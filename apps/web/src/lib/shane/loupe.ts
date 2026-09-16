@@ -12,6 +12,8 @@
  * reconciliation package is not read or imported.
  */
 
+import { METER_RUN_IN_SP } from '@ilya/score-parser';
+
 /** A system's measure range, from the renderer's own `data-system` attribute. */
 export interface SystemRange {
 	fromMeasure: number;
@@ -359,24 +361,12 @@ export function clipToHead(win: MeasureWindow, head: number): MeasureWindow {
 }
 
 /**
- * THE RUN-IN FROM THE METER TO THE MUSIC, in stave-spaces. Gould rule 240,
- * p. 42, TIME-SIGNATURE ROW: two stave-spaces from a time signature to a first
- * note that carries no accidental. The same table gives the clef and the key
- * signature 2.5, and the time signature its own, smaller figure; the renderer's
- * `ksEnd = o.leftMargin - sp(2.5)` (`staff-renderer.ts`) is the key-signature
- * row and is not this one.
- *
- * Ruled by Dann 2026-09-14, after the build had borrowed the key signature's 2.5
- * (`docs/memory/OPEN.md`, section N.138). Read from
- * `docs/sessions/memo-gould-dimensional-priors_r1_2026-08-24.md:113`, where the
- * row is FLAGGED as read from small table numerals and owed a re-verification;
- * he ruled on it knowing that, and it joins the Gould re-shoot. N.139 inherits
- * this number, so the page and the loupe stand the meter off the music alike.
- *
- * NOT IMPLEMENTED, recorded: the row's shorter figures for a first note that
- * carries one accidental (1) or two or more (1).
+ * THE RUN-IN FROM THE METER TO THE MUSIC lives in `@ilya/score-parser` since
+ * N.139, beside the page renderer that draws the same meter, so there is exactly
+ * one. Its source and Dann's ruling are with it there. Re-exported so the
+ * loupe's callers and tests keep their import.
  */
-export const METER_RUN_IN_SP = 2;
+export { METER_RUN_IN_SP };
 
 /**
  * THE AIR BETWEEN THE KEY SIGNATURE AND THE METER, in stave-spaces. The
@@ -487,6 +477,58 @@ export function meterLayout(
 	place(unit, staffTop + 3 * lineGap);
 
 	return { span: lead + ink + gapBefore(METER_RUN_IN_SP, bodyAir), glyphs };
+}
+
+/**
+ * N.139 round 3. Where the body opens on a measure that changes meter
+ * mid-system.
+ *
+ * Ruled at the desk 2026-09-16: *"a measure that changes meter mid-system must
+ * show exactly 2 spaces from its meter to the first note, as the page does."*
+ *
+ * WHAT WAS WRONG. The page draws the change after its barline and holds the
+ * first note `METER_RUN_IN_SP` clear of it. The loupe strips the page's meter
+ * from its clone and draws its own panel, so the body opened on the measure's
+ * window as before and carried the page meter's whole room as empty stave:
+ * three spaces on Without Sun song 1, m. 2.
+ *
+ * THE FIX. The body opens where the page's meter ink ends. The page already
+ * stands the first note the run-in clear of that edge, so when the caller passes
+ * `meterLayout` the air to that NOTE (not to the underlay, which sits below the
+ * stave), it finds `bodyAir` complete and adds nothing, and the panel's digits
+ * meet the note at the page's own run-in.
+ *
+ * `meterRights` is every page meter's ink right edge on the system. The one
+ * that belongs to this measure ends at or before the measure's first note and
+ * within `METER_RUN_IN_SP + METER_LEAD_SP` of it. An earlier measure's meter is
+ * a note column and a barline further left, so it cannot qualify.
+ *
+ * NOTHING THE BODY DRAWS IS CUT. `inkXs` is the music's ink as the frame
+ * measures it, underlay included, and the edge never passes the leftmost of it
+ * inside the window. Where a long syllable reaches left of the page's meter,
+ * the body opens on the syllable, and the note then stands further than the
+ * run-in from the panel. NOT MEASURED: neither walk score has such a syllable.
+ *
+ * Returns `view` unchanged where no page meter belongs to the measure.
+ */
+export function openAfterPageMeter(
+	view: MeasureWindow,
+	meterRights: readonly number[],
+	firstNoteInk: number,
+	inkXs: readonly number[],
+	lineGap: number,
+): MeasureWindow {
+	if (!Number.isFinite(firstNoteInk) || !(lineGap > 0)) return view;
+	const reach = (METER_RUN_IN_SP + METER_LEAD_SP) * lineGap;
+	let edge = -Infinity;
+	for (const r of meterRights) {
+		if (!Number.isFinite(r) || r > firstNoteInk + 1e-6 || r < firstNoteInk - reach) continue;
+		edge = Math.max(edge, r);
+	}
+	if (!Number.isFinite(edge)) return view;
+	for (const x of inkXs) if (Number.isFinite(x) && x >= view.left && x < view.right) edge = Math.min(edge, x);
+	if (!(edge > view.left) || !(edge < view.right - 1)) return view;
+	return { left: edge, right: view.right };
 }
 
 /** One mark's horizontal extent, in its system's coordinates. */

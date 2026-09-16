@@ -1275,6 +1275,29 @@ failure is one of:**
 **Instrument each of the three rather than guessing. They are cheap to
 distinguish and only one of them is a design decision working correctly.**
 
+### HALF A: CAUSE FOUND 2026-09-16, BY A READ-ONLY SONNET DIAGNOSIS
+
+**Condition 2 fails, for a reason nobody had guessed.** T05's converted MNX has
+`global.lyrics.lineOrder = ["v3","v1","v2"]`. `v3` ("Verse 3") is declared and never
+used; only `v1` (Cyrillic) and `v2` (IPA) carry syllables. The parser numbers verses
+by raw position in `lineOrder` (`mnx-parser.ts:396`,
+`order.forEach((id, i) => lineIdToVerse.set(id, i + 1))`, read by the desk
+2026-09-16), so `v3` becomes verse 1, and `collectScoreWords(score, 1)` returns no
+words. Verse 2 returns the 73 Cyrillic words. Conditions 1 and 3 hold correctly
+(`origin` is `'upload'`, `noLyrics` is false). Positive control: Sunless 01
+(MusicXML) returns 39 words, matching N.134's walk. A `.mnx` dropped directly
+takes the same parser path and fails the same way if its `lineOrder` lists an
+unused line first.
+
+**The fix, as described by the diagnosis, NOT MADE:** in `mnx-parser.ts`, before
+numbering, keep only the `lineOrder` ids that actually occur on the part's events
+(`seenLineIdsInOrder`), then append observed-but-unlisted ids as today.
+
+**NOT ESTABLISHED:** whether `v3` is a Finale setting or a denigma quirk; whether
+other `.musx` files carry the same empty slot; whether anything else that reads
+verse numbers (Score markup's underlay, Transcription's verse picker) is affected
+by the phantom verse today.
+
 ### HALF B: THE NAME FROM THE HEADER. CAUSE ALREADY ESTABLISHED
 
 **The converted MNX carries no header at all.** Read 2026-09-15 from T05 converted

@@ -44,6 +44,24 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### UPDATED 2026-09-16, LATER. Read this before the block that follows
+>
+> - **Insights 01a and 01b are both done.** Dann's notes: `Insights Research/_synthesis/review-01a.md`
+>   (R1 to R3) and `review-01b.md` (S1 and S2 ruled; **S3, the opened-vowel targets, is
+>   OPEN and is the next question for Dann**).
+> - **N.125 is DONE** (`570d76f`, walked). See THE TRACKER.
+> - **Bozeman PVA2 batch C is extracted** (Ch. 1 to 3, 10, 11; 35 photos, 31 labelled,
+>   4 duplicates skipped): `_extraction/claims_bozeman-PVA2_batch-C.csv`, 50 rows, 10
+>   advice rows, checked by the desk (parses; longest quote 13 words). Input for
+>   Insights pass 02. Ch. 12 is not wanted (no belting, `PRODUCT.md`).
+> - **S3 to S5 are ruled** in `review-01b.md`. Still Dann's from the candidates:
+>   tolerances (TOL2, and the crossing band), INS-P01-7's migration targets for six
+>   vowels and replace-or-annotate, INS-P01-8's treble alternative, INS-P01-10's leap size.
+> - **N.143's cause is found** (`OPEN.md` §N.143, Half A): fix queued behind N.139.
+> - **N.139 is built, not shipped**: head-room, loupe, and first-measure fixes approved
+>   as desk defaults and running in Code.
+> - **N.139 is still briefed and ready.**
+>
 > ### ADDED AT THE CLOSE OF 2026-09-16 (late). One research thread IS in flight
 >
 > **Fable is running Stage 01a of the Insights synthesis** (started by Dann
@@ -213,9 +231,8 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > `brief-colour-stage4_r1_2026-09-14`,
 > `brief-n135-ocr-measurement_r1_2026-09-14` (its measurement RUN, memo landed).
 > **N.118's brief ran on 2026-09-14 and the colour token rename is done.**
-> **N.119's brief carries a false row and must be corrected before it is built:**
-> its audit table says `Open syllables` reaches Score markup. It does not. See
-> N.136.
+> **N.119's brief row on `Open syllables` is already corrected** (brief line 89,
+> "NO. CORRECTED 2026-09-14"; checked by the desk 2026-09-16). See N.136.
 >
 > **THE COLOUR STORY, RULED AND PLANNED.** The principle, the five-hue map and
 > the six-stage plan are in `../sessions/plan-colour-story_r1_2026-09-13.md`, with
@@ -368,7 +385,16 @@ does not repeat them.
   square brackets mean editorial in a score and that number is Ilya's own
   addition. Spec in the OWED section below; it stays there as the record of what
   was ruled.
-- `[ ]` **N.125. Slurs as tapered objects.** Numbered 2026-09-11, **never tracked
+- `[x]` **N.125. DONE 2026-09-16, walked by Dann on `570d76f`: "looks great".**
+  Shipped in `34b143c` (slurs drawn as the tie's filled outline; tie and slur
+  thickness read from the notation font's SMuFL `engravingDefaults`, Finale
+  Maestro 0.25 and 0.05 sp; `TIE_CENTRE_SP` retired) and `570d76f` (slur ends sit
+  0.73 sp from the notehead centre, as a tie's do; clearances in stave spaces).
+  Account: `../sessions/memo-n125-slurs_r1_2026-09-11.md`. Lesson:
+  `ENVIRONMENT.md` §ASK THE FONT FIRST. Left open, NOT ESTABLISHED: a melisma slur
+  crossing a system break may clear a turning mark drawn on the other system.
+  Move this entry to `LOG.md` at the close. The original entry follows.
+- (was) **N.125. Slurs as tapered objects.** Numbered 2026-09-11, **never tracked
   until now, which is why Dann has met it twice.** Slurs draw as a constant
   1.3 px stroke (`staff-renderer.ts:2822`) where ties are filled tapered lenses
   (`:2783`); Gould 151 gives both one design. Brief written

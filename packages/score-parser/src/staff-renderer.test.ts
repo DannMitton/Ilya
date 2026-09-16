@@ -25,7 +25,7 @@ import type { AnalyzedEvent, VoiceProfileSnapshot } from './analysis-types';
 import { analyzeScore, pitchToHz } from './overlay-engine';
 import type { ParsedScore, Pitch, VocalLineEvent } from './types';
 import { prepareSmuflFont, REQUIRED_GLYPHS } from './smufl-metadata';
-import { paginateScore } from './page-layout';
+import { paginateScore, sliceScore, sliceWidth } from './page-layout';
 import {
   accidentalStateAtEndOf,
   BARLINE_ROOM,
@@ -34,6 +34,10 @@ import {
   COURTESY_GAP_SP,
   HYPHEN_HALF,
   layoutColumns,
+  meterDeclaredAt,
+  METER_BARLINE_CLEAR_SP,
+  METER_KEY_CLEAR_SP,
+  METER_RUN_IN_SP,
   renderAnalyzedStaff,
   tacetRuns,
   TURNING_CLEARANCE_SP,
@@ -116,11 +120,11 @@ describe('staff renderer: layout', () => {
 
   it('renders the key signature (one flat) at the bass-clef B2 position', () => {
     // B2 sits on the second staff line from the bottom: y 108, text baseline 112.
-    // x is now DERIVED, not the old hardcoded 62: the key signature ends two
-    // and a half stave-spaces before the first note (Gould r240), so at the
-    // default stave it ends at leftMargin 92 − 30 = 62 and its single flat,
-    // 9 px wide in primitive mode, starts at 53.
-    expect(svg.includes('x="53" y="112"')).toBe(true);
+    // x is DERIVED, laid out forwards since N.139: the stave starts at 0, the
+    // clef is indented one stave-space (12) and is 24 px wide in primitive mode,
+    // and the key signature stands one space after it (Gould r236): 12 + 24 + 12
+    // = 48. It was 53 while the head was laid out backwards from x 92.
+    expect(svg.includes('x="48" y="112"')).toBe(true);
   });
 
   it('renders a natural accidental where the note contradicts the key (B natural)', () => {
@@ -560,8 +564,8 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // shifts right of the sung one. N.106 restates the arithmetic: D3 takes a
     // down-stem, so the sung unit's right ink edge is its notehead's, at
     // 306 + 6.2, and the turning head's centre is 1.6 + 0.25x12 + 6.2 beyond
-    // it: cx = 323.
-    expect(svg.includes('cx="323"')).toBe(true);
+    // it: cx = 323. N.139 lays the head out FORWARDS from the stave's edge at 0, so the demo's first column moved from 92 to 117.2 (clef indent 12, clef 24, 12, flat 9, 12, meter 18, run-in 24, half a notehead 6.2) and every x after it moved by +25.2. So 348.2.
+    expect(svg.includes('cx="348.2"')).toBe(true);
   });
 
   it('sends a LOWER turning note right as well, the retired diagonal (N.106)', () => {
@@ -569,9 +573,10 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // BELOW. Until N.106 the pair kept Gould r103's rising diagonal and this
     // note displaced LEFT, to cx 646, through the sung note's own accidental
     // space. E3 takes an up-stem, so the sung unit's right edge is the stem's
-    // at 660 + 5.5 + 0.75, and the turning head lands at 677.05.
-    expect(svg.includes('cx="677.05"')).toBe(true);
-    expect(svg.includes('cx="646"')).toBe(false);
+    // at 660 + 5.5 + 0.75, and the turning head lands at 677.05. N.139 lays the head out FORWARDS from the stave's edge at 0, so the demo's first column moved from 92 to 117.2 (clef indent 12, clef 24, 12, flat 9, 12, meter 18, run-in 24, half a notehead 6.2) and every x after it moved by +25.2. So
+    // 702.25, and the retired left displacement would be 671.2.
+    expect(svg.includes('cx="702.25"')).toBe(true);
+    expect(svg.includes('cx="671.2"')).toBe(false);
   });
 
   it('brackets the triplet in black with its numeral', () => {
@@ -587,7 +592,8 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // the advance to the rest that follows it now answers to `TURNING_TRAIL_SP`
     // and grew by a quarter of a pixel, which every column after it inherits.
     // That single column is the ONLY place the ink term binds on this fixture.
-    expect(svg.includes('x="761.25" y="58"')).toBe(true);
+    // N.139 lays the head out FORWARDS from the stave's edge at 0, so the demo's first column moved from 92 to 117.2 (clef indent 12, clef 24, 12, flat 9, 12, meter 18, run-in 24, half a notehead 6.2) and every x after it moved by +25.2. So 786.45.
+    expect(svg.includes('x="786.45" y="58"')).toBe(true);
   });
 });
 
@@ -1491,14 +1497,15 @@ describe('staff renderer: clef passes (v37 §A.17)', () => {
     const svg = renderDemo({ clef: 'treble' });
     // B4 = middle staff line y 96; primitive text baseline y + 4. Same derived
     // x as the bass pass: the header geometry does not depend on the clef's
-    // pitch mapping, only on the clef's width.
-    expect(svg.includes('x="53" y="100"')).toBe(true);
+    // pitch mapping, only on the clef's width. 48 since N.139's forward head.
+    expect(svg.includes('x="48" y="100"')).toBe(true);
   });
 
   it('moves the notes with the clef: the same pitch sits lower on a treble staff', () => {
     const bass = renderDemo();
     const treble = renderDemo({ clef: 'treble' });
-    const firstHeadY = (svg: string): number => Number(svg.match(/<ellipse cx="92" cy="([\d.-]+)"/)?.[1]);
+    // The first column's x, 117.2 since N.139's forward head (92 before).
+    const firstHeadY = (svg: string): number => Number(svg.match(/<ellipse cx="117.2" cy="([\d.-]+)"/)?.[1]);
     // Treble middle line is B4, twelve diatonic steps above bass's D3, so
     // the same written pitch drops by 12 half-gap steps (6 × lineGap = 72).
     expect(firstHeadY(treble) - firstHeadY(bass)).toBe(72);
@@ -2201,5 +2208,149 @@ describe('the courtesy survives the system break (N.102 increment 1b)', () => {
       const out = paginate([[0, 'B', 4, -1], [1, 'B', 4, 0]]);
       expect(count(out.systems[0].svg, PL)).toBe(0);
     });
+  });
+});
+
+describe('staff renderer: the meter on the page (N.139)', () => {
+  // The synthetic face draws every glyph 1.18 spaces wide from x 0, so a digit's
+  // ink is 14.16 px at the default stave of 12, and so are the clef and the flat.
+  const gap = 12;
+  const digitW = 1.18 * gap;
+  const opts = (extra: StaffRenderOptions = {}): StaffRenderOptions => ({
+    font: syntheticSmuflFont(),
+    fontFamily: 'TestFont',
+    ...extra,
+  });
+  const clefXOf = (svg: string) =>
+    Number(svg.match(new RegExp(`<text x="([\\d.]+)"[^>]*>${String.fromCodePoint(0xe062)}<`))![1]);
+  const flatXsOf = (svg: string) => [...svg.matchAll(/<text data-key-signature="" x="([\d.-]+)"/g)].map((m) => Number(m[1]));
+  /** The demo with its meter changed to `beats`/`beatType` from `from` on. */
+  const changedAt = (from: number, beats = 6, beatType = 8, silent: number[] = []): ParsedScore => {
+    const parsed = demoScore();
+    return {
+      ...parsed,
+      measures: parsed.measures.map((m) => (m.index >= from ? { ...m, timeSignature: { beats, beatType } } : m)),
+      vocalLine: parsed.vocalLine.filter((e) => !silent.includes(e.measureIndex)),
+    };
+  };
+  const analyzedOf = (parsed: ParsedScore) =>
+    analyzeScore(parsed, demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
+  const meters = (svg: string) =>
+    [...svg.matchAll(/<g data-meter="([^"]+)"><text x="([\d.-]+)"/g)].map((m) => ({ sig: m[1], x: Number(m[2]) }));
+
+  it('reads a declaration as a change of value from the measure before', () => {
+    const parsed = changedAt(2);
+    expect(meterDeclaredAt(parsed, 0)).toBeUndefined();
+    expect(meterDeclaredAt(parsed, 1)).toBeUndefined();
+    expect(meterDeclaredAt(parsed, 2)).toEqual({ beats: 6, beatType: 8 });
+    expect(meterDeclaredAt(parsed, 3)).toBeUndefined();
+  });
+
+  it('lays the head out forwards: stave edge, clef, key, meter, run-in, first note', () => {
+    const svg = renderDemo(opts());
+    const found = meters(svg);
+    expect(found.map((m) => m.sig)).toEqual(['3/4']);
+    expect(Number(svg.match(/<line x1="([\d.]+)"/)![1])).toBe(0);
+    const clefX = clefXOf(svg);
+    expect(clefX).toBeCloseTo(gap, 2); // Gould r81, one space in from the edge
+    const [flatX] = flatXsOf(svg);
+    expect(flatX - (clefX + digitW)).toBeCloseTo(gap, 2); // r236
+    // The flat's step is its width plus 1 px; the meter stands a space after it.
+    expect(found[0].x - (flatX + digitW + 1)).toBeCloseTo(METER_KEY_CLEAR_SP * gap, 2);
+    // n1 has no accidental, so its notehead's left edge ends the run-in.
+    const n1 = svg.slice(svg.indexOf('data-event-id="n1"'));
+    const headX = Number(n1.match(/<text x="([\d.-]+)"/)![1]);
+    expect(headX - (found[0].x + digitW)).toBeCloseTo(METER_RUN_IN_SP * gap, 2);
+  });
+
+  it('keeps every stave edge and clef in place however long the key signature, and nothing collides', () => {
+    for (const fifths of [0, 4, 7, -7]) {
+      const parsed = { ...demoScore(), keySignatures: [{ measureIndex: 0, signature: { fifths } }] };
+      parsed.measures = parsed.measures.map((m) => ({ ...m, keySignature: { fifths } }));
+      const svg = renderAnalyzedStaff(parsed, analyzedOf(parsed), opts());
+      expect(Number(svg.match(/<line x1="([\d.]+)"/)![1])).toBe(0);
+      const clefX = clefXOf(svg);
+      expect(clefX).toBeCloseTo(gap, 2);
+      const flats = flatXsOf(svg);
+      expect(flats).toHaveLength(Math.abs(fifths));
+      const keyRight = flats.length ? flats[flats.length - 1] + digitW : clefX + digitW;
+      if (flats.length) expect(flats[0]).toBeGreaterThanOrEqual(clefX + digitW + gap - 0.01);
+      expect(meters(svg)[0].x).toBeGreaterThanOrEqual(keyRight + gap - 0.01);
+    }
+  });
+
+  it('does not restate the meter at a system start that declares none', () => {
+    const parsed = demoScore();
+    const analyzed = analyzedOf(parsed);
+    const at = (extra: StaffRenderOptions) => meters(renderAnalyzedStaff(parsed, analyzed, opts({ measureOffset: 3, ...extra })));
+    expect(at({})).toHaveLength(0);
+    expect(at({ incomingTimeSignature: { beats: 3, beatType: 4 } })).toHaveLength(0);
+    // A change landing on the system's first measure does draw.
+    expect(at({ incomingTimeSignature: { beats: 2, beatType: 4 } }).map((m) => m.sig)).toEqual(['3/4']);
+  });
+
+  it('draws a change mid-system after its barline, the run-in clear of the first note', () => {
+    const parsed = changedAt(2);
+    const svg = renderAnalyzedStaff(parsed, analyzedOf(parsed), opts());
+    const found = meters(svg);
+    expect(found.map((m) => m.sig)).toEqual(['3/4', '6/8']);
+    const change = found[1];
+    // The barline painted immediately before the digits stands the clearance left of them.
+    const before = svg.slice(0, svg.indexOf('<g data-meter="6/8">'));
+    const bars = [...before.matchAll(/<line x1="([\d.]+)" y1="(\d+)" x2="\1"/g)].map((m) => Number(m[1]));
+    expect(change.x - bars[bars.length - 1]).toBeCloseTo(METER_BARLINE_CLEAR_SP * gap, 1);
+    // n7 opens measure 2 with no accidental, so its notehead is its leftmost ink.
+    const n7 = svg.slice(svg.indexOf('data-event-id="n7"'));
+    const headX = Number(n7.match(/<text x="([\d.-]+)"/)![1]);
+    expect(headX - (change.x + digitW)).toBeCloseTo(METER_RUN_IN_SP * gap, 1);
+  });
+
+  it('puts the meter in the advance, so the pagination estimate and the render agree', () => {
+    const parsed = changedAt(2);
+    const analyzed = analyzedOf(parsed);
+    const o = opts();
+    const estimate = sliceWidth(parsed, 1, 3, o, analyzed);
+    const drawn = renderAnalyzedStaff(sliceScore(parsed, 1, 3), analyzed, { ...o, measureOffset: 1 });
+    const width = Number(drawn.match(/viewBox="0 [\d.-]+ ([\d.]+)/)![1]);
+    expect(width).toBeCloseTo(estimate, 1);
+    // And the meter made the estimate wider than the same range without it.
+    expect(estimate).toBeGreaterThan(sliceWidth(demoScore(), 1, 3, o, analyzedOf(demoScore())));
+  });
+
+  it('agrees with the render where the change lands on the system head, and draws it there', () => {
+    const parsed = changedAt(2);
+    const analyzed = analyzedOf(parsed);
+    const o = opts();
+    const estimate = sliceWidth(parsed, 2, 4, o, analyzed);
+    const drawn = renderAnalyzedStaff(sliceScore(parsed, 2, 4), analyzed, {
+      ...o,
+      measureOffset: 2,
+      incomingTimeSignature: parsed.measures[1].timeSignature,
+    });
+    expect(meters(drawn).map((m) => m.sig)).toEqual(['6/8']);
+    const width = Number(drawn.match(/viewBox="0 [\d.-]+ ([\d.]+)/)![1]);
+    expect(width).toBeCloseTo(estimate, 1);
+    // The positive control: the same range with no change has no meter in its head.
+    expect(estimate).toBeGreaterThan(sliceWidth(demoScore(), 2, 4, o, analyzedOf(demoScore())));
+  });
+
+  it('draws a change on the first measure of a paginated system', () => {
+    // Narrow enough that measure 2, which declares 6/8, opens a system.
+    const parsed = changedAt(2);
+    const out = paginateScore(parsed, analyzedOf(parsed), { ...opts(), pageWidth: 520, marginLeft: 0, marginRight: 0 });
+    const opening = out.systems.find((sys) => sys.fromMeasure === 2);
+    expect(opening).toBeDefined();
+    expect(meters(opening!.svg).map((m) => m.sig)).toEqual(['6/8']);
+    for (const sys of out.systems.filter((x) => x.fromMeasure > 2)) expect(meters(sys.svg)).toHaveLength(0);
+  });
+
+  it('breaks a run of tacet measures where the meter changes, and draws the change on the run', () => {
+    const parsed = changedAt(2, 6, 8, [1, 2, 3]);
+    expect(tacetRuns(parsed)).toEqual([
+      { fromMeasure: 1, toMeasure: 1, count: 1 },
+      { fromMeasure: 2, toMeasure: 3, count: 2 },
+    ]);
+    const svg = renderAnalyzedStaff(parsed, analyzedOf(parsed), opts());
+    expect(meters(svg).map((m) => m.sig)).toEqual(['3/4', '6/8']);
   });
 });

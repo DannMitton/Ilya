@@ -53,6 +53,7 @@ export {
 	IPA_TO_CYR_BASELINE,
 	WITHHELD_SIGLA,
 	WITHHELD_SIGLA_WIDTH_PX,
+	METER_RUN_IN_SP,
 	type StaffRenderOptions,
 } from './staff-renderer';
 export { chooseClef, clefFromSource, type RenderClef } from './clef-select';

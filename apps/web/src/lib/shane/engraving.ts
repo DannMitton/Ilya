@@ -22,7 +22,11 @@ export interface EngravingValues {
 	minGap: number;
 	/** Vertical px between stacked systems. */
 	systemGap: number;
-	/** x where staff content begins, after clef and key signature. */
+	/**
+	 * x where the stave's lines begin, inside the system. Since N.139 the head is
+	 * laid out forwards from it (`systemHead` in `@ilya/score-parser`), and the
+	 * first note's x follows from the head rather than from this value.
+	 */
 	leftMargin: number;
 }
 
@@ -32,7 +36,9 @@ export const ENGRAVING_DEFAULTS: EngravingValues = {
 	pxPerWhole: 110,
 	minGap: 14,
 	systemGap: 6,
-	leftMargin: 76,
+	// N.139: every stave starts flush with the page's content edge, as an engraved
+	// score's does. Was 76, the first note's x under the backwards head. DESK DEFAULT.
+	leftMargin: 0,
 };
 
 /** The fixed minGap:pxPerWhole ratio the user-facing spacing control keeps. */

@@ -39,6 +39,7 @@
 		measureWindow,
 		meterLayout,
 		METER_LEAD_SP,
+		openAfterPageMeter,
 		nearestTarget,
 		parseSystemRange,
 		systemIndexOf,
@@ -257,6 +258,9 @@
 			if (el.hasAttribute('data-hit') || el.hasAttribute('data-event-id')) continue;
 			if (el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
 			if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
+			/* N.139: the page's meter is stripped from the clone, so it is not the
+			   music the loupe's own meter panel stands clear of. */
+			if (el.closest('[data-meter]')) continue;
 			const tacet = el.closest('[data-tacet]');
 			if (tacet && tacet !== el) continue;
 			let b: DOMRect;
@@ -791,7 +795,42 @@
 		   after. It marks which measure the page is working on, which is a
 		   question about the measure and not about the loupe's two crops; the
 		   clip is the loupe's business alone. */
-		const view = clipToHead(win, headWidthUnits);
+		/* N.139 ROUND 3. A MEASURE THAT CHANGES METER MID-SYSTEM OPENS ON THE
+		   PAGE METER'S EDGE. The page's meter is stripped from the clone below
+		   and the panel draws it instead, so the body must not also carry the
+		   room the page left for it. `openAfterPageMeter` in `loupe.ts` carries
+		   the rule. The ink edge is the font's, `bBoxNE` of each digit as drawn;
+		   with no metrics, the digit's drawn box stands in. */
+		const pageMeterRights: number[] = [];
+		for (const g of sysEl.querySelectorAll('[data-meter]')) {
+			let right = -Infinity;
+			for (const t of g.querySelectorAll('text')) {
+				const digit = font
+					? DIGIT_GLYPHS.map((n) => font.prepared.glyph(n)).find((d) => d.char === t.textContent)
+					: undefined;
+				if (digit) {
+					right = Math.max(right, Number(t.getAttribute('x')) + digit.bBoxNE[0] * lineGap);
+					continue;
+				}
+				try {
+					const b = (t as SVGGraphicsElement).getBBox();
+					if (b && b.width) right = Math.max(right, b.x + b.width);
+				} catch {
+					/* not rendered */
+				}
+			}
+			if (Number.isFinite(right)) pageMeterRights.push(right);
+		}
+		const headClipped = clipToHead(win, headWidthUnits);
+		const view = openAfterPageMeter(headClipped, pageMeterRights, firstOwnInk, inkXs, lineGap);
+		/* Where the body opened on the page meter's edge, the panel's run-in is
+		   measured to the first NOTE, as the page measures it, and not to the
+		   underlay. MEASURED on the first build of this round: Without Sun song 1,
+		   m. 2's IPA syllable starts at 150.27, 1.8 units right of the edge at
+		   148.47, and the panel held the meter two spaces off it, 20.19 units
+		   from the notehead. Underlay sits below the stave, where it never meets
+		   the meter on the page either. */
+		const openedAfterPageMeter = view.left !== headClipped.left;
 		const viewSpan = view.right - view.left;
 
 		/* THE HEAD SHARES THE FIT rather than being added to it. A measure
@@ -901,6 +940,9 @@
 				   band opened on the header and carried the whole gap back in. */
 				if (el.hasAttribute('data-hit') || el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
 				if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
+				/* N.139: a page head meter stands in this band and is stripped from
+				   the clone, so it must not open a carried band of empty stave. */
+				if (el.closest('[data-meter]')) continue;
 				let b: DOMRect;
 				try {
 					b = (el as SVGGraphicsElement).getBBox();
@@ -920,7 +962,13 @@
 				lineGap,
 				staffTop,
 				headEnds ? 0 : METER_LEAD_SP * lineGap,
-				carry ? 0 : Number.isFinite(firstInk) ? firstInk - view.left : 0,
+				carry
+					? 0
+					: openedAfterPageMeter
+						? firstOwnInk - view.left
+						: Number.isFinite(firstInk)
+							? firstInk - view.left
+							: 0,
 			);
 			if (layout) {
 				if (headEnds) headCropUnits = headerRight;
@@ -1001,6 +1049,12 @@
 		   courtesy number after a rest is the page orienting a reader across the
 		   piece, which an excerpt does not need. DESK DEFAULT. */
 		for (const el of clone.querySelectorAll('[data-bar-number]')) el.remove();
+		/* N.139: THE METER DRAWS ONCE. The page now draws its own meter at the
+		   head and at every change, and the loupe already supplies the held
+		   measure's meter as its own panel (N.138), so the page's copy comes off
+		   the clone. Found on the walk of N.139 r1: Sunless 01 m. 2 showed the
+		   panel's 12/8 and then a clipped copy of the page's. DESK DEFAULT. */
+		for (const el of clone.querySelectorAll('[data-meter]')) el.remove();
 		/* THE LOUPE MARKS THE TAKEN NOTE THE WAY THE PAGE DOES, N.113a, ruled by
 		   Dann 2026-09-07 from his walk of `e1bcb67`: "a box on the notehead".
 		   His words on what it replaced: the bar drawn after the notehead is

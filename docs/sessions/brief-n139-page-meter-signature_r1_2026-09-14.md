@@ -191,3 +191,34 @@ A memo at `docs/sessions/memo-n139-page-meter_r1_<date>.md`:
 6. Any decision this brief did not settle, marked as yours and reversible.
 
 **Do not commit and do not stage.** No agent writes with git.
+
+---
+
+# AMENDED AT THE DESK, 2026-09-16. Read this before "What is established"
+
+## 0.1 Re-verified at `570d76f`. The line numbers above have moved
+
+N.126, N.141, and N.125 landed after this brief was written. Read today:
+
+| | line as written above | line today |
+|---|---|---|
+| system head (`clefW` to `staveLeft`) | `staff-renderer.ts:1654-1664` | **`:1838-1844`** (`ksEnd = o.leftMargin - sp(2.5)` at `:1841`) |
+| `BARLINE_ROOM` | `:135` | **`:136`** |
+| tacet numeral glyphs, `numeralScale` | `:564`, `:559-568` | **`:565`**, **`:560`** |
+| the three advance sites | `:1300`, `:1321`, `:1325` | **`:1454`, `:1475`, `:1479`** |
+| `sliceWidth` calls `layoutColumns` | `page-layout.ts:136-137` | `:136`, unchanged |
+| `leftMargin` 76 | `engraving.ts:35` | `apps/web/src/lib/shane/engraving.ts:35` |
+
+Re-verify every one before editing. Draw calls for the clef and key accidentals were not re-read; find them by name.
+
+## 0.2 N.138 is done
+
+The "DO NOT START THIS WHILE N.138 IS IN FLIGHT" line no longer applies. N.138 shipped and was walked across 2026-09-14 and 2026-09-15 (`STATE.md`; account in `LOG.md` block 16).
+
+## 0.3 Default 4 cannot be followed as written
+
+`METER_RUN_IN_SP = 2` is at `apps/web/src/lib/shane/loupe.ts:379`. `staff-renderer.ts` is in `packages/score-parser`, which cannot import from `apps/web`. **DESK DEFAULT:** move the constant into `packages/score-parser` beside the renderer's other engraving constants, export it, and have `loupe.ts` import it from `@ilya/score-parser` so there is still exactly one. Dann's ruling on the value (2 stave spaces, 2026-09-14) is unchanged.
+
+## 0.4 The glyphs come from the font
+
+This brief already uses the font's `timeSig0` to `timeSig9`. Keep it that way, and take any size or spacing value the font's SMuFL metadata provides before inventing one (`docs/memory/ENVIRONMENT.md` §ASK THE FONT FIRST).

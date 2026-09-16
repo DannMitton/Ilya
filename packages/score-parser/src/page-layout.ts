@@ -23,6 +23,8 @@ import type { ParsedScore } from './types';
 import type { AnalyzedScore } from './analysis-types';
 import {
 	accidentalStateAtEndOf,
+	headMeterSignature,
+	systemHead,
 	renderAnalyzedStaff,
 	layoutColumns,
 	type StaffRenderOptions,
@@ -52,13 +54,12 @@ const PAGE_DEFAULTS = {
   systemGap: 28,
 };
 
-// The renderer's own left margin default. The advance arithmetic is NOT
-// mirrored here: `layoutColumns` is imported from the renderer and produces
-// the columns BOTH modules walk, so the estimate and the rendering cannot
-// drift apart at all rather than merely failing a test when they do
-// (N.6b-1; widened from two shared constants to the whole walk at N.104,
-// when a system gained a second kind of column).
-const RENDER_DEFAULTS = { leftMargin: 92 };
+// The advance arithmetic is NOT mirrored here: `layoutColumns` is imported
+// from the renderer and produces the columns BOTH modules walk, so the estimate
+// and the rendering cannot drift apart at all rather than merely failing a test
+// when they do (N.6b-1; widened from two shared constants to the whole walk at
+// N.104, when a system gained a second kind of column). N.139 does the same for
+// the head: `systemHead` says where the first column stands, and both call it.
 /**
  * Nothing past the closing barline: the renderer's `width` is exactly its
  * `contentRight` and the barline's stroke sits inside it (N.6b-2).
@@ -115,9 +116,9 @@ export function sliceScore(parsed: ParsedScore, fromMeasure: number, toMeasure: 
 }
 
 /**
- * Width a measure range would occupy, using the renderer's own x-advance
- * arithmetic (leftMargin + duration-proportional advances + barline room
- * + right pad).
+ * Width a measure range would occupy, using the renderer's own arithmetic: the
+ * system head from `systemHead`, then the duration-proportional advances with
+ * their barline and meter room, then the right pad.
  *
  * N.103 adds `analyzed`, and it is not optional in practice: without it the
  * walk cannot see the turning layer, so a page packed here would hold measures
@@ -132,9 +133,20 @@ export function sliceWidth(
   options: StaffRenderOptions = {},
   analyzed?: AnalyzedScore,
 ): number {
-  const leftMargin = options.leftMargin ?? RENDER_DEFAULTS.leftMargin;
   const { columns, trailing } = layoutColumns(parsed, options, fromMeasure, toMeasure, analyzed);
-  return leftMargin + columns.reduce((total, c) => total + c.advance, 0) + trailing + RIGHT_PAD;
+  /* N.139. The head this range's system would draw, asked the way the render
+     asks it: the slice's first measure supplies the key and the meter, and the
+     bar before it says whether that meter is a change. `renderAnalyzedStaff`
+     receives the same bar as `incomingTimeSignature` from `paginateScore`. */
+  const from = Number.isFinite(fromMeasure) ? Math.max(0, fromMeasure) : 0;
+  const first = parsed.measures[from];
+  const head = systemHead(
+    options,
+    options.clef ?? chooseClef(parsed),
+    first?.keySignature.fifths ?? parsed.keySignatures[0]?.signature.fifths ?? 0,
+    headMeterSignature(first?.timeSignature, parsed.measures[from - 1]?.timeSignature, from === 0),
+  );
+  return head.contentLeft + columns.reduce((total, c) => total + c.advance, 0) + trailing + RIGHT_PAD;
 }
 
 function viewBoxOf(svg: string): { minY: number; width: number; height: number } {
@@ -220,6 +232,9 @@ export function paginateScore(
       measureOffset: a,
       // N.102 increment 1b: what the bar before this slice left in force.
       incomingAccidentals: incomingAt(a),
+      // N.139: the meter that bar counted in, so a change on this system's
+      // first measure draws at its head.
+      incomingTimeSignature: parsed.measures[a - 1]?.timeSignature,
       // Every system fills the line, so they all come out the same width and
       // all reach both margins (Dann's ruling, 2026-08-06). `sliceWidth` above
       // still packs on NATURAL widths, which is what decides how many measures
@@ -309,6 +324,7 @@ export function paginateScore(
         finalBarline: true,
         measureOffset: lastSystem.fromMeasure,
         incomingAccidentals: incomingAt(lastSystem.fromMeasure),
+        incomingTimeSignature: parsed.measures[lastSystem.fromMeasure - 1]?.timeSignature,
       },
     );
     const box = viewBoxOf(svg);

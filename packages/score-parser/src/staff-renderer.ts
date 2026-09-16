@@ -132,8 +132,52 @@ export const WITHHELD_SIGLA_WIDTH_PX = WITHHELD_SIGLA.diameterPx;
 const CYR_FONT_PX = 12.5;
 const IPA_FONT_PX = 12;
 
-/** Extra room at a barline, shared with `page-layout.ts`'s width estimate. */
+/**
+ * Extra room at a barline. `page-layout.ts` does not read this constant: it
+ * calls `layoutColumns`, which adds it to each advance, so the estimate sees it
+ * through the shared walk (read 2026-09-16, N.139).
+ */
 export const BARLINE_ROOM = 14;
+
+/**
+ * How far a measure-opening barline stands left of the column it opens, in px.
+ * The draw loop wrote this as a bare `nx - 18`; named at N.139 because the meter
+ * room is added to it and the layout walk has to know it.
+ */
+export const BARLINE_TO_COLUMN_PX = 18;
+
+/**
+ * THE RUN-IN FROM THE METER TO THE MUSIC, in stave-spaces. Gould rule 240,
+ * p. 42, TIME-SIGNATURE ROW: two stave-spaces from a time signature to a first
+ * note that carries no accidental. The same table gives the clef and the key
+ * signature 2.5, and the time signature its own, smaller figure; the header's
+ * `HEAD_RUN_IN_SP` is the key-signature row and is not this one.
+ *
+ * Ruled by Dann 2026-09-14, after the build had borrowed the key signature's 2.5
+ * (`docs/memory/OPEN.md`, section N.138). Read from
+ * `docs/sessions/memo-gould-dimensional-priors_r1_2026-08-24.md:113`, where the
+ * row is FLAGGED as read from small table numerals and owed a re-verification;
+ * he ruled on it knowing that, and it joins the Gould re-shoot.
+ *
+ * ONE CONSTANT FOR TWO SURFACES. N.138 wrote it in the web app's `loupe.ts`;
+ * N.139 moved it here, where the page renderer can read it, and the loupe
+ * imports it, so the page and the loupe stand the meter off the music alike.
+ *
+ * NOT IMPLEMENTED, recorded: the row's shorter figures for a first note that
+ * carries one accidental (1) or two or more (1).
+ */
+export const METER_RUN_IN_SP = 2;
+
+/**
+ * The air on each side of the meter that is not its run-in, in stave-spaces.
+ * Both are Gould's low end, read from the priors memo and not from the book:
+ * r236, p. 41, clef, key and time signature separated by 1 to 1.5 spaces
+ * (`memo-gould-dimensional-priors_r1_2026-08-24.md:22`), which is the figure the
+ * header already uses between clef and key; r242, p. 42, one space each side of
+ * a barline mid-system (`:34`). The font's `engravingDefaults` states neither.
+ */
+export const METER_KEY_CLEAR_SP = 1;
+export const METER_BARLINE_CLEAR_SP = 1;
 
 /**
  * The air between a courtesy accidental and each of its parentheses, in stave
@@ -173,7 +217,7 @@ export const TURNING_CLEARANCE_SP = 0.25;
 export interface StaffRenderOptions {
   staffMidY?: number;   // y of the middle staff line
   lineGap?: number;     // px between adjacent staff lines
-  leftMargin?: number;  // x where the staff content begins (after clef/key)
+  leftMargin?: number;  // x where the stave's lines begin; the head is laid out forwards from it (N.139)
   pxPerWhole?: number;  // horizontal px per whole-note of onset time
   minGap?: number;      // minimum px between successive events
   /**
@@ -330,15 +374,32 @@ export interface StaffRenderOptions {
    * slice takes its carry from the measure this call itself just drew.
    */
   incomingAccidentals?: Record<string, number>;
+  /**
+   * N.139. The meter in force in the measure before this slice's first measure.
+   *
+   * The same gap `incomingAccidentals` fills, for the meter: a slice starts at
+   * measure 0 and cannot see what the bar before its system break counted in,
+   * so a change of meter that falls on a system's first measure is invisible
+   * from inside this call. Where it is passed and differs from the slice's
+   * first measure, the head draws the new signature.
+   *
+   * NOTHING PASSES IT YET. `paginateScore` would, in one line; that file was
+   * outside N.139's scope and the change is reported rather than made. Until
+   * then a change landing on a system's first measure draws nothing.
+   * A render with `measureOffset` 0 opens the piece and always draws its
+   * signature, so this is not read there.
+   */
+  incomingTimeSignature?: TimeSignature;
 }
 
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature'>> = {
   staffMidY: 96,
   lineGap: 12,
-  leftMargin: 92,
+  // N.139: the stave's own left edge, flush with the system's. DESK DEFAULT.
+  leftMargin: 0,
   pxPerWhole: 240,
   minGap: 40,
   fontFamily: 'Bravura',
@@ -566,6 +627,172 @@ const DIGIT_SMUFL: readonly RequiredGlyphName[] = [
   'timeSig5', 'timeSig6', 'timeSig7', 'timeSig8', 'timeSig9',
 ];
 
+/**
+ * A digit's width where no font is loaded, in stave-spaces. Primitive mode is
+ * the sandbox path; this is the desk's own figure, about the width of every
+ * `timeSig` digit in the three faces the project ships.
+ */
+const NO_FONT_METER_DIGIT_SP = 1.5;
+
+/** One meter signature, as the glyphs it draws and the width of its ink. */
+export interface MeterInk {
+  count: { name: RequiredGlyphName; width: number }[];
+  unit: { name: RequiredGlyphName; width: number }[];
+  /** The wider of the two digit groups, in px. The narrower is centred on it. */
+  width: number;
+}
+
+/**
+ * N.139. The ink of a meter signature, from the notation font.
+ *
+ * DIGITS ALWAYS, never `timeSigCommon` or `timeSigCutCommon`, even where the
+ * MusicXML path recorded a symbol: the MNX path records none, so digits are the
+ * only form both paths draw alike (brief r1, desk default 1).
+ *
+ * THE WIDTH IS THE FONT'S. A group is its digits' bounding boxes laid edge to
+ * edge, which is how `meterLayout` in the loupe measures the same digits.
+ *
+ * ONE FUNCTION FOR THE LAYOUT WALK AND THE DRAW, so the room `layoutColumns`
+ * reserves and the ink the renderer draws cannot disagree. Null for a signature
+ * no digit can spell.
+ */
+export function meterInk(sig: TimeSignature | undefined, options: StaffRenderOptions = {}): MeterInk | null {
+  if (!sig) return null;
+  const valid = (n: number): boolean => Number.isInteger(n) && n > 0;
+  if (!valid(sig.beats) || !valid(sig.beatType)) return null;
+  const lineGap = options.lineGap ?? DEFAULTS.lineGap;
+  const smufl = options.font;
+  const group = (n: number): MeterInk['count'] =>
+    [...String(n)].map((c) => {
+      const name = DIGIT_SMUFL[Number(c)];
+      const g = smufl?.glyph(name);
+      return { name, width: (g ? g.bBoxNE[0] - g.bBoxSW[0] : NO_FONT_METER_DIGIT_SP) * lineGap };
+    });
+  const count = group(sig.beats);
+  const unit = group(sig.beatType);
+  const sum = (gs: MeterInk['count']): number => gs.reduce((t, g) => t + g.width, 0);
+  return { count, unit, width: Math.max(sum(count), sum(unit)) };
+}
+
+/**
+ * N.139. The meter a measure declares, or undefined where it declares none.
+ *
+ * A DECLARATION IS A CHANGE OF VALUE from the measure before. The parsers' own
+ * `timeSignatures` list would be the more literal reading, but `sliceScore`
+ * replaces that list with the slice's opening snapshot, so a system could not
+ * see a change inside itself. The per-measure snapshot survives slicing, and
+ * `layoutColumns` has to give the same answer on a slice and on the whole
+ * score or pagination and rendering part company. DESK DEFAULT: a restatement
+ * of the meter already in force draws nothing.
+ *
+ * Measure 0 declares nothing here: the opening signature is a header symbol,
+ * laid out by the renderer's head and not by a column.
+ */
+export function meterDeclaredAt(parsed: ParsedScore, measureIndex: number): TimeSignature | undefined {
+  const here = parsed.measures[measureIndex]?.timeSignature;
+  const before = parsed.measures[measureIndex - 1]?.timeSignature;
+  if (!here || !before) return undefined;
+  return here.beats !== before.beats || here.beatType !== before.beatType ? here : undefined;
+}
+
+/**
+ * THE RUN-IN FROM A CLEF OR KEY SIGNATURE TO THE MUSIC, in stave-spaces. Gould
+ * rule 240, p. 42, the clef and key-signature rows: two and a half spaces to a
+ * first note that carries no accidental
+ * (`memo-gould-dimensional-priors_r1_2026-08-24.md:113`, flagged there as read
+ * from small table numerals). The time-signature row is `METER_RUN_IN_SP`.
+ */
+export const HEAD_RUN_IN_SP = 2.5;
+
+/**
+ * N.139. The meter a system's head draws: the opening signature where the
+ * system opens the piece, and otherwise only where the bar before the system
+ * counted in a different meter. A meter is not restated at a system start the
+ * way a clef and key are (Dann, 2026-09-14).
+ */
+export function headMeterSignature(
+  opening: TimeSignature | undefined,
+  incoming: TimeSignature | undefined,
+  opensPiece: boolean,
+): TimeSignature | undefined {
+  if (!opening) return undefined;
+  if (opensPiece) return opening;
+  return incoming && (opening.beats !== incoming.beats || opening.beatType !== incoming.beatType) ? opening : undefined;
+}
+
+/** A system's head, in the system's own px. */
+export interface SystemHead {
+  /** Where the stave's lines begin. `options.leftMargin`. */
+  staveLeft: number;
+  clefGlyphName: RequiredGlyphName;
+  clefX: number;
+  clefW: number;
+  ksGlyphName: RequiredGlyphName;
+  ksCount: number;
+  /** One accidental's width plus 1 px. */
+  ksStep: number;
+  ksStart: number;
+  /** The key signature's right edge; the clef's right edge where there is no key signature. */
+  ksEnd: number;
+  meterInk: MeterInk | null;
+  meterLeft: number;
+  meterRight: number;
+  /** The first column's x: the head's last symbol, its run-in, and half a black notehead. */
+  contentLeft: number;
+}
+
+/**
+ * N.139. THE SYSTEM HEAD, LAID OUT FORWARDS, as an engraved score lays it out.
+ * Ruled at the desk 2026-09-16, replacing the backwards layout from a fixed
+ * first-note x that ran out of room once a meter joined the head.
+ *
+ * Every stave starts at the same left edge, `leftMargin`. Then, left to right,
+ * each clearance Gould's (read from the priors memo, not the book):
+ *   r81,  p. 6:  the clef indented into the stave by one stave-space;
+ *   r236, p. 41: clef and key signature one space apart (`METER_KEY_CLEAR_SP`
+ *                is the same rule's figure between key and meter);
+ *   r176, p. 91: clef, then key signature, then time signature;
+ *   r240, p. 42: the run-in to the first note, `HEAD_RUN_IN_SP` after a clef or
+ *                key signature and `METER_RUN_IN_SP` after a meter.
+ *
+ * THE RUN-IN ENDS AT A BLACK NOTEHEAD'S LEFT EDGE, not at the first column's own
+ * ink, so every system with the same head puts its first note at the same x.
+ * NOT implemented from r240, recorded: the shorter run-in before a first note
+ * that carries an accidental; its accidental stands inside the run-in.
+ *
+ * ONE FUNCTION, called by `renderAnalyzedStaff` and by `page-layout.ts`'s
+ * `sliceWidth`, so the width the paginator packs to starts where the ink does.
+ */
+export function systemHead(
+  options: StaffRenderOptions,
+  clef: RenderClef,
+  fifths: number,
+  meter: TimeSignature | undefined,
+): SystemHead {
+  const lineGap = options.lineGap ?? DEFAULTS.lineGap;
+  const smufl = options.font;
+  const sp = (v: number): number => v * lineGap;
+  const M = inkMetrics(options);
+  const staveLeft = options.leftMargin ?? DEFAULTS.leftMargin;
+
+  const clefGlyphName: RequiredGlyphName = clef === 'bass' ? 'fClef' : clef === 'treble-8vb' ? 'gClef8vb' : 'gClef';
+  const clefX = staveLeft + sp(1);
+  const clefW = smufl ? sp(smufl.glyph(clefGlyphName).widthSp) : 24;
+
+  const ksGlyphName: RequiredGlyphName = fifths >= 0 ? 'accidentalSharp' : 'accidentalFlat';
+  const ksCount = Math.abs(fifths);
+  const ksStep = smufl ? sp(smufl.glyph(ksGlyphName).widthSp) + 1 : 9;
+  const ksStart = clefX + clefW + (ksCount > 0 ? sp(1) : 0);
+  const ksEnd = ksStart + ksCount * ksStep;
+
+  const mi = meterInk(meter, options);
+  const meterLeft = ksEnd + sp(METER_KEY_CLEAR_SP);
+  const meterRight = meterLeft + (mi?.width ?? 0);
+  const contentLeft = (mi ? meterRight + sp(METER_RUN_IN_SP) : ksEnd + sp(HEAD_RUN_IN_SP)) + M.headHalfW('quarter');
+
+  return { staveLeft, clefGlyphName, clefX, clefW, ksGlyphName, ksCount, ksStep, ksStart, ksEnd, meterInk: mi, meterLeft, meterRight, contentLeft };
+}
+
 /** A run of consecutive measures the vocal part is silent in. */
 export interface TacetRun {
   /** First and last measure index of the run, inclusive. */
@@ -594,7 +821,9 @@ export function tacetRuns(parsed: ParsedScore): TacetRun[] {
   for (const m of parsed.measures) {
     if (sung.has(m.index)) continue;
     const open = runs[runs.length - 1];
-    if (open && open.toMeasure === m.index - 1) {
+    // N.139: a change of meter opens a new run, so the change draws at its own
+    // barline rather than vanishing inside a consolidated rest. DESK DEFAULT.
+    if (open && open.toMeasure === m.index - 1 && !meterDeclaredAt(parsed, m.index)) {
       open.toMeasure = m.index;
       open.count += 1;
     } else {
@@ -803,6 +1032,9 @@ interface Placed {
   ev: VocalLineEvent;
   x: number;
   newMeasure: boolean;
+  /** N.139: the meter this column's measure declares mid-system, and its room. */
+  meter?: TimeSignature;
+  meterRoom: number;
 }
 
 /**
@@ -1369,13 +1601,22 @@ export function columnAdvance(
  *
  * `advance` is the px from the previous column to this one at the minimum
  * width, before any justification stretch, and it already includes
- * `BARLINE_ROOM` where the column opens a measure.
+ * `BARLINE_ROOM` where the column opens a measure, and `meterRoom` where that
+ * measure declares a meter.
  */
 export interface LayoutColumn {
   ev?: VocalLineEvent;
   tacet?: TacetRun;
   advance: number;
   newMeasure: boolean;
+  /** N.139. The meter this column's measure declares, where it opens one mid-system. */
+  meter?: TimeSignature;
+  /**
+   * N.139. The px the meter adds between the measure's barline and this column,
+   * unstretched: the barline draws at `x - BARLINE_TO_COLUMN_PX - meterRoom`.
+   * 0 where no meter draws.
+   */
+  meterRoom: number;
 }
 
 /**
@@ -1436,6 +1677,30 @@ export function layoutColumns(
   const inkOf = (ev: VocalLineEvent): ColumnInk =>
     columnInk(ev, analyzed?.events[ev.id], carry, turningAcc, inkOptions);
 
+  /* N.139. THE METER'S ROOM LIVES IN THE ADVANCE, and that is the whole of
+     keeping pagination honest: `sliceWidth` sums these same advances, so a meter
+     reserved here is a meter the paginator sees. Only a column that opens a
+     measure mid-system can carry one; the first column of a walk has advance 0
+     and its measure's signature, if any, belongs to the head.
+
+     A NOTE COLUMN: barline, `METER_BARLINE_CLEAR_SP`, the digits, then
+     `METER_RUN_IN_SP` to the column's leftmost ink. The barline already stands
+     `BARLINE_TO_COLUMN_PX` left of the column, so only the excess is added.
+
+     A TACET COLUMN: barline, clearance, digits, and then the run-in less the
+     H-bar's own inset, which the rest already stands off its left bound. */
+  const meterRoomFor = (measureIndex: number, inkLeft: number | undefined): { meter?: TimeSignature; meterRoom: number } => {
+    const meter = meterDeclaredAt(parsed, measureIndex);
+    const mi = meterInk(meter, options);
+    if (!meter || !mi) return { meterRoom: 0 };
+    const lead = METER_BARLINE_CLEAR_SP * lineGap + mi.width;
+    const meterRoom =
+      inkLeft === undefined
+        ? lead + Math.max(0, METER_RUN_IN_SP - TACET_REST.barInsetSp) * lineGap
+        : Math.max(0, lead + METER_RUN_IN_SP * lineGap + inkLeft - BARLINE_TO_COLUMN_PX);
+    return { meter, meterRoom };
+  };
+
   const columns: LayoutColumn[] = [];
   let prevMeasure = -1;
   let prevDurWhole = 0;
@@ -1446,13 +1711,15 @@ export function layoutColumns(
   let runCursor = 0;
 
   const openRun = (run: TacetRun): void => {
+    const room = columns.length === 0 ? { meterRoom: 0 } : meterRoomFor(run.fromMeasure, undefined);
     columns.push({
       tacet: run,
       advance:
         columns.length === 0
           ? 0
-          : (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk) : 0) + BARLINE_ROOM,
+          : (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk) : 0) + BARLINE_ROOM + room.meterRoom,
       newMeasure: columns.length > 0,
+      ...room,
     });
     prevMeasure = run.toMeasure;
     prevEv = undefined;
@@ -1471,16 +1738,19 @@ export function layoutColumns(
        next bar's courtesy is wrong. */
     const ink = inkOf(ev);
     let advance: number;
+    let room: { meter?: TimeSignature; meterRoom: number } = { meterRoom: 0 };
     if (owedByTacet > 0) {
-      advance = owedByTacet + BARLINE_ROOM;
+      room = meterRoomFor(ev.measureIndex, ink.left);
+      advance = owedByTacet + BARLINE_ROOM + room.meterRoom;
       owedByTacet = 0;
     } else if (prevEv) {
+      if (newMeasure) room = meterRoomFor(ev.measureIndex, ink.left);
       advance =
-        columnAdvance(prevEv, ev, prevDurWhole, options, prevInk, ink) + (newMeasure ? BARLINE_ROOM : 0);
+        columnAdvance(prevEv, ev, prevDurWhole, options, prevInk, ink) + (newMeasure ? BARLINE_ROOM : 0) + room.meterRoom;
     } else {
       advance = 0;
     }
-    columns.push({ ev, advance, newMeasure: newMeasure && columns.length > 0 });
+    columns.push({ ev, advance, newMeasure: newMeasure && columns.length > 0, ...room });
     prevMeasure = ev.measureIndex;
     prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
     prevEv = ev;
@@ -1583,6 +1853,36 @@ export function renderAnalyzedStaff(
   };
   const headNameFor = headNameOf;
 
+  /**
+   * N.139. A meter signature with its ink's left edge at `left`: count over
+   * unit, the count's baseline on the second line from the top and the unit's
+   * on the second from the bottom. Every SMuFL time-signature digit is two
+   * spaces tall and centred on its baseline, so each group fills its two
+   * spaces; `meterLayout` in the loupe places the same digits the same way.
+   *
+   * `data-meter` IS A HANDLE, the way `data-key-signature` is, so a surface
+   * that clones the page can find the page's own meter.
+   */
+  const meterMarkup = (sig: TimeSignature, mi: MeterInk, left: number): string => {
+    const out = [`<g data-meter="${sig.beats}/${sig.beatType}">`];
+    const place = (gs: MeterInk['count'], baseline: number): void => {
+      let x = left + (mi.width - gs.reduce((t, g) => t + g.width, 0)) / 2;
+      for (const { name, width } of gs) {
+        if (smufl) {
+          const g = smufl.glyph(name);
+          out.push(`<text x="${round2(x - sp(g.bBoxSW[0]))}" y="${round2(baseline)}" font-size="${glyphSize}px" font-family="${esc(o.fontFamily)}" fill="#3a352f">${g.char}</text>`);
+        } else {
+          out.push(`<text x="${round2(x + width / 2)}" y="${round2(baseline + sp(0.8))}" text-anchor="middle" font-size="${round2(sp(2.4))}" font-weight="bold" fill="#3a352f">${name.slice(-1)}</text>`);
+        }
+        x += width;
+      }
+    };
+    place(mi.count, staffTop + o.lineGap);
+    place(mi.unit, staffTop + 3 * o.lineGap);
+    out.push('</g>');
+    return out.join('');
+  };
+
   const ed = smufl?.engravingDefaults;
 
   /* TIE AND SLUR INK COMES FROM THE FONT. Dann's ruling of 2026-09-16: the
@@ -1638,6 +1938,19 @@ export function renderAnalyzedStaff(
     undefined,
     analyzed,
   );
+  /* N.139. THE HEAD, from the one function `sliceWidth` also calls, so the
+     first column stands where the packing estimate put it. The opening meter
+     draws where the render opens the piece, or where the bar before this slice
+     counted in another meter. */
+  const headMeterSig = headMeterSignature(
+    parsed.measures[0]?.timeSignature,
+    options.incomingTimeSignature,
+    o.measureOffset === 0,
+  );
+  const head = systemHead(options, clef, fifths, headMeterSig);
+  const headMeter = head.meterInk;
+  const meterLeft = head.meterLeft;
+  const meterRight = head.meterRight;
   const naturalSpan = steps.reduce((total, s) => total + s.advance, 0) + trailing;
 
   // Pass two: justify. The whole span scales by one factor, so the duration
@@ -1645,7 +1958,7 @@ export function renderAnalyzedStaff(
   // a compressed duration curve; stretching uniformly preserves whatever
   // curve is in force). Stretch only: `columnAdvance` already returned the
   // minimum each column needs, and compressing would undo r235's floor.
-  const targetSpan = (options.targetWidth ?? 0) - o.leftMargin;
+  const targetSpan = (options.targetWidth ?? 0) - head.contentLeft;
   const stretch = naturalSpan > 0 && targetSpan > naturalSpan ? targetSpan / naturalSpan : 1;
 
   const placed: Placed[] = [];
@@ -1660,20 +1973,38 @@ export function renderAnalyzedStaff(
    * run's measure on the right; it is undefined for a run that ends the
    * system, where the closing barline bounds it instead.
    */
-  const tacetPlaced: Array<{ run: TacetRun; x: number; nextX?: number; newMeasure: boolean }> = [];
+  const tacetPlaced: Array<{
+    run: TacetRun;
+    x: number;
+    nextX?: number;
+    /** N.139: the barline of the column after the run stands this much further left. */
+    nextMeterRoom: number;
+    newMeasure: boolean;
+    meter?: TimeSignature;
+    meterRoom: number;
+  }> = [];
   {
-    let x = o.leftMargin;
+    let x = head.contentLeft;
     const xs: number[] = [];
     for (const s of steps) {
       x += s.advance * stretch;
       xs.push(round2(x));
     }
     steps.forEach((s, i) => {
-      if (s.ev) placed.push({ ev: s.ev, x: xs[i], newMeasure: s.newMeasure });
-      else if (s.tacet) tacetPlaced.push({ run: s.tacet, x: xs[i], nextX: xs[i + 1], newMeasure: s.newMeasure });
+      if (s.ev) placed.push({ ev: s.ev, x: xs[i], newMeasure: s.newMeasure, meter: s.meter, meterRoom: s.meterRoom });
+      else if (s.tacet)
+        tacetPlaced.push({
+          run: s.tacet,
+          x: xs[i],
+          nextX: xs[i + 1],
+          nextMeterRoom: steps[i + 1]?.meterRoom ?? 0,
+          newMeasure: s.newMeasure,
+          meter: s.meter,
+          meterRoom: s.meterRoom,
+        });
     });
   }
-  const contentRight = round2(o.leftMargin + naturalSpan * stretch);
+  const contentRight = round2(head.contentLeft + naturalSpan * stretch);
   // The system ends AT its barline. No empty stave past it: Gould's r242
   // end-of-stave allowance is for a barline falling before the stave's end,
   // and where the barline is the end there is nothing to allow for (Dann's
@@ -1816,32 +2147,12 @@ export function renderAnalyzedStaff(
   // instead of on its own paper.
   parts.push('');
 
-  // ── Header geometry, derived instead of hardcoded ──
-  // The clef sat at a fixed x of 34 and the key signature at 62, which at the
-  // print stave put the clef 6.2 stave-spaces into the stave: a gap, not an
-  // indent (Dann at the browser, 2026-08-06).
-  //
-  // Laid out BACKWARDS from `leftMargin`, where the first note sits, so the
-  // caller still owns the content start and `sliceWidth` needs no knowledge of
-  // the font to agree with this. Gould, in reverse order of application:
-  //   r240, p. 42: two and a half stave-spaces from the last header symbol to
-  //                a first note carrying no accidental;
-  //   r236, p. 41: clef and key signature separated by one to one and a half;
-  //   r81,  p. 6:  the clef is indented into the stave by one stave-space or
-  //                slightly less, which is what fixes the stave's left edge.
-  //
-  // NOT implemented from r240, recorded: the run-in shortens to 1½ or 1
-  // stave-spaces when the first note carries one or more accidentals.
-  const clefGlyphName: RequiredGlyphName =
-    clef === 'bass' ? 'fClef' : clef === 'treble-8vb' ? 'gClef8vb' : 'gClef';
-  const ksGlyphName: RequiredGlyphName = fifths >= 0 ? 'accidentalSharp' : 'accidentalFlat';
-  const clefW = smufl ? sp(smufl.glyph(clefGlyphName).widthSp) : 24;
-  const ksCount = Math.abs(fifths);
-  const ksStep = smufl ? sp(smufl.glyph(ksGlyphName).widthSp) + 1 : 9;
-  const ksEnd = o.leftMargin - sp(2.5);
-  const ksStart = ksEnd - ksCount * ksStep;
-  const clefX = Math.max(0, (ksCount > 0 ? ksStart - sp(1) : ksEnd) - clefW);
-  const staveLeft = round2(Math.max(0, clefX - sp(1)));
+  // ── Header geometry: `systemHead` lays it out FORWARDS (N.139) ──
+  // Computed before the layout pass, because the first column's x is the head's
+  // right edge plus its run-in. The comment on `systemHead` gives the order and
+  // every clearance's source.
+  const { staveLeft: headStaveLeft, clefX, clefW, clefGlyphName, ksGlyphName, ksCount, ksStep, ksStart, ksEnd } = head;
+  const staveLeft = round2(headStaveLeft);
 
   // Staff lines. Every #3a352f in this module is the stave's ink, `--ink-stave` in app.css. Baked as hex because this module is pure and DOM-free; keep in sync with the app token.
   const staffLineT = smufl ? round2(sp(ed!.staffLineThickness)) : 1;
@@ -1907,6 +2218,7 @@ export function renderAnalyzedStaff(
     }
     ksX += ksStep;
   }
+  if (headMeterSig && headMeter) parts.push(meterMarkup(headMeterSig, headMeter, meterLeft));
 
   // ── N.126: the system's measure number, above the clef ──
   // Gould p484-c and Dann's rulings; `BAR_NUMBER` holds every value and says
@@ -2161,13 +2473,20 @@ export function renderAnalyzedStaff(
 
      `TACET_REST` holds the four numbers and says which of them are convention
      and which come from the face. */
-  for (const { run, x: tx, nextX, newMeasure } of tacetPlaced) {
-    const left = newMeasure ? tx - 18 : ksEnd;
-    const right = nextX === undefined ? contentRight : nextX - 18;
+  for (const { run, x: tx, nextX, nextMeterRoom, newMeasure, meter, meterRoom } of tacetPlaced) {
+    /* N.139: where the run opens on a meter, its barline stands `meterRoom` further
+       left and the digits stand after it, and the rest's left bound is the
+       column's usual one, which `layoutColumns` placed the run-in past the
+       digits. A run that opens the system is bounded by the head's last symbol. */
+    const left = newMeasure ? tx - BARLINE_TO_COLUMN_PX : headMeter ? meterRight + sp(Math.max(0, METER_RUN_IN_SP - TACET_REST.barInsetSp)) : ksEnd;
+    const right = nextX === undefined ? contentRight : nextX - BARLINE_TO_COLUMN_PX - nextMeterRoom;
     const centre = (left + right) / 2;
     if (newMeasure) {
+      const barX = left - meterRoom;
       const barT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
-      parts.push(`<line x1="${round2(left)}" y1="${staffTop}" x2="${round2(left)}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
+      parts.push(`<line x1="${round2(barX)}" y1="${staffTop}" x2="${round2(barX)}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
+      const mi = meterInk(meter, { lineGap: o.lineGap, font: smufl });
+      if (meter && mi) parts.push(meterMarkup(meter, mi, barX + sp(METER_BARLINE_CLEAR_SP)));
     }
     const runFrom = run.fromMeasure + o.measureOffset;
     parts.push(`<g data-tacet="${runFrom}-${runFrom + run.count - 1}" data-tacet-count="${run.count}">`);
@@ -2289,14 +2608,19 @@ export function renderAnalyzedStaff(
     }
   }
 
-  for (const { ev, x: nx, newMeasure } of placed) {
+  for (const { ev, x: nx, newMeasure, meter, meterRoom } of placed) {
     // N.102: the outgoing measure's state becomes the courtesy source, but only
     // for the measure that DIRECTLY follows it. A skipped index is a tacet run,
     // and nothing carries across one. The turning layer resets outright.
     carryIntoMeasure(carry, turningAcc, ev.measureIndex);
     if (newMeasure) {
+      // N.139: a measure that declares a meter pushes its barline left by the
+      // room `layoutColumns` reserved, and the digits stand after the barline.
+      const barX = round2(nx - BARLINE_TO_COLUMN_PX - meterRoom);
       const barT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
-      parts.push(`<line x1="${nx - 18}" y1="${staffTop}" x2="${nx - 18}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
+      parts.push(`<line x1="${barX}" y1="${staffTop}" x2="${barX}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
+      const mi = meterInk(meter, { lineGap: o.lineGap, font: smufl });
+      if (meter && mi) parts.push(meterMarkup(meter, mi, barX + sp(METER_BARLINE_CLEAR_SP)));
     }
 
     if (ev.type === 'rest') {
