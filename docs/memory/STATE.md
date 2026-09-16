@@ -165,6 +165,15 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > head does not fit three documents: 237.97 px for labels needing 265.19.
 > Increment 2 is the compass.
 >
+> **INSIGHTS, THE EVIDENCE BASE, set up 2026-09-15 (a research thread, no code).**
+> The plan and Dann's rulings are in
+> `~/Documents/Voice Pedagogy Library/Insights Research/Insights-Research-Plan.md`,
+> with a copy in project knowledge at
+> `claude/spec-insights-research-pipeline_2026-09-15.md`. The source list (153
+> sources) sits beside it, in `Insights-Research-Sources.csv`, md5
+> `049b1b0635e706f057ae4b8a5b603613`. Next: the Journal of Voice access reply
+> to Elsevier, then book scans, then extraction (Sonnet), then synthesis (Fable).
+>
 > **BRIEFS WRITTEN AND NOT RUN, corrected 2026-09-14:**
 > `brief-n117-dictionary-fill_r1_2026-09-12`,
 > `brief-n125-slurs-as-objects_r1_2026-09-11`,
