@@ -924,6 +924,28 @@ under.**
   absolute indices. Restrict searches to `src` and pass `--include` filters.
 - `device_list_dir` on `~/Downloads` exceeds the token cap; use `ls -lt`.
 
+### THE RESEARCH DESK (Insights evidence base). Learned 2026-09-15 and 16
+
+- **`device_commit_files` rejects `expectedMtimeMs: null`.** Omit the field.
+  A `stagedPath` under `/mnt/user-data/outputs/` commits without a SendUserFile.
+- **Staging in the same parallel batch as an edit** can capture either version.
+  Grep the staged copy for the new text before syncing it anywhere.
+- **`project_write` `local_path`**: pass an absolute container path; a relative
+  one failed after the shell's working directory moved.
+- **The `memory` mount IS `ilya-rewrite/docs/memory`** (same md5, checked).
+- **UTF-8 in a device python heredoc worked on 2026-09-16** (IPA symbols, with
+  `open(..., encoding='utf-8')`, verified by grep). The ASCII-only rule above
+  stays the safe default; verify whenever you break it.
+- **HEIC photos:** convert on the device, `convert <HEIC> -auto-orient -resize
+  1568x1568 <jpg>`, then stage the JPEG. OCR on book photos is unreliable; read
+  pages as images.
+- **Project MUSE (Journal of Singing):** a direct PDF link fails the referrer
+  check. Open the article from the NATS members page. A "requests from your IP
+  range" message is a rate limit: wait, then reload. Dann signs in; never use his
+  credentials.
+- **Free copies of paywalled acoustics papers:** Joe Wolfe's UNSW reprints page
+  and PubMed Central had Joliveau 2004 and Titze and Worley 2009.
+
 ---
 
 ## Container

@@ -171,8 +171,17 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > with a copy in project knowledge at
 > `claude/spec-insights-research-pipeline_2026-09-15.md`. The source list (153
 > sources) sits beside it, in `Insights-Research-Sources.csv`, md5
-> `049b1b0635e706f057ae4b8a5b603613`. Next: the Journal of Voice access reply
-> to Elsevier, then book scans, then extraction (Sonnet), then synthesis (Fable).
+> `049b1b0635e706f057ae4b8a5b603613`. **Status 2026-09-16:** 36 articles and
+> Bozeman PVA 2nd ed. (Ch. 4 to 9, 13, Definitions, App. 2 and 3) extracted by
+> Sonnet into `_extraction/`. Step B briefs written, NOT RUN: core
+> `brief-insights-step-b-core_r5_2026-09-16.md` plus addendum
+> `brief-insights-step-b-pass01_r5_2026-09-16.md`, in two stages (01a, Dann
+> reviews, 01b). The plan's section "Purpose and design rulings (2026-09-16, late
+> session)" holds twelve rulings from that night (tiers, blind spots, tethered
+> abstraction, the ten-vowel set, Bozeman surrogates on a continuum between
+> charts, no pronouncements on identity) and the rulings still owed. The build
+> consequence is one line in INBOX.md. **Next:** Dann pastes the 01a opener into a
+> fresh Fable session. Waiting: Elsevier's reply on Journal of Voice access.
 >
 > **BRIEFS WRITTEN AND NOT RUN, corrected 2026-09-14:**
 > `brief-n117-dictionary-fill_r1_2026-09-12`,
