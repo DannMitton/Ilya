@@ -5042,3 +5042,173 @@ here for.
 N.111 (`7875892`, `c574cf8`, `d5a49ff`, `a186f20`), N.112 (`b191867`,
 `1b3054a`), and N.113 (`e1bcb67`, walked 2026-09-07). All walked by Dann.
 
+## Block 19. Moved from STATE.md and OPEN.md at the close of 2026-09-16
+
+N.125 closed (`34b143c`, `570d76f`), N.139 closed (`eb7d220`), and the loupe opening-rest fix shipped (`aca2dbb`), all walked by Dann on 2026-09-16. Accounts: `memo-n125-slurs_r1_2026-09-11.md`, `memo-n139-page-meter_r1_2026-09-16.md`, `memo-loupe-opening-rest_r1_2026-09-16.md`. Nothing below was reworded.
+
+### From STATE.md, THE ONE THING, the 2026-09-15 and 2026-09-16 opening blocks
+
+> ### UPDATED 2026-09-16, LATER. Read this before the block that follows
+>
+> - **Insights 01a and 01b are both done.** Dann's notes: `Insights Research/_synthesis/review-01a.md`
+>   (R1 to R3) and `review-01b.md` (S1 and S2 ruled; **S3, the opened-vowel targets, is
+>   OPEN and is the next question for Dann**).
+> - **N.125 is DONE** (`570d76f`, walked). See THE TRACKER.
+> - **Bozeman PVA2 batch C is extracted** (Ch. 1 to 3, 10, 11; 35 photos, 31 labelled,
+>   4 duplicates skipped): `_extraction/claims_bozeman-PVA2_batch-C.csv`, 50 rows, 10
+>   advice rows, checked by the desk (parses; longest quote 13 words). Input for
+>   Insights pass 02. Ch. 12 is not wanted (no belting, `PRODUCT.md`).
+> - **S3 to S5 are ruled** in `review-01b.md`. Still Dann's from the candidates:
+>   tolerances (TOL2, and the crossing band), INS-P01-7's migration targets for six
+>   vowels and replace-or-annotate, INS-P01-8's treble alternative, INS-P01-10's leap size.
+> - **N.143's cause is found** (`OPEN.md` §N.143, Half A): fix queued behind N.139.
+> - **N.139 is DONE**, shipped `eb7d220`, walked by Dann 2026-09-16: "Everything looks
+>   exactly as it should." The system head now lays out forwards (`systemHead`,
+>   `staff-renderer.ts:766`, shared with `sliceWidth`). Gate 5 moved 555/560 to
+>   **564 passed, 5 skipped (569)**, nine new tests; the desk moved
+>   `~/Downloads/ilya-ship.sh` line 80 and kept `ilya-ship.sh.bak-before-n139-2026-09-16`.
+>   **Record correction:** Code's memo says Sunless 01 went to 6 systems on 1 page; Dann's
+>   walk screenshot shows page 1 of 2 with 5 systems (mm. 1 to 15). The page is right;
+>   the memo's page count is not. **Follow-up, unnumbered:** the loupe keeps its meter 2
+>   spaces clear of the first ink, not the note, on measures without a meter change (T05
+>   m. 9 37.28 px, m. 14 26.44 px). **Check at the close:** the Sonnet 90 print fixture
+>   ("fills exactly two letter sheets") may have changed with the forward head.
+> - **Loupe drops a measure's opening rest, found by Dann 2026-09-16** (T05 mm. 28, 35, 37,
+>   57, 81; every mid-system measure that opens on a rest). Not a regression: the same code is
+>   in the 570d76f bundle. Cause: rests carry no hit rectangle (`staff-renderer.ts:2626`), the
+>   window opens at the first hit rectangle (`loupe.ts:79-89`), and the barline search rejects a
+>   barline left of the window (`Loupe.svelte:696`). **DONE: shipped `aca2dbb`, walked by Dann
+>   2026-09-16 ("Success!")**, with the meter run-in follow-up (2 spaces to the first rest or note).
+>   Gate 4 moved 1173 to **1181**; backup `ilya-ship.sh.bak-before-loupe-rest-2026-09-16`. Account:
+>   `../sessions/memo-loupe-opening-rest_r1_2026-09-16.md`. Untested: a system's first measure that
+>   opens on a rest; rests are recognized by SMuFL glyph range, a renderer handle would be sturdier.
+> - **Next build: N.143 Half A** (`OPEN.md` §N.143), then the file-name fallback (Half B).
+> - **N.139 is still briefed and ready.**
+>
+> ### ADDED AT THE CLOSE OF 2026-09-16 (late). One research thread IS in flight
+>
+> **Fable is running Stage 01a of the Insights synthesis** (started by Dann
+> 2026-09-16, in its own thread; no code, no repository writes). Everything about
+> it is in **INSIGHTS, THE EVIDENCE BASE** below and in the plan it points to.
+> What the desk does with it, in order:
+>
+> 1. When Dann brings the 01a memo, help him review the files in
+>    `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/`, one
+>    question at a time. His notes go in `_synthesis/review-01a.md`.
+> 2. Then give him the 01b opener: *"Read ...brief-insights-step-b-core_r5_2026-09-16.md
+>    first, then brief-insights-step-b-pass01_r5_2026-09-16.md in the same folder.
+>    Carry out Stage 01b of pass 01."* (full path: `~/Documents/Voice Pedagogy
+>    Library/Insights Research/`).
+> 3. Candidates for later, each needing Dann's yes: a Sonnet re-extraction of
+>    Bozeman's interventions (only 10 advice rows exist); photos of Bozeman PVA2
+>    Ch. 1 to 3 and 10 to 12 (Ch. 12 is Belting); the Elsevier reply on Journal of
+>    Voice access.
+>
+> The rest of this section, written 2026-09-15, still stands: the two briefed
+> builds below are unaffected by the research thread.
+>
+> ### READ THIS FIRST. Written at the close of 2026-09-15, for the next instantiation
+>
+> **The thread before this one compacted mid-work and was closed deliberately.**
+> Nothing is in flight and nothing is half-built. The tree at the floor is clean
+> apart from the memory files of that close.
+>
+> **TWO THINGS ARE BRIEFED AND READY TO RUN, and neither needs a ruling first:**
+>
+> - **N.125, slurs as tapered objects.** Brief at
+>   `../sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`, **amended at the
+>   desk 2026-09-15 with §0.1 (the line numbers moved), §2.4 (measure the tie's
+>   taper before touching the slur), and a corrected §2.3 (read `data-tie` and
+>   `data-slur`, never judge a curve from a picture).** Dann has met this defect
+>   twice on walks. **It is the desk's recommendation for the next thing built.**
+> - **N.139, every meter assignment draws on the page.** Brief at
+>   `../sessions/brief-n139-page-meter-signature_r1_2026-09-14.md`.
+>
+> **N.141's remaining increment is BLOCKED on N.142**, which is not built, so the
+> heading below is accurate about the item and not about what to do next. **Ask
+> Dann which he wants; do not choose for him.**
+>
+> ---
+>
+
+### From STATE.md, THE TRACKER, N.125
+
+- `[x]` **N.125. DONE 2026-09-16, walked by Dann on `570d76f`: "looks great".**
+  Shipped in `34b143c` (slurs drawn as the tie's filled outline; tie and slur
+  thickness read from the notation font's SMuFL `engravingDefaults`, Finale
+  Maestro 0.25 and 0.05 sp; `TIE_CENTRE_SP` retired) and `570d76f` (slur ends sit
+  0.73 sp from the notehead centre, as a tie's do; clearances in stave spaces).
+  Account: `../sessions/memo-n125-slurs_r1_2026-09-11.md`. Lesson:
+  `ENVIRONMENT.md` §ASK THE FONT FIRST. Left open, NOT ESTABLISHED: a melisma slur
+  crossing a system break may clear a turning mark drawn on the other system.
+  Move this entry to `LOG.md` at the close. The original entry follows.
+- (was) **N.125. Slurs as tapered objects.** Numbered 2026-09-11, **never tracked
+  until now, which is why Dann has met it twice.** Slurs draw as a constant
+  1.3 px stroke (`staff-renderer.ts:2822`) where ties are filled tapered lenses
+  (`:2783`); Gould 151 gives both one design. Brief written
+  (`../sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`) and it **needs a
+  §2.4** added before it runs: measure the rendered tie's centre thickness at the
+  shipping `lineGap` of 5.5 and say whether `TIE_CENTRE_SP` 0.4 sp survives the
+  size it is drawn at. Spec and tonight's re-verification: `OPEN.md` §N.125. Its
+  own Code thread, `staff-renderer.ts` only, off the drawer path.
+
+### From STATE.md, THE TRACKER, N.139
+
+- `[ ]` **N.139. Every meter assignment in a score draws on the page.** Ruled by
+  Dann 2026-09-14; **the number is a DESK DEFAULT** and he can collapse it into
+  N.138 with a word. Finding 2 of the 2026-09-13 walk. Ilya draws no meter
+  signature anywhere: the system head lays out the clef and the key signature and
+  nothing else (`staff-renderer.ts:1654-1664`). Spec in `OPEN.md`. **Finding 3 of
+  that walk is CLOSED and was not a defect.**
+
+### From OPEN.md, §N.139
+
+## N.139. EVERY METER ASSIGNMENT IN A SCORE DRAWS ON THE PAGE. Numbered 2026-09-14. THE NUMBER IS A DESK DEFAULT. UNPLACED.
+
+**Ruled by Dann 2026-09-14:** *"I do want every meter assignment in a score to be
+reproduced faithfully."* And, bounding it: *"I agree that inserting a meter
+signature at the beginning of each in the score is undesirable."* **The number is
+the desk's own. He ruled the behaviour and did not name an item, so he can
+collapse this into N.138 with a word.**
+
+**Found by Dann on the 2026-09-13 walk**, as finding 2 of four: the meter
+signature is missing from the rendered score, observed on Kabalevsky T05.
+
+**ESTABLISHED 2026-09-14: Ilya has never drawn one, on any score.** The system
+head lays out exactly two symbols, computed backwards from `leftMargin`, the clef
+and the key signature (`staff-renderer.ts:1654-1664`). The draw calls are the
+clef at `:1684` and `:1694` and the key accidentals at `:1712-1718`. No
+time-signature draw call exists anywhere in that file. The `timeSig0` to
+`timeSig9` glyphs at `:564` are there for the tacet count numeral, per
+`:553-558`. So this is a feature that was never built. It is not a regression and
+not a parse failure.
+
+**IT IS NOT THE CAUSE OF THE 2026-09-13 WALK'S FINDING 3, WHICH IS CLOSED AND WAS
+NOT A DEFECT.** That finding read *"it feels like the measures are half the
+rhythmic value they should be."* T05's own file declares 2/4 once at measure 1
+and never changes it across 90 measures; its Bass measures fill 2/4 exactly
+(measure 9 is quarter, eighth, eighth; measure 10 is dotted quarter, eighth;
+measure 12 is a half note); and Dann checked the printed score on 2026-09-14 and
+it is 2/4. Read from the `.musx` converted with the project's own denigma WASM
+that session.
+
+**SCOPE, from his two sentences.** Draw the opening signature and every change.
+Do not repeat it at the start of each system, which is where a meter signature
+differs from a clef and a key signature.
+
+**The data is there:** `types.ts:228` carries it per measure, and the change list
+is built at `mnx-parser.ts:411-437` and `musicxml-parser.ts:395-455`.
+
+**NAMED COST, and it is why this is separate from N.138.** The head arithmetic at
+`staff-renderer.ts:1654-1664` gains a third symbol, so `ksStart`, `clefX` and
+`staveLeft` all move left. A change of meter draws inside a system, where nothing
+draws today, so the measure-spacing pass has to reserve room for it. That means
+fewer measures per system and different pagination, the same class of cost
+already named for N.129's hyphen widening.
+
+**Done when:** the opening signature draws at the head of the first system, every
+change draws at the measure that declares it, no signature draws at a system
+start that declares none, and Dann walks it on the engraved Without Sun song 1,
+which changes at measure 2.
+
+---

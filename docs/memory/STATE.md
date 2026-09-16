@@ -11,10 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`76b24a3`**, "N.126 and N.141: measure numbers arrive on
-Score markup, and the squircle's width holds its IPA syllable", shipped
-2026-09-14 22:35, READY on the branch alias, sha checked by the desk before Dann
-was sent to it, and walked by him on 2026-09-15 (the previous floors, `eb918ed`,
+before **`aca2dbb`**, "Loupe: a measure that opens on a rest shows the rest",
+shipped 2026-09-16, READY on the branch alias, sha checked by the desk before Dann was
+sent to it, and walked by him the same day (the previous floors, `76b24a3`, `eb918ed`,
 `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
 `../sessions/LOG.md`). A floor cannot go stale,
 because further commits only move HEAD forward and never make the floor false.
@@ -44,82 +43,44 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### UPDATED 2026-09-16, LATER. Read this before the block that follows
+> ### READ THIS FIRST. Written at the close of 2026-09-16, for the next instantiation
 >
-> - **Insights 01a and 01b are both done.** Dann's notes: `Insights Research/_synthesis/review-01a.md`
->   (R1 to R3) and `review-01b.md` (S1 and S2 ruled; **S3, the opened-vowel targets, is
->   OPEN and is the next question for Dann**).
-> - **N.125 is DONE** (`570d76f`, walked). See THE TRACKER.
-> - **Bozeman PVA2 batch C is extracted** (Ch. 1 to 3, 10, 11; 35 photos, 31 labelled,
->   4 duplicates skipped): `_extraction/claims_bozeman-PVA2_batch-C.csv`, 50 rows, 10
->   advice rows, checked by the desk (parses; longest quote 13 words). Input for
->   Insights pass 02. Ch. 12 is not wanted (no belting, `PRODUCT.md`).
-> - **S3 to S5 are ruled** in `review-01b.md`. Still Dann's from the candidates:
->   tolerances (TOL2, and the crossing band), INS-P01-7's migration targets for six
->   vowels and replace-or-annotate, INS-P01-8's treble alternative, INS-P01-10's leap size.
-> - **N.143's cause is found** (`OPEN.md` §N.143, Half A): fix queued behind N.139.
-> - **N.139 is DONE**, shipped `eb7d220`, walked by Dann 2026-09-16: "Everything looks
->   exactly as it should." The system head now lays out forwards (`systemHead`,
->   `staff-renderer.ts:766`, shared with `sliceWidth`). Gate 5 moved 555/560 to
->   **564 passed, 5 skipped (569)**, nine new tests; the desk moved
->   `~/Downloads/ilya-ship.sh` line 80 and kept `ilya-ship.sh.bak-before-n139-2026-09-16`.
->   **Record correction:** Code's memo says Sunless 01 went to 6 systems on 1 page; Dann's
->   walk screenshot shows page 1 of 2 with 5 systems (mm. 1 to 15). The page is right;
->   the memo's page count is not. **Follow-up, unnumbered:** the loupe keeps its meter 2
->   spaces clear of the first ink, not the note, on measures without a meter change (T05
->   m. 9 37.28 px, m. 14 26.44 px). **Check at the close:** the Sonnet 90 print fixture
->   ("fills exactly two letter sheets") may have changed with the forward head.
-> - **Loupe drops a measure's opening rest, found by Dann 2026-09-16** (T05 mm. 28, 35, 37,
->   57, 81; every mid-system measure that opens on a rest). Not a regression: the same code is
->   in the 570d76f bundle. Cause: rests carry no hit rectangle (`staff-renderer.ts:2626`), the
->   window opens at the first hit rectangle (`loupe.ts:79-89`), and the barline search rejects a
->   barline left of the window (`Loupe.svelte:696`). Fix approved as DESK DEFAULT and sent to Code,
->   bundled with the meter run-in follow-up.
-> - **Next build: N.143 Half A** (`OPEN.md` §N.143), then the file-name fallback (Half B).
-> - **N.139 is still briefed and ready.**
+> **Nothing is in flight.** The tree at the floor is clean apart from this close's memory
+> files, which Dann commits. **Closed this session:** N.125 (`34b143c`, `570d76f`), N.139
+> (`eb7d220`), and the loupe's opening rest (`aca2dbb`), all walked by Dann. Accounts in
+> `../sessions/LOG.md` block 19.
 >
-> ### ADDED AT THE CLOSE OF 2026-09-16 (late). One research thread IS in flight
+> **THE NEXT BUILD IS N.143, HALF A. The cause is found; no brief is written.** A read-only
+> Sonnet diagnosis (returned in chat, recorded in `OPEN.md` §N.143, "HALF A: CAUSE FOUND")
+> showed T05's MNX lists an unused verse `v3` first, and `mnx-parser.ts:396` numbers verses
+> by list position, so verse 1 is empty. Fix: number only the line ids that occur on the
+> part's events. Write the Code prompt from that section. Half B (the file-name fallback,
+> a DESK DEFAULT in the same section) can ride in the same build.
 >
-> **Fable is running Stage 01a of the Insights synthesis** (started by Dann
-> 2026-09-16, in its own thread; no code, no repository writes). Everything about
-> it is in **INSIGHTS, THE EVIDENCE BASE** below and in the plan it points to.
-> What the desk does with it, in order:
+> **INSIGHTS.** Pass 01 is done: 01a and 01b ran in Fable and are reviewed. Dann's rulings:
+> `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/review-01a.md` (R1 to R3)
+> and `review-01b.md` (S1 to S5, plus desk defaults). **Still Dann's, one at a time, framed
+> with a singer's example:** the crossing-band tolerances (INS-P01-1's 50 cents and its
+> severity threshold T, INS-P01-4's TOL2); INS-P01-7's migration neighbours for the six
+> vowels with no printed path, and whether it replaces or annotates the timbre mark;
+> INS-P01-8's treble alternative; INS-P01-10's leap size; whether INS-P01-4 may fire on a
+> derived fR2; whether INS-P01-2 and INS-P01-11 are carried at all. **Bozeman PVA2 batch C
+> is extracted** (`_extraction/claims_bozeman-PVA2_batch-C.csv`, 50 rows). **Next research
+> step: pass 02 in Fable**, which needs a pass-02 addendum brief (not written). Held: the
+> Bozeman advice re-extraction (up to 1.5M tokens from the shared pool). Waiting: Elsevier.
+> Usage on 2026-09-16: all models 37%, Fable 15%, reset Sunday 05:00.
 >
-> 1. When Dann brings the 01a memo, help him review the files in
->    `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/`, one
->    question at a time. His notes go in `_synthesis/review-01a.md`.
-> 2. Then give him the 01b opener: *"Read ...brief-insights-step-b-core_r5_2026-09-16.md
->    first, then brief-insights-step-b-pass01_r5_2026-09-16.md in the same folder.
->    Carry out Stage 01b of pass 01."* (full path: `~/Documents/Voice Pedagogy
->    Library/Insights Research/`).
-> 3. Candidates for later, each needing Dann's yes: a Sonnet re-extraction of
->    Bozeman's interventions (only 10 advice rows exist); photos of Bozeman PVA2
->    Ch. 1 to 3 and 10 to 12 (Ch. 12 is Belting); the Elsevier reply on Journal of
->    Voice access.
+> **`PRODUCT.md` gained three sections this session:** ten vowels and no others; no
+> belting; Insights gives insight, not intervention.
 >
-> The rest of this section, written 2026-09-15, still stands: the two briefed
-> builds below are unaffected by the research thread.
+> **Loose ends, none urgent:** the loupe's path for a system's first measure that opens on
+> a rest is untested; a melisma slur crossing a system break may clear a turning mark on the
+> other system (NOT ESTABLISHED); the Sonnet 90 print fixture may no longer fill exactly two
+> sheets after the forward head; the desk's Grayson page renders sit in
+> `node_modules/.desk-scratch/` (git-ignored).
 >
-> ### READ THIS FIRST. Written at the close of 2026-09-15, for the next instantiation
->
-> **The thread before this one compacted mid-work and was closed deliberately.**
-> Nothing is in flight and nothing is half-built. The tree at the floor is clean
-> apart from the memory files of that close.
->
-> **TWO THINGS ARE BRIEFED AND READY TO RUN, and neither needs a ruling first:**
->
-> - **N.125, slurs as tapered objects.** Brief at
->   `../sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`, **amended at the
->   desk 2026-09-15 with §0.1 (the line numbers moved), §2.4 (measure the tie's
->   taper before touching the slur), and a corrected §2.3 (read `data-tie` and
->   `data-slur`, never judge a curve from a picture).** Dann has met this defect
->   twice on walks. **It is the desk's recommendation for the next thing built.**
-> - **N.139, every meter assignment draws on the page.** Brief at
->   `../sessions/brief-n139-page-meter-signature_r1_2026-09-14.md`.
->
-> **N.141's remaining increment is BLOCKED on N.142**, which is not built, so the
-> heading below is accurate about the item and not about what to do next. **Ask
-> Dann which he wants; do not choose for him.**
+> **N.141's remaining increment is still BLOCKED on N.142**, so the heading below describes
+> the item, not the next step.
 >
 > ---
 >
@@ -148,7 +109,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >    stays closed. **m. 84 is the defect. m. 87 is a melisma slur, settled
 >    2026-09-16 from `data-slur` (N.125 memo), so its closed box is correct.** `OPEN.md` §N.141
 >    §EVIDENCE.
-> 3. **N.125 raised again, with a challenge to the record.** Dann: *"These
+> 3. **N.125 raised again, with a challenge to the record. (N.125 is DONE 2026-09-16.)** Dann: *"These
 >    constant-width arcs are noticeable and wrong. They need to be tapered."*
 >    **Re-verified against the tree tonight and the finding holds**: ties are
 >    filled tapered lenses (`staff-renderer.ts:2783`), slurs are a constant 1.3 px
@@ -178,7 +139,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > **THE 2026-09-13 WALK'S FOUR FINDINGS ARE ALL RESOLVED OR NUMBERED.** 1 the
 > `Transcribe and fit` pill, CLOSED 2026-09-14, **its fate still Dann's to rule**
 > and both its acts known duplicates; 2 the missing meter signature, **numbered
-> N.139**, brief written, not built; 3 the possibly halved rhythmic values,
+> N.139**, DONE 2026-09-16 (`eb7d220`); 3 the possibly halved rhythmic values,
 > **CLOSED 2026-09-14 and never a defect**, T05 declares 2/4 once and Dann checked
 > the printed score; 4 N.133, **DONE 2026-09-15**, `LOG.md` block 17.
 >
@@ -242,7 +203,6 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **BRIEFS WRITTEN AND NOT RUN, corrected 2026-09-14:**
 > `brief-n117-dictionary-fill_r1_2026-09-12`,
-> `brief-n125-slurs-as-objects_r1_2026-09-11`,
 > `brief-n119-toggles-reach-score-markup_r1_2026-09-12`,
 > `brief-colour-stage4_r1_2026-09-14`,
 > `brief-n135-ocr-measurement_r1_2026-09-14` (its measurement RUN, memo landed).
@@ -401,25 +361,6 @@ does not repeat them.
   square brackets mean editorial in a score and that number is Ilya's own
   addition. Spec in the OWED section below; it stays there as the record of what
   was ruled.
-- `[x]` **N.125. DONE 2026-09-16, walked by Dann on `570d76f`: "looks great".**
-  Shipped in `34b143c` (slurs drawn as the tie's filled outline; tie and slur
-  thickness read from the notation font's SMuFL `engravingDefaults`, Finale
-  Maestro 0.25 and 0.05 sp; `TIE_CENTRE_SP` retired) and `570d76f` (slur ends sit
-  0.73 sp from the notehead centre, as a tie's do; clearances in stave spaces).
-  Account: `../sessions/memo-n125-slurs_r1_2026-09-11.md`. Lesson:
-  `ENVIRONMENT.md` §ASK THE FONT FIRST. Left open, NOT ESTABLISHED: a melisma slur
-  crossing a system break may clear a turning mark drawn on the other system.
-  Move this entry to `LOG.md` at the close. The original entry follows.
-- (was) **N.125. Slurs as tapered objects.** Numbered 2026-09-11, **never tracked
-  until now, which is why Dann has met it twice.** Slurs draw as a constant
-  1.3 px stroke (`staff-renderer.ts:2822`) where ties are filled tapered lenses
-  (`:2783`); Gould 151 gives both one design. Brief written
-  (`../sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`) and it **needs a
-  §2.4** added before it runs: measure the rendered tie's centre thickness at the
-  shipping `lineGap` of 5.5 and say whether `TIE_CENTRE_SP` 0.4 sp survives the
-  size it is drawn at. Spec and tonight's re-verification: `OPEN.md` §N.125. Its
-  own Code thread, `staff-renderer.ts` only, off the drawer path.
-
 ### Numbered 2026-09-15
 
 - `[ ]` **N.143. N.134 does not fire on a `.musx` score.** Observed by Dann on the
@@ -465,13 +406,6 @@ does not repeat them.
   **Three things it raised are still live and are NOT closed by it:** the
   selection ring landing under the system's ground (`INBOX.md`), whether a tap
   ever picked the wrong note (NOT ESTABLISHED), and N.140.
-- `[ ]` **N.139. Every meter assignment in a score draws on the page.** Ruled by
-  Dann 2026-09-14; **the number is a DESK DEFAULT** and he can collapse it into
-  N.138 with a word. Finding 2 of the 2026-09-13 walk. Ilya draws no meter
-  signature anywhere: the system head lays out the clef and the key signature and
-  nothing else (`staff-renderer.ts:1654-1664`). Spec in `OPEN.md`. **Finding 3 of
-  that walk is CLOSED and was not a defect.**
-
 - `[ ]` **N.136. Open syllabification never reaches Score markup's drawn text.**
   Found by Dann on the N.118 walk: the toggle moves, and neither the Cyrillic
   nor the IPA on the page changes. Spec in `OPEN.md`. **Not a regression from

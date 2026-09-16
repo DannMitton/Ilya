@@ -439,56 +439,6 @@ finding them twice.
 
 ---
 
-## N.139. EVERY METER ASSIGNMENT IN A SCORE DRAWS ON THE PAGE. Numbered 2026-09-14. THE NUMBER IS A DESK DEFAULT. UNPLACED.
-
-**Ruled by Dann 2026-09-14:** *"I do want every meter assignment in a score to be
-reproduced faithfully."* And, bounding it: *"I agree that inserting a meter
-signature at the beginning of each in the score is undesirable."* **The number is
-the desk's own. He ruled the behaviour and did not name an item, so he can
-collapse this into N.138 with a word.**
-
-**Found by Dann on the 2026-09-13 walk**, as finding 2 of four: the meter
-signature is missing from the rendered score, observed on Kabalevsky T05.
-
-**ESTABLISHED 2026-09-14: Ilya has never drawn one, on any score.** The system
-head lays out exactly two symbols, computed backwards from `leftMargin`, the clef
-and the key signature (`staff-renderer.ts:1654-1664`). The draw calls are the
-clef at `:1684` and `:1694` and the key accidentals at `:1712-1718`. No
-time-signature draw call exists anywhere in that file. The `timeSig0` to
-`timeSig9` glyphs at `:564` are there for the tacet count numeral, per
-`:553-558`. So this is a feature that was never built. It is not a regression and
-not a parse failure.
-
-**IT IS NOT THE CAUSE OF THE 2026-09-13 WALK'S FINDING 3, WHICH IS CLOSED AND WAS
-NOT A DEFECT.** That finding read *"it feels like the measures are half the
-rhythmic value they should be."* T05's own file declares 2/4 once at measure 1
-and never changes it across 90 measures; its Bass measures fill 2/4 exactly
-(measure 9 is quarter, eighth, eighth; measure 10 is dotted quarter, eighth;
-measure 12 is a half note); and Dann checked the printed score on 2026-09-14 and
-it is 2/4. Read from the `.musx` converted with the project's own denigma WASM
-that session.
-
-**SCOPE, from his two sentences.** Draw the opening signature and every change.
-Do not repeat it at the start of each system, which is where a meter signature
-differs from a clef and a key signature.
-
-**The data is there:** `types.ts:228` carries it per measure, and the change list
-is built at `mnx-parser.ts:411-437` and `musicxml-parser.ts:395-455`.
-
-**NAMED COST, and it is why this is separate from N.138.** The head arithmetic at
-`staff-renderer.ts:1654-1664` gains a third symbol, so `ksStart`, `clefX` and
-`staveLeft` all move left. A change of meter draws inside a system, where nothing
-draws today, so the measure-spacing pass has to reserve room for it. That means
-fewer measures per system and different pagination, the same class of cost
-already named for N.129's hyphen widening.
-
-**Done when:** the opening signature draws at the head of the first system, every
-change draws at the measure that declares it, no signature draws at a system
-start that declares none, and Dann walks it on the engraved Without Sun song 1,
-which changes at measure 2.
-
----
-
 ## N.140. THE LOUPE GUARANTEES A STAVE SPACE, AND SCROLLS RATHER THAN SHRINKING BELOW IT. Numbered by Dann 2026-09-14. UNPLACED.
 
 **Dann's design, 2026-09-14, and the words are his:** *"a contextual horizontal

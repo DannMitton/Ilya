@@ -19,6 +19,7 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| Code reports a preview serving an old build on port 4173 | `A STALE PREVIEW HOLDS PORT 4173` |
 | ship anything at all | `Gate baselines` |
 | move a gate number | `Moving a gate baseline` |
 | the ship script refuses to run | `refuses on untracked files` |
@@ -156,6 +157,8 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| the desk needs to stage a render or scratch file from the repo | `DESK SCRATCH GOES IN node_modules/.desk-scratch` |
+| a second Code session could run while one is building | `A READ-ONLY SESSION CAN RUN BESIDE A BUILD` |
 | spawn a farm-out, or cost one | `The device bridge` |
 | a subagent that cannot find the files | `The device bridge` |
 | run anything in the container | `Container` |
@@ -273,7 +276,7 @@ renderer named it.** In this project it usually did.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **1173 passed (1173)** |
+| web-test | **1181 passed (1181)** |
 | score-parser | **564 passed, 5 skipped (569)** |
 
 **MOVED 2026-09-16: score-parser 555 → 564 (N.139, nine new tests), shipped `eb7d220`. The table was stale before that too (web-test read 1104, score-parser 547); both were read from `~/Downloads/ilya-ship.sh` lines 79 and 80 on 2026-09-16. The script is the instrument.**
@@ -3057,4 +3060,31 @@ waste of time."*
 
 **What the font does not give:** the curve itself, a slur's height, or a tie's
 depth. Every notation program draws those. Only those reach Dann's eye.
+
+## A STALE PREVIEW HOLDS PORT 4173. 2026-09-16
+
+A `vite preview` started by an earlier Code session can keep serving an older build
+on port 4173, and a walk on it measures the wrong code. Its command line reads
+`vite.js preview`, so a `pkill` pattern written for `vite preview` misses it. Code
+found this twice on 2026-09-16 and restarted the preview each time. **Before any
+local walk, confirm the preview was started after the last build.**
+
+## DESK SCRATCH GOES IN node_modules/.desk-scratch. 2026-09-16
+
+`device_stage_files` stages only from a connected folder, so a render the desk wants
+to look at must sit inside one. **Never inside a tracked path of the repo:** on
+2026-09-16 the desk rendered two Grayson pages into `docs/sessions/`, where they
+were untracked files that would have made the ship script refuse. They were moved
+with `mv -n` to `node_modules/.desk-scratch/`, and
+`git --no-optional-locks status --porcelain` then showed them gone, so that path
+is ignored. Use it, or a connected folder outside the repo.
+
+## A READ-ONLY SESSION CAN RUN BESIDE A BUILD. 2026-09-16
+
+Two Code sessions share one working tree, and the ship script commits every
+tracked change, so two BUILDS at once land in one commit. **A read-only diagnosis
+can run beside a build** if its brief forbids: writing inside the repo (scripts go
+in `/tmp`), any git command, builds, preview servers, and gate runs. The N.143
+diagnosis ran that way beside N.139 on 2026-09-16 and left the tree untouched. It
+returned its report in chat, so the desk wrote the finding into `OPEN.md` itself.
 
