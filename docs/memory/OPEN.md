@@ -1162,6 +1162,22 @@ it does not describe a continuation of a sounded note.
 
 ---
 
+## N.145. A DROPPED SCORE ARRIVES AT ONCE. Numbered 2026-09-16. THE NUMBER IS A DESK DEFAULT.
+
+**Asked by Dann on the N.143 walk, 2026-09-16:** *"when we drop text in the input field, it is instantaneously processed into a transcription. Should dropping a file also be instantaneous?"* And on the N.142 walk, finding the pause still there: *"I guess this wasn't the fix that made dropping a score file instantaneous :("*.
+
+**RULED BY DANN 2026-09-16: option 2, "Instant for everything, with the photo report shown after the score arrives."** His answer: *"2"*. Put to him beside option 1 (instant for score files, pause kept for a photo or PDF read, the desk's recommendation) and option 3 (keep the pause). **Recorded as a default with its condition, per CONTRACT §1.19:** the pause is gone, and a read's caveats are still shown, after arrival rather than before it.
+
+**What exists, read 2026-09-16:** `ScoreUploader.svelte` holds a parsed score in `ui.kind === 'done'` (`:410`) and shows the format line, the conversion banner (`:804-816`), the read report (`:817` on), and **Try another file** / **Continue to analysis** (`:878-879`). `accept()` (`:556-560`) hands the score to the page. The restore path already accepts at once (`:596-600`). `hasWaitingScore` and `acceptWaiting` (`:546-554`) serve the **Transcribe and fit** pill.
+
+**What stays:** the `asking` and `askKind` states (a picture's clef and key questions, asked before a read) are input, not a pause, and stay. The replace dialog for a second score on a song that has one stays.
+
+**Cost:** **Transcribe and fit** loses its accept-a-waiting-score act, since no score will wait.
+
+**EXTENDED BY DANN 2026-09-16: REMOVE TRANSCRIBE AND FIT, AND CLOSE THE GAP.** His words: *"yes, remove the button, and close the gap at the same time."* The gap, read by the desk 2026-09-16 and NOT walked: a poem that arrives AFTER a wordless score is transcribed but never placed, because `reseatAcross` returns early on an unchanged diff (`reseat.ts:154`) and a first poem diffs as unchanged (`emptyDiff`, `text-diff.ts:52-54`; `+page.svelte`, `transcribeText`). **The pill's fate, owed since 2026-09-14, is settled by this: it goes.** Principle recorded in `PRODUCT.md`, "Once there is data to process, Ilya processes it". Brief r2: `../sessions/brief-n145-instant-score-arrival_r2_2026-09-16.md`. A wrong drop is undone with the receipt's **Clear** or **Replace**.
+
+---
+
 ## N.144. START PLACEMENT OVER IGNORES THE SCORE'S OWN LAYOUT, AND CANNOT BE UNDONE. Numbered 2026-09-16. THE NUMBER IS A DESK DEFAULT.
 
 **Seen by Dann on the N.142 walk, `c868540`, T05, 2026-09-16.** After **Start placement over**, m. 22's slurred pair (a melisma on « ёк » in the file) took « сту » on its second note, every later syllable sat one note early (« О » and « гонь » before the four-bar rest), and a horizontal line ran under « сту-дё ». In the loupe the IPA read `ˈjokstu` with no gap between the two syllables. His response: *":("*. Asked how hard a fix is: *"surely it can be coded, no? The file contains syllable assignments."*
@@ -1173,6 +1189,8 @@ it does not describe a continuation of a sounded note.
 **Constraint from the tree:** the long comment in `handleStartPlacementOver` records the N.112 fix of 2026-09-07, which made the rebuild read the POEM, not the score's words, because the engraving had lost a final « я ». `seatScoreWords` seats the poem's slots onto the score's cells, so the poem still owns the text; the brief must show that case still ends with every syllable placed.
 
 **BUILT 2026-09-16, WRITTEN NOT DONE.** Memo `../sessions/memo-n144-start-over-keeps-the-score_r1_2026-09-16.md`, read by the desk in full. `handleStartPlacementOver` pushes `loupe.undo.startOver`, then, when the input field still holds the score's words verbatim (`doc.inputText === scoreText`), empties the placements and calls `seatFilledPoem`; otherwise the old `firstPass` path runs. **So an edited poem still counts notes and can still break a melisma**; Code's choice, reversible. **Code overwrote the desk's brief** with its own 192-line version at the same path, and skipped the desk brief's T05 mismatch count and both rendering checks below; the walk carries them. `ENVIRONMENT.md`, section `CODE REWROTE THE BRIEF`.
+
+**WALKED BY DANN 2026-09-16 on `ceeb214`, incognito, T05, French mode: the layout half is DONE.** His words: *"Bingo! Instant fix :)"*. Seen in his loupe shot of m. 22 after the press: « ёк » under the first eighth, an extender line under the B and the G, « сту » under the last eighth; IPA `ˈjok` and `stu` apart. **The stray line under « сту-дё » and the `ˈjokstu` collision are both gone from the picture.** The desk's stated expectation had put « сту » on the G; the page instead matches the arrival layout, which is what the fix restores. The loupe header read « système 3 sur 11 », where the broken state read « sur 10 ». **Undo walked the same night: DONE.** **ANNULER** restored the broken layout and **REFAIRE** appeared; his words: *"yes, just as you say"*. The clause is the button's accessible name, not visible text (`bandState.ts:161-178`, ruled 2026-09-10). **The item is DONE; its spec leaves this file at the close.**
 
 **NOT ESTABLISHED:** what draws the line under « сту-дё » (the desk has not read that drawing code), and whether the `ˈjokstu` collision survives once the syllables are back on their own notes. Both are checked on this item's walk.
 

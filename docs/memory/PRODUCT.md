@@ -51,6 +51,27 @@ quotation is Dann's.
 
 ---
 
+## Once there is data to process, Ilya processes it. Stated by Dann 2026-09-16
+
+**His words:** *"once there is data to process, Ilya should process it."* And, on
+removing **Continue to analysis** and **Transcribe and fit**: *"By getting rid of
+the two buttons I think we are establishing Ilya's robust response and I like
+that very much, the appearance of instantaneity."*
+
+**The default:** text transcribes when it arrives, a score draws when it is
+dropped, and a poem and a melody are paired as soon as both exist, in either
+order. No button stands between the singer's material and the result. **The
+condition for departing from it:** Ilya still stops to ask where it needs an
+answer only the singer has (a picture's clef and key), or before it would
+destroy the singer's own work (the replace dialog).
+
+**This supersedes** his ruling of 2026-09-07 that the Transcribe button "keeps its
+explicit act", and it leaves the drawer grammar's filled-pill row (section "The
+drawer grammar and the path") without **Transcribe and fit**; the Input surface
+now has no primary pill.
+
+---
+
 ## What Ilya produces. SETTLED. Do not reopen
 
 **A study edition whose paper is a GUI.**

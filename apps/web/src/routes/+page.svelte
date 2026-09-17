@@ -146,6 +146,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		seatCliticFolds,
 	} from '$lib/shane/clitic-seat';
 	import { seatScoreWords } from '$lib/shane/score-seat';
+	import { shouldSeatFirstTranscription } from '$lib/shane/first-seat';
 	import { collectScoreWords, scoreWordsText } from '$lib/shane/vowel-resolver';
 	import {
 		COARSE_TAP_SPACES,
@@ -2320,12 +2321,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * The poem in the field, transcribed, and nothing else.
 	 *
 	 * N.108-5 LIFTED THIS OUT OF `handleTranscribe`, because after Dann's
-	 * ruling of 2026-09-04 three callers run it and only one of them is a
+	 * ruling of 2026-09-04 three callers ran it and only one of them was a
 	 * button press: the button, an arriving score, and the dictionary
 	 * finishing its load after a boot that found a poem and a score together.
-	 * What stayed behind in `handleTranscribe` is everything the singer's own
-	 * press is entitled to do and an implicit run is not, which is the breath,
+	 * What stayed behind in `handleTranscribe` was everything the singer's
+	 * own press was entitled to do and an implicit run was not: the breath,
 	 * the console record, and the focus move onto the first word.
+	 *
+	 * N.145, 2026-09-16: TRANSCRIBE AND FIT IS REMOVED. Dann: *"yes, remove
+	 * the button."* `handleTranscribe` went with it, breath, console record,
+	 * focus move and all; every call here is now implicit (a paste or a
+	 * drop, a typing pause, an arriving score, the dictionary landing at
+	 * boot) or Cmd+Enter in the intake field, which now calls `flushText`
+	 * directly rather than a button handler.
 	 *
 	 * N.57: glosses are deliberately NOT wiped here. `runPipeline()` rebuilds
 	 * `lines`, then `keepSurvivingGlosses()` drops only the ones whose word
@@ -2383,6 +2391,38 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			) {
 				seatFilledPoem(waiting);
 			}
+		}
+		/* N.145, "close the gap." A first transcription diffs as unchanged
+		   (`diff` above, from `emptyDiff()`), so `reseatAcross` never runs for
+		   it: before this block, a score already attached and still wholly
+		   unplaced never got a seat at all once its poem finally arrived.
+		   `shouldSeatFirstTranscription` (`first-seat.ts`) is the guard: it
+		   refuses once any note already carries a syllable, by hand, by the
+		   `scoreSeatWaiting` block just above, or by `reseatAcross` itself, so
+		   a later edit is never swept back through here. Mirrors
+		   `applyArrival`'s own seat for the reverse arrival order:
+		   `mergeOnUpload` for a wordless score (its own `firstPass`),
+		   `seatFilledPoem` (N.144) where the field still holds the score's own
+		   words verbatim. */
+		if (ingestedScore && shouldSeatFirstTranscription(doc.pairings, true)) {
+			const parsed = ingestedScore.result.score;
+			if (scoreText !== '' && doc.inputText === scoreText) {
+				seatFilledPoem(ingestedScore);
+			} else {
+				const noLyrics = ingestedScore.result.warnings.some((w) => w.code === 'no-lyrics-found');
+				const merged = mergeOnUpload(
+					doc.pairings,
+					parsed.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
+					syllableTargetIds(parsed.vocalLine),
+					buildSlotQueue(lines),
+					noLyrics,
+				);
+				doc.pairings = seatCliticFolds(parsed, merged.map);
+				if (merged.proposed) {
+					pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
+				}
+			}
+			orphanedCount = 0;
 		}
 		/* N.57's anchor check STAYS, and it is now a second gate rather than
 		   the mechanism. The diff has already moved every gloss whose word
@@ -2454,63 +2494,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		pairingCursor = Math.min(pairingCursor, Math.max(0, slotQueue.length - 1));
 	}
 
-	/**
-	 * N.108-5. TRANSCRIBE ALSO RUNS THE ANALYSIS.
-	 *
-	 * RULED BY DANN 2026-09-04: *"I'm also rethinking the idea of independent
-	 * Transcribe and Continue to score markup actions. I think one should
-	 * invoke the other."* A score standing at Continue is accepted by this
-	 * press, on the uploader's own `accept()` and no second copy of it.
-	 *
-	 * THE ORDER IS THE POINT. `transcribeText()` runs FIRST, so that by the
-	 * time `applyArrival` reaches `buildSlotQueue(lines)` the queue is this
-	 * poem's rather than empty, and the first pass proposes onto the notes.
-	 * Reversed, the accept would merge against nothing and the singer would
-	 * read `0 / 5`.
-	 *
-	 * IT DOES NOT RE-SEAT A SCORE THAT IS ALREADY ATTACHED. Re-running the
-	 * pairing pass when the poem changes under a score is **N.112**, the next
-	 * item in the text-to-score sequence Dann ruled on 2026-09-06, and doing
-	 * it here would be building N.112 early under another name.
-	 */
-	function handleTranscribe() {
-		if (!canTranscribe) return;
-		/* THE BUTTON ALWAYS RUNS THE PIPELINE, even where the join has already
-		   transcribed this exact text. RULED BY DANN 2026-09-07: the button
-		   "keeps its explicit act". A press that measured the text and decided
-		   to do nothing would be a dead control, and the singer pressed it. */
-		transcribeText();
-		uploaderEl?.acceptWaiting();
-		if (lines.length > 0) {
-			// Breath animation: content appears with breath-in
-			triggerPaperBreathIn();
-			// Console output for verification
-			console.group('[Ilya] Transcription result');
-			lines.forEach((line, li) => {
-				console.group(`Line ${li}`);
-				line.words.forEach((w) => {
-					console.log(
-						`${w.cleanWord} → ${w.ipaDisplay}`,
-						{
-							stress: w.stressIndex,
-							source: w.stressSource,
-							boundary: w.rightBoundary,
-							proclitic: w.isProclitic,
-							enclitic: w.isEnclitic,
-							gloss: w.gloss,
-						}
-					);
-				});
-				console.groupEnd();
-			});
-			console.groupEnd();
-			// Focus first WordStack after render
-			requestAnimationFrame(() => {
-				const first = document.querySelector<HTMLElement>('[data-word-index="0-0"]');
-				first?.focus();
-			});
-		}
-	}
+	/* N.108-5's `handleTranscribe` IS REMOVED, 2026-09-16 (N.145): Dann,
+	   "yes, remove the button." It ran `transcribeText()`, accepted a score
+	   standing at Continue (`uploaderEl?.acceptWaiting()`, also removed, see
+	   `ScoreUploader.svelte`'s `announceArrival`), and then, only for an
+	   explicit press, the breath-in animation, a console record of the
+	   transcription, and a focus move onto the first word. All three of
+	   those went with it; nothing replaces them, and `transcribeText()`
+	   alone now carries every call this function used to route through it. */
 	function handleClear() {
 		doc.inputText = '';
 		lines = [];
@@ -3696,38 +3687,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 */
 	let uploaderEl = $state<ScoreUploader | null>(null);
 
-	/**
-	 * WHETHER TRANSCRIBE AND FIT'S ACT DOES ANYTHING. N.115, brief §3.2:
-	 * "Transcribe and fit is filled only while its act does something."
-	 *
-	 * THE PREDICATE WAS `handleTranscribe` READ BACK. That function does two
-	 * things and no more: it runs the pipeline over `doc.inputText`, and it
-	 * accepts a score that is standing at Continue. `transcribedText` is the
-	 * one owner of the first question and `hasWaitingScore` of the second.
-	 *
-	 * ONE PRIMARY WHILE A SCORE WAITS, N.115 increment 2, the path rule "one
-	 * primary" (DESK DEFAULT, Dann's to wave off). Dann's walk of `a584ad8`
-	 * found `Continue to analysis` and this pill both filled after a `.musx`
-	 * drop, because the second disjunct here was exactly the fact that draws
-	 * Continue (`ScoreUploader`'s `ui.kind === 'done'`). So while a score
-	 * waits, Continue is the one filled pill and this one is a ghost; once the
-	 * score is accepted it fills again if the text still needs its act. THIS
-	 * IS PRESENTATION ONLY: `handleTranscribe` is untouched and a press while
-	 * a score waits still accepts it.
-	 *
-	 * IT IS NOT `canTranscribe`. That guard says whether the button may be
-	 * pressed at all, and a dictionary still loading disables it; this says
-	 * whether pressing it would change anything, which is what a fill means
-	 * under "at rest, nothing is filled; exactly one thing is next".
-	 *
-	 * THE BUTTON'S ACT IS UNTOUCHED. Dann's ruling of 2026-09-07 stands: "the
-	 * button keeps its explicit act", so a press with nothing to do still runs
-	 * the pipeline. Only the FILL is conditional, and a ghost pill is still a
-	 * pill a singer can press.
-	 */
-	const transcribeActs = $derived(
-		canTranscribe && doc.inputText !== transcribedText && uploaderEl?.hasWaitingScore() !== true
-	);
+	/* N.115's `transcribeActs` IS REMOVED, 2026-09-16 (N.145), along with the
+	   Transcribe and fit pill it filled: with no button there is nothing
+	   left to fill or leave a ghost. `uploaderEl` itself stays, still bound
+	   to `ScoreUploader` and still read by `onfile` below for `take()`. */
 
 	/**
 	 * Keep the singer's own file, byte for byte.
@@ -4391,11 +4354,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{transcribeError}
 					{language}
 					oninput={handleInput}
-					ontranscribe={handleTranscribe}
+					onflush={flushText}
 					onclear={handleClear}
 					{wordCount}
 					lineCount={poemLineCount}
-					{transcribeActs}
 					{hasResults}
 					isMobile={isPhone}
 					score={ingestedScore ? { fileName: ingestedScore.fileName } : null}

@@ -278,8 +278,10 @@ renderer named it.** In this project it usually did.
 |---|---|
 | phonology | 216 |
 | dictionary | 235 |
-| web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **1201 passed (1201)** |
+| web-check | **0 errors, 8 warnings, 5 files** |
+| web-test | **1206 passed (1206)** |
+
+*(2026-09-16, N.145: web-test 1201 → 1206, five `first-seat.test.ts` tests; web-check 7 → 8 warnings and 4 → 5 files, one new warning, the unused `.btn-primary` left in `IntakePanel.svelte` on purpose to keep the four-file button twin (memo §7). DESK DEFAULT to accept it. Script backup `ilya-ship.sh.bak-before-n145-2026-09-16`.)*
 
 *(web-test moved 1187 → 1199 → 1201 on 2026-09-16 late: N.142's twelve tests, then the loupe French build's two. Script backup `ilya-ship.sh.bak-before-n142-2026-09-16`.)*
 | score-parser | **567 passed, 5 skipped (572)** |

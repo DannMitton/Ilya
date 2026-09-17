@@ -59,7 +59,15 @@
 		 * `+page.svelte` has a string it is gone.
 		 */
 		oninput: (text: string, how: TextArrival) => void;
-		ontranscribe: () => void;
+		/**
+		 * N.145, 2026-09-16, REPLACES `ontranscribe`. Transcribe and fit is
+		 * removed (Dann: "yes, remove the button"); text already transcribes
+		 * on paste and after a typing pause (`oninput`'s own `TextArrival`),
+		 * so the one thing this field still needs its own verb for is
+		 * Cmd+Enter, which skips the pause. Maps to `+page.svelte`'s
+		 * `flushText`.
+		 */
+		onflush: () => void;
 		onclear: () => void;
 		/** N.70's ruling arrives with the picker it governs; see `acceptList`. */
 		isMobile?: boolean;
@@ -72,14 +80,6 @@
 		 * disagree. Blank lines are not lines of verse.
 		 */
 		lineCount: number;
-		/**
-		 * N.115, brief §3.2: whether pressing Transcribe and fit would change
-		 * anything. It decides the FILL and nothing else; the button is live
-		 * whenever `canTranscribe` says so, because Dann's ruling of
-		 * 2026-09-07 keeps its explicit act. See `+page.svelte`'s
-		 * `transcribeActs`.
-		 */
-		transcribeActs: boolean;
 		hasResults: boolean;
 		/** The ACCEPTED score, or null. Not a file mid-flight. */
 		score: { fileName: string } | null;
@@ -144,12 +144,11 @@
 		language,
 		sourceScore,
 		oninput,
-		ontranscribe,
+		onflush,
 		onclear,
 		isMobile = false,
 		wordCount,
 		lineCount,
-		transcribeActs,
 		hasResults,
 		score,
 		poemFromScore = false,
@@ -325,10 +324,14 @@
 
 	/* ── Existing handlers ─────────────────────────────────── */
 
+	/* N.145, 2026-09-16: CALLS `onflush`, NOT THE REMOVED BUTTON. Cmd+Enter
+	   still means "transcribe now, skip the pause"; it used to reach that
+	   through Transcribe and fit's own handler and now calls `flushText`
+	   directly. */
 	function handleKeydown(e: KeyboardEvent) {
 		if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
 			e.preventDefault();
-			ontranscribe();
+			onflush();
 		}
 	}
 </script>
@@ -636,28 +639,10 @@
 		<div class="intake-stations">{@render notationAndAnalysis()}</div>
 	{/if}
 
-	<!-- ── THE ONE TRANSCRIBE. Ruled 2026-09-02: "The Transcribe action lives
-	     under the intake in Piece and nowhere else." Clear left this row for
-	     the poem's receipt, which is the other half of the same ruling, so
-	     the row holds one button and the `1fr 2fr` grid that made Transcribe
-	     the wide one has nothing left to divide. -->
-	<div class="intake-transcribe">
-		<!-- N.115: FILLED ONLY WHILE ITS ACT DOES SOMETHING, ruled 2026-09-10
-		     through "at rest, nothing is filled; exactly one thing is next, and
-		     only that pill is filled". The predicate is `transcribeActs` in
-		     `+page.svelte`, which is `handleTranscribe` read back. The button
-		     is LIVE either way: Dann's ruling of 2026-09-07 keeps its explicit
-		     act, and a ghost pill is still a pill a singer can press. -->
-		<button
-			class="action-btn"
-			class:btn-primary={transcribeActs}
-			class:btn-ghost={!transcribeActs}
-			disabled={!canTranscribe}
-			onclick={ontranscribe}
-		>
-			{loaderState.isLoading ? t('input.transcribeLoading', language) : t('input.transcribe', language)}
-		</button>
-	</div>
+	<!-- ── THE ONE TRANSCRIBE IS REMOVED, 2026-09-16 (N.145). Dann: "yes,
+	     remove the button." `input.transcribe` and `input.transcribeLoading`
+	     stay in `i18n.ts`, unused, the same way N.108 increment 2's dropzone
+	     strings did: a ratified string is not this ship's to delete. -->
 
 	{#if transcribeError}
 		<!-- The failure of Transcribe, so it reports inside the station whose
@@ -1158,15 +1143,8 @@
 		margin-right: 0;
 	}
 
-	/* THE ONE TRANSCRIBE, N.108 increment 2. `.source-actions` was a
-	   `1fr 2fr` grid holding Clear and Transcribe, and Clear left it for the
-	   poem's receipt on Dann's ruling of 2026-09-02. One button has no columns
-	   to divide, so this is a grid of one and Transcribe takes the width, which
-	   is what "the primary action is the wide one" always meant. */
-	.intake-transcribe {
-		display: grid;
-		gap: 6px;
-	}
+	/* `.intake-transcribe` IS REMOVED, 2026-09-16 (N.145), with the row it
+	   laid out: Transcribe and fit is gone. */
 
 	/* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
 	   calibration ritual's own two buttons (`CalibrationWizard.svelte`'s
@@ -1175,8 +1153,14 @@
 	   buttons share its rounded ends?" Only the corners move; the fill, the
 	   border, the type and the padding are untouched.
 
-	   It carries all six drawer buttons: five `.btn-ghost` and the one
-	   `.btn-primary`, which are fill rules and set no radius of their own. */
+	   IT CARRIES FIVE DRAWER BUTTONS NOW, ALL `.btn-ghost`, since Transcribe
+	   and fit, the one `.btn-primary` in this file, is gone (N.145,
+	   2026-09-16). `.btn-primary` STAYS UNUSED HERE RATHER THAN REMOVED: this
+	   file's own header calls `.action-btn`, `.btn-ghost` and `.btn-primary`
+	   a twinned declaration across four files, "change one and change all
+	   four," and deleting a fill rule from one twin while the other three
+	   keep it would be the smaller, quieter version of exactly the drift that
+	   note exists to prevent. */
 	.action-btn {
 		padding: 0.45rem 0.5rem;
 		font-family: var(--font-sans);

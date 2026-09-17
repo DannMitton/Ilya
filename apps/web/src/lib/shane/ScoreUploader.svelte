@@ -71,11 +71,13 @@
 
 	interface Props {
 		language: Language;
-		/** The parsed score, accepted by the user via "Continue to analysis".
-		 *  Live wiring (§E.7) consumes this.
+		/** The parsed score. Live wiring (§E.7) consumes this.
 		 *
 		 *  N.67 step 2: the FILE travels with it, because the library stores the
-		 *  singer's own bytes and only this component ever holds them. */
+		 *  singer's own bytes and only this component ever holds them.
+		 *
+		 *  N.145, 2026-09-16: CALLED AT ONCE, no longer via a singer's press
+		 *  of "Continue to analysis", which is gone. See `announceArrival`. */
 		oningested: (
 			ingested: IngestedScore,
 			file: File,
@@ -143,7 +145,14 @@
 		 *  PDF's words are extracted and a picture's are recognised. */
 		| { kind: 'askKind'; file: File; picture: boolean }
 		| { kind: 'busy'; label: string }
-		| { kind: 'done'; ingested: IngestedScore; file: File }
+		/** N.145, 2026-09-16: RENAMED FROM `done`. The parse already succeeded
+		 *  and `oningested` has already been called (`announceArrival`, called
+		 *  right after every upload-origin `handleFile`); nothing here is
+		 *  still waiting on a singer's press. What this state carries is what
+		 *  stays ON SCREEN afterwards: the format line, the fidelity banner,
+		 *  and a picture or PDF's read report, until the singer dismisses it
+		 *  or drops another file. */
+		| { kind: 'arrived'; ingested: IngestedScore; file: File }
 		| { kind: 'error'; message: string }
 		| { kind: 'soon'; message: string };
 
@@ -247,6 +256,7 @@
 			return;
 		}
 		await handleFile(file);
+		announceArrival();
 	}
 
 	/**
@@ -407,11 +417,42 @@
 		}
 
 		if (outcome.ok) {
-			ui = { kind: 'done', ingested: outcome.ingested, file };
+			ui = { kind: 'arrived', ingested: outcome.ingested, file };
 			return;
 		}
 		const c = classify(outcome.error, isMscz);
 		ui = c.soon ? { kind: 'soon', message: c.message } : { kind: 'error', message: c.message };
+	}
+
+	/**
+	 * N.145, 2026-09-16, RULED BY DANN: option 2, instant for every file. A
+	 * parse's own success used to leave the score waiting at `done` for a
+	 * singer's press; `handleFile` now lands it at `arrived` instead, and
+	 * every UPLOAD-origin caller of `handleFile` calls this right after, so
+	 * the page draws the score with no press in between.
+	 *
+	 * THE RESTORE PATH DOES NOT CALL THIS, ON PURPOSE. `onMount` below calls
+	 * `oningested` itself, with origin `'restore'`, and still resets to
+	 * `idle` afterwards exactly as it always has: a reload silently brings
+	 * the score back, and this file's `arrived` summary is not shown for it.
+	 * Calling this here too would fire `oningested` a second time and with
+	 * the wrong origin, which is why the origin is not a parameter: this
+	 * function is upload-only by construction, matching what `accept()` used
+	 * to do before this ship, minus the `reset()` its explicit press earned
+	 * and this instant arrival does not.
+	 */
+	function announceArrival(): void {
+		if (ui.kind !== 'arrived') return;
+		const page = pageFor(ui.ingested);
+		oningested(ui.ingested, page ? inkFile(ui.file) : ui.file, 'upload', page ?? undefined);
+	}
+
+	/** The singer answered "the score" on the PDF/picture question. N.145
+	 *  extends this to call `announceArrival` the same way every other
+	 *  upload-origin path into `handleFile` does. */
+	async function handleScoreAnswer(file: File): Promise<void> {
+		await handleFile(file);
+		announceArrival();
 	}
 
 	/**
@@ -516,49 +557,16 @@
 	async function readAsked(): Promise<void> {
 		if (ui.kind !== 'asking') return;
 		await handleFile(ui.file, answers);
+		announceArrival();
 	}
 
-	/**
-	 * N.108-5. Accept a score that is standing at Continue, if one is.
-	 *
-	 * RULED BY DANN 2026-09-04: Transcribe and Continue to analysis are one
-	 * action, *"one should invoke the other."* This is the half the drawer's
-	 * Transcribe button reaches for. It returns whether it did anything, so
-	 * the caller can say so; every other state, and there are seven, is a
-	 * score that is not waiting on an answer and this must not disturb it.
-	 *
-	 * `accept()` ITSELF IS UNCHANGED, and that is deliberate: one press of
-	 * Continue and one press of Transcribe now run the SAME line, so the two
-	 * paths cannot drift apart into two behaviours.
-	 */
-	/**
-	 * N.115. WHETHER A SCORE IS STANDING AT CONTINUE, without accepting it.
-	 *
-	 * "Transcribe and fit is filled only while its act does something" (brief
-	 * §3.2), and one of the two things its act does is `acceptWaiting`. That
-	 * predicate is the `if` on the next function, read rather than acted on,
-	 * so the pill and the press cannot disagree about whether there is a score
-	 * to accept.
-	 *
-	 * IT IS REACTIVE ACROSS THE BOUNDARY: `ui` is `$state`, so a `$derived` in
-	 * the owner that calls this re-runs when the read finishes.
-	 */
-	export function hasWaitingScore(): boolean {
-		return ui.kind === 'done';
-	}
-
-	export function acceptWaiting(): boolean {
-		if (ui.kind !== 'done') return false;
-		accept();
-		return true;
-	}
-
-	function accept(): void {
-		if (ui.kind !== 'done') return;
-		const page = pageFor(ui.ingested);
-		oningested(ui.ingested, page ? inkFile(ui.file) : ui.file, 'upload', page ?? undefined);
-		reset();
-	}
+	/* N.108-5's `accept()`, and N.115's `hasWaitingScore` / `acceptWaiting`
+	   that read it, ARE REMOVED, 2026-09-16 (N.145): "Transcribe and fit"
+	   is gone (Dann: "yes, remove the button"), and with no button standing
+	   at Continue there is nothing left for either to read or to press.
+	   What `accept()` did — `pageFor`, `inkFile`, and the call to
+	   `oningested` — is now `announceArrival`, above, called the instant a
+	   parse succeeds rather than on a later press. */
 
 	/** The page provenance for a reader arrival, with the measured spacing filled in. */
 	function pageFor(ingested: IngestedScore): PageProvenance | null {
@@ -593,7 +601,11 @@
 		// never re-asks. Re-asking on every reload is the tool forgetting, which
 		// is the same principle N.67 step 2's restore already states.
 		await handleFile(file, restore.answers ?? undefined);
-		if (ui.kind === 'done') {
+		// N.145 RENAMED 'done' TO 'arrived'; NOTHING ELSE HERE CHANGED. This
+		// path calls `oningested` itself, with origin 'restore', and resets
+		// to `idle` exactly as it always has, unlike an upload's
+		// `announceArrival`, which this path does not call.
+		if (ui.kind === 'arrived') {
 			// 'restore', not 'upload': these bytes CAME from the vault, and
 			// writing them back would be the tool rewriting what it just read.
 			oningested(ui.ingested, ui.file, 'restore');
@@ -697,11 +709,11 @@
 	}
 
 	const bannerTier = $derived(
-		ui.kind === 'done' && !bannerDismissed ? fidelityBanner(ui.ingested.provenance) : null
+		ui.kind === 'arrived' && !bannerDismissed ? fidelityBanner(ui.ingested.provenance) : null
 	);
 	const showBanner = $derived(bannerTier !== null);
 	const readReport = $derived<ReadReport | null>(
-		ui.kind === 'done' ? (ui.ingested.readReport ?? null) : null
+		ui.kind === 'arrived' ? (ui.ingested.readReport ?? null) : null
 	);
 	const measureList = (subs: { measureIndex: number; count: number }[]): string =>
 		subs.map((x) => x.measureIndex + 1).join(', ');
@@ -756,7 +768,11 @@
 				>
 					{T('intake.pdf.poem')}
 				</button>
-				<button type="button" class="btn-primary" onclick={() => void handleFile((ui as { file: File }).file)}>
+				<button
+					type="button"
+					class="btn-primary"
+					onclick={() => void handleScoreAnswer((ui as { file: File }).file)}
+				>
 					{T('intake.pdf.score')}
 				</button>
 			</div>
@@ -801,7 +817,14 @@
 			<span class="spinner"></span>
 			<span class="status-label">{ui.label}</span>
 		</div>
-	{:else if ui.kind === 'done'}
+	{:else if ui.kind === 'arrived'}
+		<!-- N.145, 2026-09-16. THE SCORE HAS ALREADY ARRIVED: `announceArrival`
+		     (or, for a restore, `onMount`) has already called `oningested`.
+		     Nothing below is a question; it is what stays on screen about the
+		     file that just landed, until the singer dismisses it or drops
+		     another. Try another file and Continue to analysis are gone: the
+		     receipt's Clear and Replace already do the first job, and there is
+		     nothing left to continue to. -->
 		<div class="result">
 			<p class="format-label">{formatLabel(ui.ingested.provenance)}</p>
 			{#if showBanner}
@@ -872,12 +895,19 @@
 							)}
 						</p>
 					{/if}
+					<!-- N.145, 2026-09-16, DESK DEFAULT per the brief: the read report
+					     had no dismiss of its own, because it used to leave with
+					     Try another file or Continue to analysis. Both are gone, so
+					     this is now the only way to clear the whole arrived summary
+					     without dropping another file. Reuses `upload.banner.dismiss`;
+					     no string is coined. -->
+					<div class="result-actions">
+						<button type="button" class="btn-secondary" onclick={reset}>
+							{T('upload.banner.dismiss')}
+						</button>
+					</div>
 				</div>
 			{/if}
-			<div class="result-actions">
-				<button type="button" class="btn-secondary" onclick={reset}>{T('upload.tryAnother')}</button>
-				<button type="button" class="btn-primary" onclick={accept}>{T('upload.continue')}</button>
-			</div>
 		</div>
 	{:else if ui.kind === 'soon'}
 		<div class="note">
