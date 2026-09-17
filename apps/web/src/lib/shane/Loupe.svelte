@@ -23,6 +23,8 @@
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { afterGround } from '$lib/shane/system-ground';
 	import { RING_REACH, RING_STROKE } from '$lib/shane/selection-ring';
+	import type { Slot, PairingMap } from '$lib/shane/pairings';
+	import LoupeSyllables from '$lib/shane/LoupeSyllables.svelte';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import {
 		headBound,
@@ -96,9 +98,12 @@
 		 */
 		meter?: { beats: number; beatType: number } | null;
 		/**
-		 * A tap on an entry inside the loupe. Dann's ruling of 2026-08-26 moved
-		 * N.55b's syllable placement here: on a phone the page tap navigates and
-		 * this one places.
+		 * A tap on an entry inside the loupe. N.147, RULED BY DANN 2026-09-17:
+		 * this only takes the entry now (`+page.svelte`'s `handleLoupePick` is
+		 * `setCursor` and nothing else). Placement moved to a tap on a
+		 * SYLLABLE, in the row this component now draws itself (`onplace`,
+		 * below); a note tap reassigning whatever syllable happened to be
+		 * armed was Dann's own "unacceptable," 2026-09-16.
 		 */
 		onpick: (eventId: string) => void;
 		/** What the loupe must stand clear of on the left: the landscape dock, or
@@ -108,6 +113,23 @@
 		dockHeight: number;
 		/** A phone keeps the ruled 2.4; a desk aims at a readable stave. */
 		isPhone: boolean;
+		/** N.147. The whole poem's queue, `+page.svelte`'s `slotQueue`, drawn by
+		    `LoupeSyllables` on the loupe's own paper. */
+		slots: readonly Slot[];
+		/** The live pairing map, for which slots are placed and which one sits
+		    on the taken note. */
+		pairings: PairingMap;
+		/** A tap on a syllable: places it on the selected note and advances the
+		    selection (`+page.svelte`'s `placeSyllableOnSelected`). */
+		onplace: (slot: Slot) => void;
+		/** The disclosure's own open state. N.147, RULED BY DANN 2026-09-17:
+		    session-only, no `localStorage`, starts closed; lives in
+		    `+page.svelte` because THIS component is destroyed and recreated on
+		    every raise and dismiss (`{#if loupeAvailable && loupeOpen && cursor}`),
+		    so a local `$state` here would reset every time instead of once per
+		    session. */
+		syllablesOpen: boolean;
+		ontogglesyllables: () => void;
 	}
 
 	let {
@@ -126,6 +148,11 @@
 		dockInset,
 		dockHeight,
 		isPhone,
+		slots,
+		pairings,
+		onplace,
+		syllablesOpen,
+		ontogglesyllables,
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
@@ -538,6 +565,16 @@
 		windowHeight: number;
 		/** The y its CENTRE sits on; the frame hangs off it at -50%. */
 		centreY: number;
+		/**
+		 * N.147. THE TWO BOUNDS `centreY` WAS CLAMPED AGAINST, carried so the
+		 * syllable row's own height (unknown until it opens, and until its
+		 * content is measured, since the desk paragraph's height depends on how
+		 * many lines the queue wraps to) can be clamped the same way once it is
+		 * known, rather than only at the moment this frame was built. See
+		 * `shownCentreY` below.
+		 */
+		stageTop: number;
+		stageBottom: number;
 		system: number;
 		systems: number;
 	}
@@ -1187,13 +1224,8 @@
 		   nearest the singer's thumb. The frame's height is a page-wide
 		   constant since §14, so the two are equivalent here, and the bottom
 		   is the one that cannot drift when the room above it changes. */
-		const centreY = centreOnPage(
-			Math.max(sheet ? sheet.top : 0, 0),
-			stageBottom,
-			window.innerHeight,
-			windowHeight + CHROME,
-			GUTTER,
-		);
+		const stageTop = Math.max(sheet ? sheet.top : 0, 0);
+		const centreY = centreOnPage(stageTop, stageBottom, window.innerHeight, windowHeight + CHROME, GUTTER);
 
 		/* ── N.141 STEP 2. THE LOUPE'S OWN SQUIRCLE ──────────────────────────────
 		   The page's ring, read as drawn and placed on the strip by `stripRing`
@@ -1252,6 +1284,8 @@
 			contentHeight,
 			windowHeight,
 			centreY,
+			stageTop,
+			stageBottom,
 			system: systemIndexOf(ranges, measureIndex) + 1,
 			systems: ranges.length,
 		};
@@ -1333,6 +1367,77 @@
 		}
 		return T('loupe.measureTagShort').replace('%m', measureLabel);
 	});
+
+	/**
+	 * N.147. "THE LOUPE MUST STAY INSIDE THE VIEWPORT WHEN THE ROW OPENS."
+	 *
+	 * `frame.centreY` alone still keeps the box's own vertical CENTRE exactly
+	 * where `centreOnPage` put it, whatever the box's true height turns out to
+	 * be: `top: {centreY}px` plus `transform: translateY(-50%)` centres on the
+	 * ELEMENT'S OWN RENDERED HEIGHT, which the browser computes after layout,
+	 * so the maths does not need to know that height in advance. What
+	 * `centreOnPage`'s CLAMP does need in advance is the height, because the
+	 * clamp is what keeps the box's TOP and BOTTOM edges inside the stage; a
+	 * clamp computed for a shorter box (before the row existed) does not
+	 * protect the taller box the open row produces.
+	 *
+	 * SO THE BOX MEASURES ITSELF. A `ResizeObserver` on `.loupe` (the same
+	 * instrument `layoutTick` already uses on the page's own container, just
+	 * turned on this element instead) reports the TRUE rendered height, and
+	 * `shownCentreY` reruns the exact clamp `centreY` used, with that true
+	 * height instead of the `windowHeight + CHROME` estimate. `measuredHeight`
+	 * starts at 0 so the fallback keeps drawing the loupe in the frame before
+	 * this component's first paint, exactly as it always has when the row is
+	 * absent or closed, which is when the estimate is already exact.
+	 *
+	 * REACTS TO THE ROW OPENING OR CLOSING, because that changes the box's
+	 * layout height and the observer fires. It reacts to the row's OWN CONTENT
+	 * changing height too (a longer desk paragraph wrapping to more lines,
+	 * up to the `max-height: 104px` cap), for the same reason. A window
+	 * resize is covered exactly as well as it already was before this brief:
+	 * `layoutTick` reruns the whole `frame` effect on a page-container resize,
+	 * which recomputes `centreY` and, on the next frame, this too.
+	 */
+	let loupeEl = $state<HTMLElement | undefined>(undefined);
+	let measuredHeight = $state(0);
+	$effect(() => {
+		const el = loupeEl;
+		if (!el || typeof ResizeObserver === 'undefined') {
+			measuredHeight = 0;
+			return;
+		}
+		const ro = new ResizeObserver(([entry]) => (measuredHeight = entry.borderBoxSize?.[0]?.blockSize ?? el.offsetHeight));
+		ro.observe(el);
+		return () => ro.disconnect();
+	});
+
+	const shownCentreY = $derived.by(() => {
+		if (!frame) return 0;
+		const height = measuredHeight || frame.windowHeight + CHROME;
+		const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+		const centreY = centreOnPage(frame.stageTop, frame.stageBottom, viewportHeight, height, GUTTER);
+		/* MEASURED ON AN IPHONE SE'S OWN 375 x 667, WITH THE ROW OPEN: the open
+		   row can make the box taller than the room between the top gutter and
+		   the dock's own top edge has to give (`stageBottom - GUTTER`, the two
+		   bounds `centreOnPage` clamps against). `centreOnPage` resolves that
+		   conflict in the TOP gutter's favour (its own `Math.max(..., highest)`
+		   runs last), which is the right call for the frame it has always sized
+		   — a taken measure, never this tall. It is the wrong call for the row:
+		   the result pushed the box 70px INTO the dock, over the singer's own
+		   duration and pitch cells, on the exact measurement above.
+
+		   SO THIS CLAMPS AGAIN, the other way, ONLY when the two bounds
+		   themselves conflict (`highest > lowest`; `centreOnPage` never
+		   reaches this shape on its own). The dock's controls are a singer's
+		   hands mid-task; a tight top gutter is a few pixels near a header
+		   nothing is pressing. NOT ESTABLISHED how often a real phone reaches
+		   this at all: the memo names the one measurement that did, and asks
+		   Dann's own walk to look for it deliberately rather than treat this
+		   clamp as the last word. */
+		const lowest = frame.stageBottom - height / 2;
+		const highest = GUTTER + height / 2;
+		return highest > lowest ? Math.min(centreY, lowest) : centreY;
+	});
 </script>
 
 {#if open && frame}
@@ -1343,7 +1448,8 @@
 	     frame would drop half its height as the animation ended. -->
 	<div
 		class="loupe"
-		style="left: {frame.left}px; width: {frame.width}px; top: {frame.centreY}px;"
+		bind:this={loupeEl}
+		style="left: {frame.left}px; width: {frame.width}px; top: {shownCentreY}px;"
 	>
 		<p class="loupe-tag" class:paired={!!noteLine}>{tag}</p>
 		{#if noteLine}
@@ -1485,6 +1591,47 @@
 			{/if}
 			</div>
 		</div>
+		<!-- N.147, RULED BY DANN 2026-09-17: THE SYLLABLES ROW, drawing 1 of the
+		     three the desk put to him ("Hairline"). A 1 px rule under the
+		     notes, then a full-width disclosure in the loupe's own tag style
+		     (`.loupe-syl-label` below copies `.loupe-tag`'s five declarations
+		     and adds the uppercase `.loupe-tag` itself does not carry, so the
+		     measure tag above is untouched), then the syllables themselves on
+		     the loupe's own paper (`LoupeSyllables.svelte`).
+
+		     HIDDEN WHERE THERE IS NOTHING TO SHOW, the same gate the drawer's
+		     retired row kept (`showSyllables`, `IntakePanel.svelte`): an empty
+		     `slots` means no transcription and no score words either, and a
+		     disclosure over nothing is not a disclosure. -->
+		{#if slots.length > 0}
+			<div class="loupe-syl-hairline"></div>
+			<button
+				type="button"
+				class="loupe-syl-toggle"
+				aria-expanded={syllablesOpen}
+				aria-controls="loupe-syllables"
+				aria-label={T('loupe.syllables')}
+				onclick={ontogglesyllables}
+			>
+				<span class="loupe-syl-label">{T('loupe.syllables')}</span>
+				<svg
+					class="loupe-syl-chevron"
+					class:expanded={syllablesOpen}
+					width="10"
+					height="10"
+					viewBox="0 0 10 10"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.8"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				><polyline points="3,1.5 7,5 3,8.5" /></svg>
+			</button>
+			{#if syllablesOpen}
+				<LoupeSyllables id="loupe-syllables" {slots} {pairings} {selectedEventId} {isPhone} {onplace} />
+			{/if}
+		{/if}
 	</div>
 {/if}
 
@@ -1602,6 +1749,68 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+	}
+
+	/* N.147, RULED BY DANN 2026-09-17: THE HAIRLINE under the notes, drawing 1
+	   ("Hairline") of the three the desk put to him. */
+	.loupe-syl-hairline {
+		margin: 10px 0 8px;
+		height: 1px;
+		background: rgba(74, 69, 64, 0.25);
+	}
+
+	/* THE DISCLOSURE ROW, full width, in the loupe's own tag style
+	   (`.loupe-syl-label` copies `.loupe-tag`'s five declarations, below).
+	   Ruled 2026-09-17: sentence case in the string, capitals by this CSS,
+	   which is why `.loupe-tag` itself is untouched (its own strings, the
+	   measure tag among them, are not meant to shout). */
+	.loupe-syl-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		border: none;
+		background: none;
+		padding: 0;
+		margin: 0 0 6px;
+		cursor: pointer;
+		font: inherit;
+	}
+
+	.loupe-syl-label {
+		font-family: var(--font-sans, system-ui, sans-serif);
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		color: var(--ink-tertiary, #6a655f);
+		text-transform: uppercase;
+	}
+
+	/* Copied value for value from `IntakePanel.svelte`'s own disclosure
+	   chevron, the tree's one recipe for this glyph (`StationHeader.svelte`'s,
+	   per that file's own comment): closed points down, open points up. */
+	.loupe-syl-chevron {
+		flex-shrink: 0;
+		transform: rotate(90deg);
+		transition: transform 150ms ease;
+		color: var(--ink-tertiary, #6a655f);
+	}
+
+	.loupe-syl-chevron.expanded {
+		transform: rotate(-90deg);
+	}
+
+	@media (pointer: coarse) {
+		.loupe-syl-toggle {
+			min-height: 44px;
+		}
+	}
+
+	@media print {
+		.loupe-syl-hairline,
+		.loupe-syl-toggle {
+			display: none !important;
+		}
 	}
 
 	.loupe-svg {

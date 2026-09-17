@@ -1063,3 +1063,70 @@ export function rotateSyllables(
 
 	return { map: next, displaced: [] };
 }
+
+/**
+ * N.147. Place ONE slot on ONE note: the loupe's syllable-tap gesture, pulled
+ * out of `+page.svelte` so it is testable without mounting the page.
+ *
+ * REFUSES SILENTLY on a note not in `eventIds`, the same guard
+ * `placeArmedSyllable` carried (a rest or a tie's continuation can never take
+ * a syllable of its own; N.142). Returns `null` rather than a copy of `map`
+ * so the caller can tell "nothing happened" from "happened, no-op" without a
+ * reference check, and skip its own undo push and cursor advance.
+ *
+ * A REPLACEMENT, NOT AN INSERTION: tapping a second syllable onto an already
+ * seated note overwrites it, exactly as the old cursor-driven placement did.
+ * Nothing here decides whether that is wise; the loupe's own selection model
+ * is what keeps a singer from doing it by accident now that a plain note tap
+ * no longer arms anything.
+ */
+export function placeSyllable(
+	map: PairingMap,
+	eventIds: readonly string[],
+	eventId: string,
+	slot: Slot,
+): PairingMap | null {
+	if (!eventIds.includes(eventId)) return null;
+	return {
+		...map,
+		[eventId]: {
+			kind: 'syllable',
+			cyrillic: slot.cyrillic,
+			ipa: slot.ipa,
+			vowel: slot.vowel,
+			origin: slot.origin,
+		},
+	};
+}
+
+/**
+ * N.147. The note the selection should move to right after a placement: the
+ * next entry in `eventIds`, past `fromId`, that carries no decision at all.
+ *
+ * UNDECIDED ONLY, the same test `shiftToNextOpenNote` already applies
+ * (`map[id] === undefined`): a note marked `melisma` or `empty` is a decision
+ * and does not want a syllable, so it is not "next" for this purpose even
+ * though it is not `kind: 'syllable'`.
+ *
+ * STOPS AT THE END RATHER THAN WRAPPING, the same rule `placeArmedSyllable`
+ * followed advancing `pairingCursor`: a wrap would silently start overwriting
+ * seated notes from the top. Returns `null` there, and the caller leaves the
+ * selection where the placement left it.
+ *
+ * `fromId` NOT FOUND IN `eventIds` searches from the start, which only
+ * matters if the placed note itself was somehow outside `eventIds`; the
+ * placement guard above makes that unreachable in practice, but the search
+ * still has to answer something.
+ */
+export function nextOpenSyllableTarget(
+	map: PairingMap,
+	eventIds: readonly string[],
+	fromId: string,
+): string | null {
+	const at = eventIds.indexOf(fromId);
+	const start = at === -1 ? 0 : at + 1;
+	for (let i = start; i < eventIds.length; i++) {
+		if (map[eventIds[i]] === undefined) return eventIds[i];
+	}
+	return null;
+}

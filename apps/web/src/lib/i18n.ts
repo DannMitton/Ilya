@@ -406,6 +406,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.station.pitch':         { en: 'Pitch',                        fr: 'Hauteur' },
 	'loupe.station.accidental':    { en: 'Accidental \u00b7 Entry',       fr: 'Altération \u00b7 Saisie' },
 	'loupe.station.lyric':         { en: 'Lyric',                        fr: 'Texte' },
+	// N.147, RULED BY DANN 2026-09-17. The loupe's own SYLLABLES disclosure,
+	// under the notes: sentence case in the string, capitals by the tag
+	// style's own CSS (`.loupe-syl-label` in `Loupe.svelte`). The same key
+	// names the disclosure button's aria-label, so nothing else is coined.
+	'loupe.syllables':             { en: 'Syllables',                    fr: 'Syllabes' },
 	// Cells the singer can see and cannot use this slice. Slice 3 takes all
 	// three, and none of them carries behaviour here.
 	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },

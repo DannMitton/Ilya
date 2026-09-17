@@ -399,9 +399,9 @@ describe('N.111 increment 3, the automatic seat', () => {
 describe('N.111 increment 3, the hand', () => {
 	it('gives the click surface a queue on a lyric-bearing score', async () => {
 		// The gap the hand had to close: `buildSlotQueue(lines)` over the SINGER'S
-		// transcription is empty on a score that arrives with words, so
-		// `SyllableStation` drew nothing and `placeArmedSyllable` returned at its
-		// first line. This is the queue `+page.svelte` falls back to.
+		// transcription is empty on a score that arrives with words, so the
+		// loupe's own syllable row drew nothing and there was nothing to place.
+		// This is the queue `+page.svelte` falls back to.
 		const score = await parse(xml);
 		const read = readScoreText(score, 1);
 		expect(read).not.toBeNull();

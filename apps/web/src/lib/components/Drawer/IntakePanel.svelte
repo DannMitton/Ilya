@@ -3,9 +3,6 @@
 	import type { LoaderState } from '$lib/loader';
 	import { t, type Language } from '$lib/i18n';
 	import type { TextArrival } from '$lib/one-action';
-	// N.115: one owner for `37 / 94 placed`, which is drawn on both syllable
-	// rows here and on Input's closed state line in `Drawer.svelte`.
-	import { placedLine } from './bandState';
 
 	/*
 	 * IntakePanel.svelte — THE INPUT GROUP'S CONTENTS AND NOTHING ELSE.
@@ -93,33 +90,14 @@
 		onfile: (file: File) => void;
 		/** Clear on the SCORE receipt. Leaves the poem alone. */
 		onclearscore: () => void;
-		/**
-		 * N.114, RULED BY DANN 2026-09-07 and 2026-09-09: the syllable line
-		 * lives under the poem field, not in Score markup.
-		 *
-		 * A SNIPPET RATHER THAN PROPS, for the reason `sourceScore` above
-		 * gives: `SyllableStation`'s four inputs (`slotQueue`,
-		 * `shownPairings`, `pairingCursor` and the cursor setter) all live in
-		 * `+page.svelte` beside the placement that moves them, and drilling
-		 * four of them through here would put half of one gesture in a
-		 * component that owns none of it. The argument is `clipped`: this
-		 * component owns the disclosure, so it says which of the two sizes it
-		 * wants and the station draws it.
-		 */
-		syllableLine?: Snippet<[boolean]>;
-		/** The pair on the row, the two numbers the Lyric label already has. */
-		syllablesPlaced?: number;
-		syllablesTotal?: number;
-		/**
-		 * N.114b item 3, RULED BY DANN 2026-09-10. "Start placement over" was a
-		 * pill under Voice in Score markup. It rebuilds every seat from the
-		 * poem, so it is the CLEAR of placements, and placements live in this
-		 * line since N.114; it rides the open line's own row now, beside the
-		 * count it resets.
-		 *
-		 * The handler is `+page.svelte`'s `handleStartPlacementOver`, unchanged.
-		 */
-		onstartover?: () => void;
+		/* N.147, RULED BY DANN 2026-09-17: THE SYLLABLE LINE THAT LIVED HERE
+		   (N.114, 2026-09-07 and 2026-09-09; `syllableLine`, `syllablesPlaced`,
+		   `syllablesTotal`, `onstartover`) IS GONE, collapsed row and all. His
+		   reason: two copies of the syllabified text confuse the singer, and
+		   moving between drawer and loupe to place syllables is inconvenient,
+		   worst on a phone. This band keeps the source text only now; the row
+		   lives in the loupe (`LoupeSyllables.svelte`, rendered by
+		   `Loupe.svelte`), beside the notes it places onto. */
 		/**
 		 * NOTATION AND ANALYSIS, N.115 increment 3. RULED BY DANN 2026-09-10
 		 * late: the Text fold is deleted, "as a child of Input it adds no
@@ -154,34 +132,8 @@
 		poemFromScore = false,
 		onfile,
 		onclearscore,
-		syllableLine,
-		syllablesPlaced = 0,
-		syllablesTotal = 0,
-		onstartover,
 		notationAndAnalysis,
 	}: Props = $props();
-
-	/* N.114. THE LINE IS COLLAPSED UNTIL IT IS OPENED, and once opened it stays
-	   open for the session: this is `$state` and nothing else, with no id in
-	   the drawer's open set and no `localStorage` write. DESK DEFAULT, named as
-	   one in the brief, and reversible in one line.
-
-	   It is deliberately NOT a station id. The intake has none by the
-	   2026-09-02 ruling this file's header carries, and giving one row inside
-	   it a stored open state would be the first. */
-	let syllablesOpen = $state(false);
-
-	/* RULING 1: no score, no line at all. RULING 2 and the desk default: the
-	   row is absent while Transcribe is running, because the queue it previews
-	   is being rebuilt underneath it. `syllablesTotal` guards the empty queue:
-	   a score can be present before there is a poem to syllabify, and an empty
-	   box says less than no box. */
-	const showSyllables = $derived(
-		score !== null &&
-			syllableLine !== undefined &&
-			syllablesTotal > 0 &&
-			!loaderState.isLoading
-	);
 
 	/* ONE OWNER FOR "THE SOURCE FIELD IS EMPTY". It bound the watermark and
 	   the sage hover together by Dann's ruling of 2026-08-20; the watermark
@@ -512,84 +464,14 @@
 			</div>
 		{/if}
 
-		<!-- ── THE SYLLABLE LINE, N.114. RULED BY DANN 2026-09-07 and
-		     2026-09-09. It sat in Score markup under an UNDERLAY header; it
-		     sits here now, under the score receipt, live whenever a score is
-		     present. Nothing about the gesture changed: a click on a syllable
-		     moves the SABB and placement stays in the loupe.
-
-		     UNDER THE SCORE RECEIPT RATHER THAN THE POEM'S, because the line
-		     exists only when the score does. Drawing r2, plate 1, marks that
-		     a desk inference; it is a desk default here and moves in one
-		     line.
-
-		     NO LABEL AND NO NEW STRING, ruled 2026-09-09: "Syllables" is
-		     self-evident over the syllables. The count and the chevron carry
-		     the row, and the count is the same numeral pair the Lyric label
-		     draws, so it needs no translation and no plural agreement.
-
-		     COLLAPSED, THE WHOLE ROW IS THE BUTTON, which is why the station
-		     draws spans and not buttons inside it (`clipped`). Open, the row
-		     above the line carries the count and the chevron and the line
-		     below it is the station exactly as it has always rendered. Both
-		     states wear the box: `SyllableStation`'s own white ground and its
-		     1 px #9585A2 rule, the recipe its SABB cell already used.
-
-		     NOT A PILL. The 999px ends of `.action-btn` are the drawer's six
-		     ACTIONS; this is a disclosure over a box of text, and drawing r2
-		     draws it at the 3px the box wears. -->
-		{#if showSyllables}
-			{#if syllablesOpen}
-				<div class="syl-head">
-					<!-- N.114b item 3. THE ONLY THING THAT MAY DESTROY A PLACEMENT,
-					     and it is the singer pressing it; an upload never
-					     rebuilds. It left its pill under Voice for this row on
-					     Dann's ruling of 2026-09-10, because what it clears is
-					     the count sitting beside it. Drawn only with the line
-					     OPEN, which is the ruling: a verb this destructive does
-					     not ride a collapsed row a singer opened by accident.
-
-					     A PILL, NOT A TEXT VERB. N.114b item 4, RULED BY DANN
-					     2026-09-10 walking `7665afa`: "needs to be inside a pill
-					     to be consistent as an actionable button." It wore
-					     `.receipt-btn` for one ship on the desk's reading that
-					     it was a receipt's afterthought; his ruling is that it
-					     is an ACTION, so it takes the ghost pill Choose a file
-					     wears three rows down in this same band. Clear and
-					     Replace on the receipts stay text, which is the same
-					     ruling drawing the line rather than blurring it.
-					     `station.startOver` is the string it already carried;
-					     nothing is coined. -->
-					<button
-						type="button"
-						class="action-btn btn-ghost syl-start-over"
-						onclick={() => onstartover?.()}
-					>{t('station.startOver', language)}</button>
-					<button
-						type="button"
-						class="syl-toggle"
-						aria-expanded="true"
-						aria-controls="intake-syllables"
-						onclick={() => (syllablesOpen = false)}
-					>
-						<span class="syl-count">{placedLine(syllablesPlaced, syllablesTotal, language)}</span>
-						<svg class="syl-chevron" class:expanded={syllablesOpen} width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
-					</button>
-				</div>
-				<div class="syl-box syl-open" id="intake-syllables">{@render syllableLine?.(false)}</div>
-			{:else}
-				<button
-					type="button"
-					class="syl-box syl-row"
-					aria-expanded="false"
-					onclick={() => (syllablesOpen = true)}
-				>
-					<span class="syl-preview">{@render syllableLine?.(true)}</span>
-					<span class="syl-count">{placedLine(syllablesPlaced, syllablesTotal, language)}</span>
-					<svg class="syl-chevron" class:expanded={syllablesOpen} width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1.5 7,5 3,8.5" /></svg>
-				</button>
-			{/if}
-		{/if}
+		<!-- THE SYLLABLE LINE THAT STOOD HERE (N.114, 2026-09-07 and
+		     2026-09-09) IS GONE, N.147, RULED BY DANN 2026-09-17, collapsed
+		     row and all: two copies of the syllabified text confused the
+		     singer, and moving between drawer and loupe to place syllables
+		     was inconvenient, worst on a phone. This band shows the source
+		     text only now. The row lives in the loupe
+		     (`LoupeSyllables.svelte`, rendered by `Loupe.svelte`), beside the
+		     notes it places onto. -->
 
 		<!-- ── THE CHOOSE A FILE PILL IS STRUCK. N.115, ruled by Dann
 		     2026-09-10: the verb is the link in the field's caption above and
@@ -711,17 +593,6 @@
 	   box and a positioned box is what the frame has always been; removing it
 	   is a change to the frame that nothing asked for. */
 	.intake {
-		/* ── ONE GAP BETWEEN THE FRAME'S ROWS. N.114b item 6, RULED BY DANN
-		   2026-09-10 walking `8278429`: the open syllable box had 8 px under it
-		   (Choose a file's row) and nothing above it, so the box sat against its
-		   own header row while the rest of the frame breathed.
-
-		   THE VALUE IS DECLARED ONCE AND SPENT THREE TIMES, which is the whole
-		   of the fix: the header row, the open box, and the actions row all read
-		   this, so the air above the box and the air below it cannot drift
-		   apart. It was `.syl-head`'s and `.intake-actions`'s own literal 8px in
-		   two places before this ship. */
-		--intake-row-gap: 8px;
 		position: relative;
 		border: 1px dashed rgba(26, 22, 18, 0.28);
 		border-radius: 4px;
@@ -831,133 +702,11 @@
 		color: var(--ink-primary);
 	}
 
-	/* ── THE SYLLABLE LINE, N.114 ───────────────────────────
-	   THE BOX IS `SyllableStation`'s OWN RECIPE, lifted off the SABB cell it
-	   already draws (that file's `.slot.is-cursor`, `background: #FFFFFF` and
-	   `border: 1px solid #9585A2`) and applied to the row. Ruling 2 names
-	   those two declarations, so they are copied value for value rather than
-	   re-chosen, and the collapsed row and the open line wear the same box.
-	   The 3px radius is drawing r2's (`.syl.boxed`). */
-	.syl-box {
-		background: #ffffff;
-		border: 1px solid #9585a2;
-		border-radius: 3px;
-		padding: 6px 8px;
-		text-align: left;
-	}
-
-	/* Collapsed: preview, then count, then chevron, on one row. `min-width: 0`
-	   on the preview is what lets it ellipsise instead of pushing the count
-	   and the chevron off the end; the clip itself is the station's own
-	   `.station-text.is-clipped`. */
-	.syl-row {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		width: 100%;
-		cursor: pointer;
-		font: inherit;
-	}
-
-	.syl-preview {
-		flex: 1;
-		min-width: 0;
-	}
-
-	/* Open: the count and the chevron on the row ABOVE the line, right-aligned
-	   because there is no label to sit opposite. No rule of its own: the score
-	   receipt directly above already draws the drawer's hairline, and a second
-	   one 8px under it would read as a mistake.
-
-	   N.114b item 3 puts "Start placement over" on this row, left of the count.
-	   `justify-content: flex-end` still holds the pair to the right and the
-	   verb takes the margin, so nothing about where the count and the chevron
-	   sit changes when the verb is drawn. */
-	.syl-head {
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-	}
-
-	/* The verb takes the room, so the count and the chevron keep the corner.
-	   Everything else about it is `.action-btn.btn-ghost`'s, which it wears
-	   whole: the pill ends, the fill, the border and the type are Choose a
-	   file's, unchanged, so the band holds one ghost pill recipe and not two. */
-	.syl-start-over {
-		margin-right: auto;
-	}
-
-	.syl-toggle {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		border: none;
-		background: transparent;
-		padding: 0 2px;
-		cursor: pointer;
-		font: inherit;
-	}
-
-	/* The pair, in the recipe `CorrectionSurface`'s `.station-count` uses on
-	   the Lyric label: tertiary ink, tabular figures, thin spaces around the
-	   solidus. Two numbers rather than a formatted string, so nothing here
-	   needs translating. */
-	.syl-count {
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		color: var(--ink-tertiary);
-		font-variant-numeric: tabular-nums;
-		flex: none;
-		white-space: nowrap;
-	}
-
-	/* THE GLYPH AND THE TWO ROTATIONS ARE `StationHeader.svelte`'s, copied
-	   value for value the way this file's header says the button family is:
-	   Svelte scopes a rule to the file that writes the markup, and this markup
-	   is written here. Change one and change both. The rule they express is
-	   that ruling's, unchanged: the chevron points the way the panel will
-	   grow, so closed points down and open points up. */
-	.syl-chevron {
-		flex-shrink: 0;
-		transform: rotate(90deg);
-		transition: transform 150ms ease;
-		color: var(--ink-tertiary);
-	}
-
-	.syl-chevron.expanded {
-		transform: rotate(-90deg);
-	}
-
-	/* The touch floor, twinned on `StationHeader`'s `.station-disclosure`: a
-	   coarse pointer gets 44 px, a fine one does not. No new geometry and no
-	   new exemption; the row is a disclosure and it is sized like the drawer's
-	   other disclosures. */
-	@media (pointer: coarse) {
-		.syl-row,
-		.syl-toggle,
-		/* N.114b item 4. `.action-btn` sets no floor of its own, so the pill
-		   joins the row's two disclosures here rather than carrying a floor
-		   the other five `.action-btn`s do not have. */
-		.syl-start-over {
-			min-height: 44px;
-		}
-	}
-
-	/* The one way in that is not a drop, N.108 increment 4. The wrap is kept
-	   from when there were two: a French Choose a file may run longer than an
-	   English one, and a row that wraps costs nothing when it does not. */
-	/* `.intake-actions` IS GONE, N.115. It held one button, Choose a file, and
-	   that pill is struck; the verb is the link in `.intake-caption` now. Its
-	   share of the row-gap rule below goes with it. */
-
-	/* N.114b item 6. THE TWO ROWS THAT TAKE THE FRAME'S GAP, in one rule so
-	   there is one owner and no literal repeated. `.syl-open` is the OPEN box
-	   only: the collapsed row is `.syl-box.syl-row` and sits where it always
-	   has, directly under the score receipt, which this ship does not move. */
-	.syl-head,
-	.syl-open {
-		margin-top: var(--intake-row-gap);
-	}
+	/* THE SYLLABLE LINE'S OWN RULES (`.syl-box`, `.syl-row`, `.syl-preview`,
+	   `.syl-head`, `.syl-start-over`, `.syl-toggle`, `.syl-count`,
+	   `.syl-chevron`, and their `pointer: coarse` touch floor) ARE GONE, N.147,
+	   with the markup they drew. `--intake-row-gap` went with them: both its
+	   spends were inside this block. */
 
 	.intake-drop-hint {
 		margin: 0;
@@ -1153,14 +902,20 @@
 	   buttons share its rounded ends?" Only the corners move; the fill, the
 	   border, the type and the padding are untouched.
 
-	   IT CARRIES FIVE DRAWER BUTTONS NOW, ALL `.btn-ghost`, since Transcribe
-	   and fit, the one `.btn-primary` in this file, is gone (N.145,
-	   2026-09-16). `.btn-primary` STAYS UNUSED HERE RATHER THAN REMOVED: this
-	   file's own header calls `.action-btn`, `.btn-ghost` and `.btn-primary`
-	   a twinned declaration across four files, "change one and change all
-	   four," and deleting a fill rule from one twin while the other three
-	   keep it would be the smaller, quieter version of exactly the drift that
-	   note exists to prevent. */
+	   N.147, 2026-09-17: THIS WHOLE FAMILY IS NOW UNUSED IN THIS FILE.
+	   `.btn-primary` already stood unused after N.145 took Transcribe and fit;
+	   N.147 took "Start placement over" (`.syl-start-over`, RULED BY DANN
+	   2026-09-10, N.114b item 3), which was the last `.action-btn`/
+	   `.btn-ghost` in this file, with the syllable row it rode. Every button
+	   left standing here (Clear, Replace, Choose a file) wears `.receipt-btn`.
+
+	   ALL FOUR STAY, UNUSED, RATHER THAN BEING REMOVED: this file's own header
+	   calls `.action-btn`, `.btn-ghost` and `.btn-primary` a twinned
+	   declaration across four files, "change one and change all four," and
+	   deleting a rule from one twin while the other three keep it would be the
+	   smaller, quieter version of exactly the drift that note exists to
+	   prevent. svelte-check counts all four now (the web-check gate moves
+	   8 → 12 warnings with this ship; see the N.147 memo). */
 	.action-btn {
 		padding: 0.45rem 0.5rem;
 		font-family: var(--font-sans);

@@ -34,6 +34,8 @@ import {
 	melismaRuns,
 	pairedSyllableType,
 	vacatedNotes,
+	placeSyllable,
+	nextOpenSyllableTarget,
 } from './pairings';
 import type { Pairing, PairingMap, Slot, TieAwareEvent } from './pairings';
 
@@ -521,5 +523,69 @@ describe('pairedSyllableType', () => {
 		expect(pairedSyllableType(map)).toBeUndefined();
 		expect(pairedSyllableType({})).toBeUndefined();
 		expect(pairedSyllableType(undefined)).toBeUndefined();
+	});
+});
+
+/* ── N.147: the loupe's syllable tap places on the SELECTED note, and a note
+   tap no longer places at all. `placeSyllable` and `nextOpenSyllableTarget`
+   are the whole of that gesture's logic, pulled into this file because
+   `+page.svelte` has no test harness of its own (no `.svelte.test.ts` file
+   exists anywhere in this tree; confirmed by search, N.147 step 0). ── */
+
+describe('placeSyllable', () => {
+	it('writes the slot onto the note, the IPA included', () => {
+		const s = slot('мос', 'mós', 'o', 0, 'москва');
+		const out = placeSyllable({}, IDS, 'n0', s);
+		expect(out).toEqual({
+			n0: { kind: 'syllable', cyrillic: 'мос', ipa: 'mós', vowel: 'o', origin: s.origin },
+		});
+	});
+
+	it('overwrites a note that already carries a pairing', () => {
+		const map: PairingMap = { n0: syl('ой', 0) };
+		const s = slot('да', 'da', 'a', 1, 'слово');
+		const out = placeSyllable(map, IDS, 'n0', s);
+		expect(out).toEqual({ n0: { kind: 'syllable', cyrillic: 'да', ipa: 'da', vowel: 'a', origin: s.origin } });
+	});
+
+	it('refuses a note not in eventIds, the N.142 guard carried over from a rest or a tie continuation', () => {
+		const withoutN1 = IDS.filter((id) => id !== 'n1');
+		const out = placeSyllable({}, withoutN1, 'n1', slot('да', 'da', 'a', 0, 'да'));
+		expect(out).toBeNull();
+	});
+
+	it('does not mutate the map it was given', () => {
+		const map: PairingMap = { n0: syl('ой', 0) };
+		placeSyllable(map, IDS, 'n1', slot('да', 'da', 'a', 1, 'слово'));
+		expect(map).toEqual({ n0: syl('ой', 0) });
+	});
+});
+
+describe('nextOpenSyllableTarget', () => {
+	it('finds the next undecided note past fromId', () => {
+		const map: PairingMap = { n0: syl('ой', 0), n1: syl('да', 1) };
+		expect(nextOpenSyllableTarget(map, IDS, 'n1')).toBe('n2');
+	});
+
+	it('skips a melisma or an empty mark: both are decisions, not open notes', () => {
+		const map: PairingMap = { n1: { kind: 'melisma' }, n2: { kind: 'empty' } };
+		expect(nextOpenSyllableTarget(map, IDS, 'n0')).toBe('n3');
+	});
+
+	it('stops at the end rather than wrapping', () => {
+		const map: PairingMap = {
+			n0: syl('a', 0),
+			n1: syl('b', 0),
+			n2: syl('c', 0),
+			n3: syl('d', 0),
+			n4: syl('e', 0),
+			n5: syl('f', 0),
+		};
+		expect(nextOpenSyllableTarget(map, IDS, 'n4')).toBeNull();
+	});
+
+	it('searches from the start when fromId is not itself in eventIds', () => {
+		const map: PairingMap = { n0: syl('ой', 0) };
+		expect(nextOpenSyllableTarget(map, IDS, 'not-an-id')).toBe('n1');
 	});
 });

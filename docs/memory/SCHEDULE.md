@@ -24,7 +24,7 @@ in Code moves to LATER.
 
 ## Week 1. Thursday 2026-09-17 to Sunday 2026-09-20. Clear the decks, find the surprises
 
-- [ ] **N.146**, poem or score detected. Read Code's memo, move gates, ship, walk: a score PDF, a score photo, a text PDF, a poem photo, and a page with the poem above the music. **2026-09-17:** shipped `fe4d2c7` and `6e98057`; all walked except walk 5 (poem photo), which awaits step 2c (`STATE.md`).
+- [x] **N.146**, poem or score detected. **CLOSED 2026-09-17: walk 5 passed in Incognito (`OPEN.md`, N.146 findings, 9).** Read Code's memo, move gates, ship, walk: a score PDF, a score photo, a text PDF, a poem photo, and a page with the poem above the music. **2026-09-17:** shipped `fe4d2c7` and `6e98057`; all walked except walk 5 (poem photo), which awaits step 2c (`STATE.md`).
 - [ ] **N.147, the loupe tap** (was INBOX-37; the number is a DESK DEFAULT). Dann picks one of the four designs, then brief, build, walk.
 - [ ] **N.142 step 2.** The desk counts, through Chrome on the branch alias, placements in Dann's library that sit on a tie's continuation. Build only if the count is not zero.
 - [ ] **The nine CHECK rows.** The desk looks at each (a Sonnet agent for the code reads). Each closes or becomes IN work in week 2.

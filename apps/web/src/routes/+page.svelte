@@ -21,8 +21,11 @@
 		shiftToEndOfLyric,
 		shiftToNextOpenNote,
 		mergeOnUpload,
+		placeSyllable,
+		nextOpenSyllableTarget,
 		type PairingMap,
 		type ShiftDirection,
+		type Slot,
 	} from '$lib/shane/pairings';
 	// N.67 step 0: the song document owns the per-song state and is the only
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
@@ -71,7 +74,6 @@
 	import type { SourceBytes } from '$lib/library/driver';
 	import { version } from '$app/environment';
 	import type { OpenedLibrary } from '$lib/library';
-	import SyllableStation from '$lib/shane/SyllableStation.svelte';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import IntakePanel from '$lib/components/Drawer/IntakePanel.svelte';
 	import InspectorPanel from '$lib/components/Drawer/InspectorPanel.svelte';
@@ -349,21 +351,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// save or load reported, and the drawer shows it exactly as before.
 	// French ratified by Dann, 2026-08-14.
 	let noLyricsFile = $state<string | null>(null);
-	// The syllable the NEXT note click will place. Finale's insertion point.
-	let pairingCursor = $state(0);
 	/* THE QUEUE, AND WHERE IT COMES FROM WHEN THE SINGER HAS TYPED NOTHING.
 
 	   N.111 increment 3, ruled by Dann 2026-09-04: on a lyric-bearing score the
 	   singer gets "the same click surface the no-lyrics path already has ...
 	   N.55b's surface reaching the other path; do not build a second one."
 
-	   NOTHING IN THAT SURFACE WAS EVER GATED ON `noLyrics`. `handleLoupePick`
-	   places, `SyllableStation` draws the queue and the cursor, the two shifts
-	   move a run, and none of them asks whether the file carried words. THE
-	   QUEUE WAS THE WHOLE GAP: it is built from the singer's own transcription,
-	   and on a score that arrives with words there usually is none, so
-	   `slotQueue` was empty, `SyllableStation`'s own `slots.length > 0` guard
-	   drew nothing, and `placeArmedSyllable` returned at its first line.
+	   NOTHING IN THAT SURFACE WAS EVER GATED ON `noLyrics`. N.147 moved the
+	   drawing and the placement into the loupe itself (`LoupeSyllables.svelte`
+	   draws the queue, `placeSyllableOnSelected` places on the taken note),
+	   the two shifts move a run, and none of them asks whether the file
+	   carried words. THE QUEUE WAS THE WHOLE GAP: it is built from the
+	   singer's own transcription, and on a score that arrives with words
+	   there usually is none, so `slotQueue` was empty and there was nothing
+	   in the loupe's row to tap.
 
 	   So the fallback is the score's own words, read through the same pipeline
 	   (`readScoreText`, `clitic-seat.ts`). THE SINGER'S TEXT STILL WINS
@@ -617,8 +618,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		const source = rebuildSource(doc.inputText, poemQueue.length);
 		if (source === 'none') return;
 		/* N.144. Pushed AFTER the empty-queue return above, the same rule
-		   `placeArmedSyllable` states for the same reason: a press that does
-		   nothing must not leave an Undo pill that would undo nothing. */
+		   `placeSyllableOnSelected` states for the same reason: a press that
+		   does nothing must not leave an Undo pill that would undo nothing. */
 		pushUndo({ kind: 'text', key: 'loupe.undo.startOver' });
 		if (scoreText !== '' && doc.inputText === scoreText) {
 			doc.pairings = {};
@@ -633,53 +634,41 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			firstPass(syllableTargetIds(parsed.vocalLine), rebuildQueue),
 		);
 		orphanedCount = 0;
-		pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, rebuildQueue.length - 1));
 	}
 
 	/**
-	 * N.55b's placement: the armed syllable lands on one note.
+	 * N.147's placement: a tapped syllable lands on the SELECTED note, not on
+	 * whatever note is tapped next.
 	 *
-	 * Lifted out of `handleNotePick` by Dann's ruling of 2026-08-26 so that two
-	 * callers can share it without either one owning it. The rule itself is
-	 * unchanged, including the advance that stops at the end rather than
-	 * wrapping, because a wrap would silently start overwriting from the top.
+	 * REPLACES `placeArmedSyllable` (N.55b, lifted out of `handleNotePick` by
+	 * Dann's ruling of 2026-08-26), which read the armed syllable off
+	 * `slotQueue[pairingCursor]` and placed it on whichever note the singer
+	 * tapped next. RULED BY DANN 2026-09-17: a note tap in the loupe now only
+	 * selects (`handleLoupePick`, below), so there is no "next note clicked"
+	 * for an armed syllable to wait for, and `pairingCursor` is retired with
+	 * it. The gesture is inverted: the singer taps the SYLLABLE, in the
+	 * loupe's own row, and it lands on the note already selected.
 	 *
-	 * N.142, 2026-09-16, FOUND WHILE BUILDING THE BRIEF'S OWN SITE LIST: this
-	 * is a ninth seating site the spec did not name, because it is the loupe's
-	 * DIRECT tap-and-place, not a bulk pass. `handleLoupePick` calls this on
-	 * whatever note the singer tapped, with no check against `eventIds`, so
-	 * without this guard a tie's continuation was still tappable and
-	 * placeable by hand even after `firstPass` and `mergeOnUpload` stopped
-	 * seating one automatically. Selection still runs either way
-	 * (`handleLoupePick`'s `setCursor` call, above this function): the loupe
-	 * still stops on a tied note, per the brief's own requirement; only the
-	 * placement onto it is refused, silently, exactly as a rest already is
-	 * (a rest was never in `eventIds` either, and nothing here ever asked
-	 * whether a rest could be armed).
+	 * `placeSyllable` AND `nextOpenSyllableTarget` CARRY THE RULE, in
+	 * `pairings.ts` where a test can reach it (N.142's `eventIds` guard against
+	 * a rest or a tie's continuation, and the "stop at the end rather than
+	 * wrap" rule `pairingCursor`'s own advance used to carry). This function is
+	 * the press: it finds the selected note, pushes undo, writes, and moves
+	 * the selection on.
 	 */
-	function placeArmedSyllable(eventId: string): void {
-		if (!eventIds.includes(eventId)) return;
-		const slot = slotQueue[pairingCursor];
-		if (!slot) return;
+	function placeSyllableOnSelected(slot: Slot): void {
+		const eventId = selectedEventId;
+		if (!eventId) return;
+		const placed = placeSyllable(doc.pairings, eventIds, eventId, slot);
+		if (!placed) return;
 		/* N.111-3b. A PLACEMENT IS A CORRECTION VERB LIKE THE OTHERS and pushes
 		   like the others. RULED BY DANN 2026-09-07 on his walk of `d5a49ff`,
 		   which found a second click on the same note seating the cursor's next
-		   syllable over the first with no way back.
-
-		   IT PUSHES AFTER THE EARLY RETURN, so a click with an empty queue
-		   leaves an Undo pill that would undo nothing. */
+		   syllable over the first with no way back. */
 		pushUndo({ kind: 'text', key: 'loupe.undo.placed' });
-		doc.pairings = {
-			...doc.pairings,
-			[eventId]: {
-				kind: 'syllable',
-				cyrillic: slot.cyrillic,
-				ipa: slot.ipa,
-				vowel: slot.vowel,
-				origin: slot.origin,
-			},
-		};
-		pairingCursor = Math.min(pairingCursor + 1, slotQueue.length - 1);
+		doc.pairings = placed;
+		const next = nextOpenSyllableTarget(placed, eventIds, eventId);
+		if (next) setCursor({ kind: 'entry', id: next });
 	}
 
 	/**
@@ -706,10 +695,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		setCursor({ kind: 'entry', id: eventId });
 	}
 
-	/** A tap on an entry INSIDE the loupe: it takes the entry and places. */
+	/**
+	 * A tap on an entry INSIDE the loupe: it takes the entry, and nothing more.
+	 *
+	 * RULED BY DANN 2026-09-17 (N.147), "unacceptable": before this, a tap here
+	 * both selected the entry and placed whatever syllable was armed
+	 * (`placeArmedSyllable`), so a singer moving around the loupe reassigned
+	 * syllables by accident. Placement now runs the other way: a tap on a
+	 * SYLLABLE, in the loupe's own row, places it on whichever note is already
+	 * selected (`placeSyllableOnSelected`). This function is identical to
+	 * `handleNotePick` and stays separate only because the two taps land on two
+	 * different surfaces and a future ruling could still tell them apart.
+	 */
 	function handleLoupePick(eventId: string): void {
 		setCursor({ kind: 'entry', id: eventId });
-		placeArmedSyllable(eventId);
 	}
 
 	/* ── N.92, the correction minimum ────────────────────────────────────
@@ -882,13 +881,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   the walk: undoing an entry made in a gap dismissed the loupe, because
 		   every entry is pushed from a gap and every gap pushes a null
 		   selection. */
+		/* N.147: THIS FIELD IS NOW WHAT UNDOES A PLACEMENT'S ADVANCE TOO. A
+		   placement moves the SELECTION to the next open note
+		   (`placeSyllableOnSelected`), where before N.147 it advanced a
+		   separate `pairingCursor` that this entry carried on its own. One
+		   field now does both jobs, because the selection was always the one a
+		   placement's undo had to restore for the OTHER reason above; retiring
+		   `pairingCursor` with the note-tap-places gesture cost this entry
+		   nothing. */
 		selected: string | null;
-		/* THE QUEUE'S PLACE, N.111-3b. A placement is undoable now, and a
-		   placement advances `pairingCursor`; without this the pairing would
-		   come back and the queue would stay one syllable ahead, so the next
-		   click would place the wrong word. Every other verb leaves the cursor
-		   alone, so carrying it costs those entries nothing. */
-		pairingCursor: number;
 		gapAfter: string | null | undefined;
 	}
 	let undoStack = $state<UndoEntry[]>([]);
@@ -912,7 +913,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			corrections: doc.corrections,
 			pairings: doc.pairings,
 			selected: selectedEventId,
-			pairingCursor,
 			gapAfter,
 		};
 	}
@@ -921,7 +921,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.corrections = entry.corrections;
 		doc.pairings = entry.pairings;
 		selectedEventId = entry.selected;
-		pairingCursor = entry.pairingCursor;
 		gapAfter = entry.gapAfter;
 	}
 
@@ -1444,10 +1443,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	   THE STATE LIVES HERE, with the verbs. `Loupe.svelte` reads the rendered
 	   page's own geometry and draws; `CorrectionDock.svelte` presents; neither
-	   owns a correction. That is the split `SyllableStation` and
+	   owns a correction. That is the split `LoupeSyllables` and
 	   `ShiftLyricsControl` already keep. */
 	let loupeOpen = $state(false);
 	let dockHeight = $state(0);
+	/* N.147, RULED BY DANN 2026-09-17: the syllable row's disclosure state
+	   lives "for the session only, with no `localStorage` write" (precedent
+	   `IntakePanel.svelte:166`, the row's own before this move) and "starts
+	   closed."
+	   IT LIVES HERE AND NOT IN `Loupe.svelte`, which the precedent's own
+	   component did not have to consider: `<Loupe>` is created and destroyed
+	   on every raise and dismiss (`{#if loupeAvailable && loupeOpen && cursor}`,
+	   below), so a `$state` local to it would reset to closed every time the
+	   loupe closed, which is "starts closed on every loupe," not "starts
+	   closed once per session." This is the one piece of `+page.svelte` state
+	   this brief adds. */
+	let loupeSyllablesOpen = $state(false);
 
 	/** The score document on a phone, in either orientation, with a read to correct. */
 	/* THE LOUPE IS ON BOTH MODALITIES NOW, slice 4. `isPhone` is gone from this
@@ -2418,9 +2429,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					noLyrics,
 				);
 				doc.pairings = seatCliticFolds(parsed, merged.map);
-				if (merged.proposed) {
-					pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
-				}
 			}
 			orphanedCount = 0;
 		}
@@ -2486,12 +2494,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (diff.unchanged || !ingestedScore) return;
 		const result = reseatByDiff(doc.pairings, eventIds, slotQueue, diff, before);
 		doc.pairings = seatCliticFolds(ingestedScore.result.score, result.map);
-		/* THE QUEUE'S CURSOR IS CLAMPED, not recomputed. A shorter poem can
-		   leave it past the end, which would arm nothing and make the next
-		   click on the loupe do nothing at all. Recomputing it from the placed
-		   count instead would jump the cursor across the poem on every
-		   keystroke pause, which is the singer's place to stand. */
-		pairingCursor = Math.min(pairingCursor, Math.max(0, slotQueue.length - 1));
 	}
 
 	/* N.108-5's `handleTranscribe` IS REMOVED, 2026-09-16 (N.145): Dann,
@@ -3088,8 +3090,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let scoreSeatWaiting: IngestedScore | null = null;
 
 	/**
-	 * N.134. Seat the filled poem from the score's own mapping, and put the
-	 * cursor where the no-lyrics path puts it after its first pass.
+	 * N.134. Seat the filled poem from the score's own mapping.
 	 *
 	 * The clitic seat is re-run after it, which is a no-op on the arrival path
 	 * (it has already run) and is what keeps the ruled arrangement on the
@@ -3098,7 +3099,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function seatFilledPoem(ingested: IngestedScore): void {
 		const parsed = ingested.result.score;
 		doc.pairings = seatCliticFolds(parsed, seatScoreWords(parsed, doc.pairings, lines).map);
-		pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
 	}
 
 	/**
@@ -3237,12 +3237,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.pairings = seatCliticFolds(ingested.result.score, doc.pairings);
 		// Kept, never dropped, and reported as a count.
 		orphanedCount = merged.orphaned.length;
-		// The cursor lands on the first syllable the pass did not reach. Only
-		// moved where the pass actually ran: a re-upload must not walk the
-		// singer's insertion point back.
-		if (merged.proposed) {
-			pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, slotQueue.length - 1));
-		}
 		/* N.134, RULED BY DANN 2026-09-14: the words the box was just filled with
 		   are seated on the notes the file engraved them under.
 
@@ -3537,7 +3531,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			transcribedText = null;
 			cancelQuietTimer();
 			orphanedCount = 0;
-			pairingCursor = 0;
 			noLyricsFile = null;
 			restoreSource = restoreFrom(bytes, next.source?.page);
 			doc = next;
@@ -4364,9 +4357,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{poemFromScore}
 					onfile={(file) => void uploaderEl?.take(file)}
 					onclearscore={handleClearScore}
-					syllablesPlaced={placedSlotCount}
-					syllablesTotal={slotQueue.length}
-					onstartover={handleStartPlacementOver}
 				>
 					{#snippet sourceScore()}
 						{#if INCLUDE_SHANE}
@@ -4418,32 +4408,15 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							{/if}
 						{/if}
 					{/snippet}
-					<!-- N.114. THE SYLLABLE LINE, RULED BY DANN 2026-09-07 and
-					     2026-09-09 out of Score markup and under the poem
-					     field. A snippet for the same reason `sourceScore` is
-					     one: the four inputs are all here, beside
-					     `placeArmedSyllable`, which is the other half of the
-					     same gesture, and `IntakePanel` owns none of them.
-
-					     `clipped` IS THE PANEL'S TO SAY. It owns the
-					     disclosure, so it asks for the collapsed size or the
-					     open one and the station draws it; the queue, the
-					     pairings and the cursor are the same in both.
-
-					     NOTHING ABOUT THE GESTURE CHANGED. `oncursor` is the
-					     assignment it always was, placement is still
-					     `handleLoupePick`'s, and this component still never
-					     edits a syllable. -->
-					{#snippet syllableLine(clipped: boolean)}
-						<SyllableStation
-							slots={slotQueue}
-							pairings={shownPairings}
-							cursor={pairingCursor}
-							{language}
-							oncursor={(i) => (pairingCursor = i)}
-							{clipped}
-						/>
-					{/snippet}
+					<!-- N.147, RULED BY DANN 2026-09-17: THE SYLLABLE LINE LEFT
+					     THIS DRAWER ENTIRELY, collapsed row and all. N.114
+					     (2026-09-07, 2026-09-09) had put it here, under the
+					     poem field; his reason for taking it out again is
+					     that two copies of the syllabified text confuse the
+					     singer, and moving between drawer and loupe to place
+					     syllables is inconvenient, worst on a phone. It lives
+					     in the loupe now (`LoupeSyllables.svelte`, rendered by
+					     `Loupe.svelte`), beside the notes it places onto. -->
 					<!-- ═══ THE TEXT GROUP (N.108 increment 1). Notation and Analysis,
 					     and only those two: the map Dann ruled 2026-09-02 gives Text
 					     exactly them. Both were somewhere else in the N.73 S3 column,
@@ -4559,12 +4532,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     work with the voice pinned below it in its own anchor.
 
 			     UNDERLAY IS GONE FROM THIS GROUP, N.114, RULED BY DANN
-			     2026-09-07: the queue and the SABB live under the poem field,
-			     inside the Input band, where the text they belong to is. The
-			     station is deleted rather than emptied, and `underlay` is out
-			     of `STATION_IDS` with it, so nothing here can be stored open.
-			     `IntakePanel`'s `syllableLine` snippet, above, is where the
-			     same component renders now.
+			     2026-09-07: the queue and the SABB moved under the poem field,
+			     inside the Input band, where the text they belonged to was.
+			     The station is deleted rather than emptied, and `underlay` is
+			     out of `STATION_IDS` with it, so nothing here can be stored
+			     open. N.147, 2026-09-17, MOVED THE QUEUE AGAIN, out of the
+			     drawer entirely and into the loupe (`LoupeSyllables.svelte`);
+			     the Input band now keeps the source text only.
 
 			     The lyric VERBS never moved: they are in Corrections with the
 			     note they act on, because they render only when a paired note
@@ -4783,15 +4757,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						</p>
 					{/if}
 					<!-- START PLACEMENT OVER LEFT THIS BLOCK, N.114b item 3, RULED BY
-					     DANN 2026-09-10. It rebuilds every seat from the poem, so it
-					     is the Clear of placements, and placements live in the
-					     syllable line since N.114. It rides that line's own open row
-					     now, beside the count it resets (`IntakePanel`'s
-					     `onstartover`). Its guard came with it: the row is drawn only
-					     where there is a score and a queue, which is the same pair of
-					     conditions this `{#if}` tested. `.start-over` goes with the
-					     button; `station.startOver` is unchanged and still the only
-					     string it uses. -->
+					     DANN 2026-09-10, for `IntakePanel`'s syllable row, beside the
+					     count it reset. N.147, 2026-09-17, DELETED THAT ROW WITH THE
+					     REST OF THE DRAWER'S SYLLABLE LINE, and named no new home for
+					     the pill. `handleStartPlacementOver` is UNCHANGED and still
+					     defined below, but NOTHING IN THE UI CALLS IT any more: NOT
+					     ESTABLISHED where, or whether, it belongs now. Flagged in the
+					     N.147 memo rather than decided here. -->
 					<!-- R5, N.27: no save site is silent. N.67 step 0 made this the
 					     WHOLE song's report rather than the pairing map's alone, and
 					     N.67 step 6 finalized what it says: quota with its figures,
@@ -4998,6 +4970,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		dockInset={loupeInset}
 		dockHeight={loupeFoot}
 		{isPhone}
+		slots={slotQueue}
+		pairings={shownPairings}
+		onplace={placeSyllableOnSelected}
+		syllablesOpen={loupeSyllablesOpen}
+		ontogglesyllables={() => (loupeSyllablesOpen = !loupeSyllablesOpen)}
 	/>
 	{#if isPhone}
 	<CorrectionSurface
