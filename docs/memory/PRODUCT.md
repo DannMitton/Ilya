@@ -4,6 +4,23 @@ Open this before forming any opinion about what Ilya should do or look like.
 
 ---
 
+## Why Ilya exists: a legacy others can build on. Stated by Dann 2026-09-17
+
+**His words:** *"This is my legacy. I want it to be good, to be useful, and to help
+future folks innovate to other language bases."*
+
+Three tests for any choice, in his order: is it good, is it useful, and does it
+leave a path for someone building the same thing for another language.
+
+**What the tree says today, read 2026-09-17:** the licence is MIT (`LICENSE:1`).
+`CONTRIBUTING.md:9` closes Ilya itself to any phonological authority but
+Grayson's, which is right for Ilya, and says nothing about how to build a sibling
+for another language. Which parts of the tree are Russian-specific and which
+would carry over is NOT ESTABLISHED. **Not release work** under the freeze rule;
+caught in `INBOX.md` for after 2026-10-30.
+
+---
+
 ## Ilya is already public. Stated by Dann 2026-09-16
 
 **His words:** *"a first public Ilya already exists and has been available since

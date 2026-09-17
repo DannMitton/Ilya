@@ -4405,6 +4405,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 									oningested={(ingested, file, origin, page) =>
 										void handleArrival(ingested, file, origin, page)}
 									onpoem={(text) => handleInput(text)}
+									{loaderState}
 								/>
 							{/key}
 							{#if noLyricsFile}

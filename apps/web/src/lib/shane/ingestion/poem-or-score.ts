@@ -13,7 +13,15 @@
  * light check never flagged); this only says what a given set of outcomes
  * adds up to, which is what makes it cheap to test exhaustively without a
  * PDF, a picture, or a page reader anywhere nearby.
+ *
+ * N.146 step 2: an OCR reading must also pass `ocr-guard.ts`'s
+ * `passesRussianGuard` before it can become a poem -- Dann's ruling that
+ * Ilya refuses a reading that is mostly not Russian words. The text-layer
+ * path is not guarded: a PDF's own text is what its author typed, not a
+ * machine's guess at it.
  */
+
+import { passesRussianGuard } from './ocr-guard';
 
 export interface PoemOrScoreOutcome {
 	/** Did `staff-detect.ts`'s light check find staves on this page? */
@@ -37,14 +45,17 @@ export type PoemOrScoreResult =
 	 *  refusal for this, coining nothing new. */
 	| { kind: 'unreadable' };
 
-export function decidePoemOrScore(outcome: PoemOrScoreOutcome): PoemOrScoreResult {
+export function decidePoemOrScore(
+	outcome: PoemOrScoreOutcome,
+	isKnownWord: (token: string) => boolean
+): PoemOrScoreResult {
 	if (outcome.stavesFound && outcome.sungLineFound) return { kind: 'score' };
 
 	const textLayer = outcome.textLayer;
 	if (textLayer !== null && textLayer.trim() !== '') {
 		return { kind: 'poem', source: 'textLayer', text: textLayer };
 	}
-	if (outcome.ocrText.trim() !== '') {
+	if (outcome.ocrText.trim() !== '' && passesRussianGuard(outcome.ocrText, isKnownWord)) {
 		return { kind: 'poem', source: 'ocr', text: outcome.ocrText };
 	}
 	return { kind: 'unreadable' };

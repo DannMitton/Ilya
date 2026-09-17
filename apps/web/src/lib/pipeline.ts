@@ -251,6 +251,17 @@ export function wordGrid(text: string): string[][] {
   );
 }
 
+/**
+ * N.146 step 2: is `word` a Russian word Ilya's own dictionary knows?
+ * The one door `ScoreUploader.svelte`'s OCR guard (`ingestion/ocr-guard.ts`)
+ * reaches the dictionary through, since this file is the guardrailed sole
+ * importer of `@ilya/phonology` in the app. The same first lookup
+ * `processText` itself makes before any poetic-forms retry.
+ */
+export function isKnownWord(word: string): boolean {
+  return GraysonEngine.lookupStress(word) !== null;
+}
+
 export function processText(
   text: string,
   options: ProcessTextOptions = {},

@@ -56,8 +56,9 @@
 	different thing, and Dann's ruling did not touch it.
 -->
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, untrack } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import type { LoaderState } from '$lib/loader';
 	import { WorkerScoreReader } from './engine/score-reader';
 	import { WebmscoreMsczConverter } from './engine/mscz-converter';
 	import { WorkerPageReader, type ClefKeyProbe } from './engine/page-reader';
@@ -75,6 +76,8 @@
 	import { detectScoreFormat, SNIFF_LENGTH } from './ingestion/format-detection';
 	import { prefillFrom } from './ingestion/clef-key-prompt';
 	import { decidePoemOrScore } from './ingestion/poem-or-score';
+	import { dictionaryGuardMode, isKnownWordForGuard } from './ingestion/ocr-guard';
+	import { isKnownWord } from '$lib/pipeline';
 	import type { EngravingAnswers } from './ingestion/recognized-to-musicxml';
 	import type { ReadReport } from './ingestion/recognized';
 	import type { PageProvenance } from '$lib/library/types';
@@ -116,9 +119,17 @@
 		 * way a score does.
 		 */
 		onpoem: (text: string) => void;
+		/**
+		 * N.146 step 2b. The SAME `loaderState` `+page.svelte` already owns and
+		 * already passes to `IntakePanel` / `AnalysisStation` -- no second
+		 * loader, no second load. Read only by the OCR guard
+		 * (`dictionaryGuardMode`, `ingestion/ocr-guard.ts`), to hold a busy
+		 * reading until the dictionary it judges against has actually loaded.
+		 */
+		loaderState: LoaderState;
 	}
 
-	let { language, oningested, restore = null, onpoem }: Props = $props();
+	let { language, oningested, restore = null, onpoem, loaderState }: Props = $props();
 
 	const T = (key: string) => t(key, language);
 
@@ -290,6 +301,41 @@
 	let pendingPoemFallback: { kind: 'image' | 'pdf'; ink: ArrayBuffer } | null = null;
 
 	/**
+	 * N.146 step 2b. Callers parked here by `waitForDictionaryGuard`, spent
+	 * the moment `loaderState` stops meaning `'wait'` (loaded, or failed --
+	 * either way there is a verdict to give). The effect below is the ONE
+	 * place this component reads `loaderState`; everywhere else that decides
+	 * with the dictionary reads `dictionaryGuardMode`'s result, not the raw
+	 * state, the same separation `ocr-guard.ts` keeps between its pure
+	 * decision and the one real dictionary it is ever run against.
+	 */
+	let dictionaryWaiters: Array<() => void> = [];
+
+	$effect(() => {
+		if (dictionaryGuardMode(loaderState) === 'wait') return;
+		untrack(() => {
+			if (dictionaryWaiters.length === 0) return;
+			const waiters = dictionaryWaiters;
+			dictionaryWaiters = [];
+			waiters.forEach((resolve) => resolve());
+		});
+	});
+
+	/**
+	 * Resolves at once if the dictionary already has a verdict (loaded, or
+	 * failed); otherwise resolves the moment it does. Never opens a second
+	 * loader or starts a second load -- `loaderState` is `+page.svelte`'s
+	 * own, handed down as a prop the same way `IntakePanel` and
+	 * `AnalysisStation` already receive it.
+	 */
+	function waitForDictionaryGuard(): Promise<void> {
+		if (dictionaryGuardMode(loaderState) !== 'wait') return Promise.resolve();
+		return new Promise((resolve) => {
+			dictionaryWaiters.push(resolve);
+		});
+	}
+
+	/**
 	 * The first page's ink, for the staff check. The SAME rasterizers
 	 * `probeFile` and `readPages` already use; the failure classes each
 	 * throws map to the same copy `classify()` gives an `IngestOutcome`
@@ -363,7 +409,11 @@
 	 * N.146. The poem route's OCR half, and the FINAL word on whether this
 	 * upload is a poem at all: once OCR has had its attempt, every outcome
 	 * this drop could have reached is on hand, and `decidePoemOrScore`
-	 * (`ingestion/poem-or-score.ts`) says what they add up to.
+	 * (`ingestion/poem-or-score.ts`) says what they add up to -- including,
+	 * N.146 step 2, `ocr-guard.ts`'s judgment of the OCR text itself, which
+	 * refuses one that is mostly not Russian words. N.146 step 2b: that
+	 * judgment waits for `loaderState` to say the dictionary has a verdict
+	 * (loaded, or failed) before it runs at all (`waitForDictionaryGuard`).
 	 *
 	 * Shared by a picture, which never had a text layer to try (`textLayer`
 	 * is `null`), and a PDF whose text layer came back empty (`textLayer` is
@@ -404,7 +454,19 @@
 			};
 			return;
 		}
-		const result = decidePoemOrScore({ stavesFound, sungLineFound, textLayer, ocrText });
+		// N.146 step 2b. The guard must not judge `ocrText` against a
+		// dictionary that has not loaded (empty `ocrText` skips the wait: it
+		// reaches `unreadable` on its own, `decidePoemOrScore`'s empty check,
+		// with no guard verdict to wait for). `ui` is untouched here -- the
+		// busy label above keeps showing until there is a real verdict.
+		if (ocrText.trim() !== '') {
+			await waitForDictionaryGuard();
+		}
+		const mode = dictionaryGuardMode(loaderState);
+		const result = decidePoemOrScore(
+			{ stavesFound, sungLineFound, textLayer, ocrText },
+			isKnownWordForGuard(mode, isKnownWord)
+		);
 		if (result.kind === 'poem') {
 			onpoem(result.text);
 			reset();
