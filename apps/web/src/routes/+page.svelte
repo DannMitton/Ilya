@@ -3059,17 +3059,43 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * all become the new piece's together, which is the whole point. Without it
 	 * this is step 3's behaviour exactly, unchanged.
 	 */
-	function applyArrival(
+	async function applyArrival(
 		ingested: IngestedScore,
 		file: File,
 		origin: 'upload' | 'restore',
 		replaceWholeSong: boolean,
-	): void {
+	): Promise<void> {
 		if (replaceWholeSong) doc.pairings = {};
 		// N.67 step 2. The singer's own bytes go down with the song, in one
 		// transaction, so a reload brings the score back. Only a real upload
 		// writes: a restore's bytes came from the vault.
-		if (origin === 'upload') void attachUploadedSource(ingested, file, arrivalPage ?? undefined);
+		//
+		// AWAITED, N.143 half B, 2026-09-16: this used to fire with `void` and
+		// run in the background while the rest of this function continued
+		// synchronously. `nameIfUnnamed` (below, and inside `handleInput`) reads
+		// `doc.source` to propose a name from the file, and a name is written
+		// once (`nameIfUnnamed`'s own `doc.name !== ''` guard). Naming used to
+		// run before this promise resolved, so `doc.source` was still null, the
+		// file name never got a turn, and a headerless upload was named from the
+		// poem's first four words instead. Awaiting here costs one microtask
+		// tick of local hashing (`hashBytes`, `fingerprintVocalLine`), no
+		// network, so it does not delay the fill a singer would notice; it is
+		// the same single call to `attachSource`, not a second save site.
+		//
+		// CAUGHT, NOT LET FLY: `attachUploadedSource`'s own hashing is already
+		// best-effort (its internal `try`/`catch`), but `file.arrayBuffer()`
+		// ahead of it is not. Before this change a throw there was an unhandled
+		// rejection that never touched the rest of this function, because
+		// nothing awaited it. Awaiting it now would otherwise abort the fill and
+		// the seat below over a failure that is only the source recording, so it
+		// is caught here and the arrival continues without a stored source.
+		if (origin === 'upload') {
+			try {
+				await attachUploadedSource(ingested, file, arrivalPage ?? undefined);
+			} catch (err) {
+				console.error('[Ilya] score kept, but its source could not be attached:', err);
+			}
+		}
 		// Live-wired (§E.7 slice 1): VoiceProfilePane renders this as paginated
 		// notation in the Fit main pane.
 		ingestedScore = ingested;

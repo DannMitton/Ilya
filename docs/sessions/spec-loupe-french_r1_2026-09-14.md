@@ -90,12 +90,44 @@ the acute and the double e. The Roll Up the Rim cup carries the imperative,
 « Réessayez »; that is the same verb in the form a cup addresses you in, and it is
 not the form this file uses for controls.
 
-## STILL OPEN. Do not build these
+## RULED 2026-09-16: the undo clause for Start placement over
 
-- **`i18n.ts:373` `loupe.beat`** and **`:374` `loupe.beatPulse`**, "beat %b" and
-  "beat %b, pulse %p". **Neither « temps » nor « pulsation » appears in any
-  French slot in the file**, so both words are unattested here. **Not yet put to
-  Dann.**
+**Dann chose option A, 2026-09-16.** Nothing is coined: both halves are adopted
+from the button itself, `station.startOver:1328`, "Start placement over" /
+« Recommencer le placement ». The line then reads « Annuler\u00a0: placement
+recommencé ».
+
+| line | key | en | fr, RULED |
+|---|---|---|---|
+| new, beside `:388` | `loupe.undo.startOver` (DESK DEFAULT name) | `placement started over` | « placement recommencé » |
+
+**Put to him beside two alternatives, not taken:** "placements rebuilt" /
+« placements reconstruits », and "placements reset" / « placements
+réinitialisés ».
+
+**NOT ESTABLISHED, for the build:** whether Start placement over pushes onto the
+loupe's undo stack today. The clause is useless if it does not; Code checks
+before wiring it.
+
+## RULED 2026-09-16: the beat position
+
+**Dann chose option A, 2026-09-16.** « temps » and « division » had appeared in no
+French slot before this ruling. **The desk proposed them from its own prior on
+French music terminology, not from a source read that session;** Dann ratified
+them. « division » names what `entry.ts` counts: one pulse is `1 / division` of a
+beat, with a division of 3 in compound metre and 2 otherwise.
+
+| line | key | en | fr, RULED |
+|---|---|---|---|
+| 373 | `loupe.beat` | `beat %b` | « temps %b » |
+| 374 | `loupe.beatPulse` | `beat %b, pulse %p` | « temps %b, division %p » |
+
+**Not taken:** « subdivision » (longer, and usually a finer split), and
+« pulsation » (in French teaching it often names the beat itself).
+
+## STILL OPEN
+
+Nothing in the loupe's French, as of 2026-09-16.
 
 ---
 *Instrument: `i18n.ts` read in the ranges `375-395`, `468-475`, and by targeted

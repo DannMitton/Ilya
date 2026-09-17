@@ -22,7 +22,7 @@ nothing is built against a moving part and nothing is built twice. Asked for by
 Dann, 2026-09-15.
 
 **What it is not.** A release cut. It says what order to build in, not where the
-first public Ilya stops. That question is still his and is recorded separately in
+next public Ilya stops (Ilya has been public since January; see `PRODUCT.md`). That question is still his and is recorded separately in
 `STATE.md` §RULINGS DANN OWES.
 
 **Instrument.** `OPEN.md` read in full, `STATE.md` §THE TRACKER and §OWED read in

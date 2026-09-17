@@ -26,10 +26,17 @@ import type { PluralStore, SongSummary } from './driver';
  * there is no material yet.
  *
  * *Composer, title* first, because that is how a singer names a piece to
- * another singer. Then the poem's opening words, because a song with no score
- * header still has words. An empty answer is honest: a song created a moment
- * ago has nothing to be named after, and inventing something would be the tool
- * asserting what it does not know.
+ * another singer. Then the dropped file's own name (N.143 half B, ruled
+ * 2026-09-16): a score with no header still usually has a rich file name, and
+ * the singer named that file. Then the poem's opening words, because a song
+ * with no header and no file name still has words. An empty answer is honest:
+ * a song created a moment ago has nothing to be named after, and inventing
+ * something would be the tool asserting what it does not know.
+ *
+ * The whole file base name becomes the song's name; it is never split into
+ * the Piece fields (composer, poet, title stay empty for the singer). Ruled
+ * 2026-09-15, `docs/memory/OPEN.md` §N.143: splitting a file name into fields
+ * is inference that will be wrong on someone else's file.
  *
  * Nothing keys on this. It is for human eyes, and the singer may edit it.
  */
@@ -39,7 +46,24 @@ export function proposeName(record: SongRecord): string {
 	if (composer && title) return `${composer}, ${title}`;
 	if (title) return title;
 	if (composer) return composer;
+	const fromFile = fileBaseName(record.source?.fileName ?? '');
+	if (fromFile) return fromFile;
 	return record.poem.trim().split(/\s+/).filter(Boolean).slice(0, 4).join(' ');
+}
+
+/**
+ * A file name with its last extension removed and whitespace trimmed, or the
+ * empty string when nothing usable remains.
+ *
+ * Only the LAST extension is stripped, so `Op. 45 no. 2.musicxml` loses only
+ * `.musicxml`. No allowlist of extensions: a score arrives as one of the
+ * formats Ilya reads today, and a future format needs no change here.
+ */
+function fileBaseName(fileName: string): string {
+	const trimmed = fileName.trim();
+	const dot = trimmed.lastIndexOf('.');
+	const base = dot > 0 ? trimmed.slice(0, dot) : trimmed;
+	return base.trim();
 }
 
 /**

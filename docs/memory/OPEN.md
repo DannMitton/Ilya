@@ -1248,6 +1248,18 @@ other `.musx` files carry the same empty slot; whether anything else that reads
 verse numbers (Score markup's underlay, Transcription's verse picker) is affected
 by the phantom verse today.
 
+### BOTH HALVES BUILT 2026-09-16, WRITTEN NOT DONE
+
+Memos: `../sessions/memo-n143-musx-verse-fill_r1_2026-09-16.md` and
+`../sessions/memo-n143b-name-from-file_r1_2026-09-16.md`, read by the desk in
+full. T05's verse 1 went from 0 words to 73. Half B found the trap real:
+`attachUploadedSource` was fired unawaited, so the poem always named the song
+first; it is now awaited inside a `try`/`catch` (`+page.svelte:3082-3090`).
+**Two things the memos found that the spec did not know:** clitic-fold
+proposals (`clitic-seat.ts:145`) were also silently empty on `.musx`, and T05's
+`v2` line is NOT IPA; the parser reads the literal text `box` on its first
+event. The earlier line in this section calling `v2` IPA is superseded.
+
 ### HALF B: THE NAME FROM THE HEADER. CAUSE ALREADY ESTABLISHED
 
 **The converted MNX carries no header at all.** Read 2026-09-15 from T05 converted
@@ -1306,6 +1318,31 @@ the name is written the first time there is material to build one from, and is t
 singer's from then on. **A file name is material.** The same memo records that a
 song named from its poem never picks up a better name later, which is deliberate
 and is not changed here.
+
+### HALF B's RANKING, RULED BY DANN 2026-09-16
+
+**His words:** *"When a dropped score has no title or composer inside it, the song
+should be called by the file name, then the poem's opening words in my library. T05
+becomes "Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell". It's my
+understanding these files can be renamed."*
+
+**The order `proposeName` follows** (`apps/web/src/lib/library/songs.ts:36-43` today:
+header, then the poem's first four words): **the score header, then the dropped
+file's base name, then the poem's opening words**, then the existing dated
+placeholder. The collision numeral (`uniqueName`) applies as today.
+
+**The rename he refers to exists:** `renameSong` at `songs.ts:200`, called from
+`+page.svelte:3508`. A name is the singer's to change.
+
+**DESK DEFAULT, 2026-09-16:** the file name applies to every dropped score,
+including a PDF or a photograph (N.59), so a camera file can name a song
+`IMG_4411`. Dann can narrow it.
+
+**The trap for the build, NOT ESTABLISHED:** a name is written once
+(`nameIfUnnamed`, `+page.svelte:3722`). `handleInput` calls it at `:2736`, and
+N.134's fill arrives through `handleInput`. If the fill runs before
+`doc.attachSource` (`:3673`), the poem names the song first and the file name
+never gets a turn. Brief: `../sessions/brief-n143b-name-from-file_r1_2026-09-16.md`.
 
 ### WHY IT MATTERS MORE THAN ITS SIZE
 

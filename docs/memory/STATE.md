@@ -549,8 +549,9 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
-- **THE UNDO SENTENCE FOR "START PLACEMENT OVER". Dann's to rule, English and
-  French, then one line in Code.** Carried out of the 2026-09-10 walk narrative
+- **RULED 2026-09-16, BUILD OWED: « placement recommencé » / "placement started
+  over"**, in `../sessions/spec-loupe-french_r1_2026-09-14.md`. ~~**THE UNDO SENTENCE FOR "START PLACEMENT OVER". Dann's to rule, English and
+  French, then one line in Code.**~~ Carried out of the 2026-09-10 walk narrative
   on 2026-09-13 before that narrative moved to `../sessions/LOG.md` block 12.
   **Confirmed live against the tree 2026-09-13:** the button exists
   (`i18n.ts:1328`, `station.startOver`, en "Start placement over", fr
@@ -559,12 +560,22 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
   `:470-472` holds `deleted`, `dotOn`, `dotDouble`, `dotOff`, `lyrics`,
   `restored`, `placed`, `melisma`, `melismaOff`, `entered`, `rest` and `tie`,
   and none of them says that a whole placement was started over.
-- **THREE FRENCH STRINGS ARE ENGLISH, found 2026-09-13 while checking the clause
+- **SUPERSEDED 2026-09-16: THESE THREE ARE RULED, NOT OWED.** Dann ruled all
+  three on 2026-09-14 (« syllabe placée », « mélisme défini », « mélisme
+  effacé »), with `loupe.redo` « Refaire\u00a0: %s », `loupe.melisma`,
+  `loupe.lyric.melisma` and `calib.common.retake`, in
+  `../sessions/spec-loupe-french_r1_2026-09-14.md`. **What is owed is the BUILD:
+  the tree still carries English in all of those slots (`i18n.ts:387-392`,
+  `:419`, `:422`, read 2026-09-16).** The desk offered them to him again on
+  2026-09-16 before tether 16 caught it. `loupe.beat` and `loupe.beatPulse`
+  were RULED 2026-09-16 (« temps %b », « temps %b, division %p »), same spec.
+  **The loupe's French is now fully ruled and wholly unbuilt.**
+  ~~**THREE FRENCH STRINGS ARE ENGLISH, found 2026-09-13 while checking the clause
   list above.** `i18n.ts:388` `loupe.undo.placed` reads fr 'syllable placed';
   `:391` `loupe.undo.melisma` reads fr 'melisma set'; `:392`
   `loupe.undo.melismaOff` reads fr 'melisma cleared'. **A singer in French mode
   is shown English in the loupe's undo line.** French is Dann's; nothing is
-  coined here.
+  coined here.~~
 - **THE RELEASE CUT, and it is the biggest thing he owes. Raised 2026-09-13
   when he asked how close a fully working app is.** The answer is in
   `../sessions/memo-footprint-and-release-arithmetic_r1_2026-09-13.md` §4, and
@@ -576,7 +587,8 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
   closed, of which only N.128 was one of the fifteen.** The queue grew faster
   than it drained. **So the release date is set by when he stops numbering, not
   by how fast Code builds.** The ask, when the moment is right: name the items
-  a first public Ilya contains, freeze that list, and move the rest to a
+  the next public iteration of Ilya contains (Ilya has been public since
+  January, corrected by Dann 2026-09-16; see `PRODUCT.md`), freeze that list, and move the rest to a
   post-release file the way `OPEN.md` now holds unstarted specs. **Do not put
   this to him mid-item, and do not raise it twice.**
 - **THE RELEASE ORDER CONTRADICTS ITSELF, and both halves are his. Found

@@ -443,6 +443,68 @@ describe('MnxScoreParser: diagnostics and degraded sources', () => {
 		expect(r.score.vocalLine[0].syllable!.text).toBe('tɨ');
 	});
 
+	it('numbers verses from lineOrder, skipping a declared-but-unused id listed FIRST (N.143)', async () => {
+		const doc = mainFixture();
+		(doc.global as { lyrics: { lineOrder: string[] } }).lyrics.lineOrder = ['v3', 'v1', 'v2'];
+		const r = await parser.parse(mnxInput(doc));
+		expect(r.score.vocalLine[0].syllable!.text).toBe('Ты');
+		expect(r.score.vocalLine[0].syllable!.verseNumber).toBe(1);
+		expect(r.score.vocalLine[0].syllable!.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'Ты', type: 'whole' },
+			{ verseNumber: 2, text: 'tɨ', type: 'whole' },
+		]);
+	});
+
+	it('numbers verses from lineOrder, skipping a declared-but-unused id listed in the MIDDLE, with no gap (N.143)', async () => {
+		const doc = mainFixture();
+		(doc.global as { lyrics: { lineOrder: string[] } }).lyrics.lineOrder = ['v1', 'v3', 'v2'];
+		const r = await parser.parse(mnxInput(doc));
+		expect(r.score.vocalLine[0].syllable!.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'Ты', type: 'whole' },
+			{ verseNumber: 2, text: 'tɨ', type: 'whole' },
+		]);
+	});
+
+	it('numbers the Patterson shape (v2, v4, v6, v8, all used) unchanged (N.143)', async () => {
+		const doc = {
+			mnx: { version: 17 },
+			global: {
+				lyrics: { lineOrder: ['v2', 'v4', 'v6', 'v8'] },
+				measures: [{ time: { count: 4, unit: 4 }, key: { fifths: 0 } }],
+			},
+			parts: [
+				{
+					id: 'P1',
+					measures: [
+						{
+							sequences: [
+								{
+									content: [
+										ev('whole', {
+											lyrics: {
+												v2: { text: 'one', type: 'whole' },
+												v4: { text: 'two', type: 'whole' },
+												v6: { text: 'three', type: 'whole' },
+												v8: { text: 'four', type: 'whole' },
+											},
+										}),
+									],
+								},
+							],
+						},
+					],
+				},
+			],
+		};
+		const r = await parser.parse(mnxInput(doc));
+		expect(r.score.vocalLine[0].syllable!.versesInfo).toEqual([
+			{ verseNumber: 1, text: 'one', type: 'whole' },
+			{ verseNumber: 2, text: 'two', type: 'whole' },
+			{ verseNumber: 3, text: 'three', type: 'whole' },
+			{ verseNumber: 4, text: 'four', type: 'whole' },
+		]);
+	});
+
 	it('warns once per part set when multiple parts carry lyrics', async () => {
 		const doc = mainFixture();
 		const parts = doc.parts as Array<Record<string, unknown>>;

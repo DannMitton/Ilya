@@ -374,7 +374,11 @@ export class MnxScoreParser implements ScoreParser {
 			const rawOrder = doc.global?.lyrics?.lineOrder;
 			let order: string[];
 			if (Array.isArray(rawOrder) && rawOrder.every((x) => typeof x === 'string')) {
-				order = rawOrder as string[];
+				// A lineId listed in lineOrder but never seen on an event (a
+				// declared-but-unused verse slot, e.g. a Finale verse a singer
+				// never filled in) claims a verse number and shifts every real
+				// verse after it. Number only the ids that actually occur.
+				order = (rawOrder as string[]).filter((id) => seenLineIdsInOrder.includes(id));
 				// Any observed lineId missing from lineOrder is appended in
 				// first-appearance order so its syllables are not dropped.
 				for (const id of seenLineIdsInOrder) {

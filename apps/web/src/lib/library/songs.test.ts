@@ -69,6 +69,65 @@ describe('proposeName, design §2.3 layer 3', () => {
 		expect(proposeName(song('a'))).toBe('');
 		expect(proposeName(song('a', { poem: '   \n  ' }))).toBe('');
 	});
+
+	describe('the file name fallback, N.143 half B', () => {
+		const base = emptySongRecord('a', NOW).metadata;
+		const sourceOf = (fileName: string) => ({
+			fileName,
+			byteLength: 10,
+			importedAt: NOW,
+			contentHash: 'h',
+			fingerprint: 'f',
+		});
+
+		it('a header beats the file name', () => {
+			expect(
+				proposeName(
+					song('a', {
+						metadata: { ...base, title: 'Сонет 90' },
+						source: sourceOf('T05 Cupid laid by his brand, and fell.musx'),
+					}),
+				),
+			).toBe('Сонет 90');
+		});
+
+		it('no header: a file name and a poem, the file name wins', () => {
+			expect(
+				proposeName(
+					song('a', {
+						poem: 'Я вас любил любовь ещё быть может',
+						source: sourceOf('Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx'),
+					}),
+				),
+			).toBe('Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell');
+		});
+
+		it('no header, an empty file name: the poem wins', () => {
+			expect(
+				proposeName(song('a', { poem: 'Я вас любил любовь ещё быть может', source: sourceOf('') })),
+			).toBe('Я вас любил любовь');
+		});
+
+		it("names T05 from its file, extension stripped", () => {
+			expect(
+				proposeName(
+					song('a', {
+						source: sourceOf('Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx'),
+					}),
+				),
+			).toBe('Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell');
+		});
+
+		it('strips only the LAST extension from a name with dots inside it', () => {
+			expect(proposeName(song('a', { source: sourceOf('Op. 45 no. 2.musicxml') }))).toBe('Op. 45 no. 2');
+		});
+
+		it('falls through to the poem when there is no source at all', () => {
+			expect(proposeName(song('a', { poem: 'Я вас любил любовь ещё быть может', source: null }))).toBe(
+				'Я вас любил любовь',
+			);
+		});
+	});
 });
 
 describe('placeholderName', () => {

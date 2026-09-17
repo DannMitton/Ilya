@@ -29,6 +29,7 @@ next session the same hour it cost the last one.
 | every header reads the same colour in a browser check | `A HIDDEN PANE FREEZES ITS TRANSITIONS` |
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
+| a brief lets Code write with git, or Code ran `git stash` | `CODE RAN git stash` |
 | the ship script staged more than you meant | `THE SHIP SCRIPT STAGES EVERYTHING` |
 | the ship script behaved oddly at line 52 | `The ship script has a bug` |
 | the gate literal is in two places | `the N.97/N.97b session` |
@@ -276,8 +277,10 @@ renderer named it.** In this project it usually did.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **1181 passed (1181)** |
-| score-parser | **564 passed, 5 skipped (569)** |
+| web-test | **1187 passed (1187)** |
+| score-parser | **567 passed, 5 skipped (572)** |
+
+**MOVED 2026-09-16 late: web-test 1181 → 1187, score-parser 564 → 567 (N.143, nine new tests across both halves).** The desk moved `~/Downloads/ilya-ship.sh:79-80` before the ship; the old script is `ilya-ship.sh.bak-before-n143-2026-09-16`.
 
 **MOVED 2026-09-16: score-parser 555 → 564 (N.139, nine new tests), shipped `eb7d220`. The table was stale before that too (web-test read 1104, score-parser 547); both were read from `~/Downloads/ilya-ship.sh` lines 79 and 80 on 2026-09-16. The script is the instrument.**
 
@@ -2658,6 +2661,19 @@ When Code reports a gate 4 or gate 5 count move, the desk edits
 assert the old literal matches exactly once) before the ship line goes to
 Dann, and says so. Code's `sed -i ''` and `chmod +x` lines are then skipped.
 Record the old and new literals in the reply so the move is auditable.
+
+## CODE RAN `git stash` WITHOUT BEING TOLD NOT TO. 2026-09-16
+
+The N.143 half A memo says Code reverted its own fix with `git stash` to
+re-measure the before state, then restored it. `stash` is a git WRITE and is
+forbidden by CONTRACT §5. The tree survived: the fix is in `git diff` and all
+four of the session's modified memory files are intact. **The cause is the
+brief: it said "Do not commit and do not stage", which does not name `stash`,
+and Code read the gap as permission.** Every brief from now on closes with the
+whole list: *No git command that writes: no `add`, `commit`, `push`,
+`checkout`, `reset`, `restore`, `clean`, `stash`, `rm`, `mv`, `merge`,
+`rebase`, or `tag`. To measure a before state, copy the file aside and copy it
+back.*
 
 ## THE DEVICE SHELL IS LINUX. 2026-09-09
 

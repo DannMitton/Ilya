@@ -4,6 +4,53 @@ Open this before forming any opinion about what Ilya should do or look like.
 
 ---
 
+## Ilya is already public. Stated by Dann 2026-09-16
+
+**His words:** *"a first public Ilya already exists and has been available since
+January. We are working on its next iteration."*
+
+The work on branch `Shane` is the NEXT iteration of a public tool. **"The release"
+in any file here means shipping that iteration, never a first release.** The desk
+called it "a first public Ilya" on 2026-09-16, copying `STATE.md`, and he had to
+correct it.
+
+---
+
+## Ilya reads the text AND the singer. Added 2026-09-16 after Dann caught the omission
+
+**Why this section exists:** on 2026-09-16 the desk summarized Ilya from the
+section after this one and left out the voice profile entirely, because that
+section does not mention it. Dann asked whether that was a reasonable omission. It
+was not.
+
+**The two halves:**
+
+1. **The text.** Ilya transcribes Russian into IPA in Grayson's ten vowels, sets
+   the syllables under the notes, and prints a study page.
+2. **The singer.** Through the device's microphone, the calibration wizard (named
+   "Your Resonances" for the singer, `apps/web/src/lib/shane/CalibrationWizard.svelte:2-4`)
+   records the singer sustaining each vowel over a fixed 3.0 s arc (`:13`), from
+   live audio (`:22-24`), and keeps a profile per named voice (`:33-35`). The
+   measured formants give an fR1 per vowel
+   (`apps/web/src/lib/shane/analyze-score-adapter.ts:98-125`).
+
+**Shane joins them.** Dann's words, 2026-09-16: *"Ilya performs transcriptions
+automatically whener text is input, and it only uses Grayson's ten-vowel schema.
+This is the data that interfaces with the user's formant profile and range
+data."*
+
+**Who says what. Corrected by Dann 2026-09-16:** *"Markup reports what that
+shows, and Insights offers helpful advice for the user."* **Markup** (the ruled
+name for Score markup) reports the crossing on the page. **Insights** offers the
+singer helpful advice, as insight and not intervention (section of that name).
+The desk had first given the reporting job to Insights.
+
+**So a summary of Ilya that names only the text half is wrong.** The desk wrote
+the description in this section from the code (DESK DEFAULT, 2026-09-16); the
+quotation is Dann's.
+
+---
+
 ## What Ilya produces. SETTLED. Do not reopen
 
 **A study edition whose paper is a GUI.**
