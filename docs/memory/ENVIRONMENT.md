@@ -30,6 +30,7 @@ next session the same hour it cost the last one.
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
 | a brief lets Code write with git, or Code ran `git stash` | `CODE RAN git stash` |
+| git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
 | the ship script staged more than you meant | `THE SHIP SCRIPT STAGES EVERYTHING` |
 | the ship script behaved oddly at line 52 | `The ship script has a bug` |
 | the gate literal is in two places | `the N.97/N.97b session` |
@@ -277,7 +278,9 @@ renderer named it.** In this project it usually did.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | 0 errors, 7 warnings, 4 files |
-| web-test | **1187 passed (1187)** |
+| web-test | **1201 passed (1201)** |
+
+*(web-test moved 1187 → 1199 → 1201 on 2026-09-16 late: N.142's twelve tests, then the loupe French build's two. Script backup `ilya-ship.sh.bak-before-n142-2026-09-16`.)*
 | score-parser | **567 passed, 5 skipped (572)** |
 
 **MOVED 2026-09-16 late: web-test 1181 → 1187, score-parser 564 → 567 (N.143, nine new tests across both halves).** The desk moved `~/Downloads/ilya-ship.sh:79-80` before the ship; the old script is `ilya-ship.sh.bak-before-n143-2026-09-16`.
@@ -2661,6 +2664,22 @@ When Code reports a gate 4 or gate 5 count move, the desk edits
 assert the old literal matches exactly once) before the ship line goes to
 Dann, and says so. Code's `sed -i ''` and `chmod +x` lines are then skipped.
 Record the old and new literals in the reply so the move is auditable.
+
+## `git status` FROM THE BRIDGE LEAVES A STALE `index.lock`. 2026-09-16
+
+`git status` refreshes the index when file stat data has changed, which means
+writing `.git/index.lock` and then unlinking it. **The bridge forbids unlink**,
+so on 2026-09-16 the desk's `git --no-pager status --porcelain` printed
+`warning: unable to unlink '.../.git/index.lock': Operation not permitted` and
+left a zero-byte lock behind. Every later git write on Dann's machine (his
+`add`, the ship script's `commit`) fails until the lock is removed. Earlier
+calls the same night left nothing, because the index needed no refresh.
+
+**The rule: from the bridge, run read-only git ONLY as
+`git --no-optional-locks ...`** (or with `GIT_OPTIONAL_LOCKS=0`), which skips
+the refresh and never takes the lock. If a lock is ever left, Dann removes it
+with `rm ~/Desktop/ilya-rewrite/.git/index.lock`, once no git process of his
+is running.
 
 ## CODE RAN `git stash` WITHOUT BEING TOLD NOT TO. 2026-09-16
 

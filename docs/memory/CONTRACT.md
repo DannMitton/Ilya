@@ -338,6 +338,14 @@ Every brief demands a section listing what the agent could not establish, and
 **Dann's usage is NOT ESTABLISHED.** Ask for a screenshot before planning any
 farm-out.
 
+**THE DESK SPAWNS THE SUBAGENT ITSELF. Ruled by Dann 2026-09-16.** His words,
+when the desk handed him a brief to paste into a Sonnet session: *"No, you spawn
+the Sonnet subagent."* A farm-out the desk can run with its own Agent tool
+(model `sonnet` or `opus`), it runs, and it reads the brief file itself. Dann
+pastes only what must run in Claude Code on his machine: builds and gates. The
+project instructions' "a brief Dann can paste" is superseded for everything
+else.
+
 ---
 
 ## 3. HOW DANN WORKS, AND WHAT THAT REQUIRES OF YOU
@@ -431,6 +439,11 @@ too blunt. **What is forbidden is every git command that WRITES:** `add`,
 
 **Read-only git is allowed and is sometimes the honest thing to do:** `status`,
 `log`, `diff`, `show`, `ls-files`, `check-ignore`. They change nothing.
+
+**AMENDED 2026-09-16: from the bridge, always as `git --no-optional-locks`.**
+Plain `git status` wrote `.git/index.lock` and the bridge could not delete it
+(`ENVIRONMENT.md`, section `git status FROM THE BRIDGE`). "They change
+nothing" was not true without the flag.
 
 The rule exists for one concrete reason, not for a general fear: **`git add -A`
 from this desk swept Code's working tree three times in one night, 2026-08-20**

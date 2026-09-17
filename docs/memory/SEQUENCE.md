@@ -33,6 +33,10 @@ blocks another.
 
 ---
 
+**RELEASE DATE, ruled by Dann 2026-09-16: Friday 2026-10-30.** The order below is read against it; what does not fit goes to FLAGGED or LATER (`STATE.md` §RULINGS DANN OWES).
+
+---
+
 ## The six real dependencies. Everything else floats
 
 **1. N.129 comes before every piece of horizontal spacing work.** It is a RULER
@@ -82,16 +86,19 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 
 | item | why here |
 |---|---|
-| **N.129** | Everything that spaces text measures against its table. Nothing else in the notation layer should be built first. |
+| **N.129** | Brief written 2026-09-16, `../sessions/brief-n129-underlay-ruler_r1_2026-09-16.md`; runs after N.142 and the loupe French. Everything that spaces text measures against its table. Nothing else in the notation layer should be built first. |
 | **N.136** | Cheap, and it settles the live half of N.119 before N.119 is briefed. |
 
 ### Tier 1. The notation layer
 
 | item | why here |
 |---|---|
-| **N.139** | Brief written and inherits the 2-space run-in Dann ruled. Its mid-system signature adds to a column advance, so it wants N.129's table. |
-| **N.126** | Measure numbers. Vertical, so N.129 does not bind it. Can run any time. |
-| **N.125** | Slurs. Its own Code thread, `staff-renderer.ts` only, off the drawer path. Brief written. Independent. |
+| ~~**N.139**~~ DONE 2026-09-16, `eb7d220` | Brief written and inherits the 2-space run-in Dann ruled. Its mid-system signature adds to a column advance, so it wants N.129's table. |
+| ~~**N.126**~~ DONE 2026-09-15, `76b24a3` | Measure numbers. Vertical, so N.129 does not bind it. Can run any time. |
+| ~~**N.125**~~ DONE 2026-09-16, `34b143c`, `570d76f` | Slurs. Its own Code thread, `staff-renderer.ts` only, off the drawer path. Brief written. Independent. |
+| ~~**N.143**~~ DONE 2026-09-16, `7abb5ae` | A `.musx` score fills the input field and takes its file's name. Placed 2026-09-16. |
+| **N.142** | Ties are prolongation. Placed 2026-09-16, NEXT BUILD, brief `../sessions/brief-n142-tie-is-prolongation_r1_2026-09-16.md`. Unblocks N.141's last step. Independent of N.129: it changes which notes take syllables, not their spacing. |
+| *(loupe French)* | Not numbered. All ruled 2026-09-14 and 2026-09-16; brief `../sessions/brief-loupe-french-build_r1_2026-09-16.md`, runs after N.142. |
 | **N.115** | The singer moves a measure between systems. **Last in this tier**: it reflows whole systems, so it wants the ruler and the meter already in place, or its reflow is judged against content that is about to change. |
 
 ### Tier 2. Names, then language
@@ -125,7 +132,7 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 
 | item | why here |
 |---|---|
-| **N.141** | In Code, 2026-09-15. |
+| **N.141** | Two increments shipped. The last (a tie spanning the squircle) waits on N.142. |
 | **N.140** | The stave-space floor. **Insurance rather than an improvement**: on today's scores the scroll would never fire, and landscape already answers the mobile case. Lowest priority of anything numbered. |
 
 ### Tier 6. The reader

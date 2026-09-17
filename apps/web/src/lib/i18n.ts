@@ -366,12 +366,13 @@ const strings: Record<string, Record<Language, string>> = {
 	// a singer would count. `%p` is the pulse inside it, and its clause appears
 	// only where the note is off the beat.
 	//
-	// FRENCH IS OWED. Both keys carry the ENGLISH IN BOTH SLOTS, the treatment
-	// `input.transcribe` and the `group.*` block get for the same reason: `t()`
-	// prints `[MISSING: key]` for an absent variant, and Dann has not seen this
-	// French. Add them to the table owed after N.114.
-	'loupe.beat':                  { en: 'beat %b',                      fr: 'beat %b' },
-	'loupe.beatPulse':             { en: 'beat %b, pulse %p',            fr: 'beat %b, pulse %p' },
+	// RULED by Dann 2026-09-16 (`docs/sessions/spec-loupe-french_r1_2026-09-14.md`):
+	// « temps » and « division » are the desk's proposal from its own prior on
+	// French music terminology, ratified rather than adopted from a source read
+	// that session. « division » names what `entry.ts` counts: one pulse is
+	// `1 / division` of a beat.
+	'loupe.beat':                  { en: 'beat %b',                      fr: 'temps %b' },
+	'loupe.beatPulse':             { en: 'beat %b, pulse %p',            fr: 'temps %b, division %p' },
 	// The named Undo pill. It reads the change it will reverse, stated in the
 	// direction the change happened. Absent when nothing can be undone.
 	'loupe.undo':                  { en: 'Undo: %s',                     fr: 'Annuler\u00a0: %s' },
@@ -382,14 +383,24 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.undo.lyrics':           { en: 'syllables shifted',            fr: 'syllabes décalées' },
 	'loupe.undo.restored':         { en: 'corrections cleared',          fr: 'corrections effacées' },
 	// N.111-3b. The Redo pill's frame, and the one action name the two pills
-	// share. FRENCH OWED for both: the `fr` slot carries the English so nothing
-	// renders `[MISSING`, and Dann has not seen a translation for either.
-	'loupe.redo':                  { en: 'Redo: %s',                     fr: 'Redo: %s' },
-	'loupe.undo.placed':           { en: 'syllable placed',              fr: 'syllable placed' },
+	// share. RULED by Dann 2026-09-14 (`docs/sessions/spec-loupe-french_r1_2026-09-14.md`):
+	// « Refaire » moves here from Restore, hard space before the colon adopted
+	// from `loupe.undo` above. « syllabe placée » is ratified, not coined:
+	// « placées » is in use at `intake.placed:625`, and « placement » is
+	// ratified across `upload.*`, `binder.*` and `replace.*`.
+	'loupe.redo':                  { en: 'Redo: %s',                     fr: 'Refaire : %s' },
+	'loupe.undo.placed':           { en: 'syllable placed',              fr: 'syllabe placée' },
+	// RULED by Dann 2026-09-16: `station.startOver`'s own English/French pair,
+	// verbatim, for the undo pill after Start placement over.
+	'loupe.undo.startOver':        { en: 'placement started over',       fr: 'placement recommencé' },
 	// N.113. The pill reads what the press will take back, so the pair names
-	// the two directions rather than the control. FRENCH OWED.
-	'loupe.undo.melisma':          { en: 'melisma set',                  fr: 'melisma set' },
-	'loupe.undo.melismaOff':       { en: 'melisma cleared',              fr: 'melisma cleared' },
+	// the two directions rather than the control. RULED by Dann 2026-09-14:
+	// « défini » adopted from `loupe.undo.tuplet` below (« nolet défini »),
+	// « effacé » adopted from `loupe.undo.restored` above (« corrections
+	// effacées »), both joining the `loupe.undo.*` family's own shape, noun
+	// plus agreeing past participle, no article.
+	'loupe.undo.melisma':          { en: 'melisma set',                  fr: 'mélisme défini' },
+	'loupe.undo.melismaOff':       { en: 'melisma cleared',              fr: 'mélisme effacé' },
 	// The four stations, in the ruled order. Durations lead.
 	'loupe.station.duration':      { en: 'Duration',                     fr: 'Durée' },
 	'loupe.station.pitch':         { en: 'Pitch',                        fr: 'Hauteur' },
@@ -412,14 +423,19 @@ const strings: Record<string, Record<Language, string>> = {
 	// scope. The clause after the comma is `shiftLyrics.toEndOfLyric` and
 	// `shiftLyrics.toNextOpenNote` verbatim.
 	// N.113, the melisma. THREE NEW ENGLISH STRINGS, and the row label is the
-	// fourth. FRENCH OWED on all four: the `fr` slot carries the English so
-	// nothing renders `[MISSING`, exactly as `loupe.redo` does since N.111-3b.
-	// `Melisma` is ADOPTED, not coined: it is the word Finale's own manual and
-	// Gould both use, and the tree has used it since N.55b (`pairings.ts:126`).
-	'loupe.melisma':               { en: 'Melisma',                      fr: 'Melisma' },
+	// fourth; `loupe.lyric.toEnd` and `loupe.lyric.toNextOpen` below were
+	// translated earlier and are not FRENCH OWED. **RULED by Dann 2026-09-14
+	// (`docs/sessions/spec-loupe-french_r1_2026-09-14.md`): « Mélisme »**,
+	// against « vocalise », which the desk ruled out before he chose because it
+	// collides with the exercise sense in a voice application. It is masculine,
+	// so its participles above take no final e.
+	'loupe.melisma':               { en: 'Melisma',                      fr: 'Mélisme' },
 	// The row label, in the shape its two neighbours already take: what the
-	// verb touches, then what it does to it.
-	'loupe.lyric.melisma':         { en: 'This note sustains the syllable', fr: 'This note sustains the syllable' },
+	// verb touches, then what it does to it. **RULED by Dann's choice of
+	// option A, 2026-09-14**: a sentence rather than the term, so it does not
+	// use « Mélisme ». « prolonge » is COINED for this file; « soutient » was
+	// the alternative and was not taken.
+	'loupe.lyric.melisma':         { en: 'This note sustains the syllable', fr: 'Cette note prolonge la syllabe' },
 	'loupe.lyric.toEnd':           { en: 'Syllables, to the end of the lyric', fr: 'Les syllabes, jusqu\u2019à la fin du texte' },
 	'loupe.lyric.toNextOpen':      { en: 'Syllables, to the next open note',   fr: 'Les syllabes, jusqu\u2019à la prochaine note libre' },
 
@@ -962,7 +978,18 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.defaultVoiceName': { en: 'Voice', fr: 'Voix' },
 	'calib.section.ariaLabel': { en: 'Your Resonances: voice calibration', fr: 'Vos résonances\u00a0: calibration de la voix' },
 	'calib.common.continue': { en: 'Continue', fr: 'Continuer' },
-	'calib.common.retake': { en: 'Re-take', fr: 'Refaire' },
+	// « Refaire » MOVED OFF THIS KEY, RULED by Dann 2026-09-14
+	// (`docs/sessions/spec-loupe-french_r1_2026-09-14.md`): `loupe.redo` needed
+	// it and this key lost it as B's stated cost. « Réessayer » is ADOPTED from
+	// general Canadian French usage (Dann's reason: it is on the Tim Horton's
+	// Roll Up the Rim cup every year), not from any other slot in this file.
+	// The desk's « Recommencer » was proposed and withdrawn: `station.startOver`
+	// already reads « Recommencer le placement », and collapsing "Re-take" and
+	// "Start over" into one French word would have lost the distinction between
+	// another attempt and a restart. Written as the infinitive, matching this
+	// file's other buttons (« Rétablir », « Recommencer le placement »), not
+	// the imperative « Réessayez » the cup itself uses.
+	'calib.common.retake': { en: 'Re-take', fr: 'Réessayer' },
 	'calib.common.of': { en: 'of', fr: 'sur' },
 	'calib.common.vowels': { en: 'vowels', fr: 'voyelles' },
 	'calib.common.vowelWord': { en: 'Vowel', fr: 'Voyelle' },

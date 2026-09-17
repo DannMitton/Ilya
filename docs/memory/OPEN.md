@@ -1248,7 +1248,11 @@ other `.musx` files carry the same empty slot; whether anything else that reads
 verse numbers (Score markup's underlay, Transcription's verse picker) is affected
 by the phantom verse today.
 
-### BOTH HALVES BUILT 2026-09-16, WRITTEN NOT DONE
+### BOTH HALVES SHIPPED IN `7abb5ae` AND WALKED BY DANN 2026-09-16: DONE
+
+**Walked on the branch alias in an incognito window, T05 dropped fresh.** Seen in his screenshot: the input field filled with « Бог Купидон дремал в тиши лесной… », the poem receipt `77 words` `from score`, `146 / 146 placed`, and Score markup drawing. His word: *"correct."* The desk had listed the song's name among the expectations; the library row was not in the screenshot, so the name rests on his word. **The spec moves out of this file at the close.**
+
+#### The build account
 
 Memos: `../sessions/memo-n143-musx-verse-fill_r1_2026-09-16.md` and
 `../sessions/memo-n143b-name-from-file_r1_2026-09-16.md`, read by the desk in

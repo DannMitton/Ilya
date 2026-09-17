@@ -363,7 +363,7 @@ does not repeat them.
   was ruled.
 ### Numbered 2026-09-15
 
-- `[ ]` **N.143. N.134 does not fire on a `.musx` score.** Observed by Dann on the
+- `[x]` **N.143. DONE 2026-09-16, shipped `7abb5ae`, walked by Dann ("correct").** Account in `OPEN.md` §N.143 until the close moves it. ~~N.134 does not fire on a `.musx` score.~~ Observed by Dann on the
   deploy `76b24a3`, 2026-09-15, after three sightings by Code that were each
   written off to the load. **Both halves are absent on T05:** the input field stays empty, no
   `from score` receipt, no name from the header. **N.134 was walked on MusicXML;
@@ -576,6 +576,30 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
   `loupe.undo.melismaOff` reads fr 'melisma cleared'. **A singer in French mode
   is shown English in the loupe's undo line.** French is Dann's; nothing is
   coined here.~~
+- **THE RELEASE DATE, RULED BY DANN 2026-09-16: FRIDAY 2026-10-30.** The desk
+  proposed it as the far end of the 2026-09-13 estimate; his words: *"By
+  Hallowe'en? Sounds good."* **It is a target that the scope gives way to, not
+  a wall:** what does not fit by the date goes to FLAGGED or LATER. The dialogue
+  that produced it continues below, one question at a time. The sort of the
+  inventory into IN, FLAGGED and LATER is still owed.
+- **FOR THE SORT: START PLACEMENT OVER CANNOT BE UNDONE.** Established by
+  Code 2026-09-16 (`memo-loupe-french-build_r1_2026-09-16.md`):
+  `handleStartPlacementOver` never calls `pushUndo`, yet it rebuilds every
+  placement. A singer who presses it by mistake loses their hand placements.
+  **DESK READING: that is lost work, so it meets the freeze rule's exception.**
+  The undo clause is ruled and built as a key, unwired.
+- **N.142 STEP 2 IS WAITING ON A COUNT FROM DANN'S BROWSER.** Whether any song
+  in his library holds a placement on a tie's continuation is a fact about his
+  IndexedDB, which Code cannot read (`memo-n142-tie-prolongation_r1_2026-09-16.md`
+  §5). The desk can read it through Chrome on the branch alias.
+- **THE FREEZE RULE, RULED BY DANN 2026-09-16.** His word: *"I accept."* The
+  wording he accepted: **"From the day the sort is done, a new finding goes to
+  LATER by default. It joins this release only if Ilya would otherwise tell a
+  singer something false, or lose a singer's work."** Cases put to him with it:
+  "1 lines" goes to LATER; the loupe tap that reassigns syllables joins the
+  release (lost work); N.143 would have joined (Transcription empty). **The
+  desk's advice, given with it: keep the exception narrow; "confusing" and
+  "ugly" are not in it.**
 - **THE RELEASE CUT, and it is the biggest thing he owes. Raised 2026-09-13
   when he asked how close a fully working app is.** The answer is in
   `../sessions/memo-footprint-and-release-arithmetic_r1_2026-09-13.md` §4, and

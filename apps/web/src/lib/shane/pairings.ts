@@ -255,6 +255,58 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 /* ── The first pass (R3) ────────────────────────────────────────── */
 
 /**
+ * The minimal shape N.142's predicate needs from an event: enough to tell a
+ * rest from a note and a tie's continuation from its onset. A local,
+ * structural type rather than an import of `VocalLineEvent`, because this
+ * file's own rule (above) is that it never touches `VocalLineEvent`; any
+ * caller's real parsed or corrected events satisfy this shape without a cast.
+ */
+export interface TieAwareEvent {
+	id: string;
+	type: 'note' | 'rest';
+	tied?: { type: 'start' | 'continue' | 'stop' | 'let-ring' };
+}
+
+/**
+ * The ids of notes that may begin a NEW syllable, in document order.
+ *
+ * N.142, Dann 2026-09-15: "a note either begins a syllable or continues
+ * one," and a tie's continuation is one note WRITTEN TWICE, not a new
+ * sounded event, so it can never begin one. A rest is excluded as it always
+ * was; a tie's continuation is now excluded the same way.
+ *
+ * READS THE PREVIOUS NOTE'S `tied.type`, NOT THE NOTE'S OWN. A hand
+ * correction writes `tied: { type: 'start' }` (or deletes `tied`) only onto
+ * the note the correction is keyed on (`correction.ts`'s `amend`); it never
+ * writes `'continue'` or `'stop'` onto the note that follows. Deciding from
+ * the note's own field would miss a tie the singer just added (the
+ * following note carries no `tied` at all) and would wrongly still exclude
+ * a note whose tie the singer just removed (the following note still
+ * carries the reader's stale `'stop'`). Tracking the state forward, note by
+ * note, reads correctly in both cases because it never consults the field
+ * this walk is about to overwrite for the note in hand.
+ *
+ * A REST DOES NOT RESET THE TIE STATE. A tie cannot sound across a rest in
+ * valid notation, so this only matters for malformed input, and the correct
+ * behaviour for a walk is to skip over it rather than invent a rule for data
+ * that should not exist.
+ *
+ * `let-ring` IS NOT A CONTINUATION (spec, "THE SHAPE OF THE FIX"): it is l.v.
+ * notation, not a note written twice, and it neither excludes the note that
+ * carries it nor propagates to the note after.
+ */
+export function syllableTargetIds(events: readonly TieAwareEvent[]): string[] {
+	const out: string[] = [];
+	let continuesTie = false;
+	for (const ev of events) {
+		if (ev.type === 'rest') continue;
+		if (!continuesTie) out.push(ev.id);
+		continuesTie = ev.tied?.type === 'start' || ev.tied?.type === 'continue';
+	}
+	return out;
+}
+
+/**
  * One slot per note, in document order, until one side runs out.
  *
  * IT NEVER CREATES A MELISMA (Dann, E.46). The ordinary outcome on a
@@ -271,7 +323,8 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
  * the singer can simply SEE. The drawer says in one sentence that these are
  * proposals; the page says it with the syllables themselves.
  *
- * @param eventIds sung note events in document order, rests already excluded
+ * @param eventIds syllable targets in document order (N.142,
+ * `syllableTargetIds`): rests and a tie's continuations already excluded
  */
 export function firstPass(eventIds: readonly string[], queue: readonly Slot[]): PairingMap {
 	const map: PairingMap = {};
@@ -309,6 +362,14 @@ export function firstPass(eventIds: readonly string[], queue: readonly Slot[]): 
  * underlay of its own. That preserves N.55a's behaviour on the genuinely fresh
  * path (Ilya proposes where the score is silent, and never over a score that
  * already speaks) while ending the unconditional rebuild.
+ *
+ * `eventIds` AND `targetIds` ARE DELIBERATELY TWO LISTS (N.142, 2026-09-16).
+ * `eventIds` is every sung note, rests excluded, and decides whether a
+ * placement's note still EXISTS in the new score: a tie's continuation is
+ * still a note, so it must stay in this list or a placement on an ordinary,
+ * still-present note would misreport as orphaned. `targetIds` is narrower
+ * (`syllableTargetIds`): it is what a fresh `firstPass` may write into, since
+ * a tie's continuation may never begin a syllable.
  */
 export interface MergeResult {
 	map: PairingMap;
@@ -326,6 +387,7 @@ export interface MergeResult {
 export function mergeOnUpload(
 	existing: PairingMap,
 	eventIds: readonly string[],
+	targetIds: readonly string[],
 	queue: readonly Slot[],
 	scoreCarriesNoLyrics: boolean,
 ): MergeResult {
@@ -333,7 +395,7 @@ export function mergeOnUpload(
 	const orphaned = Object.keys(existing).filter((id) => !present.has(id));
 	if (Object.keys(existing).length === 0) {
 		return scoreCarriesNoLyrics
-			? { map: firstPass(eventIds, queue), proposed: true, orphaned: [] }
+			? { map: firstPass(targetIds, queue), proposed: true, orphaned: [] }
 			: { map: {}, proposed: false, orphaned: [] };
 	}
 	return { map: existing, proposed: false, orphaned };
@@ -451,6 +513,17 @@ export function melismaIds(map: PairingMap): Set<string> {
  *   they have only taken the melisma back.
  *
  * NOTHING IS MUTATED. A new map is returned, matching this file's habit.
+ *
+ * N.142, 2026-09-16: A NOTE NOT IN `eventIds` MAY NOT BE MARKED. `eventIds`
+ * is `syllableTargetIds`' output at the call site, so a tie's continuation
+ * is not in it; such a note has no new sounded onset of its own to carry a
+ * melisma (Dann's own table, `docs/memory/OPEN.md` §N.142: a tie's
+ * continuation is one note written twice, a melisma's is a new attack on the
+ * same vowel, and a note cannot be both at once). This is checked AFTER the
+ * "already marked" case above, not before it, so a mark predating this rule
+ * can still be cleared; it is refused only going forward. The loupe may
+ * still SELECT such a note (navigation is untouched); only the mark is
+ * refused, silently, same as a note already decided some other way.
  */
 export function toggleMelisma(
 	map: PairingMap,
@@ -463,6 +536,7 @@ export function toggleMelisma(
 		delete next[eventId];
 		return { map: next, set: false, displaced: [] };
 	}
+	if (!eventIds.includes(eventId)) return { map: { ...map }, set: false, displaced: [] };
 	let base = map;
 	let displaced: Pairing[] = [];
 	if (current?.kind === 'syllable') {

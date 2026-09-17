@@ -28,13 +28,14 @@ import {
 	refreshPairings,
 	mergeOnUpload,
 	firstPass,
+	syllableTargetIds,
 	toggleMelisma,
 	melismaIds,
 	melismaRuns,
 	pairedSyllableType,
 	vacatedNotes,
 } from './pairings';
-import type { Pairing, PairingMap, Slot } from './pairings';
+import type { Pairing, PairingMap, Slot, TieAwareEvent } from './pairings';
 
 const slot = (cyrillic: string, ipa: string, vowel: string | undefined, slotIndex: number, word: string): Slot => ({
 	cyrillic,
@@ -100,6 +101,62 @@ describe('refreshPairings', () => {
 	});
 });
 
+/* ── N.142, a tie is prolongation ────────────────────────────────── */
+
+describe('syllableTargetIds', () => {
+	const note = (id: string, tied?: TieAwareEvent['tied']): TieAwareEvent => ({ id, type: 'note', tied });
+	const rest = (id: string): TieAwareEvent => ({ id, type: 'rest' });
+
+	it('excludes rests, as it always did', () => {
+		expect(syllableTargetIds([note('n1'), rest('r1'), note('n2')])).toEqual(['n1', 'n2']);
+	});
+
+	it('excludes a plain tie\'s continuation', () => {
+		const events = [note('n1', { type: 'start' }), note('n2', { type: 'stop' })];
+		expect(syllableTargetIds(events)).toEqual(['n1']);
+	});
+
+	it('excludes a tie\'s continuation across a barline (measure is not this file\'s concern)', () => {
+		// Barlines are not represented here at all; the point is that nothing
+		// about crossing one matters to this walk.
+		const events = [note('m1n2', { type: 'start' }), note('m2n1', { type: 'stop' })];
+		expect(syllableTargetIds(events)).toEqual(['m1n2']);
+	});
+
+	it('excludes every note in a chain of three tied notes, keeping only the first', () => {
+		const events = [
+			note('n1', { type: 'start' }),
+			note('n2', { type: 'continue' }),
+			note('n3', { type: 'stop' }),
+		];
+		expect(syllableTargetIds(events)).toEqual(['n1']);
+	});
+
+	it('a rest sitting between two events breaks nothing in the walk', () => {
+		const events = [note('n1', { type: 'start' }), rest('r1'), note('n2', { type: 'stop' })];
+		expect(syllableTargetIds(events)).toEqual(['n1']);
+	});
+
+	it('a singer-ADDED tie excludes the following note even though its own `tied` is absent', () => {
+		// `correction.ts`'s `amend` writes `tied: { type: 'start' }` onto the
+		// note the correction is keyed on and never touches the note after.
+		const events = [note('n1', { type: 'start' }), note('n2')];
+		expect(syllableTargetIds(events)).toEqual(['n1']);
+	});
+
+	it('a singer-REMOVED tie no longer excludes the following note, even though it still carries a stale `stop`', () => {
+		// The correction deletes `tied` on n1 only; n2's own field is whatever
+		// the reader wrote and is not consulted for n2's own eligibility.
+		const events = [note('n1'), note('n2', { type: 'stop' })];
+		expect(syllableTargetIds(events)).toEqual(['n1', 'n2']);
+	});
+
+	it('let-ring is not a continuation: it excludes nothing, before or after it', () => {
+		const events = [note('n1', { type: 'let-ring' }), note('n2')];
+		expect(syllableTargetIds(events)).toEqual(['n1', 'n2']);
+	});
+});
+
 /* ── The merge rule, N.67 step 3, design §2.6 ────────────────────── */
 
 describe('mergeOnUpload', () => {
@@ -109,7 +166,7 @@ describe('mergeOnUpload', () => {
 	it('proposes a first pass into an EMPTY map when the score has no lyrics', () => {
 		// N.55a's fresh path, preserved exactly: Ilya proposes where the score
 		// is silent.
-		const result = mergeOnUpload({}, ['e1', 'e2'], BEFORE, true);
+		const result = mergeOnUpload({}, ['e1', 'e2'], ['e1', 'e2'], BEFORE, true);
 
 		expect(result.proposed).toBe(true);
 		expect(Object.keys(result.map)).toEqual(['e1', 'e2']);
@@ -118,7 +175,7 @@ describe('mergeOnUpload', () => {
 
 	it('proposes NOTHING when the score carries its own underlay', () => {
 		// Where the score speaks, Ilya reads it rather than talking over it.
-		const result = mergeOnUpload({}, ['e1', 'e2'], BEFORE, false);
+		const result = mergeOnUpload({}, ['e1', 'e2'], ['e1', 'e2'], BEFORE, false);
 
 		expect(result.proposed).toBe(false);
 		expect(result.map).toEqual({});
@@ -129,7 +186,7 @@ describe('mergeOnUpload', () => {
 		// singer's own decisions with the default layout.
 		const mine = paired();
 
-		const result = mergeOnUpload(mine, ['e1', 'e2'], BEFORE, true);
+		const result = mergeOnUpload(mine, ['e1', 'e2'], ['e1', 'e2'], BEFORE, true);
 
 		expect(result.map).toBe(mine);
 		expect(result.proposed).toBe(false);
@@ -141,7 +198,7 @@ describe('mergeOnUpload', () => {
 		// upload.
 		const mine = paired();
 
-		expect(mergeOnUpload(mine, ['e1', 'e2'], BEFORE, false).map).toBe(mine);
+		expect(mergeOnUpload(mine, ['e1', 'e2'], ['e1', 'e2'], BEFORE, false).map).toBe(mine);
 	});
 
 	it('carries a placement across by its positional key', () => {
@@ -149,7 +206,7 @@ describe('mergeOnUpload', () => {
 		// stayed where it was keeps its pairing with no matching by text.
 		const mine = paired();
 
-		const result = mergeOnUpload(mine, ['e1', 'e2', 'e3'], BEFORE, true);
+		const result = mergeOnUpload(mine, ['e1', 'e2', 'e3'], ['e1', 'e2', 'e3'], BEFORE, true);
 
 		expect(result.map.e1.kind).toBe('syllable');
 		expect(result.orphaned).toEqual([]);
@@ -158,7 +215,7 @@ describe('mergeOnUpload', () => {
 	it('reports a placement whose note the new score does not contain, and KEEPS it', () => {
 		const mine = paired();
 
-		const result = mergeOnUpload(mine, ['e2', 'e3'], BEFORE, true);
+		const result = mergeOnUpload(mine, ['e2', 'e3'], ['e2', 'e3'], BEFORE, true);
 
 		expect(result.orphaned).toEqual(['e1']);
 		// Reported, not dropped. A singer who re-exported a shortened score has
@@ -167,7 +224,28 @@ describe('mergeOnUpload', () => {
 	});
 
 	it('reports nothing on a fresh proposal', () => {
-		expect(mergeOnUpload({}, ['e1'], BEFORE, true).orphaned).toEqual([]);
+		expect(mergeOnUpload({}, ['e1'], ['e1'], BEFORE, true).orphaned).toEqual([]);
+	});
+
+	it('N.142: a tie continuation counts as PRESENT (not orphaned) but is never a firstPass target', () => {
+		// e2 is a tie's continuation: still a real, present note (eventIds
+		// carries it), but firstPass may not write into it (targetIds does not).
+		const result = mergeOnUpload({}, ['e1', 'e2', 'e3'], ['e1', 'e3'], BEFORE, true);
+
+		expect(Object.keys(result.map)).toEqual(['e1', 'e3']);
+		expect(result.map.e2).toBeUndefined();
+	});
+
+	it('N.142: a placement on a tie continuation is PRESENT, not orphaned, once the score still carries that note', () => {
+		// A legacy placement seated (before N.142) on what is now recognised as
+		// a tie's continuation. The note itself did not disappear from the
+		// score, so it must not be reported as orphaned; N.142's own migration
+		// of a misplaced syllable is a separate concern from existence.
+		const mine = { e2: { kind: 'syllable', cyrillic: 'x', ipa: 'x', vowel: 'x', origin: { lineIndex: 0, wordIndex: 0, slotIndex: 0, word: 'x' } } } as PairingMap;
+
+		const result = mergeOnUpload(mine, ['e1', 'e2', 'e3'], ['e1', 'e3'], BEFORE, true);
+
+		expect(result.orphaned).toEqual([]);
 	});
 });
 
@@ -245,6 +323,24 @@ describe('toggleMelisma', () => {
 		const map: PairingMap = { n0: syl('ой', 0), n1: syl('да', 1) };
 		toggleMelisma(map, IDS, 'n1');
 		expect(shown(map)).toBe('ой да _ _ _ _');
+	});
+
+	it('N.142: refuses to mark a note that is not in eventIds (a tie continuation)', () => {
+		// n1 excluded, as syllableTargetIds would exclude a tie's continuation.
+		const withoutN1 = IDS.filter((id) => id !== 'n1');
+		const map: PairingMap = { n0: syl('ой', 0) };
+		const r = toggleMelisma(map, withoutN1, 'n1');
+		expect(r.set).toBe(false);
+		expect(Object.hasOwn(r.map, 'n1')).toBe(false);
+		expect(r.map).toEqual(map);
+	});
+
+	it('N.142: still clears a mark predating the rule, even though the note is no longer in eventIds', () => {
+		const withoutN1 = IDS.filter((id) => id !== 'n1');
+		const map: PairingMap = { n1: { kind: 'melisma' } };
+		const r = toggleMelisma(map, withoutN1, 'n1');
+		expect(r.set).toBe(false);
+		expect(Object.hasOwn(r.map, 'n1')).toBe(false);
 	});
 });
 

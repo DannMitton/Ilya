@@ -13,6 +13,7 @@
 	import {
 		buildSlotQueue,
 		firstPass,
+		syllableTargetIds,
 		refreshPairings,
 		melismaIds,
 		toggleMelisma,
@@ -592,10 +593,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		const parsed = ingestedScore.result.score;
 		doc.pairings = seatCliticFolds(
 			parsed,
-			firstPass(
-				parsed.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
-				rebuildQueue,
-			),
+			firstPass(syllableTargetIds(parsed.vocalLine), rebuildQueue),
 		);
 		orphanedCount = 0;
 		pairingCursor = Math.min(Object.keys(doc.pairings).length, Math.max(0, rebuildQueue.length - 1));
@@ -608,8 +606,22 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * callers can share it without either one owning it. The rule itself is
 	 * unchanged, including the advance that stops at the end rather than
 	 * wrapping, because a wrap would silently start overwriting from the top.
+	 *
+	 * N.142, 2026-09-16, FOUND WHILE BUILDING THE BRIEF'S OWN SITE LIST: this
+	 * is a ninth seating site the spec did not name, because it is the loupe's
+	 * DIRECT tap-and-place, not a bulk pass. `handleLoupePick` calls this on
+	 * whatever note the singer tapped, with no check against `eventIds`, so
+	 * without this guard a tie's continuation was still tappable and
+	 * placeable by hand even after `firstPass` and `mergeOnUpload` stopped
+	 * seating one automatically. Selection still runs either way
+	 * (`handleLoupePick`'s `setCursor` call, above this function): the loupe
+	 * still stops on a tied note, per the brief's own requirement; only the
+	 * placement onto it is refused, silently, exactly as a rest already is
+	 * (a rest was never in `eventIds` either, and nothing here ever asked
+	 * whether a rest could be armed).
 	 */
 	function placeArmedSyllable(eventId: string): void {
+		if (!eventIds.includes(eventId)) return;
 		const slot = slotQueue[pairingCursor];
 		if (!slot) return;
 		/* N.111-3b. A PLACEMENT IS A CORRECTION VERB LIKE THE OTHERS and pushes
@@ -1585,8 +1597,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   the read whether it had heard of a note the singer had just made.
 
 	   A syllable can sit on an entered note like any other, so the sequence the
-	   shift walks has to be the sequence the page draws. */
-	const eventIds = $derived(correctedLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id));
+	   shift walks has to be the sequence the page draws.
+
+	   N.142, 2026-09-16: NARROWED TO SYLLABLE TARGETS, not merely non-rests.
+	   Every reader of this list (`vacatedNotes`, `toggleMelisma`,
+	   `shiftToEndOfLyric`, `shiftToNextOpenNote`, `reseatByDiff`, and
+	   `dockShiftAnchor` below) is about which note may hold or receive a
+	   syllable, and a tie's continuation may hold none (Dann, 2026-09-15: a
+	   tie is prolongation, not a new syllable target). Taking a tied
+	   continuation in the loupe still works (navigation reads `correctedLine`
+	   directly, `:1448-1461`, unaffected); only these placement-adjacent verbs
+	   now read it as unavailable there, which is the correct state for a note
+	   that can never carry a syllable of its own. */
+	const eventIds = $derived(syllableTargetIds(correctedLine));
 
 	const dockShiftAnchor = $derived(
 		selectedEventId && eventIds.includes(selectedEventId) ? selectedEventId : null,
@@ -3157,9 +3180,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// is still the only caller of `firstPass`; the score's own seat is not
 		// folded into it, because that seat needs the parsed score's cells and
 		// the clitic seat has to run between the two (see below).
+		//
+		// N.142, 2026-09-16: TWO LISTS, NOT ONE. `eventIds` (every sung note,
+		// rests excluded) still decides ORPHANED: a tie's continuation is a
+		// real, present note, so a placement sitting on one must not misreport
+		// as belonging to a note the score no longer has. `syllableTargetIds`
+		// narrows further, for `firstPass` alone: a tie's continuation may
+		// never begin a syllable (`pairings.ts`).
 		const merged = mergeOnUpload(
 			doc.pairings,
 			ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
+			syllableTargetIds(ingested.result.score.vocalLine),
 			buildSlotQueue(lines),
 			noLyrics,
 		);
