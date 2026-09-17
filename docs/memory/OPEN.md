@@ -1162,6 +1162,22 @@ it does not describe a continuation of a sounded note.
 
 ---
 
+## N.144. START PLACEMENT OVER IGNORES THE SCORE'S OWN LAYOUT, AND CANNOT BE UNDONE. Numbered 2026-09-16. THE NUMBER IS A DESK DEFAULT.
+
+**Seen by Dann on the N.142 walk, `c868540`, T05, 2026-09-16.** After **Start placement over**, m. 22's slurred pair (a melisma on « ёк » in the file) took « сту » on its second note, every later syllable sat one note early (« О » and « гонь » before the four-bar rest), and a horizontal line ran under « сту-дё ». In the loupe the IPA read `ˈjokstu` with no gap between the two syllables. His response: *":("*. Asked how hard a fix is: *"surely it can be coded, no? The file contains syllable assignments."*
+
+**Cause, read 2026-09-16:** `handleStartPlacementOver` (`+page.svelte`) seats with `firstPass` (`pairings.ts:276-288`), slot i on target i. The arrival path seats the same poem with `seatFilledPoem` (`+page.svelte`, N.134), which calls `seatScoreWords` (`score-seat.ts:78-121`): each word's slots on the file's own vowel cells, so melismas hold. **And the press never calls `pushUndo`** (`memo-loupe-french-build_r1_2026-09-16.md`), so it cannot be taken back.
+
+**The fix, DESK DEFAULT:** where the score carries words, Start placement over empties the placements and calls `seatFilledPoem`; a wordless score keeps `firstPass`. The press pushes an undo entry that reads `loupe.undo.startOver` (ruled, built, unwired). **Cost:** a word the singer edited so it no longer matches the score is left unplaced, as on arrival.
+
+**Constraint from the tree:** the long comment in `handleStartPlacementOver` records the N.112 fix of 2026-09-07, which made the rebuild read the POEM, not the score's words, because the engraving had lost a final « я ». `seatScoreWords` seats the poem's slots onto the score's cells, so the poem still owns the text; the brief must show that case still ends with every syllable placed.
+
+**BUILT 2026-09-16, WRITTEN NOT DONE.** Memo `../sessions/memo-n144-start-over-keeps-the-score_r1_2026-09-16.md`, read by the desk in full. `handleStartPlacementOver` pushes `loupe.undo.startOver`, then, when the input field still holds the score's words verbatim (`doc.inputText === scoreText`), empties the placements and calls `seatFilledPoem`; otherwise the old `firstPass` path runs. **So an edited poem still counts notes and can still break a melisma**; Code's choice, reversible. **Code overwrote the desk's brief** with its own 192-line version at the same path, and skipped the desk brief's T05 mismatch count and both rendering checks below; the walk carries them. `ENVIRONMENT.md`, section `CODE REWROTE THE BRIEF`.
+
+**NOT ESTABLISHED:** what draws the line under « сту-дё » (the desk has not read that drawing code), and whether the `ˈjokstu` collision survives once the syllables are back on their own notes. Both are checked on this item's walk.
+
+---
+
 ## N.143. N.134 DOES NOT FIRE ON A `.musx` SCORE. Numbered 2026-09-15. THE NUMBER IS A DESK DEFAULT. UNPLACED.
 
 **Observed by Dann on the deploy `76b24a3`, 2026-09-15**, with screenshots, after

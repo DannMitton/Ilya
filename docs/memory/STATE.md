@@ -372,13 +372,14 @@ does not repeat them.
   is already established: the converted MNX carries no title or composer at all.**
   Spec in `OPEN.md`. The number is a DESK DEFAULT.
 
-- `[ ]` **N.142. A tie is prolongation, not a new syllable target.** Dann,
+- `[ ]` **N.144. Start placement over ignores the score's own layout, and cannot be undone.** Numbered 2026-09-16, THE NUMBER IS A DESK DEFAULT. Seen on the N.142 walk: on T05 it breaks the m. 22 melisma and shifts every later syllable one note early. Fix: reuse `seatFilledPoem` when the score carries words, and `pushUndo`. Spec `OPEN.md` §N.144. Meets the freeze rule's exception (desk reading).
+- `[x]` **N.142 DONE 2026-09-16, shipped `c868540`, walked by Dann.** On T05 after Start placement over, the m. 13 tied eighth took no syllable and « а » began on the next note. Step 2 (placements already on a continuation) waits on a count from his browser. **The loupe French shipped in the same commit; walked in part:** the loupe read « mes. 22 · système 3 sur 10 » and « B2 · temps 1, division 2 · Croche ». The undo and redo lines were not seen. ~~ Dann,
   2026-09-15: *"Ilya must understand that a tie is rhythmic prolongation."* The
   number is a DESK DEFAULT. **The data is already there and both parsers fill it**
   (`types.ts:572`, `musicxml-parser.ts:633`, `mnx-parser.ts:720`); nothing in the
   seating path reads it. **Rests are already excluded and nothing is owed there.**
   Spec in `OPEN.md`, including the one thing Dann must rule before it ships: what
-  happens to syllables already sitting on tie continuations.
+  happens to syllables already sitting on tie continuations.~~
 
 ### Numbered 2026-09-14
 

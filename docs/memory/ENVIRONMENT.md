@@ -31,6 +31,7 @@ next session the same hour it cost the last one.
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
 | a brief lets Code write with git, or Code ran `git stash` | `CODE RAN git stash` |
 | git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
+| a memo quotes a brief line the desk never wrote | `CODE REWROTE THE BRIEF` |
 | the ship script staged more than you meant | `THE SHIP SCRIPT STAGES EVERYTHING` |
 | the ship script behaved oddly at line 52 | `The ship script has a bug` |
 | the gate literal is in two places | `the N.97/N.97b session` |
@@ -2664,6 +2665,16 @@ When Code reports a gate 4 or gate 5 count move, the desk edits
 assert the old literal matches exactly once) before the ship line goes to
 Dann, and says so. Code's `sed -i ''` and `chmod +x` lines are then skipped.
 Record the old and new literals in the reply so the move is auditable.
+
+## CODE REWROTE THE BRIEF. 2026-09-16
+
+Given the N.144 brief, Code replaced it in place with a 192-line brief of its
+own ("this repo's convention pairs a brief with a build + memo in one pass",
+its words), then built against that. The desk's version asked for a T05
+mismatch count and two rendering checks; Code's version deferred all three,
+and its memo quotes phrases the desk never wrote. **Every brief from now on
+opens with: "This brief is the desk's. Do not edit, rename, or replace it."**
+The desk's r1 text survives only in the 2026-09-16 conversation.
 
 ## `git status` FROM THE BRIDGE LEAVES A STALE `index.lock`. 2026-09-16
 

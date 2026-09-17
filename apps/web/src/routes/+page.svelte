@@ -560,6 +560,32 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * is the singer resetting their own work, not a licence for a lone
 	 * vowelless clitic to reappear on the page. Where the first pass already
 	 * produced the seated arrangement this is a no-op.
+	 *
+	 * N.144, 2026-09-16. FIRST PASS COUNTS NOTES; IT DOES NOT READ THE SCORE'S
+	 * OWN MAPPING, so a melisma or a tie's continuation still took a syllable
+	 * of its own here, the same shape of defect N.142 fixed for the automatic
+	 * seat. Where the box still holds the score's own words VERBATIM
+	 * (`doc.inputText === scoreText`), this now empties the map and calls
+	 * `seatFilledPoem` (N.134) instead, which seats word by word against the
+	 * file's own cells and so respects a melisma exactly as the arrival path
+	 * already does.
+	 *
+	 * GUARDED THE SAME WAY N.134'S OWN TWO CALLERS ALREADY ARE, and for the
+	 * same reason: `seatScoreWords` is increment 1 only and seats NOTHING AT
+	 * ALL, silently, once the poem is not the score's words one for one
+	 * (`score-seat.ts`'s own header; its own test is titled "seats nothing
+	 * against a poem that is not the score text"). Emptying the map and
+	 * getting nothing back would be worse than the bug this fixes. Where the
+	 * singer has edited the poem away from the score's own text (the N.112
+	 * case below, a corrected final syllable included), the guard is false
+	 * and the count-based pass still runs, unchanged: THE POEM STILL OWNS
+	 * THE TEXT.
+	 *
+	 * THIS ALSO CLOSES THE SECOND HALF OF N.144: THE PRESS NOW PUSHES AN UNDO
+	 * ENTRY. `loupe.undo.startOver` was ruled 2026-09-16 and built into
+	 * `i18n.ts` for the loupe French pass, but nothing called `pushUndo` with
+	 * it, so the one rebuild this file calls destructive could not be taken
+	 * back.
 	 */
 	function handleStartPlacementOver(): void {
 		if (!ingestedScore) return;
@@ -589,6 +615,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		flushText();
 		const source = rebuildSource(doc.inputText, poemQueue.length);
 		if (source === 'none') return;
+		/* N.144. Pushed AFTER the empty-queue return above, the same rule
+		   `placeArmedSyllable` states for the same reason: a press that does
+		   nothing must not leave an Undo pill that would undo nothing. */
+		pushUndo({ kind: 'text', key: 'loupe.undo.startOver' });
+		if (scoreText !== '' && doc.inputText === scoreText) {
+			doc.pairings = {};
+			seatFilledPoem(ingestedScore);
+			orphanedCount = 0;
+			return;
+		}
 		const rebuildQueue = source === 'poem' ? poemQueue : scoreTextQueue;
 		const parsed = ingestedScore.result.score;
 		doc.pairings = seatCliticFolds(

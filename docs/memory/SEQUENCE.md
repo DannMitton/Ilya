@@ -97,8 +97,9 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 | ~~**N.126**~~ DONE 2026-09-15, `76b24a3` | Measure numbers. Vertical, so N.129 does not bind it. Can run any time. |
 | ~~**N.125**~~ DONE 2026-09-16, `34b143c`, `570d76f` | Slurs. Its own Code thread, `staff-renderer.ts` only, off the drawer path. Brief written. Independent. |
 | ~~**N.143**~~ DONE 2026-09-16, `7abb5ae` | A `.musx` score fills the input field and takes its file's name. Placed 2026-09-16. |
-| **N.142** | Ties are prolongation. Placed 2026-09-16, NEXT BUILD, brief `../sessions/brief-n142-tie-is-prolongation_r1_2026-09-16.md`. Unblocks N.141's last step. Independent of N.129: it changes which notes take syllables, not their spacing. |
-| *(loupe French)* | Not numbered. All ruled 2026-09-14 and 2026-09-16; brief `../sessions/brief-loupe-french-build_r1_2026-09-16.md`, runs after N.142. |
+| **N.144** | Start placement over keeps the score's layout, and can be undone. Placed 2026-09-16, NEXT BUILD, brief `../sessions/brief-n144-start-over-keeps-the-score_r1_2026-09-16.md`. |
+| ~~**N.142**~~ DONE 2026-09-16, `c868540` | Ties are prolongation. Placed 2026-09-16, brief `../sessions/brief-n142-tie-is-prolongation_r1_2026-09-16.md`. Unblocks N.141's last step. Independent of N.129: it changes which notes take syllables, not their spacing. |
+| ~~*(loupe French)*~~ SHIPPED `c868540` | Not numbered. All ruled 2026-09-14 and 2026-09-16; brief `../sessions/brief-loupe-french-build_r1_2026-09-16.md`, runs after N.142. |
 | **N.115** | The singer moves a measure between systems. **Last in this tier**: it reflows whole systems, so it wants the ruler and the meter already in place, or its reflow is judged against content that is about to change. |
 
 ### Tier 2. Names, then language
