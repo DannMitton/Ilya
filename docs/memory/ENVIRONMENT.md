@@ -54,6 +54,8 @@ next session the same hour it cost the last one.
 | walking a fresh profile without touching his library | `INCOGNITO ON THE ALIAS` |
 | walking at 390 px on his Mac | `DEVICE MODE LOCKS THE WIDTH` |
 | the cloud desk cannot fetch the alias | `NO NETWORK TO VERCEL FROM THE DESK` |
+| checking the alias serves the new build, 2026-09-17 | `THE ALIAS CHECK THAT WORKED` |
+| reading the console of Dann's own Chrome tab | `THE EXTENSION CANNOT SEE HIS TAB` |
 | `sed -i ''` fails in device_bash | `THE DEVICE SHELL IS LINUX` |
 | briefing Design | `WHAT DESIGN CAN READ` |
 | Design's return is not in Downloads | `DESIGN WRITES INTO THE TREE` |
@@ -3155,4 +3157,25 @@ can run beside a build** if its brief forbids: writing inside the repo (scripts 
 in `/tmp`), any git command, builds, preview servers, and gate runs. The N.143
 diagnosis ran that way beside N.139 on 2026-09-16 and left the tree untouched. It
 returned its report in chat, so the desk wrote the finding into `OPEN.md` itself.
+
+## THE ALIAS CHECK THAT WORKED. 2026-09-17
+
+Twice on 2026-09-17, `device_bash` reached the branch alias:
+`curl -s -m 15 https://ilya-git-shane-dannmittons-projects.vercel.app/sw.js | grep -m1 "const CACHE_VERSION"`
+returned the new build's stamp, which matched `web_fetch_vercel_url` on the
+deployment's own sha URL. **That pair is the alias-lag check:** the stamps
+match, the alias serves the build. `web_fetch_vercel_url` on the ALIAS itself
+fails ("Failed to create protection bypass: 409 Conflict"). This amends
+`NO NETWORK TO VERCEL FROM THE DESK` (2026-09-10), which found no route; the
+device's egress may differ night to night, so try the curl first.
+
+`list_deployments` takes `since` in milliseconds. A `since` later than the push
+returns nothing, which is not "no deploy yet".
+
+## THE EXTENSION CANNOT SEE HIS TAB. 2026-09-17
+
+`tabs_context_mcp` answered "No tab group exists for this session". The Chrome
+extension sees only tabs in its own group, so it cannot read the console of the
+tab Dann is walking in. Ask him for `Cmd + Option + J` and a screenshot, and
+note that his console filter (`shane-live` on 2026-09-17) hides most messages.
 

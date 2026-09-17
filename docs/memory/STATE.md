@@ -11,9 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`7c596f7`**, "N.145: a dropped score arrives at once; Transcribe and fit is gone",
-shipped 2026-09-16, READY on the branch alias, sha checked by the desk before Dann was
-sent to it, and walked by him the same night (the previous floors, `aca2dbb`, `76b24a3`, `eb918ed`,
+before **`6e98057`**, "N.146 step 2: Ilya refuses an OCR reading that is not Russian, and
+waits for the dictionary before judging", shipped 2026-09-17, READY, the alias serving it
+(sw.js stamp checked by the desk), walked by Dann the same night (the previous floors,
+`fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
 `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
 `../sessions/LOG.md`). A floor cannot go stale,
 because further commits only move HEAD forward and never make the floor false.
@@ -24,11 +25,8 @@ landed since.
 `2d54185`, are in `../sessions/LOG.md`, block 5.** They are closed, and closed
 things do not live in this file.
 
-**The push range is the check, not the memo.**
-A floor that predates
-its own content is the stale number this paragraph exists to prevent. A floor cannot go stale, because further commits only
-move HEAD forward and never make the floor false. If the tree is ahead of it,
-that is expected and tells you only that work has landed since.
+**The push range is the check, not the memo.** A floor that predates its own content
+is the stale number this paragraph exists to prevent.
 
 **Ask Dann for the state in one line. You do not WRITE with git, ever.**
 Read-only git is allowed under the narrowed CONTRACT §5, ratified 2026-09-13:
@@ -43,24 +41,40 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-17 (early morning), for the next instantiation
+> ### READ THIS FIRST. Written at the close of 2026-09-17, about 02:00, for the next instantiation
 >
-> **THE ONE THING IS `SCHEDULE.md`, WEEK 1, TOP LINE: N.146.** Its brief is
-> `../sessions/brief-n146-poem-or-score-detected_r1_2026-09-16.md`; the paste was issued
-> twice. **At this close Code was mid-build:** `git --no-optional-locks status` showed
-> `ScoreUploader.svelte` modified and four new files (`engine/staff-detect.ts` and its test,
-> `ingestion/poem-or-score.ts` and its test), with no memo yet. First act: look for
-> `memo-n146-*` in `../sessions/`, read it in full, then gates and ship as usual.
-> **The memory files were committed on their own, without the ship script,** so N.146's
-> half-built code was not swept in.
+> **THE ONE THING IS STILL N.146, `SCHEDULE.md` WEEK 1, TOP LINE. ITS LAST STEP IS 2c.**
+> Shipped: step 1 (`fe4d2c7`, staff check, no question) and steps 2 and 2b together
+> (`6e98057`: Ilya refuses an OCR reading that is mostly not Russian, and waits for the
+> dictionary before judging). Walks 1, 2, 3, 4, and 6 passed N.146's routing (`OPEN.md`,
+> findings). **Walk 5 did not pass as built:** on `6e98057`, after New song, the garble
+> photo dropped on the input field showed "This file was not recognised as a score."
+> immediately, twice (finding 8). **At this close Code was investigating** under
+> `../sessions/brief-n146-step2c-unrecognised-photo_r1_2026-09-17.md`.
 >
-> **Closed this session, all shipped and walked by Dann:** N.143 (`7abb5ae`), N.142 with
-> the loupe French (`c868540`), N.144 (`ceeb214`), N.145 (`7c596f7`). Accounts and specs
-> are `../sessions/LOG.md` block 20. **Residues still open** (`OPEN.md`, "RESIDUES OF
+> **First act:** look for `memo-n146-step2c-*` in `../sessions/`; read it in full. If Code
+> built a fix: gates (web-test baseline **1253**, already in `ilya-ship.sh:79`), `git add`
+> its new files, ship, check the alias (ENVIRONMENT, `THE ALIAS CHECK THAT WORKED`), then
+> Dann repeats walk 5: close Ilya tabs, open the alias, New song, drop
+> `~/Downloads/walk-n146-poem-photo.jpg` on the input field. **Expected:** "No text
+> recognised in image.", the field unchanged, no new song. If Code could not reproduce it,
+> bring Dann the memo's evidence. **N.146 closes when walk 5 passes;** then its spec leaves
+> `OPEN.md` and its account goes to `../sessions/LOG.md`.
+>
+> **The memory files were NOT committed at this close** (Dann went to bed with Code
+> mid-work). Commit them on their own, never with the ship script while Code has files
+> open: the ship script stages every tracked change (`ilya-ship.sh:94`, `git add -u`).
+>
+> **Residues of N.142 to N.145** (closed 2026-09-16, LOG block 20) (`OPEN.md`, "RESIDUES OF
 > ITEMS CLOSED 2026-09-16"): N.142 step 2, a count of placements on tie continuations in
-> Dann's browser (desk via Chrome); N.145's poem pasted after a wordless score was never
-> walked; the loupe French undo and redo lines were not seen on screen. **N.141's last
-> step is unblocked** (N.142 shipped).
+> Dann's browser (desk via Chrome; note ENVIRONMENT `THE EXTENSION CANNOT SEE HIS TAB`);
+> N.145's poem pasted after a wordless score was never walked; the loupe French undo and
+> redo lines were not seen on screen. **N.141's last step is unblocked** (N.142 shipped).
+>
+> **Done this session besides N.146:** the week 1 per-format walk's sample files were found
+> (`SCHEDULE.md`; still missing a real phone photo of a score); `PRODUCT.md` gained "Why
+> Ilya exists" in Dann's words (a legacy others can build on for other languages), and its
+> post-release porting guide is caught in `INBOX.md`.
 >
 > **THE RELEASE, RULED 2026-09-16.** Date Friday 2026-10-30. The sort is done and the
 > freeze rule is in force (§RULINGS DANN OWES). IN: 24 rows,
@@ -68,14 +82,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > `../sessions/estimate-release_r1_2026-09-16.md`. The week-by-week road: `SCHEDULE.md`.
 > Checkpoint Friday 2026-10-09.
 >
-> **FINDINGS FROM THE N.146 WALK, 2026-09-17, for the week 1 per-format walk (DESK DEFAULT: recorded, not switched to).**
-> 1. The Lamm scan PNG (`~/Downloads/sunless-01-v-chetyryokh-stenakh_lamm-scan.png`, 1290 x 2796, read at staff spacing 10.0 px) drew as nonsense: 4 systems, 57 notes, 0 rests, 7 measures, and **the meter signatures do not agree with the barlines in any measure** (4/4 over about fifteen quarters; 1/4 over six or seven; 4/8 over seven and nine). Dann's words: "The notation is nonsense", "The meter signature does not agree with the barlines". N.146 did not change the read path (`handleFile(file)` gets the original file). Whether this is worse than before is NOT ESTABLISHED; `Untitled, 2026-08-25` was built on the same file. The desk chose a phone-screenshot-sized file as the "photo"; Code's 400 dpi raster of the same scan measured s = 30.0.
-> 2. On Ilya's has-met-this-music dialog, **Put it in this song** was followed by a new song, `Untitled, 2026-09-17 (2)`, selected at the top of Repertoire, although the dialog says the file goes in the song you are in. Seen on screen; cause NOT ESTABLISHED.
-> 3. Walk 3 (a text PDF, `Repertoire_assignment_rubric.pdf`, dropped while `Untitled, 2026-09-17 (2)` held a score) passed for N.146: no question, the words filled the input field. **The words went into a new song, `Repertoire Evaluation Guide: use`,** not the song holding the score, although the input field's hint reads "Drop the other kind here". Seen on screen; whether this predates N.146 is NOT ESTABLISHED.
-> 4. Walk 4 (`~/Downloads/walk-n146-poem-scan.pdf`, image only, made by the desk from `reading-aid.test.ts:89-96`) passed for N.146; Dann: "brilliant!" **The OCR read line 6's first word, То, as Го** (the page shows a stem with a bar across both sides; the reading has the bar on the right side only), and Transcription then drew it as 'go with the gloss "go". A false word shown to a singer; OCR, not N.146's routing.
-> 5. Walk 5 (`~/Downloads/walk-n146-poem-photo.jpg`, the desk's synthetic photo: tilted 2.5 degrees, a lighting gradient, grain, blur) routed correctly (no question) and **filled the input field with garble: 82 lines, 302 words, from a six-line poem.** Dann: "lol garble! what is this?" Tesseract reads the file as given (`ScoreUploader.svelte:392-396`), and any non-empty OCR text is taken as the poem (`ingestion/poem-or-score.ts:47-48`), as it was before N.146. **N.146 widens the exposure:** a picture with no staves now goes to OCR with no press, so any such picture becomes a poem and a new song. Whether a real phone photo fares better is NOT ESTABLISHED. **RULED by Dann 2026-09-17 (asked for the recommendation, said yes): Ilya refuses an OCR reading that is mostly not Russian words, as N.146 step 2; cleaning the picture first goes to LATER.** Brief `../sessions/brief-n146-step2-ocr-guard_r1_2026-09-17.md`. **Step 2 BUILT by Code, not shipped** (memo `../sessions/memo-n146-step2-ocr-guard_r1_2026-09-17.md`, read in full by the desk: tokens of 3+ Cyrillic letters, refused past a strict majority unknown; scan 0%, photo 68.3%; web-test 1244). **The desk found it refuses a real poem dropped before the dictionary loads** (`engine.ts:122` starts `{}`; `loader.ts:655` injects only at the end), so step 2b makes the guard wait: `../sessions/brief-n146-step2b-wait-for-dictionary_r1_2026-09-17.md`. Ship both together.
-> 6. Walk 6 (`~/Downloads/IMSLP113877-PMLP232488-Mussorgsky_-_Without_Sun.pdf`, 23 pages, JBIG2 at 600 ppi per `pdfimages -list`, the poem-above-music case) **stuck on "Reading the page…"**. That label is `upload.status.readingPage` (`i18n.ts:888`), shown only on the score path in `handleFile` (`ScoreUploader.svelte:464-468`) while `probeFile` reads page 1 before the clef-and-key check. **So N.146 chose "score" for this page, as ruled; the hang is in the pre-existing probe.** Pages render at 400 dpi (`page-pdf.ts:52`). **Not a hang: it finished,** "Read in 97.2 s": 42 systems, 124 staves, 489 notes, 2 rests, 92 measures; **eleven pages unread** (4, 8, 12, 14, 16, 18, 19, 20, 21, 22, 23); length assumed on 328 notes; the input field stayed empty. Dann: "Finally". N.146's part passed (a score, the poem not taken). The 97 s wait with one static label, and the unread pages, are the reader's; whether the wait predates N.146 is NOT ESTABLISHED.
-> 7. Insights on walk 6's read, seen on Dann's screenshot 00:50: compass **A3 to F♯6**, tessitura D4 to C♯5, reference range "Not typed" on all three rows, then "Without the range you typed, this page cannot say whether this key suits you." followed by **"Nothing in this piece is flagged for your voice."** An F♯6 in a sung line is implausible for this song (the reader read the top staff in 17 systems, per its own receipt), and "nothing flagged" sits under a sentence saying nothing could be checked. Also: a tall empty region at the top of the Insights box. All three NOT ESTABLISHED as faults until the code is read; candidates for the freeze rule's false-statement test.
+> **FINDINGS 1 TO 8 FROM THE N.146 WALK** moved verbatim to `OPEN.md`, section "FINDINGS FROM THE N.146 WALK, 2026-09-17". They feed week 1's per-format walk and the CHECK rows. Findings 5 and 8 are N.146's own.
 >
 > **Week 1's other lines need Dann first:** N.147, the loupe tap (four designs in
 > `INBOX.md`; the desk recommends a tap that only selects, plus a Place control); the
@@ -88,16 +95,8 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > **INSIGHTS RESEARCH.** Pass 02 is planned:
 > `~/Documents/Voice Pedagogy Library/Insights Research/plan-pass02_r1_2026-09-16.md`.
 > **Put to Dann and unanswered:** ruling 1 of the six owed (the desk recommends INS-P01-2
-> to LATER and INS-P01-11 folded into INS-P01-1 as one sentence). **DONE 2026-09-17, on his go:** the Sonnet extraction of Howell, *Hearing Singing*, chapters 5 to 12 and the Glossary, from the publisher proof, in two agents (159k + 217k tokens). Brief `Insights Research/brief-insights-step-a-howell-HS_r1_2026-09-17.md`; outputs `_extraction/claims_howell-HS_batch-A.csv` (39 rows) and `-B.csv` (76 rows), with their `sources_` files. Desk spot-checked HS-B-020 (p. 139), HS-B-036 (p. 156), and HS-B-039 (p. 157) against the proof: as printed. **p. 157 prints a soprano's whoop at D5 and, three sentences later, at D4;** **RULED by Dann, the book's editor, 2026-09-17: D5 is correct; D4 would still be chest register for a soprano.** Recorded in HS-B-039's notes. **Elsevier answered:** Journal of Voice at 120 USD, print and online, back
+> to LATER and INS-P01-11 folded into INS-P01-1 as one sentence). **DONE 2026-09-17:** the Howell extraction (moved to `../sessions/LOG.md` block 21). **Elsevier answered:** Journal of Voice at 120 USD, print and online, back
 > issues from 1987; Dann asked how to buy.
->
-> **New standing rules this session, all in the files:** CONTRACT tether 21 amended (no
-> size or state claim without a line read this session; his words verbatim); the desk
-> spawns its own subagents (CONTRACT §2); read-only git from the bridge only as
-> `git --no-optional-locks` (CONTRACT §5, ENVIRONMENT); every brief opens "This brief is
-> the desk's. Do not edit" (ENVIRONMENT). `PRODUCT.md` gained: Ilya is already public;
-> Ilya reads the text and the singer (Markup reports, Insights advises); once there is
-> data to process, Ilya processes it.
 >
 > **Carried from 2026-09-16, still true:** colour stage 5 is displaced
 > (`../sessions/plan-colour-story_r1_2026-09-13.md` §STAGE 5); the loupe's path for a
@@ -106,8 +105,9 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > 90 print fixture may no longer fill exactly two sheets; the desk's Grayson page renders
 > sit in `node_modules/.desk-scratch/` (git-ignored).
 >
-> **Usage, 2026-09-16 20:00:** all models 40%, Fable 15%, reset Sunday 05:00. One Sonnet
-> agent this session used about 260k tokens.
+> **Usage, 2026-09-17 00:45:** all models 48% (40% at 2026-09-16 20:00), Fable 15%
+> (unchanged), reset Sunday 05:00. This session's two Sonnet agents (Howell) used 159k and
+> 217k tokens; Code ran Sonnet for N.146 steps 2 to 2c.
 >
 > ---
 >
@@ -139,7 +139,7 @@ does not repeat them.
 
 ### Numbered 2026-09-16
 
-- `[ ]` **N.146. Ilya tells a poem from a score itself, for a PDF or a picture.** Numbered 2026-09-16, DESK DEFAULT number; design adopted on Dann's instruction (*"we will go with that"*). Spec `OPEN.md` §N.146. IN. No switch, no new strings (struck by Dann the same night). Brief `../sessions/brief-n146-poem-or-score-detected_r1_2026-09-16.md`.
+- `[ ]` **N.146. Ilya tells a poem from a score itself, for a PDF or a picture.** Numbered 2026-09-16, DESK DEFAULT number; design adopted on Dann's instruction (*"we will go with that"*). Spec `OPEN.md` §N.146. IN. No switch, no new strings (struck by Dann the same night). Brief `../sessions/brief-n146-poem-or-score-detected_r1_2026-09-16.md`. **2026-09-17: steps 1, 2, 2b shipped (`fe4d2c7`, `6e98057`); walk 5 outstanding; step 2c open** (THE ONE THING).
 - `[ ]` **N.147. The loupe tap both navigates and places the armed syllable.** Was
   INBOX-37; the number is a DESK DEFAULT, 2026-09-16. Dann: unacceptable. Four designs in
   `INBOX.md` (2026-09-16); the desk recommends a tap that only selects, plus a Place
@@ -563,44 +563,13 @@ canon still living in project knowledge.
 
 
 ---
-*Split 2026-09-01. `STATE.md` was 3,089 lines and 207 KB. The session history,
-the `## Log` table, and three stale colophons moved to `../sessions/LOG.md`.
-What stays is what `README.md` asks a new session to read: the one thing, the
-tracker, and the rulings Dann owes. Backup of the pre-split file:
-`STATE.md.bak-2026-09-01`.*
+*Split 2026-09-01; backup `STATE.md.bak-2026-09-01`. The closing colophons of
+2026-09-10 to 2026-09-17 (early morning) moved to `../sessions/LOG.md` block 21 at the
+close of 2026-09-17, about 02:00.*
 
-*Close of 2026-09-10 late: 673 lines, over the 600 tripwire after N.123, N.124, and the Tempo station were added. Two blocks moved to LOG.md block 10 tonight (the 06:15 one-thing block; the blocking-set table). What remains is open. The next thing to move is whatever Dann rules in RULINGS DANN OWES; the 2026-08-18 copy-gap and step-4b lists are the oldest.*
-
-*Close of 2026-09-13, on Dann's word: the four stage 2 ruling records left this file for `../sessions/spec-colour_r1_2026-09-13.md`, verbatim. They were not closed work, so `LOG.md` was the wrong destination; they are the specification stage 4 builds from, and this file keeps the twenty values and a pointer. Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count is written here, because the number is stale the moment anything else is added. The remaining excess is still the 2026-09-10 and 2026-09-11 walk narrative named above, with its three live residues, untouched tonight.*
-
-*Close of 2026-09-13, the colour session. Stages 3a and 3b and the close of stage 2 moved to `../sessions/LOG.md` block 13, verbatim, with three live items lifted out of them first and kept in §THE ONE THING. The four stage 2 ruling records left earlier the same day for `../sessions/spec-colour_r1_2026-09-13.md`. Four items were numbered: N.130, N.131, N.132, N.133. Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count is written here.*
-
-*Close of 2026-09-14. N.134 and N.118 both shipped in `4d79f24` and were walked
-by Dann; their accounts and the one-thing block they replaced are in
-`../sessions/LOG.md` block 14, verbatim. Four things were lifted out and
-rewritten fresh rather than moved: the stage 4 spec, the twenty values, INSIGHTS
-WHAT IS OPEN, and BRIEFS WRITTEN AND NOT RUN. Numbered tonight: N.135 and N.136.
-Extended tonight: N.129 with the hyphen omission and its ruling, N.115 with both
-arrow directions and the reflow standard. Amended tonight: `PRODUCT.md` twice
-(layout is editorial; agency is the justification; a vowelless clitic never holds
-a note alone) and `CONTRACT.md` twice (no aphorisms and no hype; do not write his
-rulings as absolutes). Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count
-is written here.*
-
-
-*Close of 2026-09-14 late. Stage 4 of the colour story shipped as `aa2b419` and
-was walked; N.137 was numbered, shipped as `490c12d`, and walked the same night.
-Both moved to `../sessions/LOG.md` block 15, verbatim, with the two items stage
-4's walk did not reach recorded there as UNWALKED rather than passed. The floor
-moves to `490c12d`. `CONTRACT.md` tether 18 was amended: describe a glyph, never
-substitute the nearest letter you can type. `ENVIRONMENT.md` gains the ё plus
-U+0301 render trap with its index row, and a second dated sighting of the
-stranded `index.lock`. THE ONE THING moves to colour stage 5 on the ruled order
-of `plan-colour-story_r1_2026-09-13.md`, and Dann may displace it with a word.*
-
-***TRIPWIRE: this file is over 600 lines. Per `README.md` that means something
-failed to move, and it is not stage 4, which moved tonight. The oldest
-candidates are still the 2026-08-18 copy-gap and step-4b lists and the RULINGS
-DANN OWES block. Raised for Dann, not acted on.***
-
-*Close of 2026-09-17, early morning. N.142, N.143, N.144 and N.145 closed and moved to `../sessions/LOG.md` block 20 with the old read-first block and seven `[x]` tracker marks. The tail of THE ONE THING moved to `OPEN.md` as live carry-over. N.146 and N.147 numbered. The release sort, the freeze rule, the estimate and `SCHEDULE.md` were made this session. Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count is written here.*
+*Close of 2026-09-17, about 02:00. N.146 steps 1, 2, and 2b shipped (`fe4d2c7`,
+`6e98057`); step 2c under investigation by Code. Findings 1 to 8 of the N.146 walk moved
+to `OPEN.md`; the Howell extraction and the previous close's standing-rules paragraph
+moved to LOG block 21. `PRODUCT.md` gained "Why Ilya exists"; `ENVIRONMENT.md` gained
+`THE ALIAS CHECK THAT WORKED` and `THE EXTENSION CANNOT SEE HIS TAB`; `SCHEDULE.md`
+gained the per-format samples. The floor moves to `6e98057`. Memory NOT committed.*

@@ -5800,4 +5800,66 @@ fails for the singer who has just paid for Finale.
 
 ---
 
+---
+
+# BLOCK 21. Moved from STATE.md at the close of 2026-09-17, about 02:00
+
+## Standing rules recorded at the close of 2026-09-17 (early morning)
+
+> **New standing rules this session, all in the files:** CONTRACT tether 21 amended (no
+> size or state claim without a line read this session; his words verbatim); the desk
+> spawns its own subagents (CONTRACT §2); read-only git from the bridge only as
+> `git --no-optional-locks` (CONTRACT §5, ENVIRONMENT); every brief opens "This brief is
+> the desk's. Do not edit" (ENVIRONMENT). `PRODUCT.md` gained: Ilya is already public;
+> Ilya reads the text and the singer (Markup reports, Insights advises); once there is
+> data to process, Ilya processes it.
+>
+
+## Howell, *Hearing Singing*, extraction
+
+**DONE 2026-09-17, on his go:** the Sonnet extraction of Howell, *Hearing Singing*, chapters 5 to 12 and the Glossary, from the publisher proof, in two agents (159k + 217k tokens). Brief `Insights Research/brief-insights-step-a-howell-HS_r1_2026-09-17.md`; outputs `_extraction/claims_howell-HS_batch-A.csv` (39 rows) and `-B.csv` (76 rows), with their `sources_` files. Desk spot-checked HS-B-020 (p. 139), HS-B-036 (p. 156), and HS-B-039 (p. 157) against the proof: as printed. **p. 157 prints a soprano's whoop at D5 and, three sentences later, at D4;** **RULED by Dann, the book's editor, 2026-09-17: D5 is correct; D4 would still be chest register for a soprano.** Recorded in HS-B-039's notes.
+
+## STATE.md closing colophons, 2026-09-01 to 2026-09-17 (early morning), verbatim
+
+*Split 2026-09-01. `STATE.md` was 3,089 lines and 207 KB. The session history,
+the `## Log` table, and three stale colophons moved to `../sessions/LOG.md`.
+What stays is what `README.md` asks a new session to read: the one thing, the
+tracker, and the rulings Dann owes. Backup of the pre-split file:
+`STATE.md.bak-2026-09-01`.*
+
+*Close of 2026-09-10 late: 673 lines, over the 600 tripwire after N.123, N.124, and the Tempo station were added. Two blocks moved to LOG.md block 10 tonight (the 06:15 one-thing block; the blocking-set table). What remains is open. The next thing to move is whatever Dann rules in RULINGS DANN OWES; the 2026-08-18 copy-gap and step-4b lists are the oldest.*
+
+*Close of 2026-09-13, on Dann's word: the four stage 2 ruling records left this file for `../sessions/spec-colour_r1_2026-09-13.md`, verbatim. They were not closed work, so `LOG.md` was the wrong destination; they are the specification stage 4 builds from, and this file keeps the twenty values and a pointer. Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count is written here, because the number is stale the moment anything else is added. The remaining excess is still the 2026-09-10 and 2026-09-11 walk narrative named above, with its three live residues, untouched tonight.*
+
+*Close of 2026-09-13, the colour session. Stages 3a and 3b and the close of stage 2 moved to `../sessions/LOG.md` block 13, verbatim, with three live items lifted out of them first and kept in §THE ONE THING. The four stage 2 ruling records left earlier the same day for `../sessions/spec-colour_r1_2026-09-13.md`. Four items were numbered: N.130, N.131, N.132, N.133. Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count is written here.*
+
+*Close of 2026-09-14. N.134 and N.118 both shipped in `4d79f24` and were walked
+by Dann; their accounts and the one-thing block they replaced are in
+`../sessions/LOG.md` block 14, verbatim. Four things were lifted out and
+rewritten fresh rather than moved: the stage 4 spec, the twenty values, INSIGHTS
+WHAT IS OPEN, and BRIEFS WRITTEN AND NOT RUN. Numbered tonight: N.135 and N.136.
+Extended tonight: N.129 with the hyphen omission and its ruling, N.115 with both
+arrow directions and the reflow standard. Amended tonight: `PRODUCT.md` twice
+(layout is editorial; agency is the justification; a vowelless clitic never holds
+a note alone) and `CONTRACT.md` twice (no aphorisms and no hype; do not write his
+rulings as absolutes). Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count
+is written here.*
+
+
+*Close of 2026-09-14 late. Stage 4 of the colour story shipped as `aa2b419` and
+was walked; N.137 was numbered, shipped as `490c12d`, and walked the same night.
+Both moved to `../sessions/LOG.md` block 15, verbatim, with the two items stage
+4's walk did not reach recorded there as UNWALKED rather than passed. The floor
+moves to `490c12d`. `CONTRACT.md` tether 18 was amended: describe a glyph, never
+substitute the nearest letter you can type. `ENVIRONMENT.md` gains the ё plus
+U+0301 render trap with its index row, and a second dated sighting of the
+stranded `index.lock`. THE ONE THING moves to colour stage 5 on the ruled order
+of `plan-colour-story_r1_2026-09-13.md`, and Dann may displace it with a word.*
+
+***TRIPWIRE: this file is over 600 lines. Per `README.md` that means something
+failed to move, and it is not stage 4, which moved tonight. The oldest
+candidates are still the 2026-08-18 copy-gap and step-4b lists and the RULINGS
+DANN OWES block. Raised for Dann, not acted on.***
+
+*Close of 2026-09-17, early morning. N.142, N.143, N.144 and N.145 closed and moved to `../sessions/LOG.md` block 20 with the old read-first block and seven `[x]` tracker marks. The tail of THE ONE THING moved to `OPEN.md` as live carry-over. N.146 and N.147 numbered. The release sort, the freeze rule, the estimate and `SCHEDULE.md` were made this session. Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count is written here.*
 
