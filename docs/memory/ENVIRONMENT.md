@@ -32,6 +32,8 @@ next session the same hour it cost the last one.
 | a brief lets Code write with git, or Code ran `git stash` | `CODE RAN git stash` |
 | git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
 | a memo quotes a brief line the desk never wrote | `CODE REWROTE THE BRIEF` |
+| a photo arrives as `.HEIC` | `HEIC PHOTOS IN THE CLOUD SHELL` |
+| Howell's book is needed | `WHERE HOWELL'S HEARING SINGING LIVES` |
 | the ship script staged more than you meant | `THE SHIP SCRIPT STAGES EVERYTHING` |
 | the ship script behaved oddly at line 52 | `The ship script has a bug` |
 | the gate literal is in two places | `the N.97/N.97b session` |
@@ -2667,6 +2669,24 @@ When Code reports a gate 4 or gate 5 count move, the desk edits
 assert the old literal matches exactly once) before the ship line goes to
 Dann, and says so. Code's `sed -i ''` and `chmod +x` lines are then skipped.
 Record the old and new literals in the reply so the move is auditable.
+
+## HEIC PHOTOS IN THE CLOUD SHELL. 2026-09-17
+
+Dann's iPhone photos arrive as `.HEIC`. ImageMagick's `convert` in the cloud shell
+cannot read them ("no images defined"). `pip install pillow-heif
+--break-system-packages`, then open with `pillow_heif.register_heif_opener()` and
+`ImageOps.exif_transpose`, and save a JPEG no larger than 1600 px before reading it.
+One failed call, 2026-09-17.
+
+## WHERE HOWELL'S *HEARING SINGING* LIVES. 2026-09-17
+
+The text of record is the publisher's proof of 2025-01-16, matched to the printed
+contents: `~/Documents/Voice Pedagogy Library/Insights Research/Howell_I (2025) -
+Hearing Singing - publisher proof 2025-01-16.pdf`. Originals, several versions, in
+`~/Documents/_ARCHIVE 2026-07/Documents & Research/` (three proofs
+`Howell_9798881804633*.pdf`, and editing `.docx` files from August and September
+2024). Finding them took a grant on `~/Documents` and `~/Desktop` and a `find` by
+name; the grants do not carry to the next session.
 
 ## CODE REWROTE THE BRIEF. 2026-09-16
 

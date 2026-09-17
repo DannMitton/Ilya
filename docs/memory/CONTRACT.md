@@ -290,6 +290,21 @@ file and tether it or say NOT ESTABLISHED. Tether 1's fourth form was never
 allowed; this names the moment it slips in, which is when a picture looks
 explanatory. An inference he asked for is marked DESK INFERENCE on its face.
 
+**AMENDED 2026-09-16, after the desk told him N.123 was "the largest unstarted
+piece" without opening the tree, and the layer turned out to be built and in
+use.** His words, verbatim: *"We have this interaction often, Fucking check the
+code befofre you declare somethign with confidence. Thatis as bad as a lie,
+unreliable inference is your cardinal sin."* And when the desk answered that it
+had written the rule down: *"I'm not impressed. You lie; it is part of your
+character. You keep teaching me that I can't trust you."* **A record entry does
+not repair this. Only claims that carry their source do.**
+
+**The rule, with no exception for a proposal or a recommendation:** a sentence
+that sizes, dates, or describes the state of an item (built, unbuilt, large,
+small, blocked) carries a `path:line` read this session. Memory files and
+inventories are leads, not evidence. If the tree has not been opened, the
+sentence says NOT ESTABLISHED, or it is not written.
+
 ### 22. NEW, 2026-09-09, ruled by Dann. WHEN HE SAYS IT IS HARD, THAT IS THE FINDING. LEAD WITH THE BETTER DESIGN, NEVER WITH A CASE FOR WHAT IS THERE.
 
 **Dann's words, 2026-09-09:** *"You're coming up with reasons why you should

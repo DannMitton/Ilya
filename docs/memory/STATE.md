@@ -11,9 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`aca2dbb`**, "Loupe: a measure that opens on a rest shows the rest",
+before **`7c596f7`**, "N.145: a dropped score arrives at once; Transcribe and fit is gone",
 shipped 2026-09-16, READY on the branch alias, sha checked by the desk before Dann was
-sent to it, and walked by him the same day (the previous floors, `76b24a3`, `eb918ed`,
+sent to it, and walked by him the same night (the previous floors, `aca2dbb`, `76b24a3`, `eb918ed`,
 `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
 `../sessions/LOG.md`). A floor cannot go stale,
 because further commits only move HEAD forward and never make the floor false.
@@ -43,298 +43,78 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-16, for the next instantiation
+> ### READ THIS FIRST. Written at the close of 2026-09-17 (early morning), for the next instantiation
 >
-> **Nothing is in flight.** The tree at the floor is clean apart from this close's memory
-> files, which Dann commits. **Closed this session:** N.125 (`34b143c`, `570d76f`), N.139
-> (`eb7d220`), and the loupe's opening rest (`aca2dbb`), all walked by Dann. Accounts in
-> `../sessions/LOG.md` block 19.
+> **THE ONE THING IS `SCHEDULE.md`, WEEK 1, TOP LINE: N.146.** Its brief is
+> `../sessions/brief-n146-poem-or-score-detected_r1_2026-09-16.md`; the paste was issued
+> twice. **At this close Code was mid-build:** `git --no-optional-locks status` showed
+> `ScoreUploader.svelte` modified and four new files (`engine/staff-detect.ts` and its test,
+> `ingestion/poem-or-score.ts` and its test), with no memo yet. First act: look for
+> `memo-n146-*` in `../sessions/`, read it in full, then gates and ship as usual.
+> **The memory files were committed on their own, without the ship script,** so N.146's
+> half-built code was not swept in.
 >
-> **THE NEXT BUILD IS N.143, HALF A. The cause is found; no brief is written.** A read-only
-> Sonnet diagnosis (returned in chat, recorded in `OPEN.md` §N.143, "HALF A: CAUSE FOUND")
-> showed T05's MNX lists an unused verse `v3` first, and `mnx-parser.ts:396` numbers verses
-> by list position, so verse 1 is empty. Fix: number only the line ids that occur on the
-> part's events. Write the Code prompt from that section. Half B (the file-name fallback,
-> a DESK DEFAULT in the same section) can ride in the same build.
+> **Closed this session, all shipped and walked by Dann:** N.143 (`7abb5ae`), N.142 with
+> the loupe French (`c868540`), N.144 (`ceeb214`), N.145 (`7c596f7`). Accounts and specs
+> are `../sessions/LOG.md` block 20. **Residues still open** (`OPEN.md`, "RESIDUES OF
+> ITEMS CLOSED 2026-09-16"): N.142 step 2, a count of placements on tie continuations in
+> Dann's browser (desk via Chrome); N.145's poem pasted after a wordless score was never
+> walked; the loupe French undo and redo lines were not seen on screen. **N.141's last
+> step is unblocked** (N.142 shipped).
 >
-> **INSIGHTS.** Pass 01 is done: 01a and 01b ran in Fable and are reviewed. Dann's rulings:
-> `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/review-01a.md` (R1 to R3)
-> and `review-01b.md` (S1 to S5, plus desk defaults). **Still Dann's, one at a time, framed
-> with a singer's example:** the crossing-band tolerances (INS-P01-1's 50 cents and its
-> severity threshold T, INS-P01-4's TOL2); INS-P01-7's migration neighbours for the six
-> vowels with no printed path, and whether it replaces or annotates the timbre mark;
-> INS-P01-8's treble alternative; INS-P01-10's leap size; whether INS-P01-4 may fire on a
-> derived fR2; whether INS-P01-2 and INS-P01-11 are carried at all. **Bozeman PVA2 batch C
-> is extracted** (`_extraction/claims_bozeman-PVA2_batch-C.csv`, 50 rows). **Next research
-> step: pass 02 in Fable**, which needs a pass-02 addendum brief (not written). Held: the
-> Bozeman advice re-extraction (up to 1.5M tokens from the shared pool). Waiting: Elsevier.
-> Usage on 2026-09-16: all models 37%, Fable 15%, reset Sunday 05:00.
+> **THE RELEASE, RULED 2026-09-16.** Date Friday 2026-10-30. The sort is done and the
+> freeze rule is in force (§RULINGS DANN OWES). IN: 24 rows,
+> `../sessions/sort-release_r1_2026-09-16.md`. Estimate (DESK INFERENCE):
+> `../sessions/estimate-release_r1_2026-09-16.md`. The week-by-week road: `SCHEDULE.md`.
+> Checkpoint Friday 2026-10-09.
 >
-> **`PRODUCT.md` gained three sections this session:** ten vowels and no others; no
-> belting; Insights gives insight, not intervention.
+> **Week 1's other lines need Dann first:** N.147, the loupe tap (four designs in
+> `INBOX.md`; the desk recommends a tap that only selects, plus a Place control); the
+> design commissions for N.123 and N.94 (with his say-so).
 >
-> **Loose ends, none urgent:** the loupe's path for a system's first measure that opens on
-> a rest is untested; a melisma slur crossing a system break may clear a turning mark on the
-> other system (NOT ESTABLISHED); the Sonnet 90 print fixture may no longer fill exactly two
-> sheets after the forward head; the desk's Grayson page renders sit in
-> `node_modules/.desk-scratch/` (git-ignored).
+> **N.131's French:** 21 rows drafted and ratified, with two edits (row 9 « Retirer »;
+> row 11 "Drop your file here." / « Déposez votre fichier ici. »). NOT BUILT:
+> `../sessions/spec-n131-french_r1_2026-09-16.md`. Rows 12, 17, 18 went to N.146.
 >
-> **N.141's remaining increment is still BLOCKED on N.142**, so the heading below describes
-> the item, not the next step.
+> **INSIGHTS RESEARCH.** Pass 02 is planned:
+> `~/Documents/Voice Pedagogy Library/Insights Research/plan-pass02_r1_2026-09-16.md`.
+> **Put to Dann and unanswered:** ruling 1 of the six owed (the desk recommends INS-P01-2
+> to LATER and INS-P01-11 folded into INS-P01-1 as one sentence). **Awaiting his go:** a
+> Sonnet extraction of Howell, *Hearing Singing*, from the publisher proof in that folder,
+> which the desk matched to the printed contents (about 150k tokens at worst, NOT
+> ESTABLISHED). **Elsevier answered:** Journal of Voice at 120 USD, print and online, back
+> issues from 1987; Dann asked how to buy.
 >
-> ---
+> **New standing rules this session, all in the files:** CONTRACT tether 21 amended (no
+> size or state claim without a line read this session; his words verbatim); the desk
+> spawns its own subagents (CONTRACT §2); read-only git from the bridge only as
+> `git --no-optional-locks` (CONTRACT §5, ENVIRONMENT); every brief opens "This brief is
+> the desk's. Do not edit" (ENVIRONMENT). `PRODUCT.md` gained: Ilya is already public;
+> Ilya reads the text and the singer (Markup reports, Insights advises); once there is
+> data to process, Ilya processes it.
 >
-> ### THE ONE THING: N.141, THE SQUIRCLE'S GRAMMAR. IN CODE, 2026-09-15.
+> **Carried from 2026-09-16, still true:** colour stage 5 is displaced
+> (`../sessions/plan-colour-story_r1_2026-09-13.md` §STAGE 5); the loupe's path for a
+> system's first measure that opens on a rest is untested; a melisma slur crossing a
+> system break may clear a turning mark on the other system (NOT ESTABLISHED); the Sonnet
+> 90 print fixture may no longer fill exactly two sheets; the desk's Grayson page renders
+> sit in `node_modules/.desk-scratch/` (git-ignored).
 >
-> **Spec in `OPEN.md` §N.141, brief at
-> `../sessions/brief-n141-squircle-grammar_r1_2026-09-15.md`.** Every rule in it
-> is Dann's, quoted and dated. **Two increments have shipped** (`debdf02` the
-> grammar and the row spacing, `76b24a3` the width holding its IPA syllable, both
-> walked). **What is left in N.141 is the tie-spanning increment, and it DEPENDS
-> ON N.142**, which is not built.
->
-> ---
->
-> ### WHAT THE WALK OF `76b24a3` FOUND, 2026-09-15 late. Four things, all recorded
->
-> 1. **N.143.** N.134 does not fire on a `.musx` score: the input field and
->    Transcription are both empty on T05, the song is `Untitled, 2026-09-15`, and
->    the Piece fields are blank, while Score markup draws the file's own words.
->    **Fourth sighting, first by Dann on a deploy.** Spec `OPEN.md` §N.143, three
->    candidate causes named, NOT BUILT. **This reopens the first half of N.134,
->    which the block below still records as DONE; it was walked on a
->    `.musicxml`.**
-> 2. **N.141 case 2, with evidence.** Two loupe shots, m. 84 and m. 87 of T05
->    (**corrected 2026-09-16**; first recorded as Without Sun song 2), where a note's value carries past the barline and the squircle
->    stays closed. **m. 84 is the defect. m. 87 is a melisma slur, settled
->    2026-09-16 from `data-slur` (N.125 memo), so its closed box is correct.** `OPEN.md` §N.141
->    §EVIDENCE.
-> 3. **N.125 raised again, with a challenge to the record. (N.125 is DONE 2026-09-16.)** Dann: *"These
->    constant-width arcs are noticeable and wrong. They need to be tapered."*
->    **Re-verified against the tree tonight and the finding holds**: ties are
->    filled tapered lenses (`staff-renderer.ts:2783`), slurs are a constant 1.3 px
->    stroke (`:2822`). The brief has ruled since 2026-09-11 that slurs become
->    tapered objects. **It needs a §2.4 added** and it needs PLACING; it has been
->    UNPLACED and untracked since 2026-09-11 and he keeps meeting it.
-> 4. **N.126 CONFIRMED ON THE PAGE.** Dann, 2026-09-15: *"4 [28] reads exactly as
->    it should."* The system-start number bare, the post-rest courtesy number in
->    square brackets, side by side, and he read them without prompting. **The last
->    open question on N.126 is closed and the item is DONE.**
->
-> **THE TIE / SLUR PREDICATE IS LOAD-BEARING FOR THREE ITEMS AT ONCE** (N.125,
-> N.141 case 2, N.142), and none of them can be settled from a picture. **Read
-> `data-tie` and `data-slur` off the rendered page.** Recorded in `OPEN.md`
-> §N.125.
+> **Usage, 2026-09-16 20:00:** all models 40%, Fable 15%, reset Sunday 05:00. One Sonnet
+> agent this session used about 260k tokens.
 >
 > ---
 >
-> **COLOUR STAGE 5 WAS DISPLACED BY DANN ON 2026-09-14 AND IS STILL DISPLACED.**
-> He displaced it in favour of the 2026-09-13 walk's findings 2 and 3. Its scope
-> is unchanged and is in
-> `../sessions/plan-colour-story_r1_2026-09-13.md` §STAGE 5: `--stone-600`
-> declared or its seven references rewritten, every other ghost the census found,
-> and inline literals that duplicate a token replaced or explained. **No brief is
-> written for it. It is hygiene and it is the least visible thing on the list.**
+> ### LIVE CARRY-OVER FROM EARLIER CLOSES
 >
-> **THE 2026-09-13 WALK'S FOUR FINDINGS ARE ALL RESOLVED OR NUMBERED.** 1 the
-> `Transcribe and fit` pill, CLOSED 2026-09-14, **its fate still Dann's to rule**
-> and both its acts known duplicates; 2 the missing meter signature, **numbered
-> N.139**, DONE 2026-09-16 (`eb7d220`); 3 the possibly halved rhythmic values,
-> **CLOSED 2026-09-14 and never a defect**, T05 declares 2/4 once and Dann checked
-> the printed score; 4 N.133, **DONE 2026-09-15**, `LOG.md` block 17.
->
-> **SIX SHIPS ACROSS 2026-09-14 INTO 2026-09-15, ALL WALKED BY DANN.** `78f3db8`
-> N.138 increment 1, `8bb406c` its increments 2 and 3, `d6580af` the ring and
-> held-measure mark landing after the ground, `eb918ed` N.133, `debdf02` N.141's
-> grammar, `76b24a3` N.126 and N.141's IPA width. **N.138's account is `LOG.md`
-> block 16 and N.133's is block 17.** Gates moved across the night; the desk moved
-> `~/Downloads/ilya-ship.sh` lines 79 and 80 each time and kept a backup per move.
-> **At `76b24a3` the gate lines read 1173 and 555.**
->
-> **THE REST OF THIS SECTION IS THE 2026-09-13 AND 2026-09-14 NARRATIVE.** Its
-> closed material moved to `LOG.md` block 18 at this close. What remains is live:
-> N.127's unreviewed decisions, the briefs list, N.129, N.94, the ratified names,
-> the colour plan pointer, the text-to-score sequence, and the damage in Dann's
-> own engraving.
->
-> ---
->
-> **DANN'S OWN ENGRAVING IS DAMAGED, AND IT IS NOT ILYA'S DOING. Measured
-> 2026-09-14** on `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml`:
->
-> - Verse 1 gives the vowelless `в` a note of its own at index 36; verse 2 folds
->   it into `ˈvʲbʲu` at 37. **The two underlays are one note out of phase**, which
->   Dorico's own render of the file shows.
-> - **Words are broken across rests in both verses**, 8 in the Cyrillic and 11 in
->   the IPA, counted from the file's own `begin`…`end` marks.
-> - The last word is `одинока`, one syllable short of `одинокая`, **which is why
->   the last note draws bare.** Code proved it by appending the `я`.
->
-> **He engraved the IPA verse himself in Finale during his doctorate**, so this is
-> a file to repair and not a defect in Ilya. **Consequence for the project: this
-> score is not a usable ruler for judging seating accuracy.** A clean fixture is
-> wanted before anyone judges whether words land on the right notes.
->
-> **INSIGHTS, WHAT IS OPEN.** Code made five decisions of its own on N.127
-> increment 1, all listed in `../sessions/memo-n127-insights-inc1_r1_2026-09-13.md`,
-> all reversible, none reviewed by Dann. One row prints nothing on his Sunless
-> score because measure 17 does not add up to its time signature. At 390 px the
-> head does not fit three documents: 237.97 px for labels needing 265.19.
-> Increment 2 is the compass.
->
-> **INSIGHTS, THE EVIDENCE BASE, set up 2026-09-15 (a research thread, no code).**
-> The plan and Dann's rulings are in
-> `~/Documents/Voice Pedagogy Library/Insights Research/Insights-Research-Plan.md`,
-> with a copy in project knowledge at
-> `claude/spec-insights-research-pipeline_2026-09-15.md`. The source list (153
-> sources) sits beside it, in `Insights-Research-Sources.csv`, md5
-> `049b1b0635e706f057ae4b8a5b603613`. **Status 2026-09-16:** 36 articles and
-> Bozeman PVA 2nd ed. (Ch. 4 to 9, 13, Definitions, App. 2 and 3) extracted by
-> Sonnet into `_extraction/`. Step B briefs written, NOT RUN: core
-> `brief-insights-step-b-core_r5_2026-09-16.md` plus addendum
-> `brief-insights-step-b-pass01_r5_2026-09-16.md`, in two stages (01a, Dann
-> reviews, 01b). The plan's section "Purpose and design rulings (2026-09-16, late
-> session)" holds twelve rulings from that night (tiers, blind spots, tethered
-> abstraction, the ten-vowel set, Bozeman surrogates on a continuum between
-> charts, no pronouncements on identity) and the rulings still owed. The build
-> consequence is one line in INBOX.md. **Stage 01a is running in Fable** (started
-> 2026-09-16 late); see THE ONE THING for what follows. Waiting: Elsevier's reply
-> on Journal of Voice access.
->
-> **BRIEFS WRITTEN AND NOT RUN, corrected 2026-09-14:**
-> `brief-n117-dictionary-fill_r1_2026-09-12`,
-> `brief-n119-toggles-reach-score-markup_r1_2026-09-12`,
-> `brief-colour-stage4_r1_2026-09-14`,
-> `brief-n135-ocr-measurement_r1_2026-09-14` (its measurement RUN, memo landed).
-> **N.118's brief ran on 2026-09-14 and the colour token rename is done.**
-> **N.119's brief row on `Open syllables` is already corrected** (brief line 89,
-> "NO. CORRECTED 2026-09-14"; checked by the desk 2026-09-16). See N.136.
->
-> **THE COLOUR STORY, RULED AND PLANNED.** The principle, the five-hue map and
-> the six-stage plan are in `../sessions/plan-colour-story_r1_2026-09-13.md`, with
-> the full ruling in `INBOX.md`. Learn moves rose to umber; nothing else moves.
-> **Stages 1, 2, 3a and 3b are done and walked. Stage 4 is the one thing above.**
->
-> **N.129, THE UNDERLAY IS SPACED IN THE WRONG FONT'S METRICS. Numbered by
-> Dann 2026-09-13. UNPLACED.** `underlay-widths.ts:690` declares its table as
-> "Per-1000-em advance widths for **Source Serif 4** Cyrillic", and the
-> renderer uses it for the syllable column advance
-> (`staff-renderer.ts:754-762`) and for hyphen and extender endpoints
-> (`:2742-2750`). The page has drawn those glyphs in **Source Sans 3** ever
-> since the paginator began stripping the renderer's serif root
-> (`page-layout.ts:376`). So every syllable's spacing and every hyphen and
-> extender end on Score markup is computed from metrics the glyphs never had.
-> Code measured about 5% on one word, « ночь » 27.72 serif against 26.34 sans.
-> Candidate fixes, unruled: remeasure the table in Source Sans 3, or make the
-> face a parameter so the two cannot diverge again. **Bears on N.118 and on
-> the `columnAdvance` crowding item already in OWED.** Found by Code inside
-> the loupe-typeface memo; the desk read all three sites itself.
->
-> **FOLDED IN 2026-09-14 ON DANN'S WORD, found by him on the N.118 walk.**
-> He read `не прог ляд – на я,` on the page and counted three hyphens missing
-> from one word.
->
-> 1. **Ilya omits a hyphen silently whenever two syllables' ink comes within
->    4 px.** `staff-renderer.ts:2761-2763`: `from = rightEdgeOf(a) + 2`,
->    `to = leftEdgeOf(b) - 2`, then `if (to <= from) continue`. The 4 is two
->    paddings, not a chosen engraving value.
-> 2. **The file contradicts itself.** `clampHyphenX` handles a gap narrower
->    than the hyphen by centring it and letting it overhang, and says so in
->    its own comment: *"Omitting the hyphen instead is a Gould question (rules
->    26 to 40, unread), so it is not taken here."* The loop omits before
->    `clampHyphenX` is ever reached.
-> 3. **Gould rules 26 to 40 are still unread**, recorded at
->    `../sessions/memo-n113-melisma_r1_2026-09-07.md:223`, and the book is not
->    on this machine.
-> 4. **RULED BY DANN 2026-09-14:** *"I don't want Ilya dropping hyphens.
->    Instead, I want the note spacing to shift to permit the appearance of
->    hyphens properly."* So the omission goes, and the spacer widens instead.
-> 5. **The fix's shape, DESK INFERENCE and his to wave off:** a gap between
->    two syllables of ONE WORD takes a larger floor than a gap between two
->    words, sized to the hyphen plus its clearance. Today there is one floor,
->    `INK_CLEAR_SP = 0.5` stave spaces (N.103), and it knows nothing about
->    hyphens.
-> 6. **Named cost:** widening word-internal gaps means fewer measures per
->    system and different pagination on every page, not only on tight words.
-> 7. **This work sits on top of the wrong-metrics fix, not beside it.** A
->    hyphen clearance tuned against a table that is 5% out is tuned against a
->    bad ruler.
->
-> **SCOPE RULED 2026-09-14, and item 5 is unblocked.** The desk asked whether
-> his ruling of 2026-08-13, "THE NOTES NEVER MOVE", barred widening a column to
-> fit a hyphen. His answer, recorded in full in `PRODUCT.md`: *"Sometimes I want
-> the notes to move to accommodate legibility in the text underlay. The
-> engraving is not the composer's; it is a highly edited aspect of the
-> musico-textual object that is subject to our scholarly intervention. We can
-> freely rearrange the page layout and measure distribution to accommodate
-> legibility and logic. We don't want to interfere with these elements without
-> justification."* **So layout, measure distribution and horizontal spacing are
-> editorial, and the standard is justification rather than prohibition.**
->
-> **N.94 HAS A HOME AGAIN, 2026-09-13.** Numbered 2026-08-24 as "transposition
-> interface, modelled on Newzik" and never built. It is now a **station inside
-> the `Melody` band, sibling to Corrections**. Established: the ENGINE already
-> exists and ships. `packages/score-parser/src/transposition.ts` exports
-> `transposeScore`, `suggestTranspositions`, `spellPitch`,
-> `keyNameAfterTransposition` and more, built so the watch list names computed
-> keys rather than guesses (Dann's ruling 2026-07-20), wired at
-> `watchlist.ts:476`. Only the control is missing. **Re-read
-> `claude/e31-late-rulings-and-the-transposition-control_2026-08-07.md` first**
-> (rulings 9 to 14, the detented-ruler spec); it is 37 days old and its
-> amendments are unchecked, per tether 17.
->
-> **THE NAMES, RATIFIED 2026-09-13, BOTH LANGUAGES.** Tabs: `Text` / « Texte »,
-> `Markup` / « Annotation », `Insights` / « Aperçus ». Drawer band:
-> `Melody` / « Mélodie ». The French mirrors the English throughout and
-> nothing is coined. **Tab padding goes 0.7 rem to 0.5 rem** to fit the French
-> row, returning 19.2 px; afterwards English has 55.07 px spare and French
-> 15.64 at a 390 px viewport. **OWED: nobody has seen 0.5 rem on screen.**
-> This supersedes the `MARKUP` band rename of 2026-09-12.
->
-> **THE TEXT-TO-SCORE SEQUENCE, RULED BY DANN 2026-09-06**, one path through
-> the pairing layer: 1 N.108-5 cleanup DONE; 2 N.112 the text is
-> authoritative DONE; 3 N.113 the melisma DONE; 4 N.114 the syllable line
-> under the poem DONE 2026-09-09 (narrowed from Type Into Score), N.114a
-> and N.114b 1 to 5 DONE 2026-09-10. **Then, inserted by Dann 2026-09-10:
-> the drawer as a path (Design consulted), carrying N.119 to N.122 and
-> N.118.** Then N.110 (set aside, briefed), N.115, N.116, the release
-> order N.85 to N.88, N.84 (Guide and Learn), N.83.
->
-> **N.127, INSIGHTS, numbered by Dann 2026-09-11 evening (first ruled as
-> N.126 in-session; renumbered after the desk missed `STATE.md:497`, the
-> collision is the desk's error, owned in-thread). UNPLACED. Ilya's third
-> document, sibling to Transcription and Score markup, third member of the
-> `DeskHead` pair.** Rulings, all Dann's 2026-09-11: read-only, never an
-> input surface; every line computed from the singer's inputs or a sourced
-> advice string a predicate fired; appears the instant voice information
-> exists, thin to deep, broad-analysis pattern inherited; content in a
-> squircle inheriting the watch band (`VoiceProfilePane.svelte:1532-1533`),
-> which migrates off Score markup wholly, leaving it pure notation;
-> governing colour dusty rose `--dusty-rose #A67B7B`, inks luminance-keyed;
-> page one fixed at one page, a second page only when earned, fired advice
-> printed there in full; citations as footnotes, attribution in Guide and
-> footer; page one ordered for the choosing moment; identity head carries
-> voice name, composer, title (DESK DEFAULT: calibration date joins it,
-> which would close N.19); section headers take `TitleHeader.svelte`
-> `.metadata-line` recipe in rose ink; the compass stave's clef follows the
-> SINGER via `chooseClef` on the declared range's median (tenor
-> treble-8vb-by-range refinement recorded here, not yet designed); the foot
-> is one apparatus block, Insights' copy of `footer.attribution` drops the
-> lieder.net clause, siblings untouched; the labelled teacher's blank is
-> DEAD, unlabelled negative space stays. Six curation criteria ruled as a
-> LIVING list (see the brief), headline: helpful not comprehensive; one
-> entry per hazard anchored by its weightiest instance in the Loupe's
-> measure-tag grammar; Score markup answers where, Insights answers what,
-> how much, and what to do; silence is a finding. Record:
-> `docs/sessions/n127-design-pack/` (commits `e0c34c1`, `52517e6`). Design
-> returned R1 to R3 the same evening; R3 carries the three clef passes and
-> the French-proved foot; a six-item refinement message is with Design
-> (stave to 8 px line gap, no note-name captions, mini-squircle collision
-> law, G clef curl on the G line, binding-squircle footprint with two
-> treatments for Dann to rule, foot daylight and right-indented hairline).
-> **Design's returned HTML lives only in Dann's Downloads; commit the
-> latest into the pack at the next touch.**
->
+> **Moved verbatim to `OPEN.md`, section "LIVE CARRY-OVER FROM STATE.md", at the close of
+> 2026-09-17.** It holds live specs and records: Dann's damaged Sunless engraving (not a
+> seating ruler), N.127's rulings and its five unreviewed Code decisions, the Insights
+> evidence base as of 2026-09-15, the briefs written and not run, the colour story, N.129's
+> hyphen fold-in and the spacing ruling, N.94's home (superseded in part), the ratified
+> names, and the text-to-score sequence. Open it when one of those comes up.
+
+---
 
 ## THE TRACKER
 
@@ -351,36 +131,14 @@ dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
 
-### Placed 2026-09-15 at the close. Both were UNPLACED and untracked since 2026-09-11
+### Numbered 2026-09-16
 
-- `[x]` **N.126. Measure numbers on Score markup. DONE, shipped in `76b24a3`,
-  CONFIRMED BY DANN 2026-09-15:** *"4 [28] reads exactly as it should."* The
-  system-start number bare above the clef, the post-rest courtesy number in
-  square brackets beside it, and he read the pair on the page without being
-  prompted. **The square brackets were his amendment of 2026-09-15**, because
-  square brackets mean editorial in a score and that number is Ilya's own
-  addition. Spec in the OWED section below; it stays there as the record of what
-  was ruled.
-### Numbered 2026-09-15
-
-- `[x]` **N.143. DONE 2026-09-16, shipped `7abb5ae`, walked by Dann ("correct").** Account in `OPEN.md` §N.143 until the close moves it. ~~N.134 does not fire on a `.musx` score.~~ Observed by Dann on the
-  deploy `76b24a3`, 2026-09-15, after three sightings by Code that were each
-  written off to the load. **Both halves are absent on T05:** the input field stays empty, no
-  `from score` receipt, no name from the header. **N.134 was walked on MusicXML;
-  T05 is `.musx` through denigma into MNX.** The gate is at
-  `+page.svelte:3120-3123` and three conditions could be failing. **Half B's cause
-  is already established: the converted MNX carries no title or composer at all.**
-  Spec in `OPEN.md`. The number is a DESK DEFAULT.
-
-- `[ ]` **N.145. A dropped score arrives at once; no Continue to analysis. RULED BY DANN 2026-09-16: option 2, instant for every file. EXTENDED the same night: Transcribe and fit is removed, and a poem arriving after a wordless score is placed at once.** Brief r2 supersedes r1. Numbered 2026-09-16, THE NUMBER IS A DESK DEFAULT. Spec `OPEN.md` §N.145, brief `../sessions/brief-n145-instant-score-arrival_r2_2026-09-16.md` (r1 superseded).
-- `[x]` **N.144 DONE 2026-09-16, shipped `ceeb214`, walked by Dann ("Bingo! Instant fix"; undo "just as you say").** ~~Start placement over ignores the score's own layout, and cannot be undone.~~ Numbered 2026-09-16, THE NUMBER IS A DESK DEFAULT. Seen on the N.142 walk: on T05 it breaks the m. 22 melisma and shifts every later syllable one note early. Fix: reuse `seatFilledPoem` when the score carries words, and `pushUndo`. Spec `OPEN.md` §N.144. Meets the freeze rule's exception (desk reading).
-- `[x]` **N.142 DONE 2026-09-16, shipped `c868540`, walked by Dann.** On T05 after Start placement over, the m. 13 tied eighth took no syllable and « а » began on the next note. Step 2 (placements already on a continuation) waits on a count from his browser. **The loupe French shipped in the same commit; walked in part:** the loupe read « mes. 22 · système 3 sur 10 » and « B2 · temps 1, division 2 · Croche ». The undo and redo lines were not seen. ~~ Dann,
-  2026-09-15: *"Ilya must understand that a tie is rhythmic prolongation."* The
-  number is a DESK DEFAULT. **The data is already there and both parsers fill it**
-  (`types.ts:572`, `musicxml-parser.ts:633`, `mnx-parser.ts:720`); nothing in the
-  seating path reads it. **Rests are already excluded and nothing is owed there.**
-  Spec in `OPEN.md`, including the one thing Dann must rule before it ships: what
-  happens to syllables already sitting on tie continuations.~~
+- `[ ]` **N.146. Ilya tells a poem from a score itself, for a PDF or a picture.** Numbered 2026-09-16, DESK DEFAULT number; design adopted on Dann's instruction (*"we will go with that"*). Spec `OPEN.md` §N.146. IN. No switch, no new strings (struck by Dann the same night). Brief `../sessions/brief-n146-poem-or-score-detected_r1_2026-09-16.md`.
+- `[ ]` **N.147. The loupe tap both navigates and places the armed syllable.** Was
+  INBOX-37; the number is a DESK DEFAULT, 2026-09-16. Dann: unacceptable. Four designs in
+  `INBOX.md` (2026-09-16); the desk recommends a tap that only selects, plus a Place
+  control beside the armed syllable. **His pick is owed.** IN (the freeze rule's lost-work
+  exception). `SCHEDULE.md` week 1.
 
 ### Numbered 2026-09-14
 
@@ -402,12 +160,6 @@ does not repeat them.
   the scroll may take a gesture on a surface where the swipe dismisses and the
   tap places a syllable.**
 
-- `[x]` **N.138. The loupe supplies the meter for every measure it shows. DONE
-  2026-09-14, all three increments, walked by Dann.** Increment 1 `78f3db8`,
-  increments 2 and 3 `8bb406c`. Account and spec in `../sessions/LOG.md` block 16.
-  **Three things it raised are still live and are NOT closed by it:** the
-  selection ring landing under the system's ground (`INBOX.md`), whether a tap
-  ever picked the wrong note (NOT ESTABLISHED), and N.140.
 - `[ ]` **N.136. Open syllabification never reaches Score markup's drawn text.**
   Found by Dann on the N.118 walk: the toggle moves, and neither the Cyrillic
   nor the IPA on the page changes. Spec in `OPEN.md`. **Not a regression from
@@ -423,11 +175,6 @@ does not repeat them.
   **Belongs in the release cut's IN bucket:** the ruled release sentence names
   Insights, and a document in the wrong language is wrong rather than
   half-built. Spec in `OPEN.md`. **Dann owes the French; nothing is coined.**
-- `[x]` **N.133. The renderer stops painting its own ground. DONE 2026-09-15,
-  shipped as `eb918ed` and walked by Dann.** Account and spec in
-  `../sessions/LOG.md` block 17. Gate 5 moved to 550. **Still NOT ESTABLISHED, and
-  small: no actual print preview was taken**, only a reading of the loaded print
-  stylesheets.
 - `[ ]` **N.132. The ratified names are not built.** `Text`, `Markup`, `Melody`,
   ruled 2026-09-13 in both languages, and the tree still says "Transcription" and
   "Score markup" (`i18n.ts:106`, `:117`, `:59`). **Found because Dann walked the
@@ -584,7 +331,8 @@ through that seam. It is the last catch-and-drop of its kind in the tree.
   a wall:** what does not fit by the date goes to FLAGGED or LATER. The dialogue
   that produced it continues below, one question at a time. The sort of the
   inventory into IN, FLAGGED and LATER is still owed.
-- **FOR THE SORT: START PLACEMENT OVER CANNOT BE UNDONE.** Established by
+- **SORT RULINGS, 2026-09-16** (proposal `../sessions/sort-release_r1_2026-09-16.md`): **N.94 IN**, and its place is ruled: *"it belongs in the Score Markup section between Corrections and Voice."* (supersedes the 2026-09-13 note placing it in a `Melody` band station). **N.131 IN**, whole. **N.123 IN** (his word, over the desk's LATER), restated 2026-09-16: *"we absolutely need to have this visual. Non-negotiable."* **The visual, in his words 2026-09-16:** *"'this visual' means the range and the tessituragram with passaggio zone indicated."* So **N.127 increment 2 (the compass stave: the piece's range against the singer's) is IN**, and N.123's tessituragram carries the passaggio zone shaded (already in its spec as "the singer's turning points shaded"). **N.85 IN, N.86 IN, N.87 LATER** (his words: *"this is fine as you have marked them"*); **N.88: Dann's own optional afternoon task, probably 2026-10-29** (his words: *"if I feel like it"*). **THE SORT IS DONE 2026-09-16 AND THE FREEZE RULE IS IN FORCE.** IN: 24 rows, listed in `../sessions/sort-release_r1_2026-09-16.md`. **SIZED 2026-09-16, DESK INFERENCE on Dann's request:** `../sessions/estimate-release_r1_2026-09-16.md`. About 45 to 75 build cycles needed against about 100 available at the week's pace: **achievable if the freeze holds, the three design rows (N.94, N.123, N.84) start early, and the pace holds.** DESK DEFAULT checkpoint: **Friday 2026-10-09**; a design row not in Code by then moves to LATER and the date stands. **THE SCHEDULE: `SCHEDULE.md`, written 2026-09-16, starts 2026-09-17.** INBOX-37 (the loupe tap) is numbered **N.147**, DESK DEFAULT number.
+- ~~**FOR THE SORT: START PLACEMENT OVER CANNOT BE UNDONE.**~~ **FIXED BY N.144, `ceeb214`.** Established by
   Code 2026-09-16 (`memo-loupe-french-build_r1_2026-09-16.md`):
   `handleStartPlacementOver` never calls `pushUndo`, yet it rebuilds every
   placement. A singer who presses it by mistake loses their hand placements.
@@ -848,3 +596,5 @@ of `plan-colour-story_r1_2026-09-13.md`, and Dann may displace it with a word.*
 failed to move, and it is not stage 4, which moved tonight. The oldest
 candidates are still the 2026-08-18 copy-gap and step-4b lists and the RULINGS
 DANN OWES block. Raised for Dann, not acted on.***
+
+*Close of 2026-09-17, early morning. N.142, N.143, N.144 and N.145 closed and moved to `../sessions/LOG.md` block 20 with the old read-first block and seven `[x]` tracker marks. The tail of THE ONE THING moved to `OPEN.md` as live carry-over. N.146 and N.147 numbered. The release sort, the freeze rule, the estimate and `SCHEDULE.md` were made this session. Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count is written here.*

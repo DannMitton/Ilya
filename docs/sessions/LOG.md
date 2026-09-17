@@ -5212,3 +5212,592 @@ start that declares none, and Dann walks it on the engraved Without Sun song 1,
 which changes at measure 2.
 
 ---
+
+---
+
+## Block 20. Moved from STATE.md and OPEN.md at the close of 2026-09-17 (early)
+
+N.143, N.142 with the loupe French, N.144 and N.145 all shipped and were walked by Dann on 2026-09-16. N.126, N.138 and N.133 tracker marks moved with them (their accounts were already in blocks 16 and 17). Moved verbatim.
+
+### From STATE.md §THE ONE THING: the 2026-09-16 read-first block and its walk narrative
+
+> ### READ THIS FIRST. Written at the close of 2026-09-16, for the next instantiation
+>
+> **Nothing is in flight.** The tree at the floor is clean apart from this close's memory
+> files, which Dann commits. **Closed this session:** N.125 (`34b143c`, `570d76f`), N.139
+> (`eb7d220`), and the loupe's opening rest (`aca2dbb`), all walked by Dann. Accounts in
+> `../sessions/LOG.md` block 19.
+>
+> **THE NEXT BUILD IS N.143, HALF A. The cause is found; no brief is written.** A read-only
+> Sonnet diagnosis (returned in chat, recorded in `OPEN.md` §N.143, "HALF A: CAUSE FOUND")
+> showed T05's MNX lists an unused verse `v3` first, and `mnx-parser.ts:396` numbers verses
+> by list position, so verse 1 is empty. Fix: number only the line ids that occur on the
+> part's events. Write the Code prompt from that section. Half B (the file-name fallback,
+> a DESK DEFAULT in the same section) can ride in the same build.
+>
+> **INSIGHTS.** Pass 01 is done: 01a and 01b ran in Fable and are reviewed. Dann's rulings:
+> `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/review-01a.md` (R1 to R3)
+> and `review-01b.md` (S1 to S5, plus desk defaults). **Still Dann's, one at a time, framed
+> with a singer's example:** the crossing-band tolerances (INS-P01-1's 50 cents and its
+> severity threshold T, INS-P01-4's TOL2); INS-P01-7's migration neighbours for the six
+> vowels with no printed path, and whether it replaces or annotates the timbre mark;
+> INS-P01-8's treble alternative; INS-P01-10's leap size; whether INS-P01-4 may fire on a
+> derived fR2; whether INS-P01-2 and INS-P01-11 are carried at all. **Bozeman PVA2 batch C
+> is extracted** (`_extraction/claims_bozeman-PVA2_batch-C.csv`, 50 rows). **Next research
+> step: pass 02 in Fable**, which needs a pass-02 addendum brief (not written). Held: the
+> Bozeman advice re-extraction (up to 1.5M tokens from the shared pool). Waiting: Elsevier.
+> Usage on 2026-09-16: all models 37%, Fable 15%, reset Sunday 05:00.
+> **2026-09-16 late: pass 02 planned,** `~/Documents/Voice Pedagogy Library/Insights Research/plan-pass02_r1_2026-09-16.md`. **Elsevier answered:** Journal of Voice at 120 USD, print and online, back issues from 1987; Dann asked how to buy. Usage at 20:00 the same night: all models 40%, Fable 15%.
+>
+> **`PRODUCT.md` gained three sections this session:** ten vowels and no others; no
+> belting; Insights gives insight, not intervention.
+>
+> **Loose ends, none urgent:** the loupe's path for a system's first measure that opens on
+> a rest is untested; a melisma slur crossing a system break may clear a turning mark on the
+> other system (NOT ESTABLISHED); the Sonnet 90 print fixture may no longer fill exactly two
+> sheets after the forward head; the desk's Grayson page renders sit in
+> `node_modules/.desk-scratch/` (git-ignored).
+>
+> **N.141's remaining increment is still BLOCKED on N.142**, so the heading below describes
+> the item, not the next step.
+>
+> ---
+>
+> ### THE ONE THING: N.141, THE SQUIRCLE'S GRAMMAR. IN CODE, 2026-09-15.
+>
+> **Spec in `OPEN.md` §N.141, brief at
+> `../sessions/brief-n141-squircle-grammar_r1_2026-09-15.md`.** Every rule in it
+> is Dann's, quoted and dated. **Two increments have shipped** (`debdf02` the
+> grammar and the row spacing, `76b24a3` the width holding its IPA syllable, both
+> walked). **What is left in N.141 is the tie-spanning increment, and it DEPENDS
+> ON N.142**, which is not built.
+>
+> ---
+>
+> ### WHAT THE WALK OF `76b24a3` FOUND, 2026-09-15 late. Four things, all recorded
+>
+> 1. **N.143.** N.134 does not fire on a `.musx` score: the input field and
+>    Transcription are both empty on T05, the song is `Untitled, 2026-09-15`, and
+>    the Piece fields are blank, while Score markup draws the file's own words.
+>    **Fourth sighting, first by Dann on a deploy.** Spec `OPEN.md` §N.143, three
+>    candidate causes named, NOT BUILT. **This reopens the first half of N.134,
+>    which the block below still records as DONE; it was walked on a
+>    `.musicxml`.**
+> 2. **N.141 case 2, with evidence.** Two loupe shots, m. 84 and m. 87 of T05
+>    (**corrected 2026-09-16**; first recorded as Without Sun song 2), where a note's value carries past the barline and the squircle
+>    stays closed. **m. 84 is the defect. m. 87 is a melisma slur, settled
+>    2026-09-16 from `data-slur` (N.125 memo), so its closed box is correct.** `OPEN.md` §N.141
+>    §EVIDENCE.
+> 3. **N.125 raised again, with a challenge to the record. (N.125 is DONE 2026-09-16.)** Dann: *"These
+>    constant-width arcs are noticeable and wrong. They need to be tapered."*
+>    **Re-verified against the tree tonight and the finding holds**: ties are
+>    filled tapered lenses (`staff-renderer.ts:2783`), slurs are a constant 1.3 px
+>    stroke (`:2822`). The brief has ruled since 2026-09-11 that slurs become
+>    tapered objects. **It needs a §2.4 added** and it needs PLACING; it has been
+>    UNPLACED and untracked since 2026-09-11 and he keeps meeting it.
+> 4. **N.126 CONFIRMED ON THE PAGE.** Dann, 2026-09-15: *"4 [28] reads exactly as
+>    it should."* The system-start number bare, the post-rest courtesy number in
+>    square brackets, side by side, and he read them without prompting. **The last
+>    open question on N.126 is closed and the item is DONE.**
+>
+> **THE TIE / SLUR PREDICATE IS LOAD-BEARING FOR THREE ITEMS AT ONCE** (N.125,
+> N.141 case 2, N.142), and none of them can be settled from a picture. **Read
+> `data-tie` and `data-slur` off the rendered page.** Recorded in `OPEN.md`
+> §N.125.
+>
+> ---
+>
+> **COLOUR STAGE 5 WAS DISPLACED BY DANN ON 2026-09-14 AND IS STILL DISPLACED.**
+> He displaced it in favour of the 2026-09-13 walk's findings 2 and 3. Its scope
+> is unchanged and is in
+> `../sessions/plan-colour-story_r1_2026-09-13.md` §STAGE 5: `--stone-600`
+> declared or its seven references rewritten, every other ghost the census found,
+> and inline literals that duplicate a token replaced or explained. **No brief is
+> written for it. It is hygiene and it is the least visible thing on the list.**
+>
+> **THE 2026-09-13 WALK'S FOUR FINDINGS ARE ALL RESOLVED OR NUMBERED.** 1 the
+> `Transcribe and fit` pill, CLOSED 2026-09-14, **its fate still Dann's to rule**
+> and both its acts known duplicates; 2 the missing meter signature, **numbered
+> N.139**, DONE 2026-09-16 (`eb7d220`); 3 the possibly halved rhythmic values,
+> **CLOSED 2026-09-14 and never a defect**, T05 declares 2/4 once and Dann checked
+> the printed score; 4 N.133, **DONE 2026-09-15**, `LOG.md` block 17.
+>
+> **SIX SHIPS ACROSS 2026-09-14 INTO 2026-09-15, ALL WALKED BY DANN.** `78f3db8`
+> N.138 increment 1, `8bb406c` its increments 2 and 3, `d6580af` the ring and
+> held-measure mark landing after the ground, `eb918ed` N.133, `debdf02` N.141's
+> grammar, `76b24a3` N.126 and N.141's IPA width. **N.138's account is `LOG.md`
+> block 16 and N.133's is block 17.** Gates moved across the night; the desk moved
+> `~/Downloads/ilya-ship.sh` lines 79 and 80 each time and kept a backup per move.
+> **At `76b24a3` the gate lines read 1173 and 555.**
+>
+> **THE REST OF THIS SECTION IS THE 2026-09-13 AND 2026-09-14 NARRATIVE.** Its
+> closed material moved to `LOG.md` block 18 at this close. What remains is live:
+> N.127's unreviewed decisions, the briefs list, N.129, N.94, the ratified names,
+> the colour plan pointer, the text-to-score sequence, and the damage in Dann's
+> own engraving.
+>
+> ---
+>
+
+### From STATE.md §THE TRACKER
+
+- `[x]` **N.126. Measure numbers on Score markup. DONE, shipped in `76b24a3`,
+  CONFIRMED BY DANN 2026-09-15:** *"4 [28] reads exactly as it should."* The
+  system-start number bare above the clef, the post-rest courtesy number in
+  square brackets beside it, and he read the pair on the page without being
+  prompted. **The square brackets were his amendment of 2026-09-15**, because
+  square brackets mean editorial in a score and that number is Ilya's own
+  addition. Spec in the OWED section below; it stays there as the record of what
+  was ruled.
+
+### From STATE.md §THE TRACKER
+
+- `[x]` **N.143. DONE 2026-09-16, shipped `7abb5ae`, walked by Dann ("correct").** Account in `OPEN.md` §N.143 until the close moves it. ~~N.134 does not fire on a `.musx` score.~~ Observed by Dann on the
+  deploy `76b24a3`, 2026-09-15, after three sightings by Code that were each
+  written off to the load. **Both halves are absent on T05:** the input field stays empty, no
+  `from score` receipt, no name from the header. **N.134 was walked on MusicXML;
+  T05 is `.musx` through denigma into MNX.** The gate is at
+  `+page.svelte:3120-3123` and three conditions could be failing. **Half B's cause
+  is already established: the converted MNX carries no title or composer at all.**
+  Spec in `OPEN.md`. The number is a DESK DEFAULT.
+
+### From STATE.md §THE TRACKER
+
+- `[x]` **N.145 DONE 2026-09-16 for the drop, shipped `7c596f7`, walked by Dann: *"Instantaneous! No button click needed! :))"*** Fresh incognito, T05 dropped: the input field filled, Transcription drew in full, Score markup drew with `146 / 146 placed`, Insights drew its not-calibrated page, the conversion notice stood with its **Dismiss**, and no Transcribe and fit pill. **Not walked: a poem pasted after a score with no words** (no wordless score was to hand). ~~A dropped score arrives at once; no Continue to analysis. RULED BY DANN 2026-09-16: option 2, instant for every file. EXTENDED the same night: Transcribe and fit is removed, and a poem arriving after a wordless score is placed at once.** Brief r2 supersedes r1.~~ Numbered 2026-09-16, THE NUMBER IS A DESK DEFAULT. Spec `OPEN.md` §N.145, brief `../sessions/brief-n145-instant-score-arrival_r2_2026-09-16.md` (r1 superseded).
+
+### From STATE.md §THE TRACKER
+
+- `[x]` **N.144 DONE 2026-09-16, shipped `ceeb214`, walked by Dann ("Bingo! Instant fix"; undo "just as you say").** ~~Start placement over ignores the score's own layout, and cannot be undone.~~ Numbered 2026-09-16, THE NUMBER IS A DESK DEFAULT. Seen on the N.142 walk: on T05 it breaks the m. 22 melisma and shifts every later syllable one note early. Fix: reuse `seatFilledPoem` when the score carries words, and `pushUndo`. Spec `OPEN.md` §N.144. Meets the freeze rule's exception (desk reading).
+
+### From STATE.md §THE TRACKER
+
+- `[x]` **N.142 DONE 2026-09-16, shipped `c868540`, walked by Dann.** On T05 after Start placement over, the m. 13 tied eighth took no syllable and « а » began on the next note. Step 2 (placements already on a continuation) waits on a count from his browser. **The loupe French shipped in the same commit; walked in part:** the loupe read « mes. 22 · système 3 sur 10 » and « B2 · temps 1, division 2 · Croche ». The undo and redo lines were not seen. ~~ Dann,
+  2026-09-15: *"Ilya must understand that a tie is rhythmic prolongation."* The
+  number is a DESK DEFAULT. **The data is already there and both parsers fill it**
+  (`types.ts:572`, `musicxml-parser.ts:633`, `mnx-parser.ts:720`); nothing in the
+  seating path reads it. **Rests are already excluded and nothing is owed there.**
+  Spec in `OPEN.md`, including the one thing Dann must rule before it ships: what
+  happens to syllables already sitting on tie continuations.~~
+
+### From STATE.md §THE TRACKER
+
+- `[x]` **N.138. The loupe supplies the meter for every measure it shows. DONE
+  2026-09-14, all three increments, walked by Dann.** Increment 1 `78f3db8`,
+  increments 2 and 3 `8bb406c`. Account and spec in `../sessions/LOG.md` block 16.
+  **Three things it raised are still live and are NOT closed by it:** the
+  selection ring landing under the system's ground (`INBOX.md`), whether a tap
+  ever picked the wrong note (NOT ESTABLISHED), and N.140.
+
+### From STATE.md §THE TRACKER
+
+- `[x]` **N.133. The renderer stops painting its own ground. DONE 2026-09-15,
+  shipped as `eb918ed` and walked by Dann.** Account and spec in
+  `../sessions/LOG.md` block 17. Gate 5 moved to 550. **Still NOT ESTABLISHED, and
+  small: no actual print preview was taken**, only a reading of the loaded print
+  stylesheets.
+
+### From OPEN.md
+
+## N.142. A TIE IS PROLONGATION, NOT A NEW SYLLABLE TARGET. Numbered 2026-09-15. THE NUMBER IS A DESK DEFAULT. UNPLACED.
+
+**Dann, 2026-09-15, and the musical statement is the item:**
+
+> *"Ilya does not understand the rhythmic function of a tie. Ties effectively
+> extend the duration of a note. The very same duration, depending on context
+> (i.e. meter) can reasonably be expressed through a dotted quarter note, AND/OR
+> by a quarter note tied to an eighth note or vice versa. At the moment, Ilya will
+> set a syllable under any engraved note that is contiguous. This is an error.
+> Ilya must understand that a tie is rhythmic prolongation."*
+
+**The number is the desk's; he described the defect and ruled it an error without
+naming an item.** Wave it off or renumber with a word.
+
+### ESTABLISHED 2026-09-15
+
+- **The data is there, on both ingest paths.** `types.ts:439` gives every
+  `VocalLineEvent` a `tied?: TieInfo`, and `TieInfo.type` is
+  `'start' | 'continue' | 'stop' | 'let-ring'` (`:572-585`).
+  **`musicxml-parser.ts:633`** sets it from the sounding tie, and
+  **`mnx-parser.ts:720-723`** sets it from MNX's `ties` array. So nothing has to
+  be parsed that is not already parsed.
+- **Nothing in the seating path reads it.** The list handed to `firstPass` is
+  `parsed.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id)`
+  (`+page.svelte:596`), and the same filter appears at `:1589`, `:2947`, `:3136`,
+  `:1448`, `:1456`, and in `correction.ts:574` and `:583`. **Rests are excluded;
+  tie continuations are not.**
+
+### RESTS ARE ALREADY RIGHT, AND HIS PARALLEL ALREADY HOLDS
+
+He put the rest case as an analogy to the clitic rule: a rest has no pitch, so it
+cannot carry a syllable, as a vowelless clitic cannot. **That rule is already
+built.** `firstPass`'s own doc comment states it as a contract: *"@param eventIds
+sung note events in document order, rests already excluded."* **Nothing is owed on
+the rest half.**
+
+### THE HANDLE IS `tied`, NOT THE ONSET. Recorded because Dann asked the question
+
+He asked: *"Is there a way to associate the assignment of a syllable with the
+onset of the note? Tied notes have no onset, they are a continuation."*
+
+**The instinct is right and the handle would not work.** Every event carries a
+`rhythmicPosition`, a tie's continuation included, because in the data a
+continuation does begin somewhere. **What he means by "no onset" is musical: no
+new articulation.** The field that expresses that is `tied`. Onset is a position;
+articulation is what a tie suppresses.
+
+### THE CONCEPTUAL FRAME. Dann, 2026-09-15, and it governs the predicate
+
+> *"One way to think about a melisma with my earlier onset idea is to read a
+> melisma as a collection of contiguous notes with one single onset: the first
+> note is the onset with the syllable assignment, and the subsequent contiguous
+> notes lack this onset since it is expected that the same vowel will be sung on
+> these notes as is assigned to the primary note."*
+
+**THIS IS THE RIGHT MODEL FOR SYLLABLE ASSIGNMENT, and it unifies the tie and the
+melisma under one predicate:** a note either begins a syllable or continues one.
+
+**AND ONE DISTINCTION MUST SURVIVE UNDERNEATH IT, or the analysis is wrong.**
+
+| | a TIE's continuation | a MELISMA's continuation |
+|---|---|---|
+| new syllable | no | no |
+| **new sounded event** | **no.** One note written twice | **yes.** New pitch, new attack, same vowel |
+| duration | belongs to the first note's sounded length | its own, at its own pitch |
+
+**Where that bites, and it is not cosmetic.** N.123's cycle dose sums f0 against
+seconds over sung notes: a melisma's notes are several pitches each accruing time
+under one vowel, a tie is one pitch accruing the sum. **The same is true of every
+per-vowel figure Shane produces**, which is the whole point of the product.
+**So: one onset rule for syllables, two behaviours for duration and pitch.**
+
+**A SECOND DIFFERENCE, AND IT GOVERNS WHAT THE SINGER MAY DO.** A tie is a fact of
+the score and Ilya reads it. A melisma is sometimes read, where a score carries its
+own words and encodes it by the absence of a syllable on later notes
+(`types.ts:464-479`), and sometimes chosen, where the text comes from the poem box
+and the singer sets it with `toggleMelisma` (`pairings.ts:455`).
+
+**So a singer may re-decide a melisma and should not be able to re-decide a tie.**
+**Recorded as a strong default and NOT as a wall**, per CONTRACT §1.19: editions do
+sometimes tie where a slur is meant, and a singer who meets one needs a way
+through rather than a refusal.
+
+**THE PHRASE MARK, raised by Dann in the same breath.** *"Very often melismas will
+feature a phrase mark that applies to all its notes. But not always."* A slur over
+a melisma is the engraver's own statement that those notes carry one syllable, so
+it is a signal Ilya could READ rather than infer. **His "not always" is what stops
+it being the only signal: it is a prior, not a rule.** Nothing is built on it and
+it is recorded here so the idea is not lost. It touches N.125, which draws slurs
+but does not read them.
+
+### THE SHAPE OF THE FIX
+
+**One predicate, applied where the sung-note list is built.** A note is a syllable
+target when it is not a rest AND its `tied.type` is not `continue` and not `stop`.
+**It deserves a named helper rather than a filter repeated in eight places**,
+because "a note that can take a syllable" is a concept in this product and not an
+incidental condition. The eight sites are listed above.
+
+**`let-ring` is NOT the same case and is left alone** unless Dann rules
+otherwise: it is l.v. notation, rare in vocal music, preserved for fidelity, and
+it does not describe a continuation of a sounded note.
+
+### NAMED COSTS, and the second one needs a ruling before anything ships
+
+1. **The count of available notes falls on any score with ties.** `95 / 95 placed`
+   becomes a smaller denominator. That is correct, and it will look like a change
+   to a number the singer has seen.
+2. **EXISTING PLACEMENTS ON TIED CONTINUATIONS. NARROWED 2026-09-15, and it is
+   probably not a ruling Dann owes.** A song seated under the old rule may hold a
+   syllable on a note that stops being a target. Every remedy has a cost: back
+   onto the tie's first note gives that note two syllables; forward shifts every
+   later syllable by one and the last falls off the end; dropping it destroys a
+   placement the singer made.
+
+   **THE DESK FIRST PUT THIS TO DANN AS A RULING HE OWED. That was wrong, and two
+   things narrow it almost to nothing.**
+
+   - **It cannot arise on the score-words path.** Where a score carries its own
+     lyrics, the file already does the right thing. **MEASURED on Kabalevsky T05,
+     2026-09-15:** the tie from `ev453` in m. 12 to `ev454` in m. 13 gives the
+     first note the syllable « ной, » and the tied note **no lyric key at all**.
+     Engravers do not set a syllable on a tie's continuation. **So the defect is
+     confined to the POEM path**, where `firstPass` seats typed text by counting
+     notes.
+   - **It only bites if it has actually happened.** Whether any song in Dann's
+     library holds a syllable on a tied continuation is **countable, not
+     hypothetical**. Count it before designing a migration.
+
+   **RULED BY DANN 2026-09-15: PUSH FORWARD. Every later syllable shifts by one
+   and the last falls off the end.** His words, and the reason is the ruling:
+   *"Because lyrics are linearly sequenced (following the existence of language in
+   time), the only reasonable option is push it forward. Lyrics are not
+   mathematical constructs. They exist inside a linear implication of first x then
+   y then z, and that order cannot change while still representing the lyric with
+   fidelity."*
+
+   **The other two answers each break the sequence**: putting it back gives one
+   note two syllables, dropping it removes a word from the line. **Only pushing
+   forward preserves the order, which is the thing a lyric IS.**
+
+   **AND THE RULE SIGNALS ITSELF, which is why it needs no mark.** A syllable that
+   falls off the end leaves the placed count short, and that count is already on
+   the singer's screen. CONTRACT §6 forbids a mark that says Ilya is unsure; none
+   is needed here.
+
+   **So the build's first act is a count, not a policy.** If the count is zero,
+   no migration is needed and nothing is put to Dann. If it is not zero, the
+   merge rule's own principle governs the design: *"an upload never destroys
+   placements; only the singer does, on purpose"* (`pairings.ts`, §The merge
+   rule), and only then is there a question worth his time.
+
+### NOT ESTABLISHED
+
+- **Whether the renderer draws a tie's continuation as a note the singer can tap**
+  and therefore place on by hand, independently of `firstPass`. The loupe's own
+  `ownIds` filter at `+page.svelte:1448` excludes rests only.
+- **What a melisma spanning a tie should do.** N.113's melisma machinery and this
+  rule meet on the same notes and nobody has looked.
+
+---
+
+### From OPEN.md
+
+## N.143. N.134 DOES NOT FIRE ON A `.musx` SCORE. Numbered 2026-09-15. THE NUMBER IS A DESK DEFAULT. UNPLACED.
+
+**Observed by Dann on the deploy `76b24a3`, 2026-09-15**, with screenshots, after
+three prior sightings by Code that were each written off to the load. His words:
+*"I just pulled T05 in and there is no instantaneous transcription. Why doesn't an
+instantaneous transcription appear? We based a whole evening of work on making
+that happen."*
+
+**THE TERM IS "THE INPUT FIELD". Dann, 2026-09-15:** *"the input field (not the
+poem box grrr)"*. The band is labelled `Input` and the field is where a poem is
+pasted, typed or dropped. **Older records, N.134's included, say "poem box"; they
+are history and are not rewritten. Nothing written from 2026-09-15 uses it.**
+
+**THE FOURTH SIGHTING, AND THE FIRST BY DANN ON A DEPLOY.** The `INBOX.md` entry
+of 2026-09-15 recorded the pattern across Code's three runs. This supersedes it:
+it is a defect, not a fixture quirk.
+
+### WHAT HIS SCREENSHOTS SHOW
+
+| | state |
+|---|---|
+| Score markup | **Draws T05's own words.** « Бог Ку-пи-дон дре-мал в ти-ши лес-ной » |
+| Measure numbers | Drawing, including the bracketed courtesy numbers `[9]` and `[28]` |
+| **The input field** | **EMPTY.** Placeholder showing |
+| **Transcription** | **EMPTY.** "Enter your Cyrillic text in the drawer on the left." |
+| The poem receipt | **No `from score` tag** |
+| The song's name | **`Untitled, 2026-09-15`**, not named from the score |
+| The Piece fields | All empty |
+
+**So BOTH halves of N.134 are absent for this file.** N.134 was walked on
+2026-09-14 with 39 words, the `from score` receipt, Transcription drawing, and the
+song named from the score header. **That walk was on Sunless 01, which is
+MusicXML. T05 is `.musx` through denigma into MNX.**
+
+### HALF A: THE POEM FILL. THE GATE IS FOUND, THE FAILING CONDITION IS NOT
+
+`+page.svelte:3120-3123`:
+
+```
+const fillText =
+    origin === 'upload' && !noLyrics && doc.inputText.trim() === ''
+        ? scoreWordsText(collectScoreWords(ingested.result.score, 1))
+        : '';
+```
+
+**All three conditions must hold. Two of them plainly do:** the box is empty in his
+screenshot, and the score carries lyrics, since they draw on Score markup. **So the
+failure is one of:**
+
+1. **`origin !== 'upload'`.** The comment above that line says the fill is
+   deliberately confined to an upload so that a saved song with an empty box is
+   not written on boot. **Establish what `origin` was for his drop.**
+2. **`collectScoreWords(score, 1)` returns nothing on this file.** It takes VERSE
+   1. **T05's MNX carries TWO lyric lines**, `v1` Cyrillic and `v2` IPA
+   (read from the converted file 2026-09-15). If the MNX path numbers or orders
+   them differently from MusicXML, verse 1 may not be what the caller assumes.
+   Its `close()` also returns null for a word where **no syllable carried a
+   vowel**, so a structural difference could empty the list silently.
+3. **`noLyrics` is computed true** despite the lyrics drawing.
+
+**Instrument each of the three rather than guessing. They are cheap to
+distinguish and only one of them is a design decision working correctly.**
+
+### HALF A: CAUSE FOUND 2026-09-16, BY A READ-ONLY SONNET DIAGNOSIS
+
+**Condition 2 fails, for a reason nobody had guessed.** T05's converted MNX has
+`global.lyrics.lineOrder = ["v3","v1","v2"]`. `v3` ("Verse 3") is declared and never
+used; only `v1` (Cyrillic) and `v2` (IPA) carry syllables. The parser numbers verses
+by raw position in `lineOrder` (`mnx-parser.ts:396`,
+`order.forEach((id, i) => lineIdToVerse.set(id, i + 1))`, read by the desk
+2026-09-16), so `v3` becomes verse 1, and `collectScoreWords(score, 1)` returns no
+words. Verse 2 returns the 73 Cyrillic words. Conditions 1 and 3 hold correctly
+(`origin` is `'upload'`, `noLyrics` is false). Positive control: Sunless 01
+(MusicXML) returns 39 words, matching N.134's walk. A `.mnx` dropped directly
+takes the same parser path and fails the same way if its `lineOrder` lists an
+unused line first.
+
+**The fix, as described by the diagnosis, NOT MADE:** in `mnx-parser.ts`, before
+numbering, keep only the `lineOrder` ids that actually occur on the part's events
+(`seenLineIdsInOrder`), then append observed-but-unlisted ids as today.
+
+**NOT ESTABLISHED:** whether `v3` is a Finale setting or a denigma quirk; whether
+other `.musx` files carry the same empty slot; whether anything else that reads
+verse numbers (Score markup's underlay, Transcription's verse picker) is affected
+by the phantom verse today.
+
+### BOTH HALVES SHIPPED IN `7abb5ae` AND WALKED BY DANN 2026-09-16: DONE
+
+**Walked on the branch alias in an incognito window, T05 dropped fresh.** Seen in his screenshot: the input field filled with « Бог Купидон дремал в тиши лесной… », the poem receipt `77 words` `from score`, `146 / 146 placed`, and Score markup drawing. His word: *"correct."* The desk had listed the song's name among the expectations; the library row was not in the screenshot, so the name rests on his word. **The spec moves out of this file at the close.**
+
+#### The build account
+
+Memos: `../sessions/memo-n143-musx-verse-fill_r1_2026-09-16.md` and
+`../sessions/memo-n143b-name-from-file_r1_2026-09-16.md`, read by the desk in
+full. T05's verse 1 went from 0 words to 73. Half B found the trap real:
+`attachUploadedSource` was fired unawaited, so the poem always named the song
+first; it is now awaited inside a `try`/`catch` (`+page.svelte:3082-3090`).
+**Two things the memos found that the spec did not know:** clitic-fold
+proposals (`clitic-seat.ts:145`) were also silently empty on `.musx`, and T05's
+`v2` line is NOT IPA; the parser reads the literal text `box` on its first
+event. The earlier line in this section calling `v2` IPA is superseded.
+
+### HALF B: THE NAME FROM THE HEADER. CAUSE ALREADY ESTABLISHED
+
+**The converted MNX carries no header at all.** Read 2026-09-15 from T05 converted
+with the project's own denigma WASM: the document's top-level keys are `global`,
+`layouts`, `mnx`, `parts` and `scores`, and the `scores` block holds only
+`"name":"Score"` with layout ids. **There is no title and no composer for Ilya to
+read.**
+
+**So this half is a LIMIT OF THE CONVERSION, not a defect in Ilya**, and it
+explains the empty Piece fields and `Untitled, 2026-09-15`.
+
+**It still wants a decision from Dann, and it is not the same decision as half A.**
+A `.musx` singer will never get a song named from its score while denigma emits no
+header. **Whether Ilya says anything about that, or silently leaves the fields to
+the singer, is his.** CONTRACT §6 forbids a mark that says Ilya is unsure, which
+bears on any notice.
+
+### HALF B's ANSWER, RULED BY DANN 2026-09-15: A DEFAULT NAMING CONVENTION
+
+**His words:** *"If there is no header for Ilya to name the song from, and this
+somehow affects its ability to work properly, then we should develop a default
+assigned naming convention."*
+
+**FIRST, THE CONDITIONAL IN HIS SENTENCE IS ANSWERED: IT DOES NOT AFFECT
+FUNCTION.** Half A's gate at `+page.svelte:3120-3123` reads the origin, the
+lyrics, and whether the input field is empty. **It never reads the name or the
+header.** The two halves are independent, and fixing the name will not fill the
+input field.
+
+**SECOND, A DEFAULT ALREADY EXISTS.** Dann's own library shows
+`Untitled, 2026-09-15`, `Untitled, 2026-08-25` and `Untitled, 2026-08-25 (2)`, so
+Ilya already falls back to a dated name with a disambiguator. **What is missing is
+a BETTER fallback, not a first one.**
+
+**THE CANDIDATE IS THE FILE'S OWN NAME, and it is usually richer than a score
+header.** The file Dann dropped is
+`Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`: composer,
+poet, catalogue position and title, all present.
+
+**DESK DEFAULT on the shape, and Dann can overrule it:**
+
+1. **Where the score carries a header, that wins.** Unchanged, and it is N.134's
+   ruled behaviour.
+2. **Where it does not, the song takes the FILE'S BASE NAME**, extension stripped.
+3. **Where there is no usable file name either**, the existing `Untitled, <date>`
+   fallback stands.
+
+**DO NOT PARSE THE FILE NAME INTO THE PIECE FIELDS.** Splitting
+`Kabalevsky - Shakespeare - T05 …` into composer, poet and title is inference, it
+will be wrong on other people's filenames, and CONTRACT §1.21 forbids inferring
+without being asked. **The whole base name becomes the song's NAME; the Piece
+fields stay empty for the singer.**
+
+**IT OBEYS THE EXISTING NAMING RULE WITHOUT AMENDING IT.** N.67 step 4b, 2026-08-18:
+the name is written the first time there is material to build one from, and is the
+singer's from then on. **A file name is material.** The same memo records that a
+song named from its poem never picks up a better name later, which is deliberate
+and is not changed here.
+
+### HALF B's RANKING, RULED BY DANN 2026-09-16
+
+**His words:** *"When a dropped score has no title or composer inside it, the song
+should be called by the file name, then the poem's opening words in my library. T05
+becomes "Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell". It's my
+understanding these files can be renamed."*
+
+**The order `proposeName` follows** (`apps/web/src/lib/library/songs.ts:36-43` today:
+header, then the poem's first four words): **the score header, then the dropped
+file's base name, then the poem's opening words**, then the existing dated
+placeholder. The collision numeral (`uniqueName`) applies as today.
+
+**The rename he refers to exists:** `renameSong` at `songs.ts:200`, called from
+`+page.svelte:3508`. A name is the singer's to change.
+
+**DESK DEFAULT, 2026-09-16:** the file name applies to every dropped score,
+including a PDF or a photograph (N.59), so a camera file can name a song
+`IMG_4411`. Dann can narrow it.
+
+**The trap for the build, NOT ESTABLISHED:** a name is written once
+(`nameIfUnnamed`, `+page.svelte:3722`). `handleInput` calls it at `:2736`, and
+N.134's fill arrives through `handleInput`. If the fill runs before
+`doc.attachSource` (`:3673`), the poem names the song first and the file name
+never gets a turn. Brief: `../sessions/brief-n143b-name-from-file_r1_2026-09-16.md`.
+
+### WHY IT MATTERS MORE THAN ITS SIZE
+
+**`.musx` is one of the four formats Ilya accepts and it is the one Dann's own
+Finale work arrives in.** A feature that works on MusicXML and not on Finale files
+fails for the singer who has just paid for Finale.
+
+### NOT ESTABLISHED
+
+- Which of the three conditions fails.
+- Whether the same failure affects `.mnx` arriving directly, which shares the
+  parser but not the conversion.
+- Whether `collectScoreWords` is verse-aware in the way the MNX parser numbers
+  lines.
+
+### From OPEN.md
+
+## N.144. START PLACEMENT OVER IGNORES THE SCORE'S OWN LAYOUT, AND CANNOT BE UNDONE. Numbered 2026-09-16. THE NUMBER IS A DESK DEFAULT.
+
+**Seen by Dann on the N.142 walk, `c868540`, T05, 2026-09-16.** After **Start placement over**, m. 22's slurred pair (a melisma on « ёк » in the file) took « сту » on its second note, every later syllable sat one note early (« О » and « гонь » before the four-bar rest), and a horizontal line ran under « сту-дё ». In the loupe the IPA read `ˈjokstu` with no gap between the two syllables. His response: *":("*. Asked how hard a fix is: *"surely it can be coded, no? The file contains syllable assignments."*
+
+**Cause, read 2026-09-16:** `handleStartPlacementOver` (`+page.svelte`) seats with `firstPass` (`pairings.ts:276-288`), slot i on target i. The arrival path seats the same poem with `seatFilledPoem` (`+page.svelte`, N.134), which calls `seatScoreWords` (`score-seat.ts:78-121`): each word's slots on the file's own vowel cells, so melismas hold. **And the press never calls `pushUndo`** (`memo-loupe-french-build_r1_2026-09-16.md`), so it cannot be taken back.
+
+**The fix, DESK DEFAULT:** where the score carries words, Start placement over empties the placements and calls `seatFilledPoem`; a wordless score keeps `firstPass`. The press pushes an undo entry that reads `loupe.undo.startOver` (ruled, built, unwired). **Cost:** a word the singer edited so it no longer matches the score is left unplaced, as on arrival.
+
+**Constraint from the tree:** the long comment in `handleStartPlacementOver` records the N.112 fix of 2026-09-07, which made the rebuild read the POEM, not the score's words, because the engraving had lost a final « я ». `seatScoreWords` seats the poem's slots onto the score's cells, so the poem still owns the text; the brief must show that case still ends with every syllable placed.
+
+**BUILT 2026-09-16, WRITTEN NOT DONE.** Memo `../sessions/memo-n144-start-over-keeps-the-score_r1_2026-09-16.md`, read by the desk in full. `handleStartPlacementOver` pushes `loupe.undo.startOver`, then, when the input field still holds the score's words verbatim (`doc.inputText === scoreText`), empties the placements and calls `seatFilledPoem`; otherwise the old `firstPass` path runs. **So an edited poem still counts notes and can still break a melisma**; Code's choice, reversible. **Code overwrote the desk's brief** with its own 192-line version at the same path, and skipped the desk brief's T05 mismatch count and both rendering checks below; the walk carries them. `ENVIRONMENT.md`, section `CODE REWROTE THE BRIEF`.
+
+**WALKED BY DANN 2026-09-16 on `ceeb214`, incognito, T05, French mode: the layout half is DONE.** His words: *"Bingo! Instant fix :)"*. Seen in his loupe shot of m. 22 after the press: « ёк » under the first eighth, an extender line under the B and the G, « сту » under the last eighth; IPA `ˈjok` and `stu` apart. **The stray line under « сту-дё » and the `ˈjokstu` collision are both gone from the picture.** The desk's stated expectation had put « сту » on the G; the page instead matches the arrival layout, which is what the fix restores. The loupe header read « système 3 sur 11 », where the broken state read « sur 10 ». **Undo walked the same night: DONE.** **ANNULER** restored the broken layout and **REFAIRE** appeared; his words: *"yes, just as you say"*. The clause is the button's accessible name, not visible text (`bandState.ts:161-178`, ruled 2026-09-10). **The item is DONE; its spec leaves this file at the close.**
+
+**NOT ESTABLISHED:** what draws the line under « сту-дё » (the desk has not read that drawing code), and whether the `ˈjokstu` collision survives once the syllables are back on their own notes. Both are checked on this item's walk.
+
+---
+
+### From OPEN.md
+
+## N.145. A DROPPED SCORE ARRIVES AT ONCE. Numbered 2026-09-16. THE NUMBER IS A DESK DEFAULT.
+
+**Asked by Dann on the N.143 walk, 2026-09-16:** *"when we drop text in the input field, it is instantaneously processed into a transcription. Should dropping a file also be instantaneous?"* And on the N.142 walk, finding the pause still there: *"I guess this wasn't the fix that made dropping a score file instantaneous :("*.
+
+**RULED BY DANN 2026-09-16: option 2, "Instant for everything, with the photo report shown after the score arrives."** His answer: *"2"*. Put to him beside option 1 (instant for score files, pause kept for a photo or PDF read, the desk's recommendation) and option 3 (keep the pause). **Recorded as a default with its condition, per CONTRACT §1.19:** the pause is gone, and a read's caveats are still shown, after arrival rather than before it.
+
+**What exists, read 2026-09-16:** `ScoreUploader.svelte` holds a parsed score in `ui.kind === 'done'` (`:410`) and shows the format line, the conversion banner (`:804-816`), the read report (`:817` on), and **Try another file** / **Continue to analysis** (`:878-879`). `accept()` (`:556-560`) hands the score to the page. The restore path already accepts at once (`:596-600`). `hasWaitingScore` and `acceptWaiting` (`:546-554`) serve the **Transcribe and fit** pill.
+
+**What stays:** the `asking` and `askKind` states (a picture's clef and key questions, asked before a read) are input, not a pause, and stay. The replace dialog for a second score on a song that has one stays.
+
+**Cost:** **Transcribe and fit** loses its accept-a-waiting-score act, since no score will wait.
+
+**EXTENDED BY DANN 2026-09-16: REMOVE TRANSCRIBE AND FIT, AND CLOSE THE GAP.** His words: *"yes, remove the button, and close the gap at the same time."* The gap, read by the desk 2026-09-16 and NOT walked: a poem that arrives AFTER a wordless score is transcribed but never placed, because `reseatAcross` returns early on an unchanged diff (`reseat.ts:154`) and a first poem diffs as unchanged (`emptyDiff`, `text-diff.ts:52-54`; `+page.svelte`, `transcribeText`). **The pill's fate, owed since 2026-09-14, is settled by this: it goes.** Principle recorded in `PRODUCT.md`, "Once there is data to process, Ilya processes it". Brief r2: `../sessions/brief-n145-instant-score-arrival_r2_2026-09-16.md`. A wrong drop is undone with the receipt's **Clear** or **Replace**.
+
+---
+
+

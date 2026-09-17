@@ -49,6 +49,10 @@ waiting, on purpose.
    one thing closes and the next is being chosen, or when Dann asks to work
    through the queue. Created 2026-09-15.
 
+7. **`SCHEDULE.md`** — the week-by-week road to the release on 2026-10-30.
+   Open it when choosing what to do next, and tick it at every close. Created
+   2026-09-16.
+
 `INBOX.md` is append-only and **you do not open it unless Dann asks.**
 
 `../sessions/LOG.md` is the archive behind `STATE.md`, split out 2026-09-01.
