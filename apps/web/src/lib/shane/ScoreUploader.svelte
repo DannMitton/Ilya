@@ -36,16 +36,24 @@
 
 	THE INTAKE HANDS FILES IN THROUGH `take()`, exported as an instance method
 	and called from `+page.svelte` on the `bind:this`. It is `handleFile` with
-	one thing in front of it: the PDF question below.
+	one thing in front of it: the staff check below.
 
-	THE ONE KIND THE BYTES CANNOT SETTLE IS A PDF, so it is the one kind that
-	asks. Ruled by the build brief: "A PDF asks once, in place, which it is. Do
-	not guess." Every other format the sniff meets answers for itself: MusicXML,
-	MNX, the three ZIP containers and a photograph are all the SCORE, and text
-	typed or pasted is the POEM. A PDF is honestly either, so `askKind` puts the
-	question where the file landed and takes the singer's answer. The score
-	answer is the path this component always took. The poem answer is
-	`extractPdfText`, and it hands the words up through `onpoem`.
+	N.146, 2026-09-16: NOTHING ASKS WHICH KIND A PDF OR A PICTURE IS ANY MORE.
+	Dann: "can we make it so that Ilya autodetects content? I want to remove
+	this cognitive burden from the user and lay it on Ilya instead" and "Why
+	doesn't Ilya just process whatever it can without advertising that it is
+	changing tactics mid-process?" `take()` now runs `hasStaves`
+	(`engine/staff-detect.ts`) on the page before anything else: staves found,
+	it tries the score, exactly the path this component always took; the score
+	read that follows yields no sung line, or no staves were found at all, it
+	tries the poem instead, silently, the same way `handleScoreAnswer` and
+	`readPdfAsPoem` always worked, just reached without a press. `askKind` and
+	the question it asked (`intake.pdf.title` / `intake.picture.title`) are
+	gone; `decidePoemOrScore` (`ingestion/poem-or-score.ts`) is the pure
+	branch table behind the whole decision, including what happens where
+	NEITHER reading answers. The `asking` state below (a picture's clef and
+	key questions) is untouched: it is a different question, about a
+	different thing, and Dann's ruling did not touch it.
 -->
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
@@ -54,6 +62,7 @@
 	import { WebmscoreMsczConverter } from './engine/mscz-converter';
 	import { WorkerPageReader, type ClefKeyProbe } from './engine/page-reader';
 	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from './engine/page-image';
+	import { hasStaves } from './engine/staff-detect';
 	import {
 		ingestScoreFile,
 		fidelityBanner,
@@ -65,6 +74,7 @@
 	} from './ingestion/ingest';
 	import { detectScoreFormat, SNIFF_LENGTH } from './ingestion/format-detection';
 	import { prefillFrom } from './ingestion/clef-key-prompt';
+	import { decidePoemOrScore } from './ingestion/poem-or-score';
 	import type { EngravingAnswers } from './ingestion/recognized-to-musicxml';
 	import type { ReadReport } from './ingestion/recognized';
 	import type { PageProvenance } from '$lib/library/types';
@@ -136,14 +146,6 @@
 		 *  are what the two controls now show. False is the old prompt, word for
 		 *  word. */
 		| { kind: 'asking'; file: File; detected: boolean }
-		/** N.108 increment 2: a PDF waits here for the one answer its bytes
-		 *  cannot give. See this file's header.
-		 *
-		 *  N.108 increment 4: A PICTURE WAITS HERE TOO, and `picture` says
-		 *  which it is. The question is the same and the two answers are the
-		 *  same words; only the route behind each answer differs, because a
-		 *  PDF's words are extracted and a picture's are recognised. */
-		| { kind: 'askKind'; file: File; picture: boolean }
 		| { kind: 'busy'; label: string }
 		/** N.145, 2026-09-16: RENAMED FROM `done`. The parse already succeeded
 		 *  and `oningested` has already been called (`announceArrival`, called
@@ -229,46 +231,115 @@
 	 * THE ONE WAY IN, N.108 increment 2. `RootPanel`'s field takes the drop and
 	 * the pick; `+page.svelte` calls this on the instance.
 	 *
-	 * A PDF STOPS HERE AND ASKS, and SINCE N.108 INCREMENT 4 SO DOES A PICTURE.
-	 * Ruled by Dann 2026-09-03 when he consolidated the three ways in: the
-	 * camera icon was how a singer used to say "this picture is text", and with
-	 * one picker there is no button left to say it, so the picture asks. Every
-	 * other file goes straight to `handleFile`, unchanged, because the sniff
-	 * answers for it. The question is asked ONCE per file: answering it calls
-	 * `handleFile`, `readPdfAsPoem` or `readPictureAsPoem` directly, and none of
-	 * them comes back through here.
+	 * N.146: A PDF OR A PICTURE NO LONGER ASKS. Both are rasterized to their
+	 * first page's ink here (the same ink `probeFile` and the eventual read
+	 * would rasterize again; named, not cached, per `rasterizeFirstPage`'s own
+	 * comment below) and `hasStaves` (`engine/staff-detect.ts`) answers "does
+	 * this page show staves" from it. Staves found, this hands off to the
+	 * score route this component always took (`handleFile`, which still asks
+	 * the picture's own clef-and-key question); no staves, straight to the
+	 * poem route (`readPdfAsPoem` / `readAsPoemByOcr`). Neither route shows a
+	 * question or a label naming which one Ilya is trying.
 	 *
-	 * A DROPPED PICTURE ASKS TOO, which reverses the increment 2 brief's "a
-	 * photograph goes to the reader". That rule was written while the camera
-	 * icon existed to mean the other thing. Recorded in
-	 * `memo-n108-finishings_r1_2026-09-03.md` §5 as a departure.
+	 * `pendingPoemFallback` carries what the poem route would need -- which
+	 * kind, and the already-rasterized ink -- to `readAsked`, below, for the
+	 * one case this function's own return cannot reach: the score attempt
+	 * only really happens after the singer answers the clef-and-key question,
+	 * which is a later press, not this call.
 	 *
-	 * THE SNIFF IS `readableKind`, WHICH IS `detectScoreFormat`, THE SAME ONE
-	 * DISPATCH USES, so this cannot disagree with what `ingestScoreFile` decides
-	 * a moment later. A file whose head cannot be read at all is neither, so it
-	 * falls through to the score route and earns that route's own named refusal.
+	 * THE SNIFF IS STILL `readableKind`, WHICH IS `detectScoreFormat`, THE
+	 * SAME ONE DISPATCH USES. A file whose head cannot be read at all is
+	 * neither, so it falls through to the score route and earns that route's
+	 * own named refusal, exactly as before N.146.
 	 */
 	export async function take(file: File): Promise<void> {
 		const kind = await readableKind(file);
-		if (kind !== null) {
-			bannerDismissed = false;
-			ui = { kind: 'askKind', file, picture: kind === 'image' };
+		if (kind === null) {
+			await handleFile(file);
+			announceArrival();
 			return;
 		}
-		await handleFile(file);
-		announceArrival();
+		bannerDismissed = false;
+		ui = { kind: 'busy', label: T('upload.status.reading') };
+		const rasterized = await rasterizeFirstPage(file, kind);
+		if ('errorMessage' in rasterized) {
+			ui = { kind: 'error', message: rasterized.errorMessage };
+			return;
+		}
+		const { ink } = rasterized;
+		if (await hasStaves(ink)) {
+			pendingPoemFallback = { kind, ink };
+			await handleFile(file);
+			return;
+		}
+		pendingPoemFallback = null;
+		if (kind === 'pdf') {
+			await readPdfAsPoem(file, ink, false, null);
+		} else {
+			await readAsPoemByOcr(file, null, false, null);
+		}
 	}
 
 	/**
-	 * The singer answered "the poem".
+	 * N.146. What the poem route needs where the score route was tried first
+	 * and fell through: which kind the file was, and the ink `take()` already
+	 * rasterized for the staff check, so the OCR fallback below never
+	 * rasterizes a PDF's first page twice. Set by `take()`, read by
+	 * `readAsked()`, cleared by `reset()`.
+	 */
+	let pendingPoemFallback: { kind: 'image' | 'pdf'; ink: ArrayBuffer } | null = null;
+
+	/**
+	 * The first page's ink, for the staff check. The SAME rasterizers
+	 * `probeFile` and `readPages` already use; the failure classes each
+	 * throws map to the same copy `classify()` gives an `IngestOutcome`
+	 * carrying `PDF_UNREADABLE` / `PDF_JBIG2_UNDECODED` / `IMAGE_UNDECODABLE`,
+	 * because a page that cannot be rasterized at all is that same failure
+	 * whether it is met here or at the read.
+	 */
+	async function rasterizeFirstPage(
+		file: File,
+		kind: 'image' | 'pdf'
+	): Promise<{ ink: ArrayBuffer } | { errorMessage: string }> {
+		if (kind === 'image') {
+			try {
+				return { ink: await toGreyscalePng(file) };
+			} catch (err) {
+				console.error('[ScoreUploader] the picture could not be rasterized:', err);
+				return { errorMessage: T('upload.err.imageUndecodable') };
+			}
+		}
+		const { rasterizePdf, PdfUnreadableError, PdfJbig2UndecodedError } = await import('./engine/page-pdf');
+		try {
+			const pages = await rasterizePdf(file, 1);
+			if (pages.length === 0) throw new PdfUnreadableError('this PDF has no pages');
+			return { ink: pages[0] };
+		} catch (err) {
+			if (err instanceof PdfJbig2UndecodedError) return { errorMessage: T('upload.err.pdfJbig2') };
+			if (err instanceof PdfUnreadableError) return { errorMessage: T('upload.err.pdfUnreadable') };
+			console.error('[ScoreUploader] the PDF could not be rasterized:', err);
+			return { errorMessage: T('upload.err.pdfUnreadable') };
+		}
+	}
+
+	/**
+	 * The poem route on a PDF, silent since N.146: tried where the staff
+	 * check found nothing, or where it found staves but the score read that
+	 * followed yielded no sung line (`stavesFound` and `sungLineFound` carry
+	 * that history through to `decidePoemOrScore`, by way of
+	 * `readAsPoemByOcr`, once OCR has had its own attempt).
 	 *
 	 * IT IS AN EXTRACTION AND NOT AN OCR, so a scanned PDF holds no text and
-	 * comes back empty. That is a mis-answer rather than a fault, and it is
-	 * reported as one: the singer is told the PDF carries no text and is left
-	 * where they were, with the file still nameable and the score answer still
-	 * one press away.
+	 * comes back empty. That is not a fault: it falls through to
+	 * `readAsPoemByOcr`, which reads the SAME ink `take()` already
+	 * rasterized, the existing Russian OCR path.
 	 */
-	async function readPdfAsPoem(file: File): Promise<void> {
+	async function readPdfAsPoem(
+		file: File,
+		ink: ArrayBuffer,
+		stavesFound: boolean,
+		sungLineFound: boolean | null
+	): Promise<void> {
 		ui = { kind: 'busy', label: T('intake.pdf.reading') };
 		let text: string;
 		try {
@@ -279,52 +350,50 @@
 			ui = { kind: 'error', message: T('upload.err.pdfUnreadable') };
 			return;
 		}
-		if (text === '') {
-			ui = { kind: 'error', message: T('intake.pdf.noText') };
+		if (text.trim() !== '') {
+			onpoem(text);
+			reset();
 			return;
 		}
-		onpoem(text);
-		reset();
+		const stem = file.name.replace(/\.[^.]+$/, '') || 'page';
+		await readAsPoemByOcr(new File([ink], `${stem}.png`, { type: 'image/png' }), text, stavesFound, sungLineFound);
 	}
 
 	/**
-	 * The singer answered "the poem" on a PICTURE. N.108 increment 4.
+	 * N.146. The poem route's OCR half, and the FINAL word on whether this
+	 * upload is a poem at all: once OCR has had its attempt, every outcome
+	 * this drop could have reached is on hand, and `decidePoemOrScore`
+	 * (`ingestion/poem-or-score.ts`) says what they add up to.
 	 *
-	 * THIS IS THE CAMERA ICON'S OWN CODE, MOVED, NOT REWRITTEN. It was
-	 * `handleOcrFile` in `RootPanel.svelte`: the same dynamic `tesseract.js`
-	 * import, the same `rus` worker, the same `terminate`, and the same two
-	 * failure messages in both languages, which were English and French
-	 * literals there and are English and French literals here. Nothing about
-	 * the recognition changed; only what a singer presses to ask for it.
+	 * Shared by a picture, which never had a text layer to try (`textLayer`
+	 * is `null`), and a PDF whose text layer came back empty (`textLayer` is
+	 * `''`, passed on by `readPdfAsPoem` above) -- a distinction
+	 * `decidePoemOrScore` does not need, since the two decide the same way,
+	 * but kept here so the type stays honest about which file actually had a
+	 * text layer to check.
 	 *
-	 * IT REPORTS THROUGH `ui`, WHICH THE ICON COULD NOT. The icon spun in the
-	 * field's corner and wrote its refusal into a line under the intake; this
-	 * component already owns a wait and a refusal for every other file, and a
-	 * picture's OCR is now one more answer about a file, shown where the rest
-	 * are.
-	 *
-	 * A PICTURE WITH NO WORDS IN IT IS A MIS-ANSWER, not a fault, exactly as an
-	 * imageless PDF is: the singer is told, and the score answer is still one
-	 * press away behind the same question.
+	 * THIS IS THE CAMERA ICON'S OWN CODE, MOVED, NOT REWRITTEN, for the OCR
+	 * step itself. It was `handleOcrFile` in `RootPanel.svelte`: the same
+	 * dynamic `tesseract.js` import, the same `rus` worker, the same
+	 * `terminate`, and the same two failure messages in both languages, which
+	 * were English and French literals there and are English and French
+	 * literals here. N.146 is what decides whether it runs at all and what an
+	 * empty answer from it now means; the recognition itself is unchanged.
 	 */
-	async function readPictureAsPoem(file: File): Promise<void> {
+	async function readAsPoemByOcr(
+		file: File,
+		textLayer: string | null,
+		stavesFound: boolean,
+		sungLineFound: boolean | null
+	): Promise<void> {
 		ui = { kind: 'busy', label: T('intake.picture.reading') };
+		let ocrText = '';
 		try {
 			const { createWorker } = await import('tesseract.js');
 			const worker = await createWorker('rus');
 			const { data: { text } } = await worker.recognize(file);
 			await worker.terminate();
-			if (text.trim() === '') {
-				ui = {
-					kind: 'error',
-					message: language === 'en'
-						? 'No text recognised in image.'
-						: 'Aucun texte reconnu dans l\u2019image.',
-				};
-				return;
-			}
-			onpoem(text.trim());
-			reset();
+			ocrText = text;
 		} catch (err) {
 			console.error('[ScoreUploader] the picture could not be recognised:', err);
 			ui = {
@@ -333,7 +402,23 @@
 					? 'OCR processing failed.'
 					: 'Échec du traitement OCR.',
 			};
+			return;
 		}
+		const result = decidePoemOrScore({ stavesFound, sungLineFound, textLayer, ocrText });
+		if (result.kind === 'poem') {
+			onpoem(result.text);
+			reset();
+			return;
+		}
+		// BOTH READINGS FAILED (N.146): no sung line worth showing (or no
+		// staves at all), no text layer, and OCR found nothing either. The
+		// existing picture refusal, coining nothing new.
+		ui = {
+			kind: 'error',
+			message: language === 'en'
+				? 'No text recognised in image.'
+				: 'Aucun texte reconnu dans l\u2019image.',
+		};
 	}
 
 	/** Is this a page the reader can read? Sniffed by bytes, as dispatch will. */
@@ -355,8 +440,21 @@
 	 * the read, because the reader detects neither clef nor key and E.43
 	 * measured the cost of wrong values at 38% against 73%. A restored page
 	 * does not ask again: its answers came back with it.
+	 *
+	 * `onNoSungLine`, N.146: passed only by `readAsked`, for the one call to
+	 * this function that follows a staves-found decision in `take()`. Where
+	 * the read that follows finds no sung line, this hands off to it
+	 * silently instead of showing the read's own error or `soon` note --
+	 * `readAsked` falls through to the poem route in its place. Never
+	 * touched for a restore or for a direct format (MusicXML, `.musx`, an
+	 * `.mscz`), which have no poem route to fall through to and keep
+	 * showing their own errors exactly as before.
 	 */
-	async function handleFile(file: File, storedAnswers?: EngravingAnswers): Promise<void> {
+	async function handleFile(
+		file: File,
+		storedAnswers?: EngravingAnswers,
+		onNoSungLine?: () => Promise<void>
+	): Promise<void> {
 		bannerDismissed = false;
 		if (!storedAnswers && (await isPicture(file))) {
 			// N.97. The reader looks at the page BEFORE the prompt appears, so the
@@ -412,10 +510,14 @@
 			});
 		} catch (err) {
 			console.error('[ScoreUploader] unexpected ingest failure:', err);
+			if (onNoSungLine) return onNoSungLine();
 			ui = { kind: 'error', message: T('upload.err.parseFailed') };
 			return;
 		}
 
+		if (onNoSungLine && !(outcome.ok && (outcome.ingested.readReport?.notes ?? 0) > 0)) {
+			return onNoSungLine();
+		}
 		if (outcome.ok) {
 			ui = { kind: 'arrived', ingested: outcome.ingested, file };
 			return;
@@ -445,14 +547,6 @@
 		if (ui.kind !== 'arrived') return;
 		const page = pageFor(ui.ingested);
 		oningested(ui.ingested, page ? inkFile(ui.file) : ui.file, 'upload', page ?? undefined);
-	}
-
-	/** The singer answered "the score" on the PDF/picture question. N.145
-	 *  extends this to call `announceArrival` the same way every other
-	 *  upload-origin path into `handleFile` does. */
-	async function handleScoreAnswer(file: File): Promise<void> {
-		await handleFile(file);
-		announceArrival();
 	}
 
 	/**
@@ -553,10 +647,27 @@
 		}
 	}
 
-	/** The singer pressed "Read this page". */
+	/**
+	 * The singer pressed "Read this page". N.146: `ui.kind === 'asking'` is
+	 * now only ever reached by way of `take()`'s staves-found branch, so
+	 * `pendingPoemFallback` is always set here; the fallback closure is
+	 * skipped only as a type-safe default this function's own contract
+	 * cannot otherwise reach, not as a real path anything takes.
+	 */
 	async function readAsked(): Promise<void> {
 		if (ui.kind !== 'asking') return;
-		await handleFile(ui.file, answers);
+		const { file } = ui;
+		const fallback = pendingPoemFallback;
+		await handleFile(
+			file,
+			answers,
+			fallback
+				? () =>
+						fallback.kind === 'pdf'
+							? readPdfAsPoem(file, fallback.ink, true, false)
+							: readAsPoemByOcr(file, null, true, false)
+				: undefined
+		);
 		announceArrival();
 	}
 
@@ -618,6 +729,7 @@
 	function reset(): void {
 		ui = { kind: 'idle' };
 		bannerDismissed = false;
+		pendingPoemFallback = null;
 	}
 
 	/* ── Presentation mappings ──────────────────────────────────────── */
@@ -731,53 +843,12 @@
 	     rulings they carried are recorded at the top of this file.
 
 	     SO THIS COMPONENT RENDERS NOTHING UNTIL A FILE ARRIVES, and everything
-	     it renders after that is an answer about that file: the PDF question,
-	     the clef and key question, the wait, the read report, the refusals. It
+	     it renders after that is an answer about that file: the clef and key
+	     question (N.146: the only question left), the wait, the read report,
+	     the refusals. It
 	     is mounted inside the intake, so every one of them appears where the
 	     file landed. -->
-	{#if ui.kind === 'askKind'}
-		<!-- N.108 increment 2. THE ONE QUESTION THE BYTES CANNOT ANSWER, asked
-		     once, in place, per the build brief §3: "A PDF asks once, in place,
-		     which it is. Do not guess."
-
-		     N.108 increment 4: A PICTURE ASKS IT TOO. Only the title changes,
-		     because only the noun does; `intake.pdf.why`, `intake.pdf.poem` and
-		     `intake.pdf.score` name no format and are reused word for word. The
-		     poem answer runs OCR on a picture and a text extraction on a PDF,
-		     which is the whole of the difference and it is behind the button.
-
-		     TWO ANSWERS AND A WAY OUT, in the shape the clef-and-key prompt
-		     below already uses, because it is the same kind of thing: a file is
-		     held, nothing is mutated, and the singer decides. Cancel is
-		     `upload.ask.cancel`, that prompt's own ratified string.
-
-		     THE FILE NAME IS SHOWN, because a singer who dropped two files in a
-		     row must be able to see which one is being asked about. -->
-		<div class="ask">
-			<p class="ask-title">{ui.picture ? T('intake.picture.title') : T('intake.pdf.title')}</p>
-			<p class="ask-why">{T('intake.pdf.why').replace('%s', ui.file.name)}</p>
-			<div class="result-actions">
-				<button type="button" class="btn-secondary" onclick={reset}>{T('upload.ask.cancel')}</button>
-				<button
-					type="button"
-					class="btn-secondary"
-					onclick={() => {
-						const asked = ui as { file: File; picture: boolean };
-						void (asked.picture ? readPictureAsPoem(asked.file) : readPdfAsPoem(asked.file));
-					}}
-				>
-					{T('intake.pdf.poem')}
-				</button>
-				<button
-					type="button"
-					class="btn-primary"
-					onclick={() => void handleScoreAnswer((ui as { file: File }).file)}
-				>
-					{T('intake.pdf.score')}
-				</button>
-			</div>
-		</div>
-	{:else if ui.kind === 'asking'}
+	{#if ui.kind === 'asking'}
 		<!-- N.59, Ruling A, as amended by N.97. Two things the reader now READS
 		     off the page and asks the singer to confirm. The drawer manipulates,
 		     so the control is lawful here; nothing about this appears on the
