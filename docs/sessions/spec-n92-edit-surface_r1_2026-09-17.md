@@ -54,9 +54,12 @@ The loupe opens on Syllables. The panel swaps without the loupe jumping.
 ### 4.1 Reaching a note or a gap
 
 - Tapping a note in the loupe selects it (N.147).
-- The measure is drawn again as a row of **chips**, one per note, each carrying
-  its length and its syllable, with a **caret** between chips.
-- **A chip selects a note. A caret selects the gap between two notes.** The
+- ~~The measure is drawn again as a row of **chips**, one per note, each carrying
+  its length and its syllable, with a **caret** between chips.~~ **SUPERSEDED
+  2026-09-17 by Dann's ruling, `docs/memory/OPEN.md` section THE CARET clause 3.
+  There is no chip row.** The caret is drawn on the engraved measure itself, across
+  the stave, with an arrowhead at each end pointing inward.
+- **A note on the stave selects a note. A caret selects the gap between two notes.** The
   cursor therefore stands in one of two kinds of place, and that is what
   replaces an insert MODE. On a computer the arrow keys step through the
   measure alternately: note, gap, note, gap.

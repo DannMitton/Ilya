@@ -24,6 +24,7 @@
 	import { afterGround } from '$lib/shane/system-ground';
 	import { RING_REACH, RING_STROKE } from '$lib/shane/selection-ring';
 	import type { Slot, PairingMap } from '$lib/shane/pairings';
+	import type { Cursor } from '$lib/shane/entry';
 	import LoupeSyllables from '$lib/shane/LoupeSyllables.svelte';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import {
@@ -106,6 +107,20 @@
 		 * armed was Dann's own "unacceptable," 2026-09-16.
 		 */
 		onpick: (eventId: string) => void;
+		/**
+		 * N.92, THE CARETS. The held measure's own run of places, head gap to
+		 * tail gap, `+page.svelte`'s `positionsInMeasure` (`entry.ts`). One
+		 * caret is drawn per `gap` this carries; every `entry` it carries
+		 * already has its own hit rectangle and needs nothing from this list.
+		 */
+		positions: readonly Cursor[];
+		/**
+		 * A tap on a CARET: the gap's own `after`, `null` for the head gap.
+		 * `+page.svelte`'s `handleLoupePickGap` is `setCursor({ kind: 'gap',
+		 * after })`, the same write the stepper makes, so nothing downstream of
+		 * the cursor needs to know a tap made it there instead of a key.
+		 */
+		onpickgap: (after: string | null) => void;
 		/** What the loupe must stand clear of on the left: the landscape dock, or
 		    the open drawer on a desk. */
 		dockInset: number;
@@ -145,6 +160,8 @@
 		fill,
 		meter = null,
 		onpick,
+		positions,
+		onpickgap,
 		dockInset,
 		dockHeight,
 		isPhone,
@@ -602,6 +619,8 @@
 		void revision;
 		void selectedEventId;
 		void layoutTick;
+		void positions;
+		void syllablesOpen;
 		const font = notationFont;
 		if (!open || measureIndex === null || ownIds.length === 0) {
 			frame = null;
@@ -1166,6 +1185,127 @@
 			el.setAttribute('data-loupe-hit', id);
 		}
 
+		/* ── N.92, THE CARETS ─────────────────────────────────────────────
+		   RULED BY DANN 2026-09-17 (`docs/memory/OPEN.md`, THE CARET clauses 1
+		   to 3): a vertical mark past the top and bottom staff lines, an
+		   arrowhead at each end pointing inward, one per gap in `positions`,
+		   drawn only while the syllables row is closed.
+
+		   EVERY GAP'S X COMES FROM A HIT RECTANGLE, NEVER A NEW MEASUREMENT.
+		   The renderer tiles each note's hit rectangle edge to edge with its
+		   neighbours' (`staff-renderer.ts`'s `prevXById`/`nextXById`), so the
+		   shared edge between two adjacent rectangles already IS the gap
+		   between them, rest or no rest in between: a rest earns no
+		   rectangle of its own, but the notes on either side of it still meet
+		   at its true boundary. The head and tail gaps take the crop's own
+		   edges, `view.left` and `view.right`, which is where the opening and
+		   closing barline already stand (the ruling above them).
+
+		   A GAP BOTH OF WHOSE NEIGHBOURS ARE RESTS HAS NO RECTANGLE ON
+		   EITHER SIDE, and nothing here invents one: that gap is left out.
+		   NOT ESTABLISHED how often that costs a real score; the memo says
+		   so plainly rather than guessing. */
+		if (!syllablesOpen && positions.length > 1) {
+			const rectOf = (id: string) => container.querySelector(`[data-hit="${CSS.escape(id)}"]`);
+			const marks: { after: string | null; x: number }[] = [];
+			const last = positions.length - 1;
+			for (let i = 0; i < positions.length; i++) {
+				const p = positions[i];
+				if (p.kind !== 'gap') continue;
+				let x: number | null = null;
+				if (i === 0) {
+					x = view.left;
+				} else if (i === last) {
+					x = view.right;
+				} else {
+					const before = positions[i - 1];
+					const after = positions[i + 1];
+					const beforeHit = before.kind === 'entry' ? rectOf(before.id) : null;
+					const afterHit = after.kind === 'entry' ? rectOf(after.id) : null;
+					if (beforeHit) {
+						x = Number(beforeHit.getAttribute('x')) + Number(beforeHit.getAttribute('width'));
+					} else if (afterHit) {
+						x = Number(afterHit.getAttribute('x'));
+					}
+				}
+				if (x !== null && Number.isFinite(x)) marks.push({ after: p.after, x });
+			}
+
+			if (marks.length > 0) {
+				/* THE ARROWHEAD'S OWN LENGTH IS THE EXTENSION PAST THE STAFF, so the
+				   mark's outer end is the arrow's base and its apex just touches the
+				   staff line it terminates on: nothing stands proud of the arrow. One
+				   line gap is a stave space, the unit every other measurement on this
+				   surface already uses. */
+				const staffBottom = staffTop + 4 * lineGap;
+				const armLen = lineGap;
+				const armHalf = lineGap * 0.8;
+				const topOuter = staffTop - armLen;
+				const bottomOuter = staffBottom + armLen;
+				const ink = '#9585a2'; /* --lavender: a correction-surface affordance
+				   reads in the section's own hue, not the engraving's black, on the
+				   same principle `.cell.engaged` already draws by (`CorrectionSurface.
+				   svelte`'s "STATE MARKERS ON MUSIC VERBS"). DESK DEFAULT, reversible:
+				   the memo names it. */
+				/* THE HIT RECTANGLE IS WIDER THAN THE DRAWN MARK, on the shipped
+				   note's own precedent (`staff-renderer.ts`'s "a transparent hit
+				   target... SVG hit-tests painted geometry only"). `nearestTarget`
+				   resolves by CENTRE alone (`loupe.ts`), so this width sets no
+				   boundary between one gap and its neighbour; it only guarantees the
+				   rectangle itself is never smaller than the 44 px floor this surface
+				   draws every control at, converted from CSS pixels through `scale`,
+				   the same px-per-unit every panel here is sized by. */
+				const hitHalf = Math.max(lineGap, 22 / scale);
+				const hitTop = staffTop - 3.5 * lineGap;
+				const hitBottom = staffBottom + 3.5 * lineGap;
+				const SVG_NS = 'http://www.w3.org/2000/svg';
+				const carets = document.createElementNS(SVG_NS, 'g');
+				carets.setAttribute('data-loupe-carets', '');
+				for (const mark of marks) {
+					const x = mark.x;
+					const hit = document.createElementNS(SVG_NS, 'rect');
+					hit.setAttribute('data-loupe-gap', mark.after ?? '');
+					hit.setAttribute('x', String(x - hitHalf));
+					hit.setAttribute('y', String(hitTop));
+					hit.setAttribute('width', String(hitHalf * 2));
+					hit.setAttribute('height', String(hitBottom - hitTop));
+					hit.setAttribute('fill', 'transparent');
+					hit.setAttribute('pointer-events', 'all');
+					hit.setAttribute('cursor', 'pointer');
+					carets.appendChild(hit);
+
+					const stem = document.createElementNS(SVG_NS, 'line');
+					stem.setAttribute('x1', String(x));
+					stem.setAttribute('y1', String(topOuter));
+					stem.setAttribute('x2', String(x));
+					stem.setAttribute('y2', String(bottomOuter));
+					stem.setAttribute('stroke', ink);
+					stem.setAttribute('stroke-width', '1');
+					stem.setAttribute('pointer-events', 'none');
+					carets.appendChild(stem);
+
+					const top = document.createElementNS(SVG_NS, 'path');
+					top.setAttribute(
+						'd',
+						`M ${x - armHalf},${topOuter} L ${x + armHalf},${topOuter} L ${x},${staffTop} Z`,
+					);
+					top.setAttribute('fill', ink);
+					top.setAttribute('pointer-events', 'none');
+					carets.appendChild(top);
+
+					const bottom = document.createElementNS(SVG_NS, 'path');
+					bottom.setAttribute(
+						'd',
+						`M ${x - armHalf},${bottomOuter} L ${x + armHalf},${bottomOuter} L ${x},${staffBottom} Z`,
+					);
+					bottom.setAttribute('fill', ink);
+					bottom.setAttribute('pointer-events', 'none');
+					carets.appendChild(bottom);
+				}
+				clone.appendChild(carets);
+			}
+		}
+
 		/* ONE SAGE RECTANGLE ON THE PAGE, marking the measure the loupe holds.
 		   It is not a control and it is not decoration: it is the page saying
 		   which of its own components is under the knife, and between it and
@@ -1306,18 +1446,37 @@
 	   band, each hold a whole copy of the system's clone, hit rectangles and
 	   all, and a rectangle's client box is not cut by the crop that hides it,
 	   so those copies stand where nothing is drawn. The body is the one crop
-	   that shows the measure's own entries. */
+	   that shows the measure's own entries.
+
+	   N.92, THE CARETS: ONE POOL, NOT TWO. An entry and the gap beside it
+	   compete for the same tap, so resolving them in the same call to
+	   `nearestTarget` is what makes "one tap has one winner" true by
+	   construction rather than by a second comparison this function would
+	   otherwise have to write itself. `data-loupe-hit` and `data-loupe-gap`
+	   share nothing else, so their two kinds of id are told apart with a
+	   prefix, `note:` or `gap:`, that never reaches `onpick` or `onpickgap`:
+	   each still hears exactly the id or the `after` it always heard. */
 	function handleTap(e: MouseEvent): void {
-		const targets = [...(windowEl?.querySelectorAll('.loupe-body [data-loupe-hit]') ?? [])].map((el) => {
+		const notes = [...(windowEl?.querySelectorAll('.loupe-body [data-loupe-hit]') ?? [])].map((el) => {
 			const r = el.getBoundingClientRect();
 			return {
-				id: el.getAttribute('data-loupe-hit') ?? '',
+				id: `note:${el.getAttribute('data-loupe-hit') ?? ''}`,
 				cx: r.left + r.width / 2,
 				cy: r.top + r.height / 2,
 			};
 		});
-		const id = nearestTarget(targets, e.clientX, e.clientY);
-		if (id) onpick(id);
+		const gaps = [...(windowEl?.querySelectorAll('.loupe-body [data-loupe-gap]') ?? [])].map((el) => {
+			const r = el.getBoundingClientRect();
+			return {
+				id: `gap:${el.getAttribute('data-loupe-gap') ?? ''}`,
+				cx: r.left + r.width / 2,
+				cy: r.top + r.height / 2,
+			};
+		});
+		const winner = nearestTarget([...notes, ...gaps], e.clientX, e.clientY);
+		if (!winner) return;
+		if (winner.startsWith('note:')) onpick(winner.slice('note:'.length));
+		else onpickgap(winner.slice('gap:'.length) || null);
 	}
 
 	/* THE LISTENER IS ATTACHED RATHER THAN WRITTEN INTO THE MARKUP, and the

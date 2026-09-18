@@ -59,6 +59,37 @@ export function positions(line: readonly VocalLineEvent[]): Cursor[] {
 }
 
 /**
+ * The places within one measure: its head gap, then each of its own entries
+ * with the gap that follows it, ending on the gap after its last entry.
+ *
+ * A SLICE OF `positions(line)`, NOT A SECOND WAY TO NAME A GAP (N.92, the
+ * carets, `brief-n92-carets_r1_2026-09-17.md` §3). A measure's entries sit
+ * together in `line`, so its own run of places is a contiguous slice of the
+ * whole line's places: index `2k+1` is the entry at `line[k]`, and the gaps
+ * on either side of it are `2k` and `2k+2`. The boundary gaps this returns
+ * are the same objects a NEIGHBOURING measure's own call would return for its
+ * own head or tail: one physical barline, read from whichever measure holds
+ * the loupe.
+ *
+ * EMPTY FOR A MEASURE WITH NO ENTRY, which a tacet run can be: there is
+ * nothing here for the bar to stand on, and nothing to slice.
+ */
+export function positionsInMeasure(
+	line: readonly VocalLineEvent[],
+	measureIndex: number,
+): Cursor[] {
+	let first = -1;
+	let last = -1;
+	for (let i = 0; i < line.length; i++) {
+		if (line[i].measureIndex !== measureIndex) continue;
+		if (first < 0) first = i;
+		last = i;
+	}
+	if (first < 0) return [];
+	return positions(line).slice(2 * first, 2 * last + 3);
+}
+
+/**
  * The place `delta` along from this one, or null at either end.
  *
  * Stopping rather than wrapping, on `neighbourId`'s own precedent: a wrap

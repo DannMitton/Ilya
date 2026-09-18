@@ -169,6 +169,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		isEnteredId,
 		measureFill,
 		middleLine,
+		positionsInMeasure,
 		previousEntry,
 		stepCursor,
 		toggleRest,
@@ -709,6 +710,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 */
 	function handleLoupePick(eventId: string): void {
 		setCursor({ kind: 'entry', id: eventId });
+	}
+
+	/**
+	 * A tap on a CARET inside the loupe (N.92, the carets): it stands the bar
+	 * in that gap, the same place the stepper would leave it. `setCursor` is
+	 * the one function that writes `selectedEventId` and `gapAfter` together,
+	 * so the readout, the armed duration cells and the PITCH station's
+	 * greying all agree with a caret tap exactly as they already agree with
+	 * the stepper.
+	 */
+	function handleLoupePickGap(after: string | null): void {
+		setCursor({ kind: 'gap', after });
 	}
 
 	/* ── N.92, the correction minimum ────────────────────────────────────
@@ -1519,6 +1532,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (!first) return [];
 		return later.filter((ev) => ev.measureIndex === first.measureIndex).map((ev) => ev.id);
 	});
+
+	/* N.92, THE CARETS. The held measure's own run of places, head gap to tail
+	   gap, off `correctedLine` rather than the read: a hand-entered note is a
+	   place the bar can stand exactly as a read one is. `positionsInMeasure`
+	   is `positions` itself, sliced; the loupe draws one caret per `gap` this
+	   carries and reads every `entry` it carries as already spoken for by its
+	   own hit rectangle. */
+	const heldMeasurePositions = $derived(
+		heldMeasureIndex === null ? [] : positionsInMeasure(correctedLine, heldMeasureIndex),
+	);
 
 	/* THE READOUT, `F3 · quarter · на`. Every part of it is a string the app
 	   already ships, and a part that has no value is absent rather than
@@ -4968,6 +4991,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		fill={heldFill}
 		meter={heldMeter}
 		onpick={handleLoupePick}
+		positions={heldMeasurePositions}
+		onpickgap={handleLoupePickGap}
 		dockInset={loupeInset}
 		dockHeight={loupeFoot}
 		{isPhone}

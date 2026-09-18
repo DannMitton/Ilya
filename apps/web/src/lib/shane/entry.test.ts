@@ -30,6 +30,7 @@ import {
 	middleLine,
 	nextEnteredId,
 	positions,
+	positionsInMeasure,
 	previousEntry,
 	sameCursor,
 	stepCount,
@@ -95,6 +96,47 @@ describe('where the bar can stand', () => {
 		expect(previousEntry(LINE, { kind: 'entry', id: 'b' })?.id).toBe('a');
 		expect(previousEntry(LINE, { kind: 'gap', after: null })).toBeNull();
 		expect(previousEntry(LINE, { kind: 'entry', id: 'a' })).toBeNull();
+	});
+});
+
+describe('a measure\'s own run of places (N.92, the carets)', () => {
+	const twoMeasures = [
+		ev('a', P('F', 3)),
+		ev('b', P('G', 3)),
+		{ ...ev('c', P('A', 3)), measureIndex: 1 },
+		{ ...ev('d', P('B', 3)), measureIndex: 1 },
+	];
+
+	it('is the whole line for a line that is one measure', () => {
+		expect(positionsInMeasure(LINE, 0)).toEqual(positions(LINE));
+	});
+
+	it('slices one measure\'s own head gap, entries and tail gap', () => {
+		expect(positionsInMeasure(twoMeasures, 0)).toEqual([
+			{ kind: 'gap', after: null },
+			{ kind: 'entry', id: 'a' },
+			{ kind: 'gap', after: 'a' },
+			{ kind: 'entry', id: 'b' },
+			{ kind: 'gap', after: 'b' },
+		]);
+		expect(positionsInMeasure(twoMeasures, 1)).toEqual([
+			{ kind: 'gap', after: 'b' },
+			{ kind: 'entry', id: 'c' },
+			{ kind: 'gap', after: 'c' },
+			{ kind: 'entry', id: 'd' },
+			{ kind: 'gap', after: 'd' },
+		]);
+	});
+
+	it('names the barline between two measures the same gap on both sides', () => {
+		const tail = positionsInMeasure(twoMeasures, 0).at(-1);
+		const head = positionsInMeasure(twoMeasures, 1)[0];
+		expect(tail).toEqual({ kind: 'gap', after: 'b' });
+		expect(tail).toEqual(head);
+	});
+
+	it('is empty for a measure with no entry', () => {
+		expect(positionsInMeasure(twoMeasures, 9)).toEqual([]);
 	});
 });
 

@@ -1319,4 +1319,21 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
 ### THE CARET, RULED BY DANN 2026-09-17 (the N.92 insert-reach slice, drawn in `n92-carets-on-the-measure.html`)
 
 1. **The caret is terminated, not a bare line.** His words: *"it terminates the lines you've drawn with arrowheads pointing inward. This symbol, exceeding the stave limits as you have drawn it, with these termini, are much less likely to look like erratic barlines and more likely to look to the user like insertion opportunities."* So: a vertical mark that runs past the top and bottom staff lines, with an arrowhead at each end pointing inward toward the staff. The desk's drawing had one arrowhead and is superseded. **Whether Finale's own insertion bar carries arrowheads is NOT ESTABLISHED**; the research memo records only "a thin vertical cursor" and a pitch crossbar. The ruling stands on its own reasoning, not on Finale's.
+
+3. **THE CHIP ROW RETIRES. Ruled by Dann 2026-09-17 late, on the desk's
+   recommendation.** His words, when the desk put the two places to him: *"I think
+   we decided aghainst the chips?"* **The desk searched before answering and found
+   no earlier decision:** `../sessions/spec-n92-edit-surface_r1_2026-09-17.md:57-59`
+   still carried the chip row, `../sessions/report-n151-note-entry_r1_2026-09-17.md:226`
+   still recommended building it, and nothing in `docs/memory/` or `docs/sessions/`
+   recorded a ruling against it. **So this clause is the ruling, not a record of one.**
+   - The caret is drawn on the engraved measure in the loupe, across the stave, per
+     clause 1. The measure is never drawn a second time as a row of chips.
+   - A note is selected on the notation, which is what the tree already does
+     (`../sessions/memo-n92-edit-audit_r1_2026-09-17.md:23`, citing
+     `Loupe.svelte:1310-1321`, not re-read this session).
+   - **The condition that would justify departing from it:** if a gap's caret cannot
+     be made a reliable tap target on the engraved measure at phone width, the chip
+     row returns as the fallback, and Dann hears about it before it is built.
+
 2. **Carets are drawn only while Corrections is the active panel.** With the loupe alone, or with Syllables showing, no insertion points are drawn. His reasoning, and the desk agrees: a mark that appears when it cannot be used is noise, and the loupe's default state is reading, not editing.
