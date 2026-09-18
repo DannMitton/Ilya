@@ -1249,28 +1249,25 @@
 				if (x !== null && Number.isFinite(x)) marks.push({ after: p.after, x, beforeHit, afterHit });
 			}
 
-			/* THE CLEARANCE, CLAUSE 4's SECOND HALF. *"ensure that the carets do
-			   not align with the sides of the squircle: let them be fully
-			   expressed without that collision."* The collision is structural: a
-			   caret's own x, above, is a note's hit-rectangle edge, and the
-			   squircle drawn on that same note can reach the same edge.
+			/* THE CLEARANCE, CLAUSE 4's SECOND HALF, AMENDED BY CLAUSE 5's FIRST
+			   HALF. *"ensure that the carets do not align with the sides of the
+			   squircle: let them be fully expressed without that collision."*
+			   The collision is structural: a caret's own x, above, is a note's
+			   hit-rectangle edge, and the squircle drawn on that same note can
+			   reach the same edge, or past it: N.141 widens the squircle with an
+			   accidental and the IPA row, so it is routinely wider than the
+			   note's own hit rectangle.
+
+			   THE RULE IS THE SPAN, NOT JUST THE STROKES' OWN MARGINS (clause 5):
+			   `bandLeft`/`bandRight` already reach 1.2 line-gaps PAST each stroke,
+			   so they bound the squircle's whole span between them; a caret
+			   anywhere from one band edge to the other, including dead centre, is
+			   caught by the same `continue` guard below and pushed.
 
 			   OUTWARD, NEVER INTO THE TAKEN NOTE. A caret nearer the squircle's
 			   left than its centre moves further left; nearer or past centre, it
 			   moves right. Either way it moves away from the squircle, never
-			   toward it.
-
-			   THE CLAMP HOLDS IT SHORT OF THE NEXT NOTE, RATHER THAN ONTO IT: a
-			   push is capped so the CARET'S OWN HIT RECTANGLE (its half-width is
-			   `hitHalf`, below) never crosses the neighbouring note's
-			   hit-rectangle CENTRE on that side. A caret can still advance into
-			   that note's territory, which is normal (every caret already sits
-			   on some note's hit rectangle's edge), but its own rectangle stops
-			   short of straddling the neighbour's centre, which is what keeps
-			   the two rectangles' CENTRES apart by a full `hitHalf` rather than
-			   letting them coincide (§ below). Only a note with a hit rectangle
-			   can clamp; a rest cannot, on `positionsInMeasure`'s own reasoning
-			   above: it has none to read. */
+			   toward it. */
 			/* THE CARET'S OWN HIT-RECTANGLE HALF-WIDTH, needed here too: the clamp
 			   below stops a caret's rectangle short of the neighbouring note's
 			   rectangle's own CENTRE, not merely short of its edge, or the two
@@ -1291,6 +1288,20 @@
 				const bandLeft = ringX - ringStroke / 2 - CLEARANCE;
 				const bandRight = ringX + ringW + ringStroke / 2 + CLEARANCE;
 				const centreSquircle = ringX + ringW / 2;
+				/* THE STROKE ITSELF IS THE FLOOR, CLAUSE 5's OWN BUG: `7e28272`
+				   let the neighbour clamp win outright, and on m. 6 of the
+				   fixture a squircle sat close enough to its own next note that
+				   `hitHalf` short of that note's centre was STILL inside the
+				   squircle's own stroke. MEASURED there: the clamp capped a
+				   push at 580.495, short of the stroke's own outer edge at
+				   583.33. Clause 4's clamp guards against a caret colliding
+				   with the WRONG note; it was never meant to permit one
+				   standing inside the RIGHT one, which clause 5, DoD 1, rules
+				   absolute. So the stroke edge is applied AFTER the neighbour
+				   clamp, as a floor (left) or ceiling (right): the neighbour
+				   clamp still wins whenever the two agree, and only gives way,
+				   by as little as the conflict demands, where they cannot both
+				   be satisfied. */
 				for (const mark of marks) {
 					if (mark.x <= bandLeft || mark.x >= bandRight) continue;
 					if (mark.x <= centreSquircle) {
@@ -1300,7 +1311,7 @@
 							const bw = Number(mark.beforeHit.getAttribute('width'));
 							pushed = Math.max(pushed, bx + bw / 2 + hitHalf);
 						}
-						mark.x = pushed;
+						mark.x = Math.min(pushed, ringX - ringStroke / 2);
 					} else {
 						let pushed = bandRight;
 						if (mark.afterHit) {
@@ -1308,7 +1319,7 @@
 							const aw = Number(mark.afterHit.getAttribute('width'));
 							pushed = Math.min(pushed, ax + aw / 2 - hitHalf);
 						}
-						mark.x = pushed;
+						mark.x = Math.max(pushed, ringX + ringW + ringStroke / 2);
 					}
 				}
 			}

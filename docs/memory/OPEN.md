@@ -1382,4 +1382,51 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
      generalizes to flats, naturals, or other scores; no second fixture was
      built.
 
+5. **TWO CORRECTIONS FROM THE WALK OF `7e28272`. Ruled by Dann 2026-09-17,
+   late.** He walked m. 6 of Without Sun song 1 and found both.
+   - **NO CARET IS DRAWN INSIDE THE SQUIRCLE.** His words: *"The left side shows
+     the caret inside the squircle (big no-no)."* Clause 4's clearance catches
+     only a gap within 1.2 line-gaps of a stroke, so a gap whose x falls deep
+     inside the squircle's span is caught by neither band and stays where it is.
+     The squircle is wider than the note's own hit rectangle, because an
+     accidental and the IPA row widen it (N.141), so this is ordinary, not rare.
+     **The rule is now the span, not the edges: a caret whose x falls anywhere
+     between the squircle's two strokes moves outward to 1.2 line-gaps beyond
+     the nearer stroke**, under the same clamp as clause 4.
+   - **THE DIAGNOSIS IN THE BULLET ABOVE IS WRONG, and it was the desk's, written
+     without opening the file. Struck 2026-09-17 by Code, which measured the real
+     cause.** The check was never two bands: `bandLeft` and `bandRight` already
+     sit 1.2 line-gaps past each stroke, so together they already bound the whole
+     span, centre included. **What put the caret inside the squircle was clause
+     4's own neighbour clamp**, which can be stricter than clearing the stroke,
+     and which was winning outright. Measured on m. 6, the note `A♭3 · Eighth ·
+     ка`: the squircle spans 558.15 to 583.33 system units, the full push wanted
+     589.93, and the clamp capped it at 580.495, inside the squircle.
+     **The rule, corrected: clearing the squircle's stroke is a FLOOR the
+     neighbour clamp cannot override. The clamp governs everything short of that
+     conflict.** Account: `../sessions/memo-n92-caret-span-and-rests_r1_2026-09-17.md` §2.
+     The ruled behaviour, no caret inside the squircle, is unchanged; only the
+     desk's account of the cause was wrong.
+   - **A REST TAKES A CARET ON EACH SIDE, LIKE EVERY OTHER DURATION GLYPH.** His
+     words: *"Rests are rhythmic placeholders. there should be a caret on either
+     side of the rest glyph just like every other duration glyph in this measure.
+     No two contiguous carets make sense. They are devices like parentheses,
+     meant to contain something."*
+   - **The cause, read 2026-09-17:** `staff-renderer.ts:2626-2633` draws a rest's
+     glyph and then `continue`s, so a rest never reaches the hit rectangle at
+     `:2892-2898`. With no rectangle on either side of it, the caret geometry has
+     no edge to read, so the two gaps flanking a rest collapse together and draw
+     as a contiguous pair. **The same `continue` is why a singer cannot tap a
+     rest at all**, though `entry.ts:46-58` already records that a rest IS a place
+     the cursor can stand, because slice 3 converts one back to a note.
+   - **So the fix is one change, not two: a rest is emitted with the same hit
+     rectangle every other event gets.** Its consequence, DESK DEFAULT and
+     reversible, stated so Dann can wave it off: **a tap on a rest then selects
+     that rest**, on the page as well as in the loupe, where today it resolves to
+     the nearest note. That follows from his own ruling that a rest is a duration
+     glyph like the others.
+   - **No two carets ever stand contiguous with no glyph between them.** After
+     the rest's rectangle exists, that should hold by construction. If it does
+     not, it is a defect to report, never a pair to suppress.
+
 2. **Carets are drawn only while Corrections is the active panel.** With the loupe alone, or with Syllables showing, no insertion points are drawn. His reasoning, and the desk agrees: a mark that appears when it cannot be used is noise, and the loupe's default state is reading, not editing.

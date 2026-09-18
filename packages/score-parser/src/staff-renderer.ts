@@ -2624,6 +2624,43 @@ export function renderAnalyzedStaff(
     }
 
     if (ev.type === 'rest') {
+      // N.92, THE CARETS clause 5: A REST IS A DURATION GLYPH LIKE THE OTHERS,
+      // ruled by Dann 2026-09-17, so it takes the SAME hit rectangle the note
+      // branch draws below, `prevXById`/`nextXById` extent and all, wrapped in
+      // the SAME kind of `pointer-events="none"` group the note branch opens,
+      // for the same reason (N.71): the glyph is painted, so without it a
+      // click landing on its own few px of ink would resolve to the glyph,
+      // not to `closest('[data-hit]')`'s rectangle, and a rest would keep the
+      // dead centre notes had before N.71 fixed it. The rectangle is emitted
+      // FIRST, so the glyph paints over it, and `highestInk` is left alone
+      // here for the same reason it is left alone there: this rectangle is
+      // clipped to the page like any other element rather than resizing the
+      // crop around it.
+      //
+      // NOT `data-event-id`, DELIBERATELY: that attribute is also how
+      // `Loupe.svelte`'s own ink-walk (`restOrNoteInk`) tells a rest's glyph
+      // from a note's, `!el.closest('[data-event-id]')` being half of its own
+      // test for a rest. Naming this group `data-event-id` would fail that
+      // test for every rest the moment this ships, so the group here is
+      // anonymous: `pointer-events="none"` is all a rest ever borrows from
+      // the note branch's wrapper.
+      //
+      // THE CAUSE OF TWO DEFECTS AT ONCE. Without this, a rest could not be
+      // tapped at all, although `entry.ts`'s own `positions` already counted
+      // it as a place the cursor can stand; and the loupe's carets either
+      // side of a rest had no edge to read, so they read as a bare gap
+      // rather than as bracketing a glyph. One rectangle fixes both:
+      // `Loupe.svelte`'s caret geometry already falls back to a neighbour's
+      // edge when an entry has none, so once a rest has its own, nothing
+      // there needed to change.
+      parts.push('<g pointer-events="none">');
+      {
+        const hitL = ((prevXById.get(ev.id) ?? nx - 40) + nx) / 2;
+        const hitR = (nx + (nextXById.get(ev.id) ?? nx + 40)) / 2;
+        const hitTop = staffTop - 3.5 * o.lineGap;
+        const hitBottom = staffBottom + 3.5 * o.lineGap;
+        parts.push(`<rect data-hit="${esc(ev.id)}" x="${round2(hitL)}" y="${round2(hitTop)}" width="${round2(hitR - hitL)}" height="${round2(hitBottom - hitTop)}" fill="transparent" pointer-events="all" cursor="pointer"/>`);
+      }
       if (smufl) {
         const rest = REST_SMUFL[ev.duration.base];
         const ry = rest === 'restWhole' ? o.staffMidY - o.lineGap : o.staffMidY;
@@ -2631,6 +2668,7 @@ export function renderAnalyzedStaff(
       } else {
         parts.push(`<rect x="${nx - 5}" y="${o.staffMidY - 3}" width="10" height="6" rx="1.5" fill="#3a352f"/>`);
       }
+      parts.push(`</g>`);
       continue;
     }
     const pitch = ev.pitch;
