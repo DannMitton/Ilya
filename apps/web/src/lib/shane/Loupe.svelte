@@ -1087,7 +1087,13 @@
 		const fitWidth = Math.max(0, width - FRAME_SIDES);
 		const drawn = Math.min(totalSpan * unitPx * magnification, fitWidth);
 		const scale = drawn / totalSpan;
-		const contentWidth = viewSpan * scale;
+		/* `viewSpan * scale` WOULD BE THIS PANEL'S OWN NATIVE WIDTH, but the
+		   body panel's actual content width is `bodyContentWidth`, computed
+		   with the carets further down: clause 6 widens the body's own crop
+		   by AT LEAST `CARET_MARGIN` on each side, more where a caret's own
+		   footprint needs it (measured on the fixture, m. 2's head gap; see
+		   the widening below), so its CSS width must grow with it at the
+		   same `scale` or the extra room comes out as a stretch. */
 		const headWidth = headCropUnits * scale;
 		const meterWidth = meterSpanUnits * scale;
 		/* THE CROP'S VERTICAL EXTENT is the page's ink band, laid around this
@@ -1193,26 +1199,87 @@
 		   element itself is found. */
 		const pageRing = sysEl.querySelector('[data-selection-ring][data-note-selected]');
 
+		/* THE BODY'S OWN MARGIN, CLAUSE 6: *"the spacing in the Loupe is
+		   temporary and situational, and bears not on the paper GUI."* A
+		   fixed two line-gaps, past the crop `measureWindow` already chose,
+		   on both sides, unconditionally, so the crop never resizes when a
+		   caret's own position happens to need the room and never resizes
+		   when it does not: one width per measure, not one that jumps as the
+		   singer steps between notes. It is spent two ways below: it is the
+		   room a nudged barline (§ below) moves into, and it is why a caret
+		   drawn at the crop's own true edge is never clipped (clause 6 item
+		   5). The ring and the frame's own `viewBox`, further down, are
+		   repointed from `view.left`/`viewSpan` to `bodyViewLeft`/
+		   `bodyViewSpan` so the crop that is drawn agrees with the crop this
+		   block reasons about. */
+		const CARET_MARGIN = lineGap * 2;
+		let bodyViewLeft = view.left - CARET_MARGIN;
+		let bodyViewRight = view.right + CARET_MARGIN;
+		let bodyViewSpan = viewSpan + CARET_MARGIN * 2;
+
 		/* ── N.92, THE CARETS ─────────────────────────────────────────────
 		   RULED BY DANN 2026-09-17 (`docs/memory/OPEN.md`, THE CARET clauses 1
-		   to 3): a vertical mark past the top and bottom staff lines, an
+		   to 6): a vertical mark past the top and bottom staff lines, an
 		   arrowhead at each end pointing inward, one per gap in `positions`,
 		   drawn only while the syllables row is closed.
 
-		   EVERY GAP'S X COMES FROM A HIT RECTANGLE, NEVER A NEW MEASUREMENT.
-		   The renderer tiles each note's hit rectangle edge to edge with its
-		   neighbours' (`staff-renderer.ts`'s `prevXById`/`nextXById`), so the
-		   shared edge between two adjacent rectangles already IS the gap
-		   between them, rest or no rest in between: a rest earns no
-		   rectangle of its own, but the notes on either side of it still meet
-		   at its true boundary. The head and tail gaps take the crop's own
-		   edges, `view.left` and `view.right`, which is where the opening and
-		   closing barline already stand (the ruling above them).
+		   THE POSITION RULE, CLAUSE 6, m. 17: A CARET STANDS IN THE MIDDLE OF
+		   THE SPACE IT NAMES. *"Strange choice to make the last caret overlap
+		   the barline instead of planting it right in the middle of the space
+		   that preceded the barline, there's plenty of room there."* The
+		   space is bounded by INK, never by a hit rectangle: a note's own
+		   drawn edge (`inkOf`, below, unions `data-event-id`'s children and
+		   `data-of-event`'s, which is where an accidental or a dot lives),
+		   the squircle's own outer stroke where the neighbour is the taken
+		   note, or a barline for the head and tail gaps. MEASURED on the
+		   fixture, m. 14: the OLD hit-rectangle clamp let a caret stand only
+		   `hitHalf` short of a neighbour's hit-rectangle CENTRE, which on
+		   that note was 7-plus units short of where its ink actually began,
+		   and the caret landed on the note. The ink boundary does not make
+		   that mistake: it is where the note actually is.
 
-		   A GAP BOTH OF WHOSE NEIGHBOURS ARE RESTS HAS NO RECTANGLE ON
-		   EITHER SIDE, and nothing here invents one: that gap is left out.
-		   NOT ESTABLISHED how often that costs a real score; the memo says
-		   so plainly rather than guessing.
+		   THE HEAD AND TAIL GAPS TAKE THE BARLINE, not the crop's own edge
+		   (clause 6, m. 3: *"caret first, then barline"*). Where a measure
+		   opens a system and carries no barline of its own, the crop's own
+		   edge stands in, the same rule `measureWindow` already used.
+
+		   WHERE EVEN THE INK-TO-BARLINE ROOM IS SHORT OF A CARET'S OWN
+		   FOOTPRINT, THE BARLINE MOVES, not the caret onto something.
+		   MEASURED on the fixture, m. 3: the head gap's native room was 3.01
+		   units against a 3.74-unit floor, short by well under one line-gap.
+		   Nothing else in the system references a barline's own position
+		   (unlike a note, which a beam, a tie or a ledger line can also
+		   depend on), and `CARET_MARGIN` above is exactly the room it moves
+		   into.
+
+		   A GAP WHOSE INK CANNOT BE READ ON EITHER SIDE FALLS BACK TO THE
+		   OLD HIT-RECTANGLE TILING, unchanged: the renderer already tiles
+		   each note's hit rectangle edge to edge with its neighbours'
+		   (`staff-renderer.ts`'s `prevXById`/`nextXById`), so that boundary
+		   is never wrong, only less exact than ink where ink can be read.
+		   NOT ESTABLISHED how often the fallback fires on a real score; the
+		   memo says so rather than guessing.
+
+		   WHAT THIS DOES NOT ATTEMPT: an INTERIOR gap (not the head or tail)
+		   whose true room, ink to ink or ink to squircle stroke, is short of
+		   a caret's footprint has no floor here, unlike the head and tail
+		   gaps above: it is placed at its true midpoint anyway, on the best
+		   information there is, and may stand against or over that ink or
+		   that stroke. MEASURED on the fixture: a beam crossing the gap is
+		   one cause (nine gaps, the memo names them); a neighbour's ink and
+		   the selected note's squircle stroke leaving less room between them
+		   than the caret's own width is another and the more common one
+		   (eighteen gaps, the memo names them too). Neither boundary can
+		   move under this brief's own constraints: the squircle's geometry
+		   is N.141's, and `staff-renderer.ts` draws a beam from BOTH its
+		   notes' own positions at once, flushed once after every note in the
+		   system is placed, with neither note carrying a handle back to the
+		   gap between them, so redrawing one from outside the renderer risks
+		   a beam that no longer says what duration it groups. A note's own
+		   ink is not moved either, for the same reason the research this
+		   brief drew on found translating one unsafe in general: a beam, a
+		   tie, or a ledger line can depend on a note's position without the
+		   note itself carrying a handle back to them.
 
 		   THE WEIGHT IS CLAUSE 4's, RULED BY DANN 2026-09-17 LATE, walking the
 		   first ship: *"functionally this is correct but... it's monstrous!
@@ -1222,106 +1289,166 @@
 		   steps clear of. */
 		if (!syllablesOpen && positions.length > 1) {
 			const rectOf = (id: string) => container.querySelector(`[data-hit="${CSS.escape(id)}"]`);
-			const marks: {
-				after: string | null;
-				x: number;
-				beforeHit: Element | null;
-				afterHit: Element | null;
-			}[] = [];
+			/* THE INK ITSELF: the union of a note's own group (excluding its
+			   hit rectangle, which is not ink) and everything stamped
+			   `data-of-event` for it (an accidental, a dot: both stand outside
+			   the group, `staff-renderer.ts`'s own placement). A REST HAS
+			   NEITHER, since its hit rectangle sits in an ANONYMOUS group
+			   (`staff-renderer.ts`, N.92 clause 5: never `data-event-id`, which
+			   `Loupe.svelte`'s own `restOrNoteInk` tells a rest apart by), so
+			   its glyph is found the one other way available: the hit
+			   rectangle's own next sibling, which is where the renderer
+			   paints it, immediately after. */
+			const inkOf = (id: string): { left: number; right: number } | null => {
+				let minX = Infinity;
+				let maxX = -Infinity;
+				const widen = (el: Element) => {
+					try {
+						const b = (el as SVGGraphicsElement).getBBox();
+						if (b.width || b.height) {
+							minX = Math.min(minX, b.x);
+							maxX = Math.max(maxX, b.x + b.width);
+						}
+					} catch {
+						/* not rendered */
+					}
+				};
+				const g = container.querySelector(`[data-event-id="${CSS.escape(id)}"]`);
+				if (g) for (const c of g.children) if (!c.hasAttribute('data-hit')) widen(c);
+				for (const c of container.querySelectorAll(`[data-of-event="${CSS.escape(id)}"]`)) widen(c);
+				if (!Number.isFinite(minX)) {
+					const sib = rectOf(id)?.nextElementSibling;
+					if (sib) widen(sib);
+				}
+				return Number.isFinite(minX) ? { left: minX, right: maxX } : null;
+			};
+			const ringStrokeHalf = pageRing
+				? (parseFloat(getComputedStyle(pageRing).strokeWidth) || RING_STROKE) / 2
+				: 0;
+			const ringLeftEdge = pageRing ? Number(pageRing.getAttribute('x')) - ringStrokeHalf : null;
+			const ringRightEdge = pageRing
+				? Number(pageRing.getAttribute('x')) + Number(pageRing.getAttribute('width')) + ringStrokeHalf
+				: null;
+
+			/* PLATE C'S OWN NUMBERS, moved up from the drawing pass below: the
+			   position rule needs `armHalf` to know how much room a caret's
+			   own footprint requires before it can decide whether the barline
+			   must move. `hitHalf` moves up with it for the same reason clause
+			   4 already gave it: the hit rectangle's own half-width, so a
+			   clamped caret's rectangle and its neighbour's stay a full
+			   `hitHalf` apart rather than coinciding (measured on the fixture,
+			   `m.8`, `F♯3`: two rectangles' centres 0.00003 units apart, closer
+			   than a real `MouseEvent.clientX` even resolves). */
+			const staffBottom = staffTop + 4 * lineGap;
+			const armLen = lineGap * 0.6;
+			const armHalf = lineGap * 0.34;
+			const hitHalf = Math.max(lineGap, 22 / scale);
+			const MIN_SPACE = armHalf * 2 + lineGap * 0.3;
+
 			const last = positions.length - 1;
+			const leftBoundary = (i: number): number | null => {
+				if (i === 0) return opening ? opening.x : null;
+				const e = positions[i - 1];
+				if (e.kind !== 'entry') return null;
+				/* THIS ENTRY SITS TO THE LEFT of gap `i`, so where it is the
+				   taken note, the edge THIS gap must clear is the squircle's
+				   own RIGHT stroke, not its left: the boundary facing the gap,
+				   never the far side of the note. */
+				if (e.id === selectedEventId && ringRightEdge !== null) return ringRightEdge;
+				return inkOf(e.id)?.right ?? null;
+			};
+			const rightBoundary = (i: number): number | null => {
+				if (i === last) return closing ? closing.right : null;
+				const e = positions[i + 1];
+				if (e.kind !== 'entry') return null;
+				/* SYMMETRIC: this entry sits to the RIGHT of gap `i`, so its
+				   squircle's LEFT stroke is the edge facing the gap. */
+				if (e.id === selectedEventId && ringLeftEdge !== null) return ringLeftEdge;
+				return inkOf(e.id)?.left ?? null;
+			};
+
+			let openingNudge = 0;
+			let closingNudge = 0;
+			const marks: { after: string | null; x: number }[] = [];
 			for (let i = 0; i < positions.length; i++) {
 				const p = positions[i];
 				if (p.kind !== 'gap') continue;
-				const beforeEntry = i > 0 ? positions[i - 1] : undefined;
-				const afterEntry = i < last ? positions[i + 1] : undefined;
-				const beforeHit = beforeEntry?.kind === 'entry' ? rectOf(beforeEntry.id) : null;
-				const afterHit = afterEntry?.kind === 'entry' ? rectOf(afterEntry.id) : null;
+				let leftB = leftBoundary(i);
+				let rightB = rightBoundary(i);
+				if (i === 0 && leftB === null) leftB = bodyViewLeft;
+				if (i === last && rightB === null) rightB = bodyViewRight;
+
 				let x: number | null = null;
-				if (i === 0) {
-					x = view.left;
-				} else if (i === last) {
-					x = view.right;
-				} else if (beforeHit) {
-					x = Number(beforeHit.getAttribute('x')) + Number(beforeHit.getAttribute('width'));
-				} else if (afterHit) {
-					x = Number(afterHit.getAttribute('x'));
+				if (leftB !== null && rightB !== null) {
+					if (i === 0 && opening && rightB - leftB < MIN_SPACE) {
+						const deficit = MIN_SPACE - (rightB - leftB);
+						openingNudge = Math.max(openingNudge, deficit);
+						leftB -= deficit;
+					}
+					if (i === last && closing && rightB - leftB < MIN_SPACE) {
+						const deficit = MIN_SPACE - (rightB - leftB);
+						closingNudge = Math.max(closingNudge, deficit);
+						rightB += deficit;
+					}
+					x = (leftB + rightB) / 2;
+				} else {
+					/* THE FALLBACK: hit-rectangle tiling, exactly as shipped
+					   before this ruling, for the gap whose ink could not be
+					   read on the side that needed it. */
+					const beforeEntry = i > 0 ? positions[i - 1] : undefined;
+					const afterEntry = i < last ? positions[i + 1] : undefined;
+					const beforeHit = beforeEntry?.kind === 'entry' ? rectOf(beforeEntry.id) : null;
+					const afterHit = afterEntry?.kind === 'entry' ? rectOf(afterEntry.id) : null;
+					if (i === 0) x = bodyViewLeft;
+					else if (i === last) x = bodyViewRight;
+					else if (beforeHit) x = Number(beforeHit.getAttribute('x')) + Number(beforeHit.getAttribute('width'));
+					else if (afterHit) x = Number(afterHit.getAttribute('x'));
 				}
-				if (x !== null && Number.isFinite(x)) marks.push({ after: p.after, x, beforeHit, afterHit });
+				if (x !== null && Number.isFinite(x)) marks.push({ after: p.after, x });
 			}
 
-			/* THE CLEARANCE, CLAUSE 4's SECOND HALF, AMENDED BY CLAUSE 5's FIRST
-			   HALF. *"ensure that the carets do not align with the sides of the
-			   squircle: let them be fully expressed without that collision."*
-			   The collision is structural: a caret's own x, above, is a note's
-			   hit-rectangle edge, and the squircle drawn on that same note can
-			   reach the same edge, or past it: N.141 widens the squircle with an
-			   accidental and the IPA row, so it is routinely wider than the
-			   note's own hit rectangle.
-
-			   THE RULE IS THE SPAN, NOT JUST THE STROKES' OWN MARGINS (clause 5):
-			   `bandLeft`/`bandRight` already reach 1.2 line-gaps PAST each stroke,
-			   so they bound the squircle's whole span between them; a caret
-			   anywhere from one band edge to the other, including dead centre, is
-			   caught by the same `continue` guard below and pushed.
-
-			   OUTWARD, NEVER INTO THE TAKEN NOTE. A caret nearer the squircle's
-			   left than its centre moves further left; nearer or past centre, it
-			   moves right. Either way it moves away from the squircle, never
-			   toward it. */
-			/* THE CARET'S OWN HIT-RECTANGLE HALF-WIDTH, needed here too: the clamp
-			   below stops a caret's rectangle short of the neighbouring note's
-			   rectangle's own CENTRE, not merely short of its edge, or the two
-			   centres can land close enough that a real tap cannot tell them
-			   apart. MEASURED live on the fixture (`m.8`, `F♯3`): clamping to the
-			   bare centre put a caret's rectangle and its neighbour's within
-			   0.00003 units of each other, closer than a browser's own
-			   `MouseEvent.clientX` even reports (it rounds to a whole CSS pixel),
-			   so no tap could reliably choose between them. `hitHalf` is the same
-			   half-width the hit rectangle itself is drawn at, below, so the
-			   clamp and the rectangle it bounds agree by construction. */
-			const hitHalf = Math.max(lineGap, 22 / scale);
-			if (pageRing) {
-				const ringX = Number(pageRing.getAttribute('x'));
-				const ringW = Number(pageRing.getAttribute('width'));
-				const ringStroke = parseFloat(getComputedStyle(pageRing).strokeWidth) || RING_STROKE;
-				const CLEARANCE = lineGap * 1.2;
-				const bandLeft = ringX - ringStroke / 2 - CLEARANCE;
-				const bandRight = ringX + ringW + ringStroke / 2 + CLEARANCE;
-				const centreSquircle = ringX + ringW / 2;
-				/* THE STROKE ITSELF IS THE FLOOR, CLAUSE 5's OWN BUG: `7e28272`
-				   let the neighbour clamp win outright, and on m. 6 of the
-				   fixture a squircle sat close enough to its own next note that
-				   `hitHalf` short of that note's centre was STILL inside the
-				   squircle's own stroke. MEASURED there: the clamp capped a
-				   push at 580.495, short of the stroke's own outer edge at
-				   583.33. Clause 4's clamp guards against a caret colliding
-				   with the WRONG note; it was never meant to permit one
-				   standing inside the RIGHT one, which clause 5, DoD 1, rules
-				   absolute. So the stroke edge is applied AFTER the neighbour
-				   clamp, as a floor (left) or ceiling (right): the neighbour
-				   clamp still wins whenever the two agree, and only gives way,
-				   by as little as the conflict demands, where they cannot both
-				   be satisfied. */
-				for (const mark of marks) {
-					if (mark.x <= bandLeft || mark.x >= bandRight) continue;
-					if (mark.x <= centreSquircle) {
-						let pushed = bandLeft;
-						if (mark.beforeHit) {
-							const bx = Number(mark.beforeHit.getAttribute('x'));
-							const bw = Number(mark.beforeHit.getAttribute('width'));
-							pushed = Math.max(pushed, bx + bw / 2 + hitHalf);
-						}
-						mark.x = Math.min(pushed, ringX - ringStroke / 2);
-					} else {
-						let pushed = bandRight;
-						if (mark.afterHit) {
-							const ax = Number(mark.afterHit.getAttribute('x'));
-							const aw = Number(mark.afterHit.getAttribute('width'));
-							pushed = Math.min(pushed, ax + aw / 2 - hitHalf);
-						}
-						mark.x = Math.max(pushed, ringX + ringW + ringStroke / 2);
-					}
+			/* THE BARLINE MOVES, NOT THE CARET: applied to the CLONE, so the
+			   live page's own engraving is untouched (constraint: "the page
+			   and the print" do not change). `nudgeBarline` matches by x
+			   within half a unit rather than by identity, because a FINAL
+			   measure's closing barline is drawn as a pair and both must move
+			   together to stay a pair. */
+			const nudgeBarline = (nativeX: number, deltaX: number): void => {
+				for (const line of clone.querySelectorAll('line')) {
+					if (line.getAttribute('stroke') !== '#3a352f') continue;
+					const x1 = Number(line.getAttribute('x1'));
+					const x2 = Number(line.getAttribute('x2'));
+					if (Math.abs(x1 - x2) > 0.01 || Math.abs(x1 - nativeX) > 0.5) continue;
+					line.setAttribute('x1', String(x1 + deltaX));
+					line.setAttribute('x2', String(x2 + deltaX));
 				}
+			};
+			if (openingNudge > 0 && opening) nudgeBarline(opening.x, -openingNudge);
+			if (closingNudge > 0 && closing) nudgeBarline(closing.right, closingNudge);
+
+			/* THE MARGIN'S OWN FLOOR, MEASURED ON THE FIXTURE, m. 2's head
+			   gap: the fixed two-line-gap `CARET_MARGIN` is not always
+			   enough. That gap's boundary is the opening barline, not the
+			   crop's own edge, and the position rule can place the mark
+			   anywhere between the barline and the squircle it precedes;
+			   where that midpoint lands close to `bodyViewLeft` anyway
+			   (measured: 0.015 units short of it), the arrowhead's own
+			   half-width (`armHalf`) crosses the crop and clause 5 item 5,
+			   whole marks only, breaks. The SAME risk holds for a mark that
+			   falls exactly ON the crop's edge, the fallback path takes
+			   above when a measure opens a system with no barline of its
+			   own (`x = bodyViewLeft` there, dead centre on the edge). So
+			   the margin widens again here, past whichever mark actually
+			   landed closest to an edge, and never narrower than the fixed
+			   margin above: `Math.min`/`Math.max` against the existing
+			   value, not a replacement of it. */
+			if (marks.length > 0) {
+				const footprint = armHalf + lineGap * 0.15;
+				const leftMost = Math.min(...marks.map((m) => m.x));
+				const rightMost = Math.max(...marks.map((m) => m.x));
+				bodyViewLeft = Math.min(bodyViewLeft, leftMost - footprint);
+				bodyViewRight = Math.max(bodyViewRight, rightMost + footprint);
+				bodyViewSpan = bodyViewRight - bodyViewLeft;
 			}
 
 			if (marks.length > 0) {
@@ -1332,9 +1459,6 @@
 				   surface already uses. PLATE C SHRINKS BOTH: the arm from a full
 				   line-gap to 0.6, the arrowhead's half-base from 0.8 to 0.34, so the
 				   mark reads as a fine terminated line rather than a flag. */
-				const staffBottom = staffTop + 4 * lineGap;
-				const armLen = lineGap * 0.6;
-				const armHalf = lineGap * 0.34;
 				const topOuter = staffTop - armLen;
 				const bottomOuter = staffBottom + armLen;
 				/* THE SQUIRCLE IS THE FEATURED COLOURED ELEMENT; THE CARET IS NOT
@@ -1483,6 +1607,14 @@
 		   is found above, with the carets, which read it too. */
 		const carryWidth = carry ? carrySpanUnits * scale : 0;
 		const tailWidth = tailSpanUnits * scale;
+		/* THE BODY'S OWN CONTENT WIDTH GROWS WITH ITS MARGIN, clause 6: the
+		   viewBox below is wider by `CARET_MARGIN` on each side, so the CSS
+		   width drawing it must be wider by the same amount at the same
+		   `scale`, or the extra room would come out as a stretch instead of
+		   as blank space. The ring's own origin moves with it, `bodyViewLeft`
+		   in place of `view.left`, so ring and content agree on what native x
+		   the body panel's own left edge now names. */
+		const bodyContentWidth = bodyViewSpan * scale;
 		const ring = pageRing
 			? stripRing(
 					{
@@ -1493,7 +1625,7 @@
 						radius: Number(pageRing.getAttribute('rx')) || 0,
 						stroke: parseFloat(getComputedStyle(pageRing).strokeWidth) || RING_STROKE,
 					},
-					view.left,
+					bodyViewLeft,
 					headWidth + meterWidth + carryWidth,
 					cropTop,
 					scale,
@@ -1502,10 +1634,10 @@
 
 		frame = {
 			inner: clone.innerHTML,
-			viewBox: `${view.left} ${cropTop} ${viewSpan} ${cropHeight}`,
+			viewBox: `${bodyViewLeft} ${cropTop} ${bodyViewSpan} ${cropHeight}`,
 			width,
 			left,
-			contentWidth,
+			contentWidth: bodyContentWidth,
 			headWidth,
 			headViewBox: `0 ${cropTop} ${headCropUnits} ${cropHeight}`,
 			meter: meterPanel
@@ -1527,7 +1659,7 @@
 						}
 					: null,
 			ring,
-			stripWidth: headWidth + meterWidth + carryWidth + contentWidth + tailWidth,
+			stripWidth: headWidth + meterWidth + carryWidth + bodyContentWidth + tailWidth,
 			contentHeight,
 			windowHeight,
 			centreY,

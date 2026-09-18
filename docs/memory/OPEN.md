@@ -1429,4 +1429,113 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
      the rest's rectangle exists, that should hold by construction. If it does
      not, it is a defect to report, never a pair to suppress.
 
+6. **THE CARET AND THE NOTE AFTER THE SQUIRCLE COLLIDE. Found by Dann on the walk
+   of `8cb9b51`, 2026-09-17 late, m. 14 of Without Sun song 1.** His words:
+   *"Collision between the note to the right of the squircle and the caret that
+   should precede it. PLease fix these spacing problems?"*
+   - **The squircle floor and the neighbour clamp cannot both be satisfied in a
+     tight measure.** Clause 5 made clearing the squircle's stroke a floor the
+     clamp cannot override, so where there is not room for both, the caret now
+     lands on the note instead of inside the squircle. One collision was traded
+     for the other. **The desk's reading of the cause is NOT ESTABLISHED and is
+     not to be built on: it is measured first.**
+   - **THE ANSWER IS TO MAKE ROOM, on Dann's own standing rulings**, and the
+     order is his too: *"Take the cheaper route first"* (the re-engraving
+     permission, recorded above), and measure before anything moves (the
+     2026-09-15 widening ruling, whose principle is that the layout yields to the
+     squircle and never the reverse).
+   - **Doing nothing is not defensible here.** A caret touching a notehead reads
+     as a defect, and it is the one mark whose whole job is to say "a note can go
+     here, and not on top of that one."
+   - **What is still Dann's, and only if the measurement forces it:** re-engraving
+     the held measure at its own spacing costs the property that the loupe is a
+     guaranteed picture of the page. His permission for that is conditional and
+     already given. **If it fires, he is told in the same breath.**
+   - **AND THE TAIL CARET MUST NOT OVERLAP THE BARLINE. Found by Dann the same
+     night, m. 3.** His words: *"The last caret in this measure must not overlap
+     the barliine: caret first, then barline."* The measure's last gap is drawn at
+     the crop's own right edge, which is where the closing barline stands. **The
+     caret stands clear of the barline and to its LEFT: the order along the stave
+     is caret, then barline.**
+   - **The head gap takes the same rule mirrored, DESK DEFAULT and reversible:**
+     the first caret stands clear of the opening barline and to its RIGHT, so the
+     order is barline, then caret. A caret belongs inside the measure it inserts
+     into.
+   - **EVERY CARET IS DRAWN WHOLE. Found by Dann the same night, m. 4.** His
+     words: *"There is not reason the first and last carets in the measure cannot
+     be full symbols instead of the truncated halves Ilya draws. Please make all
+     carets fully complete, and not half of themselves."* **No caret is ever a
+     half of itself:** both arrowheads and the full stroke are drawn, on every
+     caret in the measure, the first and the last included.
+   - **This is the same fix as the barline rule.** The head and tail carets are
+     drawn at the crop's own left and right edges, so half of each mark falls
+     outside the crop and is clipped. Standing them inside the measure, clear of
+     the barlines, satisfies both rules at once. **The desk's reading of the
+     clipping is NOT ESTABLISHED and is measured before it is built on.**
+   - **BOTH STROKES OF THE SQUIRCLE OVERLAP THEIR CARETS. Found by Dann the same
+     night, m. 6.** His words: *"Double whammy... Both sides of the squircle
+     overlap the carets on either side."* Not one side, both.
+   - **THE FOUR FINDINGS ARE ONE FINDING.** m. 14, m. 3, m. 4 and m. 6 are the
+     same thing seen four ways: **the carets are being fitted into spacing that
+     was engraved before they existed.** Every remedy so far has relocated the
+     collision rather than removed it, which is what a shuffle inside fixed room
+     can do. **DESK INFERENCE, and it is the measurement's to confirm or refute:
+     the cheap route is exhausted, and the answer is Dann's own second remedy,
+     make room.** Nothing is built on this sentence until the measurement says
+     so.
+   - **A CARET STANDS IN THE MIDDLE OF THE SPACE IT NAMES. Ruled by Dann
+     2026-09-17 late, m. 17, and it SUPERSEDES the desk's own "clear of the
+     barline" wording above.** His words: *"Strange choice to make the last caret
+     overlap the barline instead of planting it right in the middle of the space
+     that preceded the barline, there's plenty of room there."*
+     - The tail caret stands midway between the last note's ink and the closing
+       barline.
+     - The head caret stands midway between whatever opens the measure and the
+       first note's ink.
+     - An interior caret stands midway between its two neighbours' ink.
+     **The desk's rule was a clearance, which says only where a caret may not be.
+     Dann's is a position, which says where it belongs, and it answers the
+     clipping and the barline overlap at once.** The clearance from the squircle
+     and from a neighbour's ink remain as floors where the middle is not free.
+   - **THE LOUPE'S SPACING IS ITS OWN, AND IT MAY EXPAND. Ruled by Dann
+     2026-09-17 late.** His words: *"the spacing in the Loupe is temporary and
+     situational, and bears not on the paper GUI? Loupe demands expanded spacing
+     to accommodate all the elements without overlap."*
+     - **The loupe's spacing is temporary and situational. It does not bind the
+       page, and nothing about the printed result follows from it.**
+     - **The loupe expands its spacing as far as it needs to hold every element
+       without overlap.** That is the loupe's job, not a concession.
+     - **THIS SUPERSEDES THE COST RECORDED WITH THE RE-ENGRAVING PERMISSION**
+       (`OPEN.md`, THE PERMISSION HE GAVE, 2026-09-15), which read that
+       re-engraving costs the property that the loupe is a guaranteed picture of
+       the page, and that the cheaper route comes first. **Dann has now priced
+       that property: for spacing, it is not one he is keeping.** The loupe
+       remains a true picture of WHAT the measure holds; it is no longer a
+       promise about the spacing between those things.
+     - **So expanded spacing is the route, not the fallback.** A remedy that
+       squeezes the carets into the page's spacing is the one that now needs
+       justifying.
+   - **WHAT SHIPPED AGAINST THAT RULING, AND WHAT DID NOT. Recorded 2026-09-17
+     late from `../sessions/memo-n92-caret-collision_r1_2026-09-17.md`, read in
+     full.** The four measures Dann photographed are fixed and measured. **The
+     loupe's spacing was NOT expanded.** What was built instead: the position
+     rule now reads a neighbour's own INK rather than its hit rectangle, the
+     head and tail gaps nudge the barline, and the crop's margin widens past
+     whichever caret lands closest to it. All three move marks inside the CLONE
+     of the page's SVG.
+   - **The residue, measured across the whole fixture: 27 gaps on 12 of its 18
+     measures still collide.** Eighteen where a neighbour's ink and the squircle
+     leave less room than a caret's own width (as little as 0.153 units against a
+     caret width of 3.74), and nine where a caret meets a beam. **So the collisions
+     Dann photographed recur on measures he has not opened.**
+   - **THE CAUSE IS THE MECHANISM, AND IT IS THE DESK'S BRIEF THAT CHOSE IT.** The
+     brief said "expand the loupe's spacing" and never said how, so Code kept
+     working inside the clone, where a beam, a tie, a ledger line, or an
+     accidental can depend on a note's position without carrying a handle back to
+     it, which makes moving any note unsafe. **Re-engraving does not have that
+     problem:** the renderer lays out beams, ties and accidentals itself at the
+     new spacing. Dann's own permission named that mechanism in 2026-09-15's
+     words, "calling the renderer for the held measure alone, at its own
+     spacing", and the brief did not carry it. **The next pass says it outright.**
+
 2. **Carets are drawn only while Corrections is the active panel.** With the loupe alone, or with Syllables showing, no insertion points are drawn. His reasoning, and the desk agrees: a mark that appears when it cannot be used is noise, and the loupe's default state is reading, not editing.
