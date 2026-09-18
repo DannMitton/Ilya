@@ -5897,3 +5897,76 @@ sentence "Down a semitone" disproportionately wide.
 own §0 correction, the spec, and the audit. **The desk's error, recorded because it is the
 cardinal one:** the report declared that nothing in Ilya inserts a note, written without
 opening `correction.ts`, which has carried insertion since N.92 slice 3.
+
+
+## Block 23. Moved from STATE.md at the close of 2026-09-18, about 04:00
+
+**The ONE THING block written at the close of 2026-09-17, evening, archived verbatim when N.92's caret reach handed off to N.153.**
+
+## THE ONE THING
+
+> ### READ THIS FIRST. Written at the close of 2026-09-17, late evening, for the next instantiation
+>
+> **THE ONE THING IS N.92's INSERT REACH: the carets.** Designed, ruled and drawn tonight,
+> not briefed. Spec `../sessions/spec-n92-edit-surface_r1_2026-09-17.md` §4.1; the audit that
+> sized it at more than one evening is `../sessions/memo-n92-edit-audit_r1_2026-09-17.md`;
+> the drawing is `n92-carets-on-the-measure.html` (sent in session, not in the tree).
+> **Its rulings are in `OPEN.md`, section "THE CARET".** `SCHEDULE.md` week 2 is where it sits.
+>
+> **THE HEADLINE OF THE NIGHT, and the desk's own error: INSERTION IS ALREADY BUILT**, as
+> N.92 slice 3. A singer reaches it by walking the stepper beside the readout into a gap,
+> where a duration cell enters a note; `entry.ts:183-198`, `correction.ts:305-357`,
+> `:496-526`, `:382-433`. The desk wrote "nothing in Ilya inserts a note" in
+> `../sessions/report-n151-note-entry_r1_2026-09-17.md` without opening the file, and the
+> report carries its own correction at §0. **What N.92 still lacks is a way to REACH the
+> gap that a singer would find.** Dann walked the old path tonight and it works.
+>
+> **Shipped and walked by Dann tonight:** `55c04d9`, N.147 (the syllables moved into the
+> loupe, a note tap only selects); `0eb0a95`, the semitone cells returned and the fill tag
+> gained its word; `b03e918`, the pitch cells became a grid of six. The alias served each
+> (stamps `ilya-1789668784118`, `…695158110`, `…696588211`).
+>
+> **N.146 CLOSED 2026-09-17**: walk 5 passed in Incognito. Code could not reproduce finding
+> 8 and built nothing; the cause is NOT ESTABLISHED, with two leads in `OPEN.md`
+> (findings 9 to 12).
+>
+> **Numbered tonight, all DESK DEFAULT numbers, specs in `OPEN.md`:** N.148 (Undo and Redo
+> in the loupe's Syllables bar), N.149 (Corrections moves into the loupe and the Score
+> Markup header's pair retires with it), N.150 (the drawer's Score Markup band becomes
+> Voice, « Voix »), N.151 (retired: it is N.92's own territory), N.152 (playback of the
+> Markup, LATER, its own cardinal, with transport controls, navigation by measure, and a
+> choice of timbre; the desk owes research on sound sets and on what transport serves
+> study).
+>
+> **Rulings tonight, recorded where they bind:** `PRODUCT.md` gains "The text and the
+> notes", three rules plus the protection that stops at user error. `OPEN.md` carries the
+> rest: the measure tolerates being over while the singer works and is flagged once left
+> that way; the edited score comes back out as an edited copy and the singer's own tempo
+> counts; the printed page carries one line only when the score holds singer edits; four
+> singer's marks (staccato, tenuto, fermata, breath), with rit., accel. and caesura going
+> with tempo; there is no stopping rule, and notating a melody for analysis is where this
+> eventually goes.
+>
+> **Owed by Dann, and small:** the walk of the fill tag's SHORT state (he saw OVER live);
+> whether a measure left over may print; what Replace does to a night of corrections.
+>
+> **Still true from the morning:** the phone walk of N.147 was never taken, so the sideways
+> scroll of the syllables row under the loupe's `touch-action: none` is NOT ESTABLISHED
+> (`Loupe.svelte:1513`); "Start placement over" has no control anywhere since N.147 removed
+> the drawer row that carried it.
+>
+> **Usage, 2026-09-17 evening:** all models 55%, Fable 15%, reset Sunday 05:00. Tonight
+> spent two Sonnet agents (the Finale research, 137k; the audit, 208k) and no Fable.
+>
+> ---
+>
+> ### LIVE CARRY-OVER FROM EARLIER CLOSES
+>
+> **Moved verbatim to `OPEN.md`, section "LIVE CARRY-OVER FROM STATE.md", at the close of
+> 2026-09-17.** It holds live specs and records: Dann's damaged Sunless engraving (not a
+> seating ruler), N.127's rulings and its five unreviewed Code decisions, the Insights
+> evidence base as of 2026-09-15, the briefs written and not run, the colour story, N.129's
+> hyphen fold-in and the spacing ruling, N.94's home (superseded in part), the ratified
+> names, and the text-to-score sequence. Open it when one of those comes up.
+
+---

@@ -11,9 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`6e98057`**, "N.146 step 2: Ilya refuses an OCR reading that is not Russian, and
-waits for the dictionary before judging", shipped 2026-09-17, READY, the alias serving it
-(sw.js stamp checked by the desk), walked by Dann the same night (the previous floors,
+before **`637acc1`**, "N.92: no opening barline, the loupe fits its contents, and more
+daylight at the squircle", shipped 2026-09-18, READY, the alias serving it (sw.js stamp
+`ilya-1789745706089`, checked by the desk), walked by Dann the same night (the previous floors,
+`a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
 `fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
 `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
 `../sessions/LOG.md`). A floor cannot go stale,
@@ -41,71 +42,59 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-17, late evening, for the next instantiation
+> ### READ THIS FIRST. Written at the close of 2026-09-18, about 04:00
 >
-> **THE ONE THING IS N.92's INSERT REACH: the carets.** Designed, ruled and drawn tonight,
-> not briefed. Spec `../sessions/spec-n92-edit-surface_r1_2026-09-17.md` §4.1; the audit that
-> sized it at more than one evening is `../sessions/memo-n92-edit-audit_r1_2026-09-17.md`;
-> the drawing is `n92-carets-on-the-measure.html` (sent in session, not in the tree).
-> **Its rulings are in `OPEN.md`, section "THE CARET".** `SCHEDULE.md` week 2 is where it sits.
+> **THE ONE THING IS N.153: the loupe re-engraves the held measure at its own spacing.**
+> Numbered by Dann 2026-09-18. Spec and its five stages are in `OPEN.md`. Stage 1 is the
+> squircle's box arithmetic, extracted from `VoiceProfilePane.svelte` as a
+> behaviour-preserving refactor; stage 2 is one additive data channel; stage 3 is the render
+> itself. **Each stage lands and is verified on its own.**
 >
-> **THE HEADLINE OF THE NIGHT, and the desk's own error: INSERTION IS ALREADY BUILT**, as
-> N.92 slice 3. A singer reaches it by walking the stepper beside the readout into a gap,
-> where a duration cell enters a note; `entry.ts:183-198`, `correction.ts:305-357`,
-> `:496-526`, `:382-433`. The desk wrote "nothing in Ilya inserts a note" in
-> `../sessions/report-n151-note-entry_r1_2026-09-17.md` without opening the file, and the
-> report carries its own correction at §0. **What N.92 still lacks is a way to REACH the
-> gap that a singer would find.** Dann walked the old path tonight and it works.
+> **WHY IT MATTERS, and it is not what the desk thought at midnight. MEASURED 2026-09-18:
+> the separation between a caret's hit centre and its neighbour's runs 1.13 px to 7.89 px at
+> phone width, on all 17 held-able measures, against a 44 px floor.** `nearestTarget`
+> resolves by centre, so **a caret is not reliably tappable on a phone anywhere in this
+> score.** The desktop path works today, by stepper and by caret. **N.153 is what makes the
+> insert reach work on a phone**, not a tidy-up of the 27 drawing collisions.
 >
-> **Shipped and walked by Dann tonight:** `55c04d9`, N.147 (the syllables moved into the
-> loupe, a note tap only selects); `0eb0a95`, the semitone cells returned and the fill tag
-> gained its word; `b03e918`, the pitch cells became a grid of six. The alias served each
-> (stamps `ilya-1789668784118`, `…695158110`, `…696588211`).
+> **SHIPPED 2026-09-17 evening to 2026-09-18, six commits, all walked by Dann:**
+> `f4e31a2` the carets themselves; `7e28272` their weight, plate C's grey at 0.32 with the
+> squircle clearance; `8cb9b51` no caret inside the squircle, and a rest gets the hit
+> rectangle every other event has; `fda5b9c` carets read ink rather than hit rectangles;
+> `a86e985` the loupe shows one measure whole and may take the width it needs;
+> `637acc1` no opening barline, the loupe fits its contents, 1.6 line-gaps of daylight.
 >
-> **N.146 CLOSED 2026-09-17**: walk 5 passed in Incognito. Code could not reproduce finding
-> 8 and built nothing; the cause is NOT ESTABLISHED, with two leads in `OPEN.md`
-> (findings 9 to 12).
+> **DANN'S RULINGS OF THE NIGHT, all in `OPEN.md` section THE CARET, clauses 1 to 13.** They
+> outlive the code they came from. The squircle is the one coloured thing in the loupe; a
+> caret stands in the middle of the space it names; the loupe shows ONE MEASURE and nothing
+> else, adjacent content included; its spacing is its own and does not bind the page; it may
+> exceed the page's width, retracting his own ruling of 2026-08-27; and it is sized to its
+> contents, keyed to the held measure and never to the selection.
 >
-> **Numbered tonight, all DESK DEFAULT numbers, specs in `OPEN.md`:** N.148 (Undo and Redo
-> in the loupe's Syllables bar), N.149 (Corrections moves into the loupe and the Score
-> Markup header's pair retires with it), N.150 (the drawer's Score Markup band becomes
-> Voice, « Voix »), N.151 (retired: it is N.92's own territory), N.152 (playback of the
-> Markup, LATER, its own cardinal, with transport controls, navigation by measure, and a
-> choice of timbre; the desk owes research on sound sets and on what transport serves
-> study).
+> **STILL OPEN AND ALL WAITING ON N.153:** the 27 drawing collisions on 12 of 18 measures
+> (18 ink-and-squircle, 9 beam-crossing); the 44 px tap floor, reached nowhere; and one
+> hairline sliver of an adjacent syllable on m. 8, which Code kept deliberately rather than
+> cut the closing barline.
 >
-> **Rulings tonight, recorded where they bind:** `PRODUCT.md` gains "The text and the
-> notes", three rules plus the protection that stops at user error. `OPEN.md` carries the
-> rest: the measure tolerates being over while the singer works and is flagged once left
-> that way; the edited score comes back out as an edited copy and the singer's own tempo
-> counts; the printed page carries one line only when the score holds singer edits; four
-> singer's marks (staccato, tenuto, fermata, breath), with rit., accel. and caesura going
-> with tempo; there is no stopping rule, and notating a melody for analysis is where this
-> eventually goes.
+> **OWED BY DANN, small, and none of it blocks N.153:** whether a measure left over may
+> print; what Replace does to a night of corrections; the walk of the fill tag's SHORT
+> state; and N.140's two numbers, the stave-space floor in CSS pixels and whether the loupe's
+> horizontal scroll may take a gesture.
 >
-> **Owed by Dann, and small:** the walk of the fill tag's SHORT state (he saw OVER live);
-> whether a measure left over may print; what Replace does to a night of corrections.
+> **A PROCESS CHANGE LANDED TONIGHT, and it is in `ENVIRONMENT.md` under `A BRIEF THAT
+> CARRIES A CAUSE COSTS A PASS`.** Three of the night's six passes were spent because the
+> desk wrote a CAUSE into a brief from prose rather than from the file. `../sessions/BRIEF-TEMPLATE.md`
+> has no slot for a cause: observations, then cited facts, then an instruction to Code to
+> measure. **Use it for every brief.**
 >
-> **Still true from the morning:** the phone walk of N.147 was never taken, so the sideways
-> scroll of the syllables row under the loupe's `touch-action: none` is NOT ESTABLISHED
-> (`Loupe.svelte:1513`); "Start placement over" has no control anywhere since N.147 removed
-> the drawer row that carried it.
->
-> **Usage, 2026-09-17 evening:** all models 55%, Fable 15%, reset Sunday 05:00. Tonight
-> spent two Sonnet agents (the Finale research, 137k; the audit, 208k) and no Fable.
+> **Usage, 2026-09-18: NOT ESTABLISHED.** No screenshot was taken tonight. No subagents were
+> spawned by the desk; all building ran in Claude Code on Dann's machine.
 >
 > ---
 >
 > ### LIVE CARRY-OVER FROM EARLIER CLOSES
 >
-> **Moved verbatim to `OPEN.md`, section "LIVE CARRY-OVER FROM STATE.md", at the close of
-> 2026-09-17.** It holds live specs and records: Dann's damaged Sunless engraving (not a
-> seating ruler), N.127's rulings and its five unreviewed Code decisions, the Insights
-> evidence base as of 2026-09-15, the briefs written and not run, the colour story, N.129's
-> hyphen fold-in and the spacing ruling, N.94's home (superseded in part), the ratified
-> names, and the text-to-score sequence. Open it when one of those comes up.
-
----
+> In `OPEN.md`, section "LIVE CARRY-OVER FROM STATE.md". Open it when one of those comes up.
 
 ## THE TRACKER
 
@@ -129,8 +118,10 @@ does not repeat them.
   only selects. Shipped `55c04d9`, walked by Dann the same evening. Account in
   `../sessions/LOG.md` block 22.
 - `[ ]` **N.92. Notation editing.** Numbered by Dann 2026-08-24. Slices 1 to 3 are
-  shipped, insertion included. **Open: the caret reach** (THE ONE THING), the four
-  singer's marks, tie to the note before, and the page flag for a measure left over.
+  shipped, insertion included. **The caret reach is DRAWN and shipped over six commits
+  2026-09-17 to 2026-09-18, and is not usable on a phone: see N.153, which owns that.**
+  Open here: the four singer's marks, tie to the note before, and the page flag for a
+  measure left over.
   Spec `../sessions/spec-n92-edit-surface_r1_2026-09-17.md`, audit
   `../sessions/memo-n92-edit-audit_r1_2026-09-17.md`.
 - `[ ]` **N.148, N.149, N.150.** Undo and Redo in the Syllables bar; Corrections moves
