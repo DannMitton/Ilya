@@ -87,6 +87,28 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > has no slot for a cause: observations, then cited facts, then an instruction to Code to
 > measure. **Use it for every brief.**
 >
+> **RULED AFTER THE CLOSE, 2026-09-18, in a design conversation with no code written.
+> `OPEN.md` section THE CARET, clauses 14, 15 and 16.**
+>
+> - **Clause 14. The loupe has THREE states and a tween between two of them.** Reading is
+>   the opening state, an enlarged view of the paper measure at the page's own spacing,
+>   with NO carets. Syllables opens the accordion and keeps the measure essentially as it
+>   was. **Corrections is the only state that shows carets**, and entering it tweens: the
+>   notes and rests travel to their new positions while the carets fade in from zero
+>   opacity to 0.32, the card's perimeter moving on the same curve and the same duration.
+>   The technique is **FLIP**, and a cross-fade is ruled out because the teaching IS the
+>   movement. The return is the same machinery reversed and faster. **The toggle is locked
+>   for the tween's duration; dismissal stays live by Escape, swipe and chevron.**
+> - **Clause 15. THE PERIMETER IS NEVER SMALLER THAN WHAT IT CONTAINS, at any frame.**
+>   Promoted to a standing rule for the loupe, because every clipping defect of these two
+>   days is that sentence broken while standing still.
+> - **Clause 16, OPEN. The held measure's sage mark is in the code and not on the screen.**
+>   Dann's screenshot shows no sage rectangle. A one-line read-only check is written down
+>   and not yet run.
+> - **The tween work is DELIBERATELY UNNUMBERED**, on Dann's ruling: the number waits until
+>   N.149 is closer, because N.149 is what makes the Corrections gate real. **Do not mint
+>   one and do not read its absence as an oversight.**
+>
 > **Usage, 2026-09-18: NOT ESTABLISHED.** No screenshot was taken tonight. No subagents were
 > spawned by the desk; all building ran in Claude Code on Dann's machine.
 >

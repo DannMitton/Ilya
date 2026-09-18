@@ -319,6 +319,50 @@ the paths already). Whoever takes N.142 should be told this.
 
 ---
 
+
+15. **THE PERIMETER IS NEVER SMALLER THAN WHAT IT CONTAINS. A STANDING RULE FOR THE
+    LOUPE, promoted out of clause 14's tween timing 2026-09-18 with Dann's
+    agreement** (*"Absolutely correct... the perimeter is never smaller than what it
+    contains, at any frame"*).
+    - **It holds standing still, during a resize, and at every frame of a tween.**
+    - **Every clipping defect of 2026-09-17 and 2026-09-18 is this rule broken while
+      standing still:** the half-drawn sharp that read as a microtonal accidental
+      (clause 9), the caret arrowheads cut at the crop's edge (clause 6), and the
+      sliver of the next measure's syllable on m. 8. Each was a perimeter smaller
+      than its contents.
+    - **So the whole-fixture scan tests one sentence rather than four.** A glyph, a
+      caret, or any part of either that falls outside the loupe's own bounds is this
+      rule failing, whatever drew it.
+
+
+16. **THE HELD MEASURE'S SAGE MARK IS IN THE CODE AND NOT ON THE SCREEN. Open,
+    2026-09-18.** Dann sent a full-page screenshot showing two lavender squircles,
+    one on the paper and one in the loupe, **and no sage rectangle anywhere**. His
+    words: *"There is no sage rectangle... Dig deeper and convince me if I am missing
+    something, otherwise actually read the code to review why you are misrepresenting
+    the interfaces."*
+    - **THE DESK WAS WRONG TO STATE IT AS PRESENT.** It cited comments and a token
+      rather than the rendered result, which is CONTRACT tether 5. **The screenshot is
+      the evidence; the source is not.**
+    - **What the code says, read 2026-09-18.** `Loupe.svelte:1677-1686` creates an SVG
+      `rect`, marks it `data-held-measure`, sets `fill` to `none`, sets **no stroke of
+      its own**, and inserts it into the PAGE's SVG. The colour comes only from
+      `:2664-2670`, `:global([data-held-measure]) { stroke: var(--sage, #839275);
+      stroke-width: 1.2 }`. **So if that rule does not reach the element, the rect is
+      in the DOM and wholly invisible.**
+    - **Three candidates, none established.** It is never created, since the block is
+      gated on `hitH > 0` and the desk has not read where `hitH` comes from; or it is
+      created and the `:global` rule does not reach it; or the page's SVG re-renders
+      after the insert and takes the node with it, the loupe injecting into a
+      component it does not own.
+    - **The one-line check, read-only, not yet run:**
+      `document.querySelectorAll('[data-held-measure]').length` plus the computed
+      `stroke` of the first. **`0` means never made; `1` with `none` means made and
+      unstyled.**
+    - **AND THE DESIGN QUESTION BEHIND IT IS DANN'S:** whether the held measure wants
+      a mark on the page at all, now that the lavender squircle appears on both
+      surfaces and carries the correspondence by itself.
+
 ## N.130. INSIGHTS HAS NO FRENCH. Numbered by Dann 2026-09-13. UNPLACED.
 
 **The item.** Every string on Insights is English in both languages. A singer
@@ -1732,6 +1776,125 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
     - **This reframes N.153.** It is not a tidiness item about collisions. **The
       insert reach does not work on a phone at all**, and N.153 is what makes it
       work. The desktop path works today, by stepper and by caret.
+
+14. **THE LOUPE'S THREE STATES, AND THE TWEEN INTO CORRECTIONS. Ruled by Dann
+    2026-09-18.**
+    - **UNNUMBERED ON PURPOSE. Ruled by Dann 2026-09-18:** *"leave the number until
+      N.149 is closer."* **Do not mint a number for this, and do not treat its
+      absence as an oversight.** The design is ruled and recorded here; the item
+      gets its number when N.149 approaches, because N.149 is what makes the
+      Corrections gate real. His words: *"eventually when the Loupe is working properly, we are
+    not going to see carets when the Loupe opens. Carets are a device for musical
+    notation navigation and placement. The only time carets should be visible in the
+    Loupe is when the user has clicked Corrections."*
+    - **READING, the opening state.** The loupe is an enlarged version of the paper
+      measure, carrying the page's own layout and spacing. *"So we are looking at a
+      detail of the page engraving."* **No carets.**
+    - **SYLLABLES.** The accordion opens downward and syllables can be reassigned.
+      The measure looks essentially as it did, *"with necessary spacing adjustments
+      if the syllables entered are especially long or short."*
+    - **CORRECTIONS.** The spacing changes to make room for the carets, and the
+      loupe may widen to hold it.
+    - **THERE ARE THEREFORE THREE SPACINGS, not two**, and the desk names it because
+      "essentially the same" will otherwise be built as "unchanged" and a long
+      syllable will collide. The syllable-adjusted spacing needs its own rule.
+    - **THE TWEEN. Ruled by Dann 2026-09-18.** Entering Corrections is animated: the
+      established elements, notes and rests, move continuously from their reading
+      positions to their corrections positions, while the carets fade in. His words:
+      *"the purpose of the animation is to teach the user nonverbally that the
+      carets are conceptual insertions meant to allow them to insert values"*, and
+      the goal is *"Calm Authority"*.
+    - **THE TECHNIQUE IS FLIP** (First, Last, Invert, Play), which is Flash's motion
+      tween applied to a layout change: measure, apply the new layout, measure again,
+      transform each element back to where it started, then release. **A cross-fade
+      or a fade-out-and-in is NOT acceptable: nothing appears to move, and the
+      teaching is the movement.** Elements are addressable by `data-event-id`
+      (`staff-renderer.ts:2879`). **NOT ESTABLISHED** whether Svelte's `animate:flip`
+      can be used, since it works on keyed each blocks and the loupe's notation is
+      injected markup.
+    - **THE CARD AND THE NOTATION MOVE AS ONE GESTURE. Ruled by Dann 2026-09-18**,
+      over the desk's recommendation to sequence them. His words: *"I don't have a
+      problem with not directing the user's focus during this process... I don't see
+      why we need to curate the user's focus."* The desk's objection is withdrawn:
+      the card grows because its contents did, and splitting them invents a seam the
+      physics does not have.
+    - **THE CARETS BEGIN AT ZERO OPACITY. Ruled by Dann 2026-09-18:** *"we want them
+      to appear from the ether, meaning their first frame will be zero opacity."* So
+      they read as arriving into the room rather than sliding with it, inside the one
+      gesture, with no second beat.
+    - **THEY FADE FROM 0 TO 0.32, WHICH IS A CARET'S OWN FULL VALUE**, ruled from
+      plate C (clause 4). **Written down because "fades in to full opacity" gets built
+      as 1.0 and blows out the weight Dann chose.** The same holds in reverse: the
+      return tween fades 0.32 to 0.
+    - **The animation fires only on a deliberate move into Corrections.** Not on
+      opening the loupe, which N.147 has opening with the Syllables row closed, and
+      not on arrowing to an adjacent measure.
+    - **`prefers-reduced-motion` turns it off outright. Duration around 200 to
+      250 ms.** DESK DEFAULT.
+    - **THE PERIMETER IS TIMED TO THE CONTENTS. Ruled by Dann 2026-09-18:** *"we can
+      time the expansion of the Loupe's perimeter to the expansion of the note
+      tweening inside it? This should give the illusion of containing growth."*
+      - **Same duration AND the same easing curve.** Two different curves over the
+        same duration desynchronize mid-flight and the edge arrives before or after
+        its contents, which breaks the containment.
+      - **THE PERIMETER IS NEVER SMALLER THAN WHAT IT CONTAINS, AT ANY FRAME.** The
+        loupe clips to its own bounds, so a card narrower than its contents cuts them
+        off, and a caret would be sliced for the length of the tween. **This is the
+        same clipping class Dann found five times on 2026-09-17 and 2026-09-18.**
+      - **So expanding, the card matches or leads by a hair; contracting, the card
+        FOLLOWS the notes in.** The intuition that contents push the perimeter would
+        put the notes first in both directions, which is the unsafe order. At these
+        durations a few milliseconds of lead is invisible; the clipping would not be.
+        DESK REASONING, put to Dann.
+    - **THE RETURN TWEEN. Ruled by Dann 2026-09-18.** His words: *"switching from
+      Corrections mode back to Syllables is going to require a fast transition where
+      the carets fade out and the musical notation follows paths back."* Same FLIP
+      machinery, run the other way.
+      - **The carets leave FIRST**, then the room closes behind them. Arriving last
+        and leaving first is the same meaning read backwards; fading them out mid
+        travel makes them look carried away by the reflow rather than withdrawn.
+        DESK DEFAULT.
+      - **Faster than the entry, about two thirds of it**, because the entry teaches
+        and the exit only confirms a decision already made. Entry about 220 ms, exit
+        about 150 ms. DESK DEFAULT.
+      - **The destination is the state being returned TO, not the page.** With the
+        Syllables row open and a long syllable, the target is the syllable-adjusted
+        spacing, the third spacing named above, and not the paper's. **Written down
+        because "back to the paper engraving" will otherwise be built as the page's
+        spacing and will be wrong whenever a syllable has widened something.**
+      - **THE TWEEN IS INTERRUPTIBLE AND REVERSIBLE FROM MID-FLIGHT.** Toggling
+        Corrections twice quickly turns the motion around from wherever it stands.
+        **It never queues a second animation behind the first.** Queued tweens are
+        how an instrument starts to feel laggy, and this is hard to retrofit.
+        **DESK RECOMMENDATION, ratified by Dann 2026-09-18** (*"I defer to your
+        advice... If you intuit this is necessary then I agree with you"*), **and the
+        desk told him the basis and the cost before he did.** The basis is a known
+        failure mode, not a reading of this tree: a transition that assumes it starts
+        at rest will, when re-triggered mid-flight, either snap back and replay or
+        queue and play twice. The cost is that every tween must capture where things
+        actually are at that instant rather than where they began; FLIP makes that
+        tractable because measuring current positions is what it already does.
+      - **RULED BY DANN 2026-09-18: BUILD THE LOCK.** His words: *"I think 'lock the
+        toggle for the duration of the tween' is reasonable. It saves a bunch of
+        hassle and they can still hit the escape button if they need to interrupt."*
+        A second press inside the tween's duration does nothing. Simpler than the
+        interruptible version, never desynchronizes. **The interruptible version
+        stays on the record above as the better end state if the lock ever reads as
+        heavy.**
+      - **THE LOCK COVERS THE CORRECTIONS AND SYLLABLES TOGGLE ONLY. DISMISSAL STAYS
+        LIVE BY EVERY ROUTE.** Escape is confirmed at `+page.svelte:1408-1410`,
+        `case 'Escape': dismissLoupe()`, read 2026-09-18. **But a phone has no Escape
+        key**, and its dismissal is the downward swipe, so a lock written as "ignore
+        input during the tween" would leave a phone singer with no way out for a
+        fifth of a second, which is the one case where being ignored matters.
+        **Escape, the swipe and the chevron all stay live throughout.**
+      - **A dismissal landing mid-tween cleans up after itself:** no transforms left
+        on the cloned nodes, no mark left on the page.
+    - **DEPENDENCY: N.149**, which moves Corrections into the loupe and is recorded
+      as not small, and which carries a question of Dann's, what offers Undo while
+      the loupe is closed. **Until N.149 lands, the gate is the desk default from
+      clause 6: carets whenever the Syllables row is closed. That is a stopgap
+      standing in for this rule, and it is why carets appear on opening today.**
 
     - **NUMBERED N.153 BY DANN, 2026-09-18.** His words: *"Yes, confirmed N.153."*
       The desk proposed reviving N.151 and then withdrew it: that number's spec is
