@@ -1669,11 +1669,151 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
       of the 27 the derived-spacing search actually closes, and whether it
       converges or needs a cap and a "this measure cannot have the width it needs"
       report of its own.
-    - **FOR DANN: this plan is large enough to want its own number rather than
-      living inside N.92's caret slice.** The desk has not minted one.
+
+11. **THE LOUPE DRAWS NO OPENING BARLINE, EVER. Ruled by Dann 2026-09-18 on the
+    walk of `a86e985`, m. 5.** His words: *"found another unwanted initial
+    barline. These need to be gone."*
+    - **Clause 7 was not enough, and this says why.** Code's clip removed content
+      belonging to ADJACENT measures, and it works. **A measure's own opening
+      barline is not adjacent content**, so it survived the clip and is still
+      drawn after the clef, key and meter.
+    - **The rule: no barline is drawn at the loupe's left, whatever it belongs
+      to.** The head panel's clef, key and meter stand for the measure's start,
+      and a barline after a meter signature is wrong notation.
+    - **The closing barline stays.** It is the continuation conceit Dann endorsed
+      in clause 7, and it sits at the right with the tail panel behind it.
+
+12. **THE LOUPE IS SIZED TO ITS CONTENTS, NOT TO THE VIEWPORT. Ruled by Dann
+    2026-09-18, after the width retraction made every loupe full width.** His
+    words: *"Can we have some sort of responsive dimension? I think imposing a
+    minimum is smart? But this Loupe can be much tighter to its contents than it
+    is. I see no reason to impose uniformity in dimension for all Loupes."*
+    - **Width equals the contents plus padding**, clamped between a minimum and
+      the viewport less the drawer and the gutters. `Loupe.svelte:1662` already
+      computes `stripWidth` from the panels it has just built; `:692` currently
+      discards it in favour of the room the viewport offers.
+    - **THE SIZE IS KEYED TO THE HELD MEASURE, NEVER TO THE SELECTION.** Within one
+      measure the card holds still while the singer steps from note to gap to note.
+      It resizes only when the loupe is raised on a different measure. **This is
+      the one virtue of a uniform width, stability under the hand, and it is kept
+      without the cost.** DESK REASONING, put to Dann and not waved off.
+    - **The minimum is set by what the header and the syllables bar need to read**,
+      not by the notation. DESK DEFAULT, reversible, and the number is stated when
+      it is built.
+    - **What the desk argued and Dann agreed with:** an oversized card makes the
+      eye travel to find the music, hides more of the page the loupe is supposed to
+      rest on, and throws away a free signal, that a wide loupe means a dense bar.
+
+13. **MORE DAYLIGHT, AND A TAP SEPARATION FLOOR. Asked for by Dann 2026-09-18 on
+    the walk of the barline fix.** His words: *"Maybe even a little more daylight
+    between the squircle and that caret on the right side? I'm thinking about fat
+    fingers on mobile and selection hotspots."*
+    - **THE DESK'S DISTINCTION, put to him and not waved off: daylight and tap
+      safety are two different numbers.** The clearance is the DRAWN gap and scales
+      with the notation. Mis-taps are decided by `nearestTarget`, which compares
+      hit-rectangle CENTRES, so what governs a thumb is the distance between two
+      centres in CSS pixels at phone width. **Code measured that at 22 px** on the
+      case it fixed on 2026-09-17. A 44 px target whose centre sits 22 px from its
+      neighbour's is ambiguous under a thumb.
+    - **Drawn clearance: 1.2 line-gaps becomes 1.6.** DESK DEFAULT, reversible.
+    - **Tap separation floor: 44 CSS pixels between a caret's hit centre and its
+      neighbour's, measured at phone width.** DESK DEFAULT, reversible, and it is
+      the number his reasoning actually names.
+    - **Where the floor cannot be reached, it is reported, never quietly shrunk.**
+      On the tight measures it will not be reachable inside the current spacing,
+      for the same reason the carets collide there. **That list is evidence for
+      N.153.**
+    - **MEASURED 2026-09-18, and it is the night's most important number: the floor
+      is reached on NONE of the 17 measures. The separation runs 1.13 px to 7.89 px
+      against a 44 px floor** (`../sessions/memo-n92-no-opening-barline-and-fit_r1_2026-09-18.md`).
+      **So a caret is not reliably tappable on a phone anywhere in this score.** A
+      thumb aimed at one is within 8 px of its neighbour's centre everywhere, and
+      `nearestTarget` resolves by centre.
+    - **This reframes N.153.** It is not a tidiness item about collisions. **The
+      insert reach does not work on a phone at all**, and N.153 is what makes it
+      work. The desktop path works today, by stepper and by caret.
+
+    - **NUMBERED N.153 BY DANN, 2026-09-18.** His words: *"Yes, confirmed N.153."*
+      The desk proposed reviving N.151 and then withdrew it: that number's spec is
+      still in this file and still carries live rulings, so recycling it would make
+      a future search return the measure edit surface instead. **N.152 was the
+      highest in use, checked across `OPEN.md`, `STATE.md` and `SEQUENCE.md`.**
    - **It is carried into the re-engraving brief, and it is also named there as a
      defect that must not survive a stop.** A re-engraved measure draws its own
      barlines and needs no nudge at all, so the mechanism that is suspected here
      goes away with it. If the re-engraving stops, this is fixed on its own.
 
 2. **Carets are drawn only while Corrections is the active panel.** With the loupe alone, or with Syllables showing, no insertion points are drawn. His reasoning, and the desk agrees: a mark that appears when it cannot be used is noise, and the loupe's default state is reading, not editing.
+
+
+## N.153. THE LOUPE RE-ENGRAVES THE HELD MEASURE AT ITS OWN SPACING. Numbered by Dann 2026-09-18.
+
+**Why it exists.** 27 gaps on 12 of the fixture's 18 measures collide: 18 where a
+neighbour's ink and the squircle leave less room than a caret's own width, as
+little as 0.153 units against a caret 3.74 units wide, and 9 where a caret meets a
+beam (`../sessions/memo-n92-caret-collision_r1_2026-09-17.md` §4). **They are
+scale-invariant**, so no window size closes them; only wider RELATIVE spacing
+does, and only a re-engraved measure can have it. Three passes on 2026-09-17 and
+2026-09-18 each relocated the collisions instead of removing them, which is what a
+shuffle inside a crop can do.
+
+**The rulings it serves**, all in this file, section THE CARET:
+- Clause 6: the loupe's spacing is its own, temporary and situational, and does
+  not bind the page.
+- Clause 7: the loupe shows one measure and nothing else.
+- Clause 8: the loupe may exceed the page's width; the notation's point size is
+  the fixed quantity and the window is the variable one.
+- Clause 1 and the position rule: every caret stands in the middle of the space it
+  names, and touches nothing.
+
+**The mechanism, established 2026-09-18 and not a proposal.**
+`packages/score-parser/src/page-layout.ts` already renders one measure alone at
+its own spacing through `renderAnalyzedStaff(sliceScore(parsed, m, m), analyzed,
+options)`, and `sliceScore` rebases `measureIndex` without touching `ev.id`, so
+every caret, tap and hit rectangle keys off the ids it already uses.
+
+**THE FIVE STAGES, from Code's own plan**
+(`../sessions/memo-n92-loupe-reengraves_r1_2026-09-18.md` §1, read in full). Each
+lands and is verified on its own.
+
+1. **Extract the squircle's box arithmetic** out of `VoiceProfilePane.svelte` into
+   a pure shared function, called from the page exactly as today. A
+   behaviour-preserving refactor, verifiable by diffing the page's own output.
+2. **Add one additive data channel**, `VoiceProfilePane.svelte` to `+page.svelte`
+   to `Loupe.svelte`, carrying `readingScore`, `analyzed`, `clef`, the font and
+   the five underlay preview maps, assembled inside the untracked effect that
+   already reports `onpagesdrawn`, so it costs no new reactive surface. **Without
+   the preview maps a re-engraved measure would draw the file's own default
+   syllable under a note the singer hand-paired elsewhere**, which is a
+   singer-visible lie, not a cosmetic gap.
+3. **Replace the clone with the render.** In `Loupe.svelte`, swap
+   `sysEl.cloneNode(true)` for `renderAnalyzedStaff` on a one-measure slice, at a
+   spacing DERIVED rather than chosen: render, measure every gap against the
+   position rule's floor, widen and re-render while any floor would fire, stop at
+   the smallest spacing that needs none. Collapse the panel strip toward the one
+   panel a self-contained render produces. Repoint the caret maths at the new
+   root; it already works by DOM query on `data-event-id`, `data-of-event` and
+   `data-hit` rather than by page-relative geometry.
+4. **Retire or knowingly keep `loupe.ts`'s crop helpers and their tests**, as its
+   own decision. Roughly a dozen exported functions and a 781-line test file exist
+   to slice one shared coordinate space, and mostly retire with the crop.
+5. **Re-run the whole-fixture scan** over all 18 measures as the acceptance test,
+   plus real-click verification of note, rest and caret tap resolution.
+
+**THE UNCOSTED PIECE, and stage 3 measures it first.** The derived spacing is a
+control loop: nothing in `staff-renderer.ts`'s `pxPerWhole`/`minGap` options is
+driven today by a caller measuring its own output and asking for more. **NOT
+ESTABLISHED: how many of the 27 it closes, whether it converges, and whether it
+needs a cap plus a "this measure cannot have the width it needs" report.**
+
+**WHAT N.153 IS ACTUALLY FOR, measured 2026-09-18 and sharper than the collision
+count.** At phone width the separation between a caret's hit centre and its
+neighbour's runs **1.13 px to 7.89 px on all 17 held-able measures, against a 44 px
+floor**. `nearestTarget` resolves by centre, so **a caret is not reliably tappable
+on a phone anywhere in this score.** The carets are drawn correctly, cleared
+correctly, and cannot be used by a thumb. **N.153 is what makes the insert reach
+work on a phone**, not a tidy-up of 27 collisions. The desktop path works today.
+
+**Done when:** the whole-fixture scan passes on all 18 measures with zero
+violations of the five rules, tap resolution is unregressed, the page and the
+print are untouched, and Dann walks it.

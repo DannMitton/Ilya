@@ -745,28 +745,15 @@
 		);
 
 		const inset = pageInset(stageWidth, SIDE_INSET);
-		const width = Math.max(160, stageWidth - inset * 2);
-
-		/* THE LOUPE CENTRES ON THE PAGE'S OWN AXIS, ruled by Dann 2026-08-27:
-		   it belongs to the page it magnifies, so it lines up with it at every
-		   width, drawer open or closed, on both surfaces.
-
-		   IT WAS FLUSH LEFT BEFORE, and the width cap of §11 is what exposed
-		   that: while the loupe filled the room it was given, its left edge and
-		   the sheet's nearly agreed; once it was capped at the sheet's width it
-		   kept the old left edge and the two came apart. MEASURED at 1400 with
-		   the drawer closed, the loupe's centre was 272.2 px left of the
-		   sheet's.
-
-		   CENTRED, THEN CLAMPED CLEAR. The older ruling still binds: the loupe
-		   never overlaps the dock or the open drawer. Where the sheet's centre
-		   would put it under one, the clamp wins and the loupe sits as close to
-		   the page's axis as it can get. That is not a compromise the code
-		   makes quietly: §13 of the memo names the one case where it bites. */
-		const stop = Math.max(dockInset + GUTTER, window.innerWidth - GUTTER - width);
-		const left = sheet
-			? Math.min(Math.max(sheet.x + sheet.width / 2 - width / 2, dockInset + GUTTER), stop)
-			: dockInset + GUTTER;
+		/* CLAUSE 12 RENAMED THIS FROM `width`. It is now a CEILING the content
+		   is fitted under (`fitWidth`, below, and the clamp the frame's own
+		   final `width` takes further down), not the frame's own width: the
+		   room the stage offers, less the side inset, same as before. The
+		   frame's own width is computed once `stripWidth` exists, past the
+		   panel strip below, and centring (`left`/`stop`) moves with it,
+		   past that same point, so both read the width they actually draw
+		   rather than the room that used to stand in for it. */
+		const maxWidth = Math.max(160, stageWidth - inset * 2);
 
 		/* AN ENGRAVED EXCERPT OPENS WITH NO BARLINE BEFORE ITS FIRST NOTE, and
 		   Dann walked the deploy and found one: on a mid-system measure the
@@ -1120,7 +1107,7 @@
 		const carrySpanUnits = carry ? carry.right - carry.left : 0;
 
 		const totalSpan = headCropUnits + meterSpanUnits + carrySpanUnits + viewSpan + tailSpanUnits;
-		const fitWidth = Math.max(0, width - FRAME_SIDES);
+		const fitWidth = Math.max(0, maxWidth - FRAME_SIDES);
 		const drawn = Math.min(totalSpan * unitPx * magnification, fitWidth);
 		const scale = drawn / totalSpan;
 		/* `viewSpan * scale` WOULD BE THIS PANEL'S OWN NATIVE WIDTH, but the
@@ -1235,20 +1222,59 @@
 		   element itself is found. */
 		const pageRing = sysEl.querySelector('[data-selection-ring][data-note-selected]');
 
+		/* CLAUSE 13/2.5. MORE DAYLIGHT BETWEEN THE SQUIRCLE AND THE CARET NEXT
+		   TO IT, moved up from beside the boundary functions below so
+		   `CARET_MARGIN` can be sized against it: Dann, on the walk, *"Maybe
+		   even a little more daylight between the squircle and that caret on
+		   the right side?"* Raised from the retired clause 4's own 1.2
+		   line-gaps (dropped when the position rule became ink/stroke-based
+		   and the boundary functions below started reading the bare stroke,
+		   zero clearance) to 1.6, DESK DEFAULT, reversible, and it is spent
+		   only where the squircle is the boundary: a neighbour's plain ink
+		   asks for none, since it is not what Dann's own words named. THIS
+		   IS THE DRAWN CLEARANCE, not the tap-safety floor, the desk's own
+		   distinction, put to Dann and not waved off: the two are decided by
+		   different things, a hit rectangle's CENTRE in CSS pixels for the
+		   second, measured separately below the scan. */
+		const SQUIRCLE_CLEARANCE = lineGap * 1.6;
+
 		/* THE BODY'S OWN MARGIN, CLAUSE 6: *"the spacing in the Loupe is
-		   temporary and situational, and bears not on the paper GUI."* A
-		   fixed two line-gaps, past the crop `measureWindow` already chose,
-		   on both sides, unconditionally, so the crop never resizes when a
-		   caret's own position happens to need the room and never resizes
-		   when it does not: one width per measure, not one that jumps as the
-		   singer steps between notes. It is spent two ways below: it is the
-		   room a nudged barline (§ below) moves into, and it is why a caret
-		   drawn at the crop's own true edge is never clipped (clause 6 item
-		   5). The ring and the frame's own `viewBox`, further down, are
-		   repointed from `view.left`/`viewSpan` to `bodyViewLeft`/
-		   `bodyViewSpan` so the crop that is drawn agrees with the crop this
-		   block reasons about. */
-		const CARET_MARGIN = lineGap * 2;
+		   temporary and situational, and bears not on the paper GUI."* Past
+		   the crop `measureWindow` already chose, on both sides,
+		   unconditionally, so the crop never resizes when a caret's own
+		   position happens to need the room and never resizes when it does
+		   not: one width per measure, not one that jumps as the singer steps
+		   between notes. It is spent three ways below: it is the room a
+		   nudged barline (§ below) moves into, it is why a caret drawn at
+		   the crop's own true edge is never clipped (clause 6 item 5), and,
+		   since clause 12 keyed the frame's own WIDTH to this same span, it
+		   is why that width holds still while the singer steps too.
+
+		   CLAUSE 12's OWN FLOOR, "moving the selection within one measure
+		   does not change it at all." MEASURED, m. 7, before this margin
+		   included `SQUIRCLE_CLEARANCE`: with G3 (the measure's own first
+		   note) taken, the squircle's own clearance pushed the head gap's
+		   boundary `3.549` native units, `0.645` line-gaps, past the fixed
+		   two line-gaps `CARET_MARGIN` alone reserved, so the dynamic
+		   footprint widening two paragraphs down had to make up the
+		   difference every time a first- or last-note squircle came and
+		   went, and `frame.width` moved with it, `642.3` against `634.55`
+		   CSS px, under the singer's own hand. `CARET_MARGIN` now reserves
+		   `SQUIRCLE_CLEARANCE` itself, unconditionally, on both sides, so
+		   the dynamic widening's own `Math.min`/`Math.max` almost never has
+		   more to add than this fixed floor already holds, and `frame.width`
+		   stops moving with the selection on every measure this fixture
+		   carries (the whole-fixture stability walk, in the memo, is the
+		   proof). NOT ESTABLISHED past this fixture: a squircle wide enough
+		   (an unusually long IPA syllable, N.141's own width driver) to
+		   still exceed this floor would still touch the dynamic widening,
+		   and would still move `frame.width`, since nothing here can predict
+		   another note's own squircle short of building it, which is
+		   N.153's own extraction and out of this brief's scope. The ring and
+		   the frame's own `viewBox`, further down, are repointed from
+		   `view.left`/`viewSpan` to `bodyViewLeft`/`bodyViewSpan` so the crop
+		   that is drawn agrees with the crop this block reasons about. */
+		const CARET_MARGIN = lineGap * 2 + SQUIRCLE_CLEARANCE;
 		let bodyViewLeft = view.left - CARET_MARGIN;
 		let bodyViewRight = view.right + CARET_MARGIN;
 		let bodyViewSpan = viewSpan + CARET_MARGIN * 2;
@@ -1401,9 +1427,30 @@
 			const armHalf = lineGap * 0.34;
 			const hitHalf = Math.max(lineGap, 22 / scale);
 			const MIN_SPACE = armHalf * 2 + lineGap * 0.3;
+			/* `SQUIRCLE_CLEARANCE` IS DECLARED ABOVE, beside `CARET_MARGIN`,
+			   clause 13/2.5: `CARET_MARGIN` now reserves it unconditionally,
+			   so the two have to agree on one number rather than risk a
+			   second, silently disagreeing copy. */
 
 			const last = positions.length - 1;
-			const leftBoundary = (i: number): number | null => {
+			/* `withClearance` DEFAULTS TRUE AND THE MARKS LOOP BELOW CAN ASK
+			   FOR FALSE. Clause 13/2.5's own clearance is additive daylight
+			   for the ordinary case; it is not a floor, and nothing gave it
+			   one. MEASURED on this session's own walk, m. 6, the gap after
+			   `A♭3`: the clearance alone (`ringRightEdge + 8.8`) already
+			   read past `593`, the NEXT note's own ink starting at `587.51`,
+			   before the caret's own width was even counted, so the
+			   position rule's midpoint landed inside that note whatever it
+			   computed. The bare stroke, zero clearance, is what this gap
+			   drew before clause 13, still short of the note but by less;
+			   asking for a little more daylight cannot be the reason a gap
+			   that used to fall short of touching now falls INSIDE the
+			   neighbour it never used to reach, so the loop below asks for
+			   the bare edge again wherever the clearance edge alone already
+			   crosses the other side, and takes the true midpoint of that
+			   instead. Never worse than clause 13 found it; DoD 5b's own
+			   report names every gap this still does not reach. */
+			const leftBoundary = (i: number, withClearance = true): number | null => {
 				if (i === 0) return opening ? opening.x : null;
 				const e = positions[i - 1];
 				if (e.kind !== 'entry') return null;
@@ -1411,16 +1458,20 @@
 				   taken note, the edge THIS gap must clear is the squircle's
 				   own RIGHT stroke, not its left: the boundary facing the gap,
 				   never the far side of the note. */
-				if (e.id === selectedEventId && ringRightEdge !== null) return ringRightEdge;
+				if (e.id === selectedEventId && ringRightEdge !== null) {
+					return ringRightEdge + (withClearance ? SQUIRCLE_CLEARANCE : 0);
+				}
 				return inkOf(e.id)?.right ?? null;
 			};
-			const rightBoundary = (i: number): number | null => {
+			const rightBoundary = (i: number, withClearance = true): number | null => {
 				if (i === last) return closing ? closing.right : null;
 				const e = positions[i + 1];
 				if (e.kind !== 'entry') return null;
 				/* SYMMETRIC: this entry sits to the RIGHT of gap `i`, so its
 				   squircle's LEFT stroke is the edge facing the gap. */
-				if (e.id === selectedEventId && ringLeftEdge !== null) return ringLeftEdge;
+				if (e.id === selectedEventId && ringLeftEdge !== null) {
+					return ringLeftEdge - (withClearance ? SQUIRCLE_CLEARANCE : 0);
+				}
 				return inkOf(e.id)?.left ?? null;
 			};
 
@@ -1430,6 +1481,22 @@
 				if (p.kind !== 'gap') continue;
 				let leftB = leftBoundary(i);
 				let rightB = rightBoundary(i);
+				/* THE CLEARANCE FALLBACK, against `MIN_SPACE`, the same
+				   floor the head and tail gaps nudge a barline to reach: can
+				   a caret stand in this room at all. If the daylight clause
+				   13 adds already leaves less than that, using it only
+				   trades a squircle touch for an ink one, or makes an
+				   existing ink touch deeper, never the "little more
+				   daylight" it was asked for. Both sides fall back to their
+				   bare stroke together, so the mark stays the TRUE midpoint
+				   of one consistent room rather than a mix of a clearanced
+				   edge on one side and a bare one on the other, and the
+				   result is never worse than clause 13 found it: the bare
+				   room is always at least as wide as the clearanced one. */
+				if (leftB !== null && rightB !== null && rightB - leftB < MIN_SPACE) {
+					leftB = leftBoundary(i, false);
+					rightB = rightBoundary(i, false);
+				}
 				if (i === 0 && leftB === null) leftB = bodyViewLeft;
 				if (i === last && rightB === null) rightB = bodyViewRight;
 
@@ -1687,7 +1754,7 @@
 				)
 			: null;
 
-		/* ── CLAUSE 1.0. THE BODY SHOWS ONE MEASURE AND NOTHING ELSE ──────────
+		/* ── CLAUSE 1.0/11. THE BODY SHOWS ONE MEASURE AND NOTHING ELSE ───────
 		   Dann, m. 13: *"There should not be any information in the Loupe from
 		   adjacent measures."* `bodyViewLeft`/`bodyViewRight` are wider than the
 		   measure's own true content, on purpose, clause 6's room for a caret's
@@ -1712,18 +1779,192 @@
 		   where any glyph's ink happens to fall, which is why one could cut a
 		   sharp in half and the other, by construction, cannot.
 
-		   A NUDGED BARLINE MOVES THE CLIP WITH IT. `nudgeBarline` (above)
-		   redraws the opening or closing barline `openingNudge`/
-		   `closingNudge` past `opening.x`/`closing.right` when the position
-		   rule needed the room, and the clip has to reach exactly as far, or
-		   it would cut the barline it just moved. `CLIP_PAD` is a barline
-		   stroke's own room, spent only on the side a barline is actually
-		   drawn: where there is none (a system's first or last measure), the
-		   plain `view` edge is already the proven boundary and gets nothing
-		   added to it. */
+		   CLAUSE 11: NO BARLINE AT THE LEFT, EVER, whatever it belongs to.
+		   *"Found another unwanted initial barline. These need to be gone."*
+		   The opening barline is not adjacent content (it is this measure's
+		   own), so clause 7's clip let it stand; it is excluded here on its
+		   own rule instead, which is why the two clauses are read together.
+		   The head panel's clef, key and meter already stand for the
+		   measure's start, and a barline after a meter signature is wrong
+		   notation regardless of whose measure drew it. `opening.x` is the
+		   barline's own, UN-nudged position, and nudging only ever moves it
+		   further left (`nudgeBarline` above), so clipping everything left of
+		   `opening.x` itself, whole stroke included, excludes it whether or
+		   not it moved. `leftBoundary(0)`'s own reference for the head
+		   caret's position is untouched by this: the caret still centres
+		   against `opening.x`, drawn or not, exactly as clause 6 already had
+		   it. `CLIP_PAD` here is spent the other way from the closing side
+		   below, keeping the stroke OUT rather than keeping it whole.
+
+		   THE CLOSING BARLINE STAYS, clause 7's own continuation conceit,
+		   Dann endorsed and clause 11 does not touch. `closing.right` IS
+		   ALREADY THE STROKE'S OWN OUTER EDGE, not its centre: `loupe.ts`'s
+		   `closingBarline` adds half the line's own width in, so no pad
+		   belongs here in the ordinary, un-nudged case. FOUND ON THIS
+		   SESSION'S OWN WALK, m. 8: an unconditional pad here, meant only to
+		   protect the stroke, instead let `484.64` to `466.92` of m. 9's own
+		   syllable, `деж`/`ˈdʲɛʒ`, the NEXT measure's, paint half-visible
+		   past `closing.right` on the un-nudged case, clause 7's and 3.1's
+		   own violation at once. THE PAD IS SPENT ONLY WHERE A NUDGE ACTUALLY
+		   MOVED THE STROKE: `nudgeBarline` (above) redraws it past
+		   `closing.right` when the position rule needed the room, and only
+		   then does the clip need to reach further to avoid cutting the
+		   barline it just moved. Where there is no closing barline at all (a
+		   system's last measure), the plain `view` edge is already the
+		   proven boundary and gets nothing added to it either. */
 		const CLIP_PAD = lineGap * 0.15;
-		const bodyClipLeft = opening ? opening.x - openingNudge - CLIP_PAD : view.left;
-		const bodyClipRight = closing ? closing.right + closingNudge + CLIP_PAD : view.right;
+		let bodyClipLeft = opening ? opening.x + CLIP_PAD : view.left;
+		let bodyClipRight = closing
+			? closing.right + closingNudge + (closingNudge > 0 ? CLIP_PAD : 0)
+			: view.right;
+
+		/* THE SAFETY NET, GENERAL WHERE THE BARLINE REFERENCE ALONE IS NOT.
+		   FOUND ON THIS SESSION'S WALK, m. 8: the CLOSING BARLINE is a
+		   NOTATION boundary, and m. 9's own first note sits cleanly past it,
+		   but that note's underlay SYLLABLE, centred on its own narrow note
+		   and wider than it (a long word, ordinary on the page, Gould does
+		   not pad a barline against lyric ink), reached back past the
+		   barline to `444.64`, inside what `bodyClipRight` above still
+		   called this measure's own room. Clause 7 names a syllable
+		   explicitly ("not a syllable, not a fragment of one"), so a
+		   boundary that only reasons about NOTATION cannot be the whole
+		   rule. This pass reads every mark clause 7 already names foreign
+		   (an adjacent event's own group, its accidental or dot, its
+		   IPA/Cyrillic syllable, a stray key signature or clef) and pulls
+		   the clip in from whichever side it is found on, past its own near
+		   edge by `CLIP_PAD`, never past the boundary already set above
+		   (`Math.max`/`Math.min` against the existing value, the same
+		   discipline clause 6's own footprint widening uses): the barline
+		   reference is right everywhere it is not contradicted by an
+		   actual mark, and only actual marks narrow it further. */
+		const ownPrefix = `m${measureIndex}-`;
+		/* READ FROM `sysEl`, THE LIVE PAGE, NOT `clone`. `clone` is a detached
+		   copy at this point in the effect (`clone.innerHTML` is not read
+		   until the frame is assembled, well after), and `getBBox` on a
+		   detached SVG element has no layout to report: it throws, or on some
+		   engines answers all-zero, so every candidate silently failed this
+		   check's own `catch` until this was caught and fixed. `sysEl` is the
+		   same system, still mounted, its coordinates identical to the clone
+		   that will be built from it, which is what every other ink read in
+		   this effect already relies on (`inkOf`, above, reads `container`,
+		   the live page, for the same reason). */
+		/* A GROUP'S OWN `getBBox` IS NOT ITS INK, the same trap `inkOf` above
+		   was already built to avoid: `[data-event-id]`'s own group carries
+		   its `data-hit` rectangle as a child, wider than the glyph and
+		   `pointer-events="none"` so it never taps, but very much part of
+		   the group's own box. FOUND THE SAME SESSION, minutes after the fix
+		   above: reading it whole pulled `bodyClipRight` in past `closing`
+		   itself, on the strength of a transparent rectangle nobody sees,
+		   and clipped the barline clause 7 requires. This reads a group's
+		   CHILDREN, excluding the hit rectangle, the way every other ink
+		   measurement here already does; anything else (an accidental, a
+		   dot, a syllable) is read whole, since none of them carry one. */
+		const markInk = (el: Element): { left: number; right: number } | null => {
+			let minX = Infinity;
+			let maxX = -Infinity;
+			const widen = (node: Element) => {
+				try {
+					const b = (node as SVGGraphicsElement).getBBox();
+					if (b.width || b.height) {
+						minX = Math.min(minX, b.x);
+						maxX = Math.max(maxX, b.x + b.width);
+					}
+				} catch {
+					/* not rendered */
+				}
+			};
+			if (el.tagName === 'g' && el.hasAttribute('data-event-id')) {
+				for (const c of el.children) if (!c.hasAttribute('data-hit')) widen(c);
+			} else {
+				widen(el);
+			}
+			return Number.isFinite(minX) ? { left: minX, right: maxX } : null;
+		};
+		for (const el of sysEl.querySelectorAll(
+			'[data-event-id], [data-of-event], [data-ipa-of], [data-withheld], [data-key-signature], [data-clef]',
+		)) {
+			const id =
+				el.getAttribute('data-event-id') ??
+				el.getAttribute('data-of-event') ??
+				el.getAttribute('data-ipa-of') ??
+				el.getAttribute('data-withheld');
+			const isForeign = el.hasAttribute('data-key-signature') || el.hasAttribute('data-clef') || (id !== null && !id.startsWith(ownPrefix));
+			if (!isForeign) continue;
+			const b = markInk(el);
+			if (!b) continue;
+			if (b.right <= bodyClipLeft || b.left >= bodyClipRight) continue;
+			/* NEVER PAST THE CLOSING BARLINE ITSELF: clause 7 endorsed it as
+			   the continuation conceit, and clause 11 leaves it standing, so
+			   a neighbour's own ink tightens the room short of it, never
+			   through it. The opening side carries no such floor: clause 11
+			   excludes that barline unconditionally already, so there is
+			   nothing there for a neighbour's ink to be kept clear of. */
+			if (b.left >= (bodyClipLeft + bodyClipRight) / 2) {
+				const floor = closing ? closing.right + closingNudge : bodyClipLeft;
+				bodyClipRight = Math.max(floor, Math.min(bodyClipRight, b.left - CLIP_PAD));
+			} else {
+				bodyClipLeft = Math.max(bodyClipLeft, b.right + CLIP_PAD);
+			}
+		}
+
+		/* ── CLAUSE 12. THE LOUPE SIZES TO ITS CONTENTS ───────────────────────
+		   Dann, after the width retraction made every loupe full width: *"I
+		   see no reason to impose uniformity in dimension for all Loupes...
+		   this Loupe can be much tighter to its contents than it is."*
+
+		   THE STRIP'S OWN WIDTH, `stripWidth` below, IS ALREADY EVERY PANEL
+		   THIS EFFECT JUST BUILT, side by side, at the `scale` `maxWidth`
+		   capped. The frame's own outer width is that plus the card's own
+		   padding and border (`FRAME_SIDES`, the same figure `fitWidth`
+		   already spends), clamped between `MIN_WIDTH` below and `maxWidth`,
+		   the room the stage offers, unchanged from what `width` used to be
+		   unconditionally.
+
+		   `MIN_WIDTH`'S OWN NUMBER, set by what has to fit ABOVE the
+		   notation, not by the notation: the tag row and the readout's own
+		   second line, whose text is neither fixed nor short (a fill flag
+		   widens the tag, a taken rest with a beat and a pulse widens the
+		   readout). MEASURED on this fixture, off the DOM's own font at
+		   canvas `measureText`, not `getBoundingClientRect` (the tag's own
+		   box already fills its row, so its rect reports the ROW's width,
+		   not the text's): the widest tag, `m. 17 · system 6 of 6 · 14 of
+		   12, over`, sets `220.7` px at the tag's own weight and tracking;
+		   the widest readout, `Rest · beat 4, pulse 2 · Quarter`, sets
+		   `160.6` px at the readout's own, lighter weight. `280` clears the
+		   wider of the two (the tag) by `59.3` px past its own text plus
+		   the card's own padding and border (`FRAME_SIDES`, `22.8` px),
+		   room for a longer fill flag or a higher system count than this
+		   fixture carries, not chosen by eye. DESK DEFAULT, reversible:
+		   Dann's own ask was for "a minimum," not this figure. NOT
+		   ESTABLISHED beyond this fixture's own longest strings. */
+		const stripWidth = headWidth + meterWidth + carryWidth + bodyContentWidth + tailWidth;
+		const MIN_WIDTH = 280;
+		const width = Math.min(maxWidth, Math.max(MIN_WIDTH, stripWidth + FRAME_SIDES));
+
+		/* THE LOUPE CENTRES ON THE PAGE'S OWN AXIS, ruled by Dann 2026-08-27:
+		   it belongs to the page it magnifies, so it lines up with it at every
+		   width, drawer open or closed, on both surfaces. MOVED HERE FROM
+		   `maxWidth`'s own declaration by clause 12: centring now reads the
+		   width the frame actually draws, not the room that used to stand in
+		   for it, or a short measure would centre as if it were still full
+		   width and sit off-axis from the page it names.
+
+		   IT WAS FLUSH LEFT BEFORE, and the width cap of §11 is what exposed
+		   that: while the loupe filled the room it was given, its left edge and
+		   the sheet's nearly agreed; once it was capped at the sheet's width it
+		   kept the old left edge and the two came apart. MEASURED at 1400 with
+		   the drawer closed, the loupe's centre was 272.2 px left of the
+		   sheet's.
+
+		   CENTRED, THEN CLAMPED CLEAR. The older ruling still binds: the loupe
+		   never overlaps the dock or the open drawer. Where the sheet's centre
+		   would put it under one, the clamp wins and the loupe sits as close to
+		   the page's axis as it can get. That is not a compromise the code
+		   makes quietly: §13 of the memo names the one case where it bites. */
+		const stop = Math.max(dockInset + GUTTER, window.innerWidth - GUTTER - width);
+		const left = sheet
+			? Math.min(Math.max(sheet.x + sheet.width / 2 - width / 2, dockInset + GUTTER), stop)
+			: dockInset + GUTTER;
 
 		frame = {
 			inner: clone.innerHTML,
@@ -1759,7 +2000,7 @@
 						}
 					: null,
 			ring,
-			stripWidth: headWidth + meterWidth + carryWidth + bodyContentWidth + tailWidth,
+			stripWidth,
 			contentHeight,
 			windowHeight,
 			centreY,

@@ -138,6 +138,14 @@ does not repeat them.
   2026-09-17, DESK DEFAULT numbers.
 - `[~]` **N.152. Playback of the Markup.** LATER, its own cardinal, asked for by Dann
   2026-09-17. Spec in `OPEN.md`.
+- `[ ]` **N.153. The loupe re-engraves the held measure at its own spacing.**
+  Numbered by Dann 2026-09-18. Spec in `OPEN.md`, five stages, each landing on its
+  own. **It is what closes the 27 caret collisions**, which are scale-invariant and
+  reachable no other way. Account of the stop that produced it:
+  `../sessions/memo-n92-loupe-reengraves_r1_2026-09-18.md` §1. **AND IT IS BIGGER THAN
+  THAT: measured 2026-09-18, the tap separation between a caret and its neighbour
+  runs 1.13 px to 7.89 px at phone width against a 44 px floor, on all 17 measures.
+  The insert reach does not work on a phone at all until N.153 lands.**
 
 ### Numbered 2026-09-14
 

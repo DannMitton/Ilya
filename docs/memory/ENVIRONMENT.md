@@ -20,6 +20,7 @@ next session the same hour it cost the last one.
 | you are about to, or you are seeing | search for |
 |---|---|
 | Code reports a preview serving an old build on port 4173 | `A STALE PREVIEW HOLDS PORT 4173` |
+| writing a brief for Code | `A BRIEF THAT CARRIES A CAUSE COSTS A PASS` |
 | ship anything at all | `Gate baselines` |
 | move a gate number | `Moving a gate baseline` |
 | the ship script refuses to run | `refuses on untracked files` |
@@ -3194,3 +3195,30 @@ re-chosen from the beginning."*
 Both are SMuFL, so the codepoints are identical and a sketch swaps with one `@font-face`
 line. Maestro is an OTF, so a data URI takes `format('opentype')`, not `format('woff2')`.
 It base64s to about 375 KB, which is fine inside a one-off HTML sketch.
+
+
+## A BRIEF THAT CARRIES A CAUSE COSTS A PASS. 2026-09-18
+
+**Measured, not asserted: six passes on N.92's carets on 2026-09-17 and
+2026-09-18 where two would have done.** Three of the extra four were spent
+because the desk wrote a CAUSE into the brief, in prose, from a screenshot, and
+Code built against it before measuring.
+
+- "the caret holds short of that note" became clamping to the note's own centre,
+  which broke tapping (`memo-n92-caret-weight_r1_2026-09-17.md` §2).
+- "a gap deep in the squircle's span is caught by neither band" was wrong; the
+  real cause was the neighbour clamp overriding the stroke clearance
+  (`memo-n92-caret-span-and-rests_r1_2026-09-17.md` §2).
+- "expand the loupe's spacing" named an outcome and not a mechanism, so Code
+  stayed inside the clone, where beams and ties make any move unsafe
+  (`memo-n92-caret-collision_r1_2026-09-17.md` §4).
+
+**THE FIX IS THE FORM, NOT THE RESOLVE.** `../sessions/BRIEF-TEMPLATE.md` has no
+slot for a cause. Observations go in section 1, citations in section 2, and
+finding the cause is section 3's instruction to Code. **A rule telling the desk
+to infer less has now been written three times and failed twice more the same
+night. A form with nowhere to put a diagnosis cannot be complied with badly.**
+
+**What did work, all three external to the desk:** Dann asking "are you certain",
+which sent the desk to the file; the brief instructing Code to measure before
+diagnosing, which returned the real cause twice; and Dann looking at the screen.

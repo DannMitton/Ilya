@@ -74,6 +74,14 @@ with N.120 as the drawer's surfaces"*, and N.94's transposition control is a
 station inside the `Melody` band, sibling to Corrections. **All three want the
 station grammar settled first.** This is a Dann action, not a build.
 
+**7. N.153 comes before any further caret work, and nothing comes before N.153.**
+Added 2026-09-18. Three passes on 2026-09-17 and 2026-09-18 each relocated the
+caret collisions rather than removing them, because a crop of the page cannot give
+a measure wider relative spacing and the collisions are scale-invariant. **Any
+further attempt to place carets inside the crop is work that N.153 throws away.**
+N.153 itself depends on nothing else open: its five stages are internal to
+`Loupe.svelte`, `VoiceProfilePane.svelte` and `loupe.ts`.
+
 **6. N.130 is inside the release, N.131 is outside it.** `STATE.md`: the ruled
 release sentence names Insights, and *"a document in the wrong language is wrong
 rather than half-built."* N.131 is explicitly not release-blocking.
