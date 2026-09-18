@@ -41,73 +41,58 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-17, about 02:00, for the next instantiation
+> ### READ THIS FIRST. Written at the close of 2026-09-17, late evening, for the next instantiation
 >
-> **THE ONE THING IS STILL N.146, `SCHEDULE.md` WEEK 1, TOP LINE. ITS LAST STEP IS 2c.**
-> Shipped: step 1 (`fe4d2c7`, staff check, no question) and steps 2 and 2b together
-> (`6e98057`: Ilya refuses an OCR reading that is mostly not Russian, and waits for the
-> dictionary before judging). Walks 1, 2, 3, 4, and 6 passed N.146's routing (`OPEN.md`,
-> findings). **Walk 5 did not pass as built:** on `6e98057`, after New song, the garble
-> photo dropped on the input field showed "This file was not recognised as a score."
-> immediately, twice (finding 8). **At this close Code was investigating** under
-> `../sessions/brief-n146-step2c-unrecognised-photo_r1_2026-09-17.md`.
+> **THE ONE THING IS N.92's INSERT REACH: the carets.** Designed, ruled and drawn tonight,
+> not briefed. Spec `../sessions/spec-n92-edit-surface_r1_2026-09-17.md` §4.1; the audit that
+> sized it at more than one evening is `../sessions/memo-n92-edit-audit_r1_2026-09-17.md`;
+> the drawing is `n92-carets-on-the-measure.html` (sent in session, not in the tree).
+> **Its rulings are in `OPEN.md`, section "THE CARET".** `SCHEDULE.md` week 2 is where it sits.
 >
-> **First act:** look for `memo-n146-step2c-*` in `../sessions/`; read it in full. If Code
-> built a fix: gates (web-test baseline **1253**, already in `ilya-ship.sh:79`), `git add`
-> its new files, ship, check the alias (ENVIRONMENT, `THE ALIAS CHECK THAT WORKED`), then
-> Dann repeats walk 5: close Ilya tabs, open the alias, New song, drop
-> `~/Downloads/walk-n146-poem-photo.jpg` on the input field. **Expected:** "No text
-> recognised in image.", the field unchanged, no new song. If Code could not reproduce it,
-> bring Dann the memo's evidence. **N.146 closes when walk 5 passes;** then its spec leaves
-> `OPEN.md` and its account goes to `../sessions/LOG.md`.
+> **THE HEADLINE OF THE NIGHT, and the desk's own error: INSERTION IS ALREADY BUILT**, as
+> N.92 slice 3. A singer reaches it by walking the stepper beside the readout into a gap,
+> where a duration cell enters a note; `entry.ts:183-198`, `correction.ts:305-357`,
+> `:496-526`, `:382-433`. The desk wrote "nothing in Ilya inserts a note" in
+> `../sessions/report-n151-note-entry_r1_2026-09-17.md` without opening the file, and the
+> report carries its own correction at §0. **What N.92 still lacks is a way to REACH the
+> gap that a singer would find.** Dann walked the old path tonight and it works.
 >
-> **The memory files were NOT committed at this close** (Dann went to bed with Code
-> mid-work). Commit them on their own, never with the ship script while Code has files
-> open: the ship script stages every tracked change (`ilya-ship.sh:94`, `git add -u`).
+> **Shipped and walked by Dann tonight:** `55c04d9`, N.147 (the syllables moved into the
+> loupe, a note tap only selects); `0eb0a95`, the semitone cells returned and the fill tag
+> gained its word; `b03e918`, the pitch cells became a grid of six. The alias served each
+> (stamps `ilya-1789668784118`, `…695158110`, `…696588211`).
 >
-> **Residues of N.142 to N.145** (closed 2026-09-16, LOG block 20) (`OPEN.md`, "RESIDUES OF
-> ITEMS CLOSED 2026-09-16"): N.142 step 2, a count of placements on tie continuations in
-> Dann's browser (desk via Chrome; note ENVIRONMENT `THE EXTENSION CANNOT SEE HIS TAB`);
-> N.145's poem pasted after a wordless score was never walked; the loupe French undo and
-> redo lines were not seen on screen. **N.141's last step is unblocked** (N.142 shipped).
+> **N.146 CLOSED 2026-09-17**: walk 5 passed in Incognito. Code could not reproduce finding
+> 8 and built nothing; the cause is NOT ESTABLISHED, with two leads in `OPEN.md`
+> (findings 9 to 12).
 >
-> **Done this session besides N.146:** the week 1 per-format walk's sample files were found
-> (`SCHEDULE.md`; still missing a real phone photo of a score); `PRODUCT.md` gained "Why
-> Ilya exists" in Dann's words (a legacy others can build on for other languages), and its
-> post-release porting guide is caught in `INBOX.md`.
+> **Numbered tonight, all DESK DEFAULT numbers, specs in `OPEN.md`:** N.148 (Undo and Redo
+> in the loupe's Syllables bar), N.149 (Corrections moves into the loupe and the Score
+> Markup header's pair retires with it), N.150 (the drawer's Score Markup band becomes
+> Voice, « Voix »), N.151 (retired: it is N.92's own territory), N.152 (playback of the
+> Markup, LATER, its own cardinal, with transport controls, navigation by measure, and a
+> choice of timbre; the desk owes research on sound sets and on what transport serves
+> study).
 >
-> **THE RELEASE, RULED 2026-09-16.** Date Friday 2026-10-30. The sort is done and the
-> freeze rule is in force (§RULINGS DANN OWES). IN: 24 rows,
-> `../sessions/sort-release_r1_2026-09-16.md`. Estimate (DESK INFERENCE):
-> `../sessions/estimate-release_r1_2026-09-16.md`. The week-by-week road: `SCHEDULE.md`.
-> Checkpoint Friday 2026-10-09.
+> **Rulings tonight, recorded where they bind:** `PRODUCT.md` gains "The text and the
+> notes", three rules plus the protection that stops at user error. `OPEN.md` carries the
+> rest: the measure tolerates being over while the singer works and is flagged once left
+> that way; the edited score comes back out as an edited copy and the singer's own tempo
+> counts; the printed page carries one line only when the score holds singer edits; four
+> singer's marks (staccato, tenuto, fermata, breath), with rit., accel. and caesura going
+> with tempo; there is no stopping rule, and notating a melody for analysis is where this
+> eventually goes.
 >
-> **FINDINGS 1 TO 8 FROM THE N.146 WALK** moved verbatim to `OPEN.md`, section "FINDINGS FROM THE N.146 WALK, 2026-09-17". They feed week 1's per-format walk and the CHECK rows. Findings 5 and 8 are N.146's own.
+> **Owed by Dann, and small:** the walk of the fill tag's SHORT state (he saw OVER live);
+> whether a measure left over may print; what Replace does to a night of corrections.
 >
-> **Week 1's other lines need Dann first:** N.147, the loupe tap (four designs in
-> `INBOX.md`; the desk recommends a tap that only selects, plus a Place control); the
-> design commissions for N.123 and N.94 (with his say-so).
+> **Still true from the morning:** the phone walk of N.147 was never taken, so the sideways
+> scroll of the syllables row under the loupe's `touch-action: none` is NOT ESTABLISHED
+> (`Loupe.svelte:1513`); "Start placement over" has no control anywhere since N.147 removed
+> the drawer row that carried it.
 >
-> **N.131's French:** 21 rows drafted and ratified, with two edits (row 9 « Retirer »;
-> row 11 "Drop your file here." / « Déposez votre fichier ici. »). NOT BUILT:
-> `../sessions/spec-n131-french_r1_2026-09-16.md`. Rows 12, 17, 18 went to N.146.
->
-> **INSIGHTS RESEARCH.** Pass 02 is planned:
-> `~/Documents/Voice Pedagogy Library/Insights Research/plan-pass02_r1_2026-09-16.md`.
-> **Put to Dann and unanswered:** ruling 1 of the six owed (the desk recommends INS-P01-2
-> to LATER and INS-P01-11 folded into INS-P01-1 as one sentence). **DONE 2026-09-17:** the Howell extraction (moved to `../sessions/LOG.md` block 21). **Elsevier answered:** Journal of Voice at 120 USD, print and online, back
-> issues from 1987; Dann asked how to buy.
->
-> **Carried from 2026-09-16, still true:** colour stage 5 is displaced
-> (`../sessions/plan-colour-story_r1_2026-09-13.md` §STAGE 5); the loupe's path for a
-> system's first measure that opens on a rest is untested; a melisma slur crossing a
-> system break may clear a turning mark on the other system (NOT ESTABLISHED); the Sonnet
-> 90 print fixture may no longer fill exactly two sheets; the desk's Grayson page renders
-> sit in `node_modules/.desk-scratch/` (git-ignored).
->
-> **Usage, 2026-09-17 00:45:** all models 48% (40% at 2026-09-16 20:00), Fable 15%
-> (unchanged), reset Sunday 05:00. This session's two Sonnet agents (Howell) used 159k and
-> 217k tokens; Code ran Sonnet for N.146 steps 2 to 2c.
+> **Usage, 2026-09-17 evening:** all models 55%, Fable 15%, reset Sunday 05:00. Tonight
+> spent two Sonnet agents (the Finale research, 137k; the audit, 208k) and no Fable.
 >
 > ---
 >
@@ -140,11 +125,19 @@ does not repeat them.
 ### Numbered 2026-09-16
 
 - `[x]` **N.146. Ilya tells a poem from a score itself, for a PDF or a picture.** **CLOSED 2026-09-17: walk 5 passed in Incognito; step 2c built nothing (`OPEN.md`, N.146 findings, 9). Spec and account move to `LOG.md` at this session's close.** Numbered 2026-09-16, DESK DEFAULT number; design adopted on Dann's instruction (*"we will go with that"*). Spec `OPEN.md` §N.146. IN. No switch, no new strings (struck by Dann the same night). Brief `../sessions/brief-n146-poem-or-score-detected_r1_2026-09-16.md`. **2026-09-17: steps 1, 2, 2b shipped (`fe4d2c7`, `6e98057`); walk 5 outstanding; step 2c open** (THE ONE THING).
-- `[ ]` **N.147. The loupe tap both navigates and places the armed syllable.** Was
-  INBOX-37; the number is a DESK DEFAULT, 2026-09-16. Dann: unacceptable. Four designs in
-  `INBOX.md` (2026-09-16); the desk recommends a tap that only selects, plus a Place
-  control beside the armed syllable. **His pick is owed.** IN (the freeze rule's lost-work
-  exception). `SCHEDULE.md` week 1.
+- `[x]` **N.147. CLOSED 2026-09-17.** The syllables moved into the loupe, and a note tap
+  only selects. Shipped `55c04d9`, walked by Dann the same evening. Account in
+  `../sessions/LOG.md` block 22.
+- `[ ]` **N.92. Notation editing.** Numbered by Dann 2026-08-24. Slices 1 to 3 are
+  shipped, insertion included. **Open: the caret reach** (THE ONE THING), the four
+  singer's marks, tie to the note before, and the page flag for a measure left over.
+  Spec `../sessions/spec-n92-edit-surface_r1_2026-09-17.md`, audit
+  `../sessions/memo-n92-edit-audit_r1_2026-09-17.md`.
+- `[ ]` **N.148, N.149, N.150.** Undo and Redo in the Syllables bar; Corrections moves
+  into the loupe; the drawer's band becomes Voice. Specs in `OPEN.md`, numbered
+  2026-09-17, DESK DEFAULT numbers.
+- `[~]` **N.152. Playback of the Markup.** LATER, its own cardinal, asked for by Dann
+  2026-09-17. Spec in `OPEN.md`.
 
 ### Numbered 2026-09-14
 

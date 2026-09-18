@@ -5863,3 +5863,37 @@ DANN OWES block. Raised for Dann, not acted on.***
 
 *Close of 2026-09-17, early morning. N.142, N.143, N.144 and N.145 closed and moved to `../sessions/LOG.md` block 20 with the old read-first block and seven `[x]` tracker marks. The tail of THE ONE THING moved to `OPEN.md` as live carry-over. N.146 and N.147 numbered. The release sort, the freeze rule, the estimate and `SCHEDULE.md` were made this session. Per `ENVIRONMENT.md` §PRUNING A MEMORY FILE, no line count is written here.*
 
+
+## Block 22. Close of 2026-09-17, evening. N.146 and N.147 closed, and two more ships
+
+**N.146. Ilya tells a poem from a score itself. CLOSED.** Steps 1, 2 and 2b shipped as
+`fe4d2c7` and `6e98057`. Step 2c: Code could not reproduce finding 8 and built nothing
+(`memo-n146-step2c-unrecognised-photo_r1_2026-09-17.md`). Walk 5 then passed, walked by
+Dann in a Chrome Incognito window on the branch alias about 12:45: "No text recognised in
+image." after about three seconds, the field unchanged, no third song. **The cause of
+finding 8 stays NOT ESTABLISHED**, with two untested leads in `OPEN.md` (findings 9 to 12):
+a Finder drawing fault that made the photo's row unclickable and put `wasm-artifact.yml`
+under it, which would end at exactly that message (`format-detection.ts:215`,
+`ScoreUploader.svelte:838`); and the everyday profile's cached build.
+
+**N.147. The syllables move into the loupe. CLOSED.** Shipped `55c04d9`, walked the same
+evening. A note tap in the loupe now only selects; tapping a syllable places it on the
+selected note and the selection advances; the drawer's syllable line is gone;
+`SyllableStation.svelte` was replaced by `LoupeSyllables.svelte`; `pairingCursor` was
+deleted entirely. Code also found and fixed a viewport fault of its own: the loupe could
+cover the phone's dock once the row made it taller. **Two things it could not settle**,
+both still open: the phone's sideways scroll under `touch-action: none`, and "Start
+placement over", which lost its only control with the drawer row.
+
+**The two small rows. SHIPPED `0eb0a95` and walked.** The semitone cells returned to the
+Corrections surface, reversing the retirement of 2026-08-24 on Dann's ruling, and the
+loupe's fill tag now ends with `short` / « incomplète » or `over` / « trop pleine », ruled
+by Dann the same night. **The pitch grid. SHIPPED `b03e918` and walked**: six cells, three
+columns by distance and two rows by direction, with one new key,
+`loupe.pitch.semitone` / « demi-ton ». Dann's own arrangement, after he found the full
+sentence "Down a semitone" disproportionately wide.
+
+**The design night behind them** is in `../sessions/`: the Finale research report with its
+own §0 correction, the spec, and the audit. **The desk's error, recorded because it is the
+cardinal one:** the report declared that nothing in Ilya inserts a note, written without
+opening `correction.ts`, which has carried insertion since N.92 slice 3.

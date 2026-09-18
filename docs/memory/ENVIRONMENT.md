@@ -56,6 +56,7 @@ next session the same hour it cost the last one.
 | the cloud desk cannot fetch the alias | `NO NETWORK TO VERCEL FROM THE DESK` |
 | checking the alias serves the new build, 2026-09-17 | `THE ALIAS CHECK THAT WORKED` |
 | reading the console of Dann's own Chrome tab | `THE EXTENSION CANNOT SEE HIS TAB` |
+| drawing music in a sketch or a mockup | `THE MUSIC FACE IS MAESTRO` |
 | `sed -i ''` fails in device_bash | `THE DEVICE SHELL IS LINUX` |
 | briefing Design | `WHAT DESIGN CAN READ` |
 | Design's return is not in Downloads | `DESIGN WRITES INTO THE TREE` |
@@ -3179,3 +3180,17 @@ extension sees only tabs in its own group, so it cannot read the console of the
 tab Dann is walking in. Ask him for `Cmd + Option + J` and a screenshot, and
 note that his console filter (`shane-live` on 2026-09-17) hides most messages.
 
+
+
+## THE MUSIC FACE IS MAESTRO. 2026-09-17
+
+Ilya ships four faces under `apps/web/static/fonts/`: `finale-maestro/FinaleMaestro.otf`,
+`bravura/Bravura.woff2`, `leland/Leland.otf` and `lato-ipa.woff2`. **Maestro is the one
+Dann chose and re-chose, and every drawing the desk makes uses it.** The desk drew three
+mockups in Bravura on 2026-09-17 and he corrected it: *"Our default font is not Bravura
+and I want you to stop choosing it over Maestro, which is the font I have chosen and
+re-chosen from the beginning."*
+
+Both are SMuFL, so the codepoints are identical and a sketch swaps with one `@font-face`
+line. Maestro is an OTF, so a data URI takes `format('opentype')`, not `format('woff2')`.
+It base64s to about 375 KB, which is fine inside a one-off HTML sketch.
