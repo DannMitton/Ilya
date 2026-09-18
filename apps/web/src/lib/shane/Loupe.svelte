@@ -1185,6 +1185,14 @@
 			el.setAttribute('data-loupe-hit', id);
 		}
 
+		/* THE SQUIRCLE, READ HERE SO THE CARETS CAN CLEAR IT (below) AND N.141
+		   STEP 2 CAN PLACE IT (further down, unmoved): one query, shared,
+		   rather than two reaching the live page for the same element. Its
+		   geometry is untouched here, still the selection ring's own, still
+		   read for `stripRing` at its own place; this is only where the
+		   element itself is found. */
+		const pageRing = sysEl.querySelector('[data-selection-ring][data-note-selected]');
+
 		/* ── N.92, THE CARETS ─────────────────────────────────────────────
 		   RULED BY DANN 2026-09-17 (`docs/memory/OPEN.md`, THE CARET clauses 1
 		   to 3): a vertical mark past the top and bottom staff lines, an
@@ -1204,31 +1212,105 @@
 		   A GAP BOTH OF WHOSE NEIGHBOURS ARE RESTS HAS NO RECTANGLE ON
 		   EITHER SIDE, and nothing here invents one: that gap is left out.
 		   NOT ESTABLISHED how often that costs a real score; the memo says
-		   so plainly rather than guessing. */
+		   so plainly rather than guessing.
+
+		   THE WEIGHT IS CLAUSE 4's, RULED BY DANN 2026-09-17 LATE, walking the
+		   first ship: *"functionally this is correct but... it's monstrous!
+		   ...the squircles should remain the featured coloured element."*
+		   Plate C's weight, plate D's clearance. Nothing about what a caret
+		   DOES changes here, only how it reads beside the squircle it now
+		   steps clear of. */
 		if (!syllablesOpen && positions.length > 1) {
 			const rectOf = (id: string) => container.querySelector(`[data-hit="${CSS.escape(id)}"]`);
-			const marks: { after: string | null; x: number }[] = [];
+			const marks: {
+				after: string | null;
+				x: number;
+				beforeHit: Element | null;
+				afterHit: Element | null;
+			}[] = [];
 			const last = positions.length - 1;
 			for (let i = 0; i < positions.length; i++) {
 				const p = positions[i];
 				if (p.kind !== 'gap') continue;
+				const beforeEntry = i > 0 ? positions[i - 1] : undefined;
+				const afterEntry = i < last ? positions[i + 1] : undefined;
+				const beforeHit = beforeEntry?.kind === 'entry' ? rectOf(beforeEntry.id) : null;
+				const afterHit = afterEntry?.kind === 'entry' ? rectOf(afterEntry.id) : null;
 				let x: number | null = null;
 				if (i === 0) {
 					x = view.left;
 				} else if (i === last) {
 					x = view.right;
-				} else {
-					const before = positions[i - 1];
-					const after = positions[i + 1];
-					const beforeHit = before.kind === 'entry' ? rectOf(before.id) : null;
-					const afterHit = after.kind === 'entry' ? rectOf(after.id) : null;
-					if (beforeHit) {
-						x = Number(beforeHit.getAttribute('x')) + Number(beforeHit.getAttribute('width'));
-					} else if (afterHit) {
-						x = Number(afterHit.getAttribute('x'));
+				} else if (beforeHit) {
+					x = Number(beforeHit.getAttribute('x')) + Number(beforeHit.getAttribute('width'));
+				} else if (afterHit) {
+					x = Number(afterHit.getAttribute('x'));
+				}
+				if (x !== null && Number.isFinite(x)) marks.push({ after: p.after, x, beforeHit, afterHit });
+			}
+
+			/* THE CLEARANCE, CLAUSE 4's SECOND HALF. *"ensure that the carets do
+			   not align with the sides of the squircle: let them be fully
+			   expressed without that collision."* The collision is structural: a
+			   caret's own x, above, is a note's hit-rectangle edge, and the
+			   squircle drawn on that same note can reach the same edge.
+
+			   OUTWARD, NEVER INTO THE TAKEN NOTE. A caret nearer the squircle's
+			   left than its centre moves further left; nearer or past centre, it
+			   moves right. Either way it moves away from the squircle, never
+			   toward it.
+
+			   THE CLAMP HOLDS IT SHORT OF THE NEXT NOTE, RATHER THAN ONTO IT: a
+			   push is capped so the CARET'S OWN HIT RECTANGLE (its half-width is
+			   `hitHalf`, below) never crosses the neighbouring note's
+			   hit-rectangle CENTRE on that side. A caret can still advance into
+			   that note's territory, which is normal (every caret already sits
+			   on some note's hit rectangle's edge), but its own rectangle stops
+			   short of straddling the neighbour's centre, which is what keeps
+			   the two rectangles' CENTRES apart by a full `hitHalf` rather than
+			   letting them coincide (§ below). Only a note with a hit rectangle
+			   can clamp; a rest cannot, on `positionsInMeasure`'s own reasoning
+			   above: it has none to read. */
+			/* THE CARET'S OWN HIT-RECTANGLE HALF-WIDTH, needed here too: the clamp
+			   below stops a caret's rectangle short of the neighbouring note's
+			   rectangle's own CENTRE, not merely short of its edge, or the two
+			   centres can land close enough that a real tap cannot tell them
+			   apart. MEASURED live on the fixture (`m.8`, `F♯3`): clamping to the
+			   bare centre put a caret's rectangle and its neighbour's within
+			   0.00003 units of each other, closer than a browser's own
+			   `MouseEvent.clientX` even reports (it rounds to a whole CSS pixel),
+			   so no tap could reliably choose between them. `hitHalf` is the same
+			   half-width the hit rectangle itself is drawn at, below, so the
+			   clamp and the rectangle it bounds agree by construction. */
+			const hitHalf = Math.max(lineGap, 22 / scale);
+			if (pageRing) {
+				const ringX = Number(pageRing.getAttribute('x'));
+				const ringW = Number(pageRing.getAttribute('width'));
+				const ringStroke = parseFloat(getComputedStyle(pageRing).strokeWidth) || RING_STROKE;
+				const CLEARANCE = lineGap * 1.2;
+				const bandLeft = ringX - ringStroke / 2 - CLEARANCE;
+				const bandRight = ringX + ringW + ringStroke / 2 + CLEARANCE;
+				const centreSquircle = ringX + ringW / 2;
+				for (const mark of marks) {
+					if (mark.x <= bandLeft || mark.x >= bandRight) continue;
+					if (mark.x <= centreSquircle) {
+						let pushed = bandLeft;
+						if (mark.beforeHit) {
+							const bx = Number(mark.beforeHit.getAttribute('x'));
+							const bw = Number(mark.beforeHit.getAttribute('width'));
+							pushed = Math.max(pushed, bx + bw / 2 + hitHalf);
+						}
+						mark.x = pushed;
+					} else {
+						let pushed = bandRight;
+						if (mark.afterHit) {
+							const ax = Number(mark.afterHit.getAttribute('x'));
+							const aw = Number(mark.afterHit.getAttribute('width'));
+							pushed = Math.min(pushed, ax + aw / 2 - hitHalf);
+						}
+						mark.x = pushed;
 					}
 				}
-				if (x !== null && Number.isFinite(x)) marks.push({ after: p.after, x });
 			}
 
 			if (marks.length > 0) {
@@ -1236,17 +1318,22 @@
 				   mark's outer end is the arrow's base and its apex just touches the
 				   staff line it terminates on: nothing stands proud of the arrow. One
 				   line gap is a stave space, the unit every other measurement on this
-				   surface already uses. */
+				   surface already uses. PLATE C SHRINKS BOTH: the arm from a full
+				   line-gap to 0.6, the arrowhead's half-base from 0.8 to 0.34, so the
+				   mark reads as a fine terminated line rather than a flag. */
 				const staffBottom = staffTop + 4 * lineGap;
-				const armLen = lineGap;
-				const armHalf = lineGap * 0.8;
+				const armLen = lineGap * 0.6;
+				const armHalf = lineGap * 0.34;
 				const topOuter = staffTop - armLen;
 				const bottomOuter = staffBottom + armLen;
-				const ink = '#9585a2'; /* --lavender: a correction-surface affordance
-				   reads in the section's own hue, not the engraving's black, on the
-				   same principle `.cell.engaged` already draws by (`CorrectionSurface.
-				   svelte`'s "STATE MARKERS ON MUSIC VERBS"). DESK DEFAULT, reversible:
-				   the memo names it. */
+				/* THE SQUIRCLE IS THE FEATURED COLOURED ELEMENT; THE CARET IS NOT
+				   (clause 4). `--ink-tertiary`'s own literal, the app's warm grey,
+				   at 0.32 opacity on the whole mark, and a hairline rather than a
+				   flat `1`: the stave's OWN sampled line width, `stave.lineWidth`,
+				   so the caret reads as fine as the staff at every magnification
+				   instead of as a bar drawn one unit thick regardless of it. */
+				const ink = '#6A655F';
+				const strokeWidth = stave.lineWidth > 0 ? stave.lineWidth : 1;
 				/* THE HIT RECTANGLE IS WIDER THAN THE DRAWN MARK, on the shipped
 				   note's own precedent (`staff-renderer.ts`'s "a transparent hit
 				   target... SVG hit-tests painted geometry only"). `nearestTarget`
@@ -1254,13 +1341,22 @@
 				   boundary between one gap and its neighbour; it only guarantees the
 				   rectangle itself is never smaller than the 44 px floor this surface
 				   draws every control at, converted from CSS pixels through `scale`,
-				   the same px-per-unit every panel here is sized by. */
-				const hitHalf = Math.max(lineGap, 22 / scale);
+				   the same px-per-unit every panel here is sized by. IT MOVES WITH
+				   THE DRAWN MARK, clause 4's own words, off the same (possibly
+				   clamped) `mark.x` the line and arrowheads use; the gap it names
+				   is `mark.after`, untouched by the clearance above. `hitHalf` ITSELF
+				   IS DECLARED ABOVE, with the clamp: the same half-width bounds the
+				   rectangle here and keeps a clamped caret's rectangle off its
+				   neighbour's there, and it would be a second, silently agreeing
+				   copy of the same number to declare it twice. */
 				const hitTop = staffTop - 3.5 * lineGap;
 				const hitBottom = staffBottom + 3.5 * lineGap;
 				const SVG_NS = 'http://www.w3.org/2000/svg';
 				const carets = document.createElementNS(SVG_NS, 'g');
 				carets.setAttribute('data-loupe-carets', '');
+				const inkGroup = document.createElementNS(SVG_NS, 'g');
+				inkGroup.setAttribute('opacity', '0.32');
+				carets.appendChild(inkGroup);
 				for (const mark of marks) {
 					const x = mark.x;
 					const hit = document.createElementNS(SVG_NS, 'rect');
@@ -1280,9 +1376,9 @@
 					stem.setAttribute('x2', String(x));
 					stem.setAttribute('y2', String(bottomOuter));
 					stem.setAttribute('stroke', ink);
-					stem.setAttribute('stroke-width', '1');
+					stem.setAttribute('stroke-width', String(strokeWidth));
 					stem.setAttribute('pointer-events', 'none');
-					carets.appendChild(stem);
+					inkGroup.appendChild(stem);
 
 					const top = document.createElementNS(SVG_NS, 'path');
 					top.setAttribute(
@@ -1291,7 +1387,7 @@
 					);
 					top.setAttribute('fill', ink);
 					top.setAttribute('pointer-events', 'none');
-					carets.appendChild(top);
+					inkGroup.appendChild(top);
 
 					const bottom = document.createElementNS(SVG_NS, 'path');
 					bottom.setAttribute(
@@ -1300,7 +1396,7 @@
 					);
 					bottom.setAttribute('fill', ink);
 					bottom.setAttribute('pointer-events', 'none');
-					carets.appendChild(bottom);
+					inkGroup.appendChild(bottom);
 				}
 				clone.appendChild(carets);
 			}
@@ -1372,8 +1468,8 @@
 		   in `loupe.ts`: same box, same corner, same stroke, scaled. It is drawn
 		   in its own layer BENEATH the panels, which are transparent since N.133,
 		   so it still sits under the music as ruled 2026-08-28, and it reaches
-		   across the seams the body's crop used to cut it at. */
-		const pageRing = sysEl.querySelector('[data-selection-ring][data-note-selected]');
+		   across the seams the body's crop used to cut it at. `pageRing` itself
+		   is found above, with the carets, which read it too. */
 		const carryWidth = carry ? carrySpanUnits * scale : 0;
 		const tailWidth = tailSpanUnits * scale;
 		const ring = pageRing
@@ -1455,7 +1551,17 @@
 	   otherwise have to write itself. `data-loupe-hit` and `data-loupe-gap`
 	   share nothing else, so their two kinds of id are told apart with a
 	   prefix, `note:` or `gap:`, that never reaches `onpick` or `onpickgap`:
-	   each still hears exactly the id or the `after` it always heard. */
+	   each still hears exactly the id or the `after` it always heard.
+
+	   N.92 CLAUSE 4's CLAMP KEEPS A FULL `hitHalf` BETWEEN A CLAMPED CARET
+	   AND THE NOTE IT CLAMPED AGAINST (the caret-weight block, above), so
+	   the two never come close enough for this pool to need a tie-break
+	   between them. Found live on the fixture (`m.8`, `F♯3`) BEFORE that
+	   margin existed: a caret clamped to a neighbour's bare hit-rectangle
+	   centre put the two within 0.00003 units of each other, closer than a
+	   real `MouseEvent.clientX` even resolves, so no tap could choose
+	   between them reliably. The margin is the fix; this pool needed none
+	   of its own. */
 	function handleTap(e: MouseEvent): void {
 		const notes = [...(windowEl?.querySelectorAll('.loupe-body [data-loupe-hit]') ?? [])].map((el) => {
 			const r = el.getBoundingClientRect();

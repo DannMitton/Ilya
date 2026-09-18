@@ -1336,4 +1336,50 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
      be made a reliable tap target on the engraved measure at phone width, the chip
      row returns as the fallback, and Dann hears about it before it is built.
 
+4. **THE CARET'S WEIGHT, AND ITS CLEARANCE FROM THE SQUIRCLE. Ruled by Dann
+   2026-09-17 late, from the drawing `caret-weight_r1_2026-09-17.html` (five
+   plates, sent in session, not in the tree). He chose plate C's weight with
+   plate D's clearance.** His words on
+   the shipped build: *"functionally this is correct but look at this: it's
+   monstrous! Those carets are creating visual noise that is unhelpful... I think
+   the squircles should remain the featured coloured element in the Loupe... they
+   should be evident and ready to be used, but not command the user's attention
+   as primary objects of interest."*
+   - **The squircle is the featured coloured element in the loupe. The caret is
+     not.** Lavender belongs to the squircle.
+   - **Plate C's values, ruled after he saw D at A's weight:** the app's own warm
+     grey, `--ink-tertiary` `#6A655F`, at **0.32 opacity**; the vertical stroke is
+     a **hairline, the stave's own line width** rather than a flat literal; the
+     **arm is 0.6 line-gaps** past each staff line, and the **arrowhead's base is
+     0.68 line-gaps** (half-base 0.34). The shipped values were lavender at full
+     strength, stroke `1`, arm 1.0, base 1.6 (`Loupe.svelte:1241-1245`, `:1283`,
+     read 2026-09-17).
+   - **THE CLEARANCE. His words: *"ensure that the carets do not align with the
+     sides of the squircle: let them be fully expressed without that
+     collision."*** The collision is structural: a caret stands at the boundary
+     between two notes, which is where the squircle's edge lands. **No caret
+     stands closer than 1.2 line-gaps to the squircle's stroke, and it moves
+     OUTWARD, away from the squircle, never into the taken note.** The 1.2 is a
+     DESK DEFAULT, reversible.
+   - **The condition that would justify departing from the clearance:** if moving
+     a caret outward would carry it onto a neighbouring note, the caret holds
+     short of that note rather than taking the full 1.2, and Dann is told which
+     scores do it.
+   - **CORRECTED 2026-09-17 by Code, and the desk's brief was the fault.** The
+     brief said only "holds short of that note", and the first build read that as
+     the neighbouring note's own hit-rectangle CENTRE. **That breaks tapping:**
+     measured on the fixture, the clamped caret's hit centre and the note's hit
+     centre sat 0.00003 system units apart, closer than a `MouseEvent.clientX`
+     reports, so a tap dead centre on the caret resolved to the note.
+     **The rule is: the clamp stops `hitHalf` short of the neighbour's centre**,
+     where `hitHalf` is the caret's own hit-rectangle half-width, so the caret's
+     near edge meets the neighbour's centre instead of its own centre landing
+     there. Re-measured after the fix: 22 CSS pixels apart, and the tap resolves
+     to the gap. Account: `../sessions/memo-n92-caret-weight_r1_2026-09-17.md` §2.
+   - **Which measures clamp, on the one fixture walked:** m. 8 and m. 9 of
+     Without Sun song 1, both after a sharp, because the accidental widens the
+     squircle toward a close neighbour. **NOT ESTABLISHED** whether that
+     generalizes to flats, naturals, or other scores; no second fixture was
+     built.
+
 2. **Carets are drawn only while Corrections is the active panel.** With the loupe alone, or with Syllables showing, no insertion points are drawn. His reasoning, and the desk agrees: a mark that appears when it cannot be used is noise, and the loupe's default state is reading, not editing.
