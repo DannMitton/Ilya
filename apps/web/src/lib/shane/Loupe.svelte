@@ -552,6 +552,31 @@
 
 	interface Frame {
 		inner: string;
+		/** N.92/clause 1.0. The carets' own markup, serialized apart from
+		    `inner` so the body panel can clip `inner` to the measure's true
+		    boundary without clipping a caret whose arrowhead legitimately
+		    stands past it, in the room clause 6 cleared for it. Empty while
+		    no caret is drawn (syllables open, or a single-entry measure). */
+		caretsMarkup: string;
+		/** Clause 1.0/3.1. The body panel's own clip, native x: nothing of
+		    `inner` paints outside `[bodyClipLeft, bodyClipRight]`, whole or
+		    half, however far `viewBox` itself reaches for a caret's room. */
+		bodyClipLeft: number;
+		bodyClipRight: number;
+		/** The clip rect's y and height, native units: the same band `viewBox`
+		    itself carries as its own second and fourth numbers, named so the
+		    template does not parse them back out of that string. */
+		bodyClipTop: number;
+		bodyClipHeight: number;
+		/** A `<clipPath>` id unique to the held measure, so two loupes (or two
+		    renders of one, mid-transition) never share a clip definition. */
+		bodyClipId: string;
+		/** Clause 1.0.1. The stave as the page draws it, for the body panel's
+		    own background layer: five lines the full width of `viewBox`,
+		    UNCLIPPED, painted behind the clipped clone so the margin clause 6
+		    opens for a caret reads as stave rather than as a blank seam
+		    before the tail panel's own run picks the same lines up. */
+		stave: StaveInk;
 		viewBox: string;
 		/** The frame's own width, stable as the singer steps between measures. */
 		width: number;
@@ -679,11 +704,22 @@
 			return;
 		}
 
-		/* THE LOUPE NEVER EXCEEDS THE PAGE'S OWN WIDTH, ruled by Dann 2026-08-27
-		   after his desktop walk found it growing to the viewport with the
-		   drawer closed. It magnifies part of that page, so a frame wider than
-		   the thing it is a part of reads as a second document rather than as a
-		   closer look at this one.
+		/* THE LOUPE NEVER EXCEEDS THE PAGE'S OWN WIDTH ON A PHONE. Ruled by Dann
+		   2026-08-27 after his desktop walk found it growing to the viewport
+		   with the drawer closed: it magnifies part of that page, so a frame
+		   wider than the thing it is a part of reads as a second document
+		   rather than as a closer look at this one.
+
+		   RETRACTED ON A DESK, 2026-09-18 (clause 1.0.2). His words: *"especially
+		   on desktop, the measure contents should be fully represented... If we
+		   don't shrink the point size of the notation, the only responsible
+		   alternative is to allow wider measures to be fully expressed on a
+		   device where they can be."* The notation's point size is the fixed
+		   quantity; the window is the variable one. A desk's own `stageWidth` is
+		   no longer held to the page's own, only to `room`, the viewport less the
+		   drawer and the gutters. A phone still holds to the page: its own room
+		   is already the constraint N.140 (open, unbuilt) answers with landscape
+		   or a scroll, not with a wider loupe than the thumbnail it sits on.
 
 		   THE PAGE'S WIDTH IS MEASURED, not computed from `PAGE_SIZES`: the
 		   sheet on screen is what the loupe is a crop of, and on a phone that
@@ -702,7 +738,7 @@
 		   is the one place they part: the sheet is wider than the room beside
 		   the dock, so the stage is the visible part of it. That disparity is
 		   the one carried since slice 2 and named again in the memo. */
-		const stageWidth = sheet && sheet.width > 0 ? Math.min(room, sheet.width) : room;
+		const stageWidth = isPhone && sheet && sheet.width > 0 ? Math.min(room, sheet.width) : room;
 		const stageBottom = Math.min(
 			sheet ? sheet.bottom : window.innerHeight,
 			window.innerHeight - dockHeight,
@@ -1217,6 +1253,27 @@
 		let bodyViewRight = view.right + CARET_MARGIN;
 		let bodyViewSpan = viewSpan + CARET_MARGIN * 2;
 
+		/* HOISTED OUT OF THE CARET BLOCK BELOW, clause 1.0: the body's visible
+		   content is clipped to the measure's own true boundary further down
+		   (`bodyClipLeft`/`bodyClipRight`), whether or not a caret is ever
+		   drawn (syllables can be open, or the measure can carry a single
+		   entry), and that clip has to answer for a NUDGED barline exactly
+		   the way the caret math that moves it does. Declared here, at zero,
+		   so the clip has an answer even when the gate below never runs; the
+		   caret block still owns writing to them. */
+		let openingNudge = 0;
+		let closingNudge = 0;
+		/* THE CARETS' OWN MARKUP, SERIALIZED SEPARATELY FROM THE CLONE. Clause
+		   1.0/3.1: the body panel clips the clone's own content to the
+		   measure's true boundary (`bodyClipLeft`/`bodyClipRight`, at the
+		   frame's own assembly, further down) so nothing from a neighbour
+		   measure or the system's head ever paints there, whole or half. A
+		   caret's own arrowhead legitimately stands past that boundary, in
+		   the room `CARET_MARGIN` cleared for it, so it cannot be inside the
+		   same clipped element: it is drawn to its own string and placed
+		   outside the clip in the template, unclipped. */
+		let caretsMarkup = '';
+
 		/* ── N.92, THE CARETS ─────────────────────────────────────────────
 		   RULED BY DANN 2026-09-17 (`docs/memory/OPEN.md`, THE CARET clauses 1
 		   to 6): a vertical mark past the top and bottom staff lines, an
@@ -1367,8 +1424,6 @@
 				return inkOf(e.id)?.left ?? null;
 			};
 
-			let openingNudge = 0;
-			let closingNudge = 0;
 			const marks: { after: string | null; x: number }[] = [];
 			for (let i = 0; i < positions.length; i++) {
 				const p = positions[i];
@@ -1533,7 +1588,7 @@
 					bottom.setAttribute('pointer-events', 'none');
 					inkGroup.appendChild(bottom);
 				}
-				clone.appendChild(carets);
+				caretsMarkup = carets.outerHTML;
 			}
 		}
 
@@ -1632,8 +1687,53 @@
 				)
 			: null;
 
+		/* ── CLAUSE 1.0. THE BODY SHOWS ONE MEASURE AND NOTHING ELSE ──────────
+		   Dann, m. 13: *"There should not be any information in the Loupe from
+		   adjacent measures."* `bodyViewLeft`/`bodyViewRight` are wider than the
+		   measure's own true content, on purpose, clause 6's room for a caret's
+		   own footprint; they are a VIEWPORT, not a promise about what paints
+		   inside it. Before this, whatever the clone happened to hold in that
+		   extra room painted too: found on m. 13, the system's own key
+		   signature (already drawn once, correctly, by the head panel) peeking
+		   past its own boundary; found on m. 5 and m. 14, the previous
+		   measure's closing barline; found on m. 16 (3.1), a sharp cut in half
+		   by the widened edge, which is worse than showing a whole foreign
+		   mark, since a half-drawn accidental claims a pitch the score never
+		   wrote.
+
+		   THE CLIP IS `view.left`/`view.right`, not `bodyViewLeft`/
+		   `bodyViewRight`. `view` is the boundary N.138 and N.139 already
+		   proved safe: `clipToHead` and `openAfterPageMeter` place it so it
+		   never lands inside a glyph's own ink (`loupe.ts`'s own comment on
+		   `clipToHead`, "the union is exactly the union the unclipped pair
+		   painted"), which is exactly the property clause 3.1 asks for.
+		   `bodyViewLeft`/`bodyViewRight` earn no such proof: they are `view`
+		   plus a fixed or footprint-driven margin with no relationship to
+		   where any glyph's ink happens to fall, which is why one could cut a
+		   sharp in half and the other, by construction, cannot.
+
+		   A NUDGED BARLINE MOVES THE CLIP WITH IT. `nudgeBarline` (above)
+		   redraws the opening or closing barline `openingNudge`/
+		   `closingNudge` past `opening.x`/`closing.right` when the position
+		   rule needed the room, and the clip has to reach exactly as far, or
+		   it would cut the barline it just moved. `CLIP_PAD` is a barline
+		   stroke's own room, spent only on the side a barline is actually
+		   drawn: where there is none (a system's first or last measure), the
+		   plain `view` edge is already the proven boundary and gets nothing
+		   added to it. */
+		const CLIP_PAD = lineGap * 0.15;
+		const bodyClipLeft = opening ? opening.x - openingNudge - CLIP_PAD : view.left;
+		const bodyClipRight = closing ? closing.right + closingNudge + CLIP_PAD : view.right;
+
 		frame = {
 			inner: clone.innerHTML,
+			caretsMarkup,
+			bodyClipLeft,
+			bodyClipRight,
+			bodyClipTop: cropTop,
+			bodyClipHeight: cropHeight,
+			bodyClipId: `loupe-body-clip-${measureIndex}`,
+			stave,
 			viewBox: `${bodyViewLeft} ${cropTop} ${bodyViewSpan} ${cropHeight}`,
 			width,
 			left,
@@ -1975,8 +2075,51 @@
 				xmlns="http://www.w3.org/2000/svg"
 				style="font-family: var(--font-sans)"
 			>
-				<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG, cloned -->
-				{@html frame.inner}
+				<!-- CLAUSE 1.0/3.1: the clone's own content is clipped to the
+				     measure's true boundary, so nothing of a neighbour measure or
+				     the system's head paints in the room `viewBox` opens for a
+				     caret's footprint, whole or half (`Loupe.svelte`'s own script,
+				     "CLAUSE 1.0. THE BODY SHOWS ONE MEASURE AND NOTHING ELSE"). The
+				     carets themselves are OUTSIDE this clip, drawn from their own
+				     markup, since their arrowheads legitimately stand in that same
+				     room. -->
+				<clipPath id={frame.bodyClipId}>
+					<rect
+						x={frame.bodyClipLeft}
+						y={frame.bodyClipTop}
+						width={frame.bodyClipRight - frame.bodyClipLeft}
+						height={frame.bodyClipHeight}
+					/>
+				</clipPath>
+				<!-- CLAUSE 1.0.1: the margin clause 6 opens on both sides of the
+				     clip is otherwise blank, which is what read as a gap before
+				     the tail panel's own short run of stave. Painted first, so
+				     the clipped clone's own five lines (same y, same stroke,
+				     same width, read off the same page) simply paint over this
+				     layer where the two overlap: never a doubled or a
+				     conflicting line, only one continuous stave across the
+				     whole strip. Unclipped and un-namespaced: `x1`/`x2` reach
+				     far past this panel's own `viewBox` on both sides and the
+				     viewBox itself is what crops them, the same way it already
+				     crops everything else here. -->
+				<g>
+					{#each frame.stave.lines as y, i (i)}
+						<line
+							x1="-100000"
+							y1={y}
+							x2="100000"
+							y2={y}
+							stroke={frame.stave.lineStroke}
+							stroke-width={frame.stave.lineWidth}
+						/>
+					{/each}
+				</g>
+				<g clip-path="url(#{frame.bodyClipId})">
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG, cloned -->
+					{@html frame.inner}
+				</g>
+				<!-- eslint-disable-next-line svelte/no-at-html-tags -- this component's own carets, built above -->
+				{@html frame.caretsMarkup}
 			</svg>
 			<!-- N.138 INCREMENT 3. The stave past the closing barline, the loupe's
 			     own drawing like the meter, so nothing of the next measure stands

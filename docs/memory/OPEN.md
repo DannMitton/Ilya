@@ -1537,5 +1537,143 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
      new spacing. Dann's own permission named that mechanism in 2026-09-15's
      words, "calling the renderer for the held measure alone, at its own
      spacing", and the brief did not carry it. **The next pass says it outright.**
+   - **A BARLINE STANDS AFTER THE METER SIGNATURE. Found by Dann on the walk of
+     `fda5b9c`, 2026-09-18, m. 14.** His words: *"this measure has an
+     inappropriate barline after the meter signature."* **A meter signature is
+     followed by music, never by a barline.**
+   - **THE CAUSE, read 2026-09-18 and better than the desk's first guess.**
+     `Loupe.svelte:1215-1218` widens the body crop by `CARET_MARGIN`, two
+     line-gaps, on each side, to give the head and tail carets room, and `:1637`
+     feeds that widened left edge into the viewBox. **The crop therefore takes in
+     two line-gaps of whatever precedes the measure**, which on a mid-system
+     measure is the previous measure's closing barline. The loupe's own head panel
+     has already drawn the clef, key and meter, so that barline lands between the
+     meter and the first note. **The last step, that the mark in view is
+     specifically that barline, is NOT ESTABLISHED and is measured before it is
+     fixed.**
+   - **Dann on the second sighting, m. 5, 2026-09-18:** *"The carets look great
+     but so many of these measures now have that inappropriate barline at the
+     beginning."* **It is every mid-system measure, not a few.**
+   - ~~**DESK RECOMMENDATION:** the body clone strips the barline that precedes the
+     held measure.~~ **SUPERSEDED the same night by Dann's general rule below,
+     which covers it and everything like it.**
+
+7. **THE LOUPE SHOWS ONE MEASURE AND NOTHING ELSE. Ruled by Dann 2026-09-18, on
+   m. 13, and it is the governing rule for the loupe's picture.** His words:
+   *"The Loupe is an artificial instance of a single measure. The conceit that we
+   implemented of the barline suggesting continuation is conceptual only. There
+   should not be any information in the Loupe from adjacent measures."*
+   - **No mark from an adjacent measure is drawn in the loupe, at either end.**
+     Not a barline, not an accidental, not a notehead, not a syllable, not a
+     fragment of one. What he photographed on m. 13: a stray sharp at the left
+     after the meter, and a flat plus two syllable fragments past the closing
+     barline at the right.
+   - **The barline that suggests continuation is a CONCEIT.** It stands for the
+     measure's boundary. It is not a window onto what is on the other side of it.
+   - **This supersedes the desk's piecemeal recommendation** to strip the
+     preceding barline, which fixed one symptom of this rule being broken.
+   - **It is also the strongest argument for re-engraving.** A crop of the page
+     can always pull in a neighbour, and every widening of it pulls in more. **A
+     re-engraved single measure has no neighbours to pull in**, so this rule holds
+     by construction rather than by stripping marks one kind at a time.
+   - **THE TAIL PANEL IS NOW DETACHED. Found by Dann on m. 12, 2026-09-18.** His
+     words: *"Why is the measure followed by the weird disconnected artefact of a
+     stave line?"* **Read this session:** `Loupe.svelte:807` draws a short run of
+     bare stave after the measure whenever the closing barline is not the final
+     one, which is the continuation conceit; `:1984-2000` draws it as its own SVG
+     butted against the body. `fda5b9c` widened the body by `CARET_MARGIN` on each
+     side and `:1610-1617` renders that extra width as blank space, so a gap opens
+     between the barline and the tail. **The tail did not move. The body grew past
+     it.**
+   - **The conceit stays; the seam must not show.** Dann endorsed the continuation
+     barline as a conceit in the same breath as clause 7. What is wrong is the
+     detachment, not the tail. **Every panel of the strip meets its neighbour with
+     no gap, whatever margin the body takes for its carets.**
+
+8. **THE LOUPE MAY EXCEED THE PAGE'S WIDTH. Ruled by Dann 2026-09-18, and it
+   RETRACTS HIS OWN RULING OF 2026-08-27.** His words: *"I retract 'THE LOUPE
+   NEVER EXCEEDS THE PAGE'S OWN WIDTH, ruled by Dann 2026-08-27 after his desktop
+   walk found it growing to the viewport with the drawer closed.' Instead,
+   especially on desktop, the measure contents should be fully represented. I
+   realize that Loupe contents are now padded with non-collision constraints and
+   carets inserted between notation elements. This extra width is going to cause
+   wider measures. If we don't shrink the point size of the notation, the only
+   responsible alternative is to allow wider measures to be fully expressed on a
+   device where they can be."*
+   - **The retracted rule and its reason**, for the record: the loupe never
+     exceeded the page's width because *"a frame wider than the thing it is a part
+     of reads as a second document rather than as a closer look at this one"*
+     (`Loupe.svelte:682-687`, which carries it as a comment naming Dann).
+   - **Why it no longer holds:** the loupe is no longer a crop of the page. Its
+     spacing is its own (clause 6), it shows one measure and nothing else
+     (clause 7), and the carets and their clearances make a measure wider than the
+     page draws it.
+   - **The notation's point size is the fixed quantity. The window is the variable
+     one.** That is the same principle as N.140, now applied to the desk and not
+     only to the phone.
+   - **On a device that cannot give the width**, the singer turns to landscape or
+     scrolls. N.140 is that item, ruled 2026-09-14 and still open, and it waits on
+     two things of Dann's: the floor in CSS pixels, and whether the scroll may
+     take a gesture.
+   - **WHEN CODE TOUCHES `Loupe.svelte:682-687`, IT RECORDS THE RETRACTION THERE.**
+     That comment cites Dann by name for the opposite rule. It is amended, with
+     the date and the reason, not deleted.
+
+9. **A CLIPPED ACCIDENTAL READS AS A MICROTONAL ONE, AND THAT IS FALSE
+   INFORMATION. Found by Dann on m. 16, 2026-09-18.** His words: *"Why is there a
+   strange half-sharp following the meter signature?... I did not program any
+   microtonal notation."*
+   - **What is drawn:** one vertical stroke with two slanted crossbars, which is
+     half of the sharp glyph. **The desk describes the marks rather than naming a
+     character, per CONTRACT tether 18.**
+   - **Same cause as the barline:** the body crop starts two line-gaps before the
+     measure (`Loupe.svelte:1215-1218`), so a glyph straddling that edge is drawn
+     as a fragment. **Which sharp it is, the previous measure's or this measure's
+     own, is NOT ESTABLISHED.**
+   - **THIS ONE MISINFORMS, and it is a different class from the rest.** A
+     half-drawn sharp is Ilya making a claim about the pitch that the score does
+     not make. Under the freeze rule of 2026-09-16, a finding joins the release
+     when **"Ilya would otherwise tell a singer something false"**, so this
+     qualifies on its own, independently of the caret work.
+   - **NO NOTATION GLYPH IS EVER DRAWN CLIPPED IN THE LOUPE.** Whole or absent.
+     The rule for carets (clause 6) now holds for every glyph the loupe draws.
+
+10. **THE RE-ENGRAVING STOPPED AT ITS OWN STOP CONDITION, 2026-09-18, and the
+    stop is correct.** Account and the five-stage plan:
+    `../sessions/memo-n92-loupe-reengraves_r1_2026-09-18.md` §1, read in full by
+    the desk.
+    - **The mechanism is confirmed real.** `page-layout.ts` already renders one
+      measure alone at its own spacing through
+      `renderAnalyzedStaff(sliceScore(parsed, m, m), ...)`, and `sliceScore`
+      rebases `measureIndex` without touching `ev.id`, so every caret, tap and
+      hit rectangle built over the last three briefs keys off the same ids.
+    - **What made it more than one pass, all four measured:** the score, the
+      analysis, the font and the five underlay preview maps are private
+      `$derived` state inside `VoiceProfilePane.svelte`, and a re-engraved measure
+      without them would draw the file's own default syllable under a note the
+      singer has hand-paired elsewhere, which is a singer-visible lie, not a
+      cosmetic gap; the squircle's box arithmetic is inline in that same component
+      and not callable; `loupe.ts`'s dozen crop helpers and their 781-line test
+      file exist to slice one shared coordinate space and mostly retire with the
+      crop; and **the addendum's derived spacing is a control loop nobody has
+      costed**, since `staff-renderer.ts` has no caller today that measures its own
+      output and asks for more room.
+    - **Built anyway, as the brief required:** the body panel clips the clone to
+      the measure's true boundary, which closes clauses 7 and 9 with one mechanism;
+      the body paints its own stave behind the clip, closing the tail seam; and the
+      width cap is retracted with the comment at `Loupe.svelte:682-687` amended in
+      place rather than deleted.
+    - **The 27 collisions are unchanged and expected to be**, because they are
+      what the re-engraving would have addressed.
+    - **NOT ESTABLISHED, and it is the first thing stage 3 must measure:** how many
+      of the 27 the derived-spacing search actually closes, and whether it
+      converges or needs a cap and a "this measure cannot have the width it needs"
+      report of its own.
+    - **FOR DANN: this plan is large enough to want its own number rather than
+      living inside N.92's caret slice.** The desk has not minted one.
+   - **It is carried into the re-engraving brief, and it is also named there as a
+     defect that must not survive a stop.** A re-engraved measure draws its own
+     barlines and needs no nudge at all, so the mechanism that is suspected here
+     goes away with it. If the re-engraving stops, this is fixed on its own.
 
 2. **Carets are drawn only while Corrections is the active panel.** With the loupe alone, or with Syllables showing, no insertion points are drawn. His reasoning, and the desk agrees: a mark that appears when it cannot be used is noise, and the loupe's default state is reading, not editing.
