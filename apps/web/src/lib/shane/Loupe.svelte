@@ -1344,20 +1344,25 @@
 
 		   THE SHORT FORM SURVIVES for a page whose systems cannot be read,
 		   which is the same relationship `measureTagShort` has to
-		   `measureTag`. Four forms, and each one says everything it knows. */
+		   `measureTag`. Four forms, and each one says everything it knows.
+
+		   THE WORD, RULED BY DANN 2026-09-17. `fill` is null where the measure
+		   agrees, so its presence alone means `actual` and `expected` differ;
+		   which way decides `short` or `over`. Over carries no alarm: a
+		   sextuplet under construction reads over the meter until it binds. */
 		if (fill && frame.system > 0 && frame.systems > 0) {
-			return T('loupe.measureTagBoth')
+			return `${T('loupe.measureTagBoth')
 				.replace('%m', measureLabel)
 				.replace('%s', String(frame.system))
 				.replace('%t', String(frame.systems))
 				.replace('%a', String(fill.actual))
-				.replace('%e', String(fill.expected));
+				.replace('%e', String(fill.expected))}, ${T(fill.actual < fill.expected ? 'loupe.fill.short' : 'loupe.fill.over')}`;
 		}
 		if (fill) {
-			return T('loupe.measureTagFill')
+			return `${T('loupe.measureTagFill')
 				.replace('%m', measureLabel)
 				.replace('%a', String(fill.actual))
-				.replace('%e', String(fill.expected));
+				.replace('%e', String(fill.expected))}, ${T(fill.actual < fill.expected ? 'loupe.fill.short' : 'loupe.fill.over')}`;
 		}
 		if (frame.system > 0 && frame.systems > 0) {
 			return T('loupe.measureTag')

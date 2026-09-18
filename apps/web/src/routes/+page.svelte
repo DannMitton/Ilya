@@ -4603,6 +4603,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 							ondot={handleDotCell}
 							onstep={handleStep}
 							onoctave={handleOctave}
+							onsemitone={handleSemitone}
 							onaccidental={handleAccidental}
 							ondelete={handleDeleteNote}
 							onshift={handleDockShift}
@@ -4990,6 +4991,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		ondot={handleDotCell}
 		onstep={handleStep}
 		onoctave={handleOctave}
+		onsemitone={handleSemitone}
 		onaccidental={handleAccidental}
 		ondelete={handleDeleteNote}
 		onshift={handleDockShift}

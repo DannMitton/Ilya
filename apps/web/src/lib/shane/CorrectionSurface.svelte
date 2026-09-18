@@ -124,6 +124,7 @@
 		ondot: () => void;
 		onstep: (direction: 1 | -1) => void;
 		onoctave: (direction: 1 | -1) => void;
+		onsemitone: (direction: 1 | -1) => void;
 		onaccidental: (kind: 'flat' | 'natural' | 'sharp') => void;
 		ondelete: () => void;
 		onshift: (scope: 'end' | 'nextOpen', direction: ShiftDirection) => void;
@@ -150,6 +151,7 @@
 		ondot,
 		onstep,
 		onoctave,
+		onsemitone,
 		onaccidental,
 		ondelete,
 		onshift,
@@ -593,9 +595,13 @@
 		{/if}
 	</section>
 
-	<!-- PITCH. The semitone verbs stay retired, per Dann's ruling of
-	     2026-08-24: a B natural cannot become B flat, and down a semitone
-	     respells as A sharp, which is what the spelling policy is for. -->
+	<!-- PITCH. The semitone verbs were retired by Dann's ruling of 2026-08-24:
+	     a B natural cannot become B flat, and down a semitone respells as A
+	     sharp, which is what the spelling policy is for. RULED BY DANN
+	     2026-09-17, REVERSING THAT: a singer on a phone has no way to nudge a
+	     semitone at all, and a phone is the surface Ilya is built for. The
+	     cells return below, calling the same `handleSemitone` the keys
+	     already called; the spelling policy still does the respelling. -->
 	<!-- PITCH. In a gap the LABEL carries the state and the greying only agrees
 	     with it, which is principle 8: the sentence says the note will arrive at
 	     the previous entry's pitch, and the verbs finish it once it exists. -->
@@ -636,6 +642,24 @@
 				onpointerdown={onhold(() => onoctave(-1))}
 				onclick={() => onoctave(-1)}
 				><span aria-hidden="true">&#x25BC;</span> {T('loupe.pitch.octave')}</button
+			>
+			<button
+				type="button"
+				class="cell"
+				disabled={inGap}
+				aria-label={T('correct.semitoneUp')}
+				onpointerdown={onhold(() => onsemitone(1))}
+				onclick={() => onsemitone(1)}
+				><span aria-hidden="true">&#x25B2;</span> {T('correct.semitoneUp')}</button
+			>
+			<button
+				type="button"
+				class="cell"
+				disabled={inGap}
+				aria-label={T('correct.semitoneDown')}
+				onpointerdown={onhold(() => onsemitone(-1))}
+				onclick={() => onsemitone(-1)}
+				><span aria-hidden="true">&#x25BC;</span> {T('correct.semitoneDown')}</button
 			>
 		</div>
 	</section>

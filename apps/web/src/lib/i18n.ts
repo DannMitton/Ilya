@@ -521,6 +521,13 @@ const strings: Record<string, Record<Language, string>> = {
 	// short form for a page whose systems cannot be read, which is the same
 	// relationship `loupe.measureTagShort` has to `loupe.measureTag`.
 	'loupe.measureTagBoth':        { en: 'm.\u00a0%m \u00b7 system %s of %t \u00b7 %a of %e', fr: 'mes.\u00a0%m \u00b7 système %s sur %t \u00b7 %a sur %e' },
+	// N.92, RULED BY DANN 2026-09-17: the tag above keeps its numbers and gains
+	// one word for which way the measure disagrees, joined with a comma and a
+	// space. Nothing joins where `measureFill` returns null, because a measure
+	// that adds up already says nothing. Not an error: over is a sextuplet
+	// still under construction, and Ilya waits.
+	'loupe.fill.short':            { en: 'short',                         fr: 'incomplète' },
+	'loupe.fill.over':             { en: 'over',                          fr: 'trop pleine' },
 
 	'notation.reconstitution.desc': { en: 'Show reconstitution',        fr: 'Afficher la reconstitution' },
 	'display.stressDiacritics':    { en: 'Stress diacritics',            fr: 'Diacritiques d\u2019accent' },

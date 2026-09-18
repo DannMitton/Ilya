@@ -448,3 +448,33 @@ Shown to Dann as the FRENCH TABLE. He approved « saisir » explicitly ("that's 
 | Voice: Dann · 10 of 10 | Voix : Dann · 10 sur 10 | NOT ESTABLISHED (adopted or coined) |
 
 *Section appended 2026-09-10 from `docs/sessions/product-addition-drawer-grammar_r1_2026-09-10.md`, transcribed by Sonnet from STATE.md, INBOX.md, the desk critique, and the drawing r1 Plate 1; three gaps the agent flagged were filled by the desk from the session record.*
+
+## THE TEXT AND THE NOTES. Ruled by Dann 2026-09-17. Binds every item that touches either
+
+Dann's own framing, the same night: *"the text is linear and inviolable... we'd
+like to keep the Input field's text intact through our Loupe machinations."*
+These three rules are what that means, and they are already how the tree behaves:
+the syllable queue is derived from the poem on every render and a placement never
+consumes a syllable.
+
+1. **The poem in Input is the text, and only Input changes it.** No action in the
+   loupe writes, deletes or reorders a syllable of the poem. A loupe edit
+   therefore cannot leave the poem with a gap or a non sequitur.
+2. **A syllable on a note is a placement, not a copy.** Delete the note and the
+   placement goes with it; the syllable is still in the poem, unplaced, and the
+   row draws it grey. Unplaced is grey and placed is black (N.114 ruling 4,
+   2026-09-07).
+3. **Deleting text happens in Input, and the notes it sat on go quiet.** Ruled
+   2026-09-07 and built: a deleted word vacates its notes rather than sliding the
+   rest of the line along.
+
+**Where the protection goes.** One act in this model destroys work: deleting text
+in Input that carries placements. That act says how many placed syllables it will
+free before it happens. Everything in the loupe is a placement, and Undo restores
+it.
+
+**And the protection stops there. Ruled by Dann 2026-09-17:** *"a syllable on the
+wrong note should be user error. At some point we have to allow the user to be
+human and make mistakes. We can't save the user from their own calamity."* So
+Ilya does not warn about a placement that is merely wrong, does not second-guess
+a singer's edit, and does not mark uncertainty it cannot justify.
