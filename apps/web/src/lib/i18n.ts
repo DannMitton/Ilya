@@ -420,8 +420,16 @@ const strings: Record<string, Record<Language, string>> = {
 	// accessible name, so a screen reader still hears which note goes.
 	'loupe.delete':                { en: 'Delete',                       fr: 'Supprimer' },
 	// The pitch cells' visible words, with the direction carried by a triangle
-	// beside them. `correct.stepUp` and its three neighbours stay the
+	// beside them. `correct.stepUp` and its five neighbours stay the
 	// accessible names, so nothing a screen reader hears is abbreviated.
+	// `loupe.pitch.semitone`, N.92, RULED BY DANN 2026-09-17: the PITCH
+	// station's grid of six reads column by distance (semitone, step,
+	// octave) and row by direction, so this key takes the column's own
+	// place, before `step`. Not "tone", because the middle cell moves the
+	// notehead by a diatonic step, which is a semitone or a whole tone
+	// depending on the key (`correction.ts:156`), and "tone" would name a
+	// distance it does not always give.
+	'loupe.pitch.semitone':        { en: 'semitone',                     fr: 'demi-ton' },
 	'loupe.pitch.step':            { en: 'step',                         fr: 'degré' },
 	'loupe.pitch.octave':          { en: 'octave',                       fr: 'octave' },
 	// The lyric verbs, named for what they touch rather than for Finale's

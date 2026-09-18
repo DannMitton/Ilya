@@ -605,8 +605,27 @@
 	<!-- PITCH. In a gap the LABEL carries the state and the greying only agrees
 	     with it, which is principle 8: the sentence says the note will arrive at
 	     the previous entry's pitch, and the verbs finish it once it exists. -->
+	<!-- A GRID OF SIX, RULED BY DANN 2026-09-17, walking `0eb0a95`: the first
+	     ship's semitone cells read their full spoken sentence ("Up a
+	     semitone") because they had no short word, and came out
+	     disproportionately wide beside step and octave. Column is distance,
+	     row is direction: semitone, step, octave left to right; up, then
+	     down. `loupe.pitch.semitone` supplies the missing word
+	     (`i18n.ts`); the spoken names (`correct.semitoneUp` and its five
+	     neighbours) are UNCHANGED, on the `aria-label` only. DOM order is
+	     the grid's own reading order, row by row, so tab order needs no
+	     separate ruling. -->
 	<section class="station">
-		<div class="cells">
+		<div class="cells pitch-grid">
+			<button
+				type="button"
+				class="cell"
+				disabled={inGap}
+				aria-label={T('correct.semitoneUp')}
+				onpointerdown={onhold(() => onsemitone(1))}
+				onclick={() => onsemitone(1)}
+				><span aria-hidden="true">&#x25B2;</span> {T('loupe.pitch.semitone')}</button
+			>
 			<button
 				type="button"
 				class="cell"
@@ -615,15 +634,6 @@
 				onpointerdown={onhold(() => onstep(1))}
 				onclick={() => onstep(1)}
 				><span aria-hidden="true">&#x25B2;</span> {T('loupe.pitch.step')}</button
-			>
-			<button
-				type="button"
-				class="cell"
-				disabled={inGap}
-				aria-label={T('correct.stepDown')}
-				onpointerdown={onhold(() => onstep(-1))}
-				onclick={() => onstep(-1)}
-				><span aria-hidden="true">&#x25BC;</span> {T('loupe.pitch.step')}</button
 			>
 			<button
 				type="button"
@@ -638,28 +648,28 @@
 				type="button"
 				class="cell"
 				disabled={inGap}
+				aria-label={T('correct.semitoneDown')}
+				onpointerdown={onhold(() => onsemitone(-1))}
+				onclick={() => onsemitone(-1)}
+				><span aria-hidden="true">&#x25BC;</span> {T('loupe.pitch.semitone')}</button
+			>
+			<button
+				type="button"
+				class="cell"
+				disabled={inGap}
+				aria-label={T('correct.stepDown')}
+				onpointerdown={onhold(() => onstep(-1))}
+				onclick={() => onstep(-1)}
+				><span aria-hidden="true">&#x25BC;</span> {T('loupe.pitch.step')}</button
+			>
+			<button
+				type="button"
+				class="cell"
+				disabled={inGap}
 				aria-label={T('correct.octaveDown')}
 				onpointerdown={onhold(() => onoctave(-1))}
 				onclick={() => onoctave(-1)}
 				><span aria-hidden="true">&#x25BC;</span> {T('loupe.pitch.octave')}</button
-			>
-			<button
-				type="button"
-				class="cell"
-				disabled={inGap}
-				aria-label={T('correct.semitoneUp')}
-				onpointerdown={onhold(() => onsemitone(1))}
-				onclick={() => onsemitone(1)}
-				><span aria-hidden="true">&#x25B2;</span> {T('correct.semitoneUp')}</button
-			>
-			<button
-				type="button"
-				class="cell"
-				disabled={inGap}
-				aria-label={T('correct.semitoneDown')}
-				onpointerdown={onhold(() => onsemitone(-1))}
-				onclick={() => onsemitone(-1)}
-				><span aria-hidden="true">&#x25BC;</span> {T('correct.semitoneDown')}</button
 			>
 		</div>
 	</section>
@@ -1019,6 +1029,22 @@
 	.cells {
 		display: flex;
 		flex-wrap: wrap;
+		gap: 4px;
+	}
+
+	/* THE PITCH GRID, N.92, RULED BY DANN 2026-09-17: three columns (distance)
+	   by two rows (direction), so the six cells line up as a table rather
+	   than wrap as a sentence. `1fr` for every column, unconditionally, is
+	   what keeps the three columns aligned across both rows AND across the
+	   phone/desktop width difference: a column's width is never read off
+	   its own cell's text, only off the track. `gap` is one value for both
+	   axes, the same 4px `.cells` already spends everywhere else on this
+	   surface; the row gap is Dann's to move, this is only where it sits
+	   today. `min-width: 44px` on `.cell` is the floor a shrinking column
+	   still cannot cross. */
+	.pitch-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
 		gap: 4px;
 	}
 
