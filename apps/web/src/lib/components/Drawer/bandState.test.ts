@@ -184,53 +184,31 @@ describe('N.115 increment 3 the pair on the Score markup band', () => {
 	});
 });
 
-describe('N.115 Score markup’s state line', () => {
-	/* Plate C, and `correct.state` is its own key: ruled by Dann 2026-09-10
-	   with its French, after the walk showed the Corrections sentence eating
-	   the row at 390 px. `correct.count` keeps its one render site inside the
-	   Corrections station body and is not read here. */
+describe('N.150 Voice’s state line', () => {
 	it('builds the whole line from the parts that exist', () => {
-		expect(scoreStateLine(2, 'Dann', 10, 10, 'en')).toBe(
-			'2 notes corrected · Voice: Dann · 10 of 10'
-		);
+		expect(scoreStateLine('Dann', 10, 10, 'en')).toBe('Voice: Dann · 10 of 10');
 	});
 
-	it('uses the singular phrase for one note', () => {
-		expect(scoreStateLine(1, undefined, 0, 10, 'en')).toBe('1 note corrected');
-		expect(scoreStateLine(1, undefined, 0, 10, 'fr')).toBe('1 note corrigée');
-	});
-
-	it('drops the corrected count when there is none', () => {
-		expect(scoreStateLine(0, 'Dann', 10, 10, 'en')).toBe('Voice: Dann · 10 of 10');
+	/* N.150, 2026-09-20: Corrections left the band, so its line no longer
+	   counts them. The line is the voice alone, in either language. */
+	it('does not announce corrections', () => {
+		expect(scoreStateLine(undefined, 0, 10, 'en')).toBe('');
+		expect(scoreStateLine(undefined, 0, 10, 'fr')).toBe('');
 	});
 
 	/* A voice with readings but no name is the pre-naming instant, and
 	   `VoiceAnchor` already refuses to print an empty pair of guillemets for
 	   it. This line falls out the same way. */
 	it('drops the voice when it has no name', () => {
-		expect(scoreStateLine(2, undefined, 10, 10, 'en')).toBe('2 notes corrected');
-		expect(scoreStateLine(2, '', 10, 10, 'en')).toBe('2 notes corrected');
+		expect(scoreStateLine('', 10, 10, 'en')).toBe('');
 	});
 
 	it('drops the count when nothing has been sampled', () => {
-		expect(scoreStateLine(0, 'Dann', 0, 10, 'en')).toBe('Voice: Dann');
+		expect(scoreStateLine('Dann', 0, 10, 'en')).toBe('Voice: Dann');
 	});
 
-	/* Brief §3.4, first bullet: "Empty song, no score, no voice: band and
-	   nothing under it." */
-	it('says nothing for an empty song with no score and no voice', () => {
-		expect(scoreStateLine(0, undefined, 0, 10, 'en')).toBe('');
-		expect(scoreStateLine(0, undefined, 0, 10, 'fr')).toBe('');
-	});
-
-	/* `calib.anchor.named` carries the ratified French, guillemets and all;
-	   `correct.state` carries its own, ruled 2026-09-10. */
+	/* `calib.anchor.named` carries the ratified French, guillemets and all. */
 	it('takes the ruled French across the whole line', () => {
-		expect(scoreStateLine(0, 'Dann', 10, 10, 'fr')).toBe(
-			'Voix : « Dann » · 10 sur 10'
-		);
-		expect(scoreStateLine(2, 'Dann', 10, 10, 'fr')).toBe(
-			'2 notes corrigées · ' + 'Voix : « Dann » · 10 sur 10'
-		);
+		expect(scoreStateLine('Dann', 10, 10, 'fr')).toBe('Voix : « Dann » · 10 sur 10');
 	});
 });

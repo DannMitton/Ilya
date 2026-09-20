@@ -291,8 +291,22 @@ renderer named it.** In this project it usually did.
 |---|---|
 | phonology | 216 |
 | dictionary | 235 |
-| web-check | **0 errors, 8 warnings, 5 files** |
-| web-test | **1206 passed (1206)** |
+| web-check | **0 errors, 12 warnings, 5 files** |
+| web-test | **1263 passed (1263)** |
+
+**MOVED 2026-09-20: web-test 1265 → 1263 (N.150).** Permission asked and given by
+Dann, per this file's own rule below. Backup `ilya-ship.sh.bak-1265-2026-09-20`, and
+the moved line was read back in the same paste. **The move is a DELETION, which is
+rare here: three tests left `bandState.test.ts` and one arrived.** Two tested only the
+corrected-count phrasing Dann struck 2026-09-20; the third, "says nothing for an empty
+song with no score and no voice", **is not a lost assertion**: its exact check, empty
+string in both languages, survives inside the new "does not announce corrections"
+test. **Verified off `git diff`, not off the build report, which had said two tests.**
+
+**AND THIS TABLE WAS STALE WHEN THAT MOVE WAS MADE.** It read web-test 1206 and
+web-check 8 warnings while `ilya-ship.sh` read 1265 and 12. **The script is the
+instrument and this table had stopped following it for four ships.** Read `:76-80`
+before quoting any number here.
 
 *(2026-09-16, N.145: web-test 1201 → 1206, five `first-seat.test.ts` tests; web-check 7 → 8 warnings and 4 → 5 files, one new warning, the unused `.btn-primary` left in `IntakePanel.svelte` on purpose to keep the four-file button twin (memo §7). DESK DEFAULT to accept it. Script backup `ilya-ship.sh.bak-before-n145-2026-09-16`.)*
 

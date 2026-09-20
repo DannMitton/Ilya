@@ -546,8 +546,9 @@
 					     increment 3 deleted the fold on Dann's ruling of 2026-09-10
 					     late, so the two are `IntakePanel`'s own stations and no id of
 					     TEXT's survives anywhere. -->
-					<!-- ═══ SCORE MARKUP. Lavender, one step down. Corrections and
-					     Voice. -->
+					<!-- ═══ VOICE (N.150; the key and the id stay `scoreMarkup`, which
+					     are wire values). Lavender, one step down. Holds the Voice
+					     station only: Corrections moved to the loupe (N.149). -->
 					<section class="group group-score">
 						{@render bandHead(BAND_IDS.scoreMarkup, t('group.scoreMarkup', language), scoreState, false)}
 						{#if sections.has(BAND_IDS.scoreMarkup)}

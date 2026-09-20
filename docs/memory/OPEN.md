@@ -1334,6 +1334,19 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 
 ## N.148, N.149, N.150. THE LOUPE TAKES THE WORK, AND THE DRAWER'S SCORE MARKUP BAND BECOMES VOICE. Numbered 2026-09-17, DESK DEFAULT numbers.
 
+> **N.148 AND N.149 ARE CLOSED, 2026-09-20. ONLY N.150 IN THIS SECTION IS STILL OPEN.**
+> N.148 shipped inside `6ca97db`; N.149 shipped over `6ca97db`, `be792b6` and
+> `38dac87`, each walked by Dann. **Everything below about the two modes, the pill,
+> the fill and the caret gate is a RECORD, not a spec. Do not build from it.**
+> N.150's own bullet is below and is unbuilt: `i18n.ts:59` `group.scoreMarkup` still
+> reads `Score markup` in both languages, read 2026-09-20.
+>
+> **THE MOVE TO `LOG.md` IS OWED AND WAS NOT DONE**, deliberately: this section
+> covers three items, one still open, and the spacing table under it belongs to
+> N.153 rather than to N.149. **Splitting it wants a clear head, not the end of a
+> session.** Do it at the next close and give it a LOG block of its own.
+
+
 **Dann's direction, 2026-09-17, after walking N.147:** *"I think we need an in-section Undo/Redo. Can we fit one flush right next to the chevron? The bar should open/close the Syllables accordion except for the Undo/Redo section of the bar."* Then: *"My plan is to get it off that header entirely and populate dedicated Undo/Redo controls into the Loupe's syllables and next, into the Corrections, which will also now be relocated to the Loupe to economize focus."* Then: *"Score Markup as a section of the Drawer is finished, and Voice becomes the new header title of that section."*
 
 - **N.148. Undo and Redo in the loupe's Syllables bar.** The bar becomes one row of three: the SYLLABLES label, which is the disclosure and takes the whole left side; Undo and Redo; the chevron at the right edge. A bar that is itself a button cannot hold buttons (the limit N.114 ruling 2 met), so the label is the disclosure rather than the whole row. Reuses the Score Markup header's own pair (`Drawer.svelte:189`, `:562`, `stackActions`) and its labels (`i18n.ts:378`, `:391`), so no new strings and no new French. **RULED by Dann: one Undo stack, the app's existing one**, whose label says what it takes back. 44 px targets on a phone; both grey out when there is nothing to take back (DESK DEFAULT).

@@ -270,14 +270,15 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 
 	/* The mapping is KEPT, which the ruling asks for in as many words, and it
 	   is what a version 2 set still goes through. `voice` was the second id
-	   here until N.114a took it out of `STATION_IDS`; `corrections` is a
-	   surviving Score markup station and stands in its place. */
+	   here until N.114a took it out of `STATION_IDS`, and `corrections` was the
+	   third until N.149; `analysis` is a surviving station and stands in its
+	   place. */
 	it('keeps the mapping for a set that is already new', () => {
-		expect(migrateOpenStations(['repertoire', 'corrections'], false)).toEqual([
+		expect(migrateOpenStations(['repertoire', 'analysis'], false)).toEqual([
 			'repertoire',
-			'corrections',
+			'analysis',
 		]);
-		expect(migrateOpenStations(['repertoire', 'corrections'], true)).toEqual(['repertoire']);
+		expect(migrateOpenStations(['repertoire', 'analysis'], true)).toEqual(['repertoire']);
 	});
 
 	/* N.115. A band and a station together survive a phone, because they are

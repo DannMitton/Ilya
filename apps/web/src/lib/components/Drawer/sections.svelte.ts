@@ -72,8 +72,10 @@ export const STATION_IDS = {
 	binder: 'binder',
 	notation: 'notation',
 	analysis: 'analysis',
-	corrections: 'corrections',
-	/* `text` IS GONE, N.115 increment 3. RULED BY DANN 2026-09-10 late: the
+	/* `corrections` IS GONE, N.149, RULED BY DANN 2026-09-20: it moved to
+	   the loupe, so a stored `corrections` names no door and
+	   `migrateOpenStations` drops it like `text`, with no version bump.
+	   `text` IS GONE, N.115 increment 3. RULED BY DANN 2026-09-10 late: the
 	   Text fold is deleted, "as a child of Input it adds no value except to
 	   bottleneck access to Notation and Analysis." The two stations stand in
 	   INPUT under the poem box as the plain stations they always were. A

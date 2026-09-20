@@ -81,6 +81,13 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >   `{ en: 'Score markup', fr: 'Score markup' }`. The band did not become Voice.
 >   **It is the orphaned third of the trio.**
 >
+> #### OWED AT THE NEXT CLOSE, and it was deferred on purpose
+>
+> **N.148's and N.149's accounts have NOT moved out of `OPEN.md` into `LOG.md`.** They
+> are marked CLOSED in place at the head of their section, so nothing reads as open,
+> **but the section covers three items with N.150 still open, and the spacing table
+> inside it belongs to N.153.** The split wants care. Give it its own LOG block.
+>
 > #### THE NEXT ONE THING IS NOT RULED. DESK DEFAULT, and he can wave it off
 >
 > **DESK DEFAULT: N.150, to finish the trio.** It is small, it was ruled to ride with

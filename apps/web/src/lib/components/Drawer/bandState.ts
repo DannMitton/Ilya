@@ -203,16 +203,14 @@ export function stackActions(
 }
 
 /**
- * SCORE MARKUP, closed: the corrected-note count, the voice, the voice's
- * sampled-vowel count, in that order, built from the parts that exist.
+ * VOICE, closed: the voice and the voice's sampled-vowel count, in that
+ * order, built from the parts that exist.
  *
- * `2 notes corrected`, THE PHRASE THE PLATES DRAW, and it is its own pair of
- * keys. The brief §3.4 asked for `correct.count` and `correct.countOne`
- * because those carried ratified French and the plate's phrase had none; Dann
- * ruled `correct.state` and `correct.stateOne` with their French on
- * 2026-09-10, after the walk showed the sentence eating the row at 390 px
- * before the voice reached it. The two sentence keys keep their one render
- * site, the notice inside the Corrections station body, and are not touched.
+ * IT NO LONGER ANNOUNCES CORRECTIONS. N.150, 2026-09-20: the band is named
+ * Voice and holds only the Voice station, and a state line describes what its
+ * band holds. Corrections moved to the loupe (N.149), so a count of them here
+ * would be a stale summary. `correct.state` and `correct.stateOne`, which drew
+ * it (N.115, 2026-09-10), went with it.
  *
  * THE VOICE HALF IS `calib.anchor.named`, the string the Voice station's own
  * line already uses, for the same reason: it reads "Voice: {voice}" and its
@@ -220,11 +218,10 @@ export function stackActions(
  * rather than printing an empty pair of guillemets, which is `VoiceAnchor`'s
  * own rule and this is the second reader of it.
  *
- * AN EMPTY SONG WITH NO SCORE AND NO VOICE RETURNS '', which is the brief's
- * first bullet: band and nothing under it.
+ * NO VOICE RETURNS '', band and nothing under it. The export keeps its name
+ * `scoreStateLine`: the band id is still `scoreMarkup`, a wire value.
  */
 export function scoreStateLine(
-	correctedCount: number,
 	voiceName: string | undefined,
 	sampledVowels: number,
 	totalVowels: number,
@@ -232,11 +229,6 @@ export function scoreStateLine(
 ): string {
 	const named = voiceName !== undefined && voiceName !== '';
 	return joinParts([
-		correctedCount === 1
-			? t('correct.stateOne', language)
-			: correctedCount > 1
-				? t('correct.state', language).replace('%s', String(correctedCount))
-				: null,
 		named ? t('calib.anchor.named', language).replace('{voice}', voiceName) : null,
 		named && sampledVowels > 0
 			? t('voice.state.count', language)

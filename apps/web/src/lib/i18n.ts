@@ -46,17 +46,15 @@ const strings: Record<string, Record<Language, string>> = {
 	//    Underlay station's name, and the Voice station's name. Every one is
 	//    listed in the increment 1 memo with its key.
 	//
-	//    `group.scoreMarkup` IS THE SAME ENGLISH AS `tab.markedScore`, which
-	//    already carries ratified French (« Partition annotée », 2026-08-19).
-	//    They are kept apart because one names a DOCUMENT in the desk head and
-	//    one names a GROUP in the drawer, and folding two concepts onto one
-	//    string is how a rename comes to move something nobody meant to move.
-	//    Whether they should be one string is DANN'S TO RULE.
+	//    `group.scoreMarkup` READS "Voice" / « Voix » since N.150 (2026-09-20).
+	//    The KEY stays, because `BAND_IDS.scoreMarkup` is a wire value and a
+	//    gate asserts it. It once matched `tab.markedScore`; it no longer does,
+	//    and the French « Voix » is a desk proposal awaiting Dann's ratification.
 	'group.piece':                 { en: 'Piece',                        fr: 'Pièce' },
 	//    `group.text` IS DELETED in both languages, N.115 increment 3: the
 	//    Text fold was its last reader, and Dann ruled the fold away
 	//    2026-09-10 late.
-	'group.scoreMarkup':           { en: 'Score markup',                 fr: 'Score markup' },
+	'group.scoreMarkup':           { en: 'Voice',                        fr: 'Voix' },
 	//    `group.input` JOINS THEM, N.108-5, and it is a SEVENTH owed name.
 	//    Dann named the band himself on 2026-09-07: the intake becomes its own
 	//    group between Piece and Text, "named INPUT, painted sage like Text
@@ -259,16 +257,6 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.lenHalf':             { en: 'Half',                          fr: 'Blanche' },
 	'correct.lenWhole':            { en: 'Whole',                         fr: 'Ronde' },
 	'correct.restore':             { en: 'Undo my corrections to this note', fr: 'Annuler mes corrections sur cette note' },
-	'correct.count':               { en: 'You have corrected %s notes.',  fr: 'Vous avez corrigé %s notes.' },
-	'correct.countOne':            { en: 'You have corrected one note.',  fr: 'Vous avez corrigé une note.' },
-	// N.115, RULED BY DANN 2026-09-10 with its French. SCORE MARKUP'S CLOSED
-	// STATE LINE ONLY. The two keys above are a SENTENCE and they keep their
-	// one render site, the notice inside the Corrections station body; a
-	// sentence on a state line ate the row before the voice reached it, walked
-	// at 390 px. These two are the phrase the plates draw
-	// (`drawing-drawer-front-side_r2_2026-09-10.html`, Plates B and C).
-	'correct.state':               { en: '%s notes corrected',            fr: '%s notes corrigées' },
-	'correct.stateOne':            { en: '1 note corrected',              fr: '1 note corrigée' },
 	// ── N.111, the clitic seat ───────────────────────────────
 	//    A vowelless clitic the file seated alone on a sung pitch, and what
 	//    Ilya did about it.
@@ -513,8 +501,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// THE ONE HEADER, ruled by Dann 2026-08-27: DURATION, PITCH and
 	// ACCIDENTAL · ENTRY consolidate under it and LYRIC rides inside as a
 	// labelled row. Both words are adopted, and they are the same word: the app
-	// already says `corrections` in `correct.count` and « corrections » in its
-	// French, and `notation.orphans` says it in both too.
+	// already says `corrections` in `notation.orphans`, in both languages.
 	'loupe.station.corrections':   { en: 'Corrections',                   fr: 'Corrections' },
 	// THE MEASURE TAG'S ARITHMETIC, ruled by Dann 2026-08-26. An overfull or
 	// short bar is not blocked and not re-timed, and the page stays silent; the

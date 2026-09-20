@@ -393,6 +393,19 @@ himself.**
 
 **Tell him which words you coined and which you adopted, every time.**
 
+**A RATIFICATION IS NOT AN AUTHORSHIP. Ruled by Dann 2026-09-20.** His words: *"My
+ruling is not my invention. You often insert amenities that I like and I rule in
+favour of them. This one stank."*
+
+**So the record carries both halves, separately: who offered it, and that he ruled on
+it.** The desk proposes amenities; he rules them in or out. **Writing "Dann's ruling
+of <date>" beside something the desk invented hands him authorship he never claimed,
+and it will be quoted back at him one day as his own idea.** When he later rules an
+amenity out, that is not a reversal on his part. It is the desk's amenity failing.
+
+**This is tether 19's other half.** That tether says a ruling is deliberate and
+carries its source. This says the SOURCE has two fields, not one.
+
 ### 3.1 Digressions. THE INBOX PROTOCOL
 
 Dann's mind connects things. Mid-task he will surface something related or

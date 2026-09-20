@@ -2288,14 +2288,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		)
 	);
 
-	/* SCORE MARKUP SAYS NOTHING BEHIND THE WALL. Both halves of its line, the
-	   corrected notes and the voice, are score-capability state, so a
-	   wall-closed build shows the band and nothing under it, which is the same
-	   answer an empty song gets. */
+	/* VOICE SAYS NOTHING BEHIND THE WALL. Its line is the voice, which is
+	   score-capability state, so a wall-closed build shows the band and
+	   nothing under it, which is the same answer an empty song gets. */
 	const scoreStateText = $derived(
 		INCLUDE_SHANE
 			? scoreStateLine(
-					correctedCount,
 					shaneVoiceName,
 					Object.keys(shaneFormants).length,
 					VOWELS.length,
@@ -4565,8 +4563,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{/snippet}
 				</IntakePanel>
 			{/snippet}
-			<!-- ═══ THE SCORE MARKUP GROUP (N.108 increment 1). Corrections and
-			     Voice, in that order. It was `shanePanel`, a column of score
+			<!-- ═══ THE VOICE GROUP (N.108 increment 1, renamed N.150 from Score
+			     markup; Corrections left it at N.149). It was `shanePanel`, a column of score
 			     work with the voice pinned below it in its own anchor.
 
 			     UNDERLAY IS GONE FROM THIS GROUP, N.114, RULED BY DANN
@@ -4593,99 +4591,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     already did. -->
 			{#snippet scoreGroup()}
 				{#if INCLUDE_SHANE}
-					<!-- N.92 CORRECTIONS. It rides inside the score capability's
-					     own wall and shows nothing at all until there is a read
-					     to correct, so a wall-closed build and a text-only
-					     session are both untouched.
-
-					     SLICE 4 RE-CUT IT INTO THE PHONE'S FOUR STATIONS.
-					     `CorrectionControls` is deleted: it carried the same
-					     verbs in a different order under different labels, and
-					     two surfaces that mean the same thing are two things to
-					     learn. This is the SAME COMPONENT the dock renders, in
-					     its panel variant, so the desktop and the phone cannot
-					     drift.
-
-					     THE SEMITONE VERBS DIED HERE. They were retired for the
-					     phone by Dann's ruling of 2026-08-24 and the drawer went
-					     on showing them; the re-cut is where that ended. The
-					     spelling policy is what answers a semitone now: down a
-					     semitone from B natural respells as A sharp, and the
-					     three accidental verbs reach every spelling.
-
-					     N.108 gives it a station header and a chevron, which it
-					     did not have, because every station in a frame retracts.
-					     The surface's own CORRECTIONS heading is gated to the
-					     dock in the same ship, so the name is drawn once. -->
-					{#if ingestedScore}
-						<div class="station">
-						<StationHeader
-							label={t('loupe.station.corrections', language)}
-							expanded={sections.has(STATION_IDS.corrections)}
-							ontoggle={() => sections.toggle(STATION_IDS.corrections)}
-							controls="station-corrections"
-						/>
-						{#if sections.has(STATION_IDS.corrections)}
-						<div class="station-body" id="station-corrections">
-						<CorrectionSurface
-							variant="panel"
-							open={loupeOpen}
-							{language}
-							readout={readoutLine}
-							{selectedBase}
-							{selectedDotted}
-							shiftDisabled={dockShiftDisabled}
-							ondismiss={dismissLoupe}
-							onwalk={handleMove}
-							onbase={handleDurationCell}
-							ondot={handleDotCell}
-							onstep={handleStep}
-							onoctave={handleOctave}
-							onsemitone={handleSemitone}
-							onaccidental={handleAccidental}
-							ondelete={handleDeleteNote}
-							onshift={handleDockShift}
-							onmelisma={handleMelisma}
-							{selectedMelisma}
-							{melismaDisabled}
-							{inGap}
-							{armedBase}
-							armedDots={armedDots > 0}
-							arrivalName={gapAnchorName}
-							{selectedIsRest}
-							{selectedTied}
-							{tieAvailable}
-							onrest={handleRest}
-							ontie={handleTie}
-							onrestore={handleRestoreNote}
-							{restoreAvailable}
-							placed={placedSlotCount}
-							total={slotQueue.length}
-							{tupletOpen}
-							{tupletDef}
-							{tupletFits}
-							onopentuplet={openTuplet}
-							onclosetuplet={closeTuplet}
-							ontupletdef={applyTupletDefinition}
-							{onhold}
-						/>
-						<!-- N.108 increment 1a, ruled by Dann 2026-09-02: "You have
-						     corrected 2 notes." renders inside the Corrections
-						     station body, not under Voice. It was in the notices
-						     block at the foot of the group, which put a sentence
-						     about corrections three stations away from the surface
-						     that made them. Nothing about the sentence changed. -->
-						{#if correctedCount > 0}
-							<p class="shane-storage-notice">
-								{correctedCount === 1
-									? t('correct.countOne', language)
-									: t('correct.count', language).replace('%s', String(correctedCount))}
-							</p>
-						{/if}
-						</div>
-						{/if}
-						</div>
-					{/if}
+					<!-- CORRECTIONS ARE NOT IN THE DRAWER. N.149, RULED BY DANN
+					     2026-09-20 12:07: "it was always the plan to migrate
+					     Corrections from the Drawer to the Loup surface. Remove
+					     it." The loupe's Corrections panel (`loupeCorrections`,
+					     below) is the one surface, so the drawer's mount, its
+					     station, and `corrections` in `STATION_IDS` are gone.
+					     The corrected-count sentence went with them, RULED BY
+					     DANN 2026-09-20 12:09: deleted, not relocated.
+					     THIS BAND IS VOICE (N.150) and holds only the Voice
+					     station, so the station's own header retired below and
+					     the band carries the name once. -->
 					<!-- ── VOICE. N.108: the anchor line is inside a station now,
 					     and the station is the last one in Score markup. It was
 					     the drawer's pinned BOTTOM region, one line with its own
@@ -4720,7 +4636,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     `profileStore.ts`, so this line and the wizard cannot
 					     disagree. -->
 					<div class="station">
-						<StationHeader label={t('voice.heading', language)} />
+						<!-- N.150: no StationHeader. The band is named Voice, so the
+						     name is drawn once, there. N.114a (2026-09-09) kept this
+						     header because it was the only thing naming Voice; that
+						     condition is gone. One line brings it back. -->
 						<!-- No `id` here since N.114a: the id existed for the
 						     header's `aria-controls`, and there is no toggle
 						     left to control anything. -->
