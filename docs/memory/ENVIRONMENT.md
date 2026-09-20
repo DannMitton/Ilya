@@ -22,6 +22,7 @@ next session the same hour it cost the last one.
 | Code reports a preview serving an old build on port 4173 | `A STALE PREVIEW HOLDS PORT 4173` |
 | writing a brief for Code | `A BRIEF THAT CARRIES A CAUSE COSTS A PASS` |
 | ship anything at all | `Gate baselines` |
+| you sent a file to the Mac, or are about to hand Dann a ship command | `REPORT SUCCESS AND WRITE NOTHING` |
 | move a gate number | `Moving a gate baseline` |
 | the ship script refuses to run | `refuses on untracked files` |
 | an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
@@ -3226,8 +3227,8 @@ diagnosing, which returned the real cause twice; and Dann looking at the screen.
 
 ## A FILE TRANSFER CAN REPORT SUCCESS AND WRITE NOTHING. 2026-09-19
 
-**IT HAPPENED TWICE IN ONE EVENING, AND ONCE IT WENT AN HOUR UNDETECTED WHILE
-THE DESK TOLD DANN THE WORK HAD SHIPPED.**
+**IT HAPPENED THREE TIMES IN ONE EVENING, AND ONCE IT WENT AN HOUR UNDETECTED
+WHILE THE DESK TOLD DANN THE WORK HAD SHIPPED.**
 
 **Case 1, caught after an hour.** A two-file send of `STATE.md` and
 `CONTRACT.md` returned `written` for both with no rejection. **Only
@@ -3240,8 +3241,20 @@ count.
 `written`; the file on disk was unchanged. Dann ran the ship and it answered
 *"Working tree clean. Running gates anyway; nothing to commit."*
 
-**Both times the container copy was correct and re-sending identical bytes with
-a fresh mtime guard worked.** WHY THE FIRST ATTEMPTS DID NOT IS NOT
+**Case 3, and it is the one that suggests a cause.** A one-row edit to this very
+file returned `written` and did not land. **The failing send used an mtime guard
+from a staging taken about twenty minutes earlier. Re-staging the same file,
+unchanged at 181 491 bytes, returned a DIFFERENT mtimeMs, and the identical
+payload then landed.** DESK INFERENCE, tethered to those two stagings: **the
+guard can go stale against the device while the call still reports success**, so
+the write is skipped silently. NOT ESTABLISHED as the cause of cases 1 and 2.
+
+**THE WORKING RULE THAT FOLLOWS: re-stage a file immediately before you send it,
+so the guard is seconds old, and read it back afterwards.** Three for three, a
+re-stage plus resend worked on the first retry.
+
+**All three times the container copy was correct and re-sending identical bytes
+with a fresh mtime guard worked.** WHY THE FIRST ATTEMPTS DID NOT IS NOT
 ESTABLISHED, and no explanation was invented. **A partial success within one
 multi-file call is the dangerous shape**, because the result names every file as
 written.
