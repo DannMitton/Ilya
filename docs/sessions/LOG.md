@@ -5970,3 +5970,179 @@ opening `correction.ts`, which has carried insertion since N.92 slice 3.
 > names, and the text-to-score sequence. Open it when one of those comes up.
 
 ---
+
+---
+
+## Block 24. THE ILYA REGISTER, folded in and retired at the close of 2026-09-19
+
+**Ruled by Dann 2026-09-19:** *"retire it into `STATE.md` and `LOG.md`"*, over
+the alternative of a revision 11. The register was
+`claude/ILYA REGISTER_2026-08-11.md`, revision 10, E.46, 13 August 2026,
+233 lines, 20,264 bytes, and it was the last piece of canon living in project
+knowledge rather than in the tree.
+
+**Its live rows went to `../memory/STATE.md`**, section "THE REGISTER IS RETIRED".
+**Everything below is closed, historical, or a record of method, and is verbatim.**
+
+**HOW IT WAS RECOVERED, because the method matters if this ever happens again.**
+The file was not in the tree and not on Dann's disk. It was read out of the Shane
+project's knowledge through the browser, from the raw-source view, one `<code>`
+element per line, 233 of them. **The first extraction was malformed**: the newline
+lives in the row's parent element and not in the `<code>`, so joining the
+elements' text produced 20,032 bytes on a single line. **The second joined on
+`\n` and verified at 233 lines before anything was written.**
+
+### Its state vocabulary
+
+| state | meaning |
+|---|---|
+| `DONE` | closed by a browser observation, not by a build |
+| `PART DONE` | a named part observed and closed; the rest named and unbuilt or unobserved |
+| `WRITTEN` | in the tree, not yet observed |
+| `RULED` | decided, not started |
+| `OPEN` | numbered, neither ruled in detail nor started |
+| `KILLED` | deliberately abandoned |
+| `NOT ESTABLISHED` | the number is in use somewhere and this register cannot yet say what it is |
+
+
+### The 19 rows the register itself carried as `DONE` or `KILLED`
+
+| # | item | state | primary source |
+|---|---|---|---|
+| **N.7** | Notation placement: rendered once, anchored below the scrolling panel | `DONE` | `NotationFields.svelte:2-26`. **E.45: its `+page.svelte` citations were renumbered by naming, not by new numbers** |
+| **N.10** | The Transcribe↔Fit shared-state seam | `DONE` | `vowel-resolver.ts` header; `underlay-donor.ts` supplies the pairing by LCS over cleaned Cyrillic forms. E.44: Fable read `+page.svelte:1055` live |
+| **N.12** | Pre-reform normalizer | `DONE` | `packages/dictionary/src/pre-reform-normalizer.ts`; 33 tests |
+| **N.14** | Homograph headword holds an array of entries | `DONE` | `loader.ts:415` |
+| **N.16** | Five-column atom layout, `flex-wrap: wrap` | `DONE` | `InspectorPanel.svelte:1734`. Affirmed by Dann's use, 10 Aug 2026 |
+| **N.23** | iOS focus zoom | `DONE` | `app.css:249-255` |
+| **N.24** | The band's siblings take `.organism`'s symmetry | `DONE` | arithmetic on `IMG_5084` in `e38-handover` §7 |
+| **N.25** | — | **`KILLED`** | Dann, E.38: *"kill the farm out"* |
+| **N.26** | The reader's warm-up | `DONE` | `claude/e38-handover_v1_2026-08-10.md` §4 |
+| **N.34** | `listSep` hardcoded English | **`DONE`** | OBSERVED by Dann, 12 August 2026 |
+| **N.36** | Tab labels move into the dictionary | **`DONE`** | observed on `2c92e04` |
+| **N.40** | `<html lang>` follows the language toggle | **`DONE`** | observed on `2c92e04` |
+| **N.41** | The mobile drawer measured the large viewport | **`DONE`** | repaired at `a9d1675` |
+| **N.43** | The Notation section collapses from its header | **`DONE`** | observed on `eba0950` |
+| **N.44** | Fit's paper had no phone rule at all | **`DONE`**, shipped `3ab8334` | OBSERVED by Dann on his own phone, 12 August 2026 |
+| **N.52** | The double sharp was written as two sharps | **`DONE`**, shipped `ed83583` | OBSERVED 12 August |
+| **N.53** | The update notice did not hold its shape | **`DONE`**, shipped `0f037f6` | OBSERVED 12 August |
+| **N.54** | Actualiser landed you back on the old build | **`DONE`**, shipped `8345803` | OBSERVED 12 August |
+| **N.57** | Glosses survive Transcribe, and survive a reload | **`DONE`**, shipped `a66517a` | Three tests with a negative control, E.45 |
+
+### The 10 rows closed, parked, or deferred between 13 August and this fold
+
+**Their register text is kept because it carries the primary source; their
+current state is the one `STATE.md` gives, not this one.**
+
+| # | item | state as of 2026-08-13 | primary source |
+|---|---|---|---|
+| **N.32** | **The Guide's false claims. Prose only** | **`PART DONE`**, shipped `821c5f5` | `claude/e38-guide-prose-audit_2026-08-10.md`. **FOUR sites remain.** (a) Composer captions, fr 144-145 and en 406-407; (b) the French provenance sentence, fr 109; (c) en 417's double-click gloss claim — **E.46 RE-VERIFIED: the editor is a live `<input class="dict-gloss-input">` opening at `InspectorPanel.svelte:1033`**; (d) fr 164's *l'onglet Ma traduction*, where the tab reads *Mon choix* (`i18n.ts:151`). **CAVEAT: three of the four are alt text on screenshots nobody has opened; if the images show those tabs, the owner is N.33** |
+| **N.47** | Print-from-phone verification | `OPEN`. **BLOCKING** | A gate, not a build. Ten minutes, Dann's |
+| **N.55a** | A score with no lyric underlay pairs note to syllable from Transcribe's text | **`RULED`, unbuilt. BLOCKING** | **Dann, E.46: *"There is no narrow class of cases where Ilya may pair without asking."* TOTAL ABSTENTION.** **`'no-lyrics-found'` ESTABLISHED: it is a `ParseWarningCode`, `types.ts:916`, raised identically by `musicxml-parser.ts:333-335` and `mnx-parser.ts:330-335`, both falling back to part 0. Tested at `musicxml-parser.test.ts:417-422`.** **AND IT REACHES NOTHING: no component in `apps/web/src` reads parse warnings.** **Its courtesy message rides N.55b's increment 2 by ruling R3** |
+| **N.55b** | The interface that corrects the pairing by hand | **`PART DONE`**. Increment 1 shipped `22c28a0` and OBSERVED. **BLOCKING** | **`claude/e46-n55b-click-assignment-design_2026-08-13.md`, revision 2. Finale's Click Assignment, verified from the manual. Eight rulings from Dann, E.46.** Hit targets: 5 of 5 resolve at 8 px off the glyph where 0 of 5 did, with a negative control 40 px below the band resolving to nothing |
+| **N.56** | Draw the withheld page badly, once, from Dann's own readings | `OPEN`. **BLOCKING** | A build, not a consult. **STILL UNPLACED in Dann's ordering** |
+| **N.58** | MIDI import | `OPEN`. **BLOCKING**, behind N.55a | E.44 opener §3.1 |
+| **N.59** | The reader in the browser, PDF and photograph | `OPEN`. **BLOCKING** | `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md`. **Pyodide, not a rewrite. PIN THE VERSIONS** |
+| **N.62** | The accessibility sweep, twenty-nine strings, one job | **`OPEN`** | E.44. Third clause: `InspectorPanel.svelte:1039` reads *"Modifier le glose"* where French takes *la glose*. **RE-VERIFIED E.46, still there** |
+| **N.63** | The desktop interstitial | **`RULED` to die, unbuilt** | `claude/e45-n63-ruled-kill-the-interstitial_2026-08-13.md`. **UNRULED STILL: where the honest residue goes — Guide, input line, or nothing** |
+| **N.67** | The local filing system | **`RULED` in principle, unstarted** | `claude/e45-n67-storage-architecture_2026-08-13.md`. **E.46: `ilya:pairings` in `localStorage` is the interim, migrated wholesale when this lands** |
+
+### Unnumbered rows that `STATE.md` already carried, not duplicated forward
+
+| item | source | note |
+|---|---|---|
+| **The French `?` spacing**, 11 sites | **E.46** | France's practice in a Canadian dictionary. Dann's ruling |
+| **The French colon spacing**, 8 sites | **E.46** | 3 in `i18n.ts`, 5 in `fit-legend.ts`. Mechanical |
+| **`stripBackingRect` matches `fill="#FFFFFF"`; `staff-renderer.ts:1352` paints `#F0EBE0`** | **E.46** | whether `paginateScore` adds a white one is NOT ESTABLISHED |
+| **D3's Job A, per-verse reprints** | E.36 §1.14, §7.7 | ruled by Dann, still unnumbered |
+| **The per-format score arrival audit** | E.45, asked for and never written up | |
+
+### RULED IN E.46
+ 
+**N.55a: TOTAL ABSTENTION.** *"There is no narrow class of cases where Ilya may
+pair without asking."* A melody arriving without text is never corresponded
+automatically. **The whole of the pairing work moves to N.55b.**
+ 
+**N.55b adopts Finale's Click Assignment grammar**, with three states per note
+from LilyPond's `__` versus `\skip` distinction.
+ 
+**The doctrine: "Ilya may propose, never claim."** An incomplete automated pass is
+permitted, because a starting position inside an editor is not an assertion.
+**The moment it can leave the editor unexamined, it becomes one.**
+ 
+**The first pass:** one syllable per note, in order, until one side runs out. **It
+never creates a melisma.**
+ 
+**Path A:** the hit target lives in the renderer.
+ 
+**Five design rulings.** R1 undecided is bare, the deliberate `empty` earns the
+mark. R2 the dashed enclosure only, no VERIFY label on the stave. R3 the pass
+runs on accept, and the courtesy message rides the same moment. R4 a click
+consumes from the queue, with the cursor **in the drawer**, because *drawer
+manipulates, page displays and prints*. R5 `localStorage` as `ilya:pairings`
+until N.67.
+ 
+**N.10b's French, replaced by Dann:**
+ 
+> « La partition et Ilya découpent ce mot différemment : rien n'est transcrit
+> ici, car il faudrait deviner. »
+ 
+with U+00A0 before the colon. **NOT YET IN THE TREE.** It waits for a build.
+
+### MEASURED IN E.46
+ 
+| fact | value |
+|---|---|
+| **Pointer events on the stave** | **5 of 5 events resolve at the glyph centre; before `22c28a0`, 0 of 5 at 8 px off; after, 5 of 5** |
+| **Negative control** | 40 px below the band resolves to **nothing**. The targets are bounded |
+| **Inked notehead** | **about 7 px wide.** Noteheads are SMuFL `<text>`, so SVG hit-tests painted glyph only |
+| **Hit target after `22c28a0`** | **27.5 to 48.3 px wide, 47 px usable height** on the first system. `.score-window` is `overflow: hidden` and clips ten pixels off the top |
+| **Ilya's engraver is its own** | `paginateScore`, `packages/score-parser/src/page-layout.ts:152`, feeding `renderAnalyzedStaff`, `staff-renderer.ts:461`. Output is an **SVG string**, injected at `VoiceProfilePane.svelte:681` and `:686` |
+| **Parse warnings reach no UI** | a grep of `apps/web/src` for `warnings` over `.ts` and `.svelte` returns the font lab, one test fixture, and one doc comment. **No render site** |
+| **French colon spacing** | **`i18n.ts`: 18 strings correct with U+00A0, 3 with a plain space. `fit-legend.ts`: 0 of 5 correct.** Eight sites, mechanical |
+| **French `?` spacing** | **11 strings carry U+00A0 before `?`**, which is the Imprimerie nationale practice. **The OQLF opts for no space.** Uniform, so somebody chose it. **UNRULED** |
+| **Gate baselines** | phonology 216, dictionary 235, web-check 0 errors and 7 warnings in 4 files, web-test 408, **score-parser 442 passed and 5 skipped**. `ilya-ship.sh:80` updated |
+| **`/fit-font-lab`** | **returns a Vercel 404 on the deployed build.** In the tree, not in the static output |
+
+### VERIFIED FROM PRIMARY SOURCES, E.46
+ 
+**Finale's feature is named Click Assignment**, Lyrics menu: syllables typed into
+a separate Lyrics window, then notes clicked in score order, one syllable per
+click; Option-click assigns consecutively and **skips rests, tied notes, and
+other layers**. **Shift Lyrics** shifts all syllables by one note from a selected
+point, with three scopes: **to the End of the Lyric, to the Next Open Note, and
+Rotate syllables**. **No swap command exists in the manual.** MakeMusic ended
+Finale on **26 August 2024**.
+ 
+**LilyPond** uses `--` between syllables of one word, `__` for the melisma
+extender, and `\skip` to leave a note bare, **and its documentation warns
+explicitly not to use `_` for skipping because an underscore indicates a
+melisma.**
+ 
+**Canadian French takes an `espace insécable` before the colon** (OQLF; Clés de
+la rédaction). Before `;`, `!` and `?` the OQLF gives *"pas d'espace ou une
+espace fine"* and **opts for no space**.
+
+### CORRECTIONS FILED IN E.46, ALL AGAINST OPUS
+ 
+1. **Opus proposed a GUI option without opening `e44-fable-ruling-studio-architecture`**, and mis-cited **N.64** from this register's one-line summary. **Tether ten, for the second consecutive session.** Dann stopped it by saying he did not understand the implications.
+2. **Opus recommended Ilya copy Verovio's per-note-id pattern. Ilya already does it**, `staff-renderer.ts:960`. **Roughly 90,000 tokens went to a rendering-library survey whose answer was in the tree.** `staff-renderer.ts` should have been opened before the brief was written.
+3. **Opus proposed a syllable strip beside the stave**, which would have put a control on the paper and broken the ruled binding paradigm.
+4. **Opus guessed the paths of `Paper.svelte` and `InspectorPanel.svelte`** and read two missing files before locating them.
+5. **Opus was about to report the hit target as 60.5 px tall.** Caught before reporting: `.score-window` clips it and the usable height is 47.
+6. **Opus uploaded a `.musicxml` into Transcription's OCR input**, which the E.46 opener §6 warns about by name.
+7. **Opus overwrote the branch alias's score metadata with the fixture's and did not snapshot the previous values.** Not recoverable.
+
+**And one instrument problem caught rather than reported.** A tab created by the
+extension loaded while `document.hidden` was `true`; the app never hydrated, 32
+DOM nodes and an empty body. **Reported as an instrument fault and not as a
+defect in Ilya.** Tether eleven, working.
+
+---
+*The register's own colophon, verbatim: "Opus, revision 10, E.46, 13 August 2026.
+One commit, no cardinal closed, one cardinal ruled, one moved to PART DONE on a
+browser observation with a negative control, eight rulings from Dann, and seven
+corrections filed against my own claims. The blocking number is still SEVEN, and
+saying otherwise would be the easiest lie available tonight." **That last
+sentence was wrong twice over: only six rows carried the mark, and by 2026-08-21
+the blocking set was empty.**

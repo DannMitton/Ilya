@@ -563,15 +563,122 @@ Kabalevsky op. 52 no. 9, fourteen lines. **It fills exactly two letter sheets.**
 
 ---
 
-## Register corrections owed
+## THE REGISTER IS RETIRED, 2026-09-19. Its live rows are below
 
-`claude/ILYA-REGISTER_2026-08-11.md` is at revision 10 and needs revision 11.
-Its N.55a row is FALSE (N.55a is CLOSED). It says "ten cardinals" over a list of
-twelve; **five actually remain and none is in the tree: N.1, N.2, N.3, N.18,
-N.21.** Its N.55b row is stale. **The blocking number is now THREE.**
+**Ruled by Dann 2026-09-19, over revision 11:** *"retire it into `STATE.md` and
+`LOG.md`"*. `claude/ILYA REGISTER_2026-08-11.md` was revision 10, E.46,
+13 August 2026, 233 lines. **Its closed rows, its E.46 measurements, its
+primary-source verifications, and its corrections are in `../sessions/LOG.md`
+block 24, verbatim. What was still live is here.** Nothing else points at it,
+and the file in project knowledge can be deleted.
 
-**Or fold the register into this file and retire it.** It is the last piece of
-canon still living in project knowledge.
+**WHY IT WAS RETIRED RATHER THAN REVISED, and the finding is against this file,
+not against the register.** The instruction to produce revision 11 said **"The
+blocking number is now THREE."** That is stale against this file's own
+**"THE BLOCKING SET IS EMPTY, 2026-08-21."** Revision 11 as specified would have
+written a stale number into canon. **Two further errors, found 2026-09-19:** the
+register's own header and colophon both claim the blocking number is SEVEN while
+only SIX of its rows carry the `BLOCKING` mark; and its gaps sentence says "ten
+cardinals" over a list of twelve.
+
+**THE REGISTER'S ROW FORMAT IS KEPT AS IT WAS**, because the value of these rows
+is the primary source in the fourth column, and rewording them would cost that.
+Its state vocabulary is in `../sessions/LOG.md` block 24.
+
+### The live rows, 27 of them, verbatim from revision 10
+
+**Read the state column against this file first.** These rows were last touched
+on 13 August 2026, so any row this file contradicts is settled by this file.
+
+| # | item | state | primary source |
+|---|---|---|---|
+| **N.15** | The touch-target repair | `RULED`, increment 1 specified and unapplied | `claude/e36-session-record_2026-08-10.md` §7.5; increment 1 at `claude/sonnet-memo-n15-inc1-touch-token-and-mapping_2026-08-10.md`. **E.46: N.55b's hit targets are 27.5 to 48.3 px wide, below the 44 px floor, and the column spacing is the bound. Not a third exemption; a constraint the engraving imposes** |
+| **N.17** | Viewport repair. Partly a no-op as ruled | `OPEN` | `claude/e38-handover_v1_2026-08-10.md` §10 |
+| **N.19** | The calibration date | `OPEN` | `claude/e38-ratified-goal-ledger-CORRECTED_2026-08-10.md` §3. Ruled to print, E.36 §7.4 |
+| **N.22** | The English-only Fit drawer, in French | **`WRITTEN`** | `claude/e40-handover_v1_2026-08-11.md` §6. Its surviving `aria-label`s are inside **N.62** |
+| **N.27** | The silent save. `saveStore` swallows its exception | `OPEN` | `profileStore.ts:220-224`. Gates N.28–N.29. **E.46: N.55b's `ilya:pairings` must NOT repeat it. A second silent save site is the same defect written twice** |
+| **N.28 / N.28a / N.28b** | Export: one voice, all voices, the unexported mark, pseudonymous | `OPEN` | slate, revision 3. **E.45: this is where the copyright question is revisited, before the door is built** |
+| **N.29** | Import, identity by id | `OPEN` | slate, revision 3 |
+| **N.30** | Re-key the override maps from positional to linguistic | `OPEN`, deferred by Dann in E.40 | slate, revision 3. **Keys are `${lineIndex}-${wordIndex}`, verified E.45 at `+page.svelte` and `pipeline.ts:229`** |
+| **N.31** | User glosses persist as `user-override` | `OPEN` | blocked behind N.30. **E.45, offered and unanswered: a user gloss is one bare string with no language on it, while the dictionary's glosses are bilingual `{en, fr}`** |
+| **N.32a** | Say plainly that Ilya transmits nothing | `OPEN` | slate, revision 3. **E.45 verified it: every outbound call in `src` is a GET for Ilya's own assets** |
+| **N.33** | The Guide's screenshot recapture, on Playwright | `RULED`, waits for the GUI | Fable, E.44: unblocked by N.66 |
+| **N.35** | `SPOKEN_NAME` and `spoken()` are English | **`PART DONE`** | Shipped `6829161`. The four error captions are inside **N.62** |
+| **N.37** | The stale `e16-harness` README | `OPEN` | slate, revision 3 |
+| **N.38** | The C8 field audit | `RULED`, unscoped | slate, revision 3 |
+| **N.39** | Scope the Learn overhaul | `RULED`, unstarted | `claude/e38-handover_v1_2026-08-10.md` §9 |
+| **N.42** | The desk selector. **It selects a document, not a destination** | `RULED`, build-ready | `claude/e41-n42-assigned-desk-selector_2026-08-11.md`, **whose §2 is WRONG**. Two genuinely open: the luminance-keyed inks, and chip cream versus light |
+| **N.45** | Transcribe's mobile content view | **`PART DONE`** | **E.45 DIAGNOSIS, RE-VERIFIED E.46 at `Paper.svelte:113-117`: the ruling said bypass pagination; the build set `gap: 0` instead. Portrait renders a STACK OF PAGES with the seam hidden.** **And the comment at `Paper.svelte:109-112` still asserts the pages must stay in the DOM for print, which Dann overruled. It is a live trap for the next reader.** Track switch offered and never answered |
+| **N.46** | Fit's mobile presentation, shape A | **`PART DONE`**, shipped `4ec2840`, `b624631` | Landscape DONE, observed by Dann. UNOBSERVED: the provenance legend |
+| **N.48** | The inescapable vowel | **`WRITTEN`**, shipped `f18c6ce`. **NOT EXERCISED** | Still needs a failing `[u]` |
+| **N.49** | `[u]` extraction; the voice type never reaches the extractor | **`OPEN`** | `claude/e43-n49-assigned-extraction_2026-08-12.md`. INTERMITTENT |
+| **N.50** | NotePicker joins the dictionary | **`PART DONE`**, shipped `f18c6ce` | Scope B, ten of fourteen. Eight strings inside N.62 |
+| **N.51** | The Fit surface wears Transcription's accent | **`OPEN`** | E.43, Dann's `record` ruling. `--sage` at 39 sites across 12 files |
+| **N.60** | The brace rule: the staff the brace does not span is the voice | `RULED` by Dann, 12 August 2026 | `claude/e43-n59-the-reader-in-a-browser_2026-08-12.md` §2 |
+| **N.61** | The watch as a capture device | **`OPEN`, a question rather than a feature** | Whether a web app can reach that microphone is NOT ESTABLISHED |
+| **N.64** | **Transcribe and Fit share one media input, the E.27 "Source" station** | **`RULED`, unstarted** | **`claude/e44-fable-ruling-studio-architecture_2026-08-13.md`, header table. E.46 CORRECTION: this is the INTAKE, not the text beside the notes. Opus mis-cited it from this register's own one-line summary** |
+| **N.65** | The drawer's anchors | **`RULED`, half built** | `claude/e36-session-record_2026-08-10.md` §1.4. Built in the E.29 shape, not the E.36 shape. **E.46: N.55b's syllable station is a new tenant of this scroll** |
+| **N.66** | The Studio consolidation | **`RULED`, unstarted** | `claude/e44-fable-ruling-studio-architecture_2026-08-13.md`. **E.46: Studio shows ONE document at a time. It would not put the text beside the stave, and Fable overturned the continuous packet page explicitly** |
+
+### Ten rows closed since the register was written. Not carried
+
+- **N.32** closed/parked table, LOG block 9
+- **N.47** closed/parked table, LOG block 9
+- **N.55a** closed/parked table, LOG block 9
+- **N.55b** closed/parked table, LOG block 9
+- **N.56** closed/parked table, LOG block 9
+- **N.58** DEFERRED TO FUTURE DEVELOPMENT by Dann 2026-08-21
+- **N.59** PARKED AT TIER 2, answered no, 2026-08-18 (step 3, the brace rule, still open)
+- **N.62** closed/parked table, LOG block 9
+- **N.63** closed/parked table, LOG block 9
+- **N.67** CLOSED WHOLE 2026-08-18
+
+### The gaps, carried forward and CORRECTED
+
+**The register said "ten cardinals" and listed twelve.** Verbatim, its list was
+N.1 through N.6, N.8, N.9, N.11, N.13, N.18, and N.21. **N.10b came off that
+list in E.46**, located at `fit-legend.ts:80-104`.
+
+**THIS FILE'S OWN LATER CLAIM WAS FIVE:** *"five actually remain and none is in
+the tree: N.1, N.2, N.3, N.18, N.21."* **WHICH OF THE TWO IS RIGHT IS NOT
+ESTABLISHED.** The two counts were never reconciled, and the five-item list is
+consistent with N.6 appearing on the visible list as a live item, which a genuinely
+unlocated number could not. **Whoever picks this up reconciles the twelve against
+the five and says which stands.**
+
+Their rows, verbatim:
+
+| # | item | state | primary source |
+|---|---|---|---|
+| N.1 – N.6 | — | **NOT ESTABLISHED** | not located. See §Gaps |
+| N.8 – N.9 | — | **NOT ESTABLISHED** | not located |
+| **N.10a, N.10b** | sub-items of N.10 | **N.10b LOCATED, E.46:** the withheld-syllable legend entry, `fit-legend.ts:80-104`. N.10a still NOT ESTABLISHED | **E.46: N.10b's French was replaced by Dann.** See §RULED |
+| N.11 | — | **NOT ESTABLISHED** | not located |
+| N.13 | — | **NOT ESTABLISHED** | not located |
+| **N.14a, N.14b** | sub-items of N.14 | **NOT ESTABLISHED** | named in the commit history per the E.38 slate |
+| N.18, N.21 | — | **NOT ESTABLISHED** | not located |
+| **N.20** | Built on `analyzePerVerse`. **Do not delete that function** | **NOT ESTABLISHED** | named in the E.41 opener §7.4; scope not located |
+
+**Filling them is archaeology and it is optional. N.20's scope is genuinely
+unknown**, and it matters more than the others. **The C-series is a separate
+numbering** and was not in the register.
+
+### Unnumbered and outstanding, carried forward
+
+**5 of the register's 13 unnumbered rows are already in this file and are not
+repeated here** (D3's Job A, French `?` spacing, French colon spacing, per-format score arrival audit, stripBackingRect). The
+remaining 8 are:
+
+| item | source | note |
+|---|---|---|
+| Three `notation.*.desc` keys write bare vowel glyphs | `e40-handover` §8 | |
+| The stress-acutes toggle governs Transcription only | `NotationFields.svelte:14-21` | never numbered |
+| A third touch-geometry exemption for the Notation header | E.41 | still unanswered |
+| Three elements still measured in `100vh` | `+layout.svelte:12-17` | N.17 |
+| The toggles are not freely combinable | E.38 audit | the Guide says *"freely combined"* |
+| The rotation lock | E.44 | no string or code fixes it |
+| **The teacher-with-a-studio copyright case** | E.45, raised by Dann, unanswered | |
+| `ILYA_PROJECT_MAP_2026-08-10_r7.svg` has no cards for N.23 through N.67 | E.41 | **the map is an archive; the tracker is the instrument** |
 
 ---
 
