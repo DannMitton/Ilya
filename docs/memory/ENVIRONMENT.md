@@ -3199,8 +3199,24 @@ classes are `loupe-head`, `loupe-meter`, `loupe-body`, `loupe-tail` and the stri
 **inside them the carets are bare `line` and `path` elements with no class and no data
 attribute.** A selector like `[class*=caret]` or `[data-caret]` returns nothing.
 
-**So: never report a caret count from a selector.** Zoom the loupe and look, or count
-by a geometry the drawing actually has. A zero here means the selector was wrong, not
+**SO NEVER REPORT A CARET COUNT FROM A CLASS SELECTOR. COUNT THE GEOMETRY INSTEAD,
+AND THIS WORKS, measured 2026-09-20 on `38dac87`:**
+
+```
+const body = document.querySelector('.loupe-window .loupe-body');
+const carets = (body.querySelectorAll('path').length - 1) / 2;
+```
+
+**A caret is two `path` arrowheads plus one `line` stem.** On T05 m. 10 the body went
+from 1 path and 41 lines with no carets to 7 paths and 44 lines with three, and
+`.loupe-window`'s `innerHTML.length` went 28031 to 29833. **The lone baseline `path`
+is not a caret**, which is why the formula subtracts one; confirm that baseline on any
+document before trusting the count.
+
+**THE MARKUP LENGTH IS THE BETTER TEST FOR "IS THE MEASURE BACK AS IT WAS".** Three
+caret-free states on the same measure gave `innerHTML.length` 28031 each, character
+for character. That settles a "looks the same" question by identity rather than by
+eye A zero here means the selector was wrong, not
 that the carets are absent, which is CONTRACT tether 11 and tether 14 together.
 
 ## CHROME WILL NOT GO BELOW ABOUT 555 CSS PX. 2026-09-20

@@ -123,6 +123,19 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > `Loupe.svelte:1393` gains `&& syllablesOpen`, so **the carets and the pill's fill
 > become one condition.** Amendment 5c in the r2 brief.
 >
+> **BUILT AND WALKED 2026-09-20, shipped `38dac87`.** Verified in his own Chrome on
+> T05 m. 10, by identity rather than by eye: **`.loupe-window`'s `innerHTML.length` is
+> 28031 in all three caret-free states** (raised and retracted, Syllables open,
+> retracted from Corrections) **and 29833 with Corrections open.** Character for
+> character, so "restore the measure to its opening state appearance" is the same
+> drawing, not a resemblance. Body paths and lines go 1 and 41 to 7 and 44 and back.
+> **Dann said "let's ship" on seeing it.**
+>
+> **AND THE CARETS ARE COUNTABLE AFTER ALL**, which closes the hole where both Code
+> and the desk reported zero from a class selector: a caret is two arrowhead `path`
+> elements plus one stem `line`, so `(paths - 1) / 2` gives three on this measure.
+> Recorded in `ENVIRONMENT.md`, `THE CARETS CARRY NO CLASS`.
+>
 > #### THE ONE FINDING FROM THE WALK, HIS, AND DEFERRED BY HIM
 >
 > **THE DURATION ROW WRAPS: the dot and Tuplet drop to a second row.** Seen at 555 px.
