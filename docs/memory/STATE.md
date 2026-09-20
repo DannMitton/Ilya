@@ -42,7 +42,59 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-18, about 04:00
+> ### READ THIS FIRST. Written at the close of 2026-09-19, about 22:00
+>
+> **THE ONE THING IS STILL N.153, AND 2026-09-19 DID NOT TOUCH IT.** Its account is
+> below, under the close of 2026-09-18, and nothing in it has changed. **Stage 1, the
+> squircle's box arithmetic extracted from `VoiceProfilePane.svelte` as a
+> behaviour-preserving refactor, is where a fresh thread starts.**
+>
+> **THE FLOOR DOES NOT MOVE. It stays at `637acc1`.** Seven commits landed on
+> 2026-09-19 and **not one of them is walked**, so by this file's own rule none of
+> them can be a floor. **HEAD is `438f08f` and the tree is clean.**
+>
+> **WHAT 2026-09-19 WAS: canon, French, and one small removal. No N.153.**
+>
+> | commit | what |
+> |---|---|
+> | `02dd6d2` | **the ILYA REGISTER is retired.** Its 27 live rows, its gaps and eight unnumbered live items are in this file; the rest is `../sessions/LOG.md` block 24. **Its subject line is wrong**, from a heredoc error; Dann ruled it stands rather than force-push |
+> | `71ae880` | **all 59 Insights entries in French**, and the canon rule that the desk drafts French |
+> | `074f230` | **the held measure's page mark removed.** Clause 16 closed |
+> | `9dfdab8` | **N.131's 25 real entries in French**, and 25 recorded as never having been defects |
+> | `ea862e6` | the Guide acknowledges Roberge and the OQLF |
+> | `ce1f4b9` | the OQLF link, verified against the page that states the rule |
+> | `438f08f` | clause 16 closed in canon, a lost amendment rebuilt, the transfer fault recorded |
+>
+> **FIVE THINGS ARE OWED A WALK, and none of them is closed until they get one:**
+> Aperçus in French (**Dann confirmed this one on 2026-09-19: "looks great"**); the
+> intake and drawer strings in French; the witness line reading « mes. »; no sage
+> rectangle on the page; and the Guide's Language paragraph with both links live.
+>
+> **THE RULE THAT CHANGED, AND IT OUTLIVES THE SESSION: THE DESK DRAFTS THE FRENCH
+> AND DANN RULES ON IT.** *"I prefer to have you suggest translations that I can react
+> to. That saves me cognitive bandwidth."* Never hand him blank slates. It is in this
+> file's N.130 row and in `CONTRACT.md` §4. **And French musical terminology now has an
+> authority: Roberge's GDRM, beside the OQLF for punctuation** (`INBOX.md`, 2026-09-19).
+>
+> **AN INSTRUMENT FAULT THAT BIT TWICE AND MUST NOT BITE AGAIN:** a file transfer to
+> the Mac can report success and write nothing, silently, including for one file of a
+> multi-file send. **Read every file back on the device before handing Dann a ship
+> command.** `ENVIRONMENT.md`, `A FILE TRANSFER CAN REPORT SUCCESS AND WRITE NOTHING`.
+>
+> **OWED BY DANN, small, none of it blocking N.153:** the walk above; whether the
+> comment **THE LOUPE ANCHORS FIXED AND NEVER TRAVELS** (his ruling of 2026-08-26,
+> which still says the sage rectangle moves across the page) is amended or left;
+> `underlay.heading`'s « Placement des paroles », a DESK DEFAULT he has not ruled on;
+> and the four items carried from 2026-09-18 below.
+>
+> **NOT IN THE REPO ON PURPOSE:** nine legacy project-memory exports and
+> `STATE.md.bak-2026-09-19` are in `~/Downloads`. **Dann ruled 2026-09-19 that the
+> exports stay on disk, being archival**; Shane's duplicates the new memory system.
+> The backup is the revert path for `02dd6d2`, by renaming it over `STATE.md`.
+>
+> ---
+>
+> ### The close of 2026-09-18, about 04:00. N.153's account is here
 >
 > **THE ONE THING IS N.153: the loupe re-engraves the held measure at its own spacing.**
 > Numbered by Dann 2026-09-18. Spec and its five stages are in `OPEN.md`. Stage 1 is the
@@ -643,24 +695,47 @@ on 13 August 2026, so any row this file contradicts is settled by this file.
 N.1 through N.6, N.8, N.9, N.11, N.13, N.18, and N.21. **N.10b came off that
 list in E.46**, located at `fit-legend.ts:80-104`.
 
-**THIS FILE'S OWN LATER CLAIM WAS FIVE:** *"five actually remain and none is in
-the tree: N.1, N.2, N.3, N.18, N.21."* **WHICH OF THE TWO IS RIGHT IS NOT
-ESTABLISHED.** The two counts were never reconciled, and the five-item list is
-consistent with N.6 appearing on the visible list as a live item, which a genuinely
-unlocated number could not. **Whoever picks this up reconciles the twelve against
-the five and says which stands.**
+**RECONCILED 2026-09-19. THE FIVE STANDS AND THE REGISTER'S TWELVE WAS STALE.**
+
+**Method, so it can be checked:** a word-boundary grep for each cardinal
+(`\bN\.<n>\b`, which does not match N.10 or N.146) across `docs/`, and
+separately across `apps`, `packages` and `tools`.
+
+**SEVEN OF THE TWELVE ARE IN THE TREE, each with an identity the register never
+recorded:**
+
+| # | what it is | read at |
+|---|---|---|
+| **N.4** | the unmeasured page | `packages/score-parser/src/staff-renderer.test.ts:1065`; `staff-renderer.ts:895`, `:2282` |
+| **N.5** | the singer's notation preferences, 2026-08-05 | `apps/web/src/lib/shane/VoiceProfilePane.svelte:164`, `:844`, `:861` |
+| **N.6** | ledger-line notes' stems, **recorded and NOT implemented** | `packages/score-parser/src/staff-renderer.ts:1791` |
+| **N.8** | the singer's open-syllable preference, 2026-08-06 | `apps/web/src/lib/shane/vowel-resolver.ts:411`; `VoiceProfilePane.svelte:174` |
+| **N.9** | the clitic rule: a word with no vowel can never own a slot | `apps/web/src/lib/shane/pairings.ts:102`, `:173`; `vowel-resolver.ts:512` |
+| **N.11** | a hyphen's ink stays inside the gap between two syllables | `packages/score-parser/src/staff-renderer.ts:1175`, `:3404`; `staff-renderer.test.ts:53` |
+| **N.13** | voicing preserved before a voiced-obstruent-initial word at a soft boundary | `packages/phonology/tests/notation-edge-cases.test.ts:528`, `:551` |
+
+**N.6 BEING LOCATED IS THE ONE THAT MATTERS**, because it is on the visible list
+as a live item, which a genuinely unlocated number could not be. Its code
+comment says what it is and says it is not built.
+
+**FIVE REMAIN GENUINELY UNLOCATED: N.1, N.2, N.3, N.18, N.21.** Zero references
+in `apps`, `packages` or `tools`, and in `docs/` they appear **only inside the
+gap listings themselves**. Nothing anywhere says what they are.
+
+**The rows below are the register's, kept verbatim as its record. They are
+superseded by the table above wherever the two disagree.**
 
 Their rows, verbatim:
 
 | # | item | state | primary source |
 |---|---|---|---|
-| N.1 – N.6 | — | **NOT ESTABLISHED** | not located. See §Gaps |
-| N.8 – N.9 | — | **NOT ESTABLISHED** | not located |
+| N.1 – N.6 | — | **SUPERSEDED 2026-09-19: N.4, N.5 and N.6 are located; N.1, N.2, N.3 are not** | not located. See §Gaps |
+| N.8 – N.9 | — | **SUPERSEDED 2026-09-19: both located** | not located |
 | **N.10a, N.10b** | sub-items of N.10 | **N.10b LOCATED, E.46:** the withheld-syllable legend entry, `fit-legend.ts:80-104`. N.10a still NOT ESTABLISHED | **E.46: N.10b's French was replaced by Dann.** See §RULED |
-| N.11 | — | **NOT ESTABLISHED** | not located |
-| N.13 | — | **NOT ESTABLISHED** | not located |
+| N.11 | — | **SUPERSEDED 2026-09-19: located** | not located |
+| N.13 | — | **SUPERSEDED 2026-09-19: located** | not located |
 | **N.14a, N.14b** | sub-items of N.14 | **NOT ESTABLISHED** | named in the commit history per the E.38 slate |
-| N.18, N.21 | — | **NOT ESTABLISHED** | not located |
+| N.18, N.21 | — | **NOT ESTABLISHED, confirmed 2026-09-19** | not located, and named nowhere but here |
 | **N.20** | Built on `analyzePerVerse`. **Do not delete that function** | **NOT ESTABLISHED** | named in the E.41 opener §7.4; scope not located |
 
 **Filling them is archaeology and it is optional. N.20's scope is genuinely
@@ -698,3 +773,13 @@ to `OPEN.md`; the Howell extraction and the previous close's standing-rules para
 moved to LOG block 21. `PRODUCT.md` gained "Why Ilya exists"; `ENVIRONMENT.md` gained
 `THE ALIAS CHECK THAT WORKED` and `THE EXTENSION CANNOT SEE HIS TAB`; `SCHEDULE.md`
 gained the per-format samples. The floor moves to `6e98057`. Memory NOT committed.*
+
+*Close of 2026-09-19, about 22:00. Seven commits, `02dd6d2` to `438f08f`, all
+pushed, none walked, so the floor stays at `637acc1`. The ILYA REGISTER is retired
+and project knowledge now holds no canon. Insights and N.131's real 25 are French;
+N.130's recorded range was wrong and is corrected. The held measure's page mark is
+gone and clause 16 is closed. The desk drafts the French from now on, ruled by Dann.
+`SCHEDULE.md` gained N.154 and gated N.84 on it; `ENVIRONMENT.md` gained the
+transfer fault; `INBOX.md` gained two N.84 notes; `OPEN.md` closed clause 16. The
+twelve-versus-five gaps count is reconciled: five remain, and seven were located.
+N.153 was not touched. Memory NOT committed.*
