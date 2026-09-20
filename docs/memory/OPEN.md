@@ -335,8 +335,8 @@ the paths already). Whoever takes N.142 should be told this.
       rule failing, whatever drew it.
 
 
-16. **THE HELD MEASURE'S SAGE MARK IS IN THE CODE AND NOT ON THE SCREEN. Open,
-    2026-09-18.** Dann sent a full-page screenshot showing two lavender squircles,
+16. **THE HELD MEASURE'S SAGE MARK IS IN THE CODE AND NOT ON THE SCREEN. CLOSED 2026-09-19,
+    2026-09-18; closed by removal, not by repair.** Dann sent a full-page screenshot showing two lavender squircles,
     one on the paper and one in the loupe, **and no sage rectangle anywhere**. His
     words: *"There is no sage rectangle... Dig deeper and convince me if I am missing
     something, otherwise actually read the code to review why you are misrepresenting
@@ -362,6 +362,20 @@ the paths already). Whoever takes N.142 should be told this.
     - **AND THE DESIGN QUESTION BEHIND IT IS DANN'S:** whether the held measure wants
       a mark on the page at all, now that the lavender squircle appears on both
       surfaces and carries the correspondence by itself.
+    - **ANSWERED 2026-09-19: THE MARK GOES.** Dann ruled it over chasing the bug.
+      **The reasoning, and the cost he accepted:** the squircle is mirrored on paper
+      and loupe and the measure tag names the held measure in words, but those mark
+      the SELECTED entry, **so with no selection, or a selection in another measure,
+      the page no longer says which measure the loupe holds.** Shipped `074f230`.
+      Six sites removed; four ink-survey filters naming the attribute are left, as
+      compound conditions that now never match. `system-ground.ts` stays whole: the
+      selection ring still calls `afterGround` from `VoiceProfilePane.svelte:629`.
+      **UNWALKED.**
+    - **ONE RESIDUE, AND IT IS DANN RULING TEXT SO THE DESK LEFT IT.** The comment
+      below the removal, **THE LOUPE ANCHORS FIXED AND NEVER TRAVELS** (his ruling of
+      2026-08-26), still reads *"the sage rectangle alone moves across the still
+      page"*. True as a record of what he ruled, false as a description of the code.
+      **His to amend or leave.**
 
 ## N.130. INSIGHTS HAS NO FRENCH. Numbered by Dann 2026-09-13. UNPLACED.
 

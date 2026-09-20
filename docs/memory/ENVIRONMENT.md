@@ -3222,3 +3222,35 @@ night. A form with nowhere to put a diagnosis cannot be complied with badly.**
 **What did work, all three external to the desk:** Dann asking "are you certain",
 which sent the desk to the file; the brief instructing Code to measure before
 diagnosing, which returned the real cause twice; and Dann looking at the screen.
+
+
+## A FILE TRANSFER CAN REPORT SUCCESS AND WRITE NOTHING. 2026-09-19
+
+**IT HAPPENED TWICE IN ONE EVENING, AND ONCE IT WENT AN HOUR UNDETECTED WHILE
+THE DESK TOLD DANN THE WORK HAD SHIPPED.**
+
+**Case 1, caught after an hour.** A two-file send of `STATE.md` and
+`CONTRACT.md` returned `written` for both with no rejection. **Only
+`CONTRACT.md` arrived.** `STATE.md` kept its old text, the commit that was
+supposed to carry the change carried nothing, and the desk reported it shipped.
+It surfaced only because a later staging showed `STATE.md` at its pre-edit byte
+count.
+
+**Case 2, caught in one line.** An edited `GuideContent.svelte` returned
+`written`; the file on disk was unchanged. Dann ran the ship and it answered
+*"Working tree clean. Running gates anyway; nothing to commit."*
+
+**Both times the container copy was correct and re-sending identical bytes with
+a fresh mtime guard worked.** WHY THE FIRST ATTEMPTS DID NOT IS NOT
+ESTABLISHED, and no explanation was invented. **A partial success within one
+multi-file call is the dangerous shape**, because the result names every file as
+written.
+
+**THE RULE: A TRANSFER THAT REPORTS SUCCESS IS NOT EVIDENCE THE BYTES ARRIVED.**
+Read every file back on the device before handing Dann a ship command. Check the
+byte count AND grep for something the edit added; a size alone can coincide.
+**For a multi-file send, check every file, not the first one.**
+
+**What made case 2 cheap:** `ilya-ship.sh` refuses on a clean tree and says so.
+**The script is the instrument**, again. What made case 1 expensive: nothing
+checked, and a commit message asserted the change.

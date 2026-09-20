@@ -102,9 +102,13 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > - **Clause 15. THE PERIMETER IS NEVER SMALLER THAN WHAT IT CONTAINS, at any frame.**
 >   Promoted to a standing rule for the loupe, because every clipping defect of these two
 >   days is that sentence broken while standing still.
-> - **Clause 16, OPEN. The held measure's sage mark is in the code and not on the screen.**
->   Dann's screenshot shows no sage rectangle. A one-line read-only check is written down
->   and not yet run.
+> - **Clause 16, CLOSED 2026-09-19 by removing the mark, not by fixing it.**
+>   Ruled by Dann over chasing the bug: the page no longer carries a held-measure
+>   rectangle. **One of its three candidates was eliminated by reading** (`hitH` is
+>   `own.nodes[0]` height at `Loupe.svelte:686-687`, and `lineGap = hitH / 11` at
+>   `:689` feeds the loupe crop at `:1132`, so a zero would collapse the loupe he can
+>   see); **which of the other two hid it is NOT ESTABLISHED and is now moot.**
+>   Shipped `074f230`, six sites removed. **UNWALKED.** Account in `OPEN.md` clause 16.
 > - **The tween work is DELIBERATELY UNNUMBERED**, on Dann's ruling: the number waits until
 >   N.149 is closer, because N.149 is what makes the Corrections gate real. **Do not mint
 >   one and do not read its absence as an oversight.**
@@ -194,7 +198,7 @@ does not repeat them.
   all English in both languages, found while checking the loupe's undo clauses.
   **Belongs in the release cut's IN bucket:** the ruled release sentence names
   Insights, and a document in the wrong language is wrong rather than
-  half-built. Spec in `OPEN.md`. **Dann owes the French; nothing is coined.**
+  half-built. Spec in `OPEN.md`. **THE DESK DRAFTS THE FRENCH AND DANN RULES ON IT, ruled 2026-09-19**, superseding *"Dann owes the French; nothing is coined"*. His words: *"I prefer to have you suggest translations that I can react to. That saves me cognitive bandwidth."* **So never hand him blank slates.** Draft from the French already in the file, say which entries the glossary came from, flag the choices that are genuinely his, and let him ratify, edit, or decline. **Nothing reaches the tree until he ratifies it**, which is the one clause of the old rule that survives. **BUILT 2026-09-19: all 59 Insights entries are French** (`71ae880`), drafts and rulings in `../sessions/insights-french_r1_2026-09-19.md`. **UNWALKED.** **AND THE ROW'S OWN RANGE WAS WRONG: only 12 of the 59 sat in `:1417-1475`; the other 47 ran `:1476` to `:1522`.** A brief written to the cited range would have fixed twelve strings and reported Insights done.
 - `[ ]` **N.132. The ratified names are not built.** `Text`, `Markup`, `Melody`,
   ruled 2026-09-13 in both languages, and the tree still says "Transcription" and
   "Score markup" (`i18n.ts:106`, `:117`, `:59`). **Found because Dann walked the
