@@ -18,13 +18,14 @@
 	   or leaves.
 
 	   IT PRINTS NOTHING, like the selection mark it carries. ------------- */
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { RING_REACH, RING_STROKE } from '$lib/shane/selection-ring';
 	import type { Slot, PairingMap } from '$lib/shane/pairings';
 	import type { Cursor } from '$lib/shane/entry';
 	import LoupeSyllables from '$lib/shane/LoupeSyllables.svelte';
+import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import {
 		headBound,
@@ -50,6 +51,7 @@
 		systemIndexOf,
 		windowScale,
 		type HitRect,
+		type LoupeMode,
 		type InkSpan,
 		type PageInk,
 		type Vertical,
@@ -123,8 +125,6 @@
 		/** What the loupe must stand clear of on the left: the landscape dock, or
 		    the open drawer on a desk. */
 		dockInset: number;
-		/** What it must stand clear of below: the portrait dock, or nothing. */
-		dockHeight: number;
 		/** A phone keeps the ruled 2.4; a desk aims at a readable stave. */
 		isPhone: boolean;
 		/** N.147. The whole poem's queue, `+page.svelte`'s `slotQueue`, drawn by
@@ -144,6 +144,24 @@
 		    session. */
 		syllablesOpen: boolean;
 		ontogglesyllables: () => void;
+		/**
+		 * N.149. WHICH OF THE LOUPE'S TWO MODES IS CHOSEN. Syllables draws no
+		 * carets; Corrections draws them and holds the correction cells.
+		 * `syllablesOpen` keeps its two other jobs (the panel's own open state,
+		 * and the re-frame at the effect that reads it), and the mode is read
+		 * beside it at that same effect so a swap re-frames too.
+		 */
+		mode: LoupeMode;
+		onmode: (mode: LoupeMode) => void;
+		/** The Undo and Redo the Score markup band used to carry, in the same
+		    words: `null` is an empty stack and draws nothing. Nothing is drawn
+		    at all while the loupe is closed, because this component is not. */
+		undoLabel: string | null;
+		redoLabel: string | null;
+		onundo: () => void;
+		onredo: () => void;
+		/** The correction cells, mounted by the page in Corrections mode. */
+		corrections?: Snippet;
 	}
 
 	let {
@@ -162,13 +180,19 @@
 		positions,
 		onpickgap,
 		dockInset,
-		dockHeight,
 		isPhone,
 		slots,
 		pairings,
 		onplace,
 		syllablesOpen,
 		ontogglesyllables,
+		mode,
+		onmode,
+		undoLabel,
+		redoLabel,
+		onundo,
+		onredo,
+		corrections,
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
@@ -604,15 +628,12 @@
 		contentHeight: number;
 		/** The window's height, sized by the TALLEST system on the page. */
 		windowHeight: number;
-		/** The y its CENTRE sits on; the frame hangs off it at -50%. */
+		/** The y the frame's centre would sit on. Since N.149 only `stageTop`, `stageBottom` and the height are read from this frame; `anchorTop` hangs the card from its top. */
 		centreY: number;
 		/**
-		 * N.147. THE TWO BOUNDS `centreY` WAS CLAMPED AGAINST, carried so the
-		 * syllable row's own height (unknown until it opens, and until its
-		 * content is measured, since the desk paragraph's height depends on how
-		 * many lines the queue wraps to) can be clamped the same way once it is
-		 * known, rather than only at the moment this frame was built. See
-		 * `shownCentreY` below.
+		 * N.147. THE TWO BOUNDS `centreY` WAS CLAMPED AGAINST, carried so
+		 * `anchorTop` can centre the card's fixed part (N.149) against the same
+		 * stage once its true height is measured.
 		 */
 		stageTop: number;
 		stageBottom: number;
@@ -645,6 +666,7 @@
 		void layoutTick;
 		void positions;
 		void syllablesOpen;
+		void mode;
 		const font = notationFont;
 		if (!open || measureIndex === null || ownIds.length === 0) {
 			frame = null;
@@ -738,10 +760,7 @@
 		   the dock, so the stage is the visible part of it. That disparity is
 		   the one carried since slice 2 and named again in the memo. */
 		const stageWidth = isPhone && sheet && sheet.width > 0 ? Math.min(room, sheet.width) : room;
-		const stageBottom = Math.min(
-			sheet ? sheet.bottom : window.innerHeight,
-			window.innerHeight - dockHeight,
-		);
+		const stageBottom = sheet ? Math.min(sheet.bottom, window.innerHeight) : window.innerHeight;
 
 		const inset = pageInset(stageWidth, SIDE_INSET);
 		/* CLAUSE 12 RENAMED THIS FROM `width`. It is now a CEILING the content
@@ -1304,7 +1323,8 @@
 		   RULED BY DANN 2026-09-17 (`docs/memory/OPEN.md`, THE CARET clauses 1
 		   to 6): a vertical mark past the top and bottom staff lines, an
 		   arrowhead at each end pointing inward, one per gap in `positions`,
-		   drawn only while the syllables row is closed.
+		   drawn only in Corrections mode (N.149; it was the
+		   syllables row's own open state until then).
 
 		   THE POSITION RULE, CLAUSE 6, m. 17: A CARET STANDS IN THE MIDDLE OF
 		   THE SPACE IT NAMES. *"Strange choice to make the last caret overlap
@@ -1370,7 +1390,7 @@
 		   Plate C's weight, plate D's clearance. Nothing about what a caret
 		   DOES changes here, only how it reads beside the squircle it now
 		   steps clear of. */
-		if (!syllablesOpen && positions.length > 1) {
+		if (mode === 'corrections' && positions.length > 1) {
 			const rectOf = (id: string) => container.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 			/* THE INK ITSELF: the union of a note's own group (excluding its
 			   hit rectangle, which is not ink) and everything stamped
@@ -2113,75 +2133,78 @@
 	});
 
 	/**
-	 * N.147. "THE LOUPE MUST STAY INSIDE THE VIEWPORT WHEN THE ROW OPENS."
+	 * N.149. THE MUSIC IS THE ANCHOR, and it does not move between modes or
+	 * when the panel opens.
 	 *
-	 * `frame.centreY` alone still keeps the box's own vertical CENTRE exactly
-	 * where `centreOnPage` put it, whatever the box's true height turns out to
-	 * be: `top: {centreY}px` plus `transform: translateY(-50%)` centres on the
-	 * ELEMENT'S OWN RENDERED HEIGHT, which the browser computes after layout,
-	 * so the maths does not need to know that height in advance. What
-	 * `centreOnPage`'s CLAMP does need in advance is the height, because the
-	 * clamp is what keeps the box's TOP and BOTTOM edges inside the stage; a
-	 * clamp computed for a shorter box (before the row existed) does not
-	 * protect the taller box the open row produces.
+	 * RULED BY DANN 2026-09-20, ruling 6, option B: *"the music sits at one
+	 * vertical, every time; sections grow downward; when the contents exceed
+	 * the room the accordion scrolls inside itself rather than the card
+	 * moving."* Until this ship the card hung off its own CENTRE
+	 * (`translateY(-50%)`) and was clamped against the dock, so opening the
+	 * syllables row grew it upward and moved the music by the row's height
+	 * (measured 2026-09-20, m. 9 at 390 x 844: 44 px).
 	 *
-	 * SO THE BOX MEASURES ITSELF. A `ResizeObserver` on `.loupe` (the same
-	 * instrument `layoutTick` already uses on the page's own container, just
-	 * turned on this element instead) reports the TRUE rendered height, and
-	 * `shownCentreY` reruns the exact clamp `centreY` used, with that true
-	 * height instead of the `windowHeight + CHROME` estimate. `measuredHeight`
-	 * starts at 0 so the fallback keeps drawing the loupe in the frame before
-	 * this component's first paint, exactly as it always has when the row is
-	 * absent or closed, which is when the estimate is already exact.
+	 * SO THE CARD IS HUNG FROM ITS TOP, and the top is derived from the part
+	 * of the card that never changes height: `.loupe-top`, the tag, the note
+	 * line, the window and the bar. `centreOnPage` centres THAT part on the
+	 * page's visible height, exactly as it always centred the whole card when
+	 * the whole card was that part alone. The panel region hangs below it and
+	 * has no vote in where anything stands.
 	 *
-	 * REACTS TO THE ROW OPENING OR CLOSING, because that changes the box's
-	 * layout height and the observer fires. It reacts to the row's OWN CONTENT
-	 * changing height too (a longer desk paragraph wrapping to more lines,
-	 * up to the `max-height: 104px` cap), for the same reason. A window
-	 * resize is covered exactly as well as it already was before this brief:
-	 * `layoutTick` reruns the whole `frame` effect on a page-container resize,
-	 * which recomputes `centreY` and, on the next frame, this too.
+	 * THE PANEL REGION'S ROOM IS DERIVED, never chosen: what is left between
+	 * the bottom of `.loupe-top` and the bottom of the viewport, less a small
+	 * foot for the shadow to land on. The panel scrolls inside that room
+	 * (`.loupe-panel`), so clause 15 holds at every frame: the card is never
+	 * smaller than what it contains, and it is never taller than the screen.
 	 */
-	let loupeEl = $state<HTMLElement | undefined>(undefined);
-	let measuredHeight = $state(0);
-	$effect(() => {
-		const el = loupeEl;
-		if (!el || typeof ResizeObserver === 'undefined') {
-			measuredHeight = 0;
-			return;
-		}
-		const ro = new ResizeObserver(([entry]) => (measuredHeight = entry.borderBoxSize?.[0]?.blockSize ?? el.offsetHeight));
-		ro.observe(el);
-		return () => ro.disconnect();
-	});
+	let topH = $state(0);
+	const PANEL_FOOT = 8;
+	/* The card's own vertical furniture, from `.loupe` in this file's
+	   stylesheet: 10 px above, 12 below, and the 1.4 px border twice. */
+	const CARD_FURNITURE = 10 + 12 + 1.4 * 2;
+	/* The bar's own height, for the one frame before `.loupe-top` is measured:
+	   the hairline and its margins (19) plus the 44 px floor. */
+	const BAR_ESTIMATE = 19 + 44;
 
-	const shownCentreY = $derived.by(() => {
+	const bareHeight = $derived(frame ? (topH ? topH : frame.windowHeight + CHROME + BAR_ESTIMATE) + CARD_FURNITURE : 0);
+
+	const anchorTop = $derived.by(() => {
 		if (!frame) return 0;
-		const height = measuredHeight || frame.windowHeight + CHROME;
 		const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
-		const centreY = centreOnPage(frame.stageTop, frame.stageBottom, viewportHeight, height, GUTTER);
-		/* MEASURED ON AN IPHONE SE'S OWN 375 x 667, WITH THE ROW OPEN: the open
-		   row can make the box taller than the room between the top gutter and
-		   the dock's own top edge has to give (`stageBottom - GUTTER`, the two
-		   bounds `centreOnPage` clamps against). `centreOnPage` resolves that
-		   conflict in the TOP gutter's favour (its own `Math.max(..., highest)`
-		   runs last), which is the right call for the frame it has always sized
-		   — a taken measure, never this tall. It is the wrong call for the row:
-		   the result pushed the box 70px INTO the dock, over the singer's own
-		   duration and pitch cells, on the exact measurement above.
-
-		   SO THIS CLAMPS AGAIN, the other way, ONLY when the two bounds
-		   themselves conflict (`highest > lowest`; `centreOnPage` never
-		   reaches this shape on its own). The dock's controls are a singer's
-		   hands mid-task; a tight top gutter is a few pixels near a header
-		   nothing is pressing. NOT ESTABLISHED how often a real phone reaches
-		   this at all: the memo names the one measurement that did, and asks
-		   Dann's own walk to look for it deliberately rather than treat this
-		   clamp as the last word. */
-		const lowest = frame.stageBottom - height / 2;
-		const highest = GUTTER + height / 2;
-		return highest > lowest ? Math.min(centreY, lowest) : centreY;
+		const centreY = centreOnPage(frame.stageTop, frame.stageBottom, viewportHeight, bareHeight, GUTTER);
+		return centreY - bareHeight / 2;
 	});
+
+	const panelRoom = $derived.by(() => {
+		if (!frame) return 0;
+		const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+		return Math.max(0, viewportHeight - PANEL_FOOT - (anchorTop + bareHeight));
+	});
+
+	/* THE MODES, in the order the pill draws them, and the roving focus the
+	   desk selector already carries (`DeskHead.svelte`, `handlePairKeydown`). */
+	const MODES: readonly LoupeMode[] = ['syllables', 'corrections'];
+
+	function modeLabel(m: LoupeMode): string {
+		return T(m === 'syllables' ? 'loupe.syllables' : 'loupe.station.corrections');
+	}
+
+	function handleModeKeydown(event: KeyboardEvent): void {
+		const current = MODES.indexOf(mode);
+		let next = current;
+		if (event.key === 'ArrowRight') next = (current + 1) % MODES.length;
+		else if (event.key === 'ArrowLeft') next = (current - 1 + MODES.length) % MODES.length;
+		else if (event.key === 'Home') next = 0;
+		else if (event.key === 'End') next = MODES.length - 1;
+		else return;
+		event.preventDefault();
+		if (next !== current) {
+			onmode(MODES[next]);
+			document.getElementById(`loupe-mode-${MODES[next]}`)?.focus();
+		}
+	}
+
+	const actions = $derived(stackActions(undoLabel, redoLabel, language));
 </script>
 
 {#if open && frame}
@@ -2192,9 +2215,9 @@
 	     frame would drop half its height as the animation ended. -->
 	<div
 		class="loupe"
-		bind:this={loupeEl}
-		style="left: {frame.left}px; width: {frame.width}px; top: {shownCentreY}px;"
+		style="left: {frame.left}px; width: {frame.width}px; top: {anchorTop}px;"
 	>
+		<div class="loupe-top" bind:offsetHeight={topH}>
 		<p class="loupe-tag" class:paired={!!noteLine}>{tag}</p>
 		{#if noteLine}
 			<p class="loupe-note">{noteLine}</p>
@@ -2390,35 +2413,81 @@
 		     retired row kept (`showSyllables`, `IntakePanel.svelte`): an empty
 		     `slots` means no transcription and no score words either, and a
 		     disclosure over nothing is not a disclosure. -->
-		{#if slots.length > 0}
-			<div class="loupe-syl-hairline"></div>
-			<button
-				type="button"
-				class="loupe-syl-toggle"
-				aria-expanded={syllablesOpen}
-				aria-controls="loupe-syllables"
-				aria-label={T('loupe.syllables')}
-				onclick={ontogglesyllables}
-			>
-				<span class="loupe-syl-label">{T('loupe.syllables')}</span>
-				<svg
-					class="loupe-syl-chevron"
-					class:expanded={syllablesOpen}
-					width="10"
-					height="10"
-					viewBox="0 0 10 10"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.8"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					aria-hidden="true"
-				><polyline points="3,1.5 7,5 3,8.5" /></svg>
-			</button>
+		<div class="loupe-syl-hairline"></div>
+		<div class="loupe-bar">
+			<!-- N.149, DESIGN A, CHOSEN BY DANN 2026-09-17 AND RESTATED 2026-09-20:
+			     *"Two segments in one pill on the left of the bar, the way the
+			     desk selector already pairs Transcription and Fit. The chosen
+			     one is filled. Undo, Redo and the chevron sit flush right."*
+			     The recipe is `DeskHead.svelte`'s pair, copied: a tablist,
+			     `role="tab"`, `aria-selected`, roving `tabindex`, arrows and
+			     Home and End. NO `aria-controls` ON THE MEMBERS, for the reason
+			     `DeskHead.svelte:100-107` records: the two share one panel
+			     region and neither owns a panel of its own. -->
+			<div class="loupe-pair" role="tablist" aria-label={T('a11y.tabs')}>
+				{#each MODES as m (m)}
+					<button
+						type="button"
+						class="loupe-pair-member"
+						class:chosen={mode === m}
+						role="tab"
+						id="loupe-mode-{m}"
+						aria-selected={mode === m}
+						tabindex={mode === m ? 0 : -1}
+						onclick={() => onmode(m)}
+						onkeydown={handleModeKeydown}
+					>
+						{modeLabel(m)}
+					</button>
+				{/each}
+			</div>
+			<div class="loupe-bar-right">
+				{#each actions as action (action.kind)}
+					<button type="button" class="loupe-action" aria-label={action.sentence} onclick={() => (action.kind === 'undo' ? onundo() : onredo())}>
+						<span aria-hidden="true">{action.kind === 'undo' ? '\u21B0' : '\u21B1'}</span>
+						<span>{action.verb}</span>
+					</button>
+				{/each}
+				<button
+					type="button"
+					class="loupe-syl-toggle"
+					aria-expanded={syllablesOpen}
+					aria-controls="loupe-panel"
+					aria-label={modeLabel(mode)}
+					onclick={ontogglesyllables}
+				>
+					<svg
+						class="loupe-syl-chevron"
+						class:expanded={syllablesOpen}
+						width="10"
+						height="10"
+						viewBox="0 0 10 10"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					><polyline points="3,1.5 7,5 3,8.5" /></svg>
+				</button>
+			</div>
+		</div>
+		</div>
+		<!-- THE PANEL REGION. Always in the DOM so the card's own layout has one
+		     shape; it holds the syllables in Syllables mode and the correction
+		     cells in Corrections mode, and it scrolls inside the room derived
+		     above rather than moving the card. -->
+		<div class="loupe-panel" id="loupe-panel" style="max-height: {panelRoom}px;">
 			{#if syllablesOpen}
-				<LoupeSyllables id="loupe-syllables" {slots} {pairings} {selectedEventId} {isPhone} {onplace} />
+				{#if mode === 'syllables'}
+					{#if slots.length > 0}
+						<LoupeSyllables id="loupe-syllables" {slots} {pairings} {selectedEventId} {isPhone} {onplace} />
+					{/if}
+				{:else}
+					{@render corrections?.()}
+				{/if}
 			{/if}
-		{/if}
+		</div>
 	</div>
 {/if}
 
@@ -2449,8 +2518,7 @@
 		padding: 10px 10px 12px;
 		border: 1.4px solid var(--ink-secondary, #4a4540);
 		border-radius: 10px;
-		/* Hung off its own centre; see the anchor note on the element. */
-		transform: translateY(-50%);
+		/* Hung from its top since N.149; see `anchorTop` in the script. */
 		background: var(--paper-light, #f5f1e8);
 		/* ── THREE LAYERS, TO SELL THE LIFT ──────────────────────────────
 		   Ruled by Dann 2026-08-28, out of §15's proposal. The geometry of
@@ -2483,11 +2551,11 @@
 	@keyframes loupe-rise {
 		from {
 			opacity: 0;
-			transform: translateY(calc(-50% + 6px));
+			transform: translateY(6px);
 		}
 		to {
 			opacity: 1;
-			transform: translateY(-50%);
+			transform: none;
 		}
 	}
 
@@ -2551,26 +2619,116 @@
 	   Ruled 2026-09-17: sentence case in the string, capitals by this CSS,
 	   which is why `.loupe-tag` itself is untouched (its own strings, the
 	   measure tag among them, are not meant to shout). */
-	.loupe-syl-toggle {
+	.loupe-bar {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		width: 100%;
-		border: none;
-		background: none;
-		padding: 0;
+		gap: 8px;
 		margin: 0 0 6px;
-		cursor: pointer;
-		font: inherit;
 	}
 
-	.loupe-syl-label {
+	/* N.149, THE PAIR. `DeskHead.svelte`'s `.pair` and `.pair-member`, copied:
+	   a track in full ink, a divider at the track's weight, and the chosen
+	   member drawn as a card in `--paper-cream`. The label is this bar's own
+	   register (the tag's face, uppercase, as `.loupe-syl-label` was), so the
+	   pill reads as this card's furniture and not as the desk's. */
+	.loupe-pair {
+		display: inline-flex;
+		flex: none;
+		border: 1px solid var(--ink-primary, #1a1612);
+		border-radius: 4px;
+		overflow: hidden;
+	}
+
+	.loupe-pair-member {
+		border: none;
+		background: transparent;
+		color: var(--ink-primary, #1a1612);
 		font-family: var(--font-sans, system-ui, sans-serif);
 		font-size: 0.6875rem;
 		font-weight: 600;
 		letter-spacing: 0.06em;
-		color: var(--ink-tertiary, #6a655f);
 		text-transform: uppercase;
+		padding: 0.3rem 0.7rem;
+		cursor: pointer;
+	}
+
+	.loupe-pair-member + .loupe-pair-member {
+		border-left: 1px solid var(--ink-primary, #1a1612);
+	}
+
+	.loupe-pair-member.chosen {
+		background: var(--paper-cream, #f0ebe0);
+		cursor: default;
+	}
+
+	.loupe-pair-member:not(.chosen):hover {
+		background: rgba(26, 22, 18, 0.06);
+	}
+
+	.loupe-pair-member:focus-visible,
+	.loupe-action:focus-visible,
+	.loupe-syl-toggle:focus-visible {
+		outline: 2px solid var(--ink-primary, #1a1612);
+		outline-offset: 2px;
+	}
+
+	/* Flush right: Undo, Redo, then the chevron outermost, the rule every
+	   station header keeps. */
+	.loupe-bar-right {
+		display: flex;
+		align-items: center;
+		margin-left: auto;
+	}
+
+	/* Undo and Redo, clickable text in the bar's own label style, which is what
+	   the Score markup band's pair was (N.115 increment 3) and why they carry
+	   its glyphs and its `underline` on hover. */
+	.loupe-action {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4em;
+		min-width: 32px;
+		padding: 0.3rem 6px;
+		border: none;
+		background: none;
+		cursor: pointer;
+		font-family: var(--font-sans, system-ui, sans-serif);
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--ink-tertiary, #6a655f);
+	}
+
+	.loupe-action:hover {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 3px;
+	}
+
+	.loupe-syl-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 32px;
+		border: none;
+		background: none;
+		padding: 0.3rem 8px;
+		margin: 0;
+		cursor: pointer;
+		font: inherit;
+	}
+
+	/* THE PANEL REGION scrolls inside the room `panelRoom` derives, and takes
+	   both pans back from the frame's own `touch-action: none`: a scroll
+	   container's own value governs what is inside it, and the syllables
+	   strip pans sideways while the correction cells pan down. */
+	.loupe-panel {
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		touch-action: pan-x pan-y;
 	}
 
 	/* Copied value for value from `IntakePanel.svelte`'s own disclosure
@@ -2588,14 +2746,22 @@
 	}
 
 	@media (pointer: coarse) {
+		.loupe-pair-member,
+		.loupe-action,
 		.loupe-syl-toggle {
 			min-height: 44px;
+		}
+
+		.loupe-action,
+		.loupe-syl-toggle {
+			min-width: 44px;
 		}
 	}
 
 	@media print {
 		.loupe-syl-hairline,
-		.loupe-syl-toggle {
+		.loupe-bar,
+		.loupe-panel {
 			display: none !important;
 		}
 	}

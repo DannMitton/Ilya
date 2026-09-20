@@ -156,6 +156,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		isDismissSwipe,
 		nearestTarget,
 		tapBand,
+		type LoupeMode,
 	} from '$lib/shane/loupe';
 	import {
 		applyTuplet,
@@ -1459,7 +1460,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   owns a correction. That is the split `LoupeSyllables` and
 	   `ShiftLyricsControl` already keep. */
 	let loupeOpen = $state(false);
-	let dockHeight = $state(0);
 	/* N.147, RULED BY DANN 2026-09-17: the syllable row's disclosure state
 	   lives "for the session only, with no `localStorage` write" (precedent
 	   `IntakePanel.svelte:166`, the row's own before this move) and "starts
@@ -1472,6 +1472,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   closed once per session." This is the one piece of `+page.svelte` state
 	   this brief adds. */
 	let loupeSyllablesOpen = $state(false);
+	/* N.149. THE LOUPE'S TWO MODES. Syllables draws no carets; Corrections
+	   draws them and holds the correction cells. RULED 2026-09-20: the loupe
+	   OPENS ON SYLLABLES, so this returns to it whenever the loupe closes and
+	   nothing remembers the last mode used (that is Dann's to rule, and he
+	   has not). Choosing a mode opens the panel, since a mode whose panel is
+	   shut is a label with nothing behind it. */
+	let loupeMode = $state<LoupeMode>('syllables');
+	$effect(() => {
+		if (!loupeOpen) loupeMode = 'syllables';
+	});
+	function handleLoupeMode(mode: LoupeMode): void {
+		loupeMode = mode;
+		loupeSyllablesOpen = true;
+	}
 
 	/** The score document on a phone, in either orientation, with a read to correct. */
 	/* THE LOUPE IS ON BOTH MODALITIES NOW, slice 4. `isPhone` is gone from this
@@ -2171,9 +2185,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   `isPhone` branch above it is untouched and still carries the dock's
 	   ruled 380 in landscape. */
 	const loupeInset = $derived(
-		isPhone ? (phonePortrait ? 0 : 380) : isMobile ? 0 : drawerWidth,
+		isPhone ? 0 : isMobile ? 0 : drawerWidth,
 	);
-	const loupeFoot = $derived(isPhone && phonePortrait ? dockHeight : 0);
 
 	const canTranscribe = $derived(
 		doc.inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
@@ -4268,10 +4281,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		pieceFromScore={doc.fromScoreFields.has('title')}
 		inputState={inputStateText}
 		scoreState={scoreStateText}
-		{undoLabel}
-		{redoLabel}
-		onundo={handleUndo}
-		onredo={handleRedo}
 		ontogglepull={handlePullToggle}
 		gesturesBlocked={loupeOpen}
 		ontabchange={handleTabChange}
@@ -4977,6 +4986,50 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
      THEY ARRIVE AS ONE MOTION AND LEAVE AS ONE, a single 180 ms fade on both,
      which is what teaches the singer they are one object on the first raise
      rather than on the first dismissal. -->
+{#snippet loupeCorrections()}
+	<CorrectionSurface
+			variant="panel"
+			open={loupeOpen}
+			{language}
+			readout={readoutLine}
+			{selectedBase}
+			{selectedDotted}
+			shiftDisabled={dockShiftDisabled}
+			ondismiss={dismissLoupe}
+			onwalk={handleMove}
+			onbase={handleDurationCell}
+			ondot={handleDotCell}
+			onstep={handleStep}
+			onoctave={handleOctave}
+			onsemitone={handleSemitone}
+			onaccidental={handleAccidental}
+			ondelete={handleDeleteNote}
+			onshift={handleDockShift}
+			onmelisma={handleMelisma}
+			{selectedMelisma}
+			{melismaDisabled}
+			{inGap}
+			{armedBase}
+			armedDots={armedDots > 0}
+			arrivalName={gapAnchorName}
+			{selectedIsRest}
+			{selectedTied}
+			{tieAvailable}
+			onrest={handleRest}
+			ontie={handleTie}
+			onrestore={handleRestoreNote}
+			{restoreAvailable}
+			placed={placedSlotCount}
+			total={slotQueue.length}
+			{tupletOpen}
+			{tupletDef}
+			{tupletFits}
+			onopentuplet={openTuplet}
+			onclosetuplet={closeTuplet}
+			ontupletdef={applyTupletDefinition}
+			{onhold}
+		/>
+{/snippet}
 {#if loupeAvailable && loupeOpen && cursor}
 	<Loupe
 		open={loupeOpen}
@@ -4994,58 +5047,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		positions={heldMeasurePositions}
 		onpickgap={handleLoupePickGap}
 		dockInset={loupeInset}
-		dockHeight={loupeFoot}
 		{isPhone}
 		slots={slotQueue}
 		pairings={shownPairings}
 		onplace={placeSyllableOnSelected}
 		syllablesOpen={loupeSyllablesOpen}
 		ontogglesyllables={() => (loupeSyllablesOpen = !loupeSyllablesOpen)}
+		mode={loupeMode}
+		onmode={handleLoupeMode}
+		{undoLabel}
+		{redoLabel}
+		onundo={handleUndo}
+		onredo={handleRedo}
+		corrections={loupeCorrections}
 	/>
-	{#if isPhone}
-	<CorrectionSurface
-		{language}
-		portrait={phonePortrait}
-		readout={readoutLine}
-		{selectedBase}
-		{selectedDotted}
-		shiftDisabled={dockShiftDisabled}
-		ondismiss={dismissLoupe}
-		onwalk={handleMove}
-		onbase={handleDurationCell}
-		ondot={handleDotCell}
-		onstep={handleStep}
-		onoctave={handleOctave}
-		onsemitone={handleSemitone}
-		onaccidental={handleAccidental}
-		ondelete={handleDeleteNote}
-		onshift={handleDockShift}
-		onmelisma={handleMelisma}
-		{selectedMelisma}
-		{melismaDisabled}
-		onheight={(h) => (dockHeight = h)}
-		{inGap}
-		{armedBase}
-		armedDots={armedDots > 0}
-		arrivalName={gapAnchorName}
-		{selectedIsRest}
-		{selectedTied}
-		{tieAvailable}
-		onrest={handleRest}
-		ontie={handleTie}
-		onrestore={handleRestoreNote}
-		{restoreAvailable}
-		placed={placedSlotCount}
-		total={slotQueue.length}
-		{tupletOpen}
-		{tupletDef}
-		{tupletFits}
-		onopentuplet={openTuplet}
-		onclosetuplet={closeTuplet}
-		ontupletdef={applyTupletDefinition}
-		{onhold}
-	/>
-	{/if}
 {/if}
 {#if updated.current && !updateDismissed}
 	<div class="update-toast screen-only" role="status">

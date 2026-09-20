@@ -881,3 +881,6 @@ export function centreOnPage(
 	const highest = gutter + height / 2;
 	return Math.min(Math.max(Math.min(centre, lowest), highest), viewportHeight - height / 2);
 }
+
+/** N.149. The loupe's two modes: Syllables draws no carets, Corrections draws them and holds the correction cells. */
+export type LoupeMode = 'syllables' | 'corrections';
