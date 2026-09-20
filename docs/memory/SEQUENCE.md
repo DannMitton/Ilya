@@ -23,17 +23,18 @@ Dann, 2026-09-15.
 
 **What it is not.** A release cut. It says what order to build in, not where the
 next public Ilya stops (Ilya has been public since January; see `PRODUCT.md`). That question is still his and is recorded separately in
-`STATE.md` §RULINGS DANN OWES.
+`OWED.md` §RULINGS DANN OWES.
 
 **Instrument.** `OPEN.md` read in full, `STATE.md` §THE TRACKER and §OWED read in
-full, 2026-09-15. **The small and parked items are NOT sequenced** (N.45's
+full, 2026-09-15. **§OWED moved to `OWED.md` on 2026-09-20; the
+reading above was of `STATE.md` as it stood that night.** **The small and parked items are NOT sequenced** (N.45's
 remainder, N.51, N.17, N.19, N.61, N.6, N.27, N.28, N.48, N.59 step 3, N.102-1c,
 N.82, N.89): they are known only by their one-line entries and none of them
 blocks another.
 
 ---
 
-**RELEASE DATE, ruled by Dann 2026-09-16: Friday 2026-10-30.** The order below is read against it; what does not fit goes to FLAGGED or LATER (`STATE.md` §RULINGS DANN OWES).
+**RELEASE DATE, ruled by Dann 2026-09-16: Friday 2026-10-30.** The order below is read against it; what does not fit goes to FLAGGED or LATER (`OWED.md` §RULINGS DANN OWES).
 
 ---
 
@@ -181,5 +182,5 @@ produces one.** Putting it last means the release is cut without that number.
 **The queue grows faster than it drains.** Fifteen numbers arrived in the seven
 days to 2026-09-13 while nine closed; 2026-09-14 into 2026-09-15 closed two and
 numbered three. **No build order fixes that.** The release date is set by when the
-numbering stops, which is the ask recorded in `STATE.md` §RULINGS DANN OWES and is
+numbering stops, which is the ask recorded in `OWED.md` §RULINGS DANN OWES and is
 deliberately not raised here.

@@ -53,6 +53,14 @@ waiting, on purpose.
    Open it when choosing what to do next, and tick it at every close. Created
    2026-09-16.
 
+8. **`OWED.md`** — the standing debts and the unsettled questions: what the desk
+   owes, what Dann owes, what has never been settled, and the retired register's
+   live rows. **NOT part of the opening read.** Open it when one of its items
+   comes up, when Dann asks what is outstanding, or when the one thing closes and
+   the next is being chosen. **Split out of `STATE.md` on 2026-09-20 on Dann's
+   ruling**, which took `STATE.md` from 1,141 lines to 547 and under its own
+   tripwire for the first time. Nothing was reworded.
+
 `INBOX.md` is append-only and **you do not open it unless Dann asks.**
 
 `../sessions/LOG.md` is the archive behind `STATE.md`, split out 2026-09-01.
@@ -74,6 +82,7 @@ beats the archive.**
 | `ENVIRONMENT.md` | when a tool, path, or baseline moves | you, when you learn it the hard way |
 | `OPEN.md` | when an item is numbered, ruled, or starts | you |
 | `SEQUENCE.md` | when an item closes or is numbered | you |
+| `OWED.md` | when a debt is incurred or paid, or a question is settled | you |
 | `STATE.md` | **every session, at the close** | you |
 | `INBOX.md` | any time Dann digresses | you, one line, immediately |
 
@@ -117,6 +126,15 @@ forty-seven of its predecessors were written and thrown away.
 1. Update `STATE.md`: the one thing, the tracker marks, what moved. **If an item
    closes, its spec leaves `OPEN.md` in the same pass;** if Dann numbers a new
    one, its spec enters `OPEN.md` and its mark enters `STATE.md` §THE TRACKER.
+   **A new debt or an unsettled question goes to `OWED.md`, not here.** `STATE.md`
+   is the session's state; `OWED.md` is what is open and not moving.
+
+   **AND CHECK WHERE THE RULINGS LANDED. Learned the hard way 2026-09-20:** moving
+   a closed item's account to `LOG.md` can carry Dann's rulings into the archive,
+   which this page says is not authoritative. **Six of his rulings went that way in
+   one pass and were only caught because the next move was checked first.** Before
+   you move an account, grep each ruling it carries and confirm it also lives in
+   `OPEN.md`, `CONTRACT.md` or `PRODUCT.md`.
 2. **Move what closed to `../sessions/LOG.md`.** Ruled by Dann 2026-09-01:
    **`STATE.md` holds only what is open. Anything that closes moves to `LOG.md` at
    the close of the session that closed it.** Size is an output, not a target.

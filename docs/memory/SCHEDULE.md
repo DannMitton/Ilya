@@ -12,7 +12,7 @@ closed, and move anything unfinished to the next week with its date. If a week
 runs over, the buffer in week 5 absorbs it; if the buffer is gone, the lowest
 line in the week moves to LATER, and the date stands.
 
-**Rules in force:** the freeze rule (`STATE.md` §RULINGS DANN OWES): a new
+**Rules in force:** the freeze rule (`OWED.md` §RULINGS DANN OWES): a new
 finding joins only if Ilya would otherwise tell a singer something false or
 lose a singer's work. **Checkpoint Friday 2026-10-09:** a design row not yet
 in Code moves to LATER.
