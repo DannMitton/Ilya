@@ -30,7 +30,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// English stands in both slots because `t()` prints `[MISSING: key]` for an
 	// absent variant, which would put that literal on the pull. « Papier » is
 	// the obvious word and it is DANN'S TO RULE, not this ship's to assume.
-	'drawer.paper':                { en: 'Paper',                        fr: 'Paper' },
+	'drawer.paper':                { en: 'Paper',                        fr: 'Papier' },
 
 	// ── The three groups (N.108 increment 1) ─────────────────
 	//    FRENCH IS DEFERRED BY DANN'S RULING OF 2026-09-02, and these six
@@ -52,7 +52,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    one names a GROUP in the drawer, and folding two concepts onto one
 	//    string is how a rename comes to move something nobody meant to move.
 	//    Whether they should be one string is DANN'S TO RULE.
-	'group.piece':                 { en: 'Piece',                        fr: 'Piece' },
+	'group.piece':                 { en: 'Piece',                        fr: 'Pièce' },
 	//    `group.text` IS DELETED in both languages, N.115 increment 3: the
 	//    Text fold was its last reader, and Dann ruled the fold away
 	//    2026-09-10 late.
@@ -61,7 +61,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    Dann named the band himself on 2026-09-07: the intake becomes its own
 	//    group between Piece and Text, "named INPUT, painted sage like Text
 	//    (hue names place: it is text)". Same slot treatment as the six above.
-	'group.input':                 { en: 'Input',                        fr: 'Input' },
+	'group.input':                 { en: 'Input',                        fr: 'Entrée' },
 	//    ── A BAND'S STATE LINE, N.115, ruled with its French 2026-09-10.
 	//    A closed band shows one line under it, its state; open, the content
 	//    itself is the state. Piece's line, Input's line and Score markup's
@@ -80,7 +80,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    The binder station. Its three buttons keep their own ratified
 	//    `binder.*` strings; this names the station they sit in, which had no
 	//    name because it was a bare row inside Source.
-	'binder.heading':              { en: 'Export and import',            fr: 'Export and import' },
+	'binder.heading':              { en: 'Export and import',            fr: 'Exportation et importation' },
 	//    UNDERLAY is the English name Dann ruled 2026-08-18. It ships today as
 	//    `shiftLyrics.title` "Shift Lyrics", which keeps its ratified French
 	//    and its own call sites; this is the station name, and the two are not
@@ -91,10 +91,10 @@ const strings: Record<string, Record<Language, string>> = {
 	//    where the ruling of 2026-09-09 gives it no label at all). Kept and
 	//    marked in place rather than deleted, the way `upload.scanTooltip` is,
 	//    on Dann's ruling of 2026-09-03.
-	'underlay.heading':            { en: 'Underlay',                     fr: 'Underlay' },
+	'underlay.heading':            { en: 'Underlay',                     fr: 'Placement des paroles' },
 	//    VOICE, the station name from E.27 §3.3. The anchor line inside it
 	//    keeps its ratified `calib.anchor.*` strings.
-	'voice.heading':               { en: 'Voice',                        fr: 'Voice' },
+	'voice.heading':               { en: 'Voice',                        fr: 'Voix' },
 
 	// ── Tab bar (N.36) ───────────────────────────────────────
 	//    The labels lived in the component, so French lived in two
@@ -161,7 +161,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// FRENCH OWED. « texte » was ratified for the old word and cannot stand for
 	// the new one; « poème » is the likely answer and Dann has not ruled it, so
 	// the `fr` slot carries the English until he does.
-	'input.watermark':             { en: 'poem',                         fr: 'poem' },
+	'input.watermark':             { en: 'poem',                         fr: 'poème' },
 	'input.warning':               { en: 'characters. Large texts may be slow to process.', fr: 'caractères. Les textes longs peuvent être lents à traiter.' },
 	// RENAMED 2026-09-07 BY DANN, N.108-5: the button reads "Transcribe and
 	// fit", because after this ship one press does both halves. It read
@@ -304,9 +304,9 @@ const strings: Record<string, Record<Language, string>> = {
 	//    seats, at ingest, and says nothing. Kept in place and not deleted on
 	//    his instruction, the same treatment N.108 increments 2 and 4 gave
 	//    their retired strings above.
-	'clitic.seated':               { en: '%s cannot take a note of its own, so Ilya seated it with %s and moved %s notes.', fr: '%s cannot take a note of its own, so Ilya seated it with %s and moved %s notes.' },
-	'clitic.seatedOne':            { en: '%s cannot take a note of its own, so Ilya seated it with %s and moved one note.', fr: '%s cannot take a note of its own, so Ilya seated it with %s and moved one note.' },
-	'clitic.undo':                 { en: 'Undo',                          fr: 'Undo' },
+	'clitic.seated':               { en: '%s cannot take a note of its own, so Ilya seated it with %s and moved %s notes.', fr: '%s ne peut pas avoir de note à lui seul, alors Ilya l\u2019a placé avec %s et a déplacé %s notes.' },
+	'clitic.seatedOne':            { en: '%s cannot take a note of its own, so Ilya seated it with %s and moved one note.', fr: '%s ne peut pas avoir de note à lui seul, alors Ilya l\u2019a placé avec %s et a déplacé une note.' },
+	'clitic.undo':                 { en: 'Undo',                          fr: 'Annuler' },
 	// N.97. A correction whose event id no longer resolves after a re-read has
 	// not landed, and it must not fail silently. The DRAWER carries the count;
 	// nothing is marked on the paper. Dann's own wording, approved 2026-08-24
@@ -653,8 +653,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'intake.caption':     { en: 'A score or a photograph can go here too, or you can choose a file.', fr: 'Une partition ou une photographie peut aussi aller ici, ou vous pouvez choisir un fichier.' },
 	'intake.captionLink': { en: 'choose a file', fr: 'choisir un fichier' },
 	// The receipt lines. %s is the count in each.
-	'intake.lines':       { en: '%s lines',   fr: '%s lines' },
-	'intake.words':       { en: '%s words',   fr: '%s words' },
+	'intake.lines':       { en: '%s lines',   fr: '%s lignes' },
+	'intake.words':       { en: '%s words',   fr: '%s mots' },
 	// N.115, ruled with its French 2026-09-10. The syllable line's own numeral
 	// pair, given the word it was missing, in both the open row and the closed
 	// one. The first %s is what is placed and the second is the whole queue.
@@ -662,24 +662,24 @@ const strings: Record<string, Record<Language, string>> = {
 	// One Clear for both receipts, because the tag beside it already says which
 	// kind is being cleared. `input.clear` said "Clear text", which named the
 	// kind a second time and could not name the score at all.
-	'intake.clear':       { en: 'Clear',      fr: 'Clear' },
-	'intake.replace':     { en: 'Replace',    fr: 'Replace' },
+	'intake.clear':       { en: 'Clear',      fr: 'Effacer' },
+	'intake.replace':     { en: 'Replace',    fr: 'Remplacer' },
 	// `intake.choose` IS DELETED, N.115. The Choose a file pill under the field
 	// is struck (ruled 2026-09-10) and the verb is the link inside
 	// `intake.caption` now; nothing else in the tree read the key.
-	'intake.dropHint':    { en: 'Drop the other kind here, or a new file of the same kind to replace it.', fr: 'Drop the other kind here, or a new file of the same kind to replace it.' },
+	'intake.dropHint':    { en: 'Drop the other kind here, or a new file of the same kind to replace it.', fr: 'Déposez ici l\u2019autre type de fichier, ou un nouveau fichier du même type pour le remplacer.' },
 	// THE PDF QUESTION, build brief §3: "A PDF asks once, in place, which it
 	// is. Do not guess." %s is the file's name, so a singer who dropped two
 	// files in a row can see which one is being asked about.
-	'intake.pdf.title':   { en: 'Is this PDF the poem, or the score?', fr: 'Is this PDF the poem, or the score?' },
-	'intake.pdf.why':     { en: 'Ilya cannot tell from the file itself. %s', fr: 'Ilya cannot tell from the file itself. %s' },
-	'intake.pdf.poem':    { en: 'The poem', fr: 'The poem' },
-	'intake.pdf.score':   { en: 'The score', fr: 'The score' },
-	'intake.pdf.reading': { en: 'Reading the words out of the PDF…', fr: 'Reading the words out of the PDF…' },
+	'intake.pdf.title':   { en: 'Is this PDF the poem, or the score?', fr: 'Ce PDF est-il le poème ou la partition?' },
+	'intake.pdf.why':     { en: 'Ilya cannot tell from the file itself. %s', fr: 'Ilya ne peut pas le déterminer à partir du fichier lui-même. %s' },
+	'intake.pdf.poem':    { en: 'The poem', fr: 'Le poème' },
+	'intake.pdf.score':   { en: 'The score', fr: 'La partition' },
+	'intake.pdf.reading': { en: 'Reading the words out of the PDF…', fr: 'Lecture des mots dans le PDF…' },
 	// The honest answer where a PDF answered "the poem" holds no text at all,
 	// which is what a scan is. It is a mis-answer and not a broken file, so it
 	// says what happened and points at the other answer.
-	'intake.pdf.noText':  { en: 'There are no words in this PDF to read. If it is a picture of a page, drop it again and choose The score.', fr: 'There are no words in this PDF to read. If it is a picture of a page, drop it again and choose The score.' },
+	'intake.pdf.noText':  { en: 'There are no words in this PDF to read. If it is a picture of a page, drop it again and choose The score.', fr: 'Il n\u2019y a aucun mot à lire dans ce PDF. S\u2019il s\u2019agit d\u2019une image de page, déposez-le de nouveau et choisissez La partition.' },
 	// THE PICTURE ASKS THE SAME QUESTION, N.108 increment 4, ruled by Dann
 	// 2026-09-03: the camera icon, Choose a file, and Read a score from a
 	// photograph "all serve the same function". One picker takes every kind,
@@ -693,8 +693,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//
 	// FRENCH IS OWED, as it is for every N.108 string: the English stands in
 	// both slots because `t()` prints `[MISSING: key]` for an absent variant.
-	'intake.picture.title':   { en: 'Is this picture the poem, or the score?', fr: 'Is this picture the poem, or the score?' },
-	'intake.picture.reading': { en: 'Reading the words out of the picture…', fr: 'Reading the words out of the picture…' },
+	'intake.picture.title':   { en: 'Is this picture the poem, or the score?', fr: 'Cette image est-elle le poème ou la partition?' },
+	'intake.picture.reading': { en: 'Reading the words out of the picture…', fr: 'Lecture des mots dans l\u2019image…' },
 
 
 	// ── Word Console placeholder ─────────────────────────────
@@ -719,7 +719,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// THE FRENCH IS OWED. The English stands in both slots, as the six N.108
 	// strings above do, because `t()` prints `[MISSING: key]` for an absent
 	// variant and that literal would land on the empty page.
-	'paper.empty.mobile':          { en: 'Tap Drawer at the bottom of the screen to open the drawer.', fr: 'Tap Drawer at the bottom of the screen to open the drawer.' },
+	'paper.empty.mobile':          { en: 'Tap Drawer at the bottom of the screen to open the drawer.', fr: 'Touchez Tiroir au bas de l\u2019écran pour ouvrir le tiroir.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
@@ -764,7 +764,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'fit.witness.placeMany':       { en: 'places',                       fr: 'endroits' },
 	'fit.witness.scoreLabel':      { en: 'Score',                        fr: 'Partition' },
 	'fit.witness.poemLabel':       { en: 'Poem',                         fr: 'Poème' },
-	'fit.witness.measureAbbr':     { en: 'm.',                           fr: 'm.' },
+	'fit.witness.measureAbbr':     { en: 'm.',                           fr: 'mes.' },
 
 	// ── Provenance labels (for Inspector inline display) ─────
 	'provenance.dictionary':       { en: 'Stress verified from dictionary',      fr: 'Accent vérifié dans le dictionnaire' },
