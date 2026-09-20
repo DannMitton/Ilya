@@ -17,6 +17,11 @@ finding joins only if Ilya would otherwise tell a singer something false or
 lose a singer's work. **Checkpoint Friday 2026-10-09:** a design row not yet
 in Code moves to LATER.
 
+**ONE HARD DEPENDENCY, ruled 2026-09-19: N.84, the Guide, cannot start until
+N.154 and the French are done and walked.** It is the only line in this file
+that blocks another, and it is in the header so a week-6 reader does not meet it
+for the first time on the day.
+
 **Pace assumed:** about four heavy evenings a week (`git log`, week to
 2026-09-16). Dann's days are his; the weeks are a guide, not a timetable.
 
@@ -60,11 +65,30 @@ in Code moves to LATER.
 - [ ] **How the release goes out.** How the `Shane` branch reaches the public site is NOT ESTABLISHED in any memory file. The desk finds out and writes it down.
 - [ ] **N.85**: README, CONTRIBUTING, code of conduct. The desk drafts; Dann reads every word.
 - [ ] **Desk housekeeping**: COLOUR-7, INBOX-17, INBOX-31 into `PRODUCT.md`.
+- [ ] **N.154. EVERY USER-FACING STRING SAYS WHAT THE APP NOW IS, both languages.**
+  Numbered 2026-09-19, DESK DEFAULT number, on Dann's instruction: *"we need to
+  align all of our text with the actual evolved app."* **The seed, found
+  2026-09-19:** `tab.fit:109` still reads "Fit", and `calib.welcome.lede:1056`
+  and `calib.welcome.fryAnswer:1058` still tell the singer *"Fit will measure
+  your voice"* and *"Fit reads its resonances"*, **for a surface that no longer
+  exists**; Fit was folded into Voice and Score Markup. Thirty-five keys are also
+  named `fit.*`, which is cosmetic and is NOT in this item.
+  **IT MEETS THE FREEZE RULE'S EXCEPTION** rather than needing one: a string that
+  names a surface the singer cannot find is Ilya telling a singer something false.
+  **English first, then French**, because the French cannot be verified against
+  English that is itself stale. **Its real size is NOT ESTABLISHED**; the three
+  above were found by one grep for a single word.
 - [ ] **Buffer.** Anything that spilled from weeks 1 to 4.
 
 ## Week 6. Monday 2026-10-19 to Sunday 2026-10-25. The Guide, once the interface is final
 
 - [ ] **N.84**: the Guide rewritten for the interface as it now is, in English and French, with new screenshots. Dann reviews the prose.
+  **BLOCKED ON N.154, AND ON A FRENCH VERIFICATION, ruled by Dann 2026-09-19:**
+  *"let's make a French verification a prerequisite for that process."* The Guide
+  describes the interface, so a Guide written over stale strings documents an app
+  that does not exist, in two languages, with screenshots to match. **The gate:
+  N.154 closed, N.130 and N.131 closed, and the French walked on screen** before
+  a word of the Guide is rewritten.
 - [ ] **The format walk again**, and a print walk, to catch what the month broke.
 
 ## Week 7. Monday 2026-10-26 to Friday 2026-10-30. Release

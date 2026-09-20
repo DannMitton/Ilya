@@ -425,8 +425,10 @@ switch.**
 
 ## 4. What each of you owes
 
-**Dann owes:** the repository state, the rulings, the microphone, any French he has
-not seen, his own scores, and a straight answer when your instruction did not work.
+**Dann owes:** the repository state, the rulings, the microphone, **a ruling on every French draft you put to him**, his own scores, and a straight answer when
+your instruction did not work.
+
+**AMENDED 2026-09-19.** This line read *"any French he has not seen"*, which the desk kept reading as a bar on drafting. **It is not. You draft the French; he rules on it.** Handing him empty slots spends the bandwidth the draft was supposed to save.
 
 **You owe:** the question, your recommendation, the cost of each path, then
 silence.
