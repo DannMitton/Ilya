@@ -75,6 +75,14 @@ describe('N.118 the slot carries its word’s trailing punctuation', () => {
 		for (const row of rows!) {
 			if (row.firstSlot < 0) continue;
 			const nuclei = row.word.cells.filter((c) => /[аеёиоуыэюя]/iu.test(c.text));
+			// N.156: the closing word «одинокая.» arrives a cell short of its five
+			// slots (the file's cell «кая.» holds two), so it is checked for its
+			// punctuation alone and not syllable by syllable.
+			if (nuclei.length < row.lastSlot - row.firstSlot + 1) {
+				expect(queue[row.lastSlot].cyrillic).toBe('я.');
+				punctuated++;
+				continue;
+			}
 			for (let k = 0; k <= row.lastSlot - row.firstSlot; k++) {
 				const slot = queue[row.firstSlot + k];
 				if (/[,.;]$/.test(slot.cyrillic)) {
@@ -85,7 +93,7 @@ describe('N.118 the slot carries its word’s trailing punctuation', () => {
 				if (slot.cyrillic !== nuclei[k].text) differ.push(`${slot.cyrillic}|${nuclei[k].text}`);
 			}
 		}
-		expect(punctuated).toBe(14);
+		expect(punctuated).toBe(15);
 		// What still differs is the engraver's division against Ilya's, and the
 		// clitic the file seated alone. No punctuation is left on the list.
 		expect(differ).toEqual(['прог|про', 'ляд|гляд', 'в' + NBSP + 'бью|бью', 'счас|сча', 'тье|стье']);
@@ -176,7 +184,7 @@ describe('N.118 on the fixture’s clitic run', () => {
 		const fold = findCliticFolds(await sunless())[0];
 		for (const { cyrillic } of fold.seat) expect(cyrillic).not.toMatch(/[,.;]{2}$/);
 		expect(fold.seat.filter((s) => /[,.;]$/.test(s.cyrillic)).map((s) => s.cyrillic)).toEqual([
-			'я,', 'я;', 'е;', 'я,', 'я.', 'на,', 'я,',
+			'я,', 'я;', 'е;', 'я,', 'я.', 'на,', 'я,', 'я.',
 		]);
 	});
 });

@@ -61,8 +61,8 @@ describe('N.134 the fill text', () => {
 		const text = scoreWordsText(collectScoreWords(await parse(), 1));
 		expect(text.split(' ')).toHaveLength(39);
 		expect(text.startsWith('Комнатка тесная, тихая, милая;')).toBe(true);
-		// The file's own last word, missing its final я.
-		expect(text.endsWith(' одинока')).toBe(true);
+		// The file's own last word, «одинокая.», whole since N.156.
+		expect(text.endsWith(' одинокая.')).toBe(true);
 		expect(text).not.toContain('\n');
 	});
 });
@@ -72,10 +72,10 @@ describe('N.134 seating from the score, on the engraved Sunless no. 1', () => {
 		const score = await parse();
 		const lines = poemLines(score);
 		const queue = buildSlotQueue(lines);
-		expect(queue).toHaveLength(95);
+		expect(queue).toHaveLength(96);
 		const keys = seatedKeys(arrive(score, lines));
 		expect(new Set(keys).size).toBe(keys.length);
-		expect(queue.filter((s) => keys.includes(key(s.origin)))).toHaveLength(95);
+		expect(queue.filter((s) => keys.includes(key(s.origin)))).toHaveLength(96);
 	});
 
 	it('copies the file mapping before the clitic, carrying the file punctuation', async () => {
@@ -116,8 +116,11 @@ describe('N.134 seating from the score, on the engraved Sunless no. 1', () => {
 	it('run on its own, puts the fused slot on the note the file gave бью', async () => {
 		const score = await parse();
 		const { map, seated, withheld } = seatScoreWords(score, {}, poemLines(score));
-		expect(seated).toBe(95);
-		expect(withheld).toBe(0);
+		// N.156: the file's last word «одинокая.» has 4 cells against 5 slots, so
+		// on its own it is withheld: its five slots are the difference. The app
+		// seats the clitic first, and then the word is inside the run.
+		expect(seated).toBe(91);
+		expect(withheld).toBe(5);
 		const fold = findCliticFolds(score)[0];
 		expect(map[fold.cliticEventId]).toBeUndefined();
 		const host = collectScoreWords(score, 1)
@@ -148,8 +151,10 @@ describe('N.134 seating from the score, on the engraved Sunless no. 1', () => {
 			{ ...lines[0], words: [{ ...w0, syllables: w0.syllables.slice(0, 2) }, ...rest] },
 		];
 		const { map, seated, withheld } = seatScoreWords(score, {}, cut);
-		expect(withheld).toBe(2);
-		expect(seated).toBe(92);
+		// 2 from the cut word, plus the 5 slots of the closing «одинокая.» (N.156),
+		// which on its own is a cell short of its slots.
+		expect(withheld).toBe(7);
+		expect(seated).toBe(88);
 		for (const cell of collectScoreWords(score, 1)[0].cells) {
 			expect(map[cell.eventId]).toBeUndefined();
 		}

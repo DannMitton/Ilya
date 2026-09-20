@@ -2146,3 +2146,64 @@ work on a phone**, not a tidy-up of 27 collisions. The desktop path works today.
 **Done when:** the whole-fixture scan passes on all 18 measures with zero
 violations of the five rules, tap resolution is unregressed, the page and the
 print are untouched, and Dann walks it.
+
+
+---
+
+## N.155. A WORD BROKEN ACROSS A SYSTEM TAKES A HYPHEN AT THE LINE END
+
+**Numbered 2026-09-20. THE NUMBER IS A DESK DEFAULT.** **The design is the desk's
+proposal; Dann ruled it in** at 14:07 on 2026-09-20, choosing option A over leaving it.
+Per the ratification rule of 2026-09-20, those are two facts and the record carries both.
+
+**THE SOURCE IS N.129'S OWN RULING, not a new one.** Dann, 2026-09-14: *"I don't want
+Ilya dropping hyphens."* N.129 step 2 closed every case inside a system. **A word broken
+across a system break is the last place Ilya still drops one.**
+
+### What the singer sees today
+
+The last syllable under the last note of a system is `неп`, and nothing on the page says
+the word continues. The eye moves to the next line and has to work out whether it just
+sang a word or a fragment. **Seven joins on Without Sun no. 1 are in this state**,
+reported by Code 2026-09-20 and not independently counted by the desk.
+
+### Why the hyphen loop cannot do it, read in the tree 2026-09-20
+
+`staff-renderer.ts:506-508`: *"`paginateScore` renders every system through its own
+`renderAnalyzedStaff` call on a rebased slice"*. So the hyphen loop at `:3434` never sees
+a pair that straddles a break, which is **also why removing the omission in step 2 drew
+no stray hyphen across the page.** The slice cannot know its last syllable continues a
+word by looking sideways.
+
+**BUT IT MAY NOT NEED TO LOOK SIDEWAYS AT ALL, and this shrinks the build.** The underlay
+entry carries `sylType` (`staff-renderer.ts:2404`), and `start` or `middle` on the slice's
+LAST entry already means a further syllable exists, which can only be on the next system.
+**That is a DESK READING of the data model the hyphen loop relies on at `:3396`, not a run;
+Code confirms it before building on it.** If it holds, this is local to
+`renderAnalyzedStaff` and the paginator is untouched.
+
+**The desk told Dann the paginator would have to hand the flag in, and corrected itself
+the same minute.** The precedent below stands as the fallback if the reading fails.
+
+### The precedent, in the same paragraph
+
+**N.102 increment 1b has this exact shape** (`staff-renderer.ts:506-510`): a slice had no
+idea what the measure before it stated, so the paginator now computes
+`incomingAccidentals` and hands it in. **This is a known move in this file, not new
+architecture.**
+
+### NOT ESTABLISHED
+
+- **Where the hyphen sits horizontally.** Immediately after the last syllable, or pushed
+  to the right margin. Published practice differs and **this is Dann's eye.** Bring him a
+  drawing rather than a paragraph, per tether 18's corollary.
+- **Gould rules 26 to 40 remain unread and the book is not on this machine**
+  (`../sessions/memo-n113-melisma_r1_2026-09-07.md:223`). No rule of Gould's is cited for
+  this item, in either direction.
+- Whether a melisma extender crossing a break wants the same treatment.
+
+### Sequencing
+
+**DESK DEFAULT: it displaces N.153 by one build**, because it is small and it finishes
+work walked the same day. Dann can send it behind N.153 with a word.
+

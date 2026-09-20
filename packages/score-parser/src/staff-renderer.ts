@@ -1115,6 +1115,14 @@ export const HYPHEN_PAD = 2;
  * spacer now reserves exactly what the loop needs and the loop never omits.
  */
 export const HYPHEN_GAP_PX = HYPHEN_HALF * 2 + HYPHEN_PAD * 2;
+/**
+ * N.155. How far the CENTRE of a line-end hyphen sits right of the last
+ * syllable's ink: the same pad an in-system hyphen keeps, then half the mark.
+ * DESK DEFAULT, Dann rules on it at the walk. It is the one value that says
+ * "immediately after the syllable"; to push the hyphen toward the right margin
+ * instead, change this line (or make it a function of the system's width).
+ */
+export const LINE_END_HYPHEN_OFFSET_PX = HYPHEN_PAD + HYPHEN_HALF;
 
 /** The IPA row's size, in page units, and its face. */
 export const IPA_FONT_SIZE = 12;
@@ -3447,6 +3455,22 @@ export function renderAnalyzedStaff(
         hx = clampHyphenX(hx, from, to); // N.11: the nudge above is unbounded
         parts.push(`<line x1="${round2(hx - HYPHEN_HALF)}" y1="${hyphenY}" x2="${round2(hx + HYPHEN_HALF)}" y2="${hyphenY}" stroke="#1a1612" stroke-width="1" data-hyphen="${esc(a.evId)}"/>`);
       }
+    }
+
+    // N.155: a word broken across a system. The paginator renders each system
+    // as its own slice, so the loop above never sees the pair that straddles the
+    // break. But `start` or `middle` on the slice's last syllable already
+    // means a further syllable exists, and it can only be on the next system, so
+    // the slice draws the hyphen itself. It reserves no room: it sits in the
+    // trailing space `columnAdvance` leaves after the last syllable. If the
+    // continuation never arrives (malformed underlay, or a whole score rendered
+    // in one call), the result is one spurious hyphen and nothing worse.
+    // The last entry that CARRIES Cyrillic: a melisma's continuation notes are
+    // entries too (IPA only, no Cyrillic), and they trail the syllable they hold.
+    const lastU = [...underlay].reverse().find((u) => u.cyr);
+    if (lastU && (lastU.sylType === 'start' || lastU.sylType === 'middle')) {
+      const hx = rightEdgeOf(lastU) + LINE_END_HYPHEN_OFFSET_PX;
+      parts.push(`<line x1="${round2(hx - HYPHEN_HALF)}" y1="${hyphenY}" x2="${round2(hx + HYPHEN_HALF)}" y2="${hyphenY}" stroke="#1a1612" stroke-width="1" data-hyphen="${esc(lastU.evId)}"/>`);
     }
 
     // Extenders: word-final syllable (whole|end) opening a melisma.

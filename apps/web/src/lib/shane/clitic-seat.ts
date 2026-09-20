@@ -284,6 +284,13 @@ function foldAt(
 	let endCell = cells.length;
 	for (let j = k + 1; j < rows.length; j++) {
 		if (rows[j].offset !== 1) {
+			// THE SCORE'S LAST WORD, ONE SYLLABLE SHORT. A file that spends a note
+			// on the clitic runs out of notes one syllable before the poem does,
+			// so its final word arrives a cell short of its slots and the offset
+			// falls back to zero there. That is the same slide reaching its end,
+			// not a re-alignment: the run stays open through the last note so the
+			// last syllable lands on it.
+			if (j === rows.length - 1 && rows[j].offset === 0) break;
 			endCell = rows[j].firstCell;
 			break;
 		}

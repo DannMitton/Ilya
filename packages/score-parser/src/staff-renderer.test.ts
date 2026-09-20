@@ -33,6 +33,8 @@ import {
   columnAdvance,
   clampHyphenX,
   HYPHEN_GAP_PX,
+  HYPHEN_PAD,
+  LINE_END_HYPHEN_OFFSET_PX,
   CYR_FONT_SIZE,
   COURTESY_GAP_SP,
   HYPHEN_HALF,
@@ -2377,5 +2379,39 @@ describe('N.129 step 2: a hyphen is never omitted', () => {
     // «но» to «чу»: two words, so only the ordinary half-space.
     expect(columnAdvance(ev.get('n7')!, ev.get('n8')!, 0.125, opts)).toBeCloseTo(w('но') + w('чу') + 2, 6);
     expect(HYPHEN_GAP_PX).toBe(HYPHEN_HALF * 2 + 4);
+  });
+});
+
+describe('N.155: a word broken across a system takes a hyphen at the line end', () => {
+  const hyphenOf = (svg: string, id: string) =>
+    [...svg.matchAll(new RegExp(`<line x1="([^"]+)" y1="([^"]+)" x2="([^"]+)" y2="([^"]+)" stroke="#1a1612" stroke-width="1" data-hyphen="${id}"/>`, 'g'))];
+
+  it('draws one after a last syllable that is start or middle, in the in-system hyphen\'s own shape', () => {
+    for (const type of ['start', 'middle'] as const) {
+      const svg = renderDemo({ sylTypePreview: { n18: type } });
+      const mine = hyphenOf(svg, 'n18');
+      expect(mine, type).toHaveLength(1);
+      const [, x1, y1, x2, y2] = mine[0];
+      const inSystem = hyphenOf(svg, 'n2')[0];
+      expect(Number(x2) - Number(x1)).toBeCloseTo(2 * HYPHEN_HALF, 6);
+      expect(y1).toBe(y2);
+      expect(y1).toBe(inSystem[2]);
+      expect((Number(x1) + Number(x2)) / 2).toBeGreaterThan(0);
+      expect(LINE_END_HYPHEN_OFFSET_PX).toBe(HYPHEN_PAD + HYPHEN_HALF);
+    }
+  });
+
+  it('draws none after a last syllable that is whole or end', () => {
+    expect(hyphenOf(renderDemo(), 'n18')).toHaveLength(0);
+    expect(hyphenOf(renderDemo({ sylTypePreview: { n18: 'end' } }), 'n18')).toHaveLength(0);
+  });
+
+  it('reserves no room: a line-end hyphen does not change the width or any column', () => {
+    const x = (svg: string) => [...svg.matchAll(/<text x="([^"]+)"/g)].map((m) => m[1]).join(',');
+    const w = (svg: string) => svg.match(/viewBox="([^"]+)"/)![1];
+    const a = renderDemo({ sylTypePreview: { n18: 'end' } });
+    const b = renderDemo({ sylTypePreview: { n18: 'middle' } });
+    expect(w(b)).toBe(w(a));
+    expect(x(b)).toBe(x(a));
   });
 });

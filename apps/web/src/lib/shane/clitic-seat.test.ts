@@ -35,6 +35,17 @@ const xml = readFileSync(
 	'utf8',
 );
 
+/**
+ * THE FILE AS IT WAS BEFORE N.156: the last word cut off at «одинока», its `ка`
+ * still `middle`, the final `я` never written because Finale spent a note on «в»
+ * and ran out. It is the only fixture here whose queue is one slot short of its
+ * notes, so it is what the blank channel's tests are run on.
+ */
+const truncatedXml = xml.replace(
+	'<syllabic>end</syllabic>\n          <text>кая.</text>',
+	'<syllabic>middle</syllabic>\n          <text>ка</text>',
+);
+
 async function parse(source: string): Promise<ParsedScore> {
 	const res = await new MusicXmlScoreParser().parse({
 		format: 'musicxml',
@@ -81,11 +92,11 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 		// before it is in the run.
 		expect(at).toBe(36);
 		expect(fold.seat[0].eventId).toBe(fold.cliticEventId);
-		// 96 cells, 95 slots: the run covers the clitic and every note after it
-		// except the last, which the queue cannot reach.
+		// 96 cells, 96 slots (N.156 wrote the final «я» into the file): the run
+		// covers the clitic and every note after it, the last one included.
 		expect(cells).toHaveLength(96);
-		expect(fold.seat).toHaveLength(59);
-		expect(fold.seat.at(-1)!.eventId).toBe(cells[94].eventId);
+		expect(fold.seat).toHaveLength(60);
+		expect(fold.seat.at(-1)!.eventId).toBe(cells[95].eventId);
 	});
 
 	it('seats «в бью» on the E and closes the tail up, exactly as the print does', async () => {
@@ -119,8 +130,20 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 		}
 	});
 
-	it('leaves the last note UNDECIDED rather than empty', async () => {
+	it('seats the final я on the last note, and the closing word is five syllables on five notes', async () => {
 		const score = await parse(xml);
+		const cells = cellsOf(score);
+		const fold = findCliticFolds(score)[0];
+		expect(fold.blanked).toEqual([]);
+		const after = shown(score, applyCliticSeat({}, fold));
+		expect(after.slice(91)).toEqual(['о', 'ди', 'но', 'ка', 'я.']);
+		expect(applyCliticSeat({}, fold)[cells[95].eventId]).toEqual(
+			expect.objectContaining({ kind: 'syllable', cyrillic: 'я.' }),
+		);
+	});
+
+	it('leaves the last note UNDECIDED rather than empty, on the truncated file', async () => {
+		const score = await parse(truncatedXml);
 		const cells = cellsOf(score);
 		const fold = findCliticFolds(score)[0];
 		const map = applyCliticSeat({}, fold);
@@ -229,7 +252,7 @@ describe('N.111 increment 3, the automatic seat', () => {
 			expect.objectContaining({ kind: 'syllable', cyrillic: 'в' + NBSP + 'бью' }),
 		);
 		// The whole run, and nothing before it.
-		expect(Object.keys(seated)).toHaveLength(59);
+		expect(Object.keys(seated)).toHaveLength(60);
 	});
 
 	it('is idempotent, so a re-upload cannot seat twice', async () => {
@@ -253,8 +276,8 @@ describe('N.111 increment 3, the automatic seat', () => {
 		expect(again[own]).toEqual({ kind: 'melisma' });
 	});
 
-	it('leaves the note the queue cannot reach UNDECIDED, and names it blank', async () => {
-		const score = await parse(xml);
+	it('leaves the note the queue cannot reach UNDECIDED, and names it blank, on the truncated file', async () => {
+		const score = await parse(truncatedXml);
 		const cells = cellsOf(score);
 		const fold = findCliticFolds(score)[0];
 		// 96 cells against 95 slots: exactly one note is left over, and it is the
@@ -266,8 +289,8 @@ describe('N.111 increment 3, the automatic seat', () => {
 		expect(Object.values(seated).some((p) => p.kind === 'melisma')).toBe(false);
 	});
 
-	it('draws NOTHING on a blanked note, not the file’s stale cell', async () => {
-		const score = await parse(xml);
+	it('draws NOTHING on a blanked note, not the file’s stale cell, on the truncated file', async () => {
+		const score = await parse(truncatedXml);
 		const cells = cellsOf(score);
 		const fold = findCliticFolds(score)[0];
 		const seated = seatCliticFolds(score, {});
@@ -287,13 +310,13 @@ describe('N.111 increment 3, the automatic seat', () => {
 		expect(blanked?.[last]).toBe('');
 	});
 
-	it('blanks the IPA line by the SAME rule as the Cyrillic line', async () => {
+	it('blanks the IPA line by the SAME rule as the Cyrillic line, on the truncated file', async () => {
 		// The walk finding on `c574cf8`. The Cyrillic channel blanked and the IPA
 		// channel merely omitted the event, which is not the same thing:
 		// `staff-renderer.ts:2463` reads `ipaPreview?.[id] ?? a?.vowel`, so an
 		// omission falls through to the analysis's sustained vowel and the note
 		// drew a stray `ɑ` over a bare cell. Both channels call `applyBlank` now.
-		const score = await parse(xml);
+		const score = await parse(truncatedXml);
 		const cells = cellsOf(score);
 		const fold = findCliticFolds(score)[0];
 		const blank = new Set(fold.blanked);
@@ -354,7 +377,9 @@ describe('N.111 increment 3, the automatic seat', () => {
 
 		// EVERY mark the file printed survives the move, and no mark is invented:
 		// the two lists are equal, in order.
-		const marks = (list: readonly string[]) => list.filter((c) => /[^\p{L}\p{M}]$/u.test(c));
+		// Compared as the marks themselves: the closing cell was `кая.` and is `я.`.
+		const marks = (list: readonly string[]) =>
+			list.filter((c) => /[^\p{L}\p{M}]$/u.test(c)).map((c) => c.match(/[^\p{L}\p{M}]+$/u)![0]);
 		expect(marks(after)).toEqual(marks(before));
 	});
 
@@ -391,7 +416,7 @@ describe('N.111 increment 3, the automatic seat', () => {
 		const start = {};
 		const seated = seatCliticFolds(score, start);
 		expect(start).toEqual({});
-		expect(Object.keys(seated)).toHaveLength(59);
+		expect(Object.keys(seated)).toHaveLength(60);
 		expect(seated).not.toBe(start);
 	});
 });
@@ -405,9 +430,9 @@ describe('N.111 increment 3, the hand', () => {
 		const score = await parse(xml);
 		const read = readScoreText(score, 1);
 		expect(read).not.toBeNull();
-		expect(read!.queue).toHaveLength(95);
+		expect(read!.queue).toHaveLength(96);
 		expect(read!.queue[0].cyrillic).toBe('Ком');
-		expect(read!.queue.at(-1)!.cyrillic).toBe('ка');
+		expect(read!.queue.at(-1)!.cyrillic).toBe('я.');
 	});
 
 	it('is the SAME queue the seat’s origins point into, so a seat is not drift', async () => {
@@ -428,13 +453,19 @@ describe('N.111 increment 3, the hand', () => {
 		expect(readScoreText(score, 1)).toBeNull();
 	});
 
-	it('has no я to offer, because the engraving never wrote one', async () => {
-		// The fixture's own words end «ночь одинока»: the final `я` of одинокая is
-		// missing from the file, so it is missing from the queue too. Ilya cannot
-		// know it, which is exactly why the hand exists. The singer supplies it by
-		// transcribing the poem, and the queue then comes from their text.
+	it('offers the final я now that the file carries it (N.156)', async () => {
 		const score = await parse(xml);
 		const queue = readScoreText(score, 1)!.queue;
+		expect(queue.at(-1)!.origin.word).toBe('одинокая');
+		expect(queue.map((s) => s.cyrillic).slice(-5)).toEqual(['о', 'ди', 'но', 'ка', 'я.']);
+	});
+
+	it('has no я to offer on the truncated file, which is why the hand exists', async () => {
+		// The file as it was before N.156 ended «ночь одинока»: the final `я` was
+		// missing from the file, so it was missing from the queue too.
+		const score = await parse(truncatedXml);
+		const queue = readScoreText(score, 1)!.queue;
+		expect(queue).toHaveLength(95);
 		expect(queue.at(-1)!.origin.word).toBe('одинока');
 		expect(queue.map((s) => s.cyrillic).slice(-4)).toEqual(['о', 'ди', 'но', 'ка']);
 	});

@@ -91,6 +91,7 @@ next session the same hour it cost the last one.
 |---|---|
 | drive a browser yourself | `Claude Code, and where the building` |
 | you are about to send Dann a terminal command that starts `claude` | `Claude Code, and where the building` (it is NOT installed on his Mac; Code is the desktop app's Code tab. Cost the desk a wasted turn 2026-09-20) |
+| asking which build a tab is actually running | `THE APP TELLS YOU WHICH BUILD IT IS ON` |
 | a walk harness needs a home | `A WALK HARNESS BELONGS` |
 | a memory commit swallowed Code's source edits | `NEVER COMMIT -a WHILE CODE IS WORKING` |
 | vitest or node dies on the bridge with `@rollup/rollup-linux-arm64-gnu` | `THE BRIDGE SHELL IS NOT THE MAC` |
@@ -3276,6 +3277,36 @@ was served, and sent Dann to walk it. He got the old build and the session ended
 there. **The alias check was correct and insufficient: it measures the server, and
 the phone is a second cache in front of it.** Check the stamp, then give the
 tab-closing step in the SAME message, before he walks.
+
+## THE APP TELLS YOU WHICH BUILD IT IS ON. 2026-09-20
+
+**Ilya shows its own update toast, "A new version of Ilya is ready.", with a
+`button.update-toast-action` labelled Refresh.** That toast is the only instrument
+in this file that answers "is this tab running the newest build" directly, and
+clicking it swaps the build in place with no tab cycle and no storage touched.
+
+**EVERY OTHER INSTRUMENT TRIED ON 2026-09-20 WAS WRONG OR INCONCLUSIVE:**
+
+- **The alias stamp measures the server, not the tab.** Already recorded under
+  `THE PHONE HOLDS THE OLD BUILD`.
+- **`caches.keys()` plus `caches.match()` on the loaded scripts is USELESS here.**
+  `/_app/immutable/` names are content-hashed, so a chunk that did not change
+  between builds legitimately still lives in the OLDEST cache and matches there.
+  On 2026-09-20 all six loaded chunks matched `ilya-1789921329592-static` while
+  the page was running a build two ships newer.
+- **`registration.waiting` stayed `true` even after the new worker had taken
+  over**, so it does not answer the question either.
+- **Grepping the entry chunks for a new string finds nothing**, because the
+  renderer loads on demand. That is a failed lookup, not an absence (tether 14).
+
+**THE COST, and it was paid twice in one session.** The desk cycled tabs, measured
+the hyphen gaps on Dann's own word, and was about to report them as step 2's result.
+They were step 1's. The toast in the corner of the screenshot is what caught it.
+
+**THE ACCIDENTAL BENEFIT, worth reaching for on purpose:** measuring BEFORE clicking
+Refresh and again after gives a before-and-after on the same document, in the same
+tab, at the same window size. That is the positive control that `neither Code nor a
+fixture could produce for N.129 step 2.
 
 ## THE ALIAS CHECK THAT WORKED. 2026-09-17
 

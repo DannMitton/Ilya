@@ -381,6 +381,32 @@ dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
 
+### Numbered 2026-09-20
+
+- `[ ]` **N.156. The Sunless 01 fixture is missing its final syllable and a note.**
+  Numbered 2026-09-20, **ruled in by Dann at 14:21**, who chose the real fix over
+  retagging «ка». **Found by N.155's line-end hyphen on the first page it was drawn on.**
+  The Lamm scan sets «о-ди-но-ка-я» on five notes; the fixture has four and never closes
+  the word. **A second defect rides with it: lyric lines 1 and 2 disagree about
+  «непроглядная» from measure 4 and line 2 lags by one note at the end.** Brief
+  `../sessions/brief-n156-sunless01-fixture_r1_2026-09-20.md`.
+
+- `[x]` **N.129. The underlay is spaced in the wrong font's metrics, and hyphens are
+  never omitted. CLOSED 2026-09-20, both steps walked.** Step 1 shipped `e75d6f3`, the
+  Cyrillic underlay drawing in the face its widths were measured from; Dann walked it in
+  a browser and in print (*"it looks fabulous"*). Step 2 shipped `7bd3d04`, the omission
+  removed and a word-internal gap reserving `HYPHEN_GAP_PX`; Dann walked it on
+  « неп-рог-ляд-на-я » in Without Sun no. 1 and passed it. **The face ruling and the
+  reading-versus-instrument rule are in `OPEN.md` §N.129.** Brief
+  `../sessions/brief-n129-underlay-ruler_r2_2026-09-20.md`, memos
+  `../sessions/memo-n129-underlay-ruler_r1_2026-09-20.md` and
+  `../sessions/memo-n129-step2-hyphens_r1_2026-09-20.md`.
+- `[ ]` **N.155. A word broken across a system takes a hyphen at the line end.** Numbered
+  2026-09-20, DESK DEFAULT number. **Design proposed by the desk, ruled in by Dann** at
+  14:07. It is the last case of his hyphen ruling of 2026-09-14. Spec in `OPEN.md`.
+  **Two things are his and unruled: where the hyphen sits horizontally, and whether a
+  melisma extender crossing a break wants the same.**
+
 ### Numbered 2026-09-16
 
 - `[x]` **N.146. Ilya tells a poem from a score itself, for a PDF or a picture.** **CLOSED 2026-09-17: walk 5 passed in Incognito; step 2c built nothing (`OPEN.md`, N.146 findings, 9). Spec and account move to `LOG.md` at this session's close.** Numbered 2026-09-16, DESK DEFAULT number; design adopted on Dann's instruction (*"we will go with that"*). Spec `OPEN.md` §N.146. IN. No switch, no new strings (struck by Dann the same night). Brief `../sessions/brief-n146-poem-or-score-detected_r1_2026-09-16.md`. **2026-09-17: steps 1, 2, 2b shipped (`fe4d2c7`, `6e98057`); walk 5 outstanding; step 2c open** (THE ONE THING).
