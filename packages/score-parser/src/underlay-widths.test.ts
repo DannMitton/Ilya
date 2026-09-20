@@ -15,7 +15,11 @@
  */
 
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from "./underlay-widths";
+import { CYR_FONT_FAMILY, CYR_FONT_SIZE } from "./staff-renderer";
+import { renderDemo } from "./demo-fixture";
 
 describe("estimateIpaWidthPx", () => {
   it("treats modifier-heavy IPA strings as much narrower than a flat length * average-width guess", () => {
@@ -133,5 +137,28 @@ describe("cross-string sanity (naive length * 7.5 vs measured, at 12px)", () => 
     const measured = estimateIpaWidthPx(s, 12);
     expect(measured).toBeLessThan(naive);
     expect(measured).toBeGreaterThan(0);
+  });
+});
+
+describe("the Cyrillic row's drawn face is the face its table was measured from (N.129)", () => {
+  it("draws in the face the table declares in its own header", () => {
+    const source = readFileSync(fileURLToPath(new URL("./underlay-widths.ts", import.meta.url)), "utf8");
+    const declared = source.match(/Per-1000-em advance widths for (.+?) Cyrillic/);
+    expect(declared, "underlay-widths.ts no longer declares its Cyrillic face").not.toBeNull();
+    const measuredFace = declared![1].replace(/\*/g, "");
+    expect(CYR_FONT_FAMILY.startsWith(`'${measuredFace}'`)).toBe(true);
+  });
+
+  it("puts that face on every Cyrillic underlay text, and on nothing that is not Cyrillic", () => {
+    const svg = renderDemo();
+    const cyr = [...svg.matchAll(/<text x="[^"]*" y="[^"]*" text-anchor="[^"]*" font-size="12.5"[^>]*>([^<]*)<\/text>/g)];
+    expect(cyr.length).toBeGreaterThan(0);
+    for (const m of cyr) expect(m[0]).toContain(`font-family="${CYR_FONT_FAMILY}"`);
+    // Measure numbers keep inheriting the root's Source Sans 3.
+    for (const m of svg.matchAll(/<text data-bar-number[^>]*>/g)) expect(m[0]).not.toContain("font-family");
+  });
+
+  it("measures at the size it draws at, from one constant", () => {
+    expect(CYR_FONT_SIZE).toBe(12.5);
   });
 });

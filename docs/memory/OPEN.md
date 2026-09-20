@@ -1145,6 +1145,57 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 > the `columnAdvance` crowding item already in OWED.** Found by Code inside
 > the loupe-typeface memo; the desk read all three sites itself.
 >
+> **RULED BY DANN 2026-09-20, 13:02 and 13:09. THE CANDIDATE FIXES ABOVE ARE NO
+> LONGER UNRULED, AND THE DIRECTION IS THE OPPOSITE OF THE ONE BRIEF r1 ASSUMED.**
+>
+> **The desk proposed serif and Dann ruled it in.** The desk put two options to him:
+> remeasure the table in Source Sans 3, or draw the underlay in Source Serif 4, which
+> the table already measures. He answered `A`. **The option was the desk's; the ruling
+> is his.**
+>
+> **THE RULE, ratified 13:09.** Cyrillic the singer reads is serif, wherever it
+> appears. Cyrillic that instructs is sans. Any surface that draws Cyrillic at a size
+> other than 12.5 px re-instances the width table at its own optical size rather than
+> rescaling it.
+>
+> **`Reading voice` and `Instrument voice` are ADOPTED, not coined.** They are the
+> tree's own terms at `IntakePanel.svelte:762-764` and `:833-836`, which cite a brief
+> section 3.6 as having ruled the principle. **Which brief that is, is NOT
+> ESTABLISHED.**
+>
+> **AN EARLIER WORDING WAS RATIFIED AT 13:07 AND CORRECTED AT 13:09. DO NOT QUOTE IT.**
+> It read "Cyrillic on paper is serif, Cyrillic in the interface is sans". It was the
+> desk's drafting and it was wrong: it would have turned the drawer's poem field
+> (`IntakePanel.svelte:767`) and the loupe's syllable row (`LoupeSyllables.svelte:232`,
+> `:295`) sans, reversing decisions that are built and commented with their reasons.
+>
+> **READ IN THE TREE 2026-09-20, and this is what the ruling rests on:**
+>
+> - `staff-renderer.ts:3327` is the ONLY emission of Cyrillic underlay text, and it
+>   carries no `font-family`, so it inherits the SVG root.
+> - `staff-renderer.ts:3462` sets that root to `'Source Sans 3'`. **The root also feeds
+>   measure numbers (`:2238`), tuplet numerals (`:2301`) and time-signature digits
+>   (`:2579`), which are not Cyrillic and which this ruling does not touch.**
+> - `underlay-widths.ts:690` still declares Source Serif 4, **so the table is already
+>   correct for the ruled face and step 1 is no longer a remeasurement.**
+> - `app.css:23` sets `--font-serif: 'Source Serif 4', Georgia, 'Times New Roman',
+>   serif`; `:24` sets `--font-sans`; `:209-210` set `--font-body: var(--font-serif)`
+>   and `--font-ui: var(--font-sans)`.
+> - `app.html:16` already loads both faces, so the ruled face costs no new font load.
+> - `WordStack.svelte:263-264` and `TitleHeader.svelte:153-155` are already serif, so
+>   the score's underlay is the LAST Cyrillic in Ilya drawn against the rule.
+> - `Loupe.svelte:990-992` and `:1041` read the face off the page's own clef `<text>`,
+>   so the loupe follows the page and needs no separate change.
+> - `Loupe.svelte:9`: the loupe is a VIEW TRANSFORM, not a second renderer, so the
+>   optical-size clause cannot bite today. **It bites when N.153 re-engraves the measure
+>   at its own spacing**, which `SEQUENCE.md:43` puts directly behind N.129.
+> - `underlay-widths.ts:65-71` is where the optical-size clause comes from, in the
+>   file's own words: the table is pinned to `opsz=12.5`, a larger size resolves a
+>   narrower instance, and you re-instance rather than rescale.
+>
+> **BRIEF r1 IS SUPERSEDED BY**
+> `../sessions/brief-n129-underlay-ruler_r2_2026-09-20.md`.
+>
 > **FOLDED IN 2026-09-14 ON DANN'S WORD, found by him on the N.118 walk.**
 > He read `не прог ляд – на я,` on the page and counted three hyphens missing
 > from one word.

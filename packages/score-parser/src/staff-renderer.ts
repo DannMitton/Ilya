@@ -127,9 +127,9 @@ export const WITHHELD_SIGLA_WIDTH_PX = WITHHELD_SIGLA.diameterPx;
  * (lyric x-height about one stave-space) has never been measured and is held
  * pending a render at three `lineGap` values. Named here so the drawing sites
  * and the width measurement cannot disagree, and so that when they are
- * finally scaled there is one place to change.
+ * finally scaled there is one place to change. The Cyrillic size is
+ * `CYR_FONT_SIZE`, exported below, and is both the drawn and the measured size.
  */
-const CYR_FONT_PX = 12.5;
 const IPA_FONT_PX = 12;
 
 /**
@@ -1060,7 +1060,7 @@ function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions): num
   const sigla = !ipa && options.withheldIpa?.has(ev.id) === true;
   if (!cyr && !ipa && !sigla) return 0;
   const inked = Math.max(
-    cyr ? estimateCyrillicWidthPx(cyr, CYR_FONT_PX) : 0,
+    cyr ? estimateCyrillicWidthPx(cyr, CYR_FONT_SIZE) : 0,
     ipa ? estimateIpaWidthPx(ipa, IPA_FONT_PX) : 0,
     sigla ? WITHHELD_SIGLA_WIDTH_PX : 0,
   );
@@ -1093,8 +1093,21 @@ export const HYPHEN_HALF = 2.5;
 /** The IPA row's size, in page units, and its face. */
 export const IPA_FONT_SIZE = 12;
 export const IPA_FONT_FAMILY = "'Lato IPA', sans-serif";
-/** The Cyrillic row's size, in page units. Its face is the page's sans. */
+/**
+ * The Cyrillic row's size, in page units. It is the size the row is drawn at
+ * AND the size `underlay-widths.ts` measured its table at, so it is one number.
+ */
 export const CYR_FONT_SIZE = 12.5;
+/**
+ * The Cyrillic row's face: Source Serif 4, the face `underlay-widths.ts` measured
+ * its table from (N.129, ruled by Dann 2026-09-20: Cyrillic the singer reads is
+ * serif). It mirrors `--font-serif` in `apps/web/src/app.css`. Drawn on the row
+ * itself, because the SVG root is Source Sans 3 and also feeds measure numbers,
+ * tuplet numerals and time-signature digits, which are not Cyrillic.
+ * The table is pinned to opsz=12.5, so N.153, which re-engraves a measure at its
+ * own size, must re-instance it at that opsz rather than rescale it.
+ */
+export const CYR_FONT_FAMILY = "'Source Serif 4', Georgia, 'Times New Roman', serif";
 
 /**
  * How far the Cyrillic baseline sits below the IPA baseline, in page units.
@@ -3324,7 +3337,7 @@ export function renderAnalyzedStaff(
   const ipaY = Math.max(staffBottom + 28, Math.ceil(lowestInk) + 14);
   const cyrY = ipaY + IPA_TO_CYR_BASELINE;
   for (const u of underlay) {
-    if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="${u.align}" font-size="${CYR_FONT_SIZE}" fill="#1a1612">${esc(u.cyr)}</text>`);
+    if (u.cyr) parts.push(`<text x="${u.x}" y="${cyrY}" text-anchor="${u.align}" font-size="${CYR_FONT_SIZE}" font-family="${CYR_FONT_FAMILY}" fill="#1a1612">${esc(u.cyr)}</text>`);
     // IPA is ALWAYS upright, in the app's 'Lato IPA' subset (Mitton 2020
     // §§4.6.6–4.6.7 via Grayson): italics flatten double-storey [a] toward
     // single-storey, destroying the bright-a / dark-a contrast that sung
@@ -3378,7 +3391,7 @@ export function renderAnalyzedStaff(
     // overstated any string with modifier letters by more than twice, so
     // hyphen and extender ends were computed from a width the glyphs never
     // occupied (`underlay-widths.ts`).
-    const estW = (s: string): number => estimateCyrillicWidthPx(s, CYR_FONT_PX);
+    const estW = (s: string): number => estimateCyrillicWidthPx(s, CYR_FONT_SIZE);
     const rightEdgeOf = (u: (typeof underlay)[number]): number =>
       u.align === 'start' ? u.x + estW(u.cyr) : u.x + estW(u.cyr) / 2;
     const leftEdgeOf = (u: (typeof underlay)[number]): number =>
