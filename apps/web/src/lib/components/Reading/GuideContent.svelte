@@ -279,7 +279,7 @@
 
 						<p><strong>Textes.</strong> Les textes d’essai proviennent du <a href="https://www.lieder.net" target="_blank" rel="noopener">LiederNet Archive</a>, fondé et entretenu par Emily Ezust. Sa politique ne demande aucune reconnaissance; elle est remerciée ici quand même, avec gratitude, parce que cette archive est un cadeau fait à toute personne qui chante.</p>
 
-						<p><strong>Langue.</strong> Le français d’<em>Ilya</em> suit l’Office québécois de la langue française pour les espacements et la ponctuation, et le <a href="https://roberge.mus.ulaval.ca/gdrm/" target="_blank" rel="noopener"><em>Guide des difficultés de rédaction en musique</em></a> de Marc-André Roberge (Université Laval) pour la terminologie musicale.</p>
+						<p><strong>Langue.</strong> Le français d’<em>Ilya</em> suit l’<a href="https://vitrinelinguistique.oqlf.gouv.qc.ca/22039/la-typographie/espacement/espacement-avant-et-apres-les-signes-de-ponctuation-et-les-symboles" target="_blank" rel="noopener">Office québécois de la langue française</a> pour les espacements et la ponctuation, et le <a href="https://roberge.mus.ulaval.ca/gdrm/" target="_blank" rel="noopener"><em>Guide des difficultés de rédaction en musique</em></a> de Marc-André Roberge (Université Laval) pour la terminologie musicale.</p>
 
 						<p><strong>Polices.</strong> Chaque police intégrée est publiée sous la SIL Open Font License, version 1.1, et le texte de chaque licence est distribué avec les fichiers de police : Bravura, © 2015 Steinberg Media Technologies GmbH; Leland, © 2025 MuseScore BVBA; Finale Maestro, © 2021 MakeMusic, Inc.; et Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
 
@@ -556,7 +556,7 @@
 
 						<p><strong>Texts.</strong> Test texts were drawn from <a href="https://www.lieder.net" target="_blank" rel="noopener">The LiederNet Archive</a>, founded and maintained by Emily Ezust. Her policy asks for no acknowledgment; she is thanked here anyway, with gratitude, because the archive is a gift to everyone who sings.</p>
 
-						<p><strong>Language.</strong> <em>Ilya</em>’s French follows the Office québécois de la langue française on spacing and punctuation, and Marc-André Roberge’s <a href="https://roberge.mus.ulaval.ca/gdrm/" target="_blank" rel="noopener"><em>Guide des difficultés de rédaction en musique</em></a> (Université Laval) on musical terminology.</p>
+						<p><strong>Language.</strong> <em>Ilya</em>’s French follows the <a href="https://vitrinelinguistique.oqlf.gouv.qc.ca/22039/la-typographie/espacement/espacement-avant-et-apres-les-signes-de-ponctuation-et-les-symboles" target="_blank" rel="noopener">Office québécois de la langue française</a> on spacing and punctuation, and Marc-André Roberge’s <a href="https://roberge.mus.ulaval.ca/gdrm/" target="_blank" rel="noopener"><em>Guide des difficultés de rédaction en musique</em></a> (Université Laval) on musical terminology.</p>
 
 						<p><strong>Fonts.</strong> Every embedded font is released under the SIL Open Font License, Version 1.1, and each licence text is distributed with the font files: Bravura, © 2015 Steinberg Media Technologies GmbH; Leland, © 2025 MuseScore BVBA; Finale Maestro, © 2021 MakeMusic, Inc.; and Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
 
