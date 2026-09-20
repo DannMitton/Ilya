@@ -1971,33 +1971,16 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>16</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>middle</syllabic>
-          <text>ка</text>
+          <syllabic>end</syllabic>
+          <text>кая.</text>
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
           <text>ˈno</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>я.</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɑ</text>
         </lyric>
       </note>
       <note>

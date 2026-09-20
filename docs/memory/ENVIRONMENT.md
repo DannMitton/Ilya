@@ -93,6 +93,7 @@ next session the same hour it cost the last one.
 | you are about to send Dann a terminal command that starts `claude` | `Claude Code, and where the building` (it is NOT installed on his Mac; Code is the desktop app's Code tab. Cost the desk a wasted turn 2026-09-20) |
 | asking which build a tab is actually running | `THE APP TELLS YOU WHICH BUILD IT IS ON` |
 | a fixture you fixed does not change what Dann sees on screen | `THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE` |
+| a corrected poem or score does not change the Score Markup underlay | `THE UNDERLAY DRAWS STORED TEXT` |
 | a walk harness needs a home | `A WALK HARNESS BELONGS` |
 | a memory commit swallowed Code's source edits | `NEVER COMMIT -a WHILE CODE IS WORKING` |
 | vitest or node dies on the bridge with `@rollup/rollup-linux-arm64-gnu` | `THE BRIDGE SHELL IS NOT THE MAC` |
@@ -3278,6 +3279,35 @@ was served, and sent Dann to walk it. He got the old build and the session ended
 there. **The alias check was correct and insufficient: it measures the server, and
 the phone is a second cache in front of it.** Check the stamp, then give the
 tab-closing step in the SAME message, before he walks.
+
+## THE UNDERLAY DRAWS STORED TEXT. 2026-09-20
+
+**Score Markup's Cyrillic is `pairedCyrillic(pairings)` (`pairings.ts:789-800`), which
+returns each STORED pairing's own `cyrillic` string.** It does no punctuation work and
+never reads the score file once a pairing exists.
+
+**Punctuation is attached when a slot is MADE**, not when the page is drawn: the last
+slot of a word carries that word's trailing punctuation (`pairings.ts:185-193`), and
+`clitic-seat.ts:311` carries the file cell's punctuation on a re-seat, on Dann's ruling
+of 2026-09-04 (`clitic-seat.ts:344`).
+
+**SO A CORRECTED POEM OR SCORE DOES NOT REACH AN EXISTING PLACEMENT.**
+`refreshPairings` rewrites a stored seat's text only when the seat's origin line, word
+index, slot index AND word text all match the poem's. **Anything less and the old text
+stands, silently.**
+
+**THE FINGERPRINT, read in Dann's own library 2026-09-20.** On Without Sun no. 1 the
+five seats of the final word read `origin.word` « одинока » for slots 0 to 3 and
+« одинокая » for slot 4. **The word text differs across one word**, which is what a
+seat made under the truncated file looks like, and it is why the period never arrived.
+
+**WHAT WAS DONE, and it is a one-off, not a fix.** The desk edited his stored pairing
+directly: song `39ae51c9`, key `m17-1-2`, `cyrillic` « я » to « я. », then reloaded.
+Setting it back to « я » reverts it. **The defect under it is N.157.**
+
+**READ THIS BEFORE BRIEFING ANY TEXT CORRECTION.** Editing a file, a fixture or the
+poem field changes nothing a singer has already placed. **Say which artefact the fix has
+to reach before you write the brief.**
 
 ## THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE. 2026-09-20
 

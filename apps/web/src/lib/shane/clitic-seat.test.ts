@@ -52,10 +52,18 @@ const xml = readFileSync(
  * and ran out. It is the only fixture here whose queue is one slot short of its
  * notes, so it is what the blank channel's tests are run on.
  */
-const truncatedXml = xml.replace(
-	'<syllabic>end</syllabic>\n          <text>кая.</text>',
-	'<syllabic>middle</syllabic>\n          <text>ка</text>',
-);
+const truncatedXml = (() => {
+	// The fixture now carries «я.» as its own eighth note after an eighth «ка».
+	// Undo that: drop the «я.» note and give «ка» its quarter back.
+	const at = xml.lastIndexOf('<text>я.</text>');
+	const from = xml.lastIndexOf('<note>', at);
+	const to = xml.indexOf('</note>', at) + '</note>'.length;
+	const withoutYa = xml.slice(0, from).trimEnd() + xml.slice(to);
+	return withoutYa.replace(
+		/<duration>8<\/duration>(\s*<voice>1<\/voice>\s*)<type>eighth<\/type>(\s*<lyric name="verse" number="1">\s*<syllabic>)middle(<\/syllabic>\s*<text>ка<\/text>)/,
+		'<duration>16</duration>$1<type>quarter</type>$2middle$3',
+	);
+})();
 
 async function parse(source: string): Promise<ParsedScore> {
 	const res = await new MusicXmlScoreParser().parse({
@@ -103,9 +111,10 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 		// before it is in the run.
 		expect(at).toBe(36);
 		expect(fold.seat[0].eventId).toBe(fold.cliticEventId);
-		// 96 cells, 96 slots (N.156 wrote the final «я» into the file): the run
-		// covers the clitic and every note after it, the last one included.
-		expect(cells).toHaveLength(96);
+		// 97 cells, 96 slots (the file now carries «я.» as its own eighth note, but
+		// still spends a note on «в»): the run covers the clitic and every note after
+		// it that the queue reaches, and the 97th note is left over.
+		expect(cells).toHaveLength(97);
 		expect(fold.seat).toHaveLength(60);
 		expect(fold.seat.at(-1)!.eventId).toBe(cells[95].eventId);
 	});
@@ -145,9 +154,10 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 		const score = await parse(xml);
 		const cells = cellsOf(score);
 		const fold = findCliticFolds(score)[0];
-		expect(fold.blanked).toEqual([]);
+		// The 97th note, left over after the fold, is named blank.
+		expect(fold.blanked).toEqual([cells[96].eventId]);
 		const after = shown(score, applyCliticSeat({}, fold));
-		expect(after.slice(91)).toEqual(['о', 'ди', 'но', 'ка', 'я.']);
+		expect(after.slice(91, 96)).toEqual(['о', 'ди', 'но', 'ка', 'я.']);
 		expect(applyCliticSeat({}, fold)[cells[95].eventId]).toEqual(
 			expect.objectContaining({ kind: 'syllable', cyrillic: 'я.' }),
 		);
@@ -168,7 +178,7 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 		const cells = cellsOf(score);
 		const seated = seatCliticFolds(score, {});
 		const types = pairedSyllableType(seated)!;
-		expect(cells.slice(91).map((c) => types[c.eventId])).toEqual(['start', 'middle', 'middle', 'middle', 'end']);
+		expect(cells.slice(91, 96).map((c) => types[c.eventId])).toEqual(['start', 'middle', 'middle', 'middle', 'end']);
 
 		// And the page draws it: a hyphen after «но» and one after «ка», none at
 		// the line end because «я.» closes the word.
@@ -210,7 +220,9 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 		// Nothing before it moves.
 		for (const c of cells.slice(0, 94)) expect(types[c.eventId]).toBe(bare[c.eventId]);
 
-		// The typed «я» carries no period, and none is invented for it.
+		// The «я» a hand placement writes carries the poem's own text and nothing
+		// added: no period is invented for it. The data carries its own period now
+		// (the file's cell reads «я.»), and a typed «я» has none.
 		expect(pairedCyrillic(map)![ya]).toBe('я');
 
 		// And the page draws the hyphen between them.
@@ -218,8 +230,7 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 			generatedAt: '2026-07-12T00:00:00.000Z',
 		});
 		const drawn = (t: typeof types) => {
-			const svg = paginateScore(score, analyzed, { cyrPreview: pairedCyrillic(map), sylTypePreview: t })
-				.systems.at(-1)!.svg;
+			const svg = paginateScore(score, analyzed, { cyrPreview: pairedCyrillic(map), sylTypePreview: t }).systems.at(-1)!.svg;
 			return [...svg.matchAll(/data-hyphen="([^"]+)"/g)].map((m) => m[1]);
 		};
 		expect(drawn(bare)).not.toContain(ka);
@@ -428,7 +439,7 @@ describe('N.111 increment 3, the automatic seat', () => {
 		const score = await parse(xml);
 		const cells = cellsOf(score);
 		const fold = findCliticFolds(score)[0];
-		const last = cells[95].eventId;
+		const last = cells[96].eventId;
 		// The hand puts a syllable on it. `+page.svelte` builds the blank set out
 		// of the folds MINUS whatever the map now decides, so this note leaves it.
 		const seated = {
@@ -464,7 +475,9 @@ describe('N.111 increment 3, the automatic seat', () => {
 		// Compared as the marks themselves: the closing cell was `кая.` and is `я.`.
 		const marks = (list: readonly string[]) =>
 			list.filter((c) => /[^\p{L}\p{M}]$/u.test(c)).map((c) => c.match(/[^\p{L}\p{M}]+$/u)![0]);
-		expect(marks(after)).toEqual(marks(before));
+		// The seat closes the tail up one note, so 97 cells before are 96 after; the
+		// 97th note is blank and is not compared.
+		expect(marks(after.slice(0, 96))).toEqual(marks(before));
 	});
 
 	it('carries nothing where the engraver’s division is not Ilya’s word', async () => {

@@ -116,11 +116,10 @@ describe('N.134 seating from the score, on the engraved Sunless no. 1', () => {
 	it('run on its own, puts the fused slot on the note the file gave бью', async () => {
 		const score = await parse();
 		const { map, seated, withheld } = seatScoreWords(score, {}, poemLines(score));
-		// N.156: the file's last word «одинокая.» has 4 cells against 5 slots, so
-		// on its own it is withheld: its five slots are the difference. The app
-		// seats the clitic first, and then the word is inside the run.
-		expect(seated).toBe(91);
-		expect(withheld).toBe(5);
+		// The file's last word «одинокая.» now has 5 cells for its 5 slots, so it is
+		// seated like every other word and nothing is withheld.
+		expect(seated).toBe(96);
+		expect(withheld).toBe(0);
 		const fold = findCliticFolds(score)[0];
 		expect(map[fold.cliticEventId]).toBeUndefined();
 		const host = collectScoreWords(score, 1)
@@ -151,10 +150,8 @@ describe('N.134 seating from the score, on the engraved Sunless no. 1', () => {
 			{ ...lines[0], words: [{ ...w0, syllables: w0.syllables.slice(0, 2) }, ...rest] },
 		];
 		const { map, seated, withheld } = seatScoreWords(score, {}, cut);
-		// 2 from the cut word, plus the 5 slots of the closing «одинокая.» (N.156),
-		// which on its own is a cell short of its slots.
-		expect(withheld).toBe(7);
-		expect(seated).toBe(88);
+		expect(withheld).toBe(2);
+		expect(seated).toBe(93);
 		for (const cell of collectScoreWords(score, 1)[0].cells) {
 			expect(map[cell.eventId]).toBeUndefined();
 		}

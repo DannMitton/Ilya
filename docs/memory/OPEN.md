@@ -2207,3 +2207,33 @@ architecture.**
 **DESK DEFAULT: it displaces N.153 by one build**, because it is small and it finishes
 work walked the same day. Dann can send it behind N.153 with a word.
 
+
+
+---
+
+## N.157. REPLACING A SCORE DOES NOT RE-DERIVE THE SEATS
+
+**Numbered 2026-09-20. DESK DEFAULT number.** Found underneath the period, after Dann
+spent an afternoon on what looked like a one-character fix.
+
+**What happens today, established by Code and by the desk reading his library:**
+
+- `mergeOnUpload` returns the existing pairing map untouched on a replacement, so every
+  stored seat survives with the text it was made with.
+- `seatScoreWords` runs only into an EMPTY map, so the new note the corrected file adds
+  is never seated. The fold names it blank and it draws nothing. **That is why the
+  underlay stayed at 96 elements against the file's 97.**
+- `refreshPairings` (`+page.svelte:417`) rewrites a stored seat's text only on an exact
+  origin match, so a corrected word never reaches a placement made under the old text.
+
+**What it looked like to Dann:** Transcription showed « одинокая. » and Score Markup
+showed « я » with no period, on the same screen, on the current build. **He asked four
+times for a period and each answer was about a different artefact.**
+
+**THE SHAPE OF THE FIX, DESK INFERENCE and Dann's to wave off.** On a score
+replacement, re-derive the seats against the new score and poem: keep a seat that still
+matches, refresh the text where word and slot match, and seat a note the new file adds.
+**Add no punctuation rule; the period is already in the slot text.**
+
+**NOT ESTABLISHED:** whether a re-derive can keep hand placements in every case, and
+what should happen to a placement whose word no longer exists in the new text.
