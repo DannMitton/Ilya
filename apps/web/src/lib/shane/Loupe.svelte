@@ -21,7 +21,6 @@
 	import { onMount } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
-	import { afterGround } from '$lib/shane/system-ground';
 	import { RING_REACH, RING_STROKE } from '$lib/shane/selection-ring';
 	import type { Slot, PairingMap } from '$lib/shane/pairings';
 	import type { Cursor } from '$lib/shane/entry';
@@ -1144,11 +1143,12 @@
 		}
 
 		const clone = sysEl.cloneNode(true) as Element;
-		/* The clone arrives carrying whatever the page was wearing: its own
-		   held-measure rectangle, which belongs on the page and not inside the
-		   loupe, and VoiceProfilePane's `data-note-selected`, which is the
-		   page's mark and not this surface's. Both come off. */
-		for (const el of clone.querySelectorAll('[data-held-measure]')) el.remove();
+		/* The clone arrives carrying VoiceProfilePane's `data-note-selected`,
+		   which is the page's mark and not this surface's. It comes off below,
+		   at its own strip.
+		
+		   THE PAGE NO LONGER WEARS A HELD-MEASURE RECTANGLE, removed 2026-09-19
+		   on Dann's ruling, so there is nothing of it to take off the clone. */
 		/* THE LOUPE IS A CONTROL SURFACE FOR ENGRAVING CONCERNS ONLY, ruled by
 		   Dann 2026-08-27. The Score Markup's sage formant noteheads, the red
 		   crossing squircles and the phonation breaks are analysis, and the
@@ -1659,32 +1659,25 @@
 			}
 		}
 
-		/* ONE SAGE RECTANGLE ON THE PAGE, marking the measure the loupe holds.
-		   It is not a control and it is not decoration: it is the page saying
-		   which of its own components is under the knife, and between it and
-		   the measure tag the singer never loses their place.
-
-		   IT RIDES THE PAGE'S OWN SVG, the way VoiceProfilePane's selection
-		   mark does, so it sits in the system's coordinate space and the
-		   thumbnail's scale never has to be undone.
-
-		   AND IT GOES AFTER THE PAPER. It went in at `firstChild`, which is
-		   before the system's full-width ground, so it was painted under the
-		   paper, and standing first it also stopped the pane's skip over that
-		   ground and sent the selection ring under the paper too. Established
-		   2026-09-14 with the pane visible; `system-ground.ts` has the account. */
-		for (const stale of container.querySelectorAll('[data-held-measure]')) stale.remove();
-		if (hitH > 0) {
-			const mark = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-			mark.setAttribute('data-held-measure', '');
-			mark.setAttribute('x', String(win.left));
-			mark.setAttribute('y', String(hitY + 3.5 * lineGap));
-			mark.setAttribute('width', String(span));
-			mark.setAttribute('height', String(4 * lineGap));
-			mark.setAttribute('fill', 'none');
-			mark.setAttribute('pointer-events', 'none');
-			sysEl.insertBefore(mark, afterGround(sysEl));
-		}
+		/* THE HELD MEASURE HAS NO MARK ON THE PAGE. Ruled by Dann 2026-09-19,
+		   closing OPEN.md clause 16.
+		
+		   A sage rectangle was drawn here into the PAGE's SVG from 2026-09-14.
+		   It was never seen on screen: the rect carried `fill="none"` and took
+		   its stroke only from a `:global` rule in this component, and Dann's
+		   screenshot of 2026-09-18 showed no rectangle anywhere. Whether the rule
+		   failed to reach it or the page's own re-render took the node is NOT
+		   ESTABLISHED, and is now moot.
+		
+		   WHAT CARRIES THE CORRESPONDENCE INSTEAD: the lavender squircle, drawn on
+		   both the paper and the loupe, and the measure tag that names the held
+		   measure in words. THE KNOWN COST, accepted: those mark the SELECTED
+		   entry, not the held measure, so with no selection, or a selection in
+		   another measure, the page does not say which measure the loupe holds.
+		
+		   AND THE LOUPE NO LONGER WRITES INTO AN SVG IT DOES NOT OWN, which is
+		   what `system-ground.ts` was reasoning about. That file stays: the
+		   selection ring still needs it, from VoiceProfilePane. */
 
 		/* THE LOUPE ANCHORS FIXED AND NEVER TRAVELS. Ruled by Dann 2026-08-26
 		   on the deploy walk, and it replaces the placement r2 shipped, which
@@ -2010,9 +2003,6 @@
 			systems: ranges.length,
 		};
 
-		return () => {
-			for (const stale of container.querySelectorAll('[data-held-measure]')) stale.remove();
-		};
 	});
 
 	/* A TAP INSIDE THE LOUPE TAKES THE ENTRY, and places the armed syllable.
@@ -2661,22 +2651,8 @@
 		border-radius: 2px;
 	}
 
-	/* THE HELD MEASURE'S MARK, on the page rather than on this surface. Sage,
-	   Studio's accent for the score document, and hairline so it reads as a
-	   bracket around the measure rather than as a box drawn on the music. */
-	:global([data-held-measure]) {
-		stroke: var(--sage, #839275);
-		stroke-width: 1.2;
-	}
-
 	@media print {
 		.loupe {
-			display: none !important;
-		}
-
-		/* THE PAGE PRINTS AS IT PRINTED. The mark says what the singer is doing
-		   now, which is the same reason the selection outline drops. */
-		:global([data-held-measure]) {
 			display: none !important;
 		}
 	}
