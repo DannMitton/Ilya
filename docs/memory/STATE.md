@@ -351,6 +351,20 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > In `OPEN.md`, section "LIVE CARRY-OVER FROM STATE.md". Open it when one of those comes up.
 
+## THE ONE THING FOR THE NEXT THREAD: N.129, THE RULER
+
+**Set at the close of 2026-09-20, when N.148, N.149 and N.150 closed together.**
+
+**What `SEQUENCE.md` says, and it is SEQUENCE's claim rather than a reading of the
+tree:** N.129 is dependency 1 and comes before every piece of horizontal spacing work.
+`underlay-widths.ts:690` declares its table as Source Serif 4 metrics while the page
+has drawn Source Sans 3 since the paginator began stripping the serif root, about 5%
+out on one measured word. **N.153's derived spacing is horizontal spacing work, so it
+sits behind this.**
+
+**NOT ESTABLISHED: none of those files was opened on 2026-09-20.** The next thread
+opens them before it writes a brief, per tether 21.
+
 ## THE TRACKER
 
 **The goal: a working beta. PDF, photograph, and MIDI stay in it.**

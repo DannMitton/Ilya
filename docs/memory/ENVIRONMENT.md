@@ -64,6 +64,8 @@ next session the same hour it cost the last one.
 | you are about to count carets with a selector | `THE CARETS CARRY NO CLASS` |
 | you need a 390 px window in his Chrome | `CHROME WILL NOT GO BELOW ABOUT 555 CSS PX` |
 | reading the console of Dann's own Chrome tab | `THE EXTENSION CANNOT SEE HIS TAB` |
+| a click or zoom lands in the wrong place in his Chrome | `THE SCREENSHOT FRAME IS NOT CONSTANT` |
+| the extension goes dead after you close a tab | `CLOSING THE LAST TAB CAN QUIT CHROME` |
 | drawing music in a sketch or a mockup | `THE MUSIC FACE IS MAESTRO` |
 | `sed -i ''` fails in device_bash | `THE DEVICE SHELL IS LINUX` |
 | briefing Design | `WHAT DESIGN CAN READ` |
@@ -3287,6 +3289,44 @@ device's egress may differ night to night, so try the curl first.
 
 `list_deployments` takes `since` in milliseconds. A `since` later than the push
 returns nothing, which is not "no deploy yet".
+
+## THE SCREENSHOT FRAME IS NOT CONSTANT. 2026-09-20
+
+**Every `computer` screenshot reports its own coordinate frame, and the frame CHANGES
+between calls** on the same tab and the same window: 1408 x 840 on some, 1568 x 740 on
+others. Clicks and zooms are in that frame, not in CSS pixels.
+
+**So the scale factor is `frameWidth / innerWidth`, recomputed from the CURRENT
+screenshot every time.** Carrying a factor from an earlier call is what put two zooms
+on the wrong part of the page on 2026-09-20, once on the poem instead of the loupe's
+bar and once on the Input band instead of the Voice band.
+
+**THE CHEAP CHECK, and it is a pure read:** hover at the coordinate you are about to
+click, then run `document.querySelectorAll(':hover')` and look at the last element.
+On 2026-09-20 that returned `rect#m9-0-1` and proved the mapping was right when two
+clicks had already failed, which moved the search from the coordinates to the app.
+
+**Eyeballing a position off the returned image is worse than both.** Estimates from
+the image were out by about 40 px in an 860-wide view. **Get the rect from
+`getBoundingClientRect()`, scale it, and verify by hover.**
+
+## CLOSING THE LAST TAB CAN QUIT CHROME. 2026-09-20
+
+**`tabs_close_mcp` on the group's last tab auto-removes the group, and if that tab was
+Chrome's last window, Chrome quits and the extension reports "not connected."** It
+happened on 2026-09-20 and cost Dann a "please open Chrome again."
+
+**Create a second tab BEFORE closing the one you are finished with.** Note that after
+`tabs_create_mcp` plus a close, the new tab may not be in the session's group; call
+`tabs_context_mcp` with `createIfEmpty: true` and use whatever it returns.
+
+**AND ON THE SERVICE WORKER, which is why these closes happen at all** (see
+`THE PHONE HOLDS THE OLD BUILD`): **a close-and-reopen advances the active worker by
+exactly ONE build.** Two ships behind means two cycles. **The deterministic move is
+`(await navigator.serviceWorker.getRegistration()).unregister()` then reload:** the
+page then loads from the network on the newest build, `controller` reads false, and it
+re-registers on the next load. **It clears no IndexedDB and touches none of Dann's
+songs.** Record the registration's state before doing it, per CONTRACT §5.
 
 ## THE EXTENSION CANNOT SEE HIS TAB. 2026-09-17
 
