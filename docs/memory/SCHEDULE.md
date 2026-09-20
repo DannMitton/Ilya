@@ -37,6 +37,18 @@ for the first time on the day.
 - [ ] **UNSETTLED-6, the per-format walk.** Dann drops one file of each kind Ilya accepts: MusicXML, `.mxl`, `.musx`, `.mnx`, `.mscz`, PDF, photo. **Samples found by the desk 2026-09-17:** MusicXML `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml`; `.mxl` `tools/e16-harness/output/mussorgsky---sunless-01---within-four-walls/score.mxl`; `.musx` `~/Downloads/Mussorgsky - Sunless 04 - Be bored.musx`; `.mnx` `~/Downloads/Sharp Excerpt.fin27.mnx` (the only one); `.mscz` `~/Downloads/Schubert_Gretchen_am_Spinnrade_D118_OpenScore.mscz`; PDF and pictures from the N.146 walk (`STATE.md`, findings). **Still missing: a real phone photo of a score.** The sniff accepts HEIC (`format-detection.ts:117`); which of the 234 phone photos in `~/Downloads` show a score is NOT ESTABLISHED.
 - [ ] **Start the two design rows.** With Dann's say-so: design for **N.123** (where the tessituragram and its bands sit, given Insights page one is fixed at one page) and for **N.94** (the transposition control in the Score Markup band, between Corrections and Voice). A Sonnet agent looks for N.123's two missing sources (the centre-of-gravity formula; Titze, Švec, and Popolo 2003).
 
+**CLOSE OF WEEK 1, 2026-09-20.** N.153 stage 1 shipped and walked (`0028266`). **The
+week's real outcome was not a build: Dann ruled the loupe's two modes and the design for
+them was recovered** (`OPEN.md` §N.149's design exists and is chosen). **N.149 and N.153
+together are now THE ONE THING**, at his direction: *"start work on the two modes in a
+fresh thread."* Everything spacing-related from the 2026-09-19 walk folds into them
+rather than being built separately; his own reading is that the separate notes are
+*"obviated by our new understanding of the carets/spacing conflation."*
+
+**Carried into week 2 unchanged:** N.142 step 2 (now turning on the m. 31 and mm. 40-41
+tie-or-melisma reading), the nine CHECK rows, UNSETTLED-6's per-format walk, and the two
+design rows.
+
 ## Week 2. Monday 2026-09-21 to Sunday 2026-09-27. The ruler and the toggles
 
 - [ ] **N.129**, the underlay ruler and no dropped hyphens. Brief written. Walk on screen and in print.

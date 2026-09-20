@@ -42,6 +42,151 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### READ THIS FIRST. Written at the close of 2026-09-19 into 2026-09-20, about 00:20
+>
+> **THE ONE THING IS NOW N.149 AND N.153 TOGETHER: the loupe's two modes.** Dann ruled
+> the whole shape of it on this walk and asked that the next thread start on it. N.153
+> stage 1 shipped tonight; stages 2 to 5 are what give Corrections its spacing.
+>
+> **THE FLOOR MOVES TO `0028266`**, "N.153 stage 1: the squircle's box arithmetic moves
+> to selection-ring.ts", shipped 2026-09-20 about 00:56 UTC-4, gates at baseline, alias
+> stamp `ilya-1789873002682` checked by the desk, and **walked by Dann the same night**
+> on the branch alias. HEAD was `55382d3` when the session opened.
+>
+> **WHAT SHIPPED.** N.153 stage 1 only. The five helpers (`glyphInk`, `markBox`,
+> `eventInk`, `ipaBaselineOf`, `ipaFaceDescent`) and `inkCanvas` left
+> `VoiceProfilePane.svelte` for `selection-ring.ts`, which now exports
+> `ringBox(hit, group, id): RingBox | null`. **Verified two ways:** Code's own live scan
+> gave byte-identical numbers on all 115 `[data-hit]` ids before and after, and the desk
+> diffed the move, finding 276 of 288 removed lines byte-identical after a one-tab
+> dedent, the other 12 being four import names, one rewritten import line, three guards
+> that became `return null`, and four `setAttribute` lines now reading the returned box.
+> `group.setAttribute('data-note-selected','')` still runs BEFORE the call, so the 19
+> ids that return no ring keep the attribute; the rect scan was blind to that and it
+> holds.
+>
+> ---
+>
+> ### THE WALK OF 2026-09-19 INTO 2026-09-20. Sixteen items, all on T05
+>
+> **READ THIS BEFORE THE LIST. DANN'S OWN FRAMING, 2026-09-20:** *"most of my notes will
+> be obviated by our new understanding of the carets/spacing conflation. That's why I'm
+> pushing to work on the two modes and the tweening between them."*
+>
+> **He is right, and it collapses the list.** Nearly every spacing complaint on this walk
+> is one fault seen from several angles: **the loupe has no mode gate, so it shows
+> Corrections' spacing and calls it the default.** The padding he kept finding is room
+> reserved for carets in a view that should not have carets at all. **So do not build
+> against the individual spacing complaints. Build the two modes, and they go.**
+>
+> **What the mode split does NOT fix, and these are the live items:** the tie-or-melisma
+> question on m. 31 and mm. 40-41; the glyph overlap on m. 22; the loupe vanishing; the
+> incoming tie meeting the sharp on m. 45; and the tacet run's missing hit rectangle.
+> Everything else in the list below is either a ruling to build or a symptom of the
+> conflation.
+>
+> **THE DOCUMENT IS T05**, `Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and
+> fell.musx`, Marshak's Sonnet 153. **NOT Sunless 01**, which is what Code's stage 1 scan
+> used. Keep the two apart: stage 5's acceptance scan must run on the document the 27
+> collisions were counted on, and which that is remains NOT ESTABLISHED.
+>
+> #### RULED BY DANN ON THIS WALK
+>
+> 1. **THE LOUPE'S TWO MODES, AND OPTION A IS CHOSEN.** Corrections is a sibling STATE
+>    reached by a pill it shares with Syllables, not a second section under Syllables.
+>    **The design is `../sessions/design-n149-loupe-two-panels_r1_2026-09-17.html`**,
+>    drawn by the desk 2026-09-17, chosen by Dann the same night, LOST for three days
+>    because it was never written to disk, and recovered by Dann 2026-09-20. Its own
+>    words for option A: *"Two segments in one pill on the left of the bar, the way the
+>    desk selector already pairs Transcription and Fit. The chosen one is filled. Undo,
+>    Redo and the chevron sit flush right."*
+> 2. **THE LOUPE OPENS ON SYLLABLES**, the dominant mode. Whether it should instead open
+>    on the mode last used is **still Dann's to consider**; he said so and did not rule.
+> 3. **THE TWEEN RUNS SYLLABLES TO CORRECTIONS**, both directions. This refines clause 14,
+>    which had it running from Reading. His reason, and it is the point of the whole
+>    thing: *"having those carets fade in should intuitively tell the user that they are
+>    controls interleaved with the notes on the page."*
+> 4. **IN SYLLABLES MODE THERE ARE NO CARETS.** The carets belong to Corrections, and
+>    **Corrections necessarily carries more generous spacing** to hold them without
+>    collisions.
+> 5. **THE PAPER AND THE LOUPE MAY ENGRAVE THE SAME MEASURE DIFFERENTLY.** His words:
+>    *"We already accept that the engraved measure on Paper is not the same as the Loupe."*
+>    The Paper is engraved as if to be played from; the Loupe is for navigation and closer
+>    inspection.
+> 6. **THE LOUPE'S ANCHOR: OPTION B. Anchor the music, and give the accordion its own
+>    scroll.** The music sits at one vertical, every time; sections grow downward; when
+>    the contents exceed the room the accordion scrolls inside itself rather than the card
+>    moving. **He has now ruled this twice**: the 2026-09-17 mockup already says *"the
+>    panel below swaps without the loupe moving"*, and it was never transcribed.
+> 7. **THE METER RUN-IN IN THE LOUPE IS 1 STAVE SPACE.** The page keeps Gould's 2
+>    (rule 240, p. 42, `staff-renderer.ts:150-169`). Loupe-local, by ruling 5.
+> 8. **THE STAVE RUN-ON PAST THE CLOSING BARLINE IS 1 STAVE SPACE.** Measured before the
+>    ruling: today it is 4.6 sp, being `CARET_MARGIN` 3.6 (`Loupe.svelte:1277`, which is
+>    `lineGap * 2 + SQUIRCLE_CLEARANCE`, itself `lineGap * 1.6` at `:1266`) plus
+>    `EXCERPT_TAIL_SP` 1 (`loupe.ts:598`). Confirmed independently by measuring his own
+>    screenshots: 100 px of run-on at 21.75 px to the stave space, on both m. 9 and m. 12.
+>    **1 sp lands on Gould rule 242, p. 42**, her barline-adjacent clearance. His
+>    instruction: *"Do not overthink the width... just make it shorter than what it is
+>    now, visually."*
+> 9. **THE TIE RUNS INTO THE RUN-ON, FULLY REALIZED, WITH A TAPERED END**, as if it
+>    reached a note that is not shown. Today it stops square at the barline (m. 12).
+>    **The tail panel draws only `<line>` elements today** (`Loupe.svelte:2367-2375`), so
+>    this is new drawing rather than a tweak.
+> 10. **NO UNDO WHILE THE LOUPE IS CLOSED**, which answers N.149's only open question
+>    (`OPEN.md:1340`), outstanding since 2026-09-17. Reopening any measure brings the
+>    controls back; the stack is the app's own, as he ruled 2026-09-17.
+> 11. **THE CARETS OCCUPY A DIFFERENT CONCEPTUAL PLANE FROM THE NOTATION.** His words.
+>    This is what frees both quantities to go to 1 sp: if the carets are their own layer,
+>    `CARET_MARGIN`'s 3.6 sp carved out of the notation was never theirs to need.
+> 12. **ELAINE GOULD IS SHE/HER.** The desk wrote "he" twice and was corrected.
+>
+> #### DESK FINDINGS, each read this session
+>
+> - **A tacet run carries no hit rectangle**, so a tap on a multibar rest resolves to the
+>   NEAREST event that has one. The renderer emits one `data-hit` per event
+>   (`staff-renderer.ts:2662`, `:2936`) and `:1600` says a tacet run is a column, not an
+>   event. **Dann's two shots are the control: m. 28 gave the measure after, m. 49 the
+>   measure before.** Nearest, not next.
+> - **Nothing suppresses a caret for want of room.** `Loupe.svelte:1529` pushes a mark on
+>   every branch; the `MIN_SPACE` paths at `:1496` fall back to the bare stroke and at
+>   `:1505-1514` nudge the barline outward. So "the gap was too tight" never explains an
+>   absent caret.
+> - **The loupe sacrifices its TOP when the open card is too tall for its room.**
+>   `centreOnPage` (`loupe.ts:869-883`) clamps between `lowest` and `highest`, and when
+>   they conflict `Loupe.svelte:2183` takes `Math.min(centreY, lowest)`. The music is at
+>   the top. **This is what put the card under the browser chrome on m. 57**, and option B
+>   removes the conflict rather than retuning it.
+> - **THE TIE PREDICATE EXISTS. The record saying it does not is STALE.** `pairings.ts:304`
+>   computes `continuesTie` off the PREVIOUS note's `tied.type`, and `:372` states
+>   *"a tie's continuation may never begin a syllable."* Both parsers populate `tied`
+>   (`musicxml-parser.ts:633`, `mnx-parser.ts:724`). **And the `.musx` path does not parse
+>   slurs at all** (`mnx-parser.ts:23`).
+>
+> #### OPEN FROM THIS WALK, none of it ruled
+>
+> - **m. 31 and mm. 40-41: a sustained note carries a vowel with no Cyrillic under it.**
+>   Dann reads them as ties; the underlay draws the melisma extender, which
+>   `OPEN.md:886-887` calls the melisma's own mark. **The two have opposite correct
+>   answers** (`OPEN.md:850-851`). **Settle by reading `data-tie` / `data-slur` off the
+>   rendered page, never from the picture** (`OPEN.md:892`, which this project already
+>   learned on m. 84 and m. 87 of this same score). **If they are ties, N.142 step 2's
+>   count is not zero and that build is unblocked** (`OPEN.md:1258-1261`).
+> - **m. 22: two IPA glyphs overlap at one x.** The desk first called the `o` on the
+>   melisma note a defect and **withdrew that**: a melisma's continuation is a new sounded
+>   event, so the vowel is by design. Only the overlap is unexplained. **Dann was asked to
+>   look at m. 22 on the page and had not reported back.**
+> - **The loupe stopped appearing entirely at 23:31**, while the selection ring still drew.
+>   Suspect is the same position arithmetic. **Reload result not reported.**
+> - **m. 45: an incoming tie collides with the first note's sharp.** The head's carry panel
+>   has no clearance rule against an accidental. Wants a quantity in stave spaces.
+> - **The tacet-run practice, proposed by the desk and NOT ruled:** a tacet run is always
+>   tappable and raises the loupe on itself; the loupe names its span in words, not only
+>   the numeral; and the count carries its provenance where the singer asks for it. **The
+>   argument is that a wrong multirest count is the one read error a singer cannot
+>   discover**, which puts it inside the freeze rule's own exception.
+>
+> ---
+>
 > ### READ THIS FIRST. Written at the close of 2026-09-19, about 22:00
 >
 > **THE ONE THING IS STILL N.153, AND 2026-09-19 DID NOT TOUCH IT.** Its account is

@@ -21,6 +21,8 @@ next session the same hour it cost the last one.
 |---|---|
 | Code reports a preview serving an old build on port 4173 | `A STALE PREVIEW HOLDS PORT 4173` |
 | writing a brief for Code | `A BRIEF THAT CARRIES A CAUSE COSTS A PASS` |
+| you drew something and sent it to Dann | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
+| looking for a mockup or ruling from an earlier session | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
 | ship anything at all | `Gate baselines` |
 | you sent a file to the Mac, or are about to hand Dann a ship command | `REPORT SUCCESS AND WRITE NOTHING` |
 | move a gate number | `Moving a gate baseline` |
@@ -3267,3 +3269,40 @@ byte count AND grep for something the edit added; a size alone can coincide.
 **What made case 2 cheap:** `ilya-ship.sh` refuses on a clean tree and says so.
 **The script is the instrument**, again. What made case 1 expensive: nothing
 checked, and a commit message asserted the change.
+
+---
+
+## A DRAWING NOT IN THE TREE DOES NOT SURVIVE THE SESSION. 2026-09-20
+
+**Write every drawing into `docs/sessions/` BEFORE you send it. Not after, and not
+only into the conversation.**
+
+**What it cost, measured rather than asserted.** On 2026-09-17 the desk drew two
+mockups, `n92-carets-on-the-measure.html` and `n151-measure-edit-surface.html`.
+`OPEN.md:1348` records the second as *"sent in the session, not in the tree."* A third,
+the loupe's two-panel design, was drawn the same night and Dann chose option A from it.
+**All three vanished.** On 2026-09-20 the desk spent a long stretch of Dann's evening
+looking for the third one and told him twice it could not be found, before he produced
+it from his own machine.
+
+**The ten places searched, so nobody repeats the sweep:** the repository's 39 HTML
+mockups; `~/Downloads`; `git log --diff-filter=D` for deleted HTML; every filename ever
+in git history; `docs/sessions/*.md` from 2026-09-17 to 19; `LOG.md`; project knowledge
+(374 docs, RAG); `conversation_search`; `recent_chats`; and both of Dann's published
+artifacts, the August one unpacked from its base64 bundle and searched. **None held it.**
+
+**AND HERE IS WHY NONE OF THEM COULD.** `recent_chats` and `conversation_search` reach
+the claude.ai chat store only, whose newest entry for this project is **2026-09-12**.
+**Sessions from 2026-09-17 onward are Claude Code sessions and are not in that store at
+all.** Images and HTML rendered inside one live in that session's container and are gone
+when it ends. **So the desk cannot recover its own earlier work. Only the tree can.**
+
+**The rule, and it is cheap:** a drawing gets a dated filename in `docs/sessions/`, is
+written there first, is read back, and only then is Dann told to open it. Tonight's
+`drawing-n153-loupe-spacing_r1_2026-09-19.html` was written that way and is in the tree.
+The three that were not are not.
+
+**Dann's own transcripts are on his disk** under `~/.claude/projects/`, which is not a
+connected folder and which Claude's own data folders normally refuse anyway. **That is
+his recovery path, not the desk's.**
+
