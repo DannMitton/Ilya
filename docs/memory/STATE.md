@@ -42,6 +42,149 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### READ THIS FIRST. Written 2026-09-20, about 11:30
+>
+> **N.149 IS CLOSED. WALKED AND ACCEPTED BY DANN 2026-09-20, 11:29.** His words:
+> *"Acceptable for now, but later revision needed."* Shipped `6ca97db`, "N.149: the
+> loupe's two modes, a segmented pill, and the carets move to Corrections", pushed
+> about 01:03, five gates at baseline, six files, 695 insertions and 314 deletions.
+>
+> **THE FLOOR MOVES TO `6ca97db`**, alias stamp `ilya-1789880588959`, checked by the
+> desk. **HEAD was `d5e0927` when the session opened.**
+>
+> **HOW IT WAS WALKED, and the method is new.** Dann declined the phone walk: he had
+> no notation file on the phone and said the transfer dysregulates him. **The desk
+> drove his own Chrome through the extension and sent him screenshots; he ruled on
+> those.** His library and his songs were never altered, nothing was placed, and his
+> window size was recorded and restored. **This is a walk. Record it as one, and
+> reach for it again when a phone walk would cost him more than it returns.**
+>
+> #### WHAT THE DESK OBSERVED ON `6ca97db`, in his Chrome, on T05 m. 10
+>
+> - **The loupe opens on Syllables**, pill on the left with SYLLABLES filled, chevron
+>   flush right, **and no carets.**
+> - **Corrections draws the carets**, three in that measure, arrowheads inward, and
+>   the correction cells are in the loupe.
+> - **THE MUSIC DOES NOT MOVE.** `.loupe-window` top is **512.19 px in both modes** at
+>   desk width and **355.78 px before and after scrolling** at narrow width. Identical,
+>   not approximate. The card grows downward, 374.7 px to 705.8 px.
+> - **THE PANEL SCROLLS INSIDE ITSELF AND THE CARD HOLDS.** Scrolling past the duration
+>   row reached Tie, Restore and the lyric controls with `.loupe` top steady at
+>   304.69 px. **That is ruling 6 of 2026-09-20, observed.**
+>
+> #### WHAT ELSE THIS COMMIT CLOSED AND DID NOT CLOSE, read in the tree 2026-09-20
+>
+> - **N.148 IS CLOSED, inside `6ca97db`.** The Drawer's `stackActions`, `undoLabel`,
+>   `onundo` and their CSS are gone from `Drawer.svelte`, and Undo appears in the
+>   loupe's bar after a correction. It was ruled to ride with N.149 and it did.
+> - **N.150 IS NOT BUILT.** `i18n.ts:59` `group.scoreMarkup` still reads
+>   `{ en: 'Score markup', fr: 'Score markup' }`. The band did not become Voice.
+>   **It is the orphaned third of the trio.**
+>
+> #### THE NEXT ONE THING IS NOT RULED. DESK DEFAULT, and he can wave it off
+>
+> **DESK DEFAULT: N.150, to finish the trio.** It is small, it was ruled to ride with
+> N.149, and it is now the only unbuilt third. **Then week 2 opens on N.129**, because
+> `SEQUENCE.md` dependency 1 puts the ruler correction before every piece of
+> horizontal spacing work, **and N.153 stage 3's derived spacing is horizontal spacing
+> work.** Whether N.153 stages 2 to 5 may proceed ahead of N.129 is **NOT ESTABLISHED
+> and is a real sequencing question**, not a formality.
+>
+> #### RULED BY DANN 2026-09-20, 11:31, AFTER THE WALK. BUILD OWED
+>
+> **THE CHOSEN PILL SEGMENT TAKES A LAVENDER FILL.** His words: *"The active portion
+> of the Syllable/Corrections pill should have a lavender fill to reinforce to the
+> user which mode they are in."* Today it is `--paper-cream`, the card's own ground
+> (`Loupe.svelte:2660-2663`), so the chosen segment is barely marked.
+>
+> **THIS ADDS A SECOND COLOURED THING TO THE LOUPE**, against his ruling of
+> 2026-09-17 that the squircle is the one coloured thing. **The later ruling stands;
+> the older one is the reason the fill is a tint rather than full weight.** DESK
+> DEFAULT, his to overturn with a word: `--lavender-desk` (#D5CEDA, lavender at 60%,
+> `app.css:149`) rather than `--lavender` (#9585A2, `app.css:56`).
+>
+> **REFINED BY HIM 11:33, and it changes the rule:** *"on open state neither half
+> should bear colour. Selecting the mode gives it colour. When the accordion is
+> retracted there is no colour."* **The desk read it back as three states and he
+> answered "correct": panel retracted, neither half coloured; panel open, the current
+> mode's half takes the lavender; retract, the colour goes. So THE FILL MARKS AN OPEN
+> PANEL, NOT A MODE**, gated on `mode === m` AND `syllablesOpen` (`Loupe.svelte:2432`,
+> `:145`). `aria-selected` and the roving tabindex stay on `mode === m` alone.
+>
+> Brief: `../sessions/brief-n149-pill-lavender_r2_2026-09-20.md`. **Revision 1 is
+> superseded and wrong; it tied the fill to the mode.**
+>
+> #### THE ONE FINDING FROM THE WALK, HIS, AND DEFERRED BY HIM
+>
+> **THE DURATION ROW WRAPS: the dot and Tuplet drop to a second row.** Seen at 555 px.
+> **Dann ruled it acceptable for now and said a later revision is needed.** It is
+> UNNUMBERED: he deferred it, he did not rule it in. **By the freeze rule of
+> 2026-09-16 it is LATER** (it tells a singer nothing false and loses no work).
+> Number it only when he says so.
+>
+> #### WHAT CODE REPORTED, and every line of it is now DONE rather than WRITTEN
+>
+, `WRITTEN` ON EVERY LINE OF THE BRIEF'S SECTION 6
+>
+> Measured at 390 x 844 on T05 in a fresh `[::1]` origin, Dann's library untouched.
+> The music's top is **290.1 px in all four states** on the phone and **389.5 px** on
+> the desk at 1440 x 900. **0 carets in Syllables across all 64 tappable measures; 17
+> in Corrections on m. 9.** `tsc` clean, 1,265 web tests pass. The Score Markup header's
+> Undo and Redo are retired and the phone dock is gone.
+>
+> **The card now hangs from the music's top; the panel region grows downward with a
+> DERIVED height**, the room between the music's bottom and the viewport foot less 8 px:
+> 358.1 px on the phone against 545 px of Corrections content, so it scrolls inside
+> itself; 207.7 px against 449 px on the desk.
+>
+> #### CODE'S NOT ESTABLISHED LIST, none of it ruled, all of it for the walk
+>
+> - **The correction cells are cramped**, about 322 px against the dock's 366, so the
+>   duration row wraps and the dot and Tuplet drop to a second row. The 44 px floors
+>   hold. **Dann's eye.**
+> - **The desk gets only a 207.7 px window** because the anchor sits at page centre.
+>   A higher anchor gives more room and is a taste call.
+> - **A swipe inside the panel now scrolls it and does not dismiss the loupe.** Clause
+>   14 ruled that dismissal stays live by Escape, swipe and chevron. **Whether this
+>   breaks that ruling is NOT ESTABLISHED and is a walk question.**
+> - **Landscape phone is untested.** The 380 px left inset for the dock is gone.
+> - **`CorrectionSurface`'s `dock` variant now has no mount.** The code is left in
+>   place; removing it is its own decision.
+> - **The drawer's Corrections station is untouched**, so both copies exist on the desk.
+> - **Of measure numbers 8 to 89, only 64 carry hit rectangles.** Whether the other 18
+>   are empty measures is NOT ESTABLISHED.
+>
+> #### DESK DEFAULTS OF THIS SESSION, all reversible, all free for Dann to wave off
+>
+> - **READING IS RETIRED**, leaving two modes. Clause 14 of 2026-09-18 ruled three
+>   states with Reading opening (`OPEN.md:1878`); the rulings of 2026-09-20 refine it
+>   (`OPEN.md:1380`). **He has not ruled on the retirement.**
+> - **The library is never touched for a measurement.** Code was told to answer
+>   *Replace this song* with neither and to measure in a fresh origin. Standing.
+> - Segment tap opens the panel; the chevron takes the current mode's name; the pill
+>   reuses `a11y.tabs`. No new strings and no new French.
+>
+> #### CORRECTED THIS SESSION
+>
+> **The "18 measures" figure is NOT T05's.** It belongs to the fixture the 27
+> collisions were counted on, which this file already records as NOT ESTABLISHED.
+> **T05 carries measure numbers to at least 88.** The desk wrote 18 into a brief and
+> Code caught it.
+>
+> #### OPEN AND UNBUILT
+>
+> - **N.153 stages 2 to 5.** Stage 2's brief is written and unbuilt:
+>   `../sessions/brief-n153-s2-data-channel_r1_2026-09-20.md`. **It carries a finding
+>   worth keeping: `page-layout.ts:180-182` resolves the clef ONCE for the whole score,
+>   with the comment that a slice-level heuristic could flip clefs between systems, so
+>   the loupe's one-measure slice must be handed the resolved clef or it can draw a
+>   different clef from the page.**
+> - **The tween, deliberately unnumbered.** N.149 shipped as an instant swap.
+> - **`STATE.md` is over its own 600-line tripwire.** It was 930 lines at this
+>   session's open. Something failed to move to `LOG.md`.
+>
+> ---
+>
 > ### READ THIS FIRST. Written at the close of 2026-09-19 into 2026-09-20, about 00:20
 >
 > **THE ONE THING IS NOW N.149 AND N.153 TOGETHER: the loupe's two modes.** Dann ruled
@@ -347,9 +490,20 @@ does not repeat them.
   measure left over.
   Spec `../sessions/spec-n92-edit-surface_r1_2026-09-17.md`, audit
   `../sessions/memo-n92-edit-audit_r1_2026-09-17.md`.
-- `[ ]` **N.148, N.149, N.150.** Undo and Redo in the Syllables bar; Corrections moves
-  into the loupe; the drawer's band becomes Voice. Specs in `OPEN.md`, numbered
-  2026-09-17, DESK DEFAULT numbers.
+- `[x]` **N.148. CLOSED 2026-09-20** inside `6ca97db`. Undo and Redo moved into the
+  loupe's bar and the Score Markup header's pair is deleted (`Drawer.svelte`, read
+  2026-09-20: no `stackActions`, no `undoLabel`, no `onundo`).
+- `[x]` **N.149. CLOSED 2026-09-20.** The loupe's two modes, design A's segmented
+  pill, and the carets confined to Corrections. Shipped `6ca97db`, walked by Dann on
+  desk-driven screenshots the same morning: *"Acceptable for now, but later revision
+  needed."* **One finding deferred by him and UNNUMBERED: the duration row wraps, so
+  the dot and Tuplet drop to a second row.** Brief
+  `../sessions/brief-n149-both-modes_r1_2026-09-20.md`.
+- `[ ]` **N.150. The drawer's SCORE MARKUP band becomes Voice.** Numbered 2026-09-17,
+  DESK DEFAULT number. **Orphaned when N.149 shipped without it. NOT built, read
+  2026-09-20: `i18n.ts:59` `group.scoreMarkup` is `Score markup` in both languages.**
+  French owed: the desk proposes « Voix », adopted rather than coined. Spec in
+  `OPEN.md`.
 - `[~]` **N.152. Playback of the Markup.** LATER, its own cardinal, asked for by Dann
   2026-09-17. Spec in `OPEN.md`.
 - `[ ]` **N.153. The loupe re-engraves the held measure at its own spacing.**

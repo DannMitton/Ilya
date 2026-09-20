@@ -2429,7 +2429,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 					<button
 						type="button"
 						class="loupe-pair-member"
-						class:chosen={mode === m}
+						class:chosen={mode === m && syllablesOpen}
 						role="tab"
 						id="loupe-mode-{m}"
 						aria-selected={mode === m}
@@ -2657,8 +2657,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		border-left: 1px solid var(--ink-primary, #1a1612);
 	}
 
+	/* N.149 r2: the fill marks an OPEN panel and which one it is, so it is
+	   gated on the mode AND the panel. A tint, so it reads as state beside the
+	   lavender squircle. `aria-selected` stays on the mode alone. */
 	.loupe-pair-member.chosen {
-		background: var(--paper-cream, #f0ebe0);
+		background: var(--lavender-desk, #d5ceda);
 		cursor: default;
 	}
 

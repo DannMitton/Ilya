@@ -37,6 +37,10 @@ for the first time on the day.
 - [ ] **UNSETTLED-6, the per-format walk.** Dann drops one file of each kind Ilya accepts: MusicXML, `.mxl`, `.musx`, `.mnx`, `.mscz`, PDF, photo. **Samples found by the desk 2026-09-17:** MusicXML `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml`; `.mxl` `tools/e16-harness/output/mussorgsky---sunless-01---within-four-walls/score.mxl`; `.musx` `~/Downloads/Mussorgsky - Sunless 04 - Be bored.musx`; `.mnx` `~/Downloads/Sharp Excerpt.fin27.mnx` (the only one); `.mscz` `~/Downloads/Schubert_Gretchen_am_Spinnrade_D118_OpenScore.mscz`; PDF and pictures from the N.146 walk (`STATE.md`, findings). **Still missing: a real phone photo of a score.** The sniff accepts HEIC (`format-detection.ts:117`); which of the 234 phone photos in `~/Downloads` show a score is NOT ESTABLISHED.
 - [ ] **Start the two design rows.** With Dann's say-so: design for **N.123** (where the tessituragram and its bands sit, given Insights page one is fixed at one page) and for **N.94** (the transposition control in the Score Markup band, between Corrections and Voice). A Sonnet agent looks for N.123's two missing sources (the centre-of-gravity formula; Titze, Švec, and Popolo 2003).
 
+**AMENDED 2026-09-20, 11:30. N.149 AND N.148 ARE CLOSED**, shipped `6ca97db` and
+walked by Dann on desk-driven screenshots. **N.150 is orphaned and open.** The floor
+moves to `6ca97db`. One finding deferred by him, unnumbered: the duration row wraps.
+
 **CLOSE OF WEEK 1, 2026-09-20.** N.153 stage 1 shipped and walked (`0028266`). **The
 week's real outcome was not a build: Dann ruled the loupe's two modes and the design for
 them was recovered** (`OPEN.md` §N.149's design exists and is chosen). **N.149 and N.153

@@ -1479,8 +1479,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   has not). Choosing a mode opens the panel, since a mode whose panel is
 	   shut is a label with nothing behind it. */
 	let loupeMode = $state<LoupeMode>('syllables');
+	/* The panel resets with the mode (desk, 2026-09-20, N.149 r2 5b): the
+	   pill's fill marks an open panel, so a re-raise must open with the panel
+	   shut and neither half coloured. This supersedes "once per session" above. */
 	$effect(() => {
-		if (!loupeOpen) loupeMode = 'syllables';
+		if (!loupeOpen) {
+			loupeMode = 'syllables';
+			loupeSyllablesOpen = false;
+		}
 	});
 	function handleLoupeMode(mode: LoupeMode): void {
 		loupeMode = mode;

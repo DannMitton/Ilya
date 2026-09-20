@@ -59,6 +59,10 @@ next session the same hour it cost the last one.
 | walking at 390 px on his Mac | `DEVICE MODE LOCKS THE WIDTH` |
 | the cloud desk cannot fetch the alias | `NO NETWORK TO VERCEL FROM THE DESK` |
 | checking the alias serves the new build, 2026-09-17 | `THE ALIAS CHECK THAT WORKED` |
+| Dann's phone shows an old build after a ship | `THE PHONE HOLDS THE OLD BUILD` |
+| you need Dann to walk a ship and a device walk would cost him | `THE DESK DRIVES HIS CHROME AND HE RULES ON SHOTS` |
+| you are about to count carets with a selector | `THE CARETS CARRY NO CLASS` |
+| you need a 390 px window in his Chrome | `CHROME WILL NOT GO BELOW ABOUT 555 CSS PX` |
 | reading the console of Dann's own Chrome tab | `THE EXTENSION CANNOT SEE HIS TAB` |
 | drawing music in a sketch or a mockup | `THE MUSIC FACE IS MAESTRO` |
 | `sed -i ''` fails in device_bash | `THE DEVICE SHELL IS LINUX` |
@@ -3162,6 +3166,83 @@ can run beside a build** if its brief forbids: writing inside the repo (scripts 
 in `/tmp`), any git command, builds, preview servers, and gate runs. The N.143
 diagnosis ran that way beside N.139 on 2026-09-16 and left the tree untouched. It
 returned its report in chat, so the desk wrote the finding into `OPEN.md` itself.
+
+## THE DESK DRIVES HIS CHROME AND HE RULES ON SHOTS. 2026-09-20
+
+**Dann declined a phone walk, and the reason is standing, not a mood:** he had no
+notation file on the phone, getting one there means AirDrop or another finicky
+transfer, and he said it dysregulates him. *"I don't want to go through this first
+thing in the morning. No."*
+
+**WHAT WORKED, and use it again.** The Claude in Chrome extension opened the alias in
+his own Chrome, which already holds his library and his songs. The desk raised the
+loupe, switched modes, measured with `javascript_tool`, and sent him zoomed
+screenshots. **He ruled on the pictures and N.149 closed.**
+
+**THE RULES THAT MADE IT SAFE, and they are not optional:**
+
+- **Read and measure only.** No placing, no answering a *Replace this song* prompt,
+  no writes of any kind.
+- **Record what was there before changing any state, per CONTRACT §5.** His window
+  was 2229 x 1229; the desk resized it to walk the narrow layout and **restored it**.
+- **Say in the report what was not established**, rather than letting a screenshot
+  imply more than it shows.
+
+**The extension was not connected on the first try** and the desk said so rather than
+sending him to fix it; he opened Chrome himself a minute later.
+
+## THE CARETS CARRY NO CLASS. 2026-09-20
+
+**Both Code and the desk counted ZERO carets in a mode that visibly draws them.** The
+loupe's notation is injected markup: `.loupe-window` holds five `svg` elements whose
+classes are `loupe-head`, `loupe-meter`, `loupe-body`, `loupe-tail` and the strip, and
+**inside them the carets are bare `line` and `path` elements with no class and no data
+attribute.** A selector like `[class*=caret]` or `[data-caret]` returns nothing.
+
+**So: never report a caret count from a selector.** Zoom the loupe and look, or count
+by a geometry the drawing actually has. A zero here means the selector was wrong, not
+that the carets are absent, which is CONTRACT tether 11 and tether 14 together.
+
+## CHROME WILL NOT GO BELOW ABOUT 555 CSS PX. 2026-09-20
+
+`resize_window` to 390 x 900 on his Mac produced `innerWidth` **555**, not 390: macOS
+Chrome enforces a minimum window width. His display runs `devicePixelRatio` 1.8 with
+`outerWidth` 2229 against `innerWidth` 2476, so the CSS-to-window relation is not 1:1
+either. **555 px is narrow enough to trigger the phone layout and is NOT the phone's
+real width**, so any crowding seen there is milder than the phone's. For a true
+390 px, use DevTools device mode (`DEVICE MODE LOCKS THE WIDTH`), which the desk
+cannot drive, or the built-in browser pane, which has no library.
+
+## THE PHONE HOLDS THE OLD BUILD. 2026-09-20
+
+**The alias can serve the new build while Dann's phone serves the old one, and that
+is by design.** `apps/web/static/sw.js:16` reads: *"DELIBERATELY NOT IN THIS:
+`skipWaiting`, `clients.claim`, and the update..."*
+
+**So a new service worker installs and then WAITS.** It takes over only once every
+tab for that origin is closed. A reload does not do it, and neither does a second.
+
+**DANN'S PHONE BROWSER IS CHROME, NOT SAFARI. Corrected by him 2026-09-20.** Chrome
+on iOS is WKWebView, so the service worker behaves identically, but it keeps its own
+tabs and its own storage. **Name Chrome when you write the instruction.** This file
+said Safari for one revision and he had to correct it.
+
+**THE FIX, and it clears no storage:** close every Chrome tab showing Ilya on the
+phone, then open the alias again.
+
+**NEVER REACH FOR CLEARING SITE DATA.** Dann's library is IndexedDB on that origin
+in Chrome.
+Clearing site data to force a build destroys his songs, and it is irreversible.
+
+**THE DISAMBIGUATOR IS A PRIVATE TAB**, which has no service worker, so it shows the
+true current build. Its library is empty, so it answers "which build am I on" and
+cannot answer "does this work on my score".
+
+**WHAT IT COST, 2026-09-20.** The desk checked the alias stamp, confirmed `6ca97db`
+was served, and sent Dann to walk it. He got the old build and the session ended
+there. **The alias check was correct and insufficient: it measures the server, and
+the phone is a second cache in front of it.** Check the stamp, then give the
+tab-closing step in the SAME message, before he walks.
 
 ## THE ALIAS CHECK THAT WORKED. 2026-09-17
 
