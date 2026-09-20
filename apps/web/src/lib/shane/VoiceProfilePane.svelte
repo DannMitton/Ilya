@@ -645,7 +645,9 @@
 	   that ended a word could reach the hyphen loop wearing a `start`. Derived
 	   here for `cyrPreview`'s own reason: this component holds `pairings`, and
 	   a prop carrying a projection of that map could go stale against it. */
-	const sylTypePreview = $derived(pairedSyllableType(pairings));
+	const sylTypePreview = $derived(
+		pairedSyllableType(pairings, readingScore?.vocalLine.map((ev) => ev.id)),
+	);
 
 	/* N.113. THE SINGER'S MELISMA, as its own channel to the renderer.
 	   Derived here rather than passed in, because this component already holds

@@ -831,6 +831,7 @@ export function pairedCyrillic(
  */
 export function pairedSyllableType(
 	map: PairingMap | undefined,
+	order?: readonly string[],
 ): Record<string, 'whole' | 'start' | 'middle' | 'end'> | undefined {
 	if (!map) return undefined;
 	const key = (o: SlotOrigin) => `${o.lineIndex}\u0000${o.wordIndex}\u0000${o.word}`;
@@ -849,6 +850,33 @@ export function pairedSyllableType(
 		const first = p.origin.slotIndex <= 0;
 		const closes = p.origin.slotIndex >= end;
 		out[id] = first && closes ? 'whole' : first ? 'start' : closes ? 'end' : 'middle';
+	}
+	/* THE POEM'S WORD OVERRIDES THE SCORE'S SHORTER ONE (N.112, applied; Dann
+	   2026-09-20). A note seated from the score's own words can close a word the
+	   poem has since made longer: the file's «одинока» closes on «ка», and a «я»
+	   the singer typed into the poem and placed on the next note is slot 4 of
+	   «одинокая». The two seats have different origins, so each reads as the end
+	   of its own word and the hyphen loop, which joins only a start or middle to
+	   what follows, draws nothing between them. A syllable that is NOT the first
+	   of its word directly after a note typed `end` (or `whole`) proves that note
+	   does not close anything, so it is retyped `middle` (or `start`). ADJACENCY
+	   IS THE HYPHEN LOOP'S: the next seated note in `order`, rests skipped.
+	   Without `order` the map alone cannot say what follows what, and this is
+	   skipped. */
+	if (order) {
+		let prev: string | undefined;
+		for (const id of order) {
+			const p = map[id];
+			if (p?.kind !== 'syllable' || !p.cyrillic || out[id] === undefined) continue;
+			if (prev !== undefined && p.origin.slotIndex > 0) {
+				const before = map[prev];
+				if (before?.kind === 'syllable' && key(before.origin) !== key(p.origin)) {
+					if (out[prev] === 'end') out[prev] = 'middle';
+					else if (out[prev] === 'whole') out[prev] = 'start';
+				}
+			}
+			prev = id;
+		}
 	}
 	return Object.keys(out).length > 0 ? out : undefined;
 }

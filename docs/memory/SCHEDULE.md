@@ -61,7 +61,7 @@ design rows.
 
 ## Week 2. Monday 2026-09-21 to Sunday 2026-09-27. The ruler and the toggles
 
-- [ ] **N.129**, the underlay ruler and no dropped hyphens. Brief written. Walk on screen and in print.
+- [x] **N.129**, the underlay ruler and no dropped hyphens. **CLOSED 2026-09-20, ahead of the week**, in two ships, both walked: `e75d6f3` (the underlay draws in Source Serif 4, the face its widths were measured from) and `7bd3d04` (hyphens are never omitted, and a word-internal gap reserves `HYPHEN_GAP_PX`). Walked on screen and in print (*"it looks fabulous"*). **The recorded "about 5%" error was wrong and is corrected to 12.2%.**
 - [ ] **N.136 with N.119**: every notation toggle acts at once on Transcription and Markup, and no toggle does nothing.
 - [ ] **N.141, last step**: the squircle across a tie.
 - [ ] **N.132**: the ratified names and the tab padding.

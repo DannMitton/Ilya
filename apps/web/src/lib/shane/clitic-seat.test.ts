@@ -16,7 +16,8 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { MusicXmlScoreParser, type ParsedScore } from '@ilya/score-parser';
+import { MusicXmlScoreParser, analyzeScore, paginateScore, type ParsedScore } from '@ilya/score-parser';
+import { demoProfileUnmeasured } from '../../../../../packages/score-parser/src/demo-fixture';
 import { parseXml } from './ingestion/mini-dom';
 import {
 	findCliticFolds,
@@ -26,7 +27,17 @@ import {
 	readScoreText,
 } from './clitic-seat';
 import { collectScoreWords } from './vowel-resolver';
-import { pairedCyrillic, applyBlank } from './pairings';
+import {
+	pairedCyrillic,
+	pairedSyllableType,
+	applyBlank,
+	buildSlotQueue,
+	placeSyllable,
+	syllableTargetIds,
+} from './pairings';
+import { seatScoreWords } from './score-seat';
+import { processText } from '$lib/pipeline';
+import { scoreWordsText } from './vowel-resolver';
 
 const NBSP = '\u00A0';
 
@@ -140,6 +151,79 @@ describe('N.111 the clitic seat, on the engraved Sunless no. 1', () => {
 		expect(applyCliticSeat({}, fold)[cells[95].eventId]).toEqual(
 			expect.objectContaining({ kind: 'syllable', cyrillic: 'я.' }),
 		);
+	});
+
+	it('gives the last piece of the split «кая.» its period and no other piece one', async () => {
+		const score = await parse(xml);
+		const cells = cellsOf(score);
+		const seated = seatCliticFolds(score, {});
+		const cyr = pairedCyrillic(seated)!;
+		expect(cyr[cells[95].eventId]).toBe('я.');
+		expect(cyr[cells[94].eventId]).toBe('ка');
+		expect(cyr[cells[93].eventId]).toBe('но');
+	});
+
+	it('marks the pieces of the split «кая.» as syllables of one word, so the hyphen rule joins them', async () => {
+		const score = await parse(xml);
+		const cells = cellsOf(score);
+		const seated = seatCliticFolds(score, {});
+		const types = pairedSyllableType(seated)!;
+		expect(cells.slice(91).map((c) => types[c.eventId])).toEqual(['start', 'middle', 'middle', 'middle', 'end']);
+
+		// And the page draws it: a hyphen after «но» and one after «ка», none at
+		// the line end because «я.» closes the word.
+		const analyzed = analyzeScore(score, demoProfileUnmeasured, () => undefined as never, {
+			generatedAt: '2026-07-12T00:00:00.000Z',
+		});
+		const pages = paginateScore(score, analyzed, { cyrPreview: pairedCyrillic(seated), sylTypePreview: types });
+		const last = pages.systems.at(-1)!.svg;
+		const drawn = [...last.matchAll(/data-hyphen="([^"]+)"/g)].map((m) => m[1]);
+		expect(drawn).toContain(cells[94].eventId);
+		expect(drawn).toContain(cells[93].eventId);
+		expect(drawn).not.toContain(cells[95].eventId);
+	});
+
+	it('retypes the note before a hand-placed «я» so the poem’s longer word is joined (N.112 applied)', async () => {
+		// The path Dann's page took: the file ends «одинока» (`ка` closes its word),
+		// the singer types «я» into the poem, and its slot is placed on the last note.
+		const score = await parse(truncatedXml);
+		const cells = cellsOf(score);
+		const ids = syllableTargetIds(score.vocalLine);
+		const scoreText = scoreWordsText(collectScoreWords(score, 1));
+		const arrived = seatScoreWords(
+			score,
+			seatCliticFolds(score, {}),
+			processText(scoreText, { language: 'en' }),
+		).map;
+		const slot = buildSlotQueue(processText(scoreText + 'я', { language: 'en' })).at(-1)!;
+		const map = placeSyllable(arrived, ids, cells[95].eventId, slot)!;
+		const ka = cells[94].eventId;
+		const ya = cells[95].eventId;
+
+		// THE POSITIVE CONTROL: without the order the map alone cannot see the
+		// adjacency, and both read as the end of a word, which is the defect.
+		const bare = pairedSyllableType(map)!;
+		expect([bare[ka], bare[ya]]).toEqual(['end', 'end']);
+
+		const types = pairedSyllableType(map, score.vocalLine.map((e) => e.id))!;
+		expect([types[ka], types[ya]]).toEqual(['middle', 'end']);
+		// Nothing before it moves.
+		for (const c of cells.slice(0, 94)) expect(types[c.eventId]).toBe(bare[c.eventId]);
+
+		// The typed «я» carries no period, and none is invented for it.
+		expect(pairedCyrillic(map)![ya]).toBe('я');
+
+		// And the page draws the hyphen between them.
+		const analyzed = analyzeScore(score, demoProfileUnmeasured, () => undefined as never, {
+			generatedAt: '2026-07-12T00:00:00.000Z',
+		});
+		const drawn = (t: typeof types) => {
+			const svg = paginateScore(score, analyzed, { cyrPreview: pairedCyrillic(map), sylTypePreview: t })
+				.systems.at(-1)!.svg;
+			return [...svg.matchAll(/data-hyphen="([^"]+)"/g)].map((m) => m[1]);
+		};
+		expect(drawn(bare)).not.toContain(ka);
+		expect(drawn(types)).toContain(ka);
 	});
 
 	it('leaves the last note UNDECIDED rather than empty, on the truncated file', async () => {

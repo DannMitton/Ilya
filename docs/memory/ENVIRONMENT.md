@@ -92,6 +92,7 @@ next session the same hour it cost the last one.
 | drive a browser yourself | `Claude Code, and where the building` |
 | you are about to send Dann a terminal command that starts `claude` | `Claude Code, and where the building` (it is NOT installed on his Mac; Code is the desktop app's Code tab. Cost the desk a wasted turn 2026-09-20) |
 | asking which build a tab is actually running | `THE APP TELLS YOU WHICH BUILD IT IS ON` |
+| a fixture you fixed does not change what Dann sees on screen | `THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE` |
 | a walk harness needs a home | `A WALK HARNESS BELONGS` |
 | a memory commit swallowed Code's source edits | `NEVER COMMIT -a WHILE CODE IS WORKING` |
 | vitest or node dies on the bridge with `@rollup/rollup-linux-arm64-gnu` | `THE BRIDGE SHELL IS NOT THE MAC` |
@@ -3277,6 +3278,26 @@ was served, and sent Dann to walk it. He got the old build and the session ended
 there. **The alias check was correct and insufficient: it measures the server, and
 the phone is a second cache in front of it.** Check the stamp, then give the
 tab-closing step in the SAME message, before he walks.
+
+## THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE. 2026-09-20
+
+**A fixture in `apps/web/src/lib/shane/ingestion/fixtures/` is a TEST input. Dann's
+page renders a song in his IndexedDB, which he imported from his own file.** The two
+are different objects with the same music in them, and fixing one does not touch the
+other.
+
+**What it cost, 2026-09-20.** N.156 corrected
+`fixtures/sunless-01-engraved.musicxml` so «одинокая» closed properly. Code's tests
+went green on the fixture path. **Dann's page was unchanged**, and the desk measured
+the same defect three times before checking the source. **The file he actually
+imported, `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml`,
+still ended on «ка» with `syllabic` `middle` and carried no «я» at all** (read
+2026-09-20), **yet «я» drew on screen**, so the underlay a singer sees is produced by
+Ilya rather than read off the score's lyric line.
+
+**THE RULE. Before briefing a fixture fix, say which artefact the defect was seen in.**
+If Dann saw it on his own page, a fixture change cannot close it, and a green test on
+the fixture path is not evidence about his screen.
 
 ## THE APP TELLS YOU WHICH BUILD IT IS ON. 2026-09-20
 

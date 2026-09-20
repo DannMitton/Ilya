@@ -95,7 +95,7 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 
 | item | why here |
 |---|---|
-| **N.129** | Brief written 2026-09-16, `../sessions/brief-n129-underlay-ruler_r1_2026-09-16.md`; runs after N.142 and the loupe French. Everything that spaces text measures against its table. Nothing else in the notation layer should be built first. |
+| ~~**N.129**~~ **CLOSED 2026-09-20**, `e75d6f3` and `7bd3d04`, both walked | The ruler. **r1's direction was WRONG and r2 reversed it:** Dann ruled the underlay draws in Source Serif 4, the face the table already measures, rather than the table being remeasured into Source Sans 3. Brief `../sessions/brief-n129-underlay-ruler_r2_2026-09-20.md`. **Dependency 1 is now discharged and every horizontal spacing item behind it is free.** |
 | **N.136** | Cheap, and it settles the live half of N.119 before N.119 is briefed. |
 
 ### Tier 1. The notation layer
@@ -106,7 +106,7 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 | ~~**N.126**~~ DONE 2026-09-15, `76b24a3` | Measure numbers. Vertical, so N.129 does not bind it. Can run any time. |
 | ~~**N.125**~~ DONE 2026-09-16, `34b143c`, `570d76f` | Slurs. Its own Code thread, `staff-renderer.ts` only, off the drawer path. Brief written. Independent. |
 | ~~**N.143**~~ DONE 2026-09-16, `7abb5ae` | A `.musx` score fills the input field and takes its file's name. Placed 2026-09-16. |
-| **N.144** | Start placement over keeps the score's layout, and can be undone. Placed 2026-09-16, NEXT BUILD, brief `../sessions/brief-n144-start-over-keeps-the-score_r1_2026-09-16.md`. |
+| ~~**N.144**~~ DONE, `ceeb214` | Start placement over keeps the score's layout, and can be undone. **This row read NEXT BUILD until 2026-09-20, when `OWED.md:131` was found already recording it as shipped. A sequence that has gone stale is worse than none.** |
 | ~~**N.142**~~ DONE 2026-09-16, `c868540` | Ties are prolongation. Placed 2026-09-16, brief `../sessions/brief-n142-tie-is-prolongation_r1_2026-09-16.md`. Unblocks N.141's last step. Independent of N.129: it changes which notes take syllables, not their spacing. |
 | ~~*(loupe French)*~~ SHIPPED `c868540` | Not numbered. All ruled 2026-09-14 and 2026-09-16; brief `../sessions/brief-loupe-french-build_r1_2026-09-16.md`, runs after N.142. |
 | **N.115** | The singer moves a measure between systems. **Last in this tier**: it reflows whole systems, so it wants the ruler and the meter already in place, or its reflow is judged against content that is about to change. |
@@ -184,3 +184,62 @@ days to 2026-09-13 while nine closed; 2026-09-14 into 2026-09-15 closed two and
 numbered three. **No build order fixes that.** The release date is set by when the
 numbering stops, which is the ask recorded in `OWED.md` §RULINGS DANN OWES and is
 deliberately not raised here.
+
+
+---
+
+## THE AUTONOMOUS RUN. Set 2026-09-20, on Dann's instruction
+
+**His instruction:** the desk and Code take the items below without him, and he stays
+available for permissions and for questions of taste. **He still walks everything.
+`WRITTEN` is not `DONE`.**
+
+**What made this possible:** N.129 closed, which discharges dependency 1, and Dann
+asked for a profile of what could run without his rulings.
+
+### The rule for this run
+
+1. **The desk writes the brief, Code builds, the desk walks it in Dann's Chrome and
+   sends him shots to rule on.** That walk method is `ENVIRONMENT.md`
+   §`THE DESK DRIVES HIS CHROME AND HE RULES ON SHOTS`.
+2. **Take the app's own update toast before measuring anything**
+   (`ENVIRONMENT.md` §`THE APP TELLS YOU WHICH BUILD IT IS ON`). Three readings were
+   reported off stale builds on 2026-09-20.
+3. **Name the artefact a defect was seen in before briefing a fix**
+   (`ENVIRONMENT.md` §`THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE`).
+4. **Ask Dann only for: a gate baseline move, a `git add`, a ship, a walk verdict, and
+   anything that is taste, irreversible or French.** Nothing else.
+5. **An unresolved detail is the desk's to hold, not his to carry** (`CONTRACT.md` §3,
+   ruled 2026-09-20). A worry with no consequence yet is a line in `ENVIRONMENT.md` or
+   a note for the walk, never a question and never a menu of options.
+
+### The order, largest value first
+
+| item | what it is, and what it needs from Dann |
+|---|---|
+| **N.153 stages 2 to 5** | The loupe re-engraves the held measure at its own spacing. Stage 1 shipped `0028266`; stage 2's brief is written, `../sessions/brief-n153-s2-data-channel_r1_2026-09-20.md`. **Depends on nothing and nothing comes before it** (dependency 7). It closes the 27 scale-invariant caret collisions and is what makes the insert reach usable on a phone. **Dann: the walk.** |
+| **N.132** | The ratified names, `Text` / « Texte », `Markup` / « Annotation », `Insights` / « Aperçus », `Melody` / « Mélodie », ruled 2026-09-13 in both languages and still unbuilt. Carries the ruled 0.5 rem tab padding nobody has seen. **Must precede N.130 and N.131** (dependency 2). **Dann: the walk, and his eye on 0.5 rem.** |
+| **N.136** | Open syllabification never reaches Score markup's drawn text. Small, traced, and it shrinks N.119 before N.119 is briefed (dependency 3). **Dann: the walk.** |
+| **N.141, last step** | The squircle across a tie. Was gated on N.142, which shipped `c868540`. **Its other two questions stay Dann's and are NOT in this run.** |
+| **N.135** | The page reader reads the text underlay. Ruled 2026-09-14, cost measured in `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. Independent. **Dann: the walk.** |
+| **N.142 step 2** | Was blocked on a count only Dann's browser holds. **No longer: the desk read his library through Chrome three times on 2026-09-20 and takes the count itself.** Build only if the count is not zero. |
+
+### Absorbed alongside, no brief needed
+
+- **N.128's two other consumers.** One question: do `sustain.ts:61-84` and
+  `watchlist.ts:229-244` read the corrected line or the reader's events? Pure code
+  reading. `OWED.md` §OWED.
+- **Remove `bits-ui`** from `apps/web/package.json`. Ruled 2026-08-16, lockfile only,
+  on its own commit.
+- **The reading half of N.86's dead-code audit.** What the Shane switch does at release
+  stays Dann's.
+
+**FARM-OUT NOTE, usage read from Dann's screenshot 2026-09-20 15:25:** all-models
+weekly at 8%, Fable at 0%. **The shared pool is wide open**, so the audits and the
+code-reads go to Sonnet agents rather than inline. State the cost before each.
+
+### NOT in this run, because they are his
+
+The drawer grammar ratification, which gates N.120, N.122 and N.94. N.140's two
+numbers. N.141's other two questions. N.154's and N.131's French. The N.83 ordering
+contradiction. The release cut.

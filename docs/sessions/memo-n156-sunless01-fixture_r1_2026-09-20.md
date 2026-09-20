@@ -62,3 +62,21 @@ Expected values that moved, and why:
 - Not walked in a browser. I did not run the app.
 - The seat change is general (any file whose last word is one cell short after a fold), and I
   tested it on this fixture only.
+
+## Addendum: the period and the syllable types (2026-09-20, later)
+
+Dann asked for the seat to (1) carry the cell's trailing period to the last piece of a split
+«кая.» and (2) mark the pieces middle and end so the hyphen rule joins them. **I measured first
+and both already hold; no code changed.** Seated on the fixture, notes 91 to 95 read
+`о ди но ка я.` with types start, middle, middle, middle, end (the types come from
+`pairedSyllableType` over the seated map, by slot position). The queue's last slot already
+carries the period, so `я.` gets it and `ка` does not. The last system draws hyphens after
+«но» and after «ка», and none at the line end.
+
+Two tests added (`clitic-seat.test.ts`), so **web-test 1265 to 1267**; the ship script needs
+1267. Other gates unchanged: 216, 235, web-check 0 errors and 12 warnings, score-parser 575
+passed and 5 skipped. No expected value moved.
+
+An earlier message of Dann's asked instead for two fixture cells on "two notes that already
+carry it". Only one note carries «кая.», and a later message replaced it, so I did not do that.
+The tests cover the seated path only; a raw unseated render still shows `кая.` on one note.
