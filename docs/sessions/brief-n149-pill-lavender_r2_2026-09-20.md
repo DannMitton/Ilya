@@ -98,6 +98,36 @@ singer who dismisses mid-correction and comes back reopens the panel with one ta
 **ALSO CHECK, from Code's own NOT ESTABLISHED list:** whether any theme or media
 block in `app.css` redefines `--lavender-desk`. Report it before building.
 
+## 5c. AMENDMENT, RULED BY DANN 2026-09-20 11:54. THE CARET GATE MOVES
+
+**His words, verbatim:** *"NO, retracting the panel should restore the measure to its
+opening state appearance. The carets are unique to the Corrections mode. When
+Corrections is active we should see carets. When Syllables is active or the Loup is
+in open state, we should not see carets."*
+
+**This OVERTURNS a desk default.** The desk observed that the carets stay drawn when
+the panel is retracted and chose to leave it. Dann ruled against that. **His ruling
+stands and the desk's reading is struck.**
+
+**THE CHANGE, one condition.** `apps/web/src/lib/shane/Loupe.svelte:1393` reads
+`if (mode === 'corrections' && positions.length > 1) {`. **It becomes
+`mode === 'corrections' && syllablesOpen && positions.length > 1`.**
+
+**So the carets and the pill's fill are now the SAME condition**, `mode === m &&
+syllablesOpen`. They appear together and they go together. **Say so in a comment at
+the gate, so the next reader does not split them again.**
+
+**No new dependency is needed:** `:668-669` already reads both `syllablesOpen` and
+`mode`, so the re-frame fires on a retract.
+
+**Done when, added to section 6, each observed in a browser:**
+
+- **Loupe raised, panel retracted: NO carets**, whatever the mode.
+- **Corrections open: carets drawn**, as today.
+- **Retract from Corrections: the carets go**, and the measure looks as it did when
+  the loupe opened.
+- **Syllables open: no carets.**
+
 ## 6. Done when
 
 `WRITTEN` on all of these, each observed in a browser, not inferred:

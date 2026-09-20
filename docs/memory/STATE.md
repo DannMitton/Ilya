@@ -114,6 +114,15 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > Brief: `../sessions/brief-n149-pill-lavender_r2_2026-09-20.md`. **Revision 1 is
 > superseded and wrong; it tied the fill to the mode.**
 >
+> **RULED 2026-09-20 11:54, AFTER WALKING `be792b6`. THE CARET GATE MOVES, and it
+> overturns a desk default.** His words: *"retracting the panel should restore the
+> measure to its opening state appearance. The carets are unique to the Corrections
+> mode. When Corrections is active we should see carets. When Syllables is active or
+> the Loup is in open state, we should not see carets."* **The desk had observed the
+> carets staying up on a retract and chose to leave it; he ruled against that.**
+> `Loupe.svelte:1393` gains `&& syllablesOpen`, so **the carets and the pill's fill
+> become one condition.** Amendment 5c in the r2 brief.
+>
 > #### THE ONE FINDING FROM THE WALK, HIS, AND DEFERRED BY HIM
 >
 > **THE DURATION ROW WRAPS: the dot and Tuplet drop to a second row.** Seen at 555 px.

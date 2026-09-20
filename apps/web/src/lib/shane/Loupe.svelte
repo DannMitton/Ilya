@@ -1390,7 +1390,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   Plate C's weight, plate D's clearance. Nothing about what a caret
 		   DOES changes here, only how it reads beside the squircle it now
 		   steps clear of. */
-		if (mode === 'corrections' && positions.length > 1) {
+		/* N.149 r2 5c, RULED BY DANN 2026-09-20 11:54. THE CARETS AND THE
+		   PILL'S FILL ARE ONE CONDITION, `mode === m && syllablesOpen`: they
+		   appear together and go together, so a retracted panel restores the
+		   measure to how it looked when the loupe opened. Do not split them. */
+		if (mode === 'corrections' && syllablesOpen && positions.length > 1) {
 			const rectOf = (id: string) => container.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 			/* THE INK ITSELF: the union of a note's own group (excluding its
 			   hit rectangle, which is not ink) and everything stamped
