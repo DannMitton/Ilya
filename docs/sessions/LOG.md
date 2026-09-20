@@ -6146,3 +6146,248 @@ corrections filed against my own claims. The blocking number is still SEVEN, and
 saying otherwise would be the easiest lie available tonight." **That last
 sentence was wrong twice over: only six rows carried the mark, and by 2026-08-21
 the blocking set was empty.**
+
+## Block 25. N.148, N.149 and N.150 CLOSED 2026-09-20. Moved from `OPEN.md` at the close.
+
+**Verbatim from `OPEN.md`, nothing reworded.** Shipped over `6ca97db` (the two modes and
+the segmented pill), `be792b6` (the pill's fill marks an open panel), `38dac87` (the
+carets follow the panel) and `c582892` (Corrections leaves the drawer, the band becomes
+Voice, the corrected-count sentence goes). **Every one walked by Dann the same day, on
+desk-driven screenshots in his own Chrome.** « Voix » ratified 2026-09-20.
+
+**The Syllables-mode spacing subsection that sat inside this section did NOT come here.**
+It moved to N.153's section in `OPEN.md`, being loupe-local spacing rather than the mode
+split, and it is still open.
+
+## N.148, N.149, N.150. THE LOUPE TAKES THE WORK, AND THE DRAWER'S SCORE MARKUP BAND BECOMES VOICE. Numbered 2026-09-17, DESK DEFAULT numbers.
+
+> **N.148 AND N.149 ARE CLOSED, 2026-09-20. ONLY N.150 IN THIS SECTION IS STILL OPEN.**
+> N.148 shipped inside `6ca97db`; N.149 shipped over `6ca97db`, `be792b6` and
+> `38dac87`, each walked by Dann. **Everything below about the two modes, the pill,
+> the fill and the caret gate is a RECORD, not a spec. Do not build from it.**
+> N.150's own bullet is below and is unbuilt: `i18n.ts:59` `group.scoreMarkup` still
+> reads `Score markup` in both languages, read 2026-09-20.
+>
+> **THE MOVE TO `LOG.md` IS OWED AND WAS NOT DONE**, deliberately: this section
+> covers three items, one still open, and the spacing table under it belongs to
+> N.153 rather than to N.149. **Splitting it wants a clear head, not the end of a
+> session.** Do it at the next close and give it a LOG block of its own.
+
+
+**Dann's direction, 2026-09-17, after walking N.147:** *"I think we need an in-section Undo/Redo. Can we fit one flush right next to the chevron? The bar should open/close the Syllables accordion except for the Undo/Redo section of the bar."* Then: *"My plan is to get it off that header entirely and populate dedicated Undo/Redo controls into the Loupe's syllables and next, into the Corrections, which will also now be relocated to the Loupe to economize focus."* Then: *"Score Markup as a section of the Drawer is finished, and Voice becomes the new header title of that section."*
+
+- **N.148. Undo and Redo in the loupe's Syllables bar.** The bar becomes one row of three: the SYLLABLES label, which is the disclosure and takes the whole left side; Undo and Redo; the chevron at the right edge. A bar that is itself a button cannot hold buttons (the limit N.114 ruling 2 met), so the label is the disclosure rather than the whole row. Reuses the Score Markup header's own pair (`Drawer.svelte:189`, `:562`, `stackActions`) and its labels (`i18n.ts:378`, `:391`), so no new strings and no new French. **RULED by Dann: one Undo stack, the app's existing one**, whose label says what it takes back. 44 px targets on a phone; both grey out when there is nothing to take back (DESK DEFAULT).
+- **N.149. Corrections moves into the loupe**, and the Score Markup header's Undo and Redo retire in the same item, never before. The correction verbs already ride the loupe's dock on a phone, so this consolidates a half-move. **OPEN, for Dann:** what offers Undo while the loupe is closed. The loupe exists only while a note is selected (`+page.svelte:4956`); `Cmd + Z` and `Cmd + Shift + Z` still work on a computer (`+page.svelte:1343-1346`), and a phone would have nothing.
+- **N.150. The drawer's SCORE MARKUP band becomes Voice**, riding with N.149 (DESK DEFAULT). The band holds Corrections and Voice today (`Drawer.svelte:623-624`); once Corrections leaves, Voice is all that is in it. Its lavender is already the voice family's. It also ends the collision between the band's name and the Markup tab that N.132 renames. **French owed**; the desk proposes « Voix », adopted, not coined.
+- **Cost:** all three are new work inside the release window. N.148 is small; N.149 is not. The checkpoint of 2026-10-09 is where they are cut (`SCHEDULE.md`).
+
+### N.149's DESIGN EXISTS AND IS CHOSEN. Recovered and transcribed 2026-09-20
+
+**`../sessions/design-n149-loupe-two-panels_r1_2026-09-17.html`**, drawn by the desk
+2026-09-17, chosen by Dann the same night, and **lost for three days because it was
+never written to disk.** Dann recovered it 2026-09-20. Its title is "One loupe, two
+panels" and it offers three: A segmented pair, B two labels, C tabs at the foot.
+
+**DANN CHOSE A, SEGMENTED PAIR**, stated again 2026-09-20: *"I chose A, segmented pair."*
+The file's own description of it, verbatim:
+
+> Two segments in one pill on the left of the bar, the way the desk selector already
+> pairs Transcription and Fit. The chosen one is filled. Undo, Redo and the chevron sit
+> flush right. It is the loudest of the three, and the least ambiguous about being a
+> switch.
+
+**And its header carries three more facts the record did not have:**
+
+> In all three the loupe opens on Syllables, the bar carries Undo and Redo flush right,
+> and the panel below swaps without the loupe moving. The Corrections cells are the ones
+> `CorrectionSurface.svelte` already draws: length, pitch, accidental, rest and remove.
+
+**THREE CONSEQUENCES.**
+
+1. **N.148's placement was right and the desk's 2026-09-20 "top right corner"
+   recommendation was wrong.** Undo and Redo sit flush right IN THE BAR. N.148 needs one
+   amendment only: the left element is a two-segment pill, not the `SYLLABLES` label.
+2. **"The panel below swaps without the loupe moving" is the anchor ruling**, drawn
+   2026-09-17 and ruled again by Dann 2026-09-20 as option B.
+3. **N.149 is largely relocation, not construction.** The correction cells exist in
+   `CorrectionSurface.svelte`. **The "N.149 is not small" costing above predates this
+   file and must be redone against it.**
+
+**RULED BY DANN 2026-09-20, on top of the drawing:**
+
+- **In Syllables mode there are no carets**, and **Corrections carries more generous
+  spacing** so its carets never collide. This is what N.153 stages 2 and 3 provide.
+- **The tween runs Syllables to Corrections**, both directions, refining clause 14 which
+  had it running from Reading. His reason: *"having those carets fade in should
+  intuitively tell the user that they are controls interleaved with the notes on the
+  page."*
+- **The loupe opens on Syllables.** Whether it should open on the mode last used is
+  **still his to consider**; he raised it and did not rule.
+- **No Undo while the loupe is closed.** This closes the item's only open question,
+  outstanding since 2026-09-17.
+
+## Block 26. Three superseded closes, moved from `STATE.md` at the close of 2026-09-20.
+
+**Verbatim, nothing reworded.** In file order: the close of 2026-09-19 into 2026-09-20
+(00:20), then the close of 2026-09-19 (22:00), then the close of 2026-09-18 (04:00).
+**Each names a floor and a one thing that the close of 2026-09-20 supersedes:** the
+floor is now `c582892` and N.148, N.149 and N.150 are closed. **The walk of 2026-09-19
+into 2026-09-20 did NOT move**; it stays in `STATE.md` because it still holds live
+items that the mode split did not answer.
+
+> ### READ THIS FIRST. Written at the close of 2026-09-19 into 2026-09-20, about 00:20
+>
+> **THE ONE THING IS NOW N.149 AND N.153 TOGETHER: the loupe's two modes.** Dann ruled
+> the whole shape of it on this walk and asked that the next thread start on it. N.153
+> stage 1 shipped tonight; stages 2 to 5 are what give Corrections its spacing.
+>
+> **THE FLOOR MOVES TO `0028266`**, "N.153 stage 1: the squircle's box arithmetic moves
+> to selection-ring.ts", shipped 2026-09-20 about 00:56 UTC-4, gates at baseline, alias
+> stamp `ilya-1789873002682` checked by the desk, and **walked by Dann the same night**
+> on the branch alias. HEAD was `55382d3` when the session opened.
+>
+> **WHAT SHIPPED.** N.153 stage 1 only. The five helpers (`glyphInk`, `markBox`,
+> `eventInk`, `ipaBaselineOf`, `ipaFaceDescent`) and `inkCanvas` left
+> `VoiceProfilePane.svelte` for `selection-ring.ts`, which now exports
+> `ringBox(hit, group, id): RingBox | null`. **Verified two ways:** Code's own live scan
+> gave byte-identical numbers on all 115 `[data-hit]` ids before and after, and the desk
+> diffed the move, finding 276 of 288 removed lines byte-identical after a one-tab
+> dedent, the other 12 being four import names, one rewritten import line, three guards
+> that became `return null`, and four `setAttribute` lines now reading the returned box.
+> `group.setAttribute('data-note-selected','')` still runs BEFORE the call, so the 19
+> ids that return no ring keep the attribute; the rect scan was blind to that and it
+> holds.
+>
+> ---
+>
+
+---
+
+> ### READ THIS FIRST. Written at the close of 2026-09-19, about 22:00
+>
+> **THE ONE THING IS STILL N.153, AND 2026-09-19 DID NOT TOUCH IT.** Its account is
+> below, under the close of 2026-09-18, and nothing in it has changed. **Stage 1, the
+> squircle's box arithmetic extracted from `VoiceProfilePane.svelte` as a
+> behaviour-preserving refactor, is where a fresh thread starts.**
+>
+> **THE FLOOR DOES NOT MOVE. It stays at `637acc1`.** Seven commits landed on
+> 2026-09-19 and **not one of them is walked**, so by this file's own rule none of
+> them can be a floor. **HEAD is `438f08f` and the tree is clean.**
+>
+> **WHAT 2026-09-19 WAS: canon, French, and one small removal. No N.153.**
+>
+> | commit | what |
+> |---|---|
+> | `02dd6d2` | **the ILYA REGISTER is retired.** Its 27 live rows, its gaps and eight unnumbered live items are in this file; the rest is `../sessions/LOG.md` block 24. **Its subject line is wrong**, from a heredoc error; Dann ruled it stands rather than force-push |
+> | `71ae880` | **all 59 Insights entries in French**, and the canon rule that the desk drafts French |
+> | `074f230` | **the held measure's page mark removed.** Clause 16 closed |
+> | `9dfdab8` | **N.131's 25 real entries in French**, and 25 recorded as never having been defects |
+> | `ea862e6` | the Guide acknowledges Roberge and the OQLF |
+> | `ce1f4b9` | the OQLF link, verified against the page that states the rule |
+> | `438f08f` | clause 16 closed in canon, a lost amendment rebuilt, the transfer fault recorded |
+>
+> **FIVE THINGS ARE OWED A WALK, and none of them is closed until they get one:**
+> Aperçus in French (**Dann confirmed this one on 2026-09-19: "looks great"**); the
+> intake and drawer strings in French; the witness line reading « mes. »; no sage
+> rectangle on the page; and the Guide's Language paragraph with both links live.
+>
+> **THE RULE THAT CHANGED, AND IT OUTLIVES THE SESSION: THE DESK DRAFTS THE FRENCH
+> AND DANN RULES ON IT.** *"I prefer to have you suggest translations that I can react
+> to. That saves me cognitive bandwidth."* Never hand him blank slates. It is in this
+> file's N.130 row and in `CONTRACT.md` §4. **And French musical terminology now has an
+> authority: Roberge's GDRM, beside the OQLF for punctuation** (`INBOX.md`, 2026-09-19).
+>
+> **AN INSTRUMENT FAULT THAT BIT TWICE AND MUST NOT BITE AGAIN:** a file transfer to
+> the Mac can report success and write nothing, silently, including for one file of a
+> multi-file send. **Read every file back on the device before handing Dann a ship
+> command.** `ENVIRONMENT.md`, `A FILE TRANSFER CAN REPORT SUCCESS AND WRITE NOTHING`.
+>
+> **OWED BY DANN, small, none of it blocking N.153:** the walk above; whether the
+> comment **THE LOUPE ANCHORS FIXED AND NEVER TRAVELS** (his ruling of 2026-08-26,
+> which still says the sage rectangle moves across the page) is amended or left;
+> `underlay.heading`'s « Placement des paroles », a DESK DEFAULT he has not ruled on;
+> and the four items carried from 2026-09-18 below.
+>
+> **NOT IN THE REPO ON PURPOSE:** nine legacy project-memory exports and
+> `STATE.md.bak-2026-09-19` are in `~/Downloads`. **Dann ruled 2026-09-19 that the
+> exports stay on disk, being archival**; Shane's duplicates the new memory system.
+> The backup is the revert path for `02dd6d2`, by renaming it over `STATE.md`.
+>
+> ---
+>
+> ### The close of 2026-09-18, about 04:00. N.153's account is here
+>
+> **THE ONE THING IS N.153: the loupe re-engraves the held measure at its own spacing.**
+> Numbered by Dann 2026-09-18. Spec and its five stages are in `OPEN.md`. Stage 1 is the
+> squircle's box arithmetic, extracted from `VoiceProfilePane.svelte` as a
+> behaviour-preserving refactor; stage 2 is one additive data channel; stage 3 is the render
+> itself. **Each stage lands and is verified on its own.**
+>
+> **WHY IT MATTERS, and it is not what the desk thought at midnight. MEASURED 2026-09-18:
+> the separation between a caret's hit centre and its neighbour's runs 1.13 px to 7.89 px at
+> phone width, on all 17 held-able measures, against a 44 px floor.** `nearestTarget`
+> resolves by centre, so **a caret is not reliably tappable on a phone anywhere in this
+> score.** The desktop path works today, by stepper and by caret. **N.153 is what makes the
+> insert reach work on a phone**, not a tidy-up of the 27 drawing collisions.
+>
+> **SHIPPED 2026-09-17 evening to 2026-09-18, six commits, all walked by Dann:**
+> `f4e31a2` the carets themselves; `7e28272` their weight, plate C's grey at 0.32 with the
+> squircle clearance; `8cb9b51` no caret inside the squircle, and a rest gets the hit
+> rectangle every other event has; `fda5b9c` carets read ink rather than hit rectangles;
+> `a86e985` the loupe shows one measure whole and may take the width it needs;
+> `637acc1` no opening barline, the loupe fits its contents, 1.6 line-gaps of daylight.
+>
+> **DANN'S RULINGS OF THE NIGHT, all in `OPEN.md` section THE CARET, clauses 1 to 13.** They
+> outlive the code they came from. The squircle is the one coloured thing in the loupe; a
+> caret stands in the middle of the space it names; the loupe shows ONE MEASURE and nothing
+> else, adjacent content included; its spacing is its own and does not bind the page; it may
+> exceed the page's width, retracting his own ruling of 2026-08-27; and it is sized to its
+> contents, keyed to the held measure and never to the selection.
+>
+> **STILL OPEN AND ALL WAITING ON N.153:** the 27 drawing collisions on 12 of 18 measures
+> (18 ink-and-squircle, 9 beam-crossing); the 44 px tap floor, reached nowhere; and one
+> hairline sliver of an adjacent syllable on m. 8, which Code kept deliberately rather than
+> cut the closing barline.
+>
+> **OWED BY DANN, small, and none of it blocks N.153:** whether a measure left over may
+> print; what Replace does to a night of corrections; the walk of the fill tag's SHORT
+> state; and N.140's two numbers, the stave-space floor in CSS pixels and whether the loupe's
+> horizontal scroll may take a gesture.
+>
+> **A PROCESS CHANGE LANDED TONIGHT, and it is in `ENVIRONMENT.md` under `A BRIEF THAT
+> CARRIES A CAUSE COSTS A PASS`.** Three of the night's six passes were spent because the
+> desk wrote a CAUSE into a brief from prose rather than from the file. `../sessions/BRIEF-TEMPLATE.md`
+> has no slot for a cause: observations, then cited facts, then an instruction to Code to
+> measure. **Use it for every brief.**
+>
+> **RULED AFTER THE CLOSE, 2026-09-18, in a design conversation with no code written.
+> `OPEN.md` section THE CARET, clauses 14, 15 and 16.**
+>
+> - **Clause 14. The loupe has THREE states and a tween between two of them.** Reading is
+>   the opening state, an enlarged view of the paper measure at the page's own spacing,
+>   with NO carets. Syllables opens the accordion and keeps the measure essentially as it
+>   was. **Corrections is the only state that shows carets**, and entering it tweens: the
+>   notes and rests travel to their new positions while the carets fade in from zero
+>   opacity to 0.32, the card's perimeter moving on the same curve and the same duration.
+>   The technique is **FLIP**, and a cross-fade is ruled out because the teaching IS the
+>   movement. The return is the same machinery reversed and faster. **The toggle is locked
+>   for the tween's duration; dismissal stays live by Escape, swipe and chevron.**
+> - **Clause 15. THE PERIMETER IS NEVER SMALLER THAN WHAT IT CONTAINS, at any frame.**
+>   Promoted to a standing rule for the loupe, because every clipping defect of these two
+>   days is that sentence broken while standing still.
+> - **Clause 16, CLOSED 2026-09-19 by removing the mark, not by fixing it.**
+>   Ruled by Dann over chasing the bug: the page no longer carries a held-measure
+>   rectangle. **One of its three candidates was eliminated by reading** (`hitH` is
+>   `own.nodes[0]` height at `Loupe.svelte:686-687`, and `lineGap = hitH / 11` at
+>   `:689` feeds the loupe crop at `:1132`, so a zero would collapse the loupe he can
+>   see); **which of the other two hid it is NOT ESTABLISHED and is now moot.**
+>   Shipped `074f230`, six sites removed. **UNWALKED.** Account in `OPEN.md` clause 16.
+> - **The tween work is DELIBERATELY UNNUMBERED**, on Dann's ruling: the number waits until
+>   N.149 is closer, because N.149 is what makes the Corrections gate real. **Do not mint
+>   one and do not read its absence as an oversight.**
+>
+> **Usage, 2026-09-18: NOT ESTABLISHED.** No screenshot was taken tonight. No subagents were
+> spawned by the desk; all building ran in Claude Code on Dann's machine.
+>
+> ---
+>

@@ -1332,101 +1332,12 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 - **Brief:** `../sessions/brief-n147-syllables-in-the-loupe_r1_2026-09-17.md`.
 - **Cost:** the pairing cursor (`+page.svelte:662`, drawn at `:4441`) loses its job in the loupe; what else reads it is NOT ESTABLISHED until Code checks. Size NOT ESTABLISHED; the release estimate's 1 to 2 evenings covered the tap alone.
 
-## N.148, N.149, N.150. THE LOUPE TAKES THE WORK, AND THE DRAWER'S SCORE MARKUP BAND BECOMES VOICE. Numbered 2026-09-17, DESK DEFAULT numbers.
+## N.148, N.149 and N.150 are CLOSED. Their account moved to `../sessions/LOG.md` block 25 on 2026-09-20.
 
-> **N.148 AND N.149 ARE CLOSED, 2026-09-20. ONLY N.150 IN THIS SECTION IS STILL OPEN.**
-> N.148 shipped inside `6ca97db`; N.149 shipped over `6ca97db`, `be792b6` and
-> `38dac87`, each walked by Dann. **Everything below about the two modes, the pill,
-> the fill and the caret gate is a RECORD, not a spec. Do not build from it.**
-> N.150's own bullet is below and is unbuilt: `i18n.ts:59` `group.scoreMarkup` still
-> reads `Score markup` in both languages, read 2026-09-20.
->
-> **THE MOVE TO `LOG.md` IS OWED AND WAS NOT DONE**, deliberately: this section
-> covers three items, one still open, and the spacing table under it belongs to
-> N.153 rather than to N.149. **Splitting it wants a clear head, not the end of a
-> session.** Do it at the next close and give it a LOG block of its own.
-
-
-**Dann's direction, 2026-09-17, after walking N.147:** *"I think we need an in-section Undo/Redo. Can we fit one flush right next to the chevron? The bar should open/close the Syllables accordion except for the Undo/Redo section of the bar."* Then: *"My plan is to get it off that header entirely and populate dedicated Undo/Redo controls into the Loupe's syllables and next, into the Corrections, which will also now be relocated to the Loupe to economize focus."* Then: *"Score Markup as a section of the Drawer is finished, and Voice becomes the new header title of that section."*
-
-- **N.148. Undo and Redo in the loupe's Syllables bar.** The bar becomes one row of three: the SYLLABLES label, which is the disclosure and takes the whole left side; Undo and Redo; the chevron at the right edge. A bar that is itself a button cannot hold buttons (the limit N.114 ruling 2 met), so the label is the disclosure rather than the whole row. Reuses the Score Markup header's own pair (`Drawer.svelte:189`, `:562`, `stackActions`) and its labels (`i18n.ts:378`, `:391`), so no new strings and no new French. **RULED by Dann: one Undo stack, the app's existing one**, whose label says what it takes back. 44 px targets on a phone; both grey out when there is nothing to take back (DESK DEFAULT).
-- **N.149. Corrections moves into the loupe**, and the Score Markup header's Undo and Redo retire in the same item, never before. The correction verbs already ride the loupe's dock on a phone, so this consolidates a half-move. **OPEN, for Dann:** what offers Undo while the loupe is closed. The loupe exists only while a note is selected (`+page.svelte:4956`); `Cmd + Z` and `Cmd + Shift + Z` still work on a computer (`+page.svelte:1343-1346`), and a phone would have nothing.
-- **N.150. The drawer's SCORE MARKUP band becomes Voice**, riding with N.149 (DESK DEFAULT). The band holds Corrections and Voice today (`Drawer.svelte:623-624`); once Corrections leaves, Voice is all that is in it. Its lavender is already the voice family's. It also ends the collision between the band's name and the Markup tab that N.132 renames. **French owed**; the desk proposes « Voix », adopted, not coined.
-- **Cost:** all three are new work inside the release window. N.148 is small; N.149 is not. The checkpoint of 2026-10-09 is where they are cut (`SCHEDULE.md`).
-
-### N.149's DESIGN EXISTS AND IS CHOSEN. Recovered and transcribed 2026-09-20
-
-**`../sessions/design-n149-loupe-two-panels_r1_2026-09-17.html`**, drawn by the desk
-2026-09-17, chosen by Dann the same night, and **lost for three days because it was
-never written to disk.** Dann recovered it 2026-09-20. Its title is "One loupe, two
-panels" and it offers three: A segmented pair, B two labels, C tabs at the foot.
-
-**DANN CHOSE A, SEGMENTED PAIR**, stated again 2026-09-20: *"I chose A, segmented pair."*
-The file's own description of it, verbatim:
-
-> Two segments in one pill on the left of the bar, the way the desk selector already
-> pairs Transcription and Fit. The chosen one is filled. Undo, Redo and the chevron sit
-> flush right. It is the loudest of the three, and the least ambiguous about being a
-> switch.
-
-**And its header carries three more facts the record did not have:**
-
-> In all three the loupe opens on Syllables, the bar carries Undo and Redo flush right,
-> and the panel below swaps without the loupe moving. The Corrections cells are the ones
-> `CorrectionSurface.svelte` already draws: length, pitch, accidental, rest and remove.
-
-**THREE CONSEQUENCES.**
-
-1. **N.148's placement was right and the desk's 2026-09-20 "top right corner"
-   recommendation was wrong.** Undo and Redo sit flush right IN THE BAR. N.148 needs one
-   amendment only: the left element is a two-segment pill, not the `SYLLABLES` label.
-2. **"The panel below swaps without the loupe moving" is the anchor ruling**, drawn
-   2026-09-17 and ruled again by Dann 2026-09-20 as option B.
-3. **N.149 is largely relocation, not construction.** The correction cells exist in
-   `CorrectionSurface.svelte`. **The "N.149 is not small" costing above predates this
-   file and must be redone against it.**
-
-**RULED BY DANN 2026-09-20, on top of the drawing:**
-
-- **In Syllables mode there are no carets**, and **Corrections carries more generous
-  spacing** so its carets never collide. This is what N.153 stages 2 and 3 provide.
-- **The tween runs Syllables to Corrections**, both directions, refining clause 14 which
-  had it running from Reading. His reason: *"having those carets fade in should
-  intuitively tell the user that they are controls interleaved with the notes on the
-  page."*
-- **The loupe opens on Syllables.** Whether it should open on the mode last used is
-  **still his to consider**; he raised it and did not rule.
-- **No Undo while the loupe is closed.** This closes the item's only open question,
-  outstanding since 2026-09-17.
-
-### THE LOUPE'S SYLLABLES-MODE SPACING. Ruled by Dann 2026-09-20
-
-Both quantities are **loupe-local**, under his ruling that *"the engraved measure on
-Paper is not the same as the Loupe."*
-
-| quantity | today | ruled | where |
-|---|---|---|---|
-| meter run-in | 2 sp, Gould rule 240 p. 42 | **1 sp in the loupe; the page keeps 2** | `staff-renderer.ts:169` |
-| stave run-on past the closing barline | 4.6 sp | **1 sp** | `loupe.ts:598` + `Loupe.svelte:1277` |
-
-**The 4.6 was measured two ways before the ruling:** by reading the tree
-(`CARET_MARGIN` = `lineGap * 2 + SQUIRCLE_CLEARANCE`, itself `lineGap * 1.6`, plus
-`EXCERPT_TAIL_SP` = 1), and by measuring Dann's own screenshots (100 px of run-on at
-21.75 px to the stave space, identical on m. 9 and m. 12). **1 sp lands on Gould rule
-242, p. 42**, her barline-adjacent clearance, which was not the desk's reason for it:
-Dann asked for about a third of what was there.
-
-**His instruction on how much to think about it:** *"Do not overthink the width of the
-stave that exceeds the barline, just make it shorter than what it is now, visually."*
-
-**AND THE TIE RUNS INTO IT, tapered**, as if reaching a note that is not shown
-(m. 12 stops square at the barline today). **The tail panel draws only `<line>` elements**
-(`Loupe.svelte:2367-2375`), so this is new drawing, not a constant.
-
-**A desk caveat Dann has heard and waved past:** 1 sp is about 33 px at the zoom he
-walked, and the desk's reading is that it is the tightest a taper can be and still read.
-He chose to build it and look rather than argue it. **Walk a tied measure when it lands.**
-
+Shipped over `6ca97db`, `be792b6`, `38dac87` and `c582892`, each walked by Dann.
+**The loupe's Syllables-mode spacing rulings that used to sit here have moved into
+N.153's section below, where they belong: they are loupe-local spacing, not the mode
+split.** Nothing was reworded in either move.
 
 ## N.151. THE MEASURE EDIT SURFACE, WITH INSERT. Numbered 2026-09-17, DESK DEFAULT number. Report: `../sessions/report-n151-note-entry_r1_2026-09-17.md`.
 
@@ -2010,7 +1921,95 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
 2. **Carets are drawn only while Corrections is the active panel.** With the loupe alone, or with Syllables showing, no insertion points are drawn. His reasoning, and the desk agrees: a mark that appears when it cannot be used is noise, and the loupe's default state is reading, not editing.
 
 
+### THE LOUPE'S TWO MODES, RULED BY DANN ON THE WALK OF 2026-09-19 INTO 2026-09-20
+
+**MOVED HERE 2026-09-20 from `STATE.md`, verbatim and unreworded, because six of these
+twelve lived in `STATE.md` and nowhere else.** N.148, N.149 and N.150 are closed and
+their account is in `../sessions/LOG.md` block 25, **but the archive is not
+authoritative and rulings outlive the code they came from.** They belong here, beside
+THE CARET's other clauses.
+
+1. **THE LOUPE'S TWO MODES, AND OPTION A IS CHOSEN.** Corrections is a sibling STATE
+   reached by a pill it shares with Syllables, not a second section under Syllables.
+   **The design is `../sessions/design-n149-loupe-two-panels_r1_2026-09-17.html`**,
+   drawn by the desk 2026-09-17, chosen by Dann the same night, LOST for three days
+   because it was never written to disk, and recovered by Dann 2026-09-20. Its own
+   words for option A: *"Two segments in one pill on the left of the bar, the way the
+   desk selector already pairs Transcription and Fit. The chosen one is filled. Undo,
+   Redo and the chevron sit flush right."*
+2. **THE LOUPE OPENS ON SYLLABLES**, the dominant mode. Whether it should instead open
+   on the mode last used is **still Dann's to consider**; he said so and did not rule.
+3. **THE TWEEN RUNS SYLLABLES TO CORRECTIONS**, both directions. This refines clause 14,
+   which had it running from Reading. His reason, and it is the point of the whole
+   thing: *"having those carets fade in should intuitively tell the user that they are
+   controls interleaved with the notes on the page."*
+4. **IN SYLLABLES MODE THERE ARE NO CARETS.** The carets belong to Corrections, and
+   **Corrections necessarily carries more generous spacing** to hold them without
+   collisions.
+5. **THE PAPER AND THE LOUPE MAY ENGRAVE THE SAME MEASURE DIFFERENTLY.** His words:
+   *"We already accept that the engraved measure on Paper is not the same as the Loupe."*
+   The Paper is engraved as if to be played from; the Loupe is for navigation and closer
+   inspection.
+6. **THE LOUPE'S ANCHOR: OPTION B. Anchor the music, and give the accordion its own
+   scroll.** The music sits at one vertical, every time; sections grow downward; when
+   the contents exceed the room the accordion scrolls inside itself rather than the card
+   moving. **He has now ruled this twice**: the 2026-09-17 mockup already says *"the
+   panel below swaps without the loupe moving"*, and it was never transcribed.
+7. **THE METER RUN-IN IN THE LOUPE IS 1 STAVE SPACE.** The page keeps Gould's 2
+   (rule 240, p. 42, `staff-renderer.ts:150-169`). Loupe-local, by ruling 5.
+8. **THE STAVE RUN-ON PAST THE CLOSING BARLINE IS 1 STAVE SPACE.** Measured before the
+   ruling: today it is 4.6 sp, being `CARET_MARGIN` 3.6 (`Loupe.svelte:1277`, which is
+   `lineGap * 2 + SQUIRCLE_CLEARANCE`, itself `lineGap * 1.6` at `:1266`) plus
+   `EXCERPT_TAIL_SP` 1 (`loupe.ts:598`). Confirmed independently by measuring his own
+   screenshots: 100 px of run-on at 21.75 px to the stave space, on both m. 9 and m. 12.
+   **1 sp lands on Gould rule 242, p. 42**, her barline-adjacent clearance. His
+   instruction: *"Do not overthink the width... just make it shorter than what it is
+   now, visually."*
+9. **THE TIE RUNS INTO THE RUN-ON, FULLY REALIZED, WITH A TAPERED END**, as if it
+   reached a note that is not shown. Today it stops square at the barline (m. 12).
+   **The tail panel draws only `<line>` elements today** (`Loupe.svelte:2367-2375`), so
+   this is new drawing rather than a tweak.
+10. **NO UNDO WHILE THE LOUPE IS CLOSED**, which answers N.149's only open question
+   (`OPEN.md:1340`), outstanding since 2026-09-17. Reopening any measure brings the
+   controls back; the stack is the app's own, as he ruled 2026-09-17.
+11. **THE CARETS OCCUPY A DIFFERENT CONCEPTUAL PLANE FROM THE NOTATION.** His words.
+   This is what frees both quantities to go to 1 sp: if the carets are their own layer,
+   `CARET_MARGIN`'s 3.6 sp carved out of the notation was never theirs to need.
+12. **ELAINE GOULD IS SHE/HER.** The desk wrote "he" twice and was corrected.
+
 ## N.153. THE LOUPE RE-ENGRAVES THE HELD MEASURE AT ITS OWN SPACING. Numbered by Dann 2026-09-18.
+
+> **MOVED HERE 2026-09-20 from the N.148/N.149/N.150 section, unreworded.** It is
+> loupe-local spacing and belongs with N.153, not with the mode split.
+
+### THE LOUPE'S SYLLABLES-MODE SPACING. Ruled by Dann 2026-09-20
+
+Both quantities are **loupe-local**, under his ruling that *"the engraved measure on
+Paper is not the same as the Loupe."*
+
+| quantity | today | ruled | where |
+|---|---|---|---|
+| meter run-in | 2 sp, Gould rule 240 p. 42 | **1 sp in the loupe; the page keeps 2** | `staff-renderer.ts:169` |
+| stave run-on past the closing barline | 4.6 sp | **1 sp** | `loupe.ts:598` + `Loupe.svelte:1277` |
+
+**The 4.6 was measured two ways before the ruling:** by reading the tree
+(`CARET_MARGIN` = `lineGap * 2 + SQUIRCLE_CLEARANCE`, itself `lineGap * 1.6`, plus
+`EXCERPT_TAIL_SP` = 1), and by measuring Dann's own screenshots (100 px of run-on at
+21.75 px to the stave space, identical on m. 9 and m. 12). **1 sp lands on Gould rule
+242, p. 42**, her barline-adjacent clearance, which was not the desk's reason for it:
+Dann asked for about a third of what was there.
+
+**His instruction on how much to think about it:** *"Do not overthink the width of the
+stave that exceeds the barline, just make it shorter than what it is now, visually."*
+
+**AND THE TIE RUNS INTO IT, tapered**, as if reaching a note that is not shown
+(m. 12 stops square at the barline today). **The tail panel draws only `<line>` elements**
+(`Loupe.svelte:2367-2375`), so this is new drawing, not a constant.
+
+**A desk caveat Dann has heard and waved past:** 1 sp is about 33 px at the zoom he
+walked, and the desk's reading is that it is the tightest a taper can be and still read.
+He chose to build it and look rather than argue it. **Walk a tied measure when it lands.**
+
 
 **Why it exists.** 27 gaps on 12 of the fixture's 18 measures collide: 18 where a
 neighbour's ink and the squircle leave less room than a caret's own width, as
