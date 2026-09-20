@@ -90,6 +90,7 @@ next session the same hour it cost the last one.
 | you are about to, or you are seeing | search for |
 |---|---|
 | drive a browser yourself | `Claude Code, and where the building` |
+| you are about to send Dann a terminal command that starts `claude` | `Claude Code, and where the building` (it is NOT installed on his Mac; Code is the desktop app's Code tab. Cost the desk a wasted turn 2026-09-20) |
 | a walk harness needs a home | `A WALK HARNESS BELONGS` |
 | a memory commit swallowed Code's source edits | `NEVER COMMIT -a WHILE CODE IS WORKING` |
 | vitest or node dies on the bridge with `@rollup/rollup-linux-arm64-gnu` | `THE BRIDGE SHELL IS NOT THE MAC` |

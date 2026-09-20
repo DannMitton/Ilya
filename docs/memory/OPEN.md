@@ -1140,6 +1140,21 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 > (`page-layout.ts:376`). So every syllable's spacing and every hyphen and
 > extender end on Score markup is computed from metrics the glyphs never had.
 > Code measured about 5% on one word, « ночь » 27.72 serif against 26.34 sans.
+>
+> **THE 27.72 FIGURE IS WRONG AND THE GAP IS TWICE WHAT THIS PARAGRAPH SAYS.
+> MEASURED 2026-09-20 ON `e75d6f3`, in Dann's own Chrome, after the walk.** Summing
+> the table's own entries for « ночь » (`н` 670, `о` 586, `ч` 605, `ь` 537 per 1000
+> em) gives 2398, which at 12.5 px is **29.98 px**. The browser draws the serif at
+> **29.80 px** by two instruments that agree, SVG `getComputedTextLength` and canvas
+> `measureText`. The sans draws at **26.34 px**, which matches the recorded sans
+> figure exactly and is what validates the instrument.
+>
+> **So the error this item corrects was 29.98 against 26.34, about 12.2% and roughly
+> 3.6 px on one four-letter word, not "about 5%".** The 27.72 came from Code's
+> loupe-typeface memo of 2026-09-12 and was never checked against the table.
+> **`INBOX.md:144` still carries it and is left alone, because it is a dated record
+> of what was read that night.** Every "5% out" elsewhere in this file, including
+> item 7 of the block below, reads 12.2%.
 > Candidate fixes, unruled: remeasure the table in Source Sans 3, or make the
 > face a parameter so the two cannot diverge again. **Bears on N.118 and on
 > the `columnAdvance` crowding item already in OWED.** Found by Code inside

@@ -44,7 +44,7 @@ blocks another.
 correction: `underlay-widths.ts:690` declares its table as Source Serif 4 metrics
 and the page has drawn Source Sans 3 since the paginator began stripping the
 serif root, so every syllable advance and every hyphen endpoint is computed from
-metrics the glyphs never had, about 5% out on one measured word. `STATE.md` says
+metrics the glyphs never had, about 12.2% out on one measured word (**corrected 2026-09-20 from "about 5%"; the old figure rested on a 27.72 px serif measurement that the table does not give and no browser draws. The table gives 29.98 px for « ночь » and the browser draws 29.80. See `OPEN.md` §N.129**). `STATE.md` says
 it of the hyphen work in its own words: *"A hyphen clearance tuned against a table
 that is 5% out is tuned against a bad ruler."* **The same is true of N.139's
 mid-system signature, of N.115's reflow, and of N.141's step 3 if it is ever

@@ -25,12 +25,15 @@ import type { AnalyzedEvent, VoiceProfileSnapshot } from './analysis-types';
 import { analyzeScore, pitchToHz } from './overlay-engine';
 import type { ParsedScore, Pitch, VocalLineEvent } from './types';
 import { prepareSmuflFont, REQUIRED_GLYPHS } from './smufl-metadata';
+import { estimateCyrillicWidthPx } from './underlay-widths';
 import { paginateScore, sliceScore, sliceWidth } from './page-layout';
 import {
   accidentalStateAtEndOf,
   BARLINE_ROOM,
   columnAdvance,
   clampHyphenX,
+  HYPHEN_GAP_PX,
+  CYR_FONT_SIZE,
   COURTESY_GAP_SP,
   HYPHEN_HALF,
   layoutColumns,
@@ -2352,5 +2355,27 @@ describe('staff renderer: the meter on the page (N.139)', () => {
     ]);
     const svg = renderAnalyzedStaff(parsed, analyzedOf(parsed), opts());
     expect(meters(svg).map((m) => m.sig)).toEqual(['3/4', '6/8']);
+  });
+});
+
+describe('N.129 step 2: a hyphen is never omitted', () => {
+  it('draws a hyphen at every join of «по-гру-зи-сь», at every tested stave size', () => {
+    for (const lineGap of [4, 6, 8, 12]) {
+      const svg = renderDemo({ lineGap, pxPerWhole: 10, minGap: 2 });
+      for (const id of ['n2', 'n3', 'n5']) {
+        expect(svg.includes(`data-hyphen="${id}"`), `lineGap ${lineGap}, join after ${id}`).toBe(true);
+      }
+    }
+  });
+
+  it('reserves a hyphen inside a word and not between two words', () => {
+    const ev = new Map(demoScore().vocalLine.map((e) => [e.id, e]));
+    const opts = { lineGap: 4, pxPerWhole: 10, minGap: 2 };
+    const w = (t: string) => estimateCyrillicWidthPx(t, CYR_FONT_SIZE) / 2;
+    // «по» to «гру»: one word, so the gap between their ink holds a hyphen.
+    expect(columnAdvance(ev.get('n2')!, ev.get('n3')!, 0.125, opts)).toBeCloseTo(w('по') + w('гру') + HYPHEN_GAP_PX, 6);
+    // «но» to «чу»: two words, so only the ordinary half-space.
+    expect(columnAdvance(ev.get('n7')!, ev.get('n8')!, 0.125, opts)).toBeCloseTo(w('но') + w('чу') + 2, 6);
+    expect(HYPHEN_GAP_PX).toBe(HYPHEN_HALF * 2 + 4);
   });
 });

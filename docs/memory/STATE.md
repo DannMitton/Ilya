@@ -358,8 +358,9 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 **What `SEQUENCE.md` says, and it is SEQUENCE's claim rather than a reading of the
 tree:** N.129 is dependency 1 and comes before every piece of horizontal spacing work.
 `underlay-widths.ts:690` declares its table as Source Serif 4 metrics while the page
-has drawn Source Sans 3 since the paginator began stripping the serif root, about 5%
-out on one measured word. **N.153's derived spacing is horizontal spacing work, so it
+has drawn Source Sans 3 since the paginator began stripping the serif root, about
+**12.2%** out on one measured word (**corrected 2026-09-20 from "about 5%", measured
+on `e75d6f3`; see `OPEN.md` §N.129**). **N.153's derived spacing is horizontal spacing work, so it
 sits behind this.**
 
 **NOT ESTABLISHED: none of those files was opened on 2026-09-20.** The next thread

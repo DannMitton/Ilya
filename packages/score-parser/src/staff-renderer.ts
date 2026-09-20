@@ -1048,6 +1048,21 @@ interface Placed {
  * here, because the columns following a melisma opening carry no syllable at
  * all by the data model, so there is nothing for it to collide with.
  */
+/**
+ * Whether `ev` continues the word `prevEv` opened or carried: the same test the
+ * hyphen loop applies to consecutive underlay entries, on the same text and
+ * syllable-type sources the drawing reads.
+ */
+function joinsWord(prevEv: VocalLineEvent, ev: VocalLineEvent, options: StaffRenderOptions): boolean {
+  const a = options.sylTypePreview?.[prevEv.id] ?? prevEv.syllable?.type;
+  const b = options.sylTypePreview?.[ev.id] ?? ev.syllable?.type;
+  const aText = options.cyrPreview?.[prevEv.id] ?? prevEv.syllable?.text ?? '';
+  const bText = options.cyrPreview?.[ev.id] ?? ev.syllable?.text ?? '';
+  return (
+    (a === 'start' || a === 'middle') && (b === 'middle' || b === 'end') && aText !== '' && bText !== ''
+  );
+}
+
 function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions): number {
   // N.55b R6: a pairing's Cyrillic outranks the score's, because a score
   // with no underlay has none and the singer's decision is the only text
@@ -1089,6 +1104,17 @@ function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions): num
  */
 /** Half the drawn width of a hyphen: its ink spans `hx ± HYPHEN_HALF`. */
 export const HYPHEN_HALF = 2.5;
+/** The padding each side of a hyphen's ink, in px. The hyphen loop's `± 2`. */
+export const HYPHEN_PAD = 2;
+/**
+ * The least gap between two syllables' ink, in px, that holds a hyphen and its
+ * clearance: the hyphen's width plus a pad each side. N.129 step 2, applied
+ * only between two syllables of ONE word (`joinsWord`). DESK INFERENCE from
+ * Dann's ruling of 2026-09-14, his to wave off: 9 px is what the drawing loop
+ * already demands (`from = right + 2`, `to = left - 2`, hyphen 5 wide), so the
+ * spacer now reserves exactly what the loop needs and the loop never omits.
+ */
+export const HYPHEN_GAP_PX = HYPHEN_HALF * 2 + HYPHEN_PAD * 2;
 
 /** The IPA row's size, in page units, and its face. */
 export const IPA_FONT_SIZE = 12;
@@ -1200,8 +1226,9 @@ export const BAR_NUMBER = {
  * When the gap is narrower than the hyphen itself that window is empty and
  * there is no correct answer; the centre of the gap is the least-bad one,
  * overhanging both neighbours slightly rather than one of them entirely.
- * Omitting the hyphen instead is a Gould question (rules 26 to 40, unread),
- * so it is not taken here.
+ * N.129 step 2: Dann ruled against omission (2026-09-14, "I don't want Ilya
+ * dropping hyphens"), and `columnAdvance` now reserves `HYPHEN_GAP_PX` inside
+ * a word, so this overhang case is a guard that should not be reached.
  */
 export function clampHyphenX(hx: number, from: number, to: number, half = HYPHEN_HALF): number {
   if (to - from < half * 2) return (from + to) / 2;
@@ -1585,7 +1612,9 @@ export function columnAdvance(
   const textNeed =
     underlayHalfWidth(prevEv, options) +
     (ev
-      ? underlayHalfWidth(ev, options) + lineGap * 0.5
+      ? underlayHalfWidth(ev, options) +
+        // N.129 step 2: inside a word the gap must hold a hyphen.
+        Math.max(lineGap * 0.5, joinsWord(prevEv, ev, options) ? HYPHEN_GAP_PX : 0)
       : lineGap);
   /* THE INK TERM (N.103). The previous column's rightmost ink, this column's
      leftmost ink, and a clearance between them. `TURNING_TRAIL_SP` replaces
@@ -3407,9 +3436,10 @@ export function renderAnalyzedStaff(
       const b = underlay[i + 1];
       const joins = (a.sylType === 'start' || a.sylType === 'middle') && (b.sylType === 'middle' || b.sylType === 'end');
       if (!joins || !a.cyr || !b.cyr) continue;
-      const from = rightEdgeOf(a) + 2;
-      const to = leftEdgeOf(b) - 2;
-      if (to <= from) continue;
+      const from = rightEdgeOf(a) + HYPHEN_PAD;
+      const to = leftEdgeOf(b) - HYPHEN_PAD;
+      // N.129 step 2: never omitted (Dann, 2026-09-14). A gap narrower than the
+      // hyphen falls to `clampHyphenX`'s guard, which centres it.
       const count = Math.max(1, Math.floor((to - from) / 60));
       for (let k = 1; k <= count; k++) {
         let hx = from + ((to - from) * k) / (count + 1);
