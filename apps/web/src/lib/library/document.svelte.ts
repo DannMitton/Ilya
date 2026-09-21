@@ -74,6 +74,13 @@ export class SongDocument {
 	 */
 	corrections = $state<CorrectionMap>({});
 
+	/**
+	 * N.160 step 3, the text the seats describe: the poem as it was the last
+	 * time the seats were re-seated. Saved through the same path as `pairings`,
+	 * and stored only while it differs from the poem (`recordFromFields`).
+	 */
+	seatedText = $state('');
+
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
 	/** Why the load did not come back whole. Replaces `pairingsLoadFailed`. */
@@ -227,6 +234,7 @@ export class SongDocument {
 			openSyllabification: this.openSyllabification,
 			pairings: this.pairings,
 			corrections: this.corrections,
+			seatedText: this.seatedText,
 		};
 	}
 
@@ -274,6 +282,7 @@ export class SongDocument {
 		this.openSyllabification = fields.openSyllabification;
 		this.pairings = fields.pairings;
 		this.corrections = fields.corrections;
+		this.seatedText = fields.seatedText;
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {

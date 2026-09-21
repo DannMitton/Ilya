@@ -93,6 +93,21 @@ export interface SongRecord {
 	 * this field, which is what `validateRecord` fills in.
 	 */
 	corrections: CorrectionMap;
+	/**
+	 * N.160 step 3: THE SEATED TEXT, the poem exactly as it was the last time
+	 * the seats were re-seated against it. The re-seat diffs a new poem against
+	 * this, so a Clear and a paste, a reload inside the typing pause, or an
+	 * edit while the dictionary loads all re-seat instead of freezing
+	 * (`memo-n160b-the-approach_r1_2026-09-21.md` s0 and s1).
+	 *
+	 * OPTIONAL, AND ABSENT MEANS "THE SAME AS `poem`". It is written only while
+	 * it differs from the poem (`recordFromFields`), so a song whose seats
+	 * describe its poem never carries it and its record does not change. An
+	 * older record has none, which reads the same way, and an older Ilya
+	 * importing a newer binder drops it (`validateRecord` copies only what it
+	 * knows), so no schema bump.
+	 */
+	seatedText?: string;
 	source: SongSource | null;
 }
 

@@ -406,7 +406,17 @@ export function isCliticSeated(map: PairingMap, fold: CliticFold): boolean {
 	   `seatCliticFolds` would write the whole run again over every note in it,
 	   the singer's corrections included. The refresh brings the stored text
 	   forward on the page; this only has to recognize the seat. */
-	return p.cyrillic.replace(TRAILING_PUNCTUATION, '') === seat.replace(TRAILING_PUNCTUATION, '');
+	/* N.160 step 3. CASE AND ё ARE NOT PART OF THE TEST EITHER, for the same
+	   reason. The fold builds its seat from the ENGRAVED words, and a singer's
+	   poem capitalizes a line's first word: «В бьющемся» against the score's
+	   «в бью». Every re-seat and every heal copies the POEM's slot onto this
+	   note, so a strict comparison read that seat as unseated, and the next
+	   load rewrote the fold's whole run in the score's own coordinates, where
+	   no poem address holds. Measured 2026-09-21 on the Sunless fixture: 60
+	   notes rewritten on a plain reload. */
+	const form = (text: string) =>
+		text.replace(TRAILING_PUNCTUATION, '').toLowerCase().replace(/\u0451/g, '\u0435');
+	return form(p.cyrillic) === form(seat);
 }
 
 /* `revertCliticSeat` IS GONE, N.108-5. It took one fold's seat back off the

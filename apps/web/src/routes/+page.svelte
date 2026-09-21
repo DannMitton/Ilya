@@ -29,7 +29,8 @@
 		type ShiftDirection,
 		type Slot,
 	} from '$lib/shane/pairings';
-	import { dryRunLog, planHeal } from '$lib/shane/heal';
+	import { applyHeal, dryRunLog, healLog, planHeal } from '$lib/shane/heal';
+	import { seatedTextDiff } from '$lib/shane/seated-text';
 	// N.67 step 0: the song document owns the per-song state and is the only
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
 	// longer called from here; the legacy driver writes the same key.
@@ -627,6 +628,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   `placeSyllableOnSelected` states for the same reason: a press that
 		   does nothing must not leave an Undo pill that would undo nothing. */
 		pushUndo({ kind: 'text', key: 'loupe.undo.startOver' });
+		/* N.160 step 3. The seats are rebuilt from the text just transcribed,
+		   so that is the text they describe (`transcribeText`'s seated text). */
+		doc.seatedText = transcribedText ?? doc.inputText;
 		if (scoreText !== '' && doc.inputText === scoreText) {
 			doc.pairings = {};
 			seatFilledPoem(ingestedScore);
@@ -909,6 +913,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   nothing. */
 		selected: string | null;
 		gapAfter: string | null | undefined;
+		/* N.160 step 3. The text these pairings describe. The stack outlives a
+		   text edit, so an undo can bring back seats made against an older
+		   poem, and the seated text has to come back with them or the next
+		   transcription would diff from the wrong text and freeze them. */
+		seatedText: string;
 	}
 	let undoStack = $state<UndoEntry[]>([]);
 	/* THE OTHER HALF, N.111-3b. RULED BY DANN 2026-09-07: "we do not include an
@@ -932,12 +941,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			pairings: doc.pairings,
 			selected: selectedEventId,
 			gapAfter,
+			seatedText: doc.seatedText,
 		};
 	}
 
 	function restore(entry: UndoEntry): void {
 		doc.corrections = entry.corrections;
 		doc.pairings = entry.pairings;
+		doc.seatedText = entry.seatedText;
 		selectedEventId = entry.selected;
 		gapAfter = entry.gapAfter;
 	}
@@ -2487,13 +2498,30 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		transcribedGrid = nextGrid;
 		carryOverridesAcross(diff);
 		runPipeline();
-		/* THE RE-SEAT IS HANDED THE PREVIOUS GRID, NOT THE NEW ONE, and it is a
-		   parameter rather than a read of `transcribedGrid` because that has
-		   already been advanced by the line above. It needs the poem the seats
-		   were made against, so it can tell a seat that describes THIS poem
-		   from one made from the score's own words or carried in from another
-		   song. Walk defect on `b191867`, memo §9. */
-		reseatAcross(diff, prevGrid);
+		/* N.160 STEP 3. THE SEATS DIFF AGAINST THE SEATED TEXT, not against the
+		   session's grid. `transcribedGrid` keeps its other job, above: carrying
+		   the session's stress, ё, and boundary marks, which a Clear drops on
+		   purpose. The seats outlive a Clear, a reload, and a song switch, so
+		   the text they describe has to outlive them too, and it is stored
+		   (`doc.seatedText`). Before this, all three emptied the grid and the
+		   first transcription after them moved nothing: the freeze
+		   (`memo-n160b-the-approach_r1_2026-09-21.md` s0).
+
+		   THE RE-SEAT IS STILL HANDED THE BEFORE GRID, now the seated text's. It
+		   needs the poem the seats were made against, so it can tell a seat
+		   that describes THIS poem from one made from the score's own words or
+		   carried in from another song. Walk defect on `b191867`, memo §9. */
+		const seated = seatedTextDiff(doc.seatedText, doc.inputText);
+		const followed = reseatAcross(seated.diff, seated.before);
+		/* THE HEAL, once per session of a song: a load, a switch, or a Clear.
+		   It repairs only seats whose address still fails AFTER the exact
+		   re-seat, which are seats frozen before the seated text existed. */
+		if (prevGrid.length === 0) healFrozenSeats();
+		/* The seated text advances only when the seats could follow the text.
+		   With no score attached the re-seat cannot run, so a song that still
+		   holds seats keeps the older text, and the next transcription with the
+		   score present diffs from it. */
+		if (followed) doc.seatedText = doc.inputText;
 		/* N.134. A SCORE'S SEAT THAT ARRIVED BEFORE THE DICTIONARY is spent here,
 		   now that `lines` is this poem's. See `scoreSeatWaiting`. */
 		if (scoreSeatWaiting) {
@@ -2594,10 +2622,40 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * no-op, which is the property `handleStartPlacementOver` already relies
 	 * on.
 	 */
-	function reseatAcross(diff: TextDiff, before: readonly (readonly string[])[]): void {
-		if (diff.unchanged || !ingestedScore) return;
+	function reseatAcross(diff: TextDiff, before: readonly (readonly string[])[]): boolean {
+		if (diff.unchanged) return true;
+		if (!ingestedScore) {
+			// N.160 step 3: whether the seats now describe the new text, which
+			// with no score to re-seat on is true only when there are none.
+			return !Object.values(doc.pairings).some((p) => p.kind === 'syllable');
+		}
 		const result = reseatByDiff(doc.pairings, eventIds, slotQueue, diff, before);
 		doc.pairings = seatCliticFolds(ingestedScore.result.score, result.map);
+		return true;
+	}
+
+	/**
+	 * N.160 STEP 3, THE HEAL THAT WRITES. `heal.ts` works out, seat by seat,
+	 * how each seat whose address fails would find its word in this poem, and
+	 * this writes the ones found by the anchor or the joined-run rule under
+	 * the guard. A rejected or unfound seat is left exactly as it is, and it
+	 * is counted (the safety rule, `OPEN.md` s N.160).
+	 *
+	 * It writes `doc.pairings` ONLY where it repaired a seat, so a song with
+	 * nothing to repair is never saved by it, and every write it makes is
+	 * logged per song (`healLog`), so a repair can be told from a corruption
+	 * without a diff.
+	 *
+	 * No clitic re-seat follows it, unlike `reseatAcross`: the heal writes the
+	 * seats it found and nothing else.
+	 */
+	function healFrozenSeats(): void {
+		if (!ingestedScore || eventIds.length === 0) return;
+		const plan = planHeal(doc.pairings, lines, eventIds);
+		const { map, wrote } = applyHeal(doc.pairings, plan, lines);
+		if (wrote.length === 0) return;
+		doc.pairings = map;
+		for (const line of healLog(doc.id, plan, wrote)) console.info(line);
 	}
 
 	/* N.108-5's `handleTranscribe` IS REMOVED, 2026-09-16 (N.145): Dann,
@@ -3219,7 +3277,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		origin: 'upload' | 'restore',
 		replaceWholeSong: boolean,
 	): Promise<void> {
-		if (replaceWholeSong) doc.pairings = {};
+		if (replaceWholeSong) {
+			doc.pairings = {};
+			/* N.160 step 3. The seats are cleared, so the seated text restarts
+			   at the text any new seat below is made from. */
+			doc.seatedText = transcribedText ?? doc.inputText;
+		}
 		// N.67 step 2. The singer's own bytes go down with the song, in one
 		// transaction, so a reload brings the score back. Only a real upload
 		// writes: a restore's bytes came from the vault.

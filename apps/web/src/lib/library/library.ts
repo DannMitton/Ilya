@@ -50,6 +50,11 @@ export interface SongFields {
 	pairings: PairingMap;
 	/** N.92, hand corrections to a page read. Keyed by event id, like pairings. */
 	corrections: CorrectionMap;
+	/**
+	 * N.160 step 3: the text the seats describe. Never absent on the page: a
+	 * record without one describes its own poem (`SongRecord.seatedText`).
+	 */
+	seatedText: string;
 }
 
 /* ── Record and page state, converted in one place ──────────────── */
@@ -75,6 +80,7 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		// save site is added: the re-keyed map is written back the next time the
 		// document saves for its own reasons.
 		corrections: migrateCorrectionIds(record.corrections),
+		seatedText: record.seatedText ?? record.poem,
 	};
 }
 
@@ -84,13 +90,16 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
  * writes is what today writes.
  */
 export function recordFromFields(base: SongRecord, fields: SongFields): SongRecord {
+	// N.160 step 3. Stored only while it differs from the poem, so it is
+	// dropped from `base` first and put back only then.
+	const { seatedText: _stored, ...rest } = base;
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
 		key,
 		gloss,
 		fields.glossAnchors.get(key) ?? '',
 	]);
 	return {
-		...base,
+		...rest,
 		poem: fields.inputText,
 		metadata: { ...fields.metadata },
 		fromScore: [...fields.fromScoreFields],
@@ -98,6 +107,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		openSyllabification: fields.openSyllabification,
 		pairings: fields.pairings,
 		corrections: fields.corrections,
+		...(fields.seatedText !== fields.inputText ? { seatedText: fields.seatedText } : {}),
 	};
 }
 
@@ -178,6 +188,10 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 	// not have carried.
 	if (isStringRecord(value.corrections)) record.corrections = value.corrections as CorrectionMap;
 	else if (value.corrections !== undefined) malformed();
+	// N.160 step 3, additive, and its default is ABSENCE, which reads as "the
+	// seats describe the poem" (`SongRecord.seatedText`).
+	if (typeof value.seatedText === 'string') record.seatedText = value.seatedText;
+	else if (value.seatedText !== undefined) malformed();
 
 	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
 	// This function rebuilds the record field by field from `emptySongRecord`,

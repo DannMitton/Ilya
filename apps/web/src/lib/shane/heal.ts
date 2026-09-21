@@ -437,3 +437,76 @@ export function dryRunLog(plan: HealPlan): string[] {
 	}
 	return lines;
 }
+
+/* ── N.160 step 3, the write ─────────────────────────────────────── */
+
+/**
+ * The heal's write: every `anchor` and `joined` seat takes the slot the plan
+ * found for it, text and all, the way `reseat.ts` refreshes a seat whose word
+ * moved. A `rejected` or `unfound` seat is not touched, and neither is an
+ * `address` seat: the plan's outcome is the whole decision.
+ *
+ * NOTHING IS MUTATED. Where nothing is written the SAME map comes back, so a
+ * caller can test identity and skip the assignment, and a song with nothing
+ * to repair is never saved by the heal.
+ */
+export function applyHeal(
+	map: PairingMap,
+	plan: HealPlan,
+	lines: readonly LineData[],
+): { map: PairingMap; wrote: HealCase[] } {
+	const bySlot = new Map<string, Slot>();
+	for (const s of buildSlotQueue(lines)) {
+		bySlot.set(`${s.origin.lineIndex}-${s.origin.wordIndex}-${s.origin.slotIndex}`, s);
+	}
+	const wrote: HealCase[] = [];
+	let next: PairingMap | null = null;
+	for (const c of plan.cases) {
+		if ((c.kind !== 'anchor' && c.kind !== 'joined') || !c.to) continue;
+		const slot = bySlot.get(`${c.to.line}-${c.to.word}-${c.to.slot}`);
+		if (slot === undefined || map[c.eventId]?.kind !== 'syllable') continue;
+		next ??= { ...map };
+		next[c.eventId] = {
+			kind: 'syllable',
+			cyrillic: slot.cyrillic,
+			ipa: slot.ipa,
+			vowel: slot.vowel,
+			origin: slot.origin,
+		};
+		wrote.push(c);
+	}
+	return { map: next ?? map, wrote };
+}
+
+/** The console prefix of the heal's own record of what it wrote. */
+export const HEAL_PREFIX = '[Ilya] N.160 heal';
+
+/**
+ * What the heal wrote, per song, in the dry run's format. Printed only when
+ * it wrote something, so a heal line in the console IS the record of a
+ * write: a seat that changed on a load with no such line was changed by
+ * something else.
+ */
+export function healLog(songId: string, plan: HealPlan, wrote: readonly HealCase[]): string[] {
+	if (wrote.length === 0) return [];
+	const written = new Set(wrote.map((c) => c.eventId));
+	const left = plan.cases.filter(
+		(c) => (c.kind === 'rejected' || c.kind === 'unfound') && !written.has(c.eventId),
+	);
+	const n = (kind: HealKind, from: readonly HealCase[]) => from.filter((c) => c.kind === kind);
+	const lines = [
+		`${HEAL_PREFIX}, song ${songId}: wrote ${wrote.length} of ${plan.seated} seated = ` +
+			`${n('anchor', wrote).length} anchor + ${n('joined', wrote).length} joined; ` +
+			`left ${n('rejected', left).length} rejected + ${n('unfound', left).length} unfound as they were.`,
+	];
+	for (const [label, these] of [
+		['wrote anchor', n('anchor', wrote)],
+		['wrote joined', n('joined', wrote)],
+		['left rejected', n('rejected', left)],
+		['left unfound', n('unfound', left)],
+	] as const) {
+		if (these.length === 0) continue;
+		lines.push(`${HEAL_PREFIX}, ${label} (${these.length}): ${these.map(describeCase).join(' | ')}`);
+	}
+	return lines;
+}
