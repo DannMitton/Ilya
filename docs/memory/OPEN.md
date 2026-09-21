@@ -788,6 +788,52 @@ clips the vowel is not expressing the thing the document is for.
 problem it named was real; the conclusion it drew from it was not the only one
 available.
 
+### AMENDED BY DANN 2026-09-20, 23:32 AND 23:35. A FLOOR, AND GROWTH FOR HIGH NOTES
+
+**This amends his own rulings of 2026-09-14 and 2026-09-15 that every box on a system is one
+height.** Everything above stands except that clause. **CLOSED AND WALKED 2026-09-21**, shipped
+in `6101e01`.
+
+His words, 23:32:
+
+> *"Each measure in the loupe should share a default predetermined common height based on the
+> spatial relationship between the musical line and the corresponding row of IPA syllables
+> immediately beneath it. The bottom of the squircle is anchored to that IPA is its baseline
+> and this should always be the case. But the height of the squircle may vary for notes drawen
+> above the staff. There is a minumum default height with the possiblity of accommodating
+> higher notes inside the squircle for the notes that require the extra height."*
+
+Refining it at 23:35:
+
+> *"the minumum default should capture the distance between the IPA baseline and maybe one
+> space above the stave? And notes that require more height (such as those above the staff on
+> ledger lines) will get that extra height but the bottom of the squircle will always line up
+> with its siblings."*
+
+**The rule as built.** `selection-ring.ts`, `ringBox`: the bottom is the IPA baseline plus the
+face's descent, identical for every box, so all siblings line up. The top is
+`Math.min(staffTop, own.top) - gap`, a floor of one stave space above the stave, with a note's
+own ink taking it higher. **`RING_PAD_Y`'s fixed `9` no longer governs the vertical**, replaced
+by one stave space so the clearance scales with the notation. That substitution was a DESK
+DEFAULT, ruled in by Dann on the walk.
+
+**This also closed the divergence N.153 introduced.** The system-wide highest-ink loop is gone,
+so nothing depends on what else is on the system and the loupe and the page agree by
+construction, with no data passed between them.
+
+**MEASURED at 390 px on all 97 notes, both surfaces:** every bottom is 54. The floor box is
+59.5 units and the tallest is 73.38 (`m10-0-1`). **64 of 97 boxes exceed the floor**, because
+`eventInk` includes the stem and a conventional up-stem reaches above the stave. **Dann ruled
+that correct**, 2026-09-21: *"This will look the best when sopranos use Ilya."* The desk had
+briefed an expectation of "only notes above the stave" and that expectation was the desk's, not
+his rule.
+
+**Open, and small:** the viewBox clamp binds on two notes of the page's first system,
+`m1-3-4` losing 1.776 units and `m2-0-1` losing 0.632, so those two differ between page and
+loupe. The other 95 match exactly. Brief `../sessions/brief-n141-loupe-ring-height_r2_2026-09-20.md`,
+memo `../sessions/memo-n141-loupe-ring-height_r2_2026-09-20.md`, drawing
+`../sessions/drawing-n141-floor-height_r1_2026-09-21.html`.
+
 ### INCREMENT: THE WIDTH IGNORES THE IPA. Found by Dann on the walk of `debdf02`, 2026-09-15
 
 **His words:** *"Please solve the collision shown, the IPA should not be tangent
@@ -2298,3 +2344,113 @@ the two documents. **Dann can overrule this reading with a word.**
 reconstitutes to `/ɑ/` and never to `/o/`. **And Ilya departs from Grayson on exactly one
 point**, ruled by Dann and argued in LEARN at `:3029-3031`: unstressed ⟨е⟩ after ⟨ж⟩, ⟨ш⟩
 or ⟨ц⟩ reconstitutes to `[ɛ]`. Whoever builds this reads that passage first.
+
+## N.159. THE SCORE OBEYS THE SINGER'S SWITCHES. Numbered 2026-09-21. DESK DEFAULT NUMBER
+
+**Folded into N.160 as its first step**, and it is the step a singer sees first. Kept as its
+own number because it ships on its own and because `SCHEDULE.md` week 2 already carries it as
+"N.136 with N.119".
+
+**What the singer suffers.** They flip a switch under Notation and the poem changes while the
+score, the page that goes on the music stand, does not. Three switches behave this way:
+**Open syllables** (N.136), **Reconstitution** (N.158), and **Apply stress acutes** on some
+notes. The header says `n of 7 changed` beside a page that did not change.
+
+**Why.** Transcription applies the switches as it draws, per word, per render
+(`WordStack.svelte:23`, `:32-51`, `:55-77`). The score has one drawing step,
+`applyNotationPreferences` at `VoiceProfilePane.svelte:615`, which knows only four of the
+seven (`engine.ts:155-179`). The other three have no route.
+
+**The design, measured and proposed by Code**, in
+`../sessions/memo-n159-score-obeys-the-switches_r1_2026-09-21.md`: one pure function and one
+`$derived` beside `shownPairings` (`+page.svelte:418`), working each seated syllable out
+fresh from the current poem on every draw. **Nothing new is stored.**
+
+**Measured on the Sunless fixture, 97 notes, a clean origin:** today Reconstitution and Open
+syllables change **0** notes on the score, while on Transcription they change 20 and 14 of 39
+words. A console prototype changes **19** and **32**, matching Transcription letter for
+letter. The step costs **0.16 ms** at 97 notes and **0.80 ms** at 960, against a flip that
+already takes 8 to 30 ms click to painted frame. **Paint on a phone is NOT MEASURED and is
+the walk.**
+
+**DESK DEFAULTS, each waivable with a word.** Open syllables re-divides the IPA only, leaving
+the Cyrillic where the singer placed it, which matches Transcription showing the Cyrillic as a
+whole undivided word. The acoustic marks follow a restored vowel. Spot reconstitution and a
+per-word syllable boundary are included. **Separate geminates cannot reach the score at all**,
+because the substitution needs two identical consonants inside one string and a note holds one
+syllable (measured on «ванна»: Transcription `ˈvɑnːɑ`, the score `ˈvɑn` then `nɑ`). **Where a
+length marker belongs across a note boundary is an engraving question and it is Dann's.**
+
+---
+
+## N.160. THE WORK, AND ITS TWO VIEWS. Numbered 2026-09-21. DESK DEFAULT NUMBER
+
+**The model is Dann's and is transcribed in `PRODUCT.md` §THE WORK, AND ITS TWO VIEWS.** This
+item is what acts on it.
+
+### The defect, as Code established it 2026-09-21
+
+**A seat's link to its word survives only as long as the session remembers the PREVIOUS
+text.** The diff compares against `transcribedGrid`, which is never stored
+(`+page.svelte:2926`). **Corrected by Code the same night, narrower than its own first
+answer:** a reload or a song switch does not freeze seats by itself. Three paths do:
+
+1. a Clear, then a new poem;
+2. a reload inside the 600 ms typing pause;
+3. an edit made while the dictionary is still loading (`+page.svelte:2974`, `one-action.ts:41`).
+
+**Measured on Dann's own library through the branch alias, 2026-09-21:** his Sunless song
+holds 96 pairings. **25 carry an `origin.lineIndex` that does not exist** in the current
+one-line poem, and 8 of those carry a stress mark, so eight acutes were withheld invisibly.
+**Of the 25, 15 carry a word still present in the poem** (13 appearing once, 2 being «тень»
+which appears twice). Only 10 are genuinely gone: «непроглядная» and «безответная», the two
+words the engraver split.
+
+### The shape, converged
+
+`../sessions/memo-n160b-the-approach_r1_2026-09-21.md`.
+
+- **A seat's anchor is its word's letters plus the syllable's ordinal.** `SlotOrigin.word`
+  already is that anchor, ruled by Dann 2026-08-13 (`pairings.ts:81-93`). **The line-and-word
+  address becomes a cache.**
+- **THE JOINED-RUN RULE.** An old word may match a run of adjacent current words whose letters
+  join to the same thing, so «непроглядная» finds «не» + «проглядная». **This replaces a text
+  curation subsystem the desk was drifting toward and should not build.** An engraver's split
+  becomes a match to recognize rather than a corruption to repair.
+- **The previous text is stored with the song**, one optional string, a few hundred bytes,
+  **no schema change**, because `validateRecord` copies only the fields it knows
+  (`library.ts:136-212`). Every future edit then goes through the re-seat rules Dann ruled on
+  2026-09-07 with no guessing.
+- **Re-finding by anchor shrinks to a one-time repair at load**, for seats already frozen.
+  N.160's original every-redraw re-finding is withdrawn. The two are not redundant: stored
+  text covers the future, the repair covers what is already broken.
+- **Retired:** `refreshPairings`, `ownedByPoem`, and re-seat rules 1 and 2.
+
+### THE SAFETY RULE, and it governs every step
+
+**A seat Ilya cannot find keeps what it shows now, and it is counted. It is never erased.**
+
+### The sequence
+
+1. **The score obeys every switch** (N.159). Already week 2's "N.136 with N.119", so it
+   displaces nothing. **Walked on Dann's phone.** It also counts frozen seats.
+2. **A dry run.** The repair runs without writing and logs what it would do on Dann's library.
+   **He exports a binder backup first.**
+3. **The stored text plus the repair.** Walked on his own library.
+4. After 2026-10-30: stop storing the IPA and the vowel for new placements.
+5. After 2026-10-30: the clitic seat writes poem positions, then verses.
+
+**DESK DEFAULT: steps 2 and 3 move N.132 to week 3 and spend the week-5 buffer.** That buffer
+is the only slack, and week 1 already spilled five items into week 2. `SCHEDULE.md`'s own rule
+is that once the buffer is gone, the lowest line in a week moves to LATER and the date stands.
+
+### THE ONE RULING DANN OWES, and it is deliberately deferred
+
+**When a word has truly left the poem, does its note keep showing the old syllable, which is
+today's behaviour and the default until he rules, or clear to blank?**
+
+**It is asked after step 3, against a real count rather than a hypothesis.** Code's prediction
+is zero, because the joined-run rule should resolve all 25 of Dann's, in which case the
+question may never need answering before the release. **The desk removed this from Code's
+desk defaults:** blanking a note removes something a singer can see, and its frequency was
+NOT ESTABLISHED.

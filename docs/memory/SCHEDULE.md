@@ -62,9 +62,18 @@ design rows.
 ## Week 2. Monday 2026-09-21 to Sunday 2026-09-27. The ruler and the toggles
 
 - [x] **N.129**, the underlay ruler and no dropped hyphens. **CLOSED 2026-09-20, ahead of the week**, in two ships, both walked: `e75d6f3` (the underlay draws in Source Serif 4, the face its widths were measured from) and `7bd3d04` (hyphens are never omitted, and a word-internal gap reserves `HYPHEN_GAP_PX`). Walked on screen and in print (*"it looks fabulous"*). **The recorded "about 5%" error was wrong and is corrected to 12.2%.**
-- [ ] **N.136 with N.119**: every notation toggle acts at once on Transcription and Markup, and no toggle does nothing.
+- [ ] **N.136 with N.119**: every notation toggle acts at once on Transcription and Markup,
+  and no toggle does nothing. **THIS IS NOW N.160 STEP 1**, designed and measured 2026-09-21
+  (`OPEN.md` §N.159, plan in `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`). It
+  displaces nothing, because it was already this line. **Walked on Dann's phone**, which is
+  the one measurement nobody has taken.
 - [ ] **N.141, last step**: the squircle across a tie.
-- [ ] **N.132**: the ratified names and the tab padding.
+- [ ] **N.132**: the ratified names and the tab padding. **MOVED TO WEEK 3 on 2026-09-21,
+  DESK DEFAULT**, to make room for N.160 steps 2 and 3.
+- [ ] **N.160 steps 2 and 3**: the dry run on Dann's library, then the stored text plus the
+  one-time repair, which unfreezes his 25 notes and stops any note freezing again. **These
+  spend the week-5 buffer.** Numbered and specified 2026-09-21 (`OPEN.md` §N.160). **He
+  exports a binder backup before step 2.**
 - [ ] **Fixes from week 1**: whatever the format walk and the CHECK rows turned up.
 
 ## Week 3. Monday 2026-09-28 to Sunday 2026-10-04. Insights and the design rows
@@ -105,7 +114,10 @@ design rows.
   **English first, then French**, because the French cannot be verified against
   English that is itself stale. **Its real size is NOT ESTABLISHED**; the three
   above were found by one grep for a single word.
-- [ ] **Buffer.** Anything that spilled from weeks 1 to 4.
+- [ ] **Buffer. SPENT ON 2026-09-21 by N.160 steps 2 and 3**, a DESK DEFAULT Dann can
+  overturn. **Week 1 had already spilled five items into week 2 before this.** This file's
+  own rule now governs: once the buffer is gone, the lowest line in a week moves to LATER and
+  the date stands.
 
 ## Week 6. Monday 2026-10-19 to Sunday 2026-10-25. The Guide, once the interface is final
 

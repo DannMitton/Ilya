@@ -504,3 +504,52 @@ His words, given while N.119 was being briefed:
    a learner cannot tell a confident mark from a hopeful one.
 
 **`ё` never takes an acute**, being inherently stressed (`WordStack.svelte:70-71`).
+
+## THE WORK, AND ITS TWO VIEWS. Ruled by Dann 2026-09-21, and it is the frame for the rest
+
+**This is Dann's model, in his own words, and it is his invention rather than the desk's.**
+The desk had been trying to reconcile two documents. He replaced the problem.
+
+> *"this gets simpler when we consider the Platonic musico-textual creation that both
+> surfaces (Transcription and Markup) are reflections of. Why don't you conceptually start
+> there instead of trying to fuse two disparate sources?"*
+
+And, extending it the same minute:
+
+> *"Thinking of it as reflections of a musico-textual object will allow us to easily process
+> different text underlays for familiar melodies, and new melodies for familiar texts. There
+> is no conflict here, just a bunch of musico-textual objects that need careful profiling."*
+
+**THE MODEL. There is one work: a text joined to a music. Transcription and Score markup are
+two views of it. Neither view owns anything; both render.** A text and a music are separately
+reusable: two verses are one music with two texts, and a poem set by two composers is one
+text with two musics.
+
+**Three things follow, and they are why this is a product statement and not an architecture
+note.**
+
+1. **A setting is a decision about the work, not about a page.** "This syllable sings on this
+   note" is true whether or not anyone is looking at a score.
+2. **The Notation toggles belong to the work.** They are decisions about how the song is
+   sung. **So a view that ignores them is not rendering the work.** Score markup obeying them
+   is correctness, not a feature. **Ruled by Dann 2026-09-21, 01:37:** *"We must have Score
+   Markup respond instantaneously to the Notation toggles just like Transcription does."*
+3. **The work has one text, now.** **Ruled by Dann 2026-09-21, 02:12:** *"I don't think the
+   user cares about which syllable was seated in another poem? That is irrelevant to their
+   need for accurate representation of the poem they arrive with now."* So there is no
+   category called "seated under an older poem". A seat resolves against the work's current
+   text or it does not.
+
+**WHAT DANN ASKED FOR, and it is the measure this work is held to.** His words, 2026-09-21:
+*"Seamlessness, instantaneous correct information, carefully rendered and defensible."*
+
+**THE EVIDENCE THAT THE TREE ALREADY WANTS THIS**, read 2026-09-21 at `b543620`. The engine
+is verse-aware in seven places (`analyzePerVerse`, and a `verseNumber` parameter on
+`buildUnderlayResolvers`, `collectScoreWords`, `readScoreText`, `findCliticFolds`,
+`seatScoreWords` and `watchlist.ts:333`), and `analyze-per-verse.ts` states the model in its
+own header: *"Each verse sings the same notes with different text."* **The stored song record
+contains the word "verse" zero times**, and every one of those calls takes the default of 1.
+The model is in the engine and flattened at the storage layer.
+
+**The item that acts on this is N.160**, specified in `OPEN.md`, with the converged plan in
+`../sessions/memo-n160b-the-approach_r1_2026-09-21.md`.

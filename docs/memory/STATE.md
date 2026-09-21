@@ -41,92 +41,63 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-20, about 22:00
+> ### READ THIS FIRST. Written at the close of 2026-09-21, about 02:50
 >
-> **THE ONE THING IS N.153 STAGE 3b: derive the loupe's own spacing.** Stages 1, 2 and 3a
-> are shipped. Stage 3b is the part that actually closes the caret collisions, and it is
-> the part nobody has costed.
+> **THE ONE THING IS N.160 STEP 1: the score obeys every Notation switch.** It is specified as
+> N.159 in `OPEN.md`, it is already `SCHEDULE.md` week 2's "N.136 with N.119", and Code has
+> designed and measured it. **It displaces nothing.** The converged plan for everything after
+> it is `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`.
 >
-> #### WHAT SHIPPED TONIGHT
+> #### WHAT SHIPPED AND WAS WALKED, four ships
 >
-> - **Stage 2, `c3ca3f5`.** The bundle (`readingScore`, `analyzed`, `clef`, the font and the
->   five preview maps) reaches `Loupe.svelte` as a prop, assembled inside the existing
->   untracked effect. **Walked by Dann on a clean load of the branch alias and passed.**
->   Brief `../sessions/brief-n153-s2-data-channel_r1_2026-09-20.md`, sections 8 and 9 added
->   by the desk.
-> - **Stage 3a, `0f7375c`.** The loupe draws a render of the system instead of a clone of the
->   page. `renderSystemSlice` lifted out of `paginateScore` and exported; new
->   `loupe-render.ts`; the render is mounted off-screen and measured there. Page and print
->   output byte-identical across 8 layouts. Brief
->   `../sessions/brief-n153-s3a-render-not-clone_r1_2026-09-20.md`.
+> - **`0f7375c` and `c3ca3f5` carried into the night from 2026-09-20.**
+> - **`6101e01`, N.141's height rule.** A floor one stave space above the stave, growth for a
+>   note whose own ink goes higher, and a bottom identical on every box. **Dann amended his own
+>   one-height ruling to get it** (`OPEN.md` §N.141, 2026-09-20 23:32 and 23:35). Walked: *"Yes
+>   this is ideal."*
+> - **`b4320d2`, N.119, the stress acutes reach Score markup.** 31 acutes on the fixture. The
+>   toggle marks the **Cyrillic**, not the IPA, and the acute is located by which syllable's IPA
+>   carries the stress mark. Walked.
+> - **`b543620`, N.119b.** A hand-assigned stress now refreshes the stored pairing, so the acute
+>   follows live. Walked in part: «Комнатка» fixed, «непроглядная» not, and that residue is
+>   N.160.
+> - **`345d943`**, the design record for N.159 and N.160. No code.
 >
-> #### THE ONE THING OWED ON WHAT SHIPPED
+> #### THE RELEASE PATH IS PROVEN, and it was the biggest unknown on the board
 >
-> **`0f7375c` IS `WRITTEN`, NOT `DONE`. The real-click tap check was never run.** Code did
-> not press any clicks and the desk promised to walk it in Dann's Chrome and did not. Note,
-> rest and caret tap resolution on the deployed build is the outstanding item.
-> **`ENVIRONMENT.md` §`THE CARETS CARRY NO CLASS`: count the geometry, never a selector.**
+> **Rehearsed live on 2026-09-20.** A fast-forward of `main` to `Shane` and `git push origin
+> main` put it live in about 90 seconds with no manual promote step. `SCHEDULE.md` week 5's
+> "How the release goes out" is **CLOSED**. **The public URL is `ilya.dannmitton.com`, not the
+> apex, which serves Dann's Squarespace studio site.** Full sequence and traps in
+> `ENVIRONMENT.md` §`HOW A RELEASE ACTUALLY GOES OUT` and §`THE PUBLIC ILYA URL`.
 >
-> #### THE GATE 4 BASELINE MOVED, on Dann's ruling
+> **`main` now carries `2b980e7`.** Everything after that is on `Shane` only.
 >
-> `~/Downloads/ilya-ship.sh:79` now expects `"1333 passed (1333)"`, up from 1268. The 65 new
-> tests are all in `loupe-render.test.ts` (64 from the loop at `:44-45`, 1 at `:79`) and the
-> other four suites are unchanged. Original line backed up at
-> `~/Downloads/ilya-ship.sh.bak-gate4-1268-2026-09-20`.
+> #### THE MODEL DANN RULED, and it reframes the next month
 >
-> #### THE FIXTURE IS EDITED AND UNCOMMITTED. DEAL WITH THIS FIRST
+> **`PRODUCT.md` §THE WORK, AND ITS TWO VIEWS.** One work, a text joined to a music;
+> Transcription and Score markup are two views of it. **The Notation toggles belong to the
+> work, so a view that ignores them is not rendering the work.** His words for the standard:
+> *"Seamlessness, instantaneous correct information, carefully rendered and defensible."*
 >
-> **The desk edited `apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml`
-> and it is sitting uncommitted, with twenty tests failing against it.** The edit set
-> measures 17 and 18 to `ground-truth.json`'s reading. **It also deleted two `.bak` files
-> from that directory, one of them tracked.** Dann's Downloads copy was overwritten too;
-> its backup is `.bak-before-values-2026-09-20` beside it.
+> #### WHAT IS OWED ON WHAT SHIPPED
 >
-> **The revert, which Dann has NOT run:**
-> `git checkout -- apps/web/src/lib/shane/ingestion/fixtures/`
+> - **Dann's own library holds 25 frozen seats of 96**, measured through the branch alias
+>   2026-09-21. N.160 steps 2 and 3 repair them. **He exports a binder backup before the dry
+>   run.**
+> - **The viewBox clamp binds on two notes**, `m1-3-4` and `m2-0-1`, so the loupe and page
+>   differ there by under a third of a stave space. `OPEN.md` §N.141.
+> - **N.153 stages 4 and 5 are untouched**: retiring `loupe.ts`'s crop helpers, and the
+>   whole-fixture scan. **No standalone scan harness exists in the tree.**
+> - **A phone walk of N.160 step 1.** Every timing so far is headless desktop Chromium on a dev
+>   build.
 >
-> **Twenty tests in `clitic-seat.test.ts`, `punctuation-slot.test.ts` and `score-seat.test.ts`
-> assert on the fixture's contents.** `clitic-seat.test.ts:56-58` holds a helper that undoes
-> this afternoon's fixture change; `:114` asserts 97 cells. The corrected file has 96.
+> #### THE BUFFER IS SPENT
 >
-> #### WHAT DANN ACTUALLY REPORTED, and it is N.157, not the fixture
->
-> **He saw a doubled « я. » and a split final value on screen.** The doubled syllable comes
-> from the stored seat the desk hand-patched this afternoon (song `39ae51c9`, key
-> `m17-1-2`) sitting alongside the note the file supplies. **That is N.157: replacing a
-> score does not re-derive the seats.** The desk spent an hour on the fixture instead and
-> Dann named the cost: *"When you extemporize and complicate, you actually harm me."*
->
-> #### MUSORGSKY'S VALUES, ruled by Dann 2026-09-20 21:44, and they are his, not the desk's
->
-> **«о-ди-но-ка-я» is a tuplet on the first two syllables, then a dotted quarter, an eighth,
-> and a quarter.** His words: *"The tuplet is two half notes in the space of three
-> quarters."* Confirmed against
-> `tools/e16-harness/output/mussorgsky---sunless-01---within-four-walls/ground-truth.json`,
-> parsed from his own Finale file with zero warnings and zero errors.
->
-> #### T01 AND T05 WERE SWAPPED IN THE RECORD, corrected by Dann
->
-> **T01 is Sunless 01**, `sunless-01-engraved.musicxml`, verified 2 parts and 18 measures.
-> **T05 is `Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`**, 90
-> measures. The desk's stage 2 brief named T05 for all three measurements, so **Code's clef
-> and live-map numbers describe the wrong piece and must be re-taken on T01.** Recorded in
-> that brief's section 9.
-
-## THE ONE THING FOR THE NEXT THREAD: N.129, THE RULER
-
-**Set at the close of 2026-09-20, when N.148, N.149 and N.150 closed together.**
-
-**What `SEQUENCE.md` says, and it is SEQUENCE's claim rather than a reading of the
-tree:** N.129 is dependency 1 and comes before every piece of horizontal spacing work.
-`underlay-widths.ts:690` declares its table as Source Serif 4 metrics while the page
-has drawn Source Sans 3 since the paginator began stripping the serif root, about
-**12.2%** out on one measured word (**corrected 2026-09-20 from "about 5%", measured
-on `e75d6f3`; see `OPEN.md` §N.129**). **N.153's derived spacing is horizontal spacing work, so it
-sits behind this.**
-
-**NOT ESTABLISHED: none of those files was opened on 2026-09-20.** The next thread
-opens them before it writes a brief, per tether 21.
+> **N.160 steps 2 and 3 take the week-5 buffer and move N.132 to week 3**, a DESK DEFAULT Dann
+> can overturn. Week 1 had already spilled five items into week 2. `SCHEDULE.md`'s own rule now
+> governs: once the buffer is gone, the lowest line in a week moves to LATER and the date
+> stands.
 
 ## THE TRACKER
 
@@ -142,6 +113,25 @@ section says what is open; that file says what comes first and why. **Six
 dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
+
+### Numbered 2026-09-21
+
+- `[ ]` **N.159. The score obeys the singer's switches.** DESK DEFAULT number. **Step 1 of
+  N.160 and already `SCHEDULE.md` week 2's "N.136 with N.119", so it displaces nothing.**
+  Designed and measured by Code; spec in `OPEN.md`. **Walked on Dann's phone** when it ships.
+- `[ ]` **N.160. The work, and its two views.** DESK DEFAULT number. **The model is Dann's**
+  (`PRODUCT.md`). Five steps, two before the release and three after; spec in `OPEN.md`, plan
+  in `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`. **Steps 2 and 3 spend the week-5
+  buffer.** **One ruling deferred to Dann, deliberately, until it can be asked against a real
+  count:** when a word has truly left the poem, does its note keep the old syllable or clear
+  to blank?
+- `[ ]` **N.158. Reconstitution never reaches Score markup.** Numbered 2026-09-21, DESK
+  DEFAULT number. **Folded into N.160 step 1.** LEARN Unit 4 instructs the singer to use the
+  toggle and names the result, in both languages, and on the score nothing happens. Spec in
+  `OPEN.md`.
+- `[x]` **N.119. The stress acutes reach Score markup. CLOSED 2026-09-21**, shipped `b4320d2`
+  and walked. **N.119b** followed in `b543620`: a hand-assigned stress refreshes the stored
+  pairing. **Its residue is N.160**, not a further acute defect.
 
 ### Numbered 2026-09-20
 
@@ -221,7 +211,7 @@ does not repeat them.
 
 ### Numbered 2026-09-14
 
-- `[D]` **N.141. The squircle has no grammar.** Found by Dann on the walk of
+- `[ ]` **N.141. The squircle has no grammar. THE HEIGHT RULE CLOSED 2026-09-21**, shipped `6101e01` and walked (*"Yes this is ideal"*). **Dann amended his own one-height ruling on 2026-09-20 to get it**; the amendment is in `OPEN.md` §N.141. **Open here: the squircle across a tie, which waits on N.142**, and the viewBox clamp binding on two notes. No longer `[D]`: the two questions that were his are ruled. Found by Dann on the walk of
   `d6580af`, 2026-09-14: the ring takes the IPA on one measure and not on three,
   it is trimmed inside the measure region only sometimes, and an accidental of the
   taken note can meet its edge. **Marked `[D]` because two of its three questions
@@ -389,3 +379,16 @@ stage 2 walked and passed, 3a NOT walked. The floor moves to `0f7375c`. Gate 4's
 moved to 1333 on Dann's ruling. The Sunless 01 fixture is edited and uncommitted with
 twenty tests failing; the revert is in THE ONE THING and Dann has not run it.
 `ENVIRONMENT.md` gained four rows. Memory NOT committed.*
+
+*Close of 2026-09-21, about 02:50. Four ships walked: `6101e01` (N.141's height rule),
+`b4320d2` (N.119, the stress acutes), `b543620` (N.119b), and `345d943` (the N.159 and N.160
+design record, no code). **The release path was rehearsed live and is proven**; `SCHEDULE.md`
+week 5's "How the release goes out" is closed and `main` carries `2b980e7`. **Dann ruled the
+musico-textual model**, transcribed to `PRODUCT.md`, and it reframes N.136, N.158 and N.159
+into one item, N.160. **His library was read through the branch alias and holds 25 frozen
+seats of 96**, of which 15 carry a word still in the poem. `ENVIRONMENT.md` gained six
+sections with index rows, `OPEN.md` gained N.158, N.159, N.160 and N.141's amendment,
+`PRODUCT.md` gained the stress acutes' purpose and the work-and-views model, and
+`SCHEDULE.md` records that the week-5 buffer is spent. **The desk was wrong loudly and
+repeatedly between 00:40 and 01:15**, on four claims it had not read, and the recovery was
+reading before speaking. Memory NOT committed.*
