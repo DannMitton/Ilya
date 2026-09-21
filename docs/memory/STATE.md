@@ -11,10 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`9801308`**, "N.156: the poem's word division outranks the score's, so a hand-placed
-final syllable joins its word", shipped 2026-09-20, walked by the desk driving Dann's own
-Chrome after taking the app's update toast (the previous floors,
-`a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
+before **`0f7375c`**, "N.153 stage 3a: the loupe draws a render of the system, not a clone of
+the page", shipped 2026-09-20 21:39, all five gates at baseline (the previous floors,
+`46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
 `fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
 `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
 `../sessions/LOG.md`). A floor cannot go stale,
@@ -42,99 +41,77 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-20, about 15:50
+> ### READ THIS FIRST. Written at the close of 2026-09-20, about 22:00
 >
-> **THE ONE THING IS N.153, STAGES 2 TO 5: the loupe re-engraves the held measure at
-> its own spacing.** Stage 1 shipped `0028266`. Stage 2's brief is written,
-> `../sessions/brief-n153-s2-data-channel_r1_2026-09-20.md`. `SEQUENCE.md` dependency 7:
-> nothing comes before it and it depends on nothing. **N.129 closing today removed its
-> last gate.** It closes the 27 scale-invariant caret collisions and is what makes the
-> insert reach usable on a phone at all.
+> **THE ONE THING IS N.153 STAGE 3b: derive the loupe's own spacing.** Stages 1, 2 and 3a
+> are shipped. Stage 3b is the part that actually closes the caret collisions, and it is
+> the part nobody has costed.
 >
-> **THE NEXT THREAD RUNS AUTONOMOUSLY, on Dann's instruction of 2026-09-20 15:25.**
-> The desk and Code take the items in `SEQUENCE.md` §THE AUTONOMOUS RUN without him.
-> **He is present for permissions and for taste.** Ask him only for a gate baseline
-> move, a `git add`, a ship, a walk verdict, and anything that is taste, irreversible
-> or French. **Nothing else.**
+> #### WHAT SHIPPED TONIGHT
 >
-> #### THE PERIOD ON « я » IS RESOLVED, AND THE DEFECT UNDER IT IS N.157
+> - **Stage 2, `c3ca3f5`.** The bundle (`readingScore`, `analyzed`, `clef`, the font and the
+>   five preview maps) reaches `Loupe.svelte` as a prop, assembled inside the existing
+>   untracked effect. **Walked by Dann on a clean load of the branch alias and passed.**
+>   Brief `../sessions/brief-n153-s2-data-channel_r1_2026-09-20.md`, sections 8 and 9 added
+>   by the desk.
+> - **Stage 3a, `0f7375c`.** The loupe draws a render of the system instead of a clone of the
+>   page. `renderSystemSlice` lifted out of `paginateScore` and exported; new
+>   `loupe-render.ts`; the render is mounted off-screen and measured there. Page and print
+>   output byte-identical across 8 layouts. Brief
+>   `../sessions/brief-n153-s3a-render-not-clone_r1_2026-09-20.md`.
 >
-> **It cost Dann an afternoon and it harmed him.** He asked four times for a period and
-> each answer was about a different artefact: the tree fixture, his own file, the poem,
-> the stored seat. **Only the last one was ever on his screen.**
+> #### THE ONE THING OWED ON WHAT SHIPPED
 >
-> **What resolved it:** the desk edited his stored pairing by hand. Song `39ae51c9`,
-> key `m17-1-2`, `cyrillic` « я » to « я. », then a reload. Setting it back reverts it.
-> **That is a one-off, not a fix.**
+> **`0f7375c` IS `WRITTEN`, NOT `DONE`. The real-click tap check was never run.** Code did
+> not press any clicks and the desk promised to walk it in Dann's Chrome and did not. Note,
+> rest and caret tap resolution on the deployed build is the outstanding item.
+> **`ENVIRONMENT.md` §`THE CARETS CARRY NO CLASS`: count the geometry, never a selector.**
 >
-> **What was corrected on the way, and both are committed:** the tree fixture and
-> `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml` now
-> carry « я. » as its own eighth note with `syllabic` `end`, « ка » retyped `middle`
-> before it, and measure 18 still totalling 96. Both backed up as
-> `.bak-before-ja-2026-09-20`.
+> #### THE GATE 4 BASELINE MOVED, on Dann's ruling
 >
-> **THE LESSON IS IN `ENVIRONMENT.md` §`THE UNDERLAY DRAWS STORED TEXT`.** Editing a
-> file, a fixture or the poem changes nothing a singer has already placed. **Say which
-> artefact a fix has to reach before writing the brief.**
+> `~/Downloads/ilya-ship.sh:79` now expects `"1333 passed (1333)"`, up from 1268. The 65 new
+> tests are all in `loupe-render.test.ts` (64 from the loop at `:44-45`, 1 at `:79`) and the
+> other four suites are unchanged. Original line backed up at
+> `~/Downloads/ilya-ship.sh.bak-gate4-1268-2026-09-20`.
 >
-> #### WHAT CLOSED TODAY, in order
+> #### THE FIXTURE IS EDITED AND UNCOMMITTED. DEAL WITH THIS FIRST
 >
-> - **N.148, N.149, N.150** closed in the morning, five ships to `c582892`, all walked.
-> - **N.129 CLOSED.** Two ships, both walked. `e75d6f3`: the Cyrillic underlay draws in
->   Source Serif 4, the face its widths were measured from. `7bd3d04`: the silent hyphen
->   omission is gone and a word-internal gap reserves `HYPHEN_GAP_PX`. **Walked on screen
->   and in print.**
-> - **N.155 CLOSED**, shipped in `b53a6df`, walked: a word broken across a system takes a
->   hyphen at the line end.
-> - **N.156 shipped `b53a6df` and `9801308`**, walked for the hyphen: the poem's word
->   division outranks the score's lyric line, so a hand-placed final syllable joins its
->   word. **Not closed: the period is outstanding.**
+> **The desk edited `apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml`
+> and it is sitting uncommitted, with twenty tests failing against it.** The edit set
+> measures 17 and 18 to `ground-truth.json`'s reading. **It also deleted two `.bak` files
+> from that directory, one of them tracked.** Dann's Downloads copy was overwritten too;
+> its backup is `.bak-before-values-2026-09-20` beside it.
 >
-> **THE FLOOR MOVES TO `46f1d31`**, the close commit.
+> **The revert, which Dann has NOT run:**
+> `git checkout -- apps/web/src/lib/shane/ingestion/fixtures/`
 >
-> **ONE PIECE OF CRUFT WENT IN WITH IT, and it is the desk's error.** The close was
-> staged with `git add -A apps/web/src/lib/shane`, which swept
-> `ingestion/fixtures/sunless-01-engraved.musicxml.bak-before-ja-2026-09-20` into the
-> tree. **Delete it early next thread and do not ask Dann about it.** Every ship above was walked by the desk driving
-> Dann's own Chrome and sending him shots to rule on.
+> **Twenty tests in `clitic-seat.test.ts`, `punctuation-slot.test.ts` and `score-seat.test.ts`
+> assert on the fixture's contents.** `clitic-seat.test.ts:56-58` holds a helper that undoes
+> this afternoon's fixture change; `:114` asserts 97 cells. The corrected file has 96.
 >
-> #### THE RULING THAT MATTERS MOST FROM TODAY, and it is about how the desk works
+> #### WHAT DANN ACTUALLY REPORTED, and it is N.157, not the fixture
 >
-> **`CONTRACT.md` §3 now carries it, ruled by Dann after he said it three times in one
-> afternoon:** an unresolved detail is the desk's to hold, not his to carry. **He named
-> the cost in his own words: it drains his bandwidth and dysregulates him, and he called
-> it harm.** Twice on 2026-09-20 the desk stopped a finished, walked build to hand him a
-> menu of options about a single syllable in a test fixture. **A worry with no
-> consequence yet is a line in `ENVIRONMENT.md` or a note for the walk. It is never a
-> question and never a numbered set of options.**
+> **He saw a doubled « я. » and a split final value on screen.** The doubled syllable comes
+> from the stored seat the desk hand-patched this afternoon (song `39ae51c9`, key
+> `m17-1-2`) sitting alongside the note the file supplies. **That is N.157: replacing a
+> score does not re-derive the seats.** The desk spent an hour on the fixture instead and
+> Dann named the cost: *"When you extemporize and complicate, you actually harm me."*
 >
-> #### THREE INSTRUMENTS THAT LIED TODAY, all now in `ENVIRONMENT.md`
+> #### MUSORGSKY'S VALUES, ruled by Dann 2026-09-20 21:44, and they are his, not the desk's
 >
-> - **`THE APP TELLS YOU WHICH BUILD IT IS ON`.** Ilya's own update toast is the only
->   reliable answer. The alias stamp measures the server; `caches.keys()` is useless
->   because `/_app/immutable/` names are content-hashed; `registration.waiting` stayed
->   true after the swap. **Three readings were reported off stale builds before this was
->   found.**
-> - **`THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE`.** A green test on a fixture path
->   is not evidence about his screen.
-> - **`Claude Code, and where the building happens`** gained an index row: `claude` is
->   not on his Mac and never was.
+> **«о-ди-но-ка-я» is a tuplet on the first two syllables, then a dotted quarter, an eighth,
+> and a quarter.** His words: *"The tuplet is two half notes in the space of three
+> quarters."* Confirmed against
+> `tools/e16-harness/output/mussorgsky---sunless-01---within-four-walls/ground-truth.json`,
+> parsed from his own Finale file with zero warnings and zero errors.
 >
-> #### CORRECTED TODAY
+> #### T01 AND T05 WERE SWAPPED IN THE RECORD, corrected by Dann
 >
-> **The recorded « ночь » serif width of 27.72 px was wrong and had been law since
-> 2026-09-12.** The table gives 29.98 px and the browser draws 29.80. **So N.129's error
-> was 12.2%, not "about 5%".** Corrected in `OPEN.md`, `SEQUENCE.md` and here;
-> `INBOX.md:144` left alone as a dated record.
->
-> **`SEQUENCE.md` listed N.144 as NEXT BUILD while `OWED.md:131` already recorded it
-> shipped as `ceeb214`.** Corrected.
->
-> #### OWED AT THE NEXT CLOSE
->
-> **N.148's, N.149's and N.150's accounts still have not moved from `OPEN.md` to
-> `LOG.md`**, carried from this morning's close. N.129's and N.155's accounts join them.
-> **Grep each ruling before moving an account**, per `README.md`'s closing ritual.
+> **T01 is Sunless 01**, `sunless-01-engraved.musicxml`, verified 2 parts and 18 measures.
+> **T05 is `Kabalevsky - Shakespeare - T05 Cupid laid by his brand, and fell.musx`**, 90
+> measures. The desk's stage 2 brief named T05 for all three measurements, so **Code's clef
+> and live-map numbers describe the wrong piece and must be re-taken on T01.** Recorded in
+> that brief's section 9.
 
 ## THE ONE THING FOR THE NEXT THREAD: N.129, THE RULER
 
@@ -406,3 +383,9 @@ gone and clause 16 is closed. The desk drafts the French from now on, ruled by D
 transfer fault; `INBOX.md` gained two N.84 notes; `OPEN.md` closed clause 16. The
 twelve-versus-five gaps count is reconciled: five remain, and seven were located.
 N.153 was not touched. Memory NOT committed.*
+
+*Close of 2026-09-20, about 22:00. N.153 stages 2 and 3a shipped, `c3ca3f5` and `0f7375c`;
+stage 2 walked and passed, 3a NOT walked. The floor moves to `0f7375c`. Gate 4's baseline
+moved to 1333 on Dann's ruling. The Sunless 01 fixture is edited and uncommitted with
+twenty tests failing; the revert is in THE ONE THING and Dann has not run it.
+`ENVIRONMENT.md` gained four rows. Memory NOT committed.*

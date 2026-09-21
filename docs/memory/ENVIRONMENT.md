@@ -92,6 +92,10 @@ next session the same hour it cost the last one.
 | drive a browser yourself | `Claude Code, and where the building` |
 | you are about to send Dann a terminal command that starts `claude` | `Claude Code, and where the building` (it is NOT installed on his Mac; Code is the desktop app's Code tab. Cost the desk a wasted turn 2026-09-20) |
 | asking which build a tab is actually running | `THE APP TELLS YOU WHICH BUILD IT IS ON` |
+| you are about to drive the Code tab yourself | `THE DESK CANNOT REACH THE CODE TAB` |
+| deciding whether to farm a tree-read out to a subagent | `A SUBAGENT CAN REACH THE REPO` |
+| an empty `read_console_messages` result | `THE CONSOLE TRACKER STARTS WHEN YOU CALL IT` |
+| any question about what a score actually says | `THE GROUND TRUTH BEATS THE OMR` |
 | a fixture you fixed does not change what Dann sees on screen | `THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE` |
 | a corrected poem or score does not change the Score Markup underlay | `THE UNDERLAY DRAWS STORED TEXT` |
 | a walk harness needs a home | `A WALK HARNESS BELONGS` |
@@ -3540,3 +3544,51 @@ The three that were not are not.
 connected folder and which Claude's own data folders normally refuse anyway. **That is
 his recovery path, not the desk's.**
 
+## THE DESK CANNOT REACH THE CODE TAB. 2026-09-20
+
+**The Claude desktop app excludes itself from computer use.** `computer_list_apps`
+enumerated 60 apps on Dann's Mac, Finder and Messenger and Chrome among them, and returned
+**nothing** for either `claude` or `anthropic`. Re-checked after he rebooted, with Chrome
+newly running as the positive control: still nothing.
+
+**So the desk cannot paste into Code. Dann pastes, always.** The desk had recommended
+driving the Code tab before checking, and he spent a reboot on it.
+
+## A SUBAGENT CAN REACH THE REPO. 2026-09-20
+
+**Corrects a claim the desk made the same day without testing it.** A Sonnet agent spawned
+with the Agent tool used `mcp__remote-devices__device_bash`, read the tree at the right
+commit, and returned a memo with `path:line` throughout. **The folder grant carries.**
+
+**AND CHECK ITS CITATIONS.** That memo quoted a comment correctly but cited it 16 lines off
+(`page-layout.ts:296-300`; it is at `:312-315`). Tether 3 applies to a subagent's memo
+exactly as to a document: spot-check the load-bearing lines before building on them.
+
+**AND QUOTE ITS COST HONESTLY.** The desk stated ~40k tokens worst case; it spent 128k.
+
+## THE CONSOLE TRACKER STARTS WHEN YOU CALL IT. 2026-09-20
+
+**`read_console_messages` captures nothing from before its first call on that tab, and a
+navigation resets it.** An empty result is therefore not evidence of a clean load.
+
+**The honest procedure:** call it once to start tracking, reload, then read. Confirm the
+tracker is live by reading with a permissive pattern first (it returned 1,024 messages on
+one load), THEN filter for what you are looking for. A negative with no positive control is
+worth nothing, per tether 11.
+
+## THE GROUND TRUTH BEATS THE OMR. 2026-09-20
+
+**Every piece in `tools/e16-harness/output/<piece>/` carries a `ground-truth.json` parsed
+from Dann's own Finale `.musx` with `parser: {warnings: 0, errors: 0}`.** It holds every
+note's duration, onset, midi and syllable text for both verses, keyed by the same
+`m<measure>-<onset>` ids the app uses. **That is the instrument for any question about what
+a score says.**
+
+**The OMR in the same folder is NOT.** `homr-score.json` for Sunless 01 scores
+`rhythmF1` 0.856, `pitchF1` 0.536, `meanPitchShiftSemitones` 3.06, and syllable
+`alignmentErrorRate` **1**, meaning zero syllables correctly aligned.
+
+**What it cost, 2026-09-20:** the desk magnified a publisher's scan and reasoned about
+noteheads for half an hour to answer a question `ground-truth.json` answers exactly, in the
+same repository. Dann's words: *"Lamm is one publisher with one engraving. The question is
+about what Musorgsky wrote."*
