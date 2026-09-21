@@ -153,6 +153,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/shane/clitic-seat';
 	import { seatScoreWords } from '$lib/shane/score-seat';
 	import { shouldFoldOnArrival, shouldSeatFirstTranscription } from '$lib/shane/first-seat';
+	import { seatWaitingScore } from '$lib/shane/waiting-seat';
 	import { collectScoreWords, scoreWordsText } from '$lib/shane/vowel-resolver';
 	import {
 		COARSE_TAP_SPACES,
@@ -2532,7 +2533,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				lines.length > 0 &&
 				doc.inputText === scoreWordsText(collectScoreWords(waiting.result.score, 1))
 			) {
-				seatFilledPoem(waiting);
+				/* N.161b. NOT `seatFilledPoem`: the singer can place by hand
+				   while the dictionary loads, and its fold would rewrite them.
+				   `seatWaitingScore` fills empty notes only, and folds only a
+				   map with no syllable in it (`waiting-seat.ts`). */
+				doc.pairings = seatWaitingScore(waiting.result.score, doc.pairings, lines);
 			}
 		}
 		/* N.145, "close the gap." A first transcription diffs as unchanged
@@ -2541,7 +2546,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   unplaced never got a seat at all once its poem finally arrived.
 		   `shouldSeatFirstTranscription` (`first-seat.ts`) is the guard: it
 		   refuses once any note already carries a syllable, by hand, by the
-		   `scoreSeatWaiting` block just above, or by `reseatAcross` itself, so
+		   arrival's own fold (which is why the `scoreSeatWaiting` block just
+		   above cannot share this guard, `waiting-seat.ts`), by that block,
+		   or by `reseatAcross` itself, so
 		   a later edit is never swept back through here. Mirrors
 		   `applyArrival`'s own seat for the reverse arrival order:
 		   `mergeOnUpload` for a wordless score (its own `firstPass`),
@@ -3254,8 +3261,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * N.134. Seat the filled poem from the score's own mapping.
 	 *
 	 * The clitic seat is re-run after it, which is a no-op on the arrival path
-	 * (it has already run) and is what keeps the ruled arrangement on the
-	 * waiting path, where the fold ran at arrival against the score's own queue.
+	 * (it has already run). THE WAITING PATH NO LONGER COMES HERE (N.161b): a
+	 * singer can place by hand before the dictionary lands, and this re-run
+	 * would rewrite that placement. It spends through `seatWaitingScore`.
 	 */
 	function seatFilledPoem(ingested: IngestedScore): void {
 		const parsed = ingested.result.score;
