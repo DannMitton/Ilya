@@ -29,6 +29,7 @@
 		type ShiftDirection,
 		type Slot,
 	} from '$lib/shane/pairings';
+	import { dryRunLog, planHeal } from '$lib/shane/heal';
 	// N.67 step 0: the song document owns the per-song state and is the only
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
 	// longer called from here; the legacy driver writes the same key.
@@ -2351,6 +2352,26 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		console.info(
 			`[Ilya] N.160 seats: ${live} drawn live, ${stored} kept as stored, of ${live + stored} seated`,
 		);
+	});
+	/* N.160 step 2, THE DRY RUN OF THE HEAL (`heal.ts`). Once per song per
+	   load, the console says, seat by seat, how the heal WOULD find each
+	   seat's word in this poem: by its address, by its anchor, by the
+	   joined-run rule, refused by the guard, or not at all. IT WRITES
+	   NOTHING: `planHeal` reads `doc.pairings` and returns a plan, and the
+	   plan goes to the console only. Nothing is drawn on the page and
+	   nothing is put in the drawer (CONTRACT s6).
+
+	   Same gate as the count above, plus the score's notes: `switchSong`
+	   drops `ingestedScore` with `lines`, so a song's seats are never set
+	   against another song's notes. It reads the STORED map, not
+	   `shownPairings`, because the stored map is what step 3 would write. */
+	let dryRunLoggedFor: string | null = null;
+	$effect(() => {
+		if (lines.length === 0 || transcribedText !== doc.inputText || eventIds.length === 0) return;
+		const plan = planHeal(doc.pairings, lines, eventIds);
+		if (plan.seated === 0 || dryRunLoggedFor === doc.id) return;
+		dryRunLoggedFor = doc.id;
+		for (const line of dryRunLog(plan)) console.info(line);
 	});
 	function runPipeline() {
 		transcribeError = '';
