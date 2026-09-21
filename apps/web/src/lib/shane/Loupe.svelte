@@ -1351,10 +1351,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   says none belongs here. A derivation attempt draws no ring: the
 		   spacing is a property of the measure, not of the selection.
 
-		   ONE DIFFERENCE, NOT ESTABLISHED AS HARMLESS: `ringBox` reads the ink of
-		   the whole system it is handed for the ring's top and bottom, so on a
-		   measure whose ink is shorter than its page system's the ring is
-		   shorter than the page's. */
+		   THE HEIGHT IS `ringBox`'S OWN, and it is the page's (N.141, amended by
+		   Dann 2026-09-20): a floor of one stave space above the stave, higher
+		   for a note whose own ink reaches higher, and a bottom on the IPA
+		   baseline. Every input belongs to the taken note or the stave, so a
+		   one-measure render and the page's system give the same box. */
 		const pageRing = (() => {
 			if (derive || !selectedEventId) return null;
 			const hit = sysEl.querySelector(`[data-hit="${CSS.escape(selectedEventId)}"]`);

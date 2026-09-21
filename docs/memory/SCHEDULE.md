@@ -84,7 +84,12 @@ design rows.
 ## Week 5. Monday 2026-10-12 to Sunday 2026-10-18. Clean house. (Monday is Thanksgiving.)
 
 - [ ] **N.86**: the dead-code audit (a Sonnet agent reads), and Dann rules what the Shane switch (`apps/web/src/lib/wall.ts:6-7`) does at release.
-- [ ] **How the release goes out.** How the `Shane` branch reaches the public site is NOT ESTABLISHED in any memory file. The desk finds out and writes it down.
+- [x] **How the release goes out. CLOSED 2026-09-20, ahead of the week, by a live dry
+  run.** `main` is the production branch; a fast-forward from `Shane` and
+  `git push origin main` puts it live in about 90 seconds with no manual promote step.
+  The ship script cannot do it. Full sequence, the verification that works, and the
+  traps are in `ENVIRONMENT.md` §`HOW A RELEASE ACTUALLY GOES OUT`. **The public URL
+  is `ilya.dannmitton.com`, not the apex** (§`THE PUBLIC ILYA URL`).
 - [ ] **N.85**: README, CONTRIBUTING, code of conduct. The desk drafts; Dann reads every word.
 - [ ] **Desk housekeeping**: COLOUR-7, INBOX-17, INBOX-31 into `PRODUCT.md`.
 - [ ] **N.154. EVERY USER-FACING STRING SAYS WHAT THE APP NOW IS, both languages.**

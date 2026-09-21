@@ -252,12 +252,13 @@ export function ringBox(hit: Element, group: Element, id: string): RingBox | nul
 	/* ── THE SQUIRCLE'S GRAMMAR, N.141 STEP 1 ───────────────────────────
 	   Ruled by Dann 2026-09-14 and 2026-09-15, in `docs/memory/OPEN.md`
 	   §N.141. The WIDTH still follows the taken note's own ink, notehead,
-	   accidental and dot. The HEIGHT no longer follows the width: the
-	   bottom is the IPA baseline and the top is the note's own extent, and
-	   both are read for the whole system, so every ring on a system is the
-	   same height. `RING_ASPECT` is gone, by his ruling of 2026-09-15:
-	   "the new grammar wins and `RING_ASPECT` stops being a height floor".
-	   The portrait feel survives as `RING_MIN_W`. */
+	   accidental and dot. The HEIGHT does not follow the width: the bottom
+	   is the IPA baseline, shared by every ring on a system, and the top is
+	   a floor of one stave space above the stave, higher for a note whose
+	   own ink reaches higher (Dann, 2026-09-20; the top is set below).
+	   `RING_ASPECT` is gone, by his ruling of 2026-09-15: "the new grammar
+	   wins and `RING_ASPECT` stops being a height floor". The portrait feel
+	   survives as `RING_MIN_W`. */
 	const own = eventInk(sysEl, group, id);
 	if (!own || !Number.isFinite(own.left) || !Number.isFinite(own.right)) return null;
 
@@ -293,17 +294,28 @@ export function ringBox(hit: Element, group: Element, id: string): RingBox | nul
 	const width = Math.max(RING_MIN_W, right - left + RING_PAD_X * 2);
 	const centreX = (left + right) / 2;
 
-	/* THE TOP: the highest ink any note on this system reaches, notehead,
-	   accidental, dot or its own stem, padded. One number for the system,
-	   so the taken note's own top is always inside it and every ring on
-	   the system shares it. A beam is not a note's own ink in this sense
-	   and may be bisected, ruled 2026-09-14, so beams are not read. */
-	let systemTop = staffTop;
-	for (const g of sysEl.querySelectorAll('[data-event-id]')) {
-		const ink = eventInk(sysEl, g, g.getAttribute('data-event-id') ?? '');
-		if (ink) systemTop = Math.min(systemTop, ink.top);
-	}
-	let top = systemTop - RING_PAD_Y;
+	/* THE TOP: ONE STAVE SPACE ABOVE THE STAVE, AND HIGHER FOR A NOTE THAT
+	   REACHES HIGHER. Ruled by Dann 2026-09-20, amending his rulings of
+	   2026-09-14 and 2026-09-15 (`docs/memory/OPEN.md` §N.141): *"the minumum
+	   default should capture the distance between the IPA baseline and maybe
+	   one space above the stave? And notes that require more height (such as
+	   those above the staff on ledger lines) will get that extra height but
+	   the bottom of the squircle will always line up with its siblings."*
+
+	   The floor IS the top, with no `RING_PAD_Y` on the vertical: the edge sits
+	   one space above the stave, and a note whose own ink stands higher (notehead,
+	   accidental, dot or its own stem, from `eventInk`) gets the same space above
+	   that ink. It grows upward only. y grows downward, so `Math.min` takes
+	   whichever is higher on the page.
+
+	   EVERY INPUT BELONGS TO THE TAKEN NOTE OR TO THE STAVE. The system's other
+	   notes are not read, which is why the page, whose `sysEl` is a system, and
+	   the loupe, whose `sysEl` is one measure, give the same box for the same
+	   note with nothing passed between them. A beam is not a note's own ink in
+	   this sense and may be bisected, ruled 2026-09-14, so beams are not read
+	   (`eventInk` reads a group's marks and what is tagged `data-of-event`). */
+	const highest = Math.min(staffTop, own.top);
+	let top = highest - gap;
 
 	/* THE BOTTOM ENCLOSES THE IPA ROW'S FULL INK, descenders included, and
 	   stops short of the Cyrillic row. RULED BY DANN 2026-09-15, overruling
@@ -313,7 +325,9 @@ export function ringBox(hit: Element, group: Element, id: string): RingBox | nul
 	   descent below the IPA baseline: the face's metric, not the glyphs on
 	   the system, so a syllable without a descender, and a melisma with no
 	   syllable at all, get the same box as one carrying ɲ (his ruling of
-	   2026-09-14: "as if there were a verbatim vowel printed there").
+	   2026-09-14: "as if there were a verbatim vowel printed there"). Every
+	   box on a system shares this edge, and Dann's amendment of 2026-09-20
+	   keeps it: the bottom always lines up with its siblings.
 
 	   THE CYRILLIC IS OUTSIDE BY CONSTRUCTION, not by a clamp here: the
 	   renderer sets the Cyrillic baseline `IPA_TO_CYR_BASELINE` below the
@@ -326,15 +340,15 @@ export function ringBox(hit: Element, group: Element, id: string): RingBox | nul
 			? ipaBaseline + ipaFaceDescent() + RING_STROKE / 2
 			: Math.max(own.bottom, staffBottom) + RING_PAD_Y;
 
-	/* NEVER TRUNCATED ON THE PAGE. The renderer leaves one stave-space of
-	   headroom above the system's highest ink, and the pad wants more, so
-	   the top is held inside the viewBox with its stroke. It moves down
-	   rather than the box being cut, and it cannot pass the highest ink,
-	   which is inside the viewBox to begin with. */
+	/* NEVER TRUNCATED. Kept, and it must not silently change a height: the
+	   renderer leaves one stave-space of headroom above a system's highest ink,
+	   and the top is held inside the viewBox with its stroke, moving down
+	   rather than the box being cut. It cannot pass the note's own highest
+	   ink, which is inside the viewBox to begin with. */
 	const vb = (sysEl.getAttribute('viewBox') ?? '').split(/\s+/).map(Number);
 	if (vb.length === 4 && Number.isFinite(vb[1]) && Number.isFinite(vb[3])) {
 		const bleed = RING_STROKE / 2;
-		top = Math.min(Math.max(top, vb[1] + bleed), systemTop);
+		top = Math.min(Math.max(top, vb[1] + bleed), highest);
 		bottom = Math.min(bottom, vb[1] + vb[3] - bleed);
 	}
 	const y = top;

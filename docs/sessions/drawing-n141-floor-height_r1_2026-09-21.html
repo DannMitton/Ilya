@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>N.141 floor height</title>
+<style>
+  :root{
+    --bg:#faf8f4; --ink:#2b2621; --muted:#6b6259; --rule:#d6cec2;
+    --lav:#8b7ab8; --lav-fill:rgba(139,122,184,.10);
+    --warn:#b4603a; --ok:#5f7a4a;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#17150f; --ink:#ece5da; --muted:#9d9488; --rule:#3b352c;
+      --lav:#b3a2dd; --lav-fill:rgba(179,162,221,.14);
+      --warn:#e08b5e; --ok:#9dbb80;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#17150f; --ink:#ece5da; --muted:#9d9488; --rule:#3b352c;
+    --lav:#b3a2dd; --lav-fill:rgba(179,162,221,.14);
+    --warn:#e08b5e; --ok:#9dbb80;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.55 "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding:32px 16px 64px;
+  }
+  .wrap{max-width:900px;margin:0 auto}
+  h1{font-size:1.5rem;font-weight:600;margin:0 0 .25rem;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:0 0 2rem;font-size:.95rem}
+  .case{border-top:1px solid var(--rule);padding:1.75rem 0 .5rem}
+  .case h2{font-size:1.05rem;font-weight:600;margin:0 0 .15rem}
+  .case p{color:var(--muted);margin:0 0 1rem;font-size:.9rem}
+  .fig{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  svg{display:block;min-width:620px}
+  .tag{font-size:.78rem;font-weight:600;letter-spacing:.02em;text-transform:uppercase}
+  .tag.warn{color:var(--warn)}
+  .tag.ok{color:var(--ok)}
+  .legend{display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.85rem;color:var(--muted);margin-top:.5rem}
+  .swatch{display:inline-block;width:.85rem;height:.85rem;border-radius:3px;vertical-align:-1px;margin-right:.35rem;border:1.5px solid var(--lav);background:var(--lav-fill)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>N.141: where the floor should sit</h1>
+<p class="sub">Measured by Code on Without Sun no. 1, 97 notes at 390&nbsp;px. One stave space is 5.5 units. The bottom is 54 on every box, on both surfaces.</p>
+
+<!-- ============ CASE 1 ============ -->
+<div class="case">
+  <h2>As built: floor one space above the stave</h2>
+  <p><span class="tag warn">64 of 97 boxes exceed it</span> &nbsp;·&nbsp; floor 59.5 units, tallest 73.38</p>
+  <div class="fig">
+  <svg viewBox="0 0 640 260" role="img" aria-label="A stave with three notes. The floor line sits one space above the stave and two of the three note boxes break through it.">
+    <!-- stave -->
+    <g stroke="var(--ink)" stroke-width="1" opacity=".75">
+      <line x1="40" y1="70" x2="600" y2="70"/><line x1="40" y1="82" x2="600" y2="82"/>
+      <line x1="40" y1="94" x2="600" y2="94"/><line x1="40" y1="106" x2="600" y2="106"/>
+      <line x1="40" y1="118" x2="600" y2="118"/>
+    </g>
+    <!-- IPA baseline -->
+    <line x1="40" y1="196" x2="600" y2="196" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="606" y="200" font-size="10" fill="var(--muted)">IPA baseline</text>
+    <!-- floor line -->
+    <line x1="40" y1="58" x2="600" y2="58" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="606" y="55" font-size="10" fill="var(--warn)">floor</text>
+
+    <!-- note A: low, down-stem, fits -->
+    <g>
+      <ellipse cx="120" cy="112" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="112" y1="112" x2="112" y2="154" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="100" y="58" width="42" height="146" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+      <text x="121" y="228" font-size="10" fill="var(--ok)" text-anchor="middle">at the floor</text>
+    </g>
+    <!-- note B: middle line, up-stem, breaks floor -->
+    <g>
+      <ellipse cx="300" cy="94" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="308" y1="94" x2="308" y2="52" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="280" y="40" width="42" height="164" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+      <text x="301" y="228" font-size="10" fill="var(--warn)" text-anchor="middle">stem breaks it</text>
+    </g>
+    <!-- note C: ledger, high -->
+    <g>
+      <line x1="466" y1="46" x2="494" y2="46" stroke="var(--ink)" stroke-width="1"/>
+      <ellipse cx="480" cy="46" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="472" y1="46" x2="472" y2="88" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="458" y="30" width="44" height="174" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+      <text x="480" y="228" font-size="10" fill="var(--muted)" text-anchor="middle">genuinely high</text>
+    </g>
+  </svg>
+  </div>
+</div>
+
+<!-- ============ CASE 2 ============ -->
+<div class="case">
+  <h2>Proposed: floor one space above a standard up-stem</h2>
+  <p><span class="tag ok">only ledger-line notes exceed it</span> &nbsp;·&nbsp; floor about 68 units</p>
+  <div class="fig">
+  <svg viewBox="0 0 640 260" role="img" aria-label="The same three notes with the floor raised above stem height. The first two boxes now share one height and only the ledger note grows.">
+    <g stroke="var(--ink)" stroke-width="1" opacity=".75">
+      <line x1="40" y1="70" x2="600" y2="70"/><line x1="40" y1="82" x2="600" y2="82"/>
+      <line x1="40" y1="94" x2="600" y2="94"/><line x1="40" y1="106" x2="600" y2="106"/>
+      <line x1="40" y1="118" x2="600" y2="118"/>
+    </g>
+    <line x1="40" y1="196" x2="600" y2="196" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="606" y="200" font-size="10" fill="var(--muted)">IPA baseline</text>
+    <line x1="40" y1="42" x2="600" y2="42" stroke="var(--ok)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="606" y="39" font-size="10" fill="var(--ok)">floor</text>
+
+    <g>
+      <ellipse cx="120" cy="112" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="112" y1="112" x2="112" y2="154" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="100" y="42" width="42" height="162" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+      <text x="121" y="228" font-size="10" fill="var(--ok)" text-anchor="middle">floor</text>
+    </g>
+    <g>
+      <ellipse cx="300" cy="94" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="308" y1="94" x2="308" y2="52" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="280" y="42" width="42" height="162" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+      <text x="301" y="228" font-size="10" fill="var(--ok)" text-anchor="middle">same floor</text>
+    </g>
+    <g>
+      <line x1="466" y1="46" x2="494" y2="46" stroke="var(--ink)" stroke-width="1"/>
+      <ellipse cx="480" cy="46" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="472" y1="46" x2="472" y2="88" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="458" y="30" width="44" height="174" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+      <text x="480" y="228" font-size="10" fill="var(--muted)" text-anchor="middle">grows</text>
+    </g>
+  </svg>
+  </div>
+</div>
+
+<!-- ============ CASE 3 ============ -->
+<div class="case">
+  <h2>The other end: floor at the tallest note on the score</h2>
+  <p><span class="tag">every box identical</span> &nbsp;·&nbsp; about 73.4 units, which is your 2026-09-14 rule restated as one constant</p>
+  <div class="fig">
+  <svg viewBox="0 0 640 260" role="img" aria-label="The same three notes with every box the same height, reaching above the ledger note.">
+    <g stroke="var(--ink)" stroke-width="1" opacity=".75">
+      <line x1="40" y1="70" x2="600" y2="70"/><line x1="40" y1="82" x2="600" y2="82"/>
+      <line x1="40" y1="94" x2="600" y2="94"/><line x1="40" y1="106" x2="600" y2="106"/>
+      <line x1="40" y1="118" x2="600" y2="118"/>
+    </g>
+    <line x1="40" y1="196" x2="600" y2="196" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="606" y="200" font-size="10" fill="var(--muted)">IPA baseline</text>
+    <line x1="40" y1="30" x2="600" y2="30" stroke="var(--lav)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="606" y="27" font-size="10" fill="var(--lav)">floor</text>
+
+    <g>
+      <ellipse cx="120" cy="112" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="112" y1="112" x2="112" y2="154" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="100" y="30" width="42" height="174" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+    </g>
+    <g>
+      <ellipse cx="300" cy="94" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="308" y1="94" x2="308" y2="52" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="280" y="30" width="42" height="174" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+    </g>
+    <g>
+      <line x1="466" y1="46" x2="494" y2="46" stroke="var(--ink)" stroke-width="1"/>
+      <ellipse cx="480" cy="46" rx="8" ry="5.5" fill="var(--ink)"/>
+      <line x1="472" y1="46" x2="472" y2="88" stroke="var(--ink)" stroke-width="1.6"/>
+      <rect x="458" y="30" width="44" height="174" rx="12" fill="var(--lav-fill)" stroke="var(--lav)" stroke-width="1.8"/>
+    </g>
+  </svg>
+  </div>
+  <div class="legend"><span><span class="swatch"></span>the squircle</span></div>
+</div>
+
+</div>
+</body>
+</html>

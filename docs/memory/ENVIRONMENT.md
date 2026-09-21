@@ -25,6 +25,7 @@ next session the same hour it cost the last one.
 | looking for a mockup or ruling from an earlier session | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
 | ship anything at all | `Gate baselines` |
 | you sent a file to the Mac, or are about to hand Dann a ship command | `REPORT SUCCESS AND WRITE NOTHING` |
+| you sent a file to the Mac and are about to say it is saved | `device_commit_files CAN REPORT SUCCESS` |
 | move a gate number | `Moving a gate baseline` |
 | the ship script refuses to run | `refuses on untracked files` |
 | an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
@@ -44,6 +45,9 @@ next session the same hour it cost the last one.
 | your own `git add -A` swept Code's tree | `git add -A` |
 | you are about to cite a file's zero grep hits | `IS THE VOWEL ENGINE` |
 | you are about to give Dann a use count | `A GREP COUNT IS NOT A USE COUNT` |
+| Score Markup or Insights missing from a built app | `THE SHANE WALL LIVES IN A TRACKED .env` |
+| `git status` jumps to hundreds of untracked files | `A BRANCH SWITCH CAN UNCOVER HUNDREDS` |
+| grep or diff says `Resource deadlock avoided` | `THE BRIDGE CANNOT READ A FILE WITH " 2"` |
 | you are about to rename a CSS custom property | `A TOKEN IS ALSO A STRING KEY` |
 
 ### Deploys and URLs
@@ -55,6 +59,9 @@ next session the same hour it cost the last one.
 | a singer is not receiving a new build | `THE BRANCH ALIAS IS THE N.72` |
 | the alias is serving something stale | `The branch alias, observed` |
 | sending Dann to walk a ship | `WALK ON THE ALIAS, NEVER ON A SHA URL` |
+| giving a singer the URL, or reading Vercel's alias list | `THE PUBLIC ILYA URL IS ilya.dannmitton.com` |
+| you are about to put a release on the public site | `HOW A RELEASE ACTUALLY GOES OUT` |
+| checking from the desk whether a deploy is live | `HOW A RELEASE ACTUALLY GOES OUT` |
 | walking a fresh profile without touching his library | `INCOGNITO ON THE ALIAS` |
 | walking at 390 px on his Mac | `DEVICE MODE LOCKS THE WIDTH` |
 | the cloud desk cannot fetch the alias | `NO NETWORK TO VERCEL FROM THE DESK` |
@@ -3592,3 +3599,121 @@ a score says.**
 noteheads for half an hour to answer a question `ground-truth.json` answers exactly, in the
 same repository. Dann's words: *"Lamm is one publisher with one engraving. The question is
 about what Musorgsky wrote."*
+
+## THE PUBLIC ILYA URL IS ilya.dannmitton.com, NOT THE APEX. 2026-09-20
+
+**`dannmitton.com` does not serve Ilya.** The apex resolves to `76.223.105.230` and
+`13.248.243.5`, answers with `Server: DPS/2.0.0`, and returns the title
+"Dann Mitton, DMA - Voice Lessons, Lyric Diction Coaching". That is Dann's Squarespace
+studio site.
+
+**Vercel has `dannmitton.com` attached to the `ilya` project as a verified domain, and a
+production deployment lists it in its `alias` array.** DNS has never pointed there, so the
+attachment is an inert claim and the alias list is not evidence of what a visitor reaches.
+
+**`ilya.dannmitton.com` is served by Vercel** (`server: Vercel`, region `yul1`) and is the
+URL to give a singer.
+
+**What it cost, 2026-09-20:** a farm-out read `list_project_domains` and the deployment's
+`alias` array and reported that the public reaches Ilya at the apex. The desk repeated it
+before checking. **An alias list says what Vercel would serve if DNS arrived. Curl the
+host.**
+
+## THE SHANE WALL LIVES IN A TRACKED .env, NOT IN VERCEL. 2026-09-20
+
+`apps/web/src/lib/wall.ts:6-7` reads `import.meta.env.PUBLIC_INCLUDE_SHANE` at build time,
+and Rollup tree-shakes every branch behind it when it is not `'true'`. It gates
+`DeskHead.svelte:51` (the tab pair collapses to `['transcription']`), `destinations.ts:103`
+and `:105`, and five blocks in `+page.svelte`.
+
+**The Vercel project has exactly one environment variable, `BLOB_READ_WRITE_TOKEN`.
+`PUBLIC_INCLUDE_SHANE` has never been set there.** It is supplied instead by
+`apps/web/.env`, which is **tracked in the repository** and contains
+`PUBLIC_INCLUDE_SHANE=true`. Vite reads it from the package root on every build, Vercel's
+included.
+
+**So the wall is down everywhere a build runs, and it cannot be raised per environment
+without a commit.** `apps/web/.env.example` still instructs that production leave the
+variable unset. That instruction has not described the behaviour since `.env` entered the
+tree at `27ca138`, 2026-06-23.
+
+**What it cost, 2026-09-20:** the desk told Dann a production deploy would ship a
+transcription-only page. It would not. `git ls-files --error-unmatch apps/web/.env`
+settles it in one command.
+
+## HOW A RELEASE ACTUALLY GOES OUT. Established 2026-09-20 by a live dry run
+
+**It was NOT ESTABLISHED in any memory file before this, and `SCHEDULE.md` had it as a
+week-5 unknown.** It is now a known 90-second operation, run end to end on 2026-09-20.
+
+1. `main` is the default branch and Vercel's production branch. Every production
+   deployment in the project's history carries `githubCommitRef: "main"`.
+2. `main` had no upstream configured, so a bare `git push` refuses. Use
+   `git push origin main`.
+3. Vercel's GitHub integration builds and promotes on the push, with **no manual promote
+   step**. Build took 40 seconds; live 90 seconds after the push.
+4. Aliases attach automatically, `aliasError: null`.
+5. **The ship script cannot do this.** `~/Downloads/ilya-ship.sh` refuses unless the branch
+   is `Shane` and pushes only to `origin/Shane`, which produces a preview deploy. It never
+   invokes Vercel.
+6. **Rollback:** the previous production deployment carries `isRollbackCandidate: true`.
+
+**Before 2026-09-20, `Shane` had never been production.** `main` sat at `acf7db4` from
+2026-06-12, 551 commits behind, for 100 days.
+
+**The verification that worked:** the `CACHE_VERSION` stamp in `/sw.js`, which
+`apps/web/scripts/stamp-sw.mjs` writes per build. Curl it on the host and check the number
+falls inside the deployment's build window. **Grepping the served HTML for tab labels does
+NOT work:** the app is entirely client-rendered and the shell carries none of them.
+**Grepping the modulepreloaded chunks does not work either:** those are the shell only, and
+`Loupe.svelte` lives in a lazily loaded route chunk the HTML never lists.
+
+## A BRANCH SWITCH CAN UNCOVER HUNDREDS OF UNTRACKED DUPLICATES. 2026-09-20
+
+**After `git checkout main` and `git merge --ff-only Shane`, `git status --porcelain` went
+from 5 entries to 511.** 510 were named `* 2.*` and one was `tools/e16-harness/.gitignore 2`.
+Their mtimes were from Aug 21, so the files were old, and none is covered by `.gitignore`.
+**Confirmed in Dann's own Terminal, not only through the bridge.**
+
+**Why it matters: the ship script refuses on untracked files**, so the next ship would have
+refused.
+
+**The fix that worked**, run by Dann, which moves rather than deletes and keeps the tree
+structure:
+
+```
+git ls-files --others --exclude-standard -z | while IFS= read -r -d '' f; do mkdir -p "$HOME/Desktop/ilya-dupes-2026-09-20/$(dirname "$f")"; mv "$f" "$HOME/Desktop/ilya-dupes-2026-09-20/$f"; done
+```
+
+They are at `~/Desktop/ilya-dupes-2026-09-20/`. **NOT ESTABLISHED: what created them, and
+whether their contents differ from their originals.**
+
+## THE BRIDGE CANNOT READ A FILE WITH " 2" IN ITS NAME. 2026-09-20
+
+`grep` and `diff` through `mcp__remote-devices__device_bash` returned
+**"Resource deadlock avoided"** on every path matching `* 2.*` under
+`~/Desktop/ilya-rewrite`. The file is never read, and the tool that tried reports a
+difference it did not measure.
+
+**What it cost, 2026-09-20:** `diff -q "wall.ts" "wall 2.ts"` printed `DIFFERS`, which the
+desk reported as a finding. It had read nothing. **A non-zero exit from a comparison is not
+a comparison. Check the error stream.**
+
+## device_commit_files CAN REPORT SUCCESS AND WRITE STALE CONTENT. 2026-09-20
+
+**Rewriting a file and committing it to the same `devicePath` a second time wrote the
+FIRST version's bytes and returned `{"written":[...],"rejected":[]}`.** Passing
+`force: true` did not help. The container's copy was 7,670 bytes; the Mac's was 5,990,
+with a fresh timestamp and the old content.
+
+**What it cost, 2026-09-20:** Code built a brief the desk had already replaced, and the
+desk told Dann it was a timing race. It was not. Code found it, not the desk.
+
+**The rule. Never say a file is saved until you have read it back off the device.** After
+every `device_commit_files`, check the byte count and grep a string that exists only in
+the new version. **When a file must be revised, write it under a new name (`_r2_`) rather
+than overwriting**, which also matches this project's own brief-versioning convention.
+
+**This is `CONTRACT.md` §5's "Do not tell Dann a thing is saved before it is saved",
+and the desk broke it because a tool said otherwise. A tool's success message is not an
+observation.**
