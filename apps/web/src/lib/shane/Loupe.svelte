@@ -21,14 +21,14 @@
 	import { onMount, type Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
-	import { RING_REACH, RING_STROKE } from '$lib/shane/selection-ring';
+	import { RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/shane/selection-ring';
 	import type { Slot, PairingMap } from '$lib/shane/pairings';
 	import type { Cursor } from '$lib/shane/entry';
 	import LoupeSyllables from '$lib/shane/LoupeSyllables.svelte';
 import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
-	import { renderLoupeSystem, systemMarkup } from '$lib/shane/loupe-render';
+	import { deriveMinGap, renderLoupeMeasure, systemMarkup, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/shane/loupe-render';
 	import {
 		headBound,
 		MUSIC_MARK,
@@ -51,7 +51,6 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		nearestTarget,
 		parseSystemRange,
 		systemIndexOf,
-		windowScale,
 		type HitRect,
 		type LoupeMode,
 		type InkSpan,
@@ -177,7 +176,6 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		noteLine = '',
 		measureIndex,
 		ownIds,
-		nextIds,
 		selectedEventId,
 		revision,
 		bundle = null,
@@ -689,6 +687,37 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		return { rects, nodes };
 	}
 
+	/* THE SPACING THE LOOP SETTLED ON, keyed on the measure's drawing and the page's
+	   scale (see the key where it is built). Plain state and not `$state`: nothing renders from it, and reading
+	   it inside the effect below must not subscribe the effect to its own cache. */
+	const spacingCache = new Map<string, DerivedSpacing>();
+
+	/** FNV-1a over a string, as a hex word: a key for a drawing, not a security matter. */
+	function fingerprint(text: string): string {
+		let h = 0x811c9dc5;
+		for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193);
+		return `${text.length}:${(h >>> 0).toString(16)}`;
+	}
+
+	/** The smallest gap between neighbouring caret centres, in native units; Infinity with fewer than two. */
+	function worstSeparation(marks: readonly { x: number }[]): number {
+		const xs = marks.map((m) => m.x).sort((a, b) => a - b);
+		let worst = Infinity;
+		for (let i = 1; i < xs.length; i++) worst = Math.min(worst, xs[i] - xs[i - 1]);
+		return worst;
+	}
+
+	/** Each neighbouring pair under the floor, named by the gaps' own ids, for the console. */
+	function offendingPairs(marks: readonly { after: string | null; x: number }[], scale: number): string[] {
+		const sorted = [...marks].sort((a, b) => a.x - b.x);
+		const out: string[] = [];
+		for (let i = 1; i < sorted.length; i++) {
+			const px = (sorted[i].x - sorted[i - 1].x) * scale;
+			if (px < TAP_FLOOR_PX) out.push(`${sorted[i - 1].after ?? 'head'} to ${sorted[i].after ?? 'head'} ${px.toFixed(1)} px`);
+		}
+		return out;
+	}
+
 	/* THE CLONE, rebuilt whenever the held measure, the taken entry, or the
 	   page itself changes. Reading the DOM rather than being handed geometry
 	   is deliberate: the page is injected SVG, so the DOM is the only place
@@ -721,25 +750,51 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			frame = null;
 			return;
 		}
-		const range = parseSystemRange(pageSys.getAttribute('data-system'));
-		const rendered = range ? renderLoupeSystem(drawnFrom, range, Number(pageSys.getAttribute('width'))) : null;
-		const markup = range && rendered ? systemMarkup(rendered, range) : '';
-		const sysEl = markup ? mountRender(markup) : null;
-		if (!sysEl) {
+		/* THE PAGE'S OWN SYSTEM WIDTH, and the scale it stands at on screen. The
+		   loupe's render is one measure at a width of its own, so neither the
+		   render's width nor its box says how large the page's notation is; the
+		   page's system does. `unitPx` is CSS pixels per user unit of the page's
+		   notation, and the loupe's point size is that times the magnification,
+		   which no spacing the loupe derives can change (clause 8). */
+		const pageSysWidth = Number(pageSys.getAttribute('width'));
+		const unitPx = pageSys.getBoundingClientRect().width / pageSysWidth;
+		if (!(unitPx > 0)) {
 			frame = null;
 			return;
 		}
+		const measure = measureIndex;
+
+		/* ONE ATTEMPT AT THE HELD MEASURE, at a `minGap` (stage 3b). The spacing
+		   loop below calls it repeatedly with `derive` set, which measures the
+		   carets from the ink alone: no selection, so the spacing it settles on is
+		   a property of the measure and the frame does not breathe as the singer
+		   steps. The last call is the one whose frame is drawn. Everything the
+		   frame is made of stands in this closure, unmoved from stage 3a except
+		   where a comment says stage 3b. */
+		const attempt = (
+			minGap: number,
+			derive: boolean,
+		): {
+			frame: Frame;
+			marks: { after: string | null; x: number }[];
+			derivationSets: { after: string | null; x: number }[][];
+			scale: number;
+		} | null => {
+		const rendered = renderLoupeMeasure(drawnFrom, measure, minGap);
+		const markup = rendered ? systemMarkup(rendered, { fromMeasure: measure, toMeasure: measure }) : '';
+		const sysEl = markup ? mountRender(markup) : null;
+		if (!sysEl) return null;
 		const own = hitsFor(sysEl, ownIds);
 		const first = own.nodes[0];
-		if (!first) {
-			frame = null;
-			return;
-		}
+		if (!first) return null;
 
-		// The next measure bounds the window only when it shares this system,
-		// which is when the render, which is this system alone, holds it.
-		const next = hitsFor(sysEl, nextIds);
-		const nextHere = next.nodes.length > 0 ? next.rects : [];
+		/* NO NEXT MEASURE SHARES THE RENDER, and none is drawn (clause 7: no mark
+		   from an adjacent measure, at either end). The window's right edge is
+		   therefore the render's own right edge, which is where the closing
+		   barline stands, and `closingBarline` below takes it from there.
+		   `measureWindow` is handed no next hits on purpose. `nextIds`, which
+		   bounded the window in stage 3a while the next measure shared the
+		   system's render, is no longer read. */
 
 		const sysWidth = Number(sysEl.getAttribute('width'));
 		const sysHeight = Number(sysEl.getAttribute('height'));
@@ -754,21 +809,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		/** One line gap, an eleventh of that rectangle. Three things need it. */
 		const lineGap = hitH / 11;
 
-		const win = measureWindow(own.rects, nextHere, sysWidth);
-		if (!win || !(sysHeight > 0) || !(sysWidth > 0)) {
-			frame = null;
-			return;
-		}
-
-		/* The page's on-screen scale, MEASURED rather than recomputed. PageFit's
-		   transform, the fitted width, and any browser pinch are all already in
-		   this number, and none of them is knowable from here otherwise. */
-		const box = pageSys.getBoundingClientRect();
-		const unitPx = box.width / sysWidth;
-		if (!(unitPx > 0)) {
-			frame = null;
-			return;
-		}
+		const win = measureWindow(own.rects, [], sysWidth);
+		if (!win || !(sysHeight > 0) || !(sysWidth > 0)) return null;
 
 		/* THE LOUPE NEVER EXCEEDS THE PAGE'S OWN WIDTH ON A PHONE. Ruled by Dann
 		   2026-08-27 after his desktop walk found it growing to the viewport
@@ -809,7 +851,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 
 		const inset = pageInset(stageWidth, SIDE_INSET);
 		/* CLAUSE 12 RENAMED THIS FROM `width`. It is now a CEILING the content
-		   is fitted under (`fitWidth`, below, and the clamp the frame's own
+		   is clamped under (the frame's own
 		   final `width` takes further down), not the frame's own width: the
 		   room the stage offers, less the side inset, same as before. The
 		   frame's own width is computed once `stripWidth` exists, past the
@@ -1170,9 +1212,18 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		const carrySpanUnits = carry ? carry.right - carry.left : 0;
 
 		const totalSpan = headCropUnits + meterSpanUnits + carrySpanUnits + viewSpan + tailSpanUnits;
-		const fitWidth = Math.max(0, maxWidth - FRAME_SIDES);
-		const drawn = Math.min(totalSpan * unitPx * magnification, fitWidth);
-		const scale = drawn / totalSpan;
+		/* N.153 STAGE 3b: THE SCALE IS NO LONGER FITTED. It was
+		   `min(totalSpan * unitPx * magnification, maxWidth - FRAME_SIDES) /
+		   totalSpan`, so a measure wider than the room drew smaller. The loupe
+		   now widens its own engraving to reach the tap floor, and a fixed ceiling
+		   on a wider span is a SMALLER scale: the loop would widen the drawing and
+		   the cap would shrink it back, and the on-screen separation would not
+		   move. Clause 8: the notation's point size is the fixed quantity and the
+		   window is the variable one. The strip may now be wider than the window,
+		   which scrolls it (`.loupe-window` in the stylesheet). N.140 owns how
+		   the singer moves what does not fit. */
+		void totalSpan;
+		const scale = unitPx * magnification;
 		/* `viewSpan * scale` WOULD BE THIS PANEL'S OWN NATIVE WIDTH, but the
 		   body panel's actual content width is `bodyContentWidth`, computed
 		   with the carets further down: clause 6 widens the body's own crop
@@ -1289,7 +1340,28 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   geometry is untouched here, still the selection ring's own, still
 		   read for `stripRing` at its own place; this is only where the
 		   element itself is found. */
-		const pageRing = pageSys.querySelector('[data-selection-ring][data-note-selected]');
+		/* THE SQUIRCLE, IN THE LOUPE'S OWN COORDINATES (stage 3b). Stage 3a read the
+		   PAGE's ring off `pageSys`, and that was right while the render was the
+		   page's own drawing at the page's width. The render is now one measure at
+		   a spacing of its own, so the page's ring stands where the page's note
+		   stands and this drawing's note is elsewhere. The box is made here from
+		   the mounted render by `ringBox`, the function the page's ring is made
+		   by, so the shape is the page's and the position is the loupe's. A
+		   taken note in another measure has no ring in this render, and clause 7
+		   says none belongs here. A derivation attempt draws no ring: the
+		   spacing is a property of the measure, not of the selection.
+
+		   ONE DIFFERENCE, NOT ESTABLISHED AS HARMLESS: `ringBox` reads the ink of
+		   the whole system it is handed for the ring's top and bottom, so on a
+		   measure whose ink is shorter than its page system's the ring is
+		   shorter than the page's. */
+		const pageRing = (() => {
+			if (derive || !selectedEventId) return null;
+			const hit = sysEl.querySelector(`[data-hit="${CSS.escape(selectedEventId)}"]`);
+			const group = hit?.closest('[data-event-id]');
+			const box = hit && group ? ringBox(hit, group, selectedEventId) : null;
+			return box ? { ...box, radius: RING_RADIUS, stroke: RING_STROKE } : null;
+		})();
 
 		/* CLAUSE 13/2.5. MORE DAYLIGHT BETWEEN THE SQUIRCLE AND THE CARET NEXT
 		   TO IT, moved up from beside the boundary functions below so
@@ -1444,7 +1516,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   PILL'S FILL ARE ONE CONDITION, `mode === m && syllablesOpen`: they
 		   appear together and go together, so a retracted panel restores the
 		   measure to how it looked when the loupe opened. Do not split them. */
-		if (mode === 'corrections' && syllablesOpen && positions.length > 1) {
+		const marks: { after: string | null; x: number }[] = [];
+		const derivationSets: { after: string | null; x: number }[][] = [];
+		if ((derive || (mode === 'corrections' && syllablesOpen)) && positions.length > 1) {
 			const rectOf = (id: string) => sysEl.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 			/* THE INK ITSELF: the union of a note's own group (excluding its
 			   hit rectangle, which is not ink) and everything stamped
@@ -1479,13 +1553,16 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				}
 				return Number.isFinite(minX) ? { left: minX, right: maxX } : null;
 			};
-			const ringStrokeHalf = pageRing
-				? (parseFloat(getComputedStyle(pageRing).strokeWidth) || RING_STROKE) / 2
-				: 0;
-			const ringLeftEdge = pageRing ? Number(pageRing.getAttribute('x')) - ringStrokeHalf : null;
-			const ringRightEdge = pageRing
-				? Number(pageRing.getAttribute('x')) + Number(pageRing.getAttribute('width')) + ringStrokeHalf
-				: null;
+			/* WHICH NOTE IS TAKEN, AS THE CARETS SEE IT: its id and the two edges of
+			   its ring. Drawing uses the singer's own selection. A derivation
+			   attempt runs the placement once for each entry in turn, and once for
+			   none (below), because the squircle moves the caret beside the taken
+			   note and the spacing has to hold whichever note is taken. */
+			const ringEdgesOf = (r: { x: number; width: number; stroke: number } | null) =>
+				r ? { left: r.x - r.stroke / 2, right: r.x + r.width + r.stroke / 2 } : null;
+			let takenId: string | null = selectedEventId;
+			let ringLeftEdge: number | null = ringEdgesOf(pageRing)?.left ?? null;
+			let ringRightEdge: number | null = ringEdgesOf(pageRing)?.right ?? null;
 
 			/* PLATE C'S OWN NUMBERS, moved up from the drawing pass below: the
 			   position rule needs `armHalf` to know how much room a caret's
@@ -1532,7 +1609,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				   taken note, the edge THIS gap must clear is the squircle's
 				   own RIGHT stroke, not its left: the boundary facing the gap,
 				   never the far side of the note. */
-				if (e.id === selectedEventId && ringRightEdge !== null) {
+				if (e.id === takenId && ringRightEdge !== null) {
 					return ringRightEdge + (withClearance ? SQUIRCLE_CLEARANCE : 0);
 				}
 				return inkOf(e.id)?.right ?? null;
@@ -1543,13 +1620,14 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				if (e.kind !== 'entry') return null;
 				/* SYMMETRIC: this entry sits to the RIGHT of gap `i`, so its
 				   squircle's LEFT stroke is the edge facing the gap. */
-				if (e.id === selectedEventId && ringLeftEdge !== null) {
+				if (e.id === takenId && ringLeftEdge !== null) {
 					return ringLeftEdge - (withClearance ? SQUIRCLE_CLEARANCE : 0);
 				}
 				return inkOf(e.id)?.left ?? null;
 			};
 
-			const marks: { after: string | null; x: number }[] = [];
+			const placeMarks = (): { after: string | null; x: number }[] => {
+			const out: { after: string | null; x: number }[] = [];
 			for (let i = 0; i < positions.length; i++) {
 				const p = positions[i];
 				if (p.kind !== 'gap') continue;
@@ -1600,8 +1678,33 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 					else if (beforeHit) x = Number(beforeHit.getAttribute('x')) + Number(beforeHit.getAttribute('width'));
 					else if (afterHit) x = Number(afterHit.getAttribute('x'));
 				}
-				if (x !== null && Number.isFinite(x)) marks.push({ after: p.after, x });
+				if (x !== null && Number.isFinite(x)) out.push({ after: p.after, x });
 			}
+			return out;
+			};
+			if (derive) {
+				/* EVERY SELECTION, and none. The worst separation over all of them is
+				   what the loop is handed, so the floor holds for whichever note the
+				   singer takes. The sets are returned together; the loop takes the
+				   minimum across them. */
+				derivationSets.push(placeMarks());
+				for (const p of positions) {
+					if (p.kind !== 'entry') continue;
+					const hit = sysEl.querySelector(`[data-hit="${CSS.escape(p.id)}"]`);
+					const group = hit?.closest('[data-event-id]');
+					const box = hit && group ? ringBox(hit, group, p.id) : null;
+					if (!box) continue;
+					const e = ringEdgesOf({ ...box, stroke: RING_STROKE });
+					takenId = p.id;
+					ringLeftEdge = e?.left ?? null;
+					ringRightEdge = e?.right ?? null;
+					derivationSets.push(placeMarks());
+				}
+				takenId = null;
+				ringLeftEdge = null;
+				ringRightEdge = null;
+			}
+			marks.push(...placeMarks());
 
 			/* THE BARLINE MOVES, NOT THE CARET: applied to the CLONE, so the
 			   live page's own engraving is untouched (constraint: "the page
@@ -1647,7 +1750,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				bodyViewSpan = bodyViewRight - bodyViewLeft;
 			}
 
-			if (marks.length > 0) {
+			if (marks.length > 0 && !derive) {
 				/* THE ARROWHEAD'S OWN LENGTH IS THE EXTENSION PAST THE STAFF, so the
 				   mark's outer end is the arrow's base and its apex just touches the
 				   staff line it terminates on: nothing stands proud of the arrow. One
@@ -1774,7 +1877,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   relationship for the whole session on all three. */
 		/* The tallest drawing the page can produce, which is the narrowest
 		   measure's, capped by the magnification this modality asks for. */
-		const windowHeight = cropHeight * windowScale(page, unitPx * magnification, fitWidth);
+		const windowHeight = cropHeight * unitPx * magnification;
 		/* THE LOUPE IS CENTRED ON THE PAGE'S VISIBLE HEIGHT. It sat in the
 		   page's lower third before, which put it below the eyeline; that was
 		   this desk's own narrowing of Dann's words rather than his ruling,
@@ -1806,14 +1909,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		const bodyContentWidth = bodyViewSpan * scale;
 		const ring = pageRing
 			? stripRing(
-					{
-						x: Number(pageRing.getAttribute('x')),
-						y: Number(pageRing.getAttribute('y')),
-						width: Number(pageRing.getAttribute('width')),
-						height: Number(pageRing.getAttribute('height')),
-						radius: Number(pageRing.getAttribute('rx')) || 0,
-						stroke: parseFloat(getComputedStyle(pageRing).strokeWidth) || RING_STROKE,
-					},
+					pageRing,
 					bodyViewLeft,
 					headWidth + meterWidth + carryWidth,
 					cropTop,
@@ -2033,7 +2129,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			? Math.min(Math.max(sheet.x + sheet.width / 2 - width / 2, dockInset + GUTTER), stop)
 			: dockInset + GUTTER;
 
-		frame = {
+		return {
+			marks,
+			derivationSets,
+			scale,
+			frame: {
 			inner: clone.innerHTML,
 			caretsMarkup,
 			bodyClipLeft,
@@ -2075,8 +2175,53 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			stageBottom,
 			system: systemIndexOf(ranges, measureIndex) + 1,
 			systems: ranges.length,
+			},
+		};
 		};
 
+		/* ── THE LOUPE'S OWN SPACING, N.153 STAGE 3b ──────────────────────────
+		   Render, measure every adjacent pair of carets in CSS pixels at the
+		   loupe's own scale, and widen `minGap` until none stands nearer than the
+		   tap floor. `deriveMinGap` in `loupe-render.ts` is the search and says
+		   why it is a bisection and why the render passes no `targetWidth`.
+
+		   THE ANSWER IS A PROPERTY OF THE MEASURE AND THE PAGE'S SCALE, so it is
+		   kept: stepping the selection re-runs this effect and must not re-run the
+		   search, or the frame would take a dozen renders under the singer's hand
+		   at every step. THE KEY IS THE DRAWING, NOT THE BUNDLE. The bundle is a
+		   new object whenever the page redraws, which the singer's own selection
+		   causes (MEASURED 2026-09-20: the search re-ran on every raise while the
+		   key was the bundle's identity), so the key is the measure's render at the
+		   page's own spacing, which changes exactly when what the search reads
+		   changes, and the page's scale. */
+		const pageRender = renderLoupeMeasure(drawnFrom, measure, drawnFrom.spacing.minGap);
+		const key = `${measure}|${isPhone ? 'p' : 'd'}|${unitPx.toFixed(3)}|${positions.length}|${pageRender ? fingerprint(pageRender.svg) : ''}`;
+		let derived = spacingCache.get(key);
+		if (!derived) {
+			const t0 = performance.now();
+			derived = deriveMinGap(drawnFrom.spacing.minGap, (g) => {
+				const a = attempt(g, true);
+				if (!a) return null;
+				return { worst: Math.min(...a.derivationSets.map(worstSeparation)) * a.scale, scale: a.scale };
+			});
+			if (spacingCache.size > 400) spacingCache.clear();
+			spacingCache.set(key, derived);
+			console.debug(
+				`[loupe] m.${measure} minGap ${derived.minGap.toFixed(2)} (page ${drawnFrom.spacing.minGap}), ${derived.iterations} renders in ${(performance.now() - t0).toFixed(0)} ms, worst ${derived.worst.toFixed(2)} px`,
+			);
+			if (!derived.converged || derived.worst < TAP_FLOOR_PX) {
+				/* THE MEASURE CANNOT HAVE THE WIDTH IT NEEDS. Best spacing reached is
+				   drawn, and the residue goes to the console: no mark on the page and
+				   none in the loupe (CONTRACT.md section 6). */
+				const at = attempt(derived.minGap, true);
+				const pairs = at ? at.derivationSets.flatMap((set) => offendingPairs(set, at.scale)) : [];
+				console.warn(
+					`[loupe] m.${measure} kept minGap ${derived.minGap.toFixed(2)} short of the ${TAP_FLOOR_PX} px floor: ${pairs.join('; ')}`,
+				);
+			}
+		}
+		const result = attempt(derived.minGap, false);
+		frame = result ? result.frame : null;
 	});
 
 	/* A TAP INSIDE THE LOUPE TAKES THE ENTRY, and places the armed syllable.
@@ -2656,8 +2801,19 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	.loupe-window {
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		overflow: hidden;
+		justify-content: safe center;
+		/* N.153 STAGE 3b. The strip is no longer scaled down to fit the window
+		   (clause 8), so a measure whose derived spacing is wider than the room
+		   scrolls sideways instead. `safe` keeps its left end reachable when it
+		   overflows. The frame's `touch-action: none` is taken back for the
+		   horizontal pan alone, so the vertical swipe that dismisses stays the
+		   loupe's own; whether the scroll may keep a horizontal gesture on a
+		   surface where a tap places a syllable is N.140's question. */
+		overflow-x: auto;
+		overflow-y: hidden;
+		touch-action: pan-x;
+		overscroll-behavior-x: contain;
+		scrollbar-width: none;
 	}
 
 	/* N.147, RULED BY DANN 2026-09-17: THE HAIRLINE under the notes, drawing 1
