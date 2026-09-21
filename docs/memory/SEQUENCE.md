@@ -96,7 +96,7 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 | item | why here |
 |---|---|
 | ~~**N.129**~~ **CLOSED 2026-09-20**, `e75d6f3` and `7bd3d04`, both walked | The ruler. **r1's direction was WRONG and r2 reversed it:** Dann ruled the underlay draws in Source Serif 4, the face the table already measures, rather than the table being remeasured into Source Sans 3. Brief `../sessions/brief-n129-underlay-ruler_r2_2026-09-20.md`. **Dependency 1 is now discharged and every horizontal spacing item behind it is free.** |
-| **N.136** | Cheap, and it settles the live half of N.119 before N.119 is briefed. |
+| ~~**N.136**~~ **CLOSED 2026-09-21**, `1d18514`, walked | Closed inside N.159, which gave the score one drawing step for every switch. **N.158 closed with it.** Dependency 3 is discharged. |
 
 ### Tier 1. The notation layer
 
@@ -219,7 +219,7 @@ asked for a profile of what could run without his rulings.
 |---|---|
 | **N.153 stages 2 to 5** | The loupe re-engraves the held measure at its own spacing. Stage 1 shipped `0028266`; stage 2's brief is written, `../sessions/brief-n153-s2-data-channel_r1_2026-09-20.md`. **Depends on nothing and nothing comes before it** (dependency 7). It closes the 27 scale-invariant caret collisions and is what makes the insert reach usable on a phone. **Dann: the walk.** |
 | **N.132** | The ratified names, `Text` / « Texte », `Markup` / « Annotation », `Insights` / « Aperçus », `Melody` / « Mélodie », ruled 2026-09-13 in both languages and still unbuilt. Carries the ruled 0.5 rem tab padding nobody has seen. **Must precede N.130 and N.131** (dependency 2). **Dann: the walk, and his eye on 0.5 rem.** |
-| **N.136** | Open syllabification never reaches Score markup's drawn text. Small, traced, and it shrinks N.119 before N.119 is briefed (dependency 3). **Dann: the walk.** |
+| ~~**N.136**~~ **DONE 2026-09-21**, `1d18514`, walked | Closed inside N.159. The desk walked it in Dann's Chrome and he ruled on the shots. |
 | **N.141, last step** | The squircle across a tie. Was gated on N.142, which shipped `c868540`. **Its other two questions stay Dann's and are NOT in this run.** |
 | **N.135** | The page reader reads the text underlay. Ruled 2026-09-14, cost measured in `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. Independent. **Dann: the walk.** |
 | **N.142 step 2** | Was blocked on a count only Dann's browser holds. **No longer: the desk read his library through Chrome three times on 2026-09-20 and takes the count itself.** Build only if the count is not zero. |

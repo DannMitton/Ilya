@@ -11,8 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`0f7375c`**, "N.153 stage 3a: the loupe draws a render of the system, not a clone of
-the page", shipped 2026-09-20 21:39, all five gates at baseline (the previous floors,
+before **`1d18514`**, "N.159: the score obeys every Notation switch, drawn fresh from the live
+poem, nothing stored", shipped 2026-09-21 03:26, all five gates at baseline and walked by Dann
+on his own library the same night (the previous floors, `0f7375c`,
 `46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
 `fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
 `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
@@ -41,63 +42,48 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-21, about 02:50
+> ### READ THIS FIRST. Written at the close of 2026-09-21, about 03:50
 >
-> **THE ONE THING IS N.160 STEP 1: the score obeys every Notation switch.** It is specified as
-> N.159 in `OPEN.md`, it is already `SCHEDULE.md` week 2's "N.136 with N.119", and Code has
-> designed and measured it. **It displaces nothing.** The converged plan for everything after
-> it is `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`.
+> **THE ONE THING IS N.160 STEP 2: the dry run.** The heal runs read-only on Dann's own library
+> and logs what it WOULD do, seat by seat, so the only copy of the fault is never written to
+> blind. Spec `OPEN.md` §N.160; the plan is
+> `../sessions/memo-n160b-the-approach_r1_2026-09-21.md` §2 step 2. **Dann exports a binder
+> backup before it runs.** It displaces N.132 to week 3, a DESK DEFAULT already recorded in
+> `SCHEDULE.md`.
 >
-> #### WHAT SHIPPED AND WAS WALKED, four ships
+> #### WHAT SHIPPED AND WAS WALKED
 >
-> - **`0f7375c` and `c3ca3f5` carried into the night from 2026-09-20.**
-> - **`6101e01`, N.141's height rule.** A floor one stave space above the stave, growth for a
->   note whose own ink goes higher, and a bottom identical on every box. **Dann amended his own
->   one-height ruling to get it** (`OPEN.md` §N.141, 2026-09-20 23:32 and 23:35). Walked: *"Yes
->   this is ideal."*
-> - **`b4320d2`, N.119, the stress acutes reach Score markup.** 31 acutes on the fixture. The
->   toggle marks the **Cyrillic**, not the IPA, and the acute is located by which syllable's IPA
->   carries the stress mark. Walked.
-> - **`b543620`, N.119b.** A hand-assigned stress now refreshes the stored pairing, so the acute
->   follows live. Walked in part: «Комнатка» fixed, «непроглядная» not, and that residue is
->   N.160.
-> - **`345d943`**, the design record for N.159 and N.160. No code.
+> **`1d18514`, N.159, and it closed three tracker items at once:** N.159, N.136 and N.158. The
+> score now obeys every Notation switch, drawn fresh from the live poem on every render, with
+> nothing stored. Walked by Dann on his own library in his Chrome on the branch alias at about
+> 03:45: *"YEs :)"*.
 >
-> #### THE RELEASE PATH IS PROVEN, and it was the biggest unknown on the board
+> #### THE NUMBER THAT CHANGED THE PICTURE
 >
-> **Rehearsed live on 2026-09-20.** A fast-forward of `main` to `Shane` and `git push origin
-> main` put it live in about 90 seconds with no manual promote step. `SCHEDULE.md` week 5's
-> "How the release goes out" is **CLOSED**. **The public URL is `ilya.dannmitton.com`, not the
-> apex, which serves Dann's Squarespace studio site.** Full sequence and traps in
-> `ENVIRONMENT.md` §`HOW A RELEASE ACTUALLY GOES OUT` and §`THE PUBLIC ILYA URL`.
->
-> **`main` now carries `2b980e7`.** Everything after that is on `Shane` only.
->
-> #### THE MODEL DANN RULED, and it reframes the next month
->
-> **`PRODUCT.md` §THE WORK, AND ITS TWO VIEWS.** One work, a text joined to a music;
-> Transcription and Score markup are two views of it. **The Notation toggles belong to the
-> work, so a view that ignores them is not rendering the work.** His words for the standard:
-> *"Seamlessness, instantaneous correct information, carefully rendered and defensible."*
+> **The seat instrument fired on Dann's own library: 67 drawn live, 29 kept as stored, of 96
+> seated.** The earlier audit predicted 25 from the line index alone. **It is 29.** Every
+> planning number for N.160 steps 2 and 3 is against 29, not 25, and where the other four come
+> from is NOT ESTABLISHED.
 >
 > #### WHAT IS OWED ON WHAT SHIPPED
 >
-> - **Dann's own library holds 25 frozen seats of 96**, measured through the branch alias
->   2026-09-21. N.160 steps 2 and 3 repair them. **He exports a binder backup before the dry
->   run.**
-> - **The viewBox clamp binds on two notes**, `m1-3-4` and `m2-0-1`, so the loupe and page
->   differ there by under a third of a stave space. `OPEN.md` §N.141.
-> - **N.153 stages 4 and 5 are untouched**: retiring `loupe.ts`'s crop helpers, and the
->   whole-fixture scan. **No standalone scan harness exists in the tree.**
-> - **A phone walk of N.160 step 1.** Every timing so far is headless desktop Chromium on a dev
->   build.
+> - **Paint on a phone is NOT MEASURED.** Every timing is desktop. Dann declined a phone walk
+>   on 2026-09-20 for a standing reason (`ENVIRONMENT.md` §`THE DESK DRIVES HIS CHROME AND HE
+>   RULES ON SHOTS`), so this walk was driven from his Chrome instead. **Whether a flip feels
+>   instant under his thumb is still unanswered.**
+> - **`refreshPairings` and `stressAcutedCyrillic`'s own lookup are still in the tree.**
+>   `memo-n160b` retires both in step 1; the desk held them back to keep the test suites
+>   untouched, DESK DEFAULT, and they retire with step 3.
+> - **The two-vowel-letter suppression has no test of its own**, per Code's memo. It is covered
+>   only because both paths share one function.
+> - **N.153 stages 4 and 5 are untouched**, and **N.157 is open**: replacing a score does not
+>   re-derive the seats.
 >
 > #### THE BUFFER IS SPENT
 >
 > **N.160 steps 2 and 3 take the week-5 buffer and move N.132 to week 3**, a DESK DEFAULT Dann
-> can overturn. Week 1 had already spilled five items into week 2. `SCHEDULE.md`'s own rule now
-> governs: once the buffer is gone, the lowest line in a week moves to LATER and the date
-> stands.
+> can overturn. `SCHEDULE.md`'s own rule governs from here: once the buffer is gone, the lowest
+> line in a week moves to LATER and the date stands.
 
 ## THE TRACKER
 
@@ -116,19 +102,24 @@ does not repeat them.
 
 ### Numbered 2026-09-21
 
-- `[ ]` **N.159. The score obeys the singer's switches.** DESK DEFAULT number. **Step 1 of
-  N.160 and already `SCHEDULE.md` week 2's "N.136 with N.119", so it displaces nothing.**
-  Designed and measured by Code; spec in `OPEN.md`. **Walked on Dann's phone** when it ships.
+- `[x]` **N.159. The score obeys the singer's switches. CLOSED 2026-09-21**, shipped `1d18514`
+  and walked by Dann on his own library, in his Chrome on the branch alias: *"YEs :)"*. **It
+  closed N.136 and N.158 with it.** Measured on his library at the walk: Reconstitution changes
+  **16** notes, Open syllables changes **24** and moves no Cyrillic, and the new seat instrument
+  reads **67 drawn live, 29 kept as stored, of 96 seated**. Spec and account moved to
+  `../sessions/LOG.md` block 27. Brief
+  `../sessions/brief-n159-score-markup-responds-live_r3_2026-09-21.md`, memo
+  `../sessions/memo-n159-build_r1_2026-09-21.md`. **NOT MEASURED: paint on a phone.**
 - `[ ]` **N.160. The work, and its two views.** DESK DEFAULT number. **The model is Dann's**
   (`PRODUCT.md`). Five steps, two before the release and three after; spec in `OPEN.md`, plan
   in `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`. **Steps 2 and 3 spend the week-5
   buffer.** **One ruling deferred to Dann, deliberately, until it can be asked against a real
   count:** when a word has truly left the poem, does its note keep the old syllable or clear
   to blank?
-- `[ ]` **N.158. Reconstitution never reaches Score markup.** Numbered 2026-09-21, DESK
-  DEFAULT number. **Folded into N.160 step 1.** LEARN Unit 4 instructs the singer to use the
-  toggle and names the result, in both languages, and on the score nothing happens. Spec in
-  `OPEN.md`.
+- `[x]` **N.158. Reconstitution never reaches Score markup. CLOSED 2026-09-21** inside
+  `1d18514`. LEARN Unit 4's instruction now holds on the score: 16 notes change on Dann's own
+  song. **His account of what reconstitution is moved to `PRODUCT.md` §WHAT RECONSTITUTION IS**
+  before the spec went to `../sessions/LOG.md` block 27.
 - `[x]` **N.119. The stress acutes reach Score markup. CLOSED 2026-09-21**, shipped `b4320d2`
   and walked. **N.119b** followed in `b543620`: a hand-assigned stress refreshes the stored
   pairing. **Its residue is N.160**, not a further acute defect.
@@ -229,10 +220,10 @@ does not repeat them.
   the scroll may take a gesture on a surface where the swipe dismisses and the
   tap places a syllable.**
 
-- `[ ]` **N.136. Open syllabification never reaches Score markup's drawn text.**
-  Found by Dann on the N.118 walk: the toggle moves, and neither the Cyrillic
-  nor the IPA on the page changes. Spec in `OPEN.md`. **Not a regression from
-  N.134 or N.118**; those made a partial gap total.
+- `[x]` **N.136. Open syllabification never reaches Score markup's drawn text. CLOSED
+  2026-09-21** inside `1d18514`. Found by Dann on the N.118 walk. **24 notes now re-divide on
+  his own song and the Cyrillic does not move**, which is the desk default he walked and
+  passed. Account in `../sessions/LOG.md` block 27.
 - `[ ]` **N.135. The page reader reads the text underlay.** Ruled by Dann
   2026-09-14. Cost measured the same night in
   `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. Spec in `OPEN.md`.
@@ -392,3 +383,17 @@ sections with index rows, `OPEN.md` gained N.158, N.159, N.160 and N.141's amend
 `SCHEDULE.md` records that the week-5 buffer is spent. **The desk was wrong loudly and
 repeatedly between 00:40 and 01:15**, on four claims it had not read, and the recovery was
 reading before speaking. Memory NOT committed.*
+
+*Close of 2026-09-21, about 03:50. One ship, `1d18514`, walked, and it closed three tracker
+items: N.159, N.136 and N.158. The score obeys every Notation switch, drawn fresh from the live
+poem on every render, with nothing stored. Gate 4 moved 1354 to 1360 with Dann's permission;
+backup `~/Downloads/ilya-ship.sh.bak-1354-2026-09-21`. **The seat instrument fired on Dann's
+own library for the first time: 67 drawn live, 29 kept as stored, of 96 seated**, so the
+planning number for N.160 steps 2 and 3 is 29 rather than 25. His account of what
+reconstitution is moved to `PRODUCT.md` before N.158's spec went to the archive.
+`ENVIRONMENT.md` gained two sections with index rows, a correction on the execute bit, and a
+gate-table update that was 91 tests behind the script. The walk was driven from Dann's own
+Chrome and he ruled on the pictures. **NOT MEASURED: paint on a phone. NOT ESTABLISHED: where
+the four seats beyond the predicted 25 come from, and whether `ilya:openSyllabification` was
+left as it was found.** Memory NOT committed.*
+

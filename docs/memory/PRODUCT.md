@@ -505,6 +505,28 @@ His words, given while N.119 was being briefed:
 
 **`ё` never takes an acute**, being inherently stressed (`WordStack.svelte:70-71`).
 
+## WHAT RECONSTITUTION IS. Stated by Dann 2026-09-21, and the account is his
+
+**His words, given while N.158 was being written:**
+
+> *"Reconstitution has to do with vowel reduction. Grayson offers rules for vowel reduction
+> (i.e. akanye, ekyane, and ikanye; the reduction of unstressed vowels in relation to their
+> stressed counterpart). Reconstitution rolls back that layer of reduction to restore more
+> distinct vowel values."*
+
+**Two things bound it, and both are already in LEARN.**
+
+1. **The one-way door** (`LearnContent.svelte:3023`): `[ʌ]` reconstitutes to `/ɑ/` and never
+   to `/o/`.
+2. **Ilya departs from Grayson on exactly one point**, ruled by Dann and argued in LEARN at
+   `:3029-3031`: unstressed ⟨е⟩ after ⟨ж⟩, ⟨ш⟩ or ⟨ц⟩ reconstitutes to `[ɛ]`.
+
+**Whoever builds anything that touches reconstitution reads that passage first.**
+
+**Transcribed here at the close of 2026-09-21**, out of `OPEN.md` §N.158, before that section
+moved to the archive. It is a statement about what Ilya does, so it belongs in this file
+rather than in a closed item.
+
 ## THE WORK, AND ITS TWO VIEWS. Ruled by Dann 2026-09-21, and it is the frame for the rest
 
 **This is Dann's model, in his own words, and it is his invention rather than the desk's.**

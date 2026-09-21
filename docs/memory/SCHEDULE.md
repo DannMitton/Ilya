@@ -62,8 +62,12 @@ design rows.
 ## Week 2. Monday 2026-09-21 to Sunday 2026-09-27. The ruler and the toggles
 
 - [x] **N.129**, the underlay ruler and no dropped hyphens. **CLOSED 2026-09-20, ahead of the week**, in two ships, both walked: `e75d6f3` (the underlay draws in Source Serif 4, the face its widths were measured from) and `7bd3d04` (hyphens are never omitted, and a word-internal gap reserves `HYPHEN_GAP_PX`). Walked on screen and in print (*"it looks fabulous"*). **The recorded "about 5%" error was wrong and is corrected to 12.2%.**
-- [ ] **N.136 with N.119**: every notation toggle acts at once on Transcription and Markup,
-  and no toggle does nothing. **THIS IS NOW N.160 STEP 1**, designed and measured 2026-09-21
+- [x] **N.136 with N.119**: every notation toggle acts at once on Transcription and Markup,
+  and no toggle does nothing. **CLOSED 2026-09-21 as N.159**, shipped `1d18514` and walked by
+  Dann on his own library in his Chrome. **N.136 and N.158 closed with it.** Measured on his
+  library: Reconstitution 16 notes, Open syllables 24, and the seat instrument reads 67 drawn
+  live, 29 kept as stored, of 96. **Paint on a phone is still NOT MEASURED.** Designed and
+  measured 2026-09-21
   (`OPEN.md` §N.159, plan in `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`). It
   displaces nothing, because it was already this line. **Walked on Dann's phone**, which is
   the one measurement nobody has taken.

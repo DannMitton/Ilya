@@ -73,6 +73,8 @@ next session the same hour it cost the last one.
 | reading the console of Dann's own Chrome tab | `THE EXTENSION CANNOT SEE HIS TAB` |
 | a click or zoom lands in the wrong place in his Chrome | `THE SCREENSHOT FRAME IS NOT CONSTANT` |
 | the extension goes dead after you close a tab | `CLOSING THE LAST TAB CAN QUIT CHROME` |
+| a reading of 0 changes, or the dictionary never loads, in a tab you drove | `THE EXTENSION'S OWN TAB LANDS BEHIND` |
+| the tab id you had stops working mid-session | `THE EXTENSION'S OWN TAB LANDS BEHIND` |
 | drawing music in a sketch or a mockup | `THE MUSIC FACE IS MAESTRO` |
 | `sed -i ''` fails in device_bash | `THE DEVICE SHELL IS LINUX` |
 | briefing Design | `WHAT DESIGN CAN READ` |
@@ -99,6 +101,7 @@ next session the same hour it cost the last one.
 | drive a browser yourself | `Claude Code, and where the building` |
 | you are about to send Dann a terminal command that starts `claude` | `Claude Code, and where the building` (it is NOT installed on his Mac; Code is the desktop app's Code tab. Cost the desk a wasted turn 2026-09-20) |
 | asking which build a tab is actually running | `THE APP TELLS YOU WHICH BUILD IT IS ON` |
+| asking which build a tab is running, when the build ADDS a string | `A BUILD THAT ADDS A STRING IS ITS OWN MARKER` |
 | you are about to drive the Code tab yourself | `THE DESK CANNOT REACH THE CODE TAB` |
 | deciding whether to farm a tree-read out to a subagent | `A SUBAGENT CAN REACH THE REPO` |
 | an empty `read_console_messages` result | `THE CONSOLE TRACKER STARTS WHEN YOU CALL IT` |
@@ -309,7 +312,14 @@ renderer named it.** In this project it usually did.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | **0 errors, 12 warnings, 5 files** |
-| web-test | **1263 passed (1263)** |
+| web-test | **1360 passed (1360)** |
+
+**MOVED 2026-09-21: web-test 1354 → 1360 (N.159, six new tests in `draw-pairings.test.ts`).**
+Permission asked and given by Dann before the ship. Backup `ilya-ship.sh.bak-1354-2026-09-21`,
+and `:79` was read back in the same call. **AND THE TABLE WAS STALE AGAIN, by 91:** it read
+1263 while the script read 1354, across the N.153 ships. **The script is the instrument. This
+table has now been stale at every single ship it records.** Read `:76-80` before quoting any
+number here.
 
 **MOVED 2026-09-20: web-test 1265 → 1263 (N.150).** Permission asked and given by
 Dann, per this file's own rule below. Backup `ilya-ship.sh.bak-1265-2026-09-20`, and
@@ -434,6 +444,11 @@ gate 4 to 671. macOS `sed -i ''` rewrites the file rather than editing it, and
 the new file came out `-rw-------`, so the next run was `Permission denied` and
 looked like a problem with the ship rather than with the edit. **Follow every
 baseline `sed` with `chmod +x ~/Downloads/ilya-ship.sh`.**
+
+**AND IT IS NOT THE `sed`. CONFIRMED 2026-09-21: a `python3` read-modify-write over the bridge
+drops the bit too**, leaving `-rw-------`. The desk moved gate 4 to 1360 that way and had to
+`chmod +x` afterwards. **So the rule is about writing the file at all, whatever the tool.
+Always `chmod +x` and read `ls -l` back.**
 
 **In Claude Code the five gates run in about a minute, all five, in one command.**
 That is the whole reason the build moved off the bridge. Run them yourself and
@@ -3717,3 +3732,66 @@ than overwriting**, which also matches this project's own brief-versioning conve
 **This is `CONTRACT.md` §5's "Do not tell Dann a thing is saved before it is saved",
 and the desk broke it because a tool said otherwise. A tool's success message is not an
 observation.**
+
+## THE EXTENSION'S OWN TAB LANDS BEHIND, AND A HIDDEN TAB NEVER LOADS THE DICTIONARY. 2026-09-21
+
+**A tab the Chrome extension opens can sit in a window that is not frontmost on Dann's Mac.
+That tab reports `document.hidden === true`, Chrome clamps its timers, the dictionary loader
+never finishes, and the page draws its stored underlay with no transcription behind it.**
+
+**WHAT IT LOOKS LIKE, AND IT LOOKS EXACTLY LIKE A DEFECT.** On the N.159 walk the desk flipped
+Reconstitution on Dann's own song and measured **0 notes changed** on a build that was
+verified new. The same flip, on the same tab, measured **16** once he brought the window to
+the front.
+
+**THE TELL, and it is one line:** `document.hidden` is `true` while `document.hasFocus()` is
+`true`. This file already carried that combination under `Browser and extension`; what is new
+is that it fires on a tab the EXTENSION created, not only on one Dann backgrounded.
+
+```
+JSON.stringify({hidden: document.hidden, vis: document.visibilityState, focus: document.hasFocus()})
+```
+
+**Run it before any measurement whose subject is drawn text, and do not report a reading taken
+while `hidden` is true.** The fix is one sentence to Dann: bring the Chrome window showing Ilya
+to the front. **Creating a second tab does not help; it lands in the same window.**
+
+**AND THE TAB GROUP CHURNS.** Mid-session, `tabs_context_mcp` returned a NEW `tabGroupId` and a
+new tab, and every earlier tab id failed with "not in Claude's tab group for this session".
+**A tool call that fails that way is a group change, not a closed tab.** Call
+`tabs_context_mcp` again, take the tab it gives, and re-run `find` for every ref: refs do not
+survive the change either.
+
+**AND THE CONSOLE TRACKER IS RESET BY EVERY NAVIGATION** (§`THE CONSOLE TRACKER STARTS WHEN YOU
+CALL IT`). To catch a line logged once per load: navigate, call `read_console_messages` to arm
+it, navigate again, wait, then read. A line missing before the window is fronted is not
+absent; it never fired.
+
+## A BUILD THAT ADDS A STRING IS ITS OWN MARKER. 2026-09-21
+
+**§`THE APP TELLS YOU WHICH BUILD IT IS ON` says the update toast is the only instrument that
+answers "is this tab running the newest build". There is a second one, and it is better when
+the new build introduces a string:** fetch every JavaScript resource the page has actually
+loaded and search it for that string.
+
+```
+const js = performance.getEntriesByType('resource').map(r=>r.name).filter(n=>n.endsWith('.js'));
+const hits = [];
+await Promise.all(js.map(async u => { try { const t = await (await fetch(u)).text();
+  if (t.includes('<the new string>')) hits.push(u.split('/').pop()); } catch(e){} }));
+JSON.stringify({chunks: js.length, hits})
+```
+
+**Measured 2026-09-21:** 19 loaded chunks, and N.159's own console string was found in
+`eMPDFLCv.js`, which settled the build question in one call while the toast was absent and the
+seats line had not yet fired.
+
+**Why it works where the other instruments failed.** It reads what the tab EXECUTED, not what
+the server holds and not what a cache contains. **It only works when the new build adds a
+string**, so a refactor or a CSS change cannot be checked this way; §`THE APP TELLS YOU WHICH
+BUILD IT IS ON` still governs those. **A console line the build logs is such a string, which
+is one more reason to put an instrument in a build.**
+
+**The negative is still not evidence** (tether 14): a miss can mean the chunk holding it has
+not loaded yet, so confirm the surface is drawn before you read a zero.
+
