@@ -66,7 +66,9 @@
 		resolveVocalReadingOctave,
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
+		chooseClef,
 	} from '@ilya/score-parser';
+	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
 	import {
@@ -155,7 +157,7 @@
 		 * comes to it as this callback rather than as a list of values someone
 		 * has to remember to extend. THAT LIST IS HOW THE DEFECT HAPPENED.
 		 */
-		onpagesdrawn?: () => void;
+		onpagesdrawn?: (bundle: LoupeRenderBundle | null) => void;
 		/**
 		 * The singer's notation preferences (N.5, 2026-08-05). Ilya's output
 		 * is ONE study document, and Transcribe already spells its IPA to
@@ -854,7 +856,24 @@
 	   are closed; only `scorePages` may be a dependency here. */
 	$effect(() => {
 		void scorePages;
-		untrack(() => onpagesdrawn?.());
+		untrack(() =>
+			onpagesdrawn?.(
+				readingScore && analyzed
+					? {
+							readingScore,
+							analyzed,
+							clef: chooseClef(readingScore),
+							font: notationFont?.prepared,
+							fontFamily: notationFont?.family,
+							ipaPreview,
+							withheldIpa,
+							cyrPreview,
+							sylTypePreview,
+							melismaPreview,
+						}
+					: null,
+			),
+		);
 	});
 
 	// Interim running-header text for pages 2+: the song title when the

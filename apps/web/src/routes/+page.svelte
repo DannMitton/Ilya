@@ -199,6 +199,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/shane/correction';
 	import { pitchLabel } from '$lib/shane/note-picker';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
+	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
 	// Engine connectivity check
@@ -2014,13 +2015,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   token that says "the page was redrawn" cannot go stale for a fourth
 	   reason, which a list of the values that redraw it can and did. */
 	let pageRevision = $state(0);
+	/* N.153 stage 2: what the loupe will render a measure from. Raw, because it
+	   is a snapshot handed over whole and never mutated. Nothing reads it yet. */
+	let loupeBundle = $state.raw<LoupeRenderBundle | null>(null);
 	/* A FUNCTION DECLARATION, NOT AN INLINE ARROW. An arrow here is a new
 	   identity on every render of this file, and the pane reads this prop inside
 	   the effect that reports the rebuild, so a fresh identity would re-run that
 	   effect, bump this counter, and re-render: an unbounded loop, which is what
 	   `effect_update_depth_exceeded` was on the first build of this fix. The
 	   pane also calls it untracked; both ends are closed on purpose. */
-	function handlePagesDrawn(): void {
+	function handlePagesDrawn(bundle: LoupeRenderBundle | null): void {
+		loupeBundle = bundle;
 		pageRevision += 1;
 	}
 	let updateDismissed = $state(false);
@@ -4965,6 +4970,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		nextIds={nextMeasureIds}
 		{selectedEventId}
 		revision={pageRevision}
+		bundle={loupeBundle}
 		{language}
 		fill={heldFill}
 		meter={heldMeter}

@@ -135,3 +135,84 @@ The commit, the results against every line of section 6, the three measurements
 of section 3, and **what could not be established.**
 
 **NOT ESTABLISHED beats a complete invented answer.**
+
+---
+
+## 8. ANCHORS RE-CHECKED AT `46f1d31`, 2026-09-20 16:10, by the desk
+
+**Five commits landed after this brief was written.** Every `path:line` in
+section 2 was re-read at `46f1d31`. **Where this section and section 2 disagree,
+this section wins**, per CONTRACT tether 3.
+
+**Held, unchanged:** `VoiceProfilePane.svelte` `:490` `notationFont`, `:538`
+`readingScore`, `:554` `analysisScore`, `:587` `ipaPreview`, `:621`
+`withheldIpa`, `:639` `cyrPreview`, `:648` `sylTypePreview`.
+`page-layout.ts:98` `sliceScore`. `page-layout.ts:182` the once-resolved clef.
+
+**Drifted. Find each by the name, not by the old number:**
+
+| thing | section 2 said | tree at `46f1d31` |
+|---|---|---|
+| `melismaPreview` declaration | `VoiceProfilePane.svelte:659` | `:661` |
+| `analyzed` declaration | `VoiceProfilePane.svelte:673` | `:675` |
+| `scorePages` / `paginateScore` block | `:788-809` | `:790-812`, `paginateScore(` at `:792` |
+| the font spread | `:807` | `:809` |
+| the reporting effect | `:853-856` | `:855-858`, its comment ends `:854` |
+| `handlePagesDrawn` | `+page.svelte:2003-2005` | `:2023-2024` |
+| `onpagesdrawn={handlePagesDrawn}` | `+page.svelte:4920` | `:4854` |
+| `interface Props` | `Loupe.svelte:59` | `:61`; `revision: unknown` at `:87` |
+| `renderAnalyzedStaff` | `staff-renderer.ts:1818` | `:1868` |
+
+**THE INSTRUMENT NOTE IN SECTION 2 IS DISCHARGED.** The IPA read site was read at
+source this session. It is `staff-renderer.ts:3205` and it is
+`const ipa = marked ? '' : (options.ipaPreview?.[ev.id] ?? a?.vowel ?? '');`,
+**not** the bare form the comment quoted. A second read site exists at
+`staff-renderer.ts:1074`, `const ipa = options.ipaPreview?.[ev.id] ?? '';`, with
+no `a?.vowel` fallback. **Section 2 knew of one site; there are two.**
+
+**One citation to re-site, not to renumber.** Section 2's `page-layout.ts:126`
+"paginate passes the SAME options the render uses" is a sentence in the doc
+comment on `sliceWidth`, which now spans `:120-128`. It is a comment, not code.
+The code that resolves the clef once is `page-layout.ts:182`.
+
+**NOT ESTABLISHED:** whether the drift came from `e75d6f3`, `7bd3d04`, `b53a6df`,
+`9801308` or `46f1d31`. No blame was traced, because the current numbers are what
+the build needs.
+
+---
+
+## 9. THE WRONG PIECE WAS MEASURED. Desk error, corrected by Dann 2026-09-20 20:38
+
+**Section 3 names T05 three times. It should say T01.** Dann: *"the fixture with 18
+measures is T01, it's an easy mistake to make: we've been using both as test pieces
+and they must have gotten swapped."*
+
+**Verified against the file, not inferred:**
+`apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml` has 2
+`score-part` entries and 18 distinct `measure number` values, highest 18.
+**T05 is a different piece**, `Kabalevsky - Shakespeare - T05 Cupid laid by his brand,
+and fell.musx` (`OPEN.md:870`), and Code counted 90 measures in it.
+
+**So all three of Code's section 3 measurements describe T05, not the fixture N.153
+targets.** They are not wrong; they are about the wrong score.
+
+**What this does NOT affect, and why stage 2 shipped anyway.** Stage 2 hands the loupe
+whatever the pane already held. Nothing in the change reads a measure, a clef or a
+map, so it is score-agnostic. The byte-identity line of section 6 was closed by reading
+the whole diff rather than by rendering one score, so it holds for every score.
+
+**What it DOES affect, and stage 3 owns it:**
+
+1. **The clef question must be re-asked on T01.** Code found every T05 measure carries
+   a printed F clef, so every one-measure slice agreed with the whole score. **That
+   result says nothing about T01**, and the brief's own warning stands: a measure with
+   no printed clef falls to the median heuristic per slice and can differ.
+2. **The live-map counts must be re-taken on T01.** On T05, `withheldIpa` and
+   `melismaPreview` were `undefined` and the other three carried 146 to 149 entries
+   against 170 vocal events. **T01's numbers are NOT ESTABLISHED.**
+3. **The `pageRevision` cadence is probably score-independent**, since it counts page
+   rebuilds rather than measures. **That is a desk reading, not a measurement.**
+
+**The lesson, and it is the desk's.** `OPEN.md` §N.153 says "the fixture", which was
+correct. The brief substituted a score name for it and got the wrong one. **Name the
+fixture by its file path, not by a piece label that two scores can answer to.**

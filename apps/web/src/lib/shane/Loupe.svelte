@@ -27,6 +27,7 @@
 	import LoupeSyllables from '$lib/shane/LoupeSyllables.svelte';
 import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
+	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
 	import {
 		headBound,
 		MUSIC_MARK,
@@ -85,6 +86,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		 * clone of a page that is no longer on screen.
 		 */
 		revision: unknown;
+		/**
+		 * N.153 stage 2: the inputs the page rendered from, for the render that
+		 * stage 3 swaps in for the clone. Nothing here reads it yet.
+		 */
+		bundle?: LoupeRenderBundle | null;
 		language: Language;
 		/**
 		 * What the held measure holds against what its signature asks for, or

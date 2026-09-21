@@ -90,7 +90,12 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >   division outranks the score's lyric line, so a hand-placed final syllable joins its
 >   word. **Not closed: the period is outstanding.**
 >
-> **THE FLOOR MOVES TO `9801308`.** Every ship above was walked by the desk driving
+> **THE FLOOR MOVES TO `46f1d31`**, the close commit.
+>
+> **ONE PIECE OF CRUFT WENT IN WITH IT, and it is the desk's error.** The close was
+> staged with `git add -A apps/web/src/lib/shane`, which swept
+> `ingestion/fixtures/sunless-01-engraved.musicxml.bak-before-ja-2026-09-20` into the
+> tree. **Delete it early next thread and do not ask Dann about it.** Every ship above was walked by the desk driving
 > Dann's own Chrome and sending him shots to rule on.
 >
 > #### THE RULING THAT MATTERS MOST FROM TODAY, and it is about how the desk works
