@@ -15,6 +15,8 @@
 		firstPass,
 		syllableTargetIds,
 		refreshPairings,
+		drawPairings,
+		drawnSeatCount,
 		melismaIds,
 		toggleMelisma,
 		vacatedNotes,
@@ -2313,6 +2315,42 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			return applyOpenSyllabificationToLines(lines, syllableOverrides, doc.openSyllabification);
 		}
 		return lines;
+	});
+	/* N.159. WHAT EACH SEATED NOTE DRAWS on Score markup and in Insights,
+	   worked out fresh from the live poem under Reconstitution, Open
+	   syllables, a spot reconstitution, and a moved boundary, so the score
+	   obeys the switches the moment Transcription does. It composes over
+	   `shownPairings` and is never written back: `doc.pairings` stays the
+	   singer's record, and nothing derived is stored (CONTRACT s6).
+
+	   It takes RAW `lines`, NEVER `effectiveLines` above. `drawPairings`
+	   re-cuts the engine's syllables itself, once; feeding it the display
+	   transform is the double slice N.10 ruled out. Declared here, below the
+	   switch state it reads, rather than beside `shownPairings`. */
+	const drawnUnderlay = $derived(
+		drawPairings(shownPairings, lines, {
+			openSyllabification: doc.openSyllabification,
+			reconstitution: notationPrefs.reconstitution,
+			spotReconstitution,
+			syllableOverrides,
+		}),
+	);
+	/* N.160's instrument, and only an instrument: once per song per load, the
+	   console says how many seats draw from the live poem and how many keep
+	   the text they were stored with. Nothing is drawn on the page and nothing
+	   is put in the drawer (brief N.159 r3 s5). It waits for `lines` to be
+	   THIS poem's (`transcribedText`), or a song switch would be counted
+	   against the previous song's words. A plain `let`, so the guard is not
+	   itself a dependency. */
+	let seatCountLoggedFor: string | null = null;
+	$effect(() => {
+		if (lines.length === 0 || transcribedText !== doc.inputText) return;
+		const { live, stored } = drawnSeatCount(drawnUnderlay);
+		if (live + stored === 0 || seatCountLoggedFor === doc.id) return;
+		seatCountLoggedFor = doc.id;
+		console.info(
+			`[Ilya] N.160 seats: ${live} drawn live, ${stored} kept as stored, of ${live + stored} seated`,
+		);
 	});
 	function runPipeline() {
 		transcribeError = '';
@@ -4825,6 +4863,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				composer={doc.metadata.composer}
 				transcribedLines={lines}
 				pairings={shownPairings}
+				{drawnUnderlay}
 				openSyllabification={doc.openSyllabification}
 			/>
 		{:else if destination === 'studio'}
@@ -4841,6 +4880,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{isMobile}
 				transcribedLines={lines}
 				pairings={shownPairings}
+				{drawnUnderlay}
 				{blankUnderlay}
 				onnotepick={handleNotePick}
 				{selectedEventId}

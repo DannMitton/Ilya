@@ -237,6 +237,46 @@ export function applyOpenSyllabificationToLines(
 	});
 }
 
+/**
+ * A word's syllables as the singer's division switches cut them, or
+ * `undefined` where they leave the engine's division alone.
+ *
+ * N.159: THE ONE RULE FOR WHICH WORD IS RE-CUT AND HOW. Transcription's
+ * display transform below and the score's drawing step (`drawPairings`,
+ * `shane/pairings.ts`) both call it, so the two pages cannot disagree about
+ * a word's division. A per-word override outranks the global switch; a
+ * clitic and a word of one syllable are never re-cut.
+ *
+ * Does not mutate the word.
+ */
+export function reslicedSyllables(
+	word: WordStackData,
+	syllableOverrides?: ReadonlyMap<string, SyllableOverride>,
+	globalOpenSyllabification: boolean = true
+): SyllableData[] | undefined {
+	// Skip clitics (they show arrows, no syllable re-spacing needed)
+	if (word.isProclitic || word.isEnclitic) return undefined;
+
+	// Skip words with no syllable data or single syllable
+	if (!word.syllables || word.syllables.length <= 1) return undefined;
+
+	// Check for per-word override
+	const overrideKey = `${word.lineIndex}-${word.wordIndex}`;
+	const override = syllableOverrides?.get(overrideKey);
+
+	if (override) {
+		// Per-word override: use custom boundaries with displayLog IPA
+		const charIpas = word.displayLog.map(e => e.ipa ?? '');
+		return applySyllableOverride(word.syllables, charIpas, override);
+	}
+	if (globalOpenSyllabification) {
+		// Global open syllabification for non-overridden words
+		return openSyllabify(word.syllables);
+	}
+	// No transform: keep engine defaults
+	return undefined;
+}
+
 function applyOpenSyllabificationToLineWords(
 	words: WordStackData[],
 	syllableOverrides?: Map<string, SyllableOverride>,
@@ -244,28 +284,8 @@ function applyOpenSyllabificationToLineWords(
 ): WordStackData[] {
 	return words.map((word, idx) => {
 		try {
-			// Skip clitics (they show arrows, no syllable re-spacing needed)
-			if (word.isProclitic || word.isEnclitic) return word;
-
-			// Skip words with no syllable data or single syllable
-			if (!word.syllables || word.syllables.length <= 1) return word;
-
-			// Check for per-word override
-			const overrideKey = `${word.lineIndex}-${word.wordIndex}`;
-			const override = syllableOverrides?.get(overrideKey);
-
-			let resliced: SyllableData[];
-			if (override) {
-				// Per-word override: use custom boundaries with displayLog IPA
-				const charIpas = word.displayLog.map(e => e.ipa ?? '');
-				resliced = applySyllableOverride(word.syllables, charIpas, override);
-			} else if (globalOpenSyllabification) {
-				// Global open syllabification for non-overridden words
-				resliced = openSyllabify(word.syllables);
-			} else {
-				// No transform: keep engine defaults
-				return word;
-			}
+			const resliced = reslicedSyllables(word, syllableOverrides, globalOpenSyllabification);
+			if (!resliced) return word;
 
 			let ipa = rebuildIpaFromSyllables(resliced);
 

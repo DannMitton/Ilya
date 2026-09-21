@@ -78,7 +78,9 @@
 		pairedSyllableType,
 		applyBlank,
 		melismaIds,
+		drawnAcutedCyrillic,
 		type PairingMap,
+		type DrawnUnderlay,
 	} from '$lib/shane/pairings';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { applyNotationPreferences } from '@ilya/phonology';
@@ -212,6 +214,13 @@
 		 */
 		pairings?: PairingMap;
 		/**
+		 * N.159: what each seated note DRAWS, worked out fresh from the live
+		 * poem under the singer's switches (`drawPairings`). Its IPA, vowel,
+		 * and acute outrank the stored pairing's. Absent means every note
+		 * draws its pairing as before.
+		 */
+		drawnUnderlay?: DrawnUnderlay;
+		/**
 		 * N.111 increment 3: notes inside a seated clitic run that carry no
 		 * pairing and must draw NOTHING.
 		 *
@@ -254,6 +263,7 @@
 		showStressDiacritics = false,
 		transcribedLines = undefined,
 		pairings = undefined,
+		drawnUnderlay = undefined,
 		blankUnderlay = undefined,
 		onnotepick = undefined,
 		selectedEventId = null,
@@ -584,7 +594,7 @@
 	// N.55b R7/R8: a hand pairing outranks the resolver, its whole-word
 	// withhold included, and carries the vowel glyph the forecast needs.
 	const vowelResolver = $derived(
-		underlayResolvers ? withPairedVowel(underlayResolvers.vowel, pairings) : null,
+		underlayResolvers ? withPairedVowel(underlayResolvers.vowel, pairings, drawnUnderlay) : null,
 	);
 
 	// N.5: the printed IPA line. Every string is Ilya's own, read from the
@@ -611,7 +621,12 @@
 			   channel exists to prevent. A sustained vowel is not
 			   re-articulated, so there is no onset to transcribe. */
 			if (paired?.kind !== 'syllable' && blankUnderlay?.has(ev.id)) continue;
-			const ipa = paired?.kind === 'syllable' ? paired.ipa : underlayResolvers.ipa(ev);
+			/* N.159: the DRAWN IPA, so Reconstitution and Open syllables reach
+			   the note. The four spelling switches still apply on the line below. */
+			const ipa =
+				paired?.kind === 'syllable'
+					? (drawnUnderlay?.[ev.id]?.ipa ?? paired.ipa)
+					: underlayResolvers.ipa(ev);
 			if (ipa) out[ev.id] = applyNotationPreferences(ipa, notationPrefs, true);
 		}
 		/* AN EXPLICIT EMPTY STRING, NOT AN OMISSION, and the walk finding on
@@ -648,7 +663,11 @@
 	// underlay has no other source for the word under the note.
 	const cyrPreview = $derived.by(() => {
 		const cyr = pairedCyrillic(pairings, blankUnderlay);
-		return cyr && showStressDiacritics ? stressAcutedCyrillic(cyr, pairings, transcribedLines) : cyr;
+		if (!cyr || !showStressDiacritics) return cyr;
+		// N.159: the drawing step has already found each seat's word.
+		return drawnUnderlay
+			? drawnAcutedCyrillic(cyr, drawnUnderlay)
+			: stressAcutedCyrillic(cyr, pairings, transcribedLines);
 	});
 
 	/* N.113b item 3: the word division of the words the page is drawing. It

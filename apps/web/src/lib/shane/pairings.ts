@@ -32,8 +32,10 @@
  * leave a note undecided (Dann, E.46).
  */
 
-import type { LineData, WordStackData } from '$lib/types';
+import type { LineData, SyllableOverride, WordStackData } from '$lib/types';
 import { CYRILLIC_VOWEL, vowelOfSyllable } from '$lib/shane/vowel-resolver';
+import { applyReconstitution } from '$lib/reconstitution';
+import { reslicedSyllables } from '$lib/syllable-utils';
 
 /**
  * The engine's stress mark, declared at `engine.ts:230` as `'stress'`.
@@ -764,11 +766,17 @@ export function loadPairings(): { map: PairingMap; reason?: string } {
 export function withPairedVowel<E extends { id: string }>(
 	base: (ev: E) => string | undefined,
 	map: PairingMap | undefined,
+	/** N.159: the drawn vowel outranks the stored one, so a note drawn `ɛ`
+	 *  under Reconstitution is forecast as `ɛ`, not as the stored `ɪ`. */
+	drawn?: DrawnUnderlay,
 ): (ev: E) => string | undefined {
 	if (!map) return base;
 	return (ev) => {
 		const p = map[ev.id];
-		if (p?.kind === 'syllable') return p.vowel;
+		if (p?.kind === 'syllable') {
+			const d = drawn?.[ev.id];
+			return d ? d.vowel : p.vowel;
+		}
 		return base(ev);
 	};
 }
@@ -836,24 +844,222 @@ export function stressAcutedCyrillic(
 	lines: readonly LineData[] | undefined,
 ): Record<string, string> {
 	if (!map || !lines) return cyr;
-	const vowels = 'аеёиоуыэюяАЕЁИОУЫЭЮЯ';
 	const out: Record<string, string> = { ...cyr };
 	for (const [id, text] of Object.entries(cyr)) {
 		const p = map[id];
 		if (p?.kind !== 'syllable' || !p.ipa.includes(STRESS_MARK)) continue;
 		const word = lines[p.origin.lineIndex]?.words[p.origin.wordIndex];
 		if (!word || word.cleanWord !== p.origin.word) continue;
-		if (word.stressIndex === undefined || word.stressIndex < 0) continue;
-		if (word.stressSource === 'clitic' || word.isProclitic || word.isEnclitic) continue;
-		if (word.stressSource === 'inferred') continue;
-		const chars = [...text];
-		const at = chars.flatMap((c, i) => (vowels.includes(c) ? [i] : []));
-		if (at.length !== 1) continue;
-		if (chars[at[0]] === 'ё' || chars[at[0]] === 'Ё') continue;
-		chars[at[0]] += '\u0301';
-		out[id] = chars.join('');
+		if (!wordTakesAcute(word)) continue;
+		const marked = withAcute(text);
+		if (marked !== undefined) out[id] = marked;
 	}
 	return out;
+}
+
+/** The word half of WordStack's conditions: a stress index, no clitic, and
+ *  no inferred stress. Shared by `stressAcutedCyrillic` and `drawPairings`
+ *  so the two cannot disagree. */
+function wordTakesAcute(word: WordStackData): boolean {
+	if (word.stressIndex === undefined || word.stressIndex < 0) return false;
+	if (word.stressSource === 'clitic' || word.isProclitic || word.isEnclitic) return false;
+	return word.stressSource !== 'inferred';
+}
+
+/** The syllable half: the acute on the one vowel letter of `text`, or
+ *  undefined where there is not exactly one, or where it is `ё`. */
+function withAcute(text: string): string | undefined {
+	const vowels = 'аеёиоуыэюяАЕЁИОУЫЭЮЯ';
+	const chars = [...text];
+	const at = chars.flatMap((c, i) => (vowels.includes(c) ? [i] : []));
+	if (at.length !== 1) return undefined;
+		if (chars[at[0]] === 'ё' || chars[at[0]] === 'Ё') return undefined;
+		chars[at[0]] += '\u0301';
+	return chars.join('');
+}
+
+/* ── N.159, the drawing step ────────────────────────────────────── */
+
+/** The switches that change how a seated syllable is DRAWN, never what the
+ *  singer placed. The four spelling switches (`applyNotationPreferences`)
+ *  are not here: `VoiceProfilePane` applies them to whatever this returns,
+ *  as it always has. */
+export interface DrawSwitches {
+	openSyllabification: boolean;
+	reconstitution: boolean;
+	/** Keyed `lineIndex-wordIndex`. A key PRESENT inverts the global switch
+	 *  for that word, exactly as `WordStack.svelte`'s `reconActive` does. */
+	spotReconstitution?: ReadonlyMap<string, unknown>;
+	/** Keyed `lineIndex-wordIndex`, the Inspector's moved boundaries. */
+	syllableOverrides?: ReadonlyMap<string, SyllableOverride>;
+}
+
+/** What one seated note draws. Never stored. */
+export interface DrawnSyllable {
+	/** The Cyrillic AS PLACED. Open syllables re-divides the IPA only. */
+	cyrillic: string;
+	ipa: string;
+	vowel: string | undefined;
+	/** Whether the Cyrillic takes the stress acute when the switch is on. */
+	acute: boolean;
+	/** True where the poem identified the seat's word and the note is drawn
+	 *  from it; false where the note draws its stored text, as before. */
+	answered: boolean;
+}
+
+/** Event id to what the note draws. Syllable pairings only. */
+export type DrawnUnderlay = Record<string, DrawnSyllable>;
+
+/** U+0000 between syllables while one word is reconstituted as a whole. No
+ *  IPA holds it, and `applyReconstitution` passes it through untouched. */
+const SYLLABLE_SEAM = String.fromCharCode(0);
+
+/**
+ * The word with every reduced vowel restored, syllable by syllable.
+ *
+ * ONE POSITIONAL WALK OVER THE WHOLE WORD, which is what Transcription does
+ * (`pipeline.ts`, `tw.ipaReconstituted = applyReconstitution(ipaCore, ...)`,
+ * and again after a re-cut in `syllable-utils.ts`). The syllables are joined
+ * on a seam, walked once against the word's own log, and split back, so the
+ * n-th vowel of the word meets the n-th log entry however the word is cut.
+ * A re-cut moves consonants only (`syllable-utils.ts`), so the walk lines up.
+ *
+ * The log's vowel entries are restored the same way, one entry at a time, so
+ * `vowelOfSyllable` hands the forecast the restored vowel.
+ */
+function reconstitutedWord(w: WordStackData): WordStackData {
+	const log = w.result?.transcriptionLog;
+	if (!log) return w;
+	const parts = applyReconstitution(
+		w.syllables.map((s) => s.ipa ?? '').join(SYLLABLE_SEAM),
+		log,
+	).split(SYLLABLE_SEAM);
+	if (parts.length !== w.syllables.length) return w;
+	return {
+		...w,
+		syllables: w.syllables.map((s, i) => ({ ...s, ipa: parts[i] })),
+		result: {
+			...w.result,
+			transcriptionLog: log.map((e) =>
+				e.features?.type === 'vowel' ? { ...e, ipa: applyReconstitution(e.ipa, [e]) } : e,
+			),
+		},
+	};
+}
+
+/**
+ * N.159. WHAT EACH SEATED NOTE DRAWS, worked out fresh from the live poem.
+ *
+ * Transcription obeys every Notation switch as it draws; the score obeyed
+ * four, and Reconstitution, Open syllables, and some acutes never reached it.
+ * This is the score's drawing step for those. It is a sibling of
+ * `refreshPairings` and composes over its output (`shownPairings`).
+ *
+ * HOW. It builds a DRAWN copy of `lines` in which each word is re-cut by the
+ * shared rule (`reslicedSyllables`) and then reconstituted where the global
+ * switch, inverted by a spot key, says so. It runs the existing
+ * `buildSlotQueue` over that copy, so the clitic fusion and the punctuation
+ * rule are the shipped ones, not a second copy. Each seat is looked up by its
+ * `(line, word, slot)` and must match `origin.word`, the same test as
+ * `refreshPairings` and `reseat.ts`.
+ *
+ * A SEAT THE POEM CANNOT IDENTIFY draws its stored text, as it did before
+ * this existed. It is never re-keyed, moved, or erased.
+ *
+ * NOTHING IS STORED AND NOTHING IS WRITTEN. The map is read and never
+ * mutated. The placement writers (`firstPass`, `placeSyllable`, `reseat.ts`)
+ * keep copying the RAW slot; copying this would bake the singer's current
+ * switches into their record.
+ *
+ * IT NEVER READS `effectiveLines` (`+page.svelte`). Pass it the RAW `lines`.
+ * It re-cuts the engine's own syllables once, here. `effectiveLines` carries
+ * a re-cut display string, and feeding the score from it is the double slice
+ * N.10 ruled out; `draw-pairings.test.ts` holds that line.
+ */
+export function drawPairings(
+	map: PairingMap,
+	lines: readonly LineData[],
+	switches: DrawSwitches,
+): DrawnUnderlay {
+	const drawnLines: LineData[] = lines.map((line) => ({
+		...line,
+		words: line.words.map((w) => {
+			const cut = reslicedSyllables(
+				w,
+				switches.syllableOverrides,
+				switches.openSyllabification,
+			);
+			const recut = cut ? { ...w, syllables: cut } : w;
+			const spot = switches.spotReconstitution?.has(`${w.lineIndex}-${w.wordIndex}`) ?? false;
+			const recon = spot ? !switches.reconstitution : switches.reconstitution;
+			return recon ? reconstitutedWord(recut) : recut;
+		}),
+	}));
+	const byOrigin = new Map<string, Slot>();
+	for (const s of buildSlotQueue(drawnLines)) {
+		byOrigin.set(`${s.origin.lineIndex}-${s.origin.wordIndex}-${s.origin.slotIndex}`, s);
+	}
+	const out: DrawnUnderlay = {};
+	for (const [eventId, p] of Object.entries(map)) {
+		if (p.kind !== 'syllable') continue;
+		const o = p.origin;
+		const slot = byOrigin.get(`${o.lineIndex}-${o.wordIndex}-${o.slotIndex}`);
+		const word = lines[o.lineIndex]?.words[o.wordIndex];
+		if (
+			slot === undefined ||
+			word === undefined ||
+			o.word === undefined ||
+			slot.origin.word !== o.word ||
+			word.cleanWord !== o.word
+		) {
+			out[eventId] = {
+				cyrillic: p.cyrillic,
+				ipa: p.ipa,
+				vowel: p.vowel,
+				acute: false,
+				answered: false,
+			};
+			continue;
+		}
+		out[eventId] = {
+			cyrillic: p.cyrillic,
+			ipa: slot.ipa,
+			vowel: slot.vowel,
+			acute: slot.ipa.includes(STRESS_MARK) && wordTakesAcute(word),
+			answered: true,
+		};
+	}
+	return out;
+}
+
+/**
+ * N.159. The stress acute from the drawing step: `stressAcutedCyrillic`'s
+ * job, with the word already found. The syllable half of the conditions
+ * (one vowel letter, not `ё`) is the same function.
+ */
+export function drawnAcutedCyrillic(
+	cyr: Record<string, string>,
+	drawn: DrawnUnderlay,
+): Record<string, string> {
+	const out: Record<string, string> = { ...cyr };
+	for (const [id, text] of Object.entries(cyr)) {
+		if (!drawn[id]?.acute) continue;
+		const marked = withAcute(text);
+		if (marked !== undefined) out[id] = marked;
+	}
+	return out;
+}
+
+/** N.160's instrument: how many seats draw from the live poem and how many
+ *  keep their stored text. Counted, never shown. */
+export function drawnSeatCount(drawn: DrawnUnderlay): { live: number; stored: number } {
+	let live = 0;
+	let stored = 0;
+	for (const d of Object.values(drawn)) {
+		if (d.answered) live++;
+		else stored++;
+	}
+	return { live, stored };
 }
 
 /**

@@ -40,7 +40,7 @@
 		type Pitch,
 	} from '@ilya/score-parser';
 	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
-	import { withPairedVowel, type PairingMap } from '$lib/shane/pairings';
+	import { withPairedVowel, type PairingMap, type DrawnUnderlay } from '$lib/shane/pairings';
 	import { resolveAdvice } from '$lib/shane/advice-resolver';
 	import { buildVoiceProfileSnapshot } from '$lib/shane/analyze-score-adapter';
 	import { buildWatchList } from '$lib/shane/watchlist';
@@ -66,6 +66,9 @@
 		composer?: string;
 		transcribedLines?: readonly LineData[];
 		pairings?: PairingMap;
+		/** N.159: the drawn vowel outranks the stored one, so Insights names
+		 *  the marks Score markup draws. */
+		drawnUnderlay?: DrawnUnderlay;
 		openSyllabification?: boolean;
 		isMobile?: boolean;
 	}
@@ -81,6 +84,7 @@
 		composer = '',
 		transcribedLines = undefined,
 		pairings = undefined,
+		drawnUnderlay = undefined,
 		openSyllabification = false,
 		isMobile = false,
 	}: Props = $props();
@@ -105,7 +109,7 @@
 				})
 			: null,
 	);
-	const vowelResolver = $derived(underlayResolvers ? withPairedVowel(underlayResolvers.vowel, pairings) : null);
+	const vowelResolver = $derived(underlayResolvers ? withPairedVowel(underlayResolvers.vowel, pairings, drawnUnderlay) : null);
 	const analyzed = $derived(
 		analysisScore && vowelResolver
 			? resolveAdvice(analyzeScore(analysisScore, adapted.snapshot, vowelResolver))
