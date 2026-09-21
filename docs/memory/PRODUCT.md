@@ -478,3 +478,29 @@ wrong note should be user error. At some point we have to allow the user to be
 human and make mistakes. We can't save the user from their own calamity."* So
 Ilya does not warn about a placement that is merely wrong, does not second-guess
 a singer's edit, and does not mark uncertainty it cannot justify.
+
+## WHAT THE STRESS ACUTES ARE FOR. Ruled by Dann 2026-09-21, and it is his
+
+His words, given while N.119 was being briefed:
+
+> *"the acute accent only applies to orthographic renderings; the IPA line features stress
+> marks on stressed syllables for this purpose. The acutes are a courtesy for those who
+> are trying to master their Cyrillic literacy. They help non-native users know without a
+> doubt which syllable is stressed, simply by paying attention to the Cyrillic."*
+
+**Three things follow, and they are the reason the build has the shape it has.**
+
+1. **The acute belongs to the Cyrillic and never to the IPA.** The IPA already carries the
+   engine's own stress mark. A toggle that marks both would be saying the same thing
+   twice, and a toggle that marks the IPA instead is marking a row that already says it.
+2. **The mark is read on its own.** A singer builds Cyrillic literacy by attending to the
+   Cyrillic alone, so the acute has to be right without the IPA beside it. On the score,
+   where the Cyrillic is drawn per syllable, an acute on the wrong syllable does not
+   merely fail to help; it teaches the wrong thing.
+3. **This is why the suppressions are not an optimization.** `WordStack.svelte:55-61`
+   withholds the acute on a clitic and on a word whose stress is inferred, and its comment
+   calls the acute *"a confidence signal"*. Under this ruling that comment is the product
+   rule: Ilya marks stress where it knows, and stays silent where it is guessing, because
+   a learner cannot tell a confident mark from a hopeful one.
+
+**`ё` never takes an acute**, being inherently stressed (`WordStack.svelte:70-71`).

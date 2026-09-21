@@ -2237,3 +2237,64 @@ matches, refresh the text where word and slot match, and seat a note the new fil
 
 **NOT ESTABLISHED:** whether a re-derive can keep hand placements in every case, and
 what should happen to a placement whose word no longer exists in the new text.
+
+## N.158. RECONSTITUTION NEVER REACHES SCORE MARKUP. Numbered 2026-09-21. THE NUMBER IS A DESK DEFAULT
+
+**Found 2026-09-21 while briefing N.119.** Dann supplied the domain account that sent the
+desk to look; the defect is the desk's finding.
+
+### What the singer is told, and what happens
+
+`LearnContent.svelte:3031`, English, and `:982` and `:991`, French, instruct the singer to
+use the global reconstitution toggle and name the outcome:
+
+> *"When the reconstitution toggle is active, unstressed ⟨е⟩ after an always-hard consonant
+> reconstitutes to [ɛ]."*
+
+and, as an exercise: *"Try ⟨жена⟩... In the Drawer panel, under Notation, switch on global
+reconstitution, and Ilya restores it to [ɛ]."*
+
+**On Transcription this is true. On Score markup nothing happens.**
+
+### Why, read in the tree 2026-09-21 at `6101e01`
+
+- **The toggle IS wired**, and an earlier desk claim that it "changes nothing in either
+  document" (`brief-n119-toggles-reach-score-markup_r1_2026-09-12.md` §3) **is false.**
+  `notationPrefs.reconstitution` is read at `WordStack.svelte:23`, `VerseLine.svelte:30`
+  and `:38`, `InspectorPanel.svelte:59`, and `+page.svelte:2288`. All of those are the
+  Transcription side.
+- **Score markup's only filter is `applyNotationPreferences`**, called at
+  `VoiceProfilePane.svelte:607`. That function (`packages/phonology/src/engine.ts:155-179`)
+  reads `reducedVowel`, `shcha`, `palatalNasal` and `geminate`. **It never reads
+  `reconstitution`**, which is declared at `engine.ts:35`.
+
+### Why it is NOT the same size as the stress acutes
+
+The other four preferences are regex substitutions on a string the score already has.
+Reconstitution is a different string, computed upstream: `word.ipaReconstituted` and
+`word.ipaOwnReconstituted` on the Transcription side.
+
+**The `Pairing` type carries no reconstituted form.** `pairings.ts:118-127` declares
+`cyrillic`, `ipa`, `vowel` and `origin`, and the word "reconstitut" does not appear in
+that file. So this needs either a second IPA string carried through the pairing, or
+reduction computed per syllable at the score. **That is a channel, not a patch, and its
+size is NOT ESTABLISHED.**
+
+### Release standing
+
+**The desk reads this as meeting the freeze rule's exception** (`OWED.md` §RULINGS DANN
+OWES): a new finding joins the release only if Ilya would otherwise tell a singer something
+false. LEARN instructs an action and names its result; the result does not occur on one of
+the two documents. **Dann can overrule this reading with a word.**
+
+### The domain account, from Dann 2026-09-21, for whoever builds it
+
+> *"Reconstitution has to do with vowel reduction. Grayson offers rules for vowel reduction
+> (i.e. akanye, ekyane, and ikanye; the reduction of unstressed vowels in relation to their
+> stressed counterpart). Reconstitution rolls back that layer of reduction to restore more
+> distinct vowel values."*
+
+**The one-way door is the constraint that matters** (`LearnContent.svelte:3023`): `[ʌ]`
+reconstitutes to `/ɑ/` and never to `/o/`. **And Ilya departs from Grayson on exactly one
+point**, ruled by Dann and argued in LEARN at `:3029-3031`: unstressed ⟨е⟩ after ⟨ж⟩, ⟨ш⟩
+or ⟨ц⟩ reconstitutes to `[ɛ]`. Whoever builds this reads that passage first.

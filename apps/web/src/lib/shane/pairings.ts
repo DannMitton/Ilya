@@ -800,6 +800,56 @@ export function pairedCyrillic(
 }
 
 /**
+ * N.119. The stress acute on the score's Cyrillic underlay.
+ *
+ * `Apply stress acutes` puts U+0301 on the stressed vowel of a word on
+ * Transcription (`Paper/WordStack.svelte`, `displayCyrillic`). This does the
+ * same for the syllable under a note, and it does not carry a word index to
+ * do it: the stressed syllable is the one whose own IPA holds the engine's
+ * stress mark (`STRESS_MARK`), and the acute goes on the vowel of that
+ * syllable's own Cyrillic.
+ *
+ * THE FOUR CONDITIONS OF WORDSTACK TRAVEL WITH IT, read from the word the
+ * pairing came from (`origin`, looked up in the transcription's own lines):
+ * no stress index or a negative one, a clitic, inferred stress, and `ё`,
+ * which is inherently stressed and never takes an acute. The word is
+ * confirmed by `origin.word`; a pairing whose word has moved or gone is
+ * left bare, because a confidence signal that cannot be checked is not shown.
+ *
+ * A SYLLABLE HOLDING MORE THAN ONE VOWEL LETTER IS LEFT BARE. The engine cuts
+ * at every vowel, so only a moved boundary makes one, and nothing on the
+ * pairing says which vowel is stressed. A vowelless clitic fused into the
+ * slot carries no vowel, so it never adds one.
+ *
+ * Returns a new record; the input is not touched.
+ */
+export function stressAcutedCyrillic(
+	cyr: Record<string, string>,
+	map: PairingMap | undefined,
+	lines: readonly LineData[] | undefined,
+): Record<string, string> {
+	if (!map || !lines) return cyr;
+	const vowels = 'аеёиоуыэюяАЕЁИОУЫЭЮЯ';
+	const out: Record<string, string> = { ...cyr };
+	for (const [id, text] of Object.entries(cyr)) {
+		const p = map[id];
+		if (p?.kind !== 'syllable' || !p.ipa.includes(STRESS_MARK)) continue;
+		const word = lines[p.origin.lineIndex]?.words[p.origin.wordIndex];
+		if (!word || word.cleanWord !== p.origin.word) continue;
+		if (word.stressIndex === undefined || word.stressIndex < 0) continue;
+		if (word.stressSource === 'clitic' || word.isProclitic || word.isEnclitic) continue;
+		if (word.stressSource === 'inferred') continue;
+		const chars = [...text];
+		const at = chars.flatMap((c, i) => (vowels.includes(c) ? [i] : []));
+		if (at.length !== 1) continue;
+		if (chars[at[0]] === 'ё' || chars[at[0]] === 'Ё') continue;
+		chars[at[0]] += '\u0301';
+		out[id] = chars.join('');
+	}
+	return out;
+}
+
+/**
  * WHERE INSIDE ITS WORD each paired syllable stands, in the renderer's own
  * vocabulary, so hyphens and extenders are drawn from the words on the page
  * rather than from the words the publisher engraved.

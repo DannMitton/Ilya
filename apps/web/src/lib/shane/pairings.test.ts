@@ -36,7 +36,9 @@ import {
 	vacatedNotes,
 	placeSyllable,
 	nextOpenSyllableTarget,
+	stressAcutedCyrillic,
 } from './pairings';
+import type { LineData, WordStackData } from '$lib/types';
 import type { Pairing, PairingMap, Slot, TieAwareEvent } from './pairings';
 
 const slot = (cyrillic: string, ipa: string, vowel: string | undefined, slotIndex: number, word: string): Slot => ({
@@ -587,5 +589,63 @@ describe('nextOpenSyllableTarget', () => {
 	it('searches from the start when fromId is not itself in eventIds', () => {
 		const map: PairingMap = { n0: syl('ой', 0) };
 		expect(nextOpenSyllableTarget(map, IDS, 'not-an-id')).toBe('n1');
+	});
+});
+
+/* N.119: the stress acute on the score's Cyrillic. Hand-built fixtures: the rule
+   under test is the derivation and its four suppressions, not the engine. */
+describe('stressAcutedCyrillic', () => {
+	const ACUTE = '\u0301';
+	const MARK = '\u02C8';
+	const word = (over: Partial<WordStackData>): WordStackData =>
+		({
+			cleanWord: 'вода',
+			stressIndex: 1,
+			stressSource: 'dictionary',
+			isProclitic: false,
+			isEnclitic: false,
+			...over,
+		}) as WordStackData;
+	const linesOf = (w: WordStackData): LineData[] => [{ words: [w] } as unknown as LineData];
+	const pair = (cyrillic: string, ipa: string, w: string): PairingMap => ({
+		e1: { kind: 'syllable', cyrillic, ipa, vowel: undefined, origin: { lineIndex: 0, wordIndex: 0, slotIndex: 0, word: w } },
+	});
+	const run = (map: PairingMap, lines: LineData[]) => stressAcutedCyrillic({ e1: (map.e1 as { cyrillic: string }).cyrillic }, map, lines).e1;
+
+	it('marks the vowel of the syllable whose own IPA holds the stress mark', () => {
+		expect(run(pair('да', MARK + 'da', 'вода'), linesOf(word({})))).toBe('д' + '\u0430' + ACUTE);
+	});
+	it('leaves an unstressed syllable bare', () => {
+		expect(run(pair('во', 'va', 'вода'), linesOf(word({})))).toBe('во');
+	});
+	it('marks under a fused vowelless clitic and keeps the clitic', () => {
+		expect(run(pair('в\u00A0лес', MARK + 'vlʲes', 'лес'), linesOf(word({ cleanWord: 'лес' })))).toBe('в\u00A0л' + '\u0435' + ACUTE + 'с');
+	});
+	it('never marks ё', () => {
+		expect(run(pair('нёс', MARK + 'nʲos', 'нёс'), linesOf(word({ cleanWord: 'нёс' })))).toBe('нёс');
+	});
+	it('suppresses a negative or absent stress index', () => {
+		expect(run(pair('да', MARK + 'da', 'вода'), linesOf(word({ stressIndex: -1 })))).toBe('да');
+		expect(run(pair('да', MARK + 'da', 'вода'), linesOf(word({ stressIndex: undefined as unknown as number })))).toBe('да');
+	});
+	it('suppresses a clitic, by source or by flag', () => {
+		expect(run(pair('да', MARK + 'da', 'вода'), linesOf(word({ stressSource: 'clitic' })))).toBe('да');
+		expect(run(pair('да', MARK + 'da', 'вода'), linesOf(word({ isProclitic: true })))).toBe('да');
+		expect(run(pair('да', MARK + 'da', 'вода'), linesOf(word({ isEnclitic: true })))).toBe('да');
+	});
+	it('suppresses inferred stress', () => {
+		expect(run(pair('да', MARK + 'da', 'вода'), linesOf(word({ stressSource: 'inferred' })))).toBe('да');
+	});
+	it('leaves a syllable bare when its word cannot be confirmed', () => {
+		expect(run(pair('да', MARK + 'da', 'вода'), linesOf(word({ cleanWord: 'другое' })))).toBe('да');
+		expect(run(pair('да', MARK + 'da', 'вода'), [])).toBe('да');
+	});
+	it('leaves a syllable with more than one vowel bare', () => {
+		expect(run(pair('вода', MARK + 'vada', 'вода'), linesOf(word({})))).toBe('вода');
+	});
+	it('returns its input when there is no map or no lines', () => {
+		const cyr = { e1: 'да' };
+		expect(stressAcutedCyrillic(cyr, undefined, [])).toBe(cyr);
+		expect(stressAcutedCyrillic(cyr, pair('да', MARK + 'da', 'вода'), undefined)).toBe(cyr);
 	});
 });

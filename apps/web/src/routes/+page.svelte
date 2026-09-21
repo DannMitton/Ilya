@@ -4501,11 +4501,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     ruling 3 of 2026-08-19, which keeps lavender in Studio to
 						     the voice anchor and the calibration surfaces.
 
-						     KNOWN GAP, accepted and unnumbered: the stress-acutes toggle
-						     will appear on Fit and change nothing there, because
-						     showStressDiacritics never reaches VoiceProfilePane
-						     (it is never given that prop). Fit's IPA stress mark is a separate and
-						     unconditional thing (pipeline.ts:711). -->
+						     The stress-acutes toggle reaches Fit since N.119: it marks the
+						     Cyrillic underlay and leaves the IPA line alone. -->
 						<NotationFields
 							{notationPrefs}
 							{showStressDiacritics}
@@ -4856,6 +4853,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{engraving}
 				{notationPrefs}
 				openSyllabification={doc.openSyllabification}
+				{showStressDiacritics}
 				onpagesdrawn={handlePagesDrawn}
 			/>
 		{:else}

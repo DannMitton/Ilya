@@ -11,14 +11,11 @@
 	   +page.svelte, rendered once in each panel. See RootPanel.svelte's
 	   "shared with the Fit drawer" comment on the metadata block.
 
-	   KNOWN GAP, recorded rather than fixed here. Six of the seven toggles
-	   govern both surfaces. The seventh, stress acutes, does not: Fit's
-	   VoiceProfilePane is not passed showStressDiacritics
-	   (it is never given that prop), and it is read only at WordStack.svelte:56 and
-	   InspectorPanel.svelte:98,201, both Transcription-only. Fit's IPA stress
-	   mark is a separate and unconditional thing (pipeline.ts:711). Wiring the
-	   Cyrillic acute into Fit's underlay changes the printed page and needs
-	   its own walk, so it is a numbered item of its own, not part of N.7.
+	   THE SEVENTH TOGGLE NOW REACHES FIT (N.119). It was the one that did not:
+	   stress acutes were read only on Transcription. VoiceProfilePane takes
+	   showStressDiacritics and puts the acute on the Cyrillic underlay, never
+	   the IPA line. Fit's IPA stress mark is a separate and unconditional
+	   thing (pipeline.ts:711).
 
 	   The class names still read `cosmetic`; the heading has read Notation
 	   since i18n.ts:48. Renaming the classes is cosmetic churn inside a

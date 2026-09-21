@@ -74,6 +74,7 @@
 	import {
 		withPairedVowel,
 		pairedCyrillic,
+		stressAcutedCyrillic,
 		pairedSyllableType,
 		applyBlank,
 		melismaIds,
@@ -177,6 +178,12 @@
 		 */
 		openSyllabification?: boolean;
 		/**
+		 * N.119: the Cyrillic acute on the stressed vowel, the same toggle
+		 * Transcription obeys. It governs the Cyrillic underlay ONLY; the IPA
+		 * line is spelled by `notationPrefs` and is not touched by this.
+		 */
+		showStressDiacritics?: boolean;
+		/**
 		 * N.92: the note the correction surface has selected, or null. DISPLAY
 		 * ONLY. It marks one note and nothing else lands on the paper.
 		 */
@@ -244,6 +251,7 @@
 		onpagesdrawn = undefined,
 		notationPrefs,
 		openSyllabification = false,
+		showStressDiacritics = false,
 		transcribedLines = undefined,
 		pairings = undefined,
 		blankUnderlay = undefined,
@@ -638,7 +646,10 @@
 
 	// N.55b R6: the Cyrillic channel. A score that arrived with no lyric
 	// underlay has no other source for the word under the note.
-	const cyrPreview = $derived(pairedCyrillic(pairings, blankUnderlay));
+	const cyrPreview = $derived.by(() => {
+		const cyr = pairedCyrillic(pairings, blankUnderlay);
+		return cyr && showStressDiacritics ? stressAcutedCyrillic(cyr, pairings, transcribedLines) : cyr;
+	});
 
 	/* N.113b item 3: the word division of the words the page is drawing. It
 	   travels with `cyrPreview` because it describes the same text: the
