@@ -34,6 +34,12 @@ Dann's words, quoted and dated, with what has amended them since.
 
 What must not change, and what is out of scope.
 
+**AND WHAT THIS WORK DISPLACES, supplied by the desk.** One line: which scheduled item moves,
+or "nothing". **Added 2026-09-21** after Code answered a design brief and had to mark the
+displacement NOT ESTABLISHED, having not read `SCHEDULE.md`. **Sequencing is the desk's, not
+Code's**, so the brief states it and never asks for it. Code may then say whether the trade
+looks wrong from the code's side.
+
 ## 6. Done when
 
 Observable tests, each holding on EVERY case, not only the one that exposed the

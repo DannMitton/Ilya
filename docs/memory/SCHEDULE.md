@@ -71,7 +71,14 @@ design rows.
   (`OPEN.md` §N.159, plan in `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`). It
   displaces nothing, because it was already this line. **Walked on Dann's phone**, which is
   the one measurement nobody has taken.
-- [ ] **N.141, last step**: the squircle across a tie.
+- [x] **N.160 steps 2 and 3. CLOSED 2026-09-21**, shipped `2fb7516` and `46ac52f`, both
+  walked. The dry run read Dann's library seat by seat; the heal wrote 14 of 96 and left the
+  5 it could not resolve exactly as they were.
+- [ ] **N.161. The load path should not write.** Numbered 2026-09-21, raised by Dann. **IN
+  under the freeze rule.** Plan agreed between the desk and Code; spec in `OPEN.md` §N.161.
+  **It takes this week and pushes the line below to week 3.**
+- [ ] ~~**N.141, last step**: the squircle across a tie.~~ **MOVED TO WEEK 3 on 2026-09-21,
+  DESK DEFAULT**, to make room for N.161.
 - [ ] **N.132**: the ratified names and the tab padding. **MOVED TO WEEK 3 on 2026-09-21,
   DESK DEFAULT**, to make room for N.160 steps 2 and 3.
 - [ ] **N.160 steps 2 and 3**: the dry run on Dann's library, then the stored text plus the

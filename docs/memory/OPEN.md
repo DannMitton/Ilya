@@ -2286,6 +2286,78 @@ what should happen to a placement whose word no longer exists in the new text.
 
 ---
 
+## N.161. THE LOAD PATH SHOULD NOT WRITE. Numbered 2026-09-21. THE NUMBER IS A DESK DEFAULT
+
+**Raised by Dann 2026-09-21**, on being told that a plain reload could rewrite up to 60 of his
+stored seats: *"Can we streamline that or eliminate it in favour of a better solution?"*
+
+**IN, under the freeze rule, on both clauses.** A hand change on one note, or a word deleted
+from the poem, silently rewrites up to 60 decided notes on the next load or edit; and a deleted
+word comes back on the page, which tells the singer something false.
+
+### What the singer suffers
+
+They open a song they placed weeks ago and, before they touch anything, a quarter of their
+placements are rewritten into the score's own coordinates, where nothing ties them to the poem.
+No act of theirs, and nothing on screen. The loss shows up later as acutes that never appear
+and switches that do nothing.
+
+### The mechanism, read by the desk 2026-09-21
+
+- **`isCliticSeated` decides by comparing two strings** (`clitic-seat.ts:398-420`), after
+  stripping trailing punctuation, lowercasing, and folding ё to е.
+- **`seatCliticFolds` rewrites a fold's whole run when that test says unseated** (`:447-457`).
+- **The comparison has drifted twice, and the file records both.** N.118 added trailing
+  punctuation to what it must ignore (`:402-408`); N.160 step 3 added case and ё (`:409-416`),
+  after «В бью» against «в бью» rewrote 60 notes on a plain reload.
+
+### The plan, agreed between the desk and Code 2026-09-21
+
+**The fold runs only where placements are built from nothing.**
+
+- **Keep it at the three rebuild sites:** `+page.svelte:642` (Start over), `:2563` (the first
+  seat of a transcription), `:3263` (the score's own seat of a poem it filled).
+- **Gate it at `:3404`** on the map holding no syllable seat before the merge, which is the
+  test `first-seat.ts` already makes.
+- **Remove it from `:2633`.** **This is Code's correction to the desk**, which had missed the
+  site. The fold depends only on the score, never on the poem (`findCliticFolds`,
+  `clitic-seat.ts:145-165`), so deleting «бьющемся» from the poem vacates note 37, the fold then
+  rewrites the whole run from the score's own words, and the deleted word returns to the page.
+
+**TWO OPTIONS THE DESK PROPOSED AND CODE REFUTED, recorded so they are not proposed again.**
+
+1. **"N.160's heal can seat a legacy song."** It cannot. The fold shifts every syllable from
+   «в» onward by one note (`clitic-seat.ts:79-85`), and the heal only touches seats whose
+   address has failed. A legacy song's addresses look valid and merely sit one note late.
+2. **"Seat only undecided notes, never a poem address."** The fold's job is to overwrite about
+   60 decided notes, so it applies whole or not at all. A partial shift is a broken run.
+
+**HELD IN RESERVE: a per-song marker**, optional, on the song record rather than on a pairing.
+Code would converge on it **only if** a stored song exists whose score has a fold, whose clitic
+note does not hold the fused seat, and which nobody changed by hand.
+
+### NOT ESTABLISHED
+
+- **Whether any such song exists.** The desk can check it in Dann's Chrome: for each song whose
+  score has a fold, compare the clitic's note to the fold's first cell.
+- **The deleted-host rewrite at `:2633`.** Code read it and did not run it.
+- **Why `:2633` was added.** Its comment's premise contradicts `findCliticFolds`'s signature.
+
+### Cost, from Code
+
+Two call sites change. Nothing new in the record, no schema change, nothing on the page or in
+the drawer. `clitic-seat.test.ts` and `score-seat.test.ts` stay green. Two or three new tests
+for the gate, which must be a pure predicate in a `.ts` file because vitest cannot reach
+`+page.svelte`. Two browser walks on the fixture: a hand change on note 37, and a deleted host
+word.
+
+### What it displaces
+
+**DESK DEFAULT: week 2, after step 3's walk, and N.141's last step, the squircle across a tie,
+moves to week 3 beside N.132.** The week-5 buffer is already spent.
+
+---
+
 ## N.160. THE WORK, AND ITS TWO VIEWS. Numbered 2026-09-21. DESK DEFAULT NUMBER
 
 **The model is Dann's and is transcribed in `PRODUCT.md` §THE WORK, AND ITS TWO VIEWS.** This
@@ -2335,11 +2407,16 @@ words the engraver split.
 
 ### The sequence
 
-1. **The score obeys every switch** (N.159). Already week 2's "N.136 with N.119", so it
-   displaces nothing. **Walked on Dann's phone.** It also counts frozen seats.
-2. **A dry run.** The repair runs without writing and logs what it would do on Dann's library.
-   **He exports a binder backup first.**
-3. **The stored text plus the repair.** Walked on his own library.
+1. ~~**The score obeys every switch** (N.159).~~ **CLOSED 2026-09-21**, `1d18514`, walked.
+   It also counts frozen seats, and its first reading on Dann's library was 67 drawn live,
+   29 kept as stored, of 96.
+2. ~~**A dry run.**~~ **CLOSED 2026-09-21**, `2fb7516`, read by the desk on Dann's library:
+   `96 seated = 77 address + 9 anchor + 5 joined + 1 rejected + 4 unfound`. He exported a
+   binder backup first.
+3. ~~**The stored text plus the repair.**~~ **CLOSED 2026-09-21**, `46ac52f`, walked by Dann:
+   *"yes :)"*. The heal wrote 14 of 96, 9 by anchor and 5 by the joined-run rule, and the dry
+   run afterwards reads 91 address, 1 rejected, 4 unfound. **The prediction was 14 and 91, and
+   both landed.**
 4. After 2026-10-30: stop storing the IPA and the vowel for new placements.
 5. After 2026-10-30: the clitic seat writes poem positions, then verses.
 
@@ -2352,8 +2429,17 @@ is that once the buffer is gone, the lowest line in a week moves to LATER and th
 **When a word has truly left the poem, does its note keep showing the old syllable, which is
 today's behaviour and the default until he rules, or clear to blank?**
 
-**It is asked after step 3, against a real count rather than a hypothesis.** Code's prediction
-is zero, because the joined-run rule should resolve all 25 of Dann's, in which case the
-question may never need answering before the release. **The desk removed this from Code's
-desk defaults:** blanking a note removes something a singer can see, and its frequency was
-NOT ESTABLISHED.
+**THE COUNT IS NOW REAL, 2026-09-21, and the prediction of zero was wrong: five notes, and
+they are all one word.** Notes 92 to 95 of Dann's Sunless song carry «о ди но ка» from address
+`0-38`, and note 96 «я.» is rejected only because the guard found it with no matched
+neighbour.
+
+**BUT THE QUESTION'S PREMISE IS NOT ESTABLISHED, WHICH IS WHY IT IS STILL NOT ASKED.** Code
+observed 2026-09-21 that the heal cannot place a frozen seat onto a word another seat already
+holds, and «одинокая» in the poem is held. **So those five may be blocked rather than
+orphaned, which is a different defect and not a ruling at all.** Settle that before asking him.
+Putting a ruling to him about a word that left the poem, when the word did not leave, is the
+manufactured decision `CONTRACT.md` §3 forbids.
+
+**The desk removed this from Code's desk defaults:** blanking a note removes something a
+singer can see, and its frequency was NOT ESTABLISHED.

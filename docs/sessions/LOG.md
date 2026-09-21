@@ -6507,3 +6507,56 @@ syllable (measured on «ванна»: Transcription `ˈvɑnːɑ`, the score `ˈv
 length marker belongs across a note boundary is an engraving question and it is Dann's.**
 
 ---
+
+---
+
+## Block 28. N.160 steps 1, 2 and 3 CLOSED 2026-09-21. The account, at the close
+
+**Three ships in one day, each walked before the next was briefed.**
+
+| ship | what it was | walked |
+|---|---|---|
+| `1d18514` | N.159, the score obeys every Notation switch, drawn fresh from the live poem | Dann, on his own library in his Chrome: *"YEs :)"* |
+| `2fb7516` | step 2, the dry run: every seat's verdict logged, nothing written | the desk read the log on his library |
+| `46ac52f` | step 3, the stored seated text and the heal that writes once | Dann, on his own library: *"yes :)"* |
+
+**THE NUMBERS, all measured on Dann's own library rather than on the fixture.**
+
+- **First reading, 03:40:** 67 drawn live, 29 kept as stored, of 96 seated. The earlier audit
+  had predicted 25 from the line index alone.
+- **The dry run, 04:10:** `96 seated = 77 address + 9 anchor + 5 joined + 1 rejected + 4
+  unfound`.
+- **The heal, 15:51:** `wrote 14 of 96 seated = 9 anchor + 5 joined; left 1 rejected + 4 unfound
+  as they were`, and the dry run afterwards read `91 address, 1 rejected, 4 unfound`. **Code's
+  prediction was 14 and 91. Both landed.**
+
+**WHAT THE JOINED-RUN RULE PROVED.** «непроглядная» was stored whole and the poem holds it as
+two words. All five of its slots mapped across, `1-1.0` to `1-1.4` landing on `1-1.0` and
+`1-2.0` to `1-2.3`. **Code had worried the rule ran one way only; on Dann's library it ran the
+way his data needed.**
+
+**WHAT DID NOT RESOLVE, and it is one word.** Notes 92 to 95 carry «о ди но ка» from address
+`0-38`, which belongs to a poem he no longer has, and note 96 «я.» is rejected only because the
+guard found it with no matched neighbour, its neighbours being those four.
+
+**THE FINDING THAT OUTGREW THE ITEM.** Code established that a plain reload was rewriting up to
+60 of Dann's stored seats: `isCliticSeated` compared «В бью» to the score's «в бью» with an
+exact match, called the fold unseated, and `seatCliticFolds` rewrote the run into the score's
+own coordinates. **Step 3's case fold closes the live case. N.161 removes the mechanism**, and
+its plan is agreed between the desk and Code.
+
+**THREE DESK ERRORS, recorded because they were corrected by someone else.**
+
+1. **The desk missed a call site.** `+page.svelte:2633` has the same hazard on every text edit.
+   Code found it.
+2. **The desk proposed that N.160's heal could seat a legacy song.** It cannot: the fold shifts
+   every syllable from «в» onward by one note, and the heal only touches failed addresses.
+3. **The desk proposed seating only undecided notes.** The fold applies whole or not at all.
+
+**THE DESK'S OWN WALK CHANGED STATE IT DID NOT PREDICT.** Between 03:40 and 04:10 the frozen
+count fell from 29 to 19 while the desk flipped switches and reloaded. **What moved those ten
+seats is NOT ESTABLISHED**, and Code later showed that no Notation switch rewrites a stored
+seat, so the flips themselves were not it.
+
+**THE SPECS** for N.158 and N.159 are in block 27. N.160's own spec stays in `OPEN.md`, because
+steps 4 and 5 are open.

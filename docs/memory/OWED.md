@@ -19,6 +19,21 @@ asks what is outstanding, or when the one thing closes and the next is being cho
 
 ## OWED, RULED BUT NOT YET DONE
 
+- **RETIRE `refreshPairings`, `stressAcutedCyrillic`'s OWN LOOKUP, `ownedByPoem`, AND RE-SEAT
+  RULES 1 AND 2.** `../sessions/memo-n160b-the-approach_r1_2026-09-21.md` retires the first two
+  at step 1 and `ownedByPoem` at step 5. **The desk held all of them back, DESK DEFAULT**, so
+  that neither the first singer-visible change (N.159) nor the first write to a singer's stored
+  work (N.160 step 3) carried a refactor beside it. **They are owed as their own commit**, and
+  nothing else waits on them.
+- **SOMETHING WRITES `updatedAt` ABOUT SEVEN SECONDS AFTER EVERY LOAD**, with the record
+  otherwise field-for-field identical. **Found by Code 2026-09-21**, which proved N.160's heal
+  is not the cause by building a control without it and seeing the same stamp. **Untraced.**
+  Code's own lead, not yet followed: `transcribeText`'s call to `keepSurvivingGlosses()` may be
+  reassigning `doc.glossOverrides` and triggering the autosave.
+- **DANN'S STRESS ACUTES SWITCH CHANGED STATE UNOBSERVED.** `ilya:showStressDiacritics` read
+  `true` at 04:00 on 2026-09-21, verified by the desk after its walk, and `false` at 15:50.
+  **The desk did not touch it in between. NOT ESTABLISHED**, and left as it was found.
+
 - **N.128'S TWO OTHER CONSUMERS. Carried out of the narrative 2026-09-13 and
   SHARPENED; the question is now a single one.** Both `sustain.ts:61-84` and
   `watchlist.ts:229-244` hold **the same duplicated `activeTempoAt`**, which

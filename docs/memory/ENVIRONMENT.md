@@ -312,7 +312,13 @@ renderer named it.** In this project it usually did.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | **0 errors, 12 warnings, 5 files** |
-| web-test | **1360 passed (1360)** |
+| web-test | **1378 passed (1378)** |
+
+**MOVED TWICE MORE THE SAME DAY, 2026-09-21: 1360 → 1368 (N.160 step 2, eight tests in
+`heal.test.ts`) and 1368 → 1378 (N.160 step 3, ten tests in `seated-text.test.ts`).** Dann's
+permission asked and given before each ship; backups `ilya-ship.sh.bak-1360-2026-09-21` and
+`ilya-ship.sh.bak-1368-2026-09-21`, and `:79` read back after each edit. **Three ships in one
+day moved this gate three times, so quote the script and never this table.**
 
 **MOVED 2026-09-21: web-test 1354 → 1360 (N.159, six new tests in `draw-pairings.test.ts`).**
 Permission asked and given by Dann before the ship. Backup `ilya-ship.sh.bak-1354-2026-09-21`,
@@ -3753,7 +3759,14 @@ JSON.stringify({hidden: document.hidden, vis: document.visibilityState, focus: d
 ```
 
 **Run it before any measurement whose subject is drawn text, and do not report a reading taken
-while `hidden` is true.** The fix is one sentence to Dann: bring the Chrome window showing Ilya
+while `hidden` is true.**
+
+**AND CHECK WHICH DOCUMENT THE TAB IS SHOWING BEFORE YOU READ A ZERO. 2026-09-21.** A fresh tab
+on the alias opened on **Transcription**, so `document.querySelectorAll('[data-ipa-of]')`
+returned **0 notes** on a build that draws 96 of them. That reads exactly like a broken render.
+**`localStorage.getItem('ilya:activeTab')` says which document is up**; it read `transcription`
+while the desk was measuring Score markup. Switch with the tab control, read, then switch back,
+and record the value first, per `CONTRACT.md` §5. The fix is one sentence to Dann: bring the Chrome window showing Ilya
 to the front. **Creating a second tab does not help; it lands in the same window.**
 
 **AND THE TAB GROUP CHURNS.** Mid-session, `tabs_context_mcp` returned a NEW `tabGroupId` and a

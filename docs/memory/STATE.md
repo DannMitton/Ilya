@@ -11,10 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`1d18514`**, "N.159: the score obeys every Notation switch, drawn fresh from the live
-poem, nothing stored", shipped 2026-09-21 03:26, all five gates at baseline and walked by Dann
-on his own library the same night (the previous floors, `0f7375c`,
-`46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
+before **`46ac52f`**, "N.160 step 3: the seats diff against a stored seated text, and the heal
+writes once, logged per song", shipped 2026-09-21 14:31, all five gates at baseline and walked
+by Dann on his own library the same afternoon (the previous floors, `2fb7516`, `1d18514`,
+`0f7375c`, `46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
 `fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
 `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
 `../sessions/LOG.md`). A floor cannot go stale,
@@ -42,48 +42,51 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-21, about 03:50
+> ### READ THIS FIRST. Written at the close of 2026-09-21, about 19:15
 >
-> **THE ONE THING IS N.160 STEP 2: the dry run.** The heal runs read-only on Dann's own library
-> and logs what it WOULD do, seat by seat, so the only copy of the fault is never written to
-> blind. Spec `OPEN.md` §N.160; the plan is
-> `../sessions/memo-n160b-the-approach_r1_2026-09-21.md` §2 step 2. **Dann exports a binder
-> backup before it runs.** It displaces N.132 to week 3, a DESK DEFAULT already recorded in
-> `SCHEDULE.md`.
+> **THE ONE THING IS N.161: the load path should not write.** The plan is agreed between the
+> desk and Code and is in `OPEN.md` §N.161. **It needs a brief and nothing else.** It takes
+> week 2 and pushes N.141's last step to week 3, a DESK DEFAULT Dann can overturn.
 >
-> #### WHAT SHIPPED AND WAS WALKED
+> #### WHAT SHIPPED AND WAS WALKED, three ships in one day
 >
-> **`1d18514`, N.159, and it closed three tracker items at once:** N.159, N.136 and N.158. The
-> score now obeys every Notation switch, drawn fresh from the live poem on every render, with
-> nothing stored. Walked by Dann on his own library in his Chrome on the branch alias at about
-> 03:45: *"YEs :)"*.
+> - **`1d18514`, N.159**, and it closed N.136 and N.158 with it. The score obeys every Notation
+>   switch, drawn fresh from the live poem, nothing stored.
+> - **`2fb7516`, N.160 step 2**, the dry run. It writes nothing and logs every seat's verdict.
+> - **`46ac52f`, N.160 step 3**, the stored seated text and the heal. **Walked by Dann on his
+>   own library:** *"yes :)"*.
 >
-> #### THE NUMBER THAT CHANGED THE PICTURE
+> #### WHAT THE HEAL DID ON HIS LIBRARY, and the prediction held
 >
-> **The seat instrument fired on Dann's own library: 67 drawn live, 29 kept as stored, of 96
-> seated.** The earlier audit predicted 25 from the line index alone. **It is 29.** Every
-> planning number for N.160 steps 2 and 3 is against 29, not 25, and where the other four come
-> from is NOT ESTABLISHED.
+> **`wrote 14 of 96 seated = 9 anchor + 5 joined; left 1 rejected + 4 unfound as they were.`**
+> The dry run afterwards reads **91 address, 1 rejected, 4 unfound**, which was Code's
+> prediction exactly. «Тень», the second «тень», «безответная» and «Дума» carry the poem again,
+> and «непроглядная» maps across the poem's two words by the joined-run rule.
+>
+> #### THE BIGGEST FINDING OF THE DAY, and it is why N.161 exists
+>
+> **A plain reload was rewriting up to 60 of his stored seats.** `isCliticSeated` compared
+> «В бью» to the score's «в бью» with an exact match, decided the fold was unseated, and
+> `seatCliticFolds` rewrote notes 37 to 96 into the score's own coordinates. Step 3's case fold
+> closes the live case; N.161 removes the mechanism.
 >
 > #### WHAT IS OWED ON WHAT SHIPPED
 >
-> - **Paint on a phone is NOT MEASURED.** Every timing is desktop. Dann declined a phone walk
->   on 2026-09-20 for a standing reason (`ENVIRONMENT.md` §`THE DESK DRIVES HIS CHROME AND HE
->   RULES ON SHOTS`), so this walk was driven from his Chrome instead. **Whether a flip feels
->   instant under his thumb is still unanswered.**
-> - **`refreshPairings` and `stressAcutedCyrillic`'s own lookup are still in the tree.**
->   `memo-n160b` retires both in step 1; the desk held them back to keep the test suites
->   untouched, DESK DEFAULT, and they retire with step 3.
-> - **The two-vowel-letter suppression has no test of its own**, per Code's memo. It is covered
->   only because both paths share one function.
-> - **N.153 stages 4 and 5 are untouched**, and **N.157 is open**: replacing a score does not
->   re-derive the seats.
+> - **Paint on a phone is NOT MEASURED.** Every timing is desktop.
+> - **`refreshPairings`, `stressAcutedCyrillic`'s lookup, `ownedByPoem` and re-seat rules 1 and
+>   2 are all still in the tree.** `memo-n160b` retires them; the desk held them back so the
+>   first ship that wrote to a singer's stored work carried no refactor. **They get their own
+>   commit.**
+> - **Something writes `updatedAt` about seven seconds after every load**, with the record
+>   otherwise identical. Code proved the heal is not the cause. Untraced.
+> - **Dann's stress acutes switch read `true` at 04:00 and `false` at 15:50.** The desk did not
+>   touch it after verifying it. **NOT ESTABLISHED.**
 >
-> #### THE BUFFER IS SPENT
+> #### THE BUFFER IS SPENT AND WEEK 2 IS FULL
 >
-> **N.160 steps 2 and 3 take the week-5 buffer and move N.132 to week 3**, a DESK DEFAULT Dann
-> can overturn. `SCHEDULE.md`'s own rule governs from here: once the buffer is gone, the lowest
-> line in a week moves to LATER and the date stands.
+> N.160 steps 2 and 3 took the week-5 buffer. N.161 now takes week 2 and pushes N.141's last
+> step to week 3 beside N.132. **`SCHEDULE.md`'s rule governs from here: the lowest line in a
+> week moves to LATER and the date stands.**
 
 ## THE TRACKER
 
@@ -102,6 +105,15 @@ does not repeat them.
 
 ### Numbered 2026-09-21
 
+- `[ ]` **N.161. The load path should not write.** DESK DEFAULT number, **raised by Dann**
+  2026-09-21 on being told a plain reload could rewrite up to 60 of his stored seats. **IN
+  under the freeze rule, on both clauses.** `isCliticSeated` decides by comparing two strings
+  (`clitic-seat.ts:398-420`) and `seatCliticFolds` rewrites the fold's whole run when it says
+  unseated (`:447-457`); the comparison has drifted twice. **The plan is agreed between the
+  desk and Code**, and Code corrected the desk on three points: `+page.svelte:2633` must lose
+  the call too, the heal cannot seat a legacy song, and a partial seat is a broken run. Spec
+  in `OPEN.md`. **DESK DEFAULT: it takes week 2 and pushes N.141's last step to week 3.**
+
 - `[x]` **N.159. The score obeys the singer's switches. CLOSED 2026-09-21**, shipped `1d18514`
   and walked by Dann on his own library, in his Chrome on the branch alias: *"YEs :)"*. **It
   closed N.136 and N.158 with it.** Measured on his library at the walk: Reconstitution changes
@@ -111,11 +123,13 @@ does not repeat them.
   `../sessions/brief-n159-score-markup-responds-live_r3_2026-09-21.md`, memo
   `../sessions/memo-n159-build_r1_2026-09-21.md`. **NOT MEASURED: paint on a phone.**
 - `[ ]` **N.160. The work, and its two views.** DESK DEFAULT number. **The model is Dann's**
-  (`PRODUCT.md`). Five steps, two before the release and three after; spec in `OPEN.md`, plan
-  in `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`. **Steps 2 and 3 spend the week-5
-  buffer.** **One ruling deferred to Dann, deliberately, until it can be asked against a real
-  count:** when a word has truly left the poem, does its note keep the old syllable or clear
-  to blank?
+  (`PRODUCT.md`). **STEPS 1, 2 AND 3 ARE CLOSED 2026-09-21**, shipped `1d18514`, `2fb7516` and
+  `46ac52f`, each walked. The heal wrote 14 of his 96 seats and the dry run afterwards reads
+  91 address, 1 rejected, 4 unfound. **Steps 4 and 5 wait until after 2026-10-30.** Spec in
+  `OPEN.md`, plan in `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`. **The deferred
+  ruling is STILL NOT ASKED, and not because the count is missing:** it is five notes, all
+  «одинокая», and Code's reading is that they may be blocked by a seat that already holds the
+  word rather than orphaned by a word that left. **Settle that before putting it to Dann.**
 - `[x]` **N.158. Reconstitution never reaches Score markup. CLOSED 2026-09-21** inside
   `1d18514`. LEARN Unit 4's instruction now holds on the score: 16 notes change on Dann's own
   song. **His account of what reconstitution is moved to `PRODUCT.md` §WHAT RECONSTITUTION IS**
@@ -396,4 +410,18 @@ gate-table update that was 91 tests behind the script. The walk was driven from 
 Chrome and he ruled on the pictures. **NOT MEASURED: paint on a phone. NOT ESTABLISHED: where
 the four seats beyond the predicted 25 come from, and whether `ilya:openSyllabification` was
 left as it was found.** Memory NOT committed.*
+
+*Close of 2026-09-21, about 19:15. Three ships, all walked: `1d18514` (N.159, closing N.136 and
+N.158), `2fb7516` (N.160 step 2, the dry run) and `46ac52f` (N.160 step 3, the stored seated
+text and the heal). The floor moves to `46ac52f`. **The heal wrote 14 of Dann's 96 seats and
+the dry run afterwards read 91 address, 1 rejected, 4 unfound, which was the prediction
+exactly.** Gate 4 moved three times in one day, 1354 to 1360 to 1368 to 1378, with his
+permission each time. **N.161 is numbered and its plan is agreed between the desk and Code**,
+which corrected the desk on three points; the account is in `../sessions/LOG.md` block 28.
+`OPEN.md` gained N.161 and lost N.158 and N.159; `OWED.md` gained the retirement debt, the
+`updatedAt` write and the stress-switch drift; `ENVIRONMENT.md` gained the two gate moves and
+the wrong-document trap; `BRIEF-TEMPLATE.md` gained a displacement line, because Code had to
+mark a displacement NOT ESTABLISHED that was never its to establish. **The bridge dropped
+mid-edit at about 16:00 and one `STATE.md` write was lost; it was found by reading the file
+rather than assumed, and rewritten.** Memory NOT committed.*
 
