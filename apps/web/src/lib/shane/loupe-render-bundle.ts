@@ -7,7 +7,10 @@
  * snapshot of the render that just landed and adds no reactive dependency. The
  * fields are the ones `paginateScore` was given, plus `clef`, which
  * `paginateScore` resolves once for the whole score (`chooseClef(readingScore)`)
- * and which a one-measure slice must be handed rather than re-derive.
+ * and which a slice must be handed rather than re-derive.
+ *
+ * N.153 stage 3a adds `spacing`, the four engraving values the page rendered
+ * at, so the loupe's render of a system is the page's own drawing of it.
  */
 import type { AnalyzedScore, ParsedScore, PreparedSmuflFont, RenderClef } from '@ilya/score-parser';
 
@@ -15,6 +18,7 @@ export interface LoupeRenderBundle {
 	readingScore: ParsedScore;
 	analyzed: AnalyzedScore;
 	clef: RenderClef;
+	spacing: { lineGap: number; pxPerWhole: number; minGap: number; leftMargin: number };
 	font: PreparedSmuflFont | undefined;
 	fontFamily: string | undefined;
 	ipaPreview: Record<string, string> | undefined;

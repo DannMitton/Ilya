@@ -863,6 +863,12 @@
 							readingScore,
 							analyzed,
 							clef: chooseClef(readingScore),
+							spacing: {
+								lineGap: engraving.lineGap,
+								pxPerWhole: engraving.pxPerWhole,
+								minGap: engraving.minGap,
+								leftMargin: engraving.leftMargin,
+							},
 							font: notationFont?.prepared,
 							fontFamily: notationFont?.family,
 							ipaPreview,

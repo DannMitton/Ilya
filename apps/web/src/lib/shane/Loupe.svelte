@@ -28,6 +28,7 @@
 import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
+	import { renderLoupeSystem, systemMarkup } from '$lib/shane/loupe-render';
 	import {
 		headBound,
 		MUSIC_MARK,
@@ -87,8 +88,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		 */
 		revision: unknown;
 		/**
-		 * N.153 stage 2: the inputs the page rendered from, for the render that
-		 * stage 3 swaps in for the clone. Nothing here reads it yet.
+		 * N.153 stage 2: the inputs the page rendered from. Stage 3a draws the held
+		 * measure's system from them, in place of a clone of the page's own.
 		 */
 		bundle?: LoupeRenderBundle | null;
 		language: Language;
@@ -179,6 +180,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		nextIds,
 		selectedEventId,
 		revision,
+		bundle = null,
 		language,
 		fill,
 		meter = null,
@@ -649,6 +651,32 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 
 	let frame = $state<Frame | null>(null);
 
+	/* WHERE THE RENDER IS MEASURED. `renderAnalyzedStaff` returns a string, and
+	   a string has no layout: `getBBox` on markup that is detached, in a
+	   `<template>`, parsed by `DOMParser`, or under `display: none` answers all
+	   zeros (MEASURED in the browser pane, 2026-09-20). So the string is mounted
+	   here, in the document but out of sight, and read there. It stands outside
+	   `.fit-paper-container`, so no page query can reach it, and it takes no
+	   pointer, so no tap can. The markup the loupe DRAWS is parsed again from the
+	   same string and never touches the document. */
+	let renderHost: HTMLElement | null = null;
+	function mountRender(markup: string): Element | null {
+		if (!renderHost) {
+			renderHost = document.createElement('div');
+			renderHost.setAttribute('aria-hidden', 'true');
+			renderHost.setAttribute('inert', '');
+			renderHost.style.cssText =
+				'position:fixed;left:-99999px;top:0;visibility:hidden;pointer-events:none;';
+			document.body.appendChild(renderHost);
+		}
+		renderHost.innerHTML = markup;
+		return renderHost.firstElementChild;
+	}
+	onMount(() => () => {
+		renderHost?.remove();
+		renderHost = null;
+	});
+
 	function hitsFor(page: Element, ids: readonly string[]): { rects: HitRect[]; nodes: Element[] } {
 		const rects: HitRect[] = [];
 		const nodes: Element[] = [];
@@ -674,7 +702,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		void syllablesOpen;
 		void mode;
 		const font = notationFont;
-		if (!open || measureIndex === null || ownIds.length === 0) {
+		const drawnFrom = bundle;
+		if (!open || measureIndex === null || ownIds.length === 0 || !drawnFrom) {
 			frame = null;
 			return;
 		}
@@ -683,24 +712,34 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			frame = null;
 			return;
 		}
-		const own = hitsFor(container, ownIds);
+		/* THE PAGE IS ASKED TWO THINGS and no more: which system the held measure
+		   stands in, and how large that system is on screen. Everything else the
+		   loupe draws and measures comes from the render below. */
+		const pageFirst = hitsFor(container, ownIds).nodes[0];
+		const pageSys = pageFirst?.closest('[data-system]');
+		if (!(pageSys instanceof Element)) {
+			frame = null;
+			return;
+		}
+		const range = parseSystemRange(pageSys.getAttribute('data-system'));
+		const rendered = range ? renderLoupeSystem(drawnFrom, range, Number(pageSys.getAttribute('width'))) : null;
+		const markup = range && rendered ? systemMarkup(rendered, range) : '';
+		const sysEl = markup ? mountRender(markup) : null;
+		if (!sysEl) {
+			frame = null;
+			return;
+		}
+		const own = hitsFor(sysEl, ownIds);
 		const first = own.nodes[0];
 		if (!first) {
 			frame = null;
 			return;
 		}
-		const sysEl = first.closest('[data-system]');
-		if (!(sysEl instanceof Element)) {
-			frame = null;
-			return;
-		}
 
-		// The next measure bounds the window only when it shares this system.
-		const next = hitsFor(container, nextIds);
-		const nextHere =
-			next.nodes.length > 0 && next.nodes.every((n) => n.closest('[data-system]') === sysEl)
-				? next.rects
-				: [];
+		// The next measure bounds the window only when it shares this system,
+		// which is when the render, which is this system alone, holds it.
+		const next = hitsFor(sysEl, nextIds);
+		const nextHere = next.nodes.length > 0 ? next.rects : [];
 
 		const sysWidth = Number(sysEl.getAttribute('width'));
 		const sysHeight = Number(sysEl.getAttribute('height'));
@@ -724,7 +763,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		/* The page's on-screen scale, MEASURED rather than recomputed. PageFit's
 		   transform, the fitted width, and any browser pinch are all already in
 		   this number, and none of them is knowable from here otherwise. */
-		const box = sysEl.getBoundingClientRect();
+		const box = pageSys.getBoundingClientRect();
 		const unitPx = box.width / sysWidth;
 		if (!(unitPx > 0)) {
 			frame = null;
@@ -1167,11 +1206,16 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			if (r) ranges.push(r);
 		}
 
-		const clone = sysEl.cloneNode(true) as Element;
-		/* The clone arrives carrying VoiceProfilePane's `data-note-selected`,
-		   which is the page's mark and not this surface's. It comes off below,
-		   at its own strip.
-		
+		/* PARSED FROM THE RENDER'S OWN STRING, detached: it is markup to draw and
+		   nothing here measures it. A `<template>` parses SVG in its own
+		   namespace and runs no script. */
+		const cloneHost = document.createElement('template');
+		cloneHost.innerHTML = markup;
+		const clone = cloneHost.content.firstElementChild as Element;
+		/* The render carries no `data-note-selected` and no selection ring, which
+		   are VoiceProfilePane's marks on the page; the strips below remove them
+		   all the same, and stay in case the renderer ever draws either.
+
 		   THE PAGE NO LONGER WEARS A HELD-MEASURE RECTANGLE, removed 2026-09-19
 		   on Dann's ruling, so there is nothing of it to take off the clone. */
 		/* THE LOUPE IS A CONTROL SURFACE FOR ENGRAVING CONCERNS ONLY, ruled by
@@ -1241,11 +1285,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 
 		/* THE SQUIRCLE, READ HERE SO THE CARETS CAN CLEAR IT (below) AND N.141
 		   STEP 2 CAN PLACE IT (further down, unmoved): one query, shared,
-		   rather than two reaching the live page for the same element. Its
+		   rather than two reaching the page for the same element. Its
 		   geometry is untouched here, still the selection ring's own, still
 		   read for `stripRing` at its own place; this is only where the
 		   element itself is found. */
-		const pageRing = sysEl.querySelector('[data-selection-ring][data-note-selected]');
+		const pageRing = pageSys.querySelector('[data-selection-ring][data-note-selected]');
 
 		/* CLAUSE 13/2.5. MORE DAYLIGHT BETWEEN THE SQUIRCLE AND THE CARET NEXT
 		   TO IT, moved up from beside the boundary functions below so
@@ -1401,7 +1445,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   appear together and go together, so a retracted panel restores the
 		   measure to how it looked when the loupe opened. Do not split them. */
 		if (mode === 'corrections' && syllablesOpen && positions.length > 1) {
-			const rectOf = (id: string) => container.querySelector(`[data-hit="${CSS.escape(id)}"]`);
+			const rectOf = (id: string) => sysEl.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 			/* THE INK ITSELF: the union of a note's own group (excluding its
 			   hit rectangle, which is not ink) and everything stamped
 			   `data-of-event` for it (an accidental, a dot: both stand outside
@@ -1426,9 +1470,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 						/* not rendered */
 					}
 				};
-				const g = container.querySelector(`[data-event-id="${CSS.escape(id)}"]`);
+				const g = sysEl.querySelector(`[data-event-id="${CSS.escape(id)}"]`);
 				if (g) for (const c of g.children) if (!c.hasAttribute('data-hit')) widen(c);
-				for (const c of container.querySelectorAll(`[data-of-event="${CSS.escape(id)}"]`)) widen(c);
+				for (const c of sysEl.querySelectorAll(`[data-of-event="${CSS.escape(id)}"]`)) widen(c);
 				if (!Number.isFinite(minX)) {
 					const sib = rectOf(id)?.nextElementSibling;
 					if (sib) widen(sib);
@@ -1861,16 +1905,16 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   reference is right everywhere it is not contradicted by an
 		   actual mark, and only actual marks narrow it further. */
 		const ownPrefix = `m${measureIndex}-`;
-		/* READ FROM `sysEl`, THE LIVE PAGE, NOT `clone`. `clone` is a detached
-		   copy at this point in the effect (`clone.innerHTML` is not read
-		   until the frame is assembled, well after), and `getBBox` on a
+		/* READ FROM `sysEl`, THE MOUNTED RENDER, NOT `clone`. `clone` is a
+		   detached copy at this point in the effect (`clone.innerHTML` is not
+		   read until the frame is assembled, well after), and `getBBox` on a
 		   detached SVG element has no layout to report: it throws, or on some
 		   engines answers all-zero, so every candidate silently failed this
 		   check's own `catch` until this was caught and fixed. `sysEl` is the
-		   same system, still mounted, its coordinates identical to the clone
-		   that will be built from it, which is what every other ink read in
-		   this effect already relies on (`inkOf`, above, reads `container`,
-		   the live page, for the same reason). */
+		   same system, mounted, its coordinates identical to the clone that
+		   was parsed from the same string, which is what every other ink read
+		   in this effect already relies on (`inkOf`, above, reads `sysEl` for
+		   the same reason). */
 		/* A GROUP'S OWN `getBBox` IS NOT ITS INK, the same trap `inkOf` above
 		   was already built to avoid: `[data-event-id]`'s own group carries
 		   its `data-hit` rectangle as a child, wider than the glyph and

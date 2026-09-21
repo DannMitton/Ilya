@@ -86,6 +86,7 @@ export {
 export { demoScore, demoProfile, demoResolver, renderDemo, syntheticSmuflFont } from './demo-fixture';
 export {
   paginateScore,
+  renderSystemSlice,
   sliceScore,
   sliceWidth,
   type PageLayoutOptions,
