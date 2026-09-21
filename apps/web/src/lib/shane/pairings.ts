@@ -461,7 +461,14 @@ export function refreshPairings(map: PairingMap, queue: readonly Slot[]): Pairin
 			current !== undefined &&
 			p.origin.word !== undefined &&
 			current.origin.word === p.origin.word;
-		if (sameWord && current.cyrillic !== p.cyrillic) {
+		/* N.119b: `|| current.ipa !== p.ipa`. A stress the singer moves by hand
+		   changes the slot's IPA (the mark, and the vowel it reduces or
+		   restores) and leaves its Cyrillic alone, so this branch never fired
+		   and the pairing kept the old stress: the score's IPA row and its
+		   Cyrillic acute both went stale. Every writer of a pairing copies
+		   `slot.ipa` (`firstPass`, `placeSyllable`, `reseat.ts`,
+		   `clitic-seat.ts`), so the slot's is the current one. */
+		if (sameWord && (current.cyrillic !== p.cyrillic || current.ipa !== p.ipa)) {
 			next[eventId] = {
 				kind: 'syllable',
 				cyrillic: current.cyrillic,

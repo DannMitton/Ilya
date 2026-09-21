@@ -67,6 +67,24 @@ const cyrOf = (map: PairingMap, id: string): string | undefined => {
 };
 
 describe('refreshPairings', () => {
+	it('follows a stress the singer moved: the mark, the vowel, and nothing of the text', () => {
+		const MARK = '\u02C8';
+		const stale: PairingMap = {
+			e1: { kind: 'syllable', cyrillic: 'мос', ipa: MARK + 'mos', vowel: 'o', origin: { lineIndex: 0, wordIndex: 0, slotIndex: 0, word: 'москва' } },
+			e2: { kind: 'syllable', cyrillic: 'ква', ipa: 'kva', vowel: 'a', origin: { lineIndex: 0, wordIndex: 0, slotIndex: 1, word: 'москва' } },
+		};
+		const moved: Slot[] = [slot('мос', 'mas', 'a', 0, 'москва'), slot('ква', MARK + 'kva', 'a', 1, 'москва')];
+		const out = refreshPairings(stale, moved);
+		expect((out.e1 as { ipa: string }).ipa).toBe('mas');
+		expect((out.e2 as { ipa: string }).ipa).toBe(MARK + 'kva');
+		expect(cyrOf(out, 'e1')).toBe('мос');
+	});
+
+	it('does not refresh the IPA of a different word', () => {
+		const diffWord: Slot[] = [slot('мос', '\u02C8mos', 'o', 0, 'болото')];
+		expect((refreshPairings(paired(), diffWord).e1 as { ipa: string }).ipa).toBe('mos');
+	});
+
 	it('refreshes a re-divided pairing', () => {
 		const map = refreshPairings(paired(), REDIVIDED);
 		expect(cyrOf(map, 'e1')).toBe('мо');
