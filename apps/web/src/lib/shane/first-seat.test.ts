@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { shouldSeatFirstTranscription } from './first-seat';
+import { shouldFoldOnArrival, shouldSeatFirstTranscription } from './first-seat';
 import type { PairingMap } from './pairings';
 
 describe('N.145 shouldSeatFirstTranscription', () => {
@@ -41,5 +41,31 @@ describe('N.145 shouldSeatFirstTranscription', () => {
 		// allows.
 		const pairings: PairingMap = { 'm1-0-0': { kind: 'melisma' }, 'm1-1-0': { kind: 'empty' } };
 		expect(shouldSeatFirstTranscription(pairings, true)).toBe(true);
+	});
+});
+
+describe('N.161 shouldFoldOnArrival', () => {
+	const placed: PairingMap = {
+		'm1-0-0': {
+			kind: 'syllable',
+			cyrillic: 'тес',
+			ipa: 'tʲes',
+			vowel: 'e',
+			origin: { lineIndex: 0, wordIndex: 0, slotIndex: 0, word: 'тесная' },
+		},
+	};
+
+	it('refuses a map that already holds a placement, so a restore or a re-upload never folds', () => {
+		expect(shouldFoldOnArrival(placed)).toBe(false);
+	});
+
+	it('accepts an empty map, so a first ingest and a whole-song replace still seat the clitic', () => {
+		expect(shouldFoldOnArrival({})).toBe(true);
+	});
+
+	it('control: the same melisma and empty marks accept alone and refuse once one syllable joins them', () => {
+		const marks: PairingMap = { 'm1-1-0': { kind: 'melisma' }, 'm1-2-0': { kind: 'empty' } };
+		expect(shouldFoldOnArrival(marks)).toBe(true);
+		expect(shouldFoldOnArrival({ ...marks, ...placed })).toBe(false);
 	});
 });

@@ -152,7 +152,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		seatCliticFolds,
 	} from '$lib/shane/clitic-seat';
 	import { seatScoreWords } from '$lib/shane/score-seat';
-	import { shouldSeatFirstTranscription } from '$lib/shane/first-seat';
+	import { shouldFoldOnArrival, shouldSeatFirstTranscription } from '$lib/shane/first-seat';
 	import { collectScoreWords, scoreWordsText } from '$lib/shane/vowel-resolver';
 	import {
 		COARSE_TAP_SPACES,
@@ -2614,13 +2614,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * to seat onto, `eventIds` is empty, and the pass would be a no-op that
 	 * still wrote the map.
 	 *
-	 * THE CLITIC SEAT RE-RUNS AFTER IT (N.111, ruled by Dann 2026-09-04: a
-	 * vowelless clitic is seated with its host automatically, "no vowelless
-	 * word in Russian can carry its own duration"). A fold the new text
-	 * introduces is seated at once, and one it removes was released with its
-	 * word by the pass above. Where the arrangement is unchanged this is a
-	 * no-op, which is the property `handleStartPlacementOver` already relies
-	 * on.
+	 * THE CLITIC SEAT DOES NOT RUN HERE (N.161). It ran here until 2026-09-21,
+	 * but the fold reads the score alone, never the poem (`findCliticFolds`):
+	 * deleting the host word vacated its note, the fold then rewrote the whole
+	 * run from the score's own words, and the deleted word came back on the
+	 * page. The fold runs only where placements are built from nothing: Start
+	 * over, a first transcription, the score's own seat, and an arrival onto
+	 * a map with no syllable in it.
 	 */
 	function reseatAcross(diff: TextDiff, before: readonly (readonly string[])[]): boolean {
 		if (diff.unchanged) return true;
@@ -2629,8 +2629,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			// with no score to re-seat on is true only when there are none.
 			return !Object.values(doc.pairings).some((p) => p.kind === 'syllable');
 		}
-		const result = reseatByDiff(doc.pairings, eventIds, slotQueue, diff, before);
-		doc.pairings = seatCliticFolds(ingestedScore.result.score, result.map);
+		doc.pairings = reseatByDiff(doc.pairings, eventIds, slotQueue, diff, before).map;
 		return true;
 	}
 
@@ -3381,6 +3380,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// as belonging to a note the score no longer has. `syllableTargetIds`
 		// narrows further, for `firstPass` alone: a tie's continuation may
 		// never begin a syllable (`pairings.ts`).
+		const foldOnArrival = shouldFoldOnArrival(doc.pairings);
 		const merged = mergeOnUpload(
 			doc.pairings,
 			ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
@@ -3393,15 +3393,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   clitic with its host HERE, at ingest, with no proposal and no button.
 		   A lone vowelless clitic cannot exist on the page.
 
-		   AFTER THE MERGE, so it can never overwrite a placement the singer
-		   already made: `mergeOnUpload` returns the existing map untouched on a
-		   re-upload, and `isCliticSeated` then finds each fold already seated
-		   and does nothing. On a fresh map it seats.
-
-		   IT RUNS ON A RESTORE TOO. The restored map already carries the seat,
-		   so this is a no-op there; it is not gated on `origin` because a song
-		   saved before this shipped has a map that does not carry it. */
-		doc.pairings = seatCliticFolds(ingested.result.score, doc.pairings);
+		   AFTER THE MERGE, and ONLY WHERE THE MAP HELD NO SYLLABLE BEFORE IT
+		   (N.161, `shouldFoldOnArrival`). A first ingest and a whole-song
+		   replace still seat. A restore and a re-upload onto placed work do
+		   not: the fold reads the score alone, and whenever `isCliticSeated`
+		   read a stored seat as unseated it rewrote the run from «в» to the
+		   end, up to 60 decided notes, on a plain reload. */
+		if (foldOnArrival) doc.pairings = seatCliticFolds(ingested.result.score, doc.pairings);
 		// Kept, never dropped, and reported as a count.
 		orphanedCount = merged.orphaned.length;
 		/* N.134, RULED BY DANN 2026-09-14: the words the box was just filled with

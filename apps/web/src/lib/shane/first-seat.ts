@@ -39,3 +39,26 @@ export function shouldSeatFirstTranscription(pairings: PairingMap, hasScore: boo
 	if (!hasScore) return false;
 	return !Object.values(pairings).some((p) => p.kind === 'syllable');
 }
+
+/**
+ * N.161, "the load path should not write." Whether a score's arrival
+ * (`+page.svelte`'s `applyArrival`) should run the clitic seat.
+ *
+ * THE FOLD RUNS ONLY WHERE PLACEMENTS ARE BUILT FROM NOTHING. The fold
+ * depends on the score alone, never on the poem (`findCliticFolds`), and it
+ * rewrites every syllable from the clitic to the end of the piece. Run over a
+ * map that already holds the singer's placements, it can rewrite up to 60 of
+ * them on a plain reload, because a restore arrives through the same path.
+ *
+ * ASKED OF THE MAP BEFORE THE MERGE, and it is the same test as
+ * `shouldSeatFirstTranscription`: no syllable placed. A first ingest and a
+ * whole-song replace (which clears the map first) both qualify and still
+ * seat, so a lone vowelless clitic never reaches the page (Dann, 2026-09-04).
+ * A restore or a re-upload onto placed work does not qualify, which agrees
+ * with the merge rule: an upload never destroys placements.
+ *
+ * @param before the song's placements as they stood before `mergeOnUpload`
+ */
+export function shouldFoldOnArrival(before: PairingMap): boolean {
+	return shouldSeatFirstTranscription(before, true);
+}
