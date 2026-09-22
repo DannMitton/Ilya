@@ -596,3 +596,139 @@ The model is in the engine and flattened at the storage layer.
 
 **The item that acts on this is N.160**, specified in `OPEN.md`, with the converged plan in
 `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`.
+
+---
+
+## WHAT THE SINGER MAY DO TO A SCORE, AND WHAT COMES OUT. Ruled by Dann 2026-09-17
+
+**TRANSCRIBED HERE 2026-09-22, and this is a move, not a new ruling.** All four lived only
+inside `OPEN.md` §N.151, a 695-line spec that nothing in the read order pointed at, so four
+rules governing the whole app were reachable only by opening one item. **They are Dann's
+own words and his own rulings; the desk offered none of them.**
+
+### 1. WYSIWYG means what it says
+
+**Dann, 2026-09-17:** *"Ilya's WYSIWYG GUI is exactly that: if it appears on Ilya's page,
+it can be printed."*
+
+So a mark that draws on the page prints, and anything that cannot print does not belong on
+the page. This is the same rule as `CONTRACT.md` §6's *"do not put a control on the
+paper"*, read from the other side.
+
+### 2. There is no stopping rule, and that is deliberate
+
+**Dann, 2026-09-17:** *"I don't see a stopping rule or boundary for the user. They should
+be able to intentionally break a score or even recompose one... they maybe able to enter a
+melody from scratch using Ilya only as the composition device! Why not?"*
+
+**So the edit set is NOT fenced by "repair only."** Any design that refuses an edit because
+it is not a repair is arguing with this ruling.
+
+**The desk's note, carried with it and marked as the desk's:** composing from scratch needs
+measures and a meter to exist before a note can be placed, and **nothing in the tree creates
+an empty song's first measure.** That gap is named, not solved.
+
+### 3. The edited score comes back out, as an edited copy, and the singer's own tempo counts
+
+**Dann, 2026-09-17:** *"Ideally a corrected score comes back out of Ilya, but we conceded
+that it is an edited copy. The user may decide to impose tempo markings that reflect their
+personal performance practice but are not strictly attributable to the composer. This is
+permissible, and it will affect their (the user's) phonation time computation so we allow
+it, as a nod to the actual performance as opposed to the Platonic ideal high-fidelity
+composition."*
+
+- **Ilya exports what the singer corrected, and the export says it is an edited copy.** It
+  is never presented as the composer's text.
+- **A tempo the singer imposes is legitimate input**, even where no composer wrote one,
+  because Ilya is describing the performance the singer intends.
+- **Consequence, and it follows from "Why Ilya exists":** every phonation-time figure
+  resting on a singer's own tempo says so where the figure is read, and the export carries
+  the same statement in its file. An uncited number is the thing Ilya exists to refuse.
+- **Tempo is a first-class, singer-editable fact, not an import-only one.** Dann the same
+  day: *"I think the user needs to be able to go in and apply tempo markings anywhere in
+  the score, whether the composer placed them or not."*
+
+### 4. Files: deliberate destruction only
+
+**Dann, 2026-09-17:** *"if the singer wants to overwrite the file, they should be able to.
+Or even delete it and start again. What we don't want is the unwitting deletion or
+overwriting of files the user still wants."*
+
+Replace and Delete stay, each behind a clear act. **The bar is on the UNWITTING loss, never
+on the deliberate one.**
+
+### What stays in N.151 rather than here
+
+The measure-edit surface's own design, the over-full measure tolerance and its flag, the
+caret rulings, and the composer's-notation constraint. **Those bind one item. These four
+bind Ilya.**
+
+---
+
+## ILYA SORTS WHAT IT IS GIVEN, AND NEVER SAYS SO. Ruled by Dann 2026-09-16
+
+**TRANSCRIBED HERE 2026-09-22 from `OPEN.md` §N.146 before that spec was archived.** Dann's
+words, his rulings; the design they produced was the desk's, adopted on his instruction.
+
+**The principle.** *"can we make it so that Ilya autodetects content? I want to remove this
+cognitive burden from the user and lay it on Ilya instead. Help!"*
+
+**And Ilya does not narrate the sorting.** He struck the desk's proposed receipt switch the
+same night: *"Why do we need these labels at all? Why doesn't Ilya just process whatever it
+can without advertising that it is changing tactics mid-process?"* **So: no switch, no
+label, no question.** Ilya tries the likelier reading first and falls back silently.
+
+**A PAGE WITH A POEM ABOVE THE MUSIC IS A SCORE.** *"the house style for many International
+scores format it this way, with the poem under the title followed by the score. Ilya should
+be prepared for this and treat it as a score because the text underlay sometimes varies
+slightly (repetition, omission) from the poem."* **Staves anywhere on the page decide it,
+whatever text sits above them.**
+
+**The accepted risk, in his own reasoning:** *"if Ilya misjudges a page, I suspect the user
+will try again? I don't see how the user can make Ilya process something it can't
+process?"* The same file gives the same answer, so the singer's real exits are the existing
+ones: paste or type the poem, or drop the score in another format.
+
+**This is the intake half of "Once there is data to process, Ilya processes it", above.**
+
+---
+
+## THE SYLLABLES LIVE IN THE LOUPE, NOT THE DRAWER. Ruled by Dann 2026-09-17
+
+**TRANSCRIBED HERE 2026-09-22 from `OPEN.md` §N.147 before that spec was archived.** N.147
+shipped in `55c04d9` and Dann walked it, **so these are built, not pending.** They are here
+because they bind anything that later touches the loupe or the drawer's Input section.
+**Read with "The page and the loupe answer to different things", above.**
+
+**The finding that produced them, Dann 2026-09-16, "unacceptable":** a tap on a note in the
+loupe both selected it and placed the armed syllable, so moving around the loupe reassigned
+syllables by accident.
+
+**The five ruled defaults:**
+
+1. **The syllable line leaves the drawer entirely and lives in the loupe.** The drawer's
+   Input section keeps the source text only, in the input field. **His reason: two copies of
+   the syllabified text confuse the singer**, and moving between drawer and loupe to place
+   syllables is inconvenient, worst on a phone. **This REVERSES N.114's placement**, ruled
+   2026-09-07 and 2026-09-09. **Revisit only if singers lose an overview they need.**
+2. **In the loupe it is an accordion expansion under the notes**, and the loupe is a
+   satellite of the drawer: a control surface. **It departs from the loupe's one constant
+   height when open**, which is a named exception to that rule, not an oversight.
+3. **No syllable is focused or armed by default**, so nothing can be placed by accident.
+   This is the cure for the finding above and must survive any redesign.
+4. **The syllables scroll when height is short.**
+5. **The loupe's notation keeps its IPA under the notes**, on the underlay's near line above
+   the Cyrillic. **His reason, and it is the substantive one: the interface ties pitch to
+   vowel, and IPA, not spelling, gives the vowel.** The Syllables row itself stays Cyrillic
+   only, and a placement brings the syllable's correct, in-context IPA to the note.
+
+**Ratified by Dann on the drawings, 2026-09-17:** treatment 1, Hairline. A hairline under
+the notes, then a SYLLABLES disclosure row in the loupe's tag style with a chevron, then the
+syllables on the loupe's paper.
+
+**French: « Syllabes », ruled by Dann 2026-09-17.** "Syllables" is the desk's coined English
+label and he ruled its French. **Belongs with "Strings ruled with their French", above.**
+
+**Still true and carried from the spec:** placed syllables are black and unplaced are
+tertiary grey, per N.114 ruling 4 (Dann 2026-09-07, *"Committed is black"*). The desk's
+first draft said the reverse and he corrected it the same day.

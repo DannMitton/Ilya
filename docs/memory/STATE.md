@@ -11,9 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`8bd1aff`**, "N.154: the picture and PDF banner names Text, the tab that exists,
-in both languages", shipped 2026-09-21 23:17, all five gates at baseline and **walked by
-Dann on the alias in both languages** (the previous floors, `5f7be82`, `9b05ddd`, `9782d8e`, `44c5830`,
+before **`1b0d645`**, "The bookkeeping audit", shipped 2026-09-22 13:02, all five gates at
+baseline. **The last code in it is `b29ee8c`, the receipt tag fix, walked by Dann on the
+alias in French 2026-09-22 13:05**: *"Yes there is a gap, terrific!"* (the previous floors,
+`b29ee8c`, `8bd1aff`, `5f7be82`, `9b05ddd`, `9782d8e`, `44c5830`,
 `46ac52f`, `2fb7516`, `1d18514`,
 `0f7375c`, `46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
 `fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
@@ -296,7 +297,8 @@ does not repeat them.
   width: 40px` with no overflow rule, and « PARTITION » renders 61.38 px, overlapping the
   filename by 11.38 px after the row's 10 px gap. **English was unaffected, which is why it
   survived five days** as an untracked `INBOX.md` note from 2026-09-16. Now
-  `min-width: 62px`. **Its walk is owed.** Brief
+  `min-width: 62px`. **WALKED BY DANN 2026-09-22 in French on the alias:** *"Yes there is a
+  gap, terrific!"* Brief
   `../sessions/brief-partition-tag-overlaps-the-filename_r1_2026-09-21.md`.
 - `[ ]` **N.131. French parity everywhere else.** The 64 or so untranslated
   entries outside Insights. **DESK DEFAULT on splitting this from N.130, and Dann
@@ -545,3 +547,19 @@ is NOT ESTABLISHED, are all in `OWED.md`. **The desk quoted this audit at twenty
 and was wrong for the third time tonight**; the safe part took that long and the triage is
 a session of its own.*
 
+*Addendum 2, 2026-09-22 about 13:20. **The ruling triage ran and it was not bookkeeping.**
+`OPEN.md` held three closed items' specs, and none was archivable as it stood. **N.146
+carried three of Dann's rulings and NINE LIVE WALK FINDINGS**, four of them things a singer
+sees: a false word drawn from OCR, a text PDF's words landing in a new song rather than the
+one holding the score, "Nothing in this piece is flagged for your voice" printed directly
+under a sentence saying nothing could be checked, and New song needing two clicks. **They
+are now `OWED.md` §"The N.146 walk findings" and none is numbered.** N.147's five ruled
+defaults and N.151's four product-level rulings are transcribed to `PRODUCT.md`, which
+gained three sections. N.155's residue is in `OWED.md`. **All three specs are archived in
+`LOG.md` blocks 32 and 33, and `OPEN.md` now holds only open items.** **Week 1's four
+remaining boxes are ESTABLISHED as never started**, searched across memory, the sessions
+folder and `LOG.md`. **And one fault survives at the next level down:** Dann's ruling of
+2026-09-14, "I don't want Ilya dropping hyphens", sits at `OPEN.md:1250` nested inside
+N.141's 804-line spec, so it will go to the archive the day N.141 closes. Recorded in
+`OWED.md`, not fixed, because N.141 is open. **The pattern across the whole triage: every
+time the records were checked, more open work appeared, and none of it was new.**

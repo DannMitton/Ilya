@@ -135,6 +135,92 @@ asks what is outstanding, or when the one thing closes and the next is being cho
 4. **Nineteen gaps after a rest read "before the first entry".** The selection
    itself is correct; only the wording is wrong. Code flagged it and left it alone.
 
+### N.155's RESIDUE, and a ruling nested where it will be lost. 2026-09-22
+
+**N.155 closed 2026-09-20**, shipped `b53a6df` and walked. **Its spec was archived
+2026-09-22 and these four are what could not go with it.**
+
+1. **Whether a melisma extender crossing a system break wants the same hyphen treatment.**
+   NOT ESTABLISHED, and never put to Dann.
+2. **At a stave size under about 7 the line-end hyphen would meet the barline.** Not a
+   defect yet; no song has been drawn that small.
+3. **A last syllable that opens a melisma gets its hyphen mid-melisma.** Same status.
+4. **Gould rules 26 to 40 remain unread and the book is not on this machine.** **No rule of
+   Gould's is cited for the line-end hyphen in either direction**, so the shipped design
+   rests on published practice the desk described rather than on a cited authority.
+
+**The horizontal position is settled by the walk, not by a separate ruling.**
+`LINE_END_HYPHEN_OFFSET_PX` holds it as one value and Dann walked and passed it. The spec
+had marked it *"Dann's eye"* and unruled; his walk is the ratification.
+
+### AND A RULING IS NESTED WHERE IT WILL BE LOST. Found 2026-09-22
+
+**Dann's ruling of 2026-09-14, *"I don't want Ilya dropping hyphens"*, lives at
+`OPEN.md:1250`, inside N.141's 804-line spec**, as a quoted block belonging to N.129.
+N.129 itself closed 2026-09-20 and its own spec is gone. **So the day N.141 closes, that
+ruling goes into the archive with it**, which is the fault this whole triage exists to
+repair, one level down.
+
+**It wants a home in `PRODUCT.md` before N.141 closes.** Not done here, because N.141 is
+open and nothing is urgent about it; recorded so the next close cannot miss it.
+
+### THE N.146 WALK FINDINGS, 2026-09-17. NINE ARE LIVE AND WERE BURIED IN A CLOSED SPEC
+
+**Moved here 2026-09-22, verbatim in substance, from `OPEN.md` §N.146 before that spec was
+archived.** N.146 itself closed 2026-09-17. **Its walk findings did not**, and they sat
+inside a closed item where nothing in the read order counted them. **Four are things a
+singer sees.**
+
+1. **The Lamm scan PNG draws as nonsense.** 1290 x 2796 at staff spacing 10.0 px: 4 systems,
+   57 notes, 0 rests, 7 measures, and **the meter signatures do not agree with the barlines
+   in any measure** (4/4 over about fifteen quarters; 1/4 over six or seven; 4/8 over seven
+   and nine). Dann: *"The notation is nonsense"*. **NOT ESTABLISHED: whether this is worse
+   than before N.146**, which did not change the read path. The desk chose a
+   phone-screenshot-sized file; Code's 400 dpi raster of the same scan measured s = 30.0.
+2. **"Put it in this song" makes a new song.** On the has-met-this-music dialog, choosing it
+   produced `Untitled, 2026-09-17 (2)` at the top of Repertoire, **although the dialog says
+   the file goes in the song you are in.** Seen on screen; cause NOT ESTABLISHED.
+3. **A text PDF's words land in a new song, not the song holding the score.** Walk 3 dropped
+   `Repertoire_assignment_rubric.pdf` while a song held a score; the words made
+   `Repertoire Evaluation Guide: use` instead, **although the input field's hint reads "Drop
+   the other kind here"**. NOT ESTABLISHED whether it predates N.146.
+4. **A FALSE WORD IS SHOWN TO A SINGER.** The OCR read line 6's «То» as «Го» (the page shows
+   a stem with a bar across both sides; the reading has the bar on the right only), and
+   Transcription then drew it as `'go` with the gloss "go". **This is OCR, not N.146's
+   routing**, and it is the shape of fault the freeze rule's false-statement test exists for.
+6. **A 23-page PDF takes 97.2 s behind one static label, and eleven pages go unread.** Pages
+   4, 8, 12, 14, 16, 18, 19, 20, 21, 22 and 23. The label is `upload.status.readingPage`
+   (`i18n.ts:888`), shown while `probeFile` reads page 1
+   (`ScoreUploader.svelte:464-468`); pages render at 400 dpi (`page-pdf.ts:52`).
+   **N.146's own part passed:** it chose "score", as ruled. NOT ESTABLISHED whether the wait
+   predates N.146.
+7. **Insights states two things at once that cannot both hold.** On walk 6's read: compass
+   **A3 to F♯6** (implausible for a sung line in this song; the reader read the top staff in
+   17 systems by its own receipt), reference range "Not typed" on all three rows, then
+   *"Without the range you typed, this page cannot say whether this key suits you."*
+   **followed by "Nothing in this piece is flagged for your voice."** Also a tall empty
+   region at the top of the Insights box. **All three NOT ESTABLISHED as faults until the
+   code is read**, and all three are candidates for the freeze rule's false-statement test.
+8. **The cause of the "not recognised as a score" message on a normal JPEG stays NOT
+   ESTABLISHED.** Walk 5 later PASSED on a real Finder drag in Incognito, and Code could not
+   reproduce it and built nothing. Two untested leads are in
+   `../sessions/memo-n146-step2c-unrecognised-photo_r1_2026-09-17.md`.
+10. **New song needs two clicks.** Seen twice by Dann 2026-09-17, in his everyday profile and
+    in Incognito: the first click only moves focus onto the button.
+11. **A fresh profile opens with a song already listed**, `Untitled, 2026-09-17`, carrying
+    **Rename and no Delete**, before any click. Every drawer section except Input opened
+    collapsed.
+12. **Delete's confirmation reads as an error message.** Dann read the warning that deletion
+    cannot be undone as an error and left both songs undeleted. **Code's memo also records
+    that New song closes the Input section.**
+
+**Finding 5 is CLOSED and is not carried:** the OCR garble produced Dann's ruling of
+2026-09-17 that Ilya refuses a reading that is mostly not Russian words, built as N.146
+steps 2 and 2b and shipped in `fe4d2c7` and `6e98057`.
+
+**NONE OF THESE IS NUMBERED.** Per `CONTRACT.md` §3.1 nothing enters the tracker unless Dann
+rules it in, so they stand here until he does.
+
 ### New from the bookkeeping audit, 2026-09-21. THE RECORDS OVERSTATE AND UNDERSTATE AT ONCE
 
 **Found when Dann asked how close the open work was, and the honest answer was that the
@@ -164,11 +250,16 @@ it is the one that needs care rather than speed.**
    edited score returning as an edited copy with the singer's own tempo counted, and
    deliberate destruction only. **They sit inside one item's spec and govern the whole
    app.**
-3. **FOUR OF `SCHEDULE.md` WEEK 1'S FIVE BOXES HAVE NO ESTABLISHED STATUS.** Week 1 ended
-   2026-09-20. N.92's caret reach did ship, over six commits 2026-09-17 to 2026-09-18, and
-   N.153 then made it usable on a phone. **The other four are unreconciled: N.142 step 2,
-   the nine CHECK rows, UNSETTLED-6's per-format walk, and starting the two design rows.**
-   Until they are, no completion figure for the release means anything.
+3. **FOUR OF `SCHEDULE.md` WEEK 1'S FIVE BOXES WERE NEVER STARTED. ESTABLISHED 2026-09-22.**
+   Week 1 ended 2026-09-20. **N.92's caret reach did ship**, over six commits 2026-09-17 to
+   2026-09-18, and N.153 then made it usable on a phone; its box is now ticked. **The other
+   four have no memo, no brief, no `LOG.md` block and no tracker row:** N.142 step 2, the
+   nine CHECK rows, UNSETTLED-6's per-format walk, and starting the two design rows.
+   **Searched 2026-09-22** across `docs/memory/*.md`, `docs/sessions/` filenames and
+   `LOG.md`; the only N.142 artefacts are for step 1, shipped `c868540` 2026-09-16.
+   **So week 1 delivered one box of five, and four items have been carried silently for two
+   weeks.** They are not late work; they are unstarted work that the schedule shows as
+   pending and nothing else counts.
 
 ### New from the N.132 and N.154 closes, 2026-09-21. Five, none blocking the beta
 

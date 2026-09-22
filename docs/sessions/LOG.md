@@ -6910,3 +6910,171 @@ spanning 54.0 to 55.9 px spare in English and 14.6 to 16.4 px in French.
    forced Verdana and confirmed the tag grows rather than overlapping.
 
 Brief `brief-n132-ratified-names-and-tab-padding_r1_2026-09-21.md`.
+
+---
+
+## Block 32. N.146's spec archived 2026-09-22, AFTER its rulings and findings were rehoused
+
+**N.146 closed 2026-09-17. Its spec stayed in `OPEN.md` for five days**, and was archived
+only once everything live inside it had a home. **This is the check `README.md` demands
+before any account moves, and it was worth running:** the spec held three of Dann's rulings
+and nine live walk findings, four of them things a singer sees.
+
+**Where each part went, 2026-09-22:**
+
+- **`PRODUCT.md` §"Ilya sorts what it is given, and never says so"** took the autodetect
+  principle, the struck receipt switch, the poem-above-music ruling, and Dann's own
+  reasoning about a misjudged page.
+- **`OWED.md` §"The N.146 walk findings"** took findings 1, 2, 3, 4, 6, 7, 8, 10, 11 and 12.
+  **Finding 5 is closed** and was not carried: it produced the OCR guard, shipped in
+  `fe4d2c7` and `6e98057`.
+- **What follows is the rest**, which is the design as built and is genuinely closed.
+
+Brief `brief-n146-poem-or-score-detected_r1_2026-09-16.md`.
+
+---
+
+## N.146. ILYA TELLS A POEM FROM A SCORE ITSELF, FOR A PDF OR A PICTURE. Numbered 2026-09-16. THE NUMBER IS A DESK DEFAULT.
+
+**Dann, 2026-09-16, reviewing the N.131 French:** *"can we make it so that Ilya autodetects content? I want to remove this cognitive burden from the user and lay it on Ilya instead. Help!"* and *"Advise me on the simplest design from the user's perspective and we will go with that."* **So the design below is the desk's, adopted on his instruction in advance.**
+
+**Today, read 2026-09-16:** `ScoreUploader.svelte`, `take()`, sends every PDF and every picture to a question, "Is this PDF the poem, or the score?" (`intake.pdf.*`, `intake.picture.*`), per his ruling of 2026-09-03 when the camera icon went. A scanned PDF answered "the poem" ends on `intake.pdf.noText`. Every other file is sorted by its own format sniff.
+
+**THE DESIGN, from the singer's side.** The singer drops a PDF or a picture and it goes where it belongs, with no question.
+
+1. **One rule for both kinds:** if the page shows staves, it is the score; if not, it is the poem. A PDF with a text layer is not enough on its own, because an engraved score PDF carries its lyrics as text.
+2. **A poem page with no text layer is read as a picture** (the existing Russian OCR), so "There are no words in this PDF" never appears.
+3. ~~**The receipt carries one quiet switch**~~ **STRUCK BY DANN 2026-09-16:** *"Why do we need these labels at all? Why doesn't Ilya just process whatever it can without advertising that it is changing tactics mid-process?"* **No switch and no label.** Ilya tries the likelier reading first and falls back silently: staves found, read the score; the score read yields no sung line, read the page as a poem; no staves, take the text layer, and with none, read the page as a picture. **The named risk, accepted:** a page Ilya misjudges cannot be corrected except by editing the result; the receipt's **Retirer** clears it. Revisit only if a walk shows a misjudged page. **Dann, the same night:** *"if Ilya misjudges a page, I suspect the user will try again? I don't see how the user can make Ilya process something it can't process?"* The desk agreed: the same file gives the same answer, so trying again changes nothing, and the singer's real exits already exist (paste or type the poem; drop the score in another format).
+4. It arrives at once, like every other drop (N.145, and `PRODUCT.md`, "Once there is data to process, Ilya processes it").
+
+**The cost that is NOT ESTABLISHED:** how fast staves can be found. The photo reader finds them in Python inside a worker (`page-reader.worker.ts`), which takes seconds to load. A lighter check (long, evenly spaced dark horizontal rows in the rendered page) may do; Code measures both before choosing.
+
+**RULED BY DANN 2026-09-16: A PAGE WITH A POEM ABOVE THE MUSIC IS A SCORE.** His words: *"the house style for many International scores format it this way, with the poem under the title followed by the score. Ilya should be prepared for this and treat it as a score because the text underlay sometimes varies slightly (repetition, omission) from the poem."* So staves anywhere on the page decide it, whatever text sits above them. **The brief's walk should include such a page.**
+
+**Strings:** the question strings and `intake.pdf.noText` retire. **No new strings.**
+
+---
+
+---
+
+## FINDINGS FROM THE N.146 WALK, 2026-09-17. Moved verbatim from STATE.md at the close
+
+> **FINDINGS FROM THE N.146 WALK, 2026-09-17, for the week 1 per-format walk (DESK DEFAULT: recorded, not switched to).**
+> 1. The Lamm scan PNG (`~/Downloads/sunless-01-v-chetyryokh-stenakh_lamm-scan.png`, 1290 x 2796, read at staff spacing 10.0 px) drew as nonsense: 4 systems, 57 notes, 0 rests, 7 measures, and **the meter signatures do not agree with the barlines in any measure** (4/4 over about fifteen quarters; 1/4 over six or seven; 4/8 over seven and nine). Dann's words: "The notation is nonsense", "The meter signature does not agree with the barlines". N.146 did not change the read path (`handleFile(file)` gets the original file). Whether this is worse than before is NOT ESTABLISHED; `Untitled, 2026-08-25` was built on the same file. The desk chose a phone-screenshot-sized file as the "photo"; Code's 400 dpi raster of the same scan measured s = 30.0.
+> 2. On Ilya's has-met-this-music dialog, **Put it in this song** was followed by a new song, `Untitled, 2026-09-17 (2)`, selected at the top of Repertoire, although the dialog says the file goes in the song you are in. Seen on screen; cause NOT ESTABLISHED.
+> 3. Walk 3 (a text PDF, `Repertoire_assignment_rubric.pdf`, dropped while `Untitled, 2026-09-17 (2)` held a score) passed for N.146: no question, the words filled the input field. **The words went into a new song, `Repertoire Evaluation Guide: use`,** not the song holding the score, although the input field's hint reads "Drop the other kind here". Seen on screen; whether this predates N.146 is NOT ESTABLISHED.
+> 4. Walk 4 (`~/Downloads/walk-n146-poem-scan.pdf`, image only, made by the desk from `reading-aid.test.ts:89-96`) passed for N.146; Dann: "brilliant!" **The OCR read line 6's first word, То, as Го** (the page shows a stem with a bar across both sides; the reading has the bar on the right side only), and Transcription then drew it as 'go with the gloss "go". A false word shown to a singer; OCR, not N.146's routing.
+> 5. Walk 5 (`~/Downloads/walk-n146-poem-photo.jpg`, the desk's synthetic photo: tilted 2.5 degrees, a lighting gradient, grain, blur) routed correctly (no question) and **filled the input field with garble: 82 lines, 302 words, from a six-line poem.** Dann: "lol garble! what is this?" Tesseract reads the file as given (`ScoreUploader.svelte:392-396`), and any non-empty OCR text is taken as the poem (`ingestion/poem-or-score.ts:47-48`), as it was before N.146. **N.146 widens the exposure:** a picture with no staves now goes to OCR with no press, so any such picture becomes a poem and a new song. Whether a real phone photo fares better is NOT ESTABLISHED. **RULED by Dann 2026-09-17 (asked for the recommendation, said yes): Ilya refuses an OCR reading that is mostly not Russian words, as N.146 step 2; cleaning the picture first goes to LATER.** Brief `../sessions/brief-n146-step2-ocr-guard_r1_2026-09-17.md`. **Step 2 BUILT by Code, not shipped** (memo `../sessions/memo-n146-step2-ocr-guard_r1_2026-09-17.md`, read in full by the desk: tokens of 3+ Cyrillic letters, refused past a strict majority unknown; scan 0%, photo 68.3%; web-test 1244). **The desk found it refuses a real poem dropped before the dictionary loads** (`engine.ts:122` starts `{}`; `loader.ts:655` injects only at the end), so step 2b makes the guard wait: `../sessions/brief-n146-step2b-wait-for-dictionary_r1_2026-09-17.md`. Ship both together.
+> 6. Walk 6 (`~/Downloads/IMSLP113877-PMLP232488-Mussorgsky_-_Without_Sun.pdf`, 23 pages, JBIG2 at 600 ppi per `pdfimages -list`, the poem-above-music case) **stuck on "Reading the page…"**. That label is `upload.status.readingPage` (`i18n.ts:888`), shown only on the score path in `handleFile` (`ScoreUploader.svelte:464-468`) while `probeFile` reads page 1 before the clef-and-key check. **So N.146 chose "score" for this page, as ruled; the hang is in the pre-existing probe.** Pages render at 400 dpi (`page-pdf.ts:52`). **Not a hang: it finished,** "Read in 97.2 s": 42 systems, 124 staves, 489 notes, 2 rests, 92 measures; **eleven pages unread** (4, 8, 12, 14, 16, 18, 19, 20, 21, 22, 23); length assumed on 328 notes; the input field stayed empty. Dann: "Finally". N.146's part passed (a score, the poem not taken). The 97 s wait with one static label, and the unread pages, are the reader's; whether the wait predates N.146 is NOT ESTABLISHED.
+> 7. Insights on walk 6's read, seen on Dann's screenshot 00:50: compass **A3 to F♯6**, tessitura D4 to C♯5, reference range "Not typed" on all three rows, then "Without the range you typed, this page cannot say whether this key suits you." followed by **"Nothing in this piece is flagged for your voice."** An F♯6 in a sung line is implausible for this song (the reader read the top staff in 17 systems, per its own receipt), and "nothing flagged" sits under a sentence saying nothing could be checked. Also: a tall empty region at the top of the Insights box. All three NOT ESTABLISHED as faults until the code is read; candidates for the freeze rule's false-statement test.
+> 8. **Walk 5 repeated on `6e98057`** (N.146 step 2 and 2b, shipped): after **New song**, the photo dropped on the input field showed **"This file was not recognised as a score."** immediately on release, twice (`upload.err.unrecognised`, `i18n.ts:957`). The garble stayed out (Dann: "a good outcome"), but the intended message is "No text recognised in image.", which Code saw in dev. The file's bytes are a normal JPEG. Cause NOT ESTABLISHED; brief `../sessions/brief-n146-step2c-unrecognised-photo_r1_2026-09-17.md`.
+> 9. **Step 2c, 2026-09-17.** Code could not reproduce finding 8 and built nothing (`../sessions/memo-n146-step2c-unrecognised-photo_r1_2026-09-17.md`, read in full by the desk). **Walk 5 then PASSED**, walked by Dann about 12:45 in a Chrome Incognito window on the branch alias (its `sw.js` stamp `ilya-1789655907810`, 2026-09-17 10:38, the build of `e3b8eb4`, no app change since `6e98057`), with a real Finder drag of the real 207,216-byte file, after **New song**: "No text recognised in image." after about three seconds, the input field unchanged, no third song. **The cause of finding 8 stays NOT ESTABLISHED.** Two leads, neither tested: (a) DESK INFERENCE, tied to the code: Dann's Finder list was drawing two lists over each other, the photo's row could not be clicked, and the row drawn under it was `wasm-artifact.yml` (1,811 bytes, text); a text file ends at exactly `upload.err.unrecognised` (`format-detection.ts:215`, `ScoreUploader.svelte:838`), fast. A reboot cleared the Finder fault. (b) Last night's walk ran in Dann's everyday profile, whose cached build this walk did not exercise.
+> 10. **New song needs two clicks.** Seen twice by Dann 2026-09-17 (everyday profile and Incognito): the first click only moves focus onto **New song**; the second creates the song.
+> 11. **A fresh profile opens with a song already listed**, `Untitled, 2026-09-17`, with **Rename** and no **Delete**, before any click (Incognito, 2026-09-17). Every drawer section except Input opened collapsed.
+> 12. **Delete asks for confirmation.** Dann read the warning that deletion cannot be undone as an error message, and left both songs. Code's memo also records that **New song** closes the Input section.
+
+---
+
+## Block 33. N.147's and N.155's specs archived 2026-09-22, after their rulings were rehoused
+
+**Both items closed days before their specs left `OPEN.md`:** N.147 on 2026-09-17
+(`55c04d9`, walked) and N.155 on 2026-09-20 (`b53a6df`, walked). **Neither was archivable
+as it stood.**
+
+- **N.147 carried five ruled defaults of 2026-09-17** that bind the loupe permanently,
+  including the one that reverses N.114's placement of the syllable line. **They are now
+  `PRODUCT.md` §"The syllables live in the loupe, not the drawer"**, together with the
+  ratified Hairline treatment and the French « Syllabes ».
+- **N.155 carried four unresolved items and a research gap.** They are now `OWED.md`
+  §"N.155's residue".
+
+**Both full specs follow, unchanged.**
+
+---
+
+## N.147. THE LOUPE TAP, AND THE SYLLABLES MOVE INTO THE LOUPE. Numbered 2026-09-16 (DESK DEFAULT number). IN, under the freeze rule's lost-work exception.
+
+**The finding, Dann 2026-09-16, "unacceptable":** a tap on a note in the loupe both selects it and places the armed syllable (`handleLoupePick`, `+page.svelte:710-713`), so moving around the loupe reassigns syllables by accident. `INBOX.md:187` records only the desk's recommended design of that night; the other three designs were never written down (searched 2026-09-17: tree and project).
+
+**RULED BY DANN 2026-09-17, as defaults:**
+
+1. **The syllable line leaves the drawer entirely and lives in the loupe.** The drawer's Input section keeps the source text only, in the input field. His reason: two copies of the syllabified text confuse the singer, and moving between drawer and loupe to place syllables is inconvenient, worst on a phone. This reverses the placement of N.114 (ruled 2026-09-07 and 2026-09-09, `+page.svelte:4421-4423`). It would be revisited if singers lose an overview they need.
+2. **In the loupe it is an accordion expansion under the notes,** and the loupe is treated as a satellite of the drawer: a control surface, which the record already called it (`LOG.md:536`). It departs from the loupe's one constant height (same block) when open.
+3. **No syllable is focused or armed by default,** so nothing can be placed by accident.
+4. **The syllables scroll when height is short.**
+5. **IPA, ruled 2026-09-17.** The loupe's notation keeps its IPA under the notes, on the underlay's near line above the Cyrillic (`staff-renderer.ts:95`), because the interface ties pitch to vowel and IPA, not spelling, gives the vowel. The Syllables row stays Cyrillic only. A placement brings the syllable's correct, in-context IPA to the note that receives it (today's path: `pairings.ts:229`, `+page.svelte:675-676`). The text is linear, and singers are used to scrolling to find text.
+
+**The desk's design within those rulings, 2026-09-17, put to Dann:**
+
+- A note tap only selects (N.147's own fix). A tap on a syllable places it on the selected note, and the selection moves to the next note. Nothing is armed in between.
+- **Phone:** one row, 44 px tall, scrolling sideways, because a downward drag anywhere on the loupe already dismisses it (`+page.svelte:1864-1888`; `touch-action: none` at `Loupe.svelte:1513`). The strip needs its own `touch-action: pan-x` to scroll inside the loupe; that this works under the loupe's `none` is DESK INFERENCE, for Code to verify. After each placement the strip glides so the syllables after the one placed sit under the thumb, without arming any.
+- **Desk:** the same strip wraps at the poem's own line breaks and scrolls downward when the loupe is short of room. There is no swipe on a desk (`+page.svelte:1882-1883`). The split follows E.36's clause "control geometry answers to input modality" (quoted from `claude/ILYA_PROJECT_MAP_2026-08-10.svg`, snippet only).
+- Placed syllables are black and unplaced are tertiary grey, as N.114 ruling 4 has it (Dann 2026-09-07, "Committed is black", `SyllableStation.svelte` head comment); the desk's first draft said the reverse and was corrected the same day. The selected note's own syllable is outlined in lavender.
+- **Drawn 2026-09-17** in three attachments (hairline, tray, pull tab) for Dann's pick by eye: `n147-syllables-in-the-loupe.html`, sent in the session, generated by the desk (not in the tree).
+- **PICKED BY DANN 2026-09-17: drawing 1, Hairline.** A hairline under the notes, then a SYLLABLES disclosure row in the loupe's tag style with a chevron, then the syllables on the loupe's paper.
+- DESK DEFAULTS: the row's open state lives for the session only, with no `localStorage` write (precedent `IntakePanel.svelte:166`; this replaces the desk's earlier "remembers" line); it starts closed. "Syllables" is the desk's coined label; **French « Syllabes », ruled by Dann 2026-09-17.**
+- **Brief:** `../sessions/brief-n147-syllables-in-the-loupe_r1_2026-09-17.md`.
+- **Cost:** the pairing cursor (`+page.svelte:662`, drawn at `:4441`) loses its job in the loupe; what else reads it is NOT ESTABLISHED until Code checks. Size NOT ESTABLISHED; the release estimate's 1 to 2 evenings covered the tap alone.
+
+---
+
+## N.155. A WORD BROKEN ACROSS A SYSTEM TAKES A HYPHEN AT THE LINE END
+
+**Numbered 2026-09-20. THE NUMBER IS A DESK DEFAULT.** **The design is the desk's
+proposal; Dann ruled it in** at 14:07 on 2026-09-20, choosing option A over leaving it.
+Per the ratification rule of 2026-09-20, those are two facts and the record carries both.
+
+**THE SOURCE IS N.129'S OWN RULING, not a new one.** Dann, 2026-09-14: *"I don't want
+Ilya dropping hyphens."* N.129 step 2 closed every case inside a system. **A word broken
+across a system break is the last place Ilya still drops one.**
+
+### What the singer sees today
+
+The last syllable under the last note of a system is `неп`, and nothing on the page says
+the word continues. The eye moves to the next line and has to work out whether it just
+sang a word or a fragment. **Seven joins on Without Sun no. 1 are in this state**,
+reported by Code 2026-09-20 and not independently counted by the desk.
+
+### Why the hyphen loop cannot do it, read in the tree 2026-09-20
+
+`staff-renderer.ts:506-508`: *"`paginateScore` renders every system through its own
+`renderAnalyzedStaff` call on a rebased slice"*. So the hyphen loop at `:3434` never sees
+a pair that straddles a break, which is **also why removing the omission in step 2 drew
+no stray hyphen across the page.** The slice cannot know its last syllable continues a
+word by looking sideways.
+
+**BUT IT MAY NOT NEED TO LOOK SIDEWAYS AT ALL, and this shrinks the build.** The underlay
+entry carries `sylType` (`staff-renderer.ts:2404`), and `start` or `middle` on the slice's
+LAST entry already means a further syllable exists, which can only be on the next system.
+**That is a DESK READING of the data model the hyphen loop relies on at `:3396`, not a run;
+Code confirms it before building on it.** If it holds, this is local to
+`renderAnalyzedStaff` and the paginator is untouched.
+
+**The desk told Dann the paginator would have to hand the flag in, and corrected itself
+the same minute.** The precedent below stands as the fallback if the reading fails.
+
+### The precedent, in the same paragraph
+
+**N.102 increment 1b has this exact shape** (`staff-renderer.ts:506-510`): a slice had no
+idea what the measure before it stated, so the paginator now computes
+`incomingAccidentals` and hands it in. **This is a known move in this file, not new
+architecture.**
+
+### NOT ESTABLISHED
+
+- **Where the hyphen sits horizontally.** Immediately after the last syllable, or pushed
+  to the right margin. Published practice differs and **this is Dann's eye.** Bring him a
+  drawing rather than a paragraph, per tether 18's corollary.
+- **Gould rules 26 to 40 remain unread and the book is not on this machine**
+  (`../sessions/memo-n113-melisma_r1_2026-09-07.md:223`). No rule of Gould's is cited for
+  this item, in either direction.
+- Whether a melisma extender crossing a break wants the same treatment.
+
+### Sequencing
+
+**DESK DEFAULT: it displaces N.153 by one build**, because it is small and it finishes
+work walked the same day. Dann can send it behind N.153 with a word.
+
+
+
+---
