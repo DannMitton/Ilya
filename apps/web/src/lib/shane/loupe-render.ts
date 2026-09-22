@@ -95,7 +95,13 @@ export interface DerivedSpacing {
 	worst: number;
 	/** Renders the search made, the first at the page's own `minGap`. */
 	iterations: number;
-	/** False where the ceiling or the render budget was reached with a pair still under the floor. */
+	/**
+	 * False only where the ceiling itself leaves a pair under the floor. The
+	 * render budget never makes it false: the bisection stops on `hi`, which
+	 * already clears the floor, so a search cut short by the budget answers
+	 * converged, at a `minGap` coarser than `MIN_GAP_RESOLUTION`. So converged
+	 * is exactly `worst >= floor`.
+	 */
 	converged: boolean;
 }
 
