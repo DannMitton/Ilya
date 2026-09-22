@@ -184,7 +184,8 @@ singer sees.**
    `Repertoire_assignment_rubric.pdf` while a song held a score; the words made
    `Repertoire Evaluation Guide: use` instead, **although the input field's hint reads "Drop
    the other kind here"**. NOT ESTABLISHED whether it predates N.146.
-4. **A FALSE WORD IS SHOWN TO A SINGER.** The OCR read line 6's «То» as «Го» (the page shows
+4. **NUMBERED N.163 ON 2026-09-22 and no longer a loose debt. A FALSE WORD IS SHOWN TO A
+   SINGER.** The OCR read line 6's «То» as «Го» (the page shows
    a stem with a bar across both sides; the reading has the bar on the right only), and
    Transcription then drew it as `'go` with the gloss "go". **This is OCR, not N.146's
    routing**, and it is the shape of fault the freeze rule's false-statement test exists for.
@@ -194,7 +195,8 @@ singer sees.**
    (`ScoreUploader.svelte:464-468`); pages render at 400 dpi (`page-pdf.ts:52`).
    **N.146's own part passed:** it chose "score", as ruled. NOT ESTABLISHED whether the wait
    predates N.146.
-7. **Insights states two things at once that cannot both hold.** On walk 6's read: compass
+7. **NUMBERED N.164 ON 2026-09-22 and no longer a loose debt. Insights states two things at
+   once that cannot both hold.** On walk 6's read: compass
    **A3 to F♯6** (implausible for a sung line in this song; the reader read the top staff in
    17 systems by its own receipt), reference range "Not typed" on all three rows, then
    *"Without the range you typed, this page cannot say whether this key suits you."*

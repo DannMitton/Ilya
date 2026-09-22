@@ -2171,3 +2171,126 @@ manufactured decision `CONTRACT.md` §3 forbids.
 
 **The desk removed this from Code's desk defaults:** blanking a note removes something a
 singer can see, and its frequency was NOT ESTABLISHED.
+
+---
+
+## N.163. ILYA SHOWS A SINGER A WORD THAT IS NOT ON THE PAGE. Ruled in by Dann 2026-09-22
+
+**Source: N.146's walk finding 4, 2026-09-17.** It sat inside a closed spec for five days,
+moved to `OWED.md` on 2026-09-22, and Dann ruled it into the tracker the same day on the
+desk's recommendation that **it meets the freeze rule's own false-statement test.**
+
+**What happened.** On walk 4 the OCR read line 6's «То» as «Го». The page shows a stem with
+a bar across both sides; the reading has the bar on the right only. **Transcription then
+drew it as `'go` with the gloss "go".**
+
+**Why it is worse than a bad OCR reading.** Ilya did not merely mis-read. **It passed the
+mis-reading into the dictionary and presented the result with a gloss**, which is the voice
+Ilya uses for things it knows. A singer has no way to tell that word from a correct one.
+
+**NOT ESTABLISHED, and the desk is not choosing between these:**
+
+- Whether the fix belongs at the OCR layer, at the dictionary seam, or in **how a word Ilya
+  cannot vouch for is presented.**
+- Whether the existing OCR guard helps. **N.146 step 2 already refuses a reading that is
+  mostly not Russian words** (shipped `fe4d2c7`, `6e98057`), and it did not catch this,
+  because «Го» IS a Russian-shaped token. **A majority test cannot catch a single wrong
+  word.**
+- Whether any signal exists at the seam to distinguish a confident reading from a doubtful
+  one. **If none exists, this is a bigger item than it looks.**
+
+**DANN'S, AND NOT YET ASKED:** whether a word Ilya is unsure of should be marked on screen.
+**`CONTRACT.md` §6 forbids a mark that appears on everything**, and his N.146 ruling forbids
+Ilya advertising that it is changing tactics. **A mark here would have to be rare and
+specific, which is the test his N.151 page-mark ruling already sets.**
+
+---
+
+## N.164. INSIGHTS STATES TWO THINGS AT ONCE THAT CANNOT BOTH HOLD. Ruled in by Dann 2026-09-22
+
+**Source: N.146's walk finding 7, seen on Dann's screenshot 2026-09-17 at 00:50.** Same
+history as N.163: buried in a closed spec, surfaced 2026-09-22.
+
+**What the page said, in this order:**
+
+1. Compass **A3 to F♯6**, tessitura D4 to C♯5.
+2. Reference range **"Not typed"** on all three rows.
+3. *"Without the range you typed, this page cannot say whether this key suits you."*
+4. **"Nothing in this piece is flagged for your voice."**
+
+**Lines 3 and 4 cannot both be true.** If nothing could be checked, nothing could be
+cleared either.
+
+**A second thing on the same screen:** the compass reads to **F♯6**, which is implausible
+for a sung line in that song. **The reader read the top staff in 17 systems by its own
+receipt**, so the compass may be describing the piano rather than the voice.
+
+**A third:** a tall empty region at the top of the Insights box.
+
+**ALL THREE ARE NOT ESTABLISHED AS FAULTS until the code is read**, and they may be three
+faults or one. **The desk has not opened `InsightsPane.svelte` for any of them.**
+
+**Why it is release-relevant:** `PRODUCT.md` says Insights forecasts and never declares, and
+**"Why Ilya exists" makes an uncited number the thing Ilya refuses.** A cleared verdict
+resting on data that was never available is that fault in its plainest form.
+
+---
+
+## N.165. THE LOUPE DRAWS NO NOTES. DESK DEFAULT number, found by Dann 2026-09-22
+
+**Full account and the brief:**
+`../sessions/brief-n165-n166-blank-loupe-and-the-reloaded-scan_r1_2026-09-22.md`.
+
+**Observed on his screen**, French, Annotation tab, song
+`sunless-01-v-chetyryokh-stenakh_lamm-scan`: he clicked a printed note and the loupe opened
+holding **clef, two sharps, 6/4 and barlines, and no noteheads**. Twice, on measures 5 and
+6. **The header knew what it held both times** (« A4 · temps 4, division 2 · Noire », then
+« C#4 · temps 2, division 2 · Noire »), and **the page above drew the same measures
+correctly.**
+
+**Both failing measures report « trop pleine »: 6.5 of 6, then 7.5 of 6.**
+
+**TWO HYPOTHESES ARE LIVE AND THE DESK HAS NOT SEPARATED THEM.**
+
+- **Dann's:** the score carries no lyrics. His words: *"I assumed this was because there was
+  no text, but that shouldn't matter."*
+- **The desk's:** the measure is over-full.
+
+**`~/Downloads/no-lyrics-control.musicxml` separates them in one run**: no lyrics, and its
+measures add up.
+
+**It bears on N.151's ruling of 2026-09-17** that Ilya must tolerate a measure with more
+beats than the meter allows. **If an over-full measure draws no notes, that ruling is not
+met.**
+
+**A lead the desk read but is NOT calling a cause:** `renderLoupeMeasure`
+(`loupe-render.ts:79`) returns `LoupeSystemRender | null`, and `loupe-render.test.ts:87`
+already asserts a null return for one range.
+
+**Riding with it: the squircle loses its bottom edge in the loupe** and is closed on the
+page. **No number of its own; N.141 already carries a viewBox clamp as open** and the brief
+asks Code to say whether this is that item.
+
+---
+
+## N.166. A STORED SCAN MAY NEED THE PAGE READER TO REDISPLAY. DESK DEFAULT number, 2026-09-22
+
+**Found by the desk while investigating N.165**, and it is the more serious of the two if it
+holds.
+
+**What happened.** The desk opened the same song, from the same library, on the same origin,
+in its own Chrome tab. **The score never drew.** The drawer sat on
+`upload.status.preparingReader` (`i18n.ts:899`, shown at `ScoreUploader.svelte:530` and
+`:556`) for over twenty seconds, with no PARTITION receipt and 12 SVGs on the page, all of
+them chevrons.
+
+**The instrument was sound.** `Kabalevsky - Shakespeare - T05` rendered in the same tab
+moments later: 28 SVGs, 834 elements, page reader idle.
+
+**Why it matters.** **A stored score should not need the OCR reader to redisplay.** If it
+does, every scan-derived song re-runs the reader on every load. **Dann's 23-page PDF read
+took 97.2 s on 2026-09-17.**
+
+**NOT ESTABLISHED.** The brief asks Code to report it and **not to fix it in that ship**:
+its fix is a different path from N.165's, and it may touch the load path that N.161 has just
+been through.
