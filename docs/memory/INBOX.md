@@ -196,3 +196,5 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-09-17, Dann: Ilya is his legacy and should help others build for other languages. After the release: map which parts of the tree are Russian-specific and which carry over, then write a guide for building a sibling (`PRODUCT.md`, "Why Ilya exists").
 
 - 2026-09-21, Dann ASKED, on ruling N.132 row 3 in: re-develop GUIDE. His words: *"I bnet there are a ziullionplaces where we will need to update to these new names"*. The Guide prose carries the old tab names, and Learn probably does too. Note only, not numbered.
+
+- 2026-09-21, Dann, on scoping the N.154 sweep to `i18n.ts` and leaving Guide and Learn out: *"I agree. I suspect guide and Learn will undergo radical rewrites, so this is an appropriate plan."* **So a name-sweep of the Guide and Learn prose may never be worth running**; their strings would be rewritten wholesale rather than patched. Bears on the earlier note the same evening.

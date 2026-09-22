@@ -460,6 +460,26 @@ from the French punctuation ruling of 2026-08-21.
 unnumbered watch band English header at `watchlist.ts:92` in this file's visible
 list. **They may be the same item three times.**
 
+**THE VISIBLE LABEL AND THE SPOKEN LABEL MUST AGREE. Reported by Code 2026-09-21,
+ruled into this item by Dann the same evening.** His words: *"Yes please add
+harmoizing the labels to N.131."*
+
+- **The case that produced it:** N.132 renamed the tab to `Text` / « Texte » and left
+  `a11y.paper` reading "Transcription" in both languages (the key, not a line number:
+  Code's own edits moved it from `:142` to `:145` in the same ship). It names the
+  page area that tab shows (`Paper.svelte:63`, read by Code 2026-09-21), and only that
+  tab has one. **So a screen reader says "Transcription" where the tab says "Text".**
+- **The scope Dann ruled is the general one, not just this key:** wherever a surface
+  carries both a visible label and an accessible name, the two say the same thing.
+  `a11y.tabs` sits beside `a11y.paper` at `i18n.ts:135` and is in the same family.
+- **`i18n.ts:135` records that `a11y.tabs` and `a11y.paper` are the same word in both
+  languages**, which is a statement about the OLD name and needs re-checking against
+  whatever the harmonized value turns out to be.
+- **NOT ESTABLISHED: how many other accessible names disagree with their visible
+  label.** The triage in step one now has to look for this as well as for French
+  parity, and one grep for `a11y.` is where it starts.
+
+
 ---
 
 ## N.132. THE RATIFIED NAMES ARE NOT BUILT. Numbered by Dann 2026-09-13. UNPLACED.
