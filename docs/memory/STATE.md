@@ -11,9 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`1b0d645`**, "The bookkeeping audit", shipped 2026-09-22 13:02, all five gates at
-baseline. **The last code in it is `b29ee8c`, the receipt tag fix, walked by Dann on the
-alias in French 2026-09-22 13:05**: *"Yes there is a gap, terrific!"* (the previous floors,
+before **`f6d2184`**, "N.165: the loupe reads measure ownership from the score, not from an
+id's spelling", shipped 2026-09-22 13:49, all five gates at baseline and **walked by Dann on
+the alias in French 2026-09-22 13:54**: *"This looks as it should!"* (the previous floors,
+`1b0d645`, `b29ee8c`,
 `b29ee8c`, `8bd1aff`, `5f7be82`, `9b05ddd`, `9782d8e`, `44c5830`,
 `46ac52f`, `2fb7516`, `1d18514`,
 `0f7375c`, `46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
@@ -110,7 +111,7 @@ does not repeat them.
   same screen: a compass of **A3 to F♯6**, implausible for a sung line in that song, and a
   tall empty region at the top of the Insights box. Spec in `OPEN.md`. **All three are NOT
   ESTABLISHED as faults until the code is read.**
-- `[ ]` **N.165. The loupe draws no notes.** DESK DEFAULT number, **found by Dann
+- `[x]` **N.165. The loupe draws no notes. CLOSED 2026-09-22**, shipped `f6d2184` and walked. DESK DEFAULT number, **found by Dann
   2026-09-22** on `sunless-01-v-chetyryokh-stenakh_lamm-scan`, in French, on Annotation.
   He clicked a printed note and the loupe opened holding clef, key signature, 6/4 and
   barlines, **and no noteheads**, twice, on measures 5 and 6. **The header knew what it
@@ -129,9 +130,14 @@ does not repeat them.
   ran x 233.4 to 262.1 against notes at 35.8 to 249.** **It blanked the loupe on every
   measure of every scan-derived song**, not just this one. **The desk's own lead, the null
   return, had nothing to do with it**, and `renderLoupeMeasure` drew six event groups
-  correctly. **FIXED, gates at baseline, WALK OWED.** The squircle rode with it and is a
+  correctly. **FIXED, gates at baseline.** The squircle rode with it and is a
   sibling of N.141's clamp, not the clamp: `ringRoom` widened the band above the ring and
   never below, which only shows on a system with no underlay.
+  **WALKED BY DANN 2026-09-22 on the alias in French, and not on the song he found it on:**
+  he walked the 23-page IMSLP Mussorgsky instead, where the loupe drew measure 8 and
+  measure 11 in full with the ring closed. **His measure 11 reads « 14.5 sur 6, trop
+  pleine » and draws every note**, which is independent confirmation that over-fullness
+  was never the cause. His words: *"This looks as it should!"*
 - `[ ]` **N.166. A stored scan may need the page reader to redisplay.** DESK DEFAULT number,
   found by the desk 2026-09-22 while investigating N.165. **The same song, the same library,
   the same origin, in the desk's own tab: the score never drew**, and the drawer sat on
