@@ -19,8 +19,8 @@
  * singer's stored destination. The split does not rename any of them and
  * writes the same four strings it always wrote.
  *
- * `shane` is Studio's second document, shown to the singer as "Marked score"
- * (« Partition annotée »). The engine codename stays in the code.
+ * `shane` is Studio's second document, shown to the singer as "Markup"
+ * (« Annotation », N.132). The engine codename stays in the code.
  *
  * `insights` is Studio's third document, N.127, numbered by Dann 2026-09-11
  * and shown to the singer as "Insights" (« Aperçus », ruled 2026-09-12). It

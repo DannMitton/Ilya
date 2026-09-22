@@ -96,23 +96,26 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Tab bar (N.36) ───────────────────────────────────────
 	//    The labels lived in the component, so French lived in two
-	//    places. Three of the four are invariant by ruling; they are
-	//    keyed anyway, so the invariance is recorded here as identical
-	//    en/fr values rather than as an absence from the dictionary.
+	//    places. Two of them are invariant by ruling, Guide and Fit;
+	//    they are keyed anyway, so the invariance is recorded here as
+	//    identical en/fr values rather than as an absence from the
+	//    dictionary. 'tab.transcription' was the third until N.132.
 	//    'Fit' is invariant by Dann's ruling of 13 July 2026; the
 	//    internal tab id stays 'shane', the dictionary key does not.
-	'tab.transcription':           { en: 'Transcription',                fr: 'Transcription' },
+	'tab.transcription':           { en: 'Text',                         fr: 'Texte' },
 	'tab.learn':                   { en: 'Learn',                        fr: 'Leçons' },
 	'tab.guide':                   { en: 'Guide',                        fr: 'Guide' },
 	'tab.fit':                     { en: 'Fit',                          fr: 'Fit' },
 	// N.73 S1. Studio's second document, named for the singer in the desk
-	// head's pair. RATIFIED by Dann 2026-08-19 with the rest of the N.73
-	// table: « Partition annotée » is the idiomatic francophone term for a
-	// score carrying working markings, his own correction over « marquée ».
+	// head's pair. N.132: "Markup" and « Annotation », RATIFIED by Dann
+	// 2026-09-13 with "Text" and « Texte » for 'tab.transcription'. They
+	// SUPERSEDE « Partition annotée », ratified 2026-08-19 for the old
+	// name "Marked score", later "Score markup": do not carry it forward.
+	// The KEYS stay, because both are cited by name across the tree.
 	// This does NOT replace 'tab.fit': Fit is the tool's name and is
 	// invariant in French by his ruling of 2026-07-13. The document is not
 	// called Fit.
-	'tab.markedScore':             { en: 'Score markup',                 fr: 'Partition annotée' },
+	'tab.markedScore':             { en: 'Markup',                       fr: 'Annotation' },
 	// N.127. Studio's third document. « Aperçus » RULED by Dann 2026-09-12,
 	// and it is the only French N.127 increment 1 writes. Every `insights.*`
 	// key below carries the English in both slots, and its French is OWED.
@@ -133,7 +136,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    control, not what it does, and the chevron's own state rides on
 	//    aria-expanded.
 	//    'a11y.tabs' and 'a11y.paper' are the same word in both languages.
-	//    They are keyed anyway, the way 'tab.transcription' is, so parity
+	//    They are keyed anyway, the way 'tab.guide' is, so parity
 	//    stays total and no slot is left for `t()` to report as missing.
 	//    These are spoken, never printed, so no guillemets.
 	'a11y.drawer':                 { en: 'Controls',                     fr: 'Commandes' },

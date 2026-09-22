@@ -64,7 +64,7 @@ async function loadFixture(page: Page, lines: { type: string; text: string; step
 	});
 	await page.goto('/');
 	await page.locator('input.hidden-input').setInputFiles(FIXTURE);
-	await page.getByRole('tab', { name: 'Score markup' }).click();
+	await page.getByRole('tab', { name: 'Markup' }).click();
 	await page.locator('.score-page [data-hit]').first().waitFor({ state: 'attached' });
 	await seated;
 	await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));

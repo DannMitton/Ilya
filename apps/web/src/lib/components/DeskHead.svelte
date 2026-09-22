@@ -5,9 +5,9 @@
 	every destination with it (audit finding F4), and as a fixed 56 px footer
 	on the phone.
 
-	Two objects, one line. The boxed pair on the left switches Studio's two
-	documents, Transcription and the Marked score. Learn and Guide sit on the
-	right as set-apart text links. Placement B, ruled by Dann (N.42 §1.3): the
+	Two objects, one line. The boxed pair on the left switches Studio's
+	documents, Text, Markup, and Insights (N.127, N.132). Learn and Guide
+	sit on the right as set-apart text links. Placement B, ruled by Dann (N.42 §1.3): the
 	pair is flush with the sheet's left edge, not the desk's.
 
 	The pair rests as state 1c (N.42 §1.4): no sliding thumb, both words at
@@ -45,9 +45,11 @@
 	   in the same track, not as a second row (Design R3, drawing 1d). It
 	   reads the voice and the score the marked score reads, so it sits behind
 	   the same wall. The name `pairIds` stays; renaming it would move every
-	   comment in the tree that cites it. DESKTOP ONLY in this increment: at
-	   390 px the head does not hold three documents, and the direction there
-	   is Dann's to rule. */
+	   comment in the tree that cites it. EVERY WIDTH since N.132: Dann ruled
+	   the phone direction 2026-09-21, the ratified names at 0.5 rem padding.
+	   The three documents fit the 342 px head at a 390 px viewport with
+	   54.05 px spare in English and 14.61 px in French, measured on the
+	   live build 2026-09-21 (the desk's harness said 54.20 and 14.81). */
 	const pairIds: TabId[] = INCLUDE_SHANE ? ['transcription', 'shane', 'insights'] : ['transcription'];
 	const linkIds: TabId[] = ['learn', 'guide'];
 
@@ -55,8 +57,9 @@
 		switch (id) {
 			case 'transcription': return T('tab.transcription');
 			// Studio's second document. The engine codename is 'shane'; the
-			// singer reads "Marked score" and « Partition annotée », ratified
-			// by Dann 2026-08-19. It is not called Fit here.
+			// singer reads "Markup" and « Annotation », ratified by Dann
+			// 2026-09-13 (N.132). They supersede 2026-08-19's « Partition
+			// annotée », ratified for the old name. It is not called Fit here.
 			case 'shane': return T('tab.markedScore');
 			// Studio's third document, N.127. « Aperçus », ruled by Dann 2026-09-12.
 			case 'insights': return T('tab.insights');
@@ -194,7 +197,9 @@
 		font-weight: 600;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
-		padding: 0.3rem 0.7rem;
+		/* 0.5 rem, not 0.7, N.132: ruled by Dann 2026-09-13 and on screen
+		   2026-09-21. ONE value at every width, so no media query touches it. */
+		padding: 0.3rem 0.5rem;
 		cursor: pointer;
 	}
 
