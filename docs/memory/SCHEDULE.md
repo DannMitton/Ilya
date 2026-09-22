@@ -31,7 +31,10 @@ for the first time on the day.
 
 - [x] **N.146**, poem or score detected. **CLOSED 2026-09-17: walk 5 passed in Incognito (`OPEN.md`, N.146 findings, 9).** Read Code's memo, move gates, ship, walk: a score PDF, a score photo, a text PDF, a poem photo, and a page with the poem above the music. **2026-09-17:** shipped `fe4d2c7` and `6e98057`; all walked except walk 5 (poem photo), which awaits step 2c (`STATE.md`).
 - [x] **N.147, the loupe tap. CLOSED 2026-09-17**: the syllables moved into the loupe, a note tap only selects, shipped `55c04d9` and walked. Two more ships followed the same night: the semitone cells and the fill tag's word (`0eb0a95`), and the pitch grid of six (`b03e918`).
-- [ ] **N.92's caret reach.** Designed and ruled 2026-09-17, sized at more than one evening by the audit. Week 2.
+- [x] **N.92's caret reach. SHIPPED**, over six commits 2026-09-17 to 2026-09-18, and
+  **N.153 then made it usable on a phone** (caret-to-caret separation 1.13-7.89 px to
+  44.00-44.16 px, closed on scope 2026-09-21). **Ticked 2026-09-21 in the bookkeeping
+  audit; the box had stood unchecked while the work was done.** Its remainder is N.162.
 - [ ] **N.142 step 2.** The desk counts, through Chrome on the branch alias, placements in Dann's library that sit on a tie's continuation. Build only if the count is not zero.
 - [ ] **The nine CHECK rows.** The desk looks at each (a Sonnet agent for the code reads). Each closes or becomes IN work in week 2.
 - [ ] **UNSETTLED-6, the per-format walk.** Dann drops one file of each kind Ilya accepts: MusicXML, `.mxl`, `.musx`, `.mnx`, `.mscz`, PDF, photo. **Samples found by the desk 2026-09-17:** MusicXML `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml`; `.mxl` `tools/e16-harness/output/mussorgsky---sunless-01---within-four-walls/score.mxl`; `.musx` `~/Downloads/Mussorgsky - Sunless 04 - Be bored.musx`; `.mnx` `~/Downloads/Sharp Excerpt.fin27.mnx` (the only one); `.mscz` `~/Downloads/Schubert_Gretchen_am_Spinnrade_D118_OpenScore.mscz`; PDF and pictures from the N.146 walk (`STATE.md`, findings). **Still missing: a real phone photo of a score.** The sniff accepts HEIC (`format-detection.ts:117`); which of the 234 phone photos in `~/Downloads` show a score is NOT ESTABLISHED.
@@ -85,9 +88,13 @@ design rows.
   N.130 and N.131. **It carried two N.154 rows with it:** `upload.banner.reader` shipped
   the same night as `8bd1aff`, and `a11y.paper` went to N.131 on Dann's ruling. **The
   « PARTITION » receipt collision was found and fixed in the same session.**
-- [ ] **N.160 steps 2 and 3**: the dry run on Dann's library, then the stored text plus the
+> **THIS ROW WAS A DUPLICATE AND IS STRUCK 2026-09-21.** The `[x]` row above records the
+> same two steps closed, shipped `2fb7516` and `46ac52f`, both walked. The original text
+> is kept below the strike because it carries the planning numbers.
+>
+> ~~**N.160 steps 2 and 3**: the dry run on Dann's library, then the stored text plus the
   one-time repair, which unfreezes his 25 notes and stops any note freezing again. **These
-  spend the week-5 buffer.** Numbered and specified 2026-09-21 (`OPEN.md` §N.160). **He
+  spend the week-5 buffer.** Numbered and specified 2026-09-21 (`OPEN.md` §N.160).~~ **He
   exports a binder backup before step 2.**
 - [ ] **Fixes from week 1**: whatever the format walk and the CHECK rows turned up.
 

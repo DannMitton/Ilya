@@ -181,11 +181,28 @@ does not repeat them.
   `../sessions/brief-n129-underlay-ruler_r2_2026-09-20.md`, memos
   `../sessions/memo-n129-underlay-ruler_r1_2026-09-20.md` and
   `../sessions/memo-n129-step2-hyphens_r1_2026-09-20.md`.
-- `[ ]` **N.155. A word broken across a system takes a hyphen at the line end.** Numbered
-  2026-09-20, DESK DEFAULT number. **Design proposed by the desk, ruled in by Dann** at
-  14:07. It is the last case of his hyphen ruling of 2026-09-14. Spec in `OPEN.md`.
-  **Two things are his and unruled: where the hyphen sits horizontally, and whether a
-  melisma extender crossing a break wants the same.**
+> **N.155's DUPLICATE OPEN ROW WAS STRUCK HERE 2026-09-21.** It said the item was open
+> with its spec in `OPEN.md`, while the closed row above says it shipped in `b53a6df` and
+> was walked. **Both rows stood from 2026-09-20 to 2026-09-21** and the count of open
+> items was wrong by one for a day. The two deferred items it named are carried on the
+> closed row, so nothing is lost.
+
+### Numbered 2026-09-17
+
+- `[ ]` **N.151. The measure edit surface, with insert.** Numbered 2026-09-17, DESK
+  DEFAULT number. **THIS ROW WAS MISSING UNTIL 2026-09-21 and the item was invisible to
+  the read order:** a 695-line spec in `OPEN.md` that `STATE.md`, `SEQUENCE.md`,
+  `SCHEDULE.md` and `OWED.md` all failed to name. Found when Dann asked how close the
+  open work was. **Insertion is BUILT, as N.92 slice 3** (`correction.ts:48-100`,
+  `:305-345`, `:496`, `:382-433`, reached through `CorrectionSurface.svelte:539-541`),
+  **so the item is tether 22, not a missing capability: it exists and is hard to find.**
+  **IT CARRIES NINE OF DANN'S RULINGS OF 2026-09-17**, and four of them are
+  product-level rather than item-level: WYSIWYG (*"if it appears on Ilya's page, it can
+  be printed"*), no stopping rule for the singer, the edited score comes back out as an
+  edited copy with the singer's own tempo counted, and deliberate destruction only.
+  **Those four want transcribing to `PRODUCT.md`; see `OWED.md`.** Report
+  `../sessions/report-n151-note-entry_r1_2026-09-17.md`. **NOT ESTABLISHED: its size, and
+  where it sits against the release.**
 
 ### Numbered 2026-09-16
 
@@ -511,4 +528,20 @@ the window twice; whether « PARTITION » fits 62 px in Consolas or Android's mo
 why the `zoom` region's coordinate frame is not `frameWidth / innerWidth`.** **The
 « PARTITION » walk is the one thing owed from tonight.** Memory IS committed with this
 close.*
+
+*Addendum, 2026-09-21 about 23:50, after the close. **Dann asked how close the open work
+was and the answer was that the records could not say**, so a bookkeeping audit ran. **Five
+faults, four repaired in this pass.** N.155 was marked closed AND open and the ghost row is
+struck. N.160's steps 2 and 3 were marked closed AND open in `SCHEDULE.md` and the
+duplicate is struck. Week 1's caret-reach box was unchecked while the work had shipped, and
+is ticked. **And N.151, "the measure edit surface, with insert", numbered 2026-09-17 with a
+695-line spec carrying nine of Dann's rulings, had NO tracker row and appeared in no
+sequence, schedule or debt list: nothing in the read order pointed at any of it.** It now
+has a row. **The fifth fault is recorded rather than repaired, on purpose:** three closed
+items' specs still sit in `OPEN.md` and each carries rulings that a move would bury in the
+archive, which is the 2026-09-20 failure exactly. That triage, plus N.151's four
+product-level rulings that belong in `PRODUCT.md`, plus four of week 1's boxes whose status
+is NOT ESTABLISHED, are all in `OWED.md`. **The desk quoted this audit at twenty minutes
+and was wrong for the third time tonight**; the safe part took that long and the triage is
+a session of its own.*
 

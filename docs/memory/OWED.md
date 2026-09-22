@@ -135,6 +135,41 @@ asks what is outstanding, or when the one thing closes and the next is being cho
 4. **Nineteen gaps after a rest read "before the first entry".** The selection
    itself is correct; only the wording is wrong. Code flagged it and left it alone.
 
+### New from the bookkeeping audit, 2026-09-21. THE RECORDS OVERSTATE AND UNDERSTATE AT ONCE
+
+**Found when Dann asked how close the open work was, and the honest answer was that the
+records could not say.** Four of the five faults are repaired; **this row is the fifth and
+it is the one that needs care rather than speed.**
+
+1. **THREE CLOSED ITEMS' SPECS ARE STILL IN `OPEN.md` AND CANNOT SIMPLY BE MOVED.**
+   N.146 (39 lines), N.147 (24), N.155 (61). **Each carries rulings that would land in
+   `../sessions/LOG.md`, which `README.md` says is not authoritative.** This is the exact
+   failure of 2026-09-20, when six of Dann's rulings went into the archive in one pass.
+   **Before any of the three moves, each ruling needs a home:**
+   - **N.146:** *"A PAGE WITH A POEM ABOVE THE MUSIC IS A SCORE"*, ruled 2026-09-16, is
+     product-level and belongs in `PRODUCT.md`. So does the autodetect principle behind it:
+     *"can we make it so that Ilya autodetects content? I want to remove this cognitive
+     burden from the user."* **And two of its walk findings are LIVE, not closed:** New
+     song needs two clicks (seen twice by Dann 2026-09-17, in both his everyday profile and
+     Incognito), and Delete's confirmation reads as an error message, which left him not
+     deleting two songs. **Those two are defects and belong here in `OWED.md`, not in an
+     archive.**
+   - **N.147:** five ruled defaults of 2026-09-17, including the IPA placement. Item-level,
+     but they bind the loupe and need a home before the spec goes.
+   - **N.155:** Dann ruled option A in at 14:07 on 2026-09-20, and the horizontal position
+     of the hyphen is recorded as *"Dann's eye"* and unruled.
+2. **N.151's FOUR PRODUCT-LEVEL RULINGS OF 2026-09-17 ARE NOT IN `PRODUCT.md`:** WYSIWYG
+   (*"if it appears on Ilya's page, it can be printed"*), no stopping rule for the singer
+   (*"they should be able to intentionally break a score or even recompose one"*), the
+   edited score returning as an edited copy with the singer's own tempo counted, and
+   deliberate destruction only. **They sit inside one item's spec and govern the whole
+   app.**
+3. **FOUR OF `SCHEDULE.md` WEEK 1'S FIVE BOXES HAVE NO ESTABLISHED STATUS.** Week 1 ended
+   2026-09-20. N.92's caret reach did ship, over six commits 2026-09-17 to 2026-09-18, and
+   N.153 then made it usable on a phone. **The other four are unreconciled: N.142 step 2,
+   the nine CHECK rows, UNSETTLED-6's per-format walk, and starting the two design rows.**
+   Until they are, no completion figure for the release means anything.
+
 ### New from the N.132 and N.154 closes, 2026-09-21. Five, none blocking the beta
 
 1. **THE RECEIPTS WANT ONE SHARED TAG COLUMN, AND THE FIX SHIPPED TONIGHT IS THE CHEAP
