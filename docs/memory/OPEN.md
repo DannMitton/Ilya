@@ -464,6 +464,39 @@ list. **They may be the same item three times.**
 
 ## N.132. THE RATIFIED NAMES ARE NOT BUILT. Numbered by Dann 2026-09-13. UNPLACED.
 
+> ### CORRECTED 2026-09-21 AT THE CLOSE. READ THIS BEFORE THE SPEC BELOW.
+>
+> **Everything under this box was written 2026-09-13 and a third of it is superseded.
+> Do not brief Code from it without reading this first.** Every line here was read in
+> `i18n.ts` on 2026-09-21.
+>
+> **1. THE BAND IS DONE, AND NOT UNDER THE NAME THIS SPEC RULES.** The spec says the
+> drawer band becomes `Melody` / « Mélodie », ruled 2026-09-13. **`group.scoreMarkup`
+> reads `Voice` / « Voix » (`i18n.ts:57`), ruled by Dann on 2026-09-20 under N.150 and
+> ratified by him on screen.** The newer ruling stands. **Briefing the spec as written
+> would rename his band to Melody and undo N.150.**
+>
+> **2. TRAP 2 IS ALREADY RESOLVED.** `i18n.ts:49-51` records that `group.scoreMarkup`
+> once matched `tab.markedScore` and no longer does. The collision the rename was to
+> fix is gone, so the two no longer have to move together.
+>
+> **3. EVERY LINE NUMBER BELOW HAS MOVED:** `:59` is now `:57`, `:106` is now `:104`,
+> `:117` is now `:115`, `:121` is now `:119`.
+>
+> **4. WHAT ACTUALLY REMAINS, and it is three things:**
+> - `tab.transcription` (`i18n.ts:104`) reads "Transcription" in both languages and
+>   becomes `Text` / « Texte ».
+> - `tab.markedScore` (`i18n.ts:115`) reads "Score markup" / « Partition annotée » and
+>   becomes `Markup` / « Annotation ». **Trap 1 below still holds: do not carry
+>   « Partition annotée » forward.**
+> - **The tab padding, 0.7 rem to 0.5 rem.** Nobody has seen it on screen, and that is
+>   still the one thing in this item that is owed.
+>
+> **5. `tab.insights` was already correct** and still is (`:119`). **`tab.fit` reads
+> "Fit" in both columns (`:107`), and `i18n.ts:112` says Fit is the tool's name**, so
+> it may be deliberate rather than an N.131 gap. **NOT ESTABLISHED.**
+
+
 **Found 2026-09-13 when Dann walked the colour deploy and saw "Transcription"
 and "Score markup" on screen.** He ratified new names earlier the same day, in
 both languages, and **nothing tracked building them.** A search of `STATE.md` and
