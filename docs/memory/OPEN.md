@@ -2294,3 +2294,52 @@ took 97.2 s on 2026-09-17.**
 **NOT ESTABLISHED.** The brief asks Code to report it and **not to fix it in that ship**:
 its fix is a different path from N.165's, and it may touch the load path that N.161 has just
 been through.
+
+---
+
+## N.167. A FRENCH SINGER CAN SIT THROUGH THE WHOLE READER WAIT READING ENGLISH. Ruled in by Dann 2026-09-22
+
+**Found by Code 2026-09-22** while verifying its own replacement of
+`upload.status.preparingReader`. **It predates that change and is not caused by it.**
+
+### What was seen, and this part is solid
+
+In the browser pane the drawer was in French, its language toggle offering « English »,
+**and the page reader's waiting line came up in English and stayed English for the whole
+wait.** That wait is about a minute on a one-page PDF and longer on a real score.
+
+### Code's reading of the mechanism. NOT established by the desk
+
+The line's text is fixed once from the `language` value in play at that moment
+(`ScoreUploader.svelte:134`), and is never re-translated afterwards, **so a restore that
+begins before the stored language has loaded stays in English for the entire wait.**
+
+**The desk has not read `ScoreUploader.svelte:530` or `:556` in context** to confirm how the
+value is held. **Code's own words on the limit of what it saw:** *"That could show up on his
+walk."*
+
+### Why this is not a French-parity tidy-up
+
+**`PRODUCT.md` §"Both languages, start to finish", stated by Dann 2026-09-22:** *"French
+users aren't jsut capricious humans who insist on imposing French when they can really speak
+English. Some can, some can't."*
+
+**So a singer who cannot read English receives nothing at all for that minute**, on the one
+screen whose entire purpose is to explain why nothing is happening. **The desk first
+recommended this ride with N.131 and withdrew that the same day** once Dann stated the
+principle; both halves are in `OWED.md`.
+
+### NOT ESTABLISHED
+
+- **Whether Dann ever sees the English on the alias.** His screenshot of 2026-09-22 showed
+  the French. **The timing differs between the pane and his Chrome and nobody knows why.**
+- **How wide this is.** If the cause is a value captured once at mount, **other status and
+  error strings set the same way would share it**, and no one has looked.
+- **Whether it can be fixed without re-rendering the waiting line mid-wait**, which is a
+  different question from translating it.
+
+### What this is NOT
+
+**It is not N.166.** N.166 is that a stored scan re-reads at all. **This is what the singer
+reads while it does.** Fixing N.166 shortens the exposure and does not remove it: a first
+read still waits, and still waits in whatever language was set at that instant.

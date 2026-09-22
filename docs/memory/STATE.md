@@ -97,6 +97,22 @@ does not repeat them.
 
 ### Numbered 2026-09-22
 
+- `[ ]` **N.167. A French singer can sit through the whole reader wait reading English.**
+  **RULED IN BY DANN 2026-09-22**, on the desk's revised recommendation. **Found by Code**
+  while checking its own string ship. **OBSERVED, and this part is solid:** in the browser
+  pane the drawer was in French, its toggle offering « English », and the page reader's
+  waiting line came up in English and stayed English for the whole wait. **CODE'S READING of
+  the mechanism, NOT established by the desk:** the line's text is fixed once from the
+  `language` value in play at that moment (`ScoreUploader.svelte:134`) and never
+  re-translated, so a restore beginning before the stored language loads stays English
+  throughout. **It predates the 2026-09-22 string replacement and is not caused by it.**
+  **Dann's own screen disagrees with the pane:** his screenshot the same morning showed
+  « Préparation du lecteur de page » in French on the alias, **so whether he ever sees the
+  English is NOT ESTABLISHED.** **Why it is not a parity tidy-up:** `PRODUCT.md` §"Both
+  languages, start to finish", stated by Dann the same day. A singer who cannot read English
+  gets no information at all, for about a minute, **on the one screen whose whole job is to
+  explain why nothing is happening.** Spec in `OPEN.md`.
+
 - `[ ]` **N.163. Ilya shows a singer a word that is not on the page.** **RULED IN BY DANN
   2026-09-22** from N.146's walk finding 4, on the desk's recommendation that it meets the
   freeze rule's false-statement test. The OCR read «То» as «Го» (the page shows a stem with

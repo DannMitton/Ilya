@@ -247,10 +247,9 @@ words: *"That could show up on his walk."*
 **WITHDRAWN THE SAME DAY, 2026-09-22, after Dann stated the principle now in `PRODUCT.md`
 §"Both languages, start to finish".** His point: *"Some can, some can't."*
 
-**REVISED DESK RECOMMENDATION, still unruled: number it.** A singer who cannot read English
-gets **no information at all** for the length of that wait, on the one screen whose whole
-job is to say why nothing is happening. **That is not a parity tidy-up and it should not
-wait on N.131's triage.** Dann to rule.
+~~**REVISED DESK RECOMMENDATION, still unruled: number it.**~~ **RULED IN BY DANN
+2026-09-22. THIS IS NOW N.167 and is no longer a loose debt.** Spec in `OPEN.md`, tracker
+row in `STATE.md`. The account above stands as the finding's history.
 
 ### TWO CODE COMMENTS STILL PROMISE THE READER RUNS ONCE. Found by Code 2026-09-22
 
