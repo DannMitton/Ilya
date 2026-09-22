@@ -223,6 +223,43 @@ steps 2 and 2b and shipped in `fe4d2c7` and `6e98057`.
 **NONE OF THESE IS NUMBERED.** Per `CONTRACT.md` §3.1 nothing enters the tracker unless Dann
 rules it in, so they stand here until he does.
 
+### THE WAITING LINE CAN COME UP IN ENGLISH FOR A FRENCH SINGER. Found by Code 2026-09-22
+
+**OBSERVED, and this part is solid:** in the browser pane the drawer was in French, its
+toggle offering « English », **and the page reader's waiting line came up in English and
+stayed English for the whole wait.**
+
+**CODE'S READING of the mechanism, not established by the desk:** the line's text is fixed
+once from the `language` value in play at that moment (`ScoreUploader.svelte:134`) and is
+never re-translated, **so a restore that begins before the stored language has loaded stays
+in English for the entire wait.** The desk has not read `:530` or `:556` in context to
+confirm how the value is held.
+
+**IT IS NOT NEW AND IT IS NOT THE STRING CHANGE.** It predates 2026-09-22's replacement of
+`upload.status.preparingReader`.
+
+**And Dann's own screen disagrees with the pane:** his screenshot of 2026-09-22 showed
+« Préparation du lecteur de page » in French on the alias. **So the timing differs between
+the pane and his Chrome**, and whether he ever sees the English is NOT ESTABLISHED. Code's
+words: *"That could show up on his walk."*
+
+**DESK RECOMMENDATION, unruled: this rides with N.131 rather than taking a number.** It is a
+French-parity failure whose cause is timing rather than a missing translation, and N.131's
+triage has to look at it either way.
+
+### TWO CODE COMMENTS STILL PROMISE THE READER RUNS ONCE. Found by Code 2026-09-22
+
+**No singer sees either**, which is why they were left alone.
+
+- `engine/score-reader.ts:35` quotes *"Preparing the score reader. This will only happen
+  once."* **No i18n key carries that sentence any more.**
+- `engine/page-reader.ts:37` says *"the first-load copy is shown once."* **That holds within
+  one page session, and N.166 breaks it across reloads.**
+
+The old sentence is also quoted in `STATE.md`, in N.165's brief, and in
+`../sessions/memo-n108-intake_r1_2026-09-03.md`. **Those are records of what was true then
+and are correct as history.** The two code comments are not.
+
 ### New from N.165's fix, 2026-09-22. Two, neither blocking
 
 1. **NOT ESTABLISHED: whether the selection ring closes on a partly-lyric page.** Code's fix

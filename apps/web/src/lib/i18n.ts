@@ -896,7 +896,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// tier. Every French term here is adopted, ordinary musical French:
 	// clé, armure, dièse, bémol, portée, interligne, silence. Nothing coined.
 	'upload.status.readingPage':   { en: 'Reading the page…', fr: 'Lecture de la page…' },
-	'upload.status.preparingReader': { en: 'Preparing the page reader. This will only happen once.', fr: 'Préparation du lecteur de page. Cela n’arrivera qu’une fois.' },
+	'upload.status.preparingReader': { en: 'Ilya is reading the notes off your page. Starting the reader might take about one minute, then a few seconds for each page of music after that.', fr: 'Ilya lit les notes sur votre page. Le démarrage du lecteur peut prendre environ une minute, et après quelques secondes par page de partition.' },
 	'upload.format.imageReader':   { en: 'Format: photograph → MusicXML', fr: 'Format\u00a0: photographie → MusicXML' },
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
 	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them in Text.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image; saisissez-les dans Texte.' },
