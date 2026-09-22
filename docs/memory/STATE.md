@@ -43,47 +43,34 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-21, about 22:15
+> ### READ THIS FIRST. Written at the close of 2026-09-21, about 22:20
 >
-> **THE ONE THING IS SHIPPING AND WALKING N.153 STAGE 5.** DESK DEFAULT, and Dann can name
-> another. **`15b7d1a` is committed locally and NOT PUSHED**, so nothing of stage 5 is on the
-> branch alias yet and it cannot be walked. **The ship script refuses on untracked files**, and
-> the desk's two briefs plus this session's `OPEN.md` and `STATE.md` edits are untracked or
-> unstaged, so Dann stages first.
+> **THE ONE THING IS N.132: the ratified names, and the tab padding.** DESK DEFAULT, and Dann
+> can name another. `Text`, `Markup`, `Melody` and `Insights` were ruled in both languages on
+> 2026-09-13 and the tree still says "Transcription" and "Score markup" (`i18n.ts:106`,
+> `:117`, `:59`, cited from the spec and NOT re-read this session). **`SEQUENCE.md` dependency
+> 2 puts it before N.130 and N.131**, and the ruled release sentence names Insights, so it
+> gates the French work. It carries the ruled 0.5 rem tab padding, which nobody has seen on
+> screen. **It was pushed out of week 2 twice** to make room for N.160 and N.161. Spec in
+> `OPEN.md`.
 >
-> #### N.153 IS CLOSED ON SCOPE AND IS NOT DONE
+> #### NOTHING IS MID-FLIGHT. N.153 CLOSED 2026-09-21
 >
-> Dann ruled "close N.153" at 22:07 when the desk put the tap-pooling finding to him. **The
-> item's own number moved**: caret-to-caret separation was 1.13 to 7.89 px on 2026-09-18 and is
-> **44.00 to 44.16 px as drawn** on all 17 measures that carry notes. **It is WRITTEN until he
-> walks it.**
+> All five stages are in, shipped `9b05ddd` carrying Code's `15b7d1a`, and the memory close
+> rode `7c52b02`. **Stage 5 changes nothing a singer sees**, so it has no walk and none is
+> owed. Account in `../sessions/LOG.md` block 30.
 >
-> #### WHAT THE CLOSE ALMOST BURIED, and this is the README's own warning firing
+> #### WHAT CAME OUT OF IT, and none of it is in flight either
 >
-> **Two parts of Dann's spacing ruling of 2026-09-20 are NOT BUILT**, and they lived only
-> inside N.153's spec. They are lifted verbatim to `OPEN.md` §THE CARET clause 16:
->
-> - **The meter run-in is still the page's 2 sp**, not the ruled 1 sp in the loupe
->   (`staff-renderer.ts:169`, and the loupe's render passes no override).
-> - **The tie taper into the run-on is not drawn at all.** No `taper` exists in `Loupe.svelte`,
->   `loupe.ts` or `loupe-render.ts`.
-> - The run-on itself IS built at 1 sp (`loupe.ts:598`, `Loupe.svelte:935`).
->
-> #### WHAT IS OWED OUT OF THIS SESSION
->
-> - **N.162**, the caret and the note competing for one thumb. Numbered, spec not written.
-> - **`core-loop.test.ts` fails before any change this session.** It waits for `.status-ok`,
->   removed from `IntakePanel.svelte:225`, so all 21 tests time out. **No gate catches this,
->   because `ilya-ship.sh` does not run Playwright.**
-> - **Rule 5a's one violation, m. 17:** a caret stands 2.90 px right of centre because
->   `closingBarline` returns the final double bar's outer edge (`loupe.ts:691`). Every other
->   measure is within 0.28 px. **The new scan exits non-zero on it**, so the gate is red until
->   it is settled.
-> - **NOT ESTABLISHED:** why m. 7's `minGap` is 69.65 where stage 3b recorded 69.33, the other
->   16 matching exactly; what clause 13's "its neighbour" covers; behaviour at any width but
->   390 px.
-> - **19 gaps after a rest read "before the first entry".** Wording only; the selection is
->   right.
+> - **N.162 is numbered and unstarted:** a caret's hit centre sits 15.6 to 21.4 px from the
+>   nearest note's, and `nearestTarget` pools them, so a thumb aimed at a caret often takes the
+>   note. **Clause 13's words are met and its reasoning is not.**
+> - **Two parts of Dann's 2026-09-20 spacing ruling are NOT BUILT** and stand in `OPEN.md`
+>   §THE CARET clause 16: the meter run-in at 1 sp in the loupe, and the tie taper into the
+>   run-on.
+> - **Four debts are in `OWED.md`**, the sharpest being that `core-loop.test.ts` fails before
+>   anything touched it, and no gate catches it because `ilya-ship.sh` does not run Playwright.
+> - **NOT MEASURED: paint on a phone**, still, every timing this month being desktop.
 
 ## THE TRACKER
 
