@@ -217,7 +217,7 @@ asked for a profile of what could run without his rulings.
 
 | item | what it is, and what it needs from Dann |
 |---|---|
-| **N.161. The load path should not write** | The clitic seat rewrites up to 60 stored seats when one text comparison drifts. **Plan agreed between the desk and Code 2026-09-21**, spec in `OPEN.md`. Two call sites change, nothing new is stored. **Dann: the walk.** |
+| ~~**N.161. The load path should not write**~~ **CLOSED 2026-09-21**, `44c5830` and `9782d8e` | The clitic seat rewrites up to 60 stored seats when one text comparison drifts. **Plan agreed between the desk and Code 2026-09-21**, spec in `OPEN.md`. Two call sites change, nothing new is stored. **Dann: the walk.** |
 | **N.153 stages 2 to 5** | The loupe re-engraves the held measure at its own spacing. Stage 1 shipped `0028266`; stage 2's brief is written, `../sessions/brief-n153-s2-data-channel_r1_2026-09-20.md`. **Depends on nothing and nothing comes before it** (dependency 7). It closes the 27 scale-invariant caret collisions and is what makes the insert reach usable on a phone. **Dann: the walk.** |
 | **N.132** | The ratified names, `Text` / « Texte », `Markup` / « Annotation », `Insights` / « Aperçus », `Melody` / « Mélodie », ruled 2026-09-13 in both languages and still unbuilt. Carries the ruled 0.5 rem tab padding nobody has seen. **Must precede N.130 and N.131** (dependency 2). **Dann: the walk, and his eye on 0.5 rem.** |
 | ~~**N.136**~~ **DONE 2026-09-21**, `1d18514`, walked | Closed inside N.159. The desk walked it in Dann's Chrome and he ruled on the shots. |

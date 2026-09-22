@@ -107,6 +107,7 @@ next session the same hour it cost the last one.
 | an empty `read_console_messages` result | `THE CONSOLE TRACKER STARTS WHEN YOU CALL IT` |
 | any question about what a score actually says | `THE GROUND TRUTH BEATS THE OMR` |
 | a fixture you fixed does not change what Dann sees on screen | `THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE` |
+| you need to act inside a window that closes too fast to reach | `HOLD THE DICTIONARY OPEN TO WALK A LOADING WINDOW` |
 | a corrected poem or score does not change the Score Markup underlay | `THE UNDERLAY DRAWS STORED TEXT` |
 | a walk harness needs a home | `A WALK HARNESS BELONGS` |
 | a memory commit swallowed Code's source edits | `NEVER COMMIT -a WHILE CODE IS WORKING` |
@@ -312,7 +313,12 @@ renderer named it.** In this project it usually did.
 | phonology | 216 |
 | dictionary | 235 |
 | web-check | **0 errors, 12 warnings, 5 files** |
-| web-test | **1378 passed (1378)** |
+| web-test | **1385 passed (1385)** |
+
+**AND TWICE AGAIN, 2026-09-21 EVENING: 1378 → 1381 (N.161, three tests in `first-seat.test.ts`)
+and 1381 → 1385 (N.161b, four tests in `waiting-seat.test.ts`).** **Five ships in one day moved
+gate 4 five times**, 1354 to 1385. Backups `ilya-ship.sh.bak-1378-2026-09-21` and
+`ilya-ship.sh.bak-1381-2026-09-21`. **Read `:79`. Never quote this table.**
 
 **MOVED TWICE MORE THE SAME DAY, 2026-09-21: 1360 → 1368 (N.160 step 2, eight tests in
 `heal.test.ts`) and 1368 → 1378 (N.160 step 3, ten tests in `seated-text.test.ts`).** Dann's
@@ -3807,4 +3813,27 @@ is one more reason to put an instrument in a build.**
 
 **The negative is still not evidence** (tether 14): a miss can mean the chunk holding it has
 not loaded yet, so confirm the surface is drawn before you read a zero.
+
+## HOLD THE DICTIONARY OPEN TO WALK A LOADING WINDOW. 2026-09-21
+
+**A defect that lives in the gap between a page loading and its dictionary finishing cannot be
+walked by hand, because the gap is about 1.6 s on a warm origin.** Code met this on N.161b and
+solved it cleanly: **a temporary line in a copy of `loader.ts` that holds the load until the
+console releases it**, then the original file restored and byte-checked against `HEAD`.
+
+**What it made possible, and nothing else would have:** placing a syllable by hand while the
+score seat was still waiting, releasing the dictionary, and watching the old code write «в бью»
+over it. **That is a reproduction, not a reading of the code**, and it is what turned a NOT
+ESTABLISHED into a defect.
+
+**The rules that made it safe.** The hold went into `loader.ts` only for the walk; the file was
+restored and confirmed identical to `HEAD` with `git diff --stat` before the ship; and **the
+five gates ran before the hold went back in**, not after.
+
+**The window's own size is a product fact worth knowing:** the dictionary is about 170 MB, so
+on a singer's first visit over a real network the window is far wider than 1.6 s. **How wide on
+Dann's own devices is NOT ESTABLISHED.**
+
+**The general form: when a window is too narrow to act in, widen it at its source and restore
+the source.** Do not reason about what would happen inside it.
 

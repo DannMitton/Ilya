@@ -6560,3 +6560,120 @@ seat, so the flips themselves were not it.
 
 **THE SPECS** for N.158 and N.159 are in block 27. N.160's own spec stays in `OPEN.md`, because
 steps 4 and 5 are open.
+
+---
+
+## Block 29. N.161 and N.161b CLOSED 2026-09-21. Moved from `OPEN.md` at the close
+
+**Raised by Dann** on being told a plain reload could rewrite up to 60 of his stored seats:
+*"Can we streamline that or eliminate it in favour of a better solution?"* **Two ships,
+`44c5830` and `9782d8e`, both walked in a real browser by Code with controls.**
+
+**WHAT IT WAS.** `seatCliticFolds` rewrites a fold's whole run whenever `isCliticSeated` says
+the fold is unseated, and that test is a string comparison that had already drifted twice
+(`clitic-seat.ts:398-420`, whose own comments record N.118's punctuation and N.160 step 3's
+case and ё). Run from a load path or a text edit, it overwrote the singer's own placements.
+
+**WHAT SHIPPED.** The fold now runs only where placements are built from nothing. It keeps its
+three rebuild sites, it is gated at the arrival path on the map holding no syllable
+(`shouldFoldOnArrival`, `first-seat.ts:62-64`), and it is gone from `reseatAcross`. **N.161b
+then added the fourth site**, `+page.svelte:2535`, through a new `waiting-seat.ts` that fills
+empty notes only.
+
+**THE CONTROLS, and they are what make this more than an assertion.** On the old page: a
+syllable hand-placed on note 37 went back to «в бью» on the next reload, and deleting
+«бьющемся» from the poem brought the deleted word back onto the score. On the new page neither
+happens.
+
+**THREE DESK ERRORS, all corrected by someone else, all recorded.**
+
+1. **The desk missed `+page.svelte:2633`.** Code found it in its r1 answer.
+2. **The desk proposed two shapes for N.161b and both were wrong.** Shape 1 would have refused
+   every score that has a fold, because the waiting seat only exists after the arrival fold has
+   already filled its 60 notes; shape 2 was the partial fold Code had already refuted. **Had
+   Code obeyed the brief, it would have built the worse thing.**
+3. **The desk's own coverage was incomplete**, which is why the sweep existed at all.
+
+**THE SWEEP.** A read-only Sonnet agent, spawned by the desk on Dann's instruction, read every
+site that writes `doc.pairings` and returned a table with `path:line` throughout. **Cost 160k
+tokens against a 200k quote**, 48 tool calls. It found the fourth site. Its one unverified row,
+`#onRemoteWrite`'s guard, is in `OWED.md`.
+
+**THE WINDOW IS REAL.** Code reproduced it by holding the dictionary load open with a temporary
+line in `loader.ts`, placing a syllable by hand, then releasing. **How long that window lasts
+on Dann's own devices is NOT ESTABLISHED**; the dictionary is about 170 MB and a cached load
+measured about 1.6 s.
+
+**The spec below is verbatim from `OPEN.md`.**
+
+## N.161. THE LOAD PATH SHOULD NOT WRITE. Numbered 2026-09-21. THE NUMBER IS A DESK DEFAULT
+
+**Raised by Dann 2026-09-21**, on being told that a plain reload could rewrite up to 60 of his
+stored seats: *"Can we streamline that or eliminate it in favour of a better solution?"*
+
+**IN, under the freeze rule, on both clauses.** A hand change on one note, or a word deleted
+from the poem, silently rewrites up to 60 decided notes on the next load or edit; and a deleted
+word comes back on the page, which tells the singer something false.
+
+### What the singer suffers
+
+They open a song they placed weeks ago and, before they touch anything, a quarter of their
+placements are rewritten into the score's own coordinates, where nothing ties them to the poem.
+No act of theirs, and nothing on screen. The loss shows up later as acutes that never appear
+and switches that do nothing.
+
+### The mechanism, read by the desk 2026-09-21
+
+- **`isCliticSeated` decides by comparing two strings** (`clitic-seat.ts:398-420`), after
+  stripping trailing punctuation, lowercasing, and folding ё to е.
+- **`seatCliticFolds` rewrites a fold's whole run when that test says unseated** (`:447-457`).
+- **The comparison has drifted twice, and the file records both.** N.118 added trailing
+  punctuation to what it must ignore (`:402-408`); N.160 step 3 added case and ё (`:409-416`),
+  after «В бью» against «в бью» rewrote 60 notes on a plain reload.
+
+### The plan, agreed between the desk and Code 2026-09-21
+
+**The fold runs only where placements are built from nothing.**
+
+- **Keep it at the three rebuild sites:** `+page.svelte:642` (Start over), `:2563` (the first
+  seat of a transcription), `:3263` (the score's own seat of a poem it filled).
+- **Gate it at `:3404`** on the map holding no syllable seat before the merge, which is the
+  test `first-seat.ts` already makes.
+- **Remove it from `:2633`.** **This is Code's correction to the desk**, which had missed the
+  site. The fold depends only on the score, never on the poem (`findCliticFolds`,
+  `clitic-seat.ts:145-165`), so deleting «бьющемся» from the poem vacates note 37, the fold then
+  rewrites the whole run from the score's own words, and the deleted word returns to the page.
+
+**TWO OPTIONS THE DESK PROPOSED AND CODE REFUTED, recorded so they are not proposed again.**
+
+1. **"N.160's heal can seat a legacy song."** It cannot. The fold shifts every syllable from
+   «в» onward by one note (`clitic-seat.ts:79-85`), and the heal only touches seats whose
+   address has failed. A legacy song's addresses look valid and merely sit one note late.
+2. **"Seat only undecided notes, never a poem address."** The fold's job is to overwrite about
+   60 decided notes, so it applies whole or not at all. A partial shift is a broken run.
+
+**HELD IN RESERVE: a per-song marker**, optional, on the song record rather than on a pairing.
+Code would converge on it **only if** a stored song exists whose score has a fold, whose clitic
+note does not hold the fused seat, and which nobody changed by hand.
+
+### NOT ESTABLISHED
+
+- **Whether any such song exists.** The desk can check it in Dann's Chrome: for each song whose
+  score has a fold, compare the clitic's note to the fold's first cell.
+- **The deleted-host rewrite at `:2633`.** Code read it and did not run it.
+- **Why `:2633` was added.** Its comment's premise contradicts `findCliticFolds`'s signature.
+
+### Cost, from Code
+
+Two call sites change. Nothing new in the record, no schema change, nothing on the page or in
+the drawer. `clitic-seat.test.ts` and `score-seat.test.ts` stay green. Two or three new tests
+for the gate, which must be a pure predicate in a `.ts` file because vitest cannot reach
+`+page.svelte`. Two browser walks on the fixture: a hand change on note 37, and a deleted host
+word.
+
+### What it displaces
+
+**DESK DEFAULT: week 2, after step 3's walk, and N.141's last step, the squircle across a tie,
+moves to week 3 beside N.132.** The week-5 buffer is already spent.
+
+---

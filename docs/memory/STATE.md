@@ -11,9 +11,10 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`46ac52f`**, "N.160 step 3: the seats diff against a stored seated text, and the heal
-writes once, logged per song", shipped 2026-09-21 14:31, all five gates at baseline and walked
-by Dann on his own library the same afternoon (the previous floors, `2fb7516`, `1d18514`,
+before **`9782d8e`**, "N.161b: the waiting score seat fills empty notes only, so a syllable
+placed while the dictionary loads survives", shipped 2026-09-21 19:59, all five gates at
+baseline and walked in a real browser with a control (the previous floors, `44c5830`,
+`46ac52f`, `2fb7516`, `1d18514`,
 `0f7375c`, `46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
 `fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
 `d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
@@ -42,51 +43,42 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-21, about 19:15
+> ### READ THIS FIRST. Written at the close of 2026-09-21, about 20:10
 >
-> **THE ONE THING IS N.161: the load path should not write.** The plan is agreed between the
-> desk and Code and is in `OPEN.md` §N.161. **It needs a brief and nothing else.** It takes
-> week 2 and pushes N.141's last step to week 3, a DESK DEFAULT Dann can overturn.
+> **THE ONE THING IS N.153 STAGES 4 AND 5.** DESK DEFAULT, and Dann can name another. Stages 1
+> to 3a are shipped; **stage 4 retires `loupe.ts`'s crop helpers and stage 5 is the
+> whole-fixture scan, and no standalone scan harness exists in the tree.** `SEQUENCE.md`
+> dependency 7 puts N.153 before any further caret work and nothing before it, and the
+> autonomous run lists it first for value.
 >
-> #### WHAT SHIPPED AND WAS WALKED, three ships in one day
+> #### WEEK 2 IS CLEAR ON ITS FIRST DAY
 >
-> - **`1d18514`, N.159**, and it closed N.136 and N.158 with it. The score obeys every Notation
->   switch, drawn fresh from the live poem, nothing stored.
-> - **`2fb7516`, N.160 step 2**, the dry run. It writes nothing and logs every seat's verdict.
-> - **`46ac52f`, N.160 step 3**, the stored seated text and the heal. **Walked by Dann on his
->   own library:** *"yes :)"*.
+> **Five ships on 2026-09-21**, every one walked: `1d18514` (N.159, closing N.136 and N.158),
+> `2fb7516` and `46ac52f` (N.160 steps 2 and 3), `44c5830` and `9782d8e` (N.161 and N.161b).
+> **Everything `SCHEDULE.md` put in week 2 is done**, and N.132 and N.141's last step already
+> stand in week 3.
 >
-> #### WHAT THE HEAL DID ON HIS LIBRARY, and the prediction held
+> #### WHAT THE DAY ESTABLISHED, in one line each
 >
-> **`wrote 14 of 96 seated = 9 anchor + 5 joined; left 1 rejected + 4 unfound as they were.`**
-> The dry run afterwards reads **91 address, 1 rejected, 4 unfound**, which was Code's
-> prediction exactly. «Тень», the second «тень», «безответная» and «Дума» carry the poem again,
-> and «непроглядная» maps across the poem's two words by the joined-run rule.
+> - **The score obeys every Notation switch**, drawn fresh from the live poem, nothing stored.
+> - **Dann's frozen seats are repaired:** the heal wrote 14 of 96 and the dry run now reads 91
+>   address, 1 rejected, 4 unfound.
+> - **A plain reload was rewriting up to 60 stored seats**, and no longer can. The trigger was a
+>   string comparison that has drifted three times.
+> - **A syllable placed while the dictionary is still loading now survives**, reproduced and
+>   fixed the same evening.
 >
-> #### THE BIGGEST FINDING OF THE DAY, and it is why N.161 exists
+> #### WHAT IS OWED ON ALL OF IT
 >
-> **A plain reload was rewriting up to 60 of his stored seats.** `isCliticSeated` compared
-> «В бью» to the score's «в бью» with an exact match, decided the fold was unseated, and
-> `seatCliticFolds` rewrote notes 37 to 96 into the score's own coordinates. Step 3's case fold
-> closes the live case; N.161 removes the mechanism.
->
-> #### WHAT IS OWED ON WHAT SHIPPED
->
-> - **Paint on a phone is NOT MEASURED.** Every timing is desktop.
+> - **Paint on a phone is NOT MEASURED.** Every timing this month is desktop.
+> - **The five «одинокая» notes.** The deferred ruling is still not asked, and not for want of a
+>   count: they may be blocked by a seat that already holds the word rather than orphaned by a
+>   word that left. **Settle that first** (`OPEN.md` §N.160).
 > - **`refreshPairings`, `stressAcutedCyrillic`'s lookup, `ownedByPoem` and re-seat rules 1 and
->   2 are all still in the tree.** `memo-n160b` retires them; the desk held them back so the
->   first ship that wrote to a singer's stored work carried no refactor. **They get their own
->   commit.**
-> - **Something writes `updatedAt` about seven seconds after every load**, with the record
->   otherwise identical. Code proved the heal is not the cause. Untraced.
-> - **Dann's stress acutes switch read `true` at 04:00 and `false` at 15:50.** The desk did not
->   touch it after verifying it. **NOT ESTABLISHED.**
->
-> #### THE BUFFER IS SPENT AND WEEK 2 IS FULL
->
-> N.160 steps 2 and 3 took the week-5 buffer. N.161 now takes week 2 and pushes N.141's last
-> step to week 3 beside N.132. **`SCHEDULE.md`'s rule governs from here: the lowest line in a
-> week moves to LATER and the date stands.**
+>   2** are still in the tree and owed as their own commit (`OWED.md`).
+> - **The `updatedAt` write on every load**, and **`#onRemoteWrite`'s guard**, which the sweep
+>   flagged as the one row it did not verify to its own standard. Both in `OWED.md`.
+> - **N.157**, replacing a score does not re-derive the seats, is open and untouched.
 
 ## THE TRACKER
 
@@ -105,7 +97,13 @@ does not repeat them.
 
 ### Numbered 2026-09-21
 
-- `[ ]` **N.161. The load path should not write.** DESK DEFAULT number, **raised by Dann**
+- `[x]` **N.161 and N.161b. The load path should not write. CLOSED 2026-09-21**, shipped
+  `44c5830` and `9782d8e`. **The fold now runs only where placements are built from nothing.**
+  Code walked both in a real browser with controls: on the old page a hand-placed syllable went
+  back to «в бью» on reload and a deleted word returned to the score; on the new page neither
+  happens. **A read-only Sonnet sweep found the fourth call site** the desk and Code had both
+  missed, for 160k tokens against a 200k quote. Account in `../sessions/LOG.md` block 29.
+- ~~`[ ]` **N.161. The load path should not write.** DESK DEFAULT number, **raised by Dann**~~
   2026-09-21 on being told a plain reload could rewrite up to 60 of his stored seats. **IN
   under the freeze rule, on both clauses.** `isCliticSeated` decides by comparing two strings
   (`clitic-seat.ts:398-420`) and `seatCliticFolds` rewrites the fold's whole run when it says
@@ -424,4 +422,18 @@ the wrong-document trap; `BRIEF-TEMPLATE.md` gained a displacement line, because
 mark a displacement NOT ESTABLISHED that was never its to establish. **The bridge dropped
 mid-edit at about 16:00 and one `STATE.md` write was lost; it was found by reading the file
 rather than assumed, and rewritten.** Memory NOT committed.*
+
+*Close of 2026-09-21, about 20:10. **Five ships, every one walked**, and the floor moves to
+`9782d8e`: `1d18514` (N.159, closing N.136 and N.158), `2fb7516` and `46ac52f` (N.160 steps 2
+and 3), `44c5830` and `9782d8e` (N.161 and N.161b). **Everything `SCHEDULE.md` put in week 2 is
+closed on the week's first day.** Gate 4 moved five times, 1354 to 1385, with Dann's permission
+each time. **A read-only Sonnet sweep, spawned by the desk on his instruction, found a fourth
+call site the desk and Code had both missed**, for 160k tokens against a 200k quote; its one
+unverified row is in `OWED.md`. **The desk was corrected by Code four times across the day** and
+each correction is recorded in `../sessions/LOG.md` blocks 28 and 29 rather than smoothed away;
+the sharpest is that both shapes the desk offered for N.161b were wrong, and obeying the brief
+would have built the worse one. `ENVIRONMENT.md` gained the five gate moves, the
+wrong-document trap, and how to hold a loading window open. **NOT MEASURED: paint on a phone.
+NOT ESTABLISHED: the five «одинокая» notes, `#onRemoteWrite`'s race, and the `updatedAt` write
+on every load.** Memory NOT committed.*
 

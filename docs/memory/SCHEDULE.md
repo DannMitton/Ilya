@@ -74,9 +74,9 @@ design rows.
 - [x] **N.160 steps 2 and 3. CLOSED 2026-09-21**, shipped `2fb7516` and `46ac52f`, both
   walked. The dry run read Dann's library seat by seat; the heal wrote 14 of 96 and left the
   5 it could not resolve exactly as they were.
-- [ ] **N.161. The load path should not write.** Numbered 2026-09-21, raised by Dann. **IN
-  under the freeze rule.** Plan agreed between the desk and Code; spec in `OPEN.md` §N.161.
-  **It takes this week and pushes the line below to week 3.**
+- [x] **N.161 and N.161b. CLOSED 2026-09-21**, shipped `44c5830` and `9782d8e`, both walked in
+  a real browser with controls. A read-only Sonnet sweep found a fourth call site the desk and
+  Code had both missed. Account in `../sessions/LOG.md` block 29.
 - [ ] ~~**N.141, last step**: the squircle across a tie.~~ **MOVED TO WEEK 3 on 2026-09-21,
   DESK DEFAULT**, to make room for N.161.
 - [ ] **N.132**: the ratified names and the tab padding. **MOVED TO WEEK 3 on 2026-09-21,

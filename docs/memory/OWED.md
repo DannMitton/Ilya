@@ -19,6 +19,13 @@ asks what is outstanding, or when the one thing closes and the next is being cho
 
 ## OWED, RULED BUT NOT YET DONE
 
+- **`#onRemoteWrite`'s GUARD IS THE ONE ROW THE SWEEP DID NOT VERIFY TO ITS OWN STANDARD.**
+  `document.svelte.ts:300-312` applies another tab's record to the open document, guarded by
+  `this.#scheduler.isPending()` at `:303` (`library.ts:483`). **The Sonnet sweep of 2026-09-21
+  read it as guarded and said plainly that it could not rule out a same-tick race**, where a
+  remote tab's write lands over an unsaved local edit whose `schedule()` has not yet run. **NOT
+  ESTABLISHED**, and it is the kind of race that costs a singer work silently.
+
 - **RETIRE `refreshPairings`, `stressAcutedCyrillic`'s OWN LOOKUP, `ownedByPoem`, AND RE-SEAT
   RULES 1 AND 2.** `../sessions/memo-n160b-the-approach_r1_2026-09-21.md` retires the first two
   at step 1 and `ownedByPoem` at step 5. **The desk held all of them back, DESK DEFAULT**, so
