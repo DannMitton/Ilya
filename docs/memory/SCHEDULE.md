@@ -79,8 +79,12 @@ design rows.
   Code had both missed. Account in `../sessions/LOG.md` block 29.
 - [ ] ~~**N.141, last step**: the squircle across a tie.~~ **MOVED TO WEEK 3 on 2026-09-21,
   DESK DEFAULT**, to make room for N.161.
-- [ ] **N.132**: the ratified names and the tab padding. **MOVED TO WEEK 3 on 2026-09-21,
-  DESK DEFAULT**, to make room for N.160 steps 2 and 3.
+- [x] **N.132**: the ratified names and the tab padding. **CLOSED 2026-09-21**, shipped
+  `5f7be82` and walked by Dann in both languages on the alias. **It was moved to week 3
+  twice and then done on week 2's first night anyway**, pulled forward because it gates
+  N.130 and N.131. **It carried two N.154 rows with it:** `upload.banner.reader` shipped
+  the same night as `8bd1aff`, and `a11y.paper` went to N.131 on Dann's ruling. **The
+  « PARTITION » receipt collision was found and fixed in the same session.**
 - [ ] **N.160 steps 2 and 3**: the dry run on Dann's library, then the stored text plus the
   one-time repair, which unfreezes his 25 notes and stops any note freezing again. **These
   spend the week-5 buffer.** Numbered and specified 2026-09-21 (`OPEN.md` §N.160). **He

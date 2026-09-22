@@ -45,6 +45,8 @@ next session the same hour it cost the last one.
 | your own `git add -A` swept Code's tree | `git add -A` |
 | you are about to cite a file's zero grep hits | `IS THE VOWEL ENGINE` |
 | you are about to give Dann a use count | `A GREP COUNT IS NOT A USE COUNT` |
+| you are about to say no test asserts a string | `MUST NAME \`apps/web/e2e-phone/\`` |
+| quoting the cost of a sweep of `i18n.ts` | `A SWEEP OF \`i18n.ts\` COSTS ABOUT 120k` |
 | Score Markup or Insights missing from a built app | `THE SHANE WALL LIVES IN A TRACKED .env` |
 | `git status` jumps to hundreds of untracked files | `A BRANCH SWITCH CAN UNCOVER HUNDREDS` |
 | grep or diff says `Resource deadlock avoided` | `THE BRIDGE CANNOT READ A FILE WITH " 2"` |
@@ -66,6 +68,7 @@ next session the same hour it cost the last one.
 | walking at 390 px on his Mac | `DEVICE MODE LOCKS THE WIDTH` |
 | the cloud desk cannot fetch the alias | `NO NETWORK TO VERCEL FROM THE DESK` |
 | checking the alias serves the new build, 2026-09-17 | `THE ALIAS CHECK THAT WORKED` |
+| asking whether the alias has this ship yet | `PICKS UP A SHIP IN ABOUT TWENTY SECONDS` |
 | Dann's phone shows an old build after a ship | `THE PHONE HOLDS THE OLD BUILD` |
 | you need Dann to walk a ship and a device walk would cost him | `THE DESK DRIVES HIS CHROME AND HE RULES ON SHOTS` |
 | you are about to count carets with a selector | `THE CARETS CARRY NO CLASS` |
@@ -77,6 +80,8 @@ next session the same hour it cost the last one.
 | the tab id you had stops working mid-session | `THE EXTENSION'S OWN TAB LANDS BEHIND` |
 | drawing music in a sketch or a mockup | `THE MUSIC FACE IS MAESTRO` |
 | `sed -i ''` fails in device_bash | `THE DEVICE SHELL IS LINUX` |
+| `grep` says `Invalid collation character`, or a `&&` chain dies at a grep | `ACCENTED RANGE DIES ON THE BRIDGE` |
+| `md5` or `date -r` is not found on the bridge | `md5` AND `date -r` DO NOT EXIST` |
 | briefing Design | `WHAT DESIGN CAN READ` |
 | Design's return is not in Downloads | `DESIGN WRITES INTO THE TREE` |
 | the Vercel toolbar covers the drawer on a phone | `THE VERCEL TOOLBAR` |
@@ -938,7 +943,10 @@ phone, is the way.
   bytes and 1747 JS characters; the difference is the ten Cyrillic characters in
   its `work-title` at two UTF-8 bytes each.
 - **`file_upload` needs the Fit tab ACTIVE FIRST.** Transcription's OCR input will
-  take a `.musicxml` and fail.
+  take a `.musicxml` and fail. **NAMES CORRECTED 2026-09-21: there is no Fit tab and
+  no Transcription tab.** Fit folded into Voice and Markup; the tab reads `Text`
+  / « Texte » and `Markup` / « Annotation » since N.132 (`5f7be82`). The wire ids are
+  unchanged, `transcription` and `shane`, so `ilya:activeTab` still stores the old words.
 - **`form_input` triggers Svelte's binding; `computer`'s `type` did not.**
 - **`computer`'s `left_click` can silently no-op on a real, visible, enabled
   button.** Check the button's own state via `javascript_tool` first, then drive
@@ -3290,6 +3298,22 @@ real width**, so any crowding seen there is milder than the phone's. For a true
 390 px, use DevTools device mode (`DEVICE MODE LOCKS THE WIDTH`), which the desk
 cannot drive, or the built-in browser pane, which has no library.
 
+**WORSE ON 2026-09-21, AND THE DESK DID NOT USE THIS INDEX ROW BEFORE SPENDING FOUR
+CALLS REDISCOVERING IT.** `resize_window` to 390 x 1100 returned *"Successfully resized
+window containing tab ..."* and `innerWidth` did **not move at all**: 1825 before, 1825
+after. **Not clamped to 555. Unchanged.** Cause NOT ESTABLISHED.
+
+**AND HIS WINDOW'S SIZE COULD NOT BE RECORDED, so it could not have been restored.**
+`window.outerWidth` / `outerHeight` read **`[0, 0]`** on one call and **`[760, 63]`** on
+the next, against an `innerWidth` / `innerHeight` of **1825 x 1222**. The 2026-09-20 row
+above records `outerWidth` 2229 as readable, so **these values are unreliable night to
+night and must not be trusted for a restore.** `screen.availWidth/Height` read
+2240 x 1229 and was stable.
+
+**SO: record and restore by VIEWPORT (`innerWidth` / `innerHeight`), never by
+`outerWidth`.** And ask Dann to resize rather than driving it, which is what worked:
+he did it himself in one message.
+
 ## THE PHONE HOLDS THE OLD BUILD. 2026-09-20
 
 **The alias can serve the new build while Dann's phone serves the old one, and that
@@ -3433,6 +3457,26 @@ clicks had already failed, which moved the search from the coordinates to the ap
 **Eyeballing a position off the returned image is worse than both.** Estimates from
 the image were out by about 40 px in an 860-wide view. **Get the rect from
 `getBoundingClientRect()`, scale it, and verify by hover.**
+
+**`frameWidth / innerWidth` IS WRONG FOR A `zoom` REGION. Corrected 2026-09-21, and the
+rule above cost a wasted zoom.** Frame 1338 against `innerWidth` 1825 implies 0.7337.
+**The true factor was 0.6595**, and a region computed at 0.7337 came back cut, starting
+mid-word.
+
+**The frame does not track the viewport.** It stayed ~1338 while `innerWidth` went
+1643 → 1825, so `frameWidth / innerWidth` is not a constant relation and cannot be one.
+
+**WHAT WORKED, and use it:** take one zoom, find two features whose CSS x you already
+know from `getBoundingClientRect()` (a border, the right edge of a word), read their x in
+the returned image, and solve for the factor. Two independent points agreed to 0.001 on
+2026-09-21. **The cut position of a failed zoom is itself a measurement:** a region
+starting 46 frame px right of the head's left edge landed mid-"A" of `ANNOTATION`, which
+only 0.66 predicts.
+
+**AND `hover` MAY NOT SHARE THE `zoom` FRAME.** A hover at the tab's centre computed with
+the verified 0.6595 returned `main.main-content`, not the button. So the cheap hover check
+above **did not corroborate a factor that two edge measurements then proved right.** Do
+not discard a factor on a failed hover alone. Cause NOT ESTABLISHED.
 
 ## CLOSING THE LAST TAB CAN QUIT CHROME. 2026-09-20
 
@@ -3774,7 +3818,8 @@ while `hidden` is true.**
 on the alias opened on **Transcription**, so `document.querySelectorAll('[data-ipa-of]')`
 returned **0 notes** on a build that draws 96 of them. That reads exactly like a broken render.
 **`localStorage.getItem('ilya:activeTab')` says which document is up**; it read `transcription`
-while the desk was measuring Score markup. Switch with the tab control, read, then switch back,
+while the desk was measuring Score markup (**that tab reads `Markup` / « Annotation » since
+N.132, 2026-09-21; the wire id `shane` is unchanged**). Switch with the tab control, read, then switch back,
 and record the value first, per `CONTRACT.md` §5. The fix is one sentence to Dann: bring the Chrome window showing Ilya
 to the front. **Creating a second tab does not help; it lands in the same window.**
 
@@ -3887,3 +3932,65 @@ one.
 `.claude/`.** A citation taken from a worktree path is a citation to a copy, and it
 can be stale.
 
+### grep WITH AN ACCENTED RANGE DIES ON THE BRIDGE. 2026-09-21
+
+`grep -o "dans [A-Za-zÀ-ÿ]*\."` returns **`grep: Invalid collation character`** and exits
+2, which **kills the rest of a `&&` chain** and looks like the file is wrong rather than
+the pattern.
+
+**Use `python3` for any pattern with an accented range.** A one-liner reading the line and
+running `re.findall` gave the answer immediately. This file's French strings make the trap
+common rather than rare.
+
+### `md5` AND `date -r` DO NOT EXIST ON THE BRIDGE. 2026-09-21
+
+`md5 -q <file>` → `command not found`. **Use `md5sum`**, whose output is the hash then the
+filename.
+
+`date -r <epoch>` → `No such file or directory`: the bridge's `date` is GNU, where `-r`
+means "reference file". **Convert an epoch in the cloud container with `python3`**, using
+`zoneinfo.ZoneInfo('America/Toronto')` so the answer is in Dann's own time.
+
+### THE DESK'S TEST GREP MUST NAME `apps/web/e2e-phone/`. 2026-09-21
+
+**The N.132 brief stated, as established, that no test asserted the old tab strings. It
+was wrong**, and Code found `apps/web/e2e-phone/loupe-scan.test.ts:67` matching
+`"Score markup"`. Obeying the brief would have left a broken selector.
+
+**The desk's grep was `apps/web/src` plus `apps/web/tests` plus `apps/web/e2e`.**
+`apps/web/e2e-phone/` is a FOURTH directory and is outside that net. Tether 14: a failed
+lookup is not an absence, and this is the shape it takes in this tree.
+
+**So: every test search names all four, or it is not a test search.** Better, search
+`apps/web` and filter by `*.test.ts` / `*.spec.ts`, which cannot miss a new directory.
+
+### A SWEEP OF `i18n.ts` COSTS ABOUT 120k, NOT 50k. 2026-09-21
+
+**The desk quoted 30k to 50k for a grep-first, read-only sweep of the string dictionary
+and the agent spent 116,375.** The grep-first method held; the desk's arithmetic on a
+**1542-line, 614-entry** file did not.
+
+**Quote a sweep of `i18n.ts` at 120k.** This was the **third quote overrun on
+2026-09-21** and the second of the desk's: a Sonnet sweep ran 160k against a 200k quote,
+and a Sonnet audit ran 268,709 against 200k. **Tether 4 says quote the worst case. Three
+in one day says the desk's estimates of this file are low by two to four times.**
+
+### THE ALIAS PICKS UP A SHIP IN ABOUT TWENTY SECONDS, AND THE STAMP IS THE PROOF. 2026-09-21
+
+**`sw.js`'s `CACHE_VERSION` is an epoch in milliseconds, and converting it settles which
+build the alias serves** without asking Dann to look at anything.
+
+```
+curl -s -m 20 https://ilya-git-shane-dannmittons-projects.vercel.app/sw.js | grep -m1 CACHE_VERSION
+```
+
+**Measured twice on 2026-09-21:** `5f7be82` committed 22:43:00 and the alias served a
+build stamped **22:43:19**; `8bd1aff` committed 23:17:08 and the alias served
+**23:17:26**. **Nineteen and eighteen seconds.** A stamp that predates the commit means
+the deploy is still running, which is the honest thing to say rather than "it should be
+live."
+
+**AND DO NOT LOOK FOR A UI STRING IN THE IMMUTABLE BUNDLES.** A scan of the first 40
+`/_app/immutable/**.js` files referenced from the root HTML found **neither** the old nor
+the new sentence, because the dictionary is not in them. **That null result is a failed
+lookup, not an absence**, and reporting it as one would have been tether 14 again.

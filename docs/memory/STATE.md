@@ -11,9 +11,9 @@ name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
 What it names instead is a **FLOOR**: everything described below was true at or
-before **`9782d8e`**, "N.161b: the waiting score seat fills empty notes only, so a syllable
-placed while the dictionary loads survives", shipped 2026-09-21 19:59, all five gates at
-baseline and walked in a real browser with a control (the previous floors, `44c5830`,
+before **`8bd1aff`**, "N.154: the picture and PDF banner names Text, the tab that exists,
+in both languages", shipped 2026-09-21 23:17, all five gates at baseline and **walked by
+Dann on the alias in both languages** (the previous floors, `5f7be82`, `9b05ddd`, `9782d8e`, `44c5830`,
 `46ac52f`, `2fb7516`, `1d18514`,
 `0f7375c`, `46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
 `fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
@@ -43,34 +43,40 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-21, about 22:20
+> ### READ THIS FIRST. Written at the close of 2026-09-21, about 23:40
 >
-> **THE ONE THING IS N.132: the ratified names, and the tab padding.** DESK DEFAULT, and Dann
-> can name another. `Text`, `Markup`, `Melody` and `Insights` were ruled in both languages on
-> 2026-09-13 and the tree still says "Transcription" and "Score markup" (`i18n.ts:106`,
-> `:117`, `:59`, cited from the spec and NOT re-read this session). **`SEQUENCE.md` dependency
-> 2 puts it before N.130 and N.131**, and the ruled release sentence names Insights, so it
-> gates the French work. It carries the ruled 0.5 rem tab padding, which nobody has seen on
-> screen. **It was pushed out of week 2 twice** to make room for N.160 and N.161. Spec in
-> `OPEN.md`.
+> **THE ONE THING IS N.130'S WALK: Insights' French, and it is the last release-blocking
+> item that is already built.** DESK DEFAULT, and Dann can name another. **All 59
+> `insights.*` entries have French differing from English**, parsed in `i18n.ts` on
+> 2026-09-21, so the build is real and only his eye is owed. **`SEQUENCE.md` tier 2 puts it
+> next now that dependency 2 is discharged**, and the ruled release sentence names Insights.
 >
-> #### NOTHING IS MID-FLIGHT. N.153 CLOSED 2026-09-21
+> **IT IS A SITTING, NOT A LOOK.** `SCHEDULE.md` week 3 says *"Dann rules it in one
+> sitting"*, and it is 59 entries of French. **Do not open it by pretending otherwise.** He
+> was told this on 2026-09-21 and chose other work that night, which is not a refusal.
 >
-> All five stages are in, shipped `9b05ddd` carrying Code's `15b7d1a`, and the memory close
-> rode `7c52b02`. **Stage 5 changes nothing a singer sees**, so it has no walk and none is
-> owed. Account in `../sessions/LOG.md` block 30.
+> #### NOTHING IS MID-FLIGHT. THREE SHIPS CLOSED 2026-09-21 EVENING
 >
-> #### WHAT CAME OUT OF IT, and none of it is in flight either
+> **N.132 CLOSED**, `5f7be82`, walked in both languages. Account in `../sessions/LOG.md`
+> block 31. **N.154's first row CLOSED**, `8bd1aff`, walked. **The « PARTITION » receipt
+> collision CLOSED**, shipped with this close, **and its walk is the one thing owed from
+> tonight**: the score receipt in French with a file loaded.
 >
-> - **N.162 is numbered and unstarted:** a caret's hit centre sits 15.6 to 21.4 px from the
->   nearest note's, and `nearestTarget` pools them, so a thumb aimed at a caret often takes the
->   note. **Clause 13's words are met and its reasoning is not.**
-> - **Two parts of Dann's 2026-09-20 spacing ruling are NOT BUILT** and stand in `OPEN.md`
->   §THE CARET clause 16: the meter run-in at 1 sp in the loupe, and the tie taper into the
->   run-on.
-> - **Four debts are in `OWED.md`**, the sharpest being that `core-loop.test.ts` fails before
->   anything touched it, and no gate catches it because `ilya-ship.sh` does not run Playwright.
-> - **NOT MEASURED: paint on a phone**, still, every timing this month being desktop.
+> #### WHAT CAME OUT OF THEM, and none of it is in flight
+>
+> - **Dann ruled label harmony into N.131** on 2026-09-21: wherever a surface carries both
+>   a visible label and an accessible name, the two say the same thing. `a11y.paper` is its
+>   first case. Spec in `OPEN.md` §N.131.
+> - **Five debts are in `OWED.md`**, the sharpest being that at 390 px the poem receipt's
+>   line gets no room at all, which predates tonight and wants the same grid restructure as
+>   the tag column.
+> - **`PRODUCT.md`'s tabs table was three names out of date** and named a Fit tab that does
+>   not exist. Corrected at this close, with the padding ratification beside it.
+> - **The desk was wrong three times tonight and Code caught two of them:** a test grep that
+>   missed a fourth directory, a fixed pixel width chosen from one font, and a token quote
+>   low by a factor of three. All three are in `ENVIRONMENT.md`.
+> - **NOT MEASURED: paint on a phone**, still. **NOT ESTABLISHED: whether « PARTITION »
+>   fits 62 px in Consolas or Android's monospace.**
 
 ## THE TRACKER
 
@@ -253,11 +259,28 @@ does not repeat them.
   **Belongs in the release cut's IN bucket:** the ruled release sentence names
   Insights, and a document in the wrong language is wrong rather than
   half-built. Spec in `OPEN.md`. **THE DESK DRAFTS THE FRENCH AND DANN RULES ON IT, ruled 2026-09-19**, superseding *"Dann owes the French; nothing is coined"*. His words: *"I prefer to have you suggest translations that I can react to. That saves me cognitive bandwidth."* **So never hand him blank slates.** Draft from the French already in the file, say which entries the glossary came from, flag the choices that are genuinely his, and let him ratify, edit, or decline. **Nothing reaches the tree until he ratifies it**, which is the one clause of the old rule that survives. **BUILT 2026-09-19: all 59 Insights entries are French** (`71ae880`), drafts and rulings in `../sessions/insights-french_r1_2026-09-19.md`. **UNWALKED.** **AND THE ROW'S OWN RANGE WAS WRONG: only 12 of the 59 sat in `:1417-1475`; the other 47 ran `:1476` to `:1522`.** A brief written to the cited range would have fixed twelve strings and reported Insights done.
-- `[ ]` **N.132. The ratified names are not built.** `Text`, `Markup`, `Melody`,
-  ruled 2026-09-13 in both languages, and the tree still says "Transcription" and
-  "Score markup" (`i18n.ts:106`, `:117`, `:59`). **Found because Dann walked the
-  colour deploy and read the tabs.** Carries the ruled tab padding of 0.5 rem,
-  which nobody has seen on screen. Spec in `OPEN.md`.
+- `[x]` **N.132. The ratified names, and the tab padding. CLOSED 2026-09-21**, shipped
+  `5f7be82` and walked by Dann on the alias in both languages. **The padding was
+  load-bearing, not cosmetic:** before this ship `Insights` and « Aperçus » were clipped
+  off a 390 px screen entirely, by 71 px in English and 107 px in French, and at the old
+  0.7 rem the ratified names still ran 4.31 px over in French. **A comment in
+  `DeskHead.svelte` had said the question was Dann's to rule since N.127 and it had never
+  been put to him.** Account in `../sessions/LOG.md` block 31.
+- `[x]` **N.154's first row. The picture and PDF banner named a dead tab. CLOSED
+  2026-09-21**, shipped `8bd1aff` and walked in both languages. `upload.banner.reader` told
+  a singer to type the words "in Transcription". **A read-only Sonnet sweep of all 614
+  dictionary entries found no other stale string**, which is the useful result: the
+  rename's damage was three keys, all already known. Memo
+  `../sessions/memo-n154-stale-surface-names-sweep_r1_2026-09-21.md`. **N.154's English
+  half is otherwise still open in `SCHEDULE.md` week 5.**
+- `[x]` **« PARTITION » overlapped the filename on the score receipt. CLOSED 2026-09-21**,
+  shipped with this close. **Dann: *"« PARTITION » must not collide with the filename, I'm
+  surprised this is happening."*** Cause: `.intake-receipt .tag` was `flex: none;
+  width: 40px` with no overflow rule, and « PARTITION » renders 61.38 px, overlapping the
+  filename by 11.38 px after the row's 10 px gap. **English was unaffected, which is why it
+  survived five days** as an untracked `INBOX.md` note from 2026-09-16. Now
+  `min-width: 62px`. **Its walk is owed.** Brief
+  `../sessions/brief-partition-tag-overlaps-the-filename_r1_2026-09-21.md`.
 - `[ ]` **N.131. French parity everywhere else.** The 64 or so untranslated
   entries outside Insights. **DESK DEFAULT on splitting this from N.130, and Dann
   can merge them with a word:** the two differ in urgency, and one number would
@@ -460,4 +483,32 @@ block 30, `ENVIRONMENT.md` gained three traps with index rows, `SEQUENCE.md` dis
 dependency 7, `SCHEDULE.md` recorded the close, and **N.162 is numbered**. **NOT MEASURED:
 paint on a phone, still. NOT ESTABLISHED: m. 7's `minGap`, what clause 13's "its neighbour"
 covers, and behaviour at any width but 390 px.** Memory NOT committed at the time of writing.*
+
+*Close of 2026-09-21, about 23:40. **Three ships, two of them walked in both languages**,
+and the floor moves to `8bd1aff`: `5f7be82` (N.132, the ratified names and the 0.5 rem
+padding), `8bd1aff` (N.154's first row, the banner naming a dead tab), and the
+« PARTITION » receipt fix riding this close. Five gates at baseline on every one.
+**N.132's padding turned out to be load-bearing:** before it, `Insights` and « Aperçus »
+were clipped off a 390 px screen entirely, 71 px over in English and 107 px in French, and
+`DeskHead.svelte`'s own comment had called that Dann's to rule since N.127 without anyone
+asking him. He ruled it off a drawing of three states, then walked the live build.
+**Dependency 2 is discharged and N.130 and N.131 are unblocked.** Dann ruled label harmony
+into N.131. A read-only Sonnet sweep of all 614 dictionary entries **found no stale string
+the desk had not already found by hand**, which bounded the rename's damage to three keys.
+`PRODUCT.md`'s tabs table was three names out of date and is corrected, with the
+one-padding-value-at-every-width ratification beside it. `OWED.md` gained five debts,
+`ENVIRONMENT.md` gained five traps and two corrections with index rows, `LOG.md` gained
+block 31, `OPEN.md` lost N.132 and gained N.131's label clause, `SEQUENCE.md` discharged
+dependency 2, and `SCHEDULE.md` ticked N.132. **The desk was wrong three times and Code
+caught two:** a test grep that missed `apps/web/e2e-phone/` and stated an absence from it,
+a fixed 62 px width chosen from one font on one machine, and a token quote low by a factor
+of three. **The desk also failed to use `ENVIRONMENT.md`'s own index** and spent four calls
+rediscovering `CHROME WILL NOT GO BELOW ABOUT 555 CSS PX`. **Code reported correcting a
+stale memory note and no such change was on disk**; the two stale tab names it meant are
+repaired at this close by the desk. **NOT MEASURED: paint on a phone, still. NOT
+ESTABLISHED: a photograph at 390 px, `resize_window` having reported success without moving
+the window twice; whether « PARTITION » fits 62 px in Consolas or Android's monospace; and
+why the `zoom` region's coordinate frame is not `frameWidth / innerWidth`.** **The
+« PARTITION » walk is the one thing owed from tonight.** Memory IS committed with this
+close.*
 

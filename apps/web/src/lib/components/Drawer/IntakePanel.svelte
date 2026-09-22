@@ -645,7 +645,14 @@
 		text-transform: uppercase;
 		color: var(--ink-tertiary);
 		flex: none;
-		width: 40px;
+		/* A MINIMUM, not a width: « PARTITION » draws 61.38px in Menlo and ran
+		   11.38px into the file name at 40px (Dann, 2026-09-21). 62px was
+		   measured against Menlo alone, with 0.61px spare, and a fixed width
+		   cannot survive font substitution: a wider fallback would paint over
+		   the name again. So the tag may grow past 62px and never overlap.
+		   Where every tag fits, the column holds, and both receipts' lines
+		   start at one x. */
+		min-width: 62px;
 	}
 
 	/* The file name can be long and the drawer is 520px. It takes the room

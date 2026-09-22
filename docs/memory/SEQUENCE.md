@@ -50,10 +50,13 @@ that is 5% out is tuned against a bad ruler."* **The same is true of N.139's
 mid-system signature, of N.115's reflow, and of N.141's step 3 if it is ever
 reached.** Build the ruler first or measure three more things against a bad one.
 
-**2. N.132 comes before N.130 and N.131.** N.132 builds the ratified names,
-`Text` / « Texte », `Markup` / « Annotation », `Insights` / « Aperçus », `Melody`
-/ « Mélodie ». N.130 and N.131 translate about 122 entries. **Translating strings
-that are about to be renamed is work done twice.**
+**2. ~~N.132 comes before N.130 and N.131.~~ DISCHARGED 2026-09-21**, shipped `5f7be82`
+and walked by Dann in both languages. **N.130 and N.131 are unblocked and nothing orders
+them any more.** The names built were `Text` / « Texte » and `Markup` / « Annotation »;
+`Insights` / « Aperçus » was already correct, and **`Melody` / « Mélodie » was NOT built
+and must not be**, the band being `Voice` / « Voix » under N.150. **The dependency's own
+reasoning held:** the sweep that followed found `upload.banner.reader` still naming the old
+tab, which is exactly the work-done-twice this row existed to prevent.
 
 **3. N.136 comes before N.119, and shrinks it.** N.119 asks which notation
 toggles reach Score markup. The 2026-09-15 re-audit established that four of the
@@ -115,7 +118,7 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 
 | item | why here |
 |---|---|
-| **N.132** | The ratified names. Also carries the ruled 0.5 rem tab padding nobody has seen on screen. |
+| ~~**N.132**~~ **DONE 2026-09-21**, `5f7be82`, walked | The ratified names and the 0.5 rem padding, both on screen in both languages. **The padding was load-bearing:** at 0.7 rem the French pair ran 4.31 px over the 342 px head, and before the rename `Insights` was clipped off the screen entirely, by 71 px in English and 107 px in French. |
 | **N.130** | Insights' French, about 58 entries. Release-blocking. |
 | **N.131** | The rest, about 64 entries. **Its real size is NOT ESTABLISHED** until a triage separates the genuinely untranslated from words identical in French on purpose. The loupe's share of that triage is already done in `spec-loupe-french_r1_2026-09-14.md`. |
 
@@ -220,7 +223,7 @@ asked for a profile of what could run without his rulings.
 | ~~**N.161. The load path should not write**~~ **CLOSED 2026-09-21**, `44c5830` and `9782d8e` | The clitic seat rewrites up to 60 stored seats when one text comparison drifts. **Plan agreed between the desk and Code 2026-09-21**, spec in `OPEN.md`. Two call sites change, nothing new is stored. **Dann: the walk.** |
 | ~~**N.153 stages 2 to 5**~~ **CLOSED ON SCOPE 2026-09-21**, shipped `9b05ddd` (carrying Code's `15b7d1a`) | All five stages are in. Stage 4 closed as "knowingly keep": nothing retired. Stage 5's scan reaches the 44 px tap floor on all 17 measures that carry notes, **44.00 to 44.16 px as drawn against 1.13 to 7.89 px on 2026-09-18**. **Dependency 7 is discharged and no longer orders anything.** **Its remainder is N.162**, a different mechanism. **Two parts of Dann's 2026-09-20 spacing ruling are NOT BUILT** and now stand in `OPEN.md` §THE CARET clause 16. |
 | **N.162** | A caret and a note compete for the same thumb: 15.6 to 21.4 px between their hit centres, and `nearestTarget` pools them. Numbered 2026-09-21, DESK DEFAULT number, spec not written. **Depends on nothing.** **NOT ESTABLISHED: whether a note must stay tappable inside Corrections**, which decides the shape. **Dann: whether clause 13's "its neighbour" covers any tap target.** |
-| **N.132** | The ratified names, `Text` / « Texte », `Markup` / « Annotation », `Insights` / « Aperçus », `Melody` / « Mélodie », ruled 2026-09-13 in both languages and still unbuilt. Carries the ruled 0.5 rem tab padding nobody has seen. **Must precede N.130 and N.131** (dependency 2). **Dann: the walk, and his eye on 0.5 rem.** |
+| ~~**N.132**~~ **CLOSED 2026-09-21**, shipped `5f7be82` and walked | Dann ruled the 0.5 rem padding in off a drawing of three states and walked the live build in both languages. **Dependency 2 is discharged.** `Melody` / « Mélodie » was NOT built and must not be. **Its residue is one N.154 row, shipped the same night as `8bd1aff`**, and the `a11y.paper` label, which Dann ruled into N.131. |
 | ~~**N.136**~~ **DONE 2026-09-21**, `1d18514`, walked | Closed inside N.159. The desk walked it in Dann's Chrome and he ruled on the shots. |
 | **N.141, last step** | The squircle across a tie. Was gated on N.142, which shipped `c868540`. **Its other two questions stay Dann's and are NOT in this run.** |
 | **N.135** | The page reader reads the text underlay. Ruled 2026-09-14, cost measured in `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. Independent. **Dann: the walk.** |

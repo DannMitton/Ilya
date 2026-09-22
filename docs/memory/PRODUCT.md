@@ -149,12 +149,33 @@ words: *"Let's not confuse our GUIs with the actual musico-textual object."*
 
 ## The tabs
 
-| tab | what it is |
-|---|---|
-| **Transcribe** | Russian text to Grayson-faithful IPA. Photographed Cyrillic text ships too, via tesseract.js. |
-| **Fit** | Does this piece suit my voice? Forecasts, never declares. |
-| **Learn** | Seven sections, Grayson throughout. Shipped. |
-| **Guide** | How to use it, and why it chose that. |
+**NAMES CORRECTED 2026-09-21, transcribed from Dann's ratification of 2026-09-13 and
+built in `5f7be82`.** This table had read `Transcribe · Fit · Learn · Guide` since it was
+written, which was three names out of date and named a Fit tab that does not exist.
+
+| tab | French | what it is |
+|---|---|---|
+| **Text** | « Texte » | Russian text to Grayson-faithful IPA. Photographed Cyrillic text ships too, via tesseract.js. |
+| **Markup** | « Annotation » | The score carrying the singer's words and marks. Wire id `shane`. |
+| **Insights** | « Aperçus » | Does this piece suit my voice? Forecasts, never declares. |
+| **Learn** | « Leçons » | Seven sections, Grayson throughout. Shipped. |
+| **Guide** | « Guide » | How to use it, and why it chose that. |
+
+**The drawer band is `Voice` / « Voix »** (N.150, ruled 2026-09-20 and ratified by Dann on
+screen). **`Melody` / « Mélodie » was ratified 2026-09-13 and never built**; the newer
+ruling stands and nothing should build Melody.
+
+**Fit is the tool's name, not a tab.** Ruled by Dann 2026-07-13, invariant in French, and
+restated as current at `i18n.ts:115`. It folded into Voice and Markup, so a string sending
+a singer *to* Fit is wrong while a string saying Fit measures their voice is not.
+
+**THE TAB PADDING IS ONE VALUE AT EVERY WIDTH. Ratified by Dann 2026-09-21** when he asked
+*"We will have consistenct etween desktop and miobile, right?"* and accepted that it is.
+`.pair-member`'s `padding: 0.3rem 0.5rem` sits in `DeskHead.svelte`'s base rule and **no
+media query may narrow it per breakpoint.** At a 390 px viewport the 0.5 rem is what makes
+French fit at all: at the previous 0.7 rem the French pair ran 4.31 px over a 342 px head,
+and before the rename it overflowed by 107 px with `Insights` clipped off the screen
+entirely. **The padding is load-bearing, not cosmetic.**
 
 ---
 

@@ -6831,3 +6831,82 @@ print are untouched, and Dann walks it.
 
 
 ---
+
+---
+
+## Block 31. N.132 CLOSED 2026-09-21. Moved from `OPEN.md` at the close
+
+**Shipped `5f7be82`, five gates at baseline, walked by Dann on the branch alias in both
+languages the same evening.** His ruling, on a drawing of three states: *"Yes, I think Rwo
+3 is our only viuable option."*
+
+### What it was, and why the padding was not cosmetic
+
+The tabs had read "Transcription" and "Score markup" since Dann ratified `Text` / « Texte »
+and `Markup` / « Annotation » on 2026-09-13, and **nothing tracked building them** until
+N.132 was numbered the same day.
+
+**MEASURED 2026-09-21 at a 390 px viewport, where the head has 342 px.** The desk built a
+harness copying `DeskHead.svelte`'s style block value for value; it agreed with the
+live-build figure in `OPEN.md` within 0.9 px, and with the shipped build within 0.2 px.
+
+| state | English | French |
+|---|---|---|
+| **Before, old names at 0.7 rem** | needs 413.28 px, **71.28 px over**, 69 px of text cut | needs 449.23 px, **107.23 px over**, 105 px cut |
+| Ratified names, still 0.7 rem | fits, 35.08 px spare | **4.31 px over.** Still does not fit |
+| **Ratified names at 0.5 rem** | 54.20 px spare | 14.81 px spare |
+
+**So `Insights` and « Aperçus » were clipped off the screen entirely before this ship**,
+`.pair` carrying `overflow: hidden`. **`DeskHead.svelte`'s own comment had said so since
+N.127** (*"at 390 px the head does not hold three documents, and the direction there is
+Dann's to rule"*) **and the question had never been put to him.** His ruling discharged it.
+
+**The 0.5 rem padding is what makes French fit at all.** The names alone do not.
+
+### What the spec got wrong, caught before briefing
+
+**A third of the 2026-09-13 spec was superseded and briefing it as written would have
+undone N.150.** It ruled the drawer band to `Melody` / « Mélodie »; the band reads `Voice`
+/ « Voix » by Dann's later ruling of 2026-09-20, ratified by him on screen. **The newer
+ruling stands, `Melody` was never built, and nothing should build it.** Every line number
+in the spec had also moved, and its trap 2 was already resolved.
+
+### The walk
+
+Driven by the desk in Dann's own Chrome on the alias, read-and-measure only, per
+`ENVIRONMENT.md` §`THE DESK DRIVES HIS CHROME AND HE RULES ON SHOTS`. Live readings:
+computed padding 8px each side, pair 183.92 px against the harness's 183.83, desk head
+528.05 px spare. French « Texte | Annotation | Aperçus » with « Leçons » and « Guide ».
+**His language was English when found and was returned to English.**
+
+**NOT ESTABLISHED, and it stayed that way:** no photograph at 390 px. `resize_window`
+reported success without moving the window, twice, and `outerWidth` read junk, so the
+narrow view could not be captured. **Three instruments agreed on the numbers instead**,
+spanning 54.0 to 55.9 px spare in English and 14.6 to 16.4 px in French.
+
+### Its residue, and where each part went
+
+- **`upload.banner.reader` told a singer to type words "in Transcription".** Shipped the
+  same night as `8bd1aff`, an N.154 row. **It covers the PDF intake too** (`ingest.ts:66`).
+- **`a11y.paper` still reads "Transcription"**, so a screen reader names that region
+  differently from the tab. **Dann ruled label harmony into N.131** on 2026-09-21:
+  *"Yes please add harmoizing the labels to N.131."*
+- **A read-only Sonnet sweep of all 614 dictionary entries found no other stale string**,
+  which bounded the rename's damage to three keys, all already known. Memo
+  `memo-n154-stale-surface-names-sweep_r1_2026-09-21.md`. **It cost 116,375 tokens against
+  the desk's 30k to 50k quote**, the third overrun of the day.
+- **`profile.scoreRegionAria` was left alone.** The sweep called it stale by matching a
+  name; the desk read `VoiceProfilePane.svelte:991` and found it labels a region holding
+  `scorePages`, so « Partition annotée du répertoire » is accurate description.
+
+### The desk's two errors in this item, both caught by Code
+
+1. **The brief stated no test asserted the old strings.** `e2e-phone/loupe-scan.test.ts:67`
+   did. The desk's grep covered three test directories and that is a fourth.
+   `ENVIRONMENT.md` now names all four.
+2. **A fixed `width: 62px` was chosen for the « PARTITION » fix from one font on one
+   machine**, leaving 0.61 px of headroom against Menlo and none against Consolas or
+   Android's monospace. Corrected to `min-width: 62px` in the same session; Code's control
+   forced Verdana and confirmed the tag grows rather than overlapping.
+
+Brief `brief-n132-ratified-names-and-tab-padding_r1_2026-09-21.md`.

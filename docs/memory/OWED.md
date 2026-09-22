@@ -135,6 +135,30 @@ asks what is outstanding, or when the one thing closes and the next is being cho
 4. **Nineteen gaps after a rest read "before the first entry".** The selection
    itself is correct; only the wording is wrong. Code flagged it and left it alone.
 
+### New from the N.132 and N.154 closes, 2026-09-21. Five, none blocking the beta
+
+1. **THE RECEIPTS WANT ONE SHARED TAG COLUMN, AND THE FIX SHIPPED TONIGHT IS THE CHEAP
+   ONE.** `.intake-receipt .tag` is now `min-width: 62px` with `flex: none`, which can
+   never collide again, **but the two receipts line up only while every tag fits inside
+   62 px.** Code's control forced Verdana and the tag grew to 62.58 px, pushing the
+   filename 0.58 px right of the poem receipt's. **The durable fix is one grid column
+   sized to the widest tag across both receipts**, which needs a markup change because the
+   two receipts are sibling divs. Do it whenever the drawer is next opened.
+2. **NOT ESTABLISHED: whether « PARTITION » fits 62 px in Consolas or in Android's generic
+   monospace.** Measured only against Menlo, at 61.38 px with 0.61 px spare. `min-width`
+   makes a miss harmless rather than impossible, so this is a tidiness debt, not a defect.
+3. **At a 390 px viewport the poem receipt's line gets no room at all.** Found by Code
+   2026-09-21 while checking the tag fix; **it predates that fix and is unchanged by it.**
+   The count, the `from score` tag and the two buttons take the whole row, so "1 lines" is
+   squeezed to 0 px. Same cure as row 1.
+4. **The poem receipt reads "1 lines" and « 1 lignes ».** `intake.lines` has no singular
+   form. **Recorded in `INBOX.md` on 2026-09-16 and still live five days later**, which is
+   the same way the « PARTITION » collision survived: an inbox note nothing tracks.
+5. **The reader banner opens "Read from a picture" for a PDF as well as a picture.**
+   `ingest.ts:66` gives both intakes `upload.banner.reader`, and the drawer prints
+   "Format: PDF → MusicXML" two lines above it. **Seen by Dann on screen 2026-09-21.** It
+   is an N.154 row rather than anything tonight's ships broke.
+
 **And one that is N.162's, not a debt:** a caret's hit centre sits 15.6 to 21.4 px
 from the nearest note's, and `nearestTarget` pools both. **NOT ESTABLISHED: whether
 clause 13's "its neighbour" covers any tap target or only the next caret**, which
