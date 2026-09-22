@@ -243,9 +243,14 @@ confirm how the value is held.
 the pane and his Chrome**, and whether he ever sees the English is NOT ESTABLISHED. Code's
 words: *"That could show up on his walk."*
 
-**DESK RECOMMENDATION, unruled: this rides with N.131 rather than taking a number.** It is a
-French-parity failure whose cause is timing rather than a missing translation, and N.131's
-triage has to look at it either way.
+~~**DESK RECOMMENDATION, unruled: this rides with N.131 rather than taking a number.**~~
+**WITHDRAWN THE SAME DAY, 2026-09-22, after Dann stated the principle now in `PRODUCT.md`
+§"Both languages, start to finish".** His point: *"Some can, some can't."*
+
+**REVISED DESK RECOMMENDATION, still unruled: number it.** A singer who cannot read English
+gets **no information at all** for the length of that wait, on the one screen whose whole
+job is to say why nothing is happening. **That is not a parity tidy-up and it should not
+wait on N.131's triage.** Dann to rule.
 
 ### TWO CODE COMMENTS STILL PROMISE THE READER RUNS ONCE. Found by Code 2026-09-22
 

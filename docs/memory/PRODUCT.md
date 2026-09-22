@@ -732,3 +732,28 @@ label and he ruled its French. **Belongs with "Strings ruled with their French",
 **Still true and carried from the spec:** placed syllables are black and unplaced are
 tertiary grey, per N.114 ruling 4 (Dann 2026-09-07, *"Committed is black"*). The desk's
 first draft said the reverse and he corrected it the same day.
+
+---
+
+## BOTH LANGUAGES, START TO FINISH. Stated by Dann 2026-09-22
+
+**His words:** *"I know you're aware of thew importance of French parity, and that French
+users aren't jsut capricious humans who insist on imposing French when they can really
+speak English. Some can, some can't. We render our app in both of Canada's official
+languages from start to finish."*
+
+**What this settles, and it is a weighting, not a new feature.**
+
+- **A French string is not a convenience for someone who could have read the English.** Some
+  singers cannot. **So an English string reaching a French session is a singer receiving
+  nothing**, not a singer receiving something slightly wrong.
+- **"Start to finish" includes the screens nobody designs:** waiting lines, status text,
+  error messages, accessible names. **A minute of English on a loading screen is a minute of
+  silence for that singer.**
+- **It bears directly on how N.131 is weighed.** French parity items are not cosmetic, and
+  a parity failure whose cause is timing rather than a missing translation is the same
+  failure to the singer.
+
+**What it does NOT do:** it does not make every untranslated string release-blocking.
+`SEQUENCE.md` dependency 6 still holds, N.130 inside the release and N.131 outside it, and
+Dann has not moved that. **It raises the weight of a parity failure, not the schedule.**

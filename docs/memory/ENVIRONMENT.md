@@ -2243,6 +2243,16 @@ shell sits in `~`, where a repo-relative path fails.
 
 ---
 
+
+**AND IT WILL TAKE A SNAPSHOT OF THE DESK MID-WRITE. 2026-09-22.** Dann ran the ship while
+the desk was part way through a two-file memory write. **The commit caught `OWED.md` as it
+stood at that instant and missed the revision written seconds later, and missed `PRODUCT.md`
+entirely.** Nothing was lost, because both edits were on disk; **one logical change simply
+split across two commits**, which is a record-integrity problem rather than a data one.
+
+**So after any ship that runs while the desk is writing, verify what actually landed:**
+`git show <sha>:<path> | grep` for the content, not just `git status`. **Do not assume the
+commit holds what you just wrote.**
 ## THE BRANCH ALIAS IS THE N.72 INSTRUMENT
 
 `ilya-git-shane-dannmittons-projects.vercel.app` is the same address every ship,
