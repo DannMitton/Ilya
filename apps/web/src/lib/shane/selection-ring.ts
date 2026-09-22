@@ -194,6 +194,10 @@ function eventInk(
  * it where every note on the system is a melisma or unplaced. Null where
  * the system has no underlay at all.
  */
+export function hasUnderlay(sys: Element): boolean {
+	return ipaBaselineOf(sys) !== null;
+}
+
 function ipaBaselineOf(sys: Element): number | null {
 	let ipa = -Infinity;
 	let cyr = -Infinity;

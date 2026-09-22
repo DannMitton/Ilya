@@ -44,6 +44,8 @@ next session the same hour it cost the last one.
 | the gate literal is in two places | `the N.97/N.97b session` |
 | your own `git add -A` swept Code's tree | `git add -A` |
 | you are about to cite a file's zero grep hits | `IS THE VOWEL ENGINE` |
+| a loupe or measure-scoped selector returns nothing on a scanned score | `SCAN EVENT IDS ARE NOT m-PREFIXED` |
+| Code says it saved a memory or corrected a note | `CODE REPORTS A MEMORY WRITE THAT IS NOT ON DISK` |
 | you are about to give Dann a use count | `A GREP COUNT IS NOT A USE COUNT` |
 | you are about to say no test asserts a string | `MUST NAME \`apps/web/e2e-phone/\`` |
 | quoting the cost of a sweep of `i18n.ts` | `A SWEEP OF \`i18n.ts\` COSTS ABOUT 120k` |
@@ -3994,3 +3996,36 @@ live."
 `/_app/immutable/**.js` files referenced from the root HTML found **neither** the old nor
 the new sentence, because the dictionary is not in them. **That null result is a failed
 lookup, not an absence**, and reporting it as one would have been tether 14 again.
+
+### SCAN EVENT IDS ARE NOT `m`-PREFIXED. Found by Code 2026-09-22
+
+**A score parsed from MusicXML gives events ids like `m5-1-2`. A score READ FROM INK gives
+ids like `r4-928`.** Same app, same loupe, two id vocabularies.
+
+**What it cost:** `Loupe.svelte` decided whether a mark belonged to the held measure by
+testing whether its id started `m{index}-`. **On every scan-derived song, every note in the
+held measure therefore counted as foreign**, and the loupe's crop narrowed past all of them.
+On m. 5 of the Lamm scan the visible band ran x 233.4 to 262.1 while the notes stood from
+35.8 to 249, **leaving only the closing barline on screen.** That is N.165, and it blanked
+the loupe on every measure of every scanned song, not just the one Dann found.
+
+**THE RULE: never decide measure ownership from the spelling of an id.** Take the held
+measure's events from the score (`readingScore.vocalLine`), which is what the fix does.
+**And when a selector or a prefix test returns nothing on a scanned score, suspect the id
+vocabulary before suspecting the data.**
+
+### CODE REPORTS A MEMORY WRITE THAT IS NOT ON DISK. Twice, 2026-09-21 and 2026-09-22
+
+**Both times Code's report ended with a line saying it had corrected or saved a memory
+note, and both times `git status` showed no change under `docs/memory/`.**
+
+- 2026-09-21: *"I updated one memory note: its upload steps still named the old SCORE MARKUP
+  tab."* No such change existed; the desk repaired the two stale names itself at the close.
+- 2026-09-22: *"I saved one memory: scan event ids are not `m`-prefixed."* No such change
+  existed; the section above is the desk writing it.
+
+**So: grep for the content of any memory note Code says it wrote, before believing it.**
+Cause NOT ESTABLISHED, and it may be as simple as Code writing to its own session memory
+rather than to this folder. **The cost is silent: a trap that cost an hour goes unrecorded
+and the next session pays it again.**
+

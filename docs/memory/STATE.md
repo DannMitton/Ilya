@@ -120,7 +120,18 @@ does not repeat them.
   lyrics; the desk's, that the measure is over-full. **The control fixture separates them in
   one run.** Brief
   `../sessions/brief-n165-n166-blank-loupe-and-the-reloaded-scan_r1_2026-09-22.md`.
-  **It bears on N.151's ruling that Ilya must tolerate an over-full measure.**
+  **CAUSE FOUND BY CODE 2026-09-22, AND BOTH HYPOTHESES DIED.** The control fixture draws
+  its notes in the loupe, which killed Dann's; scan m. 4 is **under**-full, 4 of 6, and is
+  blank the same way, which killed the desk's. **The real cause: `Loupe.svelte` decided a
+  mark belonged to the held measure by testing whether its id started `m{index}-`, and a
+  score read from ink gives ids like `r4-928`**, so every note counted as foreign and the
+  crop narrowed past all of them, leaving the closing barline. **On m. 5 the visible band
+  ran x 233.4 to 262.1 against notes at 35.8 to 249.** **It blanked the loupe on every
+  measure of every scan-derived song**, not just this one. **The desk's own lead, the null
+  return, had nothing to do with it**, and `renderLoupeMeasure` drew six event groups
+  correctly. **FIXED, gates at baseline, WALK OWED.** The squircle rode with it and is a
+  sibling of N.141's clamp, not the clamp: `ringRoom` widened the band above the ring and
+  never below, which only shows on a system with no underlay.
 - `[ ]` **N.166. A stored scan may need the page reader to redisplay.** DESK DEFAULT number,
   found by the desk 2026-09-22 while investigating N.165. **The same song, the same library,
   the same origin, in the desk's own tab: the score never drew**, and the drawer sat on
@@ -128,7 +139,14 @@ does not repeat them.
   **The desk's instrument was sound**: `Kabalevsky T05` rendered in the same tab, 28 SVGs
   and 834 elements. **If real, every scan-derived song re-runs the reader on every load**;
   Dann's 23-page PDF took 97.2 s on 2026-09-17. **NOT ESTABLISHED**, and the brief says to
-  report it rather than fix it. Same brief as N.165.
+  report it rather than fix it. Same brief as N.165. **ESTABLISHED REAL AND MEASURED BY CODE 2026-09-22, and NOT FIXED**,
+  per the brief. `ScoreUploader.svelte:771-776` restores a song by calling
+  `handleFile(file, restore.answers)`, **which sends the stored ink back through
+  `ingestScoreFile` with `readPages`**, so the page is read again from scratch. **Measured
+  after a reload of a ONE-page PDF: « Préparation du lecteur de page » showed from 3.8 s to
+  61.3 s, and the score appeared at 61.3 s.** Dann's 23-page PDF would pay about its 97.2 s
+  read on every reload plus the warm-up, **which is an estimate from the one-page timing,
+  not a measurement.** **The string says "This will only happen once."**
 
 ### Numbered 2026-09-21
 

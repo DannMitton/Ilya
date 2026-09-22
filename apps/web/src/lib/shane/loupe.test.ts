@@ -777,5 +777,9 @@ describe('the loupe\'s own squircle', () => {
 		// A reach the pad already covers adds nothing.
 		expect(ringRoom(page, 5.5, 0.5, 2)!.above).toBe(13.88);
 		expect(ringRoom(null, 5.5, 0.5, 10)).toBeNull();
+		// N.165: below only when a system has no underlay, 7.25 more for a reach of 10.
+		expect(ringRoom(page, 5.5, 0.5, 10, 10)!.below).toBeCloseTo(68.61 + 7.25, 10);
+		expect(ringRoom(page, 5.5, 0.5, 10, 10)!.above).toBeCloseTo(13.88 + 7.25, 10);
+		expect(ringRoom(page, 5.5, 0.5, 10, 2)!.below).toBe(68.61);
 	});
 });

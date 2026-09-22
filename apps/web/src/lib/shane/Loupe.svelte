@@ -21,7 +21,7 @@
 	import { onMount, type Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
-	import { RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/shane/selection-ring';
+	import { hasUnderlay, RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/shane/selection-ring';
 	import type { Slot, PairingMap } from '$lib/shane/pairings';
 	import type { Cursor } from '$lib/shane/entry';
 	import LoupeSyllables from '$lib/shane/LoupeSyllables.svelte';
@@ -1242,8 +1242,13 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   frame always used. */
 		const page = pageMetrics(container);
 		/* N.141 step 2: the band leaves room above for the selection ring's
-		   reach, which half a space did not. `ringRoom` in `loupe.ts`. */
-		const crop = inkCrop(ringRoom(page, lineGap, INK_PAD_SP, RING_REACH), staffTop, lineGap, INK_PAD_SP, {
+		   reach, which half a space did not. `ringRoom` in `loupe.ts`. N.165:
+		   and below, where any system on the page has no underlay, because
+		   there the ring closes `RING_PAD_Y` past the ink instead of on the IPA
+		   row. Page-wide, like the band, so the frame does not breathe. */
+		const bare = [...container.querySelectorAll('[data-system]')].some((s) => !hasUnderlay(s));
+		const ringBand = ringRoom(page, lineGap, INK_PAD_SP, RING_REACH, bare ? RING_REACH : 0);
+		const crop = inkCrop(ringBand, staffTop, lineGap, INK_PAD_SP, {
 			top: sysMinY,
 			height: sysHeight,
 		});
@@ -2001,7 +2006,17 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   discipline clause 6's own footprint widening uses): the barline
 		   reference is right everywhere it is not contradicted by an
 		   actual mark, and only actual marks narrow it further. */
-		const ownPrefix = `m${measureIndex}-`;
+		/* THE HELD MEASURE'S OWN EVENTS ARE READ OFF THE SCORE, NOT OFF THE ID'S
+		   SPELLING. N.165: this was `m${index}-`, the prefix the MusicXML and
+		   MNX parsers write, and the page reader writes `r4-928` (row and x).
+		   On every scan-derived song every one of the held measure's own notes
+		   read as foreign, and the pass below pulled the clip in past all of
+		   them to the closing barline. MEASURED 2026-09-22 on the Lamm scan,
+		   m. 5: clip x 233.4, 28.7 wide, notes from 35.8 to 249. Rests are
+		   included, which `ownIds` does not carry. */
+		const ownEvents = new Set(
+			drawnFrom.readingScore.vocalLine.filter((ev) => ev.measureIndex === measure).map((ev) => ev.id),
+		);
 		/* READ FROM `sysEl`, THE MOUNTED RENDER, NOT `clone`. `clone` is a
 		   detached copy at this point in the effect (`clone.innerHTML` is not
 		   read until the frame is assembled, well after), and `getBBox` on a
@@ -2052,7 +2067,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				el.getAttribute('data-of-event') ??
 				el.getAttribute('data-ipa-of') ??
 				el.getAttribute('data-withheld');
-			const isForeign = el.hasAttribute('data-key-signature') || el.hasAttribute('data-clef') || (id !== null && !id.startsWith(ownPrefix));
+			const isForeign = el.hasAttribute('data-key-signature') || el.hasAttribute('data-clef') || (id !== null && !ownEvents.has(id));
 			if (!isForeign) continue;
 			const b = markInk(el);
 			if (!b) continue;

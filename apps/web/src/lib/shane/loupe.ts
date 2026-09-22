@@ -739,10 +739,29 @@ export function stripRing(
  * Without Sun song 1, 60 of 96 notes, by 0.37 to 3.37 units. The band grows
  * above by only what the pad does not already give. It is a page-wide constant
  * like the band itself, so the frame still does not breathe between notes.
+ *
+ * N.165, BELOW AS WELL, BUT ONLY WHERE A SYSTEM HAS NO UNDERLAY. There
+ * `ringBox` closes the ring `RING_PAD_Y` below the note's own bottom or the
+ * staff's, whichever is lower, so it reaches `reachBelow` past the lowest ink
+ * and the half-space pad cut it: MEASURED 2026-09-22, the Lamm scan's C♯4 in
+ * m. 6 lost 10.15 px of a 119.98 px window, and the no-lyrics control's C4 lost
+ * 13 px. Where every system carries an underlay the ring closes on the IPA
+ * row, inside the band, and the caller passes 0, so nothing there moves.
  */
-export function ringRoom(page: PageInk | null, lineGap: number, padSpaces: number, reach: number): PageInk | null {
+export function ringRoom(
+	page: PageInk | null,
+	lineGap: number,
+	padSpaces: number,
+	reach: number,
+	reachBelow = 0,
+): PageInk | null {
 	if (!page) return page;
-	return { ...page, above: page.above + Math.max(0, reach - lineGap * padSpaces) };
+	const pad = lineGap * padSpaces;
+	return {
+		...page,
+		above: page.above + Math.max(0, reach - pad),
+		below: page.below + Math.max(0, reachBelow - pad),
+	};
 }
 
 /**

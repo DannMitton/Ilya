@@ -223,6 +223,16 @@ steps 2 and 2b and shipped in `fe4d2c7` and `6e98057`.
 **NONE OF THESE IS NUMBERED.** Per `CONTRACT.md` §3.1 nothing enters the tracker unless Dann
 rules it in, so they stand here until he does.
 
+### New from N.165's fix, 2026-09-22. Two, neither blocking
+
+1. **NOT ESTABLISHED: whether the selection ring closes on a partly-lyric page.** Code's fix
+   leaves room below the ring when **any** system on the page carries no underlay. **The
+   case it did not find or test is a page WITH lyrics where the held measure has no
+   syllables.** Its words: *"I did not find or test that case."*
+2. **N.166's cost for a long PDF is an estimate, not a measurement.** 61.3 s was measured on
+   a one-page PDF in a hidden pane with the tone lift applied. **Dann's 23-page figure of
+   about 97.2 s per reload is extrapolated from it.**
+
 ### New from the bookkeeping audit, 2026-09-21. THE RECORDS OVERSTATE AND UNDERSTATE AT ONCE
 
 **Found when Dann asked how close the open work was, and the honest answer was that the
