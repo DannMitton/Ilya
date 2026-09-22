@@ -2033,6 +2033,63 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
 2. **Carets are drawn only while Corrections is the active panel.** With the loupe alone, or with Syllables showing, no insertion points are drawn. His reasoning, and the desk agrees: a mark that appears when it cannot be used is noise, and the loupe's default state is reading, not editing.
 
 
+15. **THE BEAM IS THE ONE EXCEPTION TO "TOUCHES NOTHING". RULED BY DANN
+    2026-09-21, on the desk's recommendation.** His words: *"The beam is the one
+    exception I can think of. Carets must intersect it, there's no other
+    option."*
+    - **The desk proposed it and Dann ruled it in.** The record carries both
+      halves, per CONTRACT section 3.
+    - A caret runs past the top and bottom staff lines with an arrowhead at each
+      end (clause 1). On beamed notes the beam sits in the band those arms reach
+      into, so the overlap is structural and no spacing removes it. Measured at
+      stage 3b: 11 gaps whose caret a beam spans at any spacing (Code's count,
+      2026-09-21, not verified by the desk; `OPEN.md` section N.153 carries 9
+      from a different measurement on 2026-09-17).
+    - **So a beam is not "something" for the purpose of the caret's position
+      rule.** Noteheads, stems, accidentals, and the squircle still are.
+    - **The scan reports beam contacts as their own named row**, counted and
+      visible, never folded into the violations.
+    - **The condition that would justify departing from it:** if a caret crossing
+      a beam ever reads as a collision rather than as a mark passing behind the
+      music, the exception is withdrawn for that case and Dann is shown the
+      drawing before anything is changed.
+
+16. **THE LOUPE'S OWN SPACING. RULED BY DANN 2026-09-20. LIFTED HERE FROM
+    N.153's SPEC AT N.153's CLOSE, 2026-09-21, UNREWORDED.**
+
+    **It is lifted because it would otherwise have gone to the archive with
+    N.153's account, which is the exact failure `README.md` records from
+    2026-09-20.** Two of its three parts are not built, so it is live work, not a
+    closed item's residue.
+
+    Both quantities are loupe-local, under his ruling that *"the engraved measure
+    on Paper is not the same as the Loupe."*
+
+    | quantity | today | ruled | build state, read 2026-09-21 |
+    |---|---|---|---|
+    | meter run-in | 2 sp, Gould rule 240 p. 42 | **1 sp in the loupe; the page keeps 2** | **NOT BUILT** |
+    | stave run-on past the closing barline | 4.6 sp | **1 sp** | **BUILT** |
+
+    - **The run-on is built.** `EXCERPT_TAIL_SP = 1` (`loupe.ts:598`), spent at
+      `Loupe.svelte:935`, and zero on a final barline.
+    - **The meter run-in is NOT BUILT.** `METER_RUN_IN_SP = 2`
+      (`staff-renderer.ts:169`) is the only value in the tree, and the loupe's
+      render passes no override: `bundleRenderOptions`
+      (`loupe-render.ts:58-69`) carries spacing, clef, the five previews and the
+      font, and `renderLoupeMeasure` (`:79-89`) adds `minGap` and deletes
+      `targetWidth`. So the loupe draws its meter at the page's 2 sp.
+    - **THE TIE RUNS INTO THE RUN-ON, tapered**, as if reaching a note that is not
+      shown. **NOT BUILT.** No `taper` appears in `Loupe.svelte`, `loupe.ts` or
+      `loupe-render.ts`, and the tail panel draws only `<line>` elements
+      (`Loupe.svelte:2590-2597`).
+    - **His instruction on how much to think about the run-on:** *"Do not overthink
+      the width of the stave that exceeds the barline, just make it shorter than
+      what it is now, visually."*
+    - **A desk caveat he heard and waved past:** 1 sp is about 33 px at the zoom he
+      walked, and the desk's reading is that it is the tightest a taper can be and
+      still read. He chose to build it and look rather than argue it. **Walk a tied
+      measure when the taper lands.**
+
 ### THE LOUPE'S TWO MODES, RULED BY DANN ON THE WALK OF 2026-09-19 INTO 2026-09-20
 
 **MOVED HERE 2026-09-20 from `STATE.md`, verbatim and unreworded, because six of these

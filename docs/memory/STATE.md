@@ -43,42 +43,47 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-21, about 20:10
+> ### READ THIS FIRST. Written at the close of 2026-09-21, about 22:15
 >
-> **THE ONE THING IS N.153 STAGES 4 AND 5.** DESK DEFAULT, and Dann can name another. Stages 1
-> to 3a are shipped; **stage 4 retires `loupe.ts`'s crop helpers and stage 5 is the
-> whole-fixture scan, and no standalone scan harness exists in the tree.** `SEQUENCE.md`
-> dependency 7 puts N.153 before any further caret work and nothing before it, and the
-> autonomous run lists it first for value.
+> **THE ONE THING IS SHIPPING AND WALKING N.153 STAGE 5.** DESK DEFAULT, and Dann can name
+> another. **`15b7d1a` is committed locally and NOT PUSHED**, so nothing of stage 5 is on the
+> branch alias yet and it cannot be walked. **The ship script refuses on untracked files**, and
+> the desk's two briefs plus this session's `OPEN.md` and `STATE.md` edits are untracked or
+> unstaged, so Dann stages first.
 >
-> #### WEEK 2 IS CLEAR ON ITS FIRST DAY
+> #### N.153 IS CLOSED ON SCOPE AND IS NOT DONE
 >
-> **Five ships on 2026-09-21**, every one walked: `1d18514` (N.159, closing N.136 and N.158),
-> `2fb7516` and `46ac52f` (N.160 steps 2 and 3), `44c5830` and `9782d8e` (N.161 and N.161b).
-> **Everything `SCHEDULE.md` put in week 2 is done**, and N.132 and N.141's last step already
-> stand in week 3.
+> Dann ruled "close N.153" at 22:07 when the desk put the tap-pooling finding to him. **The
+> item's own number moved**: caret-to-caret separation was 1.13 to 7.89 px on 2026-09-18 and is
+> **44.00 to 44.16 px as drawn** on all 17 measures that carry notes. **It is WRITTEN until he
+> walks it.**
 >
-> #### WHAT THE DAY ESTABLISHED, in one line each
+> #### WHAT THE CLOSE ALMOST BURIED, and this is the README's own warning firing
 >
-> - **The score obeys every Notation switch**, drawn fresh from the live poem, nothing stored.
-> - **Dann's frozen seats are repaired:** the heal wrote 14 of 96 and the dry run now reads 91
->   address, 1 rejected, 4 unfound.
-> - **A plain reload was rewriting up to 60 stored seats**, and no longer can. The trigger was a
->   string comparison that has drifted three times.
-> - **A syllable placed while the dictionary is still loading now survives**, reproduced and
->   fixed the same evening.
+> **Two parts of Dann's spacing ruling of 2026-09-20 are NOT BUILT**, and they lived only
+> inside N.153's spec. They are lifted verbatim to `OPEN.md` §THE CARET clause 16:
 >
-> #### WHAT IS OWED ON ALL OF IT
+> - **The meter run-in is still the page's 2 sp**, not the ruled 1 sp in the loupe
+>   (`staff-renderer.ts:169`, and the loupe's render passes no override).
+> - **The tie taper into the run-on is not drawn at all.** No `taper` exists in `Loupe.svelte`,
+>   `loupe.ts` or `loupe-render.ts`.
+> - The run-on itself IS built at 1 sp (`loupe.ts:598`, `Loupe.svelte:935`).
 >
-> - **Paint on a phone is NOT MEASURED.** Every timing this month is desktop.
-> - **The five «одинокая» notes.** The deferred ruling is still not asked, and not for want of a
->   count: they may be blocked by a seat that already holds the word rather than orphaned by a
->   word that left. **Settle that first** (`OPEN.md` §N.160).
-> - **`refreshPairings`, `stressAcutedCyrillic`'s lookup, `ownedByPoem` and re-seat rules 1 and
->   2** are still in the tree and owed as their own commit (`OWED.md`).
-> - **The `updatedAt` write on every load**, and **`#onRemoteWrite`'s guard**, which the sweep
->   flagged as the one row it did not verify to its own standard. Both in `OWED.md`.
-> - **N.157**, replacing a score does not re-derive the seats, is open and untouched.
+> #### WHAT IS OWED OUT OF THIS SESSION
+>
+> - **N.162**, the caret and the note competing for one thumb. Numbered, spec not written.
+> - **`core-loop.test.ts` fails before any change this session.** It waits for `.status-ok`,
+>   removed from `IntakePanel.svelte:225`, so all 21 tests time out. **No gate catches this,
+>   because `ilya-ship.sh` does not run Playwright.**
+> - **Rule 5a's one violation, m. 17:** a caret stands 2.90 px right of centre because
+>   `closingBarline` returns the final double bar's outer edge (`loupe.ts:691`). Every other
+>   measure is within 0.28 px. **The new scan exits non-zero on it**, so the gate is red until
+>   it is settled.
+> - **NOT ESTABLISHED:** why m. 7's `minGap` is 69.65 where stage 3b recorded 69.33, the other
+>   16 matching exactly; what clause 13's "its neighbour" covers; behaviour at any width but
+>   390 px.
+> - **19 gaps after a rest read "before the first entry".** Wording only; the selection is
+>   right.
 
 ## THE TRACKER
 
@@ -96,6 +101,20 @@ does not repeat them.
 
 
 ### Numbered 2026-09-21
+
+- `[ ]` **N.162. A caret and a note compete for the same thumb.** Numbered 2026-09-21,
+  DESK DEFAULT number, split off at N.153's close **on Dann's ruling to close N.153 rather
+  than hold it open for this.** **Measured by Code's stage 5 scan, 2026-09-21: a caret's hit
+  centre sits 15.6 to 21.4 px from the nearest note's hit centre**, and `nearestTarget` pools
+  notes and carets and resolves by nearest centre, so the catchment around a caret is about
+  eight to ten pixels. A thumb that drifts past it selects the note and the insert does not
+  happen. **It is a different mechanism from N.153's**, which was spacing: caret-to-caret now
+  clears 44 px and this does not move with it. **Clause 13's literal words are met and its
+  reasoning is not:** the clause was prompted by a caret 22 px from a note, and the distance
+  is now worse than that. **NOT ESTABLISHED: whether a note must stay tappable inside
+  Corrections**, which decides the shape of any fix; the desk has not read that interaction.
+  **Clause 3's fallback condition may be live**, and Dann hears about it before a chip row is
+  built. Spec not yet written.
 
 - `[x]` **N.161 and N.161b. The load path should not write. CLOSED 2026-09-21**, shipped
   `44c5830` and `9782d8e`. **The fold now runs only where placements are built from nothing.**
@@ -203,7 +222,7 @@ does not repeat them.
   its values moved, because `sections.test.ts:67` asserts on `BAND_IDS`.
 - `[~]` **N.152. Playback of the Markup.** LATER, its own cardinal, asked for by Dann
   2026-09-17. Spec in `OPEN.md`.
-- `[ ]` **N.153. The loupe re-engraves the held measure at its own spacing.**
+- `[x]` **N.153. The loupe re-engraves the held measure at its own spacing. CLOSED ON SCOPE 2026-09-21**, ruled by Dann in those words when the desk put the tap-pooling finding to him. **WRITTEN, NOT DONE: stage 5 is committed locally as `15b7d1a`, not pushed, and not walked.** Stage 4 closed as "knowingly keep" (nothing retired; three symbols are test-only and kept for the proofs they carry). Stage 5's scan reaches the 44 px floor on all 17 measures that carry notes: **44.00 to 44.16 px as drawn, against 1.13 to 7.89 px on 2026-09-18**, converging in 11 renders each, 49 of 49 real taps correct on m. 5, five gates at baseline. **Its remainder is N.162.** **Two parts of his 2026-09-20 spacing ruling are NOT BUILT and were lifted to `OPEN.md` §THE CARET clause 16 rather than carried into the archive.** Brief `../sessions/brief-n153-s5-whole-fixture-scan_r1_2026-09-21.md`, memo `../sessions/memo-n153-s5-whole-fixture-scan_r1_2026-09-21.md`, stage 4 brief `../sessions/brief-n153-s4-what-retires_r1_2026-09-21.md`.
   Numbered by Dann 2026-09-18. Spec in `OPEN.md`, five stages, each landing on its
   own. **It is what closes the 27 caret collisions**, which are scale-invariant and
   reachable no other way. Account of the stop that produced it:
@@ -435,5 +454,7 @@ the sharpest is that both shapes the desk offered for N.161b were wrong, and obe
 would have built the worse one. `ENVIRONMENT.md` gained the five gate moves, the
 wrong-document trap, and how to hold a loading window open. **NOT MEASURED: paint on a phone.
 NOT ESTABLISHED: the five «одинокая» notes, `#onRemoteWrite`'s race, and the `updatedAt` write
-on every load.** Memory NOT committed.*
+on every load.** **Memory IS committed this time:** `2cd4094` carries every file named above,
+and this corrected line rides the commit after it. A clean `git status` at the next session's
+open is expected, not a surprise.*
 
