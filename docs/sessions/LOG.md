@@ -6677,3 +6677,157 @@ word.
 moves to week 3 beside N.132.** The week-5 buffer is already spent.
 
 ---
+
+---
+
+## Block 30. N.153 CLOSED ON SCOPE 2026-09-21. Moved from `OPEN.md` at the close
+
+**Dann ruled "close N.153" at 22:07**, when the desk put the caret-versus-note tap
+finding to him and recommended closing the item and numbering the remainder. Shipped
+`9b05ddd`, which carried Code's `15b7d1a`. **All five stages are in.**
+
+**What the item was for, and whether it delivered:** the tap separation between a
+caret and its neighbouring caret was 1.13 to 7.89 px at phone width on 2026-09-18,
+against a 44 px floor. It is **44.00 to 44.16 px as drawn** on all 17 measures that
+carry notes, converging in 11 renders each, measured by the stage 5 scan at 390 x 844.
+
+**Stage 4 closed as "knowingly keep".** `OPEN.md`'s wording, that roughly a dozen
+functions "mostly retire with the crop", did not hold: stage 3b deleted the clone and
+repointed the same head, body, meter and tail arithmetic at the loupe's own
+one-measure render, so the helpers stayed load-bearing. Three symbols have no
+production caller and were kept for the proofs they carry: `renderLoupeSystem`
+(`loupe-render.ts:170`), `windowScale` (`loupe.ts:815`), and the `METER_RUN_IN_SP`
+re-export (`loupe.ts:369`). A read-only Sonnet audit established the use sites; it
+cost 268,709 tokens against a 200k quote the desk had given, **and the quote was the
+desk's miss, not the agent's.**
+
+**WHAT DID NOT CLOSE, and it is why this block exists.** Two parts of Dann's spacing
+ruling of 2026-09-20 are **NOT BUILT** and lived only inside the spec below. They are
+lifted verbatim to `OPEN.md` §THE CARET clause 16 and are live work: **the meter
+run-in is still the page's 2 sp** rather than the ruled 1 sp in the loupe
+(`staff-renderer.ts:169`), and **the tie taper into the run-on is not drawn at all**
+(no `taper` in `Loupe.svelte`, `loupe.ts` or `loupe-render.ts`; the tail panel draws
+only `<line>`, `Loupe.svelte:2590-2597`). The run-on itself IS built at 1 sp
+(`loupe.ts:598`, `Loupe.svelte:935`). **The README records this exact failure from
+2026-09-20, and checking for it before the move is what caught it.**
+
+**The remainder is N.162**, in `STATE.md` and `SEQUENCE.md`: a caret's hit centre
+sits 15.6 to 21.4 px from the nearest note's, and `nearestTarget` pools notes and
+carets. Clause 13's literal words are met and its reasoning is not.
+
+**Four debts went to `OWED.md`**: `core-loop.test.ts`'s pre-existing failure and the
+missing Playwright gate, the red rule 5a row on m. 17, m. 7's unexplained `minGap`,
+and the nineteen rest gaps whose wording is wrong.
+
+Briefs `brief-n153-s4-what-retires_r1_2026-09-21.md` and
+`brief-n153-s5-whole-fixture-scan_r1_2026-09-21.md`, memo
+`memo-n153-s5-whole-fixture-scan_r1_2026-09-21.md`.
+
+**The spec as `OPEN.md` carried it, verbatim and unreworded:**
+
+## N.153. THE LOUPE RE-ENGRAVES THE HELD MEASURE AT ITS OWN SPACING. Numbered by Dann 2026-09-18.
+
+> **MOVED HERE 2026-09-20 from the N.148/N.149/N.150 section, unreworded.** It is
+> loupe-local spacing and belongs with N.153, not with the mode split.
+
+### THE LOUPE'S SYLLABLES-MODE SPACING. Ruled by Dann 2026-09-20
+
+Both quantities are **loupe-local**, under his ruling that *"the engraved measure on
+Paper is not the same as the Loupe."*
+
+| quantity | today | ruled | where |
+|---|---|---|---|
+| meter run-in | 2 sp, Gould rule 240 p. 42 | **1 sp in the loupe; the page keeps 2** | `staff-renderer.ts:169` |
+| stave run-on past the closing barline | 4.6 sp | **1 sp** | `loupe.ts:598` + `Loupe.svelte:1277` |
+
+**The 4.6 was measured two ways before the ruling:** by reading the tree
+(`CARET_MARGIN` = `lineGap * 2 + SQUIRCLE_CLEARANCE`, itself `lineGap * 1.6`, plus
+`EXCERPT_TAIL_SP` = 1), and by measuring Dann's own screenshots (100 px of run-on at
+21.75 px to the stave space, identical on m. 9 and m. 12). **1 sp lands on Gould rule
+242, p. 42**, her barline-adjacent clearance, which was not the desk's reason for it:
+Dann asked for about a third of what was there.
+
+**His instruction on how much to think about it:** *"Do not overthink the width of the
+stave that exceeds the barline, just make it shorter than what it is now, visually."*
+
+**AND THE TIE RUNS INTO IT, tapered**, as if reaching a note that is not shown
+(m. 12 stops square at the barline today). **The tail panel draws only `<line>` elements**
+(`Loupe.svelte:2367-2375`), so this is new drawing, not a constant.
+
+**A desk caveat Dann has heard and waved past:** 1 sp is about 33 px at the zoom he
+walked, and the desk's reading is that it is the tightest a taper can be and still read.
+He chose to build it and look rather than argue it. **Walk a tied measure when it lands.**
+
+
+**Why it exists.** 27 gaps on 12 of the fixture's 18 measures collide: 18 where a
+neighbour's ink and the squircle leave less room than a caret's own width, as
+little as 0.153 units against a caret 3.74 units wide, and 9 where a caret meets a
+beam (`../sessions/memo-n92-caret-collision_r1_2026-09-17.md` §4). **They are
+scale-invariant**, so no window size closes them; only wider RELATIVE spacing
+does, and only a re-engraved measure can have it. Three passes on 2026-09-17 and
+2026-09-18 each relocated the collisions instead of removing them, which is what a
+shuffle inside a crop can do.
+
+**The rulings it serves**, all in this file, section THE CARET:
+- Clause 6: the loupe's spacing is its own, temporary and situational, and does
+  not bind the page.
+- Clause 7: the loupe shows one measure and nothing else.
+- Clause 8: the loupe may exceed the page's width; the notation's point size is
+  the fixed quantity and the window is the variable one.
+- Clause 1 and the position rule: every caret stands in the middle of the space it
+  names, and touches nothing.
+
+**The mechanism, established 2026-09-18 and not a proposal.**
+`packages/score-parser/src/page-layout.ts` already renders one measure alone at
+its own spacing through `renderAnalyzedStaff(sliceScore(parsed, m, m), analyzed,
+options)`, and `sliceScore` rebases `measureIndex` without touching `ev.id`, so
+every caret, tap and hit rectangle keys off the ids it already uses.
+
+**THE FIVE STAGES, from Code's own plan**
+(`../sessions/memo-n92-loupe-reengraves_r1_2026-09-18.md` §1, read in full). Each
+lands and is verified on its own.
+
+1. **Extract the squircle's box arithmetic** out of `VoiceProfilePane.svelte` into
+   a pure shared function, called from the page exactly as today. A
+   behaviour-preserving refactor, verifiable by diffing the page's own output.
+2. **Add one additive data channel**, `VoiceProfilePane.svelte` to `+page.svelte`
+   to `Loupe.svelte`, carrying `readingScore`, `analyzed`, `clef`, the font and
+   the five underlay preview maps, assembled inside the untracked effect that
+   already reports `onpagesdrawn`, so it costs no new reactive surface. **Without
+   the preview maps a re-engraved measure would draw the file's own default
+   syllable under a note the singer hand-paired elsewhere**, which is a
+   singer-visible lie, not a cosmetic gap.
+3. **Replace the clone with the render.** In `Loupe.svelte`, swap
+   `sysEl.cloneNode(true)` for `renderAnalyzedStaff` on a one-measure slice, at a
+   spacing DERIVED rather than chosen: render, measure every gap against the
+   position rule's floor, widen and re-render while any floor would fire, stop at
+   the smallest spacing that needs none. Collapse the panel strip toward the one
+   panel a self-contained render produces. Repoint the caret maths at the new
+   root; it already works by DOM query on `data-event-id`, `data-of-event` and
+   `data-hit` rather than by page-relative geometry.
+4. **Retire or knowingly keep `loupe.ts`'s crop helpers and their tests**, as its
+   own decision. Roughly a dozen exported functions and a 781-line test file exist
+   to slice one shared coordinate space, and mostly retire with the crop.
+5. **Re-run the whole-fixture scan** over all 18 measures as the acceptance test,
+   plus real-click verification of note, rest and caret tap resolution.
+
+**THE UNCOSTED PIECE, and stage 3 measures it first.** The derived spacing is a
+control loop: nothing in `staff-renderer.ts`'s `pxPerWhole`/`minGap` options is
+driven today by a caller measuring its own output and asking for more. **NOT
+ESTABLISHED: how many of the 27 it closes, whether it converges, and whether it
+needs a cap plus a "this measure cannot have the width it needs" report.**
+
+**WHAT N.153 IS ACTUALLY FOR, measured 2026-09-18 and sharper than the collision
+count.** At phone width the separation between a caret's hit centre and its
+neighbour's runs **1.13 px to 7.89 px on all 17 held-able measures, against a 44 px
+floor**. `nearestTarget` resolves by centre, so **a caret is not reliably tappable
+on a phone anywhere in this score.** The carets are drawn correctly, cleared
+correctly, and cannot be used by a thumb. **N.153 is what makes the insert reach
+work on a phone**, not a tidy-up of 27 collisions. The desktop path works today.
+
+**Done when:** the whole-fixture scan passes on all 18 measures with zero
+violations of the five rules, tap resolution is unregressed, the page and the
+print are untouched, and Dann walks it.
+
+
+---

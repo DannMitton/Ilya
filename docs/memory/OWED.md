@@ -114,6 +114,32 @@ asks what is outstanding, or when the one thing closes and the next is being cho
   Measured before the ruling: one `AlertDialog` cost **+18.7 KB gzipped**
   (392,547 to 411,292), against Fable's ~8 KB budget for all of N.67.
 
+### New from N.153's close, 2026-09-21. Four, none blocking the beta
+
+1. **`core-loop.test.ts` fails before anything this session touched it.** It waits
+   for `.status-ok`, which was removed from `IntakePanel.svelte:225`, so all 21
+   tests time out. **No gate catches this, because `ilya-ship.sh` does not run
+   Playwright.** Found by Code while confirming stage 5 regressed nothing; it
+   verified the failure on the untouched `chromium` project. **The debt is two
+   things: the selector, and a gate that would have caught it.**
+2. **The new phone scan exits non-zero on one violation, so its gate is red.**
+   Rule 5a, m. 17: a caret stands 2.90 px right of the middle of its space,
+   because `closingBarline` returns the final double bar's OUTER edge
+   (`loupe.ts:691`) and the placement uses that as the boundary. On a single
+   barline the two edges differ by about 0.28 px, which is why every other measure
+   passes. **Whether the space ends at the thin line facing the measure is
+   unsettled, and Code changed nothing.** A permanently red acceptance test trains
+   everyone to ignore it, so this is worth settling before the scan is relied on.
+3. **NOT ESTABLISHED: why m. 7's `minGap` is 69.65 where stage 3b recorded
+   69.33.** The other 16 measures match stage 3b exactly.
+4. **Nineteen gaps after a rest read "before the first entry".** The selection
+   itself is correct; only the wording is wrong. Code flagged it and left it alone.
+
+**And one that is N.162's, not a debt:** a caret's hit centre sits 15.6 to 21.4 px
+from the nearest note's, and `nearestTarget` pools both. **NOT ESTABLISHED: whether
+clause 13's "its neighbour" covers any tap target or only the next caret**, which
+decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
+
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
 - **RULED 2026-09-16, BUILD OWED: « placement recommencé » / "placement started

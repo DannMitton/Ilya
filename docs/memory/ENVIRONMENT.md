@@ -98,6 +98,8 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| a measurement taken soon after a score loads disagrees with a later one | `THE SEATING REDRAW ARRIVES FOUR SECONDS LATE` |
+| you are measuring whether two drawn things touch | `A BOUNDING BOX IS NOT INK` |
 | drive a browser yourself | `Claude Code, and where the building` |
 | you are about to send Dann a terminal command that starts `claude` | `Claude Code, and where the building` (it is NOT installed on his Mac; Code is the desktop app's Code tab. Cost the desk a wasted turn 2026-09-20) |
 | asking which build a tab is actually running | `THE APP TELLS YOU WHICH BUILD IT IS ON` |
@@ -194,6 +196,7 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| a repo-wide grep returns two hits for every file | `THE WORKTREE DOUBLES EVERY GREP` |
 | the desk needs to stage a render or scratch file from the repo | `DESK SCRATCH GOES IN node_modules/.desk-scratch` |
 | a second Code session could run while one is building | `A READ-ONLY SESSION CAN RUN BESIDE A BUILD` |
 | spawn a farm-out, or cost one | `The device bridge` |
@@ -3836,4 +3839,51 @@ Dann's own devices is NOT ESTABLISHED.**
 
 **The general form: when a window is too narrow to act in, widen it at its source and restore
 the source.** Do not reason about what would happen inside it.
+
+---
+
+### THE SEATING REDRAW ARRIVES FOUR SECONDS LATE. Measured by Code 2026-09-21
+
+**A score finishes loading and the drawing is not final.** About 4 s later, with no
+input from anyone, the N.160 syllable seating runs, the underlay text changes, and
+anything derived from the drawing is recomputed against different ink. Code measured
+the underlay going from 133 to 136 characters, and the loupe's derived `minGap` for
+m. 5 moving from 82.78 to 82.16 in the same walk with no step between.
+
+**Anything that measures the page must wait for the seating, not for the load.** The
+signal is the `[Ilya] N.160 seats:` console line, which fires once per song per load,
+at the moment the transcribed lines first reach the underlay. The stage 5 scan gates
+on it (`apps/web/e2e-phone/loupe-scan.test.ts`).
+
+**The general form: a page that keeps working after its load event has no single
+"ready". Find the line that fires when the thing you are measuring stops changing.**
+
+---
+
+### A BOUNDING BOX IS NOT INK. Cost Code a false positive 2026-09-21
+
+**Testing whether a caret touches a glyph by comparing bounding boxes reports
+contacts that are not there.** A text element's box is its em box, which extends well
+past the drawn ink of most characters. Code's stage 5 probe reported the caret on
+m. 16 touching the tuplet "2"; measured against the glyph's real ink there is 1.2 px
+of clear space.
+
+**Measure the glyph's actual ink with canvas `measureText` in the element's own
+font.** And add a control: assert every text element's canvas ink sits inside its own
+em box, so a wrong font silently substituted cannot hide a real contact. Code's run
+of that control passed 5,625 of 5,625 measures.
+
+---
+
+### THE WORKTREE DOUBLES EVERY GREP. Found by the desk 2026-09-21
+
+**`.claude/worktrees/` holds a full second copy of the tree.** A grep from the
+repository root returns two hits for every file, with paths that look real. On
+2026-09-21 a search for `playwright` in `package.json` returned
+`./.claude/worktrees/objective-wright-7aea5b/apps/web/package.json` beside the real
+one.
+
+**Scope repo-wide searches to `apps/`, `packages/` or `docs/`, or exclude
+`.claude/`.** A citation taken from a worktree path is a citation to a copy, and it
+can be stale.
 

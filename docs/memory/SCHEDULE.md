@@ -87,6 +87,18 @@ design rows.
   exports a binder backup before step 2.**
 - [ ] **Fixes from week 1**: whatever the format walk and the CHECK rows turned up.
 
+- [x] **N.153, ALL FIVE STAGES. CLOSED ON SCOPE 2026-09-21**, shipped `9b05ddd` carrying
+  Code's `15b7d1a`. **It was never scheduled into a week**, so it displaced nothing that was
+  named; it spent week 2's first evening, which was already clear. Stage 4 retired nothing and
+  closed as "knowingly keep"; stage 5's scan reaches the 44 px tap floor on all 17 measures
+  that carry notes, against 1.13 to 7.89 px on 2026-09-18. **Stage 5 changes nothing a singer
+  sees**, so there is no walk for it. Account in `../sessions/LOG.md` block 30.
+- [ ] **N.162**, the remainder of N.153: a caret and a note compete for the same thumb.
+  Numbered 2026-09-21, unscheduled, spec not written.
+- [ ] **Two parts of the 2026-09-20 loupe spacing ruling are NOT BUILT** and are now
+  `OPEN.md` §THE CARET clause 16: the meter run-in at 1 sp in the loupe, and the tie taper
+  into the run-on. Unscheduled.
+
 ## Week 3. Monday 2026-09-28 to Sunday 2026-10-04. Insights and the design rows
 
 - [ ] **N.127 increment 2**: the compass stave, the piece's range against the singer's.

@@ -458,3 +458,19 @@ on every load.** **Memory IS committed this time:** `2cd4094` carries every file
 and this corrected line rides the commit after it. A clean `git status` at the next session's
 open is expected, not a surprise.*
 
+*Close of 2026-09-21, about 22:20. **One ship, `9b05ddd`, carrying Code's `15b7d1a`**, five
+gates at baseline. **N.153 is CLOSED ON SCOPE by Dann's ruling at 22:07** and all five stages
+are in: caret-to-caret separation went from 1.13 to 7.89 px on 2026-09-18 to **44.00 to 44.16
+px as drawn** on all 17 measures that carry notes. **Stage 4 retired nothing**: `OPEN.md`'s
+"mostly retire with the crop" did not survive contact with the tree, because stage 3b
+repointed the same arithmetic at the loupe's own render rather than leaving a dead path. A
+read-only Sonnet audit established that, **for 268,709 tokens against the desk's 200k quote,
+which was the desk's miss.** **The close almost buried two unbuilt parts of Dann's spacing
+ruling of 2026-09-20**, which lived only inside N.153's spec; checking before the move is what
+caught them, and they now stand as `OPEN.md` §THE CARET clause 16. **Dann ruled clause 15**,
+the beam exception, on the desk's recommendation. `OWED.md` gained four debts, `LOG.md` gained
+block 30, `ENVIRONMENT.md` gained three traps with index rows, `SEQUENCE.md` discharged
+dependency 7, `SCHEDULE.md` recorded the close, and **N.162 is numbered**. **NOT MEASURED:
+paint on a phone, still. NOT ESTABLISHED: m. 7's `minGap`, what clause 13's "its neighbour"
+covers, and behaviour at any width but 390 px.** Memory NOT committed at the time of writing.*
+
