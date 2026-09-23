@@ -68,6 +68,13 @@ describe('resolveVocalReadingOctave', () => {
     expect(resolveVocalReadingOctave(parsed, BASS_RANGE)).toBe(-1);
   });
 
+  it('reads a MusicXML treble-8vb line where it sounds, since its pitches already sound', () => {
+    const mnx = scoreOf([note('n1', P('A', 2)), note('n2', P('E', 4, -1))], { sign: 'G', line: 2, octaveChange: -1 });
+    const musicxml = { ...mnx, source: { ...mnx.source, format: 'musicxml' as const, origin: 'musicxml-direct' as const } };
+    expect(resolveVocalReadingOctave(musicxml)).toBe(0);
+    expect(resolveVocalReadingOctave(musicxml, BASS_RANGE)).toBe(0);
+  });
+
   it('does not guess on a plain treble clef with no declared range', () => {
     const parsed = scoreOf([note('n1', P('G', 4))], { sign: 'G', line: 2 });
     expect(resolveVocalReadingOctave(parsed)).toBe(0);

@@ -1516,8 +1516,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.phonation.headline': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}.' },
 	'insights.phonation.headlineInferred': { en: 'Your phonation takes about {low} to {high} of this piece, at the speed {tempoWord} usually means.', fr: 'Votre phonation occupe environ {low} à {high} de la pièce, au tempo qu’indique habituellement {tempoWord}.' },
 	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo ; le temps de phonation ne peut donc pas être donné en secondes.' },
-	// English is the desk's mirror of the ratified French (DESK DEFAULT).
-	'insights.phonation.byVowel':  { en: 'By vowel, most phonation time first', fr: 'Par voyelle, par temps de phonation décroissant' },
+	// RATIFIED by Dann 2026-09-23 03:14, with the vowel chart's fixed order
+	// (`docs/memory/OPEN.md`, N.123, "THE VOWEL CHART'S ORDER").
+	'insights.phonation.byVowel':  { en: 'Seconds of phonation per vowel', fr: 'Secondes de phonation par voyelle' },
+	// The same chart's heading when the score states no tempo, so it prints
+	// shares. RATIFIED by Dann 2026-09-23 03:39 (desk-offered).
+	'insights.phonation.byVowelShare': { en: 'Share of phonation per vowel', fr: 'Part de la phonation par voyelle' },
 	'insights.phonation.finding':  { en: '{n} instances, {seconds} of phonation in all.', fr: '{n} occurrences, {seconds} de phonation en tout.' },
 	// The singular of the line above, for a finding with one instance, where
 	// "1 instances" would be wrong in both languages. RATIFIED by Dann 2026-09-23 01:35.
@@ -1537,6 +1541,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// N.123 with N.127 increment 2, the tessituragram: English is the desk's,
 	// every French row RATIFIED by Dann 2026-09-23 01:57
 	// (`docs/sessions/brief-code-tessituragram_r1_2026-09-23.md` §5).
+	// Unrendered since r2 (the range field is gone), kept as ratified.
 	'insights.figure.rangeLabel':  { en: 'your range, {low} to {high}',  fr: 'votre ambitus, {low} à {high}' },
 	'insights.figure.tessitura':   { en: 'tessitura',                    fr: 'tessiture' },
 	'insights.figure.lowest':      { en: '{pitch} lowest',               fr: '{pitch} la plus grave' },
@@ -1548,6 +1553,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.figure.zoneBelow':   { en: 'below · {share}',              fr: 'au-dessous · {share}' },
 	'insights.figure.caption':     { en: 'Seconds of phonation per pitch', fr: 'Secondes de phonation par hauteur' },
 	'insights.figure.captionQuavers': { en: 'Phonation per pitch, in quavers', fr: 'Phonation par hauteur, en croches' },
+	// Unrendered since r2 (the focus segment is gone), kept as ratified.
 	'insights.figure.captionFocus': { en: 'dark: sung on {vowels}',      fr: 'en foncé\u00a0: chanté sur {vowels}' },
 };
 

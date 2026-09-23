@@ -34,7 +34,8 @@ import type { ParsedScore, Pitch } from './types';
  *   - a bass, C, or absent clef yields 0 (bass already sounds as written; a
  *     C clef and an absent clef route through the render's own heuristic);
  *   - an explicit octave-displaced treble clef (`octaveChange <= -1`) is
- *     honoured directly (the source told us);
+ *     honoured directly for MNX, and for MusicXML yields 0, because a
+ *     MusicXML pitch is already the sounding one;
  *   - a plain treble clef is disambiguated by the singer's range, shifting an
  *     octave down only when that fits their range strictly better;
  *   - a plain treble clef with no declared range yields 0 (no signal to judge
@@ -48,7 +49,16 @@ export function resolveVocalReadingOctave(
   if (!clef || clef.sign !== 'G') return 0;
 
   const marked = clef.octaveChange ?? 0;
-  if (marked <= -1) return marked; // an explicit treble-8vb clef is authoritative
+  if (marked <= -1) {
+    /* A MUSICXML PITCH ALREADY SOUNDS WHERE THE OCTAVE CLEF SAYS. Its
+       `<octave>` is the sounding octave and `<clef-octave-change>` only tells
+       the engraver how to print it, so shifting again reads the line an
+       octave low. Measured 2026-09-23: Sunless no. 2's voice part stores A2
+       to E♭4 under a treble-8vb clef, the span Mitton (2020, printed p. 92)
+       gives, and this branch read it as A1 to E♭3. MNX keeps the shift: its
+       convention for an octave clef is not established here. */
+    return parsed.source?.format === 'musicxml' ? 0 : marked;
+  }
 
   if (!range) return 0; // plain treble, no range: do not guess
 

@@ -32,7 +32,7 @@
 	import type { LineData } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, formatNameForPaper } from '$lib/composers-poets';
-	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
+	import { VOWELS, type Vowel, type CalibratedFormant, type VoiceCharacteristics } from '$lib/shane/engine/types';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import {
 		analyzeScore,
@@ -52,6 +52,7 @@
 		strikeLiederClause,
 		PAGE_ONE_FINDINGS,
 		formatSeconds,
+		formatSecondsFine,
 		formatTempo,
 		type Containment,
 		type Finding,
@@ -329,16 +330,29 @@
 		});
 	}
 
-	/* The caption under the bars. Its second half names the focus colour, so
-	   it prints only where the colour is drawn: with a resolver, and with a
-	   finding (brief §3, devices 2 and 4). */
-	function captionOf(ph: PhonationSection): { scale: string; focus: string | null } {
-		const figure = model?.figure;
-		const scale = T(figure?.scale === 'seconds' ? 'insights.figure.caption' : 'insights.figure.captionQuavers');
-		const vowels = figure && !figure.quiet ? (figure.focusVowels ?? []) : [];
-		const sung = new Set((ph.vowels ?? []).map((v) => v.vowel));
-		const shown = vowels.filter((v) => sung.has(v));
-		return { scale, focus: shown.length > 0 ? shown.map((v) => `[${v}]`).join(', ') : null };
+	/* THE VOWEL CHART'S ORDER, ruled by Dann 2026-09-23 03:13 (`OPEN.md`,
+	   N.123): `VOWELS`, never time. A vowel the piece never sings does not
+	   print (DESK DEFAULT). A vowel outside `VOWELS` follows, most time first,
+	   so nothing sung is dropped (DESK DEFAULT). */
+	const vowelChart = $derived.by(() => {
+		const list = model?.phonation.vowels ?? [];
+		const order = VOWELS as readonly string[];
+		const known = order.flatMap((v) => list.filter((x) => x.vowel === v));
+		const rest = list.filter((x) => !order.includes(x.vowel));
+		const rows = [...known, ...rest];
+		const max = Math.max(0, ...rows.map((r) => r.share));
+		return rows.map((r) => ({ ...r, width: max > 0 ? r.share / max : 0 }));
+	});
+
+	/** A vowel's time: one decimal under a second, and a range where the tempo is a word. */
+	function vowelValue(v: { share: number; seconds: SecondsFigure | null }): string {
+		if (!v.seconds) return shareText(Math.round(v.share * 100));
+		return v.seconds.kind === 'point'
+			? formatSecondsFine(v.seconds.seconds, language)
+			: fill(T('insights.fit.span'), {
+					low: formatSecondsFine(v.seconds.low, language),
+					high: formatSecondsFine(v.seconds.high, language),
+				});
 	}
 
 	function findingSeconds(f: Finding): string {
@@ -364,11 +378,8 @@
 	<p class="section-head">{text}</p>
 {/snippet}
 
-{#snippet finding(f: Finding, n: number)}
+{#snippet finding(f: Finding)}
 	<div class="finding">
-		<!-- The finding's number, drawn and not a string, matches the one at
-		     its bar in the tessituragram (brief §3, device 1). -->
-		<span class="mark" aria-hidden="true">{n}</span>
 		<p class="finding-tag">{findingTag(f)}{' \u00b7 '}<span class="ipa">[{f.vowel}]</span>{#if wordOf(f)}{' \u00b7 '}{wordOf(f)}{/if}</p>
 		<p class="finding-body">{findingBody(f)}{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}{#if findingSeconds(f)}{' '}<span class="finding-further">{findingSeconds(f)}</span>{/if}</p>
 	</div>
@@ -383,28 +394,30 @@
 			<p class="prose">{headlineOf(ph)}</p>
 
 			{#if model?.figure}
-				{@const cap = captionOf(ph)}
 				<div class="figure">
 					<Tessituragram figure={model.figure} {language} />
-					<p class="figure-caption">{cap.scale}{#if cap.focus}{@const [before, after] = T('insights.figure.captionFocus').split('{vowels}')}{' \u00b7 '}{before}<span class="ipa">{cap.focus}</span>{after}{/if}</p>
 				</div>
 			{/if}
 			<!-- Without both passaggi the figure draws no lines and no shares,
 			     and the fit table alone says so. -->
 			{#if vowels && vowelsOnPageOne}
-				{@render vowelTimes(ph)}
+				{@render vowelTimes()}
 			{/if}
 		{/if}
 	</div>
 {/snippet}
 
-{#snippet vowelTimes(ph: PhonationSection)}
-	<p class="sub-head">{T('insights.phonation.byVowel')}</p>
-	<!-- A vowel a finding names takes the bars' focus colour, bold and
-	     underlined, so the list and the figure mark it one way. -->
-	<ul class="vowel-times">
-		{#each ph.vowels ?? [] as v (v.vowel)}
-			<li class:flagged={v.flagged}><span class="ipa">[{v.vowel}]</span>{' '}{v.seconds ? secondsText(v.seconds) : shareText(Math.round(v.share * 100))}</li>
+{#snippet vowelTimes()}
+	<p class="sub-head">{T(model?.phonation.timing === 'none' ? 'insights.phonation.byVowelShare' : 'insights.phonation.byVowel')}</p>
+	<!-- One bar per vowel in the ruled order (after Dann's Figure 6.10). A
+	     vowel a finding names draws its bar and label in the dark rose of the
+	     pitch bars it sits on. -->
+	<ul class="vowel-chart">
+		{#each vowelChart as v (v.vowel)}
+			<li class:flagged={v.flagged}>
+				<span class="vowel-label ipa">[{v.vowel}]</span>
+				<span class="vowel-track"><span class="vowel-bar" style="width: {v.width * 170}px;"></span><span class="vowel-value">{vowelValue(v)}</span></span>
+			</li>
 		{/each}
 	</ul>
 {/snippet}
@@ -567,8 +580,8 @@
 							{#if pageOneFindings.length === 0}
 								<p class="prose">{T('insights.findings.none')}</p>
 							{:else}
-								{#each pageOneFindings as f, i (f.key)}
-									{@render finding(f, i + 1)}
+								{#each pageOneFindings as f (f.key)}
+									{@render finding(f)}
 								{/each}
 								{#if deferredFindings.length > 0}
 									<p class="remainder">{remainderLine}</p>
@@ -607,15 +620,15 @@
 									</p>
 								{/if}
 								{#if vowelsOnPageTwo}
-									{@render vowelTimes(model.phonation)}
+									{@render vowelTimes()}
 								{/if}
 							</div>
 						{/if}
 						{#if deferredFindings.length > 0}
 							<div class="section">
 								{@render sectionHead(T('insights.findings.deferredHeading'))}
-								{#each deferredFindings as f, i (f.key)}
-									{@render finding(f, pageOneFindings.length + i + 1)}
+								{#each deferredFindings as f (f.key)}
+									{@render finding(f)}
 								{/each}
 							</div>
 						{/if}
@@ -773,31 +786,9 @@
 	/* ── Findings ───────────────────────────────────────────── */
 
 	.finding {
-		position: relative;
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
-		padding-left: 24px;
-	}
-
-	/* The desk's redraw: a 15 px circle in rose ink. */
-	.mark {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 15px;
-		height: 15px;
-		box-sizing: border-box;
-		border: 1px solid var(--rose-ink);
-		border-radius: 50%;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		font-family: var(--font-sans);
-		font-size: 9.5px;
-		font-weight: 700;
-		line-height: 1;
-		color: var(--rose-ink);
 	}
 
 	/* The Loupe's measure tag (`Loupe.svelte`, `.loupe-tag`). */
@@ -844,33 +835,6 @@
 		margin-top: 4px;
 	}
 
-	/* Under the bars, from their baseline (`Tessituragram.svelte`, 262 of 570). */
-	.figure-caption {
-		margin: 0;
-		padding-left: 46%;
-		font-family: var(--font-sans);
-		font-size: 9.5px;
-		font-weight: 600;
-		letter-spacing: 0.06em;
-		line-height: 1.35;
-		font-variant-caps: all-small-caps;
-		color: var(--rose-ink);
-	}
-
-	.figure-caption .ipa {
-		font-variant-caps: normal;
-	}
-
-	.vowel-times {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		font-family: var(--font-serif);
-		font-size: 12.5px;
-		line-height: 1.45;
-		color: var(--ink-secondary);
-	}
-
 	.sub-head {
 		margin: 6px 0 0;
 		font-family: var(--font-sans);
@@ -881,23 +845,57 @@
 		color: var(--ink-tertiary);
 	}
 
-	.vowel-times {
+	/* The vowel chart. The bars are the pitch bars' `--rose`, 6 px, as in
+	   the desk's sparse drawing; a vowel with a finding takes `--rose-ink`. */
+	.vowel-chart {
+		margin: 0;
+		padding: 0;
+		list-style: none;
 		display: flex;
-		flex-wrap: wrap;
-		column-gap: 18px;
-		row-gap: 2px;
+		flex-direction: column;
+		gap: 2px;
+		font-family: var(--font-sans);
+		font-size: 11px;
+		line-height: 1.2;
 	}
 
-	.vowel-times li {
+	.vowel-chart li {
+		display: grid;
+		grid-template-columns: 30px 1fr;
+		column-gap: 6px;
+		align-items: center;
+	}
+
+	.vowel-label {
+		text-align: right;
+		font-size: 12.5px;
+		color: var(--ink-primary);
+	}
+
+	.vowel-track {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.vowel-bar {
+		height: 6px;
+		background: var(--rose);
+	}
+
+	.vowel-value {
+		font-size: 10px;
+		color: var(--ink-tertiary);
 		white-space: nowrap;
 	}
 
-	/* The bars' focus colour, bold, underlined 2 px (brief §3, device 2). */
-	.vowel-times .flagged {
+	.vowel-chart .flagged .vowel-label {
 		font-weight: 700;
 		color: var(--rose-ink);
-		text-decoration: underline 2px var(--rose-ink);
-		text-underline-offset: 3px;
+	}
+
+	.vowel-chart .flagged .vowel-bar {
+		background: var(--rose-ink);
 	}
 
 	/* ── The running head on the earned page ─────────────────

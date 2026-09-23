@@ -14,6 +14,8 @@
 import { describe, expect, it } from 'vitest';
 import {
 	analyzeScore,
+	resolveVocalReadingOctave,
+	shiftVocalOctave,
 	type Measure,
 	type ParsedScore,
 	type Pitch,
@@ -25,6 +27,7 @@ import {
 	buildInsights,
 	countCrossings,
 	formatSeconds,
+	formatSecondsFine,
 	formatTempo,
 	groupFindings,
 	wholePercents,
@@ -240,48 +243,45 @@ describe('N.123 phonation time', () => {
 });
 
 describe('N.123 the tessituragram', () => {
-	const finding = (pitch: Pitch, vowel: string): Finding => ({
-		key: `k-${vowel}`,
+	const finding = (pitch: Pitch, vowel: string, measure = '1'): Finding => ({
+		key: `k-${vowel}-${measure}`,
 		kind: 'sustain',
-		measure: '1',
+		measure,
 		pitch,
 		vowel,
 		instances: 1,
 		massQuavers: 1,
 	});
 
-	it('gives each spelling its own bar, and splits a stave step lowest first', () => {
-		// B♭3, B3, and A♯3: B♭3 and A♯3 are one key, but sit on two steps.
+	it('gives each sounding pitch one row, named by every spelling the line sings there', () => {
+		// B♭3 (half), B3, and A♯3: B♭3 and A♯3 sound alike and share a row.
 		const spelled = [
 			note('a', 0, 0, P('B', 3, -1), HALF),
 			note('b', 0, 2, P('B', 3)),
 			note('c', 0, 3, P('A', 3, 1)),
 		];
 		const f = buildInsights({ analysisScore: score(spelled, 1), profile, watchList: null }).figure!;
-		expect(f.slots.map((s) => s.bars.map((b) => [b.pitch.step, b.pitch.alter, b.quavers]))).toEqual([
-			[['A', 1, 2]],
-			[
-				['B', -1, 4],
-				['B', 0, 2],
-			],
+		expect(f.rows.map((r) => [r.midi, r.spellings.map((p) => `${p.step}${p.alter}`), r.quavers])).toEqual([
+			[58, ['A1', 'B-1'], 6],
+			[59, ['B0'], 2],
 		]);
-		expect(f.longest.pitch).toEqual(P('B', 3, -1));
-		expect(f.longest.share).toBe(4 / 8);
+		expect(f.longest.midi).toBe(58);
+		expect(f.longest.share).toBe(6 / 8);
 	});
 
-	it('marks the time on a flagged vowel, numbers findings in list order, and follows the typed range for the clef', () => {
-		const vowelOf: Record<string, string> = { a: 'a', b: 'a', c: 'i', d: 'i', e: 'i', f: 'i', g: 'u', h: 'u', i: 'u', j: 'i' };
+	it('hangs each finding on its pitch in list order, and follows the typed range for the clef', () => {
 		const sc = score(line, 3);
 		const m = buildInsights({ analysisScore: sc, profile, watchList: null });
-		const findings = [finding(P('D', 3), 'i'), finding(P('E', 4, -1), 'u'), finding(P('D', 3), 'i')];
-		const f = tessituragram(sc, profile, findings, m.tessitura, m.range, m.phonation.zones, (ev) => vowelOf[ev.id])!;
-		const d3 = f.slots.flatMap((s) => s.bars).find((b) => b.pitch.step === 'D')!;
-		// D3 is c, d, e, f (quarters) and j (half), all on [i]: 12 quavers, all flagged.
-		expect([d3.quavers, d3.focusQuavers]).toEqual([12, 12]);
-		const a2 = f.slots[0].bars[0];
-		expect([a2.quavers, a2.focusQuavers]).toEqual([4, 0]);
-		expect(f.marks.map((x) => x.n)).toEqual([1, 2, 3]);
-		expect(f.focusVowels).toEqual(['i', 'u']);
+		const findings = [finding(P('D', 3), 'i', '1'), finding(P('E', 4, -1), 'u', '3'), finding(P('D', 3), 'a', '2')];
+		const f = tessituragram(sc, profile, findings, m.tessitura, m.range, m.phonation.zones)!;
+		const d3 = f.rows.find((r) => r.midi === 50)!;
+		expect(d3.quavers).toBe(12);
+		expect(d3.tags).toEqual([
+			{ measure: '1', vowel: 'i' },
+			{ measure: '2', vowel: 'a' },
+		]);
+		expect(f.rows.find((r) => r.midi === 63)!.tags).toEqual([{ measure: '3', vowel: 'u' }]);
+		expect(f.rows[0].tags).toEqual([]);
 		expect(f.quiet).toBe(false);
 		// Typed G2 to F4: steps 18 and 31, midpoint floored to 24, which is F3: bass.
 		expect(f.clef).toBe('bass');
@@ -291,19 +291,34 @@ describe('N.123 the tessituragram', () => {
 		expect(f.longest.seconds).toBeNull();
 	});
 
-	it('draws quietly with no findings, marks nothing without a resolver, and prices the longest bar at a tempo', () => {
+	it('names a MusicXML treble-8vb line by the pitches it sounds, A2 to E♭4, as the pane reads it', () => {
+		// Sunless no. 2's shape: stored A2 to E♭4 under a G clef with an 8 below.
+		const raw = score([note('a', 0, 0, P('A', 2)), note('b', 0, 1, P('C', 3, 1)), note('c', 0, 2, P('E', 4, -1), HALF)], 1);
+		const parsed = {
+			...raw,
+			source: { format: 'musicxml', fidelity: 'native', origin: 'musicxml-direct', sourceWarnings: [] },
+			clefs: [{ measureIndex: 0, clef: { sign: 'G', line: 2, octaveChange: -1 } }],
+		} as unknown as ParsedScore;
+		const shift = resolveVocalReadingOctave(parsed, profile.range);
+		const reading = shift !== 0 ? shiftVocalOctave(parsed, shift) : parsed;
+		const f = buildInsights({ analysisScore: reading, profile, watchList: null }).figure!;
+		expect(f.rows.map((r) => r.spellings.map((p) => `${p.step}${p.alter}${p.octave}`))).toEqual([['A02'], ['C13'], ['E-14']]);
+		expect(f.compass).toEqual({ low: P('A', 2), high: P('E', 4, -1) });
+	});
+
+	it('draws quietly with no findings, prices the longest bar at a tempo, and keeps a decimal under a second', () => {
 		const bare: VoiceProfileSnapshot = { fR1: profile.fR1 };
 		const f = buildInsights({ analysisScore: withTempo(score(line, 3), quarter60), profile: bare, watchList: null }).figure!;
 		expect(f.quiet).toBe(true);
-		expect(f.focusVowels).toBeNull();
-		expect(f.slots.every((s) => s.bars.every((b) => b.focusQuavers === 0))).toBe(true);
 		expect(f.zones).toBeNull();
-		expect(f.range).toBeNull();
 		// No typed range: the compass A2 to E♭4 decides, steps 19 and 30, midpoint 24, F3: bass.
 		expect(f.clef).toBe('bass');
 		expect(f.scale).toBe('seconds');
 		// D3, 12 quavers at a half second each.
 		expect(f.longest.seconds).toEqual({ kind: 'point', seconds: 6 });
+		expect(formatSecondsFine(0.4, 'en')).toBe('0.4\u00a0s');
+		expect(formatSecondsFine(0.4, 'fr')).toBe('0,4\u00a0s');
+		expect(formatSecondsFine(12.4, 'fr')).toBe('12\u00a0s');
 	});
 });
 

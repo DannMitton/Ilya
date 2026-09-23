@@ -412,7 +412,10 @@ const DIATONIC: Record<Pitch['step'], number> = { C: 0, D: 1, E: 2, F: 3, G: 4, 
 const MIDDLE_LINE: Record<RenderClef, number> = {
   bass: 3 * 7 + DIATONIC.D,
   treble: 4 * 7 + DIATONIC.B,
-  'treble-8vb': 4 * 7 + DIATONIC.B, // written pitches; the 8 is sounding-only
+  // Sounding pitches: under the 8 below, the middle line B4 sounds B3. The
+  // line arrives at sounding pitch (`vocal-octave.ts`), so it is placed an
+  // octave above where treble would put it, as the edition prints it.
+  'treble-8vb': 3 * 7 + DIATONIC.B,
 };
 
 function diatonicNumber(p: Pitch): number {
