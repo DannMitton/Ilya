@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { chooseClef, clefFromSource } from './clef-select';
+import { chooseClef, chooseClefForSpan, clefFromSource } from './clef-select';
 import type { Clef, ParsedScore, Pitch, VocalLineEvent } from './types';
 
 function note(id: string, step: Pitch['step'], octave: number, measureIndex = 0): VocalLineEvent {
@@ -80,5 +80,19 @@ describe('chooseClef', () => {
 
 	it('defaults an empty vocal line to treble', () => {
 		expect(chooseClef(score([]))).toBe('treble');
+	});
+});
+
+describe('chooseClefForSpan', () => {
+	const p = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
+
+	it('puts a bass range in bass and a treble range in treble, on the midpoint', () => {
+		expect(chooseClefForSpan(p('E', 2), p('E', 4))).toBe('bass'); // midpoint E3
+		expect(chooseClefForSpan(p('C', 4), p('C', 6))).toBe('treble'); // midpoint C5
+	});
+
+	it('reads middle C as treble, as the line heuristic does', () => {
+		expect(chooseClefForSpan(p('C', 3), p('C', 5))).toBe('treble'); // midpoint C4
+		expect(chooseClefForSpan(p('B', 2), p('C', 5))).toBe('bass'); // midpoint B3, floored
 	});
 });

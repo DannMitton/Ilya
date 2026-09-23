@@ -24,7 +24,9 @@
 	 * N.123's work, and brief §6 says not to build N.123. The two panes are
 	 * never mounted together, so the chain runs once either way.
 	 */
+	import { untrack } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
+	import Tessituragram from '$lib/shane/Tessituragram.svelte';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import { PAGE_SIZES, MARGINS, HEADER_GAP } from '$lib/page-config';
 	import type { LineData } from '$lib/types';
@@ -51,7 +53,6 @@
 		PAGE_ONE_FINDINGS,
 		formatSeconds,
 		formatTempo,
-		wholePercents,
 		type Containment,
 		type Finding,
 		type PhonationSection,
@@ -162,12 +163,76 @@
 	const subsequentTop = $derived(MARGINS.vertical + runningHeight + HEADER_GAP);
 
 	// ── Pages ──────────────────────────────────────────────────────────
-	const pageOneFindings = $derived(model ? model.findings.slice(0, PAGE_ONE_FINDINGS) : []);
-	const deferredFindings = $derived(model ? model.findings.slice(PAGE_ONE_FINDINGS) : []);
-	/* PLACEMENT, N.123: page one is fixed at one page and its budget is spent
-	   (`PAGE_ONE_FINDINGS`), so the phonation-time section opens page two, and
-	   page two exists whenever the model does. Nothing on page one shrinks. */
-	const totalPages = $derived(model ? 2 : 1);
+	/* PLACEMENT, N.123 with N.127 increment 2: phonation time and the
+	   tessituragram are one unit on page one, in the compass's place (Dann,
+	   2026-09-23 01:40). Page one is fixed at one page and page two is only
+	   earned (ruled 2026-09-11).
+
+	   PAGE ONE IS FILLED BY MEASURING WHAT IT RENDERS (brief
+	   `brief-code-tessituragram-fit_r1_2026-09-23.md` §1, DESK DEFAULT). It
+	   starts with everything: the unit with its vowel list, and up to
+	   `PAGE_ONE_FINDINGS` findings. While the squircle's bottom passes the
+	   foot's top, one step at a time: the vowel list opens page two, then the
+	   lightest finding on page one follows it, and at least one finding
+	   stays. Past that nothing shrinks; the overflow is logged. Every score
+	   and every language is measured afresh, so no height is written here. */
+	const untrusted = $derived(model && !model.phonation.nothingSung ? model.phonation.untrustedMeasures : null);
+	const vowels = $derived(model && !model.phonation.nothingSung && model.phonation.vowels?.length ? model.phonation.vowels : null);
+
+	let vowelsOnPageOne = $state(true);
+	let pageOneCount = $state(PAGE_ONE_FINDINGS);
+	/* Each new model or language starts from everything again. */
+	$effect(() => {
+		void model;
+		void language;
+		vowelsOnPageOne = true;
+		pageOneCount = PAGE_ONE_FINDINGS;
+	});
+
+	/* MEASURED FROM LAYOUT, after each render. The effect reads the offsets
+	   itself, because the size bindings (the machinery behind `headerHeight`
+	   and `runningHeight`) report through a ResizeObserver, which a hidden
+	   tab never runs: observed 2026-09-23, the bound height stayed at 60 px
+	   while the squircle was 731. The bindings stay so a late change, a font
+	   arriving, still re-measures. Offsets are layout values, so a phone's
+	   fitted scale does not touch them. */
+	let pageOneEl = $state<HTMLElement | null>(null);
+	let pageOneHeight = $state(0);
+	const footHeights = $state([0, 0, 0]);
+	const footEls = $state<Array<HTMLElement | null>>([null, null, null]);
+
+	$effect(() => {
+		// Every input that changes page one's height re-measures it.
+		void model;
+		void language;
+		void vowelsOnPageOne;
+		void pageOneCount;
+		void pageOneHeight;
+		void footHeights[1];
+		const squircle = pageOneEl;
+		const foot = footEls[1];
+		if (!model || !squircle || !foot) return;
+		const over = squircle.offsetTop + squircle.offsetHeight - foot.offsetTop;
+		if (over <= 0) return;
+		untrack(() => {
+			if (vowels && vowelsOnPageOne) {
+				vowelsOnPageOne = false;
+				return;
+			}
+			const shown = Math.min(pageOneCount, model.findings.length);
+			if (shown > 1) {
+				pageOneCount = shown - 1;
+				return;
+			}
+			console.warn(`[Ilya] Insights page one overflows the foot by ${over.toFixed(1)} px with nothing left to move.`);
+		});
+	});
+
+	const pageOneFindings = $derived(model ? model.findings.slice(0, pageOneCount) : []);
+	const deferredFindings = $derived(model ? model.findings.slice(pageOneCount) : []);
+	const vowelsOnPageTwo = $derived(!!vowels && !vowelsOnPageOne);
+	const hasPageTwo = $derived(!!model && (deferredFindings.length > 0 || !!untrusted || vowelsOnPageTwo));
+	const totalPages = $derived(hasPageTwo ? 2 : 1);
 
 	const attribution = $derived(strikeLiederClause(T('footer.attribution')));
 	const hasTypedCharacteristics = $derived(
@@ -264,25 +329,17 @@
 		});
 	}
 
-	/* Low to high along the bar, high to low down the legend, so both read the
-	   way pitch reads on a staff. JUDGEMENT. */
-	const zoneRows = $derived.by(() => {
-		const z = model?.phonation.zones;
-		if (!z) return null;
-		const [below, between, above] = wholePercents([z.below, z.between, z.above]);
-		return {
-			bar: [
-				{ key: 'below', share: z.below },
-				{ key: 'between', share: z.between },
-				{ key: 'above', share: z.above },
-			],
-			legend: [
-				{ key: 'above', label: T('insights.phonation.zoneAbove'), pct: above },
-				{ key: 'between', label: T('insights.phonation.zoneBetween'), pct: between },
-				{ key: 'below', label: T('insights.phonation.zoneBelow'), pct: below },
-			],
-		};
-	});
+	/* The caption under the bars. Its second half names the focus colour, so
+	   it prints only where the colour is drawn: with a resolver, and with a
+	   finding (brief §3, devices 2 and 4). */
+	function captionOf(ph: PhonationSection): { scale: string; focus: string | null } {
+		const figure = model?.figure;
+		const scale = T(figure?.scale === 'seconds' ? 'insights.figure.caption' : 'insights.figure.captionQuavers');
+		const vowels = figure && !figure.quiet ? (figure.focusVowels ?? []) : [];
+		const sung = new Set((ph.vowels ?? []).map((v) => v.vowel));
+		const shown = vowels.filter((v) => sung.has(v));
+		return { scale, focus: shown.length > 0 ? shown.map((v) => `[${v}]`).join(', ') : null };
+	}
 
 	function findingSeconds(f: Finding): string {
 		if (!f.seconds) return '';
@@ -307,8 +364,11 @@
 	<p class="section-head">{text}</p>
 {/snippet}
 
-{#snippet finding(f: Finding)}
+{#snippet finding(f: Finding, n: number)}
 	<div class="finding">
+		<!-- The finding's number, drawn and not a string, matches the one at
+		     its bar in the tessituragram (brief §3, device 1). -->
+		<span class="mark" aria-hidden="true">{n}</span>
 		<p class="finding-tag">{findingTag(f)}{' \u00b7 '}<span class="ipa">[{f.vowel}]</span>{#if wordOf(f)}{' \u00b7 '}{wordOf(f)}{/if}</p>
 		<p class="finding-body">{findingBody(f)}{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}{#if findingSeconds(f)}{' '}<span class="finding-further">{findingSeconds(f)}</span>{/if}</p>
 	</div>
@@ -321,49 +381,36 @@
 			<p class="prose">{T('insights.fit.nothingSung')}</p>
 		{:else}
 			<p class="prose">{headlineOf(ph)}</p>
-			{#if ph.untrustedMeasures}
-				<p class="remainder">
-					{fill(T(ph.untrustedMeasures.length === 1 ? 'insights.phonation.untrustedOne' : 'insights.phonation.untrustedMany'), {
-						measures: ph.untrustedMeasures.join(', '),
-					})}
-				</p>
-			{/if}
 
-			{#if zoneRows}
-				<div class="zone-bar" aria-hidden="true">
-					{#each zoneRows.bar as z (z.key)}
-						{#if z.share > 0}
-							<span class="zone zone-{z.key}" style="flex-grow: {z.share};"></span>
-						{/if}
-					{/each}
+			{#if model?.figure}
+				{@const cap = captionOf(ph)}
+				<div class="figure">
+					<Tessituragram figure={model.figure} {language} />
+					<p class="figure-caption">{cap.scale}{#if cap.focus}{@const [before, after] = T('insights.figure.captionFocus').split('{vowels}')}{' \u00b7 '}{before}<span class="ipa">{cap.focus}</span>{after}{/if}</p>
 				</div>
-				<ul class="zone-legend">
-					{#each zoneRows.legend as z (z.key)}
-						<li><span class="swatch zone-{z.key}"></span><span>{z.label}</span><span class="zone-pct">{shareText(z.pct)}</span></li>
-					{/each}
-				</ul>
-			{:else}
-				<!-- No bar without both passaggi: an edge nobody typed is an edge
-				     nothing is measured against. -->
-				<p class="remainder">{T('insights.fit.crossingsUncounted')}</p>
 			{/if}
-
-			{#if ph.vowels && ph.vowels.length > 0}
-				<p class="sub-head">{T('insights.phonation.byVowel')}</p>
-				<!-- A vowel a finding names is set in bold, since the findings list
-				     marks its vowel tag no other way. DESK DEFAULT. -->
-				<ul class="vowel-times">
-					{#each ph.vowels as v (v.vowel)}
-						<li class:flagged={v.flagged}><span class="ipa">[{v.vowel}]</span>{' '}{v.seconds ? secondsText(v.seconds) : shareText(Math.round(v.share * 100))}</li>
-					{/each}
-				</ul>
+			<!-- Without both passaggi the figure draws no lines and no shares,
+			     and the fit table alone says so. -->
+			{#if vowels && vowelsOnPageOne}
+				{@render vowelTimes(ph)}
 			{/if}
 		{/if}
 	</div>
 {/snippet}
 
+{#snippet vowelTimes(ph: PhonationSection)}
+	<p class="sub-head">{T('insights.phonation.byVowel')}</p>
+	<!-- A vowel a finding names takes the bars' focus colour, bold and
+	     underlined, so the list and the figure mark it one way. -->
+	<ul class="vowel-times">
+		{#each ph.vowels ?? [] as v (v.vowel)}
+			<li class:flagged={v.flagged}><span class="ipa">[{v.vowel}]</span>{' '}{v.seconds ? secondsText(v.seconds) : shareText(Math.round(v.share * 100))}</li>
+		{/each}
+	</ul>
+{/snippet}
+
 {#snippet foot(pageNumber: number, withFootnote: boolean)}
-	<footer class="insights-foot">
+	<footer class="insights-foot" bind:offsetHeight={footHeights[pageNumber]} bind:this={footEls[pageNumber]}>
 		<div class="apparatus">
 			{#if withFootnote}
 				<p class="footnote">
@@ -403,7 +450,7 @@
 					labelInk="var(--rose-ink)"
 				/>
 
-				<div class="squircle" style="top: {contentTop}px;">
+				<div class="squircle" style="top: {contentTop}px;" bind:offsetHeight={pageOneHeight} bind:this={pageOneEl}>
 					{#if !analysisScore}
 						<p class="silence">{T('insights.silence.noScore')}</p>
 					{:else if !model}
@@ -420,12 +467,7 @@
 							</ul>
 						</div>
 					{:else}
-						<!-- THE COMPASS'S PLACE, increment 2. Brief §4: leave the space
-						     it will occupy, and draw neither a placeholder nor a label.
-						     The height is Design R3 drawing 1a's compass block: its
-						     section head, the stave squircle at the sheet's measure,
-						     and the gap beneath them. -->
-						<div class="compass-reserve" aria-hidden="true"></div>
+						{@render phonationView(model.phonation)}
 
 						<div class="section">
 							{@render sectionHead(T('insights.fit.heading'))}
@@ -525,8 +567,8 @@
 							{#if pageOneFindings.length === 0}
 								<p class="prose">{T('insights.findings.none')}</p>
 							{:else}
-								{#each pageOneFindings as f (f.key)}
-									{@render finding(f)}
+								{#each pageOneFindings as f, i (f.key)}
+									{@render finding(f, i + 1)}
 								{/each}
 								{#if deferredFindings.length > 0}
 									<p class="remainder">{remainderLine}</p>
@@ -539,11 +581,11 @@
 				{@render foot(1, citesTessitura)}
 			</article>
 
-			{#if model}
-				<!-- PAGE TWO. It opens with phonation time (N.123), then carries the
-				     findings page one's count line promises (brief §4.3), in page
-				     one's own shape; the advice section Design drew on it is not in
-				     this increment. -->
+			{#if model && hasPageTwo}
+				<!-- PAGE TWO, earned. It names the measures phonation time could not
+				     vouch for and lists time per vowel, then carries the findings
+				     page one's count line promises (brief §4.3), numbered on from
+				     page one. -->
 				<article
 					class="paper-page insights-page"
 					style="width: {dims.width}px; height: {dims.height}px;"
@@ -554,12 +596,26 @@
 						<div class="running-rule"></div>
 					</header>
 					<div class="squircle" style="top: {subsequentTop}px;">
-						{@render phonationView(model.phonation)}
+						{#if untrusted || vowelsOnPageTwo}
+							<div class="section">
+								{@render sectionHead(T('insights.phonation.heading'))}
+								{#if untrusted}
+									<p class="remainder">
+										{fill(T(untrusted.length === 1 ? 'insights.phonation.untrustedOne' : 'insights.phonation.untrustedMany'), {
+											measures: untrusted.join(', '),
+										})}
+									</p>
+								{/if}
+								{#if vowelsOnPageTwo}
+									{@render vowelTimes(model.phonation)}
+								{/if}
+							</div>
+						{/if}
 						{#if deferredFindings.length > 0}
 							<div class="section">
 								{@render sectionHead(T('insights.findings.deferredHeading'))}
-								{#each deferredFindings as f (f.key)}
-									{@render finding(f)}
+								{#each deferredFindings as f, i (f.key)}
+									{@render finding(f, pageOneFindings.length + i + 1)}
 								{/each}
 							</div>
 						{/if}
@@ -605,13 +661,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 15px;
-	}
-
-	/* Design R3 drawing 1a: the compass section's head (22.4) and gap (6),
-	   the stave squircle at this measure (160 plus its 2 px border). */
-	.compass-reserve {
-		height: 190px;
-		flex-shrink: 0;
 	}
 
 	.section {
@@ -724,9 +773,31 @@
 	/* ── Findings ───────────────────────────────────────────── */
 
 	.finding {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
+		padding-left: 24px;
+	}
+
+	/* The desk's redraw: a 15 px circle in rose ink. */
+	.mark {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 15px;
+		height: 15px;
+		box-sizing: border-box;
+		border: 1px solid var(--rose-ink);
+		border-radius: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-sans);
+		font-size: 9.5px;
+		font-weight: 700;
+		line-height: 1;
+		color: var(--rose-ink);
 	}
 
 	/* The Loupe's measure tag (`Loupe.svelte`, `.loupe-tag`). */
@@ -765,38 +836,31 @@
 		line-height: 1.4;
 	}
 
-	/* ── Phonation time (N.123) ───────────────────────────────
-	   The rose family carries the zones, lightest low and darkest high. */
-	.zone-bar {
+	/* ── Phonation time and the tessituragram (N.123, N.127) ── */
+	.figure {
 		display: flex;
-		height: 14px;
+		flex-direction: column;
+		gap: 4px;
 		margin-top: 4px;
-		border: 1px solid var(--rose, #ab7f7f);
-		border-radius: 3px;
-		overflow: hidden;
 	}
 
-	.zone {
-		flex-basis: 0;
+	/* Under the bars, from their baseline (`Tessituragram.svelte`, 262 of 570). */
+	.figure-caption {
+		margin: 0;
+		padding-left: 46%;
+		font-family: var(--font-sans);
+		font-size: 9.5px;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		line-height: 1.35;
+		font-variant-caps: all-small-caps;
+		color: var(--rose-ink);
 	}
 
-	.zone + .zone {
-		border-left: 1px solid var(--paper-cream);
+	.figure-caption .ipa {
+		font-variant-caps: normal;
 	}
 
-	.zone-below {
-		background: rgba(171, 127, 127, 0.22);
-	}
-
-	.zone-between {
-		background: rgba(171, 127, 127, 0.55);
-	}
-
-	.zone-above {
-		background: var(--rose, #ab7f7f);
-	}
-
-	.zone-legend,
 	.vowel-times {
 		margin: 0;
 		padding: 0;
@@ -805,26 +869,6 @@
 		font-size: 12.5px;
 		line-height: 1.45;
 		color: var(--ink-secondary);
-	}
-
-	.zone-legend li {
-		display: grid;
-		grid-template-columns: 12px 1fr auto;
-		align-items: center;
-		column-gap: 8px;
-	}
-
-	.swatch {
-		width: 10px;
-		height: 10px;
-		border: 1px solid var(--rose, #ab7f7f);
-		border-radius: 2px;
-		box-sizing: border-box;
-	}
-
-	.zone-pct {
-		font-variant-numeric: tabular-nums;
-		color: var(--ink-primary);
 	}
 
 	.sub-head {
@@ -848,9 +892,12 @@
 		white-space: nowrap;
 	}
 
+	/* The bars' focus colour, bold, underlined 2 px (brief §3, device 2). */
 	.vowel-times .flagged {
 		font-weight: 700;
-		color: var(--ink-primary);
+		color: var(--rose-ink);
+		text-decoration: underline 2px var(--rose-ink);
+		text-underline-offset: 3px;
 	}
 
 	/* ── The running head on the earned page ─────────────────

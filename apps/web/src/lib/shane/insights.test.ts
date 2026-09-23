@@ -29,7 +29,9 @@ import {
 	groupFindings,
 	wholePercents,
 	strikeLiederClause,
+	tessituragram,
 	verdictOf,
+	type Finding,
 	type RangeRow,
 	type TessituraRow,
 } from './insights';
@@ -234,6 +236,74 @@ describe('N.123 phonation time', () => {
 		expect(formatSeconds(120)).toBe('2\u00a0min');
 		expect(wholePercents([16, 4, 4])).toEqual([67, 17, 16]);
 		expect(wholePercents([0, 0, 0])).toEqual([0, 0, 0]);
+	});
+});
+
+describe('N.123 the tessituragram', () => {
+	const finding = (pitch: Pitch, vowel: string): Finding => ({
+		key: `k-${vowel}`,
+		kind: 'sustain',
+		measure: '1',
+		pitch,
+		vowel,
+		instances: 1,
+		massQuavers: 1,
+	});
+
+	it('gives each spelling its own bar, and splits a stave step lowest first', () => {
+		// B♭3, B3, and A♯3: B♭3 and A♯3 are one key, but sit on two steps.
+		const spelled = [
+			note('a', 0, 0, P('B', 3, -1), HALF),
+			note('b', 0, 2, P('B', 3)),
+			note('c', 0, 3, P('A', 3, 1)),
+		];
+		const f = buildInsights({ analysisScore: score(spelled, 1), profile, watchList: null }).figure!;
+		expect(f.slots.map((s) => s.bars.map((b) => [b.pitch.step, b.pitch.alter, b.quavers]))).toEqual([
+			[['A', 1, 2]],
+			[
+				['B', -1, 4],
+				['B', 0, 2],
+			],
+		]);
+		expect(f.longest.pitch).toEqual(P('B', 3, -1));
+		expect(f.longest.share).toBe(4 / 8);
+	});
+
+	it('marks the time on a flagged vowel, numbers findings in list order, and follows the typed range for the clef', () => {
+		const vowelOf: Record<string, string> = { a: 'a', b: 'a', c: 'i', d: 'i', e: 'i', f: 'i', g: 'u', h: 'u', i: 'u', j: 'i' };
+		const sc = score(line, 3);
+		const m = buildInsights({ analysisScore: sc, profile, watchList: null });
+		const findings = [finding(P('D', 3), 'i'), finding(P('E', 4, -1), 'u'), finding(P('D', 3), 'i')];
+		const f = tessituragram(sc, profile, findings, m.tessitura, m.range, m.phonation.zones, (ev) => vowelOf[ev.id])!;
+		const d3 = f.slots.flatMap((s) => s.bars).find((b) => b.pitch.step === 'D')!;
+		// D3 is c, d, e, f (quarters) and j (half), all on [i]: 12 quavers, all flagged.
+		expect([d3.quavers, d3.focusQuavers]).toEqual([12, 12]);
+		const a2 = f.slots[0].bars[0];
+		expect([a2.quavers, a2.focusQuavers]).toEqual([4, 0]);
+		expect(f.marks.map((x) => x.n)).toEqual([1, 2, 3]);
+		expect(f.focusVowels).toEqual(['i', 'u']);
+		expect(f.quiet).toBe(false);
+		// Typed G2 to F4: steps 18 and 31, midpoint floored to 24, which is F3: bass.
+		expect(f.clef).toBe('bass');
+		// Shares 16, 4, 4 of 24 as whole percents.
+		expect(f.zones).toEqual({ below: 67, between: 17, above: 16 });
+		expect(f.scale).toBe('quavers');
+		expect(f.longest.seconds).toBeNull();
+	});
+
+	it('draws quietly with no findings, marks nothing without a resolver, and prices the longest bar at a tempo', () => {
+		const bare: VoiceProfileSnapshot = { fR1: profile.fR1 };
+		const f = buildInsights({ analysisScore: withTempo(score(line, 3), quarter60), profile: bare, watchList: null }).figure!;
+		expect(f.quiet).toBe(true);
+		expect(f.focusVowels).toBeNull();
+		expect(f.slots.every((s) => s.bars.every((b) => b.focusQuavers === 0))).toBe(true);
+		expect(f.zones).toBeNull();
+		expect(f.range).toBeNull();
+		// No typed range: the compass A2 to E♭4 decides, steps 19 and 30, midpoint 24, F3: bass.
+		expect(f.clef).toBe('bass');
+		expect(f.scale).toBe('seconds');
+		// D3, 12 quavers at a half second each.
+		expect(f.longest.seconds).toEqual({ kind: 'point', seconds: 6 });
 	});
 });
 

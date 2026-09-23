@@ -26,6 +26,7 @@
 
 import {
 	aggregatePhonation,
+	chooseClefForSpan,
 	pachecoTessitura,
 	pitchToMidi,
 	secondsFor,
@@ -161,6 +162,52 @@ export interface PhonationSection {
 	nothingSung: boolean;
 }
 
+/** One spelled pitch's time on the tessituragram. */
+export interface FigureBar {
+	/** As the score spells it: the bar sits at this letter and octave. */
+	pitch: Pitch;
+	midi: number;
+	/** Sung time on this spelling, quaver-equivalents, repeats counted. */
+	quavers: number;
+	/** The part of `quavers` sung on a vowel some finding names. Zero without a resolver. */
+	focusQuavers: number;
+}
+
+/** One line or space of the stave. Two spellings on it split its height. */
+export interface FigureSlot {
+	/** Octave times seven plus the letter's index from C. */
+	diatonic: number;
+	/** Lowest pitch first, so the lowest draws at the bottom of the slot. */
+	bars: FigureBar[];
+}
+
+/**
+ * The tessituragram, N.123's figure joined to N.127 increment 2's compass
+ * stave (`docs/sessions/brief-code-tessituragram_r1_2026-09-23.md`). Pure
+ * data: `InsightsPane.svelte` only draws it.
+ */
+export interface TessituragramModel {
+	clef: 'treble' | 'bass';
+	/** Low to high, sung slots only. */
+	slots: FigureSlot[];
+	compass: PitchSpan;
+	/** The longest bar, whose end carries the axis's only number. */
+	longest: { pitch: Pitch; quavers: number; share: number; seconds: SecondsFigure | null };
+	/** Seconds when the tempo is a point; quavers when it is a range or absent. */
+	scale: 'seconds' | 'quavers';
+	/** Every finding's number, 1 upward in list order, at its anchor's spelling. */
+	marks: Array<{ n: number; pitch: Pitch }>;
+	/** The vowels the focus colour marks. Null without a resolver. */
+	focusVowels: string[] | null;
+	/** No finding at all: the bars draw quietly. */
+	quiet: boolean;
+	range: PitchSpan | null;
+	tessitura: PitchSpan | null;
+	passaggio: { primo: Pitch; secondo: Pitch } | null;
+	/** Whole percents that sum to 100. Null without both passaggi. */
+	zones: PassaggioZones | null;
+}
+
 export interface InsightsModel {
 	range: RangeRow;
 	crossings: CrossingsRow;
@@ -169,6 +216,8 @@ export interface InsightsModel {
 	/** Heaviest first. Empty is a finding: nothing fired. */
 	findings: Finding[];
 	phonation: PhonationSection;
+	/** Null when nothing pitched is sung. */
+	figure: TessituragramModel | null;
 }
 
 export interface InsightsInputs {
@@ -454,6 +503,101 @@ export function phonationSection(
 	return { timing, tempo, phonation, length, zones, vowels, untrustedMeasures, nothingSung: false };
 }
 
+const DIATONIC_INDEX: Record<Pitch['step'], number> = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
+
+/** The stave step a spelled pitch sits on. */
+export function diatonicOf(p: Pitch): number {
+	return p.octave * 7 + DIATONIC_INDEX[p.step];
+}
+
+/**
+ * The tessituragram's data (N.123 with N.127 increment 2).
+ *
+ * BY SPELLING, NOT BY KEY. `aggregatePhonation`'s `byPitch` is keyed by MIDI
+ * number, where B♭3 and A♯3 are one key, but the figure places each bar at
+ * its letter and octave. So the aggregation runs once more with a resolver
+ * whose answer is the spelling and the vowel together, and `byVowel` comes
+ * back keyed by both. That keeps the bar-reading arbitration and the trust
+ * rules `aggregatePhonation` applies, rather than summing durations a
+ * second way here.
+ */
+export function tessituragram(
+	score: ParsedScore,
+	profile: VoiceProfileSnapshot,
+	findings: readonly Finding[],
+	tessitura: TessituraRow,
+	range: RangeRow,
+	zones: PassaggioZones | null,
+	vowelForEvent?: VowelForEvent,
+): TessituragramModel | null {
+	if (!range.measured) return null;
+	const SEP = '\u0001';
+	const spell = (p: Pitch) => `${p.step}|${p.alter ?? 0}|${p.octave}`;
+	const totals = aggregatePhonation(score, {
+		vowelForEvent: (ev) => (ev.pitch ? `${spell(ev.pitch)}${SEP}${vowelForEvent?.(ev) ?? ''}` : undefined),
+	});
+	const total = fractionToNumber(totals.total);
+	if (total <= 0 || !totals.byVowel) return null;
+
+	const focusVowels = vowelForEvent ? [...new Set(findings.map((f) => f.vowel))] : null;
+	const focus = new Set(focusVowels ?? []);
+	const pitchOf = new Map<string, Pitch>();
+	for (const ev of score.vocalLine) if (ev.type === 'note' && ev.pitch) pitchOf.set(spell(ev.pitch), ev.pitch);
+
+	const bars = new Map<string, FigureBar>();
+	for (const [key, q] of totals.byVowel) {
+		const [spelling, vowel] = key.split(SEP);
+		const pitch = pitchOf.get(spelling);
+		if (!pitch) continue;
+		const bar = bars.get(spelling) ?? { pitch, midi: pitchToMidi(pitch), quavers: 0, focusQuavers: 0 };
+		const n = fractionToNumber(q);
+		bar.quavers += n;
+		if (vowel && focus.has(vowel)) bar.focusQuavers += n;
+		bars.set(spelling, bar);
+	}
+
+	const bySlot = new Map<number, FigureBar[]>();
+	for (const bar of bars.values()) {
+		const d = diatonicOf(bar.pitch);
+		bySlot.set(d, [...(bySlot.get(d) ?? []), bar]);
+	}
+	const slots = [...bySlot]
+		.map(([diatonic, b]) => ({ diatonic, bars: b.sort((x, y) => x.midi - y.midi) }))
+		.sort((a, b) => a.diatonic - b.diatonic);
+
+	// The first longest wins a tie, lowest first, so the pick is deterministic.
+	let longest: FigureBar | null = null;
+	for (const slot of slots) for (const bar of slot.bars) if (!longest || bar.quavers > longest.quavers) longest = bar;
+	if (!longest) return null;
+
+	const pricing = secondsPerQuaver(score);
+	const scale = pricing && pricing.tempo.provenance !== 'inferred' ? 'seconds' : 'quavers';
+	const typed = profile.range ? { low: profile.range.lowest, high: profile.range.highest } : null;
+	const shares = zones ? wholePercents([zones.below, zones.between, zones.above]) : null;
+
+	return {
+		/* DESK DEFAULT: with no typed range there is no singer to follow, so
+		   the clef follows the piece's own compass by the same rule. */
+		clef: typed ? chooseClefForSpan(typed.low, typed.high) : chooseClefForSpan(range.measured.low, range.measured.high),
+		slots,
+		compass: range.measured,
+		longest: {
+			pitch: longest.pitch,
+			quavers: longest.quavers,
+			share: longest.quavers / total,
+			seconds: pricing ? pricing.price(longest.quavers) : null,
+		},
+		scale,
+		marks: findings.map((f, i) => ({ n: i + 1, pitch: f.pitch })),
+		focusVowels,
+		quiet: findings.length === 0,
+		range: typed,
+		tessitura: tessitura.measured ? { low: tessitura.measured.low, high: tessitura.measured.high } : null,
+		passaggio: profile.passaggio ? { primo: profile.passaggio.primo, secondo: profile.passaggio.secondo } : null,
+		zones: shares && zones ? { below: shares[0], between: shares[1], above: shares[2] } : null,
+	};
+}
+
 /**
  * Whole percentages that sum to 100, by largest remainder, so a bar of three
  * zones never reads 33, 33, 33. Shares that sum to zero give zeros.
@@ -527,6 +671,9 @@ export function buildInsights({ analysisScore, profile, watchList, vowelForEvent
 		verdict: verdictOf(range, tessitura),
 		findings,
 		phonation,
+		figure: phonation.nothingSung
+			? null
+			: tessituragram(analysisScore, profile, findings, tessitura, range, phonation.zones, vowelForEvent),
 	};
 }
 

@@ -50,9 +50,29 @@ export function chooseClef(parsed: ParsedScore): RenderClef {
   }
   const nums = parsed.vocalLine
     .filter((e) => e.type === 'note' && e.pitch)
-    .map((e) => e.pitch!.octave * 7 + DIATONIC[e.pitch!.step])
+    .map((e) => diatonicOf(e.pitch!))
     .sort((a, b) => a - b);
   if (nums.length === 0) return 'treble';
-  const median = nums[Math.floor(nums.length / 2)];
+  return clefForMedian(nums[Math.floor(nums.length / 2)]);
+}
+
+function diatonicOf(p: Pitch): number {
+  return p.octave * 7 + DIATONIC[p.step];
+}
+
+/** The heuristic's one rule: at or above middle C reads best in treble. */
+function clefForMedian(median: number): 'treble' | 'bass' {
   return median >= MIDDLE_C ? 'treble' : 'bass';
+}
+
+/**
+ * The same heuristic over a declared span rather than a sung line: the
+ * clef for the median of the span's two ends, which is their midpoint,
+ * floored to a staff step. Ruled 2026-09-11 (`docs/memory/OPEN.md`, the
+ * Insights rulings): the compass stave's clef follows the SINGER, on the
+ * declared range's median. Like the heuristic in `chooseClef`, it never
+ * returns `treble-8vb`.
+ */
+export function chooseClefForSpan(low: Pitch, high: Pitch): 'treble' | 'bass' {
+  return clefForMedian(Math.floor((diatonicOf(low) + diatonicOf(high)) / 2));
 }

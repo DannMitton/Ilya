@@ -1516,20 +1516,17 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.phonation.headline': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}.' },
 	'insights.phonation.headlineInferred': { en: 'Your phonation takes about {low} to {high} of this piece, at the speed {tempoWord} usually means.', fr: 'Votre phonation occupe environ {low} à {high} de la pièce, au tempo qu’indique habituellement {tempoWord}.' },
 	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo ; le temps de phonation ne peut donc pas être donné en secondes.' },
-	'insights.phonation.zoneAbove': { en: 'Above your secondo passaggio', fr: 'Au-dessus de votre secondo passaggio' },
-	'insights.phonation.zoneBetween': { en: 'Between your passaggi',     fr: 'Entre vos passaggi' },
-	'insights.phonation.zoneBelow': { en: 'Below your primo passaggio',  fr: 'Au-dessous de votre primo passaggio' },
 	// English is the desk's mirror of the ratified French (DESK DEFAULT).
 	'insights.phonation.byVowel':  { en: 'By vowel, most phonation time first', fr: 'Par voyelle, par temps de phonation décroissant' },
 	'insights.phonation.finding':  { en: '{n} instances, {seconds} of phonation in all.', fr: '{n} occurrences, {seconds} de phonation en tout.' },
-	// DESK DEFAULT, NOT RATIFIED: the singular of the line above, for a finding
-	// with one instance, where "1 instances" would be wrong in both languages.
+	// The singular of the line above, for a finding with one instance, where
+	// "1 instances" would be wrong in both languages. RATIFIED by Dann 2026-09-23 01:35.
 	'insights.phonation.findingOne': { en: '1 instance, {seconds} of phonation in all.', fr: '1 occurrence, {seconds} de phonation en tout.' },
 	// DESK DEFAULT: a share as the page prints it. French sets a space before %.
 	'insights.phonation.share':    { en: '{n}%',                         fr: '{n} %' },
-	// DESK DEFAULT, NOT RATIFIED, in either language: an untrusted bar is
-	// counted as written and named. The French reuses the ratified fragment of
-	// `insights.fit.withheldOne`.
+	// An untrusted bar is counted as written and named. The French reuses the
+	// ratified fragment of `insights.fit.withheldOne`. Both lines RATIFIED by
+	// Dann 2026-09-23 01:35.
 	'insights.phonation.untrustedOne': { en: 'Measure {measures} does not add up to its time signature, so its notes are counted as written.', fr: 'La mesure {measures} ne correspond pas à son chiffrage de mesure ; ses notes sont comptées telles qu’écrites.' },
 	'insights.phonation.untrustedMany': { en: 'Measures {measures} do not add up to their time signatures, so their notes are counted as written.', fr: 'Les mesures {measures} ne correspondent pas à leur chiffrage de mesure ; leurs notes sont comptées telles qu’écrites.' },
 	// WRITTEN, NOT SHOWN. Rendered nowhere until the Loupe carries a tempo
@@ -1537,6 +1534,21 @@ const strings: Record<string, Record<Language, string>> = {
 	// would send a singer to a control that does not exist. English is Dann's
 	// (2026-09-23 01:05); the French is PROPOSED, NOT RATIFIED.
 	'insights.phonation.tempoPointer': { en: 'You may assign tempi manually using the Loupe.', fr: 'Vous pouvez indiquer vos tempi vous-même dans la loupe.' },
+	// N.123 with N.127 increment 2, the tessituragram: English is the desk's,
+	// every French row RATIFIED by Dann 2026-09-23 01:57
+	// (`docs/sessions/brief-code-tessituragram_r1_2026-09-23.md` §5).
+	'insights.figure.rangeLabel':  { en: 'your range, {low} to {high}',  fr: 'votre ambitus, {low} à {high}' },
+	'insights.figure.tessitura':   { en: 'tessitura',                    fr: 'tessiture' },
+	'insights.figure.lowest':      { en: '{pitch} lowest',               fr: '{pitch} la plus grave' },
+	'insights.figure.highest':     { en: '{pitch} highest',              fr: '{pitch} la plus aiguë' },
+	'insights.figure.primo':       { en: 'primo',                        fr: 'primo' },
+	'insights.figure.secondo':     { en: 'secondo',                      fr: 'secondo' },
+	'insights.figure.zoneAbove':   { en: 'above · {share}',              fr: 'au-dessus · {share}' },
+	'insights.figure.zoneBetween': { en: 'between · {share}',            fr: 'entre · {share}' },
+	'insights.figure.zoneBelow':   { en: 'below · {share}',              fr: 'au-dessous · {share}' },
+	'insights.figure.caption':     { en: 'Seconds of phonation per pitch', fr: 'Secondes de phonation par hauteur' },
+	'insights.figure.captionQuavers': { en: 'Phonation per pitch, in quavers', fr: 'Phonation par hauteur, en croches' },
+	'insights.figure.captionFocus': { en: 'dark: sung on {vowels}',      fr: 'en foncé\u00a0: chanté sur {vowels}' },
 };
 
 /**

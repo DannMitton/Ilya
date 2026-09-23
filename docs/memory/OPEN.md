@@ -162,6 +162,8 @@ the paths already). Whoever takes N.142 should be told this.
 > ESTABLISHED below. The inventory's SPEC-ONLY was wrong, and so was the desk's
 > "largest unstarted piece" when it proposed LATER. **Placed IN by Dann 2026-09-16.**
 >
+> **RULED BY DANN 2026-09-23 01:40: THE PHONATION-TIME SECTION AND THE TESSITURAGRAM ARE ONE UNIT.** Shipped as `1dfee32` on page two. Dann, on reading it: the section *"certainly pairs beautifully with the planned tessituragram. Let's plan to concatenate the new section with the tessituragram so this information can be taken in simultaneously."* **Who offered what:** the desk found that its own three-zone bar (option 1, offered 2026-09-22 23:45) repeats the tessituragram at lower resolution, and that the headline, the per-vowel list, and the seconds inside findings do not. Dann ruled the pairing. **DESK DEFAULT, not ruled:** when the tessituragram is built, the bar is struck and its three shares become labels on the drawing's shaded regions; the headline and the per-vowel list sit directly with the drawing; the section stays on page two until then.
+>
 > **N.123, THE AGGREGATION LAYER, numbered by Dann 2026-09-10 late,
 > UNPLACED, displaces nothing until he places it.** One layer under four
 > figures (E.19, 2026-07-30, found them sharing it): per-pitch and per-vowel
