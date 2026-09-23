@@ -215,6 +215,8 @@ next session the same hour it cost the last one.
 | a date, before you stamp one on anything | `THE MOUNT'S FILE TIMESTAMPS ARE NOT THE DATE` |
 | prune `STATE.md`, or script an edit inside a blockquote | `PRUNING A MEMORY FILE` |
 | quote Ilya's size, or a byte count of anything | `ILYA'S SIZE` |
+| about to read a long source (a dissertation, a book, a 1,500-line file) | `A LONG READ DIES AT THE COMPACTION` |
+| a file Dann names is not under Desktop or Downloads | `THE BRIDGE CARRIES A THIRD FOLDER` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -4039,3 +4041,56 @@ Cause NOT ESTABLISHED, and it may be as simple as Code writing to its own sessio
 rather than to this folder. **The cost is silent: a trap that cost an hour goes unrecorded
 and the next session pays it again.**
 
+
+---
+
+### A LONG READ DIES AT THE COMPACTION. Learned 2026-09-22, and it cost the session
+
+**Symptom.** The desk read §3.1.1 of St-Pierre's dissertation — a census of thirty-nine
+annotation types across forty-two voice guides, the single most useful finding of the day —
+**held the findings in context, intending to report them in the next message, and the thread
+compacted before that message was sent.** What survived was a compaction summary, not the
+source. Every figure and quotation in
+`docs/sessions/proposal-st-pierre-elements-for-ilya_r2_2026-09-22.md` now carries a
+provenance warning that it must be re-verified against the PDF, because it must.
+
+**THE RULE. A long read is not finished until its findings are on disk.** Write the findings
+to a session document **before the next tool call**, not at the end of the reading, and never
+at the end of the reply. The read is the expensive part; the write is thirty seconds.
+
+**Why this is not obvious.** A 200-page PDF read across several calls feels like one
+continuous act, and the desk defers the write until the act completes. **The act does not
+control when the context ends.** Compaction is not announced and does not wait.
+
+**Applies to:** dissertations and books, 1,000+ line source files read in full, i18n sweeps,
+a long grep's output, and any browser observation not yet written down.
+
+**The corollary for the handover.** When a compaction has already happened, **say so in the
+document**, name what came through the summary rather than the source, and tell the next
+session what to re-open. Do not launder a summary into a citation.
+
+---
+
+### THE BRIDGE CARRIES A THIRD FOLDER. Observed 2026-09-22
+
+**`get_device_info` on 2026-09-22 returned three connected folders, not two:**
+
+```
+/Users/dannmitton/Desktop/ilya-rewrite
+/Users/dannmitton/Downloads
+/Users/dannmitton/Documents/Voice Pedagogy Research
+```
+
+**The opener in `README.md` names only the first two.** The third was granted during the
+2026-09-22 session so the desk could read St-Pierre's dissertation, and it is where the voice
+pedagogy literature lives — Howell, the dissertations, the guides.
+
+**What this means for the next session.** Folder grants do not carry between sessions, and
+**the opener will not ask for the research folder.** If Dann names a source that is not under
+Desktop or Downloads, **request it explicitly** with `device_request_folder_access` for
+`/Users/dannmitton/Documents/Voice Pedagogy Research` rather than reporting that the file
+cannot be found. **Tether 14: a failed lookup is not an absence.**
+
+**Path for the St-Pierre PDF**, which the next session will want:
+`~/Documents/Voice Pedagogy Research/Dissertations/St-Pierre - 2016 - Pedagogical Guide to
+the Interpretation of 19th C French Canadian Songs for Solo Voice and Piano.pdf`

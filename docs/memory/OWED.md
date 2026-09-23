@@ -164,6 +164,39 @@ repair, one level down.
 **It wants a home in `PRODUCT.md` before N.141 closes.** Not done here, because N.141 is
 open and nothing is urgent about it; recorded so the next close cannot miss it.
 
+### EVERY WALK HAS BEEN ON ONE VOICE, AND IT MAY BE THE LEAST COMMON ONE. 2026-09-22
+
+**Dann, 2026-09-22, on reading St-Pierre's grid:** *"Karine is a soprano and her treble-voice
+concerns may be different than my low-male-voice concerns. But they are nevertheless
+relevant since I suspect mostly sopranos will be using Ilya. (Sopranoes are the most common
+voice type)"* **Recorded as his suspicion, which is what he called it, not as an
+established fact.**
+
+**THE DESIGN IS NOT THE PROBLEM.** Ilya is voice-type-agnostic by his ruling of 2026-09-16,
+*"a declared voice type plays NO part in choosing values, because fach is bound up with
+identity"*, and the code honours it: `profileStore.ts:85` keeps `voiceType` optional and
+`analyze.ts:31` takes it as `_voiceType`, unused. **A soprano gets her own measured formants
+and her own typed range.** This is a deliberate departure from St-Pierre, whose high and low
+tessitura are defined per voice type against McKinney's ideal ranges, **and Ilya's is the
+better instrument for it.**
+
+**THE EVIDENCE IS THE PROBLEM.** Every walk, fixture and measured number in this record is
+**Dann's own low male voice and his own repertoire**: Mussorgsky's Without Sun, Kabalevsky's
+Shakespeare sonnets, the Lamm scan. **Nothing has ever been walked on a treble voice or on
+treble repertoire.**
+
+**What that leaves NOT ESTABLISHED**, and none of it is a defect until someone looks:
+
+- Whether the passaggio crossing findings read sensibly for a voice whose passaggi sit an
+  octave higher.
+- Whether the compass and tessitura bands draw legibly for a part sitting mostly above the
+  stave.
+- Whether the calibration wizard's vowel capture behaves on a treble voice at all, the
+  formant work having been tuned against one bass-baritone.
+
+**The cheap version is one walk:** a treble profile and one piece of treble repertoire,
+through the same path. **Not numbered, and Dann has not ruled it in.**
+
 ### THE N.146 WALK FINDINGS, 2026-09-17. NINE ARE LIVE AND WERE BURIED IN A CLOSED SPEC
 
 **Moved here 2026-09-22, verbatim in substance, from `OPEN.md` §N.146 before that spec was
@@ -344,6 +377,43 @@ clause 13's "its neighbour" covers any tap target or only the next caret**, whic
 decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
+
+### ADDED AT THE CLOSE OF 2026-09-22. Five, and the first two block N.130
+
+1. **`finding.passaggio`, `i18n.ts:1501`. PARKED AT DANN'S OWN WORD, mid-walk.** The whole
+   question is preserved in `../sessions/insights-french-as-built_r3_2026-09-22.md`: **is
+   Ilya's "turning" the vowel's or the register's?** It decides between
+   « le changement de registre », « changement de timbre », and no noun at all. **The
+   semicolon's French spacing rides along with whatever he rules.** This is B1 row 10 of
+   N.130 and the walk stopped on it.
+
+2. **`fit.heading`. The English moved and the French did not, and a third problem appeared.**
+   Dann ruled the English to **"Ilya reads your compatibility from these three
+   measurements"**. The French still reads « La correspondance, terme par terme », which
+   mirrored the *old* English and now mirrors nothing. **AND:** the new English introduces
+   **"compatibility"** where `tab.fit`, every `insights.fit.*` key and "Repertoire fit score"
+   all say **"fit"**. **One term per concept is house style.** The desk raised this
+   consequence on 2026-09-22 and **Dann did not answer it.** Two ways out: carry
+   "compatibility" everywhere, or bring the heading back to "fit". **His.**
+
+3. **Does the 2026-09-22 ruling become tether 23?** *"Prioritize the needs of the user rather
+   than the needs of the programmer or the code. There is always a way to accomplish an
+   objective with the code."* Transcribed to `PRODUCT.md` §"THE CODE IS NOT A CONSTRAINT ON
+   THE PRODUCT", **but it is a rule about how the desk reasons, which is `CONTRACT.md`'s
+   subject.** Ask at the open of the next thread; it is one word of answer.
+
+4. **Performance length: in or out?** The strongest finding of the St-Pierre research.
+   Her census calls it one of the four *least* common annotations across forty-two guides and
+   the omission *"surprising"*. **Ilya can give it per singer, which no printed guide can.**
+   Full case in `../sessions/proposal-st-pierre-elements-for-ilya_r2_2026-09-22.md`
+   §"PERFORMANCE LENGTH". **Nothing enters the tracker until he rules it in.**
+
+5. **Dynamics, re-opened.** Refused in the r1 proposal partly because `ParsedScore` carries
+   no dynamics. **The 2026-09-22 ruling struck that reason.** It is now a question of worth
+   against a parser build, not a question of possibility. **Not ruled either way.**
+
+### THE OLDER ROWS FOLLOW
+
 
 - **RULED 2026-09-16, BUILD OWED: « placement recommencé » / "placement started
   over"**, in `../sessions/spec-loupe-french_r1_2026-09-14.md`. ~~**THE UNDO SENTENCE FOR "START PLACEMENT OVER". Dann's to rule, English and
@@ -682,3 +752,17 @@ remaining 8 are:
 | The rotation lock | E.44 | no string or code fixes it |
 | **The teacher-with-a-studio copyright case** | E.45, raised by Dann, unanswered | |
 | `ILYA_PROJECT_MAP_2026-08-10_r7.svg` has no cards for N.23 through N.67 | E.41 | **the map is an archive; the tracker is the instrument** |
+
+---
+
+## OWED BY THE DESK, ADDED AT THE CLOSE OF 2026-09-22
+
+| what | where it is | state |
+|---|---|---|
+| **A Code brief for the eight ruled Insights rows** | rulings in `../sessions/insights-french-as-built_r3_2026-09-22.md` | ruled, not written, not built |
+| **N.130 B2, thirty rows** | same document | not walked |
+| **N.130 A, nineteen rows** | same document | not walked |
+| **Re-verify St-Pierre §3.1.1 against the PDF** | see `ENVIRONMENT.md` §`A LONG READ DIES AT THE COMPACTION` | the census in the r2 proposal came through a compaction summary, not a second read |
+| **Check whether her Chapter 4 entries carry a duration** | one song entry settles it | decides whether she adopted the thing she called a surprising omission |
+| **Her bibliography itself** | forty-two named guides, unopened | Dann asked for her sources; the desk reviewed her *survey* of them, one layer short |
+| **Whether informative annotation belongs in Ilya** | composer, poet, year, context | the most common annotations in her entire census, and Ilya offers none |

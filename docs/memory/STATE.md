@@ -45,40 +45,75 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-21, about 23:40
+> ### READ THIS FIRST. Written at the close of 2026-09-22, about 22:40
 >
-> **THE ONE THING IS N.130'S WALK: Insights' French, and it is the last release-blocking
-> item that is already built.** DESK DEFAULT, and Dann can name another. **All 59
-> `insights.*` entries have French differing from English**, parsed in `i18n.ts` on
-> 2026-09-21, so the build is real and only his eye is owed. **`SEQUENCE.md` tier 2 puts it
-> next now that dependency 2 is discharged**, and the ruled release sentence names Insights.
+> **THE ONE THING IS STILL N.130'S WALK: Insights' French. It was started on 2026-09-22 and
+> it is PARKED, not abandoned, ten rows in.** DESK DEFAULT, and Dann can name another.
 >
-> **IT IS A SITTING, NOT A LOOK.** `SCHEDULE.md` week 3 says *"Dann rules it in one
-> sitting"*, and it is 59 entries of French. **Do not open it by pretending otherwise.** He
-> was told this on 2026-09-21 and chose other work that night, which is not a refusal.
+> **WHERE IT STOPPED, exactly.** The 59 `insights.*` entries were sorted into three bands
+> and written out row by row in `../sessions/insights-french-as-built_r3_2026-09-22.md`,
+> which is the instrument for this walk and **is the first thing to open.** Dann walked
+> **band B1** and ruled on nine of its ten rows. **He parked on row ten,
+> `finding.passaggio` (`i18n.ts:1501`), at his own word**, and the whole question is
+> preserved in that document: is Ilya's "turning" the vowel's or the register's? **B2 (30
+> rows) and A (19 rows) have not been walked at all.**
 >
-> #### NOTHING IS MID-FLIGHT. THREE SHIPS CLOSED 2026-09-21 EVENING
+> **RESUME BY OPENING r3, NOT BY STARTING OVER.** Nine rulings are in it. Re-walking them
+> would be a second sitting he has already paid for.
 >
-> **N.132 CLOSED**, `5f7be82`, walked in both languages. Account in `../sessions/LOG.md`
-> block 31. **N.154's first row CLOSED**, `8bd1aff`, walked. **The « PARTITION » receipt
-> collision CLOSED**, shipped with this close, **and its walk is the one thing owed from
-> tonight**: the score receipt in French with a file loaded.
+> #### NOTHING IS MID-FLIGHT IN THE TREE. THE TREE IS CLEAN AT THE FLOOR
 >
-> #### WHAT CAME OUT OF THEM, and none of it is in flight
+> **`f6d2184` is the floor and nothing has shipped since.** What is uncommitted at this
+> close is **memory and session documents only** — `INBOX.md`, `OWED.md`, `PRODUCT.md`,
+> `STATE.md`, `ENVIRONMENT.md`, the r3 walk document, and the three St-Pierre documents.
+> **No application code is in flight.**
 >
-> - **Dann ruled label harmony into N.131** on 2026-09-21: wherever a surface carries both
->   a visible label and an accessible name, the two say the same thing. `a11y.paper` is its
->   first case. Spec in `OPEN.md` §N.131.
-> - **Five debts are in `OWED.md`**, the sharpest being that at 390 px the poem receipt's
->   line gets no room at all, which predates tonight and wants the same grid restructure as
->   the tag column.
-> - **`PRODUCT.md`'s tabs table was three names out of date** and named a Fit tab that does
->   not exist. Corrected at this close, with the padding ratification beside it.
-> - **The desk was wrong three times tonight and Code caught two of them:** a test grep that
->   missed a fourth directory, a fixed pixel width chosen from one font, and a token quote
->   low by a factor of three. All three are in `ENVIRONMENT.md`.
-> - **NOT MEASURED: paint on a phone**, still. **NOT ESTABLISHED: whether « PARTITION »
->   fits 62 px in Consolas or Android's monospace.**
+> #### TWO THINGS DANN RULED ON 2026-09-22 THAT CHANGE HOW THE DESK REASONS
+>
+> - **"Clarity for a receptive user, not compactness."** In `PRODUCT.md`. It killed
+>   "phonation mass", which was **the desk's own coinage and not a term from the
+>   literature**, and replaced it with *"What is flagged, by how much singing time you spend
+>   singing it."*
+> - **"There is always a way to accomplish an objective with the code."** In `PRODUCT.md`
+>   §"THE CODE IS NOT A CONSTRAINT ON THE PRODUCT". **"The tree does not do that" is a cost,
+>   not a verdict.** Only three kinds of refusal survive it, and they are listed there.
+>   **It may want to be tether 23. That is row 3 of `OWED.md` §"RULINGS DANN OWES".**
+>
+> #### THE RESEARCH THREAD, WHICH IS NOT A TRACKER ITEM AND MUST NOT BECOME ONE BY DRIFT
+>
+> **Karine St-Pierre's 2016 dissertation was read on Dann's instruction** — she was in the
+> doctoral cohort before his — and three documents came out of it, all in `../sessions/`:
+> the difficulty-grid memo, and the proposal at **r2**, which is the live one.
+>
+> **The strongest finding is performance length.** Her census of forty-two voice guides
+> records it as one of the four *least* common annotations and calls the omission
+> *"surprising"*. **Every reason the field gives for leaving it out is a reason not to PRINT
+> one number for everyone, and Ilya does not print for everyone.** Case in the r2 proposal.
+>
+> **AND A WARNING ON THAT DOCUMENT.** Its census figures and quotations **came through a
+> compaction summary, not a second read of the PDF.** They must be re-verified before
+> anything is built on them. See `ENVIRONMENT.md` §`A LONG READ DIES AT THE COMPACTION`,
+> which is the trap that caused it, and §`THE BRIDGE CARRIES A THIRD FOLDER`, which is where
+> the PDF lives. **Nothing from this research is numbered. §3.1 holds.**
+>
+> #### WHAT THE DESK GOT WRONG ON 2026-09-22, since the next session inherits the habits
+>
+> - **It let a long read sit in context instead of writing it down, and the thread compacted
+>   on top of it.** Now a trap in `ENVIRONMENT.md`.
+> - **It loaded a comma with weight-bearing logic in a proposed string** — *"Your
+>   compatibility, as these three measurements show it"* — **the exact fault it had just
+>   diagnosed in "The fit, in its terms".** Dann caught it. It is a habit, not a one-off.
+> - **It read a verb backwards** and told Dann "relies on" pointed the wrong way in his own
+>   draft. It did not. The subject was the problem, not the verb.
+> - **It flagged `fit.heading`'s French as the suspect when the English was the ambiguous
+>   one.**
+>
+> #### STILL NOT MEASURED, carried forward unchanged
+>
+> **Paint on a phone.** And **whether « PARTITION » fits 62 px in Consolas or Android's
+> monospace** — the fix is `min-width`, so the tag grows rather than overlapping, but the
+> observation has never been made.
+
 
 ## THE TRACKER
 
@@ -127,33 +162,10 @@ does not repeat them.
   same screen: a compass of **A3 to F♯6**, implausible for a sung line in that song, and a
   tall empty region at the top of the Insights box. Spec in `OPEN.md`. **All three are NOT
   ESTABLISHED as faults until the code is read.**
-- `[x]` **N.165. The loupe draws no notes. CLOSED 2026-09-22**, shipped `f6d2184` and walked. DESK DEFAULT number, **found by Dann
-  2026-09-22** on `sunless-01-v-chetyryokh-stenakh_lamm-scan`, in French, on Annotation.
-  He clicked a printed note and the loupe opened holding clef, key signature, 6/4 and
-  barlines, **and no noteheads**, twice, on measures 5 and 6. **The header knew what it
-  held both times**, down to « A4 · temps 4, division 2 · Noire », and the page above drew
-  the same measures correctly. **Both failing measures report « trop pleine », 6.5 and 7.5
-  of 6.** **Two hypotheses are live and unseparated:** Dann's, that the score carries no
-  lyrics; the desk's, that the measure is over-full. **The control fixture separates them in
-  one run.** Brief
-  `../sessions/brief-n165-n166-blank-loupe-and-the-reloaded-scan_r1_2026-09-22.md`.
-  **CAUSE FOUND BY CODE 2026-09-22, AND BOTH HYPOTHESES DIED.** The control fixture draws
-  its notes in the loupe, which killed Dann's; scan m. 4 is **under**-full, 4 of 6, and is
-  blank the same way, which killed the desk's. **The real cause: `Loupe.svelte` decided a
-  mark belonged to the held measure by testing whether its id started `m{index}-`, and a
-  score read from ink gives ids like `r4-928`**, so every note counted as foreign and the
-  crop narrowed past all of them, leaving the closing barline. **On m. 5 the visible band
-  ran x 233.4 to 262.1 against notes at 35.8 to 249.** **It blanked the loupe on every
-  measure of every scan-derived song**, not just this one. **The desk's own lead, the null
-  return, had nothing to do with it**, and `renderLoupeMeasure` drew six event groups
-  correctly. **FIXED, gates at baseline.** The squircle rode with it and is a
-  sibling of N.141's clamp, not the clamp: `ringRoom` widened the band above the ring and
-  never below, which only shows on a system with no underlay.
-  **WALKED BY DANN 2026-09-22 on the alias in French, and not on the song he found it on:**
-  he walked the 23-page IMSLP Mussorgsky instead, where the loupe drew measure 8 and
-  measure 11 in full with the ring closed. **His measure 11 reads « 14.5 sur 6, trop
-  pleine » and draws every note**, which is independent confirmation that over-fullness
-  was never the cause. His words: *"This looks as it should!"*
+- `[x]` **N.165. The loupe draws no notes. CLOSED 2026-09-22**, shipped `f6d2184`, walked by
+  Dann on the alias in French: *"This looks as it should!"* **Account moved to
+  `../sessions/LOG.md` block 35 at the close of 2026-09-22.** It carries no ruling of his;
+  the cause, the two dead hypotheses and the squircle sibling are all in that block.
 - `[ ]` **N.166. A stored scan may need the page reader to redisplay.** DESK DEFAULT number,
   found by the desk 2026-09-22 while investigating N.165. **The same song, the same library,
   the same origin, in the desk's own tab: the score never drew**, and the drawer sat on
@@ -557,3 +569,25 @@ closed rows that had never moved; they are `LOG.md` block 34 and this file is ba
 `OPEN.md` §N.129 that no longer exists. **NOT ESTABLISHED: the cause of the blank loupe, the
 squircle's missing bottom edge, whether a stored scan re-reads on load, and all three of
 N.164's parts.***
+
+*Addendum 4, 2026-09-22 about 22:40, written at the close and **the thread ended because it
+compacted**, which is itself the session's sharpest finding. **Three ships closed and walked
+in French on the alias**: N.165's blank loupe (`f6d2184`, account now `LOG.md` block 35), the
+reader's waiting note in Dann's own ruled words, and the « PARTITION » receipt gap. **N.130's
+walk was started and is parked ten rows in at `finding.passaggio`, at Dann's word**, with
+nine B1 rulings banked in `../sessions/insights-french-as-built_r3_2026-09-22.md`. **Dann
+killed "phonation mass" as the desk's own coinage**, not a term from the literature, and
+ruled `PRODUCT.md` §"Clarity for a receptive user, not compactness" over it. **He then ruled
+that the code is not a constraint on the product** — *"there is always a way"* — which struck
+one of the desk's own refusals the day it was written and **may want to be tether 23**;
+that question is `OWED.md` row 3. **Karine St-Pierre's dissertation was read on his
+instruction** and produced a memo and a proposal now at r2, whose strongest finding is
+**performance length**: the field calls it impractical because a printed guide must name one
+number for everyone, and **Ilya does not print for everyone**. **THE TRAP THAT ENDED THE
+THREAD: the desk held that census in context intending to report it, and the compaction took
+it.** The r2 proposal's figures therefore carry a provenance warning and must be re-verified
+against the PDF. Trap and path in `ENVIRONMENT.md` §`A LONG READ DIES AT THE COMPACTION` and
+§`THE BRIDGE CARRIES A THIRD FOLDER`. **NOT ESTABLISHED: whether St-Pierre adopted
+performance length in her own Chapter 4; whether `fit.heading`'s new "compatibility" is
+allowed to break one-term-per-concept against `tab.fit`; paint on a phone; and « PARTITION »
+in Consolas.***

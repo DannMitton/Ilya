@@ -7215,3 +7215,36 @@ records that they will be lost the day N.141 closes.
   `min-width: 62px`. **WALKED BY DANN 2026-09-22 in French on the alias:** *"Yes there is a
   gap, terrific!"* Brief
   `../sessions/brief-partition-tag-overlaps-the-filename_r1_2026-09-21.md`.
+
+
+---
+
+## Block 35. N.165, the blank loupe. Moved from `STATE.md` at the close of 2026-09-22
+
+- `[x]` **N.165. The loupe draws no notes. CLOSED 2026-09-22**, shipped `f6d2184` and walked. DESK DEFAULT number, **found by Dann
+  2026-09-22** on `sunless-01-v-chetyryokh-stenakh_lamm-scan`, in French, on Annotation.
+  He clicked a printed note and the loupe opened holding clef, key signature, 6/4 and
+  barlines, **and no noteheads**, twice, on measures 5 and 6. **The header knew what it
+  held both times**, down to « A4 · temps 4, division 2 · Noire », and the page above drew
+  the same measures correctly. **Both failing measures report « trop pleine », 6.5 and 7.5
+  of 6.** **Two hypotheses are live and unseparated:** Dann's, that the score carries no
+  lyrics; the desk's, that the measure is over-full. **The control fixture separates them in
+  one run.** Brief
+  `../sessions/brief-n165-n166-blank-loupe-and-the-reloaded-scan_r1_2026-09-22.md`.
+  **CAUSE FOUND BY CODE 2026-09-22, AND BOTH HYPOTHESES DIED.** The control fixture draws
+  its notes in the loupe, which killed Dann's; scan m. 4 is **under**-full, 4 of 6, and is
+  blank the same way, which killed the desk's. **The real cause: `Loupe.svelte` decided a
+  mark belonged to the held measure by testing whether its id started `m{index}-`, and a
+  score read from ink gives ids like `r4-928`**, so every note counted as foreign and the
+  crop narrowed past all of them, leaving the closing barline. **On m. 5 the visible band
+  ran x 233.4 to 262.1 against notes at 35.8 to 249.** **It blanked the loupe on every
+  measure of every scan-derived song**, not just this one. **The desk's own lead, the null
+  return, had nothing to do with it**, and `renderLoupeMeasure` drew six event groups
+  correctly. **FIXED, gates at baseline.** The squircle rode with it and is a
+  sibling of N.141's clamp, not the clamp: `ringRoom` widened the band above the ring and
+  never below, which only shows on a system with no underlay.
+  **WALKED BY DANN 2026-09-22 on the alias in French, and not on the song he found it on:**
+  he walked the 23-page IMSLP Mussorgsky instead, where the loupe drew measure 8 and
+  measure 11 in full with the ring closed. **His measure 11 reads « 14.5 sur 6, trop
+  pleine » and draws every note**, which is independent confirmation that over-fullness
+  was never the cause. His words: *"This looks as it should!"*

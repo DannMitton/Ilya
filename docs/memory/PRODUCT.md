@@ -757,3 +757,77 @@ languages from start to finish."*
 **What it does NOT do:** it does not make every untranslated string release-blocking.
 `SEQUENCE.md` dependency 6 still holds, N.130 inside the release and N.131 outside it, and
 Dann has not moved that. **It raises the weight of a parity failure, not the schedule.**
+
+---
+
+## CLARITY FOR A RECEPTIVE USER, NOT COMPACTNESS. Ruled by Dann 2026-09-22
+
+**His words:** *"The riegister we are looking for is not compactness for the sake of
+comprehension. It is clarity for a receptive user."*
+
+**And the test he applied to reach it:** *"Because 'phonation mass' is not a term from the
+literature and it's not a familiar term in the field, we can't justify it."*
+
+**So, for every string a singer reads:**
+
+- **A term Ilya cannot justify does not go on the page.** Not from the literature and not
+  current in the field means it is jargon, whoever coined it. **This binds the desk's own
+  coinages hardest**, because they arrive dressed as precision.
+- **Length is not the enemy. Obscurity is.** Given a short phrase the singer must decode and
+  a longer one they simply understand, **take the longer one.** He chose "What is flagged,
+  by how much of the piece you spend on it" over "longest first", which was four words
+  shorter and which the desk had recommended.
+- **The reader is receptive, not impatient.** A singer reading their own results has come to
+  understand something. Write for that person.
+
+**This is not licence to pad.** The same ruling struck a clause entirely: "lighter by
+phonation mass" left the remainder sentence rather than being reworded, **because the
+sentence did not need the measurement at all.** Say the thing that is needed, in words that
+are understood, and stop.
+
+**Where it came from:** the desk coined "phonation mass" in the N.127 design brief of
+2026-09-11, a code comment then attributed it to Dann's ruling, and he did not recognize the
+phrase when he met it on 2026-09-22. **The metric is real and unchanged; only its name was
+invented.** See `OWED.md`.
+
+---
+
+## THE CODE IS NOT A CONSTRAINT ON THE PRODUCT. Ruled by Dann 2026-09-22
+
+> *"If she has a compelling idea, we will figure out how to assimilate it into Ilya.
+> Prioritize the needs of the user rather than the needs of the programmer or the code.
+> There is always a way to accomplish an objective with the code."*
+
+**Said of the St-Pierre research, and it generalizes.** Dann amended the desk's own sentence
+— *"so the proposal does not promise things the tree cannot compute"* — to read **"cannot
+compute YET."**
+
+### What this binds
+
+**"The tree does not do that" is a cost, not a verdict.** When the desk weighs an idea, the
+question is whether the user needs it, not whether the parser already carries it. If the
+answer is yes and the parser does not, **the parser is the thing that moves.**
+
+**This does not license promising the user anything.** WRITTEN and DONE are unchanged, and
+nothing ships on an intention. It changes what the desk is allowed to *refuse*: a refusal
+must rest on the product, not on the build.
+
+### The three refusals that survive it
+
+1. **The element is about somebody other than the singer** — the pianist's difficulty, the
+   reader's difficulty.
+2. **The element pronounces on the singer** rather than forecasting. `PRODUCT.md`
+   §"Insights gives insight, not intervention" and §"What Ilya produces".
+3. **Dann has ruled against its shape.** The summed difficulty grade, for one.
+
+### The refusal it struck on the day it was made
+
+**Dynamics**, refused in `proposal-st-pierre-elements-for-ilya_r1` partly because
+`ParsedScore` carries no dynamics at all. **That is a parser gap and is now a build cost.**
+Re-opened in r2 as a question of worth. **Not ruled either way.**
+
+### It may want a tether number
+
+**This is a rule about how the desk reasons, which is `CONTRACT.md`'s subject, not this
+file's.** It is transcribed here because it was ruled about the product. **Dann's to decide
+whether it becomes tether 23.**

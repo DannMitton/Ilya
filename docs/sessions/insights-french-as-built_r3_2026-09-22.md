@@ -10,7 +10,149 @@ Every row is the text a singer reads today, read out of `i18n.ts` on 2026-09-22.
 
 ## DANN'S RULINGS ON THIS SET. Appended as he gives them
 
-**1 of 59 ruled.**
+**6 of 59 ruled, and 2 more are ENGLISH-RULED with their French pending. B1: 6 of 10. ONE PARKED.**
+
+### `findings.heading` and `findings.remainder*`: "PHONATION MASS" IS STRUCK. English ruled 2026-09-22
+
+**Dann:** *"Because 'phonation mass' is not a term from the literature and it's not a
+familiar term in the field, we can't justify it."* **The principle he drew from it is now
+`PRODUCT.md` §"Clarity for a receptive user, not compactness".**
+
+- **What the metric actually is**, read from `insights.ts:262-308`, not from its comment:
+  for each kind of problem, Ilya sums **the sounding length of every note where it happens,
+  in eighth-notes, repeats counted**, and sorts the problems by that total. **It is time and
+  nothing else.** The metric is correct and is not changing.
+- **"Mass" was the desk's metaphor**, coined in
+  `brief-to-design-n127-insights_r3_2026-09-11.md:75` and never Dann's.
+- **`findings.heading` (`:1489`) becomes, ruled by Dann:**
+  **"What is flagged, by how much of the piece you spend on it"**, chosen over the desk's
+  recommended "What is flagged, longest first", **which was shorter and which he rejected on
+  register.**
+- **`findings.remainderOne` and `remainderMany` (`:1493`, `:1494`): the clause "lighter by
+  phonation mass" LEAVES the sentence** rather than being reworded. The heading carries the
+  ranking basis; the remainder sentence only says where the rest is printed.
+- **FRENCH RULED 2026-09-22.**
+  - `findings.heading` → « Ce qui est signalé, selon la part de la pièce que vous y
+    consacrez »
+  - `findings.remainderOne` → « 1 autre observation est imprimée en entier à la page 2. »
+  - `findings.remainderMany` → « {n} autres observations sont imprimées en entier à la
+    page 2. »
+  - **The desk drafted « que vous y passez » and Dann ruled « que vous y consacrez ».** His
+    words: *"I read passez and it felt croche to my eart."* **His ear, and it is the
+    authority here.**
+  - **The remainder sentences gained « est » / « sont »** because dropping the clause left a
+    fragment; the English is a sentence and the French now is too. **Desk decision, and he
+    can wave it off.**
+  - **THE HEADING WAS THEN REVISED IN BOTH LANGUAGES, 2026-09-22, to say the literal
+    thing.** The desk raised that the heading framed the metric as a proportion of the piece
+    while the metric is an absolute total of sung duration, and Dann took the more literal
+    form:
+    - **FR, ruled:** « Ce qui est signalé, selon le temps de chant que vous y consacrez »
+    - **EN, ruled:** "What is flagged, by how much time you spend singing it"
+    - **The desk then flagged that the French had moved away from the English**, against
+      Dann's mirror ruling of 2026-09-13, and asked whether the English should follow. **He
+      brought the English across**, restoring the mirror with the truer sentence in both.
+    - **His first English draft doubled a word** ("how much singing time you spend singing
+      it"); the desk offered two landings and he took *"by how much time you spend singing
+      it."*
+
+
+- **`fit.colReference` (`:1461`): FRENCH KEEP, ENGLISH TO ALIGN.** **Ruled by Dann
+  2026-09-22**, his words: *"Kepe the French, Align the English."*
+  - « Vos repères » stands, and it was already his, ruled 2026-09-19.
+  - **The finding:** the column holds three different things, one per row — the typed range
+    (`:1468`), the typed passaggi (`:1473`) and the typed tessitura. **"Your reference
+    range" names only the first. « Vos repères » covers all three**, so the French heading
+    was the accurate one.
+  - **DESK PROPOSAL for the English, ruled in by him as "align" rather than by wording:
+    "Your references".** **The English is his voice and he can change this in one word**;
+    the ruling was to align, and the desk supplied the candidate.
+
+
+- **`fit.colFlag` (`:1462`): FRENCH KEEP.** « Signalement » stands. **Ruled by Dann
+  2026-09-22**, his word: *"keep."* The desk noted that « Signalement » names the act while
+  the cells give the result, and recommended keeping it **because the English "Flag" carries
+  the same slight mismatch and because a heading called « Verdict » would claim more than a
+  page that forecasts rather than declares.**
+
+
+- **`finding.crossing` (`:1498`): FRENCH KEEP, and the "whoop" question is RULED.** **Dann
+  2026-09-22:** *"Insights does not have to explain Whoop, that information belongs in
+  either LEarn or Guide with a footnote to Bozeman."*
+  - **So « le youhou » stands in Insights, unexplained, and that is deliberate.** The desk
+    had raised that a term from the literature arriving unexplained might fail his own
+    register ruling of the same evening.
+  - **The division he ruled: Insights NAMES, Learn or Guide EXPLAINS**, and the Bozeman
+    citation belongs where the explanation is, not on the results page.
+  - **Which of the two, Learn or Guide, he left open.** Not a decision the desk should make
+    for him.
+
+### PARKED BY DANN 2026-09-22, to be asked again later. `finding.passaggio` (`:1501`)
+
+**His words:** *"My brain can't handle this nuance now. Ask me again later."*
+**DO NOT re-derive this. The whole question is below.**
+
+- **EN:** "This falls near your passaggio; expect the turn to want managing."
+- **FR as built:** « Cela tombe près de votre passaggio; attendez-vous à devoir gérer le
+  passage. »
+- **The problem:** the English names a PLACE (the passaggio) and an EVENT (the turn). The
+  French uses one root for both, and « le passage » is commonly the passaggio itself in
+  French pedagogy, **so the sentence can read circularly.**
+- **THE ONE QUESTION THAT DECIDES IT, and it is Dann's alone:** `PRODUCT.md` §"The turning
+  layer" (ruled 2026-09-02) defines turning as a property of the **vowel**. This sentence's
+  "turn" is the register turn at the passaggio. **Are those one concept in Ilya's vocabulary
+  or two?**
+- **If two:** desk recommendation « le changement de registre ».
+- **If one:** reuse his ruled « changement de timbre » rather than minting a second term.
+- **If he wants no new noun:** « … attendez-vous à devoir le gérer. »
+- **Rides along whichever he picks:** that semicolon has no French spacing. It is one of the
+  63 `!` and `;` sites in `OPEN.md` §N.131.
+
+
+- **`fit.crossingsCount` (`:1471`) and `fit.passaggiTyped` (`:1473`): FRENCH EDIT, ruled by
+  Dann 2026-09-22.** **The Italian stays.** His words: *"mirror the English exactly, yes as
+  you say."*
+  - `:1471` becomes « {primo} du primo, {secondo} du secondo »
+  - `:1473` becomes « Primo {primo}, secondo {secondo}, indiqués »
+  - **THE ELLIPSIS IS KEPT DELIBERATELY.** The English says "of the primo", not "of the
+    primo passaggio", and he ruled the mirror over the clearer spelled-out form.
+  - **Three arguments, all from the file:** the same table already keeps « passaggio »
+    (`:1464`), « passaggi » (`:1472`) and « votre passaggio » (`:1501`), so only these two
+    rows translated; the English keeps primo and secondo, and Dann's ruling of 2026-09-13 is
+    that the French mirrors the English; and **the words differ in meaning** — primo and
+    secondo are ordinals, « primaire » and « secondaire » are categorical, so even as a
+    translation the pair was wrong and « premier »/« second » would have been the ordinals.
+  - **The desk's claim that French voice pedagogy keeps the Italian was marked as its own
+    understanding, unverified against the French literature**, and Dann ruled with that
+    stated.
+
+
+- **`footnote.tessitura` (`i18n.ts:1505`): FRENCH EDIT, ruled by Dann 2026-09-22.**
+  **The translated-title bracket is trimmed to the title alone.** His words: *"Agreed: A
+  translated-title bracket normally carries the title alone."* and, on the punctuation,
+  *"Yes, I accept your recommendation."*
+  - **The finding was mechanical, not taste:** the bracket repeated the journal, volume,
+    number, year and page, **all five of which already stood immediately before it**, so the
+    French citation gave the volume and page twice.
+  - **The judgement was his:** the article exists only in English, so the English title is
+    the only real one. He kept the bracket, which places the subject for a francophone
+    reader, and removed the duplication.
+  - **Guillemets kept, period outside the closing guillemet**, a title not being a full
+    sentence. **Desk recommendation, accepted by him**, on the grounds that the file already
+    sets titles and names in guillemets throughout.
+  - **THE EXACT EDIT.** Replace this tail, verbatim:
+    ```
+    \u00a0\u00bb, <em>Journal of Singing</em>, vol. 69, no 5, 2013, p. 559.]
+    ```
+    with:
+    ```
+    \u00a0\u00bb.]
+    ```
+    **The line's own convention is preserved: escaped guillemets with a non-breaking space
+    inside, accented letters literal.** Nothing else on the line changes.
+  - **What a singer will read:** … *Journal of Singing* 69, no. 5 (2013), p. 559.
+    [« La voix d'Angelica Catalani selon une méthode d'analyse statistique ».]
+
 
 - **`fit.heading` (`i18n.ts:1458`): FRENCH KEEP.** « La correspondance, terme par terme »
   stands. **Ruled by Dann 2026-09-22**, his words: *"The French « terme par terme » commits
