@@ -45,86 +45,55 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-23, about 01:20
+> ### READ THIS FIRST. Written at the close of 2026-09-23, about 03:55
 >
-> **THE ONE THING: Code builds phonation time in Insights, N.123's first figure.** DESK DEFAULT,
-> and Dann can name another. The brief is written and every string in it is ratified in both
-> languages: `../sessions/brief-code-phonation-time_r1_2026-09-23.md`, md5
-> `a4767f9d64db0c130abd09aa3ebc8392`. **The next session's first act is to hand Dann the one line
-> he pastes into Claude Code**, which tells Code to read that file and carry it out, then to
-> review Code's memo against the brief.
+> **THE ONE THING: Dann walks `ccb790c` on the alias, in both languages.** That walk is N.123
+> part 1's done-when (`../sessions/brief-code-tessituragram_r2_2026-09-23.md`, §Done when).
+> Walk Insights on a song he has measured, then **Score markup on Sunless 2, 3, 5, or 6**:
+> the octave fix below changed how those songs print there, and nobody but Code has seen it.
+> DESK DEFAULT, and Dann can name another. **The session's first act is to hand him the
+> `open` command for the alias** (`ENVIRONMENT.md`, `WALK ON THE ALIAS, NEVER ON A SHA URL`).
 >
-> **N.130'S WALK IS STILL PARKED, now at the end of B1.** `finding.passaggio` was ruled
-> 2026-09-22 22:49: « Cela tombe près de votre passaggio ; attendez-vous à devoir le gérer. »
-> **All ten B1 rows are ruled; B2 (30 rows) and A (19 rows) are unwalked.** The instrument is
-> still `../sessions/insights-french-as-built_r3_2026-09-22.md`, and its ruled rows wait for a
-> Code brief.
+> **N.130'S FRENCH WALK IS STILL PARKED** at the end of B1 (B2, 30 rows, and A, 19 rows,
+> unwalked; instrument `../sessions/insights-french-as-built_r3_2026-09-22.md`).
 >
 > #### THE TREE AT THIS CLOSE
 >
-> **HEAD was `f225585` at 22:34 with a clean tree** (Dann, 2026-09-22 22:46). The floor stays
-> `f6d2184`. **Correction to the previous close:** it said nothing had shipped since the floor;
-> `205a7ae` changed one string in `apps/web/src/lib/i18n.ts` (the reader's waiting line). No other
-> application code has moved. **Everything written tonight is documents only**, listed below, and
-> Dann is asked to commit it.
+> **HEAD `ccb790c`, pushed 2026-09-23 03:47:27, all five gates at baseline** (216, 235,
+> 0 errors and 12 warnings, 1396, 579 + 5 skipped = 584). The alias served it at 03:47:44.
+> The floor stays `f6d2184`: **no ship tonight was walked in both languages.** Dann walked
+> `0ccda31` in English only (02:40, a screenshot), which produced the r2 redesign.
+> The four ships tonight: `1dfee32` phonation time; `0ccda31` the tessituragram on page one,
+> page one fitting by measurement; `ccb790c` the redesign and the octave fix. **This close's
+> memory edits are uncommitted; Dann ships them with the next build or commits them alone.**
 >
-> #### THE ST-PIERRE THREAD, 2026-09-22 22:48 to 2026-09-23 01:10. NOT tracker items unless marked
+> #### WHAT WAS BUILT TONIGHT, N.123 PART 1 AND N.127 INCREMENT 2
 >
-> Dann's instruction: harvest every good aspect of Karine St-Pierre's work and her sources to
-> enhance Ilya's output; later, *"this current work is at the service of enhancing Insights by way
-> of providing more nuanced evidence for the user."* **Every file below is in `../sessions/`.**
+> The unit on page one of Insights: the heading, the headline sentence ("You phonate for about
+> ... of this ... piece"), the tessituragram, and the vowel chart. **Its design rulings are in
+> `OPEN.md` N.123, three dated blocks from 2026-09-23.** Every string is ratified in both
+> languages. The briefs and memos, in order, are in `../sessions/`: `brief-code-phonation-time_r1`,
+> `brief-code-tessituragram_r1`, `-fit_r1`, `_r2`, `-fix_r1`, each with its `memo-code-` twin.
+> The drawings Dann chose from: `tessituragram-sparse_r1_2026-09-23.html` is the one built.
 >
-> - **Extractions and evaluation:** `st-pierre-extraction-A-chapters-3-4_r1_2026-09-22.md`
->   (Sonnet; the r2 census re-verified and HELD), `st-pierre-extraction-B-sources_r1_2026-09-22.md`
->   (Sonnet), `st-pierre-evaluation-C-fable_r1_2026-09-22.md` (Fable: her grid is the weak
->   instrument and her prose the strong one; the "as clause" pattern).
-> - **Harvests:** `harvest-nix-2002-and-christensen-2024_r1_2026-09-22.md`. Christensen measured
->   St-Pierre's grid as the most variable of six (p. 539). Christensen and St-Pierre are both
->   Lorna MacDonald's students and Dann's colleagues.
-> - **Methods (Opus):** `method-phrase-length_r1_2026-09-22.md` (every rest ends a phrase; 179
->   rests and 0 breath marks across the six Sunless songs; recommends its own number beside
->   N.123, **not ruled**) and `method-leaps_r1_2026-09-22.md` **with eight addenda, which are the
->   live part: read addenda 3 to 8, not the body.**
-> - **Research (Sonnet):** `research-legato-test-literature_r1_2026-09-23.md` (nobody has built
->   the timed legato test) and `research-phrase-marks-verification_r1_2026-09-23.md` (Dann's
->   phrase-mark claims NOT ESTABLISHED either way; text setting may predict arcs better than era).
-> - **Phonation time:** `insights-phonation-time_r1_2026-09-22.md` holds every ruling and string.
+> **THE OCTAVE FIX IS BIGGER THAN INSIGHTS.** `packages/score-parser/src/vocal-octave.ts`
+> (the rule, about `:60`) shifted every MusicXML vocal line in a treble-8vb clef down an
+> octave, though MusicXML already stores sounding pitch. **Sunless 2, 3, 5, and 6 read an
+> octave low everywhere, Score markup included, until `ccb790c`.** Sunless 2 went from
+> A1 to E♭3 to A2 to E♭4, matching the dissertation (printed p. 92); Sunless 6 now reads
+> C♯3 to D4, matching §6.1.6. MNX keeps the old rule; its convention is NOT ESTABLISHED.
+> `staff-renderer.ts:418` changed with it.
 >
-> #### RULINGS MADE TONIGHT, AND WHERE EACH LANDED
+> #### WHAT THE DESK GOT WRONG TONIGHT
 >
-> - **Cited advice is allowed in Insights**, attribution on its face: `PRODUCT.md` §"Insights
->   gives insight, not intervention", amendment 2026-09-23.
-> - **There is no teacher mode; N.124 serves one voice as fully as several; N.124 kept LATER:**
->   `OPEN.md` N.124. **The multi-voice library exists** (`profileStore.ts:104-108`): `SEQUENCE.md`
->   dependency 4.
-> - **The tempo control lives in the Loupe:** `OPEN.md` N.120.
-> - **A large leap is a minor sixth or greater; outside the typed range the approach is moot;
->   Ilya entertains both Christensen and Bozeman; Dann's m. 14 sentence is the register;
->   Bozeman covers all voices:** `method-leaps_r1` addenda 3 to 8. **Not yet in `PRODUCT.md`:
->   transcribe at the next close if still standing.**
-> - **Dynamics:** the piano's marking applies to the voice unless the voice has its own; a singer's
->   own marking is legitimate; the dynamic in force is defined in `method-leaps_r1` addendum 7.
-> - **Self-report is struck** as an intake path. **"Phonation" for reporting, "sing" for
->   instruction.**
->
-> #### THE PROBE SESSION DANN ASKED FOR, NOT STARTED
->
-> Phrase marks (slur arcs, which Ilya can tell from melisma slurs because it knows the syllables),
-> dynamics (a curated lexicon on the model of `tempo-lexicon.ts`), comma detection from scans
-> (Dann: *"we are on the vanguard"*), and the timed legato intake test. Inputs are listed in
-> `insights-phonation-time_r1_2026-09-22.md`.
->
-> #### WHAT THE DESK GOT WRONG, since the next session inherits the habits
->
-> - **Cost estimates ran low.** The first Sonnet pair used 529k against a quoted 150k to 300k.
->   Later quotes were widened and held.
-> - **It repeated a stale line without opening the tree** ("the multi-voice library is NOT
->   ESTABLISHED"); the library was built 2026-07-11.
-> - **It judged Bozeman's scope from one article's title.**
-> - **It wrote six leap rules Dann called "AI slop that lacks understanding"**, attaching the leap
->   to out-of-range notes where it is moot. Lead from the singer's seat.
-> - **It cited a 13-day-old ruling (the tempo "station") as the current shape.** Dann: *"Join me in
->   the present, the water is fine!"*
+> - It told Dann the Mac was not linked before the bridge tools had arrived, and left out the
+>   Terminal line he needed. The bridge dropped and returned three more times
+>   (`ENVIRONMENT.md`, `THE BRIDGE DROPS AND COMES BACK`).
+> - It offered the three-zone bar without checking it against N.123's own tessituragram.
+> - Its r1 brief sent thin paired bars and circled numbers that meant nothing to a singer.
+> - It pushed a strict IPA vowel trace, which Dann accepted, then found it broke his fR1 arch
+>   (Table 5.3). Checking his rationale against his data first would have saved the reversal.
+> - Code's first page-two move was unconditional; the desk caught it only by reading the code.
 >
 > #### STILL NOT MEASURED, carried forward unchanged
 >

@@ -19,6 +19,14 @@ asks what is outstanding, or when the one thing closes and the next is being cho
 
 ## OWED, RULED BUT NOT YET DONE
 
+- **FROM THE 2026-09-23 NIGHT, N.123 PART 1. Held by the desk, none of them a question for Dann yet.**
+  - **The worst case overflows page one by 107 px:** French, both tessitura qualifiers, one finding left (`../sessions/memo-code-tessituragram-fit_r1_2026-09-23.md`). No real score produces it; built by injection.
+  - **The clef for a voice far from the song:** a soprano reading Sunless 6 sits on ledger lines well below the stave. And **a tenor gets plain treble**, never treble-8vb (`chooseClefForSpan`, `clef-select.ts:76`).
+  - **Two findings on one pitch, and an enharmonic name such as "A♯3 / B♭3", are unit-tested but never seen rendered.** No fixture has either.
+  - **MNX's octave convention under a treble-8vb clef is NOT ESTABLISHED.** `ccb790c` changed the rule for MusicXML only (`vocal-octave.ts`).
+  - **Score markup on the treble-8vb songs changed in `ccb790c` and only Code has seen it.**
+  - **The desk owes a transcription:** the leap rulings in `../sessions/method-leaps_r1_2026-09-22.md` addenda 3 to 8 were to go into `PRODUCT.md` "at the next close if still standing". The 03:55 close did not do it.
+
 - **`#onRemoteWrite`'s GUARD IS THE ONE ROW THE SWEEP DID NOT VERIFY TO ITS OWN STANDARD.**
   `document.svelte.ts:300-312` applies another tab's record to the open document, guarded by
   `this.#scheduler.isPending()` at `:303` (`library.ts:483`). **The Sonnet sweep of 2026-09-21

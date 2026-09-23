@@ -108,6 +108,8 @@ next session the same hour it cost the last one.
 | a measurement taken soon after a score loads disagrees with a later one | `THE SEATING REDRAW ARRIVES FOUR SECONDS LATE` |
 | you are measuring whether two drawn things touch | `A BOUNDING BOX IS NOT INK` |
 | drive a browser yourself | `Claude Code, and where the building` |
+| a size binding stays stuck in the browser pane | `A HIDDEN PANE NEVER RUNS A RESIZEOBSERVER` |
+| a song in a treble-8vb clef reads an octave off | `MUSICXML STORES SOUNDING PITCH UNDER AN OCTAVE CLEF` |
 | you are about to send Dann a terminal command that starts `claude` | `Claude Code, and where the building` (it is NOT installed on his Mac; Code is the desktop app's Code tab. Cost the desk a wasted turn 2026-09-20) |
 | asking which build a tab is actually running | `THE APP TELLS YOU WHICH BUILD IT IS ON` |
 | asking which build a tab is running, when the build ADDS a string | `A BUILD THAT ADDS A STRING IS ITS OWN MARKER` |
@@ -204,6 +206,7 @@ next session the same hour it cost the last one.
 | you are about to, or you are seeing | search for |
 |---|---|
 | a repo-wide grep returns two hits for every file | `THE WORKTREE DOUBLES EVERY GREP` |
+| the device tools vanish mid-session, or are absent at the open | `THE BRIDGE DROPS AND COMES BACK` |
 | the desk needs to stage a render or scratch file from the repo | `DESK SCRATCH GOES IN node_modules/.desk-scratch` |
 | a second Code session could run while one is building | `A READ-ONLY SESSION CAN RUN BESIDE A BUILD` |
 | spawn a farm-out, or cost one | `The device bridge` |
@@ -4124,3 +4127,22 @@ container outputs to `docs/sessions/` with `device_commit_files`.
 evaluation over those extractions, about 223k; one Opus method brief with tree and library
 reading, about 250k; one Sonnet web literature search, about 127k. **The desk's first quote
 (150k to 300k for the Sonnet pair) was half the real cost.**
+
+---
+
+## MUSICXML STORES SOUNDING PITCH UNDER AN OCTAVE CLEF. 2026-09-23
+
+**Symptom.** Sunless 2, 3, 5, and 6 read an octave low everywhere: Insights, the tessituragram, and Score markup. Sunless 2 showed A1 to E♭3.
+
+**Cause, found by Code and cited:** `packages/score-parser/src/vocal-octave.ts` (the rule was at `:51`, now about `:60`) shifted any vocal line in an explicit treble-8vb clef down an octave, assuming written pitch. The fixture's `<octave>` values already give sounding pitch: A2 to E♭4 in `tools/e16-harness/output/mussorgsky---sunless-02---you-did-not-recognize-me/mxl_extract/score.musicxml`, part P1, under `<clef-octave-change>-1</clef-octave-change>`. **Fixed in `ccb790c` for MusicXML; MNX keeps the old rule, its convention NOT ESTABLISHED.** `staff-renderer.ts:418` changed to match.
+
+**How it was caught:** the desk compared Code's reported row names with the fixture's own octaves and the dissertation's stated range (printed p. 92). **Check a reported range against the source file and one independent source before shipping.**
+
+## A HIDDEN PANE NEVER RUNS A RESIZEOBSERVER. 2026-09-23
+
+Code, building page one's fit-by-measurement: in the browser pane, `bind:offsetHeight` stayed at 60 while the element was 731 tall, because a hidden pane gets no rendering frames and the ResizeObserver behind the binding never fires. **The fix in `InsightsPane.svelte` reads the heights directly after each render and keeps the bindings only for later changes.** Anything else that measures through a binding will fail the same way in the pane and work in Dann's Chrome.
+
+## THE BRIDGE DROPS AND COMES BACK. 2026-09-23
+
+At the open, the `mcp__remote-devices__*` tools were not yet in the session, and the desk told Dann the Mac was not linked. It was: the tools arrived a turn later. **Later the same night they dropped and returned three times**, each time with a notice that the server was reconnecting. **The rule:** when they are absent or drop, say the lookup came back empty, wait a turn or run `ToolSearch` (it waits for connecting servers), and never tell Dann the link is gone. Work that needs no bridge carries on meanwhile.
+
