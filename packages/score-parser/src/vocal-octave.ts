@@ -33,9 +33,10 @@ import type { ParsedScore, Pitch } from './types';
  * be READ for this singer:
  *   - a bass, C, or absent clef yields 0 (bass already sounds as written; a
  *     C clef and an absent clef route through the render's own heuristic);
- *   - an explicit octave-displaced treble clef (`octaveChange <= -1`) is
- *     honoured directly for MNX, and for MusicXML yields 0, because a
- *     MusicXML pitch is already the sounding one;
+ *   - an explicit octave-displaced treble clef (`octaveChange <= -1`) yields
+ *     0 for MusicXML and for MNX that denigma converted from `.musx`, because
+ *     both already store the sounding pitch; it is honoured directly only for
+ *     MNX uploaded as MNX, whose convention is not established;
  *   - a plain treble clef is disambiguated by the singer's range, shifting an
  *     octave down only when that fits their range strictly better;
  *   - a plain treble clef with no declared range yields 0 (no signal to judge
@@ -55,9 +56,18 @@ export function resolveVocalReadingOctave(
        the engraver how to print it, so shifting again reads the line an
        octave low. Measured 2026-09-23: Sunless no. 2's voice part stores A2
        to E♭4 under a treble-8vb clef, the span Mitton (2020, printed p. 92)
-       gives, and this branch read it as A1 to E♭3. MNX keeps the shift: its
-       convention for an octave clef is not established here. */
-    return parsed.source?.format === 'musicxml' ? 0 : marked;
+       gives, and this branch read it as A1 to E♭3.
+
+       DENIGMA'S MNX STORES SOUNDING PITCH TOO. Measured 2026-09-23 on Dann's
+       own `.musx` files through denigma: Sunless nos. 2, 3, 5, and 6 carry a
+       treble-8vb clef, and their MNX pitches already sit in Mitton's range
+       (no. 2 stores A2 to E♭4). Dann ruled 2026-09-23: skip the shift for
+       denigma MNX only. MNX uploaded as MNX keeps it, because no hand-written
+       MNX with an octave clef has been checked: its convention is NOT
+       ESTABLISHED, and this branch is where that question lives. */
+    const storesSounding =
+      parsed.source?.format === 'musicxml' || parsed.source?.origin === 'denigma-mnx-from-musx';
+    return storesSounding ? 0 : marked;
   }
 
   if (!range) return 0; // plain treble, no range: do not guess

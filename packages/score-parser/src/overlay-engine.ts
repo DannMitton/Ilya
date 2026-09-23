@@ -128,7 +128,7 @@ export function scoreContentId(parsed: ParsedScore): string {
 
 // ── The engine ─────────────────────────────────────────────────────
 
-const CROSSING_TOLERANCE_CENTS = 50; // within a semitone of fR1 counts as a crossing
+export const CROSSING_TOLERANCE_CENTS = 50; // within a semitone of fR1 counts as a crossing (read by conditions.ts)
 const RANGE_EPSILON_CENTS = 1; // guard against float noise at the boundaries
 
 export interface AnalyzeOptions {

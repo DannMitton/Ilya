@@ -1,0 +1,200 @@
+voice,table,dimension,band,notes,seconds,share_of_sung_time,songs
+mitton,dimension,fo against fR1,open,1603,915.0,65.5%,16
+mitton,dimension,fo against fR1,close,810,449.6,32.2%,16
+mitton,dimension,fo against fR1,crossing,6,2.0,0.1%,4
+mitton,dimension,fo against fR1,above,4,4.9,0.3%,3
+mitton,dimension,fo against fR1,not assessed,50,24.6,1.8%,9
+mitton,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 3,132,79.4,5.7%,15
+mitton,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 4,50,26.0,1.9%,13
+mitton,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 5,4,1.4,0.1%,4
+mitton,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2237,1264.7,90.6%,16
+mitton,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,50,24.6,1.8%,9
+mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),n = 3,28,13.9,1.0%,10
+mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),n = 4,141,83.7,6.0%,15
+mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),n = 5,164,102.9,7.4%,16
+mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),n = 6,152,85.7,6.1%,16
+mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),n = 7,119,55.7,4.0%,16
+mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),n = 8,98,46.6,3.3%,16
+mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),none,1721,983.0,70.4%,16
+mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,50,24.6,1.8%,9
+mitton,dimension,Passaggio,not assessed,2473,1396.0,100.0%,16
+mitton,dimension,Range,in-range,2423,1371.5,98.2%,16
+mitton,dimension,Range,not assessed,50,24.6,1.8%,9
+mitton,dimension,Sustained ceiling exposure,not exposed,2423,1371.5,98.2%,16
+mitton,dimension,Sustained ceiling exposure,not assessed,50,24.6,1.8%,9
+mitton,dimension,Vowel,i,359,181.4,13.0%,16
+mitton,dimension,Vowel,ɪ,174,72.3,5.2%,16
+mitton,dimension,Vowel,ɨ,202,103.6,7.4%,16
+mitton,dimension,Vowel,e,99,76.0,5.4%,16
+mitton,dimension,Vowel,ɛ,136,104.9,7.5%,16
+mitton,dimension,Vowel,a,21,14.5,1.0%,8
+mitton,dimension,Vowel,ɑ,647,344.1,24.7%,16
+mitton,dimension,Vowel,ʌ,171,73.6,5.3%,16
+mitton,dimension,Vowel,o,329,237.1,17.0%,16
+mitton,dimension,Vowel,u,285,163.8,11.7%,16
+mitton,dimension,Vowel,no vowel resolved,50,24.6,1.8%,9
+mitton,dimension,Held or short (over the tie chain; the regions use this),held,45,87.5,6.3%,7
+mitton,dimension,Held or short (over the tie chain; the regions use this),short,2428,1308.5,93.7%,16
+mitton,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",held,14,44.2,3.2%,4
+mitton,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",short,2459,1351.9,96.8%,16
+mitton,dimension,Approach,repeated,496,228.3,16.4%,16
+mitton,dimension,Approach,step,1023,590.3,42.3%,16
+mitton,dimension,Approach,leap-up,414,300.1,21.5%,16
+mitton,dimension,Approach,leap-down,427,211.1,15.1%,16
+mitton,dimension,Approach,tie,97,57.8,4.1%,14
+mitton,dimension,Approach,first note,16,8.4,0.6%,16
+mitton,dimension,Approach after a rest,after a rest,175,91.9,6.6%,16
+mitton,dimension,Approach after a rest,no rest before,2282,1295.7,92.8%,16
+mitton,dimension,Approach after a rest,first note,16,8.4,0.6%,16
+mitton,dimension,Position in the phrase,first,206,106.4,7.6%,16
+mitton,dimension,Position in the phrase,middle,2060,1183.2,84.8%,16
+mitton,dimension,Position in the phrase,last,206,105.0,7.5%,16
+mitton,dimension,Position in the phrase,only,1,1.5,0.1%,1
+mitton,dimension,Length of the phrase,under 2 s,143,58.0,4.2%,7
+mitton,dimension,Length of the phrase,2 to 4 s,342,154.9,11.1%,12
+mitton,dimension,Length of the phrase,4 to 6 s,325,163.8,11.7%,10
+mitton,dimension,Length of the phrase,6 to 8 s,276,154.8,11.1%,10
+mitton,dimension,Length of the phrase,8 to 12 s,560,288.0,20.6%,12
+mitton,dimension,Length of the phrase,12 s or more,827,576.4,41.3%,10
+mitton,dimension,"Position in the piece, cumulative phonation",under 30 s,892,474.2,34.0%,16
+mitton,dimension,"Position in the piece, cumulative phonation",30 to 60 s,852,448.2,32.1%,15
+mitton,dimension,"Position in the piece, cumulative phonation",60 to 90 s,567,321.8,23.0%,15
+mitton,dimension,"Position in the piece, cumulative phonation",90 to 120 s,121,96.3,6.9%,5
+mitton,dimension,"Position in the piece, cumulative phonation",120 to 180 s,41,55.6,4.0%,2
+mitton,dimension,"Position in the piece, share of the song",first third,828,471.5,33.8%,16
+mitton,dimension,"Position in the piece, share of the song",middle third,873,465.3,33.3%,16
+mitton,dimension,"Position in the piece, share of the song",last third,772,459.2,32.9%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɑ x short x step x in-range,263,136.6,9.8%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,open x o x short x step x in-range,109,84.5,6.1%,15
+mitton,region,fR1 band x vowel x held or short x approach x range,close x i x short x step x in-range,131,64.6,4.6%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɑ x short x leap-up x in-range,105,62.5,4.5%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɑ x short x repeated x in-range,140,62.3,4.5%,15
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɑ x short x leap-down x in-range,109,50.0,3.6%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,close x u x short x step x in-range,88,47.9,3.4%,15
+mitton,region,fR1 band x vowel x held or short x approach x range,open x o x short x leap-up x in-range,50,39.8,2.9%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɛ x short x step x in-range,53,35.7,2.6%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,close x u x short x leap-up x in-range,52,35.1,2.5%,14
+mitton,region,fR1 band x vowel x held or short x approach x range,close x i x short x leap-up x in-range,44,30.1,2.2%,14
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ʌ x short x step x in-range,74,30.0,2.1%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,close x i x short x repeated x in-range,77,28.9,2.1%,15
+mitton,region,fR1 band x vowel x held or short x approach x range,open x o x short x repeated x in-range,44,28.0,2.0%,15
+mitton,region,fR1 band x vowel x held or short x approach x range,close x e x short x step x in-range,36,27.4,2.0%,15
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɛ x short x leap-up x in-range,30,25.0,1.8%,10
+mitton,region,fR1 band x vowel x held or short x approach x range,open x o x short x leap-down x in-range,39,24.9,1.8%,14
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɨ x short x step x in-range,47,21.8,1.6%,14
+mitton,region,fR1 band x vowel x held or short x approach x range,close x u x short x repeated x in-range,42,20.4,1.5%,12
+mitton,region,fR1 band x vowel x held or short x approach x range,close x o x short x leap-up x in-range,23,20.1,1.4%,13
+mitton,region,fR1 band x vowel x held or short x approach x range,close x i x short x leap-down x in-range,48,19.9,1.4%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɨ x short x leap-down x in-range,44,19.9,1.4%,14
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɪ x short x step x in-range,43,17.9,1.3%,15
+mitton,region,fR1 band x vowel x held or short x approach x range,open x u x short x step x in-range,27,17.2,1.2%,13
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ʌ x short x leap-down x in-range,40,17.1,1.2%,14
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ʌ x short x repeated x in-range,40,16.5,1.2%,16
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɪ x short x repeated x in-range,40,16.0,1.1%,12
+mitton,region,fR1 band x vowel x held or short x approach x range,close x ɨ x short x step x in-range,33,15.7,1.1%,14
+mitton,region,fR1 band x vowel x held or short x approach x range,close x e x short x leap-up x in-range,22,14.8,1.1%,10
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɪ x short x leap-down x in-range,27,12.7,0.9%,10
+mitton,region,fR1 band x vowel x held or short x approach x range,close x ɪ x short x step x in-range,28,11.5,0.8%,12
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɛ x short x leap-down x in-range,17,10.8,0.8%,12
+mitton,region,fR1 band x vowel x held or short x approach x range,open x a x short x step x in-range,14,10.7,0.8%,7
+mitton,region,fR1 band x vowel x held or short x approach x range,close x ɨ x short x repeated x in-range,21,10.5,0.8%,8
+mitton,region,fR1 band x vowel x held or short x approach x range,close x o x short x step x in-range,23,10.5,0.8%,10
+mitton,region,fR1 band x vowel x held or short x approach x range,close x u x short x leap-down x in-range,24,10.5,0.8%,11
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ɛ x short x repeated x in-range,16,10.1,0.7%,11
+mitton,region,fR1 band x vowel x held or short x approach x range,open x e x short x step x in-range,11,10.1,0.7%,10
+mitton,region,fR1 band x vowel x held or short x approach x range,open x ʌ x short x leap-up x in-range,17,10.0,0.7%,10
+mitton,region,fR1 band x vowel x held or short x approach x range,open x o x short x tie x in-range,23,9.9,0.7%,8
+godin,dimension,fo against fR1,open,240,117.9,8.4%,16
+godin,dimension,fo against fR1,close,1435,824.8,59.1%,16
+godin,dimension,fo against fR1,crossing,81,43.1,3.1%,13
+godin,dimension,fo against fR1,above,465,282.0,20.2%,16
+godin,dimension,fo against fR1,not assessed,252,128.2,9.2%,16
+godin,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 3,2,0.4,0.0%,1
+godin,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2219,1267.5,90.8%,16
+godin,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,252,128.2,9.2%,16
+godin,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,2473,1396.0,100.0%,16
+godin,dimension,Passaggio,not assessed,2473,1396.0,100.0%,16
+godin,dimension,Range,not assessed,2473,1396.0,100.0%,16
+godin,dimension,Sustained ceiling exposure,not assessed,2473,1396.0,100.0%,16
+godin,dimension,Vowel,i,359,181.4,13.0%,16
+godin,dimension,Vowel,ɪ,174,72.3,5.2%,16
+godin,dimension,Vowel,ɨ,202,103.6,7.4%,16
+godin,dimension,Vowel,e,99,76.0,5.4%,16
+godin,dimension,Vowel,ɛ,136,104.9,7.5%,16
+godin,dimension,Vowel,a,21,14.5,1.0%,8
+godin,dimension,Vowel,ɑ,647,344.1,24.7%,16
+godin,dimension,Vowel,ʌ,171,73.6,5.3%,16
+godin,dimension,Vowel,o,329,237.1,17.0%,16
+godin,dimension,Vowel,u,285,163.8,11.7%,16
+godin,dimension,Vowel,no vowel resolved,50,24.6,1.8%,9
+godin,dimension,Held or short (over the tie chain; the regions use this),held,45,87.5,6.3%,7
+godin,dimension,Held or short (over the tie chain; the regions use this),short,2428,1308.5,93.7%,16
+godin,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",held,14,44.2,3.2%,4
+godin,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",short,2459,1351.9,96.8%,16
+godin,dimension,Approach,repeated,496,228.3,16.4%,16
+godin,dimension,Approach,step,1023,590.3,42.3%,16
+godin,dimension,Approach,leap-up,414,300.1,21.5%,16
+godin,dimension,Approach,leap-down,427,211.1,15.1%,16
+godin,dimension,Approach,tie,97,57.8,4.1%,14
+godin,dimension,Approach,first note,16,8.4,0.6%,16
+godin,dimension,Approach after a rest,after a rest,175,91.9,6.6%,16
+godin,dimension,Approach after a rest,no rest before,2282,1295.7,92.8%,16
+godin,dimension,Approach after a rest,first note,16,8.4,0.6%,16
+godin,dimension,Position in the phrase,first,206,106.4,7.6%,16
+godin,dimension,Position in the phrase,middle,2060,1183.2,84.8%,16
+godin,dimension,Position in the phrase,last,206,105.0,7.5%,16
+godin,dimension,Position in the phrase,only,1,1.5,0.1%,1
+godin,dimension,Length of the phrase,under 2 s,143,58.0,4.2%,7
+godin,dimension,Length of the phrase,2 to 4 s,342,154.9,11.1%,12
+godin,dimension,Length of the phrase,4 to 6 s,325,163.8,11.7%,10
+godin,dimension,Length of the phrase,6 to 8 s,276,154.8,11.1%,10
+godin,dimension,Length of the phrase,8 to 12 s,560,288.0,20.6%,12
+godin,dimension,Length of the phrase,12 s or more,827,576.4,41.3%,10
+godin,dimension,"Position in the piece, cumulative phonation",under 30 s,892,474.2,34.0%,16
+godin,dimension,"Position in the piece, cumulative phonation",30 to 60 s,852,448.2,32.1%,15
+godin,dimension,"Position in the piece, cumulative phonation",60 to 90 s,567,321.8,23.0%,15
+godin,dimension,"Position in the piece, cumulative phonation",90 to 120 s,121,96.3,6.9%,5
+godin,dimension,"Position in the piece, cumulative phonation",120 to 180 s,41,55.6,4.0%,2
+godin,dimension,"Position in the piece, share of the song",first third,828,471.5,33.8%,16
+godin,dimension,"Position in the piece, share of the song",middle third,873,465.3,33.3%,16
+godin,dimension,"Position in the piece, share of the song",last third,772,459.2,32.9%,16
+godin,region,fR1 band x vowel x held or short x approach,close x ɑ x short x step,210,107.6,7.7%,16
+godin,region,fR1 band x vowel x held or short x approach,close x o x short x step,95,72.2,5.2%,15
+godin,region,fR1 band x vowel x held or short x approach,close x ɑ x short x leap-up,100,60.0,4.3%,16
+godin,region,fR1 band x vowel x held or short x approach,close x ɑ x short x repeated,96,41.1,2.9%,15
+godin,region,fR1 band x vowel x held or short x approach,not assessed x ɨ x short x step,80,37.5,2.7%,15
+godin,region,fR1 band x vowel x held or short x approach,above x o x short x leap-up,38,32.7,2.3%,15
+godin,region,fR1 band x vowel x held or short x approach,above x i x short x step,66,31.3,2.2%,16
+godin,region,fR1 band x vowel x held or short x approach,above x u x short x step,55,30.5,2.2%,15
+godin,region,fR1 band x vowel x held or short x approach,close x ɑ x short x leap-down,62,30.5,2.2%,16
+godin,region,fR1 band x vowel x held or short x approach,above x u x short x leap-up,43,29.1,2.1%,14
+godin,region,fR1 band x vowel x held or short x approach,open x ɑ x short x step,53,29.0,2.1%,15
+godin,region,fR1 band x vowel x held or short x approach,close x ɛ x short x step,42,28.8,2.1%,14
+godin,region,fR1 band x vowel x held or short x approach,close x i x short x step,53,28.4,2.0%,13
+godin,region,fR1 band x vowel x held or short x approach,close x u x short x step,45,27.8,2.0%,15
+godin,region,fR1 band x vowel x held or short x approach,close x o x short x leap-up,35,27.2,1.9%,15
+godin,region,fR1 band x vowel x held or short x approach,close x ɛ x short x leap-up,33,27.0,1.9%,11
+godin,region,fR1 band x vowel x held or short x approach,close x ʌ x short x step,65,26.5,1.9%,16
+godin,region,fR1 band x vowel x held or short x approach,not assessed x ɨ x short x leap-down,56,26.2,1.9%,15
+godin,region,fR1 band x vowel x held or short x approach,close x o x short x leap-down,38,24.5,1.8%,14
+godin,region,fR1 band x vowel x held or short x approach,close x o x short x repeated,38,24.3,1.7%,15
+godin,region,fR1 band x vowel x held or short x approach,close x e x short x step,28,23.3,1.7%,15
+godin,region,fR1 band x vowel x held or short x approach,above x o x short x step,37,22.8,1.6%,15
+godin,region,fR1 band x vowel x held or short x approach,above x i x short x leap-up,34,22.2,1.6%,15
+godin,region,fR1 band x vowel x held or short x approach,close x ɪ x short x step,53,22.0,1.6%,15
+godin,region,fR1 band x vowel x held or short x approach,close x i x short x leap-down,48,21.4,1.5%,15
+godin,region,fR1 band x vowel x held or short x approach,close x ɪ x short x repeated,54,21.4,1.5%,13
+godin,region,fR1 band x vowel x held or short x approach,open x ɑ x short x repeated,44,21.3,1.5%,11
+godin,region,fR1 band x vowel x held or short x approach,open x ɑ x short x leap-down,47,19.5,1.4%,16
+godin,region,fR1 band x vowel x held or short x approach,not assessed x ɨ x short x leap-up,28,18.1,1.3%,12
+godin,region,fR1 band x vowel x held or short x approach,above x i x short x repeated,42,15.3,1.1%,12
+godin,region,fR1 band x vowel x held or short x approach,close x i x short x repeated,40,15.1,1.1%,15
+godin,region,fR1 band x vowel x held or short x approach,crossing x i x short x step,27,14.6,1.0%,8
+godin,region,fR1 band x vowel x held or short x approach,above x e x short x step,19,14.2,1.0%,14
+godin,region,fR1 band x vowel x held or short x approach,not assessed x ɨ x short x repeated,31,13.6,1.0%,11
+godin,region,fR1 band x vowel x held or short x approach,close x ɪ x short x leap-down,31,13.3,1.0%,12
+godin,region,fR1 band x vowel x held or short x approach,close x u x short x leap-down,27,12.9,0.9%,11
+godin,region,fR1 band x vowel x held or short x approach,above x e x short x leap-up,18,12.6,0.9%,8
+godin,region,fR1 band x vowel x held or short x approach,close x u x short x repeated,24,11.7,0.8%,9
+godin,region,fR1 band x vowel x held or short x approach,close x ʌ x short x leap-down,22,9.3,0.7%,12
+godin,region,fR1 band x vowel x held or short x approach,above x u x short x repeated,20,9.1,0.7%,7

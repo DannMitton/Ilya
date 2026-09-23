@@ -75,6 +75,26 @@ describe('resolveVocalReadingOctave', () => {
     expect(resolveVocalReadingOctave(musicxml, BASS_RANGE)).toBe(0);
   });
 
+  it('reads a denigma treble-8vb line where it sounds, since denigma MNX stores sounding pitch too', () => {
+    // Sunless no. 2 as denigma delivers it: A2 to E♭4 under a treble-8vb clef.
+    const direct = scoreOf([note('n1', P('A', 2)), note('n2', P('E', 4, -1))], { sign: 'G', line: 2, octaveChange: -1 });
+    const denigma = {
+      ...direct,
+      source: { ...direct.source, fidelity: 'high' as const, origin: 'denigma-mnx-from-musx' as const },
+    };
+    expect(resolveVocalReadingOctave(denigma)).toBe(0);
+    expect(resolveVocalReadingOctave(denigma, BASS_RANGE)).toBe(0);
+    // The same line uploaded as MNX keeps the shift: that convention is not established.
+    expect(resolveVocalReadingOctave(direct, BASS_RANGE)).toBe(-1);
+  });
+
+  it('still disambiguates a plain treble clef by range on the denigma path', () => {
+    // Sunless no. 4 arrives in plain treble at its written octave, B3 to E♭5.
+    const parsed = scoreOf([note('n1', P('B', 3)), note('n2', P('E', 5, -1))], { sign: 'G', line: 2 });
+    const denigma = { ...parsed, source: { ...parsed.source, origin: 'denigma-mnx-from-musx' as const } };
+    expect(resolveVocalReadingOctave(denigma, { lowest: P('A', 2), highest: P('E', 4) })).toBe(-1);
+  });
+
   it('does not guess on a plain treble clef with no declared range', () => {
     const parsed = scoreOf([note('n1', P('G', 4))], { sign: 'G', line: 2 });
     expect(resolveVocalReadingOctave(parsed)).toBe(0);

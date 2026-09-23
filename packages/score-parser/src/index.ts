@@ -61,6 +61,19 @@ export { chooseClef, chooseClefForSpan, clefFromSource, type RenderClef } from '
 export { resolveVocalReadingOctave, shiftVocalOctave } from './vocal-octave';
 export { scoreInPerformanceOrder, type PerformanceOrderScore } from './performance-order';
 export {
+  noteConditions,
+  FR1_RUNGS,
+  FR2_MAX_HARMONIC,
+  type NoteCondition,
+  type NoteConditionsResult,
+  type NoteConditionsOptions,
+  type FR1Band,
+  type ApproachBand,
+  type PhrasePosition,
+  type PhraseBoundary,
+  type TempoState,
+} from './conditions';
+export {
   suggestTranspositions,
   transposePitch,
   transposeScore,
