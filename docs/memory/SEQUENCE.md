@@ -67,7 +67,7 @@ What remains of N.119 afterwards is two toggles that reach nothing at all:
 declared "Phase 3, not wired yet" at `engine.ts:35`.
 
 **4. N.123 comes before N.124.** Stated in N.124's own spec: *"Needs: N.123."*
-**N.124 also needs a multi-voice library, which is NOT ESTABLISHED as existing**,
+**AMENDED 2026-09-23, READ IN THE TREE: THE MULTI-VOICE LIBRARY EXISTS.** `ProfileStore` holds `voices: StoredVoice[]` with an `activeId` (`apps/web/src/lib/shane/profileStore.ts:104-108`); each voice has a free-text name (`:71`), its measured formants (`:77`), and its typed range and passaggi (`:92`); switched by `ProfileSwitcher.svelte`; built 2026-07-11 (`CalibrationWizard.svelte:33-39`). **What is not built is reading one song against several voices at once:** Insights takes one voice's snapshot (`insights.ts:115-116`). Dann also ruled there is no teacher mode (`OPEN.md`, N.124). The sentence that follows is superseded: **N.124 also needs a multi-voice library, which is NOT ESTABLISHED as existing**,
 and the singer's floor and ceiling from calibration, also NOT ESTABLISHED. Those
 are prerequisites nobody has checked.
 

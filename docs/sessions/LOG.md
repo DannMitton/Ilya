@@ -7248,3 +7248,20 @@ records that they will be lost the day N.141 closes.
   measure 11 in full with the ring closed. **His measure 11 reads « 14.5 sur 6, trop
   pleine » and draws every note**, which is independent confirmation that over-fullness
   was never the cause. His words: *"This looks as it should!"*
+
+
+## Block 36. Moved from `STATE.md` at the close of 2026-09-23, about 01:20, to bring it under its 600-line tripwire
+
+Neither piece carries a ruling of Dann's that lives only here: N.165's account is in block 35, and the colophon's `PRODUCT.md` addition ("Why Ilya exists") is in `PRODUCT.md`.
+
+- `[x]` **N.165. The loupe draws no notes. CLOSED 2026-09-22**, shipped `f6d2184`, walked by
+  Dann on the alias in French: *"This looks as it should!"* **Account moved to
+  `../sessions/LOG.md` block 35 at the close of 2026-09-22.** It carries no ruling of his;
+  the cause, the two dead hypotheses and the squircle sibling are all in that block.
+
+*Close of 2026-09-17, about 02:00. N.146 steps 1, 2, and 2b shipped (`fe4d2c7`,
+`6e98057`); step 2c under investigation by Code. Findings 1 to 8 of the N.146 walk moved
+to `OPEN.md`; the Howell extraction and the previous close's standing-rules paragraph
+moved to LOG block 21. `PRODUCT.md` gained "Why Ilya exists"; `ENVIRONMENT.md` gained
+`THE ALIAS CHECK THAT WORKED` and `THE EXTENSION CANNOT SEE HIS TAB`; `SCHEDULE.md`
+gained the per-format samples. The floor moves to `6e98057`. Memory NOT committed.*

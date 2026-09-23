@@ -187,6 +187,10 @@ the paths already). Whoever takes N.142 should be told this.
 > `docs/sessions/guide-tessituragram-paragraph_r2_2026-09-10.md` (N.84).
 > Ruled out again: any ranking or difficulty score.
 >
+> **KEPT LATER BY DANN 2026-09-23 00:59**, after he asked whether the desk could build the several-voices reading autonomously and was told it cannot (`CONTRACT.md` §5) and that it sits outside the release. His words: *"keep N.124 as LATER"*. The desk's offer to write its design now was not ruled on.
+>
+> **RULED BY DANN 2026-09-23 00:56: THERE IS NO TEACHER MODE.** *"It wasn't written for a teacher. It was written for a user. There is no defined teacher mode versus student mode in Ilya. All users are users, all users can enjoy the same insights."* He foresees teachers using it across a studio AND individual singers using it for themselves: *"Both are valid, both are taken seriously, and both are predicted."* **So N.124 serves one voice as fully as several.** The single-voice case needs no multi-voice library. His framing of the goal, same night: one right transposition with favourable acoustic events and range fit is *"the golden egg Ilya is primed to offer users"*, and a transposition redistributes pitch, vowel, and dynamic partnerings, so it can create new challenges or show that no key works (`../sessions/method-leaps_r1_2026-09-22.md`, addendum 7).
+>
 > **N.124, REPERTOIRE FOR A STUDIO, numbered by Dann 2026-09-10 late,
 > UNPLACED, after N.123.** A teacher holding several students' voices,
 > one song. Ilya gives a curation, not a table: the original key's
@@ -208,6 +212,8 @@ the paths already). Whoever takes N.142 should be told this.
 > ceiling from calibration (what the wizard captures today NOT ESTABLISHED);
 > a multi-voice library, NOT ESTABLISHED as existing; sentence copy in both
 > languages, Dann's, before Code.
+>
+> **AMENDED BY DANN 2026-09-23 01:07: THE TEMPO CONTROL LIVES IN THE LOUPE**, not in a drawer station. Asked whether to record it, he answered: *"I accept that I said things earlier that no longer apply to the way Ilya has necessarily evolved. Join me in the present, the water is fine!"* It follows his 2026-09-17 ruling that the syllables live in the Loupe. Insights may then point to it: *"You may assign tempi manually using the Loupe."* (`../sessions/insights-phonation-time_r1_2026-09-22.md`).
 >
 > **N.120 gains a `Tempo` station, RULED by Dann 2026-09-10 late:** Ilya
 > presets tempo from what it reads (encoded mark, or an editorial marking on

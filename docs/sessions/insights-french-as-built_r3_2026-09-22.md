@@ -87,7 +87,15 @@ familiar term in the field, we can't justify it."* **The principle he drew from 
   - **Which of the two, Learn or Guide, he left open.** Not a decision the desk should make
     for him.
 
-### PARKED BY DANN 2026-09-22, to be asked again later. `finding.passaggio` (`:1501`)
+### `finding.passaggio` (`:1501`): FRENCH EDIT, ruled by Dann 2026-09-22 at 22:49. Formerly parked
+
+- **Ruled:** « Cela tombe près de votre passaggio ; attendez-vous à devoir le gérer. »
+  Option 3 of the three the desk drafted (the desk's words, his choice). His words: *"this is a clever way to dodge identifying the noun"*.
+- **The narrow no-break space before the semicolon is the desk's addition**, per the French spacing rule; Dann typed the sentence without it.
+- **Noted, not a question:** « le » refers back to the passaggio, so the French says to manage the passaggio where the English says to manage the turn.
+- The question that was parked is preserved below for the record.
+
+#### The parked question, as it stood
 
 **His words:** *"My brain can't handle this nuance now. Ask me again later."*
 **DO NOT re-derive this. The whole question is below.**

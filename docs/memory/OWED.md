@@ -766,3 +766,14 @@ remaining 8 are:
 | **Check whether her Chapter 4 entries carry a duration** | one song entry settles it | decides whether she adopted the thing she called a surprising omission |
 | **Her bibliography itself** | forty-two named guides, unopened | Dann asked for her sources; the desk reviewed her *survey* of them, one layer short |
 | **Whether informative annotation belongs in Ilya** | composer, poet, year, context | the most common annotations in her entire census, and Ilya offers none |
+
+## ADDED AT THE CLOSE OF 2026-09-23, about 01:20. Open from the St-Pierre thread
+
+None of these is numbered; `CONTRACT.md` §3.1 holds until Dann rules one in.
+
+1. **Phrase length: its own number, or inside N.123?** The Opus method recommends its own item beside N.123 (`../sessions/method-phrase-length_r1_2026-09-22.md`). Dann has not ruled.
+2. **Leaps: numbered, and when?** The method is `../sessions/method-leaps_r1_2026-09-22.md`, addenda 3 to 8. Its rulings are not yet in `PRODUCT.md`; transcribe them if they still stand at the next close.
+3. **The dynamics lexicon:** Dann wants it, on the model of `tempo-lexicon.ts`. Not numbered. Leaps and phrase length both need it.
+4. **The probe session** Dann asked for: phrase marks, dynamics, comma detection from scans, the timed legato intake test. Not scheduled.
+5. **The tempo pointer's French**, « Vous pouvez indiquer vos tempi vous-même dans la loupe. », proposed, not ratified. It shows only once the Loupe has a tempo control.
+6. **Loose end, held, not a question:** `StoredVoice.voiceType` is still a routing key to Bozeman value-sets (`profileStore.ts:78-85`), against Dann's 2026-09-16 ruling that a declared voice type plays no part in choosing values. The leaps agent also found a stale comment at `analysis-types.ts:72-73` saying the passaggi come from voice-type norms; the adapter uses the singer's typed values. Raise only if it bites.

@@ -217,6 +217,7 @@ next session the same hour it cost the last one.
 | quote Ilya's size, or a byte count of anything | `ILYA'S SIZE` |
 | about to read a long source (a dissertation, a book, a 1,500-line file) | `A LONG READ DIES AT THE COMPACTION` |
 | a file Dann names is not under Desktop or Downloads | `THE BRIDGE CARRIES A THIRD FOLDER` |
+| a research session needs his sources, or a subagent needs his files | `A FOURTH FOLDER, AND SUBAGENTS ON THE BRIDGE` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -4094,3 +4095,32 @@ cannot be found. **Tether 14: a failed lookup is not an absence.**
 **Path for the St-Pierre PDF**, which the next session will want:
 `~/Documents/Voice Pedagogy Research/Dissertations/St-Pierre - 2016 - Pedagogical Guide to
 the Interpretation of 19th C French Canadian Songs for Solo Voice and Piano.pdf`
+
+
+### A FOURTH FOLDER, AND SUBAGENTS ON THE BRIDGE. Observed 2026-09-22 and 2026-09-23
+
+**Dann's library lives in two folders, not one.** `~/Documents/Voice Pedagogy Research` holds
+the dissertations (St-Pierre is under `Dissertations/`). `~/Documents/Voice Pedagogy Library`
+holds the journal articles, filed in alphabetical subfolders by author (`A-C/`, `M-O/`, and so
+on): Nix 2002 is `M-O/Nix_J (2002) Criteria for Selecting Repertoire - JOS-058-3-2002-217.PDF`,
+Christensen 2024 is under `A-C/`. **Neither is in the `README.md` opener's grant.** Request them
+with `device_request_folder_access` when a research task needs them; they mount at
+`$HOME/mnt/Voice Pedagogy Research` and `$HOME/mnt/Voice Pedagogy Library`.
+
+**`pdftotext` and `pdfinfo` are installed on Dann's side of the bridge.** Convert a PDF there,
+page by page with `-f N -l N` if page numbers matter, and write the text to `$HOME` outside
+`mnt/`. **A dissertation's printed page is not its PDF page:** St-Pierre's printed page = PDF
+page minus 11.
+
+**Subagents CAN use the bridge.** The two Opus agents of 2026-09-22 loaded
+`mcp__remote-devices__device_bash` through ToolSearch and read the tree and the library
+themselves. The Sonnet agents were instead given files staged into the container
+(`device_stage_files`, then `/mnt/user-data/uploads/...`); both work. **Either way, tell the
+agent to write its output as it goes**, per `A LONG READ DIES AT THE COMPACTION`, and move
+container outputs to `docs/sessions/` with `device_commit_files`.
+
+**Costs, measured 2026-09-22/23, for sizing the next farm-out:** reading and extracting a
+280-page dissertation in two halves cost about 257k and 272k Sonnet tokens; one Fable
+evaluation over those extractions, about 223k; one Opus method brief with tree and library
+reading, about 250k; one Sonnet web literature search, about 127k. **The desk's first quote
+(150k to 300k for the Sonnet pair) was half the real cost.**

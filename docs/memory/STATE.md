@@ -45,74 +45,91 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-22, about 22:40
+> ### READ THIS FIRST. Written at the close of 2026-09-23, about 01:20
 >
-> **THE ONE THING IS STILL N.130'S WALK: Insights' French. It was started on 2026-09-22 and
-> it is PARKED, not abandoned, ten rows in.** DESK DEFAULT, and Dann can name another.
+> **THE ONE THING: Code builds phonation time in Insights, N.123's first figure.** DESK DEFAULT,
+> and Dann can name another. The brief is written and every string in it is ratified in both
+> languages: `../sessions/brief-code-phonation-time_r1_2026-09-23.md`, md5
+> `a4767f9d64db0c130abd09aa3ebc8392`. **The next session's first act is to hand Dann the one line
+> he pastes into Claude Code**, which tells Code to read that file and carry it out, then to
+> review Code's memo against the brief.
 >
-> **WHERE IT STOPPED, exactly.** The 59 `insights.*` entries were sorted into three bands
-> and written out row by row in `../sessions/insights-french-as-built_r3_2026-09-22.md`,
-> which is the instrument for this walk and **is the first thing to open.** Dann walked
-> **band B1** and ruled on nine of its ten rows. **He parked on row ten,
-> `finding.passaggio` (`i18n.ts:1501`), at his own word**, and the whole question is
-> preserved in that document: is Ilya's "turning" the vowel's or the register's? **B2 (30
-> rows) and A (19 rows) have not been walked at all.**
+> **N.130'S WALK IS STILL PARKED, now at the end of B1.** `finding.passaggio` was ruled
+> 2026-09-22 22:49: « Cela tombe près de votre passaggio ; attendez-vous à devoir le gérer. »
+> **All ten B1 rows are ruled; B2 (30 rows) and A (19 rows) are unwalked.** The instrument is
+> still `../sessions/insights-french-as-built_r3_2026-09-22.md`, and its ruled rows wait for a
+> Code brief.
 >
-> **RESUME BY OPENING r3, NOT BY STARTING OVER.** Nine rulings are in it. Re-walking them
-> would be a second sitting he has already paid for.
+> #### THE TREE AT THIS CLOSE
 >
-> #### NOTHING IS MID-FLIGHT IN THE TREE. THE TREE IS CLEAN AT THE FLOOR
+> **HEAD was `f225585` at 22:34 with a clean tree** (Dann, 2026-09-22 22:46). The floor stays
+> `f6d2184`. **Correction to the previous close:** it said nothing had shipped since the floor;
+> `205a7ae` changed one string in `apps/web/src/lib/i18n.ts` (the reader's waiting line). No other
+> application code has moved. **Everything written tonight is documents only**, listed below, and
+> Dann is asked to commit it.
 >
-> **`f6d2184` is the floor and nothing has shipped since.** What is uncommitted at this
-> close is **memory and session documents only** — `INBOX.md`, `OWED.md`, `PRODUCT.md`,
-> `STATE.md`, `ENVIRONMENT.md`, the r3 walk document, and the three St-Pierre documents.
-> **No application code is in flight.**
+> #### THE ST-PIERRE THREAD, 2026-09-22 22:48 to 2026-09-23 01:10. NOT tracker items unless marked
 >
-> #### TWO THINGS DANN RULED ON 2026-09-22 THAT CHANGE HOW THE DESK REASONS
+> Dann's instruction: harvest every good aspect of Karine St-Pierre's work and her sources to
+> enhance Ilya's output; later, *"this current work is at the service of enhancing Insights by way
+> of providing more nuanced evidence for the user."* **Every file below is in `../sessions/`.**
 >
-> - **"Clarity for a receptive user, not compactness."** In `PRODUCT.md`. It killed
->   "phonation mass", which was **the desk's own coinage and not a term from the
->   literature**, and replaced it with *"What is flagged, by how much singing time you spend
->   singing it."*
-> - **"There is always a way to accomplish an objective with the code."** In `PRODUCT.md`
->   §"THE CODE IS NOT A CONSTRAINT ON THE PRODUCT". **"The tree does not do that" is a cost,
->   not a verdict.** Only three kinds of refusal survive it, and they are listed there.
->   **It may want to be tether 23. That is row 3 of `OWED.md` §"RULINGS DANN OWES".**
+> - **Extractions and evaluation:** `st-pierre-extraction-A-chapters-3-4_r1_2026-09-22.md`
+>   (Sonnet; the r2 census re-verified and HELD), `st-pierre-extraction-B-sources_r1_2026-09-22.md`
+>   (Sonnet), `st-pierre-evaluation-C-fable_r1_2026-09-22.md` (Fable: her grid is the weak
+>   instrument and her prose the strong one; the "as clause" pattern).
+> - **Harvests:** `harvest-nix-2002-and-christensen-2024_r1_2026-09-22.md`. Christensen measured
+>   St-Pierre's grid as the most variable of six (p. 539). Christensen and St-Pierre are both
+>   Lorna MacDonald's students and Dann's colleagues.
+> - **Methods (Opus):** `method-phrase-length_r1_2026-09-22.md` (every rest ends a phrase; 179
+>   rests and 0 breath marks across the six Sunless songs; recommends its own number beside
+>   N.123, **not ruled**) and `method-leaps_r1_2026-09-22.md` **with eight addenda, which are the
+>   live part: read addenda 3 to 8, not the body.**
+> - **Research (Sonnet):** `research-legato-test-literature_r1_2026-09-23.md` (nobody has built
+>   the timed legato test) and `research-phrase-marks-verification_r1_2026-09-23.md` (Dann's
+>   phrase-mark claims NOT ESTABLISHED either way; text setting may predict arcs better than era).
+> - **Phonation time:** `insights-phonation-time_r1_2026-09-22.md` holds every ruling and string.
 >
-> #### THE RESEARCH THREAD, WHICH IS NOT A TRACKER ITEM AND MUST NOT BECOME ONE BY DRIFT
+> #### RULINGS MADE TONIGHT, AND WHERE EACH LANDED
 >
-> **Karine St-Pierre's 2016 dissertation was read on Dann's instruction** — she was in the
-> doctoral cohort before his — and three documents came out of it, all in `../sessions/`:
-> the difficulty-grid memo, and the proposal at **r2**, which is the live one.
+> - **Cited advice is allowed in Insights**, attribution on its face: `PRODUCT.md` §"Insights
+>   gives insight, not intervention", amendment 2026-09-23.
+> - **There is no teacher mode; N.124 serves one voice as fully as several; N.124 kept LATER:**
+>   `OPEN.md` N.124. **The multi-voice library exists** (`profileStore.ts:104-108`): `SEQUENCE.md`
+>   dependency 4.
+> - **The tempo control lives in the Loupe:** `OPEN.md` N.120.
+> - **A large leap is a minor sixth or greater; outside the typed range the approach is moot;
+>   Ilya entertains both Christensen and Bozeman; Dann's m. 14 sentence is the register;
+>   Bozeman covers all voices:** `method-leaps_r1` addenda 3 to 8. **Not yet in `PRODUCT.md`:
+>   transcribe at the next close if still standing.**
+> - **Dynamics:** the piano's marking applies to the voice unless the voice has its own; a singer's
+>   own marking is legitimate; the dynamic in force is defined in `method-leaps_r1` addendum 7.
+> - **Self-report is struck** as an intake path. **"Phonation" for reporting, "sing" for
+>   instruction.**
 >
-> **The strongest finding is performance length.** Her census of forty-two voice guides
-> records it as one of the four *least* common annotations and calls the omission
-> *"surprising"*. **Every reason the field gives for leaving it out is a reason not to PRINT
-> one number for everyone, and Ilya does not print for everyone.** Case in the r2 proposal.
+> #### THE PROBE SESSION DANN ASKED FOR, NOT STARTED
 >
-> **AND A WARNING ON THAT DOCUMENT.** Its census figures and quotations **came through a
-> compaction summary, not a second read of the PDF.** They must be re-verified before
-> anything is built on them. See `ENVIRONMENT.md` §`A LONG READ DIES AT THE COMPACTION`,
-> which is the trap that caused it, and §`THE BRIDGE CARRIES A THIRD FOLDER`, which is where
-> the PDF lives. **Nothing from this research is numbered. §3.1 holds.**
+> Phrase marks (slur arcs, which Ilya can tell from melisma slurs because it knows the syllables),
+> dynamics (a curated lexicon on the model of `tempo-lexicon.ts`), comma detection from scans
+> (Dann: *"we are on the vanguard"*), and the timed legato intake test. Inputs are listed in
+> `insights-phonation-time_r1_2026-09-22.md`.
 >
-> #### WHAT THE DESK GOT WRONG ON 2026-09-22, since the next session inherits the habits
+> #### WHAT THE DESK GOT WRONG, since the next session inherits the habits
 >
-> - **It let a long read sit in context instead of writing it down, and the thread compacted
->   on top of it.** Now a trap in `ENVIRONMENT.md`.
-> - **It loaded a comma with weight-bearing logic in a proposed string** — *"Your
->   compatibility, as these three measurements show it"* — **the exact fault it had just
->   diagnosed in "The fit, in its terms".** Dann caught it. It is a habit, not a one-off.
-> - **It read a verb backwards** and told Dann "relies on" pointed the wrong way in his own
->   draft. It did not. The subject was the problem, not the verb.
-> - **It flagged `fit.heading`'s French as the suspect when the English was the ambiguous
->   one.**
+> - **Cost estimates ran low.** The first Sonnet pair used 529k against a quoted 150k to 300k.
+>   Later quotes were widened and held.
+> - **It repeated a stale line without opening the tree** ("the multi-voice library is NOT
+>   ESTABLISHED"); the library was built 2026-07-11.
+> - **It judged Bozeman's scope from one article's title.**
+> - **It wrote six leap rules Dann called "AI slop that lacks understanding"**, attaching the leap
+>   to out-of-range notes where it is moot. Lead from the singer's seat.
+> - **It cited a 13-day-old ruling (the tempo "station") as the current shape.** Dann: *"Join me in
+>   the present, the water is fine!"*
 >
 > #### STILL NOT MEASURED, carried forward unchanged
 >
 > **Paint on a phone.** And **whether « PARTITION » fits 62 px in Consolas or Android's
-> monospace** — the fix is `min-width`, so the tag grows rather than overlapping, but the
-> observation has never been made.
+> monospace.**
 
 
 ## THE TRACKER
@@ -162,10 +179,6 @@ does not repeat them.
   same screen: a compass of **A3 to F♯6**, implausible for a sung line in that song, and a
   tall empty region at the top of the Insights box. Spec in `OPEN.md`. **All three are NOT
   ESTABLISHED as faults until the code is read.**
-- `[x]` **N.165. The loupe draws no notes. CLOSED 2026-09-22**, shipped `f6d2184`, walked by
-  Dann on the alias in French: *"This looks as it should!"* **Account moved to
-  `../sessions/LOG.md` block 35 at the close of 2026-09-22.** It carries no ruling of his;
-  the cause, the two dead hypotheses and the squircle sibling are all in that block.
 - `[ ]` **N.166. A stored scan may need the page reader to redisplay.** DESK DEFAULT number,
   found by the desk 2026-09-22 while investigating N.165. **The same song, the same library,
   the same origin, in the desk's own tab: the score never drew**, and the drawer sat on
@@ -393,13 +406,6 @@ Kabalevsky op. 52 no. 9, fourteen lines. **It fills exactly two letter sheets.**
 *Split 2026-09-01; backup `STATE.md.bak-2026-09-01`. The closing colophons of
 2026-09-10 to 2026-09-17 (early morning) moved to `../sessions/LOG.md` block 21 at the
 close of 2026-09-17, about 02:00.*
-
-*Close of 2026-09-17, about 02:00. N.146 steps 1, 2, and 2b shipped (`fe4d2c7`,
-`6e98057`); step 2c under investigation by Code. Findings 1 to 8 of the N.146 walk moved
-to `OPEN.md`; the Howell extraction and the previous close's standing-rules paragraph
-moved to LOG block 21. `PRODUCT.md` gained "Why Ilya exists"; `ENVIRONMENT.md` gained
-`THE ALIAS CHECK THAT WORKED` and `THE EXTENSION CANNOT SEE HIS TAB`; `SCHEDULE.md`
-gained the per-format samples. The floor moves to `6e98057`. Memory NOT committed.*
 
 *Close of 2026-09-19, about 22:00. Seven commits, `02dd6d2` to `438f08f`, all
 pushed, none walked, so the floor stays at `637acc1`. The ILYA REGISTER is retired
