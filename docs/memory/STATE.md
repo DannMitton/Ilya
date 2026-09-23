@@ -45,6 +45,43 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### READ THIS FIRST. Written at the close of 2026-09-23, about 17:35. SUPERSEDES THE 03:55 BLOCK BELOW AS THE ONE THING
+>
+> **THE ONE THING: N.168, Insights intake, step 1, the condition map. The desk's; nothing
+> from Dann.** Numbered by Dann at 17:29, *"engage in it ASAP."* The plan:
+> `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md`
+> (request folder access to `~/Documents/Voice Pedagogy Library` at the open; it is outside
+> the two folders the opener names). Write `condition-map_r1.md` beside the plan.
+>
+> **Step 1 is begun: the engine was read at 17:31. What it computes per note**
+> (`packages/score-parser/src/analysis-types.ts`, `AnalyzedEvent`, from `:125`): `timbre`
+> (open below the turning pitch, close above), `turningPitch` (an octave below fR1),
+> `crossing` (fo within `CROSSING_TOLERANCE_CENTS = 50` of fR1, `overlay-engine.ts:131`,
+> `:173`), `aboveFirstResonance`, `inPassaggio`, `rangeStatus`, `sustainedCeilingExposure`,
+> `vowel`. Long sustain: `SUSTAIN_SECONDS_THRESHOLD = 2.5` (`sustain.ts:24`). Phonation:
+> `aggregatePhonation`, `secondsFor`, `totalFoldCycles` (`phonation.ts:306`, `:455`, `:551`);
+> passaggio zones in `insights.ts:116-121`. Transposition: `transposition.ts:217`, `:347`.
+> **NOT YET COMPUTED:** any fR2 event mark (fR2 is carried in the snapshot,
+> `overlay-engine.ts:276`, and read by no mark); 3fo and 4fo mini-turns; the approach
+> interval (no leap code found by grep); dynamics (not parsed, `PRODUCT.md` "The refusal it
+> struck"); phrase length.
+>
+> **WHAT THIS AFTERNOON SETTLED.** Five Insights principles, ratified and recorded in
+> `PRODUCT.md`, "What Insights is for" through "How Insights stays trustworthy". The
+> hazard-only advice rule is retired (15:53). The research map and source queue:
+> `.../Insights Research/insights-backbone-map_r1_2026-09-23.md`. A Sonnet precedent survey:
+> `.../_synthesis/memo-sonnet-precedents_r1_2026-09-23.md`. The six register papers are
+> converted to text in `.../_primary-text/` for a Fable read at N.168 step 5 (brief drafted,
+> NOT RUN, in the old session's scratchpad and lost with it; rewrite from the plan).
+>
+> **JOURNAL OF VOICE: PAID, ACCESS NOT LIVE.** Invoice ABS13464112, paid 2026-09-23.
+> Dann's Elsevier account shows "no active subscriptions"; the claim form failed with both
+> numbers. His request went to Elsevier (Rajesh, Societies) at 15:15. **Wait for their reply;
+> do not send him back to the claim form.** Details in the research plan's open items.
+>
+> **THE ccb790c WALK IS PARKED, not dropped** (Dann, 14:49: *"I can't work on this again right
+> now"*). It is the 03:55 block's one thing, below.
+>
 > ### READ THIS FIRST. Written at the close of 2026-09-23, about 03:55
 >
 > **THE ONE THING: Dann walks `ccb790c` on the alias, in both languages.** That walk is N.123
@@ -84,16 +121,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > C♯3 to D4, matching §6.1.6. MNX keeps the old rule; its convention is NOT ESTABLISHED.
 > `staff-renderer.ts:418` changed with it.
 >
-> #### WHAT THE DESK GOT WRONG TONIGHT
->
-> - It told Dann the Mac was not linked before the bridge tools had arrived, and left out the
->   Terminal line he needed. The bridge dropped and returned three more times
->   (`ENVIRONMENT.md`, `THE BRIDGE DROPS AND COMES BACK`).
-> - It offered the three-zone bar without checking it against N.123's own tessituragram.
-> - Its r1 brief sent thin paired bars and circled numbers that meant nothing to a singer.
-> - It pushed a strict IPA vowel trace, which Dann accepted, then found it broke his fR1 arch
->   (Table 5.3). Checking his rationale against his data first would have saved the reversal.
-> - Code's first page-two move was unconditional; the desk caught it only by reading the code.
+> #### WHAT THE DESK GOT WRONG, 03:55 CLOSE: moved to `../sessions/LOG.md` at the 17:35 close (no rulings in it).
 >
 > #### STILL NOT MEASURED, carried forward unchanged
 >
@@ -115,6 +143,10 @@ section says what is open; that file says what comes first and why. **Six
 dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
+
+### Numbered 2026-09-23
+
+- `[ ]` **N.168. Insights intake: filling the three stores.** **NUMBERED BY DANN 2026-09-23 17:29**, *"we should engage in it ASAP."* The plan is `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md` (seven steps: condition map, frequency run, coverage audit, targeted extraction, composing, Dann's vetting, encoding and tests). It rests on the five Insights principles ratified the same afternoon (`PRODUCT.md`, "What Insights is for" to "How Insights stays trustworthy"). Spec in `OPEN.md`. **Next: step 1, the condition map, the desk's.**
 
 ### Numbered 2026-09-22
 

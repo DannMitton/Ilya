@@ -7360,5 +7360,18 @@ Verbatim. Its rulings were checked: each one it lists names the file it landed i
 > **Paint on a phone.** And **whether « PARTITION » fits 62 px in Consolas or Android's
 > monospace.**
 
+---
 
+## Moved from STATE.md at the close of 2026-09-23 17:35: the 03:55 close's list of desk errors
 
+> #### WHAT THE DESK GOT WRONG TONIGHT
+>
+> - It told Dann the Mac was not linked before the bridge tools had arrived, and left out the
+>   Terminal line he needed. The bridge dropped and returned three more times
+>   (`ENVIRONMENT.md`, `THE BRIDGE DROPS AND COMES BACK`).
+> - It offered the three-zone bar without checking it against N.123's own tessituragram.
+> - Its r1 brief sent thin paired bars and circled numbers that meant nothing to a singer.
+> - It pushed a strict IPA vowel trace, which Dann accepted, then found it broke his fR1 arch
+>   (Table 5.3). Checking his rationale against his data first would have saved the reversal.
+> - Code's first page-two move was unconditional; the desk caught it only by reading the code.
+>

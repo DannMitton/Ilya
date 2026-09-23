@@ -36,6 +36,10 @@ next session the same hour it cost the last one.
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
 | a brief lets Code write with git, or Code ran `git stash` | `CODE RAN git stash` |
 | git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
+| converting a journal PDF to text for an agent | `PDFTOTEXT WITHOUT -layout FOR TWO COLUMNS` |
+| spawning a Fable or Sonnet agent while Dann talks | `AN AGENT BLOCKS THE CONVERSATION` |
+| the Chrome extension cannot see the tab Dann means | `THE EXTENSION SEES ONLY ITS OWN TABS` |
+| reading Dann's library or Insights Research | `THE LIBRARY IS OUTSIDE THE OPENER'S GRANT` |
 | a memo quotes a brief line the desk never wrote | `CODE REWROTE THE BRIEF` |
 | a photo arrives as `.HEIC` | `HEIC PHOTOS IN THE CLOUD SHELL` |
 | Howell's book is needed | `WHERE HOWELL'S HEARING SINGING LIVES` |
@@ -4146,3 +4150,18 @@ Code, building page one's fit-by-measurement: in the browser pane, `bind:offsetH
 
 At the open, the `mcp__remote-devices__*` tools were not yet in the session, and the desk told Dann the Mac was not linked. It was: the tools arrived a turn later. **Later the same night they dropped and returned three times**, each time with a notice that the server was reconnecting. **The rule:** when they are absent or drop, say the lookup came back empty, wait a turn or run `ToolSearch` (it waits for connecting servers), and never tell Dann the link is gone. Work that needs no bridge carries on meanwhile.
 
+## PDFTOTEXT WITHOUT -layout FOR TWO COLUMNS. 2026-09-23
+
+`pdftotext -layout` on a two-column journal page (J Voice, JASA) interleaves the columns line by line, so the text reads as nonsense. Plain `pdftotext` (no flag) reads each column in order. Checked on Roubeau 2009 and Herbst and Švec 2014. Spot-check one page of each conversion before an agent reads it.
+
+## AN AGENT BLOCKS THE CONVERSATION. 2026-09-23
+
+From this desk, an Agent call runs in the foreground: the conversation waits until it returns. The desk told Dann a Fable read "can run in the background while we work", which was false, and he interrupted it. Say "our conversation pauses for about N minutes" before spawning. A Sonnet web survey took about 2 minutes and 100k tokens.
+
+## THE EXTENSION SEES ONLY ITS OWN TABS. 2026-09-23
+
+Claude in Chrome sees only the tabs in its own group. A tab Dann opened himself is invisible to it; ask for a screenshot rather than claiming to read it.
+
+## THE LIBRARY IS OUTSIDE THE OPENER'S GRANT. 2026-09-23
+
+The opener grants `~/Desktop/ilya-rewrite` and `~/Downloads`. Insights research lives in `~/Documents/Voice Pedagogy Library/Insights Research/`, and the book PDFs in its alphabetized subfolders (A-C, D-F, ...). Request `~/Documents/Voice Pedagogy Library` once, with a reason, when the work needs it. It mounts at `$HOME/mnt/Voice Pedagogy Library`. Filenames follow `Surname_I et al (Year) - Title - JOV VVV_II.pdf`.

@@ -396,6 +396,18 @@ the paths already). Whoever takes N.142 should be told this.
       page"*. True as a record of what he ruled, false as a description of the code.
       **His to amend or leave.**
 
+## N.168. INSIGHTS INTAKE: FILLING THE THREE STORES. Numbered by Dann 2026-09-23 17:29. "ASAP"
+
+**The plan, in full:** `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md`. It supersedes the pass 02 plan of 2026-09-16.
+
+**In short.** "Comprehensive" is defined by what Ilya can observe: a finite map of conditions in the score (vowel, dynamic, held or short, approach, position) and in the voice (fo and harmonics against fR1 and fR2, passaggi, range edges). Real repertoire is run through the map for a low male and a treble voice to rank regions by how often singers meet them; collection follows that ranking. A fact enters the store only if it is detectable, consequential, and supported. A region stops when covered or when its sources run out (then Insights stays silent there).
+
+**Who offered what.** The need, the number, and the urgency are Dann's; the map, the frequency run, the three tests, and the stopping rule are the desk's proposal of 17:28, which he accepted at 17:29.
+
+**Done when:** every frequent region on the map, for both test voices, is covered by a vetted, tested connection or marked nothing known.
+
+**Depends on:** the dynamics lexicon (`OWED.md`) for the dynamic dimension; score files for the dissertation's songs (only Sunless 1 is in the tree, NOT ESTABLISHED where the rest are).
+
 ## N.130. INSIGHTS HAS NO FRENCH. Numbered by Dann 2026-09-13. UNPLACED.
 
 **The item.** Every string on Insights is English in both languages. A singer
