@@ -28,13 +28,16 @@ import {
 	aggregatePhonation,
 	pachecoTessitura,
 	pitchToMidi,
+	secondsFor,
 	soundingFromNotation,
 	fractionToNumber,
 	type ParsedScore,
 	type Pitch,
+	type TempoResolution,
 	type TessituraBasis,
 	type VocalLineEvent,
 	type VoiceProfileSnapshot,
+	type VowelForEvent,
 } from '@ilya/score-parser';
 import type { WatchEntry, WatchKind, WatchList } from './watchlist';
 
@@ -98,6 +101,64 @@ export interface Finding {
 	instances: number;
 	/** Summed phonation over every instance, in quaver-equivalents, repeats counted. */
 	massQuavers: number;
+	/** `massQuavers` in seconds, N.123. Absent when the score states no tempo. */
+	seconds?: SecondsFigure;
+}
+
+/**
+ * A span of time in seconds. A RANGE wherever the tempo is inferred from a
+ * word, because `secondsFor` then gives a band and a point would be a guess
+ * printed as a measurement.
+ */
+export type SecondsFigure = { kind: 'point'; seconds: number } | { kind: 'range'; low: number; high: number };
+
+/** The three zones of the singer's own passaggi, as shares of phonation time, 0 to 1. */
+export interface PassaggioZones {
+	below: number;
+	between: number;
+	above: number;
+}
+
+export interface VowelTime {
+	/** IPA verbatim from the resolver. */
+	vowel: string;
+	/** Share of total phonation time, 0 to 1. */
+	share: number;
+	/** Null when the score states no tempo. */
+	seconds: SecondsFigure | null;
+	/** True when a finding anywhere in Insights names this vowel. */
+	flagged: boolean;
+}
+
+/**
+ * N.123's first figure, phonation time, as Insights prints it (Dann's option 1,
+ * ruled 2026-09-22 23:45).
+ */
+export interface PhonationSection {
+	/**
+	 * `point` for an encoded or singer-set tempo, `range` for a tempo inferred
+	 * from a word, `none` when the score states no tempo.
+	 */
+	timing: 'point' | 'range' | 'none';
+	/** Total sounding time. Null when `timing` is `none`. */
+	phonation: SecondsFigure | null;
+	/**
+	 * Elapsed length, rests included, at the same tempo. A point only: where the
+	 * tempo is inferred the headline drops the length (brief §3, DESK DEFAULT).
+	 */
+	length: number | null;
+	tempo: TempoResolution | null;
+	/** Null without both typed passaggi, or when nothing is sung. */
+	zones: PassaggioZones | null;
+	/** Most phonation time first. Null when no resolver was supplied. */
+	vowels: VowelTime[] | null;
+	/**
+	 * The printed numbers of bars `PhonationTrust` cannot vouch for. Their time
+	 * is INCLUDED in every figure, as written, and the page names them.
+	 */
+	untrustedMeasures: string[] | null;
+	/** Nothing pitched is sung, so there is no time to divide. */
+	nothingSung: boolean;
 }
 
 export interface InsightsModel {
@@ -107,6 +168,7 @@ export interface InsightsModel {
 	verdict: Verdict;
 	/** Heaviest first. Empty is a finding: nothing fired. */
 	findings: Finding[];
+	phonation: PhonationSection;
 }
 
 export interface InsightsInputs {
@@ -116,6 +178,8 @@ export interface InsightsInputs {
 	profile: VoiceProfileSnapshot;
 	/** The watch list built over the same analysis, or null when none was built. */
 	watchList: WatchList | null;
+	/** The resolver the analysis used. Omit it and the per-vowel list is absent. */
+	vowelForEvent?: VowelForEvent;
 }
 
 function pitched(score: ParsedScore): Array<VocalLineEvent & { pitch: Pitch }> {
@@ -308,18 +372,161 @@ export function groupFindings(watchList: WatchList | null, analysisScore: Parsed
 	return findings.sort((a, b) => b.massQuavers - a.massQuavers);
 }
 
+/**
+ * Seconds for a span of quavers. Seconds are linear in quavers at one tempo,
+ * so one call to `secondsFor` for a single quaver prices every figure on the
+ * page, and the section and the findings cannot disagree about the tempo.
+ */
+function secondsPerQuaver(score: ParsedScore): { tempo: TempoResolution; price: (q: number) => SecondsFigure } | null {
+	const one = secondsFor({ numerator: 1, denominator: 1 }, score);
+	if (!one) return null;
+	const range = one.secondsRange;
+	return {
+		tempo: one.tempo,
+		price: range
+			? (q) => ({ kind: 'range', low: q * range[0], high: q * range[1] })
+			: (q) => ({ kind: 'point', seconds: q * one.seconds }),
+	};
+}
+
+/**
+ * The phonation-time section (N.123, the first figure).
+ *
+ * ZONE BOUNDARIES, DESK DEFAULT (brief 2026-09-23 §1.2): below means a MIDI
+ * number under the primo; above means one over the secondo; between is
+ * everything else, both passaggi included. A note ON a passaggio is counted
+ * between, which differs from `countCrossings`, where the edge counts as above:
+ * a crossing asks whether the voice has turned, a zone asks where it sits.
+ *
+ * TRUST, DESK DEFAULT, and deliberately NOT the tessitura row's. An untrusted
+ * bar is counted as written and named, never dropped (`PhonationTrust`). The
+ * tessitura withholds because Pacheco's cut can turn on half a quaver; an
+ * "about" figure in seconds does not, and withholding it hid the whole section
+ * on the engraved Sunless no. 1, whose bar 17 does not close (probe,
+ * 2026-09-23).
+ */
+export function phonationSection(
+	score: ParsedScore,
+	profile: VoiceProfileSnapshot,
+	findings: readonly Finding[],
+	vowelForEvent?: VowelForEvent,
+): PhonationSection {
+	const totals = aggregatePhonation(score, vowelForEvent ? { vowelForEvent } : {});
+	const pricing = secondsPerQuaver(score);
+	const timing = !pricing ? 'none' : pricing.tempo.provenance === 'inferred' ? 'range' : 'point';
+	const tempo = pricing?.tempo ?? null;
+	const total = fractionToNumber(totals.total);
+	const untrustedMeasures =
+		totals.trust.untrustedBars > 0 ? totals.trust.untrustedMeasureIndices.map((i) => measureNumber(score, i)) : null;
+	if (total <= 0) {
+		return { timing, tempo, phonation: null, length: null, zones: null, vowels: null, untrustedMeasures, nothingSung: true };
+	}
+
+	const phonation = pricing ? pricing.price(total) : null;
+	const lengthFigure = pricing && timing === 'point' ? pricing.price(fractionToNumber(totals.elapsed)) : null;
+	const length = lengthFigure?.kind === 'point' ? lengthFigure.seconds : null;
+
+	let zones: PassaggioZones | null = null;
+	if (profile.passaggio) {
+		const primo = pitchToMidi(profile.passaggio.primo);
+		const secondo = pitchToMidi(profile.passaggio.secondo);
+		let below = 0;
+		let above = 0;
+		for (const [midi, q] of totals.byPitch) {
+			if (midi < primo) below += fractionToNumber(q);
+			else if (midi > secondo) above += fractionToNumber(q);
+		}
+		zones = { below: below / total, between: (total - below - above) / total, above: above / total };
+	}
+
+	let vowels: VowelTime[] | null = null;
+	if (totals.byVowel) {
+		const flagged = new Set(findings.map((f) => f.vowel));
+		// Array.prototype.sort is stable, so equal times keep first-sung order.
+		vowels = [...totals.byVowel]
+			.map(([vowel, q]) => {
+				const n = fractionToNumber(q);
+				return { vowel, share: n / total, seconds: pricing ? pricing.price(n) : null, flagged: flagged.has(vowel) };
+			})
+			.sort((a, b) => b.share - a.share);
+	}
+
+	return { timing, tempo, phonation, length, zones, vowels, untrustedMeasures, nothingSung: false };
+}
+
+/**
+ * Whole percentages that sum to 100, by largest remainder, so a bar of three
+ * zones never reads 33, 33, 33. Shares that sum to zero give zeros.
+ */
+export function wholePercents(shares: readonly number[]): number[] {
+	const sum = shares.reduce((a, b) => a + b, 0);
+	if (sum <= 0) return shares.map(() => 0);
+	const raw = shares.map((x) => (x / sum) * 100);
+	const out = raw.map(Math.floor);
+	let left = 100 - out.reduce((a, b) => a + b, 0);
+	// Remainders are compared at 1e-9 so float noise cannot break a true tie;
+	// a tie then goes to the earlier share, which keeps the result deterministic.
+	const order = raw
+		.map((r, i) => ({ i, rem: Math.round((r - Math.floor(r)) * 1e9) }))
+		.sort((a, b) => b.rem - a.rem);
+	for (const { i } of order) {
+		if (left <= 0) break;
+		out[i] += 1;
+		left -= 1;
+	}
+	return out;
+}
+
+/**
+ * Seconds as the page prints them: `2 min 40 s`, or `40 s` under a minute,
+ * rounded to the whole second because every figure is "about". The spaces
+ * are no-break so a figure never splits across a line.
+ */
+export function formatSeconds(seconds: number): string {
+	const whole = Math.round(seconds);
+	const m = Math.floor(whole / 60);
+	const s = whole % 60;
+	if (m === 0) return `${s}\u00a0s`;
+	return s === 0 ? `${m}\u00a0min` : `${m}\u00a0min\u00a0${s}\u00a0s`;
+}
+
+const BEAT_GLYPH: Record<string, string> = {
+	whole: '\u{1D15D}',
+	half: '\u{1D15E}',
+	quarter: '\u2669',
+	eighth: '\u266A',
+	'16th': '\u{1D161}',
+};
+
+/** The tempo as a metronome mark, `♩ = 72`, from the resolution's own beat. */
+export function formatTempo(tempo: TempoResolution, language: 'en' | 'fr'): string {
+	const glyph = (BEAT_GLYPH[tempo.beatUnit] ?? tempo.beatUnit) + (tempo.beatUnitDots > 0 ? '.'.repeat(tempo.beatUnitDots) : '');
+	const bpm = new Intl.NumberFormat(language === 'fr' ? 'fr-CA' : 'en-CA', { maximumFractionDigits: 1 }).format(tempo.bpm);
+	return `${glyph}\u00a0=\u00a0${bpm}`;
+}
+
 /** Build page one's model from seams that already exist. Pure and deterministic. */
-export function buildInsights({ analysisScore, profile, watchList }: InsightsInputs): InsightsModel {
+export function buildInsights({ analysisScore, profile, watchList, vowelForEvent }: InsightsInputs): InsightsModel {
 	const line = pitched(analysisScore);
 	const range = rangeRow(line, profile);
 	const crossings = crossingsRow(line, profile);
 	const tessitura = tessituraRow(analysisScore, line, profile);
+	const grouped = groupFindings(watchList, analysisScore);
+	const phonation = phonationSection(analysisScore, profile, grouped, vowelForEvent);
+
+	/* Option 2, "only as a complement to option 1's claims" (Dann, 2026-09-22):
+	   a finding carries seconds at the tempo the section prints, and none
+	   where the section prints none. */
+	const pricing = secondsPerQuaver(analysisScore);
+	const findings = pricing ? grouped.map((f) => ({ ...f, seconds: pricing.price(f.massQuavers) })) : grouped;
+
 	return {
 		range,
 		crossings,
 		tessitura,
 		verdict: verdictOf(range, tessitura),
-		findings: groupFindings(watchList, analysisScore),
+		findings,
+		phonation,
 	};
 }
 

@@ -24,7 +24,10 @@ import { t } from '$lib/i18n';
 import {
 	buildInsights,
 	countCrossings,
+	formatSeconds,
+	formatTempo,
 	groupFindings,
+	wholePercents,
 	strikeLiederClause,
 	verdictOf,
 	type RangeRow,
@@ -157,6 +160,80 @@ describe('N.127 the fit table', () => {
 		expect(m.tessitura.reference).toBeNull();
 		expect(m.tessitura.flag).toBeNull();
 		expect(m.verdict).toBe('cannot-say');
+	});
+});
+
+const AT0 = { fraction: { numerator: 0, denominator: 1 } };
+const withTempo = (sc: ParsedScore, extra: Partial<ParsedScore>): ParsedScore => ({ ...sc, ...extra }) as ParsedScore;
+const quarter60 = { tempoMarkings: [{ measureIndex: 0, rhythmicPosition: AT0, bpm: 60, beatUnit: 'quarter', beatUnitDots: 0 }] } as Partial<ParsedScore>;
+const rest = (id: string, measureIndex: number): VocalLineEvent =>
+	({ id, type: 'rest', measureIndex, rhythmicPosition: AT0, duration: { base: 'whole', dots: 0, fraction: { numerator: 1, denominator: 1 } } }) as VocalLineEvent;
+
+describe('N.123 phonation time', () => {
+	it('prices phonation and the piece, rests included, at an encoded tempo', () => {
+		// 24 sung quavers and one bar of rest, at quarter = 60: a quaver is half
+		// a second, so 12 s sung of a 16 s piece.
+		const sc = withTempo(score([...line, rest('r', 3)], 4), quarter60);
+		const ph = buildInsights({ analysisScore: sc, profile, watchList: null }).phonation;
+		expect(ph.timing).toBe('point');
+		expect(ph.phonation).toEqual({ kind: 'point', seconds: 12 });
+		expect(ph.length).toBe(16);
+		expect(formatTempo(ph.tempo!, 'en')).toBe('\u2669\u00a0=\u00a060');
+	});
+
+	it('gives a range and no length when the tempo is inferred from a word', () => {
+		const sc = withTempo(score(line, 3), { tempoWords: [{ measureIndex: 0, rhythmicPosition: AT0, text: 'Andante' }] });
+		const ph = buildInsights({ analysisScore: sc, profile, watchList: null }).phonation;
+		expect(ph.timing).toBe('range');
+		expect(ph.phonation?.kind).toBe('range');
+		expect(ph.length).toBeNull();
+		expect(ph.tempo?.printedText).toBe('Andante');
+	});
+
+	it('invents no tempo, and still divides the time into shares', () => {
+		const ph = buildInsights({ analysisScore: score(line, 3), profile, watchList: null }).phonation;
+		expect(ph.timing).toBe('none');
+		expect(ph.phonation).toBeNull();
+		// Primo F3 is 53, secondo D4 is 62. Below: A2 4 and D3 12. On the primo,
+		// so between: F3 4. Above: E♭4 4. Of 24 quavers.
+		expect(ph.zones).toEqual({ below: 16 / 24, between: 4 / 24, above: 4 / 24 });
+	});
+
+	it('draws no zones without both passaggi', () => {
+		const bare: VoiceProfileSnapshot = { fR1: profile.fR1 };
+		expect(buildInsights({ analysisScore: score(line, 3), profile: bare, watchList: null }).phonation.zones).toBeNull();
+	});
+
+	it('orders vowels by phonation time and marks the ones a finding names', () => {
+		const vowelOf: Record<string, string> = { a: 'a', b: 'a', c: 'i', d: 'i', e: 'i', f: 'i', g: 'u', h: 'u', i: 'u', j: 'i' };
+		const ph = buildInsights({
+			analysisScore: score(line, 3),
+			profile,
+			watchList: null,
+			vowelForEvent: (ev) => vowelOf[ev.id],
+		}).phonation;
+		// Quarters are 2 quavers, halves 4. a: 2 + 2 = 4; i: 4 x 2 + 4 = 12; u: 2 + 2 + 4 = 8.
+		expect(ph.vowels?.map((v) => v.vowel)).toEqual(['i', 'u', 'a']);
+		expect(ph.vowels?.every((v) => !v.flagged)).toBe(true);
+	});
+
+	it('counts an untrusted bar as written and names it, never dropping it', () => {
+		const bad = line.map((ev) =>
+			ev.id === 'e' ? { ...ev, duration: { ...HALF, fraction: { numerator: 3, denominator: 4 } } } : ev,
+		);
+		const m = buildInsights({ analysisScore: withTempo(score(bad, 3), quarter60), profile, watchList: null });
+		expect(m.phonation.untrustedMeasures).toEqual(['2']);
+		// Bar 2's first note is summed as the half its notation says: 26 quavers, 13 s.
+		expect(m.phonation.phonation).toEqual({ kind: 'point', seconds: 13 });
+		expect(m.phonation.zones).not.toBeNull();
+	});
+
+	it('prints seconds as the page does, and shares that sum to 100', () => {
+		expect(formatSeconds(160)).toBe('2\u00a0min\u00a040\u00a0s');
+		expect(formatSeconds(39.6)).toBe('40\u00a0s');
+		expect(formatSeconds(120)).toBe('2\u00a0min');
+		expect(wholePercents([16, 4, 4])).toEqual([67, 17, 16]);
+		expect(wholePercents([0, 0, 0])).toEqual([0, 0, 0]);
 	});
 });
 

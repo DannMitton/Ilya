@@ -207,6 +207,16 @@ describe('the totals themselves', () => {
 		expect(t.coverage.pitchedNotes).toBe(1);
 	});
 
+	it('counts rests in the elapsed length, which is the time the piece takes', () => {
+		const s = scoreOf(
+			[measure(0, 4, 4), measure(1, 4, 4)],
+			[rest(0, dur('whole')), note(1, 'C', 4, dur('half')), rest(1, dur('half'))],
+		);
+		const t = aggregatePhonation(s);
+		expect(fractionToNumber(t.total)).toBe(4);
+		expect(fractionToNumber(t.elapsed)).toBe(16);
+	});
+
 	it('collapses enharmonics onto one pitch key, since a singer sings one note', () => {
 		const aSharp: VocalLineEvent = { ...note(0, 'A', 3, dur('quarter')), pitch: { step: 'A', octave: 3, alter: 1 } } as VocalLineEvent;
 		const bFlat: VocalLineEvent = { ...note(0, 'B', 3, dur('quarter')), pitch: { step: 'B', octave: 3, alter: -1 } } as VocalLineEvent;

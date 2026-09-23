@@ -49,8 +49,13 @@
 		buildInsights,
 		strikeLiederClause,
 		PAGE_ONE_FINDINGS,
+		formatSeconds,
+		formatTempo,
+		wholePercents,
 		type Containment,
 		type Finding,
+		type PhonationSection,
+		type SecondsFigure,
 	} from '$lib/shane/insights';
 
 	interface Props {
@@ -131,7 +136,14 @@
 	   prints no number at all (brief §7), even where a typed range exists. */
 	const measured = $derived(adapted.completeness.formants);
 	const model = $derived(
-		measured && analysisScore ? buildInsights({ analysisScore, profile: adapted.snapshot, watchList }) : null,
+		measured && analysisScore
+			? buildInsights({
+					analysisScore,
+					profile: adapted.snapshot,
+					watchList,
+					...(vowelResolver ? { vowelForEvent: vowelResolver } : {}),
+				})
+			: null,
 	);
 
 	// ── The identity head ──────────────────────────────────────────────
@@ -152,7 +164,10 @@
 	// ── Pages ──────────────────────────────────────────────────────────
 	const pageOneFindings = $derived(model ? model.findings.slice(0, PAGE_ONE_FINDINGS) : []);
 	const deferredFindings = $derived(model ? model.findings.slice(PAGE_ONE_FINDINGS) : []);
-	const totalPages = $derived(deferredFindings.length > 0 ? 2 : 1);
+	/* PLACEMENT, N.123: page one is fixed at one page and its budget is spent
+	   (`PAGE_ONE_FINDINGS`), so the phonation-time section opens page two, and
+	   page two exists whenever the model does. Nothing on page one shrinks. */
+	const totalPages = $derived(model ? 2 : 1);
 
 	const attribution = $derived(strikeLiederClause(T('footer.attribution')));
 	const hasTypedCharacteristics = $derived(
@@ -220,6 +235,63 @@
 		return n === 1 ? T('insights.findings.furtherOne') : fill(T('insights.findings.furtherMany'), { n });
 	}
 
+	// ── Phonation time (N.123) ─────────────────────────────────────────
+	function secondsText(f: SecondsFigure): string {
+		return f.kind === 'point'
+			? formatSeconds(f.seconds)
+			: fill(T('insights.fit.span'), { low: formatSeconds(f.low), high: formatSeconds(f.high) });
+	}
+
+	function shareText(n: number): string {
+		return fill(T('insights.phonation.share'), { n });
+	}
+
+	/* Row 4 replaces the section's numbers when there is no tempo; the zones
+	   and the vowel order still print as shares, which need no tempo. */
+	function headlineOf(ph: PhonationSection): string {
+		if (ph.timing === 'none' || !ph.phonation || !ph.tempo) return T('insights.phonation.noTempo');
+		if (ph.phonation.kind === 'range') {
+			return fill(T('insights.phonation.headlineInferred'), {
+				low: formatSeconds(ph.phonation.low),
+				high: formatSeconds(ph.phonation.high),
+				tempoWord: ph.tempo.printedText ?? ph.tempo.term ?? '',
+			});
+		}
+		return fill(T('insights.phonation.headline'), {
+			phonation: formatSeconds(ph.phonation.seconds),
+			length: formatSeconds(ph.length ?? ph.phonation.seconds),
+			tempo: formatTempo(ph.tempo, language),
+		});
+	}
+
+	/* Low to high along the bar, high to low down the legend, so both read the
+	   way pitch reads on a staff. JUDGEMENT. */
+	const zoneRows = $derived.by(() => {
+		const z = model?.phonation.zones;
+		if (!z) return null;
+		const [below, between, above] = wholePercents([z.below, z.between, z.above]);
+		return {
+			bar: [
+				{ key: 'below', share: z.below },
+				{ key: 'between', share: z.between },
+				{ key: 'above', share: z.above },
+			],
+			legend: [
+				{ key: 'above', label: T('insights.phonation.zoneAbove'), pct: above },
+				{ key: 'between', label: T('insights.phonation.zoneBetween'), pct: between },
+				{ key: 'below', label: T('insights.phonation.zoneBelow'), pct: below },
+			],
+		};
+	});
+
+	function findingSeconds(f: Finding): string {
+		if (!f.seconds) return '';
+		const seconds = secondsText(f.seconds);
+		return f.instances === 1
+			? fill(T('insights.phonation.findingOne'), { seconds })
+			: fill(T('insights.phonation.finding'), { n: f.instances, seconds });
+	}
+
 	const remainderLine = $derived(
 		deferredFindings.length === 1
 			? T('insights.findings.remainderOne')
@@ -238,7 +310,55 @@
 {#snippet finding(f: Finding)}
 	<div class="finding">
 		<p class="finding-tag">{findingTag(f)}{' \u00b7 '}<span class="ipa">[{f.vowel}]</span>{#if wordOf(f)}{' \u00b7 '}{wordOf(f)}{/if}</p>
-		<p class="finding-body">{findingBody(f)}{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}</p>
+		<p class="finding-body">{findingBody(f)}{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}{#if findingSeconds(f)}{' '}<span class="finding-further">{findingSeconds(f)}</span>{/if}</p>
+	</div>
+{/snippet}
+
+{#snippet phonationView(ph: PhonationSection)}
+	<div class="section">
+		{@render sectionHead(T('insights.phonation.heading'))}
+		{#if ph.nothingSung}
+			<p class="prose">{T('insights.fit.nothingSung')}</p>
+		{:else}
+			<p class="prose">{headlineOf(ph)}</p>
+			{#if ph.untrustedMeasures}
+				<p class="remainder">
+					{fill(T(ph.untrustedMeasures.length === 1 ? 'insights.phonation.untrustedOne' : 'insights.phonation.untrustedMany'), {
+						measures: ph.untrustedMeasures.join(', '),
+					})}
+				</p>
+			{/if}
+
+			{#if zoneRows}
+				<div class="zone-bar" aria-hidden="true">
+					{#each zoneRows.bar as z (z.key)}
+						{#if z.share > 0}
+							<span class="zone zone-{z.key}" style="flex-grow: {z.share};"></span>
+						{/if}
+					{/each}
+				</div>
+				<ul class="zone-legend">
+					{#each zoneRows.legend as z (z.key)}
+						<li><span class="swatch zone-{z.key}"></span><span>{z.label}</span><span class="zone-pct">{shareText(z.pct)}</span></li>
+					{/each}
+				</ul>
+			{:else}
+				<!-- No bar without both passaggi: an edge nobody typed is an edge
+				     nothing is measured against. -->
+				<p class="remainder">{T('insights.fit.crossingsUncounted')}</p>
+			{/if}
+
+			{#if ph.vowels && ph.vowels.length > 0}
+				<p class="sub-head">{T('insights.phonation.byVowel')}</p>
+				<!-- A vowel a finding names is set in bold, since the findings list
+				     marks its vowel tag no other way. DESK DEFAULT. -->
+				<ul class="vowel-times">
+					{#each ph.vowels as v (v.vowel)}
+						<li class:flagged={v.flagged}><span class="ipa">[{v.vowel}]</span>{' '}{v.seconds ? secondsText(v.seconds) : shareText(Math.round(v.share * 100))}</li>
+					{/each}
+				</ul>
+			{/if}
+		{/if}
 	</div>
 {/snippet}
 
@@ -419,11 +539,11 @@
 				{@render foot(1, citesTessitura)}
 			</article>
 
-			{#if deferredFindings.length > 0}
-				<!-- THE EARNED PAGE, and it exists only because page one's count line
-				     promises it (brief §4.3). It carries the deferred findings in
-				     page one's own shape; the advice section Design drew on it is
-				     not in this increment. -->
+			{#if model}
+				<!-- PAGE TWO. It opens with phonation time (N.123), then carries the
+				     findings page one's count line promises (brief §4.3), in page
+				     one's own shape; the advice section Design drew on it is not in
+				     this increment. -->
 				<article
 					class="paper-page insights-page"
 					style="width: {dims.width}px; height: {dims.height}px;"
@@ -434,12 +554,15 @@
 						<div class="running-rule"></div>
 					</header>
 					<div class="squircle" style="top: {subsequentTop}px;">
-						<div class="section">
-							{@render sectionHead(T('insights.findings.deferredHeading'))}
-							{#each deferredFindings as f (f.key)}
-								{@render finding(f)}
-							{/each}
-						</div>
+						{@render phonationView(model.phonation)}
+						{#if deferredFindings.length > 0}
+							<div class="section">
+								{@render sectionHead(T('insights.findings.deferredHeading'))}
+								{#each deferredFindings as f (f.key)}
+									{@render finding(f)}
+								{/each}
+							</div>
+						{/if}
 					</div>
 					{@render foot(2, false)}
 				</article>
@@ -640,6 +763,94 @@
 		font-family: var(--font-serif);
 		font-size: 12.5px;
 		line-height: 1.4;
+	}
+
+	/* ── Phonation time (N.123) ───────────────────────────────
+	   The rose family carries the zones, lightest low and darkest high. */
+	.zone-bar {
+		display: flex;
+		height: 14px;
+		margin-top: 4px;
+		border: 1px solid var(--rose, #ab7f7f);
+		border-radius: 3px;
+		overflow: hidden;
+	}
+
+	.zone {
+		flex-basis: 0;
+	}
+
+	.zone + .zone {
+		border-left: 1px solid var(--paper-cream);
+	}
+
+	.zone-below {
+		background: rgba(171, 127, 127, 0.22);
+	}
+
+	.zone-between {
+		background: rgba(171, 127, 127, 0.55);
+	}
+
+	.zone-above {
+		background: var(--rose, #ab7f7f);
+	}
+
+	.zone-legend,
+	.vowel-times {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-family: var(--font-serif);
+		font-size: 12.5px;
+		line-height: 1.45;
+		color: var(--ink-secondary);
+	}
+
+	.zone-legend li {
+		display: grid;
+		grid-template-columns: 12px 1fr auto;
+		align-items: center;
+		column-gap: 8px;
+	}
+
+	.swatch {
+		width: 10px;
+		height: 10px;
+		border: 1px solid var(--rose, #ab7f7f);
+		border-radius: 2px;
+		box-sizing: border-box;
+	}
+
+	.zone-pct {
+		font-variant-numeric: tabular-nums;
+		color: var(--ink-primary);
+	}
+
+	.sub-head {
+		margin: 6px 0 0;
+		font-family: var(--font-sans);
+		font-size: 10px;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-tertiary);
+	}
+
+	.vowel-times {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 18px;
+		row-gap: 2px;
+	}
+
+	.vowel-times li {
+		white-space: nowrap;
+	}
+
+	.vowel-times .flagged {
+		font-weight: 700;
+		color: var(--ink-primary);
 	}
 
 	/* ── The running head on the earned page ─────────────────

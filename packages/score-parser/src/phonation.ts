@@ -246,6 +246,14 @@ export interface PhonationTotals {
 	byPitchByVowel?: Map<number, Map<string, Fraction>>;
 	/** Total sung time. Equals the sum of `byPitch`. */
 	total: Fraction;
+	/**
+	 * The piece's ELAPSED length on the vocal line: every event summed, rests
+	 * and unpitched notes included, so it is the time the piece takes rather
+	 * than the time the singer phonates. Summed under each bar's chosen reading,
+	 * exactly as `total` is, so an untrusted bar's time is included here too and
+	 * named in `trust`, never quietly dropped (N.123, 2026-09-23).
+	 */
+	elapsed: Fraction;
 	coverage: PhonationCoverage;
 	trust: PhonationTrust;
 }
@@ -356,7 +364,10 @@ export function aggregatePhonation(parsed: ParsedScore, options: PhonationOption
 		coverage.notesWithoutVowel = 0;
 	}
 
+	let elapsed = ZERO;
 	for (const ev of parsed.vocalLine) {
+		const reading = chosen.get(ev.measureIndex) === 'fraction' ? soundingFromFraction : soundingFromNotation;
+		elapsed = addF(elapsed, mulF(reading(ev.duration), QUAVERS_PER_WHOLE));
 		if (ev.type === 'rest') {
 			coverage.rests += 1;
 			continue;
@@ -367,7 +378,6 @@ export function aggregatePhonation(parsed: ParsedScore, options: PhonationOption
 		}
 		coverage.pitchedNotes += 1;
 
-		const reading = chosen.get(ev.measureIndex) === 'fraction' ? soundingFromFraction : soundingFromNotation;
 		const quavers = mulF(reading(ev.duration), QUAVERS_PER_WHOLE);
 		const midi = midiOf(ev.pitch);
 
@@ -395,6 +405,7 @@ export function aggregatePhonation(parsed: ParsedScore, options: PhonationOption
 		...(byVowel ? { byVowel } : {}),
 		...(byPitchByVowel ? { byPitchByVowel } : {}),
 		total,
+		elapsed,
 		coverage,
 		trust: {
 			arbitratedBars: bars.filter((b) => b.verdict === 'metre-chose-notation' || b.verdict === 'metre-chose-fraction').length,
