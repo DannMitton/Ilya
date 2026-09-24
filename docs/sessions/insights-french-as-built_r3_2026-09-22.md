@@ -177,6 +177,24 @@ familiar term in the field, we can't justify it."* **The principle he drew from 
 
 ---
 
+### LIST B2, rows 1 to 9 (the fit table). Ruled by Dann 2026-09-24 15:37
+
+*"I ratify the eight as built, and « Rien de chanté à mesurer » for the ninth."* **Eight RATIFIED as built.** `insights.fit.nothingSung` (`i18n.ts:1482`) is a **FRENCH EDIT**: « Rien de chanté jusqu’à la mesure » becomes « Rien de chanté à mesurer ». Offered by the desk (the as-built French read "up to the bar"); ruled by Dann. **Not yet in the tree.**
+
+### LIST B2, rows 10 to 19 (verdicts, findings headings, range findings). Ruled by Dann 2026-09-24 15:38
+
+All ten **RATIFIED as built** (*"yes"*).
+
+**CORRECTION, the desk's error, found 2026-09-24 15:50:** one of these ten was `findings.heading`, which Dann had already RULED on 2026-09-22 (this file, top section: « Ce qui est signalé, selon le temps de chant que vous y consacrez » / "What is flagged, by how much time you spend singing it"). That ruling never reached the tree, so the desk showed him the old as-built string and he ratified it without the ruling in view. **The 2026-09-24 ratification of `findings.heading` is VOID; the 2026-09-22 ruling stands.** None of the 2026-09-22 rulings in the top section are in the tree (checked against `i18n.ts` the same minute).
+
+### LIST B2, rows 20 to 29 (vowel findings, method, silence). Ruled by Dann 2026-09-24 15:40
+
+All ten **RATIFIED as built** (*"yes"*), keeping « Le {vowel} ». Dann asked whether « La » was right because « voyelle » is feminine; the desk answered that a letter or sound named alone is masculine in French (« le a », « le [ɑ] ») and offered « La voyelle {vowel} » as the correct alternative. He kept « Le ». **LIST B2 IS CLOSED:** 28 as built, one French edit (`insights.fit.nothingSung`). The instrument's count of 30 was 29 rows in the table.
+
+### LIST A, all 19. Ruled by Dann 2026-09-24 15:41
+
+All 19 **RATIFIED as built** (*"It looks good"*). **N.130's walk of this instrument is complete:** B1 (ruled 2026-09-22), B2, and A. Two French edits are outstanding in the tree: `insights.fit.nothingSung`, and `insights.findings.furtherOne`, which becomes « Une autre occurrence, dans la partition. » (desk-offered after Dann asked whether a leading digit was acceptable; the desk cited the convention against opening a sentence with a numeral; **RATIFIED by Dann 2026-09-24 15:43**). **Two more, same rule, RATIFIED by Dann 2026-09-24 15:46:** `findings.remainderOne` « Une autre observation est imprimée en entier à la page 2. » and `phonation.findingOne` « Une occurrence, {seconds} de phonation en tout. » Every ruled string is now briefed to Code: `brief-code-n130-strings_r1_2026-09-24.md`.
+
 ## FIVE PLACES THE DESK WOULD LOOK FIRST. Desk readings, not rulings
 
 1. **`footnote.tessitura` keeps Pacheco's title in English and adds a French translation in

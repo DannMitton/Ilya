@@ -138,6 +138,19 @@ the same session and still cited the original as current.
 **So: date every ruling you quote, say how old it is, and name what has touched
 it since. A ruling nothing has amended is worth more than one nobody checked.**
 
+**AMENDED 2026-09-24, after a ratified set was shown to him as if it were unruled.** Dann's
+French rulings of 2026-09-22 on Insights never reached `i18n.ts`. The desk read the tree,
+showed him the old strings "as built", and he ratified one of them, voiding his own ruling
+until the desk caught it. His words: *"This is not the first time we have encountered older
+work that was not properly seated in the tree. It probably won't be the last."*
+
+**THE RULE. Before you show Dann any string, or any built thing, for a ruling: check the
+tree AGAINST the rulings file for it, not the tree alone.** Grep every ruled key in the
+instrument or `OPEN.md` and confirm the tree carries the ruled text. **Where a ruling is
+missing from the tree, say so first and brief Code; never present the stale text as
+"as built".** And at every close: **a ruling is not built until a grep of the tree shows
+it.** Record any gap in `STATE.md` before the session ends.
+
 ### 18. NEW, 2026-08-20, ruled by Dann. NAME THE THING BY WHAT HE CAN SEE.
 
 **Dann's words:** *"I find your critique leans too heavily on matters that are
@@ -611,6 +624,11 @@ applies without being read.
   are ruled, and the French is LOWERCASE.
 - **Do not write French Dann has not seen.** Show the whole table, and say which
   words are coined and which adopted.
+- **Check every French agreement against its referent before you show a draft.**
+  Dann, 2026-09-24: *"This is a persistent nuance in French that we need to be aware
+  of."* A letter or sound named alone is masculine (« le [ɑ] »); a heading with no noun
+  (« Mesuré dans cette pièce ») agrees with an implied « ce qui est », masculine singular;
+  everything else agrees with its written noun. Say which referent you checked.
 - Do not remove the guillemets from `profile.subtitleNamed`.
 - Do not open the formant extractor before saying how a fix gets verified against
   his voice; read the N.49 document first.

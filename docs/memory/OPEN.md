@@ -396,6 +396,26 @@ the paths already). Whoever takes N.142 should be told this.
       page"*. True as a record of what he ruled, false as a description of the code.
       **His to amend or leave.**
 
+## N.170. OUTSIDE EYES: REFINE ILYA WITH SINGERS AND OUTSIDE REVIEWERS. Numbered by Dann 2026-09-24 15:54
+
+**The need, Dann's words:** *"We have developed Ilya in a silo and I want to call on outside eyes to see what we have built and make useful suggestions that we may not have thought of: elegant ways to offer controls to the neophyte user, commentary on our colour story, ideas about consolidating or streamlining functionality... more than a visual critique, I want a design critique, including how the code itself is segmented and modal-ized."* And, numbering it: *"build a sequential plan that we can carry out to refine Ilya"*, with the review packet *"part of our plan"*.
+
+**Who offered what.** The need and the numbering are Dann's. The routes (singers watched, ADPList, a code-structure review, AI audit tools last), the review packet, and this sequence are the desk's proposal of 2026-09-24 15:51; he accepted the packet explicitly.
+
+**The plan, in order. Each step names who does it.**
+
+1. **Freeze a review build (desk).** When the French in flight has shipped, name the commit reviewers see, and walk it once in both languages. Reviewers get the alias and nothing else.
+2. **The review packet (desk drafts; Dann rules the questions).** One page on what Ilya is and who it serves; screenshots of Texte, Annotation and Aperçus on one song in both languages, and printed; **three or four questions Dann most wants answered** (candidates: controls for the neophyte; the colour story, including INBOX 2026-09-24 on printed colour; what could be consolidated; how the modes and panels are divided); a task script for user tests; an observation sheet.
+3. **Singers, watched (Dann runs; the desk supplies the script).** Three to five singers from his students or NFPVT, each with a song they know and three or four tasks, the observer silent. Findings recorded in their words. **Ranked first by the desk:** only users show what confuses.
+4. **Expert design critique (Dann books).** One ADPList session with a UX or UI mentor, the packet sent ahead.
+5. **Code-structure critique (desk prepares).** A fresh AI session with no project memory, given the repository and the packet's structure questions; optionally a specific question to a Svelte community. **DESK NOTE:** a model is an outside view, not an independent one.
+6. **Synthesis (desk sorts; Dann rules).** Every finding goes to one of: fix before release (only under the freeze rule's exception), a release candidate, or LATER. Dann rules by cluster, not by row.
+7. **Build (Code), walked (Dann).** Each ruled cluster is numbered and built the usual way.
+
+**Placement, DESK INFERENCE, his to rule:** steps 1 and 2 in week 3 (from 2026-09-28), step 3 in week 4, step 6 before the checkpoint of 2026-10-09. Under the freeze rule, most builds from step 7 land after 2026-10-30.
+
+**Done when:** step 6 is ruled and every cluster is numbered or recorded as LATER.
+
 ## N.169. ILYA'S MARKUP AGAINST THE DISSERTATION'S APPENDIX B. Numbered by Dann 2026-09-24 10:09. UNSCHEDULED
 
 **The item.** On the 2026-09-24 walk, Dann compared Sunless 2 on Markup with the same song in his dissertation (Appendix B) and was distracted by the disparities. His words: *"would like to resolve these differences, or at least understand why Ilya is offering different values than my earlier ones from my dissertation."*
