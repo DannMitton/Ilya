@@ -6,7 +6,7 @@ Weights are seconds sung. Where a tempo was inferred from a word, each note take
 
 ## Songs
 
-Every song was read from its `.musx` through denigma, in memory, and is in performance order as written (no repeats or jumps to unfold). Tempo is the first stated tempo, as `secondsFor` uses it. The octave shift is the app's reading octave for the low voice (`resolveVocalReadingOctave`). The treble voice sings the low voice's line up an octave.
+Every song was read from its `.musx` through denigma, in memory, and is in performance order as written (no repeats or jumps to unfold). Tempo is the first stated tempo, as `secondsFor` uses it. The octave shift is the app's reading octave for the low voice (`resolveVocalReadingOctave`). Godin's treble voice sings the low voice's line up an octave. The six literature voices each sing the shift that puts the most sung time in their range (see "Transposition").
 
 | Song | Read | Bars | Untrusted bars | Tempo | Clef | Octave shift | Sung span (low voice) | Sung notes | With a vowel | Words with no vowel resolved | Phrases | Boundaries: rest, silence, breath mark, caesura | Sung seconds | Parse warnings |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -28,6 +28,44 @@ Every song was read from its `.musx` through denigma, in memory, and is in perfo
 | Kabalevsky T10 | yes | 83 | 0 | encoded, 56 bpm, beat half dotted | F4 | 0 | C3 to E4 | 156 | 155 | 1 | 9 | 7, 2, 1, 0 | 70.0 | none |
 
 Phrase boundaries across the sixteen songs: rest 184, silence 20, breath-mark 16, caesura 0, end 3. A silence is a stretch of the vocal line with no event at all, usually an empty bar; a mark on a note before a rest counts under both.
+
+## Voices
+
+The six literature voices are test fixtures, never a label shown to a singer. fR1 in Hz; "d" marks a vowel derived by `expectedF1` from the Bozeman midpoints; a dash is not assessed. None of the six has fR2, so every fR2 dimension reads "not assessed" for them.
+
+| Voice | [i] | [ɪ] | [ɨ] | [e] | [ɛ] | [a] | [ɑ] | [ʌ] | [o] | [u] | Range | Passaggio (primo, secondo) | Sources |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Low male voice (Mitton) | 296 | 393 | 404 | 381 | 577 | 711 | 617 | 616 | 489 | 346 | A2 to E4 | A♭3, D♭4 | see the file header |
+| Treble voice (Godin), songs up an octave | 392 | 453 | - | 453 | 679 | 807 | 679 | 679 | 453 | 392 | none | none | Godin and Howell 2015 |
+| Test voice: bass (literature) | 311 | 454 d | 425 d | 440 | 539 | 695 d | 605 | 605 d | 440 | 320 | F2 to F4 | A3, D4 | fR1 Bozeman bass; passaggio Miller 1986 p. 117, basso cantante; range McKinney 1994 Figure 3 floor, ceiling two octaves above (DESK DEFAULT) |
+| Test voice: baritone (literature) | 339 | 524 d | 463 d | 508 | 571 | 695 d | 605 | 605 d | 508 | 339 | A♭2 to A♭4 | B3, E4 | fR1 Bozeman baritone; passaggio Miller 1986 p. 117, baritono lirico (primo printed B4, read B3); range McKinney 1994 Figure 3 floor, ceiling two octaves above (DESK DEFAULT) |
+| Test voice: tenor (literature) | 339 | 589 d | 463 d | 571 | 605 | 780 d | 679 | 679 d | 539 | 381 | C3 to C5 | D4, G4 | fR1 Bozeman tenor-mezzo; passaggio Miller 1986 p. 117, tenore lirico; range McKinney 1994 Figure 3 floor, ceiling two octaves above (DESK DEFAULT) |
+| Test voice: contralto (literature) | 339 | 589 d | 463 d | 571 | 605 | 780 d | 679 | 679 d | 539 | 381 | G3 to G5 | G4, D5 | fR1 Bozeman charts no contralto; the tenor-mezzo bands stand in; passaggio Miller 1986 p. 135, Figure 10.3; range McKinney 1994 Figure 3 floor, ceiling two octaves above (DESK DEFAULT) |
+| Test voice: mezzo-soprano (literature) | 339 | 589 d | 463 d | 571 | 605 | 780 d | 679 | 679 d | 539 | 381 | A3 to A5 | E4, E5 | fR1 Bozeman tenor-mezzo; passaggio Miller 1986 p. 135, Figure 10.2; range McKinney 1994 Figure 3 floor, ceiling two octaves above (DESK DEFAULT) |
+| Test voice: soprano (literature) | 381 | 589 d | 520 d | 571 | 605 | 780 d | 679 | 679 d | 571 | 415 | C4 to C6 | E♭4, F♯5 | fR1 Bozeman soprano; passaggio Miller 1986 p. 134, Figure 10.1; range McKinney 1994 Figure 3 floor, ceiling two octaves above (DESK DEFAULT) |
+
+## Transposition
+
+Shift in semitones from the file's key (the low voice's reading), with the share of sung time inside the voice's range at that shift, then in the file's key. The search runs from -12 to +24; among shifts that tie, the one whose time-weighted mean pitch sits nearest the middle of the range wins (DESK DEFAULT), then the smaller move. Mitton stays in the file's key. Godin has no range, so her +12 is fixed.
+
+| Song | mitton | godin | bass | baritone | tenor | contralto | mezzo | soprano |
+|---|---|---|---|---|---|---|---|---|
+| Sunless 01 | 0 (100.0%; 100.0%) | +12 | -2 (100.0%; 100.0%) | +1 (100.0%; 100.0%) | +5 (100.0%; 100.0%) | +12 (100.0%; 59.4%) | +14 (100.0%; 40.0%) | +17 (100.0%; 7.2%) |
+| Sunless 02 | 0 (100.0%; 100.0%) | +12 | -1 (100.0%; 100.0%) | +2 (100.0%; 100.0%) | +6 (100.0%; 95.4%) | +13 (100.0%; 42.2%) | +15 (100.0%; 32.9%) | +18 (100.0%; 7.1%) |
+| Sunless 03 | 0 (100.0%; 100.0%) | +12 | -2 (100.0%; 100.0%) | +1 (100.0%; 100.0%) | +5 (100.0%; 99.6%) | +12 (100.0%; 66.2%) | +14 (100.0%; 31.7%) | +17 (100.0%; 12.5%) |
+| Sunless 04 | 0 (100.0%; 100.0%) | +12 | -3 (100.0%; 100.0%) | 0 (100.0%; 100.0%) | +4 (100.0%; 99.1%) | +11 (100.0%; 54.2%) | +13 (100.0%; 37.3%) | +16 (100.0%; 15.8%) |
+| Sunless 05 | 0 (100.0%; 100.0%) | +12 | -3 (100.0%; 100.0%) | 0 (100.0%; 100.0%) | +4 (100.0%; 100.0%) | +11 (100.0%; 59.9%) | +13 (100.0%; 44.7%) | +16 (100.0%; 15.2%) |
+| Sunless 06 | 0 (100.0%; 100.0%) | +12 | -3 (100.0%; 100.0%) | 0 (100.0%; 100.0%) | +4 (100.0%; 100.0%) | +11 (100.0%; 57.3%) | +13 (100.0%; 42.7%) | +16 (100.0%; 14.8%) |
+| Kabalevsky T01 | 0 (100.0%; 100.0%) | +12 | -2 (100.0%; 100.0%) | +1 (100.0%; 100.0%) | +5 (100.0%; 98.6%) | +12 (100.0%; 53.5%) | +14 (100.0%; 41.9%) | +17 (100.0%; 11.3%) |
+| Kabalevsky T02 | 0 (100.0%; 100.0%) | +12 | -2 (100.0%; 100.0%) | +1 (100.0%; 100.0%) | +5 (100.0%; 99.6%) | +12 (100.0%; 65.0%) | +14 (100.0%; 36.4%) | +17 (100.0%; 15.3%) |
+| Kabalevsky T03 | 0 (100.0%; 100.0%) | +12 | -2 (100.0%; 100.0%) | +1 (100.0%; 100.0%) | +5 (100.0%; 100.0%) | +12 (100.0%; 68.2%) | +14 (100.0%; 40.3%) | +17 (100.0%; 9.2%) |
+| Kabalevsky T04 | 0 (100.0%; 100.0%) | +12 | -2 (100.0%; 100.0%) | +1 (100.0%; 100.0%) | +5 (100.0%; 100.0%) | +12 (100.0%; 62.1%) | +14 (100.0%; 35.8%) | +17 (100.0%; 22.6%) |
+| Kabalevsky T05 | 0 (100.0%; 100.0%) | +12 | -3 (100.0%; 100.0%) | 0 (100.0%; 100.0%) | +4 (100.0%; 98.3%) | +11 (100.0%; 71.1%) | +13 (100.0%; 56.6%) | +16 (100.0%; 13.6%) |
+| Kabalevsky T06 | 0 (100.0%; 100.0%) | +12 | -3 (100.0%; 100.0%) | 0 (100.0%; 100.0%) | +4 (100.0%; 99.1%) | +11 (100.0%; 63.4%) | +13 (100.0%; 45.5%) | +16 (100.0%; 6.8%) |
+| Kabalevsky T07 | 0 (100.0%; 100.0%) | +12 | -2 (100.0%; 100.0%) | +1 (100.0%; 100.0%) | +5 (100.0%; 99.5%) | +12 (100.0%; 56.2%) | +14 (100.0%; 39.5%) | +17 (100.0%; 11.4%) |
+| Kabalevsky T08 | 0 (100.0%; 100.0%) | +12 | -1 (100.0%; 100.0%) | +2 (100.0%; 100.0%) | +6 (100.0%; 99.1%) | +13 (100.0%; 48.7%) | +15 (100.0%; 24.3%) | +18 (100.0%; 11.7%) |
+| Kabalevsky T09 | 0 (100.0%; 100.0%) | +12 | -3 (100.0%; 100.0%) | 0 (100.0%; 100.0%) | +4 (100.0%; 96.7%) | +11 (100.0%; 68.5%) | +13 (100.0%; 48.8%) | +16 (100.0%; 16.0%) |
+| Kabalevsky T10 | 0 (100.0%; 100.0%) | +12 | -3 (100.0%; 100.0%) | 0 (100.0%; 100.0%) | +4 (100.0%; 100.0%) | +11 (100.0%; 64.5%) | +13 (100.0%; 42.6%) | +16 (100.0%; 16.6%) |
 
 ## Low male voice (Mitton)
 
@@ -75,6 +113,14 @@ Phrase boundaries across the sixteen songs: rest 184, silence 20, breath-mark 16
 | inside | 44.7% | 623.7 | 1061 | 16 |
 | outside | 53.6% | 747.8 | 1362 | 16 |
 | not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Passaggio, three ways (by pitch, so a note with no vowel is assessed too)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| below primo | 50.7% | 708.1 | 1321 | 16 |
+| inside | 45.5% | 635.2 | 1083 | 16 |
+| above secondo | 3.8% | 52.7 | 69 | 15 |
 
 **Range**
 
@@ -262,6 +308,12 @@ The top 40 regions hold 68.5% of sung time.
 |---|---|---|---|---|
 | not assessed | 100.0% | 1396.0 | 2473 | 16 |
 
+**Passaggio, three ways (by pitch, so a note with no vowel is assessed too)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not assessed | 100.0% | 1396.0 | 2473 | 16 |
+
 **Range**
 
 | Band | Share of sung time | Seconds | Notes | Songs |
@@ -409,3 +461,1196 @@ The top 40 regions hold 68.5% of sung time.
 | 40 | above × u × short × repeated | 0.7% | 9.1 | 20 | 7 |
 
 The top 40 regions hold 77.1% of sung time.
+
+## Test voice: bass (literature)
+
+2473 sung notes across 16 songs; 1396.0 s of sung time with a tempo.
+
+### Per dimension
+
+**fo against fR1**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| open | 75.7% | 1056.6 | 1886 | 16 |
+| close | 22.6% | 314.9 | 537 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR1 (n = 3 to 5)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| n = 3 | 7.0% | 97.9 | 162 | 16 |
+| n = 4 | 3.8% | 53.4 | 110 | 15 |
+| n = 5 | 0.7% | 10.3 | 24 | 10 |
+| none | 86.7% | 1209.9 | 2127 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR2 (n = 1 to 8)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not assessed | 100.0% | 1396.0 | 2473 | 16 |
+
+**Passaggio**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| inside | 16.5% | 230.3 | 346 | 16 |
+| outside | 81.7% | 1141.1 | 2077 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Passaggio, three ways (by pitch, so a note with no vowel is assessed too)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| below primo | 83.2% | 1161.5 | 2120 | 16 |
+| inside | 16.8% | 234.5 | 353 | 16 |
+
+**Range**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| in-range | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Sustained ceiling exposure**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not exposed | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Vowel**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| i | 13.0% | 181.4 | 359 | 16 |
+| ɪ | 5.2% | 72.3 | 174 | 16 |
+| ɨ | 7.4% | 103.6 | 202 | 16 |
+| e | 5.4% | 76.0 | 99 | 16 |
+| ɛ | 7.5% | 104.9 | 136 | 16 |
+| a | 1.0% | 14.5 | 21 | 8 |
+| ɑ | 24.7% | 344.1 | 647 | 16 |
+| ʌ | 5.3% | 73.6 | 171 | 16 |
+| o | 17.0% | 237.1 | 329 | 16 |
+| u | 11.7% | 163.8 | 285 | 16 |
+| no vowel resolved | 1.8% | 24.6 | 50 | 9 |
+
+**Held or short (over the tie chain; the regions use this)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 6.3% | 87.5 | 45 | 7 |
+| short | 93.7% | 1308.5 | 2428 | 16 |
+
+**Held or short, per event (the overlay engine's own reading, for comparison)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 3.2% | 44.2 | 14 | 4 |
+| short | 96.8% | 1351.9 | 2459 | 16 |
+
+**Approach**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| repeated | 16.4% | 228.3 | 496 | 16 |
+| step | 42.3% | 590.3 | 1023 | 16 |
+| leap-up | 21.5% | 300.1 | 414 | 16 |
+| leap-down | 15.1% | 211.1 | 427 | 16 |
+| tie | 4.1% | 57.8 | 97 | 14 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Approach after a rest**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| after a rest | 6.6% | 91.9 | 175 | 16 |
+| no rest before | 92.8% | 1295.7 | 2282 | 16 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Position in the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first | 7.6% | 106.4 | 206 | 16 |
+| middle | 84.8% | 1183.2 | 2060 | 16 |
+| last | 7.5% | 105.0 | 206 | 16 |
+| only | 0.1% | 1.5 | 1 | 1 |
+
+**Length of the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 2 s | 4.2% | 58.0 | 143 | 7 |
+| 2 to 4 s | 11.1% | 154.9 | 342 | 12 |
+| 4 to 6 s | 11.7% | 163.8 | 325 | 10 |
+| 6 to 8 s | 11.1% | 154.8 | 276 | 10 |
+| 8 to 12 s | 20.6% | 288.0 | 560 | 12 |
+| 12 s or more | 41.3% | 576.4 | 827 | 10 |
+
+**Position in the piece, cumulative phonation**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 30 s | 34.0% | 474.2 | 892 | 16 |
+| 30 to 60 s | 32.1% | 448.2 | 852 | 15 |
+| 60 to 90 s | 23.0% | 321.8 | 567 | 15 |
+| 90 to 120 s | 6.9% | 96.3 | 121 | 5 |
+| 120 to 180 s | 4.0% | 55.6 | 41 | 2 |
+
+**Position in the piece, share of the song**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first third | 33.8% | 471.5 | 828 | 16 |
+| middle third | 33.3% | 465.3 | 873 | 16 |
+| last third | 32.9% | 459.2 | 772 | 16 |
+
+### Regions: fR1 band × vowel × held or short × approach × range × passaggio
+
+151 distinct regions occur; the top 40 by seconds sung. Not assessed means the profile has no value for that note.
+
+| Rank | Region | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|---|
+| 1 | open × ɑ × short × step × in-range × outside | 8.7% | 121.9 | 228 | 16 |
+| 2 | open × o × short × step × in-range × outside | 6.2% | 86.0 | 115 | 16 |
+| 3 | open × ɑ × short × repeated × in-range × outside | 4.2% | 59.0 | 132 | 15 |
+| 4 | close × i × short × step × in-range × outside | 3.6% | 50.7 | 101 | 16 |
+| 5 | open × ɑ × short × leap-down × in-range × outside | 3.4% | 47.7 | 105 | 16 |
+| 6 | open × o × short × leap-up × in-range × outside | 3.0% | 42.3 | 53 | 16 |
+| 7 | open × ɑ × short × leap-up × in-range × outside | 3.0% | 41.8 | 71 | 16 |
+| 8 | open × ɨ × short × step × in-range × outside | 2.4% | 33.8 | 72 | 15 |
+| 9 | open × ɛ × short × step × in-range × outside | 2.2% | 30.5 | 46 | 16 |
+| 10 | open × e × short × step × in-range × outside | 2.2% | 30.1 | 37 | 16 |
+| 11 | open × o × short × repeated × in-range × outside | 2.0% | 28.4 | 45 | 15 |
+| 12 | close × u × short × step × in-range × outside | 2.0% | 28.2 | 51 | 14 |
+| 13 | open × u × short × step × in-range × outside | 1.9% | 27.2 | 44 | 15 |
+| 14 | open × ɪ × short × step × in-range × outside | 1.9% | 27.1 | 65 | 16 |
+| 15 | open × ʌ × short × step × in-range × outside | 1.9% | 25.8 | 62 | 16 |
+| 16 | open × ɨ × short × leap-down × in-range × outside | 1.8% | 25.0 | 55 | 15 |
+| 17 | open × o × short × leap-down × in-range × outside | 1.8% | 24.9 | 39 | 14 |
+| 18 | close × i × short × repeated × in-range × outside | 1.6% | 23.0 | 61 | 15 |
+| 19 | open × ɪ × short × repeated × in-range × outside | 1.6% | 22.7 | 57 | 14 |
+| 20 | open × ɑ × short × leap-up × in-range × inside | 1.5% | 20.6 | 34 | 13 |
+| 21 | close × i × short × leap-up × in-range × outside | 1.3% | 18.1 | 28 | 12 |
+| 22 | close × u × short × leap-up × in-range × outside | 1.3% | 18.0 | 26 | 10 |
+| 23 | open × ʌ × short × leap-down × in-range × outside | 1.2% | 17.1 | 40 | 14 |
+| 24 | open × ɛ × short × leap-up × in-range × outside | 1.2% | 16.9 | 19 | 8 |
+| 25 | open × ʌ × short × repeated × in-range × outside | 1.1% | 16.0 | 38 | 15 |
+| 26 | open × i × short × step × in-range × outside | 1.1% | 15.8 | 28 | 11 |
+| 27 | close × i × short × leap-down × in-range × outside | 1.1% | 15.1 | 34 | 16 |
+| 28 | open × ɑ × short × step × in-range × inside | 1.1% | 14.7 | 35 | 12 |
+| 29 | close × u × short × leap-up × in-range × inside | 1.0% | 14.5 | 22 | 13 |
+| 30 | close × o × short × leap-up × in-range × inside | 1.0% | 14.4 | 15 | 11 |
+| 31 | close × u × short × repeated × in-range × outside | 1.0% | 14.3 | 26 | 12 |
+| 32 | open × ɪ × short × leap-down × in-range × outside | 1.0% | 14.3 | 32 | 12 |
+| 33 | open × ɨ × short × leap-up × in-range × outside | 1.0% | 14.1 | 21 | 11 |
+| 34 | open × i × short × leap-down × in-range × outside | 1.0% | 13.3 | 31 | 12 |
+| 35 | open × u × short × leap-down × in-range × outside | 0.9% | 12.5 | 26 | 11 |
+| 36 | close × i × short × leap-up × in-range × inside | 0.7% | 10.1 | 16 | 11 |
+| 37 | open × o × short × tie × in-range × outside | 0.7% | 9.9 | 23 | 8 |
+| 38 | open × ɨ × short × repeated × in-range × outside | 0.7% | 9.8 | 25 | 10 |
+| 39 | close × u × short × step × in-range × inside | 0.7% | 9.7 | 20 | 10 |
+| 40 | open × u × short × repeated × in-range × outside | 0.7% | 9.4 | 22 | 9 |
+
+The top 40 regions hold 77.0% of sung time.
+
+## Test voice: baritone (literature)
+
+2473 sung notes across 16 songs; 1396.0 s of sung time with a tempo.
+
+### Per dimension
+
+**fo against fR1**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| open | 69.8% | 974.1 | 1735 | 16 |
+| close | 28.1% | 392.5 | 683 | 16 |
+| crossing | 0.0% | 0.4 | 2 | 2 |
+| above | 0.3% | 4.5 | 3 | 2 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR1 (n = 3 to 5)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| n = 3 | 4.1% | 57.1 | 107 | 16 |
+| n = 4 | 2.1% | 28.7 | 59 | 15 |
+| n = 5 | 0.1% | 1.8 | 6 | 5 |
+| none | 92.0% | 1283.9 | 2251 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR2 (n = 1 to 8)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not assessed | 100.0% | 1396.0 | 2473 | 16 |
+
+**Passaggio**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| inside | 25.1% | 350.4 | 570 | 16 |
+| outside | 73.1% | 1021.1 | 1853 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Passaggio, three ways (by pitch, so a note with no vowel is assessed too)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| below primo | 73.9% | 1032.2 | 1886 | 16 |
+| inside | 25.5% | 356.5 | 582 | 16 |
+| above secondo | 0.5% | 7.4 | 5 | 4 |
+
+**Range**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| in-range | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Sustained ceiling exposure**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not exposed | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Vowel**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| i | 13.0% | 181.4 | 359 | 16 |
+| ɪ | 5.2% | 72.3 | 174 | 16 |
+| ɨ | 7.4% | 103.6 | 202 | 16 |
+| e | 5.4% | 76.0 | 99 | 16 |
+| ɛ | 7.5% | 104.9 | 136 | 16 |
+| a | 1.0% | 14.5 | 21 | 8 |
+| ɑ | 24.7% | 344.1 | 647 | 16 |
+| ʌ | 5.3% | 73.6 | 171 | 16 |
+| o | 17.0% | 237.1 | 329 | 16 |
+| u | 11.7% | 163.8 | 285 | 16 |
+| no vowel resolved | 1.8% | 24.6 | 50 | 9 |
+
+**Held or short (over the tie chain; the regions use this)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 6.3% | 87.5 | 45 | 7 |
+| short | 93.7% | 1308.5 | 2428 | 16 |
+
+**Held or short, per event (the overlay engine's own reading, for comparison)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 3.2% | 44.2 | 14 | 4 |
+| short | 96.8% | 1351.9 | 2459 | 16 |
+
+**Approach**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| repeated | 16.4% | 228.3 | 496 | 16 |
+| step | 42.3% | 590.3 | 1023 | 16 |
+| leap-up | 21.5% | 300.1 | 414 | 16 |
+| leap-down | 15.1% | 211.1 | 427 | 16 |
+| tie | 4.1% | 57.8 | 97 | 14 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Approach after a rest**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| after a rest | 6.6% | 91.9 | 175 | 16 |
+| no rest before | 92.8% | 1295.7 | 2282 | 16 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Position in the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first | 7.6% | 106.4 | 206 | 16 |
+| middle | 84.8% | 1183.2 | 2060 | 16 |
+| last | 7.5% | 105.0 | 206 | 16 |
+| only | 0.1% | 1.5 | 1 | 1 |
+
+**Length of the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 2 s | 4.2% | 58.0 | 143 | 7 |
+| 2 to 4 s | 11.1% | 154.9 | 342 | 12 |
+| 4 to 6 s | 11.7% | 163.8 | 325 | 10 |
+| 6 to 8 s | 11.1% | 154.8 | 276 | 10 |
+| 8 to 12 s | 20.6% | 288.0 | 560 | 12 |
+| 12 s or more | 41.3% | 576.4 | 827 | 10 |
+
+**Position in the piece, cumulative phonation**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 30 s | 34.0% | 474.2 | 892 | 16 |
+| 30 to 60 s | 32.1% | 448.2 | 852 | 15 |
+| 60 to 90 s | 23.0% | 321.8 | 567 | 15 |
+| 90 to 120 s | 6.9% | 96.3 | 121 | 5 |
+| 120 to 180 s | 4.0% | 55.6 | 41 | 2 |
+
+**Position in the piece, share of the song**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first third | 33.8% | 471.5 | 828 | 16 |
+| middle third | 33.3% | 465.3 | 873 | 16 |
+| last third | 32.9% | 459.2 | 772 | 16 |
+
+### Regions: fR1 band × vowel × held or short × approach × range × passaggio
+
+169 distinct regions occur; the top 40 by seconds sung. Not assessed means the profile has no value for that note.
+
+| Rank | Region | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|---|
+| 1 | open × ɑ × short × step × in-range × outside | 7.6% | 106.4 | 198 | 16 |
+| 2 | open × o × short × step × in-range × outside | 5.5% | 76.2 | 101 | 15 |
+| 3 | open × ɑ × short × repeated × in-range × outside | 3.9% | 54.9 | 122 | 15 |
+| 4 | close × i × short × step × in-range × outside | 3.8% | 53.0 | 103 | 16 |
+| 5 | open × ɑ × short × leap-down × in-range × outside | 3.4% | 47.3 | 104 | 16 |
+| 6 | close × u × short × step × in-range × outside | 2.7% | 37.1 | 65 | 16 |
+| 7 | open × ɑ × short × leap-up × in-range × inside | 2.5% | 34.8 | 54 | 14 |
+| 8 | open × o × short × leap-up × in-range × outside | 2.3% | 31.6 | 39 | 15 |
+| 9 | open × ɑ × short × step × in-range × inside | 2.0% | 28.0 | 58 | 16 |
+| 10 | open × ɑ × short × leap-up × in-range × outside | 2.0% | 27.7 | 51 | 16 |
+| 11 | open × e × short × step × in-range × outside | 1.9% | 26.5 | 31 | 16 |
+| 12 | open × o × short × repeated × in-range × outside | 1.9% | 26.3 | 42 | 15 |
+| 13 | open × ɨ × short × step × in-range × outside | 1.9% | 26.3 | 57 | 14 |
+| 14 | open × o × short × leap-down × in-range × outside | 1.8% | 24.9 | 39 | 14 |
+| 15 | open × ɪ × short × step × in-range × outside | 1.7% | 23.5 | 57 | 16 |
+| 16 | open × ɨ × short × leap-down × in-range × outside | 1.6% | 22.7 | 51 | 15 |
+| 17 | open × ʌ × short × step × in-range × outside | 1.6% | 22.3 | 52 | 16 |
+| 18 | open × ɛ × short × step × in-range × outside | 1.6% | 22.3 | 35 | 13 |
+| 19 | close × i × short × repeated × in-range × outside | 1.6% | 21.8 | 57 | 14 |
+| 20 | open × ɪ × short × repeated × in-range × outside | 1.6% | 21.7 | 55 | 13 |
+| 21 | close × u × short × leap-up × in-range × inside | 1.4% | 19.4 | 28 | 13 |
+| 22 | close × u × short × repeated × in-range × outside | 1.3% | 18.5 | 35 | 11 |
+| 23 | open × ʌ × short × leap-down × in-range × outside | 1.2% | 17.1 | 40 | 14 |
+| 24 | close × i × short × leap-down × in-range × outside | 1.2% | 16.2 | 38 | 16 |
+| 25 | close × u × short × leap-up × in-range × outside | 1.1% | 16.0 | 24 | 9 |
+| 26 | close × o × short × leap-up × in-range × inside | 1.1% | 15.2 | 19 | 13 |
+| 27 | close × u × short × step × in-range × inside | 1.1% | 15.1 | 29 | 12 |
+| 28 | close × i × short × leap-up × in-range × inside | 1.1% | 14.8 | 22 | 13 |
+| 29 | open × ɪ × short × leap-down × in-range × outside | 1.0% | 14.3 | 32 | 12 |
+| 30 | open × ʌ × short × repeated × in-range × outside | 1.0% | 14.3 | 34 | 13 |
+| 31 | close × i × short × leap-up × in-range × outside | 1.0% | 13.5 | 22 | 11 |
+| 32 | open × ɛ × short × leap-up × in-range × inside | 0.9% | 12.8 | 17 | 9 |
+| 33 | open × u × short × step × in-range × outside | 0.9% | 12.8 | 20 | 11 |
+| 34 | open × ɛ × short × leap-up × in-range × outside | 0.9% | 12.2 | 13 | 6 |
+| 35 | open × ɛ × short × step × in-range × inside | 0.9% | 12.1 | 17 | 12 |
+| 36 | open × i × short × leap-down × in-range × outside | 0.8% | 11.6 | 25 | 11 |
+| 37 | close × u × short × leap-down × in-range × outside | 0.8% | 10.9 | 25 | 11 |
+| 38 | open × o × short × leap-up × in-range × inside | 0.8% | 10.7 | 14 | 9 |
+| 39 | open × ɨ × short × leap-up × in-range × outside | 0.8% | 10.6 | 16 | 9 |
+| 40 | open × i × short × step × in-range × outside | 0.8% | 10.6 | 17 | 8 |
+
+The top 40 regions hold 72.6% of sung time.
+
+## Test voice: tenor (literature)
+
+2473 sung notes across 16 songs; 1396.0 s of sung time with a tempo.
+
+### Per dimension
+
+**fo against fR1**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| open | 51.6% | 720.7 | 1310 | 16 |
+| close | 44.2% | 617.3 | 1059 | 16 |
+| crossing | 0.8% | 11.6 | 21 | 14 |
+| above | 1.6% | 21.8 | 33 | 12 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR1 (n = 3 to 5)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| n = 3 | 4.0% | 56.2 | 110 | 14 |
+| n = 4 | 0.2% | 2.5 | 5 | 4 |
+| none | 94.0% | 1312.8 | 2308 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR2 (n = 1 to 8)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not assessed | 100.0% | 1396.0 | 2473 | 16 |
+
+**Passaggio**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| inside | 34.7% | 484.4 | 778 | 16 |
+| outside | 63.5% | 887.1 | 1645 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Passaggio, three ways (by pitch, so a note with no vowel is assessed too)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| below primo | 63.6% | 887.4 | 1665 | 16 |
+| inside | 35.2% | 491.3 | 791 | 16 |
+| above secondo | 1.2% | 17.3 | 17 | 8 |
+
+**Range**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| in-range | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Sustained ceiling exposure**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not exposed | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Vowel**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| i | 13.0% | 181.4 | 359 | 16 |
+| ɪ | 5.2% | 72.3 | 174 | 16 |
+| ɨ | 7.4% | 103.6 | 202 | 16 |
+| e | 5.4% | 76.0 | 99 | 16 |
+| ɛ | 7.5% | 104.9 | 136 | 16 |
+| a | 1.0% | 14.5 | 21 | 8 |
+| ɑ | 24.7% | 344.1 | 647 | 16 |
+| ʌ | 5.3% | 73.6 | 171 | 16 |
+| o | 17.0% | 237.1 | 329 | 16 |
+| u | 11.7% | 163.8 | 285 | 16 |
+| no vowel resolved | 1.8% | 24.6 | 50 | 9 |
+
+**Held or short (over the tie chain; the regions use this)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 6.3% | 87.5 | 45 | 7 |
+| short | 93.7% | 1308.5 | 2428 | 16 |
+
+**Held or short, per event (the overlay engine's own reading, for comparison)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 3.2% | 44.2 | 14 | 4 |
+| short | 96.8% | 1351.9 | 2459 | 16 |
+
+**Approach**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| repeated | 16.4% | 228.3 | 496 | 16 |
+| step | 42.3% | 590.3 | 1023 | 16 |
+| leap-up | 21.5% | 300.1 | 414 | 16 |
+| leap-down | 15.1% | 211.1 | 427 | 16 |
+| tie | 4.1% | 57.8 | 97 | 14 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Approach after a rest**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| after a rest | 6.6% | 91.9 | 175 | 16 |
+| no rest before | 92.8% | 1295.7 | 2282 | 16 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Position in the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first | 7.6% | 106.4 | 206 | 16 |
+| middle | 84.8% | 1183.2 | 2060 | 16 |
+| last | 7.5% | 105.0 | 206 | 16 |
+| only | 0.1% | 1.5 | 1 | 1 |
+
+**Length of the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 2 s | 4.2% | 58.0 | 143 | 7 |
+| 2 to 4 s | 11.1% | 154.9 | 342 | 12 |
+| 4 to 6 s | 11.7% | 163.8 | 325 | 10 |
+| 6 to 8 s | 11.1% | 154.8 | 276 | 10 |
+| 8 to 12 s | 20.6% | 288.0 | 560 | 12 |
+| 12 s or more | 41.3% | 576.4 | 827 | 10 |
+
+**Position in the piece, cumulative phonation**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 30 s | 34.0% | 474.2 | 892 | 16 |
+| 30 to 60 s | 32.1% | 448.2 | 852 | 15 |
+| 60 to 90 s | 23.0% | 321.8 | 567 | 15 |
+| 90 to 120 s | 6.9% | 96.3 | 121 | 5 |
+| 120 to 180 s | 4.0% | 55.6 | 41 | 2 |
+
+**Position in the piece, share of the song**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first third | 33.8% | 471.5 | 828 | 16 |
+| middle third | 33.3% | 465.3 | 873 | 16 |
+| last third | 32.9% | 459.2 | 772 | 16 |
+
+### Regions: fR1 band × vowel × held or short × approach × range × passaggio
+
+187 distinct regions occur; the top 40 by seconds sung. Not assessed means the profile has no value for that note.
+
+| Rank | Region | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|---|
+| 1 | open × ɑ × short × step × in-range × outside | 6.8% | 95.1 | 174 | 16 |
+| 2 | open × o × short × step × in-range × outside | 3.9% | 54.9 | 70 | 15 |
+| 3 | close × i × short × step × in-range × outside | 3.9% | 54.2 | 105 | 14 |
+| 4 | open × ɑ × short × repeated × in-range × outside | 3.5% | 49.1 | 109 | 15 |
+| 5 | open × ɑ × short × leap-down × in-range × outside | 3.2% | 45.4 | 99 | 16 |
+| 6 | close × u × short × step × in-range × outside | 2.8% | 38.8 | 69 | 16 |
+| 7 | close × o × short × leap-up × in-range × inside | 2.4% | 34.0 | 42 | 15 |
+| 8 | open × ɑ × short × step × in-range × inside | 2.2% | 30.9 | 64 | 14 |
+| 9 | open × ɑ × short × leap-up × in-range × inside | 2.0% | 28.3 | 41 | 15 |
+| 10 | close × o × short × step × in-range × inside | 2.0% | 28.0 | 44 | 15 |
+| 11 | close × i × short × leap-down × in-range × outside | 1.8% | 24.8 | 56 | 15 |
+| 12 | close × i × short × repeated × in-range × outside | 1.7% | 24.2 | 65 | 15 |
+| 13 | open × o × short × repeated × in-range × outside | 1.6% | 21.9 | 34 | 14 |
+| 14 | open × ɑ × short × leap-up × in-range × outside | 1.6% | 21.8 | 42 | 16 |
+| 15 | open × o × short × leap-down × in-range × outside | 1.5% | 21.1 | 34 | 14 |
+| 16 | open × ɪ × short × step × in-range × outside | 1.5% | 20.5 | 50 | 15 |
+| 17 | close × u × short × step × in-range × inside | 1.4% | 20.2 | 35 | 14 |
+| 18 | open × ɪ × short × repeated × in-range × outside | 1.4% | 20.0 | 51 | 13 |
+| 19 | close × u × short × repeated × in-range × outside | 1.4% | 19.6 | 37 | 12 |
+| 20 | open × e × short × step × in-range × outside | 1.4% | 19.0 | 23 | 15 |
+| 21 | close × e × short × step × in-range × inside | 1.3% | 18.6 | 24 | 14 |
+| 22 | close × u × short × leap-up × in-range × inside | 1.3% | 18.5 | 28 | 13 |
+| 23 | close × ɨ × short × step × in-range × outside | 1.3% | 18.5 | 41 | 13 |
+| 24 | open × ɛ × short × step × in-range × outside | 1.3% | 18.2 | 28 | 12 |
+| 25 | open × o × short × leap-up × in-range × outside | 1.3% | 18.1 | 22 | 12 |
+| 26 | open × ʌ × short × leap-down × in-range × outside | 1.2% | 17.1 | 40 | 14 |
+| 27 | open × ʌ × short × step × in-range × outside | 1.2% | 16.8 | 42 | 15 |
+| 28 | close × u × short × leap-down × in-range × outside | 1.1% | 15.3 | 32 | 12 |
+| 29 | close × ɛ × short × leap-up × in-range × inside | 1.0% | 14.0 | 18 | 9 |
+| 30 | open × ɪ × short × leap-down × in-range × outside | 1.0% | 14.0 | 31 | 11 |
+| 31 | close × ɛ × short × step × in-range × inside | 1.0% | 13.6 | 19 | 12 |
+| 32 | close × u × short × leap-up × in-range × outside | 1.0% | 13.4 | 21 | 8 |
+| 33 | open × ʌ × short × repeated × in-range × outside | 0.9% | 13.3 | 32 | 13 |
+| 34 | open × ɨ × short × leap-down × in-range × outside | 0.9% | 13.1 | 27 | 11 |
+| 35 | close × ɑ × short × leap-up × in-range × inside | 0.9% | 12.3 | 22 | 13 |
+| 36 | close × i × short × leap-up × in-range × outside | 0.9% | 12.3 | 19 | 10 |
+| 37 | close × i × short × step × in-range × inside | 0.9% | 12.3 | 24 | 11 |
+| 38 | close × o × short × step × in-range × outside | 0.9% | 12.1 | 18 | 9 |
+| 39 | close × e × short × leap-up × in-range × inside | 0.9% | 12.1 | 17 | 8 |
+| 40 | open × ɑ × short × repeated × in-range × inside | 0.9% | 11.9 | 27 | 13 |
+
+The top 40 regions hold 69.3% of sung time.
+
+## Test voice: contralto (literature)
+
+2473 sung notes across 16 songs; 1396.0 s of sung time with a tempo.
+
+### Per dimension
+
+**fo against fR1**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| open | 11.2% | 155.7 | 316 | 16 |
+| close | 65.7% | 917.0 | 1576 | 16 |
+| crossing | 3.8% | 53.4 | 96 | 15 |
+| above | 17.6% | 245.4 | 435 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR1 (n = 3 to 5)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| n = 3 | 0.0% | 0.4 | 1 | 1 |
+| none | 98.2% | 1371.1 | 2422 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR2 (n = 1 to 8)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not assessed | 100.0% | 1396.0 | 2473 | 16 |
+
+**Passaggio**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| inside | 56.4% | 786.9 | 1322 | 16 |
+| outside | 41.9% | 584.6 | 1101 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Passaggio, three ways (by pitch, so a note with no vowel is assessed too)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| below primo | 41.6% | 580.4 | 1112 | 16 |
+| inside | 57.2% | 798.3 | 1344 | 16 |
+| above secondo | 1.2% | 17.3 | 17 | 8 |
+
+**Range**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| in-range | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Sustained ceiling exposure**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not exposed | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Vowel**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| i | 13.0% | 181.4 | 359 | 16 |
+| ɪ | 5.2% | 72.3 | 174 | 16 |
+| ɨ | 7.4% | 103.6 | 202 | 16 |
+| e | 5.4% | 76.0 | 99 | 16 |
+| ɛ | 7.5% | 104.9 | 136 | 16 |
+| a | 1.0% | 14.5 | 21 | 8 |
+| ɑ | 24.7% | 344.1 | 647 | 16 |
+| ʌ | 5.3% | 73.6 | 171 | 16 |
+| o | 17.0% | 237.1 | 329 | 16 |
+| u | 11.7% | 163.8 | 285 | 16 |
+| no vowel resolved | 1.8% | 24.6 | 50 | 9 |
+
+**Held or short (over the tie chain; the regions use this)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 6.3% | 87.5 | 45 | 7 |
+| short | 93.7% | 1308.5 | 2428 | 16 |
+
+**Held or short, per event (the overlay engine's own reading, for comparison)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 3.2% | 44.2 | 14 | 4 |
+| short | 96.8% | 1351.9 | 2459 | 16 |
+
+**Approach**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| repeated | 16.4% | 228.3 | 496 | 16 |
+| step | 42.3% | 590.3 | 1023 | 16 |
+| leap-up | 21.5% | 300.1 | 414 | 16 |
+| leap-down | 15.1% | 211.1 | 427 | 16 |
+| tie | 4.1% | 57.8 | 97 | 14 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Approach after a rest**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| after a rest | 6.6% | 91.9 | 175 | 16 |
+| no rest before | 92.8% | 1295.7 | 2282 | 16 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Position in the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first | 7.6% | 106.4 | 206 | 16 |
+| middle | 84.8% | 1183.2 | 2060 | 16 |
+| last | 7.5% | 105.0 | 206 | 16 |
+| only | 0.1% | 1.5 | 1 | 1 |
+
+**Length of the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 2 s | 4.2% | 58.0 | 143 | 7 |
+| 2 to 4 s | 11.1% | 154.9 | 342 | 12 |
+| 4 to 6 s | 11.7% | 163.8 | 325 | 10 |
+| 6 to 8 s | 11.1% | 154.8 | 276 | 10 |
+| 8 to 12 s | 20.6% | 288.0 | 560 | 12 |
+| 12 s or more | 41.3% | 576.4 | 827 | 10 |
+
+**Position in the piece, cumulative phonation**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 30 s | 34.0% | 474.2 | 892 | 16 |
+| 30 to 60 s | 32.1% | 448.2 | 852 | 15 |
+| 60 to 90 s | 23.0% | 321.8 | 567 | 15 |
+| 90 to 120 s | 6.9% | 96.3 | 121 | 5 |
+| 120 to 180 s | 4.0% | 55.6 | 41 | 2 |
+
+**Position in the piece, share of the song**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first third | 33.8% | 471.5 | 828 | 16 |
+| middle third | 33.3% | 465.3 | 873 | 16 |
+| last third | 32.9% | 459.2 | 772 | 16 |
+
+### Regions: fR1 band × vowel × held or short × approach × range × passaggio
+
+194 distinct regions occur; the top 40 by seconds sung. Not assessed means the profile has no value for that note.
+
+| Rank | Region | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|---|
+| 1 | close × ɑ × short × step × in-range × inside | 5.5% | 76.7 | 151 | 16 |
+| 2 | close × o × short × step × in-range × inside | 4.0% | 55.4 | 78 | 16 |
+| 3 | close × ɑ × short × leap-up × in-range × inside | 3.9% | 54.5 | 88 | 16 |
+| 4 | above × i × short × step × in-range × inside | 3.1% | 43.7 | 85 | 16 |
+| 5 | close × o × short × step × in-range × outside | 2.7% | 37.0 | 48 | 15 |
+| 6 | close × o × short × leap-up × in-range × inside | 2.5% | 35.4 | 47 | 15 |
+| 7 | open × ɑ × short × step × in-range × outside | 2.4% | 33.2 | 59 | 15 |
+| 8 | close × ɑ × short × repeated × in-range × inside | 2.2% | 30.9 | 70 | 14 |
+| 9 | close × u × short × step × in-range × outside | 2.2% | 30.0 | 52 | 15 |
+| 10 | above × u × short × step × in-range × inside | 2.0% | 27.8 | 50 | 15 |
+| 11 | close × ɑ × short × step × in-range × outside | 1.9% | 26.6 | 53 | 15 |
+| 12 | above × u × short × leap-up × in-range × inside | 1.9% | 25.9 | 37 | 14 |
+| 13 | close × e × short × step × in-range × inside | 1.8% | 25.3 | 32 | 15 |
+| 14 | open × ɑ × short × repeated × in-range × outside | 1.7% | 23.8 | 49 | 13 |
+| 15 | close × ɛ × short × step × in-range × inside | 1.7% | 23.1 | 36 | 13 |
+| 16 | above × i × short × leap-up × in-range × inside | 1.6% | 22.6 | 35 | 15 |
+| 17 | open × ɑ × short × leap-down × in-range × outside | 1.6% | 22.2 | 54 | 16 |
+| 18 | close × ɛ × short × leap-up × in-range × inside | 1.4% | 19.8 | 25 | 10 |
+| 19 | close × ɑ × short × leap-down × in-range × inside | 1.3% | 18.7 | 36 | 14 |
+| 20 | close × ʌ × short × step × in-range × inside | 1.3% | 18.7 | 45 | 16 |
+| 21 | close × ɨ × short × step × in-range × outside | 1.3% | 18.6 | 42 | 13 |
+| 22 | close × ɨ × short × leap-down × in-range × outside | 1.3% | 17.8 | 38 | 13 |
+| 23 | above × i × short × repeated × in-range × inside | 1.3% | 17.7 | 47 | 13 |
+| 24 | close × o × short × leap-down × in-range × outside | 1.2% | 16.6 | 26 | 13 |
+| 25 | above × i × short × step × in-range × outside | 1.1% | 14.8 | 33 | 13 |
+| 26 | close × o × short × repeated × in-range × inside | 1.0% | 14.5 | 21 | 11 |
+| 27 | close × ɪ × short × step × in-range × inside | 1.0% | 14.2 | 34 | 14 |
+| 28 | close × o × short × repeated × in-range × outside | 1.0% | 14.0 | 22 | 10 |
+| 29 | close × u × short × leap-down × in-range × outside | 1.0% | 13.3 | 27 | 11 |
+| 30 | close × e × short × leap-up × in-range × inside | 0.9% | 13.2 | 20 | 10 |
+| 31 | close × o × short × leap-up × in-range × outside | 0.9% | 12.4 | 15 | 8 |
+| 32 | close × ɨ × short × step × in-range × inside | 0.9% | 12.2 | 23 | 12 |
+| 33 | close × u × short × repeated × in-range × outside | 0.9% | 12.0 | 25 | 10 |
+| 34 | close × i × short × leap-down × in-range × outside | 0.8% | 11.6 | 25 | 11 |
+| 35 | close × ɛ × short × step × in-range × outside | 0.8% | 11.3 | 15 | 9 |
+| 36 | close × i × short × step × in-range × outside | 0.8% | 10.6 | 17 | 8 |
+| 37 | close × ɪ × short × repeated × in-range × outside | 0.7% | 10.1 | 25 | 8 |
+| 38 | close × e × short × step × in-range × outside | 0.7% | 9.9 | 13 | 9 |
+| 39 | close × ɑ × short × leap-down × in-range × outside | 0.6% | 9.1 | 19 | 10 |
+| 40 | open × ʌ × short × leap-down × in-range × outside | 0.6% | 8.8 | 21 | 11 |
+
+The top 40 regions hold 65.5% of sung time.
+
+## Test voice: mezzo-soprano (literature)
+
+2473 sung notes across 16 songs; 1396.0 s of sung time with a tempo.
+
+### Per dimension
+
+**fo against fR1**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| open | 4.4% | 62.1 | 131 | 16 |
+| close | 64.1% | 895.2 | 1570 | 16 |
+| crossing | 5.5% | 77.2 | 126 | 16 |
+| above | 24.1% | 337.0 | 596 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR1 (n = 3 to 5)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| none | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR2 (n = 1 to 8)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not assessed | 100.0% | 1396.0 | 2473 | 16 |
+
+**Passaggio**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| inside | 91.3% | 1273.9 | 2243 | 16 |
+| outside | 7.0% | 97.5 | 180 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Passaggio, three ways (by pitch, so a note with no vowel is assessed too)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| below primo | 6.0% | 83.3 | 169 | 16 |
+| inside | 92.8% | 1295.5 | 2287 | 16 |
+| above secondo | 1.2% | 17.3 | 17 | 8 |
+
+**Range**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| in-range | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Sustained ceiling exposure**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not exposed | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Vowel**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| i | 13.0% | 181.4 | 359 | 16 |
+| ɪ | 5.2% | 72.3 | 174 | 16 |
+| ɨ | 7.4% | 103.6 | 202 | 16 |
+| e | 5.4% | 76.0 | 99 | 16 |
+| ɛ | 7.5% | 104.9 | 136 | 16 |
+| a | 1.0% | 14.5 | 21 | 8 |
+| ɑ | 24.7% | 344.1 | 647 | 16 |
+| ʌ | 5.3% | 73.6 | 171 | 16 |
+| o | 17.0% | 237.1 | 329 | 16 |
+| u | 11.7% | 163.8 | 285 | 16 |
+| no vowel resolved | 1.8% | 24.6 | 50 | 9 |
+
+**Held or short (over the tie chain; the regions use this)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 6.3% | 87.5 | 45 | 7 |
+| short | 93.7% | 1308.5 | 2428 | 16 |
+
+**Held or short, per event (the overlay engine's own reading, for comparison)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 3.2% | 44.2 | 14 | 4 |
+| short | 96.8% | 1351.9 | 2459 | 16 |
+
+**Approach**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| repeated | 16.4% | 228.3 | 496 | 16 |
+| step | 42.3% | 590.3 | 1023 | 16 |
+| leap-up | 21.5% | 300.1 | 414 | 16 |
+| leap-down | 15.1% | 211.1 | 427 | 16 |
+| tie | 4.1% | 57.8 | 97 | 14 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Approach after a rest**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| after a rest | 6.6% | 91.9 | 175 | 16 |
+| no rest before | 92.8% | 1295.7 | 2282 | 16 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Position in the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first | 7.6% | 106.4 | 206 | 16 |
+| middle | 84.8% | 1183.2 | 2060 | 16 |
+| last | 7.5% | 105.0 | 206 | 16 |
+| only | 0.1% | 1.5 | 1 | 1 |
+
+**Length of the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 2 s | 4.2% | 58.0 | 143 | 7 |
+| 2 to 4 s | 11.1% | 154.9 | 342 | 12 |
+| 4 to 6 s | 11.7% | 163.8 | 325 | 10 |
+| 6 to 8 s | 11.1% | 154.8 | 276 | 10 |
+| 8 to 12 s | 20.6% | 288.0 | 560 | 12 |
+| 12 s or more | 41.3% | 576.4 | 827 | 10 |
+
+**Position in the piece, cumulative phonation**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 30 s | 34.0% | 474.2 | 892 | 16 |
+| 30 to 60 s | 32.1% | 448.2 | 852 | 15 |
+| 60 to 90 s | 23.0% | 321.8 | 567 | 15 |
+| 90 to 120 s | 6.9% | 96.3 | 121 | 5 |
+| 120 to 180 s | 4.0% | 55.6 | 41 | 2 |
+
+**Position in the piece, share of the song**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first third | 33.8% | 471.5 | 828 | 16 |
+| middle third | 33.3% | 465.3 | 873 | 16 |
+| last third | 32.9% | 459.2 | 772 | 16 |
+
+### Regions: fR1 band × vowel × held or short × approach × range × passaggio
+
+195 distinct regions occur; the top 40 by seconds sung. Not assessed means the profile has no value for that note.
+
+| Rank | Region | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|---|
+| 1 | close × ɑ × short × step × in-range × inside | 8.8% | 122.6 | 229 | 16 |
+| 2 | close × o × short × step × in-range × inside | 5.9% | 82.4 | 111 | 16 |
+| 3 | above × i × short × step × in-range × inside | 4.7% | 65.3 | 133 | 16 |
+| 4 | close × ɑ × short × leap-up × in-range × inside | 4.4% | 61.8 | 103 | 16 |
+| 5 | close × ɑ × short × repeated × in-range × inside | 3.5% | 48.8 | 114 | 15 |
+| 6 | close × o × short × leap-up × in-range × inside | 3.0% | 42.3 | 53 | 16 |
+| 7 | close × ɑ × short × leap-down × in-range × inside | 2.8% | 39.3 | 83 | 16 |
+| 8 | above × u × short × step × in-range × inside | 2.7% | 37.7 | 70 | 15 |
+| 9 | close × ɛ × short × step × in-range × inside | 2.4% | 33.9 | 51 | 16 |
+| 10 | above × u × short × leap-up × in-range × inside | 2.3% | 32.2 | 47 | 14 |
+| 11 | above × i × short × leap-up × in-range × inside | 2.2% | 30.8 | 46 | 15 |
+| 12 | above × i × short × repeated × in-range × inside | 2.1% | 29.4 | 79 | 15 |
+| 13 | close × e × short × step × in-range × inside | 2.0% | 28.6 | 37 | 14 |
+| 14 | close × ʌ × short × step × in-range × inside | 2.0% | 28.2 | 69 | 16 |
+| 15 | close × o × short × repeated × in-range × inside | 1.8% | 25.2 | 39 | 14 |
+| 16 | close × ɛ × short × leap-up × in-range × inside | 1.8% | 25.0 | 30 | 10 |
+| 17 | close × ɪ × short × step × in-range × inside | 1.8% | 25.0 | 61 | 16 |
+| 18 | close × ɨ × short × step × in-range × inside | 1.6% | 22.2 | 48 | 13 |
+| 19 | close × ɪ × short × repeated × in-range × inside | 1.5% | 21.3 | 52 | 14 |
+| 20 | close × o × short × leap-down × in-range × inside | 1.5% | 20.9 | 32 | 14 |
+| 21 | above × i × short × leap-down × in-range × inside | 1.3% | 18.5 | 45 | 16 |
+| 22 | above × u × short × repeated × in-range × inside | 1.2% | 16.4 | 31 | 12 |
+| 23 | close × ɨ × short × leap-down × in-range × inside | 1.1% | 15.8 | 37 | 15 |
+| 24 | close × u × short × step × in-range × inside | 1.0% | 13.9 | 22 | 11 |
+| 25 | close × ʌ × short × repeated × in-range × inside | 1.0% | 13.9 | 32 | 15 |
+| 26 | close × ʌ × short × leap-down × in-range × inside | 0.9% | 12.9 | 32 | 13 |
+| 27 | above × ɨ × short × step × in-range × inside | 0.8% | 11.2 | 23 | 12 |
+| 28 | above × o × short × leap-up × in-range × inside | 0.8% | 10.8 | 13 | 11 |
+| 29 | close × e × short × leap-up × in-range × inside | 0.7% | 10.1 | 16 | 9 |
+| 30 | crossing × u × short × step × in-range × inside | 0.7% | 9.2 | 16 | 8 |
+| 31 | close × ʌ × short × leap-up × in-range × inside | 0.7% | 9.2 | 15 | 9 |
+| 32 | close × a × short × step × in-range × inside | 0.7% | 9.1 | 12 | 7 |
+| 33 | close × ɛ × short × leap-down × in-range × inside | 0.6% | 9.0 | 14 | 10 |
+| 34 | close × o × short × tie × in-range × inside | 0.6% | 9.0 | 21 | 8 |
+| 35 | open × ɑ × short × repeated × in-range × inside | 0.6% | 8.9 | 15 | 5 |
+| 36 | above × ɨ × short × repeated × in-range × inside | 0.6% | 8.7 | 16 | 8 |
+| 37 | close × ɨ × short × leap-up × in-range × inside | 0.6% | 8.6 | 13 | 8 |
+| 38 | not assessed × no vowel × short × step × not assessed × not assessed | 0.6% | 8.1 | 16 | 6 |
+| 39 | close × ɪ × short × leap-down × in-range × inside | 0.6% | 7.7 | 21 | 11 |
+| 40 | above × ɨ × short × leap-up × in-range × inside | 0.5% | 7.5 | 12 | 8 |
+
+The top 40 regions hold 74.6% of sung time.
+
+## Test voice: soprano (literature)
+
+2473 sung notes across 16 songs; 1396.0 s of sung time with a tempo.
+
+### Per dimension
+
+**fo against fR1**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| open | 0.3% | 4.6 | 12 | 9 |
+| close | 54.4% | 759.3 | 1373 | 16 |
+| crossing | 7.2% | 101.1 | 166 | 16 |
+| above | 36.3% | 506.3 | 872 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR1 (n = 3 to 5)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| none | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Harmonic rung at fR2 (n = 1 to 8)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not assessed | 100.0% | 1396.0 | 2473 | 16 |
+
+**Passaggio**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| inside | 95.0% | 1326.2 | 2368 | 16 |
+| outside | 3.2% | 45.2 | 55 | 15 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Passaggio, three ways (by pitch, so a note with no vowel is assessed too)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| below primo | 0.2% | 2.7 | 4 | 2 |
+| inside | 96.8% | 1350.8 | 2418 | 16 |
+| above secondo | 3.1% | 42.6 | 51 | 15 |
+
+**Range**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| in-range | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Sustained ceiling exposure**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| not exposed | 98.2% | 1371.5 | 2423 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+**Vowel**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| i | 13.0% | 181.4 | 359 | 16 |
+| ɪ | 5.2% | 72.3 | 174 | 16 |
+| ɨ | 7.4% | 103.6 | 202 | 16 |
+| e | 5.4% | 76.0 | 99 | 16 |
+| ɛ | 7.5% | 104.9 | 136 | 16 |
+| a | 1.0% | 14.5 | 21 | 8 |
+| ɑ | 24.7% | 344.1 | 647 | 16 |
+| ʌ | 5.3% | 73.6 | 171 | 16 |
+| o | 17.0% | 237.1 | 329 | 16 |
+| u | 11.7% | 163.8 | 285 | 16 |
+| no vowel resolved | 1.8% | 24.6 | 50 | 9 |
+
+**Held or short (over the tie chain; the regions use this)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 6.3% | 87.5 | 45 | 7 |
+| short | 93.7% | 1308.5 | 2428 | 16 |
+
+**Held or short, per event (the overlay engine's own reading, for comparison)**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| held | 3.2% | 44.2 | 14 | 4 |
+| short | 96.8% | 1351.9 | 2459 | 16 |
+
+**Approach**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| repeated | 16.4% | 228.3 | 496 | 16 |
+| step | 42.3% | 590.3 | 1023 | 16 |
+| leap-up | 21.5% | 300.1 | 414 | 16 |
+| leap-down | 15.1% | 211.1 | 427 | 16 |
+| tie | 4.1% | 57.8 | 97 | 14 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Approach after a rest**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| after a rest | 6.6% | 91.9 | 175 | 16 |
+| no rest before | 92.8% | 1295.7 | 2282 | 16 |
+| first note | 0.6% | 8.4 | 16 | 16 |
+
+**Position in the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first | 7.6% | 106.4 | 206 | 16 |
+| middle | 84.8% | 1183.2 | 2060 | 16 |
+| last | 7.5% | 105.0 | 206 | 16 |
+| only | 0.1% | 1.5 | 1 | 1 |
+
+**Length of the phrase**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 2 s | 4.2% | 58.0 | 143 | 7 |
+| 2 to 4 s | 11.1% | 154.9 | 342 | 12 |
+| 4 to 6 s | 11.7% | 163.8 | 325 | 10 |
+| 6 to 8 s | 11.1% | 154.8 | 276 | 10 |
+| 8 to 12 s | 20.6% | 288.0 | 560 | 12 |
+| 12 s or more | 41.3% | 576.4 | 827 | 10 |
+
+**Position in the piece, cumulative phonation**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| under 30 s | 34.0% | 474.2 | 892 | 16 |
+| 30 to 60 s | 32.1% | 448.2 | 852 | 15 |
+| 60 to 90 s | 23.0% | 321.8 | 567 | 15 |
+| 90 to 120 s | 6.9% | 96.3 | 121 | 5 |
+| 120 to 180 s | 4.0% | 55.6 | 41 | 2 |
+
+**Position in the piece, share of the song**
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| first third | 33.8% | 471.5 | 828 | 16 |
+| middle third | 33.3% | 465.3 | 873 | 16 |
+| last third | 32.9% | 459.2 | 772 | 16 |
+
+### Regions: fR1 band × vowel × held or short × approach × range × passaggio
+
+187 distinct regions occur; the top 40 by seconds sung. Not assessed means the profile has no value for that note.
+
+| Rank | Region | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|---|
+| 1 | close × ɑ × short × step × in-range × inside | 8.7% | 121.5 | 227 | 16 |
+| 2 | close × o × short × step × in-range × inside | 4.8% | 66.8 | 87 | 15 |
+| 3 | above × i × short × step × in-range × inside | 4.7% | 65.1 | 132 | 16 |
+| 4 | close × ɑ × short × repeated × in-range × inside | 4.2% | 58.5 | 130 | 15 |
+| 5 | above × u × short × step × in-range × inside | 3.6% | 50.3 | 90 | 16 |
+| 6 | close × ɑ × short × leap-down × in-range × inside | 3.3% | 45.5 | 99 | 16 |
+| 7 | close × ɑ × short × leap-up × in-range × inside | 3.0% | 41.8 | 71 | 16 |
+| 8 | above × u × short × leap-up × in-range × inside | 2.3% | 32.0 | 49 | 14 |
+| 9 | above × i × short × leap-up × in-range × inside | 2.1% | 29.7 | 43 | 14 |
+| 10 | above × i × short × repeated × in-range × inside | 2.1% | 29.4 | 79 | 15 |
+| 11 | close × ʌ × short × step × in-range × inside | 1.8% | 25.6 | 61 | 15 |
+| 12 | close × o × short × leap-down × in-range × inside | 1.8% | 24.5 | 38 | 14 |
+| 13 | close × o × short × repeated × in-range × inside | 1.7% | 23.2 | 37 | 14 |
+| 14 | above × u × short × repeated × in-range × inside | 1.6% | 22.9 | 46 | 12 |
+| 15 | close × ɛ × short × step × in-range × inside | 1.6% | 22.3 | 35 | 13 |
+| 16 | close × o × short × leap-up × in-range × inside | 1.6% | 22.3 | 29 | 15 |
+| 17 | close × ɪ × short × step × in-range × inside | 1.5% | 20.5 | 50 | 15 |
+| 18 | close × ɪ × short × repeated × in-range × inside | 1.4% | 20.0 | 51 | 13 |
+| 19 | above × o × short × leap-up × in-range × inside | 1.4% | 19.0 | 26 | 13 |
+| 20 | close × e × short × step × in-range × inside | 1.4% | 19.0 | 23 | 15 |
+| 21 | close × ɨ × short × step × in-range × inside | 1.3% | 18.6 | 42 | 13 |
+| 22 | above × i × short × leap-down × in-range × inside | 1.3% | 18.5 | 45 | 16 |
+| 23 | above × o × short × step × in-range × inside | 1.3% | 18.1 | 29 | 15 |
+| 24 | close × ɨ × short × leap-down × in-range × inside | 1.3% | 17.8 | 38 | 13 |
+| 25 | close × ʌ × short × leap-down × in-range × inside | 1.2% | 17.1 | 40 | 14 |
+| 26 | close × ʌ × short × repeated × in-range × inside | 1.1% | 16.0 | 38 | 15 |
+| 27 | above × ɨ × short × step × in-range × inside | 1.1% | 15.0 | 31 | 15 |
+| 28 | close × ɪ × short × leap-down × in-range × inside | 0.9% | 13.0 | 30 | 11 |
+| 29 | above × ɑ × short × leap-up × in-range × inside | 0.9% | 12.3 | 22 | 13 |
+| 30 | close × ɛ × short × leap-up × in-range × inside | 0.9% | 12.2 | 13 | 6 |
+| 31 | close × u × short × step × in-range × inside | 0.8% | 11.1 | 16 | 10 |
+| 32 | above × e × short × step × in-range × inside | 0.8% | 11.0 | 16 | 12 |
+| 33 | above × e × short × leap-up × in-range × inside | 0.8% | 11.0 | 16 | 8 |
+| 34 | above × u × short × leap-down × in-range × inside | 0.8% | 10.9 | 25 | 11 |
+| 35 | close × a × short × step × in-range × inside | 0.8% | 10.7 | 14 | 7 |
+| 36 | above × ɨ × short × repeated × in-range × inside | 0.7% | 10.2 | 20 | 8 |
+| 37 | above × ɨ × short × leap-up × in-range × inside | 0.7% | 9.5 | 15 | 10 |
+| 38 | above × ɛ × short × leap-up × in-range × inside | 0.7% | 9.3 | 12 | 6 |
+| 39 | crossing × o × short × leap-up × in-range × inside | 0.7% | 9.3 | 10 | 7 |
+| 40 | above × o × short × leap-up × in-range × outside | 0.7% | 9.3 | 8 | 7 |
+
+The top 40 regions hold 73.1% of sung time.
+
+## Candidate P1a: counts per voice
+
+A note counts when it lies within one semitone of the secondo (for a treble voice, also within one semitone of the primo) AND at least one clause holds: held (over the tie chain), highest of its phrase (ties at the top all count), its vowel's turning pitch 0 to 2 semitones below it, a crossing, or an fR2 rung. Treble here is Godin, contralto, mezzo, and soprano. A measurement for vetting, not a feature.
+
+| Voice | Notes near the passaggio edge | Notes that fire | Share of sung time | Seconds | Songs | held | highest of phrase | turning pitch 0 to 2 st below | crossing | fR2 rung |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Low male voice (Mitton) | 264 | 188 | 9.7% | 135.0 | 15 | 12 | 131 | 15 | 6 | 79 |
+| Treble voice (Godin), songs up an octave | not assessed (no passaggio) | | | | |  |  |  |  |  |
+| Test voice: bass (literature) | 17 | 15 | 1.2% | 16.9 | 8 | 6 | 15 | 5 | 0 | 0 |
+| Test voice: baritone (literature) | 51 | 44 | 2.8% | 39.0 | 15 | 9 | 36 | 14 | 2 | 0 |
+| Test voice: tenor (literature) | 89 | 68 | 3.8% | 53.6 | 15 | 9 | 58 | 12 | 7 | 0 |
+| Test voice: contralto (literature) | 805 | 189 | 9.3% | 129.3 | 16 | 22 | 92 | 49 | 57 | 0 |
+| Test voice: mezzo-soprano (literature) | 453 | 180 | 7.8% | 108.6 | 16 | 9 | 63 | 90 | 34 | 0 |
+| Test voice: soprano (literature) | 244 | 131 | 7.4% | 103.3 | 15 | 12 | 119 | 5 | 1 | 0 |
+
+The clause columns count firing notes on which that clause holds; one note can hold several, so they do not sum to the firing count.

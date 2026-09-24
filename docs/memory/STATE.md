@@ -68,6 +68,16 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > leads; manual downloads when a site blocks automation; the vocabulary rule) are in
 > `.../Insights Research/needs_r1_2026-09-23.md`.
 >
+> **Added 2026-09-24 00:45. Step 5 begun, step 6 begun.** Fable composed 11 candidate connections
+> (5 dynamics, blocked on the engine; 6 passaggio and turn): `.../Insights Research/_synthesis/
+> candidate-cases_pass02_r1_2026-09-23.csv` and `memo-fable-step5_r1_2026-09-23.md`. Dann vetted P1:
+> reworked into P1a and P1b (English only; French waits for an agreed English). **Not yet agreed:** the
+> P1a English (Fable's full version against the desk's trimmed one). Three rulings recorded in
+> `PRODUCT.md` (every voice, Dann the bass exemplar; singer-specific claims are templates with three
+> checks; his 00:42 sentence), and the method in the plan's "Revision, 2026-09-24 00:45". **Waiting to
+> run in Code:** `docs/sessions/brief-code-n168-six-voices_r1_2026-09-24.md` (six literature-built test
+> voices; per-note CSVs; P1a counts). Vetting resumes with P1a once those counts exist.
+>
 > **Next, in order:** (1) Journal of Voice, once Elsevier access is live: the search list in
 > `coverage_r2`, led by the marked-dynamic-to-sound-level link. (2) Step 5, Fable composing
 > connections for the best-covered regions (dynamics chain, passaggio and turning). (3) The rest of
@@ -105,13 +115,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > `brief-code-tessituragram_r1`, `-fit_r1`, `_r2`, `-fix_r1`, each with its `memo-code-` twin.
 > The drawings Dann chose from: `tessituragram-sparse_r1_2026-09-23.html` is the one built.
 >
-> **THE OCTAVE FIX IS BIGGER THAN INSIGHTS.** `packages/score-parser/src/vocal-octave.ts`
-> (the rule, about `:60`) shifted every MusicXML vocal line in a treble-8vb clef down an
-> octave, though MusicXML already stores sounding pitch. **Sunless 2, 3, 5, and 6 read an
-> octave low everywhere, Score markup included, until `ccb790c`.** Sunless 2 went from
-> A1 to E♭3 to A2 to E♭4, matching the dissertation (printed p. 92); Sunless 6 now reads
-> C♯3 to D4, matching §6.1.6. MNX keeps the old rule; its convention is NOT ESTABLISHED.
-> `staff-renderer.ts:418` changed with it.
+> **The octave fix** (`ccb790c`, MusicXML) and its `.musx` twin (`10e090c`) are closed: account moved to `../sessions/LOG.md` 2026-09-24.
 >
 > #### WHAT THE DESK GOT WRONG, 03:55 CLOSE: moved to `../sessions/LOG.md` at the 17:35 close (no rulings in it).
 >

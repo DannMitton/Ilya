@@ -271,6 +271,22 @@ Dann's words: *"I absolutely reject the label "faults" and the verb "diagnose". 
 
 **Who offered what.** The ruling and its wording are Dann's. It sits beside "Insights gives insight, not intervention" (2026-09-16) and "How Insights speaks" (2026-09-23 17:21).
 
+## Ilya serves every voice; Dann is the exemplar for basses. Ruled by Dann 2026-09-24 00:34
+
+Dann's words: *"Ilya will serve all voice types. I'm happy to be the exemplar for basses with the caveat that we need to heartily account for the issues faced by all of the other voice types as well... Ilya isn't about serving me specifically. It is about becoming an asset to the singing community at large."* And, 00:22: outside his own low male voice he leans on the literature.
+
+**The default:** every connection is written for any voice, against the singer's own declared passaggi and measured resonances; Dann's values appear only as one worked example. Known-answer tests run across six test voices (bass, baritone, tenor, contralto, mezzo, soprano) built from the literature (DESK DEFAULT for the six, 00:36), never shown to a singer as labels. **Condition for departing:** none stated.
+
+## A singer-specific claim is a template, and every populated sentence is checked. Ruled by Dann 2026-09-24 00:36 and 00:38
+
+Dann's words: *"We can only declare this ... if it applies exactly to the singer being addressed ... as code it should be algebraic and populated by the singer's specific values as they relate to the source in the literature."* And: *"It will be tempting to dumbly populate these kinds of conditional template sentences with values and call it a day. That is insufficient. After such a statement is populated, the sentence itself must be evaluated to be plausible against the core source claim."*
+
+**The default:** each clause is computed from this singer's values and appears only when its own test holds; wording follows the value's origin (sung: stated; derived or generic: "likely", or the clause is dropped). After population, before display, three checks (the desk's proposal, 00:38): (1) scope, the populated case lies inside the conditions under which the source observed the relation (voice, pitch region, vowel class, register, loudness), else suppressed or marked as outside what the source studied; (2) sense, values agree with the words and with human physiology, and no clause contradicts another (the N.164 failure); (3) cross-check, no two observations on the same note or phrase tell the singer opposite things; where sources differ, that is shown as information. Thresholds such as "a harmonic sits on a resonance" are build defaults until a source sets them, and are marked so.
+
+**Who offered what.** The rulings and their words are Dann's; the three-check structure and the six test voices are the desk's proposals. **Dann ratified the direction 2026-09-24 00:40:** *"I like the direction you plan... This makes me feel much more comfortable using constructs borrowed from the literature but personalized to the user's values."* The working method is in `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md`, "Revision, 2026-09-24 00:45".
+
+**Why it matters, Dann's sentence, 00:42** (his revision of a desk sentence): *"Staying faithful to what the field actually knows, while fitting it to one singer's body as they attempt to negotiate the technical demands of specific Russian vocal repertoire, is what makes Insights worth trusting."*
+
 ## Insights gives insight, not intervention. Stated by Dann 2026-09-16
 
 A vowel an Insight names is a conceptual target, reached with subtlety, and the teacher's informed ear decides. Dann's words: *"The informed ear of a teacher should be the decising factor, and obviously that lies beyond Ilya's capabilities. We are not looking for Insights to replace informed pedagogical intervention. we are looking for Insights to provide.... insght."* A named target may be any vowel on Jones's quadrilateral, not only Grayson's ten, because the prescription follows Grayson and the performance does not have to. Record: `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/review-01b.md` S3.

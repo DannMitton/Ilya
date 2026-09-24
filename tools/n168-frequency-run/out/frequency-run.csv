@@ -20,6 +20,9 @@ mitton,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,50,24.6,1.8%,9
 mitton,dimension,Passaggio,inside,1061,623.7,44.7%,16
 mitton,dimension,Passaggio,outside,1362,747.8,53.6%,16
 mitton,dimension,Passaggio,not assessed,50,24.6,1.8%,9
+mitton,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",below primo,1321,708.1,50.7%,16
+mitton,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",inside,1083,635.2,45.5%,16
+mitton,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",above secondo,69,52.7,3.8%,15
 mitton,dimension,Range,in-range,2423,1371.5,98.2%,16
 mitton,dimension,Range,not assessed,50,24.6,1.8%,9
 mitton,dimension,Sustained ceiling exposure,not exposed,2423,1371.5,98.2%,16
@@ -116,6 +119,7 @@ godin,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2219,1267.5,90.8%,16
 godin,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,252,128.2,9.2%,16
 godin,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,2473,1396.0,100.0%,16
 godin,dimension,Passaggio,not assessed,2473,1396.0,100.0%,16
+godin,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",not assessed,2473,1396.0,100.0%,16
 godin,dimension,Range,not assessed,2473,1396.0,100.0%,16
 godin,dimension,Sustained ceiling exposure,not assessed,2473,1396.0,100.0%,16
 godin,dimension,Vowel,i,359,181.4,13.0%,16
@@ -200,3 +204,609 @@ godin,region,fR1 band x vowel x held or short x approach,above x e x short x lea
 godin,region,fR1 band x vowel x held or short x approach,close x u x short x repeated,24,11.7,0.8%,9
 godin,region,fR1 band x vowel x held or short x approach,close x ʌ x short x leap-down,22,9.3,0.7%,12
 godin,region,fR1 band x vowel x held or short x approach,above x u x short x repeated,20,9.1,0.7%,7
+bass,dimension,fo against fR1,open,1886,1056.6,75.7%,16
+bass,dimension,fo against fR1,close,537,314.9,22.6%,16
+bass,dimension,fo against fR1,not assessed,50,24.6,1.8%,9
+bass,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 3,162,97.9,7.0%,16
+bass,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 4,110,53.4,3.8%,15
+bass,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 5,24,10.3,0.7%,10
+bass,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2127,1209.9,86.7%,16
+bass,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,50,24.6,1.8%,9
+bass,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,2473,1396.0,100.0%,16
+bass,dimension,Passaggio,inside,346,230.3,16.5%,16
+bass,dimension,Passaggio,outside,2077,1141.1,81.7%,16
+bass,dimension,Passaggio,not assessed,50,24.6,1.8%,9
+bass,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",below primo,2120,1161.5,83.2%,16
+bass,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",inside,353,234.5,16.8%,16
+bass,dimension,Range,in-range,2423,1371.5,98.2%,16
+bass,dimension,Range,not assessed,50,24.6,1.8%,9
+bass,dimension,Sustained ceiling exposure,not exposed,2423,1371.5,98.2%,16
+bass,dimension,Sustained ceiling exposure,not assessed,50,24.6,1.8%,9
+bass,dimension,Vowel,i,359,181.4,13.0%,16
+bass,dimension,Vowel,ɪ,174,72.3,5.2%,16
+bass,dimension,Vowel,ɨ,202,103.6,7.4%,16
+bass,dimension,Vowel,e,99,76.0,5.4%,16
+bass,dimension,Vowel,ɛ,136,104.9,7.5%,16
+bass,dimension,Vowel,a,21,14.5,1.0%,8
+bass,dimension,Vowel,ɑ,647,344.1,24.7%,16
+bass,dimension,Vowel,ʌ,171,73.6,5.3%,16
+bass,dimension,Vowel,o,329,237.1,17.0%,16
+bass,dimension,Vowel,u,285,163.8,11.7%,16
+bass,dimension,Vowel,no vowel resolved,50,24.6,1.8%,9
+bass,dimension,Held or short (over the tie chain; the regions use this),held,45,87.5,6.3%,7
+bass,dimension,Held or short (over the tie chain; the regions use this),short,2428,1308.5,93.7%,16
+bass,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",held,14,44.2,3.2%,4
+bass,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",short,2459,1351.9,96.8%,16
+bass,dimension,Approach,repeated,496,228.3,16.4%,16
+bass,dimension,Approach,step,1023,590.3,42.3%,16
+bass,dimension,Approach,leap-up,414,300.1,21.5%,16
+bass,dimension,Approach,leap-down,427,211.1,15.1%,16
+bass,dimension,Approach,tie,97,57.8,4.1%,14
+bass,dimension,Approach,first note,16,8.4,0.6%,16
+bass,dimension,Approach after a rest,after a rest,175,91.9,6.6%,16
+bass,dimension,Approach after a rest,no rest before,2282,1295.7,92.8%,16
+bass,dimension,Approach after a rest,first note,16,8.4,0.6%,16
+bass,dimension,Position in the phrase,first,206,106.4,7.6%,16
+bass,dimension,Position in the phrase,middle,2060,1183.2,84.8%,16
+bass,dimension,Position in the phrase,last,206,105.0,7.5%,16
+bass,dimension,Position in the phrase,only,1,1.5,0.1%,1
+bass,dimension,Length of the phrase,under 2 s,143,58.0,4.2%,7
+bass,dimension,Length of the phrase,2 to 4 s,342,154.9,11.1%,12
+bass,dimension,Length of the phrase,4 to 6 s,325,163.8,11.7%,10
+bass,dimension,Length of the phrase,6 to 8 s,276,154.8,11.1%,10
+bass,dimension,Length of the phrase,8 to 12 s,560,288.0,20.6%,12
+bass,dimension,Length of the phrase,12 s or more,827,576.4,41.3%,10
+bass,dimension,"Position in the piece, cumulative phonation",under 30 s,892,474.2,34.0%,16
+bass,dimension,"Position in the piece, cumulative phonation",30 to 60 s,852,448.2,32.1%,15
+bass,dimension,"Position in the piece, cumulative phonation",60 to 90 s,567,321.8,23.0%,15
+bass,dimension,"Position in the piece, cumulative phonation",90 to 120 s,121,96.3,6.9%,5
+bass,dimension,"Position in the piece, cumulative phonation",120 to 180 s,41,55.6,4.0%,2
+bass,dimension,"Position in the piece, share of the song",first third,828,471.5,33.8%,16
+bass,dimension,"Position in the piece, share of the song",middle third,873,465.3,33.3%,16
+bass,dimension,"Position in the piece, share of the song",last third,772,459.2,32.9%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x step x in-range x outside,228,121.9,8.7%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x step x in-range x outside,115,86.0,6.2%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x repeated x in-range x outside,132,59.0,4.2%,15
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x step x in-range x outside,101,50.7,3.6%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-down x in-range x outside,105,47.7,3.4%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x leap-up x in-range x outside,53,42.3,3.0%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-up x in-range x outside,71,41.8,3.0%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɨ x short x step x in-range x outside,72,33.8,2.4%,15
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɛ x short x step x in-range x outside,46,30.5,2.2%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x e x short x step x in-range x outside,37,30.1,2.2%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x repeated x in-range x outside,45,28.4,2.0%,15
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x outside,51,28.2,2.0%,14
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x u x short x step x in-range x outside,44,27.2,1.9%,15
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x step x in-range x outside,65,27.1,1.9%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x step x in-range x outside,62,25.8,1.9%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɨ x short x leap-down x in-range x outside,55,25.0,1.8%,15
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x leap-down x in-range x outside,39,24.9,1.8%,14
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x repeated x in-range x outside,61,23.0,1.6%,15
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x repeated x in-range x outside,57,22.7,1.6%,14
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-up x in-range x inside,34,20.6,1.5%,13
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-up x in-range x outside,28,18.1,1.3%,12
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-up x in-range x outside,26,18.0,1.3%,10
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x leap-down x in-range x outside,40,17.1,1.2%,14
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɛ x short x leap-up x in-range x outside,19,16.9,1.2%,8
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x repeated x in-range x outside,38,16.0,1.1%,15
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x i x short x step x in-range x outside,28,15.8,1.1%,11
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-down x in-range x outside,34,15.1,1.1%,16
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x step x in-range x inside,35,14.7,1.1%,12
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-up x in-range x inside,22,14.5,1.0%,13
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-up x in-range x inside,15,14.4,1.0%,11
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x repeated x in-range x outside,26,14.3,1.0%,12
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x leap-down x in-range x outside,32,14.3,1.0%,12
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɨ x short x leap-up x in-range x outside,21,14.1,1.0%,11
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x i x short x leap-down x in-range x outside,31,13.3,1.0%,12
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x u x short x leap-down x in-range x outside,26,12.5,0.9%,11
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-up x in-range x inside,16,10.1,0.7%,11
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x tie x in-range x outside,23,9.9,0.7%,8
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɨ x short x repeated x in-range x outside,25,9.8,0.7%,10
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x inside,20,9.7,0.7%,10
+bass,region,fR1 band x vowel x held or short x approach x range x passaggio,open x u x short x repeated x in-range x outside,22,9.4,0.7%,9
+baritone,dimension,fo against fR1,open,1735,974.1,69.8%,16
+baritone,dimension,fo against fR1,close,683,392.5,28.1%,16
+baritone,dimension,fo against fR1,crossing,2,0.4,0.0%,2
+baritone,dimension,fo against fR1,above,3,4.5,0.3%,2
+baritone,dimension,fo against fR1,not assessed,50,24.6,1.8%,9
+baritone,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 3,107,57.1,4.1%,16
+baritone,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 4,59,28.7,2.1%,15
+baritone,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 5,6,1.8,0.1%,5
+baritone,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2251,1283.9,92.0%,16
+baritone,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,50,24.6,1.8%,9
+baritone,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,2473,1396.0,100.0%,16
+baritone,dimension,Passaggio,inside,570,350.4,25.1%,16
+baritone,dimension,Passaggio,outside,1853,1021.1,73.1%,16
+baritone,dimension,Passaggio,not assessed,50,24.6,1.8%,9
+baritone,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",below primo,1886,1032.2,73.9%,16
+baritone,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",inside,582,356.5,25.5%,16
+baritone,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",above secondo,5,7.4,0.5%,4
+baritone,dimension,Range,in-range,2423,1371.5,98.2%,16
+baritone,dimension,Range,not assessed,50,24.6,1.8%,9
+baritone,dimension,Sustained ceiling exposure,not exposed,2423,1371.5,98.2%,16
+baritone,dimension,Sustained ceiling exposure,not assessed,50,24.6,1.8%,9
+baritone,dimension,Vowel,i,359,181.4,13.0%,16
+baritone,dimension,Vowel,ɪ,174,72.3,5.2%,16
+baritone,dimension,Vowel,ɨ,202,103.6,7.4%,16
+baritone,dimension,Vowel,e,99,76.0,5.4%,16
+baritone,dimension,Vowel,ɛ,136,104.9,7.5%,16
+baritone,dimension,Vowel,a,21,14.5,1.0%,8
+baritone,dimension,Vowel,ɑ,647,344.1,24.7%,16
+baritone,dimension,Vowel,ʌ,171,73.6,5.3%,16
+baritone,dimension,Vowel,o,329,237.1,17.0%,16
+baritone,dimension,Vowel,u,285,163.8,11.7%,16
+baritone,dimension,Vowel,no vowel resolved,50,24.6,1.8%,9
+baritone,dimension,Held or short (over the tie chain; the regions use this),held,45,87.5,6.3%,7
+baritone,dimension,Held or short (over the tie chain; the regions use this),short,2428,1308.5,93.7%,16
+baritone,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",held,14,44.2,3.2%,4
+baritone,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",short,2459,1351.9,96.8%,16
+baritone,dimension,Approach,repeated,496,228.3,16.4%,16
+baritone,dimension,Approach,step,1023,590.3,42.3%,16
+baritone,dimension,Approach,leap-up,414,300.1,21.5%,16
+baritone,dimension,Approach,leap-down,427,211.1,15.1%,16
+baritone,dimension,Approach,tie,97,57.8,4.1%,14
+baritone,dimension,Approach,first note,16,8.4,0.6%,16
+baritone,dimension,Approach after a rest,after a rest,175,91.9,6.6%,16
+baritone,dimension,Approach after a rest,no rest before,2282,1295.7,92.8%,16
+baritone,dimension,Approach after a rest,first note,16,8.4,0.6%,16
+baritone,dimension,Position in the phrase,first,206,106.4,7.6%,16
+baritone,dimension,Position in the phrase,middle,2060,1183.2,84.8%,16
+baritone,dimension,Position in the phrase,last,206,105.0,7.5%,16
+baritone,dimension,Position in the phrase,only,1,1.5,0.1%,1
+baritone,dimension,Length of the phrase,under 2 s,143,58.0,4.2%,7
+baritone,dimension,Length of the phrase,2 to 4 s,342,154.9,11.1%,12
+baritone,dimension,Length of the phrase,4 to 6 s,325,163.8,11.7%,10
+baritone,dimension,Length of the phrase,6 to 8 s,276,154.8,11.1%,10
+baritone,dimension,Length of the phrase,8 to 12 s,560,288.0,20.6%,12
+baritone,dimension,Length of the phrase,12 s or more,827,576.4,41.3%,10
+baritone,dimension,"Position in the piece, cumulative phonation",under 30 s,892,474.2,34.0%,16
+baritone,dimension,"Position in the piece, cumulative phonation",30 to 60 s,852,448.2,32.1%,15
+baritone,dimension,"Position in the piece, cumulative phonation",60 to 90 s,567,321.8,23.0%,15
+baritone,dimension,"Position in the piece, cumulative phonation",90 to 120 s,121,96.3,6.9%,5
+baritone,dimension,"Position in the piece, cumulative phonation",120 to 180 s,41,55.6,4.0%,2
+baritone,dimension,"Position in the piece, share of the song",first third,828,471.5,33.8%,16
+baritone,dimension,"Position in the piece, share of the song",middle third,873,465.3,33.3%,16
+baritone,dimension,"Position in the piece, share of the song",last third,772,459.2,32.9%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x step x in-range x outside,198,106.4,7.6%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x step x in-range x outside,101,76.2,5.5%,15
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x repeated x in-range x outside,122,54.9,3.9%,15
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x step x in-range x outside,103,53.0,3.8%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-down x in-range x outside,104,47.3,3.4%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x outside,65,37.1,2.7%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-up x in-range x inside,54,34.8,2.5%,14
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x leap-up x in-range x outside,39,31.6,2.3%,15
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x step x in-range x inside,58,28.0,2.0%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-up x in-range x outside,51,27.7,2.0%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x e x short x step x in-range x outside,31,26.5,1.9%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x repeated x in-range x outside,42,26.3,1.9%,15
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɨ x short x step x in-range x outside,57,26.3,1.9%,14
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x leap-down x in-range x outside,39,24.9,1.8%,14
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x step x in-range x outside,57,23.5,1.7%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɨ x short x leap-down x in-range x outside,51,22.7,1.6%,15
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x step x in-range x outside,52,22.3,1.6%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɛ x short x step x in-range x outside,35,22.3,1.6%,13
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x repeated x in-range x outside,57,21.8,1.6%,14
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x repeated x in-range x outside,55,21.7,1.6%,13
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-up x in-range x inside,28,19.4,1.4%,13
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x repeated x in-range x outside,35,18.5,1.3%,11
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x leap-down x in-range x outside,40,17.1,1.2%,14
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-down x in-range x outside,38,16.2,1.2%,16
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-up x in-range x outside,24,16.0,1.1%,9
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-up x in-range x inside,19,15.2,1.1%,13
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x inside,29,15.1,1.1%,12
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-up x in-range x inside,22,14.8,1.1%,13
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x leap-down x in-range x outside,32,14.3,1.0%,12
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x repeated x in-range x outside,34,14.3,1.0%,13
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-up x in-range x outside,22,13.5,1.0%,11
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɛ x short x leap-up x in-range x inside,17,12.8,0.9%,9
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x u x short x step x in-range x outside,20,12.8,0.9%,11
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɛ x short x leap-up x in-range x outside,13,12.2,0.9%,6
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɛ x short x step x in-range x inside,17,12.1,0.9%,12
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x i x short x leap-down x in-range x outside,25,11.6,0.8%,11
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-down x in-range x outside,25,10.9,0.8%,11
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x leap-up x in-range x inside,14,10.7,0.8%,9
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɨ x short x leap-up x in-range x outside,16,10.6,0.8%,9
+baritone,region,fR1 band x vowel x held or short x approach x range x passaggio,open x i x short x step x in-range x outside,17,10.6,0.8%,8
+tenor,dimension,fo against fR1,open,1310,720.7,51.6%,16
+tenor,dimension,fo against fR1,close,1059,617.3,44.2%,16
+tenor,dimension,fo against fR1,crossing,21,11.6,0.8%,14
+tenor,dimension,fo against fR1,above,33,21.8,1.6%,12
+tenor,dimension,fo against fR1,not assessed,50,24.6,1.8%,9
+tenor,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 3,110,56.2,4.0%,14
+tenor,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 4,5,2.5,0.2%,4
+tenor,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2308,1312.8,94.0%,16
+tenor,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,50,24.6,1.8%,9
+tenor,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,2473,1396.0,100.0%,16
+tenor,dimension,Passaggio,inside,778,484.4,34.7%,16
+tenor,dimension,Passaggio,outside,1645,887.1,63.5%,16
+tenor,dimension,Passaggio,not assessed,50,24.6,1.8%,9
+tenor,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",below primo,1665,887.4,63.6%,16
+tenor,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",inside,791,491.3,35.2%,16
+tenor,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",above secondo,17,17.3,1.2%,8
+tenor,dimension,Range,in-range,2423,1371.5,98.2%,16
+tenor,dimension,Range,not assessed,50,24.6,1.8%,9
+tenor,dimension,Sustained ceiling exposure,not exposed,2423,1371.5,98.2%,16
+tenor,dimension,Sustained ceiling exposure,not assessed,50,24.6,1.8%,9
+tenor,dimension,Vowel,i,359,181.4,13.0%,16
+tenor,dimension,Vowel,ɪ,174,72.3,5.2%,16
+tenor,dimension,Vowel,ɨ,202,103.6,7.4%,16
+tenor,dimension,Vowel,e,99,76.0,5.4%,16
+tenor,dimension,Vowel,ɛ,136,104.9,7.5%,16
+tenor,dimension,Vowel,a,21,14.5,1.0%,8
+tenor,dimension,Vowel,ɑ,647,344.1,24.7%,16
+tenor,dimension,Vowel,ʌ,171,73.6,5.3%,16
+tenor,dimension,Vowel,o,329,237.1,17.0%,16
+tenor,dimension,Vowel,u,285,163.8,11.7%,16
+tenor,dimension,Vowel,no vowel resolved,50,24.6,1.8%,9
+tenor,dimension,Held or short (over the tie chain; the regions use this),held,45,87.5,6.3%,7
+tenor,dimension,Held or short (over the tie chain; the regions use this),short,2428,1308.5,93.7%,16
+tenor,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",held,14,44.2,3.2%,4
+tenor,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",short,2459,1351.9,96.8%,16
+tenor,dimension,Approach,repeated,496,228.3,16.4%,16
+tenor,dimension,Approach,step,1023,590.3,42.3%,16
+tenor,dimension,Approach,leap-up,414,300.1,21.5%,16
+tenor,dimension,Approach,leap-down,427,211.1,15.1%,16
+tenor,dimension,Approach,tie,97,57.8,4.1%,14
+tenor,dimension,Approach,first note,16,8.4,0.6%,16
+tenor,dimension,Approach after a rest,after a rest,175,91.9,6.6%,16
+tenor,dimension,Approach after a rest,no rest before,2282,1295.7,92.8%,16
+tenor,dimension,Approach after a rest,first note,16,8.4,0.6%,16
+tenor,dimension,Position in the phrase,first,206,106.4,7.6%,16
+tenor,dimension,Position in the phrase,middle,2060,1183.2,84.8%,16
+tenor,dimension,Position in the phrase,last,206,105.0,7.5%,16
+tenor,dimension,Position in the phrase,only,1,1.5,0.1%,1
+tenor,dimension,Length of the phrase,under 2 s,143,58.0,4.2%,7
+tenor,dimension,Length of the phrase,2 to 4 s,342,154.9,11.1%,12
+tenor,dimension,Length of the phrase,4 to 6 s,325,163.8,11.7%,10
+tenor,dimension,Length of the phrase,6 to 8 s,276,154.8,11.1%,10
+tenor,dimension,Length of the phrase,8 to 12 s,560,288.0,20.6%,12
+tenor,dimension,Length of the phrase,12 s or more,827,576.4,41.3%,10
+tenor,dimension,"Position in the piece, cumulative phonation",under 30 s,892,474.2,34.0%,16
+tenor,dimension,"Position in the piece, cumulative phonation",30 to 60 s,852,448.2,32.1%,15
+tenor,dimension,"Position in the piece, cumulative phonation",60 to 90 s,567,321.8,23.0%,15
+tenor,dimension,"Position in the piece, cumulative phonation",90 to 120 s,121,96.3,6.9%,5
+tenor,dimension,"Position in the piece, cumulative phonation",120 to 180 s,41,55.6,4.0%,2
+tenor,dimension,"Position in the piece, share of the song",first third,828,471.5,33.8%,16
+tenor,dimension,"Position in the piece, share of the song",middle third,873,465.3,33.3%,16
+tenor,dimension,"Position in the piece, share of the song",last third,772,459.2,32.9%,16
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x step x in-range x outside,174,95.1,6.8%,16
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x step x in-range x outside,70,54.9,3.9%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x step x in-range x outside,105,54.2,3.9%,14
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x repeated x in-range x outside,109,49.1,3.5%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-down x in-range x outside,99,45.4,3.2%,16
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x outside,69,38.8,2.8%,16
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-up x in-range x inside,42,34.0,2.4%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x step x in-range x inside,64,30.9,2.2%,14
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-up x in-range x inside,41,28.3,2.0%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x step x in-range x inside,44,28.0,2.0%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-down x in-range x outside,56,24.8,1.8%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x repeated x in-range x outside,65,24.2,1.7%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x repeated x in-range x outside,34,21.9,1.6%,14
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-up x in-range x outside,42,21.8,1.6%,16
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x leap-down x in-range x outside,34,21.1,1.5%,14
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x step x in-range x outside,50,20.5,1.5%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x inside,35,20.2,1.4%,14
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x repeated x in-range x outside,51,20.0,1.4%,13
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x repeated x in-range x outside,37,19.6,1.4%,12
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x e x short x step x in-range x outside,23,19.0,1.4%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x e x short x step x in-range x inside,24,18.6,1.3%,14
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-up x in-range x inside,28,18.5,1.3%,13
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x step x in-range x outside,41,18.5,1.3%,13
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɛ x short x step x in-range x outside,28,18.2,1.3%,12
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x o x short x leap-up x in-range x outside,22,18.1,1.3%,12
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x leap-down x in-range x outside,40,17.1,1.2%,14
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x step x in-range x outside,42,16.8,1.2%,15
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-down x in-range x outside,32,15.3,1.1%,12
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x leap-up x in-range x inside,18,14.0,1.0%,9
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɪ x short x leap-down x in-range x outside,31,14.0,1.0%,11
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x step x in-range x inside,19,13.6,1.0%,12
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-up x in-range x outside,21,13.4,1.0%,8
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x repeated x in-range x outside,32,13.3,0.9%,13
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɨ x short x leap-down x in-range x outside,27,13.1,0.9%,11
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x leap-up x in-range x inside,22,12.3,0.9%,13
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-up x in-range x outside,19,12.3,0.9%,10
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x step x in-range x inside,24,12.3,0.9%,11
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x step x in-range x outside,18,12.1,0.9%,9
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,close x e x short x leap-up x in-range x inside,17,12.1,0.9%,8
+tenor,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x repeated x in-range x inside,27,11.9,0.9%,13
+contralto,dimension,fo against fR1,open,316,155.7,11.2%,16
+contralto,dimension,fo against fR1,close,1576,917.0,65.7%,16
+contralto,dimension,fo against fR1,crossing,96,53.4,3.8%,15
+contralto,dimension,fo against fR1,above,435,245.4,17.6%,16
+contralto,dimension,fo against fR1,not assessed,50,24.6,1.8%,9
+contralto,dimension,Harmonic rung at fR1 (n = 3 to 5),n = 3,1,0.4,0.0%,1
+contralto,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2422,1371.1,98.2%,16
+contralto,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,50,24.6,1.8%,9
+contralto,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,2473,1396.0,100.0%,16
+contralto,dimension,Passaggio,inside,1322,786.9,56.4%,16
+contralto,dimension,Passaggio,outside,1101,584.6,41.9%,16
+contralto,dimension,Passaggio,not assessed,50,24.6,1.8%,9
+contralto,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",below primo,1112,580.4,41.6%,16
+contralto,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",inside,1344,798.3,57.2%,16
+contralto,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",above secondo,17,17.3,1.2%,8
+contralto,dimension,Range,in-range,2423,1371.5,98.2%,16
+contralto,dimension,Range,not assessed,50,24.6,1.8%,9
+contralto,dimension,Sustained ceiling exposure,not exposed,2423,1371.5,98.2%,16
+contralto,dimension,Sustained ceiling exposure,not assessed,50,24.6,1.8%,9
+contralto,dimension,Vowel,i,359,181.4,13.0%,16
+contralto,dimension,Vowel,ɪ,174,72.3,5.2%,16
+contralto,dimension,Vowel,ɨ,202,103.6,7.4%,16
+contralto,dimension,Vowel,e,99,76.0,5.4%,16
+contralto,dimension,Vowel,ɛ,136,104.9,7.5%,16
+contralto,dimension,Vowel,a,21,14.5,1.0%,8
+contralto,dimension,Vowel,ɑ,647,344.1,24.7%,16
+contralto,dimension,Vowel,ʌ,171,73.6,5.3%,16
+contralto,dimension,Vowel,o,329,237.1,17.0%,16
+contralto,dimension,Vowel,u,285,163.8,11.7%,16
+contralto,dimension,Vowel,no vowel resolved,50,24.6,1.8%,9
+contralto,dimension,Held or short (over the tie chain; the regions use this),held,45,87.5,6.3%,7
+contralto,dimension,Held or short (over the tie chain; the regions use this),short,2428,1308.5,93.7%,16
+contralto,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",held,14,44.2,3.2%,4
+contralto,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",short,2459,1351.9,96.8%,16
+contralto,dimension,Approach,repeated,496,228.3,16.4%,16
+contralto,dimension,Approach,step,1023,590.3,42.3%,16
+contralto,dimension,Approach,leap-up,414,300.1,21.5%,16
+contralto,dimension,Approach,leap-down,427,211.1,15.1%,16
+contralto,dimension,Approach,tie,97,57.8,4.1%,14
+contralto,dimension,Approach,first note,16,8.4,0.6%,16
+contralto,dimension,Approach after a rest,after a rest,175,91.9,6.6%,16
+contralto,dimension,Approach after a rest,no rest before,2282,1295.7,92.8%,16
+contralto,dimension,Approach after a rest,first note,16,8.4,0.6%,16
+contralto,dimension,Position in the phrase,first,206,106.4,7.6%,16
+contralto,dimension,Position in the phrase,middle,2060,1183.2,84.8%,16
+contralto,dimension,Position in the phrase,last,206,105.0,7.5%,16
+contralto,dimension,Position in the phrase,only,1,1.5,0.1%,1
+contralto,dimension,Length of the phrase,under 2 s,143,58.0,4.2%,7
+contralto,dimension,Length of the phrase,2 to 4 s,342,154.9,11.1%,12
+contralto,dimension,Length of the phrase,4 to 6 s,325,163.8,11.7%,10
+contralto,dimension,Length of the phrase,6 to 8 s,276,154.8,11.1%,10
+contralto,dimension,Length of the phrase,8 to 12 s,560,288.0,20.6%,12
+contralto,dimension,Length of the phrase,12 s or more,827,576.4,41.3%,10
+contralto,dimension,"Position in the piece, cumulative phonation",under 30 s,892,474.2,34.0%,16
+contralto,dimension,"Position in the piece, cumulative phonation",30 to 60 s,852,448.2,32.1%,15
+contralto,dimension,"Position in the piece, cumulative phonation",60 to 90 s,567,321.8,23.0%,15
+contralto,dimension,"Position in the piece, cumulative phonation",90 to 120 s,121,96.3,6.9%,5
+contralto,dimension,"Position in the piece, cumulative phonation",120 to 180 s,41,55.6,4.0%,2
+contralto,dimension,"Position in the piece, share of the song",first third,828,471.5,33.8%,16
+contralto,dimension,"Position in the piece, share of the song",middle third,873,465.3,33.3%,16
+contralto,dimension,"Position in the piece, share of the song",last third,772,459.2,32.9%,16
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x step x in-range x inside,151,76.7,5.5%,16
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x step x in-range x inside,78,55.4,4.0%,16
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x leap-up x in-range x inside,88,54.5,3.9%,16
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x step x in-range x inside,85,43.7,3.1%,16
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x step x in-range x outside,48,37.0,2.7%,15
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-up x in-range x inside,47,35.4,2.5%,15
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x step x in-range x outside,59,33.2,2.4%,15
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x repeated x in-range x inside,70,30.9,2.2%,14
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x outside,52,30.0,2.2%,15
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x step x in-range x inside,50,27.8,2.0%,15
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x step x in-range x outside,53,26.6,1.9%,15
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x leap-up x in-range x inside,37,25.9,1.9%,14
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x e x short x step x in-range x inside,32,25.3,1.8%,15
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x repeated x in-range x outside,49,23.8,1.7%,13
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x step x in-range x inside,36,23.1,1.7%,13
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x leap-up x in-range x inside,35,22.6,1.6%,15
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x leap-down x in-range x outside,54,22.2,1.6%,16
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x leap-up x in-range x inside,25,19.8,1.4%,10
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x leap-down x in-range x inside,36,18.7,1.3%,14
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ʌ x short x step x in-range x inside,45,18.7,1.3%,16
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x step x in-range x outside,42,18.6,1.3%,13
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x leap-down x in-range x outside,38,17.8,1.3%,13
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x repeated x in-range x inside,47,17.7,1.3%,13
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-down x in-range x outside,26,16.6,1.2%,13
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x step x in-range x outside,33,14.8,1.1%,13
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x repeated x in-range x inside,21,14.5,1.0%,11
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɪ x short x step x in-range x inside,34,14.2,1.0%,14
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x repeated x in-range x outside,22,14.0,1.0%,10
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x leap-down x in-range x outside,27,13.3,1.0%,11
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x e x short x leap-up x in-range x inside,20,13.2,0.9%,10
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-up x in-range x outside,15,12.4,0.9%,8
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x step x in-range x inside,23,12.2,0.9%,12
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x repeated x in-range x outside,25,12.0,0.9%,10
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x leap-down x in-range x outside,25,11.6,0.8%,11
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x step x in-range x outside,15,11.3,0.8%,9
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x i x short x step x in-range x outside,17,10.6,0.8%,8
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɪ x short x repeated x in-range x outside,25,10.1,0.7%,8
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x e x short x step x in-range x outside,13,9.9,0.7%,9
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x leap-down x in-range x outside,19,9.1,0.6%,10
+contralto,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ʌ x short x leap-down x in-range x outside,21,8.8,0.6%,11
+mezzo,dimension,fo against fR1,open,131,62.1,4.4%,16
+mezzo,dimension,fo against fR1,close,1570,895.2,64.1%,16
+mezzo,dimension,fo against fR1,crossing,126,77.2,5.5%,16
+mezzo,dimension,fo against fR1,above,596,337.0,24.1%,16
+mezzo,dimension,fo against fR1,not assessed,50,24.6,1.8%,9
+mezzo,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2423,1371.5,98.2%,16
+mezzo,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,50,24.6,1.8%,9
+mezzo,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,2473,1396.0,100.0%,16
+mezzo,dimension,Passaggio,inside,2243,1273.9,91.3%,16
+mezzo,dimension,Passaggio,outside,180,97.5,7.0%,16
+mezzo,dimension,Passaggio,not assessed,50,24.6,1.8%,9
+mezzo,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",below primo,169,83.3,6.0%,16
+mezzo,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",inside,2287,1295.5,92.8%,16
+mezzo,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",above secondo,17,17.3,1.2%,8
+mezzo,dimension,Range,in-range,2423,1371.5,98.2%,16
+mezzo,dimension,Range,not assessed,50,24.6,1.8%,9
+mezzo,dimension,Sustained ceiling exposure,not exposed,2423,1371.5,98.2%,16
+mezzo,dimension,Sustained ceiling exposure,not assessed,50,24.6,1.8%,9
+mezzo,dimension,Vowel,i,359,181.4,13.0%,16
+mezzo,dimension,Vowel,ɪ,174,72.3,5.2%,16
+mezzo,dimension,Vowel,ɨ,202,103.6,7.4%,16
+mezzo,dimension,Vowel,e,99,76.0,5.4%,16
+mezzo,dimension,Vowel,ɛ,136,104.9,7.5%,16
+mezzo,dimension,Vowel,a,21,14.5,1.0%,8
+mezzo,dimension,Vowel,ɑ,647,344.1,24.7%,16
+mezzo,dimension,Vowel,ʌ,171,73.6,5.3%,16
+mezzo,dimension,Vowel,o,329,237.1,17.0%,16
+mezzo,dimension,Vowel,u,285,163.8,11.7%,16
+mezzo,dimension,Vowel,no vowel resolved,50,24.6,1.8%,9
+mezzo,dimension,Held or short (over the tie chain; the regions use this),held,45,87.5,6.3%,7
+mezzo,dimension,Held or short (over the tie chain; the regions use this),short,2428,1308.5,93.7%,16
+mezzo,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",held,14,44.2,3.2%,4
+mezzo,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",short,2459,1351.9,96.8%,16
+mezzo,dimension,Approach,repeated,496,228.3,16.4%,16
+mezzo,dimension,Approach,step,1023,590.3,42.3%,16
+mezzo,dimension,Approach,leap-up,414,300.1,21.5%,16
+mezzo,dimension,Approach,leap-down,427,211.1,15.1%,16
+mezzo,dimension,Approach,tie,97,57.8,4.1%,14
+mezzo,dimension,Approach,first note,16,8.4,0.6%,16
+mezzo,dimension,Approach after a rest,after a rest,175,91.9,6.6%,16
+mezzo,dimension,Approach after a rest,no rest before,2282,1295.7,92.8%,16
+mezzo,dimension,Approach after a rest,first note,16,8.4,0.6%,16
+mezzo,dimension,Position in the phrase,first,206,106.4,7.6%,16
+mezzo,dimension,Position in the phrase,middle,2060,1183.2,84.8%,16
+mezzo,dimension,Position in the phrase,last,206,105.0,7.5%,16
+mezzo,dimension,Position in the phrase,only,1,1.5,0.1%,1
+mezzo,dimension,Length of the phrase,under 2 s,143,58.0,4.2%,7
+mezzo,dimension,Length of the phrase,2 to 4 s,342,154.9,11.1%,12
+mezzo,dimension,Length of the phrase,4 to 6 s,325,163.8,11.7%,10
+mezzo,dimension,Length of the phrase,6 to 8 s,276,154.8,11.1%,10
+mezzo,dimension,Length of the phrase,8 to 12 s,560,288.0,20.6%,12
+mezzo,dimension,Length of the phrase,12 s or more,827,576.4,41.3%,10
+mezzo,dimension,"Position in the piece, cumulative phonation",under 30 s,892,474.2,34.0%,16
+mezzo,dimension,"Position in the piece, cumulative phonation",30 to 60 s,852,448.2,32.1%,15
+mezzo,dimension,"Position in the piece, cumulative phonation",60 to 90 s,567,321.8,23.0%,15
+mezzo,dimension,"Position in the piece, cumulative phonation",90 to 120 s,121,96.3,6.9%,5
+mezzo,dimension,"Position in the piece, cumulative phonation",120 to 180 s,41,55.6,4.0%,2
+mezzo,dimension,"Position in the piece, share of the song",first third,828,471.5,33.8%,16
+mezzo,dimension,"Position in the piece, share of the song",middle third,873,465.3,33.3%,16
+mezzo,dimension,"Position in the piece, share of the song",last third,772,459.2,32.9%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x step x in-range x inside,229,122.6,8.8%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x step x in-range x inside,111,82.4,5.9%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x step x in-range x inside,133,65.3,4.7%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x leap-up x in-range x inside,103,61.8,4.4%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x repeated x in-range x inside,114,48.8,3.5%,15
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-up x in-range x inside,53,42.3,3.0%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x leap-down x in-range x inside,83,39.3,2.8%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x step x in-range x inside,70,37.7,2.7%,15
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x step x in-range x inside,51,33.9,2.4%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x leap-up x in-range x inside,47,32.2,2.3%,14
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x leap-up x in-range x inside,46,30.8,2.2%,15
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x repeated x in-range x inside,79,29.4,2.1%,15
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x e x short x step x in-range x inside,37,28.6,2.0%,14
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ʌ x short x step x in-range x inside,69,28.2,2.0%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x repeated x in-range x inside,39,25.2,1.8%,14
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x leap-up x in-range x inside,30,25.0,1.8%,10
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɪ x short x step x in-range x inside,61,25.0,1.8%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x step x in-range x inside,48,22.2,1.6%,13
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɪ x short x repeated x in-range x inside,52,21.3,1.5%,14
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-down x in-range x inside,32,20.9,1.5%,14
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x leap-down x in-range x inside,45,18.5,1.3%,16
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x repeated x in-range x inside,31,16.4,1.2%,12
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x leap-down x in-range x inside,37,15.8,1.1%,15
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x inside,22,13.9,1.0%,11
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ʌ x short x repeated x in-range x inside,32,13.9,1.0%,15
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ʌ x short x leap-down x in-range x inside,32,12.9,0.9%,13
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x ɨ x short x step x in-range x inside,23,11.2,0.8%,12
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x o x short x leap-up x in-range x inside,13,10.8,0.8%,11
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x e x short x leap-up x in-range x inside,16,10.1,0.7%,9
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,crossing x u x short x step x in-range x inside,16,9.2,0.7%,8
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ʌ x short x leap-up x in-range x inside,15,9.2,0.7%,9
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x a x short x step x in-range x inside,12,9.1,0.7%,7
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x leap-down x in-range x inside,14,9.0,0.6%,10
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x tie x in-range x inside,21,9.0,0.6%,8
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,open x ɑ x short x repeated x in-range x inside,15,8.9,0.6%,5
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x ɨ x short x repeated x in-range x inside,16,8.7,0.6%,8
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x leap-up x in-range x inside,13,8.6,0.6%,8
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,not assessed x no vowel x short x step x not assessed x not assessed,16,8.1,0.6%,6
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɪ x short x leap-down x in-range x inside,21,7.7,0.6%,11
+mezzo,region,fR1 band x vowel x held or short x approach x range x passaggio,above x ɨ x short x leap-up x in-range x inside,12,7.5,0.5%,8
+soprano,dimension,fo against fR1,open,12,4.6,0.3%,9
+soprano,dimension,fo against fR1,close,1373,759.3,54.4%,16
+soprano,dimension,fo against fR1,crossing,166,101.1,7.2%,16
+soprano,dimension,fo against fR1,above,872,506.3,36.3%,16
+soprano,dimension,fo against fR1,not assessed,50,24.6,1.8%,9
+soprano,dimension,Harmonic rung at fR1 (n = 3 to 5),none,2423,1371.5,98.2%,16
+soprano,dimension,Harmonic rung at fR1 (n = 3 to 5),not assessed,50,24.6,1.8%,9
+soprano,dimension,Harmonic rung at fR2 (n = 1 to 8),not assessed,2473,1396.0,100.0%,16
+soprano,dimension,Passaggio,inside,2368,1326.2,95.0%,16
+soprano,dimension,Passaggio,outside,55,45.2,3.2%,15
+soprano,dimension,Passaggio,not assessed,50,24.6,1.8%,9
+soprano,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",below primo,4,2.7,0.2%,2
+soprano,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",inside,2418,1350.8,96.8%,16
+soprano,dimension,"Passaggio, three ways (by pitch, so a note with no vowel is assessed too)",above secondo,51,42.6,3.1%,15
+soprano,dimension,Range,in-range,2423,1371.5,98.2%,16
+soprano,dimension,Range,not assessed,50,24.6,1.8%,9
+soprano,dimension,Sustained ceiling exposure,not exposed,2423,1371.5,98.2%,16
+soprano,dimension,Sustained ceiling exposure,not assessed,50,24.6,1.8%,9
+soprano,dimension,Vowel,i,359,181.4,13.0%,16
+soprano,dimension,Vowel,ɪ,174,72.3,5.2%,16
+soprano,dimension,Vowel,ɨ,202,103.6,7.4%,16
+soprano,dimension,Vowel,e,99,76.0,5.4%,16
+soprano,dimension,Vowel,ɛ,136,104.9,7.5%,16
+soprano,dimension,Vowel,a,21,14.5,1.0%,8
+soprano,dimension,Vowel,ɑ,647,344.1,24.7%,16
+soprano,dimension,Vowel,ʌ,171,73.6,5.3%,16
+soprano,dimension,Vowel,o,329,237.1,17.0%,16
+soprano,dimension,Vowel,u,285,163.8,11.7%,16
+soprano,dimension,Vowel,no vowel resolved,50,24.6,1.8%,9
+soprano,dimension,Held or short (over the tie chain; the regions use this),held,45,87.5,6.3%,7
+soprano,dimension,Held or short (over the tie chain; the regions use this),short,2428,1308.5,93.7%,16
+soprano,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",held,14,44.2,3.2%,4
+soprano,dimension,"Held or short, per event (the overlay engine's own reading, for comparison)",short,2459,1351.9,96.8%,16
+soprano,dimension,Approach,repeated,496,228.3,16.4%,16
+soprano,dimension,Approach,step,1023,590.3,42.3%,16
+soprano,dimension,Approach,leap-up,414,300.1,21.5%,16
+soprano,dimension,Approach,leap-down,427,211.1,15.1%,16
+soprano,dimension,Approach,tie,97,57.8,4.1%,14
+soprano,dimension,Approach,first note,16,8.4,0.6%,16
+soprano,dimension,Approach after a rest,after a rest,175,91.9,6.6%,16
+soprano,dimension,Approach after a rest,no rest before,2282,1295.7,92.8%,16
+soprano,dimension,Approach after a rest,first note,16,8.4,0.6%,16
+soprano,dimension,Position in the phrase,first,206,106.4,7.6%,16
+soprano,dimension,Position in the phrase,middle,2060,1183.2,84.8%,16
+soprano,dimension,Position in the phrase,last,206,105.0,7.5%,16
+soprano,dimension,Position in the phrase,only,1,1.5,0.1%,1
+soprano,dimension,Length of the phrase,under 2 s,143,58.0,4.2%,7
+soprano,dimension,Length of the phrase,2 to 4 s,342,154.9,11.1%,12
+soprano,dimension,Length of the phrase,4 to 6 s,325,163.8,11.7%,10
+soprano,dimension,Length of the phrase,6 to 8 s,276,154.8,11.1%,10
+soprano,dimension,Length of the phrase,8 to 12 s,560,288.0,20.6%,12
+soprano,dimension,Length of the phrase,12 s or more,827,576.4,41.3%,10
+soprano,dimension,"Position in the piece, cumulative phonation",under 30 s,892,474.2,34.0%,16
+soprano,dimension,"Position in the piece, cumulative phonation",30 to 60 s,852,448.2,32.1%,15
+soprano,dimension,"Position in the piece, cumulative phonation",60 to 90 s,567,321.8,23.0%,15
+soprano,dimension,"Position in the piece, cumulative phonation",90 to 120 s,121,96.3,6.9%,5
+soprano,dimension,"Position in the piece, cumulative phonation",120 to 180 s,41,55.6,4.0%,2
+soprano,dimension,"Position in the piece, share of the song",first third,828,471.5,33.8%,16
+soprano,dimension,"Position in the piece, share of the song",middle third,873,465.3,33.3%,16
+soprano,dimension,"Position in the piece, share of the song",last third,772,459.2,32.9%,16
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x step x in-range x inside,227,121.5,8.7%,16
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x step x in-range x inside,87,66.8,4.8%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x step x in-range x inside,132,65.1,4.7%,16
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x repeated x in-range x inside,130,58.5,4.2%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x step x in-range x inside,90,50.3,3.6%,16
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x leap-down x in-range x inside,99,45.5,3.3%,16
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɑ x short x leap-up x in-range x inside,71,41.8,3.0%,16
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x leap-up x in-range x inside,49,32.0,2.3%,14
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x leap-up x in-range x inside,43,29.7,2.1%,14
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x repeated x in-range x inside,79,29.4,2.1%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ʌ x short x step x in-range x inside,61,25.6,1.8%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-down x in-range x inside,38,24.5,1.8%,14
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x repeated x in-range x inside,37,23.2,1.7%,14
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x repeated x in-range x inside,46,22.9,1.6%,12
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x step x in-range x inside,35,22.3,1.6%,13
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x o x short x leap-up x in-range x inside,29,22.3,1.6%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɪ x short x step x in-range x inside,50,20.5,1.5%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɪ x short x repeated x in-range x inside,51,20.0,1.4%,13
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x o x short x leap-up x in-range x inside,26,19.0,1.4%,13
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x e x short x step x in-range x inside,23,19.0,1.4%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x step x in-range x inside,42,18.6,1.3%,13
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x i x short x leap-down x in-range x inside,45,18.5,1.3%,16
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x o x short x step x in-range x inside,29,18.1,1.3%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɨ x short x leap-down x in-range x inside,38,17.8,1.3%,13
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ʌ x short x leap-down x in-range x inside,40,17.1,1.2%,14
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ʌ x short x repeated x in-range x inside,38,16.0,1.1%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x ɨ x short x step x in-range x inside,31,15.0,1.1%,15
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɪ x short x leap-down x in-range x inside,30,13.0,0.9%,11
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x ɑ x short x leap-up x in-range x inside,22,12.3,0.9%,13
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x ɛ x short x leap-up x in-range x inside,13,12.2,0.9%,6
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x u x short x step x in-range x inside,16,11.1,0.8%,10
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x e x short x step x in-range x inside,16,11.0,0.8%,12
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x e x short x leap-up x in-range x inside,16,11.0,0.8%,8
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x u x short x leap-down x in-range x inside,25,10.9,0.8%,11
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,close x a x short x step x in-range x inside,14,10.7,0.8%,7
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x ɨ x short x repeated x in-range x inside,20,10.2,0.7%,8
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x ɨ x short x leap-up x in-range x inside,15,9.5,0.7%,10
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x ɛ x short x leap-up x in-range x inside,12,9.3,0.7%,6
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,crossing x o x short x leap-up x in-range x inside,10,9.3,0.7%,7
+soprano,region,fR1 band x vowel x held or short x approach x range x passaggio,above x o x short x leap-up x in-range x outside,8,9.3,0.7%,7

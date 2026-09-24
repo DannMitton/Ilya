@@ -7418,3 +7418,15 @@ Its rulings live in `docs/memory/PRODUCT.md` (the five Insights principles) and 
 > **THE ccb790c WALK IS PARKED, not dropped** (Dann, 14:49: *"I can't work on this again right
 > now"*). It is the 03:55 block's one thing, below.
 >
+
+
+## Moved from STATE.md 2026-09-24 00:50: the octave-fix paragraph of the 03:55 block (closed; the .musx half shipped at 10e090c). No rulings in it. Verbatim:
+
+> **THE OCTAVE FIX IS BIGGER THAN INSIGHTS.** `packages/score-parser/src/vocal-octave.ts`
+> (the rule, about `:60`) shifted every MusicXML vocal line in a treble-8vb clef down an
+> octave, though MusicXML already stores sounding pitch. **Sunless 2, 3, 5, and 6 read an
+> octave low everywhere, Score markup included, until `ccb790c`.** Sunless 2 went from
+> A1 to E♭3 to A2 to E♭4, matching the dissertation (printed p. 92); Sunless 6 now reads
+> C♯3 to D4, matching §6.1.6. MNX keeps the old rule; its convention is NOT ESTABLISHED.
+> `staff-renderer.ts:418` changed with it.
+>
