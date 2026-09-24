@@ -255,6 +255,22 @@ The bracketed article is the desk's, added for grammar. **Who offered what:** th
 
 **THE FIVE ELEMENTS ARE COMPLETE, 2026-09-23:** purpose ("What Insights is for"), frame ("How Insights reads a score"), chain ("How Insights works"), voice ("How Insights speaks"), and trust (this section). The working draft they replace is `~/Documents/Voice Pedagogy Library/Insights Research/insights-principles_working_r1_2026-09-23.md`.
 
+## Universal relations, individual values. The principle ratified by Dann 2026-09-23 20:49; the three kinds of claim are a DESK DEFAULT
+
+> The universal things are relations, not values. The physics that links pitch, vowel, and dynamic to what a voice does holds for every singer: the turn where 2fo passes fR1, about 6 to 9 dB for each doubling of lung pressure (Titze 2013, p. 191), harmonics as whole multiples of fo. The values those relations act on belong to one body: where each vowel's fR1 sits, where the passaggi fall, what a forte costs. Insights therefore makes three kinds of claim, strongest first: (1) a universal relation applied to this singer's own measured values; (2) a trend widely reported whose size varies from singer to singer, stated as a direction, never as a number for this singer; (3) nothing, where neither exists.
+
+**Who offered what.** The idea is Dann's (20:47 to 20:48): individual morphology means "trends and widely applicable generalizations as opposed to universally quantifiable touchstones." The sentence "The universal things are relations, not values" and the three kinds of claim are the desk's wording; he ratified the sentence at 20:49 (*"Correct!"*). **Condition for departing:** a relation shown to vary between singers is demoted to a trend.
+
+**What it means for dynamics.** A marked dynamic is relative to the singer and the piece, never a decibel value, so Insights forecasts dynamics as direction (louder costs more pressure, and more at higher pitch: Cleveland 1992 p. 25; Titze 2013 p. 191). Absolute figures would need the singer's own voice range profile (Titze and Maxfield 2021); whether Ilya's microphone can measure one is NOT ESTABLISHED.
+
+## No faults, no diagnosis: coordination is assessed. Ruled by Dann 2026-09-23 22:39
+
+Dann's words: *"I absolutely reject the label "faults" and the verb "diagnose". There are no faults, just optimal and less optimal coordination, and I adopt the attitude of the Ontario College of Registered Massage Therapists in reserving "diagnosis" for the legitimate certified medical profession, not voice teaching which at best is para-medical. We do not diagnose: we assess."*
+
+**The default:** Insights, its copy in both languages, and the desk's own records say "optimal" and "less optimal coordination", and "assess" or "assessment". Never "fault", "flaw", "diagnose", or "diagnosis". **Condition for departing:** a source's own words, quoted verbatim and attributed to that author (for example McKinney's title and terms), which stay as written in `quote` fields and citations.
+
+**Who offered what.** The ruling and its wording are Dann's. It sits beside "Insights gives insight, not intervention" (2026-09-16) and "How Insights speaks" (2026-09-23 17:21).
+
 ## Insights gives insight, not intervention. Stated by Dann 2026-09-16
 
 A vowel an Insight names is a conceptual target, reached with subtlety, and the teacher's informed ear decides. Dann's words: *"The informed ear of a teacher should be the decising factor, and obviously that lies beyond Ilya's capabilities. We are not looking for Insights to replace informed pedagogical intervention. we are looking for Insights to provide.... insght."* A named target may be any vowel on Jones's quadrilateral, not only Grayson's ten, because the prescription follows Grayson and the performance does not have to. Record: `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/review-01b.md` S3.

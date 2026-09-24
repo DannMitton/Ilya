@@ -45,42 +45,34 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-23, about 17:35. SUPERSEDES THE 03:55 BLOCK BELOW AS THE ONE THING
+> ### READ THIS FIRST. Written 2026-09-23, about 23:30. SUPERSEDES THE 17:35 BLOCK (moved to `../sessions/LOG.md`)
 >
-> **THE ONE THING: N.168, Insights intake, step 1, the condition map. The desk's; nothing
-> from Dann.** Numbered by Dann at 17:29, *"engage in it ASAP."* The plan:
-> `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md`
-> (request folder access to `~/Documents/Voice Pedagogy Library` at the open; it is outside
-> the two folders the opener names). Write `condition-map_r1.md` beside the plan.
+> **THE ONE THING: N.168, Insights intake, step 4 (targeted extraction) is well under way; step 5
+> (Fable composes connections) is next.** Plan: `~/Documents/Voice Pedagogy Library/Insights
+> Research/plan-intake_r1_2026-09-23.md`. Request folder access to `~/Documents` at the open (the
+> library and the Finale scores live there).
 >
-> **Step 1 is begun: the engine was read at 17:31. What it computes per note**
-> (`packages/score-parser/src/analysis-types.ts`, `AnalyzedEvent`, from `:125`): `timbre`
-> (open below the turning pitch, close above), `turningPitch` (an octave below fR1),
-> `crossing` (fo within `CROSSING_TOLERANCE_CENTS = 50` of fR1, `overlay-engine.ts:131`,
-> `:173`), `aboveFirstResonance`, `inPassaggio`, `rangeStatus`, `sustainedCeilingExposure`,
-> `vowel`. Long sustain: `SUSTAIN_SECONDS_THRESHOLD = 2.5` (`sustain.ts:24`). Phonation:
-> `aggregatePhonation`, `secondsFor`, `totalFoldCycles` (`phonation.ts:306`, `:455`, `:551`);
-> passaggio zones in `insights.ts:116-121`. Transposition: `transposition.ts:217`, `:347`.
-> **NOT YET COMPUTED:** any fR2 event mark (fR2 is carried in the snapshot,
-> `overlay-engine.ts:276`, and read by no mark); 3fo and 4fo mini-turns; the approach
-> interval (no leap code found by grep); dynamics (not parsed, `PRODUCT.md` "The refusal it
-> struck"); phrase length.
+> **Done tonight.** Step 1: `condition-map_r1.md`. Step 2: built and shipped `10e090c` (condition
+> module `packages/score-parser/src/conditions.ts`, frequency run over all sixteen dissertation songs
+> from `~/Documents/Finale Files/`, and the `.musx` treble-8vb octave fix, WRITTEN not walked); then
+> Mitton's passaggi A-flat3 to D-flat4 added to the run (uncommitted; 44.7% of sung time inside).
+> Step 3: `coverage_r1.md`, then `coverage_r2_2026-09-23.md` (1,235 rows; its Journal of Voice search
+> list is tomorrow's). Step 4: about 689 new fact rows in `_extraction/` from Miller 2008, St-Pierre
+> 2014, 32 JOS articles (downloaded and filed in the library), 12 Mac articles, Henrich 2005, Titze
+> et al. 2007, Roubeau 2004 (French), both Millers, four dissertations, Chen 2017 and McKinney 1994
+> (photographed pages in `_scans/`). Memos in `_synthesis/`, dated 2026-09-23. Fable read the six
+> register papers: `_synthesis/memo-fable-registers_r1_2026-09-23.md`.
 >
-> **WHAT THIS AFTERNOON SETTLED.** Five Insights principles, ratified and recorded in
-> `PRODUCT.md`, "What Insights is for" through "How Insights stays trustworthy". The
-> hazard-only advice rule is retired (15:53). The research map and source queue:
-> `.../Insights Research/insights-backbone-map_r1_2026-09-23.md`. A Sonnet precedent survey:
-> `.../_synthesis/memo-sonnet-precedents_r1_2026-09-23.md`. The six register papers are
-> converted to text in `.../_primary-text/` for a Fable read at N.168 step 5 (brief drafted,
-> NOT RUN, in the old session's scratchpad and lost with it; rewrite from the plan).
+> **Rulings recorded tonight in `PRODUCT.md`:** "Universal relations, individual values" (20:49) and
+> "No faults, no diagnosis: coordination is assessed" (22:39). Standing instructions (bibliography
+> leads; manual downloads when a site blocks automation; the vocabulary rule) are in
+> `.../Insights Research/needs_r1_2026-09-23.md`.
 >
-> **JOURNAL OF VOICE: PAID, ACCESS NOT LIVE.** Invoice ABS13464112, paid 2026-09-23.
-> Dann's Elsevier account shows "no active subscriptions"; the claim form failed with both
-> numbers. His request went to Elsevier (Rajesh, Societies) at 15:15. **Wait for their reply;
-> do not send him back to the claim form.** Details in the research plan's open items.
->
-> **THE ccb790c WALK IS PARKED, not dropped** (Dann, 14:49: *"I can't work on this again right
-> now"*). It is the 03:55 block's one thing, below.
+> **Next, in order:** (1) Journal of Voice, once Elsevier access is live: the search list in
+> `coverage_r2`, led by the marked-dynamic-to-sound-level link. (2) Step 5, Fable composing
+> connections for the best-covered regions (dynamics chain, passaggio and turning). (3) The rest of
+> the JOS screen and the Recent Research in Singing digests. **Still parked:** the ccb790c walk
+> (below) and N.130's French walk.
 >
 > ### READ THIS FIRST. Written at the close of 2026-09-23, about 03:55
 >
@@ -146,7 +138,7 @@ does not repeat them.
 
 ### Numbered 2026-09-23
 
-- `[ ]` **N.168. Insights intake: filling the three stores.** **NUMBERED BY DANN 2026-09-23 17:29**, *"we should engage in it ASAP."* The plan is `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md` (seven steps: condition map, frequency run, coverage audit, targeted extraction, composing, Dann's vetting, encoding and tests). It rests on the five Insights principles ratified the same afternoon (`PRODUCT.md`, "What Insights is for" to "How Insights stays trustworthy"). Spec in `OPEN.md`. **Next: step 1, the condition map, the desk's.**
+- `[ ]` **N.168. Insights intake: filling the three stores.** **NUMBERED BY DANN 2026-09-23 17:29**, *"we should engage in it ASAP."* The plan is `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md` (seven steps: condition map, frequency run, coverage audit, targeted extraction, composing, Dann's vetting, encoding and tests). It rests on the five Insights principles ratified the same afternoon (`PRODUCT.md`, "What Insights is for" to "How Insights stays trustworthy"). Spec in `OPEN.md`. **2026-09-23 late: steps 1 to 3 done, step 2 shipped `10e090c`, step 4 under way (the READ THIS FIRST block).**
 
 ### Numbered 2026-09-22
 

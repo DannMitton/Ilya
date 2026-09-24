@@ -7375,3 +7375,46 @@ Verbatim. Its rulings were checked: each one it lists names the file it landed i
 >   (Table 5.3). Checking his rationale against his data first would have saved the reversal.
 > - Code's first page-two move was unconditional; the desk caught it only by reading the code.
 >
+
+
+## Moved from STATE.md at 2026-09-23 23:30: the 17:35 READ THIS FIRST block, superseded
+
+Its rulings live in `docs/memory/PRODUCT.md` (the five Insights principles) and its open items in the new block. Verbatim, as committed at `10e090c` (a later uncommitted two-line edit to its Fable-brief sentence is superseded: the Fable read ran).
+
+> ### READ THIS FIRST. Written at the close of 2026-09-23, about 17:35. SUPERSEDES THE 03:55 BLOCK BELOW AS THE ONE THING
+>
+> **THE ONE THING: N.168, Insights intake, step 1, the condition map. The desk's; nothing
+> from Dann.** Numbered by Dann at 17:29, *"engage in it ASAP."* The plan:
+> `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md`
+> (request folder access to `~/Documents/Voice Pedagogy Library` at the open; it is outside
+> the two folders the opener names). Write `condition-map_r1.md` beside the plan.
+>
+> **Step 1 is begun: the engine was read at 17:31. What it computes per note**
+> (`packages/score-parser/src/analysis-types.ts`, `AnalyzedEvent`, from `:125`): `timbre`
+> (open below the turning pitch, close above), `turningPitch` (an octave below fR1),
+> `crossing` (fo within `CROSSING_TOLERANCE_CENTS = 50` of fR1, `overlay-engine.ts:131`,
+> `:173`), `aboveFirstResonance`, `inPassaggio`, `rangeStatus`, `sustainedCeilingExposure`,
+> `vowel`. Long sustain: `SUSTAIN_SECONDS_THRESHOLD = 2.5` (`sustain.ts:24`). Phonation:
+> `aggregatePhonation`, `secondsFor`, `totalFoldCycles` (`phonation.ts:306`, `:455`, `:551`);
+> passaggio zones in `insights.ts:116-121`. Transposition: `transposition.ts:217`, `:347`.
+> **NOT YET COMPUTED:** any fR2 event mark (fR2 is carried in the snapshot,
+> `overlay-engine.ts:276`, and read by no mark); 3fo and 4fo mini-turns; the approach
+> interval (no leap code found by grep); dynamics (not parsed, `PRODUCT.md` "The refusal it
+> struck"); phrase length.
+>
+> **WHAT THIS AFTERNOON SETTLED.** Five Insights principles, ratified and recorded in
+> `PRODUCT.md`, "What Insights is for" through "How Insights stays trustworthy". The
+> hazard-only advice rule is retired (15:53). The research map and source queue:
+> `.../Insights Research/insights-backbone-map_r1_2026-09-23.md`. A Sonnet precedent survey:
+> `.../_synthesis/memo-sonnet-precedents_r1_2026-09-23.md`. The six register papers are
+> converted to text in `.../_primary-text/` for a Fable read at N.168 step 5 (brief drafted,
+> NOT RUN, in the old session's scratchpad and lost with it; rewrite from the plan).
+>
+> **JOURNAL OF VOICE: PAID, ACCESS NOT LIVE.** Invoice ABS13464112, paid 2026-09-23.
+> Dann's Elsevier account shows "no active subscriptions"; the claim form failed with both
+> numbers. His request went to Elsevier (Rajesh, Societies) at 15:15. **Wait for their reply;
+> do not send him back to the claim form.** Details in the research plan's open items.
+>
+> **THE ccb790c WALK IS PARKED, not dropped** (Dann, 14:49: *"I can't work on this again right
+> now"*). It is the 03:55 block's one thing, below.
+>

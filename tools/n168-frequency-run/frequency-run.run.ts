@@ -61,13 +61,20 @@ const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, oc
  * Low male voice, Mitton. fR1 and fR2 copied from `MITTON` in
  * `packages/score-parser/src/modification-engine.test.ts:21-24` (not imported:
  * it is a test file). Range A2 to E4 (brief, from the acoustic framework §2).
- * No primo or secondo exists in the tree for Mitton, so passaggio is not
- * assessed. No tessitura was given.
+ * No tessitura was given.
+ *
+ * Passaggio: primo A♭3, secondo D♭4, in scientific pitch notation (middle C
+ * is C4, Mitton 2020 §1.5). Mitton (2020), §3.2.2, Table 3.1, printed p. 30,
+ * Miller's lyric bass values; §3.5, p. 35: "The range that defines the lyric
+ * bass zona di passaggio (Ab3-Db4) is overlaid on the graphs in Chapter 6."
+ * These are generic, a published value for the voice category. They were not
+ * measured from Dann's voice.
  */
 const MITTON: VoiceProfileSnapshot = {
 	fR1: { i: 296, e: 381, ɪ: 393, ɨ: 404, u: 346, o: 489, ɛ: 577, ʌ: 616, ɑ: 617, a: 711 },
 	fR2: { i: 1705, e: 1532, ɪ: 1600, ɨ: 1100, u: 804, o: 826, ɛ: 1311, ʌ: 1167, ɑ: 1013, a: 1113 },
 	range: { lowest: P('A', 2), highest: P('E', 4) },
+	passaggio: { primo: P('A', 3, -1), secondo: P('D', 4, -1) },
 	label: 'Mitton, low male voice',
 };
 

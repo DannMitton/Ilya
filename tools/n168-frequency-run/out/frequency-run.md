@@ -72,7 +72,9 @@ Phrase boundaries across the sixteen songs: rest 184, silence 20, breath-mark 16
 
 | Band | Share of sung time | Seconds | Notes | Songs |
 |---|---|---|---|---|
-| not assessed | 100.0% | 1396.0 | 2473 | 16 |
+| inside | 44.7% | 623.7 | 1061 | 16 |
+| outside | 53.6% | 747.8 | 1362 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
 
 **Range**
 
@@ -175,54 +177,54 @@ Phrase boundaries across the sixteen songs: rest 184, silence 20, breath-mark 16
 | middle third | 33.3% | 465.3 | 873 | 16 |
 | last third | 32.9% | 459.2 | 772 | 16 |
 
-### Regions: fR1 band × vowel × held or short × approach × range
+### Regions: fR1 band × vowel × held or short × approach × range × passaggio
 
-125 distinct regions occur; the top 40 by seconds sung. Not assessed means the profile has no value for that note.
+171 distinct regions occur; the top 40 by seconds sung. Not assessed means the profile has no value for that note.
 
 | Rank | Region | Share of sung time | Seconds | Notes | Songs |
 |---|---|---|---|---|---|
-| 1 | open × ɑ × short × step × in-range | 9.8% | 136.6 | 263 | 16 |
-| 2 | open × o × short × step × in-range | 6.1% | 84.5 | 109 | 15 |
-| 3 | close × i × short × step × in-range | 4.6% | 64.6 | 131 | 16 |
-| 4 | open × ɑ × short × leap-up × in-range | 4.5% | 62.5 | 105 | 16 |
-| 5 | open × ɑ × short × repeated × in-range | 4.5% | 62.3 | 140 | 15 |
-| 6 | open × ɑ × short × leap-down × in-range | 3.6% | 50.0 | 109 | 16 |
-| 7 | close × u × short × step × in-range | 3.4% | 47.9 | 88 | 15 |
-| 8 | open × o × short × leap-up × in-range | 2.9% | 39.8 | 50 | 16 |
-| 9 | open × ɛ × short × step × in-range | 2.6% | 35.7 | 53 | 16 |
-| 10 | close × u × short × leap-up × in-range | 2.5% | 35.1 | 52 | 14 |
-| 11 | close × i × short × leap-up × in-range | 2.2% | 30.1 | 44 | 14 |
-| 12 | open × ʌ × short × step × in-range | 2.1% | 30.0 | 74 | 16 |
-| 13 | close × i × short × repeated × in-range | 2.1% | 28.9 | 77 | 15 |
-| 14 | open × o × short × repeated × in-range | 2.0% | 28.0 | 44 | 15 |
-| 15 | close × e × short × step × in-range | 2.0% | 27.4 | 36 | 15 |
-| 16 | open × ɛ × short × leap-up × in-range | 1.8% | 25.0 | 30 | 10 |
-| 17 | open × o × short × leap-down × in-range | 1.8% | 24.9 | 39 | 14 |
-| 18 | open × ɨ × short × step × in-range | 1.6% | 21.8 | 47 | 14 |
-| 19 | close × u × short × repeated × in-range | 1.5% | 20.4 | 42 | 12 |
-| 20 | close × o × short × leap-up × in-range | 1.4% | 20.1 | 23 | 13 |
-| 21 | close × i × short × leap-down × in-range | 1.4% | 19.9 | 48 | 16 |
-| 22 | open × ɨ × short × leap-down × in-range | 1.4% | 19.9 | 44 | 14 |
-| 23 | open × ɪ × short × step × in-range | 1.3% | 17.9 | 43 | 15 |
-| 24 | open × u × short × step × in-range | 1.2% | 17.2 | 27 | 13 |
-| 25 | open × ʌ × short × leap-down × in-range | 1.2% | 17.1 | 40 | 14 |
-| 26 | open × ʌ × short × repeated × in-range | 1.2% | 16.5 | 40 | 16 |
-| 27 | open × ɪ × short × repeated × in-range | 1.1% | 16.0 | 40 | 12 |
-| 28 | close × ɨ × short × step × in-range | 1.1% | 15.7 | 33 | 14 |
-| 29 | close × e × short × leap-up × in-range | 1.1% | 14.8 | 22 | 10 |
-| 30 | open × ɪ × short × leap-down × in-range | 0.9% | 12.7 | 27 | 10 |
-| 31 | close × ɪ × short × step × in-range | 0.8% | 11.5 | 28 | 12 |
-| 32 | open × ɛ × short × leap-down × in-range | 0.8% | 10.8 | 17 | 12 |
-| 33 | open × a × short × step × in-range | 0.8% | 10.7 | 14 | 7 |
-| 34 | close × ɨ × short × repeated × in-range | 0.8% | 10.5 | 21 | 8 |
-| 35 | close × o × short × step × in-range | 0.8% | 10.5 | 23 | 10 |
-| 36 | close × u × short × leap-down × in-range | 0.8% | 10.5 | 24 | 11 |
-| 37 | open × ɛ × short × repeated × in-range | 0.7% | 10.1 | 16 | 11 |
-| 38 | open × e × short × step × in-range | 0.7% | 10.1 | 11 | 10 |
-| 39 | open × ʌ × short × leap-up × in-range | 0.7% | 10.0 | 17 | 10 |
-| 40 | open × o × short × tie × in-range | 0.7% | 9.9 | 23 | 8 |
+| 1 | open × ɑ × short × step × in-range × outside | 5.4% | 74.7 | 142 | 16 |
+| 2 | open × ɑ × short × step × in-range × inside | 4.4% | 61.8 | 121 | 16 |
+| 3 | open × o × short × step × in-range × outside | 3.7% | 51.0 | 63 | 15 |
+| 4 | open × ɑ × short × leap-up × in-range × inside | 3.5% | 48.8 | 76 | 15 |
+| 5 | open × ɑ × short × repeated × in-range × outside | 2.9% | 40.9 | 86 | 15 |
+| 6 | open × ɑ × short × leap-down × in-range × outside | 2.6% | 36.6 | 84 | 16 |
+| 7 | close × i × short × step × in-range × outside | 2.5% | 34.6 | 69 | 13 |
+| 8 | open × o × short × step × in-range × inside | 2.4% | 33.5 | 46 | 15 |
+| 9 | close × i × short × step × in-range × inside | 2.2% | 30.0 | 62 | 16 |
+| 10 | close × u × short × step × in-range × inside | 2.0% | 27.9 | 48 | 14 |
+| 11 | close × u × short × leap-up × in-range × inside | 1.8% | 25.5 | 39 | 13 |
+| 12 | open × o × short × leap-up × in-range × inside | 1.8% | 24.5 | 31 | 14 |
+| 13 | open × ɨ × short × step × in-range × outside | 1.6% | 21.8 | 47 | 14 |
+| 14 | open × ɑ × short × repeated × in-range × inside | 1.5% | 21.4 | 54 | 13 |
+| 15 | close × i × short × leap-up × in-range × inside | 1.5% | 21.2 | 31 | 14 |
+| 16 | open × ɛ × short × step × in-range × inside | 1.5% | 20.9 | 33 | 13 |
+| 17 | close × e × short × step × in-range × inside | 1.5% | 20.9 | 28 | 15 |
+| 18 | open × o × short × leap-down × in-range × outside | 1.5% | 20.7 | 33 | 14 |
+| 19 | open × o × short × repeated × in-range × outside | 1.5% | 20.3 | 31 | 13 |
+| 20 | close × u × short × step × in-range × outside | 1.4% | 20.0 | 40 | 14 |
+| 21 | open × ɨ × short × leap-down × in-range × outside | 1.4% | 19.9 | 44 | 14 |
+| 22 | open × ɪ × short × step × in-range × outside | 1.3% | 17.9 | 43 | 15 |
+| 23 | open × ɛ × short × leap-up × in-range × inside | 1.3% | 17.7 | 23 | 10 |
+| 24 | open × u × short × step × in-range × outside | 1.2% | 17.2 | 27 | 13 |
+| 25 | open × ɪ × short × repeated × in-range × outside | 1.1% | 16.0 | 40 | 12 |
+| 26 | open × ʌ × short × step × in-range × outside | 1.1% | 15.9 | 40 | 15 |
+| 27 | open × o × short × leap-up × in-range × outside | 1.1% | 15.3 | 19 | 11 |
+| 28 | open × ʌ × short × leap-down × in-range × outside | 1.1% | 15.3 | 34 | 14 |
+| 29 | close × ɨ × short × step × in-range × inside | 1.1% | 15.1 | 32 | 14 |
+| 30 | close × i × short × repeated × in-range × inside | 1.1% | 15.0 | 41 | 12 |
+| 31 | open × ɛ × short × step × in-range × outside | 1.1% | 14.8 | 20 | 11 |
+| 32 | close × i × short × leap-down × in-range × outside | 1.0% | 14.5 | 36 | 14 |
+| 33 | open × ʌ × short × step × in-range × inside | 1.0% | 14.1 | 34 | 16 |
+| 34 | close × i × short × repeated × in-range × outside | 1.0% | 13.9 | 36 | 14 |
+| 35 | open × ɑ × short × leap-up × in-range × outside | 1.0% | 13.6 | 29 | 15 |
+| 36 | open × ɑ × short × leap-down × in-range × inside | 1.0% | 13.4 | 25 | 11 |
+| 37 | open × ɪ × short × leap-down × in-range × outside | 0.9% | 12.7 | 27 | 10 |
+| 38 | open × ʌ × short × repeated × in-range × outside | 0.9% | 12.7 | 31 | 13 |
+| 39 | close × e × short × leap-up × in-range × inside | 0.9% | 12.5 | 19 | 10 |
+| 40 | close × o × short × leap-up × in-range × outside | 0.8% | 11.7 | 10 | 8 |
 
-The top 40 regions hold 82.2% of sung time.
+The top 40 regions hold 68.5% of sung time.
 
 ## Treble voice (Godin), songs up an octave
 

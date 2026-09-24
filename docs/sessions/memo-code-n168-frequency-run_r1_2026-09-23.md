@@ -105,3 +105,56 @@ Added in this run, each a JUDGEMENT:
 - `docs/sessions/memo-code-n168-frequency-run_r1_2026-09-23.md`
 
 Modified: `packages/score-parser/src/index.ts` and `packages/score-parser/src/overlay-engine.ts`. The brief itself, `docs/sessions/brief-code-n168-frequency-run_r1_2026-09-23.md`, was already untracked.
+
+## Addendum, 2026-09-23: Mitton's passaggi
+
+**Written by Claude Code on branch `Shane` at `10e090c`. The working tree was dirty with `docs/memory/STATE.md` and this addendum's brief, both untouched.** Answers `brief-code-n168-passaggio_r1_2026-09-23.md`.
+
+### The change
+
+The Mitton profile in `frequency-run.run.ts` now carries `passaggio: { primo: A♭3, secondo: D♭4 }`. Godin still has none. The comment beside the values cites Mitton (2020), §3.2.2, Table 3.1, printed p. 30 (Miller's lyric bass values), and §3.5, p. 35. It says the values are generic, a published value for the voice category, and not measured from your voice.
+
+I checked the citation against the PDF in `~/Downloads`. Table 3.1 on printed p. 30 lists lyric bass at A♭3 and D♭4. The §3.5 sentence on p. 35 reads as the brief quotes it. The table points to §1.5 for pitch notation, which is scientific pitch notation with middle C as C4. That matches the engine's `Pitch`, so A♭3 is 207.7 Hz and D♭4 is 277.2 Hz, with no octave conversion. The band is inclusive at both ends (`overlay-engine.ts:186`).
+
+Nothing in `packages/` or `apps/` changed.
+
+### The gates
+
+| Gate | Before | After |
+|---|---|---|
+| phonology | 216 passed (216) | 216 passed (216) |
+| dictionary | 235 passed (235) | 235 passed (235) |
+| web-check | 0 errors and 12 warnings in 5 files | 0 errors and 12 warnings in 5 files |
+| web-test | 1396 passed (1396) | 1396 passed (1396) |
+| score-parser | 599 passed, 5 skipped (604) | 599 passed, 5 skipped (604) |
+
+The baseline matches `~/Downloads/ilya-ship.sh:76-80`. No gate moved.
+
+### Passaggio shares, Mitton
+
+| Band | Share of sung time | Seconds | Notes | Songs |
+|---|---|---|---|---|
+| inside | 44.7% | 623.7 | 1061 | 16 |
+| outside | 53.6% | 747.8 | 1362 | 16 |
+| not assessed | 1.8% | 24.6 | 50 | 9 |
+
+The 50 notes that are not assessed are the 50 notes that resolve no vowel. The overlay engine skips a note with no operative vowel before it computes passaggio (`overlay-engine.ts:164`), so those notes get no reading. Every song has time inside the band.
+
+Godin's tables are byte-for-byte unchanged.
+
+### How the regions changed
+
+- The region key gained a sixth part, passaggio. Distinct regions rose from 125 to 171.
+- The top 40 now hold 68.5 percent of sung time, down from 82.2 percent. The same time is split across more regions.
+- The old leader, open × ɑ × short × step × in-range at 9.8 percent, splits into outside (5.4 percent, still first) and inside (4.4 percent, second).
+- Upward leaps on [ɑ] land mostly inside the band: inside is 3.5 percent (fourth), and outside is 1.0 percent (35th). Before the split, this region was fourth at 4.5 percent.
+- Stepwise [u] and upward leaps on [u] and [i] also lean inside. Stepwise [o], repeated [ɑ], downward leaps on [ɑ], and [ɨ] and [ɪ] lean outside.
+
+### Per-piece zones
+
+The runner does not report them. It has one passaggio dimension across all sixteen songs, with inside and outside only. It does not split "outside" into below and above, and it has no per-song passaggio table. I did not add one, because the brief made it conditional on the runner.
+
+## NOT ESTABLISHED (addendum)
+
+- **How "outside" divides into below A♭3 and above D♭4.** `NoteCondition.inPassaggio` is a boolean, so the runner cannot tell them apart without a new field or a pitch comparison in the runner.
+- **Per-song passaggio shares.** Not computed.

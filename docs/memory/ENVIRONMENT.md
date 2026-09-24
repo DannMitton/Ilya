@@ -38,6 +38,12 @@ next session the same hour it cost the last one.
 | git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
 | converting a journal PDF to text for an agent | `PDFTOTEXT WITHOUT -layout FOR TWO COLUMNS` |
 | spawning a Fable or Sonnet agent while Dann talks | `AN AGENT BLOCKS THE CONVERSATION` |
+| searching the Journal of Singing index | `THE JOS INDEX ANSWERS A POST` |
+| downloading Journal of Singing PDFs for the library | `JOS PDFS FROM THE ARTICLE PAGE` |
+| a site shows a bot check or blocks a download | `A BLOCKED DOWNLOAD IS DANN'S TO CLICK` |
+| handing Mac files to a subagent | `SUBAGENTS CANNOT SEE THE MAC` |
+| Dann drops iPhone photos (.HEIC) in Downloads | `HEIC PHOTOS OF BOOK PAGES` |
+| a long script in Chrome times out after 45 s | `LONG CHROME SCRIPTS RUN DETACHED` |
 | the Chrome extension cannot see the tab Dann means | `THE EXTENSION SEES ONLY ITS OWN TABS` |
 | reading Dann's library or Insights Research | `THE LIBRARY IS OUTSIDE THE OPENER'S GRANT` |
 | a memo quotes a brief line the desk never wrote | `CODE REWROTE THE BRIEF` |
@@ -4165,3 +4171,30 @@ Claude in Chrome sees only the tabs in its own group. A tab Dann opened himself 
 ## THE LIBRARY IS OUTSIDE THE OPENER'S GRANT. 2026-09-23
 
 The opener grants `~/Desktop/ilya-rewrite` and `~/Downloads`. Insights research lives in `~/Documents/Voice Pedagogy Library/Insights Research/`, and the book PDFs in its alphabetized subfolders (A-C, D-F, ...). Request `~/Documents/Voice Pedagogy Library` once, with a reason, when the work needs it. It mounts at `$HOME/mnt/Voice Pedagogy Library`. Filenames follow `Surname_I et al (Year) - Title - JOV VVV_II.pdf`.
+
+
+---
+
+## THE JOS INDEX ANSWERS A POST. Learned 2026-09-23
+
+The NATS Journal of Singing index (`nats.org/cgi/page.cgi/journal-of-singing-index.html`, reached through Dann's logged-in Chrome) is a form that POSTs to `/cgi/page.cgi/_subscription.html` with fields `author`, `title`, `description` (the summary), `body` (full text), `year`, `month`, and `cmd=do_search`. From a page on nats.org, `fetch` with those fields returns the results page; parse `main` text. About 1.5 s per query. Summaries in the index are cut short and the Recent Research in Singing digests carry biography only. Dann authorized searching the index; ask before downloading.
+
+## JOS PDFS FROM THE ARTICLE PAGE. Learned 2026-09-23
+
+Each result links to `/cgi/page.cgi/_article.html/Journal_of_Singing/<Title>_<Year>_<Mon>`; that page has a "Download Article" link. From a nats.org page, fetch the article page, follow the link, check the first five bytes are `%PDF-`, and save through a blob link with Dann's file name (`Surname_I (Year) - Title - JOS vvv_ii.pdf`, colons and question marks dropped). Then copy into the alphabetical library folder, check the size, and only then remove the Downloads copy (deletion in Downloads needs Dann's permission once per session). Titles with curly quotes defeat substring matching; search a distinctive word instead. Pre-1995 issues are the NATS Bulletin or NATS Journal; the desk used `JOS vvv_ii` for all, and the one older library file uses "The NATS Journal".
+
+## A BLOCKED DOWNLOAD IS DANN'S TO CLICK. Ruled by Dann 2026-09-23 21:11
+
+HAL and PubMed Central refuse scripted downloads with a bot check. **The desk does not route around it through his Chrome.** It opens the page in his Chrome and stops; he downloads; the desk renames and files. Direct links from an author's lab page (e.g. Jussieu) downloaded from the bridge without trouble.
+
+## SUBAGENTS CANNOT SEE THE MAC. Learned 2026-09-23
+
+A spawned agent works in the cloud container. Stage its inputs first with `device_stage_files` (they land in `/mnt/user-data/uploads/` under the folder names), name the staged paths in the brief, have it write to `/mnt/user-data/outputs/`, and bring results back with `device_commit_files`. A brief that points at `_synthesis/` memos the desk itself wrote in `/mnt/user-data/outputs/` must say so, or the agent reports them missing. Convert PDFs to text on the bridge (`pdftotext`, `pdftotext -f N -l M` for page ranges) before staging.
+
+## HEIC PHOTOS OF BOOK PAGES. Learned 2026-09-23
+
+The bridge has ImageMagick: `convert IMG_n.HEIC -resize 1500x1500 -quality 82 out.jpg`. File the JPEGs under `Insights Research/_scans/<author-year-part>/`. Page order is not always the file order (one batch was shot in reverse); map by printed page number (`tesseract` on a bottom crop helps, but read the image when it fails). For a figure, crop the full-resolution HEIC (3024 by 4032) around the chart. Dann's pencil marginalia are his own notes, never the author's claims. When a notehead is in doubt, ask Dann to read it from the book: it took him one message.
+
+## LONG CHROME SCRIPTS RUN DETACHED. Learned 2026-09-23
+
+`javascript_tool` gives up after 45 s, though the page keeps running what it started. Launch long loops as an unawaited `(async()=>{...})()` that writes progress to a `window` variable, return at once, then poll. A result containing query strings or cookie-like text is blocked from the return value; keep URLs inside the page and return only counts or names.
