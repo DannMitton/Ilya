@@ -163,6 +163,30 @@ describe('detectScoreFormat: recognised refusals', () => {
 		});
 	});
 
+	it('accepts MNX whose "mnx" key sits past the sniff window', () => {
+		// Walk finding 2026-09-24: `Sharp Excerpt.fin27.mnx` writes its keys in
+		// alphabetical order, so `"mnx"` opens at byte 7,702 and the head alone
+		// read it as "not an MNX score".
+		const doc = `{"global":{"measures":[],"pad":"${'x'.repeat(SNIFF_LENGTH * 2)}"},"mnx":{"version":4},"parts":[]}`;
+		expect(doc.indexOf('"mnx"')).toBeGreaterThan(SNIFF_LENGTH);
+		expect(detectScoreFormat('excerpt.mnx', utf8(doc))).toEqual({ ok: true, format: 'mnx' });
+		// A caller holding only the head still gets the refusal: a head cannot
+		// prove the key is absent, and it cannot prove it is present.
+		expect(detectScoreFormat('excerpt.mnx', utf8(doc).subarray(0, SNIFF_LENGTH))).toEqual({
+			ok: false,
+			failure: { kind: 'json-not-mnx' }
+		});
+		// Past the window, only a top-level object counts: a nested key or a
+		// scalar does not.
+		const pad = `"pad":"${'x'.repeat(SNIFF_LENGTH * 2)}"`;
+		for (const tail of ['"a":{"mnx":{}}', '"mnx":4']) {
+			expect(detectScoreFormat('data.json', utf8(`{${pad},${tail}}`))).toEqual({
+				ok: false,
+				failure: { kind: 'json-not-mnx' }
+			});
+		}
+	});
+
 	it('refuses XML that is not MusicXML, naming the root element', () => {
 		expect(detectScoreFormat('song.xml', utf8('<?xml version="1.0"?><museScore/>'))).toEqual({
 			ok: false,

@@ -45,6 +45,16 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### READ THIS FIRST. Written 2026-09-24 11:07. Dann on a break mid-session
+>
+> **Focus switched by Dann 09:48 from N.168 to the schedule's outstanding items.** The `ccb790c` walk was done in both languages (Insights on Cupid and Sunless 2; Markup on Sunless 2; octave checked on bars 1, 9, and 12 against his dissertation). Its findings shipped as **`5e22d03`**, all five gates at the new baselines (web-test 1401; score-parser 602 + 5 skipped, 607; `ilya-ship.sh` edited with Dann's permission, backup `ilya-ship.sh.bak-1396-2026-09-24`). **`5e22d03` is WRITTEN, not walked.** Brief and memo: `../sessions/brief-code-vowel-chart-all-ten_r1_2026-09-24.md`, `memo-code-vowel-chart-all-ten_r1_2026-09-24.md`.
+>
+> **Next, in order:** (1) walk `5e22d03` on the alias: Cupid on Texte shows the score's words; Insights shows ten vowels with 0 s rows; the receipt reads « 1 ligne »; Sunless 2 Markup shows 4/4 once. (2) Paste `../sessions/brief-code-meter-provenance_r1_2026-09-24.md` into Code (Code found the Finale files store an actual meter with a different displayed one, and denigma keeps only the actual; Sunless 1 MusicXML still prints 12/8 where the edition prints 6/4). (3) Per-format walk: `.musx` and MusicXML done; `.mxl`, `.mnx`, `.mscz`, PDF, photo remain. (4) CHECK rows: Sonnet memo `../sessions/memo-sonnet-check-rows_r1_2026-09-24.md` says six CLOSED, two need a print by Dann (INBOX-5 colour, UNSETTLED-8 VERIFY box); **its citations are not yet spot-checked by the desk.** (5) N.142 step 2.
+>
+> **Added 15:25.** `5e22d03` walked by the desk in Dann's Chrome (read only): four checks passed; the fifth found Aperçus page one overprinting its foot on first render. Meter provenance answered (`../sessions/memo-code-meter-provenance_r1_2026-09-24.md`; `ENVIRONMENT.md`, `FINALE PICKUPS AND musx2mxl METERS`). Per-format walk on a sha URL: `.mxl` and `.mscz` pass; `.mnx` was refused by a 2,048-byte sniff; PDF stalled in a hidden tab (NOT ESTABLISHED). Code fixed the `.mnx` sniff and the page-one fit and counted **N.142 step 2: zero, nothing to build** (`../sessions/memo-code-afternoon-findings_r1_2026-09-24.md`). web-test baseline 1401 to 1402 with Dann's permission (backup `ilya-ship.sh.bak-1401-2026-09-24`). CHECK rows: the Sonnet memo's citations spot-checked by the desk and hold; six CLOSED, two await Dann's prints (INBOX-5, UNSETTLED-8). N.168 added to `SCHEDULE.md`. **Left:** walk the afternoon ship; the two prints; the PDF read and a phone photo; N.130's French walk (B2, A).
+>
+> **Numbered today:** N.169 (Markup against the dissertation's Appendix B; `OPEN.md`). **Still to do at the close:** add N.168 to `SCHEDULE.md`; tick week-1 and week-2 lines as they are walked.
+
 > ### READ THIS FIRST. Written 2026-09-23, about 23:30. SUPERSEDES THE 17:35 BLOCK (moved to `../sessions/LOG.md`)
 >
 > **THE ONE THING: N.168, Insights intake, step 4 (targeted extraction) is well under way; step 5

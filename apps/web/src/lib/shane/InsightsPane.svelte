@@ -24,7 +24,7 @@
 	 * N.123's work, and brief §6 says not to build N.123. The two panes are
 	 * never mounted together, so the chain runs once either way.
 	 */
-	import { untrack } from 'svelte';
+	import { tick, untrack } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import Tessituragram from '$lib/shane/Tessituragram.svelte';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
@@ -197,37 +197,64 @@
 	   tab never runs: observed 2026-09-23, the bound height stayed at 60 px
 	   while the squircle was 731. The bindings stay so a late change, a font
 	   arriving, still re-measures. Offsets are layout values, so a phone's
-	   fitted scale does not touch them. */
+	   fitted scale does not touch them.
+
+	   IT MEASURES AFTER `tick()`, NOT IN THE EFFECT'S OWN RUN. Walk finding
+	   2026-09-24 (Cupid, French, a visible tab): page one printed over its
+	   foot until a language switch. Logged in headless Chromium the same
+	   day: the effect ran with `contentTop` at 191 while the squircle's
+	   `style.top` still read 64 px, and again at 291 while it read 191. The
+	   squircle is drawn in `PageFit`'s snippet, so its `top` is a child's
+	   template effect, which runs after this component's `$effect`. A
+	   measure in the effect's own run therefore reads the page as it was,
+	   fits, and nothing asks again: the header's height arrives late, the
+	   squircle moves without changing size, and no size binding fires.
+	   `tick()` resolves once every pending update is in the DOM, the child's
+	   included. It is a microtask, so a hidden tab still runs it.
+
+	   `contentTop` is an input for the same reason: a header that grows
+	   moves page one without resizing it. */
 	let pageOneEl = $state<HTMLElement | null>(null);
 	let pageOneHeight = $state(0);
 	const footHeights = $state([0, 0, 0]);
 	const footEls = $state<Array<HTMLElement | null>>([null, null, null]);
 
-	$effect(() => {
-		// Every input that changes page one's height re-measures it.
-		void model;
-		void language;
-		void vowelsOnPageOne;
-		void pageOneCount;
-		void pageOneHeight;
-		void footHeights[1];
+	function fitPageOne() {
 		const squircle = pageOneEl;
 		const foot = footEls[1];
 		if (!model || !squircle || !foot) return;
 		const over = squircle.offsetTop + squircle.offsetHeight - foot.offsetTop;
 		if (over <= 0) return;
-		untrack(() => {
-			if (vowels && vowelsOnPageOne) {
-				vowelsOnPageOne = false;
-				return;
-			}
-			const shown = Math.min(pageOneCount, model.findings.length);
-			if (shown > 1) {
-				pageOneCount = shown - 1;
-				return;
-			}
-			console.warn(`[Ilya] Insights page one overflows the foot by ${over.toFixed(1)} px with nothing left to move.`);
+		if (vowels && vowelsOnPageOne) {
+			vowelsOnPageOne = false;
+			return;
+		}
+		const shown = Math.min(pageOneCount, model.findings.length);
+		if (shown > 1) {
+			pageOneCount = shown - 1;
+			return;
+		}
+		console.warn(`[Ilya] Insights page one overflows the foot by ${over.toFixed(1)} px with nothing left to move.`);
+	}
+
+	$effect(() => {
+		// Every input that changes page one's height or position re-measures it.
+		void model;
+		void language;
+		void vowelsOnPageOne;
+		void pageOneCount;
+		void pageOneHeight;
+		void contentTop;
+		void footHeights[1];
+		void pageOneEl;
+		void footEls[1];
+		let current = true;
+		tick().then(() => {
+			if (current) untrack(fitPageOne);
 		});
+		return () => {
+			current = false;
+		};
 	});
 
 	const pageOneFindings = $derived(model ? model.findings.slice(0, pageOneCount) : []);

@@ -97,6 +97,8 @@ next session the same hour it cost the last one.
 | briefing Design | `WHAT DESIGN CAN READ` |
 | Design's return is not in Downloads | `DESIGN WRITES INTO THE TREE` |
 | the Vercel toolbar covers the drawer on a phone | `THE VERCEL TOOLBAR` |
+| a Finale-made score shows a wrong or doubled meter | `FINALE PICKUPS AND musx2mxl METERS` |
+| a per-format walk without touching Dann's library | `WALK FORMATS ON A SHA URL` |
 
 ### Browsers, phones, and what each one refuses
 
@@ -4198,3 +4200,14 @@ The bridge has ImageMagick: `convert IMG_n.HEIC -resize 1500x1500 -quality 82 ou
 ## LONG CHROME SCRIPTS RUN DETACHED. Learned 2026-09-23
 
 `javascript_tool` gives up after 45 s, though the page keeps running what it started. Launch long loops as an unawaited `(async()=>{...})()` that writes progress to a `window` variable, return at once, then poll. A result containing query strings or cookie-like text is blocked from the return value; keep URLs inside the page and return only counts or names.
+
+
+## FINALE PICKUPS AND musx2mxl METERS. 2026-09-24
+
+**Finale stores a pickup bar as a short ACTUAL meter with the full meter set to DISPLAY over it.** Both converters Ilya depends on keep only the actual meter: denigma's MNX gives a meter only a count and a unit, and musx2mxl's MusicXML has no alternative meter. So a pickup arrives as its own short meter (Sunless 1 3/4, Sunless 2 and 3 2/4). `adoptPickupMeter` (`packages/score-parser/src/pickup.ts`, shipped `5e22d03`) now prints the song's meter over it. Evidence: Code decrypted all six Sunless `.musx` files (`../sessions/memo-code-meter-provenance_r1_2026-09-24.md`).
+
+**musx2mxl 0.2.9 also rewrites Sunless 1's dotted-half beat in eighths:** 3/4 and 6/4 become 6/8 and 12/8. Dann's Finale file and his dissertation are right; the MusicXML is wrong. **Do not cite a musx2mxl file's meter without checking a printed score.** The desk's `brief-n139-page-meter-signature_r1_2026-09-14.md:172` did, and the error sat for ten days. The fixture `sunless-01-engraved.musicxml` keeps the wrong meter; `correction.test.ts:484` depends on it.
+
+## WALK FORMATS ON A SHA URL. 2026-09-24
+
+A sha-pinned deployment is its own origin with an EMPTY library (`WALK ON THE ALIAS, NEVER ON A SHA URL`). **That is the point for a per-format walk:** uploads there create songs Dann never sees. Find the URL with the Vercel tool `list_deployments` (branch `Shane`, slug `dannmittons-projects`). **The Chrome extension's `file_upload` refuses device paths;** stage the file with `device_stage_files` first and upload its `/mnt/user-data/uploads/...` path. The extension's tab reports `document.hidden` true, so the dictionary and the page reader stall there (the hidden-tab entry): arrival and Markup can be checked, Text and a PDF read cannot.

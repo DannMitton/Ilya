@@ -53,7 +53,10 @@ export type DetectionResult =
  */
 export const ACCEPTED_EXTENSIONS = '.mnx,.json,.xml,.musicxml,.mxl,.mscz,.musx,.pdf,image/*';
 
-/** How many leading bytes detection needs at most. */
+/**
+ * How many leading bytes detection sniffs. Enough for every verdict except
+ * refusing JSON: that one parses the whole file first (`hasTopLevelMnx`).
+ */
 export const SNIFF_LENGTH = 2048;
 
 // ── Magic numbers ────────────────────────────────────────────────
@@ -147,6 +150,18 @@ function xmlRootElement(head: string): string | undefined {
 	return match?.[1];
 }
 
+/** True when the bytes parse as JSON whose top level holds an `mnx` object. */
+function hasTopLevelMnx(bytes: Uint8Array): boolean {
+	try {
+		const doc: unknown = JSON.parse(decodeScoreText(bytes));
+		if (typeof doc !== 'object' || doc === null || Array.isArray(doc)) return false;
+		const mnx = (doc as Record<string, unknown>).mnx;
+		return typeof mnx === 'object' && mnx !== null && !Array.isArray(mnx);
+	} catch {
+		return false;
+	}
+}
+
 const extensionOf = (fileName: string): string => {
 	const dot = fileName.lastIndexOf('.');
 	return dot === -1 ? '' : fileName.slice(dot + 1).toLowerCase();
@@ -159,8 +174,10 @@ const extensionOf = (fileName: string): string => {
  *
  * @param fileName The file's name as uploaded (extension disambiguates
  *   ZIP containers and names the closed `.mus` case).
- * @param bytes Leading bytes of the file; `SNIFF_LENGTH` is enough. Passing
- *   the whole file is also fine — only the head is examined.
+ * @param bytes Leading bytes of the file; `SNIFF_LENGTH` is enough for
+ *   every format but one. A JSON file whose head lacks the `"mnx"` key is
+ *   parsed in full before it is refused, so pass the whole file when the
+ *   verdict decides whether a score is accepted.
  */
 export function detectScoreFormat(fileName: string, bytes: Uint8Array): DetectionResult {
 	const ext = extensionOf(fileName);
@@ -194,6 +211,13 @@ export function detectScoreFormat(fileName: string, bytes: Uint8Array): Detectio
 		// The head may be a truncated window, so look for the key rather
 		// than parsing.
 		if (/"mnx"\s*:/.test(head)) return { ok: true, format: 'mnx' };
+		// The key can sit past the window: a file written with its keys in
+		// alphabetical order puts `global` and `layouts` first, and Dann's
+		// `Sharp Excerpt.fin27.mnx` opens `"mnx"` at byte 7,702 (walk finding
+		// 2026-09-24). So before refusing, read the top level of whatever
+		// bytes the caller passed. Dispatch passes the whole file; a caller
+		// that passed only the head gets a parse failure and the same refusal.
+		if (hasTopLevelMnx(bytes)) return { ok: true, format: 'mnx' };
 		return { ok: false, failure: { kind: 'json-not-mnx' } };
 	}
 
