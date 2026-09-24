@@ -61,3 +61,17 @@ Other `docs/sessions/*french*` files (`brief-n78-*`, `memo-n78-*`, `memo-loupe-f
 - The 63 `!` and `;` sites without French spacing noted at `OPEN.md` §N.131 (`:503-504`) were not counted here; they are a known open item, not a string ruling.
 
 *Read-only. No git command that writes was run. Files read: the brief, the two code briefs, the five source files, `n131-french_r1`, `fable-n73`, `spec-loupe-french`, `brief-loupe-french-build`, `brief-n77`, grep of every other `*french*` file, `OPEN.md`, `PRODUCT.md`, `STATE.md`, `LOG.md` lines cited, `ScoreUploader.svelte:45-57`, `LearnContent.svelte` greps, `git log` and `git show` of `9dfdab8`, `71ae880`.*
+
+## DANN'S RULINGS ON THESE ROWS, 2026-09-24 evening
+
+- `group.piece`: **« Pièce » stands** (18:47). His 2026-09-16 « Œuvre » is withdrawn. The desk offered consistency with the Insights prose (« cette pièce »). No change to the tree.
+- `group.input`: **« Entrée » stands** (18:50). His 2026-09-16 « Saisie » is withdrawn. « Dépôt » was considered and declined on the desk's advice (mirror with "Input"; « dépôt » reads as storage beside « Répertoire »). No change to the tree.
+- `binder.heading`: **« Exportation et importation » stands** (18:51). His 2026-09-16 « Exporter et importer » is withdrawn. Nouns, like the drawer's other headings. No change to the tree.
+- `intake.lines` and `intake.line`: **« %s lignes » and « %s ligne » stand** (18:52). His 2026-09-16 « %s vers » is withdrawn: the receipt counts lines of text, not verses (Sunless 2's poem arrives as one line). No change to the tree.
+- `intake.clear`: **« Retirer » restored** (18:52), his 2026-09-16 ruling reaffirmed. English "Clear" unchanged. `notePicker.clear` stays « Effacer ». **CHANGE TO THE TREE, owed to Code.**
+- **18:53, Dann: *"I trust your recommendations for the remaining items. Proceed."*** The desk's recommendations, so ruled:
+  - `intake.dropHint`: **his 2026-09-16 ruling restored in both languages**, "Drop your file here." / « Déposez votre fichier ici. » **CHANGE OWED.**
+  - `intake.pdf.reading` and `intake.picture.reading`: **his 2026-09-16 rulings restored**, « Lecture des mots du PDF… » and « Lecture des mots de l’image… ». **CHANGE OWED.**
+  - `paper.empty.mobile`: **« Touchez » stands, as built.** His 2026-09-16 « Appuyez sur Tiroir… » is withdrawn on the desk's advice: "Tap" is « Touchez » in all seven other strings (`i18n.ts:1068` onward), one term per concept.
+  - `underlay.heading`: no change; the key is unused since N.114.
+  - The chapter kicker « chapitre %s sur %s »: left as NOT ESTABLISHED (probably superseded by N.77); no change.

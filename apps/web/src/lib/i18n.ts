@@ -656,12 +656,12 @@ const strings: Record<string, Record<Language, string>> = {
 	// One Clear for both receipts, because the tag beside it already says which
 	// kind is being cleared. `input.clear` said "Clear text", which named the
 	// kind a second time and could not name the score at all.
-	'intake.clear':       { en: 'Clear',      fr: 'Effacer' },
+	'intake.clear':       { en: 'Clear',      fr: 'Retirer' },
 	'intake.replace':     { en: 'Replace',    fr: 'Remplacer' },
 	// `intake.choose` IS DELETED, N.115. The Choose a file pill under the field
 	// is struck (ruled 2026-09-10) and the verb is the link inside
 	// `intake.caption` now; nothing else in the tree read the key.
-	'intake.dropHint':    { en: 'Drop the other kind here, or a new file of the same kind to replace it.', fr: 'Déposez ici l\u2019autre type de fichier, ou un nouveau fichier du même type pour le remplacer.' },
+	'intake.dropHint':    { en: 'Drop your file here.', fr: 'Déposez votre fichier ici.' },
 	// THE PDF QUESTION, build brief §3: "A PDF asks once, in place, which it
 	// is. Do not guess." %s is the file's name, so a singer who dropped two
 	// files in a row can see which one is being asked about.
@@ -669,7 +669,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'intake.pdf.why':     { en: 'Ilya cannot tell from the file itself. %s', fr: 'Ilya ne peut pas le déterminer à partir du fichier lui-même. %s' },
 	'intake.pdf.poem':    { en: 'The poem', fr: 'Le poème' },
 	'intake.pdf.score':   { en: 'The score', fr: 'La partition' },
-	'intake.pdf.reading': { en: 'Reading the words out of the PDF…', fr: 'Lecture des mots dans le PDF…' },
+	'intake.pdf.reading': { en: 'Reading the words out of the PDF…', fr: 'Lecture des mots du PDF…' },
 	// The honest answer where a PDF answered "the poem" holds no text at all,
 	// which is what a scan is. It is a mis-answer and not a broken file, so it
 	// says what happened and points at the other answer.
@@ -688,7 +688,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// FRENCH IS OWED, as it is for every N.108 string: the English stands in
 	// both slots because `t()` prints `[MISSING: key]` for an absent variant.
 	'intake.picture.title':   { en: 'Is this picture the poem, or the score?', fr: 'Cette image est-elle le poème ou la partition?' },
-	'intake.picture.reading': { en: 'Reading the words out of the picture…', fr: 'Lecture des mots dans l\u2019image…' },
+	'intake.picture.reading': { en: 'Reading the words out of the picture…', fr: 'Lecture des mots de l\u2019image…' },
 
 
 	// ── Word Console placeholder ─────────────────────────────
