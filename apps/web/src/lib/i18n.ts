@@ -645,6 +645,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// The receipt lines. %s is the count in each.
 	'intake.lines':       { en: '%s lines',   fr: '%s lignes' },
 	'intake.words':       { en: '%s words',   fr: '%s mots' },
+	// The singulars, chosen by `countText` in `bandState.ts`: English takes
+	// them at 1, French at 0 and 1. French RATIFIED by Dann 2026-09-24 10:19.
+	'intake.line':        { en: '%s line',    fr: '%s ligne' },
+	'intake.word':        { en: '%s word',    fr: '%s mot' },
 	// N.115, ruled with its French 2026-09-10. The syllable line's own numeral
 	// pair, given the word it was missing, in both the open row and the closed
 	// one. The first %s is what is placed and the second is the whole queue.

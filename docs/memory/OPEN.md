@@ -396,6 +396,22 @@ the paths already). Whoever takes N.142 should be told this.
       page"*. True as a record of what he ruled, false as a description of the code.
       **His to amend or leave.**
 
+## N.169. ILYA'S MARKUP AGAINST THE DISSERTATION'S APPENDIX B. Numbered by Dann 2026-09-24 10:09. UNSCHEDULED
+
+**The item.** On the 2026-09-24 walk, Dann compared Sunless 2 on Markup with the same song in his dissertation (Appendix B) and was distracted by the disparities. His words: *"would like to resolve these differences, or at least understand why Ilya is offering different values than my earlier ones from my dissertation."*
+
+**Established the same morning.** Same method both sides: the grey head is the turning pitch "an octave below my fR1 values" (thesis, Appendix B, p. 206, `~/Documents/_ARCHIVE 2026-07/Documents & Research/Mitton_Daniel_A_202006_DMA_thesis.pdf`); Ilya's lavender head is `fR1 / 2` (`packages/score-parser/src/overlay-engine.ts:169`, drawn at `staff-renderer.ts:2997`). Three inputs differ:
+
+1. **The vowel on about ten unstressed syllables**, Ilya's transcription against his 2018 underlay: Ме [mʲi]/[mʲe], ни- [ɲɪ]/[ɲi], е-го [jɪ]/[je], мгновенье [ɲjɪ]/[ɲjɛ], пе-ре- [rʲɪ]/[rʲe], наслажденье [nʌ]/[nɑ] and [ɲjɪ]/[ɲjɛ], горечь [rʲi]/[rʲe], забвенья [za]/[zɑ], у-ло-вил [vʲiɫ]/[vɨɫ] (the last read from the PDF's extracted text; check the page). **Which is right is Dann's diction ruling.**
+2. **The fR1 values**: dissertation §5.3.3 (2018) against his calibration of 2026-08-12, 7 of 10 measured. His live values are in the browser, not in `~/Downloads/Ilya, September 21, 2026.ilya`. NOT ESTABLISHED how far they move each head.
+3. **Notation only**: Ilya draws the Finale file's treble-8vb clef (middle line B3, `staff-renderer.ts:418`) where he engraved bass clef; Ilya shows a 2/4 first bar where the thesis shows 4/4 over a two-beat bar. **Reversed by Dann two minutes later, 10:17:** the pickup should carry the song's 4/4, and Ilya's 2/4 is wrong. Moved to the Code brief `../sessions/brief-code-vowel-chart-all-ten_r1_2026-09-24.md`, fifth finding; no longer part of this item.
+
+**Control already in the tree:** `tools/n168-frequency-run/out/notes-mitton.csv`, Sunless 02, 68 notes, is Ilya's engine run with the 2018 values; against the thesis it isolates cause 1 from cause 2.
+
+**The target, shown by Dann 2026-09-24 10:28:** his dissertation's Appendix B, p. 207 (Sunless 1), *"this is the kind of document we are looking to replicate"*: bass clef, 6/4, grey turning heads, stems up for close timbre and down for open, IPA under the Cyrillic. **Also found the same morning:** `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml` carries 6/8 at bar 1 and 12/8 from bar 2 (read from the file); the printed edition and the dissertation both say 6/4.
+
+**Next step when it is picked up:** a screenshot of the Voice band's values, then a note-by-note table (pitch, vowel, turning pitch, both versions, cause per row).
+
 ## N.168. INSIGHTS INTAKE: FILLING THE THREE STORES. Numbered by Dann 2026-09-23 17:29. "ASAP"
 
 **The plan, in full:** `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md`. It supersedes the pass 02 plan of 2026-09-16.

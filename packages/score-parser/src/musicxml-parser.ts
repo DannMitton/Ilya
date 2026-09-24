@@ -76,6 +76,7 @@ import type {
 	VocalLineEvent,
 	WorkMetadata,
 } from './types';
+import { adoptPickupMeter } from './pickup';
 
 // ── Minimal DOM surface the parser reads ───────────────────────────
 
@@ -623,6 +624,9 @@ export class MusicXmlScoreParser implements ScoreParser {
 			}
 			measures.push(measure);
 		}
+
+		// A pickup that arrives carrying its own length as a meter (`pickup.ts`).
+		adoptPickupMeter(measures, timeSignatures);
 
 		// 5. Tie resolution: types first, then best-effort partner linkage by
 		//    same-pitch adjacency (MusicXML ties are not id-targeted).

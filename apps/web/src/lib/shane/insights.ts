@@ -41,6 +41,7 @@ import {
 	type VowelForEvent,
 } from '@ilya/score-parser';
 import type { WatchEntry, WatchKind, WatchList } from './watchlist';
+import { VOWELS } from './engine/types';
 
 /** Where a measured span sits against the span the singer typed. */
 export type Containment = 'contained' | 'above' | 'below' | 'wider';
@@ -584,6 +585,36 @@ export function formatSecondsFine(seconds: number, language: 'en' | 'fr'): strin
 		maximumFractionDigits: 1,
 	}).format(seconds);
 	return `${n}\u00a0s`;
+}
+
+/** One row of the vowel chart: the vowel's time, its bar's width as a share of the longest, and whether it was sung at all. */
+export interface VowelChartRow extends VowelTime {
+	/** 0 to 1, against the longest row. */
+	width: number;
+	/** True for a vowel of `VOWELS` the piece never sings: it prints 0 and draws no bar. */
+	absent: boolean;
+}
+
+/**
+ * THE VOWEL CHART'S ROWS. Every vowel of `VOWELS`, in that order, ruled by
+ * Dann 2026-09-23 03:13 (`OPEN.md`, N.123). A vowel the piece never sings
+ * prints at 0, ruled by Dann 2026-09-24 09:53, so no row reads as an omission.
+ * A vowel outside `VOWELS` follows, most time first, so nothing sung is
+ * dropped (DESK DEFAULT). No sung vowels at all gives no rows: ten zeros
+ * would be false.
+ */
+export function vowelChartRows(list: readonly VowelTime[] | null | undefined): VowelChartRow[] {
+	if (!list?.length) return [];
+	const order = VOWELS as readonly string[];
+	// A zero row prints seconds where the chart prints seconds, and a share where it prints shares.
+	const zeroSeconds: SecondsFigure | null = list.some((x) => x.seconds) ? { kind: 'point', seconds: 0 } : null;
+	const known = order.map(
+		(v) => list.find((x) => x.vowel === v) ?? { vowel: v, share: 0, seconds: zeroSeconds, flagged: false },
+	);
+	const rest = list.filter((x) => !order.includes(x.vowel));
+	const rows = [...known, ...rest];
+	const max = Math.max(0, ...rows.map((r) => r.share));
+	return rows.map((r) => ({ ...r, width: max > 0 ? r.share / max : 0, absent: !list.includes(r) }));
 }
 
 /**

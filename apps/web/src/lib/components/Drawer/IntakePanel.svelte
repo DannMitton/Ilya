@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import type { LoaderState } from '$lib/loader';
 	import { t, type Language } from '$lib/i18n';
+	import { countText } from './bandState';
 	import type { TextArrival } from '$lib/one-action';
 
 	/*
@@ -86,6 +87,12 @@
 		 * Derived in `+page.svelte`, where the score and the poem both live.
 		 */
 		poemFromScore?: boolean;
+		/**
+		 * The poem shown is the score's words, derived and not stored
+		 * (`+page.svelte`, `derivedPoem`). DESK DEFAULT 2026-09-24: its receipt
+		 * offers Replace but not Clear, because there is nothing stored to clear.
+		 */
+		poemDerived?: boolean;
 		/** A file arrived at the one field, by drop or by picker. */
 		onfile: (file: File) => void;
 		/** Clear on the SCORE receipt. Leaves the poem alone. */
@@ -130,6 +137,7 @@
 		hasResults,
 		score,
 		poemFromScore = false,
+		poemDerived = false,
 		onfile,
 		onclearscore,
 		notationAndAnalysis,
@@ -444,14 +452,16 @@
 		{#if !sourceIsEmpty}
 			<div class="intake-receipt receipt-poem">
 				<span class="tag">{t('input.watermark', language)}</span>
-				<span class="line">{t('intake.lines', language).replace('%s', String(lineCount))}</span>
+				<span class="line">{countText(lineCount, 'line', language)}</span>
 				{#if hasResults}
-					<span class="count">{t('intake.words', language).replace('%s', String(wordCount))}</span>
+					<span class="count">{countText(wordCount, 'word', language)}</span>
 				{/if}
 				{#if poemFromScore}
 					<span class="from-score">{t('meta.fromScore', language)}</span>
 				{/if}
-				<button type="button" class="receipt-btn" onclick={onclear}>{t('intake.clear', language)}</button>
+				{#if !poemDerived}
+					<button type="button" class="receipt-btn" onclick={onclear}>{t('intake.clear', language)}</button>
+				{/if}
 				<button type="button" class="receipt-btn" onclick={replacePoem}>{t('intake.replace', language)}</button>
 			</div>
 		{/if}

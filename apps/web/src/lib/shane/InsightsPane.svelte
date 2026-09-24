@@ -32,7 +32,7 @@
 	import type { LineData } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, formatNameForPaper } from '$lib/composers-poets';
-	import { VOWELS, type Vowel, type CalibratedFormant, type VoiceCharacteristics } from '$lib/shane/engine/types';
+	import { type Vowel, type CalibratedFormant, type VoiceCharacteristics } from '$lib/shane/engine/types';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import {
 		analyzeScore,
@@ -54,6 +54,7 @@
 		formatSeconds,
 		formatSecondsFine,
 		formatTempo,
+		vowelChartRows,
 		type Containment,
 		type Finding,
 		type PhonationSection,
@@ -252,6 +253,18 @@
 	// ── Words for the model ────────────────────────────────────────────
 	const P = (p: Pitch) => pitchLabel(p);
 
+	/* THE FIT TABLE'S ACCIDENTALS SET IN THE SANS. Walk finding 2026-09-24:
+	   no face of `--font-serif` (`app.css:23`) carries ♭ with a tight
+	   advance, so the browser's fallback drew it a full em wide, "E ♭ 4",
+	   while ♯ took half an em. The sans draws both tight, as the
+	   tessituragram's own labels already do. Measured, not inferred. */
+	function accidentalParts(text: string): Array<{ text: string; acc: boolean }> {
+		return text
+			.split(/([♭♯]+)/)
+			.filter((p) => p.length > 0)
+			.map((part) => ({ text: part, acc: /^[♭♯]+$/.test(part) }));
+	}
+
 	function flagWord(flag: Containment | null): string {
 		return flag ? T(`insights.flag.${flag}`) : '';
 	}
@@ -330,22 +343,13 @@
 		});
 	}
 
-	/* THE VOWEL CHART'S ORDER, ruled by Dann 2026-09-23 03:13 (`OPEN.md`,
-	   N.123): `VOWELS`, never time. A vowel the piece never sings does not
-	   print (DESK DEFAULT). A vowel outside `VOWELS` follows, most time first,
-	   so nothing sung is dropped (DESK DEFAULT). */
-	const vowelChart = $derived.by(() => {
-		const list = model?.phonation.vowels ?? [];
-		const order = VOWELS as readonly string[];
-		const known = order.flatMap((v) => list.filter((x) => x.vowel === v));
-		const rest = list.filter((x) => !order.includes(x.vowel));
-		const rows = [...known, ...rest];
-		const max = Math.max(0, ...rows.map((r) => r.share));
-		return rows.map((r) => ({ ...r, width: max > 0 ? r.share / max : 0 }));
-	});
+	/* The chart's rows and their order live in `vowelChartRows`, where a test can reach them. */
+	const vowelChart = $derived(vowelChartRows(model?.phonation.vowels));
 
 	/** A vowel's time: one decimal under a second, and a range where the tempo is a word. */
-	function vowelValue(v: { share: number; seconds: SecondsFigure | null }): string {
+	function vowelValue(v: { share: number; seconds: SecondsFigure | null; absent: boolean }): string {
+		// A vowel never sung prints a whole zero, "0 s" or "0%", never "0.0 s".
+		if (v.absent) return v.seconds ? formatSeconds(0) : shareText(0);
 		if (!v.seconds) return shareText(Math.round(v.share * 100));
 		return v.seconds.kind === 'point'
 			? formatSecondsFine(v.seconds.seconds, language)
@@ -407,6 +411,8 @@
 	</div>
 {/snippet}
 
+{#snippet pitched(text: string)}{#each accidentalParts(text) as part, j (j)}{#if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
+
 {#snippet vowelTimes()}
 	<p class="sub-head">{T(model?.phonation.timing === 'none' ? 'insights.phonation.byVowelShare' : 'insights.phonation.byVowel')}</p>
 	<!-- One bar per vowel in the ruled order (after Dann's Figure 6.10). A
@@ -416,7 +422,7 @@
 		{#each vowelChart as v (v.vowel)}
 			<li class:flagged={v.flagged}>
 				<span class="vowel-label ipa">[{v.vowel}]</span>
-				<span class="vowel-track"><span class="vowel-bar" style="width: {v.width * 170}px;"></span><span class="vowel-value">{vowelValue(v)}</span></span>
+				<span class="vowel-track">{#if !v.absent}<span class="vowel-bar" style="width: {v.width * 170}px;"></span>{/if}<span class="vowel-value">{vowelValue(v)}</span></span>
 			</li>
 		{/each}
 	</ul>
@@ -496,14 +502,14 @@
 									<span role="cell" class="term">{T('insights.fit.range')}</span>
 									<span role="cell">
 										{#if model.range.measured}
-											{fill(T('insights.fit.compass'), { low: P(model.range.measured.low), high: P(model.range.measured.high) })}
+											{@render pitched(fill(T('insights.fit.compass'), { low: P(model.range.measured.low), high: P(model.range.measured.high) }))}
 										{:else}
 											{T('insights.fit.noPitches')}
 										{/if}
 									</span>
 									<span role="cell">
 										{#if model.range.reference}
-											{fill(T('insights.fit.spanTyped'), { low: P(model.range.reference.low), high: P(model.range.reference.high) })}
+											{@render pitched(fill(T('insights.fit.spanTyped'), { low: P(model.range.reference.low), high: P(model.range.reference.high) }))}
 										{:else}
 											{T('insights.fit.notTyped')}
 										{/if}
@@ -522,7 +528,7 @@
 									</span>
 									<span role="cell">
 										{#if model.crossings.reference}
-											{fill(T('insights.fit.passaggiTyped'), { primo: P(model.crossings.reference.primo), secondo: P(model.crossings.reference.secondo) })}
+											{@render pitched(fill(T('insights.fit.passaggiTyped'), { primo: P(model.crossings.reference.primo), secondo: P(model.crossings.reference.secondo) }))}
 										{:else}
 											{T('insights.fit.notTyped')}
 										{/if}
@@ -536,7 +542,7 @@
 									<span role="cell" class="term">{T('insights.fit.tessitura')}</span>
 									<span role="cell">
 										{#if model.tessitura.measured}
-											{fill(T('insights.fit.span'), { low: P(model.tessitura.measured.low), high: P(model.tessitura.measured.high) })}<sup>1</sup>
+											{@render pitched(fill(T('insights.fit.span'), { low: P(model.tessitura.measured.low), high: P(model.tessitura.measured.high) }))}<sup>1</sup>
 											{#if model.tessitura.measured.basis === 'half-second-maximum'}
 												<span class="qualifier">{T('insights.fit.tessituraFallback')}</span>
 											{/if}
@@ -554,7 +560,7 @@
 									</span>
 									<span role="cell">
 										{#if model.tessitura.reference}
-											{fill(T('insights.fit.spanTyped'), { low: P(model.tessitura.reference.low), high: P(model.tessitura.reference.high) })}
+											{@render pitched(fill(T('insights.fit.spanTyped'), { low: P(model.tessitura.reference.low), high: P(model.tessitura.reference.high) }))}
 										{:else}
 											{T('insights.fit.notTyped')}
 										{/if}
@@ -745,6 +751,10 @@
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--ink-tertiary);
+	}
+
+	.fit-table .acc {
+		font-family: var(--font-sans);
 	}
 
 	.fit-row .term {

@@ -143,6 +143,7 @@ does not repeat them.
 ### Numbered 2026-09-23
 
 - `[ ]` **N.168. Insights intake: filling the three stores.** **NUMBERED BY DANN 2026-09-23 17:29**, *"we should engage in it ASAP."* The plan is `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md` (seven steps: condition map, frequency run, coverage audit, targeted extraction, composing, Dann's vetting, encoding and tests). It rests on the five Insights principles ratified the same afternoon (`PRODUCT.md`, "What Insights is for" to "How Insights stays trustworthy"). Spec in `OPEN.md`. **2026-09-23 late: steps 1 to 3 done, step 2 shipped `10e090c`, step 4 under way (the READ THIS FIRST block).**
+- `[ ]` **N.169. Ilya's Markup against the dissertation's Appendix B.** **NUMBERED BY DANN 2026-09-24 10:09**, *"Please number this and we will resolve it later."* Unscheduled. Spec in `OPEN.md`.
 
 ### Numbered 2026-09-22
 

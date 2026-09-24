@@ -70,6 +70,7 @@ import type {
 	TupletInfo,
 	VocalLineEvent,
 } from './types';
+import { adoptPickupMeter } from './pickup';
 
 // ── Loose raw shapes for the incoming JSON ─────────────────────────
 // These deliberately model only what the parser reads. Every access is
@@ -704,6 +705,9 @@ export class MnxScoreParser implements ScoreParser {
 				}
 			}
 		}
+
+		// A pickup that arrives carrying its own length as a meter (`pickup.ts`).
+		adoptPickupMeter(measures, timeSignatures);
 
 		// 6. Tie resolution: MNX marks the start side only, via note-level
 		//    `ties: [{target}]`. The target note's event becomes the stop

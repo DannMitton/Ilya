@@ -16,6 +16,7 @@ import { describe, it, expect } from 'vitest';
 import {
 	pieceStateLine,
 	inputStateLine,
+	countText,
 	placedLine,
 	notationStateLine,
 	notationDepartures,
@@ -210,5 +211,21 @@ describe('N.150 Voice’s state line', () => {
 	/* `calib.anchor.named` carries the ratified French, guillemets and all. */
 	it('takes the ruled French across the whole line', () => {
 		expect(scoreStateLine('Dann', 10, 10, 'fr')).toBe('Voix : « Dann » · 10 sur 10');
+	});
+});
+
+describe('countText: a count takes the singular (walk finding 2026-09-24, "1 lines")', () => {
+	it('English takes the singular at 1 only', () => {
+		expect(countText(1, 'line', 'en')).toBe('1 line');
+		expect(countText(1, 'word', 'en')).toBe('1 word');
+		expect(countText(0, 'line', 'en')).toBe('0 lines');
+		expect(countText(2, 'word', 'en')).toBe('2 words');
+		expect(inputStateLine(1, 1, 0, 0, false, 'en')).toBe('1 line · 1 word');
+	});
+	it('French takes the singular at 0 and 1', () => {
+		expect(countText(0, 'line', 'fr')).toBe('0 ligne');
+		expect(countText(1, 'word', 'fr')).toBe('1 mot');
+		expect(countText(2, 'line', 'fr')).toBe('2 lignes');
+		expect(countText(8, 'word', 'fr')).toBe('8 mots');
 	});
 });

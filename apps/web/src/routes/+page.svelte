@@ -405,6 +405,42 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   stated rather than hidden: an edit that restores the exact text brings the
 	   tag back, and clearing the score takes the tag away while the words stay. */
 	const poemFromScore = $derived(scoreText !== '' && doc.inputText === scoreText);
+	/* THE DERIVED POEM. RULED BY DANN 2026-09-24 09:57 and 09:59: "Text in the
+	   system must yield a transcription if that text populates Markup." DESK
+	   DEFAULT of the same day on how: SHOWN, DERIVED, NEVER STORED. With the
+	   poem box empty and a score carrying words, Text shows the score's words
+	   transcribed with `runPipeline`'s own options, and the drawer shows them
+	   as a poem from the score.
+
+	   KEPT OUT OF `lines` AND `doc.inputText`, and that is the point. `lines`
+	   feeds `poemQueue`, and a non-empty `poemQueue` takes `slotQueue` over
+	   from `scoreTextQueue` and could move placements. So nothing is written
+	   at startup, which keeps the 2026-09-14 reason for not filling on a
+	   restore (`applyArrival`), and CONTRACT §6 holds.
+
+	   THE SINGER'S FIRST ACT MAKES IT THEIRS (`claimDerivedPoem`) on a song
+	   with no stored placement: typing in the box, or a stress, ё, or gloss
+	   change on Text, first writes the score's words into the box exactly as
+	   an upload does, then applies the act. From then on it is an ordinary
+	   poem. A song that stores placements is never claimed; see there. */
+	const derivedPoem = $derived(doc.inputText.trim() === '' ? scoreText : '');
+	const derivedLines = $derived.by((): LineData[] => {
+		if (derivedPoem === '' || loaderState.isLoading || loaderState.entryCount === 0) return [];
+		try {
+			return processText(derivedPoem, {
+				language,
+				userStressOverrides: userStressOverrides.size > 0 ? userStressOverrides : undefined,
+				yoToggles: yoToggles.size > 0 ? yoToggles : undefined,
+			});
+		} catch (e: unknown) {
+			console.error('[Ilya] Transcription error (derived poem):', e);
+			return [];
+		}
+	});
+	/** What Text shows: the singer's transcription, or else the derived poem's. */
+	const textLines = $derived(lines.length > 0 ? lines : derivedLines);
+	/** What the drawer shows in the poem box. */
+	const shownPoem = $derived(derivedPoem !== '' ? derivedPoem : doc.inputText);
 	/* N.55b: the pairing layer, wired. `refreshPairings` brings a re-divided
 	   word's TEXT forward: the nucleus the singer paired is still the same
 	   nucleus, so its text is stale rather than wrong.
@@ -2218,7 +2254,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.inputText.trim().length > 0 && !loaderState.isLoading && loaderState.entryCount > 0
 	);
 
-	const hasResults = $derived(lines.length > 0);
+	const hasResults = $derived(textLines.length > 0);
 	/**
 	 * N.73 S2. ONE Print button, in the Transcription drawer's button row,
 	 * guarded by whichever document is on the desk. Both expressions are the
@@ -2256,7 +2292,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		calibrating = false;
 	}
 	const wordCount = $derived(
-		lines.reduce((sum, l) => sum + l.words.length, 0)
+		textLines.reduce((sum, l) => sum + l.words.length, 0)
 	);
 
 	/**
@@ -2274,7 +2310,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * not report one more line than it has.
 	 */
 	const poemLineCount = $derived(
-		doc.inputText.split('\n').filter((l) => l.trim() !== '').length
+		shownPoem.split('\n').filter((l) => l.trim() !== '').length
 	);
 
 	const pieceStateText = $derived(pieceStateLine(doc.metadata.title, doc.metadata.composer));
@@ -2325,9 +2361,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Per-word syllable overrides take precedence when present.
 	const effectiveLines = $derived.by(() => {
 		if (doc.openSyllabification || syllableOverrides.size > 0) {
-			return applyOpenSyllabificationToLines(lines, syllableOverrides, doc.openSyllabification);
+			return applyOpenSyllabificationToLines(textLines, syllableOverrides, doc.openSyllabification);
 		}
-		return lines;
+		return textLines;
 	});
 	/* N.159. WHAT EACH SEATED NOTE DRAWS on Score markup and in Insights,
 	   worked out fresh from the live poem under Reconstitution, Open
@@ -2398,7 +2434,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			lines = result;
 			// Update selected word to reflect new pipeline results
 			if (selectedWord) {
-				const newWord = result[selectedWord.lineIndex]?.words?.[selectedWord.wordIndex];
+				// On a derived poem the selection lives in `derivedLines`, which
+				// has already recomputed from the marks this run was asked for.
+				const shown = result.length > 0 ? result : derivedLines;
+				const newWord = shown[selectedWord.lineIndex]?.words?.[selectedWord.wordIndex];
 				if (newWord) selectedWord = newWord;
 			}
 		} catch (e: unknown) {
@@ -2801,6 +2840,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// ── Stress assignment handler ────────────────────────────────
 	function handleStressAssign(syllableIndex: number, source: string) {
 		if (!selectedWord) return;
+		claimDerivedPoem();
+		if (!selectedWord) return;
 		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
 		const existingOverride = userStressOverrides.get(key);
 		const isClitic = selectedWord.isProclitic || selectedWord.isEnclitic || existingOverride?.promotedFromClitic;
@@ -2816,6 +2857,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// ── Stress revert handler ────────────────────────────────────
 	function handleStressRevert() {
 		if (!selectedWord) return;
+		claimDerivedPoem();
+		if (!selectedWord) return;
 		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
 		const newMap = new Map(userStressOverrides);
 		newMap.delete(key);
@@ -2824,6 +2867,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	// ── Character-level ё toggle handler ─────────────────────────
 	function handleYoCharToggle(charIndex: number, source: string | null) {
+		if (!selectedWord) return;
+		claimDerivedPoem();
 		if (!selectedWord) return;
 		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}-${charIndex}`;
 		const newMap = new Map(yoToggles);
@@ -2852,6 +2897,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	// ── Per-word gloss override handler ───────────────────────────
 	function handleGlossOverride(gloss: string | null) {
+		if (!selectedWord) return;
+		claimDerivedPoem();
 		if (!selectedWord) return;
 		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
 		const newMap = new Map(doc.glossOverrides);
@@ -2951,6 +2998,47 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * N.134 added a fourth caller that arrives whole the same way: a score's
 	 * own underlay filling an empty box, from `applyArrival`.
 	 */
+	/**
+	 * THE SINGER'S FIRST ACT ON A DERIVED POEM MAKES IT THEIRS. The score's
+	 * words go into the box exactly as an upload puts them there: `handleInput`,
+	 * whose transcription seats them through `seatFilledPoem` when, and only
+	 * when, no note carries a syllable yet (`shouldSeatFirstTranscription`,
+	 * N.145).
+	 *
+	 * A SONG THAT ALREADY STORES ANY PLACEMENT IS NOT CLAIMED. DESK DEFAULT
+	 * 2026-09-24, after two walk tests on Without Sun no. 1, whose seats were
+	 * made against a different poem: writing the poem let the transcription
+	 * move 79 of 96 seats, and keeping the map through the act only deferred
+	 * the move to the next load, where N.160's heal re-addresses them. So on
+	 * such a song no poem is written. A stress or ё change applies to the
+	 * derived transcription as session state, which is what those marks are
+	 * on any poem (`resetSessionState`); a gloss is stored as on any poem.
+	 * N.160's heal is untouched. Typing in the box is the singer writing
+	 * their own poem, and writes it as it always has.
+	 *
+	 * THE SELECTION IS CARRIED ACROSS. The transcription replaces every
+	 * `WordStackData`, and the act that follows names the selected word, so
+	 * the same position is picked up from the poem's own lines. The two
+	 * transcriptions are one text under one set of options, so the position
+	 * names the same word.
+	 */
+	function claimDerivedPoem(): void {
+		if (derivedPoem === '') return;
+		if (Object.keys(doc.pairings).length > 0) return;
+		const at = selectedWord ? { line: selectedWord.lineIndex, word: selectedWord.wordIndex } : null;
+		handleInput(derivedPoem);
+		if (at) {
+			selectedWord = lines[at.line]?.words?.[at.word] ?? null;
+			if (selectedWord) lastFocusedWord = at;
+		}
+	}
+
+	/** The poem box's own input. On a derived poem, the box is claimed first. */
+	function handlePoemInput(text: string, how: TextArrival): void {
+		claimDerivedPoem();
+		handleInput(text, how);
+	}
+
 	function handleInput(text: string, how: TextArrival = 'paste') {
 		doc.inputText = text;
 		nameIfUnnamed();
@@ -4510,12 +4598,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     stands under. -->
 			{#snippet inputGroup()}
 				<IntakePanel
-					inputText={doc.inputText}
+					inputText={shownPoem}
+					poemDerived={derivedPoem !== ''}
 					{loaderState}
 					{canTranscribe}
 					{transcribeError}
 					{language}
-					oninput={handleInput}
+					oninput={handlePoemInput}
 					onflush={flushText}
 					onclear={handleClear}
 					{wordCount}
@@ -4523,7 +4612,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{hasResults}
 					isMobile={isPhone}
 					score={ingestedScore ? { fileName: ingestedScore.fileName } : null}
-					{poemFromScore}
+					poemFromScore={poemFromScore || derivedPoem !== ''}
 					onfile={(file) => void uploaderEl?.take(file)}
 					onclearscore={handleClearScore}
 				>

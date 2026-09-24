@@ -73,10 +73,21 @@ export function inputStateLine(
 	language: Language,
 ): string {
 	return joinParts([
-		lineCount > 0 ? t('intake.lines', language).replace('%s', String(lineCount)) : null,
-		wordCount > 0 ? t('intake.words', language).replace('%s', String(wordCount)) : null,
+		lineCount > 0 ? countText(lineCount, 'line', language) : null,
+		wordCount > 0 ? countText(wordCount, 'word', language) : null,
 		hasScore && slotTotal > 0 ? placedLine(slotsPlaced, slotTotal, language) : null,
 	]);
+}
+
+/**
+ * `1 line`, `8 lines`, « 1 ligne », « 0 mot ». English takes the singular at
+ * 1 only; French takes it at 0 and 1. Walk finding 2026-09-24: the receipt
+ * read "1 lines".
+ */
+export function countText(n: number, noun: 'line' | 'word', language: Language): string {
+	const singular = language === 'fr' ? n <= 1 : n === 1;
+	const key = singular ? (noun === 'line' ? 'intake.line' : 'intake.word') : noun === 'line' ? 'intake.lines' : 'intake.words';
+	return t(key, language).replace('%s', String(n));
 }
 
 /**

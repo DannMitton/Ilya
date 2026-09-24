@@ -34,6 +34,7 @@ import {
 	strikeLiederClause,
 	tessituragram,
 	verdictOf,
+	vowelChartRows,
 	type Finding,
 	type RangeRow,
 	type TessituraRow,
@@ -414,5 +415,37 @@ describe('N.127 the tab name', () => {
 	it('carries the French Dann ruled on 2026-09-12', () => {
 		expect(t('tab.insights', 'en')).toBe('Insights');
 		expect(t('tab.insights', 'fr')).toBe('Aperçus');
+	});
+});
+
+describe('the vowel chart prints all ten vowels (ruled by Dann 2026-09-24 09:53)', () => {
+	const sung = [
+		{ vowel: 'a', share: 0.5, seconds: { kind: 'point' as const, seconds: 10 }, flagged: false },
+		{ vowel: 'i', share: 0.3, seconds: { kind: 'point' as const, seconds: 6 }, flagged: true },
+		{ vowel: 'u', share: 0.2, seconds: { kind: 'point' as const, seconds: 4 }, flagged: false },
+	];
+
+	it('a piece with no [ʌ] still yields ten rows, [ʌ] at 0, in VOWELS order', () => {
+		const rows = vowelChartRows(sung);
+		expect(rows.map((r) => r.vowel)).toEqual(['i', 'e', 'ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o', 'u']);
+		const schwa = rows.find((r) => r.vowel === 'ʌ')!;
+		expect(schwa).toMatchObject({ share: 0, width: 0, absent: true, flagged: false });
+		expect(schwa.seconds).toEqual({ kind: 'point', seconds: 0 });
+		expect(rows.find((r) => r.vowel === 'a')).toMatchObject({ width: 1, absent: false });
+		expect(rows.find((r) => r.vowel === 'u')!.width).toBeCloseTo(0.4);
+	});
+
+	it('a zero row carries no seconds where the chart prints shares, and nothing sung gives no chart', () => {
+		const rows = vowelChartRows(sung.map((v) => ({ ...v, seconds: null })));
+		expect(rows).toHaveLength(10);
+		expect(rows.find((r) => r.vowel === 'o')).toMatchObject({ seconds: null, absent: true });
+		expect(vowelChartRows(null)).toEqual([]);
+		expect(vowelChartRows([])).toEqual([]);
+	});
+
+	it('a vowel outside VOWELS still follows the ten', () => {
+		const rows = vowelChartRows([...sung, { vowel: 'æ', share: 0.1, seconds: null, flagged: false }]);
+		expect(rows).toHaveLength(11);
+		expect(rows[10]).toMatchObject({ vowel: 'æ', absent: false });
 	});
 });
