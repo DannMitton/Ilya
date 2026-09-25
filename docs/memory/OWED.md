@@ -386,6 +386,8 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
+- **2026-09-24: where N.168, N.169 and N.170 sit against the five weeks to 2026-10-30.** The buffer is spent; `SCHEDULE.md` places none of the three. Raised by the desk at 19:10.
+
 ### ADDED AT THE CLOSE OF 2026-09-22. Five, and the first two block N.130
 
 1. **`finding.passaggio`, `i18n.ts:1501`. PARKED AT DANN'S OWN WORD, mid-walk.** The whole
@@ -581,6 +583,7 @@ French Dann has not seen.
   Chrome on iOS offers no Add to Home Screen and `InstallPrompt.svelte:48`
   already excludes `CriOS` and `FxiOS`. Established by reading, carried over
   from N.72 where it was named and never ruled.
+  **CLOSED AS KNOWN**, per `../sessions/LOG.md` ("N.72 residue: CLOSED AS KNOWN, no build"); confirmed by the CHECK-row audit of 2026-09-24. No build.
 - ~~**N.63.** Where the honest residue goes~~ **RULED 2026-08-21: SAY NOTHING.**
   Still owed: deleting the gate itself, if it still ships. NOT ESTABLISHED
   whether it does; the last evidence is Fable's finding F5 of 2026-08-18.

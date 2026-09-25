@@ -99,6 +99,8 @@ next session the same hour it cost the last one.
 | the Vercel toolbar covers the drawer on a phone | `THE VERCEL TOOLBAR` |
 | a Finale-made score shows a wrong or doubled meter | `FINALE PICKUPS AND musx2mxl METERS` |
 | a per-format walk without touching Dann's library | `WALK FORMATS ON A SHA URL` |
+| the bridge says "not connected to the bridge" while Dann says it is open | `THE BRIDGE CAN GO STALE` |
+| reading Dann's iPhone photos (HEIC) in the workspace | `HEIC IN THE WORKSPACE` |
 
 ### Browsers, phones, and what each one refuses
 
@@ -4211,3 +4213,12 @@ The bridge has ImageMagick: `convert IMG_n.HEIC -resize 1500x1500 -quality 82 ou
 ## WALK FORMATS ON A SHA URL. 2026-09-24
 
 A sha-pinned deployment is its own origin with an EMPTY library (`WALK ON THE ALIAS, NEVER ON A SHA URL`). **That is the point for a per-format walk:** uploads there create songs Dann never sees. Find the URL with the Vercel tool `list_deployments` (branch `Shane`, slug `dannmittons-projects`). **The Chrome extension's `file_upload` refuses device paths;** stage the file with `device_stage_files` first and upload its `/mnt/user-data/uploads/...` path. The extension's tab reports `document.hidden` true, so the dictionary and the page reader stall there (the hidden-tab entry): arrival and Markup can be checked, Text and a PDF read cannot.
+
+
+## THE BRIDGE CAN GO STALE. 2026-09-24
+
+Every `mcp__remote-devices__*` call, including `get_device_info`, returned "The device this session is bound to is not connected to the bridge." for about five minutes, while Dann saw the bridge open and active. **A reboot of his Mac fixed it**; the first call after returned normally. Retry once, say the error verbatim, never call his report false, and offer the reboot. He read the desk's repeated "can't reach" as false claims, so quote the instrument's own words.
+
+## HEIC IN THE WORKSPACE. 2026-09-24
+
+Dann's photos arrive as iPhone HEIC in `~/Downloads`. Stage them (`device_stage_files`, 50 per call), then convert in the workspace: `pip install --break-system-packages pillow-heif`, then `pillow_heif.register_heif_opener()`, `ImageOps.exif_transpose`, greyscale, thumbnail to about 1200 x 1600, save JPEG in the scratchpad. The Chrome extension's `file_upload` refuses workspace paths and device paths; it accepts `/mnt/user-data/uploads/...` only, so a converted file must go to his Downloads with `device_commit_files` and be staged back.

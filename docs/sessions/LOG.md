@@ -7430,3 +7430,105 @@ Its rulings live in `docs/memory/PRODUCT.md` (the five Insights principles) and 
 > C♯3 to D4, matching §6.1.6. MNX keeps the old rule; its convention is NOT ESTABLISHED.
 > `staff-renderer.ts:418` changed with it.
 >
+
+
+## Block: close of 2026-09-24. STATE.md's THE ONE THING blocks of 2026-09-23 and 2026-09-24, moved verbatim
+
+> ### READ THIS FIRST. Written 2026-09-24 11:07. Dann on a break mid-session
+>
+> **Focus switched by Dann 09:48 from N.168 to the schedule's outstanding items.** The `ccb790c` walk was done in both languages (Insights on Cupid and Sunless 2; Markup on Sunless 2; octave checked on bars 1, 9, and 12 against his dissertation). Its findings shipped as **`5e22d03`**, all five gates at the new baselines (web-test 1401; score-parser 602 + 5 skipped, 607; `ilya-ship.sh` edited with Dann's permission, backup `ilya-ship.sh.bak-1396-2026-09-24`). **`5e22d03` is WRITTEN, not walked.** Brief and memo: `../sessions/brief-code-vowel-chart-all-ten_r1_2026-09-24.md`, `memo-code-vowel-chart-all-ten_r1_2026-09-24.md`.
+>
+> **Next, in order:** (1) walk `5e22d03` on the alias: Cupid on Texte shows the score's words; Insights shows ten vowels with 0 s rows; the receipt reads « 1 ligne »; Sunless 2 Markup shows 4/4 once. (2) Paste `../sessions/brief-code-meter-provenance_r1_2026-09-24.md` into Code (Code found the Finale files store an actual meter with a different displayed one, and denigma keeps only the actual; Sunless 1 MusicXML still prints 12/8 where the edition prints 6/4). (3) Per-format walk: `.musx` and MusicXML done; `.mxl`, `.mnx`, `.mscz`, PDF, photo remain. (4) CHECK rows: Sonnet memo `../sessions/memo-sonnet-check-rows_r1_2026-09-24.md` says six CLOSED, two need a print by Dann (INBOX-5 colour, UNSETTLED-8 VERIFY box); **its citations are not yet spot-checked by the desk.** (5) N.142 step 2.
+>
+> **Added 15:25.** `5e22d03` walked by the desk in Dann's Chrome (read only): four checks passed; the fifth found Aperçus page one overprinting its foot on first render. Meter provenance answered (`../sessions/memo-code-meter-provenance_r1_2026-09-24.md`; `ENVIRONMENT.md`, `FINALE PICKUPS AND musx2mxl METERS`). Per-format walk on a sha URL: `.mxl` and `.mscz` pass; `.mnx` was refused by a 2,048-byte sniff; PDF stalled in a hidden tab (NOT ESTABLISHED). Code fixed the `.mnx` sniff and the page-one fit and counted **N.142 step 2: zero, nothing to build** (`../sessions/memo-code-afternoon-findings_r1_2026-09-24.md`). web-test baseline 1401 to 1402 with Dann's permission (backup `ilya-ship.sh.bak-1401-2026-09-24`). CHECK rows: the Sonnet memo's citations spot-checked by the desk and hold; six CLOSED, two await Dann's prints (INBOX-5, UNSETTLED-8). N.168 added to `SCHEDULE.md`. **Left:** walk the afternoon ship; the two prints; the PDF read and a phone photo; N.130's French walk (B2, A).
+>
+> **Added 15:35.** `d1cc2d3` walked by the desk: Cupid Aperçus in French fits page one on first render. CHECK rows: **UNSETTLED-8 half closed** (the VERIFY box prints, on Save as PDF and on Dann's paper; the override badge untested, no page carries one); **INBOX-5 CLOSED** (Dann's printer prints the sage rule green; the Texte page asks for near-black IPA and glosses, measured from Chrome's PDF). PDF read passes on the sha URL in a front tab (6 systems, melody drawn). Only a phone photo remains of the per-format walk.
+>
+> **Added 16:05. RULINGS NOT IN THE TREE, per CONTRACT tether 17 as amended today.** The 2026-09-22 Insights rulings are now seated by Code (`../sessions/memo-code-n130-strings_r1_2026-09-24.md`, unshipped at this line). A Fable audit (`../sessions/memo-audit-rulings-vs-tree_r1_2026-09-24.md`) found **ten more**: nine of Dann's N.131 rulings of 2026-09-16 (`../sessions/spec-n131-french_r1_2026-09-16.md:50-56`: « Œuvre », « Saisie », « Exporter et importer », « %s vers », « Retirer », "Drop your file here." / « Déposez votre fichier ici. », two reading strings, the mobile empty line) were overwritten by the unruled desk draft `n131-french_r1_2026-09-19.md`, built in `9dfdab8`; one Learn heading of 2026-08-19. **Dann has walked the as-built names since; whether his 09-16 rulings or the as-built stand is his, one row at a time.** Note the conflict with today's « %s ligne », ruled without the 09-16 « %s vers » in view.
+>
+> **Added 19:00. THE RULINGS AUDIT IS CLOSED.** Dann ruled all ten rows (the last five on the desk's recommendation, his words 18:53: *"I trust your recommendations for the remaining items. Proceed."*); decisions and reasons in `../sessions/memo-audit-rulings-vs-tree_r1_2026-09-24.md`. Kept as built: « Pièce », « Entrée », « Exportation et importation », « ligne(s) », « Touchez ». Restored and built by Code: « Retirer », the drop hint "Drop your file here." / « Déposez votre fichier ici. », « Lecture des mots du PDF… », « Lecture des mots de l’image… » (`../sessions/memo-code-n131-restored-rulings_r1_2026-09-24.md`). Three code comments still describe the old hint (`i18n.ts:634`, `IntakePanel.svelte:400`, `:415`): cosmetic, not scheduled. **19:06: `2f955e6` and `1987157` walked by the desk in Dann's Chrome, French, on his library (read only):** the drop hint and « Retirer » in the drawer; on Cupid's Aperçus the heading « Ce qui est signalé, selon le temps de chant que vous y consacrez », « Vos repères », no « primaire », and the footnote bracket ending « ».] ». **Next session: N.170 step 1, or N.168 at P1a, Dann's choice.**
+>
+> **Added 19:25. THE PHONE PHOTO FAILS.** `~/Downloads/IMG_5635.HEIC` (page 63 of Dann's printed Sunless 1): Chrome on his Mac cannot decode HEIC and the tree has no decoder, so Ilya refuses it honestly. The same photo as JPEG (`~/Downloads/IMG_5635-as-jpeg.jpg`, made by the desk) gives "No text recognized in image." and draws nothing; it appears routed as a poem. Code is diagnosing, no build: `../sessions/brief-code-phone-photo_r1_2026-09-24.md`. **RULED BY DANN 19:43, on the desk's recommendation:** *"honest messages now, and photo reading and HEIC decoding after the release."* Owed now: an honest message where the Russian guard refuses recognised text (`ScoreUploader.svelte:481`), and a HEIC message telling a Mac user how to get a JPEG, both languages, French drafted by the desk for his ruling. Curved-photo reading and a HEIC decoder go to LATER (`../sessions/memo-code-phone-photo_r1_2026-09-24.md`). **20:45: both messages built by Code, seen in both languages** (`../sessions/memo-code-photo-messages_r1_2026-09-24.md`); web-test baseline 1402 to 1404 with Dann's permission (backup `ilya-ship.sh.bak-1402-2026-09-24`). Held, not scheduled: a scanned PDF with no text now also says "this picture". The Reid is extracted: 124 rows, `Insights Research/_extraction/claims_reid-1975_2026-09-24.csv`.
+>
+> **Numbered today:** N.169 (Markup against the dissertation's Appendix B; `OPEN.md`). **Still to do at the close:** add N.168 to `SCHEDULE.md`; tick week-1 and week-2 lines as they are walked.
+
+> ### READ THIS FIRST. Written 2026-09-23, about 23:30. SUPERSEDES THE 17:35 BLOCK (moved to `../sessions/LOG.md`)
+>
+> **THE ONE THING: N.168, Insights intake, step 4 (targeted extraction) is well under way; step 5
+> (Fable composes connections) is next.** Plan: `~/Documents/Voice Pedagogy Library/Insights
+> Research/plan-intake_r1_2026-09-23.md`. Request folder access to `~/Documents` at the open (the
+> library and the Finale scores live there).
+>
+> **Done tonight.** Step 1: `condition-map_r1.md`. Step 2: built and shipped `10e090c` (condition
+> module `packages/score-parser/src/conditions.ts`, frequency run over all sixteen dissertation songs
+> from `~/Documents/Finale Files/`, and the `.musx` treble-8vb octave fix, WRITTEN not walked); then
+> Mitton's passaggi A-flat3 to D-flat4 added to the run (uncommitted; 44.7% of sung time inside).
+> Step 3: `coverage_r1.md`, then `coverage_r2_2026-09-23.md` (1,235 rows; its Journal of Voice search
+> list is tomorrow's). Step 4: about 689 new fact rows in `_extraction/` from Miller 2008, St-Pierre
+> 2014, 32 JOS articles (downloaded and filed in the library), 12 Mac articles, Henrich 2005, Titze
+> et al. 2007, Roubeau 2004 (French), both Millers, four dissertations, Chen 2017 and McKinney 1994
+> (photographed pages in `_scans/`). Memos in `_synthesis/`, dated 2026-09-23. Fable read the six
+> register papers: `_synthesis/memo-fable-registers_r1_2026-09-23.md`.
+>
+> **Rulings recorded tonight in `PRODUCT.md`:** "Universal relations, individual values" (20:49) and
+> "No faults, no diagnosis: coordination is assessed" (22:39). Standing instructions (bibliography
+> leads; manual downloads when a site blocks automation; the vocabulary rule) are in
+> `.../Insights Research/needs_r1_2026-09-23.md`.
+>
+> **Added 2026-09-24 00:45. Step 5 begun, step 6 begun.** Fable composed 11 candidate connections
+> (5 dynamics, blocked on the engine; 6 passaggio and turn): `.../Insights Research/_synthesis/
+> candidate-cases_pass02_r1_2026-09-23.csv` and `memo-fable-step5_r1_2026-09-23.md`. Dann vetted P1:
+> reworked into P1a and P1b (English only; French waits for an agreed English). **Not yet agreed:** the
+> P1a English (Fable's full version against the desk's trimmed one). Three rulings recorded in
+> `PRODUCT.md` (every voice, Dann the bass exemplar; singer-specific claims are templates with three
+> checks; his 00:42 sentence), and the method in the plan's "Revision, 2026-09-24 00:45". **Waiting to
+> run in Code:** `docs/sessions/brief-code-n168-six-voices_r1_2026-09-24.md` (six literature-built test
+> voices; per-note CSVs; P1a counts). Vetting resumes with P1a once those counts exist.
+>
+> **Next, in order:** (1) Journal of Voice, once Elsevier access is live: the search list in
+> `coverage_r2`, led by the marked-dynamic-to-sound-level link. (2) Step 5, Fable composing
+> connections for the best-covered regions (dynamics chain, passaggio and turning). (3) The rest of
+> the JOS screen and the Recent Research in Singing digests. **Still parked:** the ccb790c walk
+> (below) and N.130's French walk.
+>
+> ### READ THIS FIRST. Written at the close of 2026-09-23, about 03:55
+>
+> **THE ONE THING: Dann walks `ccb790c` on the alias, in both languages.** That walk is N.123
+> part 1's done-when (`../sessions/brief-code-tessituragram_r2_2026-09-23.md`, §Done when).
+> Walk Insights on a song he has measured, then **Score markup on Sunless 2, 3, 5, or 6**:
+> the octave fix below changed how those songs print there, and nobody but Code has seen it.
+> DESK DEFAULT, and Dann can name another. **The session's first act is to hand him the
+> `open` command for the alias** (`ENVIRONMENT.md`, `WALK ON THE ALIAS, NEVER ON A SHA URL`).
+>
+> **N.130'S FRENCH WALK IS STILL PARKED** at the end of B1 (B2, 30 rows, and A, 19 rows,
+> unwalked; instrument `../sessions/insights-french-as-built_r3_2026-09-22.md`).
+>
+> #### THE TREE AT THIS CLOSE
+>
+> **HEAD `ccb790c`, pushed 2026-09-23 03:47:27, all five gates at baseline** (216, 235,
+> 0 errors and 12 warnings, 1396, 579 + 5 skipped = 584). The alias served it at 03:47:44.
+> The floor stays `f6d2184`: **no ship tonight was walked in both languages.** Dann walked
+> `0ccda31` in English only (02:40, a screenshot), which produced the r2 redesign.
+> The four ships tonight: `1dfee32` phonation time; `0ccda31` the tessituragram on page one,
+> page one fitting by measurement; `ccb790c` the redesign and the octave fix. **This close's
+> memory edits are uncommitted; Dann ships them with the next build or commits them alone.**
+>
+> #### WHAT WAS BUILT TONIGHT, N.123 PART 1 AND N.127 INCREMENT 2
+>
+> The unit on page one of Insights: the heading, the headline sentence ("You phonate for about
+> ... of this ... piece"), the tessituragram, and the vowel chart. **Its design rulings are in
+> `OPEN.md` N.123, three dated blocks from 2026-09-23.** Every string is ratified in both
+> languages. The briefs and memos, in order, are in `../sessions/`: `brief-code-phonation-time_r1`,
+> `brief-code-tessituragram_r1`, `-fit_r1`, `_r2`, `-fix_r1`, each with its `memo-code-` twin.
+> The drawings Dann chose from: `tessituragram-sparse_r1_2026-09-23.html` is the one built.
+>
+> **The octave fix** (`ccb790c`, MusicXML) and its `.musx` twin (`10e090c`) are closed: account moved to `../sessions/LOG.md` 2026-09-24.
+>
+> #### WHAT THE DESK GOT WRONG, 03:55 CLOSE: moved to `../sessions/LOG.md` at the 17:35 close (no rulings in it).
+>
+> #### STILL NOT MEASURED, carried forward unchanged
+>
+> **Paint on a phone.** And **whether « PARTITION » fits 62 px in Consolas or Android's
+> monospace.**
+
+
