@@ -27,6 +27,8 @@ Every song was read from its `.musx` through denigma, in memory, and is in perfo
 | Kabalevsky T09 | yes | 39 | 0 | encoded, 84 bpm, beat quarter | F4 | 0 | B2 to E♭4 | 149 | 147 | 2 | 11 | 9, 1, 1, 0 | 76.1 | none |
 | Kabalevsky T10 | yes | 83 | 0 | encoded, 56 bpm, beat half dotted | F4 | 0 | C3 to E4 | 156 | 155 | 1 | 9 | 7, 2, 1, 0 | 70.0 | none |
 
+`#` marks (N.171), folded at arrival as the app does: Sunless 01 0 folded, 2 already joined; Sunless 02 0 folded, 0 already joined; Sunless 03 0 folded, 8 already joined; Sunless 04 0 folded, 2 already joined; Sunless 05 0 folded, 4 already joined; Sunless 06 0 folded, 1 already joined; Kabalevsky T01 0 folded, 14 already joined; Kabalevsky T02 0 folded, 11 already joined; Kabalevsky T03 0 folded, 10 already joined; Kabalevsky T04 0 folded, 8 already joined; Kabalevsky T05 0 folded, 13 already joined; Kabalevsky T06 0 folded, 13 already joined; Kabalevsky T07 0 folded, 12 already joined; Kabalevsky T08 0 folded, 11 already joined; Kabalevsky T09 0 folded, 7 already joined; Kabalevsky T10 0 folded, 8 already joined. A joined mark (`jɑ #`) is one the conversion already attached to its syllable; the fold leaves it alone. Every note, duration, and non-vowel figure was checked identical before and after the fold.
+
 Phrase boundaries across the sixteen songs: rest 184, silence 20, breath-mark 16, caesura 0, end 3. A silence is a stretch of the vocal line with no event at all, usually an empty bar; a mark on a note before a rest counts under both.
 
 ## Voices

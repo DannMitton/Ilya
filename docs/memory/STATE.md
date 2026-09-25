@@ -100,6 +100,10 @@ dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
 
+### Numbered 2026-09-24, evening
+
+- `[ ]` **N.171. Switch on the `#` repair.** **NUMBERED BY DANN 2026-09-24 21:40**, *"Switch it on."* Found by the code audit the same night. Spec in `OPEN.md`; brief `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`. Placed in week 3 (DESK DEFAULT).
+
 ### Numbered 2026-09-23
 
 - `[ ]` **N.168. Insights intake: filling the three stores.** **NUMBERED BY DANN 2026-09-23 17:29**, *"we should engage in it ASAP."* The plan is `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md` (seven steps: condition map, frequency run, coverage audit, targeted extraction, composing, Dann's vetting, encoding and tests). It rests on the five Insights principles ratified the same afternoon (`PRODUCT.md`, "What Insights is for" to "How Insights stays trustworthy"). Spec in `OPEN.md`. **2026-09-23 late: steps 1 to 3 done, step 2 shipped `10e090c`, step 4 under way (the READ THIS FIRST block).**
@@ -240,7 +244,7 @@ does not repeat them.
   what that permission costs.
 
 - `[ ]` **N.140. The loupe guarantees a stave space, and scrolls rather than
-  shrinking below it.** Dann's own design, ruled 2026-09-14, over the desk's
+  shrinking below it.** **MOSTLY BUILT, found by the code audit 2026-09-24 and recorded on Dann's instruction** (*"That's great news, please update our records"*): only the question of the sideways scroll against a syllable tap remains (`OPEN.md` §N.140). Dann's own design, ruled 2026-09-14, over the desk's
   recommendation to do nothing; both cases are recorded in `OPEN.md`. **A
   phone-portrait item:** the desktop branch already derives its magnification to
   hit a 12 px target (`Loupe.svelte:152`, `:686-691`), and Dann reads the loupe

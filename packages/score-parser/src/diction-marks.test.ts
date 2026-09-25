@@ -165,6 +165,21 @@ describe('folding # out of the syllable slot', () => {
 		expect(ipaOf(score, 'c')).toBe('dɑ');
 	});
 
+	it('N.171: on a single-verse score, the vacated tail loses its syllable instead of repeating one', () => {
+		// No `versesInfo`: the primary text IS the only verse. Before N.171 the
+		// tail kept its old text, so the verse's last syllable printed twice.
+		const one = (id: string, text?: string, type: SyllableInfo['type'] = 'whole'): VocalLineEvent => {
+			const e = ev(id);
+			return text === undefined ? e : ({ ...e, syllable: { id: `s-${id}`, text, type, verseNumber: 1 } } as VocalLineEvent);
+		};
+		const s = scoreOf([one('n69', 'я'), one('n70', '#'), one('n71', 'на'), one('n72', 'прав', 'start'), one('n73', 'ду', 'end')]);
+		const fold = foldDictionMarks(s);
+		expect(fold.score.vocalLine.map((e) => e.syllable?.text)).toEqual(['я#', 'на', 'прав', 'ду', undefined]);
+		expect(fold.score.vocalLine[4].syllable).toBeUndefined();
+		expect([...vowelResolverAbstentions(fold, 1)]).toEqual(['n73']);
+		expect(fold.score.dictionMarks?.vacatedTailEventIds).toEqual([{ eventId: 'n73', verseNumber: 1 }]);
+	});
+
 	it('NEGATIVE CONTROL: a score with no mark is returned BY REFERENCE, untouched', () => {
 		// The repair must be a provable no-op where there is nothing to repair.
 		// Sunless 2 is this case in the real corpus and it is the control that

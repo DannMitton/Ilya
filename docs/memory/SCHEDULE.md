@@ -114,12 +114,19 @@ design rows.
 
 ## Week 3. Monday 2026-09-28 to Sunday 2026-10-04. Insights and the design rows
 
+- [ ] **The tree audit. STARTED 2026-09-24 21:25 on Dann's instruction ("the audit now, please"); the desk had placed it after the Sunday reset, which he overruled.** Asked for by Dann 2026-09-24 21:11: catalogue what the code really contains, tie each module to an open item, and propose a new number for any chunk the plan does not describe. Two Sonnet agents: one catalogues the code (223 source files, about 91,000 lines, counted 2026-09-24), one checks every ruled string against the tree. **Placed by the desk, DESK DEFAULT.**
+- [ ] **N.171**, switch on the `#` repair (numbered by Dann 2026-09-24 21:40). Code builds from `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`; Dann walks a Sunless song with a `#`. **Placed by the desk, DESK DEFAULT.**
+- [ ] **N.169**, the note-by-note table against Appendix B (one evening). The desk builds it from `tools/n168-frequency-run/out/notes-mitton.csv` and a screenshot of Dann's Voice band; Dann rules the vowels. **Placed 2026-09-24, DESK DEFAULT.**
+- [ ] **N.168, P1a**: Fable redrafts the English from `p1a-counts.csv`, the desk checks every claim against its extraction row, Dann vets one draft. **Placed 2026-09-24, DESK DEFAULT.**
+
 - [x] **N.127 increment 2. Built `0ccda31`/`ccb790c`, WALKED by Dann in both languages 2026-09-24.**: the compass stave, the piece's range against the singer's.
 - [x] **N.123, part 1. WALKED by Dann in both languages 2026-09-24**; its findings shipped `5e22d03` and `d1cc2d3`, walked.: the tessituragram with the passaggio zone shaded.
 - [ ] **N.94, part 1**: the control appears, and the score draws in the chosen key.
 - [x] **N.130 and N.131. DONE 2026-09-24, ahead of the week:** Insights' French walked and every ruling seated (`2f955e6`); the audit's ten N.131 rows ruled and seated (`1987157`); both walked by the desk on Dann's library.: the desk drafts Insights' French; Dann rules it in one sitting; one build carries it with N.131's 21 ratified rows.
 
 ## Week 4. Monday 2026-10-05 to Sunday 2026-10-11. Finish the design rows
+
+- [ ] **N.168, first slice in Code before the checkpoint**: the vetted passaggio and turning connections only. The dynamics connections wait on the engine and go to LATER. **Placed 2026-09-24, DESK DEFAULT; its size is NOT ESTABLISHED.** **N.94 stays in this week: Dann ruled 2026-09-24 21:08 that the transposition control does not wait for the release.** If the week runs over, this file's own rule applies.
 
 - [ ] **N.123, part 2**: the half-mass band, and the centre of gravity and cycle dose if their sources were found. A figure without a source is left out, not guessed.
 - [ ] **N.94, part 2**, and its walk.
@@ -128,7 +135,9 @@ design rows.
 
 ## Week 5. Monday 2026-10-12 to Sunday 2026-10-18. Clean house. (Monday is Thanksgiving.)
 
-- [ ] **N.86**: the dead-code audit (a Sonnet agent reads), and Dann rules what the Shane switch (`apps/web/src/lib/wall.ts:6-7`) does at release.
+- [ ] **N.170 steps 1 and 2**: freeze the review build and draft the review packet. **Ruled by Dann 2026-09-24 21:03:** *"I don't want to freeze this stage of the build. If we still have five weeks, I want to wait three more until Ilya has really taken shape."* The desk's proposal of weeks 3 and 4 in `OPEN.md` §N.170 is superseded.
+- [ ] **N.168**: French for the first slice; Dann rules it.
+- [ ] **N.86**: the dead-code audit (a Sonnet agent reads) **Candidates found by the code audit of 2026-09-24**, section 3 of each memo: `../sessions/memo-audit-code-catalogue-a_r1_2026-09-24.md` (the unreachable reconciliation shell, `TextualWitnesses.svelte`; `notation-overlay.ts`) and `-b_` (`renderer-output.ts`, `optimalRegion`, the `_rhythm_spike` folder, the `fit-font-lab` route)., and Dann rules what the Shane switch (`apps/web/src/lib/wall.ts:6-7`) does at release.
 - [x] **How the release goes out. CLOSED 2026-09-20, ahead of the week, by a live dry
   run.** `main` is the production branch; a fast-forward from `Shane` and
   `git push origin main` puts it live in about 90 seconds with no manual promote step.
@@ -164,6 +173,7 @@ design rows.
   that does not exist, in two languages, with screenshots to match. **The gate:
   N.154 closed, N.130 and N.131 closed, and the French walked on screen** before
   a word of the Guide is rewritten.
+- [ ] **N.170 steps 3 and 4**: singers watched, and the ADPList session. Steps 5 to 7 fall after 2026-10-30. **Placed 2026-09-24, DESK DEFAULT.**
 - [ ] **The format walk again**, and a print walk, to catch what the month broke.
 
 ## Week 7. Monday 2026-10-26 to Friday 2026-10-30. Release

@@ -366,6 +366,12 @@ Every brief demands a section listing what the agent could not establish, and
 **Dann's usage is NOT ESTABLISHED.** Ask for a screenshot before planning any
 farm-out.
 
+**USAGE DOES NOT DETERMINE THE WORK. Ruled by Dann 2026-09-24 21:24**, after the desk
+deferred an audit to wait for a weekly reset. His words: *"If we run out of my weekly
+limit I will deal with it then. I do not want usage to determine the work."* So: state the
+cost, choose the cheapest model that can do the job, and start. Never delay, shrink, or
+reorder work to protect a limit. Running out is his to handle.
+
 **THE DESK SPAWNS THE SUBAGENT ITSELF. Ruled by Dann 2026-09-16.** His words,
 when the desk handed him a brief to paste into a Sonnet session: *"No, you spawn
 the Sonnet subagent."* A farm-out the desk can run with its own Agent tool

@@ -39,16 +39,18 @@
  *   `byVowel` absent     no resolver was supplied, so no vowel was ever asked
  *                        for. Absent is not empty.
  *
- * ## Two limitations that travel with the result
+ * ## What travels with the result
  *
- * **The diction-mark fold is NOT applied here** (Dann's scope ruling,
- * 2026-08-02: wire additively first, fold next). `#` still occupies a
- * syllable slot, which puts every later syllable of that verse one note
- * late. That misalignment reaches `byVowel` and `byPitchByVowel` and NOTHING
- * else: `byPitch`, `total`, `tessitura`, `seconds`, and `foldCycles` never
- * consult a syllable, so they are unaffected. Read the per-vowel breakdown as
- * provisional until `foldDictionMarks` is in the resolver chain; the rest
- * stands.
+ * **The diction-mark fold is applied upstream of this seam, not here**
+ * (N.171, Dann 2026-09-24: "Switch it on"). `ingest.ts` folds every `#` out of
+ * the syllable slot it took, at arrival, and `buildUnderlayResolvers`
+ * abstains on the vacated tail via `score.dictionMarks`. So a score reaching
+ * this seam from an upload already has its underlay repaired, and
+ * `byVowel` and `byPitchByVowel` read the repaired verse. `byPitch`, `total`,
+ * `tessitura`, `seconds`, and `foldCycles` never consult a syllable and were
+ * never affected. A caller that parses a score itself, outside `ingest.ts`,
+ * must call `foldDictionMarks` before building its resolver, or the per-vowel
+ * figures are one note late after every mark in the sung verse.
  *
  * **`trust.untrustedQuavers` is included in the totals**, not excluded.
  * `aggregatePhonation` reports it rather than dropping it, because quietly

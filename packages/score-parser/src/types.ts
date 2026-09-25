@@ -98,6 +98,30 @@ export interface ParsedScore {
    * change when accompaniment support lands.
    */
   accompaniment?: AccompanimentLine[];
+
+  /**
+   * N.171. What `foldDictionMarks` (`diction-marks.ts`) did to this score's
+   * underlay, carried on the score so every consumer downstream of the fold
+   * can still see it. Absent when no `#` was folded, which is every score
+   * whose sung verses carry no mark.
+   *
+   * It travels with the score rather than beside it because the vowel
+   * resolver needs `vacatedTailEventIds` (see `vowelResolverAbstentions`),
+   * and the resolver is handed derived scores (`shiftVocalOctave`,
+   * `transposeScore`), which spread the score and so keep this field.
+   */
+  dictionMarks?: DictionMarksRecord;
+}
+
+/** N.171. The part of a `DictionMarkFold` that must survive on the score. */
+export interface DictionMarksRecord {
+  /** Every folded mark: the event it follows, and the slot it vacated. */
+  breaks: Array<{ afterEventId?: string; vacatedEventId: string; verseNumber: number }>;
+  /**
+   * Events left with no syllable in a repaired verse. After the fold they look
+   * exactly like melisma continuations, and must abstain instead.
+   */
+  vacatedTailEventIds: Array<{ eventId: string; verseNumber: number }>;
 }
 
 // ── Work metadata (§A.6/§A.16; shape approved by Dann, 2026-07-13) ──

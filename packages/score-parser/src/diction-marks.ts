@@ -254,14 +254,27 @@ export function foldDictionMarks(
 		};
 
 		// A verse that lost its only entry leaves the event with no syllable at all.
-		if (versesInfo && versesInfo.length === 0) {
+		// N.171: on a single-verse event (no `versesInfo`) the primary text IS the
+		// verse, so a vacated tail must drop it too. Before this, the tail kept its
+		// old syllable and the verse's last syllable was printed twice.
+		const primaryVacated = perEvent.has(syl.verseNumber) && !perEvent.get(syl.verseNumber);
+		if ((versesInfo && versesInfo.length === 0) || (!versesInfo?.length && primaryVacated)) {
 			const { syllable: _dropped, ...rest } = ev;
 			return rest as VocalLineEvent;
 		}
 		return { ...ev, syllable: nextSyllable };
 	});
 
-	return { score: { ...parsed, vocalLine }, breaks, affectedVerses, shiftedEvents, vacatedTailEvents, vacatedTailEventIds };
+	// N.171: the record rides on the score, so a resolver handed this score (or
+	// one derived from it) can still tell a vacated tail from a melisma.
+	return {
+		score: { ...parsed, vocalLine, dictionMarks: { breaks, vacatedTailEventIds } },
+		breaks,
+		affectedVerses,
+		shiftedEvents,
+		vacatedTailEvents,
+		vacatedTailEventIds,
+	};
 }
 
 /**
@@ -273,8 +286,14 @@ export function foldDictionMarks(
  *     const skip = vowelResolverAbstentions(fold, 2);
  *     const resolve = (ev) => (skip.has(ev.id) ? undefined : myResolver(ev));
  */
-export function vowelResolverAbstentions(fold: DictionMarkFold, verseNumber: number): Set<string> {
+export function vowelResolverAbstentions(
+	fold: Pick<DictionMarkFold, 'vacatedTailEventIds'> | undefined,
+	verseNumber: number,
+): Set<string> {
 	const out = new Set<string>();
+	// N.171: accepts the fold itself or the record it leaves on the score
+	// (`score.dictionMarks`), which is absent wherever nothing was folded.
+	if (!fold) return out;
 	for (const v of fold.vacatedTailEventIds) if (v.verseNumber === verseNumber) out.add(v.eventId);
 	return out;
 }

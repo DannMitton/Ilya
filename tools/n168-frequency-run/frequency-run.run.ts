@@ -34,6 +34,7 @@ import {
 	MnxScoreParser,
 	aggregatePhonation,
 	analyzeScore,
+	foldDictionMarks,
 	isLongSustain,
 	noteConditions,
 	pitchToMidi,
@@ -56,6 +57,7 @@ import { setBlurbData } from '@ilya/blurb';
 import { installHomographEntries } from '$lib/loader';
 import { processText } from '$lib/pipeline';
 import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
+import { scoreMetrics } from '$lib/shane/score-metrics';
 import { musxToMnxJson } from '../e16-harness/src/denigma-convert';
 import { checkPlausibility, FLOOR_MARGIN_SEMITONES, CEILING_MARGIN_SEMITONES } from '$lib/shane/engine/plausibility';
 import { expectedF1 } from '$lib/shane/engine/derivations';
@@ -378,6 +380,10 @@ interface SongStatus {
 	tempo?: 'stated' | 'inferred' | 'none';
 	tempoDetail?: string;
 	verses?: number[];
+	/** N.171: marks `foldDictionMarks` found standing alone in a slot, and folded. */
+	foldedMarks?: number;
+	/** N.171: marks already joined to a syllable in the file (`jɑ #`), which the fold leaves alone. */
+	joinedMarks?: number;
 	octaveShift?: number;
 	clef?: string;
 	performanceOrder?: string;
@@ -456,6 +462,27 @@ function searchShift(notes: NoteCondition[], weightOf: (n: NoteCondition) => num
 /** The P1a clauses, in the order the brief states them. */
 const P1A_CLAUSES = ['held', 'highest of phrase', 'turning pitch 0 to 2 st below', 'crossing', 'fR2 rung'] as const;
 
+/**
+ * N.171, Dann 2026-09-24 21:59: the folded `#` must have "zero effect on
+ * correct duration counts or other calculations". Every note, every duration,
+ * and every `scoreMetrics` figure outside the per-vowel attribution must be
+ * identical before and after the fold, or the run stops.
+ */
+function assertFoldChangesNoCalculation(id: string, raw: ParsedScore, folded: ParsedScore): void {
+	const notes = (s: ParsedScore) =>
+		JSON.stringify(s.vocalLine.map((e) => [e.id, e.type, e.pitch, e.duration, e.tied, e.rhythmicPosition]));
+	const figures = (s: ParsedScore, tempo?: { overrideBpm: number }) => {
+		const m = scoreMetrics(s, { vowelForEvent: buildUnderlayResolvers(s, 1).vowel, ...(tempo ? { tempo } : {}) });
+		const { byVowel: _v, byPitchByVowel: _pv, coverage, ...rest } = m.phonation;
+		const { notesWithVowel: _w, notesWithoutVowel: _wo, ...counts } = coverage;
+		return JSON.stringify({ ...m, phonation: { ...rest, byPitch: [...rest.byPitch], coverage: counts } });
+	};
+	if (notes(raw) !== notes(folded)) throw new Error(`${id}: the fold changed a note`);
+	for (const tempo of [undefined, { overrideBpm: 60 }]) {
+		if (figures(raw, tempo) !== figures(folded, tempo)) throw new Error(`${id}: the fold changed a figure outside the per-vowel breakdown`);
+	}
+}
+
 async function runSong(id: string, file: string): Promise<{ status: SongStatus; rows: Record<string, Row[]> }> {
 	const status: SongStatus = { id, file, read: false };
 	const rows: Record<string, Row[]> = Object.fromEntries(VOICES.map((v) => [v.key, []]));
@@ -468,7 +495,15 @@ async function runSong(id: string, file: string): Promise<{ status: SongStatus; 
 			status.failure = `parse failed: ${fatal.map((e) => e.code).join(', ')}`;
 			return { status, rows };
 		}
-		parsed = result.score;
+		// N.171: the fold at arrival, as `ingest.ts` applies it in the app.
+		const fold = foldDictionMarks(result.score);
+		assertFoldChangesNoCalculation(id, result.score, fold.score);
+		parsed = fold.score;
+		status.foldedMarks = fold.breaks.length;
+		status.joinedMarks = result.score.vocalLine.reduce(
+			(n, e) => n + (e.syllable?.versesInfo ?? (e.syllable ? [e.syllable] : [])).filter((v) => v.text !== '#' && v.text.includes('#')).length,
+			0,
+		);
 		status.parseWarnings = result.warnings.map((w) => w.code);
 	} catch (e) {
 		status.failure = `conversion failed: ${(e as Error).message}`;
@@ -763,6 +798,11 @@ test('N.168 frequency run', async () => {
 				: `| ${s.id} | NO: ${s.failure} | | | | | | | | | | | | | |`,
 		);
 	}
+
+	md.push(
+		'',
+		`\`#\` marks (N.171), folded at arrival as the app does: ${statuses.filter((st) => st.read).map((st) => `${st.id} ${st.foldedMarks} folded, ${st.joinedMarks} already joined`).join('; ')}. A joined mark (\`jɑ #\`) is one the conversion already attached to its syllable; the fold leaves it alone. Every note, duration, and non-vowel figure was checked identical before and after the fold.`,
+	);
 
 	const kinds = ['rest', 'silence', 'breath-mark', 'caesura', 'end'];
 	const fired = kinds.map((k) => `${k} ${statuses.reduce((sum, st) => sum + (st.boundaries?.[k] ?? 0), 0)}`);

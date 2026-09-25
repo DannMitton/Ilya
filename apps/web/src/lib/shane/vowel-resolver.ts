@@ -100,6 +100,7 @@ const STRESS_MARK = 'ˈ';
 import type { SyllableData } from '@ilya/phonology';
 import type { LineData, WordStackData } from '$lib/types';
 import type { ParsedScore, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
+import { vowelResolverAbstentions } from '@ilya/score-parser';
 
 /** The ten Russian sung vowels (engine/types.ts `Vowel`), as a lookup set. */
 const TEN_VOWELS: ReadonlySet<string> = new Set([
@@ -603,6 +604,15 @@ export function buildUnderlayResolvers(
 				}
 			}
 		}
+	}
+
+	// N.171: the events a folded `#` left with no syllable in this verse. By
+	// shape they are melisma continuations, and the sustain pointer above
+	// joined them to the verse's last slot; they carry no text, so they
+	// abstain (`diction-marks.ts:49-52`). Empty wherever nothing was folded.
+	for (const eventId of vowelResolverAbstentions(parsed.dictionMarks, verseNumber)) {
+		byEventVowel.delete(eventId);
+		byEventIpa.delete(eventId);
 	}
 
 	return {

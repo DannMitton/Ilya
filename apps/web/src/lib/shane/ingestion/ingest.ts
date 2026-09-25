@@ -26,6 +26,7 @@
  */
 
 import {
+	foldDictionMarks,
 	MnxScoreParser,
 	MusicXmlScoreParser,
 	type ParseError,
@@ -300,7 +301,29 @@ function toOutcome(
 ): IngestOutcome {
 	const fatal = result.errors.filter((e) => e.fatal);
 	if (fatal.length > 0) return err({ code: 'PARSE_FAILED', errors: fatal });
-	return { ok: true, ingested: { fileName, provenance, result } };
+	return { ok: true, ingested: { fileName, provenance, result: withDictionMarksFolded(result) } };
+}
+
+/**
+ * N.171, "Switch it on" (Dann, 2026-09-24): the `#` phonation-break mark is
+ * folded out of the syllable slot it took, here, at the one seam every
+ * arrival passes through, so Text, Markup, the seat, and every resolver read
+ * the same repaired underlay.
+ *
+ * Dann's rule, 2026-07-30 (`diction-marks.ts:8-12`): the mark joins the
+ * syllable before it and is never discarded, so the boundary survives as a
+ * fact. The fold records what it did on `score.dictionMarks`, which is how
+ * `buildUnderlayResolvers` abstains on the vacated tail rather than carrying a
+ * vowel onto a note the verse never reached.
+ *
+ * A score with no mark in any verse comes back BY REFERENCE, so this is
+ * exactly the old arrival wherever there is nothing to repair.
+ */
+function withDictionMarksFolded(result: ParseResult): ParseResult {
+	// No vocal line, nothing to fold (and `foldDictionMarks` rightly throws).
+	if (!Array.isArray(result.score?.vocalLine)) return result;
+	const fold = foldDictionMarks(result.score);
+	return fold.score === result.score ? result : { ...result, score: fold.score };
 }
 
 // ── `.mxl` rootfile resolution ───────────────────────────────────
