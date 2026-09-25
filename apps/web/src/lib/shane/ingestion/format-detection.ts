@@ -110,6 +110,20 @@ const isIsoBmffImage = (b: Uint8Array): boolean => {
 	return ISO_BMFF_IMAGE_BRANDS.includes(brand);
 };
 
+/** The HEIC and HEIF brands of `ISO_BMFF_IMAGE_BRANDS`, AVIF left out. */
+const HEIF_BRANDS = ISO_BMFF_IMAGE_BRANDS.filter((brand) => !brand.startsWith('avi'));
+
+/**
+ * Is this picture HEIC or HEIF, by its bytes? Asked only after a browser
+ * has failed to decode a picture, so that failure can name the format and
+ * its way out (`upload.err.imageHeic`) instead of the generic refusal.
+ */
+export function isHeifImage(bytes: Uint8Array): boolean {
+	if (!hasBytesAt(bytes, 4, FTYP)) return false;
+	const brand = String.fromCharCode(bytes[8], bytes[9], bytes[10], bytes[11]).toLowerCase();
+	return HEIF_BRANDS.includes(brand);
+}
+
 const isImage = (b: Uint8Array) =>
 	startsWithBytes(b, [0x89, 0x50, 0x4e, 0x47]) || // PNG
 	startsWithBytes(b, [0xff, 0xd8, 0xff]) || // JPEG

@@ -947,6 +947,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.err.readerLoadFailed': { en: 'The page reader could not be loaded. Check your connection and try again.', fr: 'Le lecteur de page n’a pas pu être chargé. Vérifiez votre connexion et réessayez.' },
 	'upload.err.pageReadFailed':   { en: 'Ilya could not read this page. Reading photographs is new and does not yet work on every page. If you have the score as a MusicXML, MNX, or Finale file, Ilya reads those directly.', fr: 'Ilya n’a pas pu lire cette page. La lecture de photographies est nouvelle et ne fonctionne pas encore sur toutes les pages. Si vous avez la partition sous forme de fichier MusicXML, MNX ou Finale, Ilya lit ces formats directement.' },
 	'upload.err.imageUndecodable': { en: 'This browser cannot open that picture. A JPEG or a PNG will work.', fr: 'Ce navigateur ne peut pas ouvrir cette image. Un JPEG ou un PNG fonctionnera.' },
+	// Both RATIFIED by Dann 2026-09-24 20:37 to 20:38 (brief-code-photo-messages_r1).
+	// `imageHeic` replaces `imageUndecodable` only where the picture sniffs as
+	// HEIC or HEIF; `pictureUnclear` is every refusal of a picture the poem
+	// route could not read, the Russian guard's included.
+	'upload.err.imageHeic':        { en: 'Ilya cannot yet open iPhone photos in HEIC format. On a Mac, open the photo in Preview and choose File, then Export, then JPEG.', fr: 'Ilya ne peut pas encore ouvrir les photos d’iPhone en format HEIC. Sur un Mac, ouvrez la photo dans Aperçu et choisissez Fichier, puis Exporter, puis JPEG.' },
+	'upload.err.pictureUnclear':   { en: 'Ilya could not read this picture clearly. A flat scan or a PDF works best.', fr: 'Ilya n’a pas pu lire cette image clairement. Une numérisation à plat ou un PDF donne de meilleurs résultats.' },
 	'upload.err.pdfUnreadable':    { en: 'Ilya could not open that PDF. If it is password protected, save an unlocked copy and try again.', fr: 'Ilya n’a pas pu ouvrir ce PDF. S’il est protégé par un mot de passe, enregistrez-en une copie déverrouillée et réessayez.' },
 	// N.96. Both strings are Dann's own wording, the French ruled 2026-08-24
 	// and transcribed verbatim, straight apostrophe included.

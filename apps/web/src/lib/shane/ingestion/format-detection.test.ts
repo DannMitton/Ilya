@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { detectScoreFormat, ACCEPTED_EXTENSIONS, SNIFF_LENGTH } from './format-detection';
+import { detectScoreFormat, isHeifImage, ACCEPTED_EXTENSIONS, SNIFF_LENGTH } from './format-detection';
 
 const utf8 = (s: string) => new TextEncoder().encode(s);
 
@@ -154,6 +154,25 @@ describe('detectScoreFormat: recognised refusals', () => {
 			ok: false,
 			failure: { kind: 'unrecognised' }
 		});
+	});
+
+	/**
+	 * `isHeifImage` picks the refusal for a picture the browser could not
+	 * decode (ruled 2026-09-24). The same real iPhone header is HEIF; AVIF,
+	 * the same container family, and a JPEG are not, and keep the generic
+	 * refusal.
+	 */
+	it('names the real iPhone HEIC photograph as HEIF', () => {
+		expect(isHeifImage(IPHONE_HEIC_HEADER)).toBe(true);
+	});
+
+	it('does NOT call AVIF or a JPEG HEIF', () => {
+		const avif = new Uint8Array([
+			0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70, 0x61, 0x76, 0x69, 0x66
+		]);
+		const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01]);
+		expect(isHeifImage(avif)).toBe(false);
+		expect(isHeifImage(jpeg)).toBe(false);
 	});
 
 	it('refuses JSON that is not MNX', () => {

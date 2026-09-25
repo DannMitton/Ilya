@@ -35,9 +35,9 @@ for the first time on the day.
   **N.153 then made it usable on a phone** (caret-to-caret separation 1.13-7.89 px to
   44.00-44.16 px, closed on scope 2026-09-21). **Ticked 2026-09-21 in the bookkeeping
   audit; the box had stood unchecked while the work was done.** Its remainder is N.162.
-- [ ] **N.142 step 2.** The desk counts, through Chrome on the branch alias, placements in Dann's library that sit on a tie's continuation. Build only if the count is not zero.
-- [ ] **The nine CHECK rows.** The desk looks at each (a Sonnet agent for the code reads). Each closes or becomes IN work in week 2.
-- [ ] **UNSETTLED-6, the per-format walk.** Dann drops one file of each kind Ilya accepts: MusicXML, `.mxl`, `.musx`, `.mnx`, `.mscz`, PDF, photo. **Samples found by the desk 2026-09-17:** MusicXML `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml`; `.mxl` `tools/e16-harness/output/mussorgsky---sunless-01---within-four-walls/score.mxl`; `.musx` `~/Downloads/Mussorgsky - Sunless 04 - Be bored.musx`; `.mnx` `~/Downloads/Sharp Excerpt.fin27.mnx` (the only one); `.mscz` `~/Downloads/Schubert_Gretchen_am_Spinnrade_D118_OpenScore.mscz`; PDF and pictures from the N.146 walk (`STATE.md`, findings). **Still missing: a real phone photo of a score.** The sniff accepts HEIC (`format-detection.ts:117`); which of the 234 phone photos in `~/Downloads` show a score is NOT ESTABLISHED.
+- [x] **N.142 step 2. CLOSED 2026-09-24: counted zero from the 2026-09-21 export, so nothing to build** (`../sessions/memo-code-afternoon-findings_r1_2026-09-24.md`). The desk counts, through Chrome on the branch alias, placements in Dann's library that sit on a tie's continuation. Build only if the count is not zero.
+- [x] **The nine CHECK rows. CLOSED 2026-09-24**, all but UNSETTLED-8's override badge, which no page carries to test (`../sessions/memo-sonnet-check-rows_r1_2026-09-24.md`; `STATE.md`). The desk looks at each (a Sonnet agent for the code reads). Each closes or becomes IN work in week 2.
+- [ ] **UNSETTLED-6, the per-format walk. SIX OF SEVEN PASS 2026-09-24** (`.musx`, MusicXML, `.mxl`, `.mscz`, `.mnx` after `d1cc2d3`, PDF); **only a phone photo of a score remains.** Dann drops one file of each kind Ilya accepts: MusicXML, `.mxl`, `.musx`, `.mnx`, `.mscz`, PDF, photo. **Samples found by the desk 2026-09-17:** MusicXML `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml`; `.mxl` `tools/e16-harness/output/mussorgsky---sunless-01---within-four-walls/score.mxl`; `.musx` `~/Downloads/Mussorgsky - Sunless 04 - Be bored.musx`; `.mnx` `~/Downloads/Sharp Excerpt.fin27.mnx` (the only one); `.mscz` `~/Downloads/Schubert_Gretchen_am_Spinnrade_D118_OpenScore.mscz`; PDF and pictures from the N.146 walk (`STATE.md`, findings). **Still missing: a real phone photo of a score.** The sniff accepts HEIC (`format-detection.ts:117`); which of the 234 phone photos in `~/Downloads` show a score is NOT ESTABLISHED.
 - [ ] **Start the two design rows.** With Dann's say-so: design for **N.123** (where the tessituragram and its bands sit, given Insights page one is fixed at one page) and for **N.94** (the transposition control in the Score Markup band, between Corrections and Voice). A Sonnet agent looks for N.123's two missing sources (the centre-of-gravity formula; Titze, Švec, and Popolo 2003).
 
 **WEEK 1 CLOSED 2026-09-20, 12:30. N.148, N.149 AND N.150 ARE ALL CLOSED**, over five
@@ -114,10 +114,10 @@ design rows.
 
 ## Week 3. Monday 2026-09-28 to Sunday 2026-10-04. Insights and the design rows
 
-- [ ] **N.127 increment 2**: the compass stave, the piece's range against the singer's.
-- [ ] **N.123, part 1**: the tessituragram with the passaggio zone shaded.
+- [x] **N.127 increment 2. Built `0ccda31`/`ccb790c`, WALKED by Dann in both languages 2026-09-24.**: the compass stave, the piece's range against the singer's.
+- [x] **N.123, part 1. WALKED by Dann in both languages 2026-09-24**; its findings shipped `5e22d03` and `d1cc2d3`, walked.: the tessituragram with the passaggio zone shaded.
 - [ ] **N.94, part 1**: the control appears, and the score draws in the chosen key.
-- [ ] **N.130 and N.131**: the desk drafts Insights' French; Dann rules it in one sitting; one build carries it with N.131's 21 ratified rows.
+- [x] **N.130 and N.131. DONE 2026-09-24, ahead of the week:** Insights' French walked and every ruling seated (`2f955e6`); the audit's ten N.131 rows ruled and seated (`1987157`); both walked by the desk on Dann's library.: the desk drafts Insights' French; Dann rules it in one sitting; one build carries it with N.131's 21 ratified rows.
 
 ## Week 4. Monday 2026-10-05 to Sunday 2026-10-11. Finish the design rows
 

@@ -73,7 +73,7 @@
 		type IngestProvenance,
 		type PageRead,
 	} from './ingestion/ingest';
-	import { detectScoreFormat, SNIFF_LENGTH } from './ingestion/format-detection';
+	import { detectScoreFormat, isHeifImage, SNIFF_LENGTH } from './ingestion/format-detection';
 	import { prefillFrom } from './ingestion/clef-key-prompt';
 	import { decidePoemOrScore } from './ingestion/poem-or-score';
 	import { dictionaryGuardMode, isKnownWordForGuard } from './ingestion/ocr-guard';
@@ -352,7 +352,7 @@
 				return { ink: await toGreyscalePng(file) };
 			} catch (err) {
 				console.error('[ScoreUploader] the picture could not be rasterized:', err);
-				return { errorMessage: T('upload.err.imageUndecodable') };
+				return { errorMessage: await undecodablePictureMessage(file) };
 			}
 		}
 		const { rasterizePdf, PdfUnreadableError, PdfJbig2UndecodedError } = await import('./engine/page-pdf');
@@ -473,14 +473,21 @@
 			return;
 		}
 		// BOTH READINGS FAILED (N.146): no sung line worth showing (or no
-		// staves at all), no text layer, and OCR found nothing either. The
-		// existing picture refusal, coining nothing new.
-		ui = {
-			kind: 'error',
-			message: language === 'en'
-				? 'No text recognised in image.'
-				: 'Aucun texte reconnu dans l\u2019image.',
-		};
+		// staves at all), no text layer, and OCR found nothing the guard
+		// accepts. Ruled 2026-09-24: one honest refusal for all of it, the
+		// guard's included, since "no text" was false where OCR found text
+		// the guard refused.
+		ui = { kind: 'error', message: T('upload.err.pictureUnclear') };
+	}
+
+	/**
+	 * The refusal for a picture this browser could not decode: HEIC and
+	 * HEIF get their own (ruled 2026-09-24), every other picture keeps
+	 * `upload.err.imageUndecodable`.
+	 */
+	async function undecodablePictureMessage(file: File): Promise<string> {
+		const head = new Uint8Array(await file.slice(0, SNIFF_LENGTH).arrayBuffer());
+		return T(isHeifImage(head) ? 'upload.err.imageHeic' : 'upload.err.imageUndecodable');
 	}
 
 	/** Is this a page the reader can read? Sniffed by bytes, as dispatch will. */
@@ -584,7 +591,9 @@
 			ui = { kind: 'arrived', ingested: outcome.ingested, file };
 			return;
 		}
-		const c = classify(outcome.error, isMscz);
+		const c = outcome.error.code === 'IMAGE_UNDECODABLE'
+			? { soon: false, message: await undecodablePictureMessage(file) }
+			: classify(outcome.error, isMscz);
 		ui = c.soon ? { kind: 'soon', message: c.message } : { kind: 'error', message: c.message };
 	}
 
