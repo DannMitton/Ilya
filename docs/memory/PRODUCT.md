@@ -950,3 +950,55 @@ Re-opened in r2 as a question of worth. **Not ruled either way.**
 **This is a rule about how the desk reasons, which is `CONTRACT.md`'s subject, not this
 file's.** It is transcribed here because it was ruled about the product. **Dann's to decide
 whether it becomes tether 23.**
+
+## "SUSTAINED", NEVER "HELD". Ruled by Dann 2026-09-25 12:15
+
+**His words:** *"when user-facing text expresses an idea like this, I want us to use 'sustained' instead of 'held'. This slight shift is common in the field to imply organic movement instead of static holding."*
+
+**Scope:** every singer-facing string, in every document and in the intake. Code identifiers (`held` in `NoteCondition`, `heldBasis`) are not user-facing and stay. **The shipped strings already comply:** no English value in `i18n.ts` says "held" of a note (grep, 2026-09-25). **The French is « prolonger », ruled by Dann 2026-09-25 13:04** (*"the image feels transitive to me"*): « se prolonge » for a note, so it does not read as lengthened beyond what is written (the desk's form), and « prolongée(s) » as an adjective.
+
+## UNITY IN VARIETY. Stated by Dann 2026-09-25 12:21, and the principle is his
+
+**His words:** *"One of the very old definitions of music at its most central form is 'unity in variety.' This is the same principle when it comes to these helpful prompts from Ilya to the user: unity in variety. The unity is helpful, evidence-based suggestions grounded in the voice pedagogy literature. The variety is the user's need for the appearance of spontaneous conversation and personal connection."*
+
+**What it binds, DESK READING for him to correct:** the variety lives only in the wording (openers, closers, sentence shape). It never changes the substance or the strength of a claim: two wordings of one suggestion carry the same evidence and the same hedge. A variant that sounds more confident, or less, than its source is a change to the unity, not to the variety.
+
+**How it is built. Dann 2026-09-25 12:25:** *"those wordings and suggestions arrive as algebraic components that have been triggered by the intersection of conditions supplied by the user (range, formant profile, expertise self-reporting etc) and conditions supplied by the composer and poet (pitch and vowel). I expect Ilya to be able to express the very same idea differently with clarity... We want to serve the user, and offer the user as human an interaction as Ilya is capable of."* **Desk corollaries, accepted in the same exchange:** variety comes from combining small sets per slot (frame shape, challenge clause, opener, closer), so it multiplies while vetting only adds (3 frames, 7 openers, and 3 closers give 63 surfaces from 13 strings); every part is vetted once by Dann, in both languages; each French part is checked against every referent it can meet, not only the example on the page.
+
+## A SUGGESTION IS AN OFFER THE SINGER MAY DECLINE. Ruled by Dann 2026-09-25 12:17 to 12:19
+
+**His words, 12:17:** *"We want to avoid declaring pedagogical interventions as a certainty even if they are grounded in the literature, and always prioritize the user's agency."* The direction is his. The desk proposed the opener set, the closers, and the rotation, and he accepted them at 12:19 (*"you are headed in the right direction"*), with "Miller suggests" added. **The set is a working draft to refine, not a closed list.**
+
+- **Every "something to try" is phrased as an offer, never a command,** and its outcome is phrased as a possibility ("which can help"), never a promise ("stays", "happens on its own").
+- **Openers, all taking the same phrase after them:** "You might try letting…"; "Consider letting…"; "You could experiment with letting…"; "One thing to explore is letting…"; "If it suits your voice, try letting…"; "An option here is letting…"; and the attributed form, "[Author] suggests letting…", which puts the advice in the source's mouth (the citation then drops the repeated author name). **DESK READING of "Yes to Miller suggests": it joins the set as one more opener, not as the only form.**
+- **Closers:** "…which can help…"; "…and notice whether…"; "…to see whether…". The "notice whether" form turns the suggestion into an experiment the singer judges.
+- **DESK DEFAULT 2026-09-25 12:20, after Dann singled out "notice whether" as the tone he wants:** where the outcome is something the singer can hear or feel, the closer is "…and notice whether…"; the other two closers are used only where it is not. Reversible.
+- **Rotation (desk proposal, accepted):** by the comment's place on the page, so neighbours differ and the same page always reads the same. **CORRECTED BY THE DESK 2026-09-25 12:27, DESK DEFAULT:** place alone makes every song's first comment open the same way, which across a library is the machine tell. The rotation starts from a value derived from the song, then steps by place: stable per page, different across songs. **Plus a page rule:** no two comments on one page share an opener, closer, or frame shape. **Plus a corpus test:** render every comment across the test corpus and flag any construction that repeats too often. **No runtime rewriting by a model:** it would break design-time vetting (the design rule of 2026-09-11, every line computed or sourced), offline use, and the unity half (desk critique, 12:27). **Corrected 12:35:** the desk also cited the printed sentence "Nothing on this page is hand-written" as a reason; Dann does not require that sentence, and the desk recommends removing it (STATE.md). No opener that makes an unsourced claim ("Many singers find…").
+- **Every opener and closer needs a French twin, ruled by Dann.** Not yet drafted.
+
+## A TRAIL OF BREADCRUMBS: HOW INSIGHTS CITES. Ruled by Dann 2026-09-25 12:38 to 12:47
+
+**His principle, 12:38:** *"leaving a trail of breadcrumbs for users to follow back to the primary sources... We are writing for active singers and their teachers... It's not cute to make these people work harder to locate and verify our claims on their own."* Builds on his two-layer ruling of 03:06 (`OPEN.md` §N.173).
+
+- **Every comment carries a short citation: author, short title, year, page.** "(Miller, *Solutions for Singers*, 2004, p. 163)". The year is the desk's addition, accepted 12:47, because page numbers move between editions.
+- **On screen, the tap is the footnote:** it shows the full reference (author, full title, edition, publisher, year, page, section heading as printed, ISBN or DOI, and a short quotation read on the page image).
+- **On paper, a printed Insights ends with "Sources cited":** alphabetical, only the works cited in that print, each in full, **in its own squircle**, apart from the advisory text (Dann, 12:47). No numbered notes: the short citation already names the source. The desk proposed the list; Dann ruled it in and added the squircle.
+- **The Guide carries the complete Sources bibliography** in its Licensing and Acknowledgements section (Dann, 12:44).
+- **A printed Insights stands on its own** (Dann, 12:47, "yes"): a singer who has never opened Ilya can follow every citation and apply at least some of the advice, even without the acoustics behind it.
+- **Scoped by Dann 12:53: Insights is a personal document, written for the singer it was made for.** *"We can't worry that the text we produce must be equally comprehensible to everybody... if the user/student is troubled by a term, this makes an excellent point of conversation and inquiry with their IRL teacher."* So the citations stand on their own; the vocabulary need not. Field terms such as Bozeman's "turns" stay, with their citation, and are not glossed for a hypothetical other reader.
+
+## THE SAME POINT IN THREE REGISTERS. Proposed by Dann 2026-09-25 12:51 to 12:55; the shape is the desk's, by his delegation
+
+**His words, 12:55:** *"modulating register to suit self-declared user competence in acoustics allows Ilya to convey exactly the same point at possibly five levels of complexity... two different users, one expert, one neophyte, may examine the same piece... yet receive two differently-worded Insights outputs."* And, delegating the shape: *"You figure out what's appropriate and build that."*
+
+- **Three registers for the visible line (desk's choice):** plain (what the singer hears and feels), working (the field's terms, e.g. Bozeman's "turns"), technical (the mechanism, e.g. the second harmonic passing the first resonance).
+- **Its own intake question**, because acoustics fluency is a different axis from singing skill (N.172's questions). Five anchored points map to three registers: 1 and 2 plain, 3 working, 4 and 5 technical. "Not sure" counts as point 2 and a skip as point 3, as for every intake question (Dann, 2026-09-24 23:22 and 23:37).
+- **Unity holds across registers:** each register's line describes the same event and rests on the same extraction row and page. A plain line that makes a different claim is a defect.
+- **Build order (desk):** the slots carry a register key from the first slice; the working register is written first; plain and technical follow without a rebuild.
+
+## COMMENTS APPEAR IN THE ORDER THE SINGER MEETS THEM. Proposed by Dann 2026-09-25 12:58
+
+**His words:** *"Why don't we just address them sequentially from start to finish as one moves through the piece? This should also helpfully situate multi-verse advice where challenging vowels meet pitches that do not flag earlier combinations."*
+
+- **Desk refinement, same exchange:** the budget still selects by stakes (N.173); the selected comments are then shown in performance order, repeats and later verses unrolled, so a verse-2 comment sits where the singer reaches it.
+

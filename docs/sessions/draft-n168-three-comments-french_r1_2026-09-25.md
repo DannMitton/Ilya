@@ -6,6 +6,10 @@ The English is `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/
 
 **Drafted from the French already in `apps/web/src/lib/i18n.ts`** (the tree at `b2fde8f`), so Insights says the same thing the same way everywhere. Only the text that shows is drafted here. The tap's contents wait until Dann has seen the English.
 
+
+**RULED BY DANN 2026-09-25 13:04: « prolonger » for "sustained"** (*"the image feels transitive to me"*), in the pronominal form « se prolonge » for a note (desk's form, so it does not read as lengthened beyond what is written) and « prolongée(s) » as an adjective. The paragraph that follows is the question as it stood.
+
+**WAS OPEN FOR DANN, 2026-09-25 12:15: the French for "sustained".** He ruled that the English says "sustained", never "held", for its sense of organic movement. This draft still says « tenu », adopted from `insights.finding.tighten`. The choices: « tenu » (the usual word, and already in the file); « soutenu » (closer to the English, but singers may read it as "supported"); « prolongé » (neutral, about length only). The desk leans to keeping « tenu » and does not know whether it carries the static sense Dann wants to avoid.
 ## The glossary: adopted or coined
 
 | English | French | Source |
@@ -35,21 +39,21 @@ The English is `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/
 
 **Dann's E4 [i]:**
 
-> Ce [i] sur E4 est tenu environ 4 secondes, sur la note la plus aiguë que vous avez indiquée, et il se situe au-dessus de votre propre résonance du [i]. Laissez la mâchoire descendre avec la hauteur et gardez la pointe de la langue vers l'avant : le [i] reste un [i] tout en s'ouvrant (Miller, *Solutions for Singers*, p. 163).
+> Ce [i] sur E4 se prolonge environ 4 secondes, sur la note la plus aiguë que vous avez indiquée, et il se situe au-dessus de votre propre résonance du [i]. Laissez la mâchoire descendre avec la hauteur et gardez la pointe de la langue vers l'avant : le [i] reste un [i] tout en s'ouvrant (Miller, *Solutions for Singers*, p. 163).
 
 **The soprano test voice, A5 [i]:**
 
-> Ce [i] sur A5 est tenu environ 4 secondes, 3 demi-tons au-dessus de votre passaggio secondaire, et il se situe probablement au-dessus de la résonance de votre [i]. Laissez la voyelle s'ouvrir vers [ɑ] à mesure que vous montez ; elle se distinguera moins bien à cette hauteur, et c'est normal (Bozeman, *Practical Vocal Acoustics*, p. 55 ; McKinney, *The Diagnosis and Correction of Vocal Faults*, p. 160).
+> Ce [i] sur A5 se prolonge environ 4 secondes, 3 demi-tons au-dessus de votre passaggio secondaire, et il se situe probablement au-dessus de la résonance de votre [i]. Laissez la voyelle s'ouvrir vers [ɑ] à mesure que vous montez ; elle se distinguera moins bien à cette hauteur, et c'est normal (Bozeman, *Practical Vocal Acoustics*, p. 55 ; McKinney, *The Diagnosis and Correction of Vocal Faults*, p. 160).
 
 **Dann's E♭4 [o]:**
 
-> Ce [o] sur E♭4 est tenu environ 3 secondes, 2 demi-tons au-dessus de votre passaggio secondaire. Gardez la seconde moitié de la note au niveau de la première (Miller, *Solutions for Singers*, p. 201).
+> Ce [o] sur E♭4 se prolonge environ 3 secondes, 2 demi-tons au-dessus de votre passaggio secondaire. Gardez la seconde moitié de la note au niveau de la première (Miller, *Solutions for Singers*, p. 201).
 
 ### 2. The open vowel turning at the secondo
 
 **Dann's E♭4 [ɛ], merged with the held note:**
 
-> Ce [ɛ] sur E♭4 est tenu, culmine dans sa phrase et se situe juste après la hauteur où votre [ɛ] change de timbre (autour de D4) : la couleur se ferme ici. Laissez faire : gardez stables la longueur et la forme du conduit vocal, et la fermeture se fait d'elle-même (Bozeman, *Practical Vocal Acoustics*, p. 65).
+> Ce [ɛ] sur E♭4 se prolonge, culmine dans sa phrase et se situe juste après la hauteur où votre [ɛ] change de timbre (autour de D4) : la couleur se ferme ici. Laissez faire : gardez stables la longueur et la forme du conduit vocal, et la fermeture se fait d'elle-même (Bozeman, *Practical Vocal Acoustics*, p. 65).
 
 **Dann's E4 [ɛ]:**
 

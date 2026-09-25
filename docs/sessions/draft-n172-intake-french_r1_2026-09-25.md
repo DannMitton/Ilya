@@ -6,6 +6,8 @@ Written by the desk 2026-09-25, about 04:50, while Dann was away. **A PROPOSAL f
 
 **Drafted from the French already in `apps/web/src/lib/i18n.ts`** (the tree at `b2fde8f`).
 
+
+**OPEN FOR DANN, 2026-09-25 12:15: the French for "sustained".** He ruled that the English says "sustained", never "held", for its sense of organic movement. This draft still says « tenu », adopted from `insights.finding.tighten`. The choices: « tenu » (the usual word, and already in the file); « soutenu » (closer to the English, but singers may read it as "supported"); « prolongé » (neutral, about length only). The desk leans to keeping « tenu » and does not know whether it carries the static sense Dann wants to avoid.
 ## The glossary: adopted or coined
 
 | English | French | Source |
@@ -54,7 +56,7 @@ Written by the desk 2026-09-25, about 04:50, while Dann was away. **A PROPOSAL f
 
 *Referent: « il », « le » are « le passage », masculine. The heading names « le passage » so the pronouns have a noun to agree with; an infinitive heading (« Traverser... ») would leave them without one.*
 
-**4. Les notes tenues longtemps.**
+**4. Les notes prolongées.** (« prolonger », ruled by Dann 2026-09-25 13:04.)
 1. Les notes longues me fatiguent vite.
 2. Je peux les tenir, mais le son vacille ou s'amincit.
 3. Elles restent stables quand je prévois mon souffle.
@@ -72,12 +74,21 @@ Written by the desk 2026-09-25, about 04:50, while Dann was away. **A PROPOSAL f
 
 *Referent: « accessible » agrees with the infinitive subject « chanter piano », masculine singular. « le » in answer 3 is the act of singing piano, masculine.*
 
+**7. Le vocabulaire de l'acoustique vocale.** *Dans quelle mesure êtes-vous à l'aise avec des termes comme formant, harmonique, fo et fR1 ?*
+1. Ces termes sont nouveaux pour moi.
+2. Je les ai déjà entendus, sans les employer.
+3. J'en connais les idées principales : la résonance, les harmoniques, le changement de timbre.
+4. Je les emploie dans mon enseignement ou ma pratique.
+5. Je lis et commente la recherche en acoustique vocale.
+
+*Referent: « les », « en » are « ces termes », masculine plural. « le changement de timbre » is ADOPTED from `insights.finding.sustain`. Added 2026-09-25 12:56.*
+
 **6. Ce que vous attendez des Aperçus.** One switch per topic:
 
 - notes aiguës
 - notes graves
 - le passage par le passaggio
-- notes tenues
+- notes prolongées
 - piano dans l'aigu
 - choses à remarquer
 

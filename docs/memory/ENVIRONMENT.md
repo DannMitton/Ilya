@@ -45,6 +45,7 @@ next session the same hour it cost the last one.
 | finding a sentence on a page photo, or cropping one to look at | `OCR AND CROPS ON THE BRIDGE` |
 | editing a file and sending it to the Mac | `EDIT, THEN COMMIT, NEVER BOTH IN ONE BATCH` |
 | a long read of the code, or a subagent that must read it | `THE SOURCE TREE AS ONE TARBALL` |
+| Dann is going to sleep and wants the desk to keep working | `AN UNATTENDED RUN NEEDS AN AWAKE MAC` |
 | searching the Journal of Singing index | `THE JOS INDEX ANSWERS A POST` |
 | downloading Journal of Singing PDFs for the library | `JOS PDFS FROM THE ARTICLE PAGE` |
 | a site shows a bot check or blocks a download | `A BLOCKED DOWNLOAD IS DANN'S TO CLICK` |
@@ -4259,3 +4260,8 @@ Learned 2026-09-25. An `Edit` to a file in `/mnt/user-data/outputs/` and a `devi
 ## THE SOURCE TREE AS ONE TARBALL, FOR READING IN THE CONTAINER
 
 Learned 2026-09-25. For a long read-only session or a subagent, tar `apps/web/src`, `packages`, `tools`, and `docs/memory` on the bridge, excluding `node_modules`, `.svelte-kit`, `build`, `dist`, `.git`, and images, into `~/Downloads/_desk-<date>/tree-src.tgz` (5 MB at `b2fde8f`), stage it, and unpack it in the container. A subagent then reads it without the bridge. It is a snapshot: say which commit it is.
+
+## AN UNATTENDED RUN NEEDS AN AWAKE MAC
+
+Learned 2026-09-25. Every bridge call reaches Dann's Mac, so if it sleeps, the desk stops partway. Before he leaves, give him one line to paste into a new Terminal window: `caffeinate -i`. Nothing prints and the window seems frozen; that is correct. Ctrl-C ends it. **Remind him which window it is when he returns:** at 12:13 he typed into it and thought Terminal had frozen. Agents launched while he is away ran without an approval prompt (one Sonnet agent, 2026-09-25 04:30); two launched while he was typing were rejected (`A REJECTION MAY ONLY MEAN HE TYPED`).
+

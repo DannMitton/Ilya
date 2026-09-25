@@ -47,44 +47,47 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written 2026-09-25 about 05:40, at the close of the desk's unattended run (Dann asleep from about 03:40). SUPERSEDES the 03:35 block, which is now in `../sessions/LOG.md`, verbatim.
+> ### READ THIS FIRST. Written 2026-09-25 about 13:10, at the close of the session that ran from 03:31 (desk unattended 03:40 to about 12:10). SUPERSEDES the 05:40 block, now in `../sessions/LOG.md`, verbatim.
 >
-> **THE ONE THING: N.168, the Insights comments.** **Ruled by Dann 03:35: one "something to try" shows, and the rest sit behind a tap** (the desk offered the shape; he ruled it in). While he slept, the desk shortened the three comments, drafted their French, and drafted the Code brief for the first slice. **Start by asking Dann to read the English r2**, one question: *does the English read right, and is the suggestion that shows first the right one?*
+> **THE ONE THING: N.168, the Insights comments. The voice of a comment is now settled; the next step is Dann's vetting of the content, then the templates, then Code.** Open with question 1 below.
 >
-> #### WHAT THE DESK DID WHILE DANN SLEPT. Everything is a draft for his review unless it says otherwise
+> #### WHAT IS SETTLED ABOUT HOW INSIGHTS SPEAKS. All in `PRODUCT.md`, the seven sections at its end, each dated 2026-09-25
 >
-> 1. **KVP2: the shipped quotations are CORRECT.** The desk read pp. 96 and 141 on the photos (`IMG_4822`, `IMG_4850`). The Sonnet extraction was wrong on both pages: p. 96's sentence is there verbatim, and p. 141 says "harmonic", not "formant". Its recommended change would have put an error into the code. Rows KVP2-051 and KVP2-052 are corrected in the CSV (the CSV as it was before is at `~/Downloads/_desk-2026-09-25/claims_bozeman-KVP2_2026-09-25.before-desk-correction.csv`). **One real difference: p. 141's punctuation** (the code turns the page's parentheses into commas). Brief, not run: `../sessions/brief-code-kvp2-p141-punctuation_r1_2026-09-25.md`.
-> 2. **The three comments, English r2:** `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r2_2026-09-25.md`. About 40 to 55 words visible each, against 130 or more in r1. **The rule for which suggestion shows first is a DESK PROPOSAL for N.173:** the one computed from the singer's own measurement leads.
-> 3. **Their French, r1:** `../sessions/draft-n168-three-comments-french_r1_2026-09-25.md`. Drafted from `i18n.ts`, with a glossary that says which words are adopted and which coined, and every agreement checked. Settled while drafting: pitch names are the same in both languages (`note-picker.ts:94-96`).
-> 4. **N.172's intake questions in French, r1:** `../sessions/draft-n172-intake-french_r1_2026-09-25.md`. It translates an English draft Dann has not ruled.
-> 5. **The first-slice Code brief, a DRAFT that must not run yet:** `../sessions/brief-code-n168-first-slice_r1_2026-09-25.md`. It waits on Dann's vetting of the English, the French, N.172's questions, and N.173's budget.
-> 6. **Four open questions settled by reading the code:** `../sessions/memo-desk-code-reading_r1_2026-09-25.md`.
->    - **N.164 is real.** With no typed range, both lines always print (`insights.ts:342-343`; `InsightsPane.svelte:598-614`). The fix is taste, so it is Dann's; the memo ranks three.
->    - **N.128's two consumers already read the corrected line.** The OWED row can close.
->    - **The `updatedAt` write on every load is traced:** `keepSurvivingGlosses` always assigns new maps (`routes/+page.svelte:2927-2941`).
->    - **The `#onRemoteWrite` guard has an await gap** (`document.svelte.ts:303-312`) that can lose an edit silently.
->    - **Brief for both save fixes, DESK DEFAULT, not run:** `../sessions/brief-code-two-save-fixes_r1_2026-09-25.md`.
-> 7. **N.154 audit (Sonnet, 225k tokens):** `../sessions/memo-sonnet-n154-audit_r1_2026-09-25.md`. Three live stale strings: the two "Fit" strings, and `a11y.paper`, whose screen-reader name still says "Transcription" (desk-checked, `i18n.ts:145`, `Paper.svelte:63`; `i18n.test.ts:28` pins it). Also 62 dead keys. **The agent found the three drop-hint comments accurate.** This file said they were stale, and the desk has not settled which is right.
+> - **"SUSTAINED", NEVER "HELD"** (Dann 12:15). French: **« prolonger »** (Dann 13:04): « se prolonge » for a note, « prolongée(s) » as an adjective.
+> - **UNITY IN VARIETY** (Dann's principle, 12:21), built from small sets of parts per slot, vetted once (12:25).
+> - **A SUGGESTION IS AN OFFER THE SINGER MAY DECLINE** (Dann 12:17 to 12:19): seven openers, three closers, "notice whether" first wherever the result can be heard or felt; rotation starts from the song, no two comments on a page share an opener, closer, or frame; a corpus test for repeats; no runtime rewriting.
+> - **A TRAIL OF BREADCRUMBS** (Dann 12:38 to 12:53): short citation with the year on every comment; the tap is the footnote on screen; "Sources cited" in its own squircle at the end of a print; the full bibliography in the Guide; Insights is a personal document, so field terms such as "turns" stay.
+> - **THREE REGISTERS** (Dann's idea, the desk's shape by his delegation, 12:55): plain, working, technical, set by new intake question 7; the working register is written first.
+> - **COMMENTS IN THE ORDER THE SINGER MEETS THEM** (Dann 12:58): select by stakes, show in performance order.
+> - **How many suggestions show** (`OPEN.md` §N.173, amended 13:00): one per challenge named, at most two visible, a count for the rest, and an intake switch "Show every suggestion".
+> - **The French offer slots are complete:** `../sessions/draft-offer-slots_r1_2026-09-25.md`, end section; opener 2 is Dann's « Vous pouvez songer à laisser… » (13:05).
 >
-> #### READ BEFORE ANY INSIGHTS WORK (carried forward)
+> #### THE FILES FOR THE NEXT STEP
 >
-> - `PRODUCT.md`, "What Ilya is for, and why a data dump defeats it", "Every observation answers 'why should I care?'", and the problems-first method.
-> - `../sessions/draft-curation-rules_r1_2026-09-24.md`, N.173, a living draft. Its 2026-09-25 rulings are now also listed in `OPEN.md` §N.173.
-> - `CONTRACT.md` §2 and §3: usage never determines the work; his examples are "e.g."; draft and refine.
+> - English comments, r2: `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r2_2026-09-25.md`. **Its examples predate 13:00:** they show one suggestion and the old register. The templates rewrite them.
+> - French comments: `../sessions/draft-n168-three-comments-french_r1_2026-09-25.md` (suggestion sentences stale; « se prolonge » applied).
+> - The first-slice Code brief, a DRAFT, updated through 13:00: `../sessions/brief-code-n168-first-slice_r1_2026-09-25.md`.
+> - The catalogue behind the offers: `../sessions/catalogue-offer-constructions_r1_2026-09-25.md`.
+> - The overnight work (KVP2 verified, code-reading memo, N.154 audit, three small briefs): committed at `6cf0c5f`; details in `../sessions/LOG.md`, the 05:40 block.
 >
-> #### CARRIED FORWARD, held, not questions
+> #### NEXT FOR THE DESK, NO QUESTION NEEDED
 >
-> Still not measured: paint on a phone; whether « PARTITION » fits 62 px in Consolas or Android's monospace. A scanned PDF with no text says "this picture". Printed pages keep on-screen colouration (for N.170's reviewers). `~/Downloads/IMG_5635-as-jpeg.jpg` is a desk-made test copy. **New desk-made files Dann may delete:** `~/Downloads/_desk-kvp2-crops/` (two page crops) and `~/Downloads/_desk-2026-09-25/tree-src.tgz` (a 5 MB snapshot of the source, used for the reading). Floor: `6ede257`; HEAD at the start of this run was `b2fde8f`, clean.
+> **Write the N.168 templates** for comments 1 and 2 in the working register, English and French, from r1's firing tests and today's rulings: one suggestion per challenge, two visible, the openers, closers, and citations as ruled. Show Dann the rendered text of his three notes when done, not the template grammar.
 >
 > #### STILL WAITING ON DANN, ONE AT A TIME, in this order
 >
-> 1. The English r2 of the three comments: does it read right, and is the right suggestion showing first?
-> 2. The French of the three comments (after 1).
-> 3. N.164: which of the three fixes (the memo recommends "Nothing else in this piece is flagged...").
-> 4. Fable's two questions about the [u] comment (r1 §5).
-> 5. The seven N.172 questions: add, cut, or reword? Then their French.
-> 6. Go-ahead for the three small briefs: KVP2 punctuation, the two save fixes, and the N.154 strings (the desk will draft the "Fit" and `a11y.paper` rewordings with their French on request).
-> 7. Approve N.173's rules for `PRODUCT.md` when he judges them ready.
+> 1. **N.164:** which fix for the two contradictory lines (`../sessions/memo-desk-code-reading_r1_2026-09-25.md` §1). Desk recommends "Nothing else in this piece is flagged for your voice."
+> 2. **Fable's two questions** about the [u] comment (r1 §5 in `_synthesis/draft-three-comments_r1_2026-09-25.md`).
+> 3. **The eight N.172 intake questions** (`../sessions/draft-n172-intake-survey_r1_2026-09-24.md`, question 7 added today): add, cut, or reword? Then their French (`../sessions/draft-n172-intake-french_r1_2026-09-25.md`).
+> 4. **Go-ahead for three small Code briefs:** `brief-code-kvp2-p141-punctuation_r1_2026-09-25.md`; `brief-code-two-save-fixes_r1_2026-09-25.md`; and the N.154 strings (the desk drafts the brief on go-ahead: the two "Fit" strings, `a11y.paper`, and **removing "Nothing on this page is hand-written", RULED by Dann 12:44: "Get rid of it."**).
+> 5. **Approve N.173's rules for `PRODUCT.md`** when he judges them ready.
+>
+> #### CARRIED FORWARD, held, not questions
+>
+> - The desk has not settled whether the three drop-hint comments are stale (this file said so; the N.154 agent says they are accurate).
+> - Still not measured: paint on a phone; whether « PARTITION » fits 62 px in Consolas or Android's monospace. A scanned PDF with no text says "this picture". Printed pages keep on-screen colouration (for N.170).
+> - Desk-made files Dann may delete: `~/Downloads/IMG_5635-as-jpeg.jpg`, `~/Downloads/_desk-kvp2-crops/`, `~/Downloads/_desk-2026-09-25/` (source snapshot, the KVP2 CSV as it was before correction, two scratch files).
+> - Floor: `6ede257`. HEAD at the start of the day was `b2fde8f`; the overnight work is `6cf0c5f`.
 >
 
 ## THE TRACKER
@@ -104,7 +107,7 @@ does not repeat them.
 
 ### Numbered 2026-09-24, evening
 
-- `[ ]` **N.173. How Insights chooses what to say: the curation rules.** **NUMBERED BY DANN 2026-09-24 23:45**, a living draft, deliberately not ruled. Draft `../sessions/draft-curation-rules_r1_2026-09-24.md`; spec in `OPEN.md`.
+- `[ ]` **N.173. How Insights chooses what to say: the curation rules.** **2026-09-25: seven sections on how Insights speaks ruled into `PRODUCT.md`; the rules themselves still a living draft.** **NUMBERED BY DANN 2026-09-24 23:45**, a living draft, deliberately not ruled. Draft `../sessions/draft-curation-rules_r1_2026-09-24.md`; spec in `OPEN.md`.
 
 - `[ ]` **N.172. The singer says how experienced they are (Dreyfus's five stages), and Insights adjusts.** **NUMBERED BY DANN 2026-09-24 23:14.** Spec in `OPEN.md`. Built with the first Insights connections that use the ranking, not before (the desk's placement; **agreed by Dann 23:16**).
 

@@ -38,9 +38,9 @@ Each: five labelled points, optional, editable at any time; with no answer, Ilya
 4. It is smooth in performance most of the time.
 5. It is seamless, and I can choose where the colour changes.
 
-**4. Long held notes.**
+**4. Long sustained notes.** (Amended 2026-09-25 from "held", Dann's ruling of 12:15.)
 1. Long notes tire me quickly.
-2. I can hold them, but the tone wavers or thins.
+2. I can sustain them, but the tone wavers or thins.
 3. They stay steady when I plan the breath.
 4. They are steady in performance most of the time.
 5. They are steady, and I can shape them as I choose.
@@ -52,7 +52,14 @@ Each: five labelled points, optional, editable at any time; with no answer, Ilya
 4. It is reliable in performance most of the time.
 5. It is reliable, and I can move freely between soft and loud there.
 
-**6. What you would like from Insights.** One switch per topic, all on by default: high notes; low notes; moving through the passaggio; held notes; soft singing up high; things to notice. Shown beside questions 1 to 5 in one panel, per the desk's critique of 23:17.
+**7. Voice acoustics terms.** (Added 2026-09-25 on Dann's proposal of 12:51 to 12:55; sets the register of the visible line, `docs/memory/PRODUCT.md`, "THE SAME POINT IN THREE REGISTERS". Wording is the desk's draft.) *How comfortable are you with terms such as formant, harmonic, fo, and fR1?*
+1. These terms are new to me.
+2. I have heard them, but I do not use them.
+3. I know the main ideas: resonance, harmonics, and turning over.
+4. I use them in my teaching or my practice.
+5. I read and discuss voice acoustics research.
+
+**6. What you would like from Insights.** Plus one more switch, off by default, **"Show every suggestion"** (added 2026-09-25 13:00, Dann). One switch per topic, all on by default: high notes; low notes; moving through the passaggio; sustained notes; soft singing up high; things to notice. Shown beside questions 1 to 5 in one panel, per the desk's critique of 23:17.
 
 ## How the answers act (from the curation draft, rule 7)
 

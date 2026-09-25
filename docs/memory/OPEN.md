@@ -411,7 +411,7 @@ the paths already). Whoever takes N.142 should be told this.
 - **02:44:** a crowded note names all its challenges (*"All of them."*).
 - **02:44 and 02:45:** the treble middle voice counts as a register demand, as Miller's weak region (MIL04-021) plus the passaggio edges.
 - **03:06:** the two-layer citation (author, short title, page on the comment; the full reference, section heading, page, and quotation one tap away), and the `section_heading` column, back-filled later.
-- **03:35:** one "something to try" shows on each comment, and the rest sit behind a tap (*"Yes."*). Which suggestion shows first is a DESK PROPOSAL in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r2_2026-09-25.md` §0, not ruled.
+- **03:35:** ~~one "something to try" shows on each comment, and the rest sit behind a tap (*"Yes."*).~~ The desk offered it; he approved it. **AMENDED 2026-09-25 13:00, Dann: "yes" to the desk's proposal**, after he said he was uneasy with one suggestion per comment (*"Multiple suggestions per comment may be justified... We do not want to inundate the user... We want Ilya to be helpful and as precise as the user wants."*): one suggestion for each challenge the comment names, alternatives for the same challenge behind the tap; at most two visible by default, highest stakes first, with a count ("1 more thing to try"); and an intake switch, "Show every suggestion", which the singer can change at any time. Which suggestion shows first is a DESK PROPOSAL in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r2_2026-09-25.md` §0, not ruled.
 
 ## N.172. THE SINGER SAYS HOW EXPERIENCED THEY ARE, AND INSIGHTS ADJUSTS. Numbered by Dann 2026-09-24 23:14
 
