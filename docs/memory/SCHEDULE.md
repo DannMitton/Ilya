@@ -126,6 +126,7 @@ design rows.
 
 ## Week 4. Monday 2026-10-05 to Sunday 2026-10-11. Finish the design rows
 
+- [ ] **N.172**, the experience stage in the intake, **built with the N.168 slice so it has something to act on.** Placed by the desk, DESK DEFAULT.
 - [ ] **N.168, first slice in Code before the checkpoint**: the vetted passaggio and turning connections only. The dynamics connections wait on the engine and go to LATER. **Placed 2026-09-24, DESK DEFAULT; its size is NOT ESTABLISHED.** **N.94 stays in this week: Dann ruled 2026-09-24 21:08 that the transposition control does not wait for the release.** If the week runs over, this file's own rule applies.
 
 - [ ] **N.123, part 2**: the half-mass band, and the centre of gravity and cycle dose if their sources were found. A figure without a source is left out, not guessed.

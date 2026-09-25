@@ -1,0 +1,85 @@
+# Draft: curation rules for Insights
+
+Drafted by the desk 2026-09-24 22:40 from Dann's statements of 22:17 to 22:37 (`docs/memory/PRODUCT.md`, "What Ilya is for" and "Every observation answers 'why should I care?'"). **Rule 1 corrected by Dann 22:47; rule 2 rewritten by him 22:49.** Not yet ratified; nothing here enters `PRODUCT.md` until he rules.
+
+Dann's aim, 22:37: *"We must figure out good guidelines for curation that don't trigger the singer's alert that something is wrong and in need of fixing. That's not our teaching perspective. We equip the singer with everything we can for their success. Sometimes that will mean moving on to the next piece on their list."*
+
+1. **Piece first, notes second.** Ilya's first judgement is about the whole piece against the singer's declared range, passaggi, and acoustic points of turning per ten prescriptive sung Russian vowels inherited from Ilya's Text transcription (animated by Grayson's schema). (Dann's wording, 22:47.) Three outcomes: a good fit as written; a good fit transposed by n steps; wider than the range the singer gave.
+2. **If the piece does not fit, say so kindly and explore the transpositions.** (Dann's wording, 22:49.) *"If the piece doesn't fit, say so kindly and explore whether a transposition alleviates the key challenges or not, then identify which transposition(s) is/are most potentially helpful. No list of note-level hurdles needs to follow, but flagging new challenges in a new key is worthwhile in terms of equipping the user with good information with which to make informed choices. The helpful answer is the transposition, if one works, or the suggestion to look at the next piece."*
+3. **Per-note comments only where the piece fits**, as written or transposed, computed in the key the singer will sing.
+4. **Every comment starts from a problem singers actually bring**, as a pedagogy source records it. No source problem, no comment.
+5. **Every comment answers "why should I care?"**: something to try, or notice this (marked as information).
+6. **One comment per pattern, not per note.** The same vowel meeting the same pitch five times is one line naming all five places.
+7. **A small budget per piece**, three to five comments (DESK PROPOSAL; the number is Dann's), chosen by consequence: highest notes, held notes, climaxes first.
+8. **Good news counts.** "This passage sits well for your voice" is allowed where it is true and useful.
+9. **The words equip; they never alarm.** No "problem", "warning", or "danger". The pattern: what the music asks, what tends to help, and the source.
+10. **Silence is the default.** When no comment passes rules 4 to 7, Insights says nothing about notes.
+
+Open for Dann: the budget in rule 7; whether rule 2 still shows note comments when the singer keeps a piece that does not fit.
+
+## Dann's reactions, rule by rule (collected 2026-09-24 from 22:47; final wording to be drafted by the desk and discussed)
+
+- **Rule 3, 22:54:** *"No per-note comments, this is too much involvement from Ilya. Ilya must decide on a finite, well-curated selection of comments that will most likely help the user either with grounded pedagogical advice or with interesting observations that can enhance their enjoyment and/or understanding of the music and the singing of it. Some pieces may require no notes at all. That is desirable and totally ok. Other songs may seem to deserve copious commentary that must be whittled down thoughtfully and curated. Maybe Ilya should devise some sort of ranking to apply when commentary seems heavy? Maybe defining what 'heavy' is would be useful. A note on every note is heavy. A note on a quarter of the notes is still heavy. This needs sophisticated thought."* DESK NOTE: this absorbs rules 6 and 7 (one per pattern; a budget). The desk owes a proposal for the ranking and for "heavy".
+- **Rule 4, 22:55:** *"Every comment starts from a challenge singers actually bring, based on one of our pedagogy sources that we distilled for this assessment purpose. No source problem or acoustic feature worth discussing? No comment."* DESK NOTE: "challenge" replaces "problem" throughout; the second entry route (an acoustic feature worth discussing) is the "notice this" form of rule 5.
+- **Rule 5, 22:57:** *"Every comment directly or indirectly responds to 'why should I care?' in one of two forms: something to try, or notice this, marked as information. Pointing out a rare or particularly interesting acoustic interaction and what makes it notable is a justifiable response."* DESK NOTE: "rare" gives the ranking in rule 3 a measurable input (how uncommon the interaction is across the singer's repertoire or the frequency run).
+- **Rule 6, 22:57:** *"One comment per pattern if widely applicable, not per note. If the same vowel meets the same pitch five times, the singer reads one line that will account for all five places."* DESK NOTE: kept as its own rule rather than folded into rule 3; "if widely applicable" leaves room for a single place to carry its own comment when it differs from the others (a held or climactic instance, say).
+- **Rule 7, 23:01:** *"A small budget per piece, I agree. I don't know if at most three to five comments is reasonable? The length of the song might matter? A one-page song with ten challenges might actually bear more commentary than a six page song with one high note that will require vowel migration. I like the beginnings of your list: the highest notes, the held notes, and the climaxes first. Can we flesh this out better? What is the underlying principle at work through these elements: Complexity? Range? Emotion? Vowel shaping? Timbre? Tonal goal?... I think we should create space for multiple motivating factors but rank them somehow... I need help to figure this out."* DESK PROPOSAL in reply, 23:01, not yet answered: stakes = cost (extremity for this voice, vowel and timbre, duration, complexity) times weight (climax, phrase top, final note; emotion only through pitch, loudness, and length together); what Ilya can offer (a sourced thing to try, or rarity) decides whether a comment exists. Budget from distinct challenges above a stakes threshold, not song length. "Heavy" = more places than a singer can hold in mind: five visible at most, the rest behind "more observations" (the number and the link are desk proposals). Tonal goal is the singer's, not detectable.
+- **Rule 8, 23:01:** approved as drafted. *"I love it."*
+- **Rule 9, 23:01:** approved as drafted. *"Yes!!! bravo!"*
+- **Rule 10, 23:02:** *"Silence is the default. When no comment passes the finished complex of rules we develop, Insights says nothing about notes."*
+
+## Final wording, desk draft r2, 2026-09-24 23:05, for discussion
+
+1. **Piece first.** Insights first judges the whole piece against the singer's declared range and passaggi, and against the acoustic turning points of the ten prescriptive sung Russian vowels that Ilya's Text transcription supplies (after Grayson's schema). The judgement is one of three: a good fit as written; a good fit transposed; or wider than the range the singer gave.
+2. **When it does not fit.** Insights says so kindly and explores whether a transposition eases the main challenges. It names the most helpful transposition or transpositions, and any new challenge a new key brings, so the singer can choose with good information. No list of note-level challenges follows. The help is a transposition that works, or the suggestion to look at the next piece.
+3. **A curated selection, not a note on every note.** Insights chooses a small, finite set of comments that will most likely help: grounded pedagogical advice, or observations that deepen the singer's understanding or enjoyment of the music and of singing it. A piece may need no comments at all, and that is a good result.
+4. **Every comment starts from a challenge singers actually bring**, as one of the pedagogy sources distilled for Insights records it, or from an acoustic feature worth discussing. Neither, no comment.
+5. **Every comment answers "why should I care?"**, directly or indirectly, as something to try or as notice this, marked as information. A rare or remarkable acoustic interaction, with what makes it notable, is a good answer.
+6. **One comment per pattern.** When the same vowel meets the same pitch in several places, one comment covers them all. A place that differs, held or climactic, may carry its own.
+7. **Ranking by stakes.** ACCEPTED BY DANN 23:06 (*"Yes"*), with timbral seams added at his prompting (23:04: *"it's all timbre... We can coach this."*). Stakes are how hard the moment is for this voice (extremity against the singer's own passaggi and range, duration, crowded challenges, and timbral seams: places where the score sets two different timbres side by side for this voice, such as a turned vowel beside an unturned one, a leap across a passaggio, or a close and an open vowel on one pitch) times how much it matters musically (climax, phrase top, final note); a comment exists only where Insights has something real to offer (a sourced thing to try, or a rare interaction). The budget follows the number of distinct challenges above a stakes threshold, not the song's length. Five visible comments at most; any others behind "more observations".
+8. **Good news counts.** "This passage sits well for your voice" is said where it is true and useful.
+9. **The words equip; they never alarm.** No "problem", "warning", or "danger". Each comment says what the music asks, what tends to help, and its source.
+10. **Silence is the default.** When no comment passes these rules, Insights says nothing about notes. The piece-level judgement of rules 1 and 2 still appears.
+
+## Devil's advocate on rule 7, Dann 23:12, and the scholar found
+
+Dann: the same held high [ɑ] can be easy for a singer with a well-coordinated top, and a quick [u] can be hard for a less skilled one; *"Both are legitimate use cases and Ilya can be prepared for both. This is making me wonder if part of our formant intake should also capture some sort of self-report on musicality and singing acumen?"*
+
+**The five-category model, found by the desk in his own outline** (`~/Documents/Informed Ear Article/Outline_Informed_Ear_v7_JOS.docx`, §2.3.2 and §6.2, read 2026-09-24 23:15): Berliner (1988, 2004), adapted from Dreyfus: novice, advanced beginner, competent, proficient, expert. Dann's outline adds a pre-novice lay-listener stage below, supersedes his own three-stage schema from the prior paper (beginner, developing, experienced artist), notes that one person can sit at different stages in different strata (§6.3.1), and proposes a self-assessment matrix (§7.5). DESK NOTE: Berliner's model describes teacher expertise; Dreyfus's is the general skill-acquisition model, so applying the stages to singers rests on Dreyfus's generality, with Berliner as the adaptation Dann already uses.
+
+**DESK PROPOSAL for rule 7, not ruled:** the singer's stage changes the "how hard" half of stakes, never the "how much it matters" half. A self-reported stage lowers or raises the threshold for "something to try" comments; it never hides the piece-level judgement or a "notice this" line. Self-report is optional, and with none Ilya assumes the middle stage.
+
+## Revision r3, 2026-09-24 23:50, after Dann's review of 23:45. Numbered N.173; a living draft
+
+**Dann's edits, adopted:**
+- Rule 3: *"A piece may need no comments at all, and that's an acceptable result."*
+- Rule 4: *"Every comment starts from a challenge singers actually bring to the demands of the song."*
+
+**Rule 1's three outcomes were Dann's example, not a list** (*"I did not mean this as viz., I mean it as e.g."*). DESK CRITIQUE and PROPOSAL: a three-way verdict is too coarse to tailor anything. A piece can fit the range and still sit in the passaggio for most of its length; "good fit" hides that. Proposed instead: Insights computes the piece's fit along a few dimensions (range against the declared range; where the tessitura sits against the passaggi; how much of the sung time crosses this voice's vowel turns; the longest and highest sustained demands) and shows a short written summary that names what sits well and what asks most, then compares transpositions on the same dimensions. The dimensions stay internal; the singer reads two or three sentences. Not ruled.
+
+**"How hard" was vague** (Dann: exertion, coordination, cognitive effort, muscle antagonism, subglottal pressure?). DESK PROPOSAL: replace it with named **demands**, each tied to something Ilya detects, to an intake question (N.172), and to a family of advice:
+1. **Register demand:** the note against the singer's passaggi; a change of coordination. Intake: "moving through your passaggio". Advice: register coordination.
+2. **Resonance demand:** the vowel against its turn and crossings for this singer; vowel shaping. Advice: modify the vowel, or keep the tract shape, whichever a source supports.
+3. **Range-edge demand:** distance to the top or bottom of the declared range. Intake: the top, the bottom.
+4. **Endurance demand:** duration and phrase length. Intake: long held notes. Advice: planning the breath.
+5. **Dynamic demand:** loud high, or soft high, once markings are parsed; pressure and its control. Intake: soft singing up high.
+6. **Transition demand:** timbral seams, leaps across a passaggio or a turn. Advice: using the leap or the consonant to hide the seam (Dann's model sentence of 2026-09-23 00:43).
+A moment's stakes = the size of its demands for this singer (adjusted by their intake answers in that demand) times its musical weight. The demand type chooses the kind of advice, which is what makes a comment actionable. Not ruled.
+- **Dann, 23:48:** the six demands name what he meant by "hard" (*"yes"*). Adopted into the working draft; still N.173, still not ruled.
+
+## Tested by Fable's problems-first pass, 2026-09-24 late (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-problems-first_r1_2026-09-24.md`)
+
+- **Dann accepted its top three as worth a singer's attention, 2026-09-25 02:41** (*"Yes"*): the held note at the top; the open vowel turning at the secondo; the [u] that cannot stay closed.
+- **Rule 6 is not enough** for the tenor and soprano test voices, whose tessitura fires on most phrase tops. Fable proposes a rarity test. Not ruled.
+- **For treble voices, "inside the passaggio" is the whole middle register**; redefine it as nearness to an edge. Not ruled.
+- **Fable's open questions for Dann:** (1) may one crowded note carry several clauses, or one demand and one thing to try? (2) is a practice strategy (segmenting the phrase, say) inside "something to try"? (3) for trebles, does the middle register count as a register demand at all?
+- **Answered, Dann 2026-09-25 02:43, question (2): no practice strategies.** *"I think no? That feels like a general voice pedagogy instruction that should be delivered by a teacher. Ilya is meant to pinpoint specific challenges, whether that is a passage or a specific pitch/vowel combination."* So "something to try" stays with adjustments tied to the place itself (vowel, coordination, breath at that place); how to practise belongs to the teacher.
+- **Answered, Dann 2026-09-25 02:44, question (1): a crowded note names all its challenges** (*"All of them."*). DESK DEFAULT on form: one comment with several clauses, counted once against the budget, so a crowded climax does not crowd out the rest of the piece.
+- **Answered, Dann 2026-09-25 02:44, question (3): yes, the treble middle voice counts.** *"I think sopranos will benefit from attention to the weaker middle voice?"* DESK PROPOSAL to keep it from firing on every middle note: the register demand for a treble voice is the sourced weak region, not the whole middle. Miller 2004 p. 141 (MIL04-021): a weak spot near B4 to C5, lower for mezzos; plus nearness to the passaggio edges. Not ruled.
+- **Dann 02:45: "yes"** to the treble register demand as Miller's weak region (MIL04-021) plus the passaggio edges. Adopted into the working draft.
+
+## Citations a singer can follow, 2026-09-25 03:08
+
+Dann, 03:05: *"I'm not sure those citations are detailed enough for a user to locate the anchor texts. Can we be more specific with titles and page citations?"* DESK PROPOSAL, not ruled: on the comment, author, short title, and page (*Miller, Solutions for Singers, p. 201*); one tap away, the full reference (author, full title, edition, publisher, year), the section heading as printed, the page or pages, and a short quotation. The extraction format gains a `section_heading` column, starting with the KVP2 extraction; existing rows are back-filled later.
+- **Dann, 03:06: "yes"** to the two-layer citation. Adopted into the working draft.
+- **Ruled by Dann 03:06:** *"yes add a heading column to the format now, starting with the KVP2 extraction, and fill it in for existing rows later as a mechanical pass."* Column name `section_heading`, after `page`. Back-fill is owed (`docs/memory/OWED.md`).

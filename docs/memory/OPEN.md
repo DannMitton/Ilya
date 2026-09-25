@@ -396,6 +396,50 @@ the paths already). Whoever takes N.142 should be told this.
       page"*. True as a record of what he ruled, false as a description of the code.
       **His to amend or leave.**
 
+## N.173. HOW INSIGHTS CHOOSES WHAT TO SAY: THE CURATION RULES. Numbered by Dann 2026-09-24 23:45. A LIVING DRAFT
+
+**Dann's words, 23:45:** *"I think this is a great starting place but we need to keep working this. Please make sure it has a cardinal assigned and that we don't lose this work while it gestates."* And on method: *"It is your nature to ratify and entrench my first expressed gesture; I invite you to join me in a more flexible approach, one of drafting and refinement over time while we allow relationships and nuance to emerge through working non-adjacent issues."*
+
+**The draft lives in** `../sessions/draft-curation-rules_r1_2026-09-24.md`: the ten rules, Dann's reaction to each, the desk's revisions, and the open questions. **Not ruled.** Nothing in it is quoted back as law; each revision is dated there.
+
+**What it governs:** every Insights comment, including N.168's connections and N.172's intake answers.
+
+**Done when:** Dann says the rules are ready to record in `PRODUCT.md`. Until then, work proceeds against the latest draft and feeds what it learns back into it.
+
+## N.172. THE SINGER SAYS HOW EXPERIENCED THEY ARE, AND INSIGHTS ADJUSTS. Numbered by Dann 2026-09-24 23:14
+
+**Dann's words, 23:14:** *"Yes, we can adopt Dreyfus categories in our new intake section as part of the sung formant collection. Users can edit their self-identification anytime, so as undergrads progress they can enjoy a different slant of advice from Ilya. Can we build this?"* Prompted by his devil's advocate case at 23:12: the same held high [ɑ] is easy for a singer with a well-coordinated top and hard for a novice, and a quick [u] the reverse (`../sessions/draft-curation-rules_r1_2026-09-24.md`).
+
+**The categories:** Dreyfus's five stages, as Berliner (1988, 2004) names them: novice, advanced beginner, competent, proficient, expert (Dann's outline, `~/Documents/Informed Ear Article/Outline_Informed_Ear_v7_JOS.docx` §2.3.2 and §6.2). Dann's added lay-listener stage (§6.2.1) is left out, DESK DEFAULT, because his outline defines it for listening; he can add it.
+
+**What it does (DESK PROPOSAL, from the curation draft's rule 7):** the stage changes how hard a moment is judged to be for this singer, never how much it matters musically. It moves the threshold for "something to try" comments; it never hides the piece-level judgement or a "notice this" line. Optional; with no answer, Ilya assumes the middle stage (DESK DEFAULT).
+
+**Where it lives:** the intake, beside the sung formant collection (`apps/web/src/lib/shane/CalibrationWizard.svelte`), editable at any time. In the profile it is one more optional field of the same kind as `range`, `tessitura`, and `passaggio` (`packages/score-parser/src/analysis-types.ts:63-77`: absent when not provided). It is the singer's own statement, not derived, so storing it keeps `CONTRACT.md` §6.
+
+**THE QUESTIONS, DESK PROPOSAL 2026-09-24 23:20, on Dann's request of 23:15** (*"A question like 'how secure is your top?' might serve better than 'what is your level?' Can you devise a meaningful but brief array of questions whose responses will help tailor the way Ilya curates its commentary?"*). Kept inside N.172, DESK DEFAULT, because it is the same intake feature. Each question feeds one thing Ilya detects; each matches a section title in Miller 2004 (contents page, read 2026-09-24).
+
+0. "Where are you in your singing?" Novice, advanced beginner, competent, proficient, expert. Sets the starting point.
+1. "How secure are the notes around and above your upper passaggio?" High-note comments. (Miller 2004, "Developing Upper Range", p. 137.)
+2. "How secure is the bottom of your range?" Low-note comments. ("Extending the Low Range in Young Male Voices", p. 163.)
+3. "How even does your sound feel as you move through your passaggio?" Timbral-seam comments. ("Register Separation", p. 152.)
+4. "How comfortable are long held notes?" Sustained-note comments. ("Tanking up for Long Phrases", p. 21.)
+5. "How comfortable is singing softly up high?" Dynamics comments, once markings are parsed. ("*Mezza Voce*", p. 151.)
+6. "What would you like from Insights?" Things to try, things to notice, or both.
+
+Questions 1 to 5 are optional and answered "secure", "mostly", or "still developing" (rule 9: equip, never alarm). **SUPERSEDED 2026-09-24 23:30** by five labelled, behaviourally anchored points per question and per-topic switches: `../sessions/draft-n172-intake-survey_r1_2026-09-24.md`. All editable at any time; with no answers, Ilya assumes the middle.
+
+**RULED BY DANN 2026-09-24 23:21: one panel.** *"Fold the switches into the same panel as the intake questions, one list with an answer and a switch per topic, it is a convenience that we can capture the self-reported details from the user while we intake their sung formant data."*
+
+**RULED BY DANN 2026-09-24 23:22: "Not sure" is an answer.** *"Skipping is allowed, but not sure is valid if the respondent is not sure. We need to allow Not Sure to correspond to a default value and inform our curation. This is information, it's not nothing."* The desk had cited Krosnick and Presser (2010, pp. 281-283) against a "not sure" option; that evidence concerns attitude surveys, where the aim is a valid opinion, not a tool that tailors itself to the respondent. So each question offers "Not sure" as well as a skip, and the two are recorded differently. **"Not sure" counts as point 2, a working default** (the desk's proposal; Dann 23:37: *"Let's go with this as a working principle and adjust it if the results suck"*). Skipped counts as point 3. Revisit when the known-answer tests or N.170's singers show how it reads. **And the principle behind the intake, Dann 23:35:** *"a singer rushing through the intake might tap 'Not sure' to get it over with, and that singer will have to accept a less tailored commentary as a result. We cannot control the user, only honour their time and focus with few(er), better questions."*
+
+**Research report:** `../sessions/report-n172-survey-research_r1_2026-09-24.md` (Sonnet, 2026-09-24).
+
+**Depends on:** the curation rules being ruled, and on Insights connections that use the ranking. **Built alone, the question would change nothing a singer sees.** DESK INFERENCE about size: the field and the question are small; the effect is only as large as the connections that read it.
+
+**French:** owed, drafted by the desk for Dann to rule. Agreement matters: a stage label that describes the singer agrees with the singer's gender; a label that names the stage (« stade ») does not.
+
+**Done when:** a singer can choose and change a stage in the intake, both languages ruled, and a known-answer test shows one comment appearing for a novice and not for an expert on the same note.
+
 ## N.171. SWITCH ON THE `#` REPAIR. Numbered by Dann 2026-09-24 21:40
 
 **Found by the code audit of 2026-09-24** (`../sessions/memo-audit-code-catalogue-b_r1_2026-09-24.md`, section 2); **ruled in by Dann 21:40:** *"Switch it on."*

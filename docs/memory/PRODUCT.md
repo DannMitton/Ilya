@@ -287,6 +287,35 @@ Dann's words: *"We can only declare this ... if it applies exactly to the singer
 
 **Why it matters, Dann's sentence, 00:42** (his revision of a desk sentence): *"Staying faithful to what the field actually knows, while fitting it to one singer's body as they attempt to negotiate the technical demands of specific Russian vocal repertoire, is what makes Insights worth trusting."*
 
+## What Ilya is for, and why a data dump defeats it. Stated by Dann 2026-09-24 22:35
+
+His words, verbatim:
+
+> *"Ilya's purpose is not to self-perpetuate Ilya. Ilya's purpose is to meet the needs of the singers who want to sing Russian vocal repertoire. Ilya eliminates the language barrier with its transcriptions. Ilya curates potential technical hurdles not in general terms, but in personalized bespoke terms since Ilya intakes the user's formant profile and applies it against the piece under examination. Then Ilya makes suggestions (anything from this looks like a great fit for you, to this should be perfect for you transposed down/up x steps, to this song's range is too wide for you to accommodate from the information you provided, and everything in between) that help the user locate, learn, and negotiate Russian vocal repertoire. These purposes are undermined when we data dump."*
+
+Two typing slips are corrected in the quotation ("great fit", "everything in between"); nothing else is changed.
+
+**The method that follows from it, ruled by Dann 22:35 ("God yes: Start from the problems singers actually bring!"):** an Insights connection starts from a problem singers actually bring, as the pedagogy literature records it (Miller, McKinney, Reid and their kind), then finds where Ilya can detect that problem's conditions in a score for this singer's voice. The acoustic sources come last, as explanation and support. It reverses the method used until 2026-09-24, which started from an acoustic event and looked for a reason to care. **Who offered what:** the reversal was Dann's observation at 22:24 (*"Miller and McKinney and Reid's content all responds nicely to 'why should I care' as a singer"*); the desk named it as a method, and he ratified it.
+
+## Every observation answers "why should I care?" Ruled by Dann 2026-09-24 22:19 to 22:23
+
+**The filter.** Every line Insights shows answers the singer's question "why should I care?" in plain words, in one of two forms:
+
+- **Something to try:** a cited adjustment for this note that helps the singer sing more expressively with less effort.
+- **Notice this:** an occasional line, marked as information and never as a veiled intervention, naming a real acoustic effect on this note together with what it means for the singer's sound or effort.
+
+A comment that cannot say why the singer should care stays silent.
+
+**"Why should I care?" is the desk's test, never the singer's text. Dann, 2026-09-25 02:41:** *"Let's not be so transparent as to allow 'Why should you care' into user-facing communication, though, ok?"* The reason is built into the comment's wording; the phrase itself never appears on screen, in either language.
+
+**Dann's words.** 22:17: *"I am not interested in Ilya trying to sell the value of acoustic voice pedagogy. I am interested in gleaning the useful bits from acoustic voice pedagogy that lead to effective interventions and actionable adjustments the singer can experiment with to help them sing more expressively with less effort."* 22:19: *"I am in favour of an occasional 'notice this'-type commentary if an acoustic property or process is interesting. But it should be flagged as enlightening information, not a veiled pedagogical intervention... I'm not interested in weighing down our sophisticated app with AI filler."* 22:21, correcting the desk's narrower test (that the singer must be able to hear or feel the effect): an imperceptible fact *"might actually be of interest IF WE CAN ARTICULATE WHY THEY SHOULD CARE."*
+
+**Where "why should I care" usually comes from, Dann 22:23:** *"because the note is so high, or this note usually feels great on x vowel but y vowel makes it more of a challenge and this modification should help (or paying special attention to preserving the vocal tract shape without changing should help, either is possible)."* So the usual reasons are extremity, and contrast between vowels on the same pitch; and the helpful response may be a modification or a deliberately preserved vocal tract shape, whichever a source supports.
+
+**What prompted it.** Fable's P1a draft of 2026-09-24 (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-p1a_r1_2026-09-24.md`) commented on Dann's [o] on D♭4, a note with no difficulty to address, and would have implied an intervention where none was needed.
+
+**Who offered what.** The need, the two forms, the "why should I care" correction, and the reasons are Dann's. The wording of the filter is the desk's, ratified by his "Right!" at 22:23. It applies "How Insights speaks" (2026-09-23 17:21) rather than replacing it.
+
 ## Insights gives insight, not intervention. Stated by Dann 2026-09-16
 
 A vowel an Insight names is a conceptual target, reached with subtlety, and the teacher's informed ear decides. Dann's words: *"The informed ear of a teacher should be the decising factor, and obviously that lies beyond Ilya's capabilities. We are not looking for Insights to replace informed pedagogical intervention. we are looking for Insights to provide.... insght."* A named target may be any vowel on Jones's quadrilateral, not only Grayson's ten, because the prescription follows Grayson and the performance does not have to. Record: `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/review-01b.md` S3.

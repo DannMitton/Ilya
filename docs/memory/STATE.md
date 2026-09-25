@@ -47,44 +47,39 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### READ THIS FIRST. Written at the close of 2026-09-24, about 21:00. SUPERSEDES THE 2026-09-23 AND 2026-09-24 BLOCKS (moved verbatim to `../sessions/LOG.md`, block "close of 2026-09-24")
+> ### READ THIS FIRST. Written at the close of the session of 2026-09-24 evening, 2026-09-25 about 03:35. SUPERSEDES THE BLOCK BELOW IT (kept below until the next close moves it to `../sessions/LOG.md`)
 >
-> **THE ONE THING: NOT ESTABLISHED, Dann's to name at the open.** Offer him three, one line each, recommending the first:
-> 1. **Place the three unscheduled items against the five weeks left** (N.168 Insights intake, N.169 Markup against the dissertation, N.170 outside eyes). He owes this ruling; the buffer is spent. `SCHEDULE.md` carries N.168 in week 2 as a note; N.169 and N.170 are unplaced.
-> 2. **N.170 step 1:** freeze a review build and walk it, then draft the review packet (step 2). Spec in `OPEN.md` §N.170.
-> 3. **N.168 at P1a:** vetting resumes with the counts in `tools/n168-frequency-run/out/p1a-counts.csv`. The two English drafts (Fable's and the desk's) were never saved; the desk recommended a redraft from the counts, not yet answered.
+> **THE ONE THING: N.168, the Insights comments, now built problems-first under N.173's curation rules.** Dann accepted three comments (02:41): the held note at the top; the open vowel turning at the secondo; the [u] that cannot stay closed. Fable worded them (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r1_2026-09-25.md`); **the desk judged them too long** (four sentences, five citations each) and put one question to Dann that he has NOT answered: **should a comment offer only one "something to try", with the rest behind a tap?** Start there. Then: shorten the three; draft their French; brief Code for the first slice (week 4, with N.172).
 >
-> #### THE TREE AT THIS CLOSE
+> #### READ BEFORE ANY INSIGHTS WORK
 >
-> **HEAD `190cc74`, pushed 2026-09-24 20:50, all five gates at baseline** (216; 235; 0 errors and 12 warnings; **1404**; 602 + 5 skipped = 607). `ilya-ship.sh` baselines moved three times today with Dann's permission (backups `ilya-ship.sh.bak-1396-`, `-1401-`, `-1402-2026-09-24` in `~/Downloads`). **Floor: `190cc74`'s HEIC message walked by the desk on its sha deployment; `1987157` and `2f955e6` walked by the desk on Dann's library in French; `5e22d03` and `d1cc2d3` walked.** This close's memory edits ship with the next build or alone.
+> - `PRODUCT.md`, the three new sections of 2026-09-24/25: "What Ilya is for, and why a data dump defeats it" (Dann's purpose statement, verbatim); "Every observation answers 'why should I care?'" (the filter; the phrase never appears on screen); the problems-first method.
+> - `../sessions/draft-curation-rules_r1_2026-09-24.md`: **N.173, a living draft, deliberately NOT ruled.** Ten rules with Dann's reaction to each, the six demands (register, resonance, range edge, endurance, dynamics, transition), stakes = how much a moment demands of this voice times how much it matters musically, the two-layer citation (ruled 03:06: author, short title, page on the comment; full reference, section heading, page, and quotation one tap away), and Fable's three questions, all answered.
+> - `CONTRACT.md` §2 and §3, two new rules: usage never determines the work (Dann 21:24); his examples are "e.g.", not "viz."; draft and refine, never entrench his first gesture (23:45).
 >
-> #### WHAT CLOSED TODAY (accounts in the memos named; nothing here needs re-deriving)
+> #### WHAT MOVED THIS SESSION
 >
-> - `ccb790c` walk (N.123 part 1, N.127 increment 2, octave fixes), both languages, by Dann.
-> - Five findings shipped `5e22d03` (ten-vowel chart, score words on Text derived, singular counts, tight flat, pickup meter via `packages/score-parser/src/pickup.ts`).
-> - Meter provenance answered: `../sessions/memo-code-meter-provenance_r1_2026-09-24.md`; `ENVIRONMENT.md` `FINALE PICKUPS AND musx2mxl METERS`.
-> - `.mnx` sniff past 2 KB and Insights page-one re-measure, shipped `d1cc2d3`. **N.142 step 2 counted zero: nothing to build.**
-> - CHECK rows closed except UNSETTLED-8's override badge (no page carries one). INBOX-5 closed on Dann's own print.
-> - **N.130 closed:** every Insights French ruling seated, `2f955e6`. **Rulings audit closed:** ten N.131 rows ruled, four restored in `1987157` (`../sessions/memo-audit-rulings-vs-tree_r1_2026-09-24.md`).
-> - Per-format walk complete: six formats read; the phone photo gets honest messages (`190cc74`); curved-photo reading and a HEIC decoder are LATER by Dann's ruling of 19:43.
-> - Reid, *Voice: Psyche and Soma*: 124 claims, `~/Documents/Voice Pedagogy Library/Insights Research/_extraction/claims_reid-1975_2026-09-24.csv`; Dann's rule for imagistic sources in `needs_r1_2026-09-23.md`.
+> - **Schedule:** N.168, N.169, N.170, N.171, N.172 and the tree audit placed in `SCHEDULE.md`. **N.170 waits about three weeks, Dann's ruling (21:03).** N.94 stays before the release (Dann, 21:08).
+> - **Code audit** (two Sonnet memos in `../sessions/memo-audit-code-catalogue-*`): N.140 is mostly built (recorded in `OPEN.md`); dead code listed under N.86 in `SCHEDULE.md`.
+> - **N.171 SHIPPED `6ede257`**, the `#` repair switched on, zero effect on durations proven by test. **WRITTEN, not walked:** the walk will show no change, because no known score has a `#` in the sung verse. Code's memo: `../sessions/memo-code-n171_r1_2026-09-24.md`.
+> - **N.172 numbered** (the singer's self-report in the intake, one panel of questions and topic switches): survey draft `../sessions/draft-n172-intake-survey_r1_2026-09-24.md`, research report `../sessions/report-n172-survey-research_r1_2026-09-24.md`, "Not sure" = point 2 as a working default. Built with the N.168 slice.
+> - **N.173 numbered**, the curation rules (above).
+> - **Extractions:** Miller 2004, *Solutions for Singers*, 40 rows (`claims_miller-2004_2026-09-24.csv`); Bozeman KVP2 re-extracted problems-first, 52 rows with `section_heading` and `demand` columns (`claims_bozeman-KVP2_2026-09-25.csv`, memo `_synthesis/memo-sonnet-kvp2_r1_2026-09-25.md`). The extraction list for the blind spots, with Dann's review: `Insights Research/extraction-priorities_r1_2026-09-25.md`.
 >
-> #### NEW STANDING RULES TODAY, all in `CONTRACT.md`
+> #### OPEN AND URGENT, NOT YET VERIFIED BY THE DESK
 >
-> - Tether 17 amended: before showing Dann any string or built thing, check the tree AGAINST the rulings file; a ruling is not built until a grep shows it.
-> - §6: check every French agreement against its referent and say which referent.
+> **Ilya's shipped code may misquote KVP2.** `apps/web/src/lib/shane/advice-resolver.ts:233-238` quotes KVP2 p. 96 (*"fR1 must be raised approximately in tandem with the sung pitch to track the 1fo"*) and p. 141 (*"...track a specific harmonic..."*). The KVP2 extraction agent reports p. 96's sentence NOT FOUND and p. 141 reading "formant", not "harmonic". **The desk has not yet seen either page itself**; an OCR of the photos was running in `/tmp/.../scratchpad/kvp2/` when the session closed and is lost with the container. Next: find pp. 96 and 141 among `~/Downloads/IMG_4774` to `IMG_4854`, read them, and if the agent is right, brief Code to correct the string. The July synthesis (`claude/bozeman-kvp2-advice-synthesis_2026-07-21.md`) also carries four quotations the pages do not bear out (memo, NOT FOUND list), so treat it as a lead, never a source. Recorded in `OWED.md`.
 >
-> #### HELD, NOT QUESTIONS
+> #### CARRIED FORWARD FROM THE 2026-09-24 21:00 BLOCK (now in `../sessions/LOG.md`)
 >
-> - A scanned PDF with no text now also says "this picture" (`upload.err.pictureUnclear`).
-> - Three code comments still describe the old drop hint (`i18n.ts:634`, `IntakePanel.svelte:400`, `:415`).
-> - INBOX 2026-09-24: printed pages keep their on-screen colouration (a question for N.170's reviewers).
-> - `~/Downloads/IMG_5635-as-jpeg.jpg` is a desk-made test copy Dann may delete.
+> Still not measured: paint on a phone; whether « PARTITION » fits 62 px in Consolas or Android's monospace. Held, not questions: a scanned PDF with no text says "this picture"; three stale code comments on the old drop hint (`i18n.ts:634`, `IntakePanel.svelte:400`, `:415`); printed pages keep on-screen colouration (a question for N.170's reviewers); `~/Downloads/IMG_5635-as-jpeg.jpg` is a desk-made test copy Dann may delete. Floor: `6ede257`.
 >
-> #### STILL NOT MEASURED, carried forward
+> #### STILL WAITING ON DANN, ONE AT A TIME
 >
-> **Paint on a phone.** And **whether « PARTITION » fits 62 px in Consolas or Android's monospace.**
-
+> 1. One "something to try" per comment, the rest behind a tap?
+> 2. The seven N.172 questions: add, cut, or reword?
+> 3. Approve N.173's ten rules for `PRODUCT.md`, when he judges them ready (he said keep refining).
+>
 ## THE TRACKER
 
 **The goal: a working beta. PDF, photograph, and MIDI stay in it.**
@@ -101,6 +96,10 @@ does not repeat them.
 
 
 ### Numbered 2026-09-24, evening
+
+- `[ ]` **N.173. How Insights chooses what to say: the curation rules.** **NUMBERED BY DANN 2026-09-24 23:45**, a living draft, deliberately not ruled. Draft `../sessions/draft-curation-rules_r1_2026-09-24.md`; spec in `OPEN.md`.
+
+- `[ ]` **N.172. The singer says how experienced they are (Dreyfus's five stages), and Insights adjusts.** **NUMBERED BY DANN 2026-09-24 23:14.** Spec in `OPEN.md`. Built with the first Insights connections that use the ranking, not before (the desk's placement; **agreed by Dann 23:16**).
 
 - `[ ]` **N.171. Switch on the `#` repair.** **NUMBERED BY DANN 2026-09-24 21:40**, *"Switch it on."* Found by the code audit the same night. Spec in `OPEN.md`; brief `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`. Placed in week 3 (DESK DEFAULT).
 

@@ -7531,4 +7531,44 @@ Its rulings live in `docs/memory/PRODUCT.md` (the five Insights principles) and 
 > **Paint on a phone.** And **whether « PARTITION » fits 62 px in Consolas or Android's
 > monospace.**
 
+---
 
+### Moved from `STATE.md` at the close of the session of 2026-09-24 evening (2026-09-25 03:35), verbatim
+
+> ### READ THIS FIRST. Written at the close of 2026-09-24, about 21:00. SUPERSEDES THE 2026-09-23 AND 2026-09-24 BLOCKS (moved verbatim to `../sessions/LOG.md`, block "close of 2026-09-24")
+>
+> **THE ONE THING: NOT ESTABLISHED, Dann's to name at the open.** Offer him three, one line each, recommending the first:
+> 1. **Place the three unscheduled items against the five weeks left** (N.168 Insights intake, N.169 Markup against the dissertation, N.170 outside eyes). He owes this ruling; the buffer is spent. `SCHEDULE.md` carries N.168 in week 2 as a note; N.169 and N.170 are unplaced.
+> 2. **N.170 step 1:** freeze a review build and walk it, then draft the review packet (step 2). Spec in `OPEN.md` §N.170.
+> 3. **N.168 at P1a:** vetting resumes with the counts in `tools/n168-frequency-run/out/p1a-counts.csv`. The two English drafts (Fable's and the desk's) were never saved; the desk recommended a redraft from the counts, not yet answered.
+>
+> #### THE TREE AT THIS CLOSE
+>
+> **HEAD `190cc74`, pushed 2026-09-24 20:50, all five gates at baseline** (216; 235; 0 errors and 12 warnings; **1404**; 602 + 5 skipped = 607). `ilya-ship.sh` baselines moved three times today with Dann's permission (backups `ilya-ship.sh.bak-1396-`, `-1401-`, `-1402-2026-09-24` in `~/Downloads`). **Floor: `190cc74`'s HEIC message walked by the desk on its sha deployment; `1987157` and `2f955e6` walked by the desk on Dann's library in French; `5e22d03` and `d1cc2d3` walked.** This close's memory edits ship with the next build or alone.
+>
+> #### WHAT CLOSED TODAY (accounts in the memos named; nothing here needs re-deriving)
+>
+> - `ccb790c` walk (N.123 part 1, N.127 increment 2, octave fixes), both languages, by Dann.
+> - Five findings shipped `5e22d03` (ten-vowel chart, score words on Text derived, singular counts, tight flat, pickup meter via `packages/score-parser/src/pickup.ts`).
+> - Meter provenance answered: `../sessions/memo-code-meter-provenance_r1_2026-09-24.md`; `ENVIRONMENT.md` `FINALE PICKUPS AND musx2mxl METERS`.
+> - `.mnx` sniff past 2 KB and Insights page-one re-measure, shipped `d1cc2d3`. **N.142 step 2 counted zero: nothing to build.**
+> - CHECK rows closed except UNSETTLED-8's override badge (no page carries one). INBOX-5 closed on Dann's own print.
+> - **N.130 closed:** every Insights French ruling seated, `2f955e6`. **Rulings audit closed:** ten N.131 rows ruled, four restored in `1987157` (`../sessions/memo-audit-rulings-vs-tree_r1_2026-09-24.md`).
+> - Per-format walk complete: six formats read; the phone photo gets honest messages (`190cc74`); curved-photo reading and a HEIC decoder are LATER by Dann's ruling of 19:43.
+> - Reid, *Voice: Psyche and Soma*: 124 claims, `~/Documents/Voice Pedagogy Library/Insights Research/_extraction/claims_reid-1975_2026-09-24.csv`; Dann's rule for imagistic sources in `needs_r1_2026-09-23.md`.
+>
+> #### NEW STANDING RULES TODAY, all in `CONTRACT.md`
+>
+> - Tether 17 amended: before showing Dann any string or built thing, check the tree AGAINST the rulings file; a ruling is not built until a grep shows it.
+> - §6: check every French agreement against its referent and say which referent.
+>
+> #### HELD, NOT QUESTIONS
+>
+> - A scanned PDF with no text now also says "this picture" (`upload.err.pictureUnclear`).
+> - Three code comments still describe the old drop hint (`i18n.ts:634`, `IntakePanel.svelte:400`, `:415`).
+> - INBOX 2026-09-24: printed pages keep their on-screen colouration (a question for N.170's reviewers).
+> - `~/Downloads/IMG_5635-as-jpeg.jpg` is a desk-made test copy Dann may delete.
+>
+> #### STILL NOT MEASURED, carried forward
+>
+> **Paint on a phone.** And **whether « PARTITION » fits 62 px in Consolas or Android's monospace.**

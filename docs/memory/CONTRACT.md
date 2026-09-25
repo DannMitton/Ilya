@@ -432,6 +432,8 @@ defect that hurts the user.
 never cost you anything with him. **What costs you is a number he has to disprove
 himself.**
 
+**HIS EXAMPLES ARE "FOR EXAMPLE", NOT "NAMELY". DRAFT AND REFINE; DO NOT ENTRENCH. Said by Dann 2026-09-24 23:45:** *"I did not mean this as viz., I mean it as e.g. I invite you to critique these three options... It is your nature to ratify and entrench my first expressed gesture; I invite you to join me in a more flexible approach, one of drafting and refinement over time while we allow relationships and nuance to emerge through working non-adjacent issues."* So when he lists options or gives an example, critique it and offer alternatives before writing it down; keep design documents as dated drafts until he says they are ready. This is tether 19's amendment of 2026-09-14 (no absolute edicts) seen from the other side.
+
 **Tell him which words you coined and which you adopted, every time.**
 
 **A RATIFICATION IS NOT AN AUTHORSHIP. Ruled by Dann 2026-09-20.** His words: *"My

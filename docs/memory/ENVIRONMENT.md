@@ -38,6 +38,9 @@ next session the same hour it cost the last one.
 | git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
 | converting a journal PDF to text for an agent | `PDFTOTEXT WITHOUT -layout FOR TWO COLUMNS` |
 | spawning a Fable or Sonnet agent while Dann talks | `AN AGENT BLOCKS THE CONVERSATION` |
+| reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
+| a subagent quotes a source, or a summary does | `A SUMMARY'S QUOTATION IS NOT A QUOTATION` |
+| a tool call comes back "rejected" just as Dann sends a message | `A REJECTION MAY ONLY MEAN HE TYPED` |
 | searching the Journal of Singing index | `THE JOS INDEX ANSWERS A POST` |
 | downloading Journal of Singing PDFs for the library | `JOS PDFS FROM THE ARTICLE PAGE` |
 | a site shows a bot check or blocks a download | `A BLOCKED DOWNLOAD IS DANN'S TO CLICK` |
@@ -4222,3 +4225,17 @@ Every `mcp__remote-devices__*` call, including `get_device_info`, returned "The 
 ## HEIC IN THE WORKSPACE. 2026-09-24
 
 Dann's photos arrive as iPhone HEIC in `~/Downloads`. Stage them (`device_stage_files`, 50 per call), then convert in the workspace: `pip install --break-system-packages pillow-heif`, then `pillow_heif.register_heif_opener()`, `ImageOps.exif_transpose`, greyscale, thumbnail to about 1200 x 1600, save JPEG in the scratchpad. The Chrome extension's `file_upload` refuses workspace paths and device paths; it accepts `/mnt/user-data/uploads/...` only, so a converted file must go to his Downloads with `device_commit_files` and be staged back.
+
+---
+
+## READING HEIC PAGE PHOTOS IN THE CONTAINER
+
+Learned 2026-09-24. Dann photographs book pages as `IMG_nnnn.HEIC` in `~/Downloads`. Stage them (`device_stage_files`, at most 50 per call; they land in `/mnt/user-data/uploads/Downloads/`), then convert in the container: `pip install --break-system-packages pillow-heif`, register the opener, `thumbnail((1600,1600))`, save as greyscale JPEG in the scratchpad. The Read tool then shows each page, and a subagent can read the same scratchpad path. **Photos are not all one book:** the KVP2 range `IMG_4768` to `IMG_4859` also holds Ord's *Songs for Bass Voice*, a transcription-comment sheet, and a 2016 jury form. `tesseract` is installed in the container; OCR of 76 photos takes over two minutes, so run it in the background, and remember the scratchpad is lost when the session ends.
+
+## A SUMMARY'S QUOTATION IS NOT A QUOTATION
+
+Learned 2026-09-25. The July KVP2 synthesis (project knowledge) carried five quotations that the photographed pages do not bear out, and two of its quotations reached shipped code (`advice-resolver.ts:233-238`; `OWED.md`). A quotation is verified only when someone reads it on the page image this session. Treat any summary, memo, or synthesis as a lead to the page, never as the page.
+
+## A REJECTION MAY ONLY MEAN HE TYPED
+
+Learned 2026-09-24. Several agent launches and staging calls came back "rejected" at the moment Dann sent a message. Twice he meant only to add something, not to cancel. Do not relaunch on your own: read his message, and when it confirms the direction, resume and say so in one line.
