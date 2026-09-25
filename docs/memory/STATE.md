@@ -62,6 +62,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > #### STILL WAITING, one at a time
 >
+> 0. **N.168 first slice SHIPPED `de802cd` 16:33, not yet walked.** Owed: Dann's ruling on six French labels (table in `../sessions/memo-code-n168-first-slice_r1_2026-09-25.md`, "French: what is ruled and what is owed"); held at his request 16:33 ("I don't have the presence of mind for that work right now"). Also owed: the [œ] onset and [i] preface suggestions, both languages.
 > 1. Go-ahead is given for `brief-code-two-save-fixes_r1_2026-09-25.md` and `brief-code-kvp2-p141-punctuation_r1_2026-09-25.md`; run them after the first slice.
 > 2. N.173's rules for `PRODUCT.md`, when Dann judges them ready.
 > 3. Inbox has two new lines from today (registration gradient in the intake; loanword italics across Ilya). Not opened unless Dann asks.
