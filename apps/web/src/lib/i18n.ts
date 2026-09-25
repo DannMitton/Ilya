@@ -135,14 +135,15 @@ const strings: Record<string, Record<Language, string>> = {
 	//    'a11y.tocToggle' also corrects the English: `Toggle` named the
 	//    control, not what it does, and the chevron's own state rides on
 	//    aria-expanded.
-	//    'a11y.tabs' and 'a11y.paper' are the same word in both languages.
-	//    They are keyed anyway, the way 'tab.guide' is, so parity
-	//    stays total and no slot is left for `t()` to report as missing.
+	//    'a11y.tabs' is the same word in both languages. It is keyed
+	//    anyway, the way 'tab.guide' is, so parity stays total and no
+	//    slot is left for `t()` to report as missing. 'a11y.paper'
+	//    follows 'tab.transcription' (N.154, 2026-09-25).
 	//    These are spoken, never printed, so no guillemets.
 	'a11y.drawer':                 { en: 'Controls',                     fr: 'Commandes' },
 	'a11y.tocToggle':              { en: 'Expand or collapse',           fr: 'Développer ou réduire' },
 	'a11y.tabs':                   { en: 'Navigation',                   fr: 'Navigation' },
-	'a11y.paper':                  { en: 'Transcription',                fr: 'Transcription' },
+	'a11y.paper':                  { en: 'Text',                         fr: 'Texte' },
 
 	// ── Input area ───────────────────────────────────────────
 	// UNUSED SINCE N.108 increment 2: the one intake's placeholder is
@@ -1053,9 +1054,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.characteristics.editButton': { en: 'Edit voice characteristics', fr: 'Modifier les caractéristiques vocales' },
 	'calib.characteristics.addButton': { en: 'Add voice characteristics', fr: 'Ajouter des caractéristiques vocales' },
 	'calib.welcome.title': { en: 'Finding Your Resonances', fr: 'Trouver vos résonances' },
-	'calib.welcome.lede': { en: 'Fit will measure your voice to build a formant profile, which is a map of your voice\'s resonances that will be applied to your repertoire to determine how well it suits your voice. Follow the prompts. This wizard assumes you read IPA. Your device needs a working mic and you should be in a quiet space for the best capture of your resonances.', fr: 'Fit mesurera votre voix afin de constituer un profil de formants, c\u2019est-à-dire une carte des résonances de votre voix, qui sera ensuite appliquée à votre répertoire pour en évaluer la correspondance. Suivez les indications. Cet assistant présume que vous lisez l\u2019API. Votre appareil doit disposer d\u2019un microphone fonctionnel, et vous devriez vous trouver dans un endroit calme pour bien capter vos résonances.' },
+	'calib.welcome.lede': { en: 'Ilya will measure your voice to build a formant profile, which is a map of your voice\'s resonances that will be applied to your repertoire to determine how well it suits your voice. Follow the prompts. This wizard assumes you read IPA. Your device needs a working mic and you should be in a quiet space for the best capture of your resonances.', fr: 'Ilya mesurera votre voix afin de constituer un profil de formants, c\u2019est-à-dire une carte des résonances de votre voix, qui sera ensuite appliquée à votre répertoire pour en évaluer la correspondance. Suivez les indications. Cet assistant présume que vous lisez l\u2019API. Votre appareil doit disposer d\u2019un microphone fonctionnel, et vous devriez vous trouver dans un endroit calme pour bien capter vos résonances.' },
 	'calib.welcome.fryQuestion': { en: 'What is vocal fry?', fr: 'Qu\u2019est-ce que la friture vocale (\u00ab\u00a0vocal fry\u00a0\u00bb)?' },
-	'calib.welcome.fryAnswer': { en: 'A low, creaky voice register, easy to sustain and gentle on the voice. Fit reads its resonances rather than your sung pitch, so comfort matters more than pitch here.', fr: 'Un registre vocal grave et grésillant, facile à tenir et doux pour la voix. Fit en lit les résonances plutôt que la hauteur de votre chant, donc le confort importe ici davantage que la hauteur.' },
+	'calib.welcome.fryAnswer': { en: 'A low, creaky voice register, easy to sustain and gentle on the voice. Ilya reads its resonances rather than your sung pitch, so comfort matters more than pitch here.', fr: 'Un registre vocal grave et grésillant, facile à tenir et doux pour la voix. Ilya en lit les résonances plutôt que la hauteur de votre chant, donc le confort importe ici davantage que la hauteur.' },
 	'calib.welcome.beginButton': { en: 'Begin', fr: 'Commencer' },
 	'calib.readiness.title': { en: 'Getting ready', fr: 'Préparation' },
 	'calib.readiness.quiet': { en: 'Listening for quiet. Stay silent for a moment.', fr: 'À l\u2019écoute du silence. Restez silencieux un moment.' },
@@ -1514,8 +1515,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.finding.sustain':    { en: 'The longer {vowel} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.', fr: 'Le {vowel} plus long, ici, se pose sur sa hauteur de changement de timbre\u00a0: la couleur peut sembler instable pendant que vous le tenez.' },
 	'insights.footnote.tessitura': { en: 'Tessitura by Pacheco’s method: the span from the lowest to the highest pitch sung for at least half as long as the longest-sung pitch. Alberto José Vieira Pacheco, “Angelica Catalani’s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559.', fr: 'Tessiture selon la méthode de Pacheco\u00a0: l\u2019étendue de la hauteur la plus grave à la hauteur la plus aiguë chantée au moins la moitié du temps de la hauteur la plus longuement chantée. Alberto José Vieira Pacheco, “Angelica Catalani\u2019s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559. [\u00ab\u00a0La voix d\u2019Angelica Catalani selon une méthode d\u2019analyse statistique\u00a0\u00bb.]' },
 	'insights.citationUnverified': { en: 'CITATION NOT YET VERIFIED',    fr: 'CITATION NON ENCORE VÉRIFIÉE' },
-	'insights.method.typed':       { en: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, repeats taken. Nothing on this page is hand-written.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date}, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises. Rien sur cette page n\u2019est écrit à la main.' },
-	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, repeats taken. Nothing on this page is hand-written.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises. Rien sur cette page n\u2019est écrit à la main.' },
+	'insights.method.typed':       { en: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date}, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
+	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Méthode\u00a0: aucune voix n\u2019a été mesurée, donc rien sur cette page n\u2019en est calculé.' },
 	'insights.silence.unmeasured': { en: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:', fr: 'Aucune voix n\u2019a été mesurée, donc cette page ne compare pas cette pièce avec votre voix. Retenu jusqu\u2019à ce qu\u2019une voix le soit\u00a0:' },
 	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Toute observation sur les endroits où cette pièce pourrait solliciter votre voix.' },

@@ -2374,6 +2374,43 @@ faults or one. **The desk has not opened `InsightsPane.svelte` for any of them.*
 **"Why Ilya exists" makes an uncited number the thing Ilya refuses.** A cleared verdict
 resting on data that was never available is that fault in its plainest form.
 
+**RULED 2026-09-25, 13:14 to 13:18. Lines 3 and 4 are fixed together.** Code read by the desk
+(`../sessions/memo-desk-code-reading_r1_2026-09-25.md` §1, and `i18n.ts:1498`, `:1500`,
+`CalibrationWizard.svelte:315`, `:1111-1114`, `:1423-1449` read 2026-09-25).
+
+- **Dann's principle, his words, 13:14:** *"We want Ilya to frame processes positively where
+  possible, and point to solutions after naming a challenge."* Stated as a default, not an
+  edict (tether 19).
+- **With no range typed, the two lines become one.** Offered by the desk, ruled by Dann 13:16
+  ("Great!"): *"This page doesn't know your range yet. **Add your range**, and it can tell
+  you whether this key suits you."* ("doesn't know" replaced "doesn't have" at 13:22, to
+  match the French.) The findings line does not print in this state. The
+  desk's reason, agreed by Dann: it counts checks that never ran.
+- **"Add your range" is a link that opens calibration on the Range fields; Done returns to
+  Insights.** Dann asked for it (13:16, *"a clickable hyperlink to the section so they don't
+  have to hunt"*); the desk gave it its shape; ruled 13:18. Today Range is reachable only
+  from a secondary button on the wizard's summary page, which a voice with no readings never
+  shows first.
+- **Name things by what the singer sees, never by a tree heading.** Dann 13:17, correcting
+  the desk's "Add it under Voice characteristics". Tether 18 already says this.
+- **An obvious way to decline or ignore the offer.** Dann's own addition, 13:18: *"and an
+  obvious means for the user to decline or simply ignore our help."* **Shape RULED 13:20:**
+  a quiet **"No thanks"** after the link (offered by the desk). It hides the line on every
+  song. Dann's words: *"Those who simply ignore will continue to see the message and those
+  who click no thanks will not be harassed by it."* **DESK DEFAULT, 13:21: the decline is
+  remembered across reloads**, following the install prompt's decline
+  (`InstallPrompt.svelte:62-67`, one `localStorage` key), because a line that returns on
+  every reload is the harassment he ruled out. The desk had first said it would store
+  nothing and cited N.27; that was an overreach, since N.27 is about library and profile
+  saves (`STATE.md`, the N.27 paragraph), not a UI preference. Adding a range makes the
+  line moot either way.
+- **French, RATIFIED by Dann 13:22** (drafted by the desk; « connaît » replaced « n'a pas »
+  on his question about the verb; his words: *"I love connait, it's perfect"*):
+  « Cette page ne connaît pas encore votre ambitus. **Indiquez votre ambitus**, et elle
+  pourra vous dire si cette tonalité vous convient. » and « **Non merci** » for "No thanks".
+- The compass (A3 to F♯6) and the tall empty region stay NOT ESTABLISHED; this ruling
+  does not touch them.
+
 ---
 
 ## N.165. THE LOUPE DRAWS NO NOTES. DESK DEFAULT number, found by Dann 2026-09-22
