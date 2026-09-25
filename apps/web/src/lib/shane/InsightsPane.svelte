@@ -19,6 +19,9 @@
 	 * ONE EXCEPTION, N.164 (Dann, 2026-09-25): with no range typed, the verdict
 	 * line offers the range, with a link to the Range fields and a quiet "No
 	 * thanks". Neither control prints (`CONTRACT.md` §6).
+	 * A SECOND, N.168 (Dann, 2026-09-25 03:35): each note comment carries "More
+	 * to try, and why", which opens its other suggestions and full references.
+	 * It does not print; a printed Insights ends with "Sources cited" instead.
 	 *
 	 * THE ANALYSIS CHAIN IS `VoiceProfilePane`'S, repeated rather than shared.
 	 * The same six derivations in the same order (snapshot, reading octave,
@@ -39,11 +42,17 @@
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import {
 		analyzeScore,
+		noteConditions,
+		pitchToMidi,
 		resolveVocalReadingOctave,
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
+		type IntakeAnswers,
 		type Pitch,
 	} from '@ilya/score-parser';
+	import { isTreble, noteComments, noteFacts, registerFor, selectComments } from '$lib/shane/comments';
+	import { renderComments, songSeed, type RenderedComment } from '$lib/shane/comment-text';
+	import { fullReference, worksCited, type Run } from '$lib/shane/comment-sources';
 	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
 	import { withPairedVowel, type PairingMap, type DrawnUnderlay } from '$lib/shane/pairings';
 	import { resolveAdvice } from '$lib/shane/advice-resolver';
@@ -70,6 +79,8 @@
 	interface Props {
 		formants: Partial<Record<Vowel, CalibratedFormant>>;
 		characteristics?: VoiceCharacteristics;
+		/** N.172: the voice's intake answers, which move the note comments. */
+		intake?: IntakeAnswers;
 		voiceName?: string;
 		/** The voice's `updatedAt`, ISO 8601. Printed as the calibration date (N.19). */
 		voiceUpdatedAt?: string;
@@ -92,6 +103,7 @@
 	let {
 		formants,
 		characteristics = undefined,
+		intake = undefined,
 		voiceName = undefined,
 		voiceUpdatedAt = undefined,
 		language,
@@ -113,7 +125,7 @@
 	const dims = PAGE_SIZES.letter;
 
 	// ── The chain, as `VoiceProfilePane` runs it ───────────────────────
-	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName));
+	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, intake));
 	const parsed = $derived(ingested?.result.score ?? null);
 	const octaveShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
 	const readingScore = $derived(parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed);
@@ -157,6 +169,75 @@
 				})
 			: null,
 	);
+
+	// ── The note comments (N.168, first slice) ────────────────────────
+	/* The same six derivations feed them: the conditions read the
+	   performance-order score, as the frequency run does, so the comments the
+	   page prints are the ones the oracle counted. Treble comments are computed
+	   and not shown: their wording is not ruled (brief r2, DESK DEFAULT). */
+	const commentNotes = $derived(
+		measured && analysisScore && analyzed && vowelResolver
+			? noteConditions(analysisScore, adapted.snapshot, analyzed.events, {
+					vowelForEvent: vowelResolver,
+					...(readingScore ? { barsFrom: readingScore } : {}),
+				}).notes
+			: null,
+	);
+	const commentSelection = $derived.by(() => {
+		if (!commentNotes) return null;
+		const treble = isTreble(adapted.snapshot);
+		const all = noteComments({
+			facts: noteFacts(commentNotes, adapted.snapshot),
+			intake,
+			treble,
+			...(adapted.snapshot.range ? { ceilingMidi: pitchToMidi(adapted.snapshot.range.highest) } : {}),
+		}).filter((c) => !c.treble);
+		return selectComments(all, { phraseCount: new Set(commentNotes.map((n) => n.phrase.index)).size });
+	});
+	/* Vowels the singer sang, by the adapter's own usability gate; a derived
+	   fR1 is not a measured value for rule 1 of r2 §0. */
+	const measuredVowels = $derived(
+		new Set(
+			Object.entries(formants)
+				.filter(([, f]) => !!f && typeof f.f1 === 'number' && f.f1 > 0 && f.plausibility !== 'implausible')
+				.map(([v]) => v),
+		),
+	);
+	const renderedComments = $derived.by((): { shown: RenderedComment[]; more: RenderedComment[] } => {
+		if (!commentSelection || !commentNotes || !analysisScore) return { shown: [], more: [] };
+		const pitchById = new Map(analysisScore.vocalLine.filter((e) => e.pitch).map((e) => [e.id, e.pitch!]));
+		const page = [...commentSelection.shown, ...commentSelection.more];
+		const rendered = renderComments(page, songSeed(commentNotes.map((n) => `${n.eventId}:${n.midi}`)), {
+			language,
+			register: registerFor(intake),
+			measuredVowels,
+			imagery: intake?.imagery !== false,
+			all: intake?.suggestions === 'all',
+			pitchOf: (id) => pitchById.get(id),
+		});
+		return { shown: rendered.slice(0, commentSelection.shown.length), more: rendered.slice(commentSelection.shown.length) };
+	});
+	const hasComments = $derived(
+		renderedComments.shown.length > 0 || (commentSelection?.hiddenBySettings ?? 0) > 0,
+	);
+	/* "Sources cited": only the works the printed page cites, which are the
+	   visible suggestions of the comments shown (the tap does not print). */
+	const sourcesCited = $derived(worksCited(renderedComments.shown.flatMap((r) => r.printedRows)));
+
+	function commentTag(r: RenderedComment): string {
+		const m = analysisScore?.measures[r.comment.measureIndex];
+		const bar = m?.number || String(r.comment.measureIndex + 1);
+		const pitch = analysisScore?.vocalLine.find((e) => e.id === r.comment.eventId)?.pitch;
+		return [T('loupe.measureTagShort').replace('%m', bar), pitch ? P(pitch) : ''].filter(Boolean).join(' · ');
+	}
+
+	/** IPA in brackets sets in the IPA face; ♭ and ♯ set in the sans, as the fit table's do. */
+	function textParts(text: string): Array<{ text: string; ipa?: boolean; acc?: boolean }> {
+		return text
+			.split(/(\[[^\]]+\]|[♭♯]+)/)
+			.filter((p) => p.length > 0)
+			.map((p) => (p.startsWith('[') ? { text: p, ipa: true } : /^[♭♯]+$/.test(p) ? { text: p, acc: true } : { text: p }));
+	}
 
 	// ── The identity head ──────────────────────────────────────────────
 	const calibratedOn = $derived(/^\d{4}-\d{2}-\d{2}/.exec(voiceUpdatedAt ?? '')?.[0] ?? null);
@@ -225,8 +306,8 @@
 	   moves page one without resizing it. */
 	let pageOneEl = $state<HTMLElement | null>(null);
 	let pageOneHeight = $state(0);
-	const footHeights = $state([0, 0, 0]);
-	const footEls = $state<Array<HTMLElement | null>>([null, null, null]);
+	const footHeights = $state([0, 0, 0, 0]);
+	const footEls = $state<Array<HTMLElement | null>>([null, null, null, null]);
 
 	function fitPageOne() {
 		const squircle = pageOneEl;
@@ -270,7 +351,11 @@
 	const deferredFindings = $derived(model ? model.findings.slice(pageOneCount) : []);
 	const vowelsOnPageTwo = $derived(!!vowels && !vowelsOnPageOne);
 	const hasPageTwo = $derived(!!model && (deferredFindings.length > 0 || !!untrusted || vowelsOnPageTwo));
-	const totalPages = $derived(hasPageTwo ? 2 : 1);
+	/* N.168: the comments take a page of their own after the findings. DESK
+	   DEFAULT: page one is fixed and full, and a comment with its tap open
+	   needs room to grow, so this page grows with its content on screen. */
+	const commentsPage = $derived(!!model && hasComments ? (hasPageTwo ? 3 : 2) : null);
+	const totalPages = $derived(commentsPage ?? (hasPageTwo ? 2 : 1));
 
 	const attribution = $derived(strikeLiederClause(T('footer.attribution')));
 	const hasTypedCharacteristics = $derived(
@@ -436,6 +521,28 @@
 	<div class="finding">
 		<p class="finding-tag">{findingTag(f)}{' \u00b7 '}<span class="ipa">[{f.vowel}]</span>{#if wordOf(f)}{' \u00b7 '}{wordOf(f)}{/if}</p>
 		<p class="finding-body">{findingBody(f)}{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}{#if findingSeconds(f)}{' '}<span class="finding-further">{findingSeconds(f)}</span>{/if}</p>
+	</div>
+{/snippet}
+
+{#snippet prose(text: string)}{#each textParts(text) as part, j (j)}{#if part.ipa}<span class="ipa">{part.text}</span>{:else if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
+
+{#snippet runs(list: Run[])}{#each list as r, j (j)}{#if r.title}<em>{r.text}</em>{:else}{@render prose(r.text)}{/if}{/each}{/snippet}
+
+{#snippet comment(r: RenderedComment)}
+	<div class="comment">
+		<p class="finding-tag">{@render prose(commentTag(r))}{' \u00b7 '}<span class="ipa">[{r.comment.vowel}]</span></p>
+		<p class="comment-body">{@render prose(r.frame)}{#each r.visible as s (s.id)}{' '}{@render runs(s.runs)}{/each}</p>
+		<details class="comment-tap">
+			<summary>{#if r.count}<span class="comment-count">{r.count}</span>{' \u00b7 '}{/if}<span class="comment-tap-label">{T('comment.tap')}</span></summary>
+			{#each r.hidden as s (s.id)}
+				<p class="comment-body">{@render runs(s.runs)}</p>
+			{/each}
+			<ol class="comment-references">
+				{#each r.references as ref, j (j)}
+					<li>{@render runs(ref)}</li>
+				{/each}
+			</ol>
+		</details>
 	</div>
 {/snippet}
 
@@ -690,6 +797,58 @@
 						{/if}
 					</div>
 					{@render foot(2, false)}
+				</article>
+			{/if}
+
+			{#if commentsPage}
+				<!-- N.168: the note comments, up to five, in the order the singer
+				     meets them; the rest behind "more observations"; then, in its
+				     own squircle, the works this page cites. -->
+				<article
+					class="paper-page insights-page comments-page"
+					style="width: {dims.width}px; min-height: {dims.height}px;"
+					aria-label={fill(T('insights.pageAria'), { n: commentsPage, total: totalPages })}
+				>
+					<header class="running-header" bind:offsetHeight={runningHeight}>
+						<span class="running-text">{runningHeader}</span>
+						<div class="running-rule"></div>
+					</header>
+					<div class="comments-flow" style="padding-top: {subsequentTop}px; padding-bottom: {footHeights[commentsPage] + 72}px;">
+						<div class="squircle in-flow">
+							<div class="section">
+								{@render sectionHead(T('comment.heading'))}
+								{#each renderedComments.shown as r (r.comment.eventId)}
+									{@render comment(r)}
+								{/each}
+								{#if renderedComments.more.length > 0}
+									<details class="comment-more">
+										<summary>{renderedComments.more.length === 1 ? T('comment.more.one') : fill(T('comment.more.many'), { n: renderedComments.more.length })}</summary>
+										{#each renderedComments.more as r (r.comment.eventId)}
+											{@render comment(r)}
+										{/each}
+									</details>
+								{/if}
+								{#if (commentSelection?.hiddenBySettings ?? 0) > 0}
+									<p class="remainder">
+										{commentSelection?.hiddenBySettings === 1 ? T('comment.hidden.one') : fill(T('comment.hidden.many'), { n: commentSelection?.hiddenBySettings ?? 0 })}
+									</p>
+								{/if}
+							</div>
+						</div>
+						{#if sourcesCited.length > 0}
+							<div class="squircle in-flow sources-cited">
+								<div class="section">
+									{@render sectionHead(T('comment.sourcesCited'))}
+									<ul class="sources-list">
+										{#each sourcesCited as key (key)}
+											<li>{@render runs(fullReference(key))}</li>
+										{/each}
+									</ul>
+								</div>
+							</div>
+						{/if}
+					</div>
+					{@render foot(commentsPage, false)}
 				</article>
 			{/if}
 		</div>
@@ -1074,10 +1233,107 @@
 		color: var(--ink-secondary);
 	}
 
+	/* ── The note comments (N.168) ──────────────────────────────
+	   The findings' recipes, so a comment reads as a finding's sibling. The
+	   page grows with an open tap; the squircles sit in the flow. */
+	.comments-flow {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+		padding-left: 96px;
+		padding-right: 96px;
+	}
+
+	.squircle.in-flow {
+		position: static;
+	}
+
+	.comment {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		padding-top: 4px;
+	}
+
+	.comment-body {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: 14px;
+		line-height: 1.45;
+		color: var(--ink-primary);
+		text-wrap: pretty;
+	}
+
+	.comment-body .acc,
+	.finding-tag .acc {
+		font-family: var(--font-sans);
+	}
+
+	.comment-tap summary,
+	.comment-more summary {
+		cursor: pointer;
+		font-family: var(--font-sans);
+		font-size: 11px;
+		letter-spacing: 0.04em;
+		color: var(--ink-tertiary);
+	}
+
+	.comment-tap-label {
+		color: var(--rose-ink);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	.comment-tap[open] > .comment-body {
+		margin-top: 6px;
+	}
+
+	.comment-references {
+		margin: 6px 0 0;
+		padding-left: 1.1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		font-family: var(--font-serif);
+		font-size: 11.5px;
+		line-height: 1.4;
+		color: var(--ink-secondary);
+	}
+
+	.comment-more {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.sources-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		font-family: var(--font-serif);
+		font-size: 12.5px;
+		line-height: 1.4;
+		color: var(--ink-secondary);
+	}
+
+	.sources-list li {
+		padding-left: 1.2em;
+		text-indent: -1.2em;
+	}
+
 	@media print {
 		.paper-page {
 			box-shadow: none;
 			background: white;
+		}
+
+		/* N.168: the tap and "more observations" do not print; "Sources cited" does. */
+		.comment-tap,
+		.comment-more {
+			display: none;
 		}
 
 		/* N.164: on paper the offer is a plain sentence and the decline is gone. */

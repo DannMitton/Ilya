@@ -1573,6 +1573,135 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.figure.captionQuavers': { en: 'Phonation per pitch, in quavers', fr: 'Phonation par hauteur, en croches' },
 	// Unrendered since r2 (the focus segment is gone), kept as ratified.
 	'insights.figure.captionFocus': { en: 'dark: sung on {vowels}',      fr: 'en foncé\u00a0: chanté sur {vowels}' },
+
+	// ── N.168, first slice: the note comments (`brief-code-n168-first-slice_r2`) ──
+	//    `comment-text.ts` assembles them; `comment.<register>.<part>` falls back to
+	//    `comment.working.<part>`, the only register written in this slice.
+	//    RATIFIED: English by Dann 2026-09-25 13:48, French 13:52, as the three
+	//    rendered comments of `docs/sessions/templates-n168-working-register_r1`.
+	//    Parts marked COMPOSED join ratified parts in a combination Dann has not
+	//    read; parts marked OWED carry the ENGLISH IN BOTH SLOTS, the tree's
+	//    precedent (`drawer.paper`): `t()` prints `[MISSING: key]` for an absent
+	//    variant. Their French is drafted in the session memo for his ruling.
+	'comment.working.frame.sustained': { en: 'This [{vowel}] on {pitch} is sustained for about {seconds} seconds{ceiling}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge environ {seconds} secondes{ceiling}.' },
+	// COMPOSED: the singular, for a threshold moved under 1.5 s.
+	'comment.working.frame.sustainedOne': { en: 'This [{vowel}] on {pitch} is sustained for about {seconds} second{ceiling}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge environ {seconds} seconde{ceiling}.' },
+	'comment.working.frame.ceiling': { en: ' on the highest comfortable note you gave', fr: ' sur la note la plus aiguë confortable que vous avez indiquée' },
+	'comment.working.frame.top': { en: 'This [{vowel}] on {pitch} is the highest note of its phrase{reached}.', fr: 'Ce [{vowel}] sur {pitch} est la note la plus aiguë de sa phrase{reached}.' },
+	'comment.working.frame.sustainedTop': { en: 'This [{vowel}] on {pitch} is sustained and is the highest note of its phrase{reached}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge\u202f; c\u2019est la note la plus aiguë de sa phrase{reached}.' },
+	'comment.working.frame.reached': { en: ', reached by {leap}', fr: ', atteinte par {leap}' },
+	'comment.working.frame.reachedFrom': { en: ', reached by {leap} from {from}', fr: ', atteinte par {leap} depuis {from}' },
+	'comment.working.frame.arrivesSits': { en: 'It arrives by {leap} and sits {where}.', fr: 'Il arrive par {leap} et se situe {where}.' },
+	// COMPOSED: the leap with no resonance or turn clause.
+	'comment.working.frame.arrives': { en: 'It arrives by {leap}.', fr: 'Il arrive par {leap}.' },
+	'comment.working.frame.sits': { en: 'It sits {where}.', fr: 'Il se situe {where}.' },
+	'comment.working.where.above': { en: 'above your own [{vowel}] resonance', fr: 'au-dessus de votre propre résonance du [{vowel}]' },
+	'comment.working.where.under': { en: 'a little under your own [{vowel}] resonance, near {resonance}', fr: 'un peu sous votre propre résonance du [{vowel}], autour de {resonance}' },
+	'comment.working.where.closedU': { en: ', where a closed [{vowel}] is unlikely to hold its shape', fr: ', là où un [{vowel}] fermé a peu de chances de garder sa forme' },
+	'comment.working.where.turnJustPast': { en: 'just past the point where your [{vowel}] turns (about {turn}), so its colour closes', fr: 'juste après la hauteur où votre [{vowel}] change de timbre (autour de {turn})\u00a0: sa couleur se ferme' },
+	// COMPOSED: "past", at 2 semitones or more over the turning pitch (r2 §2 used it; not in the ratified three).
+	'comment.working.where.turnPast': { en: 'past the point where your [{vowel}] turns (about {turn}), so its colour closes', fr: 'après la hauteur où votre [{vowel}] change de timbre (autour de {turn})\u00a0: sa couleur se ferme' },
+	// The leaps. 8, 9, and 12 are ratified; 7, 10, 11, and past the octave are COMPOSED from the field's own interval names.
+	'comment.working.leap.7': { en: 'a leap of a perfect fifth', fr: 'un saut de quinte juste' },
+	'comment.working.leap.8': { en: 'a leap of a minor sixth', fr: 'un saut de sixte mineure' },
+	'comment.working.leap.9': { en: 'a leap of a major sixth', fr: 'un saut de sixte majeure' },
+	'comment.working.leap.10': { en: 'a leap of a minor seventh', fr: 'un saut de septième mineure' },
+	'comment.working.leap.11': { en: 'a leap of a major seventh', fr: 'un saut de septième majeure' },
+	'comment.working.leap.12': { en: 'an octave leap', fr: 'un saut d\u2019octave' },
+	'comment.working.leap.more': { en: 'a leap of more than an octave', fr: 'un saut de plus d\u2019une octave' },
+	// The openers (`PRODUCT.md`, "A SUGGESTION IS AN OFFER"; French settled or ruled 13:04 to 13:05). {de} is « de » or « d’ ».
+	'comment.opener.1': { en: 'You might try {action}', fr: 'Vous pourriez essayer {de}{action}' },
+	'comment.opener.2': { en: 'Consider {action}', fr: 'Vous pouvez songer à {action}' },
+	'comment.opener.3': { en: 'You can experiment with {action}', fr: 'Il peut être intéressant {de}{action}' },
+	'comment.opener.4': { en: 'One thing to explore is {action}', fr: 'Une piste à explorer\u00a0: {action}' },
+	'comment.opener.5': { en: 'Try {action}', fr: 'Essayez {de}{action}' },
+	'comment.opener.7': { en: '{author} suggests {action}', fr: '{author} propose {de}{action}' },
+	// The suggestions: the action, then the closer where the source states an outcome the singer can hear or feel.
+	'comment.working.try.jaw.action': { en: 'letting the jaw lower as the pitch rises while the tip of your tongue keeps its [{vowel}] position', fr: 'laisser la mâchoire descendre à mesure que la hauteur monte, la pointe de la langue gardant sa position de [{vowel}]' },
+	'comment.working.try.jaw.closer': { en: ', and notice what happens to the colour of the [{vowel}] as it opens', fr: '. Observez alors ce que devient la couleur du [{vowel}] quand il s\u2019ouvre' },
+	'comment.working.try.level.action': { en: 'keeping the second half of the note at the level of the first', fr: 'garder la seconde moitié de la note au niveau de la première' },
+	'comment.working.try.tract.action': { en: 'keeping the length and shape of the vocal tract steady', fr: 'garder stables la longueur et la forme du conduit vocal' },
+	'comment.working.try.tract.closer': { en: '. Notice whether the closing then happens without actively steering it', fr: '. Observez si la fermeture se fait alors sans que vous la dirigiez activement' },
+	'comment.working.try.decrescendo.action': { en: 'easing into the note with a slight decrescendo', fr: 'aborder la note avec un léger decrescendo' },
+	'comment.working.try.decrescendo.closer': { en: ', to see whether the [{vowel}] holds its shape', fr: ', pour voir si le [{vowel}] garde sa forme' },
+	'comment.working.try.legato.action': { en: 'singing the leap legato, thinking of the {pitch} as a note that asks for more energy, space, and depth, not simply a high one', fr: 'chanter le saut legato, en pensant au {pitch} comme à une note qui demande plus d\u2019énergie, d\u2019espace et de profondeur, et non simplement comme à une note aiguë' },
+	// OWED in both languages: the desk's offer-shaped English from r1 §2.1 and §3.1, not yet read by Dann. A French page leaves these two out (`frenchOwed`).
+	'comment.working.try.mixed.action': { en: 'touching a mixed vowel like [œ] at the onset and returning to the text', fr: 'touching a mixed vowel like [œ] at the onset and returning to the text' },
+	'comment.working.try.preface.action': { en: 'prefacing the [{vowel}] with the brightness of [i], as in the English \u201cyou\u201d', fr: 'prefacing the [{vowel}] with the brightness of [i], as in the English \u201cyou\u201d' },
+	// The comment's furniture. The tap label and counts are the ratified English; their French is OWED, as are the lines the desk wrote.
+	'comment.heading': { en: 'Comments on this piece', fr: 'Comments on this piece' },
+	'comment.tap': { en: 'More to try, and why', fr: 'More to try, and why' },
+	'comment.count.one': { en: '1 more thing to try', fr: '1 more thing to try' },
+	'comment.count.many': { en: '{n} more things to try', fr: '{n} more things to try' },
+	'comment.more.one': { en: 'One more observation', fr: 'One more observation' },
+	'comment.more.many': { en: '{n} more observations', fr: '{n} more observations' },
+	'comment.hidden.one': { en: 'One observation hidden by your settings', fr: 'One observation hidden by your settings' },
+	'comment.hidden.many': { en: '{n} observations hidden by your settings', fr: '{n} observations hidden by your settings' },
+	'comment.sourcesCited': { en: 'Sources cited', fr: 'Sources cited' },
+
+	// ── N.172: the Insights intake, RATIFIED by Dann 2026-09-25, English 14:32 to 14:45,
+	//    French 14:46 to 14:51 (`draft-n172-intake-survey_r1`, `draft-n172-intake-french_r1`).
+	//    *piano* and *forte* are <em> in the French, rendered with {@html} like `footer.attribution`.
+	'voiceIntake.intro': { en: '{count} quick questions so Insights understands your voice. Skip any you like, and change your answers whenever you want.', fr: '{count} questions rapides pour que les Aperçus comprennent votre voix. Passez celles que vous voulez, et modifiez vos réponses quand vous le souhaitez.' },
+	'voiceIntake.count.2': { en: 'Two', fr: 'Deux' },
+	'voiceIntake.count.3': { en: 'Three', fr: 'Trois' },
+	'voiceIntake.count.4': { en: 'Four', fr: 'Quatre' },
+	'voiceIntake.count.5': { en: 'Five', fr: 'Cinq' },
+	'voiceIntake.count.6': { en: 'Six', fr: 'Six' },
+	'voiceIntake.count.7': { en: 'Seven', fr: 'Sept' },
+	'voiceIntake.count.8': { en: 'Eight', fr: 'Huit' },
+	'voiceIntake.count.9': { en: 'Nine', fr: 'Neuf' },
+	'voiceIntake.count.10': { en: 'Ten', fr: 'Dix' },
+	'voiceIntake.notSure': { en: 'Not sure', fr: 'Je ne sais pas' },
+	'voiceIntake.clear': { en: 'Clear answer', fr: 'Effacer la réponse' },
+	'voiceIntake.top.stem': { en: 'How is the top of your voice right now, around and above your secondary passaggio?', fr: 'Où en est le haut de votre voix en ce moment, autour et au-dessus de votre passaggio secondaire\u202f?' },
+	'voiceIntake.top.1': { en: 'I cannot reach it reliably yet.', fr: 'Je ne l\u2019atteins pas encore de façon fiable.' },
+	'voiceIntake.top.2': { en: 'I can reach it, but it feels unpredictable.', fr: 'Je peux l\u2019atteindre, mais c\u2019est imprévisible.' },
+	'voiceIntake.top.3': { en: 'It works in practice when I prepare it.', fr: 'Cela fonctionne à l\u2019étude quand je le prépare.' },
+	'voiceIntake.top.4': { en: 'It is reliable in performance most of the time.', fr: 'C\u2019est fiable en concert la plupart du temps.' },
+	'voiceIntake.top.5': { en: 'It is reliable, and I can colour it as I choose.', fr: 'C\u2019est fiable, et je peux le colorer à mon gré.' },
+	'voiceIntake.bottom.stem': { en: 'How is the bottom of your range right now?', fr: 'Où en est le bas de votre ambitus en ce moment\u202f?' },
+	'voiceIntake.bottom.1': { en: 'The lowest notes do not sound reliably yet.', fr: 'Les notes les plus graves ne sortent pas encore de façon fiable.' },
+	'voiceIntake.bottom.2': { en: 'The notes sound, but they lack body.', fr: 'Les notes sortent, mais elles manquent de corps.' },
+	'voiceIntake.bottom.3': { en: 'They carry when I prepare them.', fr: 'Elles portent quand je les prépare.' },
+	'voiceIntake.bottom.4': { en: 'They carry in performance most of the time.', fr: 'Elles portent en concert la plupart du temps.' },
+	'voiceIntake.bottom.5': { en: 'They carry reliably, and I can colour them as I choose.', fr: 'Elles portent de façon fiable, et je peux les colorer à mon gré.' },
+	'voiceIntake.passaggi.stem': { en: 'How does moving through your passaggi feel in your singing right now?', fr: 'Comment se passe en ce moment la traversée de vos passaggi quand vous chantez\u202f?' },
+	'voiceIntake.passaggi.1': { en: 'I notice a clear shift in my sound there.', fr: 'J\u2019entends un net changement dans mon son à cet endroit.' },
+	'voiceIntake.passaggi.2': { en: 'I can smooth it in exercises, not yet in songs.', fr: 'Je peux la rendre homogène dans les exercices, pas encore dans le répertoire.' },
+	'voiceIntake.passaggi.3': { en: 'It is smooth in songs when I prepare it.', fr: 'Elle est homogène dans le répertoire quand je la prépare.' },
+	'voiceIntake.passaggi.4': { en: 'It is smooth in performance most of the time.', fr: 'Elle est homogène en concert la plupart du temps.' },
+	'voiceIntake.passaggi.5': { en: 'It is even throughout, and I can choose where the colour changes.', fr: 'Elle est égale d\u2019un bout à l\u2019autre, et je choisis où la couleur change.' },
+	'voiceIntake.sustained.stem': { en: 'How do long, sustained notes go for you right now?', fr: 'Comment se passent en ce moment vos notes longues et prolongées\u202f?' },
+	'voiceIntake.sustained.1': { en: 'Long notes tire me quickly.', fr: 'Les notes longues me fatiguent vite.' },
+	'voiceIntake.sustained.2': { en: 'I can sustain them, but the tone wavers or thins.', fr: 'Je peux les mener jusqu\u2019au bout, mais le son vacille ou s\u2019amincit.' },
+	'voiceIntake.sustained.3': { en: 'They stay steady when I plan the breath.', fr: 'Elles restent stables quand je prévois mon souffle.' },
+	'voiceIntake.sustained.4': { en: 'They are steady in performance most of the time.', fr: 'Elles sont stables en concert la plupart du temps.' },
+	'voiceIntake.sustained.5': { en: 'They are steady, and I can shape them as I choose.', fr: 'Elles sont stables, et je peux les façonner à mon gré.' },
+	'voiceIntake.softHigh.stem': { en: 'How is soft singing up high for you right now?', fr: 'Où en est votre chant <em>piano</em> dans l\u2019aigu en ce moment\u202f?' },
+	'voiceIntake.softHigh.1': { en: 'I cannot sing softly up high yet.', fr: 'Je ne peux pas encore chanter <em>piano</em> dans l\u2019aigu.' },
+	'voiceIntake.softHigh.2': { en: 'I can sing softly there, but it feels fragile.', fr: 'Je peux chanter <em>piano</em> dans l\u2019aigu, mais cela reste fragile.' },
+	'voiceIntake.softHigh.3': { en: 'It works when I prepare it.', fr: 'Cela fonctionne quand je le prépare.' },
+	'voiceIntake.softHigh.4': { en: 'It is reliable in performance most of the time.', fr: 'C\u2019est fiable en concert la plupart du temps.' },
+	'voiceIntake.softHigh.5': { en: 'It is reliable, and I can move freely between soft and loud there.', fr: 'C\u2019est fiable, et je passe librement du <em>piano</em> au <em>forte</em> à cet endroit.' },
+	'voiceIntake.acoustics.stem': { en: 'How comfortable are you with voice acoustics terms such as formant, harmonic, fo, and fR1?', fr: 'Dans quelle mesure êtes-vous à l\u2019aise avec des termes comme formant, harmonique, fo et fR1\u202f?' },
+	'voiceIntake.acoustics.1': { en: 'These terms are new to me.', fr: 'Ces termes sont nouveaux pour moi.' },
+	'voiceIntake.acoustics.2': { en: 'I have heard them, but I do not use them.', fr: 'Je les ai déjà entendus, sans les employer.' },
+	'voiceIntake.acoustics.3': { en: 'I know the main ideas: resonance, harmonics, and turning over.', fr: 'J\u2019en connais les idées principales\u00a0: la résonance, les harmoniques, le changement de timbre.' },
+	'voiceIntake.acoustics.4': { en: 'I use them in my teaching or my practice.', fr: 'Je les emploie dans mon enseignement ou ma pratique.' },
+	'voiceIntake.acoustics.5': { en: 'I read and discuss voice acoustics research.', fr: 'Je lis et commente la recherche en acoustique vocale.' },
+	'voiceIntake.topics.stem': { en: 'What would you like Insights to comment on?', fr: 'Qu\u2019aimeriez-vous que les Aperçus commentent\u202f?' },
+	'voiceIntake.topic.high': { en: 'High notes', fr: 'Les notes aiguës' },
+	'voiceIntake.topic.low': { en: 'Low notes', fr: 'Les notes graves' },
+	'voiceIntake.topic.passaggi': { en: 'Moving through the passaggi', fr: 'La traversée des passaggi' },
+	'voiceIntake.topic.sustained': { en: 'Sustained notes', fr: 'Les notes prolongées' },
+	'voiceIntake.topic.softHigh': { en: 'Soft singing up high', fr: 'Le chant <em>piano</em> dans l\u2019aigu' },
+	'voiceIntake.topic.other': { en: 'Other things worth noticing', fr: 'Les autres points à remarquer' },
+	'voiceIntake.appear.heading': { en: 'How comments appear', fr: 'Présentation des commentaires' },
+	'voiceIntake.appear.count': { en: 'How many suggestions should each comment show?', fr: 'Combien de suggestions chaque commentaire doit-il afficher\u202f?' },
+	'voiceIntake.appear.two': { en: 'Two, with the rest a tap away', fr: 'Deux, les autres affichées sur demande' },
+	'voiceIntake.appear.all': { en: 'All of them', fr: 'Toutes' },
+	'voiceIntake.appear.imagery': { en: 'Include imagery and metaphor cues', fr: 'Inclure des images et des métaphores' },
 };
 
 /**
@@ -1584,6 +1713,11 @@ export function t(key: string, lang: Language): string {
 	const entry = strings[key];
 	if (!entry || !entry[lang]) return `[MISSING: ${key}]`;
 	return entry[lang];
+}
+
+/** True when the key carries a value in this language. `comment-text.ts` uses it to fall back between registers. */
+export function hasString(key: string, lang: Language): boolean {
+	return !!strings[key]?.[lang];
 }
 
 /**

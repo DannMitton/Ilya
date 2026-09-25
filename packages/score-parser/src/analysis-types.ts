@@ -76,9 +76,52 @@ export interface VoiceProfileSnapshot {
    */
   passaggio?: { primo: Pitch; secondo: Pitch };
 
+  /**
+   * N.172: the singer's own answers to the Insights intake. Absent when the
+   * singer never opened the panel, and every question inside it is optional
+   * too: an absent answer is a skip, which counts as point 3, and "not sure"
+   * counts as point 2 (Dann, 2026-09-24 23:22 and 23:37). Stored, because
+   * they are the singer's statements; the comments they move are computed.
+   */
+  intake?: IntakeAnswers;
+
   /** Optional label carried through for the citation block (e.g. voice type). */
   label?: string;
 }
+
+/** One answer on the intake's five-point scale, or "not sure". */
+export type IntakePoint = 1 | 2 | 3 | 4 | 5 | 'not-sure';
+
+/**
+ * N.172's intake, as ratified by Dann 2026-09-25 (English 14:32 to 14:45,
+ * French 14:46 to 14:51). The question numbers are the ratified ones.
+ */
+export interface IntakeAnswers {
+  /** Q1: the top of the voice, around and above the secondary passaggio. */
+  top?: IntakePoint;
+  /** Q2: the bottom of the range. */
+  bottom?: IntakePoint;
+  /** Q3: moving through the passaggi. */
+  passaggi?: IntakePoint;
+  /** Q4: long, sustained notes. */
+  sustained?: IntakePoint;
+  /** Q5: soft singing up high. */
+  softHigh?: IntakePoint;
+  /** Q7: comfort with voice acoustics terms; sets the register of the visible line. */
+  acoustics?: IntakePoint;
+  /**
+   * Q6: what Insights comments on. Every topic is on unless it is `false`
+   * here, so an absent map means all six are checked (Dann, 14:31).
+   */
+  topics?: Partial<Record<IntakeTopic, boolean>>;
+  /** "How comments appear": two suggestions with the rest a tap away (default), or all of them. */
+  suggestions?: 'two' | 'all';
+  /** "Include imagery and metaphor cues". On unless `false`. */
+  imagery?: boolean;
+}
+
+/** Q6's six moments, in the ratified order. */
+export type IntakeTopic = 'high' | 'low' | 'passaggi' | 'sustained' | 'softHigh' | 'other';
 
 /** The non-destructive analysis overlay for one parsed score. */
 export interface AnalyzedScore {

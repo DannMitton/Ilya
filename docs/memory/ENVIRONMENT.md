@@ -128,6 +128,7 @@ next session the same hour it cost the last one.
 | you are about to, or you are seeing | search for |
 |---|---|
 | a measurement taken soon after a score loads disagrees with a later one | `THE SEATING REDRAW ARRIVES FOUR SECONDS LATE` |
+| the alias shows a blank white page right after a ship | `BLANK ON THE FIRST LOAD AFTER A DEPLOY` |
 | you are measuring whether two drawn things touch | `A BOUNDING BOX IS NOT INK` |
 | drive a browser yourself | `Claude Code, and where the building` |
 | a size binding stays stuck in the browser pane | `A HIDDEN PANE NEVER RUNS A RESIZEOBSERVER` |
@@ -4265,3 +4266,8 @@ Learned 2026-09-25. For a long read-only session or a subagent, tar `apps/web/sr
 
 Learned 2026-09-25. Every bridge call reaches Dann's Mac, so if it sleeps, the desk stops partway. Before he leaves, give him one line to paste into a new Terminal window: `caffeinate -i`. Nothing prints and the window seems frozen; that is correct. Ctrl-C ends it. **Remind him which window it is when he returns:** at 12:13 he typed into it and thought Terminal had frozen. Agents launched while he is away ran without an approval prompt (one Sonnet agent, 2026-09-25 04:30); two launched while he was typing were rejected (`A REJECTION MAY ONLY MEAN HE TYPED`).
 
+
+
+## BLANK ON THE FIRST LOAD AFTER A DEPLOY
+
+Learned 2026-09-25, twice (after `933bbda` and `f5decd3`). The desk's first load of the branch alias in Chrome, right after a new build went live, drew a blank white page: an empty accessibility tree, no app errors in the console (only the Zotero extension's). **A second load drew the app normally**, with the new build (checked by `sw.js`'s `CACHE_VERSION` stamp, see `THE ALIAS CHECK THAT WORKED`). Likely the service worker swapping caches, NOT ESTABLISHED. **Reload once before reporting a broken deploy.**

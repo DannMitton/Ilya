@@ -207,6 +207,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
+	import type { IntakeAnswers } from '@ilya/score-parser';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -347,6 +348,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	/* N.127: the voice's `updatedAt`, which Insights prints as its calibration
 	   date. Mirrored beside the name for the same reason the name is. */
 	let shaneVoiceUpdatedAt = $state<string | undefined>(undefined);
+	/* N.172: the voice's Insights intake answers, mirrored for Insights' note comments. */
+	let shaneIntake = $state<IntakeAnswers | undefined>(undefined);
 	// The most recently ingested score from the Fit uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
@@ -4562,11 +4565,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					<CalibrationWizard
 						{language}
 						openRequest={calibrationRequest}
-						onActiveProfileChange={(f, name, characteristics, updatedAt) => {
+						onActiveProfileChange={(f, name, characteristics, updatedAt, intake) => {
 							shaneFormants = f;
 							shaneVoiceName = name;
 							shaneCharacteristics = characteristics;
 							shaneVoiceUpdatedAt = updatedAt;
+							shaneIntake = intake;
 						}}
 						onOpenLearnNote={() => {
 							// The sung-[o] glyph's deep link: Learn tab, then the
@@ -5047,6 +5051,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{isMobile}
 				formants={shaneFormants}
 				characteristics={shaneCharacteristics}
+				intake={shaneIntake}
 				voiceName={shaneVoiceName}
 				voiceUpdatedAt={shaneVoiceUpdatedAt}
 				{language}

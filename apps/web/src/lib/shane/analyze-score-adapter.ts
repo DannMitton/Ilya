@@ -31,7 +31,7 @@
  * and completeness is a view of it, so the two channels cannot disagree.
  */
 
-import type { VoiceProfileSnapshot } from '@ilya/score-parser';
+import type { IntakeAnswers, VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import type { CalibratedFormant, VoiceCharacteristics, Vowel } from './engine/types';
 import { DERIV_SOURCE, deriveFrom } from './engine/derivations';
@@ -94,11 +94,14 @@ export function completenessOf(s: VoiceProfileSnapshot): AnalysisCompleteness {
  * @param characteristics the typed range/tessitura/passaggio, or undefined
  *   when the singer skipped the phase entirely.
  * @param label optional citation-block label (e.g. the voice name or type).
+ * @param intake N.172's answers, when the singer gave any; carried into the
+ *   snapshot for the note comments (`comments.ts`), never read here.
  */
 export function buildVoiceProfileSnapshot(
 	formants: Partial<Record<Vowel, CalibratedFormant>>,
 	characteristics: VoiceCharacteristics | undefined,
 	label?: string,
+	intake?: IntakeAnswers,
 ): AdaptedProfile {
 	// fR1 per vowel from the measured formants. A vowel the singer never sang,
 	// or a reading with no usable f1, contributes nothing: the engine already
@@ -227,6 +230,8 @@ export function buildVoiceProfileSnapshot(
 		...(tessitura ? { tessitura } : {}),
 		...(passaggio ? { passaggio } : {}),
 		...(label !== undefined ? { label } : {}),
+		// N.172: the singer's own answers, carried as given. Nothing here reads them.
+		...(intake !== undefined ? { intake: { ...intake, ...(intake.topics ? { topics: { ...intake.topics } } : {}) } } : {}),
 	};
 
 	return {

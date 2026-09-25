@@ -38,7 +38,6 @@ import {
 	isLongSustain,
 	noteConditions,
 	pitchToMidi,
-	pitchToHz,
 	hzToPitch,
 	resolveTempo,
 	resolveVocalReadingOctave,
@@ -61,6 +60,10 @@ import { scoreMetrics } from '$lib/shane/score-metrics';
 import { musxToMnxJson } from '../e16-harness/src/denigma-convert';
 import { checkPlausibility, FLOOR_MARGIN_SEMITONES, CEILING_MARGIN_SEMITONES } from '$lib/shane/engine/plausibility';
 import { expectedF1 } from '$lib/shane/engine/derivations';
+import { noteFacts } from '$lib/shane/comments';
+import { buildWatchList } from '$lib/shane/watchlist';
+import { resolveAdvice } from '$lib/shane/advice-resolver';
+import { commentsOracle, type OracleFinding, type OracleSong } from './comments-oracle';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(here, '../..');
@@ -420,6 +423,8 @@ interface Row extends NoteCondition {
 	highestOfPhrase: boolean;
 	/** Absent when the voice has no passaggio. `fired` lists the clauses that held; empty when none did. */
 	p1a?: { near: boolean; fired: string[] };
+	/** The spelled pitch, for the comments oracle. Not written to the CSV. */
+	pitch: Pitch;
 }
 
 /** ASCII pitch name for the CSV: C4, Eb4, F#5. */
@@ -483,9 +488,10 @@ function assertFoldChangesNoCalculation(id: string, raw: ParsedScore, folded: Pa
 	}
 }
 
-async function runSong(id: string, file: string): Promise<{ status: SongStatus; rows: Record<string, Row[]> }> {
+async function runSong(id: string, file: string): Promise<{ status: SongStatus; rows: Record<string, Row[]>; findings: OracleFinding[] }> {
 	const status: SongStatus = { id, file, read: false };
 	const rows: Record<string, Row[]> = Object.fromEntries(VOICES.map((v) => [v.key, []]));
+	const findings: OracleFinding[] = [];
 	let parsed: ParsedScore;
 	try {
 		const mnx = await musxToMnxJson(path.join(FINALE, file));
@@ -493,7 +499,7 @@ async function runSong(id: string, file: string): Promise<{ status: SongStatus; 
 		const fatal = result.errors.filter((e) => e.fatal);
 		if (fatal.length > 0) {
 			status.failure = `parse failed: ${fatal.map((e) => e.code).join(', ')}`;
-			return { status, rows };
+			return { status, rows, findings };
 		}
 		// N.171: the fold at arrival, as `ingest.ts` applies it in the app.
 		const fold = foldDictionMarks(result.score);
@@ -507,7 +513,7 @@ async function runSong(id: string, file: string): Promise<{ status: SongStatus; 
 		status.parseWarnings = result.warnings.map((w) => w.code);
 	} catch (e) {
 		status.failure = `conversion failed: ${(e as Error).message}`;
-		return { status, rows };
+		return { status, rows, findings };
 	}
 	status.read = true;
 
@@ -583,20 +589,21 @@ async function runSong(id: string, file: string): Promise<{ status: SongStatus; 
 		const weightOf = (n: NoteCondition) => (result.tempo === 'none' ? n.quavers : n.seconds!);
 		const total = result.notes.reduce((s, n) => s + weightOf(n), 0);
 		const byId = new Map(score.vocalLine.map((e) => [e.id, e]));
-		const phraseTop = new Map<number, number>();
-		for (const n of result.notes) phraseTop.set(n.phrase.index, Math.max(phraseTop.get(n.phrase.index) ?? -Infinity, n.midi));
+		// N.168 first slice: the derivations live in `$lib/shane/comments.ts`,
+		// which the app calls too, so these CSVs are the app's own numbers.
+		const facts = noteFacts(result.notes, voice.profile);
 		const pass = voice.profile.passaggio;
 		const primo = pass ? pitchToMidi(pass.primo) : undefined;
 		const secondo = pass ? pitchToMidi(pass.secondo) : undefined;
-		rows[voice.key] = result.notes.map((n) => {
+		rows[voice.key] = result.notes.map((n, i) => {
 			const ev = byId.get(n.eventId);
 			if (!ev || !ev.pitch) throw new Error(`${id} ${voice.key}: no sung event ${n.eventId}`);
 			const measure = measureOf.get(ev.measureIndex);
 			const pos = ev.rhythmicPosition.fraction;
-			const fR1 = n.vowel !== undefined ? voice.profile.fR1[n.vowel] : undefined;
-			const turningHz = typeof fR1 === 'number' && fR1 > 0 ? fR1 / 2 : undefined;
-			const semisFromTurning = turningHz !== undefined ? 12 * Math.log2(pitchToHz(ev.pitch) / turningHz) : undefined;
-			const highestOfPhrase = n.midi === phraseTop.get(n.phrase.index);
+			const f = facts[i];
+			const turningHz = f.turningHz;
+			const semisFromTurning = f.semitonesFromTurning;
+			const highestOfPhrase = f.highestOfPhrase;
 			let p1a: Row['p1a'];
 			if (primo !== undefined && secondo !== undefined) {
 				const near = Math.abs(n.midi - secondo) <= 1 || (voice.treble && Math.abs(n.midi - primo) <= 1);
@@ -623,14 +630,18 @@ async function runSong(id: string, file: string): Promise<{ status: SongStatus; 
 				fR1Source: n.vowel !== undefined ? voice.fR1Source[n.vowel] : undefined,
 				turningName: turningHz !== undefined ? asciiPitch(analyzed.events[n.eventId]?.turningPitch ?? hzToPitch(turningHz)) : undefined,
 				semisFromTurning,
-				passaggio3: primo !== undefined && secondo !== undefined ? (n.midi < primo ? 'below primo' : n.midi > secondo ? 'above secondo' : 'inside') : undefined,
-				toPrimo: primo !== undefined ? n.midi - primo : undefined,
-				toSecondo: secondo !== undefined ? n.midi - secondo : undefined,
+				passaggio3: f.passaggio,
+				toPrimo: f.toPrimo,
+				toSecondo: f.toSecondo,
 				highestOfPhrase,
 				p1a,
+				pitch: ev.pitch,
 			};
 		});
 		if (voice.key === 'mitton') {
+			// The shipped findings, as `InsightsPane.svelte` builds them, for the overlap report.
+			const watch = buildWatchList(readingScore, resolveAdvice(analyzed), 1, { analysisScore: score, profile: voice.profile, resolver: vowel });
+			findings.push(...watch.entries.map((e) => ({ song: id, eventId: e.eventId, bar: e.bar, kinds: [...e.kinds], vowel: e.vowel })));
 			status.tempo = result.tempo;
 			status.sungNotes = result.notes.length;
 			status.notesWithVowel = result.notes.filter((n) => n.vowel !== undefined).length;
@@ -640,7 +651,7 @@ async function runSong(id: string, file: string): Promise<{ status: SongStatus; 
 			status.heldBasis = [...new Set(result.notes.map((n) => n.heldBasis))].join(', ');
 		}
 	}
-	return { status, rows };
+	return { status, rows, findings };
 }
 
 // ── Bands ───────────────────────────────────────────────────────────
@@ -769,10 +780,12 @@ test('N.168 frequency run', async () => {
 
 	const statuses: SongStatus[] = [];
 	const all: Record<string, Row[]> = Object.fromEntries(VOICES.map((v) => [v.key, []]));
+	const findingsByVoice: OracleFinding[] = [];
 	for (const s of songs) {
-		const { status, rows } = await runSong(s.id, s.file);
+		const { status, rows, findings } = await runSong(s.id, s.file);
 		statuses.push(status);
 		for (const v of VOICES) all[v.key].push(...rows[v.key]);
+		findingsByVoice.push(...findings);
 	}
 
 	// Seconds and quavers cannot be summed. A song with no tempo is weighted in
@@ -964,6 +977,18 @@ test('N.168 frequency run', async () => {
 	rmSync(path.join(OUT, 'song-status.json'), { force: true }); // an earlier draft wrote lyric text here
 	writeFileSync(path.join(OUT, 'frequency-run.md'), md.join('\n') + '\n');
 	writeFileSync(path.join(OUT, 'frequency-run.csv'), csv.join('\n') + '\n');
+	// ── N.168 first slice: the comments oracle (brief-code-n168-first-slice_r2).
+	const oracleSongs: OracleSong[] = VOICES.flatMap((voice) =>
+		songs.map((s) => ({
+			voice: voice.key,
+			treble: voice.treble,
+			profile: voice.profile,
+			song: s.id,
+			rows: all[voice.key].filter((n) => n.song === s.id),
+		})),
+	);
+	writeFileSync(path.join(OUT, 'comments-oracle.md'), commentsOracle(oracleSongs, findingsByVoice));
+
 	writeFileSync(path.join(OUT, 'p1a-counts.csv'), ['voice,near,fires,seconds,share_of_sung_time,' + P1A_CLAUSES.join(','), ...p1aCsv].join('\n') + '\n');
 	for (const [key, text] of Object.entries(perNote)) writeFileSync(path.join(OUT, `notes-${key}.csv`), text);
 });

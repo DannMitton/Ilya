@@ -45,6 +45,7 @@
 	import Pacifier, { spokenName } from '$lib/shane/pacifier/Pacifier.svelte';
 	import { t, type Language } from '$lib/i18n';
 	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
+	import InsightsIntake from '$lib/shane/InsightsIntake.svelte';
 	import NotePicker from '$lib/shane/NotePicker.svelte';
 	import { LiveCaptureSession } from '$lib/shane/engine/live';
 	import type { CaptureSession } from '$lib/shane/engine/session';
@@ -55,7 +56,7 @@
 	} from '$lib/shane/engine/readiness';
 	import type { ShaneEngineError } from '$lib/shane/engine/errors';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
-	import { pitchToMidi, type Pitch } from '@ilya/score-parser';
+	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
 	import { deriveFrom } from '$lib/shane/engine/derivations';
 	import { applyIghDivergence } from '$lib/shane/engine/divergence';
 	import { checkPlausibility, buildPlausibilityEvent } from '$lib/shane/engine/plausibility';
@@ -165,7 +166,9 @@
 			 * rendered nowhere (`memo-release-audit-b_r1_2026-08-24.md`).
 			 * Additive, so the other readers of this callback are unchanged.
 			 */
-			updatedAt?: string
+			updatedAt?: string,
+			/** N.172: the voice's Insights intake answers. Additive, like `updatedAt`. */
+			intake?: IntakeAnswers
 		) => void;
 		/**
 		 * Q3 wizard collapse (Kimi's §A.28 ruling, 2026-07-13): counts
@@ -417,6 +420,16 @@
 		if (p) next[field] = p;
 		else delete next[field];
 		v.characteristics = CHARACTERISTIC_FIELDS.some((f) => !!next[f]) ? next : undefined;
+		v.updatedAt = new Date().toISOString();
+		persistStore();
+	}
+
+	/** N.172: the intake answers save on every change, like the characteristics. */
+	function setIntake(next: IntakeAnswers | undefined) {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (!v) return;
+		if (next) v.intake = next;
+		else delete v.intake;
 		v.updatedAt = new Date().toISOString();
 		persistStore();
 	}
@@ -1065,7 +1078,8 @@
 			$state.snapshot(activeVoice?.characteristics) as VoiceCharacteristics | undefined,
 			// Read here so the effect tracks it: every write that refreshes it
 			// (a reading, a characteristic, the readiness record) re-publishes.
-			activeVoice?.updatedAt
+			activeVoice?.updatedAt,
+			$state.snapshot(activeVoice?.intake) as IntakeAnswers | undefined
 		);
 	});
 
@@ -1569,6 +1583,12 @@
 						{language}
 						onchange={(p) => setCharacteristic('passaggioSecondary', p)}
 					/>
+				</div>
+				<!-- N.172: the Insights intake, one panel with the questions and the
+				     topic switches (Dann, 2026-09-24 23:21), beside the fields it
+				     joins on the profile. Ratified in both languages 2026-09-25. -->
+				<div class="charx-group">
+					<InsightsIntake value={activeVoice.intake} {language} onchange={setIntake} />
 				</div>
 				<button type="button" class="wizard-primary" onclick={() => (phase = 'summary')}>
 					{T('calib.characteristics.doneButton')}

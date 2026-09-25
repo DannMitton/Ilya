@@ -31,6 +31,7 @@
  * engine-spec version bump (the Ilya2006B / three-tier error contract
  * bump already queued).
  */
+import type { IntakeAnswers } from '@ilya/score-parser';
 import type { Vowel, CalibratedFormant, VoiceCharacteristics, VoiceType } from './engine/types';
 import type { FryRangeVerdict } from './engine/readiness';
 
@@ -99,6 +100,13 @@ export interface StoredVoice {
 	 * was like", never "the room was fine".
 	 */
 	readiness?: ReadinessRecord;
+	/**
+	 * N.172: the singer's answers to the Insights intake. Optional and additive,
+	 * the same discipline as the fields above: stored because they are the
+	 * singer's own statements (CONTRACT §6), and absent means never answered,
+	 * which reads as every question skipped.
+	 */
+	intake?: IntakeAnswers;
 }
 
 export interface ProfileStore {
