@@ -406,6 +406,13 @@ the paths already). Whoever takes N.142 should be told this.
 
 **Done when:** Dann says the rules are ready to record in `PRODUCT.md`. Until then, work proceeds against the latest draft and feeds what it learns back into it.
 
+**Dann's rulings on the draft, 2026-09-25, listed here so they do not live only in `../sessions/`.** Each was offered by the desk or by Fable and ruled in by him.
+- **02:43:** no practice strategies in "something to try" (*"I think no? That feels like a general voice pedagogy instruction that should be delivered by a teacher."*).
+- **02:44:** a crowded note names all its challenges (*"All of them."*).
+- **02:44 and 02:45:** the treble middle voice counts as a register demand, as Miller's weak region (MIL04-021) plus the passaggio edges.
+- **03:06:** the two-layer citation (author, short title, page on the comment; the full reference, section heading, page, and quotation one tap away), and the `section_heading` column, back-filled later.
+- **03:35:** one "something to try" shows on each comment, and the rest sit behind a tap (*"Yes."*). Which suggestion shows first is a DESK PROPOSAL in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r2_2026-09-25.md` §0, not ruled.
+
 ## N.172. THE SINGER SAYS HOW EXPERIENCED THEY ARE, AND INSIGHTS ADJUSTS. Numbered by Dann 2026-09-24 23:14
 
 **Dann's words, 23:14:** *"Yes, we can adopt Dreyfus categories in our new intake section as part of the sung formant collection. Users can edit their self-identification anytime, so as undergrads progress they can enjoy a different slant of advice from Ilya. Can we build this?"* Prompted by his devil's advocate case at 23:12: the same held high [ɑ] is easy for a singer with a well-coordinated top and hard for a novice, and a quick [u] the reverse (`../sessions/draft-curation-rules_r1_2026-09-24.md`).

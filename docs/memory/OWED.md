@@ -27,7 +27,7 @@ asks what is outstanding, or when the one thing closes and the next is being cho
   - **Score markup on the treble-8vb songs changed in `ccb790c` and only Code has seen it.**
   - **The desk owes a transcription:** the leap rulings in `../sessions/method-leaps_r1_2026-09-22.md` addenda 3 to 8 were to go into `PRODUCT.md` "at the next close if still standing". The 03:55 close did not do it.
 
-- **`#onRemoteWrite`'s GUARD IS THE ONE ROW THE SWEEP DID NOT VERIFY TO ITS OWN STANDARD.**
+- **READ 2026-09-25 by the desk: no same-tick race, but an await gap at `document.svelte.ts:303-312` can lose an edit. Brief `../sessions/brief-code-two-save-fixes_r1_2026-09-25.md`, fix 2, not run. `../sessions/memo-desk-code-reading_r1_2026-09-25.md` §4. The row as it stood:** **`#onRemoteWrite`'s GUARD IS THE ONE ROW THE SWEEP DID NOT VERIFY TO ITS OWN STANDARD.**
   `document.svelte.ts:300-312` applies another tab's record to the open document, guarded by
   `this.#scheduler.isPending()` at `:303` (`library.ts:483`). **The Sonnet sweep of 2026-09-21
   read it as guarded and said plainly that it could not rule out a same-tick race**, where a
@@ -40,7 +40,7 @@ asks what is outstanding, or when the one thing closes and the next is being cho
   that neither the first singer-visible change (N.159) nor the first write to a singer's stored
   work (N.160 step 3) carried a refactor beside it. **They are owed as their own commit**, and
   nothing else waits on them.
-- **SOMETHING WRITES `updatedAt` ABOUT SEVEN SECONDS AFTER EVERY LOAD**, with the record
+- **TRACED 2026-09-25 by the desk, reading only:** `keepSurvivingGlosses` always assigns new maps (`routes/+page.svelte:2927-2941`), which schedules a save. Brief `../sessions/brief-code-two-save-fixes_r1_2026-09-25.md`, fix 1, not run. `../sessions/memo-desk-code-reading_r1_2026-09-25.md` §3. **The row as it stood:** **SOMETHING WRITES `updatedAt` ABOUT SEVEN SECONDS AFTER EVERY LOAD**, with the record
   otherwise field-for-field identical. **Found by Code 2026-09-21**, which proved N.160's heal
   is not the cause by building a control without it and seeing the same stamp. **Untraced.**
   Code's own lead, not yet followed: `transcribeText`'s call to `keepSurvivingGlosses()` may be
@@ -49,7 +49,7 @@ asks what is outstanding, or when the one thing closes and the next is being cho
   `true` at 04:00 on 2026-09-21, verified by the desk after its walk, and `false` at 15:50.
   **The desk did not touch it in between. NOT ESTABLISHED**, and left as it was found.
 
-- **N.128'S TWO OTHER CONSUMERS. Carried out of the narrative 2026-09-13 and
+- **ANSWERED 2026-09-25 by the desk, reading only: both consumers already read the corrected line, through `correctedScore` (`routes/+page.svelte:1474-1490`, passed at `:5040` and `:5070`). No fix is needed; the duplication stays a tidiness item. `../sessions/memo-desk-code-reading_r1_2026-09-25.md` §2. The row as it stood:** **N.128'S TWO OTHER CONSUMERS. Carried out of the narrative 2026-09-13 and
   SHARPENED; the question is now a single one.** Both `sustain.ts:61-84` and
   `watchlist.ts:229-244` hold **the same duplicated `activeTempoAt`**, which
   compares `ev.rhythmicPosition.fraction` against each tempo marking's position.
@@ -791,4 +791,4 @@ None of these is numbered; `CONTRACT.md` §3.1 holds until Dann rules one in.
 
 - **Back-fill `section_heading` in every `_extraction/claims_*.csv` row. Owed by the desk from 2026-09-25**, on Dann's ruling of 03:06 (`../sessions/draft-curation-rules_r1_2026-09-24.md`, citations section). Mechanical; a Sonnet pass reading the source pages already photographed or in `_primary-text/`. New extractions carry the column from the KVP2 run on.
 
-- **KVP2 quotations in shipped code, UNVERIFIED BY THE DESK. Owed from 2026-09-25.** `apps/web/src/lib/shane/advice-resolver.ts:233-238` quotes KVP2 p. 96 and p. 141. The Sonnet extraction of 2026-09-25 reports p. 96's sentence NOT FOUND and p. 141 reading "formant" where the code says "harmonic" (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/memo-sonnet-kvp2_r1_2026-09-25.md`). The desk must read both pages itself (photos `~/Downloads/IMG_4774` to `IMG_4854`) before briefing Code. The July KVP2 synthesis in project knowledge carries four more quotations the photographed pages do not bear out: a lead, never a source.
+- **PAID 2026-09-25, about 03:50: the desk read both pages. The shipped quotations are correct; the extraction agent misread both (rows KVP2-051 and KVP2-052 corrected). Only p. 141's punctuation differs: brief `../sessions/brief-code-kvp2-p141-punctuation_r1_2026-09-25.md`, not run. The row as it stood:** **KVP2 quotations in shipped code, UNVERIFIED BY THE DESK. Owed from 2026-09-25.** `apps/web/src/lib/shane/advice-resolver.ts:233-238` quotes KVP2 p. 96 and p. 141. The Sonnet extraction of 2026-09-25 reports p. 96's sentence NOT FOUND and p. 141 reading "formant" where the code says "harmonic" (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/memo-sonnet-kvp2_r1_2026-09-25.md`). The desk must read both pages itself (photos `~/Downloads/IMG_4774` to `IMG_4854`) before briefing Code. The July KVP2 synthesis in project knowledge carries four more quotations the photographed pages do not bear out: a lead, never a source.

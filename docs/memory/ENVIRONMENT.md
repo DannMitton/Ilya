@@ -41,6 +41,10 @@ next session the same hour it cost the last one.
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
 | a subagent quotes a source, or a summary does | `A SUMMARY'S QUOTATION IS NOT A QUOTATION` |
 | a tool call comes back "rejected" just as Dann sends a message | `A REJECTION MAY ONLY MEAN HE TYPED` |
+| an extraction agent says a quotation is NOT FOUND | `AN EXTRACTION AGENT'S "NOT FOUND" IS ALSO A CLAIM` |
+| finding a sentence on a page photo, or cropping one to look at | `OCR AND CROPS ON THE BRIDGE` |
+| editing a file and sending it to the Mac | `EDIT, THEN COMMIT, NEVER BOTH IN ONE BATCH` |
+| a long read of the code, or a subagent that must read it | `THE SOURCE TREE AS ONE TARBALL` |
 | searching the Journal of Singing index | `THE JOS INDEX ANSWERS A POST` |
 | downloading Journal of Singing PDFs for the library | `JOS PDFS FROM THE ARTICLE PAGE` |
 | a site shows a bot check or blocks a download | `A BLOCKED DOWNLOAD IS DANN'S TO CLICK` |
@@ -4239,3 +4243,19 @@ Learned 2026-09-25. The July KVP2 synthesis (project knowledge) carried five quo
 ## A REJECTION MAY ONLY MEAN HE TYPED
 
 Learned 2026-09-24. Several agent launches and staging calls came back "rejected" at the moment Dann sent a message. Twice he meant only to add something, not to cancel. Do not relaunch on your own: read his message, and when it confirms the direction, resume and say so in one line.
+
+## AN EXTRACTION AGENT'S "NOT FOUND" IS ALSO A CLAIM
+
+Learned 2026-09-25. The Sonnet KVP2 extraction reported p. 96's sentence NOT FOUND and p. 141 reading "formant". The desk read both photos: the sentence is on p. 96 verbatim, and p. 141 says "harmonic". The agent recommended changing shipped code to "formant", which would have introduced the error it thought it was fixing. **A negative from an agent needs the page as much as a positive does.** Rows KVP2-051 and KVP2-052 carry the correction.
+
+## OCR AND CROPS ON THE BRIDGE, WITHOUT STAGING THE WHOLE PHOTO
+
+Learned 2026-09-25. The bridge shell (`device_bash`) has ImageMagick `convert` and `tesseract`, but not `pillow_heif`. `convert IMG.HEIC out.png` then `tesseract out.png - tsv` gives each word's box, which locates a sentence on a two-page spread. The KVP2 photos are two pages each (IMG_4822 is pp. 96 and 97), and the page number's box tells which half holds the text. To look at a crop yourself, it must sit inside a connected folder before `device_stage_files` can take it; `~/Downloads/_desk-<date>/` is the desk's place for that. A plain `-rotate 90` turned the crops upside down; use `-auto-orient` first.
+
+## EDIT, THEN COMMIT, NEVER BOTH IN ONE BATCH
+
+Learned 2026-09-25. An `Edit` to a file in `/mnt/user-data/outputs/` and a `device_commit_files` of the same file, sent in the same batch of calls, delivered the file WITHOUT the edit, twice. Both calls reported success. Commit only after the edit has returned, then grep the device copy for the new text.
+
+## THE SOURCE TREE AS ONE TARBALL, FOR READING IN THE CONTAINER
+
+Learned 2026-09-25. For a long read-only session or a subagent, tar `apps/web/src`, `packages`, `tools`, and `docs/memory` on the bridge, excluding `node_modules`, `.svelte-kit`, `build`, `dist`, `.git`, and images, into `~/Downloads/_desk-<date>/tree-src.tgz` (5 MB at `b2fde8f`), stage it, and unpack it in the container. A subagent then reads it without the bridge. It is a snapshot: say which commit it is.

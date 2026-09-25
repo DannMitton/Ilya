@@ -7572,3 +7572,39 @@ Its rulings live in `docs/memory/PRODUCT.md` (the five Insights principles) and 
 > #### STILL NOT MEASURED, carried forward
 >
 > **Paint on a phone.** And **whether « PARTITION » fits 62 px in Consolas or Android's monospace.**
+
+## Block: close of 2026-09-25 about 05:40. STATE.md's THE ONE THING block of 2026-09-25 03:35, moved verbatim. Its one ruling (03:35) also lives in OPEN.md §N.173
+
+> ### READ THIS FIRST. Written at the close of the session of 2026-09-24 evening, 2026-09-25 about 03:35. SUPERSEDES THE BLOCK BELOW IT (kept below until the next close moves it to `../sessions/LOG.md`)
+>
+> **THE ONE THING: N.168, the Insights comments, now built problems-first under N.173's curation rules.** Dann accepted three comments (02:41): the held note at the top; the open vowel turning at the secondo; the [u] that cannot stay closed. Fable worded them (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r1_2026-09-25.md`); **the desk judged them too long** (four sentences, five citations each) and put one question to Dann that he has NOT answered: **should a comment offer only one "something to try", with the rest behind a tap?** Start there. Then: shorten the three; draft their French; brief Code for the first slice (week 4, with N.172).
+>
+> #### READ BEFORE ANY INSIGHTS WORK
+>
+> - `PRODUCT.md`, the three new sections of 2026-09-24/25: "What Ilya is for, and why a data dump defeats it" (Dann's purpose statement, verbatim); "Every observation answers 'why should I care?'" (the filter; the phrase never appears on screen); the problems-first method.
+> - `../sessions/draft-curation-rules_r1_2026-09-24.md`: **N.173, a living draft, deliberately NOT ruled.** Ten rules with Dann's reaction to each, the six demands (register, resonance, range edge, endurance, dynamics, transition), stakes = how much a moment demands of this voice times how much it matters musically, the two-layer citation (ruled 03:06: author, short title, page on the comment; full reference, section heading, page, and quotation one tap away), and Fable's three questions, all answered.
+> - `CONTRACT.md` §2 and §3, two new rules: usage never determines the work (Dann 21:24); his examples are "e.g.", not "viz."; draft and refine, never entrench his first gesture (23:45).
+>
+> #### WHAT MOVED THIS SESSION
+>
+> - **Schedule:** N.168, N.169, N.170, N.171, N.172 and the tree audit placed in `SCHEDULE.md`. **N.170 waits about three weeks, Dann's ruling (21:03).** N.94 stays before the release (Dann, 21:08).
+> - **Code audit** (two Sonnet memos in `../sessions/memo-audit-code-catalogue-*`): N.140 is mostly built (recorded in `OPEN.md`); dead code listed under N.86 in `SCHEDULE.md`.
+> - **N.171 SHIPPED `6ede257`**, the `#` repair switched on, zero effect on durations proven by test. **WRITTEN, not walked:** the walk will show no change, because no known score has a `#` in the sung verse. Code's memo: `../sessions/memo-code-n171_r1_2026-09-24.md`.
+> - **N.172 numbered** (the singer's self-report in the intake, one panel of questions and topic switches): survey draft `../sessions/draft-n172-intake-survey_r1_2026-09-24.md`, research report `../sessions/report-n172-survey-research_r1_2026-09-24.md`, "Not sure" = point 2 as a working default. Built with the N.168 slice.
+> - **N.173 numbered**, the curation rules (above).
+> - **Extractions:** Miller 2004, *Solutions for Singers*, 40 rows (`claims_miller-2004_2026-09-24.csv`); Bozeman KVP2 re-extracted problems-first, 52 rows with `section_heading` and `demand` columns (`claims_bozeman-KVP2_2026-09-25.csv`, memo `_synthesis/memo-sonnet-kvp2_r1_2026-09-25.md`). The extraction list for the blind spots, with Dann's review: `Insights Research/extraction-priorities_r1_2026-09-25.md`.
+>
+> #### OPEN AND URGENT, NOT YET VERIFIED BY THE DESK
+>
+> **Ilya's shipped code may misquote KVP2.** `apps/web/src/lib/shane/advice-resolver.ts:233-238` quotes KVP2 p. 96 (*"fR1 must be raised approximately in tandem with the sung pitch to track the 1fo"*) and p. 141 (*"...track a specific harmonic..."*). The KVP2 extraction agent reports p. 96's sentence NOT FOUND and p. 141 reading "formant", not "harmonic". **The desk has not yet seen either page itself**; an OCR of the photos was running in `/tmp/.../scratchpad/kvp2/` when the session closed and is lost with the container. Next: find pp. 96 and 141 among `~/Downloads/IMG_4774` to `IMG_4854`, read them, and if the agent is right, brief Code to correct the string. The July synthesis (`claude/bozeman-kvp2-advice-synthesis_2026-07-21.md`) also carries four quotations the pages do not bear out (memo, NOT FOUND list), so treat it as a lead, never a source. Recorded in `OWED.md`.
+>
+> #### CARRIED FORWARD FROM THE 2026-09-24 21:00 BLOCK (now in `../sessions/LOG.md`)
+>
+> Still not measured: paint on a phone; whether « PARTITION » fits 62 px in Consolas or Android's monospace. Held, not questions: a scanned PDF with no text says "this picture"; three stale code comments on the old drop hint (`i18n.ts:634`, `IntakePanel.svelte:400`, `:415`); printed pages keep on-screen colouration (a question for N.170's reviewers); `~/Downloads/IMG_5635-as-jpeg.jpg` is a desk-made test copy Dann may delete. Floor: `6ede257`.
+>
+> #### STILL WAITING ON DANN, ONE AT A TIME
+>
+> 1. ~~One "something to try" per comment, the rest behind a tap?~~ **RULED BY DANN 2026-09-25 03:35: "Yes."** The desk offered it; he ruled it in. Which try leads is a DESK PROPOSAL (the one computed from the singer's own measurement), for N.173.
+> 2. The seven N.172 questions: add, cut, or reword?
+> 3. Approve N.173's ten rules for `PRODUCT.md`, when he judges them ready (he said keep refining).
+>
