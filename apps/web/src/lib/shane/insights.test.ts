@@ -34,6 +34,8 @@ import {
 	strikeLiederClause,
 	tessituragram,
 	verdictOf,
+	verdictLine,
+	printsNoFindingsLine,
 	vowelChartRows,
 	type Finding,
 	type RangeRow,
@@ -447,5 +449,58 @@ describe('the vowel chart prints all ten vowels (ruled by Dann 2026-09-24 09:53)
 		const rows = vowelChartRows([...sung, { vowel: 'æ', share: 0.1, seconds: null, flagged: false }]);
 		expect(rows).toHaveLength(11);
 		expect(rows[10]).toMatchObject({ vowel: 'æ', absent: false });
+	});
+});
+
+describe('N.164 the range offer', () => {
+	// The keys the verdict line printed before N.164, copied from
+	// `InsightsPane.svelte` at `ed2dde1`, not from `insights.ts`.
+	const BEFORE = {
+		fit: 'insights.verdict.fit',
+		'outside-range': 'insights.verdict.outsideRange',
+		'outside-tessitura': 'insights.verdict.outsideTessitura',
+		'range-only': 'insights.verdict.rangeOnly',
+	} as const;
+
+	it('offers the range, and prints no "nothing flagged", when no range is typed', () => {
+		const bare: VoiceProfileSnapshot = { fR1: profile.fR1 };
+		const m = buildInsights({ analysisScore: score(line, 3), profile: bare, watchList: null });
+		expect(m.verdict).toBe('cannot-say');
+		expect(verdictLine(m, false)).toEqual({ kind: 'offer' });
+		expect(printsNoFindingsLine(m.verdict)).toBe(false);
+	});
+
+	it('prints every other verdict exactly as before, declined or not', () => {
+		for (const [verdict, key] of Object.entries(BEFORE)) {
+			const m = { verdict: verdict as keyof typeof BEFORE, range: { measured: null, reference: null, flag: null } };
+			expect(verdictLine(m, false)).toEqual({ kind: 'verdict', key });
+			expect(verdictLine(m, true)).toEqual({ kind: 'verdict', key });
+			expect(printsNoFindingsLine(m.verdict)).toBe(true);
+		}
+		const m = buildInsights({ analysisScore: score(line, 3), profile, watchList: null });
+		expect(verdictLine(m, false)).toEqual({ kind: 'verdict', key: 'insights.verdict.outsideTessitura' });
+	});
+
+	it('prints nothing on the line once declined', () => {
+		const bare: VoiceProfileSnapshot = { fR1: profile.fR1 };
+		const m = buildInsights({ analysisScore: score(line, 3), profile: bare, watchList: null });
+		expect(verdictLine(m, true)).toEqual({ kind: 'nothing' });
+	});
+
+	it('never says it does not know a range that is typed', () => {
+		// A typed range with no pitched note is still `cannot-say`.
+		const m = buildInsights({ analysisScore: score([], 1), profile, watchList: null });
+		expect(m.range.reference).not.toBeNull();
+		expect(m.verdict).toBe('cannot-say');
+		expect(verdictLine(m, false)).toEqual({ kind: 'nothing' });
+	});
+
+	it('reads as the sentence Dann ratified, in both languages', () => {
+		const sentence = (lang: 'en' | 'fr') =>
+			`${t('insights.offer.before', lang)} ${t('insights.offer.link', lang)}${t('insights.offer.after', lang)}`;
+		expect(sentence('en')).toBe('This page doesn\u2019t know your range yet. Add your range, and it can tell you whether this key suits you.');
+		expect(sentence('fr')).toBe('Cette page ne connaît pas encore votre ambitus. Indiquez votre ambitus, et elle pourra vous dire si cette tonalité vous convient.');
+		expect(t('insights.offer.decline', 'en')).toBe('No thanks');
+		expect(t('insights.offer.decline', 'fr')).toBe('Non merci');
 	});
 });

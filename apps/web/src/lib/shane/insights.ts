@@ -731,3 +731,47 @@ export function strikeLiederClause(attribution: string): string {
  * budget the same way, by demoting whole findings to page 2.
  */
 export const PAGE_ONE_FINDINGS = 2;
+
+/**
+ * The i18n key each verdict printed before N.164, unchanged for every verdict
+ * that still prints one.
+ */
+export const VERDICT_KEYS: Record<Exclude<Verdict, 'cannot-say'>, string> = {
+	fit: 'insights.verdict.fit',
+	'outside-range': 'insights.verdict.outsideRange',
+	'outside-tessitura': 'insights.verdict.outsideTessitura',
+	'range-only': 'insights.verdict.rangeOnly',
+};
+
+/** What the line under the fit table prints. */
+export type VerdictLine =
+	| { kind: 'verdict'; key: string }
+	/** "This page doesn't know your range yet. Add your range, ..." */
+	| { kind: 'offer' }
+	| { kind: 'nothing' };
+
+/**
+ * N.164, RULED BY DANN 2026-09-25 (`docs/memory/OPEN.md` §N.164). With no
+ * range typed, the line offers the range instead of saying it cannot judge,
+ * and a singer who declined the offer sees nothing there at all.
+ *
+ * THE OFFER NEEDS AN UNTYPED RANGE, NOT ONLY `cannot-say`. `verdictOf` also
+ * returns `cannot-say` when a range is typed and the line has no pitched
+ * note, and "doesn't know your range yet" would be false there. DESK DEFAULT,
+ * 2026-09-25: that case prints nothing, since `insights.verdict.cannotSay` is
+ * no longer rendered and the fit table already says no pitches were read.
+ */
+export function verdictLine(model: Pick<InsightsModel, 'verdict' | 'range'>, offerDeclined: boolean): VerdictLine {
+	if (model.verdict !== 'cannot-say') return { kind: 'verdict', key: VERDICT_KEYS[model.verdict] };
+	if (model.range.reference || offerDeclined) return { kind: 'nothing' };
+	return { kind: 'offer' };
+}
+
+/**
+ * N.164: in the `cannot-say` state "Nothing in this piece is flagged" counts
+ * range checks that never ran, so it does not print. Findings that exist still
+ * print. Every other verdict prints the line as before.
+ */
+export function printsNoFindingsLine(verdict: Verdict): boolean {
+	return verdict !== 'cannot-say';
+}

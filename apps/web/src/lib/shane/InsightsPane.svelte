@@ -16,6 +16,9 @@
 	 * (`docs/sessions/n127-design-pack/design-return-insights_r3_2026-09-11.dc.html`).
 	 *
 	 * NOTHING HERE IS CLICKABLE, EDITABLE, OR FOCUSABLE. It is a document.
+	 * ONE EXCEPTION, N.164 (Dann, 2026-09-25): with no range typed, the verdict
+	 * line offers the range, with a link to the Range fields and a quiet "No
+	 * thanks". Neither control prints (`CONTRACT.md` §6).
 	 *
 	 * THE ANALYSIS CHAIN IS `VoiceProfilePane`'S, repeated rather than shared.
 	 * The same six derivations in the same order (snapshot, reading octave,
@@ -55,11 +58,14 @@
 		formatSecondsFine,
 		formatTempo,
 		vowelChartRows,
+		verdictLine,
+		printsNoFindingsLine,
 		type Containment,
 		type Finding,
 		type PhonationSection,
 		type SecondsFigure,
 	} from '$lib/shane/insights';
+	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/shane/range-offer-decline';
 
 	interface Props {
 		formants: Partial<Record<Vowel, CalibratedFormant>>;
@@ -79,6 +85,8 @@
 		drawnUnderlay?: DrawnUnderlay;
 		openSyllabification?: boolean;
 		isMobile?: boolean;
+		/** N.164: "Add your range" opens calibration on the Range fields. */
+		onaddrange?: () => void;
 	}
 
 	let {
@@ -95,6 +103,7 @@
 		drawnUnderlay = undefined,
 		openSyllabification = false,
 		isMobile = false,
+		onaddrange = undefined,
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
@@ -394,6 +403,20 @@
 			: fill(T('insights.phonation.finding'), { n: f.instances, seconds });
 	}
 
+	// ── The range offer (N.164) ────────────────────────────────────────
+	/* Read once per mount; the decline holds for every song and every reload. */
+	let offerDeclined = $state(rangeOfferDeclined(browserStore()));
+	function declineOffer() {
+		recordRangeOfferDecline(browserStore());
+		offerDeclined = true;
+	}
+	const verdict = $derived(model ? verdictLine(model, offerDeclined) : null);
+	/* Without the "nothing flagged" line an empty findings section has nothing
+	   under its heading, so the heading goes with it. */
+	const findingsSectionShown = $derived(
+		!!model && (pageOneFindings.length > 0 || printsNoFindingsLine(model.verdict)),
+	);
+
 	const remainderLine = $derived(
 		deferredFindings.length === 1
 			? T('insights.findings.remainderOne')
@@ -595,32 +618,32 @@
 									<span role="cell" class="flag">{flagWord(model.tessitura.flag)}</span>
 								</div>
 							</div>
-							<p class="verdict">
-								{T(
-									{
-										fit: 'insights.verdict.fit',
-										'outside-range': 'insights.verdict.outsideRange',
-										'outside-tessitura': 'insights.verdict.outsideTessitura',
-										'range-only': 'insights.verdict.rangeOnly',
-										'cannot-say': 'insights.verdict.cannotSay',
-									}[model.verdict],
-								)}
-							</p>
-						</div>
-
-						<div class="section">
-							{@render sectionHead(T('insights.findings.heading'))}
-							{#if pageOneFindings.length === 0}
-								<p class="prose">{T('insights.findings.none')}</p>
-							{:else}
-								{#each pageOneFindings as f (f.key)}
-									{@render finding(f)}
-								{/each}
-								{#if deferredFindings.length > 0}
-									<p class="remainder">{remainderLine}</p>
-								{/if}
+							{#if verdict?.kind === 'verdict'}
+								<p class="verdict">{T(verdict.key)}</p>
+							{:else if verdict?.kind === 'offer'}
+								<!-- N.164: one sentence around a link, then a quiet decline.
+								     On paper the sentence is plain text and the decline is gone. -->
+								<p class="verdict">
+									{T('insights.offer.before')}{' '}<button type="button" class="offer-link" onclick={() => onaddrange?.()}>{T('insights.offer.link')}</button>{T('insights.offer.after')}{' '}<button type="button" class="offer-decline" onclick={declineOffer}>{T('insights.offer.decline')}</button>
+								</p>
 							{/if}
 						</div>
+
+						{#if findingsSectionShown}
+							<div class="section">
+								{@render sectionHead(T('insights.findings.heading'))}
+								{#if pageOneFindings.length === 0}
+									<p class="prose">{T('insights.findings.none')}</p>
+								{:else}
+									{#each pageOneFindings as f (f.key)}
+										{@render finding(f)}
+									{/each}
+									{#if deferredFindings.length > 0}
+										<p class="remainder">{remainderLine}</p>
+									{/if}
+								{/if}
+							</div>
+						{/if}
 					{/if}
 				</div>
 
@@ -818,6 +841,38 @@
 		font-size: 16px;
 		line-height: 1.4;
 		color: var(--ink-primary);
+	}
+
+	/* ── The range offer (N.164) ────────────────────────────────
+	   JUDGEMENT, the desk's, Dann's to wave off: the link reads as a link in
+	   the page's label ink, and the decline sits after it smaller and in the
+	   tertiary ink, so it is findable and never louder than the offer. */
+	.offer-link,
+	.offer-decline {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		color: inherit;
+		cursor: pointer;
+	}
+
+	.offer-link {
+		color: var(--rose-ink);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	.offer-decline {
+		margin-left: 4px;
+		font-family: var(--font-sans);
+		font-size: 11px;
+		letter-spacing: 0.04em;
+		color: var(--ink-tertiary);
+		text-decoration: underline;
+		text-decoration-color: rgba(120, 113, 108, 0.45);
+		text-underline-offset: 2px;
 	}
 
 	/* ── Findings ───────────────────────────────────────────── */
@@ -1023,6 +1078,17 @@
 		.paper-page {
 			box-shadow: none;
 			background: white;
+		}
+
+		/* N.164: on paper the offer is a plain sentence and the decline is gone. */
+		.offer-link {
+			color: inherit;
+			text-decoration: none;
+			cursor: auto;
+		}
+
+		.offer-decline {
+			display: none;
 		}
 	}
 </style>

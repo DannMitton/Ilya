@@ -2291,6 +2291,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function exitCalibration() {
 		calibrating = false;
 	}
+	/**
+	 * N.164, ruled by Dann 2026-09-25: Insights' "Add your range" opens the
+	 * takeover on the Range fields, so the singer does not have to hunt.
+	 * Leaving the takeover returns to Insights, which never left the page.
+	 * On a phone the drawer is raised first, as a word click raises it.
+	 */
+	let calibrationRequest = $state<{ phase: 'characteristics'; n: number } | null>(null);
+	function openRangeFields() {
+		calibrationRequest = { phase: 'characteristics', n: (calibrationRequest?.n ?? 0) + 1 };
+		if (isMobile) drawerRaised = true;
+		enterCalibration();
+	}
 	const wordCount = $derived(
 		textLines.reduce((sum, l) => sum + l.words.length, 0)
 	);
@@ -4549,6 +4561,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     nothing to ask of it. -->
 					<CalibrationWizard
 						{language}
+						openRequest={calibrationRequest}
 						onActiveProfileChange={(f, name, characteristics, updatedAt) => {
 							shaneFormants = f;
 							shaneVoiceName = name;
@@ -5044,6 +5057,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				pairings={shownPairings}
 				{drawnUnderlay}
 				openSyllabification={doc.openSyllabification}
+				onaddrange={openRangeFields}
 			/>
 		{:else if destination === 'studio'}
 			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture

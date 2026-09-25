@@ -1496,7 +1496,14 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.verdict.outsideRange': { en: 'This key takes the piece outside the range you typed.', fr: 'Cette tonalité place la pièce hors de l\u2019ambitus que vous avez indiqué.' },
 	'insights.verdict.outsideTessitura': { en: 'The compass fits the range you typed, but the piece sits outside the tessitura you typed.', fr: 'L\u2019ambitus de la pièce entre dans celui que vous avez indiqué, mais la pièce se situe hors de la tessiture que vous avez indiquée.' },
 	'insights.verdict.rangeOnly':  { en: 'The compass fits the range you typed, and nothing on this page compares the tessitura.', fr: 'L\u2019ambitus de la pièce entre dans celui que vous avez indiqué, et rien sur cette page ne compare la tessiture.' },
+	// N.164, ruled by Dann 2026-09-25: `cannotSay` is no longer rendered. With no range typed,
+	// Insights offers the range instead (`insights.offer.*`). Kept so the ruling's history reads.
 	'insights.verdict.cannotSay':  { en: 'Without the range you typed, this page cannot say whether this key suits you.', fr: 'Sans l\u2019ambitus que vous avez indiqué, cette page ne peut pas dire si cette tonalité vous convient.' },
+	// N.164: one sentence around a link, then a quiet decline. Both languages ratified by Dann 2026-09-25.
+	'insights.offer.before':      { en: 'This page doesn\u2019t know your range yet.', fr: 'Cette page ne connaît pas encore votre ambitus.' },
+	'insights.offer.link':        { en: 'Add your range', fr: 'Indiquez votre ambitus' },
+	'insights.offer.after':       { en: ', and it can tell you whether this key suits you.', fr: ', et elle pourra vous dire si cette tonalité vous convient.' },
+	'insights.offer.decline':     { en: 'No thanks', fr: 'Non merci' },
 	'insights.findings.heading':   { en: 'What is flagged, by how much time you spend singing it', fr: 'Ce qui est signalé, selon le temps de chant que vous y consacrez' },
 	'insights.findings.none':      { en: 'Nothing in this piece is flagged for your voice.', fr: 'Rien dans cette pièce n\u2019est signalé pour votre voix.' },
 	'insights.findings.furtherOne': { en: 'One further instance, in the score.', fr: 'Une autre occurrence, dans la partition.' },

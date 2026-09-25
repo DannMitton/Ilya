@@ -41,7 +41,7 @@
 	 * Replaces the earlier placeholder shell (Ilya2006B fold-in), which
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 	import Pacifier, { spokenName } from '$lib/shane/pacifier/Pacifier.svelte';
 	import { t, type Language } from '$lib/i18n';
 	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
@@ -113,6 +113,8 @@
 	// Skippable and never a gate — entered only through the quiet summary
 	// button (Dann's slice-3 decision, 2026-07-13), and Done returns to
 	// the summary. Editable later through the same button.
+	// N.164 (Dann, 2026-09-25) adds a second door: Insights' "Add your
+	// range" opens here directly, through `openRequest`.
 	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary' | 'characteristics';
 	type HoldKind = 'good' | 'provisional' | 'rolled-back' | 'implausible';
 
@@ -188,6 +190,14 @@
 		onOpenLearnNote?: () => void;
 		/** N.22: active display language, threaded to the i18n dictionary. */
 		language: Language;
+		/**
+		 * N.164: a parent's request to show a phase. Each new `n` lands the
+		 * wizard on `phase`, wherever it was, because the wizard stays mounted
+		 * while the takeover is stowed and a value read once at mount would
+		 * work only the first time. Insights' "Add your range" sends
+		 * `characteristics`, the Range fields. Absent, nothing changes.
+		 */
+		openRequest?: { phase: 'characteristics'; n: number } | null;
 	}
 
 	let {
@@ -203,7 +213,8 @@
 		onComplete,
 		onActiveProfileChange,
 		onOpenLearnNote,
-		language
+		language,
+		openRequest = null
 	}: CalibrationWizardProps = $props();
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte and
@@ -313,6 +324,19 @@
 	const initialFormants = store.voices.find((v) => v.id === store.activeId)?.formants ?? {};
 	let profile = $state<Partial<Record<Vowel, CalibratedFormant>>>({ ...initialFormants });
 	let phase = $state<Phase>(hasAnyReadings(initialFormants) ? 'summary' : 'welcome');
+
+	/* N.164: answer each new `openRequest` once. A capture in flight is never
+	   interrupted, the rule the voice switcher already follows
+	   (`disabled={phase === 'capture'}`): the singer is looking at it. */
+	let answeredRequest = 0;
+	$effect(() => {
+		const req = openRequest;
+		if (!req || req.n === answeredRequest) return;
+		answeredRequest = req.n;
+		untrack(() => {
+			if (phase !== 'capture') resetFlow(req.phase);
+		});
+	});
 
 	let queue = $state<Vowel[]>([...DEFAULT_VOWELS]);
 	let queueIndex = $state(0);
