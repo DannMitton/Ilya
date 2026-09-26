@@ -38,7 +38,10 @@ jobs:
       - name: Type-check (svelte-check, gated on baseline)
         working-directory: apps/web
         env:
-          SVELTE_CHECK_BASELINE: "23"
+          # Lowered from 23 to 0 on the audit branch, 2026-09-26: the branch
+          # measured 0 errors at b7c2fc6, so the old number let 23 new errors
+          # land unseen. It is a ratchet: it may fall, and it never rises.
+          SVELTE_CHECK_BASELINE: "0"
         run: |
           # svelte-kit sync regenerates .svelte-kit/tsconfig.json that the app
           # tsconfig extends. It runs on install via the prepare script; run it
@@ -69,8 +72,51 @@ jobs:
 
           echo "OK: no new type errors above the baseline of $SVELTE_CHECK_BASELINE."
 
+      - name: Architecture ratchets (file size, layering, package surface)
+        run: node scripts/ratchets.mjs
+
       - name: Run all tests
         run: pnpm test
 
       - name: Build web app
         run: pnpm --filter @ilya/web build
+
+  e2e:
+    # The desktop end-to-end suite: what a singer sees, in a real browser.
+    # Added on the audit branch, 2026-09-26, after the suite was found to have
+    # failed silently from 5f6a2f3 (2026-09-07) with nothing running it.
+    name: End-to-end (desktop)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium for Playwright
+        working-directory: apps/web
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run the desktop suite
+        working-directory: apps/web
+        run: pnpm exec playwright test --project=chromium
+
+      - name: Keep the report when it fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/test-results
+          retention-days: 14

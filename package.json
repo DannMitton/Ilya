@@ -8,7 +8,8 @@
     "test:phonology": "pnpm --filter @ilya/phonology test",
     "test:dictionary": "pnpm --filter @ilya/dictionary test",
     "test:blurb": "pnpm --filter @ilya/blurb test",
-    "test:integration": "vitest run --config vitest.config.ts"
+    "test:integration": "vitest run --config vitest.config.ts",
+    "ratchets": "node scripts/ratchets.mjs"
   },
   "devDependencies": {
     "@ilya/phonology": "workspace:*",

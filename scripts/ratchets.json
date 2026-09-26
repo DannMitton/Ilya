@@ -1,0 +1,25 @@
+{
+  "_what": "Ceilings for scripts/ratchets.mjs. A ratchet lets a number fall and never rise. Lower a ceiling whenever a file shrinks; the script prints the new number to write. Raising one is allowed only on purpose: change the number here, in the same commit, and say why in the commit message.",
+  "newFileMaxLines": 1000,
+  "exempt": {
+    "apps/web/src/lib/i18n.ts": "The bilingual string table. It is data, and it grows with every ruled string."
+  },
+  "ceilings": {
+    "apps/web/src/routes/+page.svelte": 6225,
+    "apps/web/src/lib/components/Reading/LearnContent.svelte": 4099,
+    "packages/score-parser/src/staff-renderer.ts": 3534,
+    "apps/web/src/lib/shane/Loupe.svelte": 3054,
+    "apps/web/src/lib/components/Drawer/InspectorPanel.svelte": 2432,
+    "packages/phonology/src/engine.ts": 2276,
+    "apps/web/src/lib/shane/CalibrationWizard.svelte": 2124,
+    "apps/web/src/lib/components/Drawer/Drawer.svelte": 1990,
+    "apps/web/src/lib/shane/VoiceProfilePane.svelte": 1490,
+    "apps/web/src/lib/shane/pairings.ts": 1423,
+    "apps/web/src/lib/shane/InsightsPane.svelte": 1350,
+    "apps/web/src/lib/shane/ScoreUploader.svelte": 1340,
+    "apps/web/src/lib/shane/CorrectionSurface.svelte": 1265,
+    "packages/score-parser/src/mnx-parser.ts": 1170,
+    "packages/score-parser/src/musicxml-parser.ts": 1168,
+    "apps/web/src/lib/pipeline.ts": 1064
+  }
+}
