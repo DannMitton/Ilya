@@ -456,8 +456,10 @@ Do not rename a vowel.
 
 ## Where the code lives
 
-There is exactly **one route**, `apps/web/src/routes/+page.svelte`, and it is 1,948
-lines.
+There is exactly **one route**, `apps/web/src/routes/+page.svelte`. Its size is
+not written here, because a number here goes stale: `scripts/ratchets.json` holds
+its ceiling, which may fall and never rise (corrected 2026-09-26, audit branch;
+this line read 1,948 lines when the file was 6,225).
 
 | file | folder |
 |---|---|
