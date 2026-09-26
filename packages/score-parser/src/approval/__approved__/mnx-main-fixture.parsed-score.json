@@ -1,0 +1,447 @@
+{
+  "clefs": [],
+  "keySignatures": [
+    {
+      "measureIndex": 0,
+      "signature": {
+        "fifths": -1
+      }
+    }
+  ],
+  "measures": [
+    {
+      "expectedDuration": {
+        "denominator": 4,
+        "numerator": 3
+      },
+      "index": 0,
+      "isPickup": true,
+      "keySignature": {
+        "fifths": -1
+      },
+      "number": "1",
+      "timeSignature": {
+        "beatType": 4,
+        "beats": 3
+      }
+    },
+    {
+      "expectedDuration": {
+        "denominator": 4,
+        "numerator": 3
+      },
+      "index": 1,
+      "keySignature": {
+        "fifths": -1
+      },
+      "number": "2",
+      "timeSignature": {
+        "beatType": 4,
+        "beats": 3
+      }
+    },
+    {
+      "expectedDuration": {
+        "denominator": 4,
+        "numerator": 3
+      },
+      "index": 2,
+      "keySignature": {
+        "fifths": -1
+      },
+      "number": "3",
+      "timeSignature": {
+        "beatType": 4,
+        "beats": 3
+      }
+    }
+  ],
+  "source": {
+    "fidelity": "native",
+    "format": "mnx",
+    "languageHint": "rus",
+    "origin": "mnx-direct",
+    "sourceWarnings": []
+  },
+  "tempoMarkings": [
+    {
+      "beatUnit": "quarter",
+      "beatUnitDots": 0,
+      "bpm": 60,
+      "measureIndex": 0,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      }
+    }
+  ],
+  "timeSignatures": [
+    {
+      "measureIndex": 0,
+      "signature": {
+        "beatType": 4,
+        "beats": 3
+      }
+    }
+  ],
+  "vocalLine": [
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m0-0-1",
+      "measureIndex": 0,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_0",
+        "text": "Ты",
+        "type": "whole",
+        "verseLabel": "Verse 1",
+        "verseNumber": 1,
+        "verses": [
+          "Ты",
+          "tɨ"
+        ],
+        "versesInfo": [
+          {
+            "text": "Ты",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "tɨ",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "Ты"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 1,
+        "fraction": {
+          "denominator": 16,
+          "numerator": 3
+        }
+      },
+      "id": "m1-0-1",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_1",
+        "text": "по",
+        "type": "start",
+        "verseLabel": "Verse 1",
+        "verseNumber": 1,
+        "verses": [
+          "по",
+          "pʌ"
+        ],
+        "versesInfo": [
+          {
+            "text": "по",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "pʌ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "погрузись"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "16th",
+        "dots": 0,
+        "fraction": {
+          "denominator": 16,
+          "numerator": 1
+        }
+      },
+      "id": "m1-3-16",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 16,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_2",
+        "text": "гру",
+        "type": "middle",
+        "verseLabel": "Verse 1",
+        "verseNumber": 1,
+        "verses": [
+          "гру",
+          "ɡru"
+        ],
+        "versesInfo": [
+          {
+            "text": "гру",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɡru",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "погрузись"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m1-1-4",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "type": "note"
+    },
+    {
+      "articulations": [
+        "breath-mark"
+      ],
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m1-3-8",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_3",
+        "text": "зись",
+        "type": "end",
+        "verseLabel": "Verse 1",
+        "verseNumber": 1,
+        "verses": [
+          "зись",
+          "zisʲ"
+        ],
+        "versesInfo": [
+          {
+            "text": "зись",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "zisʲ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "погрузись"
+      },
+      "tied": {
+        "partnerEventId": "m2-0-1",
+        "type": "start"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m1-1-2",
+      "measureIndex": 1,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "half",
+        "dots": 0,
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "id": "m2-0-1",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "tied": {
+        "partnerEventId": "m1-3-8",
+        "type": "stop"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 12,
+          "numerator": 1
+        },
+        "tuplet": {
+          "actualNotes": 3,
+          "normalNotes": 2,
+          "normalType": "eighth"
+        }
+      },
+      "id": "m2-1-2",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 12,
+          "numerator": 1
+        },
+        "tuplet": {
+          "actualNotes": 3,
+          "normalNotes": 2,
+          "normalType": "eighth"
+        }
+      },
+      "id": "m2-7-12",
+      "measureIndex": 2,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 12,
+          "numerator": 7
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 12,
+          "numerator": 1
+        },
+        "tuplet": {
+          "actualNotes": 3,
+          "normalNotes": 2,
+          "normalType": "eighth"
+        }
+      },
+      "id": "m2-2-3",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 3,
+          "numerator": 2
+        }
+      },
+      "type": "note"
+    }
+  ],
+  "vocalPart": {
+    "partId": "P1",
+    "partName": "P1"
+  }
+}

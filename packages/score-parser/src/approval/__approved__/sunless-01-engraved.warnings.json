@@ -1,0 +1,10 @@
+[
+  {
+    "code": "measure-duration-mismatch",
+    "location": {
+      "measureIndex": 16,
+      "partId": "P1"
+    },
+    "message": "Measure 16 content lasts 7/4 whole notes against an expected 3/2."
+  }
+]

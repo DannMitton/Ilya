@@ -1,0 +1,5405 @@
+{
+  "clefs": [
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "measureIndex": 0
+    }
+  ],
+  "keySignatures": [
+    {
+      "measureIndex": 0,
+      "signature": {
+        "fifths": 2,
+        "mode": "major"
+      }
+    }
+  ],
+  "measures": [
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 0,
+      "isPickup": true,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "1",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 1,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "2",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 2,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "3",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 3,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "4",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 4,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "5",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 5,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "6",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 6,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "7",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 7,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "8",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 8,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "9",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 9,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "10",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 10,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "11",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 11,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "12",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 12,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "13",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 13,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "14",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 14,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "15",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 15,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "16",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 16,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "17",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    },
+    {
+      "clef": {
+        "line": 4,
+        "sign": "F"
+      },
+      "expectedDuration": {
+        "denominator": 2,
+        "numerator": 3
+      },
+      "index": 17,
+      "keySignature": {
+        "fifths": 2,
+        "mode": "major"
+      },
+      "number": "18",
+      "timeSignature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    }
+  ],
+  "metricModulations": [],
+  "source": {
+    "fidelity": "native",
+    "format": "musicxml",
+    "languageHint": "rus",
+    "origin": "musicxml-direct",
+    "sourceWarnings": [
+      "Measure 16 content lasts 7/4 whole notes against an expected 3/2."
+    ]
+  },
+  "tempoMarkings": [],
+  "tempoWords": [
+    {
+      "measureIndex": 0,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "text": "Andante tranquillo"
+    },
+    {
+      "measureIndex": 0,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "text": "Andante tranquillo"
+    },
+    {
+      "measureIndex": 13,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "text": "poco accelerando e cresc."
+    },
+    {
+      "measureIndex": 13,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "text": "poco accelerando e cresc."
+    },
+    {
+      "measureIndex": 15,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "text": "Meno mosso e tranquillo"
+    },
+    {
+      "measureIndex": 15,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "text": "Meno mosso e tranquillo"
+    }
+  ],
+  "timeSignatures": [
+    {
+      "measureIndex": 0,
+      "signature": {
+        "beatType": 8,
+        "beats": 12
+      }
+    }
+  ],
+  "vocalLine": [
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m1-0-1",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_0",
+        "text": "Ком",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "Ком",
+          "ˈko"
+        ],
+        "versesInfo": [
+          {
+            "text": "Ком",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈko",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "Комнатка"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m1-1-4",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_1",
+        "text": "нат",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "нат",
+          "mnɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "нат",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "mnɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "Комнатка"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m1-1-2",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_2",
+        "text": "ка",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "ка",
+          "tkɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ка",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "tkɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "Комнатка"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m1-3-4",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_3",
+        "text": "тес",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "тес",
+          "ˈtʲɛ"
+        ],
+        "versesInfo": [
+          {
+            "text": "тес",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈtʲɛ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "тесная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m1-1-1",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_4",
+        "text": "на",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "на",
+          "snɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "на",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "snɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "тесная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m1-5-4",
+      "measureIndex": 1,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_5",
+        "text": "я,",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я,",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я,",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "тесная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m1-11-8",
+      "measureIndex": 1,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m2-0-1",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_6",
+        "text": "ти",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "ти",
+          "ˈtʲi"
+        ],
+        "versesInfo": [
+          {
+            "text": "ти",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈtʲi",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "тихая,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m2-1-4",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_7",
+        "text": "ха",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ха",
+          "xɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ха",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "xɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "тихая,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m2-1-2",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_8",
+        "text": "я,",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я,",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я,",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "тихая,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m2-5-8",
+      "measureIndex": 2,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 5
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m2-3-4",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": 1,
+        "octave": 4,
+        "step": "C"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_9",
+        "text": "ми",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "ми",
+          "ˈmʲi"
+        ],
+        "versesInfo": [
+          {
+            "text": "ми",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈmʲi",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "милая;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m2-9-8",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_10",
+        "text": "ла",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ла",
+          "ɫɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ла",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɫɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "милая;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m2-5-4",
+      "measureIndex": 2,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_11",
+        "text": "я;",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я;",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я;",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "милая;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m2-11-8",
+      "measureIndex": 2,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m3-0-1",
+      "measureIndex": 3,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_12",
+        "text": "тень",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "тень",
+          "tʲeɲ"
+        ],
+        "versesInfo": [
+          {
+            "text": "тень",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "tʲeɲ",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "тень"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m3-1-4",
+      "measureIndex": 3,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_13",
+        "text": "не",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "не",
+          "ɲɪ"
+        ],
+        "versesInfo": [
+          {
+            "text": "не",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɲɪ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "не"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m3-1-2",
+      "measureIndex": 3,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_14",
+        "text": "про",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "про",
+          "prɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "про",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "prɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "проглядная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m3-3-4",
+      "measureIndex": 3,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_15",
+        "text": "гляд",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "гляд",
+          "ˈɡlʲɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "гляд",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈɡlʲɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "проглядная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m3-9-8",
+      "measureIndex": 3,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_16",
+        "text": "на",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "на",
+          "dnɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "на",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "dnɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "проглядная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m3-5-4",
+      "measureIndex": 3,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_17",
+        "text": "я,",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я,",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я,",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "проглядная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m4-0-1",
+      "measureIndex": 4,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_18",
+        "text": "тень",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "тень",
+          "#"
+        ],
+        "versesInfo": [
+          {
+            "text": "тень",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "#",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "тень"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m4-1-4",
+      "measureIndex": 4,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_19",
+        "text": "без",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "без",
+          "tʲeɲ"
+        ],
+        "versesInfo": [
+          {
+            "text": "без",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "tʲeɲ",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "без"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m4-1-2",
+      "measureIndex": 4,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "C"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_20",
+        "text": "от",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "от",
+          "bʲɪ"
+        ],
+        "versesInfo": [
+          {
+            "text": "от",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "bʲɪ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "ответная;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m4-3-4",
+      "measureIndex": 4,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_21",
+        "text": "вет",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "вет",
+          "zɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "вет",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "zɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "ответная;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m4-9-8",
+      "measureIndex": 4,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_22",
+        "text": "на",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "на",
+          "ˈtvʲɛ"
+        ],
+        "versesInfo": [
+          {
+            "text": "на",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈtvʲɛ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "ответная;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m4-5-4",
+      "measureIndex": 4,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_23",
+        "text": "я;",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я;",
+          "tnɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я;",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "tnɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "ответная;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m4-11-8",
+      "measureIndex": 4,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m5-0-1",
+      "measureIndex": 5,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_24",
+        "text": "ду",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "ду",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ду",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "дума"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m5-1-4",
+      "measureIndex": 5,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_25",
+        "text": "ма",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "ма",
+          "ˈdu"
+        ],
+        "versesInfo": [
+          {
+            "text": "ма",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈdu",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "дума"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m5-3-8",
+      "measureIndex": 5,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m5-1-2",
+      "measureIndex": 5,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_26",
+        "text": "глу",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "глу",
+          "mɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "глу",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "mɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "глубокая,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m5-3-4",
+      "measureIndex": 5,
+      "pitch": {
+        "alter": 0,
+        "octave": 4,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_27",
+        "text": "бо",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "бо",
+          "ɡɫu"
+        ],
+        "versesInfo": [
+          {
+            "text": "бо",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɡɫu",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "глубокая,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m5-9-8",
+      "measureIndex": 5,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_28",
+        "text": "ка",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ка",
+          "ˈbo"
+        ],
+        "versesInfo": [
+          {
+            "text": "ка",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈbo",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "глубокая,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m5-5-4",
+      "measureIndex": 5,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_29",
+        "text": "я,",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я,",
+          "kɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я,",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "kɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "глубокая,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m5-11-8",
+      "measureIndex": 5,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m6-0-1",
+      "measureIndex": 6,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_30",
+        "text": "пес",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "пес",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "пес",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "песня"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m6-1-4",
+      "measureIndex": 6,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_31",
+        "text": "ня",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "ня",
+          "ˈpʲe"
+        ],
+        "versesInfo": [
+          {
+            "text": "ня",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈpʲe",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "песня"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m6-1-2",
+      "measureIndex": 6,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_32",
+        "text": "у",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "у",
+          "sʲɲɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "у",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "sʲɲɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "унылая;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m6-3-4",
+      "measureIndex": 6,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_33",
+        "text": "ны",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ны",
+          "u"
+        ],
+        "versesInfo": [
+          {
+            "text": "ны",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "u",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "унылая;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m6-9-8",
+      "measureIndex": 6,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_34",
+        "text": "ла",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ла",
+          "ˈnɨ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ла",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈnɨ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "унылая;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m6-5-4",
+      "measureIndex": 6,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_35",
+        "text": "я;",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я;",
+          "ɫɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я;",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɫɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "унылая;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m6-11-8",
+      "measureIndex": 6,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m7-0-1",
+      "measureIndex": 7,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_36",
+        "text": "в",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "в",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "в",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "в"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m7-1-4",
+      "measureIndex": 7,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "C"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_37",
+        "text": "бью",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "бью",
+          "ˈvʲbʲu"
+        ],
+        "versesInfo": [
+          {
+            "text": "бью",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈvʲbʲu",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "бьющемся"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m7-1-2",
+      "measureIndex": 7,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_38",
+        "text": "щем",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "щем",
+          "ʃʲːɪ"
+        ],
+        "versesInfo": [
+          {
+            "text": "щем",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ʃʲːɪ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "бьющемся"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m7-3-4",
+      "measureIndex": 7,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_39",
+        "text": "ся",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "ся",
+          "msʌ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ся",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "msʌ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "бьющемся"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m7-1-1",
+      "measureIndex": 7,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_40",
+        "text": "серд",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "серд",
+          "ˈsʲɛ"
+        ],
+        "versesInfo": [
+          {
+            "text": "серд",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈsʲɛ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "сердце"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m7-9-8",
+      "measureIndex": 7,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m7-5-4",
+      "measureIndex": 7,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m7-11-8",
+      "measureIndex": 7,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "C"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "syllable": {
+        "id": "SYL_41",
+        "text": "це",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "це",
+          "rtsʌ"
+        ],
+        "versesInfo": [
+          {
+            "text": "це",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "rtsʌ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "сердце"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m8-0-1",
+      "measureIndex": 8,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_42",
+        "text": "на",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "на",
+          "nɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "на",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "nɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "надежда"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m8-1-4",
+      "measureIndex": 8,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "C"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_43",
+        "text": "деж",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "деж",
+          "ˈdʲɛ"
+        ],
+        "versesInfo": [
+          {
+            "text": "деж",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈdʲɛ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "надежда"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m8-1-2",
+      "measureIndex": 8,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_44",
+        "text": "да",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "да",
+          "ʒdɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "да",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ʒdɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "надежда"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m8-3-4",
+      "measureIndex": 8,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_45",
+        "text": "за",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "за",
+          "zɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "за",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "zɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "заветная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m8-9-8",
+      "measureIndex": 8,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_46",
+        "text": "вет",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "вет",
+          "ˈvʲɛ"
+        ],
+        "versesInfo": [
+          {
+            "text": "вет",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈvʲɛ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "заветная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m8-5-4",
+      "measureIndex": 8,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_47",
+        "text": "на",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "на",
+          "tnɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "на",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "tnɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "заветная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m8-11-8",
+      "measureIndex": 8,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m9-0-1",
+      "measureIndex": 9,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_48",
+        "text": "я,",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я,",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я,",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "заветная,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m9-1-4",
+      "measureIndex": 9,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_49",
+        "text": "быст",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "быст",
+          "ˈbɨ"
+        ],
+        "versesInfo": [
+          {
+            "text": "быст",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈbɨ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "быстрый"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m9-1-2",
+      "measureIndex": 9,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_50",
+        "text": "рый",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "рый",
+          "strɨj"
+        ],
+        "versesInfo": [
+          {
+            "text": "рый",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "strɨj",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "быстрый"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m9-3-4",
+      "measureIndex": 9,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_51",
+        "text": "по",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "по",
+          "pɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "по",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "pɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "полёт"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m9-1-1",
+      "measureIndex": 9,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_52",
+        "text": "лёт",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "лёт",
+          "ˈlʲot"
+        ],
+        "versesInfo": [
+          {
+            "text": "лёт",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈlʲot",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "полёт"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m9-5-4",
+      "measureIndex": 9,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_53",
+        "text": "за",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "за",
+          "zɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "за",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "zɑ",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "за"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m10-0-1",
+      "measureIndex": 10,
+      "pitch": {
+        "alter": 0,
+        "octave": 4,
+        "step": "C"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_54",
+        "text": "мгно",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "мгно",
+          "mɡnɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "мгно",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "mɡnɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "мгновеньем"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m10-1-4",
+      "measureIndex": 10,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_55",
+        "text": "ве",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ве",
+          "ˈvʲe"
+        ],
+        "versesInfo": [
+          {
+            "text": "ве",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈvʲe",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "мгновеньем"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m10-1-2",
+      "measureIndex": 10,
+      "pitch": {
+        "alter": 0,
+        "octave": 4,
+        "step": "C"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_56",
+        "text": "ньем",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "ньем",
+          "ɲjɪm"
+        ],
+        "versesInfo": [
+          {
+            "text": "ньем",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɲjɪm",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "мгновеньем"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m10-3-4",
+      "measureIndex": 10,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_57",
+        "text": "мгно",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "мгно",
+          "mɡnɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "мгно",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "mɡnɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "мгновения;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m10-9-8",
+      "measureIndex": 10,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_58",
+        "text": "ве",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ве",
+          "ˈvʲe"
+        ],
+        "versesInfo": [
+          {
+            "text": "ве",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈvʲe",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "мгновения;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m10-5-4",
+      "measureIndex": 10,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_59",
+        "text": "ни",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ни",
+          "ɲi"
+        ],
+        "versesInfo": [
+          {
+            "text": "ни",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɲi",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "мгновения;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m10-11-8",
+      "measureIndex": 10,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m11-0-1",
+      "measureIndex": 11,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_60",
+        "text": "я;",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я;",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я;",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "мгновения;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m11-1-4",
+      "measureIndex": 11,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_61",
+        "text": "взор",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "взор",
+          "vzor"
+        ],
+        "versesInfo": [
+          {
+            "text": "взор",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "vzor",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "взор"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m11-1-2",
+      "measureIndex": 11,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_62",
+        "text": "не",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "не",
+          "ɲɪ"
+        ],
+        "versesInfo": [
+          {
+            "text": "не",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɲɪ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "неподвижный"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m11-3-4",
+      "measureIndex": 11,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_63",
+        "text": "под",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "под",
+          "pɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "под",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "pɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "неподвижный"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m11-1-1",
+      "measureIndex": 11,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_64",
+        "text": "виж",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "виж",
+          "ˈdʲvʲi"
+        ],
+        "versesInfo": [
+          {
+            "text": "виж",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈdʲvʲi",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "неподвижный"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m11-9-8",
+      "measureIndex": 11,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m11-5-4",
+      "measureIndex": 11,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_65",
+        "text": "ный",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "ный",
+          "ʒnɨj"
+        ],
+        "versesInfo": [
+          {
+            "text": "ный",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ʒnɨj",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "неподвижный"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m12-0-1",
+      "measureIndex": 12,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_66",
+        "text": "на",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "на",
+          "nɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "на",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "nɑ",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "на"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m12-1-4",
+      "measureIndex": 12,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_67",
+        "text": "сча",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "сча",
+          "ˈʃʲːɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "сча",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈʃʲːɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "счастье"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m12-1-2",
+      "measureIndex": 12,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_68",
+        "text": "стье",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "стье",
+          "sʲtʲjɛ"
+        ],
+        "versesInfo": [
+          {
+            "text": "стье",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "sʲtʲjɛ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "счастье"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m12-3-4",
+      "measureIndex": 12,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_69",
+        "text": "да",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "да",
+          "dɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "да",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "dɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "далёкое;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m12-9-8",
+      "measureIndex": 12,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_70",
+        "text": "лё",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "лё",
+          "ˈlʲjo"
+        ],
+        "versesInfo": [
+          {
+            "text": "лё",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈlʲjo",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "далёкое;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m12-5-4",
+      "measureIndex": 12,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_71",
+        "text": "ко",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ко",
+          "kɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ко",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "kɑ",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "далёкое;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m12-11-8",
+      "measureIndex": 12,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m13-0-1",
+      "measureIndex": 13,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_72",
+        "text": "е;",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "е;",
+          "jɛ"
+        ],
+        "versesInfo": [
+          {
+            "text": "е;",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɛ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "далёкое;"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m13-1-4",
+      "measureIndex": 13,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_73",
+        "text": "мно",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "мно",
+          "ˈmno"
+        ],
+        "versesInfo": [
+          {
+            "text": "мно",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈmno",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "много"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m13-1-2",
+      "measureIndex": 13,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_74",
+        "text": "го",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "го",
+          "ɡʌ"
+        ],
+        "versesInfo": [
+          {
+            "text": "го",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɡʌ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "много"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m13-3-4",
+      "measureIndex": 13,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_75",
+        "text": "сом",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "сом",
+          "sɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "сом",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "sɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "сомнения,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m13-9-8",
+      "measureIndex": 13,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_76",
+        "text": "не",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "не",
+          "ˈmɲe"
+        ],
+        "versesInfo": [
+          {
+            "text": "не",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈmɲe",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "сомнения,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m13-5-4",
+      "measureIndex": 13,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_77",
+        "text": "ни",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ни",
+          "ɲi"
+        ],
+        "versesInfo": [
+          {
+            "text": "ни",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɲi",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "сомнения,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m14-0-1",
+      "measureIndex": 14,
+      "pitch": {
+        "alter": -1,
+        "octave": 3,
+        "step": "B"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_78",
+        "text": "я,",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я,",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я,",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "сомнения,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m14-1-4",
+      "measureIndex": 14,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_79",
+        "text": "мно",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "мно",
+          "#"
+        ],
+        "versesInfo": [
+          {
+            "text": "мно",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "#",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "много"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m14-1-2",
+      "measureIndex": 14,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_80",
+        "text": "го",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "го",
+          "ˈmno"
+        ],
+        "versesInfo": [
+          {
+            "text": "го",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈmno",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "много"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m14-3-4",
+      "measureIndex": 14,
+      "pitch": {
+        "alter": 1,
+        "octave": 4,
+        "step": "C"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_81",
+        "text": "тер",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "тер",
+          "ɡʌ"
+        ],
+        "versesInfo": [
+          {
+            "text": "тер",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɡʌ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "терпения."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m14-9-8",
+      "measureIndex": 14,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 9
+        }
+      },
+      "syllable": {
+        "id": "SYL_82",
+        "text": "пе",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "пе",
+          "tʲɪ"
+        ],
+        "versesInfo": [
+          {
+            "text": "пе",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "tʲɪ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "терпения."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m14-5-4",
+      "measureIndex": 14,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_83",
+        "text": "ни",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ни",
+          "ˈrpʲe"
+        ],
+        "versesInfo": [
+          {
+            "text": "ни",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈrpʲe",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "терпения."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m14-11-8",
+      "measureIndex": 14,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m15-0-1",
+      "measureIndex": 15,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "A"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_84",
+        "text": "я.",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я.",
+          "ɲi"
+        ],
+        "versesInfo": [
+          {
+            "text": "я.",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɲi",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "терпения."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m15-3-8",
+      "measureIndex": 15,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_85",
+        "text": "Вот",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "Вот",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "Вот",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "Вот"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m15-1-2",
+      "measureIndex": 15,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_86",
+        "text": "о",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "о",
+          "vot"
+        ],
+        "versesInfo": [
+          {
+            "text": "о",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "vot",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "она,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m15-5-8",
+      "measureIndex": 15,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 5
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m15-3-4",
+      "measureIndex": 15,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "G"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_87",
+        "text": "на,",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "на,",
+          "ɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "на,",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "она,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m15-1-1",
+      "measureIndex": 15,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_88",
+        "text": "ночь",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "ночь",
+          "ˈnɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ночь",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈnɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "ночь"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m15-5-4",
+      "measureIndex": 15,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_89",
+        "text": "мо",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "мо",
+          "notʃʲ"
+        ],
+        "versesInfo": [
+          {
+            "text": "мо",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "notʃʲ",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "моя,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m15-11-8",
+      "measureIndex": 15,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 11
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "half",
+        "dots": 0,
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "id": "m16-0-1",
+      "measureIndex": 16,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_90",
+        "text": "я,",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я,",
+          "mɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я,",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "mɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "моя,"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m16-1-2",
+      "measureIndex": 16,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "half",
+        "dots": 0,
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        },
+        "tuplet": {
+          "actualNotes": 2,
+          "normalNotes": 3,
+          "normalType": "half"
+        }
+      },
+      "id": "m16-3-4",
+      "measureIndex": 16,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_91",
+        "text": "ночь",
+        "type": "whole",
+        "verseNumber": 1,
+        "verses": [
+          "ночь",
+          "ˈjɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ночь",
+            "type": "whole",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈjɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "ночь"
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "half",
+        "dots": 0,
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        },
+        "tuplet": {
+          "actualNotes": 2,
+          "normalNotes": 3,
+          "normalType": "half"
+        }
+      },
+      "id": "m16-5-4",
+      "measureIndex": 16,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "E"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_92",
+        "text": "о",
+        "type": "start",
+        "verseNumber": 1,
+        "verses": [
+          "о",
+          "notʃʲ"
+        ],
+        "versesInfo": [
+          {
+            "text": "о",
+            "type": "start",
+            "verseNumber": 1
+          },
+          {
+            "text": "notʃʲ",
+            "type": "whole",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "одинокая."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 1,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "id": "m17-0-1",
+      "measureIndex": 17,
+      "pitch": {
+        "alter": 1,
+        "octave": 3,
+        "step": "F"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "syllable": {
+        "id": "SYL_93",
+        "text": "ди",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ди",
+          "ɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "ди",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ɑ",
+            "type": "start",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "одинокая."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m17-3-8",
+      "measureIndex": 17,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 3
+        }
+      },
+      "syllable": {
+        "id": "SYL_94",
+        "text": "но",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "но",
+          "dʲi"
+        ],
+        "versesInfo": [
+          {
+            "text": "но",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "dʲi",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "одинокая."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m17-1-2",
+      "measureIndex": 17,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "syllable": {
+        "id": "SYL_95",
+        "text": "ка",
+        "type": "middle",
+        "verseNumber": 1,
+        "verses": [
+          "ка",
+          "ˈno"
+        ],
+        "versesInfo": [
+          {
+            "text": "ка",
+            "type": "middle",
+            "verseNumber": 1
+          },
+          {
+            "text": "ˈno",
+            "type": "middle",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "одинокая."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "eighth",
+        "dots": 0,
+        "fraction": {
+          "denominator": 8,
+          "numerator": 1
+        }
+      },
+      "id": "m17-5-8",
+      "measureIndex": 17,
+      "pitch": {
+        "alter": 0,
+        "octave": 3,
+        "step": "D"
+      },
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 8,
+          "numerator": 5
+        }
+      },
+      "syllable": {
+        "id": "SYL_96",
+        "text": "я.",
+        "type": "end",
+        "verseNumber": 1,
+        "verses": [
+          "я.",
+          "jɑ"
+        ],
+        "versesInfo": [
+          {
+            "text": "я.",
+            "type": "end",
+            "verseNumber": 1
+          },
+          {
+            "text": "jɑ",
+            "type": "end",
+            "verseNumber": 2
+          }
+        ],
+        "wordContext": "одинокая."
+      },
+      "type": "note"
+    },
+    {
+      "duration": {
+        "base": "half",
+        "dots": 0,
+        "fraction": {
+          "denominator": 2,
+          "numerator": 1
+        }
+      },
+      "id": "m17-3-4",
+      "measureIndex": 17,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 3
+        }
+      },
+      "type": "rest"
+    },
+    {
+      "duration": {
+        "base": "quarter",
+        "dots": 0,
+        "fraction": {
+          "denominator": 4,
+          "numerator": 1
+        }
+      },
+      "id": "m17-5-4",
+      "measureIndex": 17,
+      "rhythmicPosition": {
+        "fraction": {
+          "denominator": 4,
+          "numerator": 5
+        }
+      },
+      "type": "rest"
+    }
+  ],
+  "vocalPart": {
+    "partId": "P1",
+    "partName": "Bass"
+  },
+  "workMetadata": {
+    "composer": "Modest Mussorgsky",
+    "title": "Without Sun, no. 1: Within Four Walls"
+  }
+}

@@ -1,0 +1,163 @@
+<svg viewBox="0 32 1246.56 160" xmlns="http://www.w3.org/2000/svg" font-family="'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif">
+<line x1="0" y1="72" x2="1246.56" y2="72" stroke="#3a352f" stroke-width="1.56"/>
+<line x1="0" y1="84" x2="1246.56" y2="84" stroke="#3a352f" stroke-width="1.56"/>
+<line x1="0" y1="96" x2="1246.56" y2="96" stroke="#3a352f" stroke-width="1.56"/>
+<line x1="0" y1="108" x2="1246.56" y2="108" stroke="#3a352f" stroke-width="1.56"/>
+<line x1="0" y1="120" x2="1246.56" y2="120" stroke="#3a352f" stroke-width="1.56"/>
+<g data-clef="bass">
+<text x="12" y="84" font-size="48px" font-family="Bravura" fill="#3a352f"></text>
+</g>
+<text data-key-signature="" x="38.16" y="108" font-size="48px" font-family="Bravura" fill="#3a352f"></text>
+<g data-meter="3/4"><text x="65.32" y="84" font-size="48px" font-family="Bravura" fill="#3a352f"></text><text x="65.32" y="108" font-size="48px" font-family="Bravura" fill="#3a352f"></text></g>
+<g data-event-id="n1" pointer-events="none">
+<rect data-hit="n1" x="90.56" y="30" width="50" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="103.48" y="126" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="116.92" y1="123.98" x2="116.92" y2="84" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n2" pointer-events="none">
+<rect data-hit="n2" x="140.56" y="30" width="50" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="163.48" y="114" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="176.92" y1="111.98" x2="176.92" y2="72" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<text data-of-event="n3" x="187.82" y="108" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<g data-event-id="n3" pointer-events="none">
+<rect data-hit="n3" x="190.56" y="30" width="40" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="203.48" y="108" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="216.92" y1="105.98" x2="216.92" y2="66" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="n4" x="230.56" y="30" width="57" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="243.48" y="96" font-size="48px" font-family="Bravura" fill="#3a352f"></text>
+</g>
+<line x1="306.56" y1="72" x2="306.56" y2="120" stroke="#3a352f" stroke-width="1.92"/>
+<g data-event-id="n5" pointer-events="none">
+<rect data-hit="n5" x="287.56" y="30" width="67" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="317.48" y="96" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="318.2" y1="98.02" x2="318.2" y2="138" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<line x1="372.68" y1="60" x2="396.44" y2="60" stroke="#3a352f" stroke-width="1.92"/>
+<g data-event-id="n6" pointer-events="none">
+<rect data-hit="n6" x="354.56" y="30" width="97" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="377.48" y="54" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="378.2" y1="56.02" x2="378.2" y2="96" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<line x1="500.56" y1="72" x2="500.56" y2="120" stroke="#3a352f" stroke-width="1.92"/>
+<g data-event-id="n7" pointer-events="none">
+<rect data-hit="n7" x="451.56" y="30" width="87" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="511.48" y="126" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="524.92" y1="123.98" x2="524.92" y2="84" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n8" pointer-events="none">
+<rect data-hit="n8" x="538.56" y="30" width="40" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="551.48" y="120" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="564.92" y1="117.98" x2="564.92" y2="78" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n9" pointer-events="none">
+<rect data-hit="n9" x="578.56" y="30" width="40" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="591.48" y="114" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="604.92" y1="111.98" x2="604.92" y2="62.4" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n10" pointer-events="none">
+<rect data-hit="n10" x="618.56" y="30" width="40" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="631.48" y="108" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="644.92" y1="105.98" x2="644.92" y2="55.2" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n11" pointer-events="none">
+<rect data-hit="n11" x="658.56" y="30" width="40" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="671.48" y="90" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="684.92" y1="87.98" x2="684.92" y2="48" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="n12" x="698.56" y="30" width="57" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="711.48" y="96" font-size="48px" font-family="Bravura" fill="#3a352f"></text>
+</g>
+<line x1="774.56" y1="72" x2="774.56" y2="120" stroke="#3a352f" stroke-width="1.92"/>
+<g data-event-id="n13" pointer-events="none">
+<rect data-hit="n13" x="755.56" y="30" width="57" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="785.48" y="114" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="798.92" y1="111.98" x2="798.92" y2="72" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n14" pointer-events="none">
+<rect data-hit="n14" x="812.56" y="30" width="40" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="825.48" y="108" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="838.92" y1="105.98" x2="838.92" y2="66" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n15" pointer-events="none">
+<rect data-hit="n15" x="852.56" y="30" width="40" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="865.48" y="102" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="878.92" y1="99.98" x2="878.92" y2="60" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n16" pointer-events="none">
+<rect data-hit="n16" x="892.56" y="30" width="50" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="905.48" y="96" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="906.2" y1="98.02" x2="906.2" y2="138" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="n17" x="942.56" y="30" width="67" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="965.48" y="96" font-size="48px" font-family="Bravura" fill="#3a352f"></text>
+</g>
+<line x1="1028.56" y1="72" x2="1028.56" y2="120" stroke="#3a352f" stroke-width="1.92"/>
+<g data-event-id="n18" pointer-events="none">
+<rect data-hit="n18" x="1009.56" y="30" width="57" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="1039.48" y="120" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="1052.92" y1="117.98" x2="1052.92" y2="78" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n19" pointer-events="none">
+<rect data-hit="n19" x="1066.56" y="30" width="40" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="1079.48" y="114" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="1092.92" y1="111.98" x2="1092.92" y2="72" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g data-event-id="n20" pointer-events="none">
+<rect data-hit="n20" x="1106.56" y="30" width="50" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="1119.48" y="114" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
+<line x1="1132.92" y1="111.98" x2="1132.92" y2="72" stroke="#1a1612" stroke-width="1.44"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="n21" x="1156.56" y="30" width="50" height="132" fill="transparent" pointer-events="all" cursor="pointer"/>
+<text x="1179.48" y="96" font-size="48px" font-family="Bravura" fill="#3a352f"></text>
+</g>
+<path d="M1094.64 118 Q 1106.56 128.8 1118.48 118 L 1118.48 116.8 Q 1106.56 124.72 1094.64 116.8 Z" fill="#1a1612" data-tie="n19"/>
+<path d="M1046.56 58.91 Q 1086.56 44.91 1126.56 58.91 L 1126.56 60.11 Q 1086.56 48.99 1046.56 60.11 Z" fill="#1a1612" data-slur="n18"/>
+<text x="110.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Ты</text>
+<text data-ipa-of="n1" x="110.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">tɨ</text>
+<text x="170.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">по</text>
+<text data-ipa-of="n2" x="170.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">po</text>
+<text x="210.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">гру</text>
+<text data-ipa-of="n3" x="210.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">gru</text>
+<text x="324.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">зи</text>
+<text data-ipa-of="n5" x="324.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">zi</text>
+<text x="384.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">сь</text>
+<text data-ipa-of="n6" x="384.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">sʲ</text>
+<text x="518.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">но</text>
+<text data-ipa-of="n7" x="518.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">no</text>
+<text x="558.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">чу</text>
+<text data-ipa-of="n8" x="558.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">tʃʲu</text>
+<text x="598.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">по</text>
+<text data-ipa-of="n9" x="598.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">po</text>
+<text x="638.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">го</text>
+<text data-ipa-of="n10" x="638.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">go</text>
+<text x="678.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ди</text>
+<text data-ipa-of="n11" x="678.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">dʲi</text>
+<text x="792.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">тьма</text>
+<text data-ipa-of="n13" x="792.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">tʲmɑ</text>
+<text x="832.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">на</text>
+<text data-ipa-of="n14" x="832.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">nɑ</text>
+<text x="872.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ста</text>
+<text data-ipa-of="n15" x="872.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">stɑ</text>
+<text x="912.56" y="172" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">пять</text>
+<text data-ipa-of="n16" x="912.56" y="152" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">pʲatʲ</text>
+<text x="1039.48" y="172" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">по</text>
+<text data-ipa-of="n18" x="1039.48" y="152" text-anchor="start" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif">po</text>
+<line x1="186.6" y1="168" x2="191.6" y2="168" stroke="#1a1612" stroke-width="1" data-hyphen="n2"/>
+<line x1="266.86" y1="168" x2="271.86" y2="168" stroke="#1a1612" stroke-width="1" data-hyphen="n3"/>
+<line x1="352.31" y1="168" x2="357.31" y2="168" stroke="#1a1612" stroke-width="1" data-hyphen="n5"/>
+<line x1="1058.14" y1="172" x2="1132.56" y2="172" stroke="#1a1612" stroke-width="1.56" data-extender="n18"/>
+<line x1="176.92000000000002" y1="72" x2="216.92000000000002" y2="66" stroke="#1a1612" stroke-width="6" data-beam-level="1"/>
+<line x1="524.92" y1="84" x2="564.92" y2="78" stroke="#1a1612" stroke-width="6" data-beam-level="1"/>
+<line x1="604.92" y1="62.4" x2="684.92" y2="48" stroke="#1a1612" stroke-width="6" data-beam-level="1"/>
+<line x1="604.92" y1="71.4" x2="644.92" y2="64.2" stroke="#1a1612" stroke-width="6" data-beam-level="2"/>
+<line x1="798.92" y1="72" x2="878.92" y2="60" stroke="#1a1612" stroke-width="6" data-beam-level="1"/>
+<line x1="1052.9199999999998" y1="78" x2="1092.9199999999998" y2="72" stroke="#1a1612" stroke-width="6" data-beam-level="1"/>
+<g data-tuplet="3"><line x1="784.56" y1="57" x2="784.56" y2="52" stroke="#1a1612" stroke-width="1.92"/><line x1="784.56" y1="52" x2="825.56" y2="52" stroke="#1a1612" stroke-width="1.92"/><line x1="839.56" y1="52" x2="880.56" y2="52" stroke="#1a1612" stroke-width="1.92"/><line x1="880.56" y1="52" x2="880.56" y2="57" stroke="#1a1612" stroke-width="1.92"/><text x="832.56" y="55.5" text-anchor="middle" font-size="11" font-style="italic" fill="#1a1612">3</text></g>
+<line x1="1245.6" y1="72" x2="1245.6" y2="120" stroke="#3a352f" stroke-width="1.92"/>
+</svg>
