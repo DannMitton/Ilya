@@ -5,77 +5,110 @@
         "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /ɑ/.",
         "citation": "p. 85"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans une syllabe accentuée, la lettre ⟨{char}⟩ se prononce généralement /ɑ/.",
+        "citation": "p. 85"
+      }
     },
     "я": {
       "en": {
         "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /ɑ/.",
         "citation": "p. 85"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans une syllabe accentuée, la lettre ⟨{char}⟩ se prononce généralement /ɑ/.",
+        "citation": "p. 85"
+      }
     },
     "о": {
       "en": {
         "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /o/.",
         "citation": "p. 86"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans une syllabe accentuée, la lettre ⟨{char}⟩ se prononce généralement /o/.",
+        "citation": "p. 86"
+      }
     },
     "ё": {
       "en": {
         "template": "The letter ⟨{char}⟩ always sounds like /o/; ⟨{char}⟩ inherently carries the stress, so it is never unstressed.",
         "citation": "p. 86"
       },
-      "fr": null
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce toujours /o/ ; ⟨{char}⟩ porte intrinsèquement l’accent et n’est donc jamais inaccentué.",
+        "citation": "p. 86"
+      }
     },
     "у": {
       "en": {
         "template": "The letter ⟨{char}⟩ always sounds like /u/, regardless of stress.",
         "citation": "p. 96"
       },
-      "fr": null
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce toujours /u/, qu’elle soit accentuée ou non.",
+        "citation": "p. 96"
+      }
     },
     "ю": {
       "en": {
         "template": "The letter ⟨{char}⟩ always sounds like /u/, regardless of stress.",
         "citation": "p. 96"
       },
-      "fr": null
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce toujours /u/, qu’elle soit accentuée ou non.",
+        "citation": "p. 96"
+      }
     },
     "ы": {
       "en": {
         "template": "The letter ⟨{char}⟩ always sounds like /ɨ/, regardless of stress.",
         "citation": "pp. 89–90"
       },
-      "fr": null
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce toujours /ɨ/, qu’elle soit accentuée ou non.",
+        "citation": "pp. 89–90"
+      }
     },
     "э": {
       "en": {
         "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /ɛ/.",
         "citation": "p. 106"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans une syllabe accentuée, la lettre ⟨{char}⟩ se prononce généralement /ɛ/.",
+        "citation": "p. 106"
+      }
     },
     "е": {
       "en": {
         "template": "In stressed syllables, the letter ⟨{char}⟩ usually sounds like /ɛ/.",
         "citation": "p. 106"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans une syllabe accentuée, la lettre ⟨{char}⟩ se prononce généralement /ɛ/.",
+        "citation": "p. 106"
+      }
     },
     "и": {
       "en": {
         "template": "The letter ⟨{char}⟩ usually sounds like /i/; it seldom reduces in sung Russian.",
         "citation": "pp. 96, 101"
       },
-      "fr": null
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce généralement /i/ ; elle se réduit rarement en russe chanté.",
+        "citation": "pp. 96, 101"
+      }
     },
     "ь": {
       "en": {
         "template": "The soft sign makes no sound of its own, but it is phonologically significant: ⟨{char}⟩ palatalizes most consonants that precede it.",
         "citation": "p. 195"
       },
-      "fr": null,
+      "fr": {
+        "template": "Le signe mou n’a aucun son propre, mais il joue un rôle phonologique : ⟨{char}⟩ palatalise la plupart des consonnes qui le précèdent.",
+        "citation": "p. 195"
+      },
       "selfSufficient": true
     },
     "ъ": {
@@ -83,7 +116,10 @@
         "template": "The hard sign makes no sound of its own, but it is phonologically significant in two ways: ⟨{char}⟩ preserves the hardness of the preceding consonant, then it triggers a /j/-glide before the next vowel.",
         "citation": "p. 193"
       },
-      "fr": null,
+      "fr": {
+        "template": "Le signe dur n’a aucun son propre, mais il joue un double rôle phonologique : ⟨{char}⟩ préserve la dureté de la consonne qui le précède, puis déclenche un glide en [j] devant la voyelle suivante.",
+        "citation": "p. 193"
+      },
       "selfSufficient": true
     },
     "б": {
@@ -91,35 +127,50 @@
         "template": "The default sound for the letter ⟨{char}⟩ is /b/.",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /b/.",
+        "citation": "p. 140"
+      }
     },
     "в": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /v/.",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /v/.",
+        "citation": "p. 152"
+      }
     },
     "г": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /ɡ/.",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /ɡ/.",
+        "citation": "p. 145"
+      }
     },
     "д": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /d/.",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /d/.",
+        "citation": "p. 145"
+      }
     },
     "ж": {
       "en": {
         "template": "The letter ⟨{char}⟩ sounds like /ʒ/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in the rarest loanwords or archaic traditional pronunciation.",
         "citation": "pp. 165, 174"
       },
-      "fr": null,
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce /ʒ/. Consonne toujours dure, l’une des trois du russe, elle résiste à la palatalisation et ne devient molle que dans de très rares emprunts ou dans une prononciation traditionnelle archaïque.",
+        "citation": "pp. 165, 174"
+      },
       "selfSufficient": true
     },
     "з": {
@@ -127,14 +178,20 @@
         "template": "The default sound for the letter ⟨{char}⟩ is /z/.",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /z/.",
+        "citation": "p. 140"
+      }
     },
     "й": {
       "en": {
         "template": "The letter ⟨{char}⟩ sounds like /j/; although English speakers call this a semi-vowel, Russian phonologists classify it as a palatalized consonant.",
         "citation": "p. 96"
       },
-      "fr": null,
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce /j/ ; alors que l’anglais et le français y voient une semi-voyelle, les phonologues russes en font une consonne palatalisée.",
+        "citation": "p. 96"
+      },
       "selfSufficient": true
     },
     "к": {
@@ -142,77 +199,110 @@
         "template": "The default sound for the letter ⟨{char}⟩ is /k/.",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /k/.",
+        "citation": "p. 140"
+      }
     },
     "л": {
       "en": {
         "template": "In sung Russian, ⟨{char}⟩ is never transcribed alone as simply /l/, but always as either its \"hard\" allophone [ɫ], or its soft allophone [lʲ].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "En russe chanté, ⟨{char}⟩ ne se transcrit jamais par un simple /l/, mais toujours soit par son allophone « dur » [ɫ], soit par son allophone mou [lʲ].",
+        "citation": "p. 145"
+      }
     },
     "м": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /m/.",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /m/.",
+        "citation": "p. 140"
+      }
     },
     "н": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /n/.",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /n/.",
+        "citation": "p. 152"
+      }
     },
     "п": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /p/.",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /p/.",
+        "citation": "p. 145"
+      }
     },
     "р": {
       "en": {
         "template": "In sung Russian, the letter ⟨{char}⟩ is a lightly trilled /r/.",
         "citation": "pp. 156–158"
       },
-      "fr": null
+      "fr": {
+        "template": "En russe chanté, la lettre ⟨{char}⟩ est un /r/ légèrement roulé.",
+        "citation": "pp. 156–158"
+      }
     },
     "с": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /s/.",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /s/.",
+        "citation": "p. 152"
+      }
     },
     "т": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /t/.",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /t/.",
+        "citation": "p. 140"
+      }
     },
     "ф": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /f/.",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /f/.",
+        "citation": "p. 145"
+      }
     },
     "х": {
       "en": {
         "template": "The default sound for the letter ⟨{char}⟩ is /x/.",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Le son par défaut de la lettre ⟨{char}⟩ est /x/.",
+        "citation": "p. 145"
+      }
     },
     "ц": {
       "en": {
         "template": "The letter ⟨{char}⟩ sounds like /ts/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in words with the suffix -ция.",
         "citation": "pp. 166, 283"
       },
-      "fr": null,
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce /ts/. Consonne toujours dure, l’une des trois du russe, elle résiste à la palatalisation et ne devient molle que dans les mots en -ция.",
+        "citation": "pp. 166, 283"
+      },
       "selfSufficient": true
     },
     "ч": {
@@ -220,7 +310,10 @@
         "template": "The letter ⟨{char}⟩ sounds like /tʃʲ/; one of the three \"soft\" consonants in Russian, ⟨{char}⟩ is inherently palatalized.",
         "citation": "p. 171"
       },
-      "fr": null,
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce /tʃʲ/. Consonne toujours molle, l’une des trois du russe, elle est intrinsèquement palatalisée.",
+        "citation": "p. 171"
+      },
       "selfSufficient": true
     },
     "ш": {
@@ -228,7 +321,10 @@
         "template": "The letter ⟨{char}⟩ sounds like /ʃ/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in the rarest loanwords.",
         "citation": "p. 162"
       },
-      "fr": null,
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce /ʃ/. Consonne toujours dure, l’une des trois du russe, elle résiste à la palatalisation et ne devient molle que dans de très rares emprunts.",
+        "citation": "p. 162"
+      },
       "selfSufficient": true
     },
     "щ": {
@@ -236,7 +332,10 @@
         "template": "The letter ⟨{char}⟩ sounds like /ʃʲʃʲ/; one of the three \"soft\" consonants in Russian, ⟨{char}⟩ is inherently palatalized.",
         "citation": "p. 171"
       },
-      "fr": null,
+      "fr": {
+        "template": "La lettre ⟨{char}⟩ se prononce /ʃʲʃʲ/. Consonne toujours molle, l’une des trois du russe, elle est intrinsèquement palatalisée.",
+        "citation": "p. 171"
+      },
       "selfSufficient": true
     }
   },
@@ -246,91 +345,130 @@
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "p. 85"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "p. 85"
+      }
     },
     "stressed:я": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "p. 85"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "p. 85"
+      }
     },
     "stressed:о": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "p. 86"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "p. 86"
+      }
     },
     "stressed:ё": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "p. 86"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "p. 86"
+      }
     },
     "stressed:у": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "p. 96"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "p. 96"
+      }
     },
     "stressed:ю": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "p. 96"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "p. 96"
+      }
     },
     "stressed:ы": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "pp. 89–90"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "pp. 89–90"
+      }
     },
     "stressed:э": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "p. 106"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "p. 106"
+      }
     },
     "stressed:е": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "p. 106"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "p. 106"
+      }
     },
     "stressed:и": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
         "citation": "pp. 96, 101"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
+        "citation": "pp. 96, 101"
+      }
     },
     "stressed-interpalatal:е": {
       "en": {
         "template": "When ⟨{char}⟩ sits sandwiched between two palatalizing agents (interpalatally) like it does here, it fronts to [{ipa}].",
         "citation": "pp. 104–107"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est encadré, comme ici, par deux agents palatalisateurs (environnement interpalatal), il s’antériorise en [{ipa}].",
+        "citation": "pp. 104–107"
+      }
     },
     "stressed-interpalatal:э": {
       "en": {
         "template": "When ⟨{char}⟩ sits sandwiched between two palatalizing agents (interpalatally) like it does here, it fronts to [{ipa}].",
         "citation": "pp. 104–107"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est encadré, comme ici, par deux agents palatalisateurs (environnement interpalatal), il s’antériorise en [{ipa}].",
+        "citation": "pp. 104–107"
+      }
     },
     "pretonic:а": {
       "en": {
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [{ipa}] (akanye).",
         "citation": "p. 97"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [{ipa}] (akanié).",
+        "citation": "p. 97"
+      },
       "standalone": true
     },
     "pretonic:о": {
@@ -338,7 +476,10 @@
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [{ipa}] (akanye).",
         "citation": "p. 97"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [{ipa}] (akanié).",
+        "citation": "p. 97"
+      },
       "standalone": true
     },
     "pretonic:я": {
@@ -346,7 +487,10 @@
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [{ipa}] (ikanye).",
         "citation": "pp. 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [{ipa}] (ikanié).",
+        "citation": "pp. 127–128"
+      },
       "standalone": true
     },
     "pretonic:е": {
@@ -354,7 +498,10 @@
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [{ipa}] (ikanye).",
         "citation": "pp. 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [{ipa}] (ikanié).",
+        "citation": "pp. 127–128"
+      },
       "standalone": true
     },
     "pretonic:э": {
@@ -362,7 +509,10 @@
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [{ipa}] (ikanye).",
         "citation": "pp. 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [{ipa}] (ikanié).",
+        "citation": "pp. 127–128"
+      },
       "standalone": true
     },
     "pretonic:и": {
@@ -370,7 +520,10 @@
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
         "citation": "pp. 96, 101"
       },
-      "fr": null,
+      "fr": {
+        "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
+        "citation": "pp. 96, 101"
+      },
       "standalone": true
     },
     "initial:а": {
@@ -378,7 +531,10 @@
         "template": "When ⟨{char}⟩ begins the word unstressed like it does here, it sounds like [{ipa}] (akanye).",
         "citation": "p. 97"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, inaccentué, commence le mot comme ici, il se prononce [{ipa}] (akanié).",
+        "citation": "p. 97"
+      },
       "standalone": true
     },
     "initial:о": {
@@ -386,7 +542,10 @@
         "template": "When ⟨{char}⟩ begins the word unstressed like it does here, it sounds like [{ipa}] (akanye).",
         "citation": "p. 97"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, inaccentué, commence le mot comme ici, il se prononce [{ipa}] (akanié).",
+        "citation": "p. 97"
+      },
       "standalone": true
     },
     "initial:я": {
@@ -394,7 +553,10 @@
         "template": "When ⟨{char}⟩ begins the word unstressed like it does here, it reduces to [{ipa}] (ikanye).",
         "citation": "pp. 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, inaccentué, commence le mot comme ici, il se réduit à [{ipa}] (ikanié).",
+        "citation": "pp. 127–128"
+      },
       "standalone": true
     },
     "initial:е": {
@@ -402,7 +564,10 @@
         "template": "When ⟨{char}⟩ begins the word unstressed like it does here, it reduces to [{ipa}] (ikanye).",
         "citation": "pp. 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, inaccentué, commence le mot comme ici, il se réduit à [{ipa}] (ikanié).",
+        "citation": "pp. 127–128"
+      },
       "standalone": true
     },
     "initial:э": {
@@ -410,7 +575,10 @@
         "template": "When ⟨{char}⟩ begins the word unstressed like it does here, it reduces to [{ipa}] (ikanye).",
         "citation": "pp. 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, inaccentué, commence le mot comme ici, il se réduit à [{ipa}] (ikanié).",
+        "citation": "pp. 127–128"
+      },
       "standalone": true
     },
     "remote:а": {
@@ -418,7 +586,10 @@
         "template": "When ⟨{char}⟩ falls in a remote syllable like it does here, far from the stress, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, en position éloignée de l’accent, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "remote:о": {
@@ -426,7 +597,10 @@
         "template": "When ⟨{char}⟩ falls in a remote syllable like it does here, far from the stress, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, en position éloignée de l’accent, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "remote:я": {
@@ -434,7 +608,10 @@
         "template": "When ⟨{char}⟩ falls in a remote syllable like it does here, far from the stress, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, en position éloignée de l’accent, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "remote:е": {
@@ -442,7 +619,10 @@
         "template": "When ⟨{char}⟩ falls in a remote syllable like it does here, far from the stress, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, en position éloignée de l’accent, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "remote:э": {
@@ -450,7 +630,10 @@
         "template": "When ⟨{char}⟩ falls in a remote syllable like it does here, far from the stress, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, en position éloignée de l’accent, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "post-stress-immediate:а": {
@@ -458,7 +641,10 @@
         "template": "When ⟨{char}⟩ falls after the stressed syllable like it does here, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, après la syllabe accentuée, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "post-stress-immediate:о": {
@@ -466,7 +652,10 @@
         "template": "When ⟨{char}⟩ falls after the stressed syllable like it does here, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, après la syllabe accentuée, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "post-stress-immediate:я": {
@@ -474,7 +663,10 @@
         "template": "When ⟨{char}⟩ falls after the stressed syllable like it does here, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, après la syllabe accentuée, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "post-stress-immediate:е": {
@@ -482,7 +674,10 @@
         "template": "When ⟨{char}⟩ falls after the stressed syllable like it does here, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, après la syllabe accentuée, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "post-stress-immediate:э": {
@@ -490,7 +685,10 @@
         "template": "When ⟨{char}⟩ falls after the stressed syllable like it does here, it always reduces to [{ipa}].",
         "citation": "pp. 108–112"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, après la syllabe accentuée, il se réduit toujours à [{ipa}].",
+        "citation": "pp. 108–112"
+      },
       "standalone": true
     },
     "after-hard:и": {
@@ -498,21 +696,30 @@
         "template": "When ⟨{char}⟩ follows an always-hard consonant like it does here, it shifts to [{ipa}].",
         "citation": "pp. 89–90"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ suit, comme ici, une consonne toujours dure, il passe à [{ipa}].",
+        "citation": "pp. 89–90"
+      }
     },
     "after-hard:е": {
       "en": {
         "template": "When ⟨{char}⟩ follows an always-hard consonant like it does here, it shifts to [{ipa}].",
         "citation": "pp. 89–90"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ suit, comme ici, une consonne toujours dure, il passe à [{ipa}].",
+        "citation": "pp. 89–90"
+      }
     },
     "unstressed:у": {
       "en": {
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
         "citation": "p. 96"
       },
-      "fr": null,
+      "fr": {
+        "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
+        "citation": "p. 96"
+      },
       "standalone": true
     },
     "unstressed:ю": {
@@ -520,7 +727,10 @@
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
         "citation": "p. 96"
       },
-      "fr": null,
+      "fr": {
+        "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
+        "citation": "p. 96"
+      },
       "standalone": true
     },
     "unstressed:ы": {
@@ -528,7 +738,10 @@
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
         "citation": "pp. 89–90"
       },
-      "fr": null,
+      "fr": {
+        "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
+        "citation": "pp. 89–90"
+      },
       "standalone": true
     },
     "unstressed:и": {
@@ -536,7 +749,10 @@
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
         "citation": "pp. 96, 101"
       },
-      "fr": null,
+      "fr": {
+        "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
+        "citation": "pp. 96, 101"
+      },
       "standalone": true
     },
     "unstressed:ё": {
@@ -544,7 +760,10 @@
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
         "citation": "p. 86"
       },
-      "fr": null,
+      "fr": {
+        "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
+        "citation": "p. 86"
+      },
       "standalone": true
     },
     "hard:б": {
@@ -552,392 +771,560 @@
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "hard:в": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 152"
+      }
     },
     "hard:г": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "hard:д": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "hard:з": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "hard:к": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "hard:м": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "hard:п": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "hard:р": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "pp. 156–158"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "pp. 156–158"
+      }
     },
     "hard:с": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 152"
+      }
     },
     "hard:т": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "hard:ф": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "hard:х": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "hard:л": {
       "en": {
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its hard form: [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme dure : [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "soft:б": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "soft:в": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 152"
+      }
     },
     "soft:г": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "soft:д": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "soft:з": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "soft:к": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "soft:л": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 152"
+      }
     },
     "soft:м": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "soft:н": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 152"
+      }
     },
     "soft:п": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "soft:р": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "pp. 156–158"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "pp. 156–158"
+      }
     },
     "soft:с": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 152"
+      }
     },
     "soft:т": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 140"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 140"
+      }
     },
     "soft:ф": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "soft:х": {
       "en": {
         "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
+        "citation": "p. 145"
+      }
     },
     "final-devoicing:б": {
       "en": {
         "template": "When ⟨{char}⟩ falls at the end of a word like it does here, it devoices to [{ipa}].",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, à la fin d’un mot, il se dévoise en [{ipa}].",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:в": {
       "en": {
         "template": "When ⟨{char}⟩ falls at the end of a word like it does here, it devoices to [{ipa}].",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, à la fin d’un mot, il se dévoise en [{ipa}].",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:г": {
       "en": {
         "template": "When ⟨{char}⟩ falls at the end of a word like it does here, it devoices to [{ipa}].",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, à la fin d’un mot, il se dévoise en [{ipa}].",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:д": {
       "en": {
         "template": "When ⟨{char}⟩ falls at the end of a word like it does here, it devoices to [{ipa}].",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, à la fin d’un mot, il se dévoise en [{ipa}].",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:ж": {
       "en": {
         "template": "When ⟨{char}⟩ falls at the end of a word like it does here, it devoices to [{ipa}].",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, à la fin d’un mot, il se dévoise en [{ipa}].",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:з": {
       "en": {
         "template": "When ⟨{char}⟩ falls at the end of a word like it does here, it devoices to [{ipa}].",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, à la fin d’un mot, il se dévoise en [{ipa}].",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:б": {
       "en": {
         "template": "When ⟨{char}⟩ sits in a cluster before a voiceless consonant like it does here, it devoices to [{ipa}] (regressive devoicing).",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans un groupe devant une consonne non voisée, il se dévoise en [{ipa}] (dévoisement régressif).",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:в": {
       "en": {
         "template": "When ⟨{char}⟩ sits in a cluster before a voiceless consonant like it does here, it devoices to [{ipa}] (regressive devoicing).",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans un groupe devant une consonne non voisée, il se dévoise en [{ipa}] (dévoisement régressif).",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:г": {
       "en": {
         "template": "When ⟨{char}⟩ sits in a cluster before a voiceless consonant like it does here, it devoices to [{ipa}] (regressive devoicing).",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans un groupe devant une consonne non voisée, il se dévoise en [{ipa}] (dévoisement régressif).",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:д": {
       "en": {
         "template": "When ⟨{char}⟩ sits in a cluster before a voiceless consonant like it does here, it devoices to [{ipa}] (regressive devoicing).",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans un groupe devant une consonne non voisée, il se dévoise en [{ipa}] (dévoisement régressif).",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:ж": {
       "en": {
         "template": "When ⟨{char}⟩ sits in a cluster before a voiceless consonant like it does here, it devoices to [{ipa}] (regressive devoicing).",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans un groupe devant une consonne non voisée, il se dévoise en [{ipa}] (dévoisement régressif).",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:з": {
       "en": {
         "template": "When ⟨{char}⟩ sits in a cluster before a voiceless consonant like it does here, it devoices to [{ipa}] (regressive devoicing).",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans un groupe devant une consonne non voisée, il se dévoise en [{ipa}] (dévoisement régressif).",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:б": {
       "en": {
         "template": "While ⟨{char}⟩ normally devoices here, the following voiced consonant [{trigger}] re-voices it through the regressive assimilation of voicing.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Si ⟨{char}⟩ se dévoise normalement dans cette position, la consonne voisée qui le suit, [{trigger}], lui rend son voisement par assimilation régressive de voisement.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:в": {
       "en": {
         "template": "While ⟨{char}⟩ normally devoices here, the following voiced consonant [{trigger}] re-voices it through the regressive assimilation of voicing.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Si ⟨{char}⟩ se dévoise normalement dans cette position, la consonne voisée qui le suit, [{trigger}], lui rend son voisement par assimilation régressive de voisement.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:г": {
       "en": {
         "template": "While ⟨{char}⟩ normally devoices here, the following voiced consonant [{trigger}] re-voices it through the regressive assimilation of voicing.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Si ⟨{char}⟩ se dévoise normalement dans cette position, la consonne voisée qui le suit, [{trigger}], lui rend son voisement par assimilation régressive de voisement.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:д": {
       "en": {
         "template": "While ⟨{char}⟩ normally devoices here, the following voiced consonant [{trigger}] re-voices it through the regressive assimilation of voicing.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Si ⟨{char}⟩ se dévoise normalement dans cette position, la consonne voisée qui le suit, [{trigger}], lui rend son voisement par assimilation régressive de voisement.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:ж": {
       "en": {
         "template": "While ⟨{char}⟩ normally devoices here, the following voiced consonant [{trigger}] re-voices it through the regressive assimilation of voicing.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Si ⟨{char}⟩ se dévoise normalement dans cette position, la consonne voisée qui le suit, [{trigger}], lui rend son voisement par assimilation régressive de voisement.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:з": {
       "en": {
         "template": "While ⟨{char}⟩ normally devoices here, the following voiced consonant [{trigger}] re-voices it through the regressive assimilation of voicing.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Si ⟨{char}⟩ se dévoise normalement dans cette position, la consonne voisée qui le suit, [{trigger}], lui rend son voisement par assimilation régressive de voisement.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:п": {
       "en": {
         "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Chaque fois que ⟨{char}⟩ se trouve, comme ici, devant une consonne voisée, il se voise en [{ipa}] par assimilation régressive de voisement.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:ф": {
       "en": {
         "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Chaque fois que ⟨{char}⟩ se trouve, comme ici, devant une consonne voisée, il se voise en [{ipa}] par assimilation régressive de voisement.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:к": {
       "en": {
         "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Chaque fois que ⟨{char}⟩ se trouve, comme ici, devant une consonne voisée, il se voise en [{ipa}] par assimilation régressive de voisement.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:т": {
       "en": {
         "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Chaque fois que ⟨{char}⟩ se trouve, comme ici, devant une consonne voisée, il se voise en [{ipa}] par assimilation régressive de voisement.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:ш": {
       "en": {
         "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Chaque fois que ⟨{char}⟩ se trouve, comme ici, devant une consonne voisée, il se voise en [{ipa}] par assimilation régressive de voisement.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:с": {
       "en": {
         "template": "Whenever ⟨{char}⟩ sits in front of a voiced consonant like it does here, it voices to [{ipa}] through the regressive assimilation of voicing.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Chaque fois que ⟨{char}⟩ se trouve, comme ici, devant une consonne voisée, il se voise en [{ipa}] par assimilation régressive de voisement.",
+        "citation": "pp. 215–221"
+      }
     },
     "genitive:г": {
       "en": {
         "template": "In the genitive endings -ого and -его, ⟨{char}⟩ is traditionally pronounced [{ipa}].",
         "citation": "p. 232"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans les terminaisons du génitif -ого et -его, ⟨{char}⟩ se prononce traditionnellement [{ipa}].",
+        "citation": "p. 232"
+      }
     },
     "bog-exception:г": {
       "en": {
         "template": "In the word бог, ⟨{char}⟩ is exceptionally pronounced as [{ipa}].",
         "citation": "p. 233"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans le mot бог, ⟨{char}⟩ se prononce exceptionnellement [{ipa}].",
+        "citation": "p. 233"
+      }
     },
     "silent:д": {
       "en": {
         "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
         "citation": "pp. 242–243"
       },
-      "fr": null,
+      "fr": {
+        "template": "Dans le groupe ⟨{cluster}⟩, la lettre ⟨{char}⟩ est muette. C’est l’un des groupes consonantiques du russe où une lettre s’écrit encore sans se prononcer.",
+        "citation": "pp. 242–243"
+      },
       "standalone": true
     },
     "silent:т": {
@@ -945,7 +1332,10 @@
         "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
         "citation": "pp. 242–243"
       },
-      "fr": null,
+      "fr": {
+        "template": "Dans le groupe ⟨{cluster}⟩, la lettre ⟨{char}⟩ est muette. C’est l’un des groupes consonantiques du russe où une lettre s’écrit encore sans se prononcer.",
+        "citation": "pp. 242–243"
+      },
       "standalone": true
     },
     "silent:в": {
@@ -953,7 +1343,10 @@
         "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
         "citation": "pp. 244–245"
       },
-      "fr": null,
+      "fr": {
+        "template": "Dans le groupe ⟨{cluster}⟩, la lettre ⟨{char}⟩ est muette. C’est l’un des groupes consonantiques du russe où une lettre s’écrit encore sans se prononcer.",
+        "citation": "pp. 244–245"
+      },
       "standalone": true
     },
     "silent:л": {
@@ -961,7 +1354,10 @@
         "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
         "citation": "p. 244"
       },
-      "fr": null,
+      "fr": {
+        "template": "Dans le groupe ⟨{cluster}⟩, la lettre ⟨{char}⟩ est muette. C’est l’un des groupes consonantiques du russe où une lettre s’écrit encore sans se prononcer.",
+        "citation": "p. 244"
+      },
       "standalone": true
     },
     "silent:з": {
@@ -969,7 +1365,10 @@
         "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
         "citation": "pp. 242–246"
       },
-      "fr": null,
+      "fr": {
+        "template": "Dans le groupe ⟨{cluster}⟩, la lettre ⟨{char}⟩ est muette. C’est l’un des groupes consonantiques du russe où une lettre s’écrit encore sans se prononcer.",
+        "citation": "pp. 242–246"
+      },
       "standalone": true
     },
     "silent:с": {
@@ -977,7 +1376,10 @@
         "template": "In the cluster ⟨{cluster}⟩, the letter ⟨{char}⟩ is silent. This is one of several consonant clusters in Russian where a letter is still written but has no phonetic realization.",
         "citation": "pp. 242–246"
       },
-      "fr": null,
+      "fr": {
+        "template": "Dans le groupe ⟨{cluster}⟩, la lettre ⟨{char}⟩ est muette. C’est l’un des groupes consonantiques du russe où une lettre s’écrit encore sans se prononcer.",
+        "citation": "pp. 242–246"
+      },
       "standalone": true
     },
     "muscovite:щ": {
@@ -985,21 +1387,30 @@
         "template": "In the Old Muscovite style, ⟨{char}⟩ is pronounced as a long palatalized fricative: [{ipa}].",
         "citation": "p. 181"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans le style vieux-moscovite, ⟨{char}⟩ se prononce comme une fricative palatalisée longue : [{ipa}].",
+        "citation": "p. 181"
+      }
     },
     "peterburgian:щ": {
       "en": {
         "template": "In the Peterburgian style, ⟨{char}⟩ is pronounced as the affricate sequence [{ipa}].",
         "citation": "p. 181"
       },
-      "fr": null
+      "fr": {
+        "template": "Dans le style pétersbourgeois, ⟨{char}⟩ se prononce comme la séquence [{ipa}], qui se termine par une affriquée.",
+        "citation": "p. 181"
+      }
     },
     "j-glide:я": {
       "en": {
         "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it inserts a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
-      "fr": null,
+      "fr": {
+        "template": "⟨{char}⟩ est l’une des quatre voyelles iotées du russe ; lorsqu’elle commence un mot, comme ici, elle insère un glide en [j] avant son son vocalique et devient [{ipa}].",
+        "citation": "pp. 114–116"
+      },
       "standalone": true
     },
     "j-glide:е": {
@@ -1007,7 +1418,10 @@
         "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it inserts a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
-      "fr": null,
+      "fr": {
+        "template": "⟨{char}⟩ est l’une des quatre voyelles iotées du russe ; lorsqu’elle commence un mot, comme ici, elle insère un glide en [j] avant son son vocalique et devient [{ipa}].",
+        "citation": "pp. 114–116"
+      },
       "standalone": true
     },
     "j-glide:ё": {
@@ -1015,7 +1429,10 @@
         "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it inserts a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
-      "fr": null,
+      "fr": {
+        "template": "⟨{char}⟩ est l’une des quatre voyelles iotées du russe ; lorsqu’elle commence un mot, comme ici, elle insère un glide en [j] avant son son vocalique et devient [{ipa}].",
+        "citation": "pp. 114–116"
+      },
       "standalone": true
     },
     "j-glide:ю": {
@@ -1023,7 +1440,10 @@
         "template": "⟨{char}⟩ is one of four iotated vowels in Russian; whenever ⟨{char}⟩ begins a word like it does here, it inserts a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
-      "fr": null,
+      "fr": {
+        "template": "⟨{char}⟩ est l’une des quatre voyelles iotées du russe ; lorsqu’elle commence un mot, comme ici, elle insère un glide en [j] avant son son vocalique et devient [{ipa}].",
+        "citation": "pp. 114–116"
+      },
       "standalone": true
     },
     "j-after-vowel:я": {
@@ -1031,7 +1451,10 @@
         "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it inserts a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
-      "fr": null,
+      "fr": {
+        "template": "⟨{char}⟩ étant l’une des quatre voyelles iotées du russe, lorsqu’elle suit, comme ici, une autre voyelle, elle insère un glide en [j] avant son son vocalique et devient [{ipa}].",
+        "citation": "pp. 114–116"
+      },
       "standalone": true
     },
     "j-after-vowel:е": {
@@ -1039,7 +1462,10 @@
         "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it inserts a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
-      "fr": null,
+      "fr": {
+        "template": "⟨{char}⟩ étant l’une des quatre voyelles iotées du russe, lorsqu’elle suit, comme ici, une autre voyelle, elle insère un glide en [j] avant son son vocalique et devient [{ipa}].",
+        "citation": "pp. 114–116"
+      },
       "standalone": true
     },
     "j-after-vowel:ё": {
@@ -1047,7 +1473,10 @@
         "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it inserts a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
-      "fr": null,
+      "fr": {
+        "template": "⟨{char}⟩ étant l’une des quatre voyelles iotées du russe, lorsqu’elle suit, comme ici, une autre voyelle, elle insère un glide en [j] avant son son vocalique et devient [{ipa}].",
+        "citation": "pp. 114–116"
+      },
       "standalone": true
     },
     "j-after-vowel:ю": {
@@ -1055,7 +1484,10 @@
         "template": "Because ⟨{char}⟩ is one of four iotated vowels in Russian, whenever it follows another vowel like it does here, it inserts a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116"
       },
-      "fr": null,
+      "fr": {
+        "template": "⟨{char}⟩ étant l’une des quatre voyelles iotées du russe, lorsqu’elle suit, comme ici, une autre voyelle, elle insère un glide en [j] avant son son vocalique et devient [{ipa}].",
+        "citation": "pp. 114–116"
+      },
       "standalone": true
     },
     "j-after-sign:я": {
@@ -1063,7 +1495,10 @@
         "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116, 193–195"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, l’une des quatre voyelles iotées du russe, suit un signe comme ici, ce signe déclenche un glide en [j] avant son son vocalique : ⟨{char}⟩ devient [{ipa}].",
+        "citation": "pp. 114–116, 193–195"
+      },
       "standalone": true
     },
     "j-after-sign:е": {
@@ -1071,7 +1506,10 @@
         "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116, 193–195"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, l’une des quatre voyelles iotées du russe, suit un signe comme ici, ce signe déclenche un glide en [j] avant son son vocalique : ⟨{char}⟩ devient [{ipa}].",
+        "citation": "pp. 114–116, 193–195"
+      },
       "standalone": true
     },
     "j-after-sign:ё": {
@@ -1079,7 +1517,10 @@
         "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116, 193–195"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, l’une des quatre voyelles iotées du russe, suit un signe comme ici, ce signe déclenche un glide en [j] avant son son vocalique : ⟨{char}⟩ devient [{ipa}].",
+        "citation": "pp. 114–116, 193–195"
+      },
       "standalone": true
     },
     "j-after-sign:ю": {
@@ -1087,7 +1528,10 @@
         "template": "When ⟨{char}⟩, one of the four iotated vowels in Russian, follows a sign like it does here, the sign triggers a /j/-glide before its vowel sound, in this case, becoming [{ipa}].",
         "citation": "pp. 114–116, 193–195"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩, l’une des quatre voyelles iotées du russe, suit un signe comme ici, ce signe déclenche un glide en [j] avant son son vocalique : ⟨{char}⟩ devient [{ipa}].",
+        "citation": "pp. 114–116, 193–195"
+      },
       "standalone": true
     },
     "hard:н": {
@@ -1095,14 +1539,20 @@
         "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
         "citation": "p. 152"
       },
-      "fr": null
+      "fr": {
+        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩ ; il prend donc sa forme par défaut : [{ipa}].",
+        "citation": "p. 152"
+      }
     },
     "pretonic-interpalatal:е": {
       "en": {
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [ɪ] (ikanye). Furthermore, when [ɪ] is sandwiched between two palatalizing agents as it is here, it fronts to [{ipa}]. The transformation of ⟨{char}⟩ to [{ipa}] follows two steps: reduction, then interpalatal fronting.",
         "citation": "pp. 125, 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [ɪ] (ikanié). De plus, lorsque [ɪ] est encadré, comme ici, par deux agents palatalisateurs, il s’antériorise en [{ipa}]. ⟨{char}⟩ devient donc [{ipa}] en deux étapes : la réduction, puis l’antériorisation interpalatale.",
+        "citation": "pp. 125, 127–128"
+      },
       "standalone": true
     },
     "pretonic-interpalatal:я": {
@@ -1110,7 +1560,10 @@
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [ɪ] (ikanye). Furthermore, when [ɪ] is sandwiched between two palatalizing agents as it is here, it fronts to [{ipa}]. The transformation of ⟨{char}⟩ to [{ipa}] follows two steps: reduction, then interpalatal fronting.",
         "citation": "pp. 125, 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [ɪ] (ikanié). De plus, lorsque [ɪ] est encadré, comme ici, par deux agents palatalisateurs, il s’antériorise en [{ipa}]. ⟨{char}⟩ devient donc [{ipa}] en deux étapes : la réduction, puis l’antériorisation interpalatale.",
+        "citation": "pp. 125, 127–128"
+      },
       "standalone": true
     },
     "pretonic-interpalatal:э": {
@@ -1118,7 +1571,10 @@
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [ɪ] (ikanye). Furthermore, when [ɪ] is sandwiched between two palatalizing agents as it is here, it fronts to [{ipa}]. The transformation of ⟨{char}⟩ to [{ipa}] follows two steps: reduction, then interpalatal fronting.",
         "citation": "pp. 125, 127–128"
       },
-      "fr": null,
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [ɪ] (ikanié). De plus, lorsque [ɪ] est encadré, comme ici, par deux agents palatalisateurs, il s’antériorise en [{ipa}]. ⟨{char}⟩ devient donc [{ipa}] en deux étapes : la réduction, puis l’antériorisation interpalatale.",
+        "citation": "pp. 125, 127–128"
+      },
       "standalone": true
     }
   },
@@ -1128,399 +1584,570 @@
         "template": "[{ipa}] is more open and centralized than the full stressed /ɑ/.",
         "citation": "p. 93"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est plus ouvert et plus centralisé que le /ɑ/ pleinement accentué.",
+        "citation": "p. 93"
+      }
     },
     "pretonic:о": {
       "en": {
         "template": "[{ipa}] is more open and centralized than the full stressed /ɑ/.",
         "citation": "p. 93"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est plus ouvert et plus centralisé que le /ɑ/ pleinement accentué.",
+        "citation": "p. 93"
+      }
     },
     "remote:а": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "remote:о": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "remote:я": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "remote:е": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "remote:э": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "post-stress-immediate:а": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "post-stress-immediate:о": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "post-stress-immediate:я": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "post-stress-immediate:е": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "post-stress-immediate:э": {
       "en": {
         "template": "[{ipa}] is the most reduced vowel in Russian; it should sound neutral and centralized.",
         "citation": "pp. 108–112"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle la plus réduite du russe ; elle doit sonner neutre et centralisée.",
+        "citation": "pp. 108–112"
+      }
     },
     "stressed-interpalatal:е": {
       "en": {
         "template": "[{ipa}] is a brighter, more forward variant of /ɛ/; think of the French /e/.",
         "citation": "pp. 104–107"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est une variante plus claire et plus antérieure de /ɛ/ ; pensez au /e/ français de « été ».",
+        "citation": "pp. 104–107"
+      }
     },
     "stressed-interpalatal:э": {
       "en": {
         "template": "[{ipa}] is a brighter, more forward variant of /ɛ/; think of the French /e/.",
         "citation": "pp. 104–107"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est une variante plus claire et plus antérieure de /ɛ/ ; pensez au /e/ français de « été ».",
+        "citation": "pp. 104–107"
+      }
     },
     "after-hard:и": {
       "en": {
         "template": "[{ipa}] is the central vowel ы; retract the tongue slightly from the /i/ position.",
         "citation": "pp. 89–90"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle centrale ы ; rétractez légèrement la langue depuis la position de /i/.",
+        "citation": "pp. 89–90"
+      }
     },
     "after-hard:е": {
       "en": {
         "template": "[{ipa}] is the central vowel ы; retract the tongue slightly from the /i/ position.",
         "citation": "pp. 89–90"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la voyelle centrale ы ; rétractez légèrement la langue depuis la position de /i/.",
+        "citation": "pp. 89–90"
+      }
     },
     "soft:б": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:в": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:г": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:д": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:з": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:к": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:м": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:п": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:р": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:с": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:т": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:ф": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:х": {
       "en": {
         "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
         "citation": "pp. 140–156, 195"
       },
-      "fr": null
+      "fr": {
+        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
+        "citation": "pp. 140–156, 195"
+      }
     },
     "soft:н": {
       "en": {
         "template": "[{ipa}] is the familiar palatal nasal we know from the Italian gn in \"ogni\" or the French gn in \"agneau.\"",
         "citation": "p. 183"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est la nasale palatale que nous connaissons bien par le gn italien d’« ogni » ou le gn français d’« agneau ».",
+        "citation": "p. 183"
+      }
     },
     "soft:л": {
       "en": {
         "template": "[{ipa}] resembles the Italian gl in \"figlio,\" but without the friction: Russian /lʲ/ is liquid, not lisping.",
         "citation": "p. 184"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] ressemble au gl italien de « figlio », mais sans friction : le /lʲ/ russe est une liquide, sans frottement latéral.",
+        "citation": "p. 184"
+      }
     },
     "hard:л": {
       "en": {
         "template": "[{ipa}] is the velarized dark-l; the back of the tongue rises toward the soft palate, giving it a heavier, thicker quality.",
         "citation": "p. 145"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] est le l vélaire, ou l sombre ; l’arrière de la langue s’élève vers le palais mou, ce qui lui donne une couleur plus lourde et plus épaisse.",
+        "citation": "p. 145"
+      }
     },
     "final-devoicing:б": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:в": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:г": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:д": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:ж": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "final-devoicing:з": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:б": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:в": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:г": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:д": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:ж": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-devoicing:з": {
       "en": {
         "template": "The voicing drops (devoices) but the place of articulation stays the same.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:б": {
       "en": {
         "template": "The voicing is effectively preserved.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement est, en pratique, préservé.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:в": {
       "en": {
         "template": "The voicing is effectively preserved.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement est, en pratique, préservé.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:г": {
       "en": {
         "template": "The voicing is effectively preserved.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement est, en pratique, préservé.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:д": {
       "en": {
         "template": "The voicing is effectively preserved.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement est, en pratique, préservé.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:ж": {
       "en": {
         "template": "The voicing is effectively preserved.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement est, en pratique, préservé.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:з": {
       "en": {
         "template": "The voicing is effectively preserved.",
         "citation": "pp. 226–229"
       },
-      "fr": null
+      "fr": {
+        "template": "Le voisement est, en pratique, préservé.",
+        "citation": "pp. 226–229"
+      }
     },
     "regressive-voicing:п": {
       "en": {
         "template": "The place and manner of articulation stay the same; only the voicing changes.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Le point et le mode d’articulation restent les mêmes ; seul le voisement change.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:ф": {
       "en": {
         "template": "The place and manner of articulation stay the same; only the voicing changes.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Le point et le mode d’articulation restent les mêmes ; seul le voisement change.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:к": {
       "en": {
         "template": "The place and manner of articulation stay the same; only the voicing changes.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Le point et le mode d’articulation restent les mêmes ; seul le voisement change.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:т": {
       "en": {
         "template": "The place and manner of articulation stay the same; only the voicing changes.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Le point et le mode d’articulation restent les mêmes ; seul le voisement change.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:ш": {
       "en": {
         "template": "The place and manner of articulation stay the same; only the voicing changes.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Le point et le mode d’articulation restent les mêmes ; seul le voisement change.",
+        "citation": "pp. 215–221"
+      }
     },
     "regressive-voicing:с": {
       "en": {
         "template": "The place and manner of articulation stay the same; only the voicing changes.",
         "citation": "pp. 215–221"
       },
-      "fr": null
+      "fr": {
+        "template": "Le point et le mode d’articulation restent les mêmes ; seul le voisement change.",
+        "citation": "pp. 215–221"
+      }
     },
     "genitive:г": {
       "en": {
         "template": "[{ipa}] sounds like /v/; this is a Russian spelling convention, not a phonological rule.",
         "citation": "p. 232"
       },
-      "fr": null
+      "fr": {
+        "template": "[{ipa}] se prononce /v/ ; c’est une convention orthographique russe, et non une règle phonologique.",
+        "citation": "p. 232"
+      }
     }
   },
   "citation_style": {
