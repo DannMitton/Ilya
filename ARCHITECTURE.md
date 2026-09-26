@@ -31,21 +31,23 @@ progressive web app, and stores the singer's songs on their own device.
 ## Codemap
 
 A pnpm workspace. The application depends on four packages. The packages never
-depend on the application.
+depend on the application, and at runtime none imports another: the
+application loads the data and injects it into each.
 
 ```
-packages/dictionary   ◄── packages/phonology ◄──┐
-packages/blurb        ◄─────────────────────────┤
-packages/score-parser ◄─────────────────────────┤
-                                            apps/web
+packages/phonology    ◄──┐
+packages/dictionary   ◄──┤
+packages/blurb        ◄──┤  apps/web imports each, and injects
+packages/score-parser ◄──┘  the dictionary data at load
 ```
 
 ### `packages/phonology` (`@ilya/phonology`)
 
 The **GraysonEngine**: stress, vowel reduction, palatalization, voicing
 assimilation, and clitic chains, turning Cyrillic into Grayson's IPA. The one
-place a phonological rule may live. Entry: `src/index.ts`. Depends on
-`@ilya/dictionary` for stress.
+place a phonological rule may live. Entry: `src/index.ts`. It imports no other
+package at runtime: the application loads the dictionary and injects it
+(`apps/web/src/lib/loader.ts`).
 
 ### `packages/dictionary` (`@ilya/dictionary`)
 
@@ -73,7 +75,9 @@ Depends on nothing else in the workspace.
   on and wires every surface together.
 - `src/lib/pipeline.ts` turns text into a transcription by calling the
   packages. `src/lib/loader.ts` loads the dictionary into IndexedDB in chunks.
-- `src/lib/i18n.ts` holds every word the singer reads, in both languages.
+- `src/lib/i18n.ts` holds the interface's words, in both languages. The Learn
+  and Guide texts are written in each language in `components/Reading/`, and
+  the word explanations come from `data/blurb-composer.json`.
 - `src/lib/destinations.ts` names where the singer is (Studio, Learn, Guide)
   and which document Studio shows (Transcription, Markup, Insights).
 - `src/lib/components/Drawer/` is the drawer: every control that changes
@@ -88,6 +92,9 @@ Depends on nothing else in the workspace.
     Workers that read a score from a PDF or a photograph.
   - `pairings.ts` joins the text's words to the score's notes, and
     `vowel-resolver.ts` asks the GraysonEngine which vowel is sung.
+  - `VoiceProfilePane.svelte` renders the Markup document: it analyzes the
+    score, paginates it (`paginateScore` in `packages/score-parser`), and hands
+    each page's SVG to `Paper/PageFit.svelte`.
   - `Loupe.svelte` and `loupe.ts` are the magnified editor for one measure.
   - `insights.ts`, `comments.ts`, and `InsightsPane.svelte` are Insights.
 - `src/lib/wall.ts` is the one switch that includes or removes Fit at build
@@ -110,7 +117,9 @@ broken.
    module writes IPA or re-derives a phonological rule of its own.
 4. **The IPA stays inside Grayson's inventory:**
    `ˈ ː a ɑ b d e ɛ f ɡ ɣ h i ɪ ɨ j ʲ k l ɫ m n ɲ o p r s ʃ t u v ʌ x z ʒ`.
-   *Tested:* `apps/web/src/lib/approval/invariants.test.ts`.
+   *Tested:* `apps/web/src/lib/approval/invariants.test.ts`. The one exception
+   is a display preference the singer chooses: `applyNotationPreferences`
+   (`packages/phonology`) can show the reduced vowel as `ə`.
 5. **Same input, same output.** *Tested:* the approval suites.
 6. **The drawer manipulates. The page displays and prints.** No control sits
    on the paper.
@@ -121,7 +130,11 @@ broken.
    is recomputed on open. The one ruled exception is R8's vowel glyph.
 10. **Stored ids never change.** The destination ids in `destinations.ts` and
     the library's record keys are written to the singer's device.
-11. **Every word the singer reads comes from `i18n.ts`**, in both languages.
+11. **Every word the singer reads exists in both languages.** Interface words
+    live in `i18n.ts`. *Tested:* `apps/web/src/lib/approval/i18n-keys.test.ts`
+    checks every literal key in both languages. **Not yet true** of the word
+    explanations: 209 of 210 templates in `data/blurb-composer.json` have no
+    French (counted 2026-09-26), and fall back to English.
 12. **Large files do not grow.** A file with a ceiling in
     `scripts/ratchets.json` may shrink and never grow; a file without one stays
     under 1,000 lines. New work goes into a new module. *Tested:*
@@ -135,10 +148,11 @@ broken.
   re-approves only a reviewed, intended change. The Playwright suite in
   `apps/web/e2e/` checks what a singer sees on the desktop layout, and
   `apps/web/e2e-phone/` checks the phone layout. `scripts/ratchets.mjs` guards
-  structure. CI (`.github/workflows/ci.yml`) runs all four on every push, with
-  zero type errors allowed.
-- **Language.** Every string is keyed in `i18n.ts`. French is ratified by Dann
-  before it ships.
+  structure. CI (`.github/workflows/ci.yml`) runs them on every push to any
+  branch, with zero type errors allowed. The phone Playwright project is not in
+  CI yet: one of its tests fails today.
+- **Language.** Interface strings are keyed in `i18n.ts`. French is ratified by
+  Dann before it ships.
 - **Storage.** Songs live in IndexedDB on the singer's device, through
   `src/lib/library/`.
 - **The dictionary** is large. `loader.ts` streams it into IndexedDB once, and

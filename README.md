@@ -43,7 +43,7 @@ Open `http://localhost:5173` in your browser.
 
 ```bash
 pnpm test           # Vitest unit and integration tests
-pnpm test:e2e       # Playwright end-to-end tests (requires dev server)
+pnpm test:e2e       # Playwright end-to-end tests (starts its own dev server)
 ```
 
 ## Project Structure

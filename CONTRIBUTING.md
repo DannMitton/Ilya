@@ -27,7 +27,7 @@ Glosses serve singers, not linguists. A good gloss is short (twenty characters o
 
 ## Working With the Code
 
-Ilya is a monorepo using pnpm workspaces. The three core packages are independently testable:
+Ilya is a monorepo using pnpm workspaces. The four packages are independently testable. [`ARCHITECTURE.md`](ARCHITECTURE.md) maps them and lists the invariants every change must keep.
 
 **`@ilya/phonology`** contains the GraysonEngine: the rule-based transcription logic. Changes here require Vitest tests demonstrating the expected behaviour, grounded in Grayson's rules. If you are adding a phonological rule, cite the page number.
 
@@ -35,13 +35,16 @@ Ilya is a monorepo using pnpm workspaces. The three core packages are independen
 
 **`@ilya/blurb`** generates the pedagogical explanations that appear when a singer clicks a word. Blurb content follows the voice and register documented in the project's voice instruction.
 
+**`@ilya/score-parser`** parses MusicXML and MNX into one score type, analyzes it, and engraves it. It needs no browser.
+
 The web application lives in `apps/web/` and is built with SvelteKit and TypeScript.
 
 ### Running Tests
 
 ```bash
 pnpm test           # Vitest unit and integration tests
-pnpm test:e2e       # Playwright end-to-end tests (requires dev server)
+pnpm test:e2e       # Playwright end-to-end tests (starts its own dev server)
+pnpm ratchets       # Architecture checks: file size, layering, package surface
 ```
 
 All tests must pass before a pull request will be reviewed.

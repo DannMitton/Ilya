@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [main, Shane]
   pull_request:
 
 # A newer push to the same branch cancels the older run, which can no longer
