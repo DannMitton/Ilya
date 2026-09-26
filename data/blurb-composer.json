@@ -296,11 +296,11 @@
     },
     "ц": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /ts/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in words with the suffix -ция.",
+        "template": "The letter ⟨{char}⟩ sounds like /ts/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ never palatalizes.",
         "citation": "pp. 166, 283"
       },
       "fr": {
-        "template": "La lettre ⟨{char}⟩ se prononce /ts/. Consonne toujours dure, l’une des trois du russe, elle résiste à la palatalisation et ne devient molle que dans les mots en -ция.",
+        "template": "La lettre ⟨{char}⟩ se prononce /ts/. Consonne toujours dure, l’une des trois du russe, elle ne se palatalise jamais.",
         "citation": "pp. 166, 283"
       },
       "selfSufficient": true
