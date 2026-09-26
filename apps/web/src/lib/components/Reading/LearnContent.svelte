@@ -1532,7 +1532,7 @@
 						<p>La frontière que le chanteur rencontre le plus fréquemment à
 						l’intérieur d’un mot est la première&#160;: une consonne toujours dure. Nous
 						avons rencontré ⟨ж⟩, ⟨ш⟩ et ⟨ц⟩ en section 5 comme des consonnes qui ne
-						sont jamais palatalisées. Ici, elles jouent le rôle de murs contre la
+						sont presque jamais palatalisées. Ici, elles jouent le rôle de murs contre la
 						palatalisation régressive. Dans большой, le ⟨ь⟩ palatalise le ⟨л⟩, mais
 						le ⟨ш⟩ à sa gauche est imperméable. La palatalisation s’arrête, et le
 						⟨б⟩ conserve sa dureté. Le chanteur qui a intériorisé les trois
@@ -3557,7 +3557,7 @@
 						</table>
 						<p>The most common boundary the singer will encounter within a word is
 						the first: an always-hard consonant. We met ⟨ж⟩, ⟨ш⟩, and ⟨ц⟩ in Section
-						5 as consonants that are never palatalized. Here they function as walls
+						5 as consonants that are almost never palatalized. Here they function as walls
 						against regressive palatalization. In большой, the ⟨ь⟩ palatalizes the
 						⟨л⟩, but the ⟨ш⟩ to its left is impervious. The palatalization stops,
 						and the ⟨б⟩ retains its hardness. The singer who has internalised the
