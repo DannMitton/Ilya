@@ -168,7 +168,7 @@
         "citation": "pp. 165, 174"
       },
       "fr": {
-        "template": "La lettre ⟨{char}⟩ se prononce /ʒ/. Consonne toujours dure, l’une des trois du russe, elle résiste à la palatalisation et ne devient molle que dans de très rares emprunts ou dans une prononciation traditionnelle archaïque.",
+        "template": "La lettre ⟨{char}⟩ se prononce /ʒ/. Consonne dure, l’une des trois du russe, elle résiste à la palatalisation et ne devient molle que dans de très rares emprunts ou dans une prononciation traditionnelle archaïque.",
         "citation": "pp. 165, 174"
       },
       "selfSufficient": true
@@ -296,12 +296,12 @@
     },
     "ц": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /ts/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ never palatalizes.",
-        "citation": "pp. 166, 283"
+        "template": "The letter ⟨{char}⟩ sounds like /ts/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization. It softens only in the word цвет and its derivatives, in some proper names, and in the suffixes -ция and -ционный where they answer to English -tion or -ence (but not in лекция, \"lecture\").",
+        "citation": "pp. 166, 168, 283–284"
       },
       "fr": {
-        "template": "La lettre ⟨{char}⟩ se prononce /ts/. Consonne toujours dure, l’une des trois du russe, elle ne se palatalise jamais.",
-        "citation": "pp. 166, 283"
+        "template": "La lettre ⟨{char}⟩ se prononce /ts/. Consonne dure, l’une des trois du russe, elle résiste à la palatalisation. Elle ne devient molle que dans le mot цвет et ses dérivés, dans certains noms propres, et dans les suffixes -ция et -ционный lorsqu’ils correspondent au français -tion ou -ence (mais pas dans лекция, « cours »).",
+        "citation": "pp. 166, 168, 283–284"
       },
       "selfSufficient": true
     },
@@ -318,12 +318,12 @@
     },
     "ш": {
       "en": {
-        "template": "The letter ⟨{char}⟩ sounds like /ʃ/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and only softens in the rarest loanwords.",
-        "citation": "p. 162"
+        "template": "The letter ⟨{char}⟩ sounds like /ʃ/; one of the three \"hard\" consonants in Russian, ⟨{char}⟩ resists palatalization, and softens only in the obsolete word пшют (\"fop\") and its forms.",
+        "citation": "pp. 162–163"
       },
       "fr": {
-        "template": "La lettre ⟨{char}⟩ se prononce /ʃ/. Consonne toujours dure, l’une des trois du russe, elle résiste à la palatalisation et ne devient molle que dans de très rares emprunts.",
-        "citation": "p. 162"
+        "template": "La lettre ⟨{char}⟩ se prononce /ʃ/. Consonne dure, l’une des trois du russe, elle résiste à la palatalisation et ne devient molle que dans le mot vieilli пшют (« dandy ») et ses formes.",
+        "citation": "pp. 162–163"
       },
       "selfSufficient": true
     },
