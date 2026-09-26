@@ -21,7 +21,11 @@ export default defineConfig({
 			   is a closed bottom sheet and the poem field is off screen, so the
 			   core loop could not type. The phone project covers the narrow
 			   layout. */
-			use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
+			use: {
+				...devices['Desktop Chrome'],
+				viewport: { width: 1440, height: 900 },
+				...(process.env.PW_CHROMIUM_PATH ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } } : {}),
+			},
 		},
 		/* N.153 STAGE 5. Clause 13's floor is defined at phone width, so the
 		   loupe scan runs here and only here: its own `testDir`, which the
@@ -37,6 +41,7 @@ export default defineConfig({
 				deviceScaleFactor: 3,
 				hasTouch: true,
 				isMobile: true,
+				...(process.env.PW_CHROMIUM_PATH ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } } : {}),
 			},
 		},
 	],

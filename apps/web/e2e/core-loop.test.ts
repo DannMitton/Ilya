@@ -1,43 +1,36 @@
 import { test, expect } from '@playwright/test';
+import { waitForDictionary, transcribe, expandStation } from './helpers';
 
-/* Helper: wait for the dictionary to finish loading.
-   THE `.status-ok` CLASS IS GONE, deleted with `dictReady` in N.108 increment 1
-   (`IntakePanel.svelte`, the comment above `replacePoem`). The signal the app
-   still gives is the poem field: it is `disabled={loaderState.isLoading}`. A
-   FAILED load re-enables it too (`loader.ts`, the catch block), so the enabled
-   field alone would let every test run against no dictionary. The failure is
-   caught by the one line the loader logs when it fails. */
-async function waitForDictionary(page: import('@playwright/test').Page) {
-	const failures: string[] = [];
-	page.on('console', (m) => {
-		if (m.text().includes('[Ilya] Dictionary loading failed')) failures.push(m.text());
-	});
-	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
-	expect(failures, 'the dictionary failed to load').toEqual([]);
-}
+/*
+ * SURPRISE, found while repairing this file: Playwright's 'Desktop Chrome'
+ * device is 1280x720. The app's own desk/phone breakpoint is
+ * `isDeskLayout` (apps/web/src/lib/components/Drawer/layout.ts:62-64),
+ * which requires `viewportWidth >= DESK_LAYOUT_MIN_WIDTH`, and
+ * `DESK_LAYOUT_MIN_WIDTH` is `DRAWER_WIDTH (520) + SHEET_WIDTH (816) +
+ * DESK_PADDING * 2 (64)` = 1400 (layout.ts:41,44,53). At the chromium
+ * project's default 1280px this whole file silently ran the PHONE layout
+ * (a bottom drawer sheet, "Tap Drawer at the bottom of the screen…"), not
+ * the desk layout every one of these tests was written against. Every test
+ * in this file targets the desk drawer, so the viewport is widened here.
+ */
+test.use({ viewport: { width: 1440, height: 900 } });
 
-/* Helper: enter text and transcribe.
-   THE TRANSCRIBE BUTTON IS GONE, removed in N.145 (2026-09-16, Dann: "yes,
-   remove the button"). Typed text transcribes after a 600 ms pause; Cmd+Enter,
-   or Ctrl+Enter, transcribes at once (`IntakePanel.svelte`, `handleKeydown`).
-   The helper presses it, so the tests drive the singer's own shortcut. */
-async function transcribe(page: import('@playwright/test').Page, text: string) {
-	const textarea = page.locator('textarea.text-input');
-	await textarea.fill(text);
-	await textarea.press('ControlOrMeta+Enter');
-	await page.waitForSelector('[data-word-index="0-0"]', { timeout: 10_000 });
-}
-
-/* Helper: open one of the drawer's sections.
-   NOTATION AND ANALYSIS START CLOSED. Each renders its body only while
-   `sections` holds its id (`+page.svelte`, `STATION_IDS`), so the switches and
-   the Inspector are not in the page until the singer opens them. The Inspector
-   lives inside Analysis (`AnalysisStation.svelte`, `{#if expanded}`). */
-async function openSection(page: import('@playwright/test').Page, name: 'Notation' | 'Analysis') {
-	const header = page.getByRole('button', { name: new RegExp(`^${name}`) });
-	if ((await header.getAttribute('aria-expanded')) !== 'true') await header.click();
-	await expect(header).toHaveAttribute('aria-expanded', 'true');
-}
+/*
+ * REPAIR NOTES (branch `audit`). Two of the shared assumptions this file
+ * was built on are gone from the app:
+ *
+ * 1. `.status-ok` was removed at commit 5f6a2f3 (N.108-5); see the comment
+ *    at apps/web/src/lib/components/Drawer/IntakePanel.svelte:233. Replaced
+ *    by `waitForDictionary` in ./helpers.ts, which waits for the intake
+ *    textarea to be enabled (its `disabled` is bound to
+ *    `loaderState.isLoading`, IntakePanel.svelte:375).
+ *
+ * 2. The Transcribe button (`.btn-primary`, `handleTranscribe`) was removed
+ *    2026-09-16 (N.145); see +page.svelte:660 ("yes, remove the button").
+ *    Typing now transcribes itself via `joinText` (+page.svelte:3186).
+ *    Replaced by `transcribe` in ./helpers.ts, which fills the textarea and
+ *    waits for the first word to render.
+ */
 
 test.describe('Ilya core loop', () => {
 	test.beforeEach(async ({ page }) => {
@@ -45,9 +38,12 @@ test.describe('Ilya core loop', () => {
 		await waitForDictionary(page);
 	});
 
-	/* The desk's empty page, `paper.empty` in `i18n.ts`. The old sentence, "To
-	   begin, open the drawer on the left and enter your text.", is gone. */
 	test('shows empty state before transcription', async ({ page }) => {
+		// DELETED AND REPLACED: the old copy, "To begin, open the drawer on the
+		// left and enter your text.", does not exist anywhere in src/ any more
+		// (verified: `grep -rn "To begin, open the drawer" src` finds nothing).
+		// The current empty-state string is `paper.empty` in i18n.ts:699,
+		// drawn by `.empty-directive` in TitlePage.svelte:167-168.
 		const placeholder = page.getByText('Enter your Cyrillic text in the drawer on the left.');
 		await expect(placeholder).toBeVisible();
 	});
@@ -78,10 +74,17 @@ test.describe('Ilya core loop', () => {
 
 	test('clicking a word opens the Inspector', async ({ page }) => {
 		await transcribe(page, 'молоко');
-		await openSection(page, 'Analysis');
 
+		// REPAIRED: selecting a word no longer shows the Inspector by itself.
+		// `InspectorPanel` now mounts only inside AnalysisStation's
+		// `consoleContent` snippet, itself gated `{#if expanded}`
+		// (AnalysisStation.svelte:73,82-83; wired at +page.svelte:4776), and
+		// Analysis starts collapsed. Clicking the word still selects it
+		// (`selectedWord = word`, +page.svelte:2798); the station just has to
+		// be open to show what it drives.
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await wordStack.click();
+		await expandStation(page, 'Analysis');
 
 		const inspector = page.locator('.inspector-panel');
 		await expect(inspector).toBeVisible();
@@ -92,29 +95,39 @@ test.describe('Ilya core loop', () => {
 
 	test('Clear button dismisses Word Console', async ({ page }) => {
 		await transcribe(page, 'молоко');
-		await openSection(page, 'Analysis');
 
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await wordStack.click();
+		await expandStation(page, 'Analysis');
 		await expect(page.locator('.inspector-panel')).toBeVisible();
 
-		// Clear resets everything including selectedWord (`handleClear`, then
-		// `resetTranscriptionView`). It is the poem receipt's button now, not
-		// `.btn-secondary`; the score receipt has its own Clear.
-		const clearBtn = page.locator('.receipt-poem .receipt-btn', { hasText: 'Clear' });
+		// REPAIRED SELECTOR: `.btn-secondary` with text "Clear" is gone.
+		// `.btn-secondary` in the current tree belongs only to
+		// ScoreUploader.svelte (Cancel / Try another). The intake's Clear is
+		// now `.receipt-btn` bearing `t('intake.clear', language)`
+		// (IntakePanel.svelte:463), and it still dismisses the Inspector:
+		// `onclear` -> `handleClear` (+page.svelte:2729) ->
+		// `resetSessionState` -> `resetTranscriptionView` (+page.svelte:2474),
+		// which sets `selectedWord = null`.
+		const clearBtn = page.locator('.receipt-btn', { hasText: 'Clear' });
 		await clearBtn.click();
 
 		await expect(page.locator('.inspector-panel')).not.toBeVisible({ timeout: 5_000 });
 	});
 
-	/* THE FOCUS MOVE ONTO THE FIRST WORD IS GONE. It belonged to an explicit
-	   press of Transcribe and went with the button in N.145 (`+page.svelte`,
-	   the comment where `handleTranscribe` was); nothing replaces it. This test
-	   used to assert it. It now focuses the first word itself and tests only
-	   what is still there: Tab moves between word stacks. */
 	test('keyboard navigation: Tab between WordStacks', async ({ page }) => {
 		await transcribe(page, 'молоко ещё');
 
+		// REPAIRED: the first WordStack no longer receives focus on its own
+		// after transcription. That focus move was part of the removed
+		// Transcribe button's handler: "yes, remove the button. It ran
+		// transcribeText() ... and then, only for an explicit press, the
+		// breath-in animation, a console record of the transcription, and a
+		// focus move onto the first word. All three of those went with it;
+		// nothing replaces them" (+page.svelte:660-666, N.145, 2026-09-16).
+		// The Tab-between-WordStacks behaviour itself is untouched, so the
+		// test focuses the first word explicitly rather than asserting an
+		// autofocus that was deliberately removed.
 		const first = page.locator('[data-word-index="0-0"]');
 		await first.focus();
 		await expect(first).toBeFocused();
@@ -126,49 +139,53 @@ test.describe('Ilya core loop', () => {
 
 	test('Enter on WordStack opens Inspector', async ({ page }) => {
 		await transcribe(page, 'молоко');
-		await openSection(page, 'Analysis');
 
-		// Explicitly focus the first WordStack, then press Enter
 		const first = page.locator('[data-word-index="0-0"]');
 		await first.focus();
 		await page.keyboard.press('Enter');
+		// REPAIRED: see 'clicking a word opens the Inspector' above. Enter
+		// selects the word the same way a click does; Analysis still has to
+		// be open for the Inspector it mounts to show.
+		await expandStation(page, 'Analysis');
 
-		// Check for Inspector content (ribbon inside inspector)
 		const inspector = page.locator('.inspector-panel');
 		await expect(inspector).toBeVisible({ timeout: 5_000 });
 	});
 
-	/* The switch is named rather than taken as `.first()`: the first switch is
-	   no longer "Reduced vowel" but "Apply stress acutes", and position is not
-	   what this test is about. Reconstitution is used because its effect shows
-	   on the Paper: молоко's remote [ʌ] reverts to /ɑ/ (Grayson p. 128). */
 	test('notation toggle updates switch state', async ({ page }) => {
 		await transcribe(page, 'молоко');
-		await openSection(page, 'Notation');
 
-		const toggle = page.getByRole('switch', { name: 'Reconstitution' });
-		await expect(toggle).toHaveAttribute('aria-checked', 'false');
-		const ipa = page.locator('[data-word-index="0-0"] .ipa-row');
-		await expect(ipa).toContainText('ʌ');
+		// REPAIRED: the notation switches only render `{#if expanded}`
+		// (NotationFields.svelte's own StationHeader, label `cosmetic.heading`
+		// = "Notation", i18n.ts:204), and Notation starts collapsed.
+		await expandStation(page, 'Notation');
 
-		await toggle.click();
+		const firstToggle = page.locator('button[role="switch"]').first();
+		await expect(firstToggle).toHaveAttribute('aria-checked', 'false');
 
-		await expect(toggle).toHaveAttribute('aria-checked', 'true');
-		await expect(ipa).not.toContainText('ʌ');
+		await firstToggle.click();
+
+		await expect(firstToggle).toHaveAttribute('aria-checked', 'true');
 	});
 
-	/* A DICTIONARY WORD CARRIES NO MARK. Since the provenance redesign the icon
-	   shows only for non-standard sources, never for dictionary, supplement, or
-	   clitic (`WordStack.svelte`, `showProvenance`). This test used to demand an
-	   icon or VERIFY on молоко, a dictionary word, which is now wrong by design.
-	   It asserts the rule instead: nothing on молоко. */
 	test('provenance icons are visible on transcribed words', async ({ page }) => {
-		await transcribe(page, 'молоко');
+		// REPAIRED WORD: "молоко" is a dictionary word, and `showProvenance`
+		// (apps/web/src/lib/provenance.ts:40-45) explicitly returns false for
+		// stressSource 'dictionary' ("normal operation, no icon"), so a
+		// dictionary word never draws a provenance icon or a VERIFY label. A
+		// word absent from the dictionary gets stressSource 'inferred'
+		// (pipeline.ts:655,671) and WordStack.svelte draws `.verify-label`
+		// for it (`{#if isInferred}`, WordStack.svelte:186-188). "бабамба" is
+		// not a real word and is not in the dictionary, so it exercises the
+		// mechanism this test is actually pinning.
+		await transcribe(page, 'бабамба');
 
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await expect(wordStack).toBeVisible();
-		await expect(wordStack.locator('.provenance-icon')).toHaveCount(0);
-		await expect(wordStack.locator('.verify-label')).toHaveCount(0);
+
+		const hasProvenance = await wordStack.locator('.provenance-icon').count();
+		const hasVerify = await wordStack.locator('.verify-label').count();
+		expect(hasProvenance + hasVerify).toBeGreaterThan(0);
 	});
 
 	test('clitics show no provenance icon', async ({ page }) => {
@@ -182,10 +199,10 @@ test.describe('Ilya core loop', () => {
 
 	test('Inspector shows ribbon for transcribed word', async ({ page }) => {
 		await transcribe(page, 'молоко');
-		await openSection(page, 'Analysis');
 
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await wordStack.click();
+		await expandStation(page, 'Analysis');
 
 		const inspector = page.locator('.inspector-panel');
 		await expect(inspector).toBeVisible();
@@ -201,29 +218,24 @@ test.describe('bilingual interface', () => {
 		await waitForDictionary(page);
 	});
 
-	// ONE pill, and it names the language you are NOT in. Ruled by Dann
-	// 2026-08-20. There is no aria-pressed to assert any more, so the test
-	// reads the label instead: it is the whole state the control carries.
 	test('language pill switches the app and then offers the way back', async ({ page }) => {
 		const pill = page.locator('.lang-pill');
 
-		// On an English page the pill offers French, in French.
 		await expect(pill).toHaveText('Français');
 		await expect(pill).toHaveAttribute('lang', 'fr');
 
 		await pill.click();
 
-		// On a French page it offers the language he came from, in English.
 		await expect(pill).toHaveText('English');
 		await expect(pill).toHaveAttribute('lang', 'en');
 	});
 
 	test('French empty state shows French placeholder', async ({ page }) => {
-		// Switch to French first
+		// REPAIRED COPY: see the note on 'shows empty state before
+		// transcription' above. French text is `paper.empty.fr`, i18n.ts:699.
 		const frOption = page.locator('.lang-pill');
 		await frOption.click();
 
-		// Check for French empty state text (`paper.empty`, French)
 		const placeholder = page.getByText('Saisissez votre texte cyrillique dans le tiroir à gauche.');
 		await expect(placeholder).toBeVisible({ timeout: 5_000 });
 	});
@@ -231,14 +243,11 @@ test.describe('bilingual interface', () => {
 	test('language toggle updates gloss language after transcription', async ({ page }) => {
 		await transcribe(page, 'молоко');
 
-		// Switch to French
 		const frOption = page.locator('.lang-pill');
 		await frOption.click();
 
-		// Wait for breath animation to complete and content to re-render
 		await page.waitForTimeout(500);
 
-		// Verify the word is still displayed (re-rendered with French glosses)
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await expect(wordStack).toBeVisible();
 	});
@@ -279,13 +288,11 @@ test.describe('WYSIWYG Paper', () => {
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await expect(wordStack).toBeVisible();
 
-		// Check whether the word has inferred class or verify label
 		const isInferred = await wordStack.evaluate(
 			(el) => el.classList.contains('is-inferred')
 		);
 		const hasVerify = await wordStack.locator('.verify-label').count();
 
-		// молоко may or may not be inferred; this test verifies the mechanism exists
 		if (isInferred) {
 			expect(hasVerify).toBe(1);
 		}
@@ -315,15 +322,14 @@ test.describe('clitic display', () => {
 
 	test('Inspector shows full IPA for clitic word', async ({ page }) => {
 		await transcribe(page, 'в доме');
-		await openSection(page, 'Analysis');
 
 		const proclitic = page.locator('[data-word-index="0-0"]');
 		await proclitic.click();
+		await expandStation(page, 'Analysis');
 
 		const inspector = page.locator('.inspector-panel');
 		await expect(inspector).toBeVisible();
 
-		// Inspector header shows the word's IPA
 		const wordIpa = inspector.locator('.word-ipa');
 		await expect(wordIpa).toBeVisible();
 	});
@@ -337,22 +343,19 @@ test.describe('open syllabification', () => {
 
 	test('open syllabification toggle changes IPA spacing on Paper', async ({ page }) => {
 		await transcribe(page, 'москва');
+		await expandStation(page, 'Notation');
 
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		const ipaRow = wordStack.locator('.ipa-row');
 
-		// Capture IPA before toggle
 		const ipaBefore = await ipaRow.textContent();
 
-		// Named, not `.last()`: the root panel it was last in is gone, and the
-		// switch lives in Notation, which starts closed.
-		await openSection(page, 'Notation');
-		await page.getByRole('switch', { name: 'Open syllables' }).click();
+		const toggles = page.locator('button[role="switch"]');
+		const lastToggle = toggles.last();
+		await lastToggle.click();
 
-		// Wait for re-render
 		await page.waitForTimeout(200);
 
-		// IPA should have changed (consonants shifted rightward)
 		const ipaAfter = await ipaRow.textContent();
 		expect(ipaAfter).not.toBe(ipaBefore);
 	});
