@@ -43,21 +43,21 @@
     "у": {
       "en": {
         "template": "The letter ⟨{char}⟩ always sounds like /u/, regardless of stress.",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       },
       "fr": {
         "template": "La lettre ⟨{char}⟩ se prononce toujours /u/, qu’elle soit accentuée ou non.",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       }
     },
     "ю": {
       "en": {
         "template": "The letter ⟨{char}⟩ always sounds like /u/, regardless of stress.",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       },
       "fr": {
         "template": "La lettre ⟨{char}⟩ se prononce toujours /u/, qu’elle soit accentuée ou non.",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       }
     },
     "ы": {
@@ -92,12 +92,12 @@
     },
     "и": {
       "en": {
-        "template": "The letter ⟨{char}⟩ usually sounds like /i/; it seldom reduces in sung Russian.",
-        "citation": "pp. 96, 101"
+        "template": "The letter ⟨{char}⟩ usually sounds like /i/; in sung Russian, neither stress nor position reduces it.",
+        "citation": "pp. 89, 101"
       },
       "fr": {
-        "template": "La lettre ⟨{char}⟩ se prononce généralement /i/ ; elle se réduit rarement en russe chanté.",
-        "citation": "pp. 96, 101"
+        "template": "La lettre ⟨{char}⟩ se prononce généralement /i/ ; en russe chanté, ni l’accent ni la position ne la réduisent.",
+        "citation": "pp. 89, 101"
       }
     },
     "ь": {
@@ -383,21 +383,21 @@
     "stressed:у": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       },
       "fr": {
         "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       }
     },
     "stressed:ю": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       },
       "fr": {
         "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       }
     },
     "stressed:ы": {
@@ -433,11 +433,11 @@
     "stressed:и": {
       "en": {
         "template": "Here, ⟨{char}⟩ carries the stress, so it takes its default value: [{ipa}].",
-        "citation": "pp. 96, 101"
+        "citation": "pp. 89, 101"
       },
       "fr": {
         "template": "Ici, ⟨{char}⟩ porte l’accent et prend donc sa valeur par défaut : [{ipa}].",
-        "citation": "pp. 96, 101"
+        "citation": "pp. 89, 101"
       }
     },
     "stressed-interpalatal:е": {
@@ -518,11 +518,11 @@
     "pretonic:и": {
       "en": {
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
-        "citation": "pp. 96, 101"
+        "citation": "pp. 89, 101"
       },
       "fr": {
         "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
-        "citation": "pp. 96, 101"
+        "citation": "pp. 89, 101"
       },
       "standalone": true
     },
@@ -714,22 +714,22 @@
     "unstressed:у": {
       "en": {
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       },
       "fr": {
         "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       },
       "standalone": true
     },
     "unstressed:ю": {
       "en": {
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       },
       "fr": {
         "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
-        "citation": "p. 96"
+        "citation": "pp. 91, 100"
       },
       "standalone": true
     },
@@ -747,11 +747,11 @@
     "unstressed:и": {
       "en": {
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",
-        "citation": "pp. 96, 101"
+        "citation": "pp. 89, 101"
       },
       "fr": {
         "template": "Accentué ou non, ⟨{char}⟩ ne se réduit jamais en russe chanté.",
-        "citation": "pp. 96, 101"
+        "citation": "pp. 89, 101"
       },
       "standalone": true
     },
