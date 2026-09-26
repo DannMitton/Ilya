@@ -5,6 +5,12 @@ on:
     branches: [main, Shane]
   pull_request:
 
+# A newer push to the same branch cancels the older run, which can no longer
+# land anyway. Added on the audit branch, 2026-09-26.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: Test, type-check, and build
@@ -42,6 +48,8 @@ jobs:
           # measured 0 errors at b7c2fc6, so the old number let 23 new errors
           # land unseen. It is a ratchet: it may fall, and it never rises.
           SVELTE_CHECK_BASELINE: "0"
+          # Warnings ratchet the same way: 12 measured at b7c2fc6.
+          SVELTE_CHECK_WARNINGS_BASELINE: "12"
         run: |
           # svelte-kit sync regenerates .svelte-kit/tsconfig.json that the app
           # tsconfig extends. It runs on install via the prepare script; run it
@@ -67,6 +75,13 @@ jobs:
 
           if [ "$ERRORS" -gt "$SVELTE_CHECK_BASELINE" ]; then
             echo "::error::svelte-check found $ERRORS errors, above the baseline of $SVELTE_CHECK_BASELINE. This push introduced new type errors; open the log above to see which files."
+            exit 1
+          fi
+
+          WARNINGS=$(awk '/ COMPLETED /{for (i = 1; i <= NF; i++) if ($i == "WARNINGS") print $(i - 1)}' svelte-check.log)
+          echo "svelte-check warnings: $WARNINGS (baseline: $SVELTE_CHECK_WARNINGS_BASELINE)"
+          if [ "$WARNINGS" -gt "$SVELTE_CHECK_WARNINGS_BASELINE" ]; then
+            echo "::error::svelte-check found $WARNINGS warnings, above the baseline of $SVELTE_CHECK_WARNINGS_BASELINE. Open the log above to see which files."
             exit 1
           fi
 
@@ -104,6 +119,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright's browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Chromium for Playwright
         working-directory: apps/web
