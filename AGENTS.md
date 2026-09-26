@@ -14,13 +14,15 @@ Guidance for AI agents working in this repository.
 
 A pnpm workspace monorepo, Node 18+, TypeScript, SvelteKit with Svelte 5 runes, tested with vitest.
 
-- `apps/web` (`@ilya/web`): the application. Four tabs: Transcription, Fit, Learn, Guide. Fit's code is at `apps/web/src/lib/shane/`.
+- `apps/web` (`@ilya/web`): the application. Three destinations (Studio, Learn, Guide); Studio holds three documents (Transcription, Markup, Insights), named in `apps/web/src/lib/destinations.ts`. Fit's code is at `apps/web/src/lib/shane/`.
 - `packages/phonology` (`@ilya/phonology`): the GraysonEngine. Russian phonological analysis per Grayson (2012).
 - `packages/dictionary` (`@ilya/dictionary`): dictionary loader, stress lookup, gloss pipeline.
 - `packages/blurb` (`@ilya/blurb`): context-aware educational explanations for phonological processes.
 - `packages/score-parser` (`@ilya/score-parser`): dual-canonical (MNX + MusicXML) ingestion into `ParsedScore`, staff rendering, Verovio output.
 
-`node_modules` is macOS-built. `pnpm test` and the app build are authoritative **only in the maintainer's terminal**, never in an agent sandbox.
+**Read `ARCHITECTURE.md` first.** It is the codemap and the list of invariants.
+
+The maintainer's `node_modules` is macOS-built, so a copy of his working tree cannot run the gates in a Linux sandbox. A fresh clone with `pnpm install --frozen-lockfile` can: on 2026-09-26 the full unit suite, the type check, the build, and the Playwright suite all ran in a Linux cloud sandbox. CI is the shared record.
 
 ## Roles and write protocol
 

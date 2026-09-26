@@ -50,29 +50,20 @@ pnpm test:e2e       # Playwright end-to-end tests (requires dev server)
 
 ```
 Ilya/
-├── apps/
-│   └── web/                        # SvelteKit web application
-│       ├── src/
-│       │   ├── lib/
-│       │   │   ├── components/
-│       │   │   │   ├── Paper/      # WYSIWYG paginated document
-│       │   │   │   └── Drawer/     # Root panel and Word Console
-│       │   │   ├── i18n.ts         # Bilingual string table (EN/FR)
-│       │   │   ├── pipeline.ts     # Transcription orchestration
-│       │   │   └── types.ts
-│       │   └── routes/
-│       │       └── +page.svelte    # Application shell and LEARN content
-│       └── e2e/                    # Playwright E2E tests
+├── apps/web/                 # The SvelteKit application (Svelte 5)
 ├── packages/
-│   ├── phonology/                  # GraysonEngine: rule-based phonological analysis
-│   ├── dictionary/                 # Dictionary loader and gloss pipeline
-│   └── blurb/                      # Pedagogical explanations for each transcription decision
-├── data/                           # Dictionary and rule data
-└── tests/
-    └── integration.test.ts         # Cross-package pipeline tests
+│   ├── phonology/            # The GraysonEngine: Russian to IPA, per Grayson (2012)
+│   ├── dictionary/           # Stress lookup and the English and French glosses
+│   ├── blurb/                # Why Ilya made each choice, for the singer
+│   └── score-parser/         # MusicXML and MNX parsing, analysis, and engraving
+├── scripts/                  # Dictionary builds and the architecture ratchets
+└── tests/                    # Cross-package integration tests
 ```
 
-Ilya is built in such a way that it can be improved and optimised. The three packages (`@ilya/phonology`, `@ilya/dictionary`, `@ilya/blurb`) are independently testable with clear boundaries. Russian linguistics aficionados can adjust the phonology and frontend developers can alter the interface.
+[`ARCHITECTURE.md`](ARCHITECTURE.md) is the map: what each part does, how the
+parts depend on one another, and the invariants that must stay true.
+
+Ilya is built in such a way that it can be improved and optimised. The four packages are independently testable with clear boundaries. Russian linguistics aficionados can adjust the phonology and frontend developers can alter the interface.
 
 ## Design and Attribution
 
