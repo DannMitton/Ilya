@@ -382,10 +382,16 @@ describe('N.127 the findings', () => {
 		const analyzed = resolveAdvice(analyzeScore(s, profile, resolver));
 		const watch = buildWatchList(s, analyzed, 1, { analysisScore: s, profile, resolver });
 		const m = buildInsights({ analysisScore: s, profile, watchList: watch });
-		// The two F3 quarters in bar 2 sit on the typed primo, so the watch
-		// list's passaggio tier fires on both: one hazard, two instances.
+		// The passaggio tier fires within ±1 semitone of EITHER typed edge,
+		// inclusive (watchlist.ts, PASSAGGIO_EDGE_WINDOW_CENTS = 100). The two F3
+		// quarters in bar 2 sit on the primo, and the E♭4 half in bar 3 sits
+		// exactly one semitone above the secondo (D4), so all three fire: one
+		// hazard, three instances, anchored by the longest, the E♭4 half.
+		// Mass: 2 + 2 + 4 = 8 quavers. Corrected on the audit branch 2026-09-26:
+		// the original expectation (two instances, F3) missed the secondo edge
+		// and had failed since this test was written at 7841fe7.
 		const passaggio = m.findings.find((f) => f.key === 'passaggio');
-		expect(passaggio).toMatchObject({ measure: '2', pitch: P('F', 3), instances: 2, massQuavers: 4 });
+		expect(passaggio).toMatchObject({ measure: '3', pitch: P('E', 4, -1), instances: 3, massQuavers: 8 });
 		// Every finding names a measure the line has and a pitch it sings.
 		for (const f of m.findings) {
 			expect(['1', '2', '3']).toContain(f.measure);
