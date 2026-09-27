@@ -209,10 +209,16 @@ describe('Task 7b: Consonants and Clusters', () => {
       expect(result.ipa).toBe('\u0283\u0268\u02C8rok\u0268j');
     });
 
-    it('keeps \u0446 hard in tsvet', () => {
-      // цвет -> ˈtsvʲɛt: ц stays hard, в soft before е
+    it('keeps \u0446 hard and \u0438 becomes \u0268 in tsirk', () => {
+      // цирк -> ˈtsɨrʲk: ц stays hard, и after ц is ɨ (Grayson pp. 166-167)
+      const result = transcribeWord('\u0446\u0438\u0440\u043A');
+      expect(result.ipa).toBe('\u02C8ts\u0268r\u02B2k');
+    });
+
+    it('palatalizes \u0446 in tsvet, a lexical exception', () => {
+      // цвет -> ˈtʲsʲvʲɛt: Grayson p. 168 prints /tʲsʲvʲɛt/ (tie bar omitted)
       const result = transcribeWord('\u0446\u0432\u0435\u0442');
-      expect(result.ipa).toBe('\u02C8tsv\u02B2\u025Bt');
+      expect(result.ipa).toBe('\u02C8t\u02B2s\u02B2v\u02B2\u025Bt');
     });
 
   });

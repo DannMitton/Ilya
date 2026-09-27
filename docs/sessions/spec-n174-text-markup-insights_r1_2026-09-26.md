@@ -78,6 +78,20 @@ the line-by-line as its own cardinal task within our code refresh"*).
 - **C. The plan, one line per change.** The desk merges A and B into an ordered
   change list, and Dann sees only what is his: any shown string, and the Vercel
   setting.
+- **C.2. A picture of the app before anything moves (added 2026-09-27).** Nothing
+  tests how the page looks, and the promise is that nothing on screen changes. So
+  before step D, the thread captures screenshots of Text, Markup, Insights, Learn,
+  and Guide, at desk (1440 × 900) and phone (390 × 844) widths, in English and
+  French, from a fixed song and score, in the Linux sandbox where the gates run.
+  After every slice of D it captures again and compares; any pixel difference is
+  explained or the slice is not done.
+- **Before D, three things land first (added 2026-09-27):** the two approved
+  briefs of 2026-09-25 (`brief-code-two-save-fixes_r1_2026-09-25.md`;
+  `brief-code-kvp2-p141-punctuation_r1_2026-09-25.md`, which edits
+  `lib/shane/advice-resolver.ts`); the failing phone test in
+  `apps/web/e2e-phone/loupe-scan.test.ts`, so the phone suite can guard the loupe's
+  move (lead: `loupe-rules.ts:13`, `:33`, a 44.00 px reading against `>= 44`); and
+  a rollback tag on `Shane`, which Dann places.
 - **D. Execute (Code), in slices,** each ending with every gate green:
   1. the document ids, with the stored-value migration and its tests;
   2. the module moves, one module per slice, with the import rewrites and the

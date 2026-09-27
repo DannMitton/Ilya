@@ -2070,7 +2070,8 @@
       "en": "flowers (gen. pl.)",
       "fr": "de fleurs"
     },
-    "source": "supplement"
+    "source": "supplement",
+    "lemma": "цветок"
   },
   "садов": {
     "stress": 1,
@@ -2166,6 +2167,411 @@
       "en": "wandering (gen. sg.)",
       "fr": "d'errance"
     },
+    "source": "supplement"
+  },
+  "пшют": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшюта": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшюту": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшютом": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшюте": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшюты": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшютов": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшютам": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшютами": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "пшютах": {
+    "stress": 0,
+    "gloss": {
+      "en": "fop (obsolete)",
+      "fr": "dandy"
+    },
+    "lemma": "пшют",
+    "source": "supplement"
+  },
+  "декламационный": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационная": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационное": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационные": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационного": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационной": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационному": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационным": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационном": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационную": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационными": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационных": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "декламационною": {
+    "stress": 4,
+    "gloss": {
+      "en": "declamatory",
+      "fr": "déclamatoire"
+    },
+    "lemma": "декламационный",
+    "source": "supplement"
+  },
+  "каденция": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденции": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденцию": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденцией": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденциею": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденций": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденциям": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденциями": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденциях": {
+    "stress": 1,
+    "gloss": {
+      "en": "cadence; cadenza",
+      "fr": "cadence"
+    },
+    "lemma": "каденция",
+    "source": "supplement"
+  },
+  "каденционный": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционная": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционное": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционные": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционного": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционной": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционному": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционным": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционном": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционную": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционными": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционных": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
+    "source": "supplement"
+  },
+  "каденционною": {
+    "stress": 3,
+    "gloss": {
+      "en": "cadential",
+      "fr": "de cadence"
+    },
+    "lemma": "каденционный",
     "source": "supplement"
   }
 }

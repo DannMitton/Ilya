@@ -10,6 +10,7 @@
  *
  * @module @ilya/phonology
  */
+import { lexicalSoftIndices } from './lexical-palatalization';
 
 // ─────────────────────────────────────────────────────────────────────
 // TYPES
@@ -847,9 +848,9 @@ export const GraysonEngine = {
   // Pass 3: Progressive palatalization of р (Grayson p. 209, footnote 277)
   //
   // Returns a Map of character indices that should be palatalized.
-  computeCompletePalatalizationMap(word: string, syllables: string[], stressIndex: number): Map<number, boolean> {
+  computeCompletePalatalizationMap(word: string, syllables: string[], stressIndex: number, lexicalSoft: ReadonlySet<number> = new Set()): Map<number, boolean> {
     const chars = [...word.toLowerCase()];
-    const softIndices = new Map<number, boolean>(); // index -> true if should be palatalized
+    const softIndices = new Map<number, boolean>([...lexicalSoft].map((i) => [i, true])); // index -> true if palatalized; seeded with lexical ц, ш (Grayson pp. 163, 168, 283-284)
 
     // Compute syllable boundaries: which char indices are in each syllable
     const syllableBoundaries: Array<{ start: number; end: number; isStressed: boolean }> = [];
@@ -1284,7 +1285,7 @@ export const GraysonEngine = {
     }
 
     if (soft && !this.alwaysSoft.has(consonant)) {
-      return base + 'ʲ';
+      return consonant === 'ц' ? 'tʲsʲ' : base + 'ʲ'; // ц is soft only lexically: Grayson's tʲsʲ, tie bar omitted (pp. 168, 283-284)
     }
 
     return base;
@@ -1329,7 +1330,7 @@ export const GraysonEngine = {
   voicedObstruents: new Set(['b', 'bʲ', 'd', 'dʲ', 'ɡ', 'z', 'zʲ', 'ʒ']),
 
   // Voiceless obstruents (can trigger devoicing of preceding consonants)
-  voicelessObstruents: new Set(['p', 'pʲ', 't', 'tʲ', 'k', 's', 'sʲ', 'ʃ', 'x', 'ts', 'tʃ', 'ʃtʃ']),
+  voicelessObstruents: new Set(['p', 'pʲ', 't', 'tʲ', 'k', 's', 'sʲ', 'ʃ', 'x', 'ts', 'tʲsʲ', 'tʃ', 'ʃtʃ']),
 
   // /v/ phonemes: "has no assimilative voicing influence of its own,
   // but is influenced by most other consonants" (Grayson p. 214)
@@ -1411,9 +1412,9 @@ export const GraysonEngine = {
       } else if (ipa.slice(i, i + 2) === 'tʃ') {
         segments.push('tʃ');
         i += 2;
-      } else if (ipa.slice(i, i + 2) === 'ts') {
-        segments.push('ts');
-        i += 2;
+      } else if (ipa.startsWith('ts', i) || ipa.startsWith('tʲsʲ', i)) { // tʲsʲ: lexical ц (Grayson pp. 163, 168, 283-284)
+        segments.push(ipa[i + 1] === 'ʲ' ? 'tʲsʲ' : 'ts');
+        i += ipa[i + 1] === 'ʲ' ? 4 : 2;
       } else if (ipa[i + 1] === 'ʲ' && ipa[i + 2] === 'ː') {
         // Consonant + palatalization + length (e.g., ʃʲː)
         segments.push(ipa.slice(i, i + 3));
@@ -1566,7 +1567,8 @@ export const GraysonEngine = {
     // Compute COMPLETE palatalization map for the whole word (Grayson p. 207-209)
     // This includes regressive AND progressive palatalization (for р after front vowels)
     // Architecture: single source of truth computed BEFORE any transcription
-    const softIndices = this.computeCompletePalatalizationMap(cleanWord, syllables, effectiveStress);
+    const lexicalSoft = new Set(lexicalSoftIndices(cleanWord, this.lookupStress(cleanWord))); // ц, ш softened by lemma (Grayson pp. 163, 168, 283-284)
+    const softIndices = this.computeCompletePalatalizationMap(cleanWord, syllables, effectiveStress, lexicalSoft);
 
     // Build a map of character position in full word to track palatalization
     let charIndexInWord = 0;
@@ -1801,7 +1803,7 @@ export const GraysonEngine = {
             }
 
             // Capture interpalatal and afterHard features
-            const prevConsonantForFeatures = this.isConsonant(prevCharInWord) ? prevCharInWord : null;
+            const prevConsonantForFeatures = this.isConsonant(prevCharInWord) && !lexicalSoft.has(prevGlobalIndex) ? prevCharInWord : null; // after lexical ц, и stays [i] (Grayson p. 284)
             vowelFeatures.interpalatal = isPrecededByPal && isFollowedByPal && prevCharInWord !== 'ъ';
             vowelFeatures.afterHard = ['ж', 'ш', 'ц'].includes(prevConsonantForFeatures as string);
 
@@ -1855,7 +1857,7 @@ export const GraysonEngine = {
             } else if (['е', 'ё', 'ю', 'я', 'и'].includes(nextChar)) {
               softTrigger = nextChar;
             } else if (isSoftFromRegressive) {
-              softTrigger = 'regressive';
+              softTrigger = lexicalSoft.has(globalIndex) ? 'lexical' : 'regressive';
             }
           }
 
@@ -2047,7 +2049,7 @@ export const GraysonEngine = {
   } as Record<string, string>,
 
   // Consonant sets for cross-word assimilation
-  crossWordVoicelessSet: new Set(['p', 'pʲ', 'f', 'fʲ', 't', 'tʲ', 's', 'sʲ', 'ʃ', 'ʃʲ', 'k', 'kʲ', 'x', 'xʲ', 'ts', 'tʃʲ', 'ʃʲʃʲ']),
+  crossWordVoicelessSet: new Set(['p', 'pʲ', 'f', 'fʲ', 't', 'tʲ', 's', 'sʲ', 'ʃ', 'ʃʲ', 'k', 'kʲ', 'x', 'xʲ', 'ts', 'tʲsʲ', 'tʃʲ', 'ʃʲʃʲ']),
   crossWordVoicedObstruentSet: new Set(['b', 'bʲ', 'd', 'dʲ', 'g', 'gʲ', 'ɡ', 'ɡʲ', 'z', 'zʲ', 'ʒ', 'ʒʲ']),
   crossWordSonorantSet: new Set(['m', 'mʲ', 'n', 'nʲ', 'ɲ', 'l', 'lʲ', 'ɫ', 'r', 'rʲ', 'j']),
   crossWordVSet: new Set(['v', 'vʲ']),
@@ -2062,7 +2064,7 @@ export const GraysonEngine = {
     // Match final consonant cluster (including affricates and palatalization)
     // Order matters: try longer sequences first
     const patterns = [
-      'ʃʲʃʲ', 'tʃʲ', 'dʒʲ', 'ts', 'dz',  // Affricates
+      'ʃʲʃʲ', 'tʲsʲ', 'tʃʲ', 'dʒʲ', 'ts', 'dz',  // Affricates
       'bʲ', 'pʲ', 'vʲ', 'fʲ', 'dʲ', 'tʲ', 'gʲ', 'ɡʲ', 'kʲ', 'zʲ', 'sʲ', 'ʒʲ', 'ʃʲ', 'xʲ', 'mʲ', 'nʲ', 'lʲ', 'rʲ',  // Palatalized
       'b', 'p', 'v', 'f', 'd', 't', 'g', 'ɡ', 'k', 'z', 's', 'ʒ', 'ʃ', 'x', 'm', 'n', 'ɲ', 'l', 'ɫ', 'r', 'j'  // Plain
     ];
@@ -2084,7 +2086,7 @@ export const GraysonEngine = {
     const clean = ipa.replace(/[ˈˌ]/g, '');
     // Match initial consonant cluster
     const patterns = [
-      'ʃʲʃʲ', 'tʃʲ', 'dʒʲ', 'ts', 'dz',
+      'ʃʲʃʲ', 'tʲsʲ', 'tʃʲ', 'dʒʲ', 'ts', 'dz',
       'bʲ', 'pʲ', 'vʲ', 'fʲ', 'dʲ', 'tʲ', 'gʲ', 'ɡʲ', 'kʲ', 'zʲ', 'sʲ', 'ʒʲ', 'ʃʲ', 'xʲ', 'mʲ', 'nʲ', 'lʲ', 'rʲ',
       'b', 'p', 'v', 'f', 'd', 't', 'g', 'ɡ', 'k', 'z', 's', 'ʒ', 'ʃ', 'x', 'm', 'n', 'ɲ', 'l', 'ɫ', 'r', 'j'
     ];
