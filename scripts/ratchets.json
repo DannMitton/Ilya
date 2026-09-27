@@ -20,6 +20,6 @@
     "apps/web/src/lib/score/CorrectionSurface.svelte": 1265,
     "packages/score-parser/src/mnx-parser.ts": 1170,
     "packages/score-parser/src/musicxml-parser.ts": 1168,
-    "apps/web/src/lib/pipeline.ts": 1064
+    "apps/web/src/lib/pipeline.ts": 1065
   }
 }

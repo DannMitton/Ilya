@@ -5,6 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { SEMINARIAN_LATIN_IPA } from '$lib/latin';
 
 /**
  * AGENTS.md, "Scholarly integrity": Grayson's restricted, singable IPA
@@ -30,6 +31,20 @@ describe('the IPA stays inside Grayson’s inventory', () => {
 			for (const ch of line) if (!GRAYSON.has(ch) && !LAYOUT.has(ch)) outside.add(ch);
 		}
 		expect([...outside]).toEqual([]);
+	});
+
+	/* THE ONE DOCUMENTED EXCEPTION (ARCHITECTURE.md invariant 4): [w], from
+	   Richter, p. xii, "occurs only in the Latin words used in the text of the
+	   song The Seminarian". It is allowed in `latin.ts`'s table and nowhere
+	   else, and only in the four words the table marks. */
+	it('allows [w] only in the Seminarian’s Latin, and only in four words', () => {
+		const withW: string[] = [];
+		for (const [word, ipa] of Object.entries(SEMINARIAN_LATIN_IPA)) {
+			const outside = [...ipa].filter((ch) => !GRAYSON.has(ch) && !LAYOUT.has(ch));
+			expect(outside.every((ch) => ch === 'w'), word).toBe(true);
+			if (outside.length > 0) withW.push(word);
+		}
+		expect(withW.sort()).toEqual(['atque', 'caulis', 'sanguis', 'unguis']);
 	});
 
 	it('would catch a symbol outside the inventory (positive control)', () => {

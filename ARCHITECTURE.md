@@ -138,11 +138,17 @@ broken.
    Tests may load a package's fixtures directly. *Tested:* `scripts/ratchets.mjs`.
 3. **IPA comes only from the GraysonEngine.** No renderer, component, or
    analysis module writes IPA or re-derives a phonological rule of its own.
+   The one exception is the thirty Latin words of «Семинарист», whose IPA is
+   Richter's (2002, pp. 43–49), in `apps/web/src/lib/latin.ts` and credited on
+   the page that shows it (Dann, 2026-09-27). Any other Latin word shows none.
 4. **The IPA stays inside Grayson's inventory:**
    `ˈ ː a ɑ b d e ɛ f ɡ ɣ h i ɪ ɨ j ʲ k l ɫ m n ɲ o p r s ʃ t u v ʌ x z ʒ`.
-   *Tested:* `apps/web/src/lib/approval/invariants.test.ts`. The one exception
-   is a display preference the singer chooses: `applyNotationPreferences`
-   (`packages/phonology`) can show the reduced vowel as `ə`.
+   *Tested:* `apps/web/src/lib/approval/invariants.test.ts`. Two exceptions:
+   a display preference the singer chooses (`applyNotationPreferences` in
+   `packages/phonology` can show the reduced vowel as `ə`), and [w], in four of
+   «Семинарист»'s Latin words only (`latin.ts`; Richter, p. xii: it "occurs
+   only in the Latin words used in the text of the song *The Seminarian*").
+   The same test pins that [w] appears nowhere else in the table.
 5. **Same input, same output.** *Tested:* the approval suites.
 6. **The drawer manipulates. The page displays and prints.** No control sits
    on the paper.

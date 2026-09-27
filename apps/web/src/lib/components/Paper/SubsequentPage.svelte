@@ -7,6 +7,7 @@
 	import RunningHeader from './RunningHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
+	import { showsRichterIpa } from '$lib/latin';
 
 	interface Props {
 		lines: LineData[];
@@ -94,6 +95,7 @@
 		{totalPages}
 		{language}
 		{legendItems}
+		richterCredit={showsRichterIpa(lines)}
 	/>
 </div>
 

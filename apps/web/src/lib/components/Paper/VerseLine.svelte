@@ -16,9 +16,11 @@
 
 	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, glossOverrides, onwordclick }: Props = $props();
 
-	// Filter out punctuation-only tokens: only render words containing Cyrillic
+	// Render words containing Cyrillic, and Latin words (`latin.ts`), which keep
+	// their place in the line. A punctuation-only token never becomes a word
+	// (`splitIntoPreLines`), and this filter would drop one if it did.
 	const displayWords = $derived(
-		words.filter(w => /[А-Яа-яЁё]/.test(w.cyrillic || ''))
+		words.filter(w => w.latin || /[А-Яа-яЁё]/.test(w.cyrillic || ''))
 	);
 
 	// Check if reconstitution is active for a given word index in displayWords.

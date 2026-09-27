@@ -24,11 +24,14 @@
 		 * measures its own footer can reserve one.
 		 */
 		onheightchange?: (height: number) => void;
+		/** A line on this page shows Richter's IPA for a Latin word (`latin.ts`), so the page credits him. */
+		richterCredit?: boolean;
 	}
 
-	let { pageNumber, totalPages, language, legendItems = [], broadNote, hairlineAccent = 'var(--sage)', onheightchange }: Props = $props();
+	let { pageNumber, totalPages, language, legendItems = [], broadNote, hairlineAccent = 'var(--sage)', richterCredit = false, onheightchange }: Props = $props();
 
 	const attribution = $derived(t('footer.attribution', language));
+	const richterLine = $derived(richterCredit ? t('footer.richter', language) : '');
 
 	/** Measured height of this footer: legend, broad note, hairline and colophon. */
 	let measuredHeight = $state(0);
@@ -95,7 +98,7 @@
 	<div class="footer-content">
 		<div class="attribution-cell">
 			<span class="attribution-text">
-				{@html attribution}&nbsp;&nbsp;&nbsp;<a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a>
+				{#if richterLine}{@html richterLine}{' '}{/if}{@html attribution}&nbsp;&nbsp;&nbsp;<a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a>
 			</span>
 		</div>
 		<div class="pagination-cell">

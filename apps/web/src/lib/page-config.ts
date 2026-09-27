@@ -98,7 +98,7 @@ export const LINES_PER_PAGE = 10;
 
 // ── Page slicing ─────────────────────────────────────────────────
 
-/** Cyrillic character test (matches VerseLine's display filter). */
+/** Cyrillic character test (with `w.latin`, matches VerseLine's display filter). */
 const CYRILLIC_RE = /[А-Яа-яЁё]/;
 
 /**
@@ -110,7 +110,7 @@ const CYRILLIC_RE = /[А-Яа-яЁё]/;
  */
 function slotCost(line: LineData): 1 | 2 {
 	const displayWords = line.words.filter(
-		w => CYRILLIC_RE.test(w.cyrillic || '')
+		w => w.latin || CYRILLIC_RE.test(w.cyrillic || '')
 	);
 	return displayWords.length > 7 ? 2 : 1;
 }

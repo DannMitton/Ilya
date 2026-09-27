@@ -109,21 +109,25 @@
 		word.stressSource !== 'dictionary' &&
 		word.stressSource !== 'supplement' &&
 		word.stressSource !== 'clitic' &&
-		word.stressSource !== undefined
+		word.stressSource !== undefined &&
+		!word.latin
 	);
 
-	const isInferred = $derived(word.stressSource === 'inferred' && !isClitic);
+	// A Latin word has no Russian stress to verify (`latin.ts`).
+	const isInferred = $derived(word.stressSource === 'inferred' && !isClitic && !word.latin);
 
 	// Whether any top-right icon is present (provenance or R sigla)
 	// R sigla shows whenever spot inverts the global, in either direction
 	const hasTopRightIcon = $derived((showProvenance && !isInferred) || spotReconstituted);
 
+	// A Latin word opens no Inspector: nothing there applies to it, and a stress
+	// set there would print a stress mark the brief forbids.
 	function handleClick() {
-		onwordclick?.(word);
+		if (!word.latin) onwordclick?.(word);
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === 'Enter' || e.key === ' ') {
+		if (!word.latin && (e.key === 'Enter' || e.key === ' ')) {
 			e.preventDefault();
 			onwordclick?.(word);
 		}
@@ -135,8 +139,10 @@
 	class:is-clitic={isClitic}
 	class:has-top-right-icon={hasTopRightIcon}
 	class:is-inferred={isInferred}
+	class:is-latin={word.latin}
 	role="button"
-	tabindex="0"
+	tabindex={word.latin ? -1 : 0}
+	aria-disabled={word.latin || undefined}
 	data-word-index="{word.lineIndex}-{word.wordIndex}"
 	onclick={handleClick}
 	onkeydown={handleKeydown}
@@ -173,7 +179,8 @@
 		{#if isClitic && !reconActive}
 			<span class="clitic-arrow">{displayIpa}</span>
 		{:else}
-			{displayIpa}
+			<!-- A Latin word with no IPA keeps the row's height, as the gloss row does. -->
+			{displayIpa || (word.latin ? '\u00A0' : '')}
 		{/if}
 	</span>
 
@@ -266,6 +273,15 @@
 		font-weight: 600;
 		color: var(--ink-primary);
 		white-space: nowrap;
+	}
+
+	/* A Latin word: italic, the engraving convention for text in another language. */
+	.is-latin .cyrillic-row {
+		font-style: italic;
+	}
+
+	.is-latin {
+		cursor: default;
 	}
 
 	.gloss-row {

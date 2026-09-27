@@ -69,6 +69,8 @@ export interface WordStackData {
   result: TranscriptionResult;
   /** Final IPA for display (after cross-word assimilation and clitic merging). */
   ipaDisplay: string;
+  /** A Latin word (`latin.ts`): kept on the page in italics, with no gloss or stress mark. */
+  latin?: boolean;
   /**
    * IPA with vowel reconstitution applied (Grayson Ch. 3, §8).
    * Pre-computed at pipeline time using the transcription log for

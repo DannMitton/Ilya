@@ -38,6 +38,7 @@ import type { GlossLanguage, BilingualGloss, DictionaryEntry } from '@ilya/dicti
 import { buildDisplayLog } from '@ilya/blurb';
 
 import { applyReconstitution } from './reconstitution';
+import { markLatinWords } from './latin';
 
 import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, YoToggle } from './types';
 
@@ -510,7 +511,7 @@ export function processText(
     };
   });
 
-  return lineDataArray;
+  return markLatinWords(lineDataArray);
 }
 
 // ── Step 1 helper: stress lookup and ё restoration ──────────────
