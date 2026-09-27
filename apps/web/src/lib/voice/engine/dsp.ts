@@ -1,4 +1,4 @@
-// Shane DSP core: numeric primitives for the engine port (browser-safe, no deps).
+// Capture DSP core: numeric primitives for the engine port (browser-safe, no deps).
 // Validated under Node against the Python/scipy reference before use.
 
 /** In-place iterative radix-2 FFT. Length must be a power of two. */

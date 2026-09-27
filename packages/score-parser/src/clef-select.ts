@@ -7,7 +7,7 @@
  * Modern vocal music uses treble and bass clefs only; a tenor part is
  * written in treble sounding an octave lower, ideally treble-with-8,
  * and C clefs appear only to replicate original clefs in early-music
- * editions (Gould extraction v5, rule 76, p. 433). Fit therefore
+ * editions (Gould extraction v5, rule 76, p. 433). Markup therefore
  * renders three clef passes — treble, treble-8vb, and bass — and maps
  * a source C clef through the heuristic rather than drawing one.
  *
@@ -28,7 +28,7 @@ const MIDDLE_C = 4 * 7 + DIATONIC.C; // C4
 
 /**
  * Map a captured source clef to a render pass. Returns null for clefs
- * Fit does not draw (C clefs), routing the caller to the heuristic.
+ * Markup does not draw (C clefs), routing the caller to the heuristic.
  */
 export function clefFromSource(clef: Clef): RenderClef | null {
   if (clef.sign === 'G') return (clef.octaveChange ?? 0) <= -1 ? 'treble-8vb' : 'treble';

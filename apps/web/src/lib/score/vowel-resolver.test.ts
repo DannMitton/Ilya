@@ -1,5 +1,5 @@
 /**
- * buildVowelResolver tests (v38 §E.5, the Shane↔Ilya seam).
+ * buildVowelResolver tests (v38 §E.5, the score↔GraysonEngine seam).
  *
  * The contract under test is the MAPPING, not the IPA: the vowels
  * themselves come verbatim from GraysonEngine via processText, so the
@@ -397,7 +397,7 @@ describe('buildVowelResolver reconstructs any verse from versesInfo', () => {
 	});
 });
 
-// ── N.10: Fit consumes Transcription's output ────────────────────────
+// ── N.10: Markup consumes Transcription's output ─────────────────────
 //
 // Dann's ruling, 7 August 2026: "Fit consumes Transcription's output
 // including the singer's stress overrides, and an unratified word says so on
@@ -492,7 +492,7 @@ describe('buildUnderlayResolvers: the singer’s overrides reach the score page'
 		const ipa = buildUnderlayResolvers(parsed, 1, {
 			transcribedLines: processText('последний')
 		}).ipa;
-		// The unpaired word still prints, from Fit's own run of the pipeline.
+		// The unpaired word still prints, from Markup's own run of the pipeline.
 		expect(ipa(byId.get('k1')!)).toBe(expectedSyllableIpa('тьма последний', 0, 0));
 		// The paired one prints from the poem's run.
 		expect(ipa(byId.get('m1')!)).toBe(sylIpaOf(plainLines[0].words[0], 0));
@@ -512,7 +512,7 @@ describe('buildUnderlayResolvers: the singer’s overrides reach the score page'
 
 // ── N.10b: the withheld mark ─────────────────────────────────────────
 //
-// Dann's ruling of 7 August, E.29 §5.1 ruled A: a syllable Fit declined to
+// Dann's ruling of 7 August, E.29 §5.1 ruled A: a syllable Markup declined to
 // transcribe says so at the syllable. The abstention itself is unchanged and
 // the tests above still pin it; what is new is that the resolver now reports
 // it. The discrimination that matters is the last test in this block: an

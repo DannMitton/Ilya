@@ -1,5 +1,5 @@
 /**
- * Fit reconciliation shell: the disparity taxonomy (piece 2 of 4).
+ * Reconciliation shell: the disparity taxonomy (piece 2 of 4).
  *
  * Two pure pieces, no detection. Detecting a divergence, or classifying a raw
  * pair (dictionary membership, edit distance, alignment), is the alignment

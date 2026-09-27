@@ -1,10 +1,10 @@
 /**
  * N.10: which Transcribe word, if any, is the donor for a score word.
  *
- * Fit and Transcribe share the pipeline completely and share no state
+ * Markup and Transcribe share the pipeline completely and share no state
  * (E.31 §1.2). This module supplies the missing half: given the score's
  * reconstructed word sequence and the singer's transcribed word sequence,
- * it says which pairs are the same word, so Fit's underlay can be built
+ * it says which pairs are the same word, so Markup's underlay can be built
  * from the singer's own corrected transcription rather than from a second,
  * override-free run of the same engine.
  *
@@ -23,7 +23,7 @@
  * classifies, and reports divergence between the two witnesses, and it
  * waits on the research pass (`reconciliation/types.ts:12-14`). This module
  * emits no Divergence, no DisparityClass, and no count; a word that fails
- * to pair is simply not paired, and Fit's own transcription of it stands.
+ * to pair is simply not paired, and Markup's own transcription of it stands.
  * Nothing here is an agreement check, per Dann's instruction of 8 August.
  *
  * It is also not a stress oracle. Every IPA character still comes from
@@ -50,7 +50,7 @@ export function flattenTranscribedWords(lines: readonly LineData[]): WordStackDa
 
 /**
  * The DP table's size ceiling. Beyond it every score word abstains, which
- * degrades to exactly today's behaviour (Fit transcribes the score itself)
+ * degrades to exactly today's behaviour (Markup transcribes the score itself)
  * rather than to a wrong page. At the ceiling the two sequences are already
  * around a thousand words each, which is a text no song carries.
  */

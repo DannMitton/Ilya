@@ -123,4 +123,4 @@ These are live debt-ledger items, not surprises. Do not "fix" one in passing; ea
 
 Built under a Fable charter ratified by Dann, after a measure-first gate found no off-the-shelf OMR engine could read this corpus's vocal pitch. Validated by a blind read on a page from an engraver and font the reader had never seen (MuseScore 3.2.3, MScore), ruled **PASS WITH NAMED DEBT** on 2026-07-27: all 24 pitches correct, one duration defect, root-caused to beam-bar geometry rather than to the font change.
 
-Key documents in the Shane project: `claude/e16-decisions-log_*.md` (charter, T1 to T6), the current `claude/e16-handover_v*.md`, `claude/fable-ruling-e16-close-blind-read_2026-07-27.md`, and `claude/fable-ruling-e16-post-close-architecture_2026-07-27.md`.
+Key documents in the project: `claude/e16-decisions-log_*.md` (charter, T1 to T6), the current `claude/e16-handover_v*.md`, `claude/fable-ruling-e16-close-blind-read_2026-07-27.md`, and `claude/fable-ruling-e16-post-close-architecture_2026-07-27.md`.

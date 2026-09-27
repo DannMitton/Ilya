@@ -7,13 +7,13 @@
  * rendered to SVG. It is not stored, not exported to the user, and not
  * part of any round-trip. If Verovio adds MNX support later (architecture
  * spec §"Renderer-output step"), this function is replaced with
- * `generateRendererMnx` and the rest of Shane is untouched.
+ * `generateRendererMnx` and the rest of the app is untouched.
  *
  * Output contains:
  *   - One staff (the isolated vocal line; accompaniment is not rendered).
  *   - Verovio-renderable basics: pitches, rhythms, lyrics, measure
  *     structure, key and time signature, tempo markings.
- *   - Shane analytical overlays via Verovio's notation primitives:
+ *   - Analytical overlays via Verovio's notation primitives:
  *       - Stem direction (down = open timbre, up = close timbre).
  *       - Grey stemless noteheads for vowel migration turning points.
  *   - Stable data attributes on notes and syllables, mapping to
@@ -93,7 +93,7 @@ export function generateRendererMusicXml(parsed: ParsedScore): string {
   //   data attributes. Three candidate paths:
   //
   //     A. Use MusicXML's `<other-notation>` or `<other-direction>` with
-  //        a Shane-namespaced attribute soup, and depend on Verovio
+  //        an app-namespaced attribute soup, and depend on Verovio
   //        passing them through. Needs Verovio behaviour verification;
   //        Verovio 6.1 strips unknown elements by default.
   //
@@ -108,7 +108,7 @@ export function generateRendererMusicXml(parsed: ParsedScore): string {
   //        `VocalLineEvent` by walking the score in document order, and
   //        inject `data-*` attributes. This is the most robust path
   //        because it bypasses MusicXML's encoding limits entirely, but
-  //        it requires the Shane rendering layer to keep the ParsedScore
+  //        it requires the app's rendering layer to keep the ParsedScore
   //        and the SVG output in lockstep order.
   //
   //   Recommendation pending Verovio 6.1 behaviour test: prefer C if

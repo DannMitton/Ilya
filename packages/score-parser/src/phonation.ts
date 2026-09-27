@@ -1,7 +1,7 @@
 /**
  * Phonation-time aggregation.
  *
- * The layer Shane is named for and did not have: summed SOUNDING time per
+ * The layer the voice analysis needed and did not have: summed SOUNDING time per
  * pitch, per vowel, and per pitch-and-vowel, in Pacheco's quaver-equivalents,
  * with an optional conversion to seconds where the score states a tempo.
  *

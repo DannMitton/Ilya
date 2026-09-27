@@ -51,7 +51,7 @@ was not.
    measured formants give an fR1 per vowel
    (`buildVoiceProfileSnapshot` in `apps/web/src/lib/analysis/analyze-score-adapter.ts`).
 
-**Shane joins them.** Dann's words, 2026-09-16: *"Ilya performs transcriptions
+**Markup and Insights join them.** Dann's words, 2026-09-16: *"Ilya performs transcriptions
 automatically whener text is input, and it only uses Grayson's ten-vowel schema.
 This is the data that interfaces with the user's formant profile and range
 data."*
@@ -156,7 +156,7 @@ written, which was three names out of date and named a Fit tab that does not exi
 | tab | French | what it is |
 |---|---|---|
 | **Text** | « Texte » | Russian text to Grayson-faithful IPA. Photographed Cyrillic text ships too, via tesseract.js. |
-| **Markup** | « Annotation » | The score carrying the singer's words and marks. Wire id `shane`. |
+| **Markup** | « Annotation » | The score carrying the singer's words and marks. Wire id `markup` (`shane` before N.174, still read by `restoreSurface`). |
 | **Insights** | « Aperçus » | Does this piece suit my voice? Forecasts, never declares. |
 | **Learn** | « Leçons » | Seven sections, Grayson throughout. Shipped. |
 | **Guide** | « Guide » | How to use it, and why it chose that. |
@@ -168,6 +168,8 @@ ruling stands and nothing should build Melody.
 **Fit is the tool's name, not a tab.** Ruled by Dann 2026-07-13, invariant in French, and
 restated as current at `i18n.ts:115`. It folded into Voice and Markup, so a string sending
 a singer *to* Fit is wrong while a string saying Fit measures their voice is not.
+**AMENDED BY N.174, 2026-09-27:** the code no longer names Fit; `i18n.ts` keeps this
+ruling as history. The Guide's shown "Fit" headings are N.154's, owed to Dann.
 
 **THE TAB PADDING IS ONE VALUE AT EVERY WIDTH. Ratified by Dann 2026-09-21** when he asked
 *"We will have consistenct etween desktop and miobile, right?"* and accepted that it is.

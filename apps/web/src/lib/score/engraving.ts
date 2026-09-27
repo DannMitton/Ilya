@@ -1,5 +1,5 @@
 /**
- * Fit engraving preferences: the user-adjustable notation geometry.
+ * Engraving preferences: the user-adjustable notation geometry.
  *
  * Born from the Appendix B/C proportions work (Dann's ruling,
  * 2026-07-13): the stave size serves the page; the goal is a document

@@ -1,5 +1,5 @@
 /**
- * Shane profile persistence, v2: multiple named voices.
+ * Voice profile persistence, v2: multiple named voices.
  *
  * v1 (2026-07-11, same day): a single profile per device, built on Kimi's
  * gate that the profile-ready main-pane state must not ship before the
@@ -40,7 +40,7 @@ import type { FryRangeVerdict } from './engine/readiness';
  * 1.4a: "add the room-monitor toast recorded in the profile's provenance").
  *
  * This is provenance, not a reading: it says what the room and the throwaway
- * fry were like when the vowels below were sampled, so a Fit result printed
+ * fry were like when the vowels below were sampled, so a Markup page printed
  * from this voice can say so rather than implying laboratory conditions. Every
  * field distinguishes "measured" from "not measured"; nothing here stands in
  * for an absent measurement.

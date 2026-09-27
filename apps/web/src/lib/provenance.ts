@@ -22,7 +22,7 @@ export interface LegendItem {
 	/**
 	 * Render the label with no icon circle beside it.
 	 *
-	 * Added for the Fit legend (item 1.6, `lib/markup/legend.ts`), whose
+	 * Added for the Markup legend (item 1.6, `lib/markup/legend.ts`), whose
 	 * states appear in that page's prose as WORDS rather than as glyphs. An
 	 * icon circle there would introduce a mark that is nowhere else on the
 	 * page, which is a legend explaining itself. Optional and additive, so

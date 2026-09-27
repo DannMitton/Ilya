@@ -83,17 +83,16 @@ test.describe('correcting a word', () => {
 	});
 });
 
-test.describe('bilingual Fit and Insights', () => {
+test.describe('bilingual Markup and Insights', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
 		await waitForDictionary(page);
 	});
 
-	test('switching EN/FR updates the Fit pane\'s uncalibrated message', async ({ page }) => {
-		// The tab is internally 'shane' and reads "Markup" / "Annotation" in
-		// the drawn UI (`tab.markedScore`, i18n.ts:118), a surprise against
-		// AGENTS.md's "the user-facing tab is Fit... never translated";
-		// see the audit memo. This test pins what actually renders.
+	test('switching EN/FR updates the Markup page\'s uncalibrated message', async ({ page }) => {
+		// The document's id is 'markup' (N.174) and it reads "Markup" /
+		// "Annotation" in the drawn UI (`tab.markedScore`). This test pins
+		// what actually renders.
 		await page.getByRole('tab', { name: 'Markup' }).click();
 
 		const empty = page.locator('.profile-empty');
@@ -182,13 +181,13 @@ test.describe('Learn and Guide', () => {
 	});
 });
 
-test.describe('Fit with no calibration', () => {
+test.describe('Markup with no calibration', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
 		await waitForDictionary(page);
 	});
 
-	test('Fit shows its honest empty state with no calibration', async ({ page }) => {
+	test('Markup shows its honest empty state with no calibration', async ({ page }) => {
 		// `profile.emptyState`, i18n.ts:1190. Drawn by MarkupPane.svelte:1148-1149
 		// only in the pre-calibration branch, so its presence is itself the
 		// singer-visible signal that nothing has been measured yet. No
@@ -201,7 +200,7 @@ test.describe('Fit with no calibration', () => {
 
 		// The calibration invitation is offered, never forced. It lives in
 		// the drawer's own "Voice" station (VoiceAnchor.svelte, wired at
-		// +page.svelte), not inside the Fit pane itself, and Voice starts
+		// +page.svelte), not inside the Markup page itself, and Voice starts
 		// collapsed.
 		await expandStation(page, 'Voice');
 		await expect(page.getByRole('button', { name: 'Calibrate', exact: true })).toBeVisible();

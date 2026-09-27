@@ -257,7 +257,7 @@ than solved speculatively now.
   a syllable for the verse being scored, the fraction that did NOT end up
   correctly aligned — either because the ground-truth note had no
   matching recognized note at all (counted as misaligned, not excluded:
-  a dropped note IS a lyric re-association failure from Fit's
+  a dropped note IS a lyric re-association failure from Markup's
   perspective), or because the matched recognized note carries different
   syllable text.
 

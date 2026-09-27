@@ -243,7 +243,7 @@ export function applyOpenSyllabificationToLines(
  *
  * N.159: THE ONE RULE FOR WHICH WORD IS RE-CUT AND HOW. Transcription's
  * display transform below and the score's drawing step (`drawPairings`,
- * `shane/pairings.ts`) both call it, so the two pages cannot disagree about
+ * `score/pairings.ts`) both call it, so the two pages cannot disagree about
  * a word's division. A per-word override outranks the global switch; a
  * clitic and a word of one syllable are never re-cut.
  *

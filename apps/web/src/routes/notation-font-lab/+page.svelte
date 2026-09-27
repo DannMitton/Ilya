@@ -1,5 +1,5 @@
 <!--
-  Fit font lab — the in-browser three-font taste test (Kimi step 5,
+  Notation font lab — the in-browser three-font taste test (Kimi step 5,
   2026-07-12). DEV ROUTE: judges Bravura, Leland, and Finale Maestro on
   the shared demo fixture before the winner becomes the NotationPreferences
   default at live wiring. Not linked from the app shell.
@@ -47,11 +47,11 @@
 </script>
 
 <svelte:head>
-	<title>Fit font lab</title>
+	<title>Notation font lab</title>
 </svelte:head>
 
 <main class="lab">
-	<h1>Fit font lab</h1>
+	<h1>Notation font lab</h1>
 	<p class="lab-note">
 		The shared demo phrase rendered by the production staff renderer in each SMuFL candidate.
 		Same layout engine, same analytical marks; only the font and its engraving metadata change.

@@ -1,14 +1,14 @@
 /**
- * Shane score-parser canonical types.
+ * Score-parser canonical types.
  *
- * These types define `ParsedScore`, Shane's unified internal representation
+ * These types define `ParsedScore`, the unified internal representation
  * of a parsed musical score. Two parsers, `MnxScoreParser` and
  * `MusicXmlScoreParser`, both produce `ParsedScore` from their respective
  * source formats. Downstream analysis and rendering consume `ParsedScore`
  * and do not care which format it came from.
  *
  * The shape is closer to MNX than to MusicXML, because MNX maps more
- * directly to Shane's analytical needs (explicit lyric-to-note alignment,
+ * directly to the analysis's needs (explicit lyric-to-note alignment,
  * JSON-native structure, and a stable lyric subset). MusicXML differences
  * are normalised inside the `MusicXmlScoreParser`, not exposed in the type.
  *
@@ -38,7 +38,7 @@ export interface ParsedScore {
   source: ScoreSource;
 
   /**
-   * The vocal part Shane will analyse. Selected by the parser from the
+   * The vocal part the analysis will read. Selected by the parser from the
    * source's available parts; in a piano-voice score this is the voice
    * staff.
    */

@@ -1,11 +1,11 @@
 <!--
 	MetadataFields — the song-metadata block (title, opus, composer, poet,
 	translator, reset). Extracted from RootPanel so the Transcription drawer and
-	the Fit drawer could render the same chrome, bound to one source of truth
+	the score drawer (then Fit's) could render the same chrome, bound to one source of truth
 	(handover v35 §E.5b; Kimi's placement ruling, questions 1 and 3).
 
 	N.73 S2 merged the two drawers, so there is ONE instance again, RootPanel's,
-	and it serves both of Studio's documents. The two props the Fit instance
+	and it serves both of Studio's documents. The two props the score instance
 	carried alone, `fromScore` and `onrevert`, came with it.
 -->
 <script lang="ts">

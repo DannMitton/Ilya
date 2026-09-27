@@ -2,7 +2,7 @@
  * Tests for the slice-4 analysis adapter.
  *
  * TREE-READY placement copy: identical logic to the sandbox-verified
- * shane-sandbox/analyze-score-adapter.test.ts, with the imports rewritten to
+ * sandbox copy (then `shane-sandbox/`) of this test, with the imports rewritten to
  * the repo-relative form (the sandbox copy used absolute paths so it could
  * run without the repo's macOS-built node_modules). Runs under apps/web's
  * vitest the way the note-picker and vowel-resolver tests do.

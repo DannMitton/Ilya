@@ -1,5 +1,5 @@
 /**
- * Bespoke SVG staff renderer for the isolated vocal melody plus Shane's
+ * Bespoke SVG staff renderer for the isolated vocal melody plus Markup's
  * Appendix B analytical markup. Chosen over driving an engraver (OSMD /
  * Verovio) by the renderer spike (2026-07-12): the turning-pitch
  * noteheads and red crossing boxes are not notation primitives, so any
@@ -72,7 +72,7 @@ import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
  * `PageFooter` imports it for the legend circle, so the mark and its legend
  * entry cannot drift into being two different glyphs.
  *
- * `--lavender` in `app.css`. Fit's own accent, and a colour the
+ * `--lavender` in `app.css`. Markup's own accent, and a colour the
  * underlay's ink and the acoustic marks both leave alone.
  */
 export const WITHHELD_SIGLA = {
@@ -234,7 +234,7 @@ export interface StaffRenderOptions {
   /**
    * Per event id, the full syllable IPA for the underlay's NEAR line, the
    * one closest to the stave since the 2026-08-05 swap
-   * (Dann, 2026-07-17: every lyric Fit underlays gets two lines, IPA then
+   * (Dann, 2026-07-17: every lyric Markup underlays gets two lines, IPA then
    * Cyrillic; "one vowel per syllable per rhythmic value" is the rule,
    * consonants included, never just the acoustic vowel). Verbatim from
    * Ilya's GraysonEngine; the renderer never synthesizes IPA (Dann's

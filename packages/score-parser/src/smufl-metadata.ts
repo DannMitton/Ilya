@@ -20,7 +20,7 @@
  *     4 spaces = 4 * lineGap px (one em spans the five-line staff).
  *
  * Codepoints are not part of font metadata files; they come from the SMuFL
- * specification's stable glyph registry. The subset Fit renders is embedded
+ * specification's stable glyph registry. The subset Markup renders is embedded
  * below (SMuFL 1.4 glyphnames).
  */
 
@@ -43,7 +43,7 @@ export interface SmuflGlyphMetrics {
   anchors: Record<string, SpPoint>;
 }
 
-/** The engraving defaults Fit consumes, in staff spaces. */
+/** The engraving defaults Markup consumes, in staff spaces. */
 export interface SmuflEngravingDefaults {
   staffLineThickness: number;
   stemThickness: number;

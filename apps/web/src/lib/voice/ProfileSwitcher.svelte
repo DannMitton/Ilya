@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * Shane voice switcher: the drawer header above the calibration wizard.
+	 * The voice switcher: the drawer header above the calibration wizard.
 	 *
 	 * Consensus record (Claude-Kimi-Dann, 2026-07-11):
 	 * - The header is always interactive, from first launch, with one quiet
@@ -21,7 +21,7 @@
 	 *   renders the naming field itself and the wizard waits behind it.
 	 * - The whole control is inert during an active capture (the `disabled`
 	 *   prop, driven by the wizard's phase): preventive, not punitive.
-	 * - "Voice", not "User" or "Singer": Shane measures the instrument, not
+	 * - "Voice", not "User" or "Singer": Ilya measures the instrument, not
 	 *   the identity, and the default scales cleanly to variants and guests.
 	 *   French mode ("Voix N") arrived with N.22 (E.40, 2026-08-11). The
 	 *   parent still supplies the default name text; this component now
@@ -184,7 +184,7 @@
 
 			   `preventScroll` is N.73 S2's, and it is the only line that step
 			   changed outside the drawer. This field used to sit near the top
-			   of the Fit drawer's own column. Under one Studio drawer it sits
+			   of the score drawer's own column (then Fit's). Under one Studio drawer it sits
 			   at the foot of a column roughly twice as tall, so focusing it
 			   scrolled the whole drawer to the bottom and a singer opening the
 			   drawer met the calibration wizard instead of the metadata block.

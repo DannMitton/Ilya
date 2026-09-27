@@ -1,7 +1,7 @@
 <script lang="ts">
 	/**
-	 * Shane guided-director calibration wizard, user-facing name "Your
-	 * Resonances" (the Drawer-panel surface for the Shane tab).
+	 * The guided-director calibration wizard, user-facing name "Your
+	 * Resonances" (the drawer's Voice surface).
 	 *
 	 * Source of record: shane-calibration-wizard-spec_v1_2026-06-30.md,
 	 * reconciled between Claude and Kimi over two review rounds, recorded in
@@ -172,7 +172,7 @@
 		) => void;
 		/**
 		 * Q3 wizard collapse (Kimi's §A.28 ruling, 2026-07-13): counts
-		 * successful score renders in the Fit main pane — loaded, parsed,
+		 * successful score renders on the Markup page — loaded, parsed,
 		 * AND rendered; a load failure never increments (the error belongs
 		 * `scoreRenders` AND `collapsed` ARE GONE, N.114b item 8. They were
 		 * this component's whole collapse mechanism and it has no collapse
@@ -187,7 +187,7 @@
 		 * no per-vowel framework (Dann gates each vowel individually, and
 		 * only [o] is ruled), and it is hidden mid-wizard: the glyph renders
 		 * on the summary surface only, never inside a capture ritual. The
-		 * return path is the Shane tab itself; the wizard rehydrates to the
+		 * return path is the Markup page itself; the wizard rehydrates to the
 		 * summary because the voice has readings.
 		 */
 		onOpenLearnNote?: () => void;
@@ -367,7 +367,7 @@
 
 	// ── Voice characteristics (E.5 slice 3; Kimi's Q5 ruling, v39 §A.31) ─────
 	// The six pickers share one notation font load (memoized in the shared
-	// loader; the Fit pane's own load makes this a cache hit). Failure falls
+	// loader; the Markup page's own load makes this a cache hit). Failure falls
 	// back to the pickers' primitive shapes — never blocking.
 	let notationFont = $state<LoadedNotationFont | null>(null);
 	onMount(() => {
@@ -620,8 +620,8 @@
 	// convention): the resonance symbol is an italic f (a variable) with an
 	// upright roman subscript (a label, not a product of variables), set as
 	// a true subscript slightly smaller than the base — see the frSym
-	// snippet. One source in the code; the convention extends across Shane
-	// and Ilya as other surfaces are touched.
+	// snippet. One source in the code; the convention extends across the
+	// whole app as other surfaces are touched.
 	let logAnnounce = $state('');
 	// The hold banner's announcement text; delivered through a persistent
 	// hidden live region (see beginHold and Kimi's review, 2026-07-11).
@@ -1254,7 +1254,7 @@
 	<div class="visually-hidden" role="status">{holdAnnounce}</div>
 
 	<!-- THE Q3 COLLAPSE HEADER IS GONE, N.114b item 8, RULED BY DANN 2026-09-10
-	     walking `8278429`. Kimi §A.28 built it to cede the Fit drawer to the
+	     walking `8278429`. Kimi §A.28 built it to cede the score drawer (then Fit's) to the
 	     score once a score had rendered; N.73 S3 gave calibration a TAKEOVER
 	     surface of its own, so there has been nothing to cede since, and the row
 	     folded the whole ritual away and left an empty drawer.
@@ -1567,7 +1567,7 @@
 				<div class="charx-group">
 					<h3 class="charx-heading">{T('calib.characteristics.passaggioHeading')}</h3>
 					<!-- Kimi's example string redrafted agentless (the §A.31 copy
-					     flag): the app never speaks as "Shane". -->
+					     flag): the app never speaks as an agent. -->
 					<p class="charx-hint">{T('calib.characteristics.passaggioHint')}</p>
 					<NotePicker
 						label={T('calib.characteristics.passaggioPrimaryLabel')}
@@ -1605,10 +1605,10 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 1rem;
-		/* Outer padding (20px top, 40px bottom, 1rem sides) now comes from the
-		   shared .shane-panel column in +page.svelte, which wraps the whole Fit
-		   drawer so it reads as one surface with the Transcription drawer
-		   (Dann's consistency ruling, 2026-07-12; unified 2026-07-13). */
+		/* Outer padding (20px top, 40px bottom, 1rem sides) came from the old
+		   `.shane-panel` column in +page.svelte (gone since N.108), which made the
+		   score drawer read as one surface with the Transcription drawer (Dann's
+		   consistency ruling, 2026-07-12; unified 2026-07-13). */
 		padding: 0;
 	}
 
@@ -1855,7 +1855,7 @@
 
 	/* ── The resonance roster (Dann's direction, 2026-07-10) ─────────────────
 	   All ten vowels always present, so the table never changes size; rows
-	   grey until a value lands. Header carries Shane's signature lavender. */
+	   grey until a value lands. Header carries the voice's signature lavender. */
 	.wizard-roster {
 		width: 100%;
 		border-collapse: collapse;

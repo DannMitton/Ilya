@@ -1,5 +1,5 @@
 /**
- * Fit tempo tier-default resolver (steady tempo words).
+ * Tempo tier-default resolver (steady tempo words).
  *
  * Turns a written tempo WORD with no metronome number into a credible,
  * honest, overridable starting bpm, for the text-derived (INFERRED) tier of
@@ -26,7 +26,7 @@
  *
  * Pure and self-contained (no ParsedScore dependency), so it is unit-proven
  * in-sandbox. OCR-ready: normalize, exact, then bounded fuzzy; unrecognized
- * input returns null so Fit stays silent and prompts the singer, never a
+ * input returns null so the app stays silent and prompts the singer, never a
  * guess (§A.56).
  */
 

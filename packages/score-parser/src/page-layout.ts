@@ -403,7 +403,7 @@ export function paginateScore(
     // provides its own ground. The white page rectangle that stood here was
     // stripped by its only consumer before it ever drew.
     const pageParts: string[] = [
-      `<svg viewBox="0 0 ${o.pageWidth} ${o.pageHeight}" xmlns="http://www.w3.org/2000/svg" data-fit-page="${pageIndex + 1}">`,
+      `<svg viewBox="0 0 ${o.pageWidth} ${o.pageHeight}" xmlns="http://www.w3.org/2000/svg" data-score-page="${pageIndex + 1}">`,
     ];
     let y = o.marginTop;
     for (const s of group) {

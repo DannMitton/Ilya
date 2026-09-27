@@ -11,7 +11,7 @@
  * only other MNX fixture (`mnx-parser.test.ts`'s integration test against
  * the Kabalevsky Op. 52 No. 8 denigma output) is explicitly NOT committed,
  * because it derives from a copyrighted score, and runs only when the
- * `SHANE_T08_MNX` environment variable names a locally generated file.
+ * `MNX_T08_PATH` environment variable names a locally generated file.
  * That environment variable is unset here, so that path is NOT ESTABLISHED
  * by this suite; see the memo. This synthetic fixture is therefore the
  * best available stand-in, and per `mnx-parser.test.ts`'s own header, it

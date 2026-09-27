@@ -9,9 +9,9 @@
 		totalPages: number;
 		language: Language;
 		legendItems?: LegendItem[];
-		/** The broad-analysis legend sentence (§B.5); absent on non-Fit pages. */
+		/** The broad-analysis legend sentence (§B.5); absent on non-Markup pages. */
 		broadNote?: string;
-		/** Footer hairline accent: sage (Transcription) default, lavender for Fit. */
+		/** Footer hairline accent: sage (Transcription) default, lavender for Markup. */
 		hairlineAccent?: string;
 		/**
 		 * Reports this footer's measured height, so the page that owns it can
@@ -20,7 +20,7 @@
 		 * The same seam `TitleHeader` already offers, for the same reason. A
 		 * footer's height is not a constant: the provenance legend wraps with
 		 * its entry count and its language, and the broad-analysis sentence is
-		 * present on a Fit page and absent everywhere else. Only a page that
+		 * present on a Markup page and absent everywhere else. Only a page that
 		 * measures its own footer can reserve one.
 		 */
 		onheightchange?: (height: number) => void;
@@ -50,7 +50,7 @@
 		<div class="provenance-legend">
 			{#each legendItems as item}
 				<span class="legend-item">
-					<!-- item.textOnly (item 1.6): the Fit legend's states are words
+					<!-- item.textOnly (item 1.6): the Markup legend's states are words
 					     in that page's prose, not glyphs, so it carries no circle.
 					     Absent means "draw it", which is every Transcribe item's
 					     behaviour unchanged. -->
@@ -87,7 +87,7 @@
 	{/if}
 
 	{#if broadNote}
-		<p class="fit-broad-legend" role="note">{broadNote}</p>
+		<p class="broad-legend" role="note">{broadNote}</p>
 	{/if}
 
 	<div class="footer-hairline"></div>
@@ -231,7 +231,7 @@
 	/* The broad-analysis legend (§B.5): shares the sigla legend's type
 	   language (sans, ~9.5px, stone) but upright roman sentence case for
 	   readability (Gould rule 12), left-aligned to the content margin. */
-	.fit-broad-legend {
+	.broad-legend {
 		margin: 0 0 8px 0;
 		font-family: var(--font-sans);
 		font-size: 9.5px;

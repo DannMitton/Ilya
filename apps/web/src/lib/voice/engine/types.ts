@@ -1,5 +1,5 @@
 /**
- * Shane engine schema.
+ * Capture engine schema.
  *
  * Source of record: shane-extraction-engine-spec_v1_2026-06-09.md §1. These
  * types are shared by the calibration UI now and the analytical engine later,
@@ -39,7 +39,7 @@ export type VoiceType = string;
  *
  * Provenance (§A.164): `f1`/`f2` are fry-derived vocal-tract RESONANCE
  * estimates (`fR1`/`fR2` in the Titze-consensus sense), not measured formants.
- * Fit captures them via vocal fry, whose densely spaced harmonics sample the
+ * The calibration captures them via vocal fry, whose densely spaced harmonics sample the
  * tract transfer function with minimal source-filter interaction, so the LTAS
  * peaks read the tract's own resonances. The field names stay `f1`/`f2` for
  * continuity; the values are resonances, kept distinct from the sung formant.

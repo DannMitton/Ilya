@@ -1,5 +1,5 @@
 /**
- * Shane analysis model — the `AnalyzedScore` overlay.
+ * The analysis model — the `AnalyzedScore` overlay.
  *
  * Source of record: `shane-analysis-model-spec_2026-07-12.md` (LOCKED with
  * Dann for the §7.2 dimensions and the forecast-not-declaration principle,
@@ -7,15 +7,15 @@
  * layer keyed by `VocalLineEvent.id`; it never mutates `ParsedScore` (the
  * ground truth). Wiping `events` and re-running the overlay engine is free.
  *
- * Founding principle (Dann, 2026-07-12): **Fit forecasts, it does not
- * declare.** Every field here is a *forecast* derived from the singer's
+ * Founding principle (Dann, 2026-07-12; worded as Insights by Dann,
+ * 2026-09-27): **Insights forecasts, it does not declare.** Every field here is a *forecast* derived from the singer's
  * measured resonance profile applied to the score — where the timbre will
  * probably turn, where the passaggio is likely to fall — never a
  * measurement of the singer's larynx or performance. Registration in
  * particular is represented only *positionally* (`inPassaggio` + the global
- * band), because Shane measures resonance, not the laryngeal source
+ * band), because Ilya measures resonance, not the laryngeal source
  * (Roubeau's M0–M3 and Herbst & Švec's register/adduction plane describe a
- * layer Shane does not observe). The M-schema is taught in the Learn
+ * layer Ilya does not observe). The M-schema is taught in the Learn
  * glossary, not asserted per note.
  */
 
@@ -29,7 +29,7 @@ import type { Pitch } from './types';
  * fuller `VoiceProfile` into this.
  *
  * Provenance of the `fR` values (§A.164): these are fry-derived vocal-tract
- * RESONANCE estimates, not measured formants. Fit captures them via vocal fry
+ * RESONANCE estimates, not measured formants. The calibration captures them via vocal fry
  * (Titze/Walker/Maxfield), whose densely spaced harmonics sample the tract's
  * transfer function with minimal source-filter interaction, so the LTAS peaks
  * read the tract's own resonances. They are `fRn` in the Titze-consensus sense

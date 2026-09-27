@@ -1,5 +1,5 @@
 /**
- * The GraysonEngine vowel resolver: the Shane↔Ilya seam (v38 §E.5).
+ * The GraysonEngine vowel resolver: the score↔GraysonEngine seam (v38 §E.5).
  *
  * `buildVowelResolver(parsed)` returns the `VowelResolver` that
  * `analyzeScore` consumes: per vocal-line event, the operative sung vowel

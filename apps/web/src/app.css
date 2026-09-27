@@ -4,9 +4,9 @@
    Palette: Kimi Round 2 — Calm Authority
    ═══════════════════════════════════════════════════════════ */
 
-/* ── Shane pacifier font: self-hosted Lato IPA subset ─────────
+/* ── Pacifier font: self-hosted Lato IPA subset ───────────────
    Google Fonts' served Lato omits the five IPA Extensions vowels
-   the pacifier needs, so Shane self-hosts a verified subset under
+   the pacifier needs, so the app self-hosts a verified subset under
    the distinct family 'Lato IPA' (spec §5, §5a). The woff2 sits at
    static/fonts/lato-ipa.woff2, served at /fonts/lato-ipa.woff2.
    ───────────────────────────────────────────────────────────── */
@@ -186,8 +186,8 @@
 	--umber-ink: #61472C;
 	--cobalt-ink: #374D75;
 
-	/* ── Shane pacifier (fourth tab) ──────────────────────── */
-	/* Calibration-pacifier tokens, per Shane pacifier spec v11 §13.   */
+	/* ── Calibration pacifier ──────────────────────────────── */
+	/* Calibration-pacifier tokens, per the pacifier spec v11 §13.     */
 	/* --paper-cream and the ink hierarchy above are reused as-is.     */
 	/* --arc-green and --prep-amber carry contrast caveats tracked in  */
 	/* the pacifier contrast checker (contrast.ts), not here.          */

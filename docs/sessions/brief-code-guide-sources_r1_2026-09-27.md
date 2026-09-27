@@ -10,7 +10,7 @@ our claims of scholarly fair use."*
 Ilya's works are cited in several places, each written by hand: the Guide's
 "Licences and Acknowledgments" (`GuideContent.svelte:547`, French at `:270`),
 Learn's prose, `NOTICES.md`, `README.md`, and the Insights comments' registry
-(`apps/web/src/lib/shane/comment-sources.ts`, `WORKS`). On 2026-09-27 `NOTICES.md`
+(`apps/web/src/lib/insights/comment-sources.ts`, `WORKS`). On 2026-09-27 `NOTICES.md`
 was found crediting Grayson to the wrong university, which no other copy repeated.
 Hand-kept copies drift.
 

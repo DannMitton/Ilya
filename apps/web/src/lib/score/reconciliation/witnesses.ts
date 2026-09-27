@@ -1,5 +1,5 @@
 /**
- * Fit reconciliation shell: the "Textual witnesses" drawer view-model (piece 3 of 4).
+ * Reconciliation shell: the "Textual witnesses" drawer view-model (piece 3 of 4).
  *
  * Pure derivation for the drawer section. TextualWitnesses.svelte renders this. There
  * is no component-render test harness in apps/web (logic lives in .ts and is tested;

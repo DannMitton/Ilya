@@ -1,12 +1,12 @@
 /**
- * The head-of-score watch list ("Places to watch"), Fit design C.
+ * The head-of-score watch list ("Places to watch"), design C.
  *
- * A pure translation layer: it reads the acoustic marks Fit already computes
+ * A pure translation layer: it reads the acoustic marks the analysis already computes
  * per note (`AnalyzedScore.events`, all from the singer's own fR1) and the
  * parsed score, and returns a severity-ranked, adaptively filtered list of the
  * places in the song most likely to challenge THIS singer as profiled. It
  * computes no new acoustics and makes no claim the per-note marks do not
- * already carry: "Fit forecasts, it does not declare" (overlay-engine.ts).
+ * already carry: "Insights forecasts, it does not declare" (overlay-engine.ts).
  *
  * Rulings this implements (project knowledge):
  *   - §7.1–§7.5 (`fit-watchlist-rulings_2026-07-17.md`): placement as a head
@@ -301,7 +301,7 @@ function isRare(kind: WatchKind, counts: Record<WatchKind, number>): boolean {
  * are STRUCTURALLY advice-bearing, i.e. worth a line when rare, whether or not
  * the advice resolver (`advice-resolver.ts`) found a sourced fix for them. The
  * resolved `[i]→[ɪ]` advice is APPENDED to the crossing line at render
- * (`watchEntryLine`), never used to GATE inclusion here: a rare crossing Fit can
+ * (`watchEntryLine`), never used to GATE inclusion here: a rare crossing the analysis can
  * describe (the whoop) but not yet advise still earns its line, so the dial
  * never silently hides an honest forecast. Kept as a structural predicate (not
  * inlined) so the deferred hazard clause (§A.149 clause 3) can later branch on

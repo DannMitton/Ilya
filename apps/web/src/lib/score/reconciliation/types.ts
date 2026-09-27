@@ -1,10 +1,10 @@
 /**
- * Fit reconciliation shell: the divergence data model (piece 1 of 4).
+ * Reconciliation shell: the divergence data model (piece 1 of 4).
  *
  * The two-witness problem (kimi-brief-lyric-reconciliation; Dann's rulings and
  * Kimi's Q1-Q6, both binding; handover v39 §A.36). A singer brings two witnesses
  * of one text: the poem, authoritative for language, in Ilya's Transcription tab,
- * and the score underlay, primary for sung substance, dropped into Fit. Where the
+ * and the score underlay, primary for sung substance, dropped into Markup. Where the
  * two diverge, the divergence is information, recorded as apparatus, never
  * silently resolved.
  *

@@ -2,7 +2,7 @@
   "name": "@ilya/score-parser",
   "version": "0.1.0",
   "private": true,
-  "description": "Shane score parser: dual-canonical (MNX + MusicXML) ingestion into ParsedScore, plus Verovio renderer output",
+  "description": "Ilya score parser: dual-canonical (MNX + MusicXML) ingestion into ParsedScore, plus Verovio renderer output",
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",

@@ -24,7 +24,7 @@
  *
  * Replaced by a real `analyzeScore()` call when the two named follow-ups
  * land: range/tessitura/passaggio capture in the profile, and the
- * GraysonEngine vowel resolver (the Shane↔Ilya seam).
+ * GraysonEngine vowel resolver (the score↔GraysonEngine seam).
  */
 
 import {

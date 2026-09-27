@@ -95,6 +95,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type TabId,
 	} from '$lib/destinations';
 	import { INCLUDE_MARKUP_INSIGHTS } from '$lib/wall';
+	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
 	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
@@ -338,19 +339,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let destination = $state<Destination>('studio');
 	let studioDocument = $state<StudioDocument>('text');
 	const activeTab = $derived(tabIdFor({ destination, studioDocument }));
-	// Shane: the active voice's stored readings and name, published by the
+	// The voice: the active voice's stored readings and name, published by the
 	// wizard in the drawer (the workshop) so the main pane (the gallery,
 	// the Voice Profile envelope) mirrors the voice the drawer is working
 	// on. The wizard owns the profile store; this is a read-only reflection.
-	let shaneFormants = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
-	let shaneVoiceName = $state<string | undefined>(undefined);
-	let shaneCharacteristics = $state<VoiceCharacteristics | undefined>(undefined);
+	let voiceFormants = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
+	let voiceName = $state<string | undefined>(undefined);
+	let voiceCharacteristics = $state<VoiceCharacteristics | undefined>(undefined);
 	/* N.127: the voice's `updatedAt`, which Insights prints as its calibration
 	   date. Mirrored beside the name for the same reason the name is. */
-	let shaneVoiceUpdatedAt = $state<string | undefined>(undefined);
+	let voiceUpdatedAt = $state<string | undefined>(undefined);
 	/* N.172: the voice's Insights intake answers, mirrored for Insights' note comments. */
-	let shaneIntake = $state<IntakeAnswers | undefined>(undefined);
-	// The most recently ingested score from the Fit uploader. Live wiring
+	let voiceIntake = $state<IntakeAnswers | undefined>(undefined);
+	// The most recently ingested score from the score uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
 	// N.67 step 3: placements whose note the newly uploaded score does not
@@ -2041,7 +2042,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		if (isPhone && drawerRaised && loupeOpen) dismissLoupe();
 	});
 
-	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
+	// Markup engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
 	// No user control; the Appendix-derived defaults are the product, and the
 	// renderer reads them as a constant. Kept as state for MarkupPane.
 	let engraving = $state<EngravingValues>({ ...ENGRAVING_DEFAULTS });
@@ -2214,7 +2215,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 	// Derived
 	const showInspector = $derived(selectedWord !== null);
-	// Reading mode means the long-form reading tabs. Shane is a
+	// Reading mode means the long-form reading tabs. Markup is a
 	// paper-on-desk gallery like Transcription (Dann's consistency ruling,
 	// 2026-07-12): its page sits exactly where the transcription page
 	// sits, sharing the full 2rem desk padding rather than reading mode's
@@ -2272,7 +2273,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * `CalibrationWizard` so the wizard's opening phase, the voice anchor's
 	 * sentence, and this Print guard cannot give three answers. The guard's
 	 * expression is unchanged in meaning: it read
-	 * `Object.keys(shaneFormants).length === 0` inline, which is the same test
+	 * `Object.keys(voiceFormants).length === 0` inline, which is the same test
 	 * written a second time.
 	 */
 	/* `printDisabled` IS GONE, N.65, Dann's ruling of 2026-08-21. It read
@@ -2281,7 +2282,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   sits under the sheet now and IT IS ALWAYS LIVE ON TRANSCRIPTION AND
 	   MARKED SCORE: no disabled state, no greying. `voiceCalibrated` stays,
 	   because the voice anchor reads it. */
-	const voiceCalibrated = $derived(hasAnyReadings(shaneFormants));
+	const voiceCalibrated = $derived(hasAnyReadings(voiceFormants));
 	/**
 	 * N.114b item 8 emptied this of everything but the flag. It used to expand
 	 * the wizard first, because the Q3 collapse could leave a takeover opening
@@ -2365,8 +2366,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const scoreStateText = $derived(
 		INCLUDE_MARKUP_INSIGHTS
 			? scoreStateLine(
-					shaneVoiceName,
-					Object.keys(shaneFormants).length,
+					voiceName,
+					Object.keys(voiceFormants).length,
 					VOWELS.length,
 					language,
 				)
@@ -3423,7 +3424,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			}
 		}
 		// Live-wired (§E.7 slice 1): MarkupPane renders this as paginated
-		// notation in the Fit main pane.
+		// notation on the Markup page.
 		ingestedScore = ingested;
 		// N.55b R3: the first pass runs on accept, and the N.55a courtesy message
 		// arrives in the same moment or it has no moment at all. It runs ONLY
@@ -3944,7 +3945,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	/**
 	 * N.108 increment 2. THE UPLOADER INSTANCE, so the one intake can hand it a
-	 * file. It is null with the shane wall up, and the call site chains on that.
+	 * file. It is null with the Markup and Insights wall up, and the call site chains on that.
 	 *
 	 * `$state`, AND THE COMPILER ASKS FOR IT. `svelte-check` raises
 	 * `non_reactive_update` on a plain `let` that a `bind:this` writes, and it
@@ -4225,11 +4226,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	/* ── Handle URL hash on page load ──────────────────────── */
 
 	function handleHashNavigation() {
-		const hash = window.location.hash.slice(1);
-		if (hash) {
-			activeHeadingId = hash;
-			scrollToAnchor(hash);
-		}
+		// An anchor renamed by N.174 D.3 is read as its new id, and the address shows the new one.
+		const saved = window.location.hash.slice(1), hash = currentGuideAnchor(saved);
+		if (hash !== saved) history.replaceState(null, '', `#${hash}`);
+		if (hash) { activeHeadingId = hash; scrollToAnchor(hash); }
 	}
 	onMount(() => {
 		// N.67 step 6. Step 1's storage console line is GONE, not moved: it said
@@ -4547,11 +4547,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     travels with it, N.73 S3, for the same reason it travelled
 					     into RootPanel at N.73 S2: Svelte scopes a rule to the
 					     component that authors the markup. -->
-					<p class="shane-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
+					<p class="markup-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
 				{/if}
 			{/snippet}
 			<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one). The wizard MOVED
-			     here from the shane panel; not one line of it is rewritten. Its
+			     here from the old shane panel; not one line of it is rewritten. Its
 			     props are the ones it already had, in the order it already had
 			     them. -->
 			{#snippet voiceTakeover()}
@@ -4565,11 +4565,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						{language}
 						openRequest={calibrationRequest}
 						onActiveProfileChange={(f, name, characteristics, updatedAt, intake) => {
-							shaneFormants = f;
-							shaneVoiceName = name;
-							shaneCharacteristics = characteristics;
-							shaneVoiceUpdatedAt = updatedAt;
-							shaneIntake = intake;
+							voiceFormants = f;
+							voiceName = name;
+							voiceCharacteristics = characteristics;
+							voiceUpdatedAt = updatedAt;
+							voiceIntake = intake;
 						}}
 						onOpenLearnNote={() => {
 							// The sung-[o] glyph's deep link: Learn tab, then the
@@ -4678,7 +4678,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 								     a file name dates a printed study sheet to an export
 								     rather than to a song. Unstyled on purpose for the first
 								     walk. -->
-								<p class="shane-no-lyrics">{t('upload.banner.noLyrics', language).replace('%s', noLyricsFile)}</p>
+								<p>{t('upload.banner.noLyrics', language).replace('%s', noLyricsFile)}</p>
 							{/if}
 						{/if}
 					{/snippet}
@@ -4716,7 +4716,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     predictable and within a thumb's reach, and being the first
 						     station of the second group is both.
 						     The state was always document-level and persisted (the notationPrefs and
-						     openSyllabification declarations and their writers) and Fit obeyed it:
+						     openSyllabification declarations and their writers) and Markup obeyed it:
 						     both reach MarkupPane through its own props of
 						     those names. Only the CONTROL was tab-scoped, which made its
 						     placement lie about its scope.
@@ -4734,7 +4734,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     ruling 3 of 2026-08-19, which keeps lavender in Studio to
 						     the voice anchor and the calibration surfaces.
 
-						     The stress-acutes toggle reaches Fit since N.119: it marks the
+						     The stress-acutes toggle reaches Markup since N.119: it marks the
 						     Cyrillic underlay and leaves the IPA line alone. -->
 						<NotationFields
 							{notationPrefs}
@@ -4880,7 +4880,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     left to control anything. -->
 						<div class="station-body">
 							<VoiceAnchor
-								voiceName={shaneVoiceName}
+								voiceName={voiceName}
 								calibrated={voiceCalibrated}
 								{language}
 								oncalibrate={enterCalibration}
@@ -4923,7 +4923,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     mark, which is E.47's strike applied here. Kept verbatim from the
 						     palette this re-cut replaces. -->
 						{#if orphanCount > 0}
-							<p class="shane-storage-notice">
+							<p>
 								{t('notation.orphans', language).replace('%s', String(orphanCount))}
 							</p>
 						{/if}
@@ -4931,21 +4931,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					{#if binderError}
 						<!-- N.67 step 5. The file is untouched in every failure, which is
 						     why all three sentences end the same way. -->
-						<p class="shane-storage-notice">{binderError}</p>
+						<p>{binderError}</p>
 					{/if}
 					{#if binderNotice}
 						<!-- N.67 step 5, the remainder. What an import ADDED. A "take the
 						     one in this file" adds nothing, so it says nothing: the song it
 						     overwrote moves to the top of the list, which is the change
 						     the singer can see. -->
-						<p class="shane-storage-notice">{binderNotice}</p>
+						<p>{binderNotice}</p>
 					{/if}
 					{#if orphanedCount > 0}
 						<!-- N.67 step 3. Reported, not acted on: the placements are
 						     KEPT and this only says how many have no note to sit on in
 						     the score just uploaded. Twins the drift surface in
 						     restraint, and unstyled on purpose like its neighbours. -->
-						<p class="shane-storage-notice">
+						<p>
 							{t('station.orphaned', language).replace('%s', String(orphanedCount))}
 						</p>
 					{/if}
@@ -4965,7 +4965,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     sentences and in WHAT ORDER is `notices.ts`, where a gate can
 					     reach it. Unstyled on purpose, matching its neighbours. -->
 					{#each storageLines as line}
-						<p class="shane-storage-notice">{fillNotice(t(line.key, language), line.args)}</p>
+						<p>{fillNotice(t(line.key, language), line.args)}</p>
 					{/each}
 					{#if doc.remoteChange}
 						<!-- N.67 step 1, socket §4.1. Last-write-wins WITH the notice.
@@ -4973,7 +4973,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     is only the tab that had unsaved work, and its work is
 						     kept. Placed beside the storage notice because that is
 						     where storage speaks today. -->
-						<p class="shane-storage-notice">{t('storage.otherTab', language)}</p>
+						<p>{t('storage.otherTab', language)}</p>
 					{/if}
 					</div>
 				{/if}
@@ -5048,11 +5048,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     findings it names are the marks that page draws. -->
 			<InsightsPane
 				{isMobile}
-				formants={shaneFormants}
-				characteristics={shaneCharacteristics}
-				intake={shaneIntake}
-				voiceName={shaneVoiceName}
-				voiceUpdatedAt={shaneVoiceUpdatedAt}
+				formants={voiceFormants}
+				characteristics={voiceCharacteristics}
+				intake={voiceIntake}
+				voiceName={voiceName}
+				voiceUpdatedAt={voiceUpdatedAt}
 				{language}
 				ingested={correctedScore}
 				scoreTitle={doc.metadata.title}
@@ -5069,8 +5069,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     letter page with the Paper system's header and footer. The
 			     wizard in the drawer publishes the active voice's readings
 			     and name into the state above. -->
-			<!-- N.10 (Dann, 7 August): Fit consumes Transcription's output.
-			     `lines` is passed RAW, not `effectiveLines` — the Fit resolver
+			<!-- N.10 (Dann, 7 August): Markup consumes Transcription's output.
+			     `lines` is passed RAW, not `effectiveLines` — the Markup resolver
 			     applies its own open syllabification, so the display view would
 			     be sliced twice. -->
 			<MarkupPane
@@ -5081,9 +5081,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{blankUnderlay}
 				onnotepick={handleNotePick}
 				{selectedEventId}
-				formants={shaneFormants}
-				voiceName={shaneVoiceName}
-				characteristics={shaneCharacteristics}
+				formants={voiceFormants}
+				voiceName={voiceName}
+				characteristics={voiceCharacteristics}
 				{language}
 				ingested={correctedScore}
 				scoreTitle={doc.metadata.title}
@@ -5264,7 +5264,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   the stations would lose their boundaries.
 
 	   ITS LAVENDER FOCUS RING SURVIVED THE MOVE. That rule was Dann's
-	   2026-07-13 arrangement, so a Fit field's focus ring mirrors the sage one
+	   2026-07-13 arrangement, so a score field's focus ring mirrors the sage one
 	   in purple; it is declared on `.group-score` in `Drawer.svelte` now,
 	   which is the same set of surfaces under a name that describes them.
 
@@ -5314,7 +5314,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   for the reason it left at S2: Svelte scopes a rule to the component that
 	   authors the markup, so the rule travels or the line loses its style
 	   silently. */
-	.shane-provenance {
+	.markup-provenance {
 		margin: 0;
 		font-family: var(--font-ui, var(--font-sans));
 		font-size: 0.75rem;

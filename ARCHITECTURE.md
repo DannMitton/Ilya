@@ -6,6 +6,9 @@ rarely change, and a map rather than a manual. It says where things are and
 what must stay true. It does not say how each module works; the code and its
 comments do that.
 
+Developed under the codename Shane; shown on screen as Fit until 2026-09.
+N.174 (2026-09-27) renamed the code to Text, Markup, and Insights.
+
 ## The problem Ilya solves
 
 A classical singer has a Russian text, and often a score. Ilya answers two
@@ -14,11 +17,10 @@ questions about it.
 1. **How do I pronounce this?** Ilya transcribes the text into a singable IPA,
    following Craig Grayson, *Russian Lyric Diction* (2012). This is the
    Transcription document.
-2. **Does this piece suit my voice?** Fit reads the score, measures the voice
-   the singer calibrates, and reports where the two meet. This follows Mitton
-   (2020). The code calls it **Shane**; the singer sees **Markup**
-   (« Annotation ») and **Insights** (« Aperçus »). The codename never reaches
-   the screen.
+2. **Does this piece suit my voice?** Ilya reads the score, measures the
+   voice the singer calibrates, and reports where the two meet. This follows
+   Mitton (2020). These are the **Markup** (« Annotation ») and **Insights**
+   (« Aperçus ») documents.
 
 Ilya is rule-based and deterministic: the same input gives the same output,
 every time. It contains no machine learning. That claim is load-bearing for
@@ -86,9 +88,7 @@ Depends on nothing else in the workspace.
 - `src/lib/library/` stores songs on the device (IndexedDB) and reads and
   writes `.ilya` binder files. `document.svelte.ts` is the seam between the
   page and storage.
-- `src/lib/score/` is the score itself, the last of `shane/`, moved by N.174
-  D.2.6; `lib/shane/` no longer exists, and the ratchet fails on any file
-  put there. Inside it:
+- `src/lib/score/` is the score itself. Inside it:
   - `ingestion/` detects a score's format and routes it to a parser, and
     `reconciliation/` holds the textual-witness work.
   - `pairings.ts` joins the text's words to the score's notes, and
@@ -97,39 +97,33 @@ Depends on nothing else in the workspace.
     and `CorrectionSurface.svelte` and `correction.ts` correct the notes.
   - `ScoreUploader.svelte` takes the file in, and `notation-fonts.ts` loads
     the notation font.
-- `src/lib/reader/` reads a score file, moved out of `shane/` by N.174 D.2.5,
-  flat, with `vendor/` for the MuseScore converter's glue. `score-reader.ts`
+- `src/lib/reader/` reads a score file. It is flat, with `vendor/` for the MuseScore converter's glue. `score-reader.ts`
   and its Worker convert Finale `.musx`, `mscz-converter.ts` converts
   MuseScore, `page-reader.ts` and its Worker read a PDF or a photograph
   (`page-pdf.ts`, `page-image.ts`, `staff-detect.ts`), `zip-reader.ts` opens
   zipped files, and `errors.ts` holds the reader's error tiers.
-- `src/lib/voice/` is the singer's voice, moved out of `shane/` by N.174
-  D.2.4. `CalibrationWizard.svelte` is the calibration wizard ("Your
+- `src/lib/voice/` is the singer's voice. `CalibrationWizard.svelte` is the calibration wizard ("Your
   Resonances"), `profileStore.ts` keeps the saved voices (still under the
   `shane.profiles.v2` key, by invariant 10), `engine/` is the microphone
   capture and its signal processing, and `pacifier/` is the capture's
   visual timer.
-- `src/lib/markup/` is the Markup document, moved out of `shane/` by N.174
-  D.2.1. `MarkupPane.svelte` analyzes the score, paginates it (`paginateScore`
+- `src/lib/markup/` is the Markup document. `MarkupPane.svelte` analyzes the score, paginates it (`paginateScore`
   in `packages/score-parser`), and hands each page's SVG to
   `Paper/PageFit.svelte`. `legend.ts` builds its footer legend. What each
   module under `src/lib/` may import is checked by `scripts/ratchets.mjs`.
-- `src/lib/insights/` is the Insights document, moved out of `shane/` by N.174
-  D.2.2. `insights.ts` builds the page's figures, `Tessituragram.svelte` draws
+- `src/lib/insights/` is the Insights document. `insights.ts` builds the page's figures, `Tessituragram.svelte` draws
   the tessituragram, `comments.ts`, `comment-text.ts`, and `comment-sources.ts`
   choose, word, and cite the per-note comments, and `InsightsPane.svelte`
   renders it all. `InsightsIntake.svelte` is in `voice/`, where the
   calibration wizard mounts it.
-- `src/lib/analysis/` is what both documents read, moved out of `shane/` by
-  N.174 D.2.3. `analyze-score-adapter.ts` turns the voice into the snapshot the
+- `src/lib/analysis/` is what both documents read. `analyze-score-adapter.ts` turns the voice into the snapshot the
   analysis reads, `watchlist.ts` and `advice-resolver.ts` list and explain what
   is flagged, `score-metrics.ts` measures the piece, and `analyze-per-verse.ts`
   and `notation-overlay.ts` are kept as they were.
 - `src/lib/wall.ts` is the one switch that includes or removes Markup and
-  Insights at build time (`PUBLIC_INCLUDE_MARKUP_INSIGHTS`, or the older
-  `PUBLIC_INCLUDE_SHANE`).
+  Insights at build time (`PUBLIC_INCLUDE_MARKUP_INSIGHTS`).
 
-Fit's work runs in five stages: **calibrate** the voice, **ingest** a score,
+Markup and Insights work in five stages: **calibrate** the voice, **ingest** a score,
 **resolve** which vowel each note sings, **analyse** where the voice and the
 music meet, and **engrave** the marked-up score.
 
@@ -142,8 +136,8 @@ broken.
 1. **Packages never import the application.** *Tested:* `scripts/ratchets.mjs`.
 2. **The application reaches a package only through its `@ilya/` name.**
    Tests may load a package's fixtures directly. *Tested:* `scripts/ratchets.mjs`.
-3. **IPA comes only from the GraysonEngine.** No renderer, component, or Fit
-   module writes IPA or re-derives a phonological rule of its own.
+3. **IPA comes only from the GraysonEngine.** No renderer, component, or
+   analysis module writes IPA or re-derives a phonological rule of its own.
 4. **The IPA stays inside Grayson's inventory:**
    `ˈ ː a ɑ b d e ɛ f ɡ ɣ h i ɪ ɨ j ʲ k l ɫ m n ɲ o p r s ʃ t u v ʌ x z ʒ`.
    *Tested:* `apps/web/src/lib/approval/invariants.test.ts`. The one exception
@@ -154,7 +148,7 @@ broken.
    on the paper.
 7. **The notes never move.** A correction to how text meets music is a side
    map keyed by event id (`pairings.ts`); it never writes into `ParsedScore`.
-8. **`VocalLineEvent` does not change shape.** Much of Fit is built on it.
+8. **`VocalLineEvent` does not change shape.** Much of Markup and Insights is built on it.
 9. **Store what the singer said, never what Ilya derived.** Everything derived
    is recomputed on open. The one ruled exception is R8's vowel glyph.
 10. **A stored id changes only with a migration.** The destination ids in
@@ -197,7 +191,7 @@ broken.
 - To change a pronunciation rule: `packages/phonology`, with its tests, and
   Grayson's text at hand.
 - To change what a singer reads: `apps/web/src/lib/i18n.ts`.
-- To change Fit's analysis: `packages/score-parser` for anything that needs no
+- To change the voice analysis: `packages/score-parser` for anything that needs no
   browser, `apps/web/src/lib/analysis/` for the rest.
 - Before any change: `pnpm test`, `pnpm ratchets`, and, in `apps/web`,
   `pnpm check` and `pnpm exec playwright test --project=chromium`.

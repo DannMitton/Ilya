@@ -5,9 +5,8 @@ export default defineConfig({
 plugins: [sveltekit()],
 // Expose PUBLIC_-prefixed env vars on import.meta.env (alongside Vite's
 // default VITE_). The Markup and Insights gate in $lib/wall reads
-// import.meta.env.PUBLIC_INCLUDE_MARKUP_INSIGHTS and its older name
-// PUBLIC_INCLUDE_SHANE, which Vite only populates when the
-// prefix is allowlisted here.
+// import.meta.env.PUBLIC_INCLUDE_MARKUP_INSIGHTS, which Vite only populates
+// when the prefix is allowlisted here.
 envPrefix: ['VITE_', 'PUBLIC_'],
 test: {
 // Unit tests live under src/. The e2e/ folder is Playwright's;

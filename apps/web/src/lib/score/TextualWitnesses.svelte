@@ -9,7 +9,7 @@
 	 *
 	 * All derivable state lives in ./reconciliation/witnesses (tested); this file is
 	 * the thin presentational shell, reviewed by eye and gated in the browser, per the
-	 * repo convention. It is not yet wired into the live Fit drawer (Option A): the
+	 * repo convention. It is not yet wired into the live score drawer (Option A): the
 	 * alignment engine that populates `reconciliation` waits for the research pass, so
 	 * with no pass the summary is not-assessed and the section renders nothing.
 	 *
@@ -41,20 +41,20 @@
 	const divergeLine = $derived.by(() => {
 		const s = model.summary;
 		if (s.kind !== 'diverge') return '';
-		const word = t(s.count === 1 ? 'fit.witness.placeOne' : 'fit.witness.placeMany', language);
-		return `${t('fit.witness.divergePrefix', language)} ${s.count} ${word}`;
+		const word = t(s.count === 1 ? 'witness.placeOne' : 'witness.placeMany', language);
+		return `${t('witness.divergePrefix', language)} ${s.count} ${word}`;
 	});
 </script>
 
 {#if model.summary.kind === 'agree'}
-	<section class="witnesses" aria-label={t('fit.witness.heading', language)}>
+	<section class="witnesses" aria-label={t('witness.heading', language)}>
 		<div class="witnesses-header static">
-			<span class="witnesses-title">{t('fit.witness.heading', language)}</span>
-			<span class="witnesses-summary">{t('fit.witness.agree', language)}</span>
+			<span class="witnesses-title">{t('witness.heading', language)}</span>
+			<span class="witnesses-summary">{t('witness.agree', language)}</span>
 		</div>
 	</section>
 {:else if model.summary.kind === 'diverge'}
-	<section class="witnesses" aria-label={t('fit.witness.heading', language)}>
+	<section class="witnesses" aria-label={t('witness.heading', language)}>
 		<button
 			type="button"
 			class="witnesses-header"
@@ -76,7 +76,7 @@
 			>
 				<polyline points="3,1.5 7,5 3,8.5" />
 			</svg>
-			<span class="witnesses-title">{t('fit.witness.heading', language)}</span>
+			<span class="witnesses-title">{t('witness.heading', language)}</span>
 			<span class="witnesses-summary">{divergeLine}</span>
 		</button>
 
@@ -85,18 +85,18 @@
 				{#each model.rows as row (row.id)}
 					<li class="witnesses-row">
 						<button type="button" class="measure-link" onclick={() => onNavigate?.(row)}>
-							{t('fit.witness.measureAbbr', language)}&nbsp;{row.location.measure}
+							{t('witness.measureAbbr', language)}&nbsp;{row.location.measure}
 						</button>
 						<span class="readings">
 							{#if row.scoreReads}
 								<span class="reading">
-									<span class="reading-label">{t('fit.witness.scoreLabel', language)}</span>
+									<span class="reading-label">{t('witness.scoreLabel', language)}</span>
 									<span class="reading-text">&#171;{row.scoreReads}&#187;</span>
 								</span>
 							{/if}
 							{#if row.ilyaReads}
 								<span class="reading">
-									<span class="reading-label">{t('fit.witness.poemLabel', language)}</span>
+									<span class="reading-label">{t('witness.poemLabel', language)}</span>
 									<span class="reading-text">&#171;{row.ilyaReads}&#187;</span>
 								</span>
 							{/if}

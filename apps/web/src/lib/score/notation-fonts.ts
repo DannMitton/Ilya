@@ -4,8 +4,8 @@
  * Finale Maestro is the product default for ALL renderings, interim and
  * final alike (Dann's rulings, 2026-07-12 and 2026-07-13); Bravura and
  * Leland remain as customization options. Extracted from the
- * fit-font-lab dev route at font wiring so the lab and the live Fit
- * pane load fonts through one path.
+ * font lab dev route (`routes/notation-font-lab/`, then `fit-font-lab`) at
+ * font wiring, so the lab and the live Markup page load fonts through one path.
  *
  * Kimi guardrail 1 (2026-07-12): every non-Bravura font is prepared
  * with Bravura as the metrics fallback, so a glyph gap in a candidate

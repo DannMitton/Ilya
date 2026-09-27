@@ -1,5 +1,5 @@
 /**
- * The Fit provenance legend (item 1.6), minimal form.
+ * The Markup provenance legend (item 1.6), minimal form.
  *
  * E.22 §4 kept this item when two others were cut, and gave the reason: it is
  * "the surface through which a singer sees where calibration is absent, so it
@@ -14,7 +14,7 @@
  * the footer renders one mechanism and neither builder has to know about the
  * other's vocabulary.
  *
- * WHAT IT EXPLAINS. The Fit page states a singer's calibration in prose:
+ * WHAT IT EXPLAINS. The Markup page states a singer's calibration in prose:
  * "...with seven vowels measured", "...are provisional". Those words are the
  * referent. **This legend defines the vocabulary that page already uses**, and
  * it emits an entry ONLY for a state actually present in the profile, on the
@@ -87,7 +87,7 @@ const MARKUP_LEGEND_COPY: Record<MarkupLegendType, Record<Language, string>> = {
  * keeps its single subject, and it is appended by `buildMarkupLegend` on a flag
  * the caller supplies from the render, which is the only place that knows.
  *
- * This entry is the ONE exception to the Fit legend's no-circle rule, and
+ * This entry is the ONE exception to the Markup legend's no-circle rule, and
  * Dann's ruling of 8 August is why: the page mark is now a drawn sigla rather
  * than a typeset character, and "human beings will see a question mark sigla
  * and know to seek out a legend." A legend that named the glyph in words
@@ -138,11 +138,11 @@ export function markupLegendTypes(
 }
 
 /**
- * Build the Fit legend for a profile. Returns `[]` for an empty or
+ * Build the Markup legend for a profile. Returns `[]` for an empty or
  * uncalibrated profile, so the footer omits the row entirely rather than
  * printing a glossary for readings that do not exist.
  *
- * `textOnly` is set on every item: Fit's states appear in the page's prose as
+ * `textOnly` is set on every item: Markup's states appear in the page's prose as
  * words, not as glyphs, so a legend circle would introduce a mark that is
  * nowhere else on the page.
  */

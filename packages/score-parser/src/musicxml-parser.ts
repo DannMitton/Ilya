@@ -2,8 +2,8 @@
  * MusicXML score parser.
  *
  * Reads MusicXML input (an XML string or a pre-parsed DOM Document) and
- * produces Shane's canonical `ParsedScore`. Supports the partwise MusicXML
- * 3.1 / 4.0 subset Shane needs: the vocal part's notes, rests, ties,
+ * produces the canonical `ParsedScore`. Supports the partwise MusicXML
+ * 3.1 / 4.0 subset the app needs: the vocal part's notes, rests, ties,
  * lyrics (with verse and elision awareness), articulations, fermatas, the
  * divisions-based duration model, key/time/tempo, and provenance. Features
  * outside that subset are noted via warnings and skipped, never fatal.

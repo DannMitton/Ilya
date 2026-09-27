@@ -439,7 +439,7 @@ export function scoreTessitura(truthNotes: GroundTruthNote[], recognizedNotes: R
  * the ground-truth note matched a recognized note (by onset, via
  * `matchNotes`), AND that recognized note carries the identical syllable
  * text. A syllable on an unmatched (missed) ground-truth note counts as
- * misaligned, not excluded, since from Fit's perspective a dropped note
+ * misaligned, not excluded, since from Markup's perspective a dropped note
  * IS a lyric re-association failure too.
  */
 export function scoreAlignment(

@@ -196,7 +196,7 @@
 		.concat(geomVowels.filter((v) => !calibrationOrder.includes(v.g)));
 
 	// ── Minimum-met achievement overlay (wizard spec v1 §2 Phase 2, §4) ──────
-	// The five-anchor floor {[i], [e], [ɛ], [ɑ], [u]} is Fit's engineering
+	// The five-anchor floor {[i], [e], [ɛ], [ɑ], [u]} is the calibration's engineering
 	// minimum: exactly the anchors the four derivations consume to reconstruct
 	// the rest of Grayson's ten idealized sung-Russian vowels (see derivations.ts).
 	// It targets Grayson's schema, not phonetic vowel-space completeness. JUDGEMENT.

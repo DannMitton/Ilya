@@ -7,7 +7,7 @@
  * function: no DOM, no app state, deterministic, and sandbox-testable, so
  * it can be exercised the same way the parsers are.
  *
- * Founding principle: **Fit forecasts, it does not declare.** Every value
+ * Founding principle (Dann, 2026-09-27): **Insights forecasts, it does not declare.** Every value
  * is a forecast from the singer's measured resonances applied to the score,
  * never a claim about the larynx. Registration is positional only
  * (`inPassaggio` + the global band); no per-note mechanism is asserted.
@@ -27,7 +27,7 @@
  *     the advice resolver reads it to tell the whoop regime from the
  *     turned-over-but-below-crossing regime (§A.190).
  *
- * The Shane↔Ilya seam: the operative sung vowel per event is supplied by
+ * The score↔GraysonEngine seam: the operative sung vowel per event is supplied by
  * the caller through `vowelForEvent` (app-side, Ilya's `processText`
  * resolves each syllable, carrying the sustained vowel across melisma
  * notes). Tests pass a stub resolver. A note with no resolvable vowel, and

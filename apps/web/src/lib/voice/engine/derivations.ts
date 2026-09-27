@@ -65,7 +65,7 @@ export const DERIVE_ANCHORS: Partial<Record<Vowel, Vowel[]>> = {
  * verdicts, and neither speaks to whether the number can be the vowel.
  *
  * `plausibility` does speak to that, and it is the one gate here (N.109,
- * carrying §B.4's rule inward). Fit will not build a derived value on an
+ * carrying §B.4's rule inward). The calibration will not build a derived value on an
  * anchor the guard has already decided cannot be that vowel. `unchecked` and
  * absent both mean the guard never ran, which is not a verdict, so both pass.
  *

@@ -96,11 +96,11 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Tab bar (N.36) ───────────────────────────────────────
 	//    The labels lived in the component, so French lived in two
-	//    places. Two of them are invariant by ruling, Guide and Fit;
-	//    they are keyed anyway, so the invariance is recorded here as
+	//    places. Two of them were invariant by ruling, Guide and Fit (the
+	//    tool's shown name until N.174); they are keyed anyway, so the invariance is recorded here as
 	//    identical en/fr values rather than as an absence from the
 	//    dictionary. 'tab.text' was the third until N.132.
-	//    'Fit' is invariant by Dann's ruling of 13 July 2026.
+	//    'Fit' was invariant by Dann's ruling of 13 July 2026.
 	'tab.text':                    { en: 'Text',                         fr: 'Texte' },
 	'tab.learn':                   { en: 'Learn',                        fr: 'Leçons' },
 	'tab.guide':                   { en: 'Guide',                        fr: 'Guide' },
@@ -110,8 +110,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// SUPERSEDE « Partition annotée », ratified 2026-08-19 for the old
 	// name "Marked score", later "Score markup": do not carry it forward.
 	// The KEYS stay, because both are cited by name across the tree.
-	// Fit is the tool's name and is invariant in French by his ruling of
-	// 2026-07-13. The document is not called Fit.
+	// Fit, the tool's shown name until N.174, was invariant in French by his
+	// ruling of 2026-07-13, and the document was never called Fit.
 	'tab.markedScore':             { en: 'Markup',                       fr: 'Annotation' },
 	// N.127. Studio's third document. « Aperçus » RULED by Dann 2026-09-12,
 	// and it is the only French N.127 increment 1 writes. Every `insights.*`
@@ -739,7 +739,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'update.dismiss':              { en: 'Dismiss',                      fr: 'Ignorer' },
 	'footer.of':                   { en: 'of',                           fr: 'sur' },
 
-	// ── Fit broad-analysis legend (§B.5) ─────────────────
+	// ── Markup broad-analysis legend (§B.5) ──────────────
 	// Composed from parts so EN and FR share one structure; the two-item
 	// join is language-specific (EN "a and b", FR "a ni b": "sans X ni Y").
 	'analysis.broad.body':         { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
@@ -747,16 +747,16 @@ const strings: Record<string, Record<Language, string>> = {
 	'analysis.broad.itemPassaggio': { en: 'positional passaggio flags',   fr: 'le signalement des notes de passaggio' },
 	'analysis.broad.join':         { en: 'and',                          fr: 'ni' },
 
-	// ── Fit textual witnesses (reconciliation shell, piece 3; Kimi Q1/Q2;
+	// ── Textual witnesses (reconciliation shell, piece 3; Kimi Q1/Q2;
 	//    English ruled by Dann 2026-07-16; French pending Dann's validation) ──
-	'fit.witness.heading':         { en: 'Textual witnesses',            fr: 'Témoins textuels' },
-	'fit.witness.agree':           { en: 'Score and poem agree',         fr: 'La partition et le poème concordent' },
-	'fit.witness.divergePrefix':   { en: 'Score and poem diverge in',    fr: 'La partition et le poème divergent à' },
-	'fit.witness.placeOne':        { en: 'place',                        fr: 'endroit' },
-	'fit.witness.placeMany':       { en: 'places',                       fr: 'endroits' },
-	'fit.witness.scoreLabel':      { en: 'Score',                        fr: 'Partition' },
-	'fit.witness.poemLabel':       { en: 'Poem',                         fr: 'Poème' },
-	'fit.witness.measureAbbr':     { en: 'm.',                           fr: 'mes.' },
+	'witness.heading':             { en: 'Textual witnesses',            fr: 'Témoins textuels' },
+	'witness.agree':               { en: 'Score and poem agree',         fr: 'La partition et le poème concordent' },
+	'witness.divergePrefix':       { en: 'Score and poem diverge in',    fr: 'La partition et le poème divergent à' },
+	'witness.placeOne':            { en: 'place',                        fr: 'endroit' },
+	'witness.placeMany':           { en: 'places',                       fr: 'endroits' },
+	'witness.scoreLabel':          { en: 'Score',                        fr: 'Partition' },
+	'witness.poemLabel':           { en: 'Poem',                         fr: 'Poème' },
+	'witness.measureAbbr':         { en: 'm.',                           fr: 'mes.' },
 
 	// ── Provenance labels (for Inspector inline display) ─────
 	'provenance.dictionary':       { en: 'Stress verified from dictionary',      fr: 'Accent vérifié dans le dictionnaire' },
@@ -781,7 +781,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    only the numeral is substituted, and no other word moves.
 	'aid.endOfVerse':              { en: '\u00b7 end of verse %s \u00b7', fr: '\u00b7 fin du couplet %s \u00b7' },
 
-	// ── Fit metadata auto-populate (§A.6; Kimi's rulings, 2026-07-13;
+	// ── Score metadata auto-populate (§A.6; Kimi's rulings, 2026-07-13;
 	//    agentless; copy flagged for Dann's review) ──
 	'meta.fromScore':              { en: 'from score',                   fr: 'de la partition' },
 	'meta.revertToScore':          { en: 'Revert to score header',       fr: 'Rétablir l’en-tête de la partition' },
@@ -791,7 +791,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'meta.arrAbbr':                { en: 'Arr.',                         fr: 'Arr.' },
 	'meta.detectedFrom':           { en: 'Detected from',                fr: 'Détecté dans le fichier' },
 
-	// ── Fit engraving controls (drawer panel beside the drop surface;
+	// ── Engraving controls (drawer panel beside the drop surface;
 	//    agentless; copy flagged for Dann's review with the §A.13 strings) ──
 	'engraving.heading':           { en: 'Engraving',                    fr: 'Gravure' },
 	'engraving.staveSize':         { en: 'Stave size',                   fr: 'Taille de la portée' },
@@ -799,7 +799,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'engraving.systemSpacing':     { en: 'Between systems',              fr: 'Entre les systèmes' },
 	'engraving.reset':             { en: 'Reset',                        fr: 'Réinitialiser' },
 
-	// ── Score uploader (Fit ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
+	// ── Score uploader (the ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
 	// THE DROP ZONE'S ONE PLACEHOLDER. RULED by Dann 2026-08-20 on his walk
 	// of `3c498aa`: the drop zone showed three stacked lines in three
 	// treatments while the textarea beside it showed one quiet line, and the

@@ -264,7 +264,7 @@ describe('page layout: system packing and page assembly', () => {
     const out = paginateScore(parsed, analyzed, { pageWidth: 500, pageHeight: 400, marginTop: 40, marginBottom: 40 });
     expect(out.pageCount).toBeGreaterThan(1);
     for (const [i, page] of out.pages.entries()) {
-      expect(page.includes(`data-fit-page="${i + 1}"`)).toBe(true);
+      expect(page.includes(`data-score-page="${i + 1}"`)).toBe(true);
     }
   });
 

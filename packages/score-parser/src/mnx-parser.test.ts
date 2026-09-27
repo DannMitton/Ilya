@@ -13,7 +13,7 @@
  * 2. An integration test against denigma's actual MNX for the Kabalevsky
  *    Op. 52 No. 8 fixture (Dann's dissertation Appendix C song). The MNX
  *    derives from a copyrighted work, so it is NOT committed; the test
- *    runs only when the SHANE_T08_MNX environment variable names the
+ *    runs only when the MNX_T08_PATH environment variable names the
  *    file (generate it by running the repo's denigma WASM over
  *    `~/Downloads/samples/Kabalevsky_-_Shakespeare_-_T08_….musx`), and
  *    skips silently everywhere else, including CI.
@@ -641,11 +641,11 @@ describe('MnxScoreParser: diagnostics and degraded sources', () => {
 });
 
 // ── Integration: denigma's real MNX for the Kabalevsky T08 fixture ──
-// Gated on SHANE_T08_MNX naming the generated file (never committed;
+// Gated on MNX_T08_PATH naming the generated file (never committed;
 // see the header note). All expected values below were read from the
 // actual denigma output of 2026-07-12.
 
-const t08Path = typeof process !== 'undefined' ? (process.env.SHANE_T08_MNX ?? '') : '';
+const t08Path = typeof process !== 'undefined' ? (process.env.MNX_T08_PATH ?? '') : '';
 let t08Data: object | null = null;
 if (t08Path.length > 0) {
 	try {

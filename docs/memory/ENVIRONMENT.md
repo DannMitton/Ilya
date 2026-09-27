@@ -70,7 +70,7 @@ next session the same hour it cost the last one.
 | you are about to give Dann a use count | `A GREP COUNT IS NOT A USE COUNT` |
 | you are about to say no test asserts a string | `MUST NAME \`apps/web/e2e-phone/\`` |
 | quoting the cost of a sweep of `i18n.ts` | `A SWEEP OF \`i18n.ts\` COSTS ABOUT 120k` |
-| Score Markup or Insights missing from a built app | `THE SHANE WALL LIVES IN A TRACKED .env` |
+| Score Markup or Insights missing from a built app | `THE MARKUP AND INSIGHTS WALL LIVES IN A TRACKED .env` |
 | `git status` jumps to hundreds of untracked files | `A BRANCH SWITCH CAN UNCOVER HUNDREDS` |
 | grep or diff says `Resource deadlock avoided` | `THE BRIDGE CANNOT READ A FILE WITH " 2"` |
 | you are about to rename a CSS custom property | `A TOKEN IS ALSO A STRING KEY` |
@@ -715,6 +715,8 @@ notice. **A measurement that reads `.shane-storage-notice` on Transcription, or
 `.song-row` on Fit, finds an empty list and means nothing by it.** Both mistakes
 were made during N.67 step 6's walk. It is also a real defect for a singer who
 never opens Fit, named in that step's memo and not solved.
+**AMENDED 2026-09-27:** `shanePanel` is gone (N.108), and N.174 removed the unused
+`shane-storage-notice` class, so neither selector exists any more.
 
 **`innerWidth` is 0 in the browser pane, so Ilya's own mobile gate fires.**
 Confirmed again 2026-08-18. Click **Continue anyway / Continuer quand même**
@@ -845,7 +847,7 @@ at 29.0, measured at 816px with the real fonts. That is what makes
 
 **`VoiceProfilePane.svelte:295-313` still duplicates the OLD arithmetic**, its own
 `TITLE_HEADER_GAP = 18` and `HEADER_HEIGHTS.subsequent + GAP`, and `HEADER_HEIGHTS`
-stays in `page-config.ts` only because of it. Fit's paper does not yet share the
+stays in `page-config.ts` only because of it. Markup's paper does not yet share the
 single `HEADER_GAP`.
 
 **With no score loaded, print emits a genuinely blank sheet**, not a sheet with a
@@ -973,25 +975,27 @@ phone, is the way.
 - **The language toggle is not a `<button>`.** Use `'button,a,[role=button]'`.
 - **A BACKGROUNDED CHROME TAB IS NOT AN INSTRUMENT.**
 - The extension's tab group can drop. Recreate with `createIfEmpty: true`.
-- **The Fit file input is NOT in the accessibility tree**, so **`file_upload`
+- **The score file input is NOT in the accessibility tree**, so **`file_upload`
   cannot be given a ref**. What works: build a `File` in `javascript_tool`, put it
   on the input through a `DataTransfer`, then dispatch `input` and `change`.
   **Record and restore any attribute you set on the page first.**
 - **A fixture's JS `.length` is not its byte count.** The control file is 1757
   bytes and 1747 JS characters; the difference is the ten Cyrillic characters in
   its `work-title` at two UTF-8 bytes each.
-- **`file_upload` needs the Fit tab ACTIVE FIRST.** Transcription's OCR input will
+- **`file_upload` needs the Markup document ACTIVE FIRST.** Transcription's OCR input will
   take a `.musicxml` and fail. **NAMES CORRECTED 2026-09-21: there is no Fit tab and
   no Transcription tab.** Fit folded into Voice and Markup; the tab reads `Text`
   / « Texte » and `Markup` / « Annotation » since N.132 (`5f7be82`). The wire ids are
   unchanged, `transcription` and `shane`, so `ilya:activeTab` still stores the old words.
+  **AMENDED BY N.174, 2026-09-27:** the ids are now `text` and `markup`; the old two
+  are still read (`restoreSurface`).
 - **`form_input` triggers Svelte's binding; `computer`'s `type` did not.**
 - **`computer`'s `left_click` can silently no-op on a real, visible, enabled
   button.** Check the button's own state via `javascript_tool` first, then drive
   it with a dispatched `.click()`.
 - **`javascript_tool` has a 45-second CDP ceiling**, and it redacts base64-looking
   strings, so an unreadable `localStorage` key is not an absent one.
-- **`/fit-font-lab` 404s on the deployed build.** There is no zero-setup route that
+- **`/notation-font-lab` (`/fit-font-lab` before N.174) 404s on the deployed build.** There is no zero-setup route that
   renders a stave; you must upload a score.
 - **Browsers and origins do not share state.** Nine voice profiles exist in
   Chrome; **"Dann", 11 juillet, is the one with readings.**
@@ -1409,10 +1413,10 @@ gates structurally cannot.
 - **`fake-indexeddb`: close the database before `deleteDatabase` in `afterEach`.**
   An open connection blocks the delete, the blocked delete blocks the next open,
   and the whole FILE hangs rather than failing. Cost: one 120-second run.
-- **The Fit stave DOES draw without a voice profile.** An earlier note here
+- **The Markup stave DOES draw without a voice profile.** An earlier note here
   was wrong: `[data-note-id]` does not exist in this tree at all. The note hit
   targets are **`[data-hit]`** rectangles carrying the event id, and the stave
-  renders with withheld sigla when no profile is calibrated. Fit's Print button
+  renders with withheld sigla when no profile is calibrated. Markup's Print button
   is still a good marker for "a score is ingested": it is disabled unless
   `ingestedScore` is set, so enabled-after-reload proves the source survived.
 - **A DISPATCHED CLICK IS NOT A CLICK, AND THE DIFFERENCE WAS A REAL BUG.**
@@ -1778,7 +1782,7 @@ went to Dann's walk instead.
 test on a throwaway route with real pipeline output, measure it there, then
 delete the route and confirm the routes directory is back to
 `+layout.svelte`, `+layout.ts`, `+page.svelte`, `+page.ts`, and
-`fit-font-lab`.
+`notation-font-lab`.
 
 **Write this into any brief whose definition of done needs a transcription.**
 Ask for the tests plus a harness measurement, and put the live walk on Dann.
@@ -1808,8 +1812,8 @@ that read 901 characters, 140 elements, and 1684 px on both documents, with only
 The desk read a `border` declaration inside a component, named it in a brief as
 the thing that paints, and was wrong both times.
 
-- **The marked score's centring.** The desk said `VoiceProfilePane` had no
-  centring container. It has one, `.fit-paper-container`, on its score branch;
+- **The marked score's centring.** The desk said `MarkupPane` (then `VoiceProfilePane`) had no
+  centring container. It has one, `.markup-paper-container`, on its score branch;
   only the empty-state branch was bare.
 - **The textarea's border.** Brief §3.6 named `.text-input`'s
   `3px solid var(--sage)` in `RootPanel.svelte`. **A
@@ -1892,8 +1896,8 @@ the page, because the flex item between them, `PageFit`'s `.paper-fit`, is
 `width: 100%` and fills the desk. **Whatever centres a page must be inside
 `PageFit`.**
 
-`Paper.svelte` does it with `.paper-container`. `VoiceProfilePane.svelte` does
-it with `.fit-paper-container`, byte-identical, on its score branch only, which
+`Paper.svelte` does it with `.paper-container`. `MarkupPane.svelte` does
+it with `.markup-paper-container`, byte-identical, on its score branch only, which
 is why the marked score sat flush left in its empty state for at least two
 builds before anyone traced it.
 
@@ -2140,6 +2144,9 @@ apps/web/static` returns nothing.**
 
 ## THE COLUMN'S FOOT BELONGS TO WHICHEVER PANEL ENDS IT. 2026-08-21
 
+**AMENDED 2026-09-27:** `.shane-panel` is gone (N.108), and the flag is
+`PUBLIC_INCLUDE_MARKUP_INSIGHTS` (N.174). The lesson below stands.
+
 The drawer stacks two panels: `RootPanel`'s `.root-panel` (Transcription) and
 `+page.svelte`'s `.shane-panel` (Fit). **`INCLUDE_SHANE` gates the whole body of
 the Fit panel**, and `apps/web/.env.example` documents the flag as unset for the
@@ -2349,7 +2356,7 @@ plus the wizard's plausibility demotion; the fry detector re-prompts
 instead. **The SNR proxy is a level meter in disguise**, one dB per dB of
 voice level, and Dann's takes sit 18 to 26 dB above its floor, so it is not
 what fails him. **`DEBUG = true` at `live.ts:173` in the deployed build**:
-filter the console on `shane-live` and the `outcome:` line carries the
+filter the console on `voice-live` (`shane-live` before N.174) and the `outcome:` line carries the
 formant, the guard verdict, and since `230cad3` the guard's four numbers
 with the name of the failing test. Ask for that line before theorizing.
 
@@ -3741,7 +3748,10 @@ URL to give a singer.
 before checking. **An alias list says what Vercel would serve if DNS arrived. Curl the
 host.**
 
-## THE SHANE WALL LIVES IN A TRACKED .env, NOT IN VERCEL. 2026-09-20
+## THE MARKUP AND INSIGHTS WALL LIVES IN A TRACKED .env, NOT IN VERCEL. 2026-09-20
+
+**AMENDED BY N.174, 2026-09-27:** the variable is `PUBLIC_INCLUDE_MARKUP_INSIGHTS`
+(`wall.ts`), and `apps/web/.env` sets it. The old name below no longer opens the wall.
 
 `apps/web/src/lib/wall.ts:6-7` reads `import.meta.env.PUBLIC_INCLUDE_SHANE` at build time,
 and Rollup tree-shakes every branch behind it when it is not `'true'`. It gates
@@ -3867,7 +3877,7 @@ on the alias opened on **Transcription**, so `document.querySelectorAll('[data-i
 returned **0 notes** on a build that draws 96 of them. That reads exactly like a broken render.
 **`localStorage.getItem('ilya:activeTab')` says which document is up**; it read `transcription`
 while the desk was measuring Score markup (**that tab reads `Markup` / « Annotation » since
-N.132, 2026-09-21; the wire id `shane` is unchanged**). Switch with the tab control, read, then switch back,
+N.132, 2026-09-21; the wire id `shane` was unchanged until N.174 made it `markup`**). Switch with the tab control, read, then switch back,
 and record the value first, per `CONTRACT.md` §5. The fix is one sentence to Dann: bring the Chrome window showing Ilya
 to the front. **Creating a second tab does not help; it lands in the same window.**
 

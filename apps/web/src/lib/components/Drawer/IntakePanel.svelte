@@ -523,7 +523,7 @@
 	     default, each with the station row, the chevron and the hairline
 	     every other station in the drawer has.
 
-	     BELOW THE SCORE ENGINE'S ANSWERS AND ABOVE TRANSCRIBE AND FIT, which
+	     BELOW THE SCORE ENGINE'S ANSWERS AND ABOVE TRANSCRIBE AND FIT (the old button), which
 	     is where the fold stood and is a DESK DEFAULT the fold carried: the
 	     primary stays last in the band, and the uploader's answers stay
 	     directly under the frame they are about. -->

@@ -3,18 +3,18 @@
 	   Extracted from RootPanel.svelte, where this section lived inside the
 	   Transcription drawer alone. The state it writes was already
 	   document-level and persisted (the notationPrefs and openSyllabification declarations),
-	   and Fit already obeyed it: notationPrefs and openSyllabification reach
+	   and Markup already obeyed it: notationPrefs and openSyllabification reach
 	   MarkupPane through its own props of those names. Only the CONTROL was
 	   tab-scoped, so its placement lied about the scope of what it governs.
 
 	   Twinned on the MetadataFields precedent: one component, state owned by
 	   +page.svelte, rendered once in each panel. See RootPanel.svelte's
-	   "shared with the Fit drawer" comment on the metadata block.
+	   "shared with the Fit drawer" comment on the metadata block (as it read then).
 
-	   THE SEVENTH TOGGLE NOW REACHES FIT (N.119). It was the one that did not:
+	   THE SEVENTH TOGGLE NOW REACHES MARKUP (N.119). It was the one that did not:
 	   stress acutes were read only on Transcription. MarkupPane takes
 	   showStressDiacritics and puts the acute on the Cyrillic underlay, never
-	   the IPA line. Fit's IPA stress mark is a separate and unconditional
+	   the IPA line. Markup's IPA stress mark is a separate and unconditional
 	   thing (pipeline.ts:711).
 
 	   The class names still read `cosmetic`; the heading has read Notation

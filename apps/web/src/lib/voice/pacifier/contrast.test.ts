@@ -1,5 +1,5 @@
 /**
- * Shane pacifier: contrast verification tests.
+ * The calibration pacifier: contrast verification tests.
  *
  * Run with: pnpm vitest (or `pnpm test` once wired into package.json).
  *

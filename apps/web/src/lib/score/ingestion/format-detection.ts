@@ -1,5 +1,5 @@
 /**
- * Score-file format detection for the Fit upload path.
+ * Score-file format detection for the score upload path.
  *
  * Pure and synchronous: file name + leading bytes in, a verdict out. No DOM,
  * no Worker, no I/O, so the sandbox shim can test it directly. The dispatch

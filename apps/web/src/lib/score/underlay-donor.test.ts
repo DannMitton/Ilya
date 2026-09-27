@@ -40,7 +40,7 @@ describe('matchDonors: position, not spelling', () => {
 	});
 
 	it('pairs verse 1 of a score against a poem typed in full', () => {
-		// The ordinary case today: Transcribe holds every verse, Fit reads one.
+		// The ordinary case today: Transcribe holds every verse, Markup reads one.
 		const score = ['ты', 'моя', 'заря'];
 		const poem = ['ты', 'моя', 'заря', 'ты', 'моё', 'солнце'];
 		expect(matchDonors(score, poem)).toEqual([0, 1, 2]);

@@ -1,7 +1,7 @@
 /**
  * @ilya/score-parser (working scope; final package name pending scaffolding)
  *
- * Public API for Shane's score-parser package.
+ * Public API for the score-parser package.
  *
  * Exports:
  *   - All canonical types from `./types` (`ParsedScore`, `VocalLineEvent`,
@@ -13,7 +13,7 @@
  *     fold, Pacheco tessitura, and the tempo seam. See the block at the
  *     foot of this file.
  *
- * Consumers (Shane's analysis layer, the OMR runners, the rendering
+ * Consumers (the app's analysis layer, the OMR runners, the rendering
  * layer) import from this barrel and do not reach into the package
  * internals. See `ARCHITECTURE_SPEC_dual_canonical.md` and the Round 9
  * specification for design rationale.

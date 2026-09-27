@@ -1,5 +1,5 @@
 <!--
-	ScoreUploader — the Fit ingest widget (Round 9 §2 Items 1, 2, 6; handover
+	ScoreUploader — the score ingest widget (Round 9 §2 Items 1, 2, 6; handover
 	v35 §E.5). One drag-and-drop surface with click-to-browse, auto-detection,
 	provenance-driven fidelity treatment, and inline persistent errors keyed by
 	IngestError code. Agentless throughout: the copy never speaks as an agent,

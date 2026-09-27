@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * The interim Voice Profile envelope pane (the Shane tab's main pane).
+	 * The Markup document's page (first built as the interim Voice Profile envelope pane).
 	 *
 	 * Source of record: handover v30 §C.1 and §R (main-pane rulings,
 	 * 2026-07-11), plus Dann's same-day ruling in review: the envelope
@@ -109,7 +109,7 @@
 		/** Mirrors Paper.svelte's prop; the page shell passes letter today. */
 		pageSize?: PageSize;
 		/**
-		 * The accepted upload from the Fit uploader (live wiring, v36 §E.7).
+		 * The accepted upload from the score uploader (live wiring, v36 §E.7).
 		 * When present, the envelope's content window carries the rendered
 		 * score pages instead of the interim copy. Slice 1 (Dann's scope
 		 * ruling, 2026-07-13) renders notation only: real systems and
@@ -195,12 +195,12 @@
 		 * "Fit consumes Transcription's output including the singer's stress
 		 * overrides").
 		 *
-		 * Fit and Transcribe share the pipeline and share no state (E.31 §1.2),
+		 * Markup and Transcribe share the pipeline and share no state (E.31 §1.2),
 		 * so before this prop existed a word the singer had corrected in
 		 * Transcribe printed here with the engine's original stress, and the
 		 * control that would fix it lived on a tab whose output never reached
 		 * this one. Where a score word pairs with a transcribed word the
-		 * singer's result is used; where it does not, Fit's own run stands for
+		 * singer's result is used; where it does not, Markup's own run stands for
 		 * that word alone (Path C, E.31 §1.5).
 		 *
 		 * Undefined, or an empty array, means no donor pass runs and the page
@@ -437,7 +437,7 @@
 	 * calibration is absent").
 	 *
 	 * ONCE PER DOCUMENT, on the first page. A four-line glossary repeated on
-	 * every sheet of a printed Fit result is noise, and the singer's page is
+	 * every sheet of a printed Markup page is noise, and the singer's page is
 	 * where a glossary belongs. Deliberately NOT the same placement rule as
 	 * `broadNote`, which repeats because it qualifies the analysis printed on
 	 * each sheet; this qualifies the calibration behind all of them.
@@ -461,7 +461,7 @@
 	/**
 	 * N.83: the footer is MEASURED, the same way the header is.
 	 *
-	 * `FOOTER_MAX_HEIGHT` is a constant 80, and a Fit footer is not 80. It
+	 * `FOOTER_MAX_HEIGHT` is a constant 80, and a Markup footer is not 80. It
 	 * carries the provenance legend, which wraps with its entry count and its
 	 * language, and the broad-analysis sentence, which no other document has.
 	 * Reserving 80 for a footer that measured 140.6 is what let the legend and
@@ -600,7 +600,7 @@
 	// N.5: the printed IPA line. Every string is Ilya's own, read from the
 	// engine's syllable transcription (`vowel-resolver.ts:265-266`), then
 	// spelled to the singer's preferences so the score pages agree with the
-	// transcription pages. Fit synthesizes nothing, per
+	// transcription pages. Markup synthesizes nothing, per
 	// `DIRECTIVE-all-ipa-through-ilya.md`; where the engine resolves no
 	// syllable the event is simply absent and the renderer prints no IPA for
 	// it, which is the correct abstention rather than a guess.
@@ -695,7 +695,7 @@
 		return out.size > 0 ? out : undefined;
 	});
 
-	// The Fit legend (item 1.6). Declared here rather than beside its doc
+	// The Markup legend (item 1.6). Declared here rather than beside its doc
 	// comment above, because N.10b's entry depends on `withheldIpa`.
 	let markupLegend = $derived(
 		buildMarkupLegend(formants, language, { withheldSyllables: !!withheldIpa })
@@ -736,7 +736,7 @@
 	// seam, seconds, and the nominal fold-cycle count, from one call.
 	//
 	// Read from `analysisScore`, the PERFORMANCE-ORDER projection, for the same
-	// reason `analyzed` is: the question Fit answers is what the singer actually
+	// reason `analyzed` is: the question Markup answers is what the singer actually
 	// sings, repeats taken and jumps followed, not what the page shows.
 	//
 	// The resolver is passed only when there is one. Its absence makes the
@@ -1103,7 +1103,7 @@
 	     Item 1.8, 2026-08-05: this passed `title=""` and had done since the
 	     envelope was written, so the comment above described an intent the
 	     code never carried out. A singer with «Gretchen am Spinnrade» in the
-	     drawer printed a Fit sheet that could not name its own subject.
+	     drawer printed a Markup sheet that could not name its own subject.
 	     OBSERVED by Dann in a browser print preview on dc7cf09. The score
 	     branch at :503 was already passing `scoreTitle`; this is the envelope
 	     catching up to it, not a new decision. An empty title still falls

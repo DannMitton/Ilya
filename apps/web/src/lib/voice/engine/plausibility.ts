@@ -40,7 +40,7 @@ export type Plausibility = NonNullable<CalibratedFormant['plausibility']>;
 export type VoiceTypeBucket = 'soprano' | 'tenor-mezzo' | 'baritone' | 'bass' | 'union';
 
 /** The six Bozeman-covered roster vowels. [ɔ] is charted by Bozeman but is
- * not in Shane's roster (Grayson's mono-phonemic /o/ ruling; see the
+ * not in the calibration roster (Grayson's mono-phonemic /o/ ruling; see the
  * Story-of-o grounding memo, 2026-07-11). The other four roster vowels
  * ([ɨ] [ɪ] [a] [ʌ]) take anchor-derived windows below. */
 type BozemanVowel = 'i' | 'e' | 'ɛ' | 'ɑ' | 'o' | 'u';

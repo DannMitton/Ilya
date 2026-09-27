@@ -524,7 +524,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   // top, before anything downstream sees the word. One string then serves all
   // four jobs, and each is correct for the first time:
   //
-  //   DISPLAY. Fit and Transcribe print дети. This keeps the promise Ilya already
+  //   DISPLAY. Markup and Transcribe print дети. This keeps the promise Ilya already
   //   makes at `GuideContent.svelte:291`, "It automatically updates and normalises
   //   spelling", and the instruction its own Learn table gives the singer at
   //   `LearnContent.svelte:2124-2127`, "Substitute its modern counterpart."

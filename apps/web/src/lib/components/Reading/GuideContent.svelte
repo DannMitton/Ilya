@@ -52,23 +52,23 @@
 
 						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, permettant aux utilisateurs de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par l'intérêt de ses utilisateurs et leur capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
 
-						<!-- La philosophie de prévision de Fit (copie de Dann, 2026-07-12).
+						<!-- The forecast philosophy (Dann's copy, 2026-07-12), in French.
 						     Traduction française attentive mais non native, à valider lors
 						     de la passe française de l'interface de calibration. -->
-						<h4 id="guide-fit-forecast">Fit prévoit, il ne déclare pas</h4>
+						<h4 id="guide-markup-forecast">Fit prévoit, il ne déclare pas</h4>
 
 						<p><em>Fit</em> prévoit; il ne déclare pas. À partir d'une poignée d'échantillons de fry sur un micro grand public, il ne peut pas, et ne doit pas, se prononcer sur votre larynx. Ce qu'il peut honnêtement faire, c'est prendre vos résonances mesurées et prévoir comment une pièce du répertoire est susceptible de rencontrer votre voix : où le timbre va probablement basculer, où la zona di passaggio risque de se situer, où la tessiture devient exigeante. Certains chanteurs s'accorderont avec la prévision, d'autres non, et cette différence est elle aussi une information, non une erreur. L'outil offre au chanteur une connaissance de lui-même et de la manière dont la musique impose ses exigences, puis remet les décisions entre ses mains et celles de son professeur.</p>
 
 						<!-- Caractéristiques vocales (E.5 tranche 3, 2026-07-13).
 						     Traduction française attentive mais non native, à valider lors
 						     de la passe française de l'interface de calibration. -->
-						<h4 id="guide-fit-characteristics">Caractéristiques vocales : ambitus, tessiture et passaggio</h4>
+						<h4 id="guide-markup-characteristics">Caractéristiques vocales : ambitus, tessiture et passaggio</h4>
 
 						<p>Au-delà de ses résonances mesurées, un profil vocal peut porter trois caractéristiques facultatives, saisies depuis le sommaire du profil dans le Tiroir : l'ambitus (les notes confortables la plus grave et la plus aiguë), la tessiture (là où la voix vit, non ses extrêmes), et le passaggio (les deux bascules, grave et aiguë, qui encadrent la zona di passaggio; les deux sont nécessaires avant qu'il soit signalé). Chacune se règle au moyen d'un sélecteur de note : choisissez la lettre, l'altération et l'octave, et la note s'affiche sur une petite portée en confirmation.</p>
 
 						<p>Ces valeurs se saisissent au clavier et ne se chantent pas, à dessein. Des extrêmes d'ambitus exigés devant un micro invitent à forcer, la tessiture relève du jugement plutôt que de la mesure, et un chanteur formé connaît généralement son passaggio mieux que ne le montrerait un échantillon rapide. Chaque champ est facultatif, et un champ vide ne bloque jamais rien : l'analyse reste simplement large pour cette dimension, et un passaggio dont une bascule reste vide n'est pas signalé : il demeure non renseigné, non pas absent. Les valeurs s'enregistrent au fil de la saisie, appartiennent à la voix active, et peuvent être modifiées ou effacées à tout moment depuis le même sommaire.</p>
 
-						<h4 id="guide-fit-notation">Conventions de notation de Fit</h4>
+						<h4 id="guide-markup-notation">Conventions de notation de Fit</h4>
 
 						<p>La partition analysée de <em>Fit</em> emploie un petit ensemble de conventions, adaptées de Mitton (2020, annexes B et C). La direction des hampes est sémantique : hampe vers le bas, timbre ouvert; hampe vers le haut, timbre fermé. Les têtes de note sauge, sans hampe, indiquent la hauteur de bascule du timbre pour la voyelle chantée, avec leurs propres altérations dans la même couleur. Un cadre rouge arrondi signale un croisement fR1/fo. Sous la portée, la ligne cyrillique est doublée d'une ligne API en caractères droits, jamais en italique, afin que le contraste entre le a clair et le a sombre demeure lisible.</p>
 
@@ -328,24 +328,24 @@
 
 						<p><em>Ilya</em> already offers an OCR component where users can photograph Cyrillic text that <em>Ilya</em> parses and processes like normal. Extending <em>Ilya</em>'s future scholarly reach might include improved accessibility features, or reverse-engineering how other Russian lyric authorities arrive at their signature transcriptions, to offer comparative transcriptions "in the style of" Russian lyric diction greats whose output differs from Grayson. The hope is not to assert Grayson's superiority over older models, but rather to use direct comparison to highlight points of divergence in transcription, allowing users to register the phonological issues that matter most. <em>Ilya</em> could be the model template for a series of robust next-gen transcription apps centring sung Arabic, English, Finnish, French, German, Italian, Korean, Mandarin, Spanish, Swedish, or Swahili. Because <em>Ilya</em> is free and open source, the improvements it will undergo are limited only by the interest of its users and their ability to enhance <em>Ilya</em> with meaningful modernisations over time.</p>
 
-							<!-- The Fit forecast philosophy (Dann's copy, 2026-07-12): the
-							     statement of what the Fit tab is and is not. Its own findable
+							<!-- The forecast philosophy (Dann's copy, 2026-07-12): the
+							     statement of what the Markup page is and is not. Its own findable
 							     heading, per Dann. FR flagged for the deferred calibration-UI
 							     French pass. -->
-							<h4 id="guide-fit-forecast">Fit forecasts, it doesn't declare</h4>
+							<h4 id="guide-markup-forecast">Fit forecasts, it doesn't declare</h4>
 							<p><em>Fit</em> forecasts; it does not declare. From a handful of fry samples on a consumer mic, it cannot and must not pronounce on your larynx. What it can honestly do is take your measured resonances and forecast how a piece of repertoire is likely to meet your voice: where the timbre will probably turn, where the zona di passaggio is likely to fall, where the range gets demanding. Some singers will align with the forecast, some won't, and that difference is information too, not error. The tool offers a singer knowledge of themselves and of how the music makes demands, then hands the decisions to them and their teacher.</p>
 
 							<!-- Voice characteristics (E.5 slice 3, 2026-07-13): the GUIDE's
 							     paraphrase of the wizard phase, same-commit with the phase
 							     itself so the guide never leads the app. Copy drafted by
 							     Claude, flagged for Dann's review with the slice-3 strings. -->
-							<h4 id="guide-fit-characteristics">Voice characteristics: range, tessitura, and passaggio</h4>
+							<h4 id="guide-markup-characteristics">Voice characteristics: range, tessitura, and passaggio</h4>
 
 							<p>Beyond its measured resonances, a voice profile can carry three optional characteristics, entered from the profile summary in the drawer: range (the lowest and highest comfortable notes), tessitura (where the voice lives, not its edges), and passaggio (the lower and upper turns that bound the zona di passaggio; both are needed before it is flagged). Each is set with a note picker: choose the letter, accidental, and octave, and the note renders on a small staff as confirmation.</p>
 
 							<p>These values are typed, not sung, by design. Range extremes demanded of a microphone invite pushing, tessitura is a judgement rather than a measurement, and a trained singer usually knows their passaggio better than any quick sample could show it. Every field is optional, and a blank field never blocks anything: the analysis simply stays broad for that dimension, and a passaggio with either turn blank is not flagged, which marks it unlocated by you, not absent. Values save as they are entered, belong to the active voice, and can be edited or cleared anytime from the same summary.</p>
 
-							<h4 id="guide-fit-notation">Fit's notation conventions</h4>
+							<h4 id="guide-markup-notation">Fit's notation conventions</h4>
 
 							<p><em>Fit</em>'s analysed score uses a small set of conventions, adapted from Mitton (2020, Appendices B and C). Stem direction is semantic: stems down mark open timbre, stems up mark close timbre. Sage stemless noteheads show the pitch of turning for the sung vowel, carrying their own accidentals in the same colour. A red rounded box marks an fR1/fo crossing. Below the staff, the Cyrillic line is doubled by an IPA line set upright, never italic, so the contrast between bright-a and dark-a stays legible.</p>
 

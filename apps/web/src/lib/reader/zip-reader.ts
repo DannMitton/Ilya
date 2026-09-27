@@ -1,5 +1,5 @@
 /**
- * Minimal ZIP reader for the Fit ingestion path.
+ * Minimal ZIP reader for the score ingestion path.
  *
  * Serves two containers: `.mxl` (compressed MusicXML) and `.mscz`
  * (MuseScore). Written against the ZIP APPNOTE structure directly, on the

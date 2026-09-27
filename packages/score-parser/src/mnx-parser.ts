@@ -1,7 +1,7 @@
 /**
  * MNX score parser.
  *
- * Reads MNX (Music Notation eXchange) input and produces Shane's canonical
+ * Reads MNX (Music Notation eXchange) input and produces the canonical
  * `ParsedScore`. Reads the stable lyric subset of MNX (stable since October
  * 2024 per the w3c-cg/mnx repo) and the core musical structure; unrecognised
  * experimental features are noted via warnings and skipped, never fatal
@@ -744,7 +744,7 @@ export class MnxScoreParser implements ScoreParser {
 		// 8. Provenance. The origin rule follows the spec TODO: a sourcePath
 		//    that names a `.musx` file marks the denigma path; everything
 		//    else is direct MNX. languageHint: Cyrillic anywhere in verse 1
-		//    marks Russian; Shane v1 ships only the Russian engine, so no
+		//    marks Russian; v1 ships only the Russian engine, so no
 		//    other hint is emitted.
 		const fromMusx = typeof mnxInput.sourcePath === 'string' && mnxInput.sourcePath.toLowerCase().endsWith('.musx');
 		const cyrillic = vocalLine.some(

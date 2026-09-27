@@ -8,13 +8,15 @@ Guidance for AI agents working in this repository.
 
 **Ilya is not AI.** It is a rule-based, deterministic engine implementing a specific scholarly framework. Same input, same output, always. No machine learning, no neural model, no guesswork. This distinction is load-bearing for the project's credibility with singers and teachers. Never blur it, and never describe Ilya as AI-powered.
 
-**Fit** (engine codename **Shane**, on branch `Shane`, behind `PUBLIC_INCLUDE_SHANE=true`) is a repertoire-fit voice-analysis pane inside Ilya. Where Ilya answers "how do I pronounce this?", Fit answers "does this piece suit my voice?" Fit operationalises Mitton (2020), *Sung Russian for the Low Male Voice* (D.M.A.).
+**Markup** and **Insights** (on branch `Shane`, behind `PUBLIC_INCLUDE_MARKUP_INSIGHTS=true`) are Ilya's voice-analysis documents. Where Ilya answers "how do I pronounce this?", they answer "does this piece suit my voice?" They operationalise Mitton (2020), *Sung Russian for the Low Male Voice* (D.M.A.).
+
+Developed under the codename Shane; shown on screen as Fit until 2026-09. N.174 (2026-09-27) renamed the code to Text, Markup, and Insights.
 
 ## Layout
 
 A pnpm workspace monorepo, Node 18+, TypeScript, SvelteKit with Svelte 5 runes, tested with vitest.
 
-- `apps/web` (`@ilya/web`): the application. Three destinations (Studio, Learn, Guide); Studio holds three documents (Transcription, Markup, Insights), named in `apps/web/src/lib/destinations.ts`. Fit's code is at `apps/web/src/lib/shane/`.
+- `apps/web` (`@ilya/web`): the application. Three destinations (Studio, Learn, Guide); Studio holds three documents (Text, Markup, Insights), named in `apps/web/src/lib/destinations.ts`. Their code is in six modules under `apps/web/src/lib/`: `reader/`, `score/`, `voice/`, `analysis/`, `markup/`, and `insights/`.
 - `packages/phonology` (`@ilya/phonology`): the GraysonEngine. Russian phonological analysis per Grayson (2012).
 - `packages/dictionary` (`@ilya/dictionary`): dictionary loader, stress lookup, gloss pipeline.
 - `packages/blurb` (`@ilya/blurb`): context-aware educational explanations for phonological processes.
@@ -60,9 +62,9 @@ Check the version marker on line 1 of any reference document before citing it. A
 
 - **Canadian spelling. Oxford comma.**
 - **No em-dashes in user-facing copy.** Use discrete sentences, or colons and commas.
-- **Agentless copy.** The app never speaks as "Shane", and never speaks as an agent at all. "Shane" is an internal engine codename and must never surface to users.
+- **Agentless copy.** The app never speaks as an agent. The retired codename never surfaces to users.
 - **"Sustain", never "held".**
-- The user-facing tab is **"Fit"** in both English and French. Invariant, a proper name like "Ilya", never translated.
+- The documents are shown as **Text**, **Markup**, and **Insights**, in French « Texte », « Annotation », and « Aperçus ».
 - **IPA comes verbatim from the GraysonEngine.** The renderer never synthesizes IPA.
 
 ## Engraving constraints

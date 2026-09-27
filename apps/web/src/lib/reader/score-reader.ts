@@ -1,7 +1,7 @@
 /**
  * ScoreReader: the main-thread facade over the warm score-reader Worker.
  *
- * This is the seam between Shane and the denigma WASM conversion. Everything
+ * This is the seam between the app and the denigma WASM conversion. Everything
  * below the seam, the Worker, the postMessage protocol, the transferable buffer,
  * and the error rebuild, is hidden here, exactly as StubCaptureSession hides the
  * capture machinery behind CaptureSession. A consumer holds a ScoreReader, calls
@@ -9,7 +9,7 @@
  *
  * Provenance:
  * - Facade-owns-Worker (Decision 1, Option A) and component-owned lifecycle
- *   (Decision 2): the Shane root component constructs one ScoreReader on mount
+ *   (Decision 2): the score uploader constructs one ScoreReader on mount
  *   and calls dispose() on unmount. The Worker is warm: it is spawned in the
  *   constructor so the module is loading before the first file is dropped.
  * - Protocol (Decision 3): replies are correlated by a monotonic id through a
@@ -31,7 +31,7 @@ import type { ScoreReaderRequest, ScoreReaderResponse } from './score-reader.wor
 /**
  * Whether the score reader has loaded successfully at least once this page
  * session. Module-level, so it survives facade teardown: when the user leaves
- * the Shane tab and returns, a new facade and Worker are created, but the
+ * the Markup page and returns, a new facade and Worker are created, but the
  * first-load copy ("Preparing the score reader. This will only happen once.")
  * is suppressed, because it did already happen once.
  */

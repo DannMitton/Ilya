@@ -108,7 +108,7 @@ export function buildVoiceProfileSnapshot(
 	// omits any event whose vowel has no fR1, so silence here is honest.
 	//
 	// §B.4 RULED (Dann, 2026-07-15): the same silence extends to a reading the
-	// plausibility guard judged IMPLAUSIBLE, and to nothing else. Fit will not
+	// plausibility guard judged IMPLAUSIBLE, and to nothing else. Markup will not
 	// build acoustic marks on a number the engine has already decided cannot be
 	// that vowel (the motivating class: fR1 ≈ 1063 Hz extracted for a sung [i]).
 	//
@@ -179,7 +179,7 @@ export function buildVoiceProfileSnapshot(
 	// A MEASURED READING ALWAYS WINS. Each channel is filled only where the
 	// loops above left it empty, so a sung [ɨ] is never displaced by a derived
 	// one. `deriveFrom` gates every anchor on a positive f1 and f2 and on the
-	// plausibility guard's verdict, carrying §B.4 inward: Fit will not build a
+	// plausibility guard's verdict, carrying §B.4 inward: the analysis will not build a
 	// derived value on a number the engine has already decided cannot be that
 	// vowel. The derived fR2 is gated as the measured fR2 loop is — the derived
 	// reading carries no f2Quality and no plausibility, both of which mean "not
@@ -242,7 +242,7 @@ export function buildVoiceProfileSnapshot(
 
 /**
  * The broad-analysis legend text (§B.5): the print-native disclosure shown
- * in the Fit page footer when acoustic marks render but a characteristics
+ * in the Markup page footer when acoustic marks render but a characteristics
  * dimension was left blank. Composed from localized parts so EN and FR share
  * one structure; the two-item join is language-specific (EN "and", FR "ni",
  * the idiomatic "sans X ni Y"). Returns '' when nothing is broad, so an empty

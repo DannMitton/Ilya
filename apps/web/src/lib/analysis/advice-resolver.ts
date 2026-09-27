@@ -1,5 +1,5 @@
 /**
- * The advice resolver: Fit's prescriptive layer (framework §4), as a PURE
+ * The advice resolver: the analysis's prescriptive layer (framework §4), as a PURE
  * POST-PASS over an already-analysed score.
  *
  * The pure score-parser overlay engine forecasts what the acoustics DO (open /

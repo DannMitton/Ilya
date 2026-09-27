@@ -1,5 +1,5 @@
 /**
- * Tests for the Fit provenance legend (item 1.6).
+ * Tests for the Markup provenance legend (item 1.6).
  *
  * The rule these obey, Dann's standing condition: no acceptance test may take
  * its expected value from the mechanism under test. So every expectation below
@@ -37,7 +37,7 @@ function reading(
 
 const profile = (m: Partial<Record<Vowel, CalibratedFormant>>) => m;
 
-describe('the Fit legend names only what the singer actually has', () => {
+describe('the Markup legend names only what the singer actually has', () => {
 	it('an empty profile earns no legend at all', () => {
 		expect(markupLegendTypes({})).toEqual([]);
 		expect(buildMarkupLegend({}, 'en')).toEqual([]);
@@ -121,7 +121,7 @@ describe('the built items carry what the footer needs', () => {
 		ɨ: reading('estimated')
 	});
 
-	it('every item is textOnly, because Fit states are words on the page and not glyphs', () => {
+	it('every item is textOnly, because Markup states are words on the page and not glyphs', () => {
 		for (const item of buildMarkupLegend(full, 'en')) {
 			expect(item.textOnly).toBe(true);
 			expect(item.icon).toBe('');
@@ -190,9 +190,9 @@ describe('the withheld-syllable entry (N.10b)', () => {
 		expect(built.slice(0, -1)).toEqual(buildMarkupLegend(formants, 'en'));
 	});
 
-	it('is the one Fit entry that draws a circle, in both languages', () => {
+	it('is the one Markup entry that draws a circle, in both languages', () => {
 		// Dann's ruling of 8 August: the page mark is a drawn sigla, so the
-		// legend shows the sigla. Every other Fit entry is a word in the page's
+		// legend shows the sigla. Every other Markup entry is a word in the page's
 		// prose and carries no circle, which the tests above assert.
 		for (const language of ['en', 'fr'] as const) {
 			const item = buildMarkupLegend({}, language, { withheldSyllables: true })[0];

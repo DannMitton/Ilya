@@ -1,5 +1,5 @@
 /**
- * Shane pacifier: WCAG contrast verification.
+ * The calibration pacifier: WCAG contrast verification.
  *
  * Pure functions for computing WCAG 2.1 contrast ratios, plus the
  * registry of contrast obligations for the pacifier's vowel-circle states.
@@ -97,7 +97,7 @@ export function contrastRatio(a: RGB, b: RGB): number {
 }
 
 // ---------------------------------------------------------------------------
-// Shane palette (spec v6 §13 + Ilya tokens referenced by name)
+// Pacifier palette (spec v6 §13 + Ilya tokens referenced by name)
 //
 // These values mirror Ilya's Calm Authority palette, and `app.css` is
 // authoritative for every one of them that it declares. That mirroring is no
@@ -112,7 +112,7 @@ export function contrastRatio(a: RGB, b: RGB): number {
 // cf7bd6350fed1945c9aba775f957d618, read 2026-07-30: `arc-green`,
 // `signal-red`, `prep-amber`, `surround-voice`, and `light-lavender` are all
 // declared in its `:root` block, under a header reading "Shane pacifier
-// (fourth tab)". The sentence was the source R20's original exemption list
+// (fourth tab)" (retitled "Calibration pacifier" by N.174). The sentence was the source R20's original exemption list
 // was written from, and it exempted from the drift check the five tokens most
 // likely to drift. This note asserts present falsity only and makes no claim
 // about whether the sentence was true when it was written. See Fable's

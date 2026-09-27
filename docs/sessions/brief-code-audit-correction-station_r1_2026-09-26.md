@@ -26,7 +26,7 @@ Read in the `audit` clone at `1213fd1`, 2026-09-26:
   (`audit-2026-09-26/page-anatomy.md`) calls lines about 639 to 1,502
   the **Correction Station** (cursor, undo and redo, pitch, duration, rest, tie,
   and tuplet editing) and ranks it the lowest-risk seam, because its hard logic
-  already sits in `$lib/shane/entry.ts`, `$lib/shane/correction.ts`, and
+  already sits in `$lib/score/entry.ts`, `$lib/score/correction.ts`, and
   `CorrectionSurface.svelte`.
 
 ## 3. Measure before you change anything
@@ -58,7 +58,7 @@ Read in the `audit` clone at `1213fd1`, 2026-09-26:
 - Do not edit any file under an `__approved__/` directory, and never run
   `vitest -u`.
 - Do not change `VocalLineEvent` or anything in
-  `apps/web/src/lib/shane/reconciliation/` (`../memory/CONTRACT.md` §6).
+  `apps/web/src/lib/score/reconciliation/` (`../memory/CONTRACT.md` §6).
 - No git command that writes (`../memory/CONTRACT.md` §5).
 - **Displaces:** nothing scheduled. Feature work continues beside the audit by
   Dann's ruling of 2026-09-26 00:31. While a slice is open, no feature work
