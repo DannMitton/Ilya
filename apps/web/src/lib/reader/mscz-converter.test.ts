@@ -16,8 +16,8 @@ import {
 	type WebMscoreModuleLike,
 	type WebMscoreScoreLike,
 } from './mscz-converter';
-import { ZipReadError } from '../ingestion/zip-reader';
-import { buildZip, utf8 } from '../ingestion/zip-fixture';
+import { ZipReadError } from './zip-reader';
+import { buildZip, utf8 } from './zip-fixture';
 
 /** A minimal, genuinely readable ZIP so the container pre-check passes. */
 const validContainer = (): Promise<Uint8Array> =>

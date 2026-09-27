@@ -88,11 +88,16 @@ Depends on nothing else in the workspace.
   page and storage.
 - `src/lib/shane/` is Fit. Inside it:
   - `ingestion/` detects a score's format and routes it to a parser.
-  - `engine/` holds the Web Workers that read a score from a PDF or a
-    photograph, and the reader's error tiers.
+  - `engine/` holds `notation-fonts.ts` until D.2.6.
   - `pairings.ts` joins the text's words to the score's notes, and
     `vowel-resolver.ts` asks the GraysonEngine which vowel is sung.
   - `Loupe.svelte` and `loupe.ts` are the magnified editor for one measure.
+- `src/lib/reader/` reads a score file, moved out of `shane/` by N.174 D.2.5,
+  flat, with `vendor/` for the MuseScore converter's glue. `score-reader.ts`
+  and its Worker convert Finale `.musx`, `mscz-converter.ts` converts
+  MuseScore, `page-reader.ts` and its Worker read a PDF or a photograph
+  (`page-pdf.ts`, `page-image.ts`, `staff-detect.ts`), `zip-reader.ts` opens
+  zipped files, and `errors.ts` holds the reader's error tiers.
 - `src/lib/voice/` is the singer's voice, moved out of `shane/` by N.174
   D.2.4. `CalibrationWizard.svelte` is the calibration wizard ("Your
   Resonances"), `profileStore.ts` keeps the saved voices (still under the

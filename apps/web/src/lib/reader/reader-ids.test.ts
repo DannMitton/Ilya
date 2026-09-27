@@ -23,9 +23,9 @@ import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 /** The canonical reader. `apps/web/static/reader/` is a generated copy of it. */
-const SOURCE = new URL('../../../../../../tools/e16-harness/reader/run_page2.py', import.meta.url);
-const ENVELOPE = new URL('../../../../../../tools/e16-harness/reader/envelope.py', import.meta.url);
-const SERVED = new URL('../../../../static/reader/run_page2.py', import.meta.url);
+const SOURCE = new URL('../../../../../tools/e16-harness/reader/run_page2.py', import.meta.url);
+const ENVELOPE = new URL('../../../../../tools/e16-harness/reader/envelope.py', import.meta.url);
+const SERVED = new URL('../../../static/reader/run_page2.py', import.meta.url);
 
 const runPage2 = readFileSync(SOURCE, 'utf8');
 const envelope = readFileSync(ENVELOPE, 'utf8');

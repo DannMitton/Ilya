@@ -43,7 +43,7 @@
 	this cognitive burden from the user and lay it on Ilya instead" and "Why
 	doesn't Ilya just process whatever it can without advertising that it is
 	changing tactics mid-process?" `take()` now runs `hasStaves`
-	(`engine/staff-detect.ts`) on the page before anything else: staves found,
+	(`reader/staff-detect.ts`) on the page before anything else: staves found,
 	it tries the score, exactly the path this component always took; the score
 	read that follows yields no sung line, or no staves were found at all, it
 	tries the poem instead, silently, the same way `handleScoreAnswer` and
@@ -59,11 +59,11 @@
 	import { onDestroy, onMount, untrack } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import type { LoaderState } from '$lib/loader';
-	import { WorkerScoreReader } from './engine/score-reader';
-	import { WebmscoreMsczConverter } from './engine/mscz-converter';
-	import { WorkerPageReader, type ClefKeyProbe } from './engine/page-reader';
-	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from './engine/page-image';
-	import { hasStaves } from './engine/staff-detect';
+	import { WorkerScoreReader } from '$lib/reader/score-reader';
+	import { WebmscoreMsczConverter } from '$lib/reader/mscz-converter';
+	import { WorkerPageReader, type ClefKeyProbe } from '$lib/reader/page-reader';
+	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from '$lib/reader/page-image';
+	import { hasStaves } from '$lib/reader/staff-detect';
 	import {
 		ingestScoreFile,
 		fidelityBanner,
@@ -79,7 +79,7 @@
 	import { dictionaryGuardMode, isKnownWordForGuard } from './ingestion/ocr-guard';
 	import { isKnownWord } from '$lib/pipeline';
 	import type { EngravingAnswers } from './ingestion/recognized-to-musicxml';
-	import type { ReadReport } from './ingestion/recognized';
+	import type { ReadReport } from '$lib/reader/recognized';
 	import type { PageProvenance } from '$lib/library/types';
 
 	interface Props {
@@ -245,7 +245,7 @@
 	 * N.146: A PDF OR A PICTURE NO LONGER ASKS. Both are rasterized to their
 	 * first page's ink here (the same ink `probeFile` and the eventual read
 	 * would rasterize again; named, not cached, per `rasterizeFirstPage`'s own
-	 * comment below) and `hasStaves` (`engine/staff-detect.ts`) answers "does
+	 * comment below) and `hasStaves` (`reader/staff-detect.ts`) answers "does
 	 * this page show staves" from it. Staves found, this hands off to the
 	 * score route this component always took (`handleFile`, which still asks
 	 * the picture's own clef-and-key question); no staves, straight to the
@@ -355,7 +355,7 @@
 				return { errorMessage: await undecodablePictureMessage(file) };
 			}
 		}
-		const { rasterizePdf, PdfUnreadableError, PdfJbig2UndecodedError } = await import('./engine/page-pdf');
+		const { rasterizePdf, PdfUnreadableError, PdfJbig2UndecodedError } = await import('$lib/reader/page-pdf');
 		try {
 			const pages = await rasterizePdf(file, 1);
 			if (pages.length === 0) throw new PdfUnreadableError('this PDF has no pages');
@@ -389,7 +389,7 @@
 		ui = { kind: 'busy', label: T('intake.pdf.reading') };
 		let text: string;
 		try {
-			const { extractPdfText } = await import('./engine/page-pdf');
+			const { extractPdfText } = await import('$lib/reader/page-pdf');
 			text = await extractPdfText(file);
 		} catch (err) {
 			console.error('[ScoreUploader] the PDF text could not be read:', err);
@@ -633,7 +633,7 @@
 				// Dynamic import: pdf.js is 644 KB gzipped and nobody who has not
 				// dropped a PDF ever pays for it (N.26's law, and the same shape as
 				// denigma and webmscore above).
-				const { rasterizePdf } = await import('./engine/page-pdf');
+				const { rasterizePdf } = await import('$lib/reader/page-pdf');
 				inks = await rasterizePdf(file);
 			} else {
 				inks = [await toGreyscalePng(file)];
@@ -704,7 +704,7 @@
 			const kind = await readableKind(file);
 			let ink: ArrayBuffer;
 			if (kind === 'pdf') {
-				const { rasterizePdf } = await import('./engine/page-pdf');
+				const { rasterizePdf } = await import('$lib/reader/page-pdf');
 				const pages = await rasterizePdf(file, 1);
 				if (pages.length === 0) return null;
 				ink = pages[0];

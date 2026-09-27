@@ -2,7 +2,7 @@
  * zip-writer.ts — a byte-honest ZIP writer, promoted to app code.
  *
  * N.67 step 5. Design §5: the binder is a ZIP, and the tree already owned a
- * real writer, `shane/ingestion/zip-fixture.ts`, built for the ingestion test
+ * real writer, `reader/zip-fixture.ts`, built for the ingestion test
  * suites. Real CRC-32, real local headers, real central directory, real EOCD.
  * **So this adds no dependency**, which matters here more than elsewhere: the
  * lockfile cannot be regenerated from the coding sandbox and CI installs

@@ -16,7 +16,7 @@
  * read two things while one of them is a default.
  */
 
-import type { ClefKeyProbe } from '../engine/page-reader';
+import type { ClefKeyProbe } from '$lib/reader/page-reader';
 
 /** The two controls' values: an index into CLEF_CHOICES, and a fifths count. */
 export interface ClefKeyPrefill {

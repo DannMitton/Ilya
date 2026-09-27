@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { MusicXmlScoreParser, type ParsedScore, type ScoreParser } from '@ilya/score-parser';
 import { parseXml } from '$lib/shane/ingestion/mini-dom';
 import { ingestScoreFile, type IngestDeps } from '$lib/shane/ingestion/ingest';
-import type { ScoreReader } from '$lib/shane/engine/score-reader';
+import type { ScoreReader } from '$lib/reader/score-reader';
 import { buildUnderlayResolvers, collectScoreWords } from '$lib/shane/vowel-resolver';
 import { scoreMetrics } from './score-metrics';
 

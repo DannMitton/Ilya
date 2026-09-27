@@ -8,7 +8,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { prefillFrom } from './clef-key-prompt';
-import type { ClefKeyProbe } from '../engine/page-reader';
+import type { ClefKeyProbe } from '$lib/reader/page-reader';
 
 const probe = (over: Partial<ClefKeyProbe>): ClefKeyProbe => ({
 	glyph: 'gClef',

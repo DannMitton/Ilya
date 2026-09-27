@@ -40,7 +40,7 @@ import type {
 	RecognizedMeasure,
 	RecognizedNote,
 	RecognizedOutput,
-} from './recognized';
+} from '$lib/reader/recognized';
 
 /** The singer's answers, which the reader cannot detect (Ruling A). */
 export interface EngravingAnswers {

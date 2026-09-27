@@ -30,7 +30,7 @@
  * call. That is the whole reason no Verovio WASM ships.
  */
 
-import type { PageReadConfig, ReadReport, RecognizedOutput } from '../ingestion/recognized';
+import type { PageReadConfig, ReadReport, RecognizedOutput } from './recognized';
 
 export type { PageReadConfig, ReadReport, RecognizedOutput };
 

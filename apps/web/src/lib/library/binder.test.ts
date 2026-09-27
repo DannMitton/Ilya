@@ -15,7 +15,7 @@ import {
 	BINDER_FORMAT,
 	MANIFEST_NAME,
 } from './binder';
-import { listZipEntries, readZipEntry } from '$lib/shane/ingestion/zip-reader';
+import { listZipEntries, readZipEntry } from '$lib/reader/zip-reader';
 import { buildZip, utf8 } from './zip-writer';
 import { emptySongRecord, type SongRecord } from './types';
 import type { SourceBytes } from './driver';

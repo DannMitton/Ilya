@@ -16,9 +16,9 @@ import {
 	type IngestDeps,
 	type IngestOutcome,
 } from './ingest';
-import { ZipReadError } from './zip-reader';
-import { buildZip, utf8 } from './zip-fixture';
-import type { ScoreReader } from '../engine/score-reader';
+import { ZipReadError } from '$lib/reader/zip-reader';
+import { buildZip, utf8 } from '$lib/reader/zip-fixture';
+import type { ScoreReader } from '$lib/reader/score-reader';
 import type { ParseError, ParseResult, ScoreInput, ScoreParser } from '@ilya/score-parser';
 
 // ── Test doubles ─────────────────────────────────────────────────

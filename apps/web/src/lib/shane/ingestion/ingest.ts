@@ -33,16 +33,16 @@ import {
 	type ParseResult,
 	type ScoreParser,
 } from '@ilya/score-parser';
-import type { ScoreReader } from '../engine/score-reader';
-import type { DenigmaError, ResourceError } from '../engine/errors';
+import type { ScoreReader } from '$lib/reader/score-reader';
+import type { DenigmaError, ResourceError } from '$lib/reader/errors';
 import {
 	detectScoreFormat,
 	decodeScoreText,
 	type DetectionFailure,
 } from './format-detection';
 import { recognizedToMusicXml, type EngravingAnswers } from './recognized-to-musicxml';
-import type { ReadReport, RecognizedOutput } from './recognized';
-import { listZipEntries, readZipEntry, ZipReadError, type ZipFailureKind } from './zip-reader';
+import type { ReadReport, RecognizedOutput } from '$lib/reader/recognized';
+import { listZipEntries, readZipEntry, ZipReadError, type ZipFailureKind } from '$lib/reader/zip-reader';
 
 // ── Provenance (drives the fidelity surface, Round 9 Item 1) ─────
 

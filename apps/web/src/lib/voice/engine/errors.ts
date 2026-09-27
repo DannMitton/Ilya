@@ -1,11 +1,11 @@
 /**
- * Capture's error tier, split out of `shane/engine/errors.ts` by N.174 D.2.4.
+ * Capture's error tier, split out of the reader's `errors.ts` by N.174 D.2.4.
  *
  * The capture layer raises failures the reader's vocabulary cannot name (a
  * microphone permission denial, say), so capture carries its own typed union,
  * discriminated by `code`. Its codes stay globally distinct from the reader's
- * two tiers (`DenigmaError` and `ResourceError`, still in
- * `shane/engine/errors.ts`), so a plain `code` check still tells them apart.
+ * two tiers (`DenigmaError` and `ResourceError`, in `reader/errors.ts`), so a
+ * plain `code` check still tells them apart.
  *
  * Provenance: the two-tier origin (DenigmaError | CaptureError) is Kimi's
  * Phase 3a review §2.4 (2026-06-09), which amended engine spec v1 §9 and §12.

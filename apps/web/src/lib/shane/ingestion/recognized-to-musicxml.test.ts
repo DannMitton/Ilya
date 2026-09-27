@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 import { MusicXmlScoreParser } from '@ilya/score-parser';
 import { recognizedToMusicXml } from './recognized-to-musicxml';
 import { applyCorrections, orphanIds } from '../correction';
-import type { RecognizedOutput } from './recognized';
+import type { RecognizedOutput } from '$lib/reader/recognized';
 import captured from './fixtures/recognized-mussorgsky-01-p1.json';
 import { parseXml } from './mini-dom';
 

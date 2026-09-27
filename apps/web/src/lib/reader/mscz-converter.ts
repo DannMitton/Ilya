@@ -48,7 +48,7 @@
  *   code alone.
  */
 
-import { listZipEntries } from '../ingestion/zip-reader';
+import { listZipEntries } from './zip-reader';
 import type { DenigmaError, ResourceError } from './errors';
 
 /** Diagnostic-only generic lines; user-facing copy is keyed off the codes. */
