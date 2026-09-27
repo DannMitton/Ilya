@@ -47,6 +47,19 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### CLOSE OF THE JVOICE THREAD, 2026-09-26 about 23:00. For the parallel desk (the audit). Does NOT supersede the block below it; THE ONE THING there stands.
+>
+> **Shipped `95f41c2` 22:52, all five gates at baseline, WALKED by Dann on localhost 22:44** ("Success!"): reconstituted я between two soft consonants now restores to [a] (`apps/web/src/lib/reconstitution.ts`, new `reconstitution.test.ts`, 7 tests), ruled by Dann 21:39 from Grayson pp. 125 and 128. The same commit carries Code's Playwright repair (`core-loop.test.ts`, 1440x900; 22 passed, 1 skipped, 1 failed = `OWED.md` phone-scan rule 5a). Gate 4 moved 1467 to 1474 by the desk before the run (backup `~/Downloads/ilya-ship.sh.bak-1467-2026-09-26`); the ship's pass confirms 1474. **This commit also swept in the audit thread's uncommitted `docs/memory` edits and every untracked `docs/sessions` file of 2026-09-26**, at Dann's `git add`.
+>
+> **For the audit, from this thread:**
+> - `packages/phonology/src/engine.ts:35` `reconstitution` is a dead engine-level copy; the live feature is `apps/web/src/lib/reconstitution.ts` (`ENVIRONMENT.md` §`RECONSTITUTION LIVES IN THE WEB APP`). Dead-code candidate.
+> - Three engine defects from Code's report, in `OWED.md` §"New from Code's report of 2026-09-26 evening": a second ё sends Cyrillic out as IPA (32 words); reflexive -ся without т comes out soft; -ться/-тся carry no vowel entry. Each needs a ruling from Dann first. Code's four questions (rule 5a; reflexive [ʌ]; unstressed second ё; hard -ся) are unasked.
+> - Two INBOX lines of 21:40: offering [a], [e], [ɪ] for pretonic я (desk idea, not ruled); the interpalatal я line is now RULED and built.
+>
+> **Insights research, N.168, this thread (all in `~/Documents/Voice Pedagogy Library/Insights Research/`):** JVoice harvest (1,038 records, `jvoice-index-results_2026-09-25.csv`), screen (`jvoice-screen_r1_2026-09-25.md`), 27 picks downloaded and filed; extraction `_extraction/claims_jvoice-A` and `-B_2026-09-26.csv` (118 rows, pages verified), plus `claims_yanushevskaya-2015_2026-09-26.csv`; research report `Sung Russian vowels and u at pitch.md`; memo `_synthesis/memo-desk-pretonic-ya-and-sung-russian_r1_2026-09-26.md`. **Downloaded, NOT extracted:** Echternach 2014, Hollien 2000, Deme 2017. **Not yet on the Mac:** Konoshenko 2020 (open access). **Next in N.168:** composing (plan step 5), Fable's work.
+>
+> **Desk-made files Dann may delete:** `~/Downloads/_desk-2026-09-26/`, the 29 JVoice originals in `~/Downloads` (`PIIS…pdf` and the renamed copies, including two "(1)" duplicates), `~/Downloads/jvoice-index-results_2026-09-25.csv`, and `Insights Research/_to_delete/`.
+
 > ### READ THIS FIRST. Written 2026-09-25 about 15:05, mid-session, while Code builds the first slice and Dann is at lunch. SUPERSEDES the 13:10 block, now in `../sessions/LOG.md`, verbatim.
 >
 > **THE ONE THING: N.168's first slice is with Code**, from `../sessions/brief-code-n168-first-slice_r2_2026-09-25.md` (pasted about 14:55). When its memo lands: check it against the brief and the tree, then ship with Dann (`git add` any new files first; update `ilya-ship.sh` gate baselines if the memo says they moved), then walk Kabalevsky T01's Insights on the alias.

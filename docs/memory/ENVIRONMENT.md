@@ -224,6 +224,8 @@ next session the same hour it cost the last one.
 | Canadian French punctuation | `TYPOGRAPHY IN THIS TREE` |
 | the French form of a name | `FRENCH NAME RESEARCH` |
 | the BnF authority route | `data.bnf.fr` |
+| you want a PDF from Elsevier (jvoice.org) or any subscription site | `SUBSCRIPTION PDFS ARE DANN'S CLICKS` |
+| an extraction agent's claims file cites pages | `EXTRACTION AGENTS MISCITE PAGES` |
 
 ### The desk's own tools and limits
 
@@ -245,6 +247,8 @@ next session the same hour it cost the last one.
 | about to read a long source (a dissertation, a book, a 1,500-line file) | `A LONG READ DIES AT THE COMPACTION` |
 | a file Dann names is not under Desktop or Downloads | `THE BRIDGE CARRIES A THIRD FOLDER` |
 | a research session needs his sources, or a subagent needs his files | `A FOURTH FOLDER, AND SUBAGENTS ON THE BRIDGE` |
+| reading more than about 1,000 characters out of a Chrome tab | `A CHROME TAB READS 1,000 CHARACTERS AT A TIME` |
+| you are about to say Ilya lacks reconstitution, or to wire `engine.ts:35` | `RECONSTITUTION LIVES IN THE WEB APP` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -4299,3 +4303,19 @@ run them all:
   2026-09-26.** `device_commit_files` reported the first as written, and the old
   md5 stayed. The second send, with `force: true`, landed. Check the md5 on the
   Mac after every overwrite.
+
+## SUBSCRIPTION PDFS ARE DANN'S CLICKS. 2026-09-26
+
+Elsevier's terms (jvoice.org) forbid automated downloading. On 2026-09-26 the desk's own safety controls stopped a scripted fetch after 4 of 27 PDFs, and disguising the pace is not allowed. **The path that works:** the desk opens each article's `/fulltext` page in Dann's Chrome with Claude in Chrome; Dann clicks Download PDF, then the viewer's download arrow; the file lands in `~/Downloads` as `PIIS0892199…pdf` (the article's PII with punctuation removed); the desk renames it to the library pattern and copies it to `Insights Research/` and the alphabetical folder. 26 articles took about 8 minutes. Chrome's Automatic downloads for www.jvoice.org is set to Allow (Dann). **If Download does nothing**, check `~/Downloads` for new `PIIS` files; a reboot cleared it once. jvoice.org search results show title, authors, issue, and PII, never an abstract or DOI.
+
+## A CHROME TAB READS 1,000 CHARACTERS AT A TIME. 2026-09-26
+
+`javascript_tool` output is cut at about 1,000 characters, and anything resembling a cookie or query string is blanked. To get a large result out of a tab (1,038 search records, 360 KB), build it in the page and save it as a Blob download (one permission ask), not in 360 reads. Keep accumulated state in `sessionStorage`; it survives navigation within the site.
+
+## EXTRACTION AGENTS MISCITE PAGES. 2026-09-26
+
+Two Sonnet extraction agents (JVoice batches A and B) wrote 118 rows; a verification agent found **57 page citations wrong**, mostly `pdf p.N` where the journal prints its own page, some a few pages off. The claims were right. **After any extraction, spot-check two rows against the PDF; if one fails, run a page-verification agent over every row** (brief shape: locate each claim's content page by page with `pdftotext -f N -l N`, correct only the `page` column, back up first). About 330k tokens for 118 rows.
+
+## RECONSTITUTION LIVES IN THE WEB APP. 2026-09-26
+
+Vowel reconstitution (Grayson Ch. 3 §8) is built at `apps/web/src/lib/reconstitution.ts`, called from `pipeline.ts` for every word and shown through the global switch and Spot reconstitution. **`packages/phonology/src/engine.ts:35` carries an unused `reconstitution` preference**, and `packages/phonology/tests/notation-edge-cases.test.ts` says "not wired yet". Both refer to the dead engine copy. The desk called the feature unfinished on that evidence and was wrong. Do not wire the engine flag; a candidate for the audit's dead-code list.
