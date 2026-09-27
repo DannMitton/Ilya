@@ -835,3 +835,24 @@ Latin transcribed with [w]. Grayson names the volume in his literature survey
 and never mentions the Seminarian or [w]. When it arrives: a small table of
 those words with Richter's IPA, and [w] as the one documented exception to the
 inventory in `ARCHITECTURE.md` and `invariants.test.ts`.
+
+## The word explanations' citations, checked against Grayson (2026-09-27)
+
+A Sonnet agent checked all 209 explanations against Grayson
+(`../sessions/audit-2026-09-26/memo-citations-sonnet.md`, `citations.csv`); the
+desk re-verified each correction's quotation on its page by machine (36 of 53
+matched directly; the rest share a page with a matched row) and by hand for
+p. 81, 140, 144, and 111. **152 entries now cite the right page** (shipped in the
+commit after `4bebeac`). The agent called the genitive rule not found; the desk
+found it on p. 324 ("although -ого and -его are spelled with a -г-, the -г- is
+read as /v/").
+
+**Owed by Dann, two content questions:**
+
+- **Post-stress ⟨а⟩.** The explanation says a vowel right after the stressed
+  syllable "always reduces". Grayson p. 111: "The letter -а- in the immediate
+  post-stressed syllable, remains sung as /ɑ/." What the engine does there, and
+  whether ⟨о⟩ is the same, is NOT ESTABLISHED.
+- **Silent ⟨з⟩ and ⟨с⟩** (`processes/silent:з`, `silent:с`, cited pp. 242–246).
+  Grayson's section on silent cluster letters names only т, д, л, and в. No
+  source found.

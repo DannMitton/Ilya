@@ -40,6 +40,7 @@ next session the same hour it cost the last one.
 | spawning a Fable or Sonnet agent while Dann talks | `AN AGENT BLOCKS THE CONVERSATION` |
 | running the gates or Playwright in the cloud, or reading the e2e suite | `THE GATES RUN IN A CLOUD CLONE` |
 | changing what Ilya claims about Russian phonology, anywhere | `READ GRAYSON BEFORE YOU CORRECT A CLAIM` |
+| a test passes in one place and fails in another, or a pitch sits exactly on a threshold | `A SEMITONE IS NOT ALWAYS 100 CENTS` |
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
 | a subagent quotes a source, or a summary does | `A SUMMARY'S QUOTATION IS NOT A QUOTATION` |
 | a tool call comes back "rejected" just as Dann sends a message | `A REJECTION MAY ONLY MEAN HE TYPED` |
@@ -4334,4 +4335,16 @@ be reversed.
 disagree about phonology, open the cited Grayson page first (the PDF is in
 `~/Downloads`; logical page = physical page minus 16; read IPA from the page image,
 never the text layer). Only then decide which part is wrong.
+
+## A SEMITONE IS NOT ALWAYS 100 CENTS. 2026-09-27
+
+`centsBetween(D4, E♭4)` returns 99.99999999999972 in the Linux sandbox and a hair
+over 100 on Dann's Mac. The watch list compared that against a 100-cent window
+with `<=`, so the same score gave different Insights on different machines, and
+`insights.test.ts` passed on one and failed on the other. The desk first "fixed"
+the test instead of the code. **Any comparison of a computed pitch distance
+against a whole-number threshold needs a float guard**, as
+`overlay-engine.ts` (`RANGE_EPSILON_CENTS`) and now `watchlist.ts`
+(`PASSAGGIO_FLOAT_GUARD_CENTS`) have. **Not yet checked:** the crossing tolerance
+(`CROSSING_TOLERANCE_CENTS`, `overlay-engine.ts:173`, `conditions.ts:154`).
 
