@@ -883,3 +883,14 @@ than deleting them.
 - **Save on open (Code, `754b0e0`):** two more places may save on open, the seated-text field and the pairings for a song with a score but no placed syllables. Read from code, not measured. Fix 1 has no test because `keepSurvivingGlosses` lives in `+page.svelte`; Code proposes moving it to a pure function in `apps/web/src/lib/`, a natural N.174 slice.
 - **KVP2 p. 141:** the punctuation follows the desk's reading of `IMG_4850.HEIC`; Code did not read the page image.
 
+## Found in N.174 (2026-09-27). None blocking
+
+- **The build gate does not remove Markup and Insights.** A production build with the gate closed still carries their code, and so did the build before N.174 D.1 (desk build, 2026-09-27). The live site ships with the gate open (`apps/web/.env`), so nothing a singer sees is affected. Whether the gate is still wanted at all is Dann's.
+- **The N.168 frequency run's committed output is stale.** Regenerating `tools/n168-frequency-run/out/comments-oracle.md` adds nine comment rows and a longer Kabalevsky T01 list, and did so before N.174 too (Code, D.2.2, with a control run on the base commit). Line 3 still names `$lib/shane/comments.ts`. One command regenerates it.
+- **A reopened song showed one extra final syllable.** In D.2.5 one stored song, reopened, drew a final «я» that a fresh upload of the same fixture does not; the base code does the same, so the move did not cause it. Not investigated (`../sessions/memo-code-n174-d25_r1_2026-09-27.md`).
+- **`OPEN.md` line 458 (at D.2.3) says `score-metrics.ts` records the diction fold as waiting on a ruling;** the file's header says the fold is applied upstream. Only the path was changed.
+- **`PRODUCT.md`'s file table listed `SyllableStation.svelte`, which does not exist;** Code dropped it in D.2.6. Where it went is not established.
+- **A Guide link opened from Text does not open the Guide.** Old `#guide-fit-*` links now land on the renamed sections, but only when the Guide is the stored destination; this was true before N.174 too (Code, D.3).
+- **Two ambiguous "Fit" mentions left as they are** (step E): "her Fit note", `apps/web/src/lib/score/vowel-resolver.ts:417`, and "paraphrase-then-*Fit:*", `AGENTS.md:57`. Each may be the title of a record rather than the old name.
+- **The stray fixture** `sunless-01-engraved.musicxml.bak-before-ja-2026-09-20` now sits in `apps/web/src/lib/score/ingestion/fixtures/`. Deleting it stays Dann's, under "Dead code found by the audit".
+- **Process, owned:** Code used `git stash` and `git checkout` in D.2.2 (CONTRACT §5; nothing was lost). Every later brief banned them by name and Code saved the rule to its own memory. In D.2.6 Code also changed a path inside one dated line of `INBOX.md`, which is append-only; the meaning did not change.

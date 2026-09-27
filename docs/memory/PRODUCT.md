@@ -454,6 +454,10 @@ loupe.
 `Russian-o` / `o russe`. `cardinal-u` / `u cardinal`. **The French is LOWERCASE.**
 Do not rename a vowel.
 
+**The code names the three documents as the singer reads them: Text, Markup, and Insights.** Numbered by Dann as N.174, 2026-09-26 23:14 (*"the three names Text Markup and Insights could feature in the code correction"*); built and walked 2026-09-27. "Shane" survives only as history: the git branch, the records, and one line in `ARCHITECTURE.md`. The module split (`score`, `voice`, `reader`, `analysis`, `markup`, `insights`) was the desk's, on his *"your choice"*, with `analysis` proposed by Fable.
+
+**"Insights forecasts, it does not declare."** Ruled by Dann 2026-09-27 in Code's N.174 D.3 thread, replacing "Fit forecasts, it does not declare" where the code quotes the principle. The Guide's shown heading still says Fit and is N.154's.
+
 ---
 
 ## Where the code lives

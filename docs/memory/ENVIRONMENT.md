@@ -35,6 +35,9 @@ next session the same hour it cost the last one.
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
 | a brief lets Code write with git, or Code ran `git stash` | `CODE RAN git stash` |
+| a change must not alter the page, and you want proof | `SCREENSHOT COMPARE` |
+| Code wants the old code running beside the dev server | `A SECOND DEV SERVER REWRITES THE VITE CACHE` |
+| a grep over `apps/web/src` misses a file you know imports something | `GREP CALLS binder.ts BINARY` |
 | git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
 | converting a journal PDF to text for an agent | `PDFTOTEXT WITHOUT -layout FOR TWO COLUMNS` |
 | spawning a Fable or Sonnet agent while Dann talks | `AN AGENT BLOCKS THE CONVERSATION` |
@@ -4360,3 +4363,24 @@ against a whole-number threshold needs a float guard**, as
 **A second instance, 2026-09-27: the loupe's 44 px tap floor.** `deriveMinGap`, the loupe's warning, and the phone rules compared caret separations to 44 exactly, so a computed 43.99999 (printed `44.00`) could fail; all now share `TAP_FLOOR_EPS_PX` (`loupe-render.ts`), 0.001 px.
 A 0.01 px guard was tried first and moved m. 7's derived spacing (69.65 to 69.33, drawn worst 43.99): **size a float guard to float noise, never to the print precision.**
 
+## CODE RAN git stash. 2026-09-27
+
+The index row for this heading existed with no section under it until N.174's close. In N.174 D.2.2, Code took its "before" reading by stashing the slice and restoring it with `git checkout`: both are git writes that CONTRACT §5 forbids. Nothing was lost. **Every brief now says: take the "before" reading first, before any edit; to read old code, use `git show <sha>:<path>` or `git archive <sha> | tar -x -C <scratch>`, which only read.** Name `stash`, `checkout`, `restore`, and `worktree` in the brief's "Do not" list; a general "no git writes" was not enough.
+
+## SCREENSHOT COMPARE. 2026-09-27
+
+Built for N.174 C.2. `../sessions/n174-c2/`: `capture.test.ts` (Text, Markup, Insights, Learn, Guide; desk 1440 x 900 and phone 390 x 844 at 3x; English and French; top, middle, and end of each scroll: 60 captures) and `voiced.test.ts` (Markup and Insights with a desk-built test voice seeded into `shane.profiles.v2`: 24 captures). Runs in the desk's cloud clone with `/opt/pw-browsers/chromium`, about 2.7 minutes for all 84.
+- **Compare only captures from the same container.** Fonts and Chromium differ between machines. Take the baseline and the slice in one container; if the container is new, recapture the baseline from the commit before the slice.
+- **The fixture is a copy outside the tree** (md5 `8341a301d78abcba62098cbcee764b62`), so moving the fixture cannot change the input.
+- **Hide scrollbars** (the harness injects the CSS); a visible thumb differed by one pixel run to run.
+- **Known noise:** pixel (1423, 24) on the voiced Markup mid-scroll captures wobbles by one level per channel between identical runs. The comparator tolerates exactly that and nothing else.
+- **Positive control, done once:** a one-letter change to `tab.insights` in English changed all 30 English captures and none of the French.
+- **Handing Code's uncommitted slice to the desk:** `git --no-optional-locks diff HEAD -M --binary > apps/web/test-results/_desk-n174/<name>.patch` (git-ignored), stage it, `git apply` it to a copy of the cloud clone, capture. Confirm the served page is the new code with one probe (a class or a request path the slice changed).
+
+## A SECOND DEV SERVER REWRITES THE VITE CACHE. 2026-09-27
+
+In N.174 D.2.5 Code served the base commit (from `git archive`) on port 5174 beside the dev server on 5173. The second server re-optimized and rewrote Vite's shared dependency cache, and PDF reads then hung on both servers. Restarting the dev server fixed it. **If the old code must run, stop the dev server first.** Staging test files for the dev server to serve: put them under the git-ignored `apps/web/.svelte-kit/`, not in `static/reader/`.
+
+## GREP CALLS binder.ts BINARY. 2026-09-27
+
+`apps/web/src/lib/library/binder.ts` holds bytes that make plain `grep` report "binary file matches" and print no line, so a scan for importers missed its import of the zip reader. **Grep the tree with `-a`.** `svelte-check` catches the import either way.

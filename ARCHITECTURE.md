@@ -16,7 +16,7 @@ questions about it.
 
 1. **How do I pronounce this?** Ilya transcribes the text into a singable IPA,
    following Craig Grayson, *Russian Lyric Diction* (2012). This is the
-   Transcription document.
+   Text document.
 2. **Does this piece suit my voice?** Ilya reads the score, measures the
    voice the singer calibrates, and reports where the two meet. This follows
    Mitton (2020). These are the **Markup** (« Annotation ») and **Insights**
@@ -81,7 +81,7 @@ Depends on nothing else in the workspace.
   and Guide texts are written in each language in `components/Reading/`, and
   the word explanations come from `data/blurb-composer.json`.
 - `src/lib/destinations.ts` names where the singer is (Studio, Learn, Guide)
-  and which document Studio shows (Transcription, Markup, Insights).
+  and which document Studio shows (Text, Markup, Insights).
 - `src/lib/components/Drawer/` is the drawer: every control that changes
   something. `Paper/` is the page: what displays and prints. `Reading/` holds
   the Learn and Guide texts.

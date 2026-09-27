@@ -7,6 +7,10 @@ the split-pipeline architecture (decision D1) is a measurement, not a
 literature opinion. Nothing here is imported by `apps/web` or `packages/*`;
 this directory only imports FROM `@ilya/score-parser`, read-only.
 
+"Fit units" is this harness's scoring unit, named when the Markup document
+was shown on screen as Fit (until 2026-09, N.174). The name is kept as
+history; the unit did not change.
+
 Full context: `claude/sonnet-brief-e16-harness-scaffold_2026-07-22.md`
 (the spec of record), `claude/e16-phase0-options-memo_2026-07-22.md` §7,
 `claude/e16-vision-and-staged-plan_2026-07-22.md` §5, decision D1 in

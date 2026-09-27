@@ -10,7 +10,7 @@ Repository: branch `Shane`.
 name itself, which is why every previous attempt was stale within the hour and
 cost a minute at the next session's open, twice.
 
-**FLOOR MOVED at the close of 2026-09-24 to `1987157`**, walked on Dann's library in French by the desk; `190cc74` above it is walked in part (THE ONE THING, "The tree at this close"). The older floor text follows for its history.
+**FLOOR MOVED at the close of N.174, 2026-09-27, to `9d1baa6`**, walked by Dann on the alias (THE ONE THING). **Before that, at the close of 2026-09-24, to `1987157`**, walked on Dann's library in French by the desk; `190cc74` above it is walked in part (THE ONE THING, "The tree at this close"). The older floor text follows for its history.
 
 What it names instead is a **FLOOR**: everything described below was true at or
 before **`f6d2184`**, "N.165: the loupe reads measure ownership from the score, not from an
@@ -47,76 +47,19 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### CLOSE OF THE PRE-N.174 RUN, 2026-09-27 about 02:30. READ THIS FIRST; it supersedes the block below it, which stays for its history.
+> ### CLOSE OF N.174, 2026-09-27 about 06:45. READ THIS FIRST. The four blocks that stood here moved to `../sessions/LOG.md` verbatim, block "close of N.174".
 >
-> **THE ONE THING is still N.174**, spec `../sessions/spec-n174-text-markup-insights_r1_2026-09-26.md` (with its C.2 screenshot baseline). **All three "before D" items are done:** the two 2026-09-25 briefs (`754b0e0`), the phone test (`7612926`), and the rollback tag **`pre-n174-2026-09-27`**, pushed, on `7612926`.
+> **N.174 IS DONE. Walked by Dann on the branch alias 2026-09-27 06:21 to 06:34.** His library opened on the document he had left, Text, with every song in the drawer (*"this is as it should be"*), and a calibration re-take with his own voice read (*"the mic works fine"*). The code now says Text, Markup, and Insights. `lib/shane/` is gone, split into six modules by job: `score`, `voice`, `reader`, `analysis`, `markup`, `insights`. Check 4 in `scripts/ratchets.mjs` holds the module boundaries and forbids any file under `lib/shane/`. The account: `../sessions/plan-n174-change-list_r1_2026-09-27.md` and the eight Code memos `../sessions/memo-code-n174-d*_r1_2026-09-27.md`.
 >
-> **Floor: `7612926`**, all eight gates at baseline, pushed. Baselines: phonology 251, dictionary 235, web-check 0/12, web-test 1484, score-parser 615 + 5 skipped, blurb 145, integration 55, ratchets. Playwright: desktop 28, phone 2, both green.
+> **Floor: `9d1baa6`**, all eight gates at baseline, web-test 1495. The desk moved gate 4 from 1484 to 1493 to 1495 (backups `~/Downloads/ilya-ship.sh.bak-1484-2026-09-27` and `ilya-ship.sh.bak-1493-2026-09-27`). Playwright: desktop 28; phone 2, with its usual one skip. **Uncommitted at this close:** `ARCHITECTURE.md` (two lines that still called the Text document "Transcription", found by step E), `tools/e16-harness/README.md` (a history note for its "Fit units"), and the memory files.
 >
-> **Landed this run:** `ab84765` lexical ⟨ц⟩/⟨ш⟩ palatalization per Grayson pp. 283-284 (`packages/phonology/src/lexical-palatalization.ts`; nouns sorted by the -tion/-ence twin; -ционн- soft when its noun is soft OR its twin ends -tial/-tory/-tionary/-tional, the last a DESK reading recorded in the file header; supplement gains пшют, декламационный, каденция, каденционный with French glosses « dandy », « déclamatoire », « cadence », « de cadence », desk-proposed, Dann did not object). `754b0e0` two save fixes and KVP2 p. 141 punctuation. `7612926` loupe tap-floor float guard (0.001 px) and rule 5a caret on the closing bar's inner edge.
+> **Ruled by Dann 2026-09-27, in Code's D.3 thread:** "Fit forecasts, it does not declare" becomes **"Insights forecasts, it does not declare"** (`PRODUCT.md` §Naming, ruled). The Guide's shown heading and its French still say Fit: those belong to N.154, and the French is Dann's.
 >
-> **Still queued for Code:** the Latin words, the Guide's Sources, then the Correction Station after N.174. New owed items are in `OWED.md`, "Found in the pre-N.174 run".
-
-> ### CLOSE OF THE AUDIT THREAD, 2026-09-27 about 00:50. READ THIS FIRST; it supersedes the one-thing lines below it, which stay for their history.
+> **Queued for Code, in this order:** the Latin words (`brief-code-latin-words-on-the-page_r1_2026-09-26.md`); the Guide's Sources (`brief-code-guide-sources_r1_2026-09-27.md`, its words RATIFIED by Dann in both languages 2026-09-27 01:02; its path now names `lib/insights/`); the Correction Station (`brief-code-audit-correction-station_r1_2026-09-26.md`, its paths now name `lib/score/`; it no longer waits). Feature work in the files that were under `lib/shane/` may resume.
 >
-> **THE ONE THING: N.174, the code says Text, Markup, and Insights.** Numbered by Dann 2026-09-26 23:14. Spec, revised after the desk's own critique: `../sessions/spec-n174-text-markup-insights_r1_2026-09-26.md`. Start with its steps A (Sonnet inventory) and B (Fable module map), in parallel. Only the Correction Station brief waits for it; feature work pauses on `lib/shane/` during its module moves (spec, "Order").
+> **Still owed by Dann, carried from the blocks moved to LOG; one at a time:** the six N.168 French labels (`../sessions/memo-code-n168-first-slice_r1_2026-09-25.md`, "French: what is ruled and what is owed") and the [œ] onset and [i] preface suggestions; N.173's rules for `PRODUCT.md`, when he judges them ready; the walk of the French word explanations and of Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines; and, unless it is already done, Claude GitHub App access for `DannMitton/ilya` (`https://github.com/apps/claude/installations/select_target`, in a fenced block when raised). Everything else owed is in `OWED.md`, including the new section "Found in N.174".
 >
-> **Floor: `f2c3a64`**, all eight gates at baseline, pushed. `ilya-ship.sh` is revision 3: eight gates (web-test 1482, score-parser 615 + 5 skipped, blurb 145, integration 55, ratchets), Playwright stays in CI (Dann 2026-09-26 23:47).
->
-> **Landed tonight, on `Shane`:** the audit branch (tests, ratchets, CI, `ARCHITECTURE.md` draft r1, French for all 209 word explanations, Learn's always-hard exceptions), the watch-list float guard (`4bebeac`), and 152 citation corrections (`f2c3a64`). Account: `../sessions/memo-audit-night-one_r1_2026-09-26.md`.
->
-> **Also queued (2026-09-27 01:05):** the Guide's Sources section, `brief-code-guide-sources_r1_2026-09-27.md`; its words RATIFIED by Dann in both languages 2026-09-27 01:02, ready for Code. `NOTICES.md` corrected (Grayson: University of Washington) and Richter added.
->
-> **Queued for Code, in this order:** the ⟨ц⟩ and ⟨ш⟩ word list (`brief-code-grayson-soft-ts-sh_r1_2026-09-26.md`) and the Latin words (`brief-code-latin-words-on-the-page_r1_2026-09-26.md`), either before or beside N.174; the Correction Station (`brief-code-audit-correction-station_r1_2026-09-26.md`) after N.174, with its paths updated.
->
-> **Owed by Dann, in `OWED.md`:** post-stress ⟨а⟩ and silent ⟨з⟩/⟨с⟩ (citations section); the ж variants; the three engine defects and Code's four questions from the JVoice thread; the dead code listed under "Dead code found by the audit"; Richter's Seminarian page for the Latin table.
->
-> **Leads:** the phone test lead is closed by `7612926`.
->
-> **Walk owed by Dann:** the French word explanations (tap a word in French) and Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines, on the live site after `f2c3a64` deploys.
-
-> ### CLOSE OF THE JVOICE THREAD, 2026-09-26 about 23:00. For the parallel desk (the audit). Does NOT supersede the block below it; THE ONE THING there stands.
->
-> **Shipped `95f41c2` 22:52, all five gates at baseline, WALKED by Dann on localhost 22:44** ("Success!"): reconstituted я between two soft consonants now restores to [a] (`apps/web/src/lib/reconstitution.ts`, new `reconstitution.test.ts`, 7 tests), ruled by Dann 21:39 from Grayson pp. 125 and 128. The same commit carries Code's Playwright repair (`core-loop.test.ts`, 1440x900; 22 passed, 1 skipped, 1 failed = `OWED.md` phone-scan rule 5a). Gate 4 moved 1467 to 1474 by the desk before the run (backup `~/Downloads/ilya-ship.sh.bak-1467-2026-09-26`); the ship's pass confirms 1474. **This commit also swept in the audit thread's uncommitted `docs/memory` edits and every untracked `docs/sessions` file of 2026-09-26**, at Dann's `git add`.
->
-> **For the audit, from this thread:**
-> - `packages/phonology/src/engine.ts:35` `reconstitution` is a dead engine-level copy; the live feature is `apps/web/src/lib/reconstitution.ts` (`ENVIRONMENT.md` §`RECONSTITUTION LIVES IN THE WEB APP`). Dead-code candidate.
-> - Three engine defects from Code's report, in `OWED.md` §"New from Code's report of 2026-09-26 evening": a second ё sends Cyrillic out as IPA (32 words); reflexive -ся without т comes out soft; -ться/-тся carry no vowel entry. Each needs a ruling from Dann first. Code's four questions (rule 5a; reflexive [ʌ]; unstressed second ё; hard -ся) are unasked.
-> - Two INBOX lines of 21:40: offering [a], [e], [ɪ] for pretonic я (desk idea, not ruled); the interpalatal я line is now RULED and built.
->
-> **Insights research, N.168, this thread (all in `~/Documents/Voice Pedagogy Library/Insights Research/`):** JVoice harvest (1,038 records, `jvoice-index-results_2026-09-25.csv`), screen (`jvoice-screen_r1_2026-09-25.md`), 27 picks downloaded and filed; extraction `_extraction/claims_jvoice-A` and `-B_2026-09-26.csv` (118 rows, pages verified), plus `claims_yanushevskaya-2015_2026-09-26.csv`; research report `Sung Russian vowels and u at pitch.md`; memo `_synthesis/memo-desk-pretonic-ya-and-sung-russian_r1_2026-09-26.md`. **Downloaded, NOT extracted:** Echternach 2014, Hollien 2000, Deme 2017. **Not yet on the Mac:** Konoshenko 2020 (open access). **Next in N.168:** composing (plan step 5), Fable's work.
->
-> **Desk-made files Dann may delete:** `~/Downloads/_desk-2026-09-26/`, the 29 JVoice originals in `~/Downloads` (`PIIS…pdf` and the renamed copies, including two "(1)" duplicates), `~/Downloads/jvoice-index-results_2026-09-25.csv`, and `Insights Research/_to_delete/`.
-
-> ### READ THIS FIRST. Written 2026-09-25 about 15:05, mid-session, while Code builds the first slice and Dann is at lunch. SUPERSEDES the 13:10 block, now in `../sessions/LOG.md`, verbatim.
->
-> **THE ONE THING: N.168's first slice is with Code**, from `../sessions/brief-code-n168-first-slice_r2_2026-09-25.md` (pasted about 14:55). When its memo lands: check it against the brief and the tree, then ship with Dann (`git add` any new files first; update `ilya-ship.sh` gate baselines if the memo says they moved), then walk Kabalevsky T01's Insights on the alias.
->
-> #### DONE THIS SESSION, 13:10 to 15:05
->
-> - **N.164, lines 3 and 4:** one offer line, "Add your range" link, remembered "No thanks"; ruled 13:14 to 13:22 (`OPEN.md` §N.164). Shipped `f5decd3`, **seen by the desk on Dann's alias in French 14:58.** The compass (A3 to F♯6) and the tall empty region stay open under N.164.
-> - **N.154, the four strings:** shipped `933bbda`; the method line seen on the alias in French. Still open in N.154: the Guide's "Fit's analysis model" (`GuideContent.svelte:553`) and 62 dead keys.
-> - **N.168, three comments in the working register, English and French, RATIFIED 13:48 and 13:52** (`../sessions/templates-n168-working-register_r1_2026-09-25.md`). Fable's two [u] questions settled as DESK DEFAULTS 13:28.
-> - **N.172, the intake, RATIFIED in both languages 14:27 to 14:51** (the two draft files, their final sections). All seven questions asked now; radio groups with "Not sure"; question 6 moments only, as checkboxes; kinds of advice are tags, not filters; imagery is a how-Insights-speaks checkbox; the suggestion count is a radio pair.
-> - **The N.173 budget was already accepted 2026-09-24 23:06** (rule 7, five visible at most). STATE had called it open; corrected.
-> - `ilya-ship.sh` gate 4 baseline moved 1412 to 1421 by the desk (was 1412; Code's 9 tests).
->
-> #### STILL WAITING, one at a time
->
-> 0. **N.168 first slice SHIPPED `de802cd` 16:33, not yet walked.** Owed: Dann's ruling on six French labels (table in `../sessions/memo-code-n168-first-slice_r1_2026-09-25.md`, "French: what is ruled and what is owed"); held at his request 16:33 ("I don't have the presence of mind for that work right now"). Also owed: the [œ] onset and [i] preface suggestions, both languages.
-> 1. Go-ahead is given for `brief-code-two-save-fixes_r1_2026-09-25.md` and `brief-code-kvp2-p141-punctuation_r1_2026-09-25.md`; run them after the first slice.
-> 2. N.173's rules for `PRODUCT.md`, when Dann judges them ready.
-> **REMIND DANN FIRST, the moment he is at the desktop (asked 2026-09-26 08:29):** give the Claude GitHub App access to `DannMitton/ilya`, so audit work pushes to a branch instead of arriving as a bundle. Link, in a fenced block: `https://github.com/apps/claude/installations/select_target`. Strike this line once it is done.
-> 5. **N.174, numbered by Dann 2026-09-26 23:14: the code says Text, Markup, and Insights.** Spec: `../sessions/spec-n174-text-markup-insights_r1_2026-09-26.md`. Runs in a fresh thread after the `audit` merge. Only the Correction Station brief waits for it; the ⟨ц⟩ and ⟨ш⟩ and Latin-words briefs can run first (spec, "Order").
-> 4. **THE ARCHITECTURE AUDIT, begun 2026-09-26 00:13, runs beside feature work** (`CONTRACT.md` §5, amended 00:25 and 00:31). Night one landed six commits on branch `audit`, eleven with the morning passes (the last, `2799560`, gives all 209 word explanations their French),, delivered as `Claude outputs/ilya-audit-2026-09-26.bundle`; account in `../sessions/memo-audit-night-one_r1_2026-09-26.md`. **Owed by Dann:** fetch and merge the branch; read `ARCHITECTURE.md` (draft r1). **Then:** the phase 4 brief for Code, `../sessions/brief-code-audit-correction-station_r1_2026-09-26.md`. Gate baselines move on merge (web-test 1,472).
-> 3. Inbox has two new lines from today (registration gradient in the intake; loanword italics across Ilya). Not opened unless Dann asks.
->
-> #### CARRIED FORWARD, held
->
-> - Whether the three drop-hint comments are stale (this file vs the N.154 agent) is unsettled.
-> - Not measured: paint on a phone; « PARTITION » at 62 px in Consolas or Android's monospace.
-> - Desk-made files Dann may delete: `~/Downloads/IMG_5635-as-jpeg.jpg`, `~/Downloads/_desk-kvp2-crops/`, `~/Downloads/_desk-2026-09-25/` (now also `IMG_5758.jpg`, `IMG_5783.jpg`, two Miller page conversions).
-> - Floor: `f5decd3`.
+> **The C.2 screenshot harness is reusable** for any change that must not alter the page: `../sessions/n174-c2/` (`capture.test.ts`, `voiced.test.ts`, the config), and `ENVIRONMENT.md` §`SCREENSHOT COMPARE`.
 
 ## THE TRACKER
 
