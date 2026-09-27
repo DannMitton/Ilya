@@ -33,8 +33,8 @@
 
 import type { IntakeAnswers, VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
-import type { CalibratedFormant, VoiceCharacteristics, Vowel } from './engine/types';
-import { DERIV_SOURCE, deriveFrom } from './engine/derivations';
+import type { CalibratedFormant, VoiceCharacteristics, Vowel } from '$lib/shane/engine/types';
+import { DERIV_SOURCE, deriveFrom } from '$lib/shane/engine/derivations';
 
 /**
  * Which analysis dimensions rest on real singer input. Derived from the
@@ -250,10 +250,10 @@ export function buildVoiceProfileSnapshot(
  */
 export function composeBroadNote(c: AnalysisCompleteness, language: Language): string {
 	const items: string[] = [];
-	if (!c.range || !c.tessitura) items.push(t('fit.broad.itemRange', language));
-	if (!c.passaggio) items.push(t('fit.broad.itemPassaggio', language));
+	if (!c.range || !c.tessitura) items.push(t('analysis.broad.itemRange', language));
+	if (!c.passaggio) items.push(t('analysis.broad.itemPassaggio', language));
 	if (items.length === 0) return '';
 	const list =
-		items.length === 2 ? `${items[0]} ${t('fit.broad.join', language)} ${items[1]}` : items[0];
-	return t('fit.broad.body', language).replace('{items}', list);
+		items.length === 2 ? `${items[0]} ${t('analysis.broad.join', language)} ${items[1]}` : items[0];
+	return t('analysis.broad.body', language).replace('{items}', list);
 }

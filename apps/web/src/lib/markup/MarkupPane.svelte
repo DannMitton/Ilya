@@ -84,14 +84,14 @@
 	} from '$lib/shane/pairings';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { applyNotationPreferences } from '@ilya/phonology';
-	import { resolveAdvice } from '$lib/shane/advice-resolver';
-	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/shane/analyze-score-adapter';
+	import { resolveAdvice } from '$lib/analysis/advice-resolver';
+	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/analysis/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { afterGround } from '$lib/shane/system-ground';
 	import { RING_RADIUS, ringBox } from '$lib/shane/selection-ring';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
-	import { buildWatchList, watchEntryLine, WATCH_HEADER } from '$lib/shane/watchlist';
-	import { scoreMetrics } from '$lib/shane/score-metrics';
+	import { buildWatchList, watchEntryLine, WATCH_HEADER } from '$lib/analysis/watchlist';
+	import { scoreMetrics } from '$lib/analysis/score-metrics';
 
 	interface Props {
 		/** The active voice's stored readings (direct samples only). */
@@ -797,7 +797,7 @@
 	// languages. `étalonner` is the accurate metrological term but reverses the
 	// relation, since Ilya is calibrated against the voice rather than the other
 	// way round, and `mesuré` was already shipped at legend.ts:76 and in
-	// i18n's `fit.broad.body`. A vocabulary sweep of the older `calibrate`
+	// i18n's `analysis.broad.body`. A vocabulary sweep of the older `calibrate`
 	// strings is recorded as its own item.
 	//
 	// N.22: migrated into i18n.ts under profile.withheld.*, preserving the

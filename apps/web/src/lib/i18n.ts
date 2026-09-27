@@ -742,10 +742,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Fit broad-analysis legend (§B.5) ─────────────────
 	// Composed from parts so EN and FR share one structure; the two-item
 	// join is language-specific (EN "a and b", FR "a ni b": "sans X ni Y").
-	'fit.broad.body':              { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
-	'fit.broad.itemRange':         { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
-	'fit.broad.itemPassaggio':     { en: 'positional passaggio flags',   fr: 'le signalement des notes de passaggio' },
-	'fit.broad.join':              { en: 'and',                          fr: 'ni' },
+	'analysis.broad.body':         { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
+	'analysis.broad.itemRange':    { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
+	'analysis.broad.itemPassaggio': { en: 'positional passaggio flags',   fr: 'le signalement des notes de passaggio' },
+	'analysis.broad.join':         { en: 'and',                          fr: 'ni' },
 
 	// ── Fit textual witnesses (reconciliation shell, piece 3; Kimi Q1/Q2;
 	//    English ruled by Dann 2026-07-16; French pending Dann's validation) ──

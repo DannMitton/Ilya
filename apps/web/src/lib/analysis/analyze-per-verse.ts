@@ -31,7 +31,7 @@ import type {
 	ParsedScore,
 	VoiceProfileSnapshot
 } from '@ilya/score-parser';
-import { buildVowelResolver } from './vowel-resolver';
+import { buildVowelResolver } from '$lib/shane/vowel-resolver';
 
 export function analyzePerVerse(
 	parsed: ParsedScore,

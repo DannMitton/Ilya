@@ -5,7 +5,7 @@
  * Specified on 2026-07-17 in `claude/fit-tempo-tier-default-design_2026-07-17.md`
  * §6, which called for "the single `activeTempoAt` seam" with a fixed precedence.
  * MEASURED 2026-07-30: the seam was never built. `activeTempoAt` exists as two
- * private copies (`sustain.ts:61`, `apps/web/src/lib/shane/watchlist.ts:229`),
+ * private copies (`sustain.ts:61`, `apps/web/src/lib/analysis/watchlist.ts`, `activeTempoAt`),
  * neither exported, and `resolveTempoTerm` was built, tested, exported, and
  * called by nothing. This module is that seam.
  *

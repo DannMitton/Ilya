@@ -455,7 +455,7 @@ Questions 1 to 5 are optional and answered "secure", "mostly", or "still develop
 
 **The defect.** In MusicXML every lyric sits on a note, so an engraved `#` takes a note, and every later syllable of that verse lands one note late (`diction-marks.ts:17-23`; measured 2026-07-30: 16 marks across the six Sunless scores).
 
-**The repair exists and is not switched on.** `foldDictionMarks` (`diction-marks.ts:141`) joins the `#` to the syllable before it and frees the note. With `vowelResolverAbstentions`, the per-vowel error against Mitton 2019 falls from 18.46% to 8.15% of sung time (`diction-marks.ts:42-51`). Nothing in `apps/web/src` calls it; `apps/web/src/lib/shane/score-metrics.ts:43-50` records it as waiting on Dann's scope ruling of 2026-08-02, *"wire additively first, fold next"*.
+**The repair exists and is not switched on.** `foldDictionMarks` (`diction-marks.ts:141`) joins the `#` to the syllable before it and frees the note. With `vowelResolverAbstentions`, the per-vowel error against Mitton 2019 falls from 18.46% to 8.15% of sung time (`diction-marks.ts:42-51`). Nothing in `apps/web/src` calls it; the header of `apps/web/src/lib/analysis/score-metrics.ts` records it as waiting on Dann's scope ruling of 2026-08-02, *"wire additively first, fold next"*.
 
 **NOT ESTABLISHED:** whether the singer-visible Transcription and Markup are misaligned today, or only the per-vowel counts (`score-metrics.ts:43-50` says only `byVowel` and `byPitchByVowel`). Code settles it first.
 

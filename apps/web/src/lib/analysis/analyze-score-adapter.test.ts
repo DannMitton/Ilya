@@ -18,7 +18,7 @@ import { describe, expect, it } from 'vitest';
 import { analyzeScore } from '@ilya/score-parser';
 import type { ParsedScore, Pitch, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
 import { buildVoiceProfileSnapshot, completenessOf, composeBroadNote, isBroadAnalysis } from './analyze-score-adapter';
-import type { CalibratedFormant, VoiceCharacteristics } from './engine/types';
+import type { CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
 
 // ── fixtures ────────────────────────────────────────────────────────
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });

@@ -56,13 +56,13 @@ import { setBlurbData } from '@ilya/blurb';
 import { installHomographEntries } from '$lib/loader';
 import { processText } from '$lib/pipeline';
 import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
-import { scoreMetrics } from '$lib/shane/score-metrics';
+import { scoreMetrics } from '$lib/analysis/score-metrics';
 import { musxToMnxJson } from '../e16-harness/src/denigma-convert';
 import { checkPlausibility, FLOOR_MARGIN_SEMITONES, CEILING_MARGIN_SEMITONES } from '$lib/shane/engine/plausibility';
 import { expectedF1 } from '$lib/shane/engine/derivations';
 import { noteFacts } from '$lib/insights/comments';
-import { buildWatchList } from '$lib/shane/watchlist';
-import { resolveAdvice } from '$lib/shane/advice-resolver';
+import { buildWatchList } from '$lib/analysis/watchlist';
+import { resolveAdvice } from '$lib/analysis/advice-resolver';
 import { commentsOracle, type OracleFinding, type OracleSong } from './comments-oracle';
 
 const here = path.dirname(fileURLToPath(import.meta.url));

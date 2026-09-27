@@ -49,7 +49,7 @@ was not.
    records the singer sustaining each vowel over a fixed 3.0 s arc (`:13`), from
    live audio (`:22-24`), and keeps a profile per named voice (`:33-35`). The
    measured formants give an fR1 per vowel
-   (`apps/web/src/lib/shane/analyze-score-adapter.ts:98-125`).
+   (`buildVoiceProfileSnapshot` in `apps/web/src/lib/analysis/analyze-score-adapter.ts`).
 
 **Shane joins them.** Dann's words, 2026-09-16: *"Ilya performs transcriptions
 automatically whener text is input, and it only uses Grayson's ten-vowel schema.

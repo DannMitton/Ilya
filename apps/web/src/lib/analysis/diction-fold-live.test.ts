@@ -15,14 +15,14 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { MusicXmlScoreParser, type ParsedScore, type ScoreParser } from '@ilya/score-parser';
-import { parseXml } from './ingestion/mini-dom';
-import { ingestScoreFile, type IngestDeps } from './ingestion/ingest';
-import type { ScoreReader } from './engine/score-reader';
-import { buildUnderlayResolvers, collectScoreWords } from './vowel-resolver';
+import { parseXml } from '$lib/shane/ingestion/mini-dom';
+import { ingestScoreFile, type IngestDeps } from '$lib/shane/ingestion/ingest';
+import type { ScoreReader } from '$lib/shane/engine/score-reader';
+import { buildUnderlayResolvers, collectScoreWords } from '$lib/shane/vowel-resolver';
 import { scoreMetrics } from './score-metrics';
 
 const sunless01 = readFileSync(
-	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
+	fileURLToPath(new URL('../shane/ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
 	'utf8',
 );
 

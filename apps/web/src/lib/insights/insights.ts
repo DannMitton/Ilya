@@ -40,7 +40,7 @@ import {
 	type VoiceProfileSnapshot,
 	type VowelForEvent,
 } from '@ilya/score-parser';
-import type { WatchEntry, WatchKind, WatchList } from '$lib/shane/watchlist';
+import type { WatchEntry, WatchKind, WatchList } from '$lib/analysis/watchlist';
 import { VOWELS } from '$lib/shane/engine/types';
 
 /** Where a measured span sits against the span the singer typed. */

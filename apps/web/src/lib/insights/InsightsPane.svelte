@@ -55,9 +55,9 @@
 	import { fullReference, worksCited, type Run } from '$lib/insights/comment-sources';
 	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
 	import { withPairedVowel, type PairingMap, type DrawnUnderlay } from '$lib/shane/pairings';
-	import { resolveAdvice } from '$lib/shane/advice-resolver';
-	import { buildVoiceProfileSnapshot } from '$lib/shane/analyze-score-adapter';
-	import { buildWatchList } from '$lib/shane/watchlist';
+	import { resolveAdvice } from '$lib/analysis/advice-resolver';
+	import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
+	import { buildWatchList } from '$lib/analysis/watchlist';
 	import { pitchLabel } from '$lib/shane/note-picker';
 	import {
 		buildInsights,

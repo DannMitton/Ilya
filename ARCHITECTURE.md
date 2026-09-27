@@ -103,6 +103,11 @@ Depends on nothing else in the workspace.
   the tessituragram, `comments.ts`, `comment-text.ts`, and `comment-sources.ts`
   choose, word, and cite the per-note comments, and `InsightsPane.svelte`
   renders it all. `InsightsIntake.svelte` stays in `shane/` until D.2.4.
+- `src/lib/analysis/` is what both documents read, moved out of `shane/` by
+  N.174 D.2.3. `analyze-score-adapter.ts` turns the voice into the snapshot the
+  analysis reads, `watchlist.ts` and `advice-resolver.ts` list and explain what
+  is flagged, `score-metrics.ts` measures the piece, and `analyze-per-verse.ts`
+  and `notation-overlay.ts` are kept as they were.
 - `src/lib/wall.ts` is the one switch that includes or removes Markup and
   Insights at build time (`PUBLIC_INCLUDE_MARKUP_INSIGHTS`, or the older
   `PUBLIC_INCLUDE_SHANE`).
@@ -176,7 +181,7 @@ broken.
   Grayson's text at hand.
 - To change what a singer reads: `apps/web/src/lib/i18n.ts`.
 - To change Fit's analysis: `packages/score-parser` for anything that needs no
-  browser, `apps/web/src/lib/shane/` for the rest.
+  browser, `apps/web/src/lib/analysis/` for the rest.
 - Before any change: `pnpm test`, `pnpm ratchets`, and, in `apps/web`,
   `pnpm check` and `pnpm exec playwright test --project=chromium`.
 
