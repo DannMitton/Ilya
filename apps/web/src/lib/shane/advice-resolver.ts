@@ -233,8 +233,8 @@ const GODIN_HOWELL_TRACKING_CITATION =
 	'Corroborated by Bozeman, Kinesthetic Voice Pedagogy 2 (Inside View Press, 2021), ' +
 	'Ch. 10 p.96 ("fR1 must be raised approximately in tandem with the sung pitch to track the ' +
 	'1fo") and glossary p.141 ("Formant tracking: the tuning of a resonance to follow or track ' +
-	'a specific harmonic, such as fR1:1fo, tracking of whoop timbre, upper treble voice ' +
-	'strategy"); KVP2 writes fR1/1fo (Titze consensus, §A.164), no translation needed. ' +
+	'a specific harmonic, such as fR1:1fo tracking of whoop timbre (upper treble voice strategy)"); ' +
+	'KVP2 writes fR1/1fo (Titze consensus, §A.164), no translation needed. ' +
 	'Opus-verified on the photographed pages, 2026-07-22.';
 
 /**

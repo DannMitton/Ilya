@@ -136,7 +136,12 @@ export class SongDocument {
 	/** True while a remote record is being applied, so the apply does not echo. */
 	#applying = false;
 
-	private constructor(library: Library, loaded: SongRecord, loadFailure: FailureReason | null) {
+	private constructor(
+		library: Library,
+		loaded: SongRecord,
+		loadFailure: FailureReason | null,
+		makeScheduler: (run: () => Promise<void>) => SaveScheduler,
+	) {
 		this.#library = library;
 		this.#base = loaded;
 		this.id = loaded.id;
@@ -148,7 +153,7 @@ export class SongDocument {
 
 		this.#apply(loaded);
 
-		this.#scheduler = createSaveScheduler(() => this.#write());
+		this.#scheduler = makeScheduler(() => this.#write());
 		this.#channel = createLibraryChannel((message) => void this.#onRemoteWrite(message));
 
 		const stop = $effect.root(() => {
@@ -220,8 +225,14 @@ export class SongDocument {
 	 * line and never a `null` one. Both factories take a record that has already
 	 * been read, which is the property that matters.
 	 */
-	static fromLoaded(library: Library, loaded: LoadResult): SongDocument {
-		return new SongDocument(library, loaded.record, loaded.reason ?? null);
+	static fromLoaded(
+		library: Library,
+		loaded: LoadResult,
+		// A test seam only. Runes are inert under vitest (`ENVIRONMENT.md`), so
+		// no edit schedules a save there; a test supplies the scheduler instead.
+		makeScheduler: (run: () => Promise<void>) => SaveScheduler = createSaveScheduler,
+	): SongDocument {
+		return new SongDocument(library, loaded.record, loaded.reason ?? null, makeScheduler);
 	}
 
 	#snapshot(): SongFields {
@@ -305,7 +316,9 @@ export class SongDocument {
 			return;
 		}
 		const loaded = await this.#library.load(this.id);
-		if (loaded.reason) {
+		// Asked again after the await: an edit made while the load was in
+		// flight has scheduled a save, and applying now would overwrite it.
+		if (loaded.reason || this.#scheduler.isPending()) {
 			this.remoteChange = { updatedAt: message.updatedAt };
 			return;
 		}

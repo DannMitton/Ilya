@@ -2940,8 +2940,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// (`library.ts`, `recordFromFields`), in the same shape and under the same
 	// key. `persistGlosses()` is gone: assigning the maps is the save.
 	function keepSurvivingGlosses() {
-		const nextGloss = new Map<string, string>();
-		const nextAnchor = new Map<string, string>();
+		const nextGloss = new Map<string, string>(), nextAnchor = new Map<string, string>();
 		for (const [key, gloss] of doc.glossOverrides) {
 			const anchor = doc.glossAnchors.get(key);
 			if (!anchor) continue;
@@ -2952,8 +2951,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				nextAnchor.set(key, anchor);
 			}
 		}
-		doc.glossOverrides = nextGloss;
-		doc.glossAnchors = nextAnchor;
+		// Only a drop is assigned: a new Map is a change to the autosave effect, so assigning always saved every song on open.
+		if (nextGloss.size !== doc.glossOverrides.size || nextAnchor.size !== doc.glossAnchors.size) [doc.glossOverrides, doc.glossAnchors] = [nextGloss, nextAnchor];
 	}
 	// ── Per-word reset: clear all overrides for the selected word ──
 	function handleReset() {
