@@ -47,6 +47,17 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### WHEN DANN IS BACK, 2026-09-27. Written by the desk overnight, about 07:45. Read this first; the N.174 close block below it still stands.
+>
+> **Shipped after the N.174 close: `f5d0dd4`,** the Latin words on the page with Richter's IPA and the footer credit, its wording RATIFIED by Dann in both languages 2026-09-27 07:03. The 84-capture compare is clean. Ship script gate 4 is 1533 (backup `~/Downloads/ilya-ship.sh.bak-1495-2026-09-27`). **Owed by Dann:** a walk of «Семинарист» itself; no copy of the song is on the Mac.
+>
+> **THE ONE THING NOW: the audit's phase 4, the refactor, starting with its cut 1.** Brief, citations re-checked at `f5d0dd4`: `../sessions/brief-code-audit-correction-station_r2_2026-09-27.md` (supersedes r1; eleven line numbers moved by one, and it now bans `git stash` and a second dev server by name). The whole cut list for `+page.svelte`: `../sessions/page-cutlist_r1_2026-09-27.md` (Sonnet, a draft; seven cuts plus a style pass). Where every phase stands, and a proposed finish line for phase 4: `../sessions/audit-plan_r2_2026-09-27.md` (DESK DEFAULT, Dann's to change). **Correction, owned:** at 07:04 the desk told Dann phase 4 would take the whole of `+page.svelte` below 2,000 lines. The cut list reaches about 2,000 for the script only; the whole file ends near 3,350 until a style pass, which r2 of the plan now says.
+>
+> **Still owed by Dann, added:** a read of `ARCHITECTURE.md` (draft r1 from the audit, kept current by N.174). The N.174 close block left it out.
+>
+> To start cut 1, Dann pastes into Code: `Read docs/sessions/brief-code-audit-correction-station_r2_2026-09-27.md in ~/Desktop/ilya-rewrite and carry it out.`
+
+
 > ### CLOSE OF N.174, 2026-09-27 about 06:45. READ THIS FIRST. The four blocks that stood here moved to `../sessions/LOG.md` verbatim, block "close of N.174".
 >
 > **N.174 IS DONE. Walked by Dann on the branch alias 2026-09-27 06:21 to 06:34.** His library opened on the document he had left, Text, with every song in the drawer (*"this is as it should be"*), and a calibration re-take with his own voice read (*"the mic works fine"*). The code now says Text, Markup, and Insights. `lib/shane/` is gone, split into six modules by job: `score`, `voice`, `reader`, `analysis`, `markup`, `insights`. Check 4 in `scripts/ratchets.mjs` holds the module boundaries and forbids any file under `lib/shane/`. The account: `../sessions/plan-n174-change-list_r1_2026-09-27.md` and the eight Code memos `../sessions/memo-code-n174-d*_r1_2026-09-27.md`.
