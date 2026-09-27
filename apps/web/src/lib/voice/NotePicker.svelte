@@ -38,7 +38,7 @@
 		ledgerOffsets,
 		spokenPitchLabel,
 		type Step
-	} from '$lib/shane/note-picker';
+	} from '$lib/voice/note-picker';
 
 	interface Props {
 		/** The field's visible name (fieldset legend), e.g. "Lowest comfortable note". */

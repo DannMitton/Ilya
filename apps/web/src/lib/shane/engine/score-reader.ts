@@ -5,7 +5,7 @@
  * below the seam, the Worker, the postMessage protocol, the transferable buffer,
  * and the error rebuild, is hidden here, exactly as StubCaptureSession hides the
  * capture machinery behind CaptureSession. A consumer holds a ScoreReader, calls
- * convert(file), and awaits MNX text or a typed ShaneEngineError.
+ * convert(file), and awaits MNX text or a typed DenigmaError or ResourceError.
  *
  * Provenance:
  * - Facade-owns-Worker (Decision 1, Option A) and component-owned lifecycle
@@ -49,7 +49,7 @@ const LOAD_FAILURE_MESSAGE = 'The score reader could not be loaded.';
 export interface ScoreReader {
 	/**
 	 * Convert a Finale .musx File to MNX JSON text. Resolves with the text, or
-	 * rejects with a ShaneEngineError: WASM_LOAD_FAILED if the module never
+	 * rejects with a ResourceError or DenigmaError: WASM_LOAD_FAILED if the module never
 	 * loaded, CONVERSION_FAILED if the score could not be read.
 	 */
 	convert(file: File): Promise<string>;

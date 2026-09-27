@@ -58,8 +58,8 @@ import { processText } from '$lib/pipeline';
 import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
 import { scoreMetrics } from '$lib/analysis/score-metrics';
 import { musxToMnxJson } from '../e16-harness/src/denigma-convert';
-import { checkPlausibility, FLOOR_MARGIN_SEMITONES, CEILING_MARGIN_SEMITONES } from '$lib/shane/engine/plausibility';
-import { expectedF1 } from '$lib/shane/engine/derivations';
+import { checkPlausibility, FLOOR_MARGIN_SEMITONES, CEILING_MARGIN_SEMITONES } from '$lib/voice/engine/plausibility';
+import { expectedF1 } from '$lib/voice/engine/derivations';
 import { noteFacts } from '$lib/insights/comments';
 import { buildWatchList } from '$lib/analysis/watchlist';
 import { resolveAdvice } from '$lib/analysis/advice-resolver';
@@ -133,7 +133,7 @@ type BozemanVowel = 'i' | 'e' | 'ɛ' | 'ɑ' | 'o' | 'u';
 
 /**
  * Bozeman's boxed fR1 bands, [floor, ceiling] in Hz, copied value for value
- * from `CORE_BANDS` in `apps/web/src/lib/shane/engine/plausibility.ts:50`,
+ * from `CORE_BANDS` in `apps/web/src/lib/voice/engine/plausibility.ts:50`,
  * which does not export them. Sources, as `BAND_SOURCES` (`:87`) gives them:
  * soprano, Bozeman, Kinesthetic Voice Pedagogy, 2nd ed. (2021), Fig. 8, p. 75;
  * tenor-mezzo, Fig. 10, pp. 77/126; bass, Fig. 9, p. 76; baritone, Bozeman,

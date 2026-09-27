@@ -63,6 +63,8 @@ export interface ReadinessRecord {
 	fryRange: FryRangeVerdict;
 }
 
+// These names predate N.174 and stay: a singer's saved voices are stored under
+// them, and renaming a stored key loses them (ARCHITECTURE.md, invariant 10).
 const KEY_V1 = 'shane.profile.v1';
 const KEY = 'shane.profiles.v2';
 

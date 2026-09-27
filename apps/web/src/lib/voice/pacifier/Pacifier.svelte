@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import type { Vowel } from '$lib/shane/engine/types';
+	import type { Vowel } from '$lib/voice/engine/types';
 	import { t, type Language } from '$lib/i18n';
 
 	// Speakable per-vowel names for the button labels and the aria-live caption.
@@ -26,10 +26,10 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { StubCaptureSession } from '$lib/shane/engine/stub';
-	import type { CaptureSession, CaptureHandlers } from '$lib/shane/engine/session';
-	import type { VoiceType, CalibratedFormant } from '$lib/shane/engine/types';
-	import type { ShaneEngineError } from '$lib/shane/engine/errors';
+	import { StubCaptureSession } from '$lib/voice/engine/stub';
+	import type { CaptureSession, CaptureHandlers } from '$lib/voice/engine/session';
+	import type { VoiceType, CalibratedFormant } from '$lib/voice/engine/types';
+	import type { CaptureError } from '$lib/voice/engine/errors';
 
 	// 'estimated' added 2026-07-11 (Kimi's ruling, additive-only): a node
 	// whose value is a derived preview, not a sung capture. It rests with
@@ -525,7 +525,7 @@
 		}
 	}
 
-	function handleError(idx: number, err: ShaneEngineError) {
+	function handleError(idx: number, err: CaptureError) {
 		clearTimers();
 		const n = nodes[idx];
 		const code = 'code' in err ? err.code : 'EXTRACTION_FAILED';
@@ -755,7 +755,7 @@
 		<path
 			d={bandPath}
 			fill="none"
-			stroke="var(--surround-shane)"
+			stroke="var(--surround-voice)"
 			stroke-width={W}
 			stroke-linejoin="round"
 			stroke-linecap="round"

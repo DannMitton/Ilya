@@ -33,8 +33,8 @@
 
 import type { IntakeAnswers, VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
-import type { CalibratedFormant, VoiceCharacteristics, Vowel } from '$lib/shane/engine/types';
-import { DERIV_SOURCE, deriveFrom } from '$lib/shane/engine/derivations';
+import type { CalibratedFormant, VoiceCharacteristics, Vowel } from '$lib/voice/engine/types';
+import { DERIV_SOURCE, deriveFrom } from '$lib/voice/engine/derivations';
 
 /**
  * Which analysis dimensions rest on real singer input. Derived from the

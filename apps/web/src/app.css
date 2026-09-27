@@ -139,7 +139,7 @@
 	   FOUR desks, one per destination. Ruled by Dann 2026-08-19: every
 	   distinct working surface carries its own hue, which ends the sharing
 	   S1 left in place. --lavender-desk is the Marked score's desk and it
-	   is NOT --surround-shane: that token is the calibration pacifier band,
+	   is NOT --surround-voice: that token is the calibration pacifier band,
 	   it sits on white rather than on a desk, and contrast.test.ts asserts
 	   its literal. The two are different surfaces and keep different names. */
 	/* Stage 4, 2026-09-14: the desk is NOT on the ramp. Each is still 40
@@ -191,7 +191,7 @@
 	/* --paper-cream and the ink hierarchy above are reused as-is.     */
 	/* --arc-green and --prep-amber carry contrast caveats tracked in  */
 	/* the pacifier contrast checker (contrast.ts), not here.          */
-	--surround-shane: #D8D0E0;    /* the pacifier band, on white */
+	--surround-voice: #D8D0E0;    /* the pacifier band, on white */
 	/* --lavender, the captured outline, is declared with the family bands. */
 	--arc-green: #1DB954;         /* progress arc (owned exception) */
 	--signal-red: #A32D2D;        /* retake flash and badge */

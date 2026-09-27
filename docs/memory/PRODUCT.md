@@ -45,7 +45,7 @@ was not.
 1. **The text.** Ilya transcribes Russian into IPA in Grayson's ten vowels, sets
    the syllables under the notes, and prints a study page.
 2. **The singer.** Through the device's microphone, the calibration wizard (named
-   "Your Resonances" for the singer, `apps/web/src/lib/shane/CalibrationWizard.svelte:2-4`)
+   "Your Resonances" for the singer, `apps/web/src/lib/voice/CalibrationWizard.svelte:2-4`)
    records the singer sustaining each vowel over a fixed 3.0 s arc (`:13`), from
    live audio (`:22-24`), and keeps a profile per named voice (`:33-35`). The
    measured formants give an fR1 per vowel
@@ -195,7 +195,7 @@ entirely. **The padding is load-bearing, not cosmetic.**
 
 ## Ten vowels, Grayson's, and no others. Ruled by Dann, restated 2026-09-16
 
-**Ilya works in Grayson's ten prescriptive sung vowels and meets no other vowel.** Dann's words, 2026-09-16: *"Ilya will never encounter [ɔ] because it is not one of the ten prescriptive vowel targets devised by Grayson. Ilya is constrained to Grayson's ten-vowel schema, and will only ever encounter these ten vowels and no others."* The set is `VOWELS` in `apps/web/src/lib/shane/engine/types.ts:26`. The vowel resolver drops any other glyph (`vowel-resolver.ts:105-116`, `:314`).
+**Ilya works in Grayson's ten prescriptive sung vowels and meets no other vowel.** Dann's words, 2026-09-16: *"Ilya will never encounter [ɔ] because it is not one of the ten prescriptive vowel targets devised by Grayson. Ilya is constrained to Grayson's ten-vowel schema, and will only ever encounter these ten vowels and no others."* The set is `VOWELS` in `apps/web/src/lib/voice/engine/types.ts:26`. The vowel resolver drops any other glyph (`vowel-resolver.ts:105-116`, `:314`).
 
 **He had to say this twice.** On 2026-09-16 the desk wrote that an [ɔ] advice case "can never fire on a Russian score", as if that were a finding. It is the design. **How it holds, in Dann's words, 2026-09-16:** *"Ilya performs transcriptions automatically whener text is input, and it only uses Grayson's ten-vowel schema. This is the data that interfaces with the user's formant profile and range data."* So no later stage needs its own guard. This changes only if Dann changes the schema.
 

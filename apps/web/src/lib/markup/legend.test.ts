@@ -17,7 +17,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { buildMarkupLegend, markupLegendTypes, MARKUP_LEGEND_ORDER, MARKUP_WITHHELD_TYPE } from './legend';
-import type { CalibratedFormant, Vowel } from '$lib/shane/engine/types';
+import type { CalibratedFormant, Vowel } from '$lib/voice/engine/types';
 import { WITHHELD_SIGLA } from '@ilya/score-parser';
 
 /** A reading with only the fields this legend reads; the rest is scaffolding. */

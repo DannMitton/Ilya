@@ -23,7 +23,7 @@
 	import { smuflFontSizePx, spToPx, pitchToMidi, type RequiredGlyphName } from '@ilya/score-parser';
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
-	import { pitchLabel } from '$lib/shane/note-picker';
+	import { pitchLabel } from '$lib/voice/note-picker';
 	import { diatonicOf, formatSeconds, type FigureRow, type TessituragramModel } from '$lib/insights/insights';
 
 	interface Props {

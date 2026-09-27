@@ -95,7 +95,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type TabId,
 	} from '$lib/destinations';
 	import { INCLUDE_MARKUP_INSIGHTS } from '$lib/wall';
-	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
+	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
 	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import {
@@ -108,10 +108,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/components/Drawer/sections.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
-	import { hasAnyReadings } from '$lib/shane/profileStore';
+	import { hasAnyReadings } from '$lib/voice/profileStore';
 	// N.115: the ten sung vowels as a value, so Score markup's state line can
 	// count the denominator of "10 of 10" without reading the wizard's queue.
-	import { VOWELS } from '$lib/shane/engine/types';
+	import { VOWELS } from '$lib/voice/engine/types';
 	// N.115: what a closed band says, pure and tested. See `bandState.ts`.
 	import {
 		pieceStateLine,
@@ -202,11 +202,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		withCorrection,
 		type CorrectionMap
 	} from '$lib/shane/correction';
-	import { pitchLabel } from '$lib/shane/note-picker';
+	import { pitchLabel } from '$lib/voice/note-picker';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
-	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
+	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import type { IntakeAnswers } from '@ilya/score-parser';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
@@ -5738,7 +5738,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   sage desk that carried it: the Marked score is a distinct working
 		   surface, so it takes its own desk. --lavender-desk is
 		   --lavender tinted 60 percent toward white, parallel to the
-		   other three. It is not --surround-shane, which is the calibration
+		   other three. It is not --surround-voice, which is the calibration
 		   pacifier band on white and stays where it is. The bar moves with
 		   the desk (HeaderBar.svelte, .header-bar.tab-markup). */
 		--desk-fill: var(--lavender-desk, #D5CEDA);

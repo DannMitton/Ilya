@@ -3040,8 +3040,8 @@ hex literals rather than token names.
 **Gate 4 failed 3 of 1123, every failure reading "token --deeper-lavender is not
 declared."**
 
-**Why.** `apps/web/src/lib/shane/pacifier/contrast.ts:128` and `:283` key the
-pacifier's palette as the STRING `'deeper-lavender'`, **without the leading
+**Why.** `apps/web/src/lib/voice/pacifier/contrast.ts`, in its palette table and
+its contrast rows, keys the pacifier's palette as the STRING `'deeper-lavender'`, **without the leading
 dashes**, and R20 in `contrast.test.ts` resolves that key against `app.css`. The
 desk's grep pattern was `--deeper-lavender`. **A pattern carrying the dashes
 cannot match a key written without them**, so the lookup came back complete and

@@ -42,24 +42,24 @@
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
 	import { onMount, tick, untrack } from 'svelte';
-	import Pacifier, { spokenName } from '$lib/shane/pacifier/Pacifier.svelte';
+	import Pacifier, { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
 	import { t, type Language } from '$lib/i18n';
-	import ProfileSwitcher from '$lib/shane/ProfileSwitcher.svelte';
-	import InsightsIntake from '$lib/shane/InsightsIntake.svelte';
-	import NotePicker from '$lib/shane/NotePicker.svelte';
-	import { LiveCaptureSession } from '$lib/shane/engine/live';
-	import type { CaptureSession } from '$lib/shane/engine/session';
+	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
+	import InsightsIntake from '$lib/voice/InsightsIntake.svelte';
+	import NotePicker from '$lib/voice/NotePicker.svelte';
+	import { LiveCaptureSession } from '$lib/voice/engine/live';
+	import type { CaptureSession } from '$lib/voice/engine/session';
 	import {
 		READINESS_CAPTURE_MS,
 		READINESS_PREP_MS,
 		type ReadinessResult
-	} from '$lib/shane/engine/readiness';
-	import type { ShaneEngineError } from '$lib/shane/engine/errors';
+	} from '$lib/voice/engine/readiness';
+	import type { CaptureError } from '$lib/voice/engine/errors';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
-	import { deriveFrom } from '$lib/shane/engine/derivations';
-	import { applyIghDivergence } from '$lib/shane/engine/divergence';
-	import { checkPlausibility, buildPlausibilityEvent } from '$lib/shane/engine/plausibility';
+	import { deriveFrom } from '$lib/voice/engine/derivations';
+	import { applyIghDivergence } from '$lib/voice/engine/divergence';
+	import { checkPlausibility, buildPlausibilityEvent } from '$lib/voice/engine/plausibility';
 	import {
 		loadStore,
 		saveStore,
@@ -70,13 +70,13 @@
 		type ProfileStore,
 		type StoredVoice,
 		type ReadinessRecord
-	} from '$lib/shane/profileStore';
+	} from '$lib/voice/profileStore';
 	import type {
 		Vowel,
 		VoiceType,
 		CalibratedFormant,
 		VoiceCharacteristics
-	} from '$lib/shane/engine/types';
+	} from '$lib/voice/engine/types';
 
 	// ── Locked upstream (spec v1 §1, §2) ──────────────────────────────────────
 	// The seven default vowels, in the spec's fixed counterclockwise order.
@@ -313,7 +313,7 @@
 		const rePromptShown =
 			res.plausibility === 'implausible' && phase === 'capture' && !paused && vowel === currentVowel;
 		console.info(
-			'[shane] plausibility',
+			'[voice] plausibility',
 			JSON.stringify(buildPlausibilityEvent(vowel, formant.f1, res, rePromptShown, guardSessionId, voiceType))
 		);
 		return out;
@@ -557,7 +557,7 @@
 	// `SWEEP_MS` arc).
 	let readinessStep = $state<'quiet' | 'prepare' | 'capture' | 'done' | 'unmeasured'>('quiet');
 	let readinessResult = $state<ReadinessResult | undefined>(undefined);
-	let readinessError = $state<ShaneEngineError | undefined>(undefined);
+	let readinessError = $state<CaptureError | undefined>(undefined);
 	/** The count-in beat, 'Three.' | 'Two.' | 'One.'. */
 	let readinessCount = $state('');
 	/** 0 to 1 across READINESS_CAPTURE_MS. Drawn as the bar; never a measurement. */
@@ -838,7 +838,7 @@
 		// an implausible `captured` to `provisional` (`:275-276`). This function
 		// then rebuilt the profile wholesale from the Pacifier's un-guarded map
 		// and persisted it, **erasing both**. MEASURED, 2026-08-04, build
-		// b6d2828: eight `[shane] plausibility` events fired, one per vowel, and
+		// b6d2828: eight `[voice] plausibility` events fired, one per vowel, and
 		// `plausibility` was `undefined` on every reading in every stored
 		// profile. Dann's [i] was judged `implausible` with `rePromptShown:
 		// true` and was stored as `reading: 'captured'`.

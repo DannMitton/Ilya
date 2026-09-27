@@ -1,11 +1,14 @@
 /**
- * Shane engine error model (three tiers).
+ * The reader's error tiers, DenigmaError and ResourceError.
  *
- * ShaneEngineError = DenigmaError | CaptureError | ResourceError. Each tier owns
- * a real, documented, testable vocabulary; none of these codes is invented to
- * paper over an unknown. The union is discriminated by `code`, and every code is
- * globally distinct, so a plain `code` check is enough to rebuild the typed error
- * after it crosses a Worker postMessage boundary.
+ * Each tier owns a real, documented, testable vocabulary; none of these codes is
+ * invented to paper over an unknown. Each union is discriminated by `code`, and
+ * every code is globally distinct, so a plain `code` check is enough to rebuild
+ * the typed error after it crosses a Worker postMessage boundary.
+ *
+ * The third tier, CaptureError, moved to `voice/engine/errors.ts` with the
+ * capture layer (N.174 D.2.4). The union of all three, `ShaneEngineError`,
+ * is retired: each side now names only the tiers it can raise.
  *
  * Provenance:
  * - Two-tier origin (DenigmaError | CaptureError): Kimi's Phase 3a review §2.4
@@ -34,17 +37,6 @@ export type DenigmaError = { code: 'CONVERSION_FAILED'; message: string };
 
 export type DenigmaErrorCode = DenigmaError['code'];
 
-/** Capture-layer errors, raised by a CaptureSession. Unchanged. */
-export type CaptureError =
-	| { code: 'MIC_PERMISSION_DENIED'; message: string }
-	| { code: 'MIC_NOT_FOUND'; message: string }
-	| { code: 'NO_AUDIO_INPUT'; message: string }
-	| { code: 'SAMPLE_TOO_SHORT'; message: string; actualMs: number; minimumMs: number }
-	| { code: 'EXTRACTION_FAILED'; message: string; cause?: unknown }
-	| { code: 'CANCELLED'; message: string };
-
-export type CaptureErrorCode = CaptureError['code'];
-
 /**
  * Environment-limit errors, raised on the conversion path by the ScoreReader
  * facade and its Worker.
@@ -63,8 +55,3 @@ export type ResourceError =
 	| { code: 'WASM_LOAD_FAILED'; message: string };
 
 export type ResourceErrorCode = ResourceError['code'];
-
-/** The full Shane engine error union, discriminated by `code`. */
-export type ShaneEngineError = DenigmaError | CaptureError | ResourceError;
-
-export type ShaneEngineErrorCode = ShaneEngineError['code'];

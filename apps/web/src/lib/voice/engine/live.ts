@@ -83,7 +83,7 @@
  */
 
 import type { Vowel, VoiceType } from './types';
-import type { CaptureError, ShaneEngineError } from './errors';
+import type { CaptureError } from './errors';
 import type { CaptureSession, CaptureHandlers, ReadinessHandlers } from './session';
 import { detect } from './detector';
 import {
@@ -130,7 +130,7 @@ const QUIET_SETTLE_S = 0.25;
  * timeout, which was indeterminate and therefore undrawable.
  */
 
-const WORKLET_NAME = 'shane-capture-tap';
+const WORKLET_NAME = 'voice-capture-tap';
 /**
  * The worklet source, inlined so no static asset needs placing. It batches
  * the render quantum (128 samples) into 2048-sample posts, about 23
@@ -138,7 +138,7 @@ const WORKLET_NAME = 'shane-capture-tap';
  * discarded (under 43 ms), which the 500 ms end trim swallows anyway.
  */
 const WORKLET_SRC = `
-class ShaneCaptureTap extends AudioWorkletProcessor {
+class VoiceCaptureTap extends AudioWorkletProcessor {
 	constructor() {
 		super();
 		this.buf = new Float32Array(2048);
@@ -162,7 +162,7 @@ class ShaneCaptureTap extends AudioWorkletProcessor {
 		return true;
 	}
 }
-registerProcessor('${WORKLET_NAME}', ShaneCaptureTap);
+registerProcessor('${WORKLET_NAME}', VoiceCaptureTap);
 `;
 
 /**
@@ -172,7 +172,7 @@ registerProcessor('${WORKLET_NAME}', ShaneCaptureTap);
  */
 const DEBUG = true;
 function dbg(...args: unknown[]): void {
-	if (DEBUG) console.info('[shane-live]', ...args);
+	if (DEBUG) console.info('[voice-live]', ...args);
 }
 function fmt(x: number | null, digits = 2): string {
 	return x === null || Number.isNaN(x) ? 'n/a' : x.toFixed(digits);
@@ -290,14 +290,14 @@ export class LiveCaptureSession implements CaptureSession {
 		this.fryRank = 0;
 		this.releaseAudio();
 		if (wasActive) {
-			const cancelled: ShaneEngineError = { code: 'CANCELLED', message: 'Capture cancelled.' };
+			const cancelled: CaptureError = { code: 'CANCELLED', message: 'Capture cancelled.' };
 			handlers?.onError(cancelled);
 			readinessHandlers?.onError(cancelled);
 		}
 	}
 
 	/** Terminal failure: release everything, then report once. */
-	private fail(gen: number, error: ShaneEngineError): void {
+	private fail(gen: number, error: CaptureError): void {
 		if (gen !== this.gen) return;
 		dbg('fail:', error.code, '—', error.message, 'cause' in error ? JSON.stringify(error.cause) : '');
 		const handlers = this.handlers;
@@ -689,7 +689,7 @@ export class LiveCaptureSession implements CaptureSession {
 				message: 'The sample did not read as vocal fry.',
 				cause: { reason: outcome.reason, failed: outcome.failed }
 			});
-		else handlers?.onError(outcome.error as ShaneEngineError);
+		else handlers?.onError(outcome.error as CaptureError);
 	}
 
 	/** Release all audio resources: timers, graph, tracks, context. */

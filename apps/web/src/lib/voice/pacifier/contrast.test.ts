@@ -427,10 +427,10 @@ describe('R20 precondition: classification', () => {
 
 		it('negative control: a one-byte change upstream is detected, and only there', () => {
 			guard(err);
-			const bad = css.replace('--surround-shane: #D8D0E0;', '--surround-shane: #D8D0E1;');
+			const bad = css.replace('--surround-voice: #D8D0E0;', '--surround-voice: #D8D0E1;');
 			expect(bad).not.toBe(css); // provenance: the control changed the data it names
 			expect(mismatchesAgainst(bad)).toEqual([
-				'surround-shane: app.css #D8D0E1 vs PALETTE 216,208,224'
+				'surround-voice: app.css #D8D0E1 vs PALETTE 216,208,224'
 			]);
 		});
 

@@ -22,7 +22,7 @@
  */
 
 import type { Vowel, VoiceType, CalibratedFormant } from './types';
-import type { ShaneEngineError } from './errors';
+import type { CaptureError } from './errors';
 import type { ReadinessResult } from './readiness';
 
 export interface CaptureHandlers {
@@ -41,7 +41,7 @@ export interface CaptureHandlers {
 	 * boundary keeps isDivergent internally.
 	 */
 	onComplete(formant: CalibratedFormant): void;
-	onError(error: ShaneEngineError): void;
+	onError(error: CaptureError): void;
 }
 
 /**
@@ -63,7 +63,7 @@ export interface ReadinessHandlers {
 	 * are the "abstain with no microphone" path the plan requires: the wizard
 	 * makes no claim about the room and does not block the singer.
 	 */
-	onError(error: ShaneEngineError): void;
+	onError(error: CaptureError): void;
 }
 
 export interface CaptureSession {

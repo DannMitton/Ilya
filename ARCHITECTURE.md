@@ -88,11 +88,17 @@ Depends on nothing else in the workspace.
   page and storage.
 - `src/lib/shane/` is Fit. Inside it:
   - `ingestion/` detects a score's format and routes it to a parser.
-  - `engine/` holds the microphone capture, signal processing, and the Web
-    Workers that read a score from a PDF or a photograph.
+  - `engine/` holds the Web Workers that read a score from a PDF or a
+    photograph, and the reader's error tiers.
   - `pairings.ts` joins the text's words to the score's notes, and
     `vowel-resolver.ts` asks the GraysonEngine which vowel is sung.
   - `Loupe.svelte` and `loupe.ts` are the magnified editor for one measure.
+- `src/lib/voice/` is the singer's voice, moved out of `shane/` by N.174
+  D.2.4. `CalibrationWizard.svelte` is the calibration wizard ("Your
+  Resonances"), `profileStore.ts` keeps the saved voices (still under the
+  `shane.profiles.v2` key, by invariant 10), `engine/` is the microphone
+  capture and its signal processing, and `pacifier/` is the capture's
+  visual timer.
 - `src/lib/markup/` is the Markup document, moved out of `shane/` by N.174
   D.2.1. `MarkupPane.svelte` analyzes the score, paginates it (`paginateScore`
   in `packages/score-parser`), and hands each page's SVG to

@@ -39,7 +39,7 @@
 
 import type { Language } from '../i18n';
 import type { LegendItem } from '../provenance';
-import type { CalibratedFormant, Vowel } from '$lib/shane/engine/types';
+import type { CalibratedFormant, Vowel } from '$lib/voice/engine/types';
 
 /**
  * Stable display order, and it is not alphabetical. It runs from the most

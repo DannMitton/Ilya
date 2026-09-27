@@ -421,7 +421,7 @@ the paths already). Whoever takes N.142 should be told this.
 
 **What it does (DESK PROPOSAL, from the curation draft's rule 7):** the stage changes how hard a moment is judged to be for this singer, never how much it matters musically. It moves the threshold for "something to try" comments; it never hides the piece-level judgement or a "notice this" line. Optional; with no answer, Ilya assumes the middle stage (DESK DEFAULT).
 
-**Where it lives:** the intake, beside the sung formant collection (`apps/web/src/lib/shane/CalibrationWizard.svelte`), editable at any time. In the profile it is one more optional field of the same kind as `range`, `tessitura`, and `passaggio` (`packages/score-parser/src/analysis-types.ts:63-77`: absent when not provided). It is the singer's own statement, not derived, so storing it keeps `CONTRACT.md` §6.
+**Where it lives:** the intake, beside the sung formant collection (`apps/web/src/lib/voice/CalibrationWizard.svelte`), editable at any time. In the profile it is one more optional field of the same kind as `range`, `tessitura`, and `passaggio` (`packages/score-parser/src/analysis-types.ts:63-77`: absent when not provided). It is the singer's own statement, not derived, so storing it keeps `CONTRACT.md` §6.
 
 **THE QUESTIONS, DESK PROPOSAL 2026-09-24 23:20, on Dann's request of 23:15** (*"A question like 'how secure is your top?' might serve better than 'what is your level?' Can you devise a meaningful but brief array of questions whose responses will help tailor the way Ilya curates its commentary?"*). Kept inside N.172, DESK DEFAULT, because it is the same intake feature. Each question feeds one thing Ilya detects; each matches a section title in Miller 2004 (contents page, read 2026-09-24).
 

@@ -57,8 +57,8 @@
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import type { LineData, PageSize } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
-	import { spokenName } from '$lib/shane/pacifier/Pacifier.svelte';
-	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
+	import { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
+	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { buildMarkupLegend } from '$lib/markup/legend';
 	import {
 		paginateScore,

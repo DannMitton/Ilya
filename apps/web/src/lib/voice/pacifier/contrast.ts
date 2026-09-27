@@ -19,7 +19,7 @@
  * resting states, and added the green progress arc and the capture/retake
  * badges. Every obligation below was recomputed from the real palette
  * under that scheme. The geometry: each 28px white disc is welded inset
- * inside the 39px `surround-shane` band on a white field, so a glyph sits
+ * inside the 39px `surround-voice` band on a white field, so a glyph sits
  * on white, while an outline or the arc has white on its inner edge and
  * the band on its outer edge. For every Route B outline and arc colour the
  * band is the lower-contrast of those two adjacencies, so the band governs
@@ -110,7 +110,7 @@ export function contrastRatio(a: RGB, b: RGB): number {
 // `signal-red` are "Shane-specific additions (spec v6 §13) not present in
 // Ilya's app.css". That is false as of `app.css` md5
 // cf7bd6350fed1945c9aba775f957d618, read 2026-07-30: `arc-green`,
-// `signal-red`, `prep-amber`, `surround-shane`, and `light-lavender` are all
+// `signal-red`, `prep-amber`, `surround-voice`, and `light-lavender` are all
 // declared in its `:root` block, under a header reading "Shane pacifier
 // (fourth tab)". The sentence was the source R20's original exemption list
 // was written from, and it exempted from the drift check the five tokens most
@@ -124,7 +124,7 @@ export function contrastRatio(a: RGB, b: RGB): number {
 
 export const PALETTE = {
 	'lavender': hexToRgb('#9585A2'),
-	'surround-shane': hexToRgb('#D8D0E0'),
+	'surround-voice': hexToRgb('#D8D0E0'),
 	'paper-cream': hexToRgb('#F0EBE0'),
 	'ink-primary': hexToRgb('#1A1612'),
 	'ink-secondary': hexToRgb('#4A4540'),
@@ -178,7 +178,7 @@ export const WCAG = {
 // `backgroundToken`         : the opaque colour the fill resolves to.
 //   Route B: glyphs and badge marks sit on the white interior, so their
 //   fill and background are `white`. Outlines, the arc, and badge disc
-//   edges are measured against the band (`surround-shane`), the governing
+//   edges are measured against the band (`surround-voice`), the governing
 //   adjacency for the welded geometry (see the header note).
 //
 // `status`:
@@ -253,33 +253,33 @@ export const OBLIGATIONS: readonly ContrastObligation[] = [
 	{
 		state: 'dormant', element: 'outline', kind: 'ui',
 		fgToken: 'ink-primary', fgAlpha: 0.35,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'owned-exception',
 		note: 'Faint resting outline at 35% (spec v6 §6.1, §6a). Below 3:1; owned with the white resting interiors. Agreed fix if too faint in use: a stronger dormant outline (50%+), not a fill change.'
 	},
 	{
 		state: 'deselected', element: 'outline', kind: 'ui',
 		fgToken: 'ink-tertiary', fgAlpha: 1.0,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'locked'
 	},
 	{
 		state: 'listening', element: 'outline', kind: 'ui',
 		fgToken: 'ink-secondary', fgAlpha: 0.4,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'owned-exception',
 		note: 'Deliberately faint transient outline at 40% (spec v6 §6.3). Below 3:1; tracked as the faintest point of the dormant-to-captured outline progression. The listening state is independently legible via the dark glyph (9.47:1) and caption.'
 	},
 	{
 		state: 'working', element: 'outline', kind: 'ui',
 		fgToken: 'ink-secondary', fgAlpha: 0.7,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'locked'
 	},
 	{
 		state: 'captured', element: 'outline', kind: 'ui',
 		fgToken: 'lavender', fgAlpha: 1.0,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'owned-exception',
 		note: 'Settled ring at 2.50:1 against the band. Its inner edge against the white interior is 3.74:1, where its legibility comes from in practice; recorded as sub-threshold under the band-governing rule, owned by Dann (2026-05-22). Colour stage 4 (2026-09-14) moved lavender to #9585A2: 2.28:1 against the band and 3.41:1 against the white interior.'
 	},
@@ -288,7 +288,7 @@ export const OBLIGATIONS: readonly ContrastObligation[] = [
 	{
 		state: 'working', element: 'progress-arc', kind: 'ui',
 		fgToken: 'arc-green', fgAlpha: 1.0,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'owned-exception',
 		note: 'Bright green arc, owned exception (spec v6 §6.6). 1.73:1 against the band, 2.59:1 against the white interior, both below 3:1. Dann chose the bright green for signalling clarity over the compliant #15803D. NOT a WCAG-permitted waiver: WCAG has no contrast exemption for animated elements; this is an accepted deviation.'
 	},
@@ -297,7 +297,7 @@ export const OBLIGATIONS: readonly ContrastObligation[] = [
 	{
 		state: 'resting', element: 'fill', kind: 'ui',
 		fgToken: 'white', fgAlpha: 1.0,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'owned-exception',
 		note: 'White resting interior shared by dormant and deselected (spec v6 §6a). 1.50:1 against the band (1.00:1 against the white field), so the resting fill does not identify the circle on its own and the circle reads by outline. Dann chose white interiors throughout; recorded as the owned choice it is.'
 	},
@@ -313,7 +313,7 @@ export const OBLIGATIONS: readonly ContrastObligation[] = [
 	{
 		state: 'captured', element: 'badge-disc', kind: 'ui',
 		fgToken: 'ink-secondary', fgAlpha: 1.0,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'locked',
 		note: 'White badge disc edge; the badge touches the circumference so its outer edge can sit against the band. Band-governed.'
 	},
@@ -327,7 +327,7 @@ export const OBLIGATIONS: readonly ContrastObligation[] = [
 	{
 		state: 'retake', element: 'badge-disc', kind: 'ui',
 		fgToken: 'signal-red', fgAlpha: 1.0,
-		fillToken: 'surround-shane', fillAlpha: 1.0, backgroundToken: 'surround-shane',
+		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'locked',
 		note: 'Retake badge disc edge; band-governed as above.'
 	},

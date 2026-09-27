@@ -38,7 +38,7 @@
 	import type { LineData } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, formatNameForPaper } from '$lib/composers-poets';
-	import { type Vowel, type CalibratedFormant, type VoiceCharacteristics } from '$lib/shane/engine/types';
+	import { type Vowel, type CalibratedFormant, type VoiceCharacteristics } from '$lib/voice/engine/types';
 	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
 	import {
 		analyzeScore,
@@ -58,7 +58,7 @@
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
 	import { buildWatchList } from '$lib/analysis/watchlist';
-	import { pitchLabel } from '$lib/shane/note-picker';
+	import { pitchLabel } from '$lib/voice/note-picker';
 	import {
 		buildInsights,
 		strikeLiederClause,

@@ -11,7 +11,7 @@
     "apps/web/src/lib/shane/Loupe.svelte": 3054,
     "apps/web/src/lib/components/Drawer/InspectorPanel.svelte": 2432,
     "packages/phonology/src/engine.ts": 2278,
-    "apps/web/src/lib/shane/CalibrationWizard.svelte": 2124,
+    "apps/web/src/lib/voice/CalibrationWizard.svelte": 2124,
     "apps/web/src/lib/components/Drawer/Drawer.svelte": 1990,
     "apps/web/src/lib/markup/MarkupPane.svelte": 1490,
     "apps/web/src/lib/shane/pairings.ts": 1423,
