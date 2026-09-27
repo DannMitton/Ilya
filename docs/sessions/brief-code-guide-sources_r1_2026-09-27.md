@@ -46,12 +46,12 @@ attribution is not optional.
 - Place: directly after "Licences and Acknowledgments", in both languages, with
   its own entry in the drawer's table of contents.
 - Grouped by what each work does for Ilya. Groups and headings are in section 6;
-  **the French is a desk draft that Dann must ratify before it ships.**
+  the French was ratified by Dann 2026-09-27 01:02; drafted by the desk.
 - Full references in one citation style, the style `comment-sources.ts` already
   prints. Nothing is shortened to fit.
 - No git command that writes. **Displaces:** nothing scheduled.
 
-## 6. The words (English ruled when Dann ratifies the French; French: DRAFT)
+## 6. The words. RATIFIED by Dann in both languages, 2026-09-27 01:02: *"Ratified, thank you Claude"*
 
 | key (proposed) | English | French (draft) |
 |---|---|---|
