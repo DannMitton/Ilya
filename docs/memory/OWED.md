@@ -876,4 +876,10 @@ not proposed. Each is a lead from the audit's tools, checked where marked.
 N.174's inventory will surface more; its spec lists unused keys for Dann rather
 than deleting them.
 
+## Found in the pre-N.174 run (2026-09-27). None blocking N.174
+
+- **Engine, ⟨ц⟩ run (Code, `ab84765`):** цирк prints `ˈtsɨrʲk`, Grayson p. 167 prints hard р; расцветать prints `rʌ`, Grayson `rɑ`; pre-reform ⟨і⟩ spellings (революціи) are not softened; the engine prints doubled н as `nn` where Grayson p. 284 prints /nː/. All existing rules, untouched by that commit.
+- **⟨ц⟩ word list, group 3b:** words Code left as they were because the English twin is rare or unsure. Listed in the header of `packages/phonology/src/lexical-palatalization.ts`. Dann may review; nothing waits on it.
+- **Save on open (Code, `754b0e0`):** two more places may save on open, the seated-text field and the pairings for a song with a score but no placed syllables. Read from code, not measured. Fix 1 has no test because `keepSurvivingGlosses` lives in `+page.svelte`; Code proposes moving it to a pure function in `apps/web/src/lib/`, a natural N.174 slice.
+- **KVP2 p. 141:** the punctuation follows the desk's reading of `IMG_4850.HEIC`; Code did not read the page image.
 

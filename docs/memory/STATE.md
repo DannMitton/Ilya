@@ -47,6 +47,16 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### CLOSE OF THE PRE-N.174 RUN, 2026-09-27 about 02:30. READ THIS FIRST; it supersedes the block below it, which stays for its history.
+>
+> **THE ONE THING is still N.174**, spec `../sessions/spec-n174-text-markup-insights_r1_2026-09-26.md` (with its C.2 screenshot baseline). **All three "before D" items are done:** the two 2026-09-25 briefs (`754b0e0`), the phone test (`7612926`), and the rollback tag **`pre-n174-2026-09-27`**, pushed, on `7612926`.
+>
+> **Floor: `7612926`**, all eight gates at baseline, pushed. Baselines: phonology 251, dictionary 235, web-check 0/12, web-test 1484, score-parser 615 + 5 skipped, blurb 145, integration 55, ratchets. Playwright: desktop 28, phone 2, both green.
+>
+> **Landed this run:** `ab84765` lexical ⟨ц⟩/⟨ш⟩ palatalization per Grayson pp. 283-284 (`packages/phonology/src/lexical-palatalization.ts`; nouns sorted by the -tion/-ence twin; -ционн- soft when its noun is soft OR its twin ends -tial/-tory/-tionary/-tional, the last a DESK reading recorded in the file header; supplement gains пшют, декламационный, каденция, каденционный with French glosses « dandy », « déclamatoire », « cadence », « de cadence », desk-proposed, Dann did not object). `754b0e0` two save fixes and KVP2 p. 141 punctuation. `7612926` loupe tap-floor float guard (0.001 px) and rule 5a caret on the closing bar's inner edge.
+>
+> **Still queued for Code:** the Latin words, the Guide's Sources, then the Correction Station after N.174. New owed items are in `OWED.md`, "Found in the pre-N.174 run".
+
 > ### CLOSE OF THE AUDIT THREAD, 2026-09-27 about 00:50. READ THIS FIRST; it supersedes the one-thing lines below it, which stay for their history.
 >
 > **THE ONE THING: N.174, the code says Text, Markup, and Insights.** Numbered by Dann 2026-09-26 23:14. Spec, revised after the desk's own critique: `../sessions/spec-n174-text-markup-insights_r1_2026-09-26.md`. Start with its steps A (Sonnet inventory) and B (Fable module map), in parallel. Only the Correction Station brief waits for it; feature work pauses on `lib/shane/` during its module moves (spec, "Order").
@@ -61,10 +71,9 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **Owed by Dann, in `OWED.md`:** post-stress ⟨а⟩ and silent ⟨з⟩/⟨с⟩ (citations section); the ж variants; the three engine defects and Code's four questions from the JVoice thread; the dead code listed under "Dead code found by the audit"; Richter's Seminarian page for the Latin table.
 >
-> **Leads for the fresh thread, not findings:** the failing phone test reports a tap floor of 44.00 px against `converged` = worst >= 44 (`apps/web/e2e-phone/loupe-rules.ts:13`, `:33`), which may be the float pattern of `ENVIRONMENT.md` "A SEMITONE IS NOT ALWAYS 100 CENTS"; DESK INFERENCE until the test is opened. The crossing tolerance may share it.
+> **Leads:** the phone test lead is closed by `7612926`.
 >
 > **Walk owed by Dann:** the French word explanations (tap a word in French) and Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines, on the live site after `f2c3a64` deploys.
-
 
 > ### CLOSE OF THE JVOICE THREAD, 2026-09-26 about 23:00. For the parallel desk (the audit). Does NOT supersede the block below it; THE ONE THING there stands.
 >
