@@ -98,6 +98,13 @@ const MARKUP_LEGEND_COPY: Record<MarkupLegendType, Record<Language, string>> = {
  * PLACEHOLDER copy, flagged for Dann, on the same footing as the four above.
  * The French is mine and needs his eye more than the English does.
  */
+/**
+ * The withheld entry's type, which `PageFooter` compares against to draw its
+ * sigla. `LegendItem.type` is a plain string, so one constant, imported on
+ * both sides, is what keeps the two from drifting apart (N.174 D.2.2).
+ */
+export const MARKUP_WITHHELD_TYPE = 'markup-withheld';
+
 const MARKUP_WITHHELD_COPY: Record<Language, string> = {
 	en: 'The score and Ilya divide this word differently, so nothing is transcribed here rather than guessed.',
 	fr: 'La partition et Ilya divisent ce mot différemment : rien n’est transcrit ici plutôt que deviné.'
@@ -156,7 +163,7 @@ export function buildMarkupLegend(
 	// because it is the only entry that is not about the singer's voice.
 	if (options.withheldSyllables) {
 		items.push({
-			type: 'markup-withheld',
+			type: MARKUP_WITHHELD_TYPE,
 			icon: 'question',
 			label: MARKUP_WITHHELD_COPY[language],
 			// The exception: this one is a glyph on the page, so it is a glyph

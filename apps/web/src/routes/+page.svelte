@@ -120,7 +120,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		scoreStateLine,
 	} from '$lib/components/Drawer/bandState';
 	import MarkupPane from '$lib/markup/MarkupPane.svelte';
-	import InsightsPane from '$lib/shane/InsightsPane.svelte';
+	import InsightsPane from '$lib/insights/InsightsPane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
 	import {

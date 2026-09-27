@@ -155,8 +155,8 @@ the paths already). Whoever takes N.142 should be told this.
 > (`packages/score-parser/src/phonation.ts:298`) sums sounding time per pitch, per
 > vowel, and per pitch-and-vowel, in quavers and seconds; `pachecoTessitura` is
 > `packages/score-parser/src/tessitura.ts`; `totalFoldCycles` is `phonation.ts:540`;
-> Insights increment 1 already calls the layer (`apps/web/src/lib/shane/insights.ts:28`,
-> `:198`). **What N.123 still owes is the FIGURES** (the tessituragram drawing, the
+> Insights increment 1 already calls the layer (`apps/web/src/lib/insights/insights.ts`
+> imports `aggregatePhonation` and `pachecoTessitura`). **What N.123 still owes is the FIGURES** (the tessituragram drawing, the
 > half-mass band, the centre of gravity, the cycle dose on the page) and two
 > sources: the centre-of-gravity formula and the cycle-dose primary, both NOT
 > ESTABLISHED below. The inventory's SPEC-ONLY was wrong, and so was the desk's

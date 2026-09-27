@@ -15,7 +15,7 @@
     "apps/web/src/lib/components/Drawer/Drawer.svelte": 1990,
     "apps/web/src/lib/markup/MarkupPane.svelte": 1490,
     "apps/web/src/lib/shane/pairings.ts": 1423,
-    "apps/web/src/lib/shane/InsightsPane.svelte": 1350,
+    "apps/web/src/lib/insights/InsightsPane.svelte": 1350,
     "apps/web/src/lib/shane/ScoreUploader.svelte": 1340,
     "apps/web/src/lib/shane/CorrectionSurface.svelte": 1265,
     "packages/score-parser/src/mnx-parser.ts": 1170,

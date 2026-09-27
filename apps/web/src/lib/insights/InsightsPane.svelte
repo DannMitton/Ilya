@@ -32,7 +32,7 @@
 	 */
 	import { tick, untrack } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
-	import Tessituragram from '$lib/shane/Tessituragram.svelte';
+	import Tessituragram from '$lib/insights/Tessituragram.svelte';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import { PAGE_SIZES, MARGINS, HEADER_GAP } from '$lib/page-config';
 	import type { LineData } from '$lib/types';
@@ -50,9 +50,9 @@
 		type IntakeAnswers,
 		type Pitch,
 	} from '@ilya/score-parser';
-	import { isTreble, noteComments, noteFacts, registerFor, selectComments } from '$lib/shane/comments';
-	import { renderComments, songSeed, type RenderedComment } from '$lib/shane/comment-text';
-	import { fullReference, worksCited, type Run } from '$lib/shane/comment-sources';
+	import { isTreble, noteComments, noteFacts, registerFor, selectComments } from '$lib/insights/comments';
+	import { renderComments, songSeed, type RenderedComment } from '$lib/insights/comment-text';
+	import { fullReference, worksCited, type Run } from '$lib/insights/comment-sources';
 	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
 	import { withPairedVowel, type PairingMap, type DrawnUnderlay } from '$lib/shane/pairings';
 	import { resolveAdvice } from '$lib/shane/advice-resolver';
@@ -73,8 +73,8 @@
 		type Finding,
 		type PhonationSection,
 		type SecondsFigure,
-	} from '$lib/shane/insights';
-	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/shane/range-offer-decline';
+	} from '$lib/insights/insights';
+	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
 
 	interface Props {
 		formants: Partial<Record<Vowel, CalibratedFormant>>;

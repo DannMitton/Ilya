@@ -8,7 +8,7 @@
  * writes the counts to `out/`. No lyric text is written anywhere. The
  * per-note CSVs do carry each note's pitch, bar, beat, and seconds.
  *
- * The chain per song mirrors `InsightsPane.svelte:106-123`: the reading
+ * The chain per song mirrors `InsightsPane.svelte`'s "The chain" block: the reading
  * octave for the singer's range, the vowel resolver on verse 1 over the
  * reading score, and the analysis on the performance-order score.
  *
@@ -60,7 +60,7 @@ import { scoreMetrics } from '$lib/shane/score-metrics';
 import { musxToMnxJson } from '../e16-harness/src/denigma-convert';
 import { checkPlausibility, FLOOR_MARGIN_SEMITONES, CEILING_MARGIN_SEMITONES } from '$lib/shane/engine/plausibility';
 import { expectedF1 } from '$lib/shane/engine/derivations';
-import { noteFacts } from '$lib/shane/comments';
+import { noteFacts } from '$lib/insights/comments';
 import { buildWatchList } from '$lib/shane/watchlist';
 import { resolveAdvice } from '$lib/shane/advice-resolver';
 import { commentsOracle, type OracleFinding, type OracleSong } from './comments-oracle';
@@ -589,7 +589,7 @@ async function runSong(id: string, file: string): Promise<{ status: SongStatus; 
 		const weightOf = (n: NoteCondition) => (result.tempo === 'none' ? n.quavers : n.seconds!);
 		const total = result.notes.reduce((s, n) => s + weightOf(n), 0);
 		const byId = new Map(score.vocalLine.map((e) => [e.id, e]));
-		// N.168 first slice: the derivations live in `$lib/shane/comments.ts`,
+		// N.168 first slice: the derivations live in `$lib/insights/comments.ts`,
 		// which the app calls too, so these CSVs are the app's own numbers.
 		const facts = noteFacts(result.notes, voice.profile);
 		const pass = voice.profile.passaggio;

@@ -16,7 +16,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildMarkupLegend, markupLegendTypes, MARKUP_LEGEND_ORDER } from './legend';
+import { buildMarkupLegend, markupLegendTypes, MARKUP_LEGEND_ORDER, MARKUP_WITHHELD_TYPE } from './legend';
 import type { CalibratedFormant, Vowel } from '$lib/shane/engine/types';
 import { WITHHELD_SIGLA } from '@ilya/score-parser';
 
@@ -176,6 +176,8 @@ describe('the withheld-syllable entry (N.10b)', () => {
 		const built = buildMarkupLegend({}, 'en', { withheldSyllables: true });
 		expect(built).toHaveLength(1);
 		expect(built[0].type).toBe('markup-withheld');
+		// The constant PageFooter compares against is the one the builder emits.
+		expect(built[0].type).toBe(MARKUP_WITHHELD_TYPE);
 	});
 
 	it('sits last, after every voice state', () => {

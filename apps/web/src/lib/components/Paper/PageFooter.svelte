@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { LegendItem } from '$lib/provenance';
 	import { WITHHELD_SIGLA } from '@ilya/score-parser';
+	import { MARKUP_WITHHELD_TYPE } from '$lib/markup/legend';
 	import { t, type Language } from '$lib/i18n';
 
 	interface Props {
@@ -67,7 +68,7 @@
 						{:else if item.type === 'yo-restored'}
 							<!-- ё (two dots + curved e) -->
 							<svg viewBox="0 0 16 16" class="legend-icon" fill="currentColor" stroke="currentColor"><circle cx="5.5" cy="2.5" r="1.3" stroke="none"/><circle cx="10.5" cy="2.5" r="1.3" stroke="none"/><path d="M4 10h8c0-3-2-4.5-4-4.5S4 7 4 10c0 2.5 1.5 4.5 4 4.5 1.5 0 3-.5 4-2" fill="none" stroke-width="1.5" stroke-linecap="round"/></svg>
-						{:else if item.type === 'markup-withheld'}
+						{:else if item.type === MARKUP_WITHHELD_TYPE}
 							<!-- N.10b: the withheld sigla, drawn from the SAME constant
 							     the renderer puts on the stave, so the legend and the
 							     page can never become two different glyphs. Lavender

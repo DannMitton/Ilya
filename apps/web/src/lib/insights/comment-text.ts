@@ -19,7 +19,7 @@
 
 import { hzToPitch, type Pitch } from '@ilya/score-parser';
 import { hasString, t, type Language } from '$lib/i18n';
-import { pitchLabel } from './note-picker';
+import { pitchLabel } from '$lib/shane/note-picker';
 import { COMMENT_DEFAULTS, STAKES_ORDER, type Challenge, type NoteComment, type Register } from './comments';
 import { ROWS, WORKS, rowReference, shortCitation, type Run } from './comment-sources';
 

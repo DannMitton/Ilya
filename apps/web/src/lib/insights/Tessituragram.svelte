@@ -24,7 +24,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
 	import { pitchLabel } from '$lib/shane/note-picker';
-	import { diatonicOf, formatSeconds, type FigureRow, type TessituragramModel } from '$lib/shane/insights';
+	import { diatonicOf, formatSeconds, type FigureRow, type TessituragramModel } from '$lib/insights/insights';
 
 	interface Props {
 		figure: TessituragramModel;

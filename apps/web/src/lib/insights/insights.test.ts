@@ -41,8 +41,8 @@ import {
 	type RangeRow,
 	type TessituraRow,
 } from './insights';
-import { buildWatchList, type WatchEntry } from './watchlist';
-import { resolveAdvice } from './advice-resolver';
+import { buildWatchList, type WatchEntry } from '$lib/shane/watchlist';
+import { resolveAdvice } from '$lib/shane/advice-resolver';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
 
