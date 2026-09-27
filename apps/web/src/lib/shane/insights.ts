@@ -11,7 +11,7 @@
  * owns it and is tested there:
  *
  *   - the compass and the crossings read the performance-order vocal line,
- *     the same projection `VoiceProfilePane` hands `analyzeScore`;
+ *     the same projection `MarkupPane` hands `analyzeScore`;
  *   - the tessitura is `pachecoTessitura` over `aggregatePhonation`'s
  *     `byPitch`, and `PhonationTrust` decides whether it may print;
  *   - the findings are `buildWatchList`'s entries, grouped and weighed.

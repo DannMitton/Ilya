@@ -59,7 +59,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import { spokenName } from '$lib/shane/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/shane/engine/types';
-	import { buildFitLegend } from '$lib/shane/fit-legend';
+	import { buildMarkupLegend } from '$lib/markup/legend';
 	import {
 		paginateScore,
 		analyzeScore,
@@ -315,7 +315,7 @@
 		   Kabalevsky T05, and 14 after 30 steps on the shipped `Loupe.svelte`.
 		   The loupe rebuilds its own ring from the page on every selection, so
 		   it needs nothing from this sweep. */
-		for (const page of root.querySelectorAll('.fit-paper-container')) {
+		for (const page of root.querySelectorAll('.markup-paper-container')) {
 			for (const el of page.querySelectorAll('[data-note-selected]')) {
 				el.removeAttribute('data-note-selected');
 			}
@@ -697,8 +697,8 @@
 
 	// The Fit legend (item 1.6). Declared here rather than beside its doc
 	// comment above, because N.10b's entry depends on `withheldIpa`.
-	let fitLegend = $derived(
-		buildFitLegend(formants, language, { withheldSyllables: !!withheldIpa })
+	let markupLegend = $derived(
+		buildMarkupLegend(formants, language, { withheldSyllables: !!withheldIpa })
 	);
 	// The advice resolver (§A.158 RULED A) is a PURE POST-PASS wrapped here, at the
 	// analysed seam, so `analyzed` carries the resolved `vowelModification` BEFORE
@@ -796,7 +796,7 @@
 	// VOCABULARY: Dann ruled 2026-08-05 that this app's verb is MEASURE, in both
 	// languages. `étalonner` is the accurate metrological term but reverses the
 	// relation, since Ilya is calibrated against the voice rather than the other
-	// way round, and `mesuré` was already shipped at fit-legend.ts:76 and in
+	// way round, and `mesuré` was already shipped at legend.ts:76 and in
 	// i18n's `fit.broad.body`. A vocabulary sweep of the older `calibrate`
 	// strings is recorded as its own item.
 	//
@@ -986,7 +986,7 @@
 	     not user copy) for a later notice UI to read; absent when the sung order
 	     was computed cleanly. No visible surface is built here (§M0.3). -->
 	<div
-		class="fit-paper-container"
+		class="markup-paper-container"
 		role="region"
 		aria-label={T('profile.scoreRegionAria')}
 		data-analysis-notices={analysisNotices.length
@@ -1024,7 +1024,7 @@
 						{@html page}
 					</div>
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? fitLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" onheightchange={i === 0 ? handleFooterHeight : undefined} />
+				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? markupLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
 		{#if hasCommentaryPage}
@@ -1079,16 +1079,16 @@
      because `PageFit`'s `.paper-fit` is `width: 100%` and fills the desk. What
      centres a sheet is the page stack's own container, and the rule that does
      it is `align-items: center` on a flex column. The score branch above
-     already carries it, as `.fit-paper-container`; this branch never did, so
+     already carries it, as `.markup-paper-container`; this branch never did, so
      the envelope sat at the flex start while the desk head stayed centred.
 
-     THE SAME RULE, NOT A SECOND MECHANISM: this is `.fit-paper-container`
+     THE SAME RULE, NOT A SECOND MECHANISM: this is `.markup-paper-container`
      itself, unchanged, the one the score branch uses, whose declarations are
      byte-identical to `Paper.svelte`'s `.paper-container`. No `role="region"`
      and no `aria-label` here: the article below already carries its own label,
      and an unlabelled region is not exposed as a landmark, so adding one would
      be noise rather than structure. -->
-<div class="fit-paper-container">
+<div class="markup-paper-container">
 <article
 	class="paper-page profile-page envelope-page"
 	style="width: {dims.width}px; height: {dims.height}px;"
@@ -1153,7 +1153,7 @@
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin.
 	     No provenance legend items yet; the legend row simply stays empty
 	     until the score pane brings provenance to this surface. -->
-	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={fitLegend} hairlineAccent="#9585A2" onheightchange={handleFooterHeight} />
+	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={markupLegend} hairlineAccent="#9585A2" onheightchange={handleFooterHeight} />
 </article>
 </div>
 {/if}
@@ -1300,7 +1300,7 @@
 
 	/* Mirrors Paper.svelte's .paper-container so a multi-page score
 	   stacks with the same rhythm as the transcription document. */
-	.fit-paper-container {
+	.markup-paper-container {
 		display: flex;
 		flex-direction: column;
 		align-items: center;

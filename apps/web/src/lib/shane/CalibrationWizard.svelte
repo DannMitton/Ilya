@@ -150,7 +150,7 @@
 		 * onProfileChange cannot see: hydration on mount, voice switching,
 		 * creation, duplication, deletion, rename, and Start over. This is
 		 * the main pane's subscription — the Voice Profile envelope
-		 * (VoiceProfilePane.svelte, handover v30 §C.1) mirrors the
+		 * (MarkupPane.svelte, handover v30 §C.1) mirrors the
 		 * workshop's readings through the page shell, so the gallery always
 		 * shows the voice the drawer is working on, and its TitleHeader
 		 * carries the voice's name (Dann's page-furniture ruling in review).
@@ -221,7 +221,7 @@
 	}: CalibrationWizardProps = $props();
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte and
-	// VoiceProfilePane.svelte's convention.
+	// MarkupPane.svelte's convention.
 	const T = (key: string) => t(key, language);
 	// Reactive, for names not yet created: a voice added while the page is in
 	// French should be offered as "Voix 3".

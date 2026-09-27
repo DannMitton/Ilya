@@ -51,7 +51,7 @@ export function systemMarkup(r: LoupeSystemRender, range: SystemRange): string {
 }
 
 /**
- * The options `VoiceProfilePane` gave `paginateScore`, rebuilt from the bundle.
+ * The options `MarkupPane` gave `paginateScore`, rebuilt from the bundle.
  * An absent channel is left out rather than set to `undefined`, as the pane
  * does, so the renderer's own defaults stand.
  */

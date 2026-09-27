@@ -524,7 +524,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	   the loupe is not inside the page. */
 	let layoutTick = $state(0);
 	$effect(() => {
-		const el = document.querySelector('.fit-paper-container');
+		const el = document.querySelector('.markup-paper-container');
 		if (!el || typeof ResizeObserver === 'undefined') return;
 		const ro = new ResizeObserver(() => (layoutTick += 1));
 		ro.observe(el);
@@ -654,7 +654,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	   `<template>`, parsed by `DOMParser`, or under `display: none` answers all
 	   zeros (MEASURED in the browser pane, 2026-09-20). So the string is mounted
 	   here, in the document but out of sight, and read there. It stands outside
-	   `.fit-paper-container`, so no page query can reach it, and it takes no
+	   `.markup-paper-container`, so no page query can reach it, and it takes no
 	   pointer, so no tap can. The markup the loupe DRAWS is parsed again from the
 	   same string and never touches the document. */
 	let renderHost: HTMLElement | null = null;
@@ -721,7 +721,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	/* THE CLONE, rebuilt whenever the held measure, the taken entry, or the
 	   page itself changes. Reading the DOM rather than being handed geometry
 	   is deliberate: the page is injected SVG, so the DOM is the only place
-	   the rendered coordinates exist, and VoiceProfilePane's own selection
+	   the rendered coordinates exist, and MarkupPane's own selection
 	   mark already reaches the page exactly this way. */
 	$effect(() => {
 		void revision;
@@ -736,7 +736,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			frame = null;
 			return;
 		}
-		const container = document.querySelector('.fit-paper-container');
+		const container = document.querySelector('.markup-paper-container');
 		if (!container) {
 			frame = null;
 			return;
@@ -1269,7 +1269,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		cloneHost.innerHTML = markup;
 		const clone = cloneHost.content.firstElementChild as Element;
 		/* The render carries no `data-note-selected` and no selection ring, which
-		   are VoiceProfilePane's marks on the page; the strips below remove them
+		   are MarkupPane's marks on the page; the strips below remove them
 		   all the same, and stay in case the renderer ever draws either.
 
 		   THE PAGE NO LONGER WEARS A HELD-MEASURE RECTANGLE, removed 2026-09-19
@@ -1328,7 +1328,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		for (const el of clone.querySelectorAll('[data-selection-ring]')) el.remove();
 		for (const el of clone.querySelectorAll('[data-note-selected]')) el.removeAttribute('data-note-selected');
 		/* THE HIT RECTANGLES ARE RENAMED IN THE CLONE, and that is what keeps
-		   the two tap grammars apart. VoiceProfilePane's delegated listener
+		   the two tap grammars apart. MarkupPane's delegated listener
 		   matches `[data-hit]` anywhere in the document, so a clone carrying
 		   that name would put the page's meaning on a tap inside the loupe.
 		   Renamed, the page keeps `data-hit` and this surface owns
@@ -1860,7 +1860,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		
 		   AND THE LOUPE NO LONGER WRITES INTO AN SVG IT DOES NOT OWN, which is
 		   what `system-ground.ts` was reasoning about. That file stays: the
-		   selection ring still needs it, from VoiceProfilePane. */
+		   selection ring still needs it, from MarkupPane. */
 
 		/* THE LOUPE ANCHORS FIXED AND NEVER TRAVELS. Ruled by Dann 2026-08-26
 		   on the deploy walk, and it replaces the placement r2 shipped, which
@@ -2295,7 +2295,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	}
 
 	/* THE LISTENER IS ATTACHED RATHER THAN WRITTEN INTO THE MARKUP, and the
-	   reason is VoiceProfilePane's own (`VoiceProfilePane.svelte:217`): the
+	   reason is MarkupPane's own (its N.55b R4 delegated listener): the
 	   thing being tapped is injected SVG, so there is no element here to hang a
 	   Svelte handler on, and putting one on the wrapper would need a role and a
 	   tabindex it should not have. This surface is `aria-hidden`, and the

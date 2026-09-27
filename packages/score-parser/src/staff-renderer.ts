@@ -245,7 +245,7 @@ export interface StaffRenderOptions {
    * with `SyllableInfo.verses`, which carries real sung text for OTHER
    * verses (§A.86) and must never be read as an IPA source (the two were
    * conflated here until a 2026-07-17 fix). WIRED since N.5:
-   * `VoiceProfilePane.svelte` passes it into `paginateScore`, and
+   * `MarkupPane.svelte` passes it into `paginateScore`, and
    * `renderDemo` populates it too. This comment claimed the opposite until
    * N.10 corrected it on 8 August 2026.
    */
@@ -3190,7 +3190,7 @@ export function renderAnalyzedStaff(
     // read `syl.verses` here, that array is real sung text for OTHER verses
     // (§A.86), not a display convenience, and must not be shown as if it
     // were this note's IPA. `options.ipaPreview` carries the full syllable
-    // IPA. IT IS WIRED: `VoiceProfilePane.svelte:506` passes it into
+    // IPA. IT IS WIRED: `MarkupPane.svelte` (`ipaPreview`) passes it into
     // `paginateScore` from `buildUnderlayResolvers(...).ipa` (N.5, 5 August).
     // This comment claimed otherwise until N.10 corrected it on 8 August;
     // demo and test callers still pass the fixture's placeholder strings.

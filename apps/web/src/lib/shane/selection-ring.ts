@@ -2,14 +2,14 @@
  * selection-ring.ts — the squircle that marks the taken note, as numbers both
  * surfaces read.
  *
- * `VoiceProfilePane.svelte` builds the ring on the page. Since N.141 step 2 the
+ * `MarkupPane.svelte` builds the ring on the page. Since N.141 step 2 the
  * loupe draws its own copy of that ring rather than showing a crop of the
  * page's, so the loupe needs the same stroke and the same reach to size its
  * crop. One source, so the two cannot drift.
  *
  * SINCE N.153 STAGE 1 THIS MODULE ALSO READS THE DOM. `ringBox` turns a taken
  * note's rendered ink into the ring's box, and it used to be inline in
- * `VoiceProfilePane.svelte`'s effect. It moved here whole, so that the loupe,
+ * `MarkupPane.svelte`'s effect. It moved here whole, so that the loupe,
  * which will render its own held measure and so has no page ring to read, can
  * ask for the same box the page draws. The arithmetic was moved, not changed:
  * the box for every selectable event of Sunless 01 was measured before and

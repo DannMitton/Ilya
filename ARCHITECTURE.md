@@ -92,13 +92,16 @@ Depends on nothing else in the workspace.
     Workers that read a score from a PDF or a photograph.
   - `pairings.ts` joins the text's words to the score's notes, and
     `vowel-resolver.ts` asks the GraysonEngine which vowel is sung.
-  - `VoiceProfilePane.svelte` renders the Markup document: it analyzes the
-    score, paginates it (`paginateScore` in `packages/score-parser`), and hands
-    each page's SVG to `Paper/PageFit.svelte`.
   - `Loupe.svelte` and `loupe.ts` are the magnified editor for one measure.
   - `insights.ts`, `comments.ts`, and `InsightsPane.svelte` are Insights.
-- `src/lib/wall.ts` is the one switch that includes or removes Fit at build
-  time (`PUBLIC_INCLUDE_SHANE`).
+- `src/lib/markup/` is the Markup document, moved out of `shane/` by N.174
+  D.2.1. `MarkupPane.svelte` analyzes the score, paginates it (`paginateScore`
+  in `packages/score-parser`), and hands each page's SVG to
+  `Paper/PageFit.svelte`. `legend.ts` builds its footer legend. What each
+  module under `src/lib/` may import is checked by `scripts/ratchets.mjs`.
+- `src/lib/wall.ts` is the one switch that includes or removes Markup and
+  Insights at build time (`PUBLIC_INCLUDE_MARKUP_INSIGHTS`, or the older
+  `PUBLIC_INCLUDE_SHANE`).
 
 Fit's work runs in five stages: **calibrate** the voice, **ingest** a score,
 **resolve** which vowel each note sings, **analyse** where the voice and the

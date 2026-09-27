@@ -1,7 +1,7 @@
 /**
  * The app-side performance-order seam (M0 jump-family wiring).
  *
- * This pins the composition `VoiceProfilePane` performs: the analysis path reads
+ * This pins the composition `MarkupPane` performs: the analysis path reads
  * the score in sung PERFORMANCE order (`scoreInPerformanceOrder` → `analyzeScore`
  * → `buildWatchList`), while the render path reads the NOTATED score unchanged
  * (`paginateScore`). The two must diverge exactly at material the sung sequence
@@ -69,7 +69,7 @@ function scoreOf(measures: Measure[]): ParsedScore {
 const allA: VowelResolver = () => 'a';
 const profile: VoiceProfileSnapshot = { fR1: { a: 700 } };
 
-describe('performance-order seam (VoiceProfilePane analysis vs render)', () => {
+describe('performance-order seam (MarkupPane analysis vs render)', () => {
 	// segno@0, Fine@2, D.S.@3, then m4 — a tail the jump never reaches.
 	const notated = scoreOf([
 		measure(0, { jump: { segno: 'A' } }),

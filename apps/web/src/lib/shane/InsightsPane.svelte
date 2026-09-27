@@ -7,7 +7,7 @@
 	 * block, and `brief-n127-insights-inc1_r1_2026-09-12.md` §1): read-only and
 	 * never an input surface; every line computed or a sourced string a
 	 * predicate fired; the content in a squircle inheriting the watch band
-	 * (`VoiceProfilePane.svelte`, `.watch-band`: 12 px radius, 1 px dusty rose,
+	 * (`MarkupPane.svelte`, `.watch-band`: 12 px radius, 1 px dusty rose,
 	 * cream inside); governing colour dusty rose, label ink `--rose-ink`, `--rose`
 	 * for lines and marks only (both moved at colour stage 4, 2026-09-14); page one fixed at one page; section headers on
 	 * `TitleHeader.svelte`'s `.metadata-line` recipe in rose; the foot one
@@ -23,7 +23,7 @@
 	 * to try, and why", which opens its other suggestions and full references.
 	 * It does not print; a printed Insights ends with "Sources cited" instead.
 	 *
-	 * THE ANALYSIS CHAIN IS `VoiceProfilePane`'S, repeated rather than shared.
+	 * THE ANALYSIS CHAIN IS `MarkupPane`'S, repeated rather than shared.
 	 * The same six derivations in the same order (snapshot, reading octave,
 	 * performance order, resolvers, analysis, watch list), so the findings
 	 * here are the marks the score page draws. Lifting them into one module is
@@ -124,7 +124,7 @@
 
 	const dims = PAGE_SIZES.letter;
 
-	// ── The chain, as `VoiceProfilePane` runs it ───────────────────────
+	// ── The chain, as `MarkupPane` runs it ───────────────────────
 	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, intake));
 	const parsed = $derived(ingested?.result.score ?? null);
 	const octaveShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
@@ -155,7 +155,7 @@
 	);
 
 	/* THE CONDITION IS THE MEASURED VOICE, as it is for the score page's
-	   withheld statement (`VoiceProfilePane.svelte`, `showWithheld`). With no
+	   withheld statement (`MarkupPane.svelte`, `showWithheld`). With no
 	   measured resonance nothing about this voice can be forecast, so the page
 	   prints no number at all (brief §7), even where a typed range exists. */
 	const measured = $derived(adapted.completeness.formants);
@@ -856,7 +856,7 @@
 </PageFit>
 
 <style>
-	/* The page stack: `VoiceProfilePane`'s `.fit-paper-container`, whose
+	/* The page stack: `MarkupPane`'s `.markup-paper-container`, whose
 	   declarations are byte-identical to `Paper.svelte`'s `.paper-container`. */
 	.insights-container {
 		display: flex;

@@ -13,7 +13,7 @@
  * order, so anything inserted before the ground is painted UNDER it and cannot
  * be seen. Two marks are inserted into the page's systems from outside the
  * renderer and both want to sit under the music but over the paper:
- * `VoiceProfilePane`'s selection ring, and the loupe's held-measure rectangle.
+ * `MarkupPane`'s selection ring, and the loupe's held-measure rectangle.
  *
  * FOUND 2026-09-14, on the N.138 walk, and established with the Browser pane
  * visible on the engraved Without Sun song 1, m. 18, at 1440 × 900. The pane

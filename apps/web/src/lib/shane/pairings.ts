@@ -882,7 +882,7 @@ function withAcute(text: string): string | undefined {
 
 /** The switches that change how a seated syllable is DRAWN, never what the
  *  singer placed. The four spelling switches (`applyNotationPreferences`)
- *  are not here: `VoiceProfilePane` applies them to whatever this returns,
+ *  are not here: `MarkupPane` applies them to whatever this returns,
  *  as it always has. */
 export interface DrawSwitches {
 	openSyllabification: boolean;

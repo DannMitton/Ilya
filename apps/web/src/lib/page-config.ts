@@ -65,7 +65,7 @@ export const HEADER_GAP = 16;
  *   new page one contentTop = 48 + 127 + 16 = 191; rule at 175; gap 16.
  *
  * NOT the same as HEADER_HEIGHTS above, which stays untouched because
- * VoiceProfilePane depends on those values.
+ * MarkupPane depends on those values.
  */
 export const HEADER_HEIGHTS_AT_LETTER = {
 	title: 127,

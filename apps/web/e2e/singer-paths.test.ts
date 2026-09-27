@@ -189,7 +189,7 @@ test.describe('Fit with no calibration', () => {
 	});
 
 	test('Fit shows its honest empty state with no calibration', async ({ page }) => {
-		// `profile.emptyState`, i18n.ts:1190. Drawn by VoiceProfilePane.svelte:1148-1149
+		// `profile.emptyState`, i18n.ts:1190. Drawn by MarkupPane.svelte:1148-1149
 		// only in the pre-calibration branch, so its presence is itself the
 		// singer-visible signal that nothing has been measured yet. No
 		// microphone is touched.

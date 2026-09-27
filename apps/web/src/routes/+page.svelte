@@ -119,7 +119,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		notationStateLine,
 		scoreStateLine,
 	} from '$lib/components/Drawer/bandState';
-	import VoiceProfilePane from '$lib/shane/VoiceProfilePane.svelte';
+	import MarkupPane from '$lib/markup/MarkupPane.svelte';
 	import InsightsPane from '$lib/shane/InsightsPane.svelte';
 	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
@@ -722,7 +722,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	}
 
 	/**
-	 * A tap on the PAGE, through VoiceProfilePane's delegated listener.
+	 * A tap on the PAGE, through MarkupPane's delegated listener.
 	 *
 	 * N.92. A click SELECTS, always. Selection is display, so setting it here
 	 * disturbs nothing.
@@ -1835,7 +1835,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   is what makes item 9's exemption for the page's own glyphs safe: coarse
 	   tap picks the measure, and fine work happens inside the loupe.
 
-	   IT DOES NOT DISTURB PLACEMENT. `handleNotePick`, VoiceProfilePane's own
+	   IT DOES NOT DISTURB PLACEMENT. `handleNotePick`, MarkupPane's own
 	   delegated listener, still runs on a tap that lands on a hit rectangle
 	   and still places the pending syllable. This adds the loupe and the
 	   nearest-entry fallback, and takes nothing away. */
@@ -1923,7 +1923,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   of that are measured requirements rather than preferences.
 
 		   NOT `e.target`, because a tap that lands on a hit rectangle reaches
-		   VoiceProfilePane's delegated listener first, and on a desk that
+		   MarkupPane's delegated listener first, and on a desk that
 		   listener places the pending syllable and re-renders the page through
 		   `{@html}`. By the time the event reaches the window, the rectangle it
 		   started on has been replaced and `closest` finds nothing, so the
@@ -2043,12 +2043,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 	// Fit engraving geometry: the fixed stave target (Kimi Q2, 2026-07-15).
 	// No user control; the Appendix-derived defaults are the product, and the
-	// renderer reads them as a constant. Kept as state for VoiceProfilePane.
+	// renderer reads them as a constant. Kept as state for MarkupPane.
 	let engraving = $state<EngravingValues>({ ...ENGRAVING_DEFAULTS });
 	// THE Q3 RENDER COUNTER IS GONE, N.114b item 8. `scoreRenders`,
 	// `wizardCollapsed`, `renderCountedFor` and `handleScoreRendered` existed
 	// only to collapse the calibration wizard once a score had rendered, and
-	// the wizard has no collapse any more. `VoiceProfilePane`'s `onrendered`
+	// the wizard has no collapse any more. `MarkupPane`'s `onrendered`
 	// prop STAYS: it is that component's own optional report and removing it
 	// is a wider ship than this ruling asks for. Nothing binds it now.
 
@@ -3422,7 +3422,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				console.error('[Ilya] score kept, but its source could not be attached:', err);
 			}
 		}
-		// Live-wired (§E.7 slice 1): VoiceProfilePane renders this as paginated
+		// Live-wired (§E.7 slice 1): MarkupPane renders this as paginated
 		// notation in the Fit main pane.
 		ingestedScore = ingested;
 		// N.55b R3: the first pass runs on accept, and the N.55a courtesy message
@@ -4370,7 +4370,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 <!-- N.92. The correction keys, bound at the window because the score is
      injected SVG with nothing to hang a handler on, the same reason
-     VoiceProfilePane delegates its click. The handler stands down entirely
+     MarkupPane delegates its click. The handler stands down entirely
      unless a note is selected, and inside any text field, so nothing else in
      the app loses a key it already had. -->
 <!-- N.92 mobile slice 2. THREE LIVE GESTURES AND NO COLLISION, per the ruled
@@ -4717,7 +4717,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 						     station of the second group is both.
 						     The state was always document-level and persisted (the notationPrefs and
 						     openSyllabification declarations and their writers) and Fit obeyed it:
-						     both reach VoiceProfilePane through its own props of
+						     both reach MarkupPane through its own props of
 						     those names. Only the CONTROL was tab-scoped, which made its
 						     placement lie about its scope.
 
@@ -5073,7 +5073,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     `lines` is passed RAW, not `effectiveLines` — the Fit resolver
 			     applies its own open syllabification, so the display view would
 			     be sliced twice. -->
-			<VoiceProfilePane
+			<MarkupPane
 				{isMobile}
 				transcribedLines={lines}
 				pairings={shownPairings}

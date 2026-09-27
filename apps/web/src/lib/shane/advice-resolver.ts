@@ -12,7 +12,7 @@
  * and everything else untouched.
  *
  * Where it runs (§A.158 RULED A): as a post-pass in `apps/web`, wired at the
- * `analyzed = $derived(analyzeScore(...))` seam in `VoiceProfilePane`, BEFORE
+ * `analyzed = $derived(analyzeScore(...))` seam in `MarkupPane`, BEFORE
  * `buildWatchList` reads the events, so the watch line can render the resolved
  * advice. It is NOT threaded through `analyzeScore`, keeping the pure engine
  * content-free.

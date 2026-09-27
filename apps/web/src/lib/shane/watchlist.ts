@@ -41,7 +41,7 @@
  * with its definition (§B).
  *
  * This module is PURE and framework-free, so it is unit-testable the way the
- * parsers are. `VoiceProfilePane` consumes it for the printed band.
+ * parsers are. `MarkupPane` consumes it for the printed band.
  */
 
 import {

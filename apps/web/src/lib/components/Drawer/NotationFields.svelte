@@ -4,7 +4,7 @@
 	   Transcription drawer alone. The state it writes was already
 	   document-level and persisted (the notationPrefs and openSyllabification declarations),
 	   and Fit already obeyed it: notationPrefs and openSyllabification reach
-	   VoiceProfilePane through its own props of those names. Only the CONTROL was
+	   MarkupPane through its own props of those names. Only the CONTROL was
 	   tab-scoped, so its placement lied about the scope of what it governs.
 
 	   Twinned on the MetadataFields precedent: one component, state owned by
@@ -12,7 +12,7 @@
 	   "shared with the Fit drawer" comment on the metadata block.
 
 	   THE SEVENTH TOGGLE NOW REACHES FIT (N.119). It was the one that did not:
-	   stress acutes were read only on Transcription. VoiceProfilePane takes
+	   stress acutes were read only on Transcription. MarkupPane takes
 	   showStressDiacritics and puts the acute on the Cyrillic underlay, never
 	   the IPA line. Fit's IPA stress mark is a separate and unconditional
 	   thing (pipeline.ts:711).

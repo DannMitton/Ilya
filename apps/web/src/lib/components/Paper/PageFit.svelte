@@ -10,7 +10,7 @@
 	 * page. If it drew a lookalike, WYSIWYG would be gone.
 	 *
 	 * C2 moved this out of `Paper.svelte`, where it served the transcription
-	 * alone, so `VoiceProfilePane` gets the same fit by the same mechanism
+	 * alone, so `MarkupPane` gets the same fit by the same mechanism
 	 * rather than by a copy that can drift. Both Studio documents miniaturize
 	 * identically because they miniaturize through this file.
 	 *

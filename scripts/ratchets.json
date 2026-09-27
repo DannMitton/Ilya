@@ -13,7 +13,7 @@
     "packages/phonology/src/engine.ts": 2278,
     "apps/web/src/lib/shane/CalibrationWizard.svelte": 2124,
     "apps/web/src/lib/components/Drawer/Drawer.svelte": 1990,
-    "apps/web/src/lib/shane/VoiceProfilePane.svelte": 1490,
+    "apps/web/src/lib/markup/MarkupPane.svelte": 1490,
     "apps/web/src/lib/shane/pairings.ts": 1423,
     "apps/web/src/lib/shane/InsightsPane.svelte": 1350,
     "apps/web/src/lib/shane/ScoreUploader.svelte": 1340,

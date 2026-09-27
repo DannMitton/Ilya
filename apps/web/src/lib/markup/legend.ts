@@ -39,7 +39,7 @@
 
 import type { Language } from '../i18n';
 import type { LegendItem } from '../provenance';
-import type { CalibratedFormant, Vowel } from './engine/types';
+import type { CalibratedFormant, Vowel } from '$lib/shane/engine/types';
 
 /**
  * Stable display order, and it is not alphabetical. It runs from the most
@@ -48,30 +48,30 @@ import type { CalibratedFormant, Vowel } from './engine/types';
  * than about the singer, and it is the only one that can co-occur with any of
  * the others.
  */
-export const FIT_LEGEND_ORDER = [
-	'fit-captured',
-	'fit-provisional',
-	'fit-estimated',
-	'fit-unmeasured'
+export const MARKUP_LEGEND_ORDER = [
+	'markup-captured',
+	'markup-provisional',
+	'markup-estimated',
+	'markup-unmeasured'
 ] as const;
 
-export type FitLegendType = (typeof FIT_LEGEND_ORDER)[number];
+export type MarkupLegendType = (typeof MARKUP_LEGEND_ORDER)[number];
 
 /** PLACEHOLDER copy, flagged for Dann. See the module note. */
-const FIT_LEGEND_COPY: Record<FitLegendType, Record<Language, string>> = {
-	'fit-captured': {
+const MARKUP_LEGEND_COPY: Record<MarkupLegendType, Record<Language, string>> = {
+	'markup-captured': {
 		en: 'Captured: you sang it, and it read cleanly.',
 		fr: 'Capturé : vous l’avez chanté, et la lecture est nette.'
 	},
-	'fit-provisional': {
+	'markup-provisional': {
 		en: 'Provisional: you sang it, but it read with less certainty. You can re-take it.',
 		fr: 'Provisoire : vous l’avez chanté, mais la lecture est moins sûre. Vous pouvez le reprendre.'
 	},
-	'fit-estimated': {
+	'markup-estimated': {
 		en: 'Estimated: not sung. Derived from the vowels you did sing.',
 		fr: 'Estimé : non chanté. Dérivé des voyelles que vous avez chantées.'
 	},
-	'fit-unmeasured': {
+	'markup-unmeasured': {
 		en: 'Unmeasured: your device could not measure the room for this sample. It says nothing about your voice.',
 		fr: 'Non mesuré : votre appareil n’a pas pu mesurer la pièce pour cet échantillon. Cela ne dit rien de votre voix.'
 	}
@@ -83,8 +83,8 @@ const FIT_LEGEND_COPY: Record<FitLegendType, Record<Language, string>> = {
  * The four are states of the singer's VOICE, derived from their formants.
  * This one is a state of the SCORE: Ilya declined to transcribe a syllable
  * because the engraver's division and the engine's disagree there. It is
- * kept out of `FitLegendType` and out of `fitLegendTypes` so that function
- * keeps its single subject, and it is appended by `buildFitLegend` on a flag
+ * kept out of `MarkupLegendType` and out of `markupLegendTypes` so that function
+ * keeps its single subject, and it is appended by `buildMarkupLegend` on a flag
  * the caller supplies from the render, which is the only place that knows.
  *
  * This entry is the ONE exception to the Fit legend's no-circle rule, and
@@ -98,7 +98,7 @@ const FIT_LEGEND_COPY: Record<FitLegendType, Record<Language, string>> = {
  * PLACEHOLDER copy, flagged for Dann, on the same footing as the four above.
  * The French is mine and needs his eye more than the English does.
  */
-const FIT_WITHHELD_COPY: Record<Language, string> = {
+const MARKUP_WITHHELD_COPY: Record<Language, string> = {
 	en: 'The score and Ilya divide this word differently, so nothing is transcribed here rather than guessed.',
 	fr: 'La partition et Ilya divisent ce mot différemment : rien n’est transcrit ici plutôt que deviné.'
 };
@@ -106,28 +106,28 @@ const FIT_WITHHELD_COPY: Record<Language, string> = {
 /**
  * Which legend entries does this profile actually warrant?
  *
- * Split out from `buildFitLegend` so the decision is reachable by `vitest`
+ * Split out from `buildMarkupLegend` so the decision is reachable by `vitest`
  * without a `Language`, and so the copy and the logic can be wrong
  * independently of each other.
  *
  * `Unmeasured` is tested across every reading rather than per state, because it
  * is orthogonal: one Captured vowel with an unmeasurable room earns the entry.
  */
-export function fitLegendTypes(
+export function markupLegendTypes(
 	formants: Partial<Record<Vowel, CalibratedFormant>>
-): FitLegendType[] {
-	const present = new Set<FitLegendType>();
+): MarkupLegendType[] {
+	const present = new Set<MarkupLegendType>();
 
 	for (const f of Object.values(formants)) {
 		if (!f) continue;
-		if (f.reading === 'captured') present.add('fit-captured');
-		else if (f.reading === 'provisional') present.add('fit-provisional');
-		else if (f.reading === 'estimated') present.add('fit-estimated');
+		if (f.reading === 'captured') present.add('markup-captured');
+		else if (f.reading === 'provisional') present.add('markup-provisional');
+		else if (f.reading === 'estimated') present.add('markup-estimated');
 		// Orthogonal, and deliberately not an `else`: see the module note.
-		if (f.noiseFloor === 'unmeasured') present.add('fit-unmeasured');
+		if (f.noiseFloor === 'unmeasured') present.add('markup-unmeasured');
 	}
 
-	return FIT_LEGEND_ORDER.filter((t) => present.has(t));
+	return MARKUP_LEGEND_ORDER.filter((t) => present.has(t));
 }
 
 /**
@@ -139,15 +139,15 @@ export function fitLegendTypes(
  * words, not as glyphs, so a legend circle would introduce a mark that is
  * nowhere else on the page.
  */
-export function buildFitLegend(
+export function buildMarkupLegend(
 	formants: Partial<Record<Vowel, CalibratedFormant>>,
 	language: Language,
 	options: { withheldSyllables?: boolean } = {}
 ): LegendItem[] {
-	const items: LegendItem[] = fitLegendTypes(formants).map((type) => ({
+	const items: LegendItem[] = markupLegendTypes(formants).map((type) => ({
 		type,
 		icon: '',
-		label: FIT_LEGEND_COPY[type][language],
+		label: MARKUP_LEGEND_COPY[type][language],
 		textOnly: true
 	}));
 	// N.10b. Last, and emitted only when the page actually carries the mark,
@@ -156,9 +156,9 @@ export function buildFitLegend(
 	// because it is the only entry that is not about the singer's voice.
 	if (options.withheldSyllables) {
 		items.push({
-			type: 'fit-withheld',
+			type: 'markup-withheld',
 			icon: 'question',
-			label: FIT_WITHHELD_COPY[language],
+			label: MARKUP_WITHHELD_COPY[language],
 			// The exception: this one is a glyph on the page, so it is a glyph
 			// here. Every entry above it is a word in the page's prose.
 			textOnly: false

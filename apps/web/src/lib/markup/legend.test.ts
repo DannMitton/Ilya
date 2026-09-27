@@ -16,8 +16,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildFitLegend, fitLegendTypes, FIT_LEGEND_ORDER } from './fit-legend';
-import type { CalibratedFormant, Vowel } from './engine/types';
+import { buildMarkupLegend, markupLegendTypes, MARKUP_LEGEND_ORDER } from './legend';
+import type { CalibratedFormant, Vowel } from '$lib/shane/engine/types';
 import { WITHHELD_SIGLA } from '@ilya/score-parser';
 
 /** A reading with only the fields this legend reads; the rest is scaffolding. */
@@ -39,65 +39,65 @@ const profile = (m: Partial<Record<Vowel, CalibratedFormant>>) => m;
 
 describe('the Fit legend names only what the singer actually has', () => {
 	it('an empty profile earns no legend at all', () => {
-		expect(fitLegendTypes({})).toEqual([]);
-		expect(buildFitLegend({}, 'en')).toEqual([]);
+		expect(markupLegendTypes({})).toEqual([]);
+		expect(buildMarkupLegend({}, 'en')).toEqual([]);
 	});
 
 	it('a profile of one captured vowel names captured and nothing else', () => {
-		expect(fitLegendTypes(profile({ i: reading('captured') }))).toEqual(['fit-captured']);
+		expect(markupLegendTypes(profile({ i: reading('captured') }))).toEqual(['markup-captured']);
 	});
 
 	it('a profile with no estimated vowels never mentions estimated', () => {
-		const types = fitLegendTypes(
+		const types = markupLegendTypes(
 			profile({ i: reading('captured'), e: reading('provisional') })
 		);
-		expect(types).toEqual(['fit-captured', 'fit-provisional']);
-		expect(types).not.toContain('fit-estimated');
+		expect(types).toEqual(['markup-captured', 'markup-provisional']);
+		expect(types).not.toContain('markup-estimated');
 	});
 
 	it('all three reading states, in most-evidence-first order', () => {
 		// Deliberately inserted in the WRONG order, so a builder that simply
 		// echoed insertion order would fail this.
-		const types = fitLegendTypes(
+		const types = markupLegendTypes(
 			profile({
 				ɨ: reading('estimated'),
 				e: reading('provisional'),
 				i: reading('captured')
 			})
 		);
-		expect(types).toEqual(['fit-captured', 'fit-provisional', 'fit-estimated']);
+		expect(types).toEqual(['markup-captured', 'markup-provisional', 'markup-estimated']);
 	});
 });
 
 describe('Unmeasured is orthogonal, not a fourth reading', () => {
 	it('one unmeasurable room among many earns the entry', () => {
-		const types = fitLegendTypes(
+		const types = markupLegendTypes(
 			profile({
 				i: reading('captured'),
 				e: reading('captured'),
 				a: reading('captured', 'unmeasured')
 			})
 		);
-		expect(types).toContain('fit-unmeasured');
+		expect(types).toContain('markup-unmeasured');
 	});
 
 	it('co-occurs with captured rather than replacing it', () => {
 		// The whole point of the ruling: "we heard you perfectly and could not
 		// measure your room" is two facts, not one verdict.
-		expect(fitLegendTypes(profile({ i: reading('captured', 'unmeasured') }))).toEqual([
-			'fit-captured',
-			'fit-unmeasured'
+		expect(markupLegendTypes(profile({ i: reading('captured', 'unmeasured') }))).toEqual([
+			'markup-captured',
+			'markup-unmeasured'
 		]);
 	});
 
 	it('a measured noise floor earns nothing', () => {
-		expect(fitLegendTypes(profile({ i: reading('captured', 'measured') }))).toEqual([
-			'fit-captured'
+		expect(markupLegendTypes(profile({ i: reading('captured', 'measured') }))).toEqual([
+			'markup-captured'
 		]);
 	});
 
 	it('sorts last, after every reading state', () => {
-		const types = fitLegendTypes(
+		const types = markupLegendTypes(
 			profile({
 				i: reading('captured', 'unmeasured'),
 				e: reading('provisional'),
@@ -105,12 +105,12 @@ describe('Unmeasured is orthogonal, not a fourth reading', () => {
 			})
 		);
 		expect(types).toEqual([
-			'fit-captured',
-			'fit-provisional',
-			'fit-estimated',
-			'fit-unmeasured'
+			'markup-captured',
+			'markup-provisional',
+			'markup-estimated',
+			'markup-unmeasured'
 		]);
-		expect(types[types.length - 1]).toBe('fit-unmeasured');
+		expect(types[types.length - 1]).toBe('markup-unmeasured');
 	});
 });
 
@@ -122,15 +122,15 @@ describe('the built items carry what the footer needs', () => {
 	});
 
 	it('every item is textOnly, because Fit states are words on the page and not glyphs', () => {
-		for (const item of buildFitLegend(full, 'en')) {
+		for (const item of buildMarkupLegend(full, 'en')) {
 			expect(item.textOnly).toBe(true);
 			expect(item.icon).toBe('');
 		}
 	});
 
 	it('every entry has copy in both languages, and they differ', () => {
-		const en = buildFitLegend(full, 'en');
-		const fr = buildFitLegend(full, 'fr');
+		const en = buildMarkupLegend(full, 'en');
+		const fr = buildMarkupLegend(full, 'fr');
 		expect(en).toHaveLength(fr.length);
 		for (let i = 0; i < en.length; i++) {
 			expect(en[i].type).toBe(fr[i].type);
@@ -143,11 +143,11 @@ describe('the built items carry what the footer needs', () => {
 	});
 
 	it('covers every type in the declared order, with no orphans', () => {
-		const built = buildFitLegend(full, 'en').map((x) => x.type);
-		for (const type of FIT_LEGEND_ORDER) {
+		const built = buildMarkupLegend(full, 'en').map((x) => x.type);
+		for (const type of MARKUP_LEGEND_ORDER) {
 			expect(built).toContain(type);
 		}
-		expect(built).toEqual([...FIT_LEGEND_ORDER]);
+		expect(built).toEqual([...MARKUP_LEGEND_ORDER]);
 	});
 });
 
@@ -165,27 +165,27 @@ describe('the withheld-syllable entry (N.10b)', () => {
 	} as CalibratedFormant;
 
 	it('is absent when the page carries no withheld syllable', () => {
-		expect(buildFitLegend({}, 'en')).toEqual([]);
-		expect(buildFitLegend({}, 'en', {})).toEqual([]);
-		expect(buildFitLegend({}, 'en', { withheldSyllables: false })).toEqual([]);
+		expect(buildMarkupLegend({}, 'en')).toEqual([]);
+		expect(buildMarkupLegend({}, 'en', {})).toEqual([]);
+		expect(buildMarkupLegend({}, 'en', { withheldSyllables: false })).toEqual([]);
 	});
 
 	it('is the whole legend on an uncalibrated page that withheld a syllable', () => {
 		// The two subjects are independent: a singer with no profile at all can
 		// still have a score whose division Ilya could not follow.
-		const built = buildFitLegend({}, 'en', { withheldSyllables: true });
+		const built = buildMarkupLegend({}, 'en', { withheldSyllables: true });
 		expect(built).toHaveLength(1);
-		expect(built[0].type).toBe('fit-withheld');
+		expect(built[0].type).toBe('markup-withheld');
 	});
 
 	it('sits last, after every voice state', () => {
 		const formants = { i: captured } as Partial<Record<Vowel, CalibratedFormant>>;
-		const built = buildFitLegend(formants, 'en', { withheldSyllables: true });
+		const built = buildMarkupLegend(formants, 'en', { withheldSyllables: true });
 		expect(built.length).toBeGreaterThan(1);
-		expect(built[built.length - 1].type).toBe('fit-withheld');
+		expect(built[built.length - 1].type).toBe('markup-withheld');
 		// And it did not displace the voice states, which is the control: the
 		// flag must add an entry, never rewrite the list.
-		expect(built.slice(0, -1)).toEqual(buildFitLegend(formants, 'en'));
+		expect(built.slice(0, -1)).toEqual(buildMarkupLegend(formants, 'en'));
 	});
 
 	it('is the one Fit entry that draws a circle, in both languages', () => {
@@ -193,7 +193,7 @@ describe('the withheld-syllable entry (N.10b)', () => {
 		// legend shows the sigla. Every other Fit entry is a word in the page's
 		// prose and carries no circle, which the tests above assert.
 		for (const language of ['en', 'fr'] as const) {
-			const item = buildFitLegend({}, language, { withheldSyllables: true })[0];
+			const item = buildMarkupLegend({}, language, { withheldSyllables: true })[0];
 			expect(item.textOnly).toBe(false);
 			expect(item.label.length).toBeGreaterThan(20);
 			// The old typeset mark must not survive in the copy: the glyph is

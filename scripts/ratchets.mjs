@@ -15,13 +15,20 @@
  * 3. PACKAGE SURFACE. Application source reaches into a package's files by
  *    a relative path (../packages/...) instead of through its @ilya/ name.
  *    Tests are exempt, because they may load a package's fixtures directly.
+ * 4. MODULES. A file under apps/web/src/lib/<m>/, for <m> one of the six
+ *    modules in MODULES below, imports a module <m> may not import. Tests
+ *    are NOT exempt here: they obey the same table. Added by N.174 D.2.0,
+ *    2026-09-27, per the module map (n174-B, section 8).
+ *
+ * A ceiling whose file no longer exists is a breach too, so a moved file
+ * cannot lose its ceiling silently: move the key with the file.
  *
  * Added on the audit branch, 2026-09-26. The idea of a ratchet in CI comes
  * from Fable's ruling of 2026-08-03 (claude/fable-ruling-e22-three-audit-
  * assessment_2026-08-03.md, 7.2), which asked for one on the colour fallbacks.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
+import { join, posix, relative, sep } from 'node:path';
 
 const root = process.cwd();
 const config = JSON.parse(readFileSync(join(root, 'scripts/ratchets.json'), 'utf8'));
@@ -63,16 +70,53 @@ for (const file of files) {
 	}
 }
 for (const file of Object.keys(config.ceilings)) {
-	if (!files.includes(file)) canLower.push(`${file}: no longer exists; remove its ceiling`);
+	if (!files.includes(file)) breaches.push(`SIZE  ${file} has a ceiling in scripts/ratchets.json but no longer exists. Move the key with the file.`);
 }
 
-// 2 and 3. Imports.
-const IMPORT = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
+// 4. Modules: what each module under apps/web/src/lib/ may import.
+const LIB = 'apps/web/src/lib/';
+const MODULES = {
+	reader: [],
+	score: ['reader'],
+	voice: ['reader', 'score'],
+	analysis: ['reader', 'score', 'voice'],
+	markup: ['reader', 'score', 'voice', 'analysis'],
+	insights: ['reader', 'score', 'voice', 'analysis'],
+};
+/** The module a repository path sits in, or null outside the six. */
+function moduleOfPath(path) {
+	if (!path.startsWith(LIB)) return null;
+	const name = path.slice(LIB.length).split('/')[0];
+	return name in MODULES ? name : null;
+}
+/** The module an import specifier in `file` resolves to, or null. */
+function moduleOfSpec(file, spec) {
+	if (spec.startsWith('$lib/')) return moduleOfPath(LIB + spec.slice('$lib/'.length));
+	if (spec.startsWith('.')) return moduleOfPath(posix.normalize(posix.join(posix.dirname(file), spec)));
+	return null;
+}
+// Slice D.2.6 switches this on, once lib/shane/ is empty: any file left there is a breach.
+const SHANE_FOLDER_IS_GONE = false;
+
+// 2, 3 and 4. Imports.
+const IMPORT = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)|new\s+URL\(\s*['"]([^'"]+)['"]\s*,\s*import\.meta\.url\s*\)/g;
 for (const file of files) {
-	if (IS_TEST.test(file)) continue;
+	if (SHANE_FOLDER_IS_GONE && file.startsWith(`${LIB}shane/`)) {
+		breaches.push(`MODULE ${file} is under lib/shane/, which no longer exists.`);
+	}
+	const isTest = IS_TEST.test(file);
+	const own = moduleOfPath(file);
 	const text = readFileSync(join(root, file), 'utf8');
 	for (const m of text.matchAll(IMPORT)) {
-		const spec = m[1] ?? m[2];
+		const spec = m[1] ?? m[2] ?? m[3];
+		if (own) {
+			const target = moduleOfSpec(file, spec);
+			if (target && target !== own && !MODULES[own].includes(target)) {
+				breaches.push(`MODULE ${file} imports "${spec}". ${own}/ may not import ${target}/.`);
+			}
+		}
+		// Checks 2 and 3 skip tests, which may load a package's fixtures directly.
+		if (isTest) continue;
 		if (file.startsWith('packages/')) {
 			if (spec.startsWith('$lib') || spec.startsWith('$app') || /(^|\/)apps\//.test(spec)) {
 				breaches.push(`LAYER ${file} imports "${spec}". A package must not depend on the application.`);
