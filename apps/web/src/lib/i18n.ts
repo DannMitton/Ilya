@@ -99,22 +99,19 @@ const strings: Record<string, Record<Language, string>> = {
 	//    places. Two of them are invariant by ruling, Guide and Fit;
 	//    they are keyed anyway, so the invariance is recorded here as
 	//    identical en/fr values rather than as an absence from the
-	//    dictionary. 'tab.transcription' was the third until N.132.
-	//    'Fit' is invariant by Dann's ruling of 13 July 2026; the
-	//    internal tab id stays 'shane', the dictionary key does not.
-	'tab.transcription':           { en: 'Text',                         fr: 'Texte' },
+	//    dictionary. 'tab.text' was the third until N.132.
+	//    'Fit' is invariant by Dann's ruling of 13 July 2026.
+	'tab.text':                    { en: 'Text',                         fr: 'Texte' },
 	'tab.learn':                   { en: 'Learn',                        fr: 'Leçons' },
 	'tab.guide':                   { en: 'Guide',                        fr: 'Guide' },
-	'tab.fit':                     { en: 'Fit',                          fr: 'Fit' },
 	// N.73 S1. Studio's second document, named for the singer in the desk
 	// head's pair. N.132: "Markup" and « Annotation », RATIFIED by Dann
-	// 2026-09-13 with "Text" and « Texte » for 'tab.transcription'. They
+	// 2026-09-13 with "Text" and « Texte » for 'tab.text'. They
 	// SUPERSEDE « Partition annotée », ratified 2026-08-19 for the old
 	// name "Marked score", later "Score markup": do not carry it forward.
 	// The KEYS stay, because both are cited by name across the tree.
-	// This does NOT replace 'tab.fit': Fit is the tool's name and is
-	// invariant in French by his ruling of 2026-07-13. The document is not
-	// called Fit.
+	// Fit is the tool's name and is invariant in French by his ruling of
+	// 2026-07-13. The document is not called Fit.
 	'tab.markedScore':             { en: 'Markup',                       fr: 'Annotation' },
 	// N.127. Studio's third document. « Aperçus » RULED by Dann 2026-09-12,
 	// and it is the only French N.127 increment 1 writes. Every `insights.*`
@@ -138,7 +135,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    'a11y.tabs' is the same word in both languages. It is keyed
 	//    anyway, the way 'tab.guide' is, so parity stays total and no
 	//    slot is left for `t()` to report as missing. 'a11y.paper'
-	//    follows 'tab.transcription' (N.154, 2026-09-25).
+	//    follows 'tab.text' (N.154, 2026-09-25).
 	//    These are spoken, never printed, so no guillemets.
 	'a11y.drawer':                 { en: 'Controls',                     fr: 'Commandes' },
 	'a11y.tocToggle':              { en: 'Expand or collapse',           fr: 'Développer ou réduire' },
@@ -598,7 +595,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// word and the same standard noun in French, so this ships no French
 	// Dann has not seen. The precedent for recording an invariant as
 	// identical en/fr values rather than as an absence is the tab bar's own
-	// comment in this file, on 'tab.transcription' and 'tab.guide'.
+	// comment in this file, on 'tab.text' and 'tab.guide'.
 	// `t()` returns `[MISSING: key]` for an empty slot, so an omitted French
 	// value is not an option here; it would print that string in the drawer.
 	'source.heading':              { en: 'Source',                       fr: 'Source' },

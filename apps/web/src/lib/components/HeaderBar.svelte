@@ -39,10 +39,10 @@
 
 <header
 	class="header-bar"
-	class:tab-transcription={activeTab === 'transcription'}
+	class:tab-text={activeTab === 'text'}
 	class:tab-learn={activeTab === 'learn'}
 	class:tab-guide={activeTab === 'guide'}
-	class:tab-shane={activeTab === 'shane'}
+	class:tab-markup={activeTab === 'markup'}
 	class:tab-insights={activeTab === 'insights'}
 >
 	<h1 class="sr-only">{language === 'fr' ? 'Ilya — Diction lyrique russe' : 'Ilya — Russian Lyric Diction'}</h1>
@@ -70,7 +70,7 @@
 
 	/* ── Tab-responsive background ────────────────────────── */
 
-	.header-bar.tab-transcription {
+	.header-bar.tab-text {
 		background: var(--sage, #839275);
 	}
 
@@ -90,7 +90,7 @@
 	   three sibling rules below (the sigil version, the inactive language
 	   option, and its hover underline) already key to --lavender and
 	   were never changed. */
-	.header-bar.tab-shane {
+	.header-bar.tab-markup {
 		background: var(--lavender, #9585A2);
 	}
 
@@ -144,7 +144,7 @@
 		transition: background-color 300ms ease;
 	}
 
-	.tab-transcription .sigil-version {
+	.tab-text .sigil-version {
 		background: var(--sage-deep, #7A8A6C);
 	}
 
@@ -160,7 +160,7 @@
 	   Learn and Guide deepened badge shades were hand-picked, not a token
 	   that exists yet. If Kimi or Dann want a precise locked value, this is
 	   the one to revisit. */
-	.tab-shane .sigil-version {
+	.tab-markup .sigil-version {
 		background: #74677F;
 	}
 
@@ -207,7 +207,7 @@
 	   (2026-09-14) the chip has its own value and the hairline was left in
 	   place. The five values live in app.css. */
 
-	.tab-transcription .lang-pill {
+	.tab-text .lang-pill {
 		background: var(--sage-chip, #637156);
 	}
 
@@ -220,7 +220,7 @@
 		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
 	}
 
-	.tab-shane .lang-pill {
+	.tab-markup .lang-pill {
 		background: var(--lavender-chip, #746580);
 	}
 

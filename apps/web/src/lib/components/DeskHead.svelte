@@ -23,7 +23,7 @@
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
 	import type { TabId } from '$lib/destinations';
-	import { INCLUDE_SHANE } from '$lib/wall';
+	import { INCLUDE_MARKUP_INSIGHTS } from '$lib/wall';
 
 	interface Props {
 		activeTab: TabId;
@@ -38,7 +38,7 @@
 	/* THE WALL. A pair whose second member compiles out is not a pair (E.44
 	   §CONTRADICTIONS 6), so a wall-closed build draws no track and no
 	   divider: one document, named where the pair would have been, still
-	   reachable from Learn and Guide. INCLUDE_SHANE is a build-time literal,
+	   reachable from Learn and Guide. INCLUDE_MARKUP_INSIGHTS is a build-time literal,
 	   so Rollup takes the dead half with it.
 
 	   THE PAIR IS THREE, N.127 increment 1: Insights joins as a third segment
@@ -50,17 +50,17 @@
 	   The three documents fit the 342 px head at a 390 px viewport with
 	   54.05 px spare in English and 14.61 px in French, measured on the
 	   live build 2026-09-21 (the desk's harness said 54.20 and 14.81). */
-	const pairIds: TabId[] = INCLUDE_SHANE ? ['transcription', 'shane', 'insights'] : ['transcription'];
+	const pairIds: TabId[] = INCLUDE_MARKUP_INSIGHTS ? ['text', 'markup', 'insights'] : ['text'];
 	const linkIds: TabId[] = ['learn', 'guide'];
 
 	function label(id: TabId): string {
 		switch (id) {
-			case 'transcription': return T('tab.transcription');
-			// Studio's second document. The engine codename is 'shane'; the
+			case 'text': return T('tab.text');
+			// Studio's second document, id 'markup' since N.174 D.1. The
 			// singer reads "Markup" and « Annotation », ratified by Dann
 			// 2026-09-13 (N.132). They supersede 2026-08-19's « Partition
 			// annotée », ratified for the old name. It is not called Fit here.
-			case 'shane': return T('tab.markedScore');
+			case 'markup': return T('tab.markedScore');
 			// Studio's third document, N.127. « Aperçus », ruled by Dann 2026-09-12.
 			case 'insights': return T('tab.insights');
 			case 'learn': return T('tab.learn');

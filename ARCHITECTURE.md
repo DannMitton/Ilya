@@ -128,8 +128,11 @@ broken.
 8. **`VocalLineEvent` does not change shape.** Much of Fit is built on it.
 9. **Store what the singer said, never what Ilya derived.** Everything derived
    is recomputed on open. The one ruled exception is R8's vowel glyph.
-10. **Stored ids never change.** The destination ids in `destinations.ts` and
-    the library's record keys are written to the singer's device.
+10. **A stored id changes only with a migration.** The destination ids in
+    `destinations.ts` and the library's record keys are written to the
+    singer's device, so an id changes only with a migration that reads both
+    the old and the new value: `restoreSurface` in `destinations.ts` is the
+    example. Amended by N.174, 2026-09-27.
 11. **Every word the singer reads exists in both languages.** Interface words
     live in `i18n.ts`. *Tested:* `apps/web/src/lib/approval/i18n-keys.test.ts`
     checks every literal key in both languages. **Not yet true** of the word

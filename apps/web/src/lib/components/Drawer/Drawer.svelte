@@ -455,7 +455,7 @@
 				     order, on both of Studio's documents, so nothing in the drawer
 				     appears, disappears, or moves when the singer flips the pair.
 				     Their own {#if} guards still suppress score-only content, and
-				     shanePanel carries its own INCLUDE_SHANE gate. Learn and Guide
+				     shanePanel carries its own INCLUDE_MARKUP_INSIGHTS gate. Learn and Guide
 				     are untouched. -->
 				{#if isStudio}
 					<!-- ═══ THE PATH. N.115, RULED BY DANN 2026-09-10: "The drawer

@@ -8,7 +8,7 @@
  * The expected values below are copied from Dann's ratified table of
  * 2026-08-23, not read back out of `i18n.ts`, so this test fails if the
  * dictionary drifts from what he approved. `a11y.paper` was re-ruled to
- * Text and Texte, matching `tab.transcription`, on 2026-09-25 (N.154), and
+ * Text and Texte, matching `tab.text`, on 2026-09-25 (N.154), and
  * its expectation is copied from that ruling. That is the standing condition
  * on every acceptance test in this repository: no expectation may take its value
  * from the mechanism under test.

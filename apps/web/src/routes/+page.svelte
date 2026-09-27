@@ -94,7 +94,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type StudioDocument,
 		type TabId,
 	} from '$lib/destinations';
-	import { INCLUDE_SHANE } from '$lib/wall';
+	import { INCLUDE_MARKUP_INSIGHTS } from '$lib/wall';
 	import CalibrationWizard from '$lib/shane/CalibrationWizard.svelte';
 	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
@@ -336,7 +336,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   what `DeskHead` names. Nothing writes it; writing `destination` or
 	   `studioDocument` is what moves it. */
 	let destination = $state<Destination>('studio');
-	let studioDocument = $state<StudioDocument>('transcription');
+	let studioDocument = $state<StudioDocument>('text');
 	const activeTab = $derived(tabIdFor({ destination, studioDocument }));
 	// Shane: the active voice's stored readings and name, published by the
 	// wizard in the drawer (the workshop) so the main pane (the gallery,
@@ -1555,13 +1555,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   and Dann's ruling of 2026-08-25 said it persists on desktop. What stays
 	   phone-only is the DOCK, which is the shell the surface sits in below
 	   768 px; the desktop's surface is the drawer's own tenant. */
-	/* N.127: `=== 'shane'`, where this read `!== 'transcription'`. That test
-	   meant the marked score while Studio held two documents, and a third
-	   document would have raised the loupe over a page with no staves. */
+	/* N.127: `=== 'markup'` (`shane` until N.174 D.1), where this read a
+	   not-the-text test. That test meant the marked score while Studio held
+	   two documents, and a third would have raised the loupe over no staves. */
 	const loupeAvailable = $derived(
-		INCLUDE_SHANE &&
+		INCLUDE_MARKUP_INSIGHTS &&
 			destination === 'studio' &&
-			studioDocument === 'shane' &&
+			studioDocument === 'markup' &&
 			!!ingestedScore,
 	);
 
@@ -2086,11 +2086,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
 	// Tab transition animation
-	// Fit (engine codename 'shane') sits adjacent to Transcription; the
+	// Markup (id 'markup' since N.174 D.1) sits adjacent to Text; the
 	// slide-direction order matches the visible tab order (Dann, 2026-07-12).
 	// N.127: Insights is the pair's third member, so it slides between the
 	// marked score and Learn, in the order the desk head draws them.
-	const TAB_ORDER: TabId[] = ['transcription', 'shane', 'insights', 'learn', 'guide'];
+	const TAB_ORDER: TabId[] = ['text', 'markup', 'insights', 'learn', 'guide'];
 	let tabTransitionClass = $state('');
 	// Mobile awareness. A WIDTH test, which on a phone is also the portrait
 	// test: 390 by 844 is under the breakpoint and 844 by 390 is over it, so
@@ -2126,7 +2126,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   is a portrait reading of the transcription and has no meaning anywhere
 	   else, and a singer who rotates back should meet the artefact. */
 	$effect(() => {
-		if (!isMobile || destination !== 'studio' || studioDocument !== 'transcription')
+		if (!isMobile || destination !== 'studio' || studioDocument !== 'text')
 			portraitView = 'page';
 	});
 	// Song metadata: `doc.metadata`, N.67 step 0.
@@ -2221,8 +2221,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// trimmed 1rem.
 	const isReadingMode = $derived(destination !== 'studio');
 	/* N.73 S3 ship two. THE WIDTH FOLLOWS THE CONSOLE, AND THE CONSOLE IS
-	   STUDIO'S, NOT THE TRANSCRIPTION'S. This read `activeTab === 'transcription'`,
-	   which was true while the two Studio documents had two drawers. S2 gave
+	   STUDIO'S, NOT THE TRANSCRIPTION'S. This read `activeTab === 'text'` (the id was
+	   `transcription` until N.174 D.1), which was true while the two Studio documents had two drawers. S2 gave
 	   them one: `RootPanel` and its Word Console render on BOTH documents, so a
 	   word selected on the transcription is still shown on the marked score,
 	   and the old expression narrowed the drawer back to 520 with the widened
@@ -2276,8 +2276,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * written a second time.
 	 */
 	/* `printDisabled` IS GONE, N.65, Dann's ruling of 2026-08-21. It read
-	   `studioDocument === 'shane' ? !ingestedScore && !voiceCalibrated
-	   : !hasResults`, and it guarded a Print button inside the drawer. Print
+	   `studioDocument === 'markup' ? !ingestedScore && !voiceCalibrated
+	   : !hasResults` (the id was `shane` until N.174 D.1), and it guarded a Print button inside the drawer. Print
 	   sits under the sheet now and IT IS ALWAYS LIVE ON TRANSCRIPTION AND
 	   MARKED SCORE: no disabled state, no greying. `voiceCalibrated` stays,
 	   because the voice anchor reads it. */
@@ -2363,7 +2363,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   score-capability state, so a wall-closed build shows the band and
 	   nothing under it, which is the same answer an empty song gets. */
 	const scoreStateText = $derived(
-		INCLUDE_SHANE
+		INCLUDE_MARKUP_INSIGHTS
 			? scoreStateLine(
 					shaneVoiceName,
 					Object.keys(shaneFormants).length,
@@ -2803,11 +2803,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   collapsed drawer had, under the state that replaced it. */
 		if (isMobile) drawerRaised = true;
 		// Switch to Transcription if clicking a word from another surface
-		if (destination !== 'studio' || studioDocument !== 'transcription') {
+		if (destination !== 'studio' || studioDocument !== 'text') {
 			destination = 'studio';
-			studioDocument = 'transcription';
+			studioDocument = 'text';
 			try {
-				localStorage.setItem('ilya:activeTab', 'transcription');
+				localStorage.setItem('ilya:activeTab', 'text');
 			} catch {
 				// localStorage unavailable
 			}
@@ -4555,7 +4555,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     props are the ones it already had, in the order it already had
 			     them. -->
 			{#snippet voiceTakeover()}
-				{#if INCLUDE_SHANE}
+				{#if INCLUDE_MARKUP_INSIGHTS}
 					<div class="takeover-panel">
 					<!-- N.114b item 8: `scoreRenders` and `bind:collapsed` are gone
 					     with the wizard's collapse. The takeover is the ritual's own
@@ -4633,7 +4633,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					onclearscore={handleClearScore}
 				>
 					{#snippet sourceScore()}
-						{#if INCLUDE_SHANE}
+						{#if INCLUDE_MARKUP_INSIGHTS}
 							<!-- The drop surface sits directly beneath the textarea it
 							     twins: N.73 S2 made text intake and score intake one
 							     Source region. The EngravingControls panel is removed
@@ -4657,7 +4657,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 							     THE BINDING IS OPTIONAL-CHAINED AT ITS ONE CALL SITE,
 							     which is not defensive tidying: this component is
-							     behind `INCLUDE_SHANE`, so with the wall up there is
+							     behind `INCLUDE_MARKUP_INSIGHTS`, so with the wall up there is
 							     no instance to call and the field's file handlers do
 							     nothing, which is what a walled-off score path should
 							     do. -->
@@ -4825,7 +4825,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     has been read, which is what the score capability's own wall
 			     already did. -->
 			{#snippet scoreGroup()}
-				{#if INCLUDE_SHANE}
+				{#if INCLUDE_MARKUP_INSIGHTS}
 					<!-- CORRECTIONS ARE NOT IN THE DRAWER. N.149, RULED BY DANN
 					     2026-09-20 12:07: "it was always the plan to migrate
 					     Corrections from the Drawer to the Loup surface. Remove
@@ -4991,7 +4991,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		     F4: with the tab bar living inside the drawer, closing the drawer
 		     took every destination with it. -->
 		<DeskHead {activeTab} {language} ontabchange={handleTabChange} />
-		{#if destination === 'studio' && studioDocument === 'transcription'}
+		{#if destination === 'studio' && studioDocument === 'text'}
 			<!-- ONE Paper, rendered from one snippet in both branches. Two call
 			     sites for the same component drift, and a drifted prop list here
 			     would mean the phone and the desk stopped showing the same
@@ -5713,7 +5713,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   paper; nothing else about these four rules changed, and the tokens are
 	   the same four. See the element's own comment. */
 
-	.app-content.tab-transcription {
+	.app-content.tab-text {
 		--desk-fill: var(--sage-desk, #CDD3C8);
 	}
 
@@ -5732,7 +5732,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		--desk-fill: var(--rose-desk, #DDCCCC);
 	}
 
-	.app-content.tab-shane {
+	.app-content.tab-markup {
 		/* One hue per working surface. Ruled by Dann 2026-08-19 during the
 		   walk, superseding "one desk, many papers" (2026-07-12) and the S1
 		   sage desk that carried it: the Marked score is a distinct working
@@ -5740,7 +5740,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   --lavender tinted 60 percent toward white, parallel to the
 		   other three. It is not --surround-shane, which is the calibration
 		   pacifier band on white and stays where it is. The bar moves with
-		   the desk (HeaderBar.svelte, .header-bar.tab-shane). */
+		   the desk (HeaderBar.svelte, .header-bar.tab-markup). */
 		--desk-fill: var(--lavender-desk, #D5CEDA);
 	}
 

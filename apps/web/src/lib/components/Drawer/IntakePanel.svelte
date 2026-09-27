@@ -45,7 +45,7 @@
 		 * The score engine's answers, rendered under the frame. A snippet
 		 * rather than props, so the uploader's wiring (its restore source, its
 		 * `{#key}` on the open song, its arrival handler and the
-		 * `INCLUDE_SHANE` gate) stays in `+page.svelte` where the rest of it
+		 * `INCLUDE_MARKUP_INSIGHTS` gate) stays in `+page.svelte` where the rest of it
 		 * lives and nothing is drilled through here.
 		 */
 		sourceScore?: Snippet;
