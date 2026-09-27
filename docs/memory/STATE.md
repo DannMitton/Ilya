@@ -47,6 +47,23 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### CLOSE OF THE AUDIT THREAD, 2026-09-27 about 00:50. READ THIS FIRST; it supersedes the one-thing lines below it, which stay for their history.
+>
+> **THE ONE THING: N.174, the code says Text, Markup, and Insights.** Numbered by Dann 2026-09-26 23:14. Spec, revised after the desk's own critique: `../sessions/spec-n174-text-markup-insights_r1_2026-09-26.md`. Start with its steps A (Sonnet inventory) and B (Fable module map), in parallel. Only the Correction Station brief waits for it; feature work pauses on `lib/shane/` during its module moves (spec, "Order").
+>
+> **Floor: `f2c3a64`**, all eight gates at baseline, pushed. `ilya-ship.sh` is revision 3: eight gates (web-test 1482, score-parser 615 + 5 skipped, blurb 145, integration 55, ratchets), Playwright stays in CI (Dann 2026-09-26 23:47).
+>
+> **Landed tonight, on `Shane`:** the audit branch (tests, ratchets, CI, `ARCHITECTURE.md` draft r1, French for all 209 word explanations, Learn's always-hard exceptions), the watch-list float guard (`4bebeac`), and 152 citation corrections (`f2c3a64`). Account: `../sessions/memo-audit-night-one_r1_2026-09-26.md`.
+>
+> **Queued for Code, in this order:** the ⟨ц⟩ and ⟨ш⟩ word list (`brief-code-grayson-soft-ts-sh_r1_2026-09-26.md`) and the Latin words (`brief-code-latin-words-on-the-page_r1_2026-09-26.md`), either before or beside N.174; the Correction Station (`brief-code-audit-correction-station_r1_2026-09-26.md`) after N.174, with its paths updated.
+>
+> **Owed by Dann, in `OWED.md`:** post-stress ⟨а⟩ and silent ⟨з⟩/⟨с⟩ (citations section); the ж variants; the three engine defects and Code's four questions from the JVoice thread; the dead code listed under "Dead code found by the audit"; Richter's Seminarian page for the Latin table.
+>
+> **Leads for the fresh thread, not findings:** the failing phone test reports a tap floor of 44.00 px against `converged` = worst >= 44 (`apps/web/e2e-phone/loupe-rules.ts:13`, `:33`), which may be the float pattern of `ENVIRONMENT.md` "A SEMITONE IS NOT ALWAYS 100 CENTS"; DESK INFERENCE until the test is opened. The crossing tolerance may share it.
+>
+> **Walk owed by Dann:** the French word explanations (tap a word in French) and Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines, on the live site after `f2c3a64` deploys.
+
+
 > ### CLOSE OF THE JVOICE THREAD, 2026-09-26 about 23:00. For the parallel desk (the audit). Does NOT supersede the block below it; THE ONE THING there stands.
 >
 > **Shipped `95f41c2` 22:52, all five gates at baseline, WALKED by Dann on localhost 22:44** ("Success!"): reconstituted я between two soft consonants now restores to [a] (`apps/web/src/lib/reconstitution.ts`, new `reconstitution.test.ts`, 7 tests), ruled by Dann 21:39 from Grayson pp. 125 and 128. The same commit carries Code's Playwright repair (`core-loop.test.ts`, 1440x900; 22 passed, 1 skipped, 1 failed = `OWED.md` phone-scan rule 5a). Gate 4 moved 1467 to 1474 by the desk before the run (backup `~/Downloads/ilya-ship.sh.bak-1467-2026-09-26`); the ship's pass confirms 1474. **This commit also swept in the audit thread's uncommitted `docs/memory` edits and every untracked `docs/sessions` file of 2026-09-26**, at Dann's `git add`.

@@ -856,3 +856,23 @@ read as /v/").
 - **Silent ⟨з⟩ and ⟨с⟩** (`processes/silent:з`, `silent:с`, cited pp. 242–246).
   Grayson's section on silent cluster letters names only т, д, л, and в. No
   source found.
+
+## Dead code found by the audit (2026-09-26), for Dann's ruling. Nothing deleted
+
+`CONTRACT.md` §6 says not to propose another project prune, so these are listed,
+not proposed. Each is a lead from the audit's tools, checked where marked.
+
+- `packages/phonology/src/engine.ts:35`: `reconstitution: boolean` in
+  `NotationPreferences`, commented "Phase 3 — not wired yet"; the live feature is
+  `apps/web/src/lib/reconstitution.ts` (checked by the desk 2026-09-27).
+- `apps/web/src/lib/shane/TextualWitnesses.svelte`: unreachable (knip, and the
+  audit catalogue of 2026-09-24, two methods).
+- `apps/web/src/lib/shane/reconciliation/taxonomy.ts` and `witnesses.ts`:
+  reachable only from each other and the unreachable component above.
+  `reconciliation/types.ts` is live. **`CONTRACT.md` §6: do not rebuild anything
+  in `reconciliation/`.**
+- The i18n key `tab.fit` (`i18n.ts:108`): no caller (desk grep, 2026-09-26).
+
+N.174's inventory will surface more; its spec lists unused keys for Dann rather
+than deleting them.
+
