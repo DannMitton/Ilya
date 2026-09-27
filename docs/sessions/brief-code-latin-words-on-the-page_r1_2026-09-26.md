@@ -63,3 +63,25 @@ the song, with no mark that anything is missing.
 
 Section 3's findings, the commit, the results against section 6, and what could
 not be established. **NOT ESTABLISHED beats a complete invented answer.**
+
+## ADDENDUM 2026-09-27: option 2 is now in scope, once Dann checks the table
+
+Dann photographed Richter's pages on 2026-09-27. The table of the Seminarian's
+thirty Latin words, in Grayson's notation, is
+`table-seminarian-latin_r1_2026-09-27.md`. **When Dann has checked its CHECK rows
+and ruled on its rights question,** this brief grows by three things:
+
+- A Latin word found in that table shows the table's IPA under it (still no gloss);
+  any other Latin word shows none, as section 5 says.
+- [w] becomes the one documented exception to Grayson's inventory: named in
+  `ARCHITECTURE.md` invariant 4 with Richter p. xii, and allowed by
+  `apps/web/src/lib/approval/invariants.test.ts` only for these words.
+- A test pins each of the thirty words' IPA from the table.
+- **Attribution, as Dann requires (2026-09-27 00:58: "I want unassailable citation
+  to preserve our claims of scholarly fair use"):** wherever Ilya shows a Latin
+  word's IPA, it credits Richter the way it credits Grayson elsewhere: "(Richter,
+  2002, pp. 43–49)", the page range covering both versions of the song. The
+  printed page carries the same credit. `NOTICES.md` already carries the full
+  reference (added 2026-09-27); the code comment on the table cites p. xii for
+  [w].
+

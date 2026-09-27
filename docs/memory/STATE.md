@@ -55,6 +55,8 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **Landed tonight, on `Shane`:** the audit branch (tests, ratchets, CI, `ARCHITECTURE.md` draft r1, French for all 209 word explanations, Learn's always-hard exceptions), the watch-list float guard (`4bebeac`), and 152 citation corrections (`f2c3a64`). Account: `../sessions/memo-audit-night-one_r1_2026-09-26.md`.
 >
+> **Also queued (2026-09-27 01:05):** the Guide's Sources section, `brief-code-guide-sources_r1_2026-09-27.md`, once Dann ratifies its French. `NOTICES.md` corrected (Grayson: University of Washington) and Richter added.
+>
 > **Queued for Code, in this order:** the ⟨ц⟩ and ⟨ш⟩ word list (`brief-code-grayson-soft-ts-sh_r1_2026-09-26.md`) and the Latin words (`brief-code-latin-words-on-the-page_r1_2026-09-26.md`), either before or beside N.174; the Correction Station (`brief-code-audit-correction-station_r1_2026-09-26.md`) after N.174, with its paths updated.
 >
 > **Owed by Dann, in `OWED.md`:** post-stress ⟨а⟩ and silent ⟨з⟩/⟨с⟩ (citations section); the ж variants; the three engine defects and Code's four questions from the JVoice thread; the dead code listed under "Dead code found by the audit"; Richter's Seminarian page for the Latin table.
