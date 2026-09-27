@@ -136,7 +136,7 @@ function report(scan: Scan, rules: Record<string, string[]>, beams: string[], no
 	const L: string[] = [];
 	L.push('# N.153 stage 5: the whole-fixture scan at 390 x 844', '');
 	L.push(`Fixture \`${FIXTURE}\`. ${scan.states.length} selections walked. Measure numbers are the fixture's 0-based index; the loupe's tag prints each one higher.`, '');
-	L.push('`converged` is INFERRED as worst >= 44, not logged (`loupe-render.ts:126-149`).', '');
+	L.push('`converged` is INFERRED as worst >= 44 less a 0.001 px float guard, not logged (`loupe-render.ts`, `deriveMinGap`).', '');
 	L.push('The walk starts after the page logs `[Ilya] N.160 seats:`, so every measure is derived on the seated underlay. "answers logged" lists every distinct `minGap` the console printed for the measure; more than one means the measure was re-derived on a different drawing during the walk.', '');
 	L.push('The last three measured columns are the rules\' own evidence, so a zero row is a measured zero: the nearest any caret\'s drawn mark came to the squircle, the largest distance any caret stood from the middle of its space, and the barlines the probe saw drawn and hidden.', '');
 	L.push('| m. | minGap (page) | renders | converged (inferred) | search worst px | drawn worst px | answers logged | offending pairs (search) | nearest squircle, lg | worst off-centre, px | barlines drawn / hidden | rules violated |');

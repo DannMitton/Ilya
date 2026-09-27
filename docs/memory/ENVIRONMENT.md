@@ -4347,4 +4347,6 @@ against a whole-number threshold needs a float guard**, as
 `overlay-engine.ts` (`RANGE_EPSILON_CENTS`) and now `watchlist.ts`
 (`PASSAGGIO_FLOAT_GUARD_CENTS`) have. **Not yet checked:** the crossing tolerance
 (`CROSSING_TOLERANCE_CENTS`, `overlay-engine.ts:173`, `conditions.ts:154`).
+**A second instance, 2026-09-27: the loupe's 44 px tap floor.** `deriveMinGap`, the loupe's warning, and the phone rules compared caret separations to 44 exactly, so a computed 43.99999 (printed `44.00`) could fail; all now share `TAP_FLOOR_EPS_PX` (`loupe-render.ts`), 0.001 px.
+A 0.01 px guard was tried first and moved m. 7's derived spacing (69.65 to 69.33, drawn worst 43.99): **size a float guard to float noise, never to the print precision.**
 

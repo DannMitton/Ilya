@@ -678,18 +678,21 @@ export function firstInkIn(xs: readonly number[], left: number, right: number): 
  * whole pair.
  *
  * `right` is the outer edge of the closing stroke, where the body's crop ends.
- * Null when no line is found, and the caller keeps the edge it had.
+ * `inner` is the edge facing the measure, the thin line's left edge on a final
+ * bar, where the last caret's space ends (OWED rule 5a, DESK DEFAULT
+ * 2026-09-27). Null when no line is found, and the caller keeps the edge it had.
  */
 export function closingBarline(
 	verticals: readonly Vertical[],
 	after: number,
 	lineGap: number,
-): { right: number; final: boolean } | null {
+): { right: number; inner: number; final: boolean } | null {
 	const lines = verticals.filter((v) => Number.isFinite(v.x) && v.x > after).sort((a, b) => a.x - b.x);
 	if (lines.length === 0 || !(lineGap > 0)) return null;
 	const pair = lines.filter((v) => v.x - lines[0].x <= lineGap);
 	const right = Math.max(...pair.map((v) => v.x + Math.max(0, v.width) / 2));
-	return { right, final: pair.length >= 2 };
+	const inner = lines[0].x - Math.max(0, lines[0].width) / 2;
+	return { right, inner, final: pair.length >= 2 };
 }
 
 /** A rectangle, in whatever units the caller names. */

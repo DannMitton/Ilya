@@ -17,6 +17,8 @@ export const SQUIRCLE_CLEARANCE_LG = 1.6;
 export const CENTRE_TOLERANCE_PX = 1;
 /** Rounding allowance on a clearance compared in client pixels. */
 const CLEARANCE_EPS_PX = 0.25;
+/** Float guard on the tap floor: the product's `TAP_FLOOR_EPS_PX` (`loupe-render.ts`), so both read one floor. */
+const TAP_FLOOR_EPS_PX = 0.001;
 
 /** One console line of the spacing loop, parsed. */
 export interface Derivation {
@@ -30,7 +32,7 @@ export interface Derivation {
 	 * INFERRED, NOT LOGGED: `deriveMinGap` returns `converged: false` only where
 	 * the ceiling itself stays under the floor, and every `converged: true`
 	 * return carries a worst of at least the floor (`loupe-render.ts:126-149`),
-	 * so converged is exactly worst >= 44.
+	 * so converged is exactly worst >= 44 less the float guard.
 	 */
 	convergedInferred: boolean;
 	/** The warn line's pairs, where one followed. */
@@ -61,7 +63,7 @@ export function parseDerivations(lines: { type: string; text: string }[]): Deriv
 				renders: Number(d[4]),
 				ms: Number(d[5]),
 				worst,
-				convergedInferred: worst >= TAP_FLOOR_PX,
+				convergedInferred: worst >= TAP_FLOOR_PX - TAP_FLOOR_EPS_PX,
 				offending: [],
 			});
 			continue;
@@ -102,7 +104,7 @@ export function rule1TapFloor(derivations: Derivation[], states: ScanState[]): s
 	}
 	for (const s of states) {
 		for (const pair of sepLines(s.probe)) {
-			if (pair.px < TAP_FLOOR_PX) out.push(`m.${heldOf(s)} step ${s.step} (${s.kind}) drawn: ${pair.a} to ${pair.b} ${pair.px.toFixed(2)} px`);
+			if (pair.px < TAP_FLOOR_PX - TAP_FLOOR_EPS_PX) out.push(`m.${heldOf(s)} step ${s.step} (${s.kind}) drawn: ${pair.a} to ${pair.b} ${pair.px.toFixed(2)} px`);
 		}
 	}
 	return out;

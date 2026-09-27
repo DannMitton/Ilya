@@ -28,7 +28,7 @@
 import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
-	import { deriveMinGap, renderLoupeMeasure, systemMarkup, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/shane/loupe-render';
+	import { deriveMinGap, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/shane/loupe-render';
 	import {
 		headBound,
 		MUSIC_MARK,
@@ -713,7 +713,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		const out: string[] = [];
 		for (let i = 1; i < sorted.length; i++) {
 			const px = (sorted[i].x - sorted[i - 1].x) * scale;
-			if (px < TAP_FLOOR_PX) out.push(`${sorted[i - 1].after ?? 'head'} to ${sorted[i].after ?? 'head'} ${px.toFixed(1)} px`);
+			if (px < TAP_FLOOR_PX - TAP_FLOOR_EPS_PX) out.push(`${sorted[i - 1].after ?? 'head'} to ${sorted[i].after ?? 'head'} ${px.toFixed(1)} px`);
 		}
 		return out;
 	}
@@ -1621,7 +1621,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				return inkOf(e.id)?.right ?? null;
 			};
 			const rightBoundary = (i: number, withClearance = true): number | null => {
-				if (i === last) return closing ? closing.right : null;
+				if (i === last) return closing ? closing.inner : null; // the edge facing the measure (OWED rule 5a)
 				const e = positions[i + 1];
 				if (e.kind !== 'entry') return null;
 				/* SYMMETRIC: this entry sits to the RIGHT of gap `i`, so its
@@ -2225,7 +2225,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			console.debug(
 				`[loupe] m.${measure} minGap ${derived.minGap.toFixed(2)} (page ${drawnFrom.spacing.minGap}), ${derived.iterations} renders in ${(performance.now() - t0).toFixed(0)} ms, worst ${derived.worst.toFixed(2)} px`,
 			);
-			if (!derived.converged || derived.worst < TAP_FLOOR_PX) {
+			if (!derived.converged || derived.worst < TAP_FLOOR_PX - TAP_FLOOR_EPS_PX) {
 				/* THE MEASURE CANNOT HAVE THE WIDTH IT NEEDS. Best spacing reached is
 				   drawn, and the residue goes to the console: no mark on the page and
 				   none in the loupe (CONTRACT.md section 6). */

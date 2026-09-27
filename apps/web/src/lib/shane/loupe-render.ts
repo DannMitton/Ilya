@@ -70,6 +70,12 @@ export function bundleRenderOptions(bundle: LoupeRenderBundle): StaffRenderOptio
 
 /** The tap floor in CSS pixels: what this surface draws every control at. */
 export const TAP_FLOOR_PX = 44;
+/**
+ * Float guard on the tap floor, in CSS px: a separation computed as 43.99999
+ * meets a 44 px floor, and a real 43.99 does not. Float noise only, never a
+ * looser floor (`ENVIRONMENT.md`, the float trap).
+ */
+export const TAP_FLOOR_EPS_PX = 0.001;
 
 /**
  * Render measure `m` alone, at natural width, with `minGap` as the one spacing
@@ -100,7 +106,7 @@ export interface DerivedSpacing {
 	 * render budget never makes it false: the bisection stops on `hi`, which
 	 * already clears the floor, so a search cut short by the budget answers
 	 * converged, at a `minGap` coarser than `MIN_GAP_RESOLUTION`. So converged
-	 * is exactly `worst >= floor`.
+	 * is exactly `worst >= floor - TAP_FLOOR_EPS_PX`.
 	 */
 	converged: boolean;
 }
@@ -136,18 +142,19 @@ export function deriveMinGap(
 		scale = r.scale;
 		return r.worst;
 	};
+	const meets = (w: number): boolean => w >= floor - TAP_FLOOR_EPS_PX;
 	const startWorst = probe(pageMinGap);
-	if (startWorst >= floor) return { minGap: pageMinGap, worst: startWorst, iterations, converged: true };
+	if (meets(startWorst)) return { minGap: pageMinGap, worst: startWorst, iterations, converged: true };
 	const ceiling = Math.max(pageMinGap, scale > 0 ? floor / scale : floor) * CEILING_FACTOR;
 	const ceilingWorst = probe(ceiling);
-	if (ceilingWorst < floor) return { minGap: ceiling, worst: ceilingWorst, iterations, converged: false };
+	if (!meets(ceilingWorst)) return { minGap: ceiling, worst: ceilingWorst, iterations, converged: false };
 	let lo = pageMinGap;
 	let hi = ceiling;
 	let hiWorst = ceilingWorst;
 	while (hi - lo > MIN_GAP_RESOLUTION && iterations < MAX_SPACING_RENDERS) {
 		const mid = (lo + hi) / 2;
 		const w = probe(mid);
-		if (w >= floor) {
+		if (meets(w)) {
 			hi = mid;
 			hiWorst = w;
 		} else lo = mid;

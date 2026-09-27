@@ -638,7 +638,7 @@ describe('the closing barline', () => {
 			{ x: 241, width: 0.8 },
 			{ x: 420, width: 0.8 },
 		];
-		expect(closingBarline(lines, 106, gap)).toEqual({ right: 241.4, final: false });
+		expect(closingBarline(lines, 106, gap)).toEqual({ right: 241.4, inner: 240.6, final: false });
 	});
 
 	it('does not depend on the order the lines were drawn in', () => {
@@ -658,6 +658,8 @@ describe('the closing barline', () => {
 		const c = closingBarline(lines, 400, gap)!;
 		expect(c.final).toBe(true);
 		expect(c.right).toBeCloseTo(610.62 + 2.75 / 2, 10);
+		// The caret's space ends at the thin line facing the measure (OWED rule 5a).
+		expect(c.inner).toBeCloseTo(606.5 - 0.88 / 2, 10);
 	});
 
 	it('does not read the next measure\'s barline as half of a pair', () => {
