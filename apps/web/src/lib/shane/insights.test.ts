@@ -388,8 +388,11 @@ describe('N.127 the findings', () => {
 		// exactly one semitone above the secondo (D4), so all three fire: one
 		// hazard, three instances, anchored by the longest, the E♭4 half.
 		// Mass: 2 + 2 + 4 = 8 quavers. Corrected on the audit branch 2026-09-26:
-		// the original expectation (two instances, F3) missed the secondo edge
-		// and had failed since this test was written at 7841fe7.
+		// the original expectation (two instances, F3) missed the secondo edge.
+		// CORRECTED 2026-09-27: the old expectation passed on Dann's Mac and
+		// failed on Linux, because exactly one semitone measured just over 100
+		// cents on one and just under on the other. watchlist.ts now carries a
+		// float guard, so the E♭4 counts on every machine.
 		const passaggio = m.findings.find((f) => f.key === 'passaggio');
 		expect(passaggio).toMatchObject({ measure: '3', pitch: P('E', 4, -1), instances: 3, massQuavers: 8 });
 		// Every finding names a measure the line has and a pitch it sings.

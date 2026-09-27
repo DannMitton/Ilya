@@ -70,6 +70,16 @@ import { collectScoreWords } from './vowel-resolver';
  */
 const PASSAGGIO_EDGE_WINDOW_CENTS = 100;
 
+/**
+ * Float guard for the window above, in cents. A note exactly one semitone from
+ * an edge measures 99.99999999999972 cents on one machine and a hair over 100
+ * on another, so without it the same score gave different findings on
+ * different devices (found 2026-09-27, when a test passed in a Linux sandbox
+ * and failed on Dann's Mac). The same guard `overlay-engine.ts` keeps for the
+ * range, `RANGE_EPSILON_CENTS`.
+ */
+const PASSAGGIO_FLOAT_GUARD_CENTS = 1;
+
 /** Sustain threshold in seconds. SOURCED §A.117 (≥ 2.5 s OR a fermata). */
 const SUSTAIN_SECONDS_THRESHOLD = 2.5;
 
@@ -397,9 +407,9 @@ export function buildWatchList(
 		// SOURCED §A.126. Only when the singer declared both edges.
 		if (passaggio) {
 			const nearPrimo =
-				Math.abs(centsBetween(pitchToHz(passaggio.primo), foHz)) <= PASSAGGIO_EDGE_WINDOW_CENTS;
+				Math.abs(centsBetween(pitchToHz(passaggio.primo), foHz)) <= PASSAGGIO_EDGE_WINDOW_CENTS + PASSAGGIO_FLOAT_GUARD_CENTS;
 			const nearSecondo =
-				Math.abs(centsBetween(pitchToHz(passaggio.secondo), foHz)) <= PASSAGGIO_EDGE_WINDOW_CENTS;
+				Math.abs(centsBetween(pitchToHz(passaggio.secondo), foHz)) <= PASSAGGIO_EDGE_WINDOW_CENTS + PASSAGGIO_FLOAT_GUARD_CENTS;
 			if (nearPrimo || nearSecondo) kinds.push('passaggio');
 		}
 

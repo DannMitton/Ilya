@@ -39,6 +39,7 @@ next session the same hour it cost the last one.
 | converting a journal PDF to text for an agent | `PDFTOTEXT WITHOUT -layout FOR TWO COLUMNS` |
 | spawning a Fable or Sonnet agent while Dann talks | `AN AGENT BLOCKS THE CONVERSATION` |
 | running the gates or Playwright in the cloud, or reading the e2e suite | `THE GATES RUN IN A CLOUD CLONE` |
+| changing what Ilya claims about Russian phonology, anywhere | `READ GRAYSON BEFORE YOU CORRECT A CLAIM` |
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
 | a subagent quotes a source, or a summary does | `A SUMMARY'S QUOTATION IS NOT A QUOTATION` |
 | a tool call comes back "rejected" just as Dann sends a message | `A REJECTION MAY ONLY MEAN HE TYPED` |
@@ -4319,3 +4320,18 @@ Two Sonnet extraction agents (JVoice batches A and B) wrote 118 rows; a verifica
 ## RECONSTITUTION LIVES IN THE WEB APP. 2026-09-26
 
 Vowel reconstitution (Grayson Ch. 3 §8) is built at `apps/web/src/lib/reconstitution.ts`, called from `pipeline.ts` for every word and shown through the global switch and Spot reconstitution. **`packages/phonology/src/engine.ts:35` carries an unused `reconstitution` preference**, and `packages/phonology/tests/notation-edge-cases.test.ts` says "not wired yet". Both refer to the dead engine copy. The desk called the feature unfinished on that evidence and was wrong. Do not wire the engine flag; a candidate for the audit's dead-code list.
+
+## READ GRAYSON BEFORE YOU CORRECT A CLAIM. 2026-09-26
+
+**The desk's own error.** An explanation said ⟨ц⟩ softens in -ция. The engine
+(`engine.ts:237`) and Learn both said ⟨ц⟩ never palatalizes, so the desk "corrected"
+the explanation to match them, in both languages, without opening Grayson. Grayson
+pp. 168 and 283–284 supported the explanation; the engine and Learn were the ones
+departing from him. Dann asked for Grayson to be read, and the correction had to
+be reversed.
+
+**The rule:** agreement between two parts of Ilya is not evidence. When two parts
+disagree about phonology, open the cited Grayson page first (the PDF is in
+`~/Downloads`; logical page = physical page minus 16; read IPA from the page image,
+never the text layer). Only then decide which part is wrong.
+

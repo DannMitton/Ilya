@@ -2520,3 +2520,15 @@ principle; both halves are in `OWED.md`.
 **It is not N.166.** N.166 is that a stored scan re-reads at all. **This is what the singer
 reads while it does.** Fixing N.166 shortens the exposure and does not remove it: a first
 read still waits, and still waits in whatever language was set at that instant.
+
+## N.174. THE CODE SAYS TEXT, MARKUP, AND INSIGHTS. Numbered by Dann 2026-09-26 23:14
+
+*"Execute the line-by-line as its own cardinal task within our code refresh."* Retire
+"Shane" and "Fit" as names in the code; the three documents carry their on-screen
+names; `lib/shane/` becomes modules by job (`score`, `voice`, `reader`, `markup`,
+`insights`, DESK DEFAULT on Dann's "your choice"); nothing a singer saved breaks.
+**Spec, with Dann's words and the steps A to E:**
+`../sessions/spec-n174-text-markup-insights_r1_2026-09-26.md`. Runs in a fresh
+thread, after the `audit` merge. Only the Correction Station brief waits for it
+(spec, "Order"); feature work pauses on `lib/shane/` during its module moves.
+
