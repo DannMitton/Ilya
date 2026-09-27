@@ -15,7 +15,13 @@ export default defineConfig({
 	projects: [
 		{
 			name: 'chromium',
-			use: { ...devices['Desktop Chrome'] },
+			/* THE DESK, NOT THE SHEET. `Desktop Chrome` is 1280 wide, and the
+			   desk layout starts at `DESK_LAYOUT_MIN_WIDTH` (1400, `layout.ts`:
+			   drawer 520 + sheet 816 + 32 padding each side). Below it the drawer
+			   is a closed bottom sheet and the poem field is off screen, so the
+			   core loop could not type. The phone project covers the narrow
+			   layout. */
+			use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
 		},
 		/* N.153 STAGE 5. Clause 13's floor is defined at phone width, so the
 		   loupe scan runs here and only here: its own `testDir`, which the

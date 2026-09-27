@@ -530,6 +530,10 @@ my identity or doing crime."*
 `device_commit_files` is file delivery, not a commit. The bridge refuses `rm`: move a file into
 `_to_delete/` and say so. Write scratch scripts to the session home.
 
+**AMENDED BY DANN 2026-09-26 00:25, for the architecture audit only.** The desk offered four options for who writes the audit's code; Dann chose the desk's recommended split, option 3: *"Yes to your recommendation option 3"*. **Subagents in the desk's cloud workspace may write tests, guardrails, and documents on a dedicated branch, `audit`, run the gates there, and push that branch. Dann reviews and merges.** The hotspot refactors (starting with `+page.svelte`) stay with Code on his machine, where he walks each step. Every other git write stays forbidden, and no agent pushes to `Shane` or `main`. Who offered it: the desk. Who ruled it in: Dann.
+
+**AND, 2026-09-26 00:31, feature work continues during the audit.** The desk offered three options and recommended the first; Dann: *"Hey if you can juggle both I am impressed and grateful yes"*. The audit and the feature line stay out of each other's files. A hotspot file is closed to new features only while its own refactor step runs. The plan lives at `../sessions/audit-plan_r1_2026-09-26.md`, a dated draft.
+
 **THE SHIP SCRIPT.**
 ```
 sh ~/Downloads/ilya-ship.sh "N.xx: the commit message"
@@ -632,7 +636,8 @@ applies without being read.
   are ruled, and the French is LOWERCASE.
 - **Do not write French Dann has not seen.** Show the whole table, and say which
   words are coined and which adopted.
-- **Check every French agreement against its referent before you show a draft.**
+- - **DELEGATED BY DANN 2026-09-26 08:52, for the 209 word-explanation templates only:** *"hand-wave the ones that you know conform to prior translations we have already encountered, and flag those that are obviously calques. Also show me the ones you feel truly need my eye, but otherwise I defer to your judgment to resolve this outstanding persisting issue."* The desk drafted all of them into `data/blurb-composer.json` on branch `audit`; the table and the items for his eye are `../sessions/french-blurbs_r1_2026-09-26.md`. His merge of the branch is the ratification. This is not a standing waiver of the rule that follows.
+**Check every French agreement against its referent before you show a draft.**
   Dann, 2026-09-24: *"This is a persistent nuance in French that we need to be aware
   of."* A letter or sound named alone is masculine (« le [ɑ] »); a heading with no noun
   (« Mesuré dans cette pièce ») agrees with an implied « ce qui est », masculine singular;

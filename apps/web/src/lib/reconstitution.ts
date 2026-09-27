@@ -10,6 +10,7 @@
  * (e.g. ɪ) reconstitutes differently depending on its source character:
  *   ɪ from я → ɑ
  *   ɪ from е → ɛ
+ *   i from я (interpalatal) → a
  *
  * A pure string replacement cannot distinguish these cases.
  *
@@ -78,6 +79,13 @@ export function applyReconstitution(
 
     // i from е (interpalatal) → e (Grayson: "reverts to [e] or [je]")
     if (ipa === 'i' && char === 'е' && entry.features?.interpalatal) return 'e';
+
+    // i from я (interpalatal) → a. Grayson p. 128 prints the interpalatal
+    // clause for е only; p. 125 has [a] as /a/'s interpalatal allophone, so
+    // the restored /ɑ/ fronts to [a] between two soft consonants, as the
+    // stressed vowel does. Dann's ruling, 2026-09-26. The /j/ glide is not a
+    // vowel in this walk, so word-initial [ji] becomes [ja] with no extra code.
+    if (ipa === 'i' && char === 'я' && entry.features?.interpalatal) return 'a';
 
     // ɨ from е after always-hard consonant (ж/ш/ц) → ɛ
     // Dann's departure from Grayson p. 129. Grayson says [ɨ] after hard

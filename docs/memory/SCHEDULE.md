@@ -6,6 +6,8 @@ Written by the desk the same night, from the sort
 (`../sessions/sort-release_r1_2026-09-16.md`) and the estimate
 (`../sessions/estimate-release_r1_2026-09-16.md`, DESK INFERENCE).
 
+**AMENDED BY DANN 2026-09-26 00:21. The date is a target, not a wall.** His words: *"That date is artificial, and was invented in response to my complaints that the app development was feleinbg endless." (verbatim)* And: *"I have recommitted to ensuring that the actual release contains my best draft, so if I can avoid shipping errors I will."* So the architecture audit (begun 2026-09-26) may run before the release, and "the date stands" in the next paragraph no longer outranks shipping stable code.
+
 **How to use it.** Work the current week top to bottom. Tick a line when it is
 **walked**, not when it is written. **Maintained at every close:** tick what
 closed, and move anything unfinished to the next week with its date. If a week

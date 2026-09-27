@@ -38,6 +38,7 @@ next session the same hour it cost the last one.
 | git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
 | converting a journal PDF to text for an agent | `PDFTOTEXT WITHOUT -layout FOR TWO COLUMNS` |
 | spawning a Fable or Sonnet agent while Dann talks | `AN AGENT BLOCKS THE CONVERSATION` |
+| running the gates or Playwright in the cloud, or reading the e2e suite | `THE GATES RUN IN A CLOUD CLONE` |
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
 | a subagent quotes a source, or a summary does | `A SUMMARY'S QUOTATION IS NOT A QUOTATION` |
 | a tool call comes back "rejected" just as Dann sends a message | `A REJECTION MAY ONLY MEAN HE TYPED` |
@@ -4271,3 +4272,30 @@ Learned 2026-09-25. Every bridge call reaches Dann's Mac, so if it sleeps, the d
 ## BLANK ON THE FIRST LOAD AFTER A DEPLOY
 
 Learned 2026-09-25, twice (after `933bbda` and `f5decd3`). The desk's first load of the branch alias in Chrome, right after a new build went live, drew a blank white page: an empty accessibility tree, no app errors in the console (only the Zotero extension's). **A second load drew the app normally**, with the new build (checked by `sw.js`'s `CACHE_VERSION` stamp, see `THE ALIAS CHECK THAT WORKED`). Likely the service worker swapping caches, NOT ESTABLISHED. **Reload once before reporting a broken deploy.**
+
+
+## THE GATES RUN IN A CLOUD CLONE. 2026-09-26
+
+**Learned during the architecture audit.** The old rule "no gate runs in an agent
+sandbox" was about a copy of Dann's macOS-built `node_modules`. A fresh clone does
+run them all:
+
+- `git clone --depth 1 --branch Shane https://github.com/DannMitton/ilya`, then
+  `pnpm install --frozen-lockfile`. Reads work; **pushes are refused** until the
+  Claude GitHub App has the repository. Deliver a branch as a `git bundle` into
+  `Claude outputs/`, which is gitignored.
+- **pnpm 12 writes placeholder `allowBuilds` lines into `pnpm-workspace.yaml`** on
+  install. Remove them by editing the file before anything is committed.
+- **Playwright:** the sandbox's Chromium is revision 1194 and the pinned Playwright
+  wants 1208. Set `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome`
+  (the override is in `apps/web/playwright.config.ts` on the `audit` branch). Never
+  run `playwright install` there.
+- **The desk layout needs a viewport of at least 1,400 px.** Playwright's default is
+  1,280, which silently runs the phone layout. The desktop tests set 1,440.
+- **The desktop e2e suite waited on `.status-ok` from 2026-09-07 until 2026-09-26**
+  and so tested nothing, because nothing ran it. CI runs it now.
+
+- **Overwriting a file that already exists on the Mac took two sends, twice, on
+  2026-09-26.** `device_commit_files` reported the first as written, and the old
+  md5 stayed. The second send, with `force: true`, landed. Check the md5 on the
+  Mac after every overwrite.

@@ -130,6 +130,7 @@ asks what is outstanding, or when the one thing closes and the next is being cho
    Playwright.** Found by Code while confirming stage 5 regressed nothing; it
    verified the failure on the untouched `chromium` project. **The debt is two
    things: the selector, and a gate that would have caught it.**
+   **The selector half is PAID 2026-09-26** (Code, uncommitted at the time of writing: `apps/web/e2e/core-loop.test.ts`, `apps/web/playwright.config.ts` at 1440x900; 22 passed, 1 skipped, 1 failed, the failure being item 2). **Still owed: the gate**, since `ilya-ship.sh` still does not run Playwright.
 2. **The new phone scan exits non-zero on one violation, so its gate is red.**
    Rule 5a, m. 17: a caret stands 2.90 px right of the middle of its space,
    because `closingBarline` returns the final double bar's OUTER edge
@@ -142,6 +143,12 @@ asks what is outstanding, or when the one thing closes and the next is being cho
    69.33.** The other 16 measures match stage 3b exactly.
 4. **Nineteen gaps after a rest read "before the first entry".** The selection
    itself is correct; only the wording is wrong. Code flagged it and left it alone.
+
+### New from Code's report of 2026-09-26 evening. Engine defects, found while building the я reconstitution rule
+
+1. **A second ё in a word sends a Cyrillic letter out as IPA.** Stress locks to the first ё (`engine.ts:1127-1135`); the second has no unstressed branch and falls through `return vowel;` (`:1246`). трёхколёсный comes out `ˈtrʲox kʌ lʲёs nɨj`; with reconstitution on, every later vowel slides one place. 32 dictionary words have two ё, 31 misaligned. **Code's line numbers, not re-read by the desk.** Needs Dann's ruling on how the unstressed ё of a compound is read; Grayson's page not yet found.
+2. **Reflexive -ся without т comes out soft**: учился `u ˈtʃʲiɫ sʲɑ`, моюся `ˈmo ju sʲɪ`. Code reads Grayson pp. 281 to 282 and 284 as saying the reflexive -ся is always hard. Needs Dann's ruling.
+3. **Reflexive -ться and -тся carry no vowel entry**, so reconstitution never sees their [ʌ] (`engine.ts:321-324`, `:569-573`, `:1618-1640`, per Code). Grayson's p. 128 chart has no reflexive row. Whether it reconstitutes to [ɑ] is Dann's to rule; a yes means the engine logs the vowel separately.
 
 ### N.155's RESIDUE, and a ruling nested where it will be lost. 2026-09-22
 
@@ -792,3 +799,39 @@ None of these is numbered; `CONTRACT.md` §3.1 holds until Dann rules one in.
 - **Back-fill `section_heading` in every `_extraction/claims_*.csv` row. Owed by the desk from 2026-09-25**, on Dann's ruling of 03:06 (`../sessions/draft-curation-rules_r1_2026-09-24.md`, citations section). Mechanical; a Sonnet pass reading the source pages already photographed or in `_primary-text/`. New extractions carry the column from the KVP2 run on.
 
 - **PAID 2026-09-25, about 03:50: the desk read both pages. The shipped quotations are correct; the extraction agent misread both (rows KVP2-051 and KVP2-052 corrected). Only p. 141's punctuation differs: brief `../sessions/brief-code-kvp2-p141-punctuation_r1_2026-09-25.md`, not run. The row as it stood:** **KVP2 quotations in shipped code, UNVERIFIED BY THE DESK. Owed from 2026-09-25.** `apps/web/src/lib/shane/advice-resolver.ts:233-238` quotes KVP2 p. 96 and p. 141. The Sonnet extraction of 2026-09-25 reports p. 96's sentence NOT FOUND and p. 141 reading "formant" where the code says "harmonic" (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/memo-sonnet-kvp2_r1_2026-09-25.md`). The desk must read both pages itself (photos `~/Downloads/IMG_4774` to `IMG_4854`) before briefing Code. The July KVP2 synthesis in project knowledge carries four more quotations the photographed pages do not bear out: a lead, never a source.
+
+## The always-hard consonants depart from Grayson (found 2026-09-26)
+
+Read in Grayson (PDF in `~/Downloads`, logical page = physical page minus 16)
+at Dann's request, 2026-09-26 09:29. **The engine and Learn say ⟨ж⟩, ⟨ш⟩, and
+⟨ц⟩ never palatalize** (`packages/phonology/src/engine.ts:237`, `:908`; Learn's
+alphabet table, both languages). Grayson gives exceptions:
+
+- **⟨ц⟩:** palatalized in цвет and its derivatives, and in some proper names
+  (p. 168); in the suffixes -ция and -ционный when they answer to -tion or
+  -ence, but not in лекция (pp. 283–284). Ilya today: цвет `ˈtsvʲɛt`,
+  революция `rʲɪvɑˈlʲutsɨjɪ`, лекция `ˈlʲɛktsɨjɪ` (transcribeWord, 943,106
+  entries loaded).
+- **⟨ш⟩:** palatalized only in the obsolete пшют (p. 163). Ilya: `ˈpʃut`.
+- **⟨ж⟩:** жюри has a palatalized variant Grayson calls acceptable, perhaps
+  recommended, in song (p. 165); -жж- and -зж- may be read palatalized, "often
+  perfectly acceptable, even desired" in late-romantic works (p. 174). Ilya:
+  жюри `ʒuˈrʲi`, дрожжи `ˈdroʒʒɨ`. A stylistic choice, not a defect.
+
+**RULED by Dann 2026-09-26 09:34:** *"The engine should follow Grayson especially since he has devoted text to these anomalies. Yes to the word list."* Brief: `../sessions/brief-code-grayson-soft-ts-sh_r1_2026-09-26.md`. Learn draft `../sessions/draft-learn-always-hard-exceptions_r1_2026-09-26.md` RATIFIED by Dann 2026-09-26 09:38 ("Oui ratified") and built on `audit` as `5b9bef8`. **Still owed by Dann:** the ж variants (out of the brief's scope), and ~~whether the engine follows Grayson on ц and ш~~ (a data fix, by
+word list, since лекция shows spelling cannot decide it), whether it offers the
+ж variants, and whether Learn's "never palatalises" is amended. The word
+explanations already follow Grayson on the `audit` branch (`f60ddb2`).
+
+## Latin in Russian songs, and [w] (ruled 2026-09-26 10:09)
+
+Ilya drops every word with no Cyrillic letter (`VerseLine.svelte:20–21`), so the
+Latin in «Семинарист» vanishes from the page. **Dann:** *"option 1 now, and
+option 2 once I can show you Richter's page."* Option 1 is briefed:
+`../sessions/brief-code-latin-words-on-the-page_r1_2026-09-26.md`. **Option 2
+waits on Dann:** a photo of the Seminarian's page in Laurence R. Richter,
+*Musorgsky's Complete Song Texts* (Leyerle, 2002), which Dann believes shows the
+Latin transcribed with [w]. Grayson names the volume in his literature survey
+and never mentions the Seminarian or [w]. When it arrives: a small table of
+those words with Richter's IPA, and [w] as the one documented exception to the
+inventory in `ARCHITECTURE.md` and `invariants.test.ts`.

@@ -1,18 +1,42 @@
 import { test, expect } from '@playwright/test';
 
-// Helper: wait for the dictionary to finish loading
+/* Helper: wait for the dictionary to finish loading.
+   THE `.status-ok` CLASS IS GONE, deleted with `dictReady` in N.108 increment 1
+   (`IntakePanel.svelte`, the comment above `replacePoem`). The signal the app
+   still gives is the poem field: it is `disabled={loaderState.isLoading}`. A
+   FAILED load re-enables it too (`loader.ts`, the catch block), so the enabled
+   field alone would let every test run against no dictionary. The failure is
+   caught by the one line the loader logs when it fails. */
 async function waitForDictionary(page: import('@playwright/test').Page) {
-	await page.locator('.status-ok').waitFor({ state: 'visible', timeout: 45_000 });
+	const failures: string[] = [];
+	page.on('console', (m) => {
+		if (m.text().includes('[Ilya] Dictionary loading failed')) failures.push(m.text());
+	});
+	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
+	expect(failures, 'the dictionary failed to load').toEqual([]);
 }
 
-// Helper: type text and transcribe
+/* Helper: enter text and transcribe.
+   THE TRANSCRIBE BUTTON IS GONE, removed in N.145 (2026-09-16, Dann: "yes,
+   remove the button"). Typed text transcribes after a 600 ms pause; Cmd+Enter,
+   or Ctrl+Enter, transcribes at once (`IntakePanel.svelte`, `handleKeydown`).
+   The helper presses it, so the tests drive the singer's own shortcut. */
 async function transcribe(page: import('@playwright/test').Page, text: string) {
-	const textarea = page.locator('textarea');
+	const textarea = page.locator('textarea.text-input');
 	await textarea.fill(text);
-	const btn = page.locator('.btn-primary');
-	await expect(btn).toBeEnabled({ timeout: 5_000 });
-	await btn.click();
+	await textarea.press('ControlOrMeta+Enter');
 	await page.waitForSelector('[data-word-index="0-0"]', { timeout: 10_000 });
+}
+
+/* Helper: open one of the drawer's sections.
+   NOTATION AND ANALYSIS START CLOSED. Each renders its body only while
+   `sections` holds its id (`+page.svelte`, `STATION_IDS`), so the switches and
+   the Inspector are not in the page until the singer opens them. The Inspector
+   lives inside Analysis (`AnalysisStation.svelte`, `{#if expanded}`). */
+async function openSection(page: import('@playwright/test').Page, name: 'Notation' | 'Analysis') {
+	const header = page.getByRole('button', { name: new RegExp(`^${name}`) });
+	if ((await header.getAttribute('aria-expanded')) !== 'true') await header.click();
+	await expect(header).toHaveAttribute('aria-expanded', 'true');
 }
 
 test.describe('Ilya core loop', () => {
@@ -21,8 +45,10 @@ test.describe('Ilya core loop', () => {
 		await waitForDictionary(page);
 	});
 
+	/* The desk's empty page, `paper.empty` in `i18n.ts`. The old sentence, "To
+	   begin, open the drawer on the left and enter your text.", is gone. */
 	test('shows empty state before transcription', async ({ page }) => {
-		const placeholder = page.getByText('To begin, open the drawer on the left and enter your text.');
+		const placeholder = page.getByText('Enter your Cyrillic text in the drawer on the left.');
 		await expect(placeholder).toBeVisible();
 	});
 
@@ -52,6 +78,7 @@ test.describe('Ilya core loop', () => {
 
 	test('clicking a word opens the Inspector', async ({ page }) => {
 		await transcribe(page, 'молоко');
+		await openSection(page, 'Analysis');
 
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await wordStack.click();
@@ -65,22 +92,31 @@ test.describe('Ilya core loop', () => {
 
 	test('Clear button dismisses Word Console', async ({ page }) => {
 		await transcribe(page, 'молоко');
+		await openSection(page, 'Analysis');
 
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await wordStack.click();
 		await expect(page.locator('.inspector-panel')).toBeVisible();
 
-		// Clear resets everything including selectedWord
-		const clearBtn = page.locator('.btn-secondary', { hasText: 'Clear' });
+		// Clear resets everything including selectedWord (`handleClear`, then
+		// `resetTranscriptionView`). It is the poem receipt's button now, not
+		// `.btn-secondary`; the score receipt has its own Clear.
+		const clearBtn = page.locator('.receipt-poem .receipt-btn', { hasText: 'Clear' });
 		await clearBtn.click();
 
 		await expect(page.locator('.inspector-panel')).not.toBeVisible({ timeout: 5_000 });
 	});
 
+	/* THE FOCUS MOVE ONTO THE FIRST WORD IS GONE. It belonged to an explicit
+	   press of Transcribe and went with the button in N.145 (`+page.svelte`,
+	   the comment where `handleTranscribe` was); nothing replaces it. This test
+	   used to assert it. It now focuses the first word itself and tests only
+	   what is still there: Tab moves between word stacks. */
 	test('keyboard navigation: Tab between WordStacks', async ({ page }) => {
 		await transcribe(page, 'молоко ещё');
 
 		const first = page.locator('[data-word-index="0-0"]');
+		await first.focus();
 		await expect(first).toBeFocused();
 
 		await page.keyboard.press('Tab');
@@ -90,6 +126,7 @@ test.describe('Ilya core loop', () => {
 
 	test('Enter on WordStack opens Inspector', async ({ page }) => {
 		await transcribe(page, 'молоко');
+		await openSection(page, 'Analysis');
 
 		// Explicitly focus the first WordStack, then press Enter
 		const first = page.locator('[data-word-index="0-0"]');
@@ -101,29 +138,37 @@ test.describe('Ilya core loop', () => {
 		await expect(inspector).toBeVisible({ timeout: 5_000 });
 	});
 
+	/* The switch is named rather than taken as `.first()`: the first switch is
+	   no longer "Reduced vowel" but "Apply stress acutes", and position is not
+	   what this test is about. Reconstitution is used because its effect shows
+	   on the Paper: молоко's remote [ʌ] reverts to /ɑ/ (Grayson p. 128). */
 	test('notation toggle updates switch state', async ({ page }) => {
 		await transcribe(page, 'молоко');
+		await openSection(page, 'Notation');
 
-		// First toggle (Reduced vowel) starts unchecked
-		const firstToggle = page.locator('button[role="switch"]').first();
-		await expect(firstToggle).toHaveAttribute('aria-checked', 'false');
+		const toggle = page.getByRole('switch', { name: 'Reconstitution' });
+		await expect(toggle).toHaveAttribute('aria-checked', 'false');
+		const ipa = page.locator('[data-word-index="0-0"] .ipa-row');
+		await expect(ipa).toContainText('ʌ');
 
-		await firstToggle.click();
+		await toggle.click();
 
-		// Now it should be checked
-		await expect(firstToggle).toHaveAttribute('aria-checked', 'true');
+		await expect(toggle).toHaveAttribute('aria-checked', 'true');
+		await expect(ipa).not.toContainText('ʌ');
 	});
 
+	/* A DICTIONARY WORD CARRIES NO MARK. Since the provenance redesign the icon
+	   shows only for non-standard sources, never for dictionary, supplement, or
+	   clitic (`WordStack.svelte`, `showProvenance`). This test used to demand an
+	   icon or VERIFY on молоко, a dictionary word, which is now wrong by design.
+	   It asserts the rule instead: nothing on молоко. */
 	test('provenance icons are visible on transcribed words', async ({ page }) => {
 		await transcribe(page, 'молоко');
 
-		// молоко is a dictionary word -- check for provenance icon or verify label
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await expect(wordStack).toBeVisible();
-
-		const hasProvenance = await wordStack.locator('.provenance-icon').count();
-		const hasVerify = await wordStack.locator('.verify-label').count();
-		expect(hasProvenance + hasVerify).toBeGreaterThan(0);
+		await expect(wordStack.locator('.provenance-icon')).toHaveCount(0);
+		await expect(wordStack.locator('.verify-label')).toHaveCount(0);
 	});
 
 	test('clitics show no provenance icon', async ({ page }) => {
@@ -137,6 +182,7 @@ test.describe('Ilya core loop', () => {
 
 	test('Inspector shows ribbon for transcribed word', async ({ page }) => {
 		await transcribe(page, 'молоко');
+		await openSection(page, 'Analysis');
 
 		const wordStack = page.locator('[data-word-index="0-0"]');
 		await wordStack.click();
@@ -177,8 +223,8 @@ test.describe('bilingual interface', () => {
 		const frOption = page.locator('.lang-pill');
 		await frOption.click();
 
-		// Check for French empty state text
-		const placeholder = page.getByText('Pour commencer, ouvrez le tiroir');
+		// Check for French empty state text (`paper.empty`, French)
+		const placeholder = page.getByText('Saisissez votre texte cyrillique dans le tiroir à gauche.');
 		await expect(placeholder).toBeVisible({ timeout: 5_000 });
 	});
 
@@ -269,6 +315,7 @@ test.describe('clitic display', () => {
 
 	test('Inspector shows full IPA for clitic word', async ({ page }) => {
 		await transcribe(page, 'в доме');
+		await openSection(page, 'Analysis');
 
 		const proclitic = page.locator('[data-word-index="0-0"]');
 		await proclitic.click();
@@ -297,10 +344,10 @@ test.describe('open syllabification', () => {
 		// Capture IPA before toggle
 		const ipaBefore = await ipaRow.textContent();
 
-		// The open syllabification toggle is the last switch in the root panel
-		const toggles = page.locator('button[role="switch"]');
-		const lastToggle = toggles.last();
-		await lastToggle.click();
+		// Named, not `.last()`: the root panel it was last in is gone, and the
+		// switch lives in Notation, which starts closed.
+		await openSection(page, 'Notation');
+		await page.getByRole('switch', { name: 'Open syllables' }).click();
 
 		// Wait for re-render
 		await page.waitForTimeout(200);
