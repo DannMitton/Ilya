@@ -28,9 +28,9 @@
 		type PairingMap,
 		type ShiftDirection,
 		type Slot,
-	} from '$lib/shane/pairings';
-	import { applyHeal, dryRunLog, healLog, planHeal } from '$lib/shane/heal';
-	import { seatedTextDiff } from '$lib/shane/seated-text';
+	} from '$lib/score/pairings';
+	import { applyHeal, dryRunLog, healLog, planHeal } from '$lib/score/heal';
+	import { seatedTextDiff } from '$lib/score/seated-text';
 	// N.67 step 0: the song document owns the per-song state and is the only
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
 	// longer called from here; the legacy driver writes the same key.
@@ -121,8 +121,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/components/Drawer/bandState';
 	import MarkupPane from '$lib/markup/MarkupPane.svelte';
 	import InsightsPane from '$lib/insights/InsightsPane.svelte';
-	import ScoreUploader from '$lib/shane/ScoreUploader.svelte';
-	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
+	import ScoreUploader from '$lib/score/ScoreUploader.svelte';
+	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/score/engraving';
 	import {
 		clearScoreFilled,
 		dropTagsForEdits,
@@ -134,8 +134,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
 	import AnalysisStation from '$lib/components/Drawer/AnalysisStation.svelte';
 	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
-	import Loupe from '$lib/shane/Loupe.svelte';
-	import CorrectionSurface from '$lib/shane/CorrectionSurface.svelte';
+	import Loupe from '$lib/score/Loupe.svelte';
+	import CorrectionSurface from '$lib/score/CorrectionSurface.svelte';
 	import { QUIET_MS, rebuildSource, transcribeVerdict, type TextArrival } from '$lib/one-action';
 	import {
 		diffWordGrid,
@@ -144,17 +144,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		rekeyByWordChar,
 		type TextDiff,
 	} from '$lib/text-diff';
-	import { reseatByDiff } from '$lib/shane/reseat';
+	import { reseatByDiff } from '$lib/score/reseat';
 	import {
 		findCliticFolds,
 		isCliticSeated,
 		readScoreText,
 		seatCliticFolds,
-	} from '$lib/shane/clitic-seat';
-	import { seatScoreWords } from '$lib/shane/score-seat';
-	import { shouldFoldOnArrival, shouldSeatFirstTranscription } from '$lib/shane/first-seat';
-	import { seatWaitingScore } from '$lib/shane/waiting-seat';
-	import { collectScoreWords, scoreWordsText } from '$lib/shane/vowel-resolver';
+	} from '$lib/score/clitic-seat';
+	import { seatScoreWords } from '$lib/score/score-seat';
+	import { shouldFoldOnArrival, shouldSeatFirstTranscription } from '$lib/score/first-seat';
+	import { seatWaitingScore } from '$lib/score/waiting-seat';
+	import { collectScoreWords, scoreWordsText } from '$lib/score/vowel-resolver';
 	import {
 		COARSE_TAP_SPACES,
 		FINE_TAP_SPACES,
@@ -162,7 +162,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		nearestTarget,
 		tapBand,
 		type LoupeMode,
-	} from '$lib/shane/loupe';
+	} from '$lib/score/loupe';
 	import {
 		applyTuplet,
 		arrivalPitch,
@@ -183,7 +183,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		tupletRun,
 		type Cursor,
 		type TupletDefinition,
-	} from '$lib/shane/entry';
+	} from '$lib/score/entry';
 	import type { NoteBase, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
 	import {
 		applyCorrections,
@@ -201,10 +201,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		stepPitch,
 		withCorrection,
 		type CorrectionMap
-	} from '$lib/shane/correction';
+	} from '$lib/score/correction';
 	import { pitchLabel } from '$lib/voice/note-picker';
-	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
-	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
+	import type { IngestedScore } from '$lib/score/ingestion/ingest';
+	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import type { IntakeAnswers } from '@ilya/score-parser';

@@ -20,15 +20,15 @@
 	   IT PRINTS NOTHING, like the selection mark it carries. ------------- */
 	import { onMount, type Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
-	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
-	import { hasUnderlay, RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/shane/selection-ring';
-	import type { Slot, PairingMap } from '$lib/shane/pairings';
-	import type { Cursor } from '$lib/shane/entry';
-	import LoupeSyllables from '$lib/shane/LoupeSyllables.svelte';
+	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
+	import { hasUnderlay, RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/score/selection-ring';
+	import type { Slot, PairingMap } from '$lib/score/pairings';
+	import type { Cursor } from '$lib/score/entry';
+	import LoupeSyllables from '$lib/score/LoupeSyllables.svelte';
 import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
-	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
-	import { deriveMinGap, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/shane/loupe-render';
+	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
+	import { deriveMinGap, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/score/loupe-render';
 	import {
 		headBound,
 		MUSIC_MARK,
@@ -57,7 +57,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		type PageInk,
 		type Vertical,
 		type SystemRange,
-	} from '$lib/shane/loupe';
+	} from '$lib/score/loupe';
 
 	interface Props {
 		/** Whether the loupe is up. The dock rises and falls with it. */

@@ -4,7 +4,7 @@
  * staff-renderer.ts, 3,534 lines; one function carries cyclomatic
  * complexity 244) run end to end through the REAL MusicXML parser on a
  * REAL, already-committed fixture:
- * `apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml`
+ * `apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml`
  * (5,024 lines; Mussorgsky, "Without Sun no. 1: Within Four Walls").
  * `packages/score-parser/src/approval/staff-renderer.approval.test.ts`
  * covers the same renderer against the package's own synthetic demo
@@ -15,13 +15,13 @@
  * The no-DOM-in-node fix: `MusicXmlScoreParser.parse` needs a global
  * `DOMParser` for string input (musicxml-parser.ts:863-872) and none
  * exists under vitest/node, so this test uses `parseXml` from
- * `$lib/shane/ingestion/mini-dom.ts`, the app's own dependency-free XML
+ * `$lib/score/ingestion/mini-dom.ts`, the app's own dependency-free XML
  * reader, exactly as `score-seat.test.ts`, `waiting-seat.test.ts`, and
  * five other test files in this app already do (grep
- * `from './ingestion/mini-dom'` under `src/lib/shane`).
+ * `from './ingestion/mini-dom'` under `src/lib/score`).
  *
  * The vowel resolver is NOT `buildVowelResolver`
- * (`$lib/shane/vowel-resolver.ts`): that function runs the fixture's
+ * (`$lib/score/vowel-resolver.ts`): that function runs the fixture's
  * Cyrillic verse through `processText`, which needs Ilya's ~1.29M-word
  * dictionary injected via module-level state
  * (`@ilya/phonology`'s `setStressDictionary`). This suite's other file,
@@ -57,13 +57,13 @@ import {
 	type ParsedScore,
 	type VowelResolver,
 } from '@ilya/score-parser';
-import { parseXml } from '$lib/shane/ingestion/mini-dom';
+import { parseXml } from '$lib/score/ingestion/mini-dom';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const FIXTURE_PATH = join(
 	__dirname,
-	'../shane/ingestion/fixtures/sunless-01-engraved.musicxml',
+	'../score/ingestion/fixtures/sunless-01-engraved.musicxml',
 );
 
 // Grayson's restricted, singable IPA inventory (AGENTS.md), vowels only.

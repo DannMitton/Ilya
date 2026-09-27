@@ -1,7 +1,7 @@
 /**
  * Vitest config for the N.168 frequency run. Not a gate.
  *
- * The run needs Ilya's real vowel resolver (`$lib/shane/vowel-resolver.ts`),
+ * The run needs Ilya's real vowel resolver (`$lib/score/vowel-resolver.ts`),
  * which lives in `apps/web`, so it runs under vitest. It lives HERE, outside
  * `apps/web/src`, so that the web-test gate never sees it: a skipped test
  * inside that glob would still move the gate's count string.

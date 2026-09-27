@@ -86,12 +86,17 @@ Depends on nothing else in the workspace.
 - `src/lib/library/` stores songs on the device (IndexedDB) and reads and
   writes `.ilya` binder files. `document.svelte.ts` is the seam between the
   page and storage.
-- `src/lib/shane/` is Fit. Inside it:
-  - `ingestion/` detects a score's format and routes it to a parser.
-  - `engine/` holds `notation-fonts.ts` until D.2.6.
+- `src/lib/score/` is the score itself, the last of `shane/`, moved by N.174
+  D.2.6; `lib/shane/` no longer exists, and the ratchet fails on any file
+  put there. Inside it:
+  - `ingestion/` detects a score's format and routes it to a parser, and
+    `reconciliation/` holds the textual-witness work.
   - `pairings.ts` joins the text's words to the score's notes, and
     `vowel-resolver.ts` asks the GraysonEngine which vowel is sung.
-  - `Loupe.svelte` and `loupe.ts` are the magnified editor for one measure.
+  - `Loupe.svelte` and `loupe.ts` are the magnified editor for one measure,
+    and `CorrectionSurface.svelte` and `correction.ts` correct the notes.
+  - `ScoreUploader.svelte` takes the file in, and `notation-fonts.ts` loads
+    the notation font.
 - `src/lib/reader/` reads a score file, moved out of `shane/` by N.174 D.2.5,
   flat, with `vendor/` for the MuseScore converter's glue. `score-reader.ts`
   and its Worker convert Finale `.musx`, `mscz-converter.ts` converts
@@ -113,7 +118,8 @@ Depends on nothing else in the workspace.
   D.2.2. `insights.ts` builds the page's figures, `Tessituragram.svelte` draws
   the tessituragram, `comments.ts`, `comment-text.ts`, and `comment-sources.ts`
   choose, word, and cite the per-note comments, and `InsightsPane.svelte`
-  renders it all. `InsightsIntake.svelte` stays in `shane/` until D.2.4.
+  renders it all. `InsightsIntake.svelte` is in `voice/`, where the
+  calibration wizard mounts it.
 - `src/lib/analysis/` is what both documents read, moved out of `shane/` by
   N.174 D.2.3. `analyze-score-adapter.ts` turns the voice into the snapshot the
   analysis reads, `watchlist.ts` and `advice-resolver.ts` list and explain what

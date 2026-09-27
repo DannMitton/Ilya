@@ -39,7 +39,7 @@ import {
 	type ScanState,
 } from './loupe-rules';
 
-const FIXTURE = 'src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml';
+const FIXTURE = 'src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml';
 const MEASURES = 18;
 const REPORT_DIR = join(process.cwd(), 'test-results', 'loupe-scan');
 const SCAN_JSON = join(REPORT_DIR, 'scan.json');

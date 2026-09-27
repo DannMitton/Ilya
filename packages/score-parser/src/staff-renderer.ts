@@ -897,7 +897,7 @@ const NO_FONT_ARC_MIDPOINT_SP = 0.2;
  * WHY THESE ARE FRACTIONS AND NOT DECIMALS. Both were px constants that ignored
  * the stave size, which is the second of the two N.4 faults this block already
  * carries a note about. Written over 5.5, the shipping `lineGap`
- * (`apps/web/src/lib/shane/engraving.ts`), they draw the same pixel they drew
+ * (`apps/web/src/lib/score/engraving.ts`), they draw the same pixel they drew
  * before at the shipping stave and scale everywhere else. `SLUR_CLEAR_SP` is
  * the old 6 px, unchanged in value and applied to the same two things: an
  * up-stem or beam tip, and the turning layer above its own accidental

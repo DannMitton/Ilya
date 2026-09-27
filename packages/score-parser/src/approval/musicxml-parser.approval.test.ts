@@ -2,7 +2,7 @@
  * Approval (golden-master) test for `MusicXmlScoreParser` (musicxml-parser.ts,
  * 1,168 lines). Pins today's exact `ParsedScore` produced from a real
  * fixture already committed to the repo, not a synthetic one built for
- * this suite: `apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml`
+ * this suite: `apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml`
  * (5,024 lines; Mussorgsky, "Without Sun no. 1: Within Four Walls",
  * `musx2mxl`-engraved). This is the only real score-file fixture found in
  * the repository outside `tools/e16-harness` (which is a separate,
@@ -15,7 +15,7 @@
  * `musicxml-parser.ts:863-872` (`resolveDocument`) requires a global
  * `DOMParser` for string input and says so when one is absent. Both
  * `musicxml-parser.test.ts:29-114` (this package) and
- * `apps/web/src/lib/shane/ingestion/mini-dom.ts` (the app) carry their own
+ * `apps/web/src/lib/score/ingestion/mini-dom.ts` (the app) carry their own
  * copy of the same tiny, dependency-free XML reader for exactly this
  * reason. The copy below (lines marked MINI-DOM) is that same reader,
  * reproduced verbatim rather than imported, because moving it would touch
@@ -137,7 +137,7 @@ function parseXml(src: string): MiniEl {
 
 const FIXTURE_PATH = join(
 	__dirname,
-	'../../../../apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml',
+	'../../../../apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml',
 );
 
 function parseFixture() {

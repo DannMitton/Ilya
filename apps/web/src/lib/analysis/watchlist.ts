@@ -58,7 +58,7 @@ import {
 	type VoiceProfileSnapshot,
 	type VowelResolver
 } from '@ilya/score-parser';
-import { collectScoreWords } from '$lib/shane/vowel-resolver';
+import { collectScoreWords } from '$lib/score/vowel-resolver';
 
 // ── Tunable constants (each tagged; all single-point-of-change) ──────
 

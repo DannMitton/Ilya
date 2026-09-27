@@ -14,7 +14,7 @@
  * imported rather than retyped (`PAIRINGS_KEY`), so the one string that must
  * not drift cannot.
  */
-import { PAIRINGS_KEY, type PairingMap } from '$lib/shane/pairings';
+import { PAIRINGS_KEY, type PairingMap } from '$lib/score/pairings';
 import { parseFromScore, serializeFromScore, type MetadataField } from '$lib/metadata-provenance';
 import { getAllByIndex, getAllFrom, getFrom, openDatabase, writeAcross, type StoreSpec } from './idb';
 // N.67 step 6. The list must say which rows cannot be read, and there is ONE

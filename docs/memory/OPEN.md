@@ -622,7 +622,7 @@ harmoizing the labels to N.131."*
 
 ## N.140. THE LOUPE GUARANTEES A STAVE SPACE, AND SCROLLS RATHER THAN SHRINKING BELOW IT. Numbered by Dann 2026-09-14. UNPLACED.
 
-> **MOSTLY BUILT, found by the code audit 2026-09-24 and checked by the desk the same night.** N.153 stage 3b shipped the core: the notation's point size is fixed and no longer shrinks to fit (`apps/web/src/lib/shane/Loupe.svelte:1215-1223`), and a measure wider than the window scrolls sideways (`Loupe.svelte:2818-2826`). **What remains open, per the code's own comment:** whether the sideways scroll may keep a horizontal gesture on a surface where a tap places a syllable. Audit memo: `../sessions/memo-audit-code-catalogue-a_r1_2026-09-24.md`.
+> **MOSTLY BUILT, found by the code audit 2026-09-24 and checked by the desk the same night.** N.153 stage 3b shipped the core: the notation's point size is fixed and no longer shrinks to fit (`apps/web/src/lib/score/Loupe.svelte:1215-1223`), and a measure wider than the window scrolls sideways (`Loupe.svelte`, the `.loupe-window` rule). **What remains open, per the code's own comment:** whether the sideways scroll may keep a horizontal gesture on a surface where a tap places a syllable. Audit memo: `../sessions/memo-audit-code-catalogue-a_r1_2026-09-24.md`.
 
 **Dann's design, 2026-09-14, and the words are his:** *"a contextual horizontal
 scroll with notation remaining at a pre-set point size seems preferable to
@@ -1486,7 +1486,7 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
   cannot read (`../sessions/memo-n142-tie-prolongation_r1_2026-09-16.md` §5). The desk
   reads it through Chrome on the branch alias. Build only if the count is not zero.
 - **N.145.** A poem pasted after a score with no words is placed at once
-  (`apps/web/src/lib/shane/first-seat.ts`); not walked, because no wordless score was
+  (`apps/web/src/lib/score/first-seat.ts`); not walked, because no wordless score was
   to hand.
 - **N.144.** An edited poem still takes the old note-counting path on Start placement
   over, so it can still break a melisma (Code's choice, reversible).

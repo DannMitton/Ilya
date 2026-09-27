@@ -55,7 +55,7 @@ import { setGlossDictionary } from '@ilya/dictionary';
 import { setBlurbData } from '@ilya/blurb';
 import { installHomographEntries } from '$lib/loader';
 import { processText } from '$lib/pipeline';
-import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
+import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
 import { scoreMetrics } from '$lib/analysis/score-metrics';
 import { musxToMnxJson } from '../e16-harness/src/denigma-convert';
 import { checkPlausibility, FLOOR_MARGIN_SEMITONES, CEILING_MARGIN_SEMITONES } from '$lib/voice/engine/plausibility';

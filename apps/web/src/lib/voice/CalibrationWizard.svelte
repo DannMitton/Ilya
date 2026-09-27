@@ -55,7 +55,7 @@
 		type ReadinessResult
 	} from '$lib/voice/engine/readiness';
 	import type { CaptureError } from '$lib/voice/engine/errors';
-	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
+	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
 	import { deriveFrom } from '$lib/voice/engine/derivations';
 	import { applyIghDivergence } from '$lib/voice/engine/divergence';

@@ -11,7 +11,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { renderDemo, type PreparedSmuflFont } from '@ilya/score-parser';
-	import { NOTATION_FONTS, loadNotationFont } from '$lib/shane/engine/notation-fonts';
+	import { NOTATION_FONTS, loadNotationFont } from '$lib/score/notation-fonts';
 
 	// The lab now loads through the shared notation-font loader (extracted
 	// at font wiring, 2026-07-13), so the lab and the live pane cannot

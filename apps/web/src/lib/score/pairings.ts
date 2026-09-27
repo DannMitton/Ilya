@@ -33,7 +33,7 @@
  */
 
 import type { LineData, SyllableOverride, WordStackData } from '$lib/types';
-import { CYRILLIC_VOWEL, vowelOfSyllable } from '$lib/shane/vowel-resolver';
+import { CYRILLIC_VOWEL, vowelOfSyllable } from '$lib/score/vowel-resolver';
 import { applyReconstitution } from '$lib/reconstitution';
 import { reslicedSyllables } from '$lib/syllable-utils';
 

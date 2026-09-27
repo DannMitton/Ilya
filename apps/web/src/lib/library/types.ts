@@ -16,8 +16,8 @@
  */
 import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
-import type { PairingMap } from '$lib/shane/pairings';
-import type { CorrectionMap } from '$lib/shane/correction';
+import type { PairingMap } from '$lib/score/pairings';
+import type { CorrectionMap } from '$lib/score/correction';
 
 /**
  * One stored gloss: the word key, the gloss, and the word the gloss was

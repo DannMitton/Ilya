@@ -39,7 +39,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, formatNameForPaper } from '$lib/composers-poets';
 	import { type Vowel, type CalibratedFormant, type VoiceCharacteristics } from '$lib/voice/engine/types';
-	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
+	import type { IngestedScore } from '$lib/score/ingestion/ingest';
 	import {
 		analyzeScore,
 		noteConditions,
@@ -53,8 +53,8 @@
 	import { isTreble, noteComments, noteFacts, registerFor, selectComments } from '$lib/insights/comments';
 	import { renderComments, songSeed, type RenderedComment } from '$lib/insights/comment-text';
 	import { fullReference, worksCited, type Run } from '$lib/insights/comment-sources';
-	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
-	import { withPairedVowel, type PairingMap, type DrawnUnderlay } from '$lib/shane/pairings';
+	import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
+	import { withPairedVowel, type PairingMap, type DrawnUnderlay } from '$lib/score/pairings';
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
 	import { buildWatchList } from '$lib/analysis/watchlist';

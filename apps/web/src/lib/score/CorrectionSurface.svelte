@@ -34,16 +34,16 @@
 	   44 PX FLOOR, unconditional, on every control here. The page's own glyphs
 	   are the ruled exemption and this surface takes none. -------------- */
 	import { t, type Language } from '$lib/i18n';
-	import { loadNotationFont } from '$lib/shane/engine/notation-fonts';
-	import { centredViewBox, commonInkBox, type InkBox } from '$lib/shane/loupe';
+	import { loadNotationFont } from '$lib/score/notation-fonts';
+	import { centredViewBox, commonInkBox, type InkBox } from '$lib/score/loupe';
 	import type { NoteBase } from '@ilya/score-parser';
-	import type { ShiftDirection } from '$lib/shane/pairings';
+	import type { ShiftDirection } from '$lib/score/pairings';
 	import {
 		stepCount,
 		stepValue,
 		TUPLET_VALUES,
 		type TupletDefinition,
-	} from '$lib/shane/entry';
+	} from '$lib/score/entry';
 	import { onMount, type Snippet } from 'svelte';
 
 	interface Props {

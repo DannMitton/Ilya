@@ -465,7 +465,9 @@ this line read 1,948 lines when the file was 6,225).
 |---|---|
 | `Paper.svelte`, `WordStack.svelte` | `apps/web/src/lib/components/Paper/` |
 | `InspectorPanel.svelte`, `Drawer.svelte`, `TabBar.svelte` | `apps/web/src/lib/components/Drawer/` |
-| `VoiceProfilePane.svelte`, `ScoreUploader.svelte`, `vowel-resolver.ts`, `pairings.ts`, `SyllableStation.svelte`, `profileStore.ts` | `apps/web/src/lib/shane/` |
+| `ScoreUploader.svelte`, `vowel-resolver.ts`, `pairings.ts` | `apps/web/src/lib/score/` |
+| `MarkupPane.svelte` (was `VoiceProfilePane.svelte`) | `apps/web/src/lib/markup/` |
+| `profileStore.ts` | `apps/web/src/lib/voice/` |
 
 `apps/web/static/data` is a symlink to the repository root's `data/`.
 

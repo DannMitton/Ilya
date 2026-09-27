@@ -719,10 +719,10 @@ recorded:**
 | # | what it is | read at |
 |---|---|---|
 | **N.4** | the unmeasured page | `packages/score-parser/src/staff-renderer.test.ts:1065`; `staff-renderer.ts:895`, `:2282` |
-| **N.5** | the singer's notation preferences, 2026-08-05 | `apps/web/src/lib/shane/VoiceProfilePane.svelte:164`, `:844`, `:861` |
+| **N.5** | the singer's notation preferences, 2026-08-05 | `apps/web/src/lib/markup/MarkupPane.svelte` (`notationPrefs`, `showStressDiacritics`) |
 | **N.6** | ledger-line notes' stems, **recorded and NOT implemented** | `packages/score-parser/src/staff-renderer.ts:1791` |
-| **N.8** | the singer's open-syllable preference, 2026-08-06 | `apps/web/src/lib/shane/vowel-resolver.ts:411`; `VoiceProfilePane.svelte:174` |
-| **N.9** | the clitic rule: a word with no vowel can never own a slot | `apps/web/src/lib/shane/pairings.ts:102`, `:173`; `vowel-resolver.ts:512` |
+| **N.8** | the singer's open-syllable preference, 2026-08-06 | `apps/web/src/lib/score/vowel-resolver.ts` (`openSyllabify`); `MarkupPane.svelte` (`openSyllabification`) |
+| **N.9** | the clitic rule: a word with no vowel can never own a slot | `apps/web/src/lib/score/pairings.ts:102`; `vowel-resolver.ts` (the vowelless-syllable merge) |
 | **N.11** | a hyphen's ink stays inside the gap between two syllables | `packages/score-parser/src/staff-renderer.ts:1175`, `:3404`; `staff-renderer.test.ts:53` |
 | **N.13** | voicing preserved before a voiced-obstruent-initial word at a soft boundary | `packages/phonology/tests/notation-edge-cases.test.ts:528`, `:551` |
 
@@ -865,9 +865,9 @@ not proposed. Each is a lead from the audit's tools, checked where marked.
 - `packages/phonology/src/engine.ts:35`: `reconstitution: boolean` in
   `NotationPreferences`, commented "Phase 3 — not wired yet"; the live feature is
   `apps/web/src/lib/reconstitution.ts` (checked by the desk 2026-09-27).
-- `apps/web/src/lib/shane/TextualWitnesses.svelte`: unreachable (knip, and the
+- `apps/web/src/lib/score/TextualWitnesses.svelte`: unreachable (knip, and the
   audit catalogue of 2026-09-24, two methods).
-- `apps/web/src/lib/shane/reconciliation/taxonomy.ts` and `witnesses.ts`:
+- `apps/web/src/lib/score/reconciliation/taxonomy.ts` and `witnesses.ts`:
   reachable only from each other and the unreachable component above.
   `reconciliation/types.ts` is live. **`CONTRACT.md` §6: do not rebuild anything
   in `reconciliation/`.**

@@ -95,8 +95,9 @@ function moduleOfSpec(file, spec) {
 	if (spec.startsWith('.')) return moduleOfPath(posix.normalize(posix.join(posix.dirname(file), spec)));
 	return null;
 }
-// Slice D.2.6 switches this on, once lib/shane/ is empty: any file left there is a breach.
-const SHANE_FOLDER_IS_GONE = false;
+// Switched on by slice D.2.6 (2026-09-27), which emptied lib/shane/ into lib/score/:
+// any file there now is a breach.
+const SHANE_FOLDER_IS_GONE = true;
 
 // 2, 3 and 4. Imports.
 const IMPORT = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)|new\s+URL\(\s*['"]([^'"]+)['"]\s*,\s*import\.meta\.url\s*\)/g;

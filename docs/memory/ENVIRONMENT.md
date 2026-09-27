@@ -2336,7 +2336,7 @@ Wikipedia article titles instead, one source for all 62. Both passes are in
 
 ## THE CAPTURE CHAIN, AS IT ACTUALLY IS. Read 2026-08-23, Opus memo and Dann's console
 
-`apps/web/src/lib/shane/engine/`. Constraints at `live.ts:337-343` already
+`apps/web/src/lib/voice/engine/`. Constraints at `live.ts:337-343` already
 turn off `echoCancellation`, `noiseSuppression`, and `autoGainControl`, and
 Dann's iMac honours them (`track settings` on the console). 48 kHz, no
 highpass anywhere, pre-emphasis 0.97 in `extract.ts` only. `live.ts:665`
@@ -2905,7 +2905,7 @@ having zero references to `rhythmicPosition`. The count was correct. The file is
 `packages/score-parser/src/modification-engine.ts`, "the general
 vowel-modification engine" (`:1-2`), and it has never touched durations.
 
-**Durations change in `apps/web/src/lib/shane/correction.ts`**, in
+**Durations change in `apps/web/src/lib/score/correction.ts`**, in
 `applyCorrections`. The conclusion survived only because Code went and found the
 real path. **Before you cite a file's absence as evidence, open its first ten
 lines and confirm it is the file you think it is.** This is tether 11 in a form
@@ -3242,7 +3242,7 @@ data is and proves nothing about what the singer sees. **Render it and look.**
 **Before you tune, render, or ask Dann to choose any engraving thickness, gap, or
 extension, open the notation font's SMuFL metadata.** The fonts ship in
 `apps/web/static/fonts/*/`, and the product default is Finale Maestro
-(`apps/web/src/lib/shane/engine/notation-fonts.ts:42`). Their `engravingDefaults`
+(`apps/web/src/lib/score/notation-fonts.ts:42`). Their `engravingDefaults`
 block gives, in stave spaces, the thickness of ties, slurs, stems, beams, staff lines,
 barlines, leger lines, and more. `packages/score-parser/src/smufl-metadata.ts:47-57`
 reads only some of them; a missing key is a one-line addition, not a design question.
@@ -3424,7 +3424,7 @@ to reach before you write the brief.**
 
 ## THE PAGE RENDERS HIS LIBRARY, NOT YOUR FIXTURE. 2026-09-20
 
-**A fixture in `apps/web/src/lib/shane/ingestion/fixtures/` is a TEST input. Dann's
+**A fixture in `apps/web/src/lib/score/ingestion/fixtures/` is a TEST input. Dann's
 page renders a song in his IndexedDB, which he imported from his own file.** The two
 are different objects with the same music in them, and fixing one does not touch the
 other.

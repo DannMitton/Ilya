@@ -30,7 +30,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import type { Pitch, RequiredGlyphName } from '@ilya/score-parser';
 	import { smuflFontSizePx, spToPx } from '@ilya/score-parser';
-	import type { LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
+	import type { LoadedNotationFont } from '$lib/score/notation-fonts';
 	import {
 		STEPS,
 		clefFor,

@@ -24,8 +24,8 @@
  * deriving would have made the drawing worse. This is the deriving.
  */
 import { renderSystemSlice, type StaffRenderOptions } from '@ilya/score-parser';
-import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
-import type { SystemRange } from '$lib/shane/loupe';
+import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
+import type { SystemRange } from '$lib/score/loupe';
 
 export interface LoupeSystemRender {
 	/** The standalone SVG string, exactly as the renderer returned it. */

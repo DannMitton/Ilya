@@ -23,8 +23,8 @@
  */
 import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
-import type { PairingMap } from '$lib/shane/pairings';
-import type { CorrectionMap } from '$lib/shane/correction';
+import type { PairingMap } from '$lib/score/pairings';
+import type { CorrectionMap } from '$lib/score/correction';
 import {
 	createSaveScheduler,
 	fieldsFromRecord,

@@ -68,9 +68,9 @@
 		scoreInPerformanceOrder,
 		chooseClef,
 	} from '@ilya/score-parser';
-	import type { LoupeRenderBundle } from '$lib/shane/loupe-render-bundle';
-	import type { IngestedScore } from '$lib/shane/ingestion/ingest';
-	import { buildUnderlayResolvers } from '$lib/shane/vowel-resolver';
+	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
+	import type { IngestedScore } from '$lib/score/ingestion/ingest';
+	import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
 	import {
 		withPairedVowel,
 		pairedCyrillic,
@@ -81,15 +81,15 @@
 		drawnAcutedCyrillic,
 		type PairingMap,
 		type DrawnUnderlay,
-	} from '$lib/shane/pairings';
+	} from '$lib/score/pairings';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/analysis/analyze-score-adapter';
-	import { loadNotationFont, type LoadedNotationFont } from '$lib/shane/engine/notation-fonts';
-	import { afterGround } from '$lib/shane/system-ground';
-	import { RING_RADIUS, ringBox } from '$lib/shane/selection-ring';
-	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/shane/engraving';
+	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
+	import { afterGround } from '$lib/score/system-ground';
+	import { RING_RADIUS, ringBox } from '$lib/score/selection-ring';
+	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/score/engraving';
 	import { buildWatchList, watchEntryLine, WATCH_HEADER } from '$lib/analysis/watchlist';
 	import { scoreMetrics } from '$lib/analysis/score-metrics';
 

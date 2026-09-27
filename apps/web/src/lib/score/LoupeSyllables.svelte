@@ -35,7 +35,7 @@
 -->
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { Slot, PairingMap } from '$lib/shane/pairings';
+	import type { Slot, PairingMap } from '$lib/score/pairings';
 
 	interface Props {
 		slots: readonly Slot[];

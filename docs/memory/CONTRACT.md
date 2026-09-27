@@ -630,7 +630,7 @@ applies without being read.
 - Do not add a second silent save site while N.27 is open.
 - Do not turn `underlay-donor.ts` into the alignment engine.
 - **Do not change `VocalLineEvent`**, and do not rebuild anything in
-  `apps/web/src/lib/shane/reconciliation/`.
+  `apps/web/src/lib/score/reconciliation/`.
 - Do not let Ilya propose a deliberately empty note.
 - **Do not rename a vowel.** `Russian-o` / `o russe` and `cardinal-u` / `u cardinal`
   are ruled, and the French is LOWERCASE.

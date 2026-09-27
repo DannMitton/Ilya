@@ -17,12 +17,12 @@ test.describe('opening a score', () => {
 	});
 
 	test('opening a MusicXML score through the upload UI shows the score and its transcription', async ({ page }) => {
-		// REUSED FIXTURE: apps/web/src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml,
+		// REUSED FIXTURE: apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml,
 		// already in the tree for the score-parser/ingestion package.
 		// THE ONE PICKER: the intake's hidden file input, IntakePanel.svelte:499-505,
 		// class `hidden-input`, `accept` is N.70's list (.mnx, .json, .xml,
 		// .musicxml, .mxl, .musx, .mscz, .pdf, image/*).
-		const fixture = path.resolve(process.cwd(), 'src/lib/shane/ingestion/fixtures/sunless-01-engraved.musicxml');
+		const fixture = path.resolve(process.cwd(), 'src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml');
 		await page.locator('input[type="file"].hidden-input').setInputFiles(fixture);
 
 		// The score's receipt (IntakePanel.svelte:469-473, tag `upload.watermark` = "score").
