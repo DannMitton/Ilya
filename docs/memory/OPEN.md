@@ -1398,6 +1398,13 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 > justification."* **So layout, measure distribution and horizontal spacing are
 > editorial, and the standard is justification rather than prohibition.**
 >
+> **N.94 FRENCH RULED 2026-09-28 19:28** (Dann: *"Ratified"*; drafted by the desk). The table is
+> `../sessions/brief-code-n94-key-ruler_r1_2026-09-28.md` §6: « Tonalité : {key}, telle qu’imprimée »,
+> « Essayer une autre tonalité », « Tonalité : {key}, après transposition », « Tonalité imprimée »,
+> « Annuler », « Utiliser cette tonalité », readout « Une tierce mineure plus bas · si majeur · recommandation d’Ilya »
+> (« plus haut » derived by the desk), header « Transposition d’une tierce mineure vers le bas à partir de ré majeur,
+> au choix de l’interprète. » **Not in the tree until a grep shows it.**
+>
 > **SUPERSEDED 2026-09-28: the home is the Piece band and a floating key ruler (Dann accepted drawing r4). See `STATE.md`, "N.94, THE KEY RULER".** **SUPERSEDED IN PART 2026-09-16: the control belongs in the Score Markup section, between Corrections and Voice (Dann), and N.94 is IN the release.** **N.94 HAS A HOME AGAIN, 2026-09-13.** Numbered 2026-08-24 as "transposition
 > interface, modelled on Newzik" and never built. It is now a **station inside
 > the `Melody` band, sibling to Corrections**. Established: the ENGINE already

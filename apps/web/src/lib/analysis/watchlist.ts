@@ -598,13 +598,23 @@ function adviceSentence(entry: WatchEntry, opener: WatchOpener, language: Langua
 }
 
 /**
+ * The word as the score prints it, less the punctuation the engraver set
+ * against it: `collectScoreWords` keeps the raw cell, comma and all, so
+ * « разлуки, » reads « разлуки ». The same strip as Insights' `wordOf`
+ * (`InsightsPane.svelte`), so the two documents quote a word alike.
+ */
+function bareWord(word: string | undefined): string {
+	return (word ?? '').replace(/^[\p{P}\s]+|[\p{P}\s]+$/gu, '');
+}
+
+/**
  * The rendered line for an entry, leading with the bar (§7.5). Uses the most
  * severe kind's template; the stacking count still lifts the entry in the sort.
  * A note that carries several kinds is named once by its hardest. `opener`
  * leads the advice, when the entry carries one; `watchBandLines` rotates it.
  */
 export function watchEntryLine(entry: WatchEntry, language: Language, opener: WatchOpener = 1): string {
-	const vars = { bar: entry.bar, vowel: `[${entry.vowel}]`, word: entry.word ?? '' };
+	const vars = { bar: entry.bar, vowel: `[${entry.vowel}]`, word: bareWord(entry.word) };
 	const line = (key: string, extra: Record<string, string> = {}) =>
 		fill(t(`watch.line.${key}`, language), { ...vars, ...extra });
 	const withAdvice = (text: string) => {
@@ -644,8 +654,21 @@ export function watchEntryLine(entry: WatchEntry, language: Language, opener: Wa
  * (`insights/comment-text.ts`, `rotate`); the band sits on one page, so the
  * rotation runs down the whole list. DESK DEFAULT: it starts at opener 1, and
  * a sixth advice line repeats the first, since the pool holds five.
+ *
+ * NO DUPLICATE LINE (Dann's look, 2026-09-28): two entries that would print
+ * the same sentence for the same bar are one, the first (hardest) kept. The
+ * line leads with its bar, so "same sentence, same bar" is "same text". It is
+ * compared at opener 1, before the rotation, since otherwise two identical
+ * findings would differ only by their opener and both print.
  */
 export function watchBandLines(entries: readonly WatchEntry[], language: Language): string[] {
+	const seen = new Set<string>();
+	const unique = entries.filter((e) => {
+		const key = watchEntryLine(e, language, 1);
+		if (seen.has(key)) return false;
+		seen.add(key);
+		return true;
+	});
 	let k = 0;
-	return entries.map((e) => watchEntryLine(e, language, e.advice ? OPENERS[k++ % OPENERS.length] : 1));
+	return unique.map((e) => watchEntryLine(e, language, e.advice ? OPENERS[k++ % OPENERS.length] : 1));
 }

@@ -91,6 +91,8 @@
 	import { entryGroup, RING_RADIUS, ringBox } from '$lib/score/selection-ring';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/score/engraving';
 	import { buildWatchList, watchBandLines } from '$lib/analysis/watchlist';
+	import NotesColumn from './NotesColumn.svelte';
+	import { packNotes, type NotesMeasure, type NotesSheet } from './notes-pages';
 	import { scoreMetrics } from '$lib/analysis/score-metrics';
 
 	interface Props {
@@ -853,9 +855,14 @@
 	// would have occupied: the page that would have carried the conclusions
 	// instead says why there are none.
 	const hasCommentaryPage = $derived(showOctaveNotice || showWatchBand || showWithheld);
-	const totalPages = $derived(
-		scorePages ? scorePages.length + (hasCommentaryPage ? 1 : 0) : 0,
+	// The notes run on to as many sheets as they need, never cut (Dann's look,
+	// 2026-09-28): `NotesColumn` measures them unseen, `packNotes` fills sheets.
+	const bandLines = $derived(showWatchBand && watchList ? watchBandLines(watchList.entries, language) : []);
+	let notesMeasure: NotesMeasure | null = $state(null);
+	const notesSheets: NotesSheet[] = $derived(
+		hasCommentaryPage ? (notesMeasure ? packNotes(notesMeasure, dims.height - subsequentTop - contentBottom) : [{ withheld: true, octave: true, lines: bandLines.length ? ([0, bandLines.length] as [number, number]) : null }]) : [],
 	);
+	const totalPages = $derived(scorePages ? scorePages.length + notesSheets.length : 0);
 
 	// The Q3 render report (see the onrendered prop doc): once per score
 	// identity, only when pagination yielded at least one page. A plain
@@ -1027,9 +1034,9 @@
 				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? markupLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
-		{#if hasCommentaryPage}
-			<!-- A trailing "notes" page: the octave notice and the "Places to
-			     watch" list on their own sheet AFTER the score (Dann's placement
+		{#each notesSheets as sheet, j (j)}
+			<!-- The trailing notes: the octave notice and the "Places to
+			     watch" list on their own sheets AFTER the score (Dann's placement
 			     ruling, 2026-07-18) so they sit within the page boundary and
 			     expand freely without displacing the markup. -->
 			<article
@@ -1038,40 +1045,13 @@
 				aria-label={T('profile.notesPageAria')}
 			>
 				<RunningHeader headerText={runningHeader} />
-				<div class="commentary-window" style="top: {subsequentTop}px; bottom: {contentBottom}px;">
-					{#if showWithheld}
-						<!-- Item 1.8: absence as a positive object on the page, not a
-						     gap. Placed FIRST, above the octave notice, because it
-						     governs everything else on the sheet: if no voice has been
-						     measured, nothing below it could have been forecast. -->
-						<aside class="withheld" aria-label={withheld.heading}>
-							<p class="withheld-heading">{withheld.heading}</p>
-							<p class="withheld-lede">{withheld.lede}</p>
-							<ul class="withheld-list">
-								{#each withheld.items as item (item)}
-									<li class="withheld-line">{item}</li>
-								{/each}
-							</ul>
-							<p class="withheld-close">{withheld.close}</p>
-						</aside>
-					{/if}
-					{#if showOctaveNotice}
-						<aside class="octave-notice">{OCTAVE_NOTICE}</aside>
-					{/if}
-					{#if showWatchBand && watchList}
-						<aside class="watch-band" aria-label={T('watch.header')}>
-							<p class="watch-band-header">{T('watch.header')}</p>
-							<ul class="watch-band-list">
-								{#each watchBandLines(watchList.entries, language) as line, i (watchList.entries[i].eventId)}
-									<li class="watch-band-line">{line}</li>
-								{/each}
-							</ul>
-						</aside>
-					{/if}
-				</div>
-				<PageFooter pageNumber={totalPages} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="#9585A2" />
+				<NotesColumn withheld={showWithheld ? withheld : null} octave={showOctaveNotice ? OCTAVE_NOTICE : null} bandHeader={T('watch.header')} lines={bandLines} {sheet} top={subsequentTop} bottom={contentBottom} />
+				{#if j === 0}
+					<NotesColumn withheld={showWithheld ? withheld : null} octave={showOctaveNotice ? OCTAVE_NOTICE : null} bandHeader={T('watch.header')} lines={bandLines} onmeasure={(m) => (notesMeasure = m)} />
+				{/if}
+				<PageFooter pageNumber={totalPages - notesSheets.length + j + 1} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="#9585A2" />
 			</article>
-		{/if}
+		{/each}
 	</div>
 {:else}
 <!-- THE CENTRING WRAPPER (N.73 S3, second repair from Dann's walk of ship
@@ -1326,119 +1306,8 @@
 		height: auto;
 	}
 
-	/* ── The trailing notes page (design C, §7.1) ──────────── */
-
-	/* The notes page's content window: the same text column as the score, a
-	   column of the octave notice then the "Places to watch" band. The octave
-	   notice and band render AFTER the score on their own sheet (Dann's
-	   placement ruling, 2026-07-18). First-pass treatment; design is Dann's. */
-	.commentary-window {
-		position: absolute;
-		left: 96px;
-		right: 96px;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		overflow: hidden;
-	}
-
-	.octave-notice {
-		box-sizing: border-box;
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-style: italic;
-		font-size: 0.92rem;
-		line-height: 1.5;
-		color: var(--ink-secondary, #4a4540);
-	}
-
-	/* Item 1.8, the withheld statement. Twinned on .watch-band deliberately:
-	   it stands in the place the watch list would have stood, so it should
-	   carry the same weight rather than read as a warning. Same squircle, same
-	   lavender, same small-caps header. The only departure is the closing line,
-	   which is italic serif to match .octave-notice, because it is a remark
-	   about the page rather than an item in a list. */
-	.withheld {
-		box-sizing: border-box;
-		border: 1px solid #9585a2;
-		border-radius: 12px;
-		padding: 0.7rem 1.1rem 0.8rem;
-		background: var(--paper-cream);
-	}
-
-	.withheld-heading {
-		margin: 0 0 0.35rem;
-		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
-		font-variant: small-caps;
-		letter-spacing: 0.06em;
-		font-size: 0.8rem;
-		color: #9585a2;
-	}
-
-	.withheld-lede {
-		margin: 0 0 0.5rem;
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 0.9rem;
-		line-height: 1.45;
-		color: var(--ink-secondary, #4a4540);
-	}
-
-	.withheld-list {
-		margin: 0 0 0.5rem;
-		padding-left: 1.1rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.2rem;
-	}
-
-	.withheld-line {
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 0.9rem;
-		line-height: 1.45;
-		color: var(--ink-secondary, #4a4540);
-	}
-
-	.withheld-close {
-		margin: 0;
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-style: italic;
-		font-size: 0.9rem;
-		line-height: 1.45;
-		color: var(--ink-secondary, #4a4540);
-	}
-
-	/* Outline-only lavender squircle; an in-flow block below the score. */
-	.watch-band {
-		box-sizing: border-box;
-		border: 1px solid #9585a2;
-		border-radius: 12px;
-		padding: 0.7rem 1.1rem 0.8rem;
-		background: var(--paper-cream);
-	}
-
-	.watch-band-header {
-		margin: 0 0 0.35rem;
-		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
-		font-variant: small-caps;
-		letter-spacing: 0.06em;
-		font-size: 0.8rem;
-		color: #9585a2;
-	}
-
-	.watch-band-list {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		display: flex;
-		flex-direction: column;
-		gap: 0.2rem;
-	}
-
-	.watch-band-line {
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-size: 0.9rem;
-		line-height: 1.45;
-		color: var(--ink-secondary, #4a4540);
-	}
+	/* The trailing notes page's column and its styles live in
+	   `NotesColumn.svelte` (2026-09-28). */
 
 	/* N.73 C2 retires the N.44 reflow that stood here.
 

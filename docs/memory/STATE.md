@@ -51,9 +51,13 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **Last ship: `8127e01`, 2026-09-28 16:27**, all eight gates at baseline: calm-loupe slice 7, N.154, N.82, README, CONTRIBUTING, the code of conduct, N.169's close. Earlier the same day: `7d2fcd6` (calm loupe slices 1 to 6, Correction Station slice 3). Ship script gates: 4 is `"1640 passed (1640)"`, 5 is `"616 passed | 5 skipped (621)"` (latest backup `~/Downloads/ilya-ship.sh.bak-1613-2026-09-28`).
 >
+> **2026-09-28 19:28, N.94 MOVED:** step 1 RULED yes (`CONTRACT.md` §6, 19:23); step 2 done, the renderer read is in the brief §2; brief written, `../sessions/brief-code-n94-key-ruler_r1_2026-09-28.md`; its French RULED 19:28 (`OPEN.md` §N.94). **It runs after Code's four watch-band fixes ship** (both edit `MarkupPane.svelte`). Code's queue: it goes in ahead of item 1 unless Dann says otherwise (DESK DEFAULT).
+>
 > **THE ONE THING NEXT: N.94, the key ruler.** Design accepted (block below). Two steps before any brief, one at a time:
 > 1. **Ask Dann, not yet answered:** add to `CONTRACT.md` §6, *"No control is part of the printed page. Passing layers, the loupe and the key ruler, float above it and never print."* The desk recommends yes.
 > 2. **The desk reads the renderer** to establish whether the engraved page can redraw in a new key. NOT ESTABLISHED. Then the Code brief.
+>
+> **2026-09-28 ~20:00, DESK CHECK DONE on the four watch-band fixes:** patch `apps/web/test-results/_desk-n174/watch-band-four-fixes.patch` (md5 `1b0726370322deae123518e85075ee5a`, carries desk doc edits too; applied with `--exclude='docs/*'`) plus `watch-band-four-fixes-new.tar`, applied to a cloud clone of `8127e01` (same app code as `1fda2e4`). Web 1,646 passed, check 0 errors (12 warnings), ratchets OK. 84 captures each side: only Markup differs; Text, Insights, Learn, Guide identical. Box now closes on every sheet, words bare, repeats gone. Observed: phone French ends on a sheet carrying one line under the repeated heading. **Next: Dann's look, then gate 4 to 1646, then ship.**
 >
 > **WAITING ON THE DESK'S CHECK: Code's four watch-band fixes**, uncommitted in Dann's tree. Report `../sessions/report-code-watch-band-four-fixes_r1_2026-09-28.md`: the heading as the box's title, notes that flow onto as many sheets as needed (new `notes-pages.ts`, `NotesColumn.svelte`; `MarkupPane.svelte` 1490 to 1359, ratchet lowered), bare quoted words, no duplicate line. Code: web 1,646, check 0 errors, ratchets OK. **Its patch is NOT in `apps/web/test-results/_desk-n174/`** (that holds only slice 7, N.154, N.82); ask Code for it or build it from the tree before Playwright runs. Then desk compare, Dann's look, gate 4 to 1646, ship.
 >

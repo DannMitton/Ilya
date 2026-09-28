@@ -7,7 +7,7 @@
 	 * block, and `brief-n127-insights-inc1_r1_2026-09-12.md` §1): read-only and
 	 * never an input surface; every line computed or a sourced string a
 	 * predicate fired; the content in a squircle inheriting the watch band
-	 * (`MarkupPane.svelte`, `.watch-band`: 12 px radius, 1 px dusty rose,
+	 * (`NotesColumn.svelte`, `.watch-band`: 12 px radius, 1 px dusty rose,
 	 * cream inside); governing colour dusty rose, label ink `--rose-ink`, `--rose`
 	 * for lines and marks only (both moved at colour stage 4, 2026-09-14); page one fixed at one page; section headers on
 	 * `TitleHeader.svelte`'s `.metadata-line` recipe in rose; the foot one

@@ -633,6 +633,10 @@ applies without being read.
 - Do not put a mark on the page to say Ilya is unsure. **A mark that appears on
   everything says nothing.**
 - Do not put a control on the paper. **Drawer manipulates, page displays and prints.**
+- **No control is part of the printed page. Passing layers, the loupe and the key
+  ruler, float above it and never print.** Offered by the desk; ruled in by Dann
+  2026-09-28 19:23 (*"yes"*). Default, with its exception stated per tether 19:
+  a layer may print only if Dann rules that one in by name.
 - Do not form an opinion about the GUI before opening Fable's Studio ruling.
 - Do not build any of the GUI track before the beta closes unless Dann names what
   it displaces.

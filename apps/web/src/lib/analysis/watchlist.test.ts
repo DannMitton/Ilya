@@ -640,3 +640,21 @@ describe('watch-band copy in French (N.82, ruled 2026-09-28)', () => {
 		expect(lines[1]).toBe('Bar 2: the longer [o] here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.');
 	});
 });
+
+describe("the band on Dann's look (2026-09-28)", () => {
+	const base = { eventId: 'e', density: 1 } as const;
+	it('quotes a word without the punctuation the engraver set against it', () => {
+		const e: WatchEntry = { ...base, tier: 1, kinds: ['passaggio'], bar: '12', vowel: 'u', word: 'разлуки,' };
+		expect(watchEntryLine(e, 'en')).toContain('разлуки');
+		expect(watchEntryLine(e, 'en')).not.toContain('разлуки,');
+		expect(watchEntryLine(e, 'fr')).not.toContain('разлуки,');
+	});
+
+	it('prints one line where two entries would print the same sentence for the same bar', () => {
+		const adv = (id: string, bar: string): WatchEntry => ({ ...base, eventId: id, tier: 2, kinds: ['crossing'], bar, vowel: 'ɔ', advice: { action: 'openOCrossing' } });
+		const lines = watchBandLines([adv('a', '7'), adv('b', '7'), adv('c', '8')], 'en');
+		expect(lines).toHaveLength(2);
+		expect(lines[0].startsWith('Bar 7')).toBe(true);
+		expect(lines[1].startsWith('Bar 8')).toBe(true);
+	});
+});
