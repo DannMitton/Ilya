@@ -264,6 +264,12 @@ export interface TranspositionCandidate {
    * of fifths and respelled to stay within seven accidentals.
    */
   targetKey?: string;
+  /**
+   * The same target key as numbers (fifths and mode), so the app can name it in
+   * either language (N.82): the package passes numbers out and the app
+   * composes the words. Present exactly when `targetKey` is.
+   */
+  targetKeySignature?: { fifths: number; mode: 'major' | 'minor' };
 }
 
 export interface TranspositionSuggestion {
@@ -327,6 +333,21 @@ export function keyNameAfterTransposition(
   source: KeySignature | undefined,
   semitones: number,
 ): string | null {
+  const key = keyAfterTransposition(source, semitones);
+  if (key === null) return null;
+  const tonic = (key.mode === 'minor' ? MINOR_TONIC_BY_FIFTHS : MAJOR_TONIC_BY_FIFTHS)[key.fifths + 7];
+  return tonic === undefined ? null : `${tonic} ${key.mode}`;
+}
+
+/**
+ * The key signature a score lands in after transposing by `semitones`, as
+ * numbers: fifths within ±7 and the source's mode. Null when the source carries
+ * no mode, for the reason `keyNameAfterTransposition` gives. Pure.
+ */
+export function keyAfterTransposition(
+  source: KeySignature | undefined,
+  semitones: number,
+): { fifths: number; mode: 'major' | 'minor' } | null {
   if (!source || source.mode === undefined) return null;
   // Fifths displacement for transposing up by `semitones`: seven fifths per
   // semitone on the circle, folded to the nearest representative in [−5, 6].
@@ -335,8 +356,8 @@ export function keyNameAfterTransposition(
   let fifths = source.fifths + delta;
   if (fifths > 7) fifths -= 12;
   else if (fifths < -7) fifths += 12;
-  const tonic = (source.mode === 'minor' ? MINOR_TONIC_BY_FIFTHS : MAJOR_TONIC_BY_FIFTHS)[fifths + 7];
-  return tonic === undefined ? null : `${tonic} ${source.mode}`;
+  if (fifths < -7 || fifths > 7) return null;
+  return { fifths, mode: source.mode };
 }
 
 /**
@@ -369,13 +390,14 @@ export function suggestTranspositions(
     const outOfRange = countOutOfRange(shifted, profile);
     if (outOfRange >= currentOutOfRange) continue; // must strictly improve the range fit
     const targetKey = keyNameAfterTransposition(sourceKey, s);
+    const targetKeySignature = keyAfterTransposition(sourceKey, s);
     candidates.push({
       semitones: s,
       intervalName: intervalName(s),
       outOfRange,
       crossings: countCrossings(shifted, profile, vowel),
       resolvesRange: outOfRange === 0,
-      ...(targetKey !== null ? { targetKey } : {}),
+      ...(targetKey !== null && targetKeySignature !== null ? { targetKey, targetKeySignature } : {}),
     });
   }
 

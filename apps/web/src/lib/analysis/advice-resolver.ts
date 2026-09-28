@@ -35,11 +35,13 @@
  * (the v1 string is Mitton, re-verified on the thesis this cycle). The citation
  * is never printed on the paper apparatus; attribution lives in Learn/Guide
  * (Dann, 2026-07-21). Forecast-not-declare extends to advice: the copy hedges
- * ("you may find it helpful", §A.169), it does not command.
+ * (§A.169), it does not command. The words live in `i18n.ts` under
+ * `watch.advice.*`, in both languages, led by a rotated opener (N.82): this
+ * module names the action and the target vowel, and composes no sentence.
  *
  * Tags: SOURCED (a ruling, a type, or a verified citation), INFERENCE (derived),
- * JUDGEMENT (a build-time default, Dann rules). Copy is Dann's and is APPROVED
- * (§A.169); this module only places it.
+ * JUDGEMENT (a build-time default, Dann rules). Copy is Dann's (§A.169, redrafted
+ * as opener + action on 2026-09-28); this module only names it.
  *
  * Pure and framework-free, so it unit-tests the way the parsers do.
  */
@@ -83,12 +85,16 @@ interface AdviceCase {
 	/** Does this event trigger the case? Pure, side-effect-free. */
 	matches(ev: AnalyzedEvent): boolean;
 	/**
-	 * The sourced advice copy. Receives the operative sung vowel and, for a
-	 * named-target case, the target vowel to lean toward (`undefined` for an
-	 * articulatory case).
+	 * The advice's action, which names its words in `i18n.ts`
+	 * (`watch.advice.{action}`). The watch band fills it with the sung vowel
+	 * and, for a named-target case, the target vowel, then leads it with a
+	 * rotated opener (N.82, Dann 2026-09-28 15:10).
 	 */
-	copy(vowel: string, target?: string): string;
+	readonly action: AdviceAction;
 }
+
+/** The five advice actions, one per case; each is a `watch.advice.*` key. */
+export type AdviceAction = 'iCrossing' | 'openOCrossing' | 'oCover' | 'openTracking' | 'maleTurnover';
 
 /**
  * SOURCED (Mitton 2020, re-verified on the thesis page this cycle,
@@ -112,9 +118,9 @@ const MITTON_I_TO_LAX_I_CITATION =
  * so higher voices need their own cases, not a widened predicate here.
  *
  * The APPROVED copy (§A.169) is templated on the target vowel: "first
- * resonance" not "first formant" (§A.164 consistency); the forecast-not-declare
- * hedge "you may find it helpful"; slashes `/ɪ/` to match the crossing line's
- * `/i/`. For the sourced target `ɪ` it renders Dann's approved string verbatim.
+ * resonance" not "first formant" (§A.164 consistency); a forecast-not-declare
+ * hedge; square brackets `[ɪ]` to match the crossing line's `[i]` (Dann,
+ * 2026-09-28 15:06).
  */
 const I_CROSSING: AdviceCase = {
 	id: 'i-to-lax-i-crossing',
@@ -123,8 +129,7 @@ const I_CROSSING: AdviceCase = {
 	sourcedTarget: 'ɪ',
 	citation: MITTON_I_TO_LAX_I_CITATION,
 	matches: (ev) => ev.crossing === true && ev.vowel === 'i',
-	copy: (_vowel, target) =>
-		`You may find it helpful to relax the jaw and lean it toward /${target}/, giving it a touch more space, which lifts your first resonance clear of the pitch.`
+	action: 'iCrossing'
 };
 
 /**
@@ -165,8 +170,7 @@ const OPEN_O_CROSSING: AdviceCase = {
 	sourceVowel: 'ɔ',
 	citation: GODIN_HOWELL_O_CROSSING_CITATION,
 	matches: (ev) => ev.crossing === true && ev.vowel === 'ɔ',
-	copy: () =>
-		`You may find it helpful to allow the turn and let the vowel open into that fuller, headier resonance; up here it settles the tone rather than straining to stay bright.`
+	action: 'openOCrossing'
 };
 
 /**
@@ -200,9 +204,8 @@ const MITTON_O_COVER_CITATION =
  * exposure via a hazard kind (clause 3, §A.149).
  *
  * The APPROVED copy is Dann's (2026-07-22), templated on the target vowel: the
- * forecast-not-declare hedge "you may find it helpful"; slashes to match the
- * watch line; a semicolon (not an em-dash) for the nested thought. For the
- * sourced target `ɑ` it renders Dann's approved string verbatim.
+ * forecast-not-declare hedge; square brackets to match the watch line; a
+ * semicolon (not an em-dash) for the nested thought.
  */
 const O_COVER: AdviceCase = {
 	id: 'o-to-dark-a-cover',
@@ -211,8 +214,7 @@ const O_COVER: AdviceCase = {
 	sourcedTarget: 'ɑ',
 	citation: MITTON_O_COVER_CITATION,
 	matches: (ev) => ev.vowel === 'o' && ev.sustainedCeilingExposure === true,
-	copy: (_vowel, target) =>
-		`You may find it helpful to allow the vowel to open and darken toward /${target}/; that is a more comfortable option than a close /o/ this high.`
+	action: 'oCover'
 };
 
 /**
@@ -265,8 +267,7 @@ const OPEN_TRACKING: AdviceCase = {
 	citation: GODIN_HOWELL_TRACKING_CITATION,
 	matches: (ev) =>
 		ev.sustainedCeilingExposure === true && ev.crossing !== true && ev.aboveFirstResonance === true,
-	copy: (vowel) =>
-		`You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /${vowel}/ squeezed this high.`
+	action: 'openTracking'
 };
 
 /**
@@ -314,8 +315,7 @@ const MALE_TURNOVER: AdviceCase = {
 	citation: BOZEMAN_MALE_TURNOVER_CITATION,
 	matches: (ev) =>
 		ev.sustainedCeilingExposure === true && ev.crossing !== true && ev.aboveFirstResonance !== true,
-	copy: (vowel) =>
-		`You may find it helpful to let the /${vowel}/ turn and gather here rather than spreading it open for more sound; up this high the ring comes from letting it settle, not from pushing it wider.`
+	action: 'maleTurnover'
 };
 
 /**
@@ -376,7 +376,12 @@ export function resolveAdvice(analyzed: AnalyzedScore): AnalyzedScore {
 		}
 		events[id] = {
 			...ev,
-			vowelModification: { text: hit.copy(ev.vowel, target), citation: hit.citation, register: hit.register }
+			vowelModification: {
+				action: hit.action,
+				...(target !== undefined ? { target } : {}),
+				citation: hit.citation,
+				register: hit.register
+			}
 		};
 	}
 	return { ...analyzed, events };

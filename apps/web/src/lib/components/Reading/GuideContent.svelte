@@ -55,7 +55,7 @@
 						<!-- The forecast philosophy (Dann's copy, 2026-07-12), in French.
 						     Traduction française attentive mais non native, à valider lors
 						     de la passe française de l'interface de calibration. -->
-						<h4 id="guide-markup-forecast">Fit prévoit, il ne déclare pas</h4>
+						<h4 id="guide-markup-forecast">Les Aperçus prévoient, ils ne déclarent pas</h4>
 
 						<p><em>Fit</em> prévoit; il ne déclare pas. À partir d'une poignée d'échantillons de fry sur un micro grand public, il ne peut pas, et ne doit pas, se prononcer sur votre larynx. Ce qu'il peut honnêtement faire, c'est prendre vos résonances mesurées et prévoir comment une pièce du répertoire est susceptible de rencontrer votre voix : où le timbre va probablement basculer, où la zona di passaggio risque de se situer, où la tessiture devient exigeante. Certains chanteurs s'accorderont avec la prévision, d'autres non, et cette différence est elle aussi une information, non une erreur. L'outil offre au chanteur une connaissance de lui-même et de la manière dont la musique impose ses exigences, puis remet les décisions entre ses mains et celles de son professeur.</p>
 
@@ -68,7 +68,7 @@
 
 						<p>Ces valeurs se saisissent au clavier et ne se chantent pas, à dessein. Des extrêmes d'ambitus exigés devant un micro invitent à forcer, la tessiture relève du jugement plutôt que de la mesure, et un chanteur formé connaît généralement son passaggio mieux que ne le montrerait un échantillon rapide. Chaque champ est facultatif, et un champ vide ne bloque jamais rien : l'analyse reste simplement large pour cette dimension, et un passaggio dont une bascule reste vide n'est pas signalé : il demeure non renseigné, non pas absent. Les valeurs s'enregistrent au fil de la saisie, appartiennent à la voix active, et peuvent être modifiées ou effacées à tout moment depuis le même sommaire.</p>
 
-						<h4 id="guide-markup-notation">Conventions de notation de Fit</h4>
+						<h4 id="guide-markup-notation">Conventions de notation de l'Annotation</h4>
 
 						<p>La partition analysée de <em>Fit</em> emploie un petit ensemble de conventions, adaptées de Mitton (2020, annexes B et C). La direction des hampes est sémantique : hampe vers le bas, timbre ouvert; hampe vers le haut, timbre fermé. Les têtes de note sauge, sans hampe, indiquent la hauteur de bascule du timbre pour la voyelle chantée, avec leurs propres altérations dans la même couleur. Un cadre rouge arrondi signale un croisement fR1/fo. Sous la portée, la ligne cyrillique est doublée d'une ligne API en caractères droits, jamais en italique, afin que le contraste entre le a clair et le a sombre demeure lisible.</p>
 
@@ -332,7 +332,7 @@
 							     statement of what the Markup page is and is not. Its own findable
 							     heading, per Dann. FR flagged for the deferred calibration-UI
 							     French pass. -->
-							<h4 id="guide-markup-forecast">Fit forecasts, it doesn't declare</h4>
+							<h4 id="guide-markup-forecast">Insights forecasts, it does not declare</h4>
 							<p><em>Fit</em> forecasts; it does not declare. From a handful of fry samples on a consumer mic, it cannot and must not pronounce on your larynx. What it can honestly do is take your measured resonances and forecast how a piece of repertoire is likely to meet your voice: where the timbre will probably turn, where the zona di passaggio is likely to fall, where the range gets demanding. Some singers will align with the forecast, some won't, and that difference is information too, not error. The tool offers a singer knowledge of themselves and of how the music makes demands, then hands the decisions to them and their teacher.</p>
 
 							<!-- Voice characteristics (E.5 slice 3, 2026-07-13): the GUIDE's
@@ -345,7 +345,7 @@
 
 							<p>These values are typed, not sung, by design. Range extremes demanded of a microphone invite pushing, tessitura is a judgement rather than a measurement, and a trained singer usually knows their passaggio better than any quick sample could show it. Every field is optional, and a blank field never blocks anything: the analysis simply stays broad for that dimension, and a passaggio with either turn blank is not flagged, which marks it unlocated by you, not absent. Values save as they are entered, belong to the active voice, and can be edited or cleared anytime from the same summary.</p>
 
-							<h4 id="guide-markup-notation">Fit's notation conventions</h4>
+							<h4 id="guide-markup-notation">Markup's notation conventions</h4>
 
 							<p><em>Fit</em>'s analysed score uses a small set of conventions, adapted from Mitton (2020, Appendices B and C). Stem direction is semantic: stems down mark open timbre, stems up mark close timbre. Sage stemless noteheads show the pitch of turning for the sung vowel, carrying their own accidentals in the same colour. A red rounded box marks an fR1/fo crossing. Below the staff, the Cyrillic line is doubled by an IPA line set upright, never italic, so the contrast between bright-a and dark-a stays legible.</p>
 

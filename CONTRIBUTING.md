@@ -1,12 +1,14 @@
 # Contributing to Ilya
 
-Thank you for your interest in improving Ilya! This document explains how the project is organised, what kinds of contributions are welcome, and where the boundaries lie.
+Thank you for your interest in improving Ilya! This document explains how the project is organized, what kinds of contributions are welcome, and where the boundaries lie.
 
 ## The Scholarly Foundation
 
-Ilya implements one source: Craig Grayson's doctoral dissertation *Russian Lyric Diction: A Practical Guide* (D.M.A., University of Washington, 2012). This is not a limitation; it is the point. Grayson's work synthesises Russian lyric diction into a systematic, teachable framework, and Ilya's value depends on faithfully operationalising that framework.
+For Russian phonology, Ilya implements one source: Craig Grayson's doctoral dissertation *Russian Lyric Diction: A Practical Guide* (D.M.A., University of Washington, 2012). This is not a limitation; it is the point. Grayson's work synthesizes Russian lyric diction into a systematic, teachable framework, and Ilya's value depends on faithfully operationalizing that framework.
 
 Contributions that improve how Ilya implements Grayson are welcome. Contributions that substitute a different phonological authority, however well-intentioned, are not. If you believe Grayson is wrong about something, you may well be right, but Ilya is not the venue for that argument. Where I have departed from Grayson, I have done so transparently, with supporting citations and a visible callout in the interface. The same standard applies to any proposed departure.
+
+Two other bodies of scholarship stand beside Grayson's, each in its own place. The IPA for the Latin words that appear in some song texts follows Laurence R. Richter's *Mussorgsky's Complete Song Texts* (Leyerle, 2002), rendered in Grayson's notation; see [NOTICES.md](NOTICES.md). The guidance Insights offers about the voice draws on the voice pedagogy literature, including the sources reviewed in my doctoral dissertation.
 
 ## Reporting Transcription Errors
 
@@ -46,6 +48,8 @@ pnpm test           # Vitest unit and integration tests
 pnpm test:e2e       # Playwright end-to-end tests (starts its own dev server)
 pnpm ratchets       # Architecture checks: file size, layering, package surface
 ```
+
+`apps/web` also carries `pnpm check`, the type check.
 
 All tests must pass before a pull request will be reviewed.
 

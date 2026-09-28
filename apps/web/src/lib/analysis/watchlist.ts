@@ -58,7 +58,9 @@ import {
 	type VoiceProfileSnapshot,
 	type VowelResolver
 } from '@ilya/score-parser';
+import { t, type Language } from '$lib/i18n';
 import { collectScoreWords } from '$lib/score/vowel-resolver';
+import type { AdviceAction } from './advice-resolver';
 
 // ── Tunable constants (each tagged; all single-point-of-change) ──────
 
@@ -97,9 +99,6 @@ const RARE_KIND_MAX_NOTES = 3;
 // No cap (Dann, 2026-07-18): every note the adaptive rule INCLUDES renders,
 // on the list's own page after the score. The filtering happens at inclusion
 // (§A.149), not by a downstream cap.
-
-/** Header line. APPROVED §7.5. */
-export const WATCH_HEADER = 'Places to watch';
 
 // ── The model ───────────────────────────────────────────────────────
 
@@ -151,29 +150,37 @@ export interface WatchEntry {
 	/** For a range entry: above the ceiling or below the floor the singer gave. */
 	rangeDirection?: 'above' | 'below';
 	/**
-	 * The ready range-line transposition fragment, baked on at build time so
-	 * `watchEntryLine` stays entry-only (Dann's ruling A, 2026-07-20). E.g.
-	 * "to E flat major or D flat major" (mode known) or "down a major third or a
-	 * perfect fourth" (mode-less fallback). Absent when the module found no
-	 * improving key: then the range line names the fact alone (§A.150).
+	 * The song-level transposition, baked on at build time so `watchEntryLine`
+	 * stays entry-only (Dann's ruling A, 2026-07-20), as numbers (N.82): the
+	 * signed semitones of each suggestion, and their target keys when the
+	 * printed score declared a mode. The line names keys when `keys` is present
+	 * ("to E flat major or D flat major"), else the intervals ("down a major
+	 * third or a perfect fourth"). Absent when the module found no improving
+	 * key: then the range line names the fact alone (§A.150).
 	 */
-	transpositionPhrase?: string;
+	transposition?: WatchTransposition;
 	/**
-	 * The resolved, ready-to-append advice clause: the actionable second half of
-	 * the crossing line (§A.168), baked on from `AnalyzedEvent.vowelModification`
-	 * at build time so `watchEntryLine` stays entry-only. Present only when the
-	 * advice resolver matched a sourced case (v1: an `[i]→[ɪ]` crossing, §A.161);
-	 * absent otherwise, and the line renders its description alone (ruling B,
-	 * Dann 2026-07-21). The citation is NOT carried here: it is never printed on
-	 * the paper apparatus (attribution lives in Learn/Guide).
+	 * The resolved advice: the actionable second half of the line (§A.168),
+	 * baked on from `AnalyzedEvent.vowelModification` at build time. Its action
+	 * names the words (`watch.advice.*`), and `target` is the vowel it leans
+	 * toward, when the case names one. Absent when no sourced case matched, and
+	 * the line renders its description alone (ruling B, Dann 2026-07-21). The
+	 * citation is NOT carried here: it is never printed on the paper apparatus
+	 * (attribution lives in Learn/Guide).
 	 */
-	advice?: string;
+	advice?: { action: AdviceAction; target?: string };
 	/**
 	 * Harmonic density d = fR1/fo (number of harmonics at/below the first
 	 * resonance). Lower = higher in the voice = more acute; sorts first within
 	 * a tier. INFERENCE on Bozeman pp. 42–43 (§A.135).
 	 */
 	density: number;
+}
+
+/** One song-level transposition, as numbers (see `WatchEntry.transposition`). */
+export interface WatchTransposition {
+	semitones: number[];
+	keys?: { fifths: number; mode: 'major' | 'minor' }[];
 }
 
 export interface WatchList {
@@ -457,7 +464,14 @@ export function buildWatchList(
 			// The advice resolver's resolved clause, baked on for render (§A.168).
 			// Populated only on a matched case (v1: an [i]→[ɪ] crossing); the
 			// citation is deliberately not carried (never printed, Dann 2026-07-21).
-			...(a.vowelModification ? { advice: a.vowelModification.text } : {}),
+			...(a.vowelModification
+				? {
+						advice: {
+							action: a.vowelModification.action as AdviceAction,
+							...(a.vowelModification.target !== undefined ? { target: a.vowelModification.target } : {})
+						}
+					}
+				: {}),
 			// d = fR1/fo, and fR1 = 2·(turning-pitch Hz), so d = 2·turningHz/fo.
 			density: (2 * pitchToHz(a.turningPitch)) / foHz
 		});
@@ -484,11 +498,11 @@ export function buildWatchList(
 	// line and baked on here. Computed only when a range violation exists and
 	// the caller supplied the inputs; empty suggestion → the fact alone.
 	if (transposition && included.some((e) => e.kinds.includes('range'))) {
-		const phrase = transpositionPhrase(
+		const found = watchTransposition(
 			suggestTranspositions(transposition.analysisScore, transposition.profile, transposition.resolver)
 		);
-		if (phrase) {
-			for (const e of included) if (e.kinds.includes('range')) e.transpositionPhrase = phrase;
+		if (found) {
+			for (const e of included) if (e.kinds.includes('range')) e.transposition = found;
 		}
 	}
 
@@ -503,99 +517,135 @@ function barOf(parsed: ParsedScore, ev: VocalLineEvent): string {
 	return m ? m.number : String(ev.measureIndex + 1);
 }
 
-// ── Transposition phrasing (§A.151; Dann's copy ruling, 2026-07-20) ──
+// ── Transposition (§A.151; Dann's copy ruling, 2026-07-20) ──────
 
 /**
- * The ready range-line fragment for one song-level suggestion, or null to say
- * nothing (the range line then names the fact alone). Key names when the
- * printed score declared a mode (every candidate carries a `targetKey`);
- * otherwise the interval fallback, since three flats is both E flat major and C
- * minor and naming a key there would be a guess.
+ * The one song-level suggestion as numbers, or null to say nothing (the range
+ * line then names the fact alone). Keys when the printed score declared a mode
+ * (every candidate carries a `targetKeySignature`); otherwise the intervals
+ * alone, since three flats is both E flat major and C minor and naming a key
+ * there would be a guess. The interval names cover one to six semitones, the
+ * search window `watchlist.ts` asks for; a wider move says nothing rather than
+ * naming an interval nobody ruled.
  */
-function transpositionPhrase(s: TranspositionSuggestion): string | null {
+function watchTransposition(s: TranspositionSuggestion): WatchTransposition | null {
 	if (s.suggestions.length === 0) return null;
-	if (s.suggestions.every((c) => c.targetKey)) {
-		return `to ${s.suggestions.map((c) => c.targetKey).join(' or ')}`;
-	}
-	return joinIntervals(s.suggestions.map((c) => c.intervalName));
+	const semitones = s.suggestions.map((c) => c.semitones);
+	const keys = s.suggestions.map((c) => c.targetKeySignature);
+	if (keys.every((k) => k !== undefined)) return { semitones, keys: keys as NonNullable<(typeof keys)[number]>[] };
+	if (semitones.some((n) => Math.abs(n) < 1 || Math.abs(n) > 6)) return null;
+	return { semitones };
 }
 
-/** "down a major third or a perfect fourth"; elides a repeated leading direction. */
-function joinIntervals(names: string[]): string {
-	if (names.length <= 1) return names[0] ?? '';
-	const dir = names[0].split(' ')[0];
-	if (names.every((n) => n.startsWith(`${dir} `))) {
-		return `${dir} ${names.map((n) => n.slice(dir.length + 1)).join(' or ')}`;
-	}
-	return names.join(' or ');
+// ── Copy, in both languages (N.82, ruled 2026-09-28 15:04 to 15:10) ──
+// Every word is in `i18n.ts` under `watch.*`; this section only chooses keys
+// and fills them. The English is CLOSED (§A.150), with the advice redrafted
+// as opener + action and IPA in square brackets (Dann, 2026-09-28).
+
+const fill = (s: string, vars: Record<string, string>) =>
+	Object.entries(vars).reduce((out, [k, v]) => out.replaceAll(`{${k}}`, v), s);
+
+/** « de » before an infinitive, elided before a vowel or a mute h (as `comment-text.ts`). */
+function de(action: string): string {
+	return /^[aeiouhâàéèêîôû]/i.test(action) ? 'd’' : 'de ';
 }
 
-// ── Copy (EN). CLOSED §A.150 except the hazard line (deferred, §B). ──
+/** The openers the advice rotates through: Insights' `comment.opener.1` to `.5`. */
+const OPENERS = [1, 2, 3, 4, 5] as const;
+export type WatchOpener = (typeof OPENERS)[number];
+
+/** Letters on the circle of fifths from F; a tonic is `fifths + 1` steps along it (+3 for minor). */
+const FIFTHS_LETTERS = ['F', 'C', 'G', 'D', 'A', 'E', 'B'] as const;
+
+/** "E flat major", « mi bémol majeur ». */
+function keyName(key: { fifths: number; mode: 'major' | 'minor' }, language: Language): string {
+	const step = key.fifths + 1 + (key.mode === 'minor' ? 3 : 0);
+	const letter = t(`watch.key.letter.${FIFTHS_LETTERS[((step % 7) + 7) % 7]}`, language);
+	const shift = Math.floor(step / 7);
+	const tonic =
+		shift === 0
+			? letter
+			: fill(t('watch.key.tonic', language), {
+					letter,
+					accidental: t(shift < 0 ? 'notePicker.acc.flat' : 'notePicker.acc.sharp', language)
+				});
+	return fill(t('watch.key.name', language), { tonic, mode: t(`watch.key.mode.${key.mode}`, language) });
+}
+
+/** "to E flat major or D flat major", or "down a major third or a perfect fourth". */
+function transpositionPhrase(tr: WatchTransposition, language: Language): string {
+	if (tr.keys) {
+		const [a, b] = tr.keys.map((k) => keyName(k, language));
+		return fill(t(b === undefined ? 'watch.keyPhrase.one' : 'watch.keyPhrase.two', language), { a, b: b ?? '' });
+	}
+	const dir = (n: number) => t(n < 0 ? 'watch.direction.down' : 'watch.direction.up', language);
+	const [a, b] = tr.semitones.map((n) => t(`watch.interval.${Math.abs(n)}`, language));
+	const [sa, sb] = tr.semitones;
+	if (b === undefined) return fill(t('watch.intervalPhrase.one', language), { direction: dir(sa), a });
+	// One shared direction is said once; mixed directions each name their own.
+	if (Math.sign(sa) === Math.sign(sb)) return fill(t('watch.intervalPhrase.shared', language), { direction: dir(sa), a, b });
+	return fill(t('watch.intervalPhrase.mixed', language), { dirA: dir(sa), a, dirB: dir(sb), b });
+}
+
+/** The advice sentence: an opener filled with the action, then a period. */
+function adviceSentence(entry: WatchEntry, opener: WatchOpener, language: Language): string {
+	if (!entry.advice) return '';
+	const action = fill(t(`watch.advice.${entry.advice.action}`, language), {
+		vowel: entry.vowel,
+		target: entry.advice.target ?? ''
+	});
+	return `${fill(t(`comment.opener.${opener}`, language), { action, de: de(action) })}.`;
+}
 
 /**
  * The rendered line for an entry, leading with the bar (§7.5). Uses the most
  * severe kind's template; the stacking count still lifts the entry in the sort.
- * A note that carries several kinds is named once by its hardest.
+ * A note that carries several kinds is named once by its hardest. `opener`
+ * leads the advice, when the entry carries one; `watchBandLines` rotates it.
  */
-export function watchEntryLine(entry: WatchEntry): string {
-	const bar = entry.bar;
-	const v = `/${entry.vowel}/`;
+export function watchEntryLine(entry: WatchEntry, language: Language, opener: WatchOpener = 1): string {
+	const vars = { bar: entry.bar, vowel: `[${entry.vowel}]`, word: entry.word ?? '' };
+	const line = (key: string, extra: Record<string, string> = {}) =>
+		fill(t(`watch.line.${key}`, language), { ...vars, ...extra });
+	const withAdvice = (text: string) => {
+		const advice = adviceSentence(entry, opener, language);
+		return advice ? `${text} ${advice}` : text;
+	};
 	switch (entry.kinds[0]) {
 		case 'range': {
 			// CLOSED §A.150: name the fact, then offer a transposition when the
-			// module found one (key names, or intervals when the score is mode-less,
-			// baked on as `transpositionPhrase`), else the fact alone.
-			const base =
-				entry.rangeDirection === 'below'
-					? `Bar ${bar} drops below the range you gave`
-					: `Bar ${bar} rises above the range you gave`;
-			return entry.transpositionPhrase
-				? `${base}; you may want to transpose ${entry.transpositionPhrase}.`
-				: `${base}.`;
+			// module found one, else the fact alone.
+			const side = entry.rangeDirection === 'below' ? 'rangeBelow' : 'rangeAbove';
+			return entry.transposition
+				? line(`${side}Transpose`, { phrase: transpositionPhrase(entry.transposition, language) })
+				: line(side);
 		}
-		case 'crossing': {
-			// CLOSED §A.150 (the whoop description). The advice resolver's clause
-			// is APPENDED when present (§A.168 render (a); v1 = the [i]→[ɪ] copy,
-			// §A.169); a crossing with no resolved advice renders the description
-			// alone (ruling B, additive, Dann 2026-07-21).
-			const whoop = `Bar ${bar}: your ${v} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.`;
-			return entry.advice ? `${whoop} ${entry.advice}` : whoop;
-		}
-		case 'cover': {
-			// CLOSED (Dann, 2026-07-22): the exposed-sustain hazard line; the
-			// resolved [o]→[ɑ] advice APPENDS when present (§A.168; additive,
-			// ruling B). Detection routes only the [o] cover here, so v = /o/; H2's
-			// active-open hazard is the separate 'tracking' kind, below.
-			const exposed = `Bar ${bar}: the ${v} at the top of your range and sustained here is an exposed spot where the vowel can tighten.`;
-			return entry.advice ? `${exposed} ${entry.advice}` : exposed;
-		}
-		case 'tracking': {
-			// CLOSED (Dann, 2026-07-22): the exposed close-vowel active-open
-			// (formant-tracking) hazard line; the resolved articulatory advice
-			// APPENDS when present (§A.168; additive, ruling B). Vowel-agnostic: it
-			// names whatever close vowel triggered it, unlike the [o]-only cover.
-			const exposedTrack = `Bar ${bar}: the ${v} at the top of your range and sustained here is an exposed spot where the vowel can tighten.`;
-			return entry.advice ? `${exposedTrack} ${entry.advice}` : exposedTrack;
-		}
-		case 'turnover': {
-			// CLOSED (Dann, 2026-07-22): the male turnover hazard line, the turned-
-			// side sibling of 'tracking' (§A.190); the resolved articulatory advice
-			// APPENDS when present (§A.168; additive, ruling B). The risk here is the
-			// opposite of tracking's tightening: spreading the vowel open and pressing
-			// toward the yell, so the line names that risk, not tightening.
-			const exposedTurn = `Bar ${bar}: the ${v} at the top of your range and sustained here is an exposed spot where the tone can spread or press.`;
-			return entry.advice ? `${exposedTurn} ${entry.advice}` : exposedTurn;
-		}
+		case 'crossing': // CLOSED §A.150 (the whoop); advice APPENDS when present (§A.168, ruling B)
+			return withAdvice(line('crossing'));
+		case 'cover': // CLOSED (Dann, 2026-07-22): the [o] cover and the tracking hazard share a line
+		case 'tracking':
+			return withAdvice(line('tighten'));
+		case 'turnover': // CLOSED (Dann, 2026-07-22): the turned-side risk is spreading or pressing (§A.190)
+			return withAdvice(line('turnover'));
 		case 'passaggio': // APPROVED §7.5
-			return entry.word
-				? `Bar ${bar}: '${entry.word}' falls near your passaggio; expect the turn to want managing.`
-				: `Bar ${bar}: your ${v} falls near your passaggio; expect the turn to want managing.`;
+			return line(entry.word ? 'passaggioWord' : 'passaggio');
 		case 'timbre': { // APPROVED §7.5
-			const dir = entry.timbreDirection === 'close-to-open' ? 'close to open' : 'open to close';
-			const on = entry.word ? ` on '${entry.word}'` : '';
-			return `Bar ${bar}: your ${v}${on} turns ${dir} inside the word, so the colour shifts as you sing it.`;
+			const dir = entry.timbreDirection === 'close-to-open' ? 'timbreCloseToOpen' : 'timbreOpenToClose';
+			return line(entry.word ? `${dir}Word` : dir);
 		}
 		case 'sustain': // CLOSED §A.150 ("pitch of turning"; "sustain", never "held")
-			return `Bar ${bar}: the longer ${v} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.`;
+			return line('sustain');
 	}
+}
+
+/**
+ * Every line on the band, in order. The advice openers rotate so no two advice
+ * sentences on the page share one, as Insights' page rule does
+ * (`insights/comment-text.ts`, `rotate`); the band sits on one page, so the
+ * rotation runs down the whole list. DESK DEFAULT: it starts at opener 1, and
+ * a sixth advice line repeats the first, since the pool holds five.
+ */
+export function watchBandLines(entries: readonly WatchEntry[], language: Language): string[] {
+	let k = 0;
+	return entries.map((e) => watchEntryLine(e, language, e.advice ? OPENERS[k++ % OPENERS.length] : 1));
 }

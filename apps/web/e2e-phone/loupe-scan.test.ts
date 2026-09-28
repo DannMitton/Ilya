@@ -15,9 +15,9 @@
  * entry of m. 1, switched to Corrections, stepped back to the head gap, and
  * then stepped forward with the dock's own Next note button through every
  * entry and gap to the end of the score. The loupe follows the selection
- * across measures, so each measure is drawn with each of its notes taken (the
- * squircle, rule 2) and with each of its gaps taken (no squircle, rule 5's
- * centring). m. 0 carries no entry and opens no loupe; it is a reported row.
+ * across measures, so each measure is drawn with each of its notes and rests
+ * taken (the squircle, rule 2) and with each of its gaps taken (rule 5's
+ * centring; the gap's own squircle surrounds its caret and moves none). m. 0 carries no entry and opens no loupe; it is a reported row.
  */
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -28,6 +28,7 @@ import {
 	beamContacts,
 	centring,
 	drawnWorst,
+	entryRingTaken,
 	squircleDistance,
 	parseDerivations,
 	rule1TapFloor,
@@ -114,10 +115,11 @@ async function stepBy(page: Page, name: 'Next note' | 'Previous note'): Promise<
 	return true;
 }
 
+/* By what is taken, not by the ring: since calm-loupe slice 7 every stop carries one. */
 function kindOf(p: Probe): ScanState['kind'] {
-	if (p.ring) return 'note';
 	if (p.readout?.startsWith('Rest')) return 'rest';
-	return p.readout?.includes('the next duration enters here') ? 'gap' : 'rest';
+	if (p.readout?.includes('the next duration enters here')) return 'gap';
+	return p.ring ? 'note' : 'rest';
 }
 
 /* ── THE REPORT ───────────────────────────────────────────────────────── */
@@ -156,14 +158,14 @@ function report(scan: Scan, rules: Record<string, string[]>, beams: string[], no
 			.map(([k]) => k.split(':')[0]);
 		let nearest = Infinity;
 		for (const s of own) {
-			if (s.kind !== 'note' || !s.probe.ring) continue;
+			if (!entryRingTaken(s)) continue;
 			for (const c of s.probe.carets) {
 				const q = squircleDistance(s.probe, c.after);
 				if (q) nearest = Math.min(nearest, q.edge / s.probe.lineGapPx);
 			}
 		}
 		const offs = own
-			.filter((s) => s.kind !== 'note' || !s.probe.ring)
+			.filter((s) => !entryRingTaken(s))
 			.flatMap((s) => centring(s.probe).map((r) => r.offsetPx))
 			.filter((x): x is number => x !== null);
 		const worstOff = offs.length ? Math.max(...offs.map(Math.abs)) : NaN;

@@ -21,7 +21,8 @@
 	import { onMount, tick, type Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
-	import { hasUnderlay, RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/score/selection-ring';
+	import { caretRingBox, entryGroup, hasUnderlay, RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/score/selection-ring';
+	import { caretRingFloor, caretRingHalf, inkRoom, ringBoundary } from '$lib/score/stop-ring';
 	import type { Slot, PairingMap } from '$lib/score/pairings';
 	import type { Cursor } from '$lib/score/entry';
 	import LoupeSyllables from '$lib/score/LoupeSyllables.svelte';
@@ -30,7 +31,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import { followEntry, GrowOnlyWidth, HeldHeight } from '$lib/score/loupe-hold';
 	import { releasesFocus, type LoupeMode } from '$lib/score/loupe-panel.svelte';
-	import { deriveMinGap, pairSeparations, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/score/loupe-render';
+	import { deriveMinGap, fingerprint, offendingPairs, pairSeparations, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/score/loupe-render';
 	import {
 		headBound,
 		MUSIC_MARK,
@@ -51,9 +52,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		METER_LEAD_SP,
 		openAfterPageMeter,
 		nearestTarget,
+		hitsFor,
 		parseSystemRange,
 		systemIndexOf,
-		type HitRect,
 		type InkSpan,
 		type PageInk,
 		type Vertical,
@@ -81,6 +82,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		nextIds: readonly string[];
 		/** The taken entry, marked inside the loupe as it is on the page. */
 		selectedEventId: string | null;
+		/** The gap the bar stands in, as `CorrectionCursor.gapAfter` holds it; its caret takes the ring (`stop-ring.ts`). */
+		gapAfter?: string | null;
 		/**
 		 * Anything that changes when the page's SVG is rebuilt. `{@html page}`
 		 * replaces the whole system, which would otherwise leave this holding a
@@ -178,6 +181,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		measureIndex,
 		ownIds,
 		selectedEventId,
+		gapAfter = undefined,
 		revision,
 		bundle = null,
 		language,
@@ -680,40 +684,10 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		renderHost = null;
 	});
 
-	function hitsFor(page: Element, ids: readonly string[]): { rects: HitRect[]; nodes: Element[] } {
-		const rects: HitRect[] = [];
-		const nodes: Element[] = [];
-		for (const id of ids) {
-			const el = page.querySelector(`[data-hit="${CSS.escape(id)}"]`);
-			if (!el) continue;
-			nodes.push(el);
-			rects.push({ x: Number(el.getAttribute('x')), width: Number(el.getAttribute('width')) });
-		}
-		return { rects, nodes };
-	}
-
 	/* THE SPACING THE LOOP SETTLED ON, keyed on the measure's drawing and the page's
 	   scale (see the key where it is built). Plain state and not `$state`: nothing renders from it, and reading
 	   it inside the effect below must not subscribe the effect to its own cache. */
 	const spacingCache = new Map<string, DerivedSpacing>();
-
-	/** FNV-1a over a string, as a hex word: a key for a drawing, not a security matter. */
-	function fingerprint(text: string): string {
-		let h = 0x811c9dc5;
-		for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193);
-		return `${text.length}:${(h >>> 0).toString(16)}`;
-	}
-
-	/** Each neighbouring pair under the floor, named by the gaps' own ids, for the console. */
-	function offendingPairs(marks: readonly { after: string | null; x: number }[], scale: number): string[] {
-		const sorted = [...marks].sort((a, b) => a.x - b.x);
-		const out: string[] = [];
-		for (let i = 1; i < sorted.length; i++) {
-			const px = (sorted[i].x - sorted[i - 1].x) * scale;
-			if (px < TAP_FLOOR_PX - TAP_FLOOR_EPS_PX) out.push(`${sorted[i - 1].after ?? 'head'} to ${sorted[i].after ?? 'head'} ${px.toFixed(1)} px`);
-		}
-		return out;
-	}
 
 	/* THE CLONE, rebuilt whenever the held measure, the taken entry, or the
 	   page itself changes. Reading the DOM rather than being handed geometry
@@ -775,6 +749,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			frame: Frame;
 			marks: { after: string | null; x: number }[];
 			derivationSets: { after: string | null; x: number }[][];
+			ringRooms: { after: string | null; room: number }[];
 			scale: number;
 		} | null => {
 		const rendered = renderLoupeMeasure(drawnFrom, measure, minGap);
@@ -1349,7 +1324,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   stands and this drawing's note is elsewhere. The box is made here from
 		   the mounted render by `ringBox`, the function the page's ring is made
 		   by, so the shape is the page's and the position is the loupe's. A
-		   taken note in another measure has no ring in this render, and clause 7
+		   taken rest has one too (`entryGroup`, calm-loupe slice 7). A taken note in another measure has no ring in this render, and clause 7
 		   says none belongs here. A derivation attempt draws no ring: the
 		   spacing is a property of the measure, not of the selection.
 
@@ -1361,7 +1336,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		const pageRing = (() => {
 			if (derive || !selectedEventId) return null;
 			const hit = sysEl.querySelector(`[data-hit="${CSS.escape(selectedEventId)}"]`);
-			const group = hit?.closest('[data-event-id]');
+			const group = hit ? entryGroup(hit) : null;
 			const box = hit && group ? ringBox(hit, group, selectedEventId) : null;
 			return box ? { ...box, radius: RING_RADIUS, stroke: RING_STROKE } : null;
 		})();
@@ -1433,6 +1408,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   same clipped element: it is drawn to its own string and placed
 		   outside the clip in the template, unclipped. */
 		let caretsMarkup = '';
+		let caretRing: typeof pageRing = null; // the taken caret's ring, set below (`stop-ring.ts`)
 
 		/* ── N.92, THE CARETS ─────────────────────────────────────────────
 		   RULED BY DANN 2026-09-17 (`docs/memory/OPEN.md`, THE CARET clauses 1
@@ -1513,6 +1489,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   condition, so the card's width is the same in either mode. */
 		const marks: { after: string | null; x: number }[] = [];
 		const derivationSets: { after: string | null; x: number }[][] = [];
+		const ringRooms: { after: string | null; room: number }[] = []; // each caret's, over its ring's floor
 		if (positions.length > 1) {
 			const rectOf = (id: string) => sysEl.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 			/* THE INK ITSELF: the union of a note's own group (excluding its
@@ -1553,8 +1530,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			   attempt runs the placement once for each entry in turn, and once for
 			   none (below), because the squircle moves the caret beside the taken
 			   note and the spacing has to hold whichever note is taken. */
-			const ringEdgesOf = (r: { x: number; width: number; stroke: number } | null) =>
-				r ? { left: r.x - r.stroke / 2, right: r.x + r.width + r.stroke / 2 } : null;
+			const ringEdgesOf = (r: { x: number; width: number; stroke: number } | null) => ringBoundary(r, view.left);
 			let takenId: string | null = selectedEventId;
 			let ringLeftEdge: number | null = ringEdgesOf(pageRing)?.left ?? null;
 			let ringRightEdge: number | null = ringEdgesOf(pageRing)?.right ?? null;
@@ -1687,7 +1663,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			for (const p of positions) {
 				if (p.kind !== 'entry') continue;
 				const hit = sysEl.querySelector(`[data-hit="${CSS.escape(p.id)}"]`);
-				const group = hit?.closest('[data-event-id]');
+				const group = hit ? entryGroup(hit) : null;
 				const box = hit && group ? ringBox(hit, group, p.id) : null;
 				if (!box) continue;
 				const e = ringEdgesOf({ ...box, stroke: RING_STROKE });
@@ -1733,6 +1709,17 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				bodyViewLeft = Math.min(bodyViewLeft, leftMost - footprint);
 				bodyViewRight = Math.max(bodyViewRight, rightMost + footprint);
 				bodyViewSpan = bodyViewRight - bodyViewLeft;
+			}
+
+			/* CALM-LOUPE SLICE 7: every caret's ring room, for the search, and the taken caret's ring (`stop-ring.ts`). */
+			const entryInk = positions.flatMap((p) => (p.kind === 'entry' ? (inkOf(p.id) ?? []) : []));
+			const roomAt = (x: number) => inkRoom(x, entryInk, bodyViewLeft, closing ? closing.inner + closingNudge : bodyViewRight);
+			for (const m of derivationSets[0] ?? []) ringRooms.push({ after: m.after, room: roomAt(m.x) / caretRingFloor(armHalf) });
+			const taken = !derive && gapAfter !== undefined && mode === 'corrections' && syllablesOpen ? marks.find((m) => m.after === gapAfter) : undefined;
+			if (taken) {
+				const { half, short } = caretRingHalf(roomAt(taken.x), armHalf);
+				if (short) console.warn(`[loupe] m.${measure} caret ring after ${gapAfter ?? 'head'} is short of its room, to ink or the body's edge`);
+				caretRing = { ...caretRingBox(sysEl, taken.x, half, staffTop, lineGap), radius: RING_RADIUS, stroke: RING_STROKE };
 			}
 
 			if (marks.length > 0 && !derive && mode === 'corrections' && syllablesOpen) {
@@ -1891,9 +1878,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   in place of `view.left`, so ring and content agree on what native x
 		   the body panel's own left edge now names. */
 		const bodyContentWidth = bodyViewSpan * scale;
-		const ring = pageRing
+		const ring = (pageRing ?? caretRing)
 			? stripRing(
-					pageRing,
+					(pageRing ?? caretRing)!,
 					bodyViewLeft,
 					headWidth + meterWidth + carryWidth,
 					cropTop,
@@ -2127,6 +2114,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		return {
 			marks,
 			derivationSets,
+			ringRooms,
 			scale,
 			frame: {
 			inner: clone.innerHTML,
@@ -2199,6 +2187,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				const a = attempt(g, true);
 				if (!a) return null;
 				const pairs = pairSeparations(a.derivationSets, a.scale);
+				// Calm-loupe slice 7: a caret's ring room meets the floor exactly when it holds the ring.
+				for (const r of a.ringRooms) pairs[`ring ${r.after ?? 'head'}`] = r.room * TAP_FLOOR_PX;
 				return { worst: Math.min(Infinity, ...Object.values(pairs)), scale: a.scale, pairs };
 			});
 			if (spacingCache.size > 400) spacingCache.clear();
@@ -2213,7 +2203,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				const at = attempt(derived.minGap, true);
 				const pairs = at ? at.derivationSets.flatMap((set) => offendingPairs(set, at.scale)) : [];
 				console.warn(
-					`[loupe] m.${measure} kept minGap ${derived.minGap.toFixed(2)} short of the ${TAP_FLOOR_PX} px floor: ${pairs.join('; ')}`,
+					`[loupe] m.${measure} kept minGap ${derived.minGap.toFixed(2)} short of the ${TAP_FLOOR_PX} px floor: ${pairs.join('; ')}${derived.stuck.length ? ` (set aside: ${derived.stuck.join(', ')})` : ''}`,
 				);
 			}
 		}
@@ -2290,8 +2280,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	});
 	/* Calm-loupe slice 4: the window follows the taken entry sideways (`followEntry`). */
 	$effect(() => {
-		const f = frame, el = windowEl, id = selectedEventId;
-		if (f && el && id) void tick().then(() => followEntry(el, id, f.ring, { across: GUTTER, down: 8 }));
+		const f = frame, el = windowEl, id = selectedEventId, inGap = gapAfter !== undefined;
+		if (f && el && (id || (inGap && f.ring))) void tick().then(() => followEntry(el, id, f.ring, { across: GUTTER, down: 8 }));
 	});
 
 	const tag = $derived.by(() => {
@@ -3014,6 +3004,13 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	.loupe-ring rect {
 		fill: none;
 		stroke: var(--lavender, #9585a2);
+	}
+
+	/* NO TEXT SELECTION IN THE MUSIC (calm-loupe slice 7): a selected glyph painted its FONT box, 13 by 193 px on a
+	   rest, the grey band Dann read as the rest's mark on 2026-09-28. Nothing in Ilya reads a selection here. */
+	.loupe-strip {
+		-webkit-user-select: none;
+		user-select: none;
 	}
 
 	/* The head carries the clef and the key and nothing else, and it must not

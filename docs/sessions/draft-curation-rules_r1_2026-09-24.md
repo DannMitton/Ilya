@@ -83,3 +83,18 @@ A moment's stakes = the size of its demands for this singer (adjusted by their i
 Dann, 03:05: *"I'm not sure those citations are detailed enough for a user to locate the anchor texts. Can we be more specific with titles and page citations?"* DESK PROPOSAL, not ruled: on the comment, author, short title, and page (*Miller, Solutions for Singers, p. 201*); one tap away, the full reference (author, full title, edition, publisher, year), the section heading as printed, the page or pages, and a short quotation. The extraction format gains a `section_heading` column, starting with the KVP2 extraction; existing rows are back-filled later.
 - **Dann, 03:06: "yes"** to the two-layer citation. Adopted into the working draft.
 - **Ruled by Dann 03:06:** *"yes add a heading column to the format now, starting with the KVP2 extraction, and fill it in for existing rows later as a mechanical pass."* Column name `section_heading`, after `page`. Back-fill is owed (`docs/memory/OWED.md`).
+
+## Revision r4, 2026-09-28 16:26. THE GATES. A living draft, to be refined as it meets real songs
+
+**Why:** Dann, 2026-09-28 16:18 to 16:24, on Markup's watch band: *"I think it might be best to say less than more"*; a fixed count of three *"does not make sense for a challenging multipart epic song"*; *"this kind of nuance can work best with a gated approach."* **Accepted as a draft by Dann 16:26:** *"Yes, and let's stay flexible about refining them in future in case they are not just right."* Drawn by the desk from r1 to r3 above; the sources of each gate are named.
+
+**One set of gates for both Markup's « Points à surveiller » box and Insights' comments** (DESK PROPOSAL, open), so the two never disagree about what matters. A place is said only if it passes every gate, in this order:
+
+1. **The piece fits.** If it does not, the box leads with the transposition that helps, not a list of notes (rule 2, Dann's wording).
+2. **There is something real to offer:** a sourced thing to try, or a rare interaction worth noticing. Neither, no entry (rules 4 and 5, Dann's wording).
+3. **The stakes clear a threshold.** Stakes = the size of the demand for this singer (register, resonance, range edge, endurance, dynamics, transition: the six Dann said yes to 2026-09-24 23:48) × musical weight (climax, phrase top, final note, held note). The singer's stage (N.172) moves the threshold for "something to try", never for "notice this". A threshold, not a count: a short song passes a few places, an epic many.
+4. **Patterns fold.** The same vowel on the same pitch in several places is one entry naming them all; a crowded note names all its challenges in one entry (Dann, 2026-09-25 02:44).
+5. **No crowded page.** At most about two entries per printed page, keeping the highest stakes (new, DESK PROPOSAL).
+6. **Silence is the default.** An easy song shows nothing, and that is a good result (rule 10).
+
+**Open for Dann, not ruled:** the stakes threshold; the page limit; one set of gates for both documents. **Refinement is expected:** each gate is a default with room for the case that justifies departing from it (`CONTRACT.md` tether 19).

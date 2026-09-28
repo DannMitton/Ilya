@@ -250,9 +250,11 @@ export interface AnalyzedEvent {
    * `[i]→[ɪ]` crossing advice), `'opportunity'` = a colour is available (names
    * provisional, §A.159). `citation` is an INTERNAL provenance record, verified
    * on the source before it ships; it is never printed on the paper apparatus
-   * (attribution lives in Learn/Guide, Dann 2026-07-21).
+   * (attribution lives in Learn/Guide, Dann 2026-07-21). `action` names the
+   * advice (the app's i18n composes its words, N.82) and `target` is the IPA
+   * vowel it leans toward, when the case names one.
    */
-  vowelModification?: { text: string; citation: string; register: 'hazard' | 'opportunity' };
+  vowelModification?: { action: string; target?: string; citation: string; register: 'hazard' | 'opportunity' };
 
   // ── Provenance ──
   /** User corrections overlay the forecast; a non-empty array raises the "user-corrected" tier. */

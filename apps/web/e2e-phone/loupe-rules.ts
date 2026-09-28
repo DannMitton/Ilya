@@ -78,6 +78,13 @@ export function parseDerivations(lines: { type: string; text: string }[]): Deriv
 }
 
 const heldOf = (s: ScanState) => s.probe.heldMeasure ?? -1;
+
+/**
+ * An entry is taken and carries its squircle, which the carets beside it must
+ * clear. A note or a rest since calm-loupe slice 7 (2026-09-28); a taken gap's
+ * squircle surrounds its own caret by design, so it is not one of these.
+ */
+export const entryRingTaken = (s: ScanState): boolean => s.kind !== 'gap' && !!s.probe.ring;
 const sepLines = (p: Probe): { a: string; b: string; px: number }[] => {
 	const c = [...p.carets].sort((x, y) => x.cx - y.cx);
 	const out: { a: string; b: string; px: number }[] = [];
@@ -124,12 +131,13 @@ export function squircleDistance(p: Probe, after: string): { edge: number; centr
  * RULE 2, clause 13. No caret nearer than 1.6 line-gaps to the squircle's stroke.
  * MEASURED ON THE DRAWN MARK, its nearest arrowhead or stem edge, since the
  * clause names daylight; the hit centre's distance is reported beside it.
- * Only where a note is taken, since only then is a squircle drawn.
+ * Only where an entry is taken (`entryRingTaken`): a taken caret stands in
+ * its own squircle.
  */
 export function rule2SquircleClearance(states: ScanState[]): string[] {
 	const out: string[] = [];
 	for (const s of states) {
-		if (s.kind !== 'note' || !s.probe.ring) continue;
+		if (!entryRingTaken(s)) continue;
 		const need = SQUIRCLE_CLEARANCE_LG * s.probe.lineGapPx;
 		for (const c of s.probe.carets) {
 			const d = squircleDistance(s.probe, c.after);
@@ -230,7 +238,7 @@ export function rule5Position(states: ScanState[]): { centre: string[]; touch: s
 	const notMeasured = new Set<string>();
 	const touch = new Set<string>();
 	for (const s of states) {
-		if (s.kind !== 'note' || !s.probe.ring) {
+		if (!entryRingTaken(s)) {
 			for (const r of centring(s.probe)) {
 				if (r.offsetPx === null) notMeasured.add(`m.${r.measure} caret after ${r.after || 'head'}: ink not found on a side (${r.leftBy} | ${r.rightBy})`);
 				else if (Math.abs(r.offsetPx) > CENTRE_TOLERANCE_PX)
@@ -239,7 +247,7 @@ export function rule5Position(states: ScanState[]): { centre: string[]; touch: s
 		}
 		for (const c of s.probe.contacts) {
 			if (c.kind === 'beam') continue;
-			touch.add(`m.${heldOf(s)} caret after ${c.after || 'head'} touches ${c.what}${c.owner ? ` of ${c.owner}` : ''}${s.kind === 'note' ? ' (a note taken)' : ''}`);
+			touch.add(`m.${heldOf(s)} caret after ${c.after || 'head'} touches ${c.what}${c.owner ? ` of ${c.owner}` : ''}${entryRingTaken(s) ? ' (an entry taken)' : ''}`);
 		}
 	}
 	return { centre: [...centre], touch: [...touch], notMeasured: [...notMeasured] };

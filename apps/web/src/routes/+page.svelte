@@ -5007,7 +5007,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		measureIndex={heldMeasureIndex}
 		ownIds={heldMeasureIds}
 		nextIds={nextMeasureIds}
-		{selectedEventId}
+		{selectedEventId} {gapAfter}
 		revision={pageRevision}
 		bundle={loupeBundle}
 		{language}

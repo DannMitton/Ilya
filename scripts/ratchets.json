@@ -8,7 +8,7 @@
     "apps/web/src/routes/+page.svelte": 6028,
     "apps/web/src/lib/components/Reading/LearnContent.svelte": 4099,
     "packages/score-parser/src/staff-renderer.ts": 3534,
-    "apps/web/src/lib/score/Loupe.svelte": 3044,
+    "apps/web/src/lib/score/Loupe.svelte": 3041,
     "apps/web/src/lib/components/Drawer/InspectorPanel.svelte": 2432,
     "packages/phonology/src/engine.ts": 2278,
     "apps/web/src/lib/voice/CalibrationWizard.svelte": 2124,

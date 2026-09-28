@@ -80,6 +80,7 @@ export {
   spellPitch,
   type SpellingContext,
   intervalName,
+  keyAfterTransposition,
   type TranspositionCandidate,
   type TranspositionSuggestion,
   type SuggestTranspositionOptions,

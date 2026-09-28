@@ -230,6 +230,25 @@ function ipaFaceDescent(): number {
 }
 
 /**
+ * The group that holds a taken entry's own marks, found from its hit
+ * rectangle: a note's `[data-event-id]` group, or a rest's.
+ *
+ * A REST'S GROUP IS ANONYMOUS, by the renderer's choice (`staff-renderer.ts`,
+ * N.92 clause 5: `data-event-id` is how `restOrNoteInk` tells a rest's glyph
+ * from a note's), and it holds exactly the hit rectangle and the rest's
+ * glyph. So a hit rectangle with no `[data-event-id]` above it takes its own
+ * parent, and `ringBox` reads the glyph from there as it reads a notehead.
+ * Calm-loupe slice 7, 2026-09-28: one squircle for every stop. Before this a
+ * taken rest drew no ring on either surface.
+ */
+export function entryGroup(hit: Element): Element | null {
+	const note = hit.closest('[data-event-id]');
+	if (note) return note;
+	const own = hit.parentElement;
+	return own && own.tagName === 'g' && own !== hit.closest('[data-system]') ? own : null;
+}
+
+/**
  * The box of the ring for the taken note `id`, or null wherever the page has
  * drawn none: a tap rectangle with no stave height, a group outside any
  * `[data-system]`, or a note with no ink to measure.
@@ -317,7 +336,24 @@ export function ringBox(hit: Element, group: Element, id: string): RingBox | nul
 	   the loupe, whose `sysEl` is one measure, give the same box for the same
 	   note with nothing passed between them. A beam is not a note's own ink in
 	   this sense and may be bisected, ruled 2026-09-14, so beams are not read
-	   (`eventInk` reads a group's marks and what is tagged `data-of-event`). */
+	   (`eventInk` reads a group's marks and what is tagged `data-of-event`).
+	   The arithmetic is `ringSpan`'s, below, shared with the caret's ring. */
+	const { top, bottom } = ringSpan(sysEl, staffTop, staffBottom, gap, own);
+	return { x: centreX - width / 2, y: top, width, height: bottom - top };
+}
+
+/**
+ * The ring's top and bottom, for any mark the ring encloses: `own` is that
+ * mark's ink (a note's, a rest's, or a caret's arrowheads). One grammar for
+ * every stop, so every ring on a system shares its bottom edge.
+ */
+function ringSpan(
+	sysEl: Element,
+	staffTop: number,
+	staffBottom: number,
+	gap: number,
+	own: { top: number; bottom: number },
+): { top: number; bottom: number } {
 	const highest = Math.min(staffTop, own.top);
 	let top = highest - gap;
 
@@ -355,7 +391,27 @@ export function ringBox(hit: Element, group: Element, id: string): RingBox | nul
 		top = Math.min(Math.max(top, vb[1] + bleed), highest);
 		bottom = Math.min(bottom, vb[1] + vb[3] - bleed);
 	}
-	const y = top;
-	const height = bottom - top;
-	return { x: centreX - width / 2, y, width, height };
+	return { top, bottom };
+}
+
+/**
+ * The ring around a CARET, where the bar stands in a gap (calm-loupe slice 7,
+ * 2026-09-28, desk default under Dann's delegation: "one mark for every stop").
+ * Dann's words on the walk: *"the squircle doesn't capture the carets as I
+ * expected."*
+ *
+ * `x` is the caret's line and `half` the ring's half-width to its stroke's
+ * centre, which the caller sizes against the gap's own room. The top and
+ * bottom are `ringBox`'s (`ringSpan`): one stave space above the stave, and
+ * the IPA row's descent below, so the ring lines up with its siblings. The
+ * arrowheads reach 0.6 of a space past the stave (THE CARET, clause 4), inside
+ * both edges.
+ */
+export function caretRingBox(sysEl: Element, x: number, half: number, staffTop: number, gap: number): RingBox {
+	const staffBottom = staffTop + 4 * gap;
+	const { top, bottom } = ringSpan(sysEl, staffTop, staffBottom, gap, {
+		top: staffTop,
+		bottom: staffBottom + gap * 0.6,
+	});
+	return { x: x - half, y: top, width: half * 2, height: bottom - top };
 }

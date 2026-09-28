@@ -3,7 +3,7 @@
  * is written out by hand from the ruling `loupe-hold.ts` cites.
  */
 import { describe, expect, it } from 'vitest';
-import { followScroll, GrowOnlyWidth, HeldHeight } from './loupe-hold';
+import { cleanEdges, followScroll, GrowOnlyWidth, HeldHeight } from './loupe-hold';
 
 describe('GrowOnlyWidth', () => {
 	it('the first frame on a measure is its own width, not eased', () => {
@@ -75,5 +75,45 @@ describe('HeldHeight', () => {
 		h.hold('m2|929|1.000', 225);
 		expect(h.hold('m3|929|1.000', 328)).toBe(328);
 		expect(h.hold('m3|1200|1.000', 250)).toBe(250);
+	});
+});
+
+/* Calm-loupe slice 7, observation 3. Strip pixels, window 225 px, the pad 8,
+   from «Скучай» m. 25 at A1 as measured in the pane: the follow left the
+   scroll at 23, the IPA row's ink at 239 to 265, the Cyrillic's at 290 to 311. */
+describe('cleanEdges', () => {
+	const ipa = [239, 265] as const;
+	const cyr = [290, 311] as const;
+
+	it('moves a cut row out of the window, whole, when the note allows', () => {
+		expect(cleanEdges(23, 225, [210, 222], [ipa, cyr], 8)).toBe(13);
+	});
+
+	it('takes the row in whole when the note stands too near it to leave', () => {
+		expect(cleanEdges(23, 225, [200, 236], [ipa, cyr], 8)).toBe(40);
+	});
+
+	it('gives up the air around the note before it cuts a row', () => {
+		expect(cleanEdges(23, 225, [30, 236], [ipa, cyr], 8)).toBe(13);
+	});
+
+	it('keeps the follow where neither keeps the note in view', () => {
+		expect(cleanEdges(23, 225, [30, 240], [ipa, cyr], 8)).toBe(23);
+	});
+
+	it('does not count an overhang under a pixel as a cut', () => {
+		expect(cleanEdges(0, 225, [60, 120], [[200, 225.6]], 8)).toBe(0);
+	});
+
+	it('leaves a clean edge alone', () => {
+		expect(cleanEdges(0, 225, [60, 120], [ipa, cyr], 8)).toBe(0);
+	});
+
+	it('clears the top edge the same way', () => {
+		expect(cleanEdges(10, 225, [100, 150], [[0, 20]], 8)).toBe(21);
+	});
+
+	it('never asks for a scroll the window cannot reach', () => {
+		expect(cleanEdges(23, 225, [200, 240], [ipa], 8, 30)).toBe(23);
 	});
 });

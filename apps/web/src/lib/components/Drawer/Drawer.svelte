@@ -746,9 +746,9 @@
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-role')} data-heading-id="guide-role" onclick={() => handleTocClick('guide-role')}>{language === 'fr' ? 'R\u00f4le de l\u2019utilisateur' : 'Your role as user'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-limits')} data-heading-id="guide-limits" onclick={() => handleTocClick('guide-limits')}>{language === 'fr' ? 'Limites d\u2019Ilya' : 'Limitations'}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-future')} data-heading-id="guide-future" onclick={() => handleTocClick('guide-future')}>{language === 'fr' ? 'O\u00f9 va Ilya?' : 'Where is Ilya headed?'}</button></li>
-								<li><button class="toc-link toc-sub" class:active={isActive('guide-markup-forecast')} data-heading-id="guide-markup-forecast" onclick={() => handleTocClick('guide-markup-forecast')}>{language === 'fr' ? 'Fit pr\u00e9voit, il ne d\u00e9clare pas' : 'Fit forecasts, it doesn\u2019t declare'}</button></li>
+								<li><button class="toc-link toc-sub" class:active={isActive('guide-markup-forecast')} data-heading-id="guide-markup-forecast" onclick={() => handleTocClick('guide-markup-forecast')}>{language === 'fr' ? 'Les Aper\u00e7us pr\u00e9voient, ils ne d\u00e9clarent pas' : 'Insights forecasts, it does not declare'}</button></li>
 								<li><button class="toc-link toc-sub" class:active={isActive('guide-markup-characteristics')} data-heading-id="guide-markup-characteristics" onclick={() => handleTocClick('guide-markup-characteristics')}>{language === 'fr' ? 'Caract\u00e9ristiques vocales' : 'Voice characteristics'}</button></li>
-								<li><button class="toc-link toc-sub" class:active={isActive('guide-markup-notation')} data-heading-id="guide-markup-notation" onclick={() => handleTocClick('guide-markup-notation')}>{language === 'fr' ? 'Conventions de notation de Fit' : 'Fit\u2019s notation conventions'}</button></li>
+								<li><button class="toc-link toc-sub" class:active={isActive('guide-markup-notation')} data-heading-id="guide-markup-notation" onclick={() => handleTocClick('guide-markup-notation')}>{language === 'fr' ? 'Conventions de notation de l\u2019Annotation' : 'Markup\u2019s notation conventions'}</button></li>
 								</ul></div></div>
 							</li>
 

@@ -12,6 +12,7 @@ import {
   transposeScore,
   spellPitch,
   intervalName,
+  keyAfterTransposition,
   keyNameAfterTransposition,
   type TranspositionCandidate,
 } from './transposition';
@@ -151,6 +152,7 @@ describe('suggestTranspositions', () => {
     const out = suggestTranspositions(cMajor, profile, bySyllable);
     expect(out.suggestions[0].semitones).toBe(-4);
     expect(out.suggestions[0].targetKey).toBe('A flat major');
+    expect(out.suggestions[0].targetKeySignature).toEqual({ fifths: -4, mode: 'major' });
   });
 
   it('omits the target key when the score declares no mode', () => {
@@ -159,6 +161,7 @@ describe('suggestTranspositions', () => {
     const out = suggestTranspositions(score, profile, bySyllable);
     expect(out.suggestions.length).toBeGreaterThan(0);
     for (const c of out.suggestions) expect(c.targetKey).toBeUndefined();
+    for (const c of out.suggestions) expect(c.targetKeySignature).toBeUndefined();
   });
 });
 
@@ -190,6 +193,13 @@ describe('keyNameAfterTransposition', () => {
     expect(keyNameAfterTransposition({ fifths: 7, mode: 'major' }, 2)).toBe('E flat major');
     // C flat major down a whole tone is B double-flat major -> A major.
     expect(keyNameAfterTransposition({ fifths: -7, mode: 'major' }, -2)).toBe('A major');
+  });
+
+  it('gives the same key as numbers for the app to name (N.82)', () => {
+    expect(keyAfterTransposition({ fifths: 0, mode: 'major' }, -4)).toEqual({ fifths: -4, mode: 'major' });
+    expect(keyAfterTransposition({ fifths: 7, mode: 'major' }, 2)).toEqual({ fifths: -3, mode: 'major' });
+    expect(keyAfterTransposition({ fifths: 0, mode: 'minor' }, 2)).toEqual({ fifths: 2, mode: 'minor' });
+    expect(keyAfterTransposition({ fifths: -1 }, -4)).toBeNull();
   });
 
   it('returns null when there is no mode to trust', () => {

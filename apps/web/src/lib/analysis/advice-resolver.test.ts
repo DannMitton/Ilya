@@ -69,9 +69,8 @@ describe('resolveAdvice — the [i]→[ɪ] crossing (v1, §A.161)', () => {
 		const mod = out.events.n1.vowelModification;
 		expect(mod).toBeDefined();
 		expect(mod?.register).toBe('hazard');
-		expect(mod?.text).toBe(
-			'You may find it helpful to relax the jaw and lean it toward /ɪ/, giving it a touch more space, which lifts your first resonance clear of the pitch.'
-		);
+		expect(mod?.action).toBe('iCrossing');
+		expect(mod?.target).toBe('ɪ');
 		expect(mod?.citation).toContain('Mitton 2020');
 		expect(mod?.citation).toContain('§6.1.5');
 	});
@@ -108,9 +107,8 @@ describe('resolveAdvice — the [o]→[ɑ] cover (§A.185)', () => {
 		expect(analyzed.events.n1.crossing).toBe(false); // a cover, not a crossing
 		const mod = resolveAdvice(analyzed).events.n1.vowelModification;
 		expect(mod?.register).toBe('hazard');
-		expect(mod?.text).toBe(
-			'You may find it helpful to allow the vowel to open and darken toward /ɑ/; that is a more comfortable option than a close /o/ this high.'
-		);
+		expect(mod?.action).toBe('oCover');
+		expect(mod?.target).toBe('ɑ');
 		expect(mod?.citation).toContain('Mitton 2020');
 		expect(mod?.citation).toContain('§6.2.5');
 	});
@@ -147,17 +145,15 @@ describe('resolveAdvice: the exposed close-vowel active-open (tracking) case, wh
 		expect(analyzed.events.n1.aboveFirstResonance).toBe(true);
 		const mod = resolveAdvice(analyzed).events.n1.vowelModification;
 		expect(mod?.register).toBe('hazard');
-		expect(mod?.text).toBe(
-			'You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /e/ squeezed this high.'
-		);
-		expect(mod?.text).not.toContain('toward'); // articulatory: no target substitution
+		expect(mod?.action).toBe('openTracking');
+		expect(mod?.target).toBeUndefined(); // articulatory: no target substitution
 		expect(mod?.citation).toContain('Godin & Howell 2015');
 		expect(mod?.citation).toContain('track H1');
 	});
 
-	it('interpolates whichever close vowel triggered it (vowel-agnostic)', () => {
+	it('fires on whichever close vowel triggered it (vowel-agnostic)', () => {
 		const mod = resolveAdvice(exposedWhoop('u')).events.n1.vowelModification;
-		expect(mod?.text).toContain('holding a close /u/ squeezed this high');
+		expect(mod?.action).toBe('openTracking');
 	});
 
 	it('stays silent on a close vowel that is not exposed (mid-range)', () => {
@@ -193,28 +189,26 @@ describe('resolveAdvice: the male turnover case, turned side (§A.190)', () => {
 		expect(analyzed.events.n1.aboveFirstResonance).toBe(false);
 		const mod = resolveAdvice(analyzed).events.n1.vowelModification;
 		expect(mod?.register).toBe('hazard');
-		expect(mod?.text).toBe(
-			'You may find it helpful to let the /e/ turn and gather here rather than spreading it open for more sound; up this high the ring comes from letting it settle, not from pushing it wider.'
-		);
-		expect(mod?.text).not.toContain('toward'); // articulatory: no target substitution
+		expect(mod?.action).toBe('maleTurnover');
+		expect(mod?.target).toBeUndefined(); // articulatory: no target substitution
 		expect(mod?.citation).toContain('Bozeman 2008');
 		expect(mod?.citation).toContain('Bozeman 2010');
 	});
 
-	it('interpolates whichever close vowel triggered it (vowel-agnostic)', () => {
+	it('fires on whichever close vowel triggered it (vowel-agnostic)', () => {
 		const mod = resolveAdvice(exposedTurned('u')).events.n1.vowelModification;
-		expect(mod?.text).toContain('let the /u/ turn and gather');
+		expect(mod?.action).toBe('maleTurnover');
 	});
 
 	it('does not fire the whoop tracking case on the turned side (the §A.190 guard)', () => {
 		const mod = resolveAdvice(exposedTurned('e')).events.n1.vowelModification;
-		expect(mod?.text).not.toContain('let the jaw drop'); // tracking is guarded off here
+		expect(mod?.action).not.toBe('openTracking'); // tracking is guarded off here
 	});
 
 	it('leaves an exposed [o] to the cover, not the turnover case (match order)', () => {
 		const mod = resolveAdvice(exposedTurned('o')).events.n1.vowelModification;
-		expect(mod?.text).toContain('darken toward /ɑ/'); // the Russian cover wins
-		expect(mod?.text).not.toContain('turn and gather'); // not the turnover case
+		expect(mod?.action).toBe('oCover'); // the Russian cover wins, not the turnover case
+		expect(mod?.target).toBe('ɑ');
 	});
 });
 
@@ -224,10 +218,8 @@ describe('resolveAdvice: the [ɔ] crossing (H1, soprano whoop-coupling)', () => 
 		expect(out.events.n1.crossing).toBe(true);
 		const mod = out.events.n1.vowelModification;
 		expect(mod?.register).toBe('hazard');
-		expect(mod?.text).toBe(
-			'You may find it helpful to allow the turn and let the vowel open into that fuller, headier resonance; up here it settles the tone rather than straining to stay bright.'
-		);
-		expect(mod?.text).not.toContain('toward'); // articulatory: no target substitution
+		expect(mod?.action).toBe('openOCrossing');
+		expect(mod?.target).toBeUndefined(); // articulatory: no target substitution
 		expect(mod?.citation).toContain('Godin & Howell 2015');
 	});
 
@@ -239,7 +231,7 @@ describe('resolveAdvice: the [ɔ] crossing (H1, soprano whoop-coupling)', () => 
 
 	it('leaves the [i] crossing to Mitton, not the [ɔ] case (match order)', () => {
 		const out = resolveAdvice(analyze([note('n1', P('A', 4))], { i: 440 }, { n1: 'i' }));
-		expect(out.events.n1.vowelModification?.text).toContain('lean it toward /ɪ/');
+		expect(out.events.n1.vowelModification?.action).toBe('iCrossing');
 	});
 });
 
@@ -254,7 +246,7 @@ describe('resolveAdvice — purity and idempotence', () => {
 
 	it('never clobbers advice already present on an event', () => {
 		const analyzed = analyze([note('n1', P('A', 4))], { i: 440 }, { n1: 'i' });
-		const prior = { text: 'kept', citation: 'kept', register: 'opportunity' as const };
+		const prior = { action: 'kept', citation: 'kept', register: 'opportunity' as const };
 		const withPrior: AnalyzedScore = {
 			...analyzed,
 			events: { ...analyzed.events, n1: { ...analyzed.events.n1, vowelModification: prior } }

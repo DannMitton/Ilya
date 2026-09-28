@@ -93,3 +93,15 @@ These are not shown to the singer, so the freeze rule does not bite. No draft is
 - 3 stale strings are unrendered.
 - 1 COINED French use: « l’Annotation » as a running-text noun with an article (rows 2, 3, 6, 8).
 - Keys whose names contain "fit": 22 (21 `insights.fit.*` and `insights.verdict.fit`), counted with `grep` on `i18n.ts`, not the 35 the brief states.
+
+## Rulings
+
+- **Rows 1 to 4 RATIFIED by Dann 2026-09-28 14:54** (*"ratified"*), exactly as drafted in the table, English and French. Drafted by an Opus agent and put to him by the desk; the coined running-text « l'Annotation » (row 2, row 3) is ratified with them.
+- **Rows 5 to 8 RATIFIED by Dann 2026-09-28 14:55** (*"Ratified"*), as drafted: "Insights forecasts, it does not declare" / « Les Aperçus prévoient, ils ne déclarent pas », and "Markup's notation conventions" / « Conventions de notation de l'Annotation », heading and table-of-contents entry alike.
+- **Rows 9 to 12 RATIFIED by Dann 2026-09-28 14:58**, REDRAFTED from the table. The desk's redraft, edited by Dann (*"Paste your Russian text into the Input field."*); the desk kept lowercase "the drawer" / « le tiroir » on the rule of `i18n.ts:714` (capital = the button's label, lowercase = the panel):
+  - Row 9: "Paste your Russian text into the Input field." / « Collez votre texte russe dans le champ Entrée. »
+  - Row 10: "Paste ⟨стоит⟩ into the Input field." / « Collez ⟨стоит⟩ dans le champ Entrée. »
+  - Row 11: "…into the Input field." / « …dans le champ Entrée. » (replacing "into the Transcription tab" / « dans l'onglet Transcription »)
+  - Row 12: "Ilya's notation toggles, in the drawer, make these choices visible and reversible" / « Les sélecteurs de notation d'Ilya, dans le tiroir, rendent ces choix visibles et réversibles »
+- **Row 4 AMENDED, ratified in the same breath:** "…type them into the Input field." / « …saisissez-les dans le champ Entrée. »
+- « champ » from `calib.characteristics.lede`; « tiroir » from `paper.empty.mobile`.

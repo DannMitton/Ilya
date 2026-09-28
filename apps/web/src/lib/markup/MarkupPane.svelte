@@ -88,9 +88,9 @@
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/analysis/analyze-score-adapter';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { afterGround } from '$lib/score/system-ground';
-	import { RING_RADIUS, ringBox } from '$lib/score/selection-ring';
+	import { entryGroup, RING_RADIUS, ringBox } from '$lib/score/selection-ring';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/score/engraving';
-	import { buildWatchList, watchEntryLine, WATCH_HEADER } from '$lib/analysis/watchlist';
+	import { buildWatchList, watchBandLines } from '$lib/analysis/watchlist';
 	import { scoreMetrics } from '$lib/analysis/score-metrics';
 
 	interface Props {
@@ -324,7 +324,7 @@
 		if (!id) return;
 		const hit = root.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 		if (!hit) return;
-		const group = hit.closest('[data-event-id]');
+		const group = entryGroup(hit); // a note's, or a rest's (calm-loupe slice 7)
 		if (!group) return;
 		group.setAttribute('data-note-selected', '');
 
@@ -1059,11 +1059,11 @@
 						<aside class="octave-notice">{OCTAVE_NOTICE}</aside>
 					{/if}
 					{#if showWatchBand && watchList}
-						<aside class="watch-band" aria-label={WATCH_HEADER}>
-							<p class="watch-band-header">{WATCH_HEADER}</p>
+						<aside class="watch-band" aria-label={T('watch.header')}>
+							<p class="watch-band-header">{T('watch.header')}</p>
 							<ul class="watch-band-list">
-								{#each watchList.entries as entry (entry.eventId)}
-									<li class="watch-band-line">{watchEntryLine(entry)}</li>
+								{#each watchBandLines(watchList.entries, language) as line, i (watchList.entries[i].eventId)}
+									<li class="watch-band-line">{line}</li>
 								{/each}
 							</ul>
 						</aside>

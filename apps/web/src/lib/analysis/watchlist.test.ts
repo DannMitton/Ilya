@@ -21,10 +21,13 @@ import {
 	type VoiceProfileSnapshot,
 	type VowelResolver
 } from '@ilya/score-parser';
-import { WATCH_HEADER, buildWatchList, watchEntryLine } from './watchlist';
+import { t } from '$lib/i18n';
+import { buildWatchList, watchBandLines, watchEntryLine, type WatchEntry, type WatchOpener } from './watchlist';
 import { resolveAdvice } from './advice-resolver';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
+/** The English line, with the advice's opener (1 unless given). */
+const en = (e: WatchEntry, opener?: WatchOpener) => watchEntryLine(e, 'en', opener);
 type SylType = SyllableInfo['type'];
 
 interface NoteOpts {
@@ -98,7 +101,7 @@ describe('buildWatchList — tiers', () => {
 		const wl = buildWatchList(parsed, analyze(parsed, snap, { n1: 'a' }));
 		expect(wl.entries).toHaveLength(1);
 		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', tier: 1, kinds: ['range'], rangeDirection: 'above' });
-		expect(watchEntryLine(wl.entries[0])).toContain('rises above');
+		expect(en(wl.entries[0])).toContain('rises above');
 	});
 
 	it('tier 1: a note below the given range flags below, with its own copy', () => {
@@ -112,7 +115,7 @@ describe('buildWatchList — tiers', () => {
 		expect(wl.entries).toHaveLength(1);
 		expect(wl.entries[0]).toMatchObject({ tier: 1, kinds: ['range'], rangeDirection: 'below' });
 		// No transposition input supplied → the fact alone (§A.150 fallback).
-		expect(watchEntryLine(wl.entries[0])).toBe('Bar 1 drops below the range you gave.');
+		expect(en(wl.entries[0])).toBe('Bar 1 drops below the range you gave.');
 	});
 
 	it('tier 2: the fundamental on the first resonance flags a crossing', () => {
@@ -259,20 +262,20 @@ describe('buildWatchList — sort and show-all', () => {
 
 describe('watch-list copy', () => {
 	it('renders each tier with the ruled voice, leading with the bar', () => {
-		expect(WATCH_HEADER).toBe('Places to watch');
+		expect(t('watch.header', 'en')).toBe('Places to watch');
 		expect(
-			watchEntryLine({ eventId: 'e', tier: 1, kinds: ['range'], bar: '12', vowel: 'a', density: 1 })
+			en({ eventId: 'e', tier: 1, kinds: ['range'], bar: '12', vowel: 'a', density: 1 })
 		).toBe('Bar 12 rises above the range you gave.');
 		expect(
-			watchEntryLine({ eventId: 'e', tier: 2, kinds: ['crossing'], bar: '9', vowel: 'i', density: 1 })
+			en({ eventId: 'e', tier: 2, kinds: ['crossing'], bar: '9', vowel: 'i', density: 1 })
 		).toBe(
-			'Bar 9: your /i/ meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.'
+			'Bar 9: your [i] meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.'
 		);
 		expect(
-			watchEntryLine({ eventId: 'e', tier: 3, kinds: ['passaggio'], bar: '4', vowel: 'a', word: 'край', density: 1 })
+			en({ eventId: 'e', tier: 3, kinds: ['passaggio'], bar: '4', vowel: 'a', word: 'край', density: 1 })
 		).toBe("Bar 4: 'край' falls near your passaggio; expect the turn to want managing.");
 		expect(
-			watchEntryLine({
+			en({
 				eventId: 'e',
 				tier: 4,
 				kinds: ['timbre'],
@@ -282,11 +285,11 @@ describe('watch-list copy', () => {
 				timbreDirection: 'open-to-close',
 				density: 1
 			})
-		).toBe("Bar 7: your /a/ on 'слава' turns open to close inside the word, so the colour shifts as you sing it.");
+		).toBe("Bar 7: your [a] on 'слава' turns open to close inside the word, so the colour shifts as you sing it.");
 	});
 
 	it('names the most severe kind when a note stacks several', () => {
-		const line = watchEntryLine({
+		const line = en({
 			eventId: 'e',
 			tier: 1,
 			kinds: ['range', 'crossing'],
@@ -299,34 +302,33 @@ describe('watch-list copy', () => {
 
 	it('renders the closed sustain line ("pitch of turning", "sustain")', () => {
 		expect(
-			watchEntryLine({ eventId: 'e', tier: 5, kinds: ['sustain'], bar: '5', vowel: 'o', density: 1 })
+			en({ eventId: 'e', tier: 5, kinds: ['sustain'], bar: '5', vowel: 'o', density: 1 })
 		).toBe(
-			'Bar 5: the longer /o/ here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.'
+			'Bar 5: the longer [o] here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.'
 		);
 	});
 
 	it('appends resolved advice to the crossing line, space-joined (§A.168/§A.169)', () => {
 		expect(
-			watchEntryLine({
+			en({
 				eventId: 'e',
 				tier: 2,
 				kinds: ['crossing'],
 				bar: '37',
 				vowel: 'i',
-				advice:
-					'You may find it helpful to relax the jaw and lean it toward /ɪ/, giving it a touch more space, which lifts your first resonance clear of the pitch.',
+				advice: { action: 'iCrossing', target: 'ɪ' },
 				density: 1
 			})
 		).toBe(
-			'Bar 37: your /i/ meets your first resonance here, so the tone will want to turn full and heady, toward a whoop. You may find it helpful to relax the jaw and lean it toward /ɪ/, giving it a touch more space, which lifts your first resonance clear of the pitch.'
+			'Bar 37: your [i] meets your first resonance here, so the tone will want to turn full and heady, toward a whoop. You might try relaxing the jaw and leaning the vowel toward [ɪ], giving it a touch more space, which can lift your first resonance clear of the pitch.'
 		);
 	});
 
 	it('renders the crossing line alone when no advice resolved (additive dial, ruling B)', () => {
 		expect(
-			watchEntryLine({ eventId: 'e', tier: 2, kinds: ['crossing'], bar: '9', vowel: 'e', density: 1 })
+			en({ eventId: 'e', tier: 2, kinds: ['crossing'], bar: '9', vowel: 'e', density: 1 })
 		).toBe(
-			'Bar 9: your /e/ meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.'
+			'Bar 9: your [e] meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.'
 		);
 	});
 });
@@ -392,39 +394,38 @@ describe('buildWatchList — transposition wiring (§A.151)', () => {
 		const wl = buildWatchList(parsed, analyzed, 1, { analysisScore: parsed, profile: snap, resolver });
 		expect(wl.entries[0].kinds).toContain('range');
 		// C major down a major third (E5 → C5) is A flat major.
-		expect(watchEntryLine(wl.entries[0])).toContain('you may want to transpose to A flat major');
+		expect(en(wl.entries[0])).toContain('you may want to transpose to A flat major');
 	});
 
 	it('falls back to an interval when the score declares no mode', () => {
 		const parsed = outOfRange(); // fifths, no mode
 		const analyzed = analyze(parsed, snap, { n1: 'a' });
 		const wl = buildWatchList(parsed, analyzed, 1, { analysisScore: parsed, profile: snap, resolver });
-		expect(watchEntryLine(wl.entries[0])).toContain('you may want to transpose down a major third');
+		expect(en(wl.entries[0])).toContain('you may want to transpose down a major third');
 	});
 
 	it('names the fact alone when no transposition input is supplied', () => {
 		const parsed = outOfRange('major');
 		const analyzed = analyze(parsed, snap, { n1: 'a' });
 		const wl = buildWatchList(parsed, analyzed, 1);
-		expect(watchEntryLine(wl.entries[0])).toBe('Bar 1 rises above the range you gave.');
+		expect(en(wl.entries[0])).toBe('Bar 1 rises above the range you gave.');
 	});
 });
 
 describe('buildWatchList: the [o]→[ɑ] cover (clause 3, §A.185)', () => {
 	it('renders the cover hazard line with the advice appended', () => {
 		expect(
-			watchEntryLine({
+			en({
 				eventId: 'e',
 				tier: 2,
 				kinds: ['cover'],
 				bar: '70',
 				vowel: 'o',
-				advice:
-					'You may find it helpful to allow the vowel to open and darken toward /ɑ/; that is a more comfortable option than a close /o/ this high.',
+				advice: { action: 'oCover', target: 'ɑ' },
 				density: 1
 			})
 		).toBe(
-			'Bar 70: the /o/ at the top of your range and sustained here is an exposed spot where the vowel can tighten. You may find it helpful to allow the vowel to open and darken toward /ɑ/; that is a more comfortable option than a close /o/ this high.'
+			'Bar 70: the [o] at the top of your range and sustained here is an exposed spot where the vowel can tighten. You might try allowing the vowel to open and darken toward [ɑ]; that can be a more comfortable option than a close [o] this high.'
 		);
 	});
 
@@ -440,25 +441,24 @@ describe('buildWatchList: the [o]→[ɑ] cover (clause 3, §A.185)', () => {
 		const wl = buildWatchList(parsed, analyzed);
 		expect(wl.entries).toHaveLength(1);
 		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', kinds: ['cover'] });
-		expect(watchEntryLine(wl.entries[0])).toContain('open and darken toward /ɑ/');
+		expect(en(wl.entries[0])).toContain('open and darken toward [ɑ]');
 	});
 });
 
 describe('buildWatchList: the exposed active-open (tracking) hazard (H2)', () => {
 	it('renders the tracking hazard line with the articulatory advice appended', () => {
 		expect(
-			watchEntryLine({
+			en({
 				eventId: 'e',
 				tier: 2,
 				kinds: ['tracking'],
 				bar: '52',
 				vowel: 'e',
-				advice:
-					'You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /e/ squeezed this high.',
+				advice: { action: 'openTracking' },
 				density: 1
 			})
 		).toBe(
-			'Bar 52: the /e/ at the top of your range and sustained here is an exposed spot where the vowel can tighten. You may find it helpful to let the jaw drop to open the vowel here, raising your first resonance to the pitch; that eases the sound rather than holding a close /e/ squeezed this high.'
+			'Bar 52: the [e] at the top of your range and sustained here is an exposed spot where the vowel can tighten. You might try letting the jaw drop to open the vowel here, raising your first resonance to the pitch; that can ease the sound rather than keeping a close [e] squeezed this high.'
 		);
 	});
 
@@ -477,7 +477,7 @@ describe('buildWatchList: the exposed active-open (tracking) hazard (H2)', () =>
 		const wl = buildWatchList(parsed, analyzed);
 		expect(wl.entries).toHaveLength(1);
 		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', tier: 2, kinds: ['tracking'] });
-		expect(watchEntryLine(wl.entries[0])).toContain('raising your first resonance to the pitch');
+		expect(en(wl.entries[0])).toContain('raising your first resonance to the pitch');
 	});
 
 	it('routes an exposed [o] to the cover, not tracking (the vowel split)', () => {
@@ -496,18 +496,17 @@ describe('buildWatchList: the exposed active-open (tracking) hazard (H2)', () =>
 describe('buildWatchList: the male turnover hazard, turned side (§A.190)', () => {
 	it('renders the turnover hazard line with the articulatory advice appended', () => {
 		expect(
-			watchEntryLine({
+			en({
 				eventId: 'e',
 				tier: 2,
 				kinds: ['turnover'],
 				bar: '52',
 				vowel: 'e',
-				advice:
-					'You may find it helpful to let the /e/ turn and gather here rather than spreading it open for more sound; up this high the ring comes from letting it settle, not from pushing it wider.',
+				advice: { action: 'maleTurnover' },
 				density: 1
 			})
 		).toBe(
-			'Bar 52: the /e/ at the top of your range and sustained here is an exposed spot where the tone can spread or press. You may find it helpful to let the /e/ turn and gather here rather than spreading it open for more sound; up this high the ring comes from letting it settle, not from pushing it wider.'
+			'Bar 52: the [e] at the top of your range and sustained here is an exposed spot where the tone can spread or press. You might try letting the [e] turn and gather here rather than spreading it open for more sound; up this high the ring tends to come from letting it settle, not from pushing it wider.'
 		);
 	});
 
@@ -527,7 +526,7 @@ describe('buildWatchList: the male turnover hazard, turned side (§A.190)', () =
 		const wl = buildWatchList(parsed, analyzed);
 		expect(wl.entries).toHaveLength(1);
 		expect(wl.entries[0]).toMatchObject({ eventId: 'n1', tier: 2, kinds: ['turnover'] });
-		expect(watchEntryLine(wl.entries[0])).toContain('turn and gather');
+		expect(en(wl.entries[0])).toContain('turn and gather');
 	});
 });
 
@@ -544,8 +543,100 @@ describe('buildWatchList: the [ɔ] crossing advice (H1)', () => {
 		const wl = buildWatchList(parsed, analyzed);
 		expect(wl.entries).toHaveLength(1);
 		expect(wl.entries[0].kinds).toEqual(['crossing']);
-		const line = watchEntryLine(wl.entries[0]);
+		const line = en(wl.entries[0]);
 		expect(line).toContain('toward a whoop'); // the descriptive crossing line
-		expect(line).toContain('settles the tone rather than straining'); // the H1 advice appended
+		expect(line).toContain('can settle the tone rather than straining'); // the H1 advice appended
+	});
+});
+
+describe('watch-band copy in French (N.82, ruled 2026-09-28)', () => {
+	const fr = (e: WatchEntry, opener?: WatchOpener) => watchEntryLine(e, 'fr', opener);
+	const base = { eventId: 'e', density: 1 } as const;
+
+	it('reads the ratified French lines, IPA in square brackets', () => {
+		expect(t('watch.header', 'fr')).toBe('Points à surveiller');
+		expect(fr({ ...base, tier: 1, kinds: ['range'], bar: '12', vowel: 'a', rangeDirection: 'below' })).toBe(
+			'Mesure 12\u00a0: la note descend sous l\u2019ambitus que vous avez indiqué.'
+		);
+		expect(fr({ ...base, tier: 2, kinds: ['crossing'], bar: '9', vowel: 'i' })).toBe(
+			'Mesure 9\u00a0: votre [i] rencontre ici votre première résonance, de sorte que le son voudra devenir plein et de tête, vers le youhou.'
+		);
+		expect(fr({ ...base, tier: 2, kinds: ['tracking'], bar: '52', vowel: 'e' })).toBe(
+			'Mesure 52\u00a0: le [e], au sommet de votre ambitus et prolongé ici, est un endroit exposé où la voyelle peut se resserrer.'
+		);
+		expect(fr({ ...base, tier: 3, kinds: ['passaggio'], bar: '4', vowel: 'a', word: 'край' })).toBe(
+			'Mesure 4\u00a0: «\u00a0край\u00a0» tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre.'
+		);
+		expect(
+			fr({ ...base, tier: 4, kinds: ['timbre'], bar: '7', vowel: 'a', word: 'слава', timbreDirection: 'close-to-open' })
+		).toBe(
+			'Mesure 7\u00a0: votre [a] sur «\u00a0слава\u00a0» passe de fermé à ouvert à l\u2019intérieur du mot, de sorte que la couleur change pendant que vous le chantez.'
+		);
+		expect(fr({ ...base, tier: 5, kinds: ['sustain'], bar: '5', vowel: 'o' })).toBe(
+			'Mesure 5\u00a0: le [o] plus long, ici, se pose sur sa hauteur de changement de timbre, de sorte que la couleur peut sembler instable pendant qu\u2019il se prolonge.'
+		);
+	});
+
+	it('names keys in solfège, lowercase, and repeats « en »', () => {
+		const range = { ...base, tier: 1 as const, kinds: ['range' as const], bar: '3', vowel: 'a' };
+		const keys = { semitones: [-4, -2], keys: [{ fifths: -3, mode: 'major' as const }, { fifths: -5, mode: 'major' as const }] };
+		expect(fr({ ...range, transposition: keys })).toBe(
+			'Mesure 3\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué; vous pouvez songer à transposer en mi bémol majeur ou en ré bémol majeur.'
+		);
+		expect(en({ ...range, transposition: keys })).toBe(
+			'Bar 3 rises above the range you gave; you may want to transpose to E flat major or D flat major.'
+		);
+		const minor = { semitones: [3], keys: [{ fifths: 6, mode: 'minor' as const }] };
+		expect(fr({ ...range, transposition: minor })).toContain('transposer en ré dièse mineur.');
+		expect(en({ ...range, transposition: { semitones: [2], keys: [{ fifths: 0, mode: 'major' }] } })).toContain(
+			'transpose to C major.'
+		);
+	});
+
+	it('names intervals, a shared direction said once and mixed directions each named', () => {
+		const range = { ...base, tier: 1 as const, kinds: ['range' as const], bar: '3', vowel: 'a' };
+		expect(fr({ ...range, transposition: { semitones: [-4, -5] } })).toContain(
+			'transposer d\u2019une tierce majeure ou d\u2019une quarte juste vers le bas.'
+		);
+		expect(en({ ...range, transposition: { semitones: [-4, -5] } })).toContain(
+			'transpose down a major third or a perfect fourth.'
+		);
+		expect(fr({ ...range, transposition: { semitones: [-1, 2] } })).toContain(
+			'transposer d\u2019un demi-ton vers le bas ou d\u2019un ton vers le haut.'
+		);
+		expect(en({ ...range, transposition: { semitones: [-1, 2] } })).toContain('transpose down a semitone or up a whole tone.');
+		expect(fr({ ...range, transposition: { semitones: [6] } })).toContain('transposer d\u2019un triton vers le haut.');
+	});
+
+	it('leads the advice with an opener and elides « de » before a vowel', () => {
+		const e: WatchEntry = { ...base, tier: 2, kinds: ['crossing'], bar: '9', vowel: 'ɔ', advice: { action: 'openOCrossing' } };
+		expect(fr(e, 1)).toContain('. Vous pourriez essayer d\u2019accepter le changement de timbre');
+		expect(fr(e, 2)).toContain('. Vous pouvez songer à accepter');
+		expect(fr(e, 4)).toContain('. Une piste à explorer\u00a0: accepter');
+		expect(fr({ ...e, vowel: 'i', advice: { action: 'iCrossing', target: 'ɪ' } }, 5)).toContain(
+			'. Essayez de relâcher la mâchoire et orienter la voyelle vers [ɪ], en lui donnant un peu plus d\u2019espace, ce qui peut dégager votre première résonance de la hauteur chantée.'
+		);
+	});
+
+	it('reads every English opener with every action', () => {
+		for (const action of ['iCrossing', 'openOCrossing', 'oCover', 'openTracking', 'maleTurnover'] as const) {
+			for (const opener of [1, 2, 3, 4, 5] as const) {
+				const line = en({ ...base, tier: 2, kinds: ['crossing'], bar: '1', vowel: 'e', advice: { action, target: 'ɑ' } }, opener);
+				expect(line).not.toContain('[MISSING');
+				expect(line).toMatch(/\. (You might try|Consider|You can experiment with|One thing to explore is|Try) [a-z]+ing /);
+				expect(line.endsWith('.')).toBe(true);
+			}
+		}
+	});
+
+	it('rotates the openers down the band so no two advice sentences share one', () => {
+		const adv = (id: string): WatchEntry => ({ ...base, eventId: id, tier: 2, kinds: ['crossing'], bar: id, vowel: 'ɔ', advice: { action: 'openOCrossing' } });
+		const lines = watchBandLines(
+			[adv('1'), { ...base, eventId: 'x', tier: 5, kinds: ['sustain'], bar: '2', vowel: 'o' }, adv('3'), adv('4'), adv('5'), adv('6')],
+			'en'
+		);
+		const leads = lines.filter((l) => l.includes('allowing the turn')).map((l) => l.split('. ')[1].split(' allowing')[0]);
+		expect(leads).toEqual(['You might try', 'Consider', 'You can experiment with', 'One thing to explore is', 'Try']);
+		expect(lines[1]).toBe('Bar 2: the longer [o] here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.');
 	});
 });

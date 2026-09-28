@@ -102,7 +102,10 @@ Depends on nothing else in the workspace.
     cursor's stops, and the music keys all follow.
     `loupe-hold.ts` lets the card grow, never shrink, while it stays on
     one measure, holds the music window's height there, and keeps the
-    taken entry in the window's view.
+    taken entry in the window's view with no lyric row cut at its edge.
+    `selection-ring.ts` builds the squircle for a note or a rest, and
+    `stop-ring.ts` sizes the one around a caret, so every stop the cursor
+    takes carries the same mark.
   - `ScoreUploader.svelte` takes the file in, and `notation-fonts.ts` loads
     the notation font.
 - `src/lib/reader/` reads a score file. It is flat, with `vendor/` for the MuseScore converter's glue. `score-reader.ts`

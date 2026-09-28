@@ -362,7 +362,9 @@ export function probeLoupe(): Probe | null {
 		if (!m) return false;
 		const p = new DOMPoint(x, y).matrixTransform(m.inverse());
 		if (el instanceof SVGGeometryElement) {
-			const fill = el.getAttribute('fill');
+			/* The loupe's ring takes `fill: none` from the stylesheet, not an attribute, and
+			   since calm-loupe slice 7 a taken caret stands inside it: read the computed fill. */
+			const fill = el.getAttribute('fill') ?? getComputedStyle(el).fill;
 			const fillPainted = fill !== 'none' && fill !== 'transparent' && el.tagName !== 'line';
 			if (fillPainted && el.isPointInFill(p)) return true;
 			if (strokeOf(el) > 0 && el.isPointInStroke(p)) return true;

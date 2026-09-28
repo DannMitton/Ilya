@@ -58,6 +58,19 @@ export function systemIndexOf(ranges: readonly SystemRange[], measureIndex: numb
 	return ranges.findIndex((r) => measureIndex >= r.fromMeasure && measureIndex <= r.toMeasure);
 }
 
+/** Each id's page hit rectangle, in order, and the element it was read from; an id with none is skipped. Moved from `Loupe.svelte` (calm-loupe slice 7). */
+export function hitsFor(page: Element, ids: readonly string[]): { rects: HitRect[]; nodes: Element[] } {
+	const rects: HitRect[] = [];
+	const nodes: Element[] = [];
+	for (const id of ids) {
+		const el = page.querySelector(`[data-hit="${CSS.escape(id)}"]`);
+		if (!el) continue;
+		nodes.push(el);
+		rects.push({ x: Number(el.getAttribute('x')), width: Number(el.getAttribute('width')) });
+	}
+	return { rects, nodes };
+}
+
 /**
  * The x window of one measure inside its system.
  *

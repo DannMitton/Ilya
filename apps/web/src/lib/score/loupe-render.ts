@@ -123,6 +123,24 @@ export interface SpacingReading {
 	pairs?: Readonly<Record<string, number>>;
 }
 
+/** Each neighbouring pair of carets under the floor, named by the gaps' own ids, for the console. Moved from `Loupe.svelte` (calm-loupe slice 7). */
+export function offendingPairs(marks: readonly { after: string | null; x: number }[], scale: number): string[] {
+	const sorted = [...marks].sort((a, b) => a.x - b.x);
+	const out: string[] = [];
+	for (let i = 1; i < sorted.length; i++) {
+		const px = (sorted[i].x - sorted[i - 1].x) * scale;
+		if (px < TAP_FLOOR_PX - TAP_FLOOR_EPS_PX) out.push(`${sorted[i - 1].after ?? 'head'} to ${sorted[i].after ?? 'head'} ${px.toFixed(1)} px`);
+	}
+	return out;
+}
+
+/** FNV-1a over a string, as a hex word: a key for a drawing, not a security matter. Moved from `Loupe.svelte` (calm-loupe slice 7). */
+export function fingerprint(text: string): string {
+	let h = 0x811c9dc5;
+	for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193);
+	return `${text.length}:${(h >>> 0).toString(16)}`;
+}
+
 /**
  * Every adjacent pair of carets and its separation in CSS pixels, keyed by the
  * two gaps' own `after` ids (`head` for the first), smallest over every set:
