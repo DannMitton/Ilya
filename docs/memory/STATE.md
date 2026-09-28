@@ -47,6 +47,16 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### SESSION OF 2026-09-27 EVENING. Cut 1, slice 1 (Undo and Redo into `lib/score/undo-history.svelte.ts`) is DONE: walked by Dann on `localhost:5173` 2026-09-27 20:08 to 20:15 (pitch, Undo, Redo, rest and its Undo, tie and its Undo). Gate 4 moved 1533 to 1547 (backup `~/Downloads/ilya-ship.sh.bak-1533-2026-09-27`). Next: slice 2 per the map `../sessions/code-audit-correction-station-map_r1_2026-09-27.md`.
+>
+> **Screenshot compare: 84 of 84 identical**, baseline `b6077d7` and slice in one cloud container; slice files md5-matched to Dann's tree; the served page was probed and imports `undo-history.svelte.ts`. Code's gates: web-test 1533 to 1547, check 0 errors, ratchets OK (ceiling 6,224 to 6,135), Playwright 28 of 28. **Gate 4 in the ship script must move from 1533 to 1547 before this ships.**
+>
+> **Queued, one small change AFTER the Correction Station slices, in this order (each offered by the desk):**
+> 1. **Bug, confirmed by reading `b6077d7`, not reproduced:** `switchSong` (`+page.svelte:3788`) and `resetSessionState` (`:2494`) never clear the undo stacks, and a restore writes into whichever song is open (`:988`). Undo after a song switch writes the old song's corrections into the new one, and autosave keeps them. Found by Code. DESK DEFAULT: fix with a test, own slice.
+> 2. **The loupe's music keys act in Syllables mode.** The key handler tests only for a cursor, never `loupeMode`. DESK DEFAULT, option 1: in Syllables mode, Up, Down, `+`, `-`, digits, `.` and Delete do nothing; Left, Right, Escape, Undo and Redo work in both modes.
+> 3. **A second click on the filled mode pill closes the panel.** Proposed by Dann 2026-09-27 20:05; the desk recommended it. Change in `handleLoupeMode`; the chevron keeps its `aria-expanded` role.
+> 4. **The loupe frame bucks when an accidental appears.** Frame width is sized to contents on every redraw (`Loupe.svelte:2119-2121`, clause 12). **RATIFIED by Dann 2026-09-27 20:07** (*"I agree, ratified"*), offered by the desk: while the singer stays on one measure, the frame may grow but never shrinks, and the magnification may drop to keep every note visible but never climbs back; growth and any drop are eased (about 150 ms, none under reduced motion); both reset when the singer moves to another measure or closes the loupe. Default with its exception, per tether 19: the frame opens tight to its contents, as clause 12 rules.
+
 > ### WHEN DANN IS BACK, 2026-09-27. Written by the desk overnight, about 07:45. Read this first; the N.174 close block below it still stands.
 >
 > **Shipped after the N.174 close: `f5d0dd4`,** the Latin words on the page with Richter's IPA and the footer credit, its wording RATIFIED by Dann in both languages 2026-09-27 07:03. The 84-capture compare is clean. Ship script gate 4 is 1533 (backup `~/Downloads/ilya-ship.sh.bak-1495-2026-09-27`). **Owed by Dann:** a walk of «Семинарист» itself; no copy of the song is on the Mac.

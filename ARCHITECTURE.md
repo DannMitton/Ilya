@@ -95,6 +95,7 @@ Depends on nothing else in the workspace.
     `vowel-resolver.ts` asks the GraysonEngine which vowel is sung.
   - `Loupe.svelte` and `loupe.ts` are the magnified editor for one measure,
     and `CorrectionSurface.svelte` and `correction.ts` correct the notes.
+    `undo-history.svelte.ts` is the corrections' Undo and Redo stack.
   - `ScoreUploader.svelte` takes the file in, and `notation-fonts.ts` loads
     the notation font.
 - `src/lib/reader/` reads a score file. It is flat, with `vendor/` for the MuseScore converter's glue. `score-reader.ts`

@@ -25,7 +25,6 @@
 		mergeOnUpload,
 		placeSyllable,
 		nextOpenSyllableTarget,
-		type PairingMap,
 		type ShiftDirection,
 		type Slot,
 	} from '$lib/score/pairings';
@@ -203,6 +202,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		withCorrection,
 		type CorrectionMap
 	} from '$lib/score/correction';
+	import { stackLabel, UndoHistory } from '$lib/score/undo-history.svelte';
 	import { pitchLabel } from '$lib/voice/note-picker';
 	import type { IngestedScore } from '$lib/score/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
@@ -913,107 +913,28 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const selectedDotted = $derived(selectedDots > 0);
 
 	/* ── THE NAMED UNDO (N.92 mobile slice 2) ────────────────────────────
-	   IN MEMORY ONLY, AND THAT IS THE RULE RATHER THAN AN OMISSION. N.27
-	   stands: corrections stay the one stored diff, and this ship adds NO SAVE
-	   SITE. A reload therefore arrives with the corrections and with an empty
-	   stack, which is the honest state: the singer's corrections survived and
-	   the session's history did not.
-
-	   A SNAPSHOT, NOT AN INVERSE. `withCorrection`, `clearCorrection`, and the
-	   two shift functions all return NEW maps, so holding the previous
-	   reference is a complete, cheap record of the state before the verb, and
-	   there is no per-verb inverse to get wrong.
-
-	   THE PILL'S SENTENCE IS COMPOSED AT RENDER, not at push, so a singer who
-	   changes language mid-session reads the pill in the language they are
-	   now in.
-
-	   EVERY CORRECTION VERB PUSHES, wherever it was pressed. The dock and the
-	   desktop drawer call the same handlers, so one stack cannot disagree with
-	   another. Nothing renders the pill outside the dock, so the desk is
-	   unchanged. */
-	type UndoNote = { kind: 'text'; key: string } | { kind: 'change'; from: string; to: string };
-	interface UndoEntry {
-		note: UndoNote;
-		corrections: CorrectionMap;
-		pairings: PairingMap;
-		/* THE WHOLE CURSOR, not half of it. N.92 slice 3 gave the bar a second
-		   place to stand, and an undo that restored only `selected` set it to
-		   null while leaving `gapAfter` alone, which is no cursor at all: the
-		   effect that keeps the loupe standing then took it down. MEASURED on
-		   the walk: undoing an entry made in a gap dismissed the loupe, because
-		   every entry is pushed from a gap and every gap pushes a null
-		   selection. */
-		/* N.147: THIS FIELD IS NOW WHAT UNDOES A PLACEMENT'S ADVANCE TOO. A
-		   placement moves the SELECTION to the next open note
-		   (`placeSyllableOnSelected`), where before N.147 it advanced a
-		   separate `pairingCursor` that this entry carried on its own. One
-		   field now does both jobs, because the selection was always the one a
-		   placement's undo had to restore for the OTHER reason above; retiring
-		   `pairingCursor` with the note-tap-places gesture cost this entry
-		   nothing. */
-		selected: string | null;
-		gapAfter: string | null | undefined;
-		/* N.160 step 3. The text these pairings describe. The stack outlives a
-		   text edit, so an undo can bring back seats made against an older
-		   poem, and the seated text has to come back with them or the next
-		   transcription would diff from the wrong text and freeze them. */
-		seatedText: string;
-	}
-	let undoStack = $state<UndoEntry[]>([]);
-	/* THE OTHER HALF, N.111-3b. RULED BY DANN 2026-09-07: "we do not include an
-	   Undo/Redo button on the Loupe. We need one."
-
-	   ONE STACK EXTENDED, NOT A SECOND ONE ADDED. Redo is the same snapshot in
-	   the other direction: undo restores the entry's state and hands the state
-	   it replaced to this stack, redo does the mirror. Nothing here knows what
-	   a verb DOES, which is the property that let one stack cover nine verbs
-	   and now covers placement too.
-
-	   A NEW ACTION DROPS THE FUTURE. `pushUndo` clears this, so the redo pill
-	   can never offer to restore a state that branched away. */
-	let redoStack = $state<UndoEntry[]>([]);
-
-	/** The state as it stands right now, which is what both directions save. */
-	function snapshot(note: UndoNote): UndoEntry {
-		return {
-			note,
+	   The stack, the snapshot, and the rules they keep live in
+	   `$lib/score/undo-history.svelte.ts` (audit phase 4, slice 1). What
+	   stays here is what the page owns: which state an entry saves, and the
+	   order it is written back in. The three names below are the ones every
+	   verb, prop, and comment in this file already uses. */
+	const undoHistory = new UndoHistory(
+		() => ({
 			corrections: doc.corrections,
 			pairings: doc.pairings,
 			selected: selectedEventId,
 			gapAfter,
 			seatedText: doc.seatedText,
-		};
-	}
-
-	function restore(entry: UndoEntry): void {
-		doc.corrections = entry.corrections;
-		doc.pairings = entry.pairings;
-		doc.seatedText = entry.seatedText;
-		selectedEventId = entry.selected;
-		gapAfter = entry.gapAfter;
-	}
-
-	function pushUndo(note: UndoNote): void {
-		undoStack = [...undoStack, snapshot(note)];
-		redoStack = [];
-	}
-
-	function handleUndo(): void {
-		const top = undoStack[undoStack.length - 1];
-		if (!top) return;
-		redoStack = [...redoStack, snapshot(top.note)];
-		restore(top);
-		undoStack = undoStack.slice(0, -1);
-	}
-
-	function handleRedo(): void {
-		const top = redoStack[redoStack.length - 1];
-		if (!top) return;
-		undoStack = [...undoStack, snapshot(top.note)];
-		restore(top);
-		redoStack = redoStack.slice(0, -1);
-	}
+		}),
+		(entry) => {
+			doc.corrections = entry.corrections;
+			doc.pairings = entry.pairings;
+			doc.seatedText = entry.seatedText;
+			selectedEventId = entry.selected;
+			gapAfter = entry.gapAfter;
+		},
+	);
+	const { push: pushUndo, undo: handleUndo, redo: handleRedo } = undoHistory;
 
 	/** The five duration words the surface already ships, by base. */
 	const DURATION_KEY: Partial<Record<NoteBase, string>> = {
@@ -1414,12 +1335,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			const k = e.key.toLowerCase();
 			const redo = (k === 'z' && e.shiftKey) || (k === 'y' && !e.shiftKey);
 			const undo = k === 'z' && !e.shiftKey;
-			if (redo && redoStack.length > 0) {
+			if (redo && undoHistory.redoStack.length > 0) {
 				handleRedo();
 				e.preventDefault();
 				return;
 			}
-			if (undo && undoStack.length > 0) {
+			if (undo && undoHistory.undoStack.length > 0) {
 				handleUndo();
 				e.preventDefault();
 				return;
@@ -1817,19 +1738,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.pairings = result.map;
 	}
 
-	/* THE PILL'S SENTENCE IS COMPOSED AT RENDER, and both pills name the SAME
-	   action: the thing undo would take back, and the thing redo would put
-	   back. One reader, two stacks. */
-	function stackLabel(stack: UndoEntry[]): string | null {
-		const top = stack[stack.length - 1];
-		if (!top) return null;
-		return top.note.kind === 'text'
-			? t(top.note.key, language)
-			: `${top.note.from} \u2192 ${top.note.to}`;
-	}
-
-	const undoLabel = $derived(stackLabel(undoStack));
-	const redoLabel = $derived(stackLabel(redoStack));
+	/* The pills' sentences, composed at render (`stackLabel`). */
+	const undoLabel = $derived(stackLabel(undoHistory.undoStack, (key) => t(key, language)));
+	const redoLabel = $derived(stackLabel(undoHistory.redoStack, (key) => t(key, language)));
 
 	/* THE PAGE'S FIRST STATE: every measure takes a tap, and a tap resolves to
 	   the nearest entry rather than needing to land on a 7 px notehead. That
