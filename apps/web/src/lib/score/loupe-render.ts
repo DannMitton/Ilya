@@ -109,6 +109,39 @@ export interface DerivedSpacing {
 	 * is exactly `worst >= floor - TAP_FLOOR_EPS_PX`.
 	 */
 	converged: boolean;
+	/** The pairs set aside because the ceiling left them under the floor. */
+	stuck: string[];
+}
+
+/**
+ * One render's reading: the smallest separation, the scale, and, where the
+ * caller can name them, every adjacent pair's separation by a stable key.
+ */
+export interface SpacingReading {
+	worst: number;
+	scale: number;
+	pairs?: Readonly<Record<string, number>>;
+}
+
+/**
+ * Every adjacent pair of carets and its separation in CSS pixels, keyed by the
+ * two gaps' own `after` ids (`head` for the first), smallest over every set:
+ * each set is one selection's placement, and the floor must hold for all.
+ */
+export function pairSeparations(
+	sets: readonly (readonly { after: string | null; x: number }[])[],
+	scale: number,
+): Record<string, number> {
+	const out: Record<string, number> = {};
+	for (const set of sets) {
+		const xs = [...set].sort((a, b) => a.x - b.x);
+		for (let i = 1; i < xs.length; i++) {
+			const key = `${xs[i - 1].after ?? 'head'}>${xs[i].after ?? 'head'}`;
+			const px = (xs[i].x - xs[i - 1].x) * scale;
+			out[key] = Math.min(out[key] ?? Infinity, px);
+		}
+	}
+	return out;
 }
 
 /** Smallest step the search resolves, in native units: under a pixel at any scale this surface draws. */
@@ -124,42 +157,65 @@ export const MAX_SPACING_RENDERS = 14;
  *
  * `worstAt` renders at a `minGap` and answers the smallest separation in CSS
  * pixels with the scale it was drawn at, or null where it cannot say. The search relies on advances being
- * non-decreasing in `minGap`, which holds at natural width (module head). On the
- * cap it answers the widest spacing reached, unconverged, and the caller says so;
- * it draws nothing to say so.
+ * non-decreasing in `minGap`, which holds at natural width (module head).
+ *
+ * A PAIR THE CEILING CANNOT CLEAR IS SET ASIDE, NOT OBEYED (calm-loupe slice
+ * 4, 2026-09-28). Until then the search answered the ceiling itself for the
+ * whole measure. MEASURED on «Скучай» m. 3: the head caret and the caret
+ * after the opening rest stand 18 to 34 px apart at every spacing, because
+ * the rest's lead-in does not read `minGap`, so the measure was drawn at
+ * minGap 80.67 against the page's 14 and ran 1,298 px into a 907 px window,
+ * past its own closing barline. Four measures of that song did the same.
+ * Now the pairs under the floor at the ceiling are named in `stuck`, the
+ * search clears every other pair at the smallest spacing that does, and the
+ * answer stays unconverged so the caller still reports the stuck ones.
+ * Where the reading names no pairs, the ceiling is answered as before.
  */
 export function deriveMinGap(
 	pageMinGap: number,
-	worstAt: (minGap: number) => { worst: number; scale: number } | null,
+	worstAt: (minGap: number) => SpacingReading | null,
 	floor: number = TAP_FLOOR_PX,
 ): DerivedSpacing {
 	let iterations = 0;
 	let scale = 0;
-	const probe = (g: number): number => {
+	let skip: ReadonlySet<string> = new Set();
+	const read = (g: number): { all: number; rest: number } => {
 		iterations++;
 		const r = worstAt(g);
-		if (!r) return Infinity;
+		if (!r) return { all: Infinity, rest: Infinity };
 		scale = r.scale;
-		return r.worst;
+		if (!r.pairs || skip.size === 0) return { all: r.worst, rest: r.worst };
+		let rest = Infinity;
+		for (const [k, v] of Object.entries(r.pairs)) if (!skip.has(k)) rest = Math.min(rest, v);
+		return { all: r.worst, rest };
 	};
 	const meets = (w: number): boolean => w >= floor - TAP_FLOOR_EPS_PX;
-	const startWorst = probe(pageMinGap);
-	if (meets(startWorst)) return { minGap: pageMinGap, worst: startWorst, iterations, converged: true };
+	const start = read(pageMinGap);
+	if (meets(start.all)) return { minGap: pageMinGap, worst: start.all, iterations, converged: true, stuck: [] };
 	const ceiling = Math.max(pageMinGap, scale > 0 ? floor / scale : floor) * CEILING_FACTOR;
-	const ceilingWorst = probe(ceiling);
-	if (!meets(ceilingWorst)) return { minGap: ceiling, worst: ceilingWorst, iterations, converged: false };
+	const top = worstAt(ceiling);
+	iterations++;
+	if (top) scale = top.scale;
+	const topWorst = top ? top.worst : Infinity;
+	if (!meets(topWorst)) {
+		const stuck = top?.pairs ? Object.keys(top.pairs).filter((k) => !meets(top.pairs![k])) : [];
+		if (stuck.length === 0) return { minGap: ceiling, worst: topWorst, iterations, converged: false, stuck };
+		skip = new Set(stuck);
+		const again = read(pageMinGap);
+		if (meets(again.rest)) return { minGap: pageMinGap, worst: again.all, iterations, converged: false, stuck };
+	}
 	let lo = pageMinGap;
 	let hi = ceiling;
-	let hiWorst = ceilingWorst;
+	let hiWorst = topWorst;
 	while (hi - lo > MIN_GAP_RESOLUTION && iterations < MAX_SPACING_RENDERS) {
 		const mid = (lo + hi) / 2;
-		const w = probe(mid);
-		if (meets(w)) {
+		const w = read(mid);
+		if (meets(w.rest)) {
 			hi = mid;
-			hiWorst = w;
+			hiWorst = w.all;
 		} else lo = mid;
 	}
-	return { minGap: hi, worst: hiWorst, iterations, converged: true };
+	return { minGap: hi, worst: hiWorst, iterations, converged: skip.size === 0, stuck: [...skip] };
 }
 
 /**

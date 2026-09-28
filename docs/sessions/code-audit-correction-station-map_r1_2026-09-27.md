@@ -83,6 +83,13 @@ and its logic is testable.
 3. **The cursor.** `selectedEventId`, `gapAfter`, `cursor`, `inGap`,
    `setCursor`, `handleMove`. The most readers outside (§2), all read-only
    except `dismissLoupe` and the page tap.
+   `WRITTEN` 2026-09-27: `lib/score/correction-cursor.svelte.ts`
+   (`CorrectionCursor`) and its test. The page keeps the four names as
+   `$derived` reads of the class and destructures `setCursor` and
+   `handleMove` from it, so no reader changed. Two writers the map's §2
+   missed, both inside the station, now write the class's fields: Undo's
+   `write` (`+page.svelte:934-935` at `9ebfdc0`) and `handleDeleteNote`
+   (`:1070`). `+page.svelte` 6,097 to 6,052 lines.
 4. **The tuplet row.** `tupletOpen`, `tupletDef`, `tupletBase`, `tupletFits`,
    and the three functions. Needs slices 1 and 3.
 5. **The verbs and the selection readings.** Pitch, duration, rest, tie,

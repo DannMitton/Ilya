@@ -195,6 +195,28 @@ export function semitonePitch(
 }
 
 /**
+ * THE PITCH LIMITS, C1 AND C7. RATIFIED BY DANN 2026-09-27 21:26, offered by
+ * the desk from the literature (Basso profondo: B♭1 Rachmaninoff, F1
+ * Penderecki, octavists to C1; Soprano: G6 and G♯6 in «Popoli di Tessaglia!»
+ * and *Esclarmonde*). Seen before the ruling: holding the down arrow walked a
+ * note to E-13. A bound moves if a real score is found that writes past it.
+ *
+ * A step whose landing is outside the limits does nothing, and the page then
+ * pushes nothing to Undo. The bound is on the sounding MIDI number, so B♯0
+ * (C1's own pitch) is inside and C♯7 is not. A note already read outside the
+ * limits may still step TOWARD them, so a misread can always be walked home.
+ */
+export const PITCH_FLOOR_MIDI = 24;
+export const PITCH_CEILING_MIDI = 96;
+
+export function stepAllowed(from: Pitch, to: Pitch): boolean {
+	const t = pitchToMidi(to);
+	if (t >= PITCH_FLOOR_MIDI && t <= PITCH_CEILING_MIDI) return true;
+	const f = pitchToMidi(from);
+	return t < PITCH_FLOOR_MIDI ? t > f : t < f;
+}
+
+/**
  * THE ACCIDENTAL VERBS (N.92 slice 2, ruled by Dann 2026-08-24).
  *
  * CUMULATIVE, AND TWO CLICKS REACH DOUBLES. Flat lowers the spelling one degree

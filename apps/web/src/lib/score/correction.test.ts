@@ -36,6 +36,7 @@ import {
 	pitchToMidi,
 	semitonePitch,
 	sharpPitch,
+	stepAllowed,
 	stepPitch,
 	withCorrection,
 	type CorrectionMap
@@ -100,6 +101,36 @@ describe('N.92 pitch operations', () => {
 
 	it('nudges to the sharp side in a sharp key', () => {
 		expect(semitonePitch(P('G', 4), 1, { key: { fifths: 2 } })).toEqual(P('G', 4, 1));
+	});
+});
+
+/* THE PITCH LIMITS, C1 AND C7, ratified by Dann 2026-09-27 21:26
+   (calm-loupe slice 5). */
+describe('pitch limits', () => {
+	it('lets a step land on C1 and on C7, and not past either', () => {
+		expect(stepAllowed(P('D', 1), stepPitch(P('D', 1), -1))).toBe(true);
+		expect(stepAllowed(P('C', 1), stepPitch(P('C', 1), -1))).toBe(false);
+		expect(stepAllowed(P('B', 6), stepPitch(P('B', 6), 1))).toBe(true);
+		expect(stepAllowed(P('C', 7), stepPitch(P('C', 7), 1))).toBe(false);
+	});
+
+	it('bounds the octave and the semitone the same way', () => {
+		expect(stepAllowed(P('C', 2), octavePitch(P('C', 2), -1))).toBe(true);
+		expect(stepAllowed(P('B', 1), octavePitch(P('B', 1), -1))).toBe(false);
+		expect(stepAllowed(P('C', 7), semitonePitch(P('C', 7), 1))).toBe(false);
+		expect(stepAllowed(P('C', 1, 1), semitonePitch(P('C', 1, 1), -1))).toBe(true);
+	});
+
+	it('reads the sounding pitch, so B sharp 0 is C1 and inside', () => {
+		expect(stepAllowed(P('C', 1), P('B', 0, 1))).toBe(true);
+		expect(stepAllowed(P('B', 6), P('C', 7, 1))).toBe(false);
+	});
+
+	it('lets a note read outside the limits step back toward them, never further out', () => {
+		expect(stepAllowed(P('E', 0), P('F', 0))).toBe(true);
+		expect(stepAllowed(P('E', 0), P('D', 0))).toBe(false);
+		expect(stepAllowed(P('E', 8), P('D', 8))).toBe(true);
+		expect(stepAllowed(P('E', 8), P('F', 8))).toBe(false);
 	});
 });
 

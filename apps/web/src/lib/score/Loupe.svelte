@@ -18,7 +18,7 @@
 	   or leaves.
 
 	   IT PRINTS NOTHING, like the selection mark it carries. ------------- */
-	import { onMount, type Snippet } from 'svelte';
+	import { onMount, tick, type Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { hasUnderlay, RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/score/selection-ring';
@@ -28,7 +28,9 @@
 import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
-	import { deriveMinGap, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/score/loupe-render';
+	import { followEntry, GrowOnlyWidth, HeldHeight } from '$lib/score/loupe-hold';
+	import { releasesFocus, type LoupeMode } from '$lib/score/loupe-panel.svelte';
+	import { deriveMinGap, pairSeparations, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/score/loupe-render';
 	import {
 		headBound,
 		MUSIC_MARK,
@@ -52,7 +54,6 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		parseSystemRange,
 		systemIndexOf,
 		type HitRect,
-		type LoupeMode,
 		type InkSpan,
 		type PageInk,
 		type Vertical,
@@ -632,7 +633,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		/** The strip's width: every panel side by side. */
 		stripWidth: number;
 		contentHeight: number;
-		/** The window's height, sized by the TALLEST system on the page. */
+		/** The window's height, from the page's ink band, held per measure (`HeldHeight`). */
 		windowHeight: number;
 		/** The y the frame's centre would sit on. Since N.149 only `stageTop`, `stageBottom` and the height are read from this frame; `anchorTop` hangs the card from its top. */
 		centreY: number;
@@ -644,10 +645,14 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		stageTop: number;
 		stageBottom: number;
 		system: number;
+		/** Calm-loupe slice 3: on one measure the width grows, never shrinks, and a growth eases (`loupe-hold.ts`). */
+		eased: boolean;
 		systems: number;
 	}
 
 	let frame = $state<Frame | null>(null);
+	const widthHold = new GrowOnlyWidth();
+	const heightHold = new HeldHeight();
 
 	/* WHERE THE RENDER IS MEASURED. `renderAnalyzedStaff` returns a string, and
 	   a string has no layout: `getBBox` on markup that is detached, in a
@@ -697,14 +702,6 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		let h = 0x811c9dc5;
 		for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193);
 		return `${text.length}:${(h >>> 0).toString(16)}`;
-	}
-
-	/** The smallest gap between neighbouring caret centres, in native units; Infinity with fewer than two. */
-	function worstSeparation(marks: readonly { x: number }[]): number {
-		const xs = marks.map((m) => m.x).sort((a, b) => a - b);
-		let worst = Infinity;
-		for (let i = 1; i < xs.length; i++) worst = Math.min(worst, xs[i] - xs[i - 1]);
-		return worst;
 	}
 
 	/** Each neighbouring pair under the floor, named by the gaps' own ids, for the console. */
@@ -1406,21 +1403,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   footprint widening two paragraphs down had to make up the
 		   difference every time a first- or last-note squircle came and
 		   went, and `frame.width` moved with it, `642.3` against `634.55`
-		   CSS px, under the singer's own hand. `CARET_MARGIN` now reserves
-		   `SQUIRCLE_CLEARANCE` itself, unconditionally, on both sides, so
-		   the dynamic widening's own `Math.min`/`Math.max` almost never has
-		   more to add than this fixed floor already holds, and `frame.width`
-		   stops moving with the selection on every measure this fixture
-		   carries (the whole-fixture stability walk, in the memo, is the
-		   proof). NOT ESTABLISHED past this fixture: a squircle wide enough
-		   (an unusually long IPA syllable, N.141's own width driver) to
-		   still exceed this floor would still touch the dynamic widening,
-		   and would still move `frame.width`, since nothing here can predict
-		   another note's own squircle short of building it, which is
-		   N.153's own extraction and out of this brief's scope. The ring and
-		   the frame's own `viewBox`, further down, are repointed from
-		   `view.left`/`viewSpan` to `bodyViewLeft`/`bodyViewSpan` so the crop
-		   that is drawn agrees with the crop this block reasons about. */
+		   CSS px, under the singer's own hand. `CARET_MARGIN` reserves
+		   `SQUIRCLE_CLEARANCE` itself, on both sides. CALM-LOUPE SLICE 3
+		   closed what that left open: the widening below and the barline
+		   nudges now take every selection and none, in either mode, so
+		   neither the taken note nor the mode can move them. */
 		const CARET_MARGIN = lineGap * 2 + SQUIRCLE_CLEARANCE;
 		let bodyViewLeft = view.left - CARET_MARGIN;
 		let bodyViewRight = view.right + CARET_MARGIN;
@@ -1521,10 +1508,12 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		/* N.149 r2 5c, RULED BY DANN 2026-09-20 11:54. THE CARETS AND THE
 		   PILL'S FILL ARE ONE CONDITION, `mode === m && syllablesOpen`: they
 		   appear together and go together, so a retracted panel restores the
-		   measure to how it looked when the loupe opened. Do not split them. */
+		   measure to how it looked when the loupe opened. Do not split them.
+		   CALM-LOUPE SLICE 3: placed in both modes, DRAWN only under that
+		   condition, so the card's width is the same in either mode. */
 		const marks: { after: string | null; x: number }[] = [];
 		const derivationSets: { after: string | null; x: number }[][] = [];
-		if ((derive || (mode === 'corrections' && syllablesOpen)) && positions.length > 1) {
+		if (positions.length > 1) {
 			const rectOf = (id: string) => sysEl.querySelector(`[data-hit="${CSS.escape(id)}"]`);
 			/* THE INK ITSELF: the union of a note's own group (excluding its
 			   hit rectangle, which is not ink) and everything stamped
@@ -1688,28 +1677,26 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			}
 			return out;
 			};
-			if (derive) {
-				/* EVERY SELECTION, and none. The worst separation over all of them is
-				   what the loop is handed, so the floor holds for whichever note the
-				   singer takes. The sets are returned together; the loop takes the
-				   minimum across them. */
+			/* EVERY SELECTION, and none. The worst separation over all of them is
+			   what the loop is handed, so the floor holds for whichever note the
+			   singer takes. The sets are returned together; the loop takes the
+			   minimum across them. SINCE CALM-LOUPE SLICE 3 A DRAWING RUNS IT TOO,
+			   so the nudges and the widening below are the measure's own. */
+			const own = { takenId, ringLeftEdge, ringRightEdge };
+			derivationSets.push(placeMarks());
+			for (const p of positions) {
+				if (p.kind !== 'entry') continue;
+				const hit = sysEl.querySelector(`[data-hit="${CSS.escape(p.id)}"]`);
+				const group = hit?.closest('[data-event-id]');
+				const box = hit && group ? ringBox(hit, group, p.id) : null;
+				if (!box) continue;
+				const e = ringEdgesOf({ ...box, stroke: RING_STROKE });
+				takenId = p.id;
+				ringLeftEdge = e?.left ?? null;
+				ringRightEdge = e?.right ?? null;
 				derivationSets.push(placeMarks());
-				for (const p of positions) {
-					if (p.kind !== 'entry') continue;
-					const hit = sysEl.querySelector(`[data-hit="${CSS.escape(p.id)}"]`);
-					const group = hit?.closest('[data-event-id]');
-					const box = hit && group ? ringBox(hit, group, p.id) : null;
-					if (!box) continue;
-					const e = ringEdgesOf({ ...box, stroke: RING_STROKE });
-					takenId = p.id;
-					ringLeftEdge = e?.left ?? null;
-					ringRightEdge = e?.right ?? null;
-					derivationSets.push(placeMarks());
-				}
-				takenId = null;
-				ringLeftEdge = null;
-				ringRightEdge = null;
 			}
+			({ takenId, ringLeftEdge, ringRightEdge } = own);
 			marks.push(...placeMarks());
 
 			/* THE BARLINE MOVES, NOT THE CARET: applied to the CLONE, so the
@@ -1731,32 +1718,24 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			if (openingNudge > 0 && opening) nudgeBarline(opening.x, -openingNudge);
 			if (closingNudge > 0 && closing) nudgeBarline(closing.right, closingNudge);
 
-			/* THE MARGIN'S OWN FLOOR, MEASURED ON THE FIXTURE, m. 2's head
-			   gap: the fixed two-line-gap `CARET_MARGIN` is not always
-			   enough. That gap's boundary is the opening barline, not the
-			   crop's own edge, and the position rule can place the mark
-			   anywhere between the barline and the squircle it precedes;
-			   where that midpoint lands close to `bodyViewLeft` anyway
-			   (measured: 0.015 units short of it), the arrowhead's own
-			   half-width (`armHalf`) crosses the crop and clause 5 item 5,
-			   whole marks only, breaks. The SAME risk holds for a mark that
-			   falls exactly ON the crop's edge, the fallback path takes
-			   above when a measure opens a system with no barline of its
-			   own (`x = bodyViewLeft` there, dead centre on the edge). So
-			   the margin widens again here, past whichever mark actually
-			   landed closest to an edge, and never narrower than the fixed
-			   margin above: `Math.min`/`Math.max` against the existing
-			   value, not a replacement of it. */
-			if (marks.length > 0) {
+			/* THE MARGIN'S OWN FLOOR. MEASURED on the fixture, m. 2's head gap:
+			   a mark can land 0.015 units short of `bodyViewLeft`, or on it
+			   (the fallback above), and its arrowhead then crosses the crop,
+			   breaking clause 5 item 5, whole marks only. So the margin widens
+			   past whichever mark lands nearest an edge, never narrower than
+			   the fixed margin. CALM-LOUPE SLICE 3: over every placement, for
+			   every selection and none, so the width is the measure's own. */
+			const everyPlace = [...marks, ...derivationSets.flat()];
+			if (everyPlace.length > 0) {
 				const footprint = armHalf + lineGap * 0.15;
-				const leftMost = Math.min(...marks.map((m) => m.x));
-				const rightMost = Math.max(...marks.map((m) => m.x));
+				const leftMost = Math.min(...everyPlace.map((m) => m.x));
+				const rightMost = Math.max(...everyPlace.map((m) => m.x));
 				bodyViewLeft = Math.min(bodyViewLeft, leftMost - footprint);
 				bodyViewRight = Math.max(bodyViewRight, rightMost + footprint);
 				bodyViewSpan = bodyViewRight - bodyViewLeft;
 			}
 
-			if (marks.length > 0 && !derive) {
+			if (marks.length > 0 && !derive && mode === 'corrections' && syllablesOpen) {
 				/* THE ARROWHEAD'S OWN LENGTH IS THE EXTENSION PAST THE STAFF, so the
 				   mark's outer end is the arrow's base and its apex just touches the
 				   staff line it terminates on: nothing stands proud of the arrow. One
@@ -1881,8 +1860,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   Every surface now pins the loupe's bottom edge a fixed lift above
 		   the stage's floor, so the singer's eye and thumb keep one
 		   relationship for the whole session on all three. */
-		/* The tallest drawing the page can produce, which is the narrowest
-		   measure's, capped by the magnification this modality asks for. */
+		/* The page's ink band at this scale; held per measure below (`HeldHeight`). */
 		const windowHeight = cropHeight * unitPx * magnification;
 		/* THE LOUPE IS CENTRED ON THE PAGE'S VISIBLE HEIGHT. It sat in the
 		   page's lower third before, which put it below the eyeline; that was
@@ -2118,7 +2096,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   ESTABLISHED beyond this fixture's own longest strings. */
 		const stripWidth = headWidth + meterWidth + carryWidth + bodyContentWidth + tailWidth;
 		const MIN_WIDTH = 280;
-		const width = Math.min(maxWidth, Math.max(MIN_WIDTH, stripWidth + FRAME_SIDES));
+		const fitted = Math.min(maxWidth, Math.max(MIN_WIDTH, stripWidth + FRAME_SIDES));
+		const { width, eased } = derive ? { width: fitted, eased: false } : widthHold.hold(`${measure}|${maxWidth.toFixed(1)}|${font ? 'face' : ''}`, fitted);
 
 		/* THE LOUPE CENTRES ON THE PAGE'S OWN AXIS, ruled by Dann 2026-08-27:
 		   it belongs to the page it magnifies, so it lines up with it at every
@@ -2160,6 +2139,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			stave,
 			viewBox: `${bodyViewLeft} ${cropTop} ${bodyViewSpan} ${cropHeight}`,
 			width,
+			eased,
 			left,
 			contentWidth: bodyContentWidth,
 			headWidth,
@@ -2185,7 +2165,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			ring,
 			stripWidth,
 			contentHeight,
-			windowHeight,
+			windowHeight: derive ? windowHeight : heightHold.hold(`${measure}|${maxWidth.toFixed(1)}|${unitPx.toFixed(3)}`, windowHeight),
 			centreY,
 			stageTop,
 			stageBottom,
@@ -2218,7 +2198,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			derived = deriveMinGap(drawnFrom.spacing.minGap, (g) => {
 				const a = attempt(g, true);
 				if (!a) return null;
-				return { worst: Math.min(...a.derivationSets.map(worstSeparation)) * a.scale, scale: a.scale };
+				const pairs = pairSeparations(a.derivationSets, a.scale);
+				return { worst: Math.min(Infinity, ...Object.values(pairs)), scale: a.scale, pairs };
 			});
 			if (spacingCache.size > 400) spacingCache.clear();
 			spacingCache.set(key, derived);
@@ -2306,6 +2287,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		if (!el) return;
 		el.addEventListener('click', handleTap);
 		return () => el.removeEventListener('click', handleTap);
+	});
+	/* Calm-loupe slice 4: the window follows the taken entry sideways (`followEntry`). */
+	$effect(() => {
+		const f = frame, el = windowEl, id = selectedEventId;
+		if (f && el && id) void tick().then(() => followEntry(el, id, f.ring, { across: GUTTER, down: 8 }));
 	});
 
 	const tag = $derived.by(() => {
@@ -2430,13 +2416,12 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	     frame would drop half its height as the animation ended. -->
 	<div
 		class="loupe"
+		class:eased={frame.eased}
 		style="left: {frame.left}px; width: {frame.width}px; top: {anchorTop}px;"
 	>
 		<div class="loupe-top" bind:offsetHeight={topH}>
-		<p class="loupe-tag" class:paired={!!noteLine}>{tag}</p>
-		{#if noteLine}
-			<p class="loupe-note">{noteLine}</p>
-		{/if}
+		<p class="loupe-tag">{tag}</p>
+		<p class="loupe-note">{noteLine || '\u00a0'}</p>
 		<div class="loupe-window" bind:this={windowEl} style="height: {frame.windowHeight}px;">
 			<!-- ARIA-HIDDEN for the reason the accidental glyphs already carry:
 			     this is the page said louder, not a second thing to hear. The
@@ -2649,7 +2634,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 						id="loupe-mode-{m}"
 						aria-selected={mode === m}
 						tabindex={mode === m ? 0 : -1}
-						onclick={() => onmode(m)}
+						onclick={(e) => (onmode(m), releasesFocus(e) && e.currentTarget.blur())}
 						onkeydown={handleModeKeydown}
 					>
 						{modeLabel(m)}
@@ -2774,29 +2759,33 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		}
 	}
 
+	/* Calm-loupe slice 3: a growth on one measure eases (`loupe-hold.ts`). */
+	.loupe.eased {
+		transition: width 150ms ease-out, left 150ms ease-out;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
-		.loupe {
+		.loupe,
+		.loupe.eased {
 			animation: none;
+			transition: none;
 		}
 	}
 
 	/* The measure tag, top left, naming what the loupe holds in words. The
 	   sage rectangle on the page says the same thing in its place. */
+	/* THE LOCATOR IS ALWAYS TWO LINES. Dann, 2026-09-28 01:31: *"I suggest
+	   placeholdering a second line of text even when it's not present."* In a
+	   gap the second line holds a no-break space, so the window below never
+	   moves between a note and a gap (calm-loupe slice 2; it was one line or
+	   two, 18 px apart, MEASURED on «Скучай» m. 3). */
 	.loupe-tag {
-		margin: 0 0 6px;
+		margin: 0 0 1px;
 		font-family: var(--font-sans, system-ui, sans-serif);
 		font-size: 0.6875rem;
 		font-weight: 600;
 		letter-spacing: 0.06em;
 		color: var(--ink-tertiary, #6a655f);
-	}
-
-	/* THE LOCATOR IS TWO LINES WHEN THERE IS A NOTE TO NAME, and the pair keeps
-	   the gap the single line had: the tag gives up its own bottom margin and
-	   the second line carries it, so the window below does not move when a note
-	   is taken or released. */
-	.loupe-tag.paired {
-		margin-bottom: 1px;
 	}
 
 	/* The second line, N.113b item 2. The measure tag says WHERE the loupe is
@@ -2813,10 +2802,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	}
 
 	/* The window is a constant height and the drawing is centred in it, so a
-	   short system sits in air rather than moving the frame. */
+	   short system sits in air rather than moving the frame. Slice 5: `safe`
+	   starts a drawing taller than the held window at its top (`followEntry`). */
 	.loupe-window {
 		display: flex;
-		align-items: center;
+		align-items: safe center;
 		justify-content: safe center;
 		/* N.153 STAGE 3b. The strip is no longer scaled down to fit the window
 		   (clause 8), so a measure whose derived spacing is wider than the room

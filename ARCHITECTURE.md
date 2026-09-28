@@ -96,6 +96,13 @@ Depends on nothing else in the workspace.
   - `Loupe.svelte` and `loupe.ts` are the magnified editor for one measure,
     and `CorrectionSurface.svelte` and `correction.ts` correct the notes.
     `undo-history.svelte.ts` is the corrections' Undo and Redo stack.
+    `correction-cursor.svelte.ts` is where the corrections' bar stands: on a
+    note, or in a gap between two. `loupe-panel.svelte.ts` holds the
+    loupe's mode and its panel, and the one condition the carets, the
+    cursor's stops, and the music keys all follow.
+    `loupe-hold.ts` lets the card grow, never shrink, while it stays on
+    one measure, holds the music window's height there, and keeps the
+    taken entry in the window's view.
   - `ScoreUploader.svelte` takes the file in, and `notation-fonts.ts` loads
     the notation font.
 - `src/lib/reader/` reads a score file. It is flat, with `vendor/` for the MuseScore converter's glue. `score-reader.ts`

@@ -13,6 +13,7 @@ import { ENGRAVING_DEFAULTS as E } from './engraving';
 import {
 	MAX_SPACING_RENDERS,
 	deriveMinGap,
+	pairSeparations,
 	renderLoupeMeasure,
 	renderLoupeSystem,
 	systemMarkup,
@@ -161,5 +162,63 @@ describe('N.153 stage 3b: the search for the smallest spacing that clears the fl
 
 	it('treats a render it cannot measure as clear, so a measure with no pair is left alone', () => {
 		expect(deriveMinGap(20, () => null, 44)).toMatchObject({ minGap: 20, iterations: 1, converged: true });
+	});
+
+	describe('calm-loupe slice 4: a pair the ceiling cannot clear is set aside', () => {
+		/* Two pairs: `a>b` grows with the spacing and clears at g >= 38.18, as
+		   in the test above; `head>a` stands at 18 px whatever the spacing, as
+		   the head caret and the caret after an opening rest did on «Скучай»
+		   m. 3. */
+		const twoPairs = (g: number) => {
+			const pairs = { 'a>b': 2 + 1.1 * g, 'head>a': 18 };
+			return { worst: Math.min(...Object.values(pairs)), scale: 1.5, pairs };
+		};
+
+		it('clears every other pair at the smallest spacing, not at the ceiling', () => {
+			const r = deriveMinGap(20, twoPairs, 44);
+			expect(r.stuck).toEqual(['head>a']);
+			expect(r.minGap).toBeGreaterThanOrEqual(38.18);
+			expect(r.minGap - 38.18).toBeLessThanOrEqual(0.5 + 1e-9);
+			expect(r.iterations).toBeLessThanOrEqual(MAX_SPACING_RENDERS);
+		});
+
+		it('stays unconverged and reports the true worst, so the caller still warns', () => {
+			const r = deriveMinGap(20, twoPairs, 44);
+			expect(r.converged).toBe(false);
+			expect(r.worst).toBe(18);
+		});
+
+		it('keeps the page spacing when only the stuck pair was short', () => {
+			const r = deriveMinGap(20, (g) => ({ worst: 18, scale: 1.5, pairs: { 'a>b': 60 + g, 'head>a': 18 } }), 44);
+			expect(r).toMatchObject({ minGap: 20, converged: false, stuck: ['head>a'], iterations: 3 });
+		});
+
+		it('answers the ceiling, as before, where the reading names no pairs', () => {
+			const r = deriveMinGap(20, (g) => ({ worst: 18 + 0 * g, scale: 1.5 }), 44);
+			expect(r).toMatchObject({ converged: false, stuck: [], iterations: 2 });
+			expect(r.minGap).toBeCloseTo((44 / 1.5) * 4, 6);
+		});
+	});
+});
+
+describe('pairSeparations', () => {
+	it('keys each adjacent pair by its gaps, in CSS px, smallest over every set', () => {
+		const sets = [
+			[
+				{ after: 'b', x: 30 },
+				{ after: null, x: 0 },
+				{ after: 'a', x: 10 },
+			],
+			[
+				{ after: null, x: 0 },
+				{ after: 'a', x: 12 },
+				{ after: 'b', x: 30 },
+			],
+		];
+		expect(pairSeparations(sets, 2)).toEqual({ 'head>a': 20, 'a>b': 36 });
+	});
+
+	it('is empty with fewer than two carets', () => {
+		expect(pairSeparations([[{ after: null, x: 5 }], []], 2)).toEqual({});
 	});
 });

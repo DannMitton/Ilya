@@ -161,7 +161,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		isDismissSwipe,
 		nearestTarget,
 		tapBand,
-		type LoupeMode,
 	} from '$lib/score/loupe';
 	import {
 		applyTuplet,
@@ -177,11 +176,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		middleLine,
 		positionsInMeasure,
 		previousEntry,
-		stepCursor,
 		toggleRest,
 		toggleTie,
 		tupletRun,
-		type Cursor,
 		type TupletDefinition,
 	} from '$lib/score/entry';
 	import type { NoteBase, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
@@ -198,11 +195,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		orphanIds,
 		semitonePitch,
 		sharpPitch,
+		stepAllowed,
 		stepPitch,
 		withCorrection,
 		type CorrectionMap
 	} from '$lib/score/correction';
 	import { stackLabel, UndoHistory } from '$lib/score/undo-history.svelte';
+	import { CorrectionCursor } from '$lib/score/correction-cursor.svelte';
+	import { keyOwnedElsewhere, LoupePanel } from '$lib/score/loupe-panel.svelte';
 	import { createPressAndHold } from '$lib/score/press-and-hold';
 	import { pitchLabel } from '$lib/voice/note-picker';
 	import type { IngestedScore } from '$lib/score/ingestion/ingest';
@@ -783,7 +783,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   on reload, so an in-place edit would be destroyed by the re-read. Keyed
 	   by event id, exactly as `doc.pairings` already is, and applied after the
 	   read on the way to the renderer. */
-	let selectedEventId = $state<string | null>(null);
+	/* THE CURSOR, and the bar's two places to stand, live in
+	   `$lib/score/correction-cursor.svelte.ts` (audit phase 4, slice 3). The
+	   page keeps the names every verb, prop, and comment in this file already
+	   uses, each a `$derived` read of the class, so what depends on them
+	   re-runs exactly when it did before the move. */
+	const loupePanel = new LoupePanel();
+	const stationCursor = new CorrectionCursor(() => correctedLine, () => loupePanel.caretsShown);
+	const selectedEventId = $derived(stationCursor.selectedEventId);
+	const gapAfter = $derived(stationCursor.gapAfter);
+	const cursor = $derived(stationCursor.cursor);
+	const inGap = $derived(stationCursor.inGap);
+	const { set: setCursor, move: handleMove } = stationCursor;
 
 	/** The line as the reader read it, before any hand correction. */
 	const readLine = $derived(ingestedScore?.result.score.vocalLine ?? []);
@@ -809,44 +820,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const selectedEvent = $derived(
 		selectedEventId ? correctedLine.find((ev) => ev.id === selectedEventId) : undefined,
 	);
-
-	/* ── THE INSERTION BAR'S PLACE (N.92 slice 3) ────────────────────────
-	   Speedy's bar stands ON an entry or IN a gap between two of them, and
-	   before this slice only the first of those existed. `selectedEventId` is
-	   still the entry selection, because the drawer, the page's own mark, and
-	   the keyboard all read it and none of them knows about gaps;
-	   `gapAfter` is the second state and the two are mutually exclusive.
-
-	   `undefined` MEANS NOT IN A GAP, and `null` means the gap before the
-	   first entry. Three states need three values, and collapsing the head gap
-	   into "no gap" would make the one place a part can be extended from
-	   unreachable. */
-	let gapAfter = $state<string | null | undefined>(undefined);
-
-	const cursor = $derived<Cursor | null>(
-		gapAfter !== undefined
-			? { kind: 'gap', after: gapAfter }
-			: selectedEventId
-				? { kind: 'entry', id: selectedEventId }
-				: null,
-	);
-
-	const inGap = $derived(gapAfter !== undefined);
-
-	function setCursor(next: Cursor | null): void {
-		if (!next) {
-			selectedEventId = null;
-			gapAfter = undefined;
-			return;
-		}
-		if (next.kind === 'entry') {
-			selectedEventId = next.id;
-			gapAfter = undefined;
-		} else {
-			selectedEventId = null;
-			gapAfter = next.after;
-		}
-	}
 
 	/* THE ARMED DURATION, which is what a gap has instead of a selection.
 	   Speedy arms a value and types it; the brief asks for a rest "of the lit
@@ -931,8 +904,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			doc.corrections = entry.corrections;
 			doc.pairings = entry.pairings;
 			doc.seatedText = entry.seatedText;
-			selectedEventId = entry.selected;
-			gapAfter = entry.gapAfter;
+			stationCursor.selectedEventId = entry.selected;
+			stationCursor.gapAfter = entry.gapAfter;
 		},
 	);
 	const { push: pushUndo, undo: handleUndo, redo: handleRedo } = undoHistory;
@@ -960,8 +933,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleStep(direction: 1 | -1): void {
 		const ev = selectedEvent;
 		const p = ev && currentPitch(ev, doc.corrections);
-		if (!p) return;
-		const next = stepPitch(p, direction);
+		const next = p && stepPitch(p, direction);
+		if (!p || !next || !stepAllowed(p, next)) return;
 		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
 		correct({ pitch: next });
 	}
@@ -969,8 +942,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleOctave(direction: 1 | -1): void {
 		const ev = selectedEvent;
 		const p = ev && currentPitch(ev, doc.corrections);
-		if (!p) return;
-		const next = octavePitch(p, direction);
+		const next = p && octavePitch(p, direction);
+		if (!p || !next || !stepAllowed(p, next)) return;
 		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
 		correct({ pitch: next });
 	}
@@ -999,8 +972,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleSemitone(direction: 1 | -1): void {
 		const ev = selectedEvent;
 		const p = ev && currentPitch(ev, doc.corrections);
-		if (!p || !ev) return;
-		const next = semitonePitch(p, direction, spellingContextFor(ev));
+		const next = p && ev && semitonePitch(p, direction, spellingContextFor(ev));
+		if (!p || !next || !stepAllowed(p, next)) return;
 		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
 		correct({ pitch: next });
 	}
@@ -1040,22 +1013,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		correct({ dots: on ? 0 : 1 });
 	}
 
-	/**
-	 * The stepper, and the DRAWER's Previous and Next note.
-	 *
-	 * N.92 slice 3 moved it from `neighbourId` onto `stepCursor`, so it walks
-	 * entry, gap, entry rather than note to note. Two things changed with it:
-	 * a rest is now a place the bar can stand, because this slice converts one
-	 * back to a note, and the gaps between entries are places, because this
-	 * slice enters entries into them.
-	 */
-	function handleMove(direction: 1 | -1): void {
-		const c = cursor;
-		if (!c) return;
-		const next = stepCursor(correctedLine, c, direction);
-		if (next) setCursor(next);
-	}
-
 	function handleDeleteNote(): void {
 		const id = selectedEventId;
 		if (!id) return;
@@ -1067,7 +1024,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			neighbourId(readLine, doc.corrections, id, -1);
 		pushUndo({ kind: 'text', key: 'loupe.undo.deleted' });
 		doc.corrections = withCorrection(doc.corrections, id, { deleted: true });
-		selectedEventId = next;
+		stationCursor.selectedEventId = next;
 	}
 
 	/* THE PER-NOTE RESTORE, back by Dann's ruling of 2026-08-27 and re-homed
@@ -1270,8 +1227,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   to sit under the cursor test, which was harmless while the only keys
 		   this function claimed were bare ones. N.113a's Undo and Redo run with
 		   no cursor, so the guard has to be the first thing that happens. */
-		const el = e.target as HTMLElement | null;
-		if (el?.closest('input, textarea, select, [contenteditable="true"]')) return;
+		if (keyOwnedElsewhere(e.target)) return; // fields, and since calm-loupe slice 6 a tablist
 
 		/* ── N.113a. UNDO AND REDO AS HOTKEYS ─────────────────────────────
 		   RULED BY DANN 2026-09-07: *"on the desk, Cmd-Z (macOS) / Ctrl-Z
@@ -1310,6 +1266,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 
 		if (!cursor) return;
 		if (e.metaKey || e.ctrlKey || e.altKey) return;
+		/* Calm-loupe slice 1: in Syllables mode only the moves act (`LoupePanel.musicKeys`). */
+		if (!loupePanel.musicKeys && !['ArrowLeft', 'ArrowRight', 'Escape'].includes(e.key)) return;
 
 		switch (e.key) {
 			case 'ArrowUp':
@@ -1398,38 +1356,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   owns a correction. That is the split `LoupeSyllables` and
 	   `ShiftLyricsControl` already keep. */
 	let loupeOpen = $state(false);
-	/* N.147, RULED BY DANN 2026-09-17: the syllable row's disclosure state
-	   lives "for the session only, with no `localStorage` write" (precedent
-	   `IntakePanel.svelte:166`, the row's own before this move) and "starts
-	   closed."
-	   IT LIVES HERE AND NOT IN `Loupe.svelte`, which the precedent's own
-	   component did not have to consider: `<Loupe>` is created and destroyed
-	   on every raise and dismiss (`{#if loupeAvailable && loupeOpen && cursor}`,
-	   below), so a `$state` local to it would reset to closed every time the
-	   loupe closed, which is "starts closed on every loupe," not "starts
-	   closed once per session." This is the one piece of `+page.svelte` state
-	   this brief adds. */
-	let loupeSyllablesOpen = $state(false);
-	/* N.149. THE LOUPE'S TWO MODES. Syllables draws no carets; Corrections
-	   draws them and holds the correction cells. RULED 2026-09-20: the loupe
-	   OPENS ON SYLLABLES, so this returns to it whenever the loupe closes and
-	   nothing remembers the last mode used (that is Dann's to rule, and he
-	   has not). Choosing a mode opens the panel, since a mode whose panel is
-	   shut is a label with nothing behind it. */
-	let loupeMode = $state<LoupeMode>('syllables');
-	/* The panel resets with the mode (desk, 2026-09-20, N.149 r2 5b): the
-	   pill's fill marks an open panel, so a re-raise must open with the panel
-	   shut and neither half coloured. This supersedes "once per session" above. */
+	/* The loupe's mode and panel (N.147, N.149) live in `loupe-panel.svelte.ts`,
+	   with their rulings; declared beside the cursor, reset when the loupe closes. */
 	$effect(() => {
-		if (!loupeOpen) {
-			loupeMode = 'syllables';
-			loupeSyllablesOpen = false;
-		}
+		if (!loupeOpen) loupePanel.reset();
 	});
-	function handleLoupeMode(mode: LoupeMode): void {
-		loupeMode = mode;
-		loupeSyllablesOpen = true;
-	}
 
 	/** The score document on a phone, in either orientation, with a read to correct. */
 	/* THE LOUPE IS ON BOTH MODALITIES NOW, slice 4. `isPhone` is gone from this
@@ -5090,10 +5021,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		slots={slotQueue}
 		pairings={shownPairings}
 		onplace={placeSyllableOnSelected}
-		syllablesOpen={loupeSyllablesOpen}
-		ontogglesyllables={() => (loupeSyllablesOpen = !loupeSyllablesOpen)}
-		mode={loupeMode}
-		onmode={handleLoupeMode}
+		syllablesOpen={loupePanel.open}
+		ontogglesyllables={loupePanel.toggle}
+		mode={loupePanel.mode}
+		onmode={loupePanel.choose}
 		{undoLabel}
 		{redoLabel}
 		onundo={handleUndo}
