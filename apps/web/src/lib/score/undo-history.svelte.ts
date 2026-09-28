@@ -126,6 +126,17 @@ export class UndoHistory {
 		this.#write(top);
 		this.redoStack = this.redoStack.slice(0, -1);
 	};
+
+	/* EMPTIES BOTH STACKS, and writes nothing back. Called by `switchSong`
+	   alone (`brief-code-undo-cleared-on-song-switch_r1_2026-09-27.md`): an
+	   entry holds one song's maps, and `write` assigns them to whichever
+	   document is open, so an undo carried across a switch wrote the outgoing
+	   song's corrections and pairings into the incoming one, which then
+	   autosaved. Reproduced 2026-09-27 before this was added. */
+	clear = (): void => {
+		this.undoStack = [];
+		this.redoStack = [];
+	};
 }
 
 /* THE PILL'S SENTENCE IS COMPOSED AT RENDER, and both pills name the SAME

@@ -96,3 +96,7 @@ pressed after a switch writes the OUTGOING song's `corrections`, `pairings`,
 and `seatedText` into the incoming song's document, which autosaves. Left as
 it was by the brief's §5 ("If you find a bug, report it and leave it"). The
 fix is one call in `switchSong` once Dann rules it in.
+
+**Update, 2026-09-27.** Reproduced in the browser, then fixed by
+`brief-code-undo-cleared-on-song-switch_r1_2026-09-27.md`: `UndoHistory.clear`,
+called in `switchSong`. `WRITTEN`.

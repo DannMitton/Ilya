@@ -1127,7 +1127,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		setCursor({ kind: 'entry', id });
 	}
 
-	/** The dot. On an entry it toggles one; in a gap it arms one. */
 	/**
 	 * The dot, CUMULATIVE, ruled by Dann 2026-08-27: dot, double dot, none, the
 	 * accidental verbs' own grammar. It is an action rather than a state, which
@@ -3699,6 +3698,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	async function switchSong(id: string): Promise<void> {
 		if (id === doc.id || switching) return;
 		switching = true;
+		undoHistory.clear();
 		try {
 			await doc.close();
 			writeActiveSongId(localStorage, id);

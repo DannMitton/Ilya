@@ -163,6 +163,42 @@ describe('UndoHistory', () => {
 		expect(h.history.undoStack[0].corrections).toBe(before);
 	});
 
+	it('clear empties both stacks and writes nothing back', () => {
+		const h = harness(empty);
+		h.history.push({ kind: 'text', key: 'first' });
+		h.set({ corrections: deleted('e1') });
+		h.history.push({ kind: 'text', key: 'second' });
+		h.set({ corrections: deleted('e2') });
+		h.history.undo();
+		expect(h.history.undoStack).toHaveLength(1);
+		expect(h.history.redoStack).toHaveLength(1);
+		const writes = h.writes;
+		const state = h.state;
+
+		h.history.clear();
+
+		expect(h.history.undoStack).toEqual([]);
+		expect(h.history.redoStack).toEqual([]);
+		expect(h.writes).toBe(writes);
+		expect(h.state).toBe(state);
+	});
+
+	it('after clear, undo and redo leave a different song untouched', () => {
+		/* The song-switch case: song A's entry must not reach song B. */
+		const h = harness({ ...empty, corrections: deleted('a1'), pairings: seated('a1') });
+		h.history.push({ kind: 'change', from: 'B♭3', to: 'C♭4' });
+		h.history.clear();
+		h.set({ ...empty });
+		const songB = h.state;
+
+		h.history.undo();
+		h.history.redo();
+
+		expect(h.state).toBe(songB);
+		expect(h.state.corrections).toEqual({});
+		expect(h.state.pairings).toEqual({});
+	});
+
 	it('its verbs work detached from the instance, as the page passes them', () => {
 		const h = harness(empty);
 		const { push, undo, redo } = h.history;
