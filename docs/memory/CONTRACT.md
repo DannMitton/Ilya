@@ -17,6 +17,17 @@ Read this every session. It is short on purpose.
    in the same breath, in words that the next session cannot read as a
    caveat.
 
+6. **Quality over speed. The date never sizes the work.** Ruled by Dann
+   2026-09-27 20:50, after the desk recommended moving refactor work past the
+   release to fit 2026-10-30, the day after he had amended that date to a
+   target. His words: *"Why won't you join me when I say over and over
+   'quality over speed'"*, and *"Ilya is a scholarly tool for an audience that
+   is highly educated and highly judgmental... if it is not a pleasure to use,
+   people will not use it or share it."* So: never recommend cutting,
+   deferring, or thinning work to meet a date. When the work and the date
+   disagree, the date moves. Plan for speed by doing the work better and in
+   parallel, never by doing less of it.
+
 The tethers below are how you stay honest while doing this. They are not a
 reason to stop.
 

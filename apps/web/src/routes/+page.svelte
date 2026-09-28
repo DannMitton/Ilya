@@ -203,6 +203,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type CorrectionMap
 	} from '$lib/score/correction';
 	import { stackLabel, UndoHistory } from '$lib/score/undo-history.svelte';
+	import { createPressAndHold } from '$lib/score/press-and-hold';
 	import { pitchLabel } from '$lib/voice/note-picker';
 	import type { IngestedScore } from '$lib/score/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
@@ -1194,50 +1195,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	);
 
 	/* ── PRESS AND HOLD REPEATS (N.92 slice 3) ───────────────────────────
-	   From the ruled gesture table: holding a stepper arrow or a pitch verb
-	   repeats it while held, and NOTHING ELSE takes a hold. The table reserves
-	   press-and-hold on the page and on the loupe deliberately, because the
-	   platform trains it for text selection and for context menus.
-
-	   THE FIRST FIRE IS THE CLICK'S, not the hold's. The hold starts repeating
-	   only after 400 ms, so an ordinary tap is a tap and never a tap plus a
-	   repeat. 110 ms between repeats is about nine a second, which walks a
-	   line at reading speed without outrunning the eye.
-
-	   IT ENDS ON ANYTHING. `pointerup`, `pointercancel`, and `pointerleave`
-	   all stop it, because a repeat that outlives the finger is the worst
-	   failure this can have: it would run to the end of the part. */
-	const HOLD_DELAY = 400;
-	const HOLD_EVERY = 110;
-	let holdTimer: ReturnType<typeof setTimeout> | null = null;
-	let holdBeat: ReturnType<typeof setInterval> | null = null;
-
-	function stopHold(): void {
-		if (holdTimer !== null) clearTimeout(holdTimer);
-		if (holdBeat !== null) clearInterval(holdBeat);
-		holdTimer = null;
-		holdBeat = null;
-	}
-
-	function onhold(fire: () => void) {
-		return (e: PointerEvent) => {
-			stopHold();
-			const target = e.currentTarget as HTMLElement | null;
-			if (!target || (target as HTMLButtonElement).disabled) return;
-			const end = () => {
-				stopHold();
-				target.removeEventListener('pointerup', end);
-				target.removeEventListener('pointercancel', end);
-				target.removeEventListener('pointerleave', end);
-			};
-			target.addEventListener('pointerup', end);
-			target.addEventListener('pointercancel', end);
-			target.addEventListener('pointerleave', end);
-			holdTimer = setTimeout(() => {
-				holdBeat = setInterval(fire, HOLD_EVERY);
-			}, HOLD_DELAY);
-		};
-	}
+	   The timers, the two delays, and the rules they keep live in
+	   `$lib/score/press-and-hold.ts` (audit phase 4, slice 2). Nothing here
+	   owns any of it: the surface takes `onhold` as a prop, and
+	   `dismissLoupe` calls `stopHold`. */
+	const { onhold, stopHold } = createPressAndHold();
 
 	/* ── THE NOLET ROW ───────────────────────────────────────────────────
 	   The DURATION station swapped in place for one definition row, and the

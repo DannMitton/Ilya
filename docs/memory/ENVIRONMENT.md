@@ -4374,6 +4374,8 @@ Built for N.174 C.2. `../sessions/n174-c2/`: `capture.test.ts` (Text, Markup, In
 - **The fixture is a copy outside the tree** (md5 `8341a301d78abcba62098cbcee764b62`), so moving the fixture cannot change the input.
 - **Hide scrollbars** (the harness injects the CSS); a visible thumb differed by one pixel run to run.
 - **Known noise:** pixel (1423, 24) on the voiced Markup mid-scroll captures wobbles by one level per channel between identical runs. The comparator tolerates exactly that and nothing else.
+- **Known flake, 2026-09-27:** `desk-en-4-learn-a-top` can be captured before Learn's text loads, and the page is then blank. It happened once in a baseline at `eab54f9`; a second baseline matched the slice exactly. **When only a Learn capture differs, recapture both sides before reporting.**
+- **Playwright deletes `apps/web/test-results/` on every run**, and the patches below live there. Found by Code 2026-09-27, which lost one. **Stage a patch to the desk before anyone runs Playwright again.**
 - **Positive control, done once:** a one-letter change to `tab.insights` in English changed all 30 English captures and none of the French.
 - **Handing Code's uncommitted slice to the desk:** `git --no-optional-locks diff HEAD -M --binary > apps/web/test-results/_desk-n174/<name>.patch` (git-ignored), stage it, `git apply` it to a copy of the cloud clone, capture. Confirm the served page is the new code with one probe (a class or a request path the slice changed).
 

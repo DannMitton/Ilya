@@ -76,7 +76,10 @@ and its logic is testable.
    and its test. The page keeps `pushUndo`, `handleUndo`, and `handleRedo` as
    bindings, so no caller changed.
 2. **Press and hold.** `onhold` and `stopHold` touch no page state; a plain
-   module. The lowest-risk slice left.
+   module. The lowest-risk slice left. `WRITTEN` 2026-09-27:
+   `lib/score/press-and-hold.ts` (`createPressAndHold`) and its test. The
+   page destructures `onhold` and `stopHold` from it, so no caller changed.
+   `+page.svelte` 6,135 to 6,097 lines.
 3. **The cursor.** `selectedEventId`, `gapAfter`, `cursor`, `inGap`,
    `setCursor`, `handleMove`. The most readers outside (§2), all read-only
    except `dismissLoupe` and the page tap.
