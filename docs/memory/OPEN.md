@@ -402,6 +402,8 @@ the paths already). Whoever takes N.142 should be told this.
 
 **The draft lives in** `../sessions/draft-curation-rules_r1_2026-09-24.md`: the ten rules, Dann's reaction to each, the desk's revisions, and the open questions. **Not ruled.** Nothing in it is quoted back as law; each revision is dated there.
 
+**PARTLY RULED 2026-09-28 16:28 (r4, THE GATES, in the draft):** Dann: *"yes"*. **One set of gates serves both** Markup's « Points à surveiller » box and Insights. **About two entries per printed page, as a trial** (Dann 16:30: *"I'm a little spotty on the two entries per printed page ... We will try it and see how it goes."*). Both are defaults, open to refinement (his words 16:26: *"let's stay flexible about refining them in future in case they are not just right"*). **The stakes threshold stays open:** a starting value is tried on «Скучай» and Sunless 1 and judged by what reads. Gate order and sources: the draft, r4.
+
 **What it governs:** every Insights comment, including N.168's connections and N.172's intake answers.
 
 **Done when:** Dann says the rules are ready to record in `PRODUCT.md`. Until then, work proceeds against the latest draft and feeds what it learns back into it.
@@ -486,22 +488,6 @@ Questions 1 to 5 are optional and answered "secure", "mostly", or "still develop
 **Placement, DESK INFERENCE, his to rule:** steps 1 and 2 in week 3 (from 2026-09-28), step 3 in week 4, step 6 before the checkpoint of 2026-10-09. Under the freeze rule, most builds from step 7 land after 2026-10-30.
 
 **Done when:** step 6 is ruled and every cluster is numbered or recorded as LATER.
-
-## N.169. ILYA'S MARKUP AGAINST THE DISSERTATION'S APPENDIX B. Numbered by Dann 2026-09-24 10:09. UNSCHEDULED
-
-**The item.** On the 2026-09-24 walk, Dann compared Sunless 2 on Markup with the same song in his dissertation (Appendix B) and was distracted by the disparities. His words: *"would like to resolve these differences, or at least understand why Ilya is offering different values than my earlier ones from my dissertation."*
-
-**Established the same morning.** Same method both sides: the grey head is the turning pitch "an octave below my fR1 values" (thesis, Appendix B, p. 206, `~/Documents/_ARCHIVE 2026-07/Documents & Research/Mitton_Daniel_A_202006_DMA_thesis.pdf`); Ilya's lavender head is `fR1 / 2` (`packages/score-parser/src/overlay-engine.ts:169`, drawn at `staff-renderer.ts:2997`). Three inputs differ:
-
-1. **The vowel on about ten unstressed syllables**, Ilya's transcription against his 2018 underlay: Ме [mʲi]/[mʲe], ни- [ɲɪ]/[ɲi], е-го [jɪ]/[je], мгновенье [ɲjɪ]/[ɲjɛ], пе-ре- [rʲɪ]/[rʲe], наслажденье [nʌ]/[nɑ] and [ɲjɪ]/[ɲjɛ], горечь [rʲi]/[rʲe], забвенья [za]/[zɑ], у-ло-вил [vʲiɫ]/[vɨɫ] (the last read from the PDF's extracted text; check the page). **Which is right is Dann's diction ruling.**
-2. **The fR1 values**: dissertation §5.3.3 (2018) against his calibration of 2026-08-12, 7 of 10 measured. His live values are in the browser, not in `~/Downloads/Ilya, September 21, 2026.ilya`. NOT ESTABLISHED how far they move each head.
-3. **Notation only**: Ilya draws the Finale file's treble-8vb clef (middle line B3, `staff-renderer.ts:418`) where he engraved bass clef; Ilya shows a 2/4 first bar where the thesis shows 4/4 over a two-beat bar. **Reversed by Dann two minutes later, 10:17:** the pickup should carry the song's 4/4, and Ilya's 2/4 is wrong. Moved to the Code brief `../sessions/brief-code-vowel-chart-all-ten_r1_2026-09-24.md`, fifth finding; no longer part of this item.
-
-**Control already in the tree:** `tools/n168-frequency-run/out/notes-mitton.csv`, Sunless 02, 68 notes, is Ilya's engine run with the 2018 values; against the thesis it isolates cause 1 from cause 2.
-
-**The target, shown by Dann 2026-09-24 10:28:** his dissertation's Appendix B, p. 207 (Sunless 1), *"this is the kind of document we are looking to replicate"*: bass clef, 6/4, grey turning heads, stems up for close timbre and down for open, IPA under the Cyrillic. **Also found the same morning:** `~/Downloads/Mussorgsky - Sunless 01 - Within Four Walls (engraved).musicxml` carries 6/8 at bar 1 and 12/8 from bar 2 (read from the file); the printed edition and the dissertation both say 6/4.
-
-**Next step when it is picked up:** a screenshot of the Voice band's values, then a note-by-note table (pitch, vowel, turning pitch, both versions, cause per row).
 
 ## N.168. INSIGHTS INTAKE: FILLING THE THREE STORES. Numbered by Dann 2026-09-23 17:29. "ASAP"
 
@@ -1412,7 +1398,7 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 > justification."* **So layout, measure distribution and horizontal spacing are
 > editorial, and the standard is justification rather than prohibition.**
 >
-> **SUPERSEDED IN PART 2026-09-16: the control belongs in the Score Markup section, between Corrections and Voice (Dann), and N.94 is IN the release.** **N.94 HAS A HOME AGAIN, 2026-09-13.** Numbered 2026-08-24 as "transposition
+> **SUPERSEDED 2026-09-28: the home is the Piece band and a floating key ruler (Dann accepted drawing r4). See `STATE.md`, "N.94, THE KEY RULER".** **SUPERSEDED IN PART 2026-09-16: the control belongs in the Score Markup section, between Corrections and Voice (Dann), and N.94 is IN the release.** **N.94 HAS A HOME AGAIN, 2026-09-13.** Numbered 2026-08-24 as "transposition
 > interface, modelled on Newzik" and never built. It is now a **station inside
 > the `Melody` band, sibling to Corrections**. Established: the ENGINE already
 > exists and ships. `packages/score-parser/src/transposition.ts` exports
@@ -1534,6 +1520,16 @@ His words: *"Ideally a corrected score comes back out of Ilya, but we conceded t
 4. **There is no stopping rule, and that is deliberate.** *"I don't see a stopping rule or boundary for the user. They should be able to intentionally break a score or even recompose one... they maybe able to enter a melody from scratch using Ilya only as the composition device! Why not?"* So the edit set is not fenced by "repair only". **The desk's note, for the record:** N.151 as specified still delivers the repair case first; composing from scratch needs measures and a meter to exist before a note can be placed, and nothing in the tree creates an empty song's first measure. That gap is named, not solved, here.
 5. **Files: deliberate destruction only.** Dann: *"if the singer wants to overwrite the file, they should be able to. Or even delete it and start again. What we don't want is the unwitting deletion or overwriting of files the user still wants."* Replace and Delete stay, each behind a clear act.
 6. **The composer's notation binds the edit set too.** Dann: the set is *"beholden to what the composer has written and the specifics of their notation... especially if that notation impacts aspects that will meaningfully affect the performance."* So Ilya must be able to hold what the page holds where it changes the singing, not only what Ilya's own arithmetic consumes.
+
+### THE CALM LOUPE, 2026-09-27 AND 2026-09-28. Seated here at the close of 2026-09-28 so they do not live only in LOG
+
+Built and shipped (`7d2fcd6`, `8127e01`); walked by Dann 2026-09-28 14:47 and 16:01.
+- **RATIFIED by Dann 2026-09-27 21:26** (*"Sure"*): pitch steps stop at **C1 and C7**; at a bound the key and the hold do nothing and nothing goes to Undo. A bound moves if a real score is found that writes past it. In the tree: `lib/score/correction.ts:198-214`.
+- **RATIFIED by Dann 2026-09-27 20:07** (*"I agree, ratified"*): while the singer stays on one measure, the frame may grow but never shrinks, and the magnification may drop but never climbs back; eased about 150 ms, none under reduced motion; both reset on a new measure or on closing. The frame opens tight, as clause 12 rules.
+- **Proposed by Dann 2026-09-27 20:05, recommended by the desk:** a second click on the filled mode pill closes the panel.
+- **Dann's proposal 2026-09-27 21:22**, extending ruling 6 of 2026-09-20: the music window scrolls inside itself; the card and its buttons never move while a pitch is held.
+- **DESK DEFAULTS under Dann's delegation of 2026-09-28 01:36** (*"Take best practices and apply them to this interface and make the Loupe work elegantly for us"*), walked by him: in Syllables mode the music keys (Up, Down, `+`, `-`, digits, `.`, Delete) do nothing; one squircle marks every stop, note, rest and caret alike (`stop-ring.ts`).
+- **Seen, not a defect yet (14:47):** with a note at E1 the window follows it down and the IPA and lyric rows scroll out of view. Whether slice 7 settled it is NOT ESTABLISHED.
 
 ### THE CARET, RULED BY DANN 2026-09-17 (the N.92 insert-reach slice, drawn in `n92-carets-on-the-measure.html`)
 

@@ -118,7 +118,7 @@ design rows.
 
 - [ ] **The tree audit. STARTED 2026-09-24 21:25 on Dann's instruction ("the audit now, please"); the desk had placed it after the Sunday reset, which he overruled.** Asked for by Dann 2026-09-24 21:11: catalogue what the code really contains, tie each module to an open item, and propose a new number for any chunk the plan does not describe. Two Sonnet agents: one catalogues the code (223 source files, about 91,000 lines, counted 2026-09-24), one checks every ruled string against the tree. **Placed by the desk, DESK DEFAULT.**
 - [ ] **N.171**, switch on the `#` repair (numbered by Dann 2026-09-24 21:40). Code builds from `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`; Dann walks a Sunless song with a `#`. **Placed by the desk, DESK DEFAULT.**
-- [ ] **N.169**, the note-by-note table against Appendix B (one evening). The desk builds it from `tools/n168-frequency-run/out/notes-mitton.csv` and a screenshot of Dann's Voice band; Dann rules the vowels. **Placed 2026-09-24, DESK DEFAULT.**
+- [x] **N.169** (CLOSED by Dann 2026-09-28 16:09; shipped `8127e01`), the note-by-note table against Appendix B (one evening). The desk builds it from `tools/n168-frequency-run/out/notes-mitton.csv` and a screenshot of Dann's Voice band; Dann rules the vowels. **Placed 2026-09-24, DESK DEFAULT.**
 - [ ] **N.168, P1a**: Fable redrafts the English from `p1a-counts.csv`, the desk checks every claim against its extraction row, Dann vets one draft. **Placed 2026-09-24, DESK DEFAULT.**
 
 - [x] **N.127 increment 2. Built `0ccda31`/`ccb790c`, WALKED by Dann in both languages 2026-09-24.**: the compass stave, the piece's range against the singer's.
@@ -134,7 +134,7 @@ design rows.
 
 - [ ] **N.123, part 2**: the half-mass band, and the centre of gravity and cycle dose if their sources were found. A figure without a source is left out, not guessed.
 - [ ] **N.94, part 2**, and its walk.
-- [ ] **N.82**: the watch band's sentences move out of code and into both languages; Dann rules the French.
+- [x] **N.82** (seated, Dann's look 16:17; shipped `8127e01`): the watch band's sentences move out of code and into both languages; Dann rules the French.
 - [ ] **Friday 2026-10-09, the checkpoint.** Anything design-bound not yet in Code moves to LATER.
 
 ## Week 5. Monday 2026-10-12 to Sunday 2026-10-18. Clean house. (Monday is Thanksgiving.)
@@ -148,9 +148,9 @@ design rows.
   The ship script cannot do it. Full sequence, the verification that works, and the
   traps are in `ENVIRONMENT.md` §`HOW A RELEASE ACTUALLY GOES OUT`. **The public URL
   is `ilya.dannmitton.com`, not the apex** (§`THE PUBLIC ILYA URL`).
-- [ ] **N.85**: README, CONTRIBUTING, code of conduct. The desk drafts; Dann reads every word.
+- [x] **N.85** (README, CONTRIBUTING, code of conduct; shipped `8127e01`): README, CONTRIBUTING, code of conduct. The desk drafts; Dann reads every word.
 - [ ] **Desk housekeeping**: COLOUR-7, INBOX-17, INBOX-31 into `PRODUCT.md`.
-- [ ] **N.154. EVERY USER-FACING STRING SAYS WHAT THE APP NOW IS, both languages.**
+- [x] **N.154** (walked in French 16:03; shipped `8127e01`). ** EVERY USER-FACING STRING SAYS WHAT THE APP NOW IS, both languages.**
   Numbered 2026-09-19, DESK DEFAULT number, on Dann's instruction: *"we need to
   align all of our text with the actual evolved app."* **The seed, found
   2026-09-19:** `tab.fit:109` still reads "Fit", and `calib.welcome.lede:1056`

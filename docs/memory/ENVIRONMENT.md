@@ -28,6 +28,7 @@ next session the same hour it cost the last one.
 | you sent a file to the Mac and are about to say it is saved | `device_commit_files CAN REPORT SUCCESS` |
 | move a gate number | `Moving a gate baseline` |
 | the ship script refuses to run | `refuses on untracked files` |
+| the desk's own shell dies with exit 144, or you plan to message Code directly | `THE DESK HAS NO LINE TO CODE, AND PKILL KILLS ITS OWN SHELL` |
 | an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
 | a stale `.git/index.lock` blocks Dann's commit | `CHECK-IGNORE TAKES THE INDEX LOCK` |
 | you are about to run ANY read-only git from the bridge | `NO-OPTIONAL-LOCKS IS THE FIX` |
@@ -4386,3 +4387,10 @@ In N.174 D.2.5 Code served the base commit (from `git archive`) on port 5174 bes
 ## GREP CALLS binder.ts BINARY. 2026-09-27
 
 `apps/web/src/lib/library/binder.ts` holds bytes that make plain `grep` report "binary file matches" and print no line, so a scan for importers missed its import of the zip reader. **Grep the tree with `-a`.** `svelte-check` catches the import either way.
+
+## THE DESK HAS NO LINE TO CODE, AND PKILL KILLS ITS OWN SHELL. 2026-09-28
+
+- **No direct line from the desk to Code exists.** Checked twice, 2026-09-28 01:40 and 01:44: `ListAgents` came back empty. The desk once told Dann otherwise and had to take it back. Every hand-off goes through Dann: the desk writes a brief under `docs/sessions/`, and Dann pastes one line into Code.
+- **`pkill` with a broad pattern in the desk's cloud shell killed the shell itself** (exit 144), 2026-09-28. Stop a server by the PID you started it with, never by pattern.
+- **`tspace.library.utoronto.ca` refuses fetching (robots.txt).** Do not get round it. Ask Dann for the file, or cite the handle (`hdl.handle.net/1807/100864`) without reading it.
+

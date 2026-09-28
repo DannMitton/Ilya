@@ -1,6 +1,6 @@
 # Brief for Code: the watch band says less
 
-> **ON HOLD, 2026-09-28 16:24. The fixed count of three is WITHDRAWN** (Dann, 16:23: *"This does not make sense for a challenging multipart epic song."*). The box will be gated by N.173's rules instead; the desk is drafting the gates for his ruling. **Do not build §"The ruling" until this note is removed.** The four fixes below stand and may be built on their own.
+> **UPDATED 2026-09-28 16:28. The fixed count of three is WITHDRAWN** (Dann, 16:23). **Build the gates instead:** `docs/sessions/draft-curation-rules_r1_2026-09-24.md`, section "Revision r4 … THE GATES", with its ruling of 16:28 (one set of gates for Markup's box and Insights; about two entries per printed page). **The stakes threshold is a STARTING VALUE for trial:** choose one, state it and its reasoning, and report what the box shows on «Скучай» and on Sunless 1 at that value, so Dann can judge by reading. **The page limit is a trial too** (Dann, 16:30): list any entry the limit dropped, per page, so he can see where it bit. Where a gate needs data Ilya does not yet have (dynamics are not parsed; a sourced "thing to try" exists only for some kinds), say so and let that gate pass or fail conservatively. §"The ruling" below is superseded by this note.
 
 **Desk brief r1, 2026-09-28.**
 

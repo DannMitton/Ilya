@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Key ruler, drawing r2</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#d9d3e0;--paper:#f3efe6;--ink:#2b2724;--ink2:#6a655f;--lav:#8e82a8;--lavfill:#d8d1e4;--hair:#c9c2d6;--band:#4a5d8a}
+body{margin:0;background:var(--bg);font-family:"Source Sans 3",sans-serif;color:var(--ink);padding:24px 16px}
+h1{font-family:"Source Serif 4",serif;font-weight:400;font-size:22px;margin:0 0 4px}
+.note{font-size:14px;color:var(--ink2);margin:0 0 24px;max-width:900px}
+.plate{background:#fff;border-radius:10px;padding:18px;margin:0 auto 28px;max-width:980px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.plate h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--lav);margin:0 0 12px}
+.row{display:flex;gap:18px;flex-wrap:wrap}
+.drawer{width:300px;background:#faf8f3;border-radius:12px;overflow:hidden;flex:0 0 auto}
+.bandh{background:var(--band);color:#fff;font-size:11px;font-weight:600;letter-spacing:.12em;padding:12px 18px}
+.field{margin:8px 18px;border:1px solid #d8d3cb;border-radius:3px;padding:6px 8px;font-size:12px;color:var(--ink2);background:#fff}
+.keyline{margin:14px 18px 16px;padding-top:10px;border-top:1px solid #e3ded6;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.keyline b{font-weight:600}
+.pill{border:1px solid var(--ink);border-radius:999px;padding:4px 12px;font-size:12px;background:#fff;white-space:nowrap}
+.pill.filled{background:var(--lav);border-color:var(--lav);color:#fff}
+.page{flex:1 1 520px;min-width:300px;background:var(--paper);border-radius:4px;position:relative;padding:22px 26px 28px;box-shadow:0 1px 6px rgba(0,0,0,.12)}
+.title{font-family:"Source Serif 4",serif;font-style:italic;font-size:22px;margin:0}
+.meta{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:4px 0 10px}
+.trans{font-family:"Source Serif 4",serif;font-size:13px;color:var(--lav);margin:0 0 10px}
+.stave{height:34px;border-top:1px solid #444;border-bottom:1px solid #444;background:repeating-linear-gradient(to bottom,transparent 0 7.5px,#444 7.5px 8.5px);margin:18px 0 22px;opacity:.75}
+.ruler{position:absolute;left:14px;right:14px;top:10px;background:rgba(250,248,243,.97);border:1.4px solid var(--ink);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);padding:10px 14px 12px}
+.readout{text-align:center;font-weight:600;font-size:14px;margin-bottom:6px}
+.readout span{font-weight:400;color:var(--ink2)}
+.ticks{display:flex;justify-content:space-between;align-items:flex-end;padding:0 4px}
+.t{display:flex;flex-direction:column;align-items:center;font-size:11px;color:var(--ink2);width:34px}
+.t i{display:none}
+.t{padding:4px 0;min-height:34px;justify-content:center}
+.t small{font-size:9.5px;color:var(--ink2);opacity:.8;line-height:1.1}
+.enh{display:flex;flex-direction:column;align-items:center;line-height:1.15}
+.t.home{background:#e8e4dc;border-radius:6px;padding:2px 0;color:var(--ink)}
+.t.sel b{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--lav);color:#fff;font-size:12px}
+.t.run span{border-bottom:2px dotted var(--lav)}
+.dir{display:flex;justify-content:space-between;font-size:10px;color:var(--ink2);margin-top:4px;letter-spacing:.08em;text-transform:uppercase}
+.act{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.legend{font-size:12px;color:var(--ink2);margin-top:12px;line-height:1.5}
+</style></head><body>
+<h1>The key ruler, drawing r2</h1>
+<p class="note">A drawing for Dann to react to, 2026-09-28. The song and keys are an illustration (a song printed in D major, Ilya recommending down a minor third). Colours and type follow Ilya's page; sizes are approximate. <b>r2:</b> the tick marks are gone (the key names are the stops), and every key that has a practical enharmonic spelling shows both.</p>
+
+<div class="plate"><h2>1 · The way in: the Piece band</h2>
+<div class="row">
+<div class="drawer"><div class="bandh">PIECE</div>
+<div class="field">Скучай. Ты создана для</div><div class="field">Without Sun, no. 4</div><div class="field">Modest Mussorgsky</div>
+<div class="keyline"><span>Key: <b>D major</b>, as printed</span><span class="pill">Try another key</span></div></div>
+<div class="legend" style="flex:1;min-width:240px">The key is a fact about the whole song, so it sits with the song's other facts. One quiet line, one ghost pill. Insights' transposition finding carries the same entry, "Try this key", which opens the ruler already set to Ilya's recommendation.</div>
+</div></div>
+
+<div class="plate"><h2>2 · The ruler, floating over the whole page</h2>
+<div class="page">
+<div class="ruler">
+<div class="readout">Down a minor third · B major <span>· Ilya's recommendation</span></div>
+<div class="ticks">
+<div class="t"><span class="enh">A♭<small>G♯</small></span></div><div class="t">A</div><div class="t">B♭</div><div class="t sel"><b>B</b><small>C♭</small></div><div class="t run"><span>C</span></div><div class="t"><span class="enh">D♭<small>C♯</small></span></div><div class="t home">D</div><div class="t">E♭</div><div class="t">E</div><div class="t">F</div><div class="t"><span class="enh">F♯<small>G♭</small></span></div><div class="t">G</div><div class="t"><span class="enh">A♭<small>G♯</small></span></div>
+</div>
+<div class="dir"><span>◂ lower</span><span>as printed</span><span>higher ▸</span></div>
+<div class="act"><span class="pill">Cancel</span><span class="pill filled">Use this key</span></div>
+</div>
+<div style="height:150px"></div>
+<p class="title">Скучай. Ты создана для</p><p class="meta">Mussorgsky · Without Sun</p>
+<div class="stave"></div><div class="stave"></div><div class="stave"></div>
+</div>
+<div class="legend">The whole page stays in view and redraws as the selection moves, so the singer judges the song, not a bar. Each stop is a semitone, named by the key it lands on; there are no tick marks, because the key names are the stops. Where a key has a practical enharmonic spelling (seven accidentals or fewer), both show: the usual one above, the alternative beneath (D♭ over C♯, F♯ over G♭, B over C♭). Tapping the alternative chooses that spelling, so a singer can match an edition printed in, say, C♯ major. The readout names the interval and the key together (ruling 14). At the tritone the two ends meet at the same pitch; the ruler shows A♭/G♯ at both ends, reached down or up. The printed key sits in its grey box, always one tap away. The circle is the current choice, opening at Ilya's recommendation; the dotted key is the runner-up. Nothing evaluative appears when the singer moves off the recommendation. The strip never prints. On a phone it docks at the bottom edge, like the loupe's dock.</div>
+</div>
+
+<div class="plate"><h2>3 · After "Use this key": a new copy that says so</h2>
+<div class="row">
+<div class="drawer"><div class="bandh">PIECE</div><div class="field">Скучай. Ты создана для</div>
+<div class="keyline"><span>Key: <b>B major</b>, transposed</span><span class="pill">As printed</span></div></div>
+<div class="page" style="flex:1 1 380px"><p class="title">Скучай. Ты создана для</p><p class="meta">Mussorgsky · Without Sun</p><p class="trans">Transposed down a minor third from D major, at the singer's choice.</p><div class="stave"></div></div>
+</div>
+<div class="legend">The transposed version is a copy; the original is untouched (the "branch, do not mutate" ruling of 2026-08-07). The page states its source key and that the key was the singer's choice (ruling 13). "As printed" returns to the original in one tap.</div>
+</div>
+</body></html>
