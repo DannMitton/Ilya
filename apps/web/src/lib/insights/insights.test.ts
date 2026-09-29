@@ -14,6 +14,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	analyzeScore,
+	engraveInKey,
 	resolveVocalReadingOctave,
 	shiftVocalOctave,
 	type Measure,
@@ -511,5 +512,62 @@ describe('N.164 the range offer', () => {
 		expect(sentence('fr')).toBe('Cette page ne connaît pas encore votre ambitus. Indiquez votre ambitus, et elle pourra vous dire si cette tonalité vous convient.');
 		expect(t('insights.offer.decline', 'en')).toBe('No thanks');
 		expect(t('insights.offer.decline', 'fr')).toBe('Non merci');
+	});
+});
+
+describe('N.94 slice 2: Insights in the key the singer will sing', () => {
+	/* The fixture line in B flat major, so its E flat is diatonic. Curation
+	   rule 3 (Dann, 2026-09-24): comments are "computed in the key the singer
+	   will sing". The pane engraves the printed reading in the song's key
+	   (`SungKey.draw`, which is `engraveInKey`) before the chain runs. */
+	const B_FLAT = { fifths: -2, mode: 'major' as const };
+	const keyed = (events: VocalLineEvent[]): ParsedScore => {
+		const s = score(events, 3);
+		return {
+			...s,
+			measures: s.measures.map((m) => ({ ...m, keySignature: B_FLAT })),
+			keySignatures: [{ measureIndex: 0, signature: B_FLAT }],
+		};
+	};
+	/* A2 to E flat 4 against G2 to D4: the E flat rises a semitone above. */
+	const narrow: VoiceProfileSnapshot = { ...profile, range: { lowest: P('G', 2), highest: P('D', 4) } };
+	const resolver = () => 'a';
+	const findingsOf = (s: ParsedScore) => {
+		const analyzed = resolveAdvice(analyzeScore(s, narrow, resolver));
+		const watch = buildWatchList(s, analyzed, 1, { analysisScore: s, profile: narrow, resolver });
+		return buildInsights({ analysisScore: s, profile: narrow, watchList: watch });
+	};
+
+	it('a range finding carries the watch list\'s transposition, named as a key', () => {
+		const m = findingsOf(keyed(line));
+		const above = m.findings.find((f) => f.key === 'range-above');
+		// Down a semitone (G sharp 2 to D4) and down a whole tone (G2 to D flat
+		// 4) both fit inside G2 to D4; the smaller move leads. B flat major
+		// down a semitone is A major, down a whole tone A flat major.
+		expect(above?.transposition).toEqual({
+			semitones: [-1, -2],
+			keys: [{ fifths: 3, mode: 'major' }, { fifths: -4, mode: 'major' }],
+		});
+	});
+
+	it('after the move, Insights reads the transposed score: the compass moves and the finding goes', () => {
+		const m = findingsOf(engraveInKey(keyed(line), { semitones: -1, fifths: 3 }));
+		expect(m.range.measured).toEqual({ low: P('G', 2, 1), high: P('D', 4) });
+		expect(m.findings.filter((f) => f.kind === 'range')).toEqual([]);
+	});
+
+	it('groupFindings keeps the anchor\'s transposition, and a finding with none carries none', () => {
+		const tr = { semitones: [-3], keys: [{ fifths: 5, mode: 'major' as const }] };
+		const f = groupFindings(
+			{
+				entries: [
+					{ eventId: 'i', tier: 1, kinds: ['range'], bar: '3', vowel: 'a', density: 1, rangeDirection: 'above', transposition: tr },
+					{ eventId: 'j', tier: 1, kinds: ['passaggio'], bar: '3', vowel: 'a', density: 1 },
+				],
+			},
+			score(line, 3),
+		);
+		expect(f.find((x) => x.kind === 'range')?.transposition).toEqual(tr);
+		expect(f.find((x) => x.kind === 'passaggio')).not.toHaveProperty('transposition');
 	});
 });

@@ -471,6 +471,8 @@ Questions 1 to 5 are optional and answered "secure", "mostly", or "still develop
 
 ## N.168. INSIGHTS INTAKE: FILLING THE THREE STORES. Numbered by Dann 2026-09-23 17:29. "ASAP"
 
+**2026-09-28 23:37: THE THREE COMMENTS' ENGLISH RATIFIED** (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r6_2026-09-28.md`). The consequence sentence (Dann 23:14): what the voice tends to do on its own; but what resisting it tends to bring. Tone, Dann 23:17: "Calm Authority: Helpful, useful, and unassailably tethered to the literature it is drawn from." Next: the French (desk drafts), the tap contents vetted, then the first-slice Code brief (`../sessions/brief-code-n168-first-slice_r1_2026-09-25.md`) updated to these templates.
+
 **The plan, in full:** `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md`. It supersedes the pass 02 plan of 2026-09-16.
 
 **In short.** "Comprehensive" is defined by what Ilya can observe: a finite map of conditions in the score (vowel, dynamic, held or short, approach, position) and in the voice (fo and harmonics against fR1 and fR2, passaggi, range edges). Real repertoire is run through the map for a low male and a treble voice to rank regions by how often singers meet them; collection follows that ranking. A fact enters the store only if it is detectable, consequential, and supported. A region stops when covered or when its sources run out (then Insights stays silent there).

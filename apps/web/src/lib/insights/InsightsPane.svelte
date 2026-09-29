@@ -73,8 +73,10 @@
 		type Finding,
 		type PhonationSection,
 		type SecondsFigure,
+		type SungKey,
 	} from '$lib/insights/insights';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
+	import { accidentalParts, textParts, wordOf } from '$lib/insights/text-parts';
 
 	interface Props {
 		formants: Partial<Record<Vowel, CalibratedFormant>>;
@@ -98,6 +100,8 @@
 		isMobile?: boolean;
 		/** N.164: "Add your range" opens calibration on the Range fields. */
 		onaddrange?: () => void;
+		/** N.94 slice 2: the chosen key, which Insights reads (curation rule 3), and "Try this key". */
+		keyRuler?: SungKey;
 	}
 
 	let {
@@ -116,6 +120,7 @@
 		openSyllabification = false,
 		isMobile = false,
 		onaddrange = undefined,
+		keyRuler = undefined,
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
@@ -128,7 +133,8 @@
 	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, intake));
 	const parsed = $derived(ingested?.result.score ?? null);
 	const octaveShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
-	const readingScore = $derived(parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed);
+	const printedReading = $derived(parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed);
+	const readingScore = $derived(printedReading && (keyRuler?.draw(printedReading) ?? printedReading));
 	const analysisScore = $derived(readingScore ? scoreInPerformanceOrder(readingScore).score : null);
 	const underlayResolvers = $derived(
 		readingScore
@@ -229,14 +235,6 @@
 		const bar = m?.number || String(r.comment.measureIndex + 1);
 		const pitch = analysisScore?.vocalLine.find((e) => e.id === r.comment.eventId)?.pitch;
 		return [T('loupe.measureTagShort').replace('%m', bar), pitch ? P(pitch) : ''].filter(Boolean).join(' · ');
-	}
-
-	/** IPA in brackets sets in the IPA face; ♭ and ♯ set in the sans, as the fit table's do. */
-	function textParts(text: string): Array<{ text: string; ipa?: boolean; acc?: boolean }> {
-		return text
-			.split(/(\[[^\]]+\]|[♭♯]+)/)
-			.filter((p) => p.length > 0)
-			.map((p) => (p.startsWith('[') ? { text: p, ipa: true } : /^[♭♯]+$/.test(p) ? { text: p, acc: true } : { text: p }));
 	}
 
 	// ── The identity head ──────────────────────────────────────────────
@@ -374,18 +372,6 @@
 	// ── Words for the model ────────────────────────────────────────────
 	const P = (p: Pitch) => pitchLabel(p);
 
-	/* THE FIT TABLE'S ACCIDENTALS SET IN THE SANS. Walk finding 2026-09-24:
-	   no face of `--font-serif` (`app.css:23`) carries ♭ with a tight
-	   advance, so the browser's fallback drew it a full em wide, "E ♭ 4",
-	   while ♯ took half an em. The sans draws both tight, as the
-	   tessituragram's own labels already do. Measured, not inferred. */
-	function accidentalParts(text: string): Array<{ text: string; acc: boolean }> {
-		return text
-			.split(/([♭♯]+)/)
-			.filter((p) => p.length > 0)
-			.map((part) => ({ text: part, acc: /^[♭♯]+$/.test(part) }));
-	}
-
 	function flagWord(flag: Containment | null): string {
 		return flag ? T(`insights.flag.${flag}`) : '';
 	}
@@ -393,12 +379,6 @@
 	function findingTag(f: Finding): string {
 		const parts = [T('loupe.measureTagShort').replace('%m', f.measure), P(f.pitch)];
 		return parts.join(' · ');
-	}
-
-	/* The word as the score prints it, less the punctuation the engraver set
-	   against it: `collectScoreWords` keeps the raw cell, comma and all. */
-	function wordOf(f: Finding): string {
-		return (f.word ?? '').replace(/^[\p{P}\s]+|[\p{P}\s]+$/gu, '');
 	}
 
 	function findingBody(f: Finding): string {
@@ -521,6 +501,7 @@
 	<div class="finding">
 		<p class="finding-tag">{findingTag(f)}{' \u00b7 '}<span class="ipa">[{f.vowel}]</span>{#if wordOf(f)}{' \u00b7 '}{wordOf(f)}{/if}</p>
 		<p class="finding-body">{findingBody(f)}{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}{#if findingSeconds(f)}{' '}<span class="finding-further">{findingSeconds(f)}</span>{/if}</p>
+		{#if f.kind === 'range' && keyRuler?.stopFor(f.transposition)}<button type="button" class="try-key" onclick={() => keyRuler?.tryKey(keyRuler.stopFor(f.transposition)!)}>{T('insights.tryKey')}</button>{/if}
 	</div>
 {/snippet}
 
@@ -619,6 +600,7 @@
 					translator=""
 					opus=""
 					{language}
+					note={keyRuler?.header(language)}
 					onheightchange={(h) => (headerHeight = h)}
 					versionAccent="#AB7F7F"
 					markAccent="#AB7F7F"
@@ -1037,6 +1019,7 @@
 	/* ── Findings ───────────────────────────────────────────── */
 
 	.finding {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
@@ -1064,6 +1047,21 @@
 		line-height: 1.4;
 		color: var(--ink-primary);
 		text-wrap: pretty;
+	}
+
+	/* At the right end of the tag row, in its 18 px: no height (N.94 slice 2 addendum). */
+	.try-key {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 0 0.6rem;
+		font: 500 0.75rem/16px var(--font-sans);
+		white-space: nowrap;
+		color: var(--ink-primary);
+		background: #fff;
+		border: 1px solid var(--ink-primary);
+		border-radius: 999px;
+		cursor: pointer;
 	}
 
 	.finding-further,
@@ -1343,7 +1341,8 @@
 			cursor: auto;
 		}
 
-		.offer-decline {
+		.offer-decline,
+		.try-key {
 			display: none;
 		}
 	}

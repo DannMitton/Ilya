@@ -15,6 +15,7 @@ import {
   keyAfterTransposition,
   keyNameAfterTransposition,
   engraveInKey,
+  doubleAccidentalsDrawn,
   transpositionRulerStops,
   type TranspositionCandidate,
 } from './transposition';
@@ -559,5 +560,35 @@ describe('transpositionRulerStops', () => {
       expect(accidentalsDrawn(out)).toBe(0);
       expect(pitchToMidi(out.vocalLine[0].pitch!) - pitchToMidi(P('D', 4))).toBe(stop.semitones);
     }
+  });
+});
+
+describe('doubleAccidentalsDrawn (N.94 slice 2, the twins)', () => {
+  /** One bar per entry of `bars`, in order, in C major. */
+  const inBars = (bars: Pitch[][]): ParsedScore => {
+    const flat = bars.flat();
+    const s = keyedScore(flat, 0, 'major', bars.length);
+    let i = 0;
+    const vocalLine = bars.flatMap((bar, m) => bar.map(() => ({ ...s.vocalLine[i], measureIndex: m, pitch: flat[i++] })));
+    return { ...s, vocalLine };
+  };
+
+  it('counts a double accidental where it draws, not every note spelled with one', () => {
+    // Two B double flats in one bar draw one sign; the next bar draws it again.
+    expect(doubleAccidentalsDrawn(inBars([[P('B', 4, -2), P('B', 4, -2)]]))).toEqual({ flats: 1, sharps: 0 });
+    expect(doubleAccidentalsDrawn(inBars([[P('B', 4, -2)], [P('B', 4, -2)]]))).toEqual({ flats: 2, sharps: 0 });
+  });
+
+  it('counts double sharps apart from double flats, and no single accidental', () => {
+    const s = inBars([[P('F', 4, 2), P('G', 4, 1), P('A', 4, -1), P('E', 4, -2)]]);
+    expect(doubleAccidentalsDrawn(s)).toEqual({ flats: 1, sharps: 1 });
+  });
+
+  it('Sunless 1, bar 2: of the twins B major and C flat major, only C flat draws a double flat', () => {
+    // The flat sixth (B flat in D major), carried down a minor third, is G
+    // natural in B major and A double flat in C flat major.
+    const s = keyedScore([P('A', 3), P('B', 3, -1)], 2, 'major', 1);
+    expect(doubleAccidentalsDrawn(engraveInKey(s, { semitones: -3, fifths: 5 }))).toEqual({ flats: 0, sharps: 0 });
+    expect(doubleAccidentalsDrawn(engraveInKey(s, { semitones: -3, fifths: -7 }))).toEqual({ flats: 1, sharps: 0 });
   });
 });

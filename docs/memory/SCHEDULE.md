@@ -123,7 +123,7 @@ design rows.
 
 - [x] **N.127 increment 2. Built `0ccda31`/`ccb790c`, WALKED by Dann in both languages 2026-09-24.**: the compass stave, the piece's range against the singer's.
 - [x] **N.123, part 1. WALKED by Dann in both languages 2026-09-24**; its findings shipped `5e22d03` and `d1cc2d3`, walked.: the tessituragram with the passaggio zone shaded.
-- [ ] **N.94, part 1**: the control appears, and the score draws in the chosen key.
+- [x] **N.94, part 1** (walked by Dann 22:15, "I love it"; shipped `de31e22` 2026-09-28): the control appears, and the score draws in the chosen key.
 - [x] **N.130 and N.131. DONE 2026-09-24, ahead of the week:** Insights' French walked and every ruling seated (`2f955e6`); the audit's ten N.131 rows ruled and seated (`1987157`); both walked by the desk on Dann's library.: the desk drafts Insights' French; Dann rules it in one sitting; one build carries it with N.131's 21 ratified rows.
 
 ## Week 4. Monday 2026-10-05 to Sunday 2026-10-11. Finish the design rows

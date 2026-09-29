@@ -45,6 +45,14 @@ French is the desk's proposal, ruled by Dann.
 
 `i18n.ts`, the comment above `watch.lead.one` says "French DRAFTED BY CODE ... for Dann". Dann ratified both 2026-09-28 20:44 (`PRODUCT.md`, "The folded watch line's lead"). Change the comment to say so.
 
+## Also: fR1 and fR2 in Learn's English
+
+Titze et al. 2015 (Table I, p. 3006, read by the desk 2026-09-28; Dann ruled 2026-09-16 that Ilya uses this notation): an italic *f* with an upright subscript. Learn's French already sets it so (`LearnContent.svelte:1348-1349`, `<em>f</em><sub>R2</sub>`), but Learn's English prints plain "fR2" and "fR1" (`LearnContent.svelte:3385-3386` at `e8c4732`). Set every fR*n* and fo in Learn and the Guide, in both languages, as `<em>f</em><sub>R1</sub>` / `<em>f</em><sub>o</sub>`. Report any occurrence in `i18n.ts` (plain strings cannot carry markup; list them, do not change them).
+
+## Also: the intake's acoustics question, ruled 2026-09-29 00:06 and 00:07
+
+`voiceIntake.acoustics.stem` (`i18n.ts:1693` at `e8c4732`). English, Dann 00:06 (desk's wording on his correction to Titze et al. 2015's symbols): "How comfortable are you with voice acoustics terms such as fundamental (fo), harmonic (nfo), resonance (fR1), and formant (F1)?" French, desk's draft, ratified 00:07: « Dans quelle mesure êtes-vous à l\u2019aise avec des termes comme fondamentale (fo), harmonique (nfo), résonance (fR1) et formant (F1)\u202f? » Plain text, so no subscripts (the fallback in `notation-reference_Titze-2015.md`).
+
 ## Gates
 
 All eight at baseline or better; report the new count. `check` 0 errors; ratchets OK.

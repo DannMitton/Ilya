@@ -1786,6 +1786,17 @@ const strings: Record<string, Record<Language, string>> = {
 	'key.ruler.interval.4': { en: 'a major third', fr: 'Une tierce majeure' },
 	'key.ruler.interval.5': { en: 'a perfect fourth', fr: 'Une quarte juste' },
 	'key.ruler.interval.6': { en: 'a tritone', fr: 'Un triton' },
+	// N.94 slice 2. RULED by Dann 2026-09-28 22:27 ("Ratified"), the table in
+	// `brief-code-n94-slice2_r1_2026-09-28.md`, verbatim. The dimmed twin's count
+	// line; the phone dock's two chips, whose {tonic} is `stopLabel`; and the
+	// Insights range finding's pill.
+	'key.ruler.doubleFlatOne': { en: 'Carries 1 double flat', fr: 'Comporte 1 double b\u00e9mol' },
+	'key.ruler.doubleFlatMany': { en: 'Carries {n} double flats', fr: 'Comporte {n} doubles b\u00e9mols' },
+	'key.ruler.doubleSharpOne': { en: 'Carries 1 double sharp', fr: 'Comporte 1 double di\u00e8se' },
+	'key.ruler.doubleSharpMany': { en: 'Carries {n} double sharps', fr: 'Comporte {n} doubles di\u00e8ses' },
+	'key.dock.asPrinted': { en: 'As printed \u00b7 {tonic}', fr: 'Tonalit\u00e9 imprim\u00e9e \u00b7 {tonic}' },
+	'key.dock.pick': { en: 'Ilya\u2019s pick \u00b7 {tonic}', fr: 'Choix d\u2019Ilya \u00b7 {tonic}' },
+	'insights.tryKey': { en: 'Try this key', fr: 'Essayer cette tonalit\u00e9' },
 };
 
 /**

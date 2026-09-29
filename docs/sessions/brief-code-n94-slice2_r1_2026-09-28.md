@@ -75,3 +75,23 @@ in both languages.
 `docs/sessions/report-code-n94-slice2_r1_<date>.md`: what changed with `path:line`,
 gates, screenshots, and **What I could not establish**. NOT ESTABLISHED beats a
 complete invented answer. Do not commit, stage, stash, check out, or restore. Dann ships.
+
+## Addendum, 2026-09-28 23:55: two fixes before slice 2 ships
+
+The desk checked slice 2 in a cloud copy: web 1,682, score-parser 636 and 5 skipped,
+`check` 0 errors, ratchets OK. Two findings.
+
+1. **The pill pushes the range finding off Insights' page one.** On Sunless 1 with the
+   desk's test voice, the "Try this key" pill on its own line adds enough height that
+   the range finding ("The note drops below the range you typed", m. 5) no longer fits
+   page one and moves to "The findings page one deferred" on page 2. The finding that
+   carries the most useful action is the one deferred. **Fix, DESK DEFAULT:** set the
+   pill inline at the end of the finding's text, wrapping with it, so it adds no line
+   of its own; or count its height in page one's fit so the finding keeps its place.
+   Report which, and show Sunless 1's page one with the range finding and its pill.
+2. **The phone dock covers the last line of music.** DESK DEFAULT: reserve room under
+   the page while the dock is open, as the loupe's dock does, so nothing the singer is
+   judging sits under it. Keep the dock's 98% background, as plate 4 draws it.
+
+Re-run all eight gates, append to the slice 2 report. Do not commit, stage, stash,
+check out, or restore. Dann ships.

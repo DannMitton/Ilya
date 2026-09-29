@@ -681,7 +681,7 @@
 	});
 
 	// N.94: where the ruler opens, against the printed key's sung order.
-	$effect(() => keyRuler?.prepare((p) => printedReading && rulerOpening(printedReading, p, adapted.snapshot, vowelResolver)));
+	$effect(() => keyRuler?.prepare((p, want) => printedReading && rulerOpening(printedReading, p, adapted.snapshot, vowelResolver, want)));
 
 	// The Markup legend. Declared here rather than beside its doc comment
 	// above, because its one entry (N.10b) depends on `withheldIpa`.

@@ -1343,6 +1343,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		() => correctedScore?.result.score,
 		() => destination === 'studio' && studioDocument === 'markup',
 		() => handleTabChange('markup'),
+		() => isPhone,
 	);
 	/* N.92 mobile slice 2. A PHONE IS A SMALLEST-SIDE TEST, not a width test,
 	   and the two answer different questions. `isMobile` asks whether THIS
@@ -4333,7 +4334,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     component that authors the markup. -->
 					<p class="markup-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
 				{/if}
-				{#if INCLUDE_MARKUP_INSIGHTS}<PieceKeyLine {keyRuler} {language} {isPhone} />{/if}
+				{#if INCLUDE_MARKUP_INSIGHTS}<PieceKeyLine {keyRuler} {language} />{/if}
 			{/snippet}
 			<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one). The wizard MOVED
 			     here from the old shane panel; not one line of it is rewritten. Its
@@ -4847,6 +4848,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{drawnUnderlay}
 				openSyllabification={doc.openSyllabification}
 				onaddrange={openRangeFields}
+				{keyRuler}
 			/>
 		{:else if destination === 'studio'}
 			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture

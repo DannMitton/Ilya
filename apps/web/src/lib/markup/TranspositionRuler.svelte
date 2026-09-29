@@ -19,14 +19,21 @@
 	 * IT CARRIES ITS OWN ANCHOR: a zero-height sticky box, so it rides over the
 	 * page in view while the singer scrolls and takes no room in the page stack.
 	 *
-	 * NOT IN THIS SLICE: the phone dock (plate 4), and the direction row under
-	 * the stops ("lower, as printed, higher"), whose words are not in the ruled
-	 * table.
+	 * THE TWINS (slice 2, Dann 2026-09-28 21:41): of two keys that sound the
+	 * same, the one that draws more double accidentals is dimmed. It stays
+	 * tappable, and its readout gains the count ("Carries 2 double flats").
+	 *
+	 * ON A PHONE this hands over to the dock of plate 4
+	 * (`TranspositionDock.svelte`), with the same state and the same words.
+	 *
+	 * NOT DRAWN: the direction row under the stops ("lower, as printed,
+	 * higher"), whose words are not in the ruled table.
 	 */
 	import type { KeyChoice, KeyStop } from '@ilya/score-parser';
 	import { t, type Language } from '$lib/i18n';
-	import { isHome, readout, stopLabel, stopsFor } from './transposition-ruler';
+	import { countLines, isHome, readout, stopGroups, stopId, stopLabel, stopsFor } from './transposition-ruler';
 	import type { TranspositionRulerState } from './transposition-ruler-state.svelte';
+	import TranspositionDock from './TranspositionDock.svelte';
 
 	interface Props {
 		/** Mounted only while `keyRuler.ruler` is set, so it and `printed` are present. */
@@ -52,21 +59,17 @@
 		!!a && !!b && a.semitones === b.semitones && a.fifths === b.fifths;
 
 	/** Runs of stops with the same move: a run of two is a bracketed pair. */
-	const groups = $derived.by(() => {
-		const out: KeyStop[][] = [];
-		for (const s of stops) {
-			const last = out[out.length - 1];
-			if (last && last[0].semitones === s.semitones) last.push(s);
-			else out.push([s]);
-		}
-		return out;
-	});
+	const groups = $derived(stopGroups(stops));
+	const dimmed = $derived(keyRuler.ruler!.dimmed);
+	/** A dimmed stop's count lines; empty for any other stop. */
+	const counted = (stop: KeyChoice) =>
+		dimmed.has(stopId(stop)) ? countLines(keyRuler.ruler!.counts[stopId(stop)], language) : [];
 
 	/** The readout, with "Ilya's recommendation" set apart as the drawing sets it. */
 	const line = $derived.by(() => {
 		const plain = readout(selected, printed, null, language);
 		const full = readout(selected, printed, pick, language);
-		return { plain, rest: full.startsWith(plain) ? full.slice(plain.length) : '' };
+		return { plain, rest: full.startsWith(plain) ? full.slice(plain.length) : '', counts: counted(selected) };
 	});
 
 	const selectedIndex = $derived(stops.findIndex((s) => same(s, selected)));
@@ -92,10 +95,14 @@
 	});
 </script>
 
+{#if keyRuler.phone}
+	<TranspositionDock {keyRuler} {language} />
+{:else}
 <div class="transposition-ruler-anchor" style="width: {width}px;">
 <div class="transposition-ruler" role="dialog" aria-label={t('key.band.try', language)}>
 	<p class="readout" aria-live="polite">
 		{line.plain}{#if line.rest}<span class="readout-rest">{line.rest}</span>{/if}
+		{#each line.counts as c (c)}<span class="readout-count">{c}</span>{/each}
 	</p>
 	<!-- svelte-ignore a11y_interactive_supports_focus -->
 	<div class="stops" role="radiogroup" aria-label={t('key.band.try', language)} bind:this={strip} {onkeydown}>
@@ -109,9 +116,10 @@
 						class:home={stop.semitones === 0 && stop.fifths === printed.fifths}
 						class:sel={isSel}
 						class:run={same(stop, runnerUp)}
+						class:dim={dimmed.has(stopId(stop))}
 						role="radio"
 						aria-checked={isSel}
-						aria-label={readout(stop, printed, pick, language)}
+						aria-label={[readout(stop, printed, pick, language), ...counted(stop)].join('. ')}
 						tabindex={isSel ? 0 : -1}
 						onclick={() => onselect(stop)}
 					>
@@ -127,6 +135,7 @@
 	</div>
 </div>
 </div>
+{/if}
 
 <style>
 	/* Values from drawing r4, plate 2. JUDGEMENT, the drawing's own: it says its
@@ -220,6 +229,18 @@
 		border-radius: 50%;
 		background: var(--lavender);
 		color: #fff;
+	}
+
+	/* The busier twin: faded, never disabled. JUDGEMENT, the desk's value. */
+	.stop.dim:not(.sel) {
+		opacity: 0.4;
+	}
+
+	.readout-count {
+		display: block;
+		font-size: 12px;
+		font-weight: 400;
+		color: var(--ink-tertiary);
 	}
 
 	.stop.run:not(.sel) .stop-name {

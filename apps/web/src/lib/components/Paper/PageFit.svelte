@@ -82,8 +82,16 @@
 		width: 100%;
 	}
 
+	/* THE RESERVED HEIGHT HOLDS. The desk's scroller is a flex column
+	   (`+page.svelte`, `.main-content`), and this box's only child is out of
+	   flow, so its content minimum is zero and the column shrank it: measured
+	   2026-09-28 at 390 by 844, 1368 px declared and 661 px laid out. The
+	   pages then overflowed it, the scroller's bottom padding sat inside that
+	   overflow, and the last sheet ended 35 px under the drawer's pull. N.94
+	   slice 2 addendum, which needs that padding to clear the ruler's dock. */
 	.paper-fit.fitting {
 		position: relative;
+		flex-shrink: 0;
 	}
 
 	/* Taken out of flow so its full page width cannot widen the desk or set

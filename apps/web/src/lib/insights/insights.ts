@@ -32,6 +32,7 @@ import {
 	secondsFor,
 	soundingFromNotation,
 	fractionToNumber,
+	type KeyChoice,
 	type ParsedScore,
 	type Pitch,
 	type TempoResolution,
@@ -40,8 +41,26 @@ import {
 	type VoiceProfileSnapshot,
 	type VowelForEvent,
 } from '@ilya/score-parser';
-import type { WatchEntry, WatchKind, WatchList } from '$lib/analysis/watchlist';
+import type { WatchEntry, WatchKind, WatchList, WatchTransposition } from '$lib/analysis/watchlist';
 import { VOWELS } from '$lib/voice/engine/types';
+import type { Language } from '$lib/i18n';
+
+/**
+ * The song's chosen key, as Insights uses it (N.94 slice 2). The page shell
+ * passes the Transposition ruler's state (`markup/transposition-ruler-state.svelte.ts`),
+ * which has this shape. It is declared here because insights/ may not import
+ * markup/ (`scripts/ratchets.mjs`, the module map).
+ */
+export interface SungKey {
+	/** The printed reading engraved in the song's key (`drawInKey`). */
+	draw(reading: ParsedScore): ParsedScore;
+	/** Markup's header line for the key, or undefined as printed. */
+	header(language: Language): string | undefined;
+	/** The ruler's stop for a range finding's first suggested key, or null. */
+	stopFor(tr: WatchTransposition | undefined): KeyChoice | null;
+	/** "Try this key": Markup comes forward with the ruler open on `stop`. */
+	tryKey(stop: KeyChoice): void;
+}
 
 /** Where a measured span sits against the span the singer typed. */
 export type Containment = 'contained' | 'above' | 'below' | 'wider';
@@ -105,6 +124,12 @@ export interface Finding {
 	massQuavers: number;
 	/** `massQuavers` in seconds, N.123. Absent when the score states no tempo. */
 	seconds?: SecondsFigure;
+	/**
+	 * A range finding's song-level transposition, the watch entry's own
+	 * (`WatchEntry.transposition`), which "Try this key" opens the ruler on
+	 * (N.94 slice 2). Absent when the watch list found no improving key.
+	 */
+	transposition?: WatchTransposition;
 }
 
 /**
@@ -405,6 +430,7 @@ export function groupFindings(watchList: WatchList | null, analysisScore: Parsed
 			...(anchor.word ? { word: anchor.word } : {}),
 			instances: entries.length,
 			massQuavers: mass,
+			...(anchor.transposition ? { transposition: anchor.transposition } : {}),
 		});
 	}
 

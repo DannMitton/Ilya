@@ -1,5 +1,5 @@
 /**
- * transposition-ruler.ts — the words and the numbers of the Transposition ruler, N.94 slice 1.
+ * transposition-ruler.ts — the words and the numbers of the Transposition ruler, N.94 slices 1 and 2.
  *
  * The design is `docs/sessions/drawing-key-ruler_r4_2026-09-28.html`, accepted
  * by Dann 2026-09-28. The engine is the package's (`transpositionRulerStops`,
@@ -13,10 +13,12 @@
  * the watch band's adopted phrase. Nothing here composes a word of its own.
  */
 import {
+	doubleAccidentalsDrawn,
 	engraveInKey,
 	transpositionRulerStops,
 	scoreInPerformanceOrder,
 	suggestTranspositions,
+	type DoubleAccidentalCount,
 	type KeyChoice,
 	type KeySignature,
 	type KeyStop,
@@ -176,24 +178,133 @@ export function drawInKey(score: ParsedScore, printed: NamedKey | null, choice: 
 	return printed && choice && !isHome(choice, printed) ? engraveInKey(score, choice) : score;
 }
 
+// ── The twins (slice 2; Dann's ruling 2026-09-28 21:41, `OPEN.md` §N.94) ──
+
+/** A stop's identity, both numbers, for sets and maps. */
+export const stopId = (c: KeyChoice): string => `${c.semitones}:${c.fifths}`;
+
+/** Runs of stops with the same move, in order: a run of two is a pair of twins. */
+export function stopGroups(stops: readonly KeyStop[]): KeyStop[][] {
+	const out: KeyStop[][] = [];
+	for (const s of stops) {
+		const last = out[out.length - 1];
+		if (last && last[0].semitones === s.semitones) last.push(s);
+		else out.push([s]);
+	}
+	return out;
+}
+
+/** What a stop's twin comparison found: the drawn double accidentals, by stop id. */
+export type TwinCounts = Record<string, DoubleAccidentalCount>;
+
+/**
+ * The double accidentals each twin would draw, from the printed reading
+ * engraved in that stop (`engraveInKey`, the page's own preview), counted as
+ * the renderer draws them (`doubleAccidentalsDrawn`). Only stops in a pair are
+ * counted: a key without a twin is never dimmed, so nothing is asked of it.
+ */
+export function twinCounts(printedReading: ParsedScore, printed: NamedKey): TwinCounts {
+	const out: TwinCounts = {};
+	for (const group of stopGroups(stopsFor(printed))) {
+		if (group.length < 2) continue;
+		for (const stop of group) out[stopId(stop)] = doubleAccidentalsDrawn(drawInKey(printedReading, printed, stop));
+	}
+	return out;
+}
+
+const total = (c: DoubleAccidentalCount | undefined) => (c ? c.flats + c.sharps : 0);
+
+/**
+ * The stops that dim (ruling 21:41): in each pair, the twin that draws more
+ * double accidentals. A tie dims neither. There is no threshold: one more is
+ * enough.
+ */
+export function dimmedStops(printed: NamedKey, counts: TwinCounts): Set<string> {
+	const out = new Set<string>();
+	for (const group of stopGroups(stopsFor(printed))) {
+		if (group.length !== 2) continue;
+		const [a, b] = group.map((s) => total(counts[stopId(s)]));
+		if (a !== b) out.add(stopId(group[a > b ? 0 : 1]));
+	}
+	return out;
+}
+
+/** A dimmed stop's cleaner twin; any other stop is returned as it is. */
+export function cleanerTwin(choice: KeyChoice, printed: NamedKey, dimmed: ReadonlySet<string>): KeyChoice {
+	if (!dimmed.has(stopId(choice))) return choice;
+	const twin = stopsFor(printed).find((s) => s.semitones === choice.semitones && s.fifths !== choice.fifths);
+	return twin ? { semitones: twin.semitones, fifths: twin.fifths } : choice;
+}
+
+/**
+ * The count line a dimmed stop's readout gains: "Carries 2 double flats".
+ * One line per kind it draws, flats first. Empty for a stop that is not dimmed.
+ */
+export function countLines(count: DoubleAccidentalCount | undefined, language: Language): string[] {
+	if (!count) return [];
+	const line = (n: number, kind: 'Flat' | 'Sharp') =>
+		n === 1 ? t(`key.ruler.double${kind}One`, language) : fill(t(`key.ruler.double${kind}Many`, language), { n: String(n) });
+	return [...(count.flats ? [line(count.flats, 'Flat')] : []), ...(count.sharps ? [line(count.sharps, 'Sharp')] : [])];
+}
+
+/**
+ * The ruler's stop for a transposition the watch list suggested against the
+ * page as drawn (`base`, the song's choice, or null as printed). Insights reads
+ * the drawn key after "Use this key", so its suggestion is a move from there;
+ * the ruler's stops are moves from the printed key. The target signature is
+ * the suggestion's own, which is what keeps B major from landing on C flat.
+ * Null when the printed key offers no such stop.
+ */
+export function stopForSuggestion(
+	printed: NamedKey,
+	base: KeyChoice | null,
+	semitones: number,
+	fifths: number,
+): KeyChoice | null {
+	const move = (base?.semitones ?? 0) + semitones;
+	const folded = ((((move + 6) % 12) + 12) % 12) - 6;
+	const hits = stopsFor(printed).filter((s) => s.fifths === fifths && (s.semitones - folded) % 12 === 0);
+	// The tritone sits at both ends; take the one on the side the move went.
+	const hit = hits.find((s) => Math.sign(s.semitones) === Math.sign(move)) ?? hits[0];
+	return hit ? { semitones: hit.semitones, fifths: hit.fifths } : null;
+}
+
 /** Where the ruler opened, and what is selected now. */
-export type RulerOpening = { selected: KeyChoice; pick: KeyChoice | null; runnerUp: KeyChoice | null };
+export type RulerOpening = {
+	selected: KeyChoice;
+	pick: KeyChoice | null;
+	runnerUp: KeyChoice | null;
+	/** The twins' drawn double accidentals, by stop id (`twinCounts`). */
+	counts: TwinCounts;
+	/** The ids of the twins that dim (`dimmedStops`). */
+	dimmed: ReadonlySet<string>;
+};
 
 /**
  * Where the ruler opens, computed against the PRINTED key's sung order, so
  * the pick is the same whatever the page was showing. The search is
  * `suggestTranspositions`, the watch band's own; with no resolver there is
  * nothing to search with and the ruler opens on the printed key.
+ *
+ * ILYA'S PICK ALWAYS LANDS ON THE CLEANER TWIN (ruling 21:41): a candidate
+ * that falls on a dimmed stop moves to its twin. So does the runner-up, and
+ * so does a key asked for by "Try this key" (`requested`), because both are
+ * Ilya's recommendation too. DESK DEFAULT for those two.
  */
 export function rulerOpening(
 	printedReading: ParsedScore,
 	printed: NamedKey,
 	profile: VoiceProfileSnapshot,
 	resolver: VowelResolver | null,
+	requested: KeyChoice | null = null,
 ): RulerOpening {
 	const found = resolver
 		? suggestTranspositions(scoreInPerformanceOrder(printedReading).score, profile, resolver).suggestions
 		: [];
+	const counts = twinCounts(printedReading, printed);
+	const dimmed = dimmedStops(printed, counts);
+	const clean = (c: KeyChoice | null) => c && cleanerTwin(c, printed, dimmed);
 	const { pick, runnerUp } = openingStops(printed, found);
-	return { selected: pick ?? homeStop(printed), pick, runnerUp };
+	const selected = clean(requested) ?? clean(pick) ?? homeStop(printed);
+	return { selected, pick: clean(pick), runnerUp: clean(runnerUp), counts, dimmed };
 }

@@ -30,6 +30,7 @@
 import { analyzeScore, pitchToMidi, STEP_SEMITONE, type VowelResolver } from './overlay-engine';
 import type { KeySignature, ParsedScore, Pitch, VocalLineEvent } from './types';
 import type { VoiceProfileSnapshot } from './analysis-types';
+import { advanceAccidentalState, carryIntoMeasure, newAccidentalCarry } from './staff-renderer';
 
 /** Default search window, in semitones either side (a tritone). JUDGEMENT. */
 const DEFAULT_MAX_SEMITONES = 6;
@@ -389,6 +390,41 @@ function fewerAccidentals(p: Pitch): Pitch {
   let out = p;
   while (Math.abs(out.alter) > 2) out = carrySpelling(out, Math.sign(out.alter), pitchToMidi(out));
   return out;
+}
+
+/** The double accidentals a page draws, by kind (`doubleAccidentalsDrawn`). */
+export interface DoubleAccidentalCount {
+  flats: number;
+  sharps: number;
+}
+
+/**
+ * How many double flats and double sharps the sung line DRAWS, which is what
+ * the Transposition ruler's twins are judged by (N.94 slice 2; Dann's ruling
+ * 2026-09-28 21:41, `OPEN.md` §N.94): of two keys that sound the same, the
+ * one that draws more is dimmed.
+ *
+ * DRAWN, NOT SPELLED. A note spelled with a double accidental counts only
+ * where its accidental prints, so a second B double flat in the same bar does
+ * not count twice. The walk is the renderer's own: `advanceAccidentalState`
+ * under `carryIntoMeasure`, the calls `accidentalStateAtEndOf` makes, against
+ * the first signature, as the renderer reads it. A courtesy that restates a
+ * double accidental counts, because it draws one. Pure.
+ */
+export function doubleAccidentalsDrawn(parsed: ParsedScore): DoubleAccidentalCount {
+  const fifths = parsed.keySignatures[0]?.signature.fifths ?? parsed.measures[0]?.keySignature.fifths ?? 0;
+  const carry = newAccidentalCarry(fifths);
+  const turningAcc: Record<string, number> = {};
+  const count: DoubleAccidentalCount = { flats: 0, sharps: 0 };
+  for (const ev of parsed.vocalLine) {
+    carryIntoMeasure(carry, turningAcc, ev.measureIndex);
+    if (ev.type !== 'note' || !ev.pitch) continue;
+    const mark = advanceAccidentalState(ev.pitch, fifths, carry.measureAcc, carry.prevMeasureAcc);
+    if (mark === 'none') continue;
+    if (ev.pitch.alter === -2) count.flats++;
+    else if (ev.pitch.alter === 2) count.sharps++;
+  }
+  return count;
 }
 
 /** Notes outside the singer's declared range (pure pitch; no vowel needed). 0 when no range. */

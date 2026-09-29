@@ -903,6 +903,10 @@ Dann has not moved that. **It raises the weight of a parity failure, not the sch
 
 **Too many double flats is answered by the enharmonic twin key**, a shift of the whole score by a diminished second (Dann, 21:36), which keeps every function. The Transposition ruler already offers the twins side by side (r4). Sources: Gould rule 66 (p. 437, per the extraction); `spellPitch`'s own header, which cannot see the harmony (`transposition.ts:176-182`); MuseScore's default of keeping double accidentals.
 
+### Acoustic symbols follow Titze et al. 2015. Typography checked 2026-09-28
+
+Ruled natively 2026-09-16. Read from Table I, p. 3006, by the desk 2026-09-28: italic *f* with an upright subscript, *f*<sub>R1</sub>, *f*<sub>o</sub>, 2*f*<sub>o</sub>, n*f*<sub>o</sub>; formants *F*<sub>1</sub>. Resonance (fR) and formant (F) are kept apart; harmonics are multiples of fo, never fn. Where a surface cannot carry markup, plain "fR1" and "fo". The intake question was reworded to match, 2026-09-29 00:06 and 00:07 (English and French ratified by Dann).
+
 ### The watch box's heading. Ruled by Dann 2026-09-28
 
 "For your consideration" (Dann's English, 19:47), « À considérer » (the desk's proposal, ruled 19:48). Replaces "Places to watch" / « Points à surveiller ». **Not in the tree until a grep shows it**; briefed in `../sessions/brief-code-fr-semicolon-space_r1_2026-09-28.md`. The optional intro line under it is held, on the desk's recommendation, until Dann reads the gated box.

@@ -78,6 +78,8 @@ export {
   transposePitch,
   transposeScore,
   engraveInKey,
+  doubleAccidentalsDrawn,
+  type DoubleAccidentalCount,
   transpositionRulerStops,
   type KeyChoice,
   type KeyStop,

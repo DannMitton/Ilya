@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * THE PIECE BAND'S KEY LINE (N.94 slice 1). Drawing r4, plates 1 and 3,
+	 * THE PIECE BAND'S KEY LINE (N.94 slices 1 and 2). Drawing r4, plates 1 and 3,
 	 * accepted by Dann 2026-09-28. The key is a fact about the whole song, so
 	 * it sits with the song's other facts: one quiet line and one ghost pill.
 	 *
@@ -8,9 +8,8 @@
 	 * which opens the ruler over the Markup page. Transposed it reads "Key: B
 	 * major, transposed" with "As printed", which returns in one tap.
 	 *
-	 * ON A PHONE "Try another key" is not offered: the ruler's phone form is the
-	 * dock of plate 4, which is slice 2. "As printed" stays, so a key chosen on
-	 * a desk can always be undone anywhere. DESK DEFAULT.
+	 * ON A PHONE the same pill opens the ruler docked at the bottom edge
+	 * (plate 4, slice 2), so the line is the same on both.
 	 */
 	import { t, type Language } from '$lib/i18n';
 	import { bandLine } from './transposition-ruler';
@@ -19,10 +18,9 @@
 	interface Props {
 		keyRuler: TranspositionRulerState;
 		language: Language;
-		isPhone: boolean;
 	}
 
-	let { keyRuler, language, isPhone }: Props = $props();
+	let { keyRuler, language }: Props = $props();
 
 	const line = $derived(keyRuler.printed && bandLine(keyRuler.choice, keyRuler.printed, language));
 </script>
@@ -32,7 +30,7 @@
 		<span>{line.before}<b>{line.key}</b>{line.after}</span>
 		{#if line.transposed}
 			<button type="button" class="piece-key-pill" onclick={() => keyRuler.use(null)}>{t('key.band.backToPrinted', language)}</button>
-		{:else if !isPhone}
+		{:else}
 			<button type="button" class="piece-key-pill" onclick={() => keyRuler.tryAnother()}>{t('key.band.try', language)}</button>
 		{/if}
 	</div>
