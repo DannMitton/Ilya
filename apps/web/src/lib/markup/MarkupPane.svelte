@@ -696,7 +696,7 @@
 			: null,
 	);
 
-	// ── The "Places to watch" list (design C) ────────────────────────────
+	// ── The "For your consideration" list (design C) ─────────────────────
 	// Built purely from the marks the overlay already computed (watchlist.ts);
 	// verse 1 today. Silent on zero challenge (§7.3). Rendered AFTER the score
 	// (Dann's placement ruling, 2026-07-18), so it never displaces the markup.

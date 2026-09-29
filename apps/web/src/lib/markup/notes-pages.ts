@@ -1,7 +1,7 @@
 /**
  * Markup's trailing notes, split across as many sheets as they need.
  *
- * WHY (Dann's look, 2026-09-28 16:17): on «Скучай» the "Places to watch" box
+ * WHY (Dann's look, 2026-09-28 16:17): on «Скучай» the "For your consideration" box
  * ran past the one notes sheet, and the window's `overflow: hidden` cut its
  * last line through. The acceptance criterion outranks page count: nothing
  * may be cut. So the notes flow on to a further sheet, as the score does.

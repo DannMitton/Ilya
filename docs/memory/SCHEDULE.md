@@ -133,7 +133,7 @@ design rows.
 - [ ] **N.168, first slice in Code before the checkpoint**: the vetted passaggio and turning connections only. The dynamics connections wait on the engine and go to LATER. **Placed 2026-09-24, DESK DEFAULT; its size is NOT ESTABLISHED.** **N.94 stays in this week: Dann ruled 2026-09-24 21:08 that the transposition control does not wait for the release.** If the week runs over, this file's own rule applies.
 
 - [ ] **N.123, part 2**: the half-mass band, and the centre of gravity and cycle dose if their sources were found. A figure without a source is left out, not guessed.
-- [ ] **N.94, part 2**, and its walk.
+- [x] **N.94, part 2**, and its walk (Dann's look 2026-09-29 00:09, "lovely"; shipped `3ab034b`).
 - [x] **N.82** (seated, Dann's look 16:17; shipped `8127e01`): the watch band's sentences move out of code and into both languages; Dann rules the French.
 - [ ] **Friday 2026-10-09, the checkpoint.** Anything design-bound not yet in Code moves to LATER.
 

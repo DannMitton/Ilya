@@ -910,7 +910,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.status.preparingReader': { en: 'Ilya is reading the notes off your page. Starting the reader might take about one minute, then a few seconds for each page of music after that.', fr: 'Ilya lit les notes sur votre page. Le démarrage du lecteur peut prendre environ une minute, et après quelques secondes par page de partition.' },
 	'upload.format.imageReader':   { en: 'Format: photograph → MusicXML', fr: 'Format\u00a0: photographie → MusicXML' },
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
-	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them into the Input field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image; saisissez-les dans le champ Entrée.' },
+	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them into the Input field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image\u202f; saisissez-les dans le champ Entrée.' },
 
 	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
 	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
@@ -1539,7 +1539,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.phonation.heading':  { en: 'Phonation time',               fr: 'Temps de phonation' },
 	'insights.phonation.headline': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}.' },
 	'insights.phonation.headlineInferred': { en: 'Your phonation takes about {low} to {high} of this piece, at the speed {tempoWord} usually means.', fr: 'Votre phonation occupe environ {low} à {high} de la pièce, au tempo qu’indique habituellement {tempoWord}.' },
-	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo ; le temps de phonation ne peut donc pas être donné en secondes.' },
+	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo\u202f\u202f; le temps de phonation ne peut donc pas être donné en secondes.' },
 	// RATIFIED by Dann 2026-09-23 03:14, with the vowel chart's fixed order
 	// (`docs/memory/OPEN.md`, N.123, "THE VOWEL CHART'S ORDER").
 	'insights.phonation.byVowel':  { en: 'Seconds of phonation per vowel', fr: 'Secondes de phonation par voyelle' },
@@ -1555,8 +1555,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// An untrusted bar is counted as written and named. The French reuses the
 	// ratified fragment of `insights.fit.withheldOne`. Both lines RATIFIED by
 	// Dann 2026-09-23 01:35.
-	'insights.phonation.untrustedOne': { en: 'Measure {measures} does not add up to its time signature, so its notes are counted as written.', fr: 'La mesure {measures} ne correspond pas à son chiffrage de mesure ; ses notes sont comptées telles qu’écrites.' },
-	'insights.phonation.untrustedMany': { en: 'Measures {measures} do not add up to their time signatures, so their notes are counted as written.', fr: 'Les mesures {measures} ne correspondent pas à leur chiffrage de mesure ; leurs notes sont comptées telles qu’écrites.' },
+	'insights.phonation.untrustedOne': { en: 'Measure {measures} does not add up to its time signature, so its notes are counted as written.', fr: 'La mesure {measures} ne correspond pas à son chiffrage de mesure\u202f\u202f; ses notes sont comptées telles qu’écrites.' },
+	'insights.phonation.untrustedMany': { en: 'Measures {measures} do not add up to their time signatures, so their notes are counted as written.', fr: 'Les mesures {measures} ne correspondent pas à leur chiffrage de mesure\u202f\u202f; leurs notes sont comptées telles qu’écrites.' },
 	// WRITTEN, NOT SHOWN. Rendered nowhere until the Loupe carries a tempo
 	// control (N.120, ruled 2026-09-23 to live in the Loupe). Printing it now
 	// would send a singer to a control that does not exist. English is Dann's
@@ -1690,7 +1690,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'voiceIntake.softHigh.3': { en: 'It works when I prepare it.', fr: 'Cela fonctionne quand je le prépare.' },
 	'voiceIntake.softHigh.4': { en: 'It is reliable in performance most of the time.', fr: 'C\u2019est fiable en concert la plupart du temps.' },
 	'voiceIntake.softHigh.5': { en: 'It is reliable, and I can move freely between soft and loud there.', fr: 'C\u2019est fiable, et je passe librement du <em>piano</em> au <em>forte</em> à cet endroit.' },
-	'voiceIntake.acoustics.stem': { en: 'How comfortable are you with voice acoustics terms such as formant, harmonic, fo, and fR1?', fr: 'Dans quelle mesure êtes-vous à l\u2019aise avec des termes comme formant, harmonique, fo et fR1\u202f?' },
+	// Ruled 2026-09-29: English Dann's (00:06, on Titze et al. 2015's symbols), French the
+	// desk's draft ratified 00:07. Plain text, so no subscripts (`notation-reference_Titze-2015.md`).
+	'voiceIntake.acoustics.stem': { en: 'How comfortable are you with voice acoustics terms such as fundamental (fo), harmonic (nfo), resonance (fR1), and formant (F1)?', fr: 'Dans quelle mesure êtes-vous à l\u2019aise avec des termes comme fondamentale (fo), harmonique (nfo), résonance (fR1) et formant (F1)\u202f?' },
 	'voiceIntake.acoustics.1': { en: 'These terms are new to me.', fr: 'Ces termes sont nouveaux pour moi.' },
 	'voiceIntake.acoustics.2': { en: 'I have heard them, but I do not use them.', fr: 'Je les ai déjà entendus, sans les employer.' },
 	'voiceIntake.acoustics.3': { en: 'I know the main ideas: resonance, harmonics, and turning over.', fr: 'J\u2019en connais les idées principales\u00a0: la résonance, les harmoniques, le changement de timbre.' },
@@ -1707,23 +1709,25 @@ const strings: Record<string, Record<Language, string>> = {
 	'voiceIntake.appear.count': { en: 'How many suggestions should each comment show?', fr: 'Combien de suggestions chaque commentaire doit-il afficher\u202f?' },
 	'voiceIntake.appear.two': { en: 'Two, with the rest a tap away', fr: 'Deux, les autres affichées sur demande' },
 	'voiceIntake.appear.all': { en: 'All of them', fr: 'Toutes' },
-	'voiceIntake.appear.imagery': { en: 'Include imagery and metaphor cues', fr: 'Inclure des images et des métaphores' },	// N.82: the Markup watch band ("Places to watch"), in both languages. Ruled by
+	'voiceIntake.appear.imagery': { en: 'Include imagery and metaphor cues', fr: 'Inclure des images et des métaphores' },	// N.82: the Markup watch band ("For your consideration"), in both languages. Ruled by
 	// Dann 2026-09-28 15:04 to 15:10 (docs/sessions/n82-watch-band-draft_r1_2026-09-28.md,
 	// "Rulings"). IPA sits in square brackets (15:06). French keys are solfège,
 	// lowercase, and French repeats « en » before a second key. Each advice is an
 	// ACTION, led by a rotated `comment.opener.{1..5}` as Insights leads its
 	// suggestions, so no two advice sentences on the page share an opener.
 	// The accidental in a key name reuses `notePicker.acc.flat` / `.sharp`.
-	'watch.header': { en: 'Places to watch', fr: 'Points à surveiller' },
+	// The heading, re-ruled 2026-09-28: English Dann's (19:47), French the desk's
+	// proposal ruled by Dann (19:48); « Pour votre considération » set aside as a calque.
+	'watch.header': { en: 'For your consideration', fr: '\u00c0 consid\u00e9rer' },
 	'watch.line.rangeBelow': { en: 'Bar {bar} drops below the range you gave.', fr: 'Mesure {bar}\u00a0: la note descend sous l\u2019ambitus que vous avez indiqué.' },
 	'watch.line.rangeAbove': { en: 'Bar {bar} rises above the range you gave.', fr: 'Mesure {bar}\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué.' },
-	'watch.line.rangeBelowTranspose': { en: 'Bar {bar} drops below the range you gave; you may want to transpose {phrase}.', fr: 'Mesure {bar}\u00a0: la note descend sous l\u2019ambitus que vous avez indiqué; vous pouvez songer à transposer {phrase}.' },
-	'watch.line.rangeAboveTranspose': { en: 'Bar {bar} rises above the range you gave; you may want to transpose {phrase}.', fr: 'Mesure {bar}\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué; vous pouvez songer à transposer {phrase}.' },
+	'watch.line.rangeBelowTranspose': { en: 'Bar {bar} drops below the range you gave; you may want to transpose {phrase}.', fr: 'Mesure {bar}\u00a0: la note descend sous l\u2019ambitus que vous avez indiqué\u202f; vous pouvez songer à transposer {phrase}.' },
+	'watch.line.rangeAboveTranspose': { en: 'Bar {bar} rises above the range you gave; you may want to transpose {phrase}.', fr: 'Mesure {bar}\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué\u202f; vous pouvez songer à transposer {phrase}.' },
 	'watch.line.crossing': { en: 'Bar {bar}: your {vowel} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.', fr: 'Mesure {bar}\u00a0: votre {vowel} rencontre ici votre première résonance, de sorte que le son voudra devenir plein et de tête, vers le youhou.' },
 	'watch.line.tighten': { en: 'Bar {bar}: the {vowel} at the top of your range and sustained here is an exposed spot where the vowel can tighten.', fr: 'Mesure {bar}\u00a0: le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où la voyelle peut se resserrer.' },
 	'watch.line.turnover': { en: 'Bar {bar}: the {vowel} at the top of your range and sustained here is an exposed spot where the tone can spread or press.', fr: 'Mesure {bar}\u00a0: le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où le son peut s\u2019étaler ou se presser.' },
-	'watch.line.passaggioWord': { en: 'Bar {bar}: \'{word}\' falls near your passaggio; expect the turn to want managing.', fr: 'Mesure {bar}\u00a0: «\u00a0{word}\u00a0» tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre.' },
-	'watch.line.passaggio': { en: 'Bar {bar}: your {vowel} falls near your passaggio; expect the turn to want managing.', fr: 'Mesure {bar}\u00a0: votre {vowel} tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre.' },
+	'watch.line.passaggioWord': { en: 'Bar {bar}: \'{word}\' falls near your passaggio; expect the turn to want managing.', fr: 'Mesure {bar}\u00a0: «\u00a0{word}\u00a0» tombe près de votre passaggio\u202f; attendez-vous à devoir gérer le changement de timbre.' },
+	'watch.line.passaggio': { en: 'Bar {bar}: your {vowel} falls near your passaggio; expect the turn to want managing.', fr: 'Mesure {bar}\u00a0: votre {vowel} tombe près de votre passaggio\u202f; attendez-vous à devoir gérer le changement de timbre.' },
 	'watch.line.timbreOpenToClose': { en: 'Bar {bar}: your {vowel} turns open to close inside the word, so the colour shifts as you sing it.', fr: 'Mesure {bar}\u00a0: votre {vowel} passe d\u2019ouvert à fermé à l\u2019intérieur du mot, de sorte que la couleur change pendant que vous le chantez.' },
 	'watch.line.timbreCloseToOpen': { en: 'Bar {bar}: your {vowel} turns close to open inside the word, so the colour shifts as you sing it.', fr: 'Mesure {bar}\u00a0: votre {vowel} passe de fermé à ouvert à l\u2019intérieur du mot, de sorte que la couleur change pendant que vous le chantez.' },
 	'watch.line.timbreOpenToCloseWord': { en: 'Bar {bar}: your {vowel} on \'{word}\' turns open to close inside the word, so the colour shifts as you sing it.', fr: 'Mesure {bar}\u00a0: votre {vowel} sur «\u00a0{word}\u00a0» passe d\u2019ouvert à fermé à l\u2019intérieur du mot, de sorte que la couleur change pendant que vous le chantez.' },
@@ -1731,14 +1735,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'watch.line.sustain': { en: 'Bar {bar}: the longer {vowel} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.', fr: 'Mesure {bar}\u00a0: le {vowel} plus long, ici, se pose sur sa hauteur de changement de timbre, de sorte que la couleur peut sembler instable pendant qu\u2019il se prolonge.' },
 	// N.173 gate 4, a folded pattern names every bar (2026-09-28). The singular
 	// lead is each `watch.line.*` template's own opening, so a folded line swaps
-	// it for the plural. French DRAFTED BY CODE after « Mesure {bar} », for Dann.
+	// it for the plural. Drafted by Code, ratified by Dann 2026-09-28 20:44 ("ratify
+	// both"; `PRODUCT.md`, "The folded watch line's lead").
 	'watch.lead.one': { en: 'Bar {bar}', fr: 'Mesure {bar}' },
 	'watch.lead.many': { en: 'Bars {bars}', fr: 'Mesures {bars}' },
 	'watch.advice.iCrossing': { en: 'relaxing the jaw and leaning the vowel toward [{target}], giving it a touch more space, which can lift your first resonance clear of the pitch', fr: 'relâcher la mâchoire et orienter la voyelle vers [{target}], en lui donnant un peu plus d\u2019espace, ce qui peut dégager votre première résonance de la hauteur chantée' },
-	'watch.advice.openOCrossing': { en: 'allowing the turn and letting the vowel open into that fuller, headier resonance; up here it can settle the tone rather than straining to stay bright', fr: 'accepter le changement de timbre et laisser la voyelle s\u2019ouvrir vers cette résonance plus pleine, plus tournée vers la tête; dans cet aigu, cela peut poser le son plutôt que de le forcer à rester clair' },
-	'watch.advice.oCover': { en: 'allowing the vowel to open and darken toward [{target}]; that can be a more comfortable option than a close [o] this high', fr: 'laisser la voyelle s\u2019ouvrir et s\u2019assombrir vers [{target}]; cela peut être une option plus confortable qu\u2019un [o] fermé dans cet aigu' },
-	'watch.advice.openTracking': { en: 'letting the jaw drop to open the vowel here, raising your first resonance to the pitch; that can ease the sound rather than keeping a close [{vowel}] squeezed this high', fr: 'laisser la mâchoire descendre pour ouvrir la voyelle ici, en élevant votre première résonance jusqu\u2019à la hauteur chantée; cela peut libérer le son, plutôt que de garder un [{vowel}] fermé et serré dans cet aigu' },
-	'watch.advice.maleTurnover': { en: 'letting the [{vowel}] turn and gather here rather than spreading it open for more sound; up this high the ring tends to come from letting it settle, not from pushing it wider', fr: 'laisser le [{vowel}] changer de timbre et se rassembler ici, plutôt que de l\u2019ouvrir davantage pour obtenir plus de son; dans cet aigu, la brillance tend à venir de ce que vous le laissez se poser, et non de ce que vous l\u2019élargissez' },
+	'watch.advice.openOCrossing': { en: 'allowing the turn and letting the vowel open into that fuller, headier resonance; up here it can settle the tone rather than straining to stay bright', fr: 'accepter le changement de timbre et laisser la voyelle s\u2019ouvrir vers cette résonance plus pleine, plus tournée vers la tête\u202f; dans cet aigu, cela peut poser le son plutôt que de le forcer à rester clair' },
+	'watch.advice.oCover': { en: 'allowing the vowel to open and darken toward [{target}]; that can be a more comfortable option than a close [o] this high', fr: 'laisser la voyelle s\u2019ouvrir et s\u2019assombrir vers [{target}]\u202f; cela peut être une option plus confortable qu\u2019un [o] fermé dans cet aigu' },
+	'watch.advice.openTracking': { en: 'letting the jaw drop to open the vowel here, raising your first resonance to the pitch; that can ease the sound rather than keeping a close [{vowel}] squeezed this high', fr: 'laisser la mâchoire descendre pour ouvrir la voyelle ici, en élevant votre première résonance jusqu\u2019à la hauteur chantée\u202f; cela peut libérer le son, plutôt que de garder un [{vowel}] fermé et serré dans cet aigu' },
+	'watch.advice.maleTurnover': { en: 'letting the [{vowel}] turn and gather here rather than spreading it open for more sound; up this high the ring tends to come from letting it settle, not from pushing it wider', fr: 'laisser le [{vowel}] changer de timbre et se rassembler ici, plutôt que de l\u2019ouvrir davantage pour obtenir plus de son\u202f; dans cet aigu, la brillance tend à venir de ce que vous le laissez se poser, et non de ce que vous l\u2019élargissez' },
 	'watch.keyPhrase.one': { en: 'to {a}', fr: 'en {a}' },
 	'watch.keyPhrase.two': { en: 'to {a} or {b}', fr: 'en {a} ou en {b}' },
 	'watch.key.name': { en: '{tonic} {mode}', fr: '{tonic} {mode}' },
@@ -1808,6 +1813,11 @@ export function t(key: string, lang: Language): string {
 	const entry = strings[key];
 	if (!entry || !entry[lang]) return `[MISSING: ${key}]`;
 	return entry[lang];
+}
+
+/** Every key in the table, for tests that sweep every string (`i18n.test.ts`). */
+export function stringKeys(): string[] {
+	return Object.keys(strings);
 }
 
 /** True when the key carries a value in this language. `comment-text.ts` uses it to fall back between registers. */

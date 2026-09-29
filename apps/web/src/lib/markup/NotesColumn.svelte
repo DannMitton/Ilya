@@ -1,7 +1,7 @@
 <script lang="ts">
 	/**
 	 * The trailing notes sheet's column: the withheld statement (item 1.8), the
-	 * octave notice, and the "Places to watch" band, in that order (Dann's
+	 * octave notice, and the "For your consideration" band, in that order (Dann's
 	 * placement ruling, 2026-07-18). Lifted out of `MarkupPane.svelte` with its
 	 * styles when the notes learned to run on to a further sheet (Dann's look,
 	 * 2026-09-28; `notes-pages.ts` says why and how).
@@ -118,7 +118,7 @@
 
 <style>
 	/* The notes page's content window: the same text column as the score, a
-	   column of the octave notice then the "Places to watch" band. The octave
+	   column of the octave notice then the "For your consideration" band. The octave
 	   notice and band render AFTER the score on their own sheet (Dann's
 	   placement ruling, 2026-07-18). First-pass treatment; design is Dann's.
 	   `overflow: hidden` stays as a backstop only: the packing in

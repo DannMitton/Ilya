@@ -1,5 +1,5 @@
 /**
- * The head-of-score watch list ("Places to watch"), design C.
+ * The head-of-score watch list ("For your consideration"), design C.
  *
  * A pure translation layer: it reads the acoustic marks the analysis already computes
  * per note (`AnalyzedScore.events`, all from the singer's own fR1) and the

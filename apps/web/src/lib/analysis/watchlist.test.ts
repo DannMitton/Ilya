@@ -262,7 +262,7 @@ describe('buildWatchList — sort and show-all', () => {
 
 describe('watch-list copy', () => {
 	it('renders each tier with the ruled voice, leading with the bar', () => {
-		expect(t('watch.header', 'en')).toBe('Places to watch');
+		expect(t('watch.header', 'en')).toBe('For your consideration');
 		expect(
 			en({ eventId: 'e', tier: 1, kinds: ['range'], bar: '12', vowel: 'a', density: 1 })
 		).toBe('Bar 12 rises above the range you gave.');
@@ -554,7 +554,7 @@ describe('watch-band copy in French (N.82, ruled 2026-09-28)', () => {
 	const base = { eventId: 'e', density: 1 } as const;
 
 	it('reads the ratified French lines, IPA in square brackets', () => {
-		expect(t('watch.header', 'fr')).toBe('Points à surveiller');
+		expect(t('watch.header', 'fr')).toBe('À considérer');
 		expect(fr({ ...base, tier: 1, kinds: ['range'], bar: '12', vowel: 'a', rangeDirection: 'below' })).toBe(
 			'Mesure 12\u00a0: la note descend sous l\u2019ambitus que vous avez indiqué.'
 		);
@@ -565,7 +565,7 @@ describe('watch-band copy in French (N.82, ruled 2026-09-28)', () => {
 			'Mesure 52\u00a0: le [e], au sommet de votre ambitus et prolongé ici, est un endroit exposé où la voyelle peut se resserrer.'
 		);
 		expect(fr({ ...base, tier: 3, kinds: ['passaggio'], bar: '4', vowel: 'a', word: 'край' })).toBe(
-			'Mesure 4\u00a0: «\u00a0край\u00a0» tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre.'
+			'Mesure 4\u00a0: «\u00a0край\u00a0» tombe près de votre passaggio\u202f; attendez-vous à devoir gérer le changement de timbre.'
 		);
 		expect(
 			fr({ ...base, tier: 4, kinds: ['timbre'], bar: '7', vowel: 'a', word: 'слава', timbreDirection: 'close-to-open' })
@@ -581,7 +581,7 @@ describe('watch-band copy in French (N.82, ruled 2026-09-28)', () => {
 		const range = { ...base, tier: 1 as const, kinds: ['range' as const], bar: '3', vowel: 'a' };
 		const keys = { semitones: [-4, -2], keys: [{ fifths: -3, mode: 'major' as const }, { fifths: -5, mode: 'major' as const }] };
 		expect(fr({ ...range, transposition: keys })).toBe(
-			'Mesure 3\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué; vous pouvez songer à transposer en mi bémol majeur ou en ré bémol majeur.'
+			'Mesure 3\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué\u202f; vous pouvez songer à transposer en mi bémol majeur ou en ré bémol majeur.'
 		);
 		expect(en({ ...range, transposition: keys })).toBe(
 			'Bar 3 rises above the range you gave; you may want to transpose to E flat major or D flat major.'

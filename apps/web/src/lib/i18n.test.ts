@@ -19,7 +19,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { t } from './i18n';
+import { stringKeys, t } from './i18n';
 
 describe('N.62 accessible names', () => {
 	it('speaks the ratified French, and never [MISSING, for all four keys', () => {
@@ -79,5 +79,32 @@ describe("the loupe's French", () => {
 			expect(t(key, 'fr'), key).toBe(word);
 			expect(t(key, 'en'), key).toBe(word);
 		}
+	});
+});
+
+/**
+ * French spacing before the semicolon, ruled by Dann 2026-09-28 19:42
+ * (`docs/memory/PRODUCT.md`): a narrow no-break space, U+202F, before every
+ * French semicolon. Markup inside a value is not prose: a semicolon inside a
+ * tag (the footer's inline `style`) or ending an entity (`&#160;`) is skipped.
+ */
+describe('French semicolons carry a narrow no-break space', () => {
+	const prose = (s: string) => s.replace(/<[^>]*>/g, '').replace(/&#?\w+;/g, '');
+	const unspaced = (s: string) => [...prose(s)].filter((c, i, a) => c === ';' && a[i - 1] !== '\u202f').length;
+
+	it('finds the faults it is looking for', () => {
+		expect(unspaced('passaggio; attendez')).toBe(1);
+		expect(unspaced('passaggio\u00a0; attendez')).toBe(1);
+		expect(unspaced('passaggio ; attendez')).toBe(1);
+		expect(unspaced('passaggio\u202f; attendez')).toBe(0);
+		expect(unspaced('<span style="width:14px;height:7px">x</span>')).toBe(0);
+	});
+
+	it('every French value in i18n.ts has U+202F before each semicolon', () => {
+		const faults = stringKeys().filter((k) => unspaced(t(k, 'fr')) > 0);
+		expect(faults).toEqual([]);
+		// Not vacuous: the table carries French semicolons to check (14 on 2026-09-29).
+		const checked = stringKeys().reduce((n, k) => n + (prose(t(k, 'fr')).match(/;/g)?.length ?? 0), 0);
+		expect(checked).toBeGreaterThanOrEqual(14);
 	});
 });
