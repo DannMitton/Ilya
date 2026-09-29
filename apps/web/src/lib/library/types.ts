@@ -18,6 +18,7 @@ import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/score/pairings';
 import type { CorrectionMap } from '$lib/score/correction';
+import type { KeyChoice } from '@ilya/score-parser';
 
 /**
  * One stored gloss: the word key, the gloss, and the word the gloss was
@@ -108,6 +109,22 @@ export interface SongRecord {
 	 * knows), so no schema bump.
 	 */
 	seatedText?: string;
+	/**
+	 * N.94: THE KEY THE SINGER CHOSE on the Transposition ruler, as the two numbers that
+	 * fix it (`KeyChoice`). Absent means as printed.
+	 *
+	 * THE CHOICE, NEVER THE TRANSPOSED SCORE (`CONTRACT.md` §6, do not store
+	 * anything derived). The page engraves the new key from the printed score
+	 * and this on every render, so the printed score is never altered, which
+	 * is how "branch, do not mutate" (2026-08-07) is kept. On the song, beside
+	 * `corrections`, because the key is a fact about this song as the singer
+	 * sings it, and a switch of song must carry its own.
+	 *
+	 * OPTIONAL AND ADDITIVE, `seatedText`'s pattern: an older record has none
+	 * and reads as printed, and an older Ilya importing a newer binder drops it
+	 * (`validateRecord` copies only what it knows), so no schema bump.
+	 */
+	transposition?: KeyChoice;
 	source: SongSource | null;
 }
 

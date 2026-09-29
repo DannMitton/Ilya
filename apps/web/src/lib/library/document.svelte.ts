@@ -25,6 +25,7 @@ import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/score/pairings';
 import type { CorrectionMap } from '$lib/score/correction';
+import type { KeyChoice } from '@ilya/score-parser';
 import {
 	createSaveScheduler,
 	fieldsFromRecord,
@@ -80,6 +81,13 @@ export class SongDocument {
 	 * and stored only while it differs from the poem (`recordFromFields`).
 	 */
 	seatedText = $state('');
+
+	/**
+	 * N.94, the key the singer chose on the Transposition ruler, or null for as printed.
+	 * Saved through the same path as `corrections`: the choice, never the
+	 * transposed score (`SongRecord.transposition`).
+	 */
+	transposition = $state<KeyChoice | null>(null);
 
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
@@ -246,6 +254,7 @@ export class SongDocument {
 			pairings: this.pairings,
 			corrections: this.corrections,
 			seatedText: this.seatedText,
+			transposition: this.transposition,
 		};
 	}
 
@@ -294,6 +303,7 @@ export class SongDocument {
 		this.pairings = fields.pairings;
 		this.corrections = fields.corrections;
 		this.seatedText = fields.seatedText;
+		this.transposition = fields.transposition;
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {

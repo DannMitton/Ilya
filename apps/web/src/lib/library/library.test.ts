@@ -81,6 +81,41 @@ describe('record and page state', () => {
 	});
 });
 
+describe('N.94, the chosen key on the song', () => {
+	it('is absent on a song as printed, and stays absent through a round trip', () => {
+		const record = emptySongRecord('x', NOW);
+		const fields = fieldsFromRecord(record);
+
+		expect(fields.transposition).toBeNull();
+		expect('transposition' in recordFromFields(record, fields)).toBe(false);
+	});
+
+	it('stores the choice, two numbers, and reads it back', () => {
+		const record = emptySongRecord('x', NOW);
+		const stored = recordFromFields(record, {
+			...fieldsFromRecord(record),
+			transposition: { semitones: -3, fifths: 5 },
+		});
+
+		expect(stored.transposition).toEqual({ semitones: -3, fifths: 5 });
+		expect(validateRecord(stored, 'x', LATER).record.transposition).toEqual({ semitones: -3, fifths: 5 });
+		expect(fieldsFromRecord(stored).transposition).toEqual({ semitones: -3, fifths: 5 });
+	});
+
+	it('As printed removes it', () => {
+		const record = { ...emptySongRecord('x', NOW), transposition: { semitones: -3, fifths: 5 } };
+
+		expect('transposition' in recordFromFields(record, { ...fieldsFromRecord(record), transposition: null })).toBe(false);
+	});
+
+	it('calls a key the ruler could not have offered malformed and does not carry it', () => {
+		const result = validateRecord({ transposition: { semitones: 9, fifths: 5 } }, 'x', NOW);
+
+		expect(result.reason).toBe('malformed');
+		expect(result.record.transposition).toBeUndefined();
+	});
+});
+
 describe('validateRecord', () => {
 	it('accepts a whole record unchanged', () => {
 		const record = seededRecord();

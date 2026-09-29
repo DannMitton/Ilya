@@ -1378,6 +1378,8 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 > justification."* **So layout, measure distribution and horizontal spacing are
 > editorial, and the standard is justification rather than prohibition.**
 >
+> **N.94 SLICE 2, RULED 2026-09-28 21:41** (Dann: *"I like your logic and your recommendations. Proceed"*). Dann proposed greying out a key past a threshold of double accidentals (about 20%); the desk recommended comparing enharmonic twins instead, and he agreed. **For each twin pair (C♭/B, G♭/F♯, D♭/C♯), Ilya counts the double accidentals each would draw; the twin with more is dimmed but stays tappable, its readout adding the count ("Reads with 12 double flats"); Ilya's pick always lands on the cleaner twin; keys without a twin never dim.** Slice 2 also carries the phone dock and Insights' "Try this key". The readout string's French is owed, drafted by the desk when slice 2 is briefed. Rests on `PRODUCT.md`, "Transposition moves every note by the same interval" (21:35).
+>
 > **N.94 FRENCH RULED 2026-09-28 19:28** (Dann: *"Ratified"*; drafted by the desk). The table is
 > `../sessions/brief-code-n94-key-ruler_r1_2026-09-28.md` §6: « Tonalité : {key}, telle qu’imprimée »,
 > « Essayer une autre tonalité », « Tonalité : {key}, après transposition », « Tonalité imprimée »,
@@ -1385,7 +1387,7 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 > (« plus haut » derived by the desk), header « Transposition d’une tierce mineure vers le bas à partir de ré majeur,
 > au choix de l’interprète. » **Not in the tree until a grep shows it.**
 >
-> **SUPERSEDED 2026-09-28: the home is the Piece band and a floating key ruler (Dann accepted drawing r4). See `STATE.md`, "N.94, THE KEY RULER".** **SUPERSEDED IN PART 2026-09-16: the control belongs in the Score Markup section, between Corrections and Voice (Dann), and N.94 is IN the release.** **N.94 HAS A HOME AGAIN, 2026-09-13.** Numbered 2026-08-24 as "transposition
+> **SUPERSEDED 2026-09-28: the home is the Piece band and a floating Transposition ruler (Dann accepted drawing r4). See `STATE.md`, "N.94, THE TRANSPOSITION RULER".** **SUPERSEDED IN PART 2026-09-16: the control belongs in the Score Markup section, between Corrections and Voice (Dann), and N.94 is IN the release.** **N.94 HAS A HOME AGAIN, 2026-09-13.** Numbered 2026-08-24 as "transposition
 > interface, modelled on Newzik" and never built. It is now a **station inside
 > the `Melody` band, sibling to Corrections**. Established: the ENGINE already
 > exists and ships. `packages/score-parser/src/transposition.ts` exports

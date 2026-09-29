@@ -224,6 +224,173 @@ export function transposeScore(parsed: ParsedScore, semitones: number): ParsedSc
   };
 }
 
+// ── Engraving in a new key (N.94 slice 1) ─────────────────────────────
+
+/**
+ * A key the singer chose, as the two numbers that fix it: how far the tonic
+ * moves, and the signature the first key lands on. Both are needed because
+ * one number cannot tell B major from C flat major: they sound the same, sit
+ * the same distance from D major, and are written differently.
+ */
+export interface KeyChoice {
+  /** The tonic's move, in semitones, -6 to +6. */
+  semitones: number;
+  /** The first key signature's fifths in the new key, -7 to +7. */
+  fifths: number;
+}
+
+/** One stop on the Transposition ruler: a key a singer can be handed. */
+export interface KeyStop extends KeyChoice {
+  /** The source's mode, carried; absent when the source declared none. */
+  mode?: 'major' | 'minor';
+}
+
+/**
+ * The tonic's pitch class for a signature, C = 0. A minor tonic sits a minor
+ * third under its relative major's, so both modes move by the same amount for
+ * the same change of signature. That is why a source with no mode still has a
+ * well-defined move per stop: the major reading and the minor reading agree.
+ */
+function tonicPitchClass(fifths: number, mode: 'major' | 'minor' | undefined): number {
+  return (((7 * fifths + (mode === 'minor' ? 9 : 0)) % 12) + 12) % 12;
+}
+
+/** A signature kept within seven accidentals by its enharmonic twin (12 fifths away). */
+function foldFifths(fifths: number): number {
+  if (fifths > 7) return fifths - 12;
+  if (fifths < -7) return fifths + 12;
+  return fifths;
+}
+
+/**
+ * THE TRANSPOSITION RULER'S STOPS (drawing r4, accepted by Dann 2026-09-28). One stop
+ * for every signature from seven flats to seven sharps in the printed mode,
+ * so every key a singer can be handed is on the line and no other key is.
+ *
+ * Each stop's move is the tonic's, folded to -6..+6: the nearer way round.
+ * THE TRITONE IS BOTH WAYS, so a key a tritone off appears at each end, down
+ * and up. Keys whose tonics sound the same (B and C flat, F sharp and G flat,
+ * C sharp and D flat in major; G sharp and A flat, D sharp and E flat, A sharp
+ * and B flat in minor) are separate stops with the same move, and sort side
+ * by side, the sharp key first, as the drawing sets them.
+ *
+ * A source with no mode still gets its stops, by signature: the move is the
+ * same under either reading (`tonicPitchClass`), and the caller names each
+ * stop by interval only, because naming a key there would be a guess (Dann's
+ * ruling 2026-07-20, carried at `keyNameAfterTransposition`). Pure.
+ */
+export function transpositionRulerStops(printed: KeySignature): KeyStop[] {
+  const home = tonicPitchClass(printed.fifths, printed.mode);
+  const stops: KeyStop[] = [];
+  for (let fifths = -7; fifths <= 7; fifths++) {
+    const r = (tonicPitchClass(fifths, printed.mode) - home + 12) % 12;
+    const moves = r === 6 ? [-6, 6] : [r > 6 ? r - 12 : r];
+    for (const semitones of moves) {
+      stops.push({ semitones, fifths, ...(printed.mode ? { mode: printed.mode } : {}) });
+    }
+  }
+  return stops.sort((a, b) => a.semitones - b.semitones || b.fifths - a.fifths);
+}
+
+/**
+ * ENGRAVING GRADE, which `transposeScore` is not (ruling 9 of 2026-08-07:
+ * "transpose the key signatures, teach `transposePitch` flat-aware spelling,
+ * and print the study edition in the chosen key").
+ *
+ * Every entry of `keySignatures` and every measure's snapshot moves by the
+ * same number of fifths, keeping its mode, so the renderer draws the new
+ * signature and decides each accidental against it. Every vocal pitch moves
+ * by `choice.semitones`.
+ *
+ * EVERY NOTE MOVES BY THE SAME INTERVAL, number and quality: its printed
+ * spelling is carried by the tonic's interval (`carrySpelling`), as an
+ * engraver transposes. Ruled by Dann 2026-09-28 21:35 (`PRODUCT.md`,
+ * "Transposition moves every note by the same interval"). A diatonic note
+ * therefore lands on the new key's own spelling, and a chromatic note keeps
+ * its degree: Sunless 1's flat sixth (B flat in D major, bar 2) is A flat in
+ * C major and C flat in E flat major. `spellPitch`'s tier 2 would have made
+ * it G sharp and B natural, and drew 27 accidentals on C major and every
+ * flat key where the printed page has 18. Carrying also keeps a spelling the
+ * singer set by hand, which this layer could not otherwise honour: the
+ * corrections are applied in the app before a score reaches this package,
+ * and nothing on a `VocalLineEvent` says which spellings they set.
+ *
+ * DOUBLE SHARPS AND DOUBLE FLATS THAT RESULT STAY. The one exception, same
+ * ruling: a note that would need a TRIPLE accidental takes its enharmonic
+ * with fewer accidentals (`fewerAccidentals`).
+ *
+ * `choice.fifths` is the FIRST signature's new value; a later key change moves
+ * by the same displacement and folds to its enharmonic twin if it would pass
+ * seven accidentals. The caller keeps `choice` consistent with the printed key
+ * (a stop from `transpositionRulerStops`); this does not re-check it.
+ *
+ * Non-destructive, and the shape of every event is unchanged: only values
+ * move. At no move and the printed signature, the input comes back as is.
+ */
+export function engraveInKey(parsed: ParsedScore, choice: KeyChoice): ParsedScore {
+  const printed =
+    parsed.keySignatures[0]?.signature.fifths ?? parsed.measures[0]?.keySignature.fifths ?? 0;
+  const delta = choice.fifths - printed;
+  if (choice.semitones === 0 && delta === 0) return parsed;
+
+  const moved = (k: KeySignature): KeySignature => ({ ...k, fifths: foldFifths(k.fifths + delta) });
+  const measures = parsed.measures.map((m) => ({ ...m, keySignature: moved(m.keySignature) }));
+
+  const source = parsed.keySignatures[0]?.signature ?? parsed.measures[0]?.keySignature ?? { fifths: printed };
+  const letters = letterShift(source, choice);
+
+  return {
+    ...parsed,
+    measures,
+    keySignatures: parsed.keySignatures.map((c) => ({ ...c, signature: moved(c.signature) })),
+    vocalLine: parsed.vocalLine.map((e: VocalLineEvent) => {
+      if (!e.pitch) return e;
+      const midi = pitchToMidi(e.pitch) + choice.semitones;
+      return { ...e, pitch: fewerAccidentals(carrySpelling(e.pitch, letters, midi)) };
+    }),
+  };
+}
+
+/**
+ * How many letters the tonic moves, signed: D major to B major is two letters
+ * down, D major to C flat major one. The letter distance is fixed by the two
+ * tonics' letters; the direction and octave are the ones nearest the move in
+ * semitones (seven letters to twelve semitones), so a tritone up and a tritone
+ * down each get their own count.
+ */
+function letterShift(source: KeySignature, choice: KeyChoice): number {
+  const letterOf = (fifths: number) => {
+    const step = fifths + 1 + (source.mode === 'minor' ? 3 : 0);
+    return STEP_INDEX[FIFTHS_ORDER[((step % 7) + 7) % 7]];
+  };
+  const base = (((letterOf(choice.fifths) - letterOf(source.fifths)) % 7) + 7) % 7;
+  const target = (choice.semitones * 7) / 12;
+  return [base - 7, base, base + 7].reduce((a, b) => (Math.abs(b - target) < Math.abs(a - target) ? b : a));
+}
+
+/** `p` moved by `letters` letters, altered so it sounds at `midi`. */
+function carrySpelling(p: Pitch, letters: number, midi: number): Pitch {
+  const n = p.octave * 7 + STEP_INDEX[p.step] + letters;
+  const octave = Math.floor(n / 7);
+  const step = (Object.keys(STEP_INDEX) as Pitch['step'][])[n - octave * 7];
+  return { step, alter: midi - ((octave + 1) * 12 + STEP_SEMITONE[step]), octave };
+}
+
+/**
+ * A carried spelling past a double accidental, respelled on the neighbouring
+ * letter it points to: a triple flat on the letter below, a triple sharp on
+ * the letter above, at the same pitch. B triple flat is A flat. The ruling
+ * asks only for fewer accidentals; the neighbouring letter is the respelling
+ * that departs least from the interval's number, so it can leave a double
+ * (F triple flat is E double flat, not D). INFERENCE from the ruling of
+ * 2026-09-28 21:35.
+ */
+function fewerAccidentals(p: Pitch): Pitch {
+  let out = p;
+  while (Math.abs(out.alter) > 2) out = carrySpelling(out, Math.sign(out.alter), pitchToMidi(out));
+  return out;
+}
+
 /** Notes outside the singer's declared range (pure pitch; no vowel needed). 0 when no range. */
 function countOutOfRange(parsed: ParsedScore, profile: VoiceProfileSnapshot): number {
   if (!profile.range) return 0;

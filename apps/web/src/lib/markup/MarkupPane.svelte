@@ -68,6 +68,10 @@
 		scoreInPerformanceOrder,
 		chooseClef,
 	} from '@ilya/score-parser';
+	import TranspositionRuler from './TranspositionRuler.svelte';
+	import { rulerOpening } from './transposition-ruler';
+	import type { TranspositionRulerState } from './transposition-ruler-state.svelte';
+	import { listSep, provisionalPartsFor, statusLineFor } from './profile-status';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import type { IngestedScore } from '$lib/score/ingestion/ingest';
 	import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
@@ -248,6 +252,8 @@
 		 * through one implementation rather than through two.
 		 */
 		isMobile?: boolean;
+		/** N.94: the song's key, and the Transposition ruler that floats over this page. */
+		keyRuler?: TranspositionRulerState;
 	}
 
 	let {
@@ -271,6 +277,7 @@
 		onnotepick = undefined,
 		selectedEventId = null,
 		isMobile = false,
+		keyRuler = undefined,
 	}: Props = $props();
 
 	// N.55b R4. The score is injected as an SVG STRING, so there is no
@@ -401,25 +408,6 @@
 	// vowels), so the trio lists provisional vowels in the same order the
 	// singer sees them in the workshop roster.
 	const ROSTER_ORDER: Vowel[] = ['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u', 'ɨ', 'ɪ', 'ʌ'];
-
-	// Counts are spelled out in the locked copy's register ("Seven vowels
-	// are captured"), so the words live here; the roster caps at ten.
-	// N.22 (E.40): `profile.count.0` is deleted. `countWord` has exactly one
-	// caller (`statusLine`, below), and that caller sends a zero count to
-	// `profile.statusSetPlain` instead, so index 0 could never render in
-	// either language. The array now starts at one; `countWord` shifts.
-	const COUNT_WORDS = $derived([
-		T('profile.count.1'),
-		T('profile.count.2'),
-		T('profile.count.3'),
-		T('profile.count.4'),
-		T('profile.count.5'),
-		T('profile.count.6'),
-		T('profile.count.7'),
-		T('profile.count.8'),
-		T('profile.count.9'),
-		T('profile.count.10')
-	]);
 
 	// The provisional roster still reads capture STATUS: it names which vowels
 	// the singer may want to re-take. That is a different question from what
@@ -558,9 +546,11 @@
 	// marks and the engraving stay coherent (a shifted-down line lands in bass
 	// clef via the tessitura heuristic). Non-destructive; `parsed` is untouched.
 	const octaveShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
-	const readingScore = $derived(
+	const printedReading = $derived(
 		parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed,
 	);
+	// N.94: the key, at the same seam, over the octave (`transposition-ruler-state.svelte.ts`).
+	const readingScore = $derived(printedReading && (keyRuler?.draw(printedReading) ?? printedReading));
 	const showOctaveNotice = $derived(octaveShift !== 0);
 	// Approved copy (Dann, 2026-07-18); shown only when the reading octave shifted.
 	const OCTAVE_NOTICE = $derived(T('profile.octaveNotice'));
@@ -697,6 +687,9 @@
 		const out = melismaIds(pairings ?? {});
 		return out.size > 0 ? out : undefined;
 	});
+
+	// N.94: where the ruler opens, against the printed key's sung order.
+	$effect(() => keyRuler?.prepare((p) => printedReading && rulerOpening(printedReading, p, adapted.snapshot, vowelResolver)));
 
 	// The Markup legend (item 1.6). Declared here rather than beside its doc
 	// comment above, because N.10b's entry depends on `withheldIpa`.
@@ -923,51 +916,9 @@
 	// Interim copy, flagged for Dann's eye with the §A.6 behaviours.
 	const runningHeader = $derived(scoreTitle?.trim() ? scoreTitle : subtitle);
 
-	function countWord(n: number): string {
-		return COUNT_WORDS[n - 1] ?? String(n);
-	}
-
-	// Built as an expression so the leading space survives Svelte's
-	// block-boundary whitespace trimming (the "setwith" bug, caught by
-	// Dann in live testing, 2026-07-12).
-	// DRAFT copy, flagged for Dann (§B.2). "measured" replaces "successfully
-	// captured": the count now spans every reading the forecast reads, which
-	// includes provisional ones, and "successfully captured" would overclaim
-	// their quality.
-	let statusLine = $derived(
-		analysedVowels.length === 0
-			? T('profile.statusSetPlain')
-			: (analysedVowels.length === 1
-					? T('profile.statusSetMeasuredSingular')
-					: T('profile.statusSetMeasuredPlural')
-				).replace('{count}', countWord(analysedVowels.length).toLowerCase()),
-	);
-
-	// N.22: split around {vowels} so the glyph snippet renders in the gap. The
-	// split point travels with the translation, which is the entire point: the
-	// fragments this replaced could not be translated, because French needs a
-	// noun English omits ("Votre voyelle [ɛ]") and the gender then
-	// propagates through the participle.
-	let provisionalParts = $derived(
-		(provisionalVowels.length === 1
-			? T('profile.provisional.sentenceSingular')
-			: T('profile.provisional.sentencePlural')
-		).split('{vowels}'),
-	);
-
-	/**
-	 * The separator before item `idx` in a natural-language list. N.34: the
-	 * joins are dictionary keys, because English takes the Oxford comma
-	 * ("a, b, and c") and French does not ("a, b et c"), which collapses the
-	 * French pair and final joins onto the same word.
-	 */
-	function listSep(idx: number, len: number): string {
-		if (idx === 0) return '';
-		if (len === 2) return T('profile.provisional.listSepPair');
-		return idx === len - 1
-			? T('profile.provisional.listSepFinal')
-			: T('profile.provisional.listSepMedial');
-	}
+	// The status lines' words (`profile-status.ts`).
+	let statusLine = $derived(statusLineFor(analysedVowels.length, language));
+	let provisionalParts = $derived(provisionalPartsFor(provisionalVowels.length, language));
 </script>
 
 <!--
@@ -1000,6 +951,7 @@
 			: undefined}
 	>
 
+		{#if keyRuler?.ruler}<TranspositionRuler {keyRuler} width={dims.width} {language} />{/if}
 		{#each scorePages as page, i (i)}
 			<article
 				class="paper-page profile-page score-page"
@@ -1014,6 +966,7 @@
 						translator=""
 						opus=""
 						{language}
+						note={keyRuler?.header(language)}
 						onheightchange={handleHeaderHeight}
 						versionAccent="#9585A2"
 						markAccent="#9585A2"
@@ -1117,7 +1070,8 @@
 				<p class="profile-line profile-status">
 					{#if provisionalVowels.length > 0}{provisionalParts[0]}{#each provisionalVowels as g, i (g)}{listSep(
 								i,
-								provisionalVowels.length
+								provisionalVowels.length,
+								language
 							)}{@render vowelGlyph(g)}{/each}{provisionalParts[1] ?? ''}{:else}{T(
 							'profile.provisional.noneMessage'
 						)}{/if}

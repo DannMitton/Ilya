@@ -36,9 +36,15 @@
 		 * document until colour stage 4, 2026-09-14.
 		 */
 		labelInk?: string;
+		/**
+		 * N.94: one line under the metadata saying the page is in a key the
+		 * singer chose, and from which key (drawing r4, plate 3; ruling 13 of
+		 * 2026-08-07). Absent on every page as printed, so no other page moves.
+		 */
+		note?: string;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)' }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -103,6 +109,10 @@
 			</div>
 		{/if}
 	</div>
+
+	{#if note}
+		<p class="header-note" style="color: {labelInk}">{note}</p>
+	{/if}
 
 	<div class="header-rule" style="border-bottom-color: {ruleAccent}"></div>
 </header>
@@ -178,6 +188,15 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		max-width: 100%;
+	}
+
+	/* ── N.94: the chosen key, in the document's label ink ─── */
+
+	.header-note {
+		margin: 0 0 8px;
+		font-family: var(--font-serif);
+		font-size: 13px;
+		line-height: 1.4;
 	}
 
 	/* ── Sage horizontal rule ──────────────────────────────── */

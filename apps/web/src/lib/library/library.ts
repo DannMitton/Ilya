@@ -22,6 +22,7 @@ import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/score/pairings';
 import { migrateCorrectionIds, type CorrectionMap } from '$lib/score/correction';
+import type { KeyChoice } from '@ilya/score-parser';
 import type { PluralStore, SourceBytes, StorageDriver } from './driver';
 import { requestPersistence as defaultRequestPersistence } from './quota';
 import {
@@ -55,6 +56,8 @@ export interface SongFields {
 	 * record without one describes its own poem (`SongRecord.seatedText`).
 	 */
 	seatedText: string;
+	/** N.94: the key the singer chose, or null for as printed (`SongRecord.transposition`). */
+	transposition: KeyChoice | null;
 }
 
 /* ── Record and page state, converted in one place ──────────────── */
@@ -81,6 +84,7 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		// document saves for its own reasons.
 		corrections: migrateCorrectionIds(record.corrections),
 		seatedText: record.seatedText ?? record.poem,
+		transposition: record.transposition ?? null,
 	};
 }
 
@@ -92,7 +96,8 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 export function recordFromFields(base: SongRecord, fields: SongFields): SongRecord {
 	// N.160 step 3. Stored only while it differs from the poem, so it is
 	// dropped from `base` first and put back only then.
-	const { seatedText: _stored, ...rest } = base;
+	// N.94, the same shape: stored only while the singer has chosen a key.
+	const { seatedText: _stored, transposition: _key, ...rest } = base;
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
 		key,
 		gloss,
@@ -108,6 +113,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		pairings: fields.pairings,
 		corrections: fields.corrections,
 		...(fields.seatedText !== fields.inputText ? { seatedText: fields.seatedText } : {}),
+		...(fields.transposition ? { transposition: { ...fields.transposition } } : {}),
 	};
 }
 
@@ -192,6 +198,18 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 	// seats describe the poem" (`SongRecord.seatedText`).
 	if (typeof value.seatedText === 'string') record.seatedText = value.seatedText;
 	else if (value.seatedText !== undefined) malformed();
+	// N.94, additive, and its default is ABSENCE, which reads as printed. Two
+	// whole numbers in range or nothing: a key the ruler could not have offered
+	// is not carried, so a damaged record opens as printed.
+	if (isStringRecord(value.transposition)) {
+		const { semitones, fifths } = value.transposition as Record<string, unknown>;
+		if (
+			Number.isInteger(semitones) && Math.abs(semitones as number) <= 6 &&
+			Number.isInteger(fifths) && Math.abs(fifths as number) <= 7
+		) {
+			record.transposition = { semitones: semitones as number, fifths: fifths as number };
+		} else malformed();
+	} else if (value.transposition !== undefined) malformed();
 
 	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
 	// This function rebuilds the record field by field from `emptySongRecord`,

@@ -562,11 +562,22 @@ export type WatchOpener = (typeof OPENERS)[number];
 /** Letters on the circle of fifths from F; a tonic is `fifths + 1` steps along it (+3 for minor). */
 const FIFTHS_LETTERS = ['F', 'C', 'G', 'D', 'A', 'E', 'B'] as const;
 
-/** "E flat major", « mi bémol majeur ». */
-function keyName(key: { fifths: number; mode: 'major' | 'minor' }, language: Language): string {
+/**
+ * A key's tonic as a letter and a shift: -1 flat, 0 natural, +1 sharp. Shared
+ * with the Transposition ruler (N.94), which draws the same tonic as a glyph.
+ */
+export function keyTonic(key: { fifths: number; mode: 'major' | 'minor' }): {
+	letter: (typeof FIFTHS_LETTERS)[number];
+	shift: number;
+} {
 	const step = key.fifths + 1 + (key.mode === 'minor' ? 3 : 0);
-	const letter = t(`watch.key.letter.${FIFTHS_LETTERS[((step % 7) + 7) % 7]}`, language);
-	const shift = Math.floor(step / 7);
+	return { letter: FIFTHS_LETTERS[((step % 7) + 7) % 7], shift: Math.floor(step / 7) };
+}
+
+/** "E flat major", « mi bémol majeur ». */
+export function keyName(key: { fifths: number; mode: 'major' | 'minor' }, language: Language): string {
+	const { letter: step, shift } = keyTonic(key);
+	const letter = t(`watch.key.letter.${step}`, language);
 	const tonic =
 		shift === 0
 			? letter

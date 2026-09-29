@@ -633,7 +633,7 @@ applies without being read.
 - Do not put a mark on the page to say Ilya is unsure. **A mark that appears on
   everything says nothing.**
 - Do not put a control on the paper. **Drawer manipulates, page displays and prints.**
-- **No control is part of the printed page. Passing layers, the loupe and the key
+- **No control is part of the printed page. Passing layers, the loupe and the Transposition
   ruler, float above it and never print.** Offered by the desk; ruled in by Dann
   2026-09-28 19:23 (*"yes"*). Default, with its exception stated per tether 19:
   a layer may print only if Dann rules that one in by name.

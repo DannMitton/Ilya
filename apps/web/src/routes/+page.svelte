@@ -34,6 +34,7 @@
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
 	// longer called from here; the legacy driver writes the same key.
 	import { isDeskLayout } from '$lib/components/Drawer/layout';
+	import { calculateDrawerWidth } from '$lib/components/Drawer/drawer-width';
 	import { SongDocument, LEGACY_SONG_ID } from '$lib/library/document.svelte';
 	import { Library } from '$lib/library/library';
 	import { createMemoryDriver, globalStore } from '$lib/library/driver';
@@ -94,6 +95,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		type TabId,
 	} from '$lib/destinations';
 	import { INCLUDE_MARKUP_INSIGHTS } from '$lib/wall';
+	import { transpositionRulerState } from '$lib/markup/transposition-ruler-state.svelte';
+	import PieceKeyLine from '$lib/markup/PieceKeyLine.svelte';
 	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
 	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
@@ -1333,6 +1336,14 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			},
 		};
 	});
+	/* N.94, the Transposition ruler: the Piece band opens it and it floats over
+	   Markup. Its state and wiring are `transposition-ruler-state.svelte.ts`. */
+	const keyRuler = transpositionRulerState(
+		() => doc,
+		() => correctedScore?.result.score,
+		() => destination === 'studio' && studioDocument === 'markup',
+		() => handleTabChange('markup'),
+	);
 	/* N.92 mobile slice 2. A PHONE IS A SMALLEST-SIDE TEST, not a width test,
 	   and the two answer different questions. `isMobile` asks whether THIS
 	   frame is narrower than the page, which is what decides the fit and which
@@ -1984,37 +1995,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			viewBreathClass = 'breath-in';
 			setTimeout(() => { viewBreathClass = ''; }, 300);
 		}, 150);
-	}
-	// ── Dynamic drawer width: pure calculation from ribbon content ──
-	// Atoms are fixed 32px. Gaps, borders, and padding are constants.
-	// Width is computed before render (no DOM measurement, no flicker).
-	function calculateDrawerWidth(word: WordStackData): number {
-		const ATOM_W = 32;
-		const ATOM_GAP = 2;
-		const MOL_PAD_BORDER = 9; // 3px padding × 2 + 1.5px border × 2
-		const SYLLABLE_GAP = 12;
-		const CLITIC_COL_W = ATOM_W + MOL_PAD_BORDER; // 41px
-		const OVERHEAD = 70; // 32px panel padding + 24px lip + borders/scrollbar
-		// Count atoms per syllable from displayLog
-		const syllableAtomCounts = new Map<number, number>();
-		for (const entry of word.displayLog) {
-			const si = entry.syllableIndex ?? 0;
-			syllableAtomCounts.set(si, (syllableAtomCounts.get(si) ?? 0) + 1);
-		}
-		let ribbonWidth = 0;
-		const syllableCount = syllableAtomCounts.size;
-		// Sum molecule widths
-		for (const [, atomCount] of syllableAtomCounts) {
-			ribbonWidth += atomCount * ATOM_W + (atomCount - 1) * ATOM_GAP + MOL_PAD_BORDER;
-		}
-		// Gaps between syllable columns
-		if (syllableCount > 1) {
-			ribbonWidth += (syllableCount - 1) * SYLLABLE_GAP;
-		}
-		// Clitic arrow columns (standalone, outside molecules)
-		if (word.isProclitic) ribbonWidth += CLITIC_COL_W + SYLLABLE_GAP;
-		if (word.isEnclitic) ribbonWidth += CLITIC_COL_W + SYLLABLE_GAP;
-		return Math.max(520, Math.min(720, ribbonWidth + OVERHEAD));
 	}
 	// Derived
 	const showInspector = $derived(selectedWord !== null);
@@ -4353,6 +4333,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     component that authors the markup. -->
 					<p class="markup-provenance" title={arrangerProvenance}>{arrangerProvenance}</p>
 				{/if}
+				{#if INCLUDE_MARKUP_INSIGHTS}<PieceKeyLine {keyRuler} {language} {isPhone} />{/if}
 			{/snippet}
 			<!-- THE CALIBRATION TAKEOVER (N.73 S3 ship one). The wizard MOVED
 			     here from the old shane panel; not one line of it is rewritten. Its
@@ -4896,6 +4877,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				openSyllabification={doc.openSyllabification}
 				{showStressDiacritics}
 				onpagesdrawn={handlePagesDrawn}
+				{keyRuler}
 			/>
 		{:else}
 			<ReadingPaper {language}>

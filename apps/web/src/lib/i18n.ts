@@ -1763,6 +1763,29 @@ const strings: Record<string, Record<Language, string>> = {
 	'watch.interval.4': { en: 'a major third', fr: 'd\u2019une tierce majeure' },
 	'watch.interval.5': { en: 'a perfect fourth', fr: 'd\u2019une quarte juste' },
 	'watch.interval.6': { en: 'a tritone', fr: 'd\u2019un triton' },
+	// N.94, the Transposition ruler. RULED by Dann 2026-09-28 19:28 ("Ratified"), the
+	// table in `brief-code-n94-key-ruler_r1_2026-09-28.md` §6, verbatim.
+	'key.band.asPrinted': { en: 'Key: {key}, as printed', fr: 'Tonalit\u00e9\u00a0: {key}, telle qu\u2019imprim\u00e9e' },
+	'key.band.try': { en: 'Try another key', fr: 'Essayer une autre tonalit\u00e9' },
+	'key.band.transposed': { en: 'Key: {key}, transposed', fr: 'Tonalit\u00e9\u00a0: {key}, apr\u00e8s transposition' },
+	'key.band.backToPrinted': { en: 'As printed', fr: 'Tonalit\u00e9 imprim\u00e9e' },
+	'key.ruler.cancel': { en: 'Cancel', fr: 'Annuler' },
+	'key.ruler.use': { en: 'Use this key', fr: 'Utiliser cette tonalit\u00e9' },
+	'key.ruler.readoutPick': { en: '{interval} \u00b7 {key} \u00b7 Ilya\u2019s recommendation', fr: '{interval} \u00b7 {key} \u00b7 recommandation d\u2019Ilya' },
+	'key.ruler.readout': { en: '{interval} \u00b7 {key}', fr: '{interval} \u00b7 {key}' },
+	'key.page.header': { en: 'Transposed {interval} from {key}, at the singer\u2019s choice.', fr: 'Transposition {interval} \u00e0 partir de {key}, au choix de l\u2019interpr\u00e8te.' },
+	// The readout's interval, a standalone phrase (brief §6): in French the
+	// capitalized interval without « d’ », then « plus bas » or « plus haut »,
+	// ruled form "Une tierce mineure plus bas". English from `intervalName`,
+	// capitalized. NOT the `watch.interval.*` form, which needs a verb before it.
+	'key.ruler.down': { en: 'Down {a}', fr: '{a} plus bas' },
+	'key.ruler.up': { en: 'Up {a}', fr: '{a} plus haut' },
+	'key.ruler.interval.1': { en: 'a semitone', fr: 'Un demi-ton' },
+	'key.ruler.interval.2': { en: 'a whole tone', fr: 'Un ton' },
+	'key.ruler.interval.3': { en: 'a minor third', fr: 'Une tierce mineure' },
+	'key.ruler.interval.4': { en: 'a major third', fr: 'Une tierce majeure' },
+	'key.ruler.interval.5': { en: 'a perfect fourth', fr: 'Une quarte juste' },
+	'key.ruler.interval.6': { en: 'a tritone', fr: 'Un triton' },
 };
 
 /**

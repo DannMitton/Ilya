@@ -14,8 +14,11 @@ import {
   intervalName,
   keyAfterTransposition,
   keyNameAfterTransposition,
+  engraveInKey,
+  transpositionRulerStops,
   type TranspositionCandidate,
 } from './transposition';
+import { advanceAccidentalState } from './staff-renderer';
 import { pitchToMidi, type VowelResolver } from './overlay-engine';
 import type { Fraction, Measure, ParsedScore, Pitch, VocalLineEvent } from './types';
 import type { VoiceProfileSnapshot } from './analysis-types';
@@ -342,5 +345,219 @@ describe('spellPitch, the one speller', () => {
       alter: 0,
       octave: 4,
     });
+  });
+});
+
+// ── N.94 slice 1: engraving in a new key ───────────────────────────────
+
+/** A score in `fifths` (and `mode`) over `measureCount` bars, notes spread across them. */
+function keyedScore(
+  pitches: Pitch[],
+  fifths: number,
+  mode: 'major' | 'minor' | undefined = 'major',
+  measureCount = 2,
+): ParsedScore {
+  const key = mode ? { fifths, mode } : { fifths };
+  const base = buildScore(
+    pitches.map((p, i) => ({ ...note(`n${i}`, p), measureIndex: i % measureCount })),
+  );
+  return {
+    ...base,
+    measures: Array.from({ length: measureCount }, (_, i) => ({
+      ...base.measures[0],
+      index: i,
+      number: String(i + 1),
+      keySignature: key,
+    })),
+    keySignatures: [{ measureIndex: 0, signature: key }],
+  };
+}
+
+/** D major, one octave up from D4: every note diatonic. */
+const D_MAJOR_SCALE = [
+  P('D', 4), P('E', 4), P('F', 4, 1), P('G', 4), P('A', 4), P('B', 4), P('C', 5, 1), P('D', 5),
+];
+
+/** How many notes the renderer would give an accidental, by its own rule. */
+function accidentalsDrawn(s: ParsedScore): number {
+  const fifths = s.keySignatures[0].signature.fifths;
+  let n = 0;
+  for (const e of s.vocalLine) {
+    if (e.pitch && advanceAccidentalState(e.pitch, fifths, {}, {}) !== 'none') n++;
+  }
+  return n;
+}
+
+describe('engraveInKey', () => {
+  it('moves the signature and every measure snapshot, keeping the mode', () => {
+    const s = keyedScore(D_MAJOR_SCALE, 2);
+    const b = engraveInKey(s, { semitones: -3, fifths: 5 });
+    expect(b.keySignatures).toEqual([{ measureIndex: 0, signature: { fifths: 5, mode: 'major' } }]);
+    expect(b.measures.map((m) => m.keySignature)).toEqual([
+      { fifths: 5, mode: 'major' },
+      { fifths: 5, mode: 'major' },
+    ]);
+    // Non-destructive: the printed score is untouched.
+    expect(s.keySignatures[0].signature.fifths).toBe(2);
+    expect(s.measures[1].keySignature.fifths).toBe(2);
+    expect(s.vocalLine[0].pitch).toEqual(P('D', 4));
+  });
+
+  it('D major down a minor third lands in B major with no accidental on a diatonic note', () => {
+    const b = engraveInKey(keyedScore(D_MAJOR_SCALE, 2), { semitones: -3, fifths: 5 });
+    expect(b.vocalLine.map((e) => e.pitch)).toEqual([
+      P('B', 3), P('C', 4, 1), P('D', 4, 1), P('E', 4), P('F', 4, 1), P('G', 4, 1), P('A', 4, 1), P('B', 4),
+    ]);
+    expect(accidentalsDrawn(b)).toBe(0);
+  });
+
+  it('the same move to C flat major spells every note with flats', () => {
+    const cb = engraveInKey(keyedScore(D_MAJOR_SCALE, 2), { semitones: -3, fifths: -7 });
+    expect(cb.keySignatures[0].signature).toEqual({ fifths: -7, mode: 'major' });
+    for (const e of cb.vocalLine) expect(e.pitch?.alter).toBe(-1);
+    // Same heights as B major: C flat 4 sounds B3, and the octave arithmetic says so.
+    expect(cb.vocalLine[0].pitch).toEqual(P('C', 4, -1));
+    expect(pitchToMidi(cb.vocalLine[0].pitch!)).toBe(pitchToMidi(P('B', 3)));
+    expect(accidentalsDrawn(cb)).toBe(0);
+  });
+
+  it('a chromatic note keeps its printed spelling, moved by the tonic interval', () => {
+    // G sharp in D major is the raised fourth: E natural in B flat major, E sharp in B major.
+    const s = keyedScore([P('G', 4, 1)], 2);
+    expect(engraveInKey(s, { semitones: -4, fifths: -2 }).vocalLine[0].pitch).toEqual(P('E', 4));
+    expect(engraveInKey(s, { semitones: -3, fifths: 5 }).vocalLine[0].pitch).toEqual(P('E', 4, 1));
+  });
+
+  it('the flat sixth stays a flat sixth: Sunless 1, bar 2, where tier 2 alone went wrong', () => {
+    // B flat in D major. Tier 2 spells C major's chromatic notes sharp (G sharp)
+    // and E flat major's pitch class 11 as B natural; the degree is A flat and C flat.
+    const s = keyedScore([P('A', 3), P('B', 3, -1)], 2, 'major', 1);
+    expect(engraveInKey(s, { semitones: -2, fifths: 0 }).vocalLine.map((e) => e.pitch)).toEqual([P('G', 3), P('A', 3, -1)]);
+    const eFlat = engraveInKey(s, { semitones: 1, fifths: -3 });
+    expect(eFlat.vocalLine.map((e) => e.pitch)).toEqual([P('B', 3, -1), P('C', 4, -1)]);
+    expect(accidentalsDrawn(eFlat)).toBe(1);
+  });
+
+  it('a note that would need a triple accidental takes its enharmonic with fewer', () => {
+    // The ruled case (Dann 2026-09-28 21:35): B double flat down a chromatic
+    // semitone, an augmented unison (D major to D flat major, same letter),
+    // would be B triple flat. It comes out as A flat, the same pitch.
+    const s = keyedScore([P('B', 4, -2)], 2);
+    const out = engraveInKey(s, { semitones: -1, fifths: -5 }).vocalLine[0].pitch!;
+    expect(out).toEqual(P('A', 4, -1));
+    expect(pitchToMidi(out)).toBe(pitchToMidi(P('B', 4, -2)) - 1);
+    // A triple sharp takes the letter above: C double sharp in C major, up a
+    // chromatic semitone to C sharp major, would be C triple sharp; it is D sharp.
+    const up = engraveInKey(keyedScore([P('C', 5, 2)], 0), { semitones: 1, fifths: 7 }).vocalLine[0].pitch!;
+    expect(up).toEqual(P('D', 5, 1));
+  });
+
+  it("a composer's double accidental moved by a plain interval stays double", () => {
+    // F double sharp in D major, up a major second to E major: G double sharp.
+    const up = engraveInKey(keyedScore([P('F', 4, 2)], 2), { semitones: 2, fifths: 4 });
+    expect(up.vocalLine[0].pitch).toEqual(P('G', 4, 2));
+    // B double flat in D major, down a major second to C major: A double flat.
+    const down = engraveInKey(keyedScore([P('B', 3, -2)], 2), { semitones: -2, fifths: 0 });
+    expect(down.vocalLine[0].pitch).toEqual(P('A', 3, -2));
+  });
+
+  it('a double accidental that results from the move stays: D major to C flat major', () => {
+    // A G double flat, carried one letter and three semitones down, would be
+    // F triple flat; the neighbouring letter gives E double flat, which stays.
+    const s = keyedScore([P('G', 4, -2)], 2);
+    const out = engraveInKey(s, { semitones: -3, fifths: -7 }).vocalLine[0].pitch!;
+    expect(out).toEqual(P('E', 4, -2));
+    expect(pitchToMidi(out)).toBe(pitchToMidi(P('G', 4, -2)) - 3);
+  });
+
+  it('0 semitones at the printed signature returns the input itself', () => {
+    const s = keyedScore(D_MAJOR_SCALE, 2);
+    expect(engraveInKey(s, { semitones: 0, fifths: 2 })).toBe(s);
+  });
+
+  it('keeps every event field but the pitch, and every id', () => {
+    const s = keyedScore(D_MAJOR_SCALE, 2);
+    const b = engraveInKey(s, { semitones: 2, fifths: 4 });
+    b.vocalLine.forEach((e, i) => {
+      const { pitch: _a, ...rest } = e;
+      const { pitch: _b, ...was } = s.vocalLine[i];
+      expect(rest).toEqual(was);
+    });
+  });
+
+  it('a later key change moves by the same fifths and folds past seven accidentals', () => {
+    const s = keyedScore(D_MAJOR_SCALE, 2);
+    const withChange: ParsedScore = {
+      ...s,
+      keySignatures: [...s.keySignatures, { measureIndex: 1, signature: { fifths: 5, mode: 'major' } }],
+      measures: [s.measures[0], { ...s.measures[1], keySignature: { fifths: 5, mode: 'major' } }],
+    };
+    // Up a major third: D (2) to F sharp (6), so B (5) goes to D sharp (9), folded to E flat (-3).
+    const up = engraveInKey(withChange, { semitones: 4, fifths: 6 });
+    expect(up.keySignatures.map((k) => k.signature.fifths)).toEqual([6, -3]);
+    expect(up.measures.map((m) => m.keySignature.fifths)).toEqual([6, -3]);
+  });
+
+  it('transposeScore is untouched by it: still naturals and sharps, signature unmoved', () => {
+    const s = keyedScore(D_MAJOR_SCALE, 2);
+    const t = transposeScore(s, -4);
+    expect(t.keySignatures).toBe(s.keySignatures);
+    expect(t.vocalLine[0].pitch).toEqual(P('A', 3, 1));
+  });
+});
+
+describe('transpositionRulerStops', () => {
+  it('D major: fifteen keys, the tritone at both ends, the enharmonic pairs side by side', () => {
+    const stops = transpositionRulerStops({ fifths: 2, mode: 'major' });
+    const names = stops.map((s) => `${s.semitones}:${s.fifths}`);
+    expect(names).toEqual([
+      '-6:-4', // A flat, down a tritone
+      '-5:3', // A
+      '-4:-2', // B flat
+      '-3:5', '-3:-7', // B, C flat
+      '-2:0', // C
+      '-1:7', '-1:-5', // C sharp, D flat
+      '0:2', // D, as printed
+      '1:-3', // E flat
+      '2:4', // E
+      '3:-1', // F
+      '4:6', '4:-6', // F sharp, G flat
+      '5:1', // G
+      '6:-4', // A flat, up a tritone
+    ]);
+    expect(stops.every((s) => s.mode === 'major')).toBe(true);
+  });
+
+  it('a minor song gets the minor keys: B minor puts G sharp and A flat minor together', () => {
+    const stops = transpositionRulerStops({ fifths: 2, mode: 'minor' });
+    expect(stops).toHaveLength(16);
+    const printed = stops.find((s) => s.semitones === 0);
+    expect(printed).toEqual({ semitones: 0, fifths: 2, mode: 'minor' });
+    // G sharp minor (5 sharps) and A flat minor (7 flats) are both down a minor third from B minor.
+    expect(stops.filter((s) => s.semitones === -3).map((s) => s.fifths)).toEqual([5, -7]);
+  });
+
+  it('C major: the tritone is a pair at each end', () => {
+    const stops = transpositionRulerStops({ fifths: 0, mode: 'major' });
+    expect(stops.slice(0, 2).map((s) => `${s.semitones}:${s.fifths}`)).toEqual(['-6:6', '-6:-6']);
+    expect(stops.slice(-2).map((s) => `${s.semitones}:${s.fifths}`)).toEqual(['6:6', '6:-6']);
+  });
+
+  it('a source with no mode still has its stops, and carries no mode on them', () => {
+    const stops = transpositionRulerStops({ fifths: 2 });
+    expect(stops.map((s) => `${s.semitones}:${s.fifths}`)).toEqual(
+      transpositionRulerStops({ fifths: 2, mode: 'major' }).map((s) => `${s.semitones}:${s.fifths}`),
+    );
+    expect(stops.some((s) => 'mode' in s)).toBe(false);
+  });
+
+  it('every stop engraves consistently: the signature moves by the same count the tonic does', () => {
+    const s = keyedScore(D_MAJOR_SCALE, 2);
+    for (const stop of transpositionRulerStops({ fifths: 2, mode: 'major' })) {
+      const out = engraveInKey(s, stop);
+      expect(out.keySignatures[0].signature.fifths).toBe(stop.fifths);
+      expect(accidentalsDrawn(out)).toBe(0);
+      expect(pitchToMidi(out.vocalLine[0].pitch!) - pitchToMidi(P('D', 4))).toBe(stop.semitones);
+    }
   });
 });

@@ -456,6 +456,10 @@ Do not rename a vowel.
 
 **The code names the three documents as the singer reads them: Text, Markup, and Insights.** Numbered by Dann as N.174, 2026-09-26 23:14 (*"the three names Text Markup and Insights could feature in the code correction"*); built and walked 2026-09-27. "Shane" survives only as history: the git branch, the records, and one line in `ARCHITECTURE.md`. The module split (`score`, `voice`, `reader`, `analysis`, `markup`, `insights`) was the desk's, on his *"your choice"*, with `analysis` proposed by Fable.
 
+**The Paper GUI. Ruled by Dann 2026-09-28 21:14:** *"Use Paper GUI throughout as the umbrella term for the three documents Ilya offers for print. Individually these documents are Text, Markup, and Insights."* A printed page of one of them is still "a page".
+
+**The Transposition ruler. Ruled by Dann 2026-09-28 21:14:** *"I prefer Transposition ruler to key ruler because it is named for its function. Please adopt this everywhere."* N.94's control. Older records and the drawings `drawing-key-ruler_r1` to `r4` keep "key ruler" as written.
+
 **"Insights forecasts, it does not declare."** Ruled by Dann 2026-09-27 in Code's N.174 D.3 thread, replacing "Fit forecasts, it does not declare" where the code quotes the principle. The Guide's shown heading still says Fit and is N.154's.
 
 ---
@@ -890,6 +894,14 @@ languages from start to finish."*
 Dann has not moved that. **It raises the weight of a parity failure, not the schedule.**
 
 ---
+
+### Transposition moves every note by the same interval. Ruled by Dann 2026-09-28 21:35
+
+**His words:** *"Western musical notation for the period of art song in Ilya's scope uses functional harmony. We have to preserve the functional harmony implied by the original key... in C, Ab is modal borrowing of the bVI-chord, which resolves to a dominant. On the other hand in C, a G# reads as the applied dominant V/vi, and resolves up... it makes sense not to rewrite enharmonics: we need to move every single note in the piece by the same interval and quality."*
+
+**The rule (desk's distillation, 21:36):** every note moves by the same interval, number and quality; the key signature moves the same way; each note keeps the function its spelling gave it, so a resulting double flat or double sharp is correct and stays. A hand-set spelling moves like any other note. **Default exception, Dann's loose rule of thumb, not a hard line:** *"we can't arbitrarily mess around with enharmonic spellings until we get into triple flats, really."* A note that would need a triple accidental takes its enharmonic with fewer.
+
+**Too many double flats is answered by the enharmonic twin key**, a shift of the whole score by a diminished second (Dann, 21:36), which keeps every function. The Transposition ruler already offers the twins side by side (r4). Sources: Gould rule 66 (p. 437, per the extraction); `spellPitch`'s own header, which cannot see the harmony (`transposition.ts:176-182`); MuseScore's default of keeping double accidentals.
 
 ### The watch box's heading. Ruled by Dann 2026-09-28
 

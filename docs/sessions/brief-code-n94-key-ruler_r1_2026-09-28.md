@@ -1,9 +1,11 @@
-# Brief for Code: N.94, the key ruler, slice 1
+# Brief for Code: N.94, the Transposition ruler, slice 1
 
-Written by the desk 2026-09-28 about 19:40. **Draft r1. Do not start until two
+Written by the desk 2026-09-28 about 19:40; re-checked at `03bed5a`, 20:58. **Both start conditions now hold** (the watch-band fixes shipped in `2535f88`; the French was ruled 19:28). Originally: **Do not start until two
 things are true:** Code's four watch-band fixes have shipped (this brief edits
 `MarkupPane.svelte`, which that work also edits), and Dann has ruled the French
 in §6 (done 2026-09-28 19:28). The desk pastes the start line when both hold.
+
+**NAMING, ruled by Dann 2026-09-28 21:14:** *"I prefer Transposition ruler to key ruler because it is named for its function. Please adopt this everywhere."* Name the code for it: `TranspositionRuler.svelte`, `transposition-ruler.ts`, and its tests to match. The drawings keep their old file names (`drawing-key-ruler_r*.html`), as does this brief's; they are dated records.
 
 ## 0. What the singer gets
 
@@ -31,7 +33,7 @@ Dann 2026-09-28. Open it before you write anything. r1 to r3 are history.
   opens on Ilya's pick; every stop stays reachable. Ilya says nothing evaluative
   when the singer departs from it (same document, §5, the desk's reading then).
 - **Placement.** The Piece band and a floating ruler, superseding the Score Markup
-  placement of 2026-09-16 (`OPEN.md` §N.94, and `STATE.md` "N.94, THE KEY RULER").
+  placement of 2026-09-16 (`OPEN.md` §N.94, and `STATE.md` "N.94, THE TRANSPOSITION RULER").
 - **The ruler never prints.** `CONTRACT.md` §6, ruled in by Dann 2026-09-28 19:23.
 - **Do not change `VocalLineEvent`, and do not store anything derived.**
   `CONTRACT.md` §6.
@@ -53,7 +55,7 @@ Dann 2026-09-28. Open it before you write anything. r1 to r3 are history.
   (`transposition.ts:187-193`). `keyAfterTransposition` exists
   (`transposition.ts:347-366`) but folds each interval to one fifths value, so it
   cannot tell B major from C flat major. The ruler needs both.
-- **The seam is already there.** `MarkupPane.svelte:559-562` derives
+- **The seam is already there.** `MarkupPane.svelte`, the `octaveShift` and `readingScore` derivations (lines 560 to 563 at `03bed5a`), derives
   `readingScore` from `parsed` without touching it (the octave shift), and both the
   analysis and the render read `readingScore`. Transposition goes in the same
   derivation.
@@ -62,6 +64,14 @@ Dann 2026-09-28. Open it before you write anything. r1 to r3 are history.
   as it is.** It is the cost search's tool, not the engraver's.
 
 ## 3. The work
+
+**This brief authorizes a change to `packages/score-parser`**, in
+`src/transposition.ts` only (§3.1), because engraving in a new key is that package's
+job (ruling 9, §1). In the N.173 gates work a package edit was refused as "a change to
+a shared package" (`report-code-n173-gates_r1_2026-09-28.md`, line 77). If your tools
+refuse it again, stop at that point and report; do not route around it in the app.
+Gate 5 (score-parser tests) will move; report its new count.
+
 
 ### 3.1 The engine: `engraveInKey`
 
@@ -182,3 +192,28 @@ screenshots; and a section **What I could not establish**. NOT ESTABLISHED beats
 complete invented answer.
 
 Do not commit, stage, or push. Dann ships.
+
+## Addendum, 2026-09-28 21:40: two things before slice 1 ships
+
+The desk checked slice 1 in a cloud copy: web 1,677, score-parser 631 and 5 skipped,
+`check` 0 errors, ratchets OK, and all 84 captures unchanged with no key chosen.
+
+1. **The spelling rule is ruled, and it is yours.** `PRODUCT.md`, "Transposition moves
+   every note by the same interval", Dann 21:35: every note moves by the same interval,
+   number and quality; double flats and double sharps that result stay. Your DESK
+   DEFAULT of carrying each note's printed spelling is that rule; keep it. **Add the
+   one exception:** a note that would need a triple accidental takes its enharmonic
+   with fewer accidentals. Test it: B double flat moved down a chromatic semitone
+   (an augmented unison) would be B triple flat; it comes out as A flat, the same
+   pitch. And test that a composer's double accidental moved
+   by a plain interval stays double.
+2. **Restore both ceilings.** `scripts/ratchets.json` raised `MarkupPane.svelte` to
+   1389 and `+page.svelte` to 6057. `ARCHITECTURE.md` invariant 12: a ceiling may
+   shrink and never grow. Move the wiring out into `transposition-ruler.ts`,
+   `PieceKeyLine.svelte`, or a new module until both files are back at or under 1358
+   and 6028, and put the ceilings back. If a line truly cannot leave, stop and report
+   which and why; do not raise a ceiling.
+
+Re-run all eight gates and append to the slice 1 report. Do not commit, stage, stash,
+check out, or restore. Dann ships.
+

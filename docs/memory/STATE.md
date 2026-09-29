@@ -53,9 +53,13 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **2026-09-28 19:28, N.94 MOVED:** step 1 RULED yes (`CONTRACT.md` §6, 19:23); step 2 done, the renderer read is in the brief §2; brief written, `../sessions/brief-code-n94-key-ruler_r1_2026-09-28.md`; its French RULED 19:28 (`OPEN.md` §N.94). **It runs after Code's four watch-band fixes ship** (both edit `MarkupPane.svelte`). Code's queue: it goes in ahead of item 1 unless Dann says otherwise (DESK DEFAULT).
 >
-> **THE ONE THING NEXT: N.94, the key ruler.** Design accepted (block below). Two steps before any brief, one at a time:
-> 1. **Ask Dann, not yet answered:** add to `CONTRACT.md` §6, *"No control is part of the printed page. Passing layers, the loupe and the key ruler, float above it and never print."* The desk recommends yes.
+> **THE ONE THING NEXT: N.94, the Transposition ruler.** Design accepted (block below). Two steps before any brief, one at a time:
+> 1. **Ask Dann, not yet answered:** add to `CONTRACT.md` §6, *"No control is part of the printed page. Passing layers, the loupe and the Transposition ruler, float above it and never print."* The desk recommends yes.
 > 2. **The desk reads the renderer** to establish whether the engraved page can redraw in a new key. NOT ESTABLISHED. Then the Code brief.
+>
+> **2026-09-28 22:15, N.94 SLICE 1 WALKED BY DANN on localhost:** *"I love it"*. Transposition ruler (renamed 21:14), engraving by exact interval (ruled 21:35), triple-accidental exception (next letter, DESK DEFAULT), ceilings restored by moving wiring out (`MarkupPane.svelte` 1312, `+page.svelte` 6010; ceilings left at 1358/6028, could be lowered). Desk check: web 1681, score-parser 633+5, captures unchanged. Gates 4 and 5 moved (backup `~/Downloads/ilya-ship.sh.bak-1666-2026-09-28`). **Slice 2 ruled, not briefed** (`OPEN.md` §N.94). `ARCHITECTURE.md` ratified 21:54.
+>
+> **2026-09-28 20:54, SHIPPED `03bed5a`**: N.173's gates (strict gate 2, threshold 2, no page limit), French `watch.lead.*` ruled, N.171 closed, ARCHITECTURE.md §1. Gate 4 1666 (backup `~/Downloads/ilya-ship.sh.bak-1646-2026-09-28`). **Next to Code: N.94**, brief re-checked 20:58.
 >
 > **2026-09-28 20:26, N.173 GATES:** Code built them (uncommitted; report `../sessions/report-code-n173-gates_r1_2026-09-28.md`); desk check passed (1,665 tests, 0 errors, ratchets OK; French desk capture noise traced, `ENVIRONMENT.md`). **Dann 20:22/20:24: no data dump; gate 5 withdrawn, gate 2 strict** (curation draft, Revision r5). Brief: `../sessions/brief-code-n173-gates-strict_r1_2026-09-28.md`. **r2 (20:44): gate 5 gone, gate 2 strict, threshold 2 (Dann 20:32).** French « Mesure {bar} » / « Mesures {bars} » RATIFIED 20:44 (`PRODUCT.md`). Gate 4 to 1666 at ship.
 >
@@ -73,7 +77,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > 5. Correction Station slices 4 to 6 (`../sessions/code-audit-correction-station-map_r1_2026-09-27.md` §4, under `brief-code-audit-correction-station_r2_2026-09-27.md`).
 > 6. **Corrections keeps one fixed size:** brief `../sessions/brief-code-corrections-fixed-panel_r1_2026-09-28.md` (written 20:05). Dann's proposal 16:37; the desk's option 1 shape, agreed in direction 16:39. After item 5.
 > 7. **French semicolons:** `../sessions/brief-code-fr-semicolon-space_r1_2026-09-28.md`. After the N.173 gates.
-> 8. **N.94, the key ruler:** `../sessions/brief-code-n94-key-ruler_r1_2026-09-28.md`. After the N.173 gates (both edit the Markup notes).
+> 8. **N.94, the Transposition ruler:** `../sessions/brief-code-n94-key-ruler_r1_2026-09-28.md`. After the N.173 gates (both edit the Markup notes).
 >
 > **OPEN, carried from the moved blocks. Raise only when it bears on the work:**
 > - ~~Ruling not seated: « tenu » in `insights.finding.*`.~~ **STALE, struck 2026-09-28 19:45:** the tree already says « prolongé ici » and « se prolonge » (`i18n.ts:1523`, `:1524`, `:1528`), seated in `8127e01`.
@@ -84,18 +88,18 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > - **Slice 7's compare:** four pixels one colour level off on Learn's tabs; cause NOT ESTABLISHED.
 > - **Cut lists waiting for the audit:** `../sessions/loupe-cutlist_r2_2026-09-28.md` (re-cite first; the calm loupe moved its lines) and `../sessions/staff-renderer-cutlist_r2_2026-09-28.md`.
 > - **Later:** N.168's Insights wording, vetted.
-> - **Still owed by Dann (from the N.174 close, now in LOG):** a walk of «Семинарист» (no copy on the Mac); a read of `ARCHITECTURE.md`; the six N.168 French labels and the [œ] onset and [i] preface suggestions; the walk of the French word explanations and Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines; Claude GitHub App access for `DannMitton/ilya` unless done. Everything else owed: `OWED.md`.
+> - **Still owed by Dann (from the N.174 close, now in LOG):** a walk of «Семинарист» (no copy on the Mac); ~~a read of `ARCHITECTURE.md`~~ DONE: ratified 2026-09-28 21:54 after a claim-by-claim check (Sonnet agent, 101 claims; all wrong and unestablished claims ruled one by one; lean pass 1,891 to 1,706 words); the six N.168 French labels and the [œ] onset and [i] preface suggestions; the walk of the French word explanations and Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines; Claude GitHub App access for `DannMitton/ilya` unless done. Everything else owed: `OWED.md`.
 >
 > **Uncommitted desk files at this close:** `docs/sessions/drawing-key-ruler_r1` to `r4_2026-09-28.html`, the updated watch-band brief, `draft-curation-rules_r1_2026-09-24.md`, `STATE.md`, `OPEN.md`, `SCHEDULE.md`, `../sessions/LOG.md`, plus Code's four-fix work. `git add` the new drawings before the ship script.
 >
-> ### 2026-09-28, evening. N.94, THE KEY RULER, DESIGN ACCEPTED BY DANN (drawing `../sessions/drawing-key-ruler_r4_2026-09-28.html`; r1 to r3 are history). NOT BRIEFED.
+> ### 2026-09-28, evening. N.94, THE TRANSPOSITION RULER, DESIGN ACCEPTED BY DANN (drawing `../sessions/drawing-key-ruler_r4_2026-09-28.html`; r1 to r3 are history). NOT BRIEFED.
 > - **Entry:** the Piece band line "Key: D major, as printed" with a "Try another key" pill. Not in Corrections (Dann agreed Corrections is the wrong home). Insights' findings may offer "Try this key", which opens the same ruler.
 > - **Desktop:** a floating ruler over the whole page, a passing layer that never prints. Stops are real keys of 7 accidentals or fewer; enharmonic pairs (B and C♭, C♯ and D♭, F♯ and G♭) are SEPARATE stops side by side under a faint bracket (Dann: both are viable signatures; E♯ major is not). No tick marks. Printed key boxed, selection circled, runner-up dotted, the tritone at both ends. "Cancel" and "Use this key".
 > - **Readout, named by sound:** "Down a minor third · B major · Ilya's recommendation" (Dann: on a tempered piano the enharmonics are synonyms).
 > - **Phone:** a dock at the bottom edge, a scrolling window of about 7 stops at 44 px, fading edges, chips "As printed · D" and "Ilya's pick · B", the same readout and pills. Dann: *"yes"*.
 > - **After commit:** the copy's header says "Transposed down a minor third from D major, at the singer's choice."; the Piece band reads "Key: B major, transposed" with an "As printed" pill. The transposed version is a branch copy; the printed key is never lost.
 > - **Engine exists** (`packages/score-parser/src/transposition.ts`). **NOT ESTABLISHED:** whether the engraved page can redraw in a new key. The desk reads the renderer before the brief.
-> - **Asked, not ruled:** CONTRACT §6 amendment, "No control is part of the printed page. Passing layers, the loupe and the key ruler, float above it and never print."
+> - **Asked, not ruled:** CONTRACT §6 amendment, "No control is part of the printed page. Passing layers, the loupe and the Transposition ruler, float above it and never print."
 > - **Also agreed, not briefed:** Corrections as fixed-dimension controls that do not change shape by selection (Dann's proposal).
 >
 
