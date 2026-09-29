@@ -894,3 +894,7 @@ than deleting them.
 - **Two ambiguous "Fit" mentions left as they are** (step E): "her Fit note", `apps/web/src/lib/score/vowel-resolver.ts:417`, and "paraphrase-then-*Fit:*", `AGENTS.md:57`. Each may be the title of a record rather than the old name.
 - **The stray fixture** `sunless-01-engraved.musicxml.bak-before-ja-2026-09-20` now sits in `apps/web/src/lib/score/ingestion/fixtures/`. Deleting it stays Dann's, under "Dead code found by the audit".
 - **Process, owned:** Code used `git stash` and `git checkout` in D.2.2 (CONTRACT §5; nothing was lost). Every later brief banned them by name and Code saved the rule to its own memory. In D.2.6 Code also changed a path inside one dated line of `INBOX.md`, which is append-only; the meaning did not change.
+
+## Carried from N.171 at its close, 2026-09-28
+
+- **After 2026-10-30: the `#` at the caret.** Dann's idea of 2026-09-24 21:57; the no-placeholder form is the desk's proposal. Show the `#` at the caret between the two notes, read from the recorded break, and let the singer add or remove it there. No placeholder entry, because that would change `VocalLineEvent` (`CONTRACT.md` §6). Its look is Dann's to rule when it starts.

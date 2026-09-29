@@ -186,6 +186,11 @@ export interface WatchTransposition {
 export interface WatchList {
 	/** Final, sorted entries to render, all of them. Empty = render nothing (§7.3). */
 	entries: WatchEntry[];
+	/**
+	 * How many notes carry each kind across the whole score, BEFORE the dial:
+	 * the rarity the dial reads, kept for N.173's second gate (`gates.ts`).
+	 */
+	kindCounts?: Record<WatchKind, number>;
 }
 
 /**
@@ -298,7 +303,7 @@ function countKinds(detected: WatchEntry[]): Record<WatchKind, number> {
 }
 
 /** Rare in THIS score: at or below the (deferred, provisional) rarity ceiling. */
-function isRare(kind: WatchKind, counts: Record<WatchKind, number>): boolean {
+export function isRare(kind: WatchKind, counts: Record<WatchKind, number>): boolean {
 	return counts[kind] <= RARE_KIND_MAX_NOTES;
 }
 
@@ -506,7 +511,7 @@ export function buildWatchList(
 		}
 	}
 
-	return { entries: included };
+	return { entries: included, kindCounts: kindNoteCounts };
 }
 
 /** Bar number from the measure's own `.number`, never `measureIndex + 1` (audit §3, §A). */

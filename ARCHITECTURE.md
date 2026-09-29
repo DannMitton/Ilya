@@ -22,8 +22,11 @@ questions about it.
    Mitton (2020). These are the **Markup** (« Annotation ») and **Insights**
    (« Aperçus ») documents.
 
-Ilya is rule-based and deterministic: the same input gives the same output,
-every time. It contains no machine learning. That claim is load-bearing for
+Ilya's analysis is rule-based and deterministic: the same input gives the
+same output, every time. No part of it is learned. The one trained component
+is the OCR text recognizer, `tesseract.js`, which reads the words of a scanned
+or photographed poem. The music reader (OMR) is classical computer vision, with
+no trained model. That claim is load-bearing for
 the project's credibility, and the approval tests in `__approved__/`
 directories pin it.
 

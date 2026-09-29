@@ -506,6 +506,8 @@ The last row ratifies Plate 1's own alignment row, which the drawing itself had 
 
 The drawer is a path read top to bottom: Piece, Input, Text, Score markup, Voice.
 
+**THE TREE, checked by the desk 2026-09-28 at `2535f88`:** the drawer shows three bands, Piece, Input, and Voice (`Drawer.svelte:516`, `:539`, `:553`; the third's id is `scoreMarkup`, its label « Voix » / "Voice", `i18n.ts:57`). The five-stop path above is the 2026-09-10 ratification as written; what folded it to three is NOT ESTABLISHED by the desk. The line is kept, not rewritten.
+
 The state line a band shows closed is the collapsed form of that band; open, the content itself is the state. This corrects the desk's earlier rule and was accepted from Design's reply, ruled 2026-09-10.
 
 At rest, nothing in the drawer is filled; exactly one thing is next, and only that one thing is filled, one primary pill per surface, last in its row.
@@ -888,6 +890,28 @@ languages from start to finish."*
 Dann has not moved that. **It raises the weight of a parity failure, not the schedule.**
 
 ---
+
+### The watch box's heading. Ruled by Dann 2026-09-28
+
+"For your consideration" (Dann's English, 19:47), « À considérer » (the desk's proposal, ruled 19:48). Replaces "Places to watch" / « Points à surveiller ». **Not in the tree until a grep shows it**; briefed in `../sessions/brief-code-fr-semicolon-space_r1_2026-09-28.md`. The optional intro line under it is held, on the desk's recommendation, until Dann reads the gated box.
+
+### The folded watch line's lead. Ruled by Dann 2026-09-28 20:44
+
+`watch.lead.one` "Bar {bar}" / « Mesure {bar} » (adopted from every `watch.line.*` template) and `watch.lead.many` "Bars {bars}" / « Mesures {bars} » (coined, its plural). Drafted by Code, checked by the desk, ratified by Dann (*"ratify both"*). A folded line reads « Mesures 31 et 41 : … »; the bars are joined by the browser's own French list, « 3, 7 et 9 ».
+
+### The `#` phonation-break mark. Seated 2026-09-28 at N.171's close
+
+- **What `#` is. Dann, 2026-07-30** (quoted at `packages/score-parser/src/diction-marks.ts:8-11`): *"# means a break in phonation, a lift or an interruption as opposed to continuous phonation. Its function is to signal the stopping of assimilative processes. But alone, # has no phonetic/phonemic value."* And: *"# should never take a syllable slot."* The mark joins the syllable before it and is never discarded.
+- **It changes no calculation. Dann, 2026-09-24 21:59:** *"Just be sure that the newly situated octothorpes have zero effect on correct duration counts or other calculations."* Only which vowel a note is counted under may move; a test enforces it (N.171, shipped `6ede257`).
+
+### French spacing before the semicolon. Ruled by Dann 2026-09-28 19:42
+
+Offered by the desk; ruled in by Dann (*"yes"*). **Default:** a narrow no-break space
+(U+202F, written `\u202f` in `i18n.ts`) before every French semicolon, following the
+OQLF's *espace fine* before « ; », « ? » and « ! ». The colon keeps its no-break space
+(U+00A0). At the ruling the tree spaced its 19 French semicolons three ways: 14 with none,
+3 with U+00A0, 2 with U+202F. **Not in the tree until a grep shows it.** The ruling named
+the semicolon; « ? » and « ! » are the OQLF's pairing, not yet brought to Dann.
 
 ## CLARITY FOR A RECEPTIVE USER, NOT COMPACTNESS. Ruled by Dann 2026-09-22
 

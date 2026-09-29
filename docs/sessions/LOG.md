@@ -7898,3 +7898,30 @@ thread, after the `audit` merge. Only the Correction Station brief waits for it
 
 **Next step when it is picked up:** a screenshot of the Voice band's values, then a note-by-note table (pitch, vowel, turning pitch, both versions, cause per row).
 
+## Block: STATE.md tracker line for N.171, moved verbatim at its close, 2026-09-28.
+
+- `[ ]` **N.171. Switch on the `#` repair.** **SHIPPED `6ede257` 2026-09-24, WRITTEN; no known score carries a `#` in its sung verse, so a walk shows nothing (LOG, close of 2026-09-24). Closing it is Dann's.** **NUMBERED BY DANN 2026-09-24 21:40**, *"Switch it on."* Found by the code audit the same night. Spec in `OPEN.md`; brief `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`. Placed in week 3 (DESK DEFAULT).
+
+**CLOSED BY DANN 2026-09-28 19:46:** *"Let's close N171 now."* Shipped `6ede257` 2026-09-24; no walk, because no known score carries a `#` in its sung verse. Its rulings are seated in `PRODUCT.md`, "The `#` phonation-break mark"; its follow-on is in `OWED.md`.
+
+## Block: `OPEN.md` §N.171, moved verbatim at its close, 2026-09-28.
+
+## N.171. SWITCH ON THE `#` REPAIR. Numbered by Dann 2026-09-24 21:40
+
+**Found by the code audit of 2026-09-24** (`../sessions/memo-audit-code-catalogue-b_r1_2026-09-24.md`, section 2); **ruled in by Dann 21:40:** *"Switch it on."*
+
+**The mark.** `#` is Dann's phonation-break mark. His ruling of 2026-07-30, quoted in `packages/score-parser/src/diction-marks.ts:8-11`: *"# means a break in phonation, a lift or an interruption as opposed to continuous phonation. Its function is to signal the stopping of assimilative processes. But alone, # has no phonetic/phonemic value."* And: *"# should never take a syllable slot."*
+
+**The defect.** In MusicXML every lyric sits on a note, so an engraved `#` takes a note, and every later syllable of that verse lands one note late (`diction-marks.ts:17-23`; measured 2026-07-30: 16 marks across the six Sunless scores).
+
+**The repair exists and is not switched on.** `foldDictionMarks` (`diction-marks.ts:141`) joins the `#` to the syllable before it and frees the note. With `vowelResolverAbstentions`, the per-vowel error against Mitton 2019 falls from 18.46% to 8.15% of sung time (`diction-marks.ts:42-51`). Nothing in `apps/web/src` calls it; the header of `apps/web/src/lib/analysis/score-metrics.ts` records it as waiting on Dann's scope ruling of 2026-08-02, *"wire additively first, fold next"*.
+
+**NOT ESTABLISHED:** whether the singer-visible Transcription and Markup are misaligned today, or only the per-vowel counts (`score-metrics.ts:43-50` says only `byVowel` and `byPitchByVowel`). Code settles it first.
+
+**CODE'S STEP 1, 2026-09-24 22:06 (`../sessions/memo-code-n171_r1_2026-09-24.md`): THE DEFECT NEVER REACHED A SINGER on the known scores.** Every `#` in the six Sunless and ten Kabalevsky files is in verse 2, Dann's IPA line, and every live surface reads verse 1 (`apps/web/src/routes/+page.svelte:396`, `collectScoreWords(..., 1)`, checked by the desk). The `score-metrics.ts` comment and the desk's report to Dann were wrong to say the per-vowel counts were affected. The fold now protects any future score whose sung verse carries a `#`. Built, zero-effect test passing, gates 4 and 5 moved to 1412 and 603 (desk moved the baselines, backup `~/Downloads/ilya-ship.sh.bak-1404-2026-09-24`). **Superseded:** ~~Freeze rule:~~ DESK INFERENCE that it qualifies, because misaligned per-vowel counts make Insights tell a singer something false. Brief: `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`.
+
+**Ruled by Dann 2026-09-24 21:59:** *"Just be sure that the newly situated octothorpes have zero effect on correct duration counts or other calculations."* The `#` carries no duration and changes no total; only which vowel a note is counted under may move. The brief makes this a test.
+
+**Follow-on, after 2026-10-30 (Dann's idea of 21:57; the no-placeholder form is the desk's proposal):** show the `#` at the caret between the two notes, read from the recorded break, and let the singer add or remove it there. No placeholder entry, because that would change `VocalLineEvent` (`CONTRACT.md` §6). Its look is Dann's to rule when it starts.
+
+**Done when:** the fold runs in the live resolver chain, the zero-effect test passes, the gates pass, and Dann walks a Sunless song that carries a `#`.

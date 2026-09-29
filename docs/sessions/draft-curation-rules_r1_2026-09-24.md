@@ -100,3 +100,17 @@ Dann, 03:05: *"I'm not sure those citations are detailed enough for a user to lo
 **Open for Dann, not ruled:** the stakes threshold; the page limit; one set of gates for both documents. **Refinement is expected:** each gate is a default with room for the case that justifies departing from it (`CONTRACT.md` tether 19).
 - **RULED by Dann 2026-09-28 16:28** (*"yes"*): **one set of gates serves both** Markup's box and Insights; **the page limit is about two entries per printed page.** Both as defaults, open to refinement (his words of 16:26). **The stakes threshold stays open**, to be set by trying a starting value on real songs («Скучай», Sunless 1) and judging what reads (desk proposal, accepted in the same exchange).
 - **Dann on the page limit, 16:30:** *"I'm a little spotty on the two entries per printed page but maybe that is a good rule of thumb. We will try it and see how it goes. This will probably require adjustment as we get more feedback."* So: a trial value, to be revisited with feedback. Code's report for the gates should show where the limit bit (which entries it dropped), so the trial is visible.
+
+## Revision r5, 2026-09-28 20:24. After the first trial of the gates
+
+**Dann, 20:22:** *"Is the climax always an element that needs advice from Ilya? ... Would you respond well to a data dump identifying the climax but making no observations or suggestions of use? ... Markup and Insights are not opportunities for Ilya to data dump on the user. Instead, we need defensible ways to point out everything that may need coaching, but to let other accurate elements pass without mention because they don't serve the user."*
+
+**Dann, 20:24:** *"I think it's totally possible that some songs will not require a single comment, while others may need two or three per page, depending on their complexity and the way they interact with the user's formant profile."*
+
+**What changes (desk recommendation of 20:23, agreed by Dann 20:24):**
+- **Gate 5, the page limit, is withdrawn.** It was the desk's proposal (r4). Its trial on Sunless 1 dropped the climax. No count per page or per song; the threshold (gate 3) decides, and a song may carry none or several per page.
+- **Gate 2 is strict.** A place is said only if it carries a sourced thing to try, or a notable observation that says why it matters to this singer. A place whose kind has no sourced advice in Ilya yet (today: passaggio, timbre turn, sustain) is not said. Code's trial ran it loose (`offer: 'pending'`), which printed lines with nothing to act on.
+- **Musical weight ranks advice; it never earns a line on its own.** The climax, a phrase top, or a final note makes real advice more important. Naming the place is not advice.
+- **Consequence, stated to Dann:** with his voice, the box is empty on «Скучай» and Sunless 1 until N.168 supplies sourced passaggio advice. An empty box there points to that gap.
+- **Threshold set to 2, ruled by Dann 2026-09-28 20:32** (*"yes"*, desk recommendation). The 3 of the first trial was chosen against passaggio lines with nothing to try; strict gate 2 now removes those, so 3 only held back places carrying sourced advice (Sunless 3 bar 35, Sunless 5 bar 41). A TRIAL value still, open to refinement.
+

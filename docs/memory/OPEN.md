@@ -449,26 +449,6 @@ Questions 1 to 5 are optional and answered "secure", "mostly", or "still develop
 
 **Done when:** a singer can choose and change a stage in the intake, both languages ruled, and a known-answer test shows one comment appearing for a novice and not for an expert on the same note.
 
-## N.171. SWITCH ON THE `#` REPAIR. Numbered by Dann 2026-09-24 21:40
-
-**Found by the code audit of 2026-09-24** (`../sessions/memo-audit-code-catalogue-b_r1_2026-09-24.md`, section 2); **ruled in by Dann 21:40:** *"Switch it on."*
-
-**The mark.** `#` is Dann's phonation-break mark. His ruling of 2026-07-30, quoted in `packages/score-parser/src/diction-marks.ts:8-11`: *"# means a break in phonation, a lift or an interruption as opposed to continuous phonation. Its function is to signal the stopping of assimilative processes. But alone, # has no phonetic/phonemic value."* And: *"# should never take a syllable slot."*
-
-**The defect.** In MusicXML every lyric sits on a note, so an engraved `#` takes a note, and every later syllable of that verse lands one note late (`diction-marks.ts:17-23`; measured 2026-07-30: 16 marks across the six Sunless scores).
-
-**The repair exists and is not switched on.** `foldDictionMarks` (`diction-marks.ts:141`) joins the `#` to the syllable before it and frees the note. With `vowelResolverAbstentions`, the per-vowel error against Mitton 2019 falls from 18.46% to 8.15% of sung time (`diction-marks.ts:42-51`). Nothing in `apps/web/src` calls it; the header of `apps/web/src/lib/analysis/score-metrics.ts` records it as waiting on Dann's scope ruling of 2026-08-02, *"wire additively first, fold next"*.
-
-**NOT ESTABLISHED:** whether the singer-visible Transcription and Markup are misaligned today, or only the per-vowel counts (`score-metrics.ts:43-50` says only `byVowel` and `byPitchByVowel`). Code settles it first.
-
-**CODE'S STEP 1, 2026-09-24 22:06 (`../sessions/memo-code-n171_r1_2026-09-24.md`): THE DEFECT NEVER REACHED A SINGER on the known scores.** Every `#` in the six Sunless and ten Kabalevsky files is in verse 2, Dann's IPA line, and every live surface reads verse 1 (`apps/web/src/routes/+page.svelte:396`, `collectScoreWords(..., 1)`, checked by the desk). The `score-metrics.ts` comment and the desk's report to Dann were wrong to say the per-vowel counts were affected. The fold now protects any future score whose sung verse carries a `#`. Built, zero-effect test passing, gates 4 and 5 moved to 1412 and 603 (desk moved the baselines, backup `~/Downloads/ilya-ship.sh.bak-1404-2026-09-24`). **Superseded:** ~~Freeze rule:~~ DESK INFERENCE that it qualifies, because misaligned per-vowel counts make Insights tell a singer something false. Brief: `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`.
-
-**Ruled by Dann 2026-09-24 21:59:** *"Just be sure that the newly situated octothorpes have zero effect on correct duration counts or other calculations."* The `#` carries no duration and changes no total; only which vowel a note is counted under may move. The brief makes this a test.
-
-**Follow-on, after 2026-10-30 (Dann's idea of 21:57; the no-placeholder form is the desk's proposal):** show the `#` at the caret between the two notes, read from the recorded break, and let the singer add or remove it there. No placeholder entry, because that would change `VocalLineEvent` (`CONTRACT.md` §6). Its look is Dann's to rule when it starts.
-
-**Done when:** the fold runs in the live resolver chain, the zero-effect test passes, the gates pass, and Dann walks a Sunless song that carries a `#`.
-
 ## N.170. OUTSIDE EYES: REFINE ILYA WITH SINGERS AND OUTSIDE REVIEWERS. Numbered by Dann 2026-09-24 15:54
 
 **The need, Dann's words:** *"We have developed Ilya in a silo and I want to call on outside eyes to see what we have built and make useful suggestions that we may not have thought of: elegant ways to offer controls to the neophyte user, commentary on our colour story, ideas about consolidating or streamlining functionality... more than a visual critique, I want a design critique, including how the code itself is segmented and modal-ized."* And, numbering it: *"build a sequential plan that we can carry out to refine Ilya"*, with the review packet *"part of our plan"*.

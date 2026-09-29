@@ -37,6 +37,7 @@ next session the same hour it cost the last one.
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
 | a brief lets Code write with git, or Code ran `git stash` | `CODE RAN git stash` |
 | a change must not alter the page, and you want proof | `SCREENSHOT COMPARE` |
+| French desk captures differ by a few hundred pixels after a change that cannot reach them, or a box looks empty in the captures | `FRENCH DESK CAPTURES SHIFT PER BUILD` |
 | Code wants the old code running beside the dev server | `A SECOND DEV SERVER REWRITES THE VITE CACHE` |
 | a grep over `apps/web/src` misses a file you know imports something | `GREP CALLS binder.ts BINARY` |
 | git says `index.lock` exists, or the desk wants `git status` | `git status FROM THE BRIDGE` |
@@ -4393,4 +4394,10 @@ In N.174 D.2.5 Code served the base commit (from `git archive`) on port 5174 bes
 - **No direct line from the desk to Code exists.** Checked twice, 2026-09-28 01:40 and 01:44: `ListAgents` came back empty. The desk once told Dann otherwise and had to take it back. Every hand-off goes through Dann: the desk writes a brief under `docs/sessions/`, and Dann pastes one line into Code.
 - **`pkill` with a broad pattern in the desk's cloud shell killed the shell itself** (exit 144), 2026-09-28. Stop a server by the PID you started it with, never by pattern.
 - **`tspace.library.utoronto.ca` refuses fetching (robots.txt).** Do not get round it. Ask Dann for the file, or cite the handle (`hdl.handle.net/1807/100864`) without reading it.
+
+## FRENCH DESK CAPTURES SHIFT PER BUILD. 2026-09-28
+
+Found checking N.173's gates. With the gates applied, every French desktop capture (Text, Insights, Learn, Guide included) differed from the baseline by 300 to 8,000 pixels of text anti-aliasing, and the difference was stable run to run. **It is the build, not the change:** applying only two unused `i18n.ts` strings to a clean copy moved a DIFFERENT set of French desk captures by the same amount. English and phone captures did not move. So **a French desk difference of this size, with no visible change, is noise.** Rule it out the same way: apply the smallest no-op part of the patch alone and compare.
+
+**And the captures do not reach every notes sheet.** They take top, middle, and end of the scroll, so a short box on a middle sheet can be missed; the desk read Sunless 1's gated box as empty when it held one line. **Before reporting a box empty, read its text** with a probe spec (`.watch-band` `allInnerTexts()`), as `e2e-baseline/probe.test.ts` in the cloud clone did.
 

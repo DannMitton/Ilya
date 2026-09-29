@@ -117,7 +117,7 @@ design rows.
 ## Week 3. Monday 2026-09-28 to Sunday 2026-10-04. Insights and the design rows
 
 - [ ] **The tree audit. STARTED 2026-09-24 21:25 on Dann's instruction ("the audit now, please"); the desk had placed it after the Sunday reset, which he overruled.** Asked for by Dann 2026-09-24 21:11: catalogue what the code really contains, tie each module to an open item, and propose a new number for any chunk the plan does not describe. Two Sonnet agents: one catalogues the code (223 source files, about 91,000 lines, counted 2026-09-24), one checks every ruled string against the tree. **Placed by the desk, DESK DEFAULT.**
-- [ ] **N.171**, switch on the `#` repair (numbered by Dann 2026-09-24 21:40). Code builds from `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`; Dann walks a Sunless song with a `#`. **Placed by the desk, DESK DEFAULT.**
+- [x] **N.171** (CLOSED by Dann 2026-09-28 19:46; shipped `6ede257`), switch on the `#` repair (numbered by Dann 2026-09-24 21:40). Code builds from `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`; Dann walks a Sunless song with a `#`. **Placed by the desk, DESK DEFAULT.**
 - [x] **N.169** (CLOSED by Dann 2026-09-28 16:09; shipped `8127e01`), the note-by-note table against Appendix B (one evening). The desk builds it from `tools/n168-frequency-run/out/notes-mitton.csv` and a screenshot of Dann's Voice band; Dann rules the vowels. **Placed 2026-09-24, DESK DEFAULT.**
 - [ ] **N.168, P1a**: Fable redrafts the English from `p1a-counts.csv`, the desk checks every claim against its extraction row, Dann vets one draft. **Placed 2026-09-24, DESK DEFAULT.**
 

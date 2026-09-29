@@ -57,6 +57,10 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > 1. **Ask Dann, not yet answered:** add to `CONTRACT.md` §6, *"No control is part of the printed page. Passing layers, the loupe and the key ruler, float above it and never print."* The desk recommends yes.
 > 2. **The desk reads the renderer** to establish whether the engraved page can redraw in a new key. NOT ESTABLISHED. Then the Code brief.
 >
+> **2026-09-28 20:26, N.173 GATES:** Code built them (uncommitted; report `../sessions/report-code-n173-gates_r1_2026-09-28.md`); desk check passed (1,665 tests, 0 errors, ratchets OK; French desk capture noise traced, `ENVIRONMENT.md`). **Dann 20:22/20:24: no data dump; gate 5 withdrawn, gate 2 strict** (curation draft, Revision r5). Brief: `../sessions/brief-code-n173-gates-strict_r1_2026-09-28.md`. **r2 (20:44): gate 5 gone, gate 2 strict, threshold 2 (Dann 20:32).** French « Mesure {bar} » / « Mesures {bars} » RATIFIED 20:44 (`PRODUCT.md`). Gate 4 to 1666 at ship.
+>
+> **2026-09-28 19:40, SHIPPED `2535f88`**: the four watch-band fixes, the N.94 brief, and the CONTRACT §6 line. All eight gates at baseline; gate 4 is now `"1646 passed (1646)"` (backup `~/Downloads/ilya-ship.sh.bak-1940-2026-09-28`). Dann looked and approved at 19:38. **Code's queue, DESK DEFAULT:** the N.173 gates first, because Dann asked for them at 19:38, then N.94. Both edit the Markup notes.
+>
 > **2026-09-28 ~20:00, DESK CHECK DONE on the four watch-band fixes:** patch `apps/web/test-results/_desk-n174/watch-band-four-fixes.patch` (md5 `1b0726370322deae123518e85075ee5a`, carries desk doc edits too; applied with `--exclude='docs/*'`) plus `watch-band-four-fixes-new.tar`, applied to a cloud clone of `8127e01` (same app code as `1fda2e4`). Web 1,646 passed, check 0 errors (12 warnings), ratchets OK. 84 captures each side: only Markup differs; Text, Insights, Learn, Guide identical. Box now closes on every sheet, words bare, repeats gone. Observed: phone French ends on a sheet carrying one line under the repeated heading. **Next: Dann's look, then gate 4 to 1646, then ship.**
 >
 > **WAITING ON THE DESK'S CHECK: Code's four watch-band fixes**, uncommitted in Dann's tree. Report `../sessions/report-code-watch-band-four-fixes_r1_2026-09-28.md`: the heading as the box's title, notes that flow onto as many sheets as needed (new `notes-pages.ts`, `NotesColumn.svelte`; `MarkupPane.svelte` 1490 to 1359, ratchet lowered), bare quoted words, no duplicate line. Code: web 1,646, check 0 errors, ratchets OK. **Its patch is NOT in `apps/web/test-results/_desk-n174/`** (that holds only slice 7, N.154, N.82); ask Code for it or build it from the tree before Playwright runs. Then desk compare, Dann's look, gate 4 to 1646, ship.
@@ -65,14 +69,16 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 > 1. The N.173 gates: `Read docs/sessions/brief-code-watch-band-says-less_r1_2026-09-28.md in ~/Desktop/ilya-rewrite and carry it out.` (Its four fixes are done; the gates section of 16:28 remains, with a trial threshold, a report on «Скучай» and Sunless 1, and a list of what the page limit dropped.)
 > 2. N.86: `Read docs/sessions/brief-code-n86-remove-dead_r1_2026-09-28.md in ~/Desktop/ilya-rewrite and carry it out.`
 > 3. The voice intake: `Read docs/sessions/brief-code-voice-intake-order-and-keep-reading_r1_2026-09-28.md in ~/Desktop/ilya-rewrite and carry it out.`
-> 4. N.171, the `#` repair (`../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`). **The desk re-checks its citations first** (older HEAD).
+> 4. ~~N.171, the `#` repair.~~ **STRUCK 2026-09-28 19:55: already SHIPPED `6ede257`, 2026-09-24 22:08** (`ingest.ts`, `withDictionMarksFolded`; memo `../sessions/memo-code-n171_r1_2026-09-24.md`). The queue line was stale for four days. Nothing to paste.
 > 5. Correction Station slices 4 to 6 (`../sessions/code-audit-correction-station-map_r1_2026-09-27.md` §4, under `brief-code-audit-correction-station_r2_2026-09-27.md`).
-> 6. **To brief, agreed not written:** Corrections as fixed-dimension controls that never change shape by selection (Dann's proposal, 2026-09-28 evening).
+> 6. **Corrections keeps one fixed size:** brief `../sessions/brief-code-corrections-fixed-panel_r1_2026-09-28.md` (written 20:05). Dann's proposal 16:37; the desk's option 1 shape, agreed in direction 16:39. After item 5.
+> 7. **French semicolons:** `../sessions/brief-code-fr-semicolon-space_r1_2026-09-28.md`. After the N.173 gates.
+> 8. **N.94, the key ruler:** `../sessions/brief-code-n94-key-ruler_r1_2026-09-28.md`. After the N.173 gates (both edit the Markup notes).
 >
 > **OPEN, carried from the moved blocks. Raise only when it bears on the work:**
-> - **Ruling not seated (tether 17):** `insights.finding.tighten`, `.turnover`, `.sustain` (`i18n.ts:1523`, `:1524`, `:1528`) still say « tenu » / « tenez », against the « prolonger » ruling of 2026-09-25 13:04 (`PRODUCT.md`). Not yet briefed.
-> - **For Dann, from Code's report:** `watch.line.passaggioWord` and neighbours print « passaggio; » with no space before the semicolon. The 2026-08-21 rule (`ENVIRONMENT.md`) says no space; several later ratified strings carry a narrow no-break space. Which rule governs is NOT ESTABLISHED.
-> - **For Dann, never answered:** an optional intro line under « Points à surveiller »: "The places that pose the greatest challenges, and what to try." / « Les endroits qui présentent les plus grands défis, et ce que vous pouvez essayer. » (his English, the desk's French proposal).
+> - ~~Ruling not seated: « tenu » in `insights.finding.*`.~~ **STALE, struck 2026-09-28 19:45:** the tree already says « prolongé ici » and « se prolonge » (`i18n.ts:1523`, `:1524`, `:1528`), seated in `8127e01`.
+> - **RULED 2026-09-28 19:42:** narrow no-break space before every French semicolon (`PRODUCT.md`). Brief `../sessions/brief-code-fr-semicolon-space_r1_2026-09-28.md`, queued after the N.173 gates. Not in the tree yet.
+> - **HEADING RULED 2026-09-28 19:47/19:48:** "For your consideration" / « À considérer » (`PRODUCT.md`), briefed with the semicolons. **Held on the desk's recommendation (not answered) until he reads the gated box:** an optional intro line under the heading, formerly under « Points à surveiller »: "The places that pose the greatest challenges, and what to try." / « Les endroits qui présentent les plus grands défis, et ce que vous pouvez essayer. » (his English, the desk's French proposal).
 > - **Finding, not numbered (Dann 14:48):** a stale test word in the poem box («рябина») silently replaces a song's own words as the Syllables queue (`+page.svelte:393-396` at `7d2fcd6`). No sign to the singer that poem and score disagree.
 > - **Found, not acted on:** `PRODUCT.md:507` names the drawer path as Piece, Input, Text, Score markup, Voice; the drawer shows Piece, Input, Voice (per the N.154 agent; not re-read by the desk).
 > - **Slice 7's compare:** four pixels one colour level off on Learn's tabs; cause NOT ESTABLISHED.
@@ -114,7 +120,7 @@ does not repeat them.
 
 - `[ ]` **N.172. The singer says how experienced they are (Dreyfus's five stages), and Insights adjusts.** **2026-09-25: the intake is RATIFIED in both languages (14:27 to 14:51); built with N.168's first slice.** **NUMBERED BY DANN 2026-09-24 23:14.** Spec in `OPEN.md`. Built with the first Insights connections that use the ranking, not before (the desk's placement; **agreed by Dann 23:16**).
 
-- `[ ]` **N.171. Switch on the `#` repair.** **NUMBERED BY DANN 2026-09-24 21:40**, *"Switch it on."* Found by the code audit the same night. Spec in `OPEN.md`; brief `../sessions/brief-code-n171-hash-fold_r1_2026-09-24.md`. Placed in week 3 (DESK DEFAULT).
+- `[x]` **N.171. Switch on the `#` repair.** CLOSED by Dann 2026-09-28 19:46; shipped `6ede257`. Account in `../sessions/LOG.md`.
 
 ### Numbered 2026-09-23
 

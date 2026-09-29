@@ -90,7 +90,8 @@
 	import { afterGround } from '$lib/score/system-ground';
 	import { entryGroup, RING_RADIUS, ringBox } from '$lib/score/selection-ring';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/score/engraving';
-	import { buildWatchList, watchBandLines } from '$lib/analysis/watchlist';
+	import { buildWatchList } from '$lib/analysis/watchlist';
+	import { gateBand, gatedLines } from '$lib/analysis/gates';
 	import NotesColumn from './NotesColumn.svelte';
 	import { packNotes, type NotesMeasure, type NotesSheet } from './notes-pages';
 	import { scoreMetrics } from '$lib/analysis/score-metrics';
@@ -715,9 +716,7 @@
 	// ── The "Places to watch" list (design C) ────────────────────────────
 	// Built purely from the marks the overlay already computed (watchlist.ts);
 	// verse 1 today. Silent on zero challenge (§7.3). Rendered AFTER the score
-	// (Dann's placement ruling, 2026-07-18) so a variable-length list never
-	// displaces the score markup, which also frees the full page-1 height for
-	// pagination.
+	// (Dann's placement ruling, 2026-07-18), so it never displaces the markup.
 	// The transposition inputs (Dann's ruling A, 2026-07-20): the watch list
 	// computes the one song-level suggestion itself, run over the SAME
 	// performance-order score the analysis used, so its forecast crossings match
@@ -731,7 +730,6 @@
 				})
 			: null,
 	);
-	const showWatchBand = $derived(!!watchList && watchList.entries.length > 0);
 
 	// ── The measurement layer (E.20 built, E.21 wired) ───────────────────
 	// Phonation time per pitch and per vowel, Pacheco's tessitura, the tempo
@@ -854,10 +852,11 @@
 	// state, and the statement lands in exactly the position the watch list
 	// would have occupied: the page that would have carried the conclusions
 	// instead says why there are none.
-	const hasCommentaryPage = $derived(showOctaveNotice || showWatchBand || showWithheld);
-	// The notes run on to as many sheets as they need, never cut (Dann's look,
-	// 2026-09-28): `NotesColumn` measures them unseen, `packNotes` fills sheets.
-	const bandLines = $derived(showWatchBand && watchList ? watchBandLines(watchList.entries, language) : []);
+	// N.173: the box says only what passes the gates (`gates.ts`).
+	const watchBox = $derived(watchList && analysisScore && analyzed && vowelResolver ? gateBand({ watchList, analysisScore, ...(readingScore ? { readingScore } : {}), analyzed, profile: adapted.snapshot, vowelForEvent: vowelResolver }) : null);
+	const bandLines = $derived(watchBox ? gatedLines(watchBox.shown, language) : []);
+	const hasCommentaryPage = $derived(showOctaveNotice || bandLines.length > 0 || showWithheld);
+	// The notes run on to as many sheets as they need, never cut: `NotesColumn` measures, `packNotes` fills.
 	let notesMeasure: NotesMeasure | null = $state(null);
 	const notesSheets: NotesSheet[] = $derived(
 		hasCommentaryPage ? (notesMeasure ? packNotes(notesMeasure, dims.height - subsequentTop - contentBottom) : [{ withheld: true, octave: true, lines: bandLines.length ? ([0, bandLines.length] as [number, number]) : null }]) : [],
