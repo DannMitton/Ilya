@@ -28,6 +28,10 @@ export interface LegendItem {
 	 * page, which is a legend explaining itself. Optional and additive, so
 	 * every Transcribe item is unaffected: absent means "draw the circle", the
 	 * behaviour every existing caller already has.
+	 *
+	 * NO CALLER SETS IT since 2026-09-28, when Dann removed the Markup voice
+	 * states ("Remove the four"). The withheld-syllable entry that remains is a
+	 * glyph, so it draws its circle.
 	 */
 	textOnly?: boolean;
 }

@@ -1,202 +1,57 @@
 /**
- * Tests for the Markup provenance legend (item 1.6).
+ * Tests for the Markup legend, which since 2026-09-28 has one entry: the
+ * withheld-syllable sigla (N.10b). Dann removed the four voice-state entries
+ * that stood beside it ("Remove the four", 2026-09-28 22:18); see `legend.ts`.
  *
  * The rule these obey, Dann's standing condition: no acceptance test may take
  * its expected value from the mechanism under test. So every expectation below
- * comes from the item's own contract rather than from a reading of the code:
- *
- *   1. **Only states that are present.** E.22 §4's clause is "never guesses
- *      where calibration is absent"; a legend naming a state the singer does
- *      not have is a guess about their voice.
- *   2. **`Unmeasured` is orthogonal** (item 1.4b, `engine/types.ts:48-63`): it
- *      rides on `noiseFloor`, so it can co-occur with any reading, and one
- *      unmeasurable room among ten earns the entry.
- *   3. **Most evidence to least**, then `Unmeasured` last, because it is a
- *      statement about our instrument rather than about the singer.
+ * comes from the entry's own contract: emitted only when the page carries the
+ * mark, and drawn with the same sigla the stave carries.
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildMarkupLegend, markupLegendTypes, MARKUP_LEGEND_ORDER, MARKUP_WITHHELD_TYPE } from './legend';
-import type { CalibratedFormant, Vowel } from '$lib/voice/engine/types';
+import { buildMarkupLegend, MARKUP_WITHHELD_TYPE } from './legend';
 import { WITHHELD_SIGLA } from '@ilya/score-parser';
 
-/** A reading with only the fields this legend reads; the rest is scaffolding. */
-function reading(
-	r: CalibratedFormant['reading'],
-	noiseFloor?: CalibratedFormant['noiseFloor']
-): CalibratedFormant {
-	return {
-		f1: 500,
-		f2: 1500,
-		confidence: 'medium',
-		reading: r,
-		source: r === 'estimated' ? 'derived-interpolated' : 'measured-user',
-		...(noiseFloor ? { noiseFloor } : {})
-	};
-}
-
-const profile = (m: Partial<Record<Vowel, CalibratedFormant>>) => m;
-
-describe('the Markup legend names only what the singer actually has', () => {
-	it('an empty profile earns no legend at all', () => {
-		expect(markupLegendTypes({})).toEqual([]);
-		expect(buildMarkupLegend({}, 'en')).toEqual([]);
-	});
-
-	it('a profile of one captured vowel names captured and nothing else', () => {
-		expect(markupLegendTypes(profile({ i: reading('captured') }))).toEqual(['markup-captured']);
-	});
-
-	it('a profile with no estimated vowels never mentions estimated', () => {
-		const types = markupLegendTypes(
-			profile({ i: reading('captured'), e: reading('provisional') })
-		);
-		expect(types).toEqual(['markup-captured', 'markup-provisional']);
-		expect(types).not.toContain('markup-estimated');
-	});
-
-	it('all three reading states, in most-evidence-first order', () => {
-		// Deliberately inserted in the WRONG order, so a builder that simply
-		// echoed insertion order would fail this.
-		const types = markupLegendTypes(
-			profile({
-				ɨ: reading('estimated'),
-				e: reading('provisional'),
-				i: reading('captured')
-			})
-		);
-		expect(types).toEqual(['markup-captured', 'markup-provisional', 'markup-estimated']);
-	});
-});
-
-describe('Unmeasured is orthogonal, not a fourth reading', () => {
-	it('one unmeasurable room among many earns the entry', () => {
-		const types = markupLegendTypes(
-			profile({
-				i: reading('captured'),
-				e: reading('captured'),
-				a: reading('captured', 'unmeasured')
-			})
-		);
-		expect(types).toContain('markup-unmeasured');
-	});
-
-	it('co-occurs with captured rather than replacing it', () => {
-		// The whole point of the ruling: "we heard you perfectly and could not
-		// measure your room" is two facts, not one verdict.
-		expect(markupLegendTypes(profile({ i: reading('captured', 'unmeasured') }))).toEqual([
-			'markup-captured',
-			'markup-unmeasured'
-		]);
-	});
-
-	it('a measured noise floor earns nothing', () => {
-		expect(markupLegendTypes(profile({ i: reading('captured', 'measured') }))).toEqual([
-			'markup-captured'
-		]);
-	});
-
-	it('sorts last, after every reading state', () => {
-		const types = markupLegendTypes(
-			profile({
-				i: reading('captured', 'unmeasured'),
-				e: reading('provisional'),
-				ɨ: reading('estimated')
-			})
-		);
-		expect(types).toEqual([
-			'markup-captured',
-			'markup-provisional',
-			'markup-estimated',
-			'markup-unmeasured'
-		]);
-		expect(types[types.length - 1]).toBe('markup-unmeasured');
-	});
-});
-
-describe('the built items carry what the footer needs', () => {
-	const full = profile({
-		i: reading('captured', 'unmeasured'),
-		e: reading('provisional'),
-		ɨ: reading('estimated')
-	});
-
-	it('every item is textOnly, because Markup states are words on the page and not glyphs', () => {
-		for (const item of buildMarkupLegend(full, 'en')) {
-			expect(item.textOnly).toBe(true);
-			expect(item.icon).toBe('');
-		}
-	});
-
-	it('every entry has copy in both languages, and they differ', () => {
-		const en = buildMarkupLegend(full, 'en');
-		const fr = buildMarkupLegend(full, 'fr');
-		expect(en).toHaveLength(fr.length);
-		for (let i = 0; i < en.length; i++) {
-			expect(en[i].type).toBe(fr[i].type);
-			expect(en[i].label.length).toBeGreaterThan(0);
-			expect(fr[i].label.length).toBeGreaterThan(0);
-			// The control that catches a missing translation falling back to
-			// English rather than being absent, which would read as done.
-			expect(fr[i].label).not.toBe(en[i].label);
-		}
-	});
-
-	it('covers every type in the declared order, with no orphans', () => {
-		const built = buildMarkupLegend(full, 'en').map((x) => x.type);
-		for (const type of MARKUP_LEGEND_ORDER) {
-			expect(built).toContain(type);
-		}
-		expect(built).toEqual([...MARKUP_LEGEND_ORDER]);
-	});
-});
-
-// ── N.10b: the withheld-syllable entry ───────────────────────────────
-//
-// Dann's ruling of 7 August, E.29 §5.1 ruled A. The contract these obey is
-// the one the four voice states already obey, applied to a fifth thing that
-// is not a voice state at all: emitted only when the page carries the mark,
-// last because it is the only entry not about the singer, and never allowed
-// to disturb the four when the flag is off.
-
 describe('the withheld-syllable entry (N.10b)', () => {
-	const captured: CalibratedFormant = {
-		reading: 'captured'
-	} as CalibratedFormant;
-
 	it('is absent when the page carries no withheld syllable', () => {
-		expect(buildMarkupLegend({}, 'en')).toEqual([]);
-		expect(buildMarkupLegend({}, 'en', {})).toEqual([]);
-		expect(buildMarkupLegend({}, 'en', { withheldSyllables: false })).toEqual([]);
+		expect(buildMarkupLegend('en')).toEqual([]);
+		expect(buildMarkupLegend('en', {})).toEqual([]);
+		expect(buildMarkupLegend('en', { withheldSyllables: false })).toEqual([]);
 	});
 
-	it('is the whole legend on an uncalibrated page that withheld a syllable', () => {
-		// The two subjects are independent: a singer with no profile at all can
-		// still have a score whose division Ilya could not follow.
-		const built = buildMarkupLegend({}, 'en', { withheldSyllables: true });
+	it('is the whole legend when the page withheld a syllable', () => {
+		const built = buildMarkupLegend('en', { withheldSyllables: true });
 		expect(built).toHaveLength(1);
 		expect(built[0].type).toBe('markup-withheld');
 		// The constant PageFooter compares against is the one the builder emits.
 		expect(built[0].type).toBe(MARKUP_WITHHELD_TYPE);
 	});
 
-	it('sits last, after every voice state', () => {
-		const formants = { i: captured } as Partial<Record<Vowel, CalibratedFormant>>;
-		const built = buildMarkupLegend(formants, 'en', { withheldSyllables: true });
-		expect(built.length).toBeGreaterThan(1);
-		expect(built[built.length - 1].type).toBe('markup-withheld');
-		// And it did not displace the voice states, which is the control: the
-		// flag must add an entry, never rewrite the list.
-		expect(built.slice(0, -1)).toEqual(buildMarkupLegend(formants, 'en'));
+	it('names no voice state, in either language', () => {
+		// The control for the removal: none of the four ruled-out words may
+		// come back through this builder.
+		for (const language of ['en', 'fr'] as const) {
+			const label = buildMarkupLegend(language, { withheldSyllables: true })[0].label;
+			expect(label).not.toMatch(/Captur|Provisional|Provisoire|Estimat|Estimé|Unmeasured|Non mesuré/);
+		}
 	});
 
-	it('is the one Markup entry that draws a circle, in both languages', () => {
+	it('has copy in both languages, and they differ', () => {
+		const en = buildMarkupLegend('en', { withheldSyllables: true })[0];
+		const fr = buildMarkupLegend('fr', { withheldSyllables: true })[0];
+		expect(en.type).toBe(fr.type);
+		// The control that catches a missing translation falling back to
+		// English rather than being absent, which would read as done.
+		expect(fr.label).not.toBe(en.label);
+	});
+
+	it('draws its circle, in both languages', () => {
 		// Dann's ruling of 8 August: the page mark is a drawn sigla, so the
-		// legend shows the sigla. Every other Markup entry is a word in the page's
-		// prose and carries no circle, which the tests above assert.
+		// legend shows the sigla.
 		for (const language of ['en', 'fr'] as const) {
-			const item = buildMarkupLegend({}, language, { withheldSyllables: true })[0];
-			expect(item.textOnly).toBe(false);
+			const item = buildMarkupLegend(language, { withheldSyllables: true })[0];
+			expect(item.textOnly).toBeFalsy();
 			expect(item.label.length).toBeGreaterThan(20);
 			// The old typeset mark must not survive in the copy: the glyph is
 			// drawn now, and a label quoting brackets would name a mark the page

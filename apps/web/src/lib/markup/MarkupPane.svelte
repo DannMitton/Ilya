@@ -418,25 +418,17 @@
 	let hasReadings = $derived(Object.keys(formants).length > 0);
 
 	/**
-	 * The provenance legend (item 1.6), built from this voice's own readings.
+	 * The Markup legend: one entry, the withheld-syllable sigla (N.10b). The
+	 * four voice-state entries that stood beside it were removed by Dann's
+	 * ruling of 2026-09-28 ("Remove the four"; see `legend.ts`).
 	 *
-	 * It defines the vocabulary this page already uses in prose: the sentences
-	 * above say "with seven vowels measured" and "are provisional", and until
-	 * now nothing on the printed page said what those words mean. Empty for an
-	 * uncalibrated profile, so the footer omits the row rather than printing a
-	 * glossary for readings that do not exist (E.22 §4, "never guesses where
-	 * calibration is absent").
-	 *
-	 * ONCE PER DOCUMENT, on the first page. A four-line glossary repeated on
-	 * every sheet of a printed Markup page is noise, and the singer's page is
-	 * where a glossary belongs. Deliberately NOT the same placement rule as
-	 * `broadNote`, which repeats because it qualifies the analysis printed on
-	 * each sheet; this qualifies the calibration behind all of them.
-	 * DECLARED BELOW, beside `withheldIpa`, not here: N.10b gave this a
-	 * dependency on the render, and `withheldIpa` cannot be computed until
-	 * `readingScore` and the resolvers exist. A `$derived` reading a `const`
-	 * declared later is a temporal dead zone, and `svelte-check` does not see
-	 * one.
+	 * ONCE PER DOCUMENT, on the first page. Deliberately NOT the same placement
+	 * rule as `broadNote`, which repeats because it qualifies the analysis
+	 * printed on each sheet.
+	 * DECLARED BELOW, beside `withheldIpa`, not here: the entry depends on the
+	 * render, and `withheldIpa` cannot be computed until `readingScore` and the
+	 * resolvers exist. A `$derived` reading a `const` declared later is a
+	 * temporal dead zone, and `svelte-check` does not see one.
 	 */
 
 
@@ -691,11 +683,9 @@
 	// N.94: where the ruler opens, against the printed key's sung order.
 	$effect(() => keyRuler?.prepare((p) => printedReading && rulerOpening(printedReading, p, adapted.snapshot, vowelResolver)));
 
-	// The Markup legend (item 1.6). Declared here rather than beside its doc
-	// comment above, because N.10b's entry depends on `withheldIpa`.
-	let markupLegend = $derived(
-		buildMarkupLegend(formants, language, { withheldSyllables: !!withheldIpa })
-	);
+	// The Markup legend. Declared here rather than beside its doc comment
+	// above, because its one entry (N.10b) depends on `withheldIpa`.
+	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!withheldIpa }));
 	// The advice resolver (§A.158 RULED A) is a PURE POST-PASS wrapped here, at the
 	// analysed seam, so `analyzed` carries the resolved `vowelModification` BEFORE
 	// `buildWatchList` reads it below. It leaves the pure engine content-free and

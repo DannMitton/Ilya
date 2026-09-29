@@ -1378,6 +1378,8 @@ This was the tail of `STATE.md` §THE ONE THING. It is open material, so it live
 > justification."* **So layout, measure distribution and horizontal spacing are
 > editorial, and the standard is justification rather than prohibition.**
 >
+> **N.94 SLICE 2 BRIEFED 2026-09-28 22:30:** `../sessions/brief-code-n94-slice2_r1_2026-09-28.md`. **French RULED 22:27** (*"Ratified"*; desk's draft): « Comporte 1 double bémol / {n} doubles bémols / 1 double dièse / {n} doubles dièses », « Tonalité imprimée · {tonic} », « Choix d'Ilya · {tonic} », « Essayer cette tonalité ». English readout changed from "Reads with" to "Carries" to match. Insights follows the chosen key under curation rule 3. Not in the tree until a grep shows it.
+>
 > **N.94 SLICE 2, RULED 2026-09-28 21:41** (Dann: *"I like your logic and your recommendations. Proceed"*). Dann proposed greying out a key past a threshold of double accidentals (about 20%); the desk recommended comparing enharmonic twins instead, and he agreed. **For each twin pair (C♭/B, G♭/F♯, D♭/C♯), Ilya counts the double accidentals each would draw; the twin with more is dimmed but stays tappable, its readout adding the count ("Reads with 12 double flats"); Ilya's pick always lands on the cleaner twin; keys without a twin never dim.** Slice 2 also carries the phone dock and Insights' "Try this key". The readout string's French is owed, drafted by the desk when slice 2 is briefed. Rests on `PRODUCT.md`, "Transposition moves every note by the same interval" (21:35).
 >
 > **N.94 FRENCH RULED 2026-09-28 19:28** (Dann: *"Ratified"*; drafted by the desk). The table is

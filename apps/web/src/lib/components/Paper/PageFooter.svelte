@@ -53,10 +53,10 @@
 		<div class="provenance-legend">
 			{#each legendItems as item}
 				<span class="legend-item">
-					<!-- item.textOnly (item 1.6): the Markup legend's states are words
-					     in that page's prose, not glyphs, so it carries no circle.
-					     Absent means "draw it", which is every Transcribe item's
-					     behaviour unchanged. -->
+					<!-- item.textOnly (item 1.6): an entry that is a word on the page
+					     rather than a glyph carries no circle. No builder sets it
+					     since the Markup voice states were removed (2026-09-28).
+					     Absent means "draw it". -->
 					{#if !item.textOnly}
 						<span class="legend-circle" aria-hidden="true">
 						{#if item.type === 'user-dictionary'}
