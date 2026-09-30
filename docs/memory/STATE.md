@@ -49,7 +49,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 > ### CLOSE OF 2026-09-29, about 22:20. READ THIS FIRST.
 >
-> **THE ONE THING NEXT: N.168, Fable distils the book harvest into principles and algebraic components for Insights.** Asked for by Dann 2026-09-29 22:12. The brief is `../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`, a DRAFT: read it, confirm with Dann in one line, state the cost (150k to 300k tokens, worst case 400k), spawn one Fable agent.
+> **THE ONE THING NEXT: N.168, Fable distils the book harvest into principles and algebraic components for Insights.** Asked for by Dann 2026-09-29 22:12. The brief is `../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`, a DRAFT: read it, confirm with Dann in one line, state the cost (150k to 300k tokens, worst case 400k), spawn one Fable agent. **The harvest files live in `~/Documents/...`, outside the two opening grants: request `/Users/dannmitton/Documents` with `device_request_folder_access` before reading or staging them.**
 >
 > **What this session did (no code, no ship):** the "new pedagogy scans" step below is DONE. Nine sources harvested from Dann's photos and PDFs into `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/harvest-*_r1_2026-09-29.md`: Titze and Verdolini Abbott *Vocology*, Smith, Chapman, Jones, Miller (soprano, tenor, bass-baritone), Dayme *Dynamics of the Singing Voice*, and Bolla's *Conspectus* (vowels, tongue targets). Capture list, ratified by Dann 00:45: `../capture-list_r1_2026-09-29.md` there. Harvest brief template: `_synthesis/brief-harvest-template_r1_2026-09-29.md`. Photos converted to `~/Downloads/_desk-2026-09-29/`; 13 misfiled copies in its `_to_delete/`.
 >
