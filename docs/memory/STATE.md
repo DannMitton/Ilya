@@ -47,6 +47,22 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### CLOSE OF 2026-09-29, about 22:20. READ THIS FIRST.
+>
+> **THE ONE THING NEXT: N.168, Fable distils the book harvest into principles and algebraic components for Insights.** Asked for by Dann 2026-09-29 22:12. The brief is `../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`, a DRAFT: read it, confirm with Dann in one line, state the cost (150k to 300k tokens, worst case 400k), spawn one Fable agent.
+>
+> **What this session did (no code, no ship):** the "new pedagogy scans" step below is DONE. Nine sources harvested from Dann's photos and PDFs into `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/harvest-*_r1_2026-09-29.md`: Titze and Verdolini Abbott *Vocology*, Smith, Chapman, Jones, Miller (soprano, tenor, bass-baritone), Dayme *Dynamics of the Singing Voice*, and Bolla's *Conspectus* (vowels, tongue targets). Capture list, ratified by Dann 00:45: `../capture-list_r1_2026-09-29.md` there. Harvest brief template: `_synthesis/brief-harvest-template_r1_2026-09-29.md`. Photos converted to `~/Downloads/_desk-2026-09-29/`; 13 misfiled copies in its `_to_delete/`.
+>
+> **Rulings this session, seated in `PRODUCT.md` §"THE SYMBOL IS THE TARGET, PHYSICALLY AND CONCEPTUALLY"** (21:55 to 22:10): modification away from the target is required where pitch forbids the target; the singer keeps the target in mind; the problem is an unnecessary change that loses the word; Insights informs and never argues (Herbst 2020-21 cited). **Also seated in `PRODUCT.md` §"HOW TWO SOURCES ARE USED: DAYME AND BOLLA":** Dayme for tone and stance only, never a claim about the voice (21:05); Bolla for where the tongue sits, Grayson governs lip rounding, palatalization, and reduction (21:30).
+>
+> **Corrected:** this file's earlier summary of the needs list (six needs) was wrong; `needs_r1_2026-09-23.md` has eleven.
+>
+> **Found, not numbered:** Mitton 2020 Fig. 4.3h pictures the sung schwa [ʌ] with Bolla plate 23 («сады», first pretonic), where the thesis's own rule gives [ɑ] (addendum in the Bolla memo). Need 10 (transposing art song) has no source in any of the nine; the journal search is owed.
+>
+> **Uncommitted at this close:** `STATE.md`, `PRODUCT.md`, `ENVIRONMENT.md` (new section `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` with index rows), `../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`. Research-folder files are outside the repo.
+>
+> **Everything in the 00:15 block below is still live except its first step (the scans), which is done.**
+
 > ### CLOSE OF 2026-09-29, about 00:15. READ THIS FIRST. The previous block moved to `../sessions/LOG.md` verbatim, block "close of 2026-09-29". Its rulings were seated first: `CONTRACT.md` §6 (passing layers never print); `PRODUCT.md` (Naming: Paper GUI, Transposition ruler; transposition by the same interval; semicolon space; the watch box heading; the folded lead; the `#` mark; Titze typography); `OPEN.md` (N.94 slice 2, N.168 comments ratified); curation draft Revision r5 (gate 5 gone, gate 2 strict, threshold 2).
 >
 > **Last ship: `3ab034b`, 2026-09-29 00:11**, all eight gates at baseline (gate 4 `1682 passed (1682)`, gate 5 `636 passed | 5 skipped (641)`; backup `~/Downloads/ilya-ship.sh.bak-1671-2026-09-29`). Tonight's ships: `2535f88` watch band fixes; `03bed5a` N.173 gates; `de31e22` N.94 slice 1 and `ARCHITECTURE.md` ratified; `e8c4732` legend's four entries out; `3ab034b` N.94 slice 2.

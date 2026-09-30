@@ -112,7 +112,7 @@ design rows.
   `OPEN.md` §THE CARET clause 16: the meter run-in at 1 sp in the loupe, and the tie taper
   into the run-on. Unscheduled.
 
-- [ ] **N.168, the Insights intake. NOT IN THIS SCHEDULE WHEN IT WAS WRITTEN; added by the desk 2026-09-24.** Numbered by Dann 2026-09-23 17:29 (*"ASAP"*), it took all of 2026-09-23. Steps 1 to 3 done; step 4 well advanced (about 690 fact rows); step 5 begun (11 composed connections); step 6 (vetting) began with P1. No connection is built into the app yet. **DESK INFERENCE, not a measurement:** building, testing, and translating the connections is several weeks at 2026-09-23's pace, so it cannot all land before 2026-10-30 without displacing something. Where it sits against the other weeks is Dann's to rule.
+- [ ] **N.168, the Insights intake. NOT IN THIS SCHEDULE WHEN IT WAS WRITTEN; added by the desk 2026-09-24.** Numbered by Dann 2026-09-23 17:29 (*"ASAP"*), it took all of 2026-09-23. Steps 1 to 3 done; step 4 well advanced (about 690 fact rows); step 5 begun (11 composed connections); step 6 (vetting) began with P1. No connection is built into the app yet. **DESK INFERENCE, not a measurement:** building, testing, and translating the connections is several weeks at 2026-09-23's pace, so it cannot all land before 2026-10-30 without displacing something. Where it sits against the other weeks is Dann's to rule. **2026-09-29: the pedagogy book harvest is done (nine sources, `_synthesis/harvest-*_r1_2026-09-29.md`); next is Fable's distillation (`../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`).**
 
 ## Week 3. Monday 2026-09-28 to Sunday 2026-10-04. Insights and the design rows
 

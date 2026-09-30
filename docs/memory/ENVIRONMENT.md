@@ -256,6 +256,9 @@ next session the same hour it cost the last one.
 | a research session needs his sources, or a subagent needs his files | `A FOURTH FOLDER, AND SUBAGENTS ON THE BRIDGE` |
 | reading more than about 1,000 characters out of a Chrome tab | `A CHROME TAB READS 1,000 CHARACTERS AT A TIME` |
 | you are about to say Ilya lacks reconstitution, or to wire `engine.ts:35` | `RECONSTITUTION LIVES IN THE WEB APP` |
+| Dann's phone photos (HEIC) of book pages, to convert or read | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
+| "the latest N photos in Downloads" | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
+| a subagent refused to transcribe a book | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -4400,4 +4403,16 @@ In N.174 D.2.5 Code served the base commit (from `git archive`) on port 5174 bes
 Found checking N.173's gates. With the gates applied, every French desktop capture (Text, Insights, Learn, Guide included) differed from the baseline by 300 to 8,000 pixels of text anti-aliasing, and the difference was stable run to run. **It is the build, not the change:** applying only two unused `i18n.ts` strings to a clean copy moved a DIFFERENT set of French desk captures by the same amount. English and phone captures did not move. So **a French desk difference of this size, with no visible change, is noise.** Rule it out the same way: apply the smallest no-op part of the patch alone and compare.
 
 **And the captures do not reach every notes sheet.** They take top, middle, and end of the scroll, so a short box on a middle sheet can be missed; the desk read Sunless 1's gated box as empty when it held one line. **Before reporting a box empty, read its text** with a probe spec (`.watch-band` `allInnerTexts()`), as `e2e-baseline/probe.test.ts` in the cloud clone did.
+
+---
+
+## BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF. Added 2026-09-29 at the close of the N.168 book harvest
+
+Learned over one session that harvested nine books from Dann's photos.
+
+- **Convert HEIC on the device, not in the container.** The device's `convert` (ImageMagick) reads HEIC: `convert IMG_n.HEIC -auto-orient -quality 85 out.jpg`. The container's ImageMagick fails with "Unsupported codec"; `pip install --break-system-packages pillow-heif` works there if needed. Write the JPEGs to `~/Downloads/_desk-<date>/<book>/`, stage them with `device_stage_files`, and read them in the container. Spreads read cleanly when split at the gutter at full resolution (rotate 90 degrees counterclockwise first).
+- **AirDrop keeps the time the photo was TAKEN, not when it arrived.** "The latest N HEICs" by file time swept 13 soprano pages, photographed after the tenor pages, into the tenor batch. **Identify a batch by the page numbers in the photos, never by file time alone.** A contact sheet of each photo's header and footer strip, one read, settles the mapping. Camera numbers also skip (IMG_6000 never existed); a skip is not a missing page until the folios say so.
+- **Brief a harvest, never a transcript.** A Sonnet subagent refused "transcribe word for word" for a whole book, correctly: it asks for a copy of the book. The desk's brief was the fault; Dann's aim was always the findings. The brief that works is `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/brief-harvest-template_r1_2026-09-29.md`: who it is for, findings paraphrased with page citations, short quotes only where the term is the point, numbers exact, a Could-not-establish section.
+- **Cost seen:** 250k to 370k tokens and 5 to 16 minutes per book of 40 to 65 spreads, one Sonnet agent.
+- **Spot-check one key figure per harvest against the photo yourself.** It caught drift twice (a paraphrase "light" for Smith's "breathier"; "untrained" for Titze's "inexperienced") and settled an octave the subagent left open (Jones p. 149).
 
