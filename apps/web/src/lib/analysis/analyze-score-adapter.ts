@@ -35,6 +35,7 @@ import type { IntakeAnswers, VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import type { CalibratedFormant, VoiceCharacteristics, Vowel } from '$lib/voice/engine/types';
 import { DERIV_SOURCE, deriveFrom } from '$lib/voice/engine/derivations';
+import { isUsable } from '$lib/voice/engine/plausibility';
 
 /**
  * Which analysis dimensions rest on real singer input. Derived from the
@@ -131,7 +132,7 @@ export function buildVoiceProfileSnapshot(
 			formant &&
 			typeof formant.f1 === 'number' &&
 			formant.f1 > 0 &&
-			formant.plausibility !== 'implausible'
+			isUsable(formant)
 		) {
 			fR1[vowel] = formant.f1;
 		}
@@ -152,7 +153,7 @@ export function buildVoiceProfileSnapshot(
 			typeof formant.f2 === 'number' &&
 			formant.f2 > 0 &&
 			formant.f2Quality !== 'absent' &&
-			formant.plausibility !== 'implausible'
+			isUsable(formant)
 		) {
 			fR2[vowel] = formant.f2;
 		}

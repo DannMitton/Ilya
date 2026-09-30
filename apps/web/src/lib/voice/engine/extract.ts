@@ -1,4 +1,5 @@
 import { rfftMag, cepstralEnvelopeDb, hann, findPeaks, autocorr, levinson, polyRoots, resampleTo } from './dsp';
+import { closedPhaseF1, closedPhaseResonances, type ClosedPhaseResult } from './closed-phase';
 
 export const MITTON: Record<string, [number, number]> = {
 	i: [296, 1705], e: [381, 1532], ɪ: [393, 1600], ɨ: [404, 1100], ɛ: [577, 1311],
@@ -6,6 +7,9 @@ export const MITTON: Record<string, [number, number]> = {
 };
 const PREEMPH = 0.97, FRAME_MS = 25, NFFT = 4096, LIFTER_MS = 8, PROM_DB = 3;
 const F1R: [number, number] = [150, 1200], F2R: [number, number] = [500, 3000];
+/** JUDGEMENT, 2026-09-30: on the synthetic set in `i-extractor.test.ts` every value from 0.15 to 0.30
+ *  kept all the brief's cases; 0.30 drops the fewest good closed-phase readings. */
+const CLOSED_PHASE_AGREE = 0.3;
 
 function preemph(y: Float64Array): Float64Array {
 	const o = new Float64Array(y.length); o[0] = y[0];
@@ -104,17 +108,52 @@ function ltasEnvExport(y: Float64Array, sr: number) {
 	return { env, freqs };
 }
 
-export interface ExtractResult { f1: number | null; f2: number | null; f2Prom: number; method: 'ltas' | 'lpc-fallback'; agreement: [number, number] | null; }
+/** What the extractor saw and chose, for the dev-only capture file (`capture-file.ts`). Filled only when passed. */
+export interface ExtractTrace {
+	prior: [number, number];
+	/** Envelope peaks from 150 Hz to 3000 Hz, with prominence in dB. */
+	envelopePeaks: { f: number; promDb: number }[];
+	envelopeF1: number | null;
+	closedPhase: ClosedPhaseResult | null;
+	/** The closed-phase fR1 before the agreement check, and whether that check set it aside. */
+	closedPhaseF1: number | null;
+	closedPhaseSetAside: boolean;
+	lpc: { f1: number | null; f2: number | null };
+	chosen: ExtractResult;
+}
 
-export function extractFormants(y: Float64Array, sr: number, vowel: string): ExtractResult {
+export interface ExtractResult { f1: number | null; f2: number | null; f2Prom: number; method: 'closed-phase' | 'ltas' | 'lpc-fallback'; agreement: [number, number] | null; }
+
+export function extractFormants(y: Float64Array, sr: number, vowel: string, trace?: Partial<ExtractTrace>): ExtractResult {
+	const r = extractCore(y, sr, vowel, trace);
+	if (trace) trace.chosen = r;
+	return r;
+}
+
+function extractCore(y: Float64Array, sr: number, vowel: string, trace?: Partial<ExtractTrace>): ExtractResult {
 	const { env, freqs } = ltasEnvExport(y, sr);
 	const [pe1, pe2] = MITTON[vowel];
 	const peaks = findPeaks(env, PROM_DB).filter((p) => freqs[p.idx] >= F1R[0] && freqs[p.idx] <= F2R[1]);
 	const c1 = peaks.filter((p) => freqs[p.idx] >= F1R[0] && freqs[p.idx] <= F1R[1]);
-	let lf1: number | null = null, lf2: number | null = null, f2Prom = 0;
+	let envF1: number | null = null, lf2: number | null = null, f2Prom = 0;
 	if (c1.length) {
 		const p1 = c1.reduce((b, p) => (Math.abs(freqs[p.idx] - pe1) < Math.abs(freqs[b.idx] - pe1) ? p : b));
-		lf1 = parabolic(env, freqs, p1.idx);
+		envF1 = parabolic(env, freqs, p1.idx);
+	}
+	// fR1 comes from the closed phase when there is one (`closed-phase.ts`, which says why), unless it
+	// disagrees with the envelope's peak by more than CLOSED_PHASE_AGREE: then a pulse the closed phase
+	// did not see has spoiled it, and the envelope's reading stands, as before 2026-09-30.
+	// fR2 stays on the envelope.
+	const cp = closedPhaseResonances(y, sr);
+	let cf1 = closedPhaseF1(cp, pe1, F1R);
+	const setAside = cf1 !== null && envF1 !== null && Math.abs(cf1 - envF1) / envF1 > CLOSED_PHASE_AGREE;
+	if (trace) Object.assign(trace, {
+		prior: [pe1, pe2], envelopePeaks: peaks.map((p) => ({ f: freqs[p.idx], promDb: p.prom })),
+		envelopeF1: envF1, closedPhase: cp, closedPhaseF1: cf1, closedPhaseSetAside: setAside,
+	});
+	if (setAside) cf1 = null;
+	const lf1 = cf1 ?? envF1;
+	if (lf1 !== null) {
 		const c2 = peaks.filter((p) => freqs[p.idx] >= F2R[0] && freqs[p.idx] <= F2R[1] && freqs[p.idx] > lf1! + 80);
 		if (c2.length) {
 			const p2 = c2.reduce((b, p) => (Math.abs(freqs[p.idx] - pe2) < Math.abs(freqs[b.idx] - pe2) ? p : b));
@@ -123,9 +162,12 @@ export function extractFormants(y: Float64Array, sr: number, vowel: string): Ext
 	}
 	if (lf1 === null || lf2 === null) {
 		const p = lpcFormants(y, sr, vowel);
+		if (trace) trace.lpc = p;
+		if (cf1 !== null) return { f1: cf1, f2: p.f2 !== null && p.f2 > cf1 + 80 ? p.f2 : null, f2Prom: 0, method: 'closed-phase', agreement: null };
 		return { f1: p.f1, f2: p.f2, f2Prom: 0, method: 'lpc-fallback', agreement: null };
 	}
 	const p = lpcFormants(y, sr, vowel);
+	if (trace) trace.lpc = p;
 	const agreement: [number, number] | null = (p.f1 && p.f2) ? [Math.abs(cents(lf1, p.f1)), Math.abs(cents(lf2, p.f2))] : null;
-	return { f1: lf1, f2: lf2, f2Prom, method: 'ltas', agreement };
+	return { f1: lf1, f2: lf2, f2Prom, method: cf1 !== null ? 'closed-phase' : 'ltas', agreement };
 }

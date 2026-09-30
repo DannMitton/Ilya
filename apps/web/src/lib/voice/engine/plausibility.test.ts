@@ -9,8 +9,11 @@ import {
 	bucketFor,
 	BAND_SOURCES,
 	FLOOR_MARGIN_SEMITONES,
-	CEILING_MARGIN_SEMITONES
+	CEILING_MARGIN_SEMITONES,
+	isUsable,
+	keepReading
 } from './plausibility';
+import { usableAnchor } from './derivations';
 
 const FLOOR = Math.pow(2, FLOOR_MARGIN_SEMITONES / 12);
 const CEILING = Math.pow(2, CEILING_MARGIN_SEMITONES / 12);
@@ -165,5 +168,35 @@ describe('citation integrity', () => {
 			expect(src).toMatch(/Bozeman/);
 			expect(src.length).toBeGreaterThan(20);
 		}
+	});
+});
+
+/**
+ * 2026-09-30, "Keep my reading" (brief-code-voice-intake-order-and-keep-reading_r1,
+ * item 2). Dann's bass [i] read 247 Hz against a 246.9 Hz window floor. A kept
+ * reading keeps its verdict, carries the flag, and is used; without the flag it
+ * is not.
+ */
+describe('keep my reading', () => {
+	const implausible = { f1: 240, confidence: 'high' as const, reading: 'provisional' as const, plausibility: 'implausible' as const, source: 'measured-user' as const };
+
+	it('is not used without the flag, and is used with it', () => {
+		expect(isUsable(implausible)).toBe(false);
+		expect(isUsable(keepReading(implausible))).toBe(true);
+		expect(isUsable({ ...implausible, plausibility: 'plausible' })).toBe(true);
+	});
+
+	it('keeps the verdict and returns the reading to what its confidence earns', () => {
+		const kept = keepReading(implausible);
+		expect(kept.plausibility).toBe('implausible');
+		expect(kept.plausibilityOverride).toBe(true);
+		expect(kept.reading).toBe('captured');
+		expect(keepReading({ ...implausible, confidence: 'low' }).reading).toBe('provisional');
+	});
+
+	it('lets a kept [i] anchor a derived vowel', () => {
+		const i = { ...implausible, f2: 2000 };
+		expect(usableAnchor(i)).toBe(false);
+		expect(usableAnchor(keepReading(i))).toBe(true);
 	});
 });

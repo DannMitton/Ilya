@@ -131,6 +131,8 @@ against and lost, which Fable had ruled on, and which was waiting on a
 ratification Dann had never been asked for again. The document existed
 specifically to stop that from happening.
 
+**AMENDED 2026-09-29 22:58, after the desk put a question about Bozeman's terms to Dann before finding the KVP2 synthesis already in the project.** His words: *"In future why don't you go ahead and search for the resource you need and read it before engaging? It helps me most to have an informed copilot."* **So: before bringing Dann any question that leans on a source, search the project, the tree, AND `~/Documents/Voice Pedagogy Library`, and read what turns up, then ask.** A snippet is a lead, not the reading (tether 14).
+
 ### 17. NEW, 2026-08-20, ruled by Dann. A RULING IS A SOURCE, NOT LAW. CHECK WHAT AMENDED IT.
 
 Tether 16 sends you to search before you form an opinion. This is its other

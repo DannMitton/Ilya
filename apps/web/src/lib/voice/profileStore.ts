@@ -74,8 +74,15 @@ export interface StoredVoice {
 	name: string;
 	/** ISO 8601. Shown as the quiet secondary date in the switcher list. */
 	createdAt: string;
-	/** ISO 8601; refreshed on every formant write. */
+	/** ISO 8601; refreshed on every write: readings, characteristics, intake, voice type. */
 	updatedAt: string;
+	/**
+	 * ISO 8601; refreshed only when the readings are written (`persist()` in the
+	 * wizard). Insights prints it as "calibrated {date}", so declaring a voice
+	 * type or typing a range does not move the calibration date (desk, 2026-09-30).
+	 * Optional and additive: a voice saved before it falls back to `updatedAt`.
+	 */
+	calibratedAt?: string;
 	/** Direct samples only; derived previews are never stored. */
 	formants: Partial<Record<Vowel, CalibratedFormant>>;
 	/**
@@ -86,6 +93,15 @@ export interface StoredVoice {
 	 * does not require it (same version-2 shape, no migration).
 	 */
 	voiceType?: VoiceType;
+	/**
+	 * Voice type slice A (Dann, 2026-09-30): `voiceType` above holds the Tier 1
+	 * id (`voiceTypes.ts`); these two hold the optional finer choice, a Tier 2
+	 * id or `'other'`, and the singer's own text for Other. Optional and
+	 * additive, the same discipline as voiceType; validVoice() does not
+	 * require them.
+	 */
+	voiceTypeSpecific?: string;
+	voiceTypeOther?: string;
 	/**
 	 * Typed range/tessitura/passaggio (Kimi's Q5 ruling, 2026-07-13).
 	 * Optional and additive, same discipline as voiceType: absent on
@@ -109,6 +125,32 @@ export interface StoredVoice {
 	 * which reads as every question skipped.
 	 */
 	intake?: IntakeAnswers;
+}
+
+/** Voice type slice A: the three fields the voice-type intake writes together. */
+export type VoiceTypeChoice = Pick<StoredVoice, 'voiceType' | 'voiceTypeSpecific' | 'voiceTypeOther'>;
+
+/**
+ * Writes the singer's own statements (the intake, the voice type) into a
+ * stored voice and refreshes `updatedAt`, as every other write does. A field
+ * given as `undefined` is removed, so a cleared answer stores nothing.
+ */
+export function assignToVoice(v: StoredVoice, patch: Partial<VoiceTypeChoice & Pick<StoredVoice, 'intake'>>): void {
+	for (const [k, value] of Object.entries(patch) as [keyof typeof patch, unknown][]) {
+		if (value === undefined) delete v[k];
+		else (v as unknown as Record<string, unknown>)[k] = value;
+	}
+	touchVoice(v);
+}
+
+/**
+ * Refreshes `updatedAt` after a write that is not a reading. A voice saved
+ * before `calibratedAt` existed first keeps its last date as its calibration
+ * date, so its first edit does not move the date Insights prints.
+ */
+export function touchVoice(v: StoredVoice): void {
+	v.calibratedAt ??= v.updatedAt;
+	v.updatedAt = new Date().toISOString();
 }
 
 export interface ProfileStore {

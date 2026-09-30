@@ -320,7 +320,7 @@ describe('watch-list copy', () => {
 				density: 1
 			})
 		).toBe(
-			'Bar 37: your [i] meets your first resonance here, so the tone will want to turn full and heady, toward a whoop. You might try relaxing the jaw and leaning the vowel toward [ɪ], giving it a touch more space, which can lift your first resonance clear of the pitch.'
+			'Bar 37: your [i] meets your first resonance here, so the tone will want to turn full and heady, toward a whoop. Consider relaxing the jaw and leaning the vowel toward [ɪ], giving it a touch more space, which can lift your first resonance clear of the pitch.'
 		);
 	});
 
@@ -425,7 +425,7 @@ describe('buildWatchList: the [o]→[ɑ] cover (clause 3, §A.185)', () => {
 				density: 1
 			})
 		).toBe(
-			'Bar 70: the [o] at the top of your range and sustained here is an exposed spot where the vowel can tighten. You might try allowing the vowel to open and darken toward [ɑ]; that can be a more comfortable option than a close [o] this high.'
+			'Bar 70: the [o] at the top of your range and sustained here is an exposed spot where the vowel can tighten. Consider allowing the vowel to open and darken toward [ɑ]; that can be a more comfortable option than a close [o] this high.'
 		);
 	});
 
@@ -458,7 +458,7 @@ describe('buildWatchList: the exposed active-open (tracking) hazard (H2)', () =>
 				density: 1
 			})
 		).toBe(
-			'Bar 52: the [e] at the top of your range and sustained here is an exposed spot where the vowel can tighten. You might try letting the jaw drop to open the vowel here, raising your first resonance to the pitch; that can ease the sound rather than keeping a close [e] squeezed this high.'
+			'Bar 52: the [e] at the top of your range and sustained here is an exposed spot where the vowel can tighten. Consider letting the jaw drop to open the vowel here, raising your first resonance to the pitch; that can ease the sound rather than keeping a close [e] squeezed this high.'
 		);
 	});
 
@@ -506,7 +506,7 @@ describe('buildWatchList: the male turnover hazard, turned side (§A.190)', () =
 				density: 1
 			})
 		).toBe(
-			'Bar 52: the [e] at the top of your range and sustained here is an exposed spot where the tone can spread or press. You might try letting the [e] turn and gather here rather than spreading it open for more sound; up this high the ring tends to come from letting it settle, not from pushing it wider.'
+			'Bar 52: the [e] at the top of your range and sustained here is an exposed spot where the tone can spread or press. Consider letting the [e] turn and gather here rather than spreading it open for more sound; up this high the ring tends to come from letting it settle, not from pushing it wider.'
 		);
 	});
 
@@ -610,33 +610,34 @@ describe('watch-band copy in French (N.82, ruled 2026-09-28)', () => {
 
 	it('leads the advice with an opener and elides « de » before a vowel', () => {
 		const e: WatchEntry = { ...base, tier: 2, kinds: ['crossing'], bar: '9', vowel: 'ɔ', advice: { action: 'openOCrossing' } };
-		expect(fr(e, 1)).toContain('. Vous pourriez essayer d\u2019accepter le changement de timbre');
+		expect(fr(e, 3)).toContain('. Il peut être intéressant d\u2019accepter le changement de timbre');
 		expect(fr(e, 2)).toContain('. Vous pouvez songer à accepter');
 		expect(fr(e, 4)).toContain('. Une piste à explorer\u00a0: accepter');
-		expect(fr({ ...e, vowel: 'i', advice: { action: 'iCrossing', target: 'ɪ' } }, 5)).toContain(
-			'. Essayez de relâcher la mâchoire et orienter la voyelle vers [ɪ], en lui donnant un peu plus d\u2019espace, ce qui peut dégager votre première résonance de la hauteur chantée.'
+		expect(fr({ ...e, vowel: 'i', advice: { action: 'iCrossing', target: 'ɪ' } }, 3)).toContain(
+			'. Il peut être intéressant de relâcher la mâchoire et orienter la voyelle vers [ɪ], en lui donnant un peu plus d\u2019espace, ce qui peut dégager votre première résonance de la hauteur chantée.'
 		);
 	});
 
 	it('reads every English opener with every action', () => {
 		for (const action of ['iCrossing', 'openOCrossing', 'oCover', 'openTracking', 'maleTurnover'] as const) {
-			for (const opener of [1, 2, 3, 4, 5] as const) {
+			for (const opener of [2, 3, 4] as const) {
 				const line = en({ ...base, tier: 2, kinds: ['crossing'], bar: '1', vowel: 'e', advice: { action, target: 'ɑ' } }, opener);
 				expect(line).not.toContain('[MISSING');
-				expect(line).toMatch(/\. (You might try|Consider|You can experiment with|One thing to explore is|Try) [a-z]+ing /);
+				expect(line).toMatch(/\. (Consider|You can experiment with|One thing to explore is) [a-z]+ing /);
 				expect(line.endsWith('.')).toBe(true);
 			}
 		}
 	});
 
-	it('rotates the openers down the band so no two advice sentences share one', () => {
+	it('rotates the three openers down the band, with no "try" (Dann, 2026-09-29 22:51)', () => {
 		const adv = (id: string): WatchEntry => ({ ...base, eventId: id, tier: 2, kinds: ['crossing'], bar: id, vowel: 'ɔ', advice: { action: 'openOCrossing' } });
 		const lines = watchBandLines(
 			[adv('1'), { ...base, eventId: 'x', tier: 5, kinds: ['sustain'], bar: '2', vowel: 'o' }, adv('3'), adv('4'), adv('5'), adv('6')],
 			'en'
 		);
 		const leads = lines.filter((l) => l.includes('allowing the turn')).map((l) => l.split('. ')[1].split(' allowing')[0]);
-		expect(leads).toEqual(['You might try', 'Consider', 'You can experiment with', 'One thing to explore is', 'Try']);
+		expect(leads).toEqual(['Consider', 'You can experiment with', 'One thing to explore is', 'Consider', 'You can experiment with']);
+		expect(lines.join(' ')).not.toMatch(/\btry\b/i);
 		expect(lines[1]).toBe('Bar 2: the longer [o] here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.');
 	});
 });

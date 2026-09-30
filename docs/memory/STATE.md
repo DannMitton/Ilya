@@ -47,21 +47,23 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### CLOSE OF 2026-09-29, about 22:20. READ THIS FIRST.
+> ### 2026-09-30, about 12:30. READ THIS FIRST, THEN `QUEUE.md`.
 >
-> **THE ONE THING NEXT: N.168, Fable distils the book harvest into principles and algebraic components for Insights.** Asked for by Dann 2026-09-29 22:12. The brief is `../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`, a DRAFT: read it, confirm with Dann in one line, state the cost (150k to 300k tokens, worst case 400k), spawn one Fable agent. **The harvest files live in `~/Documents/...`, outside the two opening grants: request `/Users/dannmitton/Documents` with `device_request_folder_access` before reading or staging them.**
+> **THE ONE THING NEXT:** ship what Code built today, then run `QUEUE.md` "The run, in order" from row 3. Before the ship: Dann walks his [i] (Keep my reading is WRITTEN, not seen), Code seats the comment French ratified 12:08 (row 8b, pasted 12:10), then the ship script's gate 4 baseline moves to Code's final count (1721 plus row 8b's tests). New files to `git add` first: `insights/identity.ts`, `insights/identity.test.ts`, `voice/VoiceTypeIntake.svelte`, `voice/hold.ts`, `voice/voiceTypes.ts`, `voice/voiceTypes.test.ts`, and the desk files below.
 >
-> **What this session did (no code, no ship):** the "new pedagogy scans" step below is DONE. Nine sources harvested from Dann's photos and PDFs into `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/harvest-*_r1_2026-09-29.md`: Titze and Verdolini Abbott *Vocology*, Smith, Chapman, Jones, Miller (soprano, tenor, bass-baritone), Dayme *Dynamics of the Singing Voice*, and Bolla's *Conspectus* (vowels, tongue targets). Capture list, ratified by Dann 00:45: `../capture-list_r1_2026-09-29.md` there. Harvest brief template: `_synthesis/brief-harvest-template_r1_2026-09-29.md`. Photos converted to `~/Downloads/_desk-2026-09-29/`; 13 misfiled copies in its `_to_delete/`.
+> **The truant-brief failure, remediated.** Queues lived only in these blocks, which move to `LOG.md`, so briefs were lost (`brief-code-voice-intake-order-and-keep-reading_r1_2026-09-28.md` was queued twice and never run). **`QUEUE.md` now holds every unshipped brief; it is read at every open after this file and updated at every close.** Three audits: `../sessions/audit-briefs-A_r1_2026-09-30.md`, `-B_`, `../sessions/audit-rulings_r1_2026-09-30.md`.
 >
-> **Rulings this session, seated in `PRODUCT.md` §"THE SYMBOL IS THE TARGET, PHYSICALLY AND CONCEPTUALLY"** (21:55 to 22:10): modification away from the target is required where pitch forbids the target; the singer keeps the target in mind; the problem is an unnecessary change that loses the word; Insights informs and never argues (Herbst 2020-21 cited). **Also seated in `PRODUCT.md` §"HOW TWO SOURCES ARE USED: DAYME AND BOLLA":** Dayme for tone and stance only, never a claim about the voice (21:05); Bolla for where the tongue sits, Grayson governs lip rounding, palatalization, and reduction (21:30).
+> **Built by Code today, uncommitted** (report `../sessions/report-code-voice-type-slice-a_r1_2026-09-30.md`, four addenda): voice type slice A; Range order higher-first; the [i] "No sound came through" floor; Keep my reading; the four small fixes; "try" out of the opener rotation; the three comments rebuilt to r7.
 >
-> **Corrected:** this file's earlier summary of the needs list (six needs) was wrong; `needs_r1_2026-09-23.md` has eleven.
+> **Ruled today (all seated in `OPEN.md` §N.168 or `QUEUE.md`):** voice type two tiers (Boldrey p. 11 list plus "Not sure"; 29-label shortlist), printed after the name, French for both tiers and the intake; courtesy verification and the consistency check; Keep my reading French; comment tap and count French (« piste »); zoom French; comment French A and B (12:08); the distillation's C24 [o] wording and the single-type-source split; "hold" retired.
 >
-> **Found, not numbered:** Mitton 2020 Fig. 4.3h pictures the sung schwa [ʌ] with Bolla plate 23 («сады», first pretonic), where the thesis's own rule gives [ɑ] (addendum in the Bolla memo). Need 10 (transposing art song) has no source in any of the nine; the journal search is owed.
+> **Fable distillation r1 and r2** are in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/distillation-n168_r{1,2}_2026-09-29.md`; all its questions are settled. Boldrey (36 photos) read: `../sessions/draft-voice-labels_r2_2026-09-30.md`.
 >
-> **Uncommitted at this close:** `STATE.md`, `PRODUCT.md`, `ENVIRONMENT.md` (new section `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` with index rows), `../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`. Research-folder files are outside the repo.
+> **Owed by Dann:** slice B's copy (`../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md`); "compatibility" or "fit"; French « ? » spacing.
 >
-> **Everything in the 00:15 block below is still live except its first step (the scans), which is done.**
+> **Uncommitted desk files:** `STATE.md`, `QUEUE.md` (new), `README.md`, `OPEN.md`, `CONTRACT.md`, `../sessions/LOG.md`, and in `../sessions/`: `brief-code-voice-type-slice-a_r1`, `brief-code-small-fixes-before-ship_r1`, `brief-code-loupe-remainder_r1`, `brief-code-insights-uses-the-gates_r1`, `draft-voice-labels_r1` and `_r2`, `draft-voice-type-slice-b-copy_r1`, `french-comments_r1`, `audit-briefs-A_r1`, `audit-briefs-B_r1`, `audit-rulings_r1` (all `_2026-09-30.md`).
+
+> ### CLOSE OF 2026-09-29, about 22:20: moved verbatim to `../sessions/LOG.md`, block "close of 2026-09-29, about 22:20". Its rulings were seated in `PRODUCT.md` that night; its one thing (the Fable distillation) is done.
 
 > ### CLOSE OF 2026-09-29, about 00:15. READ THIS FIRST. The previous block moved to `../sessions/LOG.md` verbatim, block "close of 2026-09-29". Its rulings were seated first: `CONTRACT.md` §6 (passing layers never print); `PRODUCT.md` (Naming: Paper GUI, Transposition ruler; transposition by the same interval; semicolon space; the watch box heading; the folded lead; the `#` mark; Titze typography); `OPEN.md` (N.94 slice 2, N.168 comments ratified); curation draft Revision r5 (gate 5 gone, gate 2 strict, threshold 2).
 >

@@ -44,7 +44,7 @@ import {
 	type VoiceProfileSnapshot,
 } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
-import { isRare, watchEntryLine, type WatchEntry, type WatchKind, type WatchList, type WatchOpener } from './watchlist';
+import { isRare, watchEntryLine, WATCH_OPENERS, type WatchEntry, type WatchKind, type WatchList, type WatchOpener } from './watchlist';
 
 // ── The numbers ──────────────────────────────────────────────────────
 
@@ -281,17 +281,17 @@ export function gatedLines(shown: readonly GatedEntry[], language: Language): st
 		const one = t('watch.lead.one', language).replace('{bar}', g.entry.bar);
 		return line.startsWith(one) ? t('watch.lead.many', language).replace('{bars}', list.format(g.bars)) + line.slice(one.length) : line;
 	};
-	// No duplicate line (Dann's look, 2026-09-28), compared at opener 1 as
+	// No duplicate line (Dann's look, 2026-09-28), compared at one opener as
 	// `watchBandLines` compares; then the openers rotate as they do there.
 	const seen = new Set<string>();
 	const unique = shown.filter((g) => {
-		const key = render(g, 1);
+		const key = render(g, 2);
 		if (seen.has(key)) return false;
 		seen.add(key);
 		return true;
 	});
 	let k = 0;
-	return unique.map((g) => render(g, g.entry.advice ? (((k++ % 5) + 1) as WatchOpener) : 1));
+	return unique.map((g) => render(g, g.entry.advice ? WATCH_OPENERS[k++ % WATCH_OPENERS.length] : 2));
 }
 
 /** What Markup's box (and, next, Insights) hands the gates: the analysis it already holds. */

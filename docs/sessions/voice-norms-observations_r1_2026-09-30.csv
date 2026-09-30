@@ -1,0 +1,110 @@
+obs_id,source,page,source_label,tier1,tier2,kind,low,high,extended_low,extended_high,evidence,reading,notes
+OBS-001,Boldrey 1994,p. 11,soprano,soprano,,range general,B♭3,C6,G3,F6,author estimate,desk read Dann photo,
+OBS-002,Boldrey 1994,p. 11,mezzo-soprano,mezzo-soprano,,range general,G3,B♭5,,,author estimate,desk read Dann photo,
+OBS-003,Boldrey 1994,p. 11,contralto,contralto,,range general,F3,F5,,,author estimate,desk read Dann photo,
+OBS-004,Boldrey 1994,p. 11,tenor,tenor,,range general,C3,C5,,E♭5,author estimate,desk read Dann photo,
+OBS-005,Boldrey 1994,p. 11,baritone,baritone,,range general,C3,F4,G2,A4,author estimate,desk read Dann photo,
+OBS-006,Boldrey 1994,p. 11,bass-baritone,bass-baritone,,range general,A♭2,F4,E2,G4,author estimate,desk read Dann photo,
+OBS-007,Boldrey 1994,p. 11,bass,bass,,range general,F2,E4,E♭2,F4,author estimate,desk read Dann photo,
+OBS-008,Boldrey 1994,p. 11,countertenor,countertenor,,range general,,,,,author estimate,desk read Dann photo,"""comparable to either soprano, mezzo-soprano, or contralto""; no pitches"
+OBS-009,Boldrey 1994,pp. 17-18,Soubrette,soprano,soubrette,range normal,C4,C6,B♭3,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-010,Boldrey 1994,pp. 17-18,Light Lyric Coloratura Soprano,soprano,coloratura-soprano,range normal,C4,F6,A3,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-011,Boldrey 1994,pp. 17-18,Light Lyric Soprano,soprano,lyric-soprano,range normal,C4,C6,B♭3,C♯6,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-012,Boldrey 1994,pp. 17-18,Full Lyric Coloratura Soprano,soprano,coloratura-soprano,range normal,C4,F6,G3,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-013,Boldrey 1994,pp. 17-18,Full Lyric Soprano,soprano,lyric-soprano,range normal,C4,C6,B♭3,C♯6,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-014,Boldrey 1994,pp. 17-18,Light Dramatic Coloratura Soprano,soprano,coloratura-soprano,range normal,C4,F6,,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-015,Boldrey 1994,pp. 17-18,Light Dramatic (Spinto) Soprano,soprano,spinto-soprano,range normal,C4,B♭5,A3,C6,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-016,Boldrey 1994,pp. 17-18,Full Dramatic Coloratura Soprano,soprano,coloratura-soprano,range normal,C4,F6,,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-017,Boldrey 1994,pp. 17-18,Full Dramatic Soprano,soprano,dramatic-soprano,range normal,B3,B♭5,G3,C6,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-018,Boldrey 1994,pp. 17-18,High Dramatic Soprano,soprano,dramatic-soprano,range normal,G3,A5,,C6,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-019,Boldrey 1994,pp. 17-18,Light Lyric Mezzo-Soprano,mezzo-soprano,lyric-mezzo,range normal,B3,C6,G3,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-020,Boldrey 1994,pp. 17-18,Full Lyric Mezzo-Soprano,mezzo-soprano,lyric-mezzo,range normal,G3,B5,,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-021,Boldrey 1994,pp. 17-18,Dramatic Mezzo-Soprano,mezzo-soprano,dramatic-mezzo,range normal,G3,B♭5,,C6,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-022,Boldrey 1994,pp. 17-18,Lyric Contralto,contralto,contralto,range normal,G3,F5,F3,A5,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-023,Boldrey 1994,pp. 17-18,Dramatic Contralto,contralto,contralto,range normal,G3,F5,F3,A5,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-024,Boldrey 1994,pp. 17-18,Countertenor,countertenor,countertenor,range normal,F3,A5,D3,C6,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-025,Boldrey 1994,pp. 17-18,Comic Tenor,tenor,character-tenor,range normal,C3,B♭4,A2,B4,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-026,Boldrey 1994,pp. 17-18,Light Lyric Tenor,tenor,light-tenor,range normal,C3,D5,,E5,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-027,Boldrey 1994,pp. 17-18,Full Lyric Tenor,tenor,lyric-tenor,range normal,C3,C5,,C♯5,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-028,Boldrey 1994,pp. 17-18,Dramatic (Spinto) Tenor,tenor,spinto-tenor,range normal,C3,C5,,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-029,Boldrey 1994,pp. 17-18,Heroic Tenor,tenor,heldentenor,range normal,C3,B♭4,,C5,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-030,Boldrey 1994,pp. 17-18,Light Lyric Baritone,baritone,lyric-baritone,range normal,C3,A♭4,G2,A4,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-031,Boldrey 1994,pp. 17-18,Full Lyric Baritone,baritone,lyric-baritone,range normal,C3,F♯4,G2,A♭4,author estimate,desk read Dann photo (rotated; needs Dann eye),Full Lyric Baritone high uncertain
+OBS-032,Boldrey 1994,pp. 17-18,Bass-Baritone,bass-baritone,bass-baritone,range normal,A♭2,F4,E2,G4,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-033,Boldrey 1994,pp. 17-18,Comic Bass,bass,basso-buffo,range normal,F2,E4,D2,F4,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-034,Boldrey 1994,pp. 17-18,Lyric Bass,bass,basso-cantante,range normal,G2,F4,F2,,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-035,Boldrey 1994,pp. 17-18,Dramatic Bass,bass,basso-profondo,range normal,E♭2,D4,C2,F4,author estimate,desk read Dann photo (rotated; needs Dann eye),
+OBS-036,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Dramatischer Sopran,soprano,dramatic-soprano,range role (casting),G3,C6,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-037,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Dramatischer Koloratursopran,soprano,coloratura-soprano,range role (casting),C4,F6,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-038,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Charaktersopran,soprano,,range role (casting),B3,C6,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-039,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Jugendlich-dramatischer Sopran,soprano,spinto-soprano,range role (casting),C4,C6,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-040,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Lyrischer Sopran,soprano,lyric-soprano,range role (casting),C4,C6,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-041,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Lyrischer Koloratursopran,soprano,coloratura-soprano,range role (casting),C4,F6,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-042,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Soubrette,soprano,soubrette,range role (casting),C4,C6,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-043,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Dramatischer Mezzosopran,mezzo-soprano,dramatic-mezzo,range role (casting),G3,B♭5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-044,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Koloratur-Mezzosopran,mezzo-soprano,coloratura-mezzo,range role (casting),G3,B♭5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-045,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Lyrischer Mezzosopran,mezzo-soprano,lyric-mezzo,range role (casting),G3,B♭5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-046,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Dramatischer Alt,contralto,contralto,range role (casting),G3,B♭5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-047,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Spielalt,contralto,,range role (casting),G3,B♭5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-048,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Tiefer Alt,contralto,contralto,range role (casting),F3,A5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-049,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Countertenor (Altus),countertenor,countertenor,range role (casting),F3,F5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-050,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Heldentenor,tenor,heldentenor,range role (casting),C3,C5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-051,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Jugendlicher Heldentenor,tenor,dramatic-tenor,range role (casting),C3,C5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-052,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Charaktertenor,tenor,character-tenor,range role (casting),A2,B♭4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-053,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Lyrischer Tenor,tenor,lyric-tenor,range role (casting),C3,D5,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-054,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Tenorbuffo / Spieltenor,tenor,character-tenor,range role (casting),C3,B4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-055,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Heldenbariton,baritone,heldenbariton,range role (casting),G2,G4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-056,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Charakterbariton,baritone,dramatic-baritone,range role (casting),A2,A♭4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-057,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Kavalierbariton,baritone,lyric-baritone,range role (casting),A2,A♭4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-058,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Lyrischer Bariton,baritone,lyric-baritone,range role (casting),B♭2,A4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-059,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Seriöser Bass,bass,basso-profondo,range role (casting),E2,F4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-060,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Charakterbass / Bassbariton,bass-baritone,bass-baritone,range role (casting),F2,F♯4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-061,"Kloiber, Konold, Maschka 2024 (16th ed.)",via de.wiki,Bassbuffo / Spielbass,bass,basso-buffo,range role (casting),F2,F♯4,,,role ranges for casting,"secondary: de.wikipedia ""Stimmfach""",German Helmholtz converted by the desk (German b = B♭, h = B); never a limit
+OBS-062,Miller,"tenor pp. 4, 6-7, 11, 43",lirico,tenor,lyric-tenor,passaggio primo,D4,,,,clinical,harvest memo,
+OBS-063,Miller,"tenor pp. 4, 6-7, 11, 43",lirico,tenor,lyric-tenor,passaggio secondo,G4,,,,clinical,harvest memo,
+OBS-064,Miller,tenor p. 9,leggiero,tenor,light-tenor,passaggio primo,E♭4,,,,clinical,harvest memo,
+OBS-065,Miller,tenor p. 9,leggiero,tenor,light-tenor,passaggio secondo,A♭4,,,,clinical,harvest memo,
+OBS-066,Miller,tenor p. 9,tenorino,tenor,,passaggio primo,E4,,,,clinical,harvest memo,
+OBS-067,Miller,tenor p. 9,tenorino,tenor,,passaggio secondo,A4,,,,clinical,harvest memo,
+OBS-068,Miller,tenor p. 12,lirico spinto,tenor,spinto-tenor,passaggio primo,C♯4,,,,clinical,harvest memo,
+OBS-069,Miller,tenor p. 12,lirico spinto,tenor,spinto-tenor,passaggio secondo,F♯4,,,,clinical,harvest memo,
+OBS-070,Miller,tenor p. 12,robusto,tenor,dramatic-tenor,passaggio primo,C4,,,,clinical,harvest memo,
+OBS-071,Miller,tenor p. 12,robusto,tenor,dramatic-tenor,passaggio secondo,F4,,,,clinical,harvest memo,
+OBS-072,Miller,tenor p. 13,Heldentenor (usual),tenor,heldentenor,passaggio primo,C4,,,,clinical,harvest memo,
+OBS-073,Miller,tenor p. 13,Heldentenor (usual),tenor,heldentenor,passaggio secondo,F4,,,,clinical,harvest memo,
+OBS-074,Miller,soprano p. 23; Fig. 2.8 p. 25,soprano,soprano,,passaggio primo,E♭4,,,,clinical,harvest memo,
+OBS-075,Miller,soprano p. 23; Fig. 2.8 p. 25,soprano,soprano,,passaggio secondo,F♯5,,,,clinical,harvest memo,
+OBS-076,Miller,soprano Fig. 2.8 p. 25,mezzo,mezzo-soprano,,passaggio primo,E4,,,,clinical,harvest memo,
+OBS-077,Miller,soprano Fig. 2.8 p. 25,mezzo,mezzo-soprano,,passaggio secondo,F5,,,,clinical,harvest memo,
+OBS-078,Miller,soprano Fig. 2.8 p. 25,contralto,contralto,,passaggio primo,G4,,,,clinical,harvest memo,"contralto secondo ""between D5 and E♭5""; figure flagged"
+OBS-079,Miller,soprano Fig. 2.8 p. 25,contralto,contralto,,passaggio secondo,D5,,,,clinical,harvest memo,
+OBS-080,Miller,bass p. 57,lyric baritone,baritone,lyric-baritone,passaggio primo,B3,,,,clinical,harvest memo,
+OBS-081,Miller,bass p. 57,lyric baritone,baritone,lyric-baritone,passaggio secondo,E4,,,,clinical,harvest memo,
+OBS-082,Miller,bass p. 79,bass-baritone,bass-baritone,bass-baritone,passaggio primo,A3,,,,clinical,harvest memo,
+OBS-083,Miller,bass p. 79,bass-baritone,bass-baritone,bass-baritone,passaggio secondo,D4,,,,clinical,harvest memo,
+OBS-084,Mitton 2020,Table 3.1 p. 30; p. 35,lyric bass,bass,basso-cantante,passaggio primo,A♭3,,,,Miller values as cited,dissertation,
+OBS-085,Mitton 2020,p. 35,lyric bass,bass,basso-cantante,passaggio secondo,D♭4,,,,Miller values as cited,dissertation,
+OBS-086,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,soprano,soprano,,fR1 band [i],E4,A4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-087,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,soprano,soprano,,fR1 band [e],B4,E5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-088,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,soprano,soprano,,fR1 band [ɛ],C5,F5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-089,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,soprano,soprano,,fR1 band [ɑ],D5,G5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-090,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,soprano,soprano,,fR1 band [o],B4,E5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-091,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,soprano,soprano,,fR1 band [u],F4,B4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-092,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,tenor-mezzo,tenor; mezzo-soprano; contralto,,fR1 band [i],D4,G4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-093,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,tenor-mezzo,tenor; mezzo-soprano; contralto,,fR1 band [e],B4,E5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-094,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,tenor-mezzo,tenor; mezzo-soprano; contralto,,fR1 band [ɛ],C5,F5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-095,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,tenor-mezzo,tenor; mezzo-soprano; contralto,,fR1 band [ɑ],D5,G5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-096,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,tenor-mezzo,tenor; mezzo-soprano; contralto,,fR1 band [o],A4,E5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-097,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,tenor-mezzo,tenor; mezzo-soprano; contralto,,fR1 band [u],E4,A4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-098,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,PDF,baritone,baritone,,fR1 band [i],D4,G4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-099,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,PDF,baritone,baritone,,fR1 band [e],A4,D5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-100,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,PDF,baritone,baritone,,fR1 band [ɛ],B4,E5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-101,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,PDF,baritone,baritone,,fR1 band [ɑ],C5,F5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-102,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,PDF,baritone,baritone,,fR1 band [o],A4,D5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-103,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,PDF,baritone,baritone,,fR1 band [u],D4,G4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-104,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,bass,bass; bass-baritone,,fR1 band [i],D4,E4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-105,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,bass,bass; bass-baritone,,fR1 band [e],G4,B4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-106,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,bass,bass; bass-baritone,,fR1 band [ɛ],B4,D5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-107,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,bass,bass; bass-baritone,,fR1 band [ɑ],C5,F5,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-108,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,bass,bass; bass-baritone,,fR1 band [o],G4,B4,,,author approximate,tree: plausibility.ts CORE_BANDS,
+OBS-109,Bozeman 2021 (KVP2 Figs 8-10) / Levels PDF,pp. 75-77,bass,bass; bass-baritone,,fR1 band [u],D4,F4,,,author approximate,tree: plausibility.ts CORE_BANDS,

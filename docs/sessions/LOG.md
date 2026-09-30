@@ -7991,3 +7991,23 @@ thread, after the `audit` merge. Only the Correction Station brief waits for it
 > - **Asked, not ruled:** CONTRACT §6 amendment, "No control is part of the printed page. Passing layers, the loupe and the Transposition ruler, float above it and never print."
 > - **Also agreed, not briefed:** Corrections as fixed-dimension controls that do not change shape by selection (Dann's proposal).
 >
+
+
+## Block "close of 2026-09-29, about 22:20", moved verbatim from STATE.md on 2026-09-30
+
+> ### CLOSE OF 2026-09-29, about 22:20. READ THIS FIRST.
+>
+> **THE ONE THING NEXT: N.168, Fable distils the book harvest into principles and algebraic components for Insights.** Asked for by Dann 2026-09-29 22:12. The brief is `../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`, a DRAFT: read it, confirm with Dann in one line, state the cost (150k to 300k tokens, worst case 400k), spawn one Fable agent. **The harvest files live in `~/Documents/...`, outside the two opening grants: request `/Users/dannmitton/Documents` with `device_request_folder_access` before reading or staging them.**
+>
+> **What this session did (no code, no ship):** the "new pedagogy scans" step below is DONE. Nine sources harvested from Dann's photos and PDFs into `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/harvest-*_r1_2026-09-29.md`: Titze and Verdolini Abbott *Vocology*, Smith, Chapman, Jones, Miller (soprano, tenor, bass-baritone), Dayme *Dynamics of the Singing Voice*, and Bolla's *Conspectus* (vowels, tongue targets). Capture list, ratified by Dann 00:45: `../capture-list_r1_2026-09-29.md` there. Harvest brief template: `_synthesis/brief-harvest-template_r1_2026-09-29.md`. Photos converted to `~/Downloads/_desk-2026-09-29/`; 13 misfiled copies in its `_to_delete/`.
+>
+> **Rulings this session, seated in `PRODUCT.md` §"THE SYMBOL IS THE TARGET, PHYSICALLY AND CONCEPTUALLY"** (21:55 to 22:10): modification away from the target is required where pitch forbids the target; the singer keeps the target in mind; the problem is an unnecessary change that loses the word; Insights informs and never argues (Herbst 2020-21 cited). **Also seated in `PRODUCT.md` §"HOW TWO SOURCES ARE USED: DAYME AND BOLLA":** Dayme for tone and stance only, never a claim about the voice (21:05); Bolla for where the tongue sits, Grayson governs lip rounding, palatalization, and reduction (21:30).
+>
+> **Corrected:** this file's earlier summary of the needs list (six needs) was wrong; `needs_r1_2026-09-23.md` has eleven.
+>
+> **Found, not numbered:** Mitton 2020 Fig. 4.3h pictures the sung schwa [ʌ] with Bolla plate 23 («сады», first pretonic), where the thesis's own rule gives [ɑ] (addendum in the Bolla memo). Need 10 (transposing art song) has no source in any of the nine; the journal search is owed.
+>
+> **Uncommitted at this close:** `STATE.md`, `PRODUCT.md`, `ENVIRONMENT.md` (new section `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` with index rows), `../sessions/brief-fable-n168-distillation_r1_2026-09-29.md`. Research-folder files are outside the repo.
+>
+> **Everything in the 00:15 block below is still live except its first step (the scans), which is done.**
+

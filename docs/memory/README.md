@@ -34,6 +34,7 @@ waiting, on purpose.
    must not do. **Read this every time. It is the shortest and the most expensive
    to skip.**
 2. **`STATE.md`** — the one thing, the tracker, and the rulings Dann owes.
+   **Then `QUEUE.md`**, every Code brief that has not shipped (created 2026-09-30). Read it every session; update it at every close.
 3. **`ENVIRONMENT.md`** — only when you are about to touch a tool, a path, or a
    gate. It is a lookup table, not a read-through, and since 2026-09-01 it
    opens with an index keyed by symptom. Use the index.

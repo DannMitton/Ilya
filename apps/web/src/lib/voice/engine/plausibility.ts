@@ -127,14 +127,18 @@ const FLOOR_RATIO = Math.pow(2, FLOOR_MARGIN_SEMITONES / 12);
 const CEILING_RATIO = Math.pow(2, CEILING_MARGIN_SEMITONES / 12);
 
 /** Normalize a free-form declared voice type to a routing bucket. Unknown
- * or missing declarations route to the union bands — never a guess. */
+ * or missing declarations route to the union bands — never a guess.
+ * Voice type slice A (2026-09-30) adds the Tier 1 ids of `voiceTypes.ts`:
+ * contralto routes with mezzo and tenor, bass-baritone with bass (the
+ * draft's DESK DEFAULT, Boldrey p. 11 calling it "a sub-category of bass"),
+ * and countertenor and not-sure stay union. */
 export function bucketFor(voiceType?: string): VoiceTypeBucket {
 	const t = (voiceType ?? '').trim().toLowerCase();
 	if (t === 'soprano') return 'soprano';
-	if (t === 'mezzo' || t === 'mezzo-soprano' || t === 'mezzo soprano' || t === 'tenor')
+	if (t === 'mezzo' || t === 'mezzo-soprano' || t === 'mezzo soprano' || t === 'contralto' || t === 'tenor')
 		return 'tenor-mezzo';
 	if (t === 'baritone') return 'baritone';
-	if (t === 'bass') return 'bass';
+	if (t === 'bass' || t === 'bass-baritone') return 'bass';
 	return 'union';
 }
 
@@ -262,4 +266,22 @@ export function buildPlausibilityEvent(
 		anchorSource: result.anchorSource,
 		sessionId
 	};
+}
+
+/**
+ * Whether Markup and Insights may use a reading: not judged implausible, or
+ * judged so and kept by the singer (`plausibilityOverride`, 2026-09-30).
+ */
+export function isUsable(f: { plausibility?: Plausibility; plausibilityOverride?: true }): boolean {
+	return f.plausibility !== 'implausible' || f.plausibilityOverride === true;
+}
+
+/**
+ * The singer's "Keep my reading". The verdict stays; the flag records the
+ * decision; the reading returns to what its confidence alone earns
+ * (`analyze.ts`: low is Provisional, anything else Captured), undoing only the
+ * guard's demotion in `CalibrationWizard.svelte`'s `withPlausibility`.
+ */
+export function keepReading(f: CalibratedFormant): CalibratedFormant {
+	return { ...f, plausibilityOverride: true, reading: f.confidence === 'low' ? 'provisional' : 'captured' };
 }

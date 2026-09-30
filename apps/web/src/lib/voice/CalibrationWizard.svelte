@@ -46,6 +46,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
 	import InsightsIntake from '$lib/voice/InsightsIntake.svelte';
+	import VoiceTypeIntake from '$lib/voice/VoiceTypeIntake.svelte';
 	import NotePicker from '$lib/voice/NotePicker.svelte';
 	import { LiveCaptureSession } from '$lib/voice/engine/live';
 	import type { CaptureSession } from '$lib/voice/engine/session';
@@ -59,7 +60,8 @@
 	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
 	import { deriveFrom } from '$lib/voice/engine/derivations';
 	import { applyIghDivergence } from '$lib/voice/engine/divergence';
-	import { checkPlausibility, buildPlausibilityEvent } from '$lib/voice/engine/plausibility';
+	import { checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
+	import { holdKindFor, holdAnnouncement, type HoldKind } from '$lib/voice/hold';
 	import {
 		loadStore,
 		saveStore,
@@ -67,13 +69,14 @@
 		// N.73 S3: lifted out of this file so the drawer's voice anchor and
 		// this wizard cannot disagree about whether a voice is calibrated.
 		hasAnyReadings,
+		assignToVoice, touchVoice,
+		type VoiceTypeChoice,
 		type ProfileStore,
 		type StoredVoice,
 		type ReadinessRecord
 	} from '$lib/voice/profileStore';
 	import type {
 		Vowel,
-		VoiceType,
 		CalibratedFormant,
 		VoiceCharacteristics
 	} from '$lib/voice/engine/types';
@@ -117,11 +120,8 @@
 	// N.164 (Dann, 2026-09-25) adds a second door: Insights' "Add your
 	// range" opens here directly, through `openRequest`.
 	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary' | 'characteristics';
-	type HoldKind = 'good' | 'provisional' | 'rolled-back' | 'implausible';
 
 	interface CalibrationWizardProps {
-		/** Routing key to the Bozeman value-sets; undefined until a selector lands. */
-		voiceType?: VoiceType;
 		/**
 		 * The auditory input, injectable on the same pattern the Pacifier
 		 * already uses (the `session` prop in `Pacifier.svelte`). Defaults to
@@ -168,7 +168,9 @@
 			 */
 			updatedAt?: string,
 			/** N.172: the voice's Insights intake answers. Additive, like `updatedAt`. */
-			intake?: IntakeAnswers
+			intake?: IntakeAnswers,
+			/** Voice type slice A: the declared type, which Insights prints. Additive. */
+			voiceType?: VoiceTypeChoice
 		) => void;
 		/**
 		 * Q3 wizard collapse (Kimi's §A.28 ruling, 2026-07-13): counts
@@ -204,7 +206,6 @@
 	}
 
 	let {
-		voiceType = undefined,
 		// The live auditory input (locked port order step 2). One session
 		// instance for the wizard's lifetime; each capture and each readiness
 		// run opens and releases the microphone itself, so the mic indicator
@@ -241,6 +242,7 @@
 	// functions below and save the whole store, failure-silent.
 	let store = $state<ProfileStore>(loadStore(`${INITIAL_NAME_BASE} 1`));
 	let activeVoice = $derived(store.voices.find((v) => v.id === store.activeId));
+	let voiceType = $derived(activeVoice?.voiceType); // Voice type slice A: the guard routes from the stored Tier 1 id.
 	// The smallest unused sequential default, so deletions never cause
 	// name collisions ("Voice 2" existing skips to "Voice 3").
 	let nextDefaultName = $derived.by(() => {
@@ -420,18 +422,14 @@
 		if (p) next[field] = p;
 		else delete next[field];
 		v.characteristics = CHARACTERISTIC_FIELDS.some((f) => !!next[f]) ? next : undefined;
-		v.updatedAt = new Date().toISOString();
+		touchVoice(v);
 		persistStore();
 	}
 
-	/** N.172: the intake answers save on every change, like the characteristics. */
-	function setIntake(next: IntakeAnswers | undefined) {
+	/** N.172 and voice type slice A: the singer's own answers save on every change, like the characteristics. */
+	function setOwn(patch: Parameters<typeof assignToVoice>[1]) {
 		const v = store.voices.find((x) => x.id === store.activeId);
-		if (!v) return;
-		if (next) v.intake = next;
-		else delete v.intake;
-		v.updatedAt = new Date().toISOString();
-		persistStore();
+		if (v) { assignToVoice(v, patch); persistStore(); }
 	}
 
 	let hasCharacteristics = $derived.by(() => {
@@ -458,7 +456,7 @@
 		const v = store.voices.find((x) => x.id === store.activeId);
 		if (!v) return;
 		v.formants = $state.snapshot(profile) as Partial<Record<Vowel, CalibratedFormant>>;
-		v.updatedAt = new Date().toISOString();
+		v.updatedAt = v.calibratedAt = new Date().toISOString();
 		persistStore();
 	}
 
@@ -670,7 +668,7 @@
 		const v = store.voices.find((x) => x.id === store.activeId);
 		if (!v) return;
 		v.readiness = record;
-		v.updatedAt = new Date().toISOString();
+		touchVoice(v);
 		persistStore();
 	}
 
@@ -793,18 +791,7 @@
 		onVowelCaptured?.(vowel, effective);
 		if (phase !== 'capture' || paused) return;
 		if (vowel === currentVowel) {
-			// The implausible hold outranks the ordinary provisional wording:
-			// same Provisional resolution, but the copy names the mismatch
-			// (signed-off re-prompt line, 2026-07-11) instead of the generic
-			// uncertainty wording. Never a block: Continue stands.
-			beginHold(
-				vowel,
-				effective.plausibility === 'implausible'
-					? 'implausible'
-					: effective.reading === 'captured'
-						? 'good'
-						: 'provisional'
-			);
+			beginHold(vowel, holdKindFor(effective)); // `hold.ts`: implausible outranks provisional.
 		} else if (currentVowel) {
 			// Out of turn: the roster took the value; the tour stays put.
 			pacifierRef?.activateVowel(currentVowel);
@@ -897,15 +884,9 @@
 		// DOM together with its content is often missed by screen readers, so
 		// the visual banner renders conditionally for sighted users while the
 		// announcement text lands in a region that always exists.
-		holdAnnounce =
-			kind === 'good'
-				? `${spokenName(vowel, language)}${T('calib.capture.hold.captured')}`
-				: kind === 'rolled-back'
-					? T('calib.capture.hold.rolledBack')
-					: kind === 'implausible'
-						? `${T('calib.capture.hold.implausiblePrefix')} ${spokenName(vowel, language)}. ${T('calib.capture.hold.tryAgain')}`
-						: T('calib.capture.hold.noted');
-		holdTimer = after(HOLD_MS, () => {
+		holdAnnounce = holdAnnouncement(kind, spokenName(vowel, language), T);
+		// 2026-09-30: an implausible hold offers a choice (Keep my reading), so it waits for one.
+		if (kind !== 'implausible') holdTimer = after(HOLD_MS, () => {
 			holdActive = false;
 			holdTimer = undefined;
 			advance();
@@ -936,6 +917,17 @@
 		holdTimer = undefined;
 		holdActive = false;
 		advance();
+	}
+
+	/** "Keep my reading" (2026-09-28 brief, item 2): the singer's measured voice outranks an approximate band. */
+	function holdKeep() {
+		const g = holdVowel, f = g && profile[g];
+		if (g && f) {
+			profile = { ...profile, [g]: keepReading(f) };
+			persist();
+			console.info('[voice] plausibility override', JSON.stringify({ vowel: g, f1: f.f1, kept: true, guardSessionId }));
+		}
+		holdContinue();
 	}
 
 	function holdRetake() {
@@ -1076,10 +1068,11 @@
 			// re-runs when the Voice characteristics phase writes (E.5 slice 4)
 			// and the main pane re-analyses. Snapshotted like the formants.
 			$state.snapshot(activeVoice?.characteristics) as VoiceCharacteristics | undefined,
-			// Read here so the effect tracks it: every write that refreshes it
-			// (a reading, a characteristic, the readiness record) re-publishes.
-			activeVoice?.updatedAt,
-			$state.snapshot(activeVoice?.intake) as IntakeAnswers | undefined
+			// `updatedAt` is read so every write re-publishes; the value sent is the
+			// readings' own date, `calibratedAt`, which Insights prints (desk, 2026-09-30).
+			activeVoice?.updatedAt && (activeVoice.calibratedAt ?? activeVoice.updatedAt),
+			$state.snapshot(activeVoice?.intake) as IntakeAnswers | undefined,
+			{ voiceType, voiceTypeSpecific: activeVoice?.voiceTypeSpecific, voiceTypeOther: activeVoice?.voiceTypeOther }
 		);
 	});
 
@@ -1196,6 +1189,7 @@
 								{readingLabel(f.reading)}
 							</span>
 						{/if}
+						{#if f?.plausibilityOverride}<span class="wizard-roster-noisefloor">{T('calib.roster.kept')}</span>{/if}
 						{#if f?.noiseFloor === 'unmeasured'}
 							<!-- Item 1.4b. The word is Dann's ruling of 4 August. It sits
 							     on its own line rather than beside the reading, because it
@@ -1426,6 +1420,7 @@
 							<div class="wizard-hold-actions">
 								<button type="button" onclick={holdContinue}>{T('calib.common.continue')}</button>
 								<button type="button" onclick={holdRetake}>{T('calib.common.retake')}</button>
+								{#if holdKind === 'implausible'}<button type="button" onclick={holdKeep}>{T('calib.capture.hold.keep')}</button>{/if}
 							</div>
 						</div>
 					{/if}
@@ -1522,15 +1517,9 @@
 				<p class="wizard-lede">
 					{T('calib.characteristics.lede')}
 				</p>
+				<div class="charx-group"><VoiceTypeIntake value={activeVoice} {language} onchange={setOwn} /></div>
 				<div class="charx-group">
 					<h3 class="charx-heading">{T('calib.characteristics.rangeHeading')}</h3>
-					<NotePicker
-						label={T('calib.characteristics.rangeLowLabel')}
-						value={activeVoice.characteristics?.rangeLow}
-						font={notationFont}
-						{language}
-						onchange={(p) => setCharacteristic('rangeLow', p)}
-					/>
 					<NotePicker
 						label={T('calib.characteristics.rangeHighLabel')}
 						value={activeVoice.characteristics?.rangeHigh}
@@ -1538,27 +1527,34 @@
 						{language}
 						onchange={(p) => setCharacteristic('rangeHigh', p)}
 					/>
+					<NotePicker
+						label={T('calib.characteristics.rangeLowLabel')}
+						value={activeVoice.characteristics?.rangeLow}
+						font={notationFont}
+						{language}
+						onchange={(p) => setCharacteristic('rangeLow', p)}
+					/>
 					{#if rangeInverted}
 						<p class="charx-note" role="status">{T('calib.characteristics.rangeInvertedNote')}</p>
 					{/if}
 				</div>
 				<div class="charx-group">
 					<h3 class="charx-heading">{T('calib.characteristics.tessituraHeading')}</h3>
-					<!-- Kimi's ruled copy, verbatim (v39 §A.31). -->
+					<!-- Kimi's ruled copy, verbatim (v39 §A.31). Higher limits first in all three groups (Dann, 2026-09-28 15:40). -->
 					<p class="charx-hint">{T('calib.characteristics.tessituraHint')}</p>
-					<NotePicker
-						label={T('calib.characteristics.tessituraLowLabel')}
-						value={activeVoice.characteristics?.tessituraLow}
-						font={notationFont}
-						{language}
-						onchange={(p) => setCharacteristic('tessituraLow', p)}
-					/>
 					<NotePicker
 						label={T('calib.characteristics.tessituraHighLabel')}
 						value={activeVoice.characteristics?.tessituraHigh}
 						font={notationFont}
 						{language}
 						onchange={(p) => setCharacteristic('tessituraHigh', p)}
+					/>
+					<NotePicker
+						label={T('calib.characteristics.tessituraLowLabel')}
+						value={activeVoice.characteristics?.tessituraLow}
+						font={notationFont}
+						{language}
+						onchange={(p) => setCharacteristic('tessituraLow', p)}
 					/>
 					{#if tessituraInverted}
 						<p class="charx-note" role="status">{T('calib.characteristics.tessituraInvertedNote')}</p>
@@ -1570,25 +1566,25 @@
 					     flag): the app never speaks as an agent. -->
 					<p class="charx-hint">{T('calib.characteristics.passaggioHint')}</p>
 					<NotePicker
-						label={T('calib.characteristics.passaggioPrimaryLabel')}
-						value={activeVoice.characteristics?.passaggioPrimary}
-						font={notationFont}
-						{language}
-						onchange={(p) => setCharacteristic('passaggioPrimary', p)}
-					/>
-					<NotePicker
 						label={T('calib.characteristics.passaggioSecondaryLabel')}
 						value={activeVoice.characteristics?.passaggioSecondary}
 						font={notationFont}
 						{language}
 						onchange={(p) => setCharacteristic('passaggioSecondary', p)}
 					/>
+					<NotePicker
+						label={T('calib.characteristics.passaggioPrimaryLabel')}
+						value={activeVoice.characteristics?.passaggioPrimary}
+						font={notationFont}
+						{language}
+						onchange={(p) => setCharacteristic('passaggioPrimary', p)}
+					/>
 				</div>
 				<!-- N.172: the Insights intake, one panel with the questions and the
 				     topic switches (Dann, 2026-09-24 23:21), beside the fields it
 				     joins on the profile. Ratified in both languages 2026-09-25. -->
 				<div class="charx-group">
-					<InsightsIntake value={activeVoice.intake} {language} onchange={setIntake} />
+					<InsightsIntake value={activeVoice.intake} {language} onchange={(intake) => setOwn({ intake })} />
 				</div>
 				<button type="button" class="wizard-primary" onclick={() => (phase = 'summary')}>
 					{T('calib.characteristics.doneButton')}

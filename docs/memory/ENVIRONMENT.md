@@ -259,6 +259,7 @@ next session the same hour it cost the last one.
 | Dann's phone photos (HEIC) of book pages, to convert or read | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
 | "the latest N photos in Downloads" | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
 | a subagent refused to transcribe a book | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
+| where a book's page photos are (KVP2, Boldrey) | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -4414,5 +4415,11 @@ Learned over one session that harvested nine books from Dann's photos.
 - **AirDrop keeps the time the photo was TAKEN, not when it arrived.** "The latest N HEICs" by file time swept 13 soprano pages, photographed after the tenor pages, into the tenor batch. **Identify a batch by the page numbers in the photos, never by file time alone.** A contact sheet of each photo's header and footer strip, one read, settles the mapping. Camera numbers also skip (IMG_6000 never existed); a skip is not a missing page until the folios say so.
 - **Brief a harvest, never a transcript.** A Sonnet subagent refused "transcribe word for word" for a whole book, correctly: it asks for a copy of the book. The desk's brief was the fault; Dann's aim was always the findings. The brief that works is `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/brief-harvest-template_r1_2026-09-29.md`: who it is for, findings paraphrased with page citations, short quotes only where the term is the point, numbers exact, a Could-not-establish section.
 - **Cost seen:** 250k to 370k tokens and 5 to 16 minutes per book of 40 to 65 spreads, one Sonnet agent.
+- **Where two books\' photos live, found 2026-09-30.** Bozeman, *Kinesthetic Voice Pedagogy 2* (2021): `~/Downloads/IMG_4771.HEIC` onward, one spread per photo, taken portrait (rotate 90° counterclockwise, then split at the gutter). IMG_4773 and 4774 are the Contents; **IMG_4792 is pp. 26 to 27, and each later photo adds two pages** in the first run (IMG_4805 is pp. 48 to 49, IMG_4820 pp. 78 to 79); IMG_4822 is pp. 96 to 97; IMG_4828 is pp. 116 to 117. The copyright page is not photographed. IMG_4768 to 4770 belong to other books. Boldrey, *Guide to Operatic Roles and Arias* (1994): converted to `~/Downloads/_desk-2026-09-30/boldrey/` (IMG_6267 to 6302: front matter, Contents, pp. xi to xiii, 1 to 4, 6 to 18, 20 to 30; pp. 5 and 19 not photographed). Miller, *The Structure of Singing* (1986) is a searchable PDF in the library, `M-O/`; printed page = PDF page minus 21 in chapter 11.
 - **Spot-check one key figure per harvest against the photo yourself.** It caught drift twice (a paraphrase "light" for Smith's "breathier"; "untrained" for Titze's "inexperienced") and settled an octave the subagent left open (Jones p. 149).
 
+
+
+## A DIRECTORY `git add` WHILE CODE WORKS STAGES CODE'S HALF-BUILT FILES. 2026-09-30
+
+The desk gave Dann `git add apps/web/src/lib docs` at 12:52 to stage the day's new files before a ship. Code had already started the next brief (the [i] extractor) and had written `voice/engine/closed-phase.ts`, `fry-synth.ts`, and three debug tests (`zz-diag`, `zz-probe`, then `zz-dbg`); the add staged them, and the ship script then refused on the one Code wrote a minute later. The same family as `git add -A` (2026-08-20). **The rule: before asking Dann to stage, confirm Code is idle, and stage named files, never a directory.** Staging commits nothing; the recovery was to wait for Code to finish and ship everything together, with Code removing its debug tests first.

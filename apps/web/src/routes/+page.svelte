@@ -111,7 +111,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/components/Drawer/sections.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
-	import { hasAnyReadings } from '$lib/voice/profileStore';
+	import { hasAnyReadings, type VoiceTypeChoice } from '$lib/voice/profileStore';
 	// N.115: the ten sung vowels as a value, so Score markup's state line can
 	// count the denominator of "10 of 10" without reading the wizard's queue.
 	import { VOWELS } from '$lib/voice/engine/types';
@@ -350,11 +350,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	let voiceFormants = $state<Partial<Record<Vowel, CalibratedFormant>>>({});
 	let voiceName = $state<string | undefined>(undefined);
 	let voiceCharacteristics = $state<VoiceCharacteristics | undefined>(undefined);
-	/* N.127: the voice's `updatedAt`, which Insights prints as its calibration
-	   date. Mirrored beside the name for the same reason the name is. */
+	/* N.127: the date Insights prints as the calibration date: the voice's
+	   `calibratedAt`, else its `updatedAt`. Mirrored beside the name. */
 	let voiceUpdatedAt = $state<string | undefined>(undefined);
 	/* N.172: the voice's Insights intake answers, mirrored for Insights' note comments. */
 	let voiceIntake = $state<IntakeAnswers | undefined>(undefined);
+	/* Voice type slice A: the declared type, which Insights prints after the name. */
+	let voiceTypeChoice = $state<VoiceTypeChoice | undefined>(undefined);
 	// The most recently ingested score from the score uploader. Live wiring
 	// (handover v35 §E.7) connects this into the renderer and analysis path.
 	let ingestedScore = $state<IngestedScore | null>(null);
@@ -4350,12 +4352,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					<CalibrationWizard
 						{language}
 						openRequest={calibrationRequest}
-						onActiveProfileChange={(f, name, characteristics, updatedAt, intake) => {
+						onActiveProfileChange={(f, name, characteristics, updatedAt, intake, voiceType) => {
 							voiceFormants = f;
 							voiceName = name;
 							voiceCharacteristics = characteristics;
 							voiceUpdatedAt = updatedAt;
 							voiceIntake = intake;
+							voiceTypeChoice = voiceType;
 						}}
 						onOpenLearnNote={() => {
 							// The sung-[o] glyph's deep link: Learn tab, then the
@@ -4839,6 +4842,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				intake={voiceIntake}
 				voiceName={voiceName}
 				voiceUpdatedAt={voiceUpdatedAt}
+				voiceType={voiceTypeChoice}
 				{language}
 				ingested={correctedScore}
 				scoreTitle={doc.metadata.title}

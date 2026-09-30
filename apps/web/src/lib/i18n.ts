@@ -1086,6 +1086,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.capture.hold.rolledBack': { en: 'New sample was less certain, so the previous one was kept.', fr: 'Le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
 	'calib.capture.hold.implausiblePrefix': { en: 'That reading looks unlikely for', fr: 'Cette lecture semble peu probable pour' },
 	'calib.capture.hold.tryAgain': { en: 'Try again?', fr: 'Réessayer?' },
+	// Keep my reading (2026-09-28 brief, item 2). English DESK DEFAULT under Dann's finding of 15:38 to 15:40.
+	// French RATIFIED by Dann 2026-09-30 10:48: « lecture » follows `calib.capture.hold.implausiblePrefix`,
+	// « plage » follows `calib.readiness.marginal`. The brief's draft was « Garder ma mesure ».
+	'calib.capture.hold.keep': { en: 'Keep my reading', fr: 'Garder ma lecture' },
+	'calib.roster.kept': { en: 'Outside the usual band', fr: 'Hors de la plage habituelle' },
 	'calib.capture.hold.noted': { en: 'Noted, moving on. You can re-take it from the summary.', fr: 'C\u2019est noté, on poursuit. Vous pourrez la refaire depuis le sommaire.' },
 	'calib.capture.pauseButton': { en: 'Pause', fr: 'Pause' },
 	'calib.capture.returnToSummary': { en: 'Return to summary', fr: 'Retour au sommaire' },
@@ -1468,8 +1473,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    The finding descriptions adapt `watchlist.ts`'s CLOSED copy (§A.150,
 	//    Dann 2026-07-22) with its leading "Bar N:" removed, because the tag
 	//    above each description already names the measure.
-	'insights.identity':           { en: 'Insights for {voice} · calibrated {date}', fr: 'Aperçus pour {voice} · calibration du {date}' },
-	'insights.identityUncalibrated': { en: 'Insights for {voice} · not calibrated', fr: 'Aperçus pour {voice} · sans calibration' },
+	'insights.identity':           { en: 'Insights for {voice} · {voiceType} · calibrated {date}', fr: 'Aperçus pour {voice} · {voiceType} · calibration du {date}' },
+	'insights.identityUncalibrated': { en: 'Insights for {voice} · {voiceType} · not calibrated', fr: 'Aperçus pour {voice} · {voiceType} · sans calibration' },
 	'insights.yourVoice':          { en: 'your voice',                   fr: 'votre voix' },
 	'insights.pageAria':           { en: 'Insights, page {n} of {total}', fr: 'Aperçus, page {n} sur {total}' },
 	'insights.fit.heading':        { en: 'The fit, in its terms',        fr: 'La correspondance, terme par terme' },
@@ -1539,7 +1544,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.phonation.heading':  { en: 'Phonation time',               fr: 'Temps de phonation' },
 	'insights.phonation.headline': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}.' },
 	'insights.phonation.headlineInferred': { en: 'Your phonation takes about {low} to {high} of this piece, at the speed {tempoWord} usually means.', fr: 'Votre phonation occupe environ {low} à {high} de la pièce, au tempo qu’indique habituellement {tempoWord}.' },
-	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo\u202f\u202f; le temps de phonation ne peut donc pas être donné en secondes.' },
+	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo\u202f; le temps de phonation ne peut donc pas être donné en secondes.' },
 	// RATIFIED by Dann 2026-09-23 03:14, with the vowel chart's fixed order
 	// (`docs/memory/OPEN.md`, N.123, "THE VOWEL CHART'S ORDER").
 	'insights.phonation.byVowel':  { en: 'Seconds of phonation per vowel', fr: 'Secondes de phonation par voyelle' },
@@ -1555,8 +1560,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// An untrusted bar is counted as written and named. The French reuses the
 	// ratified fragment of `insights.fit.withheldOne`. Both lines RATIFIED by
 	// Dann 2026-09-23 01:35.
-	'insights.phonation.untrustedOne': { en: 'Measure {measures} does not add up to its time signature, so its notes are counted as written.', fr: 'La mesure {measures} ne correspond pas à son chiffrage de mesure\u202f\u202f; ses notes sont comptées telles qu’écrites.' },
-	'insights.phonation.untrustedMany': { en: 'Measures {measures} do not add up to their time signatures, so their notes are counted as written.', fr: 'Les mesures {measures} ne correspondent pas à leur chiffrage de mesure\u202f\u202f; leurs notes sont comptées telles qu’écrites.' },
+	'insights.phonation.untrustedOne': { en: 'Measure {measures} does not add up to its time signature, so its notes are counted as written.', fr: 'La mesure {measures} ne correspond pas à son chiffrage de mesure\u202f; ses notes sont comptées telles qu’écrites.' },
+	'insights.phonation.untrustedMany': { en: 'Measures {measures} do not add up to their time signatures, so their notes are counted as written.', fr: 'Les mesures {measures} ne correspondent pas à leur chiffrage de mesure\u202f; leurs notes sont comptées telles qu’écrites.' },
 	// WRITTEN, NOT SHOWN. Rendered nowhere until the Loupe carries a tempo
 	// control (N.120, ruled 2026-09-23 to live in the Loupe). Printing it now
 	// would send a singer to a control that does not exist. English is Dann's
@@ -1589,33 +1594,39 @@ const strings: Record<string, Record<Language, string>> = {
 	//    read; parts marked OWED carry the ENGLISH IN BOTH SLOTS, the tree's
 	//    precedent (`drawer.paper`): `t()` prints `[MISSING: key]` for an absent
 	//    variant. Their French is drafted in the session memo for his ruling.
-	'comment.working.frame.sustained': { en: 'This [{vowel}] on {pitch} is sustained for about {seconds} seconds{ceiling}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge environ {seconds} secondes{ceiling}.' },
-	// COMPOSED: the singular, for a threshold moved under 1.5 s.
-	'comment.working.frame.sustainedOne': { en: 'This [{vowel}] on {pitch} is sustained for about {seconds} second{ceiling}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge environ {seconds} seconde{ceiling}.' },
-	'comment.working.frame.ceiling': { en: ' on the highest comfortable note you gave', fr: ' sur la note la plus aiguë confortable que vous avez indiquée' },
-	'comment.working.frame.top': { en: 'This [{vowel}] on {pitch} is the highest note of its phrase{reached}.', fr: 'Ce [{vowel}] sur {pitch} est la note la plus aiguë de sa phrase{reached}.' },
-	'comment.working.frame.sustainedTop': { en: 'This [{vowel}] on {pitch} is sustained and is the highest note of its phrase{reached}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge\u202f; c\u2019est la note la plus aiguë de sa phrase{reached}.' },
-	'comment.working.frame.reached': { en: ', reached by {leap}', fr: ', atteinte par {leap}' },
-	'comment.working.frame.reachedFrom': { en: ', reached by {leap} from {from}', fr: ', atteinte par {leap} depuis {from}' },
-	'comment.working.frame.arrivesSits': { en: 'It arrives by {leap} and sits {where}.', fr: 'Il arrive par {leap} et se situe {where}.' },
-	// COMPOSED: the leap with no resonance or turn clause.
-	'comment.working.frame.arrives': { en: 'It arrives by {leap}.', fr: 'Il arrive par {leap}.' },
-	'comment.working.frame.sits': { en: 'It sits {where}.', fr: 'Il se situe {where}.' },
-	'comment.working.where.above': { en: 'above your own [{vowel}] resonance', fr: 'au-dessus de votre propre résonance du [{vowel}]' },
-	'comment.working.where.under': { en: 'a little under your own [{vowel}] resonance, near {resonance}', fr: 'un peu sous votre propre résonance du [{vowel}], autour de {resonance}' },
-	'comment.working.where.closedU': { en: ', where a closed [{vowel}] is unlikely to hold its shape', fr: ', là où un [{vowel}] fermé a peu de chances de garder sa forme' },
-	'comment.working.where.turnJustPast': { en: 'just past the point where your [{vowel}] turns (about {turn}), so its colour closes', fr: 'juste après la hauteur où votre [{vowel}] change de timbre (autour de {turn})\u00a0: sa couleur se ferme' },
-	// COMPOSED: "past", at 2 semitones or more over the turning pitch (r2 §2 used it; not in the ratified three).
-	'comment.working.where.turnPast': { en: 'past the point where your [{vowel}] turns (about {turn}), so its colour closes', fr: 'après la hauteur où votre [{vowel}] change de timbre (autour de {turn})\u00a0: sa couleur se ferme' },
-	// The leaps. 8, 9, and 12 are ratified; 7, 10, 11, and past the octave are COMPOSED from the field's own interval names.
-	'comment.working.leap.7': { en: 'a leap of a perfect fifth', fr: 'un saut de quinte juste' },
-	'comment.working.leap.8': { en: 'a leap of a minor sixth', fr: 'un saut de sixte mineure' },
-	'comment.working.leap.9': { en: 'a leap of a major sixth', fr: 'un saut de sixte majeure' },
-	'comment.working.leap.10': { en: 'a leap of a minor seventh', fr: 'un saut de septième mineure' },
-	'comment.working.leap.11': { en: 'a leap of a major seventh', fr: 'un saut de septième majeure' },
-	'comment.working.leap.12': { en: 'an octave leap', fr: 'un saut d\u2019octave' },
-	'comment.working.leap.more': { en: 'a leap of more than an octave', fr: 'un saut de plus d\u2019une octave' },
+	// r7 (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r7_2026-09-29.md`).
+	// ENGLISH RATIFIED by Dann 2026-09-28 23:37 (r6), with r7's changes of 2026-09-29 22:51 and 23:23, as the
+	// three rendered comments; parts marked COMPOSED generalize them to notes Dann has not read (build of
+	// 2026-09-30). FRENCH: the three consequence sentences below and the three leads (jaw, closePosture,
+	// lean) RATIFIED by Dann 2026-09-30 12:08 (`docs/sessions/french-comments_r1_2026-09-30.md`, table A).
+	// The frame and where parts: Code's draft of 2026-09-30, RATIFIED by Dann 2026-09-30 12:25 (same record,
+	// section C), with « un peu en dessous de » for "a little under" and, by the desk's default shown to him,
+	// « juste en dessous de » for "just under". Whoop is « youhou » and the turn « changement de timbre ».
+	// Markers: {fR1} is "(fR1)" on its first appearance on the comments page and nothing after it; *…* sets
+	// in italics (a term of art); {cite:ROW+ROW} is the short citation of those rows of one work.
+	'comment.working.frame.sustained': { en: 'This [{vowel}] on {pitch} is sustained for about {seconds} seconds{where}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge environ {seconds} secondes{where}.' },
+	// COMPOSED: the singular, and a score that states no tempo.
+	'comment.working.frame.sustainedOne': { en: 'This [{vowel}] on {pitch} is sustained for about {seconds} second{where}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge environ {seconds} seconde{where}.' },
+	'comment.working.frame.sustainedUntimed': { en: 'This [{vowel}] on {pitch} is sustained{where}.', fr: 'Ce [{vowel}] sur {pitch} se prolonge{where}.' },
+	'comment.working.frame.sits': { en: 'This [{vowel}] on {pitch} sits {where}.', fr: 'Ce [{vowel}] sur {pitch} se situe {where}.' },
+	'comment.working.where.and': { en: ' and ', fr: ' et ' },
+	'comment.working.where.above': { en: 'above the first resonance{fR1} of your sung [{vowel}]', fr: 'au-dessus de la première résonance{fR1} de votre [{vowel}] chanté' },
+	'comment.working.where.under': { en: 'a little under the first resonance{fR1} of your sung [{vowel}]', fr: 'un peu en dessous de la première résonance{fR1} de votre [{vowel}] chanté' },
+	'comment.working.where.turnJustPast': { en: 'just past where your [{vowel}] turns (about {turn})', fr: 'juste après la hauteur où votre [{vowel}] change de timbre (autour de {turn})' },
+	// COMPOSED: "past", at 2 semitones or more over the turning pitch.
+	'comment.working.where.turnPast': { en: 'past where your [{vowel}] turns (about {turn})', fr: 'après la hauteur où votre [{vowel}] change de timbre (autour de {turn})' },
+	'comment.working.where.secondoJustAbove': { en: 'just above your secondo passaggio', fr: 'juste au-dessus de votre secondo passaggio' },
+	// COMPOSED: the [u] note's other places against the secondo.
+	'comment.working.where.secondoAt': { en: 'at your secondo passaggio', fr: 'sur votre secondo passaggio' },
+	'comment.working.where.secondoAbove': { en: 'above your secondo passaggio', fr: 'au-dessus de votre secondo passaggio' },
+	'comment.working.where.secondoJustUnder': { en: 'just under your secondo passaggio', fr: 'juste en dessous de votre secondo passaggio' },
+	// The consequence sentence (Dann 23:14): what the voice tends to do here on its own; but what resisting it tends to bring.
+	// French RATIFIED by Dann 2026-09-30 12:08, « cri » for yell included.
+	'comment.working.consequence.resonance': { en: 'Here the [{vowel}] tends toward *whoop* timbre on its own; but narrowing it instead of opening the mouth tends to thin it {cite:KVP2-022+KVP2-026}.', fr: 'Ici, le [{vowel}] tend de lui-même vers un timbre *youhou* ; mais le resserrer au lieu d’ouvrir la bouche tend à l’amincir {cite:KVP2-022+KVP2-026}.' },
+	'comment.working.consequence.turn': { en: 'The colour tends to close here on its own; but keeping it open can nudge it toward a *yell* {cite:PVA2-A-046+PVA2-B-014}.', fr: 'La couleur tend ici à se fermer d’elle-même ; mais la garder ouverte peut la pousser vers un *cri* {cite:PVA2-A-046+PVA2-B-014}.' },
+	'comment.working.consequence.closedU': { en: 'Here the [{vowel}] tends to open a little on its own {cite:RMR-057}; but keeping it closed tends toward *whoop* timbre {cite:PVA2-C-025}.', fr: 'Ici, le [{vowel}] tend à s’ouvrir un peu de lui-même {cite:RMR-057} ; mais le garder fermé tend vers un timbre *youhou* {cite:PVA2-C-025}.' },
 	// The openers (`PRODUCT.md`, "A SUGGESTION IS AN OFFER"; French settled or ruled 13:04 to 13:05). {de} is « de » or « d’ ».
+	// 1 and 5 are RETIRED from both rotations 2026-09-30 ("no 'try'", Dann 2026-09-29 22:51, `docs/memory/OPEN.md` §N.168); kept, unused.
 	'comment.opener.1': { en: 'You might try {action}', fr: 'Vous pourriez essayer {de}{action}' },
 	'comment.opener.2': { en: 'Consider {action}', fr: 'Vous pouvez songer à {action}' },
 	'comment.opener.3': { en: 'You can experiment with {action}', fr: 'Il peut être intéressant {de}{action}' },
@@ -1623,27 +1634,34 @@ const strings: Record<string, Record<Language, string>> = {
 	'comment.opener.5': { en: 'Try {action}', fr: 'Essayez {de}{action}' },
 	'comment.opener.7': { en: '{author} suggests {action}', fr: '{author} propose {de}{action}' },
 	// The suggestions: the action, then the closer where the source states an outcome the singer can hear or feel.
-	'comment.working.try.jaw.action': { en: 'letting the jaw lower as the pitch rises while the tip of your tongue keeps its [{vowel}] position', fr: 'laisser la mâchoire descendre à mesure que la hauteur monte, la pointe de la langue gardant sa position de [{vowel}]' },
-	'comment.working.try.jaw.closer': { en: ', and notice what happens to the colour of the [{vowel}] as it opens', fr: '. Observez alors ce que devient la couleur du [{vowel}] quand il s\u2019ouvre' },
-	'comment.working.try.level.action': { en: 'keeping the second half of the note at the level of the first', fr: 'garder la seconde moitié de la note au niveau de la première' },
-	'comment.working.try.tract.action': { en: 'keeping the length and shape of the vocal tract steady', fr: 'garder stables la longueur et la forme du conduit vocal' },
-	'comment.working.try.tract.closer': { en: '. Notice whether the closing then happens without actively steering it', fr: '. Observez si la fermeture se fait alors sans que vous la dirigiez activement' },
+	// jaw, closePosture, and lean are r7's three leads, ENGLISH RATIFIED; FRENCH RATIFIED by Dann 2026-09-30 12:08
+	// (closePosture after « Bozeman propose de »). jaw and lean carry their own opening words, so they take no opener.
+	'comment.working.try.jaw.action': { en: 'You might let the jaw drop with the pitch, tongue tip forward', fr: 'Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l’avant' },
+	'comment.working.try.jaw.closer': { en: ', and notice whether the [{vowel}] keeps its colour', fr: ', et observer si le [{vowel}] garde sa couleur' },
+	'comment.working.try.closePosture.action': { en: 'keeping a fairly close vowel posture through the turn and a little beyond it', fr: 'garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà' },
+	'comment.working.try.closePosture.closer': { en: '. Notice whether the colour closes more easily', fr: '. Observez si la couleur se ferme plus facilement' },
+	'comment.working.try.lean.action': { en: 'If it suits your voice, let it lean toward [ʊ]', fr: 'Si cela convient à votre voix, laissez-le pencher vers [ʊ]' },
+	'comment.working.try.lean.closer': { en: ', and notice whether the [{vowel}] keeps its colour', fr: ', et observez si le [{vowel}] garde sa couleur' },
+	// Ratified 2026-09-25 13:48 and 13:52; "holds" became "keeps" under Dann's retirement of "hold" (2026-09-29 23:23).
 	'comment.working.try.decrescendo.action': { en: 'easing into the note with a slight decrescendo', fr: 'aborder la note avec un léger decrescendo' },
-	'comment.working.try.decrescendo.closer': { en: ', to see whether the [{vowel}] holds its shape', fr: ', pour voir si le [{vowel}] garde sa forme' },
+	'comment.working.try.decrescendo.closer': { en: ', to see whether the [{vowel}] keeps its shape', fr: ', pour voir si le [{vowel}] garde sa forme' },
 	'comment.working.try.legato.action': { en: 'singing the leap legato, thinking of the {pitch} as a note that asks for more energy, space, and depth, not simply a high one', fr: 'chanter le saut legato, en pensant au {pitch} comme à une note qui demande plus d\u2019énergie, d\u2019espace et de profondeur, et non simplement comme à une note aiguë' },
 	// OWED in both languages: the desk's offer-shaped English from r1 §2.1 and §3.1, not yet read by Dann. A French page leaves these two out (`frenchOwed`).
 	'comment.working.try.mixed.action': { en: 'touching a mixed vowel like [œ] at the onset and returning to the text', fr: 'touching a mixed vowel like [œ] at the onset and returning to the text' },
 	'comment.working.try.preface.action': { en: 'prefacing the [{vowel}] with the brightness of [i], as in the English \u201cyou\u201d', fr: 'prefacing the [{vowel}] with the brightness of [i], as in the English \u201cyou\u201d' },
-	// The comment's furniture. The tap label and counts are the ratified English; their French is OWED, as are the lines the desk wrote.
-	'comment.heading': { en: 'Comments on this piece', fr: 'Comments on this piece' },
-	'comment.tap': { en: 'More to try, and why', fr: 'More to try, and why' },
-	'comment.count.one': { en: '1 more thing to try', fr: '1 more thing to try' },
-	'comment.count.many': { en: '{n} more things to try', fr: '{n} more things to try' },
-	'comment.more.one': { en: 'One more observation', fr: 'One more observation' },
-	'comment.more.many': { en: '{n} more observations', fr: '{n} more observations' },
-	'comment.hidden.one': { en: 'One observation hidden by your settings', fr: 'One observation hidden by your settings' },
-	'comment.hidden.many': { en: '{n} observations hidden by your settings', fr: '{n} observations hidden by your settings' },
-	'comment.sourcesCited': { en: 'Sources cited', fr: 'Sources cited' },
+	// The comment's furniture. The tap label and counts RATIFIED by Dann 2026-09-30 11:02 in both languages, "try" retired
+	// 2026-09-29 (Dayme, pp. 21 to 22; `docs/memory/OPEN.md` §N.168). The other lines' French RATIFIED by Dann 2026-09-30
+	// 12:08 (`docs/sessions/french-comments_r1_2026-09-30.md`, table B): « commentaires » as `voiceIntake.appear.heading`
+	// says it, « selon vos choix » for "by your settings".
+	'comment.heading': { en: 'Comments on this piece', fr: 'Commentaires sur cette pièce' },
+	'comment.tap': { en: 'More to explore, and why', fr: 'D\u2019autres pistes à explorer, et pourquoi' },
+	'comment.count.one': { en: '1 more thing to explore', fr: '1 autre piste à explorer' },
+	'comment.count.many': { en: '{n} more things to explore', fr: '{n} autres pistes à explorer' },
+	'comment.more.one': { en: 'One more observation', fr: 'Une observation de plus' },
+	'comment.more.many': { en: '{n} more observations', fr: '{n} observations de plus' },
+	'comment.hidden.one': { en: 'One observation hidden by your settings', fr: 'Une observation masquée selon vos choix' },
+	'comment.hidden.many': { en: '{n} observations hidden by your settings', fr: '{n} observations masquées selon vos choix' },
+	'comment.sourcesCited': { en: 'Sources cited', fr: 'Sources citées' },
 
 	// ── N.172: the Insights intake, RATIFIED by Dann 2026-09-25, English 14:32 to 14:45,
 	//    French 14:46 to 14:51 (`draft-n172-intake-survey_r1`, `draft-n172-intake-french_r1`).
@@ -1709,6 +1727,51 @@ const strings: Record<string, Record<Language, string>> = {
 	'voiceIntake.appear.count': { en: 'How many suggestions should each comment show?', fr: 'Combien de suggestions chaque commentaire doit-il afficher\u202f?' },
 	'voiceIntake.appear.two': { en: 'Two, with the rest a tap away', fr: 'Deux, les autres affichées sur demande' },
 	'voiceIntake.appear.all': { en: 'All of them', fr: 'Toutes' },
+	// Voice type slice A (2026-09-30). RATIFIED by Dann: the heading, hint, both group labels, Tier 1,
+	// and the identity lines 00:27; the 29 Tier 2 labels 00:32 (`draft-voice-labels_r2_2026-09-30.md`).
+	// Menu in sentence case; `voiceTypes.ts` lowers the first letter mid-line, keeping a name's capital.
+	'voiceType.heading': { en: 'Voice type', fr: 'Type de voix' },
+	'voiceType.hint': { en: 'Choose the category you use for yourself. You can add a more specific one.', fr: 'Choisissez la catégorie que vous utilisez pour vous-même. Vous pouvez en préciser une plus fine.' },
+	'voiceType.more': { en: 'More specific (optional)', fr: 'Plus précis (facultatif)' },
+	'voiceType.other': { en: 'Other (type your own)', fr: 'Autre (saisissez le vôtre)' },
+	'voiceType.type.soprano': { en: 'Soprano', fr: 'Soprano' },
+	'voiceType.type.mezzo-soprano': { en: 'Mezzo-soprano', fr: 'Mezzo-soprano' },
+	'voiceType.type.contralto': { en: 'Contralto', fr: 'Contralto' },
+	'voiceType.type.countertenor': { en: 'Countertenor', fr: 'Contre-ténor' },
+	'voiceType.type.tenor': { en: 'Tenor', fr: 'Ténor' },
+	'voiceType.type.baritone': { en: 'Baritone', fr: 'Baryton' },
+	'voiceType.type.bass-baritone': { en: 'Bass-baritone', fr: 'Baryton-basse' },
+	'voiceType.type.bass': { en: 'Bass', fr: 'Basse' },
+	'voiceType.type.not-sure': { en: 'Not sure', fr: 'Je ne sais pas' },
+	'voiceType.specific.coloratura-soprano': { en: 'Coloratura soprano', fr: 'Soprano colorature' },
+	'voiceType.specific.soubrette': { en: 'Soubrette', fr: 'Soubrette' },
+	'voiceType.specific.lyric-soprano': { en: 'Lyric soprano', fr: 'Soprano lyrique' },
+	'voiceType.specific.spinto-soprano': { en: 'Spinto soprano', fr: 'Soprano spinto' },
+	'voiceType.specific.dramatic-soprano': { en: 'Dramatic soprano', fr: 'Soprano dramatique' },
+	'voiceType.specific.coloratura-mezzo': { en: 'Coloratura mezzo', fr: 'Mezzo-soprano colorature' },
+	'voiceType.specific.lyric-mezzo': { en: 'Lyric mezzo', fr: 'Mezzo-soprano lyrique' },
+	'voiceType.specific.dramatic-mezzo': { en: 'Dramatic mezzo', fr: 'Mezzo-soprano dramatique' },
+	'voiceType.specific.contralto': { en: 'Contralto', fr: 'Contralto' },
+	'voiceType.specific.countertenor': { en: 'Countertenor', fr: 'Contre-ténor' },
+	'voiceType.specific.male-alto': { en: 'Male alto', fr: 'Alto masculin' },
+	'voiceType.specific.sopranist': { en: 'Sopranist', fr: 'Sopraniste' },
+	'voiceType.specific.haute-contre': { en: 'Haute-contre', fr: 'Haute-contre' },
+	'voiceType.specific.tenor-altino': { en: 'Tenor altino', fr: 'Ténor altino' },
+	'voiceType.specific.light-tenor': { en: 'Light tenor', fr: 'Ténor léger' },
+	'voiceType.specific.lyric-tenor': { en: 'Lyric tenor', fr: 'Ténor lyrique' },
+	'voiceType.specific.spinto-tenor': { en: 'Spinto tenor', fr: 'Ténor spinto' },
+	'voiceType.specific.dramatic-tenor': { en: 'Dramatic tenor', fr: 'Ténor dramatique' },
+	'voiceType.specific.heldentenor': { en: 'Heldentenor', fr: 'Heldentenor' },
+	'voiceType.specific.character-tenor': { en: 'Character tenor', fr: 'Ténor bouffe' },
+	'voiceType.specific.baryton-martin': { en: 'Baryton Martin', fr: 'Baryton Martin' },
+	'voiceType.specific.lyric-baritone': { en: 'Lyric baritone', fr: 'Baryton lyrique' },
+	'voiceType.specific.dramatic-baritone': { en: 'Dramatic baritone', fr: 'Baryton dramatique' },
+	'voiceType.specific.heldenbariton': { en: 'Heldenbariton', fr: 'Heldenbariton' },
+	'voiceType.specific.bass-baritone': { en: 'Bass-baritone', fr: 'Baryton-basse' },
+	'voiceType.specific.basso-cantante': { en: 'Basso cantante', fr: 'Basse chantante' },
+	'voiceType.specific.basso-buffo': { en: 'Basso buffo', fr: 'Basse bouffe' },
+	'voiceType.specific.basso-profondo': { en: 'Basso profondo', fr: 'Basse profonde' },
+	'voiceType.specific.octavist': { en: 'Octavist', fr: 'Octaviste' },
 	'voiceIntake.appear.imagery': { en: 'Include imagery and metaphor cues', fr: 'Inclure des images et des métaphores' },	// N.82: the Markup watch band ("For your consideration"), in both languages. Ruled by
 	// Dann 2026-09-28 15:04 to 15:10 (docs/sessions/n82-watch-band-draft_r1_2026-09-28.md,
 	// "Rulings"). IPA sits in square brackets (15:06). French keys are solfège,

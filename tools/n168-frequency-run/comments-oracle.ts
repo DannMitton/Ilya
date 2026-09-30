@@ -271,7 +271,7 @@ export function commentsOracle(all: OracleSong[], findings: OracleFinding[]): st
 			const opener = runsText(x.visible[0]?.runs ?? []).split(' ').slice(0, 2).join(' ');
 			lead.set(opener, (lead.get(opener) ?? 0) + 1);
 			if (k === 0) firstLead.set(opener, (firstLead.get(opener) ?? 0) + 1);
-			const shape = x.frame.split('. ')[0].replace(/\[[^\]]+\]|[A-G][♭♯]?\d|\d+/g, '#');
+			const shape = runsText(x.frame).split('. ')[0].replace(/\[[^\]]+\]|[A-G][♭♯]?\d|\d+/g, '#');
 			frames.set(shape, (frames.get(shape) ?? 0) + 1);
 			total++;
 		});
@@ -296,7 +296,7 @@ export function commentsOracle(all: OracleSong[], findings: OracleFinding[]): st
 		for (const language of ['en', 'fr'] as const) {
 			md.push(`### ${language === 'en' ? 'English' : 'French'}`, '');
 			for (const x of renderComments(cs, seed, { language, register: 'working', measuredVowels: new Set(Object.keys(t01.profile.fR1)), pitchOf: (id) => byId.get(id) })) {
-				md.push(`> ${[x.frame, ...x.visible.map((v) => runsText(v.runs))].join(' ')}`, `>`, `> ${x.count ? `${x.count} · ` : ''}(tap)`, '');
+				md.push(`> ${[runsText(x.frame), runsText(x.consequence), ...x.visible.map((v) => runsText(v.runs))].filter(Boolean).join(' ')}`, `>`, `> ${x.count ? `${x.count} · ` : ''}(tap)`, '');
 			}
 		}
 	}

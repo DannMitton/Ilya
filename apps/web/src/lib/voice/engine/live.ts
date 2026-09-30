@@ -96,6 +96,8 @@ import {
 	roomSnrDb
 } from './readiness';
 import { runCapture, type CaptureOutcome } from './analyze';
+import { captureFileEnabled, saveCapture } from './capture-file';
+import type { ExtractTrace } from './extract';
 
 /** Preferred capture rate; the engine's FFT constants assume 44.1/48 kHz. */
 const TARGET_SR = 48000;
@@ -675,13 +677,19 @@ export class LiveCaptureSession implements CaptureSession {
 		const y = full.subarray(trim, full.length - trim);
 
 		let outcome: CaptureOutcome;
+		// Dev server with ?harness=1 only (`capture-file.ts`): keep this take as a WAV and a trace.
+		// Each use starts with `import.meta.env.DEV`, which a production build replaces with false, so the
+		// bundler drops these branches and `capture-file.ts` with them.
+		const trace: Partial<ExtractTrace> | undefined = import.meta.env.DEV && captureFileEnabled() ? {} : undefined;
 		try {
-			outcome = runCapture(y, sr, vowel, voiceType);
+			outcome = runCapture(y, sr, vowel, voiceType, trace);
 		} catch (e) {
+			if (import.meta.env.DEV && trace) saveCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, outcome: { outcome: 'threw', message: String(e) }, trace: null });
 			handlers?.onError({ code: 'EXTRACTION_FAILED', message: 'Analysis failed unexpectedly.', cause: e });
 			return;
 		}
 		dbg('outcome:', JSON.stringify(outcome));
+		if (import.meta.env.DEV && trace) saveCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, outcome, trace: trace.chosen ? (trace as ExtractTrace) : null });
 		if (outcome.outcome === 'reading') handlers?.onComplete(outcome.formant);
 		else if (outcome.outcome === 'reprompt')
 			handlers?.onError({

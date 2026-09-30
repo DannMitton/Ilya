@@ -555,9 +555,14 @@ function de(action: string): string {
 	return /^[aeiouhâàéèêîôû]/i.test(action) ? 'd’' : 'de ';
 }
 
-/** The openers the advice rotates through: Insights' `comment.opener.1` to `.5`. */
-const OPENERS = [1, 2, 3, 4, 5] as const;
-export type WatchOpener = (typeof OPENERS)[number];
+/**
+ * The openers the advice rotates through: Insights' `comment.opener.2` to `.4`.
+ * Openers 1 ("You might try") and 5 ("Try") left the rotation 2026-09-30 under
+ * "No 'try' in what Insights says to the singer" (Dann, 2026-09-29 22:51; Dayme, pp. 21 to 22; `docs/memory/OPEN.md` §N.168);
+ * the box speaks in the same sentences as Insights.
+ */
+export const WATCH_OPENERS = [2, 3, 4] as const;
+export type WatchOpener = (typeof WATCH_OPENERS)[number];
 
 /** Letters on the circle of fifths from F; a tonic is `fifths + 1` steps along it (+3 for minor). */
 const FIFTHS_LETTERS = ['F', 'C', 'G', 'D', 'A', 'E', 'B'] as const;
@@ -629,7 +634,7 @@ function bareWord(word: string | undefined): string {
  * A note that carries several kinds is named once by its hardest. `opener`
  * leads the advice, when the entry carries one; `watchBandLines` rotates it.
  */
-export function watchEntryLine(entry: WatchEntry, language: Language, opener: WatchOpener = 1): string {
+export function watchEntryLine(entry: WatchEntry, language: Language, opener: WatchOpener = 2): string {
 	const vars = { bar: entry.bar, vowel: `[${entry.vowel}]`, word: bareWord(entry.word) };
 	const line = (key: string, extra: Record<string, string> = {}) =>
 		fill(t(`watch.line.${key}`, language), { ...vars, ...extra });
@@ -680,11 +685,11 @@ export function watchEntryLine(entry: WatchEntry, language: Language, opener: Wa
 export function watchBandLines(entries: readonly WatchEntry[], language: Language): string[] {
 	const seen = new Set<string>();
 	const unique = entries.filter((e) => {
-		const key = watchEntryLine(e, language, 1);
+		const key = watchEntryLine(e, language, 2);
 		if (seen.has(key)) return false;
 		seen.add(key);
 		return true;
 	});
 	let k = 0;
-	return unique.map((e) => watchEntryLine(e, language, e.advice ? OPENERS[k++ % OPENERS.length] : 1));
+	return unique.map((e) => watchEntryLine(e, language, e.advice ? WATCH_OPENERS[k++ % WATCH_OPENERS.length] : 2));
 }

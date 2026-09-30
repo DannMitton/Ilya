@@ -20,7 +20,7 @@
 	 * line offers the range, with a link to the Range fields and a quiet "No
 	 * thanks". Neither control prints (`CONTRACT.md` §6).
 	 * A SECOND, N.168 (Dann, 2026-09-25 03:35): each note comment carries "More
-	 * to try, and why", which opens its other suggestions and full references.
+	 * to explore, and why" (renamed 2026-09-30), which opens its other suggestions and full references.
 	 * It does not print; a printed Insights ends with "Sources cited" instead.
 	 *
 	 * THE ANALYSIS CHAIN IS `MarkupPane`'S, repeated rather than shared.
@@ -51,7 +51,7 @@
 		type Pitch,
 	} from '@ilya/score-parser';
 	import { isTreble, noteComments, noteFacts, registerFor, selectComments } from '$lib/insights/comments';
-	import { renderComments, songSeed, type RenderedComment } from '$lib/insights/comment-text';
+	import { renderComments, songSeed, speaks, type RenderedComment } from '$lib/insights/comment-text';
 	import { fullReference, worksCited, type Run } from '$lib/insights/comment-sources';
 	import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
 	import { withPairedVowel, type PairingMap, type DrawnUnderlay } from '$lib/score/pairings';
@@ -77,6 +77,9 @@
 	} from '$lib/insights/insights';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
 	import { accidentalParts, textParts, wordOf } from '$lib/insights/text-parts';
+	import { composeIdentityLine } from '$lib/insights/identity';
+	import { isUsable } from '$lib/voice/engine/plausibility';
+	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 
 	interface Props {
 		formants: Partial<Record<Vowel, CalibratedFormant>>;
@@ -84,8 +87,10 @@
 		/** N.172: the voice's intake answers, which move the note comments. */
 		intake?: IntakeAnswers;
 		voiceName?: string;
-		/** The voice's `updatedAt`, ISO 8601. Printed as the calibration date (N.19). */
+		/** When the readings were written (`calibratedAt`, else `updatedAt`). Printed as the calibration date (N.19). */
 		voiceUpdatedAt?: string;
+		/** Voice type slice A: the singer's declared type, printed after the name. */
+		voiceType?: VoiceTypeChoice;
 		language: Language;
 		/** The corrected score, the same value the marked score reads. */
 		ingested?: IngestedScore | null;
@@ -110,6 +115,7 @@
 		intake = undefined,
 		voiceName = undefined,
 		voiceUpdatedAt = undefined,
+		voiceType = undefined,
 		language,
 		ingested = null,
 		scoreTitle = undefined,
@@ -197,7 +203,7 @@
 			intake,
 			treble,
 			...(adapted.snapshot.range ? { ceilingMidi: pitchToMidi(adapted.snapshot.range.highest) } : {}),
-		}).filter((c) => !c.treble);
+		}).filter((c) => !c.treble && speaks(c));
 		return selectComments(all, { phraseCount: new Set(commentNotes.map((n) => n.phrase.index)).size });
 	});
 	/* Vowels the singer sang, by the adapter's own usability gate; a derived
@@ -205,7 +211,7 @@
 	const measuredVowels = $derived(
 		new Set(
 			Object.entries(formants)
-				.filter(([, f]) => !!f && typeof f.f1 === 'number' && f.f1 > 0 && f.plausibility !== 'implausible')
+				.filter(([, f]) => !!f && typeof f.f1 === 'number' && f.f1 > 0 && isUsable(f))
 				.map(([v]) => v),
 		),
 	);
@@ -237,14 +243,9 @@
 		return [T('loupe.measureTagShort').replace('%m', bar), pitch ? P(pitch) : ''].filter(Boolean).join(' · ');
 	}
 
-	// ── The identity head ──────────────────────────────────────────────
+	// ── The identity head (composed in `identity.ts`, voice type slice A) ──
 	const calibratedOn = $derived(/^\d{4}-\d{2}-\d{2}/.exec(voiceUpdatedAt ?? '')?.[0] ?? null);
-	const voiceLabel = $derived(voiceName?.trim() ? voiceName.trim() : T('insights.yourVoice'));
-	const identityLine = $derived(
-		measured && calibratedOn
-			? fill(T('insights.identity'), { voice: voiceLabel, date: calibratedOn })
-			: fill(T('insights.identityUncalibrated'), { voice: voiceLabel }),
-	);
+	const identityLine = $derived(composeIdentityLine({ voiceName, voiceUpdatedAt, measured, voiceType, language }));
 	const composerDisplay = $derived(formatNameForPaper(composer, COMPOSERS, language));
 
 	let headerHeight = $state(0);
@@ -507,12 +508,12 @@
 
 {#snippet prose(text: string)}{#each textParts(text) as part, j (j)}{#if part.ipa}<span class="ipa">{part.text}</span>{:else if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
 
-{#snippet runs(list: Run[])}{#each list as r, j (j)}{#if r.title}<em>{r.text}</em>{:else}{@render prose(r.text)}{/if}{/each}{/snippet}
+{#snippet runs(list: Run[])}{#each list as r, j (j)}{#if r.title}<em>{r.text}</em>{:else if r.sub}<sub>{r.text}</sub>{:else}{@render prose(r.text)}{/if}{/each}{/snippet}
 
 {#snippet comment(r: RenderedComment)}
 	<div class="comment">
 		<p class="finding-tag">{@render prose(commentTag(r))}{' \u00b7 '}<span class="ipa">[{r.comment.vowel}]</span></p>
-		<p class="comment-body">{@render prose(r.frame)}{#each r.visible as s (s.id)}{' '}{@render runs(s.runs)}{/each}</p>
+		<p class="comment-body">{@render runs(r.frame)}{#if r.consequence.length}{' '}{@render runs(r.consequence)}{/if}{#each r.visible as s (s.id)}{' '}{@render runs(s.runs)}{/each}</p>
 		<details class="comment-tap">
 			<summary>{#if r.count}<span class="comment-count">{r.count}</span>{' \u00b7 '}{/if}<span class="comment-tap-label">{T('comment.tap')}</span></summary>
 			{#each r.hidden as s (s.id)}

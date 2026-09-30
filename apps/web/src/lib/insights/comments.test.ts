@@ -23,16 +23,16 @@ import {
 import {
 	OPENERS,
 	leadSuggestion,
+	partKey,
 	openerFits,
 	orderSuggestions,
-	partKey,
 	renderComment,
 	renderComments,
 	rotate,
 	runsText,
 	songSeed,
+	speaks,
 	SUGGESTIONS,
-	type Voicing,
 } from './comment-text';
 import { WORKS, fullReference, worksCited } from './comment-sources';
 
@@ -136,6 +136,13 @@ function commentsOf(s: ReturnType<typeof song>, intake?: IntakeAnswers): NoteCom
 	return noteComments({ facts: noteFacts(s.notes, MITTON), intake, treble: false, ceilingMidi });
 }
 const at = (cs: NoteComment[], id: string) => cs.find((c) => c.eventId === id);
+/** r7 in French: RATIFIED by Dann 2026-09-30 12:08 (table A) and 12:25 (section C), as `norm` compares it. */
+const FR_E4 =
+	"Ce [i] sur E4 se prolonge environ 4 secondes, au-dessus de la première résonance (fR1) de votre [i] chanté. Ici, le [i] tend de lui-même vers un timbre youhou ; mais le resserrer au lieu d'ouvrir la bouche tend à l'amincir (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, p. 97 et 115). Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l'avant, et observer si le [i] garde sa couleur (Miller, Solutions for Singers, 2004, p. 163).";
+const FR_EB4 =
+	"Ce [ɛ] sur E♭4 se prolonge environ 3 secondes, juste après la hauteur où votre [ɛ] change de timbre (autour de D4). La couleur tend ici à se fermer d'elle-même ; mais la garder ouverte peut la pousser vers un cri (Bozeman, Practical Vocal Acoustics, 2025, p. 45 et 65). Bozeman propose de garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà. Observez si la couleur se ferme plus facilement (Kinesthetic Voice Pedagogy 2, 2021, p. 18-19).";
+const FR_D4 =
+	"Ce [u] sur D4 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u] chanté. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 157-158) ; mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
 const POINTS: (IntakePoint | undefined)[] = [1, 2, 3, 4, 5, 'not-sure', undefined];
 
 describe('the intake answers', () => {
@@ -263,22 +270,24 @@ describe('ranking, the budget, and performance order', () => {
 
 describe('which suggestion leads (r2 §0, DESK PROPOSAL)', () => {
 	const cs = [...commentsOf(T01), ...commentsOf(T02)];
-	it('rule 1: the suggestion that reads a measured value leads', () => {
+	it("r7's lead is the one visible suggestion; McKinney's legato is behind the tap only", () => {
 		const i = at(cs, 'e4')!;
 		const o = orderSuggestions(i, { language: 'en', measuredVowels: MEASURED });
-		expect(o.visible.map((s) => s.id)).toEqual(['jaw', 'level']);
+		expect(o.visible.map((s) => s.id)).toEqual(['jaw']);
 		expect(o.hidden.map((s) => s.id)).toEqual(['legato']);
+		const u = orderSuggestions(at(cs, 'e11')!, { language: 'en', measuredVowels: MEASURED });
+		expect(u.visible.map((s) => s.id)).toEqual(['lean']);
+		expect(u.hidden.map((s) => s.id)).toEqual(['decrescendo', 'preface', 'legato']);
+	});
+	it('rule 1: the suggestion that reads a measured value leads', () => {
+		const u = at(cs, 'e11')!;
+		const primaries = SUGGESTIONS.filter((s) => ['lean', 'decrescendo'].includes(s.id));
+		expect(leadSuggestion(u, primaries, MEASURED)?.id).toBe('lean');
 	});
 	it('rule 2: with no measured value, the closest case leads (Reid’s baritone upper D)', () => {
 		const u = at(cs, 'e11')!;
-		const o = orderSuggestions(u, { language: 'en', measuredVowels: MEASURED });
-		expect(o.visible.map((s) => s.id)).toEqual(['decrescendo', 'legato']);
-		expect(o.hidden.map((s) => s.id)).toEqual(['preface']);
-	});
-	it('a derived fR1 is not a measured value', () => {
-		const i = at(cs, 'e4')!;
-		const primaries = SUGGESTIONS.filter((s) => ['jaw', 'level', 'legato'].includes(s.id));
-		expect(leadSuggestion(i, primaries, new Set())?.id).toBe('level');
+		const primaries = SUGGESTIONS.filter((s) => ['lean', 'decrescendo'].includes(s.id));
+		expect(leadSuggestion(u, primaries, new Set())?.id).toBe('decrescendo');
 	});
 	it('"All of them" shows every suggestion; imagery off drops the imagery cue', () => {
 		const e = commentsOf(T02)[0];
@@ -289,84 +298,107 @@ describe('which suggestion leads (r2 §0, DESK PROPOSAL)', () => {
 	it('a French page leaves out the suggestions whose French is owed', () => {
 		const e = commentsOf(T02)[0];
 		const fr = orderSuggestions(e, { language: 'fr', measuredVowels: MEASURED });
-		expect([...fr.visible, ...fr.hidden].map((s) => s.id)).toEqual(['tract', 'level', 'legato']);
+		expect([...fr.visible, ...fr.hidden].map((s) => s.id)).toEqual(['closePosture', 'legato']);
+	});
+});
+
+describe('which comments print (r7, DESK DEFAULT)', () => {
+	it('a sustained note with no resonance, turn, or closed [u] has nothing to say', () => {
+		const o = at(commentsOf(T04), 'e4')!;
+		expect(o.challenges).toEqual(['sustain']);
+		expect(speaks(o)).toBe(false);
+	});
+	it('the three r7 notes speak, and a note every topic hid still counts', () => {
+		for (const c of [...commentsOf(T01), ...commentsOf(T02)]) expect(speaks(c)).toBe(true);
+		const hidden = commentsOf(T04, { topics: { sustained: false } } as IntakeAnswers).find((c) => c.eventId === 'e4')!;
+		expect(hidden.kinds).toEqual([]);
+		expect(speaks(hidden)).toBe(true);
 	});
 });
 
 /** The ratified text is compared with ordinary spaces and a straight apostrophe. */
-const norm = (s: string) => s.replace(/[  ]/g, ' ').replace(/’/g, "'");
+const norm = (s: string) => s.replace(/[\u00a0\u202f]/g, ' ').replace(/\u2019/g, "'");
 
-function forced(c: NoteComment, s: ReturnType<typeof song>, language: 'en' | 'fr', frame: Voicing['frame'], openers: Voicing['openers']) {
-	const pitchOf = s.pitchOf;
+function forced(c: NoteComment, s: ReturnType<typeof song>, language: 'en' | 'fr', nameFR1 = true) {
 	const order = orderSuggestions(c, { language, measuredVowels: MEASURED });
-	const n = order.visible.length + order.hidden.length;
-	const closers = [...order.visible, ...order.hidden].map((s) => !!s.closer);
-	const r = renderComment(c, order, { frame, openers: [...openers, ...Array(n - openers.length).fill(4)], closers }, { language, register: 'working', pitchOf });
-	return { text: norm([r.frame, ...r.visible.map((s) => runsText(s.runs))].join(' ')), count: r.count };
+	const [voicing] = rotate([c], [order], 0);
+	const r = renderComment(c, order, voicing, { language, register: 'working', pitchOf: s.pitchOf }, nameFR1);
+	return { text: norm([r.frame, r.consequence, ...r.visible.map((v) => v.runs)].map(runsText).join(' ')), count: r.count, r };
 }
 
-describe("the three rendered comments reproduce Dann's ratified text (templates, 13:45 and 13:50)", () => {
+// r7, English RATIFIED by Dann 2026-09-28 23:37 and 2026-09-29 22:51 (`draft-three-comments_r7_2026-09-29.md`),
+// compared without its italics. The French is RATIFIED by Dann 2026-09-30 12:08 and 12:25
+// (`french-comments_r1_2026-09-30.md`, table A and section C): these lines pin it
+// so a change to it is deliberate. "(fR1)" prints on its first appearance on the page, the E4 here.
+describe("the three rendered comments reproduce Dann's ratified r7 text", () => {
 	const t01 = commentsOf(T01);
 	const t02 = commentsOf(T02);
 	it('E4 [i], English and French', () => {
-		const en = forced(at(t01, 'e4')!, T01, 'en', 'A', [1, 7]);
+		const en = forced(at(t01, 'e4')!, T01, 'en');
 		expect(en.text).toBe(
-			'This [i] on E4 is sustained for about 4 seconds on the highest comfortable note you gave. It arrives by a leap of a major sixth and sits above your own [i] resonance. You might try letting the jaw lower as the pitch rises while the tip of your tongue keeps its [i] position, and notice what happens to the colour of the [i] as it opens (Miller, Solutions for Singers, 2004, p. 163). Miller suggests keeping the second half of the note at the level of the first (Solutions for Singers, 2004, p. 201).',
+			'This [i] on E4 is sustained for about 4 seconds, above the first resonance (fR1) of your sung [i]. Here the [i] tends toward whoop timbre on its own; but narrowing it instead of opening the mouth tends to thin it (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, pp. 97 and 115). You might let the jaw drop with the pitch, tongue tip forward, and notice whether the [i] keeps its colour (Miller, Solutions for Singers, 2004, p. 163).',
 		);
-		expect(en.count).toBe('1 more thing to try');
-		expect(forced(at(t01, 'e4')!, T01, 'fr', 'A', [1, 7]).text).toBe(
-			"Ce [i] sur E4 se prolonge environ 4 secondes sur la note la plus aiguë confortable que vous avez indiquée. Il arrive par un saut de sixte majeure et se situe au-dessus de votre propre résonance du [i]. Vous pourriez essayer de laisser la mâchoire descendre à mesure que la hauteur monte, la pointe de la langue gardant sa position de [i]. Observez alors ce que devient la couleur du [i] quand il s'ouvre (Miller, Solutions for Singers, 2004, p. 163). Miller propose de garder la seconde moitié de la note au niveau de la première (Solutions for Singers, 2004, p. 201).",
-		);
-	});
-	it('D4 [u], English and French', () => {
-		expect(forced(at(t01, 'e11')!, T01, 'en', 'C', [3, 5]).text).toBe(
-			'This [u] on D4 is the highest note of its phrase, reached by an octave leap from D3. It sits a little under your own [u] resonance, near F4, where a closed [u] is unlikely to hold its shape. You can experiment with easing into the note with a slight decrescendo, to see whether the [u] holds its shape (Reid, Voice: Psyche and Soma, 1975, p. 66). Try singing the leap legato, thinking of the D4 as a note that asks for more energy, space, and depth, not simply a high one (McKinney, The Diagnosis and Correction of Vocal Faults, 1994, p. 189).',
-		);
-		expect(forced(at(t01, 'e11')!, T01, 'fr', 'C', [3, 5]).text).toBe(
-			"Ce [u] sur D4 est la note la plus aiguë de sa phrase, atteinte par un saut d'octave depuis D3. Il se situe un peu sous votre propre résonance du [u], autour de F4, là où un [u] fermé a peu de chances de garder sa forme. Il peut être intéressant d'aborder la note avec un léger decrescendo, pour voir si le [u] garde sa forme (Reid, Voice: Psyche and Soma, 1975, p. 66). Essayez de chanter le saut legato, en pensant au D4 comme à une note qui demande plus d'énergie, d'espace et de profondeur, et non simplement comme à une note aiguë (McKinney, The Diagnosis and Correction of Vocal Faults, 1994, p. 189).",
-		);
+		expect(en.count).toBe('1 more thing to explore');
+		expect(forced(at(t01, 'e4')!, T01, 'fr').text).toBe(FR_E4);
 	});
 	it('E♭4 [ɛ], English and French', () => {
-		const en = forced(t02[0], T02, 'en', 'B', [2, 4]);
+		const en = forced(t02[0], T02, 'en', false);
 		expect(en.text).toBe(
-			'This [ɛ] on E♭4 is sustained and is the highest note of its phrase, reached by a leap of a minor sixth. It sits just past the point where your [ɛ] turns (about D4), so its colour closes. Consider keeping the length and shape of the vocal tract steady. Notice whether the closing then happens without actively steering it (Bozeman, Practical Vocal Acoustics, 2025, p. 65). One thing to explore is keeping the second half of the note at the level of the first (Miller, Solutions for Singers, 2004, p. 201).',
+			'This [ɛ] on E♭4 is sustained for about 3 seconds, just past where your [ɛ] turns (about D4). The colour tends to close here on its own; but keeping it open can nudge it toward a yell (Bozeman, Practical Vocal Acoustics, 2025, pp. 45 and 65). Bozeman suggests keeping a fairly close vowel posture through the turn and a little beyond it. Notice whether the colour closes more easily (Kinesthetic Voice Pedagogy 2, 2021, pp. 18 to 19).',
 		);
-		expect(en.count).toBe('2 more things to try');
-		expect(forced(t02[0], T02, 'fr', 'B', [2, 4]).text).toBe(
-			"Ce [ɛ] sur E♭4 se prolonge ; c'est la note la plus aiguë de sa phrase, atteinte par un saut de sixte mineure. Il se situe juste après la hauteur où votre [ɛ] change de timbre (autour de D4) : sa couleur se ferme. Vous pouvez songer à garder stables la longueur et la forme du conduit vocal. Observez si la fermeture se fait alors sans que vous la dirigiez activement (Bozeman, Practical Vocal Acoustics, 2025, p. 65). Une piste à explorer : garder la seconde moitié de la note au niveau de la première (Miller, Solutions for Singers, 2004, p. 201).",
+		expect(en.count).toBe('2 more things to explore');
+		expect(forced(t02[0], T02, 'fr', false).text).toBe(FR_EB4);
+	});
+	it('D4 [u], English and French', () => {
+		const en = forced(at(t01, 'e11')!, T01, 'en', false);
+		expect(en.text).toBe(
+			'This [u] on D4 sits just above your secondo passaggio and a little under the first resonance of your sung [u]. Here the [u] tends to open a little on its own (Miller, The Structure of Singing, 1986, pp. 157 to 158); but keeping it closed tends toward whoop timbre (Bozeman, Practical Vocal Acoustics, 2025, p. 94). If it suits your voice, let it lean toward [ʊ], and notice whether the [u] keeps its colour.',
 		);
+		expect(en.count).toBe('3 more things to explore');
+		expect(forced(at(t01, 'e11')!, T01, 'fr', false).text).toBe(FR_D4);
+	});
+	it('sets fR1 as Titze prints it, and the terms of art and titles in italics', () => {
+		const { r } = forced(at(t01, 'e4')!, T01, 'en');
+		const i = r.frame.findIndex((x) => x.text === 'f' && x.title);
+		expect(r.frame[i + 1]).toEqual({ text: 'R1', sub: true });
+		expect(r.consequence.filter((x) => x.title).map((x) => x.text)).toEqual(['whoop', 'Kinesthetic Voice Pedagogy 2']);
+	});
+	it('cites the consequence rows on the printed page, and every row in the tap', () => {
+		const { r } = forced(at(t01, 'e11')!, T01, 'en', false);
+		expect(r.printedRows).toEqual(['RMR-057', 'PVA2-C-025']);
+		expect(r.references).toHaveLength(7);
 	});
 });
 
 describe('the rotation', () => {
-	const page = [...commentsOf(T01), ...commentsOf(T02)];
+	const page = [...commentsOf(T01), ...commentsOf(T02)].filter(speaks);
 	const orders = page.map((c) => orderSuggestions(c, { language: 'en', measuredVowels: MEASURED }));
 	it('is stable for a song and differs across songs', () => {
 		expect(songSeed(['a', 'b'])).toBe(songSeed(['a', 'b']));
 		expect(songSeed(['a', 'b'])).not.toBe(songSeed(['a', 'c']));
 	});
 	for (let seed = 0; seed < OPENERS.length * 3; seed++) {
-		it(`seed ${seed}: no two comments share a lead opener, a printed closer, or a frame shape`, () => {
+		it(`seed ${seed}: r7's leads keep their words; behind the tap, no opener repeats within a comment`, () => {
 			const v = rotate(page, orders, seed);
-			expect(new Set(v.map((x) => x.openers[0])).size).toBe(page.length);
-			const printed = v.flatMap((x, k) => orders[k].visible.map((s, j) => (x.closers[j] ? s.closer : null))).filter(Boolean);
-			expect(new Set(printed).size).toBe(printed.length);
-			const shaped = v.filter((_, k) => page[k].leap && page[k].phraseTop).map((x) => x.frame);
-			expect(new Set(shaped).size).toBe(shaped.length);
 			v.forEach((x, k) => {
-				expect(new Set(x.openers).size).toBe(x.openers.length);
 				const list = [...orders[k].visible, ...orders[k].hidden];
+				expect(x.openers[0]).toBe(list[0].opener);
+				expect(x.closers[0]).toBe(true);
+				const rotated = x.openers.filter((_, j) => list[j].opener === undefined);
+				expect(new Set(rotated).size).toBe(rotated.length);
 				x.openers.forEach((o, j) => expect(openerFits(o, list[j], x.closers[j])).toBe(true));
 			});
 		});
 	}
-	it('renders a whole page with no missing string in either language', () => {
+	it('renders a whole page with no missing string, and "(fR1)" once, in either language', () => {
 		const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
 		for (const language of ['en', 'fr'] as const) {
 			const r = renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf });
-			const all = r.flatMap((x) => [x.frame, x.count, ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), ...x.references.map(runsText)]).join(' ');
+			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), x.count, ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), ...x.references.map(runsText)]).join(' ');
 			expect(all).not.toContain('MISSING');
-			expect(all).not.toMatch(/\{[a-z]+\}/);
+			expect(all).not.toMatch(/\{[a-zA-Z0-9:+-]+\}|\*/);
+			expect(all.match(/\(fR1\)/g)).toHaveLength(1);
+			expect(all).not.toMatch(/\btry\b|\bhold/i);
 		}
 	});
 });

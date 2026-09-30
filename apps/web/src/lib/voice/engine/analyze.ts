@@ -2,13 +2,24 @@ import type { CalibratedFormant, Vowel, VoiceType } from './types';
 import type { CaptureError } from './errors';
 import { detect } from './detector';
 import { guard, type GuardResult } from './guard';
-import { extractFormants } from './extract';
+import { extractFormants, type ExtractTrace } from './extract';
 
 // SILENCE_RMS recalibrated 2026-07-01 on Dann's ACCEPT, from live iMac console
 // evidence: a genuine fry capture at 30 cm with processing off measured RMS 0.008,
 // under the old 0.01 floor, so a gate-passing capture would still have bounced as
 // "no audio input." Spec amendment pending.
-const SILENCE_RMS = 0.003, MIN_BUFFER_S = 0.5;
+//
+// 2026-09-30, the same defect again, on [i]: Dann's [a] read and his [i], sung
+// into the same microphone, came back "No sound came through". A closed vowel's
+// fry radiates less than an open one's, so [i] is the take most likely to sit
+// under a fixed level floor, and the live gate had already accepted it. A level
+// floor cannot tell a quiet voice from an empty room; the detector can, and it
+// is level-free: eight regular pulses, a decay under 0.4, flatness under 0.3,
+// and 12 dB of in-band SNR (`detector.ts`). So this check now catches only a
+// dead input, a buffer at about -100 dBFS (RMS 1e-5), such as a muted
+// interface delivering zeros, and everything else goes to `detect()`, which
+// re-prompts an empty room as not-fry. The desk's call on Dann's "fix this".
+const SILENCE_RMS = 1e-5, MIN_BUFFER_S = 0.5;
 
 function f2Quality(f2: number | null, f1: number | null, prom: number, guardPassed: boolean): CalibratedFormant['f2Quality'] {
 	if (f2 === null) return 'absent';
@@ -28,10 +39,10 @@ function f2Quality(f2: number | null, f1: number | null, prom: number, guardPass
  * steadiness the singer never made. Absent the parameter the guard runs on `y` as
  * it always has, so every existing caller is unchanged.
  */
-export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, outerGuard?: GuardResult): CalibratedFormant {
+export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>): CalibratedFormant {
 	const det = detect(y, sr);
 	const g = outerGuard ?? guard(y, sr);
-	const ex = extractFormants(y, sr, vowel);
+	const ex = extractFormants(y, sr, vowel, trace);
 	// Confidence tiers recalibrated 2026-07-01 on Dann's ACCEPT: the old flat
 	// (snrDb < 20 -> low) rule stamped every real-room capture Provisional even
 	// when the gate passed it. Graded on the same evidence as the c8 recalibration:
@@ -68,7 +79,8 @@ export type CaptureOutcome =
 	| { outcome: 'error'; error: CaptureError; guard?: GuardResult };
 
 /** The capture pipeline: structural checks, the live gate, then the §9 core. */
-export function runCapture(y: Float64Array, sr: number, vowel: Vowel, voiceType?: VoiceType): CaptureOutcome {
+/** `trace`, when passed, is filled with what the extractor saw and chose (the dev-only capture file). */
+export function runCapture(y: Float64Array, sr: number, vowel: Vowel, voiceType?: VoiceType, trace?: Partial<ExtractTrace>): CaptureOutcome {
 	const durMs = (y.length / sr) * 1000;
 	if (durMs < MIN_BUFFER_S * 1000)
 		return { outcome: 'error', error: { code: 'SAMPLE_TOO_SHORT', message: 'buffer too short', actualMs: durMs, minimumMs: MIN_BUFFER_S * 1000 } };
@@ -87,7 +99,7 @@ export function runCapture(y: Float64Array, sr: number, vowel: Vowel, voiceType?
 	const yw = g.segmentS ? y.subarray(Math.round(g.segmentS[0] * sr), Math.round(g.segmentS[1] * sr)) : y;
 	const det = detect(yw, sr);
 	if (!det.accept) return { outcome: 'reprompt', reason: 'not-fry', failed: det.failed, guard: g };
-	const cf = analyze(yw, sr, vowel, voiceType, g);
+	const cf = analyze(yw, sr, vowel, voiceType, g, trace);
 	if (!cf.f1) return { outcome: 'error', error: { code: 'EXTRACTION_FAILED', message: 'no formants recovered' }, guard: g };
 	return { outcome: 'reading', formant: cf, guard: g };
 }

@@ -81,7 +81,9 @@ export function usableAnchor(f: CalibratedFormant | undefined): f is CalibratedF
 		f.f1 > 0 &&
 		typeof f.f2 === 'number' &&
 		f.f2 > 0 &&
-		f.plausibility !== 'implausible'
+		// A kept reading (the singer's own decision, 2026-09-30) anchors too; inline, not
+		// `isUsable`, because `plausibility.ts` already imports from this file.
+		(f.plausibility !== 'implausible' || f.plausibilityOverride === true)
 	);
 }
 

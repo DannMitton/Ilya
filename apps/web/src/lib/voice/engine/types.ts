@@ -62,6 +62,15 @@ export interface CalibratedFormant {
 	 */
 	plausibility?: 'plausible' | 'implausible' | 'unchecked';
 	/**
+	 * The singer kept a reading the guard judged implausible (Dann, 2026-09-28
+	 * 15:38 to 15:40, `brief-code-voice-intake-order-and-keep-reading_r1`):
+	 * Bozeman's bands are approximate, and a measured voice outranks an
+	 * approximate chart. A record of the singer's decision, not a derived value
+	 * (CONTRACT §6). The verdict itself stays `implausible`, so the record keeps
+	 * both facts. A re-take is a new reading and carries no flag.
+	 */
+	plausibilityOverride?: true;
+	/**
 	 * Whether the room's noise floor could be measured for this sample (item
 	 * 1.4b; engine spec §3's c8 condition, `detector.ts`).
 	 *

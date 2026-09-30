@@ -1076,3 +1076,18 @@ whether it becomes tether 23.**
 **Dayme, *Dynamics of the Singing Voice* (2009).** Ruled 21:05, on the desk's words: used *"for tone and for teaching stance, and never as a source for a claim about the voice."* Her voice claims enter only as the study she cites; anything resting on her energy-field framing is excluded. Condition for departing: none stated.
 
 **Bolla, *A Conspectus of Russian Speech Sounds* (1981).** Stated by Dann 21:26 to 21:30: Bolla is speech phonetics from one informant, accepted *"while interpreting it through a lens for healthy singing."* **Bolla is the source for where the tongue sits.** *"Lip-rounding, and whether a consonant is palatalized for each sound are regulated by Grayson. So is the pattern of reduction."* Where the two differ, the difference is recorded and curated for the Ilya user; Grayson is the authority for Ilya's symbols. Resonant singing adds its own shaping across the vocal tract; the singing sources govern that.
+
+
+## THE FIRST MOMENTS OF CALIBRATION MUST BE EASY AND PAINLESS. Stated by Dann 2026-09-30 12:40
+
+His words: *"I accept that I have a low voice. But I do not accept that my low voice is anomalous. Many many basses will use this tool. We must be prepared to meet them where they are. This is the very first vowel Ilya asks for as a sample. We must not let the very first few moments of a new experience (having a formant reading done) be negative for the user. This must be easy and painless. It is painful now. Fix this."*
+
+Prompted by his own [i]: a loud, well-produced fry read 186 Hz and was met with "That reading looks unlikely", on the first vowel of the ritual (2026-09-30 12:35). Read with his courtesy-verification principle (2026-09-29 23:23, `OPEN.md` §N.168): verify without blocking; evidence decides, not policing. Default: nothing in the capture flow tells a singer their voice looks wrong; a question about a reading, if any, comes later and asks. The condition that would justify departing from it: a reading that cannot be a voice at all (a dead input), which the silence floor already handles.
+
+
+**RULED 2026-09-30 12:43** (options offered by the desk): the singer is asked their voice type before the first vowel, "I don't know" a reasonable answer (*"a support to Ilya to reach for plausible parameters"*); and nothing stops the capture: an out-of-band reading is asked about once, at the summary. Brief `../sessions/brief-code-calibration-first-moments_r1_2026-09-30.md`.
+
+
+## COLLEAGUES' RECORDINGS ARE NEVER PUBLIC. Ruled by Dann 2026-09-30 13:14
+
+His words: *"Colleagues' recordings will never be public!"* Asked by the desk from Fable's critique (`../sessions/critique-intake-plan-fable_r1_2026-09-30.md`). Ilya is open source, so anything committed is public and permanent. **The rule:** real singers' recordings live only in a private store Dann controls; the repository holds synthetic fixtures and, for real takes, only their expected values and checksums; each volunteer signs a short bilingual consent naming the storage and how to withdraw; adults only. No exception is stated; any would be Dann's alone.

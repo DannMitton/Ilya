@@ -93,6 +93,36 @@ export const WORKS: Record<string, Work> = {
 		isbn: null,
 		record: 'Insights Research/_synthesis/memo-sonnet-mckinney-1994_r1_2026-09-23.md',
 	},
+	bozeman2021: {
+		key: 'bozeman2021',
+		author: 'Bozeman',
+		authorFull: 'Bozeman, Kenneth W.',
+		shortTitle: 'Kinesthetic Voice Pedagogy 2',
+		fullTitle: 'Kinesthetic Voice Pedagogy 2: Motivating Acoustic Efficiency',
+		year: 2021,
+		edition: null,
+		place: null,
+		publisher: 'Inside View Press',
+		printing: null,
+		// NOT ESTABLISHED: no record read names the ISBN.
+		isbn: null,
+		record: 'Insights Research/_synthesis/memo-sonnet-kvp2_r1_2026-09-25.md, line 3',
+	},
+	miller1986: {
+		key: 'miller1986',
+		author: 'Miller',
+		authorFull: 'Miller, Richard',
+		shortTitle: 'The Structure of Singing',
+		fullTitle: 'The Structure of Singing',
+		year: 1986,
+		edition: null,
+		// NOT ESTABLISHED: the records read give only the year and the page count.
+		place: null,
+		publisher: null,
+		printing: null,
+		isbn: null,
+		record: 'Insights Research/long-works-toc-screen_r1_2026-09-23.md, §6',
+	},
 	howell2025: {
 		key: 'howell2025',
 		author: 'Howell',
@@ -145,6 +175,32 @@ export const ROWS: Record<string, CitedRow> = {
 		quote: 'when I sing a sustained high G [G4], the start of the note will sound just fine. Then it makes an ugly crackling sound...',
 	},
 	'PVA2-B-014': { id: 'PVA2-B-014', work: 'bozeman2025', pages: [65, 65], heading: null, quote: null },
+	// The r7 consequence sentences and the [ɛ] lead (`draft-three-comments_r7_2026-09-29.md`), read 2026-09-30.
+	'PVA2-A-046': { id: 'PVA2-A-046', work: 'bozeman2025', pages: [45, 45], heading: null, quote: null },
+	'PVA2-C-025': { id: 'PVA2-C-025', work: 'bozeman2025', pages: [94, 94], heading: null, quote: null },
+	// The row's quote column holds only the section heading, so no quotation prints.
+	'KVP2-022': { id: 'KVP2-022', work: 'bozeman2021', pages: [97, 97], heading: 'Typical Pitfalls: Timbral Thinness', quote: null },
+	'KVP2-026': {
+		id: 'KVP2-026',
+		work: 'bozeman2021',
+		pages: [115, 115],
+		heading: 'Acoustic Registration Summarized',
+		quote: 'If two or more harmonics are below the first resonance, the singer is in open timbre',
+	},
+	'KVP2-037': {
+		id: 'KVP2-037',
+		work: 'bozeman2021',
+		pages: [18, 19],
+		heading: 'Maintaining an Open Throat Across Range',
+		quote: 'in fairly close vowel posture until the second harmonic being sung turns over',
+	},
+	'RMR-057': {
+		id: 'RMR-057',
+		work: 'miller1986',
+		pages: [157, 158],
+		heading: null,
+		quote: 'it is not suggested that all vowels modify to the schwa ... or to some other designated phoneme at a specified pitch below the secondo passaggio, nor even in those pitches that lie above it',
+	},
 	'MCK-049': {
 		id: 'MCK-049',
 		work: 'mckinney1994',
@@ -196,23 +252,40 @@ export function pagesText(row: CitedRow, language: 'en' | 'fr'): string {
 	return language === 'fr' ? `p. ${a}-${b}` : `pp. ${a} to ${b}`;
 }
 
-/** A run of text; `title` sets in italics. */
+/**
+ * A run of text; `title` sets in italics (a title, or a term of art such as
+ * *whoop*); `sub` sets as a subscript, for the R1 of *f*<sub>R1</sub>.
+ */
 export interface Run {
 	text: string;
 	title?: boolean;
+	sub?: boolean;
+}
+
+/**
+ * The pages of several rows of one work, as one citation prints them: "p. 94",
+ * "pp. 97 and 115", "pp. 18 to 19"; French « p. 97 et 115 », « p. 18-19 ».
+ */
+export function pagesOf(rows: readonly CitedRow[], language: 'en' | 'fr'): string {
+	if (rows.length === 1) return pagesText(rows[0], language);
+	const span = ([a, b]: [number, number]) => (a === b ? `${a}` : language === 'fr' ? `${a}-${b}` : `${a} to ${b}`);
+	const parts = [...rows].sort((x, y) => x.pages[0] - y.pages[0]).map((r) => span(r.pages));
+	return language === 'fr' ? `p. ${parts.join(' et ')}` : `pp. ${parts.join(' and ')}`;
 }
 
 /**
  * The short citation, "(Miller, *Solutions for Singers*, 2004, p. 163)". After
  * an attributed opener ("Miller suggests"), the author drops (templates §5).
+ * Several rows of one work share one citation, their pages joined (r7:
+ * "(Bozeman, *Kinesthetic Voice Pedagogy 2*, 2021, pp. 97 and 115)").
  */
-export function shortCitation(rowId: string, language: 'en' | 'fr', dropAuthor = false): Run[] {
-	const row = ROWS[rowId];
-	const w = WORKS[row.work];
+export function shortCitation(rowIds: string | readonly string[], language: 'en' | 'fr', dropAuthor = false): Run[] {
+	const rows = (typeof rowIds === 'string' ? [rowIds] : rowIds).map((id) => ROWS[id]);
+	const w = WORKS[rows[0].work];
 	return [
 		{ text: dropAuthor ? '(' : `(${w.author}, ` },
 		{ text: w.shortTitle, title: true },
-		{ text: `, ${w.year}, ${pagesText(row, language)})` },
+		{ text: `, ${w.year}, ${pagesOf(rows, language)})` },
 	];
 }
 

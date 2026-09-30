@@ -301,3 +301,36 @@ describe('the guard says which of its four tests refused a take, and by how much
 		expect(JSON.parse(JSON.stringify(out)).guard.diag.full.cvr).toBe(out.guard.diag.full.cvr);
 	});
 });
+
+/**
+ * 2026-09-30: a quiet fry is not silence. Dann's [i] came back "No sound came
+ * through" although the live gate had accepted it, because `runCapture` held
+ * the take to an absolute RMS floor of 0.003 that the level-free detector does
+ * not share. Every level asserted here is arithmetic on the fixture.
+ */
+describe('a quiet fry is read, and a dead input is still named', () => {
+	const rms = (y: Float64Array) => Math.sqrt(y.reduce((s, x) => s + x * x, 0) / y.length);
+	const OLD_FLOOR = 0.003;
+	const quiet = steadyBuffer.map((x) => x * (0.0015 / rms(steadyBuffer)));
+
+	it('reads a fry at half the old floor, the take that used to bounce', () => {
+		expect(rms(quiet)).toBeLessThan(OLD_FLOOR);
+		// The live gate's question, on a one-second window: it accepts at this level.
+		expect(detect(quiet.subarray(0, SR), SR).accept).toBe(true);
+		const out = runCapture(quiet, SR, 'u');
+		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${JSON.stringify(out)}`);
+		expect(Math.abs(out.formant.f1 - FR1)).toBeLessThan(30);
+	});
+
+	it('still names a dead input: a buffer of zeros', () => {
+		const out = runCapture(new Float64Array(TOTAL_S * SR), SR, 'u');
+		expect(out.outcome === 'error' && out.error.code).toBe('NO_AUDIO_INPUT');
+	});
+
+	it('does not read an empty room as fry: quiet noise alone re-prompts', () => {
+		const r = rng(0x5eed), room = new Float64Array(TOTAL_S * SR);
+		for (let i = 0; i < room.length; i++) room[i] = (r() * 2 - 1) * 0.002;
+		expect(rms(room)).toBeLessThan(OLD_FLOOR);
+		expect(runCapture(room, SR, 'u').outcome).not.toBe('reading');
+	});
+});

@@ -279,6 +279,8 @@ export interface NoteComment {
 	resonance?: { side: 'above' | 'under'; fR1Hz: number; cents: number };
 	/** Comment 2's turn, non-treble. */
 	turn?: { turningHz: number; semitones: number; justPast: boolean };
+	/** Signed semitones from the typed secondo; absent without typed passaggi. Comment 3's frame names it (r7). */
+	toSecondo?: number;
 	/** Comment 1's "notice this": the phrase comes down through the zona. Computed, not yet worded. */
 	descent: boolean;
 	/** One clause each, in the frame's order. */
@@ -377,6 +379,7 @@ export function noteComments(input: CommentsInput): NoteComment[] {
 			...(leap ? { leap } : {}),
 			...(resonance ? { resonance } : {}),
 			...(turn ? { turn } : {}),
+			...(f.toSecondo !== undefined ? { toSecondo: f.toSecondo } : {}),
 			descent,
 			challenges,
 		});
