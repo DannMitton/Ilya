@@ -6,16 +6,19 @@
  */
 import type { CalibratedFormant } from './engine/types';
 
-export type HoldKind = 'good' | 'provisional' | 'rolled-back' | 'implausible';
+export type HoldKind = 'good' | 'provisional' | 'rolled-back';
 
 /**
- * The implausible hold outranks the ordinary provisional wording: same
- * Provisional resolution, but the copy names the mismatch (signed-off
- * re-prompt line, 2026-07-11) instead of the generic uncertainty wording.
- * Never a block: Continue stands.
+ * No question during capture (Dann, 2026-09-30 12:43; brief
+ * `brief-code-calibration-first-moments_r1_2026-09-30.md`): a take judged
+ * `implausible` holds and advances as its confidence alone earns, the same as
+ * a good take. The guard's demotion to Provisional is not shown here; the
+ * summary's one note carries the verdict (`outside.ts`). The implausible hold,
+ * its wait, and its Keep button are gone.
  */
 export function holdKindFor(effective: CalibratedFormant): HoldKind {
-	if (effective.plausibility === 'implausible') return 'implausible';
+	if (effective.plausibility === 'implausible' && !effective.plausibilityOverride)
+		return effective.confidence === 'low' ? 'provisional' : 'good';
 	return effective.reading === 'captured' ? 'good' : 'provisional';
 }
 
@@ -29,8 +32,6 @@ export function holdAnnouncement(kind: HoldKind, spoken: string, T: (key: string
 			return `${spoken}${T('calib.capture.hold.captured')}`;
 		case 'rolled-back':
 			return T('calib.capture.hold.rolledBack');
-		case 'implausible':
-			return `${T('calib.capture.hold.implausiblePrefix')} ${spoken}. ${T('calib.capture.hold.tryAgain')}`;
 		default:
 			return T('calib.capture.hold.noted');
 	}

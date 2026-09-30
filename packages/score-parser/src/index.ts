@@ -8,7 +8,6 @@
  *     `SyllableInfo`, `Pitch`, `Measure`, `TempoMarking`, etc.).
  *   - `MnxScoreParser` and `MusicXmlScoreParser`, the two `ScoreParser`
  *     implementations.
- *   - `generateRendererMusicXml`, the renderer-output function.
  *   - The E.20 measurement layer: phonation aggregation, the diction-mark
  *     fold, Pacheco tessitura, and the tempo seam. See the block at the
  *     foot of this file.
@@ -24,7 +23,6 @@ export * from './analysis-types';
 
 export { MnxScoreParser } from './mnx-parser';
 export { MusicXmlScoreParser } from './musicxml-parser';
-export { generateRendererMusicXml } from './renderer-output';
 export {
   analyzeScore,
   scoreContentId,

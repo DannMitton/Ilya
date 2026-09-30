@@ -47,6 +47,9 @@
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
 	import InsightsIntake from '$lib/voice/InsightsIntake.svelte';
 	import VoiceTypeIntake from '$lib/voice/VoiceTypeIntake.svelte';
+	import VoiceTypeFirst from '$lib/voice/VoiceTypeFirst.svelte';
+	import OutsideNote from '$lib/voice/OutsideNote.svelte';
+	import { outsideVowels } from '$lib/voice/outside';
 	import NotePicker from '$lib/voice/NotePicker.svelte';
 	import { LiveCaptureSession } from '$lib/voice/engine/live';
 	import type { CaptureSession } from '$lib/voice/engine/session';
@@ -312,8 +315,8 @@
 		const out: CalibratedFormant = { ...formant, plausibility: res.plausibility };
 		if (res.plausibility === 'implausible' && out.reading === 'captured')
 			out.reading = 'provisional';
-		const rePromptShown =
-			res.plausibility === 'implausible' && phase === 'capture' && !paused && vowel === currentVowel;
+		// No re-prompt is ever shown now (2026-09-30, `outside.ts`); the field stays in the ruled schema.
+		const rePromptShown = false;
 		console.info(
 			'[voice] plausibility',
 			JSON.stringify(buildPlausibilityEvent(vowel, formant.f1, res, rePromptShown, guardSessionId, voiceType))
@@ -349,6 +352,10 @@
 	let finished = $state(false);
 	let currentVowel = $derived<Vowel | undefined>(queue[queueIndex]);
 	let capturedCount = $derived(Object.values(profile).filter((f) => !!f).length);
+	let outside = $derived(outsideVowels(profile, ALL_VOWELS)); // The summary's one note (`outside.ts`).
+	// The voice type is asked before the first vowel only if the voice had none on arrival (Dann, 2026-09-30 12:44).
+	let askTypeFirst = $state(false);
+	$effect(() => { if (phase === 'welcome' && store.activeId) askTypeFirst = !untrack(() => voiceType); });
 	// The invitation to sing the remaining three waits for a complete default set
 	// (Dann, 2026-07-10): it must not appear when the summary is reached
 	// early by any path (a single-vowel re-take pass, or a queue bug).
@@ -791,7 +798,7 @@
 		onVowelCaptured?.(vowel, effective);
 		if (phase !== 'capture' || paused) return;
 		if (vowel === currentVowel) {
-			beginHold(vowel, holdKindFor(effective)); // `hold.ts`: implausible outranks provisional.
+			beginHold(vowel, holdKindFor(effective)); // `hold.ts`: an implausible take advances like any other.
 		} else if (currentVowel) {
 			// Out of turn: the roster took the value; the tour stays put.
 			pacifierRef?.activateVowel(currentVowel);
@@ -885,8 +892,7 @@
 		// the visual banner renders conditionally for sighted users while the
 		// announcement text lands in a region that always exists.
 		holdAnnounce = holdAnnouncement(kind, spokenName(vowel, language), T);
-		// 2026-09-30: an implausible hold offers a choice (Keep my reading), so it waits for one.
-		if (kind !== 'implausible') holdTimer = after(HOLD_MS, () => {
+		holdTimer = after(HOLD_MS, () => {
 			holdActive = false;
 			holdTimer = undefined;
 			advance();
@@ -919,15 +925,17 @@
 		advance();
 	}
 
-	/** "Keep my reading" (2026-09-28 brief, item 2): the singer's measured voice outranks an approximate band. */
-	function holdKeep() {
-		const g = holdVowel, f = g && profile[g];
-		if (g && f) {
-			profile = { ...profile, [g]: keepReading(f) };
-			persist();
+	/** The summary's Keep (`outside.ts`): the singer's measured voice outranks an approximate band. */
+	function keepOutside(vowels: Vowel[]) {
+		const next = { ...profile };
+		for (const g of vowels) {
+			const f = next[g];
+			if (!f) continue;
+			next[g] = keepReading(f);
 			console.info('[voice] plausibility override', JSON.stringify({ vowel: g, f1: f.f1, kept: true, guardSessionId }));
 		}
-		holdContinue();
+		profile = next;
+		persist();
 	}
 
 	function holdRetake() {
@@ -960,12 +968,12 @@
 		pacifierRef?.activateVowel(queue[queueIndex]);
 	}
 
-	async function retakeFromSummary(vowel: Vowel) {
+	async function retakeFromSummary(vowel: Vowel, ...more: Vowel[]) {
 		// Re-enter the guided flow for this one vowel; the queue becomes a
 		// single-item pass, so the ritual (and the post-capture hold) still
 		// applies, and finishing it returns to the summary via the normal
 		// advance path.
-		queue = [vowel];
+		queue = [vowel, ...more]; // `more`: the summary note's Re-take sings every vowel it names.
 		queueIndex = 0;
 		phase = 'capture';
 		await tick();
@@ -1297,6 +1305,7 @@
 						{T('calib.welcome.fryAnswer')}
 					</p>
 				</details>
+				{#if askTypeFirst}<VoiceTypeFirst value={voiceType} {language} onchange={(id) => setOwn({ voiceType: id })} />{/if}
 				<button type="button" class="wizard-primary" onclick={beginReadiness}>{T('calib.welcome.beginButton')}</button>
 			</div>
 		{:else if phase === 'readiness'}
@@ -1407,12 +1416,6 @@
 									{@render vowelTag(holdVowel!)}{T('calib.capture.hold.captured')}
 								{:else if holdKind === 'rolled-back'}
 									{T('calib.capture.hold.rolledBack')}
-								{:else if holdKind === 'implausible'}
-									<!-- The guard's re-prompt (signed off 2026-07-11): factual
-									     observation, no fault assigned — an implausible reading
-									     can equally be a mis-extraction — and the invitation
-									     rides the existing Re-take affordance below. -->
-									{T('calib.capture.hold.implausiblePrefix')} {@render vowelTag(holdVowel!)}. {T('calib.capture.hold.tryAgain')}
 								{:else}
 									{T('calib.capture.hold.noted')}
 								{/if}
@@ -1420,7 +1423,6 @@
 							<div class="wizard-hold-actions">
 								<button type="button" onclick={holdContinue}>{T('calib.common.continue')}</button>
 								<button type="button" onclick={holdRetake}>{T('calib.common.retake')}</button>
-								{#if holdKind === 'implausible'}<button type="button" onclick={holdKeep}>{T('calib.capture.hold.keep')}</button>{/if}
 							</div>
 						</div>
 					{/if}
@@ -1456,6 +1458,7 @@
 		{:else if phase === 'summary'}
 			<div class="wizard-phase">
 				<h2 id="wizard-title">{T('calib.summary.title')}</h2>
+				{#if outside.length}<OutsideNote vowels={outside} {voiceType} {language} tag={vowelTag} onkeep={() => keepOutside(outside)} onretake={() => retakeFromSummary(outside[0], ...outside.slice(1))} />{/if}
 				{#if finished}
 					<!-- No dead ends (Dann, 2026-07-10): Finish confirms, but the
 					     roster stays visible and curatable — Re-take still works and

@@ -8011,3 +8011,52 @@ thread, after the `audit` merge. Only the Correction Station brief waits for it
 >
 > **Everything in the 00:15 block below is still live except its first step (the scans), which is done.**
 
+
+
+---
+
+## Block "2026-09-30, about 12:30", moved verbatim from STATE.md at the close of 2026-09-30, about 19:50
+
+> ### 2026-09-30, about 12:30. READ THIS FIRST, THEN `QUEUE.md`.
+>
+> **THE ONE THING NEXT:** ship what Code built today, then run `QUEUE.md` "The run, in order" from row 3. Before the ship: Dann walks his [i] (Keep my reading is WRITTEN, not seen), Code seats the comment French ratified 12:08 (row 8b, pasted 12:10), then the ship script's gate 4 baseline moves to Code's final count (1721 plus row 8b's tests). New files to `git add` first: `insights/identity.ts`, `insights/identity.test.ts`, `voice/VoiceTypeIntake.svelte`, `voice/hold.ts`, `voice/voiceTypes.ts`, `voice/voiceTypes.test.ts`, and the desk files below.
+>
+> **The truant-brief failure, remediated.** Queues lived only in these blocks, which move to `LOG.md`, so briefs were lost (`brief-code-voice-intake-order-and-keep-reading_r1_2026-09-28.md` was queued twice and never run). **`QUEUE.md` now holds every unshipped brief; it is read at every open after this file and updated at every close.** Three audits: `../sessions/audit-briefs-A_r1_2026-09-30.md`, `-B_`, `../sessions/audit-rulings_r1_2026-09-30.md`.
+>
+> **Built by Code today, uncommitted** (report `../sessions/report-code-voice-type-slice-a_r1_2026-09-30.md`, four addenda): voice type slice A; Range order higher-first; the [i] "No sound came through" floor; Keep my reading; the four small fixes; "try" out of the opener rotation; the three comments rebuilt to r7.
+>
+> **Ruled today (all seated in `OPEN.md` §N.168 or `QUEUE.md`):** voice type two tiers (Boldrey p. 11 list plus "Not sure"; 29-label shortlist), printed after the name, French for both tiers and the intake; courtesy verification and the consistency check; Keep my reading French; comment tap and count French (« piste »); zoom French; comment French A and B (12:08); the distillation's C24 [o] wording and the single-type-source split; "hold" retired.
+>
+> **Fable distillation r1 and r2** are in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/distillation-n168_r{1,2}_2026-09-29.md`; all its questions are settled. Boldrey (36 photos) read: `../sessions/draft-voice-labels_r2_2026-09-30.md`.
+>
+> **Owed by Dann:** slice B's copy (`../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md`); "compatibility" or "fit"; French « ? » spacing.
+>
+> **Uncommitted desk files:** `STATE.md`, `QUEUE.md` (new), `README.md`, `OPEN.md`, `CONTRACT.md`, `../sessions/LOG.md`, and in `../sessions/`: `brief-code-voice-type-slice-a_r1`, `brief-code-small-fixes-before-ship_r1`, `brief-code-loupe-remainder_r1`, `brief-code-insights-uses-the-gates_r1`, `draft-voice-labels_r1` and `_r2`, `draft-voice-type-slice-b-copy_r1`, `french-comments_r1`, `audit-briefs-A_r1`, `audit-briefs-B_r1`, `audit-rulings_r1` (all `_2026-09-30.md`).
+
+---
+
+## Block "close of 2026-09-29, about 00:15", moved verbatim from STATE.md at the close of 2026-09-30, about 19:50 (it had stayed in STATE.md below the 22:20 pointer)
+
+> ### CLOSE OF 2026-09-29, about 00:15. READ THIS FIRST. The previous block moved to `../sessions/LOG.md` verbatim, block "close of 2026-09-29". Its rulings were seated first: `CONTRACT.md` §6 (passing layers never print); `PRODUCT.md` (Naming: Paper GUI, Transposition ruler; transposition by the same interval; semicolon space; the watch box heading; the folded lead; the `#` mark; Titze typography); `OPEN.md` (N.94 slice 2, N.168 comments ratified); curation draft Revision r5 (gate 5 gone, gate 2 strict, threshold 2).
+>
+> **Last ship: `3ab034b`, 2026-09-29 00:11**, all eight gates at baseline (gate 4 `1682 passed (1682)`, gate 5 `636 passed | 5 skipped (641)`; backup `~/Downloads/ilya-ship.sh.bak-1671-2026-09-29`). Tonight's ships: `2535f88` watch band fixes; `03bed5a` N.173 gates; `de31e22` N.94 slice 1 and `ARCHITECTURE.md` ratified; `e8c4732` legend's four entries out; `3ab034b` N.94 slice 2.
+>
+> **THE ONE THING NEXT: N.168, the new pedagogy scans.** Dann has photographed the books on the reading list (`~/Documents/Voice Pedagogy Library/Insights Research/needs_r1_2026-09-23.md`, section "Reading list for pedagogy-forward sources"): each book's copyright page, then its table of contents. He can add a glossary or index page on request. **Where the images are is NOT ESTABLISHED; ask him.** First step: read each TOC and propose which chapters to capture, in the order of the needs list (passaggio, vowel modification, breath and phrase, sustaining, vocal load, transposing art song), for all voice types, not the low male first (Dann 2026-09-28 23:28).
+>
+> **2026-09-29 00:25, SEMICOLON BRIEF DONE, desk-checked** (web 1684; 12 `i18n.ts` + 110 Learn/Guide French semicolons on U+202F; heading « À considérer »; fR/fo set in Titze form; intake question). Gate 4 1684 (backup `~/Downloads/ilya-ship.sh.bak-1682-2026-09-29`). **FOUND, DESK DEFAULT to brief next:** gate 2's rare path still prints passaggio lines with nothing to act on (Code's French screenshot, « tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre »). Under Dann's 20:22 ruling (no data dump), a rare kind prints only with a notable sentence that says why it matters; none exists yet, so those lines go silent until N.168 supplies one. Code's r2 report had listed this as NOT ESTABLISHED.
+>
+> **WAS IN CODE:** the French-semicolon brief (`../sessions/brief-code-fr-semicolon-space_r1_2026-09-28.md`), which also carries the heading « À considérer », *f*<sub>R1</sub> in Learn's English, and the intake acoustics question (EN+FR ratified 00:06/00:07). **Then, in order:** N.86 dead code; the voice intake; Correction Station slices 4 to 6; the fixed-size Corrections panel (`../sessions/brief-code-corrections-fixed-panel_r1_2026-09-28.md`). The desk checks each report in a cloud clone before Dann looks (`ENVIRONMENT.md`, SCREENSHOT COMPARE and FRENCH DESK CAPTURES SHIFT PER BUILD).
+>
+> **N.168, the three comments:** English RATIFIED 23:37 (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r6_2026-09-28.md`). Next: the desk drafts their French; Dann vets the behind-the-tap contents (r5); then `../sessions/brief-code-n168-first-slice_r1_2026-09-25.md` is updated to these templates. Pedagogy agreement rule (a visible suggestion where a pedagogy and a science source agree) is a DESK PROPOSAL, not ruled.
+>
+> **OPEN, raise only when it bears on the work:**
+> - **N.94:** both slices built and looked at by Dann (22:15, 00:09). Closing it is his to say.
+> - **The optional intro line** under the watch heading: held on the desk's recommendation until Dann reads the gated box.
+> - **Withheld sigla:** Code could not produce a withheld syllable by ordinary upload; whether a singer meets it today is NOT ESTABLISHED.
+> - **Finding, not numbered (Dann 2026-09-28 14:48):** a stale test word in the poem box silently replaces a song's own words (`+page.svelte:393-396` at `7d2fcd6`, not re-read).
+> - **Slice 7's compare:** four pixels one colour level off on Learn's tabs; cause NOT ESTABLISHED.
+> - **Cut lists waiting for the audit:** `../sessions/loupe-cutlist_r2_2026-09-28.md`, `../sessions/staff-renderer-cutlist_r2_2026-09-28.md` (re-cite first).
+> - **Ceilings could be lowered:** `MarkupPane.svelte` sits at 1312 against 1358, `+page.svelte` 6010 against 6028.
+> - **Still owed by Dann:** a walk of «Семинарист»; the six N.168 French labels and the [œ] onset and [i] preface suggestions; the walk of the French word explanations and Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines; Claude GitHub App access for `DannMitton/ilya` unless done; one phone photo of a score for the format walk.
+>
+> **Uncommitted desk files at this close:** `STATE.md`, `SCHEDULE.md`, `../sessions/LOG.md`, `OPEN.md` and `PRODUCT.md` if touched after `3ab034b`. Research-folder files (outside the repo): `_synthesis/draft-three-comments_r3` to `r6`, `needs_r1` reading list, `notation-reference_Titze-2015.md` typography.

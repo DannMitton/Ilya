@@ -4423,3 +4423,15 @@ Learned over one session that harvested nine books from Dann's photos.
 ## A DIRECTORY `git add` WHILE CODE WORKS STAGES CODE'S HALF-BUILT FILES. 2026-09-30
 
 The desk gave Dann `git add apps/web/src/lib docs` at 12:52 to stage the day's new files before a ship. Code had already started the next brief (the [i] extractor) and had written `voice/engine/closed-phase.ts`, `fry-synth.ts`, and three debug tests (`zz-diag`, `zz-probe`, then `zz-dbg`); the add staged them, and the ship script then refused on the one Code wrote a minute later. The same family as `git add -A` (2026-08-20). **The rule: before asking Dann to stage, confirm Code is idle, and stage named files, never a directory.** Staging commits nothing; the recovery was to wait for Code to finish and ship everything together, with Code removing its debug tests first.
+
+## READING DANN'S CALIBRATION CAPTURES (THE HARNESS SIDECARS)
+
+Learned 2026-09-30. With `?harness=1` on the local dev server, every calibration take drops `ilya-capture-<vowel>-<UTC>.wav` and `.json` in `~/Downloads`. They are Dann's own recordings: read them in place, never copy them into the repository. Each sidecar holds `outcome.formant` (f1, f2, confidence, reading), `outcome.guard` (`reading`, `segmentS`, and `diag.full` / `diag.best` with a `failed` list: `rate_cv`, `fr1_cv`, `fr2_cv`, `envcorr`), and `trace` (the extractor's chosen method, `closed-phase` or `ltas`). A refused take shows `outcome.reason: "not-fry"`. **"Provisional" in the summary is `analyze.ts:58-62`: guard Provisional, detector refusal, or SNR under 12 dB**, and on 2026-09-30 every one came from the guard. Read the whole set in one bridge call with a short `python3 -c` over `glob('ilya-capture-*.json')`; do not ask Dann what the screen said when the files already say it.
+
+## `burg.py` NEEDS SCIPY, AND THE BRIDGE HAS NONE
+
+Learned 2026-09-30. `tools/i-extractor-check/burg.py` imports `scipy`; the bridge shell has `numpy` only. Run it in Code's shell, or stage the WAV to the container and install `scipy` there (`pip install --break-system-packages scipy`). Do not ask Dann to install anything for it.
+
+## CHOOSING A GUIDE CITATION: LOOK FOR THE TEACHING SOURCE FIRST
+
+Learned 2026-09-30, drafting N.174. The first source to hand (Nix, Emerich and Titze 2005) was correct but written for specialists. A library search for "fry" across `Insights Research/_primary-text/` found plainer, better-fitted sources in minutes: Donald Miller 2008 p. 23 (fry described in a singer's words, and Ilya's exact method), Herbst 2020 JOS p. 178 (the 70 Hz threshold with "about C♯2"). Count matches per file first (`grep -o -i fry | wc -l`), then read the top files. Confirm every page on the PDF, not the text extraction: page markers in the `.txt` files sit at page ends, and spreads put two pages on one PDF page.

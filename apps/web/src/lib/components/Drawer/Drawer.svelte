@@ -808,8 +808,8 @@
 								</ul></div></div>
 							</li>
 
-							<!-- Licences -->
 							<li><button class="toc-link" class:active={isActive('guide-licences')} data-heading-id="guide-licences" onclick={() => handleTocClick('guide-licences')}>{language === 'fr' ? 'Licences et remerciements' : 'Licences and Acknowledgments'}</button></li>
+							<li><button class="toc-link" class:active={isActive('guide-sources')} data-heading-id="guide-sources" onclick={() => handleTocClick('guide-sources')}>{t('guide.sources.heading', language)}</button></li>
 						</ul>
 					</nav>
 				{/if}

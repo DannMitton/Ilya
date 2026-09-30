@@ -1084,13 +1084,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.capture.resumeButton': { en: 'Resume', fr: 'Reprendre' },
 	'calib.capture.hold.captured': { en: ', captured.', fr: ', captée.' },
 	'calib.capture.hold.rolledBack': { en: 'New sample was less certain, so the previous one was kept.', fr: 'Le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
-	'calib.capture.hold.implausiblePrefix': { en: 'That reading looks unlikely for', fr: 'Cette lecture semble peu probable pour' },
-	'calib.capture.hold.tryAgain': { en: 'Try again?', fr: 'Réessayer?' },
-	// Keep my reading (2026-09-28 brief, item 2). English DESK DEFAULT under Dann's finding of 15:38 to 15:40.
-	// French RATIFIED by Dann 2026-09-30 10:48: « lecture » follows `calib.capture.hold.implausiblePrefix`,
-	// « plage » follows `calib.readiness.marginal`. The brief's draft was « Garder ma mesure ».
-	'calib.capture.hold.keep': { en: 'Keep my reading', fr: 'Garder ma lecture' },
-	'calib.roster.kept': { en: 'Outside the usual band', fr: 'Hors de la plage habituelle' },
+	// The implausible hold, its "Try again?", and "Keep my reading" are gone (Dann, 2026-09-30 12:43):
+	// capture asks nothing, and the summary's one note asks once
+	// (`brief-code-calibration-first-moments_r1_2026-09-30.md`). RATIFIED by Dann 2026-09-30 12:49, verbatim.
+	'calib.roster.kept': { en: 'Beyond Ilya’s reference values', fr: 'Au-delà des valeurs de référence d’Ilya' },
+	'calib.voiceTypeFirst.heading': { en: 'Your voice type', fr: 'Votre type de voix' },
+	'calib.voiceTypeFirst.hint': { en: 'This helps Ilya read your voice against the right values. “Not sure” is a fine answer.', fr: 'Cela aide Ilya à lire votre voix selon les bonnes valeurs. « Je ne sais pas » est une bonne réponse.' },
+	'calib.summary.outside': { en: 'These readings sit outside the values Ilya draws on for {type} voices: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour les voix de {type} : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
+	'calib.summary.outsideNoType': { en: 'These readings sit outside the values Ilya draws on for any voice type: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour tous les types de voix : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
+	'calib.summary.keepAll': { en: 'Keep them', fr: 'Les garder' },
 	'calib.capture.hold.noted': { en: 'Noted, moving on. You can re-take it from the summary.', fr: 'C\u2019est noté, on poursuit. Vous pourrez la refaire depuis le sommaire.' },
 	'calib.capture.pauseButton': { en: 'Pause', fr: 'Pause' },
 	'calib.capture.returnToSummary': { en: 'Return to summary', fr: 'Retour au sommaire' },
@@ -1662,6 +1664,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'comment.hidden.one': { en: 'One observation hidden by your settings', fr: 'Une observation masquée selon vos choix' },
 	'comment.hidden.many': { en: '{n} observations hidden by your settings', fr: '{n} observations masquées selon vos choix' },
 	'comment.sourcesCited': { en: 'Sources cited', fr: 'Sources citées' },
+	// The Guide's Sources section (`brief-code-guide-sources_r1_2026-09-27.md` §6). RATIFIED by Dann in both languages 2026-09-27 01:02.
+	'guide.sources.heading': { en: 'Sources', fr: 'Sources' },
+	'guide.sources.deck': { en: 'Every work Ilya cites or builds on, in full, so that each claim can be checked at its page.', fr: 'Tous les ouvrages qu\u2019Ilya cite ou sur lesquels il s\u2019appuie, en référence complète, pour que chaque affirmation puisse être vérifiée à sa page.' },
+	'guide.sources.group.diction': { en: 'Russian lyric diction', fr: 'La diction lyrique russe' },
+	'guide.sources.group.voice': { en: 'The voice and its acoustics', fr: 'La voix et son acoustique' },
+	'guide.sources.group.texts': { en: 'Song texts', fr: 'Les textes chantés' },
 
 	// ── N.172: the Insights intake, RATIFIED by Dann 2026-09-25, English 14:32 to 14:45,
 	//    French 14:46 to 14:51 (`draft-n172-intake-survey_r1`, `draft-n172-intake-french_r1`).

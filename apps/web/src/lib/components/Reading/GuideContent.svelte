@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { Language } from '$lib/i18n';
+	import GuideSources from './GuideSources.svelte';
 
 	interface Props {
 		language: Language;
@@ -286,6 +287,8 @@
 						<p><strong>Logiciels.</strong> La conversion des partitions Finale s’appuie sur le convertisseur denigma de Robert Patterson (project-attacca, licence MIT). La reconnaissance optique de caractères est assurée par tesseract.js (licence Apache 2.0). L’interface est construite avec Svelte et SvelteKit (licence MIT).</p>
 						<p><strong>Exportation.</strong> Exporter un chant écrit un fichier de sauvegarde sur votre propre appareil, afin que votre travail survive à un téléphone perdu ou à un navigateur vidé. Ilya ne l’envoie nulle part et n’a aucun moyen de le partager. Ce que vous en faites ensuite vous appartient.</p>
 
+						<GuideSources {language} />
+
 						<div class="guide-spacer"></div>
 
 						{:else}
@@ -562,6 +565,8 @@
 
 						<p><strong>Software.</strong> Score conversion from Finale files relies on Robert Patterson’s denigma converter (project-attacca, MIT License). Optical character recognition is provided by tesseract.js (Apache License 2.0). The interface is built with Svelte and SvelteKit (MIT License).</p>
 						<p><strong>Exporting.</strong> Exporting a song writes a backup file to your own device, so your work survives a lost phone or a cleared browser. Ilya never sends it anywhere and has no way to share it: what you do with the file afterwards is yours.</p>
+
+						<GuideSources {language} />
 
 						<div class="guide-spacer"></div>
 

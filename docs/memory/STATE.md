@@ -47,47 +47,31 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### 2026-09-30, about 12:30. READ THIS FIRST, THEN `QUEUE.md`.
+> ### CLOSE OF 2026-09-30, about 19:50. READ THIS FIRST, THEN `QUEUE.md`.
 >
-> **THE ONE THING NEXT:** ship what Code built today, then run `QUEUE.md` "The run, in order" from row 3. Before the ship: Dann walks his [i] (Keep my reading is WRITTEN, not seen), Code seats the comment French ratified 12:08 (row 8b, pasted 12:10), then the ship script's gate 4 baseline moves to Code's final count (1721 plus row 8b's tests). New files to `git add` first: `insights/identity.ts`, `insights/identity.test.ts`, `voice/VoiceTypeIntake.svelte`, `voice/hold.ts`, `voice/voiceTypes.ts`, `voice/voiceTypes.test.ts`, and the desk files below.
+> **Last ship: `6d87638`, 2026-09-30 18:45** (voice type slice A, small fixes, the closed-phase [i] extractor and its capture harness), all eight gates at baseline, gate 4 `1732`. Not walked on the alias. **If Dann ran the close-of-session ship below, a later commit carries rows 2c, 3, 4 and these desk files at gate 4 `1747`;** ask him for the state in one line.
 >
-> **The truant-brief failure, remediated.** Queues lived only in these blocks, which move to `LOG.md`, so briefs were lost (`brief-code-voice-intake-order-and-keep-reading_r1_2026-09-28.md` was queued twice and never run). **`QUEUE.md` now holds every unshipped brief; it is read at every open after this file and updated at every close.** Three audits: `../sessions/audit-briefs-A_r1_2026-09-30.md`, `-B_`, `../sessions/audit-rulings_r1_2026-09-30.md`.
+> **THE ONE THING NEXT: paste row 2d to Code (parts 1 and 2).** Dann walked calibration at 19:32 to 19:36 with `?harness=1`. **His readings are good** ([i] 273/1658 and 241/1807 on the closed phase; [e] 365/1622, [ɛ] 531/1352, [a] 681/1080, [ɑ] 586/999, [o] 425/744, [u] 289/702, [ʌ] 587/1052). **But `guard.ts` stamped 7 of 9 accepted takes Provisional** (`rate_cv` against `T_RATE_CV = 0.25`; `fr1_cv` from the old coarse per-frame estimator), **and 5 first takes were refused `not-fry`.** Dann, 19:37, angry: *"NOT AN ENJOYABLE EXPERIENCE ... We need to work on something else."* **Do not ask Dann to sing again until row 2d parts 1 and 2 are verified on his own 14 capture files in `~/Downloads/ilya-capture-*-2026-09-30T23-3*` (never copied into the repository).** Paste line for Code:
 >
-> **Built by Code today, uncommitted** (report `../sessions/report-code-voice-type-slice-a_r1_2026-09-30.md`, four addenda): voice type slice A; Range order higher-first; the [i] "No sound came through" floor; Keep my reading; the four small fixes; "try" out of the opener rotation; the three comments rebuilt to r7.
+> `Read docs/memory/QUEUE.md row 2d and its brief, docs/sessions/brief-code-guard-stamps-good-fry-provisional_r1_2026-09-30.md. Do parts 1 and 2 only; part 3 waits for the desk's strings. Verify on Dann's capture files in ~/Downloads, never copy them into the repository. Report, run the gates, no git writes.`
 >
-> **Ruled today (all seated in `OPEN.md` §N.168 or `QUEUE.md`):** voice type two tiers (Boldrey p. 11 list plus "Not sure"; 29-label shortlist), printed after the name, French for both tiers and the intake; courtesy verification and the consistency check; Keep my reading French; comment tap and count French (« piste »); zoom French; comment French A and B (12:08); the distillation's C24 [o] wording and the single-type-source split; "hold" retired.
+> **The next desk task with taste: row 2d part 3,** the sing-the-vowel-first cue with a countdown (Dann 19:37). The desk drafts the flow and the strings EN and FR; Dann ratifies; then Code builds.
 >
-> **Fable distillation r1 and r2** are in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/distillation-n168_r{1,2}_2026-09-29.md`; all its questions are settled. Boldrey (36 photos) read: `../sessions/draft-voice-labels_r2_2026-09-30.md`.
+> **Extractor, row 2b step 4:** met in substance by the readings above; `tools/i-extractor-check/burg.py` was not run (the bridge has no `scipy`; run it in Code's shell or the container). The 1063 Hz reading was never reproduced.
 >
-> **Owed by Dann:** slice B's copy (`../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md`); "compatibility" or "fit"; French « ? » spacing.
+> **Built by Code, rows 2c, 3, 4** (reports in `../sessions/`): calibration's first moments; 321 lines of dead code removed (`tools/e16-harness/_rhythm_spike/` KEPT, desk call: `verify_toolchain.py` pins two of its files); the Guide's Sources section from `$lib/sources.ts` (14 works, 10 OWED). Gate 4 `1747`; `~/Downloads/ilya-ship.sh` already expects 1747 (backup `.bak-1732-2026-09-30`). **Desk decision 19:50: ship rows 2c, 3, 4 now.** The Provisional labels predate row 2c, and row 5 needs a clean tree.
 >
-> **Uncommitted desk files:** `STATE.md`, `QUEUE.md` (new), `README.md`, `OPEN.md`, `CONTRACT.md`, `../sessions/LOG.md`, and in `../sessions/`: `brief-code-voice-type-slice-a_r1`, `brief-code-small-fixes-before-ship_r1`, `brief-code-loupe-remainder_r1`, `brief-code-insights-uses-the-gates_r1`, `draft-voice-labels_r1` and `_r2`, `draft-voice-type-slice-b-copy_r1`, `french-comments_r1`, `audit-briefs-A_r1`, `audit-briefs-B_r1`, `audit-rulings_r1` (all `_2026-09-30.md`).
+> **Ratified today, late:** N.174, the Guide essay "Why Ilya listens to your fry", English 19:28 and French 19:45 (`../sessions/draft-guide-fry-essay_r1_2026-09-30.md`), seated by Code under N.84 (`QUEUE.md`). Its drafting rulings are in `OPEN.md` N.174.
+>
+> **INBOX:** Dann asked what a Chinese translation of Ilya would take (19:40); the estimate is logged, nothing decided.
+>
+> **Owed by Dann (carried from the 12:30 block):** slice B's copy (`../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md`); "compatibility" or "fit"; French « ? » spacing.
+>
+> **The 12:30 block and the stale 00:15 block moved verbatim to `../sessions/LOG.md`.**
+
 
 > ### CLOSE OF 2026-09-29, about 22:20: moved verbatim to `../sessions/LOG.md`, block "close of 2026-09-29, about 22:20". Its rulings were seated in `PRODUCT.md` that night; its one thing (the Fable distillation) is done.
 
-> ### CLOSE OF 2026-09-29, about 00:15. READ THIS FIRST. The previous block moved to `../sessions/LOG.md` verbatim, block "close of 2026-09-29". Its rulings were seated first: `CONTRACT.md` §6 (passing layers never print); `PRODUCT.md` (Naming: Paper GUI, Transposition ruler; transposition by the same interval; semicolon space; the watch box heading; the folded lead; the `#` mark; Titze typography); `OPEN.md` (N.94 slice 2, N.168 comments ratified); curation draft Revision r5 (gate 5 gone, gate 2 strict, threshold 2).
->
-> **Last ship: `3ab034b`, 2026-09-29 00:11**, all eight gates at baseline (gate 4 `1682 passed (1682)`, gate 5 `636 passed | 5 skipped (641)`; backup `~/Downloads/ilya-ship.sh.bak-1671-2026-09-29`). Tonight's ships: `2535f88` watch band fixes; `03bed5a` N.173 gates; `de31e22` N.94 slice 1 and `ARCHITECTURE.md` ratified; `e8c4732` legend's four entries out; `3ab034b` N.94 slice 2.
->
-> **THE ONE THING NEXT: N.168, the new pedagogy scans.** Dann has photographed the books on the reading list (`~/Documents/Voice Pedagogy Library/Insights Research/needs_r1_2026-09-23.md`, section "Reading list for pedagogy-forward sources"): each book's copyright page, then its table of contents. He can add a glossary or index page on request. **Where the images are is NOT ESTABLISHED; ask him.** First step: read each TOC and propose which chapters to capture, in the order of the needs list (passaggio, vowel modification, breath and phrase, sustaining, vocal load, transposing art song), for all voice types, not the low male first (Dann 2026-09-28 23:28).
->
-> **2026-09-29 00:25, SEMICOLON BRIEF DONE, desk-checked** (web 1684; 12 `i18n.ts` + 110 Learn/Guide French semicolons on U+202F; heading « À considérer »; fR/fo set in Titze form; intake question). Gate 4 1684 (backup `~/Downloads/ilya-ship.sh.bak-1682-2026-09-29`). **FOUND, DESK DEFAULT to brief next:** gate 2's rare path still prints passaggio lines with nothing to act on (Code's French screenshot, « tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre »). Under Dann's 20:22 ruling (no data dump), a rare kind prints only with a notable sentence that says why it matters; none exists yet, so those lines go silent until N.168 supplies one. Code's r2 report had listed this as NOT ESTABLISHED.
->
-> **WAS IN CODE:** the French-semicolon brief (`../sessions/brief-code-fr-semicolon-space_r1_2026-09-28.md`), which also carries the heading « À considérer », *f*<sub>R1</sub> in Learn's English, and the intake acoustics question (EN+FR ratified 00:06/00:07). **Then, in order:** N.86 dead code; the voice intake; Correction Station slices 4 to 6; the fixed-size Corrections panel (`../sessions/brief-code-corrections-fixed-panel_r1_2026-09-28.md`). The desk checks each report in a cloud clone before Dann looks (`ENVIRONMENT.md`, SCREENSHOT COMPARE and FRENCH DESK CAPTURES SHIFT PER BUILD).
->
-> **N.168, the three comments:** English RATIFIED 23:37 (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-three-comments_r6_2026-09-28.md`). Next: the desk drafts their French; Dann vets the behind-the-tap contents (r5); then `../sessions/brief-code-n168-first-slice_r1_2026-09-25.md` is updated to these templates. Pedagogy agreement rule (a visible suggestion where a pedagogy and a science source agree) is a DESK PROPOSAL, not ruled.
->
-> **OPEN, raise only when it bears on the work:**
-> - **N.94:** both slices built and looked at by Dann (22:15, 00:09). Closing it is his to say.
-> - **The optional intro line** under the watch heading: held on the desk's recommendation until Dann reads the gated box.
-> - **Withheld sigla:** Code could not produce a withheld syllable by ordinary upload; whether a singer meets it today is NOT ESTABLISHED.
-> - **Finding, not numbered (Dann 2026-09-28 14:48):** a stale test word in the poem box silently replaces a song's own words (`+page.svelte:393-396` at `7d2fcd6`, not re-read).
-> - **Slice 7's compare:** four pixels one colour level off on Learn's tabs; cause NOT ESTABLISHED.
-> - **Cut lists waiting for the audit:** `../sessions/loupe-cutlist_r2_2026-09-28.md`, `../sessions/staff-renderer-cutlist_r2_2026-09-28.md` (re-cite first).
-> - **Ceilings could be lowered:** `MarkupPane.svelte` sits at 1312 against 1358, `+page.svelte` 6010 against 6028.
-> - **Still owed by Dann:** a walk of «Семинарист»; the six N.168 French labels and the [œ] onset and [i] preface suggestions; the walk of the French word explanations and Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines; Claude GitHub App access for `DannMitton/ilya` unless done; one phone photo of a score for the format walk.
->
-> **Uncommitted desk files at this close:** `STATE.md`, `SCHEDULE.md`, `../sessions/LOG.md`, `OPEN.md` and `PRODUCT.md` if touched after `3ab034b`. Research-folder files (outside the repo): `_synthesis/draft-three-comments_r3` to `r6`, `needs_r1` reading list, `notation-reference_Titze-2015.md` typography.
 
 ## THE TRACKER
 

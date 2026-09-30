@@ -1,5 +1,6 @@
 /**
- * N.168: the one registry of sources the note comments cite.
+ * N.168: the rows the note comments cite, and their citations. The works they
+ * cite are in `$lib/sources.ts`.
  *
  * `PRODUCT.md`, "A TRAIL OF BREADCRUMBS: HOW INSIGHTS CITES" (ruled by Dann
  * 2026-09-25 12:38 to 12:47): the comment carries author, short title, year,
@@ -15,130 +16,10 @@
  * those print none. Titles and quotations stay in English in both languages.
  */
 
-export interface Work {
-	key: string;
-	/** Surname, as the short citation prints it. */
-	author: string;
-	/** As the full reference prints it: surname first. */
-	authorFull: string;
-	/** Cut at the colon, as `draft-three-comments_r2` §0 fixes them. */
-	shortTitle: string;
-	fullTitle: string;
-	year: number;
-	edition: string | null;
-	place: string | null;
-	publisher: string | null;
-	/** A reprint or reissue note, as the source record gives it. */
-	printing: string | null;
-	isbn: string | null;
-	/** Where the imprint was read. */
-	record: string;
-}
+import { WORKS, fullReference, type Run } from '$lib/sources';
 
-export const WORKS: Record<string, Work> = {
-	miller2004: {
-		key: 'miller2004',
-		author: 'Miller',
-		authorFull: 'Miller, Richard',
-		shortTitle: 'Solutions for Singers',
-		fullTitle: 'Solutions for Singers: Tools for Performers and Teachers',
-		year: 2004,
-		edition: null,
-		place: null,
-		publisher: 'Oxford University Press',
-		printing: null,
-		isbn: '978-0-19-516005-5',
-		record: 'Insights Research/long-works-toc-screen_miller-2004_r1_2026-09-24.md, copyright page',
-	},
-	bozeman2025: {
-		key: 'bozeman2025',
-		author: 'Bozeman',
-		authorFull: 'Bozeman, Kenneth',
-		shortTitle: 'Practical Vocal Acoustics',
-		fullTitle: 'Practical Vocal Acoustics',
-		year: 2025,
-		edition: '2nd ed.',
-		// NOT ESTABLISHED: no record read this session names the publisher or ISBN.
-		place: null,
-		publisher: null,
-		printing: null,
-		isbn: null,
-		record: 'Insights Research/_extraction/sources_bozeman-PVA2_batch-A.md',
-	},
-	reid1975: {
-		key: 'reid1975',
-		author: 'Reid',
-		authorFull: 'Reid, Cornelius L.',
-		shortTitle: 'Voice: Psyche and Soma',
-		fullTitle: 'Voice: Psyche and Soma',
-		year: 1975,
-		edition: null,
-		place: 'New York',
-		publisher: 'Joseph Patelson Music House',
-		printing: 'third printing 1999',
-		isbn: '0-915282-00-3',
-		record: 'Insights Research/_synthesis/memo-fable-reid-1975-front_r1_2026-09-24.md',
-	},
-	mckinney1994: {
-		key: 'mckinney1994',
-		author: 'McKinney',
-		authorFull: 'McKinney, James C.',
-		shortTitle: 'The Diagnosis and Correction of Vocal Faults',
-		fullTitle: 'The Diagnosis and Correction of Vocal Faults',
-		year: 1994,
-		edition: null,
-		place: null,
-		publisher: 'Waveland',
-		printing: 'reissued 2005',
-		isbn: null,
-		record: 'Insights Research/_synthesis/memo-sonnet-mckinney-1994_r1_2026-09-23.md',
-	},
-	bozeman2021: {
-		key: 'bozeman2021',
-		author: 'Bozeman',
-		authorFull: 'Bozeman, Kenneth W.',
-		shortTitle: 'Kinesthetic Voice Pedagogy 2',
-		fullTitle: 'Kinesthetic Voice Pedagogy 2: Motivating Acoustic Efficiency',
-		year: 2021,
-		edition: null,
-		place: null,
-		publisher: 'Inside View Press',
-		printing: null,
-		// NOT ESTABLISHED: no record read names the ISBN.
-		isbn: null,
-		record: 'Insights Research/_synthesis/memo-sonnet-kvp2_r1_2026-09-25.md, line 3',
-	},
-	miller1986: {
-		key: 'miller1986',
-		author: 'Miller',
-		authorFull: 'Miller, Richard',
-		shortTitle: 'The Structure of Singing',
-		fullTitle: 'The Structure of Singing',
-		year: 1986,
-		edition: null,
-		// NOT ESTABLISHED: the records read give only the year and the page count.
-		place: null,
-		publisher: null,
-		printing: null,
-		isbn: null,
-		record: 'Insights Research/long-works-toc-screen_r1_2026-09-23.md, §6',
-	},
-	howell2025: {
-		key: 'howell2025',
-		author: 'Howell',
-		authorFull: 'Howell, Ian',
-		// The two batch records print different subtitles, so none is printed. NOT ESTABLISHED.
-		shortTitle: 'Hearing Singing',
-		fullTitle: 'Hearing Singing',
-		year: 2025,
-		edition: null,
-		place: 'Lanham, MD',
-		publisher: 'Rowman & Littlefield',
-		printing: null,
-		isbn: null,
-		record: 'Insights Research/_extraction/sources_howell-HS_batch-B.md',
-	},
-};
+/** The works themselves are in `$lib/sources.ts`, which the Guide's Sources reads too (2026-09-30). */
+export { WORKS, fullReference, type Work, type Run } from '$lib/sources';
 
 export interface CitedRow {
 	/** The extraction row. */
@@ -253,16 +134,6 @@ export function pagesText(row: CitedRow, language: 'en' | 'fr'): string {
 }
 
 /**
- * A run of text; `title` sets in italics (a title, or a term of art such as
- * *whoop*); `sub` sets as a subscript, for the R1 of *f*<sub>R1</sub>.
- */
-export interface Run {
-	text: string;
-	title?: boolean;
-	sub?: boolean;
-}
-
-/**
  * The pages of several rows of one work, as one citation prints them: "p. 94",
  * "pp. 97 and 115", "pp. 18 to 19"; French « p. 97 et 115 », « p. 18-19 ».
  */
@@ -286,19 +157,6 @@ export function shortCitation(rowIds: string | readonly string[], language: 'en'
 		{ text: dropAuthor ? '(' : `(${w.author}, ` },
 		{ text: w.shortTitle, title: true },
 		{ text: `, ${w.year}, ${pagesOf(rows, language)})` },
-	];
-}
-
-/** The work in full, as "Sources cited" and the tap print it. Null fields print nothing. */
-export function fullReference(workKey: string): Run[] {
-	const w = WORKS[workKey];
-	const imprint = [w.place && w.publisher ? `${w.place}: ${w.publisher}` : w.publisher, String(w.year), w.printing]
-		.filter((s): s is string => !!s)
-		.join(', ');
-	return [
-		{ text: `${w.authorFull.replace(/\.$/, '')}. ` },
-		{ text: w.fullTitle, title: true },
-		{ text: `${w.edition ? `, ${w.edition.replace(/\.$/, '')}` : ''}. ${imprint}.${w.isbn ? ` ISBN ${w.isbn}.` : ''}` },
 	];
 }
 

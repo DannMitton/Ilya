@@ -396,6 +396,14 @@ the paths already). Whoever takes N.142 should be told this.
       page"*. True as a record of what he ruled, false as a description of the code.
       **His to amend or leave.**
 
+## N.174. THE GUIDE EXPLAINS WHY ILYA ASKS FOR FRY. English ratified by Dann 2026-09-30 19:28
+
+**What:** a three-paragraph Guide essay for a new user, "Why Ilya listens to your fry": what the samples are for, what fry is and why it serves (Miller 2008; Howell 2025; Herbst 2020; Titze, Maxfield & Walker 2017), and the singer's choice at a crossing (Bozeman 2021, 2010). Canonical text: `../sessions/draft-guide-fry-essay_r1_2026-09-30.md`. **RATIFIED, Dann 19:28: "Ratified, please put this somewhere where it will be triggered for inclusion in the GUIDE rewrite."**
+
+**Rulings made while drafting, all Dann 2026-09-30:** answer "so what" before "why"; the register is Dann's own authorial voice, third person and "we", not second-person selling; no absolute declarations; in-text citations name author, title, and page so a newcomer can find them; no sung-tone capture, because fry's dense spectrum shows the resonances more clearly (Titze, Maxfield & Walker 2017, p. 382.e10); the Russian choral aside is dropped, since the Guide serves every voice type; "Insights forecasts; it does not declare" is not user-facing language.
+
+**French RATIFIED, Dann 19:45:** "Let's use la personne qui chante, otherwise it's great!" (generic « le chanteur » replaced in paragraph 3; quotations translated and marked « nous traduisons »; « do♯2 (C♯2) »). **Next:** Code seats both under N.84 (`QUEUE.md`).
+
 ## N.173. HOW INSIGHTS CHOOSES WHAT TO SAY: THE CURATION RULES. Numbered by Dann 2026-09-24 23:45. A LIVING DRAFT
 
 **Dann's words, 23:45:** *"I think this is a great starting place but we need to keep working this. Please make sure it has a cardinal assigned and that we don't lose this work while it gestates."* And on method: *"It is your nature to ratify and entrench my first expressed gesture; I invite you to join me in a more flexible approach, one of drafting and refinement over time while we allow relationships and nuance to emerge through working non-adjacent issues."*
