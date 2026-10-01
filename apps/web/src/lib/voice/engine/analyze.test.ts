@@ -334,3 +334,63 @@ describe('a quiet fry is read, and a dead input is still named', () => {
 		expect(runCapture(room, SR, 'u').outcome).not.toBe('reading');
 	});
 });
+
+/**
+ * Row 2d, 2026-09-30. Dann's 19:36 walk read well on all nine vowels, and seven
+ * came back Provisional because the guard's verdict made them so: `rate_cv` on
+ * nearly every take, and the coarse per-frame fR1 track on [i], [ɑ], and [o].
+ * Provisional now means the reading itself is poor: fR1 read from each half of
+ * the analysed stretch disagrees by 8% or more (`analyze.ts`, `T_HALVES_F1`).
+ *
+ * Every expected value is the fixture's. The rate-wander take holds one pair of
+ * resonators throughout; the shifted take changes them at mid-take, from a
+ * dark [u] at 300 Hz to an [o] at 450 Hz, a 40% move in fR1.
+ */
+describe('a take is Provisional on evidence about its reading, not on its rhythm', () => {
+	/** Like `buildBuffer`, with the resonators changed at `switchS`. */
+	function buildShifted(intervals: number[], totalS: number, switchS: number, before: number[], after: number[]): Float64Array {
+		const n = Math.round(totalS * SR), cut = Math.round(switchS * SR), src = new Float64Array(n);
+		let t = 0.01;
+		for (const iv of intervals) { const i = Math.round(t * SR); if (i < n) src[i] = 1; t += iv; }
+		const a = resonate(src.subarray(0, cut), SR, before, RESONATOR_BW), b = resonate(src.subarray(cut), SR, after, RESONATOR_BW);
+		const shaped = new Float64Array(n); shaped.set(a); shaped.set(b, cut);
+		let peak = 0; for (let i = 0; i < n; i++) peak = Math.max(peak, Math.abs(shaped[i]));
+		const r = rng(0xbeef), out = new Float64Array(n);
+		for (let i = 0; i < n; i++) out[i] = (shaped[i] / peak) * 0.3 + (r() * 2 - 1) * 0.0005;
+		return out;
+	}
+	const SHIFT_S = 2.5;
+	const shiftedBuffer = buildShifted(steadyIntervals(SHIFT_S, 0x11d), SHIFT_S, SHIFT_S / 2, [FR1, FR2], [450, 800]);
+
+	it('reads a fry whose rhythm wanders as Captured, though the guard refuses the rhythm', () => {
+		const out = runCapture(rateWanderBuffer, SR, 'u');
+		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${JSON.stringify(out)}`);
+		// The guard refuses every window on the rhythm, which alone made this take
+		// Provisional before row 2d.
+		expect(out.guard.reading).toBe('Provisional');
+		expect(out.guard.diag.full.failed).toEqual(['rate_cv']);
+		expect(out.formant.reading).toBe('captured');
+		expect(Math.abs(out.formant.f1 - FR1)).toBeLessThan(30);
+		expect(out.steadiness.steady).toBe(true);
+	});
+
+	it('marks a take whose vowel moved at mid-take Provisional, though its rhythm is regular', () => {
+		// Each resonator pair holds for 1.25 s, under MIN_STABLE_S, so no sub-window
+		// can hide the move and the whole take reaches the extractor.
+		expect(guard(shiftedBuffer, SR).segmentS).toBeNull();
+		expect(detect(shiftedBuffer, SR).accept).toBe(true);
+		const out = runCapture(shiftedBuffer, SR, 'u');
+		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${JSON.stringify(out)}`);
+		expect(out.steadiness.steady).toBe(false);
+		expect(out.formant.reading).toBe('provisional');
+		expect(out.formant.confidence).toBe('low');
+	});
+
+	it('names both halves on the outcome, which is what the capture file keeps', () => {
+		const out = runCapture(shiftedBuffer, SR, 'u');
+		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${out.outcome}`);
+		const [a, b] = out.steadiness.halvesF1;
+		expect(Math.abs(a! - FR1)).toBeLessThan(45);
+		expect(Math.abs(b! - 450)).toBeLessThan(45);
+	});
+});

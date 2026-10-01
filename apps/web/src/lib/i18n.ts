@@ -640,6 +640,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// reads it. Change one and change the other.
 	'intake.caption':     { en: 'A score or a photograph can go here too, or you can choose a file.', fr: 'Une partition ou une photographie peut aussi aller ici, ou vous pouvez choisir un fichier.' },
 	'intake.captionLink': { en: 'choose a file', fr: 'choisir un fichier' },
+	// The camera glyph in the field's top-right corner, its accessible name and
+	// tooltip (row 2e). RATIFIED BY DANN 2026-09-30 20:34 ("yes"), as the desk
+	// drafted it from the tree's own term, "photograph".
+	'intake.camera':      { en: 'Take a photograph', fr: 'Prendre une photographie' },
 	// The receipt lines. %s is the count in each.
 	'intake.lines':       { en: '%s lines',   fr: '%s lignes' },
 	'intake.words':       { en: '%s words',   fr: '%s mots' },

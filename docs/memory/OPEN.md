@@ -2534,3 +2534,60 @@ principle; both halves are in `OWED.md`.
 **It is not N.166.** N.166 is that a stored scan re-reads at all. **This is what the singer
 reads while it does.** Fixing N.166 shortens the exposure and does not remove it: a first
 read still waits, and still waits in whatever language was set at that instant.
+
+---
+
+## RULINGS HOMED FROM SESSION FILES, 2026-09-30 20:30
+
+**Why this section exists.** A read-only Sonnet sweep (2026-09-30 20:23) looked for Dann's rulings recorded only inside `../sessions/` files. The desk re-read every source line below before copying it here. Each entry: the ruling, quoted from its source; the source `file:line`; who offered it. **Built or not is NOT checked here**; several are likely in `i18n.ts` already. Coverage limits are at the end of the section.
+
+### Photos and HEIC (no item number)
+- **2026-09-24 19:43, ruled by Dann:** honest messages now; curved-photo reading and a HEIC decoder after the release. `../sessions/brief-code-photo-messages_r1_2026-09-24.md:7`. Evidence: `../sessions/memo-code-phone-photo_r1_2026-09-24.md`. Also in `SCHEDULE.md` (UNSETTLED-6 and LATER).
+
+- **2026-09-30 20:32, Dann:** restore a camera glyph in the Input field's top-right corner that opens the phone camera; amends N.108 increment 4 (2026-09-03). **20:34, ratified:** `intake.camera` "Take a photograph" / « Prendre une photographie », desk-drafted. `../sessions/brief-code-camera-in-the-field_r1_2026-09-30.md`; `QUEUE.md` row 2e.
+
+- **2026-09-30 20:56 to 21:00, Dann, calibration:** the singer sings the vowel first, as usual, to set the vocal tract; a moment's pause; then fry with that shape, which alone is recorded and processed. *"Most singers will not feel comfortable going from modal singing into fry."* Flow (one tap begins, desk-offered) and four strings RATIFIED 21:00. `../sessions/draft-sing-first-cue_r1_2026-09-30.md` §REVISION 21:05; brief `../sessions/brief-code-sing-first-then-fry_r1_2026-09-30.md`.
+- **Held, not raised:** the Guide says « tractus vocal » once (`GuideContent.svelte:46`); Learn and the ratified calibration cue say « conduit vocal ». One term per concept; for N.84.
+
+### N.131, drawer French (2026-09-24 18:47 to 18:53)
+- « Pièce » stands (18:47); « Entrée » stands (18:50); « Exportation et importation » stands (18:51); « %s lignes » / « %s ligne » stand (18:52); his 2026-09-16 alternatives withdrawn. « Retirer » restored for `intake.clear` (18:52). 18:53, Dann: *"I trust your recommendations for the remaining items. Proceed."* So: `intake.dropHint` "Drop your file here." / « Déposez votre fichier ici. »; « Lecture des mots du PDF… » and « Lecture des mots de l’image… » restored; `paper.empty.mobile` « Touchez » stands. `../sessions/memo-audit-rulings-vs-tree_r1_2026-09-24.md:67-77`. Offered by the desk where it says so; ruled by Dann.
+
+### Insights vowel chart
+- **2026-09-24 09:53, ruled by Dann:** *"print the whole ten-vowel lyric diction inventory in its decided sequence, and assign a value of 0 when a vowwel doesn't appear."* `../sessions/brief-code-vowel-chart-all-ten_r1_2026-09-24.md:9`.
+- **2026-09-24 09:57 and 09:59, ruled by Dann:** *"if there's text, it should appear in Text as a transcription too"*; *"Text in the system must yield a transcription if that text populates Markup."* Same file `:36`.
+- **2026-09-23 03:39, ratified by Dann, desk-offered:** with tempo state `none`, the chart heading is "Share of phonation per vowel" / « Part de la phonation par voyelle ». `../sessions/brief-code-tessituragram-fix_r1_2026-09-23.md:26`.
+
+### Voice intake
+- **2026-09-28 15:40, Dann:** *"reorder the Range, Tessitura, and Passaggio intakes to list the higher limits first, followed by the lower limits."* `../sessions/brief-code-voice-intake-order-and-keep-reading_r1_2026-09-28.md:7`.
+- **2026-09-30 10:48, ratified by Dann:** « Garder ma lecture », « Hors de la plage habituelle ». `../sessions/brief-code-small-fixes-before-ship_r1_2026-09-30.md:27`.
+- **2026-09-30 12:32, ratified by Dann:** voice type slice B copy, English and French, with « Certaines voix ». `../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md:40`.
+
+### N.82, the watch band (2026-09-28)
+- **15:04, ratified:** group 1 French, solfège key names lowercase in prose. **15:06, ruled:** IPA on the watch band takes square brackets in both languages; default, with the exception that an explicitly phonemic context may use slashes. Dann: *"music students look for those square brackets in general text to set IPA glyphs apart."* Offered by the desk. **15:06, ratified:** group 2. **15:10, ratified:** group 3, redrafted as actions on Insights' rotated openers. `../sessions/n82-watch-band-draft_r1_2026-09-28.md:242-245`.
+- **16:21, ruled by Dann** (*"YEs!!!!!! :) :)"*), desk-offered: the box says less, advice for the hard spots only. His 16:20: the grouped one-sentence-per-kind form is *"a last resort."* `../sessions/brief-code-watch-band-says-less_r1_2026-09-28.md:11`.
+
+### N.173, curation
+- **2026-09-28 20:32, ruled by Dann** (*"yes"*, desk recommendation): threshold 2, a TRIAL value. `../sessions/draft-curation-rules_r1_2026-09-24.md:115`.
+
+### Markup legend
+- **2026-09-28 22:17 and 22:18, Dann:** *"Justify them if possible, if not, let's get rid of them."* Then *"Remove the four."* (the Captured and Provisional footer lines). `../sessions/brief-code-markup-legend-four-out_r1_2026-09-28.md:7-13`.
+
+### Latin and credits
+- **2026-09-27 00:58, ruled by Dann:** *"Perfectly comfortable. We have these attributed, right? I want unassailable citation to preserve our claims of scholarly fair use."* `../sessions/table-seminarian-latin_r1_2026-09-27.md:66-68`.
+- **2026-09-27 07:03, ratified by Dann:** the Richter credit wording, both languages; English and French drafted by the desk. `../sessions/brief-code-richter-credit-wording_r1_2026-09-27.md:6-8`.
+- **2026-09-26 21:39, Dann:** reconstituted я between two soft consonants becomes [a]: *"yes ... Please reexamine the current code to make sure we're not duplicating."* Desk-offered analogy. `../sessions/brief-code-reconstitute-interpalatal-ya_r1_2026-09-26.md:32`.
+
+### Insights method
+- **2026-09-23 00:27, ruled by Dann:** a large or wide leap is a minor sixth or greater; outside the range, the approach is moot; the six rules of addendum 2 are struck (*"AI slop that lacks understanding"*). `../sessions/method-leaps_r1_2026-09-22.md:252-258`.
+- **Dann:** *"Self-reporting is unreliable and we won't engage in that for this purpose."* Self-report struck as an intake path. `../sessions/insights-phonation-time_r1_2026-09-22.md:57`.
+
+### N.154, strings
+- **2026-09-25 12:44, Dann:** remove "Nothing on this page is hand-written": *"Get rid of it."* `../sessions/brief-code-n154-strings_r1_2026-09-25.md:20`.
+- **2026-09-28 14:54, 14:55, 14:58, ratified:** rows 1 to 12, including « l'Annotation » and *"Paste your Russian text into the Input field."* `../sessions/n154-strings-draft_r1_2026-09-28.md:99-101`.
+
+### What this sweep did NOT cover. Start the next audit here
+1. **Rulings before about 2026-09-20 were not checked one by one** (n104, n113b, n114a/b, n117, n121, n126, n129 r1, path-pass-inc2, colour-token-rename, loupe-typeface, n149, n150, n155, n156, n159, n119b). Rulings that live only in `../sessions/LOG.md` count as stranded under this section's rule.
+2. **658 ruling lines with no time stamp** were not read one by one.
+3. **Open schedule, tracker, owed and queue lines were NOT checked against the memos that may answer them.** That sweep was written and not run (2026-09-30 20:23). UNSETTLED-6 was the case found by hand.
+4. **Whether each ruling here is built in the tree was not checked.**
+5. **Conversations never written to any file cannot be found by any sweep of the tree.**

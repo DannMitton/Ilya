@@ -136,6 +136,7 @@ forty-seven of its predecessors were written and thrown away.
    one pass and were only caught because the next move was checked first.** Before
    you move an account, grep each ruling it carries and confirm it also lives in
    `OPEN.md`, `CONTRACT.md` or `PRODUCT.md`.
+1b. **Tick `SCHEDULE.md` from the day's memos and reports. Added 2026-09-30 after Dann rediscovered a walk done on 2026-09-24 that no schedule line recorded.** For every `memo-*` or `report-*` written today, find the `SCHEDULE.md` or `QUEUE.md` line it answers and mark it there, with the file name. A ruling made inside a brief is copied to `OPEN.md`, `PRODUCT.md`, or `SCHEDULE.md` LATER in the same pass; a brief is not a ruling's home.
 2. **Move what closed to `../sessions/LOG.md`.** Ruled by Dann 2026-09-01:
    **`STATE.md` holds only what is open. Anything that closes moves to `LOG.md` at
    the close of the session that closed it.** Size is an output, not a target.

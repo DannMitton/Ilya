@@ -4,6 +4,42 @@ import { detect } from './detector';
 import { guard, type GuardResult } from './guard';
 import { extractFormants, type ExtractTrace } from './extract';
 
+/**
+ * Row 2d, 2026-09-30. What makes a take Provisional is now evidence that its reading
+ * is poor, and nothing else. Dann's 19:36 walk read well on all nine vowels, and the
+ * guard still stamped seven of them Provisional: `rate_cv` on nearly every take (real
+ * fry's pulse rate wanders, and the detector already judges the rhythm), and `fr1_cv`
+ * on [i], [ɑ], and [o] from `coarseFormants`, the per-frame estimator the closed-phase
+ * reading replaced because it cannot read a closed vowel. On his files the guard's
+ * coarse fR1 track scatters from 120 to 311 Hz on an [i] the reading puts at 273.
+ *
+ * So the question is asked of the reading itself: read fR1 from each half of the
+ * stretch the extractor saw, with the same extractor, and require the halves to agree.
+ * A vowel that moved, or a reading one half of the take cannot reproduce, splits the
+ * halves. The guard still chooses the stretch (`segmentS`) and still decides `high`
+ * (`fullWindow`); its verdict no longer makes a take Provisional on its own.
+ *
+ * JUDGEMENT: 8%, the same number the guard held its coarse fR1 track to
+ * (`T_FR1_CV`, `guard.ts:4`), now applied to the reading. Dann's nine takes split
+ * by 0.5% to 3.9%; a take whose vowel changes at mid-take splits by far more.
+ */
+const T_HALVES_F1 = 0.08;
+
+/** fR1 read from each half of the analysed stretch, and whether the halves agree. */
+export interface Steadiness {
+	halvesF1: [number | null, number | null];
+	/** |a - b| over their mean, three places; null when either half gave no fR1. */
+	spread: number | null;
+	steady: boolean;
+}
+
+export function f1Steadiness(y: Float64Array, sr: number, vowel: Vowel): Steadiness {
+	const mid = y.length >> 1;
+	const a = extractFormants(y.subarray(0, mid), sr, vowel).f1, b = extractFormants(y.subarray(mid), sr, vowel).f1;
+	const spread = a && b ? Math.abs(a - b) / ((a + b) / 2) : null;
+	return { halvesF1: [a, b], spread: spread === null ? null : Math.round(spread * 1000) / 1000, steady: spread !== null && spread < T_HALVES_F1 };
+}
+
 // SILENCE_RMS recalibrated 2026-07-01 on Dann's ACCEPT, from live iMac console
 // evidence: a genuine fry capture at 30 cm with processing off measured RMS 0.008,
 // under the old 0.01 floor, so a gate-passing capture would still have bounced as
@@ -40,9 +76,14 @@ function f2Quality(f2: number | null, f1: number | null, prom: number, guardPass
  * it always has, so every existing caller is unchanged.
  */
 export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>): CalibratedFormant {
+	return grade(y, sr, vowel, outerGuard, trace).formant;
+}
+
+function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>): { formant: CalibratedFormant; steadiness: Steadiness } {
 	const det = detect(y, sr);
 	const g = outerGuard ?? guard(y, sr);
 	const ex = extractFormants(y, sr, vowel, trace);
+	const st = f1Steadiness(y, sr, vowel);
 	// Confidence tiers recalibrated 2026-07-01 on Dann's ACCEPT: the old flat
 	// (snrDb < 20 -> low) rule stamped every real-room capture Provisional even
 	// when the gate passed it. Graded on the same evidence as the c8 recalibration:
@@ -56,7 +97,7 @@ export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: 
 	const snrLow = det.snrDb !== null && det.snrDb < 12;
 	const snrHigh = det.snrDb !== null && det.snrDb > 18;
 	const confidence: CalibratedFormant['confidence'] =
-		g.reading === 'Provisional' || !det.accept || snrLow ? 'low'
+		!st.steady || !det.accept || snrLow ? 'low'
 		: snrHigh && g.fullWindow ? 'high'
 		: 'medium';
 	const reading: CalibratedFormant['reading'] = confidence === 'low' ? 'provisional' : 'captured';
@@ -67,20 +108,21 @@ export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: 
 		noiseFloor: det.snrDb === null ? 'unmeasured' : 'measured',
 	};
 	if (ex.f2 !== null) out.f2 = ex.f2;
-	return out;
+	return { formant: out, steadiness: st };
 }
 
 export type CaptureOutcome =
 	// `guard` is the stationarity verdict on the whole capture. It rides on the
 	// outcome so `live.ts` can print it: which of the two routes to Provisional
 	// fired was undiagnosable from the console before N.80.
-	| { outcome: 'reading'; formant: CalibratedFormant; guard: GuardResult }
+	// `steadiness` is the split-half fR1 check that decides Provisional (row 2d).
+	| { outcome: 'reading'; formant: CalibratedFormant; guard: GuardResult; steadiness: Steadiness }
 	| { outcome: 'reprompt'; reason: 'not-fry'; failed: string[]; guard: GuardResult }
 	| { outcome: 'error'; error: CaptureError; guard?: GuardResult };
 
 /** The capture pipeline: structural checks, the live gate, then the §9 core. */
 /** `trace`, when passed, is filled with what the extractor saw and chose (the dev-only capture file). */
-export function runCapture(y: Float64Array, sr: number, vowel: Vowel, voiceType?: VoiceType, trace?: Partial<ExtractTrace>): CaptureOutcome {
+export function runCapture(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, trace?: Partial<ExtractTrace>): CaptureOutcome {
 	const durMs = (y.length / sr) * 1000;
 	if (durMs < MIN_BUFFER_S * 1000)
 		return { outcome: 'error', error: { code: 'SAMPLE_TOO_SHORT', message: 'buffer too short', actualMs: durMs, minimumMs: MIN_BUFFER_S * 1000 } };
@@ -99,7 +141,7 @@ export function runCapture(y: Float64Array, sr: number, vowel: Vowel, voiceType?
 	const yw = g.segmentS ? y.subarray(Math.round(g.segmentS[0] * sr), Math.round(g.segmentS[1] * sr)) : y;
 	const det = detect(yw, sr);
 	if (!det.accept) return { outcome: 'reprompt', reason: 'not-fry', failed: det.failed, guard: g };
-	const cf = analyze(yw, sr, vowel, voiceType, g, trace);
+	const { formant: cf, steadiness } = grade(yw, sr, vowel, g, trace);
 	if (!cf.f1) return { outcome: 'error', error: { code: 'EXTRACTION_FAILED', message: 'no formants recovered' }, guard: g };
-	return { outcome: 'reading', formant: cf, guard: g };
+	return { outcome: 'reading', formant: cf, guard: g, steadiness };
 }

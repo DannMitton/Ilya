@@ -65,7 +65,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **INBOX:** Dann asked what a Chinese translation of Ilya would take (19:40); the estimate is logged, nothing decided.
 >
-> **Owed by Dann (carried from the 12:30 block):** slice B's copy (`../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md`); "compatibility" or "fit"; French « ? » spacing.
+> **Owed by Dann (carried from the 12:30 block):** "compatibility" or "fit"; French « ? » spacing. (Slice B's copy struck 2026-09-30 20:30: RATIFIED 12:32, `../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md:40`.)
 >
 > **The 12:30 block and the stale 00:15 block moved verbatim to `../sessions/LOG.md`.**
 

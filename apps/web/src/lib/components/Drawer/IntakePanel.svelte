@@ -3,6 +3,7 @@
 	import type { LoaderState } from '$lib/loader';
 	import { t, type Language } from '$lib/i18n';
 	import { countText } from './bandState';
+	import IntakeCamera from './IntakeCamera.svelte';
 	import type { TextArrival } from '$lib/one-action';
 
 	/*
@@ -237,10 +238,13 @@
 	   N.108 increment 1. */
 
 	/* ── THE OCR MOVED OUT, N.108 increment 4 ───────────────
-	   The camera icon that stood in the field's top-right corner is gone with
+	   The camera icon that stood in the field's top-right corner went with
 	   the photograph button beside it, ruled by Dann 2026-09-03: the icon,
 	   Choose a file, and Read a score from a photograph "all serve the same
-	   function". What the icon did has not gone anywhere. A picture picked or
+	   function". THE ICON RETURNED 2026-09-30 (row 2e) as a different control:
+	   it opens the phone's camera, which nothing else does, and on a phone
+	   only (`IntakeCamera.svelte`). What the old icon did has not gone
+	   anywhere. A picture picked or
 	   dropped now asks in place which it is, and the poem answer runs exactly
 	   the same Tesseract read, in `ScoreUploader.svelte`, beside the PDF
 	   question it now shares. The two failure messages went with it, word for
@@ -366,6 +370,7 @@
 		     owed. -->
 		<textarea
 			class="text-input"
+			class:beside-camera={isMobile}
 			bind:this={textareaEl}
 			placeholder={t('intake.placeholder', language)}
 			value={inputText}
@@ -375,24 +380,17 @@
 			disabled={loaderState.isLoading}
 		></textarea>
 
-		<!-- THE CAMERA ICON IS GONE, N.108 increment 4, ruled by Dann
-		     2026-09-03 on his walk of `42f6871`: the icon, Choose a file, and
-		     Read a score from a photograph "all serve the same function. Please
-		     consolidate these and find a reasonable place for the user to
-		     perform their file retrieval."
-
-		     WHAT THE ICON MEANT IS NOW A QUESTION RATHER THAN A BUTTON. It
-		     existed because pressing it was how a singer said "this picture is
-		     text, not music"; the increment 2 comment said so in as many words,
-		     "the two stay apart because the button a singer presses is what says
-		     which they meant". One picker cannot say it that way, so the picture
-		     asks in place, exactly as a PDF has since increment 2, and the poem
-		     answer runs the same OCR. `ScoreUploader.take` holds both questions.
-
-		     A DROPPED PICTURE NOW ASKS TOO. It went straight to the score reader
-		     before, on the brief's "a photograph goes to the reader"; that rule
-		     assumed the camera icon was the other way in, and the icon is gone.
-		     Recorded in the memo as a departure. -->
+		<!-- THE CAMERA RETURNED 2026-09-30 (row 2e), on Dann's request, and it
+		     amends N.108 increment 4. That day's icon picked a FILE for OCR, and
+		     it went because it, Choose a file, and Read a score from a
+		     photograph "all serve the same function". This one opens the
+		     CAMERA, which no other control does. A phone only, the desk's
+		     default: a desktop browser ignores `capture` and would open Choose a
+		     file again. What it takes goes through `onPick` like any picked
+		     picture (`ScoreUploader.take`, N.146). See `IntakeCamera.svelte`. -->
+		{#if isMobile}
+			<IntakeCamera {language} disabled={loaderState.isLoading} onpick={onPick} />
+		{/if}
 
 		<!-- ── THE HINT IS THE FIELD'S CAPTION. N.114a, RULED BY DANN
 		     2026-09-09 walking `3765314`: it moves from the foot of the frame,
@@ -597,11 +595,8 @@
 	   the fill back onto the textarea would change the frame, which this
 	   ruling did not ask for.
 
-	   `position: relative` STAYS WITH NO CAMERA TO CONTAIN. It was the
-	   watermark's containing block, then the OCR button's, and both are gone
-	   (N.108 increments 2 and 4). It is kept because `.dragging` paints this
-	   box and a positioned box is what the frame has always been; removing it
-	   is a change to the frame that nothing asked for. */
+	   `position: relative` holds the camera's glyph, back 2026-09-30 (row 2e),
+	   as it held the watermark and the OCR button before it. */
 	.intake {
 		position: relative;
 		border: 1px dashed rgba(26, 22, 18, 0.28);
@@ -869,8 +864,14 @@
 	   `.ocr-error`. They are deleted rather than left, because `svelte-check`
 	   counts an unused selector as a warning and gate 3's baseline is 7.
 
-	   `.intake`'s `position: relative` STAYS. It was the camera's containing
-	   block and it is also the dragging state's, so it has a second reader. */
+	   `.intake`'s `position: relative` STAYS, and since 2026-09-30 it
+	   contains the camera again. */
+
+	/* Typed lines wrap short of the camera's glyph rather than run under
+	   it: its box ends 50px inside the frame, the field begins 12px in. */
+	.text-input.beside-camera {
+		padding-right: calc(50px - 12px);
+	}
 
 	.char-warning {
 		font-size: 0.7rem;
