@@ -170,7 +170,7 @@ design rows.
 
 ## Week 6. Monday 2026-10-19 to Sunday 2026-10-25. The Guide, once the interface is final
 
-- [ ] **N.84**: the Guide rewritten for the interface as it now is, in English and French, with new screenshots. Dann reviews the prose.
+- [ ] **N.84**: the Guide rewritten for the interface as it now is, in English and French, with new screenshots. Dann reviews the prose. **STARTED 2026-10-01, three weeks early: four English drafts (`STATE.md`).**
   **BLOCKED ON N.154, AND ON A FRENCH VERIFICATION, ruled by Dann 2026-09-19:**
   *"let's make a French verification a prerequisite for that process."* The Guide
   describes the interface, so a Guide written over stale strings documents an app

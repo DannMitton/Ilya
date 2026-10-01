@@ -192,6 +192,7 @@ entirely. **The padding is load-bearing, not cosmetic.**
 - **That print renders the paper.**
 - **A mark on the page saying Ilya is unsure.** Struck in E.47. A mark that appears
   on everything says nothing, and a misplaced syllable is something Dann can see.
+- **MIDI. RULED OUT BY DANN 2026-10-01 01:25:** *"We remove MIDI from the app entirely. NO beta, no further development."* Supersedes N.58's deferral to future development (2026-08-21) and the tracker's "PDF, photograph, and MIDI stay in it." Ilya never read MIDI files: it detects one and refuses it with `upload.err.midi` (`ScoreUploader.svelte:831-832`). **DESK DEFAULT:** that refusal stays, so a singer who drops a MIDI file is told why and what to export instead. MIDI note numbers used for pitch inside the analysis are not the file format and are untouched.
 
 ---
 

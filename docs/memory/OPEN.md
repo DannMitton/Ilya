@@ -2674,3 +2674,30 @@ A read-only Sonnet sweep read about 43 of the project's 374 documents (`claude/*
 
 **Not covered:** about 330 project documents, including the later E.40 to E.48 handovers and most specs.
 
+## N.84, THE GUIDE REWRITE. Spec opened 2026-10-01
+
+**Done when:** the Guide describes the interface as it now is, in English and French, with new screenshots, and Dann has reviewed the prose (`SCHEDULE.md`, N.84 line).
+
+**The walkthrough's shape. RULED BY DANN 2026-10-01 00:35**, choosing the first of three shapes the desk offered: *"I think we eventually need all three, but for now let's do item 1"*. Who offered the three: the desk. Who ruled: Dann.
+
+1. **Now:** one session on one real score from Dann's library, from intake to print, through Text, Insights, and Markup, with a short side note for a singer who has only the poem.
+2. **Later, not scheduled:** a second walkthrough for the poem alone, and short sections by situation (a PDF, a photograph, only the poem). A default, not a wall: either may fold into the first if the first proves to cover it.
+3. **AMENDED BY DANN 2026-10-01 01:02:** *"Make the other two now."* All three are drafted in this session: `../sessions/draft-guide-walkthrough_r1_2026-10-01.md` (the score session), `../sessions/draft-guide-walkthrough-poem_r1_2026-10-01.md`, and `../sessions/draft-guide-by-situation_r1_2026-10-01.md`.
+
+**Carries:** the fry essay (N.174, `../sessions/draft-guide-fry-essay_r1_2026-09-30.md`); the stale names in `QUEUE.md` under N.84; the tessituragram paragraph (`../sessions/guide-tessituragram-paragraph_r2_2026-09-10.md`); Revert to score header (this file, "For N.84 (Guide)"); « tractus vocal » to « conduit vocal » (`GuideContent.svelte:46`). Renamed anchors go through `$lib/guide-anchors.ts`.
+
+## N.175, VIDEO WALKTHROUGHS. Numbered by Dann 2026-10-01 01:15
+
+**His words:** *"I want us to take the finished build and create these videos which you will help me post to a YouTube channel that we build to support Ilya. That way we can host hyperlinks to this video content without glutting the app. I am open to a different solution if you devise one."*
+
+**What it is:** short clips in English and French, made from the finished build, posted to a YouTube channel built for Ilya; the Guide links to them rather than carrying the files.
+
+**Desk proposals, offered 2026-10-01 01:12 to 01:20, NOT RULED:** short clips (30 to 90 s), one per task, each beside its Guide section, with captions and a written transcript; the text Guide stays primary; clips recorded from the real app with Playwright (already in `apps/web/package.json`) so they can be regenerated when the interface changes; HyperFrames or Remotion only for animated explanations; narration in Dann's voice preferred over a synthetic one (Kokoro has one French voice, graded B− by its makers). Hosting alternatives and their costs are in the 2026-10-01 01:20 reply.
+
+**Depends on:** the interface being finished (Dann: "the finished build"), and N.84's written walkthroughs, which are the scripts.
+
+**Added by Dann 2026-10-01 01:17:** *"we may also be able to take captures from the videos for inclusion as images in GUIDE"*; *"develop a sequence of tasks to perform, and flesh out scripts for these tasks in English and in French. There are precedents from other software packages we can use as best practices"*; and lean on the architecture document *"to capture how Ilya works and what users are most likely to want to see modeled in video."*
+
+**RULED BY DANN 2026-10-01 01:21:** *"I will happily narrate both the English and the French videos as long as I can depend on your help for the logistical stuff (accurate translation and register, coordinating with YouTube and that excellent links to a short address on Ilya's own domain, such as `ilya.dannmitton.com/video/calibrate`, which forwards to whichever video is current."* So: **Dann narrates both languages. The desk owns** the French translation and register of every script (drafted for his ruling, per `CONTRACT.md` §4), the YouTube logistics (titles, descriptions, caption files EN and FR, playlists), and the forwarding links. Who offered the forwarding links: the desk (01:16). Who ruled them in: Dann. The links are built by Code, as redirects on Ilya's own domain.
+
+**Desk proposal, 01:20, NOT RULED:** one Playwright script per task produces the clip AND the Guide's full-resolution stills at named steps, in both languages, rather than stills cut from compressed video. `ARCHITECTURE.md` (222 lines, a codemap and invariants) supplies how Ilya works; what singers want to see comes from `PRODUCT.md` and N.170's outside eyes, not from the codemap.

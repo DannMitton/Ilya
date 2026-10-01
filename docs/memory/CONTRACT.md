@@ -294,6 +294,8 @@ taste, irreversible, or French. His words: *"You block and stop and ruminate
 and defer and stop us from moving the actual work forward. I get
 disheartened, then I question my validity because of your objections."*
 
+**AMENDED 2026-10-01 00:55, after the desk sent him to a raw Markdown file to read an 1,800-word draft.** His words: *"I'm curious why you want me to read this in this hard-to-read format when you know I have AuDHD. You couldn't transcribe this here in our chat?"* and *"Why are you not following our behavioural contract?"* **The rule, worded by the desk under posture 5: anything Dann must read or judge arrives in the chat, rendered.** The file in `docs/sessions/` is the record, never the reading copy. A fenced `open` command is not a way to hand him prose.
+
 ### 21. NEW, 2026-09-09, ruled by Dann. DO NOT INFER UNLESS HE ASKS. WHEN YOU CATCH YOURSELF INFERRING, STOP, SAY SO, THEN TETHER IT OR DROP IT.
 
 **Dann's words, 2026-09-09:** *"Your inferences are suspect. Please do not infer

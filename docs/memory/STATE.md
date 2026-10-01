@@ -47,6 +47,16 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### CLOSE OF 2026-10-01, about 03:00 (overnight). READ THIS FIRST, THEN `QUEUE.md`.
+>
+> **THE ONE THING: N.84, the Guide.** Shape ruled by Dann 00:35 and widened 01:02 (`OPEN.md`, "N.84, THE GUIDE REWRITE"). Four English drafts wait for his read: `../sessions/draft-guide-walkthrough_r1_2026-10-01.md`, `-walkthrough-poem_`, `draft-guide-by-situation_`, `draft-guide-insights-and-markup_`. Factual base: `../sessions/memo-n84-path-map_r1_2026-10-01.md`. Next: his read, then French, screenshots, and Code's brief. **Show him drafts rendered in the chat, never as a file to open** (`CONTRACT.md` tether 20, amended 00:55).
+>
+> **Ruled tonight:** MIDI out entirely (`PRODUCT.md`); N.175 videos, Dann narrates both languages, forwarding links on Ilya's domain (`OPEN.md`); N.176 the stem legend (`QUEUE.md` row 10); 13 inbox lines deleted (`../sessions/inbox-deleted_2026-10-01.md`). Example song for the score walkthrough: Sunless 1's Lamm scan may not be clear in the US until 2027; Dann is choosing among five public-domain songs (chat, 01:20; first choice offered: Tchaikovsky Op. 38 No. 3, Jurgenson 1878).
+>
+> **Overnight:** all 22 A items worked; verdicts in `../sessions/inbox-curated_r1_2026-10-01.md`; four new briefs, `QUEUE.md` rows 10 to 13. **Owed by Dann, one at a time:** stem French (row 10); A10 gradual tempo; A12 a place-from-scratch control; A14 surrogate values; A16 italics rule; A18 contributor docs; « échantillons de fry » in the Guide.
+>
+> **Not committed.** Every file tonight is uncommitted under `docs/`.
+
 > ### CLOSE OF 2026-10-01, about 00:15. READ THIS FIRST, THEN `QUEUE.md`.
 >
 > **Last ship: `14e4cb5`, 2026-10-01 00:00**, rows 2d to 2l, all eight gates at baseline, **gate 4 `1784`** (`~/Downloads/ilya-ship.sh` expects 1784; backups `.bak-1747` to `.bak-1779`). **Desk-walked on the alias 00:10 to 00:25** (`../sessions/walk-desk-14e4cb5_r1_2026-10-01.md`): Text, Insights page 1 (EN and FR), Markup (FR), Guide (FR). Nothing found that misleads a singer. **Not walked by Dann.** If Dann ran the close-of-session ship, a later commit carries this block and the walk file.
@@ -66,7 +76,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE TRACKER
 
-**The goal: a working beta. PDF, photograph, and MIDI stay in it.**
+**The goal: a working beta. PDF and photograph stay in it. MIDI is OUT, ruled by Dann 2026-10-01 01:25 (`PRODUCT.md`, "Closed and not to be reopened").**
 
 Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
 
@@ -78,6 +88,11 @@ section says what is open; that file says what comes first and why. **Six
 dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
+
+### Numbered 2026-10-01
+
+- `[ ]` **N.176. The Markup legend explains the stems (up = close timbre, down = open timbre).** Asked by Dann 2026-10-01 01:51 from his dissertation, Appendix B; DESK DEFAULT number. Brief `../sessions/brief-code-markup-legend-stems_r1_2026-10-01.md`; French PROPOSED, awaiting his ruling.
+- `[ ]` **N.175. Video walkthroughs, English and French, on an Ilya YouTube channel.** **NUMBERED BY DANN 2026-10-01 01:15.** Made from the finished build; the Guide links to them. Spec in `OPEN.md`.
 
 ### Numbered 2026-09-24, evening
 
