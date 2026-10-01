@@ -149,3 +149,45 @@ Paste the poem into the Input field and everything in "Adding the poem", "Naming
 - "Start placement over" has no control on screen (memo §5). The draft says nothing about it.
 - The Markup legend explains only the withheld-IPA mark, not the stems, lavender noteheads, red boxes, or `#` (memo §8). The draft does not describe the marks; the existing "Markup's notation conventions" section does.
 - Anchors: replace `guide-walk-tabs`, `guide-walk-transcribe`, `guide-walk-analysis`; add score, poem, loupe, voice, insights, poem-only. Code updates `Drawer.svelte`'s `getParentIds` and `$lib/guide-anchors.ts` together.
+
+---
+
+## French, sections 1 to 4, PROPOSED 2026-10-01 03:19 (desk), awaiting Dann's ruling
+
+## Une visite guidée
+
+*Une séance complète, d'une partition numérisée à une feuille imprimée.*
+
+Cette visite suit un chant du début à la fin : « В четырёх стенах » (« Entre quatre murs »), premier chant du cycle *Sans soleil* de Moussorgski, à partir d'un PDF numérisé de la partition. Vous ajoutez la partition, puis le poème; vous nommez la pièce, lisez le texte mot par mot, vérifiez les notes qu'Ilya a lues, mesurez votre voix, lisez ce qu'Ilya dit de la pièce et de votre voix, puis imprimez. Si vous n'avez que le poème, consultez « Si vous n'avez que le poème », à la fin.
+
+### L'interface en un coup d'œil
+
+Le tiroir, à gauche, réunit les commandes. La page, à droite, montre le résultat, et c'est la page qui s'imprime.
+
+Le tiroir comporte trois bandes : **Pièce**, pour le nom du chant et votre répertoire; **Entrée**, pour la partition et le poème; **Voix**, pour votre voix. Touchez une bande pour l'ouvrir ou la fermer. À votre première visite, seule la bande Entrée est ouverte.
+
+Au-dessus de la page se trouvent trois onglets : **Texte** montre le poème transcrit, mot par mot; **Annotation** montre la partition avec votre voix tracée dessus; **Aperçus** dit comment cette pièce rencontre votre voix. À leur droite, **Leçons** ouvre un cours de diction lyrique russe, et **Guide** ouvre cette page.
+
+La pastille de langue, en haut à droite, fait passer toute l'interface de l'anglais au français. Elle affiche toujours le nom de l'autre langue.
+
+Sur un écran étroit, le tiroir glisse par-dessus la page. La languette, au bas de l'écran, indique **Tiroir** quand la page est visible et **Papier** quand le tiroir est ouvert.
+
+### Ajouter la partition
+
+Déposez le PDF sur le champ Entrée, ou touchez **choisir un fichier** dans la ligne qui se trouve dessous. Le même champ accepte aussi la photographie d'une page, un fichier MusicXML et d'autres fichiers de partition. Sur un téléphone ou une tablette, le bouton de l'appareil photo, à côté du champ, prend la photographie pour vous.
+
+Ilya lit les notes sur la page. La première fois dans une séance, le lecteur met environ une minute à démarrer, puis quelques secondes par page.
+
+Avant de lire toutes les pages, Ilya vous demande de confirmer deux choses : la clé et l'armure. Vérifiez-les sur votre propre partition, corrigez-les au besoin, puis touchez **Lire cette page**.
+
+À l'arrivée de la partition, un court rapport sous le champ indique ce qu'Ilya a lu : systèmes, portées, notes, silences et mesures. Une mise en garde rappelle que des notes lues sur une image peuvent être fausses. Gardez votre partition à portée de main : vous y comparerez les notes plus tard, dans l'Annotation.
+
+### Ajouter le poème
+
+L'image d'une partition ne porte aucune parole qu'Ilya puisse lire; le poème s'ajoute donc à part. Collez le texte russe dans le même champ.
+
+Aucun bouton à toucher : Ilya transcrit le poème dès que vous le collez, et quand vous tapez, il attend une courte pause. Il place aussi les syllabes du poème sur les notes, une syllabe par note.
+
+Sous le champ, deux reçus confirment ce qu'Ilya détient : l'un pour le **poème**, avec ses lignes et ses mots, l'autre pour la **partition**, avec le nom du fichier. Chacun offre **Remplacer** et **Retirer**.
+
+**Desk's own choices, for Dann:** « pastille de langue », « languette », « reçus », and the song's French titles (the song may change with the public-domain choice). Dann asked 03:20 whether "puis le poème" was correct; the desk confirmed it from the code for a scanned score (`i18n.ts:917`, `+page.svelte:4464`).

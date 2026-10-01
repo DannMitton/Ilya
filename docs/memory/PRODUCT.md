@@ -1114,3 +1114,7 @@ His words: *"Colleagues' recordings will never be public!"* Asked by the desk fr
 - The Guide's « échantillons de fry » (`GuideContent.svelte:61`) leaves with the N.84 rewrite.
 - Consistent with the fry essay's French, ratified 2026-09-30 19:45.
 
+## "THE INFORMED EAR" IN FRENCH: « L'OREILLE AVERTIE ». Ratified by Dann 2026-10-01 03:18
+
+Offered by the desk with three alternatives (« exercée », « éduquée », « sage »). Usito's sense 2 of « averti »: « Qui est expérimenté et a un jugement sûr », « public averti ». **His reservation, kept on record:** *"I'm just itchy about avertissement meaning warning. I don't want to imply The Warned Ear, but I think l'oreille avertie is probably the best we can hope for."* Usito's sense 1 is « informé et sur ses gardes »; a better French may replace it if one is found. Feminine: « oreille avertie ». **Confirmed by Dann 03:19:** *"Yes, discerning is a very good modal translation for the kind of informed I mean. I ratify l'oreille avertie."*
+

@@ -44,6 +44,7 @@ Created 2026-09-30 10:55 by the desk, after Dann: *"are there any other unexecut
 | 14 | `../sessions/brief-code-place-by-scope_r1_2026-10-01.md` (N.179): clear placements by scope, and place from here, after Finale | READY. French RATIFIED by Dann 2026-10-01 02:44 | Dann 2026-10-01 02:42 and 02:43 |
 | 15 | `../sessions/brief-code-french-italics_r1_2026-10-01.md`: italics on Italian musical terms in the French, plus « Qu'est-ce que la friture vocale? » | READY | Dann 2026-10-01 02:58 and 03:02; `PRODUCT.md` |
 | 16 | `../sessions/brief-code-newcomer-docs_r1_2026-10-01.md`: three fixes for a newcomer (wrong path, missing folders, control map, key-prefix index) | READY | Dann 2026-10-01 02:59 |
+| 17 | `../sessions/brief-code-stand-in-vowels_r1_2026-10-01.md`: no vowel blank; stand-ins from Bozeman's staff, fitted to the singer | READY after row 12 | Dann 2026-09-16 and 2026-10-01 02:56; `OPEN.md` |
 
 ## Open work, not truant (numbered items in `STATE.md`, never meant built yet)
 

@@ -2727,3 +2727,9 @@ A read-only Sonnet sweep read about 43 of the project's 374 documents (`claude/*
 
 **Corrections the desk owes before the brief:** Ilya merges tenor and mezzo (`plausibility.ts:61`) and cites its baritone to a website PDF (`:89`); the 2013 page has separate Mezzo and Tenor staves and a printed baritone. Read both staves note by note against the 2021 figure before splitting. Henrich, Smith & Wolfe 2011 figures were seen through a fetch summary only, NOT READ in the article.
 
+## N.180, LYRICS FROM A SCANNED SCORE. Numbered by Dann 2026-10-01 03:21
+
+**What is true today, read by the desk 2026-10-01:** a score file that carries words fills the poem box and seats them (`+page.svelte:3259`); a scanned or photographed SCORE yields notes only, and Ilya says so (`upload.banner.reader`, `i18n.ts:917`; `upload.banner.noLyrics`, `+page.svelte:4464`); a page with no staves is read as a poem by OCR (`ScoreUploader.svelte:290`, `:405`; the guard in `ingestion/ocr-guard.ts`).
+
+**The item:** read the underlay text from a score page and seat it, as a research item measured on real pages before any accuracy is promised, beside N.178 (tempo and dynamics from scans). Known risk on record: N.163, an OCR misread («То» as «Го») reached a singer as a false word with a confident gloss. The singer's poem owns the text today (the code's own words, "THE POEM STILL OWNS THE TEXT", `+page.svelte:637-638`; `PRODUCT.md`, THE TEXT AND THE NOTES, NOT re-read by the desk tonight); how a read underlay and a typed poem reconcile is a design question for Dann.
+
