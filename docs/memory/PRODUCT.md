@@ -1096,3 +1096,21 @@ Prompted by his own [i]: a loud, well-produced fry read 186 Hz and was met with 
 ## COLLEAGUES' RECORDINGS ARE NEVER PUBLIC. Ruled by Dann 2026-09-30 13:14
 
 His words: *"Colleagues' recordings will never be public!"* Asked by the desk from Fable's critique (`../sessions/critique-intake-plan-fable_r1_2026-09-30.md`). Ilya is open source, so anything committed is public and permanent. **The rule:** real singers' recordings live only in a private store Dann controls; the repository holds synthetic fixtures and, for real takes, only their expected values and checksums; each volunteer signs a short bilingual consent naming the storage and how to withdraw; adults only. No exception is stated; any would be Dann's alone.
+
+## ITALICS ON FOREIGN WORDS IN THE FRENCH. Ruled by Dann 2026-10-01 02:58
+
+**His words:** *"I agree with Roberge on Italian musical terms, and otherwise we defer to OQLF."* Who offered the options: the desk (`../sessions/memo-overnight-A16_r1_2026-10-01.md`). Who ruled: Dann.
+
+- **Italian musical terms follow Roberge's GDRM:** « On compose en italique les indications de tempo, de dynamique et d'expression » (https://roberge.mus.ulaval.ca/gdrm/08-itali.htm, read by the desk 2026-10-01). So *passaggio*, *zona di passaggio*, *legato*, *crescendo*, *decrescendo*, *piano*, *forte* take italics.
+- **Every other foreign word follows the OQLF:** italic if not francized, roman if in common use in French (https://vitrinelinguistique.oqlf.gouv.qc.ca/24351/, read by the desk 2026-10-01). A word in French form (tessiture, mélisme, friture) is French and stays roman.
+- The default with its condition, per tether 19: a term the two sources treat differently, or one the OQLF itself calls uncertain (« l'usage hésite parfois »), comes to Dann as a case.
+
+## « FRITURE VOCALE », NEVER « FRY ». Ruled by Dann 2026-10-01 03:00 and 03:02
+
+**His words, 03:00:** *"fry is an anglicisme which we do not want, nor a calque."* The desk then reported that « friture vocale » is itself a calque, but an attested one (French Wikipedia, "Laryngalisation": « La laryngalisation, voix craquée ou friture vocale (en anglais : creaky voice ou vocal fry) »), and offered keeping it or switching to « voix craquée ». **He chose 1 at 03:02: keep « friture vocale ».** Who offered: the desk. Who ruled: Dann.
+
+- Ilya's French says « friture vocale », then « friture ». « Fry » and « vocal fry » never appear in the French, parenthetical included.
+- The calibration question becomes « Qu'est-ce que la friture vocale? » (`i18n.ts:1068`, `calib.welcome.fryQuestion`; OQLF spacing, no space before « ? »).
+- The Guide's « échantillons de fry » (`GuideContent.svelte:61`) leaves with the N.84 rewrite.
+- Consistent with the fry essay's French, ratified 2026-09-30 19:45.
+

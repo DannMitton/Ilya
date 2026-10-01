@@ -53,7 +53,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **Ruled tonight:** MIDI out entirely (`PRODUCT.md`); N.175 videos, Dann narrates both languages, forwarding links on Ilya's domain (`OPEN.md`); N.176 the stem legend (`QUEUE.md` row 10); 13 inbox lines deleted (`../sessions/inbox-deleted_2026-10-01.md`). Example song for the score walkthrough: Sunless 1's Lamm scan may not be clear in the US until 2027; Dann is choosing among five public-domain songs (chat, 01:20; first choice offered: Tchaikovsky Op. 38 No. 3, Jurgenson 1878).
 >
-> **Overnight:** all 22 A items worked; verdicts in `../sessions/inbox-curated_r1_2026-10-01.md`; four new briefs, `QUEUE.md` rows 10 to 13. **Owed by Dann, one at a time:** stem French (row 10); A10 gradual tempo; A12 a place-from-scratch control; A14 surrogate values; A16 italics rule; A18 contributor docs; « échantillons de fry » in the Guide.
+> **Overnight:** all 22 A items worked; verdicts in `../sessions/inbox-curated_r1_2026-10-01.md`; four new briefs, `QUEUE.md` rows 10 to 13. **All seven questions ANSWERED by Dann 2026-10-01 02:33 to 03:02:** stem French ratified (row 10); gradual tempo option 2, plus N.177 dynamics and N.178 scan reading (`OPEN.md`); N.179 place by scope, French ratified (row 14); the stand-in vowel method with the five-staff mapping (`OPEN.md`, THE STAND-IN VOWEL VALUES; its brief is the desk's to write after reading the staves and the dissertation on velar-i); italics (row 15, `PRODUCT.md`); newcomer docs (row 16); « friture vocale » (`PRODUCT.md`, row 15). **Nothing is owed by Dann.** The stand-in brief and N.84's French are the desk's next work.
 >
 > **Not committed.** Every file tonight is uncommitted under `docs/`.
 
@@ -91,6 +91,9 @@ does not repeat them.
 
 ### Numbered 2026-10-01
 
+- `[ ]` **N.179. Clear placements by scope, and place from here (after Finale).** Ruled ready for a brief by Dann 2026-10-01 02:43; DESK DEFAULT number. `QUEUE.md` row 14.
+- `[ ]` **N.177. Dynamics: a layer the singer can add and edit, and dynamics read from MusicXML.** Numbered by Dann 2026-10-01 02:39. After N.120. Spec in `OPEN.md`.
+- `[ ]` **N.178. Reading tempo words and dynamics from scans and photographs.** Numbered by Dann 2026-10-01 02:39. A research item, measured on real pages before any accuracy is promised. After N.177. Spec in `OPEN.md`.
 - `[ ]` **N.176. The Markup legend explains the stems (up = close timbre, down = open timbre).** Asked by Dann 2026-10-01 01:51 from his dissertation, Appendix B; DESK DEFAULT number. Brief `../sessions/brief-code-markup-legend-stems_r1_2026-10-01.md`; French PROPOSED, awaiting his ruling.
 - `[ ]` **N.175. Video walkthroughs, English and French, on an Ilya YouTube channel.** **NUMBERED BY DANN 2026-10-01 01:15.** Made from the finished build; the Guide links to them. Spec in `OPEN.md`.
 

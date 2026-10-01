@@ -243,6 +243,7 @@ the paths already). Whoever takes N.142 should be told this.
 > abstain); per-region override NOT ESTABLISHED in the tree. Finale's
 > handling of gradual cues (rit., rall., schnell) is an INBOX item, recorded
 > at Dann's word, for the same station.
+> **GRADUAL CUES RULED BY DANN 2026-10-01 02:37: option 2, "with qualifications".** Ilya adopts the convention MuseScore, Dorico, and Sibelius share (rit., rall., allarg. to 75 % of the starting tempo; accel., stringendo to about 133 %; linear; held until a tempo) as a labelled default, and shows phonation time as a range. Research and the desk's two options: `../sessions/memo-overnight-A10-A15_r1_2026-10-01.md` §A10. Who offered: the desk. His qualifications (capture tempo and dynamics from scans, graft from the piano, singer edits) were critiqued the same night; see the chat of 02:40 and whatever he rules next.
 >
 > **N.122, the capture surface as a landmark.** Dann, 2026-09-10: the
 > lavender vowel-intake surface (the capture phase with the fry guide,
@@ -2701,3 +2702,28 @@ A read-only Sonnet sweep read about 43 of the project's 374 documents (`claude/*
 **RULED BY DANN 2026-10-01 01:21:** *"I will happily narrate both the English and the French videos as long as I can depend on your help for the logistical stuff (accurate translation and register, coordinating with YouTube and that excellent links to a short address on Ilya's own domain, such as `ilya.dannmitton.com/video/calibrate`, which forwards to whichever video is current."* So: **Dann narrates both languages. The desk owns** the French translation and register of every script (drafted for his ruling, per `CONTRACT.md` §4), the YouTube logistics (titles, descriptions, caption files EN and FR, playlists), and the forwarding links. Who offered the forwarding links: the desk (01:16). Who ruled them in: Dann. The links are built by Code, as redirects on Ilya's own domain.
 
 **Desk proposal, 01:20, NOT RULED:** one Playwright script per task produces the clip AND the Guide's full-resolution stills at named steps, in both languages, rather than stills cut from compressed video. `ARCHITECTURE.md` (222 lines, a codemap and invariants) supplies how Ilya works; what singers want to see comes from `PRODUCT.md` and N.170's outside eyes, not from the codemap.
+
+## N.120, N.177, N.178: TEMPO AND DYNAMICS ON THE PAGE. Ruled by Dann 2026-10-01 02:37 to 02:39
+
+**His proposal, 02:37:** *"expand Ilya's OCR/OMR capabilities to capture tempo markings and dynamics in a score, whether they appear attached to the vocal line, or when they aren't, carrying them up and grafting them from the piano staves to the vocal score. It is unlikely that Ilya will be able to do this with 100% fidelity, so the user needs to be able to go in and correct or edit or simply attach their own dynamics and tempo markings to their taste and ability. By attaching these marks to the vocal line, Ilya will have a way to gauge playback speed and commensurately adjust estimates of phonation time."*
+
+**The desk's critique, ruled in by Dann 02:39** (*"Your feedback seems reasonable so I think this is ready for a brief when the time comes. Yes, number this accordingly."*). Who offered the refinements: the desk. Who ruled: Dann.
+1. Three steps, in dependency order: **N.120** (the Tempo station, already numbered) with the shared gradual-tempo convention shown as a range, fed from MusicXML and the singer; **N.177**, a dynamics layer the singer can add and edit, plus dynamics read from MusicXML (`musicxml-parser.ts:1002-1004` skips them today); **N.178**, reading tempo words and dynamics from scans, as research measured on real pages. The page reader reads neither today (`apps/web/static/reader/`: clef, key, time signature, metre, beams, rests only).
+2. **Tempo grafts from any staff automatically**; it belongs to the whole system. **A piano dynamic arrives only as a suggestion, marked "from the piano"**, for the singer to accept or dismiss, because piano and voice dynamics often differ on purpose. A default with its condition, per tether 19: a piano dynamic may graft silently only if Dann rules a case in.
+3. **The marks live in their own layer, positioned by measure and beat, and are drawn over the vocal line.** Tempo changes happen in piano interludes too, and `VocalLineEvent` does not change (`CONTRACT.md` §6).
+4. Tempo feeds phonation time and the cycle dose; dynamics feed Insights' forecasts and advice (the frame of 2026-09-23 16:24). Each is tested on its own.
+
+## THE STAND-IN VOWEL VALUES. Ruled by Dann 2026-10-01 02:56
+
+**His words:** *"ok I rule in this design, with the voice-type mapping, as the method for the stand-in values."* Who offered the design: the desk, building on Dann's idea (02:51) that a singer's vowels ordered close to open trace an fR1 arc and a descending fR2 diagonal, with velar-i the exception (his dissertation; NOT READ by the desk). Who ruled: Dann. **Amends** his ruling of 2026-09-16 that a declared voice type plays no part in choosing values: the voice type now chooses the starting staff.
+
+**The method:**
+1. **Template:** the Bozeman staff for the singer's voice type, from *Practical Vocal Acoustics* (2013), "Approximate First Formant Locations", five staves (kenbozeman.com/formant-location.php; image read by the desk 2026-10-01, copy in `~/Downloads/bozeman-1st-formant-locations.jpg`). Mapping: Soprano → Soprano; Mezzo-soprano and Contralto → Mezzo Soprano; Tenor and Countertenor → Tenor (countertenor by the tract: DESK INFERENCE, flagged); Baritone → Baritone; Bass → Bass; Not sure → the middle of all five.
+2. **One or two sung vowels:** slide the whole template by the singer's mean log offset (uniform scaling; Anikin, Barreda & Reby 2024, *Behavior Research Methods* 56(6): 5588-5604, read by the desk 2026-10-01).
+3. **Three or more vowels spread across the arc:** also fit the arc's height and the diagonal's slope. The desk's extension, labelled as one that shows its steps.
+4. A sung value is never changed. Every stand-in is flagged with the step that made it.
+5. A sung vowel far off the shape prompts a retake rather than bending the template.
+6. Velar-i, [ɪ], and [ʌ] keep the existing derivations (`derivations.ts`), pending the desk's reading of the dissertation on velar-i.
+
+**Corrections the desk owes before the brief:** Ilya merges tenor and mezzo (`plausibility.ts:61`) and cites its baritone to a website PDF (`:89`); the 2013 page has separate Mezzo and Tenor staves and a printed baritone. Read both staves note by note against the 2021 figure before splitting. Henrich, Smith & Wolfe 2011 figures were seen through a fetch summary only, NOT READ in the article.
+
