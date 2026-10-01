@@ -2727,7 +2727,7 @@ A read-only Sonnet sweep read about 43 of the project's 374 documents (`claude/*
 
 **Corrections the desk owes before the brief:** Ilya merges tenor and mezzo (`plausibility.ts:61`) and cites its baritone to a website PDF (`:89`); the 2013 page has separate Mezzo and Tenor staves and a printed baritone. Read both staves note by note against the 2021 figure before splitting. Henrich, Smith & Wolfe 2011 figures were seen through a fetch summary only, NOT READ in the article.
 
-## N.180, LYRICS FROM A SCANNED SCORE. Numbered by Dann 2026-10-01 03:21
+## N.135, ADDENDUM 2026-10-01 (was N.180, struck 14:20 as a duplicate; the desk numbered it without searching the tracker)
 
 **What is true today, read by the desk 2026-10-01:** a score file that carries words fills the poem box and seats them (`+page.svelte:3259`); a scanned or photographed SCORE yields notes only, and Ilya says so (`upload.banner.reader`, `i18n.ts:917`; `upload.banner.noLyrics`, `+page.svelte:4464`); a page with no staves is read as a poem by OCR (`ScoreUploader.svelte:290`, `:405`; the guard in `ingestion/ocr-guard.ts`).
 

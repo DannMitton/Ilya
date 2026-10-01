@@ -55,7 +55,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **Overnight:** all 22 A items worked; verdicts in `../sessions/inbox-curated_r1_2026-10-01.md`; four new briefs, `QUEUE.md` rows 10 to 13. **All seven questions ANSWERED by Dann 2026-10-01 02:33 to 03:02:** stem French ratified (row 10); gradual tempo option 2, plus N.177 dynamics and N.178 scan reading (`OPEN.md`); N.179 place by scope, French ratified (row 14); the stand-in vowel method with the five-staff mapping (`OPEN.md`, THE STAND-IN VOWEL VALUES; its brief is the desk's to write after reading the staves and the dissertation on velar-i); italics (row 15, `PRODUCT.md`); newcomer docs (row 16); « friture vocale » (`PRODUCT.md`, row 15). **Nothing is owed by Dann.** The stand-in brief and N.84's French are the desk's next work.
 >
-> **After 03:00:** stand-in vowel brief written (`QUEUE.md` row 17, after row 12), citing Mitton 2020 pp. 81-83 read from Dann's photographs; Insights and Markup Guide French RATIFIED (`../sessions/draft-guide-insights-and-markup_r1_2026-10-01.md`); « l'oreille avertie » ratified (`PRODUCT.md`); N.180 numbered. **Waiting for Dann:** his ruling on the walkthrough French, sections 1 to 4 (in `../sessions/draft-guide-walkthrough_r1_2026-10-01.md`, last section); his choice of the public-domain song (five offered 01:20). **Committed through `900b8f4`; everything after it is uncommitted.**
+> **After 03:00:** stand-in vowel brief written (`QUEUE.md` row 17, after row 12), citing Mitton 2020 pp. 81-83 read from Dann's photographs; Insights and Markup Guide French RATIFIED (`../sessions/draft-guide-insights-and-markup_r1_2026-10-01.md`); « l'oreille avertie » ratified (`PRODUCT.md`); N.180 numbered, then struck 14:20 as a duplicate of N.135. **Waiting for Dann:** his ruling on the walkthrough French, sections 1 to 4 (in `../sessions/draft-guide-walkthrough_r1_2026-10-01.md`, last section); his choice of the public-domain song (five offered 01:20). **Committed through `900b8f4`; everything after it is uncommitted.**
 
 > ### CLOSE OF 2026-10-01, about 00:15. READ THIS FIRST, THEN `QUEUE.md`.
 >
@@ -91,7 +91,7 @@ does not repeat them.
 
 ### Numbered 2026-10-01
 
-- `[ ]` **N.180. Reading the lyrics from a scanned or photographed score page.** Numbered by Dann 2026-10-01 03:21. A research item beside N.178. Spec in `OPEN.md`.
+- ~~**N.180.**~~ **STRUCK 2026-10-01 14:20 as a DUPLICATE of N.135** ("The page reader reads the text underlay", ruled by Dann 2026-09-14). The desk numbered it at 03:21 without searching the tracker (tether 16). Its notes now sit under N.135 in `OPEN.md`.
 - `[ ]` **N.179. Clear placements by scope, and place from here (after Finale).** Ruled ready for a brief by Dann 2026-10-01 02:43; DESK DEFAULT number. `QUEUE.md` row 14.
 - `[ ]` **N.177. Dynamics: a layer the singer can add and edit, and dynamics read from MusicXML.** Numbered by Dann 2026-10-01 02:39. After N.120. Spec in `OPEN.md`.
 - `[ ]` **N.178. Reading tempo words and dynamics from scans and photographs.** Numbered by Dann 2026-10-01 02:39. A research item, measured on real pages before any accuracy is promised. After N.177. Spec in `OPEN.md`.

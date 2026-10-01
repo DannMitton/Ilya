@@ -1,0 +1,405 @@
+<svg viewBox="0 0 1400 2260" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mapTitle mapDesc" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYToyMDk1MThhZS02NzEyLTRlNzAtYjRkMi1jZTIzMWMxOGRiMjQAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaD23NKg2ippHoge8kYD/ZAQAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDphOWJhM2JlOS04YmY4LTRkYmMtYTk5My03NzNhOTQ1Y2RjOWVscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoMpg3nlh2BnhZHWKZwoiTWgAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFgg4i1uClcZE9LBiaV3twE3P46tor9JoZYKiJDUEjzTThikZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaGQxWFfX5bn5Uda7YvZRwBUAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCCWvxDTNmlXG1Qan/SmAFudBxQLlgufhwBVcpDDwnnfCWRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBitZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjIwOTUxOGFlLTY3MTItNGU3MC1iNGQyLWNlMjMxYzE4ZGIyNC9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjhmNjIxZDY3LWMzNzEtNGI0OS04MGFmLTNlZGQ5MTljNjJmOHJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCDiLW4KVxkT0sGJpXe3ATc/jq2iv0mhlgqIkNQSPNNOGKJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFgg0JW8ZVe/buKb7Gi/TJqPkqH6ax/A5xWMwaoG0mw/Ud+iY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggjbrY2dY6rjXHElK3CCxzshHTYvLEPCdxxBCXvPxKLRV0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQMhdLrrj04czRCMwGfBiqtP/PX7SLITV8XwxVvMwJ2IB/opW0FHBDZeQMdBxPLXq5fYetzo2+zFeqOCmsktTzcE=</c2pa:manifest></metadata>
+  <title id="mapTitle">Ilya project map, 1 October 2026, revision 8</title>
+  <desc id="mapDesc">A whole-project map of Ilya at 1 October 2026, replacing revision 7 of 10 August. It carries the ratified release sentence, then nine zones: what a singer opens, getting a piece in, the voice, Markup, Insights, the Guide and outreach, the French, open defects, and Code's queue. Then the schedule to the release target and what is out or later. Outline rather than colour carries status, so the map survives greyscale.</desc>
+
+  <style>
+    .t    { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--text-primary, #1a1a18); }
+    .h1   { font-size: 19px; font-weight: 650; }
+    .band { font-size: 11px; font-weight: 650; letter-spacing: 0.09em; text-transform: uppercase; fill: var(--text-tertiary, #8a8a82); }
+    .nm   { font-size: 14px; font-weight: 620; }
+    .nmS  { font-size: 12.5px; font-weight: 650; }
+    .sub  { font-size: 11.5px; fill: var(--text-secondary, #6b6b63); }
+    .met  { font-size: 10.5px; fill: var(--text-tertiary, #8a8a82); font-variant-numeric: tabular-nums; }
+    .gate { font-size: 10px; fill: var(--text-primary, #1a1a18); font-variant-numeric: tabular-nums; }
+    .gateD{ font-size: 10px; fill: var(--text-tertiary, #8a8a82); font-variant-numeric: tabular-nums; }
+    .cap  { font-size: 12px; fill: var(--text-secondary, #6b6b63); }
+    .goal { font-size: 13px; fill: var(--text-primary, #1a1a18); }
+    .ship { fill: var(--bg-secondary, #f3f2ee); stroke: var(--border-default, #d9d7cf); stroke-width: 1; }
+    .open { fill: none; stroke: var(--text-primary, #1a1a18); stroke-width: 2; }
+    .built{ fill: none; stroke: var(--text-primary, #1a1a18); stroke-width: 2; }
+    .bIn  { fill: none; stroke: var(--text-primary, #1a1a18); stroke-width: 0.75; }
+    .plan { fill: none; stroke: var(--border-default, #c9c7bf); stroke-width: 1.25; stroke-dasharray: 5 4; }
+    .cut  { fill: none; stroke: var(--text-tertiary, #8a8a82); stroke-width: 1.25; stroke-dasharray: 1.5 3; }
+    .planT{ fill: var(--text-tertiary, #8a8a82); }
+    .rule { stroke: var(--border-default, #e4e2da); stroke-width: 1; }
+  </style>
+
+  <text class="t h1"  x="40" y="34">Ilya</text>
+  <text class="t cap" x="82" y="34">project map, 1 October 2026, REVISION 8. Replaces revision 7 of 10 August. Branch Shane. Last ship 14e4cb5; desk records at 57f76ec.</text>
+
+  <!-- LEGEND -->
+  <rect class="ship"  x="40"  y="50" width="34" height="14" rx="3"/><text class="t met" x="80"  y="61">shipped and walked</text>
+  <rect class="built" x="200" y="50" width="34" height="14" rx="3"/><rect class="bIn" x="203" y="53" width="28" height="8" rx="2"/><text class="t met" x="240" y="61">shipped, not yet walked by Dann</text>
+  <rect class="open"  x="420" y="50" width="34" height="14" rx="3"/><text class="t met" x="460" y="61">open work</text>
+  <rect class="plan"  x="560" y="50" width="34" height="14" rx="3"/><text class="t met" x="600" y="61">numbered, not started</text>
+  <rect class="cut"   x="760" y="50" width="34" height="14" rx="3"/><text class="t met" x="800" y="61">out, or after the release</text>
+
+  <!-- GOAL -->
+  <text class="t band" x="40" y="96">What the release says it does &#183; the release sentence, ratified by Dann 13 September</text>
+  <line class="rule" x1="40" y1="106" x2="1360" y2="106"/>
+  <rect class="open" x="40" y="118" width="1320" height="92" rx="4"/>
+  <text class="t goal" x="64" y="146">&#8220;Ilya takes your text, your score, and your voice, and gives you three supports on the page: a formatted IPA transcription, a reading of where the piece</text>
+  <text class="t goal" x="64" y="168">will sit well for you and where it will not, and insights to help you decide whether to sing it.&#8221;</text>
+  <text class="t met"  x="64" y="192">Release target Friday 30 October, A TARGET, NOT A WALL (Dann, 26 September). Quality over speed: the date never sizes the work (CONTRACT, posture 6). The beta keeps PDF and photograph. MIDI IS OUT, ruled 1 October.</text>
+
+  <!-- ZONE 1 -->
+  <text class="t band" x="40" y="246">1 &#183; What a singer opens &#183; five tabs, three drawer bands (i18n.ts:104-119; Drawer.svelte:516-553)</text>
+  <line class="rule" x1="40" y1="256" x2="1360" y2="256"/>
+
+  <rect class="ship" x="40"   y="270" width="248" height="76" rx="4"/>
+  <text class="t nm"  x="56"  y="294">Text &#183; Texte</text>
+  <text class="t sub" x="56"  y="312">Russian to Grayson-faithful IPA</text>
+  <text class="t met" x="56"  y="330">Transcribes on paste; no button any more</text>
+
+  <rect class="ship" x="308"  y="270" width="248" height="76" rx="4"/>
+  <text class="t nm"  x="324" y="294">Markup &#183; Annotation</text>
+  <text class="t sub" x="324" y="312">The score, with the voice drawn on it</text>
+  <text class="t met" x="324" y="330">Was Fit until N.174. Zone 4</text>
+
+  <rect class="ship" x="576"  y="270" width="248" height="76" rx="4"/>
+  <text class="t nm"  x="592" y="294">Insights &#183; Aper&#231;us</text>
+  <text class="t sub" x="592" y="312">How the piece meets the voice</text>
+  <text class="t met" x="592" y="330">Zone 5</text>
+
+  <rect class="ship" x="844"  y="270" width="248" height="76" rx="4"/>
+  <text class="t nm"  x="860" y="294">Learn &#183; Le&#231;ons</text>
+  <text class="t sub" x="860" y="312">A course in Russian lyric diction</text>
+  <text class="t met" x="860" y="330">N.116: Learn as the book</text>
+
+  <rect class="open" x="1112" y="270" width="248" height="76" rx="4"/>
+  <text class="t nm"  x="1128" y="294">Guide</text>
+  <text class="t sub" x="1128" y="312">Still describes an older interface</text>
+  <text class="t met" x="1128" y="330">N.84 under way. Zone 6</text>
+
+  <text class="t cap" x="40" y="368">THE DRAWER: Piece (name, repertoire, export and import) &#183; Input (one field for poem and score; Notation; Analysis) &#183; Voice (calibration). On a narrow screen, a Drawer/Paper pull.</text>
+  <text class="t cap" x="40" y="386">The Analysis station starts closed and a word click does not open it (memo-n84-path-map &#167;4b). HELD, not raised: a tether-22 candidate.</text>
+
+  <!-- ZONE 2 -->
+  <text class="t band" x="40" y="422">2 &#183; Getting a piece in &#183; one Input field takes everything (IntakePanel.svelte; ScoreUploader.svelte)</text>
+  <line class="rule" x1="40" y1="432" x2="1360" y2="432"/>
+
+  <rect class="ship" x="40"   y="446" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="56"  y="470">Score files</text>
+  <text class="t sub" x="56"  y="488">MusicXML, MNX, Finale .musx</text>
+  <text class="t met" x="56"  y="507">Words in the file fill the poem box and seat</text>
+  <text class="t met" x="56"  y="522">themselves (+page.svelte:3259). .mscz: NOT</text>
+  <text class="t met" x="56"  y="537">ESTABLISHED which path a real file takes</text>
+
+  <rect class="ship" x="375"  y="446" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="391" y="470">PDF and photograph</text>
+  <text class="t sub" x="391" y="488">The page reader reads NOTES only</text>
+  <text class="t met" x="391" y="507">Clef and key confirmed by the singer first</text>
+  <text class="t met" x="391" y="522">Camera button on touch devices (14e4cb5)</text>
+  <text class="t met" x="391" y="537">HEIC and curved pages: LATER, by ruling</text>
+
+  <rect class="ship" x="710"  y="446" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="726" y="470">The poem</text>
+  <text class="t sub" x="726" y="488">Typed, pasted, or a photographed page</text>
+  <text class="t met" x="726" y="507">A page with no staves is read by OCR</text>
+  <text class="t met" x="726" y="522">(ScoreUploader.svelte:290, :405)</text>
+  <text class="t met" x="726" y="537">Syllables seat one per note, automatically</text>
+
+  <rect class="open" x="1045" y="446" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="1061" y="470">The loupe</text>
+  <text class="t sub" x="1061" y="488">Syllables and Corrections, on Markup</text>
+  <text class="t met" x="1061" y="507">QUEUE rows 5, 6, 8: last slices, fixed panel,</text>
+  <text class="t met" x="1061" y="522">tween, tie taper, zoom. Row 14 (N.179):</text>
+  <text class="t met" x="1061" y="537">clear by scope, place from here, after Finale</text>
+
+  <rect class="plan" x="40"   y="556" width="650" height="44" rx="4"/>
+  <text class="t nmS planT" x="56" y="575">N.135 &#183; lyrics from a scanned score &#183; N.178 &#183; tempo words and dynamics from scans</text>
+  <text class="t met planT" x="56" y="592">Research, measured on real pages before any accuracy is promised. N.180 duplicated N.135: struck.</text>
+
+  <rect class="plan" x="710"  y="556" width="650" height="44" rx="4"/>
+  <text class="t nmS planT" x="726" y="575">N.120 &#183; the Tempo station &#183; N.177 &#183; a dynamics layer the singer edits</text>
+  <text class="t met planT" x="726" y="592">Marks live in their own layer by measure and beat. Tempo grafts from the piano; piano dynamics arrive as suggestions.</text>
+
+  <!-- ZONE 3 -->
+  <text class="t band" x="40" y="636">3 &#183; The voice &#183; calibration by vocal fry, Mitton 2020 Table 5.3 and Bozeman 2013 behind it</text>
+  <line class="rule" x1="40" y1="646" x2="1360" y2="646"/>
+
+  <rect class="built" x="40"  y="660" width="315" height="96" rx="4"/>
+  <rect class="bIn"   x="45"  y="665" width="305" height="86" rx="3"/>
+  <text class="t nm"  x="58"  y="684">Calibration</text>
+  <text class="t sub" x="58"  y="702">Voice type first; sing, stop, then fry</text>
+  <text class="t met" x="58"  y="721">Shipped 14e4cb5. Dann's sing-first walk is his,</text>
+  <text class="t met" x="58"  y="736">when he wants it; he asked for space from it</text>
+
+  <rect class="open" x="375"  y="660" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="391" y="684">The plausibility guard</text>
+  <text class="t sub" x="391" y="702">Judges a reading at capture only</text>
+  <text class="t met" x="391" y="721">An old unjudged reading can anchor others</text>
+  <text class="t met" x="391" y="736">(plausibility.ts:275-277). QUEUE row 11</text>
+
+  <rect class="open" x="710"  y="660" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="726" y="684">No vowel left blank</text>
+  <text class="t sub" x="726" y="702">Ruled 16 Sept; method ruled 1 Oct</text>
+  <text class="t met" x="726" y="721">Bozeman's staff by voice type, slid and fitted</text>
+  <text class="t met" x="726" y="736">to the singer. QUEUE rows 12, then 17</text>
+
+  <rect class="ship" x="1045" y="660" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="1061" y="684">The shape, confirmed</text>
+  <text class="t sub" x="1061" y="702">fR1 arcs, fR2 descends, close to open</text>
+  <text class="t met" x="1061" y="721">Read in Mitton 2020 pp. 81-83. Velar-i breaks</text>
+  <text class="t met" x="1061" y="736">the fR2 line; it keeps its own derivation</text>
+
+  <!-- ZONE 4 -->
+  <text class="t band" x="40" y="792">4 &#183; Markup &#183; the analysed score (staff-renderer.ts)</text>
+  <line class="rule" x1="40" y1="802" x2="1360" y2="802"/>
+
+  <rect class="ship" x="40"   y="816" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="56"  y="840">The marks</text>
+  <text class="t sub" x="56"  y="858">Stems carry timbre (:1584)</text>
+  <text class="t met" x="56"  y="877">Up close, down open; lavender turning heads</text>
+  <text class="t met" x="56"  y="890">red crossing squircles; the # break</text>
+
+  <rect class="open" x="375"  y="816" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="391" y="840">N.176 &#183; the stem legend</text>
+  <text class="t sub" x="391" y="858">From Dann's Appendix B</text>
+  <text class="t met" x="391" y="877">French ratified 1 Oct. QUEUE row 10, READY</text>
+  <text class="t met" x="391" y="890">Turning heads, squircles, #: still unexplained</text>
+
+  <rect class="ship" x="710"  y="816" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="726" y="840">N.94 &#183; another key</text>
+  <text class="t sub" x="726" y="858">The transposition control</text>
+  <text class="t met" x="726" y="877">Parts 1 and 2 walked by Dann (de31e22,</text>
+  <text class="t met" x="726" y="890">3ab034b): &#8220;I love it&#8221;, &#8220;lovely&#8221;</text>
+
+  <rect class="open" x="1045" y="816" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="1061" y="840">N.141 &#183; N.162</text>
+  <text class="t sub" x="1061" y="858">Squircle grammar; caret against note</text>
+  <text class="t met" x="1061" y="877">Squircle across ties and breaks still open</text>
+  <text class="t met" x="1061" y="890">A caret sits 15.6 to 21.4 px from a note</text>
+
+  <!-- ZONE 5 -->
+  <text class="t band" x="40" y="932">5 &#183; Insights &#183; what Insights is for, ruled by Dann 23 September; Reid's triad of pitch, vowel, and dynamic</text>
+  <line class="rule" x1="40" y1="942" x2="1360" y2="942"/>
+
+  <rect class="built" x="40"  y="956" width="315" height="96" rx="4"/>
+  <rect class="bIn"   x="45"  y="961" width="305" height="86" rx="3"/>
+  <text class="t nm"  x="58"  y="980">Page 1</text>
+  <text class="t sub" x="58"  y="998">Phonation, compatibility, what is flagged</text>
+  <text class="t met" x="58"  y="1017">N.123 part 2 (bracket, cycle dose) shipped</text>
+  <text class="t met" x="58"  y="1032">14e4cb5; desk-walked, not by Dann</text>
+
+  <rect class="built" x="375" y="956" width="315" height="96" rx="4"/>
+  <rect class="bIn"   x="380" y="961" width="305" height="86" rx="3"/>
+  <text class="t nm"  x="393" y="980">N.168 &#183; N.172</text>
+  <text class="t sub" x="393" y="998">Comments; the experience question</text>
+  <text class="t met" x="393" y="1017">First slice shipped de802cd, 25 Sept,</text>
+  <text class="t met" x="393" y="1032">never walked by Dann. Templates next</text>
+
+  <rect class="open" x="710"  y="956" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="726" y="980">N.173 &#183; N.164 &#183; QUEUE row 7</text>
+  <text class="t sub" x="726" y="998">Curation rules; two claims that clash</text>
+  <text class="t met" x="726" y="1017">N.173 a living draft by Dann's choice.</text>
+  <text class="t met" x="726" y="1032">Row 7: Insights uses the gates, READY</text>
+
+  <rect class="open" x="1045" y="956" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="1061" y="980">Gradual tempo</text>
+  <text class="t sub" x="1061" y="998">Ruled 1 Oct: the shared convention</text>
+  <text class="t met" x="1061" y="1017">rit. to 75%, accel. to 133%, shown as a</text>
+  <text class="t met" x="1061" y="1032">range. Lives in N.120's Tempo station</text>
+
+  <!-- ZONE 6 -->
+  <text class="t band" x="40" y="1088">6 &#183; The Guide and the world outside &#183; N.84 started 1 October, three weeks early</text>
+  <line class="rule" x1="40" y1="1098" x2="1360" y2="1098"/>
+
+  <rect class="open" x="40"   y="1112" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="56"  y="1136">N.84 &#183; the Guide</text>
+  <text class="t sub" x="56"  y="1154">Four English drafts written</text>
+  <text class="t met" x="56"  y="1173">Insights and Markup French RATIFIED.</text>
+  <text class="t met" x="56"  y="1188">Walkthrough French 1-4 waits for Dann</text>
+
+  <rect class="open" x="375"  y="1112" width="315" height="96" rx="4"/>
+  <text class="t nm"  x="391" y="1136">The example song</text>
+  <text class="t sub" x="391" y="1154">Must be public domain everywhere</text>
+  <text class="t met" x="391" y="1173">Sunless 1's Lamm scan may not clear the US</text>
+  <text class="t met" x="391" y="1188">until 2027. Dann chooses from five</text>
+
+  <rect class="plan" x="710"  y="1112" width="315" height="96" rx="4"/>
+  <text class="t nm planT"  x="726" y="1136">N.175 &#183; video walkthroughs</text>
+  <text class="t sub planT" x="726" y="1154">EN and FR, narrated by Dann</text>
+  <text class="t met planT" x="726" y="1173">YouTube, behind forwarding links on Ilya's</text>
+  <text class="t met planT" x="726" y="1188">domain. Needs the interface final</text>
+
+  <rect class="plan" x="1045" y="1112" width="315" height="96" rx="4"/>
+  <text class="t nm planT"  x="1061" y="1136">N.170 &#183; outside eyes</text>
+  <text class="t sub planT" x="1061" y="1154">Singers and reviewers</text>
+  <text class="t met planT" x="1061" y="1173">Steps 1-2 week 5, 3-4 week 6. Dann chose</text>
+  <text class="t met planT" x="1061" y="1188">to wait until Ilya has taken shape</text>
+
+  <!-- ZONE 7 -->
+  <text class="t band" x="40" y="1244">7 &#183; Both languages, start to finish &#183; the French is drafted by the desk and ruled by Dann</text>
+  <line class="rule" x1="40" y1="1254" x2="1360" y2="1254"/>
+
+  <rect class="ship" x="40"   y="1268" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="56"  y="1292">Spacing and references</text>
+  <text class="t sub" x="56"  y="1310">The OQLF table, with a drift test</text>
+  <text class="t met" x="56"  y="1329">Shipped 14e4cb5 (rows 2g, 2i)</text>
+
+  <rect class="open" x="375"  y="1268" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="391" y="1292">Italics and &#171;&#160;friture&#160;&#187;</text>
+  <text class="t sub" x="391" y="1310">Roberge for Italian terms, else OQLF</text>
+  <text class="t met" x="391" y="1329">Ruled 1 Oct. QUEUE row 15, READY</text>
+
+  <rect class="ship" x="710"  y="1268" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="726" y="1292">Words settled 1 October</text>
+  <text class="t sub" x="726" y="1310">&#171;&#160;l'oreille avertie&#160;&#187; &#183; &#171;&#160;hampe&#160;&#187;</text>
+  <text class="t met" x="726" y="1329">&#171;&#160;friture vocale&#160;&#187;, never &#171;&#160;fry&#160;&#187;</text>
+
+  <rect class="open" x="1045" y="1268" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="1061" y="1292">N.167</text>
+  <text class="t sub" x="1061" y="1310">The reader's wait may stay English</text>
+  <text class="t met" x="1061" y="1329">Whether Dann ever sees it: NOT ESTABLISHED</text>
+
+  <!-- ZONE 8 -->
+  <text class="t band" x="40" y="1384">8 &#183; Open defects that a singer can meet</text>
+  <line class="rule" x1="40" y1="1394" x2="1360" y2="1394"/>
+
+  <rect class="open" x="40"   y="1408" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="56"  y="1432">N.166 &#183; the minute on reload</text>
+  <text class="t sub" x="56"  y="1450">A stored scan is read again</text>
+  <text class="t met" x="56"  y="1469">61.3 s for one page. Row 13 measures why</text>
+
+  <rect class="open" x="375"  y="1408" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="391" y="1432">N.163 &#183; a word not on the page</text>
+  <text class="t sub" x="391" y="1450">OCR read &#171;&#160;&#1058;&#1086;&#160;&#187; as &#171;&#160;&#1043;&#1086;&#160;&#187;</text>
+  <text class="t met" x="391" y="1469">A false word with a confident gloss</text>
+
+  <rect class="open" x="710"  y="1408" width="315" height="80" rx="4"/>
+  <text class="t nm"  x="726" y="1432">N.157 &#183; N.156</text>
+  <text class="t sub" x="726" y="1450">A new score keeps old seats</text>
+  <text class="t met" x="726" y="1469">And the Sunless 01 fixture lacks its end</text>
+
+  <rect class="cut" x="1045" y="1408" width="315" height="80" rx="4"/>
+  <text class="t nm planT"  x="1061" y="1432">N.160 steps 4 and 5</text>
+  <text class="t sub planT" x="1061" y="1450">The work and its two views</text>
+  <text class="t met planT" x="1061" y="1469">Steps 1-3 walked; 4-5 after 30 October</text>
+
+  <!-- ZONE 9: Code's queue -->
+  <text class="t band" x="40" y="1524">9 &#183; Code's queue &#183; QUEUE.md, the run in order &#183; every brief that has not shipped</text>
+  <line class="rule" x1="40" y1="1534" x2="1360" y2="1534"/>
+
+  <rect class="open" x="40" y="1548" width="650" height="226" rx="4"/>
+  <text class="t nmS" x="56" y="1570">Ready, or ready once Dann reads the brief</text>
+  <text class="t gate" x="56" y="1592">&#9633; 5 &#183; correction station, slices 4 to 6, and cause 1c</text>
+  <text class="t gate" x="56" y="1610">&#9633; 6 &#183; Corrections in a fixed panel (after 5)</text>
+  <text class="t gate" x="56" y="1628">&#9633; 7 &#183; Insights uses the gates</text>
+  <text class="t gate" x="56" y="1646">&#9633; 8 &#183; the loupe remainder &#183; 8c &#183; three citation repairs</text>
+  <text class="t gate" x="56" y="1664">&#9633; 10 &#183; N.176 stem legend &#183; 14 &#183; N.179 place by scope</text>
+  <text class="t gate" x="56" y="1682">&#9633; 11 &#183; the guard judges stored readings</text>
+  <text class="t gate" x="56" y="1700">&#9633; 12 &#183; where each vowel's number came from, then 17 &#183; stand-ins</text>
+  <text class="t gate" x="56" y="1718">&#9633; 13 &#183; N.166, measure the minute (changes nothing)</text>
+  <text class="t gate" x="56" y="1736">&#9633; 15 &#183; French italics and friture &#183; 16 &#183; newcomer documents</text>
+  <text class="t met"  x="56" y="1760">Row 9, voice type slice B: copy ratified, waits for the pooled norms table.</text>
+
+  <rect class="built" x="710" y="1548" width="650" height="226" rx="4"/>
+  <rect class="bIn"   x="715" y="1553" width="640" height="216" rx="3"/>
+  <text class="t nmS" x="728" y="1572">Partly built or written, waiting on a walk</text>
+  <text class="t gate" x="728" y="1594">&#9650; 3 &#183; N.86 dead code: two files removed, _rhythm_spike kept</text>
+  <text class="t gateD" x="728" y="1610">   (live in verify_toolchain.py; the desk owes the ruling)</text>
+  <text class="t gate" x="728" y="1630">&#9650; 4 &#183; the Guide's Sources section: written, 10 publishers OWED</text>
+  <text class="t gate" x="728" y="1650">&#9650; 2b &#183; the [i] extractor: 1063 Hz never explained</text>
+  <text class="t gate" x="728" y="1670">&#9650; 2e &#183; the camera: HEIC or JPEG from an iPhone NOT ESTABLISHED</text>
+  <text class="t gateD" x="728" y="1694">Gates at the last ship: all eight at baseline, gate 4 at 1784 tests.</text>
+  <text class="t gateD" x="728" y="1712">No agent commits. Dann ships with ilya-ship.sh.</text>
+  <text class="t gateD" x="728" y="1730">A brief enters QUEUE.md when written and leaves when shipped.</text>
+  <text class="t gateD" x="728" y="1748">The desk does not build; Code builds on Dann's machine.</text>
+
+  <!-- SCHEDULE -->
+  <text class="t band" x="40" y="1810">The road to 30 October &#183; SCHEDULE.md, ticked 1 October</text>
+  <line class="rule" x1="40" y1="1820" x2="1360" y2="1820"/>
+
+  <rect class="ship" x="40" y="1832" width="175" height="210" rx="4"/>
+  <text class="t nmS" x="54" y="1854">Weeks 1 and 2</text>
+  <text class="t met" x="54" y="1870">17 to 27 Sept</text>
+  <text class="t gateD" x="54" y="1892">&#9632; Closed</text>
+  <text class="t gateD" x="54" y="1908">&#9632; N.146 N.147 N.148-150</text>
+  <text class="t gateD" x="54" y="1924">&#9632; N.153 N.159 N.160 1-3</text>
+  <text class="t gateD" x="54" y="1940">&#9632; N.161 N.129 N.132</text>
+  <text class="t gate"  x="54" y="1962">&#9633; Carried: N.162,</text>
+  <text class="t gate"  x="54" y="1978">  N.141's last step,</text>
+  <text class="t gate"  x="54" y="1994">  two loupe parts (row 8)</text>
+
+  <rect class="ship" x="230" y="1832" width="175" height="210" rx="4"/>
+  <text class="t nmS" x="244" y="1854">Week 3 &#183; now</text>
+  <text class="t met" x="244" y="1870">28 Sept to 4 Oct</text>
+  <text class="t gateD" x="244" y="1892">&#9632; Every line ticked</text>
+  <text class="t gateD" x="244" y="1908">&#9632; Tree audit</text>
+  <text class="t gateD" x="244" y="1924">&#9632; N.171 N.169</text>
+  <text class="t gateD" x="244" y="1940">&#9632; N.127 N.123 part 1</text>
+  <text class="t gateD" x="244" y="1956">&#9632; N.94 part 1</text>
+  <text class="t gateD" x="244" y="1972">&#9632; N.130 N.131</text>
+
+  <rect class="open" x="420" y="1832" width="175" height="210" rx="4"/>
+  <text class="t nmS" x="434" y="1854">Week 4</text>
+  <text class="t met" x="434" y="1870">5 to 11 Oct</text>
+  <text class="t gateD" x="434" y="1892">&#9632; N.94 part 2, N.82</text>
+  <text class="t gate"  x="434" y="1910">&#9650; N.123 part 2, walk</text>
+  <text class="t gate"  x="434" y="1926">&#9650; N.168 slice, walk</text>
+  <text class="t gate"  x="434" y="1942">&#9650; N.172, walk</text>
+  <text class="t gate"  x="434" y="1958">&#9633; comment templates</text>
+  <text class="t gate"  x="434" y="1980">&#9633; Fri 9 Oct checkpoint</text>
+  <text class="t met"   x="434" y="1998">design rows not in Code</text>
+  <text class="t met"   x="434" y="2012">move to LATER</text>
+
+  <rect class="open" x="610" y="1832" width="175" height="210" rx="4"/>
+  <text class="t nmS" x="624" y="1854">Week 5</text>
+  <text class="t met" x="624" y="1870">12 to 18 Oct</text>
+  <text class="t gateD" x="624" y="1892">&#9632; release mechanics</text>
+  <text class="t gateD" x="624" y="1908">&#9632; N.85, N.154</text>
+  <text class="t gate"  x="624" y="1926">&#9633; N.170 steps 1-2</text>
+  <text class="t gate"  x="624" y="1942">&#9633; N.168 French</text>
+  <text class="t gate"  x="624" y="1958">&#9633; N.86 dead code</text>
+  <text class="t gate"  x="624" y="1974">&#9633; desk housekeeping</text>
+  <text class="t met"   x="624" y="1998">Buffer: spent 21 Sept</text>
+
+  <rect class="open" x="800" y="1832" width="175" height="210" rx="4"/>
+  <text class="t nmS" x="814" y="1854">Week 6</text>
+  <text class="t met" x="814" y="1870">19 to 25 Oct</text>
+  <text class="t gate"  x="814" y="1892">&#9650; N.84 STARTED 1 Oct</text>
+  <text class="t gate"  x="814" y="1910">&#9633; N.170 steps 3-4</text>
+  <text class="t gate"  x="814" y="1926">&#9633; format and print walk</text>
+  <text class="t gate"  x="814" y="1942">&#9633; N.175 videos, if the</text>
+  <text class="t gate"  x="814" y="1958">  interface is final</text>
+
+  <rect class="open" x="990" y="1832" width="175" height="210" rx="4"/>
+  <text class="t nmS" x="1004" y="1854">Week 7</text>
+  <text class="t met" x="1004" y="1870">26 to 30 Oct</text>
+  <text class="t gate"  x="1004" y="1892">&#9633; N.83 end-to-end</text>
+  <text class="t gate"  x="1004" y="1908">&#9633; freeze-rule fixes only</text>
+  <text class="t gate"  x="1004" y="1924">&#9633; Thu 29: N.88,</text>
+  <text class="t gate"  x="1004" y="1940">  marketing, optional</text>
+  <text class="t gate"  x="1004" y="1956">&#9633; Fri 30: release</text>
+
+  <rect class="cut" x="1180" y="1832" width="180" height="210" rx="4"/>
+  <text class="t nmS planT" x="1194" y="1854">LATER</text>
+  <text class="t met" x="1194" y="1870">the first list after</text>
+  <text class="t gateD" x="1194" y="1892">curved and HEIC photos</text>
+  <text class="t gateD" x="1194" y="1908">N.124 studio repertoire</text>
+  <text class="t gateD" x="1194" y="1924">N.160 steps 4-5</text>
+  <text class="t gateD" x="1194" y="1940">sibling languages:</text>
+  <text class="t gateD" x="1194" y="1956">  the map exists (A19)</text>
+  <text class="t gateD" x="1194" y="1972">Chinese: undecided</text>
+  <text class="t gateD" x="1194" y="1988">N.152 playback (parked)</text>
+
+  <text class="t cap" x="40" y="2066">THE FREEZE RULE: a new finding joins only if Ilya would otherwise tell a singer something false or lose a singer's work. When work and date disagree, the date moves.</text>
+
+  <!-- OUT -->
+  <text class="t band" x="40" y="2104">Out for good, and what changed since revision 7</text>
+  <line class="rule" x1="40" y1="2114" x2="1360" y2="2114"/>
+
+  <rect class="cut" x="40" y="2126" width="650" height="64" rx="4"/>
+  <text class="t nmS planT" x="56" y="2148">Out</text>
+  <text class="t met" x="56" y="2166">MIDI, ruled out entirely 1 October. Ilya refuses a MIDI file and says what to export instead.</text>
+  <text class="t met" x="56" y="2182">There is no teacher mode: all users are users (Dann, 23 September).</text>
+
+  <rect class="ship" x="710" y="2126" width="650" height="64" rx="4"/>
+  <text class="t nmS" x="726" y="2148">Since revision 7</text>
+  <text class="t met" x="726" y="2166">Fit became Markup and Insights; Transcription became Text; Corrections left the drawer for the loupe;</text>
+  <text class="t met" x="726" y="2182">the Transcribe button went; the voice got its own band; the record moved into docs/memory in the repository.</text>
+
+  <text class="t cap" x="40" y="2220">HOW THIS MAP WAS MADE: from STATE.md, SCHEDULE.md, QUEUE.md, OPEN.md, and PRODUCT.md read on 1 October, the control map memo-n84-path-map_r1_2026-10-01.md, and the overnight memos.</text>
+  <text class="t cap" x="40" y="2238">Every status is the record's, not a fresh walk of the app. Where the record and the tree disagree, the tree wins.</text>
+</svg>
