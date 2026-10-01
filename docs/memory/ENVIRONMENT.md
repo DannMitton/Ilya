@@ -28,6 +28,7 @@ next session the same hour it cost the last one.
 | you sent a file to the Mac and are about to say it is saved | `device_commit_files CAN REPORT SUCCESS` |
 | move a gate number | `Moving a gate baseline` |
 | the ship script refuses to run | `refuses on untracked files` |
+| rendering an SVG to look at it, or fetching kenbozeman.com | `RENDERING AN SVG, AND A SITE WEBFETCH CANNOT REACH` |
 | the desk's own shell dies with exit 144, or you plan to message Code directly | `THE DESK HAS NO LINE TO CODE, AND PKILL KILLS ITS OWN SHELL` |
 | an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
 | a stale `.git/index.lock` blocks Dann's commit | `CHECK-IGNORE TAKES THE INDEX LOCK` |
@@ -4451,4 +4452,14 @@ A desk walk in a Claude in Chrome tab showed Sunless 1's Text page empty while t
 ## WHEN WEBFETCH IS REFUSED, READ IT IN DANN'S CHROME. Learned 2026-09-30
 
 WebFetch refused `pubs.asha.org` (robots), Gale (410), ResearchGate (429), and the English `noslangues-ourlanguages.gc.ca` page (robots). What worked: **the French address `nos-langues.canada.ca/fr/...` through WebFetch**, and **Claude in Chrome**, which reads through Dann's own browser: ResearchGate's page linked the NIH author manuscript on PubMed Central (`pmc.ncbi.nlm.nih.gov/articles/PMC3158591/`), read in full with `get_page_text`. For a 2000s NIH-funded article, try PMC first. Open a new tab, read, close it.
+
+---
+
+## RENDERING AN SVG, AND A SITE WEBFETCH CANNOT REACH
+
+Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
+
+- **cairosvg cannot render the project's SVGs.** They colour through CSS `var(--token, #fallback)`, and cairosvg throws `invalid literal for int() with base 16: 'ar'`. Use Playwright in the cloud workspace instead.
+- **Playwright times out on a raw `.svg` with `full_page=True`** ("waiting for fonts to load", 30 s). Wrap the SVG in an HTML page with an explicit `width`, set the viewport to the drawing's size, and screenshot without `full_page`.
+- **kenbozeman.com loops between http and https**, so WebFetch returns a redirect it cannot follow. `curl -sL` from the device shell reaches it. The "Approximate First Formant Locations" page links a PDF whose embedded scan is 2550 × 3300 px (`pdfimages -j`); read that, not the 924 px page image.
 
