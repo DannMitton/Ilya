@@ -10,7 +10,7 @@ Status: **DRAFT r1, English only, desk 2026-10-01 01:00. Not ratified.** The sha
 
 *Deck line:* One complete session, from a scanned score to a printed sheet.
 
-This walkthrough follows one song from start to finish: "В четырёх стенах" ("Within Four Walls"), the first song of Mussorgsky's cycle *Sunless*, from a scanned PDF of the score. You bring in the score, add the poem, name the piece, read the text word by word, check the notes Ilya read, measure your voice, read what Ilya says about the piece and your voice, and print. If you have only the poem, see "If you have only the poem" at the end.
+This walkthrough follows one song from start to finish: "Средь шумного бала" ("Amid the Din of the Ball"), the third of Tchaikovsky's *Six Romances*, Op. 38, from a scanned PDF of the first edition (Jurgenson, Moscow, 1878). You bring in the score, add the poem, name the piece (or Ilya names it for you), read the text word by word, check the notes Ilya read, measure your voice, read what Ilya says about the piece and your voice, and print. If you have only the poem, see "If you have only the poem" at the end.
 
 ### The interface at a glance
 
@@ -158,7 +158,7 @@ Paste the poem into the Input field and everything in "Adding the poem", "Naming
 
 *Une séance complète, d'une partition numérisée à une feuille imprimée.*
 
-Cette visite suit un chant du début à la fin : « В четырёх стенах » (« Entre quatre murs »), premier chant du cycle *Sans soleil* de Moussorgski, à partir d'un PDF numérisé de la partition. Vous ajoutez la partition, puis le poème; vous nommez la pièce, lisez le texte mot par mot, vérifiez les notes qu'Ilya a lues, mesurez votre voix, lisez ce qu'Ilya dit de la pièce et de votre voix, puis imprimez. Si vous n'avez que le poème, consultez « Si vous n'avez que le poème », à la fin.
+Cette visite suit un chant du début à la fin : « Средь шумного бала » (« Au milieu du bruit d'un bal »), troisième des *Six romances*, op. 38, de Tchaïkovski, à partir d'un PDF numérisé de la première édition (Jurgenson, Moscou, 1878). Vous ajoutez la partition, puis le poème; vous nommez la pièce (sinon Ilya la nommera), lisez le texte mot par mot, vérifiez les notes qu'Ilya a lues, mesurez votre voix, lisez ce qu'Ilya dit de la pièce et de votre voix, puis imprimez. Si vous n'avez que le poème, consultez « Si vous n'avez que le poème », à la fin.
 
 ### L'interface en un coup d'œil
 
@@ -190,4 +190,4 @@ Aucun bouton à toucher : Ilya transcrit le poème dès que vous le collez, et q
 
 Sous le champ, deux reçus confirment ce qu'Ilya détient : l'un pour le **poème**, avec ses lignes et ses mots, l'autre pour la **partition**, avec le nom du fichier. Chacun offre **Remplacer** et **Retirer**.
 
-**Desk's own choices, for Dann:** « pastille de langue », « languette », « reçus », and the song's French titles (the song may change with the public-domain choice). Dann asked 03:20 whether "puis le poème" was correct; the desk confirmed it from the code for a scanned score (`i18n.ts:917`, `+page.svelte:4464`).
+**Desk's own choices, for Dann:** « pastille de langue », « languette », « reçus », and the song's French titles (the song may change with the public-domain choice). **2026-10-01 14:41: the song changed to Tchaikovsky Op. 38 No. 3 (Dann 14:30), Jurgenson 1878 scan saved as ~/Downloads/IMSLP1052590-PMLP44986-Op38_F.pdf; French title « Au milieu du bruit d'un bal » (desk) RATIFIED by Dann 14:41.** **14:50: Dann added « (sinon Ilya la nommera) » after « vous nommez la pièce »; English mirrored by the desk as "(or Ilya names it for you)". Checked true: `songs.ts` proposeName, written once by `backfillName` (`library/index.ts`), via `autoName` (`binder.ts:53`).** Dann asked 03:20 whether "puis le poème" was correct; the desk confirmed it from the code for a scanned score (`i18n.ts:917`, `+page.svelte:4464`).

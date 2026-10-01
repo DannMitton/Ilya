@@ -47,6 +47,12 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### CLOSE OF 2026-10-01, about 15:20. READ THIS FIRST, THEN THE BRIEF IT NAMES.
+>
+> **THE ONE THING: a scan in, a melody out, Russian seated under it. Dann wants it working by end of day 2026-10-01, with Fable at the helm.** Read `../sessions/brief-fable-scan-to-seated-lyrics_r1_2026-10-01.md` in full, **Part 1 first**: it carries the working agreement Dann and the desk reached 14:53 to 14:59 about the behavioural controls. His words: *"Please don't make me go through that again."* N.84's walkthrough French is PAUSED at Dann's word (15:00), not abandoned.
+>
+> **Today, 14:28 to 15:20:** the Guide's example song changed to Tchaikovsky Op. 38 No. 3, Jurgenson 1878 (IMSLP #1052590), saved as `~/Downloads/Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf` (pages 11 to 13 of the set); French title « Au milieu du bruit d'un bal » ratified 14:41; Dann's « (sinon Ilya la nommera) » added to the walkthrough (both in `../sessions/draft-guide-walkthrough_r1_2026-10-01.md`). Read on the alias, the scan came out 4/4 for 3/8, 5 measures, page 3 unread, voice staff guessed (the brief, Part 3). INBOX line added 14:42: multi-song files.
+
 > ### CLOSE OF 2026-10-01, about 03:00 (overnight). READ THIS FIRST, THEN `QUEUE.md`.
 >
 > **THE ONE THING: N.84, the Guide.** Shape ruled by Dann 00:35 and widened 01:02 (`OPEN.md`, "N.84, THE GUIDE REWRITE"). Four English drafts wait for his read: `../sessions/draft-guide-walkthrough_r1_2026-10-01.md`, `-walkthrough-poem_`, `draft-guide-by-situation_`, `draft-guide-insights-and-markup_`. Factual base: `../sessions/memo-n84-path-map_r1_2026-10-01.md`. Next: his read, then French, screenshots, and Code's brief. **Show him drafts rendered in the chat, never as a file to open** (`CONTRACT.md` tether 20, amended 00:55).
