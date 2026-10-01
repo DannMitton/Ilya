@@ -132,7 +132,7 @@ design rows.
 - [ ] **2026-09-25: how a comment speaks is ruled** (`PRODUCT.md`, the sections of 2026-09-25); the templates are next, then Dann's vetting, then this slice.
 - [~] **[AUDIT 2026-09-30 22:40: SHIPPED `de802cd` 2026-09-25, NOT WALKED (LOG 7763)]** **N.168, first slice in Code before the checkpoint**: the vetted passaggio and turning connections only. The dynamics connections wait on the engine and go to LATER. **Placed 2026-09-24, DESK DEFAULT; its size is NOT ESTABLISHED.** **N.94 stays in this week: Dann ruled 2026-09-24 21:08 that the transposition control does not wait for the release.** If the week runs over, this file's own rule applies.
 
-- [ ] **N.123, part 2. SOURCES FOUND AND DESIGN APPROVED 2026-09-30, ahead of the week; briefed as QUEUE row 2h.** Was: the half-mass band, and the centre of gravity and cycle dose if their sources were found. A figure without a source is left out, not guessed.
+- [~] **N.123, part 2. SHIPPED `14e4cb5` 2026-10-01 and desk-walked; NOT WALKED BY DANN.** Sources found and design approved 2026-09-30. Was: the half-mass band, and the centre of gravity and cycle dose if their sources were found. A figure without a source is left out, not guessed.
 - [x] **N.94, part 2**, and its walk (Dann's look 2026-09-29 00:09, "lovely"; shipped `3ab034b`).
 - [x] **N.82** (seated, Dann's look 16:17; shipped `8127e01`): the watch band's sentences move out of code and into both languages; Dann rules the French.
 - [ ] **Friday 2026-10-09, the checkpoint.** Anything design-bound not yet in Code moves to LATER.

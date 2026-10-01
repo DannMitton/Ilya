@@ -8086,3 +8086,21 @@ thread, after the `audit` merge. Only the Correction Station brief waits for it
 > **Owed by Dann (carried from the 12:30 block):** nothing. ("compatibility" or "fit" SETTLED 21:30, QUEUE row 2f; French spacing SETTLED 21:39 to the OQLF table, QUEUE row 2g.) (Slice B's copy struck 2026-09-30 20:30: RATIFIED 12:32, `../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md:40`.)
 >
 > **The 12:30 block and the stale 00:15 block moved verbatim to `../sessions/LOG.md`.**
+
+---
+
+## Block: 2026-09-30 about 23:30, with the 00:00 ship note (moved from `STATE.md` 2026-10-01 00:15, verbatim)
+
+> **SHIPPED `14e4cb5`, 2026-10-01 00:00:** rows 2d to 2l, all eight gates at baseline, gate 4 `1784`. Not walked on the alias. The paragraph below about uncommitted work is now history.
+>
+> ### 2026-09-30, about 23:30. READ THIS FIRST, THEN `QUEUE.md`. SUPERSEDES THE 19:50 BLOCK BELOW (it moves to `../sessions/LOG.md` at the close)
+>
+> **Last ship: `93bc639`, 2026-09-30 21:17** (row 2d parts 1 and 2, row 2e camera glyph, records). Floor unchanged until walked. **Uncommitted in the tree, all reported, gates at baseline, gate 4 `1776`** (ship script moved, backups `.bak-1747`, `.bak-1760`): row 2d parts 2b and 3 (fry detector on medians, all 14 of Dann's takes Captured; sing first, pause, then fry), 2f (Insights heading "compatibility", leap = minor sixth, two wheel strings), 2g (every French string to the OQLF spacing table, drift test), 2h (N.123 part 2: half-mass bracket, centre tick, cycle-dose line), 2i (French references in OQLF notice format). **Twenty-odd new files need `git add` before the ship.**
+>
+> **THE ONE THING NEXT: row 2j** (`QUEUE.md`): Sunless 1's Text page says "Enter your Cyrillic text" while the Input holds the poem; found by the desk's walk 23:24 on `93bc639`. Code diagnoses first, then fixes, and seats « la moitié du temps chanté » (ratified 23:21). Then ship everything together.
+>
+> **Not yet walked by Dann, and not to be pushed on him:** the camera glyph on his iPhone (HEIC or JPEG is NOT ESTABLISHED); the sing-first calibration (he asked for space from it at 19:37 and again at 21:24). **N.168's first slice and N.172 (`de802cd`, 2026-09-25) have never been walked by Dann;** the desk saw one comment render correctly on Sunless 1 at 23:25.
+>
+> **Records work tonight:** stranded rulings homed in `OPEN.md` (§RULINGS HOMED, parts 1 and 2); `../sessions/ledger-rulings-vs-tree_r1_2026-09-30.md`; `OWED.md` (12 items closed in place), `SCHEDULE.md` (5 lines), `README.md` closing step 1b. **Nothing is owed by Dann.** The audit's remaining gaps are named at the end of `OPEN.md` §RULINGS HOMED, part 2.
+>
+> **Ruled tonight, all recorded in `OPEN.md` or `PRODUCT.md`:** camera glyph (20:32, 20:34); sing first, pause, then fry (20:56 to 21:00); "compatibility" heading French (21:30); Canadian French follows the OQLF (21:39; the 2026-09-28 semicolon change was the desk's error); N.123 part 2 design and the always-on cycle dose, caveat struck (21:52 to 22:04); wheel strings (22:16); bracket French (23:21).
