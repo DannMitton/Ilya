@@ -10,6 +10,7 @@
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
 	import { showsRichterIpa } from '$lib/latin';
+	import type { EmptyTextNotice } from '$lib/one-action';
 
 	interface Props {
 		lines: LineData[];
@@ -25,6 +26,8 @@
 		glossOverrides?: Map<string, string>;
 		onwordclick?: (word: WordStackData) => void;
 		onbudgetchange?: (maxRows: number) => void;
+		/** Row 2j: what to say with no lines (`emptyTextNotice`); `enter` when absent. */
+		emptyNotice?: EmptyTextNotice;
 	}
 
 	let {
@@ -41,6 +44,7 @@
 		glossOverrides,
 		onwordclick,
 		onbudgetchange,
+		emptyNotice = 'enter',
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
@@ -166,7 +170,11 @@
 			{/each}
 		{:else}
 			<div class="empty-directive">
-				<p>{isMobile ? t('paper.empty.mobile', language) : t('paper.empty', language)}</p>
+				{#if emptyNotice === 'enter'}
+					<p>{isMobile ? t('paper.empty.mobile', language) : t('paper.empty', language)}</p>
+				{:else if emptyNotice === 'loading'}
+					<p>{t('dict.loading', language)}</p>
+				{/if}
 			</div>
 		{/if}
 	</div>

@@ -47,28 +47,19 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### CLOSE OF 2026-09-30, about 19:50. READ THIS FIRST, THEN `QUEUE.md`.
+> ### 2026-09-30, about 23:30. READ THIS FIRST, THEN `QUEUE.md`. SUPERSEDES THE 19:50 BLOCK BELOW (it moves to `../sessions/LOG.md` at the close)
 >
-> **Last ship: `6d87638`, 2026-09-30 18:45** (voice type slice A, small fixes, the closed-phase [i] extractor and its capture harness), all eight gates at baseline, gate 4 `1732`. Not walked on the alias. **If Dann ran the close-of-session ship below, a later commit carries rows 2c, 3, 4 and these desk files at gate 4 `1747`;** ask him for the state in one line.
+> **Last ship: `93bc639`, 2026-09-30 21:17** (row 2d parts 1 and 2, row 2e camera glyph, records). Floor unchanged until walked. **Uncommitted in the tree, all reported, gates at baseline, gate 4 `1776`** (ship script moved, backups `.bak-1747`, `.bak-1760`): row 2d parts 2b and 3 (fry detector on medians, all 14 of Dann's takes Captured; sing first, pause, then fry), 2f (Insights heading "compatibility", leap = minor sixth, two wheel strings), 2g (every French string to the OQLF spacing table, drift test), 2h (N.123 part 2: half-mass bracket, centre tick, cycle-dose line), 2i (French references in OQLF notice format). **Twenty-odd new files need `git add` before the ship.**
 >
-> **THE ONE THING NEXT: paste row 2d to Code (parts 1 and 2).** Dann walked calibration at 19:32 to 19:36 with `?harness=1`. **His readings are good** ([i] 273/1658 and 241/1807 on the closed phase; [e] 365/1622, [ɛ] 531/1352, [a] 681/1080, [ɑ] 586/999, [o] 425/744, [u] 289/702, [ʌ] 587/1052). **But `guard.ts` stamped 7 of 9 accepted takes Provisional** (`rate_cv` against `T_RATE_CV = 0.25`; `fr1_cv` from the old coarse per-frame estimator), **and 5 first takes were refused `not-fry`.** Dann, 19:37, angry: *"NOT AN ENJOYABLE EXPERIENCE ... We need to work on something else."* **Do not ask Dann to sing again until row 2d parts 1 and 2 are verified on his own 14 capture files in `~/Downloads/ilya-capture-*-2026-09-30T23-3*` (never copied into the repository).** Paste line for Code:
+> **THE ONE THING NEXT: row 2j** (`QUEUE.md`): Sunless 1's Text page says "Enter your Cyrillic text" while the Input holds the poem; found by the desk's walk 23:24 on `93bc639`. Code diagnoses first, then fixes, and seats « la moitié du temps chanté » (ratified 23:21). Then ship everything together.
 >
-> `Read docs/memory/QUEUE.md row 2d and its brief, docs/sessions/brief-code-guard-stamps-good-fry-provisional_r1_2026-09-30.md. Do parts 1 and 2 only; part 3 waits for the desk's strings. Verify on Dann's capture files in ~/Downloads, never copy them into the repository. Report, run the gates, no git writes.`
+> **Not yet walked by Dann, and not to be pushed on him:** the camera glyph on his iPhone (HEIC or JPEG is NOT ESTABLISHED); the sing-first calibration (he asked for space from it at 19:37 and again at 21:24). **N.168's first slice and N.172 (`de802cd`, 2026-09-25) have never been walked by Dann;** the desk saw one comment render correctly on Sunless 1 at 23:25.
 >
-> **The next desk task with taste: row 2d part 3,** the sing-the-vowel-first cue with a countdown (Dann 19:37). The desk drafts the flow and the strings EN and FR; Dann ratifies; then Code builds.
+> **Records work tonight:** stranded rulings homed in `OPEN.md` (§RULINGS HOMED, parts 1 and 2); `../sessions/ledger-rulings-vs-tree_r1_2026-09-30.md`; `OWED.md` (12 items closed in place), `SCHEDULE.md` (5 lines), `README.md` closing step 1b. **Nothing is owed by Dann.** The audit's remaining gaps are named at the end of `OPEN.md` §RULINGS HOMED, part 2.
 >
-> **Extractor, row 2b step 4:** met in substance by the readings above; `tools/i-extractor-check/burg.py` was not run (the bridge has no `scipy`; run it in Code's shell or the container). The 1063 Hz reading was never reproduced.
->
-> **Built by Code, rows 2c, 3, 4** (reports in `../sessions/`): calibration's first moments; 321 lines of dead code removed (`tools/e16-harness/_rhythm_spike/` KEPT, desk call: `verify_toolchain.py` pins two of its files); the Guide's Sources section from `$lib/sources.ts` (14 works, 10 OWED). Gate 4 `1747`; `~/Downloads/ilya-ship.sh` already expects 1747 (backup `.bak-1732-2026-09-30`). **Desk decision 19:50: ship rows 2c, 3, 4 now.** The Provisional labels predate row 2c, and row 5 needs a clean tree.
->
-> **Ratified today, late:** N.174, the Guide essay "Why Ilya listens to your fry", English 19:28 and French 19:45 (`../sessions/draft-guide-fry-essay_r1_2026-09-30.md`), seated by Code under N.84 (`QUEUE.md`). Its drafting rulings are in `OPEN.md` N.174.
->
-> **INBOX:** Dann asked what a Chinese translation of Ilya would take (19:40); the estimate is logged, nothing decided.
->
-> **Owed by Dann (carried from the 12:30 block):** "compatibility" or "fit"; French « ? » spacing. (Slice B's copy struck 2026-09-30 20:30: RATIFIED 12:32, `../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md:40`.)
->
-> **The 12:30 block and the stale 00:15 block moved verbatim to `../sessions/LOG.md`.**
+> **Ruled tonight, all recorded in `OPEN.md` or `PRODUCT.md`:** camera glyph (20:32, 20:34); sing first, pause, then fry (20:56 to 21:00); "compatibility" heading French (21:30); Canadian French follows the OQLF (21:39; the 2026-09-28 semicolon change was the desk's error); N.123 part 2 design and the always-on cycle dose, caveat struck (21:52 to 22:04); wheel strings (22:16); bracket French (23:21).
 
+> ### CLOSE OF 2026-09-30, about 19:50: moved verbatim to `../sessions/LOG.md`, block "close of 2026-09-30, about 19:50", at 2026-10-01 00:05. Its rulings are in `OPEN.md` (N.174; sing first, then fry) and its one thing (row 2d) is built.
 
 > ### CLOSE OF 2026-09-29, about 22:20: moved verbatim to `../sessions/LOG.md`, block "close of 2026-09-29, about 22:20". Its rulings were seated in `PRODUCT.md` that night; its one thing (the Fable distillation) is done.
 
@@ -99,7 +90,7 @@ does not repeat them.
 ### Numbered 2026-09-23
 
 - `[ ]` **N.168. Insights intake: filling the three stores.** **NUMBERED BY DANN 2026-09-23 17:29**, *"we should engage in it ASAP."* The plan is `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md` (seven steps: condition map, frequency run, coverage audit, targeted extraction, composing, Dann's vetting, encoding and tests). It rests on the five Insights principles ratified the same afternoon (`PRODUCT.md`, "What Insights is for" to "How Insights stays trustworthy"). Spec in `OPEN.md`. **2026-09-23 late: steps 1 to 3 done, step 2 shipped `10e090c`, step 4 under way (the READ THIS FIRST block).**
-- `[ ]` **N.170. Outside eyes: refine Ilya with singers and outside reviewers.** **NUMBERED BY DANN 2026-09-24 15:54.** Seven steps, spec in `OPEN.md`; the review packet is step 2. Unscheduled; the desk proposed weeks 3 and 4.
+- `[ ]` **N.170. Outside eyes: refine Ilya with singers and outside reviewers.** **[AUDIT 2026-09-30: placed by Dann 2026-09-24 21:03 in weeks 5 and 6, `SCHEDULE.md`; the "unscheduled, weeks 3 and 4" below is superseded.]** **NUMBERED BY DANN 2026-09-24 15:54.** Seven steps, spec in `OPEN.md`; the review packet is step 2. Unscheduled; the desk proposed weeks 3 and 4.
 
 ### Numbered 2026-09-22
 
@@ -254,7 +245,7 @@ does not repeat them.
   **Belongs in the release cut's IN bucket:** the ruled release sentence names
   Insights, and a document in the wrong language is wrong rather than
   half-built. Spec in `OPEN.md`. **THE DESK DRAFTS THE FRENCH AND DANN RULES ON IT, ruled 2026-09-19**, superseding *"Dann owes the French; nothing is coined"*. His words: *"I prefer to have you suggest translations that I can react to. That saves me cognitive bandwidth."* **So never hand him blank slates.** Draft from the French already in the file, say which entries the glossary came from, flag the choices that are genuinely his, and let him ratify, edit, or decline. **Nothing reaches the tree until he ratifies it**, which is the one clause of the old rule that survives. **BUILT 2026-09-19: all 59 Insights entries are French** (`71ae880`), drafts and rulings in `../sessions/insights-french_r1_2026-09-19.md`. **UNWALKED.** **AND THE ROW'S OWN RANGE WAS WRONG: only 12 of the 59 sat in `:1417-1475`; the other 47 ran `:1476` to `:1522`.** A brief written to the cited range would have fixed twelve strings and reported Insights done.
-- `[ ]` **N.131. French parity everywhere else.** The 64 or so untranslated
+- `[x]` **N.131. French parity everywhere else.** **[AUDIT 2026-09-30: CLOSED 2026-09-24, `1987157`, `SCHEDULE.md` week 3 and LOG 7556; the account below is history.]** The 64 or so untranslated
   entries outside Insights. **DESK DEFAULT on splitting this from N.130, and Dann
   can merge them with a word:** the two differ in urgency, and one number would
   bury the release-blocking half. **Its real size is NOT ESTABLISHED** until a

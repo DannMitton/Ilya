@@ -155,3 +155,69 @@ describe('the abstention reaches the reading a singer keeps', () => {
 		expect(analyze(sample(sr), sr, 'a').noiseFloor).toBe('measured');
 	});
 });
+
+/**
+ * Row 2d part 2b (2026-09-30): c3 and c5 read the median. Every number asserted
+ * is arithmetic on the schedule each fixture lays down, done here with this
+ * file's own helpers, never read back from `detect()`.
+ */
+describe('c3 and c5 judge the median interval, so a few missed pulses do not refuse fry', () => {
+	const SR = 48000;
+	function med(a: number[]): number {
+		const s = [...a].sort((x, y) => x - y), h = s.length >> 1;
+		return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2;
+	}
+	const dispersion = (a: number[]) => { const m = med(a); return med(a.map((x) => Math.abs(x - m))) / m; };
+	const avg = (a: number[]) => a.reduce((s, x) => s + x, 0) / a.length;
+	const sdCv = (a: number[]) => { const m = avg(a); return Math.sqrt(avg(a.map((x) => (x - m) ** 2))) / m; };
+	/** Short decaying bursts at the given intervals, so pulses 6 ms apart stay resolvable. */
+	function train(intervals: number[], totalS: number): Float64Array {
+		const n = Math.round(totalS * SR), out = noise(n, 0.0005);
+		let t = 0.01;
+		for (const iv of [0, ...intervals]) {
+			t += iv;
+			const start = Math.round(t * SR);
+			for (let i = 0; i < Math.floor(0.004 * SR) && start + i < n; i++)
+				out[start + i] += 0.2 * Math.exp(-i / SR / 0.0015) * Math.sin((2 * Math.PI * 600 * i) / SR);
+		}
+		return out;
+	}
+	const repeat = (unit: number[], untilS: number) => {
+		const out: number[] = []; let t = 0;
+		for (let k = 0; t + unit[k % unit.length] < untilS; k++) { out.push(unit[k % unit.length]); t += unit[k % unit.length]; }
+		return out;
+	};
+
+	it('accepts a 40 Hz fry with three 300 ms gaps, which the standard-deviation CV refused', () => {
+		const ivs = [...repeat([0.025], 0.6), 0.3, ...repeat([0.025], 0.4), 0.3, ...repeat([0.025], 0.4), 0.3, ...repeat([0.025], 0.3)];
+		expect(sdCv(ivs)).toBeGreaterThan(1.0);
+		expect(dispersion(ivs)).toBeLessThan(0.75);
+		const det = detect(train(ivs, 2.75), SR);
+		expect(det.failed).not.toContain('c5_cv');
+		expect(det.failed).not.toContain('c3_ipi');
+		expect(det.accept).toBe(true);
+	});
+
+	it('refuses a 140 Hz voice in phrases on c3, although its mean interval sits inside the band', () => {
+		// Speech, in shape: a modal pulse rate in 0.3 s phrases with 0.4 s pauses.
+		// The pauses lift the mean into 12.5 to 50 ms; the median stays modal.
+		const phrase = repeat([1 / 140], 0.3);
+		const ivs = [...phrase, 0.4, ...phrase, 0.4, ...phrase, 0.4, ...phrase];
+		expect(avg(ivs)).toBeGreaterThan(0.0125);
+		expect(avg(ivs)).toBeLessThan(0.05);
+		expect(med(ivs)).toBeLessThan(0.0125);
+		expect(detect(train(ivs, 2.5), SR).failed).toContain('c3_ipi');
+	});
+
+	it('refuses a rhythm whose spread about the median exceeds 0.75, on c5', () => {
+		// Cycling 6, 30, and 120 ms: median 30 ms, inside c3's band; median
+		// absolute deviation 24 ms, so the dispersion is 0.8.
+		const ivs = repeat([0.006, 0.03, 0.12], 2.4);
+		expect(med(ivs)).toBeGreaterThan(0.0125);
+		expect(med(ivs)).toBeLessThan(0.05);
+		expect(dispersion(ivs)).toBeGreaterThan(0.75);
+		const det = detect(train(ivs, 2.5), SR);
+		expect(det.failed).toContain('c5_cv');
+		expect(det.failed).not.toContain('c3_ipi');
+	});
+});

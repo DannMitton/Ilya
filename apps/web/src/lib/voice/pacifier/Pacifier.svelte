@@ -30,6 +30,7 @@
 	import type { CaptureSession, CaptureHandlers } from '$lib/voice/engine/session';
 	import type { VoiceType, CalibratedFormant } from '$lib/voice/engine/types';
 	import type { CaptureError } from '$lib/voice/engine/errors';
+	import { runCountIn, tapAction } from './count-in';
 
 	// 'estimated' added 2026-07-11 (Kimi's ruling, additive-only): a node
 	// whose value is a derived preview, not a sung capture. It rests with
@@ -43,6 +44,7 @@
 		| 'dormant'
 		| 'armed'
 		| 'preparing'
+		| 'pausing'
 		| 'listening'
 		| 'working'
 		| 'captured'
@@ -290,7 +292,6 @@
 	let pendingResult: CalibratedFormant | null = null;
 	let audioCtx: AudioContext | null = null;
 
-	const COUNT_INTERVAL = 700;
 	const FLASH_MS = 200;
 	const SWEEP_MS = 3000;
 	const COMPLETE_MS = 900;
@@ -368,24 +369,25 @@
 		});
 	}
 
+	// Row 2d part 3 (ratified 2026-09-30 21:00): sing the vowel, not recorded,
+	// on a count of three; a silent pause; then the fry, where capture begins.
 	function beginPrepare(idx: number) {
 		clearTimers();
 		focusVowel(idx);
-		nodes[idx].state = 'preparing';
-		announce = say('pacifier.preparing', layout[idx].g);
-		flashBeat(idx);
-		tick();
-		after(COUNT_INTERVAL, () => {
-			announce = T('calib.readiness.countTwo');
+		const n = nodes[idx];
+		n.skipped = false;
+		n.state = 'preparing';
+		runCountIn((step) => {
+			if (step === 'fry') return startListening(idx);
+			if (step === 'pause') {
+				n.state = 'pausing';
+				announce = T('pacifier.pause');
+				return;
+			}
+			announce = step === 'sing' ? say('pacifier.singFirst', layout[idx].g) : T(step === 'two' ? 'calib.readiness.countTwo' : 'calib.readiness.countOne');
 			flashBeat(idx);
 			tick();
-		});
-		after(2 * COUNT_INTERVAL, () => {
-			announce = T('calib.readiness.countOne');
-			flashBeat(idx);
-			tick();
-		});
-		after(3 * COUNT_INTERVAL, () => startListening(idx)); // silent zero
+		}, after);
 	}
 
 	function startListening(idx: number) {
@@ -558,59 +560,34 @@
 		announce = T('pacifier.cancelled');
 	}
 
+	// Row 2d part 3: one tap begins, from any resting state; the arm step is
+	// gone. A stray tap is undone by a second one, which cancels the count or
+	// the pause before anything is captured. An estimated node begins exactly
+	// like a dormant one (Kimi's ruling, 2026-07-11).
 	function onActivate(idx: number) {
-		const n = nodes[idx];
 		if (activeIdx !== -1 && activeIdx !== idx) return; // capture is exclusive
-		switch (n.state) {
-			case 'deselected':
-				n.skipped = false;
-				n.state = 'dormant';
-				announce = say('pacifier.selected', layout[idx].g);
-				break;
-			case 'dormant':
-			// An estimated node arms exactly like a dormant one (Kimi's
-			// ruling, 2026-07-11): the replacement of a synthetic value by a
-			// sung one is silent and automatic, and the arming caption stays
-			// procedural — no metadata chatter at the moment of breath.
-			case 'estimated':
-				n.state = 'armed';
-				announce = say('pacifier.armed', layout[idx].g);
-				break;
-			case 'armed':
-				beginPrepare(idx);
-				break;
-			case 'preparing':
-				startListening(idx); // tap-to-start-now skips the remaining count
-				break;
-			case 'captured':
-				n.state = 'armed'; // re-take via two taps; a stray tap only arms
-				announce = say('pacifier.armedRetake', layout[idx].g);
-				break;
-			case 'provisional':
-				beginPrepare(idx); // a single tap on a provisional vowel re-takes
-				break;
-			case 'listening':
-			case 'working':
-				break; // ignore; Escape cancels an in-progress capture
-		}
+		const action = tapAction(nodes[idx].state);
+		if (action === 'begin') beginPrepare(idx);
+		else if (action === 'cancel') cancelCapture(idx);
 	}
 
 	/**
-	 * Guided-director wizard hook (wizard spec v1 §2 Phase 2, §3). Drives the
-	 * exact same state transition a real tap drives, so a wizard's auto-advance
-	 * can move focus to (and arm) the next vowel without a second, separate
-	 * interaction path to keep in sync with the locked ritual. Calling this on
-	 * a vowel already mid-capture is a no-op, matching onActivate's own guard.
+	 * Guided-director wizard hook (wizard spec v1 §2 Phase 2, §3): points at
+	 * the vowel the tour is waiting on. Until row 2d part 3 this was the
+	 * first of two taps; now it only marks the vowel, and the singer's one tap
+	 * begins. A no-op while any capture is under way.
 	 */
 	export function activateVowel(g: Vowel): void {
 		const idx = layout.findIndex((v) => v.g === g);
-		if (idx !== -1) onActivate(idx);
+		if (idx === -1 || activeIdx !== -1) return;
+		nodes[idx].state = 'armed';
+		announce = say('pacifier.ready', g);
 	}
 
 	function onLongPressFire(idx: number) {
 		const n = nodes[idx];
 		if (activeIdx === idx) return;
-		if (n.state === 'listening' || n.state === 'working' || n.state === 'preparing') return;
+		if (tapAction(n.state) !== 'begin') return;
 		n.skipped = true;
 		n.sampled = false;
 		n.formant = undefined;
@@ -693,6 +670,7 @@
 				glyphOpacity = 1;
 				break;
 			case 'preparing':
+			case 'pausing':
 				stroke = n.outlinePulse ? 'var(--prep-amber)' : 'var(--ink-secondary)';
 				strokeOpacity = 1;
 				strokeWidth = 2.5;

@@ -50,8 +50,14 @@ export const COMMENT_DEFAULTS = {
 	trebleEdge: { points1to2: 3, point3: 2, points4to5: 1 } as Record<IntakeBand, number>,
 	/** Comment 3: fo within a minor third under fR1[u]. r1 §3.1, build default. */
 	closedUCents: -300,
-	/** The leap clause: an ascending leap of at least this many semitones. r1 §1.1 clause 3, build default. */
-	leapSemitones: 7,
+	/**
+	 * The leap clause: an ascending leap of at least this many semitones, a
+	 * minor sixth. Ruled by Dann 2026-09-23 00:27: "a 'large' or 'wide' leap is
+	 * a minor sixth or greater" (`method-leaps_r1_2026-09-22.md:254`). It was a
+	 * fifth, r1 §1.1 clause 3's build default. `GATE_DEFAULTS.leapSemitones`
+	 * carries the same value; change both together.
+	 */
+	leapSemitones: 8,
 	/** Comment 1's "notice this": at least this many later notes of the phrase inside the zona. r1 §1.1 clause 4. */
 	descentNotes: 2,
 	/** "just past" the turning pitch under this many semitones, "past" at or above it. DESK DEFAULT. */

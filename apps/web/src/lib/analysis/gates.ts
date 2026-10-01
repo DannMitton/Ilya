@@ -59,12 +59,14 @@ export const GATE_DEFAULTS = {
 	 */
 	stakesThreshold: 2,
 	/**
-	 * A leap, for the transition demand: a fifth, the value of Insights'
-	 * `COMMENT_DEFAULTS.leapSemitones` (r1 §1.1, build default), so the two
-	 * documents agree. Held here because `analysis/` may not import
-	 * `insights/` (`scripts/ratchets.mjs`); change both together.
+	 * A leap, for the transition demand: a minor sixth. Ruled by Dann
+	 * 2026-09-23 00:27: "a 'large' or 'wide' leap is a minor sixth or greater"
+	 * (`method-leaps_r1_2026-09-22.md:254`). It was a fifth, a build default.
+	 * Insights' `COMMENT_DEFAULTS.leapSemitones` carries the same value, so the
+	 * two documents agree. It is written twice because `analysis/` may not
+	 * import `insights/` (`scripts/ratchets.mjs`); change both together.
 	 */
-	leapSemitones: 7,
+	leapSemitones: 8,
 	/** DESK DEFAULT: the range-edge demand fires within this many semitones of the declared top or bottom. */
 	rangeEdgeSemitones: 1,
 };
@@ -137,7 +139,7 @@ function demandsOf(e: WatchEntry, n: NoteCondition | undefined, profile: VoicePr
 
 /**
  * A leap whose two notes lie on either side of a declared passaggio edge
- * (draft r3, demand 6). A leap is `leapSemitones`, a fifth: the conditions'
+ * (draft r3, demand 6). A leap is `leapSemitones`, a minor sixth: the conditions'
  * `leap-up` band starts at a minor third, and near two edges a fourth apart
  * most thirds cross one, so that band put nearly every passaggio note here.
  */

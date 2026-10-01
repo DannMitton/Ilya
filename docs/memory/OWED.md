@@ -27,7 +27,7 @@ asks what is outstanding, or when the one thing closes and the next is being cho
   - **Score markup on the treble-8vb songs changed in `ccb790c` and only Code has seen it.**
   - **The desk owes a transcription:** the leap rulings in `../sessions/method-leaps_r1_2026-09-22.md` addenda 3 to 8 were to go into `PRODUCT.md` "at the next close if still standing". The 03:55 close did not do it.
 
-- **READ 2026-09-25 by the desk: no same-tick race, but an await gap at `document.svelte.ts:303-312` can lose an edit. Brief `../sessions/brief-code-two-save-fixes_r1_2026-09-25.md`, fix 2, not run. `../sessions/memo-desk-code-reading_r1_2026-09-25.md` §4. The row as it stood:** **`#onRemoteWrite`'s GUARD IS THE ONE ROW THE SWEEP DID NOT VERIFY TO ITS OWN STANDARD.**
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: both save fixes are in the tree, `document.svelte.ts:328-335`, per `../sessions/audit-briefs-B_r1_2026-09-30.md` row 22]** **READ 2026-09-25 by the desk: no same-tick race, but an await gap at `document.svelte.ts:303-312` can lose an edit. Brief `../sessions/brief-code-two-save-fixes_r1_2026-09-25.md`, fix 2, not run. `../sessions/memo-desk-code-reading_r1_2026-09-25.md` §4. The row as it stood:** **`#onRemoteWrite`'s GUARD IS THE ONE ROW THE SWEEP DID NOT VERIFY TO ITS OWN STANDARD.**
   `document.svelte.ts:300-312` applies another tab's record to the open document, guarded by
   `this.#scheduler.isPending()` at `:303` (`library.ts:483`). **The Sonnet sweep of 2026-09-21
   read it as guarded and said plainly that it could not rule out a same-tick race**, where a
@@ -114,7 +114,7 @@ asks what is outstanding, or when the one thing closes and the next is being cho
   the list. It is the only thing that would give the chimera warning a detour
   instead of a stop sign. **Dann's ruling: deferred, recorded as owed against
   step 5, NOT folded into 4a.**
-- **Remove `bits-ui` from `apps/web/package.json`.** Ruled 2026-08-16: native
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: `apps/web/package.json` has no `bits-ui` (grep count 0, read 22:38)]** **Remove `bits-ui` from `apps/web/package.json`.** Ruled 2026-08-16: native
   `<dialog>` + `showModal()` is the answer for the delete confirmation AND the
   fingerprint prompt, not bits-ui. **Dann's ruling on timing: not in step 4's
   commit.** It costs zero bytes while nothing imports it, so removing it is
@@ -345,13 +345,13 @@ it is the one that needs care rather than speed.**
      but they bind the loupe and need a home before the spec goes.
    - **N.155:** Dann ruled option A in at 14:07 on 2026-09-20, and the horizontal position
      of the hyphen is recorded as *"Dann's eye"* and unruled.
-2. **N.151's FOUR PRODUCT-LEVEL RULINGS OF 2026-09-17 ARE NOT IN `PRODUCT.md`:** WYSIWYG
+2. **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: transcribed, `PRODUCT.md` §N.151, 2026-09-22]** **N.151's FOUR PRODUCT-LEVEL RULINGS OF 2026-09-17 ARE NOT IN `PRODUCT.md`:** WYSIWYG
    (*"if it appears on Ilya's page, it can be printed"*), no stopping rule for the singer
    (*"they should be able to intentionally break a score or even recompose one"*), the
    edited score returning as an edited copy with the singer's own tempo counted, and
    deliberate destruction only. **They sit inside one item's spec and govern the whole
    app.**
-3. **FOUR OF `SCHEDULE.md` WEEK 1'S FIVE BOXES WERE NEVER STARTED. ESTABLISHED 2026-09-22.**
+3. **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: all now closed or done, `SCHEDULE.md` week 1]** **FOUR OF `SCHEDULE.md` WEEK 1'S FIVE BOXES WERE NEVER STARTED. ESTABLISHED 2026-09-22.**
    Week 1 ended 2026-09-20. **N.92's caret reach did ship**, over six commits 2026-09-17 to
    2026-09-18, and N.153 then made it usable on a phone; its box is now ticked. **The other
    four have no memo, no brief, no `LOG.md` block and no tracker row:** N.142 step 2, the
@@ -393,7 +393,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
 
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
-- **2026-09-24: where N.168, N.169 and N.170 sit against the five weeks to 2026-10-30.** The buffer is spent; `SCHEDULE.md` places none of the three. Raised by the desk at 19:10.
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: placed in `SCHEDULE.md` weeks 3 to 6]** **2026-09-24: where N.168, N.169 and N.170 sit against the five weeks to 2026-10-30.** The buffer is spent; `SCHEDULE.md` places none of the three. Raised by the desk at 19:10.
 
 ### ADDED AT THE CLOSE OF 2026-09-22. Five, and the first two block N.130
 
@@ -404,7 +404,8 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
    semicolon's French spacing rides along with whatever he rules.** This is B1 row 10 of
    N.130 and the walk stopped on it.
 
-2. **`fit.heading`. The English moved and the French did not, and a third problem appeared.**
+2. **SETTLED 2026-09-30 21:30.** Dann ratified the English "Ilya reads your compatibility from these three measurements." and the desk's French « Ilya évalue votre compatibilité à partir de ces trois relevés. » (« relevés », not « mesures », which also means a bar). Brief: `../sessions/brief-code-seat-missing-rulings_r1_2026-09-30.md`. The original entry follows.
+   **`fit.heading`. The English moved and the French did not, and a third problem appeared.**
    Dann ruled the English to **"Ilya reads your compatibility from these three
    measurements"**. The French still reads « La correspondance, terme par terme », which
    mirrored the *old* English and now mirrors nothing. **AND:** the new English introduces
@@ -432,7 +433,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
 ### THE OLDER ROWS FOLLOW
 
 
-- **RULED 2026-09-16, BUILD OWED: « placement recommencé » / "placement started
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: built, `i18n.ts:384`, per `../sessions/audit-rulings_r1_2026-09-30.md` table D]** **RULED 2026-09-16, BUILD OWED: « placement recommencé » / "placement started
   over"**, in `../sessions/spec-loupe-french_r1_2026-09-14.md`. ~~**THE UNDO SENTENCE FOR "START PLACEMENT OVER". Dann's to rule, English and
   French, then one line in Code.**~~ Carried out of the 2026-09-10 walk narrative
   on 2026-09-13 before that narrative moved to `../sessions/LOG.md` block 12.
@@ -465,14 +466,14 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
   a wall:** what does not fit by the date goes to FLAGGED or LATER. The dialogue
   that produced it continues below, one question at a time. The sort of the
   inventory into IN, FLAGGED and LATER is still owed.
-- **SORT RULINGS, 2026-09-16** (proposal `../sessions/sort-release_r1_2026-09-16.md`): **N.94 IN**, and its place is ruled: *"it belongs in the Score Markup section between Corrections and Voice."* (supersedes the 2026-09-13 note placing it in a `Melody` band station). **N.131 IN**, whole. **N.123 IN** (his word, over the desk's LATER), restated 2026-09-16: *"we absolutely need to have this visual. Non-negotiable."* **The visual, in his words 2026-09-16:** *"'this visual' means the range and the tessituragram with passaggio zone indicated."* So **N.127 increment 2 (the compass stave: the piece's range against the singer's) is IN**, and N.123's tessituragram carries the passaggio zone shaded (already in its spec as "the singer's turning points shaded"). **N.85 IN, N.86 IN, N.87 LATER** (his words: *"this is fine as you have marked them"*); **N.88: Dann's own optional afternoon task, probably 2026-10-29** (his words: *"if I feel like it"*). **THE SORT IS DONE 2026-09-16 AND THE FREEZE RULE IS IN FORCE.** IN: 24 rows, listed in `../sessions/sort-release_r1_2026-09-16.md`. **SIZED 2026-09-16, DESK INFERENCE on Dann's request:** `../sessions/estimate-release_r1_2026-09-16.md`. About 45 to 75 build cycles needed against about 100 available at the week's pace: **achievable if the freeze holds, the three design rows (N.94, N.123, N.84) start early, and the pace holds.** DESK DEFAULT checkpoint: **Friday 2026-10-09**; a design row not in Code by then moves to LATER and the date stands. **THE SCHEDULE: `SCHEDULE.md`, written 2026-09-16, starts 2026-09-17.** INBOX-37 (the loupe tap) is numbered **N.147**, DESK DEFAULT number.
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: the sort is done, `../sessions/sort-release_r1_2026-09-16.md`:3]** **SORT RULINGS, 2026-09-16** (proposal `../sessions/sort-release_r1_2026-09-16.md`): **N.94 IN**, and its place is ruled: *"it belongs in the Score Markup section between Corrections and Voice."* (supersedes the 2026-09-13 note placing it in a `Melody` band station). **N.131 IN**, whole. **N.123 IN** (his word, over the desk's LATER), restated 2026-09-16: *"we absolutely need to have this visual. Non-negotiable."* **The visual, in his words 2026-09-16:** *"'this visual' means the range and the tessituragram with passaggio zone indicated."* So **N.127 increment 2 (the compass stave: the piece's range against the singer's) is IN**, and N.123's tessituragram carries the passaggio zone shaded (already in its spec as "the singer's turning points shaded"). **N.85 IN, N.86 IN, N.87 LATER** (his words: *"this is fine as you have marked them"*); **N.88: Dann's own optional afternoon task, probably 2026-10-29** (his words: *"if I feel like it"*). **THE SORT IS DONE 2026-09-16 AND THE FREEZE RULE IS IN FORCE.** IN: 24 rows, listed in `../sessions/sort-release_r1_2026-09-16.md`. **SIZED 2026-09-16, DESK INFERENCE on Dann's request:** `../sessions/estimate-release_r1_2026-09-16.md`. About 45 to 75 build cycles needed against about 100 available at the week's pace: **achievable if the freeze holds, the three design rows (N.94, N.123, N.84) start early, and the pace holds.** DESK DEFAULT checkpoint: **Friday 2026-10-09**; a design row not in Code by then moves to LATER and the date stands. **THE SCHEDULE: `SCHEDULE.md`, written 2026-09-16, starts 2026-09-17.** INBOX-37 (the loupe tap) is numbered **N.147**, DESK DEFAULT number.
 - ~~**FOR THE SORT: START PLACEMENT OVER CANNOT BE UNDONE.**~~ **FIXED BY N.144, `ceeb214`.** Established by
   Code 2026-09-16 (`memo-loupe-french-build_r1_2026-09-16.md`):
   `handleStartPlacementOver` never calls `pushUndo`, yet it rebuilds every
   placement. A singer who presses it by mistake loses their hand placements.
   **DESK READING: that is lost work, so it meets the freeze rule's exception.**
   The undo clause is ruled and built as a key, unwired.
-- **N.142 STEP 2 IS WAITING ON A COUNT FROM DANN'S BROWSER.** Whether any song
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: counted zero, closed 2026-09-24, `SCHEDULE.md` week 1]** **N.142 STEP 2 IS WAITING ON A COUNT FROM DANN'S BROWSER.** Whether any song
   in his library holds a placement on a tie's continuation is a fact about his
   IndexedDB, which Code cannot read (`memo-n142-tie-prolongation_r1_2026-09-16.md`
   §5). The desk can read it through Chrome on the branch alias.
@@ -484,7 +485,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
   release (lost work); N.143 would have joined (Transcription empty). **The
   desk's advice, given with it: keep the exception narrow; "confusing" and
   "ugly" are not in it.**
-- **THE RELEASE CUT, and it is the biggest thing he owes. Raised 2026-09-13
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: the sort is done 2026-09-16, `../sessions/sort-release_r1_2026-09-16.md`:3]** **THE RELEASE CUT, and it is the biggest thing he owes. Raised 2026-09-13
   when he asked how close a fully working app is.** The answer is in
   `../sessions/memo-footprint-and-release-arithmetic_r1_2026-09-13.md` §4, and
   the arithmetic is this: about thirty-five units of ruled and unbuilt work
@@ -499,7 +500,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
   January, corrected by Dann 2026-09-16; see `PRODUCT.md`), freeze that list, and move the rest to a
   post-release file the way `OPEN.md` now holds unstarted specs. **Do not put
   this to him mid-item, and do not raise it twice.**
-- **THE RELEASE ORDER CONTRADICTS ITSELF, and both halves are his. Found
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: the 2026-09-16 sort supersedes the 2026-09-06 sequence; `SCHEDULE.md` orders N.86, N.84, N.83]** **THE RELEASE ORDER CONTRADICTS ITSELF, and both halves are his. Found
   2026-09-13.** His ruling of 2026-08-24 set the order **N.83, N.84, N.85,
   N.86, N.87, N.88**, with walkthrough prep first, and N.82 and N.89 riding
   between (`../sessions/LOG.md`, the 2026-08-24 numbers table). His
@@ -625,7 +626,7 @@ French Dann has not seen.
   is unsure. **Whether these are the ruled exception was not checked.**
 - **`VoiceProfilePane.svelte:295-313` duplicates the old header arithmetic.**
   Fit's paper does not yet share the Transcribe paper's single `HEADER_GAP`.
-- **Whether `.mscz` ingest actually succeeds in a browser.** The path is live in
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: passed, `SCHEDULE.md` UNSETTLED-6 (six of seven formats, 2026-09-24)]** **Whether `.mscz` ingest actually succeeds in a browser.** The path is live in
   code (`ScoreUploader.svelte:106-137`) but `i18n.ts:272` still carries a
   "coming soon" string for it. Nobody has run it.
 
@@ -865,7 +866,7 @@ not proposed. Each is a lead from the audit's tools, checked where marked.
 - `packages/phonology/src/engine.ts:35`: `reconstitution: boolean` in
   `NotationPreferences`, commented "Phase 3 — not wired yet"; the live feature is
   `apps/web/src/lib/reconstitution.ts` (checked by the desk 2026-09-27).
-- `apps/web/src/lib/score/TextualWitnesses.svelte`: unreachable (knip, and the
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: removed, shipped `477ba5b` (file absent, read 22:38)]** `apps/web/src/lib/score/TextualWitnesses.svelte`: unreachable (knip, and the
   audit catalogue of 2026-09-24, two methods).
 - `apps/web/src/lib/score/reconciliation/taxonomy.ts` and `witnesses.ts`:
   reachable only from each other and the unreachable component above.

@@ -25,6 +25,7 @@
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { pitchLabel } from '$lib/voice/note-picker';
 	import { diatonicOf, formatSeconds, type FigureRow, type TessituragramModel } from '$lib/insights/insights';
+	import { formatCycles } from '$lib/insights/singing-measures';
 
 	interface Props {
 		figure: TessituragramModel;
@@ -197,6 +198,78 @@
 	});
 	const shareText = (n: number) => fill(T('insights.phonation.share'), { n });
 
+	// ── N.123 part 2: half the singing, its centre, and the cycle dose ──
+	/* THE BRACKET STANDS JUST PAST THE LONGEST LABEL among the bars it spans,
+	   so no label runs into it; the approved drawing set it at the right edge,
+	   where the zone shares now sit. Labels are measured in the figure's own
+	   face on a canvas, once the fonts are ready; before then, or without a
+	   canvas, 4.7 px a character at 8 px stands in (an overestimate, so the
+	   fallback errs toward clearance). */
+	let fontsReady = $state(0);
+	onMount(() => {
+		document.fonts?.ready.then(() => (fontsReady += 1));
+	});
+	let measurer: CanvasRenderingContext2D | null = null;
+	function textWidth(text: string, size: number, weight: number): number {
+		void fontsReady;
+		if (typeof document !== 'undefined') {
+			measurer ??= document.createElement('canvas').getContext('2d');
+			const family = getComputedStyle(document.documentElement).getPropertyValue('--font-sans').trim();
+			if (measurer && family) {
+				measurer.font = `${weight} ${size}px ${family}`;
+				return measurer.measureText(text).width;
+			}
+		}
+		return text.length * 4.7 * (size / 8);
+	}
+	const bracket = $derived.by(() => {
+		const band = figure.halfMass;
+		if (!band) return null;
+		const inBand = drawn.filter((r) => r.midi >= band.low && r.midi <= band.high);
+		const reach = Math.max(
+			BAR_X + BAR_MAX * 0.25,
+			...inBand.map((r) => BAR_X + r.length + (r.labels.length ? 4 + Math.max(...r.labels.map((l) => textWidth(l, 8, r.dark ? 600 : 400))) : 0)),
+		);
+		/* The centre label stacks the word over the pitch, as the drawing does,
+		   so it is as wide as the longer of the two. */
+		const centreLines = figure.centre ? [T('insights.figure.centre'), pitchLabel(figure.centre.pitch)] : null;
+		const centreWidth = centreLines ? Math.max(...centreLines.map((l) => textWidth(l, 7.5, 400))) : 0;
+		const top = rowY(band.high) - BAR / 2;
+		const bottom = rowY(band.low) + BAR / 2;
+		const tick = figure.centre ? rowY(figure.centre.midi) : null;
+		/* The zone shares end at the right edge on their passaggio lines; the
+		   centre label stops 6 px short of any share it would run into. */
+		let limit = RIGHT;
+		if (passaggi && figure.zones && tick !== null) {
+			const shares = [
+				{ y: passaggi.secondo - 4, text: fill(T('insights.figure.zoneAbove'), { share: shareText(figure.zones.above) }) },
+				{ y: passaggi.primo - 4, text: fill(T('insights.figure.zoneBetween'), { share: shareText(figure.zones.between) }) },
+				{ y: passaggi.primo + 11, text: fill(T('insights.figure.zoneBelow'), { share: shareText(figure.zones.below) }) },
+			];
+			for (const z of shares) if (Math.abs(z.y - 2.8 - tick) < 13) limit = Math.min(limit, RIGHT - textWidth(z.text, 8, 600) - 6);
+		}
+		const x = Math.min(reach + 10, limit - 9 - centreWidth);
+		return {
+			x,
+			top: tick === null ? top : Math.min(top, tick),
+			bottom: tick === null ? bottom : Math.max(bottom, tick),
+			serifTop: top,
+			serifBottom: bottom,
+			tick,
+			centreLines,
+		};
+	});
+
+	const doseText = $derived.by(() => {
+		const c = figure.cycles;
+		if (!c) return null;
+		const cycles =
+			c.kind === 'point'
+				? formatCycles(c.cycles, language)
+				: fill(T('insights.fit.span'), { low: formatCycles(c.low, language), high: formatCycles(c.high, language) });
+		return fill(T('insights.figure.cycleDose'), { cycles });
+	});
+
 	// ── The compass ────────────────────────────────────────────────────
 	const glyphPx = $derived(smuflFontSizePx(LINE_GAP));
 	const sp = (n: number) => spToPx(n, LINE_GAP);
@@ -340,8 +413,31 @@
 		</g>
 	{/if}
 
+	<!-- Half the singing: a bracket beside the bars, serifs toward them, and a
+	     tick at the centre of gravity (N.123 part 2). -->
+	{#if bracket}
+		<g stroke="var(--rose-ink)" stroke-width="1" fill="none">
+			<line x1={bracket.x} y1={bracket.top} x2={bracket.x} y2={bracket.bottom} />
+			<line x1={bracket.x - 5} y1={bracket.serifTop} x2={bracket.x} y2={bracket.serifTop} />
+			<line x1={bracket.x - 5} y1={bracket.serifBottom} x2={bracket.x} y2={bracket.serifBottom} />
+			{#if bracket.tick !== null}
+				<line x1={bracket.x} y1={bracket.tick} x2={bracket.x + 6} y2={bracket.tick} />
+			{/if}
+		</g>
+		<g class="halo" font-size="7.5" fill="var(--rose-ink)">
+			<text x={bracket.x + 1} y={bracket.top - 3.5} text-anchor="end">{T('insights.figure.halfMass')}</text>
+			{#if bracket.tick !== null && bracket.centreLines}
+				<text x={bracket.x + 9} y={bracket.tick - 1}>{bracket.centreLines[0]}</text>
+				<text x={bracket.x + 9} y={bracket.tick + 7.5}>{bracket.centreLines[1]}</text>
+			{/if}
+		</g>
+	{/if}
+
 	<text x={BAR_X} y="9" font-size="8" letter-spacing="0.05em" fill="var(--ink-tertiary)">{title}</text>
 </svg>
+{#if doseText}
+	<p class="dose">{doseText}</p>
+{/if}
 
 <style>
 	.tessituragram {
@@ -349,6 +445,15 @@
 		width: 100%;
 		height: auto;
 		overflow: visible;
+	}
+
+	/* The cycle-dose line, set as the section's prose (`.prose` in InsightsPane). */
+	.dose {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: 14px;
+		line-height: 1.45;
+		color: var(--ink-primary);
 	}
 
 	/* The paper-coloured backing: a halo of the page's own cream under each glyph. */

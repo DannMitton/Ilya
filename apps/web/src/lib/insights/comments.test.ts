@@ -136,13 +136,17 @@ function commentsOf(s: ReturnType<typeof song>, intake?: IntakeAnswers): NoteCom
 	return noteComments({ facts: noteFacts(s.notes, MITTON), intake, treble: false, ceilingMidi });
 }
 const at = (cs: NoteComment[], id: string) => cs.find((c) => c.eventId === id);
-/** r7 in French: RATIFIED by Dann 2026-09-30 12:08 (table A) and 12:25 (section C), as `norm` compares it. */
+/**
+ * r7 in French: RATIFIED by Dann 2026-09-30 12:08 (table A) and 12:25 (section C), as `norm` compares it.
+ * The words are the ratified ones. The spacing before « ; » follows Dann's OQLF ruling of 2026-09-30
+ * 21:39 (no space before « ; », « ? », « ! »), which postdates the ratification.
+ */
 const FR_E4 =
-	"Ce [i] sur E4 se prolonge environ 4 secondes, au-dessus de la première résonance (fR1) de votre [i] chanté. Ici, le [i] tend de lui-même vers un timbre youhou ; mais le resserrer au lieu d'ouvrir la bouche tend à l'amincir (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, p. 97 et 115). Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l'avant, et observer si le [i] garde sa couleur (Miller, Solutions for Singers, 2004, p. 163).";
+	"Ce [i] sur E4 se prolonge environ 4 secondes, au-dessus de la première résonance (fR1) de votre [i] chanté. Ici, le [i] tend de lui-même vers un timbre youhou; mais le resserrer au lieu d'ouvrir la bouche tend à l'amincir (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, p. 97 et 115). Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l'avant, et observer si le [i] garde sa couleur (Miller, Solutions for Singers, 2004, p. 163).";
 const FR_EB4 =
-	"Ce [ɛ] sur E♭4 se prolonge environ 3 secondes, juste après la hauteur où votre [ɛ] change de timbre (autour de D4). La couleur tend ici à se fermer d'elle-même ; mais la garder ouverte peut la pousser vers un cri (Bozeman, Practical Vocal Acoustics, 2025, p. 45 et 65). Bozeman propose de garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà. Observez si la couleur se ferme plus facilement (Kinesthetic Voice Pedagogy 2, 2021, p. 18-19).";
+	"Ce [ɛ] sur E♭4 se prolonge environ 3 secondes, juste après la hauteur où votre [ɛ] change de timbre (autour de D4). La couleur tend ici à se fermer d'elle-même; mais la garder ouverte peut la pousser vers un cri (Bozeman, Practical Vocal Acoustics, 2025, p. 45 et 65). Bozeman propose de garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà. Observez si la couleur se ferme plus facilement (Kinesthetic Voice Pedagogy 2, 2021, p. 18-19).";
 const FR_D4 =
-	"Ce [u] sur D4 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u] chanté. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 157-158) ; mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
+	"Ce [u] sur D4 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u] chanté. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 157-158); mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
 const POINTS: (IntakePoint | undefined)[] = [1, 2, 3, 4, 5, 'not-sure', undefined];
 
 describe('the intake answers', () => {

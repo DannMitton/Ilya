@@ -7,6 +7,7 @@
 	import PageFit from './PageFit.svelte';
 	import TitlePage from './TitlePage.svelte';
 	import SubsequentPage from './SubsequentPage.svelte';
+	import type { EmptyTextNotice } from '$lib/one-action';
 
 	interface Props {
 		lines: LineData[];
@@ -19,6 +20,8 @@
 		spotReconstitution?: Map<string, boolean>;
 		glossOverrides?: Map<string, string>;
 		onwordclick?: (word: WordStackData) => void;
+		/** Row 2j: what page 1 says with no lines (`emptyTextNotice`). */
+		emptyNotice?: EmptyTextNotice;
 	}
 
 	let {
@@ -32,6 +35,7 @@
 		spotReconstitution = new Map(),
 		glossOverrides = new Map(),
 		onwordclick,
+		emptyNotice = 'enter',
 	}: Props = $props();
 
 	/** Page-1 row budget, updated by TitlePage after header measurement. */
@@ -82,6 +86,7 @@
 				{glossOverrides}
 				{onwordclick}
 				onbudgetchange={handleBudgetChange}
+				{emptyNotice}
 			/>
 		{:else}
 			<SubsequentPage

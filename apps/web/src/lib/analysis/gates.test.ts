@@ -64,10 +64,10 @@ describe('gate 1, the piece fits', () => {
 });
 
 describe('gate 2, something to offer', () => {
-	// A crowded phrase top: passaggio plus a leap of a fifth across the primo, stakes 2 × 2 = 4.
+	// A crowded phrase top: passaggio plus a leap of a minor sixth across the primo, stakes 2 × 2 = 4.
 	const ns = notes([
-		{ id: 'x', midi: 50, phrase: 0 },
-		{ id: 'a', midi: 57, phrase: 0, leapFrom: 50 },
+		{ id: 'x', midi: 49, phrase: 0 },
+		{ id: 'a', midi: 57, phrase: 0, leapFrom: 49 },
 	]);
 	const counts = { range: 0, crossing: 0, cover: 0, tracking: 0, turnover: 0, passaggio: 9, timbre: 0, sustain: 0 };
 
@@ -116,15 +116,16 @@ describe('gate 3, the stakes', () => {
 		expect(r.shown.map((g) => [g.entry.eventId, g.stakes])).toEqual([['a', 2]]);
 	});
 
-	it('a leap of a fifth across the primo adds the transition demand: 2 × 2 = 4', () => {
-		const r = run([entry('a', '2', ['passaggio'])], notes([{ id: 'x', midi: 50, phrase: 0 }, { id: 'a', midi: 57, phrase: 0, leapFrom: 50 }, ...coda]));
+	// A leap is a minor sixth or greater: Dann, 2026-09-23 00:27 (`GATE_DEFAULTS.leapSemitones`).
+	it('a leap of a minor sixth across the primo adds the transition demand: 2 × 2 = 4', () => {
+		const r = run([entry('a', '2', ['passaggio'])], notes([{ id: 'x', midi: 49, phrase: 0 }, { id: 'a', midi: 57, phrase: 0, leapFrom: 49 }, ...coda]));
 		expect(r.shown[0].demands).toEqual(['register', 'transition']);
 		expect(r.shown[0].weights).toEqual(['phraseTop']);
 		expect(r.shown[0].stakes).toBe(4);
 	});
 
-	it('a leap under a fifth is not a transition', () => {
-		const r = run([entry('a', '2', ['passaggio'])], notes([{ id: 'x', midi: 53, phrase: 0 }, { id: 'a', midi: 57, phrase: 0, leapFrom: 53 }, ...coda]));
+	it('a fifth across the primo is not a transition', () => {
+		const r = run([entry('a', '2', ['passaggio'])], notes([{ id: 'x', midi: 50, phrase: 0 }, { id: 'a', midi: 57, phrase: 0, leapFrom: 50 }, ...coda]));
 		expect(r.shown[0].demands).toEqual(['register']);
 		expect(r.shown[0].stakes).toBe(2);
 	});

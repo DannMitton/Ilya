@@ -24,8 +24,8 @@
  * mechanism and neither builder has to know the other's vocabulary.
  *
  * The copy sits here rather than in `i18n.ts` under E.22 §4's licence for this
- * item: "minimal form, hardcoded copy, no configurability". It is PLACEHOLDER,
- * flagged for Dann, and the French needs his eye more than the English does.
+ * item: "minimal form, hardcoded copy, no configurability". RATIFIED by Dann
+ * 2026-09-30 23:42, English and French, as built.
  */
 
 import type { Language } from '../i18n';
@@ -40,7 +40,7 @@ export const MARKUP_WITHHELD_TYPE = 'markup-withheld';
 
 const MARKUP_WITHHELD_COPY: Record<Language, string> = {
 	en: 'The score and Ilya divide this word differently, so nothing is transcribed here rather than guessed.',
-	fr: 'La partition et Ilya divisent ce mot différemment : rien n’est transcrit ici plutôt que deviné.'
+	fr: 'La partition et Ilya divisent ce mot différemment\u00a0: rien n’est transcrit ici plutôt que deviné.'
 };
 
 /**

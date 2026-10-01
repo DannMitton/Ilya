@@ -139,7 +139,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
 	import Loupe from '$lib/score/Loupe.svelte';
 	import CorrectionSurface from '$lib/score/CorrectionSurface.svelte';
-	import { QUIET_MS, rebuildSource, transcribeVerdict, type TextArrival } from '$lib/one-action';
+	import { QUIET_MS, emptyTextNotice, rebuildSource, transcribeVerdict, type TextArrival } from '$lib/one-action';
 	import {
 		diffWordGrid,
 		emptyDiff,
@@ -4786,7 +4786,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     would mean the phone and the desk stopped showing the same
 			     document. -->
 			{#snippet transcriptionPaper()}
-				<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} glossOverrides={doc.glossOverrides} onwordclick={handleWordClick} />
+				<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} glossOverrides={doc.glossOverrides} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownPoem, loaderState)} />
 			{/snippet}
 			{#if isMobile}
 				<!-- N.73 portrait C. The stage holds both views. The one that is

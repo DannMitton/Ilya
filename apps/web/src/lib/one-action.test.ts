@@ -16,7 +16,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { QUIET_MS, rebuildSource, transcribeVerdict, type TranscribeState } from './one-action';
+import { QUIET_MS, emptyTextNotice, rebuildSource, transcribeVerdict, type TranscribeState } from './one-action';
 
 const POEM = 'Ночь была темна';
 
@@ -121,5 +121,35 @@ describe('rebuildSource', () => {
 		for (const n of [0, 1, 95, 96]) {
 			expect(rebuildSource('Комнатка', n)).not.toBe('score');
 		}
+	});
+});
+
+/**
+ * QUEUE row 2j, 2026-09-30: Dann's restored Sunless no. 1 showed "Enter your
+ * Cyrillic text" while its 8-line poem sat in the box, because the dictionary
+ * was still loading in a background tab. The instruction is for an empty box
+ * only.
+ */
+describe('what the Text page says with no lines to draw', () => {
+	const POEM = 'Комнатка тесная, тихая, милая; \nтень непроглядная, тень безответная;';
+	const loading = { isLoading: true, error: null, entryCount: 0 };
+	const ready = { isLoading: false, error: null, entryCount: 512_000 };
+	const failed = { isLoading: false, error: 'Could not load dictionary manifest.', entryCount: 0 };
+
+	it('asks for text only when the box is empty, whatever the dictionary is doing', () => {
+		expect(emptyTextNotice('', loading)).toBe('enter');
+		expect(emptyTextNotice('  \n ', ready)).toBe('enter');
+		expect(emptyTextNotice('', failed)).toBe('enter');
+	});
+
+	it('says the dictionary is loading when a restored poem waits on it', () => {
+		expect(emptyTextNotice(POEM, loading)).toBe('loading');
+		// Before the first state change the loader reports nothing loaded yet.
+		expect(emptyTextNotice(POEM, { isLoading: false, error: null, entryCount: 0 })).toBe('loading');
+	});
+
+	it('says nothing, rather than something false, in any other wait', () => {
+		expect(emptyTextNotice(POEM, ready)).toBe('quiet');
+		expect(emptyTextNotice(POEM, failed)).toBe('quiet');
 	});
 });

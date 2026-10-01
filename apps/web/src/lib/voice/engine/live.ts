@@ -530,7 +530,8 @@ export class LiveCaptureSession implements CaptureSession {
 			'gate: rms', rms.toFixed(4),
 			'| pulses', det.nPulses,
 			'| rate', fmt(det.rateHz, 1), 'Hz',
-			'| cv', fmt(det.cv),
+			'| median', fmt(det.medianIpi === null ? null : det.medianIpi * 1000, 1), 'ms',
+			'| dispersion', fmt(det.dispersion),
 			'| decay', fmt(det.decay),
 			'| flatness', det.flatness.toFixed(3),
 			// fmt() rather than toFixed(): snrDb is nullable since item 1.4b, and

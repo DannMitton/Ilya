@@ -500,7 +500,7 @@ this line read 1,948 lines when the file was 6,225).
 | A pill, filled | one per surface, the primary, last | Transcribe and fit; Finish; Re-calibrate |
 | Text verbs | receipt-scoped only: Clear, Replace, Revert, Reset | `.receipt-btn`, `.btn-reset` |
 | Alignment | flush left on the inset; nothing centred | every band on the front side; desk inference as a rule, since no document states it |
-| Radii | three: 0 paper, small controls (3 to 4 px), pills 999 | slate, 2026-08-18 |
+| Radii | three: 0 paper, small controls (3 to 4 px), pills 999. **[AUDIT 2026-09-30: amended 2026-09-02, a fourth radius of 20 px for surfaces, *"20 looks terrific"*, `../sessions/LOG.md:3351`; `OPEN.md` §RULINGS HOMED, PART 2]** | slate, 2026-08-18 |
 | Accent | one per surface; lavender on Score markup and its takeover | slate; `--lang-chip-*` tokens |
 | Alignment, ratified | flush left on the inset, nothing centred, drawer-wide | Dann, ruled 2026-09-10 |
 
@@ -574,7 +574,7 @@ at least notes 30 to 36, visible in Dorico's own render of the file.
 
 - 2026-09-09: the Voice station in Score markup stays expanded always; its chevron is struck.
 - 2026-09-09: the intake hint moves to sit directly under the textarea, above the receipts, as the field's caption, its wording unchanged.
-- 2026-09-09 and 2026-09-10: Undo and Redo move to the top bar, right end, fixed, as two pills tangent to the card, horizontal padding equal to the band inset; the dock's own Undo row goes.
+- **[SUPERSEDED, found by the audit of 2026-09-30: Dann 2026-09-17, *"get it off that header entirely"*, moved Undo and Redo into the loupe's bar (`../sessions/brief-n149-both-modes_r1_2026-09-20.md`:26; `OPEN.md` §N.149). The line below is history.]** 2026-09-09 and 2026-09-10: Undo and Redo move to the top bar, right end, fixed, as two pills tangent to the card, horizontal padding equal to the band inset; the dock's own Undo row goes.
 - 2026-09-10: Start placement over is a ghost pill in the open syllable line's row.
 - 2026-09-10: Export and import order is Export all songs, Export this song, Import a song.
 - 2026-09-10: the calibration surface's collapse row is removed.
@@ -920,7 +920,11 @@ Ruled natively 2026-09-16. Read from Table I, p. 3006, by the desk 2026-09-28: i
 - **What `#` is. Dann, 2026-07-30** (quoted at `packages/score-parser/src/diction-marks.ts:8-11`): *"# means a break in phonation, a lift or an interruption as opposed to continuous phonation. Its function is to signal the stopping of assimilative processes. But alone, # has no phonetic/phonemic value."* And: *"# should never take a syllable slot."* The mark joins the syllable before it and is never discarded.
 - **It changes no calculation. Dann, 2026-09-24 21:59:** *"Just be sure that the newly situated octothorpes have zero effect on correct duration counts or other calculations."* Only which vowel a note is counted under may move; a test enforces it (N.171, shipped `6ede257`).
 
-### French spacing before the semicolon. Ruled by Dann 2026-09-28 19:42
+### SUPERSEDED 2026-09-30 21:39. Canadian French spacing follows the OQLF table
+
+**Dann, 2026-09-30 21:39:** *"Ilya agrees with whatever the conventions for modern Canadian French demand."* The OQLF (*Vitrine linguistique*, « Espacement avant et après les signes de ponctuation et les symboles », read by the desk 21:47) *« opte pour l'absence d'espace devant le point-virgule, le point d'exclamation et le point d'interrogation »*; a no-break space before « : », « % », « $ », and inside « ». **No space before « ; », « ? », « ! ».** This restores 2026-08-21 and reverses the entry below, **which was the desk's amenity and misdescribed the OQLF** as preferring the *espace fine*. Brief: `../sessions/brief-code-french-spacing-oqlf_r1_2026-09-30.md`.
+
+### (Superseded) French spacing before the semicolon. Ruled by Dann 2026-09-28 19:42
 
 Offered by the desk; ruled in by Dann (*"yes"*). **Default:** a narrow no-break space
 (U+202F, written `\u202f` in `i18n.ts`) before every French semicolon, following the

@@ -166,7 +166,7 @@ export function rowReference(rowId: string, language: 'en' | 'fr'): Run[] {
 	const tail = [` ${pagesText(row, language)}.`];
 	if (row.heading) tail.push(` ${row.heading}.`);
 	if (row.quote) tail.push(language === 'fr' ? ` « ${row.quote} »` : ` “${row.quote}”`);
-	return [...fullReference(row.work), { text: tail.join('') }];
+	return [...fullReference(row.work, language), { text: tail.join('') }];
 }
 
 /** The works a set of rows cites, alphabetical by author then year, each once. */

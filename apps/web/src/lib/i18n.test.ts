@@ -83,28 +83,63 @@ describe("the loupe's French", () => {
 });
 
 /**
- * French spacing before the semicolon, ruled by Dann 2026-09-28 19:42
- * (`docs/memory/PRODUCT.md`): a narrow no-break space, U+202F, before every
- * French semicolon. Markup inside a value is not prose: a semicolon inside a
- * tag (the footer's inline `style`) or ending an entity (`&#160;`) is skipped.
+ * French spacing follows the OQLF table, ruled by Dann 2026-09-30 21:39
+ * (*"Ilya agrees with whatever the conventions for modern Canadian French
+ * demand"*; `docs/memory/PRODUCT.md` and `ENVIRONMENT.md`, "THE RULE FOR
+ * CANADIAN FRENCH"). No space of any kind before « ; », « ? », or « ! »; a
+ * no-break space, U+00A0, before « : »; U+00A0 inside « ». This reverses the
+ * semicolon ruling of 2026-09-28, which put U+202F before « ; ».
+ *
+ * Markup inside a value is not prose: a tag (the footer's inline `style`), an
+ * entity (`&#160;`) are skipped. A `{placeholder}` or `{cite:…}` token reads
+ * as one letter, because each prints as text (a citation prints as
+ * "(Miller 1986, p. 158)", so « lui-même {cite:RMR-057}; mais » is right). A
+ * colon between digits (a time, 13:52) or before `//` (a URL) is not
+ * punctuation.
  */
-describe('French semicolons carry a narrow no-break space', () => {
-	const prose = (s: string) => s.replace(/<[^>]*>/g, '').replace(/&#?\w+;/g, '');
-	const unspaced = (s: string) => [...prose(s)].filter((c, i, a) => c === ';' && a[i - 1] !== '\u202f').length;
+describe('French spacing follows the OQLF table', () => {
+	const prose = (s: string) => s.replace(/<[^>]*>/g, '').replace(/&#?\w+;/g, '').replace(/\{[^}]*\}/g, 'x');
+	const SPACE = /[\s\u00a0\u202f\u2009]/;
+	const faults = (s: string): string[] => {
+		const out: string[] = [];
+		const p = [...prose(s)];
+		p.forEach((c, i) => {
+			const before = p[i - 1] ?? '';
+			const after = p[i + 1] ?? '';
+			if (';?!'.includes(c) && SPACE.test(before)) out.push(`space before ${c}`);
+			if (c === ':' && !(/\d/.test(before) && /\d/.test(after)) && after !== '/' && before !== '\u00a0') out.push('no U+00A0 before :');
+			if (c === '«' && after !== '\u00a0') out.push('no U+00A0 after «');
+			if (c === '»' && before !== '\u00a0') out.push('no U+00A0 before »');
+		});
+		return out;
+	};
 
 	it('finds the faults it is looking for', () => {
-		expect(unspaced('passaggio; attendez')).toBe(1);
-		expect(unspaced('passaggio\u00a0; attendez')).toBe(1);
-		expect(unspaced('passaggio ; attendez')).toBe(1);
-		expect(unspaced('passaggio\u202f; attendez')).toBe(0);
-		expect(unspaced('<span style="width:14px;height:7px">x</span>')).toBe(0);
+		expect(faults('passaggio; attendez')).toEqual([]);
+		expect(faults('passaggio\u202f; attendez')).toEqual(['space before ;']);
+		expect(faults('passaggio\u00a0; attendez')).toEqual(['space before ;']);
+		expect(faults('passaggio ; attendez')).toEqual(['space before ;']);
+		expect(faults('Supprimer ce chant\u202f?')).toEqual(['space before ?']);
+		expect(faults('Supprimer ce chant?')).toEqual([]);
+		expect(faults('Mesure 3 : votre')).toEqual(['no U+00A0 before :']);
+		expect(faults('Mesure 3: votre')).toEqual(['no U+00A0 before :']);
+		expect(faults('Mesure {bar}\u00a0: votre')).toEqual([]);
+		expect(faults('«\u00a0{word}\u00a0»')).toEqual([]);
+		expect(faults('« mot »')).toEqual(['no U+00A0 after «', 'no U+00A0 before »']);
+		expect(faults('à 13:52, via https://kaikki.org')).toEqual([]);
+		expect(faults('<span style="width:14px;height:7px">x</span>')).toEqual([]);
+		expect(faults('lui-même {cite:RMR-057}; mais')).toEqual([]);
+		expect(faults('lui-même {cite:RMR-057} ; mais')).toEqual(['space before ;']);
 	});
 
-	it('every French value in i18n.ts has U+202F before each semicolon', () => {
-		const faults = stringKeys().filter((k) => unspaced(t(k, 'fr')) > 0);
-		expect(faults).toEqual([]);
-		// Not vacuous: the table carries French semicolons to check (14 on 2026-09-29).
-		const checked = stringKeys().reduce((n, k) => n + (prose(t(k, 'fr')).match(/;/g)?.length ?? 0), 0);
-		expect(checked).toBeGreaterThanOrEqual(14);
+	it('every French value in i18n.ts follows the table', () => {
+		const found = stringKeys().flatMap((k) => faults(t(k, 'fr')).map((f) => `${k}: ${f}`));
+		expect(found).toEqual([]);
+		// Not vacuous: on 2026-09-30 the table carried 16 « ; », 21 « ? », 62 « : », and 8 « » pairs in French prose.
+		const count = (c: string) => stringKeys().reduce((n, k) => n + [...prose(t(k, 'fr'))].filter((x) => x === c).length, 0);
+		expect(count(';')).toBeGreaterThanOrEqual(16);
+		expect(count('?')).toBeGreaterThanOrEqual(21);
+		expect(count(':')).toBeGreaterThanOrEqual(62);
+		expect(count('«')).toBeGreaterThanOrEqual(8);
 	});
 });

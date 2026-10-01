@@ -41,6 +41,7 @@ import {
 	type VoiceProfileSnapshot,
 	type VowelForEvent,
 } from '@ilya/score-parser';
+import { centreOfGravity, cycleDose, halfMassBand, type CentreOfGravity, type CycleDose, type HalfMassBand } from './singing-measures';
 import type { WatchEntry, WatchKind, WatchList, WatchTransposition } from '$lib/analysis/watchlist';
 import { VOWELS } from '$lib/voice/engine/types';
 import type { Language } from '$lib/i18n';
@@ -222,6 +223,12 @@ export interface TessituragramModel {
 	passaggio: { primo: Pitch; secondo: Pitch } | null;
 	/** Whole percents that sum to 100. Null without both passaggi. */
 	zones: PassaggioZones | null;
+	/** N.123 part 2: the bracket, "half the singing" (`singing-measures.ts`). */
+	halfMass: HalfMassBand | null;
+	/** N.123 part 2: the bracket's centre tick. */
+	centre: CentreOfGravity | null;
+	/** N.123 part 2: the line under the figure. Null without a tempo: the line is omitted. */
+	cycles: CycleDose | null;
 }
 
 export interface InsightsModel {
@@ -595,6 +602,9 @@ export function tessituragram(
 		tessitura: tessitura.measured ? { low: tessitura.measured.low, high: tessitura.measured.high } : null,
 		passaggio: profile.passaggio ? { primo: profile.passaggio.primo, secondo: profile.passaggio.secondo } : null,
 		zones: shares && zones ? { below: shares[0], between: shares[1], above: shares[2] } : null,
+		halfMass: halfMassBand(rows),
+		centre: centreOfGravity(rows),
+		cycles: cycleDose(rows, pricing ? pricing.price : null),
 	};
 }
 

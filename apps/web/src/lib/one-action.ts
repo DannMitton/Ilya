@@ -131,3 +131,29 @@ export function rebuildSource(poem: string, poemSlots: number): 'poem' | 'score'
 	if (poem.trim().length === 0) return 'score';
 	return poemSlots > 0 ? 'poem' : 'none';
 }
+
+/** What the Text page says when it has no lines to draw. */
+export type EmptyTextNotice = 'enter' | 'loading' | 'quiet';
+
+/**
+ * THE TEXT PAGE TELLS THE TRUTH WHILE IT WAITS. QUEUE row 2j, 2026-09-30.
+ *
+ * "Enter your Cyrillic text" (`paper.empty`) was drawn whenever there were no
+ * lines, so a restored poem waiting on the dictionary was told to be entered:
+ * false, and against Dann's ruling of 2026-09-24 09:57 ("Text in the system
+ * must yield a transcription if that text populates Markup"). The sentence is
+ * now said only when the box is empty. A poem waiting on the dictionary gets
+ * the loader's own `dict.loading`. Any other wait (a 600 ms typing pause, or
+ * a failed load, which the drawer already reports) gets no sentence: nothing
+ * on the page is better than a false instruction.
+ *
+ * `shownPoem` is what the box shows, so a derived poem counts as a poem.
+ */
+export function emptyTextNotice(
+	shownPoem: string,
+	loader: { isLoading: boolean; error: string | null; entryCount: number },
+): EmptyTextNotice {
+	if (shownPoem.trim() === '') return 'enter';
+	if (loader.error === null && (loader.isLoading || loader.entryCount === 0)) return 'loading';
+	return 'quiet';
+}

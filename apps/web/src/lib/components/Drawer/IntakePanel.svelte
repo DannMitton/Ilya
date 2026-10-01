@@ -3,7 +3,7 @@
 	import type { LoaderState } from '$lib/loader';
 	import { t, type Language } from '$lib/i18n';
 	import { countText } from './bandState';
-	import IntakeCamera from './IntakeCamera.svelte';
+	import IntakeCamera, { pointer } from './IntakeCamera.svelte';
 	import type { TextArrival } from '$lib/one-action';
 
 	/*
@@ -370,7 +370,7 @@
 		     owed. -->
 		<textarea
 			class="text-input"
-			class:beside-camera={isMobile}
+			class:beside-camera={pointer.coarse}
 			bind:this={textareaEl}
 			placeholder={t('intake.placeholder', language)}
 			value={inputText}
@@ -384,11 +384,11 @@
 		     amends N.108 increment 4. That day's icon picked a FILE for OCR, and
 		     it went because it, Choose a file, and Read a score from a
 		     photograph "all serve the same function". This one opens the
-		     CAMERA, which no other control does. A phone only, the desk's
-		     default: a desktop browser ignores `capture` and would open Choose a
-		     file again. What it takes goes through `onPick` like any picked
+		     CAMERA, which no other control does. On a coarse pointer (row 2k,
+		     the sixth clause of 2026-08-10), not by width: a mouse-driven browser
+		     ignores `capture`, so it would open Choose a file. It goes via `onPick` like any picked
 		     picture (`ScoreUploader.take`, N.146). See `IntakeCamera.svelte`. -->
-		{#if isMobile}
+		{#if pointer.coarse}
 			<IntakeCamera {language} disabled={loaderState.isLoading} onpick={onPick} />
 		{/if}
 

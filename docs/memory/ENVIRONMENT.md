@@ -122,6 +122,7 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| Dann's phone shows old tab names or an old screen after a ship | `THE PHONE KEEPS THE OLD BUILD UNTIL IT RELOADS` |
 | anything involving Dann's phone | `Browser and extension` |
 | iOS greys out a file Ilya can read | `Claude Code, and where the building` |
 | a tab loaded hidden and nothing downstream works | `A HIDDEN TAB` |
@@ -135,6 +136,7 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| a desk walk in Dann's Chrome shows Text empty, or "Loading dictionary…" that never ends | `A BACKGROUND TAB STARVES THE DICTIONARY LOADER` |
 | a measurement taken soon after a score loads disagrees with a later one | `THE SEATING REDRAW ARRIVES FOUR SECONDS LATE` |
 | the alias shows a blank white page right after a ship | `BLANK ON THE FIRST LOAD AFTER A DEPLOY` |
 | you are measuring whether two drawn things touch | `A BOUNDING BOX IS NOT INK` |
@@ -228,6 +230,7 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| French spacing, or a French bibliographic reference | `PRODUCT.md`, "Canadian French spacing follows the OQLF table" |
 | Canadian French punctuation | `TYPOGRAPHY IN THIS TREE` |
 | the French form of a name | `FRENCH NAME RESEARCH` |
 | the BnF authority route | `data.bnf.fr` |
@@ -238,6 +241,7 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| WebFetch refuses a journal, a PubMed page, or a Government of Canada page | `WHEN WEBFETCH IS REFUSED, READ IT IN DANN'S CHROME` |
 | a repo-wide grep returns two hits for every file | `THE WORKTREE DOUBLES EVERY GREP` |
 | the device tools vanish mid-session, or are absent at the open | `THE BRIDGE DROPS AND COMES BACK` |
 | the desk needs to stage a render or scratch file from the repo | `DESK SCRATCH GOES IN node_modules/.desk-scratch` |
@@ -2252,7 +2256,7 @@ count for colons.
 **Scan the BUILT BUNDLE, not the source, when the question is what a singer
 sees.** A naive tree sweep also drowns in JavaScript ternaries.
 
-### THE RULE FOR CANADIAN FRENCH, ruled by Dann 2026-08-21
+### THE RULE FOR CANADIAN FRENCH, ruled by Dann 2026-08-21, REAFFIRMED 2026-09-30 21:39 (the OQLF table governs every sign; see `PRODUCT.md`). The 2026-09-28 semicolon change was the desk's error
 
 **No space before `?`, `!`, or `;`. A hard space before `:`.** Canada parts
 company with France here. Sources, both checked before the ruling: the
@@ -4435,3 +4439,16 @@ Learned 2026-09-30. `tools/i-extractor-check/burg.py` imports `scipy`; the bridg
 ## CHOOSING A GUIDE CITATION: LOOK FOR THE TEACHING SOURCE FIRST
 
 Learned 2026-09-30, drafting N.174. The first source to hand (Nix, Emerich and Titze 2005) was correct but written for specialists. A library search for "fry" across `Insights Research/_primary-text/` found plainer, better-fitted sources in minutes: Donald Miller 2008 p. 23 (fry described in a singer's words, and Ilya's exact method), Herbst 2020 JOS p. 178 (the 70 Hz threshold with "about C♯2"). Count matches per file first (`grep -o -i fry | wc -l`), then read the top files. Confirm every page on the PDF, not the text extraction: page markers in the `.txt` files sit at page ends, and spreads put two pages on one PDF page.
+
+## THE PHONE KEEPS THE OLD BUILD UNTIL IT RELOADS. Learned 2026-09-30
+
+Dann scanned a QR code to the branch alias and saw "TRANSCRIPTION | SCORE MARKUP" when the tree said "Text | Markup" (`i18n.ts:104`, `:115`). Vercel confirmed the alias served the newest deployment. **The service worker (`static/sw.js:79`) answers static assets from its cache first** and fetches the new build behind it, so the first load after a ship shows whatever that browser last cached. The desk said "current build" from the deployment record without reading the screen, and was wrong. **Before telling Dann what he is looking at, compare the screen with the tree**, and expect one reload (or the "A new version of Ilya is ready" banner's Refresh) after any ship. A private tab has no service worker and settles it.
+
+## A BACKGROUND TAB STARVES THE DICTIONARY LOADER. Learned 2026-09-30
+
+A desk walk in a Claude in Chrome tab showed Sunless 1's Text page empty while the drawer held the poem. Code found the cause (`../sessions/report-code-text-page-empty-with-poem_r1_2026-09-30.md`): **the tab was in the background, Chrome clamped the loader's `setTimeout(0)` yields, and after 94 s the dictionary was still loading.** Code changed the yields to `MessageChannel` and made Text say "Loading dictionary…" while it waits. **For desk walks:** a tab group the desk drives may be hidden from Chrome's point of view; give the dictionary time, or bring the tab forward, before reporting an empty page as a defect.
+
+## WHEN WEBFETCH IS REFUSED, READ IT IN DANN'S CHROME. Learned 2026-09-30
+
+WebFetch refused `pubs.asha.org` (robots), Gale (410), ResearchGate (429), and the English `noslangues-ourlanguages.gc.ca` page (robots). What worked: **the French address `nos-langues.canada.ca/fr/...` through WebFetch**, and **Claude in Chrome**, which reads through Dann's own browser: ResearchGate's page linked the NIH author manuscript on PubMed Central (`pmc.ncbi.nlm.nih.gov/articles/PMC3158591/`), read in full with `get_page_text`. For a 2000s NIH-funded article, try PMC first. Open a new tab, read, close it.
+

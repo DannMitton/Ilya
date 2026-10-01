@@ -104,6 +104,11 @@ function buildBuffer(intervals: number[], totalS: number, seed: number): Float64
 	return out;
 }
 
+function median(a: number[]): number {
+	const s = [...a].sort((x, y) => x - y), h = s.length >> 1;
+	return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2;
+}
+
 function cv(a: number[]): number {
 	const m = a.reduce((s, x) => s + x, 0) / a.length;
 	const v = a.reduce((s, x) => s + (x - m) * (x - m), 0) / a.length;
@@ -153,12 +158,22 @@ describe('the fixture is what it claims to be, by arithmetic on its own schedule
 });
 
 describe('a take that is steady for part of its length is judged on that part', () => {
-	it('is still rejected by the detector when the detector is shown all 3.5 seconds', () => {
-		// The defect, pinned. This is what `runCapture` used to ask, and the answer
-		// has not changed: read as one buffer, this take is not fry.
-		const det = detect(twoPhaseBuffer, SR);
-		expect(det.accept).toBe(false);
-		expect(det.failed).toContain('c5_cv');
+	it('is accepted whole since the detector reads the median, and the guard still keeps the sub-window', () => {
+		// This test pinned N.80's defect: read as one buffer, the take failed
+		// `c5_cv` on a standard-deviation CV above 1.0. Row 2d part 2b
+		// (2026-09-30) moved c3 and c5 onto the median, and on the median most of
+		// this take is fry, so the whole buffer now passes. The numbers are
+		// arithmetic on the fixture's own schedule: the regular first phase is the
+		// majority of the intervals, so the median sits in it and the median
+		// absolute deviation over the median sits far below 0.75.
+		const med = median(twoPhase);
+		expect(med).toBeGreaterThan(0.0125);
+		expect(med).toBeLessThan(0.05);
+		expect(median(twoPhase.map((x) => Math.abs(x - med))) / med).toBeLessThan(0.75);
+		expect(detect(twoPhaseBuffer, SR).accept).toBe(true);
+		// What N.80 built is unchanged: the extractor is still shown the steady
+		// stretch, not the whole take.
+		expect(guard(twoPhaseBuffer, SR).fullWindow).toBe(false);
 	});
 
 	it('finds a passing sub-window and reports it as a sub-window, not the whole take', () => {

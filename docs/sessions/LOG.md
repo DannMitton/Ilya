@@ -8060,3 +8060,29 @@ thread, after the `audit` merge. Only the Correction Station brief waits for it
 > - **Still owed by Dann:** a walk of «Семинарист»; the six N.168 French labels and the [œ] onset and [i] preface suggestions; the walk of the French word explanations and Learn's ⟨ж⟩, ⟨ш⟩, ⟨ц⟩ lines; Claude GitHub App access for `DannMitton/ilya` unless done; one phone photo of a score for the format walk.
 >
 > **Uncommitted desk files at this close:** `STATE.md`, `SCHEDULE.md`, `../sessions/LOG.md`, `OPEN.md` and `PRODUCT.md` if touched after `3ab034b`. Research-folder files (outside the repo): `_synthesis/draft-three-comments_r3` to `r6`, `needs_r1` reading list, `notation-reference_Titze-2015.md` typography.
+
+---
+
+## Block: close of 2026-09-30, about 19:50 (moved from `STATE.md` 2026-10-01 00:05, verbatim)
+
+> ### CLOSE OF 2026-09-30, about 19:50. READ THIS FIRST, THEN `QUEUE.md`.
+>
+> **Last ship: `6d87638`, 2026-09-30 18:45** (voice type slice A, small fixes, the closed-phase [i] extractor and its capture harness), all eight gates at baseline, gate 4 `1732`. Not walked on the alias. **If Dann ran the close-of-session ship below, a later commit carries rows 2c, 3, 4 and these desk files at gate 4 `1747`;** ask him for the state in one line.
+>
+> **THE ONE THING NEXT: paste row 2d to Code (parts 1 and 2).** Dann walked calibration at 19:32 to 19:36 with `?harness=1`. **His readings are good** ([i] 273/1658 and 241/1807 on the closed phase; [e] 365/1622, [ɛ] 531/1352, [a] 681/1080, [ɑ] 586/999, [o] 425/744, [u] 289/702, [ʌ] 587/1052). **But `guard.ts` stamped 7 of 9 accepted takes Provisional** (`rate_cv` against `T_RATE_CV = 0.25`; `fr1_cv` from the old coarse per-frame estimator), **and 5 first takes were refused `not-fry`.** Dann, 19:37, angry: *"NOT AN ENJOYABLE EXPERIENCE ... We need to work on something else."* **Do not ask Dann to sing again until row 2d parts 1 and 2 are verified on his own 14 capture files in `~/Downloads/ilya-capture-*-2026-09-30T23-3*` (never copied into the repository).** Paste line for Code:
+>
+> `Read docs/memory/QUEUE.md row 2d and its brief, docs/sessions/brief-code-guard-stamps-good-fry-provisional_r1_2026-09-30.md. Do parts 1 and 2 only; part 3 waits for the desk's strings. Verify on Dann's capture files in ~/Downloads, never copy them into the repository. Report, run the gates, no git writes.`
+>
+> **The next desk task with taste: row 2d part 3,** the sing-the-vowel-first cue with a countdown (Dann 19:37). The desk drafts the flow and the strings EN and FR; Dann ratifies; then Code builds.
+>
+> **Extractor, row 2b step 4:** met in substance by the readings above; `tools/i-extractor-check/burg.py` was not run (the bridge has no `scipy`; run it in Code's shell or the container). The 1063 Hz reading was never reproduced.
+>
+> **Built by Code, rows 2c, 3, 4** (reports in `../sessions/`): calibration's first moments; 321 lines of dead code removed (`tools/e16-harness/_rhythm_spike/` KEPT, desk call: `verify_toolchain.py` pins two of its files); the Guide's Sources section from `$lib/sources.ts` (14 works, 10 OWED). Gate 4 `1747`; `~/Downloads/ilya-ship.sh` already expects 1747 (backup `.bak-1732-2026-09-30`). **Desk decision 19:50: ship rows 2c, 3, 4 now.** The Provisional labels predate row 2c, and row 5 needs a clean tree.
+>
+> **Ratified today, late:** N.174, the Guide essay "Why Ilya listens to your fry", English 19:28 and French 19:45 (`../sessions/draft-guide-fry-essay_r1_2026-09-30.md`), **NOT YET SEATED** (audit 2026-09-30: no "fry" essay in `GuideContent.svelte`); it waits in `QUEUE.md` under N.84. Its drafting rulings are in `OPEN.md` N.174.
+>
+> **INBOX:** Dann asked what a Chinese translation of Ilya would take (19:40); the estimate is logged, nothing decided.
+>
+> **Owed by Dann (carried from the 12:30 block):** nothing. ("compatibility" or "fit" SETTLED 21:30, QUEUE row 2f; French spacing SETTLED 21:39 to the OQLF table, QUEUE row 2g.) (Slice B's copy struck 2026-09-30 20:30: RATIFIED 12:32, `../sessions/draft-voice-type-slice-b-copy_r1_2026-09-30.md:40`.)
+>
+> **The 12:30 block and the stale 00:15 block moved verbatim to `../sessions/LOG.md`.**

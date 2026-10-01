@@ -914,7 +914,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.status.preparingReader': { en: 'Ilya is reading the notes off your page. Starting the reader might take about one minute, then a few seconds for each page of music after that.', fr: 'Ilya lit les notes sur votre page. Le démarrage du lecteur peut prendre environ une minute, et après quelques secondes par page de partition.' },
 	'upload.format.imageReader':   { en: 'Format: photograph → MusicXML', fr: 'Format\u00a0: photographie → MusicXML' },
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
-	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them into the Input field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image\u202f; saisissez-les dans le champ Entrée.' },
+	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them into the Input field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image; saisissez-les dans le champ Entrée.' },
 
 	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
 	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
@@ -1069,21 +1069,26 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.welcome.fryAnswer': { en: 'A low, creaky voice register, easy to sustain and gentle on the voice. Ilya reads its resonances rather than your sung pitch, so comfort matters more than pitch here.', fr: 'Un registre vocal grave et grésillant, facile à tenir et doux pour la voix. Ilya en lit les résonances plutôt que la hauteur de votre chant, donc le confort importe ici davantage que la hauteur.' },
 	'calib.welcome.beginButton': { en: 'Begin', fr: 'Commencer' },
 	'calib.readiness.title': { en: 'Getting ready', fr: 'Préparation' },
-	'calib.readiness.quiet': { en: 'Listening for quiet. Stay silent for a moment.', fr: 'À l\u2019écoute du silence. Restez silencieux un moment.' },
-	'calib.readiness.prepareLede': { en: 'Now a throwaway fry, just to check the mic hears you.', fr: 'Maintenant une friture d\u2019essai, simplement pour vérifier que le micro vous entend.' },
+	// The readiness gate's copy, and `calib.roster.noiseFloorTitle` and `calib.challengingInvite.*`:
+	// RATIFIED by Dann 2026-09-30 23:42 ("yes"), desk-drafted; they were PLACEHOLDER.
+	'calib.readiness.quiet': { en: 'Listening to the room. Stay silent for a moment.', fr: 'Ilya écoute la pièce. Restez en silence un moment.' },
+	'calib.readiness.prepareLede': { en: 'Next, a short test fry, so Ilya can check that the microphone hears you.', fr: 'Ensuite, une courte friture d\u2019essai, pour qu\u2019Ilya vérifie que le micro vous entend.' },
 	'calib.readiness.countThree': { en: 'Three.', fr: 'Trois.' },
 	'calib.readiness.countTwo': { en: 'Two.', fr: 'Deux.' },
 	'calib.readiness.countOne': { en: 'One.', fr: 'Un.' },
 	'calib.readiness.captureLede': { en: 'Fry now, and keep going until the bar fills.', fr: 'Faites la friture maintenant, et continuez jusqu\u2019à ce que la barre soit pleine.' },
-	'calib.readiness.captureAria': { en: 'Recording your throwaway fry', fr: 'Enregistrement de votre friture d\u2019essai' },
-	'calib.readiness.noMic': { en: 'We could not reach your microphone, so nothing was measured.', fr: 'Nous n\u2019avons pas pu accéder à votre microphone, donc rien n\u2019a été mesuré.' },
-	'calib.readiness.noFry': { en: 'We did not hear a fry, so nothing was measured.', fr: 'Nous n\u2019avons pas entendu de friture, donc rien n\u2019a été mesuré.' },
+	'calib.readiness.captureAria': { en: 'Recording your test fry', fr: 'Enregistrement de votre friture d\u2019essai' },
+	'calib.readiness.noMic': { en: 'Ilya could not reach your microphone, so nothing was measured.', fr: 'Ilya n\u2019a pas pu accéder à votre microphone, donc rien n\u2019a été mesuré.' },
+	'calib.readiness.noFry': { en: 'Ilya did not hear fry, so nothing was measured.', fr: 'Ilya n\u2019a pas entendu de friture, donc rien n\u2019a été mesuré.' },
 	'calib.readiness.guidance': { en: 'You can carry on; each vowel asks for the microphone again.', fr: 'Vous pouvez poursuivre\u00a0: chaque voyelle redemande le microphone.' },
 	'calib.readiness.complete': { en: 'Readiness check complete.', fr: 'Vérification préalable terminée.' },
 	'calib.readiness.marginal': { en: 'Your fry is reading near the edge of our range; a little lower or higher may read cleaner.', fr: 'Votre friture se lit près de la limite de notre plage. Un peu plus grave ou plus aigu se lirait plus nettement.' },
 	'calib.capture.allSet': { en: 'All set.', fr: 'Tout est prêt.' },
 	'calib.capture.cuePrefix': { en: 'Tap the', fr: 'Touchez la voyelle' },
-	'calib.capture.cueSuffix': { en: 'vowel to arm it, tap again to begin.', fr: 'pour l\u2019activer, puis touchez-la de nouveau pour commencer.' },
+	// Row 2d part 3: cueSuffix, pacifier.singFirst, pacifier.pause, and
+	// pacifier.beginPhonating RATIFIED by Dann 2026-09-30 21:00, English and
+	// French (`docs/sessions/draft-sing-first-cue_r1_2026-09-30.md`, REVISION 21:05).
+	'calib.capture.cueSuffix': { en: 'vowel to begin. First sing it as you usually do, to set the shape of your vocal tract. Then stop, keep that shape, and begin again in vocal fry. Ilya measures only the fry.', fr: 'pour commencer. Chantez-la d\u2019abord comme d\u2019habitude, pour régler la forme de votre conduit vocal. Puis arrêtez, gardez cette forme et recommencez en friture vocale. Ilya ne mesure que la friture.' },
 	'calib.capture.paused': { en: 'Paused. Resume when you\'re ready.', fr: 'En pause. Reprenez quand vous serez prêt.' },
 	'calib.capture.resumeButton': { en: 'Resume', fr: 'Reprendre' },
 	'calib.capture.hold.captured': { en: ', captured.', fr: ', captée.' },
@@ -1132,23 +1137,27 @@ const strings: Record<string, Record<Language, string>> = {
 	//    2026-08-12 that {v} never opens a French sentence, so the
 	//    French shapes differ from the English deliberately.
 	'pacifier.tapToCapture': { en: 'Tap a vowel to capture it.', fr: 'Touchez une voyelle pour la capter.' },
-	'pacifier.preparing': { en: 'Preparing {v}. Three.', fr: 'Préparation de {v}. Trois.' },
-	'pacifier.beginPhonating': { en: 'Begin phonating now. {v} in vocal fry.', fr: 'Commencez la phonation maintenant\u00a0: {v} en friture vocale.' },
+	// singFirst, pause, and beginPhonating: RATIFIED by Dann 2026-09-30 21:00 (row 2d part 3).
+	'pacifier.singFirst': { en: 'Sing {v} as you usually do. Three.', fr: 'Chantez {v} comme d\u2019habitude. Trois.' },
+	'pacifier.pause': { en: 'Stop, and keep the shape.', fr: 'Arrêtez, et gardez la forme.' },
+	'pacifier.beginPhonating': { en: 'Now {v} in vocal fry.', fr: 'Maintenant, {v} en friture vocale.' },
 	'pacifier.nowSustain': { en: 'Now sustain. Sample recording.', fr: 'Soutenez maintenant. Échantillon en cours d\u2019enregistrement.' },
 	'pacifier.captured': { en: '{v} captured.', fr: 'Capture de {v} effectuée.' },
 	'pacifier.rolledBack': { en: '{v}: new sample was less certain, so the previous one was kept.', fr: 'Pour {v}, le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
 	'pacifier.sampleUncertain': { en: '{v} sample uncertain. Tap to retry.', fr: 'Échantillon incertain pour {v}. Touchez pour réessayer.' },
 	'pacifier.cancelled': { en: 'Capture cancelled.', fr: 'Capture annulée.' },
-	'pacifier.selected': { en: '{v} selected.', fr: 'Sélection de {v}.' },
-	'pacifier.armed': { en: '{v} armed. Tap again to begin.', fr: 'Activation de {v}. Touchez de nouveau pour commencer.' },
-	'pacifier.armedRetake': { en: '{v} armed for re-take. Tap again to begin.', fr: 'Activation de {v} pour une nouvelle capture. Touchez de nouveau pour commencer.' },
 	'pacifier.skipped': { en: '{v} skipped.', fr: 'Capture ignorée pour {v}.' },
 	'pacifier.error.micPermission': { en: 'Microphone access is needed to hear your fry. Can you allow it and try again?', fr: 'L\u2019accès au microphone est nécessaire pour entendre votre friture. Pouvez-vous l\u2019autoriser et réessayer?' },
 	'pacifier.error.micNotFound': { en: 'No microphone was found. Can you connect one and try again?', fr: 'Aucun microphone n\u2019a été trouvé. Pouvez-vous en brancher un et réessayer?' },
 	'pacifier.error.noAudio': { en: 'No sound came through. Can you check the microphone and try again?', fr: 'Aucun son n\u2019est parvenu. Pouvez-vous vérifier le microphone et réessayer?' },
 	'pacifier.error.tooShort': { en: 'That sample was a little short. Can you sustain the fry a moment longer?', fr: 'Cet échantillon était un peu court. Pouvez-vous soutenir la friture un instant de plus?' },
 	'pacifier.error.default': { en: 'That sample could not be read. Can you try that again?', fr: 'Cet échantillon n\u2019a pas pu être lu. Pouvez-vous réessayer?' },
-	'pacifier.wheelAria': { en: 'Vowel calibration. Tap a vowel to select it, tap again to begin capture, long-press to skip.', fr: 'Calibration des voyelles. Touchez une voyelle pour la sélectionner, touchez-la de nouveau pour lancer la capture, appuyez longuement pour l\u2019ignorer.' },
+	// One tap begins (row 2d part 3). Both strings drafted by Code in
+	// report-code-sing-first-then-fry_r1_2026-09-30.md and RATIFIED by Dann
+	// 2026-09-30 22:16. `pacifier.ready` is the wizard's pointer caption; {v}
+	// stays mid-sentence in French, per the 2026-08-12 ruling.
+	'pacifier.wheelAria': { en: 'Vowel calibration. Tap a vowel to begin, tap again to cancel, long-press to skip.', fr: 'Calibration des voyelles. Touchez une voyelle pour commencer, touchez-la de nouveau pour annuler, appuyez longuement pour l\u2019ignorer.' },
+	'pacifier.ready': { en: 'Tap {v} to begin.', fr: 'Touchez {v} pour commencer.' },
 	'calib.summary.title': { en: 'Profile summary', fr: 'Sommaire du profil' },
 	'calib.summary.savedLede': { en: 'Your profile is saved on this device. You can keep refining any reading below.', fr: 'Votre profil est enregistré sur cet appareil. Vous pouvez continuer à affiner n\u2019importe quelle lecture ci-dessous.' },
 	'calib.summary.progressLedeSuffix': { en: 'vowels sampled. Review each reading and re-take anything uncertain before you finish.', fr: 'voyelles échantillonnées. Passez en revue chaque lecture et refaites tout ce qui est incertain avant de terminer.' },
@@ -1483,7 +1492,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.identityUncalibrated': { en: 'Insights for {voice} · {voiceType} · not calibrated', fr: 'Aperçus pour {voice} · {voiceType} · sans calibration' },
 	'insights.yourVoice':          { en: 'your voice',                   fr: 'votre voix' },
 	'insights.pageAria':           { en: 'Insights, page {n} of {total}', fr: 'Aperçus, page {n} sur {total}' },
-	'insights.fit.heading':        { en: 'The fit, in its terms',        fr: 'La correspondance, terme par terme' },
+	// The heading: English ruled by Dann 2026-09-22 (OWED.md "Rulings Dann owes"
+	// item 2), French drafted by the desk and RATIFIED by Dann 2026-09-30 21:30.
+	// « relevés », not « mesures », which also means a bar. It replaces "The
+	// fit, in its terms" / « La correspondance, terme par terme ».
+	'insights.fit.heading':        { en: 'Ilya reads your compatibility from these three measurements.', fr: 'Ilya évalue votre compatibilité à partir de ces trois relevés.' },
 	'insights.fit.colTerm':        { en: 'Term',                         fr: 'Terme' },
 	'insights.fit.colMeasured':    { en: 'Measured in this piece',       fr: 'Mesuré dans cette pièce' },
 	'insights.fit.colReference':   { en: 'Your references',              fr: 'Vos repères' },
@@ -1533,7 +1546,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.finding.crossing':   { en: 'Your {vowel} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.', fr: 'Votre {vowel} rencontre ici votre première résonance\u00a0: le son voudra devenir plein et de tête, vers le youhou.' },
 	'insights.finding.tighten':    { en: 'The {vowel} at the top of your range and sustained here is an exposed spot where the vowel can tighten.', fr: 'Le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où la voyelle peut se resserrer.' },
 	'insights.finding.turnover':   { en: 'The {vowel} at the top of your range and sustained here is an exposed spot where the tone can spread or press.', fr: 'Le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où le son peut s\u2019étaler ou se presser.' },
-	'insights.finding.passaggio':  { en: 'This falls near your passaggio; expect the turn to want managing.', fr: 'Cela tombe près de votre passaggio\u202f; attendez-vous à devoir le gérer.' },
+	'insights.finding.passaggio':  { en: 'This falls near your passaggio; expect the turn to want managing.', fr: 'Cela tombe près de votre passaggio; attendez-vous à devoir le gérer.' },
 	'insights.finding.timbreOpenToClose': { en: 'Your {vowel} turns open to close inside the word, so the colour shifts as you sing it.', fr: 'Votre {vowel} passe d\u2019ouvert à fermé à l\u2019intérieur du mot\u00a0: la couleur change pendant que vous le chantez.' },
 	'insights.finding.timbreCloseToOpen': { en: 'Your {vowel} turns close to open inside the word, so the colour shifts as you sing it.', fr: 'Votre {vowel} passe de fermé à ouvert à l\u2019intérieur du mot\u00a0: la couleur change pendant que vous le chantez.' },
 	'insights.finding.sustain':    { en: 'The longer {vowel} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.', fr: 'Le {vowel} plus long, ici, se pose sur sa hauteur de changement de timbre\u00a0: la couleur peut sembler instable pendant qu\u2019il se prolonge.' },
@@ -1550,7 +1563,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.phonation.heading':  { en: 'Phonation time',               fr: 'Temps de phonation' },
 	'insights.phonation.headline': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}.' },
 	'insights.phonation.headlineInferred': { en: 'Your phonation takes about {low} to {high} of this piece, at the speed {tempoWord} usually means.', fr: 'Votre phonation occupe environ {low} à {high} de la pièce, au tempo qu’indique habituellement {tempoWord}.' },
-	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo\u202f; le temps de phonation ne peut donc pas être donné en secondes.' },
+	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo; le temps de phonation ne peut donc pas être donné en secondes.' },
 	// RATIFIED by Dann 2026-09-23 03:14, with the vowel chart's fixed order
 	// (`docs/memory/OPEN.md`, N.123, "THE VOWEL CHART'S ORDER").
 	'insights.phonation.byVowel':  { en: 'Seconds of phonation per vowel', fr: 'Secondes de phonation par voyelle' },
@@ -1566,8 +1579,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// An untrusted bar is counted as written and named. The French reuses the
 	// ratified fragment of `insights.fit.withheldOne`. Both lines RATIFIED by
 	// Dann 2026-09-23 01:35.
-	'insights.phonation.untrustedOne': { en: 'Measure {measures} does not add up to its time signature, so its notes are counted as written.', fr: 'La mesure {measures} ne correspond pas à son chiffrage de mesure\u202f; ses notes sont comptées telles qu’écrites.' },
-	'insights.phonation.untrustedMany': { en: 'Measures {measures} do not add up to their time signatures, so their notes are counted as written.', fr: 'Les mesures {measures} ne correspondent pas à leur chiffrage de mesure\u202f; leurs notes sont comptées telles qu’écrites.' },
+	'insights.phonation.untrustedOne': { en: 'Measure {measures} does not add up to its time signature, so its notes are counted as written.', fr: 'La mesure {measures} ne correspond pas à son chiffrage de mesure; ses notes sont comptées telles qu’écrites.' },
+	'insights.phonation.untrustedMany': { en: 'Measures {measures} do not add up to their time signatures, so their notes are counted as written.', fr: 'Les mesures {measures} ne correspondent pas à leur chiffrage de mesure; leurs notes sont comptées telles qu’écrites.' },
 	// WRITTEN, NOT SHOWN. Rendered nowhere until the Loupe carries a tempo
 	// control (N.120, ruled 2026-09-23 to live in the Loupe). Printing it now
 	// would send a singer to a control that does not exist. English is Dann's
@@ -1587,6 +1600,17 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.figure.zoneBetween': { en: 'between · {share}',            fr: 'entre · {share}' },
 	'insights.figure.zoneBelow':   { en: 'below · {share}',              fr: 'au-dessous · {share}' },
 	'insights.figure.caption':     { en: 'Seconds of phonation per pitch', fr: 'Secondes de phonation par hauteur' },
+	// N.123 part 2 (brief-code-n123-part2_r1_2026-09-30.md), design approved by
+	// Dann 2026-09-30 21:52 to 22:04. The bracket's label "half the singing" is
+	// Dann's wording; "centre", stacked over the pitch, is the approved drawing's.
+	// French RATIFIED by Dann 2026-09-30 23:21 ("yes"): « la moitié du temps
+	// chanté », desk-drafted, replacing Code's « la moitié du chant », which could
+	// read as "half the song"; « centre » ratified as built.
+	// The cycle-dose line is RATIFIED in both languages (22:03 to 22:04; the
+	// parenthetical is Dann's, the French the desk's; caveat struck 22:04).
+	'insights.figure.halfMass':    { en: 'half the singing',             fr: 'la moitié du temps chanté' },
+	'insights.figure.centre':      { en: 'centre',                       fr: 'centre' },
+	'insights.figure.cycleDose':   { en: 'Cycle dose: about {cycles} (number of fold collisions in this piece)', fr: 'Dose de cycles\u00a0: environ {cycles} (nombre de collisions des cordes vocales dans cette pièce)' },
 	'insights.figure.captionQuavers': { en: 'Phonation per pitch, in quavers', fr: 'Phonation par hauteur, en croches' },
 	// Unrendered since r2 (the focus segment is gone), kept as ratified.
 	'insights.figure.captionFocus': { en: 'dark: sung on {vowels}',      fr: 'en foncé\u00a0: chanté sur {vowels}' },
@@ -1628,9 +1652,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'comment.working.where.secondoJustUnder': { en: 'just under your secondo passaggio', fr: 'juste en dessous de votre secondo passaggio' },
 	// The consequence sentence (Dann 23:14): what the voice tends to do here on its own; but what resisting it tends to bring.
 	// French RATIFIED by Dann 2026-09-30 12:08, « cri » for yell included.
-	'comment.working.consequence.resonance': { en: 'Here the [{vowel}] tends toward *whoop* timbre on its own; but narrowing it instead of opening the mouth tends to thin it {cite:KVP2-022+KVP2-026}.', fr: 'Ici, le [{vowel}] tend de lui-même vers un timbre *youhou* ; mais le resserrer au lieu d’ouvrir la bouche tend à l’amincir {cite:KVP2-022+KVP2-026}.' },
-	'comment.working.consequence.turn': { en: 'The colour tends to close here on its own; but keeping it open can nudge it toward a *yell* {cite:PVA2-A-046+PVA2-B-014}.', fr: 'La couleur tend ici à se fermer d’elle-même ; mais la garder ouverte peut la pousser vers un *cri* {cite:PVA2-A-046+PVA2-B-014}.' },
-	'comment.working.consequence.closedU': { en: 'Here the [{vowel}] tends to open a little on its own {cite:RMR-057}; but keeping it closed tends toward *whoop* timbre {cite:PVA2-C-025}.', fr: 'Ici, le [{vowel}] tend à s’ouvrir un peu de lui-même {cite:RMR-057} ; mais le garder fermé tend vers un timbre *youhou* {cite:PVA2-C-025}.' },
+	'comment.working.consequence.resonance': { en: 'Here the [{vowel}] tends toward *whoop* timbre on its own; but narrowing it instead of opening the mouth tends to thin it {cite:KVP2-022+KVP2-026}.', fr: 'Ici, le [{vowel}] tend de lui-même vers un timbre *youhou*; mais le resserrer au lieu d’ouvrir la bouche tend à l’amincir {cite:KVP2-022+KVP2-026}.' },
+	'comment.working.consequence.turn': { en: 'The colour tends to close here on its own; but keeping it open can nudge it toward a *yell* {cite:PVA2-A-046+PVA2-B-014}.', fr: 'La couleur tend ici à se fermer d’elle-même; mais la garder ouverte peut la pousser vers un *cri* {cite:PVA2-A-046+PVA2-B-014}.' },
+	'comment.working.consequence.closedU': { en: 'Here the [{vowel}] tends to open a little on its own {cite:RMR-057}; but keeping it closed tends toward *whoop* timbre {cite:PVA2-C-025}.', fr: 'Ici, le [{vowel}] tend à s’ouvrir un peu de lui-même {cite:RMR-057}; mais le garder fermé tend vers un timbre *youhou* {cite:PVA2-C-025}.' },
 	// The openers (`PRODUCT.md`, "A SUGGESTION IS AN OFFER"; French settled or ruled 13:04 to 13:05). {de} is « de » or « d’ ».
 	// 1 and 5 are RETIRED from both rotations 2026-09-30 ("no 'try'", Dann 2026-09-29 22:51, `docs/memory/OPEN.md` §N.168); kept, unused.
 	'comment.opener.1': { en: 'You might try {action}', fr: 'Vous pourriez essayer {de}{action}' },
@@ -1690,31 +1714,31 @@ const strings: Record<string, Record<Language, string>> = {
 	'voiceIntake.count.10': { en: 'Ten', fr: 'Dix' },
 	'voiceIntake.notSure': { en: 'Not sure', fr: 'Je ne sais pas' },
 	'voiceIntake.clear': { en: 'Clear answer', fr: 'Effacer la réponse' },
-	'voiceIntake.top.stem': { en: 'How is the top of your voice right now, around and above your secondary passaggio?', fr: 'Où en est le haut de votre voix en ce moment, autour et au-dessus de votre passaggio secondaire\u202f?' },
+	'voiceIntake.top.stem': { en: 'How is the top of your voice right now, around and above your secondary passaggio?', fr: 'Où en est le haut de votre voix en ce moment, autour et au-dessus de votre passaggio secondaire?' },
 	'voiceIntake.top.1': { en: 'I cannot reach it reliably yet.', fr: 'Je ne l\u2019atteins pas encore de façon fiable.' },
 	'voiceIntake.top.2': { en: 'I can reach it, but it feels unpredictable.', fr: 'Je peux l\u2019atteindre, mais c\u2019est imprévisible.' },
 	'voiceIntake.top.3': { en: 'It works in practice when I prepare it.', fr: 'Cela fonctionne à l\u2019étude quand je le prépare.' },
 	'voiceIntake.top.4': { en: 'It is reliable in performance most of the time.', fr: 'C\u2019est fiable en concert la plupart du temps.' },
 	'voiceIntake.top.5': { en: 'It is reliable, and I can colour it as I choose.', fr: 'C\u2019est fiable, et je peux le colorer à mon gré.' },
-	'voiceIntake.bottom.stem': { en: 'How is the bottom of your range right now?', fr: 'Où en est le bas de votre ambitus en ce moment\u202f?' },
+	'voiceIntake.bottom.stem': { en: 'How is the bottom of your range right now?', fr: 'Où en est le bas de votre ambitus en ce moment?' },
 	'voiceIntake.bottom.1': { en: 'The lowest notes do not sound reliably yet.', fr: 'Les notes les plus graves ne sortent pas encore de façon fiable.' },
 	'voiceIntake.bottom.2': { en: 'The notes sound, but they lack body.', fr: 'Les notes sortent, mais elles manquent de corps.' },
 	'voiceIntake.bottom.3': { en: 'They carry when I prepare them.', fr: 'Elles portent quand je les prépare.' },
 	'voiceIntake.bottom.4': { en: 'They carry in performance most of the time.', fr: 'Elles portent en concert la plupart du temps.' },
 	'voiceIntake.bottom.5': { en: 'They carry reliably, and I can colour them as I choose.', fr: 'Elles portent de façon fiable, et je peux les colorer à mon gré.' },
-	'voiceIntake.passaggi.stem': { en: 'How does moving through your passaggi feel in your singing right now?', fr: 'Comment se passe en ce moment la traversée de vos passaggi quand vous chantez\u202f?' },
+	'voiceIntake.passaggi.stem': { en: 'How does moving through your passaggi feel in your singing right now?', fr: 'Comment se passe en ce moment la traversée de vos passaggi quand vous chantez?' },
 	'voiceIntake.passaggi.1': { en: 'I notice a clear shift in my sound there.', fr: 'J\u2019entends un net changement dans mon son à cet endroit.' },
 	'voiceIntake.passaggi.2': { en: 'I can smooth it in exercises, not yet in songs.', fr: 'Je peux la rendre homogène dans les exercices, pas encore dans le répertoire.' },
 	'voiceIntake.passaggi.3': { en: 'It is smooth in songs when I prepare it.', fr: 'Elle est homogène dans le répertoire quand je la prépare.' },
 	'voiceIntake.passaggi.4': { en: 'It is smooth in performance most of the time.', fr: 'Elle est homogène en concert la plupart du temps.' },
 	'voiceIntake.passaggi.5': { en: 'It is even throughout, and I can choose where the colour changes.', fr: 'Elle est égale d\u2019un bout à l\u2019autre, et je choisis où la couleur change.' },
-	'voiceIntake.sustained.stem': { en: 'How do long, sustained notes go for you right now?', fr: 'Comment se passent en ce moment vos notes longues et prolongées\u202f?' },
+	'voiceIntake.sustained.stem': { en: 'How do long, sustained notes go for you right now?', fr: 'Comment se passent en ce moment vos notes longues et prolongées?' },
 	'voiceIntake.sustained.1': { en: 'Long notes tire me quickly.', fr: 'Les notes longues me fatiguent vite.' },
 	'voiceIntake.sustained.2': { en: 'I can sustain them, but the tone wavers or thins.', fr: 'Je peux les mener jusqu\u2019au bout, mais le son vacille ou s\u2019amincit.' },
 	'voiceIntake.sustained.3': { en: 'They stay steady when I plan the breath.', fr: 'Elles restent stables quand je prévois mon souffle.' },
 	'voiceIntake.sustained.4': { en: 'They are steady in performance most of the time.', fr: 'Elles sont stables en concert la plupart du temps.' },
 	'voiceIntake.sustained.5': { en: 'They are steady, and I can shape them as I choose.', fr: 'Elles sont stables, et je peux les façonner à mon gré.' },
-	'voiceIntake.softHigh.stem': { en: 'How is soft singing up high for you right now?', fr: 'Où en est votre chant <em>piano</em> dans l\u2019aigu en ce moment\u202f?' },
+	'voiceIntake.softHigh.stem': { en: 'How is soft singing up high for you right now?', fr: 'Où en est votre chant <em>piano</em> dans l\u2019aigu en ce moment?' },
 	'voiceIntake.softHigh.1': { en: 'I cannot sing softly up high yet.', fr: 'Je ne peux pas encore chanter <em>piano</em> dans l\u2019aigu.' },
 	'voiceIntake.softHigh.2': { en: 'I can sing softly there, but it feels fragile.', fr: 'Je peux chanter <em>piano</em> dans l\u2019aigu, mais cela reste fragile.' },
 	'voiceIntake.softHigh.3': { en: 'It works when I prepare it.', fr: 'Cela fonctionne quand je le prépare.' },
@@ -1722,13 +1746,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'voiceIntake.softHigh.5': { en: 'It is reliable, and I can move freely between soft and loud there.', fr: 'C\u2019est fiable, et je passe librement du <em>piano</em> au <em>forte</em> à cet endroit.' },
 	// Ruled 2026-09-29: English Dann's (00:06, on Titze et al. 2015's symbols), French the
 	// desk's draft ratified 00:07. Plain text, so no subscripts (`notation-reference_Titze-2015.md`).
-	'voiceIntake.acoustics.stem': { en: 'How comfortable are you with voice acoustics terms such as fundamental (fo), harmonic (nfo), resonance (fR1), and formant (F1)?', fr: 'Dans quelle mesure êtes-vous à l\u2019aise avec des termes comme fondamentale (fo), harmonique (nfo), résonance (fR1) et formant (F1)\u202f?' },
+	'voiceIntake.acoustics.stem': { en: 'How comfortable are you with voice acoustics terms such as fundamental (fo), harmonic (nfo), resonance (fR1), and formant (F1)?', fr: 'Dans quelle mesure êtes-vous à l\u2019aise avec des termes comme fondamentale (fo), harmonique (nfo), résonance (fR1) et formant (F1)?' },
 	'voiceIntake.acoustics.1': { en: 'These terms are new to me.', fr: 'Ces termes sont nouveaux pour moi.' },
 	'voiceIntake.acoustics.2': { en: 'I have heard them, but I do not use them.', fr: 'Je les ai déjà entendus, sans les employer.' },
 	'voiceIntake.acoustics.3': { en: 'I know the main ideas: resonance, harmonics, and turning over.', fr: 'J\u2019en connais les idées principales\u00a0: la résonance, les harmoniques, le changement de timbre.' },
 	'voiceIntake.acoustics.4': { en: 'I use them in my teaching or my practice.', fr: 'Je les emploie dans mon enseignement ou ma pratique.' },
 	'voiceIntake.acoustics.5': { en: 'I read and discuss voice acoustics research.', fr: 'Je lis et commente la recherche en acoustique vocale.' },
-	'voiceIntake.topics.stem': { en: 'What would you like Insights to comment on?', fr: 'Qu\u2019aimeriez-vous que les Aperçus commentent\u202f?' },
+	'voiceIntake.topics.stem': { en: 'What would you like Insights to comment on?', fr: 'Qu\u2019aimeriez-vous que les Aperçus commentent?' },
 	'voiceIntake.topic.high': { en: 'High notes', fr: 'Les notes aiguës' },
 	'voiceIntake.topic.low': { en: 'Low notes', fr: 'Les notes graves' },
 	'voiceIntake.topic.passaggi': { en: 'Moving through the passaggi', fr: 'La traversée des passaggi' },
@@ -1736,7 +1760,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'voiceIntake.topic.softHigh': { en: 'Soft singing up high', fr: 'Le chant <em>piano</em> dans l\u2019aigu' },
 	'voiceIntake.topic.other': { en: 'Other things worth noticing', fr: 'Les autres points à remarquer' },
 	'voiceIntake.appear.heading': { en: 'How comments appear', fr: 'Présentation des commentaires' },
-	'voiceIntake.appear.count': { en: 'How many suggestions should each comment show?', fr: 'Combien de suggestions chaque commentaire doit-il afficher\u202f?' },
+	'voiceIntake.appear.count': { en: 'How many suggestions should each comment show?', fr: 'Combien de suggestions chaque commentaire doit-il afficher?' },
 	'voiceIntake.appear.two': { en: 'Two, with the rest a tap away', fr: 'Deux, les autres affichées sur demande' },
 	'voiceIntake.appear.all': { en: 'All of them', fr: 'Toutes' },
 	// Voice type slice A (2026-09-30). RATIFIED by Dann: the heading, hint, both group labels, Tier 1,
@@ -1796,13 +1820,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'watch.header': { en: 'For your consideration', fr: '\u00c0 consid\u00e9rer' },
 	'watch.line.rangeBelow': { en: 'Bar {bar} drops below the range you gave.', fr: 'Mesure {bar}\u00a0: la note descend sous l\u2019ambitus que vous avez indiqué.' },
 	'watch.line.rangeAbove': { en: 'Bar {bar} rises above the range you gave.', fr: 'Mesure {bar}\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué.' },
-	'watch.line.rangeBelowTranspose': { en: 'Bar {bar} drops below the range you gave; you may want to transpose {phrase}.', fr: 'Mesure {bar}\u00a0: la note descend sous l\u2019ambitus que vous avez indiqué\u202f; vous pouvez songer à transposer {phrase}.' },
-	'watch.line.rangeAboveTranspose': { en: 'Bar {bar} rises above the range you gave; you may want to transpose {phrase}.', fr: 'Mesure {bar}\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué\u202f; vous pouvez songer à transposer {phrase}.' },
+	'watch.line.rangeBelowTranspose': { en: 'Bar {bar} drops below the range you gave; you may want to transpose {phrase}.', fr: 'Mesure {bar}\u00a0: la note descend sous l\u2019ambitus que vous avez indiqué; vous pouvez songer à transposer {phrase}.' },
+	'watch.line.rangeAboveTranspose': { en: 'Bar {bar} rises above the range you gave; you may want to transpose {phrase}.', fr: 'Mesure {bar}\u00a0: la note monte au-dessus de l\u2019ambitus que vous avez indiqué; vous pouvez songer à transposer {phrase}.' },
 	'watch.line.crossing': { en: 'Bar {bar}: your {vowel} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.', fr: 'Mesure {bar}\u00a0: votre {vowel} rencontre ici votre première résonance, de sorte que le son voudra devenir plein et de tête, vers le youhou.' },
 	'watch.line.tighten': { en: 'Bar {bar}: the {vowel} at the top of your range and sustained here is an exposed spot where the vowel can tighten.', fr: 'Mesure {bar}\u00a0: le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où la voyelle peut se resserrer.' },
 	'watch.line.turnover': { en: 'Bar {bar}: the {vowel} at the top of your range and sustained here is an exposed spot where the tone can spread or press.', fr: 'Mesure {bar}\u00a0: le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où le son peut s\u2019étaler ou se presser.' },
-	'watch.line.passaggioWord': { en: 'Bar {bar}: \'{word}\' falls near your passaggio; expect the turn to want managing.', fr: 'Mesure {bar}\u00a0: «\u00a0{word}\u00a0» tombe près de votre passaggio\u202f; attendez-vous à devoir gérer le changement de timbre.' },
-	'watch.line.passaggio': { en: 'Bar {bar}: your {vowel} falls near your passaggio; expect the turn to want managing.', fr: 'Mesure {bar}\u00a0: votre {vowel} tombe près de votre passaggio\u202f; attendez-vous à devoir gérer le changement de timbre.' },
+	'watch.line.passaggioWord': { en: 'Bar {bar}: \'{word}\' falls near your passaggio; expect the turn to want managing.', fr: 'Mesure {bar}\u00a0: «\u00a0{word}\u00a0» tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre.' },
+	'watch.line.passaggio': { en: 'Bar {bar}: your {vowel} falls near your passaggio; expect the turn to want managing.', fr: 'Mesure {bar}\u00a0: votre {vowel} tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre.' },
 	'watch.line.timbreOpenToClose': { en: 'Bar {bar}: your {vowel} turns open to close inside the word, so the colour shifts as you sing it.', fr: 'Mesure {bar}\u00a0: votre {vowel} passe d\u2019ouvert à fermé à l\u2019intérieur du mot, de sorte que la couleur change pendant que vous le chantez.' },
 	'watch.line.timbreCloseToOpen': { en: 'Bar {bar}: your {vowel} turns close to open inside the word, so the colour shifts as you sing it.', fr: 'Mesure {bar}\u00a0: votre {vowel} passe de fermé à ouvert à l\u2019intérieur du mot, de sorte que la couleur change pendant que vous le chantez.' },
 	'watch.line.timbreOpenToCloseWord': { en: 'Bar {bar}: your {vowel} on \'{word}\' turns open to close inside the word, so the colour shifts as you sing it.', fr: 'Mesure {bar}\u00a0: votre {vowel} sur «\u00a0{word}\u00a0» passe d\u2019ouvert à fermé à l\u2019intérieur du mot, de sorte que la couleur change pendant que vous le chantez.' },
@@ -1815,10 +1839,10 @@ const strings: Record<string, Record<Language, string>> = {
 	'watch.lead.one': { en: 'Bar {bar}', fr: 'Mesure {bar}' },
 	'watch.lead.many': { en: 'Bars {bars}', fr: 'Mesures {bars}' },
 	'watch.advice.iCrossing': { en: 'relaxing the jaw and leaning the vowel toward [{target}], giving it a touch more space, which can lift your first resonance clear of the pitch', fr: 'relâcher la mâchoire et orienter la voyelle vers [{target}], en lui donnant un peu plus d\u2019espace, ce qui peut dégager votre première résonance de la hauteur chantée' },
-	'watch.advice.openOCrossing': { en: 'allowing the turn and letting the vowel open into that fuller, headier resonance; up here it can settle the tone rather than straining to stay bright', fr: 'accepter le changement de timbre et laisser la voyelle s\u2019ouvrir vers cette résonance plus pleine, plus tournée vers la tête\u202f; dans cet aigu, cela peut poser le son plutôt que de le forcer à rester clair' },
-	'watch.advice.oCover': { en: 'allowing the vowel to open and darken toward [{target}]; that can be a more comfortable option than a close [o] this high', fr: 'laisser la voyelle s\u2019ouvrir et s\u2019assombrir vers [{target}]\u202f; cela peut être une option plus confortable qu\u2019un [o] fermé dans cet aigu' },
-	'watch.advice.openTracking': { en: 'letting the jaw drop to open the vowel here, raising your first resonance to the pitch; that can ease the sound rather than keeping a close [{vowel}] squeezed this high', fr: 'laisser la mâchoire descendre pour ouvrir la voyelle ici, en élevant votre première résonance jusqu\u2019à la hauteur chantée\u202f; cela peut libérer le son, plutôt que de garder un [{vowel}] fermé et serré dans cet aigu' },
-	'watch.advice.maleTurnover': { en: 'letting the [{vowel}] turn and gather here rather than spreading it open for more sound; up this high the ring tends to come from letting it settle, not from pushing it wider', fr: 'laisser le [{vowel}] changer de timbre et se rassembler ici, plutôt que de l\u2019ouvrir davantage pour obtenir plus de son\u202f; dans cet aigu, la brillance tend à venir de ce que vous le laissez se poser, et non de ce que vous l\u2019élargissez' },
+	'watch.advice.openOCrossing': { en: 'allowing the turn and letting the vowel open into that fuller, headier resonance; up here it can settle the tone rather than straining to stay bright', fr: 'accepter le changement de timbre et laisser la voyelle s\u2019ouvrir vers cette résonance plus pleine, plus tournée vers la tête; dans cet aigu, cela peut poser le son plutôt que de le forcer à rester clair' },
+	'watch.advice.oCover': { en: 'allowing the vowel to open and darken toward [{target}]; that can be a more comfortable option than a close [o] this high', fr: 'laisser la voyelle s\u2019ouvrir et s\u2019assombrir vers [{target}]; cela peut être une option plus confortable qu\u2019un [o] fermé dans cet aigu' },
+	'watch.advice.openTracking': { en: 'letting the jaw drop to open the vowel here, raising your first resonance to the pitch; that can ease the sound rather than keeping a close [{vowel}] squeezed this high', fr: 'laisser la mâchoire descendre pour ouvrir la voyelle ici, en élevant votre première résonance jusqu\u2019à la hauteur chantée; cela peut libérer le son, plutôt que de garder un [{vowel}] fermé et serré dans cet aigu' },
+	'watch.advice.maleTurnover': { en: 'letting the [{vowel}] turn and gather here rather than spreading it open for more sound; up this high the ring tends to come from letting it settle, not from pushing it wider', fr: 'laisser le [{vowel}] changer de timbre et se rassembler ici, plutôt que de l\u2019ouvrir davantage pour obtenir plus de son; dans cet aigu, la brillance tend à venir de ce que vous le laissez se poser, et non de ce que vous l\u2019élargissez' },
 	'watch.keyPhrase.one': { en: 'to {a}', fr: 'en {a}' },
 	'watch.keyPhrase.two': { en: 'to {a} or {b}', fr: 'en {a} ou en {b}' },
 	'watch.key.name': { en: '{tonic} {mode}', fr: '{tonic} {mode}' },

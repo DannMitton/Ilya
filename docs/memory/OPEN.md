@@ -175,6 +175,10 @@ the paths already). Whoever takes N.142 should be told this.
 >
 > **RULED BY DANN 2026-09-23 03:07 to 03:13: THE VOWEL CHART'S ORDER.** Seconds per vowel prints in a fixed order, not by descending time, with the interior vowels interleaved, never grouped (he rejected the desk's offer to keep [ɨ] [ɪ] [ʌ] apart). **The order is his dissertation's (Figures 6.8 and 6.10, printed p. 91), which is also `engine/types.ts:26`: [i] [e] [ɪ] [ɨ] [ɛ] [a] [ɑ] [ʌ] [o] [u].** His rationale, 03:12: the vowels are arranged *"so that the fR1 collectively render an arch while the fR2 values render a descending curve."* Checked against his Table 5.3 (printed pp. 81 to 82): fR1 296, 381, 393, 404, 577, 711, 617, 616, 489, 346 is a strict arch; fR2 descends with three small upticks ([ɪ], [ɛ], [ʌ]). **Superseded within the same exchange:** the desk had proposed a strict IPA trace, [i] [ɪ] [e], and he accepted it at 03:11; the desk then found it breaks the fR1 arch (393 then 381) and he restored his order at 03:13. Default, with the condition for departing from it: a vowel Ilya adds later goes where it keeps the fR1 arch. `VOWELS` is unchanged. **The heading follows, RATIFIED by Dann 2026-09-23 03:14 (desk-offered):** "Seconds of phonation per vowel" / « Secondes de phonation par voyelle », replacing `insights.phonation.byVowel`'s "By vowel, most phonation time first".
 >
+> **SOURCES FOUND 2026-09-30, by the desk.** (1) **Centre of gravity:** Barcan 2013, p. 37 note vii (read in full, open access, `https://ro.ecu.edu.au/cgi/viewcontent.cgi?article=1342&context=ecuworks2013`), giving Rastall's PCG: number each semitone in sequence; p = (1·d1 + 2·d2 + ... + n·dn) / (d1 + d2 + ... + dn), where dn is the sounding duration of pitch n. Rastall's primary (Music Analysis 3(2), 1984, pp. 181-199) NOT fetched. (2) **Cycle dose:** Gaskill et al. 2013, JOS 70(1) (read, `~/Documents/Voice Pedagogy Library/Insights Research/_primary-text/jos-2026-09-23/`): "an estimate of the total number of cycles of vocal fold tissue oscillation, calculated from both the elapsed phonation time data and the average fundamental frequency" (300 s at 200 Hz = 60,000 cycles), citing Titze, Švec, and Popolo, JSLHR 46(4), 2003, pp. 922-935. Dann's per-note sum of f0 × seconds is the same measure at note resolution. **The 2003 primary, READ IN FULL by the desk 2026-09-30 21:55** (NIH author manuscript, `https://pmc.ncbi.nlm.nih.gov/articles/PMC3158591/`): Titze, Švec, and Popolo, "Vocal Dose Measures: Quantifying Accumulated Vibration Exposure in Vocal Fold Tissues", *JSLHR* 46(4), 2003, **pp. 919-932** (doi 10.1044/1092-4388(2003/072)). **Gaskill's footnote and this file's earlier "pp. 922-935" are wrong; use 919-932.** What it says: the cycle count is the **vocal loading index (VLI)**, Eq. 21, "the total number of vocal-fold oscillatory periods (in thousands of cycles)", defined by **Rantala and Vilkman (1999, *Journal of Voice* 13, 484-495)**, "sensitive only to F0"; normalized per second of voicing it equals mean F0. **Dann's "fold-collision count" is in the paper:** "Rantala and Vilkman (1999) hypothesized that the total VLI dose could be seen as an indicator of total number of vocal fold collisions causing damage to vocal fold tissues." Its conclusion: "the repetitive collisions of the vocal folds, would appear to pose the greater threat of injury." The paper studies speech, not singing. The equations are images on the page, so their notation was not copied. **Naming, DESK DEFAULT for Dann's eye at the wording step:** "cycle dose" is the later literature's name (Gaskill 2013); Titze, Švec, and Popolo call it the VLI and cite Rantala and Vilkman. **N.123 part 2 is unblocked on sources.**
+>
+> **N.123 PART 2 DESIGN, APPROVED BY DANN 2026-09-30 21:52 to 22:04.** Offered by the desk as three placements; Dann chose A (a bracket beside the bars for the half-mass band, a centre tick for the centre of gravity) and changed the passaggio lines to DASHED (21:56, his idea). **No caption on the figure** (22:00, his: *"Can't we relegate this commentary to Insights itself?"*): the half-mass and centre sentences become candidate comments under N.168 and N.173. **The cycle dose always prints** (22:03: *"It's meaningless but still interesting and repeatable"*), one line under the figure: "Cycle dose: about {cycles} (number of fold collisions in this piece)" (parenthetical his) / « Dose de cycles : environ {cycles} (nombre de collisions des cordes vocales dans cette pièce) » (desk French). **The falsetto caveat of 2026-09-10 is STRUCK** (22:04: *"Strike the caveat"*). Brief `../sessions/brief-code-n123-part2_r1_2026-09-30.md`, QUEUE row 2h.
+>
 > **N.123, THE AGGREGATION LAYER, numbered by Dann 2026-09-10 late,
 > UNPLACED, displaces nothing until he places it.** One layer under four
 > figures (E.19, 2026-07-30, found them sharing it): per-pitch and per-vowel
@@ -2547,6 +2551,9 @@ read still waits, and still waits in whatever language was set at that instant.
 - **2026-09-30 20:32, Dann:** restore a camera glyph in the Input field's top-right corner that opens the phone camera; amends N.108 increment 4 (2026-09-03). **20:34, ratified:** `intake.camera` "Take a photograph" / « Prendre une photographie », desk-drafted. `../sessions/brief-code-camera-in-the-field_r1_2026-09-30.md`; `QUEUE.md` row 2e.
 
 - **2026-09-30 20:56 to 21:00, Dann, calibration:** the singer sings the vowel first, as usual, to set the vocal tract; a moment's pause; then fry with that shape, which alone is recorded and processed. *"Most singers will not feel comfortable going from modal singing into fry."* Flow (one tap begins, desk-offered) and four strings RATIFIED 21:00. `../sessions/draft-sing-first-cue_r1_2026-09-30.md` §REVISION 21:05; brief `../sessions/brief-code-sing-first-then-fry_r1_2026-09-30.md`.
+- **2026-09-30 22:16, ratified by Dann:** `pacifier.wheelAria` and `pacifier.ready` ("Tap {v} to begin." / « Touchez {v} pour commencer. »), drafted by Code. Seated by `../sessions/brief-code-seat-missing-rulings_r1_2026-09-30.md` §3.
+- **2026-09-30 23:21, ratified by Dann:** the tessituragram bracket's French « la moitié du temps chanté » (desk-drafted, replacing Code's « la moitié du chant », which can read as "the song") and « centre ». Seated by `../sessions/brief-code-text-page-empty-with-poem_r1_2026-09-30.md`, last section.
+- **2026-09-30 23:42, ratified by Dann:** ten singer-facing strings that the code marked PLACEHOLDER with no ruling (calibration readiness, roster, challenging-vowel invite, Markup's withheld-syllable legend); five redrafted by the desk so Ilya, not "we", speaks, and "test fry" for "throwaway fry". `../sessions/brief-code-calibration-copy-ratified_r1_2026-09-30.md`, QUEUE row 2l.
 - **Held, not raised:** the Guide says « tractus vocal » once (`GuideContent.svelte:46`); Learn and the ratified calibration cue say « conduit vocal ». One term per concept; for N.84.
 
 ### N.131, drawer French (2026-09-24 18:47 to 18:53)
@@ -2591,3 +2598,79 @@ read still waits, and still waits in whatever language was set at that instant.
 3. **Open schedule, tracker, owed and queue lines were NOT checked against the memos that may answer them.** That sweep was written and not run (2026-09-30 20:23). UNSETTLED-6 was the case found by hand.
 4. **Whether each ruling here is built in the tree was not checked.**
 5. **Conversations never written to any file cannot be found by any sweep of the tree.**
+
+---
+
+## RULINGS HOMED FROM SESSION FILES, PART 2: BEFORE 2026-09-20. Audit of 2026-09-30, 22:30 to 22:50
+
+Two read-only Sonnet sweeps found these rulings recorded only in `../sessions/` files or in `../sessions/LOG.md`. **The desk located each source line itself before copying it here** (grep, 22:44). Built-or-not is NOT checked for most; several are built, and the loss was the record, not the behaviour. A status of SUBJECT GONE means the thing the ruling governs no longer exists in the interface; the ruling is kept as history and governs nothing.
+
+### Colour (2026-09-13)
+- Token roles: *"the division is the paper versus everything on the screen, not the paper versus the pointer."* `--sage-gloss` takes the one paper use, `--sage-deep` the other eight. `../sessions/memo-colour-token-roles_r1_2026-09-13.md:13`.
+- Four colour rulings, RATIFIED 2026-09-13: (1) the ramp is even; (2) twelve neutrals become ten; (3) three strays go, one splits; (4) the fourth value is a rule, not an exception. `../sessions/spec-colour_r1_2026-09-13.md:63`, `:101`, `:142`, `:164`.
+- Band colours take the language-chip tokens with white text (Piece `#5C739E` 4.77:1, and the others in the table). `LOG.md` about line 1431, 2026-09-02. Status in the tree NOT ESTABLISHED.
+- *"sage names the text intake, lavender names the score intake, which is hue naming place."* `LOG.md:1761`, 2026-08-20. Likely SUBJECT GONE with the three-band drawer (`PRODUCT.md`); NOT ESTABLISHED.
+
+### Drawer (2026-09-02 to 2026-09-03)
+- A fourth radius, 20 px, for surfaces (*"20 looks terrific"*), amending "three radii, no fourth". `LOG.md:3351`. **Conflicts with `PRODUCT.md` "Radii | three"; the 2026-09-02 ruling is later.**
+- The first group is PIECE, not File: *"not every piece will be a song: some will be arias."* `LOG.md:3361`.
+- No fold: an open station grows in its group; the drawer must not rearrange under the singer's hand. `LOG.md:3341`.
+- The opening state is the map of everything and fits without scrolling. `../sessions/brief-to-design-n108-drawer-three-groups_r1_2026-09-02.md:31`.
+- The intake watermark is retired, amending N.65 (2026-08-20). `../sessions/memo-n108-intake_r1_2026-09-03.md` (watermark section).
+- Clear on the score takes the header fields with it. `../sessions/memo-n108-takeover_r1_2026-09-03.md:114`.
+- The tab slide leaves the drawer. `../sessions/memo-n108-takeover_r1_2026-09-03.md:88`.
+- Every button that draws a box takes 999 px ends; fields, frames, receipts and bands keep their radii. `../sessions/memo-n108-finishings_r1_2026-09-03.md:48`.
+- n114b item 6: the same air above the open syllable box as below it. `../sessions/brief-n114b*` (item 6).
+
+### The loupe
+- **Compound metre** (2026-09-08 walk, *"not optional"*): 6/8 is two beats of a dotted quarter, not six; numerator a multiple of 3 with denominator 8 or 16 counts in dotted beats. `../sessions/brief-n113b-walk-findings_r1*.md:27`.
+- The locator's second line names note, beat, and duration. Same brief, `:23`.
+- The taken note's box goes lavender (`:15`). Likely SUBJECT GONE under the squircle rule; NOT ESTABLISHED.
+- The loupe stays open after a placing click; Undo and Redo cover placements as well as shifts; the receipt tag reads POEM. `../sessions/memo-n111-3b-loupe*.md:1`, `:20-27`.
+- A change made from the loupe's dock is reflected in the loupe at once, with no forced reopen. `../sessions/memo-n111-hand*.md:414`.
+- The loupe inserts the correct meter signature for every measure it displays (N.138, 2026-09-14). `LOG.md:4617`.
+- Every meter assignment in a score draws on the page (N.139). `LOG.md:5124`.
+- The loupe's background is transparent and takes the loupe's native background (N.133). `LOG.md:4859`.
+- The tap band is bounded in stave-spaces (2.5 fine, 7 coarse). `LOG.md:575`, August.
+- Bound the head at the leftmost drawn ink of the music; §4.3 "later systems should move" waived (2026-08-29). `../sessions/brief-n104-loupe-head*.md:142`.
+- The tacet bar: `measureSp` 8 (down from 12), numeral scale 1, clearance 0.9 (2026-08-29). `../sessions/brief-n104-ship*.md:34`.
+- Undo and Redo marks are `↰` and `↱`. `../sessions/brief-loupe-typeface_r1*.md:97`; whether Dann ruled it is NOT ESTABLISHED in the brief itself.
+
+### Score and files
+- Marks in the edit surface: staccato, tenuto, fermata, breath, *"on the test that each changes how long the voice sounds"*; accent and marcato out (2026-09-17). `../sessions/spec-n92-edit-surface_r1*.md:81`.
+- No keyboard-only mode and no new chrome. Same spec, `:121`.
+- If there is text, it is fed through the transcription pipeline and kept *"as a formatting Transcription"* (2026-09-12). `../sessions/brief-n121-score-fills-the-poem_r1*.md:10`.
+- An import ADDS songs and never touches the song you are in (2026-08-18). `LOG.md:27`.
+- A default naming convention when there is no header to name the song from (N.143b, 2026-09-15). `LOG.md:5684-5688`.
+- Option 2: *"Instant for everything, with the photo report shown after the score arrives"* (N.145, 2026-09-16). `LOG.md:5791`.
+- Not adopted from Finale: Adjust Baselines and other engraving controls, Type Into Score on the paper, verses, Clone (2026-09-06). `LOG.md:3187`.
+- Bar numbers: the post-rest number is *"a useful courtesy"*. `../sessions/brief-n126-measure-numbers_r1_2026-09-15.md:89-92`.
+
+### Header
+- The language toggle is ONE pill naming the language the singer is not in (2026-08-20). `LOG.md:1401`. Built (the « Français » pill seen on Dann's phone 2026-09-30).
+
+### Superseded, recorded so nobody revives them
+- **"Dann writes copy"** (`LOG.md:1289`, 2026-08-20, about a printed excerpt's header and footer): superseded by `CONTRACT.md` §4 as amended 2026-09-19 and by his ruling of 2026-09-19 that the desk drafts and he ratifies.
+- **The dictionary fill** on the "Transcribe and fit" pill (`../sessions/brief-n117-dictionary-fill_r1_2026-09-12.md:9`): SUBJECT GONE, the button was removed (`PRODUCT.md`, N.145). N.117's load bar remains open.
+- **Undo and Redo in the top bar** (`PRODUCT.md`, 2026-09-09 and 2026-09-10): superseded 2026-09-17; marked in place.
+
+### What this audit still did not cover
+1. `LOG.md` blocks 1 to 7 were sampled through keyword lines only (lines 1 to 3038 at about one in three), not read in full.
+2. About 560 session files were not opened beyond keyword lines; named unread: memo-n112 beyond two lines, memo-n127 and brief-n127, the inventory, estimate and sequence bodies, brief-n135.
+3. The August rulings kept only in the claude.ai project knowledge (`claude/*.md`, 374 documents) were not searched.
+4. Anything said in conversation and never written down.
+
+---
+
+## RULINGS HOMED FROM THE CLAUDE.AI PROJECT KNOWLEDGE, PART 3. Audit of 2026-09-30, 23:35 to 23:55
+
+A read-only Sonnet sweep read about 43 of the project's 374 documents (`claude/*.md`). **Verified by the desk against the document itself (23:50):**
+
+- **E.36, ruling 4's sixth clause, 2026-08-10:** *"I want the sixth clause."* The clause, worded by Opus and adopted: **"Control geometry answers to input modality, not to form factor or brand."** Hook: `@media (pointer: coarse)`, not a width query; the desktop keeps its sizes. Also ruled: touch geometry E, a 44 px floor with the exemption rule *"Every exemption is named in the record with its justification. An exemption that is not named does not exist."* `claude/e36-RULED-touch-geometry_2026-08-10.md` §0 and §1. **Bites now:** row 2e's camera glyph was keyed to width; QUEUE row 2k.
+- **E.38, Path A, 2026-08-10:** *"Path A as you recommend"*: `.musx` stays on MNX; the product's ingest path unchanged; MusicXML from denigma goes into the harness only. `claude/e38-ruled-path-a-musx-stays-on-mnx_2026-08-10.md` §1.
+- **E.37, six numbers, 2026-08-10:** N.17 viewport repair; N.18 the anchors; N.19 calibration date; N.20 D3 Job A (per-verse reprint), Job B declined (*"unvaried text prints once"*); N.21 the desk selector (later N.42); N.22 the English-only drawer. `claude/e37-numbering-ruled_2026-08-10.md`. `OWED.md`'s register gap table lists N.18, N.20, N.21 as NOT ESTABLISHED; this is their identity.
+
+**Found by the sweep, NOT verified by the desk. HISTORY, NOT IN FORCE (desk default 2026-09-30 23:40, on Dann's comment that many will no longer apply to the app as it stands):** none of these is cited as a constraint. If a current decision touches one, read it against later rulings (tether 17) and bring Dann the case, never the prohibition (tether 19). E.19 (2026-07-30) Sunless 1 m. 17 closed, *"do not fix the code to emit an [o] at E3"*, bare G is G3 and bare A is A2; the 16 July soft-sign ruling (`claude/e33-a-rule-dann-never-made`); E.34 (2026-08-08) *"75 percent is our limit for no justification, 76 percent justifies"*, homographs must be resolved, regressive voicing assimilation *"is essential"*; E.36 anchors and *"swipe to close, chevron to open, keep both"* (likely overtaken by the September drawer); E.41 attribution hierarchy; Fable's eleven-principle GUI slate of 2026-08-18 (only some homed; Dann's ratification of each not established); E.45 storage, *"store the source and the corrections; derive the melody"*; the July [o] to [ɑ] cover rulings; the page-walk procedure; the E.38 goal ledger's date-affirmed rule; E.31 late rulings. Full table: the sweep's memo, reproduced in `../sessions/ledger-rulings-vs-tree_r1_2026-09-30.md` §G.
+
+**Not covered:** about 330 project documents, including the later E.40 to E.48 handovers and most specs.
+

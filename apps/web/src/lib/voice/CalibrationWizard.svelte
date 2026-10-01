@@ -696,8 +696,8 @@
 		captureSession.startReadiness({
 			onQuiet: () => {
 				// Count the singer in, then draw the capture window. Three beats
-				// at a third of the countdown each, matching COUNT_INTERVAL on
-				// the vowel steps, then the bar.
+				// at a third of the countdown each, then the bar. Not shared with
+				// the vowel steps, whose beat is `SING_BEAT_MS` (`count-in.ts`).
 				readinessStep = 'prepare';
 				readinessCount = T('calib.readiness.countThree');
 				readinessProgress = 0;
@@ -1128,8 +1128,8 @@
      quietest control in the last position on the page. So the label is now the
      action and the reasoning moved to a caption beneath it.
 
-     BOTH STRINGS ARE PLACEHOLDER and flagged for Dann, who writes copy. The
-     shape is ruled and the wording is not. What must not change is that the
+     BOTH STRINGS RATIFIED by Dann 2026-09-30 23:42, as built. The shape was
+     ruled before the words. What must not change is that the
      button says what it does, and that nothing here calls a vowel optional. -->
 {#snippet challengingInvite()}
 	{#if !challengingOffered && defaultsComplete}
@@ -1206,9 +1206,9 @@
 							     Unmeasured" on one line would read as a contradiction
 							     rather than as two separate facts. Never amber: this is
 							     not a fault in the singer's sample and must not be
-							     coloured like one. The qualifying clause in the title is
-							     PLACEHOLDER copy, flagged with the readiness-gate strings;
-							     the ruled word itself is not. -->
+							     coloured like one. The qualifying clause in the title was
+							     RATIFIED by Dann 2026-09-30 23:42, as built; the word
+							     itself was ruled before. -->
 							<span
 								class="wizard-roster-noisefloor"
 								title={T('calib.roster.noiseFloorTitle')}
@@ -1314,14 +1314,14 @@
 				{#if readinessStep === 'quiet'}
 					<p class="wizard-lede">{T('calib.readiness.quiet')}</p>
 				{:else if readinessStep === 'prepare'}
-					<!-- The count-in. PLACEHOLDER COPY, flagged for Dann. The shape
-					     is ruled and the wording is not: the singer is told what is
+					<!-- The count-in. Copy RATIFIED by Dann 2026-09-30 23:42. The shape
+					     was ruled first: the singer is told what is
 					     coming and given time to draw breath before anything is
 					     collected. Nothing is recorded during this step. -->
 					<p class="wizard-lede">{T('calib.readiness.prepareLede')}</p>
 					<p class="wizard-count" aria-hidden="true">{readinessCount}</p>
 				{:else if readinessStep === 'capture'}
-					<!-- PLACEHOLDER COPY, flagged for Dann. The bar is the point: it
+					<!-- Copy RATIFIED by Dann 2026-09-30 23:42. The bar is the point: it
 					     says the microphone is hearing them AND when they have given
 					     enough, which is the pair Dann named. -->
 					<p class="wizard-lede">{T('calib.readiness.captureLede')}</p>
@@ -1337,10 +1337,10 @@
 					</div>
 				{:else if readinessStep === 'unmeasured'}
 					<!-- The abstention (item 1.4a, "abstain with no microphone").
-					     PLACEHOLDER COPY, flagged for Dann, who writes copy: the
-					     register is right (states what happened, assigns no
-					     fault, names the next action) but the strings are not
-					     signed off. What must not change is the shape: the gate
+					     Copy RATIFIED by Dann 2026-09-30 23:42. The register:
+					     it states what happened, assigns no fault, and names
+					     the next action, and Ilya, not "we", is the one that
+					     could not hear. What must not change is the shape: the gate
 					     makes no claim about the room or the fry here, and it
 					     does not block. -->
 					{#if readinessNoMic}

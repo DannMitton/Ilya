@@ -67,6 +67,28 @@ const CACHE_HASH_KEY = 'ilya-dict-hash';
 // Number of NDJSON entries per IndexedDB transaction and per event loop yield
 const CHUNK_SIZE = 1500;
 
+/**
+ * ONE TURN OF THE EVENT LOOP, NOT CLAMPED IN A HIDDEN TAB. QUEUE row 2j,
+ * 2026-09-30. The loader yields every CHUNK_SIZE lines so the page stays
+ * responsive. It yielded with `setTimeout(r, 0)`, and Chrome clamps timers in
+ * a hidden tab to about one a second, so a dictionary restored in a background
+ * tab took many minutes (Dann's Sunless no. 1 still loading at 94 s), and the
+ * Text page waited with it. A message posted on a `MessageChannel` is a task
+ * Chrome does not clamp, so the yield costs a turn, as it always meant to.
+ * Where `MessageChannel` is missing (an old test runner), the timer stands in.
+ */
+function yieldTurn(): Promise<void> {
+	if (typeof MessageChannel === 'undefined') return new Promise((r) => setTimeout(r, 0));
+	return new Promise((resolve) => {
+		const channel = new MessageChannel();
+		channel.port1.onmessage = () => {
+			channel.port1.close();
+			resolve();
+		};
+		channel.port2.postMessage(null);
+	});
+}
+
 // Old cache keys from the two-tier loader (cleaned up on first load)
 const LEGACY_CACHE_KEYS = ['tier1', 'tier2', 'supplement', 'blurb'];
 
@@ -139,7 +161,7 @@ async function setCacheChunked(baseKey: string, lines: string[]): Promise<void> 
 				tx.onerror = () => resolve();
 			});
 			// Yield between chunk writes so we don't block the event loop
-			await new Promise((r) => setTimeout(r, 0));
+			await yieldTurn();
 		}
 
 		// Write meta last — its presence signals a complete cache write
@@ -380,7 +402,7 @@ async function mergeNDJSON(
 		// Yield every CHUNK_SIZE entries
 		if (i > 0 && i % CHUNK_SIZE === 0) {
 			onProgress(-1);
-			await new Promise((r) => setTimeout(r, 0));
+			await yieldTurn();
 		}
 	}
 }
@@ -428,7 +450,7 @@ export async function mergeGlossTier(
 			// Skip malformed lines silently
 		}
 		if (i > 0 && i % CHUNK_SIZE === 0) {
-			await new Promise((r) => setTimeout(r, 0));
+			await yieldTurn();
 		}
 	}
 }

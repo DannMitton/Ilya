@@ -55,7 +55,16 @@ export interface DetectorResult {
 	 * Same shape as plausibility's `unchecked` (Kimi, 2026-07-11): a valid
 	 * outcome, not an error.
 	 */
-	accept: boolean; nPulses: number; rateHz: number | null; cv: number | null;
+	accept: boolean; nPulses: number; rateHz: number | null;
+	/**
+	 * Standard deviation over the mean of the inter-pulse intervals. Diagnostic
+	 * only since row 2d part 2b (2026-09-30): no condition reads it.
+	 */
+	cv: number | null;
+	/** The median inter-pulse interval, in seconds. What `c3` judges. */
+	medianIpi: number | null;
+	/** Median absolute deviation of the intervals over their median. What `c5` judges. */
+	dispersion: number | null;
 	decay: number | null; flatness: number;
 	/** `null` when the noise band could not be formed at this sample rate. */
 	snrDb: number | null;
@@ -73,11 +82,12 @@ export function detect(y: Float64Array, sr: number): DetectorResult {
 	const env = envelope(y, sr);
 	const thr = mean(env) + 1.5 * std(env);
 	const peaks = findPeaksHeight(env, thr, Math.floor(sr * 0.005));
-	let meanIpi = NaN, cv = NaN, rate = NaN, decay = NaN;
+	let meanIpi = NaN, medIpi = NaN, cv = NaN, disp = NaN, rate = NaN, decay = NaN;
 	if (peaks.length >= 2) {
 		const ipi: number[] = [];
 		for (let i = 1; i < peaks.length; i++) ipi.push((peaks[i] - peaks[i - 1]) / sr);
 		meanIpi = mean(ipi); cv = std(ipi) / meanIpi; rate = 1 / meanIpi;
+		medIpi = median(ipi); disp = median(ipi.map((x) => Math.abs(x - medIpi))) / medIpi;
 		const ratios: number[] = [];
 		for (let i = 0; i < peaks.length - 1; i++) {
 			let lo = Infinity;
@@ -87,16 +97,25 @@ export function detect(y: Float64Array, sr: number): DetectorResult {
 		decay = median(ratios);
 	}
 	const sf = spectralFlatness(y, sr), snr = snrDb(y, sr);
-	const c3 = !isNaN(meanIpi) && meanIpi >= 0.0125 && meanIpi <= 0.05;
+	// Row 2d part 2b (2026-09-30, desk ruling): c3 and c5 read the median, and
+	// change together. On the mean, one or two long gaps where the picker missed
+	// weak pulses decided the verdict: five of Dann's fourteen first takes of
+	// 2026-09-30 were refused `c5_cv` on standard-deviation CVs of 1.03 to 1.38,
+	// one of them on a single 349 ms gap. On the median, those gaps no longer
+	// count. c3's band (12.5 to 50 ms) is unchanged; on the median interval it
+	// now refuses speech, which reads 6 to 9 ms, where on the mean speech's
+	// pauses had lifted it into the band. That is why c5 can be median-based
+	// at all: speech is as regular as fry by this measure (0.09 to 0.19).
+	const c3 = !isNaN(medIpi) && medIpi >= 0.0125 && medIpi <= 0.05;
 	const c4 = !isNaN(decay) && decay < 0.4;
-	// Recalibrated 2026-07-01 on Dann's ACCEPT, from live iMac console evidence:
-	// genuine M0 fry read CV 0.28-1.16 tick to tick because the pulse-picker misses
-	// weak pulses at real-room levels, doubling an interval and inflating the
-	// statistic; real M0 is also quasi-periodic with period-doubling. The load-bearing
-	// modal discriminator is c4 (decay), which passes comfortably. Spec amendment
-	// pending (engine spec §3, c5: 0.40 -> 1.0); a median-based dispersion measure
-	// is the principled future fix, for the Kimi brief.
-	const c5 = !isNaN(cv) && cv <= 1.0;
+	// History: recalibrated 2026-07-01 on Dann's ACCEPT (standard-deviation CV,
+	// 0.40 -> 1.0), because genuine M0 fry read 0.28-1.16 tick to tick when the
+	// picker missed weak pulses at real-room levels. This is the median-based
+	// dispersion that comment named as the principled fix.
+	// JUDGEMENT (desk, 2026-09-30): limit 0.75. Dann's fourteen takes read 0.06
+	// to 0.57; 0.75 leaves headroom above his [o] without approaching what c3
+	// already refuses. The load-bearing modal discriminator is still c4 (decay).
+	const c5 = !isNaN(disp) && disp <= 0.75;
 	const c6 = peaks.length >= 8;
 	const c7 = sf <= 0.3;
 	// Recalibrated 2026-07-01 on Dann's ACCEPT, from live iMac console evidence:
@@ -111,6 +130,7 @@ export function detect(y: Float64Array, sr: number): DetectorResult {
 	return {
 		accept: entries.every(([, v]) => v !== false),
 		nPulses: peaks.length, rateHz: isNaN(rate) ? null : rate, cv: isNaN(cv) ? null : cv,
+		medianIpi: isNaN(medIpi) ? null : medIpi, dispersion: isNaN(disp) ? null : disp,
 		decay: isNaN(decay) ? null : decay, flatness: sf, snrDb: snr,
 		failed: entries.filter(([, v]) => v === false).map(([k]) => k),
 		undecided: entries.filter(([, v]) => v === null).map(([k]) => k),

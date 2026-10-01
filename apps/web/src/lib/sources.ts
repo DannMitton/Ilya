@@ -340,8 +340,13 @@ export const OWED: Record<string, string> = {
 	'Bolla 1980': 'Learn `:3384`: "Bolla 1980, 8", no title',
 };
 
-/** The work in full, as "Sources cited" and the tap print it. Null fields print nothing. */
-export function fullReference(workKey: string): Run[] {
+/**
+ * The work in full, as "Sources cited" and the tap print it. Null fields
+ * print nothing. French follows the OQLF's « Notices bibliographiques par
+ * types de documents » (`frenchReference`); English keeps its own style.
+ */
+export function fullReference(workKey: string, language: 'en' | 'fr' = 'en'): Run[] {
+	if (language === 'fr') return frenchReference(workKey);
 	const w = WORKS[workKey];
 	const author = { text: `${w.authorFull.replace(/\.$/, '')}. ` };
 	const tail = `${w.isbn ? ` ISBN ${w.isbn}.` : ''}${w.url ? ` ${w.url}.` : ''}`;
@@ -358,3 +363,83 @@ export function fullReference(workKey: string): Run[] {
 	];
 }
 
+/* ── French: the OQLF notice ─────────────────────────────────────────
+   Brief `brief-code-french-references-oqlf_r1_2026-09-30.md`, under Dann's
+   ruling of 2026-09-30 21:39. Models read from the OQLF's « Notices
+   bibliographiques par types de documents » (vitrinelinguistique.oqlf.gouv.qc.ca/23252,
+   read by Code 2026-09-30):
+
+   - livre: « NOM, Prénom. *Titre : sous-titre*, numéro de l'édition, lieu de
+     publication, maison d'édition, date de publication, … »
+   - thèse: « BALLARIN, Sophie. *Titre*, Thèse (Ph. D.), Université de
+     Montréal, 2009, … »
+   - article: « NOM, Prénom. « Titre », *Nom de la revue*, volume, numéro,
+     date de publication, … », as « vol. 8, no 4 ».
+
+   For a work in another language the OQLF keeps the author's name, the title
+   (its capitals and its punctuation), and the publisher as published; the
+   edition, the place, and the date follow French usage. So nothing here
+   touches a title, a name, or a publisher: the surname is set in capitals,
+   as the model sets it, and the frame around them is French. */
+
+/** A surname in capitals; a Mc prefix keeps its case, « McKINNEY » (DESK DEFAULT). */
+const capitals = (surname: string) =>
+	/^Mc/.test(surname) ? `Mc${surname.slice(2).toLocaleUpperCase('fr-CA')}` : surname.toLocaleUpperCase('fr-CA');
+
+/** "Grayson, Craig M." to « GRAYSON, Craig M. »; a second author « et Prénom NOM ». */
+function frenchAuthor(full: string): string {
+	// The trailing period is the notice's own, added after, as in English.
+	const [first, second] = full.replace(/\.$/, '').split(', and ');
+	const comma = first.indexOf(', ');
+	const lead = comma === -1 ? capitals(first) : `${capitals(first.slice(0, comma))}${first.slice(comma)}`;
+	if (!second) return lead;
+	const space = second.lastIndexOf(' ');
+	return `${lead}, et ${second.slice(0, space)} ${capitals(second.slice(space + 1))}`;
+}
+
+/** "2nd ed." to « 2e éd. », as the OQLF's « 3e éd. ». */
+function frenchEdition(edition: string): string {
+	const m = /^(\d+)(?:st|nd|rd|th) ed\.?$/.exec(edition);
+	if (!m) return edition;
+	return `${m[1]}${m[1] === '1' ? 're' : 'e'} éd.`;
+}
+
+/** "Lanham, MD" to « Lanham (MD) », so the place holds no comma of its own in a comma-separated notice. */
+function frenchPlace(place: string): string {
+	const m = /^(.+), ([A-Z]{2})$/.exec(place);
+	return m ? `${m[1]} (${m[2]})` : place;
+}
+
+/** The registry's printing notes, in French. DESK DEFAULT; an unknown note prints as written. */
+const FRENCH_PRINTING: Record<string, string> = {
+	'third printing 1999': '3e tirage, 1999',
+	'reissued 2005': 'réédition, 2005',
+};
+
+/** "69, no. 5" to « vol. 69, no 5 »; "45/2" to « vol. 45, no 2 ». */
+function frenchVolume(volume: string): string {
+	const m = /^(\d+)(?:, no\. |\/)(\d+)$/.exec(volume);
+	return m ? `vol. ${m[1]}, no ${m[2]}` : volume;
+}
+
+function frenchReference(workKey: string): Run[] {
+	const w = WORKS[workKey];
+	const author = { text: `${frenchAuthor(w.authorFull)}. ` };
+	const tail = `${w.isbn ? ` ISBN ${w.isbn}.` : ''}${w.url ? ` ${w.url}.` : ''}`;
+	if (w.container)
+		return [
+			author,
+			{ text: `«\u00a0${w.fullTitle}\u00a0», ` },
+			{ text: w.container.title, title: true },
+			{ text: `, ${frenchVolume(w.container.volume)}, ${w.year}.${tail}` },
+		];
+	const parts = [
+		w.edition ? frenchEdition(w.edition) : null,
+		w.degree ? `Thèse (${w.degree})` : null,
+		w.place ? frenchPlace(w.place) : null,
+		w.publisher,
+		String(w.year),
+		w.printing ? (FRENCH_PRINTING[w.printing] ?? w.printing) : null,
+	].filter((x): x is string => !!x);
+	return [author, { text: w.fullTitle, title: true }, { text: `, ${parts.join(', ')}.${tail}` }];
+}

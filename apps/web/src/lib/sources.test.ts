@@ -113,3 +113,47 @@ describe('a full reference', () => {
 		expect(text('reid1975')).toBe('Reid, Cornelius L. Voice: Psyche and Soma. New York: Joseph Patelson Music House, 1975, third printing 1999. ISBN 0-915282-00-3.');
 	});
 });
+
+/**
+ * In French, the OQLF's notice (brief `brief-code-french-references-oqlf_r1_2026-09-30.md`;
+ * models read from vitrinelinguistique.oqlf.gouv.qc.ca/23252). The expected
+ * values are written from those models, not read back from `fullReference`:
+ * surname in capitals, a comma after the title, then edition, place,
+ * publisher, and date separated by commas; a thesis as « Thèse (degree) »; an
+ * article's title in guillemets and « vol. N, no N ». Titles, names, and
+ * publishers stay as published.
+ */
+describe('a full reference in French', () => {
+	const fr = (key: string) => fullReference(key, 'fr').map((r) => r.text).join('');
+
+	it('prints a book as an OQLF notice: a comma between place and publisher', () => {
+		expect(fr('reid1975')).toBe('REID, Cornelius L. Voice: Psyche and Soma, New York, Joseph Patelson Music House, 1975, 3e tirage, 1999. ISBN 0-915282-00-3.');
+		expect(fr('howell2025')).toBe('HOWELL, Ian. Hearing Singing, Lanham (MD), Rowman & Littlefield, 2025.');
+		expect(fr('bozeman2025')).toBe('BOZEMAN, Kenneth. Practical Vocal Acoustics, 2e éd., 2025.');
+		expect(fr('mckinney1994')).toBe('McKINNEY, James C. The Diagnosis and Correction of Vocal Faults, Waveland, 1994, réédition, 2005.');
+	});
+
+	it('prints a thesis with « Thèse » and its degree', () => {
+		expect(fr('grayson2012')).toBe(
+			'GRAYSON, Craig M. Russian Lyric Diction: A Practical Guide with Introduction and Annotations and a Bibliography with Annotations on Selected Sources, Thèse (D.M.A.), University of Washington, 2012.'
+		);
+	});
+
+	it('prints an article with its title in guillemets and its volume and number', () => {
+		const runs = fullReference('pacheco2013', 'fr');
+		expect(runs.map((r) => r.text).join('')).toBe(
+			'PACHECO, Alberto José Vieira. «\u00a0Angelica Catalani’s Voice According to a Method of Statistical Analysis\u00a0», Journal of Singing, vol. 69, no 5, 2013.'
+		);
+		expect(runs.find((r) => r.title)?.text).toBe('Journal of Singing');
+		expect(fr('yanushevskaya2015')).toBe('YANUSHEVSKAYA, Irena, et Daniel BUNČIĆ. «\u00a0Russian\u00a0», Journal of the International Phonetic Association, vol. 45, no 2, 2015.');
+	});
+
+	it('keeps every title and publisher as the English prints it, and no colon before a publisher', () => {
+		for (const [key, w] of Object.entries(WORKS)) {
+			const text = fr(key);
+			expect(text, key).toContain(w.fullTitle);
+			if (w.publisher) expect(text, key).toContain(w.publisher);
+			if (w.publisher) expect(text, key).not.toContain(`: ${w.publisher}`);
+		}
+	});
+});

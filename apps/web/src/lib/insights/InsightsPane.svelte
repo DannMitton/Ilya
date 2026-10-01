@@ -824,7 +824,7 @@
 									{@render sectionHead(T('comment.sourcesCited'))}
 									<ul class="sources-list">
 										{#each sourcesCited as key (key)}
-											<li>{@render runs(fullReference(key))}</li>
+											<li>{@render runs(fullReference(key, language))}</li>
 										{/each}
 									</ul>
 								</div>

@@ -1,10 +1,24 @@
+<script module lang="ts">
+	import { watchCoarsePointer } from '$lib/input-modality';
+
+	/**
+	 * WHERE THE CAMERA SHOWS: on a coarse primary pointer, read live (QUEUE row
+	 * 2k; Dann 2026-08-10, E.36's sixth clause, "Control geometry answers to
+	 * input modality, not to form factor or brand"). Row 2e had keyed it to
+	 * `isMobile`, a width, so an iPad in landscape lost it and a narrow desktop
+	 * window gained it. One watcher for the page's life; `IntakePanel` reads it.
+	 */
+	export const pointer = $state({ coarse: false });
+	if (typeof window !== 'undefined') watchCoarsePointer((coarse) => (pointer.coarse = coarse));
+</script>
+
 <script lang="ts">
 	/**
 	 * THE CAMERA IN THE FIELD, row 2e, Dann 2026-09-30, on his iPhone: "restore
 	 * the photo glyph in the top right corner of the input field and make it a
 	 * hotspot invoking the mobile device's camera utility". It amends N.108
 	 * increment 4; `IntakePanel.svelte` says why 2026-09-03 does not reach it,
-	 * and mounts this on a phone only.
+	 * and mounts this on a coarse pointer (`pointer`, above).
 	 *
 	 * Its own hidden input, because `capture` is what asks a phone for the
 	 * camera rather than the photo library, and the one picker must not carry
