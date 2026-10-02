@@ -50,6 +50,9 @@ next session the same hour it cost the last one.
 | making truth from a `.musx`, or reading a scan page by eye | `TRUTH FROM FINALE FILES, AND SHEETS FOR THE EYE` |
 | closing a thread with a check-in scheduled | `TRUTH FROM FINALE FILES, AND SHEETS FOR THE EYE` |
 | writing a brief or memo while a ship paste is already in Dann's hands | `A NEW FILE BREAKS THE PASTE HE ALREADY HAS` |
+| running an outside engine, scoring anything against a truth file from the desk, or reading the cloud lane's branch | `WHAT THE DESK LEARNED ON 2026-10-02` |
+| asking what resolution or depth a scan has, or stamping a time in a record | `WHAT THE DESK LEARNED ON 2026-10-02` |
+| Dann pastes a Code summary the desk has already ruled on | `WHAT THE DESK LEARNED ON 2026-10-02` |
 | changing what Ilya claims about Russian phonology, anywhere | `READ GRAYSON BEFORE YOU CORRECT A CLAIM` |
 | a test passes in one place and fails in another, or a pitch sits exactly on a threshold | `A SEMITONE IS NOT ALWAYS 100 CENTS` |
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
@@ -4508,3 +4511,18 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 
 - **The ship script refuses on any untracked file, and a ship paste names its files at the moment it is written.** On 2026-10-02 at 09:49 the desk sent the next brief into `docs/sessions/` three minutes after giving Dann the paste for row 22. Had he run the paste then, it would have refused on the new brief. Caught by the desk's own `status` before he ran it.
 - **So: between handing Dann a ship paste and seeing its commit in the tree, write nothing new into the repository's tracked folders.** A file that must be written in that window goes to `apps/web/test-results/_desk-hold/`, which is git-ignored, and moves to its home once the commit shows. Edits to files that are already tracked are safe: the script stages them with `git add -u`.
+
+---
+
+## WHAT THE DESK LEARNED ON 2026-10-02 (the thread of 09:32 to 16:05)
+
+- **The desk's clock is the device's.** Run `date` in the device shell before writing a time into a record. The desk stamped three records four to nine minutes ahead by guessing, and had to correct each.
+- **An outside engine runs in the desk's own cloud workspace.** `python3 -m venv hv`, then `hv/bin/pip install homr` (0.7.0; onnxruntime 1.30.0, numpy 2.5.3), then `hv/bin/homr page.png`: 14 to 35 seconds a page on two cores, models fetched on the first run. Pages come from `pdftoppm -r 400 -png`. The converter and the scoring call are `../sessions/measure-yardstick-desk_r1_2026-10-02/conv.py` and `score.ts`. Nothing of the engine enters the repository; homr is AGPL-3.0.
+- **`scan-scorer.ts` runs under plain Node 22.22** in the desk's workspace and on the device shell (Node 22.23.2): `node score.ts <truth.json> <read.json>`. Stage the scorer and the truth files; the truth files are git-ignored and on the Mac only.
+- **The cloud lane's branch can be read from the Mac's clone:** `git --no-optional-locks --no-pager show origin/cloud-lane:<path>`. It shows what the Mac last fetched, so check the commit's time first.
+- **`pdfimages -list <pdf>` says what a scan holds.** The Tchaikovsky PDF is 1 bit per pixel at 400 ppi; the *Sunless* PDF is 1 bit per pixel at 600 ppi, and the app reads it at 400.
+- **`device_commit_files` can answer HTTP 404 for a file written a moment before.** The same call succeeded on the second try.
+- **A send and an edit in one batch race.** The desk sent a file to the Mac and corrected the same file in the same batch; the uncorrected copy landed. Edit, verify, then send (the older section EDIT, THEN COMMIT, NEVER BOTH IN ONE BATCH says the same from the other side).
+- **Dann's paste of Code's summary can arrive after the desk has ruled on the report from the tree,** and it can arrive twice. Answer in two lines with the ruling already made and the one paste that is pending; do not re-rule.
+- **To look at a staff-line crossing, cut the system at 400 ppi and enlarge it three or four times with nearest-neighbour scaling.** The two sketch scripts are `../sessions/drawing-stave-mask-demo_r1_2026-10-02.py` and `../sessions/drawing-fitted-ovals-demo_r1_2026-10-02.py`.
+- **A head's place against its staff lines, measured locally, settles a pitch by eye:** find the five lines in the columns beside the head and express the head's centre in half spaces from the bottom line. A wide window fails where a hairpin lies over the staff.
