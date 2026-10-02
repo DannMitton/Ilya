@@ -207,3 +207,35 @@ WRITTEN, not DONE. DONE is Dann's walk after he merges. Brief: `brief-code-newco
 **Gates (all eight).** All at baseline, no number moved: 251; 235; 0 errors and 12 warnings in 5 files; 1797 (the figure after row 15); 644 and 5 skipped (649); 145; 55; ratchets: OK.
 
 **Not established.** Whether House style (`docs/house-style/SKILL.md`, which the brief names) was read: I did not open it. I followed the standing rules in `AGENTS.md` (Canadian spelling, Oxford comma, no em-dashes, no agent voice in user-facing copy); the new text is documentation, so a style check is the desk's.
+
+## Row 7: Insights uses the same gates as Markup
+
+WRITTEN, not DONE. DONE is Dann's walk after he merges. Brief: `brief-code-insights-uses-the-gates_r1_2026-09-30.md`. The rulings it rests on: one set of gates for both documents (Dann 2026-09-28 16:28), no data dump (`PRODUCT.md`, 2026-09-24), and gate 2's rare path silent (DESK DEFAULT, `STATE.md` 2026-09-29 00:25).
+
+**What changed.**
+1. `apps/web/src/lib/analysis/gates.ts`, `GATE_DEFAULTS.notableRare` (new): the sentence a rare kind would carry, by kind. **Empty for every kind today.** `hasOffer` (gate 2) now passes a rare kind only if it has one, so a rare kind with nothing sourced to try says nothing, in Markup's box and in Insights. A comment records that whether the sentence is later printed, or only admits the line, is not established; nothing prints it yet.
+2. `gates.ts`, `gatedWatchList(watchList, result)` (new): the watch list as the gates left it, meaning the entries that passed plus the instances gate 4 folded into them, in the list's own order. When the piece does not fit (gate 1), it keeps the range entries, every one, and nothing else, because Markup's box then leads with the transposition and no list follows.
+3. `apps/web/src/lib/insights/insights.ts`: `buildInsights` takes optional `analyzed` and `readingScore`. With `analyzed` and `vowelForEvent` it groups its findings from `gatedWatchList(watchList, gateBand(...))`, the call Markup's box makes. Without them it reads the watch list as before (ungated), which keeps every older caller and test as it was.
+4. `apps/web/src/lib/insights/InsightsPane.svelte`: passes `analyzed` and `readingScore` (on the existing `vowelForEvent` line, so the file stays at its ceiling).
+5. Tests. `gates.test.ts`: the old "a kind rare in this score passes without advice" now says the opposite and asserts `GATE_DEFAULTS.notableRare` is empty; new tests for a rare kind with a sentence passing while another without one does not, and a common kind with a sentence still saying nothing; three for `gatedWatchList` (folds kept and low-stakes dropped in list order; range entries kept when the piece does not fit; kind counts kept). The hand-built gate 3 and gate 4 tests had passed gate 2 by being rare, so their `run` helper now supplies a sentence for every kind and says why. `insights.test.ts`: three tests on the song already in that file, through the real chain.
+
+**What the agreement test shows (real chain, the song in `insights.test.ts`).** Three passaggio notes, no sourced advice, rare in the song. Before: Insights listed a passaggio finding with 3 instances; Markup's box was already silent on it under strict gate 2 only where the kind is common, and printed it where rare. After: Markup's box prints nothing and Insights prints no finding. With a sourced thing to try attached to the three entries: Markup prints one line, "Bar 3: your [a] falls near your passaggio; expect the turn to want managing.", and Insights has one passaggio finding at measure 3 with 1 instance, in place of the 3 an ungated list holds (the two F3 quarters on the primo carry one demand and no weight, under the threshold). I probed these values first, then wrote the assertions from the song's own notes, not from the gate's output.
+
+**Gates (all eight, after the change).**
+
+| # | Result | Baseline | Moved by |
+|---|---|---|---|
+| 1 | 251 passed (251) | same | |
+| 2 | 235 passed (235) | same | |
+| 3 | 0 errors, 12 warnings in 5 files | same | |
+| 4 | 1805 passed (1805) | 1797 after rows 15 and 16 | +8: `gates.test.ts` (+5, one replaced by three, plus three new), `insights.test.ts` (+3) |
+| 5 | 644 passed, 5 skipped (649) | same | |
+| 6 | 145 passed (145) | same | |
+| 7 | 55 passed (55) | same | |
+| 8 | ratchets: OK. | same | |
+
+**Not established, and the brief's own asks I could not meet.**
+- **Item 3, what Insights prints on Sunless 1 and «Скучай» for the bass and soprano test voices, before and after, in English and French: not produced.** The songs are Dann's Finale files read from `~/Documents/Finale Files` by `tools/n168-frequency-run/frequency-run.run.ts`; they are not in this repository, so the run cannot happen here.
+- **Screenshots of Insights before and after, both languages: not produced**, for the same reason, and because nothing was run in a browser.
+- Whether the gates now hide an Insights finding Dann wants to see. Insights' range finding still prints (gate 1 keeps every range entry), and the "no findings" line prints when nothing passes; whether silence on a rare passaggio note reads as intended on his songs is for his walk.
+- Insights' phonation section also reads the grouped findings (the vowels a finding names are marked in the vowel chart), so it now sees the gated findings too. I did not test that section against the change beyond the suite staying green.

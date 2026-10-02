@@ -32,6 +32,7 @@ import {
 	secondsFor,
 	soundingFromNotation,
 	fractionToNumber,
+	type AnalyzedScore,
 	type KeyChoice,
 	type ParsedScore,
 	type Pitch,
@@ -43,6 +44,7 @@ import {
 } from '@ilya/score-parser';
 import { centreOfGravity, cycleDose, halfMassBand, type CentreOfGravity, type CycleDose, type HalfMassBand } from './singing-measures';
 import type { WatchEntry, WatchKind, WatchList, WatchTransposition } from '$lib/analysis/watchlist';
+import { gateBand, gatedWatchList } from '$lib/analysis/gates';
 import { VOWELS } from '$lib/voice/engine/types';
 import type { Language } from '$lib/i18n';
 
@@ -252,6 +254,17 @@ export interface InsightsInputs {
 	watchList: WatchList | null;
 	/** The resolver the analysis used. Omit it and the per-vowel list is absent. */
 	vowelForEvent?: VowelForEvent;
+	/**
+	 * The analysis the watch list was built over. With it and `vowelForEvent`,
+	 * the findings pass through the same gates as Markup's box (`gateBand`;
+	 * Dann 2026-09-28 16:28, one set of gates for both documents). WITHOUT
+	 * them the watch list is read as it stands, ungated: the pane always passes
+	 * both, and a watch list cannot exist without them, so this is the seam for
+	 * a caller that holds neither.
+	 */
+	analyzed?: AnalyzedScore | null;
+	/** The notated score, which arbitrates each bar's sounding length (`noteConditions`). */
+	readingScore?: ParsedScore;
 }
 
 function pitched(score: ParsedScore): Array<VocalLineEvent & { pitch: Pitch }> {
@@ -705,12 +718,16 @@ export function formatTempo(tempo: TempoResolution, language: 'en' | 'fr'): stri
 }
 
 /** Build page one's model from seams that already exist. Pure and deterministic. */
-export function buildInsights({ analysisScore, profile, watchList, vowelForEvent }: InsightsInputs): InsightsModel {
+export function buildInsights({ analysisScore, profile, watchList, vowelForEvent, analyzed, readingScore }: InsightsInputs): InsightsModel {
 	const line = pitched(analysisScore);
 	const range = rangeRow(line, profile);
 	const crossings = crossingsRow(line, profile);
 	const tessitura = tessituraRow(analysisScore, line, profile);
-	const grouped = groupFindings(watchList, analysisScore);
+	const gated =
+		watchList && analyzed && vowelForEvent
+			? gatedWatchList(watchList, gateBand({ watchList, analysisScore, ...(readingScore ? { readingScore } : {}), analyzed, profile, vowelForEvent }))
+			: watchList;
+	const grouped = groupFindings(gated, analysisScore);
 	const phonation = phonationSection(analysisScore, profile, grouped, vowelForEvent);
 
 	/* Option 2, "only as a complement to option 1's claims" (Dann, 2026-09-22):

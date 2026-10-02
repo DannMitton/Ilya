@@ -26,8 +26,10 @@
  * The survivors print in performance order (`PRODUCT.md`, "COMMENTS APPEAR IN
  * THE ORDER THE SINGER MEETS THEM": select by stakes, show in order).
  *
- * Pure and framework-free. Markup's box calls it today; Insights is to call
- * the same function (DESK DEFAULT: its findings are the same watch entries).
+ * Pure and framework-free. Markup's box and Insights both call it: Insights
+ * groups its findings from the entries that passed (`gatedWatchList`,
+ * `insights.ts`, the 2026-10-02 build of QUEUE row 7), so the two documents
+ * cannot disagree about what is worth saying.
  *
  * Tags: SOURCED (a ruling or the draft), DESK DEFAULT (reversible, Dann's to
  * wave off), TRIAL (a starting value Dann judges by reading), NOT ESTABLISHED
@@ -69,6 +71,17 @@ export const GATE_DEFAULTS = {
 	leapSemitones: 8,
 	/** DESK DEFAULT: the range-edge demand fires within this many semitones of the declared top or bottom. */
 	rangeEdgeSemitones: 1,
+	/**
+	 * Gate 2's rare path (DESK DEFAULT, `STATE.md` 2026-09-29 00:25; brief
+	 * `brief-code-insights-uses-the-gates_r1_2026-09-30.md`): a kind rare in this
+	 * score earns a line only if it carries a notable sentence, one that says why
+	 * it matters (`PRODUCT.md`, "What Ilya is for, and why a data dump defeats it").
+	 * The sentence is read from here, by kind. EMPTY FOR EVERY KIND TODAY, so
+	 * a rare kind with nothing sourced to try prints nothing until N.168 supplies
+	 * its sentence. Whether the line then prints the sentence, or the sentence
+	 * only admits the line, is NOT ESTABLISHED: nothing reads it for printing yet.
+	 */
+	notableRare: {} as Partial<Record<WatchKind, string>>,
 };
 
 export type GateDefaults = typeof GATE_DEFAULTS;
@@ -183,11 +196,13 @@ function weightsById(notes: readonly NoteCondition[]): Map<string, { note: NoteC
 
 /**
  * Gate 2, strict (r5): a sourced thing to try (`advice-resolver.ts`, today
- * the crossing and the three exposed hazards), or a kind rare in this score.
- * Nothing else: weight is not an offer, so a climax with no advice is unsaid.
+ * the crossing and the three exposed hazards), or a kind rare in this score
+ * that carries a notable sentence (`GATE_DEFAULTS.notableRare`, empty today, so
+ * the rare path is silent). Nothing else: weight is not an offer, so a climax
+ * with no advice is unsaid.
  */
-function hasOffer(e: WatchEntry, counts: Record<WatchKind, number>): boolean {
-	return e.advice !== undefined || e.kinds.some((k) => isRare(k, counts));
+function hasOffer(e: WatchEntry, counts: Record<WatchKind, number>, d: GateDefaults): boolean {
+	return e.advice !== undefined || e.kinds.some((k) => isRare(k, counts) && d.notableRare[k] !== undefined);
 }
 
 /**
@@ -236,7 +251,7 @@ export function applyGates(input: GateInput): GateResult {
 	// Gates 2 and 3.
 	const passing: GatedEntry[] = [];
 	for (const e of entries) {
-		if (!hasOffer(e, counts)) {
+		if (!hasOffer(e, counts, d)) {
 			result.noOffer.push(e);
 			continue;
 		}
@@ -296,7 +311,25 @@ export function gatedLines(shown: readonly GatedEntry[], language: Language): st
 	return unique.map((g) => render(g, g.entry.advice ? WATCH_OPENERS[k++ % WATCH_OPENERS.length] : 2));
 }
 
-/** What Markup's box (and, next, Insights) hands the gates: the analysis it already holds. */
+/**
+ * The watch list as the gates left it: the entries that passed, with the
+ * instances gate 4 folded into them, in the watch list's own order. Insights
+ * groups its findings from this, so its page and Markup's box cannot disagree
+ * about what is worth saying (Dann 2026-09-28 16:28, ONE set of gates).
+ *
+ * Gate 1 failing is the one case the rule differs: the box leads with the
+ * transposition and no list of notes follows, so what stands is the range
+ * entries, every one, which is what Insights' range finding counts its
+ * instances from. Nothing else is said.
+ */
+export function gatedWatchList(watchList: WatchList, result: GateResult): WatchList {
+	const keep = result.fits
+		? new Set<WatchEntry>([...result.shown.map((g) => g.entry), ...result.folded])
+		: new Set<WatchEntry>(watchList.entries.filter((e) => e.kinds.includes('range')));
+	return { ...watchList, entries: watchList.entries.filter((e) => keep.has(e)) };
+}
+
+/** What Markup's box (and Insights) hands the gates: the analysis it already holds. */
 export interface BandInput {
 	watchList: WatchList;
 	/** The performance-order score the analysis read. */

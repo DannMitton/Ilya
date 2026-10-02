@@ -43,6 +43,7 @@ import {
 	type TessituraRow,
 } from './insights';
 import { buildWatchList, type WatchEntry } from '$lib/analysis/watchlist';
+import { gateBand, gatedLines } from '$lib/analysis/gates';
 import { resolveAdvice } from '$lib/analysis/advice-resolver';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
@@ -569,5 +570,45 @@ describe('N.94 slice 2: Insights in the key the singer will sing', () => {
 		);
 		expect(f.find((x) => x.kind === 'range')?.transposition).toEqual(tr);
 		expect(f.find((x) => x.kind === 'passaggio')).not.toHaveProperty('transposition');
+	});
+});
+
+/**
+ * Insights uses the gates Markup's box uses (Dann 2026-09-28 16:28: one set of
+ * gates serves both documents; `brief-code-insights-uses-the-gates`). The song
+ * is the one above, through the real chain. Each expectation is reasoned from
+ * the song, not read off the gate code: bars 2 and 3 carry three passaggio
+ * notes (the F3 pair on the primo, the E♭4 half one semitone over the secondo),
+ * and the E♭4 half is the climax and the weightiest note.
+ */
+describe('Insights says what Markup says', () => {
+	const s = score(line, 3);
+	const resolver = () => 'a';
+	const analyzed = resolveAdvice(analyzeScore(s, profile, resolver));
+	const watch = buildWatchList(s, analyzed, 1, { analysisScore: s, profile, resolver });
+	const markupLines = (w: typeof watch) => gatedLines(gateBand({ watchList: w, analysisScore: s, analyzed, profile, vowelForEvent: resolver }).shown, 'en');
+	const insights = (w: typeof watch) => buildInsights({ analysisScore: s, profile, watchList: w, vowelForEvent: resolver, analyzed });
+
+	it('is silent on a rare kind with nothing sourced to try, in both documents (gate 2)', () => {
+		// The control: the ungated grouping still finds the hazard, so it is the gate that is silent.
+		expect(groupFindings(watch, s).map((f) => f.key)).toEqual(['passaggio']);
+		expect(markupLines(watch)).toEqual([]);
+		expect(insights(watch).findings).toEqual([]);
+	});
+
+	it('speaks once, at the same place, when there is something to try (gates 2 and 3)', () => {
+		const advised = { ...watch, entries: watch.entries.map((e) => ({ ...e, advice: { action: 'iCrossing' as const, target: 'ɪ' } })) };
+		// Markup's box: one line, bar 3. The two F3 quarters on the primo carry one demand and no weight, under the threshold.
+		expect(markupLines(advised)).toHaveLength(1);
+		expect(markupLines(advised)[0]).toMatch(/^Bar 3:/);
+		// Insights: the same one place, not the three instances the ungated list holds.
+		const found = insights(advised).findings;
+		expect(found.map((f) => [f.key, f.measure, f.instances])).toEqual([['passaggio', '3', 1]]);
+		expect(groupFindings(advised, s)[0].instances).toBe(3);
+	});
+
+	it('without the analysis it reads the watch list as it stands, as before', () => {
+		const ungated = buildInsights({ analysisScore: s, profile, watchList: watch });
+		expect(ungated.findings.map((f) => f.key)).toEqual(['passaggio']);
 	});
 });

@@ -178,7 +178,7 @@
 					analysisScore,
 					profile: adapted.snapshot,
 					watchList,
-					...(vowelResolver ? { vowelForEvent: vowelResolver } : {}),
+					...(vowelResolver ? { vowelForEvent: vowelResolver, analyzed, ...(readingScore ? { readingScore } : {}) } : {}),
 				})
 			: null,
 	);

@@ -5,7 +5,7 @@
 import { describe, expect, it } from 'vitest';
 import type { NoteCondition, Pitch, VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t } from '$lib/i18n';
-import { applyGates, gatedLines, type GateInput } from './gates';
+import { applyGates, gatedLines, gatedWatchList, GATE_DEFAULTS, type GateInput } from './gates';
 import type { WatchEntry, WatchKind } from './watchlist';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
@@ -48,8 +48,16 @@ function notes(specs: NoteSpec[]): NoteCondition[] {
 	}));
 }
 
+/**
+ * Every kind carries a notable sentence here, so a test of gate 3 or gate 4 reaches
+ * its gate: gate 2's rare path is silent for every kind today (`GATE_DEFAULTS.notableRare`
+ * is empty), and these hand-built lists are small enough that every kind is rare in them.
+ * Gate 2 is tested on its own, below, with the real defaults.
+ */
+const NOTABLE = { range: 'x', crossing: 'x', cover: 'x', tracking: 'x', turnover: 'x', passaggio: 'x', timbre: 'x', sustain: 'x' };
+
 const run = (entries: WatchEntry[], ns: NoteCondition[], extra: Partial<GateInput> = {}) =>
-	applyGates({ watchList: { entries }, notes: ns, profile: PROFILE, ...extra });
+	applyGates({ watchList: { entries }, notes: ns, profile: PROFILE, defaults: { ...GATE_DEFAULTS, notableRare: NOTABLE }, ...extra });
 
 describe('gate 1, the piece fits', () => {
 	it('leads with the range entry alone when a note lies outside the range', () => {
@@ -83,9 +91,25 @@ describe('gate 2, something to offer', () => {
 		expect(r.shown).toHaveLength(1);
 	});
 
-	it('a kind rare in this score passes without advice', () => {
+	it('a kind rare in this score is silent without a notable sentence, which no kind has today', () => {
+		expect(GATE_DEFAULTS.notableRare).toEqual({});
 		const r = applyGates({ watchList: { entries: [entry('a', '2', ['passaggio'])], kindCounts: { ...counts, passaggio: 3 } }, notes: ns, profile: PROFILE });
-		expect(r.shown).toHaveLength(1);
+		expect(r.shown).toEqual([]);
+		expect(r.noOffer).toHaveLength(1);
+	});
+
+	it('a rare kind that carries a notable sentence passes, and another rare kind without one does not', () => {
+		const defaults = { ...GATE_DEFAULTS, notableRare: { passaggio: 'a sentence that says why it matters' } };
+		const list = { entries: [entry('a', '2', ['passaggio']), entry('b', '2', ['sustain'])], kindCounts: { ...counts, passaggio: 3, sustain: 1 } };
+		const r = applyGates({ watchList: list, notes: notes([{ id: 'a', midi: 57, phrase: 0 }, { id: 'b', midi: 57, phrase: 0 }]), profile: PROFILE, defaults });
+		expect(r.shown.map((g) => g.entry.eventId)).toEqual(['a']);
+		expect(r.noOffer.map((e) => e.eventId)).toEqual(['b']);
+	});
+
+	it('a common kind with a notable sentence still says nothing: the sentence is for the rare path', () => {
+		const defaults = { ...GATE_DEFAULTS, notableRare: { passaggio: 'a sentence' } };
+		const r = applyGates({ watchList: { entries: [entry('a', '2', ['passaggio'])], kindCounts: counts }, notes: ns, profile: PROFILE, defaults });
+		expect(r.shown).toEqual([]);
 	});
 
 	it('weight never passes a place alone: no offer at the climax and a phrase top prints nothing', () => {
@@ -221,5 +245,33 @@ describe('gate 5 and the line list', () => {
 		const r = run([entry('a', '5', ['passaggio']), entry('b', '5', ['passaggio'])], ns);
 		expect(r.shown).toHaveLength(2);
 		expect(gatedLines(r.shown, 'en')).toHaveLength(1);
+	});
+});
+
+describe('gatedWatchList, the entries Insights groups its findings from', () => {
+	const coda: NoteSpec[] = [{ id: 'z', midi: 62, phrase: 9 }];
+
+	it('keeps the entries that passed with the instances folded into them, drops the rest, and keeps the list order', () => {
+		// a and c are the same vowel on the same pitch, so they fold; b is a different pitch with low stakes.
+		const list = [entry('a', '1', ['passaggio']), entry('b', '2', ['passaggio']), entry('c', '3', ['passaggio'])];
+		const ns = notes([{ id: 'a', midi: 57, phrase: 0 }, { id: 'x', midi: 50, phrase: 0 }, { id: 'b', midi: 58, phrase: 1 }, { id: 'y', midi: 59, phrase: 1 }, { id: 'c', midi: 57, phrase: 2 }, { id: 'w', midi: 50, phrase: 2 }, ...coda]);
+		const r = run(list, ns);
+		expect(r.shown).toHaveLength(1);
+		expect(r.lowStakes.map((l) => l.entry.eventId)).toEqual(['b']);
+		const kept = gatedWatchList({ entries: list }, r);
+		expect(kept.entries.map((e) => e.eventId)).toEqual(['a', 'c']);
+	});
+
+	it('when the piece does not fit, keeps the range entries, every one, and nothing else', () => {
+		const list = [entry('a', '4', ['range'], { rangeDirection: 'above' }), entry('b', '2', ['passaggio']), entry('c', '5', ['range'], { rangeDirection: 'above' })];
+		const r = run(list, notes([{ id: 'a', midi: 66, phrase: 0 }, { id: 'b', midi: 57, phrase: 0 }, { id: 'c', midi: 67, phrase: 0 }]));
+		expect(r.fits).toBe(false);
+		expect(gatedWatchList({ entries: list, kindCounts: undefined }, r).entries.map((e) => e.eventId)).toEqual(['a', 'c']);
+	});
+
+	it('keeps the kind counts', () => {
+		const counts = { range: 0, crossing: 0, cover: 0, tracking: 0, turnover: 0, passaggio: 1, timbre: 0, sustain: 0 };
+		const r = run([entry('a', '1', ['passaggio'])], notes([{ id: 'a', midi: 57, phrase: 0 }, ...coda]));
+		expect(gatedWatchList({ entries: [entry('a', '1', ['passaggio'])], kindCounts: counts }, r).kindCounts).toEqual(counts);
 	});
 });
