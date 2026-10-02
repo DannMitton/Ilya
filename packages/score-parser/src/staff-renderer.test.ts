@@ -249,6 +249,50 @@ describe('staff renderer: melisma (build 1: detection and alignment)', () => {
     expect(svg.includes('data-tie="n19"')).toBe(true);
   });
 
+  describe('a tie that leaves the slice (loupe remainder, item 3)', () => {
+    /* The demo up to n19, whose tie to n20 has no partner in the slice. */
+    const upToN19 = () => {
+      const parsed = demoScore();
+      const cut = parsed.vocalLine.findIndex((e) => e.id === 'n19');
+      return { ...parsed, vocalLine: parsed.vocalLine.slice(0, cut + 1) };
+    };
+    const render = (extra: StaffRenderOptions) => {
+      const parsed = upToN19();
+      const analyzed = analyzeScore(parsed, demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
+      return renderAnalyzedStaff(parsed, analyzed, { font: syntheticSmuflFont(), fontFamily: 'TestFont', ...extra });
+    };
+    const endX = (svg: string) => {
+      const d = svg.match(/<path d="M[\d.-]+ [\d.-]+ Q [\d.-]+ [\d.-]+ ([\d.-]+) [\d.-]+[^"]*"[^>]*data-tie-runon="n19"/)!;
+      return Number(d[1]);
+    };
+
+    it('draws nothing without the option: the page never sees a tie into nothing', () => {
+      const svg = render({});
+      expect(svg.includes('data-tie')).toBe(false);
+    });
+
+    it('draws a run-on tie from the last note to runOnTieSp stave spaces past the right edge', () => {
+      const plain = render({});
+      const width = Number(plain.match(/viewBox="0 [\d.-]+ ([\d.]+)/)![1]);
+      const svg = render({ runOnTieSp: 3 });
+      expect(svg.includes('data-tie-runon="n19"')).toBe(true);
+      expect(svg.includes('data-tie="')).toBe(false); // the page's handle stays off it
+      expect(endX(svg)).toBeCloseTo(width + 3 * 12, 1);
+    });
+
+    it('is the same filled, tapered shape a tie draws', () => {
+      const svg = render({ runOnTieSp: 3 });
+      expect(svg).toMatch(/<path d="M[^"]* Q [^"]* Q [^"]* Z" fill="#1a1612" data-tie-runon="n19"\/>/);
+    });
+
+    it('draws none where the last note is not tied forward', () => {
+      const parsed = upToN19();
+      parsed.vocalLine = parsed.vocalLine.map((e) => (e.id === 'n19' ? { ...e, tied: undefined } : e));
+      const analyzed = analyzeScore(parsed, demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
+      expect(renderAnalyzedStaff(parsed, analyzed, { runOnTieSp: 3 }).includes('data-tie-runon')).toBe(false);
+    });
+  });
+
   /**
    * The DRAWN ink of a tie or a slur, measured off the emitted outline.
    *

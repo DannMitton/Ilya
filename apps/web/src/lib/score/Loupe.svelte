@@ -51,6 +51,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		measureWindow,
 		meterLayout,
 		METER_LEAD_SP,
+		CARET_ROOM_SP,
+		SQUIRCLE_CLEARANCE_SP,
 		openAfterPageMeter,
 		nearestTarget,
 		hitsFor,
@@ -423,6 +425,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		/** N.138 increment 3. The stave past the closing barline; null on the
 		    final bar, which ends flush. */
 		tail: StavePanel | null;
+		/** Item 3. The tie that leaves the measure, drawn over body and tail from the note to the end of the run-on; null where none leaves. */
+		runOn: { markup: string; left: number; width: number; viewBox: string } | null;
 		/** N.141 step 2. The taken note's squircle on the strip, in CSS pixels;
 		    null where the page has none. */
 		ring: { x: number; y: number; width: number; height: number; radius: number; stroke: number } | null;
@@ -1056,6 +1060,12 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   and it serves both viewports because the head and the body are two
 		   crops of this one clone. */
 		for (const el of clone.querySelectorAll('[data-analysis]')) el.remove();
+		/* ITEM 3, THE TIE INTO THE RUN-ON (OPEN.md, the loupe's two modes, ruling 9). The renderer drew it
+		   past the barline, where the body's clip would cut it, so it comes off the clone and is drawn on
+		   its own layer across body and tail, in the body's coordinates. None on a final bar (no tail). */
+		const runOnTies = [...clone.querySelectorAll('[data-tie-runon]')];
+		const runOnMarkup = tailSpanUnits > 0 ? runOnTies.map((el) => el.outerHTML).join('') : '';
+		for (const el of runOnTies) el.remove();
 		/* N.126: THE PAGE'S MEASURE NUMBERS STAY ON THE PAGE. The head crops the
 		   system's own left edge, so a system-start number above the clef would
 		   stand in the loupe over every measure of that system, naming the wrong
@@ -1147,7 +1157,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   distinction, put to Dann and not waved off: the two are decided by
 		   different things, a hit rectangle's CENTRE in CSS pixels for the
 		   second, measured separately below the scan. */
-		const SQUIRCLE_CLEARANCE = lineGap * 1.6;
+		const SQUIRCLE_CLEARANCE = lineGap * SQUIRCLE_CLEARANCE_SP;
 
 		/* THE BODY'S OWN MARGIN, CLAUSE 6: *"the spacing in the Loupe is
 		   temporary and situational, and bears not on the paper GUI."* Past
@@ -1175,7 +1185,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   closed what that left open: the widening below and the barline
 		   nudges now take every selection and none, in either mode, so
 		   neither the taken note nor the mode can move them. */
-		const CARET_MARGIN = lineGap * 2 + SQUIRCLE_CLEARANCE;
+		const CARET_MARGIN = lineGap * CARET_ROOM_SP + SQUIRCLE_CLEARANCE;
 		let bodyViewLeft = view.left - CARET_MARGIN;
 		let bodyViewRight = view.right + CARET_MARGIN;
 		let bodyViewSpan = viewSpan + CARET_MARGIN * 2;
@@ -1935,6 +1945,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 						viewBox: `${carry.left} ${cropTop} ${carrySpanUnits} ${cropHeight}`,
 					}
 				: null,
+			runOn: runOnMarkup
+				? { markup: runOnMarkup, left: headWidth + meterWidth + carryWidth, width: (bodyViewSpan + tailSpanUnits) * scale, viewBox: `${bodyViewLeft} ${cropTop} ${bodyViewSpan + tailSpanUnits} ${cropHeight}` }
+				: null,
 			tail:
 				tailSpanUnits > 0
 					? {
@@ -2402,6 +2415,12 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 					{/each}
 				</svg>
 			{/if}
+			{#if frame.runOn}
+				<svg class="loupe-runon" style="left: {frame.runOn.left}px;" width={frame.runOn.width} height={frame.contentHeight} viewBox={frame.runOn.viewBox} aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's tie, taken off the clone -->
+					{@html frame.runOn.markup}
+				</svg>
+			{/if}
 			</div>
 		</div>
 		<!-- N.147, RULED BY DANN 2026-09-17: THE SYLLABLES ROW, drawing 1 of the
@@ -2839,6 +2858,13 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		left: 0;
 		top: 0;
 		overflow: visible;
+		pointer-events: none;
+	}
+
+	/* Item 3. The run-on tie: over body and tail, never taking a tap. */
+	.loupe-runon {
+		position: absolute;
+		top: 0;
 		pointer-events: none;
 	}
 

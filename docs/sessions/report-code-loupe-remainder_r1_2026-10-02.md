@@ -96,3 +96,37 @@ WRITTEN as a mechanism. **No visible change was measured on any measure I could 
 | 6 | 145 passed (145) | no |
 | 7 | 55 passed (55) | no |
 | 8 | ratchets: OK | `staff-renderer.ts` could be lowered 3534 to 3487 |
+
+## Item 3: the tie runs into the run-on, with a tapered end
+
+WRITTEN. Seen in the browser on a copy of the fixture with a tie added (kept outside the repository; see below).
+
+**What changed.**
+- `staff-renderer.ts` (tie loop, formerly `:3192`): new option `runOnTieSp`. When the last note of a slice is tied forward and has no partner in the slice, the tie is drawn with the same `arcOutline` as any tie (filled, tapered at both ends, same direction rule with the note read as its own partner), from the note's head to `runOnTieSp` stave spaces past the right edge, tagged `data-tie-runon`, not `data-tie`. The page passes nothing, so the page is unchanged.
+- `loupe.ts`: `CARET_ROOM_SP` (2), `SQUIRCLE_CLEARANCE_SP` (1.6), and `RUN_ON_SP` (their sum plus `EXCERPT_TAIL_SP`, 4.6). `Loupe.svelte` now builds `CARET_MARGIN` from the first two, so the margin and the tie cannot disagree.
+- `loupe-render.ts`: `renderLoupeMeasure` passes `runOnTieSp: RUN_ON_SP`, and 0 on the final measure.
+- `Loupe.svelte`: the tie comes off the clone (the body's clip would cut it at the barline) and is drawn on its own layer, `.loupe-runon`, over body and tail in the body's coordinates, never taking a tap. Nothing is drawn on a final bar, which has no tail.
+- Tests: 4 in `staff-renderer.test.ts` (nothing without the option; drawn to `runOnTieSp` past the edge; same filled tapered shape; none for an untied note) and 3 in `loupe-render.test.ts` (drawn as `data-tie-runon`; ends at 4.6 stave spaces past the edge; none untied or on the final bar).
+
+**Observed.** `tied.musicxml`: the fixture with a tie start on m. 4's last note (E3) and the same pitch and a tie stop on m. 5's first note. Desk and phone, loupe on m. 4: the tie leaves the note, crosses the closing barline, and ends in a point at the right end of the strip (the overlay's right edge equals the strip's right edge: 1307.2 px on the desk, 552.5 px on the phone). Nothing was found inside the body panel (`.loupe-body [data-tie-runon]` count 0). m. 3, untied, draws none. Screenshots: `item3-desk-hit-m3.png`, `item3-phone-hit-m3.png`.
+
+**Gates after item 3.**
+
+| # | Result | Moved |
+|---|---|---|
+| 1 | 251 passed (251) | no |
+| 2 | 235 passed (235) | no |
+| 3 | 0 errors and 12 warnings in 5 files | no |
+| 4 | 1843 passed (1843) | +3 (`loupe-render.test.ts`) |
+| 5 | 650 passed, 5 skipped (655) | +4 (`staff-renderer.test.ts`) |
+| 6 | 145 passed (145) | no |
+| 7 | 55 passed (55) | no |
+| 8 | ratchets: OK | `Loupe.svelte` 3044 to 2908 possible, `staff-renderer.ts` 3534 to 3493 possible |
+
+**What I could not establish.**
+- **The stock fixture has no tie on its sung line**, so the tie in the screenshots is on a copy I edited, not on a score Dann owns. The song the ruling names (m. 12) is on the Mac.
+- **Which note the tie reaches** is not drawn. The tie ends at the strip's end, 4.6 stave spaces past the barline, as the ruling asks ("as if it reached a note that is not shown"). If `CARET_MARGIN` changes (ruling 8 and 11), `RUN_ON_SP` follows it.
+- **The tie's weight** in these screenshots is the primitive-mode figure; its look with Finale Maestro's own tie thickness was not checked beside the page's tie.
+- **A tie that leaves the last measure of a system** is drawn the same way; I did not check it against a page where the next system starts on the tie's partner.
+- **The run-on tie adds its ink to the slice's lowest or highest ink**, as a page tie does, which can move the IPA row by a pixel or two in a measure that ends in a tie. Not measured.
+- The phone loupe scan was not re-run for this item: the stock fixture has no tie, so the scan's measures do not draw one.

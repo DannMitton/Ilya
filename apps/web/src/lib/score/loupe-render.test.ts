@@ -235,3 +235,35 @@ describe('the loupe\'s meter run-in (loupe remainder, item 2)', () => {
 		expect(width(page) - loupe.width).toBeCloseTo(b.spacing.lineGap, 1);
 	});
 });
+
+describe('the tie into the run-on (loupe remainder, item 3)', () => {
+	const lastNoteOf = (b: LoupeRenderBundle, m: number) => [...b.readingScore.vocalLine].reverse().find((e) => e.measureIndex === m && e.type === 'note')!;
+	const tied = async (m: number) => {
+		const b = await bundle();
+		const id = lastNoteOf(b, m).id;
+		b.readingScore = { ...b.readingScore, vocalLine: b.readingScore.vocalLine.map((e) => (e.id === id ? { ...e, tied: { type: 'start' as const } } : e)) };
+		return { b, id };
+	};
+
+	it('draws a tie that leaves the measure, past the barline, as data-tie-runon', async () => {
+		const { b, id } = await tied(3);
+		const svg = renderLoupeMeasure(b, 3, b.spacing.minGap)!.svg;
+		expect(svg).toContain(`data-tie-runon="${id}"`);
+		expect(svg).not.toContain('data-tie="');
+	});
+
+	it('runs it RUN_ON_SP (4.6) stave spaces past the right edge', async () => {
+		const { b } = await tied(3);
+		const r = renderLoupeMeasure(b, 3, b.spacing.minGap)!;
+		const d = r.svg.match(/<path d="M[\d.-]+ [\d.-]+ Q [\d.-]+ [\d.-]+ ([\d.-]+) [\d.-]+[^"]*"[^>]*data-tie-runon/)!;
+		expect(Number(d[1])).toBeCloseTo(r.width + 4.6 * b.spacing.lineGap, 1);
+	});
+
+	it('draws nothing for an untied measure, and never on the final bar', async () => {
+		const b = await bundle();
+		expect(renderLoupeMeasure(b, 3, b.spacing.minGap)!.svg).not.toContain('data-tie-runon');
+		const last = b.readingScore.measures.length - 1;
+		const { b: tiedLast } = await tied(last);
+		expect(renderLoupeMeasure(tiedLast, last, tiedLast.spacing.minGap)!.svg).not.toContain('data-tie-runon');
+	});
+});

@@ -221,6 +221,7 @@ export interface StaffRenderOptions {
   leftMargin?: number;  // x where the stave's lines begin; the head is laid out forwards from it (N.139)
   pxPerWhole?: number;  // horizontal px per whole-note of onset time
   minGap?: number;      // minimum px between successive events
+  runOnTieSp?: number;  // a slice's last note tied forward draws its tie this many stave spaces past the closing barline, as `data-tie-runon` (the loupe; absent on the page)
   meterRunInSp?: number; // stave spaces from a time signature to the first note; default METER_RUN_IN_SP (the page's 2). The loupe passes 1.
   /**
    * Render clef. Omit to let the renderer assess the input and choose
@@ -397,7 +398,7 @@ export interface StaffRenderOptions {
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'runOnTieSp'>> = {
   staffMidY: 96,
   lineGap: 12,
   // N.139: the stave's own left edge, flush with the system's. DESK DEFAULT.
@@ -3194,10 +3195,15 @@ export function renderAnalyzedStaff(
     if (e.type !== 'note' || !e.pitch || !e.tied) continue;
     if (e.tied.type !== 'start' && e.tied.type !== 'continue') continue;
     const nxt = placed[i + 1];
-    if (!nxt || nxt.ev.type !== 'note' || !nxt.ev.pitch) continue;
+    /* THE LOUPE'S RUN-ON (loupe remainder, item 3). A slice ends where its measure does, so a tie
+       that leaves the last note has no partner here. With `runOnTieSp` set it is drawn as if it
+       reached a note that is not shown, and tagged `data-tie-runon` so the page's `[data-tie]`
+       readers never see it. Its partner is read as the note itself: a tie joins one pitch. */
+    const runOn = !nxt && !!o.runOnTieSp && o.runOnTieSp > 0;
+    if (!runOn && (!nxt || nxt.ev.type !== 'note' || !nxt.ev.pitch)) continue;
     const y1 = yFor(e.pitch);
     const a1 = analyzed.events[e.id];
-    const a2 = analyzed.events[nxt.ev.id];
+    const a2 = nxt ? analyzed.events[nxt.ev.id] : a1;
     // Direction: OPPOSITE the syllabic slur when one arches above the
     // span (extraction r174); otherwise away from shared stems (open =
     // stems down → tie up); mixed or unanalysed: away from the middle
@@ -3208,9 +3214,9 @@ export function renderAnalyzedStaff(
         ? a1.timbre === 'open'
         : y1 < o.staffMidY;
     const half1 = smufl ? sp(smufl.glyph(headNameFor(e.duration.base)).widthSp / 2) : 6.2;
-    const half2 = smufl ? sp(smufl.glyph(headNameFor(nxt.ev.duration.base)).widthSp / 2) : 6.2;
+    const half2 = !nxt ? 0 : smufl ? sp(smufl.glyph(headNameFor(nxt.ev.duration.base)).widthSp / 2) : 6.2;
     const x1 = placed[i].x + half1 + 1;
-    const x2 = nxt.x - half2 - 1;
+    const x2 = nxt ? nxt.x - half2 - 1 : contentRight + sp(o.runOnTieSp!);
     if (x2 <= x1) continue;
     const ey = y1 + (up ? -4 : 4);
     let depth = (up ? -1 : 1) * o.lineGap * 0.9; // shallow: flatness is identity
@@ -3239,7 +3245,7 @@ export function renderAnalyzedStaff(
        `textTie`, which is the lyric elision character. SMuFL has none either,
        so ties stay drawn geometry and there was never a second option. */
     parts.push(
-      `<path d="${arcOutline(x1, x2, ey, depth, arcInk.tieMid, arcInk.tieEnd)}" fill="#1a1612" data-tie="${esc(e.id)}"/>`,
+      `<path d="${arcOutline(x1, x2, ey, depth, arcInk.tieMid, arcInk.tieEnd)}" fill="#1a1612" data-tie${nxt ? '' : '-runon'}="${esc(e.id)}"/>`,
     );
     lowestInk = Math.max(lowestInk, ey + Math.max(0, depth));
     highestInk = Math.min(highestInk, ey + Math.min(0, depth));

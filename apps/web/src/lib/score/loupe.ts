@@ -393,6 +393,7 @@ export { METER_RUN_IN_SP };
  */
 export const LOUPE_METER_RUN_IN_SP = 1;
 
+
 /**
  * THE AIR BETWEEN THE KEY SIGNATURE AND THE METER, in stave-spaces. The
  * renderer separates its clef from its key signature by one stave-space, on
@@ -621,6 +622,19 @@ export function carryBand(
  * already uses. Dann overrules it once he has seen it.
  */
 export const EXCERPT_TAIL_SP = 1;
+
+/**
+ * THE ROOM PAST THE CLOSING BARLINE, in stave spaces, as `Loupe.svelte` spends it:
+ * `CARET_ROOM_SP` and `SQUIRCLE_CLEARANCE_SP` make its `CARET_MARGIN` (3.6), and
+ * `EXCERPT_TAIL_SP` is the tail panel's run of stave. A tie that leaves the measure
+ * runs the whole of it (loupe remainder brief, item 3; OPEN.md, the loupe's two modes,
+ * ruling 9: *"the tie runs into the run-on, fully realized, with a tapered end, as if
+ * it reached a note that is not shown"*). Declared here once so the margin and the tie
+ * cannot disagree.
+ */
+export const CARET_ROOM_SP = 2;
+export const SQUIRCLE_CLEARANCE_SP = 1.6;
+export const RUN_ON_SP = CARET_ROOM_SP + SQUIRCLE_CLEARANCE_SP + EXCERPT_TAIL_SP;
 
 /** A staff-spanning vertical as drawn: its centre x and its stroke width. */
 export interface Vertical {

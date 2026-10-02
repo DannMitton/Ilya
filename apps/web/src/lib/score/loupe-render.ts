@@ -25,7 +25,7 @@
  */
 import { renderSystemSlice, type StaffRenderOptions } from '@ilya/score-parser';
 import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
-import { LOUPE_METER_RUN_IN_SP, type SystemRange } from '$lib/score/loupe';
+import { LOUPE_METER_RUN_IN_SP, RUN_ON_SP, type SystemRange } from '$lib/score/loupe';
 
 export interface LoupeSystemRender {
 	/** The standalone SVG string, exactly as the renderer returned it. */
@@ -86,7 +86,7 @@ export function renderLoupeMeasure(bundle: LoupeRenderBundle, m: number, minGap:
 	const measures = bundle.readingScore.measures.length;
 	if (m < 0 || m >= measures) return null;
 	/* The loupe's meter run-in is 1 sp, the page's stays 2 (`LOUPE_METER_RUN_IN_SP`). */
-	const options: StaffRenderOptions = { ...bundleRenderOptions(bundle), minGap, meterRunInSp: LOUPE_METER_RUN_IN_SP };
+	const options: StaffRenderOptions = { ...bundleRenderOptions(bundle), minGap, meterRunInSp: LOUPE_METER_RUN_IN_SP, runOnTieSp: m === measures - 1 ? 0 : RUN_ON_SP };
 	delete options.targetWidth;
 	const svg = renderSystemSlice(bundle.readingScore, bundle.analyzed, options, m, m, {
 		finalBarline: m === measures - 1,
