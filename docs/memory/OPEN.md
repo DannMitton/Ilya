@@ -2733,3 +2733,23 @@ A read-only Sonnet sweep read about 43 of the project's 374 documents (`claude/*
 
 **The item:** read the underlay text from a score page and seat it, as a research item measured on real pages before any accuracy is promised, beside N.178 (tempo and dynamics from scans). Known risk on record: N.163, an OCR misread («То» as «Го») reached a singer as a false word with a confident gloss. The singer's poem owns the text today (the code's own words, "THE POEM STILL OWNS THE TEXT", `+page.svelte:637-638`; `PRODUCT.md`, THE TEXT AND THE NOTES, NOT re-read by the desk tonight); how a read underlay and a typed poem reconcile is a design question for Dann.
 
+
+## N.178 AND THE SCAN READER. Dann's rulings of 2026-10-01 and 2026-10-02, homed at the close of 2026-10-02
+
+**The plan is `../sessions/plan-scan-reader_r4_2026-10-01.md`. This section holds the rulings; the plan holds the design built on them.** Each quotation is transcribed as written. Homed from the chat and from the briefs named in `QUEUE.md` rows 18 to 20.
+
+1. **The goal, 2026-10-01 15:11:** *"By the end of day I want Ilya processing a scan, extracting a melody with respectable accuracy, and seating Russian lyrics underneath their corresponding notes predictably."* The melody includes *"the metre, the barlines, the pitches, the rhythms, the rests, the dynamics, the tempo indications, and the pickup."* **15:22:** *"Guessing is not a modality for well-constructed software."*
+2. **The measure, 22:22:** 95 of 100 notes and 9 of 10 syllables, and no confident non-word (plan r4, section 2).
+3. **A system may have no voice, 16:08:** *"we must teach Ilya that a vocal line will not always be present. It may serve us to point out that voice lines are usually monodic while piano lines feature chords, generally. Not always, but this is a useful starting place."* Built in row 18 as tacet systems.
+4. **Words are read from the scan first; the poem is an optional second witness** (22:47, and 23:06: *"I truly feel like dropping a complete score in should be enough?"*).
+5. **Read once, keep both, 23:18:** *"Yes! Let's enact: 'read once and keep both the scan and the reading.'"* Recorded in `CONTRACT.md` section 6 as the second exception to "do not store anything derived".
+6. **Tempo text, dynamics, and hairpins, 23:06:** *"Correct, this is new essential functionality that we need to build and install."*
+7. **The scorer may change, 23:06:** *"it is there to align with our need and not vice versa."*
+8. **Hyphens and correction, 23:18:** syllables split by hyphens are sewn back into words the dictionary recognizes. *"Legitimate misreads and errors should be able to be manually edited painlessly and easily by the user."*
+9. **Lines restored, 23:18:** *"in many cases punctuation will signal a line break. Enjambement happens, but it is comparatively rare."* Punctuation proposes; metre and rhyme decide (the second clause is the desk's design, plan r4).
+10. **Underlay languages, 23:31:** the Cyrillic line only for this release. *"I think for right now if Ilya can handle English, French, and Russian we are in very good shape."* The rest is deferred (`INBOX.md`, 23:33).
+11. **The metre is auditioned, 2026-10-02 01:06:** *"there should be a combination of likely Araabic numbers (1 through 9) to audition, plus the simple arithmetic of the contents of a confirmed bar to weigh against that audition as a sanity check."* **01:12:** numerators are most often 2, 3, 4, 6, 8, 9, 12, 16 and denominators 2, 4, 8, 16; used as a weight, never a gate (the weight is the desk's design). **01:16, compound metre:** *"3/8 is really 1/8 where the main beat is a triplet"*; 6/8 answers to 2/4, 9/8 to 3/4, 12/8 to 4/4. **01:18:** *"Classical and Romantic music often beams 3/4 as if it were 6/8, and can also beam passages of 6/8 as if it is 3/4 to highlight hemiola."* So beaming never changes the metre read.
+12. **The ossia, 01:53 to 01:57:** two heads on one stem do not halt the read. The larger head is the note: *"it would be wisest to choose the larger notehead of the ossia by default"*. Two heads of one size: *"this construct should be flagged for user intervention: the user should have control over selecting which possiblity they prefer, or deleting the other option."*
+13. **A head and a flag's hook, 02:11 and 02:15:** a head's white core is a closed shape, as Loupe was taught of the natural sign, and the head and the hook each have a shape of their own. Both are measures in row 20's brief.
+
+**What these do not cover:** how the unsure mark, the ossia, and the stored reading look to the singer (plan r4, phase 1, not drawn); French for any new string; the six-song test set.

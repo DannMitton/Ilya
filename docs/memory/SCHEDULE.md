@@ -125,6 +125,7 @@ design rows.
 - [x] **N.123, part 1. WALKED by Dann in both languages 2026-09-24**; its findings shipped `5e22d03` and `d1cc2d3`, walked.: the tessituragram with the passaggio zone shaded.
 - [x] **N.94, part 1** (walked by Dann 22:15, "I love it"; shipped `de31e22` 2026-09-28): the control appears, and the score draws in the chosen key.
 - [x] **N.130 and N.131. DONE 2026-09-24, ahead of the week:** Insights' French walked and every ruling seated (`2f955e6`); the audit's ten N.131 rows ruled and seated (`1987157`); both walked by the desk on Dann's library.: the desk drafts Insights' French; Dann rules it in one sitting; one build carries it with N.131's 21 ratified rows.
+- [~] **The scan reader (N.178 widened; THE ONE THING since 2026-10-01 15:11; `../sessions/plan-scan-reader_r4_2026-10-01.md`).** Not on this schedule when it was written. Staves SHIPPED `a7fd740` 2026-10-02 (`../sessions/report-code-staves-traced-and-straightened_r1_2026-10-01.md`); bars BUILT (`../sessions/report-code-bars-by-the-system_r1_2026-10-02.md`); heads MEASURED and briefed (`../sessions/report-code-one-head-to-a-stem_r1_2026-10-02.md`). `QUEUE.md` rows 18 to 20. Not walked by Dann.
 
 ## Week 4. Monday 2026-10-05 to Sunday 2026-10-11. Finish the design rows
 

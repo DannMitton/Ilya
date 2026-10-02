@@ -23,7 +23,7 @@ import sys, json, collections
 import cv2, numpy as np
 from fractions import Fraction
 sys.path.insert(0, '/home/claude')
-from reader import read_page_pitch, detect_barlines, detect_tacet_barlines, nms, band_of, FLAG_AREA_RATIO, _has_dot, _head_cc_area
+from reader import read_page_pitch, detect_barlines, nms, band_of, FLAG_AREA_RATIO, _has_dot, _head_cc_area
 from rest_templates import render_rest
 from beams import detect_beam_bars, find_stem, beams_on_stem
 from timesig import read_time_signature
@@ -385,7 +385,7 @@ def run(cfg):
         events.append(dict(sys=rr['sys'], x=rr['x'], kind='rest', dur=rr['dur'], midi=None,
                             dur_abstain=None, pitch_abstain=None))
 
-    bl = detect_barlines(nl, staves, vocal, s)
+    bl = G['barlines']['byVocal']
     # N.59, Ruling A. `measures_per_system` is a harness configuration list and
     # a browser has no configuration to read it from. Where cfg omits it, it is
     # DERIVED from the reader's own detected barlines. The harness keeps
@@ -408,8 +408,7 @@ def run(cfg):
     # tacet system `order` is 0..n-1 and every line here is today's.
     voices = G.get('voices')
     order = voices['order'] if voices else list(range(len(vocal)))
-    tbl = (detect_tacet_barlines(nl, staves, voices['tacetRef'], voices['tacetLast'], s)
-           if voices and voices['tacetRef'] else {})
+    tbl = G['barlines']['tacet']
     sysbars = []; ti = 0
     for o in order:
         if o is None: sysbars.append(tbl.get(ti, [])); ti += 1

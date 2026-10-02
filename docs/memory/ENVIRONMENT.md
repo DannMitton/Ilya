@@ -109,6 +109,9 @@ next session the same hour it cost the last one.
 | the tab id you had stops working mid-session | `THE EXTENSION'S OWN TAB LANDS BEHIND` |
 | drawing music in a sketch or a mockup | `THE MUSIC FACE IS MAESTRO` |
 | `sed -i ''` fails in device_bash | `THE DEVICE SHELL IS LINUX` |
+| you are about to write a time into a file | `THE DESK'S CLOCK, THE RELAY, AND THE APP'S RASTER` |
+| you are about to tell Dann what to paste to Code next | `THE DESK'S CLOCK, THE RELAY, AND THE APP'S RASTER` |
+| the desk's reader numbers differ from the app's, or a straightened scan loses note heads | `THE DESK'S CLOCK, THE RELAY, AND THE APP'S RASTER` |
 | `grep` says `Invalid collation character`, or a `&&` chain dies at a grep | `ACCENTED RANGE DIES ON THE BRIDGE` |
 | `md5` or `date -r` is not found on the bridge | `md5` AND `date -r` DO NOT EXIST` |
 | briefing Design | `WHAT DESIGN CAN READ` |
@@ -4463,3 +4466,12 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **Playwright times out on a raw `.svg` with `full_page=True`** ("waiting for fonts to load", 30 s). Wrap the SVG in an HTML page with an explicit `width`, set the viewport to the drawing's size, and screenshot without `full_page`.
 - **kenbozeman.com loops between http and https**, so WebFetch returns a redirect it cannot follow. `curl -sL` from the device shell reaches it. The "Approximate First Formant Locations" page links a PDF whose embedded scan is 2550 × 3300 px (`pdfimages -j`); read that, not the 924 px page image.
 
+
+## THE DESK'S CLOCK, THE RELAY, AND THE APP'S RASTER. Learned 2026-10-01 and 2026-10-02
+
+- **Read the clock before you write a time.** Twice in one session the desk stamped files with a time it had estimated: 23:40 for 23:05, and 02:30 for 02:14. The clock tool is one call.
+- **The desk does not know what Code has been sent.** At 02:12 on 2026-10-02 the desk gave Dann a follow-up line for a brief Code had never received. Before a prompt that builds on an earlier one, ask Dann in one line, or look in the tree for Code's report.
+- **One brief, whole.** When a ruling changes before Code has the brief, rewrite the brief clean under a new name and put a SUPERSEDED banner on the old ones. Do not stack amendments (Dann, 02:13: *"Please consolidate and rewrite if that helps keep things uncomplicated"*).
+- **Measure the reader on the app's own raster.** Poppler and pdf.js at 400 dpi give different pixels, and the desk's shell has OpenCV 5.0.0 and numpy 2.2.6 where the app pins cv2 4.9.0 and numpy 1.26.4. On the Tchaikovsky pages the desk's Poppler run found 9 and 2 staves and a raise; the app's path found 2, 2, and none (`../sessions/report-code-staves-traced-and-straightened_r1_2026-10-01.md`). A desk number is a lead. Code's number on the app's path is the measurement.
+- **Straightening a scan by interpolation loses note heads.** The desk's prototype read 49 of 70 heads on page 2 after linear resampling. Whole-pixel column shifts keep them (`STRAIGHTEN_MODE` `band` in `tools/e16-harness/reader/`).
+- **Edits made after a ship are uncommitted.** The ship takes what exists when it runs. Say so to Dann, and name them in `STATE.md` for the next ship.

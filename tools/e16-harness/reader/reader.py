@@ -865,13 +865,43 @@ def _brace_span(dark, x0, sys_top, sys_bot, s):
         x,y,w,h,area=stats[i]
         if h<5.0*s: continue                     # shorter than two staves plus their gap
         if best is None or h>best[1]: best=(y_lo+int(y),int(h))
+    # A BROKEN BRACE. A print whose brace is speckled at its waist leaves two
+    # halves, each taller than two spaces and neither as tall as five, or one
+    # half that covers only the upper staff of the pair. Measured 2026-10-02 on
+    # the RK-Bessel sunless01 p2 page: systems 2 and 3 found a half and the
+    # lower piano staff then counted as unbraced, so no voice staff was chosen.
+    # Halves that touch (within half a staff space) are one brace, and the
+    # taller of that and a single unbroken component wins, so an unbroken brace
+    # reads as it always did.
+    halves=sorted((int(y),int(h)) for i in range(1,num)
+                  for x,y,w,h,area in [stats[i]] if h>=2.5*s)
+    chain=None; chains=[]
+    for y,h in halves:
+        if chain is not None and y<=chain[1]+0.5*s: chain[1]=max(chain[1],y+h)
+        else:
+            chain=[y,y+h]; chains.append(chain)
+    if chains:
+        top=max(chains,key=lambda c:c[1]-c[0])
+        if top[1]-top[0]>=5.0*s and (best is None or top[1]-top[0]>best[1]):
+            best=(y_lo+top[0], top[1]-top[0])
     return None if best is None else (best[0], best[0]+best[1]-1)
 
 def _in_span(span, st):
     """Is this staff inside the brace? Most of it must be, so a brace that
     overshoots by a few pixels does not claim the staff above it."""
     lo,hi=span; top,bot=st[0],st[-1]
-    return (min(hi,bot)-max(lo,top))>=0.6*(bot-top)
+    return (min(hi,bot)-max(lo,top))>=BRACE_COVER*(bot-top)
+
+BRACE_COVER = 0.2
+
+# HOW MUCH OF A STAFF THE BRACE MUST COVER. Was 0.6. Measured 2026-10-02 on the
+# 33 systems of three staves in the tree: the voice staff's overlap with its
+# brace is never above 0 (it lies 1.6 to 3.7 staff heights clear), and the
+# piano staves' overlaps run from 0.353 (RK-Bessel sunless01 p2, system 3, its
+# lower staff: the printer drew that brace shorter than the pair it braces) up
+# to 1.0. 0.2 is the midpoint of the gap between 0 and 0.353. At 0.6 a brace
+# that falls short of its staves left one of them unbraced, and with two staves
+# unbraced the system had no decided voice.
 
 # ---------- THE TWO MORE SIGNS, and the tacet system (brief r3, 2026-10-02) ----------
 #
@@ -976,10 +1006,11 @@ def select_voices(staves, s, img):
         if _joined_at_left(dark,staves[i-1],staves[i],x0,s): systems[-1].append(i)
         else: systems.append([i])
 
-    vocal=[]; order=[]; tacet_ref=[]; tacet_last=[]; fallbacks=0; signs=[]
+    vocal=[]; order=[]; tacet_ref=[]; tacet_last=[]; fallbacks=0; signs=[]; sysinfo=[]
     for group in systems:
         if len(group)==1:
-            order.append(len(vocal)); vocal.append(group[0]); continue
+            order.append(len(vocal)); sysinfo.append(dict(group=group, voice=group[0], braced=[], x0=edges[group[0]]))
+            vocal.append(group[0]); continue
         x0=next((edges[j] for j in group if edges[j] is not None), None)
         span=_brace_span(dark,x0,staves[group[0]][0],staves[group[-1]][-1],s)
         if span is None:
@@ -992,10 +1023,13 @@ def select_voices(staves, s, img):
             if xb is not None and xb != x0:
                 span=_brace_span(dark,xb,staves[group[0]][0],staves[group[-1]][-1],s)
         unbraced=[j for j in group if span is None or not _in_span(span,staves[j])]
+        braced=[j for j in group if span is not None and _in_span(span,staves[j])]
         if span is not None and len(unbraced)==1:
-            order.append(len(vocal)); vocal.append(unbraced[0]); continue
+            order.append(len(vocal)); sysinfo.append(dict(group=group, voice=unbraced[0], braced=braced, x0=x0))
+            vocal.append(unbraced[0]); continue
         if span is not None and len(unbraced)==0:
-            order.append(None); tacet_ref.append(group[0]); tacet_last.append(group[-1]); continue
+            order.append(None); tacet_ref.append(group[0]); tacet_last.append(group[-1])
+            sysinfo.append(dict(group=group, voice=None, braced=braced, x0=x0)); continue
         tv, cv_, sc = _sign_vote(img, staves, s, group)
         # THE TWO SIGNS MUST AGREE. Measured 2026-10-02 over every system in the
         # tree (report, "The two more signs"): on the render fixtures, where the
@@ -1009,8 +1043,8 @@ def select_voices(staves, s, img):
         signs.append(dict(group=group, text=tv, chord=cv_, picked=pick))
         if pick is None:
             pick = group[0]; fallbacks += 1
-        order.append(len(vocal)); vocal.append(pick)
-    return dict(vocal=vocal, order=order, tacetRef=tacet_ref, tacetLast=tacet_last, fallbacks=fallbacks, signs=signs)
+        order.append(len(vocal)); sysinfo.append(dict(group=group, voice=pick, braced=braced, x0=x0)); vocal.append(pick)
+    return dict(vocal=vocal, order=order, tacetRef=tacet_ref, tacetLast=tacet_last, fallbacks=fallbacks, signs=signs, systems=sysinfo)
 
 def select_vocal(staves, s, img):
     """Return (vocal, fallbacks): one voice-staff index per system that has
@@ -1581,52 +1615,133 @@ def detect_barlines(nl,staves,vocal,s):
         out[bi]=_collapse_barline_cluster(sorted(xs),s)
     return out
 
-def _solid_barline_columns(nl, top, bot, s):
-    """Columns where one solid vertical stroke runs from `top` to `bot`, give
-    or take BARLINE_SPAN_TOLERANCE, with nothing else inked in the window two
-    spaces either side: the same SPAN and SOLIDITY tests
-    `_refine_merged_barline` applies, run across the whole width because a
-    piano system's barlines are often joined to stems and beams, which leaves
-    them out of `detect_barlines`' component test. Returns cluster centres."""
-    dark = nl > 0
-    H, W = dark.shape
-    pad = int(round(2.0 * s)); lo = max(0, top - pad); hi = min(H, bot + pad + 1)
-    sub = dark[lo:hi, :]
-    anyd = sub.any(axis=0)
-    first = np.argmax(sub, axis=0); last = sub.shape[0] - 1 - np.argmax(sub[::-1], axis=0)
-    cnt = sub.sum(axis=0)
-    tol = BARLINE_SPAN_TOLERANCE * s
-    ok = anyd & ((last - first + 1) == cnt) & (np.abs(lo + first - top) <= tol) & (np.abs(lo + last - bot) <= tol)
-    cols = np.flatnonzero(ok)
+# ---------- THE SYSTEM IS THE WITNESS: barlines by the piano and the voice ----------
+#
+# Brief r2 (2026-10-02). The reader looked for barlines on the voice staff
+# alone, and lost 40 of the 99 on Tchaikovsky Op. 38 No. 3: each lost barline
+# is a clean full-height stroke in the line-free image, joined by staff-line
+# remnants to a neighbouring stem, flag, rest or tie, which makes its component
+# too wide to count (report-code-bars-by-the-system_r1, items 1 to 5).
+#
+# On a system with a braced pair of staves, a bar ends where EITHER witness
+# says so. The piano's witness is a stroke that runs unbroken from the top line
+# of the upper braced staff to the bottom line of the lower one: the gap
+# between the two is what a stem does not cross. The voice's witness is
+# `detect_barlines`, unchanged (and so is `_refine_merged_barline`, which the
+# render fixtures depend on). Each barline records who saw it.
+#
+# On a system with no braced pair, `detect_barlines` runs alone and nothing
+# changes: the render fixtures have one piano staff, a stem can span one staff,
+# and 95 stems pass the stroke test there (report, item 5).
+#
+# THE TWO FILL BOUNDS, from the 33 systems that have a braced pair (the three
+# Tchaikovsky pages, both Lamm pages, and the five robustness pages; plan r4,
+# principle 9). The true barlines are the union of the two witnesses, whose
+# count equals the count made by eye on every one of the 33 systems.
+#   PIANO. Fill of a column across the braced pair's rows. The weakest true
+#   barlines' best columns fill 0.783 (Tchaikovsky p2, system 3) and 0.879
+#   (Tchaikovsky p1, system 3), the rest 0.94 (RK-Bessel sunless05 p3, system
+#   3) or more. The strongest column that is not a barline fills 0.836
+#   (Tchaikovsky p2, system 4, x 2621): a piano stem that crosses the gap.
+#   The two ranges overlap, so no bound separates all of them. 0.89 is the
+#   midpoint of the clean gap between 0.836 and 0.94; the two weak barlines
+#   fall below it and are the voice's to read, which is what the union is for.
+#   VOICE. Fill of a column across the voice staff's own rows, used only to
+#   record that the voice answers a piano stroke. The true barlines' best
+#   columns fill 0.952 or more (RK-Bessel sunless01 p2, system 3); a note's
+#   stem fills 1.0, so there is no gap above it. 0.95 is that lowest value,
+#   truncated. The test records and decides nothing.
+PIANO_STROKE_FILL = 0.89
+VOICE_STROKE_FILL = 0.95
+BARLINE_SAME_X = 0.5      # * s; measured -0.14 to +0.24 over 97 voice/piano pairs
+
+def _stroke_columns(dark, top, bot, fill):
+    """Centres of runs of columns whose ink fills at least `fill` of the rows
+    from `top` to `bot`."""
+    f = dark[top:bot + 1, :].mean(axis=0)
+    cols = np.flatnonzero(f >= fill)
     runs = []
     for c in cols:
-        if runs and c - runs[-1][1] <= 1: runs[-1][1] = c
-        else: runs.append([c, c])
-    xs = [int((a + b) // 2) for a, b in runs if (b - a + 1) <= MAX_ROW_WIDTH_BOUND * s]
-    return _collapse_barline_cluster(xs, s)
+        if runs and c - runs[-1][1] <= 1: runs[-1][1] = int(c)
+        else: runs.append([int(c), int(c)])
+    return [(a + b) // 2 for a, b in runs]
 
-def detect_tacet_barlines(nl, staves, firsts, lasts, s):
-    """Barlines of the tacet systems, in order: {k: [x, ...]}. A piano system's
-    barlines often run unbroken through both staves, so a component the height
-    of the whole system counts, as well as one the height of its first staff
-    (what `detect_barlines` looks for). Whichever finds more is taken: the two
-    are the same barlines drawn two ways."""
-    num,lab,stats,cent=cv2.connectedComponentsWithStats(nl,8)
-    out={}
-    single=detect_barlines(nl,staves,firsts,s)
-    for k,(f,l) in enumerate(zip(firsts,lasts)):
-        top=staves[f][0]; bot=staves[l][-1]; span=bot-top; xs=[]
-        for i in range(1,num):
-            x,y,w,h,area=stats[i]
-            if not (0.85*span<=h<=1.35*span and y<=top+0.3*s and y+h>=bot-0.3*s):
-                continue
-            if w <= BARLINE_WIDTH_BOUND * s:
-                xs.append(int(x+w/2))
-        cands=[_collapse_barline_cluster(sorted(xs),s), single.get(k,[]),
-               _solid_barline_columns(nl, top, bot, s),
-               _solid_barline_columns(nl, top, staves[f][-1], s)]
-        out[k]=max(cands, key=len)
+def _witness_clusters(voice_xs, piano_xs, s):
+    """Merge the two witnesses' strokes, those within BARLINE_SAME_X of each
+    other being one barline. Returns [(x, voiceSaw, pianoSaw)], the voice's x
+    where it saw the barline (the position every event id already rests on)."""
+    pts = sorted([(x, 'v') for x in voice_xs] + [(x, 'p') for x in piano_xs])
+    groups = []
+    for x, w in pts:
+        if groups and x - groups[-1][-1][0] <= BARLINE_SAME_X * s: groups[-1].append((x, w))
+        else: groups.append([(x, w)])
+    out = []
+    for g in groups:
+        vx = [x for x, w in g if w == 'v']; px = [x for x, w in g if w == 'p']
+        out.append((vx[0] if vx else px[0], bool(vx), bool(px)))
     return out
+
+def page_barlines(G):
+    """The page's barlines, once. Returns a dict:
+       byVocal  {index into `vocal`: [x, ...]}, the shape `detect_barlines` returns
+       tacet    {k: [x, ...]} for the k-th tacet system, in page order
+       witness  {both, pianoAlone, voiceAlone, noPair, tacet}: how many barlines
+                each witness saw, and how many were read on systems with no
+                braced pair or with no voice staff
+       systems  the same, per system"""
+    nl, img, staves, s, vocal = G['nl'], G['img'], G['staves'], G['s'], G['vocal']
+    voices = G.get('voices') or {}
+    sysinfo = voices.get('systems')
+    voice_det = detect_barlines(nl, staves, vocal, s)
+    by_vocal = {}; tacet = {}
+    wit = dict(both=0, pianoAlone=0, voiceAlone=0, noPair=0, tacet=0)
+    per = []
+    if sysinfo is None:
+        for vi in range(len(vocal)):
+            by_vocal[vi] = voice_det.get(vi, [])
+        wit['noPair'] = sum(len(v) for v in by_vocal.values())
+        return dict(byVocal=by_vocal, tacet=tacet, witness=wit, systems=per)
+    dark = img < 128
+    ti = 0
+    for k, sy in enumerate(sysinfo):
+        v = sy['voice']; vi = vocal.index(v) if v is not None else None
+        braced = sy['braced']
+        vxs = voice_det.get(vi, []) if vi is not None else []
+        if len(braced) < 2:
+            if vi is not None:
+                by_vocal[vi] = vxs
+                wit['noPair'] += len(vxs)
+                per.append(dict(system=k, kind='noPair', barlines=len(vxs)))
+            continue
+        top = staves[braced[0]][0]; bot = staves[braced[-1]][-1]
+        x0 = sy['x0'] if sy['x0'] is not None else 0
+        pxs = [x for x in _stroke_columns(dark, top, bot, PIANO_STROKE_FILL) if x > x0 + 2 * s]
+        cl = _witness_clusters(vxs, pxs, s)
+        # a voice stroke answers a piano-only barline when the voice staff has
+        # an unbroken stroke of its own within the same x
+        rec = []
+        if v is not None:
+            vstroke = _stroke_columns(dark, staves[v][0], staves[v][-1], VOICE_STROKE_FILL)
+        for x, vs, ps in cl:
+            if not vs and v is not None and any(abs(x - y) <= BARLINE_SAME_X * s for y in vstroke): vs = True
+            rec.append((x, vs, ps))
+        # a thin stroke and a thick one are one barline: leftmost wins
+        merged = []
+        for x, vs, ps in rec:
+            if merged and x - merged[-1][0] <= BARLINE_CLUSTER_GAP * s:
+                merged[-1] = (merged[-1][0], merged[-1][1] or vs, merged[-1][2] or ps)
+            else: merged.append((x, vs, ps))
+        xs = [m[0] for m in merged]
+        if v is None:
+            tacet[ti] = xs; ti += 1; wit['tacet'] += len(xs)
+            per.append(dict(system=k, kind='tacet', barlines=len(xs)))
+            continue
+        by_vocal[vi] = xs
+        c = dict(both=sum(1 for m in merged if m[1] and m[2]), pianoAlone=sum(1 for m in merged if m[2] and not m[1]),
+                 voiceAlone=sum(1 for m in merged if m[1] and not m[2]))
+        for key in c: wit[key] += c[key]
+        per.append(dict(system=k, kind='pair', barlines=len(xs), **c))
+    return dict(byVocal=by_vocal, tacet=tacet, witness=wit, systems=per)
 
 def read_page_pitch(cfg):
     G=read_page_geometry(cfg)
@@ -1634,7 +1749,8 @@ def read_page_pitch(cfg):
     num,lab,stats,cent=cv2.connectedComponentsWithStats(nl,8)
     head_centers=[(h['x'],h['y']) for h in heads]
     KA=key_alter(cfg['key'])
-    bl=detect_barlines(nl,staves,vocal,s)
+    G['barlines']=page_barlines(G)
+    bl=G['barlines']['byVocal']
     def localmeasure(h):
         b=bl.get(h['sys'],[]); base=sum(len(bl.get(k,[])) for k in range(h['sys']))
         return base+sum(1 for x in b if x<h['x'])

@@ -99,7 +99,7 @@ def run(cfg, ctx_in=None):
 
     staves, s, vocal, nl = G['staves'], G['s'], G['vocal'], G['nl']
     W = G['img'].shape[1]
-    bl = reader.detect_barlines(nl, staves, vocal, s)
+    bl = G['barlines']['byVocal']
     # N.59, Ruling A. Same derivation as run_page2's, and it must stay the same
     # derivation: the two consumption sites number the same measures, and a
     # disagreement between them would misplace every measure on the page. See
@@ -109,8 +109,7 @@ def run(cfg, ctx_in=None):
     # of the system that owns `vocal[vi]`.
     voices = G.get('voices')
     order = voices['order'] if voices else list(range(len(vocal)))
-    tbl = (reader.detect_tacet_barlines(nl, staves, voices['tacetRef'], voices['tacetLast'], s)
-           if voices and voices['tacetRef'] else {})
+    tbl = G['barlines']['tacet']
     sysbars = []; ti = 0
     for o in order:
         if o is None: sysbars.append(tbl.get(ti, [])); ti += 1

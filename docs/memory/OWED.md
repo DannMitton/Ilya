@@ -899,3 +899,15 @@ than deleting them.
 ## Carried from N.171 at its close, 2026-09-28
 
 - **After 2026-10-30: the `#` at the caret.** Dann's idea of 2026-09-24 21:57; the no-placeholder form is the desk's proposal. Show the `#` at the caret between the two notes, read from the recorded break, and let the singer add or remove it there. No placeholder entry, because that would change `VocalLineEvent` (`CONTRACT.md` §6). Its look is Dann's to rule when it starts.
+
+## Scan reader, 2026-10-02
+
+**The desk owes:**
+- **Head counts for each bar on the Lamm and Bessel scan pages,** from crops one bar wide. Code could not count to the head at the size it viewed them, so row 20's gate on those pages rests on looking.
+- **The Tchaikovsky truth is a draft by eye** (`../sessions/truth-draft-tchaikovsky-op38-3-voice_r1_2026-10-02.md`). It becomes truth when a second count agrees with it; Dann has not checked it.
+- **Plan r4, phase 0:** truth files, and the scorer made exact (`ONSET_TOLERANCE = 0.2` in `tools/e16-harness/src/` is too lenient on note length; Dann allowed the change at 23:06 on 2026-10-01).
+- **Plan r4, phase 1:** the singer's experience, drawn.
+- **A test set of six songs,** proposed to Dann.
+- **The metre brief,** next after row 20.
+
+**Waiting on Dann, never to be pushed:** one walk of the Tchaikovsky PDF on the alias, which is DONE for `QUEUE.md` rows 18 to 20. The desk suggested it once, for when there is more to see.

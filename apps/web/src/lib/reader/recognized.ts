@@ -95,6 +95,19 @@ export interface ReadReport {
 	 */
 	tacetSystems?: number;
 	/**
+	 * Who saw each barline, summed over the pages: on a system with a braced
+	 * pair of staves, the voice staff, the piano's strokes, or both; `noPair`
+	 * counts barlines read on systems with no braced pair, and `tacet` those
+	 * read on systems with no voice staff. Optional, like `tacetSystems`.
+	 */
+	barlineWitness?: {
+		both: number;
+		pianoAlone: number;
+		voiceAlone: number;
+		noPair: number;
+		tacet: number;
+	};
+	/**
 	 * Pages, 1-based, that raised and were skipped (N.96 ship 1b). Empty on a
 	 * clean read. A page listed here contributed no notes, no measures, and no
 	 * staff space to any other field of this report.
