@@ -6,11 +6,12 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { MusicXmlScoreParser, analyzeScore, chooseClef, paginateScore, type ParsedScore } from '@ilya/score-parser';
+import { MusicXmlScoreParser, analyzeScore, chooseClef, paginateScore, renderSystemSlice, type ParsedScore } from '@ilya/score-parser';
 import { demoProfileUnmeasured } from '../../../../../packages/score-parser/src/demo-fixture';
 import { parseXml } from './ingestion/mini-dom';
 import { ENGRAVING_DEFAULTS as E } from './engraving';
 import {
+	bundleRenderOptions,
 	MAX_SPACING_RENDERS,
 	deriveMinGap,
 	pairSeparations,
@@ -220,5 +221,17 @@ describe('pairSeparations', () => {
 
 	it('is empty with fewer than two carets', () => {
 		expect(pairSeparations([[{ after: null, x: 5 }], []], 2)).toEqual({});
+	});
+});
+
+describe('the loupe\'s meter run-in (loupe remainder, item 2)', () => {
+	it('hands the renderer a run-in of 1 stave space, where the page keeps 2', async () => {
+		const b = await bundle();
+		const opts = { ...bundleRenderOptions(b), minGap: b.spacing.minGap };
+		const page = renderSystemSlice(b.readingScore, b.analyzed, opts, 0, 0, { finalBarline: false });
+		const loupe = renderLoupeMeasure(b, 0, b.spacing.minGap)!;
+		const width = (svg: string) => Number(svg.match(/viewBox="0 [\d.-]+ ([\d.]+)/)![1]);
+		// Measure 0 declares the meter, so its slice draws one at the head; the loupe's first note stands one space nearer.
+		expect(width(page) - loupe.width).toBeCloseTo(b.spacing.lineGap, 1);
 	});
 });

@@ -382,6 +382,18 @@ export function clipToHead(win: MeasureWindow, head: number): MeasureWindow {
 export { METER_RUN_IN_SP };
 
 /**
+ * THE METER RUN-IN IN THE LOUPE IS 1 STAVE SPACE. `docs/memory/OPEN.md`, THE
+ * LOUPE'S TWO MODES, ruling 7, ruled by Dann on the walk of 2026-09-19 into
+ * 2026-09-20; loupe remainder brief, item 2. The page keeps Gould's 2
+ * (`METER_RUN_IN_SP`, rule 240, p. 42); the loupe is a navigation surface that
+ * may engrave a measure differently (ruling 5), so it is loupe-local. It is
+ * spent twice: `renderLoupeMeasure` hands it to the renderer as `meterRunInSp`,
+ * which places the first note that far from the meter the render draws, and
+ * `meterLayout` tops the panel up to it where the render draws none.
+ */
+export const LOUPE_METER_RUN_IN_SP = 1;
+
+/**
  * THE AIR BETWEEN THE KEY SIGNATURE AND THE METER, in stave-spaces. The
  * renderer separates its clef from its key signature by one stave-space, on
  * Gould r236, p. 41 (`staff-renderer.ts`, `clefX = ksStart - sp(1) - clefW`),
@@ -447,7 +459,7 @@ export interface MeterLayout {
  * measure's first ink. A measure that opens its system has none, because the
  * body starts on that ink; a mid-system measure opens half a gap after its
  * barline and has some. Either way the meter's ink stands at least
- * `METER_RUN_IN_SP` clear of the first thing in the measure.
+ * `LOUPE_METER_RUN_IN_SP` clear of the first thing in the measure.
  *
  * Null for a signature no digit can spell, so a malformed measure draws no
  * panel rather than a wrong one.
@@ -489,7 +501,7 @@ export function meterLayout(
 	place(count, staffTop + lineGap);
 	place(unit, staffTop + 3 * lineGap);
 
-	return { span: lead + ink + gapBefore(METER_RUN_IN_SP, bodyAir), glyphs };
+	return { span: lead + ink + gapBefore(LOUPE_METER_RUN_IN_SP, bodyAir), glyphs };
 }
 
 /**
@@ -532,7 +544,7 @@ export function openAfterPageMeter(
 	lineGap: number,
 ): MeasureWindow {
 	if (!Number.isFinite(firstNoteInk) || !(lineGap > 0)) return view;
-	const reach = (METER_RUN_IN_SP + METER_LEAD_SP) * lineGap;
+	const reach = (LOUPE_METER_RUN_IN_SP + METER_LEAD_SP) * lineGap;
 	let edge = -Infinity;
 	for (const r of meterRights) {
 		if (!Number.isFinite(r) || r > firstNoteInk + 1e-6 || r < firstNoteInk - reach) continue;

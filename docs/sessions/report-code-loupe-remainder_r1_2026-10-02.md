@@ -63,3 +63,36 @@ Screenshots: `item1-desk-*` and `item1-phone-*`, five frames each: Syllables at 
 - **The taken caret's lavender ring** appears and vanishes at once; it does not fade with the carets.
 - **Real-display feel:** timing was read from computed style at sampled instants; no one has watched it.
 - **Closing the panel mid-tween** starts the opposite tween from the current opacity (CSS reverses smoothly) and the height animation restarts from the measured height. Seen by computed style only.
+
+## Item 2: the meter run-in, 1 stave space in the loupe only
+
+WRITTEN as a mechanism. **No visible change was measured on any measure I could raise, and I did not force one.** Read the last two paragraphs before the walk.
+
+**What changed.**
+- `packages/score-parser/src/staff-renderer.ts`: new option `meterRunInSp` (default `METER_RUN_IN_SP`, 2), read at the head layout (`systemHead`), at a mid-system column's meter room (`meterRoomFor`), and at the tacet rest's left bound. The page passes nothing, so the page keeps 2.
+- `apps/web/src/lib/score/loupe.ts`: new `LOUPE_METER_RUN_IN_SP = 1`, used by `meterLayout` (the panel tops the run-in up to it) and by `openAfterPageMeter`'s reach.
+- `apps/web/src/lib/score/loupe-render.ts`: `renderLoupeMeasure` passes `meterRunInSp: LOUPE_METER_RUN_IN_SP`. `bundleRenderOptions` and `renderLoupeSystem` do not, so the stage 3a proof (the loupe renders the page's system byte for byte) still holds.
+- Room: `arcOutline` moved unchanged from `staff-renderer.ts` into `packages/score-parser/src/arc-outline.ts` (3534 to 3487 lines) so the renderer file does not grow past its ceiling. No ceiling raised.
+- Tests: 2 in `staff-renderer.test.ts` (head and mid-system change at 1 sp, default 2), 1 in `loupe-render.test.ts` (measure 0's loupe slice is one stave space narrower than the page's), 1 in `loupe.test.ts`; the `meterLayout` tests now state the loupe's 1.
+
+**What I measured, and why nothing moved.** With a meter-change copy of the fixture (`<time>6/8</time>` added at m. 5, kept outside the repository) I raised the loupe on m. 5 with the constant at 2, then at 1, desk and phone. The distance from the meter panel's right edge to the first music glyph's box was 3.599 sp and 3.598 sp on the desk, 3.605 sp both on the phone. That distance is `CARET_MARGIN` (`Loupe.svelte`, `lineGap * 2 + SQUIRCLE_CLEARANCE`, 3.6 sp): the body opens 3.6 sp left of its first ink to hold the head caret, and the page meter's own run-in is cut away by `openAfterPageMeter`'s "nothing the body draws is cut" rule. So the run-in the constant governs is not the air the singer sees. Screenshots: `item2-desk-meterchange-run-in-2-sp.png` and `...-1-sp.png` (identical to the eye), `item2-desk-page-system.png` (the page).
+
+**What I tried, and reverted.** I opened the body only `LOUPE_METER_RUN_IN_SP` left of its first ink where a meter panel draws, widening only for a caret's footprint and a taken note's ring. Gap on the desk fell from 3.6 to 2.1 to 2.8 sp. The phone loupe scan (`pnpm --filter @ilya/web exec playwright test --project=phone`) then failed rules 1 (tap floor, 7 violations), 2 (squircle clearance 1.6 line-gaps, 17), and 5a (caret in the middle of its space, every measure). At baseline (`b709012`, same run) the scan fails only rule 5b on m. 16. So the head caret needs `CARET_MARGIN` as it stands. I reverted that change; nothing of it is in the commit.
+
+**What I could not establish, and what it needs.**
+- A visible 1 sp from the meter to the first note needs the head caret to stop living in the notation's air. That is ruling 11 (*the carets occupy a different conceptual plane from the notation*) and ruling 8's `CARET_MARGIN`, which this brief lists nowhere ("Not in this brief" names only cause 1c). It is a design choice for Dann: where the head caret stands when the meter is 1 sp from the note.
+- Which measures show the change today: only a measure whose slice draws a meter at its head, in the case the body is allowed to keep that air. NOT ESTABLISHED on any score I have: the stock fixture's measure that declares the meter has no sung entry, so the loupe cannot be raised on it.
+- The page's 2 sp: tested at the renderer (`staff-renderer.test.ts`), not read off the browser. My browser probe of the page returned 6 sp, because box-left of a glyph is not its ink; I did not trust it and did not report it as a finding.
+
+**Gates after item 2.**
+
+| # | Result | Moved |
+|---|---|---|
+| 1 | 251 passed (251) | no |
+| 2 | 235 passed (235) | no |
+| 3 | 0 errors and 12 warnings in 5 files | no |
+| 4 | 1840 passed (1840) | +2 (one in `loupe.test.ts`, one in `loupe-render.test.ts`) |
+| 5 | 646 passed, 5 skipped (651) | +2 (`staff-renderer.test.ts`) |
+| 6 | 145 passed (145) | no |
+| 7 | 55 passed (55) | no |
+| 8 | ratchets: OK | `staff-renderer.ts` could be lowered 3534 to 3487 |

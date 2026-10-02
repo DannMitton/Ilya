@@ -2268,6 +2268,27 @@ describe('staff renderer: the meter on the page (N.139)', () => {
     expect(headX - (found[0].x + digitW)).toBeCloseTo(METER_RUN_IN_SP * gap, 2);
   });
 
+  it('stands the first note meterRunInSp off the head meter, and the page default stays 2 (loupe remainder, item 2)', () => {
+    const at = (extra: StaffRenderOptions) => {
+      const svg = renderDemo(opts(extra));
+      const found = meters(svg);
+      const n1 = svg.slice(svg.indexOf('data-event-id="n1"'));
+      return Number(n1.match(/<text x="([\d.-]+)"/)![1]) - (found[0].x + digitW);
+    };
+    expect(at({})).toBeCloseTo(2 * gap, 2);
+    expect(at({ meterRunInSp: 2 })).toBeCloseTo(2 * gap, 2);
+    expect(at({ meterRunInSp: 1 })).toBeCloseTo(1 * gap, 2);
+  });
+
+  it('stands a mid-system change meterRunInSp off the first note too', () => {
+    const parsed = changedAt(2);
+    const svg = renderAnalyzedStaff(parsed, analyzedOf(parsed), opts({ meterRunInSp: 1 }));
+    const change = meters(svg)[1];
+    const n7 = svg.slice(svg.indexOf('data-event-id="n7"'));
+    const headX = Number(n7.match(/<text x="([\d.-]+)"/)![1]);
+    expect(headX - (change.x + digitW)).toBeCloseTo(1 * gap, 1);
+  });
+
   it('keeps every stave edge and clef in place however long the key signature, and nothing collides', () => {
     for (const fifths of [0, 4, 7, -7]) {
       const parsed = { ...demoScore(), keySignatures: [{ measureIndex: 0, signature: { fifths } }] };

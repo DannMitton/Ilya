@@ -30,6 +30,7 @@ import {
 	stripRing,
 	METER_LEAD_SP,
 	METER_RUN_IN_SP,
+	LOUPE_METER_RUN_IN_SP,
 	nearestTarget,
 	pageInset,
 	parseSystemRange,
@@ -549,17 +550,17 @@ describe('the meter panel', () => {
 		expect(one.x).toBeCloseTo(0 - 0.1 * gap, 10);
 		expect(two.x).toBeCloseTo(1.0 * gap - 0.1 * gap, 10);
 		expect(eight.x).toBeCloseTo(0.5 * gap - 0.1 * gap, 10);
-		expect(m.span).toBeCloseTo(2.5 * gap + METER_RUN_IN_SP * gap, 10);
+		expect(m.span).toBeCloseTo(2.5 * gap + LOUPE_METER_RUN_IN_SP * gap, 10);
 	});
 
 	it('adds the whole run-in where the body opens on its first ink', () => {
 		const m = meterLayout(2, 4, digit, gap, top, METER_LEAD_SP * gap, 0)!;
-		expect(m.span).toBeCloseTo(1.5 * gap + METER_RUN_IN_SP * gap, 10);
+		expect(m.span).toBeCloseTo(1.5 * gap + LOUPE_METER_RUN_IN_SP * gap, 10);
 	});
 
 	it('adds only the run-in the body lacks, and none past it', () => {
-		const some = meterLayout(2, 4, digit, gap, top, METER_LEAD_SP * gap, 1 * gap)!;
-		expect(some.span).toBeCloseTo(1.5 * gap + (METER_RUN_IN_SP - 1) * gap, 10);
+		const some = meterLayout(2, 4, digit, gap, top, METER_LEAD_SP * gap, 0.4 * gap)!;
+		expect(some.span).toBeCloseTo(1.5 * gap + (LOUPE_METER_RUN_IN_SP - 0.4) * gap, 10);
 		const plenty = meterLayout(2, 4, digit, gap, top, METER_LEAD_SP * gap, 4 * gap)!;
 		expect(plenty.span).toBeCloseTo(1.5 * gap, 10);
 	});
@@ -569,11 +570,16 @@ describe('the meter panel', () => {
 		// between its second sharp and the head's edge.
 		const tight = meterLayout(2, 4, digit, gap, top, 0.42 * gap, 0)!;
 		const lead = (METER_LEAD_SP - 0.42) * gap;
-		expect(tight.span).toBeCloseTo(lead + 1.5 * gap + METER_RUN_IN_SP * gap, 10);
+		expect(tight.span).toBeCloseTo(lead + 1.5 * gap + LOUPE_METER_RUN_IN_SP * gap, 10);
 		expect(tight.glyphs[0].x).toBeCloseTo(lead - 0.1 * gap, 10);
 		const open = meterLayout(2, 4, digit, gap, top, 3 * gap, 0)!;
-		expect(open.span).toBeCloseTo(1.5 * gap + METER_RUN_IN_SP * gap, 10);
+		expect(open.span).toBeCloseTo(1.5 * gap + LOUPE_METER_RUN_IN_SP * gap, 10);
 		expect(open.glyphs[0].x).toBeCloseTo(-0.1 * gap, 10);
+	});
+
+	it('the loupe stands the meter 1 stave space off the music, the page 2', () => {
+		expect(LOUPE_METER_RUN_IN_SP).toBe(1);
+		expect(METER_RUN_IN_SP).toBe(2);
 	});
 
 	it('draws nothing for a signature no digit can spell', () => {

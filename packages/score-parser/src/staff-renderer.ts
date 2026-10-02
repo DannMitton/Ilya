@@ -49,6 +49,7 @@ import type { Fraction, NoteBase, ParsedScore, Pitch, TimeSignature, VocalLineEv
 import type { AnalyzedEvent, AnalyzedScore } from './analysis-types';
 import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from './smufl-metadata';
 import { chooseClef, type RenderClef } from './clef-select';
+import { arcOutline } from './arc-outline';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 
 /**
@@ -220,6 +221,7 @@ export interface StaffRenderOptions {
   leftMargin?: number;  // x where the stave's lines begin; the head is laid out forwards from it (N.139)
   pxPerWhole?: number;  // horizontal px per whole-note of onset time
   minGap?: number;      // minimum px between successive events
+  meterRunInSp?: number; // stave spaces from a time signature to the first note; default METER_RUN_IN_SP (the page's 2). The loupe passes 1.
   /**
    * Render clef. Omit to let the renderer assess the input and choose
    * (source clef when captured, else the tessitura heuristic; v37
@@ -402,6 +404,7 @@ const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview'
   leftMargin: 0,
   pxPerWhole: 240,
   minGap: 40,
+  meterRunInSp: METER_RUN_IN_SP,
   fontFamily: 'Bravura',
   measureOffset: 0,
 };
@@ -791,7 +794,7 @@ export function systemHead(
   const mi = meterInk(meter, options);
   const meterLeft = ksEnd + sp(METER_KEY_CLEAR_SP);
   const meterRight = meterLeft + (mi?.width ?? 0);
-  const contentLeft = (mi ? meterRight + sp(METER_RUN_IN_SP) : ksEnd + sp(HEAD_RUN_IN_SP)) + M.headHalfW('quarter');
+  const contentLeft = (mi ? meterRight + sp(options.meterRunInSp ?? METER_RUN_IN_SP) : ksEnd + sp(HEAD_RUN_IN_SP)) + M.headHalfW('quarter');
 
   return { staveLeft, clefGlyphName, clefX, clefW, ksGlyphName, ksCount, ksStep, ksStart, ksEnd, meterInk: mi, meterLeft, meterRight, contentLeft };
 }
@@ -906,57 +909,6 @@ const NO_FONT_ARC_MIDPOINT_SP = 0.2;
 const SLUR_HEAD_ANCHOR_SP = 4 / 5.5;
 const SLUR_CLEAR_SP = 6 / 5.5;
 
-/**
- * One tapered arc, outlined and filled: the shape both ties and slurs draw.
- *
- * GOULD 151, ONE DESIGN. A tie and a slur are the same object at different
- * flatness, so they are the same geometry here and differ only in the four
- * numbers handed in.
- *
- * WHAT SMuFL PROMISES, AND WHAT A CURVE ACTUALLY DRAWS. `tieMidpointThickness`
- * and `tieEndpointThickness` are DRAWN ink, the thickness of the finished shape
- * at its centre and at each terminal. A quadratic reaches only half way to its
- * control point, so the gap between two control points draws half as much ink,
- * and a renderer that feeds the font's number straight into a control point
- * draws a tie half the weight the font asked for. That was the defect N.125
- * measured on 2026-09-16.
- *
- * THE CONSTRUCTION. The outer edge runs the nominal arc, terminal to terminal
- * with control `y + depth`, exactly where the single curve always ran. The
- * inner edge returns `endThick` away at the terminals and `midThick` away at
- * the centre, which gives the shape blunt ends of the font's own height rather
- * than points. Writing the thickness as `2 * midThick - endThick` at the inner
- * control is what cancels the half-way rule: sampled across the span the ink is
- * `endThick + 4u(1-u)(midThick - endThick)`, so it is exactly `endThick` at
- * each end and exactly `midThick` at the centre.
- *
- * ENDS THAT ARE POINTS STAY POINTS. With `endThick` at 0 the two edges meet at
- * the terminals and the joining segment has no length, so the path is the
- * two-quadratic lens that primitive mode has always emitted, character for
- * character.
- *
- * @param x1 @param x2  The terminals' x, left and right.
- * @param y             The terminals' y; both ends sit level, as they always have.
- * @param depth         Signed arc height at the control point: negative bows up.
- * @param midThick      Drawn ink at the centre.
- * @param endThick      Drawn ink at each terminal.
- */
-function arcOutline(
-  x1: number,
-  x2: number,
-  y: number,
-  depth: number,
-  midThick: number,
-  endThick: number,
-): string {
-  const sgn = Math.sign(depth) || 1;
-  const mid = round2px((x1 + x2) / 2);
-  const inner = y + depth - sgn * (2 * midThick - endThick);
-  const back = round2px(y - sgn * endThick);
-  const out = `M${round2px(x1)} ${round2px(y)} Q ${mid} ${round2px(y + depth)} ${round2px(x2)} ${round2px(y)}`;
-  const ret = `Q ${mid} ${round2px(inner)} ${round2px(x1)} ${back} Z`;
-  return endThick === 0 ? `${out} ${ret}` : `${out} L ${round2px(x2)} ${back} ${ret}`;
-}
 
 /**
  * Stamp an analysis mark with its own handle.
@@ -1747,10 +1699,11 @@ export function layoutColumns(
     const mi = meterInk(meter, options);
     if (!meter || !mi) return { meterRoom: 0 };
     const lead = METER_BARLINE_CLEAR_SP * lineGap + mi.width;
+    const runIn = options.meterRunInSp ?? METER_RUN_IN_SP;
     const meterRoom =
       inkLeft === undefined
-        ? lead + Math.max(0, METER_RUN_IN_SP - TACET_REST.barInsetSp) * lineGap
-        : Math.max(0, lead + METER_RUN_IN_SP * lineGap + inkLeft - BARLINE_TO_COLUMN_PX);
+        ? lead + Math.max(0, runIn - TACET_REST.barInsetSp) * lineGap
+        : Math.max(0, lead + runIn * lineGap + inkLeft - BARLINE_TO_COLUMN_PX);
     return { meter, meterRoom };
   };
 
@@ -2531,7 +2484,7 @@ export function renderAnalyzedStaff(
        left and the digits stand after it, and the rest's left bound is the
        column's usual one, which `layoutColumns` placed the run-in past the
        digits. A run that opens the system is bounded by the head's last symbol. */
-    const left = newMeasure ? tx - BARLINE_TO_COLUMN_PX : headMeter ? meterRight + sp(Math.max(0, METER_RUN_IN_SP - TACET_REST.barInsetSp)) : ksEnd;
+    const left = newMeasure ? tx - BARLINE_TO_COLUMN_PX : headMeter ? meterRight + sp(Math.max(0, o.meterRunInSp - TACET_REST.barInsetSp)) : ksEnd;
     const right = nextX === undefined ? contentRight : nextX - BARLINE_TO_COLUMN_PX - nextMeterRoom;
     const centre = (left + right) / 2;
     if (newMeasure) {

@@ -25,7 +25,7 @@
  */
 import { renderSystemSlice, type StaffRenderOptions } from '@ilya/score-parser';
 import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
-import type { SystemRange } from '$lib/score/loupe';
+import { LOUPE_METER_RUN_IN_SP, type SystemRange } from '$lib/score/loupe';
 
 export interface LoupeSystemRender {
 	/** The standalone SVG string, exactly as the renderer returned it. */
@@ -85,7 +85,8 @@ export const TAP_FLOOR_EPS_PX = 0.001;
 export function renderLoupeMeasure(bundle: LoupeRenderBundle, m: number, minGap: number): LoupeSystemRender | null {
 	const measures = bundle.readingScore.measures.length;
 	if (m < 0 || m >= measures) return null;
-	const options: StaffRenderOptions = { ...bundleRenderOptions(bundle), minGap };
+	/* The loupe's meter run-in is 1 sp, the page's stays 2 (`LOUPE_METER_RUN_IN_SP`). */
+	const options: StaffRenderOptions = { ...bundleRenderOptions(bundle), minGap, meterRunInSp: LOUPE_METER_RUN_IN_SP };
 	delete options.targetWidth;
 	const svg = renderSystemSlice(bundle.readingScore, bundle.analyzed, options, m, m, {
 		finalBarline: m === measures - 1,
