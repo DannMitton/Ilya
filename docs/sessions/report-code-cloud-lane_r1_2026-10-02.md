@@ -81,3 +81,38 @@ No number moved.
 - That "natural modification of the vowel will inevitably result in the mounting scale" supports the comment's wording "tends to open a little on its own". The desk chose the quotation; the comment text in `i18n.ts:1657` was not touched.
 - The Bozeman ISBN's copyright page was not read by this session; it is Dann's figure.
 - How the new place and ISBN print in the French references was not walked. The existing sources tests pass.
+
+## Row 10: the Markup legend explains the stems (N.176)
+
+WRITTEN, not DONE. DONE is Dann's walk after he merges. Brief: `brief-code-markup-legend-stems_r1_2026-10-01.md`. The French strings are the ones in the brief, ratified by Dann 2026-10-01 02:33; no other French was written.
+
+**What changed.**
+1. `packages/score-parser/src/stem-legend.ts` (new): `stemLegendDrawing(direction, options)` draws the capture's four notes (two beamed eighths, a quarter, a half), every stem up or down. Heads come from the music font through `headNameOf`, stem thickness and side from `inkMetrics`, stem length from `STEM_LENGTH_SP`, and the ink is the renderer's `#1a1612`. With no font loaded it draws the renderer's primitive ellipses, scaled to the legend's size.
+2. `packages/score-parser/src/staff-renderer.ts:435` and `:1849`: `headNameOf` and `STEM_LENGTH_SP` gained `export`. Nothing else in that file changed (the file stays at its 3534-line ceiling).
+3. `packages/score-parser/src/index.ts:60`: exports `stemLegendDrawing` and its types.
+4. `apps/web/src/lib/markup/legend.ts`: two new entries, `markup-stems-up` and `markup-stems-down`, built when `options.stems` is true. EN "stems up = close timbre" and "stems down = open timbre"; FR « hampes vers le haut = timbre fermé » and « hampes vers le bas = timbre ouvert ». Each carries the one word to underline (`close`, `open`, `fermé`, `ouvert`).
+5. `apps/web/src/lib/provenance.ts:35-45`: `LegendItem` gained optional `stems` and `emphasis`.
+6. `apps/web/src/lib/components/Paper/PageFooter.svelte`: draws a stems entry as the four notes in place of the circle, and underlines the emphasis word. New optional prop `notationFont`.
+7. `apps/web/src/lib/markup/MarkupPane.svelte:760`: the legend is now built after `hasAcousticMarks` with `stems: hasAcousticMarks`, so the key appears only when the page draws at least one note with a timbre analysis (the stave's own condition, `staff-renderer.ts:1584`). Both `PageFooter` uses pass `notationFont`. The legend declaration moved down from line 688 because it now needs `hasAcousticMarks`; my first attempt failed gate 3 for that reason ("used before its declaration") and was fixed before this commit.
+8. Tests: `packages/score-parser/src/stem-legend.test.ts` (new, 8) and four in `apps/web/src/lib/markup/legend.test.ts`. They check: four heads and four stems with one beam, in font and primitive modes; every stem points the stated way; the two rows are mirror images in the stave's ink and stay inside their box; the entries are absent without analysis, present up then down with it, sit beside the withheld entry, and carry the ratified strings with the underlined adjective alone.
+
+**Gates (all eight run after the change).**
+
+| # | Result | Baseline | Moved by |
+|---|---|---|---|
+| 1 | 251 passed (251) | same | |
+| 2 | 235 passed (235) | same | |
+| 3 | 0 errors, 12 warnings in 5 files | same | |
+| 4 | 1788 passed (1788) | 1784 | +4: the four new tests in `legend.test.ts` |
+| 5 | 644 passed, 5 skipped (649) | 636 | +8: `stem-legend.test.ts` |
+| 6 | 145 passed (145) | same | |
+| 7 | 55 passed (55) | same | |
+| 8 | ratchets: OK. | same | |
+
+The desk's ship script has gate 4 at 1784 and gate 5 at 636; both need moving to 1788 and 644.
+
+**Not established.**
+- The legend on the live Markup page. I rendered the drawing alone in headless Chromium with the real Finale Maestro font and the primitive fallback and looked at the picture: four notes, two beamed eighths, a quarter, and a half, stems up in one row and down in the other, in both modes. I did not measure it, and did not see it in the footer, in print, or at Letter size. The size (a 3.5 px stave space, a drawing about 36 px wide) is JUDGEMENT, chosen to sit beside 9.5 px legend text; it is for Dann's eye.
+- The brief says "present only when the page draws at least one note with a timbre analysis". I used `Object.keys(analyzed.events).length > 0`, the existing `hasAcousticMarks`. That is true when any event is analysed, which is the condition under which a stem is semantic.
+- The legend prints on page 1 only, as the withheld entry already did.
+- The brief's report path (`report-code-markup-legend-stems_r1_2026-10-01.md`) was not created; this section is the report, as the cloud-lane prompt directs.

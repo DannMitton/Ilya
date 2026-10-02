@@ -10,7 +10,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildMarkupLegend, MARKUP_WITHHELD_TYPE } from './legend';
+import { buildMarkupLegend, MARKUP_WITHHELD_TYPE, MARKUP_STEMS_UP_TYPE, MARKUP_STEMS_DOWN_TYPE } from './legend';
 import { WITHHELD_SIGLA } from '@ilya/score-parser';
 
 describe('the withheld-syllable entry (N.10b)', () => {
@@ -61,5 +61,33 @@ describe('the withheld-syllable entry (N.10b)', () => {
 		// And the renderer's constant is real, which is what PageFooter draws.
 		expect(WITHHELD_SIGLA.path.length).toBeGreaterThan(100);
 		expect(WITHHELD_SIGLA.colour).toMatch(/^#[0-9A-Fa-f]{6}$/);
+	});
+});
+
+describe('the stems key (N.176)', () => {
+	it('is absent when the page draws no note with a timbre analysis', () => {
+		expect(buildMarkupLegend('en', { stems: false })).toEqual([]);
+		expect(buildMarkupLegend('fr', { stems: false, withheldSyllables: false })).toEqual([]);
+	});
+
+	it('is present, up then down, when the page draws one', () => {
+		const built = buildMarkupLegend('en', { stems: true });
+		expect(built.map((i) => i.type)).toEqual([MARKUP_STEMS_UP_TYPE, MARKUP_STEMS_DOWN_TYPE]);
+		expect(built.map((i) => i.stems)).toEqual(['up', 'down']);
+	});
+
+	it('stands beside the withheld entry without displacing it', () => {
+		const built = buildMarkupLegend('en', { stems: true, withheldSyllables: true });
+		expect(built.map((i) => i.type)).toEqual([MARKUP_STEMS_UP_TYPE, MARKUP_STEMS_DOWN_TYPE, MARKUP_WITHHELD_TYPE]);
+	});
+
+	it('says what Dann ratified, in both languages, and underlines the adjective alone', () => {
+		const en = buildMarkupLegend('en', { stems: true });
+		const fr = buildMarkupLegend('fr', { stems: true });
+		expect(en.map((i) => i.label)).toEqual(['stems up = close timbre', 'stems down = open timbre']);
+		expect(fr.map((i) => i.label)).toEqual(['hampes vers le haut = timbre fermé', 'hampes vers le bas = timbre ouvert']);
+		expect(en.map((i) => i.emphasis)).toEqual(['close', 'open']);
+		expect(fr.map((i) => i.emphasis)).toEqual(['fermé', 'ouvert']);
+		for (const i of [...en, ...fr]) expect(i.label).toContain(i.emphasis!);
 	});
 });

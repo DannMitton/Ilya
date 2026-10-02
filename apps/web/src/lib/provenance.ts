@@ -34,6 +34,14 @@ export interface LegendItem {
 	 * glyph, so it draws its circle.
 	 */
 	textOnly?: boolean;
+	/**
+	 * The entry is a stems key (N.176): instead of the circle it draws four
+	 * notes with their stems pointing this way, from the renderer's own glyphs
+	 * (`stemLegendDrawing`).
+	 */
+	stems?: 'up' | 'down';
+	/** A word of `label` to underline, as the dissertation's Appendix B does. */
+	emphasis?: string;
 }
 
 // ── Display predicate ────────────────────────────────────────────

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { LegendItem } from '$lib/provenance';
-	import { WITHHELD_SIGLA } from '@ilya/score-parser';
+	import { WITHHELD_SIGLA, stemLegendDrawing, type PreparedSmuflFont } from '@ilya/score-parser';
 	import { MARKUP_WITHHELD_TYPE } from '$lib/markup/legend';
 	import { t, type Language } from '$lib/i18n';
 
@@ -26,9 +26,11 @@
 		onheightchange?: (height: number) => void;
 		/** A line on this page shows Richter's IPA for a Latin word (`latin.ts`), so the page credits him. */
 		richterCredit?: boolean;
+		/** The page's notation font, so a stems key draws with the same heads the stave does (N.176). */
+		notationFont?: { prepared: PreparedSmuflFont; family: string } | null;
 	}
 
-	let { pageNumber, totalPages, language, legendItems = [], broadNote, hairlineAccent = 'var(--sage)', richterCredit = false, onheightchange }: Props = $props();
+	let { pageNumber, totalPages, language, legendItems = [], broadNote, hairlineAccent = 'var(--sage)', richterCredit = false, notationFont = null, onheightchange }: Props = $props();
 
 	const attribution = $derived(t('footer.attribution', language));
 	const richterLine = $derived(richterCredit ? t('footer.richter', language) : '');
@@ -57,7 +59,12 @@
 					     rather than a glyph carries no circle. No builder sets it
 					     since the Markup voice states were removed (2026-09-28).
 					     Absent means "draw it". -->
-					{#if !item.textOnly}
+					{#if item.stems}
+						<!-- N.176: four notes, their stems pointing the stated way, from the
+						     renderer's own heads, stems, beam and ink (`stemLegendDrawing`). -->
+						{@const d = stemLegendDrawing(item.stems, notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {})}
+						<svg class="legend-stems" width={d.width} height={d.height} viewBox="0 0 {d.width} {d.height}" aria-hidden="true" data-stems={item.stems}>{@html d.inner}</svg>
+					{:else if !item.textOnly}
 						<span class="legend-circle" aria-hidden="true">
 						{#if item.type === 'user-dictionary'}
 							<!-- Dictionary (open book with spine) -->
@@ -83,7 +90,7 @@
 						{/if}
 					</span>
 					{/if}
-					<span class="legend-label">{item.label}</span>
+					<span class="legend-label">{#if item.emphasis && item.label.includes(item.emphasis)}{item.label.slice(0, item.label.indexOf(item.emphasis))}<u>{item.emphasis}</u>{item.label.slice(item.label.indexOf(item.emphasis) + item.emphasis.length)}{:else}{item.label}{/if}</span>
 				</span>
 			{/each}
 		</div>
@@ -153,6 +160,11 @@
 		border: 1px solid currentColor;
 		border-radius: 50%;
 		flex-shrink: 0;
+	}
+
+	.legend-stems {
+		flex-shrink: 0;
+		margin-right: 2px;
 	}
 
 	.legend-icon {

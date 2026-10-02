@@ -432,7 +432,7 @@ function round2px(v: number): number {
 }
 
 /** The notehead glyph a duration takes: open for half and longer, filled otherwise. */
-function headNameOf(base: NoteBase): RequiredGlyphName {
+export function headNameOf(base: NoteBase): RequiredGlyphName {
   return base === 'whole' || base === 'breve'
     ? 'noteheadWhole'
     : base === 'half'
@@ -1846,7 +1846,7 @@ const STEM_HALF = 5.5;   // primitive-mode stem x-offset from the notehead centr
  * staff to a floor of 2.5 stave-spaces; and r87 lengthens the stem for
  * each beam past the second.
  */
-const STEM_LENGTH_SP = 3.5;
+export const STEM_LENGTH_SP = 3.5;
 const BEAM_STROKE = 4;   // primitive-mode beam thickness
 const BEAM_GAP = 7;      // primitive-mode spacing between beam levels
 const BEAM_STUB = 9;     // length of a partial (stub) beam

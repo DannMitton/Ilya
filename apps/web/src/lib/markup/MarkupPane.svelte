@@ -683,9 +683,6 @@
 	// N.94: where the ruler opens, against the printed key's sung order.
 	$effect(() => keyRuler?.prepare((p, want) => printedReading && rulerOpening(printedReading, p, adapted.snapshot, vowelResolver, want)));
 
-	// The Markup legend. Declared here rather than beside its doc comment
-	// above, because its one entry (N.10b) depends on `withheldIpa`.
-	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!withheldIpa }));
 	// The advice resolver (§A.158 RULED A) is a PURE POST-PASS wrapped here, at the
 	// analysed seam, so `analyzed` carries the resolved `vowelModification` BEFORE
 	// `buildWatchList` reads it below. It leaves the pure engine content-free and
@@ -758,6 +755,9 @@
 	// dimension was left blank. A notation-only render (no marks) has nothing
 	// to qualify, so the note stays silent there.
 	const hasAcousticMarks = $derived(!!analyzed && Object.keys(analyzed.events).length > 0);
+	// The Markup legend (N.10b, N.176): the withheld sigla needs `withheldIpa`, and the stems key
+	// needs a note with a timbre analysis, so it sits here, after both.
+	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!withheldIpa, stems: hasAcousticMarks }));
 	const showBroadNote = $derived(hasAcousticMarks && isBroadAnalysis(adapted.completeness));
 
 	// ── Item 1.8, the withheld statement (2026-08-05) ─────────────────────
@@ -973,7 +973,7 @@
 						{@html page}
 					</div>
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? markupLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" onheightchange={i === 0 ? handleFooterHeight : undefined} />
+				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? markupLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" {notationFont} onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
 		{#each notesSheets as sheet, j (j)}
@@ -1076,7 +1076,7 @@
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin.
 	     No provenance legend items yet; the legend row simply stays empty
 	     until the score pane brings provenance to this surface. -->
-	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={markupLegend} hairlineAccent="#9585A2" onheightchange={handleFooterHeight} />
+	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={markupLegend} hairlineAccent="#9585A2" {notationFont} onheightchange={handleFooterHeight} />
 </article>
 </div>
 {/if}
