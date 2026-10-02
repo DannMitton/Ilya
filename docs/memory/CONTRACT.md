@@ -631,6 +631,8 @@ Three shapes, all banned.
 
 **The test: delete the sentence. If no fact is lost, it was slop.**
 
+**THE PAGE IS NEVER WRONG. Asked by Dann 2026-10-02 15:55.** His words, transcribed as written: *"Let's be mindful of moral jugdments ("the wrong lengths") and communicate them more precisely, e.g. lengths outside our expectations. We will test lots and lots of legitimate, well-estabnlished house styles, none of which are wrong, but many of which will feel suboptimal to our critical eyes ;)"* The wording that follows is the desk's, and it is a default: where a printed page differs from Gould, or one edition from another, the page is **outside the expected range**, and no word of fault is used for it. Where Ilya's reading differs from what is printed, that is **a misread**, and the sentence says it is Ilya's. The scorer's field names (`lengthWrong`, `pitchWrong`) are code and stay as they are; prose for Dann does not use "wrong" bare.
+
 **Style never outranks accuracy.** A hedge that is true beats a clean sentence
 that is not, and `NOT ESTABLISHED` is never smoothed into confident prose.
 

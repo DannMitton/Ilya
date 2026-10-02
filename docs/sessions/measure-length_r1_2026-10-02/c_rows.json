@@ -1,0 +1,518 @@
+{
+ "5": [
+  {
+   "kind": "half",
+   "truthBar": 6,
+   "fate": "unmatched",
+   "readerBar": 3,
+   "loc": [
+    11,
+    2
+   ],
+   "near": [
+    [
+     "hook",
+     {
+      "x": 2520,
+      "y": 1980,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 1.427
+     }
+    ],
+    [
+     "hook",
+     {
+      "x": 2656,
+      "y": 1984,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 0.93
+     }
+    ]
+   ]
+  },
+  {
+   "kind": "half",
+   "truthBar": 38,
+   "fate": "unmatched",
+   "readerBar": 40,
+   "loc": [
+    16,
+    3
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 43,
+   "fate": "matched",
+   "read": {
+    "numerator": 1,
+    "denominator": 16
+   },
+   "abst": null,
+   "hollow": false,
+   "id": "r45-1092",
+   "page": 17
+  },
+  {
+   "kind": "dotted half",
+   "truthBar": 44,
+   "fate": "matched",
+   "read": null,
+   "abst": "hollow_head_on_ink_heavy_page",
+   "hollow": true,
+   "id": "r46-1419",
+   "page": 17
+  },
+  {
+   "kind": "half",
+   "truthBar": 45,
+   "fate": "matched",
+   "read": {
+    "numerator": 3,
+    "denominator": 32
+   },
+   "abst": null,
+   "hollow": false,
+   "id": "r49-3366",
+   "page": 17
+  },
+  {
+   "kind": "half",
+   "truthBar": 53,
+   "fate": "matched",
+   "read": null,
+   "abst": "hollow_head_on_ink_heavy_page",
+   "hollow": true,
+   "id": "r55-448",
+   "page": 17
+  },
+  {
+   "kind": "dotted half",
+   "truthBar": 56,
+   "fate": "unmatched",
+   "readerBar": 57,
+   "loc": [
+    17,
+    3
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 57,
+   "fate": "unmatched",
+   "readerBar": 57,
+   "loc": [
+    17,
+    3
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 57,
+   "fate": "unmatched",
+   "readerBar": 57,
+   "loc": [
+    17,
+    3
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 58,
+   "fate": "matched",
+   "read": {
+    "numerator": 1,
+    "denominator": 8
+   },
+   "abst": null,
+   "hollow": false,
+   "id": "r57-2606",
+   "page": 17
+  }
+ ],
+ "6": [
+  {
+   "kind": "half",
+   "truthBar": 1,
+   "fate": "unmatched",
+   "readerBar": 1,
+   "loc": [
+    18,
+    1
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 2,
+   "fate": "unmatched",
+   "readerBar": 1,
+   "loc": [
+    18,
+    1
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 3,
+   "fate": "unmatched",
+   "readerBar": 2,
+   "loc": [
+    18,
+    1
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 5,
+   "fate": "unmatched",
+   "readerBar": 4,
+   "loc": [
+    18,
+    2
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 6,
+   "fate": "matched",
+   "read": {
+    "numerator": 1,
+    "denominator": 2
+   },
+   "abst": null,
+   "hollow": true,
+   "id": "r6-676",
+   "page": 18
+  },
+  {
+   "kind": "half",
+   "truthBar": 7,
+   "fate": "unmatched",
+   "readerBar": 6,
+   "loc": [
+    18,
+    3
+   ],
+   "near": [
+    [
+     "admitted",
+     {
+      "x": 676,
+      "y": 3526,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 6.444
+     }
+    ],
+    [
+     "admitted",
+     {
+      "x": 1152,
+      "y": 3556,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 4.948
+     }
+    ]
+   ]
+  },
+  {
+   "kind": "half",
+   "truthBar": 9,
+   "fate": "matched",
+   "read": {
+    "numerator": 1,
+    "denominator": 8
+   },
+   "abst": null,
+   "hollow": false,
+   "id": "r7-1434",
+   "page": 19
+  },
+  {
+   "kind": "half",
+   "truthBar": 11,
+   "fate": "unmatched",
+   "readerBar": 8,
+   "loc": [
+    19,
+    1
+   ],
+   "near": [
+    [
+     "hook",
+     {
+      "x": 2913,
+      "y": 470,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 1.052
+     }
+    ]
+   ]
+  },
+  {
+   "kind": "half",
+   "truthBar": 13,
+   "fate": "matched",
+   "read": {
+    "numerator": 3,
+    "denominator": 16
+   },
+   "abst": null,
+   "hollow": false,
+   "id": "r10-2680",
+   "page": 19
+  },
+  {
+   "kind": "half",
+   "truthBar": 14,
+   "fate": "matched",
+   "read": {
+    "numerator": 1,
+    "denominator": 4
+   },
+   "abst": null,
+   "hollow": false,
+   "id": "r11-1346",
+   "page": 19
+  },
+  {
+   "kind": "half",
+   "truthBar": 17,
+   "fate": "unmatched",
+   "readerBar": 14,
+   "loc": [
+    19,
+    4
+   ],
+   "near": [
+    [
+     "hook",
+     {
+      "x": 269,
+      "y": 3755,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 1.349
+     }
+    ]
+   ]
+  },
+  {
+   "kind": "half",
+   "truthBar": 18,
+   "fate": "matched",
+   "read": {
+    "numerator": 1,
+    "denominator": 4
+   },
+   "abst": null,
+   "hollow": false,
+   "id": "r16-2609",
+   "page": 19
+  },
+  {
+   "kind": "half",
+   "truthBar": 19,
+   "fate": "matched",
+   "read": null,
+   "abst": "beam_scale_ink_no_beam",
+   "hollow": false,
+   "id": "r17-537",
+   "page": 20
+  },
+  {
+   "kind": "half",
+   "truthBar": 21,
+   "fate": "unmatched",
+   "readerBar": 18,
+   "loc": [
+    20,
+    1
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 22,
+   "fate": "matched",
+   "read": null,
+   "abst": "hollow_head_on_ink_heavy_page",
+   "hollow": true,
+   "id": "r20-668",
+   "page": 20
+  },
+  {
+   "kind": "half",
+   "truthBar": 25,
+   "fate": "unmatched",
+   "readerBar": 22,
+   "loc": [
+    20,
+    2
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 26,
+   "fate": "unmatched",
+   "readerBar": 23,
+   "loc": [
+    20,
+    3
+   ],
+   "near": [
+    [
+     "hook",
+     {
+      "x": 254,
+      "y": 2557,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 2.578
+     }
+    ],
+    [
+     "hook",
+     {
+      "x": 257,
+      "y": 2586,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 2.972
+     }
+    ]
+   ]
+  },
+  {
+   "kind": "half",
+   "truthBar": 27,
+   "fate": "unmatched",
+   "readerBar": 24,
+   "loc": [
+    20,
+    3
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 31,
+   "fate": "unmatched",
+   "readerBar": 28,
+   "loc": [
+    21,
+    1
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 33,
+   "fate": "unmatched",
+   "readerBar": 30,
+   "loc": [
+    21,
+    2
+   ],
+   "near": null
+  },
+  {
+   "kind": "half",
+   "truthBar": 34,
+   "fate": "unmatched",
+   "readerBar": 31,
+   "loc": [
+    21,
+    3
+   ],
+   "near": [
+    [
+     "hook",
+     {
+      "x": 251,
+      "y": 2604,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 2.311
+     }
+    ],
+    [
+     "hook",
+     {
+      "x": 256,
+      "y": 2641,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 2.832
+     }
+    ]
+   ]
+  },
+  {
+   "kind": "half",
+   "truthBar": 35,
+   "fate": "matched",
+   "read": null,
+   "abst": "beam_scale_ink_no_beam",
+   "hollow": false,
+   "id": "r33-769",
+   "page": 21
+  },
+  {
+   "kind": "half",
+   "truthBar": 39,
+   "fate": "unmatched",
+   "readerBar": 36,
+   "loc": [
+    22,
+    1
+   ],
+   "near": [
+    [
+     "hook",
+     {
+      "x": 2112,
+      "y": 427,
+      "closed_nolines": false,
+      "closed_withlines": true,
+      "area": 3.707
+     }
+    ]
+   ]
+  },
+  {
+   "kind": "half",
+   "truthBar": 43,
+   "fate": "matched",
+   "read": null,
+   "abst": "beam_scale_ink_no_beam",
+   "hollow": false,
+   "id": "r40-3269",
+   "page": 22
+  },
+  {
+   "kind": "half",
+   "truthBar": 47,
+   "fate": "unmatched",
+   "readerBar": 44,
+   "loc": [
+    23,
+    1
+   ],
+   "near": null
+  }
+ ]
+}

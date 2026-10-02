@@ -27,6 +27,7 @@ from reader import read_page_pitch, detect_barlines, nms, band_of, FLAG_AREA_RAT
 from rest_templates import render_rest
 from beams import detect_beam_bars, find_stem, beams_on_stem
 from timesig import read_time_signature
+import shape
 
 # Each additional flag adds roughly a notehead of ink. RECALIBRATED, close-prep
 # tier-1 unification (2026-07-24), same reasoning as FLAG_AREA_RATIO in
@@ -298,10 +299,19 @@ def run(cfg):
             flag2 = derived * (FLAG2_AREA_RATIO / FLAG_AREA_RATIO) * s * s
 
     events = []
+    # INK-HEAVY PAGES ONLY (brief r2, section 6 item 5). Applied to the 23 render pages the shape rule moves 22 of them
+    # (measured 2026-10-02: the notes' lengths differ on 22 of 23), so, as the brief says, it acts only where the page's
+    # staff lines are thicker than INK_WEIGHT_GUARD allows, which is where the area rule was never calibrated. A render
+    # page then takes the exact code path it took before. `cfg['shape_ink_heavy_only'] = False` lets a measurement
+    # apply it everywhere.
+    shape_on = cfg.get('shape', True) and (ink_heavy or not cfg.get('shape_ink_heavy_only', True))
     for idx, r in enumerate(recs):
         area = note_areas[idx]
         nb = note_nbs[idx]
         dur_abstain = None
+        shape_read = None
+        if shape_on and not r.get('hollow'):
+            shape_read = shape.read_length(nl2, lab, stats, cent, num, r['x'], r['y'], staves[vocal[r['sys']]], s, line_t)
         if r.get('hollow'):
             if ink_heavy:
                 # THE HOLLOW BYPASS, CLOSED (N.95 part C item 2, 2026-08-24).
@@ -339,6 +349,11 @@ def run(cfg):
                 dur_abstain = 'hollow_head_on_ink_heavy_page'
             else:
                 dur = Fraction(1, 2)                  # minim; stemless semibreve unexercised
+        elif shape_read is not None:
+            # A NOTE'S LENGTH IS READ FROM ITS SHAPE (row 23, brief r2): the stroke at the stem's far end and a dot in
+            # the space to its right. See `shape.py` for the rule, its bounds, and its margins. A note inside a margin
+            # abstains, and says which.
+            dur, dur_abstain = shape_read
         elif nb > 0:
             dur = Fraction(1, 4 * (2 ** nb))          # beams win
         elif area >= FLAG_AREA_MAX * s * s:
@@ -352,7 +367,7 @@ def run(cfg):
         else:
             nflags = 2 if area >= flag2 else (1 if area >= thr else 0)
             dur = Fraction(1, 4 * (2 ** nflags))
-        if dur is not None and _has_dot(r['x'], r['y'], stats, cent, num, s):
+        if dur is not None and shape_read is None and _has_dot(r['x'], r['y'], stats, cent, num, s):
             dur *= Fraction(3, 2)                     # a dot is never applied to a null duration
         midi = r['midi']
         pitch_abstain = None

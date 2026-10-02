@@ -2,6 +2,7 @@
  * scan-baseline: score the Sunless scan reads against the truth files.
  *
  * Usage: node tools/e16-harness/src/scan-baseline.ts <readsDir> <testPrivateDir> <outDir>
+ * Songs 1, 4, 5, 6 are the build songs of the Sunless scan; song 7 is the Tchaikovsky (added row 23).
  *
  * For a BUILD song (1, 4, 5, 6) it writes the full score, differences and
  * bar metres included. For a TEST-ONLY song (2, 3) it writes and prints
@@ -21,7 +22,9 @@ const SONGS = [
 	{ n: 3, role: 'test', truth: 'mussorgsky_sunless-03_finished-is-the-noisy-idle-day' },
 	{ n: 4, role: 'build', truth: 'mussorgsky_sunless-04_be-bored' },
 	{ n: 5, role: 'build', truth: 'mussorgsky_sunless-05_elegy' },
-	{ n: 6, role: 'build', truth: 'mussorgsky_sunless-06_on-the-river' }
+	{ n: 6, role: 'build', truth: 'mussorgsky_sunless-06_on-the-river' },
+	// The Tchaikovsky song: truth is the desk's draft r2 (read by eye, not proofed by Dann), kept in docs/sessions.
+	{ n: 7, role: 'build', truth: 'tchaikovsky', truthPath: 'docs/sessions/truth-draft-tchaikovsky-op38-3-voice_r2_2026-10-02.json' }
 ];
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -37,7 +40,7 @@ function totals(s: ScanScore) {
 }
 
 for (const song of SONGS) {
-	const tj = JSON.parse(fs.readFileSync(`${TRUTH}${song.truth}.truth.json`, 'utf8'));
+	const tj = JSON.parse(fs.readFileSync(song.truthPath ?? `${TRUTH}${song.truth}.truth.json`, 'utf8'));
 	const events = [...tj.verses[0].notes]
 		.sort((a: { onsetAbsolute: number }, b: { onsetAbsolute: number }) => a.onsetAbsolute - b.onsetAbsolute)
 		.map((n: { type: 'note' | 'rest'; measureIndex: number; midi?: number; duration: { numerator: number; denominator: number } }) => ({

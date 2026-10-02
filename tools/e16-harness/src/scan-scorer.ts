@@ -189,6 +189,8 @@ export interface ScanScore {
 	headline: number | null; // of every 100 printed notes, present with the right pitch and the right length
 	barMetres: BarMetre[];
 	differences: Difference[];
+	/** Every aligned pair, in sequence order: indices into the truth's events and the reader's events. Added row 23. */
+	matches: { truthIndex: number; readerIndex: number }[];
 }
 
 function fracText(f: Frac | null | undefined): string | null {
@@ -368,6 +370,7 @@ export function scoreScan(truth: TruthInput, reader: ReaderInput): ScanScore {
 		abstentions: ab,
 		headline: tNotes === 0 ? null : (100 * n.bothRight) / tNotes,
 		barMetres,
-		differences
+		differences,
+		matches: steps.flatMap((st) => (st.kind === 'match' ? [{ truthIndex: st.t, readerIndex: st.r }] : []))
 	};
 }

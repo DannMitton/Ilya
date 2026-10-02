@@ -21,6 +21,10 @@ Octaves are as printed in the treble clef, with middle C as C4. The key signatur
 
 The desk ran the outside engine homr 0.7.0 on the three pages and scored its output against this draft with `tools/e16-harness/src/scan-scorer.ts` (`memo-desk-yardstick-homr-on-seven-songs_r1_2026-10-02.md`). **In 90 of the 99 bars homr and this draft agree in every pitch, every length, and every rest,** bar 83's D♯4 among them. Every difference lies in bars 45 to 53 (page 2, system 3), where homr's first staff holds eighth rests and pitches a fifth to an octave under the printed voice. What homr read there is NOT ESTABLISHED, so those nine bars rest on the desk's eye and the head measurements alone.
 
+## Against Ilya's reader, added 2026-10-02 13:41
+
+Code scored the reader against this draft (`report-code-length-is-read-from-shape_r1_2026-10-02.md`, step 3.1). The two differ in ten pitches: bars 20, 22, 40, 53, 56, 76, 80, 83, and 87 twice. Code judged seven to be reader errors, because an accidental stands beside the head, and left bars 20, 22, and 76 to the desk. The desk looked at `measure-length_r1_2026-10-02/crops.files/tch-pitch.png`: in bar 20 the ledger line passes through the head (C♯4), and in bars 22 and 76 the head lies in the first space (F♯4). homr reads all three as this draft does. **All ten are the reader's errors, and the draft is unchanged.** Code found no place where the scan disagrees with the draft's written length.
+
 ## Two readings the desk is least sure of
 
 - **Bar 83, «сплю...»: D♯4.** Measured on the 400 dpi page, the head's centre is 12.7 px under the bottom line, where a half space is 14.5 px; the two heads before it (bar 82, E4 and E4) sit within 2 px of the line. The sharp sign is centred under the line too. So the print says D♯4. The desk has not established the piano's harmony in that bar and cannot say from the music whether E♯4 was meant.
