@@ -239,3 +239,51 @@ WRITTEN, not DONE. DONE is Dann's walk after he merges. Brief: `brief-code-insig
 - **Screenshots of Insights before and after, both languages: not produced**, for the same reason, and because nothing was run in a browser.
 - Whether the gates now hide an Insights finding Dann wants to see. Insights' range finding still prints (gate 1 keeps every range entry), and the "no findings" line prints when nothing passes; whether silence on a rare passaggio note reads as intended on his songs is for his walk.
 - Insights' phonation section also reads the grouped findings (the vowels a finding names are marked in the vowel chart), so it now sees the gated findings too. I did not test that section against the change beyond the suite staying green.
+
+## Row 14: clear placements by scope, and place from here (N.179)
+
+WRITTEN, not DONE. DONE is Dann's walk after he merges. Brief: `brief-code-place-by-scope_r1_2026-10-01.md`. The ruling: Dann 2026-10-01 02:42 and 02:43; French RATIFIED 02:44.
+
+**What changed.**
+1. `apps/web/src/lib/score/placement-scope.ts` (new, pure): `noteIdsInScope`, `clearPlacements`, `unplacedSlots`, `placeFromHere`, the `ClearScope` and `PlacementControls` types. Clear covers this measure (the selected note's bar, whole), from the selected note to the end (itself included), or the whole piece; it returns `null` when nothing was there, so a press that does nothing leaves no undo entry. The whole piece returns an empty map, which also drops orphaned entries, as the retired Start placement over did. Place from here seats the tray's unplaced slots, one per open target note in order from the selected note, with `firstPass`; a note that holds a syllable, a melisma mark, or an `empty` mark is skipped; it stops at the end.
+2. `apps/web/src/routes/+page.svelte`: `handleClearPlacements` and `handlePlaceFromHere` replace `handleStartPlacementOver` (retired, as the brief's item 3 says). Each pushes one undo entry after its no-op return, writes `doc.pairings`, and Place from here sets `doc.seatedText` and runs `seatCliticFolds`, as the old handler did. Where the box holds the score's own words verbatim (`doc.inputText === scoreText`), Place from here seats through `seatScoreWords` and `seatCliticFolds`, which is the old `seatFilledPoem` path without emptying the map first. A `placementNotes` derivation (every sung note, with its bar and whether it may start a syllable) and a `placementControls` object feed the loupe. The file is 36 lines shorter (6028 to 5992); its ceiling is lowered to match. The `rebuildSource` import left; `rebuildSource` stays in `one-action.ts` with its tests.
+3. `apps/web/src/lib/score/LoupePlacementRow.svelte` (new): a quiet row under the tray, a `Clear placements` pill that opens its three scopes in place, and a `Place from here` pill, rounded ends. `Place from here` is disabled with an empty tray or no selected note; the two narrow scopes are disabled with no selection; Clear is disabled with nothing placed. Not shown in print. A 44 px touch floor on coarse pointers, as the syllable strip keeps.
+4. `LoupeSyllables.svelte` draws the row after either layout; `Loupe.svelte` forwards `placement` (and the language it already had).
+5. `apps/web/src/lib/i18n.ts`: the seven ratified strings, EN and FR, under `loupe.place.*` and `loupe.undo.cleared` and `loupe.undo.placedFromHere`. The brief types « jusqu'à » and « d'ici » with a straight apostrophe; the tree sets it typographic (`loupe.lyric.toEnd`), so these do too. The French words are the brief's, unchanged.
+6. `apps/web/src/lib/score/placement-scope.test.ts` (new, 19).
+
+**Tests, as the brief lists them.** Each scope clears exactly its notes and nothing else; the whole piece clears orphans; melisma and empty marks go too; the map it was given is not mutated; a clear with nothing there is `null`; the cleared syllables return to the tray (`unplacedSlots` after a clear); Place from here seats in order from the selected note, skips a filled note, leaves melisma and empty marks alone, does not touch earlier notes, stops at the end, and does nothing with an empty tray, no selection, or no open note; whole-piece Clear then Place from here on the first note seats the poem again. The test notes are counted by eye in the file's header, not read off the module.
+
+**Gates (all eight, after the change).**
+
+| # | Result | Baseline | Moved by |
+|---|---|---|---|
+| 1 | 251 passed (251) | same | |
+| 2 | 235 passed (235) | same | |
+| 3 | 0 errors, 12 warnings in 5 files | same | |
+| 4 | 1824 passed (1824) | 1805 after row 7 | +19: `placement-scope.test.ts` |
+| 5 | 644 passed, 5 skipped (649) | same | |
+| 6 | 145 passed (145) | same | |
+| 7 | 55 passed (55) | same | |
+| 8 | ratchets: OK. | same | |
+
+**Ratchets.** `Loupe.svelte` ceiling raised on purpose, 3041 to 3044: three lines, one `import type`, one prop in the interface, one in the destructure; the `<LoupeSyllables>` call gained its two props on its existing line. The commit message says why. The new work is in new modules, as the ratchet prefers; this is only the forwarding. `+page.svelte` lowered 6028 to 5992.
+
+**Not established.**
+- **Undo.** Each press pushes a snapshot entry (`pushUndo`) before it writes, which the existing undo history restores whole. I did not drive an undo and redo through the page; the existing `undo-history.test.ts` covers the history, not these two presses.
+- **The score's-own-words path of Place from here** was not run on a real score. `seatScoreWords` skips decided notes and placed slots (read in `score-seat.ts`), so it fills the open notes the file's words reach; it does not begin at the selected note, because each word names its own note. The brief asks that this case "reseats as today"; whether that matches a walk is Dann's.
+- **The row's look and place** (DESK DEFAULT, for his walk): nothing was seen in a browser, on desk or phone. The pill style is JUDGEMENT.
+- **Clearing removes a melisma or `empty` mark as well as a syllable.** The brief says "removes those notes' entries from `doc.pairings`"; I read that as every kind of entry. If he wants marks kept, it is one condition in `clearPlacements`.
+- `station.startOver` and `loupe.undo.startOver` keys are now unused; I left them in the table.
+
+## Closing summary of the cloud lane
+
+Six rows were taken on `cloud-lane`, each its own commit, each pushed, each after all eight gates: 8c `019bc7f`, 10 `a3b239e`, 15 `b3ccf91`, 16 `8694424`, 7 `c45da71`, 14 (this commit). Rows 3, 5, 6, 8, 9, 11, 12, 13, and 17 were not taken. `tools/e16-harness/`, `STATE.md`, `CONTRACT.md`, `OPEN.md`, and `PRODUCT.md` were not edited. No pull request was opened; `Shane` and `main` were not pushed.
+
+**Gate movement over the lane.** Gate 4: 1784 to 1824 (+4 row 10, +9 row 15, +8 row 7, +19 row 14). Gate 5: 636 to 644 (+8, row 10). The desk's ship script needs both moved. Every other gate stayed at baseline.
+
+**Ratchet ceilings changed, on purpose, for the desk to rule on:** `CalibrationWizard.svelte` 2123 to 2124 and `InsightsPane.svelte` 1350 to 1351 (row 15, one import line each); `Loupe.svelte` 3041 to 3044 (row 14); `+page.svelte` lowered 6028 to 5992.
+
+**Decisions for Dann or the desk, collected:** `tempo` italics (row 15); `primo` and `secondo` italics (row 15); whether `insights.fit.*` needs a comment explaining its name (row 16); the 77-line shift in `i18n.ts` citations (row 16); whether silence on a rare passaggio note reads as intended (row 7); whether Clear should remove melisma and `empty` marks (row 14); every visual placement and size (rows 10 and 14).
+
+**Could not be established here:** the reader's measuring path (heading "Does the reader run in the cloud": `cdn.jsdelivr.net` is denied by this environment's network policy), the six-voice before-and-after for row 7, and every browser view.

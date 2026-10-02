@@ -25,9 +25,11 @@
 		mergeOnUpload,
 		placeSyllable,
 		nextOpenSyllableTarget,
+		type PairingMap,
 		type ShiftDirection,
 		type Slot,
 	} from '$lib/score/pairings';
+	import { clearPlacements, placeFromHere, unplacedSlots, type ClearScope, type PlacementControls, type PlacementNote } from '$lib/score/placement-scope';
 	import { applyHeal, dryRunLog, healLog, planHeal } from '$lib/score/heal';
 	import { seatedTextDiff } from '$lib/score/seated-text';
 	// N.67 step 0: the song document owns the per-song state and is the only
@@ -139,7 +141,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
 	import Loupe from '$lib/score/Loupe.svelte';
 	import CorrectionSurface from '$lib/score/CorrectionSurface.svelte';
-	import { QUIET_MS, emptyTextNotice, rebuildSource, transcribeVerdict, type TextArrival } from '$lib/one-action';
+	import { QUIET_MS, emptyTextNotice, transcribeVerdict, type TextArrival } from '$lib/one-action';
 	import {
 		diffWordGrid,
 		emptyDiff,
@@ -598,99 +600,57 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   `LYRIC · TAKE A NOTE TO SHIFT ITS SYLLABLE`. */
 
 	/**
-	 * N.67 step 3, design §2.6. THE ONLY DESTRUCTIVE REBUILD, and it is the
-	 * singer's own act, never a side effect of an upload.
+	 * N.179 (QUEUE row 14), Dann 2026-10-01 02:42 and 02:43: "My instinct is to
+	 * replicate Finale's functionality inasmuch as this is possible in a
+	 * scaled-down form for Ilya." TWO VERBS REPLACE `handleStartPlacementOver`,
+	 * which N.147 had already left with no button. Whole-piece Clear followed by
+	 * Place from here on the first note covers it. What a scope covers and which
+	 * notes a press seats is `placement-scope.ts`'s; these are the presses.
 	 *
-	 * It runs the first pass again from scratch, exactly as an upload into an
-	 * empty map does, so "start over" means the same thing here as it meant the
-	 * first time. Disabled when there is nothing to start over from.
-	 *
-	 * IT READS `slotQueue`, NOT `buildSlotQueue(lines)`, and N.111 increment 3
-	 * is why that distinction now matters. The button's own guard is
-	 * `slotQueue.length > 0`, so the queue fallback makes it appear on a
-	 * lyric-bearing score where it did not before, and the transcription it
-	 * used to rebuild from is empty there: pressing it would have emptied the
-	 * map and put nothing back.
-	 *
-	 * THE CLITIC SEAT IS RE-APPLIED AFTER IT, because starting placement over
-	 * is the singer resetting their own work, not a licence for a lone
-	 * vowelless clitic to reappear on the page. Where the first pass already
-	 * produced the seated arrangement this is a no-op.
-	 *
-	 * N.144, 2026-09-16. FIRST PASS COUNTS NOTES; IT DOES NOT READ THE SCORE'S
-	 * OWN MAPPING, so a melisma or a tie's continuation still took a syllable
-	 * of its own here, the same shape of defect N.142 fixed for the automatic
-	 * seat. Where the box still holds the score's own words VERBATIM
-	 * (`doc.inputText === scoreText`), this now empties the map and calls
-	 * `seatFilledPoem` (N.134) instead, which seats word by word against the
-	 * file's own cells and so respects a melisma exactly as the arrival path
-	 * already does.
-	 *
-	 * GUARDED THE SAME WAY N.134'S OWN TWO CALLERS ALREADY ARE, and for the
-	 * same reason: `seatScoreWords` is increment 1 only and seats NOTHING AT
-	 * ALL, silently, once the poem is not the score's words one for one
-	 * (`score-seat.ts`'s own header; its own test is titled "seats nothing
-	 * against a poem that is not the score text"). Emptying the map and
-	 * getting nothing back would be worse than the bug this fixes. Where the
-	 * singer has edited the poem away from the score's own text (the N.112
-	 * case below, a corrected final syllable included), the guard is false
-	 * and the count-based pass still runs, unchanged: THE POEM STILL OWNS
-	 * THE TEXT.
-	 *
-	 * THIS ALSO CLOSES THE SECOND HALF OF N.144: THE PRESS NOW PUSHES AN UNDO
-	 * ENTRY. `loupe.undo.startOver` was ruled 2026-09-16 and built into
-	 * `i18n.ts` for the loupe French pass, but nothing called `pushUndo` with
-	 * it, so the one rebuild this file calls destructive could not be taken
-	 * back.
+	 * Clear touches `doc.pairings` only: the poem, the glosses, and the word
+	 * edits stay, and the cleared syllables return to the tray, which is derived
+	 * from the queue and the map. One undo entry, pushed AFTER the no-op return
+	 * so a press that cleared nothing leaves no pill that would undo nothing
+	 * (the rule `placeSyllableOnSelected` states).
 	 */
-	function handleStartPlacementOver(): void {
-		if (!ingestedScore) return;
-		/* N.112 walk finding 2, Dann 2026-09-07: after this button the last note
-		   of the piece was bare, because the rebuild had run from the SCORE's
-		   own words rather than from the poem.
+	function handleClearPlacements(scope: ClearScope): void {
+		const next = clearPlacements(doc.pairings, placementNotes, selectedEventId, scope);
+		if (!next) return;
+		pushUndo({ kind: 'text', key: 'loupe.undo.cleared' });
+		doc.pairings = next;
+		if (scope === 'all') orphanedCount = 0;
+	}
 
-		   THE CAUSE. `slotQueue` falls back to `scoreTextQueue` when
-		   `buildSlotQueue(lines)` is empty, and `lines` is empty whenever the
-		   transcription has not run over the current text: at boot before the
-		   dictionary lands, and after any path that cleared it. The engraving
-		   this alias uses lost its final `я` off the end (N.111, 2026-09-04),
-		   so the score's queue is one slot shorter than the poem's and the last
-		   note came back bare.
-
-		   THE FIX IS DANN'S OWN RULING OF 2026-09-07 applied here: *"whenever
-		   text is present, the transcription exists."* `flushText` is N.108-5's
-		   join and it runs the pipeline in this same tick when the text has not
-		   been read yet, so `poemQueue` below is the singer's own whenever it
-		   can be.
-
-		   IF THE POEM STILL HAS NO QUEUE, THIS DOES NOTHING. DESK DEFAULT: text
-		   is present but the dictionary has not landed, and rebuilding from the
-		   score's words would be the defect this fixes. Doing nothing leaves
-		   every placement standing, which is the reversible answer; the singer
-		   presses again once the drawer stops saying it is loading. */
+	/**
+	 * Place from here: the tray's remaining syllables, one per open note in
+	 * order from the selected note, with the same `firstPass` and
+	 * `seatCliticFolds` the retired handler used (`placeFromHere`). A note that
+	 * already holds a syllable is skipped and melismas are left to the singer.
+	 *
+	 * WHERE THE BOX STILL HOLDS THE SCORE'S OWN WORDS VERBATIM it seats from the
+	 * score's own mapping instead, as the retired handler did (N.144): `firstPass`
+	 * counts notes and does not read the file's cells, so a melisma would take a
+	 * syllable. That path fills the open notes the file's words reach; it does
+	 * not start from the selected note, because each word already names its own
+	 * note. NOT ESTABLISHED on a real score; the test covers the pure half only.
+	 */
+	function handlePlaceFromHere(): void {
+		if (!ingestedScore || !selectedEventId) return;
 		flushText();
-		const source = rebuildSource(doc.inputText, poemQueue.length);
-		if (source === 'none') return;
-		/* N.144. Pushed AFTER the empty-queue return above, the same rule
-		   `placeSyllableOnSelected` states for the same reason: a press that
-		   does nothing must not leave an Undo pill that would undo nothing. */
-		pushUndo({ kind: 'text', key: 'loupe.undo.startOver' });
-		/* N.160 step 3. The seats are rebuilt from the text just transcribed,
-		   so that is the text they describe (`transcribeText`'s seated text). */
-		doc.seatedText = transcribedText ?? doc.inputText;
-		if (scoreText !== '' && doc.inputText === scoreText) {
-			doc.pairings = {};
-			seatFilledPoem(ingestedScore);
-			orphanedCount = 0;
-			return;
-		}
-		const rebuildQueue = source === 'poem' ? poemQueue : scoreTextQueue;
 		const parsed = ingestedScore.result.score;
-		doc.pairings = seatCliticFolds(
-			parsed,
-			firstPass(syllableTargetIds(parsed.vocalLine), rebuildQueue),
-		);
-		orphanedCount = 0;
+		let next: PairingMap | null;
+		if (scoreText !== '' && doc.inputText === scoreText) {
+			const seated = seatScoreWords(parsed, doc.pairings, lines);
+			next = seated.seated > 0 ? seatCliticFolds(parsed, seated.map) : null;
+		} else {
+			const placed = placeFromHere(doc.pairings, placementNotes, selectedEventId, slotQueue);
+			next = placed && seatCliticFolds(parsed, placed);
+		}
+		if (!next) return;
+		pushUndo({ kind: 'text', key: 'loupe.undo.placedFromHere' });
+		/* N.160 step 3. The seats now describe the text just transcribed. */
+		doc.seatedText = transcribedText ?? doc.inputText;
+		doc.pairings = next;
 	}
 
 	/**
@@ -1584,6 +1544,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   now read it as unavailable there, which is the correct state for a note
 	   that can never carry a syllable of its own. */
 	const eventIds = $derived(syllableTargetIds(correctedLine));
+
+	/* N.179: every sung note in order, for the scopes of Clear placements and for
+	   Place from here (`placement-scope.ts`). A tie's continuation is a note but
+	   not a syllable target. */
+	const placementNotes = $derived.by((): PlacementNote[] => {
+		const targets = new Set(eventIds);
+		return correctedLine.filter((ev) => ev.type !== 'rest').map((ev) => ({ id: ev.id, measureIndex: ev.measureIndex, target: targets.has(ev.id) }));
+	});
+	const placementControls = $derived<PlacementControls>({
+		onclear: handleClearPlacements,
+		onfromhere: handlePlaceFromHere,
+		hasSelection: selectedEventId !== null,
+		canClear: Object.keys(doc.pairings).length > 0,
+		canFromHere: selectedEventId !== null && unplacedSlots(slotQueue, doc.pairings).length > 0,
+	});
 
 	const dockShiftAnchor = $derived(
 		selectedEventId && eventIds.includes(selectedEventId) ? selectedEventId : null,
@@ -4742,10 +4717,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 					     DANN 2026-09-10, for `IntakePanel`'s syllable row, beside the
 					     count it reset. N.147, 2026-09-17, DELETED THAT ROW WITH THE
 					     REST OF THE DRAWER'S SYLLABLE LINE, and named no new home for
-					     the pill. `handleStartPlacementOver` is UNCHANGED and still
-					     defined below, but NOTHING IN THE UI CALLS IT any more: NOT
-					     ESTABLISHED where, or whether, it belongs now. Flagged in the
-					     N.147 memo rather than decided here. -->
+					     the pill. N.179 (2026-10-02) RETIRED `handleStartPlacementOver`:
+					     Clear placements and Place from here, a row under the loupe's
+					     tray (`LoupePlacementRow.svelte`), cover it. Whole-piece Clear,
+					     then Place from here on the first note. -->
 					<!-- R5, N.27: no save site is silent. N.67 step 0 made this the
 					     WHOLE song's report rather than the pairing map's alone, and
 					     N.67 step 6 finalized what it says: quota with its figures,
@@ -5009,6 +4984,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		slots={slotQueue}
 		pairings={shownPairings}
 		onplace={placeSyllableOnSelected}
+		placement={placementControls}
 		syllablesOpen={loupePanel.open}
 		ontogglesyllables={loupePanel.toggle}
 		mode={loupePanel.mode}

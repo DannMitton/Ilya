@@ -24,6 +24,7 @@
 	import { caretRingBox, entryGroup, hasUnderlay, RING_RADIUS, RING_REACH, RING_STROKE, ringBox } from '$lib/score/selection-ring';
 	import { caretRingFloor, caretRingHalf, inkRoom, ringBoundary } from '$lib/score/stop-ring';
 	import type { Slot, PairingMap } from '$lib/score/pairings';
+	import type { PlacementControls } from '$lib/score/placement-scope';
 	import type { Cursor } from '$lib/score/entry';
 	import LoupeSyllables from '$lib/score/LoupeSyllables.svelte';
 import { stackActions } from '$lib/components/Drawer/bandState';
@@ -146,6 +147,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		/** A tap on a syllable: places it on the selected note and advances the
 		    selection (`+page.svelte`'s `placeSyllableOnSelected`). */
 		onplace: (slot: Slot) => void;
+		placement?: PlacementControls;
 		/** The disclosure's own open state. N.147, RULED BY DANN 2026-09-17:
 		    session-only, no `localStorage`, starts closed; lives in
 		    `+page.svelte` because THIS component is destroyed and recreated on
@@ -195,6 +197,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		slots,
 		pairings,
 		onplace,
+		placement,
 		syllablesOpen,
 		ontogglesyllables,
 		mode,
@@ -2671,7 +2674,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			{#if syllablesOpen}
 				{#if mode === 'syllables'}
 					{#if slots.length > 0}
-						<LoupeSyllables id="loupe-syllables" {slots} {pairings} {selectedEventId} {isPhone} {onplace} />
+						<LoupeSyllables id="loupe-syllables" {slots} {pairings} {selectedEventId} {isPhone} {onplace} {placement} {language} />
 					{/if}
 				{:else}
 					{@render corrections?.()}

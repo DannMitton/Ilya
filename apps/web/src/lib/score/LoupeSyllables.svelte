@@ -36,6 +36,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { Slot, PairingMap } from '$lib/score/pairings';
+	import type { PlacementControls } from '$lib/score/placement-scope';
+	import type { Language } from '$lib/i18n';
+	import LoupePlacementRow from '$lib/score/LoupePlacementRow.svelte';
 
 	interface Props {
 		slots: readonly Slot[];
@@ -49,8 +52,11 @@
 		onplace: (slot: Slot) => void;
 		/** `Loupe.svelte`'s own toggle button points `aria-controls` at this id. */
 		id: string;
+		/** N.179: Clear placements and Place from here, a row under the tray. Absent: no row. */
+		placement?: PlacementControls;
+		language?: Language;
 	}
-	let { slots, pairings, selectedEventId, isPhone, onplace, id }: Props = $props();
+	let { slots, pairings, selectedEventId, isPhone, onplace, id, placement, language = 'en' }: Props = $props();
 
 	const keyOf = (s: Slot) => `${s.origin.lineIndex}-${s.origin.wordIndex}-${s.origin.slotIndex}`;
 
@@ -184,6 +190,7 @@
 				>{it.slot.cyrillic}{it.trailingHyphen ? '-' : ''}</button>{/each}</p>
 	</div>
 {/if}
+{#if placement}<LoupePlacementRow {placement} {language} />{/if}
 
 <style>
 	/* Shared reset. Plain inline text, not a chip, same rule

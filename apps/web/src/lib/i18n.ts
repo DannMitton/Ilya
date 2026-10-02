@@ -463,6 +463,17 @@ const strings: Record<string, Record<Language, string>> = {
 	// RULED by Dann 2026-09-16: `station.startOver`'s own English/French pair,
 	// verbatim, for the undo pill after Start placement over.
 	'loupe.undo.startOver':        { en: 'placement started over',       fr: 'placement recommencé' },
+	// N.179 (QUEUE row 14), RULED by Dann 2026-10-01 02:42 and 02:43, French
+	// RATIFIED 02:44 ("ratified"), adopted from the `loupe.lyric.*` and
+	// `loupe.undo.*` families. The brief types the apostrophe straight; the tree
+	// sets it typographic, as `loupe.lyric.toEnd` does.
+	'loupe.place.clear':           { en: 'Clear placements',             fr: 'Retirer le placement' },
+	'loupe.place.scope.measure':   { en: 'this measure',                 fr: 'cette mesure' },
+	'loupe.place.scope.toEnd':     { en: 'to the end',                   fr: 'jusqu\u2019à la fin' },
+	'loupe.place.scope.all':       { en: 'the whole piece',              fr: 'toute la pièce' },
+	'loupe.place.fromHere':        { en: 'Place from here',              fr: 'Placer à partir d\u2019ici' },
+	'loupe.undo.cleared':          { en: 'placements cleared',           fr: 'placement retiré' },
+	'loupe.undo.placedFromHere':   { en: 'syllables placed from here',   fr: 'syllabes placées à partir d\u2019ici' },
 	// N.113. The pill reads what the press will take back, so the pair names
 	// the two directions rather than the control. RULED by Dann 2026-09-14:
 	// « défini » adopted from `loupe.undo.tuplet` below (« nolet défini »),
