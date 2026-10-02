@@ -557,6 +557,8 @@ my identity or doing crime."*
 
 **AND, 2026-09-26 00:31, feature work continues during the audit.** The desk offered three options and recommended the first; Dann: *"Hey if you can juggle both I am impressed and grateful yes"*. The audit and the feature line stay out of each other's files. A hotspot file is closed to new features only while its own refactor step runs. The plan lives at `../sessions/audit-plan_r1_2026-09-26.md`, a dated draft.
 
+**AMENDED BY DANN 2026-10-02 02:37, for the cloud lane.** The desk asked whether a Claude Code cloud session may push one dedicated branch, never `Shane` or `main`, which Dann merges, as he ruled for `audit` on 2026-09-26. Dann: *"Yes, cloud Code may push one dedicated branch as you suggest"*, and *"Yes, the Cloud as a second lane. It's a cost-savings right now since we are running out of usage and the Cloud has that available space."* **So: a cloud session may commit to and push one dedicated branch. It never pushes `Shane` or `main` and opens no pull request. Dann merges.** The scan reader stays with Code on his Mac, where its measuring path is proven. Who offered it: the desk. Who ruled it in: Dann. The lane's reason is the cloud session credit on his usage page; if cloud sessions turn out not to draw on that credit, the reason is gone and the desk says so at once.
+
 **THE SHIP SCRIPT.**
 ```
 sh ~/Downloads/ilya-ship.sh "N.xx: the commit message"

@@ -1170,6 +1170,118 @@ def has_stem(nl, hx, hy, s, min_len=2.0, lo=0.35, hi=1.05, max_w=0.42):
     return False
 
 
+# ---------- A HOOK IS NOT A HEAD (brief r3, 2026-10-02) ----------
+#
+# The ring filter fires on the white space a stem and its flag enclose: N.95
+# found it in 2026, a distance box around the filled head was tried and
+# withdrawn, and the event was left standing with its length withheld
+# (`run_page2.py`, N.95). Measured 2026-10-02 over every hollow detection in the
+# tree, judged by looking: the 83 on the nine scan pages are ALL hooks (none is
+# a hollow head, including on the Lamm and Bessel pages), and the 68 on the 23
+# render fixtures are ALL genuine hollow heads (Verovio's half notes, in single
+# notes and in chords). The two groups are separated by the shape of the white
+# core, measured on the line-free image:
+#   CLOSED. The core is white all the way round (a white component that does
+#   not reach the edge of a window 1.4 staff spaces either way). 67 of the 68
+#   genuine cores are closed; 78 of the 83 hooks are open. On the image with
+#   the staff lines still in it, 52 of the 83 hooks are closed (a line closes
+#   the hook), so the test is made on the line-free image. The single genuine
+#   open core (R_sunless-06 page 3 near x 967, y 2164) is a hollow head in a
+#   chord whose stem runs 5.9 staff spaces; the rule does not act on renders.
+#   AREA. Of the closed cores, the genuine ones fill 0.422 to 0.458 square
+#   staff spaces (largest: R_sunless-06 page 1, x 514, y 2324) and the five
+#   closed hooks 0.61 to 0.894 (smallest: RK-Bessel sunless04 p3, x 2577,
+#   y 1960). The bound is the midpoint of that gap, 0.534. Every dimension of the
+#   core is in staff spaces, none assumed.
+# The stem alone does not separate them: the stem's run in the shorter direction
+# is 0.0 to 2.0 spaces for hooks and 0.0 to 3.48 for genuine heads (chords).
+# What the genuine group is: 68 heads from one engraver (Verovio, 300 dpi). The
+# scan pages hold no genuine hollow head that the finder detected, so the
+# bound's upper side rests on the five closed hooks, and a printed half note
+# whose core is larger than 0.534 would be set aside as a hook.
+HOOK_CORE_AREA_MAX = 0.534   # square staff spaces
+
+def white_core(ink, cx, cy, s):
+    """The white component at (cx, cy) in the boolean ink image `ink`, within a
+    window of 1.4 staff spaces each way: whether it is closed (does not reach
+    the window's edge) and its width, height and area in staff spaces. None if
+    there is no white within 0.35 spaces."""
+    r=int(round(1.4*s)); H,W=ink.shape
+    y0=max(0,cy-r); y1=min(H,cy+r+1); x0=max(0,cx-r); x1=min(W,cx+r+1)
+    white=(~ink[y0:y1,x0:x1]).astype(np.uint8)
+    sy,sx=cy-y0,cx-x0
+    if not (0<=sy<white.shape[0] and 0<=sx<white.shape[1]): return None
+    if not white[sy,sx]:
+        best=None; rr=int(round(0.35*s))
+        for dy in range(-rr,rr+1):
+            for dx in range(-rr,rr+1):
+                yy,xx=sy+dy,sx+dx
+                if 0<=yy<white.shape[0] and 0<=xx<white.shape[1] and white[yy,xx]:
+                    d=dy*dy+dx*dx
+                    if best is None or d<best[0]: best=(d,yy,xx)
+        if best is None: return None
+        sy,sx=best[1],best[2]
+    num,lab,stats,cent=cv2.connectedComponentsWithStats(white,4)
+    m=(lab==lab[sy,sx]); ys,xs=np.where(m)
+    touches=bool(ys.min()==0 or xs.min()==0 or ys.max()==m.shape[0]-1 or xs.max()==m.shape[1]-1)
+    return dict(closed=not touches,w=round((xs.max()-xs.min()+1)/s,2),h=round((ys.max()-ys.min()+1)/s,2),
+                area=round(int(m.sum())/(s*s),3))
+
+# ---------- TWO HEADS ON ONE STEM ARE ONE EVENT (the ossia) ----------
+#
+# Dann, 2026-10-02 01:53 to 01:57: a note on a vocal line may carry a second,
+# usually smaller, head (an ossia). The larger head is the note (RULED BY DANN);
+# the other is the event's alternative, never a second event. Two heads of the
+# SAME SIZE are kept as a choice of equal standing: the upper is emitted, the
+# event is counted, and both pitches are kept. Showing both heads and flagging
+# the note belong to the page model. Acts only on a braced system, and only on
+# two heads of one kind (both filled or both hollow) on one stem at one end of
+# it; a filled head with a hollow detection beside it is never an ossia (that is
+# a hook, set aside above). SIZE is the ink span of the head's own row in the
+# line-free image; two heads whose spans differ by a pixel or less are the same
+# size (the raster's tolerance, not a head dimension; none is sourced).
+def _row_span(nl, x, y, s):
+    """The width of the ink run through the head's own centre, outwards while it
+    stays dark (at most 1.3 staff spaces each way). The two heads of an ossia
+    share a stem, so the stem adds the same to both and the difference is the
+    head's."""
+    H,W=nl.shape
+    if not (0<=y<H and 0<=x<W) or nl[y,x]==0: return 0
+    lim=int(1.3*s); a=x; b=x
+    while a>0 and nl[y,a-1]>0 and x-a<lim: a-=1
+    while b<W-1 and nl[y,b+1]>0 and b-x<lim: b+=1
+    return int(b-a+1)
+
+def merge_ossia(heads, nl, s, braced_sys):
+    from beams import find_stem
+    out=[]; alts=[]; used=set()
+    order=sorted(range(len(heads)),key=lambda i:(heads[i]['sys'],heads[i]['x']))
+    stems={i:find_stem(nl,heads[i]['x'],heads[i]['y'],s) for i in range(len(heads)) if heads[i]['sys'] in braced_sys}
+    for ai,i in enumerate(order):
+        if i in used: continue
+        h=heads[i]
+        if h['sys'] not in braced_sys or stems.get(i) is None: out.append(h); continue
+        mate=None
+        for j in order[ai+1:]:
+            g=heads[j]
+            if j in used or g['sys']!=h['sys'] or stems.get(j) is None: continue
+            if bool(g.get('hollow'))!=bool(h.get('hollow')): continue
+            if abs(g['x']-h['x'])>1.2*s: break
+            if abs(stems[j]['x']-stems[i]['x'])>0.4*s: continue
+            if abs(g['y']-h['y'])>1.5*s: continue
+            mate=j; break
+        if mate is None: out.append(h); continue
+        g=heads[mate]; used.add(mate)
+        wa=_row_span(nl,h['x'],h['y'],s); wb=_row_span(nl,g['x'],g['y'],s)
+        same=abs(wa-wb)<=1
+        if same: note,alt=(h,g) if h['y']<=g['y'] else (g,h)
+        else: note,alt=(h,g) if wa>wb else (g,h)
+        out.append(note)
+        alts.append(dict(sys=int(h['sys']),x=int(note['x']),y=int(note['y']),altX=int(alt['x']),altY=int(alt['y']),
+                         altL=alt['L'],altO=int(alt['O']),sameSize=bool(same)))
+    out.sort(key=lambda h:(h['sys'],h['x']))
+    return out,alts
+
 def read_page_geometry(cfg):
     img=cv2.imread(cfg['png'],cv2.IMREAD_GRAYSCALE)
     img,staves,s,trace_info=find_staves(img,page=cfg.get('png'))
@@ -1190,15 +1302,35 @@ def read_page_geometry(cfg):
     # reads G['nl'] vs G['nl_safe'].
     bw,nl=remove_lines(img,s,staves,cfg.get("png"))
     nl_safe=nl
+    # A BRACED SYSTEM is one whose staves include a braced pair (row 19). Only
+    # on such a system do the rules of brief r3 act: a hollow detection is a
+    # head only if its white core is closed and a head's shape, and two heads of
+    # one kind on one stem are one event. Elsewhere (the render fixtures, and a
+    # system with no braced pair) the finder is exactly what it was.
+    braced_sys=set()
+    if 'vocal' not in cfg:
+        for sy in voices.get('systems',[]):
+            if sy['voice'] is not None and len(sy['braced'])>=2: braced_sys.add(vocal.index(sy['voice']))
     heads=detect_heads(img,staves,vocal,s,thr=cfg.get('head_thr',0.84))
     if cfg.get('require_stem', True):
         heads=[h for h in heads if has_stem(nl_safe,h['x'],h['y'],s)]
     for h in heads: h['hollow']=False
+    hooks=[]
     if cfg.get('hollow', True):
         from hollow import detect_hollow_heads, merge_heads
         sb=lambda y: band_of(y,staves,vocal,s)
         hh=detect_hollow_heads(nl_safe,staves,vocal,s,sb,thr=cfg.get('hollow_thr',0.38))
         hh=[h for h in hh if h['stemmed']]        # minims; the stemless semibreve path is UNEXERCISED
+        if braced_sys:
+            keep=[]
+            for h in hh:
+                if h['sys'] not in braced_sys: keep.append(h); continue
+                core=white_core(nl_safe>0,int(h['x']),int(h['y']),s)
+                if core is not None and core['closed'] and core['area']<=HOOK_CORE_AREA_MAX: keep.append(h)
+                else:
+                    hooks.append(dict(x=int(h['x']),y=int(h['y']),sys=int(h['sys']),score=float(h['score']),
+                                      coreClosed=bool(core and core['closed']),coreArea=None if core is None else core['area']))
+            hh=keep
         heads=merge_heads(heads,hh,s)
     # N.97: CLEF AND KEY-SIGNATURE INK IS NOT NOTEHEAD CANDIDACY.
     #
@@ -1231,8 +1363,11 @@ def read_page_geometry(cfg):
     topD=clef_topD(cfg['clef'][0],cfg['clef'][1],cfg.get('octaveChange',0))
     for h in heads:
         L,O=position(h,staves,vocal,topD,s); h['L']=L; h['O']=O
+    alternatives=[]
+    if braced_sys:
+        heads,alternatives=merge_ossia(heads,nl_safe,s,braced_sys)
     return dict(img=img,staves=staves,s=s,vocal=vocal,bw=bw,nl=nl,nl_safe=nl_safe,heads=heads,topD=topD,
-                vocalFallbacks=vocal_fallbacks, trace=trace_info, voices=voices,
+                vocalFallbacks=vocal_fallbacks, trace=trace_info, voices=voices, hooks=hooks, alternatives=alternatives,
                 # N.97, ADDITIVE. What the page PRINTS, alongside what the
                 # caller answered. Nothing in this module consumes it: `topD`
                 # above is still built from cfg, so a read with the same
