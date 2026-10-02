@@ -34,7 +34,7 @@
  * unreachable.
  */
 import type { VocalLineEvent } from '@ilya/score-parser';
-import { stepCursor, type Cursor } from './entry';
+import { previousEntry, stepCursor, type Cursor } from './entry';
 
 export class CorrectionCursor {
 	selectedEventId = $state<string | null>(null);
@@ -83,6 +83,25 @@ export class CorrectionCursor {
 			this.selectedEventId = null;
 			this.gapAfter = next.after;
 		}
+	};
+
+	/**
+	 * A BAR LEFT STANDING IN A GAP (loupe remainder brief, item 5). Closing the
+	 * panel, or choosing Syllables, hides the carets; a bar still in a gap then
+	 * has no caret to show where it is, and nothing is drawn until the next
+	 * arrow. This moves it to the gap's anchor, the entry it follows, so the
+	 * squircle is back on a note. DESK DEFAULT 2026-09-30 (the brief). A head
+	 * gap has no entry before it, so it takes the first entry after it, a CODE
+	 * DEFAULT. A bar on an entry, or nowhere, is left alone.
+	 */
+	leaveGap = (): void => {
+		const c = this.cursor;
+		if (c?.kind !== 'gap') return;
+		const line = this.#line();
+		const anchor = previousEntry(line, c);
+		if (anchor) return this.set({ kind: 'entry', id: anchor.id });
+		const after = stepCursor(line, c, 1);
+		if (after?.kind === 'entry') this.set(after);
 	};
 
 	/**

@@ -204,3 +204,36 @@ describe('CorrectionCursor', () => {
 		expect(c.cursor).toEqual({ kind: 'gap', after: 'a' });
 	});
 });
+
+describe('leaveGap (loupe remainder, item 5)', () => {
+	it('moves a bar standing in a gap to the entry the gap follows', () => {
+		const { c } = harness();
+		c.set({ kind: 'gap', after: 'b' });
+		c.leaveGap();
+		expect(c.cursor).toEqual({ kind: 'entry', id: 'b' });
+		expect(c.inGap).toBe(false);
+	});
+
+	it('moves the head gap to the first entry, which has nothing before it', () => {
+		const { c } = harness();
+		c.set({ kind: 'gap', after: null });
+		c.leaveGap();
+		expect(c.cursor).toEqual({ kind: 'entry', id: 'a' });
+	});
+
+	it('moves the tail gap to the last entry', () => {
+		const { c } = harness();
+		c.set({ kind: 'gap', after: 'c' });
+		c.leaveGap();
+		expect(c.cursor).toEqual({ kind: 'entry', id: 'c' });
+	});
+
+	it('leaves a bar on an entry, or nowhere, alone', () => {
+		const { c } = harness();
+		c.leaveGap();
+		expect(c.cursor).toBeNull();
+		c.set({ kind: 'entry', id: 'b' });
+		c.leaveGap();
+		expect(c.cursor).toEqual({ kind: 'entry', id: 'b' });
+	});
+});

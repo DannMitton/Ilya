@@ -179,3 +179,44 @@ A first run of gate 4 failed one test, `sources.test.ts`, because my French-rati
 - **The last system is drawn larger.** The page stretches its short last system (svg width 436 against 624) to the page's width, so its notation is 1.43 times the others, and the loupe on m. 17 stands at a stave space of 16.6 where every other measure is 11.4 (17.45 against 12 before this item). I did not find why the loupe's own target does not cancel that; it is older than this item. "One size per song" is therefore true for the loupe on seven of this song's eight systems.
 - **The fit redraws once after the first raise** (about six seconds in a headless run; the time was not measured to the second). A phone does not, since it does no fit. NOT ESTABLISHED: how long it takes on Dann's machine or a long song. A song dismissed mid-fit restarts on the next step of the selection, not at the next raise.
 - **The zoom's range, step, and the French on a phone** were not walked with a thumb; the buttons are 44 px high on a touch screen (the bar's existing rule).
+
+## Item 5: a bar left standing in a gap
+
+WRITTEN.
+
+**What changed.** When a press hides carets that were drawn (a second press on the filled pill, the chevron on Corrections, or choosing Syllables from Corrections), the bar moves from a gap to the gap's anchor, as the brief's DESK DEFAULT of 2026-09-30 says.
+- `loupe-panel.svelte.ts`: `LoupePanel` takes an optional callback and calls it from `choose` and `toggle` when `caretsShown` goes from true to false. `reset()` does not call it: dismissing the loupe clears the cursor anyway.
+- `correction-cursor.svelte.ts`: new `leaveGap()`. The anchor is the entry the gap follows (`previousEntry`, the page's own `gapAnchor`). The head gap has no entry before it, so it takes the first entry after it: a CODE DEFAULT of mine, the brief does not say. A bar on an entry, or nowhere, is left alone.
+- `+page.svelte`: one line, `new LoupePanel(() => stationCursor.leaveGap())`; the page's line count is unchanged.
+- The brief names closing the panel; choosing Syllables from Corrections leaves the same bar in a gap with no caret drawn, so it takes the same path.
+- Tests: 4 in `loupe-panel.test.ts` (fires on a second press, on the chevron, and on choosing Syllables; does not fire where no caret was drawn) and 4 in `correction-cursor.test.ts` (middle, head, and tail gaps; an entry and no cursor untouched).
+
+**Observed** (desk, m. 4, Sunless no. 1): with the bar in a caret gap the readout line is empty and the pill is on Corrections; after the second press on the filled pill the readout reads "E3 · beat 1, pulse 3 · Quarter" and a ring stands on the note, carets hidden. Choosing Syllables with the bar in the head gap likewise lands on an entry. Screenshots: `item5-desk-1-bar-in-a-gap.png`, `item5-desk-2-after-close.png`.
+
+**Gates after item 5.**
+
+| # | Result | Moved |
+|---|---|---|
+| 1 | 251 passed (251) | no |
+| 2 | 235 passed (235) | no |
+| 3 | 0 errors and 12 warnings in 5 files | no |
+| 4 | 1870 passed (1870) | +8 (`loupe-panel.test.ts` 4, `correction-cursor.test.ts` 4) |
+| 5 | 650 passed, 5 skipped (655) | no |
+| 6 | 145 passed (145) | no |
+| 7 | 55 passed (55) | no |
+| 8 | ratchets: OK | offers `MarkupPane.svelte` 1358 to 1302 only |
+
+**Ceilings.** None was raised. I lowered two, in this commit: `Loupe.svelte` 3044 to 3013 and `staff-renderer.ts` 3534 to 3493, to what the files now hold.
+
+**What I could not establish.**
+- **The anchor for the head gap** is my default, not the brief's.
+- **Undo and the stored selection:** moving the bar is a cursor write only; it records nothing on the undo stack. NOT checked against a walk that undoes after closing.
+
+## What could not be established, in one place
+
+1. **Item 1.** Whether "the perimeter" in ruling 3 is the panel region's height; and the ruling's "notes and rests move", which has nothing to act on while both modes share one spacing. Real-display feel of the tween: unseen.
+2. **Item 2.** No visible change was produced. The air between the meter and the first note is the head caret's 3.6 sp margin, and narrowing it breaks the loupe scan's rules 1, 2, and 5a. A design choice for Dann (ruling 11: where the head caret stands).
+3. **Item 3.** The stock fixture has no tie on its sung line; I saw the tie on an edited copy. The tie's look in Finale Maestro's own weight beside the page's tie: not checked.
+4. **Item 4.** On Sunless no. 1 the fit changes the size by 5 percent, because the scrolling measures are limited by the 44 px tap floor. The page draws its last system 1.43 times larger and the loupe's m. 17 follows (16.6 against 11.4); cause in the loupe not found. The fit's cost on a long song, and its redraw after the first raise, were not timed on a real machine.
+5. **Item 5.** The head-gap anchor is a code default; undo after closing was not driven.
+6. **Everywhere.** Nothing here was walked by Dann. WRITTEN is not DONE. The songs are on the Mac: Dann's library (including the m. 12 tie the ruling names) was not available, and every screenshot is of the stock Sunless no. 1 fixture or of copies I edited outside the repository.

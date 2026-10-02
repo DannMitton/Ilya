@@ -112,3 +112,43 @@ describe('LoupePanel', () => {
 		expect(p.mode).toBe('syllables');
 	});
 });
+
+describe('carets hidden by a press (loupe remainder, item 5)', () => {
+	const watch = () => {
+		let n = 0;
+		return { p: new LoupePanel(() => n++), count: () => n };
+	};
+
+	it('fires when a second press shuts the panel on Corrections', () => {
+		const { p, count } = watch();
+		p.choose('corrections');
+		expect(count()).toBe(0);
+		p.choose('corrections');
+		expect(count()).toBe(1);
+	});
+
+	it('fires when the chevron shuts a Corrections panel', () => {
+		const { p, count } = watch();
+		p.choose('corrections');
+		p.toggle();
+		expect(count()).toBe(1);
+	});
+
+	it('fires when Syllables is chosen from Corrections, though the panel stays open', () => {
+		const { p, count } = watch();
+		p.choose('corrections');
+		p.choose('syllables');
+		expect(count()).toBe(1);
+		expect(p.open).toBe(true);
+	});
+
+	it('does not fire where no caret was drawn: Syllables, a shut panel, or opening Corrections', () => {
+		const { p, count } = watch();
+		p.choose('syllables');
+		p.toggle();
+		p.toggle();
+		p.choose('corrections');
+		p.reset();
+		expect(count()).toBe(0);
+	});
+});

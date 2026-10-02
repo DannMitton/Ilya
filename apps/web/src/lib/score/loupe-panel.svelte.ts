@@ -74,6 +74,13 @@ export class LoupePanel {
 	mode = $state<LoupeMode>('syllables');
 	open = $state(false);
 
+	/** Called when a press hides carets that were drawn (loupe remainder, item 5): the page moves a bar out of a gap. */
+	readonly #onCaretsHidden: () => void;
+
+	constructor(onCaretsHidden: () => void = () => {}) {
+		this.#onCaretsHidden = onCaretsHidden;
+	}
+
 	/** The carets are drawn, the pill is filled, and the gaps are stops. */
 	get caretsShown(): boolean {
 		return this.mode === 'corrections' && this.open;
@@ -96,17 +103,21 @@ export class LoupePanel {
 	 * the chevron reopens the same panel.
 	 */
 	choose = (m: LoupeMode): void => {
+		const shown = this.caretsShown;
 		if (this.mode === m && this.open) {
 			this.open = false;
-			return;
+		} else {
+			this.mode = m;
+			this.open = true;
 		}
-		this.mode = m;
-		this.open = true;
+		if (shown && !this.caretsShown) this.#onCaretsHidden();
 	};
 
 	/** The chevron. Its `aria-expanded` names this field. */
 	toggle = (): void => {
+		const shown = this.caretsShown;
 		this.open = !this.open;
+		if (shown && !this.caretsShown) this.#onCaretsHidden();
 	};
 
 	/** The loupe closed: back to Syllables, panel shut. */

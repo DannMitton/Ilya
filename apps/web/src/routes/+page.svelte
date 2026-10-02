@@ -753,7 +753,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   page keeps the names every verb, prop, and comment in this file already
 	   uses, each a `$derived` read of the class, so what depends on them
 	   re-runs exactly when it did before the move. */
-	const loupePanel = new LoupePanel();
+	const loupePanel = new LoupePanel(() => stationCursor.leaveGap());
 	const stationCursor = new CorrectionCursor(() => correctedLine, () => loupePanel.caretsShown);
 	const selectedEventId = $derived(stationCursor.selectedEventId);
 	const gapAfter = $derived(stationCursor.gapAfter);
