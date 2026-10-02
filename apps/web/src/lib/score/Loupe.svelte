@@ -33,6 +33,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	import { followEntry, GrowOnlyWidth, HeldHeight } from '$lib/score/loupe-hold';
 	import { releasesFocus, type LoupeMode } from '$lib/score/loupe-panel.svelte';
 	import { animatePanel, ModeTween, reducedMotion } from '$lib/score/loupe-tween.svelte';
+	import { floorFactor, fitSong, measureHold, singingMeasures, songKey, type MeasureHold } from '$lib/score/loupe-fit';
+	import { loupeZoom, songSizes } from '$lib/score/loupe-fit.svelte';
 	import { headerRightOf, musicInk, pageMetrics, restOrNoteInk, staffVerticals } from '$lib/score/loupe-ink';
 	import { deriveMinGap, fingerprint, offendingPairs, pairSeparations, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/score/loupe-render';
 	import {
@@ -475,7 +477,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		renderHost.innerHTML = markup;
 		return renderHost.firstElementChild;
 	}
+	let gone = false; // the loupe was dismissed: the song's fit stops (item 4)
 	onMount(() => () => {
+		gone = true;
 		renderHost?.remove();
 		renderHost = null;
 	});
@@ -530,6 +534,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			return;
 		}
 		const measure = measureIndex;
+		const fitKey = songKey(drawnFrom.readingScore, window.innerWidth - dockInset, isPhone);
+		const sizeFactor = songSizes.get(fitKey) * loupeZoom.factor;
 
 		/* ONE ATTEMPT AT THE HELD MEASURE, at a `minGap` (stage 3b). The spacing
 		   loop below calls it repeatedly with `derive` set, which measures the
@@ -538,16 +544,25 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   steps. The last call is the one whose frame is drawn. Everything the
 		   frame is made of stands in this closure, unmoved from stage 3a except
 		   where a comment says stage 3b. */
+		/* ITEM 4: `held` IS WHAT THE EFFECT HOLDS; the song's fit hands `attempt` another measure's, and a
+		   factor on the magnification (the fit's, times the singer's zoom). The destructure below shadows
+		   the props and `measure`, so the body reads whichever measure it was handed. */
+		const held: MeasureHold = { measure, ids: ownIds as string[], positions: positions as MeasureHold['positions'], meter };
 		const attempt = (
 			minGap: number,
 			derive: boolean,
+			h: MeasureHold = held,
+			factor: number = sizeFactor,
 		): {
 			frame: Frame;
 			marks: { after: string | null; x: number }[];
 			derivationSets: { after: string | null; x: number }[][];
 			ringRooms: { after: string | null; room: number }[];
 			scale: number;
+			room: number;
+			spacePx: number;
 		} | null => {
+		const { measure, ids: ownIds, positions, meter } = h;
 		const rendered = renderLoupeMeasure(drawnFrom, measure, minGap);
 		const markup = rendered ? systemMarkup(rendered, { fromMeasure: measure, toMeasure: measure }) : '';
 		const sysEl = markup ? mountRender(markup) : null;
@@ -829,12 +844,18 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   2.4 against the thumbnail; on a desk it is whatever brings the stave
 		   to the target, measured against what the page is drawing right now. */
 		const drawnLineGap = lineGap * unitPx;
-		const magnification = isPhone
+		/* ITEM 4. CLAUSE 8 (OPEN.md, THE CARET, 2026-09-18) SAID *"THE NOTATION'S POINT SIZE IS THE FIXED
+		   QUANTITY"*; DANN AMENDED IT 2026-09-28 01:34: the size is set ONCE PER SONG so the ordinary
+		   measures fit without scrolling, and a zoom beside Undo lets the singer go finer. So the figure
+		   above is the BASE, and the magnification is that times `factor`: the song's fit (never above 1,
+		   `loupe-fit.ts`) times the singer's zoom (`loupeZoom`, held for the session). */
+		const baseMagnification = isPhone
 			? MAGNIFICATION
 			: Math.min(
 					DESKTOP_MAX,
 					Math.max(DESKTOP_MIN, drawnLineGap > 0 ? DESKTOP_TARGET_LINE_GAP / drawnLineGap : DESKTOP_MIN),
 				);
+		const magnification = baseMagnification * factor;
 
 		/* ── N.138. THE METER, A THIRD PANEL BETWEEN THE HEAD AND THE BODY ──
 		   Ruled by Dann 2026-09-14: a measure lifted out of its system must carry
@@ -987,7 +1008,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   on a wider span is a SMALLER scale: the loop would widen the drawing and
 		   the cap would shrink it back, and the on-screen separation would not
 		   move. Clause 8: the notation's point size is the fixed quantity and the
-		   window is the variable one. The strip may now be wider than the window,
+		   window is the variable one.
+		   AMENDED BY DANN 2026-09-28 01:34 (item 4, `loupe-fit.ts`): that sentence of clause 8 is retracted. The
+		   size is set once per song and the singer's zoom multiplies it; the search still never shrinks a scale to fit. The strip may now be wider than the window,
 		   which scrolls it (`.loupe-window` in the stylesheet). N.140 owns how
 		   the singer moves what does not fit. */
 		void totalSpan;
@@ -1888,7 +1911,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		const stripWidth = headWidth + meterWidth + carryWidth + bodyContentWidth + tailWidth;
 		const MIN_WIDTH = 280;
 		const fitted = Math.min(maxWidth, Math.max(MIN_WIDTH, stripWidth + FRAME_SIDES));
-		const { width, eased } = derive ? { width: fitted, eased: false } : widthHold.hold(`${measure}|${maxWidth.toFixed(1)}|${font ? 'face' : ''}`, fitted);
+		const { width, eased } = derive ? { width: fitted, eased: false } : widthHold.hold(`${measure}|${maxWidth.toFixed(1)}|${font ? 'face' : ''}|${factor.toFixed(3)}`, fitted);
 
 		/* THE LOUPE CENTRES ON THE PAGE'S OWN AXIS, ruled by Dann 2026-08-27:
 		   it belongs to the page it magnifies, so it lines up with it at every
@@ -1920,6 +1943,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			derivationSets,
 			ringRooms,
 			scale,
+			room: maxWidth,
+			spacePx: drawnLineGap * baseMagnification,
 			frame: {
 			inner: clone.innerHTML,
 			caretsMarkup,
@@ -1960,7 +1985,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			ring,
 			stripWidth,
 			contentHeight,
-			windowHeight: derive ? windowHeight : heightHold.hold(`${measure}|${maxWidth.toFixed(1)}|${unitPx.toFixed(3)}`, windowHeight),
+			windowHeight: derive ? windowHeight : heightHold.hold(`${measure}|${maxWidth.toFixed(1)}|${unitPx.toFixed(3)}|${factor.toFixed(3)}`, windowHeight),
 			centreY,
 			stageTop,
 			stageBottom,
@@ -1985,13 +2010,17 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   key was the bundle's identity), so the key is the measure's render at the
 		   page's own spacing, which changes exactly when what the search reads
 		   changes, and the page's scale. */
-		const pageRender = renderLoupeMeasure(drawnFrom, measure, drawnFrom.spacing.minGap);
-		const key = `${measure}|${isPhone ? 'p' : 'd'}|${unitPx.toFixed(3)}|${positions.length}|${pageRender ? fingerprint(pageRender.svg) : ''}`;
-		let derived = spacingCache.get(key);
-		if (!derived) {
+		/* ITEM 4: THE SEARCH IS A FUNCTION OF (MEASURE, FACTOR), so the song's fit can ask it of every
+		   measure. Only the held measure reports to the console. The factor is in the key: a different
+		   size is a different search. */
+		const spacingFor = (h: MeasureHold, factor: number, report: boolean): DerivedSpacing => {
+			const pageRender = renderLoupeMeasure(drawnFrom, h.measure, drawnFrom.spacing.minGap);
+			const key = `${h.measure}|${isPhone ? 'p' : 'd'}|${unitPx.toFixed(3)}|${factor.toFixed(3)}|${h.positions.length}|${pageRender ? fingerprint(pageRender.svg) : ''}`;
+			let derived = spacingCache.get(key);
+			if (derived) return derived;
 			const t0 = performance.now();
 			derived = deriveMinGap(drawnFrom.spacing.minGap, (g) => {
-				const a = attempt(g, true);
+				const a = attempt(g, true, h, factor);
 				if (!a) return null;
 				const pairs = pairSeparations(a.derivationSets, a.scale);
 				// Calm-loupe slice 7: a caret's ring room meets the floor exactly when it holds the ring.
@@ -2000,22 +2029,50 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			});
 			if (spacingCache.size > 400) spacingCache.clear();
 			spacingCache.set(key, derived);
+			if (!report) return derived;
 			console.debug(
-				`[loupe] m.${measure} minGap ${derived.minGap.toFixed(2)} (page ${drawnFrom.spacing.minGap}), ${derived.iterations} renders in ${(performance.now() - t0).toFixed(0)} ms, worst ${derived.worst.toFixed(2)} px`,
+				`[loupe] m.${h.measure} minGap ${derived.minGap.toFixed(2)} (page ${drawnFrom.spacing.minGap}), ${derived.iterations} renders in ${(performance.now() - t0).toFixed(0)} ms, worst ${derived.worst.toFixed(2)} px`,
 			);
 			if (!derived.converged || derived.worst < TAP_FLOOR_PX - TAP_FLOOR_EPS_PX) {
 				/* THE MEASURE CANNOT HAVE THE WIDTH IT NEEDS. Best spacing reached is
 				   drawn, and the residue goes to the console: no mark on the page and
 				   none in the loupe (CONTRACT.md section 6). */
-				const at = attempt(derived.minGap, true);
+				const at = attempt(derived.minGap, true, h, factor);
 				const pairs = at ? at.derivationSets.flatMap((set) => offendingPairs(set, at.scale)) : [];
 				console.warn(
-					`[loupe] m.${measure} kept minGap ${derived.minGap.toFixed(2)} short of the ${TAP_FLOOR_PX} px floor: ${pairs.join('; ')}${derived.stuck.length ? ` (set aside: ${derived.stuck.join(', ')})` : ''}`,
+					`[loupe] m.${h.measure} kept minGap ${derived.minGap.toFixed(2)} short of the ${TAP_FLOOR_PX} px floor: ${pairs.join('; ')}${derived.stuck.length ? ` (set aside: ${derived.stuck.join(', ')})` : ''}`,
 				);
 			}
-		}
+			return derived;
+		};
+		const derived = spacingFor(held, sizeFactor, true);
 		const result = attempt(derived.minGap, false);
 		frame = result ? result.frame : null;
+
+		/* ITEM 4, THE SONG'S SIZE, ONCE (`loupe-fit.ts`). The first raise on a song draws at the base size and
+		   starts the fit in the page's idle turns; when it settles the effect re-runs at the fitted size, and
+		   the next raise on this song draws at it at once. A phone's base is under the legible floor, so the
+		   fit answers 1 there without drawing anything. */
+		if (result && songSizes.begin(fitKey)) {
+			const score = drawnFrom.readingScore;
+			const idle = () => new Promise<void>((r) => (typeof requestIdleCallback === 'function' ? requestIdleCallback(() => r(), { timeout: 100 }) : setTimeout(r, 0)));
+			void fitSong({
+				measures: singingMeasures(score.vocalLine),
+				widthAt: (m, f) => {
+					const h = measureHold(score, m);
+					if (h.ids.length === 0) return null;
+					const at = attempt(spacingFor(h, f, false).minGap, true, h, f);
+					return at ? at.frame.stripWidth + FRAME_SIDES : null;
+				},
+				room: result.room,
+				floor: floorFactor(result.spacePx),
+				yieldTurn: idle,
+				alive: () => !gone,
+			}).then(
+				(f) => songSizes.finish(fitKey, f),
+				() => songSizes.finish(fitKey, null),
+			);
+		}
 	});
 
 	/* A TAP INSIDE THE LOUPE TAKES THE ENTRY, and places the armed syllable.
@@ -2436,7 +2493,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		     `slots` means no transcription and no score words either, and a
 		     disclosure over nothing is not a disclosure. -->
 		<div class="loupe-syl-hairline"></div>
-		<div class="loupe-bar">
+		<div class="loupe-bar" class:phone={isPhone}>
 			<!-- N.149, DESIGN A, CHOSEN BY DANN 2026-09-17 AND RESTATED 2026-09-20:
 			     *"Two segments in one pill on the left of the bar, the way the
 			     desk selector already pairs Transcription and Fit. The chosen
@@ -2463,7 +2520,11 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 					</button>
 				{/each}
 			</div>
+			<span class="loupe-bar-break" aria-hidden="true"></span>
 			<div class="loupe-bar-right">
+				<!-- ITEM 4, THE ZOOM, ruled by Dann 2026-09-28 01:34 and its words ratified 2026-09-30 11:17: a minus and a plus beside Undo, held for the session, applied to every measure. -->
+				<button type="button" class="loupe-action loupe-zoom" aria-label={T('loupe.zoomOut')} disabled={!loupeZoom.canOut} onclick={loupeZoom.zoomOut}><span aria-hidden="true">{'\u2212'}</span></button>
+				<button type="button" class="loupe-action loupe-zoom" aria-label={T('loupe.zoomIn')} disabled={!loupeZoom.canIn} onclick={loupeZoom.zoomIn}><span aria-hidden="true">+</span></button>
 				{#each actions as action (action.kind)}
 					<button type="button" class="loupe-action" aria-label={action.sentence} onclick={() => (action.kind === 'undo' ? onundo() : onredo())}>
 						<span aria-hidden="true">{action.kind === 'undo' ? '\u21B0' : '\u21B1'}</span>
@@ -2714,6 +2775,40 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		outline-offset: 2px;
 	}
 
+	/* ITEM 4 ON A PHONE. The pill, the zoom, Undo, Redo, and the chevron do not fit one row of 277 px, so the bar
+	   takes two: the pill and the chevron, then the zoom and Undo and Redo (`display: contents` lets the right-hand
+	   group's children take part in the bar's own wrap, and the break keeps the zoom off the first row). Two rows,
+	   always, so Undo appearing does not change the bar's height under the music. */
+	.loupe-bar-break {
+		display: none;
+	}
+
+	.loupe-bar.phone {
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		row-gap: 0;
+	}
+
+	.loupe-bar.phone .loupe-bar-right {
+		display: contents;
+	}
+
+	.loupe-bar.phone .loupe-syl-toggle {
+		order: 1;
+		margin-left: auto;
+	}
+
+	.loupe-bar.phone .loupe-bar-break {
+		display: block;
+		order: 2;
+		flex-basis: 100%;
+		height: 0;
+	}
+
+	.loupe-bar.phone .loupe-action {
+		order: 3;
+	}
+
 	/* Flush right: Undo, Redo, then the chevron outermost, the rule every
 	   station header keeps. */
 	.loupe-bar-right {
@@ -2743,7 +2838,17 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		color: var(--ink-tertiary, #6a655f);
 	}
 
-	.loupe-action:hover {
+	.loupe-zoom {
+		font-size: 1rem;
+		font-weight: 400;
+	}
+
+	.loupe-zoom:disabled {
+		opacity: 0.35;
+		cursor: default;
+	}
+
+	.loupe-action:hover:not(:disabled) {
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
 		text-underline-offset: 3px;

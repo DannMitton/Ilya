@@ -130,3 +130,52 @@ WRITTEN. Seen in the browser on a copy of the fixture with a tie added (kept out
 - **A tie that leaves the last measure of a system** is drawn the same way; I did not check it against a page where the next system starts on the tie's partner.
 - **The run-on tie adds its ink to the slice's lowest or highest ink**, as a page tie does, which can move the IPA row by a pixel or two in a measure that ends in a tie. Not measured.
 - The phone loupe scan was not re-run for this item: the stock fixture has no tie, so the scan's measures do not draw one.
+
+## Item 4: one notation size per song, and a zoom
+
+WRITTEN. The zoom works as ruled. The size fit works as built, and on the one song I could run it changes the size by 5 percent, because the measures that scroll there are limited by the 44 px tap floor and not by the notation's size. Read "What I could not establish".
+
+**What changed.**
+- `loupe-fit.ts` (new, pure): `fitSong`, `denseMeasures`, `floorFactor`, `measureHold`, `songKey`, `zoomFactor`. `loupe-fit.svelte.ts` (new): the session's `songSizes` and `loupeZoom`, kept outside `Loupe.svelte` because that component is rebuilt on every raise. Neither is written to `localStorage`.
+- `Loupe.svelte`: the magnification is the base figure (unchanged: 2.4 on a phone, the derived 12 px stave space on a desk) times a factor, the song's fit times the zoom. `attempt` now takes the measure it draws, so the fit can ask the same search of every measure (`spacingFor`); the held measure reports to the console as before. The first raise on a song starts the fit in idle turns (`requestIdleCallback`); the frame redraws once when it settles, and later raises on the song draw at it at once. The width and height holds are keyed on the factor, so a zoom may shrink what the grow-only rule would otherwise keep.
+- The zoom: a minus and a plus beside Undo (`.loupe-zoom`), `aria-label`s from `loupe.zoomOut` and `loupe.zoomIn`: "Zoom out" and "Zoom in", « Réduire le zoom » and « Agrandir le zoom », the brief's ratified words, verbatim. Three quarter-steps each side (0.51 to 1.95), disabled at the ends. It holds for the session and applies to every measure.
+- On a phone the bar did not fit the zoom (it ran 70 px past the card), so it takes two rows there: the pill and the chevron, then the zoom, Undo, and Redo. Always two, so Undo appearing does not change the bar's height under the music.
+- Clause 8's retraction and amendment are recorded in the comments that cite it (`Loupe.svelte`, the magnification block and the stage 3b note). The brief's cited lines `:682-687` are `hitsFor`; the sentence is not there, as the calm-loupe report said.
+- Tests: `loupe-fit.test.ts`, 19 tests.
+
+**Code defaults, all reversible** (`loupe-fit.ts` names each): a measure is dense above 1.6 times the median strip; the size never goes below the printed vocal score's stave space, 6.5 px (the note in `Loupe.svelte` on `DESKTOP_TARGET_LINE_GAP`, from Gould's rastral of about 7 mm), so a phone, already at about 6.2, is left alone and the fit answers 1 there without drawing anything; a strip that shrinks by under a quarter of the notation's own shrink is set aside like a dense one; at most three passes; a song is keyed by title, measure count, first event, and the room to 8 px, not by its event count, so entering a note does not change the size.
+
+**Observed** (desk 1440 x 900, Sunless no. 1, drawer open, window 741 px; stave space in CSS px read off the stave lines):
+
+| Moment | Stave space | Note |
+|---|---|---|
+| first raise, m. 3 | 12 | base figure; strip 790 px, scrolls |
+| 6 s later | 11.4 | factor 0.95 |
+| m. 4 (narrowest, 638 px) and m. 8 (widest, 780 px) | 11.4 and 11.4 | one size; m. 8 still scrolls |
+| after Zoom out twice | 7.3 | m. 8 now fits (705 of 706 px) |
+| re-raise on m. 4 | 7.3 | the zoom held |
+| after Zoom in four times | 17.8 | m. 4 scrolls |
+| phone, m. 4 | 5.59, then 4.46 after Zoom out | fit leaves a phone alone |
+
+Screenshots: `item4-desk-1-narrowest-m4-one-size.png`, `item4-desk-2-widest-m8-one-size.png`, `item4-desk-3-zoom-out-2.png`, `item4-desk-4-zoom-in-2.png`, `item4-phone-1-zoom-buttons.png`, `item4-phone-2-zoom-out.png`. The phone loupe scan after this item: only rule 5b on m. 16, as at baseline.
+
+**Gates after item 4.**
+
+| # | Result | Moved |
+|---|---|---|
+| 1 | 251 passed (251) | no |
+| 2 | 235 passed (235) | no |
+| 3 | 0 errors and 12 warnings in 5 files | no |
+| 4 | 1862 passed (1862) | +19 (`loupe-fit.test.ts`) |
+| 5 | 650 passed, 5 skipped (655) | no |
+| 6 | 145 passed (145) | no |
+| 7 | 55 passed (55) | no |
+| 8 | ratchets: OK | `Loupe.svelte` could be lowered 3044 to 3013 |
+
+A first run of gate 4 failed one test, `sources.test.ts`, because my French-ratification comment in `i18n.ts` named an author and a year ("Dann 2026"), which the registry test reads as a citation. I reworded the comment; the rerun above is the result.
+
+**What I could not establish.**
+- **Most of the scrolling here is not about size.** At 0.95 six of fifteen measures still scroll on the desk (strips 744 to 780 px in a 741 px window). Those strips are set by the tap floor, 44 px between carets, which is in pixels; a smaller notation gives them back almost nothing. The fit lowered the size only where lowering helped. If Dann wants these measures to fit, the lever is the tap floor on a mouse-driven desk, or a wider window, or the zoom, not this fit. NOT ESTABLISHED: what the fit does on a song whose measures are limited by the notation and not the floor; Sunless no. 1 is the only song I could run.
+- **The last system is drawn larger.** The page stretches its short last system (svg width 436 against 624) to the page's width, so its notation is 1.43 times the others, and the loupe on m. 17 stands at a stave space of 16.6 where every other measure is 11.4 (17.45 against 12 before this item). I did not find why the loupe's own target does not cancel that; it is older than this item. "One size per song" is therefore true for the loupe on seven of this song's eight systems.
+- **The fit redraws once after the first raise** (about six seconds in a headless run; the time was not measured to the second). A phone does not, since it does no fit. NOT ESTABLISHED: how long it takes on Dann's machine or a long song. A song dismissed mid-fit restarts on the next step of the selection, not at the next raise.
+- **The zoom's range, step, and the French on a phone** were not walked with a thumb; the buttons are 44 px high on a touch screen (the bar's existing rule).

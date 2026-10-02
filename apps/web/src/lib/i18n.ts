@@ -492,6 +492,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// style's own CSS (`.loupe-syl-label` in `Loupe.svelte`). The same key
 	// names the disclosure button's aria-label, so nothing else is coined.
 	'loupe.syllables':             { en: 'Syllables',                    fr: 'Syllabes' },
+	/* Item 4, the loupe's zoom. English "Zoom out" and "Zoom in"; French ratified on 2026-09-30 at 11:17, drafted on 2026-09-28. */
+	'loupe.zoomOut':               { en: 'Zoom out',                     fr: 'Réduire le zoom' },
+	'loupe.zoomIn':                { en: 'Zoom in',                      fr: 'Agrandir le zoom' },
 	// Cells the singer can see and cannot use this slice. Slice 3 takes all
 	// three, and none of them carries behaviour here.
 	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },
