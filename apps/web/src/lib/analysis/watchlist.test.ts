@@ -565,7 +565,7 @@ describe('watch-band copy in French (N.82, ruled 2026-09-28)', () => {
 			'Mesure 52\u00a0: le [e], au sommet de votre ambitus et prolongé ici, est un endroit exposé où la voyelle peut se resserrer.'
 		);
 		expect(fr({ ...base, tier: 3, kinds: ['passaggio'], bar: '4', vowel: 'a', word: 'край' })).toBe(
-			'Mesure 4\u00a0: «\u00a0край\u00a0» tombe près de votre passaggio; attendez-vous à devoir gérer le changement de timbre.'
+			'Mesure 4\u00a0: «\u00a0край\u00a0» tombe près de votre *passaggio*; attendez-vous à devoir gérer le changement de timbre.'
 		);
 		expect(
 			fr({ ...base, tier: 4, kinds: ['timbre'], bar: '7', vowel: 'a', word: 'слава', timbreDirection: 'close-to-open' })

@@ -22,6 +22,7 @@
 	import { onMount } from 'svelte';
 	import { smuflFontSizePx, spToPx, pitchToMidi, type RequiredGlyphName } from '@ilya/score-parser';
 	import { t, type Language } from '$lib/i18n';
+	import { italicRuns } from '$lib/italics';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { pitchLabel } from '$lib/voice/note-picker';
 	import { diatonicOf, formatSeconds, type FigureRow, type TessituragramModel } from '$lib/insights/insights';
@@ -403,8 +404,8 @@
 
 	{#if passaggi && figure.zones}
 		<g class="halo" font-size="7.5" fill="var(--rose-ink)">
-			<text x={BARLINE + 8} y={passaggi.primo - 2.5}>{T('insights.figure.primo')}</text>
-			<text x={BARLINE + 8} y={passaggi.secondo - 2.5}>{T('insights.figure.secondo')}</text>
+			<text x={BARLINE + 8} y={passaggi.primo - 2.5}>{#each italicRuns(T('insights.figure.primo')) as run, i (i)}{#if run.title}<tspan font-style="italic">{run.text}</tspan>{:else}{run.text}{/if}{/each}</text>
+			<text x={BARLINE + 8} y={passaggi.secondo - 2.5}>{#each italicRuns(T('insights.figure.secondo')) as run, i (i)}{#if run.title}<tspan font-style="italic">{run.text}</tspan>{:else}{run.text}{/if}{/each}</text>
 		</g>
 		<g class="halo" font-size="8" font-weight="600" fill="var(--rose-ink)" text-anchor="end">
 			<text x={RIGHT} y={passaggi.secondo - 4}>{fill(T('insights.figure.zoneAbove'), { share: shareText(figure.zones.above) })}</text>

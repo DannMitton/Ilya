@@ -140,6 +140,7 @@ describe('French spacing follows the OQLF table', () => {
 		expect(count(';')).toBeGreaterThanOrEqual(16);
 		expect(count('?')).toBeGreaterThanOrEqual(21);
 		expect(count(':')).toBeGreaterThanOrEqual(62);
-		expect(count('«')).toBeGreaterThanOrEqual(8);
+		// 7 since 2026-10-02: the ratified « Qu’est-ce que la friture vocale? » (row 15) dropped the « vocal fry » pair.
+		expect(count('«')).toBeGreaterThanOrEqual(7);
 	});
 });

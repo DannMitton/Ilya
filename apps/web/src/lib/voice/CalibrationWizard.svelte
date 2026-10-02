@@ -44,6 +44,7 @@
 	import { onMount, tick, untrack } from 'svelte';
 	import Pacifier, { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
 	import { t, type Language } from '$lib/i18n';
+	import Italics from '$lib/components/Italics.svelte';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
 	import InsightsIntake from '$lib/voice/InsightsIntake.svelte';
 	import VoiceTypeIntake from '$lib/voice/VoiceTypeIntake.svelte';
@@ -1564,10 +1565,10 @@
 					{/if}
 				</div>
 				<div class="charx-group">
-					<h3 class="charx-heading">{T('calib.characteristics.passaggioHeading')}</h3>
+					<h3 class="charx-heading"><Italics text={T('calib.characteristics.passaggioHeading')} /></h3>
 					<!-- Kimi's example string redrafted agentless (the §A.31 copy
 					     flag): the app never speaks as an agent. -->
-					<p class="charx-hint">{T('calib.characteristics.passaggioHint')}</p>
+					<p class="charx-hint"><Italics text={T('calib.characteristics.passaggioHint')} /></p>
 					<NotePicker
 						label={T('calib.characteristics.passaggioSecondaryLabel')}
 						value={activeVoice.characteristics?.passaggioSecondary}

@@ -116,3 +116,75 @@ The desk's ship script has gate 4 at 1784 and gate 5 at 636; both need moving to
 - The brief says "present only when the page draws at least one note with a timbre analysis". I used `Object.keys(analyzed.events).length > 0`, the existing `hasAcousticMarks`. That is true when any event is analysed, which is the condition under which a stem is semantic.
 - The legend prints on page 1 only, as the withheld entry already did.
 - The brief's report path (`report-code-markup-legend-stems_r1_2026-10-01.md`) was not created; this section is the report, as the cloud-lane prompt directs.
+
+## Row 15: italics on Italian musical terms in the French, and « Qu'est-ce que la friture vocale? »
+
+WRITTEN, not DONE. DONE is Dann's walk after he merges. Brief: `brief-code-french-italics_r1_2026-10-01.md`. The rule is Dann's of 2026-10-01 02:58 (`PRODUCT.md`, "ITALICS ON FOREIGN WORDS IN THE FRENCH"): Roberge's GDRM for Italian musical terms, the OQLF for every other foreign word. No word was changed; italics only, except the one ratified string in item 6.
+
+**The mechanism.** The tree's own `*…*` run (`insights/comment-text.ts`, `toRuns`). `apps/web/src/lib/italics.ts` (new) reads it for a plain string; `apps/web/src/lib/components/Italics.svelte` (new) draws the runs as text and `<em>`, never through `{@html}`. Strings that already reach the page by `{@html}` (`InsightsIntake.svelte`) or by inline HTML (Guide, Learn) take `<em>`, as `piano` and `forte` already did. Strings already read as runs (`comment.*`) take `*…*`.
+
+**The inventory, re-run by this session** over every French `fr:` value in `i18n.ts` (a script over the file, not the memo's table) and over the French branch of `GuideContent.svelte` (`:16` to `:294`) and `LearnContent.svelte` (`:15` to `:2064`). `data/blurb-composer.json` carries no musical loanword. Lines are as of this commit.
+
+| file:line | term | before | after |
+|---|---|---|---|
+| `i18n.ts:760` | passaggio | notes de passaggio | notes de *passaggio* |
+| `i18n.ts:1180` | Passaggio | Passaggio | *Passaggio* |
+| `i18n.ts:1181` | zona | La zona se | La *zona* se |
+| `i18n.ts:1182` | Passaggio | Passaggio primaire | *Passaggio* primaire |
+| `i18n.ts:1183` | Passaggio | Passaggio secondaire | *Passaggio* secondaire |
+| `i18n.ts:1226` | passaggio | votre passaggio | votre *passaggio* |
+| `i18n.ts:1505` | passaggio | Croisements de passaggio | Croisements de *passaggio* |
+| `i18n.ts:1512` | primo, secondo | du primo, du secondo | du *primo*, du *secondo* |
+| `i18n.ts:1513` | passaggi | les deux passaggi | les deux *passaggi* |
+| `i18n.ts:1514` | Primo, secondo | Primo {primo}, secondo {secondo} | *Primo* {primo}, *secondo* {secondo} |
+| `i18n.ts:1549` | passaggio | votre passaggio | votre *passaggio* |
+| `i18n.ts:1597`, `:1598` | primo, secondo | primo, secondo | *primo*, *secondo* |
+| `i18n.ts:1648`, `:1650`, `:1651`, `:1652` | secondo passaggio | secondo passaggio | *secondo passaggio* |
+| `i18n.ts:1676` | decrescendo | léger decrescendo | léger *decrescendo* |
+| `i18n.ts:1678` | legato | saut legato | saut *legato* |
+| `i18n.ts:1717` | passaggio | passaggio secondaire | `<em>passaggio</em>` secondaire |
+| `i18n.ts:1729` | passaggi | vos passaggi | vos `<em>passaggi</em>` |
+| `i18n.ts:1758` | passaggi | des passaggi | des `<em>passaggi</em>` |
+| `i18n.ts:1828`, `:1829` | passaggio | votre passaggio | votre *passaggio* |
+| `GuideContent.svelte:61` | zona di passaggio | la zona di passaggio | la `<em>zona di passaggio</em>` |
+| `GuideContent.svelte:66` | passaggio | tessiture et passaggio | tessiture et `<em>passaggio</em>` |
+| `GuideContent.svelte:68` | passaggio, zona di passaggio | le passaggio, la zona di passaggio | `<em>…</em>` on both |
+| `GuideContent.svelte:70` | passaggio (twice) | son passaggio, un passaggio | `<em>passaggio</em>` on both |
+| `LearnContent.svelte:742` | legato | passages legato | passages `<em>legato</em>` |
+
+Already italic, unchanged: `i18n.ts:1741`, `:1742`, `:1743`, `:1746`, `:1760` (`piano`, `forte`), `LearnContent.svelte:1030` and `:1097` (`ciao`, `dolce`, words cited as words). The memo's 24 changes were 29 occurrences; this inventory found the same terms plus `GuideContent.svelte:70`'s second `passaggio`, which the memo's table lists only once. A test found it (below).
+
+**The 11 plain-text paths, and where italics now draw.** `Italics.svelte` at: `NotesColumn.svelte` (the watch-band lines and the withheld items, `watchlist.ts:640`'s output and `profile.withheld.item3`), `PageFooter.svelte` (the broad-analysis note, composed at `analyze-score-adapter.ts:255`), `CalibrationWizard.svelte` (the passaggio heading and hint), `NotePicker.svelte` (the legend label), `InsightsPane.svelte` (`findingBody`, the withheld item, the crossings row and its counts). `InsightsPane`'s `pitched` snippet reads the runs too, so `*Primo* {primo}, *secondo* {secondo}` keeps its accidental styling. `Tessituragram.svelte` draws the two figure labels as an SVG `<tspan font-style="italic">`.
+
+**Cases for Dann, unchanged.**
+- **tempo** (`i18n.ts:1564-1566`, `GuideContent.svelte:179`, `LearnContent.svelte:985`): the GDRM's list of Italian terms includes it; Usito carries it as a French headword. That is the two sources treating one word differently, which the ruling's third bullet sends to Dann.
+- **primo** and **secondo** as the passaggi's names: my classification, not named in the ruling. Italian, not in Usito, so italic under both authorities by the memo's reading. JUDGEMENT; easy to reverse.
+- **Soprano, Mezzo-soprano** (`i18n.ts:1773-1789`): voice-type names, left roman, French form. **colorature, tessiture, mélisme, friture**: French words, roman, as the ruling says.
+
+**Item 6, « fry ».** `calib.welcome.fryQuestion` French is now exactly « Qu’est-ce que la friture vocale? » (`i18n.ts:1068`, typographic apostrophe as before). Hits for « fry » in the French of the three files after the change: one, `GuideContent.svelte:61` « échantillons de fry », which Dann's ruling leaves for the N.84 rewrite; unchanged. None in `i18n.ts` or `LearnContent.svelte`.
+
+**Tests.** `apps/web/src/lib/french-italics.test.ts` (new, 9): every French value in `i18n.ts` and the French branch of the Guide and Learn has no Italian musical term outside italics (the term list comes from the ruling); the named strings read as above; the English is untouched; every French asterisk is paired, so none can print; the « fry » string and no « fry » in the French of `i18n.ts`. Not vacuous: at least 24 strings set a term in italics. It caught the Guide `:70` second `passaggio` on first run.
+
+**Existing tests that moved, on purpose.** `analyze-score-adapter.test.ts:387`, `:393` and `watchlist.test.ts:568` now expect the `*passaggio*` mark (the functions return the marked string; the sinks draw it). `i18n.test.ts:144`: the floor for « » pairs in French prose goes from 8 to 7, because the ratified question dropped the « vocal fry » pair.
+
+**Ratchets raised on purpose** (`scripts/ratchets.json`, as its `_what` allows; the commit message says why): `CalibrationWizard.svelte` 2123 to 2124 and `InsightsPane.svelte` 1350 to 1351. Each needs one `import` line for the italics component, and each file stood exactly at its ceiling. `InsightsPane` takes one import for two names, through a module export in `Italics.svelte`. The desk may prefer to move work out of those files instead; I did not. `ratchets` also reports that `MarkupPane.svelte` (1358) and `+page.svelte` (6028) could be lowered; not acted on.
+
+**Gates (all eight, after the change).**
+
+| # | Result | Baseline | Moved by |
+|---|---|---|---|
+| 1 | 251 passed (251) | same | |
+| 2 | 235 passed (235) | same | |
+| 3 | 0 errors, 12 warnings in 5 files | same | |
+| 4 | 1797 passed (1797) | 1788 after row 10 | +9: `french-italics.test.ts` |
+| 5 | 644 passed, 5 skipped (649) | same as after row 10 | |
+| 6 | 145 passed (145) | same | |
+| 7 | 55 passed (55) | same | |
+| 8 | ratchets: OK. | same | |
+
+The first full run failed four web tests and the ratchet gate (the three expectations and the floor above, and the two one-line ceiling breaches); each was a consequence of the change, fixed, and the whole run repeated.
+
+**Not established.**
+- Nothing was seen in a browser. Whether each sink draws italics, in the print layout and in the phone layout, is for Dann's walk. The sinks were found by search, so a sink I did not find would show a literal `*`.
+- Whether the watch-band lines and the broad note are copied or exported as text anywhere I did not find; a literal asterisk would show there.
+- `i18n.ts` keys with no consumer found by search: `underlay.heading`, `display.*`, `engraving.*`, `result.words`, `witness.*`, `provenance.*`, `clitic.*`. Their French holds no Italian term, so nothing turned on it.

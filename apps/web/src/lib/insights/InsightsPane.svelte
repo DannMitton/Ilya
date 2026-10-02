@@ -32,6 +32,7 @@
 	 */
 	import { tick, untrack } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
+	import Italics, { italicRuns } from '$lib/components/Italics.svelte';
 	import Tessituragram from '$lib/insights/Tessituragram.svelte';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import { PAGE_SIZES, MARGINS, HEADER_GAP } from '$lib/page-config';
@@ -501,7 +502,7 @@
 {#snippet finding(f: Finding)}
 	<div class="finding">
 		<p class="finding-tag">{findingTag(f)}{' \u00b7 '}<span class="ipa">[{f.vowel}]</span>{#if wordOf(f)}{' \u00b7 '}{wordOf(f)}{/if}</p>
-		<p class="finding-body">{findingBody(f)}{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}{#if findingSeconds(f)}{' '}<span class="finding-further">{findingSeconds(f)}</span>{/if}</p>
+		<p class="finding-body"><Italics text={findingBody(f)} />{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}{#if findingSeconds(f)}{' '}<span class="finding-further">{findingSeconds(f)}</span>{/if}</p>
 		{#if f.kind === 'range' && keyRuler?.stopFor(f.transposition)}<button type="button" class="try-key" onclick={() => keyRuler?.tryKey(keyRuler.stopFor(f.transposition)!)}>{T('insights.tryKey')}</button>{/if}
 	</div>
 {/snippet}
@@ -550,7 +551,7 @@
 	</div>
 {/snippet}
 
-{#snippet pitched(text: string)}{#each accidentalParts(text) as part, j (j)}{#if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
+{#snippet pitched(text: string)}{#each italicRuns(text) as run, i (i)}{#if run.title}<em>{#each accidentalParts(run.text) as part, j (j)}{#if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}</em>{:else}{#each accidentalParts(run.text) as part, j (j)}{#if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/if}{/each}{/snippet}
 
 {#snippet vowelTimes()}
 	<p class="sub-head">{T(model?.phonation.timing === 'none' ? 'insights.phonation.byVowelShare' : 'insights.phonation.byVowel')}</p>
@@ -621,7 +622,7 @@
 							{@render sectionHead(T('profile.withheld.heading'))}
 							<p class="prose">{T('insights.silence.unmeasured')}</p>
 							<ul class="withheld-list">
-								<li>{T('profile.withheld.item3')}</li>
+								<li><Italics text={T('profile.withheld.item3')} /></li>
 								<li>{T('insights.silence.findings')}</li>
 							</ul>
 						</div>
@@ -658,12 +659,12 @@
 								</div>
 
 								<div class="fit-row" role="row">
-									<span role="cell" class="term">{T('insights.fit.crossings')}</span>
+									<span role="cell" class="term"><Italics text={T('insights.fit.crossings')} /></span>
 									<span role="cell">
 										{#if model.crossings.measured}
-											{fill(T('insights.fit.crossingsCount'), model.crossings.measured)}
+											<Italics text={fill(T('insights.fit.crossingsCount'), model.crossings.measured)} />
 										{:else}
-											{T('insights.fit.crossingsUncounted')}
+											<Italics text={T('insights.fit.crossingsUncounted')} />
 										{/if}
 									</span>
 									<span role="cell">

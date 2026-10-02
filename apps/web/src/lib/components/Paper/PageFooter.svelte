@@ -3,6 +3,7 @@
 	import { WITHHELD_SIGLA, stemLegendDrawing, type PreparedSmuflFont } from '@ilya/score-parser';
 	import { MARKUP_WITHHELD_TYPE } from '$lib/markup/legend';
 	import { t, type Language } from '$lib/i18n';
+	import Italics from '$lib/components/Italics.svelte';
 
 	interface Props {
 		pageNumber: number;
@@ -97,7 +98,7 @@
 	{/if}
 
 	{#if broadNote}
-		<p class="broad-legend" role="note">{broadNote}</p>
+		<p class="broad-legend" role="note"><Italics text={broadNote} /></p>
 	{/if}
 
 	<div class="footer-hairline"></div>

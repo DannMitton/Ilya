@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Italics from '$lib/components/Italics.svelte';
 	/**
 	 * The trailing notes sheet's column: the withheld statement (item 1.8), the
 	 * octave notice, and the "For your consideration" band, in that order (Dann's
@@ -83,7 +84,7 @@
 			<p class="withheld-lede">{withheld.lede}</p>
 			<ul class="withheld-list">
 				{#each withheld.items as item (item)}
-					<li class="withheld-line">{item}</li>
+					<li class="withheld-line"><Italics text={item} /></li>
 				{/each}
 			</ul>
 			<p class="withheld-close">{withheld.close}</p>
@@ -97,7 +98,7 @@
 			<p class="watch-band-header">{bandHeader}</p>
 			<ul class="watch-band-list">
 				{#each lines.slice(share.lines[0], share.lines[1]) as line (line)}
-					<li class="watch-band-line">{line}</li>
+					<li class="watch-band-line"><Italics text={line} /></li>
 				{/each}
 			</ul>
 		</aside>

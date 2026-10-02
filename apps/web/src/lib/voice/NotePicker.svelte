@@ -28,6 +28,7 @@
 	 * restores the singer's staged context instead of resetting it.
 	 */
 	import { t, type Language } from '$lib/i18n';
+	import Italics from '$lib/components/Italics.svelte';
 	import type { Pitch, RequiredGlyphName } from '@ilya/score-parser';
 	import { smuflFontSizePx, spToPx } from '@ilya/score-parser';
 	import type { LoadedNotationFont } from '$lib/score/notation-fonts';
@@ -148,7 +149,7 @@
 </script>
 
 <fieldset class="np">
-	<legend class="np-legend">{label}</legend>
+	<legend class="np-legend"><Italics text={label} /></legend>
 	<div class="np-row">
 		<div class="np-controls">
 			<select
