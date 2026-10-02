@@ -1,0 +1,2770 @@
+{
+ "shift": 0,
+ "shiftCounts": [
+  {
+   "shift": -24,
+   "pitchRight": 0,
+   "matched": 173
+  },
+  {
+   "shift": -12,
+   "pitchRight": 0,
+   "matched": 173
+  },
+  {
+   "shift": 0,
+   "pitchRight": 163,
+   "matched": 173
+  },
+  {
+   "shift": 12,
+   "pitchRight": 0,
+   "matched": 173
+  },
+  {
+   "shift": 24,
+   "pitchRight": 0,
+   "matched": 173
+  }
+ ],
+ "bars": {
+  "truth": 99,
+  "read": 99,
+  "allRight": 5
+ },
+ "notes": {
+  "truth": 174,
+  "read": 173,
+  "matched": 173,
+  "missing": 1,
+  "extra": 0,
+  "pitchRight": 163,
+  "pitchWrong": 10,
+  "pitchAbstained": 0,
+  "assumedNaturalRight": 0,
+  "lengthRight": 46,
+  "lengthWrong": 4,
+  "lengthAbstained": 123,
+  "bothRight": 44
+ },
+ "rests": {
+  "truth": 48,
+  "read": 10,
+  "matched": 10,
+  "lengthRight": 10
+ },
+ "abstentions": {
+  "pitch": 0,
+  "duration": 123,
+  "onset": 67,
+  "metre": 0,
+  "sum": 86
+ },
+ "headline": 25.28735632183908,
+ "barMetres": [
+  {
+   "readerBar": 0,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 1,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 2,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 3,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 4,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 5,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 6,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 7,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 7,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 8,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 8,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 9,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 9,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 10,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 10,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 11,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 11,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 12,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 12,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 13,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 13,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 14,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 14,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 15,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 15,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 16,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 16,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 17,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 17,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 18,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 18,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 19,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 19,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 20,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 20,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 21,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 21,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 22,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 22,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 23,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 23,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 24,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 24,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 25,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 25,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 26,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 26,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 27,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 27,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 28,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 28,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 29,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 29,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 30,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 30,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 31,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 31,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 32,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 32,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 33,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 33,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 34,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 34,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 35,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 35,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 36,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 36,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 37,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 37,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 38,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 38,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 39,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 39,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 40,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 40,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 41,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 41,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 42,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 42,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 43,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 43,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 44,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 44,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 45,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 45,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 46,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 46,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 47,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 47,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 48,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 48,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 49,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 49,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 50,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 50,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 51,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 51,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 52,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 52,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 53,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 53,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 54,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 54,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 55,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 55,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 56,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 56,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 57,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 57,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 58,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 58,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 59,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 59,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 60,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 60,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 61,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 62,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 62,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 63,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 63,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 64,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 64,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 65,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 65,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 66,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 66,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 67,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 67,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 68,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 68,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 69,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 70,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 70,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 71,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 71,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 72,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 72,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 73,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 73,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 74,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 74,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 75,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 75,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 76,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 76,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 77,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 77,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 78,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 78,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 79,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 79,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 80,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 80,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 81,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 81,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 82,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 82,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 83,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 84,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 84,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 85,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 85,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 86,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 86,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 87,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 87,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 88,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 88,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 89,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 89,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 90,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 90,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 91,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 91,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 92,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": 92,
+   "truthDuration": "3/8",
+   "sameLength": false
+  },
+  {
+   "readerBar": 93,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 94,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 95,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 96,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 97,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  },
+  {
+   "readerBar": 98,
+   "metre": "9/8",
+   "readerDuration": "9/8",
+   "truthBar": null,
+   "truthDuration": null,
+   "sameLength": null
+  }
+ ],
+ "differences": [
+  {
+   "kind": "missing",
+   "truthIndex": 0,
+   "readerIndex": null,
+   "truthBar": 7,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 2,
+   "readerIndex": 1,
+   "truthBar": 7,
+   "readerBar": 7
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 3,
+   "readerIndex": 2,
+   "truthBar": 8,
+   "readerBar": 8
+  },
+  {
+   "kind": "length wrong",
+   "truthIndex": 4,
+   "readerIndex": 3,
+   "truthBar": 8,
+   "readerBar": 8
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 5,
+   "readerIndex": 4,
+   "truthBar": 8,
+   "readerBar": 8
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 7,
+   "readerIndex": 6,
+   "truthBar": 9,
+   "readerBar": 9
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 8,
+   "readerIndex": null,
+   "truthBar": 10,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 10,
+   "readerIndex": 8,
+   "truthBar": 10,
+   "readerBar": 10
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 12,
+   "readerIndex": 10,
+   "truthBar": 11,
+   "readerBar": 11
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 13,
+   "readerIndex": null,
+   "truthBar": 12,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 15,
+   "readerIndex": 12,
+   "truthBar": 12,
+   "readerBar": 12
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 16,
+   "readerIndex": 13,
+   "truthBar": 13,
+   "readerBar": 13
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 18,
+   "readerIndex": 15,
+   "truthBar": 13,
+   "readerBar": 13
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 19,
+   "readerIndex": 16,
+   "truthBar": 14,
+   "readerBar": 14
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 21,
+   "readerIndex": 18,
+   "truthBar": 14,
+   "readerBar": 14
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 23,
+   "readerIndex": 20,
+   "truthBar": 15,
+   "readerBar": 15
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 24,
+   "readerIndex": 21,
+   "truthBar": 16,
+   "readerBar": 16
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 25,
+   "readerIndex": 22,
+   "truthBar": 16,
+   "readerBar": 16
+  },
+  {
+   "kind": "length wrong",
+   "truthIndex": 26,
+   "readerIndex": 23,
+   "truthBar": 16,
+   "readerBar": 16
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 28,
+   "readerIndex": null,
+   "truthBar": 17,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 29,
+   "readerIndex": null,
+   "truthBar": 18,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 31,
+   "readerIndex": 26,
+   "truthBar": 18,
+   "readerBar": 18
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 32,
+   "readerIndex": 27,
+   "truthBar": 19,
+   "readerBar": 19
+  },
+  {
+   "kind": "pitch wrong",
+   "truthIndex": 33,
+   "readerIndex": 28,
+   "truthBar": 19,
+   "readerBar": 19
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 36,
+   "readerIndex": 31,
+   "truthBar": 20,
+   "readerBar": 20
+  },
+  {
+   "kind": "pitch wrong + length abstained",
+   "truthIndex": 37,
+   "readerIndex": 32,
+   "truthBar": 21,
+   "readerBar": 21
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 38,
+   "readerIndex": 33,
+   "truthBar": 21,
+   "readerBar": 21
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 39,
+   "readerIndex": 34,
+   "truthBar": 21,
+   "readerBar": 21
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 40,
+   "readerIndex": 35,
+   "truthBar": 22,
+   "readerBar": 22
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 41,
+   "readerIndex": 36,
+   "truthBar": 22,
+   "readerBar": 22
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 42,
+   "readerIndex": 37,
+   "truthBar": 22,
+   "readerBar": 22
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 44,
+   "readerIndex": null,
+   "truthBar": 24,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 45,
+   "readerIndex": null,
+   "truthBar": 24,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 46,
+   "readerIndex": 39,
+   "truthBar": 24,
+   "readerBar": 24
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 47,
+   "readerIndex": 40,
+   "truthBar": 25,
+   "readerBar": 25
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 48,
+   "readerIndex": 41,
+   "truthBar": 25,
+   "readerBar": 25
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 49,
+   "readerIndex": 42,
+   "truthBar": 25,
+   "readerBar": 25
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 50,
+   "readerIndex": 43,
+   "truthBar": 26,
+   "readerBar": 26
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 51,
+   "readerIndex": 44,
+   "truthBar": 26,
+   "readerBar": 26
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 52,
+   "readerIndex": null,
+   "truthBar": 27,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 53,
+   "readerIndex": null,
+   "truthBar": 27,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 54,
+   "readerIndex": 45,
+   "truthBar": 27,
+   "readerBar": 27
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 59,
+   "readerIndex": 50,
+   "truthBar": 29,
+   "readerBar": 29
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 62,
+   "readerIndex": 53,
+   "truthBar": 30,
+   "readerBar": 30
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 63,
+   "readerIndex": 54,
+   "truthBar": 31,
+   "readerBar": 31
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 65,
+   "readerIndex": 56,
+   "truthBar": 31,
+   "readerBar": 31
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 66,
+   "readerIndex": 57,
+   "truthBar": 32,
+   "readerBar": 32
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 67,
+   "readerIndex": 58,
+   "truthBar": 32,
+   "readerBar": 32
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 68,
+   "readerIndex": 59,
+   "truthBar": 33,
+   "readerBar": 33
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 69,
+   "readerIndex": 60,
+   "truthBar": 33,
+   "readerBar": 33
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 70,
+   "readerIndex": 61,
+   "truthBar": 33,
+   "readerBar": 33
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 72,
+   "readerIndex": 63,
+   "truthBar": 34,
+   "readerBar": 34
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 73,
+   "readerIndex": null,
+   "truthBar": 35,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 74,
+   "readerIndex": null,
+   "truthBar": 35,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 75,
+   "readerIndex": 64,
+   "truthBar": 35,
+   "readerBar": 35
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 78,
+   "readerIndex": null,
+   "truthBar": 37,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 79,
+   "readerIndex": null,
+   "truthBar": 37,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 80,
+   "readerIndex": 67,
+   "truthBar": 37,
+   "readerBar": 37
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 81,
+   "readerIndex": 68,
+   "truthBar": 38,
+   "readerBar": 38
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 83,
+   "readerIndex": 70,
+   "truthBar": 38,
+   "readerBar": 38
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 84,
+   "readerIndex": 71,
+   "truthBar": 39,
+   "readerBar": 39
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 85,
+   "readerIndex": 72,
+   "truthBar": 39,
+   "readerBar": 39
+  },
+  {
+   "kind": "pitch wrong + length abstained",
+   "truthIndex": 86,
+   "readerIndex": 73,
+   "truthBar": 39,
+   "readerBar": 39
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 88,
+   "readerIndex": null,
+   "truthBar": 41,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 89,
+   "readerIndex": null,
+   "truthBar": 41,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 93,
+   "readerIndex": 78,
+   "truthBar": 42,
+   "readerBar": 42
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 94,
+   "readerIndex": 79,
+   "truthBar": 43,
+   "readerBar": 43
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 98,
+   "readerIndex": 83,
+   "truthBar": 44,
+   "readerBar": 44
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 99,
+   "readerIndex": null,
+   "truthBar": 45,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 100,
+   "readerIndex": null,
+   "truthBar": 45,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 101,
+   "readerIndex": 84,
+   "truthBar": 45,
+   "readerBar": 45
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 102,
+   "readerIndex": 85,
+   "truthBar": 46,
+   "readerBar": 46
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 104,
+   "readerIndex": 87,
+   "truthBar": 46,
+   "readerBar": 46
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 105,
+   "readerIndex": 88,
+   "truthBar": 47,
+   "readerBar": 47
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 106,
+   "readerIndex": 89,
+   "truthBar": 47,
+   "readerBar": 47
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 107,
+   "readerIndex": 90,
+   "truthBar": 47,
+   "readerBar": 47
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 108,
+   "readerIndex": 91,
+   "truthBar": 48,
+   "readerBar": 48
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 109,
+   "readerIndex": null,
+   "truthBar": 49,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 110,
+   "readerIndex": null,
+   "truthBar": 49,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 111,
+   "readerIndex": 92,
+   "truthBar": 49,
+   "readerBar": 49
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 114,
+   "readerIndex": 95,
+   "truthBar": 50,
+   "readerBar": 50
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 115,
+   "readerIndex": 96,
+   "truthBar": 51,
+   "readerBar": 51
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 116,
+   "readerIndex": 97,
+   "truthBar": 51,
+   "readerBar": 51
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 117,
+   "readerIndex": 98,
+   "truthBar": 51,
+   "readerBar": 51
+  },
+  {
+   "kind": "pitch wrong + length abstained",
+   "truthIndex": 119,
+   "readerIndex": 100,
+   "truthBar": 52,
+   "readerBar": 52
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 120,
+   "readerIndex": null,
+   "truthBar": 53,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 121,
+   "readerIndex": null,
+   "truthBar": 53,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 123,
+   "readerIndex": 102,
+   "truthBar": 54,
+   "readerBar": 54
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 125,
+   "readerIndex": 104,
+   "truthBar": 54,
+   "readerBar": 54
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 126,
+   "readerIndex": 105,
+   "truthBar": 55,
+   "readerBar": 55
+  },
+  {
+   "kind": "pitch wrong + length abstained",
+   "truthIndex": 127,
+   "readerIndex": 106,
+   "truthBar": 55,
+   "readerBar": 55
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 128,
+   "readerIndex": 107,
+   "truthBar": 55,
+   "readerBar": 55
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 129,
+   "readerIndex": 108,
+   "truthBar": 56,
+   "readerBar": 56
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 131,
+   "readerIndex": null,
+   "truthBar": 57,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 132,
+   "readerIndex": null,
+   "truthBar": 57,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 133,
+   "readerIndex": null,
+   "truthBar": 58,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 134,
+   "readerIndex": null,
+   "truthBar": 58,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 135,
+   "readerIndex": 110,
+   "truthBar": 58,
+   "readerBar": 58
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 136,
+   "readerIndex": 111,
+   "truthBar": 59,
+   "readerBar": 59
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 137,
+   "readerIndex": 112,
+   "truthBar": 59,
+   "readerBar": 59
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 138,
+   "readerIndex": 113,
+   "truthBar": 59,
+   "readerBar": 59
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 139,
+   "readerIndex": 114,
+   "truthBar": 60,
+   "readerBar": 60
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 140,
+   "readerIndex": 115,
+   "truthBar": 60,
+   "readerBar": 60
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 141,
+   "readerIndex": 116,
+   "truthBar": 60,
+   "readerBar": 60
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 143,
+   "readerIndex": 118,
+   "truthBar": 62,
+   "readerBar": 62
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 144,
+   "readerIndex": null,
+   "truthBar": 63,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 145,
+   "readerIndex": null,
+   "truthBar": 63,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 146,
+   "readerIndex": 119,
+   "truthBar": 63,
+   "readerBar": 63
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 148,
+   "readerIndex": 121,
+   "truthBar": 64,
+   "readerBar": 64
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 150,
+   "readerIndex": 123,
+   "truthBar": 65,
+   "readerBar": 65
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 151,
+   "readerIndex": 124,
+   "truthBar": 65,
+   "readerBar": 65
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 152,
+   "readerIndex": 125,
+   "truthBar": 65,
+   "readerBar": 65
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 153,
+   "readerIndex": 126,
+   "truthBar": 66,
+   "readerBar": 66
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 154,
+   "readerIndex": 127,
+   "truthBar": 66,
+   "readerBar": 66
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 155,
+   "readerIndex": 128,
+   "truthBar": 67,
+   "readerBar": 67
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 156,
+   "readerIndex": 129,
+   "truthBar": 67,
+   "readerBar": 67
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 157,
+   "readerIndex": 130,
+   "truthBar": 67,
+   "readerBar": 67
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 158,
+   "readerIndex": 131,
+   "truthBar": 68,
+   "readerBar": 68
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 159,
+   "readerIndex": 132,
+   "truthBar": 68,
+   "readerBar": 68
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 160,
+   "readerIndex": 133,
+   "truthBar": 68,
+   "readerBar": 68
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 162,
+   "readerIndex": 135,
+   "truthBar": 70,
+   "readerBar": 70
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 163,
+   "readerIndex": null,
+   "truthBar": 71,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 164,
+   "readerIndex": null,
+   "truthBar": 71,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 165,
+   "readerIndex": 136,
+   "truthBar": 71,
+   "readerBar": 71
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 168,
+   "readerIndex": 139,
+   "truthBar": 72,
+   "readerBar": 72
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 169,
+   "readerIndex": 140,
+   "truthBar": 73,
+   "readerBar": 73
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 170,
+   "readerIndex": 141,
+   "truthBar": 73,
+   "readerBar": 73
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 171,
+   "readerIndex": 142,
+   "truthBar": 73,
+   "readerBar": 73
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 172,
+   "readerIndex": 143,
+   "truthBar": 74,
+   "readerBar": 74
+  },
+  {
+   "kind": "pitch wrong + length wrong",
+   "truthIndex": 175,
+   "readerIndex": 146,
+   "truthBar": 75,
+   "readerBar": 75
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 176,
+   "readerIndex": 147,
+   "truthBar": 76,
+   "readerBar": 76
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 177,
+   "readerIndex": 148,
+   "truthBar": 76,
+   "readerBar": 76
+  },
+  {
+   "kind": "length wrong",
+   "truthIndex": 179,
+   "readerIndex": 150,
+   "truthBar": 77,
+   "readerBar": 77
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 180,
+   "readerIndex": 151,
+   "truthBar": 77,
+   "readerBar": 77
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 181,
+   "readerIndex": 152,
+   "truthBar": 77,
+   "readerBar": 77
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 182,
+   "readerIndex": null,
+   "truthBar": 78,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 183,
+   "readerIndex": 153,
+   "truthBar": 78,
+   "readerBar": 78
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 184,
+   "readerIndex": 154,
+   "truthBar": 78,
+   "readerBar": 78
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 186,
+   "readerIndex": 156,
+   "truthBar": 79,
+   "readerBar": 79
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 187,
+   "readerIndex": null,
+   "truthBar": 79,
+   "readerBar": null
+  },
+  {
+   "kind": "pitch wrong + length abstained",
+   "truthIndex": 188,
+   "readerIndex": 157,
+   "truthBar": 79,
+   "readerBar": 79
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 189,
+   "readerIndex": 158,
+   "truthBar": 80,
+   "readerBar": 80
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 190,
+   "readerIndex": 159,
+   "truthBar": 80,
+   "readerBar": 80
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 191,
+   "readerIndex": 160,
+   "truthBar": 80,
+   "readerBar": 80
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 193,
+   "readerIndex": 162,
+   "truthBar": 81,
+   "readerBar": 81
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 194,
+   "readerIndex": 163,
+   "truthBar": 81,
+   "readerBar": 81
+  },
+  {
+   "kind": "pitch wrong",
+   "truthIndex": 195,
+   "readerIndex": 164,
+   "truthBar": 82,
+   "readerBar": 82
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 196,
+   "readerIndex": null,
+   "truthBar": 82,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 197,
+   "readerIndex": null,
+   "truthBar": 82,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 198,
+   "readerIndex": null,
+   "truthBar": 84,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 199,
+   "readerIndex": null,
+   "truthBar": 84,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 202,
+   "readerIndex": 167,
+   "truthBar": 85,
+   "readerBar": 85
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 203,
+   "readerIndex": 168,
+   "truthBar": 85,
+   "readerBar": 85
+  },
+  {
+   "kind": "pitch wrong + length abstained",
+   "truthIndex": 204,
+   "readerIndex": 169,
+   "truthBar": 86,
+   "readerBar": 86
+  },
+  {
+   "kind": "pitch wrong + length abstained",
+   "truthIndex": 206,
+   "readerIndex": 171,
+   "truthBar": 86,
+   "readerBar": 86
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 207,
+   "readerIndex": 172,
+   "truthBar": 87,
+   "readerBar": 87
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 208,
+   "readerIndex": 173,
+   "truthBar": 87,
+   "readerBar": 87
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 209,
+   "readerIndex": null,
+   "truthBar": 88,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 210,
+   "readerIndex": null,
+   "truthBar": 88,
+   "readerBar": null
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 211,
+   "readerIndex": 174,
+   "truthBar": 88,
+   "readerBar": 88
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 212,
+   "readerIndex": 175,
+   "truthBar": 89,
+   "readerBar": 89
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 213,
+   "readerIndex": 176,
+   "truthBar": 89,
+   "readerBar": 89
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 214,
+   "readerIndex": 177,
+   "truthBar": 89,
+   "readerBar": 89
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 215,
+   "readerIndex": 178,
+   "truthBar": 90,
+   "readerBar": 90
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 216,
+   "readerIndex": 179,
+   "truthBar": 90,
+   "readerBar": 90
+  },
+  {
+   "kind": "length abstained",
+   "truthIndex": 217,
+   "readerIndex": 180,
+   "truthBar": 90,
+   "readerBar": 90
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 220,
+   "readerIndex": null,
+   "truthBar": 92,
+   "readerBar": null
+  },
+  {
+   "kind": "missing",
+   "truthIndex": 221,
+   "readerIndex": null,
+   "truthBar": 92,
+   "readerBar": null
+  }
+ ],
+ "matches": [
+  {
+   "truthIndex": 1,
+   "readerIndex": 0
+  },
+  {
+   "truthIndex": 2,
+   "readerIndex": 1
+  },
+  {
+   "truthIndex": 3,
+   "readerIndex": 2
+  },
+  {
+   "truthIndex": 4,
+   "readerIndex": 3
+  },
+  {
+   "truthIndex": 5,
+   "readerIndex": 4
+  },
+  {
+   "truthIndex": 6,
+   "readerIndex": 5
+  },
+  {
+   "truthIndex": 7,
+   "readerIndex": 6
+  },
+  {
+   "truthIndex": 9,
+   "readerIndex": 7
+  },
+  {
+   "truthIndex": 10,
+   "readerIndex": 8
+  },
+  {
+   "truthIndex": 11,
+   "readerIndex": 9
+  },
+  {
+   "truthIndex": 12,
+   "readerIndex": 10
+  },
+  {
+   "truthIndex": 14,
+   "readerIndex": 11
+  },
+  {
+   "truthIndex": 15,
+   "readerIndex": 12
+  },
+  {
+   "truthIndex": 16,
+   "readerIndex": 13
+  },
+  {
+   "truthIndex": 17,
+   "readerIndex": 14
+  },
+  {
+   "truthIndex": 18,
+   "readerIndex": 15
+  },
+  {
+   "truthIndex": 19,
+   "readerIndex": 16
+  },
+  {
+   "truthIndex": 20,
+   "readerIndex": 17
+  },
+  {
+   "truthIndex": 21,
+   "readerIndex": 18
+  },
+  {
+   "truthIndex": 22,
+   "readerIndex": 19
+  },
+  {
+   "truthIndex": 23,
+   "readerIndex": 20
+  },
+  {
+   "truthIndex": 24,
+   "readerIndex": 21
+  },
+  {
+   "truthIndex": 25,
+   "readerIndex": 22
+  },
+  {
+   "truthIndex": 26,
+   "readerIndex": 23
+  },
+  {
+   "truthIndex": 27,
+   "readerIndex": 24
+  },
+  {
+   "truthIndex": 30,
+   "readerIndex": 25
+  },
+  {
+   "truthIndex": 31,
+   "readerIndex": 26
+  },
+  {
+   "truthIndex": 32,
+   "readerIndex": 27
+  },
+  {
+   "truthIndex": 33,
+   "readerIndex": 28
+  },
+  {
+   "truthIndex": 34,
+   "readerIndex": 29
+  },
+  {
+   "truthIndex": 35,
+   "readerIndex": 30
+  },
+  {
+   "truthIndex": 36,
+   "readerIndex": 31
+  },
+  {
+   "truthIndex": 37,
+   "readerIndex": 32
+  },
+  {
+   "truthIndex": 38,
+   "readerIndex": 33
+  },
+  {
+   "truthIndex": 39,
+   "readerIndex": 34
+  },
+  {
+   "truthIndex": 40,
+   "readerIndex": 35
+  },
+  {
+   "truthIndex": 41,
+   "readerIndex": 36
+  },
+  {
+   "truthIndex": 42,
+   "readerIndex": 37
+  },
+  {
+   "truthIndex": 43,
+   "readerIndex": 38
+  },
+  {
+   "truthIndex": 46,
+   "readerIndex": 39
+  },
+  {
+   "truthIndex": 47,
+   "readerIndex": 40
+  },
+  {
+   "truthIndex": 48,
+   "readerIndex": 41
+  },
+  {
+   "truthIndex": 49,
+   "readerIndex": 42
+  },
+  {
+   "truthIndex": 50,
+   "readerIndex": 43
+  },
+  {
+   "truthIndex": 51,
+   "readerIndex": 44
+  },
+  {
+   "truthIndex": 54,
+   "readerIndex": 45
+  },
+  {
+   "truthIndex": 55,
+   "readerIndex": 46
+  },
+  {
+   "truthIndex": 56,
+   "readerIndex": 47
+  },
+  {
+   "truthIndex": 57,
+   "readerIndex": 48
+  },
+  {
+   "truthIndex": 58,
+   "readerIndex": 49
+  },
+  {
+   "truthIndex": 59,
+   "readerIndex": 50
+  },
+  {
+   "truthIndex": 60,
+   "readerIndex": 51
+  },
+  {
+   "truthIndex": 61,
+   "readerIndex": 52
+  },
+  {
+   "truthIndex": 62,
+   "readerIndex": 53
+  },
+  {
+   "truthIndex": 63,
+   "readerIndex": 54
+  },
+  {
+   "truthIndex": 64,
+   "readerIndex": 55
+  },
+  {
+   "truthIndex": 65,
+   "readerIndex": 56
+  },
+  {
+   "truthIndex": 66,
+   "readerIndex": 57
+  },
+  {
+   "truthIndex": 67,
+   "readerIndex": 58
+  },
+  {
+   "truthIndex": 68,
+   "readerIndex": 59
+  },
+  {
+   "truthIndex": 69,
+   "readerIndex": 60
+  },
+  {
+   "truthIndex": 70,
+   "readerIndex": 61
+  },
+  {
+   "truthIndex": 71,
+   "readerIndex": 62
+  },
+  {
+   "truthIndex": 72,
+   "readerIndex": 63
+  },
+  {
+   "truthIndex": 75,
+   "readerIndex": 64
+  },
+  {
+   "truthIndex": 76,
+   "readerIndex": 65
+  },
+  {
+   "truthIndex": 77,
+   "readerIndex": 66
+  },
+  {
+   "truthIndex": 80,
+   "readerIndex": 67
+  },
+  {
+   "truthIndex": 81,
+   "readerIndex": 68
+  },
+  {
+   "truthIndex": 82,
+   "readerIndex": 69
+  },
+  {
+   "truthIndex": 83,
+   "readerIndex": 70
+  },
+  {
+   "truthIndex": 84,
+   "readerIndex": 71
+  },
+  {
+   "truthIndex": 85,
+   "readerIndex": 72
+  },
+  {
+   "truthIndex": 86,
+   "readerIndex": 73
+  },
+  {
+   "truthIndex": 87,
+   "readerIndex": 74
+  },
+  {
+   "truthIndex": 90,
+   "readerIndex": 75
+  },
+  {
+   "truthIndex": 91,
+   "readerIndex": 76
+  },
+  {
+   "truthIndex": 92,
+   "readerIndex": 77
+  },
+  {
+   "truthIndex": 93,
+   "readerIndex": 78
+  },
+  {
+   "truthIndex": 94,
+   "readerIndex": 79
+  },
+  {
+   "truthIndex": 95,
+   "readerIndex": 80
+  },
+  {
+   "truthIndex": 96,
+   "readerIndex": 81
+  },
+  {
+   "truthIndex": 97,
+   "readerIndex": 82
+  },
+  {
+   "truthIndex": 98,
+   "readerIndex": 83
+  },
+  {
+   "truthIndex": 101,
+   "readerIndex": 84
+  },
+  {
+   "truthIndex": 102,
+   "readerIndex": 85
+  },
+  {
+   "truthIndex": 103,
+   "readerIndex": 86
+  },
+  {
+   "truthIndex": 104,
+   "readerIndex": 87
+  },
+  {
+   "truthIndex": 105,
+   "readerIndex": 88
+  },
+  {
+   "truthIndex": 106,
+   "readerIndex": 89
+  },
+  {
+   "truthIndex": 107,
+   "readerIndex": 90
+  },
+  {
+   "truthIndex": 108,
+   "readerIndex": 91
+  },
+  {
+   "truthIndex": 111,
+   "readerIndex": 92
+  },
+  {
+   "truthIndex": 112,
+   "readerIndex": 93
+  },
+  {
+   "truthIndex": 113,
+   "readerIndex": 94
+  },
+  {
+   "truthIndex": 114,
+   "readerIndex": 95
+  },
+  {
+   "truthIndex": 115,
+   "readerIndex": 96
+  },
+  {
+   "truthIndex": 116,
+   "readerIndex": 97
+  },
+  {
+   "truthIndex": 117,
+   "readerIndex": 98
+  },
+  {
+   "truthIndex": 118,
+   "readerIndex": 99
+  },
+  {
+   "truthIndex": 119,
+   "readerIndex": 100
+  },
+  {
+   "truthIndex": 122,
+   "readerIndex": 101
+  },
+  {
+   "truthIndex": 123,
+   "readerIndex": 102
+  },
+  {
+   "truthIndex": 124,
+   "readerIndex": 103
+  },
+  {
+   "truthIndex": 125,
+   "readerIndex": 104
+  },
+  {
+   "truthIndex": 126,
+   "readerIndex": 105
+  },
+  {
+   "truthIndex": 127,
+   "readerIndex": 106
+  },
+  {
+   "truthIndex": 128,
+   "readerIndex": 107
+  },
+  {
+   "truthIndex": 129,
+   "readerIndex": 108
+  },
+  {
+   "truthIndex": 130,
+   "readerIndex": 109
+  },
+  {
+   "truthIndex": 135,
+   "readerIndex": 110
+  },
+  {
+   "truthIndex": 136,
+   "readerIndex": 111
+  },
+  {
+   "truthIndex": 137,
+   "readerIndex": 112
+  },
+  {
+   "truthIndex": 138,
+   "readerIndex": 113
+  },
+  {
+   "truthIndex": 139,
+   "readerIndex": 114
+  },
+  {
+   "truthIndex": 140,
+   "readerIndex": 115
+  },
+  {
+   "truthIndex": 141,
+   "readerIndex": 116
+  },
+  {
+   "truthIndex": 142,
+   "readerIndex": 117
+  },
+  {
+   "truthIndex": 143,
+   "readerIndex": 118
+  },
+  {
+   "truthIndex": 146,
+   "readerIndex": 119
+  },
+  {
+   "truthIndex": 147,
+   "readerIndex": 120
+  },
+  {
+   "truthIndex": 148,
+   "readerIndex": 121
+  },
+  {
+   "truthIndex": 149,
+   "readerIndex": 122
+  },
+  {
+   "truthIndex": 150,
+   "readerIndex": 123
+  },
+  {
+   "truthIndex": 151,
+   "readerIndex": 124
+  },
+  {
+   "truthIndex": 152,
+   "readerIndex": 125
+  },
+  {
+   "truthIndex": 153,
+   "readerIndex": 126
+  },
+  {
+   "truthIndex": 154,
+   "readerIndex": 127
+  },
+  {
+   "truthIndex": 155,
+   "readerIndex": 128
+  },
+  {
+   "truthIndex": 156,
+   "readerIndex": 129
+  },
+  {
+   "truthIndex": 157,
+   "readerIndex": 130
+  },
+  {
+   "truthIndex": 158,
+   "readerIndex": 131
+  },
+  {
+   "truthIndex": 159,
+   "readerIndex": 132
+  },
+  {
+   "truthIndex": 160,
+   "readerIndex": 133
+  },
+  {
+   "truthIndex": 161,
+   "readerIndex": 134
+  },
+  {
+   "truthIndex": 162,
+   "readerIndex": 135
+  },
+  {
+   "truthIndex": 165,
+   "readerIndex": 136
+  },
+  {
+   "truthIndex": 166,
+   "readerIndex": 137
+  },
+  {
+   "truthIndex": 167,
+   "readerIndex": 138
+  },
+  {
+   "truthIndex": 168,
+   "readerIndex": 139
+  },
+  {
+   "truthIndex": 169,
+   "readerIndex": 140
+  },
+  {
+   "truthIndex": 170,
+   "readerIndex": 141
+  },
+  {
+   "truthIndex": 171,
+   "readerIndex": 142
+  },
+  {
+   "truthIndex": 172,
+   "readerIndex": 143
+  },
+  {
+   "truthIndex": 173,
+   "readerIndex": 144
+  },
+  {
+   "truthIndex": 174,
+   "readerIndex": 145
+  },
+  {
+   "truthIndex": 175,
+   "readerIndex": 146
+  },
+  {
+   "truthIndex": 176,
+   "readerIndex": 147
+  },
+  {
+   "truthIndex": 177,
+   "readerIndex": 148
+  },
+  {
+   "truthIndex": 178,
+   "readerIndex": 149
+  },
+  {
+   "truthIndex": 179,
+   "readerIndex": 150
+  },
+  {
+   "truthIndex": 180,
+   "readerIndex": 151
+  },
+  {
+   "truthIndex": 181,
+   "readerIndex": 152
+  },
+  {
+   "truthIndex": 183,
+   "readerIndex": 153
+  },
+  {
+   "truthIndex": 184,
+   "readerIndex": 154
+  },
+  {
+   "truthIndex": 185,
+   "readerIndex": 155
+  },
+  {
+   "truthIndex": 186,
+   "readerIndex": 156
+  },
+  {
+   "truthIndex": 188,
+   "readerIndex": 157
+  },
+  {
+   "truthIndex": 189,
+   "readerIndex": 158
+  },
+  {
+   "truthIndex": 190,
+   "readerIndex": 159
+  },
+  {
+   "truthIndex": 191,
+   "readerIndex": 160
+  },
+  {
+   "truthIndex": 192,
+   "readerIndex": 161
+  },
+  {
+   "truthIndex": 193,
+   "readerIndex": 162
+  },
+  {
+   "truthIndex": 194,
+   "readerIndex": 163
+  },
+  {
+   "truthIndex": 195,
+   "readerIndex": 164
+  },
+  {
+   "truthIndex": 200,
+   "readerIndex": 165
+  },
+  {
+   "truthIndex": 201,
+   "readerIndex": 166
+  },
+  {
+   "truthIndex": 202,
+   "readerIndex": 167
+  },
+  {
+   "truthIndex": 203,
+   "readerIndex": 168
+  },
+  {
+   "truthIndex": 204,
+   "readerIndex": 169
+  },
+  {
+   "truthIndex": 205,
+   "readerIndex": 170
+  },
+  {
+   "truthIndex": 206,
+   "readerIndex": 171
+  },
+  {
+   "truthIndex": 207,
+   "readerIndex": 172
+  },
+  {
+   "truthIndex": 208,
+   "readerIndex": 173
+  },
+  {
+   "truthIndex": 211,
+   "readerIndex": 174
+  },
+  {
+   "truthIndex": 212,
+   "readerIndex": 175
+  },
+  {
+   "truthIndex": 213,
+   "readerIndex": 176
+  },
+  {
+   "truthIndex": 214,
+   "readerIndex": 177
+  },
+  {
+   "truthIndex": 215,
+   "readerIndex": 178
+  },
+  {
+   "truthIndex": 216,
+   "readerIndex": 179
+  },
+  {
+   "truthIndex": 217,
+   "readerIndex": 180
+  },
+  {
+   "truthIndex": 218,
+   "readerIndex": 181
+  },
+  {
+   "truthIndex": 219,
+   "readerIndex": 182
+  }
+ ]
+}

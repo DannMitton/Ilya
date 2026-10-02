@@ -1,0 +1,37 @@
+{
+ "shift": 12,
+ "bars": {
+  "truth": 12,
+  "read": 12,
+  "allRight": 1
+ },
+ "notes": {
+  "truth": 68,
+  "read": 68,
+  "matched": 68,
+  "missing": 0,
+  "extra": 0,
+  "pitchRight": 67,
+  "pitchWrong": 0,
+  "pitchAbstained": 1,
+  "assumedNaturalRight": 1,
+  "lengthRight": 21,
+  "lengthWrong": 10,
+  "lengthAbstained": 37,
+  "bothRight": 21
+ },
+ "rests": {
+  "truth": 13,
+  "read": 12,
+  "matched": 12,
+  "lengthRight": 11
+ },
+ "abstentions": {
+  "pitch": 1,
+  "duration": 37,
+  "onset": 54,
+  "metre": 0,
+  "sum": 9
+ },
+ "headline": 30.88235294117647
+}

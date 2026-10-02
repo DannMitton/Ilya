@@ -395,6 +395,16 @@ def run(cfg):
                             dur_abstain=dur_abstain, pitch_abstain=pitch_abstain,
                             midi_assumed_natural=midi_assumed_natural))
 
+    # THE TRIAL OF FITTED SHAPES (QUEUE row 24, 2026-10-02): a measurement may hand in the lengths it read another way, as
+    # `cfg['fitted_lengths'] = {(sys, x): (Fraction or None, abstain reason or None)}`. OFF UNLESS CFG CARRIES THEM: with the key absent
+    # (every default read, the app's and the harness's) this block does nothing and every event is exactly what it was. Nothing else of
+    # an event changes; the bars, onsets, and sums below are derived from the durations as they always are.
+    fl = cfg.get('fitted_lengths')
+    if fl is not None:
+        for e in events:
+            if e['kind'] == 'note' and (e['sys'], e['x']) in fl:
+                e['dur'], e['dur_abstain'] = fl[(e['sys'], e['x'])]
+
     rests = detect_rests_multi(nl, staves, vocal, s)
     for rr in rests:
         events.append(dict(sys=rr['sys'], x=rr['x'], kind='rest', dur=rr['dur'], midi=None,
