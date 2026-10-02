@@ -4,6 +4,87 @@
    Missing keys show [MISSING: key] to enforce 100% parity.
    ═══════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════
+   THE KEY PREFIXES ARE THE FEATURE INDEX.
+
+   To find the code behind words on screen, search this file for the words,
+   read the key, and look its prefix up here. Derived from this file's 881
+   keys and a search of `apps/web/src` for each prefix on 2026-10-02 (QUEUE
+   row 16). It is a map, not a rule: nothing enforces it, so a prefix may
+   have moved since. Paths are under `apps/web/src/`; a prefix is listed with
+   the files that use it most, and its key count.
+
+   a11y.          4  accessible names: lib/components/Drawer/Drawer.svelte, lib/components/DeskHead.svelte, lib/components/Paper/Paper.svelte, lib/score/Loupe.svelte
+   aid.           2  lib/components/ReadingAid.svelte
+   analysis.      4  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
+   app.           1  the header subtitle: no consumer found
+   binder.       10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
+   calib.        99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
+   clitic.        3  no consumer found (lib/score/clitic-seat.ts does the seating)
+   collide.       5  routes/+page.svelte
+   comment.      42  the note comments: lib/insights/comment-text.ts, lib/insights/InsightsPane.svelte
+   console.       1  lib/components/Drawer/AnalysisStation.svelte
+   correct.      21  lib/score/CorrectionSurface.svelte, routes/+page.svelte
+   cosmetic.     15  lib/components/Drawer/NotationFields.svelte
+   dict.          3  lib/components/Paper/TitlePage.svelte, lib/components/Drawer/AnalysisStation.svelte
+   display.       5  no consumer found
+   drawer.        4  lib/components/Drawer/Drawer.svelte
+   engraving.     5  no consumer found
+   footer.        4  lib/components/Paper/PageFooter.svelte, lib/insights/InsightsPane.svelte
+   group.         3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
+   guide.         5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
+   input.         7  lib/components/Drawer/IntakePanel.svelte
+   insights.     91  the Insights document: lib/insights/InsightsPane.svelte, lib/insights/Tessituragram.svelte (LEGACY KEYS: `insights.fit.*`)
+   inspector.    32  lib/components/Drawer/InspectorPanel.svelte
+   intake.       20  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/bandState.ts, lib/score/ScoreUploader.svelte
+   key.          23  the key ruler: lib/markup/TranspositionRuler.svelte, lib/markup/TranspositionDock.svelte, lib/markup/transposition-ruler.ts
+   legend.        6  the Markup legend: lib/provenance.ts, lib/markup/MarkupPane.svelte
+   loupe.        54  lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, routes/+page.svelte
+   meta.         15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
+   notation.     16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts
+   notePicker.   10  lib/voice/NotePicker.svelte
+   pacifier.     17  lib/voice/pacifier/Pacifier.svelte
+   paper.         2  lib/components/Paper/TitlePage.svelte, lib/one-action.ts
+   portrait.      2  lib/components/ReadingAid.svelte, routes/+page.svelte
+   profile.      34  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/insights/InsightsPane.svelte
+   provenance.    5  no consumer found
+   recognize.     4  routes/+page.svelte
+   replace.       4  routes/+page.svelte
+   result.        1  no consumer found
+   ribbon.        6  lib/components/Drawer/InspectorPanel.svelte
+   select.        2  lib/components/Drawer/SearchableSelect.svelte
+   shiftLyrics.   5  lib/score/CorrectionSurface.svelte
+   song.          2  lib/library/notices.ts, routes/+page.svelte
+   songs.        13  routes/+page.svelte, lib/components/Drawer/SongList.svelte
+   source.        1  lib/components/Drawer/IntakePanel.svelte, lib/library/driver.ts
+   station.       2  routes/+page.svelte
+   storage.       8  lib/library/notices.ts, lib/library/library.ts
+   stress.        9  `stressSourceLabel`, at the foot of this file
+   tab.           5  lib/components/DeskHead.svelte (LEGACY KEY: `tab.markedScore`)
+   underlay.      1  no consumer found
+   update.        3  routes/+page.svelte
+   upload.       75  lib/score/ScoreUploader.svelte
+   verify.        1  lib/components/Paper/WordStack.svelte
+   voice.         2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
+   voiceIntake.  60  lib/voice/InsightsIntake.svelte, lib/voice/VoiceTypeIntake.svelte
+   voiceType.    42  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
+   vowel.        11  lib/voice/pacifier/Pacifier.svelte, lib/markup/legend.ts
+   watch.        46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
+   witness.       8  no consumer found (its component was removed)
+
+   THREE LEGACY KEYS keep a name the shown word has left, because the key is a
+   wire value or is cited by name across the tree. The comments that explain
+   them, in this file:
+   - `group.scoreMarkup` READS "Voice" since N.150: the comment above the
+     `group.piece` entry (search "The KEY stays, because `BAND_IDS`").
+   - `tab.markedScore` READS "Markup": the comment above it (search "The KEYS
+     stay, because both are cited by name").
+   - `insights.fit.*` is the Insights page's measurement table, from when the
+     document was shown as Fit (N.174 renamed the code to Text, Markup, and
+     Insights). No comment says why these keys kept the name; the heading's
+     comment, above `insights.fit.heading`, records the wording rulings.
+   ═══════════════════════════════════════════════════════════ */
+
 export type Language = 'en' | 'fr';
 
 const strings: Record<string, Record<Language, string>> = {

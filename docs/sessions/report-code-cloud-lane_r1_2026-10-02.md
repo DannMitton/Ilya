@@ -188,3 +188,22 @@ The first full run failed four web tests and the ratchet gate (the three expecta
 - Nothing was seen in a browser. Whether each sink draws italics, in the print layout and in the phone layout, is for Dann's walk. The sinks were found by search, so a sink I did not find would show a literal `*`.
 - Whether the watch-band lines and the broad note are copied or exported as text anywhere I did not find; a literal asterisk would show there.
 - `i18n.ts` keys with no consumer found by search: `underlay.heading`, `display.*`, `engraving.*`, `result.words`, `witness.*`, `provenance.*`, `clitic.*`. Their French holds no Italian term, so nothing turned on it.
+
+## Row 16: three fixes for a newcomer
+
+WRITTEN, not DONE. DONE is Dann's walk after he merges. Brief: `brief-code-newcomer-docs_r1_2026-10-01.md`. Documents and comments only; no behaviour changed.
+
+**What changed.**
+1. The blurb data path. `ARCHITECTURE.md:86` now says the file is at the repository root (`data/`, not `apps/web/data/`) and that the app fetches it as `/data/blurb-composer.json` (`apps/web/src/lib/loader.ts:64`, which I read: `const BLURB_URL = '/data/blurb-composer.json'`). `ARCHITECTURE.md:176` (invariant 11, the only other place it repeats) says "at the repository root, not under `apps/web/`". `README.md:56-67`: the structure block gains `data/` ("The shipped dictionary and blurb data (fetched by the app as /data/)") and `tools/` ("Dated research harnesses; a contributor may ignore them"). Both folders exist (`data/` holds the dictionary and blurb JSON; `tools/` holds `e16-harness/`).
+2. The control map. `ARCHITECTURE.md`, "Where to start": a line pointing to `docs/sessions/memo-n84-path-map_r1_2026-10-01.md` (dated 2026-10-01; it ages), or to searching `i18n.ts` for the words on screen and following the key.
+3. The key-prefix index. A comment block at the top of `apps/web/src/lib/i18n.ts` (lines 7 to 85) lists all 57 prefixes in the file's 881 keys, each with its key count and the files that use it most. I derived it from the file and from a search of `apps/web/src` for each prefix on 2026-10-02, not from the memo. It names the three legacy keys and points to the comments that explain them. One line in `ARCHITECTURE.md` ("Where to start") says the prefixes are the feature index.
+
+**What the index could not give.**
+- Eight prefixes have no consumer by search: `app.`, `clitic.`, `display.`, `engraving.`, `provenance.`, `result.`, `underlay.`, `witness.`. The block says so for each. They may be unused keys or built dynamically; I did not establish which. (`witness.` belonged to `TextualWitnesses.svelte`, which is not in this tree.)
+- The three legacy keys: `group.scoreMarkup` and `tab.markedScore` each have a comment that says why the key stayed, and the block points to them by search phrase. **`insights.fit.*` has no such comment.** The nearest is the one above `insights.fit.heading`, which records a wording ruling, not the key's name. The block says that plainly instead of pointing to a comment that does not explain it. If the desk wants one, it is Dann's or the desk's to write.
+- Adding 77 lines at the top of `i18n.ts` shifts every line number below it by that much. Briefs, memos, and comments elsewhere cite `i18n.ts:NNNN` (for example the brief for row 15 cites `:1068`); those citations are now off by 77 and I did not touch them. `i18n.ts` is exempt from the file-size ratchet.
+- The index is a map, not a rule: nothing enforces it, and it will age.
+
+**Gates (all eight).** All at baseline, no number moved: 251; 235; 0 errors and 12 warnings in 5 files; 1797 (the figure after row 15); 644 and 5 skipped (649); 145; 55; ratchets: OK.
+
+**Not established.** Whether House style (`docs/house-style/SKILL.md`, which the brief names) was read: I did not open it. I followed the standing rules in `AGENTS.md` (Canadian spelling, Oxford comma, no em-dashes, no agent voice in user-facing copy); the new text is documentation, so a style check is the desk's.

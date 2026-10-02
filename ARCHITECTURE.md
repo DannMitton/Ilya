@@ -83,7 +83,9 @@ search, page layout, and `staff-renderer.ts`, which engraves a staff as SVG.
   packages. `src/lib/loader.ts` loads the dictionary into IndexedDB in chunks.
 - `src/lib/i18n.ts` holds the interface's words, in both languages. The Learn
   and Guide texts are written in each language in `components/Reading/`, and
-  the word explanations come from `data/blurb-composer.json`.
+  the word explanations come from `data/blurb-composer.json`. That file is at
+  the repository root (`data/`, not `apps/web/data/`); the app fetches it as
+  `/data/blurb-composer.json` (`src/lib/loader.ts`).
 - `src/lib/destinations.ts` names where the singer is (Studio, Learn, Guide)
   and which document Studio shows (Text, Markup, Insights).
 - `src/lib/components/Drawer/` is the drawer: every control that changes
@@ -170,7 +172,8 @@ broken.
     the old and the new value: `restoreSurface` in `destinations.ts` is the
     example. Amended by N.174, 2026-09-27.
 11. **Every word the singer reads exists in both languages.** Interface words
-    live in `i18n.ts`, and the word explanations in `data/blurb-composer.json`.
+    live in `i18n.ts`, and the word explanations in `data/blurb-composer.json`
+    (at the repository root, not under `apps/web/`).
     *Tested:* `apps/web/src/lib/approval/i18n-keys.test.ts` checks every
     literal key, and `packages/blurb/tests/french-parity.test.ts` checks every
     explanation.
@@ -206,7 +209,12 @@ broken.
 
 - To change a pronunciation rule: `packages/phonology`, with its tests, and
   Grayson's text at hand.
-- To change what a singer reads: `apps/web/src/lib/i18n.ts`.
+- To change what a singer reads: `apps/web/src/lib/i18n.ts`. Its key prefixes
+  are the feature index: the block at the top of that file lists each prefix
+  and the module it belongs to.
+- To find the code behind something on screen: search `apps/web/src/lib/i18n.ts`
+  for the words on screen and follow the key, or read
+  `docs/sessions/memo-n84-path-map_r1_2026-10-01.md` (dated 2026-10-01; it ages).
 - To change the voice analysis: `packages/score-parser` for anything that needs no
   browser, `apps/web/src/lib/analysis/` for the rest.
 - Before any change: `pnpm test`, `pnpm ratchets`, and, in `apps/web`,

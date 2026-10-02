@@ -61,7 +61,9 @@ Ilya/
 │   ├── dictionary/           # Stress lookup and the English and French glosses
 │   ├── blurb/                # Why Ilya made each choice, for the singer
 │   └── score-parser/         # MusicXML and MNX parsing, analysis, and engraving
+├── data/                     # The shipped dictionary and blurb data (fetched by the app as /data/)
 ├── scripts/                  # Dictionary builds and the architecture ratchets
+├── tools/                    # Dated research harnesses; a contributor may ignore them
 └── tests/                    # Cross-package integration tests
 ```
 
