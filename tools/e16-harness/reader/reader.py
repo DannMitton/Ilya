@@ -563,6 +563,223 @@ def _staves_from_lines(img, lines, page=None):
                   'reader.detect_staves five-line validation', page)
     return checked, s
 
+# ---------- TRACED AND STRAIGHTENED STAVES (brief r3, 2026-10-02) ----------
+#
+# WHY. `detect_staves` reads a page's rows as a whole: a staff line that
+# descends across the page lands in different rows in different columns, so
+# the whole-row ink test loses most staves on a tilted print. Measured
+# 2026-10-01 on the app's own pdf.js raster of Tchaikovsky Op. 38 No. 3
+# (Jurgenson 1878): 2 staves found of 9, then 2 of 12, then a raise. Whole-page
+# rotation does not recover it, because the lines drift by different amounts
+# (the top staff -5 px, the bottom +59 px across one page).
+#
+# WHAT. The staff is the ruler. `trace_staves` cuts the page into vertical
+# strips, finds in each strip the five rows one staff space apart, and chains
+# those hits from strip to strip; chains at one height whose x-ranges do not
+# overlap are one staff. `straighten_whole_pixel` then moves every pixel a
+# WHOLE number of rows so each staff lies level. No grey value is computed:
+# the move commutes with the `img < 128` binarisation every later stage
+# applies, and where every displacement rounds to zero the page is not touched
+# at all and today's path runs unchanged. That last property is the drift gate:
+# measured, the render fixtures drift at most 0.16 px and every scan page 2.44
+# px or more, so the render fixtures stay byte-identical with no threshold.
+#
+# The staves of a straightened page come from the trace: the five rows of each
+# staff are its traced lines at their levelled heights, so `detect_staves`'
+# whole-row test is not run on the straightened page. The scan itself is never
+# altered; the straightened image is a working copy inside the read.
+#
+# THE NUMBERS BELOW ARE THE DESK'S FIRST VALUES (strip width, fill, spacing
+# tolerance, the 0.5 median-width bound), tested on twelve pages and then on
+# the 34 in the tree; see the report. They are measurements of scans at 400
+# dpi, not tuned constants for one print.
+TRACE_STRIP_S = 3.0        # strip width, staff spaces
+TRACE_FILL = 0.55          # a line hit fills more than this fraction of a strip
+TRACE_TOL = 0.18           # five rows one staff space apart, within this * s
+TRACE_LINK_STRIPS = 4      # a chain may skip this many strips before it breaks
+TRACE_MIN_HITS = 3         # strips in a chain before it can be a staff
+TRACE_SLOPE = 0.04         # px of rise per px of run allowed across a chain gap
+TRACE_NARROW = 0.5         # a staff narrower than this * the median width is set aside
+STRAIGHTEN_MARGIN_S = 1.0  # a staff's own band reaches this far past its outer lines
+STRAIGHTEN_MODE = 'band'   # 'band' (one number inside a band) or 'interp' (through the staves)
+
+def _trace_hits(img, s):
+    dark = (img < 128)
+    H, W = dark.shape
+    w = max(4, int(round(TRACE_STRIP_S * s)))
+    cands = []
+    for k in range(W // w):
+        x0 = k * w
+        prof = dark[:, x0:x0 + w].mean(axis=1)
+        rows = np.flatnonzero(prof > TRACE_FILL)
+        if rows.size == 0:
+            continue
+        lines = []; cur = [rows[0]]
+        for r in rows[1:]:
+            if r - cur[-1] <= 2: cur.append(r)
+            else: lines.append(float(np.mean(cur))); cur = [r]
+        lines.append(float(np.mean(cur)))
+        lines = np.array(lines)
+        i = 0
+        while i + 4 < len(lines):
+            d = np.diff(lines[i:i + 5])
+            if np.all(np.abs(d - s) <= TRACE_TOL * s):
+                cands.append((k, x0 + w / 2.0, lines[i:i + 5].copy())); i += 5
+            else:
+                i += 1
+    return cands, w
+
+def trace_staves(img, s):
+    """Chains of five-line hits across strips, one chain per staff, left to
+    right and top to bottom. Returns (staves, strip width). Each staff is a
+    list of (strip index, x centre, five line rows)."""
+    cands, w = _trace_hits(img, s)
+    chains = []
+    for k, xc, ys in sorted(cands, key=lambda c: c[0]):
+        best = None
+        for ch in chains:
+            lk, lx, lys = ch[-1]
+            if 0 < k - lk <= TRACE_LINK_STRIPS and abs(lys[2] - ys[2]) <= 0.5 * s:
+                if best is None or abs(lys[2] - ys[2]) < abs(best[-1][2][2] - ys[2]): best = ch
+        if best is None: chains.append([(k, xc, ys)])
+        else: best.append((k, xc, ys))
+    chains = [ch for ch in chains if len(ch) >= TRACE_MIN_HITS]
+    # Chains at one height whose x-ranges do not overlap are one staff: a run
+    # of strips with no five-line hit splits a staff in two.
+    chains.sort(key=lambda ch: ch[0][1])
+    merged = []
+    for ch in chains:
+        for m in merged:
+            if m[-1][1] < ch[0][1] and all(c[1] < ch[0][1] for c in m):
+                dx = ch[0][1] - m[-1][1]
+                if abs(ch[0][2][2] - m[-1][2][2]) <= 0.5 * s + TRACE_SLOPE * dx:
+                    m.extend(ch); break
+        else:
+            merged.append(list(ch))
+    # A false five-line pattern one staff space off a real staff (the staff's
+    # lower four lines and the row under them, or its upper four and the row
+    # above) chains too, across part of the staff's width. Two real staves are
+    # never closer than the height of one (4 spaces), so a shorter chain that
+    # overlaps a longer one in x and lies within 3.5 spaces of its middle line
+    # is the same staff seen wrongly, and is dropped. Measured 2026-10-02 on
+    # sunless06 p21 (three such chains) and sunless05 p3.
+    merged.sort(key=lambda ch: -len(ch))
+    kept = []
+    for ch in merged:
+        mid = float(np.median([c[2][2] for c in ch]))
+        dup = False
+        for k in kept:
+            kmid = float(np.median([c[2][2] for c in k]))
+            if abs(mid - kmid) < 3.5 * s and ch[0][1] <= k[-1][1] and k[0][1] <= ch[-1][1]:
+                dup = True; break
+        if not dup: kept.append(ch)
+    kept.sort(key=lambda ch: float(np.median([c[2][2] for c in ch])))
+    return kept, w
+
+def _staff_fit(ch, W):
+    """The middle line's height at every column: a quadratic through the
+    chain's hits, held constant past the chain's own ends."""
+    cx = np.array([c[1] for c in ch]); cy = np.array([c[2][2] for c in ch])
+    co = np.polyfit(cx, cy, 2 if len(cx) >= 8 else 1)
+    xs = np.arange(W, dtype=np.float64)
+    return np.polyval(co, np.clip(xs, cx.min(), cx.max()))
+
+def straighten_whole_pixel(img, staves, s, mode=None):
+    """Move every pixel a whole number of rows so each staff lies level.
+    Returns (image, levelled staves, info). Where every displacement rounds to
+    zero, returns the image itself, untouched."""
+    mode = mode or STRAIGHTEN_MODE
+    H, W = img.shape
+    fits = [_staff_fit(ch, W) for ch in staves]
+    y0 = [float(np.median([c[2][2] for c in ch])) for ch in staves]
+    disp = [np.rint(f - y).astype(int) for f, y in zip(fits, y0)]
+    maxd = int(max(int(np.abs(d).max()) for d in disp)) if disp else 0
+    # levelled lines: each traced line's height with the whole-pixel move applied
+    levelled = []
+    for ch, d in zip(staves, disp):
+        rows = np.array([[c[2][j] - d[int(min(W - 1, max(0, round(c[1]))))] for j in range(5)] for c in ch])
+        levelled.append([int(round(float(np.median(rows[:, j])))) for j in range(5)])
+    info = dict(maxDisplacement=maxd, mode=mode)
+    if maxd == 0:
+        return img, levelled, info
+    ys = np.arange(H)
+    top = [lv[0] for lv in levelled]; bot = [lv[4] for lv in levelled]
+    m = int(round(STRAIGHTEN_MARGIN_S * s))
+    knots_y = []; 
+    for i in range(len(levelled)):
+        up = m if i == 0 else min(m, max(0, (top[i] - bot[i - 1]) // 2))
+        dn = m if i == len(levelled) - 1 else min(m, max(0, (top[i + 1] - bot[i]) // 2))
+        if mode == 'interp':
+            knots_y.append((levelled[i][2], levelled[i][2]))
+        else:
+            knots_y.append((top[i] - up, bot[i] + dn))
+    out = np.full_like(img, 255)
+    for x in range(W):
+        kx = []; kv = []
+        for i, (a, b) in enumerate(knots_y):
+            v = float(disp[i][x])
+            kx.extend([a, b] if b > a else [a]); kv.extend([v, v] if b > a else [v])
+        # np.interp needs non-decreasing knots; bands are capped so they cannot cross
+        D = np.rint(np.interp(ys, kx, kv)).astype(int)
+        src = ys + D
+        ok = (src >= 0) & (src < H)
+        col = out[:, x]
+        col[ok] = img[src[ok], x]
+    return out, levelled, info
+
+TRACE_REPORT = dict(straightened=False, traced=0, setAside=0, widths=[], fallback=None)
+
+def find_staves(img, page=None):
+    """The page's staves, and the image every later stage reads.
+
+    Returns (image, staves, s, info). On a page with no tilt, or where the
+    trace finds nothing, this is exactly `detect_staves` on the page as given.
+    On a tilted page the image is a whole-pixel straightened working copy and
+    the staves are the traced lines at their levelled heights."""
+    global TRACE_REPORT
+    info = dict(straightened=False, traced=0, setAside=0, widths=[], fallback=None, maxDisplacement=0)
+    s0 = staff_space_from_runs(img)
+    traced = None
+    if _plausible_s(s0, img):
+        chains, w = trace_staves(img, s0)
+        H, W = img.shape
+        widths = [ch[-1][1] - ch[0][1] + w for ch in chains]
+        info['traced'] = len(chains); info['widths'] = [int(x) for x in widths]
+        if chains:
+            med = float(np.median(widths))
+            kept = [ch for ch, wd in zip(chains, widths) if wd >= TRACE_NARROW * med]
+            info['setAside'] = len(chains) - len(kept)
+            traced = kept
+    if traced:
+        out, levelled, finfo = straighten_whole_pixel(img, traced, s0)
+        info['maxDisplacement'] = finfo['maxDisplacement']
+        if out is not img:
+            diffs = [lv[j + 1] - lv[j] for lv in levelled for j in range(4)]
+            s = float(np.median(diffs))
+            # today's path, for comparison: a trace that finds fewer staves than
+            # `detect_staves` does on the page as printed is not an improvement
+            try:
+                today_staves, today_s = detect_staves(img, page=page)
+            except Exception:
+                today_staves = None
+            if today_staves is not None and len(today_staves) > len(levelled):
+                info['fallback'] = 'trace found %d staves, detect_staves %d' % (len(levelled), len(today_staves))
+            else:
+                # NO SENTINEL ON THE TRACED ROWS. `K_S` stays at `detect_staves`'
+                # own five-line validation. A traced staff is accepted by the
+                # trace, which asks for five rows one staff space apart in every
+                # strip, and a whole-pixel move leaves a line across two rows
+                # where the rounding falls on a half: measured 2026-10-02, the
+                # levelled rows of two robustness pages then sit under `K_S`
+                # for that reason alone and the sentinel halted pages the trace
+                # had read correctly.
+                info['straightened'] = True
+                TRACE_REPORT = info
+                return out, levelled, s, info
+    TRACE_REPORT = info
+    staves, s = detect_staves(img, page=page)
+    return img, staves, s, info
+
 # ---------- staff selection: THE BRACE RULE ----------
 #
 # N.59, 2026-08-16. THE LARGEST-GAP HEURISTIC IS STRUCK, not retuned. This
@@ -656,10 +873,99 @@ def _in_span(span, st):
     lo,hi=span; top,bot=st[0],st[-1]
     return (min(hi,bot)-max(lo,top))>=0.6*(bot-top)
 
-def select_vocal(staves, s, img):
-    """Return (vocal, fallbacks): one voice-staff index per system, in order,
-    and the number of systems where the brace rule could not decide."""
-    if not staves: return [], 0
+# ---------- THE TWO MORE SIGNS, and the tacet system (brief r3, 2026-10-02) ----------
+#
+# Dann, 2026-10-01 16:08: *"we must teach Ilya that a vocal line will not
+# always be present. It may serve us to point out that voice lines are usually
+# monodic while piano lines feature chords, generally. Not always, but this is
+# a useful starting place."*
+#
+# A system whose every staff is inside the brace has no voice staff: it is
+# TACET. That is the brace rule completed, not replaced: the rule already
+# said the voice is the staff not in the brace, and where no staff is outside
+# it there is no voice (it used to take staff 0 and read the piano's top staff
+# as a singer's line).
+#
+# Where the brace cannot decide and the system is not tacet (no brace found,
+# or more than one unbraced staff), two more signs are consulted before any
+# fallback. They are SIGNS, not rules: each votes, the votes must agree, and a
+# system they cannot settle takes staff 0 and is COUNTED, exactly as before.
+#   TEXT  a line of text hangs under a voice staff: many small marks on one
+#         baseline in the band below it. Piano staves have none.
+#   CHORD voice lines are usually monodic, piano lines chordal: the fraction of
+#         a staff's head columns that hold two or more heads.
+# Both are measured by `sign_scores`, which the tests and the report call too.
+SIGN_TEXT_BAND = (0.7, 2.6)     # staff spaces below the bottom line
+SIGN_TEXT_H = (0.30, 1.3)       # a text mark's height, staff spaces
+SIGN_TEXT_W = 1.7               # and its greatest width
+SIGN_TEXT_MIN = 6               # marks on one baseline before it is a line of text
+SIGN_CHORD_VOICE = 0.10         # a voice's head columns are this chordal or less
+SIGN_CHORD_PIANO = 0.20         # a piano's are this chordal or more
+
+def sign_scores(img, staves, s, i):
+    """(text score, chord fraction, head columns) for staff i. The text score
+    is the most marks sharing one baseline in the band under the staff."""
+    dark = (img < 128)
+    H, W = dark.shape
+    bot = staves[i][-1]
+    a = int(bot + SIGN_TEXT_BAND[0] * s); b = int(bot + SIGN_TEXT_BAND[1] * s)
+    if i + 1 < len(staves):
+        b = min(b, int(staves[i + 1][0] - 0.2 * s))
+    text = 0
+    if b - a > 3 and a < H:
+        band = dark[a:min(b, H), :].astype(np.uint8)
+        num, lab, stats, cent = cv2.connectedComponentsWithStats(band, 8)
+        ys = [cent[k][1] for k in range(1, num)
+              if SIGN_TEXT_H[0] * s <= stats[k][3] <= SIGN_TEXT_H[1] * s and stats[k][2] <= SIGN_TEXT_W * s]
+        if ys:
+            ys = np.sort(np.array(ys))
+            tol = 0.25 * s
+            for y in ys:
+                text = max(text, int(np.sum(np.abs(ys - y) <= tol)))
+    heads = detect_heads(img, staves, [i], s)
+    cols = []
+    for h in sorted(heads, key=lambda h: h['x']):
+        if cols and h['x'] - cols[-1][0] <= 0.8 * s: cols[-1][1] += 1
+        else: cols.append([h['x'], 1])
+    chord = (sum(1 for c in cols if c[1] >= 2) / float(len(cols))) if cols else None
+    return text, chord, len(cols)
+
+def _sign_vote(img, staves, s, group):
+    """Which staff of `group` the two signs name, as (text vote, chord vote):
+    each a staff index or None where that sign abstains."""
+    sc = {j: sign_scores(img, staves, s, j) for j in group}
+    tv = None
+    ranked = sorted(group, key=lambda j: -sc[j][0])
+    if sc[ranked[0]][0] >= SIGN_TEXT_MIN and (len(ranked) == 1 or sc[ranked[0]][0] >= 2 * sc[ranked[1]][0]):
+        tv = ranked[0]
+    cv_ = None
+    withc = [j for j in group if sc[j][1] is not None and sc[j][2] >= 4]
+    if len(withc) >= 2:
+        withc.sort(key=lambda j: sc[j][1])
+        if sc[withc[0]][1] <= SIGN_CHORD_VOICE and sc[withc[1]][1] >= SIGN_CHORD_PIANO:
+            cv_ = withc[0]
+    return tv, cv_, sc
+
+def _system_barline_x(dark, x0, top, bot, s):
+    """The leftmost column near the staves' left edge whose ink fills most of
+    the system's height: the system barline. A brace is curved and never fills
+    a column that high."""
+    if x0 is None: return None
+    H, W = dark.shape
+    a = max(0, x0 - int(round(1.5 * s))); b = min(W, x0 + int(round(4 * s)))
+    if b <= a: return None
+    fill = dark[max(0, top):bot + 1, a:b].mean(axis=0)
+    hit = np.flatnonzero(fill >= 0.7)
+    return int(a + hit[0]) if hit.size else None
+
+def select_voices(staves, s, img):
+    """One entry per system, in page order. Returns a dict:
+       vocal      voice staff index of each system that HAS a voice staff
+       order      per system in page order: its index into `vocal`, or None if tacet
+       tacetRef   per tacet system: the index of its first staff (to find its barlines)
+       fallbacks  systems where nothing decided and staff 0 was taken
+       signs      per undecided system: what each sign said"""
+    if not staves: return dict(vocal=[], order=[], tacetRef=[], tacetLast=[], fallbacks=0, signs=[])
     dark=(img<128)
     edges=[_staff_left_edge(dark,st) for st in staves]
 
@@ -670,18 +976,48 @@ def select_vocal(staves, s, img):
         if _joined_at_left(dark,staves[i-1],staves[i],x0,s): systems[-1].append(i)
         else: systems.append([i])
 
-    vocal=[]; fallbacks=0
+    vocal=[]; order=[]; tacet_ref=[]; tacet_last=[]; fallbacks=0; signs=[]
     for group in systems:
         if len(group)==1:
-            vocal.append(group[0]); continue
+            order.append(len(vocal)); vocal.append(group[0]); continue
         x0=next((edges[j] for j in group if edges[j] is not None), None)
         span=_brace_span(dark,x0,staves[group[0]][0],staves[group[-1]][-1],s)
+        if span is None:
+            # THE BRACE'S TIPS TOUCH THE TOP STAFF'S LINES, so where the first
+            # staff of a system is a braced one (a piano-only system) the
+            # staff's left edge lands on the brace and the brace window sits
+            # left of the brace. Measured on the tacet fixture, 2026-10-02.
+            # Try again from the system barline, which no brace reaches.
+            xb=_system_barline_x(dark,x0,staves[group[0]][0],staves[group[-1]][-1],s)
+            if xb is not None and xb != x0:
+                span=_brace_span(dark,xb,staves[group[0]][0],staves[group[-1]][-1],s)
         unbraced=[j for j in group if span is None or not _in_span(span,staves[j])]
         if span is not None and len(unbraced)==1:
-            vocal.append(unbraced[0])
-        else:
-            vocal.append(group[0]); fallbacks+=1
-    return vocal, fallbacks
+            order.append(len(vocal)); vocal.append(unbraced[0]); continue
+        if span is not None and len(unbraced)==0:
+            order.append(None); tacet_ref.append(group[0]); tacet_last.append(group[-1]); continue
+        tv, cv_, sc = _sign_vote(img, staves, s, group)
+        # THE TWO SIGNS MUST AGREE. Measured 2026-10-02 over every system in the
+        # tree (report, "The two more signs"): on the render fixtures, where the
+        # brace cannot decide and staff 0 is the voice, the text sign alone
+        # named the wrong staff 6 times of 83 (a pedal mark is a line of text
+        # to it) and the chord sign alone 6 times (a piano part written as
+        # single notes is monodic). They never agreed on a wrong staff. So the
+        # signs vote only together; one alone, or two that differ, leave the
+        # system to the counted fallback.
+        pick = tv if (tv is not None and tv == cv_) else None
+        signs.append(dict(group=group, text=tv, chord=cv_, picked=pick))
+        if pick is None:
+            pick = group[0]; fallbacks += 1
+        order.append(len(vocal)); vocal.append(pick)
+    return dict(vocal=vocal, order=order, tacetRef=tacet_ref, tacetLast=tacet_last, fallbacks=fallbacks, signs=signs)
+
+def select_vocal(staves, s, img):
+    """Return (vocal, fallbacks): one voice-staff index per system that has
+    one, in order, and the number of systems where nothing could decide.
+    A tacet system has no entry; `select_voices` says where they fall."""
+    r = select_voices(staves, s, img)
+    return r['vocal'], r['fallbacks']
 
 def clef_topD(sign, line, octaveChange=0):
     if sign=='F':   ref_deg=LETIDX['F']+7*3
@@ -802,14 +1138,16 @@ def has_stem(nl, hx, hy, s, min_len=2.0, lo=0.35, hi=1.05, max_w=0.42):
 
 def read_page_geometry(cfg):
     img=cv2.imread(cfg['png'],cv2.IMREAD_GRAYSCALE)
-    staves,s=detect_staves(img,page=cfg.get('png'))
+    img,staves,s,trace_info=find_staves(img,page=cfg.get('png'))
     # The cfg['vocal'] bypass is untouched: a fixture that names its staves is
     # byte-identical to before, and its fallback count is zero because the
     # brace rule was never consulted.
     if 'vocal' in cfg:
         vocal,vocal_fallbacks=cfg['vocal'],0
+        voices=dict(vocal=vocal,order=list(range(len(vocal))),tacetRef=[],tacetLast=[],fallbacks=0,signs=[])
     else:
-        vocal,vocal_fallbacks=select_vocal(staves,s,img)
+        voices=select_voices(staves,s,img)
+        vocal,vocal_fallbacks=voices['vocal'],voices['fallbacks']
     # ONE non-destructive removal, computed once, consumed by every downstream
     # stage (tier-1 unification -- see the note above remove_lines()). nl and
     # nl_safe are deliberately the SAME array: the "safe" removal is no longer
@@ -860,7 +1198,7 @@ def read_page_geometry(cfg):
     for h in heads:
         L,O=position(h,staves,vocal,topD,s); h['L']=L; h['O']=O
     return dict(img=img,staves=staves,s=s,vocal=vocal,bw=bw,nl=nl,nl_safe=nl_safe,heads=heads,topD=topD,
-                vocalFallbacks=vocal_fallbacks,
+                vocalFallbacks=vocal_fallbacks, trace=trace_info, voices=voices,
                 # N.97, ADDITIVE. What the page PRINTS, alongside what the
                 # caller answered. Nothing in this module consumes it: `topD`
                 # above is still built from cfg, so a read with the same
@@ -888,7 +1226,7 @@ def probe_clef_key(cfg):
     img = cv2.imread(cfg['png'], cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise RuntimeError('OpenCV could not read %r' % (cfg.get('png'),))
-    staves, s = detect_staves(img, page=cfg.get('png'))
+    img, staves, s, _trace_info = find_staves(img, page=cfg.get('png'))
     if 'vocal' in cfg:
         vocal = cfg['vocal']
     else:
@@ -1241,6 +1579,53 @@ def detect_barlines(nl,staves,vocal,s):
             if sub is not None:
                 xs.append(sub)
         out[bi]=_collapse_barline_cluster(sorted(xs),s)
+    return out
+
+def _solid_barline_columns(nl, top, bot, s):
+    """Columns where one solid vertical stroke runs from `top` to `bot`, give
+    or take BARLINE_SPAN_TOLERANCE, with nothing else inked in the window two
+    spaces either side: the same SPAN and SOLIDITY tests
+    `_refine_merged_barline` applies, run across the whole width because a
+    piano system's barlines are often joined to stems and beams, which leaves
+    them out of `detect_barlines`' component test. Returns cluster centres."""
+    dark = nl > 0
+    H, W = dark.shape
+    pad = int(round(2.0 * s)); lo = max(0, top - pad); hi = min(H, bot + pad + 1)
+    sub = dark[lo:hi, :]
+    anyd = sub.any(axis=0)
+    first = np.argmax(sub, axis=0); last = sub.shape[0] - 1 - np.argmax(sub[::-1], axis=0)
+    cnt = sub.sum(axis=0)
+    tol = BARLINE_SPAN_TOLERANCE * s
+    ok = anyd & ((last - first + 1) == cnt) & (np.abs(lo + first - top) <= tol) & (np.abs(lo + last - bot) <= tol)
+    cols = np.flatnonzero(ok)
+    runs = []
+    for c in cols:
+        if runs and c - runs[-1][1] <= 1: runs[-1][1] = c
+        else: runs.append([c, c])
+    xs = [int((a + b) // 2) for a, b in runs if (b - a + 1) <= MAX_ROW_WIDTH_BOUND * s]
+    return _collapse_barline_cluster(xs, s)
+
+def detect_tacet_barlines(nl, staves, firsts, lasts, s):
+    """Barlines of the tacet systems, in order: {k: [x, ...]}. A piano system's
+    barlines often run unbroken through both staves, so a component the height
+    of the whole system counts, as well as one the height of its first staff
+    (what `detect_barlines` looks for). Whichever finds more is taken: the two
+    are the same barlines drawn two ways."""
+    num,lab,stats,cent=cv2.connectedComponentsWithStats(nl,8)
+    out={}
+    single=detect_barlines(nl,staves,firsts,s)
+    for k,(f,l) in enumerate(zip(firsts,lasts)):
+        top=staves[f][0]; bot=staves[l][-1]; span=bot-top; xs=[]
+        for i in range(1,num):
+            x,y,w,h,area=stats[i]
+            if not (0.85*span<=h<=1.35*span and y<=top+0.3*s and y+h>=bot-0.3*s):
+                continue
+            if w <= BARLINE_WIDTH_BOUND * s:
+                xs.append(int(x+w/2))
+        cands=[_collapse_barline_cluster(sorted(xs),s), single.get(k,[]),
+               _solid_barline_columns(nl, top, bot, s),
+               _solid_barline_columns(nl, top, staves[f][-1], s)]
+        out[k]=max(cands, key=len)
     return out
 
 def read_page_pitch(cfg):

@@ -250,6 +250,10 @@ sentence to get it.
 When a ruling of his appears to forbid something, bring him the case, not the
 prohibition.
 
+**AMENDED 2026-10-01 22:01, after the desk listed five "rulings this plan needs" and flagged two older rulings as obstacles in a brief.** Dann's words: *"I'm a little uneasy with the way you treat rulings. Very often Opus informs me that I have ruled something that I consider malleable. Are you able to adopt the attitude that older decisions are often reversible if an effective option comes along that may seem to conflict?"* and *"malleability needs to be our approach here."*
+
+**The rule, worded by the desk under posture 5: an older decision is a default with a reason, never a gate.** When a better option conflicts with one, take the better option, say in one line which decision it departs from and why, and keep moving. Do not turn the conflict into a ruling Dann owes. What persists from an old decision is its reason, not its wording: if the reason still holds, honour the reason in the new design. He hears a question only for taste, the irreversible, and French.
+
 ### 20. NEW, 2026-09-02, ruled by Dann. PUT YOURSELF IN HIS POSITION FIRST.
 
 **Dann's words:** *"I need you to put yourself in my position. I am a human
@@ -363,6 +367,10 @@ experience is primary."* So every design reply is written from the singer's
 seat: what they see, what they are trying to do, what they feel at that
 moment. Tokens, files, and principles come after, as the means, never as the
 frame.
+
+**AMENDED 2026-10-01 22:01, after the desk wrote a project plan whose phases ran in the reader's order and put "the singer's side" sixth of eight.** Dann's words: *"Claude has the tendency to design from its own perspective: from the perspective of the coder and the syntax and grammar issues that it churns most. We do not need that as our point of departure... conceive and design from the point of view of the user. Please adopt the user's primacy as our motivating factor, meaning that our approach, although technical, has to be rooted in what is practical, elegant, and delightful for the user. This means ease in the GUI and minimal complexity that sometimes belies what's under the hood."*
+
+**The rule: a plan, a brief, or a design starts by saying what the singer does, sees, and feels, and the technical work is derived from that.** The singer's experience is the first section and the first phase, never a late one. The machinery's vocabulary (stages, counts, gates) stays out of anything the singer sees.
 
 ---
 
@@ -645,7 +653,7 @@ applies without being read.
 - Do not build any of the GUI track before the beta closes unless Dann names what
   it displaces.
 - Do not report a timing you have not controlled for.
-- **Do not store anything derived**, with R8's vowel glyph as the one exception.
+- **Do not store anything derived**, with R8's vowel glyph as one exception and, **ruled by Dann 2026-10-01 23:18, the reading of a scan as the other: "read once and keep both the scan and the reading."** The scan stays, byte for byte, so nothing is frozen; the reading is stamped with the reader's version (`../sessions/plan-scan-reader_r4_2026-10-01.md`, section 4). His words on the rule itself: *"this is exactly the type of edict that I want challenged."*
 - Do not add a second silent save site while N.27 is open.
 - Do not turn `underlay-donor.ts` into the alignment engine.
 - **Do not change `VocalLineEvent`**, and do not rebuild anything in

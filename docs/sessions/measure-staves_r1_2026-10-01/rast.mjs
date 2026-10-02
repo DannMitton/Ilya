@@ -1,0 +1,24 @@
+import { createRequire } from 'module';
+import fs from 'fs';
+const require = createRequire('/Users/dannmitton/Desktop/ilya-rewrite/apps/web/package.json');
+const { chromium } = require('@playwright/test');
+const pdf = process.argv[2], out = process.argv[3];
+const b64 = fs.readFileSync(pdf).toString('base64');
+const browser = await chromium.launch();
+const page = await browser.newPage();
+page.on('console', m => { const t=m.text(); if(!t.includes('Download the')) console.log('[c]', t.slice(0,200)); });
+await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
+const t0 = Date.now();
+const res = await page.evaluate(async (b64) => {
+  const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const file = new File([bytes], 'x.pdf', { type: 'application/pdf' });
+  const m = await import('/src/lib/reader/page-pdf.ts');
+  const t = performance.now();
+  const pages = await m.rasterizePdf(file);
+  const rast = performance.now() - t;
+  const outp = pages.map(p => { let s=''; const u=new Uint8Array(p); for(let i=0;i<u.length;i+=32768) s+=String.fromCharCode.apply(null,u.subarray(i,i+32768)); return btoa(s); });
+  return { rast, outp };
+}, b64);
+console.log('rasterize ms', res.rast);
+res.outp.forEach((b, i) => fs.writeFileSync(`${out}-${i+1}.png`, Buffer.from(b, 'base64')));
+await browser.close();

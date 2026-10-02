@@ -104,11 +104,23 @@ def run(cfg, ctx_in=None):
     # derivation: the two consumption sites number the same measures, and a
     # disagreement between them would misplace every measure on the page. See
     # run_page2's note for why it is len(barlines) and not len(barlines) + 1.
+    # TACET SYSTEMS (brief r3). Systems are counted in page order, a tacet one
+    # by the barlines through its own staves; `base_v[vi]` is the first measure
+    # of the system that owns `vocal[vi]`.
+    voices = G.get('voices')
+    order = voices['order'] if voices else list(range(len(vocal)))
+    tbl = (reader.detect_tacet_barlines(nl, staves, voices['tacetRef'], voices['tacetLast'], s)
+           if voices and voices['tacetRef'] else {})
+    sysbars = []; ti = 0
+    for o in order:
+        if o is None: sysbars.append(tbl.get(ti, [])); ti += 1
+        else: sysbars.append(bl.get(o, []))
     mps = cfg.get('measures_per_system')
     if mps is None:
-        mps = [max(1, len(bl.get(i, []))) for i in range(len(vocal))]
+        mps = [max(1, len(b)) for b in sysbars]
     base = list(np.cumsum([0] + list(mps))[:-1])
     n_measures = int(sum(mps))
+    base_v = {o: base[pos] for pos, o in enumerate(order) if o is not None}
 
     # Event count per GLOBAL measure index (decision 7's empty-bar gate is
     # tested on this count, never on msum reading 0 -- see run_page2's
@@ -126,24 +138,26 @@ def run(cfg, ctx_in=None):
     # in ctx_out as `pendingCautionary`).
     local_metre_hits = {}
     pending_cautionary = None
-    for syi in range(len(vocal)):
+    for pos, syi in enumerate(order):
+        if syi is None:
+            continue
         vsi = vocal[syi]
         bars = bl.get(syi, [])
         hits = timesig.search_system_signatures(nl, staves, s, vsi, 0, bars, W)
         for h in hits:
             if h['window'] == 'start':
-                target_local = base[syi]
+                target_local = base[pos]
             else:
                 k = h['window']
                 if h['is_final_barline']:
-                    if syi + 1 < len(vocal):
-                        target_local = base[syi + 1]
+                    if pos + 1 < len(order):
+                        target_local = base[pos + 1]
                     else:
                         pending_cautionary = dict(beats=h['beats'], beat_type=h['beat_type'],
                                                    page=page_no, flagged=h['flagged'])
                         continue
                 else:
-                    target_local = base[syi] + k + 1
+                    target_local = base[pos] + k + 1
             local_metre_hits[target_local] = (h['beats'], h['beat_type'], h['flagged'])
 
     incoming_cautionary = ctx_in.get('pendingCautionary')
@@ -236,6 +250,18 @@ def run(cfg, ctx_in=None):
             _abstain=abstain,
         )
         prelim.append(rec)
+
+    # ---- a tacet system's bars of rest (brief r3). Each is as long as its
+    # measure; where the metre abstained the duration stays abstained.
+    meas_dur = {r['measureIndex']: r['measureDuration'] for r in prelim}
+    for nd in ro['verses'][0]['notes']:
+        if nd.get('tacet'):
+            md = meas_dur.get(nd['measureIndex'])
+            if md is not None:
+                nd['duration'] = md
+                nd.pop('abstain', None)
+                msum[nd['measureIndex'] - offset_in] = Fraction(md['numerator'], md['denominator'])
+                event_counts_global_from_notes.setdefault(nd['measureIndex'], 1)
 
     # ---- pass 2: decisions 3, 5, 7 -- the event-gated, piece-scoped
     # pickup rule and the empty-bar abstention, via run_page2's canonical

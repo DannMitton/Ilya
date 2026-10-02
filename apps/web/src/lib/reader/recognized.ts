@@ -89,6 +89,12 @@ export interface ReadReport {
 	/** Systems where the brace rule could not decide and took staff 0. */
 	staffSelectionFallbacks: number;
 	/**
+	 * Systems with no voice staff (every staff inside the brace), read as bars
+	 * of rest for the voice. Optional: a report built before this field existed
+	 * omits it.
+	 */
+	tacetSystems?: number;
+	/**
 	 * Pages, 1-based, that raised and were skipped (N.96 ship 1b). Empty on a
 	 * clean read. A page listed here contributed no notes, no measures, and no
 	 * staff space to any other field of this report.

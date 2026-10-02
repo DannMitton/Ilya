@@ -59,6 +59,16 @@ import substrate
 T_REL = 0.793270
 
 
+# Counted, not printed, like reader.FALLBACK_FIRINGS: the lowest walk-row
+# concentration and the farthest accepted row from its seed (in staff spaces)
+# over the calls since the last reset. Brief r3 section 3a item 5.
+WALK_STATS = dict(min_conc=None, max_seed_dist_s=0.0)
+
+def reset_walk_stats():
+    WALK_STATS['min_conc'] = None
+    WALK_STATS['max_seed_dist_s'] = 0.0
+
+
 class WalkRaise(RuntimeError):
     """The band walk could not answer, and abstain beats guess."""
 
@@ -223,13 +233,31 @@ def remove_lines_safe(img, s, staves, page=None):
                                 "membership against staff extent %d"
                                 % (seed, page, staff_extent))
             members = _walk_band(ext, seed, staff_extent, nrows)  # S3, S4, S5
+            # THE BAND BOUND (desk ruling 2026-10-02, brief r3 section 3a item
+            # 4). No accepted row lies farther than half the staff space from
+            # its band's seed. That is the bound `_snap_seed` already derives,
+            # for the reason it already gives: beyond half the spacing, a row
+            # lies in the adjacent rule's basin. A band that breaks it raises,
+            # and a walk that swallows the page (the fault of N.83) breaks it
+            # at once.
+            far = max(max(seed - members[0], members[-1] - seed), 0)
+            WALK_STATS['max_seed_dist_s'] = max(WALK_STATS['max_seed_dist_s'],
+                                                far / float(s))
+            if far > s / 2.0:
+                raise WalkRaise("walk: a band on page %r reaches %d rows from "
+                                "its seed %d, beyond half the staff space "
+                                "(%.1f px)" % (page, far, seed, s / 2.0))
             allowed[max(0, members[0] - 1):members[-1] + 2] = True
             thicknesses.append(len(members))                      # S6
             accepted.extend(members)
-    # The sentinel binds HERE, downstream of the walk's decision and upstream
-    # of nothing. Ruled acceptances only.
-    substrate.sentinel(sub, accepted, 'beams.remove_lines_safe band walk',
-                       page)
+    # THE PER-ROW CONCENTRATION ENVELOPE (`K_S`) NO LONGER BINDS HERE. The
+    # sentinel stays, unchanged, at `reader.detect_staves`' five-line
+    # validation. The lowest concentration the walk accepted is counted, not
+    # judged, so the read report and the desk can see it (WALK_STATS).
+    if accepted:
+        _lo = float(min(sub['conc'][r] for r in set(accepted)))
+        WALK_STATS['min_conc'] = (_lo if WALK_STATS['min_conc'] is None
+                                  else min(WALK_STATS['min_conc'], _lo))
     line_t = float(np.median(thicknesses)) if thicknesses else 3.0
 
     # vertical run length through every ink pixel

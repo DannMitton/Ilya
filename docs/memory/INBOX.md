@@ -201,3 +201,4 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-10-01 01:40: DELETED ON DANN'S RULING (01:37), 13 lines no longer wanted, done, or superseded; verbatim in `../sessions/inbox-deleted_2026-10-01.md`.
 - 2026-10-01 03:00: OVERNIGHT, on Dann's instruction (01:41), the desk worked the 22 A items of `../sessions/inbox-curated_r1_2026-10-01.md`; verdicts are appended to that file. These inbox lines stay until Dann rules on them.
 - 2026-10-01 14:42: Dann: what happens when a singer drops a multi-song file into Ilya (e.g. a complete opus, like the 27-page Op. 38 scan)?
+- 2026-10-01 23:33: Dann: reading a second-language underlay from a scan is deferred, not dropped. English and French first, Italian and German later. Each needs its own word list, since Ilya's French and English are meanings of Russian words (`packages/dictionary/src/types.ts:9-14`). The scan is kept, so a later reader can return for it (plan r4, section 2).

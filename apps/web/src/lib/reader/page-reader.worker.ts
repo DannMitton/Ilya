@@ -168,6 +168,7 @@ def read_pages(paths_json, cfg_json):
     staves = 0
     rest_count = 0
     fallbacks = 0
+    tacet = 0
     ro_last = None
     failed = []
     first_traceback = None
@@ -209,7 +210,8 @@ def read_pages(paths_json, cfg_json):
         notes.extend(ro['verses'][0]['notes'])
         measures.extend(ro.get('measures', []))
         staff_spaces.append(float(G['s']))
-        systems += len(G['vocal'])
+        systems += len(G['voices']['order'])
+        tacet += len(G['voices']['tacetRef'])
         staves += len(G['staves'])
         rest_count += len(rests)
         fallbacks += int(G.get('vocalFallbacks', 0))
@@ -246,6 +248,7 @@ def read_pages(paths_json, cfg_json):
         pitchSubstitutions=[dict(measureIndex=k, count=v) for k, v in sorted(pitch_subs.items())],
         durationSubstitutions=[dict(measureIndex=k, count=v) for k, v in sorted(dur_subs.items())],
         staffSelectionFallbacks=fallbacks,
+        tacetSystems=tacet,
         failedPages=failed,
         readSeconds=round(time.time() - t0, 3),
     )

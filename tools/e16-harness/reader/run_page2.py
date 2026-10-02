@@ -23,7 +23,7 @@ import sys, json, collections
 import cv2, numpy as np
 from fractions import Fraction
 sys.path.insert(0, '/home/claude')
-from reader import read_page_pitch, detect_barlines, nms, band_of, FLAG_AREA_RATIO, _has_dot, _head_cc_area
+from reader import read_page_pitch, detect_barlines, detect_tacet_barlines, nms, band_of, FLAG_AREA_RATIO, _has_dot, _head_cc_area
 from rest_templates import render_rest
 from beams import detect_beam_bars, find_stem, beams_on_stem
 from timesig import read_time_signature
@@ -229,6 +229,8 @@ def read_page_metre(nl, staves, s, vocal, bl, page_width):
 
     Returns (beats, beat_type) or (None, None) -- ABSTAIN (T6) if there is
     no barline to anchor the search on, or nothing legible is found."""
+    if not vocal:
+        return None, None
     vocal_staff_idx = vocal[0]
     sys0_bars = bl.get(0, [])
     if not sys0_bars:
@@ -399,18 +401,43 @@ def run(cfg):
     # reader missed a barline of its own. The domain says the same thing: a
     # system ENDS with a barline, so n barlines close n measures rather than
     # opening an n+1th.
+    # TACET SYSTEMS (brief r3, 2026-10-02). `order` lists the page's systems
+    # in order: an index into `vocal` for a system with a voice staff, None for
+    # a tacet one. Its bars are counted from the barlines through its own
+    # staves, and each is emitted below as a bar of rest for the voice. With no
+    # tacet system `order` is 0..n-1 and every line here is today's.
+    voices = G.get('voices')
+    order = voices['order'] if voices else list(range(len(vocal)))
+    tbl = (detect_tacet_barlines(nl, staves, voices['tacetRef'], voices['tacetLast'], s)
+           if voices and voices['tacetRef'] else {})
+    sysbars = []; ti = 0
+    for o in order:
+        if o is None: sysbars.append(tbl.get(ti, [])); ti += 1
+        else: sysbars.append(bl.get(o, []))
     mps = cfg.get('measures_per_system')
     if mps is None:
-        mps = [max(1, len(bl.get(i, []))) for i in range(len(vocal))]
+        mps = [max(1, len(b)) for b in sysbars]
     base = np.cumsum([0] + list(mps))[:-1]
     out_notes = []; msum = {}
-    for syi in range(len(vocal)):
-        bnds = [0] + bl.get(syi, []) + [W]
-        ev = sorted([e for e in events if e['sys'] == syi], key=lambda e: e['x'])
-        for seg in range(mps[syi]):
+    for pos in range(len(order)):
+        syi = order[pos]
+        bnds = [0] + sysbars[pos] + [W]
+        ev = (sorted([e for e in events if e['sys'] == syi], key=lambda e: e['x'])
+              if syi is not None else [])
+        for seg in range(mps[pos]):
             lo, hi = bnds[seg], bnds[seg + 1]
+            if syi is None:
+                # A bar of rest for the voice. The measure's length is the
+                # envelope's to give, once the metre is resolved; until then
+                # the duration abstains and says why.
+                mi = int(base[pos]) + seg
+                out_notes.append(dict(id=f"r{mi}-{int(lo)}", type='rest', measureIndex=mi,
+                                      onset=dict(numerator=0, denominator=1), duration=None,
+                                      tacet=True, abstain=dict(duration='tacet_bar_awaits_metre')))
+                msum.update({mi: None})
+                continue
             segev = sorted([e for e in ev if lo <= e['x'] < hi], key=lambda e: e['x'])
-            mi = int(base[syi]) + seg
+            mi = int(base[pos]) + seg
             onset = Fraction(0)
             onset_abstained = False   # once a duration abstains, every later
                                        # record this measure loses its onset
