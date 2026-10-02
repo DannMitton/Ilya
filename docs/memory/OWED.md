@@ -910,4 +910,24 @@ than deleting them.
 - **A test set of six songs,** proposed to Dann.
 - **The metre brief,** next after row 20.
 
+- **The hook bound rests on one font.** `HOOK_CORE_AREA_MAX = 0.534` sits between Verovio's half notes and five hooks (row 20's report). No scan in the tree holds a printed hollow head that the finder detects. The test set needs a scan with printed half notes, on a line and in a space: Dann, 2026-10-02 02:37, a hollow head on a line shows two closed shapes (`OPEN.md`, "N.178 AND THE SCAN READER", item 14).
+- **An ossia on a scan is not reached.** The finder does not fire on a second head drawn on a stem, so `merge_ossia` never sees one (row 20's report, section 6 item 3). Cause not established.
+- **The reader in the cloud:** the app's own rasters of the three Tchaikovsky pages are not in the tree, and the cloud environment refuses `cdn.jsdelivr.net`. Both are needed before a reader brief can run there.
+- **Row 21,** `../sessions/brief-code-a-note-is-known-by-its-company_r1_2026-10-02.md`: its prompt goes to Dann for Code.
+
 **Waiting on Dann, never to be pushed:** one walk of the Tchaikovsky PDF on the alias, which is DONE for `QUEUE.md` rows 18 to 20. The desk suggested it once, for when there is more to see.
+
+## The cloud lane, 2026-10-02
+
+From `../sessions/report-code-cloud-lane_r1_2026-10-02.md`, read in full by the desk 2026-10-02 06:18.
+
+**The desk owes:**
+- **A walk of the six rows on the alias** after the merge. Nothing was seen in a browser: the stem legend (row 10), the French italics and any literal asterisk (row 15), the placement row and its undo (row 14), Insights through the gates (row 7).
+- **Row 7, item 3:** what Insights prints on Sunless 1 and «Скучай» for the six test voices, before and after. It needs Dann's Finale files, so it is Code's on the Mac.
+- **Citations into `i18n.ts` are off by 77 lines** since `8694424` (row 16 put the key-prefix index at the top of the file). Repair by naming the key, not by a new number.
+- **`insights.fit.*` has no comment saying why its name stayed.** The other two legacy keys have one.
+- **`station.startOver` and `loupe.undo.startOver` are unused** since row 14.
+- **Ratchet ceilings the cloud raised, accepted as a DESK DEFAULT:** `CalibrationWizard.svelte` 2123 to 2124, `InsightsPane.svelte` 1350 to 1351, `Loupe.svelte` 3041 to 3044; `+page.svelte` lowered 6028 to 5992.
+- **Row 14 clears a melisma or an `empty` mark along with a syllable.** A DESK DEFAULT for Dann's walk; one condition in `clearPlacements` reverses it.
+
+**Waiting on Dann, French:** `tempo` (left roman; Roberge's list has it as Italian, Usito as a French headword); `primo` and `secondo` as the names of the passaggi (built italic, the cloud's judgement).

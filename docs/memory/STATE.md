@@ -47,6 +47,18 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### STATE AT 2026-10-02 06:20, written mid-thread by the desk (the thread opened 02:26). READ THIS FIRST, THEN `QUEUE.md` ROW 21 AND "The cloud lane". It supersedes "Where it stands" and "The first act" in the 02:20 block that follows.
+>
+> **THE ONE THING: a scan in, a melody out, IPA seated under it and Russian seated under that** (Dann, 02:31).
+>
+> **The reader, on the Mac.** **Row 20 SHIPPED `952ff7f`,** 02:54, WRITTEN, accepted by the desk on a full read of the report: no hollow head emitted, 85 of 99 bars equal (61 before), 156 heads for 174. Its section 6 item 1 is NOT met, because 18 printed filled heads are not read. **Row 21 is their brief: `../sessions/brief-code-a-note-is-known-by-its-company_r1_2026-10-02.md`, written, NOT SENT to Code when this was written.** After it: the metre brief (not written).
+>
+> **The cloud lane** (ruled by Dann 02:37, `CONTRACT.md` section 5). Session `session_01Ui3tvcDXoPomwr4RExciPN`, Sonnet 5.5, built `QUEUE.md` rows 8c, 10, 15, 16, 7, and 14 on branch `cloud-lane`, commits `019bc7f` to `a3dde11`, 03:11 to 04:00, all eight gates in the cloud after each row. Report, read in full by the desk: `../sessions/report-code-cloud-lane_r1_2026-10-02.md` (on `cloud-lane` until merged). **The credit went from $250 to $236,** read on the usage page at 06:18; the week stood at 80% and Fable at 57%. **The ship script is moved for the merge:** gate 4 `1784` to `1824`, gate 5 `636 | 5 skipped (641)` to `644 | 5 skipped (649)`; backup `~/Downloads/ilya-ship.sh.bak-1784-2026-10-02`. **Whether `cloud-lane` is merged into `Shane`: read the tree.** Nothing in the six rows has been seen in a browser; the desk owes a walk on the alias after the merge.
+>
+> **The reader does not run in the cloud yet.** The cloud environment refuses `cdn.jsdelivr.net`, where the pinned Pyodide and its wheels come from (the cloud report, "Does the reader run in the cloud"). Two things would open it: that host allowed in the cloud environment's network settings, which is Dann's account and his to change, and the app's own rasters of the Tchaikovsky pages in the tree.
+>
+> **Waiting on Dann, French:** whether `tempo` takes italics in the French (left roman; Roberge and Usito differ), and whether `primo` and `secondo` do (built italic). **The desk's debts are in `OWED.md`, "Scan reader, 2026-10-02" and "The cloud lane, 2026-10-02".** **The desk did nothing from 02:57 to 06:17:** one browser read hung (`ENVIRONMENT.md`, THE CLOUD LANE).
+
 > ### CLOSE OF 2026-10-02, about 02:20 (the Fable thread opened 2026-10-01 15:32, closed at Dann's word after a compaction). READ THIS FIRST, THEN `QUEUE.md` ROWS 18 TO 20.
 >
 > **THE ONE THING: a scan in, a melody out, IPA seated under it and Russian seated under that** (Dann's wording, 2026-10-02 02:31, correcting the desk's short form "Russian seated under it" of his 2026-10-01 15:11 goal; `OPEN.md`, "N.178 AND THE SCAN READER", item 1). Markup already draws the two lines in that order: `packages/score-parser/src/staff-renderer.ts:3377-3378`. Test case: Tchaikovsky Op. 38 No. 3, `~/Downloads/Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf`, md5 `3d3d4684a1180bd4d4904ccbaca15bfb`. **Read `../sessions/memo-fable-code-reading_r1_2026-10-01.md`, then the plan, `../sessions/plan-scan-reader_r4_2026-10-01.md`, in full before any work.** The working agreement is Part 1 of the brief named in the 15:20 block below. Folder grants this work needs: the repository, `~/Downloads`, `~/Documents/Voice Pedagogy Library`, `~/Documents/Finale Files`.

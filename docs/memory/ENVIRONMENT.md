@@ -45,6 +45,8 @@ next session the same hour it cost the last one.
 | converting a journal PDF to text for an agent | `PDFTOTEXT WITHOUT -layout FOR TWO COLUMNS` |
 | spawning a Fable or Sonnet agent while Dann talks | `AN AGENT BLOCKS THE CONVERSATION` |
 | running the gates or Playwright in the cloud, or reading the e2e suite | `THE GATES RUN IN A CLOUD CLONE` |
+| starting or steering a cloud Code session, or reading what it built | `THE CLOUD LANE` |
+| the desk is about to wait on anything | `THE CLOUD LANE` |
 | changing what Ilya claims about Russian phonology, anywhere | `READ GRAYSON BEFORE YOU CORRECT A CLAIM` |
 | a test passes in one place and fails in another, or a pitch sits exactly on a threshold | `A SEMITONE IS NOT ALWAYS 100 CENTS` |
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
@@ -4475,3 +4477,13 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **Measure the reader on the app's own raster.** Poppler and pdf.js at 400 dpi give different pixels, and the desk's shell has OpenCV 5.0.0 and numpy 2.2.6 where the app pins cv2 4.9.0 and numpy 1.26.4. On the Tchaikovsky pages the desk's Poppler run found 9 and 2 staves and a raise; the app's path found 2, 2, and none (`../sessions/report-code-staves-traced-and-straightened_r1_2026-10-01.md`). A desk number is a lead. Code's number on the app's path is the measurement.
 - **Straightening a scan by interpolation loses note heads.** The desk's prototype read 49 of 70 heads on page 2 after linear resampling. Whole-pixel column shifts keep them (`STRAIGHTEN_MODE` `band` in `tools/e16-harness/reader/`).
 - **Edits made after a ship are uncommitted.** The ship takes what exists when it runs. Say so to Dann, and name them in `STATE.md` for the next ship.
+
+## THE CLOUD LANE. Learned 2026-10-02
+
+- **Start it at claude.ai/code in Dann's Chrome.** Pick the repository, then the branch. **With an existing branch chosen the page says "Claude will push directly to" that branch,** so never start on `Shane`: Dann makes a dedicated branch first (`git push origin Shane:refs/heads/cloud-lane`) and the session is started on it. The branch list is stale; type the new branch's name in the search box and it appears.
+- **The task box sends on Enter.** Type the prompt as one paragraph, and keep the long form in a tracked file the prompt points to.
+- **All eight gates run there from a fresh clone, at baseline** (2026-10-02, `952ff7f`). The session ran them after every row.
+- **The network: `registry.npmjs.org` and `pypi.org` answer; `cdn.jsdelivr.net` is refused with 403.** So the pinned Pyodide cannot load, in headless Chromium or under Node, and the reader cannot be measured there until that host is allowed in the environment's network settings.
+- **Cost: six queue rows, about an hour, $14 of the cloud session credit** ($250 to $236 on the usage page). The desk's estimate for four rows had been $5 to $25.
+- **Reading the result needs no Mac:** clone the branch in the desk's own workspace (`git clone --depth 12 --branch cloud-lane https://github.com/DannMitton/Ilya`) and read the report there.
+- **THE DESK CAN HANG. On 2026-10-02 one browser read (`get_page_text`) ran from 02:57 to 06:17 and the desk did nothing in that time.** Dann had pointed the same tab at another page. Before any wait, schedule a wake-up, and read a cloud session's progress from GitHub, not from the tab.
