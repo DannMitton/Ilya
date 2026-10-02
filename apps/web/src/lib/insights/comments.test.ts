@@ -146,7 +146,7 @@ const FR_E4 =
 const FR_EB4 =
 	"Ce [ɛ] sur E♭4 se prolonge environ 3 secondes, juste après la hauteur où votre [ɛ] change de timbre (autour de D4). La couleur tend ici à se fermer d'elle-même; mais la garder ouverte peut la pousser vers un cri (Bozeman, Practical Vocal Acoustics, 2025, p. 45 et 65). Bozeman propose de garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà. Observez si la couleur se ferme plus facilement (Kinesthetic Voice Pedagogy 2, 2021, p. 18-19).";
 const FR_D4 =
-	"Ce [u] sur D4 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u] chanté. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 157-158); mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
+	"Ce [u] sur D4 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u] chanté. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 158); mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
 const POINTS: (IntakePoint | undefined)[] = [1, 2, 3, 4, 5, 'not-sure', undefined];
 
 describe('the intake answers', () => {
@@ -356,7 +356,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 	it('D4 [u], English and French', () => {
 		const en = forced(at(t01, 'e11')!, T01, 'en', false);
 		expect(en.text).toBe(
-			'This [u] on D4 sits just above your secondo passaggio and a little under the first resonance of your sung [u]. Here the [u] tends to open a little on its own (Miller, The Structure of Singing, 1986, pp. 157 to 158); but keeping it closed tends toward whoop timbre (Bozeman, Practical Vocal Acoustics, 2025, p. 94). If it suits your voice, let it lean toward [ʊ], and notice whether the [u] keeps its colour.',
+			'This [u] on D4 sits just above your secondo passaggio and a little under the first resonance of your sung [u]. Here the [u] tends to open a little on its own (Miller, The Structure of Singing, 1986, p. 158); but keeping it closed tends toward whoop timbre (Bozeman, Practical Vocal Acoustics, 2025, p. 94). If it suits your voice, let it lean toward [ʊ], and notice whether the [u] keeps its colour.',
 		);
 		expect(en.count).toBe('3 more things to explore');
 		expect(forced(at(t01, 'e11')!, T01, 'fr', false).text).toBe(FR_D4);

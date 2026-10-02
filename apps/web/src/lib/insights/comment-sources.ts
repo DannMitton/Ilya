@@ -78,9 +78,10 @@ export const ROWS: Record<string, CitedRow> = {
 	'RMR-057': {
 		id: 'RMR-057',
 		work: 'miller1986',
-		pages: [157, 158],
+		// Row 8c, 2026-10-02: the earlier quotation (pp. 157 to 158) argued against modification to the schwa and did not support the comment. This one was read by the desk, PDF p. 179.
+		pages: [158, 158],
 		heading: null,
-		quote: 'it is not suggested that all vowels modify to the schwa ... or to some other designated phoneme at a specified pitch below the secondo passaggio, nor even in those pitches that lie above it',
+		quote: 'natural modification of the vowel will inevitably result in the mounting scale',
 	},
 	'MCK-049': {
 		id: 'MCK-049',

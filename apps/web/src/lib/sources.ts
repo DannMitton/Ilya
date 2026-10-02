@@ -257,8 +257,8 @@ export const WORKS: Record<string, Work> = {
 		place: null,
 		publisher: 'Inside View Press',
 		printing: null,
-		// NOT ESTABLISHED: no record read names the ISBN.
-		isbn: null,
+		// Supplied by Dann 2026-09-30 12:15; the copyright page is not among the photos.
+		isbn: '978-1-7335060-3-8',
 		group: 'voice',
 		degree: null,
 		container: null,
@@ -273,16 +273,16 @@ export const WORKS: Record<string, Work> = {
 		fullTitle: 'The Structure of Singing',
 		year: 1986,
 		edition: null,
-		// NOT ESTABLISHED: the records read give only the year and the page count.
-		place: null,
-		publisher: null,
+		// Title and copyright pages, PDF pp. 1 to 8 (read by the desk, 2026-09-30).
+		place: 'New York',
+		publisher: 'Schirmer Books',
 		printing: null,
 		isbn: null,
 		group: 'voice',
 		degree: null,
 		container: null,
 		url: null,
-		record: 'Insights Research/long-works-toc-screen_r1_2026-09-23.md, §6',
+		record: 'Insights Research/long-works-toc-screen_r1_2026-09-23.md, §6; the imprint from the title and copyright pages, PDF pp. 1 to 8 (desk, 2026-09-30)',
 	},
 	howell2025: {
 		key: 'howell2025',
