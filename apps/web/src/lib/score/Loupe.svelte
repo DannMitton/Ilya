@@ -32,13 +32,13 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import { followEntry, GrowOnlyWidth, HeldHeight } from '$lib/score/loupe-hold';
 	import { releasesFocus, type LoupeMode } from '$lib/score/loupe-panel.svelte';
+	import { animatePanel, ModeTween, reducedMotion } from '$lib/score/loupe-tween.svelte';
+	import { headerRightOf, musicInk, pageMetrics, restOrNoteInk, staffVerticals } from '$lib/score/loupe-ink';
 	import { deriveMinGap, fingerprint, offendingPairs, pairSeparations, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/score/loupe-render';
 	import {
 		headBound,
-		MUSIC_MARK,
 		clipToHead,
 		firstInkIn,
-		isRestGlyph,
 		openingBarline,
 		inkCrop,
 		carryBand,
@@ -57,8 +57,6 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		parseSystemRange,
 		systemIndexOf,
 		type InkSpan,
-		type PageInk,
-		type Vertical,
 		type SystemRange,
 	} from '$lib/score/loupe';
 
@@ -307,215 +305,6 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	   pad is only to keep the tallest of them off the frame's own edge. */
 	const INK_PAD_SP = 0.5;
 
-	/* ONE CANVAS, MEASURED THE WAY THE GLYPH CELLS ARE. `getBBox` on an SVG
-	   `<text>` returns the font's LAYOUT box, not its ink, and a survey built
-	   on it reported systems whose "ink" stood taller than the viewBox that
-	   contained them. Canvas answers with the inked bounds. */
-	let inkCanvas: CanvasRenderingContext2D | null = null;
-
-	function textInk(el: Element): { top: number; bottom: number } | null {
-		const ctx = (inkCanvas ??= document.createElement('canvas').getContext('2d'));
-		if (!ctx) return null;
-		const cs = getComputedStyle(el);
-		ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-		const m = ctx.measureText(el.textContent ?? '');
-		if (!(m.actualBoundingBoxAscent > 0 || m.actualBoundingBoxDescent > 0)) return null;
-		const y = Number(el.getAttribute('y'));
-		if (!Number.isFinite(y)) return null;
-		return { top: y - m.actualBoundingBoxAscent, bottom: y + m.actualBoundingBoxDescent };
-	}
-
-	/* ── THREE READINGS OF A SYSTEM AS DRAWN, shared by the frame and the survey ──
-	   The frame effect and `pageMetrics` used to walk these each in their own
-	   copy. N.138 increments 2 and 3 need all three in both places, so they
-	   live once. */
-
-	/** The system's paint order, the `MUSIC_MARK` gate in it, and the music's
-	    ink from the gate on. The frame effect's ink-walk comment says what is
-	    skipped and why; this is that walk, moved and unchanged. */
-	function musicInk(sys: Element): { nodes: Element[]; gate: number; xs: number[] } {
-		const nodes = [...sys.querySelectorAll('*')];
-		const gate = nodes.findIndex((el) => el.matches(MUSIC_MARK));
-		const xs: number[] = [];
-		for (let i = gate; i >= 0 && i < nodes.length; i++) {
-			const el = nodes[i];
-			if (el.hasAttribute('data-hit') || el.hasAttribute('data-event-id')) continue;
-			if (el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
-			if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
-			/* N.139: the page's meter is stripped from the clone, so it is not the
-			   music the loupe's own meter panel stands clear of. */
-			if (el.closest('[data-meter]')) continue;
-			const tacet = el.closest('[data-tacet]');
-			if (tacet && tacet !== el) continue;
-			let b: DOMRect;
-			try {
-				b = (el as SVGGraphicsElement).getBBox();
-			} catch {
-				continue;
-			}
-			if (b && (b.width || b.height)) xs.push(b.x);
-		}
-		return { nodes, gate, xs };
-	}
-
-	/** The x of every RESTS-OR-NOTES mark on the system, and of nothing else.
-	    A note is its event group's own marks (notehead, stem, flag) and what is
-	    tagged `data-of-event` (accidentals, courtesy parentheses, dots); a rest
-	    is a bare SMuFL rest glyph, or a multibar rest's group. Underlay, ties,
-	    slurs and ledger lines carry neither handle and are left out, which is
-	    the point: the meter panel's run-in is measured to the music, as the
-	    page measures it (desk ruling, 2026-09-16). */
-	function restOrNoteInk(sys: Element): number[] {
-		const xs: number[] = [];
-		for (const el of sys.querySelectorAll('*')) {
-			if (el.closest('[data-analysis]') || el.closest('[data-held-measure]') || el.closest('[data-meter]')) continue;
-			if (el.hasAttribute('data-hit') || el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
-			const tacet = el.closest('[data-tacet]');
-			const isNote = !!el.parentElement?.hasAttribute('data-event-id') || el.hasAttribute('data-of-event');
-			const isRest = tacet ? tacet === el : el.tagName === 'text' && !el.closest('[data-event-id]') && isRestGlyph(el.textContent);
-			if (!isNote && !isRest) continue;
-			try {
-				const b = (el as SVGGraphicsElement).getBBox();
-				if (b && (b.width || b.height)) xs.push(b.x);
-			} catch {
-				/* not rendered */
-			}
-		}
-		return xs;
-	}
-
-	/** The barlines, found as drawn: every vertical that spans exactly the
-	    staff, the staff's extent taken from the hit rectangle. Slice 3 §11's
-	    test, with the stroke width kept so a crop can end on a line's edge. */
-	function staffVerticals(sys: Element, staffTop: number, gap: number): Vertical[] {
-		const staffBottom = staffTop + 4 * gap;
-		const tol = gap * 0.3;
-		const out: Vertical[] = [];
-		for (const el of sys.querySelectorAll('line')) {
-			/* A STEM IS NOT A BARLINE, and a stem can span the staff to within
-			   the tolerance. MEASURED 2026-09-15 on Kabalevsky T05, m. 15: a stem
-			   at x = 151.85 runs 85.88 to 106.95 against a staff of 85 to 107,
-			   so the closing search took it and the loupe showed 12.25 units of
-			   an 80-unit measure. A barline is never inside a note's group, a
-			   stem always is, so the group is the test. Since `8bb406c`. */
-			if (el.closest('[data-event-id]') || el.closest('[data-analysis]')) continue;
-			const x1 = Number(el.getAttribute('x1'));
-			if (Math.abs(x1 - Number(el.getAttribute('x2'))) > 0.01) continue;
-			const y1 = Number(el.getAttribute('y1'));
-			const y2 = Number(el.getAttribute('y2'));
-			if (Math.abs(Math.min(y1, y2) - staffTop) > tol) continue;
-			if (Math.abs(Math.max(y1, y2) - staffBottom) > tol) continue;
-			out.push({ x: x1, width: Number(el.getAttribute('stroke-width')) || 0 });
-		}
-		return out;
-	}
-
-	/** Where the header ends: the right edge of the clef and of the key
-	    signature's last accidental, as drawn. `-Infinity` where neither is
-	    marked. The key signature's handle is `data-key-signature`, N.138
-	    increment 2. */
-	function headerRightOf(sys: Element): number {
-		let right = -Infinity;
-		for (const el of sys.querySelectorAll('[data-clef], [data-key-signature]')) {
-			let b: DOMRect;
-			try {
-				b = (el as SVGGraphicsElement).getBBox();
-			} catch {
-				continue;
-			}
-			if (b && (b.width || b.height)) right = Math.max(right, b.x + b.width);
-		}
-		return right;
-	}
-
-	/** Remembered per page, so a step does not re-survey the whole score. */
-	const surveys = new WeakMap<Element, { signature: string; metrics: PageInk }>();
-
-	function pageMetrics(container: Element): PageInk | null {
-		const systems = [...container.querySelectorAll('[data-system]')];
-		const signature = systems.map((el) => el.getAttribute('viewBox') ?? '').join('|');
-		const held = surveys.get(container);
-		if (held && held.signature === signature) return held.metrics;
-
-		let above = -Infinity;
-		let below = -Infinity;
-		let minTotalSpan = Infinity;
-		for (const sys of systems) {
-			const hit = sys.querySelector('[data-hit]');
-			if (!hit) continue;
-			const hitH = Number(hit.getAttribute('height'));
-			const gap = hitH / 11;
-			const staffTop = Number(hit.getAttribute('y')) + 3.5 * gap;
-			const sysWidth = Number(sys.getAttribute('width'));
-			if (!(gap > 0) || !Number.isFinite(staffTop)) continue;
-			for (const el of sys.querySelectorAll('*')) {
-				if (el.tagName === 'g') continue;
-				/* WHAT THE LOUPE DOES NOT DRAW CANNOT SET ITS FRAME. The hit
-				   rectangles, the page's own held rectangle and the analysis
-				   layer are all stripped from the clone, so a phonation break
-				   standing above the staff must not push the frame open for ink
-				   the loupe then removes. The paper behind the system was skipped
-				   here by its width until N.133 took it out of the renderer. */
-				if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
-				/* The page's selection ring is the pane's mark, not engraving, and
-				   the clone drops it — so it must not size the frame either. */
-				if (el.hasAttribute('data-selection-ring')) continue;
-				/* N.126's measure numbers are stripped from the clone too. */
-				if (el.hasAttribute('data-bar-number')) continue;
-				if (el.tagName === 'rect' && el.hasAttribute('data-hit')) continue;
-				let top: number;
-				let bottom: number;
-				if (el.tagName === 'text') {
-					const ink = textInk(el);
-					if (!ink) continue;
-					({ top, bottom } = ink);
-				} else {
-					let b: DOMRect;
-					try {
-						b = (el as SVGGraphicsElement).getBBox();
-					} catch {
-						continue;
-					}
-					if (!b || (!b.width && !b.height)) continue;
-					top = b.y;
-					bottom = b.y + b.height;
-				}
-				above = Math.max(above, staffTop - top);
-				below = Math.max(below, bottom - staffTop);
-			}
-
-			/* The system's measures, off its barlines. The same vertical test
-			   the held measure's own boundary search uses: a barline is the
-			   vertical that spans the staff exactly. */
-			const bars = staffVerticals(sys, staffTop, gap).map((v) => v.x);
-			const heads = [...sys.querySelectorAll('[data-hit]')].map((el) => Number(el.getAttribute('x')));
-			const head = heads.length > 0 ? Math.max(0, Math.min(...heads)) : 0;
-			const edges = [head, ...bars.sort((a, b) => a - b), sysWidth];
-			/* N.138 INCREMENT 2 SHORTENS THE HEAD, so this has to stay a LOWER
-			   bound on what the frame draws or a narrow measure would draw taller
-			   than the window cut for it. The frame draws the header up to its last
-			   glyph, then a meter, then any carried band, then the body from the
-			   head's bound or the barline, then the tail: at least the header plus
-			   the body. The first measure's body opens where `clipToHead` opens it,
-			   at the later of its hit rectangle and the head's bound. */
-			const headerRight = headerRightOf(sys);
-			const bound = headBound(musicInk(sys).xs);
-			const headTerm = Number.isFinite(headerRight) ? Math.min(headerRight, head) : head;
-			for (let i = 0; i < edges.length - 1; i++) {
-				/* The window's left edge sits half a gap inside the barline it
-				   opens on, as the crop does; the first measure of a system
-				   opens on the head and moves nothing. */
-				const left = i === 0 ? Math.max(edges[0], bound) : edges[i] + gap * 0.5;
-				const span = edges[i + 1] - left;
-				if (span < gap) continue;
-				minTotalSpan = Math.min(minTotalSpan, headTerm + span);
-			}
-		}
-		if (!Number.isFinite(above) || !Number.isFinite(below)) return null;
-		const metrics = { above, below, minTotalSpan };
-		surveys.set(container, { signature, metrics });
-		return metrics;
-	}
 
 	/* THE PAGE CAN MOVE UNDER THE LOUPE, and the loupe has to hear about it.
 	   Closing the drawer widens the desk and slides the sheet sideways over the
@@ -1725,7 +1514,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				caretRing = { ...caretRingBox(sysEl, taken.x, half, staffTop, lineGap), radius: RING_RADIUS, stroke: RING_STROKE };
 			}
 
-			if (marks.length > 0 && !derive && mode === 'corrections' && syllablesOpen) {
+			if (marks.length > 0 && !derive) {
+				/* THE CARETS ARE DRAWN IN EVERY MODE and the body's `.carets-on` class shows them (item 1, the tween: they fade, so they must exist to fade out). A hidden caret takes no tap: `handleTap`. */
 				/* THE ARROWHEAD'S OWN LENGTH IS THE EXTENSION PAST THE STAFF, so the
 				   mark's outer end is the arrow's base and its apex just touches the
 				   staff line it terminates on: nothing stands proud of the arrow. One
@@ -1763,6 +1553,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				const SVG_NS = 'http://www.w3.org/2000/svg';
 				const carets = document.createElementNS(SVG_NS, 'g');
 				carets.setAttribute('data-loupe-carets', '');
+				carets.setAttribute('class', 'loupe-carets');
 				const inkGroup = document.createElementNS(SVG_NS, 'g');
 				inkGroup.setAttribute('opacity', '0.32');
 				carets.appendChild(inkGroup);
@@ -2254,7 +2045,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				cy: r.top + r.height / 2,
 			};
 		});
-		const gaps = [...(windowEl?.querySelectorAll('.loupe-body [data-loupe-gap]') ?? [])].map((el) => {
+		const gaps = (caretsOn ? [...(windowEl?.querySelectorAll('.loupe-body [data-loupe-gap]') ?? [])] : []).map((el) => {
 			const r = el.getBoundingClientRect();
 			return {
 				id: `gap:${el.getAttribute('data-loupe-gap') ?? ''}`,
@@ -2379,6 +2170,24 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	   desk selector already carries (`DeskHead.svelte`, `handlePairKeydown`). */
 	const MODES: readonly LoupeMode[] = ['syllables', 'corrections'];
 
+	/* ITEM 1, THE TWEEN (`loupe-tween.svelte.ts` says what moves). The carets and the
+	   pill's fill are one condition; the card's height is measured before the DOM
+	   changes and animated after; the pills are locked while it runs. */
+	const caretsOn = $derived(mode === 'corrections' && syllablesOpen);
+	const tween = new ModeTween();
+	let panelEl = $state<HTMLElement | undefined>(undefined);
+	let panelBefore = 0;
+	$effect.pre(() => {
+		void caretsOn, void syllablesOpen;
+		panelBefore = panelEl?.offsetHeight ?? 0;
+	});
+	$effect(() => {
+		const direction = tween.update({ carets: caretsOn, panel: syllablesOpen }, reducedMotion());
+		if (direction && panelEl) animatePanel(panelEl, panelBefore, direction);
+	});
+	onMount(() => () => tween.dispose());
+	const chooseMode = (m: LoupeMode): void => void (tween.locked || onmode(m));
+
 	function modeLabel(m: LoupeMode): string {
 		return T(m === 'syllables' ? 'loupe.syllables' : 'loupe.station.corrections');
 	}
@@ -2392,7 +2201,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		else if (event.key === 'End') next = MODES.length - 1;
 		else return;
 		event.preventDefault();
-		if (next !== current) {
+		if (next !== current && !tween.locked) {
 			onmode(MODES[next]);
 			document.getElementById(`loupe-mode-${MODES[next]}`)?.focus();
 		}
@@ -2515,6 +2324,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			{/if}
 			<svg
 				class="loupe-svg loupe-body"
+				class:carets-on={caretsOn}
 				viewBox={frame.viewBox}
 				width={frame.contentWidth}
 				height={frame.contentHeight}
@@ -2627,7 +2437,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 						id="loupe-mode-{m}"
 						aria-selected={mode === m}
 						tabindex={mode === m ? 0 : -1}
-						onclick={(e) => (onmode(m), releasesFocus(e) && e.currentTarget.blur())}
+						onclick={(e) => (chooseMode(m), releasesFocus(e) && e.currentTarget.blur())}
 						onkeydown={handleModeKeydown}
 					>
 						{modeLabel(m)}
@@ -2670,7 +2480,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		     shape; it holds the syllables in Syllables mode and the correction
 		     cells in Corrections mode, and it scrolls inside the room derived
 		     above rather than moving the card. -->
-		<div class="loupe-panel" id="loupe-panel" style="max-height: {panelRoom}px;">
+		<div class="loupe-panel" class:tween={tween.locked} bind:this={panelEl} id="loupe-panel" style="max-height: {panelRoom}px;">
 			{#if syllablesOpen}
 				{#if mode === 'syllables'}
 					{#if slots.length > 0}
@@ -2941,6 +2751,34 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		overflow-y: auto;
 		overscroll-behavior: contain;
 		touch-action: pan-x pan-y;
+	}
+
+	/* ITEM 1, THE TWEEN. The perimeter animates its height (`animatePanel`), so the panel
+	   must not show a scrollbar while its box is smaller than its content. */
+	.loupe-panel.tween {
+		overflow: hidden;
+	}
+
+	/* THE CARETS FADE between 0 and 1 over the 0.32 their own group carries: 220 ms in, 150 ms
+	   out, `ease-out`, the numbers in `loupe-tween.svelte.ts`. Hidden, a caret takes no tap and
+	   shows no pointer. The class sits on markup built with `{@html}`, hence `:global`. */
+	.loupe-body :global(.loupe-carets) {
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 150ms ease-out, visibility 0s linear 150ms;
+	}
+
+	.loupe-body.carets-on :global(.loupe-carets) {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity 220ms ease-out, visibility 0s;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.loupe-body :global(.loupe-carets),
+		.loupe-body.carets-on :global(.loupe-carets) {
+			transition: none;
+		}
 	}
 
 	/* Copied value for value from `IntakePanel.svelte`'s own disclosure
