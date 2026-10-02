@@ -1282,6 +1282,122 @@ def merge_ossia(heads, nl, s, braced_sys):
     out.sort(key=lambda h:(h['sys'],h['x']))
     return out,alts
 
+# ---------- A NOTE IS KNOWN BY ITS COMPANY (brief r2, 2026-10-02) ----------
+#
+# On a braced system a filled candidate that `has_stem` refuses is still a head
+# when a stem stands at its flank, leaves it in one direction, and runs as far
+# as the measured heads' stems do. `has_stem` reads one column and one probe at
+# 1.5 staff spaces, so a flag lying close beside a long stem (a probe 0.6 to 1.6
+# wide) or a stem printed broken (a run of 0.6 to 2.2 before the first gap) fails
+# it. All six tests below are measured on candidates judged by looking, 2026-10-02
+# (`docs/sessions/report-code-a-note-is-known-by-its-company_r1_2026-10-02.md`,
+# "Build against brief r2"); each bound is the midpoint of the gap between the
+# heads and the nearest not-head that the other tests let through.
+#   RESPONSE   >= 0.80   heads 0.829 to 1.0; a beam's corner 0.779, a dynamic's
+#                         bracket 0.780 (a gap of 0.05 of the ellipse's area).
+#   RUN        2.83 to 5.0   the longest run in the has_stem band (0.35 to 1.05
+#                         staff spaces either side), breaks of up to 0.3 bridged.
+#                         Heads 3.0 to 4.46; the nearest not-head below 2.667; a
+#                         dynamic's bracket 6.0 (the reach is capped at 6).
+#   FAR SIDE   <= 0.97   how far the ink goes the other way from the head in the
+#                         stem's own columns (same bridging). Heads 0.0 to 0.864;
+#                         a sharp's stroke or a flag's junction 1.07 or more.
+#   COLUMN     0.36 to 0.73  the stem's distance from the candidate's centre.
+#                         Heads 0.393 to 0.633; a barline or a sharp's stroke
+#                         0.318 to 0.333 below, 0.833 or more above.
+#   ROW        >= 0.92   the ink through the candidate's own row, left and right,
+#                         in staff spaces. Heads 1.0 or more; a flat or sharp
+#                         beside a head, where the centre falls in a white gap or
+#                         on the accidental, 0.833 or less.
+# The thinnest-width bound of r1's rule R is not used: the tests above leave it
+# nothing to separate. Nothing is removed: a head already emitted stays, and a
+# candidate within 0.8 staff spaces of one (the finder's own suppression radius)
+# is the same head and is not admitted again.
+COMPANY_THR      = 0.80
+COMPANY_RUN_MIN  = 2.83
+COMPANY_RUN_MAX  = 5.0
+COMPANY_FAR_MAX  = 0.97
+COMPANY_COL_MIN  = 0.36
+COMPANY_COL_MAX  = 0.73
+COMPANY_ROW_MIN  = 0.92
+
+def _bridged_run(col, y0, ud, gap, lim):
+    """Rows from y0 in direction ud to the last ink row, white gaps of up to
+    `gap` rows bridged."""
+    H=len(col); y=y0; last=0; white=0; n=0
+    while 0<=y<H and n<lim:
+        if col[y]>0: last=n+1; white=0
+        else:
+            white+=1
+            if white>gap: break
+        y+=ud; n+=1
+    return last
+
+def company_measures(nl, hx, hy, s):
+    """The measures of the company rule at (hx, hy), in staff spaces: `row` the
+    ink through the candidate's own row, `run` the stem's run, `col` its column
+    against the centre, `far` the run the other way. None where no ink stands
+    in the stem band."""
+    H,W=nl.shape; lim=int(6*s); g=int(round(0.3*s))
+    if nl[hy,hx]==0: return None
+    a=hx
+    while a>0 and nl[hy,a-1]>0 and hx-a<int(1.3*s): a-=1
+    b=hx
+    while b<W-1 and nl[hy,b+1]>0 and b-hx<int(1.3*s): b+=1
+    row=((hx-a)+(b-hx))/s
+    if row<COMPANY_ROW_MIN: return dict(row=round(row,3),run=None,col=None,far=None)
+    best=(0,None,None)
+    for sign in (+1,-1):
+        for dx in range(int(0.35*s),int(1.05*s)+1):
+            x=hx+sign*dx
+            if not (0<=x<W): continue
+            col=nl[:,x]
+            for ud in (-1,+1):
+                r=_bridged_run(col,hy,ud,g,lim)
+                if r>best[0]: best=(r,x,ud)
+    r,x,ud=best
+    if x is None: return dict(row=round(row,3),run=None,col=None,far=None)
+    far=0
+    for c in (x-1,x,x+1):
+        if 0<=c<W: far=max(far,_bridged_run(nl[:,c],hy,-ud,g,lim))
+    return dict(row=round(row,3),run=round(r/s,3),col=round((x-hx)/s,3),far=round(far/s,3))
+
+def _company_passes(m):
+    return (m is not None and m['run'] is not None
+            and COMPANY_RUN_MIN<=m['run']<=COMPANY_RUN_MAX and m['far']<=COMPANY_FAR_MAX
+            and COMPANY_COL_MIN<=abs(m['col'])<=COMPANY_COL_MAX)
+
+def admit_by_company(img, nl, staves, vocal, s, braced_sys, heads):
+    """Filled candidates at a response of COMPANY_THR or more that no head in
+    `heads` already stands for, and whose company passes every test above.
+    `detect_heads` returns one point of a plateau of equal responses, and which
+    point is not fixed (a head the finder returns at one row for the threshold
+    0.84 it returns 5 to 8 pixels away for 0.80). So the tests are made at the
+    returned point AND at the plateau's other points (at most 13, spread evenly,
+    within one staff space), and every one must pass: measured 2026-10-02, no
+    printed head fails at one point of its plateau, and a beam's end and stem
+    (`kalmus s06 p21`, x 446, y 173) does.
+    Returns (admitted heads, their records for G['byCompany'])."""
+    pool=detect_heads(img,staves,vocal,s,thr=COMPANY_THR)
+    kw,kh=int(round(1.35*s)),int(round(0.92*s))
+    ker=cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(kw|1,kh|1)).astype(np.float32); ker/=ker.sum()
+    resp=cv2.filter2D((img<128).astype(np.float32),-1,ker)
+    H,W=nl.shape; out=[]; rec=[]
+    for h in pool:
+        if h['sys'] not in braced_sys: continue
+        hx,hy=int(h['x']),int(h['y'])
+        if any(g['sys']==h['sys'] and (g['x']-hx)**2+(g['y']-hy)**2<(0.8*s)**2 for g in heads): continue
+        m=company_measures(nl,hx,hy,s)
+        if not _company_passes(m): continue
+        v=resp[hy,hx]; r=int(1.0*s)
+        ys,xs=np.where(np.abs(resp[max(0,hy-r):hy+r+1,max(0,hx-r):hx+r+1]-v)<1e-5)
+        pts=[(int(x+max(0,hx-r)),int(y+max(0,hy-r))) for y,x in zip(ys,xs)]
+        step=max(1,len(pts)//8)
+        if not all(_company_passes(company_measures(nl,px,py,s)) for px,py in pts[::step][:9]): continue
+        g=dict(h); g['hollow']=False; g['byCompany']=True; out.append(g)
+        rec.append(dict(x=hx,y=hy,sys=int(h['sys']),score=float(h['score']),plateau=len(pts),**m))
+    return out,rec
+
 def read_page_geometry(cfg):
     img=cv2.imread(cfg['png'],cv2.IMREAD_GRAYSCALE)
     img,staves,s,trace_info=find_staves(img,page=cfg.get('png'))
@@ -1332,6 +1448,12 @@ def read_page_geometry(cfg):
                                       coreClosed=bool(core and core['closed']),coreArea=None if core is None else core['area']))
             hh=keep
         heads=merge_heads(heads,hh,s)
+    # A note is known by its company (brief r2): braced systems only, so the
+    # render fixtures, which have none, read exactly as before.
+    by_company=[]
+    if braced_sys and cfg.get('company', True):
+        extra,by_company=admit_by_company(img,nl_safe,staves,vocal,s,braced_sys,heads)
+        heads=sorted(heads+extra,key=lambda h:(h['sys'],h['x']))
     # N.97: CLEF AND KEY-SIGNATURE INK IS NOT NOTEHEAD CANDIDACY.
     #
     # `detect_heads` is a matched filter for a filled ellipse, and a G clef's
@@ -1368,6 +1490,7 @@ def read_page_geometry(cfg):
         heads,alternatives=merge_ossia(heads,nl_safe,s,braced_sys)
     return dict(img=img,staves=staves,s=s,vocal=vocal,bw=bw,nl=nl,nl_safe=nl_safe,heads=heads,topD=topD,
                 vocalFallbacks=vocal_fallbacks, trace=trace_info, voices=voices, hooks=hooks, alternatives=alternatives,
+                byCompany=[dict(r,emitted=any(abs(h['x']-r['x'])<=1 and abs(h['y']-r['y'])<=1 and h['sys']==r['sys'] for h in heads)) for r in by_company],
                 # N.97, ADDITIVE. What the page PRINTS, alongside what the
                 # caller answered. Nothing in this module consumes it: `topD`
                 # above is still built from cfg, so a read with the same

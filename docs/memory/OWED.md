@@ -905,6 +905,7 @@ than deleting them.
 **The desk owes:**
 - **Head counts for each bar on the Lamm and Bessel scan pages,** from crops one bar wide. Code could not count to the head at the size it viewed them, so row 20's gate on those pages rests on looking.
 - **The Tchaikovsky truth is a draft by eye** (`../sessions/truth-draft-tchaikovsky-op38-3-voice_r1_2026-10-02.md`). It becomes truth when a second count agrees with it; Dann has not checked it.
+- **Plan r4, phase 0 was skipped and is the desk's to drive** (Dann, 2026-10-02 08:50: *"You are the Project Manager... It is up to you to manage and initiate these things since they are part of the plan."*). State at 08:56: truth for the six *Sunless* songs and the ten Kabalevsky sonnets is extracted from Dann's `.musx` (`../sessions/memo-desk-truth-from-finale_r1_2026-10-02.md`; files in the git-ignored `tools/e16-harness/output/truth/`). The six-song set is proposed and waits for his ruling (chat, 08:55). Still to start: the exact scorer (a cloud brief), the outside-engine yardstick (the harness holds homr and oemer adapters in `tools/e16-harness/src/adapters/`), a baseline for each song, phase 1's drawings, the one-staff-size and Gould-numbers measurements, the stored reading's definition, and track B1's brief. **The harness's truth path fails under plain Node** (`mnx-parser.ts` imports `./pickup` with no extension); it ran through `npx tsx`.
 - **Plan r4, phase 0:** truth files, and the scorer made exact (`ONSET_TOLERANCE = 0.2` in `tools/e16-harness/src/` is too lenient on note length; Dann allowed the change at 23:06 on 2026-10-01).
 - **Plan r4, phase 1:** the singer's experience, drawn.
 - **A test set of six songs,** proposed to Dann.
@@ -913,7 +914,7 @@ than deleting them.
 - **The hook bound rests on one font.** `HOOK_CORE_AREA_MAX = 0.534` sits between Verovio's half notes and five hooks (row 20's report). No scan in the tree holds a printed hollow head that the finder detects. The test set needs a scan with printed half notes, on a line and in a space: Dann, 2026-10-02 02:37, a hollow head on a line shows two closed shapes (`OPEN.md`, "N.178 AND THE SCAN READER", item 14).
 - **An ossia on a scan is not reached.** The finder does not fire on a second head drawn on a stem, so `merge_ossia` never sees one (row 20's report, section 6 item 3). Cause not established.
 - **The reader in the cloud:** the app's own rasters of the three Tchaikovsky pages are not in the tree, and the cloud environment refuses `cdn.jsdelivr.net`. Both are needed before a reader brief can run there.
-- **Row 21,** `../sessions/brief-code-a-note-is-known-by-its-company_r1_2026-10-02.md`: its prompt goes to Dann for Code.
+- **Row 21 is built** (r2; `QUEUE.md`). Left over from its report, for the next reader brief: the comment at the company step says the render fixtures hold no braced system, and eight of them do when read without a `vocal` list, which is how the app reads (`apps/web/src/lib/reader/page-reader.worker.ts:197-203`); the docstring says the plateau is tested at up to 13 points and the code takes at most 9; the clef-and-key mask stops short on `kalmus s06 p21` and reads key 0 on `tch-3` system 2; two printed heads stay unread (`tch-1` x 3167, `bessel-s01p2` x 2492); the read is about 4 s slower for three pages, and no limit on the wait is set yet.
 
 **Waiting on Dann, never to be pushed:** one walk of the Tchaikovsky PDF on the alias, which is DONE for `QUEUE.md` rows 18 to 20. The desk suggested it once, for when there is more to see.
 
@@ -922,7 +923,9 @@ than deleting them.
 From `../sessions/report-code-cloud-lane_r1_2026-10-02.md`, read in full by the desk 2026-10-02 06:18.
 
 **The desk owes:**
-- **A walk of the six rows on the alias** after the merge. Nothing was seen in a browser: the stem legend (row 10), the French italics and any literal asterisk (row 15), the placement row and its undo (row 14), Insights through the gates (row 7).
+- **A desk walk of the six rows was made 2026-10-02 08:15 to 08:20** (`../sessions/walk-desk-622f35f_r1_2026-10-02.md`, three pictures beside it): the stem legend, the French italics with no literal asterisk, and the placement row all draw. **Still owed, none of it seen:** the Clear scopes and their undo, print, the phone layout, the calibration heading, row 8c's page, and Insights in English.
+- **French tempo indications from the score print roman** (« au tempo qu'indique habituellement Andante tranquillo », Aperçus, Sunless 1). The ruling's Roberge sentence puts an indication of tempo in italics (`PRODUCT.md`, "ITALICS ON FOREIGN WORDS IN THE FRENCH"). Found on the walk; a brief for the cloud lane.
+- **The stem legend costs page 1 a system on Sunless 1:** five systems with it, six in the build before. Seen on the walk; the cause is not read. For Dann's eye.
 - **Row 7, item 3:** what Insights prints on Sunless 1 and «Скучай» for the six test voices, before and after. It needs Dann's Finale files, so it is Code's on the Mac.
 - **Citations into `i18n.ts` are off by 77 lines** since `8694424` (row 16 put the key-prefix index at the top of the file). Repair by naming the key, not by a new number.
 - **`insights.fit.*` has no comment saying why its name stayed.** The other two legacy keys have one.

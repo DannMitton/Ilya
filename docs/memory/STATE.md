@@ -57,6 +57,10 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **The reader does not run in the cloud yet.** The cloud environment refuses `cdn.jsdelivr.net`, where the pinned Pyodide and its wheels come from (the cloud report, "Does the reader run in the cloud"). Two things would open it: that host allowed in the cloud environment's network settings, which is Dann's account and his to change, and the app's own rasters of the Tchaikovsky pages in the tree.
 >
+> **08:04: `cloud-lane` is merged and shipped as `622f35f`,** eight gates at baseline on the Mac. **08:06: the row 21 prompt went to Dann for Code,** and Code began measuring (`../sessions/measure-company_r1_2026-10-02/`). **08:15 to 08:20: the desk walked the six rows on the alias** (`../sessions/walk-desk-622f35f_r1_2026-10-02.md`; new files to `git add` before the next ship: that file and the folder `walk-desk-622f35f_2026-10-02/`).
+>
+> **08:24: row 21 is at r2.** Code measured r1's section 3 and stopped, as r1 told it to: its measures did not separate a head from a key-signature sharp. The desk ruled in `../sessions/brief-code-a-note-is-known-by-its-company_r2_2026-10-02.md` (r1 is SUPERSEDED): the measure is where the stem meets the head. New files to `git add`: that brief, Code's report, and `../sessions/measure-company_r1_2026-10-02/`. **The clef-and-key mask stops short of the seven-sharp key signature on `kalmus s06 p21`** (Code's report); it wants its own brief.
+>
 > **Waiting on Dann, French:** whether `tempo` takes italics in the French (left roman; Roberge and Usito differ), and whether `primo` and `secondo` do (built italic). **The desk's debts are in `OWED.md`, "Scan reader, 2026-10-02" and "The cloud lane, 2026-10-02".** **The desk did nothing from 02:57 to 06:17:** one browser read hung (`ENVIRONMENT.md`, THE CLOUD LANE).
 
 > ### CLOSE OF 2026-10-02, about 02:20 (the Fable thread opened 2026-10-01 15:32, closed at Dann's word after a compaction). READ THIS FIRST, THEN `QUEUE.md` ROWS 18 TO 20.

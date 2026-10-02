@@ -1,5 +1,7 @@
 # Brief for Code: on the voice staff, a note is known by its company
 
+**SUPERSEDED 2026-10-02 by `brief-code-a-note-is-known-by-its-company_r2_2026-10-02.md`.** Code measured this brief's section 3 and stopped, as it says to (`report-code-a-note-is-known-by-its-company_r1_2026-10-02.md`). Do not build to this file.
+
 **Written by:** the desk (Fable), 2026-10-02 about 03:00. **This is the whole brief for `QUEUE.md` row 21.** **Serves:** THE ONE THING in `docs/memory/STATE.md`: a scan in, a melody out, IPA seated under it and Russian seated under that. Part of phase 5 of `plan-scan-reader_r4_2026-10-01.md`, taken early for the reason row 20 was: the metre's arithmetic needs the right notes. **Runs on the tree as row 20 left it.** Background: your own `report-code-one-head-to-a-stem_r1_2026-10-02.md`, section "Build against brief r3", and `truth-draft-tchaikovsky-op38-3-voice_r1_2026-10-02.md`.
 
 **This brief follows `BRIEF-TEMPLATE.md`. It has no slot for a cause, and none is given.**

@@ -44,3 +44,11 @@ apps/web/test-results/
 # Files Claude delivers into the chat land here via the desktop app.
 # Generated, disposable, and they block the ship script while untracked.
 Claude outputs/
+
+# Crop sheets a measurement made to be looked at. They stay on the Mac as
+# evidence and are too heavy for the repository (34 MB of the 35 MB in
+# measure-company_r1_2026-10-02). Scripts and JSON results beside them are
+# tracked. Added by the desk 2026-10-02.
+docs/sessions/measure-*/*.files/
+docs/sessions/measure-*/sel/
+docs/sessions/measure-*/mask/
