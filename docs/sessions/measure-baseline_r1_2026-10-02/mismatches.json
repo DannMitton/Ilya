@@ -1,0 +1,2459 @@
+{
+ "1": {
+  "shift": 12,
+  "diffs": [
+   {
+    "kind": "length abstained",
+    "truthIndex": 0,
+    "readerIndex": 0,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 57,
+     "name": "A3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-1266",
+     "midi": 69,
+     "name": "A3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1188,
+     "x1": 2255,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "pitch abstained + length wrong",
+    "truthIndex": 3,
+    "readerIndex": 3,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 58,
+     "name": "A#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-1734",
+     "midi": null,
+     "name": null,
+     "assumed": "B3",
+     "len": "3/8",
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "pitch": "accidental_unresolved"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1188,
+     "x1": 2255,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "pitch wrong + length abstained",
+    "truthIndex": 4,
+    "readerIndex": 4,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 53,
+     "name": "F3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-1916",
+     "midi": 66,
+     "name": "F#3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1188,
+     "x1": 2255,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "pitch wrong + length abstained",
+    "truthIndex": 5,
+    "readerIndex": 5,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 53,
+     "name": "F3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-2059",
+     "midi": 66,
+     "name": "F#3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1188,
+     "x1": 2255,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 6,
+    "readerIndex": null,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1188,
+     "x1": 2255,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "pitch wrong",
+    "truthIndex": 7,
+    "readerIndex": 6,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 59,
+     "name": "B3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-2342",
+     "midi": 72,
+     "name": "C4",
+     "assumed": null,
+     "len": "1/4",
+     "abstain": null
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2255,
+     "x1": 3509,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 8,
+    "readerIndex": 7,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 55,
+     "name": "G3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-2493",
+     "midi": 67,
+     "name": "G3",
+     "assumed": null,
+     "len": "3/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2255,
+     "x1": 3509,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 9,
+    "readerIndex": 8,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 55,
+     "name": "G3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-2639",
+     "midi": 67,
+     "name": "G3",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2255,
+     "x1": 3509,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 10,
+    "readerIndex": null,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2255,
+     "x1": 3509,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 12,
+    "readerIndex": 10,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 57,
+     "name": "A3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-3153",
+     "midi": 69,
+     "name": "A3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2255,
+     "x1": 3509,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 13,
+    "readerIndex": 11,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 57,
+     "name": "A3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-3265",
+     "midi": 69,
+     "name": "A3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2255,
+     "x1": 3509,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 14,
+    "readerIndex": null,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2255,
+     "x1": 3509,
+     "ytop": 961,
+     "ybot": 1080
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 15,
+    "readerIndex": 12,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 58,
+     "name": "A#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-543",
+     "midi": 70,
+     "name": "A#3",
+     "assumed": null,
+     "len": "3/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 3,
+     "system": 2,
+     "x0": 0,
+     "x1": 1435,
+     "ytop": 2230,
+     "ybot": 2348
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 16,
+    "readerIndex": 13,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 52,
+     "name": "E3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-712",
+     "midi": 64,
+     "name": "E3",
+     "assumed": null,
+     "len": "3/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 3,
+     "system": 2,
+     "x0": 0,
+     "x1": 1435,
+     "ytop": 2230,
+     "ybot": 2348
+    }
+   },
+   {
+    "kind": "pitch wrong + length abstained",
+    "truthIndex": 24,
+    "readerIndex": 21,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 53,
+     "name": "F3",
+     "len": "3/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-2006",
+     "midi": 66,
+     "name": "F#3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1435,
+     "x1": 2507,
+     "ytop": 2230,
+     "ybot": 2348
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 25,
+    "readerIndex": 22,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 50,
+     "name": "D3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-2241",
+     "midi": 62,
+     "name": "D3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1435,
+     "x1": 2507,
+     "ytop": 2230,
+     "ybot": 2348
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 26,
+    "readerIndex": 23,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 50,
+     "name": "D3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-2337",
+     "midi": 62,
+     "name": "D3",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": {
+      "onset": "follows_duration_abstention"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1435,
+     "x1": 2507,
+     "ytop": 2230,
+     "ybot": 2348
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 27,
+    "readerIndex": null,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1435,
+     "x1": 2507,
+     "ytop": 2230,
+     "ybot": 2348
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 28,
+    "readerIndex": 24,
+    "truthBar": 5,
+    "readerBar": 5,
+    "truth": {
+     "type": "note",
+     "midi": 57,
+     "name": "A3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r5-2592",
+     "midi": 69,
+     "name": "A3",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 5,
+     "system": 2,
+     "x0": 2507,
+     "x1": 3510,
+     "ytop": 2230,
+     "ybot": 2348
+    }
+   },
+   {
+    "kind": "pitch wrong + length abstained",
+    "truthIndex": 29,
+    "readerIndex": 25,
+    "truthBar": 5,
+    "readerBar": 5,
+    "truth": {
+     "type": "note",
+     "midi": 54,
+     "name": "F#3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r5-2753",
+     "midi": 63,
+     "name": "D#3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 1,
+     "s": 30.0,
+     "measureIndex": 5,
+     "system": 2,
+     "x0": 2507,
+     "x1": 3510,
+     "ytop": 2230,
+     "ybot": 2348
+    }
+   }
+  ],
+  "bars": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ "4": {
+  "shift": 0,
+  "diffs": [
+   {
+    "kind": "missing",
+    "truthIndex": 1,
+    "readerIndex": null,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1403,
+     "x1": 2124,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 3,
+    "readerIndex": 2,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 64,
+     "name": "E4",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-1811",
+     "midi": 64,
+     "name": "E4",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1403,
+     "x1": 2124,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 4,
+    "readerIndex": 3,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 64,
+     "name": "E4",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-1951",
+     "midi": 64,
+     "name": "E4",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1403,
+     "x1": 2124,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 5,
+    "readerIndex": null,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1403,
+     "x1": 2124,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 6,
+    "readerIndex": null,
+    "truthBar": 2,
+    "readerBar": 1,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1403,
+     "x1": 2124,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 7,
+    "readerIndex": 4,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 66,
+     "name": "F#4",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-2272",
+     "midi": 66,
+     "name": "F#4",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2124,
+     "x1": 2786,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 8,
+    "readerIndex": 5,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 66,
+     "name": "F#4",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-2364",
+     "midi": 66,
+     "name": "F#4",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": {
+      "onset": "follows_duration_abstention"
+     }
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2124,
+     "x1": 2786,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 9,
+    "readerIndex": 6,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 66,
+     "name": "F#4",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-2456",
+     "midi": 66,
+     "name": "F#4",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2124,
+     "x1": 2786,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 12,
+    "readerIndex": 9,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 66,
+     "name": "F#4",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-2866",
+     "midi": 66,
+     "name": "F#4",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 3,
+     "system": 1,
+     "x0": 2786,
+     "x1": 3498,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 14,
+    "readerIndex": null,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 3,
+     "system": 1,
+     "x0": 2786,
+     "x1": 3498,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 15,
+    "readerIndex": null,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/4"
+    },
+    "reader": null,
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 3,
+     "system": 1,
+     "x0": 2786,
+     "x1": 3498,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 16,
+    "readerIndex": 11,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 66,
+     "name": "F#4",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-3355",
+     "midi": 66,
+     "name": "F#4",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 3,
+     "system": 1,
+     "x0": 2786,
+     "x1": 3498,
+     "ytop": 852,
+     "ybot": 976
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 18,
+    "readerIndex": 13,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 75,
+     "name": "D#5",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-838",
+     "midi": 75,
+     "name": "D#5",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 0,
+     "x1": 1389,
+     "ytop": 2256,
+     "ybot": 2380
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 20,
+    "readerIndex": 15,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 68,
+     "name": "G#4",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-1116",
+     "midi": 68,
+     "name": "G#4",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 0,
+     "x1": 1389,
+     "ytop": 2256,
+     "ybot": 2380
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 22,
+    "readerIndex": 17,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 71,
+     "name": "B4",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-1311",
+     "midi": 71,
+     "name": "B4",
+     "assumed": null,
+     "len": "1/4",
+     "abstain": null
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 0,
+     "x1": 1389,
+     "ytop": 2256,
+     "ybot": 2380
+    }
+   },
+   {
+    "kind": "pitch wrong",
+    "truthIndex": 23,
+    "readerIndex": 18,
+    "truthBar": 5,
+    "readerBar": 5,
+    "truth": {
+     "type": "note",
+     "midi": 70,
+     "name": "A#4",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r5-1501",
+     "midi": 67,
+     "name": "G4",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 5,
+     "system": 2,
+     "x0": 1389,
+     "x1": 2039,
+     "ytop": 2256,
+     "ybot": 2380
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 24,
+    "readerIndex": null,
+    "truthBar": 5,
+    "readerBar": 5,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 5,
+     "system": 2,
+     "x0": 1389,
+     "x1": 2039,
+     "ytop": 2256,
+     "ybot": 2380
+    }
+   },
+   {
+    "kind": "pitch wrong",
+    "truthIndex": 25,
+    "readerIndex": 19,
+    "truthBar": 5,
+    "readerBar": 5,
+    "truth": {
+     "type": "note",
+     "midi": 70,
+     "name": "A#4",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r5-1661",
+     "midi": 67,
+     "name": "G4",
+     "assumed": null,
+     "len": "1/4",
+     "abstain": null
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 5,
+     "system": 2,
+     "x0": 1389,
+     "x1": 2039,
+     "ytop": 2256,
+     "ybot": 2380
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 29,
+    "readerIndex": 23,
+    "truthBar": 6,
+    "readerBar": 6,
+    "truth": {
+     "type": "note",
+     "midi": 66,
+     "name": "F#4",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r6-2213",
+     "midi": 66,
+     "name": "F#4",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 6,
+     "system": 2,
+     "x0": 2039,
+     "x1": 2790,
+     "ytop": 2256,
+     "ybot": 2380
+    }
+   },
+   {
+    "kind": "pitch abstained + length wrong",
+    "truthIndex": 32,
+    "readerIndex": 26,
+    "truthBar": 6,
+    "readerBar": 6,
+    "truth": {
+     "type": "note",
+     "midi": 69,
+     "name": "A4",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r6-2519",
+     "midi": null,
+     "name": null,
+     "assumed": "A4",
+     "len": "3/8",
+     "abstain": {
+      "pitch": "accidental_unresolved"
+     }
+    },
+    "loc": {
+     "page": 9,
+     "s": 31.0,
+     "measureIndex": 6,
+     "system": 2,
+     "x0": 2039,
+     "x1": 2790,
+     "ytop": 2256,
+     "ybot": 2380
+    }
+   }
+  ],
+  "bars": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ]
+ },
+ "5": {
+  "shift": 12,
+  "diffs": [
+   {
+    "kind": "missing",
+    "truthIndex": 0,
+    "readerIndex": null,
+    "truthBar": 0,
+    "readerBar": 0,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/2"
+    },
+    "reader": null,
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 0,
+     "system": 1,
+     "x0": 0,
+     "x1": 2038,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 1,
+    "readerIndex": null,
+    "truthBar": 0,
+    "readerBar": 0,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/4"
+    },
+    "reader": null,
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 0,
+     "system": 1,
+     "x0": 0,
+     "x1": 2038,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 2,
+    "readerIndex": null,
+    "truthBar": 0,
+    "readerBar": 0,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/12"
+    },
+    "reader": null,
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 0,
+     "system": 1,
+     "x0": 0,
+     "x1": 2038,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 3,
+    "readerIndex": null,
+    "truthBar": 0,
+    "readerBar": 0,
+    "truth": {
+     "type": "note",
+     "midi": 51,
+     "name": "D#3",
+     "len": "1/6"
+    },
+    "reader": null,
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 0,
+     "system": 1,
+     "x0": 0,
+     "x1": 2038,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 4,
+    "readerIndex": 0,
+    "truthBar": 1,
+    "readerBar": 0,
+    "truth": {
+     "type": "note",
+     "midi": 50,
+     "name": "D3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r0-1841",
+     "midi": 62,
+     "name": "D3",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 0,
+     "system": 1,
+     "x0": 0,
+     "x1": 2038,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "extra",
+    "truthIndex": null,
+    "readerIndex": 1,
+    "truthBar": null,
+    "readerBar": 1,
+    "truth": null,
+    "reader": {
+     "type": "note",
+     "id": "r1-2151",
+     "midi": 60,
+     "name": "C3",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 2038,
+     "x1": 3495,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "pitch wrong + length abstained",
+    "truthIndex": 5,
+    "readerIndex": 2,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 50,
+     "name": "D3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-2493",
+     "midi": 60,
+     "name": "C3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 2038,
+     "x1": 3495,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 6,
+    "readerIndex": null,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 2038,
+     "x1": 3495,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 7,
+    "readerIndex": 3,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 50,
+     "name": "D3",
+     "len": "3/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-2876",
+     "midi": 62,
+     "name": "D3",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": {
+      "onset": "follows_duration_abstention"
+     }
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 2038,
+     "x1": 3495,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 8,
+    "readerIndex": 4,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 50,
+     "name": "D3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-3328",
+     "midi": 62,
+     "name": "D3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 2038,
+     "x1": 3495,
+     "ytop": 706,
+     "ybot": 830
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 9,
+    "readerIndex": 5,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 52,
+     "name": "E3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-494",
+     "midi": 64,
+     "name": "E3",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 2,
+     "x0": 0,
+     "x1": 2186,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 10,
+    "readerIndex": 6,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 52,
+     "name": "E3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-1002",
+     "midi": 64,
+     "name": "E3",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 2,
+     "x0": 0,
+     "x1": 2186,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 11,
+    "readerIndex": null,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 2,
+     "x0": 0,
+     "x1": 2186,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 12,
+    "readerIndex": null,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/4"
+    },
+    "reader": null,
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 2,
+     "x0": 0,
+     "x1": 2186,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 13,
+    "readerIndex": null,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 2,
+     "x0": 0,
+     "x1": 2186,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 14,
+    "readerIndex": 7,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 52,
+     "name": "E3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-2031",
+     "midi": 64,
+     "name": "E3",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 2,
+     "x0": 0,
+     "x1": 2186,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 15,
+    "readerIndex": 8,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 52,
+     "name": "E3",
+     "len": "3/16"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-2300",
+     "midi": 64,
+     "name": "E3",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 3,
+     "system": 2,
+     "x0": 2186,
+     "x1": 3493,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 16,
+    "readerIndex": 9,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 56,
+     "name": "G#3",
+     "len": "1/16"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-2488",
+     "midi": 68,
+     "name": "G#3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 3,
+     "system": 2,
+     "x0": 2186,
+     "x1": 3493,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "length abstained",
+    "truthIndex": 17,
+    "readerIndex": 10,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 51,
+     "name": "D#3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-2626",
+     "midi": 63,
+     "name": "D#3",
+     "assumed": null,
+     "len": null,
+     "abstain": {
+      "onset": "follows_duration_abstention",
+      "duration": "beam_scale_ink_no_beam"
+     }
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 3,
+     "system": 2,
+     "x0": 2186,
+     "x1": 3493,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 18,
+    "readerIndex": 11,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 52,
+     "name": "E3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-2766",
+     "midi": 64,
+     "name": "E3",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": {
+      "onset": "follows_duration_abstention"
+     }
+    },
+    "loc": {
+     "page": 11,
+     "s": 30.0,
+     "measureIndex": 3,
+     "system": 2,
+     "x0": 2186,
+     "x1": 3493,
+     "ytop": 1912,
+     "ybot": 2035
+    }
+   }
+  ],
+  "bars": [
+   0,
+   1,
+   2,
+   3
+  ]
+ },
+ "6": {
+  "shift": 12,
+  "diffs": [
+   {
+    "kind": "missing",
+    "truthIndex": 0,
+    "readerIndex": null,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 49,
+     "name": "C#3",
+     "len": "1/2"
+    },
+    "reader": null,
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1715,
+     "x1": 2588,
+     "ytop": 870,
+     "ybot": 988
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 1,
+    "readerIndex": 0,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 51,
+     "name": "D#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-2196",
+     "midi": 63,
+     "name": "D#3",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1715,
+     "x1": 2588,
+     "ytop": 870,
+     "ybot": 988
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 2,
+    "readerIndex": 1,
+    "truthBar": 1,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 53,
+     "name": "F3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r1-2397",
+     "midi": 65,
+     "name": "F3",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1715,
+     "x1": 2588,
+     "ytop": 870,
+     "ybot": 988
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 3,
+    "readerIndex": null,
+    "truthBar": 2,
+    "readerBar": 1,
+    "truth": {
+     "type": "note",
+     "midi": 54,
+     "name": "F#3",
+     "len": "1/2"
+    },
+    "reader": null,
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 1,
+     "system": 1,
+     "x0": 1715,
+     "x1": 2588,
+     "ytop": 870,
+     "ybot": 988
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 4,
+    "readerIndex": 2,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 51,
+     "name": "D#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-3071",
+     "midi": 63,
+     "name": "D#3",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2588,
+     "x1": 3471,
+     "ytop": 870,
+     "ybot": 988
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 5,
+    "readerIndex": 3,
+    "truthBar": 2,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 54,
+     "name": "F#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r2-3270",
+     "midi": 66,
+     "name": "F#3",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2588,
+     "x1": 3471,
+     "ytop": 870,
+     "ybot": 988
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 6,
+    "readerIndex": null,
+    "truthBar": 3,
+    "readerBar": 2,
+    "truth": {
+     "type": "note",
+     "midi": 56,
+     "name": "G#3",
+     "len": "1/2"
+    },
+    "reader": null,
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 2,
+     "system": 1,
+     "x0": 2588,
+     "x1": 3471,
+     "ytop": 870,
+     "ybot": 988
+    }
+   },
+   {
+    "kind": "pitch wrong + length wrong",
+    "truthIndex": 7,
+    "readerIndex": 4,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 57,
+     "name": "A3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-1124",
+     "midi": 70,
+     "name": "A#3",
+     "assumed": null,
+     "len": "3/32",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 3,
+     "system": 2,
+     "x0": 0,
+     "x1": 1557,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 8,
+    "readerIndex": 5,
+    "truthBar": 3,
+    "readerBar": 3,
+    "truth": {
+     "type": "note",
+     "midi": 56,
+     "name": "G#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r3-1348",
+     "midi": 68,
+     "name": "G#3",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 3,
+     "system": 2,
+     "x0": 0,
+     "x1": 1557,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 9,
+    "readerIndex": 6,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 61,
+     "name": "C#4",
+     "len": "3/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-1634",
+     "midi": 73,
+     "name": "C#4",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1557,
+     "x1": 2515,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 10,
+    "readerIndex": 7,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 54,
+     "name": "F#3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-1970",
+     "midi": 66,
+     "name": "F#3",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1557,
+     "x1": 2515,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 11,
+    "readerIndex": 8,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 54,
+     "name": "F#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r4-2085",
+     "midi": 66,
+     "name": "F#3",
+     "assumed": null,
+     "len": "3/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1557,
+     "x1": 2515,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 12,
+    "readerIndex": null,
+    "truthBar": 4,
+    "readerBar": 4,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/4"
+    },
+    "reader": null,
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1557,
+     "x1": 2515,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 13,
+    "readerIndex": null,
+    "truthBar": 5,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 57,
+     "name": "A3",
+     "len": "1/2"
+    },
+    "reader": null,
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1557,
+     "x1": 2515,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 14,
+    "readerIndex": null,
+    "truthBar": 5,
+    "readerBar": 4,
+    "truth": {
+     "type": "note",
+     "midi": 52,
+     "name": "E3",
+     "len": "1/4"
+    },
+    "reader": null,
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 4,
+     "system": 2,
+     "x0": 1557,
+     "x1": 2515,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 15,
+    "readerIndex": 9,
+    "truthBar": 5,
+    "readerBar": 5,
+    "truth": {
+     "type": "note",
+     "midi": 54,
+     "name": "F#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r5-3051",
+     "midi": 66,
+     "name": "F#3",
+     "assumed": null,
+     "len": "1/8",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 5,
+     "system": 2,
+     "x0": 2515,
+     "x1": 3482,
+     "ytop": 2152,
+     "ybot": 2270
+    }
+   },
+   {
+    "kind": "pitch wrong",
+    "truthIndex": 16,
+    "readerIndex": 10,
+    "truthBar": 6,
+    "readerBar": 6,
+    "truth": {
+     "type": "note",
+     "midi": 57,
+     "name": "A3",
+     "len": "1/2"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r6-676",
+     "midi": 71,
+     "name": "B3",
+     "assumed": null,
+     "len": "1/2",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 6,
+     "system": 3,
+     "x0": 0,
+     "x1": 1556,
+     "ytop": 3452,
+     "ybot": 3570
+    }
+   },
+   {
+    "kind": "pitch wrong + length wrong",
+    "truthIndex": 17,
+    "readerIndex": 11,
+    "truthBar": 6,
+    "readerBar": 6,
+    "truth": {
+     "type": "note",
+     "midi": 52,
+     "name": "E3",
+     "len": "1/8"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r6-1122",
+     "midi": 62,
+     "name": "D3",
+     "assumed": null,
+     "len": "1/16",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 6,
+     "system": 3,
+     "x0": 0,
+     "x1": 1556,
+     "ytop": 3452,
+     "ybot": 3570
+    }
+   },
+   {
+    "kind": "missing",
+    "truthIndex": 18,
+    "readerIndex": null,
+    "truthBar": 6,
+    "readerBar": 6,
+    "truth": {
+     "type": "rest",
+     "midi": null,
+     "name": null,
+     "len": "1/8"
+    },
+    "reader": null,
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 6,
+     "system": 3,
+     "x0": 0,
+     "x1": 1556,
+     "ytop": 3452,
+     "ybot": 3570
+    }
+   },
+   {
+    "kind": "length wrong",
+    "truthIndex": 19,
+    "readerIndex": 12,
+    "truthBar": 6,
+    "readerBar": 6,
+    "truth": {
+     "type": "note",
+     "midi": 54,
+     "name": "F#3",
+     "len": "1/4"
+    },
+    "reader": {
+     "type": "note",
+     "id": "r6-1152",
+     "midi": 66,
+     "name": "F#3",
+     "assumed": null,
+     "len": "1/2",
+     "abstain": null
+    },
+    "loc": {
+     "page": 18,
+     "s": 30.0,
+     "measureIndex": 6,
+     "system": 3,
+     "x0": 0,
+     "x1": 1556,
+     "ytop": 3452,
+     "ybot": 3570
+    }
+   }
+  ],
+  "bars": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ]
+ }
+}

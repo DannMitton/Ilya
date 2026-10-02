@@ -907,9 +907,11 @@ than deleting them.
 - **The Tchaikovsky truth is a draft by eye** (`../sessions/truth-draft-tchaikovsky-op38-3-voice_r1_2026-10-02.md`). It becomes truth when a second count agrees with it; Dann has not checked it.
 - **Plan r4, phase 0 was skipped and is the desk's to drive** (Dann, 2026-10-02 08:50: *"You are the Project Manager... It is up to you to manage and initiate these things since they are part of the plan."*). State at 08:56: truth for the six *Sunless* songs and the ten Kabalevsky sonnets is extracted from Dann's `.musx` (`../sessions/memo-desk-truth-from-finale_r1_2026-10-02.md`; files in the git-ignored `tools/e16-harness/output/truth/`). The six-song set is proposed and waits for his ruling (chat, 08:55). Still to start: the exact scorer (a cloud brief), the outside-engine yardstick (the harness holds homr and oemer adapters in `tools/e16-harness/src/adapters/`), a baseline for each song, phase 1's drawings, the one-staff-size and Gould-numbers measurements, the stored reading's definition, and track B1's brief. **The harness's truth path fails under plain Node** (`mnx-parser.ts` imports `./pickup` with no extension); it ran through `npx tsx`.
 - **Plan r4, phase 0:** truth files, and the scorer made exact (`ONSET_TOLERANCE = 0.2` in `tools/e16-harness/src/` is too lenient on note length; Dann allowed the change at 23:06 on 2026-10-01).
+- **The Tchaikovsky truth with pitches and lengths, begun 09:24 and not finished at the close of 09:29.** Eleven sheets are cut (`apps/web/test-results/_desk-heads/tchsys-1-1.png` to `tchsys-3-4.png`, git-ignored) and none is read. The song is pages 11 to 13 of the Jurgenson set: 3/8, two sharps, treble clef, eleven systems (3, 4, 4). The draft goes to `../sessions/truth-draft-tchaikovsky-op38-3-voice_r2_2026-10-02.md`. It stays a draft by the desk's eye until Dann proofs it or a second independent draft agrees.
+- **Still to start of phase 0, at the close of 09:29:** truth for Tchaikovsky Op. 38 No. 2 (test only; pages in `~/Downloads/IMSLP1052590-PMLP44986-Op38_F.pdf`; two independent drafts, Dann proofs the differences); each *Sunless* engraving checked against its scan (row 22's mismatch lists begin this); a measuring brief for one staff size, Gould's numbers, and the four fonts; the stored reading's definition; track B1's brief for the cloud lane (tempo text, dynamics, hairpins on score files); two more publishers from IMSLP for hardening; the fourteen line ends of each Kabalevsky sonnet for track B2.
 - **Plan r4, phase 1:** the singer's experience, drawn.
-- **A test set of six songs,** proposed to Dann.
-- **The metre brief,** next after row 20.
+- **A test set:** ruled by Dann 2026-10-02 09:00, eight songs (`OPEN.md`, "N.178 AND THE SCAN READER", item 16). Closed.
+- **The metre brief,** the standing next after row 22's table is read.
 
 - **The hook bound rests on one font.** `HOOK_CORE_AREA_MAX = 0.534` sits between Verovio's half notes and five hooks (row 20's report). No scan in the tree holds a printed hollow head that the finder detects. The test set needs a scan with printed half notes, on a line and in a space: Dann, 2026-10-02 02:37, a hollow head on a line shows two closed shapes (`OPEN.md`, "N.178 AND THE SCAN READER", item 14).
 - **An ossia on a scan is not reached.** The finder does not fire on a second head drawn on a stem, so `merge_ossia` never sees one (row 20's report, section 6 item 3). Cause not established.
@@ -934,3 +936,15 @@ From `../sessions/report-code-cloud-lane_r1_2026-10-02.md`, read in full by the 
 - **Row 14 clears a melisma or an `empty` mark along with a syllable.** A DESK DEFAULT for Dann's walk; one condition in `clearPlacements` reverses it.
 
 **Waiting on Dann, French:** `tempo` (left roman; Roberge's list has it as Italian, Usito as a French headword); `primo` and `secondo` as the names of the passaggi (built italic, the cloud's judgement).
+
+## Waiting on Dann, carried from `STATE.md` on 2026-10-02
+
+Each stood in a close block of 2026-10-01 under "Waiting on Dann, never to be pushed". They are carried here so that the move to `LOG.md` does not bury them. **None is to be pushed.**
+
+- The camera glyph on his iPhone: whether the camera hands Ilya a HEIC or a JPEG is NOT ESTABLISHED until he tries it.
+- The sing-first calibration walk. He asked for space from calibration on 2026-09-30 at 19:37 and 21:24.
+- A walk of N.168 and N.172 (shipped `de802cd`, never walked by him).
+- His ruling on the walkthrough French, sections 1 to 4 (`../sessions/draft-guide-walkthrough_r1_2026-10-01.md`, last section). Paused at his word, 2026-10-01 15:00.
+- A walk of `14e4cb5` (rows 2d to 2l), desk-walked only (`../sessions/walk-desk-14e4cb5_r1_2026-10-01.md`).
+- One walk of the Tchaikovsky PDF on the alias, which is DONE for `QUEUE.md` rows 18 to 21.
+- A walk of the six cloud-lane rows (`622f35f`), desk-walked only (`../sessions/walk-desk-622f35f_r1_2026-10-02.md`).

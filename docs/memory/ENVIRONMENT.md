@@ -47,6 +47,9 @@ next session the same hour it cost the last one.
 | running the gates or Playwright in the cloud, or reading the e2e suite | `THE GATES RUN IN A CLOUD CLONE` |
 | starting or steering a cloud Code session, or reading what it built | `THE CLOUD LANE` |
 | the desk is about to wait on anything | `THE CLOUD LANE` |
+| making truth from a `.musx`, or reading a scan page by eye | `TRUTH FROM FINALE FILES, AND SHEETS FOR THE EYE` |
+| closing a thread with a check-in scheduled | `TRUTH FROM FINALE FILES, AND SHEETS FOR THE EYE` |
+| writing a brief or memo while a ship paste is already in Dann's hands | `A NEW FILE BREAKS THE PASTE HE ALREADY HAS` |
 | changing what Ilya claims about Russian phonology, anywhere | `READ GRAYSON BEFORE YOU CORRECT A CLAIM` |
 | a test passes in one place and fails in another, or a pitch sits exactly on a threshold | `A SEMITONE IS NOT ALWAYS 100 CENTS` |
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
@@ -4487,3 +4490,21 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **Cost: six queue rows, about an hour, $14 of the cloud session credit** ($250 to $236 on the usage page). The desk's estimate for four rows had been $5 to $25.
 - **Reading the result needs no Mac:** clone the branch in the desk's own workspace (`git clone --depth 12 --branch cloud-lane https://github.com/DannMitton/Ilya`) and read the report there.
 - **THE DESK CAN HANG. On 2026-10-02 one browser read (`get_page_text`) ran from 02:57 to 06:17 and the desk did nothing in that time.** Dann had pointed the same tab at another page. Before any wait, schedule a wake-up, and read a cloud session's progress from GitHub, not from the tab.
+
+---
+
+## TRUTH FROM FINALE FILES, AND SHEETS FOR THE EYE. Learned 2026-10-02
+
+- **The harness's truth path does not run under plain Node.** `packages/score-parser/src/mnx-parser.ts` imports `./pickup` with no extension, and Node 22 refuses it (`ERR_MODULE_NOT_FOUND`). **Run it through `npx --yes tsx <script>.ts`.** The path is `musxToMnxJson` (`tools/e16-harness/src/denigma-convert.ts`), then `extractGroundTruth` (`tools/e16-harness/src/ground-truth.ts`). The desk's script was `tools/e16-harness/desk-truth.ts` in a workspace clone; it is not in the tree.
+- **Truth files live in `tools/e16-harness/output/truth/`,** which is git-ignored. They are on the Mac only. A new machine or a cloud session does not have them.
+- **To read a scan page by eye, cut it first.** A whole page at a size the desk can view shows no ledger lines and no dots. What worked: a Poppler raster at 400 dpi (3599 by 4910 for the Jurgenson pages), then one sheet for each system holding the voice staff and its lyric line cut into three stacked parts, each labelled with page, system, part, and x-range, about 1,050 by 1,560 pixels. Write the sheets under `apps/web/test-results/`, which is git-ignored, then stage and read them one at a time.
+- **The device shell's `$HOME` is not the Mac's and does not last.** Rasters kept at `$HOME/tchk/` are gone in the next thread. Anything to keep goes under the repository folder.
+- **A check-in scheduled with `send_later` fires into the thread that set it.** Cancel it at the close (`list_triggers`, then `delete_trigger`), or it wakes a closed thread.
+- **`device_commit_files` adds bytes to a PNG** (the md5 differs; the image is intact). Markdown and JSON arrive byte for byte.
+
+---
+
+## A NEW FILE BREAKS THE PASTE HE ALREADY HAS. Learned 2026-10-02
+
+- **The ship script refuses on any untracked file, and a ship paste names its files at the moment it is written.** On 2026-10-02 at 09:49 the desk sent the next brief into `docs/sessions/` three minutes after giving Dann the paste for row 22. Had he run the paste then, it would have refused on the new brief. Caught by the desk's own `status` before he ran it.
+- **So: between handing Dann a ship paste and seeing its commit in the tree, write nothing new into the repository's tracked folders.** A file that must be written in that window goes to `apps/web/test-results/_desk-hold/`, which is git-ignored, and moves to its home once the commit shows. Edits to files that are already tracked are safe: the script stages them with `git add -u`.

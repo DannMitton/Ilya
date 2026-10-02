@@ -1,0 +1,4351 @@
+{
+ "pieceId": "tchaikovsky_op38-3_sred-shumnogo-bala",
+ "status": "DRAFT r2, read by the desk by eye from the scan; not proofed by Dann",
+ "sourcePdf": "Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf",
+ "sourcePdfMd5": "3d3d4684a1180bd4d4904ccbaca15bfb",
+ "vocalPart": {
+  "partId": "P1",
+  "partName": "Voice"
+ },
+ "clef": {
+  "sign": "G",
+  "line": 2
+ },
+ "keySignature": {
+  "fifths": 2
+ },
+ "tempoMarkings": [],
+ "sungVerseNumbers": [
+  1
+ ],
+ "measureDurations": [
+  {
+   "index": 0,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 1,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 2,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 3,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 4,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 5,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 6,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 7,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 8,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 9,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 10,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 11,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 12,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 13,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 14,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 15,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 16,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 17,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 18,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 19,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 20,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 21,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 22,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 23,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 24,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 25,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 26,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 27,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 28,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 29,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 30,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 31,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 32,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 33,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 34,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 35,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 36,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 37,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 38,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 39,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 40,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 41,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 42,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 43,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 44,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 45,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 46,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 47,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 48,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 49,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 50,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 51,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 52,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 53,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 54,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 55,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 56,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 57,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 58,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 59,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 60,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 61,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 62,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 63,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 64,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 65,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 66,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 67,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 68,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 69,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 70,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 71,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 72,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 73,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 74,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 75,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 76,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 77,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 78,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 79,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 80,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 81,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 82,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 83,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 84,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 85,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 86,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 87,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 88,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 89,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 90,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 91,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 92,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 93,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 94,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 95,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 96,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 97,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  },
+  {
+   "index": 98,
+   "expectedDuration": {
+    "numerator": 3,
+    "denominator": 8
+   }
+  }
+ ],
+ "verses": [
+  {
+   "verseNumber": 1,
+   "notes": [
+    {
+     "id": "m7-0-1",
+     "type": "rest",
+     "measureIndex": 7,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 2.625
+    },
+    {
+     "id": "m7-1-8",
+     "type": "rest",
+     "measureIndex": 7,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 2.75
+    },
+    {
+     "id": "m7-1-4",
+     "type": "note",
+     "measureIndex": 7,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 2.875,
+     "midi": 66,
+     "syllableText": "Средь",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m8-0-1",
+     "type": "note",
+     "measureIndex": 8,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 3.0,
+     "midi": 67,
+     "syllableText": "шум",
+     "syllableType": "start"
+    },
+    {
+     "id": "m8-1-8",
+     "type": "note",
+     "measureIndex": 8,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 3.125,
+     "midi": 69,
+     "syllableText": "на",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m8-1-4",
+     "type": "note",
+     "measureIndex": 8,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 3.25,
+     "midi": 71,
+     "syllableText": "го",
+     "syllableType": "end"
+    },
+    {
+     "id": "m9-0-1",
+     "type": "note",
+     "measureIndex": 9,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 3.375,
+     "midi": 73,
+     "syllableText": "ба",
+     "syllableType": "start"
+    },
+    {
+     "id": "m9-1-4",
+     "type": "note",
+     "measureIndex": 9,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 3.625,
+     "midi": 66,
+     "syllableText": "ла",
+     "syllableType": "end"
+    },
+    {
+     "id": "m10-0-1",
+     "type": "rest",
+     "measureIndex": 10,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 3.75
+    },
+    {
+     "id": "m10-1-8",
+     "type": "rest",
+     "measureIndex": 10,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 3.875
+    },
+    {
+     "id": "m10-1-4",
+     "type": "note",
+     "measureIndex": 10,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 4.0,
+     "midi": 74,
+     "syllableText": "слу",
+     "syllableType": "start"
+    },
+    {
+     "id": "m11-0-1",
+     "type": "note",
+     "measureIndex": 11,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 4.125,
+     "midi": 73,
+     "syllableText": "чай",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m11-1-4",
+     "type": "note",
+     "measureIndex": 11,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 4.375,
+     "midi": 66,
+     "syllableText": "но,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m12-0-1",
+     "type": "rest",
+     "measureIndex": 12,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 4.5
+    },
+    {
+     "id": "m12-1-8",
+     "type": "rest",
+     "measureIndex": 12,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 4.625
+    },
+    {
+     "id": "m12-1-4",
+     "type": "note",
+     "measureIndex": 12,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 4.75,
+     "midi": 66,
+     "syllableText": "въ тре",
+     "syllableType": "start"
+    },
+    {
+     "id": "m13-0-1",
+     "type": "note",
+     "measureIndex": 13,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 4.875,
+     "midi": 71,
+     "syllableText": "во",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m13-1-8",
+     "type": "note",
+     "measureIndex": 13,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 5.0,
+     "midi": 73,
+     "syllableText": "гѣ",
+     "syllableType": "end"
+    },
+    {
+     "id": "m13-1-4",
+     "type": "note",
+     "measureIndex": 13,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 5.125,
+     "midi": 74,
+     "syllableText": "мір",
+     "syllableType": "start"
+    },
+    {
+     "id": "m14-0-1",
+     "type": "note",
+     "measureIndex": 14,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 5.25,
+     "midi": 76,
+     "syllableText": "ской",
+     "syllableType": "end"
+    },
+    {
+     "id": "m14-1-8",
+     "type": "note",
+     "measureIndex": 14,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 5.375,
+     "midi": 73,
+     "syllableText": "су",
+     "syllableType": "start"
+    },
+    {
+     "id": "m14-1-4",
+     "type": "note",
+     "measureIndex": 14,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 5.5,
+     "midi": 71,
+     "syllableText": "е",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m15-0-1",
+     "type": "note",
+     "measureIndex": 15,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 5.625,
+     "midi": 69,
+     "syllableText": "ты,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m15-1-4",
+     "type": "note",
+     "measureIndex": 15,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 5.875,
+     "midi": 69,
+     "syllableText": "те",
+     "syllableType": "start"
+    },
+    {
+     "id": "m16-0-1",
+     "type": "note",
+     "measureIndex": 16,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 6.0,
+     "midi": 67,
+     "syllableText": "бя",
+     "syllableType": "end"
+    },
+    {
+     "id": "m16-1-8",
+     "type": "note",
+     "measureIndex": 16,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 6.125,
+     "midi": 66,
+     "syllableText": "я",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m16-1-4",
+     "type": "note",
+     "measureIndex": 16,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 6.25,
+     "midi": 64,
+     "syllableText": "у",
+     "syllableType": "start"
+    },
+    {
+     "id": "m17-0-1",
+     "type": "note",
+     "measureIndex": 17,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 6.375,
+     "midi": 71,
+     "syllableText": "ви",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m17-1-4",
+     "type": "note",
+     "measureIndex": 17,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 6.625,
+     "midi": 62,
+     "syllableText": "дѣлъ,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m18-0-1",
+     "type": "rest",
+     "measureIndex": 18,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 6.75
+    },
+    {
+     "id": "m18-1-8",
+     "type": "rest",
+     "measureIndex": 18,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 6.875
+    },
+    {
+     "id": "m18-1-4",
+     "type": "note",
+     "measureIndex": 18,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 7.0,
+     "midi": 62,
+     "syllableText": "но",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m19-0-1",
+     "type": "note",
+     "measureIndex": 19,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 7.125,
+     "midi": 71,
+     "syllableText": "тай",
+     "syllableType": "start"
+    },
+    {
+     "id": "m19-1-4",
+     "type": "note",
+     "measureIndex": 19,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 7.375,
+     "midi": 61,
+     "syllableText": "на",
+     "syllableType": "end"
+    },
+    {
+     "id": "m20-0-1",
+     "type": "rest",
+     "measureIndex": 20,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 7.5
+    },
+    {
+     "id": "m20-1-8",
+     "type": "rest",
+     "measureIndex": 20,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 7.625
+    },
+    {
+     "id": "m20-1-4",
+     "type": "note",
+     "measureIndex": 20,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 7.75,
+     "midi": 61,
+     "syllableText": "тво",
+     "syllableType": "start"
+    },
+    {
+     "id": "m21-0-1",
+     "type": "note",
+     "measureIndex": 21,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 7.875,
+     "midi": 66,
+     "syllableText": "и",
+     "syllableType": "end"
+    },
+    {
+     "id": "m21-1-8",
+     "type": "note",
+     "measureIndex": 21,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 8.0,
+     "midi": 66,
+     "syllableText": "по",
+     "syllableType": "start"
+    },
+    {
+     "id": "m21-1-4",
+     "type": "note",
+     "measureIndex": 21,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 8.125,
+     "midi": 66,
+     "syllableText": "кры",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m22-0-1",
+     "type": "note",
+     "measureIndex": 22,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 8.25,
+     "midi": 64,
+     "syllableText": "ва",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m22-1-8",
+     "type": "note",
+     "measureIndex": 22,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 8.375,
+     "midi": 61,
+     "syllableText": "ла",
+     "syllableType": "end"
+    },
+    {
+     "id": "m22-1-4",
+     "type": "note",
+     "measureIndex": 22,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 8.5,
+     "midi": 62,
+     "syllableText": "чер",
+     "syllableType": "start"
+    },
+    {
+     "id": "m23-0-1",
+     "type": "note",
+     "measureIndex": 23,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 8
+     },
+     "onsetAbsolute": 8.625,
+     "midi": 59,
+     "syllableText": "ты;",
+     "syllableType": "end"
+    },
+    {
+     "id": "m24-0-1",
+     "type": "rest",
+     "measureIndex": 24,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 9.0
+    },
+    {
+     "id": "m24-1-8",
+     "type": "rest",
+     "measureIndex": 24,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 9.125
+    },
+    {
+     "id": "m24-1-4",
+     "type": "note",
+     "measureIndex": 24,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 9.25,
+     "midi": 66,
+     "syllableText": "лишь",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m25-0-1",
+     "type": "note",
+     "measureIndex": 25,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 9.375,
+     "midi": 67,
+     "syllableText": "о",
+     "syllableType": "start"
+    },
+    {
+     "id": "m25-1-8",
+     "type": "note",
+     "measureIndex": 25,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 9.5,
+     "midi": 69,
+     "syllableText": "чи",
+     "syllableType": "end"
+    },
+    {
+     "id": "m25-1-4",
+     "type": "note",
+     "measureIndex": 25,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 9.625,
+     "midi": 71,
+     "syllableText": "пе",
+     "syllableType": "start"
+    },
+    {
+     "id": "m26-0-1",
+     "type": "note",
+     "measureIndex": 26,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 9.75,
+     "midi": 73,
+     "syllableText": "чаль",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m26-1-4",
+     "type": "note",
+     "measureIndex": 26,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 10.0,
+     "midi": 66,
+     "syllableText": "но",
+     "syllableType": "end"
+    },
+    {
+     "id": "m27-0-1",
+     "type": "rest",
+     "measureIndex": 27,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 10.125
+    },
+    {
+     "id": "m27-1-8",
+     "type": "rest",
+     "measureIndex": 27,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 10.25
+    },
+    {
+     "id": "m27-1-4",
+     "type": "note",
+     "measureIndex": 27,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 10.375,
+     "midi": 74,
+     "syllableText": "гля",
+     "syllableType": "start"
+    },
+    {
+     "id": "m28-0-1",
+     "type": "note",
+     "measureIndex": 28,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 10.5,
+     "midi": 73,
+     "syllableText": "дѣ",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m28-1-4",
+     "type": "note",
+     "measureIndex": 28,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 10.75,
+     "midi": 66,
+     "syllableText": "ли,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m29-0-1",
+     "type": "rest",
+     "measureIndex": 29,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 10.875
+    },
+    {
+     "id": "m29-1-8",
+     "type": "rest",
+     "measureIndex": 29,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 11.0
+    },
+    {
+     "id": "m29-1-4",
+     "type": "note",
+     "measureIndex": 29,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 11.125,
+     "midi": 66,
+     "syllableText": "а",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m30-0-1",
+     "type": "note",
+     "measureIndex": 30,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 11.25,
+     "midi": 71,
+     "syllableText": "го",
+     "syllableType": "start"
+    },
+    {
+     "id": "m30-1-8",
+     "type": "note",
+     "measureIndex": 30,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 11.375,
+     "midi": 73,
+     "syllableText": "лосъ",
+     "syllableType": "end"
+    },
+    {
+     "id": "m30-1-4",
+     "type": "note",
+     "measureIndex": 30,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 11.5,
+     "midi": 74,
+     "syllableText": "такъ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m31-0-1",
+     "type": "note",
+     "measureIndex": 31,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 11.625,
+     "midi": 76,
+     "syllableText": "див",
+     "syllableType": "start"
+    },
+    {
+     "id": "m31-1-8",
+     "type": "note",
+     "measureIndex": 31,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 11.75,
+     "midi": 73,
+     "syllableText": "но",
+     "syllableType": "end"
+    },
+    {
+     "id": "m31-1-4",
+     "type": "note",
+     "measureIndex": 31,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 11.875,
+     "midi": 71,
+     "syllableText": "зву",
+     "syllableType": "start"
+    },
+    {
+     "id": "m32-0-1",
+     "type": "note",
+     "measureIndex": 32,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 12.0,
+     "midi": 69,
+     "syllableText": "чалъ",
+     "syllableType": "end"
+    },
+    {
+     "id": "m32-1-4",
+     "type": "note",
+     "measureIndex": 32,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 12.25,
+     "midi": 69,
+     "syllableText": "какъ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m33-0-1",
+     "type": "note",
+     "measureIndex": 33,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 12.375,
+     "midi": 67,
+     "syllableText": "звонъ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m33-1-8",
+     "type": "note",
+     "measureIndex": 33,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 12.5,
+     "midi": 66,
+     "syllableText": "от",
+     "syllableType": "start"
+    },
+    {
+     "id": "m33-1-4",
+     "type": "note",
+     "measureIndex": 33,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 12.625,
+     "midi": 64,
+     "syllableText": "да",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m34-0-1",
+     "type": "note",
+     "measureIndex": 34,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 12.75,
+     "midi": 71,
+     "syllableText": "лен",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m34-1-4",
+     "type": "note",
+     "measureIndex": 34,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 13.0,
+     "midi": 62,
+     "syllableText": "ной",
+     "syllableType": "end"
+    },
+    {
+     "id": "m35-0-1",
+     "type": "rest",
+     "measureIndex": 35,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 13.125
+    },
+    {
+     "id": "m35-1-8",
+     "type": "rest",
+     "measureIndex": 35,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 13.25
+    },
+    {
+     "id": "m35-1-4",
+     "type": "note",
+     "measureIndex": 35,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 13.375,
+     "midi": 62,
+     "syllableText": "сви",
+     "syllableType": "start"
+    },
+    {
+     "id": "m36-0-1",
+     "type": "note",
+     "measureIndex": 36,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 13.5,
+     "midi": 71,
+     "syllableText": "рѣ",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m36-1-4",
+     "type": "note",
+     "measureIndex": 36,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 13.75,
+     "midi": 62,
+     "syllableText": "ли,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m37-0-1",
+     "type": "rest",
+     "measureIndex": 37,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 13.875
+    },
+    {
+     "id": "m37-1-8",
+     "type": "rest",
+     "measureIndex": 37,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 14.0
+    },
+    {
+     "id": "m37-1-4",
+     "type": "note",
+     "measureIndex": 37,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 14.125,
+     "midi": 71,
+     "syllableText": "какъ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m38-0-1",
+     "type": "note",
+     "measureIndex": 38,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 14.25,
+     "midi": 74,
+     "syllableText": "мо",
+     "syllableType": "start"
+    },
+    {
+     "id": "m38-1-8",
+     "type": "note",
+     "measureIndex": 38,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 14.375,
+     "midi": 73,
+     "syllableText": "ря",
+     "syllableType": "end"
+    },
+    {
+     "id": "m38-1-4",
+     "type": "note",
+     "measureIndex": 38,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 14.5,
+     "midi": 71,
+     "syllableText": "иг",
+     "syllableType": "start"
+    },
+    {
+     "id": "m39-0-1",
+     "type": "note",
+     "measureIndex": 39,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 14.625,
+     "midi": 69,
+     "syllableText": "ра",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m39-1-8",
+     "type": "note",
+     "measureIndex": 39,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 14.75,
+     "midi": 68,
+     "syllableText": "ю",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m39-1-4",
+     "type": "note",
+     "measureIndex": 39,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 14.875,
+     "midi": 67,
+     "syllableText": "щій",
+     "syllableType": "end"
+    },
+    {
+     "id": "m40-0-1",
+     "type": "note",
+     "measureIndex": 40,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 8
+     },
+     "onsetAbsolute": 15.0,
+     "midi": 66,
+     "syllableText": "валъ.",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m41-0-1",
+     "type": "rest",
+     "measureIndex": 41,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 15.375
+    },
+    {
+     "id": "m41-1-8",
+     "type": "rest",
+     "measureIndex": 41,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 15.5
+    },
+    {
+     "id": "m41-1-4",
+     "type": "note",
+     "measureIndex": 41,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 15.625,
+     "midi": 74,
+     "syllableText": "Мнѣ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m42-0-1",
+     "type": "note",
+     "measureIndex": 42,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 15.75,
+     "midi": 73,
+     "syllableText": "станъ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m42-1-8",
+     "type": "note",
+     "measureIndex": 42,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 15.875,
+     "midi": 71,
+     "syllableText": "твой",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m42-1-4",
+     "type": "note",
+     "measureIndex": 42,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 16.0,
+     "midi": 73,
+     "syllableText": "пон",
+     "syllableType": "start"
+    },
+    {
+     "id": "m43-0-1",
+     "type": "note",
+     "measureIndex": 43,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 16.125,
+     "midi": 74,
+     "syllableText": "ра",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m43-1-8",
+     "type": "note",
+     "measureIndex": 43,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 16.25,
+     "midi": 71,
+     "syllableText": "вил",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m43-1-4",
+     "type": "note",
+     "measureIndex": 43,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 16.375,
+     "midi": 73,
+     "syllableText": "ся",
+     "syllableType": "end"
+    },
+    {
+     "id": "m44-0-1",
+     "type": "note",
+     "measureIndex": 44,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 16.5,
+     "midi": 71,
+     "syllableText": "тон",
+     "syllableType": "start"
+    },
+    {
+     "id": "m44-1-4",
+     "type": "note",
+     "measureIndex": 44,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 16.75,
+     "midi": 69,
+     "syllableText": "кій",
+     "syllableType": "end"
+    },
+    {
+     "id": "m45-0-1",
+     "type": "rest",
+     "measureIndex": 45,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 16.875
+    },
+    {
+     "id": "m45-1-8",
+     "type": "rest",
+     "measureIndex": 45,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 17.0
+    },
+    {
+     "id": "m45-1-4",
+     "type": "note",
+     "measureIndex": 45,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 17.125,
+     "midi": 74,
+     "syllableText": "и",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m46-0-1",
+     "type": "note",
+     "measureIndex": 46,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 17.25,
+     "midi": 73,
+     "syllableText": "весь",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m46-1-8",
+     "type": "note",
+     "measureIndex": 46,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 17.375,
+     "midi": 71,
+     "syllableText": "твой",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m46-1-4",
+     "type": "note",
+     "measureIndex": 46,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 17.5,
+     "midi": 73,
+     "syllableText": "за",
+     "syllableType": "start"
+    },
+    {
+     "id": "m47-0-1",
+     "type": "note",
+     "measureIndex": 47,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 17.625,
+     "midi": 74,
+     "syllableText": "дум",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m47-1-8",
+     "type": "note",
+     "measureIndex": 47,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 17.75,
+     "midi": 71,
+     "syllableText": "чи",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m47-1-4",
+     "type": "note",
+     "measureIndex": 47,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 17.875,
+     "midi": 73,
+     "syllableText": "вый",
+     "syllableType": "end"
+    },
+    {
+     "id": "m48-0-1",
+     "type": "note",
+     "measureIndex": 48,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 8
+     },
+     "onsetAbsolute": 18.0,
+     "midi": 69,
+     "syllableText": "видъ,",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m49-0-1",
+     "type": "rest",
+     "measureIndex": 49,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 18.375
+    },
+    {
+     "id": "m49-1-8",
+     "type": "rest",
+     "measureIndex": 49,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 18.5
+    },
+    {
+     "id": "m49-1-4",
+     "type": "note",
+     "measureIndex": 49,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 18.625,
+     "midi": 74,
+     "syllableText": "а",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m50-0-1",
+     "type": "note",
+     "measureIndex": 50,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 18.75,
+     "midi": 74,
+     "syllableText": "смѣхъ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m50-1-8",
+     "type": "note",
+     "measureIndex": 50,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 18.875,
+     "midi": 74,
+     "syllableText": "твой,",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m50-1-4",
+     "type": "note",
+     "measureIndex": 50,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 19.0,
+     "midi": 74,
+     "syllableText": "и",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m51-0-1",
+     "type": "note",
+     "measureIndex": 51,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 19.125,
+     "midi": 74,
+     "syllableText": "груст",
+     "syllableType": "start"
+    },
+    {
+     "id": "m51-1-8",
+     "type": "note",
+     "measureIndex": 51,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 19.25,
+     "midi": 67,
+     "syllableText": "ный,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m51-1-4",
+     "type": "note",
+     "measureIndex": 51,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 19.375,
+     "midi": 71,
+     "syllableText": "и",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m52-0-1",
+     "type": "note",
+     "measureIndex": 52,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 19.5,
+     "midi": 73,
+     "syllableText": "звон",
+     "syllableType": "start"
+    },
+    {
+     "id": "m52-1-4",
+     "type": "note",
+     "measureIndex": 52,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 19.75,
+     "midi": 68,
+     "syllableText": "кій",
+     "syllableType": "end"
+    },
+    {
+     "id": "m53-0-1",
+     "type": "rest",
+     "measureIndex": 53,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 19.875
+    },
+    {
+     "id": "m53-1-8",
+     "type": "rest",
+     "measureIndex": 53,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 20.0
+    },
+    {
+     "id": "m53-1-4",
+     "type": "note",
+     "measureIndex": 53,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 20.125,
+     "midi": 73,
+     "syllableText": "съ тѣхъ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m54-0-1",
+     "type": "note",
+     "measureIndex": 54,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 20.25,
+     "midi": 76,
+     "syllableText": "поръ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m54-1-8",
+     "type": "note",
+     "measureIndex": 54,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 20.375,
+     "midi": 74,
+     "syllableText": "въ мо",
+     "syllableType": "start"
+    },
+    {
+     "id": "m54-1-4",
+     "type": "note",
+     "measureIndex": 54,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 20.5,
+     "midi": 73,
+     "syllableText": "емъ",
+     "syllableType": "end"
+    },
+    {
+     "id": "m55-0-1",
+     "type": "note",
+     "measureIndex": 55,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 20.625,
+     "midi": 71,
+     "syllableText": "серд",
+     "syllableType": "start"
+    },
+    {
+     "id": "m55-1-8",
+     "type": "note",
+     "measureIndex": 55,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 20.75,
+     "midi": 70,
+     "syllableText": "цѣ",
+     "syllableType": "end"
+    },
+    {
+     "id": "m55-1-4",
+     "type": "note",
+     "measureIndex": 55,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 20.875,
+     "midi": 71,
+     "syllableText": "зву",
+     "syllableType": "start"
+    },
+    {
+     "id": "m56-0-1",
+     "type": "note",
+     "measureIndex": 56,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 8
+     },
+     "onsetAbsolute": 21.0,
+     "midi": 73,
+     "syllableText": "читъ!",
+     "syllableType": "end"
+    },
+    {
+     "id": "m57-0-1",
+     "type": "note",
+     "measureIndex": 57,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 21.375,
+     "midi": 73,
+     "tiedFromPrevious": true
+    },
+    {
+     "id": "m57-1-8",
+     "type": "rest",
+     "measureIndex": 57,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 21.5
+    },
+    {
+     "id": "m57-1-4",
+     "type": "rest",
+     "measureIndex": 57,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 21.625
+    },
+    {
+     "id": "m58-0-1",
+     "type": "rest",
+     "measureIndex": 58,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 21.75
+    },
+    {
+     "id": "m58-1-8",
+     "type": "rest",
+     "measureIndex": 58,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 21.875
+    },
+    {
+     "id": "m58-1-4",
+     "type": "note",
+     "measureIndex": 58,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 22.0,
+     "midi": 66,
+     "syllableText": "Въ ча",
+     "syllableType": "start"
+    },
+    {
+     "id": "m59-0-1",
+     "type": "note",
+     "measureIndex": 59,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 22.125,
+     "midi": 67,
+     "syllableText": "сы",
+     "syllableType": "end"
+    },
+    {
+     "id": "m59-1-8",
+     "type": "note",
+     "measureIndex": 59,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 22.25,
+     "midi": 69,
+     "syllableText": "о",
+     "syllableType": "start"
+    },
+    {
+     "id": "m59-1-4",
+     "type": "note",
+     "measureIndex": 59,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 22.375,
+     "midi": 71,
+     "syllableText": "ди",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m60-0-1",
+     "type": "note",
+     "measureIndex": 60,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "onsetAbsolute": 22.5,
+     "midi": 73,
+     "syllableText": "но",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m60-3-16",
+     "type": "note",
+     "measureIndex": 60,
+     "onset": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 16
+     },
+     "onsetAbsolute": 22.6875,
+     "midi": 66,
+     "syllableText": "кі",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m60-1-4",
+     "type": "note",
+     "measureIndex": 60,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 22.75,
+     "midi": 66,
+     "syllableText": "е",
+     "syllableType": "end"
+    },
+    {
+     "id": "m62-0-1",
+     "type": "note",
+     "measureIndex": 62,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 23.25,
+     "midi": 73,
+     "syllableText": "но",
+     "syllableType": "start"
+    },
+    {
+     "id": "m62-1-4",
+     "type": "note",
+     "measureIndex": 62,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 23.5,
+     "midi": 66,
+     "syllableText": "чи",
+     "syllableType": "end"
+    },
+    {
+     "id": "m63-0-1",
+     "type": "rest",
+     "measureIndex": 63,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 23.625
+    },
+    {
+     "id": "m63-1-8",
+     "type": "rest",
+     "measureIndex": 63,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 23.75
+    },
+    {
+     "id": "m63-1-4",
+     "type": "note",
+     "measureIndex": 63,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 23.875,
+     "midi": 66,
+     "syllableText": "люб",
+     "syllableType": "start"
+    },
+    {
+     "id": "m64-0-1",
+     "type": "note",
+     "measureIndex": 64,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 24.0,
+     "midi": 71,
+     "syllableText": "лю",
+     "syllableType": "end"
+    },
+    {
+     "id": "m64-1-8",
+     "type": "note",
+     "measureIndex": 64,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 24.125,
+     "midi": 73,
+     "syllableText": "я",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m64-1-4",
+     "type": "note",
+     "measureIndex": 64,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 24.25,
+     "midi": 74,
+     "syllableText": "ус",
+     "syllableType": "start"
+    },
+    {
+     "id": "m65-0-1",
+     "type": "note",
+     "measureIndex": 65,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 24.375,
+     "midi": 76,
+     "syllableText": "та",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m65-1-8",
+     "type": "note",
+     "measureIndex": 65,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 24.5,
+     "midi": 73,
+     "syllableText": "лый",
+     "syllableType": "end"
+    },
+    {
+     "id": "m65-1-4",
+     "type": "note",
+     "measureIndex": 65,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 24.625,
+     "midi": 71,
+     "syllableText": "при",
+     "syllableType": "start"
+    },
+    {
+     "id": "m66-0-1",
+     "type": "note",
+     "measureIndex": 66,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 24.75,
+     "midi": 69,
+     "syllableText": "лечь,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m66-1-4",
+     "type": "note",
+     "measureIndex": 66,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 25.0,
+     "midi": 69,
+     "syllableText": "я",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m67-0-1",
+     "type": "note",
+     "measureIndex": 67,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 25.125,
+     "midi": 67,
+     "syllableText": "ви",
+     "syllableType": "start"
+    },
+    {
+     "id": "m67-1-8",
+     "type": "note",
+     "measureIndex": 67,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 25.25,
+     "midi": 66,
+     "syllableText": "жу",
+     "syllableType": "end"
+    },
+    {
+     "id": "m67-1-4",
+     "type": "note",
+     "measureIndex": 67,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 25.375,
+     "midi": 64,
+     "syllableText": "пе",
+     "syllableType": "start"
+    },
+    {
+     "id": "m68-0-1",
+     "type": "note",
+     "measureIndex": 68,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "onsetAbsolute": 25.5,
+     "midi": 71,
+     "syllableText": "чаль",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m68-3-16",
+     "type": "note",
+     "measureIndex": 68,
+     "onset": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 16
+     },
+     "onsetAbsolute": 25.6875,
+     "midi": 62,
+     "syllableText": "ны",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m68-1-4",
+     "type": "note",
+     "measureIndex": 68,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 25.75,
+     "midi": 62,
+     "syllableText": "я",
+     "syllableType": "end"
+    },
+    {
+     "id": "m70-0-1",
+     "type": "note",
+     "measureIndex": 70,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 26.25,
+     "midi": 71,
+     "syllableText": "о",
+     "syllableType": "start"
+    },
+    {
+     "id": "m70-1-4",
+     "type": "note",
+     "measureIndex": 70,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 26.5,
+     "midi": 61,
+     "syllableText": "чи,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m71-0-1",
+     "type": "rest",
+     "measureIndex": 71,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 26.625
+    },
+    {
+     "id": "m71-1-8",
+     "type": "rest",
+     "measureIndex": 71,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 26.75
+    },
+    {
+     "id": "m71-1-4",
+     "type": "note",
+     "measureIndex": 71,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 26.875,
+     "midi": 61,
+     "syllableText": "я",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m72-0-1",
+     "type": "note",
+     "measureIndex": 72,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 27.0,
+     "midi": 66,
+     "syllableText": "слы",
+     "syllableType": "start"
+    },
+    {
+     "id": "m72-1-8",
+     "type": "note",
+     "measureIndex": 72,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 27.125,
+     "midi": 66,
+     "syllableText": "шу",
+     "syllableType": "end"
+    },
+    {
+     "id": "m72-1-4",
+     "type": "note",
+     "measureIndex": 72,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 27.25,
+     "midi": 66,
+     "syllableText": "ве",
+     "syllableType": "start"
+    },
+    {
+     "id": "m73-0-1",
+     "type": "note",
+     "measureIndex": 73,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 27.375,
+     "midi": 64,
+     "syllableText": "се",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m73-1-8",
+     "type": "note",
+     "measureIndex": 73,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 27.5,
+     "midi": 61,
+     "syllableText": "лу",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m73-1-4",
+     "type": "note",
+     "measureIndex": 73,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 27.625,
+     "midi": 62,
+     "syllableText": "ю",
+     "syllableType": "end"
+    },
+    {
+     "id": "m74-0-1",
+     "type": "note",
+     "measureIndex": 74,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 8
+     },
+     "onsetAbsolute": 27.75,
+     "midi": 59,
+     "syllableText": "рѣчь,",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m75-0-1",
+     "type": "rest",
+     "measureIndex": 75,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 28.125
+    },
+    {
+     "id": "m75-1-8",
+     "type": "rest",
+     "measureIndex": 75,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 28.25
+    },
+    {
+     "id": "m75-1-4",
+     "type": "note",
+     "measureIndex": 75,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 28.375,
+     "midi": 66,
+     "syllableText": "и",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m76-0-1",
+     "type": "note",
+     "measureIndex": 76,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 28.5,
+     "midi": 67,
+     "syllableText": "груст",
+     "syllableType": "start"
+    },
+    {
+     "id": "m76-1-8",
+     "type": "note",
+     "measureIndex": 76,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 28.625,
+     "midi": 69,
+     "syllableText": "но",
+     "syllableType": "end"
+    },
+    {
+     "id": "m76-1-4",
+     "type": "note",
+     "measureIndex": 76,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 28.75,
+     "midi": 71,
+     "syllableText": "я,",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m77-0-1",
+     "type": "note",
+     "measureIndex": 77,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "onsetAbsolute": 28.875,
+     "midi": 73,
+     "syllableText": "груст",
+     "syllableType": "start"
+    },
+    {
+     "id": "m77-3-16",
+     "type": "note",
+     "measureIndex": 77,
+     "onset": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 16
+     },
+     "onsetAbsolute": 29.0625,
+     "midi": 66,
+     "syllableText": "но",
+     "syllableType": "end"
+    },
+    {
+     "id": "m77-1-4",
+     "type": "note",
+     "measureIndex": 77,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 29.125,
+     "midi": 66,
+     "syllableText": "такъ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m78-0-1",
+     "type": "rest",
+     "measureIndex": 78,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 29.25
+    },
+    {
+     "id": "m78-1-8",
+     "type": "note",
+     "measureIndex": 78,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 29.375,
+     "midi": 67,
+     "syllableText": "за",
+     "syllableType": "start"
+    },
+    {
+     "id": "m78-1-4",
+     "type": "note",
+     "measureIndex": 78,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 29.5,
+     "midi": 67,
+     "syllableText": "сы",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m79-0-1",
+     "type": "note",
+     "measureIndex": 79,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 29.625,
+     "midi": 66,
+     "syllableText": "па",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m79-1-8",
+     "type": "note",
+     "measureIndex": 79,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 29.75,
+     "midi": 66,
+     "syllableText": "ю,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m79-1-4",
+     "type": "rest",
+     "measureIndex": 79,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 16
+     },
+     "onsetAbsolute": 29.875
+    },
+    {
+     "id": "m79-5-16",
+     "type": "note",
+     "measureIndex": 79,
+     "onset": {
+      "numerator": 5,
+      "denominator": 16
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 16
+     },
+     "onsetAbsolute": 29.9375,
+     "midi": 66,
+     "syllableText": "и",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m80-0-1",
+     "type": "note",
+     "measureIndex": 80,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 30.0,
+     "midi": 66,
+     "syllableText": "въ гре",
+     "syllableType": "start"
+    },
+    {
+     "id": "m80-1-8",
+     "type": "note",
+     "measureIndex": 80,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 30.125,
+     "midi": 67,
+     "syllableText": "захъ",
+     "syllableType": "end"
+    },
+    {
+     "id": "m80-1-4",
+     "type": "note",
+     "measureIndex": 80,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 30.25,
+     "midi": 69,
+     "syllableText": "не",
+     "syllableType": "start"
+    },
+    {
+     "id": "m81-0-1",
+     "type": "note",
+     "measureIndex": 81,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "onsetAbsolute": 30.375,
+     "midi": 71,
+     "syllableText": "вѣ",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m81-3-16",
+     "type": "note",
+     "measureIndex": 81,
+     "onset": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 16
+     },
+     "onsetAbsolute": 30.5625,
+     "midi": 64,
+     "syllableText": "до",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m81-1-4",
+     "type": "note",
+     "measureIndex": 81,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 30.625,
+     "midi": 64,
+     "syllableText": "мыхъ",
+     "syllableType": "end"
+    },
+    {
+     "id": "m82-0-1",
+     "type": "note",
+     "measureIndex": 82,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 30.75,
+     "midi": 63,
+     "syllableText": "сплю...",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m82-1-8",
+     "type": "rest",
+     "measureIndex": 82,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 30.875
+    },
+    {
+     "id": "m82-1-4",
+     "type": "rest",
+     "measureIndex": 82,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 31.0
+    },
+    {
+     "id": "m84-0-1",
+     "type": "rest",
+     "measureIndex": 84,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 31.5
+    },
+    {
+     "id": "m84-1-8",
+     "type": "rest",
+     "measureIndex": 84,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 31.625
+    },
+    {
+     "id": "m84-1-4",
+     "type": "note",
+     "measureIndex": 84,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 31.75,
+     "midi": 71,
+     "syllableText": "Люб",
+     "syllableType": "start"
+    },
+    {
+     "id": "m85-0-1",
+     "type": "note",
+     "measureIndex": 85,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 31.875,
+     "midi": 74,
+     "syllableText": "лю",
+     "syllableType": "end"
+    },
+    {
+     "id": "m85-1-8",
+     "type": "note",
+     "measureIndex": 85,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 32.0,
+     "midi": 73,
+     "syllableText": "ли",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m85-1-4",
+     "type": "note",
+     "measureIndex": 85,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 32.125,
+     "midi": 71,
+     "syllableText": "те",
+     "syllableType": "start"
+    },
+    {
+     "id": "m86-0-1",
+     "type": "note",
+     "measureIndex": 86,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 32.25,
+     "midi": 70,
+     "syllableText": "бя",
+     "syllableType": "end"
+    },
+    {
+     "id": "m86-1-8",
+     "type": "note",
+     "measureIndex": 86,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 32.375,
+     "midi": 66,
+     "syllableText": "я",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m86-1-4",
+     "type": "note",
+     "measureIndex": 86,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 32.5,
+     "midi": 70,
+     "syllableText": "не",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m87-0-1",
+     "type": "note",
+     "measureIndex": 87,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "onsetAbsolute": 32.625,
+     "midi": 73,
+     "syllableText": "зна",
+     "syllableType": "start"
+    },
+    {
+     "id": "m87-1-4",
+     "type": "note",
+     "measureIndex": 87,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 32.875,
+     "midi": 71,
+     "syllableText": "ю,",
+     "syllableType": "end"
+    },
+    {
+     "id": "m88-0-1",
+     "type": "rest",
+     "measureIndex": 88,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 33.0
+    },
+    {
+     "id": "m88-1-8",
+     "type": "rest",
+     "measureIndex": 88,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 33.125
+    },
+    {
+     "id": "m88-1-4",
+     "type": "note",
+     "measureIndex": 88,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 33.25,
+     "midi": 71,
+     "syllableText": "но",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m89-0-1",
+     "type": "note",
+     "measureIndex": 89,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "onsetAbsolute": 33.375,
+     "midi": 71,
+     "syllableText": "ка",
+     "syllableType": "start"
+    },
+    {
+     "id": "m89-3-16",
+     "type": "note",
+     "measureIndex": 89,
+     "onset": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 16
+     },
+     "onsetAbsolute": 33.5625,
+     "midi": 66,
+     "syllableText": "жет",
+     "syllableType": "middle"
+    },
+    {
+     "id": "m89-1-4",
+     "type": "note",
+     "measureIndex": 89,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 33.625,
+     "midi": 66,
+     "syllableText": "ся",
+     "syllableType": "end"
+    },
+    {
+     "id": "m90-0-1",
+     "type": "note",
+     "measureIndex": 90,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 33.75,
+     "midi": 66,
+     "syllableText": "мнѣ",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m90-1-8",
+     "type": "note",
+     "measureIndex": 90,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 16
+     },
+     "onsetAbsolute": 33.875,
+     "midi": 66,
+     "syllableText": "что",
+     "syllableType": "whole"
+    },
+    {
+     "id": "m90-5-16",
+     "type": "note",
+     "measureIndex": 90,
+     "onset": {
+      "numerator": 5,
+      "denominator": 16
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 16
+     },
+     "onsetAbsolute": 34.0625,
+     "midi": 66,
+     "syllableText": "люб",
+     "syllableType": "start"
+    },
+    {
+     "id": "m91-0-1",
+     "type": "note",
+     "measureIndex": 91,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 3,
+      "denominator": 8
+     },
+     "onsetAbsolute": 34.125,
+     "midi": 66,
+     "syllableText": "лю!",
+     "syllableType": "end"
+    },
+    {
+     "id": "m92-0-1",
+     "type": "note",
+     "measureIndex": 92,
+     "onset": {
+      "numerator": 0,
+      "denominator": 1
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 34.5,
+     "midi": 66,
+     "tiedFromPrevious": true
+    },
+    {
+     "id": "m92-1-8",
+     "type": "rest",
+     "measureIndex": 92,
+     "onset": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 34.625
+    },
+    {
+     "id": "m92-1-4",
+     "type": "rest",
+     "measureIndex": 92,
+     "onset": {
+      "numerator": 1,
+      "denominator": 4
+     },
+     "duration": {
+      "numerator": 1,
+      "denominator": 8
+     },
+     "onsetAbsolute": 34.75
+    }
+   ]
+  }
+ ]
+}
