@@ -53,6 +53,10 @@ next session the same hour it cost the last one.
 | running an outside engine, scoring anything against a truth file from the desk, or reading the cloud lane's branch | `WHAT THE DESK LEARNED ON 2026-10-02` |
 | asking what resolution or depth a scan has, or stamping a time in a record | `WHAT THE DESK LEARNED ON 2026-10-02` |
 | Dann pastes a Code summary the desk has already ruled on | `WHAT THE DESK LEARNED ON 2026-10-02` |
+| drawing Ilya's own page for Dann, or running the app without the Mac | `WHAT THE DESK LEARNED FROM 2026-10-02 TO 2026-10-04` |
+| starting a cloud session from the desk, or merging and shipping its branch | `WHAT THE DESK LEARNED FROM 2026-10-02 TO 2026-10-04` |
+| the link to the Mac drops, or a subagent is stopped | `WHAT THE DESK LEARNED FROM 2026-10-02 TO 2026-10-04` |
+| about to design a method or commission a trial | `WHAT THE DESK LEARNED FROM 2026-10-02 TO 2026-10-04` |
 | changing what Ilya claims about Russian phonology, anywhere | `READ GRAYSON BEFORE YOU CORRECT A CLAIM` |
 | a test passes in one place and fails in another, or a pitch sits exactly on a threshold | `A SEMITONE IS NOT ALWAYS 100 CENTS` |
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
@@ -4526,3 +4530,18 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **Dann's paste of Code's summary can arrive after the desk has ruled on the report from the tree,** and it can arrive twice. Answer in two lines with the ruling already made and the one paste that is pending; do not re-rule.
 - **To look at a staff-line crossing, cut the system at 400 ppi and enlarge it three or four times with nearest-neighbour scaling.** The two sketch scripts are `../sessions/drawing-stave-mask-demo_r1_2026-10-02.py` and `../sessions/drawing-fitted-ovals-demo_r1_2026-10-02.py`.
 - **A head's place against its staff lines, measured locally, settles a pitch by eye:** find the five lines in the columns beside the head and express the head's centre in half spaces from the bottom line. A wide window fails where a hairpin lies over the staff.
+
+---
+
+## WHAT THE DESK LEARNED FROM 2026-10-02 TO 2026-10-04 (the thread of 16:10)
+
+- **Look outside before you design.** The desk designed row 24's trial from logic, and Dann asked on 2026-10-04 whether anyone had looked at how working readers do it. Nobody had. Before a design or a trial: search the project, the tree, and the library (`CONTRACT.md` tether 16), **and then the field**, and test the idea on twenty notes by hand before Code spends hours on it.
+- **A measure shows only what it can show.** Code inferred that the pitch misreads were accidentals because the fitted centre agreed with the reader's step; both use the same traced lines, so a shared mistake would not show. The desk repeated it as a finding. It was checked afterward on one song and held there.
+- **The app runs in the desk's own workspace.** `git clone --depth 5 --branch Shane https://github.com/DannMitton/Ilya`, `pnpm install --frozen-lockfile`, then `pnpm dev --port 5199 --host 127.0.0.1` in `apps/web`. Drive it with the repository's own Playwright and `executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'` (the bundled version looks for a browser that is not there). The score input is the second `input[type=file]`; a tab is a `button.pair-member`. A clip at `deviceScaleFactor` 4 is sharp enough to draw on.
+- **Control the instrument.** The loupe drew empty on the Tchaikovsky score file; the *Sunless* 1 fixture in the same run drew properly, which is what made the first a finding and not an artefact.
+- **A cloud session is started through Dann's Chrome** at claude.ai/code: the page shows the environment, `Ilya`, the branch, and the model; type the prompt as one paragraph and press Return. Tell it not to edit the memory files the desk holds uncommitted edits to. It kept working with the shared pool at 96%. Row 8 (five items, 85 minutes) cost about $13.
+- **To ship a finished cloud lane with local work, one paste:** `git add` the new files, `git fetch origin`, `git merge --ff-only origin/cloud-lane`, then the ship script. Move the script's baselines to the lane's reported counts first, with a backup.
+- **Code leaves the test-only songs' note-by-note reads in `test-private` folders inside its measure folder.** Move them, unopened, to `apps/web/test-results/_desk-hold/` before `git add`.
+- **The link to the Mac can drop for days.** It dropped at 19:55 on 2026-10-02 and returned at 13:16 on 2026-10-04, when Dann next wrote from the Mac. Write held files under `/mnt/user-data/outputs/` and send them into the chat, so they survive; say plainly what is not saved.
+- **Dann can stop a subagent mid-run, and a stopped agent leaves no memo.** Keep each agent's brief as a file, so a later desk can run it.
+- **A new file in a connected folder can be written by `device_commit_files` from `/mnt/user-data/outputs/`;** a long file is safer sent that way than through a heredoc when the link is unsteady.
