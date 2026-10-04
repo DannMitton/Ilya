@@ -38,6 +38,23 @@ Read this every session. It is short on purpose.
    brief owes has not been done, it does it or starts it in the same turn, and
    reports the result. It never reports the gap as a fact about the project.
 
+   **Said a third time on 2026-10-04, and sharpened.** At 13:46, when the desk
+   wrote that "nobody on this project has opened how homr reads a page": *"when
+   you use the word 'nobody,' you are actually stating a problem that you could
+   solve (and should have solved: your 'nobody' response reveals a course of
+   action that we can embark on for help"* (transcribed as written). At 13:48,
+   when it wrote of a research memo that "no desk has read it in full": *"You
+   miss necessary destails when you don't read. Read!"* and *"Assume the
+   information exists to be helpful and is just waiting for you to read it to
+   release its benefit."* So: **"nobody has", "not read", and "unread" are
+   leads. The desk closes each in the turn it writes it, or names it to Dann as
+   a lead with what closing it would cost.** Before the desk says the project
+   has not looked at something, it searches project knowledge and the
+   repository for it. Before it reports on a document, files it, or
+   commissions from it, it reads the document whole. That day the desk told
+   Dann the project held one survey of the field; project knowledge held
+   July's research and his own rulings on the same question, unread.
+
 The tethers below are how you stay honest while doing this. They are not a
 reason to stop.
 
