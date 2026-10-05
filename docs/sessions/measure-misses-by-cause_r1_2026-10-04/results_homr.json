@@ -1,0 +1,524 @@
+{
+ "1": {
+  "label": "Sunless 1",
+  "headline": 97.91666666666667,
+  "shift": 12,
+  "counts": {
+   "truthNotes": 96,
+   "readNotes": 96,
+   "matched": 96,
+   "missing": 0,
+   "extra": 0
+  },
+  "bars": {
+   "truth": 18,
+   "read": 18,
+   "allRight": 16
+  },
+  "rests": {
+   "truth": 19,
+   "read": 21,
+   "matched": 19,
+   "lengthRight": 19
+  },
+  "classes": {
+   "right": 94,
+   "notFound": 0,
+   "pitchOnly": 0,
+   "lengthOnly": 2,
+   "both": 0
+  },
+  "pitchCauseClass3": {},
+  "pitchCauseAllFaults": {},
+  "pitchCauseSensitivity": {
+   "sharpSpelling": {},
+   "flatSpellingNonAbstained": {},
+   "lenientEitherSpellingNonAbstained": {}
+  },
+  "abstainedPitchReasons": {},
+  "abstainedPitchGeometry": {},
+  "lengthCauseClass4": {
+   "other": 2
+  },
+  "lengthCauseAllFaults": {
+   "other": 2
+  },
+  "abstainedLengthReasonsClass4": {},
+  "abstainedLengthReasonsAll": {},
+  "converterQuarter": {
+   "class4OwnLengthReadButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter": 0,
+   "rightInOwnLengthButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter2": 0
+  },
+  "accidentalMissesBarBoundary": {
+   "total": 0,
+   "barsDisagree": 0,
+   "barsAgree": 0
+  },
+  "notFound": {
+   "byTruthDuration": {},
+   "firstNoteInTruthBar": 0,
+   "followsARest": 0
+  },
+  "extras": {
+   "notes": 0,
+   "withPitchAbstained": 0,
+   "withLengthAbstained": 0,
+   "byReadDuration": {},
+   "unmatchedReadRests": 2
+  },
+  "ceilings": {
+   "B1": 97.91666666666667,
+   "B1lenient": 97.91666666666667,
+   "B2": 97.91666666666667,
+   "B3": 100,
+   "B4": 97.91666666666667,
+   "B5": 97.91666666666667,
+   "B6": 100,
+   "B7": 97.91666666666667,
+   "B8spelled": 100,
+   "B1+B2": 97.91666666666667,
+   "B8": 100,
+   "asDrawnByConverter": 97.91666666666667
+  }
+ },
+ "4": {
+  "label": "Sunless 4",
+  "headline": 100,
+  "shift": 0,
+  "counts": {
+   "truthNotes": 116,
+   "readNotes": 116,
+   "matched": 116,
+   "missing": 0,
+   "extra": 0
+  },
+  "bars": {
+   "truth": 29,
+   "read": 29,
+   "allRight": 27
+  },
+  "rests": {
+   "truth": 29,
+   "read": 29,
+   "matched": 29,
+   "lengthRight": 29
+  },
+  "classes": {
+   "right": 116,
+   "notFound": 0,
+   "pitchOnly": 0,
+   "lengthOnly": 0,
+   "both": 0
+  },
+  "pitchCauseClass3": {},
+  "pitchCauseAllFaults": {},
+  "pitchCauseSensitivity": {
+   "sharpSpelling": {},
+   "flatSpellingNonAbstained": {},
+   "lenientEitherSpellingNonAbstained": {}
+  },
+  "abstainedPitchReasons": {},
+  "abstainedPitchGeometry": {},
+  "lengthCauseClass4": {},
+  "lengthCauseAllFaults": {},
+  "abstainedLengthReasonsClass4": {},
+  "abstainedLengthReasonsAll": {},
+  "converterQuarter": {
+   "class4OwnLengthReadButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter": 0,
+   "rightInOwnLengthButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter2": 0
+  },
+  "accidentalMissesBarBoundary": {
+   "total": 0,
+   "barsDisagree": 0,
+   "barsAgree": 0
+  },
+  "notFound": {
+   "byTruthDuration": {},
+   "firstNoteInTruthBar": 0,
+   "followsARest": 0
+  },
+  "extras": {
+   "notes": 0,
+   "withPitchAbstained": 0,
+   "withLengthAbstained": 0,
+   "byReadDuration": {},
+   "unmatchedReadRests": 0
+  },
+  "ceilings": {
+   "B1": 100,
+   "B1lenient": 100,
+   "B2": 100,
+   "B3": 100,
+   "B4": 100,
+   "B5": 100,
+   "B6": 100,
+   "B7": 100,
+   "B8spelled": 100,
+   "B1+B2": 100,
+   "B8": 100,
+   "asDrawnByConverter": 100
+  }
+ },
+ "5": {
+  "label": "Sunless 5",
+  "headline": 96.12403100775194,
+  "shift": 12,
+  "counts": {
+   "truthNotes": 258,
+   "readNotes": 286,
+   "matched": 258,
+   "missing": 0,
+   "extra": 28
+  },
+  "bars": {
+   "truth": 61,
+   "read": 69,
+   "allRight": 48
+  },
+  "rests": {
+   "truth": 48,
+   "read": 54,
+   "matched": 47,
+   "lengthRight": 46
+  },
+  "classes": {
+   "right": 248,
+   "notFound": 0,
+   "pitchOnly": 8,
+   "lengthOnly": 2,
+   "both": 0
+  },
+  "pitchCauseClass3": {
+   "b": 5,
+   "a": 3
+  },
+  "pitchCauseAllFaults": {
+   "b": 5,
+   "a": 3
+  },
+  "pitchCauseSensitivity": {
+   "sharpSpelling": {
+    "b": 5,
+    "a": 3
+   },
+   "flatSpellingNonAbstained": {
+    "b": 8
+   },
+   "lenientEitherSpellingNonAbstained": {
+    "b": 5,
+    "a": 3
+   }
+  },
+  "abstainedPitchReasons": {},
+  "abstainedPitchGeometry": {},
+  "lengthCauseClass4": {
+   "dot": 1,
+   "flags": 1
+  },
+  "lengthCauseAllFaults": {
+   "dot": 1,
+   "flags": 1
+  },
+  "abstainedLengthReasonsClass4": {},
+  "abstainedLengthReasonsAll": {},
+  "converterQuarter": {
+   "class4OwnLengthReadButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter": 0,
+   "rightInOwnLengthButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter2": 0
+  },
+  "accidentalMissesBarBoundary": {
+   "total": 3,
+   "barsDisagree": 0,
+   "barsAgree": 3
+  },
+  "notFound": {
+   "byTruthDuration": {},
+   "firstNoteInTruthBar": 0,
+   "followsARest": 0
+  },
+  "extras": {
+   "notes": 28,
+   "withPitchAbstained": 0,
+   "withLengthAbstained": 0,
+   "byReadDuration": {
+    "1/8": 7,
+    "1/4": 8,
+    "1/6": 1,
+    "1/12": 1,
+    "3/16": 2,
+    "1/16": 4,
+    "3/8": 3,
+    "1/1": 1,
+    "1/2": 1
+   },
+   "unmatchedReadRests": 7
+  },
+  "ceilings": {
+   "B1": 97.28682170542636,
+   "B1lenient": 97.28682170542636,
+   "B2": 98.06201550387597,
+   "B3": 96.89922480620154,
+   "B4": 96.12403100775194,
+   "B5": 96.12403100775194,
+   "B6": 98.06201550387597,
+   "B7": 96.12403100775194,
+   "B8spelled": 100,
+   "B1+B2": 99.2248062015504,
+   "B8": 100,
+   "asDrawnByConverter": 96.12403100775194
+  }
+ },
+ "6": {
+  "label": "Sunless 6",
+  "headline": 96.8944099378882,
+  "shift": 12,
+  "counts": {
+   "truthNotes": 161,
+   "readNotes": 161,
+   "matched": 161,
+   "missing": 0,
+   "extra": 0
+  },
+  "bars": {
+   "truth": 55,
+   "read": 55,
+   "allRight": 43
+  },
+  "rests": {
+   "truth": 26,
+   "read": 26,
+   "matched": 26,
+   "lengthRight": 26
+  },
+  "classes": {
+   "right": 156,
+   "notFound": 0,
+   "pitchOnly": 5,
+   "lengthOnly": 0,
+   "both": 0
+  },
+  "pitchCauseClass3": {
+   "b": 5
+  },
+  "pitchCauseAllFaults": {
+   "b": 5
+  },
+  "pitchCauseSensitivity": {
+   "sharpSpelling": {
+    "b": 5
+   },
+   "flatSpellingNonAbstained": {
+    "b": 2,
+    "a": 3
+   },
+   "lenientEitherSpellingNonAbstained": {
+    "b": 2,
+    "a": 3
+   }
+  },
+  "abstainedPitchReasons": {},
+  "abstainedPitchGeometry": {},
+  "lengthCauseClass4": {},
+  "lengthCauseAllFaults": {},
+  "abstainedLengthReasonsClass4": {},
+  "abstainedLengthReasonsAll": {},
+  "converterQuarter": {
+   "class4OwnLengthReadButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter": 0,
+   "rightInOwnLengthButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter2": 0
+  },
+  "accidentalMissesBarBoundary": {
+   "total": 0,
+   "barsDisagree": 0,
+   "barsAgree": 0
+  },
+  "notFound": {
+   "byTruthDuration": {},
+   "firstNoteInTruthBar": 0,
+   "followsARest": 0
+  },
+  "extras": {
+   "notes": 0,
+   "withPitchAbstained": 0,
+   "withLengthAbstained": 0,
+   "byReadDuration": {},
+   "unmatchedReadRests": 0
+  },
+  "ceilings": {
+   "B1": 96.8944099378882,
+   "B1lenient": 98.75776397515529,
+   "B2": 98.13664596273291,
+   "B3": 96.8944099378882,
+   "B4": 96.8944099378882,
+   "B5": 96.8944099378882,
+   "B6": 96.8944099378882,
+   "B7": 96.8944099378882,
+   "B8spelled": 100,
+   "B1+B2": 100,
+   "B8": 100,
+   "asDrawnByConverter": 96.8944099378882
+  }
+ },
+ "7": {
+  "label": "Tchaikovsky",
+  "headline": 98.27586206896552,
+  "shift": 0,
+  "counts": {
+   "truthNotes": 174,
+   "readNotes": 174,
+   "matched": 174,
+   "missing": 0,
+   "extra": 0
+  },
+  "bars": {
+   "truth": 99,
+   "read": 99,
+   "allRight": 80
+  },
+  "rests": {
+   "truth": 48,
+   "read": 48,
+   "matched": 48,
+   "lengthRight": 48
+  },
+  "classes": {
+   "right": 171,
+   "notFound": 0,
+   "pitchOnly": 3,
+   "lengthOnly": 0,
+   "both": 0
+  },
+  "pitchCauseClass3": {
+   "a": 3
+  },
+  "pitchCauseAllFaults": {
+   "a": 3
+  },
+  "pitchCauseSensitivity": {
+   "sharpSpelling": {
+    "a": 3
+   },
+   "flatSpellingNonAbstained": {
+    "b": 3
+   },
+   "lenientEitherSpellingNonAbstained": {
+    "a": 3
+   }
+  },
+  "abstainedPitchReasons": {},
+  "abstainedPitchGeometry": {},
+  "lengthCauseClass4": {},
+  "lengthCauseAllFaults": {},
+  "abstainedLengthReasonsClass4": {},
+  "abstainedLengthReasonsAll": {},
+  "converterQuarter": {
+   "class4OwnLengthReadButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter": 0,
+   "rightInOwnLengthButOnsetLost": 0,
+   "ofThoseTruthNotAQuarter2": 0
+  },
+  "accidentalMissesBarBoundary": {
+   "total": 3,
+   "barsDisagree": 0,
+   "barsAgree": 3
+  },
+  "notFound": {
+   "byTruthDuration": {},
+   "firstNoteInTruthBar": 0,
+   "followsARest": 0
+  },
+  "extras": {
+   "notes": 0,
+   "withPitchAbstained": 0,
+   "withLengthAbstained": 0,
+   "byReadDuration": {},
+   "unmatchedReadRests": 0
+  },
+  "ceilings": {
+   "B1": 100,
+   "B1lenient": 100,
+   "B2": 98.27586206896552,
+   "B3": 98.27586206896552,
+   "B4": 98.27586206896552,
+   "B5": 98.27586206896552,
+   "B6": 100,
+   "B7": 98.27586206896552,
+   "B8spelled": 100,
+   "B1+B2": 100,
+   "B8": 100,
+   "asDrawnByConverter": 98.27586206896552
+  }
+ },
+ "total": {
+  "totals": {
+   "truthNotes": 805,
+   "class.right": 785,
+   "class.notFound": 0,
+   "class.pitchOnly": 16,
+   "class.lengthOnly": 4,
+   "class.both": 0,
+   "lenC4.other": 2,
+   "lenAll.other": 2,
+   "extras": 28,
+   "c4OnsetLost": 0,
+   "c4OnsetLostQW": 0,
+   "rightOnsetLost": 0,
+   "rightOnsetLostWrong": 0,
+   "accMiss": 6,
+   "accMissBarDisagree": 0,
+   "missing": 0,
+   "restsTruth": 170,
+   "restsMatched": 169,
+   "restsRight": 168,
+   "restsRead": 178,
+   "barsTruth": 262,
+   "barsRead": 270,
+   "ceil.B1": 791,
+   "ceil.B1lenient": 794,
+   "ceil.B2": 792,
+   "ceil.B3": 789,
+   "ceil.B4": 785,
+   "ceil.B5": 785,
+   "ceil.B6": 795,
+   "ceil.B7": 785,
+   "ceil.B8spelled": 805,
+   "ceil.B1+B2": 801,
+   "ceil.B8": 805,
+   "ceil.asDrawnByConverter": 785,
+   "headlineNotes": 785,
+   "pitchC3.b": 10,
+   "pitchC3.a": 6,
+   "pitchAll.b": 10,
+   "pitchAll.a": 6,
+   "lenC4.dot": 1,
+   "lenC4.flags": 1,
+   "lenAll.dot": 1,
+   "lenAll.flags": 1,
+   "pitchFlat.b": 13,
+   "pitchLenient.b": 7,
+   "pitchLenient.a": 9,
+   "pitchFlat.a": 3
+  },
+  "headlines": {
+   "baseline": 97.51552795031056,
+   "B1": 98.26086956521739,
+   "B1lenient": 98.63354037267081,
+   "B2": 98.38509316770187,
+   "B3": 98.01242236024845,
+   "B4": 97.51552795031056,
+   "B5": 97.51552795031056,
+   "B6": 98.75776397515529,
+   "B7": 97.51552795031056,
+   "B8spelled": 100,
+   "B1+B2": 99.5031055900621,
+   "B8": 100,
+   "asDrawnByConverter": 97.51552795031056
+  }
+ }
+}

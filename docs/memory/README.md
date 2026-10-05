@@ -113,12 +113,15 @@ Nothing else happens before it.
 Then ask me for the repository state in one line. You do not write with git,
 ever. Read-only git is allowed; CONTRACT.md §5 says which commands.
 
-Then start on THE ONE THING in STATE.md and stop after one question.
+Then start on THE ONE THING in STATE.md. Do not bring me an engineering
+choice. Before any helper runs, tell me how long you will be silent.
 ```
 
 **If that prompt ever needs to grow, something has gone wrong in this folder
 instead.** The E.48 opener it replaced ran to about six thousand words, and
 forty-seven of its predecessors were written and thrown away.
+
+**Its last line was changed by the desk at the close of 2026-10-05.** It read "Then start on THE ONE THING in STATE.md and stop after one question." Dann's rule of 2026-10-04 22:27 (`CONTRACT.md`) is that he says what he wants and the desk decides how, so the opener no longer invites a question. A DESK DEFAULT, his to overrule.
 
 ---
 

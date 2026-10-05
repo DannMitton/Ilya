@@ -1,0 +1,198 @@
+
+### Coverage of the 943,106 dictionary forms (a = own form found, b = lemma-lent)
+| source | a: own form | a: own, ё-fallback not needed | b: via lemma | b minus a | nouns a/b | verbs a/b | adj a/b | names a/b |
+| hermit2018 | 368,266 (39.0%) | 364,205 (38.6%) | 663,780 (70.4%) | +295,514 | 48.4%/80.8% | 30.9%/62.1% | 55.8%/87.6% | 35.3%/65.2% |
+| wordfreq | 348,556 (37.0%) | 341,462 (36.2%) | 622,950 (66.1%) | +274,394 | 49.0%/81.2% | 25.3%/53.6% | 59.6%/87.1% | 49.9%/82.6% |
+| ngram_1800_1917 | 538,469 (57.1%) | 514,451 (54.5%) | 772,854 (81.9%) | +234,385 | 60.1%/82.0% | 51.5%/80.3% | 75.5%/91.7% | 59.3%/83.1% |
+| ngram_1950_2019 | 665,162 (70.5%) | 636,055 (67.4%) | 835,207 (88.6%) | +170,045 | 75.6%/89.7% | 64.4%/86.8% | 87.4%/96.4% | 74.8%/92.1% |
+| poetry_ws | 87,089 (9.2%) | 85,238 (9.0%) | 292,972 (31.1%) | +205,883 | 11.5%/33.5% | 6.9%/28.1% | 13.8%/40.6% | 7.6%/21.4% |
+| leipzig_news2020 | 225,110 (23.9%) | 220,245 (23.4%) | 562,071 (59.6%) | +336,961 | 33.4%/72.8% | 15.0%/48.1% | 38.9%/80.6% | 35.4%/72.0% |
+| ls2011_lemmas (lemma list) | n/a | n/a | 449,280 (47.6%) | n/a | -/63.8% | -/33.8% | -/76.8% | -/36.7% |
+lemmas in dictionary: 85182  lemmas with any own-form data: {'hermit2018': 57450, 'wordfreq': 55121, 'ngram_1800_1917': 66614, 'ngram_1950_2019': 72819, 'poetry_ws': 23540, 'leipzig_news2020': 49816}  L&S lemmas matched: 37813
+
+### Poem «Средь шумного бала»: tokens 94 types 71
+| source | tokens with own count | types with own count | tokens via lemma | types via lemma |
+| hermit2018 | 94/94 | 71/71 | 94/94 | 71/71 |
+| wordfreq | 94/94 | 71/71 | 94/94 | 71/71 |
+| ngram_1800_1917 | 94/94 | 71/71 | 94/94 | 71/71 |
+| ngram_1950_2019 | 94/94 | 71/71 | 94/94 | 71/71 |
+| poetry_ws | 94/94 | 71/71 | 94/94 | 71/71 |
+| leipzig_news2020 | 90/94 | 68/71 | 94/94 | 71/71 |
+| ls2011_lemmas | None/94 | None/71 | 94/94 | 71/71 |
+  not found as own form in hermit2018: []
+  not found as own form in wordfreq: []
+  not found as own form in ngram_1800_1917: []
+  not found as own form in ngram_1950_2019: []
+  not found as own form in poetry_ws: []
+  not found as own form in leipzig_news2020: ['очи', 'дивно', 'свирели']
+
+### Test pairs (parts per million, own form; band in brackets). Right word first. Tick = right word has the higher band.
+
+own form:
+| pair (right / wrong) | hermit2018 | wordfreq | ngram_1800_1917 | ngram_1950_2019 | poetry_ws | leipzig_news2020 |
+| мне / мни | 6.96e+03 [7] / 0.129 [3] ok | 2.14e+03 [7] / 0.331 [3] ok | 364 [6] / 0.872 [3] ok | 889 [6] / 0.344 [3] ok | 5.14e+03 [7] / 2.5 [4] ok | 381 [6] / 0 [0] ok |
+| засыпаю / зазываю | 2.06 [4] / 0.0259 [2] ok | 1.07 [4] / 0 [0] ok | 0.11 [3] / 0.00306 [1] ok | 0.493 [3] / 0.00822 [1] ok | 3.33 [4] / 0 [0] ok | 0.29 [3] / 0 [0] ok |
+| бала / была | 5.42 [4] / 1.54e+03 [7] WRONG | 3.63 [4] / 1.32e+03 [7] WRONG | 2.23 [4] / 927 [6] WRONG | 2.08 [4] / 763 [6] WRONG | 15.8 [5] / 704 [6] WRONG | 1.33 [4] / 629 [6] WRONG |
+| мирской / морской | 0.343 [3] / 16.1 [5] WRONG | 1.1 [4] / 38.9 [5] WRONG | 6.3 [4] / 25.7 [5] WRONG | 1.46 [4] / 30.9 [5] WRONG | 14.2 [5] / 35 [5] tie | 0.232 [3] / 15.4 [5] WRONG |
+| речь / печь | 96.3 [5] / 5.51 [4] ok | 117 [6] / 9.33 [4] ok | 44 [5] / 7.51 [4] ok | 120 [6] / 9.73 [4] ok | 196 [6] / 20.8 [5] ok | 172 [6] / 4.47 [4] ok |
+| ночи / ноги | 208 [6] / 98.1 [5] ok | 120 [6] / 95.5 [5] ok | 30.2 [5] / 34.4 [5] tie | 46.5 [5] / 78.1 [5] tie | 476 [6] / 118 [6] tie | 26.9 [5] / 27.8 [5] tie |
+
+lemma-lent:
+| pair (right / wrong) | hermit2018 | wordfreq | ngram_1800_1917 | ngram_1950_2019 | poetry_ws | leipzig_news2020 |
+| мне / мни | 9.76e+04 [8] / 2.16 [4] ok | 3.48e+04 [8] / 2.39 [4] ok | 3.66e+04 [8] / 4.85 [4] ok | 3.43e+04 [8] / 2.78 [4] ok | 6.03e+04 [8] / 88.3 [5] ok | 1.76e+04 [8] / 0.638 [3] ok |
+| засыпаю / зазываю | 14.5 [5] / 0.524 [3] ok | 12.9 [5] / 0.837 [3] ok | 5.93 [4] / 0.452 [3] ok | 11 [5] / 1.04 [4] ok | 50 [5] / 1.67 [4] ok | 9.86 [4] / 0.464 [3] ok |
+| бала / была | 26.3 [5] / 1.68e+04 [8] WRONG | 17.3 [5] / 1.28e+04 [8] WRONG | 15.8 [5] / 1.31e+04 [8] WRONG | 11.8 [5] / 9.28e+03 [7] WRONG | 109 [6] / 8.81e+03 [7] WRONG | 4.93 [4] / 9.14e+03 [7] WRONG |
+| мирской / морской | 1.73 [4] / 46.8 [5] WRONG | 3.87 [4] / 130 [6] WRONG | 37.9 [5] / 141 [6] WRONG | 6.95 [4] / 116 [6] WRONG | 66.6 [5] / 133 [6] WRONG | 0.754 [3] / 55.1 [5] WRONG |
+| речь / печь | 126 [6] / 14.4 [5] ok | 190 [6] / 26.9 [5] ok | 126 [6] / 35.9 [5] ok | 250 [6] / 47.5 [5] ok | 525 [6] / 59.1 [5] ok | 212 [6] / 14 [5] ok |
+| ночи / ноги | 692 [6] / 262 [6] tie | 466 [6] / 239 [6] tie | 116 [6] / 127 [6] tie | 209 [6] / 261 [6] tie | 1.59e+03 [7] / 561 [6] ok | 241 [6] / 89.5 [5] ok |
+
+hybrid (own, else lemma mean):
+| pair (right / wrong) | hermit2018 | wordfreq | ngram_1800_1917 | ngram_1950_2019 | poetry_ws | leipzig_news2020 |
+| мне / мни | 6.96e+03 [7] / 0.129 [3] ok | 2.14e+03 [7] / 0.331 [3] ok | 364 [6] / 0.872 [3] ok | 889 [6] / 0.344 [3] ok | 5.14e+03 [7] / 2.5 [4] ok | 381 [6] / 0.0355 [2] ok |
+| засыпаю / зазываю | 2.06 [4] / 0.0259 [2] ok | 1.07 [4] / 0.044 [2] ok | 0.11 [3] / 0.00306 [1] ok | 0.493 [3] / 0.00822 [1] ok | 3.33 [4] / 0.0877 [2] ok | 0.29 [3] / 0.0244 [2] ok |
+| бала / была | 5.42 [4] / 1.54e+03 [7] WRONG | 3.63 [4] / 1.32e+03 [7] WRONG | 2.23 [4] / 927 [6] WRONG | 2.08 [4] / 763 [6] WRONG | 15.8 [5] / 704 [6] WRONG | 1.33 [4] / 629 [6] WRONG |
+| мирской / морской | 0.343 [3] / 16.1 [5] WRONG | 1.1 [4] / 38.9 [5] WRONG | 6.3 [4] / 25.7 [5] WRONG | 1.46 [4] / 30.9 [5] WRONG | 14.2 [5] / 35 [5] tie | 0.232 [3] / 15.4 [5] WRONG |
+| речь / печь | 96.3 [5] / 5.51 [4] ok | 117 [6] / 9.33 [4] ok | 44 [5] / 7.51 [4] ok | 120 [6] / 9.73 [4] ok | 196 [6] / 20.8 [5] ok | 172 [6] / 4.47 [4] ok |
+| ночи / ноги | 208 [6] / 98.1 [5] ok | 120 [6] / 95.5 [5] ok | 30.2 [5] / 34.4 [5] tie | 46.5 [5] / 78.1 [5] tie | 476 [6] / 118 [6] tie | 26.9 [5] / 27.8 [5] tie |
+
+UD xix tokens 8619 of which length>=3 and exact dictionary form: 6167
+Wikisource held-out sample: 15000 tokens; 12299 items; authors 28
+
+### Poem «Средь шумного бала» (71 types)  mean candidates per unknown letter: 3.5  random pick: 0.598
+  0.868  hermit2018 own
+  0.867  hermit2018 hybrid
+  0.858  BLEND3 quantised, 2 band(s) per decade (15 levels)
+  0.857  BLEND3 quantised, 3 band(s) per decade (23 levels)
+  0.857  BLEND3 quantised, 1 band(s) per decade (8 levels)
+  0.851  wordfreq own
+  0.851  wordfreq hybrid, banded 0-9
+  0.851  mean of 3 (hermit, wordfreq, ngram 1800-1917), hybrid
+  0.851  BLEND3 (hermit+wordfreq+ngram 1800-1917), half-count floors
+  0.849  BLEND3 quantised, 5 band(s) per decade (37 levels)
+  0.849  wordfreq hybrid
+  0.845  mean of ngram 1800-1917 + wordfreq, hybrid
+  0.845  BLEND2 (wordfreq+ngram 1800-1917), half-count floors
+  0.844  ngram_1950_2019 own
+  0.844  ngram_1950_2019 hybrid
+  0.833  ngram_1800_1917 own
+  0.833  ngram_1800_1917 hybrid
+  0.833  hermit2018 hybrid, banded 0-9
+  0.828  leipzig_news2020 own
+  0.823  ngram_1950_2019 hybrid, banded 0-9
+  0.820  ngram_1800_1917 hybrid, banded 0-9
+  0.815  hermit2018 lemma
+  0.812  dictionary file order (earlier line wins; no data used)
+  0.811  leipzig_news2020 hybrid
+  0.799  leipzig_news2020 hybrid, banded 0-9
+  0.796  L&S lemma list (reference)
+  0.792  wordfreq lemma
+  0.786  ngram_1800_1917 lemma
+  0.780  leipzig_news2020 lemma
+  0.779  ngram_1950_2019 lemma
+
+### UD_Russian-Poetry, 19th-century documents (12,000-token sample)  mean candidates per unknown letter: 3.2  random pick: 0.619
+  0.851  mean of 3 (hermit, wordfreq, ngram 1800-1917), hybrid
+  0.851  BLEND3 (hermit+wordfreq+ngram 1800-1917), half-count floors
+  0.851  BLEND3 quantised, 5 band(s) per decade (37 levels)
+  0.849  mean of ngram 1800-1917 + wordfreq, hybrid
+  0.849  BLEND2 (wordfreq+ngram 1800-1917), half-count floors
+  0.849  BLEND3 quantised, 3 band(s) per decade (23 levels)
+  0.848  hermit2018 own
+  0.847  wordfreq own
+  0.844  BLEND3 quantised, 2 band(s) per decade (15 levels)
+  0.842  ngram_1950_2019 own
+  0.842  wordfreq hybrid
+  0.841  hermit2018 hybrid
+  0.841  ngram_1950_2019 hybrid
+  0.836  ngram_1800_1917 own
+  0.835  ngram_1800_1917 hybrid
+  0.832  BLEND3 quantised, 1 band(s) per decade (8 levels)
+  0.825  leipzig_news2020 own
+  0.825  wordfreq hybrid, banded 0-9
+  0.819  leipzig_news2020 hybrid
+  0.819  hermit2018 hybrid, banded 0-9
+  0.817  ngram_1950_2019 hybrid, banded 0-9
+  0.815  ngram_1800_1917 hybrid, banded 0-9
+  0.798  ngram_1950_2019 lemma
+  0.798  leipzig_news2020 hybrid, banded 0-9
+  0.797  L&S lemma list (reference)
+  0.797  wordfreq lemma
+  0.797  ngram_1800_1917 lemma
+  0.793  hermit2018 lemma
+  0.783  dictionary file order (earlier line wins; no data used)
+  0.783  leipzig_news2020 lemma
+
+### Wikisource poems, author held out (15,000-token sample)  mean candidates per unknown letter: 3.2  random pick: 0.615
+  0.877  poetry count, author held out, own form
+  0.876  BLEND3 1 : poetry 2 (author held out)
+  0.871  ngram 1800-1917 + poetry count (author held out)
+  0.864  BLEND3 + poetry count (author held out), equal weights of 4
+  0.849  BLEND3 (hermit+wordfreq+ngram 1800-1917), half-count floors
+  0.849  BLEND3 quantised, 5 band(s) per decade (37 levels)
+  0.849  mean of 3 (hermit, wordfreq, ngram 1800-1917), hybrid
+  0.848  BLEND2 (wordfreq+ngram 1800-1917), half-count floors
+  0.848  mean of ngram 1800-1917 + wordfreq, hybrid
+  0.846  BLEND3 quantised, 3 band(s) per decade (23 levels)
+  0.845  wordfreq own
+  0.842  hermit2018 own
+  0.842  BLEND3 quantised, 2 band(s) per decade (15 levels)
+  0.841  ngram_1950_2019 own
+  0.841  wordfreq hybrid
+  0.841  ngram_1950_2019 hybrid
+  0.837  hermit2018 hybrid
+  0.836  ngram_1800_1917 own
+  0.836  ngram_1800_1917 hybrid
+  0.829  BLEND3 quantised, 1 band(s) per decade (8 levels)
+  0.824  wordfreq hybrid, banded 0-9
+  0.823  leipzig_news2020 own
+  0.818  leipzig_news2020 hybrid
+  0.817  ngram_1950_2019 hybrid, banded 0-9
+  0.817  hermit2018 hybrid, banded 0-9
+  0.815  ngram_1800_1917 hybrid, banded 0-9
+  0.797  leipzig_news2020 hybrid, banded 0-9
+  0.796  L&S lemma list (reference)
+  0.795  ngram_1950_2019 lemma
+  0.794  wordfreq lemma
+  0.794  ngram_1800_1917 lemma
+  0.789  hermit2018 lemma
+  0.783  dictionary file order (earlier line wins; no data used)
+  0.780  leipzig_news2020 lemma
+
+### Accuracy by how common the TRUE word is (its BLEND3 level, 1 band per decade: level 1 = rarest known, 8 = most common; 0 = no data)
+
+Poem «Средь шумного бала» (71 types)
+| true-word level | share of tokens | dictionary file order (earlier line wins; no | BLEND3 (hermit+wordfreq+ngram 1800-1917), ha |
+| 3 | 16.7% | 0.894 | 0.942 |
+| 4 | 26.4% | 0.750 | 0.740 |
+| 5 | 25.0% | 0.816 | 0.875 |
+| 6 | 22.2% | 0.844 | 0.865 |
+| 7 | 8.3% | 0.778 | 0.889 |
+| 8 | 1.4% | 0.667 | 1.000 |
+
+UD_Russian-Poetry, 19th-century documents (12,000-token sample)
+| true-word level | share of tokens | dictionary file order (earlier line wins; no | BLEND3 (hermit+wordfreq+ngram 1800-1917), ha |
+| 1 | 0.6% | 0.888 | 0.867 |
+| 2 | 6.2% | 0.809 | 0.797 |
+| 3 | 16.6% | 0.807 | 0.828 |
+| 4 | 26.5% | 0.770 | 0.829 |
+| 5 | 23.4% | 0.768 | 0.865 |
+| 6 | 17.7% | 0.773 | 0.860 |
+| 7 | 8.1% | 0.828 | 0.935 |
+| 8 | 1.0% | 0.667 | 1.000 |
+
+Wikisource poems, author held out (15,000-token sample)
+| true-word level | share of tokens | dictionary file order (earlier line wins; no | BLEND3 (hermit+wordfreq+ngram 1800-1917), ha | poetry count, author held out, own form | BLEND3 + poetry count (author held out), equ | BLEND3 1 : poetry 2 (author held out) |
+| 1 | 0.5% | 0.837 | 0.831 | 0.860 | 0.838 | 0.846 |
+| 2 | 5.8% | 0.822 | 0.807 | 0.863 | 0.819 | 0.852 |
+| 3 | 17.0% | 0.814 | 0.823 | 0.870 | 0.842 | 0.867 |
+| 4 | 26.3% | 0.770 | 0.823 | 0.864 | 0.844 | 0.861 |
+| 5 | 22.3% | 0.770 | 0.866 | 0.881 | 0.883 | 0.886 |
+| 6 | 18.7% | 0.761 | 0.846 | 0.861 | 0.856 | 0.859 |
+| 7 | 8.4% | 0.835 | 0.959 | 0.948 | 0.958 | 0.958 |
+| 8 | 1.0% | 0.667 | 1.000 | 1.000 | 1.000 | 1.000 |
+
+BLEND3 level counts over all forms (r=1): {1: 482848, 2: 292774, 3: 124945, 4: 35959, 5: 5919, 6: 592, 7: 63, 8: 6}
+
+real	5m24.454s
+user	5m19.175s
+sys	0m2.518s

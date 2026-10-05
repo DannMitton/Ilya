@@ -1,0 +1,10 @@
+levels = floor(k*(score+1.2))+1; score range about -1.2 .. 4.5
+raw (no quantising) accuracy 0.876
+k=   1  levels up to about 6 accuracy 0.851
+k= 1.5  levels up to about 9 accuracy 0.861
+k=   2  levels up to about 12 accuracy 0.868
+k=   3  levels up to about 18 accuracy 0.872
+k=   4  levels up to about 23 accuracy 0.874
+k=   6  levels up to about 35 accuracy 0.876
+k=   9  levels up to about 52 accuracy 0.876
+k=  12  levels up to about 69 accuracy 0.876

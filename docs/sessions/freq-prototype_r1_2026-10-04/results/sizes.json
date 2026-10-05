@@ -1,0 +1,34 @@
+{
+ "original": {
+  "raw": 96381998,
+  "gzip9": 5626268
+ },
+ "q-band09": {
+  "raw": 101256190,
+  "gzip9": 5920969
+ },
+ "q-fine": {
+  "raw": 101261713,
+  "gzip9": 6257275
+ },
+ "sidecar-band09-bytes": {
+  "raw": 943106,
+  "gzip9": 96232
+ },
+ "sidecar-fine-bytes": {
+  "raw": 943106,
+  "gzip9": 205973
+ },
+ "sidecar-band09-nibbles": {
+  "raw": 471553,
+  "gzip9": 93260
+ },
+ "prototype.tsv": {
+  "raw": 21352401,
+  "gzip9": 3231617
+ },
+ "prototype_fine.tsv": {
+  "raw": 21357925,
+  "gzip9": 3370042
+ }
+}

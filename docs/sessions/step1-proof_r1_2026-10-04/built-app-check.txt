@@ -1,0 +1,7 @@
+after 40 s: Reading the page…
+requests:
+/_app/immutable/workers/worker-CCDomnmP.js
+/_app/immutable/workers/chunks/4S7rass8.js
+/omr/models/6ed36640db4ef5d223098b6d5efe4eda97c66b24a2c72faab8a018c749003a8d/segnet_308-3296ccd40960f90ca6ab9c035cca945675d30a0f.onnx
+/omr/ort/ort-wasm-simd-threaded.jsep.mjs
+console:

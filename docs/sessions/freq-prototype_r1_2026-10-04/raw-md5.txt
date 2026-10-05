@@ -1,0 +1,13 @@
+md5 of the raw files used (not copied, over 20 MB or not redistributable)
+ce7836d8cfc9604912a8b8a12b57e820  hermit_content_2018_ru_ru_full.txt   29.0 MB  https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/ru/ru_full.txt
+bdffbbb0d1e62d557190afabe644e4b6  hermit_content_2016_ru_ru_full.txt   21.3 MB  https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2016/ru/ru_full.txt
+e8b59bcdfb17df2f036744fd983de8d2  rus_news_2020_1M.tar.gz            226.0 MB  https://downloads.wortschatz-leipzig.de/corpora/rus_news_2020_1M.tar.gz
+9fc72792f8c743fa0928cc88b39f79a6  Freq2011.zip                         0.5 MB  http://dict.ruslang.ru/Freq2011.zip   (copyright notice, no licence: not copied)
+b982f77055d5cc6c666a55b90912901a  wordfreq 3.1.1 data/large_ru.msgpack.gz  4.5 MB  pip install wordfreq==3.1.1 (wheel md5 249ce84335635b7206a01f1bcab50d0a)
+d6259275285edcc2a31412652dcb6f35  ru_poetry-ud-train.conllu
+dcf062dfaf5ad6e015aecfbbecf2c18b  ru_poetry-ud-dev.conllu
+43f087aa3f273732a9c955a5466c6688  ru_poetry-ud-test.conllu
+Streamed, not saved (no md5):
+  http://storage.googleapis.com/books/ngrams/books/20200217/rus/1-00000-of-00002.gz   840,316,801 bytes
+  http://storage.googleapis.com/books/ngrams/books/20200217/rus/1-00001-of-00002.gz   1,441,632,930 bytes
+  https://dumps.wikimedia.org/ruwikisource/latest/ruwikisource-latest-pages-articles.xml.bz2   2,083,497,137 bytes, dated 2026-10-01 21:13 GMT ("latest" moves; fetch a dated dump to repeat exactly)

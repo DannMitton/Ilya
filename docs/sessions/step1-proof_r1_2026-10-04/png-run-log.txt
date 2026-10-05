@@ -1,0 +1,11 @@
+03:05:56 console error: Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID
+03:05:58 console error: Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID
+03:06:03 dictionary loaded; dropping /tmp/claude-0/-home-claude/cde67b8f-675a-5d24-aafe-021536ff667e/scratchpad/asm/tch-1.png
+03:06:24 busy text:  Ilya is reading the notes off your page. Starting the reader might take about one minute, then a few seconds for each page of music after that.
+03:07:04 waiting 61 s
+03:08:04 waiting 121 s
+03:08:28 console info: [omr] homr read 1 of 1 pages of tch-1.png in 137177 ms on wasm
+03:08:30 read finished after 146.8 s (wall, from the drop): [omr] homr read 1 of 1 pages of tch-1.png in 137177 ms on wasm
+03:08:34 poem box before paste: ""
+03:08:50 done
+03:09:07 ?reader=ilya after 9 s: clef-and-key prompt (upload.ask.title)

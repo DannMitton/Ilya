@@ -1,0 +1,14 @@
+02:45:17 console error: Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID
+02:45:23 console error: Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID
+02:45:27 dictionary loaded; dropping /tmp/claude-0/-home-claude/cde67b8f-675a-5d24-aafe-021536ff667e/scratchpad/part22/in/tchaikovsky-op38-3.pdf
+02:45:48 busy text:  Ilya is reading the notes off your page. Starting the reader might take about one minute, then a few seconds for each page of music after that.
+02:46:28 waiting 61 s
+02:47:28 waiting 121 s
+02:48:28 waiting 181 s
+02:49:28 waiting 241 s
+02:50:28 waiting 301 s
+02:51:28 waiting 361 s
+02:51:41 console info: [omr] homr read 3 of 3 pages of tchaikovsky-op38-3.pdf in 361352 ms on wasm
+02:52:43 read finished after 436.3 s (wall, from the drop): [omr] homr read 3 of 3 pages of tchaikovsky-op38-3.pdf in 361352 ms on wasm
+02:52:47 poem box before paste: ""
+02:53:02 done

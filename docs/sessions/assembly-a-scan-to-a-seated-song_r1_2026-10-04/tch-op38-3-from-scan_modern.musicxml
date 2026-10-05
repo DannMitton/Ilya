@@ -1,0 +1,1735 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="4.0">
+  <work><work-title>Tchaikovsky, Op. 38 No. 3, read from the Jurgenson 1878 scan (desk assembly, 2026-10-04)</work-title></work>
+  <part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes><divisions>8</divisions><key><fifths>2</fifths></key><time><beats>3</beats><beat-type>8</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="2">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="3">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="4">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="5">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="6">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="7">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="8">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>Средь</text></lyric>
+      </note>
+    </measure>
+    <measure number="9">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>шум</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>но</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>го</text></lyric>
+      </note>
+    </measure>
+    <measure number="10">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>ба</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ла</text></lyric>
+      </note>
+    </measure>
+    <measure number="11">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>слу</text></lyric>
+      </note>
+    </measure>
+    <measure number="12">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>чай</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>но,</text></lyric>
+      </note>
+    </measure>
+    <measure number="13">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>в тре</text></lyric>
+      </note>
+    </measure>
+    <measure number="14">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>во</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ге</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>мирс</text></lyric>
+      </note>
+    </measure>
+    <measure number="15">
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>кой</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>су</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>е</text></lyric>
+      </note>
+    </measure>
+    <measure number="16">
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ты,</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>те</text></lyric>
+      </note>
+    </measure>
+    <measure number="17">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>бя</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>я</text></lyric>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>у</text></lyric>
+      </note>
+    </measure>
+    <measure number="18">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>ви</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>дел,</text></lyric>
+      </note>
+    </measure>
+    <measure number="19">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>но</text></lyric>
+      </note>
+    </measure>
+    <measure number="20">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>тай</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>на</text></lyric>
+      </note>
+    </measure>
+    <measure number="21">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>тво</text></lyric>
+      </note>
+    </measure>
+    <measure number="22">
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>и</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>по</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>кры</text></lyric>
+      </note>
+    </measure>
+    <measure number="23">
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>ва</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ла</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>чер</text></lyric>
+      </note>
+    </measure>
+    <measure number="24">
+      <note>
+        <pitch><step>B</step><octave>3</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type><dot/>
+        <lyric number="1"><syllabic>end</syllabic><text>ты;</text></lyric>
+      </note>
+    </measure>
+    <measure number="25">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>лишь</text></lyric>
+      </note>
+    </measure>
+    <measure number="26">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>о</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>чи</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>пе</text></lyric>
+      </note>
+    </measure>
+    <measure number="27">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>чаль</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>но</text></lyric>
+      </note>
+    </measure>
+    <measure number="28">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>гля</text></lyric>
+      </note>
+    </measure>
+    <measure number="29">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>де</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ли,</text></lyric>
+      </note>
+    </measure>
+    <measure number="30">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>а</text></lyric>
+      </note>
+    </measure>
+    <measure number="31">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>го</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>лос</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>так</text></lyric>
+      </note>
+    </measure>
+    <measure number="32">
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>див</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>но</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>зву</text></lyric>
+      </note>
+    </measure>
+    <measure number="33">
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>чал</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>как</text></lyric>
+      </note>
+    </measure>
+    <measure number="34">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>звон</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>от</text></lyric>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>да</text></lyric>
+      </note>
+    </measure>
+    <measure number="35">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>лен</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ной</text></lyric>
+      </note>
+    </measure>
+    <measure number="36">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>D</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>с ви</text></lyric>
+      </note>
+    </measure>
+    <measure number="37">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ры</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>ли</text></lyric>
+      </note>
+    </measure>
+    <measure number="38">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>как</text></lyric>
+      </note>
+    </measure>
+    <measure number="39">
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>мо</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ря</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>иг</text></lyric>
+      </note>
+    </measure>
+    <measure number="40">
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>ра</text></lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>ю</text></lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>щий</text></lyric>
+      </note>
+    </measure>
+    <measure number="41">
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type><dot/>
+        <lyric number="1"><syllabic>single</syllabic><text>вал.</text></lyric>
+      </note>
+    </measure>
+    <measure number="42">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>Мне</text></lyric>
+      </note>
+    </measure>
+    <measure number="43">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>стан</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>твой</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>но</text></lyric>
+      </note>
+    </measure>
+    <measure number="44">
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>нра</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>вил</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ся</text></lyric>
+      </note>
+    </measure>
+    <measure number="45">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>тон</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>кий.</text></lyric>
+      </note>
+    </measure>
+    <measure number="46">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>и.</text></lyric>
+      </note>
+    </measure>
+    <measure number="47">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>весь</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>твой</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>за</text></lyric>
+      </note>
+    </measure>
+    <measure number="48">
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>дум</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>чи</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>вый</text></lyric>
+      </note>
+    </measure>
+    <measure number="49">
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type><dot/>
+        <lyric number="1"><syllabic>single</syllabic><text>вид,</text></lyric>
+      </note>
+    </measure>
+    <measure number="50">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>а</text></lyric>
+      </note>
+    </measure>
+    <measure number="51">
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>смех</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>твой,</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>и</text></lyric>
+      </note>
+    </measure>
+    <measure number="52">
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>грус</text></lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>тный,</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>и</text></lyric>
+      </note>
+    </measure>
+    <measure number="53">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>звон</text></lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>кий</text></lyric>
+      </note>
+    </measure>
+    <measure number="54">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>с тех</text></lyric>
+      </note>
+    </measure>
+    <measure number="55">
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>пор</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>в мо</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ем</text></lyric>
+      </note>
+    </measure>
+    <measure number="56">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>серд</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>це</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>зву</text></lyric>
+      </note>
+    </measure>
+    <measure number="57">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>12</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type><dot/>
+        <notations><tied type="start"/></notations>
+        <lyric number="1"><syllabic>end</syllabic><text>чит!</text></lyric>
+      </note>
+    </measure>
+    <measure number="58">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations><tied type="stop"/></notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <measure number="59">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>В ча</text></lyric>
+      </note>
+    </measure>
+    <measure number="60">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>сы</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>о</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>и.</text></lyric>
+      </note>
+    </measure>
+    <measure number="61">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type><dot/>
+        <lyric number="1"><syllabic>begin</syllabic><text>не</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>ки</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>е</text></lyric>
+      </note>
+    </measure>
+    <measure number="62">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="63">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>но</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>чи</text></lyric>
+      </note>
+    </measure>
+    <measure number="64">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>люб</text></lyric>
+      </note>
+    </measure>
+    <measure number="65">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>лю</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>я</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>ус</text></lyric>
+      </note>
+    </measure>
+    <measure number="66">
+      <note>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>та</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>лый</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>при</text></lyric>
+      </note>
+    </measure>
+    <measure number="67">
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>лечь,</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>я</text></lyric>
+      </note>
+    </measure>
+    <measure number="68">
+      <note>
+        <pitch><step>G</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>ви</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>жу</text></lyric>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>пе</text></lyric>
+      </note>
+    </measure>
+    <measure number="69">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type><dot/>
+        <lyric number="1"><syllabic>middle</syllabic><text>чаль</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>ны</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>е</text></lyric>
+      </note>
+    </measure>
+    <measure number="70">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="71">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>о</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>чи,</text></lyric>
+      </note>
+    </measure>
+    <measure number="72">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>я</text></lyric>
+      </note>
+    </measure>
+    <measure number="73">
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>слы</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>шу</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>ве</text></lyric>
+      </note>
+    </measure>
+    <measure number="74">
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>се</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>лу</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ю</text></lyric>
+      </note>
+    </measure>
+    <measure number="75">
+      <note>
+        <pitch><step>B</step><octave>3</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type><dot/>
+        <lyric number="1"><syllabic>single</syllabic><text>речь,</text></lyric>
+      </note>
+    </measure>
+    <measure number="76">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>и</text></lyric>
+      </note>
+    </measure>
+    <measure number="77">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>груст</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>но</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>я,</text></lyric>
+      </note>
+    </measure>
+    <measure number="78">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type><dot/>
+        <lyric number="1"><syllabic>begin</syllabic><text>груст</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <lyric number="1"><syllabic>end</syllabic><text>но</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>так</text></lyric>
+      </note>
+    </measure>
+    <measure number="79">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>за</text></lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>сы</text></lyric>
+      </note>
+    </measure>
+    <measure number="80">
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>па</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ю,</text></lyric>
+      </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <lyric number="1"><syllabic>single</syllabic><text>и</text></lyric>
+      </note>
+    </measure>
+    <measure number="81">
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>в гре</text></lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>зах</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>не</text></lyric>
+      </note>
+    </measure>
+    <measure number="82">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type><dot/>
+        <lyric number="1"><syllabic>middle</syllabic><text>ве</text></lyric>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>до</text></lyric>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>мых</text></lyric>
+      </note>
+    </measure>
+    <measure number="83">
+      <note>
+        <pitch><step>D</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>сплю.</text></lyric>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <measure number="84">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="85">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>Люб</text></lyric>
+      </note>
+    </measure>
+    <measure number="86">
+      <note>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>я</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>бди</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>те</text></lyric>
+      </note>
+    </measure>
+    <measure number="87">
+      <note>
+        <pitch><step>A</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>бя</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>я</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>по</text></lyric>
+      </note>
+    </measure>
+    <measure number="88">
+      <note>
+        <pitch><step>C</step><alter>1</alter><octave>5</octave></pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>зна</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ю,</text></lyric>
+      </note>
+    </measure>
+    <measure number="89">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>Но</text></lyric>
+      </note>
+    </measure>
+    <measure number="90">
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type><dot/>
+        <lyric number="1"><syllabic>begin</syllabic><text>ка</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>жет</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ся</text></lyric>
+      </note>
+    </measure>
+    <measure number="91">
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>single</syllabic><text>мне</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type><dot/>
+        <lyric number="1"><syllabic>single</syllabic><text>что</text></lyric>
+      </note>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <lyric number="1"><syllabic>single</syllabic><text>люб</text></lyric>
+      </note>
+    </measure>
+    <measure number="92">
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>12</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type><dot/>
+        <notations><tied type="start"/></notations>
+        <lyric number="1"><syllabic>single</syllabic><text>лют</text></lyric>
+      </note>
+    </measure>
+    <measure number="93">
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations><tied type="stop"/></notations>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <measure number="94">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="95">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="96">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="97">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="98">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+    <measure number="99">
+      <note><rest measure="yes"/><duration>12</duration><voice>1</voice></note>
+    </measure>
+  </part>
+</score-partwise>

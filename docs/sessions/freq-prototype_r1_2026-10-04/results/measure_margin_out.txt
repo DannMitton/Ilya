@@ -1,0 +1,8 @@
+patterns with a single candidate (trivially right): 46.0% of patterns, right 100.0%
+| situation (patterns with 2 or more candidates) | share of those | right |
+| tie at the top | 0.0% | 50.0% |
+| lead under half a band | 25.8% | 49.4% |
+| lead of half to one band | 18.1% | 66.3% |
+| lead of one to two bands | 21.0% | 84.8% |
+| lead of two to three bands | 13.5% | 96.4% |
+| lead of three or more bands | 21.6% | 99.6% |

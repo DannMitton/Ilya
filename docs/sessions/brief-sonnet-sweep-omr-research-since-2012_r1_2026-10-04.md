@@ -1,6 +1,6 @@
 # Brief for a Sonnet agent: the research and the data on reading printed music, since 2012
 
-**Written by:** the desk (Fable), 2026-10-04 13:30. **Status: READY, not run.** Its first run was stopped by Dann at 13:38, when he chose a new thread for the appraisal; it produced no memo. It serves `commission-appraisal-of-the-approach_r1_2026-10-04.md`. Its companion, the sweep of systems, ran and is `memo-sonnet-working-music-readers_r1_2026-10-04.md` (279,995 tokens, 65 tool calls, nine minutes). Expect about the same cost here: one agent, about 300k tokens at worst. The text from here down is the prompt, to be given whole. Change the output path to suit the workspace.
+**Written by:** the desk (Fable), 2026-10-04 13:30. **Status: RUN 2026-10-04 at about 14:08, with four amendments from the desk (the output path; a section F on open weights; notes on tools; report any disagreement with July). The memo is `memo-sonnet-omr-research-since-2012_r1_2026-10-04.md`, 326,674 tokens.** Earlier status: READY, not run. Its first run was stopped by Dann at 13:38, when he chose a new thread for the appraisal; it produced no memo. It serves `commission-appraisal-of-the-approach_r1_2026-10-04.md`. Its companion, the sweep of systems, ran and is `memo-sonnet-working-music-readers_r1_2026-10-04.md` (279,995 tokens, 65 tool calls, nine minutes). Expect about the same cost here: one agent, about 300k tokens at worst. The text from here down is the prompt, to be given whole. Change the output path to suit the workspace.
 
 ---
 

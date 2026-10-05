@@ -1,0 +1,32 @@
+orus | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 156, 'vowelRight': 152, 'sylRight': 125, 'wordRightRaw': 85, 'wordRightFinal': 88}
+    by state (word right after check / syllables in that state): {'read': [85, 88], 'deduced': [3, 3], 'unsure': [0, 65]}
+Cyrillic | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 156, 'vowelRight': 149, 'sylRight': 132, 'wordRightRaw': 99, 'wordRightFinal': 99}
+    by state (word right after check / syllables in that state): {'read': [99, 107], 'deduced': [0, 3], 'unsure': [0, 46]}
+rus | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 146, 'vowelRight': 140, 'sylRight': 112, 'wordRightRaw': 81, 'wordRightFinal': 83}
+    by state (word right after check / syllables in that state): {'read': [83, 86], 'deduced': [0, 0], 'unsure': [0, 60]}
+orus+alts | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 156, 'vowelRight': 152, 'sylRight': 125, 'wordRightRaw': 85, 'wordRightFinal': 95}
+    by state (word right after check / syllables in that state): {'read': [85, 88], 'deduced': [10, 14], 'unsure': [0, 54]}
+v1 | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 163, 'vowelRight': 157, 'sylRight': 140, 'wordRightRaw': 124, 'wordRightFinal': 125}
+    by state (word right after check / syllables in that state): {'read': [94, 96], 'deduced': [24, 47], 'unsure': [7, 20]}
+v2 | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 162, 'vowelRight': 156, 'sylRight': 137, 'wordRightRaw': 118, 'wordRightFinal': 121}
+    by state (word right after check / syllables in that state): {'read': [95, 97], 'deduced': [22, 43], 'unsure': [4, 22]}
+v3 | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 171, 'vowelRight': 166, 'sylRight': 152, 'wordRightRaw': 142, 'wordRightFinal': 145}
+    by state (word right after check / syllables in that state): {'read': [76, 77], 'deduced': [58, 74], 'unsure': [11, 20]}
+
+== FOURTH PASS (assemble5.py), 2026-10-04 evening, after Dann at 20:06: no glyph on the line of words is thrown away ==
+v4 | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 172, 'vowelRight': 168, 'sylRight': 157, 'wordRightRaw': 148, 'wordRightFinal': 148}
+    by state (word right after check / syllables in that state): {'read': [76, 77], 'deduced': [70, 84], 'unsure': [2, 11]}
+    ledger: glyphs boxed on the 11 lines of words 559 | letters 442 | hyphens and stops 102 | kept as unknown letters 1 [['%', 2467]] | set aside 14 (left of the first note 12 ; does not stand on the line 2 )
+
+== FIFTH PASS (assemble6.py), 2026-10-04 late evening: how common a word is settles a tie when the lead is two bands or more ==
+v5 | notes headline 98.3 pitch 171 len 174 of 174 matched 174 extra 0 | bars {'truth': 99, 'read': 99, 'allRight': 80}
+    {'truthSyl': 172, 'noteMatched': 172, 'seated': 172, 'vowelRight': 168, 'sylRight': 159, 'wordRightRaw': 152, 'wordRightFinal': 152}
+    by state (word right after check / syllables in that state): {'read': [76, 77], 'deduced': [75, 89], 'unsure': [1, 6]}

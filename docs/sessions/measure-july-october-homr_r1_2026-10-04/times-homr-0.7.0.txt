@@ -1,0 +1,25 @@
+rep1/page1_300dpi.png rc=0 26s
+rep1/page2_300dpi.png rc=0 13s
+rep4/page1_300dpi.png rc=0 18s
+rep4/page2_300dpi.png rc=0 18s
+rep4/page3_300dpi.png rc=0 12s
+rep5/page1_300dpi.png rc=0 18s
+rep5/page2_300dpi.png rc=0 16s
+rep5/page3_300dpi.png rc=0 19s
+rep5/page4_300dpi.png rc=0 16s
+rep5/page5_300dpi.png rc=0 17s
+rep5/page6_300dpi.png rc=0 12s
+rep6/page1_300dpi.png rc=0 21s
+rep6/page2_300dpi.png rc=0 16s
+rep6/page3_300dpi.png rc=0 17s
+rep6/page4_300dpi.png rc=0 22s
+rep6/page5_300dpi.png rc=0 20s
+rep6/page6_300dpi.png rc=0 14s
+rep2/page1_300dpi.png rc=0 17s
+rep2/page2_300dpi.png rc=0 11s
+rep3/page1_300dpi.png rc=0 17s
+rep3/page2_300dpi.png rc=0 19s
+rep3/page3_300dpi.png rc=0 17s
+rep3/page4_300dpi.png rc=0 18s
+rep3/page5_300dpi.png rc=0 18s
+ALLDONE

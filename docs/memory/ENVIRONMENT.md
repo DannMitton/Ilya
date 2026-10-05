@@ -189,6 +189,9 @@ next session the same hour it cost the last one.
 | a Cyrillic letter on screen that is not the letter in the data | `Ё PLUS U+0301` |
 | `grep` on the Mac skipping files it should find | `SHIM AND HONOURS` |
 | a remote branch that seems not to exist | `implies --single-branch` |
+| walking Ilya in the cloud clone with no Vercel, or Markup shows three systems a sheet | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
+| running the page reader in the cloud, or handing songs to a helper | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
+| about to hand Dann a `tar` line, or putting built files into his tree | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
 
 ### Svelte, CSS, and this tree
 
@@ -233,6 +236,9 @@ next session the same hour it cost the last one.
 | a gate that cannot be run at all | `A GATE THAT CANNOT BE RUN` |
 | anything from the OMR day | `the OMR day` |
 | the capture chain end to end | `THE CAPTURE CHAIN` |
+| running homr with a place for every note, or homr will not install | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
+| Tesseract writes no hOCR, or you need a box around each letter | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
+| writing a score file for Ilya to take in, with words | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
 
 ### Print and paper
 
@@ -280,6 +286,16 @@ next session the same hour it cost the last one.
 | "the latest N photos in Downloads" | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
 | a subagent refused to transcribe a book | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
 | where a book's page photos are (KVP2, Boldrey) | `BOOK PHOTOS: HEIC, AIRDROP, AND THE HARVEST BRIEF` |
+| about to start a subagent while Dann is at the keyboard | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
+| about to work for more than a few minutes on the bridge | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
+| stopping a dev server in the cloud shell | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
+| the thread compacted, or a new thread must pick up work done in the cloud | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
+| a message sent to Dann before a compaction is needed again | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
+| writing a brief that says what files are on the cloud machine | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
+| giving a script the name of its output file | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
+| a hook asks the desk to commit and push | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
+| a file's time in the bridge shell looks four hours ahead | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
+| rebuilding the changed homr port in a new workspace | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -4545,3 +4561,31 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **The link to the Mac can drop for days.** It dropped at 19:55 on 2026-10-02 and returned at 13:16 on 2026-10-04, when Dann next wrote from the Mac. Write held files under `/mnt/user-data/outputs/` and send them into the chat, so they survive; say plainly what is not saved.
 - **Dann can stop a subagent mid-run, and a stopped agent leaves no memo.** Keep each agent's brief as a file, so a later desk can run it.
 - **A new file in a connected folder can be written by `device_commit_files` from `/mnt/user-data/outputs/`;** a long file is safer sent that way than through a heredoc when the link is unsteady.
+
+---
+
+## WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04
+
+- **The Mac's sleep stopped the desk again, from about 15:20 to 19:40, and the cure was already in this file** (`AN UNATTENDED RUN NEEDS AN AWAKE MAC`). Before any stretch of work that will run past a few minutes, give Dann the one line to paste. Dann, 19:57: *"I shoujld have asked you if we needed to caffeinate Terminal. WE will do that next time."* It is the desk's to ask, not his.
+- **A subagent run from the desk holds the desk until it returns.** While it runs, the desk does not see Dann's messages. Tell him before it starts, with the wait. The wait the desk named on 2026-10-04 was 15 to 25 minutes; a Sonnet research helper with web fetches and a 2 GB download took 46, and used 336,050 tokens against a named worst case of 300,000. Name a wider wait for research, and put a time limit in the brief as well as a token limit.
+- **homr's main branch, with a place for every note, is reachable through the git proxy.** `curl` of a GitHub archive zip returns 403. Ask for the repository (`add_repo`, read), then `GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 https://github.com/liebharc/homr`, then `pip install '.[cpu]'` in a Python 3.12 venv. Main at `560ca5c` writes `<!-- imgpos: x, y -->` after each note, and `--write-staff-positions` writes one line a staff. PyPI's 0.7.0 writes neither. homr 0.6.2 needs Python below 3.13.
+- **Tesseract with its own `--tessdata-dir` cannot find the `hocr` config file.** Replace the trailing `hocr` with `-c tessedit_create_hocr=1`, and add `-c hocr_char_boxes=1` for a box around each letter. A box's top and bottom can be wrong by a whole letter; measure the ink in the box's columns when height matters.
+- **Ilya walks in the cloud clone without Vercel.** `git clone --depth 1 --branch Shane https://github.com/DannMitton/ilya`, `pnpm install --frozen-lockfile` (4 seconds warm), then in `apps/web`, `pnpm dev` in the background, and a Playwright script with `executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'` at 1,440 px wide. Wait for `textarea.text-input` to be enabled, set the file on `input[type="file"].hidden-input`, wait for `.receipt-score`. The Markup tab answers to `page.locator('button', { hasText: /^\s*Markup\s*$/ })` and not to `getByRole('button', { name: 'Markup', exact: true })`. The script must sit inside `apps/web` to find `@playwright/test`; remove it after, so the clone stays clean. The recipe is `docs/sessions/assembly-a-scan-to-a-seated-song_r1_2026-10-04/walk.mjs`.
+- **In that headless browser each sheet of Markup shows its first three systems;** the rest lie below the edge of the `score-window`. Dann's own fixture does the same there. Whether a singer's browser does it is NOT ESTABLISHED. Do not report it as a fault of a file under test.
+- **`pkill -f "vite dev"` kills the shell that runs it,** because the pattern is in that shell's own command line (exit 144, and nothing after it runs). Find the process with `pgrep -f "vite/bin/vite.js"` and kill it by number.
+- **A score's words reach Ilya as cells, and a word with no vowel shares its host's cell.** Write «в тре» in one `<text>`, as a correctly engraved score does (`apps/web/src/lib/score/clitic-seat.ts:172-176`). An `<elision>` makes the cell a whole word and breaks the word around it (`packages/score-parser/src/musicxml-parser.ts:812-815`, `:884-889`).
+- **The dictionary's entries hold stress, part of speech, lemma, and two glosses, and nothing about how common a word is** (`data/dictionary.86d83340-a.json`, one JSON array a line: `["form", {"s","e","f","p","l"}]`). A helper's prototype of bands is in `docs/sessions/freq-prototype_r1_2026-10-04/`.
+- **Ilya's reader runs headless in the cloud on the app's own path, and reproduces the Mac's scores to the decimal** (2026-10-04, `docs/sessions/measure-misses-by-cause_r1_2026-10-04/read-songs.mjs`). Two things it needs here: the cloud's Chromium is 141 and pdf.js wants `Map.prototype.getOrInsertComputed`, so the script adds a small polyfill before the page loads; and Chromium must be started with `--proxy-server` and `--proxy-bypass-list=localhost;127.0.0.1` on the command line, because Playwright's `proxy` option sent localhost through the proxy. A Playwright script outside `apps/web` finds `@playwright/test` through `createRequire` on `apps/web/package.json`, which leaves the tree untouched.
+- **Give a helper only the build songs.** Cut a build-only PDF with `qpdf in.pdf --pages . 1-2,9-23 -- out.pdf` (the Lamm scan: songs 1, 4, 5, 6 on pages 1 to 2, 9 to 10, 11 to 17, 18 to 23), copy the build truths into a clean folder, and name in the brief the file names it must not open. The truth files are not in git (`tools/e16-harness/.gitignore`), so stage them from the Mac first.
+- **Sending a folder of 40 small files through `device_commit_files` costs the desk the whole list twice.** Tar the folder, send the one archive to `~/Downloads/_desk-<date>/`, and unpack it into `docs/sessions/` with the bridge shell.
+- **`tar xzf` in Dann's Terminal over tracked files makes an iCloud duplicate of every file it replaces** (2026-10-04 23:24: seven files replaced, seven ` 2` copies with the old dates; see `THE BRIDGE CANNOT READ A FILE WITH " 2"` and `A BRANCH SWITCH CAN UNCOVER HUNDREDS OF UNTRACKED DUPLICATES`). Never hand him a `tar` line that overwrites files in the tree. Write a changed file in place through the bridge instead, which keeps its inode and made no duplicate: `tar xzOf <archive> <path> > "$HOME/.tmp" && cat "$HOME/.tmp" > <path>`, then check the md5 against the tested copy. A duplicate can be renamed by the bridge though it cannot be read: move it to the git-ignored `apps/web/test-results/_desk-hold/`. A new file made by `tar` got no duplicate.
+
+## WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05 (the close of the appraisal thread)
+
+- **Dann closes a thread when it compacts, and the next thread's cloud workspace starts empty.** The clones, the Python environments, the model files, and every helper's output are gone. Bring each cloud deliverable to the Mac when it lands, not at the close. At this close the desk packed what was left as `~/Downloads/_desk-2026-10-05/resume-kit.tgz` (the test pages, desktop homr's reading of each, the scripts, the truths, a `README.txt`, and `models.txt` with every model file's SHA-256 and source) and `homr-web-main-worktree.tgz` (the changed port without `node_modules`). Anything under the AGPL goes to `~/Downloads`, never into `docs/sessions/`.
+- **The thread's own transcript is cut at compaction.** After it, a message the desk sent Dann before the cut cannot be read back from the workspace. The desk's table answering his question of 01:03 was lost that way. Anything the next desk will need is saved to a file when it is sent.
+- **List a folder before a brief says what is in it.** The port brief said the cloud held the `465` model files "fp32 and fp16". It held the fp32 encoder and the decoder; the fp16 encoder had only answered a HEAD request. The desk's own notes then repeated the mistake.
+- **Never give a converter an existing file as its output name.** `conv.py <in> <out>` overwrote a builder's result (`hwm/out3/sun-01.musicxml`), and the desk had to run the port again (83 seconds) to restore it. Write to a new folder.
+- **A stop hook asked the desk to commit and push,** because its shell stood in a clone with uncommitted changes. No agent writes with git. Decline in one line, and `cd` to a folder that is not a repository.
+- **File times in the bridge shell are in UTC,** four hours ahead of Toronto in October (a folder made at 02:07 showed 06:07). Use the clock tool for the time and `md5` for identity, not the dates `ls` prints.
+- **Rebuilding the changed port in a new workspace:** unpack `homr-web-main-worktree.tgz`, run `npm ci`, and put the model files under one folder as `<sha256>/<file>` (`models.txt` in the kit has the names and the source). In the kit, `scripts/port-builder/run-page.mts` runs one page under Node (55 to 83 seconds on one WebAssembly thread of the cloud machine) and `cmp.py` compares two MusicXML files, ignoring attribute order and the `imgpos` comments. The desk did not record the command line of `run-page.mts`; read its head.
