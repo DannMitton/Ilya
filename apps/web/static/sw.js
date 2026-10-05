@@ -54,6 +54,11 @@ self.addEventListener('fetch', (event) => {
   // Never intercept dictionary files — app manages these in IndexedDB
   if (url.pathname.includes('dictionary.') && url.pathname.endsWith('.json')) return;
 
+  // Never intercept the score reader's files (homr's models, about 213 MB, and
+  // onnxruntime's WebAssembly): the browser's own HTTP cache keeps them, and
+  // copying them into this cache would store them twice.
+  if (url.pathname.startsWith('/omr/')) return;
+
   // Network-first for version probe (powers the update notice)
   if (url.pathname.endsWith('/_app/version.json')) {
     event.respondWith(fetch(request).catch(() => caches.match(request)));

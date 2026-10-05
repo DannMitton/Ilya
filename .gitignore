@@ -34,6 +34,13 @@ apps/web/static/reader/
 # committed. Added N.96, 2026-08-24.
 apps/web/static/pdfjs-wasm/
 
+# Generated: homr's model files and onnxruntime-web's WebAssembly files for the
+# score reader for a scan (apps/web/src/lib/omr/), put there at dev and build
+# by apps/web/scripts/fetch-omr-models.mjs and copy-ort-wasm.mjs. Never
+# committed: the models are about 213 MB and are homr's release assets, and
+# the WebAssembly files come from the pinned onnxruntime-web in the lockfile.
+apps/web/static/omr/
+
 # Test output
 apps/web/test-results/
 

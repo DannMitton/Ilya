@@ -64,6 +64,7 @@
 	import { WorkerPageReader, type ClefKeyProbe } from '$lib/reader/page-reader';
 	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from '$lib/reader/page-image';
 	import { hasStaves } from '$lib/reader/staff-detect';
+	import { readScanAsScore, useIlyaReader } from '$lib/omr/scan';
 	import {
 		ingestScoreFile,
 		fidelityBanner,
@@ -242,26 +243,19 @@
 	 * THE ONE WAY IN, N.108 increment 2. `RootPanel`'s field takes the drop and
 	 * the pick; `+page.svelte` calls this on the instance.
 	 *
-	 * N.146: A PDF OR A PICTURE NO LONGER ASKS. Both are rasterized to their
-	 * first page's ink here (the same ink `probeFile` and the eventual read
-	 * would rasterize again; named, not cached, per `rasterizeFirstPage`'s own
-	 * comment below) and `hasStaves` (`reader/staff-detect.ts`) answers "does
-	 * this page show staves" from it. Staves found, this hands off to the
-	 * score route this component always took (`handleFile`, which still asks
-	 * the picture's own clef-and-key question); no staves, straight to the
-	 * poem route (`readPdfAsPoem` / `readAsPoemByOcr`). Neither route shows a
-	 * question or a label naming which one Ilya is trying.
-	 *
-	 * `pendingPoemFallback` carries what the poem route would need -- which
-	 * kind, and the already-rasterized ink -- to `readAsked`, below, for the
-	 * one case this function's own return cannot reach: the score attempt
-	 * only really happens after the singer answers the clef-and-key question,
-	 * which is a later press, not this call.
+	 * N.146: A PDF OR A PICTURE NO LONGER ASKS. Its first page's ink is
+	 * rasterized here and `hasStaves` (`reader/staff-detect.ts`) answers "does
+	 * this page show staves". No staves: the poem route (`readPdfAsPoem` /
+	 * `readAsPoemByOcr`). Staves, since step 1 of the homr reader (2026-10-04):
+	 * homr reads every page (`$lib/omr/scan.ts`) and the joined MusicXML is
+	 * ingested as a dropped MusicXML file is, with no clef-and-key question;
+	 * homr finding no music falls through to the poem route. `?reader=ilya`
+	 * keeps Ilya's own reader (`handleFile`, which asks the clef-and-key
+	 * question; `pendingPoemFallback` carries the poem route to `readAsked`).
 	 *
 	 * THE SNIFF IS STILL `readableKind`, WHICH IS `detectScoreFormat`, THE
-	 * SAME ONE DISPATCH USES. A file whose head cannot be read at all is
-	 * neither, so it falls through to the score route and earns that route's
-	 * own named refusal, exactly as before N.146.
+	 * SAME ONE DISPATCH USES. A file whose head cannot be read at all falls
+	 * through to the score route and earns that route's own named refusal.
 	 */
 	export async function take(file: File): Promise<void> {
 		const kind = await readableKind(file);
@@ -280,7 +274,13 @@
 		const { ink } = rasterized;
 		if (await hasStaves(ink)) {
 			pendingPoemFallback = { kind, ink };
-			await handleFile(file);
+			if (useIlyaReader(location.search)) await handleFile(file);
+			else await readScanAsScore(file, kind, {
+				busy: (key) => (ui = { kind: 'busy', label: T(key) }),
+				ingest: async (xml) => { await handleFile(xml); announceArrival(); },
+				poem: () => (kind === 'pdf' ? readPdfAsPoem(file, ink, true, false) : readAsPoemByOcr(file, null, true, false)),
+				fail: () => (ui = { kind: 'error', message: T('upload.err.parseFailed') }),
+			});
 			return;
 		}
 		pendingPoemFallback = null;

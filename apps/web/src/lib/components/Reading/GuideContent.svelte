@@ -272,7 +272,7 @@
 							<div class="band-deck">Chaque composante distribuée avec Ilya, reconnue en un seul endroit, afin qu'aucune reconnaissance due ne soit enfouie.</div>
 						</div>
 
-						<p><em>Ilya</em> est gratuit et à code ouvert, publié sous licence MIT, © 2026 Dann Mitton. Il repose sur la générosité de chercheurs, de créateurs de polices, de curateurs de données et de mainteneurs de logiciels libres. Chaque composante distribuée avec <em>Ilya</em> est reconnue ici, en un seul endroit, afin qu’aucune reconnaissance due ne soit enfouie.</p>
+						<p><em>Ilya</em> est gratuit et à code ouvert. Son propre code est publié sous licence MIT, © 2026 Dann Mitton. Comme <em>Ilya</em> intègre le lecteur de partitions homr, l’application dans son ensemble est distribuée selon les termes de la licence publique générale GNU Affero, version 3. Il repose sur la générosité de chercheurs, de créateurs de polices, de curateurs de données et de mainteneurs de logiciels libres. Chaque composante distribuée avec <em>Ilya</em> est reconnue ici, en un seul endroit, afin qu’aucune reconnaissance due ne soit enfouie.</p>
 
 						<p><strong>Recherche savante.</strong> Le moteur phonologique met en œuvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012), seule autorité phonologique d’<em>Ilya</em>, appliquée avec le généreux consentement de Grayson. Le modèle d’analyse de Fit met en œuvre le balisage des timbres ouvert et fermé, les hauteurs de bascule du timbre, l’analyse des croisements <em>f</em><sub>R1</sub>/<em>f</em><sub>o</sub> et les conseils de modification vocalique de <em>Sung Russian for the Low Male Voice Classical Singer</em> de Dann Mitton (Université de Toronto, 2020).</p>
 
@@ -284,7 +284,7 @@
 
 						<p><strong>Polices.</strong> Chaque police intégrée est publiée sous la SIL Open Font License, version 1.1, et le texte de chaque licence est distribué avec les fichiers de police : Bravura, © 2015 Steinberg Media Technologies GmbH; Leland, © 2025 MuseScore BVBA; Finale Maestro, © 2021 MakeMusic, Inc.; et Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
 
-						<p><strong>Logiciels.</strong> La conversion des partitions Finale s’appuie sur le convertisseur denigma de Robert Patterson (project-attacca, licence MIT). La reconnaissance optique de caractères est assurée par tesseract.js (licence Apache 2.0). L’interface est construite avec Svelte et SvelteKit (licence MIT).</p>
+						<p><strong>Logiciels.</strong> La conversion des partitions Finale s’appuie sur le convertisseur denigma de Robert Patterson (project-attacca, licence MIT). La reconnaissance optique de caractères est assurée par tesseract.js (licence Apache 2.0). La lecture d’une partition numérisée est assurée par homr, le moteur de reconnaissance optique de la musique de Christian Liebhardt, dans son portage pour navigateur homr-web; tous deux sont publiés sous la licence publique générale GNU Affero, version 3. <em>Ilya</em> utilise une copie de homr-web modifiée pour lire avec le modèle plus récent de homr; ces modifications, ainsi que le code source de la copie modifiée, sont publiées avec le code source d’<em>Ilya</em>. homr s’appuie sur oemer et sur Polyphonic-TrOMR. Ses modèles s’exécutent avec onnxruntime-web (licence MIT) et OpenCV.js (licence Apache 2.0). L’interface est construite avec Svelte et SvelteKit (licence MIT).</p>
 						<p><strong>Exportation.</strong> Exporter un chant écrit un fichier de sauvegarde sur votre propre appareil, afin que votre travail survive à un téléphone perdu ou à un navigateur vidé. Ilya ne l’envoie nulle part et n’a aucun moyen de le partager. Ce que vous en faites ensuite vous appartient.</p>
 
 						<GuideSources {language} />
@@ -551,7 +551,7 @@
 							<div class="band-deck">Everything Ilya ships with, acknowledged in one place, so that nothing owed is buried.</div>
 						</div>
 
-						<p><em>Ilya</em> is free and open source, released under the MIT License, © 2026 Dann Mitton. It stands on the generosity of scholars, font designers, data curators, and open-source maintainers. Every component <em>Ilya</em> ships with is acknowledged here, in one place, so that nothing owed is buried.</p>
+						<p><em>Ilya</em> is free and open source. Its own code is released under the MIT License, © 2026 Dann Mitton. Because <em>Ilya</em> includes the homr score reader, the app as a whole is distributed under the terms of the GNU Affero General Public License, version 3. It stands on the generosity of scholars, font designers, data curators, and open-source maintainers. Every component <em>Ilya</em> ships with is acknowledged here, in one place, so that nothing owed is buried.</p>
 
 						<p><strong>Scholarship.</strong> The phonological engine operationalizes Craig Grayson’s <em>Russian Lyric Diction</em> (University of Washington, 2012), <em>Ilya</em>’s sole phonological authority, applied with Grayson’s generous consent. Fit’s analysis model implements the open and close timbre markup, the pitches of turning, the <em>f</em><sub>R1</sub>/<em>f</em><sub>o</sub> crossing analysis, and the sung-vowel modification advice of Dann Mitton’s <em>Sung Russian for the Low Male Voice Classical Singer</em> (University of Toronto, 2020).</p>
 
@@ -563,7 +563,7 @@
 
 						<p><strong>Fonts.</strong> Every embedded font is released under the SIL Open Font License, Version 1.1, and each licence text is distributed with the font files: Bravura, © 2015 Steinberg Media Technologies GmbH; Leland, © 2025 MuseScore BVBA; Finale Maestro, © 2021 MakeMusic, Inc.; and Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
 
-						<p><strong>Software.</strong> Score conversion from Finale files relies on Robert Patterson’s denigma converter (project-attacca, MIT License). Optical character recognition is provided by tesseract.js (Apache License 2.0). The interface is built with Svelte and SvelteKit (MIT License).</p>
+						<p><strong>Software.</strong> Score conversion from Finale files relies on Robert Patterson’s denigma converter (project-attacca, MIT License). Optical character recognition is provided by tesseract.js (Apache License 2.0). A scanned score is read by homr, the optical music recognition engine by Christian Liebhardt, in its browser port homr-web; both are released under the GNU Affero General Public License, version 3. <em>Ilya</em> uses a copy of homr-web changed to read with homr’s newer model; the changes, and the source of the changed copy, are published with <em>Ilya</em>’s own source. homr builds on oemer and Polyphonic-TrOMR. Its models run on onnxruntime-web (MIT License) and OpenCV.js (Apache License 2.0). The interface is built with Svelte and SvelteKit (MIT License).</p>
 						<p><strong>Exporting.</strong> Exporting a song writes a backup file to your own device, so your work survives a lost phone or a cleared browser. Ilya never sends it anywhere and has no way to share it: what you do with the file afterwards is yours.</p>
 
 						<GuideSources {language} />
