@@ -391,6 +391,39 @@ from the nearest note's, and `nearestTarget` pools both. **NOT ESTABLISHED: whet
 clause 13's "its neighbour" covers any tap target or only the next caret**, which
 decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
 
+### New from 2026-10-05, the second thread. Carried from `STATE.md` at its close
+
+**Dann geared the project down that morning and is weighing whether to go on (`STATE.md`). Nothing here is raised with him until he takes the work up again, and then one at a time.**
+
+**Waiting on Dann.**
+
+- What he sees when Ilya reads the Tchaikovsky PDF with the newer build on his iMac (the walk of `QUEUE.md` rows 29 and 30).
+- Which model sits at the desk (`OPEN.md`, "N.178 AND THE SCAN READER", item 23).
+- The Guide's credit sentence, untrue since the port is a changed copy (`apps/web/src/lib/components/Reading/GuideContent.svelte:566` and `:287`). The desk drafts the English and proposes the French.
+- The French of the Guide's credits as built on 2026-10-04, a proposal he has not reacted to.
+- What he sees for the collapsed rests (step 1b of 2026-10-04).
+- `~/Downloads/tch-op38-3-from-scan_modern.musicxml` dropped on Ilya.
+- The desk's refinement of his rule of 2026-10-04 20:06, put to him and not answered: a value or a visible doubt, never a forced guess.
+
+**Owed by the desk.**
+
+- The appraisal's parts 2 to 5, in the chat (carried from the close of 2026-10-05 02:15).
+- The record of July and October on homr, given to him plainly every time the subject returns (`../sessions/memo-desk-july-and-october-on-homr_r1_2026-10-04.md`; his question of 2026-10-04 21:59).
+- The wait message made true for a slow device (`upload.status.preparingReader`), before the scan reader reaches singers. The reader has not been tried on a phone.
+- An attribution note for the two frequency data files held out of the repository (`apps/web/test-results/_desk-hold/freq-prototype-2026-10-04/`; CC BY-SA and CC BY sources).
+- The Tchaikovsky file as printed, in the old spelling, walked on Ilya. A citation carried from the note of 2026-10-05 01:00 and not reopened at this close: `apps/web/src/lib/score/vowel-resolver.ts:156` tests a cell for a vowel without ѣ, і, or ѵ.
+- The desk's word of 2026-10-04 that it does the training work itself, on a scripted run, if training becomes necessary. Set aside with the reader's accuracy work.
+
+**Unsettled, found on 2026-10-05. None is a question for Dann yet.**
+
+- The truth file holds E where the page and the reading have E sharp (*Sunless* 5, reading bar 60; `../sessions/report-opus-the-checks-measured_r1_2026-10-05.md`).
+- The scorer forgives an octave shift of 12 on *Sunless* 1, 5, and 6. Whether those pages print an 8 under the clef is NOT ESTABLISHED, and it decides the octave that Ilya draws.
+- homr sets a metre's top number from the page's median bar length and never reads it (the same report, section 4b).
+- After a retry, the WebAssembly recognizer is kept for the session, even where both paths found no music (`apps/web/src/lib/omr/homr-reader.ts`).
+- The port's `tools/gen-manifest.mjs` lists only the older model files; running it would drop the `465` records. The port does not test for `shader-f16` (`third_party/homr-web/src/models/backend.ts:114-124`, `:231`); Ilya's guard does.
+- Whether Vercel's build accepts the packed port and 213 MB of models fetched at build.
+- Whether `QUEUE.md` row 32's partial build is whole (`~/Downloads/_desk-2026-10-05/small-systems_partial_r1_2026-10-05.tgz`).
+
 ## RULINGS DANN OWES. Ask one at a time, at the right moment
 
 - **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: placed in `SCHEDULE.md` weeks 3 to 6]** **2026-09-24: where N.168, N.169 and N.170 sit against the five weeks to 2026-10-30.** The buffer is spent; `SCHEDULE.md` places none of the three. Raised by the desk at 19:10.

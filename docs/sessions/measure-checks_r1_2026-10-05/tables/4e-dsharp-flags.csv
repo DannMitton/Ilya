@@ -1,0 +1,52 @@
+version,song,bar,page,note,alter,imgpos,s,why,status,found
+v1 Ilya bounds,tch,63,tch-3,C5,1,"(616, 493)",28.0,"double sharp found, alter 1",false,"{'cx': 553, 'cy': 452, 'w': 21, 'h': 19, 'fill': 0.57}"
+v1 Ilya bounds,sun1,8,sun-01,C4,1,"(2340, 3671)",30.0,"double sharp found, alter 1",false,"{'cx': 2329, 'cy': 3700, 'w': 30, 'h': 37, 'fill': 0.58}"
+v1 Ilya bounds,sun1,15,sun-02,A4,0,"(3312, 1858)",30.0,"double sharp found, alter 0",false,"{'cx': 3302, 'cy': 1894, 'w': 34, 'h': 30, 'fill': 0.38}"
+v1 Ilya bounds,sun1,16,sun-02,G4,0,"(1081, 3391)",30.0,"double sharp found, alter 0",false,"{'cx': 1070, 'cy': 3432, 'w': 31, 'h': 38, 'fill': 0.62}"
+v1 Ilya bounds,sun4,13,sun-04,C4,1,"(1071, 425)",31.0,"double sharp found, alter 1",false,"{'cx': 1059, 'cy': 452, 'w': 34, 'h': 36, 'fill': 0.59}"
+v1 Ilya bounds,sun4,17,sun-04,E4,0,"(904, 1572)",31.0,"double sharp found, alter 0",false,"{'cx': 893, 'cy': 1602, 'w': 35, 'h': 36, 'fill': 0.52}"
+v1 Ilya bounds,sun4,25,sun-04,F4,1,"(746, 3735)",31.0,"double sharp found, alter 1",false,"{'cx': 715, 'cy': 3710, 'w': 22, 'h': 31, 'fill': 0.4}"
+v1 Ilya bounds,sun5,4,sun-05,E4,1,"(3359, 2007)",32.0,"double sharp found, alter 1",false,"{'cx': 3348, 'cy': 2039, 'w': 30, 'h': 36, 'fill': 0.58}"
+v1 Ilya bounds,sun5,8,sun-05,G4,0,"(514, 3990)",32.0,"double sharp found, alter 0",extra note,"{'cx': 504, 'cy': 4022, 'w': 25, 'h': 34, 'fill': 0.53}"
+v1 Ilya bounds,sun5,8,sun-05,G4,0,"(776, 4008)",32.0,"double sharp carried in bar, alter 0",extra note,
+v1 Ilya bounds,sun5,8,sun-05,G4,0,"(991, 4005)",32.0,"double sharp carried in bar, alter 0",extra note,
+v1 Ilya bounds,sun5,9,sun-05,D4,1,"(1639, 4025)",32.0,"double sharp found, alter 1",extra note,"{'cx': 1616, 'cy': 4048, 'w': 33, 'h': 44, 'fill': 0.48}"
+v1 Ilya bounds,sun5,9,sun-05,D4,1,"(1887, 4021)",32.0,"double sharp carried in bar, alter 1",extra note,
+v1 Ilya bounds,sun5,17,sun-06,A4,0,"(2779, 2548)",31.0,"double sharp found, alter 0",false,"{'cx': 2766, 'cy': 2502, 'w': 20, 'h': 33, 'fill': 0.5}"
+v1 Ilya bounds,sun5,17,sun-06,A4,0,"(3233, 2623)",31.0,"double sharp carried in bar, alter 0",false,
+v1 Ilya bounds,sun5,18,sun-06,E4,0,"(1744, 3787)",31.0,"double sharp found, alter 0",false,"{'cx': 1682, 'cy': 3757, 'w': 22, 'h': 34, 'fill': 0.39}"
+v1 Ilya bounds,sun5,19,sun-06,C5,1,"(3358, 3743)",31.0,"double sharp found, alter 1",false,"{'cx': 3330, 'cy': 3710, 'w': 42, 'h': 40, 'fill': 0.44}"
+v1 Ilya bounds,sun5,29,sun-08,A4,0,"(2387, 1880)",30.0,"double sharp found, alter 0",false,"{'cx': 2374, 'cy': 1917, 'w': 44, 'h': 37, 'fill': 0.46}"
+v1 Ilya bounds,sun5,29,sun-08,A4,0,"(2569, 1856)",30.0,"double sharp carried in bar, alter 0",false,
+v1 Ilya bounds,sun5,33,sun-09,F4,0,"(645, 474)",30.0,"double sharp found, alter 0",false,"{'cx': 634, 'cy': 517, 'w': 30, 'h': 38, 'fill': 0.6}"
+v1 Ilya bounds,sun5,38,sun-09,A4,1,"(3102, 1933)",30.0,"double sharp found, alter 1",false,"{'cx': 3072, 'cy': 1984, 'w': 38, 'h': 37, 'fill': 0.45}"
+v1 Ilya bounds,sun5,40,sun-09,F4,1,"(3123, 3385)",30.0,"double sharp found, alter 1",false,"{'cx': 3091, 'cy': 3384, 'w': 42, 'h': 42, 'fill': 0.41}"
+v1 Ilya bounds,sun5,40,sun-09,F4,1,"(3294, 3384)",30.0,"double sharp carried in bar, alter 1",false,
+v1 Ilya bounds,sun5,41,sun-10,E4,1,"(633, 414)",30.0,"double sharp found, alter 1",false,"{'cx': 623, 'cy': 457, 'w': 23, 'h': 26, 'fill': 0.51}"
+v1 Ilya bounds,sun5,63,sun-11,F4,1,"(1261, 2429)",30.0,"double sharp found, alter 1",false,"{'cx': 1199, 'cy': 2443, 'w': 40, 'h': 36, 'fill': 0.47}"
+v1 Ilya bounds,sun5,63,sun-11,F4,1,"(1495, 2457)",30.0,"double sharp carried in bar, alter 1",false,
+v1 Ilya bounds,sun5,63,sun-11,C5,1,"(1760, 2386)",30.0,"double sharp found, alter 1",false,"{'cx': 1735, 'cy': 2390, 'w': 37, 'h': 47, 'fill': 0.41}"
+v1 Ilya bounds,sun5,66,sun-11,F4,1,"(466, 3482)",30.0,"double sharp found, alter 1",false,"{'cx': 405, 'cy': 3474, 'w': 40, 'h': 41, 'fill': 0.47}"
+v1 Ilya bounds,sun5,67,sun-11,F4,1,"(1187, 3485)",30.0,"double sharp found, alter 1",false,"{'cx': 1153, 'cy': 3474, 'w': 39, 'h': 37, 'fill': 0.53}"
+v1 Ilya bounds,sun5,67,sun-11,F4,1,"(1531, 3472)",30.0,"double sharp carried in bar, alter 1",false,
+v1 Ilya bounds,sun6,4,sun-12,A4,0,"(1122, 2215)",30.0,"double sharp found, alter 0",false,"{'cx': 1078, 'cy': 2210, 'w': 32, 'h': 25, 'fill': 0.54}"
+v1 Ilya bounds,sun6,6,sun-12,A4,0,"(2597, 2201)",30.0,"double sharp found, alter 0",false,"{'cx': 2567, 'cy': 2202, 'w': 31, 'h': 46, 'fill': 0.42}"
+v1 Ilya bounds,sun6,6,sun-12,E4,0,"(3035, 2244)",30.0,"double sharp found, alter 0",false,"{'cx': 3003, 'cy': 2244, 'w': 34, 'h': 43, 'fill': 0.44}"
+v1 Ilya bounds,sun6,7,sun-12,A4,0,"(666, 3526)",30.0,"double sharp found, alter 0",false,"{'cx': 635, 'cy': 3510, 'w': 30, 'h': 20, 'fill': 0.6}"
+v1 Ilya bounds,sun6,17,sun-13,C4,1,"(740, 3827)",32.0,"double sharp found, alter 1",false,"{'cx': 723, 'cy': 3879, 'w': 27, 'h': 37, 'fill': 0.45}"
+v1 Ilya bounds,sun6,21,sun-14,A4,1,"(1626, 392)",32.0,"double sharp found, alter 1",false,"{'cx': 1616, 'cy': 414, 'w': 32, 'h': 33, 'fill': 0.54}"
+v1 Ilya bounds,sun6,26,sun-14,A4,0,"(1383, 2559)",32.0,"double sharp found, alter 0",false,"{'cx': 1348, 'cy': 2548, 'w': 31, 'h': 24, 'fill': 0.6}"
+v1 Ilya bounds,sun6,32,sun-15,A4,0,"(1311, 1464)",32.0,"double sharp found, alter 0",false,"{'cx': 1277, 'cy': 1461, 'w': 34, 'h': 44, 'fill': 0.43}"
+v1 Ilya bounds,sun6,35,sun-15,F4,1,"(3314, 2604)",32.0,"double sharp found, alter 1",false,"{'cx': 3304, 'cy': 2656, 'w': 34, 'h': 33, 'fill': 0.52}"
+v1 Ilya bounds,sun6,44,sun-16,E4,1,"(1706, 3666)",32.0,"double sharp found, alter 1",false,"{'cx': 1694, 'cy': 3690, 'w': 46, 'h': 36, 'fill': 0.43}"
+v2 four-lobe shape,sun4,26,sun-04,A4,0,"(1377, 3708)",31.0,"double sharp found, alter 0",false,"{'cx': 1310, 'cy': 3747, 'w': 25, 'h': 49, 'corners': 0.4, 'middles': 0.04}"
+v2 four-lobe shape,sun5,2,sun-05,C4,0,"(2116, 838)",32.0,"double sharp found, alter 0",right,"{'cx': 2092, 'cy': 862, 'w': 40, 'h': 38, 'corners': 0.82, 'middles': 0.34}"
+v2 four-lobe shape,sun5,2,sun-05,C4,0,"(2485, 839)",32.0,"double sharp carried in bar, alter 0",right,
+v2 four-lobe shape,sun5,35,sun-09,C4,0,"(2948, 531)",30.0,"double sharp found, alter 0",right,"{'cx': 2920, 'cy': 566, 'w': 39, 'h': 40, 'corners': 0.77, 'middles': 0.32}"
+v2 four-lobe shape,sun5,38,sun-09,G4,0,"(2968, 1948)",30.0,"double sharp found, alter 0",right,"{'cx': 2936, 'cy': 1974, 'w': 38, 'h': 38, 'corners': 0.77, 'middles': 0.45}"
+"v3 four-lobe shape, wider, aspect",sun5,2,sun-05,C4,0,"(2116, 838)",32.0,"double sharp found, alter 0",right,"{'cx': 2092, 'cy': 862, 'w': 40, 'h': 38, 'corners': 0.82, 'middles': 0.34}"
+"v3 four-lobe shape, wider, aspect",sun5,2,sun-05,C4,0,"(2485, 839)",32.0,"double sharp carried in bar, alter 0",right,
+"v3 four-lobe shape, wider, aspect",sun5,35,sun-09,C4,0,"(2948, 531)",30.0,"double sharp found, alter 0",right,"{'cx': 2920, 'cy': 566, 'w': 39, 'h': 40, 'corners': 0.77, 'middles': 0.32}"
+"v3 four-lobe shape, wider, aspect",sun5,38,sun-09,G4,0,"(2968, 1948)",30.0,"double sharp found, alter 0",right,"{'cx': 2936, 'cy': 1974, 'w': 38, 'h': 38, 'corners': 0.77, 'middles': 0.45}"
+"v3 four-lobe shape, wider, aspect",sun5,65,sun-11,F4,1,"(2823, 2449)",30.0,"double sharp found, alter 1",false,"{'cx': 2839, 'cy': 2463, 'w': 27, 'h': 33, 'corners': 0.74, 'middles': 0.25}"
+"v3 four-lobe shape, wider, aspect",sun5,65,sun-11,F4,1,"(3335, 2423)",30.0,"double sharp carried in bar, alter 1",false,

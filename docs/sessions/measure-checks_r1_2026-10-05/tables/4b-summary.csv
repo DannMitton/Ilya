@@ -1,0 +1,6 @@
+song,bars,flagged,flaggedWithDifference,falseFlags,differences,differencesInFlaggedBars,unflaggedDifferences,cases,outcomes,sumsDiffer
+tch,99,0,0,0,2,0,"{""pitch"": 2}","{""first bar"": 1, ""empty bar"": 16, ""last bar"": 1}","{""empty: voice silent"": 16, ""full"": 83}",0
+sun1,18,1,1,0,2,2,{},"{""first bar"": 1, ""empty bar"": 1, ""rest bar short"": 1, ""last bar"": 1}","{""empty: voice silent"": 1, ""full"": 16, ""long"": 1}",0
+sun4,29,1,0,1,0,0,{},"{""first bar"": 1, ""empty bar"": 2, ""ending"": 2, ""metre stated"": 1, ""last bar"": 1}","{""empty: voice silent"": 2, ""full"": 26, ""short"": 1}",0
+sun5,69,4,4,0,47,12,"{""pitch"": 8, ""extra"": 25, ""missing"": 1, ""length"": 1}","{""first bar"": 1, ""tuplet"": 2, ""chord"": 1, ""empty bar"": 3, ""backup/forward"": 1, ""last bar"": 1}","{""long"": 1, ""full"": 62, ""short"": 3, ""empty: voice silent"": 3}",0
+sun6,55,0,0,0,5,0,"{""pitch"": 5}","{""first bar"": 1, ""empty bar"": 7, ""last bar"": 1}","{""empty: voice silent"": 7, ""full"": 48}",0

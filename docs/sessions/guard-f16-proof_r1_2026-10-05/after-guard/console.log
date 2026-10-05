@@ -1,0 +1,11 @@
+[0.7s] debug: [vite] connecting...
+[0.7s] debug: [vite] connected.
+[10.3s] info: WebGPU is experimental on this platform. See https://github.com/gpuweb/gpuweb/wiki/Implementation-Status#implementation-status
+[10.9s] debug: [vite] connecting...
+[10.9s] debug: [vite] connected.
+[117.6s] info: [omr] homr read 1 of 1 pages of tch-1.png in 107271 ms on wasm (the WebGPU adapter lacks shader-f16, which the fp16 models need)
+[122.3s] warning: [BlurbComposer] Missing process: "stressed-interpalatal:а"
+[122.3s] warning: [BlurbComposer] Missing process: "stressed-interpalatal:и"
+[122.4s] info: [Ilya] N.160 seats: 34 drawn live, 0 kept as stored, of 34 seated
+[122.4s] info: [Ilya] N.160 dry run: 34 seated = 34 address + 0 anchor + 0 joined + 0 rejected + 0 unfound. Nothing written.
+[122.4s] info: [Ilya] N.160 dry run, address (34): note 1 m7-1-4 «Средь» of «Средь» 0-0.0 | note 2 m8-0-1 «шум» of «шумного» 0-1.0 | note 3 m8-1-8 «но» of «шумного» 0-1.1 | note 4 m8-1-4 «го» of «шумного» 0-1.2 | note 5 m9-0-1 «ба» of «бала» 0-2.0 | note 6 m9-1-4 «ла,» of «бала» 0-2.1 | note 7 m10-1-4 «слу» of «случайно» 0-3.0 | note 8 m11-0-1 «чай» of «случайно» 0-3.1 | note 9 m11-1-4 «но,» of «случайно» 0-3.2 

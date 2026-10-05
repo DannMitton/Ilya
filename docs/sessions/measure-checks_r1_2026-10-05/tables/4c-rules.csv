@@ -1,0 +1,6 @@
+song,truthKey,majorityKey,units,voiceUnits,misreadUnits,misreadVoiceUnits,rule_i_flags,rule_i_right,rule_i_false,rule_i_missed,rule_i_samepage_flags,rule_i_samepage_right,rule_i_samepage_false,rule_i_samepage_missed,rule_ii_voice_flags,rule_ii_voice_right,rule_ii_voice_false,rule_ii_voice_missed,rule_ii_system_flags,rule_ii_system_right,rule_ii_system_false,rule_ii_system_missed,rule_iii_flags,rule_iii_right,rule_iii_false,rule_iii_missed
+tch,2,2,22,11,1,1,1,1,0,0,1,1,0,0,1,1,0,0,2,1,1,0,1,1,0,0
+sun1,2,2,12,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+sun4,2,2,14,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+sun5,0,0,50,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+sun6,7,7,44,22,3,0,18,0,18,3,0,0,0,3,3,0,3,3,6,3,3,0,3,3,0,0

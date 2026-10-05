@@ -1,0 +1,14 @@
+[1.8s] debug: [vite] connecting...
+[1.8s] debug: [vite] connected.
+[14.3s] debug: [vite] connecting...
+[14.4s] debug: [vite] connected.
+[17.7s] debug: [vite] connecting...
+[17.9s] debug: [vite] connected.
+[23.9s] debug: [vite] connecting...
+[23.9s] debug: [vite] connected.
+[352.1s] info: [omr] homr read 3 of 3 pages of Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf in 328991 ms on wasm
+[356.8s] warning: [BlurbComposer] Missing process: "stressed-interpalatal:а"
+[356.8s] warning: [BlurbComposer] Missing process: "stressed-interpalatal:и"
+[356.9s] info: [Ilya] N.160 seats: 34 drawn live, 0 kept as stored, of 34 seated
+[356.9s] info: [Ilya] N.160 dry run: 34 seated = 34 address + 0 anchor + 0 joined + 0 rejected + 0 unfound. Nothing written.
+[356.9s] info: [Ilya] N.160 dry run, address (34): note 1 m7-1-4 «Средь» of «Средь» 0-0.0 | note 2 m8-0-1 «шум» of «шумного» 0-1.0 | note 3 m8-1-8 «но» of «шумного» 0-1.1 | note 4 m8-1-4 «го» of «шумного» 0-1.2 | note 5 m9-0-1 «ба» of «бала» 0-2.0 | note 6 m9-1-4 «ла,» of «бала» 0-2.1 | note 7 m10-1-4 «слу» of «случайно» 0-3.0 | note 8 m11-0-1 «чай» of «случайно» 0-3.1 | note 9 m11-1-4 «но,» of «случайно» 0-3.2 

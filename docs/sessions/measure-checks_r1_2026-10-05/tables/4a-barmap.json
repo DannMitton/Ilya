@@ -1,0 +1,189 @@
+{
+ "tch": {
+  "offsetRuns": [
+   {
+    "offset": 0,
+    "truthFrom": 7,
+    "truthTo": 92,
+    "readerFrom": 7,
+    "readerTo": 92
+   }
+  ],
+  "readerBarsWithNoMatchedEvent": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   61,
+   69,
+   83,
+   93,
+   94,
+   95,
+   96,
+   97,
+   98
+  ],
+  "readerBarsEmptyAfterJoin": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   61,
+   69,
+   83,
+   93,
+   94,
+   95,
+   96,
+   97,
+   98
+  ],
+  "truthBarsWithNoEvent": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   61,
+   69,
+   83,
+   93,
+   94,
+   95,
+   96,
+   97,
+   98
+  ]
+ },
+ "sun1": {
+  "offsetRuns": [
+   {
+    "offset": 0,
+    "truthFrom": 1,
+    "truthTo": 17,
+    "readerFrom": 1,
+    "readerTo": 17
+   }
+  ],
+  "readerBarsWithNoMatchedEvent": [
+   0
+  ],
+  "readerBarsEmptyAfterJoin": [
+   0
+  ],
+  "truthBarsWithNoEvent": [
+   0
+  ]
+ },
+ "sun4": {
+  "offsetRuns": [
+   {
+    "offset": 0,
+    "truthFrom": 1,
+    "truthTo": 28,
+    "readerFrom": 1,
+    "readerTo": 28
+   }
+  ],
+  "readerBarsWithNoMatchedEvent": [
+   0,
+   9
+  ],
+  "readerBarsEmptyAfterJoin": [
+   0,
+   9
+  ],
+  "truthBarsWithNoEvent": [
+   0,
+   9
+  ]
+ },
+ "sun5": {
+  "offsetRuns": [
+   {
+    "offset": 0,
+    "truthFrom": 0,
+    "truthTo": 3,
+    "readerFrom": 0,
+    "readerTo": 3
+   },
+   {
+    "offset": 8,
+    "truthFrom": 4,
+    "truthTo": 58,
+    "readerFrom": 12,
+    "readerTo": 66
+   }
+  ],
+  "readerBarsWithNoMatchedEvent": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   54,
+   67,
+   68
+  ],
+  "readerBarsEmptyAfterJoin": [
+   54,
+   67,
+   68
+  ],
+  "truthBarsWithNoEvent": [
+   46,
+   59,
+   60
+  ]
+ },
+ "sun6": {
+  "offsetRuns": [
+   {
+    "offset": 0,
+    "truthFrom": 1,
+    "truthTo": 48,
+    "readerFrom": 1,
+    "readerTo": 48
+   }
+  ],
+  "readerBarsWithNoMatchedEvent": [
+   0,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54
+  ],
+  "readerBarsEmptyAfterJoin": [
+   0,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54
+  ],
+  "truthBarsWithNoEvent": [
+   0,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54
+  ]
+ }
+}

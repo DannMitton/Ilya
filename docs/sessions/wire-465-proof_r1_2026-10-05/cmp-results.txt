@@ -1,0 +1,36 @@
+browser tch-1 vs node:
+EQUAL
+browser tch-2 vs node:
+EQUAL
+browser tch-3 vs node:
+EQUAL
+browser tch-1 vs desktop homr main:
+EQUAL
+browser tch-2 vs desktop homr main:
+DIFFERENT at element 489 of 4959/4960; part part id="P1"; measure-tags before: 13
+  context: /notations></note><note><pitch><step>G</step><octave>4</octave
+  first  : /pitch><duration>2</duration><type>eighth</type><voice>1</voice><staff>1</staff><notations
+  second : alter>1</alter></pitch><duration>2</duration><type>eighth</type><voice>1</voice><staff>1</staff
+browser tch-3 vs desktop homr main:
+EQUAL
+Ilya PDF page 1 vs browser PNG tch-1:
+DIFFERENT at element 1114 of 3627/3623; part part id="P2"; measure-tags before: 30
+  context: /pitch><duration>2</duration><type>quarter</type><voice>1</voice><staff>1</staff><notations
+  first  : slur number="1" type="start"></slur></notations></note><note><chord
+  second : arpeggiate></arpeggiate><slur number="1" type="start"></slur></notations></note
+Ilya PDF page 2 vs browser PNG tch-2:
+DIFFERENT at element 489 of 4967/4959; part part id="P1"; measure-tags before: 13
+  context: /notations></note><note><pitch><step>G</step><octave>4</octave
+  first  : alter>1</alter></pitch><duration>2</duration><type>eighth</type><voice>1</voice><staff>1</staff
+  second : /pitch><duration>2</duration><type>eighth</type><voice>1</voice><staff>1</staff><notations
+Ilya PDF page 3 vs browser PNG tch-3:
+DIFFERENT at element 2101 of 5213/5190; part part id="P2"; measure-tags before: 46
+  context: /print><note><pitch><step>G</step><octave>2</octave></pitch
+  first  : duration>2</duration><type>eighth</type><voice>5</voice><staff>2</staff><notations></notations
+  second : duration>4</duration><type>quarter</type><voice>5</voice><staff>2</staff><notations></notations
+568dcb61e91cc956161bdbc47ff6bf48  proof-harness/tch-1.musicxml
+45d70060bad5efd1821009728d1af7fe  proof-harness/tch-2.musicxml
+1fe2681827838c025070c73f8a0c92b9  proof-harness/tch-3.musicxml
+568dcb61e91cc956161bdbc47ff6bf48  node-run/tch-1.musicxml
+45d70060bad5efd1821009728d1af7fe  kit/kit/port-465-out/tch-2.musicxml
+1fe2681827838c025070c73f8a0c92b9  kit/kit/port-465-out/tch-3.musicxml
