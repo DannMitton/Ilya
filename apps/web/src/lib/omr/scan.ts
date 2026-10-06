@@ -14,6 +14,7 @@
  */
 import { toGreyscalePng } from '$lib/reader/page-image';
 import type { OmrProgress, OmrReadResult } from './homr-reader';
+import { READER_STAMP, type KeptReading } from './stamp';
 
 export type { OmrProgress, OmrReadResult };
 
@@ -50,8 +51,12 @@ export async function readScan(
 export interface ScanHooks {
 	/** Show a wait, named by one of the upload strings. */
 	busy: (key: 'upload.status.preparingReader' | 'upload.status.readingPage') => void;
-	/** Ingest this MusicXML file as a dropped MusicXML file is ingested. */
-	ingest: (musicXml: File) => Promise<void>;
+	/**
+	 * Ingest this MusicXML file as a dropped MusicXML file is ingested. `reading`
+	 * is the same MusicXML with the reader's stamp, for the caller to keep with
+	 * the song (`stamp.ts`).
+	 */
+	ingest: (musicXml: File, reading: KeptReading) => Promise<void>;
 	/** homr found no music on any page: try the poem route instead. */
 	poem: () => Promise<void>;
 	/** homr could not read the scan for any other reason. */
@@ -84,12 +89,20 @@ export async function readScanAsScore(
 		if (result.error === 'not_music') return hooks.poem();
 		return hooks.fail();
 	}
+	logRead(file, result);
+	await hooks.ingest(readingFile(file, result.musicXml), { musicXml: result.musicXml, stamp: READER_STAMP });
+}
+
+/** The console line for a read that succeeded: pages, time, and the path. */
+export function logRead(file: File, result: Extract<OmrReadResult, { ok: true }>): void {
 	console.info(
 		`[omr] homr read ${result.pagesRead} of ${result.pages} pages of ${file.name} in ${result.durationMs} ms on ${result.backend}` +
 			(result.pathNote ? ` (${result.pathNote})` : ''),
 	);
-	const stem = file.name.replace(/\.[^.]+$/, '') || 'score';
-	await hooks.ingest(
-		new File([result.musicXml], `${stem}.musicxml`, { type: 'application/vnd.recordare.musicxml+xml' }),
-	);
+}
+
+/** A reading as a file to ingest: `song.pdf` becomes `song.musicxml`. */
+export function readingFile(scan: File, musicXml: string): File {
+	const stem = scan.name.replace(/\.[^.]+$/, '') || 'score';
+	return new File([musicXml], `${stem}.musicxml`, { type: 'application/vnd.recordare.musicxml+xml' });
 }

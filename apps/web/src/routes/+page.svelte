@@ -213,6 +213,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import type { IngestedScore } from '$lib/score/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
+	import { storedWithReading, type KeptReading } from '$lib/omr/restore';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import type { IntakeAnswers } from '@ilya/score-parser';
 	// Engine connectivity check
@@ -3006,8 +3007,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		file: File,
 		origin: 'upload' | 'restore',
 		page?: PageProvenance,
+		scan?: { file: File; reading: KeptReading },
 	): Promise<void> {
 		arrivalPage = page ?? null;
+		arrivalScan = scan ?? null;
 		/* N.108-5. CONTINUE TO ANALYSIS ALSO TRANSCRIBES, and this is the one
 		   site that does it, so an upload, a drop that reaches accept and a
 		   boot restore cannot end up with three answers.
@@ -3142,6 +3145,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * all become the new piece's together, which is the whole point. Without it
 	 * this is step 3's behaviour exactly, unchanged.
 	 */
+	/** A scan homr read, as it arrived: stored as the source with its reading beside it (`attachUploadedSource`). */
+	let arrivalScan: { file: File; reading: KeptReading } | null = null;
+
 	async function applyArrival(
 		ingested: IngestedScore,
 		file: File,
@@ -3697,6 +3703,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			fileName: source.fileName,
 			bytes: source.bytes,
 			answers: page ? { clef: page.clef, octaveChange: page.octaveChange, fifths: page.fifths } : null,
+			reading: source.reading ?? null,
 		};
 	}
 
@@ -3740,6 +3747,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// so these bytes are the ones the retention ruling keeps and the ones a
 		// re-read reproduces exactly. The picture the singer supplied is recorded
 		// by name and hash inside `page` rather than kept twice.
+		const scan = arrivalScan;
+		arrivalScan = null;
+		if (scan) file = scan.file;
 		const bytes = await file.arrayBuffer();
 		// THE HASHES ARE BEST EFFORT; THE BYTES ARE NOT. `crypto.subtle` is
 		// absent outside a secure context, and losing it must cost recognition
@@ -3757,7 +3767,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		}
 		const importedAt = new Date().toISOString();
 		doc.attachSource(
-			{ songId: doc.id, fileName: file.name, bytes, byteLength: bytes.byteLength, contentHash, importedAt },
+			{ songId: doc.id, fileName: file.name, bytes, byteLength: bytes.byteLength, contentHash, importedAt, ...(scan && { reading: scan.reading }) },
 			{
 				fileName: file.name,
 				byteLength: bytes.byteLength,
@@ -4430,8 +4440,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 									bind:this={uploaderEl}
 									{language}
 									restore={restoreSource}
-									oningested={(ingested, file, origin, page) =>
-										void handleArrival(ingested, file, origin, page)}
+									oningested={(ingested, file, origin, page, scan) =>
+										void handleArrival(ingested, file, origin, page, scan)}
+									onreading={(reading) => restoreSource && doc.keepReading(storedWithReading(doc.id, restoreSource, doc.source, reading), reading)}
 									onpoem={(text) => handleInput(text)}
 									{loaderState}
 								/>

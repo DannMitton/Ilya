@@ -1,0 +1,21 @@
+const { open, vault, PDF, BASE } = require('./lib.cjs');
+const fs = require('fs');
+const [profile, label] = process.argv.slice(2);
+(async () => {
+  const { ctx, page, logs } = await open(profile);
+  await page.addInitScript(() => { window.__xml = []; const F = window.File; window.File = class extends F { constructor(p, n, o) { super(p, n, o); if (/\.musicxml$/.test(n)) Promise.resolve(p[0]).then(t => window.__xml.push(t)); } }; });
+  await page.goto(BASE);
+  await page.waitForSelector('input[type="file"].hidden-input', { state: 'attached', timeout: 120000 });
+  const t0 = Date.now();
+  await page.locator('input[type="file"].hidden-input').setInputFiles(PDF);
+  await page.locator('.receipt-score').waitFor({ timeout: 900000 });
+  const ms = Date.now() - t0;
+  await page.waitForTimeout(4000);
+  const xml = await page.evaluate(() => window.__xml[0]);
+  if (xml) fs.writeFileSync(`m/${label}.dropped.musicxml`, xml);
+  const v = await vault(page);
+  const out = { label, dropToScoreMs: ms, omrLines: logs.filter(l => l.includes('[omr]')), vault: v };
+  fs.writeFileSync(`m/${label}.json`, JSON.stringify(out, null, 1));
+  console.log(JSON.stringify(out));
+  await ctx.close();
+})().catch(e => { console.error('FAIL', e.message); process.exit(1); });

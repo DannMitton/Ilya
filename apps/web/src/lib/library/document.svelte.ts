@@ -36,6 +36,7 @@ import {
 } from './library';
 import { createLibraryChannel, type LibraryAnnouncement, type LibraryChannel } from './channel';
 import type { SourceBytes } from './driver';
+import type { KeptReading } from '$lib/omr/stamp';
 import {
 	emptyMetadata,
 	type FailureReason,
@@ -343,6 +344,17 @@ export class SongDocument {
 	attachSource(source: SourceBytes, provenance: SongSource): void {
 		this.#pendingSource = source;
 		this.source = provenance;
+	}
+
+	/**
+	 * A stored scan was read again by homr on restore (`$lib/omr/restore`): keep
+	 * the new reading with the song, beside the same bytes. `source` is replaced
+	 * by a copy of itself so the document's effect sees a change and schedules
+	 * the save, as `attachSource` does; nothing else about the song changes.
+	 */
+	keepReading(source: SourceBytes, reading: KeptReading): void {
+		this.#pendingSource = { ...source, reading };
+		if (this.source) this.source = { ...this.source };
 	}
 
 	/**

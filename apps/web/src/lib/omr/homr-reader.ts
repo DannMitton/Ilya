@@ -32,6 +32,7 @@
  */
 import type { Progress, Recognizer } from 'homr-web';
 import { joinPages } from './join-pages';
+import { OMR_MODEL } from './stamp';
 import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
 
 /**
@@ -240,7 +241,7 @@ const reader = makeReader({
 	choose: () => choosePathFor(typeof navigator === 'undefined' ? undefined : (navigator as { gpu?: GpuLike }).gpu),
 	create: (prefer) =>
 		import('homr-web').then(({ createRecognizer }) =>
-			createRecognizer({ baseUrl: OMR_MODELS_BASE, model: '465', prefer, wasmPaths: ORT_WASM_BASE }),
+			createRecognizer({ baseUrl: OMR_MODELS_BASE, model: OMR_MODEL, prefer, wasmPaths: ORT_WASM_BASE }),
 		),
 });
 

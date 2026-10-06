@@ -2807,4 +2807,6 @@ A read-only Sonnet sweep read about 43 of the project's 374 documents (`claude/*
     - **Markup's squircle, 06:55:** homed under N.141 in this file, and in `QUEUE.md` row 34.
     - **The reader's accuracy work:** the desk's plan sets it aside until he reopens it. What the night counted is in `QUEUE.md` rows 31 and 33: 34 of the 56 differences on the five build songs are one footnote printed small; 14 of the 15 pitch misreads are the accidental only; the trial at reading the sign from the page did not pass.
 
+24. **A saved scan reopens through homr and keeps its reading. RULED by Dann 2026-10-05 22:54** on the desk's three options: *"I choose your option 3"* (read once with homr, keep the reading stamped with the reader's version; a newer reader re-reads on purpose). Who offered it: the desk. Found by the desk at 16:26: a restore went through the old reader (`apps/web/src/lib/score/ScoreUploader.svelte:780-785`). Built as runbook step 2 (`../sessions/runbook-reader-95_r1_2026-10-05.md`).
+
 **What these do not cover:** how the unsure mark, the ossia, and the stored reading look to the singer (plan r4, phase 1, not drawn); French for any new string; the six-song test set.

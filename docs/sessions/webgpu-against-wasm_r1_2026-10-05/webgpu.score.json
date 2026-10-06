@@ -1,0 +1,46 @@
+{
+ "label": "webgpu",
+ "divisions": 2,
+ "readBars": 99,
+ "barsAddTo3_8": 83,
+ "barsAddTo3_8ByDurationElement": 20,
+ "emptyBars": 16,
+ "sumDist": {
+  "0": 16,
+  "0.375": 83
+ },
+ "truthBars": 99,
+ "shift": 0,
+ "bars": {
+  "truth": 99,
+  "read": 99,
+  "allRight": 80
+ },
+ "notes": {
+  "truth": 174,
+  "read": 174,
+  "matched": 174,
+  "missing": 0,
+  "extra": 0,
+  "pitchRight": 171,
+  "pitchWrong": 3,
+  "pitchAbstained": 0,
+  "assumedNaturalRight": 0,
+  "lengthRight": 174,
+  "lengthWrong": 0,
+  "lengthAbstained": 0,
+  "bothRight": 171
+ },
+ "rests": {
+  "truth": 48,
+  "read": 48,
+  "matched": 48,
+  "lengthRight": 48
+ },
+ "headline": 98.27586206896552,
+ "differences": [
+  "pitch wrong (truth bar 35, read bar 35)",
+  "pitch wrong (truth bar 39, read bar 39)",
+  "pitch wrong (truth bar 67, read bar 67)"
+ ]
+}

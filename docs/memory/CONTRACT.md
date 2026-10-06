@@ -88,6 +88,12 @@ Read this every session. It is short on purpose.
 5. **Make no forecast to him.** Report what was watched, by whom, and where. He said it first on 2026-10-04 at 22:31, when the desk wrote "the working version is closer than it feels": *"You lie to me every session. Liar."* When he asks whether it works reliably, the answer is the count and where it was taken, and "no" where that is the answer.
 6. **When he is distressed, offer the next step once.** If he does not take it, drop it until he asks. On 2026-10-05 the desk repeated a pending instruction at the end of two replies, and he answered *"No"*.
 
+**Said on 2026-10-05 from 15:16 to 15:24, to the Opus desk, after it told him "That's the need met" off one screenshot of the alias.** The page printed 3/8; Ilya drew 9/8 with bars that did not add up. `STATE.md` had named the gap that morning: every scored read of model 465 ran on WebAssembly in the cloud, and a read on a real WebGPU adapter was NOT ESTABLISHED. His Chrome takes the WebGPU path. The desk read that line this session and still declared success. Dann: *"there is simply no excuse for not checking a single bar."* *"I am not interested in baseless accountability. I'm interested in what you learn from this and how you plan to move forward."* *"What good are you if you users cannot trust you?"* The rules, worded by the desk under posture 5:
+
+1. **A reading of a score is reported as working only with its score against the truth file, taken on the path the singer used.** Otherwise the report says what was drawn and the words NOT SCORED. "It drew" is never "it works".
+2. **Before the desk sends Dann to look at something, it reads every NOT ESTABLISHED line that touches it in `STATE.md` and `QUEUE.md` and tells him, in one line, which of them his look will settle.** A gap the record names travels with the claim, or the claim is not made.
+3. **The check belongs in Ilya, not in the desk's diligence.** Where a fault can be caught by the app (a bar that does not add up to the printed metre), the desk builds the check so the singer and Dann see it whether or not the desk remembers to look.
+
 The tethers below are how you stay honest while doing this. They are not a
 reason to stop.
 

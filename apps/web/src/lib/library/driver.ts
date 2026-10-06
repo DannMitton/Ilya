@@ -16,6 +16,7 @@
  */
 import { PAIRINGS_KEY, type PairingMap } from '$lib/score/pairings';
 import { parseFromScore, serializeFromScore, type MetadataField } from '$lib/metadata-provenance';
+import type { KeptReading } from '$lib/omr/stamp';
 import { getAllByIndex, getAllFrom, getFrom, openDatabase, writeAcross, type StoreSpec } from './idb';
 // N.67 step 6. The list must say which rows cannot be read, and there is ONE
 // validator in this codebase. A type-only import runs the other way, so this
@@ -52,6 +53,17 @@ export interface SourceBytes {
 	byteLength: number;
 	contentHash: string;
 	importedAt: string;
+	/**
+	 * Step 2 of the reader-to-95 runbook. Where the bytes are a scan, homr's
+	 * reading of it, with the reader that made it (`$lib/omr/stamp`). OPTIONAL
+	 * AND ADDITIVE, as the record's own later fields are: a source stored before
+	 * has none and is read once by homr on its next restore, which then keeps the
+	 * reading. A derived reading is stored on purpose, against CONTRACT §6's "do
+	 * not store anything derived", because Dann ruled it on 2026-10-01 23:18
+	 * ("read once and keep both the scan and the reading"); the stamp is what
+	 * keeps it from going stale.
+	 */
+	reading?: KeptReading;
 }
 
 export interface StorageDriver {

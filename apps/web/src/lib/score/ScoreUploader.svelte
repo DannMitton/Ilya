@@ -65,6 +65,7 @@
 	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from '$lib/reader/page-image';
 	import { hasStaves } from '$lib/reader/staff-detect';
 	import { readScanAsScore, useIlyaReader } from '$lib/omr/scan';
+	import { restoreStoredScan, type KeptReading } from '$lib/omr/restore';
 	import {
 		ingestScoreFile,
 		fidelityBanner,
@@ -100,7 +101,11 @@
 			 *  GREYSCALE INK, not the picture the singer supplied, because the ink
 			 *  is what the retention ruling stores and what a re-read reproduces. */
 			page?: PageProvenance,
+			/** A scan homr read: the scan and its stamped reading, both kept. */
+			scan?: { file: File; reading: KeptReading },
 		) => void;
+		/** A stored scan was read again on restore: keep the new reading. */
+		onreading?: (reading: KeptReading) => void;
 		/** N.67 step 2: a stored source, re-ingested at boot so a reload brings
 		 *  the score back without the singer re-uploading it. The converters
 		 *  live in this component (§B.2), so the re-ingest does too. */
@@ -110,6 +115,8 @@
 			/** N.59 step 7: the clef and key this page was read with, so a
 			 *  restore never asks the two questions again. */
 			answers?: EngravingAnswers | null;
+			/** homr's stamped reading of a stored scan. */
+			reading?: KeptReading | null;
 		} | null;
 		/**
 		 * N.108 increment 2. THE POEM, where a PDF turned out to hold one.
@@ -130,7 +137,7 @@
 		loaderState: LoaderState;
 	}
 
-	let { language, oningested, restore = null, onpoem, loaderState }: Props = $props();
+	let { language, oningested, onreading, restore = null, onpoem, loaderState }: Props = $props();
 
 	const T = (key: string) => t(key, language);
 
@@ -277,7 +284,7 @@
 			if (useIlyaReader(location.search)) await handleFile(file);
 			else await readScanAsScore(file, kind, {
 				busy: (key) => (ui = { kind: 'busy', label: T(key) }),
-				ingest: async (xml) => { await handleFile(xml); announceArrival(); },
+				ingest: async (xml, reading) => { await handleFile(xml); announceArrival({ file, reading }); },
 				poem: () => (kind === 'pdf' ? readPdfAsPoem(file, ink, true, false) : readAsPoemByOcr(file, null, true, false)),
 				fail: () => (ui = { kind: 'error', message: T('upload.err.parseFailed') }),
 			});
@@ -614,10 +621,10 @@
 	 * to do before this ship, minus the `reset()` its explicit press earned
 	 * and this instant arrival does not.
 	 */
-	function announceArrival(): void {
+	function announceArrival(scan?: { file: File; reading: KeptReading }): void {
 		if (ui.kind !== 'arrived') return;
 		const page = pageFor(ui.ingested);
-		oningested(ui.ingested, page ? inkFile(ui.file) : ui.file, 'upload', page ?? undefined);
+		oningested(ui.ingested, page ? inkFile(ui.file) : ui.file, 'upload', page ?? undefined, scan);
 	}
 
 	/**
@@ -779,10 +786,21 @@
 	onMount(async () => {
 		if (!restore) return;
 		const file = new File([restore.bytes], restore.fileName);
-		// N.59 step 7: a stored picture carries its own answers, so restoring
-		// never re-asks. Re-asking on every reload is the tool forgetting, which
-		// is the same principle N.67 step 2's restore already states.
-		await handleFile(file, restore.answers ?? undefined);
+		const kind = await readableKind(file);
+		if (kind !== null && !useIlyaReader(location.search)) {
+			// A stored scan is read by homr, never Ilya's own page reader.
+			await restoreStoredScan(file, kind, restore.reading, {
+				busy: (key) => (ui = { kind: 'busy', label: T(key) }),
+				ingest: async (xml) => (await handleFile(xml), ui.kind === 'arrived'),
+				fail: () => (ui = { kind: 'error', message: T('upload.err.parseFailed') }),
+				keep: (reading) => onreading?.(reading),
+			});
+		} else {
+			// N.59 step 7: a stored picture carries its own answers, so restoring
+			// never re-asks. Re-asking on every reload is the tool forgetting, which
+			// is the same principle N.67 step 2's restore already states.
+			await handleFile(file, restore.answers ?? undefined);
+		}
 		// N.145 RENAMED 'done' TO 'arrived'; NOTHING ELSE HERE CHANGED. This
 		// path calls `oningested` itself, with origin 'restore', and resets
 		// to `idle` exactly as it always has, unlike an upload's

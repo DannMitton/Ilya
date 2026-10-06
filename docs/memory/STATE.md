@@ -47,6 +47,10 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### 2026-10-05, about 15:12, the third thread (Opus at the desk). THE NEED IS MET ON THE ALIAS.
+>
+> **Rows 27, 29, and 30 SHIPPED as `0976735` at 15:02** (gates at baseline, gate 4 `1913`; ship script moved, backup `~/Downloads/ilya-ship.sh.bak-1870-2026-10-05`), with the Guide's credit sentence corrected in both languages and ratified by Dann at 14:53. Vercel built the alias in 57 s and serves the models (two fetched at 15:06, HTTP 200, exact byte counts). **Dann walked it at 15:08 to 15:11:** the Tchaikovsky PDF dropped on the alias, a melody drawn (page 1 of 4 with the poem), the poem pasted, IPA and Russian seated under the notes at once. *"The IPA and text underlay was instantaneous once I dropped the poem in the input field. Wow!"* `main` is NOT shipped. The next row by the plan of 06:55 is QUEUE row 34 (Markup's squircle). The block below is the record of the thread before.
+
 > ### CLOSE OF 2026-10-05, about 14:50 (the thread that opened at 02:25; Dann closed it at 14:41: *"Close this thread properl;y"*). READ THIS FIRST.
 >
 > **Dann geared the project down at 06:48, and he is weighing whether to go on with Ilya at all.** *"Ok so I can't afford to keep up using Fable Extra. I need to gear down or I'll brun through my subscription by Wednesday. Create a plan that moves us forward with a lower model and we will work through it."* *"I am overwhelmed with complexity and you won't help the way I need you to."* He said that his faith in the desk as project manager was at an all-time low. What he said that morning is homed in `OPEN.md` ("N.178 AND THE SCAN READER", item 23), and the rules it gives the desk are in `CONTRACT.md` (THE POSTURE, the paragraph dated 2026-10-05). **Read that paragraph before the first reply to him. It is six rules, and each is his need.**
