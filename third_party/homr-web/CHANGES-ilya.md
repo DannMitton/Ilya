@@ -1,7 +1,7 @@
 # Changes by the Ilya project
 
 This copy of homr-web 0.2.0 (commit `cb333a5`) was changed by the Ilya
-project on 2026-10-05 and is published as `0.2.0-ilya.2`. It is not a release
+project on 2026-10-05 and 2026-10-06 and is published as `0.2.0-ilya.3`. It is not a release
 by homr-web's author. It stays under the GNU Affero General Public License
 version 3, as homr and homr-web are; LICENSE and NOTICE are unchanged.
 
@@ -51,6 +51,10 @@ All homr paths are at commit `560ca5c` unless said otherwise.
 | `src/models/manifest.ts` (0.2.0-ilya.2) | the record `encoder-465-fp16`; `MODEL_465_CATALOG` takes it on WebGPU, as `MODEL_ROLES` takes `encoder-396-fp16` | `homr/transformer/configs.py` (model name), `homr/onnx_providers.py` (fp16 on the GPU) |
 | `test/manifest.test.ts` (0.2.0-ilya.2) | one test: the 465 catalogue's encoder and decoder on each placement | none (test) |
 | `README.md`, `package.json` (0.2.0-ilya.2) | version `0.2.0-ilya.2`; the fp16 465 encoder's path and size | none |
+| `src/pipeline/staff-image.ts` (0.2.0-ilya.3) | the new `regroupingCutsASystem`; `ensureSameNumberOfStaffsMain` keeps the systems as detected when the periodic regrouping would cut one | none: a departure from homr main, `homr/staff_parsing.py` `_ensure_same_number_of_staffs` |
+| `src/pipeline/parse-staffs.ts` (0.2.0-ilya.3) | the number of voices is the largest system's, not the first system's | none: follows from the row above; the same count whenever the systems have one size |
+| `test/regrouping-ilya3.test.ts` (0.2.0-ilya.3) | five tests: the two *Sunless* 3 layouts, homr main's own case, a mixed case, and model 396 unchanged | none (test) |
+| `README.md`, `package.json` (0.2.0-ilya.3) | version `0.2.0-ilya.3` | none |
 
 ## Not ported
 
@@ -97,3 +101,29 @@ the names, element types, and shapes of `encoder-396-fp16`, read with the
 for this file for the encoder; on WebAssembly it still asks for
 `encoder-465-fp32`. Nothing else changes; a read on WebAssembly reads as
 0.2.0-ilya.1 does.
+
+## 0.2.0-ilya.3, 2026-10-06
+
+With `model: "465"`, a page whose systems hold different numbers of staffs
+is no longer cut into rows that split a printed system. homr main finds the
+period with which the grand-staff flags of the staffs repeat down the page
+and regroups the staffs by it. On the fourth page of Mussorgsky's *Sunless*
+3 (IMSLP 113877, PDF page 8) the first system holds the voice, the piano,
+and a third piano staff, and the two systems after it hold the voice and the
+piano. The flags are F T F, F T, F T; homr main and 0.2.0-ilya.2 found the
+period 3, made the second row from the voice and piano of the second system
+and the voice of the third, and dropped the third system's piano. The voice
+of the last system became the third part. Desktop homr main at `560ca5c`
+does the same on that page (its log: "Systems repeat every 3 staffs").
+
+The change: a row may lie inside one detected system, or be made of whole
+detected systems; when the regrouping would make any other row, the systems
+are kept as homr detected them, and each part keeps its place from the top
+of every system. The number of voices is then the largest system's. Nothing
+changes when every system has the same number of staffs, when every staff
+stands alone (homr main's own case), or with model 396.
+
+On the 20 pages of Ilya's five build songs the change alters no page's
+MusicXML: measured 2026-10-06 in headless Chromium on WebAssembly, through
+Ilya's own reader, from the 400 dpi pages of the desk's kit and from Ilya's
+own pdf.js render of the two PDFs, byte for byte before and after.

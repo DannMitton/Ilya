@@ -10,7 +10,7 @@
  * script downloads them at `dev` and `build` and writes them to
  * `static/omr/models/<sha256>/<file>`.
  *
- * THE FIVE FILES are the ones homr-web 0.2.0-ilya.2 reads the notes with when
+ * THE FIVE FILES are the ones homr-web 0.2.0-ilya.3 reads the notes with when
  * the reader asks for homr's model 465, which it always does: the
  * segmentation model and the model 465 transformer encoder in fp16 for WebGPU
  * and in fp32 for WebAssembly, and the model 465 transformer decoder, used by

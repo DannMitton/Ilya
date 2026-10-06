@@ -14,7 +14,7 @@
  */
 
 /** The `version` of the installed `homr-web` package. */
-export const HOMR_WEB_VERSION = '0.2.0-ilya.2';
+export const HOMR_WEB_VERSION = '0.2.0-ilya.3';
 
 /** The model `createRecognizer` is asked for (`homr-reader.ts`). */
 export const OMR_MODEL = '465';

@@ -47,6 +47,16 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### 2026-10-06, about 05:30, the overnight round (Opus at the desk; authorized by Dann 00:42). READ THIS FIRST.
+>
+> **Shipped tonight:** `bbe524b`, a saved scan reopens through homr and keeps its reading (Dann's option 3, 22:54). It was the cause of the 9/8: a song stored by the old reader was re-read by the old reader on every open (Code, `report-code-restore-reads-with-homr_r1_2026-10-05.md`). Walked by Code on the alias, not by Dann.
+>
+> **Scores on the singer's path (Code, iMac, WebGPU, 2026-10-06 00:27), build songs:** Tchaikovsky 172/174, *Sunless* 1 94/96, 4 116/116, 5 247/258, 6 156/161.
+>
+> **In Dann's tree, uncommitted, NOT shipped (delivered by the desk 05:2x, md5-checked; his files before are in `~/Downloads/_desk-2026-10-06/before-night-fix/`):** homr-web `0.2.0-ilya.3` (a printed system is never split between rows), a triplet check in the join (`apps/web/src/lib/omr/triplets.ts`), and a giant-page render cap (`apps/web/src/lib/reader/page-pdf.ts`). *Sunless* 3 rose from 143/222 to 201/222 (kit path) and 206/222 (pdf.js path); no other build song moved. Gate 4 1921 to 1935 (the cloud's count); the ship script is moved (backup `.bak-1921-2026-10-06`). `pnpm install` must run before the ship, for the new port. The old `homr-web-0.2.0-ilya.2.tgz` stays in `third_party/` unused (the bridge cannot delete). Reports: `../sessions/report-night-1_r1_2026-10-06.md`, `-2_`, `-3_`.
+>
+> **The held-out test, run once, totals only (cloud, WebAssembly, build C = the uncommitted fixes):** *Sunless* 2 57/68 (83.82, all 11 errors lengths). Kabalevsky op. 52: no. 1 150/152, no. 2 93/157 (41 of 70 bars read; edition difference or lost systems NOT ESTABLISHED), no. 3 157/157, no. 4 150/151 with 38 extra notes, no. 6 153/153, no. 7 160/163 with 116 extra notes, no. 8 154/154, no. 9 FAILED (`MusicXmlError: AssertionError: a rest group lasts 0`), no. 10 154/156. Nine scored songs: 1228 of 1311 (93.7). Before the giant-page cap every Kabalevsky PDF failed with `engine_failed` (their pages claim 1860 x 2630 pt). **So: six of ten held-out songs read at 95 or more; the reader is NOT at 95 on unseen music.** The held-out set is now spent for those faults: diagnosing them means looking, which is Dann's to allow.
+>
 > ### 2026-10-05, about 15:12, the third thread (Opus at the desk). THE NEED IS MET ON THE ALIAS.
 >
 > **Rows 27, 29, and 30 SHIPPED as `0976735` at 15:02** (gates at baseline, gate 4 `1913`; ship script moved, backup `~/Downloads/ilya-ship.sh.bak-1870-2026-10-05`), with the Guide's credit sentence corrected in both languages and ratified by Dann at 14:53. Vercel built the alias in 57 s and serves the models (two fetched at 15:06, HTTP 200, exact byte counts). **Dann walked it at 15:08 to 15:11:** the Tchaikovsky PDF dropped on the alias, a melody drawn (page 1 of 4 with the poem), the poem pasted, IPA and Russian seated under the notes at once. *"The IPA and text underlay was instantaneous once I dropped the poem in the input field. Wow!"* `main` is NOT shipped. The next row by the plan of 06:55 is QUEUE row 34 (Markup's squircle). The block below is the record of the thread before.

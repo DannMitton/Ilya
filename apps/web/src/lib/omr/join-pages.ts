@@ -19,7 +19,7 @@
  *   A page that states a different one keeps it, because that is a change
  *   printed on the page;
  * - copies every note's own text unchanged, so ties, slurs, beams, dots,
- *   and tuplets stay as homr wrote them. With model 465 that text holds
+ *   and tuplets stay as homr wrote them, except as the last item says. With model 465 that text holds
  *   homr main's `<!-- imgpos: x, y -->` comment, the note's place on the
  *   page image, and the comment arrives with the note;
  * - drops the metre that homr main's writer supplies of its own accord. With
@@ -32,6 +32,12 @@
  *   dropped where the same measure states another metre, and where a metre
  *   is already in force from an earlier page. It is kept only on the first
  *   page when that page states no other metre, so the song has one.
+ * - reads as triplets the notes of a bar that homr read without the bracketed
+ *   3 above them, where the bar is too long by exactly what triplets
+ *   account for (`triplets.ts`, which says when, and why a musician would
+ *   read them so).
+ *   Where that needs finer divisions, the bar states them and the next bar
+ *   states the divisions in force again.
  *
  * It works on the text of homr's output, not on a DOM, so it runs the same in
  * the browser and in vitest (which has no `DOMParser`). It reads elements,
@@ -39,6 +45,8 @@
  * is everything homr-web's serializer (`src/musicxml/xml.ts` in homr-web)
  * writes. It does not read CDATA sections.
  */
+
+import { completeTriplets, readMetre } from './triplets';
 
 /** One element found in a fragment of XML, with its place in that fragment. */
 interface Span {
@@ -164,6 +172,10 @@ interface InForce {
 	key: string | null;
 	time: string | null;
 	clef: string | null;
+	/** The `<divisions>` in force. */
+	divisions: number | null;
+	/** Set when the bar before changed the divisions for its triplets (`triplets.ts`): the divisions to put back. */
+	restoreDivisions: number | null;
 }
 
 /**
@@ -205,7 +217,20 @@ function rewriteMeasure(measure: string, number: number, state: InForce, firstOf
 		kept.push(text);
 	});
 	const open = span.open.replace(/\snumber="[^"]*"/, ` number="${number}"`);
-	return `${open}${(silent(kept) ? kept.filter((t) => !TIMED.test(t)) : kept).join('')}</measure>`;
+	const children = silent(kept) ? kept.filter((t) => !TIMED.test(t)) : kept;
+	// The bar before ran in three times the divisions for its triplets: put them back,
+	// unless this bar states its own before its first note.
+	const restore = state.restoreDivisions;
+	state.restoreDivisions = null;
+	if (restore !== null) {
+		const firstTimed = children.findIndex((t) => TIMED.test(t));
+		const before = firstTimed < 0 ? children : children.slice(0, firstTimed);
+		if (!before.some((t) => /^<attributes>[\s\S]*<divisions>/.test(t))) children.unshift(`<attributes><divisions>${restore}</divisions></attributes>`);
+	}
+	const statesMetre = children.some((t) => /^<attributes>[\s\S]*<time[\s>]/.test(t));
+	const triplets = completeTriplets(children, readMetre(state.time), state.divisions, statesMetre);
+	if (triplets.divisions !== null) state.restoreDivisions = state.divisions;
+	return `${open}${triplets.children.join('')}</measure>`;
 }
 
 /** A kept child that takes up time in the measure: a note, a rest, or a move of the cursor. */
@@ -247,6 +272,10 @@ function rewriteAttributes(body: string, state: InForce, dropRestatements: boole
 	for (const k of childElements(body)) {
 		const text = whole(body, k);
 		if (k.name === 'staves') continue;
+		if (k.name === 'divisions') {
+			const d = Number(inner(body, k).trim());
+			if (d > 0) state.divisions = d;
+		}
 		if (k.name === 'time' && dropTime) continue;
 		if (k.name === 'clef') {
 			const n = attr(k.open, 'number');
@@ -277,7 +306,7 @@ function rewriteAttributes(body: string, state: InForce, dropRestatements: boole
 export function joinPages(pages: readonly string[]): string {
 	if (pages.length === 0) throw new JoinPagesError('no pages');
 	const parts = pages.map((p, i) => firstPart(p, i + 1));
-	const state: InForce = { key: null, time: null, clef: null };
+	const state: InForce = { key: null, time: null, clef: null, divisions: null, restoreDivisions: null };
 	const measures: string[] = [];
 	parts.forEach((part, pageIndex) => {
 		part.measures.forEach((m, mIndex) => {

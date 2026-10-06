@@ -1,0 +1,37 @@
+{
+ "tch": {
+  "pagesRead": 3,
+  "pages": 3,
+  "backend": "webgpu",
+  "durationMs": 42377,
+  "wallMs": 42377
+ },
+ "sun1": {
+  "pagesRead": 2,
+  "pages": 2,
+  "backend": "webgpu",
+  "durationMs": 17754,
+  "wallMs": 17754
+ },
+ "sun4": {
+  "pagesRead": 2,
+  "pages": 2,
+  "backend": "webgpu",
+  "durationMs": 24742,
+  "wallMs": 24742
+ },
+ "sun5": {
+  "pagesRead": 7,
+  "pages": 7,
+  "backend": "webgpu",
+  "durationMs": 90139,
+  "wallMs": 90139
+ },
+ "sun6": {
+  "pagesRead": 6,
+  "pages": 6,
+  "backend": "webgpu",
+  "durationMs": 63218,
+  "wallMs": 63218
+ }
+}

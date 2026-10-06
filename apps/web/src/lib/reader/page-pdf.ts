@@ -53,6 +53,34 @@ const TARGET_DPI = 400;
 const PDF_UNITS_PER_INCH = 72;
 
 /**
+ * No printed song page is larger than a sheet of tabloid paper (11 x 17 in).
+ * A page that CLAIMS to be larger is a scan whose PDF declares the wrong
+ * resolution (an A4 sheet scanned at 300 ppi but declared at 96 ppi claims to
+ * be 25.8 x 36.5 in), not a bigger piece of paper. Rendered at 400 dpi it
+ * would be about 10,333 x 14,611 px, and the reading engine fails on it with
+ * no message (night 3, 2026-10-06). Such a page is rendered as if it were a
+ * tabloid sheet instead: 4,400 x 6,800 px at the most, in the page's own
+ * proportions. Every page that is a real size is untouched.
+ */
+const MAX_SHEET_LONG_INCHES = 17;
+const MAX_SHEET_SHORT_INCHES = 11;
+
+/**
+ * The render scale for a page of `widthPt` x `heightPt` PDF units: the
+ * 400 dpi scale of Ruling E, reduced only where the page would be larger than
+ * a tabloid sheet (either orientation), and then by the one factor that makes
+ * it fit. A real-size page returns exactly `TARGET_DPI / 72`, as before.
+ */
+export function renderScaleFor(widthPt: number, heightPt: number): number {
+	const base = TARGET_DPI / PDF_UNITS_PER_INCH;
+	const longIn = Math.max(widthPt, heightPt) / PDF_UNITS_PER_INCH;
+	const shortIn = Math.min(widthPt, heightPt) / PDF_UNITS_PER_INCH;
+	if (!(longIn > 0) || !(shortIn > 0)) return base;
+	if (longIn <= MAX_SHEET_LONG_INCHES && shortIn <= MAX_SHEET_SHORT_INCHES) return base;
+	return base * Math.min(MAX_SHEET_LONG_INCHES / longIn, MAX_SHEET_SHORT_INCHES / shortIn);
+}
+
+/**
  * A plain byte scan for the ASCII filter name `/JBIG2Decode` in the raw PDF.
  * This is a heuristic, not a parse: it will not find the marker if it sits
  * inside a compressed object stream (a `/ObjStm`), which some PDF writers
@@ -153,13 +181,13 @@ export async function rasterizePdf(file: File, maxPages?: number): Promise<Array
 
 	try {
 		if (doc.numPages < 1) throw new PdfUnreadableError('this PDF has no pages');
-		const scale = TARGET_DPI / PDF_UNITS_PER_INCH;
 		const pages: ArrayBuffer[] = [];
 		const last = maxPages === undefined ? doc.numPages : Math.min(doc.numPages, maxPages);
 		for (let n = 1; n <= last; n++) {
 			const page = await doc.getPage(n);
 			try {
-				const viewport = page.getViewport({ scale });
+				const unit = page.getViewport({ scale: 1 });
+				const viewport = page.getViewport({ scale: renderScaleFor(unit.width, unit.height) });
 				const canvas = new OffscreenCanvas(
 					Math.max(1, Math.round(viewport.width)),
 					Math.max(1, Math.round(viewport.height))

@@ -30,6 +30,26 @@ Report: `docs/sessions/report-code-restore-reads-with-homr_r1_2026-10-05.md`.
 
 Ruled by Dann 2026-10-05 22:54 on the desk's three options (keep the old reader; re-read with homr on every open; read once with homr and keep the reading): *"I choose your option 3"*. Who offered it: the desk.
 
-### Step 3. State: READY (released by the desk 2026-10-05 at 23:55)
+### Step 2b. State: DONE 00:17
+Step 2 shipped as `bbe524b`; Vercel built it. Verify it on the deployed alias, which is a production build, not your dev server: `https://ilya-git-shane-dannmittons-projects.vercel.app`. In headed Chrome with a fresh profile, kept in front: drop the Tchaikovsky PDF, score the reading; reload, time the reload to the score drawn, score again; reload a second time and time it. Report the console `[omr]` lines.
+Why: at 00:05 the desk opened the alias in Dann's own Chrome (his window was behind other windows, `document.visibilityState` was `hidden`) on his song «3. Средь шумного бала». After more than 6 minutes the page still showed "Ilya is reading the notes off your page", no `[omr]` line was logged, and no kept reading was stored. Whether that is only Chrome holding back a hidden window, or a fault in the production build, is NOT ESTABLISHED. If the reload in front also hangs, find why before step 3.
+Report: `docs/sessions/report-code-step2-on-the-alias_r1_2026-10-06.md`.
+
+### Step 3. State: DONE 00:27
 The desk counted the saved scan songs with corrections in Dann's Chrome at 23:52, read only: on the alias, 3 scan songs, 0 corrections each; on `ilya.dannmitton.com`, no songs store. So no song is orphaned. The two ratchet raises in step 2 stand (DESK DEFAULT). Read on the path Ilya chooses (WebGPU on this iMac).
 The baseline on the singer's path. Read every page of the five build songs (Tchaikovsky and *Sunless* 1, 4, 5, 6) through Ilya in Dann's installed Chrome, on the path step 1 leaves Ilya using, and score each song with the pipeline in `docs/sessions/measure-checks_r1_2026-10-05/` (`README.txt` lists the commands: `scripts/join.mts`, `scripts/scorer/conv.py`, `scripts/scorer/score.ts`, `scripts/baseline.py`). The page images and truth files are in `~/Downloads/_desk-2026-10-05/resume-kit.tgz` (`kit/pages/tch-1.png` to `tch-3.png`, `sun-01.png` to `sun-17.png`; `kit/truth/`; the song-to-page map is in `measure-checks_r1_2026-10-05/README.txt`, INPUTS); unpack it under the session home, never into the repository. Report per song: notes read with pitch and length as printed, of printed notes, and every difference with its cause. Do not run the test-only songs (*Sunless* 2 and 3). Report: `docs/sessions/report-code-baseline-on-the-singers-path_r1_2026-10-05.md`.
+
+
+### Step 4. State: DONE 00:32
+The test-only songs, run once, everything frozen. Nothing changes in Ilya before or during this step. Read *Sunless* 2 (pages 3 to 4) and *Sunless* 3 (pages 5 to 8) of `~/Downloads/IMSLP113877-PMLP232488-Mussorgsky_-_Without_Sun.pdf` with Ilya's reader on the path Ilya chooses, the way step 3 read the build songs, and score each against `tools/e16-harness/output/truth/` with the same scripts as step 3. **Totals only:** do not open their pages, crops, or note-by-note output, and write their reads outside the repository (the rule of `report-code-the-baseline-on-eight-songs_r1_2026-10-02.md`, and Dann's test set ruled 2026-10-02 09:00, `docs/memory/OPEN.md` item 16). The third test-only song, Tchaikovsky Op. 38 No. 2, is run only if a truth file for it exists in the tree; if none exists, say so and do not make one. Report per song: notes right of printed notes, missing, extra, misread pitch, misread length.
+Report: `docs/sessions/report-code-test-only-songs_r1_2026-10-06.md`.
+
+
+### Step 5. State: DONE 00:54
+Diagnose *Sunless* 3. Dann opened it for diagnosis at 00:33; it is a build song now. *Sunless* 2 stays test-only: do not open it.
+Change nothing in Ilya. Using step 4's read of *Sunless* 3 (pages 5 to 8 of the IMSLP PDF) and a second read forced to WebAssembly:
+1. List every difference against `tools/e16-harness/output/truth/mussorgsky_sunless-03_finished-is-the-noisy-idle-day.truth.json`: truth bar, what is printed, what was read, on each path.
+2. For each, look at the page and say the cause in one line, with a crop: which homr output was wrong (bar found or not, note length, a system missed, a page-turn join in `join-pages.ts`, the footnote kind of small system, a tuplet), or that the truth file and the scan differ (the scan decides; say so, do not edit the truth).
+3. Group the differences by cause, with counts, largest first. Say for each group whether the same cause shows on any build song.
+4. Explain the 5 missing bars and the 22 missing notes first.
+Report: `docs/sessions/report-code-sunless3-diagnosis_r1_2026-10-06.md`, crops in a folder beside it.

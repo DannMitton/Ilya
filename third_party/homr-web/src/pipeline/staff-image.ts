@@ -1,4 +1,4 @@
-// Changed by the Ilya project, 2026-10-05: homr main's staff regrouping (staff_parsing.py, 560ca5c) for model 465.
+// Changed by the Ilya project, 2026-10-05: homr main's staff regrouping (staff_parsing.py, 560ca5c) for model 465; 0.2.0-ilya.3 (2026-10-06) refuses a regrouping that cuts a detected system.
 /**
  * homr's staff_parsing.py up to the transformer: the regrouping of multi
  * staffs into voices, and prepare_staff_image, which cuts each staff out of
@@ -170,6 +170,10 @@ export function findPeriodicCore(
  * when every multi staff has the same number of staffs and that number is
  * above one; else the single staffs regrouped by findPeriodicCore; else every
  * system broken into single staffs, sorted by min_y, as in 0.7.0.
+ *
+ * Changed by the Ilya project (0.2.0-ilya.3): a regrouping that cuts a
+ * detected system is refused, and the systems are kept as detected (see
+ * regroupingCutsASystem). homr main has no such test.
  */
 function ensureSameNumberOfStaffsMain(
   multiStaffs: readonly MultiStaff[]
@@ -182,6 +186,9 @@ function ensureSameNumberOfStaffsMain(
   const flatStaffs = multiStaffs.flatMap((ms) => ms.staffs);
   const core = findPeriodicCore(flatStaffs);
   if (core !== undefined) {
+    if (regroupingCutsASystem(multiStaffs, core)) {
+      return multiStaffs;
+    }
     const kept = flatStaffs.slice(
       core.frontTrim,
       flatStaffs.length - core.backTrim
@@ -195,6 +202,60 @@ function ensureSameNumberOfStaffsMain(
   return multiStaffs
     .flatMap((ms) => ms.staffs.map((staff) => createMultiStaff([staff])))
     .sort((a, b) => a.staffs[0].minY - b.staffs[0].minY);
+}
+
+/**
+ * Added by the Ilya project (0.2.0-ilya.3). True when a regrouping by
+ * `core` would put into one new system some, but not all, of the staffs of
+ * a system that homr detected, joined by a brace, a bracket or a bar line.
+ *
+ * homr groups the staffs into systems from what is printed, and then, when
+ * the systems hold different numbers of staffs, finds the period with which
+ * the grand-staff flags repeat down the page and cuts the staffs into rows of
+ * that period. On a song page where one system adds a third staff for the
+ * piano (Mussorgsky, *Sunless* 3, the fourth page: voice, piano, and a third
+ * piano staff, then two systems of voice and piano), the flags are
+ * F T F, F T, F T; the period found is 3, and the second row is the voice
+ * and piano of one system with the voice of the next. The voice of the last
+ * system then becomes the third part, and the piano of the last system is
+ * dropped.
+ *
+ * A musician reads the staffs of a system together and keeps each part in
+ * its place from the top of every system; a printed system is never split
+ * between two rows. So a row may lie inside one detected system, or be made
+ * of whole detected systems (homr main's own case, a page where no brace was
+ * found and every staff stands alone), and nothing else.
+ */
+export function regroupingCutsASystem(
+  multiStaffs: readonly MultiStaff[],
+  core: { frontTrim: number; backTrim: number; period: number }
+): boolean {
+  const systemOf: number[] = [];
+  const firstOf: number[] = [];
+  const sizeOf: number[] = [];
+  multiStaffs.forEach((ms, system) => {
+    firstOf.push(systemOf.length);
+    sizeOf.push(ms.staffs.length);
+    for (let k = 0; k < ms.staffs.length; k += 1) {
+      systemOf.push(system);
+    }
+  });
+  const end = systemOf.length - core.backTrim;
+  for (let start = core.frontTrim; start < end; start += core.period) {
+    const stop = Math.min(start + core.period, end);
+    const touched = new Set(systemOf.slice(start, stop));
+    if (touched.size < 2) {
+      continue;
+    }
+    for (const system of touched) {
+      const first = firstOf[system] ?? 0;
+      const last = first + (sizeOf[system] ?? 0);
+      if (first < start || last > stop) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 export interface CanvasSize {

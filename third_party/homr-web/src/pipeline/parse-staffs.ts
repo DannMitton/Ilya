@@ -1,4 +1,4 @@
-// Changed by the Ilya project, 2026-10-05: drops lower2 as well as lower on a single staff, as homr main does (staff_parsing_tromr.py, 560ca5c), the same result for model 396; maps note positions back to the input image with model 465.
+// Changed by the Ilya project, 2026-10-05: drops lower2 as well as lower on a single staff, as homr main does (staff_parsing_tromr.py, 560ca5c), the same result for model 396; maps note positions back to the input image with model 465. 0.2.0-ilya.3 (2026-10-06): the number of voices is the largest system's.
 /**
  * staff_parsing.py's parse_staffs and parse_staff_image, with
  * staff_parsing_tromr.py's predict_best between them: canvas, encoder,
@@ -126,7 +126,11 @@ export async function parseStaffs(
 ): Promise<EncodedSymbol[][]> {
   const systems = ensureSameNumberOfStaffs(multiStaffs, page.height);
   const regions = staffRegions(systems);
-  const voiceCount = systems[0]?.staffs.length ?? 0;
+  // Changed by the Ilya project (0.2.0-ilya.3): the largest system sets the
+  // number of voices, because a page whose systems are kept as detected
+  // (regroupingCutsASystem in staff-image.ts) may hold systems of different
+  // sizes. With systems of one size this is homr's own count.
+  const voiceCount = Math.max(0, ...systems.map((system) => system.staffs.length));
   const total = systems.reduce(
     (sum, system) => sum + Math.min(system.staffs.length, voiceCount),
     0

@@ -1,0 +1,37 @@
+{
+ "label": "alias-drop",
+ "dropToScoreMs": 49079,
+ "omrLines": [
+  "[info] [omr] homr read 3 of 3 pages of Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf in 46530 ms on webgpu"
+ ],
+ "vault": {
+  "stores": [
+   "meta",
+   "songs",
+   "sources"
+  ],
+  "songs": [
+   {
+    "id": "2ad6f5bd-fb02-4db3-8fe8-cefb638fb14d",
+    "name": "",
+    "corrections": 0,
+    "source": {
+     "fileName": "Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf",
+     "byteLength": 319128,
+     "page": false
+    }
+   }
+  ],
+  "sources": [
+   {
+    "songId": "2ad6f5bd-fb02-4db3-8fe8-cefb638fb14d",
+    "fileName": "Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf",
+    "byteLength": 319128,
+    "reading": {
+     "stamp": "homr-web@0.2.0-ilya.2/465",
+     "len": 64771
+    }
+   }
+  ]
+ }
+}

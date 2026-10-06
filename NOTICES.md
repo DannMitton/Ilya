@@ -56,11 +56,12 @@ the packed file in `third_party/homr-web/`, where its source is; the others
 are installed from npm at the versions pinned in the lockfile, and their code
 is not part of this repository.
 
-- **homr-web** 0.2.0-ilya.2, a changed copy of homr-web 0.2.0 (upstream
+- **homr-web** 0.2.0-ilya.3, a changed copy of homr-web 0.2.0 (upstream
   commit `cb333a5`), the browser port of homr, by its authors at
   <https://github.com/jymen/homr-web>. GNU Affero General Public License
   version 3 (AGPL-3.0-only). Changed by the Ilya project to read with homr's
-  model 465 and the code of homr's main branch; it is not a release by its
+  model 465 and the code of homr's main branch, and in one place to depart
+  from it (the regrouping of a page's staffs); it is not a release by its
   authors. The source of the changed copy is in `third_party/homr-web/`, and
   `third_party/homr-web/CHANGES-ilya.md` lists every change.
 - **homr**, main branch at commit `560ca5c`, the optical music recognition
