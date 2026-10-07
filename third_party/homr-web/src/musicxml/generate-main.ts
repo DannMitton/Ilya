@@ -1,4 +1,4 @@
-// Added by the Ilya project, 2026-10-05: port of homr main's music_xml_generator.py (commit 560ca5c), used with model 465.
+// Added by the Ilya project, 2026-10-05: port of homr main's music_xml_generator.py (commit 560ca5c), used with model 465. 0.2.0-ilya.4 (2026-10-06): a clef read inside a chord of notes is written as a clef, not taken for a rest; barLengthsMain.
 /**
  * Port of homr main's music_xml_generator.py (commit 560ca5c) with the
  * default XmlGeneratorArguments. It differs from the 0.7.0 generator in
@@ -627,6 +627,49 @@ function advanceToNextGroup(
   return earliest === undefined ? ZERO : subRatio(earliest, clock);
 }
 
+/**
+ * Added by the Ilya project (0.2.0-ilya.4). The length of each bar of a
+ * staff's symbols, as buildMeasures counts it: every bar line closes a bar,
+ * and a bar lasts until the last of its notes and rests ends. A last bar with
+ * no bar line after it is counted when it holds anything. For the rests that
+ * stand in for a voice a system does not print (parse-staffs.ts).
+ */
+export function barLengthsMain(voice: readonly EncodedSymbol[]): Ratio[] {
+  const lengths: Ratio[] = [];
+  let clock = ZERO;
+  let sounding: Ratio[] = [];
+  let end = ZERO;
+  let open = false;
+  for (const symbols of sortTokenChords(voice)) {
+    const group: SymbolChord = { symbols, tupletMark: "" };
+    const [symbol] = symbols;
+    if (symbol === undefined) {
+      continue;
+    }
+    if (isBarline(group)) {
+      lengths.push(end);
+      clock = ZERO;
+      sounding = [];
+      end = ZERO;
+      open = false;
+    } else if (isNoteOrRest(symbol.rhythm)) {
+      const advance = advanceToNextGroup(group, clock, sounding);
+      for (const finish of sounding) {
+        if (compareRatio(finish, end) > 0) {
+          end = finish;
+        }
+      }
+      clock = addRatio(clock, advance);
+      sounding = sounding.filter((finish) => compareRatio(finish, clock) > 0);
+      open = true;
+    }
+  }
+  if (open) {
+    lengths.push(end);
+  }
+  return lengths;
+}
+
 const intText = (element: XmlElement | undefined, fallback: number): number =>
   element === undefined ? fallback : Number.parseInt(element.text ?? "", 10);
 
@@ -893,6 +936,16 @@ class MeasureList {
   }
 }
 
+/** build_clef. */
+function appendClef(attributes: XmlElement, clef: EncodedSymbol): void {
+  const signAndLine = clef.rhythm.split("_")[1] ?? "";
+  const element = attributes.append(
+    new XmlElement("clef", { number: String(staffOf(clef)) })
+  );
+  element.append(leaf("sign", signAndLine[0] ?? ""));
+  element.append(leaf("line", signAndLine[1] ?? ""));
+}
+
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: a line-for-line port of homr main's function, kept in its shape so the two can be compared
 function buildMeasures(
   voice: readonly EncodedSymbol[],
@@ -917,7 +970,8 @@ function buildMeasures(
     first.append(leaf("part-symbol", "brace"));
   }
   let attributes: XmlElement | undefined = first;
-  for (const [groupNo, group] of groups.entries()) {
+  for (const [groupNo, entry] of groups.entries()) {
+    let group = entry;
     const [symbol] = group.symbols;
     const last = attributes;
     attributes = undefined;
@@ -937,6 +991,22 @@ function buildMeasures(
             .append(leaf("multiple-rest", String(Number.parseInt(count, 10))));
         }
       } else {
+        // Changed by the Ilya project (0.2.0-ilya.4): a clef that the
+        // transformer joined to a chord of notes is a clef change on its
+        // staff. homr main hands it to build_note_chord, where its empty
+        // pitch makes it a rest of no length, and its assertion then loses
+        // the whole page (Kabalevsky op. 52 no. 9, its last page).
+        const clefs = group.symbols.filter((s) => s.rhythm.startsWith("clef"));
+        if (clefs.length > 0) {
+          const clefAttributes = attributesOf(list.current, last, true);
+          for (const clef of clefs) {
+            appendClef(clefAttributes, clef);
+          }
+          group = {
+            symbols: group.symbols.filter((s) => !s.rhythm.startsWith("clef")),
+            tupletMark: group.tupletMark,
+          };
+        }
         const positions = intoPositions(group);
         const advance = advanceToNextGroup(group, clock, sounding);
         clock = addRatio(clock, advance);
@@ -963,12 +1033,7 @@ function buildMeasures(
       attributes = attributesOf(list.current, last, true);
       for (const clef of group.symbols) {
         if (clef.rhythm.startsWith("clef")) {
-          const signAndLine = clef.rhythm.split("_")[1] ?? "";
-          const element = attributes.append(
-            new XmlElement("clef", { number: String(staffOf(clef)) })
-          );
-          element.append(leaf("sign", signAndLine[0] ?? ""));
-          element.append(leaf("line", signAndLine[1] ?? ""));
+          appendClef(attributes, clef);
         }
       }
     } else if (rhythm.startsWith("keySignature")) {

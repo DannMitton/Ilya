@@ -74,6 +74,27 @@ describe('completeTriplets', () => {
 		expect(completeTriplets(quintuplet, C44, 6, false).rule).toBeNull();
 	});
 
+	it('rule 3: the one choice of runs of three that fills a bar too long, beside triplets homr marked in part (Sunless 2, bar 9)', () => {
+		// divisions 6. Printed: a quarter, three eighths under a 3, three quarters under a 3.
+		// homr marked the last two quarters only: 6 + 3 + 3 + 3 + 6 + 4 + 4 = 29 sixths of a quarter, for 24.
+		const bar = [n('quarter', 6), n('eighth', 3), n('eighth', 3), n('eighth', 3), n('quarter', 6), n('quarter', 4, T), n('quarter', 4, T)];
+		const out = completeTriplets(bar, C44, 6, false);
+		expect(out.rule).toBe(3);
+		expect(out.divisions).toBeNull();
+		expect(out.children.map((t) => t.includes(T))).toEqual([false, true, true, true, true, true, true]);
+		expect(durations(out.children)).toEqual([6, 2, 2, 2, 4, 4, 4]);
+	});
+
+	it('rule 3 leaves a bar alone when two choices of runs fill it (Sunless 2, bar 7), or none can start where two of its notes would', () => {
+		// divisions 4. Eight eighths, a dotted eighth rest, a sixteenth: 5/4. Runs at notes 1 to 3 and 4 to 6,
+		// or 3 to 5 and 6 to 8, or 1 to 3 and 6 to 8, all fill the bar: only the brackets could choose.
+		const six = [...Array.from({ length: 8 }, () => n('eighth', 2)), `<note><rest /><duration>3</duration><type>eighth</type><dot /><voice>1</voice><staff>1</staff></note>`, n('16th', 1)];
+		expect(completeTriplets(six, C44, 4, false).rule).toBeNull();
+		// An eighth, then quarters: no run of three quarters starts on a half of the bar.
+		const late = [n('eighth', 3), n('quarter', 6), n('quarter', 6), n('quarter', 6), n('quarter', 6), n('eighth', 3)];
+		expect(completeTriplets(late, C44, 6, false).rule).toBeNull();
+	});
+
 	it('reads a metre in the form the join keeps it', () => {
 		expect(readMetre('<beats>3</beats><beat-type>8</beat-type>')).toEqual({ beats: 3, beatType: 8 });
 		expect(readMetre(null)).toBeNull();
@@ -126,6 +147,24 @@ describe('the triplet check inside joinPages', () => {
 			{ numerator: 1, denominator: 2 },
 			{ numerator: 1, denominator: 2 },
 		]);
+	});
+
+	it('leaves alone a bar where homr read a time signature equal to the metre in force (Kabalevsky op. 52 no. 9, bar 29)', () => {
+		// Page 2 opens with the writer's own metre beside <divisions>, then the time signature homr read:
+		// a printed 3/2 that homr can only state as the 4/4 already in force. The bar holds 3/2 of plain notes.
+		const writers = '<attributes><divisions>2</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>';
+		const printed = '<attributes><key><fifths>0</fifths></key><time><beats>4</beats><beat-type>4</beat-type></time></attributes>';
+		const long = `${n('half', 4)}${n('quarter', 2)}${n('half', 4)}${n('quarter', 2)}`;
+		const out = joinPages([
+			page(`<measure number="1">${head}${n('whole', 8)}</measure>`),
+			page(`<measure number="1">${writers}${printed}${long}</measure><measure number="2">${long}</measure>`),
+		]);
+		const bars = out.split('<measure ').slice(1);
+		// The restated metre is dropped, and the bar it stood in is left as homr read it.
+		expect(bars[1]).not.toContain('<time>');
+		expect(bars[1]).not.toContain('time-modification');
+		// The next bar, with no time signature read, is still checked.
+		expect(bars[2].match(/<time-modification>/g)).toHaveLength(4);
 	});
 
 	it('on homr\'s second page of Sunless 3, adds triplets to the five bars that are exactly half again too long, and to no other bar', () => {

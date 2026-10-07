@@ -187,6 +187,19 @@ describe('joinPages on small hand-built pages', () => {
 		expect(joinPages([b])).toContain('<beats>1</beats>');
 	});
 
+	it('writes an empty bar that homr self-closes as an open and a closing tag, so the part stays well-formed', () => {
+		const attrs = '<attributes><divisions>2</divisions><time><beats>2</beats><beat-type>4</beat-type></time></attributes>';
+		const a = page(
+			`<part id="P1"><measure number="1">${attrs}${note('C')}${note('D')}</measure><measure number="2" /><measure number="3">${note('E')}${note('F')}</measure></part>`,
+			LIST,
+		);
+		const out = joinPages([a]);
+		expect(out).not.toContain('/></measure>');
+		expect(out).toContain('<measure number="2"></measure>');
+		expect(out.match(/<measure /g)).toHaveLength(3);
+		expect(out.match(/<\/measure>/g)).toHaveLength(3);
+	});
+
 	it('refuses a page with no part', () => {
 		expect(() => joinPages(['<score-partwise version="4.0"><part-list/></score-partwise>'])).toThrow(JoinPagesError);
 		expect(() => joinPages([])).toThrow(JoinPagesError);

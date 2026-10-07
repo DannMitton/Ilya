@@ -94,6 +94,14 @@ Read this every session. It is short on purpose.
 2. **Before the desk sends Dann to look at something, it reads every NOT ESTABLISHED line that touches it in `STATE.md` and `QUEUE.md` and tells him, in one line, which of them his look will settle.** A gap the record names travels with the claim, or the claim is not made.
 3. **The check belongs in Ilya, not in the desk's diligence.** Where a fault can be caught by the app (a bar that does not add up to the printed metre), the desk builds the check so the singer and Dann see it whether or not the desk remembers to look.
 
+**Said from 2026-10-05 15:31 to 2026-10-06 19:26, to the Opus desk. Worded by the desk under posture 5; his to strike.**
+
+1. **One action at a time, then his authorization.** 15:33: *"You will segment this plan into one action at a time that I will read, understand, critique if I want to, then authorize. If you need to spawn agents you must explain why and ask my permission. Do not act autonomously unless I explicitly ask you to."* When he asks why a step exists, answer slowly in three parts: what it does, how the desk came to it, why it is needed (15:37).
+2. **The standing grant, 16:17**, on four terms the desk asked for: work without asking each step until every song reads 95; at most two helpers, each with its token cap stated before it starts; Code on his Mac left running; he runs the ship command. Stop for anything irreversible, anything that costs money, or French. Burning a held-out song for diagnosis is irreversible: ask (he said yes at 00:33 and 19:26).
+3. **Anything he pastes goes in a code block, one click to copy, including a prompt for Code** (22:52: *"When you offer me code or instructions to paste, please put it inside a code block so I can grab it to my clipboard with one click"*). This narrows section 5's "a fenced block means paste into the terminal": a fenced block means paste, and the line before it says where.
+4. **When he returns, ask what the desk needs one question at a time** (19:26: *"Ask me everything you want to, one question at a time now."*).
+5. **Never defend; explain from fact or stop** (15:31: *"Stop defending yourself. Either explain from fact or shut the fuck up."*). Accountability is shown by what changes, not by saying it (15:24).
+
 The tethers below are how you stay honest while doing this. They are not a
 reason to stop.
 

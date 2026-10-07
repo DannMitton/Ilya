@@ -21,7 +21,7 @@
     "@ilya/dictionary": "workspace:*",
     "@ilya/phonology": "workspace:*",
     "@ilya/score-parser": "workspace:*",
-    "homr-web": "file:../../third_party/homr-web/homr-web-0.2.0-ilya.3.tgz",
+    "homr-web": "file:../../third_party/homr-web/homr-web-0.2.0-ilya.4.tgz",
     "pdfjs-dist": "6.2.108",
     "tesseract.js": "^7.0.0",
     "webmscore": "^1.2.1"

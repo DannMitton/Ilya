@@ -216,7 +216,9 @@ function rewriteMeasure(measure: string, number: number, state: InForce, firstOf
 		}
 		kept.push(text);
 	});
-	const open = span.open.replace(/\snumber="[^"]*"/, ` number="${number}"`);
+	// An empty bar may come self-closed, `<measure number="3" />`: it is opened here,
+	// because the measure is written back with a closing tag.
+	const open = span.open.replace(/\snumber="[^"]*"/, ` number="${number}"`).replace(/\s*\/>$/, '>');
 	const children = silent(kept) ? kept.filter((t) => !TIMED.test(t)) : kept;
 	// The bar before ran in three times the divisions for its triplets: put them back,
 	// unless this bar states its own before its first note.
@@ -227,7 +229,12 @@ function rewriteMeasure(measure: string, number: number, state: InForce, firstOf
 		const before = firstTimed < 0 ? children : children.slice(0, firstTimed);
 		if (!before.some((t) => /^<attributes>[\s\S]*<divisions>/.test(t))) children.unshift(`<attributes><divisions>${restore}</divisions></attributes>`);
 	}
-	const statesMetre = children.some((t) => /^<attributes>[\s\S]*<time[\s>]/.test(t));
+	// homr read a time signature printed in this bar when an <attributes> other than the
+	// writer's own holds a <time>, even one the join drops above as the metre already in
+	// force: homr reads only a time signature's lower figure and works out the upper one
+	// from the page's bar lengths, so the metre it states may not be the one printed.
+	const printsMetre = kids.some((k, idx) => k.name === 'attributes' && idx !== writersTime && /<time[\s>]/.test(inner(body, k)));
+	const statesMetre = printsMetre || children.some((t) => /^<attributes>[\s\S]*<time[\s>]/.test(t));
 	const triplets = completeTriplets(children, readMetre(state.time), state.divisions, statesMetre);
 	if (triplets.divisions !== null) state.restoreDivisions = state.divisions;
 	return `${open}${triplets.children.join('')}</measure>`;

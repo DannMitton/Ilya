@@ -293,6 +293,12 @@ next session the same hour it cost the last one.
 | about to start a subagent while Dann is at the keyboard | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
 | about to work for more than a few minutes on the bridge | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
 | stopping a dev server in the cloud shell | `WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-04` |
+| Code on the Mac stopped after one runbook step | `WHAT THE DESK LEARNED FROM 2026-10-05 TO 2026-10-06` |
+| a scanned PDF fails with `engine_failed` and a bare number | `WHAT THE DESK LEARNED FROM 2026-10-05 TO 2026-10-06` |
+| scoring the kit's pages against a pdf.js render, or a page differs by a pixel | `WHAT THE DESK LEARNED FROM 2026-10-05 TO 2026-10-06` |
+| the reader hangs in Dann's Chrome, or Ilya reads nothing in a background tab | `WHAT THE DESK LEARNED FROM 2026-10-05 TO 2026-10-06` |
+| putting a helper's files into Dann's tree | `WHAT THE DESK LEARNED FROM 2026-10-05 TO 2026-10-06` |
+| a helper cannot write its report `.md` | `WHAT THE DESK LEARNED FROM 2026-10-05 TO 2026-10-06` |
 | the thread compacted, or a new thread must pick up work done in the cloud | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
 | a message sent to Dann before a compaction is needed again | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
 | writing a brief that says what files are on the cloud machine | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
@@ -4613,3 +4619,15 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **When a turn is interrupted and resumed, older messages can be delivered a second time.** Dann's messages of 02:27, 02:39, and 02:40 arrived again at 03:50. Read each message's time before answering it, and do not answer one twice.
 - **At the close, `list_triggers` shows whether a wake-up is left.** Both of this thread's had fired, and none was left at 14:43.
 - **`device_commit_files` sent a stale copy once more:** a brief corrected with `sed` and then sent arrived without the correction. The md5 on the Mac caught it, and the correction was made on the Mac in place.
+
+
+## WHAT THE DESK LEARNED FROM 2026-10-05 TO 2026-10-06
+
+- **Code on the Mac does not poll.** A runbook that tells Code to re-read itself every three minutes does not work: Code stops after each step and says so. Each step needs Dann's paste. Keep the steps in a runbook file anyway (`../sessions/runbook-reader-95_r1_2026-10-05.md`); the paste is one line.
+- **A scanned PDF whose page claims a giant size** (one image declared at 96 ppi: 1860 x 2630 pt) rendered at 400 dpi to about 10,333 x 14,611 px, and homr-web failed with `engine_failed` and a bare number for a log. Fixed by the giant-page cap in `apps/web/src/lib/reader/page-pdf.ts` (`renderScaleFor`).
+- **The kit's page images are poppler renders** (`pdftoppm -r 400 -gray -png`), byte for byte. Ilya's pdf.js render in Chromium differs in antialiasing and sometimes by a pixel of width. Measure both paths when it matters.
+- **A Chrome window behind other windows** (`document.visibilityState` `hidden`) held a read for more than six minutes with nothing logged; in front, the same alias read in 45 s. Do not judge the reader from a hidden window.
+- **The desk can read Dann's Chrome storage read-only** with Claude in Chrome (`indexedDB` `ilya-library`, stores `songs` and `sources`), in a tab it opens and closes. It counted his saved scan songs and their corrections that way.
+- **Delivering a helper's work:** copy each changed file to `/mnt/user-data/outputs/`, back up Dann's originals to `~/Downloads/_desk-<date>/`, write with `device_commit_files`, then compare md5 on the Mac. The bridge cannot delete; a replaced tarball stays in `third_party/homr-web/`, unused.
+- **Helpers' tool policy may refuse to write a `.md` report.** Tell them to put the whole report in their final message; the desk transcribes it with a provenance line.
+- **In the cloud shell, never `pkill -f` or `pgrep -f` for vite:** it matches the shell itself. Use `ps -eo pid,cmd | grep … | grep -v grep` and kill by number. A `svelte-kit sync` (the gates run one) reloads the dev page and kills a running page driver.

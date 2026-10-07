@@ -1,7 +1,7 @@
 # Changes by the Ilya project
 
 This copy of homr-web 0.2.0 (commit `cb333a5`) was changed by the Ilya
-project on 2026-10-05 and 2026-10-06 and is published as `0.2.0-ilya.3`. It is not a release
+project on 2026-10-05 and 2026-10-06 and is published as `0.2.0-ilya.4`. It is not a release
 by homr-web's author. It stays under the GNU Affero General Public License
 version 3, as homr and homr-web are; LICENSE and NOTICE are unchanged.
 
@@ -55,6 +55,10 @@ All homr paths are at commit `560ca5c` unless said otherwise.
 | `src/pipeline/parse-staffs.ts` (0.2.0-ilya.3) | the number of voices is the largest system's, not the first system's | none: follows from the row above; the same count whenever the systems have one size |
 | `test/regrouping-ilya3.test.ts` (0.2.0-ilya.3) | five tests: the two *Sunless* 3 layouts, homr main's own case, a mixed case, and model 396 unchanged | none (test) |
 | `README.md`, `package.json` (0.2.0-ilya.3) | version `0.2.0-ilya.3` | none |
+| `src/pipeline/parse-staffs.ts` (0.2.0-ilya.4) | the new `systemOffsets` and `restsForBars`: a system that begins with a grand staff, on a page whose largest system has single staffs above its grand staff, moves down by that many voices, and each voice it leaves out gets rests as long as the system's bars | none: a departure from homr main, `homr/staff_parsing.py` `parse_staffs` |
+| `src/musicxml/generate-main.ts` (0.2.0-ilya.4) | a clef joined by a chord token to notes is written as a clef change before them, and not handed to `build_note_chord`; the new `barLengthsMain`; the clef writing moved into `appendClef` | none: a departure from homr main, `homr/music_xml_generator.py` `build_measures` and `build_note_chord` |
+| `test/voices-ilya4.test.ts` (0.2.0-ilya.4) | eight tests: the two Kabalevsky layouts, pages that keep homr's order, model 396 unchanged, the rests for 2/4, 3/4, 4/4 and an odd bar, and the clef in a chord | none (test) |
+| `README.md`, `package.json` (0.2.0-ilya.4) | version `0.2.0-ilya.4` | none |
 
 ## Not ported
 
@@ -127,3 +131,36 @@ On the 20 pages of Ilya's five build songs the change alters no page's
 MusicXML: measured 2026-10-06 in headless Chromium on WebAssembly, through
 Ilya's own reader, from the 400 dpi pages of the desk's kit and from Ilya's
 own pdf.js render of the two PDFs, byte for byte before and after.
+
+## 0.2.0-ilya.4, 2026-10-06
+
+Two departures from homr main, both with `model: "465"` only.
+
+**A system that leaves out the voice's staff.** In a song the voice's
+staff is printed above the piano's, and where the voice rests for some bars
+an engraver may leave its staff out, so the system is the piano's grand staff
+alone. Kabalevsky's op. 52 (Muzgiz plate 6028) does this: no. 4, page 3,
+detects as `vg, g, vg, vg` (v a single staff, g a grand staff), and no. 7,
+page 3, as `g, g, vg, vg`. homr gives each system's staffs to the voices from
+the top, so the grand staff of such a system became the first voice, and
+Ilya, which keeps the first part, read the piano as sung: 38 notes too many
+on no. 4 and 116 on no. 7. Now `systemOffsets` takes the first of the page's
+largest systems as its layout. When that layout has single staffs above its
+first grand staff, a system that begins with a grand staff moves down by
+that many voices, if it still fits; and `restsForBars` gives each voice it
+leaves out a staff of rests, in each bar as long as that bar of the grand
+staff (counted by `barLengthsMain`, as the writer counts it), with the grand
+staff's bar lines. A musician reads such a system as the voice resting and
+the piano playing. A page whose systems all begin alike, a page whose largest
+system begins with a grand staff, and model 396 are read as before.
+
+**A clef read inside a chord.** The transformer can join a clef to a chord
+of notes with a chord token (Kabalevsky op. 52 no. 9, page 4: a G clef for
+the piano's lower staff joined to a sixteenth on the upper staff). homr main
+hands the clef to `build_note_chord`, where its empty pitch makes it a rest
+of no length, and the assertion `group_duration > 0` then fails, so the
+whole page fails: desktop homr main at `560ca5c` stops on that page with the
+same `AssertionError` (run on Ilya's own render of the page, 2026-10-06).
+Now a clef in a chord of notes is written as a clef change on its staff,
+before the chord's notes, and the notes are written as before.
+

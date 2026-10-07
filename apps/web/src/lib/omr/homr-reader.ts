@@ -2,13 +2,15 @@
  * The score reader for a scan: homr, run in the browser by homr-web.
  *
  * homr-web (https://github.com/jymen/homr-web, AGPL-3.0) is a dependency of
- * this app in a changed copy, 0.2.0-ilya.3, installed from the packed file
- * `third_party/homr-web/homr-web-0.2.0-ilya.3.tgz`. The copy's source is in
+ * this app in a changed copy, 0.2.0-ilya.4, installed from the packed file
+ * `third_party/homr-web/homr-web-0.2.0-ilya.4.tgz`. The copy's source is in
  * `third_party/homr-web/`, because the licence asks that a changed copy carry
  * its source; `CHANGES-ilya.md` there lists every change. The reader asks it
  * for homr's model 465 (`model: '465'`), which reads with that model and with
- * the code of homr's main branch at commit 560ca5c (with one departure: the
- * copy never regroups a page's staffs across a printed system). This module is the only
+ * the code of homr's main branch at commit 560ca5c (with three departures:
+ * the copy never regroups a page's staffs across a printed system, gives the
+ * voice rests where a system leaves out its staff, and writes a clef read
+ * inside a chord as a clef). This module is the only
  * place that imports it, and it imports it with a dynamic `import()`, so the
  * library, OpenCV, and onnxruntime are fetched only after a singer drops a
  * scan.
