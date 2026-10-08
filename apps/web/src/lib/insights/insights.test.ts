@@ -272,6 +272,8 @@ describe('N.123 the tessituragram', () => {
 		]);
 		expect(f.longest.midi).toBe(58);
 		expect(f.longest.share).toBe(6 / 8);
+		// Written time of each spelling, in the same order: A♯3 a quarter (2 quavers), B♭3 a half (4).
+		expect(f.rows[0].spellingQuavers).toEqual([2, 4]);
 	});
 
 	it('hangs each finding on its pitch in list order, and follows the typed range for the clef', () => {

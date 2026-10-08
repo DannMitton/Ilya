@@ -108,17 +108,41 @@ describe('the tessituragram layout: Design drawing 1', () => {
 		expect(l.tessBracket[1].x1).toBe(l.barline + 10);
 	});
 
-	it('sets every label at 10 px, line names in tertiary ink and sung pitches in rose ink, both 500', () => {
+	it('sets every name at 10 px, weight 500, in rose ink: every name is a sung pitch', () => {
 		const l = draw(tchaikovsky());
-		for (const x of l.texts.filter((t) => t.kind === 'lineName')) expect([x.size, x.weight, x.fill]).toEqual([10, 500, 'var(--ink-tertiary)']);
 		for (const x of l.texts.filter((t) => t.kind === 'sungName')) expect([x.size, x.weight, x.fill]).toEqual([10, 500, 'var(--rose-ink)']);
 		expect(l.texts.every((t) => t.size === 10)).toBe(true);
 	});
 
-	it('names the stave lines G2 to A3 and the ledger lines C4 and E4, as the drawing does', () => {
+	const names = (l: Layout, side: 'left' | 'right') => {
+		const xs = [...new Set(l.texts.filter((x) => x.kind === 'sungName').map((x) => x.x))].sort((p, q) => p - q);
+		return l.texts.filter((x) => x.kind === 'sungName' && x.x === (side === 'left' ? xs[0] : xs[1])).map((x) => x.text);
+	};
+
+	it('names every sung natural on the left, on a line or a space, and every sung sharp on the right (QUEUE row 43)', () => {
 		const l = draw(tchaikovsky());
-		expect(l.texts.filter((t) => t.kind === 'lineName').map((t) => t.text)).toEqual(['G2', 'B2', 'D3', 'F3', 'A3', 'C4', 'E4']);
-		expect(l.texts.filter((t) => t.kind === 'sungName').map((t) => t.text)).toEqual(['C♯3', 'D♯3', 'F♯3', 'G♯3', 'A♯3', 'C♯4']);
+		expect(names(l, 'left')).toEqual(['B2', 'D3', 'E3', 'G3', 'A3', 'B3', 'D4', 'E4']);
+		expect(names(l, 'right')).toEqual(['C♯3', 'D♯3', 'F♯3', 'G♯3', 'A♯3', 'C♯4']);
+	});
+
+	it('names a natural on a space (E3, B3, D4) and no line the song does not sing (F3, C4)', () => {
+		const all = draw(tchaikovsky()).texts.map((x) => x.text);
+		for (const n of ['E3', 'B3', 'D4']) expect(all).toContain(n);
+		for (const n of ['F3', 'C4', 'G2']) expect(all).not.toContain(n);
+		// Faint lines stay as they were: the stave lines and the ledger lines under the bars.
+		expect(draw(tchaikovsky()).faint.length).toBeGreaterThan(0);
+	});
+
+	it('names each row once, with the spelling with more sung time, then the less altered on a tie', () => {
+		const rowOf = (q: number[]): FigureRow => ({ midi: 58, quavers: 6, tags: [], spellings: [P('A', 3, 1), P('B', 3, -1)], spellingQuavers: q });
+		const nameFor = (q: number[]) => draw(base([rowOf(q)])).texts.find((x) => x.kind === 'sungName')!.text;
+		expect(nameFor([2, 4])).toBe('B♭3');
+		expect(nameFor([4, 2])).toBe('A♯3');
+		// Both alter by one: a tie goes to the first listed (lower letter).
+		expect(nameFor([3, 3])).toBe('A♯3');
+		// A natural against a sharp on a tie: the natural.
+		const mixed: FigureRow = { midi: 59, quavers: 4, tags: [], spellings: [P('A', 3, 2), P('B', 3)], spellingQuavers: [2, 2] };
+		expect(draw(base([mixed])).texts.find((x) => x.kind === 'sungName')!.text).toBe('B3');
 	});
 
 	it('steps 11 px, draws bars 6 and 4.5, and keeps the passaggi lines in rose ink', () => {

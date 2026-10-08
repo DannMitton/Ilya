@@ -200,6 +200,12 @@ export interface FigureRow {
 	midi: number;
 	/** Every spelling the vocal line sings at this MIDI number, low letter first. */
 	spellings: Pitch[];
+	/**
+	 * Written time of each spelling, in quaver-equivalents, parallel to `spellings`
+	 * (notes as written, repeats not counted: it only picks which spelling names
+	 * the row, QUEUE row 43). Absent in a hand-built row: the spellings tie.
+	 */
+	spellingQuavers?: number[];
 	/** Sung time at this pitch, quaver-equivalents, repeats counted. */
 	quavers: number;
 	/** The findings anchored on this pitch, in the findings list's order. */
@@ -570,6 +576,8 @@ export function tessituragram(
 	if (total <= 0) return null;
 
 	const spellings = new Map<number, Pitch[]>();
+	const written = new Map<string, number>();
+	const spellKey = (p: Pitch) => `${p.step}${p.alter ?? 0}${p.octave}`;
 	for (const ev of pitched(score)) {
 		const midi = pitchToMidi(ev.pitch);
 		const known = spellings.get(midi) ?? [];
@@ -577,12 +585,18 @@ export function tessituragram(
 			known.push(ev.pitch);
 		}
 		spellings.set(midi, known);
+		written.set(spellKey(ev.pitch), (written.get(spellKey(ev.pitch)) ?? 0) + fractionToNumber(soundingFromNotation(ev.duration)) * 8);
 	}
 
 	const rows: FigureRow[] = [...totals.byPitch]
-		.map(([midi, q]) => ({
+		.map(([midi, q]) => {
+			const names = (spellings.get(midi) ?? []).sort((a, b) => diatonicOf(a) - diatonicOf(b));
+			return { midi, names, q };
+		})
+		.map(({ midi, names, q }) => ({
 			midi,
-			spellings: (spellings.get(midi) ?? []).sort((a, b) => diatonicOf(a) - diatonicOf(b)),
+			spellings: names,
+			spellingQuavers: names.map((p) => written.get(spellKey(p)) ?? 0),
 			quavers: fractionToNumber(q),
 			tags: findings.filter((f) => pitchToMidi(f.pitch) === midi).map((f) => ({ measure: f.measure, vowel: f.vowel })),
 		}))

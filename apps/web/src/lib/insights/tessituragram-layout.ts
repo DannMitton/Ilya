@@ -64,8 +64,21 @@ const isWhite = (midi: number) => WHITE[pc(midi)] !== undefined;
 const whiteStep = (midi: number) => (Math.floor(midi / 12) - 1) * 7 + WHITE[pc(midi)];
 const upperStep = (midi: number) => whiteStep(isWhite(midi) ? midi : midi + 1);
 const lowerStep = (midi: number) => whiteStep(isWhite(midi) ? midi : midi - 1);
-const LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-const stepName = (d: number) => `${LETTERS[((d % 7) + 7) % 7]}${Math.floor(d / 7)}`;
+/**
+ * The spelling that names a row: the one with more sung time; on a tie, the
+ * less altered, then the lower letter. A row built without per-spelling times
+ * treats them as equal.
+ */
+export function spellingOf(r: FigureRow): FigureRow['spellings'][number] {
+	const w = (i: number) => r.spellingQuavers?.[i] ?? 0;
+	let best = 0;
+	for (let i = 1; i < r.spellings.length; i++) {
+		const a = r.spellings[i];
+		const b = r.spellings[best];
+		if (w(i) > w(best) || (w(i) === w(best) && Math.abs(a.alter ?? 0) < Math.abs(b.alter ?? 0))) best = i;
+	}
+	return r.spellings[best];
+}
 
 const STAVE_LINES: Record<'treble' | 'bass', number[]> = {
 	bass: [18, 20, 22, 24, 26], // G2 B2 D3 F3 A3
@@ -77,7 +90,6 @@ const fill = (s: string, vars: Record<string, string | number>) =>
 // ── What the layout returns ───────────────────────────────────────────
 export type TextKind =
 	| 'title'
-	| 'lineName'
 	| 'sungName'
 	| 'barLabel'
 	| 'passaggio'
@@ -326,9 +338,12 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 	const barline = Math.max(BARLINE_MIN, highX + headHalf + 10);
 
 	// ── Names, and the columns they set ──
-	const nameOf = (r: FigureRow) => (r.spellings.some((p) => (p.alter ?? 0) !== 0) ? r.spellings.map(pitchLabel).join(' / ') : null);
-	const lineNameW = Math.max(...[...lines, ...ledgerSteps].map((l) => measure(stepName(l), LABEL, 500)));
-	const sungW = Math.max(0, ...rowsIn.map((r) => nameOf(r)).filter((n): n is string => n !== null).map((n) => measure(n, LABEL, 500)));
+	/* EVERY SUNG PITCH IS NAMED, AND NOTHING ELSE (QUEUE row 43). A natural is
+	   named in the left column, a sharp or flat in the right, each level with its
+	   bar. A stave or ledger line the song does not sing has no name. */
+	const named = rowsIn.map((r) => ({ row: r, name: pitchLabel(spellingOf(r)), accidental: (spellingOf(r).alter ?? 0) !== 0 }));
+	const lineNameW = Math.max(0, ...named.filter((n) => !n.accidental).map((n) => measure(n.name, LABEL, 500)));
+	const sungW = Math.max(0, ...named.filter((n) => n.accidental).map((n) => measure(n.name, LABEL, 500)));
 	/* "tessitura" is the wider of the two languages' words, so the columns hold still across them. */
 	const tessW = figure.tessitura ? Math.max(...(['en', 'fr'] as const).map((l) => measure(t('insights.figure.tessitura', l), LABEL, 500))) : 0;
 	const lineNameEnd = Math.max(barline + 76, barline + 15 + tessW + 6 + lineNameW);
@@ -379,13 +394,9 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 	const TERTIARY = 'var(--ink-tertiary)';
 	const INK = 'var(--rose-ink)';
 
-	for (const l of [...lines, ...ledgerSteps]) {
-		const s = stepName(l);
-		addText({ kind: 'lineName', text: s, x: lineNameEnd, y: y(l) + 3.3, anchor: 'end', size: LABEL, weight: 500, fill: TERTIARY }, measure(s, LABEL, 500));
-	}
 	for (const r of rows) {
-		const n = nameOf(r);
-		if (n) addText({ kind: 'sungName', text: n, x: sungEnd, y: r.cy + 3.3, anchor: 'end', size: LABEL, weight: 500, fill: INK }, measure(n, LABEL, 500));
+		const n = named.find((x) => x.row.midi === r.midi)!;
+		addText({ kind: 'sungName', text: n.name, x: n.accidental ? sungEnd : lineNameEnd, y: r.cy + 3.3, anchor: 'end', size: LABEL, weight: 500, fill: INK }, measure(n.name, LABEL, 500));
 	}
 	const barLabelItems: TextItem[] = [];
 	const labelsByRow = new Map<number, TextItem[]>();
