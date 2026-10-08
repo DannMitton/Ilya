@@ -54,6 +54,8 @@ const BAR_FLOOR = 60;
 const ASC = 0.74;
 const DESC = 0.25;
 const LINE_H = 12.5;
+/** The least distance between two names' baselines in one column: ink 9.9 px plus a hair. */
+const NAME_GAP = 10.5;
 const TITLE_BASELINE = 12;
 /** Where the first piece of content below the title starts. */
 const CONTENT_TOP = 20;
@@ -64,6 +66,26 @@ const isWhite = (midi: number) => WHITE[pc(midi)] !== undefined;
 const whiteStep = (midi: number) => (Math.floor(midi / 12) - 1) * 7 + WHITE[pc(midi)];
 const upperStep = (midi: number) => whiteStep(isWhite(midi) ? midi : midi + 1);
 const lowerStep = (midi: number) => whiteStep(isWhite(midi) ? midi : midi - 1);
+/**
+ * Positions as near as possible to `want` (ascending) yet at least `gap` apart,
+ * in the same order: the least-squares fit, by pooling adjacent violators on
+ * `want[i] - i * gap`. Pure.
+ */
+export function spreadApart(want: number[], gap: number): number[] {
+	const blocks: Array<{ sum: number; n: number }> = [];
+	want.forEach((w, i) => {
+		blocks.push({ sum: w - i * gap, n: 1 });
+		while (blocks.length > 1 && blocks[blocks.length - 2].sum / blocks[blocks.length - 2].n > blocks[blocks.length - 1].sum / blocks[blocks.length - 1].n) {
+			const b = blocks.pop()!;
+			blocks[blocks.length - 1].sum += b.sum;
+			blocks[blocks.length - 1].n += b.n;
+		}
+	});
+	const out: number[] = [];
+	for (const b of blocks) for (let k = 0; k < b.n; k++) out.push(b.sum / b.n + out.length * gap);
+	return out;
+}
+
 /**
  * The spelling that names a row: the one with more sung time; on a tie, the
  * less altered, then the lower letter. A row built without per-spelling times
@@ -394,9 +416,23 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 	const TERTIARY = 'var(--ink-tertiary)';
 	const INK = 'var(--rose-ink)';
 
-	for (const r of rows) {
-		const n = named.find((x) => x.row.midi === r.midi)!;
-		addText({ kind: 'sungName', text: n.name, x: n.accidental ? sungEnd : lineNameEnd, y: r.cy + 3.3, anchor: 'end', size: LABEL, weight: 500, fill: INK }, measure(n.name, LABEL, 500));
+	/* NO TWO NAMES TOUCH (QUEUE row 46). Rows a semitone apart sit 5.5 px apart,
+	   so two names in one column would overlap: E and F, a run of sharps, E♯4 and
+	   F♯4. Within each column the names are spread to at least `NAME_GAP` apart,
+	   moving as little as possible (least squares, order kept); a name that has
+	   left its row is joined to it by a leader. */
+	const leaders: Seg[] = [];
+	for (const accidental of [false, true]) {
+		const col = rows
+			.map((r) => ({ r, n: named.find((x) => x.row.midi === r.midi)! }))
+			.filter((c) => c.n.accidental === accidental)
+			.sort((a, b) => a.r.cy - b.r.cy);
+		const endX = accidental ? sungEnd : lineNameEnd;
+		const placed = spreadApart(col.map((c) => c.r.cy), NAME_GAP);
+		col.forEach((c, i) => {
+			addText({ kind: 'sungName', text: c.n.name, x: endX, y: placed[i] + 3.3, anchor: 'end', size: LABEL, weight: 500, fill: INK }, measure(c.n.name, LABEL, 500));
+			if (Math.abs(placed[i] - c.r.cy) > 1) leaders.push({ x1: endX + 3, y1: placed[i], x2: barX - 2, y2: c.r.cy, stroke: INK, width: 0.6 });
+		});
 	}
 	const barLabelItems: TextItem[] = [];
 	const labelsByRow = new Map<number, TextItem[]>();
@@ -431,6 +467,26 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 		addText({ kind: 'tessitura', text: word, x: barline + 15, y: (top + bottom) / 2 + 3.3, anchor: 'start', size: LABEL, weight: 500, fill: INK }, measure(word, LABEL, 500));
 	}
 
+	/* A line at height `yy` from `x1` to `x2`, in the pieces left once every bar label it would run through is cut out (3 px clear each side). */
+	const spansAround = (yy: number, x1: number, x2: number): Array<[number, number]> => {
+		let spans: Array<[number, number]> = [[x1, x2]];
+		for (const lab of barLabelItems) {
+			if (lab.box.y0 - 1 > yy || lab.box.y1 + 1 < yy) continue;
+			const cutA = lab.box.x0 - 3;
+			const cutB = lab.box.x1 + 3;
+			const next: Array<[number, number]> = [];
+			for (const [a, b] of spans) {
+				if (cutB <= a || cutA >= b) next.push([a, b]);
+				else {
+					if (cutA - a > 1) next.push([a, cutA]);
+					if (b - cutB > 1) next.push([cutB, b]);
+				}
+			}
+			spans = next;
+		}
+		return spans;
+	};
+
 	// ── The passaggi, their names, and the zone shares ──
 	const passLines: Seg[] = [];
 	if (figure.passaggio && figure.zones) {
@@ -450,7 +506,7 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 			const word = T(key);
 			const w = measure(withoutItalics(word), LABEL, 500);
 			addText({ kind: 'passaggio', text: word, x: RIGHT, y: ly + 3.2, anchor: 'end', size: LABEL, weight: 500, fill: INK }, w);
-			passLines.push({ x1: barX - 4, y1: ly, x2: RIGHT - w - 4, y2: ly, stroke: INK, width: 1, dash: '4 3' });
+			for (const [a, b] of spansAround(ly, barX - 4, RIGHT - w - 4)) passLines.push({ x1: a, y1: ly, x2: b, y2: ly, stroke: INK, width: 1, dash: '4 3' });
 		}
 		const shareAt = (key: string, n: number, by: number) => {
 			const text = fill(T(key), { share: share(n) });
@@ -464,29 +520,13 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 	// ── The faint stave and ledger lines, broken around any bar label that sits on one ──
 	const faint: Seg[] = [];
 	const breakAround = (yy: number, base: Omit<Seg, 'x1' | 'x2' | 'y1' | 'y2'>) => {
-		let spans: Array<[number, number]> = [[barX - 4, bandEnd]];
-		for (const lab of barLabelItems) {
-			if (lab.box.y0 - 1 > yy || lab.box.y1 + 1 < yy) continue;
-			const cutA = lab.box.x0 - 3;
-			const cutB = lab.box.x1 + 3;
-			const next: Array<[number, number]> = [];
-			for (const [a, b] of spans) {
-				if (cutB <= a || cutA >= b) next.push([a, b]);
-				else {
-					if (cutA - a > 1) next.push([a, cutA]);
-					if (b - cutB > 1) next.push([cutB, b]);
-				}
-			}
-			spans = next;
-		}
-		for (const [a, b] of spans) faint.push({ x1: a, x2: b, y1: yy, y2: yy, ...base });
+		for (const [a, b] of spansAround(yy, barX - 4, bandEnd)) faint.push({ x1: a, x2: b, y1: yy, y2: yy, ...base });
 	};
 	for (const l of lines) breakAround(y(l), { stroke: 'var(--ink-stave, #1a1612)', opacity: 0.25, width: 1 });
 	for (const l of ledgerSteps) breakAround(y(l), { stroke: 'var(--ink-stave, #1a1612)', opacity: 0.35, dash: '1 2', width: 1 });
 
 	// ── Half the singing, and its centre: the bracket and where each label sits ──
 	const halfBracket: Seg[] = [];
-	const leaders: Seg[] = [];
 	const unplaced: string[] = [];
 	if (figure.halfMass) {
 		/* The bracket stands just past the longest label among the bars it spans,

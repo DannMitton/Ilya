@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest';
 import { writeFileSync } from 'node:fs';
 import type { Pitch } from '@ilya/score-parser';
 import type { FigureRow, TessituragramModel } from './insights';
-import { contacts, firstClear, layoutTessituragram, slotWithLeader, type Box, type Layout, type Measure } from './tessituragram-layout';
+import { contacts, firstClear, spreadApart, layoutTessituragram, slotWithLeader, type Box, type Layout, type Measure } from './tessituragram-layout';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
 const measure: Measure = (text, size) => text.length * size * 0.5;
@@ -116,7 +116,10 @@ describe('the tessituragram layout: Design drawing 1', () => {
 
 	const names = (l: Layout, side: 'left' | 'right') => {
 		const xs = [...new Set(l.texts.filter((x) => x.kind === 'sungName').map((x) => x.x))].sort((p, q) => p - q);
-		return l.texts.filter((x) => x.kind === 'sungName' && x.x === (side === 'left' ? xs[0] : xs[1])).map((x) => x.text);
+		return l.texts
+			.filter((x) => x.kind === 'sungName' && x.x === (side === 'left' ? xs[0] : xs[1]))
+			.sort((p, q) => q.y - p.y)
+			.map((x) => x.text);
 	};
 
 	it('names every sung natural on the left, on a line or a space, and every sung sharp on the right (QUEUE row 43)', () => {
@@ -269,6 +272,58 @@ describe('the extremes', () => {
 		expect(contacts(l)).toEqual([]);
 		// The accidental's left edge clears the clef's right edge.
 		expect(l.notes[0].accX!).toBeGreaterThan(4 + 2.7 * l.lineGap);
+	});
+});
+
+describe('no two names touch (QUEUE row 46)', () => {
+	const SP: Record<number, Pitch> = {};
+	const NAMES: Array<[number, Pitch['step'], number]> = [[0, 'C', 0], [1, 'C', 1], [2, 'D', 0], [3, 'D', 1], [4, 'E', 0], [5, 'F', 0], [6, 'F', 1], [7, 'G', 0], [8, 'G', 1], [9, 'A', 0], [10, 'A', 1], [11, 'B', 0]];
+	const at = (midi: number): Pitch => {
+		const [, step, alter] = NAMES[midi % 12];
+		return SP[midi] ?? P(step, Math.floor(midi / 12) - 1, alter);
+	};
+	const rowsOf = (midis: number[], weight = 10): FigureRow[] => midis.map((m, i) => ({ midi: m, spellings: [at(m)], quavers: weight + i, tags: [] }));
+	const run = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+
+	it('spreads positions to the gap, in order, moving as little as it can', () => {
+		expect(spreadApart([0, 100], 10)).toEqual([0, 100]);
+		expect(spreadApart([0, 5], 10)).toEqual([-2.5, 7.5]);
+		const p = spreadApart([0, 1, 2, 3], 10);
+		for (let i = 1; i < p.length; i++) expect(p[i] - p[i - 1]).toBeGreaterThanOrEqual(10 - 1e-9);
+		expect(p.reduce((a, b) => a + b, 0) / 4).toBeCloseTo(1.5, 6);
+	});
+
+	it('a dense chromatic run, every semitone from E3 to G♯3, touches nothing, English and French', () => {
+		SP[53] = P('E', 3, 1);
+		const f = base(rowsOf(run(52, 56)));
+		delete SP[53];
+		for (const lang of ['en', 'fr'] as const) {
+			const l = draw(f, lang);
+			expect(contacts(l)).toEqual([]);
+			// E3 and F3 sit 5.5 px apart in the left column: one of them has left its row, with a leader.
+			expect(l.leaders.length).toBeGreaterThan(0);
+			for (const s of l.leaders) expect([s.width, s.stroke, s.dash]).toEqual([0.6, 'var(--rose-ink)', undefined]);
+		}
+	});
+
+	it('B♯4 with C♯5 above it (the same sounding row spelled B♯, then the next semitone) touches nothing', () => {
+		SP[72] = P('B', 4, 1);
+		const f = base(rowsOf([61, 62, 64, 65, 66, 69, 70, 72, 73, 74], 8), { clef: 'treble' });
+		const l = draw(f);
+		expect(contacts(l)).toEqual([]);
+		const names = l.texts.filter((x) => x.kind === 'sungName').map((x) => x.text);
+		expect(names).toContain('B♯4');
+		expect(names).toContain('C♯5');
+		delete SP[72];
+	});
+
+	it('two octaves of every semitone, with findings and passaggi, touches nothing', () => {
+		const f = base(rowsOf(run(40, 64), 5), { passaggio: { primo: P('A', 3), secondo: P('E', 4, -1) }, zones: { below: 30, between: 40, above: 30 }, halfMass: { low: 50, high: 58, share: 0.5 }, centre: { value: 54, midi: 54, pitch: P('F', 3, 1) }, tessitura: { low: P('D', 3), high: P('B', 3) } });
+		for (const lang of ['en', 'fr'] as const) expect(contacts(draw(f, lang))).toEqual([]);
+	});
+
+	it('leaves a song with room (Tchaikovsky) exactly as it was: no leaders', () => {
+		expect(draw(tchaikovsky()).leaders).toEqual([]);
 	});
 });
 

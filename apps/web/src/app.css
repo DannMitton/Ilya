@@ -150,6 +150,12 @@
 	--rose-desk: #DDCCCC;           /* rose at 60% */
 	--cobalt-desk: #C7D1E3;           /* cobalt at 60% */
 	--umber-desk: #DACFC3;           /* umber at 60% */
+	/* The wait squircle's fill (QUEUE row 46, Dann 2026-10-08 01:05, option B of
+	   drawing-wait-tint-options): each band at 20 percent over white, computed as
+	   the desk tokens are, so the squircle reads lighter than the desk around it. */
+	--sage-wash: #E6E9E3;           /* sage at 20% */
+	--lavender-wash: #EAE7EC;       /* lavender at 20% */
+	--rose-wash: #EEE5E5;           /* rose at 20% */
 
 	/* ── Language-pill chips, one per destination ──────────── */
 	/* The header carries ONE language pill, naming the language the singer

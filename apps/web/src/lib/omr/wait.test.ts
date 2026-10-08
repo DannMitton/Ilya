@@ -1,5 +1,6 @@
 /** The wait for the reader: the fill, the line, and the colours. Expected values are written out by hand from the brief. */
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { advanceWait, completeWait, readingLine, waitColours, waitLine, WAIT_START } from './wait';
 import type { OmrProgress } from './homr-reader';
 
@@ -54,12 +55,27 @@ describe('the line follows the language (N.167)', () => {
 
 describe('the colours', () => {
 	it('are each document\'s own desk tint and label ink', () => {
-		expect(waitColours('text')).toEqual({ fill: 'var(--sage-desk)', ink: 'var(--sage-ink)' });
-		expect(waitColours('markup')).toEqual({ fill: 'var(--lavender-desk)', ink: 'var(--lavender-ink)' });
-		expect(waitColours('insights')).toEqual({ fill: 'var(--rose-desk)', ink: 'var(--rose-ink)' });
+		expect(waitColours('text')).toEqual({ fill: 'var(--sage-wash)', ink: 'var(--sage-ink)' });
+		expect(waitColours('markup')).toEqual({ fill: 'var(--lavender-wash)', ink: 'var(--lavender-ink)' });
+		expect(waitColours('insights')).toEqual({ fill: 'var(--rose-wash)', ink: 'var(--rose-ink)' });
 	});
 	it('draw nothing on Learn or Guide', () => {
 		expect(waitColours('learn')).toBeNull();
 		expect(waitColours('guide')).toBeNull();
+	});
+});
+
+describe('the wait squircle\'s wash (QUEUE row 46)', () => {
+	const css = readFileSync(new URL('../../app.css', import.meta.url), 'utf8');
+	const token = (name: string) => css.match(new RegExp(`--${name}:\\s*#([0-9A-Fa-f]{6})`))![1].toUpperCase();
+	const overWhite = (hex: string, share: number) =>
+		[0, 2, 4].map((i) => Math.round(share * parseInt(hex.slice(i, i + 2), 16) + (1 - share) * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
+
+	it('is each family\'s band at 20 percent over white, computed as the desk tokens are (40 percent)', () => {
+		for (const family of ['sage', 'lavender', 'rose']) {
+			expect(token(`${family}-wash`)).toBe(overWhite(token(family), 0.2));
+			expect(token(`${family}-desk`)).toBe(overWhite(token(family), 0.4));
+		}
+		expect(['sage', 'lavender', 'rose'].map((f) => token(`${f}-wash`))).toEqual(['E6E9E3', 'EAE7EC', 'EEE5E5']);
 	});
 });

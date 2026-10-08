@@ -61,15 +61,15 @@ export function waitLine(s: WaitState, language: Language): string {
 	return readingLine(s, language) ?? t('upload.status.preparingReader', language);
 }
 
-/** The tab's own desk tint and label ink (`app.css`), for the three documents; null elsewhere. */
+/** The tab's own wash (its band at 20 percent over white) and label ink (`app.css`), for the three documents; null elsewhere. */
 export function waitColours(tab: TabId): { fill: string; ink: string } | null {
 	switch (tab) {
 		case 'text':
-			return { fill: 'var(--sage-desk)', ink: 'var(--sage-ink)' };
+			return { fill: 'var(--sage-wash)', ink: 'var(--sage-ink)' };
 		case 'markup':
-			return { fill: 'var(--lavender-desk)', ink: 'var(--lavender-ink)' };
+			return { fill: 'var(--lavender-wash)', ink: 'var(--lavender-ink)' };
 		case 'insights':
-			return { fill: 'var(--rose-desk)', ink: 'var(--rose-ink)' };
+			return { fill: 'var(--rose-wash)', ink: 'var(--rose-ink)' };
 		default:
 			return null;
 	}
