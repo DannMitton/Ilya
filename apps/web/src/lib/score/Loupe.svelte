@@ -2600,7 +2600,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		box-sizing: border-box;
 		padding: 10px 10px 12px;
 		border: 1.4px solid var(--ink-secondary, #4a4540);
-		border-radius: 10px;
+		border-radius: var(--float-radius, 10px);
 		/* Hung from its top since N.149; see `anchorTop` in the script. */
 		background: var(--paper-light, #f5f1e8);
 		/* ── THREE LAYERS, TO SELL THE LIFT ──────────────────────────────
@@ -2622,10 +2622,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   AND OPACITY FALLS AS BLUR RISES. On cream paper a warm black much
 		   past 8% at this blur stops reading as shadow and starts reading as
 		   dirt on the page. */
-		box-shadow:
-			0 1px 2px rgba(46, 42, 38, 0.2),
-			0 8px 16px rgba(46, 42, 38, 0.13),
-			0 20px 44px rgba(46, 42, 38, 0.07);
+		/* The three layers live in `--float-shadow` (app.css), shared with the
+		   wait for the reader. */
+		box-shadow: var(--float-shadow);
 		/* OPACITY AND TRANSFORM ONLY, 180 ms, the slate's one duration. The
 		   loupe and the dock arrive as one motion and leave as one. */
 		animation: loupe-rise 180ms ease-out;

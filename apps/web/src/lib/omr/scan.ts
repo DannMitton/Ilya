@@ -15,8 +15,11 @@
 import { toGreyscalePng } from '$lib/reader/page-image';
 import type { OmrProgress, OmrReadResult } from './homr-reader';
 import { READER_STAMP, type KeptReading } from './stamp';
+import { readingWait, type WaitHooks } from '$lib/score/reading-wait.svelte';
 
 export type { OmrProgress, OmrReadResult };
+/** The app's one wait, re-exported for the component that echoes it in the drawer. */
+export { readingWait };
 
 /** True where the address asks for Ilya's own page reader: `?reader=ilya`. */
 export function useIlyaReader(search: string): boolean {
@@ -67,28 +70,34 @@ export interface ScanHooks {
  * Reads a scan with homr and hands the joined MusicXML to `hooks.ingest` as
  * a file named after the scan (`song.pdf` becomes `song.musicxml`). The wait
  * is named `upload.status.preparingReader` until homr reports its first
- * stage after the models, then `upload.status.readingPage`. `read` is
- * `readScan` except in tests.
+ * stage after the models, then `upload.status.readingPage`. The wait drawn on
+ * the Paper follows the same progress (`wait`). `read` is `readScan` and `wait`
+ * is the app's one wait, except in tests.
  */
 export async function readScanAsScore(
 	file: File,
 	kind: 'image' | 'pdf',
 	hooks: ScanHooks,
 	read: typeof readScan = readScan,
+	wait: WaitHooks = readingWait,
 ): Promise<void> {
 	hooks.busy('upload.status.preparingReader');
+	wait.begin();
 	let reading = false;
 	const result = await read(file, kind, (p) => {
+		wait.progress(p);
 		if (!reading && p.stage !== 'models') {
 			reading = true;
 			hooks.busy('upload.status.readingPage');
 		}
 	});
 	if (!result.ok) {
+		wait.cancel();
 		console.error(`[omr] homr did not read ${file.name}: ${result.error}`, result.log);
 		if (result.error === 'not_music') return hooks.poem();
 		return hooks.fail();
 	}
+	wait.complete();
 	logRead(file, result);
 	await hooks.ingest(readingFile(file, result.musicXml), { musicXml: result.musicXml, stamp: READER_STAMP });
 }

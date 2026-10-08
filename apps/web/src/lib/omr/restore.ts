@@ -15,6 +15,7 @@
 import { READER_STAMP, type KeptReading } from './stamp';
 import type { OmrProgress, OmrReadResult } from './homr-reader';
 import { logRead, readingFile, readScan } from './scan';
+import { readingWait, type WaitHooks } from '$lib/score/reading-wait.svelte';
 import type { SongSource } from '$lib/library/types';
 import type { SourceBytes } from '$lib/library/driver';
 export type { KeptReading } from './stamp';
@@ -83,19 +84,26 @@ export async function restoreStoredScan(
 	kept: KeptReading | null | undefined,
 	hooks: RestoreHooks,
 	read: Parameters<typeof restoreScan>[3] = readScan,
+	wait: WaitHooks = readingWait,
 ): Promise<void> {
-	if (!isCurrent(kept)) hooks.busy('upload.status.preparingReader');
+	if (!isCurrent(kept)) {
+		hooks.busy('upload.status.preparingReader');
+		wait.begin();
+	}
 	let reading = false;
 	const restored = await restoreScan(file, kind, kept, read, (p) => {
+		wait.progress(p);
 		if (!reading && p.stage !== 'models') {
 			reading = true;
 			hooks.busy('upload.status.readingPage');
 		}
 	});
 	if (!restored.ok) {
+		wait.cancel();
 		console.error(`[omr] homr did not read ${file.name}: ${restored.error}`, restored.log);
 		return hooks.fail();
 	}
+	wait.complete();
 	if (restored.result) logRead(file, restored.result);
 	const arrived = await hooks.ingest(readingFile(file, restored.musicXml));
 	if (arrived && restored.reading) hooks.keep(restored.reading);

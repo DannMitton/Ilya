@@ -64,7 +64,7 @@
 	import { WorkerPageReader, type ClefKeyProbe } from '$lib/reader/page-reader';
 	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from '$lib/reader/page-image';
 	import { hasStaves } from '$lib/reader/staff-detect';
-	import { readScanAsScore, useIlyaReader } from '$lib/omr/scan';
+	import { readScanAsScore, readingWait, useIlyaReader } from '$lib/omr/scan';
 	import { restoreStoredScan, type KeptReading } from '$lib/omr/restore';
 	import {
 		ingestScoreFile,
@@ -165,7 +165,7 @@
 		 *  are what the two controls now show. False is the old prompt, word for
 		 *  word. */
 		| { kind: 'asking'; file: File; detected: boolean }
-		| { kind: 'busy'; label: string }
+		| { kind: 'busy'; label: string; key?: string }
 		/** N.145, 2026-09-16: RENAMED FROM `done`. The parse already succeeded
 		 *  and `oningested` has already been called (`announceArrival`, called
 		 *  right after every upload-origin `handleFile`); nothing here is
@@ -283,7 +283,7 @@
 			pendingPoemFallback = { kind, ink };
 			if (useIlyaReader(location.search)) await handleFile(file);
 			else await readScanAsScore(file, kind, {
-				busy: (key) => (ui = { kind: 'busy', label: T(key) }),
+				busy: (key) => (ui = { kind: 'busy', label: '', key }),
 				ingest: async (xml, reading) => { await handleFile(xml); announceArrival({ file, reading }); },
 				poem: () => (kind === 'pdf' ? readPdfAsPoem(file, ink, true, false) : readAsPoemByOcr(file, null, true, false)),
 				fail: () => (ui = { kind: 'error', message: T('upload.err.parseFailed') }),
@@ -790,7 +790,7 @@
 		if (kind !== null && !useIlyaReader(location.search)) {
 			// A stored scan is read by homr, never Ilya's own page reader.
 			await restoreStoredScan(file, kind, restore.reading, {
-				busy: (key) => (ui = { kind: 'busy', label: T(key) }),
+				busy: (key) => (ui = { kind: 'busy', label: '', key }),
 				ingest: async (xml) => (await handleFile(xml), ui.kind === 'arrived'),
 				fail: () => (ui = { kind: 'error', message: T('upload.err.parseFailed') }),
 				keep: (reading) => onreading?.(reading),
@@ -975,7 +975,7 @@
 	{:else if ui.kind === 'busy'}
 		<div class="status">
 			<span class="spinner"></span>
-			<span class="status-label">{ui.label}</span>
+			<span class="status-label">{ui.key ? (readingWait.line(language) ?? T(ui.key)) : ui.label}</span>
 		</div>
 	{:else if ui.kind === 'arrived'}
 		<!-- N.145, 2026-09-16. THE SCORE HAS ALREADY ARRIVED: `announceArrival`

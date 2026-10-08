@@ -91,6 +91,43 @@ describe('readScanAsScore', () => {
 	});
 });
 
+describe('the wait drawn on the Paper', () => {
+	const recorder = () => {
+		const log: string[] = [];
+		return {
+			log,
+			wait: {
+				begin: () => log.push('begin'),
+				progress: (p: { page: number }) => log.push(`progress ${p.page}`),
+				complete: () => log.push('complete'),
+				cancel: () => log.push('cancel'),
+			},
+		};
+	};
+
+	it('begins, follows the progress, and completes before the ingest', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const { h } = hooks();
+		const { log, wait } = recorder();
+		const read = async (_f: File, _k: 'image' | 'pdf', onProgress?: (p: never) => void): Promise<OmrReadResult> => {
+			onProgress?.({ page: 1, pages: 2, stage: 'staff', done: 1, total: 4 } as never);
+			return { ok: true, musicXml: '<score-partwise/>', pagesRead: 2, pages: 2, backend: 'wasm', durationMs: 1 };
+		};
+		await readScanAsScore(scan, 'pdf', h, read, wait);
+		expect(log).toEqual(['begin', 'progress 1', 'complete']);
+	});
+
+	it('is gone at once on the poem route and on a failure', async () => {
+		quiet();
+		for (const error of ['not_music', 'engine_missing']) {
+			const { h } = hooks();
+			const { log, wait } = recorder();
+			await readScanAsScore(scan, 'pdf', h, async () => ({ ok: false, error, log: '' }) as OmrReadResult, wait);
+			expect(log).toEqual(['begin', 'cancel']);
+		}
+	});
+});
+
 describe('useIlyaReader', () => {
 	it('is true only for ?reader=ilya', () => {
 		expect(useIlyaReader('?reader=ilya')).toBe(true);

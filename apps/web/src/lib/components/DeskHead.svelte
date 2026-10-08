@@ -24,6 +24,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import type { TabId } from '$lib/destinations';
 	import { INCLUDE_MARKUP_INSIGHTS } from '$lib/wall';
+	import ReadingWait from './ReadingWait.svelte';
 
 	interface Props {
 		activeTab: TabId;
@@ -97,6 +98,7 @@
 </script>
 
 <div class="desk-head">
+	<ReadingWait {activeTab} {language} />
 	<!-- aria-label carried over verbatim from TabBar's tablist rather than
 	     written fresh: the ratified table has no string for this, and an
 	     invented one would be untranslated French. -->

@@ -186,6 +186,17 @@
 	--umber-ink: #61472C;
 	--cobalt-ink: #374D75;
 
+	/* ── A floating card's corner and lift ─────────────────── */
+	/* Named 2026-10-07 so the Loupe and the wait for the reader (ReadingWait)
+	   are visibly one family. The values are the Loupe's own, ruled by Dann
+	   2026-08-28 (three layers, contact split from mid; the reasoning stays
+	   with the Loupe's rule in Loupe.svelte). Nothing was changed in moving them. */
+	--float-radius: 10px;
+	--float-shadow:
+		0 1px 2px rgba(46, 42, 38, 0.2),
+		0 8px 16px rgba(46, 42, 38, 0.13),
+		0 20px 44px rgba(46, 42, 38, 0.07);
+
 	/* ── Calibration pacifier ──────────────────────────────── */
 	/* Calibration-pacifier tokens, per the pacifier spec v11 §13.     */
 	/* --paper-cream and the ink hierarchy above are reused as-is.     */
