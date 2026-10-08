@@ -95,9 +95,29 @@ interface Held {
 	reason: string | null;
 }
 
+/**
+ * The pages of the song, without the cover in front of it.
+ *
+ * homr can find a staff in the ruled border of a title page and read two bars
+ * of music from it (Gurilyov, «Раскаяние», Jurgenson 1895, page 1: one staff
+ * 30 pixels tall, a C clef and a whole-note chord). A page of a song prints a
+ * system of two staves or more, the voice over the piano, and the title page
+ * comes before it. So a page before the first page on which homr found two or
+ * more staves, on which it found a single staff, is a cover and is left out. A
+ * page whose answer does not say how many staves it found is kept, and so is
+ * every page of a song in which no page has two staves or more.
+ */
+export function withoutCovers(xmls: readonly string[], staves: readonly (number | null)[]): string[] {
+	const first = staves.findIndex((n) => n !== null && n >= 2);
+	if (first <= 0) return [...xmls];
+	return xmls.filter((_, i) => i >= first || staves[i] !== 1);
+}
+
 /** What one pass over the pages found. */
 interface Pass {
 	xmls: string[];
+	/** For each page in `xmls`, the staves homr found on it, or null where its answer did not say. */
+	staves: (number | null)[];
 	/** The error that stopped the pass, if one did. `not_music` never stops it. */
 	failure: { error: string; log: string } | null;
 }
@@ -153,6 +173,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 		onProgress?: (p: OmrProgress) => void,
 	): Promise<Pass> {
 		const xmls: string[] = [];
+		const staves: (number | null)[] = [];
 		for (let i = 0; i < images.length; i++) {
 			const result = await rec.recognizePage(images[i], {
 				ocr: false,
@@ -160,6 +181,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 			});
 			if (result.ok) {
 				xmls.push(result.musicXml);
+				staves.push(Array.isArray(result.staves) ? result.staves.length : null);
 				continue;
 			}
 			if (result.error === 'not_music') continue;
@@ -168,9 +190,9 @@ export function makeReader(deps: ReaderDeps): Reader {
 				// `worker_lost` from then on, so it is disposed and the next scan makes another.
 				void dispose(mine, rec);
 			}
-			return { xmls, failure: { error: result.error, log: result.log } };
+			return { xmls, staves, failure: { error: result.error, log: result.log } };
 		}
-		return { xmls, failure: null };
+		return { xmls, staves, failure: null };
 	}
 
 	async function read(images: readonly Blob[], onProgress?: (p: OmrProgress) => void): Promise<OmrReadResult> {
@@ -218,9 +240,10 @@ export function makeReader(deps: ReaderDeps): Reader {
 		if (found.xmls.length === 0) {
 			return { ok: false, error: 'not_music', log: `homr found no music on any page${note ? ` (${note})` : ''}` };
 		}
+		const song = withoutCovers(found.xmls, found.staves);
 		let musicXml: string;
 		try {
-			musicXml = joinPages(found.xmls);
+			musicXml = joinPages(song);
 		} catch (err) {
 			return { ok: false, error: 'join_failed', log: message(err) };
 		}
@@ -229,7 +252,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 		return {
 			ok: true,
 			musicXml,
-			pagesRead: found.xmls.length,
+			pagesRead: song.length,
 			pages: images.length,
 			backend: rec.backend,
 			durationMs: Math.round(performance.now() - t0),

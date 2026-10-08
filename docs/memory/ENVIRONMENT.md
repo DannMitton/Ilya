@@ -3908,6 +3908,8 @@ than overwriting**, which also matches this project's own brief-versioning conve
 and the desk broke it because a tool said otherwise. A tool's success message is not an
 observation.**
 
+**It happened again, 2026-10-08 13:02.** The desk edited Design brief r2 for Dann's "x of y" ruling (13:01), re-committed it to the same path, got `written`, and told Dann the ruling was in. The Mac kept the 13:00 bytes (6,729 against the container's 7,263). The Fable desk found the gap at 13:20, reading the file. The desk had not opened this file before touching the tool, which `README.md` says to do. **Read back every write, by size and by a string only the new version holds.**
+
 ## THE EXTENSION'S OWN TAB LANDS BEHIND, AND A HIDDEN TAB NEVER LOADS THE DICTIONARY. 2026-09-21
 
 **A tab the Chrome extension opens can sit in a window that is not frontmost on Dann's Mac.

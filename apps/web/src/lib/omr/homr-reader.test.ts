@@ -7,7 +7,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { Recognizer } from 'homr-web';
-import { makeReader, type ReaderDeps } from './homr-reader';
+import { makeReader, withoutCovers, type ReaderDeps } from './homr-reader';
 import type { PathChoice, PreferredBackend } from './path-choice';
 
 const PAGE_XML = readFileSync(new URL('./fixtures/tch-1.musicxml', import.meta.url), 'utf8');
@@ -220,5 +220,33 @@ describe('where a recognizer does not start', () => {
 		expect(created).toEqual(['wasm-threads']);
 		expect(result).toMatchObject({ ok: false, error: 'start_failed' });
 		expect(reader.started()).toBe(false);
+	});
+});
+
+describe('a cover in front of the song', () => {
+	it('leaves out a page with one staff before the first page with two or more, and keeps every other page', () => {
+		// Gurilyov, «Раскаяние»: a title page whose border homr reads as one staff, then two pages of systems.
+		expect(withoutCovers(['cover', 'p2', 'p3'], [1, 8, 8])).toEqual(['p2', 'p3']);
+		// A single staff after the music has begun is kept.
+		expect(withoutCovers(['p1', 'p2', 'end'], [8, 8, 1])).toEqual(['p1', 'p2', 'end']);
+		// A song printed on single staves throughout is kept whole.
+		expect(withoutCovers(['p1', 'p2'], [1, 1])).toEqual(['p1', 'p2']);
+		// A page whose answer does not say is kept.
+		expect(withoutCovers(['p1', 'p2'], [null, 8])).toEqual(['p1', 'p2']);
+	});
+
+	it('joins the song without the cover and counts the pages read without it', async () => {
+		const staves = (n: number) => Array.from({ length: n }, (_, index) => ({ cx: 0.5, cy: 0.1 * (index + 1), h: 0.05, index, w: 0.9 }));
+		const COVER = { ok: true, musicXml: PAGE_XML.replace(/<measure /, '<measure data-cover="yes" '), staves: staves(1) } as unknown as Answer;
+		const SONG = { ok: true, musicXml: PAGE_XML, staves: staves(6) } as unknown as Answer;
+		const g = fake('webgpu', [COVER, SONG]);
+		const { d } = deps(WEBGPU, async () => g.rec);
+		const result = await makeReader(d).read(pages(2));
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.pagesRead).toBe(1);
+			expect(result.pages).toBe(2);
+			expect(result.musicXml).not.toContain('data-cover');
+		}
 	});
 });

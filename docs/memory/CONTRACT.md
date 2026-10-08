@@ -446,6 +446,8 @@ frame.
 
 **The rule: a plan, a brief, or a design starts by saying what the singer does, sees, and feels, and the technical work is derived from that.** The singer's experience is the first section and the first phase, never a late one. The machinery's vocabulary (stages, counts, gates) stays out of anything the singer sees.
 
+**SAID AGAIN 2026-10-08 15:54, about wording.** The desk had written "Does your score print a 3 over A or over B?"; Dann offered "Does A or B reflect a triplet in the score?" and asked the desk to *"centre the needs of the user and reevaluate future wording from this persepctvie"* (transcribed as written). **The rule, worded by the desk under posture 5: every string a singer reads speaks a musician's terms about the notation (a tuplet, a dotted half, bar 14, your score), never the machine's (a flag, a gap, a reading, adding up, ink on the page).** Before a string goes to Dann or into a brief, read it as a singer holding the score and replace every word that only the code would say.
+
 ---
 
 ## 2. THE CEILING. Not Dann's to waive and not yours to ask about

@@ -47,6 +47,23 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### STATE OF 2026-10-08, about 15:40 (the Opus thread that opened 12:17). READ THIS FIRST; the block of about 02:15 under it is older.
+>
+> **THE ONE THING is unchanged** (95 of every 100 printed notes, pitch and length as printed, on unseen songs, on the singer's path).
+>
+> **Measured this thread, on the singer's path for the first time** (`../sessions/report-code-eight-unseen-through-the-drop_r1_2026-10-08.md`): the eight unseen songs dropped into the score box on the deployed site at `8f59ba6`, Chrome on Dann's Mac, WebGPU, none refused. **935 of 960 right, 2 extra, 97.2. Seven of eight pass at 95; song D 89.5** (15 length misreads, 1 extra, 33 bars read for 31). Score per song = (right - extra) / printed. NOT ESTABLISHED: the staff as drawn (not looked at, to keep songs unseen); a headed window; WebAssembly; truth files are unproofed drafts.
+>
+> **Shipped this thread:** `8f59ba6` (QUEUE row 49: a piano whose brace homr missed is joined back and never read as the voice; blank staves after the final double bar are not a bar; homr-web `0.2.0-ilya.5`; Grechaninov 38 extra to 0, Varlamov 22 to 1; 14 build songs byte for byte unchanged; gate 4 `1998`, ship script moved, backup `.bak-1997-2026-10-08`). Also in it: Design brief r3 and four survey memos.
+>
+> **Row 53 returned about 18:40** (`../sessions/report-code-song-d-lengths_r1_2026-10-08.md`): D is Gurilyov «Раскаяние»; 89.5 to 90.2. A title page is no longer read as music (`homr-reader.ts`, `withoutCovers`; gate 4 `2000`). **12 of its 15 length misreads are four printed sixteenth triplets (bar 25) that homr read with no 3, and nothing in homr's output says which notes they are: only reading the printed 3s from the image can recover them.** A rule-3 change for bar 7 made *Sunless* 5 worse and was taken out. Also measured: dropped as PDFs, *Sunless* 5 reads 91.5 (10 extra: its small-printed footnote and ossia) and Kabalevsky 2 59.2 (its scan stops at bar 41); 17 opened and build songs total 94.9. A, B, C, E, F unchanged (98.8). New unseen set of eight chosen and downloaded (`../sessions/memo-heldout2-chosen_r1_2026-10-08.md`, scans `~/Downloads/_desk-2026-10-08/heldout2-scans/`): no voice triplets in it, and Dann has not yet said whether he knows any.
+> **Running at about 15:40:** Code (Opus, row 52's window) on QUEUE row 53, song D. **Dann opened D for diagnosis 2026-10-08 15:37** (*"absolutely, yes"*); A, B, C, E, F stay unseen. The final test then needs a fresh unseen set (the desk owes it, from IMSLP, as on 2026-10-07).
+>
+> **Corrections (Design):** the desk surveyed 21 apps and the guidance (four memos `../sessions/memo-sonnet-*_r1_2026-10-08.md`). Dann ruled: consistency, the row of buttons never moves (12:50); helpful curation, never onerous (12:59); the review shows "x of y" (13:01); "less mental energy" as a principle (13:06). Fable (Dann's own thread) filtered the brief into r3 (`../sessions/brief-design-corrections_r3_2026-10-08.md`); **Design is working on it since about 15:18**; its return lands in `docs/sessions/` as `design-corrections_r2_2026-10-08.*`. Fable's taste question (a flagged bar opened outside the review opens on the usual pill) carries as a DESK DEFAULT, agreed by the desk.
+>
+> **Queued after row 53:** rows 47 (octave), 48 (tempo), 50 (Pacheco), 51 (the bar checks, NOT WRITTEN, waits for Design's return).
+>
+> **Learned:** a second `device_commit_files` to the same path reported success and wrote nothing new, again (`ENVIRONMENT.md`, `device_commit_files CAN REPORT SUCCESS`); read back every write. Usage at 13:27: week 58%, Fable 47%, cloud $221 of $250.
+
 > ### STATE OF 2026-10-08, about 02:15 (the Opus thread that opened 2026-10-06 23:22). READ THIS FIRST.
 >
 > **THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes, with pitch and length as printed, on songs it has never seen, on the singer's path** (Dann, 2026-10-05 15:31).
