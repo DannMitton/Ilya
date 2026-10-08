@@ -8519,3 +8519,23 @@ Its rulings and Dann's words are homed in `CONTRACT.md` (THE POSTURE, the paragr
 >
 > **Uncommitted after the commit he was asked for:** the code: eight changed tracked files, `third_party/`, `apps/web/src/lib/omr/`, and two scripts.
 
+
+
+## State of 2026-10-06 about 23:30, moved verbatim from STATE.md on 2026-10-08 about 02:15
+
+> ### CLOSE OF 2026-10-06, about 23:30 (the Opus thread that opened 2026-10-05 14:48). READ THIS FIRST.
+>
+> **THE ONE THING: the scan reader reads at least 95 of every 100 printed notes, with pitch and length as printed, on songs it has never seen, on the singer's path.** Dann's words, 2026-10-05 15:31: *"Reliably means 95% accuracy or higher."*
+>
+> **What shipped in this thread, each with all eight gates at baseline on Dann's iMac:** `0976735` (homr's reader in Ilya, model 465, the WebGPU guard, the Guide's credit sentence); `bbe524b` (a saved scan reopens through homr and keeps its reading: the cause of Dann's 9/8, which was the old reader re-reading a song saved on 2026-10-01); `c785b7f` (homr-web ilya.3, the triplet check, the giant-page cap); and the day-4 fixes (homr-web ilya.4), whose ship Dann started at 23:20. **The next desk confirms that last ship with `git log -1`; if it is not there, the files are in his tree, uncommitted, and the ship script expects gate 4 `1939`.**
+>
+> **Where it stands, measured in the desk's cloud workspace on WebAssembly, one read each (`../sessions/report-day-4_r1_2026-10-06.md`):** 16 songs, 2364 of 2487 printed notes right (95.1), 12 extra notes. At 95 or more: Tchaikovsky 171/174, *Sunless* 1, 4, 5, 6, Kabalevsky 1, 3, 4, 6, 7, 8, 9, 10. Below: *Sunless* 2 61/68, *Sunless* 3 206/222, Kabalevsky 2 93/157 (its scan stops at bar 41; 93 of 93 against the scan). On Dann's iMac with WebGPU, measured by Code before the night fixes: the five original build songs 95.7 to 100 (`../sessions/report-code-baseline-on-the-singers-path_r1_2026-10-05.md`).
+>
+> **No held-out song remains. Every song above has been looked at.** So the 95 is not established on unseen music. **The next step, already authorized in kind (Dann 2026-10-06 00:36 and 19:26, `OPEN.md` item 16): a new held-out set of Russian songs from IMSLP that Dann does not know.** Keep the eyes apart: one helper chooses the songs and drafts each truth file by eye from the scan; a different helper runs Ilya on them and reports totals only; the helper that fixes the reader never sees them. Then confirm the result on Dann's iMac (WebGPU) with Code.
+>
+> **Known faults left (`../sessions/report-day-4_r1_2026-10-06.md`):** double sharps read as naturals; a natural not carried through its bar; triplets where more than one choice fills the bar; a printed 3 read as a whole note; a page where every system is the piano alone would be read as the voice. **Other open rows:** `QUEUE.md` 36 (multimeasure-rest spacing), 37 (the bar check against the printed metre), 34 (Markup's squircle).
+>
+> **How this thread worked, which the next desk keeps:** `CONTRACT.md`, the paragraph of 2026-10-05 15:31 to 2026-10-06 19:26. Code on the Mac cannot poll a runbook: each step needs Dann's paste (`../sessions/runbook-reader-95_r1_2026-10-05.md`). The desk's own helpers in the cloud workspace, with page images and truth staged from the Mac, did the night's work; files reach his tree by `device_commit_files`, md5-checked, with his originals backed up in `~/Downloads/_desk-2026-10-06/`. The cloud workspace does not survive the thread.
+>
+> **Usage, from Dann's screen of 2026-10-06 19:38:** session 3%, week 40%, Fable 44%, cloud credit $221 of $250, "run out Saturday evening". This thread's helpers used about 1.1 million tokens on Opus and Sonnet by their own counts.
+

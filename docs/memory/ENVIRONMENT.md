@@ -78,6 +78,9 @@ next session the same hour it cost the last one.
 | Dann drops iPhone photos (.HEIC) in Downloads | `HEIC PHOTOS OF BOOK PAGES` |
 | a long script in Chrome times out after 45 s | `LONG CHROME SCRIPTS RUN DETACHED` |
 | the Chrome extension cannot see the tab Dann means | `THE EXTENSION SEES ONLY ITS OWN TABS` |
+| a background helper or `claude -p` in the cloud stops with nothing written | `THE CLOUD WORKSPACE RESTARTS` |
+| uploading one of Dann's files into a page through Claude in Chrome | `THE CLOUD WORKSPACE RESTARTS` |
+| a measurement of the reader that skips the singer's drop path | `THE CLOUD WORKSPACE RESTARTS` |
 | reading Dann's library or Insights Research | `THE LIBRARY IS OUTSIDE THE OPENER'S GRANT` |
 | a memo quotes a brief line the desk never wrote | `CODE REWROTE THE BRIEF` |
 | a photo arrives as `.HEIC` | `HEIC PHOTOS IN THE CLOUD SHELL` |
@@ -4631,3 +4634,10 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **Delivering a helper's work:** copy each changed file to `/mnt/user-data/outputs/`, back up Dann's originals to `~/Downloads/_desk-<date>/`, write with `device_commit_files`, then compare md5 on the Mac. The bridge cannot delete; a replaced tarball stays in `third_party/homr-web/`, unused.
 - **Helpers' tool policy may refuse to write a `.md` report.** Tell them to put the whole report in their final message; the desk transcribes it with a provenance line.
 - **In the cloud shell, never `pkill -f` or `pgrep -f` for vite:** it matches the shell itself. Use `ps -eo pid,cmd | grep … | grep -v grep` and kill by number. A `svelte-kit sync` (the gates run one) reloads the dev page and kills a running page driver.
+
+
+## THE CLOUD WORKSPACE RESTARTS. Learned 2026-10-07 and 2026-10-08
+
+- **The desk's cloud workspace restarted twice in one thread** (about 19:57 and 20:34 on 2026-10-07). Files on disk survived; every process died, including a background `claude -p` helper (started with `nohup`, then `setsid`) and the dev server. A background helper in the cloud is not reliable. With Dann present, the desk works in short steps and Code on the Mac builds.
+- **Claude in Chrome's `file_upload` refuses Dann's files**, from his connected folders and from the session's outputs folder alike ("only files this session is allowed to read"). Dann drags the file himself.
+- **A harness that hands a PDF straight to the reader skips the singer's door.** On 2026-10-07 the blind read called `readScan` directly and scored 97.4; on Dann's iMac the same Grechaninov PDF never reached the reader, because `take` (`ScoreUploader.svelte`) checked only page 1 for staves. Measure through `take`, or say plainly that the figure is the reader's alone.
