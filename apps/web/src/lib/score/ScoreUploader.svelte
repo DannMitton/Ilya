@@ -64,6 +64,7 @@
 	import { WorkerPageReader, type ClefKeyProbe } from '$lib/reader/page-reader';
 	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from '$lib/reader/page-image';
 	import { hasStaves } from '$lib/reader/staff-detect';
+	import { routePdf, type PdfRoute } from '$lib/score/ingestion/first-staved-page';
 	import { readScanAsScore, readingWait, useIlyaReader } from '$lib/omr/scan';
 	import { restoreStoredScan, type KeptReading } from '$lib/omr/restore';
 	import {
@@ -250,13 +251,12 @@
 	 * THE ONE WAY IN, N.108 increment 2. `RootPanel`'s field takes the drop and
 	 * the pick; `+page.svelte` calls this on the instance.
 	 *
-	 * N.146: A PDF OR A PICTURE NO LONGER ASKS. Its first page's ink is
-	 * rasterized here and `hasStaves` (`reader/staff-detect.ts`) answers "does
-	 * this page show staves". No staves: the poem route (`readPdfAsPoem` /
-	 * `readAsPoemByOcr`). Staves, since step 1 of the homr reader (2026-10-04):
-	 * homr reads every page (`$lib/omr/scan.ts`) and the joined MusicXML is
-	 * ingested as a dropped MusicXML file is, with no clef-and-key question;
-	 * homr finding no music falls through to the poem route. `?reader=ilya`
+	 * N.146: A PDF OR A PICTURE NO LONGER ASKS. A picture goes to `hasStaves`
+	 * (`reader/staff-detect.ts`), a PDF to `routePdf` (`ingestion/first-staved-page.ts`:
+	 * staves in its first four pages, or no text layer; rows 44, 45). Reader-bound
+	 * (homr, `$lib/omr/scan.ts`, every page, ingested as a dropped MusicXML file
+	 * is, no clef-and-key question): homr finding no music falls through to the
+	 * poem route (`readPdfAsPoem` / `readAsPoemByOcr`), as does no staves. `?reader=ilya`
 	 * keeps Ilya's own reader (`handleFile`, which asks the clef-and-key
 	 * question; `pendingPoemFallback` carries the poem route to `readAsked`).
 	 *
@@ -279,13 +279,15 @@
 			return;
 		}
 		const { ink } = rasterized;
-		if (await hasStaves(ink)) {
+		const route = 'route' in rasterized ? rasterized.route : null;
+		const stavesFound = route ? route.to === 'reader' && route.stavesFound : true;
+		if (route ? route.to === 'reader' : await hasStaves(ink)) {
 			pendingPoemFallback = { kind, ink };
 			if (useIlyaReader(location.search)) await handleFile(file);
 			else await readScanAsScore(file, kind, {
 				busy: (key) => (ui = { kind: 'busy', label: '', key }),
 				ingest: async (xml, reading) => { await handleFile(xml); announceArrival({ file, reading }); },
-				poem: () => (kind === 'pdf' ? readPdfAsPoem(file, ink, true, false) : readAsPoemByOcr(file, null, true, false)),
+				poem: () => (kind === 'pdf' ? readPdfAsPoem(file, ink, stavesFound, stavesFound ? false : null) : readAsPoemByOcr(file, null, true, false)),
 				fail: () => (ui = { kind: 'error', message: T('upload.err.parseFailed') }),
 			});
 			return;
@@ -343,9 +345,7 @@
 	}
 
 	/**
-	 * The first page's ink, for the staff check. The SAME rasterizers
-	 * `probeFile` and `readPages` already use; the failure classes each
-	 * throws map to the same copy `classify()` gives an `IngestOutcome`
+	 * The page's ink and, for a PDF, its route (rows 44, 45). The failure classes each throws map to the same copy `classify()` gives an `IngestOutcome`
 	 * carrying `PDF_UNREADABLE` / `PDF_JBIG2_UNDECODED` / `IMAGE_UNDECODABLE`,
 	 * because a page that cannot be rasterized at all is that same failure
 	 * whether it is met here or at the read.
@@ -353,7 +353,7 @@
 	async function rasterizeFirstPage(
 		file: File,
 		kind: 'image' | 'pdf'
-	): Promise<{ ink: ArrayBuffer } | { errorMessage: string }> {
+	): Promise<{ ink: ArrayBuffer; route?: PdfRoute } | { errorMessage: string }> {
 		if (kind === 'image') {
 			try {
 				return { ink: await toGreyscalePng(file) };
@@ -362,11 +362,11 @@
 				return { errorMessage: await undecodablePictureMessage(file) };
 			}
 		}
-		const { rasterizePdf, PdfUnreadableError, PdfJbig2UndecodedError } = await import('$lib/reader/page-pdf');
+		const { PdfUnreadableError, PdfJbig2UndecodedError } = await import('$lib/reader/page-pdf');
 		try {
-			const pages = await rasterizePdf(file, 1);
-			if (pages.length === 0) throw new PdfUnreadableError('this PDF has no pages');
-			return { ink: pages[0] };
+			const found = await routePdf(file);
+			if (!found) throw new PdfUnreadableError('this PDF has no pages');
+			return found;
 		} catch (err) {
 			if (err instanceof PdfJbig2UndecodedError) return { errorMessage: T('upload.err.pdfJbig2') };
 			if (err instanceof PdfUnreadableError) return { errorMessage: T('upload.err.pdfUnreadable') };

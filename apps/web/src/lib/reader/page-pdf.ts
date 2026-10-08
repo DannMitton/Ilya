@@ -133,8 +133,18 @@ function canvasIsBlank(
  * which asks about the FIRST page and would otherwise pay to rasterize a ten-
  * page score twice. Omitted, every page is rendered, which is what the read
  * itself always asks for.
+ *
+ * `stop`, when given, sees each page's ink as it is rendered and returns true
+ * to end the render there (that page is the last one returned). It lets the
+ * cover-page search (`score/ingestion/first-staved-page.ts`) look at one page
+ * at a time without opening the PDF again for each, and without rendering
+ * pages after the one it wanted.
  */
-export async function rasterizePdf(file: File, maxPages?: number): Promise<ArrayBuffer[]> {
+export async function rasterizePdf(
+	file: File,
+	maxPages?: number,
+	stop?: (ink: ArrayBuffer, page: number) => boolean | Promise<boolean>
+): Promise<ArrayBuffer[]> {
 	const bytes = new Uint8Array(await file.arrayBuffer());
 
 	let pdfjs: typeof import('pdfjs-dist');
@@ -219,6 +229,7 @@ export async function rasterizePdf(file: File, maxPages?: number): Promise<Array
 					);
 				}
 				pages.push(await greyscaleCanvasToPng(canvas, ctx));
+				if (stop && (await stop(pages[pages.length - 1], n))) return pages;
 			} finally {
 				page.cleanup();
 			}
