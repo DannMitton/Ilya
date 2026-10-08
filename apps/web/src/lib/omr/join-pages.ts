@@ -38,6 +38,9 @@
  *   read them so).
  *   Where that needs finer divisions, the bar states them and the next bar
  *   states the divisions in force again.
+ * - leaves out the bars at the end of the song that come after its last
+ *   double bar line and hold neither note nor rest: a voice staff printed
+ *   blank on to the margin after the voice has ended (`dropBarsAfterTheEnd`).
  *
  * It works on the text of homr's output, not on a DOM, so it runs the same in
  * the browser and in vitest (which has no `DOMParser`). It reads elements,
@@ -306,6 +309,27 @@ function rewriteAttributes(body: string, state: InForce, dropRestatements: boole
 }
 
 /**
+ * Removes, from the end of the song, the bars that come after its last double
+ * bar line and hold no note and no rest in homr's own output (`raw`, the
+ * measures as homr wrote them, one for one with `measures`).
+ *
+ * Where the voice ends before the piano, an engraver may run the voice's
+ * staff on to the margin with no notes, no rests, and no bar lines (Varlamov,
+ * «Скажи, зачем?», page 3). homr writes that blank stretch as one more bar.
+ * A bar holds time, and that one holds none, so it is not a bar of the song.
+ * homr writes a bar in which the voice is silent as a bar holding a rest, so
+ * such a bar is kept (`silent` empties it later, and it stays a bar).
+ */
+function dropBarsAfterTheEnd(measures: string[], raw: readonly string[]): void {
+	const holdsTime = (m: string) => /<(note|forward)[\s>]/.test(m);
+	let end = measures.length;
+	while (end > 0 && !holdsTime(raw[end - 1] ?? '')) end -= 1;
+	if (end === measures.length || end === 0) return;
+	if (!/<bar-style>(heavy-heavy|light-heavy)<\/bar-style>/.test(raw[end - 1] ?? '')) return;
+	measures.length = end;
+}
+
+/**
  * Joins homr-web's MusicXML for each page, in page order, into one
  * MusicXML string holding the voice part only. Throws `JoinPagesError` when
  * a page has no part to take or is not well formed.
@@ -321,6 +345,7 @@ export function joinPages(pages: readonly string[]): string {
 			measures.push(rewriteMeasure(m, measures.length + 1, state, mIndex === 0, dropRestatements));
 		});
 	});
+	dropBarsAfterTheEnd(measures, parts.flatMap((part) => part.measures));
 	const scorePart = parts[0].scorePart;
 	const id = attr(scorePart, 'id') ?? 'P1';
 	return [

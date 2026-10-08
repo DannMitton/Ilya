@@ -36,8 +36,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/score-parser
       homr-web:
-        specifier: file:../../third_party/homr-web/homr-web-0.2.0-ilya.4.tgz
-        version: file:third_party/homr-web/homr-web-0.2.0-ilya.4.tgz
+        specifier: file:../../third_party/homr-web/homr-web-0.2.0-ilya.5.tgz
+        version: file:third_party/homr-web/homr-web-0.2.0-ilya.5.tgz
       pdfjs-dist:
         specifier: 6.2.108
         version: 6.2.108
@@ -937,9 +937,9 @@ packages:
   guid-typescript@1.0.9:
     resolution: {integrity: sha512-Y8T4vYhEfwJOTbouREvG+3XDsjr8E3kIr7uf+JZ0BYloFsttiHU0WfvANVsR7TxNUJa/WpCnw/Ino/p+DeBhBQ==}
 
-  homr-web@file:third_party/homr-web/homr-web-0.2.0-ilya.4.tgz:
-    resolution: {integrity: sha512-zbqpS//ZuipQ9LVyNZPTFmeSv/jORJ3eINTKqx+86u8dM5i8W2Vpah9HYLwV03gSK4hWVK6g3mHL0EYSoz38Vg==, tarball: file:third_party/homr-web/homr-web-0.2.0-ilya.4.tgz}
-    version: 0.2.0-ilya.4
+  homr-web@file:third_party/homr-web/homr-web-0.2.0-ilya.5.tgz:
+    resolution: {integrity: sha512-ttL30GFlRk94MR3NxrClcji7JG4suzerBFGMxZlfy8dwTVpp8ow4K/rpk1mNTETp9tM4VXrqn5E2mTGuQN8Dcg==, tarball: file:third_party/homr-web/homr-web-0.2.0-ilya.5.tgz}
+    version: 0.2.0-ilya.5
     engines: {node: '>=22'}
 
   idb-keyval@6.2.2:
@@ -1959,7 +1959,7 @@ snapshots:
 
   guid-typescript@1.0.9: {}
 
-  homr-web@file:third_party/homr-web/homr-web-0.2.0-ilya.4.tgz:
+  homr-web@file:third_party/homr-web/homr-web-0.2.0-ilya.5.tgz:
     dependencies:
       '@techstark/opencv-js': 4.12.0-release.1
       '@webgpu/types': 0.1.74

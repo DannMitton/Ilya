@@ -1,7 +1,7 @@
 # Changes by the Ilya project
 
 This copy of homr-web 0.2.0 (commit `cb333a5`) was changed by the Ilya
-project on 2026-10-05 and 2026-10-06 and is published as `0.2.0-ilya.4`. It is not a release
+project on 2026-10-05, 2026-10-06, and 2026-10-08 and is published as `0.2.0-ilya.5`. It is not a release
 by homr-web's author. It stays under the GNU Affero General Public License
 version 3, as homr and homr-web are; LICENSE and NOTICE are unchanged.
 
@@ -59,6 +59,9 @@ All homr paths are at commit `560ca5c` unless said otherwise.
 | `src/musicxml/generate-main.ts` (0.2.0-ilya.4) | a clef joined by a chord token to notes is written as a clef change before them, and not handed to `build_note_chord`; the new `barLengthsMain`; the clef writing moved into `appendClef` | none: a departure from homr main, `homr/music_xml_generator.py` `build_measures` and `build_note_chord` |
 | `test/voices-ilya4.test.ts` (0.2.0-ilya.4) | eight tests: the two Kabalevsky layouts, pages that keep homr's order, model 396 unchanged, the rests for 2/4, 3/4, 4/4 and an odd bar, and the clef in a chord | none (test) |
 | `README.md`, `package.json` (0.2.0-ilya.4) | version `0.2.0-ilya.4` | none |
+| `src/pipeline/parse-staffs.ts` (0.2.0-ilya.5) | the new `joinUnbracedPianos`, called first in `parseStaffs`: on a page where a single staff stands directly above a grand staff, a system of two or more single staffs and no grand staff, with no grand staff directly below it, has its bottom two merged by `mergeStaffs` into one grand staff | none: a departure from homr main, `homr/staff_parsing.py` `parse_staffs` and `homr/brace_dot_detection.py` |
+| `test/pianos-ilya5.test.ts` (0.2.0-ilya.5) | eight tests: the three layouts of Grechaninov op. 20 no. 4 pages 2 and 5 and Varlamov «Скажи, зачем?» page 3, the merged staff's extent, a duet, a system that holds a grand staff, pages with no voice over a grand staff, and model 396 unchanged | none (test) |
+| `README.md`, `package.json` (0.2.0-ilya.5) | version `0.2.0-ilya.5` | none |
 
 ## Not ported
 
@@ -163,4 +166,31 @@ whole page fails: desktop homr main at `560ca5c` stops on that page with the
 same `AssertionError` (run on Ilya's own render of the page, 2026-10-06).
 Now a clef in a chord of notes is written as a clef change on its staff,
 before the chord's notes, and the notes are written as before.
+
+## 0.2.0-ilya.5, 2026-10-08
+
+One departure from homr main, with `model: "465"` only.
+
+**A piano whose brace homr did not find.** homr makes the two staffs of a
+piano one grand staff only where it scores a brace for the pair. Where it
+does not, the piano arrives as two single staffs. On Grechaninov's op. 20
+no. 4 (C. G. Röder plate 1966), page 2 detects as `v, g, v, g, vvv` and
+page 5 as `vg, vg, vg, v, vv`; on Varlamov's «Скажи, зачем?» (Gresser,
+plate 189), page 3 detects as `vvv, v, g` (v a single staff, g a grand
+staff, commas between the systems homr detected). homr's regrouping by the
+grand-staff flags then cannot match the systems (page 2), or regroups by one
+staff (page 3), or keeps them as detected (page 5); each time a piano staff
+became the first voice, and Ilya, which keeps the first part, read the piano
+as sung: 38 notes too many on the Grechaninov and 22 on the Varlamov.
+
+Now `joinUnbracedPianos` runs before the regrouping. On a page where a
+single staff stands directly above a grand staff (a voice over its piano),
+a system of two or more single staffs and no grand staff has its bottom two
+merged by `mergeStaffs` into one grand staff, as homr merges a pair it finds
+a brace for. A musician reads the bottom two staffs of such a system as its
+piano, because the page's other systems show the piano there. A system with
+a grand staff directly below it is left alone, because its single staffs are
+voices over that piano (a duet). A page with no single staff directly above
+a grand staff, a system that holds a grand staff, and model 396 are read as
+before.
 

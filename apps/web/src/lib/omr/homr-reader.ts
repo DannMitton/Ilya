@@ -2,8 +2,8 @@
  * The score reader for a scan: homr, run in the browser by homr-web.
  *
  * homr-web (https://github.com/jymen/homr-web, AGPL-3.0) is a dependency of
- * this app in a changed copy, 0.2.0-ilya.4, installed from the packed file
- * `third_party/homr-web/homr-web-0.2.0-ilya.4.tgz`. The copy's source is in
+ * this app in a changed copy, 0.2.0-ilya.5, installed from the packed file
+ * `third_party/homr-web/homr-web-0.2.0-ilya.5.tgz`. The copy's source is in
  * `third_party/homr-web/`, because the licence asks that a changed copy carry
  * its source; `CHANGES-ilya.md` there lists every change. The reader asks it
  * for homr's model 465 (`model: '465'`), which reads with that model and with

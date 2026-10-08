@@ -200,6 +200,25 @@ describe('joinPages on small hand-built pages', () => {
 		expect(out.match(/<\/measure>/g)).toHaveLength(3);
 	});
 
+	it('leaves out a bar after the last double bar line that holds no note and no rest, and keeps every other bar', () => {
+		const attrs = '<attributes><divisions>2</divisions><time><beats>2</beats><beat-type>4</beat-type></time></attributes>';
+		const end = '<barline location="right"><bar-style>heavy-heavy</bar-style></barline>';
+		const blank = '<measure number="4"><barline location="right"><ending number="1" type="stop" /></barline></measure>';
+		const rest = '<note><rest/><duration>4</duration><type>half</type></note>';
+		const song = (last: string, tail: string) =>
+			page(`<part id="P1"><measure number="1">${attrs}${note('C')}${note('D')}</measure><measure number="2" /><measure number="3">${last}</measure>${tail}</part>`, LIST);
+		// Varlamov, page 3: the voice's staff runs on blank after its final double bar.
+		const out = joinPages([song(`${note('E')}${note('F')}${end}`, blank)]);
+		expect(out.match(/<measure /g)).toHaveLength(3);
+		expect(out).toContain('<bar-style>heavy-heavy</bar-style>');
+		// A bar of rest after the double bar is a bar: it stays.
+		expect(joinPages([song(`${note('E')}${note('F')}${end}`, `<measure number="4">${rest}</measure>`)]).match(/<measure /g)).toHaveLength(4);
+		// With no double bar before it, a blank last bar stays as homr wrote it.
+		expect(joinPages([song(`${note('E')}${note('F')}`, blank)]).match(/<measure /g)).toHaveLength(4);
+		// A blank bar inside the song (bar 2) is never touched.
+		expect(out).toContain('<measure number="2"></measure>');
+	});
+
 	it('refuses a page with no part', () => {
 		expect(() => joinPages(['<score-partwise version="4.0"><part-list/></score-partwise>'])).toThrow(JoinPagesError);
 		expect(() => joinPages([])).toThrow(JoinPagesError);

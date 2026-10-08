@@ -1,7 +1,7 @@
 # homr-web
 
-> **This is a modified copy, 0.2.0-ilya.4, made by the Ilya project on
-> 2026-10-05 and 2026-10-06; it is not a release of homr-web by its author.** It adds the
+> **This is a modified copy, 0.2.0-ilya.5, made by the Ilya project on
+> 2026-10-05, 2026-10-06, and 2026-10-08; it is not a release of homr-web by its author.** It adds the
 > option `createRecognizer({ model: "465" })`, which reads pages with homr's
 > newer transformer model 465 and with the code of homr's main branch at
 > commit 560ca5c where that code changes the notes. Without the option it

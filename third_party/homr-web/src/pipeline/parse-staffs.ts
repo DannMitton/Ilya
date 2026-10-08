@@ -1,4 +1,4 @@
-// Changed by the Ilya project, 2026-10-05: drops lower2 as well as lower on a single staff, as homr main does (staff_parsing_tromr.py, 560ca5c), the same result for model 396; maps note positions back to the input image with model 465. 0.2.0-ilya.3 (2026-10-06): the number of voices is the largest system's. 0.2.0-ilya.4 (2026-10-06): a system that does not print the top staff gives that voice rests, and its grand staff stays with the piano.
+// Changed by the Ilya project, 2026-10-05: drops lower2 as well as lower on a single staff, as homr main does (staff_parsing_tromr.py, 560ca5c), the same result for model 396; maps note positions back to the input image with model 465. 0.2.0-ilya.3 (2026-10-06): the number of voices is the largest system's. 0.2.0-ilya.4 (2026-10-06): a system that does not print the top staff gives that voice rests, and its grand staff stays with the piano. 0.2.0-ilya.5 (2026-10-08): a piano whose brace was not found is joined into its grand staff.
 /**
  * staff_parsing.py's parse_staffs and parse_staff_image, with
  * staff_parsing_tromr.py's predict_best between them: canvas, encoder,
@@ -11,8 +11,13 @@ import { type Ratio, compareRatio, ratio } from "../transformer/duration.js";
 import { EMPTY, isLowerPosition } from "../transformer/vocabulary.js";
 import type { OpenCv } from "../cv/opencv.js";
 import type { GrayImage } from "../image/plane.js";
-import type { StaffCanvas } from "../model/pipeline.js";
-import type { MultiStaff } from "../model/staff.js";
+import { DetectionError, type StaffCanvas } from "../model/pipeline.js";
+import {
+  createMultiStaff,
+  type MultiStaff,
+  mergeStaffs,
+  type Staff,
+} from "../model/staff.js";
 import type { ModelSession } from "../models/session.js";
 import {
   type DecodeOptions,
@@ -161,6 +166,66 @@ export function systemOffsets(
   });
 }
 
+/**
+ * Added by the Ilya project (0.2.0-ilya.5). The piano of a system whose brace
+ * homr did not find, joined into the grand staff it is.
+ *
+ * In a song the piano is printed on two staffs joined by a brace, below the
+ * voice. homr makes the two one grand staff only where it scores the brace;
+ * where it does not, the piano arrives as two single staffs at the bottom of
+ * a system of single staffs (Grechaninov op. 20 no. 4, the last systems of
+ * pages 2 and 5: voice, piano, piano; Varlamov, «Скажи, зачем?», the first
+ * system of page 3). The page then holds systems of different shapes, homr's
+ * regrouping by the grand-staff flags cannot match them, and a piano staff
+ * becomes the voice.
+ *
+ * A musician reads the bottom two staffs of such a system as its piano,
+ * because the page's other systems show the piano there. So, with model 465:
+ * on a page where a single staff stands directly above a grand staff (a
+ * voice over its piano), a system of two or more single staffs and no grand
+ * staff has its bottom two merged into one grand staff, as homr merges a
+ * pair it finds a brace for. A system with a grand staff directly below it
+ * is left alone: its single staffs are voices over that piano (a duet).
+ */
+export function joinUnbracedPianos(
+  multiStaffs: readonly MultiStaff[]
+): readonly MultiStaff[] {
+  if (!followsHomrMain()) {
+    return multiStaffs;
+  }
+  const flat = multiStaffs
+    .flatMap((system) => system.staffs)
+    .sort((a, b) => a.minY - b.minY);
+  const songLayout = flat.some(
+    (staff, i) => !staff.isGrandstaff && flat[i + 1]?.isGrandstaff === true
+  );
+  if (!songLayout) {
+    return multiStaffs;
+  }
+  return multiStaffs.map((system) => {
+    const { staffs } = system;
+    if (staffs.length < 2 || staffs.some((staff) => staff.isGrandstaff)) {
+      return system;
+    }
+    const last = staffs.at(-1);
+    const next = flat.find((staff) => last !== undefined && staff.minY > last.maxY);
+    const upper = staffs.at(-2);
+    if (next?.isGrandstaff === true || upper === undefined || last === undefined) {
+      return system;
+    }
+    let piano: Staff;
+    try {
+      piano = mergeStaffs(upper, last);
+    } catch (error) {
+      if (error instanceof DetectionError) {
+        return system;
+      }
+      throw error;
+    }
+    return createMultiStaff([...staffs.slice(0, -2), piano], system.connections);
+  });
+}
+
 const WHOLE_BAR_RESTS: readonly (readonly [Ratio, string])[] = [
   [ratio(1), "rest_1"],
   [ratio(3, 4), "rest_2."],
@@ -220,7 +285,12 @@ export async function parseStaffs(
   page: GrayImage,
   options: ParseStaffsOptions = {}
 ): Promise<EncodedSymbol[][]> {
-  const systems = ensureSameNumberOfStaffs(multiStaffs, page.height);
+  // Changed by the Ilya project (0.2.0-ilya.5): a piano whose brace was not
+  // found is joined into its grand staff first (joinUnbracedPianos).
+  const systems = ensureSameNumberOfStaffs(
+    joinUnbracedPianos(multiStaffs),
+    page.height
+  );
   const regions = staffRegions(systems);
   // Changed by the Ilya project (0.2.0-ilya.3): the largest system sets the
   // number of voices, because a page whose systems are kept as detected
