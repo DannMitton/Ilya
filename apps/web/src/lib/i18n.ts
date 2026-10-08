@@ -1710,6 +1710,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.figure.halfMass':    { en: 'half the singing',             fr: 'la moitié du temps chanté' },
 	'insights.figure.centre':      { en: 'centre',                       fr: 'centre' },
 	'insights.figure.cycleDose':   { en: 'Cycle dose: about {cycles} (number of fold collisions in this piece)', fr: 'Dose de cycles\u00a0: environ {cycles} (nombre de collisions des cordes vocales dans cette pièce)' },
+	// The key under the tessituragram (QUEUE row 42), RATIFIED in both languages
+	// by Dann 2026-10-07 22:48. Each names a mark the figure draws; none prints
+	// when the figure does not draw its mark.
+	'insights.figure.key.tessitura': { en: 'tessitura',                 fr: 'tessiture' },
+	'insights.figure.key.passaggi':  { en: 'your passaggi',             fr: 'vos *passaggi*' },
+	'insights.figure.key.ledger':    { en: 'ledger line',               fr: 'ligne supplémentaire' },
 	'insights.figure.captionQuavers': { en: 'Phonation per pitch, in quavers', fr: 'Phonation par hauteur, en croches' },
 	// Unrendered since r2 (the focus segment is gone), kept as ratified.
 	'insights.figure.captionFocus': { en: 'dark: sung on {vowels}',      fr: 'en foncé\u00a0: chanté sur {vowels}' },
