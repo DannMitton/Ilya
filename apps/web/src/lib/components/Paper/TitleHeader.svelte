@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
+	import type { LegendItem } from '$lib/provenance';
+	import type { PreparedSmuflFont } from '@ilya/score-parser';
+	import LegendItems from './LegendItems.svelte';
 
 	interface Props {
 		title: string;
@@ -42,9 +45,21 @@
 		 * 2026-08-07). Absent on every page as printed, so no other page moves.
 		 */
 		note?: string;
+		/**
+		 * The Markup legend (the stems key and, when present, the withheld-syllable
+		 * sigla), drawn on the subtitle's line, right-aligned, at the subtitle's
+		 * size and in small caps (walk finding 2026-10-09, `OPEN.md` "N.176,
+		 * AMENDED 2026-10-09 01:27"). Absent on every other page, so no other
+		 * header moves. Where the subtitle and the legend do not fit on one line
+		 * the legend's items stack into short lines at the right, still above
+		 * the rule.
+		 */
+		legendItems?: LegendItem[];
+		/** The page's notation font, so the stems key draws with the same heads the stave does (N.176). */
+		notationFont?: { prepared: PreparedSmuflFont; family: string } | null;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined, legendItems = [], notationFont = null }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -67,6 +82,28 @@
 		if (translator.trim()) parts.push(`${translator.trim().toUpperCase()} (${t('meta.transl', language)})`);
 		return parts.join(' | ');
 	});
+
+	/**
+	 * ONE LINE OR STACKED. The legend sits beside the subtitle when the subtitle's
+	 * natural width, a gap, and the legend's one-line width all fit in the row,
+	 * and stacks otherwise. Both widths are MEASURED from hidden probes that
+	 * carry the live text and type, never estimated from the string, because the
+	 * subtitle carries the singer's own voice name and the legend is bilingual.
+	 */
+	const LEGEND_GAP = 24;
+	let rowWidth = $state(0);
+	let subtitleWidth = $state(0);
+	let legendWidth = $state(0);
+	let stackedWidth = $state(0);
+	const fitsOneLine = $derived(subtitleWidth + LEGEND_GAP + legendWidth <= rowWidth);
+	/* DESK DEFAULT, outside the ruling: where the subtitle does not fit WHOLE beside even
+	   the stacked legend (the French line, or a long voice name), the legend takes its own
+	   row under the subtitle, right-aligned and still above the rule, rather than the
+	   subtitle being cut with an ellipsis. The subtitle carries the voice's name, and a
+	   clipped name is information the old footer placement never cost. It is the same height
+	   as stacking (two lines). */
+	const stacked = $derived(rowWidth > 0 && !fitsOneLine && subtitleWidth + LEGEND_GAP + stackedWidth <= rowWidth);
+	const below = $derived(rowWidth > 0 && !fitsOneLine && !stacked);
 
 	/** Measured height of this header, including all content and the rule. */
 	let measuredHeight = $state(0);
@@ -95,7 +132,21 @@
 
 	<div class="metadata-block" style="color: {labelInk}">
 		{#if composerLine || attributionLine}
-			{#if composerLine}
+			{#if composerLine && legendItems.length > 0}
+				<div class="subtitle-row" class:below bind:clientWidth={rowWidth}>
+					<div class="metadata-line">{composerLine}</div>
+					<div class="header-legend" class:stacked class:below>
+						<LegendItems items={legendItems} {notationFont} />
+					</div>
+					<span class="subtitle-probe" aria-hidden="true" bind:clientWidth={subtitleWidth}>{composerLine}</span>
+					<div class="header-legend legend-probe" aria-hidden="true" bind:clientWidth={legendWidth}>
+						<LegendItems items={legendItems} {notationFont} />
+					</div>
+					<div class="header-legend legend-probe stacked-probe" aria-hidden="true" bind:clientWidth={stackedWidth}>
+						<LegendItems items={legendItems} {notationFont} />
+					</div>
+				</div>
+			{:else if composerLine}
 				<div class="metadata-line">{composerLine}</div>
 			{/if}
 			{#if attributionLine}
@@ -188,6 +239,89 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		max-width: 100%;
+	}
+
+	/* ── The Markup legend on the subtitle's line (walk finding 2026-10-09) ──
+	   The subtitle keeps its own box and ellipsis; the legend takes what it
+	   needs at the right, at the subtitle's 14px and in small caps. Stacked, the
+	   items are short lines at the right, and a long entry (the withheld-syllable
+	   sentence) wraps inside 58 % of the row rather than pushing the subtitle out. */
+
+	.subtitle-row {
+		position: relative;
+		display: flex;
+		align-items: flex-start;
+		gap: 24px;
+	}
+
+	.subtitle-row .metadata-line {
+		flex: 1 1 0;
+		min-width: 0;
+	}
+
+	.header-legend {
+		--legend-font-size: 14px;
+		flex: none;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 4px 12px;
+		line-height: 1.6;
+	}
+
+	.header-legend:not(.stacked):not(.below) {
+		white-space: nowrap;
+	}
+
+	.header-legend.stacked {
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 0;
+		max-width: 58%;
+		text-align: right;
+	}
+
+	.subtitle-row.below {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0;
+	}
+
+	.subtitle-row.below .metadata-line {
+		flex: none;
+	}
+
+	.header-legend.below {
+		align-self: flex-end;
+		flex-wrap: wrap;
+		max-width: 100%;
+	}
+
+	/* Measuring only: invisible, out of flow, same type as what it stands for. */
+	.subtitle-probe {
+		position: absolute;
+		visibility: hidden;
+		white-space: nowrap;
+		pointer-events: none;
+		font-family: var(--font-sans);
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: 1.5px;
+		font-variant-caps: all-small-caps;
+	}
+
+	.legend-probe {
+		position: absolute;
+		visibility: hidden;
+		white-space: nowrap;
+		pointer-events: none;
+	}
+
+	.stacked-probe {
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 0;
 	}
 
 	/* ── N.94: the chosen key, in the document's label ink ─── */

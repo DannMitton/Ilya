@@ -957,6 +957,8 @@
 						opus=""
 						{language}
 						note={keyRuler?.header(language)}
+						legendItems={markupLegend}
+						{notationFont}
 						onheightchange={handleHeaderHeight}
 						versionAccent="#9585A2"
 						markAccent="#9585A2"
@@ -973,7 +975,7 @@
 						{@html page}
 					</div>
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={i === 0 ? markupLegend : []} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" {notationFont} onheightchange={i === 0 ? handleFooterHeight : undefined} />
+				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={[]} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" {notationFont} onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
 		{#each notesSheets as sheet, j (j)}
@@ -1038,6 +1040,8 @@
 		translator=""
 		opus=""
 		{language}
+		legendItems={markupLegend}
+		{notationFont}
 		onheightchange={handleHeaderHeight}
 		versionAccent="#9585A2"
 		markAccent="#9585A2"
@@ -1073,10 +1077,10 @@
 		{/if}
 	</div>
 
-	<!-- Footer layer: the full PageFooter, pinned to the bottom margin.
-	     No provenance legend items yet; the legend row simply stays empty
-	     until the score pane brings provenance to this surface. -->
-	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={markupLegend} hairlineAccent="#9585A2" {notationFont} onheightchange={handleFooterHeight} />
+	<!-- Footer layer: the full PageFooter, pinned to the bottom margin. The
+	     Markup legend is drawn by the header, on the subtitle's line (walk
+	     finding 2026-10-09), so the footer's legend row stays empty. -->
+	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={[]} hairlineAccent="#9585A2" {notationFont} onheightchange={handleFooterHeight} />
 </article>
 </div>
 {/if}
