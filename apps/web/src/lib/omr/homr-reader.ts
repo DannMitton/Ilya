@@ -35,6 +35,7 @@
  */
 import type { Progress, Recognizer } from 'homr-web';
 import { joinPages } from './join-pages';
+import { lookForTupletNumber, type GreyPage, type Looked } from './tuplet-number';
 import { OMR_MODEL } from './stamp';
 import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
 
@@ -85,6 +86,8 @@ export interface ReaderDeps {
 	choose(): Promise<PathChoice>;
 	/** Makes a recognizer that prefers `prefer`. */
 	create(prefer: PreferredBackend): Promise<Recognizer>;
+	/** Reads a region of a page image, to look for a printed 3 (`tuplet-number.ts`). Absent: the join reads homr's output alone. */
+	decode?: DecodeRegion;
 }
 
 /** A recognizer, with why it is not on WebGPU if it was not asked to be. */
@@ -107,10 +110,90 @@ interface Held {
  * page whose answer does not say how many staves it found is kept, and so is
  * every page of a song in which no page has two staves or more.
  */
-export function withoutCovers(xmls: readonly string[], staves: readonly (number | null)[]): string[] {
+export function withoutCovers<T>(pages: readonly T[], staves: readonly (number | null)[]): T[] {
 	const first = staves.findIndex((n) => n !== null && n >= 2);
-	if (first <= 0) return [...xmls];
-	return xmls.filter((_, i) => i >= first || staves[i] !== 1);
+	if (first <= 0) return [...pages];
+	return pages.filter((_, i) => i >= first || staves[i] !== 1);
+}
+
+/** A rectangle of a page image, in its pixels. */
+export interface Region {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
+
+/** Reads a rectangle of a page image as greyscale (0 black, 255 white), or null where it cannot. */
+export type DecodeRegion = (image: Blob, region: Region) => Promise<GreyPage | null>;
+
+/** In the browser: the region drawn on a canvas, its red channel (the pages are greyscale). */
+export const decodeRegionInBrowser: DecodeRegion = async (image, region) => {
+	try {
+		const bitmap = await createImageBitmap(image);
+		const x = Math.max(0, Math.floor(region.x));
+		const y = Math.max(0, Math.floor(region.y));
+		const width = Math.min(bitmap.width - x, Math.ceil(region.width));
+		const height = Math.min(bitmap.height - y, Math.ceil(region.height));
+		if (width <= 0 || height <= 0) return null;
+		const canvas = new OffscreenCanvas(width, height);
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return null;
+		ctx.drawImage(bitmap, x, y, width, height, 0, 0, width, height);
+		bitmap.close();
+		const rgba = ctx.getImageData(0, 0, width, height).data;
+		const data = new Uint8Array(width * height);
+		for (let i = 0; i < data.length; i++) data[i] = rgba[i * 4];
+		return { width, height, data, x, y } as GreyPage & { x: number; y: number };
+	} catch {
+		return null;
+	}
+};
+
+/** How far around a group of notes the page is read: room for seven staff spaces and the staff-space columns. */
+const LOOK_MARGIN = 640;
+
+/**
+ * Joins the pages, looking at the page images for a printed 3 wherever the
+ * join asks (`joinPages`'s `look`, from `triplets.ts`): a first join collects
+ * the questions, the regions they need are read, and the join runs again with
+ * the answers (at most three times, for questions a changed bar raises).
+ */
+export async function joinLookingAtPages(
+	xmls: readonly string[],
+	images: readonly Blob[],
+	decode: DecodeRegion,
+): Promise<{ musicXml: string; looked: number; found: number }> {
+	const key = (page: number, notes: readonly { x: number; y: number }[]) => `${page}:${notes.map((n) => `${n.x},${n.y}`).join(';')}`;
+	const answers = new Map<string, Looked | null>();
+	let musicXml = '';
+	for (let round = 0; round < 3; round++) {
+		const asked = new Map<string, { page: number; notes: { x: number; y: number }[] }>();
+		musicXml = joinPages(xmls, (page, notes) => {
+			const k = key(page, notes);
+			if (answers.has(k)) return answers.get(k) ?? null;
+			asked.set(k, { page, notes: [...notes] });
+			return null;
+		});
+		if (asked.size === 0) break;
+		for (const [k, q] of asked) {
+			const xs = q.notes.map((n) => n.x);
+			const ys = q.notes.map((n) => n.y);
+			const region = {
+				x: Math.min(...xs) - LOOK_MARGIN,
+				y: Math.min(...ys) - LOOK_MARGIN,
+				width: Math.max(...xs) - Math.min(...xs) + 2 * LOOK_MARGIN,
+				height: Math.max(...ys) - Math.min(...ys) + 2 * LOOK_MARGIN,
+			};
+			const image = images[q.page];
+			const part = image ? ((await decode(image, region)) as (GreyPage & { x?: number; y?: number }) | null) : null;
+			const dx = part?.x ?? Math.max(0, Math.floor(region.x));
+			const dy = part?.y ?? Math.max(0, Math.floor(region.y));
+			answers.set(k, part ? lookForTupletNumber(part, q.notes.map((n) => ({ x: n.x - dx, y: n.y - dy }))) : null);
+		}
+	}
+	const all = [...answers.values()].filter((a): a is Looked => a !== null);
+	return { musicXml, looked: all.length, found: all.filter((a) => a.number === 3).length };
 }
 
 /** What one pass over the pages found. */
@@ -118,6 +201,8 @@ interface Pass {
 	xmls: string[];
 	/** For each page in `xmls`, the staves homr found on it, or null where its answer did not say. */
 	staves: (number | null)[];
+	/** For each page in `xmls`, the index of its image. */
+	image: number[];
 	/** The error that stopped the pass, if one did. `not_music` never stops it. */
 	failure: { error: string; log: string } | null;
 }
@@ -174,6 +259,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 	): Promise<Pass> {
 		const xmls: string[] = [];
 		const staves: (number | null)[] = [];
+		const image: number[] = [];
 		for (let i = 0; i < images.length; i++) {
 			const result = await rec.recognizePage(images[i], {
 				ocr: false,
@@ -182,6 +268,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 			if (result.ok) {
 				xmls.push(result.musicXml);
 				staves.push(Array.isArray(result.staves) ? result.staves.length : null);
+				image.push(i);
 				continue;
 			}
 			if (result.error === 'not_music') continue;
@@ -190,9 +277,9 @@ export function makeReader(deps: ReaderDeps): Reader {
 				// `worker_lost` from then on, so it is disposed and the next scan makes another.
 				void dispose(mine, rec);
 			}
-			return { xmls, staves, failure: { error: result.error, log: result.log } };
+			return { xmls, staves, image, failure: { error: result.error, log: result.log } };
 		}
-		return { xmls, staves, failure: null };
+		return { xmls, staves, image, failure: null };
 	}
 
 	async function read(images: readonly Blob[], onProgress?: (p: OmrProgress) => void): Promise<OmrReadResult> {
@@ -240,10 +327,17 @@ export function makeReader(deps: ReaderDeps): Reader {
 		if (found.xmls.length === 0) {
 			return { ok: false, error: 'not_music', log: `homr found no music on any page${note ? ` (${note})` : ''}` };
 		}
-		const song = withoutCovers(found.xmls, found.staves);
+		const song = withoutCovers(
+			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]] })),
+			found.staves,
+		);
 		let musicXml: string;
 		try {
-			musicXml = joinPages(song);
+			if (deps.decode) {
+				const joined = await joinLookingAtPages(song.map((p) => p.xml), song.map((p) => p.image), deps.decode);
+				musicXml = joined.musicXml;
+				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} groups of notes, found a 3 over ${joined.found}`);
+			} else musicXml = joinPages(song.map((p) => p.xml));
 		} catch (err) {
 			return { ok: false, error: 'join_failed', log: message(err) };
 		}
@@ -269,6 +363,7 @@ const reader = makeReader({
 		import('homr-web').then(({ createRecognizer }) =>
 			createRecognizer({ baseUrl: OMR_MODELS_BASE, model: OMR_MODEL, prefer, wasmPaths: ORT_WASM_BASE }),
 		),
+	decode: typeof OffscreenCanvas === 'undefined' ? undefined : decodeRegionInBrowser,
 });
 
 /** True once a recognizer has been made in this session. */

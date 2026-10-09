@@ -20,7 +20,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { MusicXmlScoreParser } from '@ilya/score-parser';
 import { parseXml, type MiniEl } from '$lib/score/ingestion/mini-dom';
-import { joinPages, JoinPagesError } from './join-pages';
+import { joinPages, JoinPagesError, placeOf } from './join-pages';
 
 const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8');
 const PAGES = ['tch-1.musicxml', 'tch-2.musicxml', 'tch-3.musicxml'].map(fixture);
@@ -217,6 +217,21 @@ describe('joinPages on small hand-built pages', () => {
 		expect(joinPages([song(`${note('E')}${note('F')}`, blank)]).match(/<measure /g)).toHaveLength(4);
 		// A blank bar inside the song (bar 2) is never touched.
 		expect(out).toContain('<measure number="2"></measure>');
+	});
+
+	it('asks the page about a bar too long, with the page and the places homr gave its notes', () => {
+		const attrs = '<attributes><divisions>2</divisions><time><beats>2</beats><beat-type>4</beat-type></time></attributes>';
+		const at = (step: string, x: number) => note(step, `<!-- imgpos: ${x}, 70 -->`).replace('<duration>2</duration>', '<duration>1</duration>').replace('quarter', 'eighth');
+		const long = `<part id="P1"><measure number="1">${attrs}${at('C', 10)}${at('D', 20)}${at('E', 30)}${note('F')}</measure></part>`;
+		const asked: { page: number; xs: number[] }[] = [];
+		const out = joinPages([page('<part id="P1"><measure number="1">' + attrs + note('C') + note('D') + '</measure></part>', LIST), page(long, LIST)], (p, notes) => {
+			asked.push({ page: p, xs: notes.map((n) => n.x) });
+			return { number: 3, candidates: 1 };
+		});
+		expect(asked).toEqual([{ page: 1, xs: [10, 20, 30] }]);
+		expect(out.match(/<time-modification>/g)).toHaveLength(3);
+		expect(placeOf('<note><!-- imgpos: 12, 34 --></note>')).toEqual({ x: 12, y: 34 });
+		expect(placeOf('<note></note>')).toBeNull();
 	});
 
 	it('refuses a page with no part', () => {

@@ -95,6 +95,32 @@ describe('completeTriplets', () => {
 		expect(completeTriplets(late, C44, 6, false).rule).toBeNull();
 	});
 
+	it('makes the notes the page prints a 3 over a triplet, in a bar with grace notes (Gurilyov, «Раскаяние», bar 25)', () => {
+		// divisions 4. A quarter, then sixteen sixteenths, two grace notes before the last three: 5/4 as homr wrote it.
+		// The page prints a 3 over the last twelve, in four groups.
+		const g = `<note><grace /><pitch><step>F</step><octave>4</octave></pitch><type>16th</type><voice>1</voice><staff>1</staff></note>`;
+		const s16 = (i: number) => n('16th', 1, `<!-- imgpos: ${100 + 10 * i}, 50 -->`);
+		const bar = [n('quarter', 4), ...[0, 1, 2, 3].map(s16), ...[4, 5, 6, 7, 8, 9, 10, 11, 12].map(s16), g, g, ...[13, 14, 15].map(s16)];
+		const printed = new Set([4, 7, 10, 13]);
+		const look = (notes: readonly string[]) => ({ number: printed.has((Number(/imgpos: (\d+)/.exec(notes[0])?.[1]) - 100) / 10) ? 3 : null, candidates: 1 });
+		const out = completeTriplets(bar, C44, 4, false, look);
+		expect(out.rule).toBe('page');
+		const marked = out.children.filter((t) => /<note>/.test(t) && !/<grace/.test(t)).map((t) => t.includes(T));
+		expect(marked).toEqual([false, false, false, false, false, ...Array(12).fill(true)]);
+		// Without the page, the bar is left as homr wrote it, as before.
+		expect(completeTriplets(bar, C44, 4, false).rule).toBeNull();
+	});
+
+	it('rule 3 stands down where the page shows no mark the size of a numeral (Gurilyov, «Раскаяние», bar 7)', () => {
+		// divisions 2. A half, an eighth rest, two eighths, and a quarter where the page prints an eighth.
+		const bar = [n('half', 4), r('eighth', 1), n('eighth', 1), n('eighth', 1), n('quarter', 2)];
+		expect(completeTriplets(bar, C44, 2, false).rule).toBe(3);
+		expect(completeTriplets(bar, C44, 2, false, () => ({ number: null, candidates: 0 })).rule).toBeNull();
+		// Where a mark stands there that is not read as a 3 (Sunless 5, bar 9), or the page cannot be looked at, rule 3 acts as before.
+		expect(completeTriplets(bar, C44, 2, false, () => ({ number: null, candidates: 3 })).rule).toBe(3);
+		expect(completeTriplets(bar, C44, 2, false, () => null).rule).toBe(3);
+	});
+
 	it('reads a metre in the form the join keeps it', () => {
 		expect(readMetre('<beats>3</beats><beat-type>8</beat-type>')).toEqual({ beats: 3, beatType: 8 });
 		expect(readMetre(null)).toBeNull();

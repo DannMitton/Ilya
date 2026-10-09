@@ -7,7 +7,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { Recognizer } from 'homr-web';
-import { makeReader, withoutCovers, type ReaderDeps } from './homr-reader';
+import { joinLookingAtPages, makeReader, withoutCovers, type ReaderDeps } from './homr-reader';
+import { joinPages } from './join-pages';
 import type { PathChoice, PreferredBackend } from './path-choice';
 
 const PAGE_XML = readFileSync(new URL('./fixtures/tch-1.musicxml', import.meta.url), 'utf8');
@@ -248,5 +249,20 @@ describe('a cover in front of the song', () => {
 			expect(result.pages).toBe(2);
 			expect(result.musicXml).not.toContain('data-cover');
 		}
+	});
+});
+
+describe('joining while looking at the pages', () => {
+	it('reads the region of the page around each group the join asks about, and joins as before where it cannot be read', async () => {
+		const attrs = '<attributes><divisions>2</divisions><time><beats>2</beats><beat-type>4</beat-type></time></attributes>';
+		const e = (x: number) => `<note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type><voice>1</voice><staff>1</staff><!-- imgpos: ${x}, 700 --></note>`;
+		const q = '<note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>';
+		const xml = `<?xml version="1.0"?><score-partwise version="4.0"><part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list><part id="P1"><measure number="1">${attrs}${q}${q}</measure><measure number="2">${e(1000)}${e(1100)}${e(1200)}${q}</measure></part></score-partwise>`;
+		const regions: { x: number; y: number; width: number; height: number }[] = [];
+		const image = new Blob(['png'], { type: 'image/png' });
+		const out = await joinLookingAtPages([xml], [image], async (_img, region) => (regions.push(region), null));
+		expect(regions).toEqual([{ x: 360, y: 60, width: 1480, height: 1280 }]);
+		expect(out.looked).toBe(0);
+		expect(out.musicXml).toBe(joinPages([xml]));
 	});
 });

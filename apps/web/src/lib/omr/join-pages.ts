@@ -49,7 +49,7 @@
  * writes. It does not read CDATA sections.
  */
 
-import { completeTriplets, readMetre } from './triplets';
+import { completeTriplets, readMetre, type PageLook } from './triplets';
 
 /** One element found in a fragment of XML, with its place in that fragment. */
 interface Span {
@@ -186,7 +186,7 @@ interface InForce {
  * measure of a later page) no restatement of what is already in force.
  * Updates `state` with what the measure states.
  */
-function rewriteMeasure(measure: string, number: number, state: InForce, firstOfPage: boolean, dropRestatements: boolean): string {
+function rewriteMeasure(measure: string, number: number, state: InForce, firstOfPage: boolean, dropRestatements: boolean, look?: PageLook): string {
 	const span = childElements(measure)[0];
 	const body = inner(measure, span);
 	const kids = childElements(body);
@@ -238,7 +238,7 @@ function rewriteMeasure(measure: string, number: number, state: InForce, firstOf
 	// from the page's bar lengths, so the metre it states may not be the one printed.
 	const printsMetre = kids.some((k, idx) => k.name === 'attributes' && idx !== writersTime && /<time[\s>]/.test(inner(body, k)));
 	const statesMetre = printsMetre || children.some((t) => /^<attributes>[\s\S]*<time[\s>]/.test(t));
-	const triplets = completeTriplets(children, readMetre(state.time), state.divisions, statesMetre);
+	const triplets = completeTriplets(children, readMetre(state.time), state.divisions, statesMetre, look);
 	if (triplets.divisions !== null) state.restoreDivisions = state.divisions;
 	return `${open}${triplets.children.join('')}</measure>`;
 }
@@ -329,12 +329,27 @@ function dropBarsAfterTheEnd(measures: string[], raw: readonly string[]): void {
 	measures.length = end;
 }
 
+/** Where homr placed a note on its page: its `<!-- imgpos: x, y -->` comment. */
+export function placeOf(note: string): { x: number; y: number } | null {
+	const m = /imgpos:\s*(\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?)/.exec(note);
+	return m ? { x: Number(m[1]), y: Number(m[2]) } : null;
+}
+
+/**
+ * What the page shows over notes at these places on page `page` (0-based, in
+ * the order of `pages`): see `PageLook` in `triplets.ts`. Null where it cannot
+ * be looked at.
+ */
+export type LookAtPage = (page: number, notes: readonly { x: number; y: number }[]) => ReturnType<PageLook>;
+
 /**
  * Joins homr-web's MusicXML for each page, in page order, into one
  * MusicXML string holding the voice part only. Throws `JoinPagesError` when
- * a page has no part to take or is not well formed.
+ * a page has no part to take or is not well formed. With `look`, a bar that
+ * reads longer than its metre is checked against the page for a printed 3
+ * (`triplets.ts`); without it the join reads homr's output alone.
  */
-export function joinPages(pages: readonly string[]): string {
+export function joinPages(pages: readonly string[], look?: LookAtPage): string {
 	if (pages.length === 0) throw new JoinPagesError('no pages');
 	const parts = pages.map((p, i) => firstPart(p, i + 1));
 	const state: InForce = { key: null, time: null, clef: null, divisions: null, restoreDivisions: null };
@@ -342,7 +357,13 @@ export function joinPages(pages: readonly string[]): string {
 	parts.forEach((part, pageIndex) => {
 		part.measures.forEach((m, mIndex) => {
 			const dropRestatements = pageIndex > 0 && mIndex === 0;
-			measures.push(rewriteMeasure(m, measures.length + 1, state, mIndex === 0, dropRestatements));
+			const onPage: PageLook | undefined = look
+				? (notes) => {
+						const places = notes.map(placeOf);
+						return places.every((p) => p !== null) ? look(pageIndex, places as { x: number; y: number }[]) : null;
+					}
+				: undefined;
+			measures.push(rewriteMeasure(m, measures.length + 1, state, mIndex === 0, dropRestatements, onPage));
 		});
 	});
 	dropBarsAfterTheEnd(measures, parts.flatMap((part) => part.measures));

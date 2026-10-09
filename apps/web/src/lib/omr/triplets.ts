@@ -45,9 +45,22 @@
  *    *Sunless* 2, bar 9, where homr marked two of three quarter-note
  *    triplets and none of an eighth-note triplet before them.)
  *
- * Nothing else is changed: a bar with a chord, a grace note, a second voice
- * (`<backup>` or `<forward>`), or a tuplet other than 3 in the time of 2 is
- * left as homr wrote it, and so is every bar that adds up already.
+ * Before the three rules, the page (QUEUE row 54, 2026-10-08): where the
+ * caller can look at the page image (`look`, `tuplet-number.ts`), a bar that
+ * reads longer than its metre has each run of three looked at, and a run with
+ * a printed 3 over it is read as a triplet, unless that would leave the bar
+ * shorter than its metre. This acts in a bar with grace notes too, because the
+ * 3 itself is the evidence (Gurilyov, «Раскаяние», bar 25). And rule 3 stands
+ * down where the page was looked at over every run it would change and shows
+ * no mark there the size of a numeral (Gurilyov, bar 7, where homr read an
+ * eighth as a quarter and rule 3 made a triplet the page does not print). The
+ * reason: the goal is the rhythm the composer printed, not a bar that adds up
+ * (Dann, 2026-10-08 15:50, `OPEN.md`, THE CORRECTIONS REDESIGN, item 5).
+ *
+ * Nothing else is changed: a bar with a chord, a second voice (`<backup>` or
+ * `<forward>`), or a tuplet other than 3 in the time of 2 is left as homr
+ * wrote it, a bar with a grace note is left to the page alone, and every bar
+ * that adds up already is left as it is.
  *
  * Each note made a triplet gains homr's own form,
  * `<time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>`,
@@ -111,8 +124,8 @@ export function readMetre(time: string | null): Metre | null {
 export interface TripletResult {
 	/** The children, changed or not. */
 	children: string[];
-	/** Which rule changed the bar, or null when it was left alone. */
-	rule: 1 | 2 | 3 | null;
+	/** Which rule changed the bar (`page`: a 3 printed over the notes), or null when it was left alone. */
+	rule: 1 | 2 | 3 | 'page' | null;
 	/** The divisions the bar now runs in, when they had to change; else null. */
 	divisions: number | null;
 }
@@ -178,6 +191,20 @@ function onlyRunsThatFill(notes: readonly Read[], bar: Frac): number[] | null {
 	return found.length === 1 ? found[0] : null;
 }
 
+/** Three notes (or rests) side by side of one plain written value, none dotted, at least one not marked: rule 3's run. */
+function isRunOfThree(run: readonly Read[]): boolean {
+	if (run.length < 3) return false;
+	const value = run[0].printed;
+	return run.every((r) => !r.dotted && eq(r.printed, value) && r.tuplet !== 'other') && run.some((r) => r.tuplet === 'none');
+}
+
+/**
+ * What the page shows over three notes of the bar (`tuplet-number.ts`), given
+ * the notes' own text: the number printed (3) or null, and how many marks the
+ * size of a numeral stand there. Null where the page cannot be looked at.
+ */
+export type PageLook = (notes: readonly string[]) => { number: number | null; candidates: number } | null;
+
 const TRIPLET =
 	'<time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>';
 
@@ -206,41 +233,73 @@ export function completeTriplets(
 	metre: Metre | null,
 	divisions: number | null,
 	statesMetre: boolean,
+	look?: PageLook,
 ): TripletResult {
 	const unchanged: TripletResult = { children: [...children], rule: null, divisions: null };
 	if (!metre || !divisions || statesMetre) return unchanged;
 	const timed = children.filter((t) => TIMED.test(t));
 	if (timed.length === 0 || timed.some((t) => !isNote(t))) return unchanged;
-	if (timed.some((t) => /<chord\s*\/>|<grace[\s/>]/.test(t))) return unchanged;
-	const reads = timed.map(readNote);
+	if (timed.some((t) => /<chord\s*\/>/.test(t))) return unchanged;
+	// Grace notes take no time: the page may still mark the notes around them; rules 1 to 3 leave such a bar alone.
+	const grace = timed.map((t) => /<grace[\s/>]/.test(t));
+	const hasGrace = grace.some(Boolean);
+	const sounding = timed.filter((_, i) => !grace[i]);
+	const reads = sounding.map(readNote);
 	if (reads.some((r) => r === null || r.tuplet === 'other')) return unchanged;
-	const notes = reads as Read[];
+	let notes = reads as Read[];
 	const bar = fr(metre.beats, metre.beatType);
-	const total = notes.reduce((s, r) => add(s, r.written), ZERO);
-	const plain = notes.filter((r) => r.tuplet === 'none');
-	if (plain.length === 0) return unchanged;
-	let rule: 1 | 2 | 3 | null = null;
-	/** Which notes become triplets. */
-	let change = notes.map((r) => r.tuplet === 'none');
-	if (!plain.some((r) => r.dotted)) {
-		if (plain.length === notes.length) {
-			if (eq(total, mul(bar, THREE_HALVES))) rule = 1;
-		} else if (gt(total, bar)) {
-			const marked = notes.filter((r) => r.tuplet === '3:2').reduce((s, r) => add(s, r.written), ZERO);
-			const rest = plain.reduce((s, r) => add(s, r.written), ZERO);
-			if (eq(add(marked, mul(rest, TWO_THIRDS)), bar)) rule = 2;
+	let total = notes.reduce((s, r) => add(s, r.written), ZERO);
+	if (notes.every((r) => r.tuplet !== 'none')) return unchanged;
+	let rule: 1 | 2 | 3 | 'page' | null = null;
+	/** Which notes become triplets: the page's first, then the rules'. */
+	const byPage = notes.map(() => false);
+	if (look && gt(total, bar)) {
+		for (let i = 0; i + 2 < notes.length; ) {
+			const run = notes.slice(i, i + 3);
+			if (isRunOfThree(run) && look(sounding.slice(i, i + 3))?.number === 3) {
+				for (let k = i; k < i + 3; k++) byPage[k] = notes[k].tuplet === 'none';
+				i += 3;
+			} else i++;
 		}
+		const after = notes.reduce((s, r, i) => add(s, byPage[i] ? mul(r.written, TWO_THIRDS) : r.written), ZERO);
+		// The page is believed unless it would leave the bar shorter than its metre.
+		if (byPage.some(Boolean) && !gt(bar, after)) {
+			rule = 'page';
+			notes = notes.map((r, i) => (byPage[i] ? { ...r, written: mul(r.written, TWO_THIRDS), tuplet: '3:2' } : r));
+			total = after;
+		} else byPage.fill(false);
 	}
-	if (rule === null && gt(total, bar)) {
-		const runs = onlyRunsThatFill(notes, bar);
-		if (runs !== null) {
-			rule = 3;
-			change = notes.map((r, i) => r.tuplet === 'none' && runs.some((start) => i >= start && i < start + 3));
+	const plain = notes.filter((r) => r.tuplet === 'none');
+	/** Which notes become triplets: the page's, then a rule's. */
+	let change = byPage.slice();
+	if (!hasGrace && plain.length > 0 && gt(total, bar)) {
+		let completed: 1 | 2 | 3 | null = null;
+		if (!plain.some((r) => r.dotted)) {
+			if (plain.length === notes.length) {
+				if (eq(total, mul(bar, THREE_HALVES))) completed = 1;
+			} else {
+				const marked = notes.filter((r) => r.tuplet === '3:2').reduce((s, r) => add(s, r.written), ZERO);
+				const rest = plain.reduce((s, r) => add(s, r.written), ZERO);
+				if (eq(add(marked, mul(rest, TWO_THIRDS)), bar)) completed = 2;
+			}
+			if (completed !== null) change = notes.map((r, i) => byPage[i] || r.tuplet === 'none');
 		}
+		if (completed === null) {
+			const runs = onlyRunsThatFill(notes, bar);
+			// Rule 3 stands down where the page was looked at over every run it would
+			// change and shows nothing there the size of a numeral, as a printed 3 would be.
+			const looks = runs === null || !look ? [] : runs.map((start) => look(sounding.slice(start, start + 3)));
+			const pageShowsNone = looks.length > 0 && looks.every((l) => l !== null && l.candidates === 0);
+			if (runs !== null && !pageShowsNone) {
+				completed = 3;
+				change = notes.map((r, i) => byPage[i] || (r.tuplet === 'none' && runs.some((start) => i >= start && i < start + 3)));
+			}
+		}
+		if (completed !== null) rule = completed;
 	}
 	if (rule === null) return unchanged;
 	// Two thirds of each changed duration must be a whole number of divisions.
-	const fits = timed.every((t, i) => {
+	const fits = sounding.every((t, i) => {
 		if (!change[i]) return true;
 		const d = Number(/<duration>\s*(\d+)\s*<\/duration>/.exec(t)?.[1]);
 		return Number.isInteger(d) && (d * 2) % 3 === 0;
@@ -249,6 +308,7 @@ export function completeTriplets(
 	let k = 0;
 	const out = children.map((t) => {
 		if (!TIMED.test(t)) return t;
+		if (/<grace[\s/>]/.test(t)) return t;
 		const i = k++;
 		return change[i] ? makeTriplet(t, scale) : scaleDuration(t, scale);
 	});
