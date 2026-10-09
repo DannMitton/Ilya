@@ -309,7 +309,16 @@ body {
 		gap: 0 !important;
 	}
 
-	.paper-container {
+	/* THE THREE PAGE STACKS, ONE RULE. `.paper-container` (Text) was the only
+	   stack this reset named, but Markup's `.markup-paper-container`
+	   (MarkupPane.svelte) and Insights' `.insights-container` (InsightsPane.svelte)
+	   are flex columns with `gap: 2rem` and `padding-bottom: 2rem` of their own,
+	   and neither screen rule had a print counterpart. Measured 2026-10-09:
+	   after the last 1056 px sheet those 32 px spilled onto one more page, so
+	   Markup (3 sheets) printed 4 and Insights (1 sheet) printed 2. */
+	.paper-container,
+	.markup-paper-container,
+	.insights-container {
 		display: block !important;
 		height: auto !important;
 		overflow: visible !important;
