@@ -1,6 +1,6 @@
 # Draft: Corrections wording, re-read from the singer's seat (r1, 2026-10-08)
 
-The desk (Opus), 2026-10-08 about 15:58, under Dann's instruction of 15:54 and `CONTRACT.md` tether 22 (said again 15:54). Source strings: `design-corrections_r2_2026-10-08.md`, "New English labels". A draft: nothing here is ruled until Dann says so.
+The desk (Opus), 2026-10-08 about 15:58, under Dann's instruction of 15:54 and `CONTRACT.md` tether 22 (said again 15:54). Source strings: `design-corrections_r2_2026-10-08.md`, "New English labels". **Accepted by Dann:** 16:02 (*"Yes, precisely!: 'The singer is comparing with the score, not judging a machine.'"*), with his edits of 16:00 ("only") and 16:01 ("a triplet"), and confirmed 21:55 (*"Yes. Didn't I ratify these already?"*). The English stands as below; French is still to be drafted.
 
 | Design's round 2 | Singer's terms (draft) | Why |
 |---|---|---|

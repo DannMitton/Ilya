@@ -1,5 +1,5 @@
 /**
- * Triplets that homr read without their bracket: a check over homr's output.
+ * Triplets, and tuplets of any number, that homr read without their number: a check over homr's output.
  *
  * homr's transformer can read the notes under a bracketed 3 at their printed
  * shapes and leave out the 3. A half and a quarter under a 3 then come out as
@@ -45,32 +45,42 @@
  *    *Sunless* 2, bar 9, where homr marked two of three quarter-note
  *    triplets and none of an eighth-note triplet before them.)
  *
- * Before the three rules, the page (QUEUE row 54, 2026-10-08): where the
- * caller can look at the page image (`look`, `tuplet-number.ts`), a bar that
- * reads longer than its metre has each run of three looked at, and a run with
- * a printed 3 over it is read as a triplet, unless that would leave the bar
- * shorter than its metre. This acts in a bar with grace notes too, because the
- * 3 itself is the evidence (Gurilyov, «Раскаяние», bar 25). And rule 3 stands
- * down where the page was looked at over every run it would change and shows
- * no mark there the size of a numeral (Gurilyov, bar 7, where homr read an
- * eighth as a quarter and rule 3 made a triplet the page does not print). The
- * reason: the goal is the rhythm the composer printed, not a bar that adds up
- * (Dann, 2026-10-08 15:50, `OPEN.md`, THE CORRECTIONS REDESIGN, item 5).
+ * Before the three rules, the page (QUEUE row 54, 2026-10-08; any number,
+ * QUEUE row 56): where the caller can read the page image (`look`,
+ * `tuplet-number.ts`), a bar that does not fit its metre is looked at once.
+ * Each number read (n, and m where the page prints n:m) is matched to the run
+ * of n notes of one plain value whose middle it stands over, within half a
+ * note, and that run is made n in the space of m: the printed m, or else
+ * `conventionalSpace` (a desk default, to be checked against Gould's Table
+ * 2, p. 203). A bar too short is looked at too, because a missed duplet in
+ * 6/8 leaves the bar short. Rules 2 and 3 work on any ratio (rule 3 on 3:2,
+ * and on 2:3 and 4:3 in compound metre), and where the page has been read,
+ * rule 3 chooses only among runs with a numeral-sized mark over their middle,
+ * so where the page shows none (Gurilyov, bar 7, where homr read an eighth as
+ * a quarter) rule 3 does not act, and where it reads three of four printed 3s
+ * and shows the fourth (Gurilyov, bar 25) rule 3 completes the bar. A bar
+ * with grace notes is left to the page, and to the rules only once the page
+ * has been read. The reason: the goal is the rhythm the composer printed, not
+ * a bar that adds up (Dann, 2026-10-08 15:50, `OPEN.md`, THE CORRECTIONS
+ * REDESIGN, item 5).
  *
- * Nothing else is changed: a bar with a chord, a second voice (`<backup>` or
- * `<forward>`), or a tuplet other than 3 in the time of 2 is left as homr
- * wrote it, a bar with a grace note is left to the page alone, and every bar
- * that adds up already is left as it is.
+ * The bar check: whatever the page and the rules make of a bar is kept only
+ * where the bar then fits its metre; otherwise the bar is left as homr wrote
+ * it (the desk, row 56: "Where a read digit does not make the bar fit it,
+ * change nothing").
  *
- * Each note made a triplet gains homr's own form,
- * `<time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>`,
- * after its `<type>` and `<dot/>`, and its `<duration>` becomes two thirds of
- * what it was. Where two thirds of a duration is not a whole number of
- * divisions, every duration in the bar is first multiplied by 3 and the bar
- * opens with `<attributes><divisions>` three times the divisions in force;
- * the caller restores the divisions at the next bar. No `<tuplet>` bracket
- * start or stop is written, because where each group of three begins is not
- * read from the page.
+ * Nothing else is changed: a bar with a chord or a second voice (`<backup>`
+ * or `<forward>`) is left as homr wrote it, and so is every bar that adds up
+ * already.
+ *
+ * Each note made a tuplet gains homr's own form,
+ * `<time-modification><actual-notes>n</actual-notes><normal-notes>m</normal-notes></time-modification>`,
+ * after its `<type>` and `<dot/>`, and its `<duration>` becomes m/n of what
+ * it was. Where that is not a whole number of divisions, every duration in
+ * the bar is first multiplied by the least factor that makes it so, and the
+ * bar opens with `<attributes><divisions>` that many times the divisions in
+ * force; the caller restores the divisions at the next bar. No `<tuplet>`
+ * bracket start or stop is written.
  *
  * Works on the text of one measure's children, as `join-pages.ts` does,
  * so it runs the same in the browser and in vitest.
@@ -92,7 +102,6 @@ const mul = (a: Frac, b: Frac): Frac => fr(a.n * b.n, a.d * b.d);
 const eq = (a: Frac, b: Frac): boolean => a.n * b.d === b.n * a.d;
 const gt = (a: Frac, b: Frac): boolean => a.n * b.d > b.n * a.d;
 const ZERO: Frac = { n: 0, d: 1 };
-const TWO_THIRDS: Frac = { n: 2, d: 3 };
 const THREE_HALVES: Frac = { n: 3, d: 2 };
 
 const TYPE: Record<string, Frac> = {
@@ -138,7 +147,14 @@ interface Read {
 	/** The value of the note's `<type>`, before dots and any tuplet. */
 	printed: Frac;
 	dotted: boolean;
-	tuplet: 'none' | '3:2' | 'other';
+	/** The tuplet the note is already marked with, n in the space of m, or null. */
+	ratio: Ratio | null;
+}
+
+/** A tuplet: n notes in the space of m of the same written value. */
+export interface Ratio {
+	n: number;
+	m: number;
 }
 
 function readNote(note: string): Read | null {
@@ -153,67 +169,102 @@ function readNote(note: string): Read | null {
 		written = add(written, part);
 	}
 	const tm = /<time-modification>([\s\S]*?)<\/time-modification>/.exec(note)?.[1];
-	let tuplet: Read['tuplet'] = 'none';
+	let ratio: Ratio | null = null;
 	if (tm !== undefined) {
 		const actual = Number(/<actual-notes>\s*(\d+)/.exec(tm)?.[1]);
 		const normal = Number(/<normal-notes>\s*(\d+)/.exec(tm)?.[1]);
-		tuplet = actual === 3 && normal === 2 ? '3:2' : 'other';
-		if (actual > 0 && normal > 0) written = mul(written, fr(normal, actual));
+		if (!(actual > 0 && normal > 0)) return null;
+		ratio = { n: actual, m: normal };
+		written = mul(written, fr(normal, actual));
 	}
-	return { written, printed: base, dotted: dots > 0, tuplet };
+	return { written, printed: base, dotted: dots > 0, ratio };
 }
+
+const sameRatio = (a: Ratio | null, b: Ratio | null): boolean => (a === null ? b === null : b !== null && a.n === b.n && a.m === b.m);
+const TRIPLET_RATIO: Ratio = { n: 3, m: 2 };
 
 /** True when `time` is a whole number of `span`s. */
 const onMultipleOf = (time: Frac, span: Frac): boolean => (time.n * span.d) % (time.d * span.n) === 0;
 
+/** True where the metre is compound: its beats a multiple of three, six or more (6/8, 9/8, 12/8, 6/4). */
+export const compound = (metre: Metre): boolean => metre.beats % 3 === 0 && metre.beats >= 6;
+
 /**
- * Rule 3: the first note of each run of three that is read as triplets, when
- * exactly one choice of runs makes the bar exactly `bar` long; else null.
+ * The space m that n notes of a tuplet fill, where the page prints n alone.
+ * DESK DEFAULT, to be checked against Gould's Table 2 (p. 203), which this code
+ * has not read: in simple metre, n in the space of the next lower power of two
+ * (3:2, 5:4, 6:4, 7:4, 9:8, 10:8, 11:8, 12:8, 13:8, 14:8, 15:8), and no space for
+ * a power of two itself (a duplet in simple metre is not a convention); in
+ * compound metre, a duplet and a quadruplet in the space of three (2:3, 4:3),
+ * and every other n as in simple metre.
  */
-function onlyRunsThatFill(notes: readonly Read[], bar: Frac): number[] | null {
-	const found: number[][] = [];
-	const walk = (i: number, time: Frac, runs: number[]): void => {
+export function conventionalSpace(n: number, metre: Metre): number | null {
+	if (n < 2) return null;
+	if (compound(metre) && (n === 2 || n === 4)) return 3;
+	if ((n & (n - 1)) === 0) return null;
+	return 2 ** Math.floor(Math.log2(n));
+}
+
+/** n notes (or rests) side by side of one plain written value, none dotted, none already in another tuplet, at least one not yet marked. */
+function isRun(run: readonly Read[], n: number, ratio: Ratio): boolean {
+	if (run.length < n) return false;
+	const value = run[0].printed;
+	return (
+		run.every((r) => !r.dotted && eq(r.printed, value) && (r.ratio === null || sameRatio(r.ratio, ratio))) &&
+		run.some((r) => r.ratio === null)
+	);
+}
+
+/**
+ * Rule 3, for each ratio given: the first note and ratio of each run read as a
+ * tuplet, when exactly one choice of runs makes the bar exactly `bar` long;
+ * else null. A run of n in the space of m begins where the span of m of its
+ * notes would begin.
+ */
+function onlyRunsThatFill(
+	notes: readonly Read[],
+	bar: Frac,
+	ratios: readonly Ratio[],
+	allowed: (start: number, ratio: Ratio) => boolean = () => true,
+): { start: number; ratio: Ratio }[] | null {
+	const found: { start: number; ratio: Ratio }[][] = [];
+	const walk = (i: number, time: Frac, runs: { start: number; ratio: Ratio }[]): void => {
 		if (found.length > 1 || gt(time, bar)) return;
 		if (i === notes.length) {
 			if (runs.length > 0 && eq(time, bar)) found.push(runs);
 			return;
 		}
 		walk(i + 1, add(time, notes[i].written), runs);
-		const run = notes.slice(i, i + 3);
-		if (run.length < 3) return;
-		const value = run[0].printed;
-		const isRun =
-			run.every((r) => !r.dotted && eq(r.printed, value) && r.tuplet !== 'other') && run.some((r) => r.tuplet === 'none');
-		const span = mul(value, { n: 2, d: 1 });
-		if (isRun && onMultipleOf(time, span)) walk(i + 3, add(time, span), [...runs, i]);
+		for (const ratio of ratios) {
+			const run = notes.slice(i, i + ratio.n);
+			if (!isRun(run, ratio.n, ratio) || !allowed(i, ratio)) continue;
+			const span = mul(run[0].printed, { n: ratio.m, d: 1 });
+			if (onMultipleOf(time, span)) walk(i + ratio.n, add(time, span), [...runs, { start: i, ratio }]);
+		}
 	};
 	walk(0, ZERO, []);
 	return found.length === 1 ? found[0] : null;
 }
 
-/** Three notes (or rests) side by side of one plain written value, none dotted, at least one not marked: rule 3's run. */
-function isRunOfThree(run: readonly Read[]): boolean {
-	if (run.length < 3) return false;
-	const value = run[0].printed;
-	return run.every((r) => !r.dotted && eq(r.printed, value) && r.tuplet !== 'other') && run.some((r) => r.tuplet === 'none');
-}
-
 /**
- * What the page shows over three notes of the bar (`tuplet-number.ts`), given
- * the notes' own text: the number printed (3) or null, and how many marks the
- * size of a numeral stand there. Null where the page cannot be looked at.
+ * What the page shows over the bar's notes (`tuplet-number.ts`), given the
+ * notes' own text: each number read, with the space m where the page prints a
+ * ratio, and `at`, where it stands, in notes (2 is over the third note, 2.5
+ * halfway to the fourth); and `marksAt`, where every mark the size of a
+ * numeral stands, whatever it reads as. Null where the page cannot be read.
  */
-export type PageLook = (notes: readonly string[]) => { number: number | null; candidates: number } | null;
+export interface PageReading {
+	numbers: { n: number; m: number | null; at: number }[];
+	marksAt: number[];
+}
+export type PageLook = (notes: readonly string[]) => PageReading | null;
 
-const TRIPLET =
-	'<time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>';
-
-/** The note with a 3:2 time-modification after its `<type>` and dots, and its duration scaled. */
-function makeTriplet(note: string, scale: number): string {
+/** The note with an n:m time-modification after its `<type>` and dots, and its duration scaled by `scale` and by m/n. */
+function makeTuplet(note: string, scale: number, ratio: Ratio): string {
 	const dur = Number(/<duration>\s*(\d+)\s*<\/duration>/.exec(note)?.[1]);
-	let out = note.replace(/<duration>\s*\d+\s*<\/duration>/, `<duration>${(dur * scale * 2) / 3}</duration>`);
-	const after = /(<type>[^<]*<\/type>(?:\s*<dot\s*\/>)*)/;
-	out = out.replace(after, `$1${TRIPLET}`);
+	let out = note.replace(/<duration>\s*\d+\s*<\/duration>/, `<duration>${(dur * scale * ratio.m) / ratio.n}</duration>`);
+	const tm = `<time-modification><actual-notes>${ratio.n}</actual-notes><normal-notes>${ratio.m}</normal-notes></time-modification>`;
+	out = out.replace(/(<type>[^<]*<\/type>(?:\s*<dot\s*\/>)*)/, `$1${tm}`);
 	return out;
 }
 
@@ -222,11 +273,16 @@ function scaleDuration(text: string, scale: number): string {
 	return text.replace(/<duration>\s*(\d+)\s*<\/duration>/, (_m, d) => `<duration>${Number(d) * scale}</duration>`);
 }
 
+/** The ratios rules 2 and 3 may read without the page: 3:2, and the duplet and quadruplet in compound metre. */
+function ruleRatios(metre: Metre): Ratio[] {
+	return compound(metre) ? [TRIPLET_RATIO, { n: 2, m: 3 }, { n: 4, m: 3 }] : [TRIPLET_RATIO];
+}
+
 /**
- * Applies the three rules to one bar's children (each child a whole element's
- * text, as `join-pages.ts` keeps them). `metre` is the metre in force in the
- * bar, `divisions` the divisions in force, and `statesMetre` whether the bar
- * states a `<time>` of its own.
+ * Applies the page and the three rules to one bar's children (each child a
+ * whole element's text, as `join-pages.ts` keeps them). `metre` is the metre
+ * in force in the bar, `divisions` the divisions in force, and `statesMetre`
+ * whether the bar states a `<time>` of its own.
  */
 export function completeTriplets(
 	children: readonly string[],
@@ -245,75 +301,107 @@ export function completeTriplets(
 	const hasGrace = grace.some(Boolean);
 	const sounding = timed.filter((_, i) => !grace[i]);
 	const reads = sounding.map(readNote);
-	if (reads.some((r) => r === null || r.tuplet === 'other')) return unchanged;
+	if (reads.some((r) => r === null)) return unchanged;
 	let notes = reads as Read[];
 	const bar = fr(metre.beats, metre.beatType);
 	let total = notes.reduce((s, r) => add(s, r.written), ZERO);
-	if (notes.every((r) => r.tuplet !== 'none')) return unchanged;
+	// A bar that fits its metre is left alone. One too short is looked at on the page only (a duplet missed in 6/8 leaves the bar short); the rules act on one too long.
+	if (notes.every((r) => r.ratio !== null) || eq(total, bar) || (!gt(total, bar) && !look)) return unchanged;
 	let rule: 1 | 2 | 3 | 'page' | null = null;
-	/** Which notes become triplets: the page's first, then the rules'. */
-	const byPage = notes.map(() => false);
-	if (look && gt(total, bar)) {
-		for (let i = 0; i + 2 < notes.length; ) {
-			const run = notes.slice(i, i + 3);
-			if (isRunOfThree(run) && look(sounding.slice(i, i + 3))?.number === 3) {
-				for (let k = i; k < i + 3; k++) byPage[k] = notes[k].tuplet === 'none';
-				i += 3;
-			} else i++;
+	/** The ratio each note is made, by the page first, then by a rule. */
+	const byPage: (Ratio | null)[] = notes.map(() => null);
+	const reading = look ? look(sounding) : null;
+	if (reading) {
+		for (const number of [...reading.numbers].sort((a, b) => a.at - b.at)) {
+			const m = number.m ?? conventionalSpace(number.n, metre);
+			if (m === null) continue;
+			const ratio = { n: number.n, m };
+			// The run of n notes the number stands over: its middle nearest the number, within half a note.
+			let best = -1;
+			let bestOff = Number.POSITIVE_INFINITY;
+			let tie = false;
+			for (let s0 = 0; s0 + ratio.n <= notes.length; s0++) {
+				if (byPage.slice(s0, s0 + ratio.n).some((r) => r !== null)) continue;
+				if (!isRun(notes.slice(s0, s0 + ratio.n), ratio.n, ratio)) continue;
+				const off = Math.abs(number.at - (s0 + (ratio.n - 1) / 2));
+				if (off > 0.5 + 1e-9) continue;
+				if (Math.abs(off - bestOff) < 1e-9) tie = true;
+				else if (off < bestOff) ((best = s0), (bestOff = off), (tie = false));
+			}
+			if (best < 0 || tie) continue;
+			for (let k = best; k < best + ratio.n; k++) if (notes[k].ratio === null) byPage[k] = ratio;
 		}
-		const after = notes.reduce((s, r, i) => add(s, byPage[i] ? mul(r.written, TWO_THIRDS) : r.written), ZERO);
-		// The page is believed unless it would leave the bar shorter than its metre.
-		if (byPage.some(Boolean) && !gt(bar, after)) {
+		if (byPage.some((r) => r !== null)) {
 			rule = 'page';
-			notes = notes.map((r, i) => (byPage[i] ? { ...r, written: mul(r.written, TWO_THIRDS), tuplet: '3:2' } : r));
-			total = after;
-		} else byPage.fill(false);
+			notes = notes.map((r, i) => {
+				const ratio = byPage[i];
+				return ratio ? { ...r, written: mul(r.written, fr(ratio.m, ratio.n)), ratio } : r;
+			});
+			total = notes.reduce((s, r) => add(s, r.written), ZERO);
+		}
 	}
-	const plain = notes.filter((r) => r.tuplet === 'none');
-	/** Which notes become triplets: the page's, then a rule's. */
-	let change = byPage.slice();
-	if (!hasGrace && plain.length > 0 && gt(total, bar)) {
+	const plain = notes.filter((r) => r.ratio === null);
+	let change: (Ratio | null)[] = byPage.slice();
+	// Grace notes keep the rules off a bar unless the page has been read over it.
+	if ((!hasGrace || reading !== null) && plain.length > 0 && gt(total, bar)) {
 		let completed: 1 | 2 | 3 | null = null;
 		if (!plain.some((r) => r.dotted)) {
-			if (plain.length === notes.length) {
-				if (eq(total, mul(bar, THREE_HALVES))) completed = 1;
-			} else {
-				const marked = notes.filter((r) => r.tuplet === '3:2').reduce((s, r) => add(s, r.written), ZERO);
+			const marked = notes.filter((r) => r.ratio !== null);
+			if (marked.length === 0) {
+				if (eq(total, mul(bar, THREE_HALVES))) {
+					completed = 1;
+					change = notes.map(() => TRIPLET_RATIO);
+				}
+			} else if (marked.every((r) => sameRatio(r.ratio, marked[0].ratio))) {
+				const ratio = marked[0].ratio as Ratio;
+				const sum = marked.reduce((s, r) => add(s, r.written), ZERO);
 				const rest = plain.reduce((s, r) => add(s, r.written), ZERO);
-				if (eq(add(marked, mul(rest, TWO_THIRDS)), bar)) completed = 2;
+				if (eq(add(sum, mul(rest, fr(ratio.m, ratio.n))), bar)) {
+					completed = 2;
+					change = notes.map((r, i) => byPage[i] ?? (r.ratio === null ? ratio : null));
+				}
 			}
-			if (completed !== null) change = notes.map((r, i) => byPage[i] || r.tuplet === 'none');
 		}
 		if (completed === null) {
-			const runs = onlyRunsThatFill(notes, bar);
-			// Rule 3 stands down where the page was looked at over every run it would
-			// change and shows nothing there the size of a numeral, as a printed 3 would be.
-			const looks = runs === null || !look ? [] : runs.map((start) => look(sounding.slice(start, start + 3)));
-			const pageShowsNone = looks.length > 0 && looks.every((l) => l !== null && l.candidates === 0);
-			if (runs !== null && !pageShowsNone) {
+			// Where the page has been read over the bar, rule 3 chooses only among runs with
+			// a mark the size of a numeral over their middle, where a printed number stands.
+			const marked = (start: number, ratio: Ratio) =>
+				reading === null || reading.marksAt.some((a) => Math.abs(a - (start + (ratio.n - 1) / 2)) <= 0.6);
+			const runs = onlyRunsThatFill(notes, bar, ruleRatios(metre), marked);
+			if (runs !== null) {
 				completed = 3;
-				change = notes.map((r, i) => byPage[i] || (r.tuplet === 'none' && runs.some((start) => i >= start && i < start + 3)));
+				change = notes.map((r, i) => {
+					if (byPage[i]) return byPage[i];
+					const run = runs.find((x) => i >= x.start && i < x.start + x.ratio.n);
+					return run && r.ratio === null ? run.ratio : null;
+				});
 			}
 		}
 		if (completed !== null) rule = completed;
 	}
 	if (rule === null) return unchanged;
-	// Two thirds of each changed duration must be a whole number of divisions.
-	const fits = sounding.every((t, i) => {
-		if (!change[i]) return true;
+	// The bar check: whatever the page and the rules make of the bar is kept only where it then fits the metre.
+	const after = notes.reduce((s, r, i) => add(s, change[i] && !byPage[i] ? mul(r.written, fr(change[i]!.m, change[i]!.n)) : r.written), ZERO);
+	if (!eq(after, bar)) return unchanged;
+	// Each changed duration times m/n must be a whole number of divisions: else every duration is multiplied first.
+	let scale = 1;
+	sounding.forEach((t, i) => {
+		const ratio = change[i];
+		if (!ratio) return;
 		const d = Number(/<duration>\s*(\d+)\s*<\/duration>/.exec(t)?.[1]);
-		return Number.isInteger(d) && (d * 2) % 3 === 0;
+		const need = ratio.n / gcd(d * ratio.m, ratio.n);
+		scale = (scale * need) / gcd(scale, need);
 	});
-	const scale = fits ? 1 : 3;
 	let k = 0;
 	const out = children.map((t) => {
 		if (!TIMED.test(t)) return t;
 		if (/<grace[\s/>]/.test(t)) return t;
 		const i = k++;
-		return change[i] ? makeTriplet(t, scale) : scaleDuration(t, scale);
+		const ratio = change[i];
+		return ratio ? makeTuplet(t, scale, ratio) : scaleDuration(t, scale);
 	});
 	if (scale === 1) return { children: out, rule, divisions: null };
 	const first = out.findIndex((t) => TIMED.test(t));
-	out.splice(first, 0, `<attributes><divisions>${divisions * 3}</divisions></attributes>`);
-	return { children: out, rule, divisions: divisions * 3 };
+	out.splice(first, 0, `<attributes><divisions>${divisions * scale}</divisions></attributes>`);
+	return { children: out, rule, divisions: divisions * scale };
 }

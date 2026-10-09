@@ -5,7 +5,12 @@
  * text, `#` for ink.
  */
 import { describe, expect, it } from 'vitest';
-import { isThree, lookForTupletNumber, shapeOf, type GreyPage, type Mark } from './tuplet-number';
+import { isThree, lookForTupletNumber, lookOverNotes, readWord, shapeOf, type GreyPage, type Mark, type Word } from './tuplet-number';
+import { unpack, type PackedTemplate } from './tuplet-digits';
+import packed from './tuplet-digit-templates.json';
+import { BRAVURA_1, BRAVURA_2, BRAVURA_5, BRAVURA_7 } from './tuplet-digits.test';
+
+const TEMPLATES = unpack(packed as PackedTemplate[]);
 
 /** a printed 3 under a sixteenth triplet, Gurilyov, «Раскаяние», bar 25 (Jurgenson, 1895): 32 by 40 pixels, staff space 28. */
 const JURGENSON_3 = [
@@ -283,18 +288,18 @@ const NOTES = [{ x: 380, y: 340 }, { x: 450, y: 352 }, { x: 520, y: 340 }];
 describe('lookForTupletNumber', () => {
 	it('finds the 3 printed under the middle note of the group', () => {
 		const p = page(28, 300, [{ art: JURGENSON_3, x: 434, y: 440 }]);
-		expect(lookForTupletNumber(p, NOTES).number).toBe(3);
+		expect(lookForTupletNumber(p, NOTES, TEMPLATES).number).toBe(3);
 	});
 
 	it('finds nothing where nothing is printed, and says no mark stood there', () => {
-		const looked = lookForTupletNumber(page(28, 300, []), NOTES);
+		const looked = lookForTupletNumber(page(28, 300, []), NOTES, TEMPLATES);
 		expect(looked.number).toBeNull();
 		expect(looked.candidates).toBe(0);
 	});
 
 	it('does not take a 3 printed over a neighbouring group', () => {
 		const p = page(28, 300, [{ art: JURGENSON_3, x: 600, y: 440 }]);
-		expect(lookForTupletNumber(p, NOTES).number).toBeNull();
+		expect(lookForTupletNumber(p, NOTES, TEMPLATES).number).toBeNull();
 	});
 
 	it('does not take a 3-shaped mark that stands in a word (a letter з beside a)', () => {
@@ -302,6 +307,49 @@ describe('lookForTupletNumber', () => {
 			{ art: JURGENSON_3, x: 434, y: 440 },
 			{ art: JURGENSON_3.map((r) => [...r].reverse().join('')), x: 470, y: 440 },
 		]);
-		expect(lookForTupletNumber(p, NOTES).number).toBeNull();
+		expect(lookForTupletNumber(p, NOTES, TEMPLATES).number).toBeNull();
+	});
+});
+
+/** A word of marks side by side, as `markWords` returns one, each mark at x on a line at y 100. */
+function word(arts: readonly (readonly string[])[], colonBefore = -1): Word {
+	let x = 0;
+	const marks = arts.map((art) => {
+		const m = mark(art);
+		const placed = { ...m, x0: x, y0: 100, x1: x + m.x1, y1: 100 + m.y1 };
+		x += m.x1 + 8;
+		return placed;
+	});
+	return { marks, colonBefore, x0: 0, x1: x };
+}
+
+describe('reading a word of digits', () => {
+	it('reads one digit from 2 to 9 as a tuplet number, and never a 1 alone', () => {
+		expect(readWord(word([BRAVURA_5]), 28, TEMPLATES)).toEqual({ n: 5, m: null });
+		expect(readWord(word([BRAVURA_7]), 28, TEMPLATES)).toEqual({ n: 7, m: null });
+		expect(readWord(word([BRAVURA_1]), 28, TEMPLATES)).toBeNull();
+	});
+
+	it('reads two digits side by side as one number, and two numbers either side of a colon as n:m', () => {
+		expect(readWord(word([BRAVURA_1, BRAVURA_2]), 28, TEMPLATES)).toEqual({ n: 12, m: null });
+		expect(readWord(word([BRAVURA_7, BRAVURA_2], 1), 28, TEMPLATES)).toEqual({ n: 7, m: 2 });
+	});
+
+	it('refuses a word with a mark that is not a digit, as a sung word is', () => {
+		expect(readWord(word([BRAVURA_5, LETTER_U]), 28, TEMPLATES)).toBeNull();
+	});
+});
+
+describe('lookOverNotes', () => {
+	it('reads a 5 printed over a bar\'s notes, and says where it stands', () => {
+		const p = page(28, 300, [{ art: BRAVURA_5, x: 434, y: 440 }]);
+		const over = lookOverNotes(p, NOTES, TEMPLATES);
+		expect(over.numbers.map((n) => n.n)).toEqual([5]);
+		expect(Math.abs((over.numbers[0]?.x ?? 0) - 452)).toBeLessThan(2);
+		expect(over.centres).toHaveLength(1);
+	});
+
+	it('reads nothing where nothing is printed', () => {
+		expect(lookOverNotes(page(28, 300, []), NOTES, TEMPLATES)).toEqual({ numbers: [], centres: [], space: 28 });
 	});
 });

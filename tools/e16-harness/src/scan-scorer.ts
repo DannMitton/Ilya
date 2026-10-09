@@ -49,6 +49,13 @@
  * exactly the bars they touch. The reader's metre for each bar is reported
  * beside the truth's bar length for the truth bar its events correspond to.
  *
+ * METRE (added QUEUE row 37, 2026-10-08). Each truth bar that holds an event is
+ * paired with the reader bar that holds most of its matched events; the metre
+ * is right there when the metre in force in that reader bar is as long as the
+ * truth's bar (`expectedDuration`). The truth records bar lengths, not printed
+ * figures, so 3/8 and 6/16 count as the same metre. A truth bar with no event
+ * (a whole bar of rest) cannot be paired and is counted apart.
+ *
  * NOT SCORED: syllables (the reader carries none), onsets.
  */
 
@@ -188,6 +195,8 @@ export interface ScanScore {
 	abstentions: { pitch: number; duration: number; onset: number; metre: number; sum: number };
 	headline: number | null; // of every 100 printed notes, present with the right pitch and the right length
 	barMetres: BarMetre[];
+	/** Truth bars whose paired reader bar has a metre in force as long as the truth's bar, of the truth bars that could be paired. */
+	metre: { right: number; paired: number; unpaired: number };
 	differences: Difference[];
 	/** Every aligned pair, in sequence order: indices into the truth's events and the reader's events. Added row 23. */
 	matches: { truthIndex: number; readerIndex: number }[];
@@ -336,6 +345,29 @@ export function scoreScan(truth: TruthInput, reader: ReaderInput): ScanScore {
 		};
 	});
 
+	const metreOf = new Map(reader.bars.map((b) => [b.measureIndex, b.metre]));
+	const metre = { right: 0, paired: 0, unpaired: 0 };
+	for (const tb of truth.bars) {
+		const idxs = truthByBar.get(tb.index) ?? [];
+		const votes = new Map<number, number>();
+		for (const i of idxs) {
+			const mr = matchOfTruth[i];
+			if (mr === null) continue;
+			const rb = reader.events[mr].measureIndex;
+			votes.set(rb, (votes.get(rb) ?? 0) + 1);
+		}
+		if (votes.size === 0) {
+			metre.unpaired++;
+			continue;
+		}
+		let best = -1;
+		let rb = -1;
+		for (const [k, v] of votes) if (v > best) { best = v; rb = k; }
+		metre.paired++;
+		const m = metreOf.get(rb);
+		if (m && tb.expectedDuration && sameFrac({ numerator: m.beats, denominator: m.beatType }, tb.expectedDuration)) metre.right++;
+	}
+
 	const ab = { pitch: 0, duration: 0, onset: 0, metre: 0, sum: 0 };
 	for (const e of reader.events) {
 		if (e.abstain?.pitch) ab.pitch++;
@@ -370,6 +402,7 @@ export function scoreScan(truth: TruthInput, reader: ReaderInput): ScanScore {
 		abstentions: ab,
 		headline: tNotes === 0 ? null : (100 * n.bothRight) / tNotes,
 		barMetres,
+		metre,
 		differences,
 		matches: steps.flatMap((st) => (st.kind === 'match' ? [{ truthIndex: st.t, readerIndex: st.r }] : []))
 	};

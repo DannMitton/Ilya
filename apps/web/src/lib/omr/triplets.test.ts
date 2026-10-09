@@ -9,7 +9,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { MusicXmlScoreParser } from '@ilya/score-parser';
 import { parseXml } from '$lib/score/ingestion/mini-dom';
-import { completeTriplets, readMetre } from './triplets';
+import { completeTriplets, conventionalSpace, readMetre } from './triplets';
 import { joinPages } from './join-pages';
 
 const C44 = { beats: 4, beatType: 4 };
@@ -101,8 +101,8 @@ describe('completeTriplets', () => {
 		const g = `<note><grace /><pitch><step>F</step><octave>4</octave></pitch><type>16th</type><voice>1</voice><staff>1</staff></note>`;
 		const s16 = (i: number) => n('16th', 1, `<!-- imgpos: ${100 + 10 * i}, 50 -->`);
 		const bar = [n('quarter', 4), ...[0, 1, 2, 3].map(s16), ...[4, 5, 6, 7, 8, 9, 10, 11, 12].map(s16), g, g, ...[13, 14, 15].map(s16)];
-		const printed = new Set([4, 7, 10, 13]);
-		const look = (notes: readonly string[]) => ({ number: printed.has((Number(/imgpos: (\d+)/.exec(notes[0])?.[1]) - 100) / 10) ? 3 : null, candidates: 1 });
+		// The page prints a 3 over the middle of each of the last four groups: sounding notes 6, 9, 12, and 15.
+		const look = () => ({ numbers: [6, 9, 12, 15].map((at) => ({ n: 3, m: null, at })), marksAt: [6, 9, 12, 15] });
 		const out = completeTriplets(bar, C44, 4, false, look);
 		expect(out.rule).toBe('page');
 		const marked = out.children.filter((t) => /<note>/.test(t) && !/<grace/.test(t)).map((t) => t.includes(T));
@@ -111,14 +111,74 @@ describe('completeTriplets', () => {
 		expect(completeTriplets(bar, C44, 4, false).rule).toBeNull();
 	});
 
+	it('completes a bar where the page reads three of four printed 3s, with rule 3 choosing the one run a mark stands over (Gurilyov, «Раскаяние», bar 25)', () => {
+		const g = `<note><grace /><pitch><step>F</step><octave>4</octave></pitch><type>16th</type><voice>1</voice><staff>1</staff></note>`;
+		const bar = [n('quarter', 4), ...Array.from({ length: 13 }, () => n('16th', 1)), g, g, ...Array.from({ length: 3 }, () => n('16th', 1))];
+		// The 3 over the second group (sounding notes 8 to 10, middle 9) is a mark the reader does not read; marks also stand near the bar's first notes.
+		const look = () => ({ numbers: [6, 12, 15].map((at) => ({ n: 3, m: null, at })), marksAt: [0.45, 0.7, 6, 9, 12, 15] });
+		const out = completeTriplets(bar, C44, 4, false, look);
+		expect(out.rule).toBe(3);
+		const marked = out.children.filter((t) => /<note>/.test(t) && !/<grace/.test(t)).map((t) => t.includes(T));
+		expect(marked).toEqual([false, false, false, false, false, ...Array(12).fill(true)]);
+		// With a mark over both runs that could complete the bar (notes 1 to 3, and 8 to 10), it is left as homr wrote it.
+		expect(completeTriplets(bar, C44, 4, false, () => ({ ...look(), marksAt: [2, 6, 9, 12, 15] })).rule).toBeNull();
+	});
+
 	it('rule 3 stands down where the page shows no mark the size of a numeral (Gurilyov, «Раскаяние», bar 7)', () => {
 		// divisions 2. A half, an eighth rest, two eighths, and a quarter where the page prints an eighth.
 		const bar = [n('half', 4), r('eighth', 1), n('eighth', 1), n('eighth', 1), n('quarter', 2)];
 		expect(completeTriplets(bar, C44, 2, false).rule).toBe(3);
-		expect(completeTriplets(bar, C44, 2, false, () => ({ number: null, candidates: 0 })).rule).toBeNull();
-		// Where a mark stands there that is not read as a 3 (Sunless 5, bar 9), or the page cannot be looked at, rule 3 acts as before.
-		expect(completeTriplets(bar, C44, 2, false, () => ({ number: null, candidates: 3 })).rule).toBe(3);
+		expect(completeTriplets(bar, C44, 2, false, () => ({ numbers: [], marksAt: [] })).rule).toBeNull();
+		// Where a mark stands over the run that is not read as a 3 (Sunless 5, bar 9), or the page cannot be looked at, rule 3 acts as before.
+		expect(completeTriplets(bar, C44, 2, false, () => ({ numbers: [], marksAt: [2] })).rule).toBe(3);
 		expect(completeTriplets(bar, C44, 2, false, () => null).rule).toBe(3);
+	});
+
+	it('gives a tuplet its space by the convention (a desk default, to be checked against Gould): 3:2, 5:4, 6:4, 7:4, and 2:3 and 4:3 in compound metre', () => {
+		const simple = { beats: 4, beatType: 4 };
+		const six8 = { beats: 6, beatType: 8 };
+		expect([3, 5, 6, 7, 9, 12].map((n) => conventionalSpace(n, simple))).toEqual([2, 4, 4, 4, 8, 8]);
+		expect([2, 4, 8].map((n) => conventionalSpace(n, simple))).toEqual([null, null, null]);
+		expect([2, 3, 4].map((n) => conventionalSpace(n, six8))).toEqual([3, 2, 3]);
+	});
+
+	it('makes five sixteenths the page prints a 5 over a quintuplet, 5 in the space of 4', () => {
+		// divisions 4, 2/4: a quarter, then five sixteenths: 9/16 where the bar holds 8.
+		const bar = [n('quarter', 4), ...[0, 1, 2, 3, 4].map(() => n('16th', 1))];
+		const out = completeTriplets(bar, { beats: 2, beatType: 4 }, 4, false, () => ({ numbers: [{ n: 5, m: null, at: 3 }], marksAt: [3] }));
+		expect(out.rule).toBe('page');
+		expect(out.children.filter((t) => t.includes('<actual-notes>5</actual-notes><normal-notes>4</normal-notes>'))).toHaveLength(5);
+		// Each sixteenth is four fifths of 1 division: the bar runs in five times the divisions.
+		expect(out.divisions).toBe(20);
+		expect(durations(out.children)).toEqual([20, 4, 4, 4, 4, 4]);
+	});
+
+	it('makes two eighths the page prints a 2 over a duplet in 6/8, 2 in the space of 3', () => {
+		// divisions 2, 6/8: a dotted quarter, then two eighths where the page prints a duplet: 5/8, a bar too short.
+		const bar = [n('quarter', 3, '<dot />'), n('eighth', 1), n('eighth', 1)];
+		const look = () => ({ numbers: [{ n: 2, m: null, at: 1.5 }], marksAt: [1.5] });
+		const out = completeTriplets(bar, { beats: 6, beatType: 8 }, 2, false, look);
+		expect(out.rule).toBe('page');
+		expect(out.children.filter((t) => t.includes('<actual-notes>2</actual-notes><normal-notes>3</normal-notes>'))).toHaveLength(2);
+		expect(out.divisions).toBe(4);
+		expect(durations(out.children)).toEqual([6, 3, 3]);
+		// The same bar with no page is left alone: the rules act only on a bar too long.
+		expect(completeTriplets(bar, { beats: 6, beatType: 8 }, 2, false).rule).toBeNull();
+	});
+
+	it('takes the space the page prints in a ratio, 7:6', () => {
+		// divisions 4, 3/4: seven sixteenths and a dotted quarter, 13/16 where the bar holds 12; 7 in the space of 6 makes it fit.
+		const bar = [...[0, 1, 2, 3, 4, 5, 6].map(() => n('16th', 1)), n('quarter', 6, '<dot />')];
+		const out = completeTriplets(bar, { beats: 3, beatType: 4 }, 4, false, () => ({ numbers: [{ n: 7, m: 6, at: 3 }], marksAt: [3] }));
+		expect(out.rule).toBe('page');
+		expect(out.children.filter((t) => t.includes('<actual-notes>7</actual-notes><normal-notes>6</normal-notes>'))).toHaveLength(7);
+	});
+
+	it('changes nothing where a number read does not make the bar fit its metre', () => {
+		const bar = [n('quarter', 4), ...[0, 1, 2, 3, 4].map(() => n('16th', 1))];
+		const out = completeTriplets(bar, { beats: 2, beatType: 4 }, 4, false, () => ({ numbers: [{ n: 6, m: null, at: 3 }], marksAt: [3] }));
+		expect(out.rule).toBeNull();
+		expect(out.children).toEqual(bar);
 	});
 
 	it('reads a metre in the form the join keeps it', () => {

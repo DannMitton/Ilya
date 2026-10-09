@@ -154,4 +154,22 @@ const RESTS = T.events.length - NOTES; // 3
 	console.log('PASS: an abstained pitch is counted apart, and midiAssumedNatural is checked against the truth.');
 }
 
+// 10. the metre: every paired bar right in the echo; a bar stated in a metre of another length is counted wrong;
+// a truth bar with no event is counted apart (row 37)
+{
+	eq(scoreScan(T, echo()).metre, { right: 5, paired: 5, unpaired: 0 }, 'perfect metre');
+	const r = echo();
+	r.bars[2].metre = { beats: 3, beatType: 4 };
+	eq(scoreScan(T, r).metre, { right: 4, paired: 5, unpaired: 0 }, 'one bar in 3/4 where the truth bar is a whole');
+	const r2 = echo();
+	r2.bars[3].metre = { beats: 8, beatType: 8 };
+	eq(scoreScan(T, r2).metre.right, 5, '8/8 is as long as 4/4: the truth records lengths, not figures');
+	const T2 = truth();
+	T2.events = T2.events.filter((ev) => ev.measureIndex !== 4);
+	const r3 = echo();
+	r3.events = r3.events.filter((ev) => ev.measureIndex !== 4);
+	eq(scoreScan(T2, r3).metre, { right: 4, paired: 4, unpaired: 1 }, 'a bar with no event is counted apart');
+	console.log('PASS: the metre in force is scored against the truth bar length, bar by bar.');
+}
+
 console.log('\nscan-scorer self-test: all checks passed.');

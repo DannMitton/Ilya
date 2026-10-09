@@ -309,6 +309,19 @@ next session the same hour it cost the last one.
 | a hook asks the desk to commit and push | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
 | a file's time in the bridge shell looks four hours ahead | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
 | rebuilding the changed homr port in a new workspace | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-05` |
+| downloading a score from IMSLP | `WHAT THE DESK LEARNED ON 2026-10-08` |
+| quoting the token cost of a helper | `WHAT THE DESK LEARNED ON 2026-10-08` |
+| Design's return is in Downloads, not the tree | `WHAT THE DESK LEARNED ON 2026-10-08` |
+| reading a digit or letter off a scan with Tesseract | `WHAT THE DESK LEARNED ON 2026-10-08` |
+| sending Claude Design a brief that is not yet shipped | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| Design's HTML return has no images, or renders without its fonts in the cloud | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| a PNG's size or md5 differs after `device_commit_files` | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| running node, tsx, or python in the bridge shell | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| a `.ts` script fails on a top-level `await` under tsx | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| about to tell Dann whether an item is built, from `SCHEDULE.md` or `QUEUE.md` | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| about to ask Dann what an edit leaves behind | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| stamping a time on a record | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| you told Dann a write was starting, and the thread compacted | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -4643,3 +4656,22 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **The desk's cloud workspace restarted twice in one thread** (about 19:57 and 20:34 on 2026-10-07). Files on disk survived; every process died, including a background `claude -p` helper (started with `nohup`, then `setsid`) and the dev server. A background helper in the cloud is not reliable. With Dann present, the desk works in short steps and Code on the Mac builds.
 - **Claude in Chrome's `file_upload` refuses Dann's files**, from his connected folders and from the session's outputs folder alike ("only files this session is allowed to read"). Dann drags the file himself.
 - **A harness that hands a PDF straight to the reader skips the singer's door.** On 2026-10-07 the blind read called `readScan` directly and scored 97.4; on Dann's iMac the same Grechaninov PDF never reached the reader, because `take` (`ScoreUploader.svelte`) checked only page 1 for staves. Measure through `take`, or say plainly that the figure is the reader's alone.
+
+## WHAT THE DESK LEARNED ON 2026-10-08
+
+- **IMSLP's own download links now show a captcha.** The helper did not try to pass it. Its public mirror works from the cloud workspace with curl: `https://vmirror.imslp.org/files/imglnks/usimg/<hash>/IMSLP<index>-<filename>`; Python's urllib gets 403 there. Each file's size matched IMSLP's API. Scripts: `~/Downloads/_desk-2026-10-08/heldout2-truth-r2/scripts/`. Dann has an IMSLP subscription, held in reserve (his own Chrome, signed in).
+- **The desk's helper quotes ran over four times in one day:** Sonnet surveys 299k and 314k against 240k each pair, code reading 185k against 120k, metre research 203k against 175k. Quote a Sonnet survey at 200k and code reading at 200k. Truth files for ten scanned songs took two Opus helpers, 491k and 387k: about 90k a song.
+- **Design wrote its round 2 return into `~/Downloads/`, not into the tree** (`DESIGN WRITES INTO THE TREE` says otherwise). Look in both. No PNG folder came with it; the desk rendered the HTML's 28 frames in headless Chromium (`[data-frame]` elements) and placed eight in `docs/sessions/design-corrections_r2_2026-10-08-png/`.
+- **Tesseract (`tesseract.js` 7.0.0, shipped for poems) read the lyric letter «б» as 6 at confidence 93** and most italic tuplet 3s as 2. Row 54 replaced it with a shape rule for the 3 (`apps/web/src/lib/omr/tuplet-number.ts`). Templates of a 3 did not carry across engravings.
+
+## WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08 TO 2026-10-09
+
+- **Claude Design reads the repository as last shipped.** A brief that sits uncommitted in the tree does not reach it. Give Dann the whole brief as one paste for Design (round 3's brief, `../sessions/brief-design-corrections_r4_2026-10-08.md`, went that way at about 22:51).
+- **Design's round 3 return came into `~/Downloads/` with no image folder, as round 2 did.** The desk renders the HTML's `[data-frame]` elements in headless Chromium in the cloud workspace. The page asks `fonts.googleapis.com` for Source Sans 3 and Source Serif 4, which the workspace cannot reach, so the scripts carry the two fonts from `@fontsource/source-sans-3` and `@fontsource/source-serif-4` (`npm install` beside the scripts first). Scripts saved at `~/Downloads/_desk-2026-10-08/design-render-scripts/`: `render.cjs <in.html> <outDir>` renders every frame and prints which fonts loaded; `strip.cjs <in.html> <outDir> <names...>` renders the named frames with the flag character taken out; `restyle.cjs <in.html> <out.png>` redraws round 3's frame `phone-paper1-fr` with the lavender-wash squircles (its bar positions are fixed to that frame); `marks.py <src.png> <out.png>` drew the comparison of marks for a bar to confirm (its crop box is fixed to one frame). They expect Playwright at `/opt/npm-tools/node_modules/playwright`.
+- **A PNG sent with `device_commit_files` arrived 5,770 bytes larger on the Mac**, each of this thread's four. A `caBX` chunk had been added; the image data was intact. What adds it is NOT ESTABLISHED. An md5 of the whole file differs from the cloud copy, so compare the chunks or the pixels.
+- **The bridge shell has node 22.23, tsx (`/usr/local/lib/node_modules_global/bin/tsx`), and python 3.10** (read 2026-10-09 00:20). The desk tested `final-line.ts` there against the ten truth files, with scratch in `$HOME/desk-scratch/` (outside `mnt/`, so never in `git status`). It is a Linux machine, not the Mac's node: a script proven there is NOT ESTABLISHED on the Mac until Code runs it.
+- **tsx compiled a `.ts` script to CommonJS there, and a top-level `await` failed.** Wrap the body in `async function main()` and call it, as `../sessions/measure-final-test_r1_2026-10-08/final-line.ts` does.
+- **A tick in `SCHEDULE.md`, or a status in `QUEUE.md`, is a lead.** At 23:58 the desk called the comment templates "not started" from an unticked line; they had shipped (`apps/web/src/lib/insights/comment-text.ts`, commits `6d87638`, `477ba5b`, `14e4cb5`, `019bc7f`). Before telling Dann whether an item is built, open the file and cite `path:line`.
+- **Before asking Dann what an edit leaves behind, read what the tree's buttons already do.** The desk asked what a removed note leaves in the bar when Rest (`apps/web/src/routes/+page.svelte:1086`) and remove (`:982`) already answered it.
+- **Read the clock before every stamp:** `date -u` in the bridge shell; Toronto is four hours behind it until the clocks change on 2026-11-01. This thread stamped three records from a guess.
+- **A promise made before a compaction is not kept by the summary.** The desk told Dann it was starting the close writes and the thread compacted before one was made. Write first, then say it.

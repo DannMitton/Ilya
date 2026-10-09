@@ -226,9 +226,10 @@ describe('joinPages on small hand-built pages', () => {
 		const asked: { page: number; xs: number[] }[] = [];
 		const out = joinPages([page('<part id="P1"><measure number="1">' + attrs + note('C') + note('D') + '</measure></part>', LIST), page(long, LIST)], (p, notes) => {
 			asked.push({ page: p, xs: notes.map((n) => n.x) });
-			return { number: 3, candidates: 1 };
+			return { numbers: [{ n: 3, m: null, x: 20 }], centres: [20] };
 		});
-		expect(asked).toEqual([{ page: 1, xs: [10, 20, 30] }]);
+		// The quarter has no place of its own and takes its placed neighbour's.
+		expect(asked).toEqual([{ page: 1, xs: [10, 20, 30, 30] }]);
 		expect(out.match(/<time-modification>/g)).toHaveLength(3);
 		expect(placeOf('<note><!-- imgpos: 12, 34 --></note>')).toEqual({ x: 12, y: 34 });
 		expect(placeOf('<note></note>')).toBeNull();

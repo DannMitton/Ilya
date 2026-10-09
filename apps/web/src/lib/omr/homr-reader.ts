@@ -35,7 +35,8 @@
  */
 import type { Progress, Recognizer } from 'homr-web';
 import { joinPages } from './join-pages';
-import { lookForTupletNumber, type GreyPage, type Looked } from './tuplet-number';
+import { lookOverNotes, type GreyPage } from './tuplet-number';
+import { loadTemplates, type TemplateMark } from './tuplet-digits';
 import { OMR_MODEL } from './stamp';
 import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
 
@@ -153,19 +154,26 @@ export const decodeRegionInBrowser: DecodeRegion = async (image, region) => {
 /** How far around a group of notes the page is read: room for seven staff spaces and the staff-space columns. */
 const LOOK_MARGIN = 640;
 
+/** What the page shows over one bar, in page pixels: as `joinPages`'s `look` answers. */
+type Seen = { numbers: { n: number; m: number | null; x: number }[]; centres: number[] };
+
 /**
- * Joins the pages, looking at the page images for a printed 3 wherever the
- * join asks (`joinPages`'s `look`, from `triplets.ts`): a first join collects
- * the questions, the regions they need are read, and the join runs again with
- * the answers (at most three times, for questions a changed bar raises).
+ * Joins the pages, looking at the page images for printed tuplet numbers
+ * wherever the join asks (`joinPages`'s `look`, from `triplets.ts`, once for
+ * each bar that reads longer than its metre): a first join collects the
+ * questions, the regions they need are read, and the join runs again with the
+ * answers (at most three times, for questions a changed bar raises). The
+ * digit templates are loaded only when a bar asks.
  */
 export async function joinLookingAtPages(
 	xmls: readonly string[],
 	images: readonly Blob[],
 	decode: DecodeRegion,
-): Promise<{ musicXml: string; looked: number; found: number }> {
+	templates: () => Promise<readonly TemplateMark[]> = loadTemplates,
+): Promise<{ musicXml: string; looked: number; numbers: number[] }> {
 	const key = (page: number, notes: readonly { x: number; y: number }[]) => `${page}:${notes.map((n) => `${n.x},${n.y}`).join(';')}`;
-	const answers = new Map<string, Looked | null>();
+	const answers = new Map<string, Seen | null>();
+	let known: readonly TemplateMark[] | null = null;
 	let musicXml = '';
 	for (let round = 0; round < 3; round++) {
 		const asked = new Map<string, { page: number; notes: { x: number; y: number }[] }>();
@@ -176,6 +184,7 @@ export async function joinLookingAtPages(
 			return null;
 		});
 		if (asked.size === 0) break;
+		known ??= await templates();
 		for (const [k, q] of asked) {
 			const xs = q.notes.map((n) => n.x);
 			const ys = q.notes.map((n) => n.y);
@@ -189,11 +198,16 @@ export async function joinLookingAtPages(
 			const part = image ? ((await decode(image, region)) as (GreyPage & { x?: number; y?: number }) | null) : null;
 			const dx = part?.x ?? Math.max(0, Math.floor(region.x));
 			const dy = part?.y ?? Math.max(0, Math.floor(region.y));
-			answers.set(k, part ? lookForTupletNumber(part, q.notes.map((n) => ({ x: n.x - dx, y: n.y - dy }))) : null);
+			if (!part) {
+				answers.set(k, null);
+				continue;
+			}
+			const over = lookOverNotes(part, q.notes.map((n) => ({ x: n.x - dx, y: n.y - dy })), known);
+			answers.set(k, over.space === null ? null : { numbers: over.numbers.map((n) => ({ ...n, x: n.x + dx })), centres: over.centres.map((c) => c + dx) });
 		}
 	}
-	const all = [...answers.values()].filter((a): a is Looked => a !== null);
-	return { musicXml, looked: all.length, found: all.filter((a) => a.number === 3).length };
+	const all = [...answers.values()].filter((a): a is Seen => a !== null);
+	return { musicXml, looked: all.length, numbers: all.flatMap((a) => a.numbers.map((n) => n.n)) };
 }
 
 /** What one pass over the pages found. */
@@ -336,7 +350,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 			if (deps.decode) {
 				const joined = await joinLookingAtPages(song.map((p) => p.xml), song.map((p) => p.image), deps.decode);
 				musicXml = joined.musicXml;
-				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} groups of notes, found a 3 over ${joined.found}`);
+				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} bars, read ${joined.numbers.length}${joined.numbers.length ? ` (${joined.numbers.join(', ')})` : ''}`);
 			} else musicXml = joinPages(song.map((p) => p.xml));
 		} catch (err) {
 			return { ok: false, error: 'join_failed', log: message(err) };

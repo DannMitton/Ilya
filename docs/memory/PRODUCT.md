@@ -427,6 +427,8 @@ doctoral edition is a red stroke with a light red fill; Ilya's is
 `fill: none` with a `--lavender` stroke (`VoiceProfilePane.svelte`,
 `rect[data-selection-ring]`).
 
+**AMENDED BY DANN 2026-10-08 23:09 to 23:15: ONE FILLED SQUIRCLE, ON THE PAPER ONLY.** A bar Ilya asks the singer to confirm carries a filled squircle with no border, in the tab's own wash (`--lavender-wash` on Markup), behind the bar's music, as a layer that never prints. His words: *"Can't we identify measures to look at with a filled squricle?"* and *"we wouldn't need a border. The fill could be that lovely mild tint that we discovered yesterday"* (transcribed as written). The reason given below still holds where it applies: the ring on live notation, in the Loupe and on a taken note, keeps no fill. The full record is `OPEN.md`, THE CORRECTIONS REDESIGN, item 10.
+
 **The two marks do different jobs, which is the justification even though he
 reached it by eye.** His annotates a region on a static page, where a wash reads as
 commentary laid over the music. **Ilya's sits on live notation the singer is

@@ -336,17 +336,57 @@ export function placeOf(note: string): { x: number; y: number } | null {
 }
 
 /**
- * What the page shows over notes at these places on page `page` (0-based, in
- * the order of `pages`): see `PageLook` in `triplets.ts`. Null where it cannot
- * be looked at.
+ * What the page shows over a bar's notes at these places on page `page`
+ * (0-based, in the order of `pages`): each number read, where it stands
+ * across the page (`x`), and the centres of every numeral-sized mark there.
+ * Null where it cannot be looked at.
  */
-export type LookAtPage = (page: number, notes: readonly { x: number; y: number }[]) => ReturnType<PageLook>;
+export type LookAtPage = (
+	page: number,
+	notes: readonly { x: number; y: number }[],
+) => { numbers: { n: number; m: number | null; x: number }[]; centres: number[] } | null;
+
+/**
+ * Every note's place, a note homr gave no place taking one between its placed
+ * neighbours (or beside the nearest, at either end). Null where no note has a place.
+ */
+export function fillPlaces(places: readonly ({ x: number; y: number } | null)[]): { x: number; y: number }[] | null {
+	const known = places.flatMap((p, i) => (p ? [i] : []));
+	if (known.length === 0) return null;
+	return places.map((p, i) => {
+		if (p) return p;
+		const before = known.filter((k) => k < i).pop();
+		const after = known.find((k) => k > i);
+		if (before === undefined) return places[after as number] as { x: number; y: number };
+		if (after === undefined) return places[before] as { x: number; y: number };
+		const a = places[before] as { x: number; y: number };
+		const b = places[after] as { x: number; y: number };
+		const t = (i - before) / (after - before);
+		return { x: a.x + t * (b.x - a.x), y: a.y + t * (b.y - a.y) };
+	});
+}
+
+/**
+ * Where a point across the page stands among the notes, counted in notes:
+ * 2 over the third note, 2.5 halfway from it to the fourth, and beyond the
+ * first or last note by the gap to its neighbour.
+ */
+export function notesAt(xs: readonly number[], x: number): number {
+	if (xs.length === 1) return 0;
+	for (let i = 0; i + 1 < xs.length; i++) {
+		const [a, b] = [xs[i], xs[i + 1]];
+		if (x >= Math.min(a, b) && x <= Math.max(a, b)) return b === a ? i : i + (x - a) / (b - a);
+	}
+	const n = xs.length;
+	if (x < xs[0]) return (x - xs[0]) / Math.max(1, Math.abs(xs[1] - xs[0]));
+	return n - 1 + (x - xs[n - 1]) / Math.max(1, Math.abs(xs[n - 1] - xs[n - 2]));
+}
 
 /**
  * Joins homr-web's MusicXML for each page, in page order, into one
  * MusicXML string holding the voice part only. Throws `JoinPagesError` when
  * a page has no part to take or is not well formed. With `look`, a bar that
- * reads longer than its metre is checked against the page for a printed 3
+ * reads longer than its metre is checked against the page for a printed tuplet number
  * (`triplets.ts`); without it the join reads homr's output alone.
  */
 export function joinPages(pages: readonly string[], look?: LookAtPage): string {
@@ -359,8 +399,15 @@ export function joinPages(pages: readonly string[], look?: LookAtPage): string {
 			const dropRestatements = pageIndex > 0 && mIndex === 0;
 			const onPage: PageLook | undefined = look
 				? (notes) => {
-						const places = notes.map(placeOf);
-						return places.every((p) => p !== null) ? look(pageIndex, places as { x: number; y: number }[]) : null;
+						const at = fillPlaces(notes.map(placeOf));
+						if (!at) return null;
+						const seen = look(pageIndex, at);
+						if (!seen) return null;
+						const xs = at.map((p) => p.x);
+						return {
+							numbers: seen.numbers.map((n) => ({ n: n.n, m: n.m, at: notesAt(xs, n.x) })),
+							marksAt: seen.centres.map((c) => notesAt(xs, c)),
+						};
 					}
 				: undefined;
 			measures.push(rewriteMeasure(m, measures.length + 1, state, mIndex === 0, dropRestatements, onPage));
