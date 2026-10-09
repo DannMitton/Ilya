@@ -35,6 +35,7 @@ import {
 	SUGGESTIONS,
 } from './comment-text';
 import { WORKS, fullReference, worksCited } from './comment-sources';
+import { t } from '../i18n';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
 
@@ -299,10 +300,27 @@ describe('which suggestion leads (r2 §0, DESK PROPOSAL)', () => {
 		const noImagery = orderSuggestions(e, { language: 'en', measuredVowels: MEASURED, imagery: false });
 		expect([...noImagery.visible, ...noImagery.hidden].map((s) => s.id)).not.toContain('legato');
 	});
-	it('a French page leaves out the suggestions whose French is owed', () => {
+	it('no suggestion leaves a French page now: both owed actions were ratified 2026-10-09', () => {
+		expect(SUGGESTIONS.filter((s) => s.frenchOwed)).toEqual([]);
 		const e = commentsOf(T02)[0];
 		const fr = orderSuggestions(e, { language: 'fr', measuredVowels: MEASURED });
-		expect([...fr.visible, ...fr.hidden].map((s) => s.id)).toEqual(['closePosture', 'legato']);
+		expect([...fr.visible, ...fr.hidden].map((s) => s.id)).toEqual(['closePosture', 'mixed', 'legato']);
+		const u = orderSuggestions(at(cs, 'e11')!, { language: 'fr', measuredVowels: MEASURED });
+		expect([...u.visible, ...u.hidden].map((s) => s.id)).toContain('preface');
+	});
+	it('the two ratified actions read exactly as Dann ruled, in both languages', () => {
+		expect(t('comment.working.try.mixed.action', 'en')).toBe(
+			'singing the passage first entirely on [œ], then beginning each note on the briefest [œ] and moving at once to the written vowel, before returning to the text',
+		);
+		expect(t('comment.working.try.mixed.action', 'fr')).toBe(
+			'chanter d\u2019abord le passage entièrement sur [œ], puis commencer chaque note sur le plus bref [œ] en passant aussitôt à la voyelle écrite, avant de revenir au texte',
+		);
+		expect(t('comment.working.try.preface.action', 'en')).toBe(
+			'singing \u201cyou\u201d on a quick five-note descending scale, then dropping the [j] and singing only the [{vowel}], keeping the same shape of lips and face',
+		);
+		expect(t('comment.working.try.preface.action', 'fr')).toBe(
+			'chanter «\u00a0you\u00a0» sur cinq notes descendantes rapides, puis omettre le [j] et ne chanter que le [{vowel}], en gardant la même forme des lèvres et du visage',
+		);
 	});
 });
 

@@ -139,3 +139,49 @@ The one number that moved is gate 4, +18, from the 18 tests in `bars-to-confirm.
 - **The 17 song readings.** Not in the repository; Code on the Mac runs this after row 57.
 - **A real DOM.** The fixtures were parsed with the app's mini DOM (`apps/web/src/lib/score/ingestion/mini-dom.ts`), since the sandbox has no `DOMParser`. The table is the mini DOM's reading of the same XML.
 - **"First bar" and "last bar" choices.** First bar is `measures[0]`. Last bar is the last measure that holds a vocal event. A vocal part that opens with empty bars and then a pickup is not given the first-bar exemption. That is the desk's call if it matters; I made it the strict way.
+
+## The two comments
+
+QUEUE row 58, brief `brief-code-seat-two-comments_r1_2026-10-09.md`. Status: `WRITTEN` on the code. `DONE` is Dann's look.
+
+### Measured before the change
+
+Everything in the tree that names `comment.working.try.mixed.action`, `comment.working.try.preface.action`, `frenchOwed`, or the old English ("touching a mixed vowel", "prefacing the"):
+
+- `apps/web/src/lib/i18n.ts:1784-1786`: the OWED comment and the two entries.
+- `apps/web/src/lib/insights/comment-text.ts:64` (the field), `:81` (row `mixed`) and `:85` (row `preface`) set `frenchOwed: true`, and `:139` is the one reader of the flag (`!(o.language === 'fr' && s.frenchOwed)`).
+- `apps/web/src/lib/insights/comments.test.ts:302` (before the change): "a French page leaves out the suggestions whose French is owed", expecting `['closePosture', 'legato']`. This was the one test that moved.
+- No snapshot file names either key. `docs/sessions/french-comments_r1_2026-09-30.md` and `docs/memory/STATE.md` also name the keys; they are records and were not edited.
+- The French-spacing test (`apps/web/src/lib/i18n.test.ts:100`, "every French value in i18n.ts follows the table") covers both strings by walking every key.
+
+### The change
+
+- `apps/web/src/lib/i18n.ts:1784`: the OWED comment is replaced by one saying both were ratified by Dann on 2026-10-09 (`OPEN.md`, N.168), with the Miller 2004 pages (p. 79 mixed, p. 77 preface).
+- `apps/web/src/lib/i18n.ts:1785-1786`: the two entries, English and French, as ruled in the brief's table. The French uses U+2019 in « d’abord » and U+00A0 inside the guillemets of « you » (the OQLF table, row 2g). The English uses U+201C and U+201D around "you", as the entry before it did.
+- `apps/web/src/lib/insights/comment-text.ts:81` and `:85`: `frenchOwed: false`. The field stays, because every other row in that list carries it as `false` and `:139` still reads it.
+- `comment-sources.ts` is unchanged, as the brief says.
+
+### Tests
+
+- `apps/web/src/lib/insights/comments.test.ts:303`: replaces the old "leaves out the owed suggestions" test. It asserts that no suggestion has `frenchOwed` set, that a French page for the T02 first note now lists `['closePosture', 'mixed', 'legato']`, and that the closed-[u] note lists `preface` in French.
+- `apps/web/src/lib/insights/comments.test.ts:311`: new. Pins the four strings, character for character.
+
+### Gates
+
+| # | Gate | After row 51 | Now |
+|---|---|---|---|
+| 1 | `pnpm test:phonology` | 251 passed (251) | 251 passed (251) |
+| 2 | `pnpm test:dictionary` | 235 passed (235) | 235 passed (235) |
+| 3 | `pnpm --filter @ilya/web check` | 0 errors and 12 warnings in 5 files | 0 errors and 12 warnings in 5 files |
+| 4 | `pnpm --filter @ilya/web test` | 2053 passed (2053) | **2054 passed (2054)** |
+| 5 | `pnpm --filter @ilya/score-parser test` | 650 passed, 5 skipped (655) | 650 passed, 5 skipped (655) |
+| 6 | `pnpm test:blurb` | 145 passed (145) | 145 passed (145) |
+| 7 | `pnpm test:integration` | 55 passed (55) | 55 passed (55) |
+| 8 | `pnpm ratchets` | OK | OK |
+
+Gate 4 moved by +1: one test replaced by two in `comments.test.ts`.
+
+### Could not establish
+
+- Whether the French wraps well in the Insights page at desk width. I did not open the app in a browser, so "a French page shows both comments where their conditions fire" is established by the ordering tests, not by a look.
+- Whether the English or French of the other comment actions was read against the typographic conventions the ruling copies. Only these two rows changed.

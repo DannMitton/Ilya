@@ -78,11 +78,11 @@ export const SUGGESTIONS: readonly SuggestionDef[] = [
 	{ id: 'jaw', challenge: 'resonance', row: 'MIL04-028', supportRows: [], kind: 'tract-shaping', alternative: false, closer: 'A', closerJoin: 'and', readsResonance: true, frenchOwed: false, opener: 'own' },
 	{ id: 'closePosture', challenge: 'turn', row: 'KVP2-037', supportRows: [], kind: 'vowel-modification', alternative: false, closer: 'A', closerJoin: 'sentence', readsResonance: true, frenchOwed: false, opener: 7 },
 	// Miller's baritone on /ɑ/ at E♭4 to G4 (MIL04-010); the case pitch is the middle of that span.
-	{ id: 'mixed', challenge: 'turn', row: 'MIL04-010', supportRows: ['MIL04-017'], kind: 'vowel-modification', alternative: true, closer: null, readsResonance: false, case: { treble: false, midi: 65 }, frenchOwed: true },
+	{ id: 'mixed', challenge: 'turn', row: 'MIL04-010', supportRows: ['MIL04-017'], kind: 'vowel-modification', alternative: true, closer: null, readsResonance: false, case: { treble: false, midi: 65 }, frenchOwed: false },
 	{ id: 'lean', challenge: 'closedU', row: 'RMR-057', supportRows: [], kind: 'vowel-modification', alternative: false, closer: 'A', closerJoin: 'and', readsResonance: true, frenchOwed: false, opener: 'own', cite: false },
 	// Reid's baritone on the upper D (REID-054), D4.
 	{ id: 'decrescendo', challenge: 'closedU', row: 'REID-057', supportRows: ['REID-054', 'HS-B-058'], kind: 'dynamics', alternative: true, closer: 'B', closerJoin: 'purpose', readsResonance: false, case: { treble: false, midi: 62 }, frenchOwed: false },
-	{ id: 'preface', challenge: 'closedU', row: 'MIL04-008', supportRows: [], kind: 'vowel-modification', alternative: true, closer: null, readsResonance: false, frenchOwed: true },
+	{ id: 'preface', challenge: 'closedU', row: 'MIL04-008', supportRows: [], kind: 'vowel-modification', alternative: true, closer: null, readsResonance: false, frenchOwed: false },
 	{ id: 'legato', challenge: 'leap', row: 'MCK-049', supportRows: [], kind: 'imagery', alternative: false, closer: null, readsResonance: false, frenchOwed: false, tapOnly: true },
 ];
 
