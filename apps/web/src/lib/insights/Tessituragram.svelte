@@ -5,10 +5,13 @@
 	 * `brief-code-tessituragram-refined_r1_2026-10-07.md`; the drawing is Design's,
 	 * `design-tessituragram-refined_r1_2026-10-07.html`, drawing 1).
 	 *
-	 * ONE STAVE CARRIES EVERYTHING, as in the desk's sparse drawing
-	 * (`docs/sessions/tessituragram-sparse_r1_2026-09-23.html`): the clef, the
-	 * compass as its two notes, a barline, then the bars growing rightward
-	 * along the same lines and spaces. There is no second frame.
+	 * THE STAVE IS THE HISTOGRAM'S BACKGROUND (Dann's walk, 2026-10-09, `OPEN.md`
+	 * "THE INSIGHTS PAGE, REARRANGED"): five grey lines and a proportionate grey
+	 * clef, no notes, so each bar's height on the stave says its pitch. The compass
+	 * that stood on this stave is its own small stave in the page's corner
+	 * (`CompassStave.svelte`), and the cycle dose is a sentence of the page's own
+	 * (`cycle-dose.ts`). Each bar carries one label, its own pitch. This departs
+	 * from Design's drawing 1 on that ruling.
 	 *
 	 * ONE ROW PER SOUNDING PITCH. A natural sits on its line or space; a sung
 	 * sharp or flat sits half a stave step from its letter, and enharmonic
@@ -31,7 +34,6 @@
 	import { italicRuns } from '$lib/italics';
 	import { t, type Language } from '$lib/i18n';
 	import type { TessituragramModel } from '$lib/insights/insights';
-	import { formatCycles } from '$lib/insights/singing-measures';
 	import { layoutTessituragram, W, type GlyphBox, type TextItem } from '$lib/insights/tessituragram-layout';
 
 	interface Props {
@@ -42,8 +44,6 @@
 	let { figure, language }: Props = $props();
 
 	const T = (key: string) => t(key, language);
-	const fill = (s: string, vars: Record<string, string | number>) =>
-		Object.entries(vars).reduce((out, [k, v]) => out.replaceAll(`{${k}}`, String(v)), s);
 
 	let font = $state<LoadedNotationFont | null>(null);
 	onMount(() => {
@@ -99,16 +99,6 @@
 			.map((text) => ({ text, ipa: /^\[.*\]$/.test(text) }));
 	}
 
-	const doseText = $derived.by(() => {
-		const c = figure.cycles;
-		if (!c) return null;
-		const cycles =
-			c.kind === 'point'
-				? formatCycles(c.cycles, language)
-				: fill(T('insights.fit.span'), { low: formatCycles(c.low, language), high: formatCycles(c.high, language) });
-		return fill(T('insights.figure.cycleDose'), { cycles });
-	});
-
 	const title = $derived(
 		T(figure.scale === 'seconds' ? 'insights.figure.caption' : 'insights.figure.captionQuavers').toLocaleUpperCase(
 			language === 'fr' ? 'fr-CA' : 'en-CA',
@@ -139,38 +129,17 @@
 			<line x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke={s.stroke} stroke-width={s.width} />
 		{/each}
 
-		<!-- The stave: solid to the barline, faint under the bars. -->
+		<!-- The stave behind the bars: grey lines from the clef to the band's end, broken around every label. -->
 		<g stroke={STAVE} stroke-width="1">
-			{#each L.staveYs as ly (ly)}
-				<line x1="0" y1={ly} x2={L.barline} y2={ly} />
-			{/each}
-			<line x1={L.barline} y1={L.staveYs[L.staveYs.length - 1]} x2={L.barline} y2={L.staveYs[0]} />
 			{#each L.faint as s, i (i)}
 				<line x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke-opacity={s.opacity} stroke-dasharray={s.dash} />
 			{/each}
 		</g>
 
+		<!-- Its clef, as quiet as the lines: the bars' height is the pitch, and no note is drawn. -->
 		{#if prepared && font && L.clef}
-			<text x={L.clef.x} y={L.clef.y} font-family={font.family} font-size={L.glyphPx} fill={STAVE}>{clefChar}</text>
+			<text x={L.clef.x} y={L.clef.y} font-family={font.family} font-size={L.glyphPx} fill={STAVE} fill-opacity="0.3">{clefChar}</text>
 		{/if}
-
-		<!-- The compass: the lowest and highest sung pitch, spelled as the score spells them. -->
-		{#each L.notes as n (n.x)}
-			<g stroke={STAVE} stroke-width="1">
-				{#each n.ledgers as ly (ly)}
-					<line x1={n.x - L.headHalf - 4} y1={ly} x2={n.x + L.headHalf + 4} y2={ly} />
-				{/each}
-			</g>
-			{#if prepared && font}
-				<text x={n.x - L.headHalf} y={n.y} font-family={font.family} font-size={L.glyphPx} fill={STAVE}>{prepared.glyph('noteheadBlack').char}</text>
-				{#if n.pitch.alter && n.accX !== null}
-					{@const acc = prepared.glyph(({ [-2]: 'accidentalDoubleFlat', [-1]: 'accidentalFlat', 1: 'accidentalSharp', 2: 'accidentalDoubleSharp' } as const)[n.pitch.alter as -2 | -1 | 1 | 2])}
-					<text x={n.accX} y={n.y} font-family={font.family} font-size={L.glyphPx} fill={STAVE}>{acc.char}</text>
-				{/if}
-			{:else}
-				<ellipse cx={n.x} cy={n.y} rx="6" ry="4.4" fill={STAVE} transform="rotate(-18 {n.x} {n.y})" />
-			{/if}
-		{/each}
 
 		<!-- The passaggi: each line stops at its own name. -->
 		<g stroke="var(--rose-ink)" stroke-width="1" stroke-dasharray="4 3">
@@ -216,9 +185,6 @@
 		{/each}
 	</g>
 </svg>
-{#if doseText}
-	<p class="dose">{doseText}</p>
-{/if}
 
 <style>
 	.tessituragram {
@@ -228,12 +194,4 @@
 		overflow: visible;
 	}
 
-	/* The cycle-dose line, set as the section's prose (`.prose` in InsightsPane). */
-	.dose {
-		margin: 0;
-		font-family: var(--font-serif);
-		font-size: 14px;
-		line-height: 1.45;
-		color: var(--ink-primary);
-	}
 </style>

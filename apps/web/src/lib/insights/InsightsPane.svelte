@@ -34,6 +34,9 @@
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import Italics, { italicRuns } from '$lib/components/Italics.svelte';
 	import Tessituragram from '$lib/insights/Tessituragram.svelte';
+	import CompassStave from '$lib/insights/CompassStave.svelte';
+	import FitTable from '$lib/insights/FitTable.svelte';
+	import { cycleDoseSentence } from '$lib/insights/cycle-dose';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import { PAGE_SIZES, MARGINS, HEADER_GAP } from '$lib/page-config';
 	import type { LineData } from '$lib/types';
@@ -70,7 +73,6 @@
 		vowelChartRows,
 		verdictLine,
 		printsNoFindingsLine,
-		type Containment,
 		type Finding,
 		type PhonationSection,
 		type SecondsFigure,
@@ -271,14 +273,19 @@
 	const untrusted = $derived(model && !model.phonation.nothingSung ? model.phonation.untrustedMeasures : null);
 	const vowels = $derived(model && !model.phonation.nothingSung && model.phonation.vowels?.length ? model.phonation.vowels : null);
 
+	/* The cycle dose is a sentence of the page's own, last before the method line. */
+	const doseSentence = $derived(model?.figure ? cycleDoseSentence(model.figure.cycles, language) : null);
 	let vowelsOnPageOne = $state(true);
 	let pageOneCount = $state(PAGE_ONE_FINDINGS);
+	/* The cycle dose is the last thing to leave page one, and only when nothing else can (QUEUE row 60). */
+	let doseOnPageOne = $state(true);
 	/* Each new model or language starts from everything again. */
 	$effect(() => {
 		void model;
 		void language;
 		vowelsOnPageOne = true;
 		pageOneCount = PAGE_ONE_FINDINGS;
+		doseOnPageOne = true;
 	});
 
 	/* MEASURED FROM LAYOUT, after each render. The effect reads the offsets
@@ -324,6 +331,10 @@
 			pageOneCount = shown - 1;
 			return;
 		}
+		if (doseSentence && doseOnPageOne) {
+			doseOnPageOne = false;
+			return;
+		}
 		console.warn(`[Ilya] Insights page one overflows the foot by ${over.toFixed(1)} px with nothing left to move.`);
 	}
 
@@ -333,6 +344,7 @@
 		void language;
 		void vowelsOnPageOne;
 		void pageOneCount;
+		void doseOnPageOne;
 		void pageOneHeight;
 		void contentTop;
 		void footHeights[1];
@@ -350,7 +362,8 @@
 	const pageOneFindings = $derived(model ? model.findings.slice(0, pageOneCount) : []);
 	const deferredFindings = $derived(model ? model.findings.slice(pageOneCount) : []);
 	const vowelsOnPageTwo = $derived(!!vowels && !vowelsOnPageOne);
-	const hasPageTwo = $derived(!!model && (deferredFindings.length > 0 || !!untrusted || vowelsOnPageTwo));
+	const doseOnPageTwo = $derived(!!doseSentence && !doseOnPageOne);
+	const hasPageTwo = $derived(!!model && (deferredFindings.length > 0 || !!untrusted || vowelsOnPageTwo || doseOnPageTwo));
 	/* N.168: the comments take a page of their own after the findings. DESK
 	   DEFAULT: page one is fixed and full, and a comment with its tap open
 	   needs room to grow, so this page grows with its content on screen. */
@@ -373,10 +386,6 @@
 
 	// ── Words for the model ────────────────────────────────────────────
 	const P = (p: Pitch) => pitchLabel(p);
-
-	function flagWord(flag: Containment | null): string {
-		return flag ? T(`insights.flag.${flag}`) : '';
-	}
 
 	function findingTag(f: Finding): string {
 		const parts = [T('loupe.measureTagShort').replace('%m', f.measure), P(f.pitch)];
@@ -478,11 +487,14 @@
 		offerDeclined = true;
 	}
 	const verdict = $derived(model ? verdictLine(model, offerDeclined) : null);
-	/* Without the "nothing flagged" line an empty findings section has nothing
-	   under its heading, so the heading goes with it. */
-	const findingsSectionShown = $derived(
-		!!model && (pageOneFindings.length > 0 || printsNoFindingsLine(model.verdict)),
-	);
+	/* THE FINDINGS LIST keeps its own heading, and only where findings exist.
+	   "Nothing in this piece is flagged" joins the closing verdict instead (Dann,
+	   2026-10-09 01:47, "THE INSIGHTS PAGE, REARRANGED"), so an empty section
+	   no longer stands under a heading of its own. */
+	const findingsSectionShown = $derived(!!model && pageOneFindings.length > 0);
+	/* A page with nothing to say under the heading (no verdict, and no "nothing flagged") prints no heading. */
+	const noneInVerdict = $derived(!!model && pageOneFindings.length === 0 && printsNoFindingsLine(model.verdict));
+	const verdictSectionShown = $derived(!!verdict && (verdict.kind !== 'nothing' || noneInVerdict));
 
 	const remainderLine = $derived(
 		deferredFindings.length === 1
@@ -551,8 +563,6 @@
 	</div>
 {/snippet}
 
-{#snippet pitched(text: string)}{#each italicRuns(text) as run, i (i)}{#if run.title}<em>{#each accidentalParts(run.text) as part, j (j)}{#if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}</em>{:else}{#each accidentalParts(run.text) as part, j (j)}{#if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/if}{/each}{/snippet}
-
 {#snippet vowelTimes()}
 	<p class="sub-head">{T(model?.phonation.timing === 'none' ? 'insights.phonation.byVowelShare' : 'insights.phonation.byVowel')}</p>
 	<!-- One bar per vowel in the ruled order (after Dann's Figure 6.10). A
@@ -608,7 +618,11 @@
 					markAccent="#AB7F7F"
 					ruleAccent="#AB7F7F"
 					labelInk="var(--rose-ink)"
-				/>
+				>
+					{#snippet aside()}
+						{#if model?.figure}<CompassStave compass={model.figure.compass} clef={model.figure.clef} {language} />{/if}
+					{/snippet}
+				</TitleHeader>
 
 				<div class="squircle" style="top: {contentTop}px;" bind:offsetHeight={pageOneHeight} bind:this={pageOneEl}>
 					{#if !analysisScore}
@@ -631,84 +645,12 @@
 
 						<div class="section">
 							{@render sectionHead(T('insights.fit.heading'))}
-							<div class="fit-table" role="table" aria-label={T('insights.fit.heading')}>
-								<div class="fit-row fit-head" role="row">
-									<span role="columnheader">{T('insights.fit.colTerm')}</span>
-									<span role="columnheader">{T('insights.fit.colMeasured')}</span>
-									<span role="columnheader">{T('insights.fit.colReference')}</span>
-									<span role="columnheader" class="flag">{T('insights.fit.colFlag')}</span>
-								</div>
+							<FitTable {model} {language} />
+						</div>
 
-								<div class="fit-row" role="row">
-									<span role="cell" class="term">{T('insights.fit.range')}</span>
-									<span role="cell">
-										{#if model.range.measured}
-											{@render pitched(fill(T('insights.fit.compass'), { low: P(model.range.measured.low), high: P(model.range.measured.high) }))}
-										{:else}
-											{T('insights.fit.noPitches')}
-										{/if}
-									</span>
-									<span role="cell">
-										{#if model.range.reference}
-											{@render pitched(fill(T('insights.fit.spanTyped'), { low: P(model.range.reference.low), high: P(model.range.reference.high) }))}
-										{:else}
-											{T('insights.fit.notTyped')}
-										{/if}
-									</span>
-									<span role="cell" class="flag">{flagWord(model.range.flag)}</span>
-								</div>
-
-								<div class="fit-row" role="row">
-									<span role="cell" class="term"><Italics text={T('insights.fit.crossings')} /></span>
-									<span role="cell">
-										{#if model.crossings.measured}
-											<Italics text={fill(T('insights.fit.crossingsCount'), model.crossings.measured)} />
-										{:else}
-											<Italics text={T('insights.fit.crossingsUncounted')} />
-										{/if}
-									</span>
-									<span role="cell">
-										{#if model.crossings.reference}
-											{@render pitched(fill(T('insights.fit.passaggiTyped'), { primo: P(model.crossings.reference.primo), secondo: P(model.crossings.reference.secondo) }))}
-										{:else}
-											{T('insights.fit.notTyped')}
-										{/if}
-									</span>
-									<!-- No threshold for a crossing count is ruled anywhere, so the
-									     flag says that rather than judging the count. -->
-									<span role="cell" class="flag">{model.crossings.measured ? T('insights.flag.noThreshold') : ''}</span>
-								</div>
-
-								<div class="fit-row" role="row">
-									<span role="cell" class="term">{T('insights.fit.tessitura')}</span>
-									<span role="cell">
-										{#if model.tessitura.measured}
-											{@render pitched(fill(T('insights.fit.span'), { low: P(model.tessitura.measured.low), high: P(model.tessitura.measured.high) }))}<sup>1</sup>
-											{#if model.tessitura.measured.basis === 'half-second-maximum'}
-												<span class="qualifier">{T('insights.fit.tessituraFallback')}</span>
-											{/if}
-											{#if model.tessitura.measured.marginal}
-												<span class="qualifier">{T('insights.fit.tessituraMarginal')}</span>
-											{/if}
-										{:else if model.tessitura.withheldFor}
-											{fill(
-												T(model.tessitura.withheldFor.length === 1 ? 'insights.fit.withheldOne' : 'insights.fit.withheldMany'),
-												{ measures: model.tessitura.withheldFor.join(', ') },
-											)}
-										{:else}
-											{T('insights.fit.nothingSung')}
-										{/if}
-									</span>
-									<span role="cell">
-										{#if model.tessitura.reference}
-											{@render pitched(fill(T('insights.fit.spanTyped'), { low: P(model.tessitura.reference.low), high: P(model.tessitura.reference.high) }))}
-										{:else}
-											{T('insights.fit.notTyped')}
-										{/if}
-									</span>
-									<span role="cell" class="flag">{flagWord(model.tessitura.flag)}</span>
-								</div>
-							</div>
+						{#if verdictSectionShown}
+						<div class="section">
+							{@render sectionHead(T('insights.verdict.heading'))}
 							{#if verdict?.kind === 'verdict'}
 								<p class="verdict">{T(verdict.key)}</p>
 							{:else if verdict?.kind === 'offer'}
@@ -718,22 +660,26 @@
 									{T('insights.offer.before')}{' '}<button type="button" class="offer-link" onclick={() => onaddrange?.()}>{T('insights.offer.link')}</button>{T('insights.offer.after')}{' '}<button type="button" class="offer-decline" onclick={declineOffer}>{T('insights.offer.decline')}</button>
 								</p>
 							{/if}
+							{#if noneInVerdict}
+								<p class="verdict">{T('insights.findings.none')}</p>
+							{/if}
 						</div>
+						{/if}
 
 						{#if findingsSectionShown}
 							<div class="section">
 								{@render sectionHead(T('insights.findings.heading'))}
-								{#if pageOneFindings.length === 0}
-									<p class="prose">{T('insights.findings.none')}</p>
-								{:else}
-									{#each pageOneFindings as f (f.key)}
-										{@render finding(f)}
-									{/each}
-									{#if deferredFindings.length > 0}
-										<p class="remainder">{remainderLine}</p>
-									{/if}
+								{#each pageOneFindings as f (f.key)}
+									{@render finding(f)}
+								{/each}
+								{#if deferredFindings.length > 0}
+									<p class="remainder">{remainderLine}</p>
 								{/if}
 							</div>
+						{/if}
+
+						{#if doseSentence && doseOnPageOne}
+							<p class="prose dose">{doseSentence}</p>
 						{/if}
 					{/if}
 				</div>
@@ -778,6 +724,9 @@
 									{@render finding(f)}
 								{/each}
 							</div>
+						{/if}
+						{#if doseOnPageTwo}
+							<p class="prose dose">{doseSentence}</p>
 						{/if}
 					</div>
 					{@render foot(2, false)}
@@ -912,64 +861,6 @@
 		font-size: 12.5px;
 		line-height: 1.45;
 		color: var(--ink-secondary);
-	}
-
-	/* ── The fit table ──────────────────────────────────────── */
-
-	.fit-table {
-		display: grid;
-		grid-template-columns: 150px 1fr 1fr 88px;
-		column-gap: 14px;
-		font-family: var(--font-serif);
-		font-size: 12.5px;
-		line-height: 1.35;
-		color: var(--ink-secondary);
-	}
-
-	.fit-row {
-		display: contents;
-	}
-
-	.fit-row > span {
-		padding: 5px 0 4px;
-		border-top: 1px solid rgba(171, 127, 127, 0.35);
-	}
-
-	.fit-head > span {
-		padding-top: 0;
-		border-top: none;
-		font-family: var(--font-sans);
-		font-size: 10px;
-		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--ink-tertiary);
-	}
-
-	.fit-table .acc {
-		font-family: var(--font-sans);
-	}
-
-	.fit-row .term {
-		color: var(--ink-primary);
-	}
-
-	.fit-row .flag {
-		text-align: right;
-	}
-
-	.fit-row:not(.fit-head) .flag {
-		font-family: var(--font-sans);
-		font-size: 10.5px;
-		font-weight: 600;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		color: var(--ink-secondary);
-	}
-
-	.qualifier {
-		display: block;
-		color: var(--ink-tertiary);
 	}
 
 	sup {

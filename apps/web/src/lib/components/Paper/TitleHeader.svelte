@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
 	import type { PreparedSmuflFont } from '@ilya/score-parser';
@@ -57,9 +58,16 @@
 		legendItems?: LegendItem[];
 		/** The page's notation font, so the stems key draws with the same heads the stave does (N.176). */
 		notationFont?: { prepared: PreparedSmuflFont; family: string } | null;
+		/**
+		 * Something that stands in the header's top-right corner, right-aligned to the
+		 * content edge, in the same place on every page that has it (Insights' compass
+		 * stave, 2026-10-09). The title and the metadata lines leave it room. Absent on
+		 * every other page, so no other header moves.
+		 */
+		aside?: Snippet;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined, legendItems = [], notationFont = null }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined, legendItems = [], notationFont = null, aside }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -91,6 +99,8 @@
 	 * subtitle carries the singer's own voice name and the legend is bilingual.
 	 */
 	const LEGEND_GAP = 24;
+	/** The corner slot's own width, so the title and the metadata leave exactly that much room. */
+	let asideWidth = $state(0);
 	let rowWidth = $state(0);
 	let subtitleWidth = $state(0);
 	let legendWidth = $state(0);
@@ -115,7 +125,8 @@
 	});
 </script>
 
-<header class="title-header" bind:offsetHeight={measuredHeight}>
+<header class="title-header" class:has-aside={!!aside} style:--aside-room="{asideWidth + 14}px" bind:offsetHeight={measuredHeight}>
+	{#if aside}<div class="header-aside" bind:clientWidth={asideWidth}>{@render aside()}</div>{/if}
 	<div class="logo" style="color: {markAccent}">
 		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span><span class="logo-version" style="color: {versionAccent}">2026a</span>
 	</div>
@@ -174,6 +185,20 @@
 		top: 48px;
 		left: 96px;
 		right: 96px;
+	}
+
+	/* ── The corner slot (Insights' compass stave) ─────────── */
+
+	.header-aside {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	.title-header.has-aside .song-title,
+	.title-header.has-aside .metadata-block,
+	.title-header.has-aside .header-note {
+		margin-right: var(--aside-room, 0px);
 	}
 
 	/* ── Logo: version nestled in y descender ──────────────── */

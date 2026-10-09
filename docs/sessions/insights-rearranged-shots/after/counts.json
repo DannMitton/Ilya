@@ -1,0 +1,162 @@
+[
+ {
+  "key": "sunless01",
+  "lang": "en",
+  "figure": true,
+  "labels": 20,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 198
+ },
+ {
+  "key": "sunless01",
+  "lang": "fr",
+  "figure": true,
+  "labels": 20,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 198
+ },
+ {
+  "key": "sun1",
+  "lang": "en",
+  "figure": true,
+  "labels": 22,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 198
+ },
+ {
+  "key": "sun1",
+  "lang": "fr",
+  "figure": true,
+  "labels": 22,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 198
+ },
+ {
+  "key": "sun4",
+  "lang": "en",
+  "figure": true,
+  "labels": 23,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 203
+ },
+ {
+  "key": "sun4",
+  "lang": "fr",
+  "figure": true,
+  "labels": 23,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 203
+ },
+ {
+  "key": "sun5",
+  "lang": "en",
+  "figure": true,
+  "labels": 24,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 212
+ },
+ {
+  "key": "sun5",
+  "lang": "fr",
+  "figure": true,
+  "labels": 24,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 212
+ },
+ {
+  "key": "sun6",
+  "lang": "en",
+  "figure": true,
+  "labels": 22,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 196
+ },
+ {
+  "key": "sun6",
+  "lang": "fr",
+  "figure": true,
+  "labels": 22,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 196
+ },
+ {
+  "key": "tch",
+  "lang": "en",
+  "figure": true,
+  "labels": 23,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 199
+ },
+ {
+  "key": "tch",
+  "lang": "fr",
+  "figure": true,
+  "labels": 24,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 199
+ },
+ {
+  "key": "sun3_2",
+  "lang": "en",
+  "figure": true,
+  "labels": 22,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 196
+ },
+ {
+  "key": "sun3_2",
+  "lang": "fr",
+  "figure": true,
+  "labels": 22,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 196
+ },
+ {
+  "key": "tch1",
+  "lang": "en",
+  "figure": true,
+  "labels": 21,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 194
+ },
+ {
+  "key": "tch1",
+  "lang": "fr",
+  "figure": true,
+  "labels": 22,
+  "textText": 0,
+  "textBar": 0,
+  "textLine": 0,
+  "figH": 194
+ }
+]

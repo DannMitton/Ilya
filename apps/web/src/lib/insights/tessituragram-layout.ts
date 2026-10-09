@@ -8,6 +8,14 @@
  * in the app, a stand-in in a test), and the music font's glyph sizes arrive
  * the same way.
  *
+ * THE 2026-10-09 REARRANGEMENT (Dann's walk, `OPEN.md` "THE INSIGHTS PAGE,
+ * REARRANGED"). This figure no longer carries the compass: its two notes, its
+ * barline, and the left columns of letter names are gone, and the compass is its
+ * own small stave in the page's corner (`compass-stave.ts`). What is left is the
+ * histogram over a quiet grey stave with its clef, and each bar carries one
+ * label, its own pitch, beside it. This departs from Design's drawing 1 (QUEUE
+ * row 42) on that ruling.
+ *
  * The drawing it builds is Design's drawing 1
  * (`design-tessituragram-refined_r1_2026-10-07.html`; the notes beside it are
  * the source of every constant marked JUDGEMENT). Units are CSS px at letter
@@ -21,7 +29,7 @@ import { pitchToMidi, smuflFontSizePx, spToPx } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import { withoutItalics } from '$lib/italics';
 import { pitchLabel } from '$lib/voice/note-picker';
-import { diatonicOf, formatSeconds, type FigureRow, type TessituragramModel } from './insights';
+import { formatSeconds, type FigureRow, type TessituragramModel } from './insights';
 
 /** Width in px of `text` at `size` px and `weight`. */
 export type Measure = (text: string, size: number, weight: number) => number;
@@ -46,16 +54,15 @@ const BASE_STEP = 11;
 const BAR = 6;
 const THIN = 4.5;
 const MIN_GAP = 1;
-/** The stave's barline, unless the compass needs more room. */
-const BARLINE_MIN = 150;
-const BAR_CAP = 196;
+/** The longest a bar may draw. 196 until the left name columns went (2026-10-09); their width went to the bars. */
+const BAR_CAP = 320;
 const BAR_FLOOR = 60;
 /** Text boxes: ascent and descent as shares of the size, Source Sans 3's. */
 const ASC = 0.74;
 const DESC = 0.25;
 const LINE_H = 12.5;
-/** The least distance between two names' baselines in one column: ink 9.9 px plus a hair. */
-const NAME_GAP = 10.5;
+/** The fan between a cluster's longest bar and its label column: a straight run, then the slope in. */
+const FAN = 26;
 const TITLE_BASELINE = 12;
 /** Where the first piece of content below the title starts. */
 const CONTENT_TOP = 20;
@@ -102,7 +109,87 @@ export function spellingOf(r: FigureRow): FigureRow['spellings'][number] {
 	return r.spellings[best];
 }
 
-const STAVE_LINES: Record<'treble' | 'bass', number[]> = {
+/**
+ * Positions as near as possible to `want` (ascending) yet each at least
+ * `gaps[i]` above the one before it, in the same order: `spreadApart` for
+ * labels of different heights. The same least-squares fit, by pooling adjacent
+ * violators on `want[i]` less the gaps summed before it. Pure.
+ */
+export function spreadByGaps(want: number[], gaps: number[]): number[] {
+	const offset: number[] = [];
+	let acc = 0;
+	want.forEach((_, i) => {
+		offset.push(acc);
+		acc += gaps[i] ?? 0;
+	});
+	const blocks: Array<{ sum: number; n: number }> = [];
+	want.forEach((w, i) => {
+		blocks.push({ sum: w - offset[i], n: 1 });
+		while (blocks.length > 1 && blocks[blocks.length - 2].sum / blocks[blocks.length - 2].n > blocks[blocks.length - 1].sum / blocks[blocks.length - 1].n) {
+			const b = blocks.pop()!;
+			blocks[blocks.length - 1].sum += b.sum;
+			blocks[blocks.length - 1].n += b.n;
+		}
+	});
+	const out: number[] = [];
+	for (const b of blocks) for (let k = 0; k < b.n; k++) out.push(b.sum / b.n + offset[out.length]);
+	return out;
+}
+
+/**
+ * WHICH BAR LABELS STAND TOGETHER IN A COLUMN. Rows a semitone apart sit 5.5 px
+ * apart and a label is about 10 px tall, so a run of them cannot each stand at its
+ * own bar's end. The labels are spread to at least a label's height apart, as
+ * near their rows as that allows, and a run that had to move is a CLUSTER: its
+ * labels stand in one column past the longest bar the run touches, and a hairline
+ * joins each to its own bar. A bar no neighbour crowds is no cluster, and its label
+ * stands at its end. This depends on the rows' places and the labels' line counts
+ * only, never on a bar's length or a language, so the bar scale can reserve the
+ * room before the bars are drawn. Pure.
+ */
+export interface ClusterPlan {
+	/** Each label's centre line after spreading, by row. */
+	centre: Map<number, number>;
+	/** The rows of each cluster, and the other rows whose bars stand beside its labels. */
+	clusters: Array<{ members: number[]; blockers: number[] }>;
+}
+
+export function planLabelClusters(items: Array<{ midi: number; cy: number; lines: number; barHalf: number }>): ClusterPlan {
+	const sorted = [...items].sort((a, b) => a.cy - b.cy);
+	const h = (n: number) => (n - 1) * LINE_H + (ASC + DESC) * LABEL;
+	const gaps = sorted.map((it, i) => (i + 1 < sorted.length ? (h(it.lines) + h(sorted[i + 1].lines)) / 2 + 0.75 : 0));
+	const placed = spreadByGaps(sorted.map((it) => it.cy), gaps);
+	const centre = new Map<number, number>();
+	sorted.forEach((it, i) => centre.set(it.midi, placed[i]));
+	const clusters: ClusterPlan['clusters'] = [];
+	let run: number[] = [0];
+	const close = () => {
+		if (run.length > 1) {
+			const members = run.map((i) => sorted[i].midi);
+			const blockers: number[] = [];
+			for (const j of sorted) {
+				if (members.includes(j.midi)) continue;
+				const beside = run.some((i) => {
+					const half = h(sorted[i].lines) / 2 + 0.75;
+					return Math.abs(j.cy - placed[i]) < half + j.barHalf;
+				});
+				if (beside) blockers.push(j.midi);
+			}
+			clusters.push({ members, blockers });
+		}
+	};
+	for (let i = 1; i < sorted.length; i++) {
+		if (placed[i] - placed[i - 1] <= gaps[i - 1] + 0.01) run.push(i);
+		else {
+			close();
+			run = [i];
+		}
+	}
+	close();
+	return { centre, clusters };
+}
+
+export const STAVE_LINES: Record<'treble' | 'bass', number[]> = {
 	bass: [18, 20, 22, 24, 26], // G2 B2 D3 F3 A3
 	treble: [30, 32, 34, 36, 38], // E4 G4 B4 D5 F5
 };
@@ -112,14 +199,12 @@ const fill = (s: string, vars: Record<string, string | number>) =>
 // ── What the layout returns ───────────────────────────────────────────
 export type TextKind =
 	| 'title'
-	| 'sungName'
 	| 'barLabel'
 	| 'passaggio'
 	| 'share'
 	| 'tessitura'
 	| 'half'
 	| 'centre'
-	| 'compass'
 	| 'key';
 
 export interface TextItem {
@@ -163,21 +248,20 @@ export interface Layout {
 	height: number;
 	/** Everything but the title is drawn translated down by this much. */
 	dy: number;
-	barline: number;
 	barX: number;
 	barMax: number;
 	rows: DrawnRow[];
 	staveYs: number[];
 	ledgerYs: number[];
-	/** Names of the stave's lines and the bars' ledger lines, with their y. */
 	band: { x: number; y: number; width: number; height: number } | null;
 	tessBracket: Seg[];
+	/** The stave behind the bars (from the clef to the band's end) and the ledger lines under them, broken around every label. */
 	faint: Seg[];
 	passLines: Seg[];
 	halfBracket: Seg[];
 	leaders: Seg[];
 	texts: TextItem[];
-	notes: Array<{ pitch: TessituragramModel['compass']['low']; x: number; y: number; ledgers: number[]; accX: number | null }>;
+	/** The clef's left edge and its anchor line's y; null before the music font arrives. */
 	clef: { x: number; y: number } | null;
 	keyMarks: KeyMark[];
 	/** Labels no near place could take and no slot could take: a contact the layout could not avoid. */
@@ -186,7 +270,6 @@ export interface Layout {
 	barMaxByLanguage: Record<Language, number>;
 	glyphPx: number;
 	lineGap: number;
-	headHalf: number;
 }
 
 // ── Boxes ───────────────────────────────────────────────────────────
@@ -251,7 +334,15 @@ export function slotWithLeader(
 }
 
 // ── The bar labels, per language ────────────────────────────────────
-function barLabels(figure: TessituragramModel, language: Language): Map<number, { dark: boolean; labels: string[] }> {
+/**
+ * ONE LABEL A BAR, ITS OWN PITCH (Dann, 2026-10-09, `OPEN.md` "THE INSIGHTS
+ * PAGE, REARRANGED", ruling 3). The label's first line begins with the pitch's
+ * name, spelled the way the row's more-sung spelling is. A dark bar's findings
+ * and the longest bar's value follow on the same label, joined by " · ", as the
+ * list under the figure names them; a bar with several findings continues them
+ * on further lines of the one label.
+ */
+function barLabels(figure: TessituragramModel, language: Language): Map<number, { dark: boolean; lines: string[] }> {
 	const T = (key: string) => t(key, language);
 	const longestText = (() => {
 		const s = figure.longest.seconds;
@@ -259,18 +350,18 @@ function barLabels(figure: TessituragramModel, language: Language): Map<number, 
 		if (s?.kind === 'range') return fill(T('insights.fit.span'), { low: formatSeconds(s.low), high: formatSeconds(s.high) });
 		return fill(T('insights.phonation.share'), { n: Math.round(figure.longest.share * 100) });
 	})();
-	const out = new Map<number, { dark: boolean; labels: string[] }>();
+	const out = new Map<number, { dark: boolean; lines: string[] }>();
 	for (const row of figure.rows) {
 		const dark = !figure.quiet && row.tags.length > 0;
-		/* A dark bar's end names its findings as the list opens them, less the
-		   pitch the row already shows, one per line; the longest bar's value
-		   follows the first. */
-		const labels = dark ? row.tags.map((tag) => `${T('loupe.measureTagShort').replace('%m', tag.measure)} · [${tag.vowel}]`) : [];
+		const lines = dark ? row.tags.map((tag) => `${T('loupe.measureTagShort').replace('%m', tag.measure)} · [${tag.vowel}]`) : [];
 		if (row.midi === figure.longest.midi) {
-			if (labels.length > 0) labels[0] = `${labels[0]} · ${longestText}`;
-			else labels.push(longestText);
+			if (lines.length > 0) lines[0] = `${lines[0]} · ${longestText}`;
+			else lines.push(longestText);
 		}
-		out.set(row.midi, { dark, labels });
+		const name = pitchLabel(spellingOf(row));
+		if (lines.length > 0) lines[0] = `${name} · ${lines[0]}`;
+		else lines.push(name);
+		out.set(row.midi, { dark, lines });
 	}
 	return out;
 }
@@ -294,7 +385,6 @@ function columnWidths(figure: TessituragramModel, language: Language, measure: M
 	return {
 		rightCol,
 		centreW: centreText ? measure(centreText, LABEL, 500) : 0,
-		tessitura: figure.tessitura ? measure(T('insights.figure.tessitura'), LABEL, 500) : 0,
 	};
 }
 
@@ -320,8 +410,11 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 	const lines = STAVE_LINES[figure.clef];
 	const bottomLine = lines[0];
 	const topLine = lines[4];
-	const ups = [topLine, diatonicOf(figure.compass.high), ...rowsIn.map((r) => upperStep(r.midi))];
-	const downs = [bottomLine, diatonicOf(figure.compass.low), ...rowsIn.map((r) => lowerStep(r.midi))];
+	/* THE COMPASS IS NOT DRAWN HERE any more: it is its own small stave in the page's
+	   corner (`compass-stave.ts`). This figure's stave is a quiet background, so each
+	   bar's height says its pitch, and its extent is the stave's and the bars'. */
+	const ups = [topLine, ...rowsIn.map((r) => upperStep(r.midi))];
+	const downs = [bottomLine, ...rowsIn.map((r) => lowerStep(r.midi))];
 	if (figure.tessitura) {
 		ups.push(upperStep(pitchToMidi(figure.tessitura.high)));
 		downs.push(lowerStep(pitchToMidi(figure.tessitura.low)));
@@ -341,52 +434,46 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 	for (let l = topLine + 2; l <= hi; l += 2) ledgerSteps.push(l);
 	for (let l = bottomLine - 2; l >= lo; l -= 2) ledgerSteps.push(l);
 
-	// ── The compass at the stave's left, which sets the barline ──
-	const ACC: Record<number, string> = { [-2]: 'accidentalDoubleFlat', [-1]: 'accidentalFlat', 1: 'accidentalSharp', 2: 'accidentalDoubleSharp' };
+	// ── The clef, at the stave's left, and what stands between it and the bars ──
 	const clefName = figure.clef === 'bass' ? 'fClef' : 'gClef';
 	const clefG = glyph(clefName);
-	const headG = glyph('noteheadBlack');
-	const headHalf = headG ? sp(headG.widthSp / 2) : 6;
-	const accW = (alter: number | undefined) => {
-		const g = alter ? glyph(ACC[alter]) : null;
-		return alter ? (g ? sp(g.widthSp) : 8) + 3 : 0;
-	};
-	const clefRight = clefG ? CLEF_X + sp(clefG.widthSp) : CLEF_X;
-	const lowP = figure.compass.low;
-	const highP = figure.compass.high;
-	const oneNote = pitchToMidi(lowP) === pitchToMidi(highP) && diatonicOf(lowP) === diatonicOf(highP);
-	const lowX = clefRight + 6 + accW(lowP.alter) + headHalf;
-	const highX = oneNote ? lowX : Math.max(lowX + 40, lowX + 2 * headHalf + 6 + accW(highP.alter));
-	const barline = Math.max(BARLINE_MIN, highX + headHalf + 10);
-
-	// ── Names, and the columns they set ──
-	/* EVERY SUNG PITCH IS NAMED, AND NOTHING ELSE (QUEUE row 43). A natural is
-	   named in the left column, a sharp or flat in the right, each level with its
-	   bar. A stave or ledger line the song does not sing has no name. */
-	const named = rowsIn.map((r) => ({ row: r, name: pitchLabel(spellingOf(r)), accidental: (spellingOf(r).alter ?? 0) !== 0 }));
-	const lineNameW = Math.max(0, ...named.filter((n) => !n.accidental).map((n) => measure(n.name, LABEL, 500)));
-	const sungW = Math.max(0, ...named.filter((n) => n.accidental).map((n) => measure(n.name, LABEL, 500)));
+	/* Before the music font arrives the clef's width is a stand-in, so the bars do not jump when it does. */
+	const clefRight = CLEF_X + (clefG ? sp(clefG.widthSp) : sp(2.7));
 	/* "tessitura" is the wider of the two languages' words, so the columns hold still across them. */
 	const tessW = figure.tessitura ? Math.max(...(['en', 'fr'] as const).map((l) => measure(t('insights.figure.tessitura', l), LABEL, 500))) : 0;
-	const lineNameEnd = Math.max(barline + 76, barline + 15 + tessW + 6 + lineNameW);
-	const sungEnd = lineNameEnd + 5 + sungW;
-	const barX = sungEnd + 6;
+	const tessBx = clefRight + 8;
+	const barX = figure.tessitura ? tessBx + 15 + tessW + 8 : clefRight + 12;
 
 	// ── One bar scale for both languages ──
 	/* Design found the French right-hand column shortens the longest bar (152 px
 	   against 137). The length comes from the tighter language, so an English
-	   page and a French one draw the same bars. */
+	   page and a French one draw the same bars.
+
+	   A label that has a sung semitone neighbour may have to stand beyond that
+	   neighbour's own label, so a run of semitone neighbours keeps its labels in
+	   a column past its longest bar (`planLabelClusters`), and every bar the column
+	   stands beside reserves the room for it. */
 	const maxFrac = (r: FigureRow) => r.quavers / figure.longest.quavers;
 	const bandRows = figure.halfMass ? rowsIn.filter((r) => r.midi >= figure.halfMass!.low && r.midi <= figure.halfMass!.high) : [];
+	const labelWidth = (info: { dark: boolean; lines: string[] }) => Math.max(...info.lines.map((l) => measure(l, LABEL, info.dark ? 600 : 500)));
+	const plan = planLabelClusters(
+		rowsIn.map((r) => ({ midi: r.midi, cy: rowY(r.midi), lines: barLabels(figure, 'en').get(r.midi)!.lines.length, barHalf: (tight(r.midi) ? THIN : BAR) / 2 })),
+	);
 	const barMaxFor = (lang: Language): number => {
 		const cw = columnWidths(figure, lang, measure);
 		const labels = barLabels(figure, lang);
 		const colLeft = RIGHT - cw.rightCol - (cw.rightCol ? 4 : 0);
 		const spineMax = colLeft - (figure.centre ? 9 + cw.centreW : 6) + (cw.rightCol ? 4 : 0);
+		/* A bar whose label stands in a column reserves the fan and the column's widest label. */
+		const reserve = new Map<number, number>();
+		for (const c of plan.clusters) {
+			const widest = Math.max(...c.members.map((m) => labelWidth(labels.get(m)!)));
+			for (const m of [...c.members, ...c.blockers]) reserve.set(m, FAN + widest);
+		}
 		let m = BAR_CAP;
 		for (const r of rowsIn) {
 			const info = labels.get(r.midi)!;
-			const lw = info.labels.length ? 4 + Math.max(...info.labels.map((l) => measure(l, LABEL, info.dark ? 600 : 400))) : 0;
+			const lw = reserve.get(r.midi) ?? 4 + labelWidth(info);
 			const inBand = bandRows.includes(r);
 			const limit = inBand && figure.halfMass ? spineMax - 10 : colLeft - 6;
 			m = Math.min(m, (limit - barX - lw) / Math.max(maxFrac(r), 1e-9));
@@ -406,6 +493,7 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 		length: maxFrac(r) * barMax,
 		dark: labelInfo.get(r.midi)!.dark,
 	}));
+	const rowBoxes: Box[] = rows.map((r) => ({ x0: barX, x1: barX + r.length, y0: r.cy - r.height / 2, y1: r.cy + r.height / 2 }));
 
 	const texts: TextItem[] = [];
 	const addText = (item: Omit<TextItem, 'box'>, w: number, lines = 1): TextItem => {
@@ -415,62 +503,75 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 	};
 	const TERTIARY = 'var(--ink-tertiary)';
 	const INK = 'var(--rose-ink)';
-
-	/* NO TWO NAMES TOUCH (QUEUE row 46). Rows a semitone apart sit 5.5 px apart,
-	   so two names in one column would overlap: E and F, a run of sharps, E♯4 and
-	   F♯4. Within each column the names are spread to at least `NAME_GAP` apart,
-	   moving as little as possible (least squares, order kept); a name that has
-	   left its row is joined to it by a leader. */
 	const leaders: Seg[] = [];
-	for (const accidental of [false, true]) {
-		const col = rows
-			.map((r) => ({ r, n: named.find((x) => x.row.midi === r.midi)! }))
-			.filter((c) => c.n.accidental === accidental)
-			.sort((a, b) => a.r.cy - b.r.cy);
-		const endX = accidental ? sungEnd : lineNameEnd;
-		const placed = spreadApart(col.map((c) => c.r.cy), NAME_GAP);
-		col.forEach((c, i) => {
-			addText({ kind: 'sungName', text: c.n.name, x: endX, y: placed[i] + 3.3, anchor: 'end', size: LABEL, weight: 500, fill: INK }, measure(c.n.name, LABEL, 500));
-			if (Math.abs(placed[i] - c.r.cy) > 1) leaders.push({ x1: endX + 3, y1: placed[i], x2: barX - 2, y2: c.r.cy, stroke: INK, width: 0.6 });
-		});
-	}
+	const unplaced: string[] = [];
+
+	/* EVERY BAR HAS ONE LABEL, ITS OWN PITCH, BESIDE THE BAR. A bar no semitone
+	   neighbour crowds has its label at its end. A run of semitone neighbours
+	   (rows 5.5 px apart under labels 10 px tall) has its labels spread to a label's
+	   height apart, in one column that starts past the run's longest bar, and each
+	   bar is joined to its label by a hairline: along its own row to the fan, then
+	   in. The labels keep their order, so the hairlines never cross (see
+	   `planLabelClusters`). */
+	const cwHere = columnWidths(figure, language, measure);
+	const colLeftPx = RIGHT - cwHere.rightCol - (cwHere.rightCol ? 4 : 0);
 	const barLabelItems: TextItem[] = [];
 	const labelsByRow = new Map<number, TextItem[]>();
+	const rowOf = new Map(rows.map((r) => [r.midi, r]));
+	const clusterOf = new Map<number, ClusterPlan['clusters'][number]>();
+	for (const c of plan.clusters) for (const m of c.members) clusterOf.set(m, c);
+	const columnX = new Map<ClusterPlan['clusters'][number], number>();
+	for (const c of plan.clusters) {
+		const tips = [...c.members, ...c.blockers].map((m) => barX + rowOf.get(m)!.length);
+		columnX.set(c, Math.max(...tips) + FAN);
+	}
 	for (const r of rows) {
 		const info = labelInfo.get(r.midi)!;
-		info.labels.forEach((label, i) => {
-			const weight = r.dark ? 600 : 400;
-			const item = addText(
-				{ kind: 'barLabel', text: label, x: barX + r.length + 4, y: r.cy + 3.3 + (i - (info.labels.length - 1) / 2) * LINE_H, anchor: 'start', size: LABEL, weight, fill: INK },
-				measure(label, LABEL, weight),
-			);
+		const n = info.lines.length;
+		const weight = r.dark ? 600 : 500;
+		const w = labelWidth(info);
+		const tipX = barX + r.length;
+		const cluster = clusterOf.get(r.midi);
+		const centre = plan.centre.get(r.midi)!;
+		const x = cluster ? columnX.get(cluster)! : tipX + 4;
+		const lineY = (i: number) => centre + 3.3 + (i - (n - 1) / 2) * LINE_H;
+		if (x + w > colLeftPx - 2) unplaced.push(`bar ${r.midi}`);
+		info.lines.forEach((line, i) => {
+			const item = addText({ kind: 'barLabel', text: line, x, y: lineY(i), anchor: 'start', size: LABEL, weight, fill: INK }, measure(line, LABEL, weight));
 			barLabelItems.push(item);
 			labelsByRow.set(r.midi, [...(labelsByRow.get(r.midi) ?? []), item]);
 		});
+		if (cluster) {
+			/* Along the bar's own row to the fan's start, then in to the label's middle. */
+			const fanStart = x - FAN + 3;
+			const to = { x: x - 3, y: centre };
+			if (fanStart > tipX + 1.5) leaders.push({ x1: tipX + 1, y1: r.cy, x2: fanStart, y2: r.cy, stroke: INK, width: 0.6 });
+			leaders.push({ x1: Math.max(tipX + 1, fanStart), y1: r.cy, x2: to.x, y2: to.y, stroke: INK, width: 0.6 });
+		}
 	}
 
-	// ── The tessitura band, and the bracket beside the barline ──
+	// ── The tessitura band, and the bracket beside the bars ──
 	let band: Layout['band'] = null;
 	const tessBracket: Seg[] = [];
+	const cutters: TextItem[] = [...barLabelItems];
 	if (figure.tessitura) {
 		const top = rowY(pitchToMidi(figure.tessitura.high)) - STEP / 2;
 		const bottom = rowY(pitchToMidi(figure.tessitura.low)) + STEP / 2;
 		band = { x: barX - 4, y: top, width: bandEnd - (barX - 4), height: bottom - top };
-		const bx = barline + 6;
 		const ink = { stroke: INK, width: 1 };
 		tessBracket.push(
-			{ x1: bx, y1: top, x2: bx + 4, y2: top, ...ink },
-			{ x1: bx + 4, y1: top, x2: bx + 4, y2: bottom, ...ink },
-			{ x1: bx, y1: bottom, x2: bx + 4, y2: bottom, ...ink },
+			{ x1: tessBx, y1: top, x2: tessBx + 4, y2: top, ...ink },
+			{ x1: tessBx + 4, y1: top, x2: tessBx + 4, y2: bottom, ...ink },
+			{ x1: tessBx, y1: bottom, x2: tessBx + 4, y2: bottom, ...ink },
 		);
 		const word = T('insights.figure.tessitura');
-		addText({ kind: 'tessitura', text: word, x: barline + 15, y: (top + bottom) / 2 + 3.3, anchor: 'start', size: LABEL, weight: 500, fill: INK }, measure(word, LABEL, 500));
+		cutters.push(addText({ kind: 'tessitura', text: word, x: tessBx + 11, y: (top + bottom) / 2 + 3.3, anchor: 'start', size: LABEL, weight: 500, fill: INK }, measure(word, LABEL, 500)));
 	}
 
-	/* A line at height `yy` from `x1` to `x2`, in the pieces left once every bar label it would run through is cut out (3 px clear each side). */
+	/* A line at height `yy` from `x1` to `x2`, in the pieces left once every label it would run through is cut out (3 px clear each side). */
 	const spansAround = (yy: number, x1: number, x2: number): Array<[number, number]> => {
 		let spans: Array<[number, number]> = [[x1, x2]];
-		for (const lab of barLabelItems) {
+		for (const lab of cutters) {
 			if (lab.box.y0 - 1 > yy || lab.box.y1 + 1 < yy) continue;
 			const cutA = lab.box.x0 - 3;
 			const cutB = lab.box.x1 + 3;
@@ -517,17 +618,16 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 		shareAt('insights.figure.zoneBelow', z.below, primoY + 16.2);
 	}
 
-	// ── The faint stave and ledger lines, broken around any bar label that sits on one ──
+	// ── The stave behind the bars, and the ledger lines under them, broken around any label that sits on one ──
 	const faint: Seg[] = [];
-	const breakAround = (yy: number, base: Omit<Seg, 'x1' | 'x2' | 'y1' | 'y2'>) => {
-		for (const [a, b] of spansAround(yy, barX - 4, bandEnd)) faint.push({ x1: a, x2: b, y1: yy, y2: yy, ...base });
+	const breakAround = (yy: number, from: number, base: Omit<Seg, 'x1' | 'x2' | 'y1' | 'y2'>) => {
+		for (const [a, b] of spansAround(yy, from, bandEnd)) faint.push({ x1: a, x2: b, y1: yy, y2: yy, ...base });
 	};
-	for (const l of lines) breakAround(y(l), { stroke: 'var(--ink-stave, #1a1612)', opacity: 0.25, width: 1 });
-	for (const l of ledgerSteps) breakAround(y(l), { stroke: 'var(--ink-stave, #1a1612)', opacity: 0.35, dash: '1 2', width: 1 });
+	for (const l of lines) breakAround(y(l), 0, { stroke: 'var(--ink-stave, #1a1612)', opacity: 0.25, width: 1 });
+	for (const l of ledgerSteps) breakAround(y(l), barX - 4, { stroke: 'var(--ink-stave, #1a1612)', opacity: 0.35, dash: '1 2', width: 1 });
 
 	// ── Half the singing, and its centre: the bracket and where each label sits ──
 	const halfBracket: Seg[] = [];
-	const unplaced: string[] = [];
 	if (figure.halfMass) {
 		/* The bracket stands just past the longest label among the bars it spans,
 		   so no label runs into it. */
@@ -535,7 +635,7 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 			barX + barMax * 0.25,
 			...rows.filter((r) => bandRows.some((b) => b.midi === r.midi)).map((r) => {
 				const labs = labelsByRow.get(r.midi) ?? [];
-				return barX + r.length + (labs.length ? 4 + Math.max(...labs.map((l) => l.box.x1 - l.box.x0)) : 0);
+				return Math.max(barX + r.length, ...labs.map((l) => l.box.x1));
 			}),
 		);
 		const spine = reach + 10;
@@ -552,7 +652,6 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 		);
 		if (tick !== null) halfBracket.push({ x1: spine, y1: tick, x2: spine + 6, y2: tick, ...ink });
 
-		const rowBoxes = rows.map((r) => ({ x0: barX, x1: barX + r.length, y0: r.cy - r.height / 2, y1: r.cy + r.height / 2 }));
 		const fixedBoxes = (withExtra = true): Box[] => [
 			...(withExtra ? (options.extraObstacles ?? []) : []),
 			...rowBoxes,
@@ -560,6 +659,7 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 			...faint.map(segBox),
 			...passLines.map(segBox),
 			...halfBracket.map(segBox),
+			...leaders.map(segBox),
 			...(band ? [{ x0: band.x, x1: band.x + band.width, y0: band.y, y1: band.y + band.height }] : []),
 		];
 
@@ -631,29 +731,17 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 		}
 	}
 
-	// ── The compass: its two notes, and its words under the stave ──
-	const noteSpecs = oneNote ? [{ pitch: lowP, x: lowX }] : [{ pitch: lowP, x: lowX }, { pitch: highP, x: highX }];
-	const clefAnchor = figure.clef === 'bass' ? 24 : 32;
-	const notes = noteSpecs.map((n) => {
-		const d = diatonicOf(n.pitch);
-		const ledgers: number[] = [];
-		for (let l = bottomLine - 2; l >= d; l -= 2) ledgers.push(l);
-		for (let l = topLine + 2; l <= d; l += 2) ledgers.push(l);
-		const acc = n.pitch.alter ? glyph(ACC[n.pitch.alter]) : null;
-		return { pitch: n.pitch, x: n.x, y: y(d), ledgers: ledgers.map(y), accX: n.pitch.alter ? n.x - headHalf - 3 - (acc ? sp(acc.widthSp) : 8) : null };
-	});
-	const yBottom = y(extent.bottom);
-	const compassText = fill(T('insights.fit.compass'), { low: pitchLabel(lowP), high: pitchLabel(highP) });
-	const compassBaseline = yBottom + 16;
-	addText({ kind: 'compass', text: compassText, x: (lowX + highX) / 2, y: compassBaseline, anchor: 'middle', size: LABEL, weight: 500, fill: INK }, measure(compassText, LABEL, 500));
-
 	// ── The key: one line under the figure, left-aligned with the bars ──
 	const keyMarks: KeyMark[] = [];
 	const entries: Array<{ kind: KeyMark['kind']; words: string }> = [];
 	if (figure.tessitura) entries.push({ kind: 'tessitura', words: T('insights.figure.key.tessitura') });
 	if (figure.passaggio && figure.zones) entries.push({ kind: 'passaggi', words: T('insights.figure.key.passaggi') });
 	if (ledgerSteps.length > 0) entries.push({ kind: 'ledger', words: T('insights.figure.key.ledger') });
-	const keyBaseline = compassBaseline + 18;
+	const yBottom = y(extent.bottom);
+	/* A run of semitone neighbours spreads its labels past the bars it spans, so the
+	   key stands under the lowest of them as well as under the stave. */
+	const labelsBottom = Math.max(yBottom, ...barLabelItems.map((x) => x.box.y1));
+	const keyBaseline = Math.max(yBottom + 13, labelsBottom + 12);
 	let kx = barX;
 	for (const e of entries) {
 		keyMarks.push({ kind: e.kind, x: kx, y: keyBaseline - 3.4 });
@@ -664,25 +752,24 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 	}
 
 	// ── Where the figure begins and ends ──
+	const clefAnchor = figure.clef === 'bass' ? 24 : 32;
 	const glyphPx = smuflFontSizePx(LINE_GAP);
 	const clefTop = clefG ? y(clefAnchor) - sp(clefG.top) : y(topLine);
 	const tops = [
 		clefTop,
 		y(topLine),
 		...rows.map((r) => r.cy - r.height / 2),
-		...texts.filter((x) => x.kind !== 'compass' && x.kind !== 'key').map((x) => x.box.y0),
+		...texts.filter((x) => x.kind !== 'key').map((x) => x.box.y0),
 		...(band ? [band.y] : []),
 		...halfBracket.map((s) => Math.min(s.y1, s.y2)),
-		...notes.map((n) => n.y - LINE_GAP / 2),
 	];
 	const dy = CONTENT_TOP - Math.min(...tops);
-	const lastBaseline = entries.length ? keyBaseline : compassBaseline;
-	const height = lastBaseline + dy + 6;
+	const lastBaseline = entries.length ? keyBaseline : Math.max(yBottom + 4, labelsBottom + 2);
+	const height = lastBaseline + dy + 4;
 
 	return {
 		height,
 		dy,
-		barline,
 		barX,
 		barMax,
 		rows,
@@ -695,14 +782,12 @@ export function layoutTessituragram(figure: TessituragramModel, language: Langua
 		halfBracket,
 		leaders,
 		texts,
-		notes,
 		clef: clefG ? { x: CLEF_X, y: y(clefAnchor) } : null,
 		keyMarks,
 		unplaced,
 		barMaxByLanguage,
 		glyphPx,
 		lineGap: LINE_GAP,
-		headHalf,
 	};
 }
 
@@ -720,7 +805,6 @@ export function contacts(layout: Layout, pad = 0.25): string[] {
 		...layout.halfBracket.map((s, i) => ({ name: `bracket ${i}`, box: segBox(s) })),
 		...layout.tessBracket.map((s, i) => ({ name: `tessitura bracket ${i}`, box: segBox(s) })),
 		...(layout.band ? [{ name: 'band', box: { x0: layout.band.x, x1: layout.band.x + layout.band.width, y0: layout.band.y, y1: layout.band.y + layout.band.height } }] : []),
-		{ name: 'barline', box: { x0: layout.barline - 0.5, x1: layout.barline + 0.5, y0: Math.min(...layout.staveYs), y1: Math.max(...layout.staveYs) } },
 	];
 	/* A leader is a line, not its bounding box: it touches a label only if a point of it does. */
 	const onLeader = (s: Seg, b: Box) => {
