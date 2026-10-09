@@ -542,18 +542,20 @@
 {/snippet}
 
 {#snippet phonationView(ph: PhonationSection)}
+	<!-- THE HISTOGRAM LEADS THE PAGE (Dann, 2026-10-09): the phonation sentence is not
+	     important enough to be its first prose, so it stands under the figure, above
+	     the compatibility table. -->
+	{#if !ph.nothingSung && model?.figure}
+		<div class="figure">
+			<Tessituragram figure={model.figure} {language} />
+		</div>
+	{/if}
 	<div class="section">
 		{@render sectionHead(T('insights.phonation.heading'))}
 		{#if ph.nothingSung}
 			<p class="prose">{T('insights.fit.nothingSung')}</p>
 		{:else}
 			<p class="prose">{headlineOf(ph)}</p>
-
-			{#if model?.figure}
-				<div class="figure">
-					<Tessituragram figure={model.figure} {language} />
-				</div>
-			{/if}
 			<!-- Without both passaggi the figure draws no lines and no shares,
 			     and the fit table alone says so. -->
 			{#if vowels && vowelsOnPageOne}
@@ -652,7 +654,8 @@
 						<div class="section">
 							{@render sectionHead(T('insights.verdict.heading'))}
 							{#if verdict?.kind === 'verdict'}
-								<p class="verdict">{T(verdict.key)}</p>
+								<!-- One paragraph: the verdict and "nothing flagged" both say how the piece sits. -->
+								<p class="verdict">{T(verdict.key)}{#if noneInVerdict}{' '}{T('insights.findings.none')}{/if}</p>
 							{:else if verdict?.kind === 'offer'}
 								<!-- N.164: one sentence around a link, then a quiet decline.
 								     On paper the sentence is plain text and the decline is gone. -->
@@ -660,7 +663,7 @@
 									{T('insights.offer.before')}{' '}<button type="button" class="offer-link" onclick={() => onaddrange?.()}>{T('insights.offer.link')}</button>{T('insights.offer.after')}{' '}<button type="button" class="offer-decline" onclick={declineOffer}>{T('insights.offer.decline')}</button>
 								</p>
 							{/if}
-							{#if noneInVerdict}
+							{#if noneInVerdict && verdict?.kind !== 'verdict'}
 								<p class="verdict">{T('insights.findings.none')}</p>
 							{/if}
 						</div>

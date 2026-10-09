@@ -104,6 +104,10 @@ test('page one runs phonation, compatibility, the closing verdict, then the find
 	const figure = await y('svg.tessituragram');
 	const table = await y('.fit-table');
 	expect(figure).toBeLessThan(table);
+	// The phonation sentence is no longer the page's first prose: the figure leads it.
+	const phonation = (await page.locator('.insights-container .paper-page >> nth=0 >> text=/^Phonation time$/i').first().boundingBox())!.y;
+	expect(figure).toBeLessThan(phonation);
+	expect(phonation).toBeLessThan(table);
 	const verdict = await y('.verdict');
 	expect(table).toBeLessThan(verdict);
 	// Where findings are listed their list follows the verdict; the cycle dose comes after them, last on the page's flow.

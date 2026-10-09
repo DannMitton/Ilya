@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { tick, type Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
 	import type { PreparedSmuflFont } from '@ilya/score-parser';
@@ -113,7 +113,36 @@
 	   clipped name is information the old footer placement never cost. It is the same height
 	   as stacking (two lines). */
 	const stacked = $derived(rowWidth > 0 && !fitsOneLine && subtitleWidth + LEGEND_GAP + stackedWidth <= rowWidth);
-	const below = $derived(rowWidth > 0 && !fitsOneLine && !stacked);
+	/* A subtitle long enough to wrap to a second line, whose last line leaves room for the
+	   legend flush right after it (Dann, 2026-10-09): the legend stands on that line, so
+	   it costs no row of its own. Measured from a hidden copy set at the row's width. */
+	let wrapProbe = $state<HTMLElement | null>(null);
+	let wrapLines = $state(1);
+	let lastLineWidth = $state(0);
+	$effect(() => {
+		void rowWidth;
+		void subtitleWidth;
+		void composerLine;
+		const probe = wrapProbe;
+		if (!probe) return;
+		let current = true;
+		tick().then(() => {
+			if (!current) return;
+			const range = document.createRange();
+			range.selectNodeContents(probe);
+			const rects = [...range.getClientRects()].filter((r) => r.width > 0);
+			const tops = [...new Set(rects.map((r) => Math.round(r.top)))];
+			if (tops.length === 0) return;
+			wrapLines = tops.length;
+			const last = Math.max(...tops);
+			lastLineWidth = rects.filter((r) => Math.round(r.top) === last).reduce((n, r) => n + r.width, 0);
+		});
+		return () => {
+			current = false;
+		};
+	});
+	const wraps = $derived(rowWidth > 0 && !fitsOneLine && !stacked && wrapLines === 2 && lastLineWidth + LEGEND_GAP + legendWidth <= rowWidth);
+	const below = $derived(rowWidth > 0 && !fitsOneLine && !stacked && !wraps);
 
 	/** Measured height of this header, including all content and the rule. */
 	let measuredHeight = $state(0);
@@ -144,11 +173,12 @@
 	<div class="metadata-block" style="color: {labelInk}">
 		{#if composerLine || attributionLine}
 			{#if composerLine && legendItems.length > 0}
-				<div class="subtitle-row" class:below bind:clientWidth={rowWidth}>
+				<div class="subtitle-row" class:below class:wraps bind:clientWidth={rowWidth}>
 					<div class="metadata-line">{composerLine}</div>
-					<div class="header-legend" class:stacked class:below>
+					<div class="header-legend" class:stacked class:below class:wraps>
 						<LegendItems items={legendItems} {notationFont} />
 					</div>
+					<div class="subtitle-probe wrap-probe" aria-hidden="true" bind:this={wrapProbe} style:width="{rowWidth}px">{composerLine}</div>
 					<span class="subtitle-probe" aria-hidden="true" bind:clientWidth={subtitleWidth}>{composerLine}</span>
 					<div class="header-legend legend-probe" aria-hidden="true" bind:clientWidth={legendWidth}>
 						<LegendItems items={legendItems} {notationFont} />
@@ -295,7 +325,7 @@
 		line-height: 1.6;
 	}
 
-	.header-legend:not(.stacked):not(.below) {
+	.header-legend:not(.stacked):not(.below):not(.wraps) {
 		white-space: nowrap;
 	}
 
@@ -305,6 +335,27 @@
 		gap: 0;
 		max-width: 58%;
 		text-align: right;
+	}
+
+	.subtitle-row.wraps {
+		display: flow-root;
+	}
+
+	.subtitle-row.wraps .metadata-line {
+		display: inline;
+		white-space: normal;
+		overflow: visible;
+		text-overflow: clip;
+	}
+
+	.header-legend.wraps {
+		float: right;
+		margin-left: 24px;
+	}
+
+	.subtitle-probe.wrap-probe {
+		white-space: normal;
+		left: 0;
 	}
 
 	.subtitle-row.below {
