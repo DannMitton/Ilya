@@ -41,6 +41,7 @@ import { applyReconstitution } from './reconstitution';
 import { markLatinWords } from './latin';
 
 import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, YoToggle } from './types';
+import { joinAfterNe } from './ne-join';
 
 // ── Constants ────────────────────────────────────────────────────
 
@@ -354,9 +355,8 @@ export function processText(
 
   // ── Step 2: Auto-detect boundaries per line ───────────────────
 
-  preLines.forEach((line) => {
-    autoDetectBoundaries(line);
-  });
+  // «не» + a word the dictionary lacks borrows the joined word's stress (`ne-join.ts`), after every override.
+  preLines.forEach((line) => { joinAfterNe(line, (w) => GraysonEngine.lookupStress(w)); autoDetectBoundaries(line); });
 
   // ── Step 3: Transcribe each line with cross-word assimilation ─
 
