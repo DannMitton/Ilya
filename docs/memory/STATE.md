@@ -62,6 +62,8 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **What row 56 measured for row 57.** Tried on time-signature figures and wired into nothing, the digit reader found 3 of about 46 printed figures on the 17 songs, 0 false; it never took C or cut C for a digit; on rendered digits it read a 3 as a 9 three times in 180. **So row 57's brief r1 is NOT to be sent as written:** its rule states a figure only where the page shows one, and this reader sees few. The next desk revises it to r2 first. DESK INFERENCE, not a finding: with no false figure and few found, the open design is what Ilya states where no figure is seen (today it states homr's metre, right for 666 of 721 pairable bars by row 37's report). Also from the report, unchecked by the desk: `timesig.py:56-59` names `timeSigPlus` as U+E08D where `glyphnames.json` gives U+E08C.
 >
+> **UPDATE 2026-10-09 02:20 (Opus desk):** row 56 SHIPPED `53035bd` 00:49. Row 57 at r2 STOPPED at measurement, nothing wired (QUEUE row 57): a font-template figure reader reads 3 of 32 printed signatures and gives false figures on rendered ones. **Next: row 57 r3 (these editions' own figures as templates), then row 55, the final test. Dann chose to wait for round 3 before spending the sealed set (02:19, *"wait for round 3"*).** Cloud lane batch 4 (rows 51, 58, 59, 60) RUNNING.
+>
 > **The order from here (a DESK DEFAULT):** read row 56's diff and the nine licences → accept it or send it back → Dann ships (gate 4 moved to 2035 in the ship script first, then the named `git add`, then the ship line; only while Code is idle) → row 57 at r2 → ship → **row 55** (`../sessions/brief-code-the-final-test_r2_2026-10-08.md`: a rehearsal on Grechaninov and Varlamov first; Code stops at the ten lines; opening a BELOW song is Dann's decision and cannot be undone) → rows 47, 48, 50 → the Corrections slices.
 >
 > **For the ship.** The ship script refuses on untracked files, and `git add` never takes a directory. Build the list from `git --no-optional-locks --no-pager status --porcelain -uall` at that moment. At 00:25 it held 34 untracked files: three under `apps/web/src/lib/omr/` (`tuplet-digits.ts`, `tuplet-digits.test.ts`, `tuplet-digit-templates.json`), and 31 under `../sessions/` (four briefs for Code, `brief-design-corrections_r4_`, `design-corrections_r3_` as `.md`, `.html`, and 14 PNGs in its folder, two drafts, four `drawing-*` PNGs, `measure-final-test_r1_2026-10-08/final-line.ts`, `plan-corrections-build_r1_`, and the reports of rows 37 and 56).
@@ -70,16 +72,20 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **Corrections, where it stands.** Every string Design named has ratified English and French (`OPEN.md`, THE CORRECTIONS REDESIGN, items 8 and 9; `../sessions/draft-corrections-french_r1_` and `draft-corrections-remaining-labels_r1_2026-10-08.md`); none is in the tree until a slice brief seats it. Design's round 3 is back (`../sessions/design-corrections_r3_2026-10-08.md`, `.html`, and its PNG folder) and ruled on (items 10 to 14; `PRODUCT.md`, "The squircle"): a bar to confirm carries a filled squircle in `--lavender-wash`, no border, no flag; the selection ring is Ilya's own (`apps/web/src/lib/score/selection-ring.ts`), not Design's drawing of it; the scan strip is in; sibling buttons wrap together; a removed note leaves nothing new. The build is planned in eleven slices (`../sessions/plan-corrections-build_r1_2026-10-08.md`; QUEUE row 51 is its slices 1 and 2). **No slice brief is written, no lane is started, and no helper ran in this thread.** Carried from the state of 15:40, a DESK DEFAULT with no home elsewhere: a bar to confirm that is opened outside the review opens on the usual pill.
 >
-> **Still Dann's from Design's round 3, not asked at this close:** the French remove labels on two lines or « Supprimer » alone; « Stable » (Design's draft for a Tempo chip).
+> **Design's round 3, both settled 2026-10-09 00:53 and 00:54:** « Stable » for Tempo's "Steady"; the French remove labels on two lines (`OPEN.md`, THE CORRECTIONS REDESIGN, items 15 and 16).
 >
 > **Owed by the desk:**
 > 1. **The slice briefs of the Corrections plan, slice 1 first.** They carry Design's round 3 points: Remove armed by a first tap; the tinted block over a taken run in the Loupe; the rose accents beside the lavender mark; the hairpin rows Design did not draw. The remove control's reach choices have no accepted English. The two "Rests …" labels are held until a slice brief settles what a removed run leaves.
 > 2. **The metre-relationship receipt** (a new row; `OPEN.md`, "METRE CHANGES", ruled 2026-10-08 21:38).
 > 3. **Cadenzas** (small, unmetred notes): their own look; not numbered.
-> 4. **Two comment actions are owed in both languages** (`apps/web/src/lib/i18n.ts:1784-1786`): `comment.working.try.mixed.action` and `comment.working.try.preface.action` carry the desk's English in both slots, not yet read by Dann, and a French page leaves them out. Read by the desk 2026-10-09 00:27.
+> 4. **SETTLED 2026-10-09 01:02 to 01:06: both comment actions RATIFIED in both languages, from Miller 2004 pp. 77 and 79 read in Dann's photographs (`OPEN.md`, N.168, the two lines of 2026-10-09). Owed now: a brief to seat them and remove `frenchOwed`.** Earlier: **Two comment actions are owed in both languages** (`apps/web/src/lib/i18n.ts:1784-1786`): `comment.working.try.mixed.action` and `comment.working.try.preface.action` carry the desk's English in both slots, not yet read by Dann, and a French page leaves them out. Read by the desk 2026-10-09 00:27.
 > 5. **An idea of the desk's, not put to Dann:** if a sealed song comes back BELOW, a blind adjudication of only the notes where the reading and the truth draft disagree, before anyone decides to open the song.
 >
 > **`SCHEDULE.md`** carries a line of 2026-10-09 with what was re-read at this close. Its checkpoint is today, Friday 2026-10-09, and its rule would move the Corrections redesign to LATER; Dann's amendment of 2026-09-26 made the date a target. That ruling is his and was not asked.
+>
+> **The Opus desk's mistake of 2026-10-09 11:41:** it told Dann he had not asked the cloud session for the 11:21 change, an inference from his not noticing it. The session page shows he worked with it that morning and ratified its heading A. Read the source before saying who asked for what.
+>
+> **The Opus desk's mistake of 2026-10-09 02:20:** it fixed row 57 r3's brief (A, B, C, E, F to stay unopened) and copied the brief to the Mac in the same parallel step, so the Mac received the unfixed text. Code caught the mismatch with its prompt and followed the prompt. The fixed text was copied at 02:21. A file is delivered only after its last edit returns.
 >
 > **This thread's mistakes, for the next desk:**
 > 1. At 23:58 the desk told Dann the Insights comment templates were "not started", from an unticked line of `SCHEDULE.md`, without opening the tree. They are built and shipped in both languages (`apps/web/src/lib/insights/comment-text.ts`; 42 `comment.*` entries). He asked for a check at 23:59. A memory file is a lead (tether 21); a sentence about an item's state carries a `path:line` read in the session.
@@ -121,6 +127,10 @@ section says what is open; that file says what comes first and why. **Six
 dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
+
+### Numbered 2026-10-09
+
+- `[ ]` **N.181. A word after «не» that the dictionary does not hold is looked up joined to «не».** Offered by the desk 2026-10-09 01:21 from Dann's walk (*Without Sun*, no. 1: «не проглядная» drew [pro], unreduced); ruled in by Dann 01:23 (*"yes"*). DESK DEFAULT number (N.180 was struck). Spec in `OPEN.md`.
 
 ### Found unlisted 2026-10-02
 
