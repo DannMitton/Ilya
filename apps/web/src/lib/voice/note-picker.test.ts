@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import type { Pitch } from '@ilya/score-parser';
 import {
 	clefFor,
+	clefForVoiceType,
 	staffOffset,
 	ledgerOffsets,
 	pitchLabel,
@@ -27,6 +28,50 @@ describe('clefFor', () => {
 		expect(clefFor(p('B', 3, 1))).toBe('treble');
 		// C♭4 sounds B3: bass despite the octave-4 spelling.
 		expect(clefFor(p('C', 4, -1))).toBe('bass');
+	});
+});
+
+describe('the clef follows the singer\u2019s voice type (Dann, 2026-10-09)', () => {
+	// D\u266f4 is the pitch the walk caught: a bass's secondary passaggio drew on a treble clef.
+	const D_SHARP_4 = p('D', 4, 1);
+
+	it('gives a bass the bass clef at his passaggio, where the pitch rule alone gave treble', () => {
+		expect(clefFor(D_SHARP_4)).toBe('treble');
+		expect(clefFor(D_SHARP_4, 'bass')).toBe('bass');
+	});
+
+	it('bass, bass-baritone, and baritone take the bass clef', () => {
+		for (const t of ['bass', 'bass-baritone', 'baritone']) expect(clefFor(D_SHARP_4, t)).toBe('bass');
+	});
+
+	it('tenor and the treble voices take the treble clef, even on a note the pitch rule would put in bass', () => {
+		const A3 = p('A', 3);
+		expect(clefFor(A3)).toBe('bass');
+		for (const t of ['tenor', 'soprano', 'mezzo-soprano', 'contralto', 'countertenor']) {
+			expect(clefFor(A3, t), t).toBe('treble');
+		}
+	});
+
+	it('no type, "Not sure", or a type the build does not know keeps the pitch rule', () => {
+		for (const t of [undefined, '', 'not-sure', 'something-else']) {
+			expect(clefFor(D_SHARP_4, t), String(t)).toBe('treble');
+			expect(clefFor(p('A', 3), t), String(t)).toBe('bass');
+			expect(clefForVoiceType(t), String(t)).toBeNull();
+		}
+	});
+
+	it('a bass\u2019s F\u266f4 sits on two ledger lines', () => {
+		const f = p('F', 4, 1);
+		expect(clefFor(f, 'bass')).toBe('bass');
+		expect(ledgerOffsets(staffOffset(f, 'bass'))).toEqual([6, 8]);
+	});
+
+	it('a note the drawing could not show falls back to the pitch rule\u2019s clef', () => {
+		// A tenor\u2019s C2 would sit 20 steps below the middle of a treble clef, off the picker\u2019s box.
+		expect(staffOffset(p('C', 2), 'treble')).toBe(-20);
+		expect(clefFor(p('C', 2), 'tenor')).toBe('bass');
+		// Within the box the type\u2019s clef stands.
+		expect(clefFor(p('C', 3), 'tenor')).toBe('treble');
 	});
 });
 

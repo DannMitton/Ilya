@@ -50,9 +50,14 @@
 		onchange: (p: Pitch | undefined) => void;
 		/** N.50: active display language, threaded to the dictionary. */
 		language: Language;
+		/**
+		 * The singer's declared voice type (the stored Tier 1 id), which picks the
+		 * clef (`clefFor`). Absent or "Not sure" keeps the pitch rule.
+		 */
+		voiceType?: string | undefined;
 	}
 
-	let { label, value = undefined, font = null, onchange, language }: Props = $props();
+	let { label, value = undefined, font = null, onchange, language, voiceType = undefined }: Props = $props();
 
 	// N.50: the house dictionary pattern, per `const T` in CalibrationWizard.svelte.
 	const T = (key: string) => t(key, language);
@@ -114,7 +119,7 @@
 	const ACC_X = 82; // accidental centre
 	const glyphSize = smuflFontSizePx(L); // 4 spaces, one em spans the staff
 
-	let clef = $derived(value ? clefFor(value) : 'treble');
+	let clef = $derived(value ? clefFor(value, voiceType) : 'treble');
 	let offset = $derived(value ? staffOffset(value, clef) : 0);
 	let noteY = $derived(MID - offset * HALF);
 	let ledgers = $derived(value ? ledgerOffsets(offset) : []);

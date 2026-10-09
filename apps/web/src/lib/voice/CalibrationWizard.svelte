@@ -1528,14 +1528,14 @@
 						label={T('calib.characteristics.rangeHighLabel')}
 						value={activeVoice.characteristics?.rangeHigh}
 						font={notationFont}
-						{language}
+						{language} {voiceType}
 						onchange={(p) => setCharacteristic('rangeHigh', p)}
 					/>
 					<NotePicker
 						label={T('calib.characteristics.rangeLowLabel')}
 						value={activeVoice.characteristics?.rangeLow}
 						font={notationFont}
-						{language}
+						{language} {voiceType}
 						onchange={(p) => setCharacteristic('rangeLow', p)}
 					/>
 					{#if rangeInverted}
@@ -1550,14 +1550,14 @@
 						label={T('calib.characteristics.tessituraHighLabel')}
 						value={activeVoice.characteristics?.tessituraHigh}
 						font={notationFont}
-						{language}
+						{language} {voiceType}
 						onchange={(p) => setCharacteristic('tessituraHigh', p)}
 					/>
 					<NotePicker
 						label={T('calib.characteristics.tessituraLowLabel')}
 						value={activeVoice.characteristics?.tessituraLow}
 						font={notationFont}
-						{language}
+						{language} {voiceType}
 						onchange={(p) => setCharacteristic('tessituraLow', p)}
 					/>
 					{#if tessituraInverted}
@@ -1573,14 +1573,14 @@
 						label={T('calib.characteristics.passaggioSecondaryLabel')}
 						value={activeVoice.characteristics?.passaggioSecondary}
 						font={notationFont}
-						{language}
+						{language} {voiceType}
 						onchange={(p) => setCharacteristic('passaggioSecondary', p)}
 					/>
 					<NotePicker
 						label={T('calib.characteristics.passaggioPrimaryLabel')}
 						value={activeVoice.characteristics?.passaggioPrimary}
 						font={notationFont}
-						{language}
+						{language} {voiceType}
 						onchange={(p) => setCharacteristic('passaggioPrimary', p)}
 					/>
 				</div>

@@ -20,6 +20,7 @@
  */
 
 import { pitchToMidi, type Pitch } from '@ilya/score-parser';
+import { bucketFor } from './engine/plausibility';
 
 export type Step = Pitch['step'];
 export type PickerClef = 'treble' | 'bass';
@@ -40,12 +41,54 @@ function diatonicNumber(p: Pitch): number {
 }
 
 /**
- * The preview clef: bass below middle C, treble from middle C up, by
- * SOUNDING pitch. Auto-chosen per note so every field of the picker
- * (a bass's low D2, a soprano's high C6) renders near its staff.
+ * The clef the singer's declared voice type asks for, or `null` where it asks
+ * for none. Ruled by Dann 2026-10-09 ("THE NOTE PICKER'S CLEF FOLLOWS THE
+ * SINGER'S VOICE TYPE", OPEN.md): bass, bass-baritone, and baritone take the
+ * bass clef; tenor and the treble voices (soprano, mezzo-soprano, contralto,
+ * countertenor) take the treble clef; no type, "Not sure", or a type this build
+ * does not know keeps the pitch rule. The bucket comes from `bucketFor`, the
+ * one place a declared type is sorted (`engine/plausibility.ts`); only the
+ * countertenor, which that sort leaves in `union` for the formant guard, is
+ * named here, because the ruling calls it a treble voice.
  */
-export function clefFor(p: Pitch): PickerClef {
-	return pitchToMidi(p) < 60 ? 'bass' : 'treble';
+export function clefForVoiceType(voiceType?: string): PickerClef | null {
+	if ((voiceType ?? '').trim().toLowerCase() === 'countertenor') return 'treble';
+	switch (bucketFor(voiceType)) {
+		case 'baritone':
+		case 'bass':
+			return 'bass';
+		case 'soprano':
+		case 'tenor-mezzo':
+			return 'treble';
+		default:
+			return null;
+	}
+}
+
+/**
+ * How far from the middle line, in half-line-gap steps, the picker's drawing
+ * box shows a note (150 by 136 at an 8 px line gap, middle at y 68). Past this
+ * a note would be clipped.
+ */
+const VISIBLE_STEPS = 15;
+
+/**
+ * The preview clef. With a declared voice type it is the type's clef, so a bass
+ * enters his passaggio on the bass clef like every other note (ledger lines are
+ * expected: a bass's F#4 sits on two). With none it is the pitch rule: bass
+ * below middle C, treble from middle C up, by SOUNDING pitch, so every field
+ * (a bass's low D2, a soprano's high C6) renders near its staff.
+ *
+ * DESK DEFAULT: a type's clef is not used for a note the box could not show
+ * (a tenor's C2 on a treble clef would sit 20 steps below the middle line); that
+ * one note takes the pitch rule's clef, because a note drawn off the box cannot
+ * be read at all.
+ */
+export function clefFor(p: Pitch, voiceType?: string): PickerClef {
+	const byPitch: PickerClef = pitchToMidi(p) < 60 ? 'bass' : 'treble';
+	const byType = clefForVoiceType(voiceType);
+	if (!byType) return byPitch;
+	return Math.abs(staffOffset(p, byType)) <= VISIBLE_STEPS ? byType : byPitch;
 }
 
 /**
