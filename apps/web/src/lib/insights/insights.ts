@@ -42,6 +42,7 @@ import {
 	type VoiceProfileSnapshot,
 	type VowelForEvent,
 } from '@ilya/score-parser';
+import { bandStableUnderDoubt } from './tessitura-robust';
 import { centreOfGravity, cycleDose, halfMassBand, type CentreOfGravity, type CycleDose, type HalfMassBand } from './singing-measures';
 import type { WatchEntry, WatchKind, WatchList, WatchTransposition } from '$lib/analysis/watchlist';
 import { gateBand, gatedWatchList } from '$lib/analysis/gates';
@@ -354,9 +355,14 @@ function tessituraRow(
 
 	/* TRUST FIRST. `aggregatePhonation` includes an untrusted bar's time in
 	   `byPitch` and says so rather than dropping it. The band is cut from
-	   those durations, so a band built on a bar the metre contradicts is not
-	   printed, and the row names the bars instead (brief §5). */
-	if (totals.trust.untrustedBars > 0) {
+	   those durations, so a band that a bar the metre contradicts could move is
+	   not printed, and the row names the bars instead (brief §5). A bar that
+	   cannot move it does not withhold it (Dann, 2026-10-09): the band is cut
+	   again with each doubtful bar at 0 to twice its written time, and prints
+	   only if it is the same band at every one (`tessitura-robust.ts`). */
+	const doubtful = totals.trust.untrustedBars > 0 ? new Set(totals.trust.untrustedMeasureIndices) : null;
+	const stable = doubtful ? bandStableUnderDoubt(score, doubtful) : undefined;
+	if (doubtful && !stable) {
 		return {
 			measured: null,
 			withheldFor: totals.trust.untrustedMeasureIndices.map((i) => measureNumber(score, i)),
@@ -365,7 +371,7 @@ function tessituraRow(
 		};
 	}
 
-	const band = pachecoTessitura(totals.byPitch);
+	const band = stable ?? pachecoTessitura(totals.byPitch);
 	if (!band) return { measured: null, withheldFor: null, reference, flag: null };
 
 	/* SPELLED AS THE SCORE SPELLS IT. The band's ends are MIDI numbers, and a

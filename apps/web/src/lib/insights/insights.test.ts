@@ -143,7 +143,10 @@ describe('N.127 the fit table', () => {
 		expect(m.verdict).toBe('outside-tessitura');
 	});
 
-	it('withholds the tessitura, and names the bar, when a measure does not add up', () => {
+	/* A DOUBTFUL BAR WITHHOLDS THE BAND ONLY WHERE IT COULD MOVE IT (Dann, 2026-10-09).
+	   The band is cut again with the bar at 0, a half, once, one and a half, and twice its
+	   written time, and prints only if it is the same band at every one. */
+	it('prints the tessitura, unchanged, when a measure does not add up but no misreading of it moves the band', () => {
 		// Bar 2's first note becomes a half by notation and three quarters by its
 		// parser fraction. The bar then sums to 5/4 one way and 6/4 the other:
 		// the readings disagree and neither closes 4/4.
@@ -153,6 +156,26 @@ describe('N.127 the fit table', () => {
 				: ev,
 		);
 		const m = buildInsights({ analysisScore: score(bad, 3), profile, watchList: null });
+		const clean = buildInsights({ analysisScore: score(line, 3), profile, watchList: null });
+		expect(m.phonation.untrustedMeasures).toEqual(['2']);
+		expect(m.tessitura.withheldFor).toBeNull();
+		expect(m.tessitura.measured?.low).toEqual(clean.tessitura.measured?.low);
+		expect(m.tessitura.measured?.high).toEqual(clean.tessitura.measured?.high);
+		expect(m.tessitura.flag).toBe(clean.tessitura.flag);
+	});
+
+	it('withholds the tessitura, and names the bar, when a misreading of that bar could move the band', () => {
+		// D3 sings 8 quavers in bar 1 and 8 in bar 3; bar 2 holds the only G3 and does not add up
+		// (5/4 by notation, 6/4 by fraction). With the bar absent the band is D3 alone; with it, D3 to G3.
+		const dd = (id: string, bar: number, pos: number) => note(id, bar, pos, P('D', 3));
+		const gg = (id: string, pos: number, d?: VocalLineEvent['duration']) => note(id, 1, pos, P('G', 3), d);
+		const bad = [
+			dd('a', 0, 0), dd('b', 0, 1), dd('c', 0, 2), dd('d', 0, 3),
+			gg('e', 0, { ...HALF, fraction: { numerator: 3, denominator: 4 } }), gg('f', 2), gg('g', 3), gg('x', 3),
+			dd('h', 2, 0), dd('i', 2, 1), dd('j', 2, 2), dd('k', 2, 3),
+		];
+		const m = buildInsights({ analysisScore: score(bad, 3), profile, watchList: null });
+		expect(m.phonation.untrustedMeasures).toEqual(['2']);
 		expect(m.tessitura.measured).toBeNull();
 		expect(m.tessitura.withheldFor).toEqual(['2']);
 		expect(m.tessitura.flag).toBeNull();

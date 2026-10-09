@@ -1621,8 +1621,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.flag.below':         { en: 'Below',                        fr: 'En dessous' },
 	'insights.flag.wider':         { en: 'Wider',                        fr: 'Plus large' },
 	'insights.flag.noThreshold':   { en: 'No threshold',                 fr: 'Aucun seuil' },
-	// The closing verdict's heading, ratified by Dann 2026-10-09 01:47 in both languages (`docs/memory/OPEN.md`, "THE INSIGHTS PAGE, REARRANGED").
-	'insights.verdict.heading':    { en: 'Your compatibility, in short', fr: 'Votre compatibilité, en bref' },
+	// The closing verdict's heading. "Your compatibility, in short" (ratified 2026-10-09 01:47) was replaced the same morning
+	// for a warmer register: Dann chose option A of three, English and French, 2026-10-09 (`docs/memory/OPEN.md`, "THE INSIGHTS PAGE, REARRANGED").
+	'insights.verdict.heading':    { en: 'How this key sits for you', fr: 'Comment cette tonalité vous convient' },
 	'insights.verdict.fit':        { en: 'This key seems like a good fit for you.', fr: 'Cette tonalité semble vous convenir.' },
 	'insights.verdict.outsideRange': { en: 'This key takes the piece outside the range you typed.', fr: 'Cette tonalité place la pièce hors de l\u2019ambitus que vous avez indiqué.' },
 	'insights.verdict.outsideTessitura': { en: 'The compass fits the range you typed, but the piece sits outside the tessitura you typed.', fr: 'L\u2019ambitus de la pièce entre dans celui que vous avez indiqué, mais la pièce se situe hors de la tessiture que vous avez indiquée.' },

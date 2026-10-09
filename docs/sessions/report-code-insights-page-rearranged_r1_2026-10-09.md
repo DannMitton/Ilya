@@ -66,3 +66,13 @@ Gate 4 moved by +20 in this brief: +9 in `tessituragram-layout.test.ts` (29 test
 - **That the leaders read well to Dann.** The hairlines in a crowded run are the part of this I would want him to look at first. If they read as noise, the alternative on the table is shorter bars' labels at the bar's end with an angled leader to a free slot, which `slotWithLeader` already does for "half the singing" and "centre"; it failed on dense runs in this build.
 - **Print.** `e2e/print-pages.test.ts` (row 59) still passes with this page, so an Insights print holds the pages it numbers. I did not look at a printed Insights page 2 holding the cycle dose.
 - **Page two and three.** Pages 2 and 3 were not rearranged beyond the dose; I checked that they still draw, not their layout.
+
+## Round two, after Dann's walk of 2026-10-09 (later that morning)
+
+Dann's rulings: the histogram leads the page and the phonation sentence moves under it, above the compatibility table; the verdict and "nothing flagged" are one paragraph; the closing-verdict heading is **option A**, « How this key sits for you » / « Comment cette tonalité vous convient » (`i18n.ts:1625`, replacing "Your compatibility, in short"); a subtitle that wraps keeps the legend flush right on its last line (`TitleHeader.svelte`, the `wraps` state); and the shaded tessitura band is not negotiable, so one doubtful bar must not take it away.
+
+**The tessitura and a doubtful bar.** The band used to be withheld whenever any bar failed the metre check (`tessituraRow`), because Pacheco's cut can turn on half a quaver. In *Without Sun*, no. 1 the doubtful bar is measure 17: 3/2 asks for 12 quavers, the notation reads 9/4, the parser's fractions 7/4, and it holds only E3. The new `apps/web/src/lib/insights/tessitura-robust.ts` cuts the band again under every reading the score offers of each doubtful bar: as written, as the fractions give it, as the metre asks, the bar absent, each bar alone absent. The band prints only if all give the same two ends; otherwise it is withheld as before. Measure 17's bar cannot move it, so *Without Sun* prints D3 to B♭3, the same band as the OMR read of the same song (`sun1`). Seven of eight captured songs drew the band before; now all eight do. The check is a sensitivity test over those readings, not a proof: where the metre itself was misread, the true bar may lie outside them, and the doubtful bars are still named on page two (`untrustedMeasures`).
+
+Tests: `insights.test.ts` (the old "withholds when a measure does not add up" case became two: a doubtful bar that cannot move the band prints it unchanged, and a doubtful bar that holds the only G3 still withholds it and names the bar).
+
+Gates after round two: all eight at baseline except gate 4; see the commit.

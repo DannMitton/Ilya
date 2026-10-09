@@ -96,7 +96,7 @@ test('page one runs phonation, compatibility, the closing verdict, then the find
 	await openInsights(page, 'en');
 	const headings = await page.locator('.insights-container .paper-page').first().locator('.section-head, .section h2, .section .head').allTextContents();
 	const text = (await page.locator('.insights-container .paper-page').first().innerText()).replace(/\s+/g, ' ');
-	const order = ['Phonation time', 'compatibility from these three measurements', 'Your compatibility, in short'].map((w) => text.toLowerCase().indexOf(w.toLowerCase()));
+	const order = ['Phonation time', 'compatibility from these three measurements', 'How this key sits for you'].map((w) => text.toLowerCase().indexOf(w.toLowerCase()));
 	expect(order.every((i) => i >= 0), `the three headings are on page one: ${JSON.stringify(headings)}`).toBe(true);
 	expect([...order].sort((a, b) => a - b)).toEqual(order);
 	// The histogram sits between the phonation sentence and the compatibility table.
