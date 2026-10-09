@@ -27,6 +27,9 @@ next session the same hour it cost the last one.
 | you sent a file to the Mac, or are about to hand Dann a ship command | `REPORT SUCCESS AND WRITE NOTHING` |
 | you sent a file to the Mac and are about to say it is saved | `device_commit_files CAN REPORT SUCCESS` |
 | move a gate number | `Moving a gate baseline` |
+| you edited a file and copied it to the Mac in the same step | `A FILE IS DELIVERED AFTER ITS LAST EDIT` |
+| a cloud session needs briefs that are not yet in GitHub | `BRIEFS INSIDE A CLOUD PROMPT` |
+| walking the phone layout without Dann's phone | `THE PHONE WALK IN A FRAME` |
 | the ship script refuses to run | `refuses on untracked files` |
 | rendering an SVG to look at it, or fetching kenbozeman.com | `RENDERING AN SVG, AND A SITE WEBFETCH CANNOT REACH` |
 | the desk's own shell dies with exit 144, or you plan to message Code directly | `THE DESK HAS NO LINE TO CODE, AND PKILL KILLS ITS OWN SHELL` |
@@ -4675,3 +4678,18 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **Before asking Dann what an edit leaves behind, read what the tree's buttons already do.** The desk asked what a removed note leaves in the bar when Rest (`apps/web/src/routes/+page.svelte:1086`) and remove (`:982`) already answered it.
 - **Read the clock before every stamp:** `date -u` in the bridge shell; Toronto is four hours behind it until the clocks change on 2026-11-01. This thread stamped three records from a guess.
 - **A promise made before a compaction is not kept by the summary.** The desk told Dann it was starting the close writes and the thread compacted before one was made. Write first, then say it.
+
+## WHAT THE DESK LEARNED ON 2026-10-09 (the Opus thread, 00:30 to 12:10)
+
+### A FILE IS DELIVERED AFTER ITS LAST EDIT
+
+At 02:20 the desk fixed a brief in its workspace and called `device_commit_files` in the same parallel step. The copy reached the Mac before the fix, so Code read the unfixed text. **Run the edit, wait for it to return, then copy.** Then grep the Mac's copy for the changed line before telling anyone it is there.
+
+### BRIEFS INSIDE A CLOUD PROMPT
+
+A cloud session clones from GitHub, so briefs that sit untracked on the Mac do not reach it. On 2026-10-09 the desk put the four briefs inside the prompt, between `===== BEGIN <name> =====` and `===== END <name> =====` lines, and told the session to save them to `/tmp/briefs/` and **never commit them**: a committed copy of a file the Mac holds untracked would block Dann's merge. The session was also told not to edit `docs/memory/`, so the merge stayed a fast-forward. It worked: `git merge --no-edit origin/cloud-lane` fast-forwarded with no conflict. A cloud session draws from the cloud credit ($18 for four rows and two follow-ups); the desk's own thread does not (the credit stayed at $221 from 00:31 to 01:52 while the weekly pool moved 75 to 77 percent).
+
+### THE PHONE WALK IN A FRAME
+
+Dann's Chrome window would not shrink by `resize_window` (it reported success; `innerWidth` stayed 2462). What worked: in a tab on the alias, a fixed overlay holding `<iframe src="/" style="width:390px;height:844px">`. Same origin, so his library and language come along, and the media queries see 390 px. **It does not emulate touch:** anything keyed to `pointer: coarse` (the 44 px floor, the camera glyph) is not seen. Remove the overlay and close the tab after. Opening the alias in any tab restarts the reader on a scanned active song (N.166): wait for « Reading your score » to finish, or open another song first.
+
