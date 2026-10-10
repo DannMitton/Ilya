@@ -317,6 +317,9 @@ next session the same hour it cost the last one.
 | Design's return is in Downloads, not the tree | `WHAT THE DESK LEARNED ON 2026-10-08` |
 | reading a digit or letter off a scan with Tesseract | `WHAT THE DESK LEARNED ON 2026-10-08` |
 | sending Claude Design a brief that is not yet shipped | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| showing Dann a design made on a Design canvas | `WHAT THE DESK LEARNED ON 2026-10-09, THE DESIGN ROUND` |
+| about to open a page in Chrome while Dann walks in the desk's tab | `WHAT THE DESK LEARNED ON 2026-10-09, THE DESIGN ROUND` |
+| forecasting how long a helper will run | `WHAT THE DESK LEARNED ON 2026-10-09, THE DESIGN ROUND` |
 | Design's HTML return has no images, or renders without its fonts in the cloud | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
 | a PNG's size or md5 differs after `device_commit_files` | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
 | running node, tsx, or python in the bridge shell | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
@@ -4693,3 +4696,13 @@ A cloud session clones from GitHub, so briefs that sit untracked on the Mac do n
 
 Dann's Chrome window would not shrink by `resize_window` (it reported success; `innerWidth` stayed 2462). What worked: in a tab on the alias, a fixed overlay holding `<iframe src="/" style="width:390px;height:844px">`. Same origin, so his library and language come along, and the media queries see 390 px. **It does not emulate touch:** anything keyed to `pointer: coarse` (the 44 px floor, the camera glyph) is not seen. Remove the overlay and close the tab after. Opening the alias in any tab restarts the reader on a scanned active song (N.166): wait for « Reading your score » to finish, or open another song first.
 
+
+
+## WHAT THE DESK LEARNED ON 2026-10-09, THE DESIGN ROUND
+
+- **A Design canvas is not a place to show Dann a design.** On 2026-10-09 he could not tell why some board thumbnails expanded and others did not, and in the desk's own Chrome tab the expand buttons and canvas keys did not respond either. **Show every page as a full-size picture in the chat** (`SendUserFile`, `display: render`), numbered in reading order. How: read each board with the Artifact tool (`action: read`, `path: project/<name>.dc.html`), or take the files the helper wrote; a static board renders in the cloud workspace with Playwright after stripping `<script src="./support.js">`, the `data-dc-script` block, `<helmet>`, and `<x-dc>` (the script used is `render/r.mjs` in that session's scratchpad: Chromium at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, viewport 816 by 1056, `deviceScaleFactor: 2`, `fullPage`). Google Fonts load from the cloud workspace.
+- **Look at the pictures at full size before Dann does.** Round 1 reached him with two squircles overlapping and a footnote printed over the figure's key; the desk had looked only at canvas zoom. The Design type's own rule ("never verify unless the user asked") does not override `CONTRACT.md` tether 5.
+- **Never navigate the tab Dann is walking in.** The desk sent the walk tab to a download page mid-walk and had to send it back. Open a new tab for anything else.
+- **A helper's run time is not forecastable from its token budget.** The Opus design helper of 2026-10-09 used 216k tokens and ran about 2 h 40 min; the desk had told Dann 30 to 60 minutes. While an Agent call runs, the desk cannot reply to him at all. Say both before it starts, and quote no duration.
+- **Claude in Chrome's `zoom` takes the screenshot's coordinate frame**, which changes with the window; take a fresh screenshot first. `javascript_tool` output that reads like page text can come back `[BLOCKED: Cookie/query string data]`; `read_page` on an element's ref reads it instead.
+- **A Cloudflare-fronted repository refuses `curl` from the bridge** ("Just a moment…" HTML saved as a .pdf). In Dann's Chrome, `fetch(location.href)` on the PDF page and a blob download land the real file in `~/Downloads`.

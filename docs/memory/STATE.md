@@ -47,6 +47,17 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### NOTE OF 2026-10-10 03:20 (Opus desk, Dann on his phone). READ FIRST.
+>
+> **Row 57 r4 is written and twice reviewed by Fable** (`../sessions/brief-code-the-metre-seen-and-summed_r4_2026-10-10.md`): a trained classifier, judged by whole signature (Dann 03:02: *"Whatever works reliably."*), with Dann's five-witness reading model (03:11, `INBOX.md`). **Not sent.** Order at Dann's desktop, his choice 03:18: (1) the desk reads row 61's uncommitted diff (it touches `join-pages.ts` and `homr-reader.ts`, which r4 may change); (2) Dann ships row 61; (3) Dann pastes r4 to Code on the Mac, Opus. Corrections of this thread are in `INBOX.md` 03:05 and 03:22.
+
+> ### NOTE OF 2026-10-09 16:20 (Opus desk). READ BEFORE THE HANDOVER BELOW.
+>
+> **The final test ran (QUEUE row 55): 76.8 with UNSURE set aside; 6 of 10 pass; K, L, M, P below.** Dann opened the four at 12:30; Row 61 reported 20:35 (`../sessions/report-code-the-four-below_r1_2026-10-09.md`, uncommitted): K 99.3 (100.0 on corrected truth), L 95.0 on corrected truth with UNSURE aside, M 88.7 and P 77.6 unchanged; the fixes for M (covers) and P (metre) changed sealed song I and were taken out. Whether to unseal I is Dann's decision, not yet put to him.
+> **Walked by Dann today:** N.168's comment, N.172's questions, row 59's clef, N.176's legend (`OPEN.md`).
+> **The Insights review is HELD at Dann's word 16:19** and restarts from purpose questions, one at a time (`OPEN.md`, INSIGHTS, REVIEWED AS A PAGE FOR THE SINGER; `CONTRACT.md`, the paragraph of 2026-10-09 16:19).
+> **Queued today:** rows 61 (the four below) and 62 (Enter settles a field). Inbox lines: 12:59 (two). Titze, Švec, and Popolo 2003 filed in Dann's library, `S-U`.
+
 > ### HANDOVER OF 2026-10-09, about 12:10 (the Opus desk thread that opened 2026-10-09 00:30; closed on Dann's question at 12:02, the thread having grown long). READ THIS FIRST.
 >
 > **THE ONE THING is unchanged:** the scan reader reads at least 95 of every 100 printed notes, pitch and length as printed, on unseen songs, on the singer's path. **Next: the final test, QUEUE row 55** (`../sessions/brief-code-the-final-test_r2_2026-10-08.md`, for Code on the Mac, Opus): a rehearsal on Grechaninov and Varlamov first, then the ten sealed songs, one run, Code stops at the lines; opening a BELOW song is Dann's decision. Dann chose at 02:19 to wait for row 57 round 3 before spending the sealed set; round 3 is done (parked), so the wait is over. The deployed alias serves `472ed96` (no reader change since `53035bd`, so the rehearsal's counts compare with row 56's "after" lines).

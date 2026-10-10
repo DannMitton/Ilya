@@ -448,6 +448,8 @@ frame.
 
 **SAID AGAIN 2026-10-08 15:54, about wording.** The desk had written "Does your score print a 3 over A or over B?"; Dann offered "Does A or B reflect a triplet in the score?" and asked the desk to *"centre the needs of the user and reevaluate future wording from this persepctvie"* (transcribed as written). **The rule, worded by the desk under posture 5: every string a singer reads speaks a musician's terms about the notation (a tuplet, a dotted half, bar 14, your score), never the machine's (a flag, a gap, a reading, adding up, ink on the page).** Before a string goes to Dann or into a brief, read it as a singer holding the score and replace every word that only the code would say.
 
+**SAID AGAIN 2026-10-09 16:19, about the Insights review. Worded by the desk under posture 5; his to strike.** The desk had answered his wish for a page that serves the singer by sorting the page's existing parts and having them redrawn. Dann: *"The point of this whole app is to help the user... We can calculate anything. Anything we calculate does not necessarily serve the user. I want you to offer designs that serve the user."* And: *"A User-facing, user-conceived piece of useful commentary on a piece of music that centres the user and their interaction with the piece."* (transcribed with his typing corrected). **The rule: a design starts from what the singer needs to learn and decide about this piece, agreed with Dann in conversation, one question at a time, before anything is drawn. What Ilya already computes is material to draw on, never the starting point. Rearranging existing outputs is not a design.**
+
 ---
 
 ## 2. THE CEILING. Not Dann's to waive and not yours to ask about
