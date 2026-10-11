@@ -66,6 +66,15 @@ As r2. **Never open, read, list, or run anything whose name begins `heldout2`.**
 - r2 "Done when", "A, B, C, E, F once": **struck for this round.**
 - r2 "Done when", the test "a lower figure outside 1, 2, 4, 8, 16, 32 is no answer": stands.
 
+## Row 61, shipped before this round (added by the desk 2026-10-10 about 09:35)
+
+Read by the desk from the uncommitted diff at `2e2dd11`. Row 61 changes nothing in `homr-reader.ts` but its comment (`0.2.0-ilya.5` to `0.2.0-ilya.6`); this round does not change that file either. In `join-pages.ts` it adds `stavesOfParts`, `pianoAlonePages`, and `withoutNotes`, and applies them at the top of `joinPages`'s measure loop: on a page of the piano alone, every bar's notes are taken out, rests included.
+
+- **Such a bar holds no note and no rest. Witness 5 neither confirms nor contradicts on it;** leave it out of the sums, as r2's bar rule leaves out a short first bar.
+- **There is no voice staff on such a page, so it has no window to read.**
+- On the 17 songs row 61 changes nothing (report r1 of row 61, line 20: every opened and build song reads byte for byte as before), so section 3's measurement is unaffected. This bears on the wiring only.
+- **Line numbers r2 and QUEUE row 57 cite in `join-pages.ts` have moved:** `printsMetre` is now line 242 (was in `:235-241`), `LookAtPage` line 404 (was `:343`), `joinPages` line 452. Find each by name.
+
 ## Report back
 
 `docs/sessions/report-code-the-metre-seen-and-summed_r3_2026-10-10.md`: the training set by class and source, the method, section 3's tables by configuration first, then what was built or why not, and **Could not establish**. NOT ESTABLISHED beats a complete invented answer. Set QUEUE row 57, say so in one line, and stop.

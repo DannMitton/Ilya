@@ -1,7 +1,7 @@
 # Changes by the Ilya project
 
 This copy of homr-web 0.2.0 (commit `cb333a5`) was changed by the Ilya
-project on 2026-10-05, 2026-10-06, and 2026-10-08 and is published as `0.2.0-ilya.5`. It is not a release
+project on 2026-10-05, 2026-10-06, 2026-10-08, and 2026-10-09 and is published as `0.2.0-ilya.6`. It is not a release
 by homr-web's author. It stays under the GNU Affero General Public License
 version 3, as homr and homr-web are; LICENSE and NOTICE are unchanged.
 
@@ -62,6 +62,8 @@ All homr paths are at commit `560ca5c` unless said otherwise.
 | `src/pipeline/parse-staffs.ts` (0.2.0-ilya.5) | the new `joinUnbracedPianos`, called first in `parseStaffs`: on a page where a single staff stands directly above a grand staff, a system of two or more single staffs and no grand staff, with no grand staff directly below it, has its bottom two merged by `mergeStaffs` into one grand staff | none: a departure from homr main, `homr/staff_parsing.py` `parse_staffs` and `homr/brace_dot_detection.py` |
 | `test/pianos-ilya5.test.ts` (0.2.0-ilya.5) | eight tests: the three layouts of Grechaninov op. 20 no. 4 pages 2 and 5 and Varlamov «Скажи, зачем?» page 3, the merged staff's extent, a duet, a system that holds a grand staff, pages with no voice over a grand staff, and model 396 unchanged | none (test) |
 | `README.md`, `package.json` (0.2.0-ilya.5) | version `0.2.0-ilya.5` | none |
+| `src/pipeline/staff-image.ts` (0.2.0-ilya.6) | the new `voiceOverPiano`; `ensureSameNumberOfStaffsMain`, on a page that prints the voice above the piano, where no period is found, keeps the systems as detected | none: a departure from homr main, `homr/staff_parsing.py` `_ensure_same_number_of_staffs` |
+| `README.md`, `package.json` (0.2.0-ilya.6) | version `0.2.0-ilya.6` | none |
 
 ## Not ported
 
@@ -193,4 +195,36 @@ a grand staff directly below it is left alone, because its single staffs are
 voices over that piano (a duet). A page with no single staff directly above
 a grand staff, a system that holds a grand staff, and model 396 are read as
 before.
+
+## 0.2.0-ilya.6, 2026-10-09
+
+One departure from homr main, with `model: "465"` only, found on a song of
+Ilya's final test (QUEUE rows 55 and 61).
+
+**A system of the piano alone, on a page with no period.** In a song the
+voice's staff is printed above the piano's, and where the voice rests an
+engraver may print a system of the piano alone; 0.2.0-ilya.4's
+`systemOffsets` gives the voice rests there. Where a page's grand-staff
+flags repeat with no period, homr main breaks every system into single
+staffs, and each becomes a row of one. On Khvoshchinsky's op. 4 no. 4
+(Iogansen), page 2 detects as `g, g, g, vg` (three systems of the piano's
+introduction, then voice and piano); the flags T T T F T have no period,
+every staff became a row of one, and the introduction, the voice, and the
+last system's piano were all read as the voice: 106 notes too many.
+
+Now, on a page where a detected system holds a single staff directly above
+a grand staff (`voiceOverPiano`), with no period the systems are kept as
+detected, as 0.2.0-ilya.3 keeps them where a regrouping would cut one, and
+`systemOffsets` gives the voice rests in the systems of the piano alone. A
+page with no voice above a grand staff, a page whose flags have a period,
+and model 396 are read as before.
+
+Tried and left out: keeping a lone grand staff that the periodic trim drops
+at an end of the page (Ippolitov-Ivanov's op. 28 no. 4, Jurgenson 1899,
+page 5, `vg, vg, v, g, g`: the last system, the piano alone, is dropped with
+its bars); and taking the metre's upper figure from the median length of
+the bars that hold a note only, so that a whole-bar rest (which homr counts
+as a whole note's length) does not set it (Zhitomirsky's op. 6 no. 2, page
+2, in 12/8, read as 5/4). Each changed the reading of a song of the final
+test that passes, which the test does not allow (QUEUE row 61).
 

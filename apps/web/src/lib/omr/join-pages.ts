@@ -38,6 +38,9 @@
  *   read them so).
  *   Where that needs finer divisions, the bar states them and the next bar
  *   states the divisions in force again.
+ * - keeps a page of the piano alone as bars in which the voice rests, where
+ *   the song's other pages print the voice above the piano
+ *   (`pianoAlonePages`);
  * - leaves out the bars at the end of the song that come after its last
  *   double bar line and hold neither note nor rest: a voice staff printed
  *   blank on to the margin after the voice has ended (`dropBarsAfterTheEnd`).
@@ -329,6 +332,63 @@ function dropBarsAfterTheEnd(measures: string[], raw: readonly string[]): void {
 	measures.length = end;
 }
 
+/**
+ * For each part of a page, in order, the staves it is printed on: its first
+ * `<staves>`, else 1. A part that states two staves counts as on two only
+ * where every bar holding a note has a note on its second staff or below, so
+ * that a part in which homr ran a single staff on after a grand staff counts
+ * as on one.
+ */
+function stavesOfParts(xml: string): number[] {
+	const rootSpan = childElements(xml).find((c) => c.name === 'score-partwise');
+	if (!rootSpan) return [];
+	const root = inner(xml, rootSpan);
+	return childElements(root)
+		.filter((c) => c.name === 'part')
+		.map((c) => {
+			const part = inner(root, c);
+			const staves = Number(/<staves>\s*(\d+)\s*<\/staves>/.exec(part)?.[1] ?? 1);
+			if (staves < 2) return staves;
+			const everyBarLow = childElements(part)
+				.filter((m) => m.name === 'measure')
+				.map((m) => inner(part, m))
+				.every((m) => !/<note[\s>]/.test(m) || /<staff>\s*[2-9]\s*<\/staff>/.test(m));
+			return everyBarLow ? staves : 1;
+		});
+}
+
+/**
+ * For each page, true where homr read the piano alone on it: every part of
+ * the page is on two staves or more (a grand staff), in a song where another
+ * page gives the voice a part of its own on one staff above a part on two.
+ *
+ * In a song the voice's staff is printed above the piano's, and where the
+ * voice has ended, or has not yet begun, an engraver may print a page of the
+ * piano alone (Ippolitov-Ivanov, op. 28 no. 4, Jurgenson 1899, page 6: the
+ * postlude, five systems of the piano's grand staff). homr makes the voice its
+ * first part, and with no voice on the page its first part is the piano. A
+ * musician reads the page as the voice resting while the piano plays, so its
+ * bars stay bars of the song and hold nothing for the voice
+ * (homr-web 0.2.0-ilya.4 does the same for a system of the piano alone on a
+ * page that also prints the voice, `systemOffsets`).
+ */
+function pianoAlonePages(pages: readonly string[]): boolean[] {
+	const staves = pages.map(stavesOfParts);
+	const voiceOverPiano = staves.some((s) => s.length >= 2 && s[0] === 1 && s.slice(1).some((n) => n >= 2));
+	return staves.map((s) => voiceOverPiano && s.length > 0 && s.every((n) => n >= 2));
+}
+
+/** A measure with its notes and its moves of the cursor taken out: the voice silent through the bar. */
+function withoutNotes(measure: string): string {
+	const span = childElements(measure)[0];
+	if (!span) return measure;
+	const body = inner(measure, span);
+	const kept = childElements(body)
+		.filter((k) => !['note', 'backup', 'forward'].includes(k.name))
+		.map((k) => whole(body, k));
+	return `${span.open.replace(/\s*\/>$/, '>')}${kept.join('')}</measure>`;
+}
+
 /** Where homr placed a note on its page: its `<!-- imgpos: x, y -->` comment. */
 export function placeOf(note: string): { x: number; y: number } | null {
 	const m = /imgpos:\s*(\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?)/.exec(note);
@@ -392,10 +452,12 @@ export function notesAt(xs: readonly number[], x: number): number {
 export function joinPages(pages: readonly string[], look?: LookAtPage): string {
 	if (pages.length === 0) throw new JoinPagesError('no pages');
 	const parts = pages.map((p, i) => firstPart(p, i + 1));
+	const tacet = pianoAlonePages(pages);
 	const state: InForce = { key: null, time: null, clef: null, divisions: null, restoreDivisions: null };
 	const measures: string[] = [];
 	parts.forEach((part, pageIndex) => {
-		part.measures.forEach((m, mIndex) => {
+		part.measures.forEach((raw, mIndex) => {
+			const m = tacet[pageIndex] ? withoutNotes(raw) : raw;
 			const dropRestatements = pageIndex > 0 && mIndex === 0;
 			const onPage: PageLook | undefined = look
 				? (notes) => {

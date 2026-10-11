@@ -235,6 +235,28 @@ describe('joinPages on small hand-built pages', () => {
 		expect(placeOf('<note></note>')).toBeNull();
 	});
 
+	it('keeps a page of the piano alone as bars in which the voice rests, where another page prints the voice above the piano', () => {
+		const attrs = '<attributes><divisions>2</divisions><time><beats>2</beats><beat-type>4</beat-type></time></attributes>';
+		const grand = '<attributes><divisions>2</divisions><staves>2</staves></attributes>';
+		const low = (step: string) => note(step, '<staff>2</staff>');
+		const both = (step: string) => `${note(step, '<staff>1</staff>')}<backup><duration>2</duration></backup>${low('C')}`;
+		const sung = page(
+			`<part id="P1"><measure number="1">${attrs}${note('C')}${note('D')}</measure></part><part id="P2"><measure number="1">${grand}${both('E')}${both('F')}</measure></part>`,
+			LIST,
+		);
+		// Ippolitov-Ivanov, op. 28 no. 4, page 6: the postlude, the piano's grand staff alone.
+		const postlude = page(`<part id="P1"><measure number="1">${grand}${both('G')}${both('A')}</measure><measure number="2">${both('B')}${both('C')}</measure></part>`, LIST);
+		const out = joinPages([sung, postlude]);
+		expect(out.match(/<measure /g)).toHaveLength(3);
+		expect(out.match(/<note>/g)).toHaveLength(2);
+		expect(out).toContain('<measure number="3"></measure>');
+		// A song with no page of the voice above the piano: the page is read as homr wrote it.
+		expect(joinPages([postlude]).match(/<note>/g)).toHaveLength(4);
+		// A part that states two staves and runs a single staff on in a bar is not the piano alone.
+		const mixed = page(`<part id="P1"><measure number="1">${grand}${both('G')}${both('A')}</measure><measure number="2">${note('B')}${note('C')}</measure></part>`, LIST);
+		expect(joinPages([sung, mixed]).match(/<note>/g)).toHaveLength(6);
+	});
+
 	it('refuses a page with no part', () => {
 		expect(() => joinPages(['<score-partwise version="4.0"><part-list/></score-partwise>'])).toThrow(JoinPagesError);
 		expect(() => joinPages([])).toThrow(JoinPagesError);

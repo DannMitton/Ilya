@@ -1,4 +1,4 @@
-// Changed by the Ilya project, 2026-10-05: homr main's staff regrouping (staff_parsing.py, 560ca5c) for model 465; 0.2.0-ilya.3 (2026-10-06) refuses a regrouping that cuts a detected system.
+// Changed by the Ilya project, 2026-10-05: homr main's staff regrouping (staff_parsing.py, 560ca5c) for model 465; 0.2.0-ilya.3 (2026-10-06) refuses a regrouping that cuts a detected system. 0.2.0-ilya.6 (2026-10-09): on a page that prints the voice above the piano, with no period the systems are kept as detected.
 /**
  * homr's staff_parsing.py up to the transformer: the regrouping of multi
  * staffs into voices, and prepare_staff_image, which cuts each staff out of
@@ -166,6 +166,32 @@ export function findPeriodicCore(
 }
 
 /**
+ * Added by the Ilya project (0.2.0-ilya.6). True when a detected system
+ * holds a single staff directly above a grand staff: the voice printed above
+ * the piano.
+ *
+ * pianoAloneKept: in a song the voice's staff is printed above the piano's,
+ * and where the voice rests an engraver may print a system of the piano
+ * alone (0.2.0-ilya.4's `systemOffsets` gives the voice rests there). Where
+ * the grand-staff flags of a page repeat with no period, homr main breaks
+ * every system into single staffs, so each becomes a row of one and every
+ * staff becomes the voice. On Khvoshchinsky's op. 4 no. 4 (Iogansen), page
+ * 2, homr detects three systems of the piano alone (the introduction) and a
+ * system of voice and piano; the flags T T T F T have no period, and the
+ * introduction, the voice, and the last system's piano were all read as the
+ * voice. On a page that prints the voice above the piano, the systems are
+ * kept as detected instead, as 0.2.0-ilya.3 keeps them where a regrouping
+ * would cut one: a printed system is never split.
+ */
+function voiceOverPiano(multiStaffs: readonly MultiStaff[]): boolean {
+  return multiStaffs.some((ms) =>
+    ms.staffs.some(
+      (staff, i) => !staff.isGrandstaff && ms.staffs[i + 1]?.isGrandstaff === true
+    )
+  );
+}
+
+/**
  * homr main's `_ensure_same_number_of_staffs` (commit 560ca5c): unchanged
  * when every multi staff has the same number of staffs and that number is
  * above one; else the single staffs regrouped by findPeriodicCore; else every
@@ -173,7 +199,9 @@ export function findPeriodicCore(
  *
  * Changed by the Ilya project (0.2.0-ilya.3): a regrouping that cuts a
  * detected system is refused, and the systems are kept as detected (see
- * regroupingCutsASystem). homr main has no such test.
+ * regroupingCutsASystem). homr main has no such test. 0.2.0-ilya.6: on a
+ * page that prints the voice above the piano, with no period the systems
+ * are kept as detected (see voiceOverPiano).
  */
 function ensureSameNumberOfStaffsMain(
   multiStaffs: readonly MultiStaff[]
@@ -198,6 +226,12 @@ function ensureSameNumberOfStaffsMain(
       regrouped.push(createMultiStaff(kept.slice(i, i + core.period)));
     }
     return regrouped;
+  }
+  // Changed by the Ilya project (0.2.0-ilya.6): with no period, a page that
+  // prints the voice above the piano keeps its systems as detected
+  // (pianoAloneKept).
+  if (voiceOverPiano(multiStaffs)) {
+    return multiStaffs;
   }
   return multiStaffs
     .flatMap((ms) => ms.staffs.map((staff) => createMultiStaff([staff])))
