@@ -1,0 +1,34 @@
+{'matched, agree': 811, 'python window unmatched': 3, 'app window with no Python window': 45}
+app windows unmatched that state something: []
+{'id': 0, 'song': 'gur', 'kind': 'start', 'truth': 'C', 'py': 'C', 'ts': 'C', 'why': None, 'matched': True, 'dx': np.float64(0.03)}
+{'id': 36, 'song': 'k01', 'kind': 'start', 'truth': '3/4', 'py': '3/4', 'ts': '3/4', 'why': None, 'matched': True, 'dx': np.float64(0.03)}
+{'id': 96, 'song': 'k02', 'kind': 'start', 'truth': '2/4', 'py': '2/4', 'ts': '2/4', 'why': None, 'matched': True, 'dx': np.float64(0.05)}
+{'id': 138, 'song': 'k03', 'kind': 'start', 'truth': '4/8', 'py': '4/8', 'ts': '4/8', 'why': None, 'matched': True, 'dx': np.float64(0.04)}
+{'id': 196, 'song': 'k04', 'kind': 'start', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.0)}
+{'id': 210, 'song': 'k04', 'kind': 'bar', 'truth': '3/4', 'py': '3/4', 'ts': '3/4', 'why': None, 'matched': True, 'dx': np.float64(0.06)}
+{'id': 213, 'song': 'k04', 'kind': 'bar', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.03)}
+{'id': 228, 'song': 'k04', 'kind': 'bar', 'truth': '2/4', 'py': '2/4', 'ts': '2/4', 'why': None, 'matched': True, 'dx': np.float64(0.01)}
+{'id': 229, 'song': 'k04', 'kind': 'start', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.0)}
+{'id': 233, 'song': 'k06', 'kind': 'start', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.02)}
+{'id': 251, 'song': 'k06', 'kind': 'start', 'truth': '2/4', 'py': '2/4', 'ts': '2/4', 'why': None, 'matched': True, 'dx': np.float64(0.03)}
+{'id': 252, 'song': 'k06', 'kind': 'bar', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.07)}
+{'id': 253, 'song': 'k06', 'kind': 'bar', 'truth': '2/4', 'py': '2/4', 'ts': '2/4', 'why': None, 'matched': True, 'dx': np.float64(0.1)}
+{'id': 254, 'song': 'k06', 'kind': 'bar', 'truth': 'courtesy:4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.08)}
+{'id': 255, 'song': 'k06', 'kind': 'start', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.04)}
+{'id': 272, 'song': 'k07', 'kind': 'start', 'truth': '6/8', 'py': None, 'ts': None, 'why': 'the readings disagree', 'matched': True, 'dx': np.float64(0.02)}
+{'id': 318, 'song': 'k07', 'kind': 'start', 'truth': '9/8', 'py': '9/8', 'ts': '9/8', 'why': None, 'matched': True, 'dx': np.float64(0.03)}
+{'id': 319, 'song': 'k07', 'kind': 'bar', 'truth': '6/8', 'py': '6/8', 'ts': '6/8', 'why': None, 'matched': True, 'dx': np.float64(0.07)}
+{'id': 326, 'song': 'k08', 'kind': 'start', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.03)}
+{'id': 364, 'song': 'k09', 'kind': 'start', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.15)}
+{'id': 396, 'song': 'k09', 'kind': 'bar', 'truth': 'courtesy:3/2', 'py': '3/2', 'ts': '3/2', 'why': None, 'matched': True, 'dx': np.float64(0.05)}
+{'id': 397, 'song': 'k09', 'kind': 'start', 'truth': '3/2', 'py': '3/2', 'ts': '3/2', 'why': None, 'matched': True, 'dx': np.float64(0.11)}
+{'id': 398, 'song': 'k09', 'kind': 'bar', 'truth': '4/4', 'py': '4/4', 'ts': '4/4', 'why': None, 'matched': True, 'dx': np.float64(0.07)}
+{'id': 411, 'song': 'k10', 'kind': 'start', 'truth': '3/4', 'py': '3/4', 'ts': '3/4', 'why': None, 'matched': True, 'dx': np.float64(0.03)}
+{'id': 489, 'song': 'sun1', 'kind': 'start', 'truth': '6/4', 'py': '6/4', 'ts': '6/4', 'why': None, 'matched': True, 'dx': np.float64(0.03)}
+{'id': 572, 'song': 'sun4', 'kind': 'start', 'truth': 'C', 'py': 'C', 'ts': 'C', 'why': None, 'matched': True, 'dx': np.float64(0.01)}
+{'id': 598, 'song': 'sun4', 'kind': 'bar', 'truth': '2/4', 'py': '2/4', 'ts': '2/4', 'why': None, 'matched': True, 'dx': np.float64(0.01)}
+{'id': 599, 'song': 'sun4', 'kind': 'bar', 'truth': 'C', 'py': 'C', 'ts': 'C', 'why': None, 'matched': True, 'dx': np.float64(0.02)}
+{'id': 606, 'song': 'sun5', 'kind': 'start', 'truth': 'C', 'py': 'C', 'ts': 'C', 'why': None, 'matched': True, 'dx': np.float64(0.01)}
+{'id': 684, 'song': 'sun6', 'kind': 'start', 'truth': 'C', 'py': 'C', 'ts': 'C', 'why': None, 'matched': True, 'dx': np.float64(0.0)}
+{'id': 756, 'song': 'tch', 'kind': 'start', 'truth': '3/8', 'py': '3/8', 'ts': '3/8', 'why': None, 'matched': True, 'dx': np.float64(0.0)}
+{'id': 846, 'song': 'varl', 'kind': 'start', 'truth': '3/8', 'py': '3/8', 'ts': '3/8', 'why': None, 'matched': True, 'dx': np.float64(0.03)}

@@ -1,0 +1,188 @@
+diff --git a/apps/web/package.json b/apps/web/package.json
+index f6e798b..7465e67 100644
+--- a/apps/web/package.json
++++ b/apps/web/package.json
+@@ -6,8 +6,8 @@
+   "license": "MIT",
+   "type": "module",
+   "scripts": {
+-    "dev": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && node scripts/copy-ort-wasm.mjs && node scripts/fetch-omr-models.mjs && vite dev",
+-    "build": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && node scripts/copy-ort-wasm.mjs && node scripts/fetch-omr-models.mjs && vite build && node scripts/stamp-sw.mjs",
++    "dev": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && node scripts/copy-ort-wasm.mjs && node scripts/fetch-omr-models.mjs && node scripts/copy-metre-model.mjs && vite dev",
++    "build": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && node scripts/copy-ort-wasm.mjs && node scripts/fetch-omr-models.mjs && node scripts/copy-metre-model.mjs && vite build && node scripts/stamp-sw.mjs",
+     "preview": "vite preview",
+     "prepare": "svelte-kit sync",
+     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+@@ -22,6 +22,7 @@
+     "@ilya/phonology": "workspace:*",
+     "@ilya/score-parser": "workspace:*",
+     "homr-web": "file:../../third_party/homr-web/homr-web-0.2.0-ilya.6.tgz",
++    "onnxruntime-web": "1.30.0",
+     "pdfjs-dist": "6.2.108",
+     "tesseract.js": "^7.0.0",
+     "webmscore": "^1.2.1"
+diff --git a/apps/web/scripts/copy-ort-wasm.mjs b/apps/web/scripts/copy-ort-wasm.mjs
+index fe6dd10..a135937 100644
+--- a/apps/web/scripts/copy-ort-wasm.mjs
++++ b/apps/web/scripts/copy-ort-wasm.mjs
+@@ -25,8 +25,10 @@ const fail = (why) => {
+ 	process.exit(1);
+ };
+ 
+-// onnxruntime-web is homr-web's dependency, not this app's, so it is looked
+-// for beside homr-web's real folder (pnpm's layout) and inside it (npm's
++// The files are homr-web's onnxruntime-web. The app's own (for the time
++// signature reader, `src/lib/omr/metre-model.ts`) is pinned to the same
++// version, so these files serve both. They are looked for beside homr-web's
++// real folder (pnpm's layout) and inside it (npm's
+ // layout when not hoisted). Neither package exports its package.json, so the
+ // folders are found by path rather than by `require.resolve`.
+ let ortDist;
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 50c097f..0a7f8af 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -38,6 +38,9 @@ importers:
+       homr-web:
+         specifier: file:../../third_party/homr-web/homr-web-0.2.0-ilya.6.tgz
+         version: file:third_party/homr-web/homr-web-0.2.0-ilya.6.tgz
++      onnxruntime-web:
++        specifier: 1.30.0
++        version: 1.30.0
+       pdfjs-dist:
+         specifier: 6.2.108
+         version: 6.2.108
+@@ -481,30 +484,35 @@ packages:
+     engines: {node: '>= 10'}
+     cpu: [arm64]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@napi-rs/canvas-linux-arm64-musl@1.0.6':
+     resolution: {integrity: sha512-zXeVWNFpj720HZln0bfAs+1/nP3Wy6Z5hUw60UJu+cvgips5jZtuX2+EjDHFk98q3BY35GaE1TQLwE9S244vPA==}
+     engines: {node: '>= 10'}
+     cpu: [arm64]
+     os: [linux]
++    libc: [musl]
+ 
+   '@napi-rs/canvas-linux-riscv64-gnu@1.0.6':
+     resolution: {integrity: sha512-kvy1Ypq4ODEI2WRNGvs588qTMcWCjlEIuZRyW8JXpiBnMUirgxQukIDFVDQEcrLlHP5cqZ9cvvfOkBJ7koOktA==}
+     engines: {node: '>= 10'}
+     cpu: [riscv64]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@napi-rs/canvas-linux-x64-gnu@1.0.6':
+     resolution: {integrity: sha512-czHnfLgSCl48iluS6bNrytGYhsbSTUuIvMucAwO0mPEj1uhkHk6SUiRI0xoqv0PSFzpGFfSnQvFpm7vV+tDO+A==}
+     engines: {node: '>= 10'}
+     cpu: [x64]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@napi-rs/canvas-linux-x64-musl@1.0.6':
+     resolution: {integrity: sha512-afsg6GyfUx8qZzjsywjimXUEWcSWETY5F80hmMb2FWVSXkRbor8IpftY2gXnasq+Y42Xug/76qTHwqvti7HRTw==}
+     engines: {node: '>= 10'}
+     cpu: [x64]
+     os: [linux]
++    libc: [musl]
+ 
+   '@napi-rs/canvas-win32-arm64-msvc@1.0.6':
+     resolution: {integrity: sha512-byzha357piy0wgK6IZOQtU4plpt94f6CxHFS7LhJpWYrDWWT/AitQNxRMfCNNaQHZXUB3BwNhQSfH2RpiZ0WaQ==}
+@@ -591,66 +599,79 @@ packages:
+     resolution: {integrity: sha512-F8sWbhZ7tyuEfsmOxwc2giKDQzN3+kuBLPwwZGyVkLlKGdV1nvnNwYD0fKQ8+XS6hp9nY7B+ZeK01EBUE7aHaw==}
+     cpu: [arm]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@rollup/rollup-linux-arm-musleabihf@4.57.1':
+     resolution: {integrity: sha512-rGfNUfn0GIeXtBP1wL5MnzSj98+PZe/AXaGBCRmT0ts80lU5CATYGxXukeTX39XBKsxzFpEeK+Mrp9faXOlmrw==}
+     cpu: [arm]
+     os: [linux]
++    libc: [musl]
+ 
+   '@rollup/rollup-linux-arm64-gnu@4.57.1':
+     resolution: {integrity: sha512-MMtej3YHWeg/0klK2Qodf3yrNzz6CGjo2UntLvk2RSPlhzgLvYEB3frRvbEF2wRKh1Z2fDIg9KRPe1fawv7C+g==}
+     cpu: [arm64]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@rollup/rollup-linux-arm64-musl@4.57.1':
+     resolution: {integrity: sha512-1a/qhaaOXhqXGpMFMET9VqwZakkljWHLmZOX48R0I/YLbhdxr1m4gtG1Hq7++VhVUmf+L3sTAf9op4JlhQ5u1Q==}
+     cpu: [arm64]
+     os: [linux]
++    libc: [musl]
+ 
+   '@rollup/rollup-linux-loong64-gnu@4.57.1':
+     resolution: {integrity: sha512-QWO6RQTZ/cqYtJMtxhkRkidoNGXc7ERPbZN7dVW5SdURuLeVU7lwKMpo18XdcmpWYd0qsP1bwKPf7DNSUinhvA==}
+     cpu: [loong64]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@rollup/rollup-linux-loong64-musl@4.57.1':
+     resolution: {integrity: sha512-xpObYIf+8gprgWaPP32xiN5RVTi/s5FCR+XMXSKmhfoJjrpRAjCuuqQXyxUa/eJTdAE6eJ+KDKaoEqjZQxh3Gw==}
+     cpu: [loong64]
+     os: [linux]
++    libc: [musl]
+ 
+   '@rollup/rollup-linux-ppc64-gnu@4.57.1':
+     resolution: {integrity: sha512-4BrCgrpZo4hvzMDKRqEaW1zeecScDCR+2nZ86ATLhAoJ5FQ+lbHVD3ttKe74/c7tNT9c6F2viwB3ufwp01Oh2w==}
+     cpu: [ppc64]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@rollup/rollup-linux-ppc64-musl@4.57.1':
+     resolution: {integrity: sha512-NOlUuzesGauESAyEYFSe3QTUguL+lvrN1HtwEEsU2rOwdUDeTMJdO5dUYl/2hKf9jWydJrO9OL/XSSf65R5+Xw==}
+     cpu: [ppc64]
+     os: [linux]
++    libc: [musl]
+ 
+   '@rollup/rollup-linux-riscv64-gnu@4.57.1':
+     resolution: {integrity: sha512-ptA88htVp0AwUUqhVghwDIKlvJMD/fmL/wrQj99PRHFRAG6Z5nbWoWG4o81Nt9FT+IuqUQi+L31ZKAFeJ5Is+A==}
+     cpu: [riscv64]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@rollup/rollup-linux-riscv64-musl@4.57.1':
+     resolution: {integrity: sha512-S51t7aMMTNdmAMPpBg7OOsTdn4tySRQvklmL3RpDRyknk87+Sp3xaumlatU+ppQ+5raY7sSTcC2beGgvhENfuw==}
+     cpu: [riscv64]
+     os: [linux]
++    libc: [musl]
+ 
+   '@rollup/rollup-linux-s390x-gnu@4.57.1':
+     resolution: {integrity: sha512-Bl00OFnVFkL82FHbEqy3k5CUCKH6OEJL54KCyx2oqsmZnFTR8IoNqBF+mjQVcRCT5sB6yOvK8A37LNm/kPJiZg==}
+     cpu: [s390x]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@rollup/rollup-linux-x64-gnu@4.57.1':
+     resolution: {integrity: sha512-ABca4ceT4N+Tv/GtotnWAeXZUZuM/9AQyCyKYyKnpk4yoA7QIAuBt6Hkgpw8kActYlew2mvckXkvx0FfoInnLg==}
+     cpu: [x64]
+     os: [linux]
++    libc: [glibc]
+ 
+   '@rollup/rollup-linux-x64-musl@4.57.1':
+     resolution: {integrity: sha512-HFps0JeGtuOR2convgRRkHCekD7j+gdAuXM+/i6kGzQtFhlCtQkpwtNzkNj6QhCDp7DRJ7+qC/1Vg2jt5iSOFw==}
+     cpu: [x64]
+     os: [linux]
++    libc: [musl]
+ 
+   '@rollup/rollup-openbsd-x64@4.57.1':
+     resolution: {integrity: sha512-H+hXEv9gdVQuDTgnqD+SQffoWoc0Of59AStSzTEj/feWTBAnSfSD3+Dql1ZruJQxmykT/JVY0dE8Ka7z0DH1hw==}
+== apps/web/omr-metre/metre-a-r6-ref.cls
+4cb75e52fb1d5fb3a251ecb8a1181f2bec87d55e9787827b91db62bf4e62ea91  apps/web/omr-metre/metre-a-r6-ref.cls
+== apps/web/omr-metre/metre-a-r6-ref.f16
+7473103d8ecb2e666fb03486e16ba23b999e08d78c2edc5e70b0827f052a512c  apps/web/omr-metre/metre-a-r6-ref.f16
+== apps/web/omr-metre/metre-a-r6.onnx
+7f3c085f24ea8b472f39cf0ef72ba3cd422f5d0abd724ce7366057a7f400c220  apps/web/omr-metre/metre-a-r6.onnx
+== apps/web/scripts/copy-metre-model.mjs
+488ff0dd18700555d131415321da24e7256cf0874cca29f693f0c54a8fb1b624  apps/web/scripts/copy-metre-model.mjs
+== apps/web/src/lib/omr/metre-model.ts
+5a809a36c949e869ee5298c1a07ad490bb6548dba16224de9f9e641557e5f33e  apps/web/src/lib/omr/metre-model.ts
+== apps/web/src/lib/omr/metre-reader.test.ts
+ab3f1d50b7e1007c82f476e7f8014751234d16ee06ab450317b52cad04e1d6e8  apps/web/src/lib/omr/metre-reader.test.ts
+== apps/web/src/lib/omr/metre-reader.ts
+36dc2ce5b83d06011afcc22c5943058d121142a25eaa8789ed8189be67afb14c  apps/web/src/lib/omr/metre-reader.ts
+== apps/web/src/lib/omr/metre-windows.test.ts
+36e3ef6785d1aee321abce9635de3088b0a872f5c50689e90ee13d2da4935025  apps/web/src/lib/omr/metre-windows.test.ts
+== apps/web/src/lib/omr/metre-windows.ts
+d78d9e3f0b9c88b9481f3838773c5caa31b852dabdcd17f4253c167ab0b278c3  apps/web/src/lib/omr/metre-windows.ts

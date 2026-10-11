@@ -1,0 +1,38 @@
+{
+ "seed": 57,
+ "tune": [
+  "k03",
+  "k06",
+  "k09",
+  "tch"
+ ],
+ "train": [
+  "sun1",
+  "sun4",
+  "sun5",
+  "sun6",
+  "k01",
+  "k02",
+  "k04",
+  "k07",
+  "k08",
+  "k10",
+  "gur",
+  "grech",
+  "varl"
+ ],
+ "extra": [
+  "sun2",
+  "sun3"
+ ],
+ "scale": [
+  0.72,
+  1.1
+ ],
+ "crops": 786868,
+ "secs": {
+  "trainA": 175,
+  "readings": 1411,
+  "total": 1589
+ }
+}

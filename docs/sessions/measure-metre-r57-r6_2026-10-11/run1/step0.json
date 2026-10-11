@@ -1,0 +1,100 @@
+{
+ "M": 0.8,
+ "cut": 0.5,
+ "centre": 0.4,
+ "res": {
+  "found": 2385,
+  "none": 2021,
+  "missed": 690,
+  "false": 4
+ },
+ "kinds": {
+  "another length": 4
+ },
+ "same_length_false_without_guard": 2,
+ "byfont": {
+  "Bravura": {
+   "found": 279,
+   "none": 238,
+   "missed": 83
+  },
+  "Leland": {
+   "found": 269,
+   "none": 242,
+   "missed": 89
+  },
+  "FinaleMaestro": {
+   "found": 287,
+   "missed": 77,
+   "none": 236
+  },
+  "FinaleEngraver": {
+   "found": 310,
+   "missed": 60,
+   "none": 230
+  },
+  "FinaleBroadway": {
+   "found": 282,
+   "none": 251,
+   "missed": 67
+  },
+  "FinaleAsh": {
+   "found": 253,
+   "missed": 109,
+   "none": 237,
+   "false": 1
+  },
+  "FinaleJazz": {
+   "found": 295,
+   "missed": 78,
+   "none": 227
+  },
+  "FinaleLegacy": {
+   "none": 115,
+   "found": 151,
+   "missed": 32,
+   "false": 2
+  },
+  "Petaluma": {
+   "found": 121,
+   "missed": 63,
+   "none": 116
+  },
+  "Sebastian": {
+   "found": 138,
+   "none": 129,
+   "missed": 32,
+   "false": 1
+  }
+ },
+ "falses": [
+  {
+   "font": "FinaleLegacy",
+   "fold": 7,
+   "truth": "1/1",
+   "said": "1/4",
+   "kind": "another length"
+  },
+  {
+   "font": "FinaleLegacy",
+   "fold": 7,
+   "truth": "6/16",
+   "said": "8/16",
+   "kind": "another length"
+  },
+  {
+   "font": "Sebastian",
+   "fold": 9,
+   "truth": "5/4",
+   "said": "6/4",
+   "kind": "another length"
+  },
+  {
+   "font": "FinaleAsh",
+   "fold": 15,
+   "truth": "11/4",
+   "said": "1/4",
+   "kind": "another length"
+  }
+ ]
+}

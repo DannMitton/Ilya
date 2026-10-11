@@ -1,0 +1,3 @@
+ M docs/memory/QUEUE.md
+ M docs/memory/STATE.md
+?? docs/sessions/brief-code-the-metre-seen-and-summed_r6-runs1-2_2026-10-11.md

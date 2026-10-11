@@ -25,8 +25,10 @@ const fail = (why) => {
 	process.exit(1);
 };
 
-// onnxruntime-web is homr-web's dependency, not this app's, so it is looked
-// for beside homr-web's real folder (pnpm's layout) and inside it (npm's
+// The files are homr-web's onnxruntime-web. The app's own (for the time
+// signature reader, `src/lib/omr/metre-model.ts`) is pinned to the same
+// version, so these files serve both. They are looked for beside homr-web's
+// real folder (pnpm's layout) and inside it (npm's
 // layout when not hoisted). Neither package exports its package.json, so the
 // folders are found by path rather than by `require.resolve`.
 let ortDist;

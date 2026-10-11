@@ -13,7 +13,7 @@ Dann, 2026-10-09 13:10, in his voice characteristics: he typed « Seriöserbaß 
 1. **Inventory first.** List every single-line text field in `apps/web/src/` that saves as the singer types (no Save button), with file and line. Report the list before changing anything beyond the first field.
 2. **Build it once:** a small shared piece (an action or component) that, on Enter or blur, blurs the field when Enter was pressed, and shows the "Saved" note for about two seconds. It does not show when the field's value did not change since it last showed. Enter never submits a form or moves the page.
 3. **Apply it** to the Other field first, then to every field on the list whose save-as-you-type behaviour is the same. A field that does not save as you type is left alone and named in the report.
-4. **Strings:** `field.saved`: English "Saved"; French « Enregistré » (PROPOSED by the desk 13:11, masculine for an implied « ce qui est »; Dann rules it at the walk; mark it PROPOSED in a comment). Quiet type, the field's own label colour; no colour that means error or success elsewhere in Ilya.
+4. **Strings:** `field.saved`: English "Saved"; French « Enregistré » (RATIFIED by Dann 2026-10-11 05:11, *"yes"*, on the OQLF GDT's « enregistrer » = *save*, « sauvegarder » = *back up*; mark it ratified in the comment, not PROPOSED. Earlier: PROPOSED by the desk 13:11, masculine for an implied « ce qui est »; Dann rules it at the walk; mark it PROPOSED in a comment). Quiet type, the field's own label colour; no colour that means error or success elsewhere in Ilya.
 5. **Tests** for the shared piece: Enter blurs and shows; blur shows; unchanged value does not show; the note disappears; the live region carries the word.
 
 ## Constraints
