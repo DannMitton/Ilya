@@ -38,6 +38,8 @@ import { joinPages } from './join-pages';
 import { lookOverNotes, type GreyPage } from './tuplet-number';
 import { loadTemplates, type TemplateMark } from './tuplet-digits';
 import { OMR_MODEL } from './stamp';
+import type { ReadMetres } from './metre-client';
+import type { MetreSeen } from './metre-witness';
 import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
 
 /**
@@ -89,6 +91,8 @@ export interface ReaderDeps {
 	create(prefer: PreferredBackend): Promise<Recognizer>;
 	/** Reads a region of a page image, to look for a printed 3 (`tuplet-number.ts`). Absent: the join reads homr's output alone. */
 	decode?: DecodeRegion;
+	/** Reads the time signatures printed on a page's voice staves (`metre-client.ts`). Absent: the join states homr's metre, as before row 57. */
+	metres?: ReadMetres;
 }
 
 /** A recognizer, with why it is not on WebGPU if it was not asked to be. */
@@ -170,19 +174,26 @@ export async function joinLookingAtPages(
 	images: readonly Blob[],
 	decode: DecodeRegion,
 	templates: () => Promise<readonly TemplateMark[]> = loadTemplates,
-): Promise<{ musicXml: string; looked: number; numbers: number[] }> {
+	seen?: readonly (readonly MetreSeen[] | null)[],
+): Promise<{ musicXml: string; looked: number; numbers: number[]; metreLog: string[] }> {
 	const key = (page: number, notes: readonly { x: number; y: number }[]) => `${page}:${notes.map((n) => `${n.x},${n.y}`).join(';')}`;
 	const answers = new Map<string, Seen | null>();
 	let known: readonly TemplateMark[] | null = null;
 	let musicXml = '';
+	let metreLog: string[] = [];
 	for (let round = 0; round < 3; round++) {
 		const asked = new Map<string, { page: number; notes: { x: number; y: number }[] }>();
-		musicXml = joinPages(xmls, (page, notes) => {
-			const k = key(page, notes);
-			if (answers.has(k)) return answers.get(k) ?? null;
-			asked.set(k, { page, notes: [...notes] });
-			return null;
-		});
+		metreLog = [];
+		musicXml = joinPages(
+			xmls,
+			(page, notes) => {
+				const k = key(page, notes);
+				if (answers.has(k)) return answers.get(k) ?? null;
+				asked.set(k, { page, notes: [...notes] });
+				return null;
+			},
+			seen ? { pages: seen, log: metreLog } : undefined,
+		);
 		if (asked.size === 0) break;
 		known ??= await templates();
 		for (const [k, q] of asked) {
@@ -207,7 +218,7 @@ export async function joinLookingAtPages(
 		}
 	}
 	const all = [...answers.values()].filter((a): a is Seen => a !== null);
-	return { musicXml, looked: all.length, numbers: all.flatMap((a) => a.numbers.map((n) => n.n)) };
+	return { musicXml, looked: all.length, numbers: all.flatMap((a) => a.numbers.map((n) => n.n)), metreLog };
 }
 
 /** What one pass over the pages found. */
@@ -217,6 +228,8 @@ interface Pass {
 	staves: (number | null)[];
 	/** For each page in `xmls`, the index of its image. */
 	image: number[];
+	/** For each page in `xmls`, what the time-signature reader saw on it, read while homr reads the next page. */
+	metres: Promise<MetreSeen[] | null>[];
 	/** The error that stopped the pass, if one did. `not_music` never stops it. */
 	failure: { error: string; log: string } | null;
 }
@@ -274,6 +287,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 		const xmls: string[] = [];
 		const staves: (number | null)[] = [];
 		const image: number[] = [];
+		const metres: Promise<MetreSeen[] | null>[] = [];
 		for (let i = 0; i < images.length; i++) {
 			const result = await rec.recognizePage(images[i], {
 				ocr: false,
@@ -283,6 +297,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 				xmls.push(result.musicXml);
 				staves.push(Array.isArray(result.staves) ? result.staves.length : null);
 				image.push(i);
+				metres.push(deps.metres && Array.isArray(result.staves) ? deps.metres(images[i], result.musicXml, result.staves) : Promise.resolve(null));
 				continue;
 			}
 			if (result.error === 'not_music') continue;
@@ -291,9 +306,9 @@ export function makeReader(deps: ReaderDeps): Reader {
 				// `worker_lost` from then on, so it is disposed and the next scan makes another.
 				void dispose(mine, rec);
 			}
-			return { xmls, staves, image, failure: { error: result.error, log: result.log } };
+			return { xmls, staves, image, metres, failure: { error: result.error, log: result.log } };
 		}
-		return { xmls, staves, image, failure: null };
+		return { xmls, staves, image, metres, failure: null };
 	}
 
 	async function read(images: readonly Blob[], onProgress?: (p: OmrProgress) => void): Promise<OmrReadResult> {
@@ -342,15 +357,17 @@ export function makeReader(deps: ReaderDeps): Reader {
 			return { ok: false, error: 'not_music', log: `homr found no music on any page${note ? ` (${note})` : ''}` };
 		}
 		const song = withoutCovers(
-			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]] })),
+			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]], metres: found.metres[i] })),
 			found.staves,
 		);
 		let musicXml: string;
 		try {
 			if (deps.decode) {
-				const joined = await joinLookingAtPages(song.map((p) => p.xml), song.map((p) => p.image), deps.decode);
+				const seen = deps.metres ? await Promise.all(song.map((p) => p.metres)) : undefined;
+				const joined = await joinLookingAtPages(song.map((p) => p.xml), song.map((p) => p.image), deps.decode, loadTemplates, seen);
 				musicXml = joined.musicXml;
 				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} bars, read ${joined.numbers.length}${joined.numbers.length ? ` (${joined.numbers.join(', ')})` : ''}`);
+				for (const line of joined.metreLog) console.info(`[omr] metre: ${line}`);
 			} else musicXml = joinPages(song.map((p) => p.xml));
 		} catch (err) {
 			return { ok: false, error: 'join_failed', log: message(err) };
@@ -378,6 +395,10 @@ const reader = makeReader({
 			createRecognizer({ baseUrl: OMR_MODELS_BASE, model: OMR_MODEL, prefer, wasmPaths: ORT_WASM_BASE }),
 		),
 	decode: typeof OffscreenCanvas === 'undefined' ? undefined : decodeRegionInBrowser,
+	metres:
+		typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined'
+			? undefined
+			: (image, xml, staves) => import('./metre-client').then(({ readMetresInWorker }) => readMetresInWorker(image, xml, staves)),
 });
 
 /** True once a recognizer has been made in this session. */

@@ -1,0 +1,374 @@
+diff --git a/apps/web/src/lib/omr/homr-reader.ts b/apps/web/src/lib/omr/homr-reader.ts
+index 4fd5b8f..8f78905 100644
+--- a/apps/web/src/lib/omr/homr-reader.ts
++++ b/apps/web/src/lib/omr/homr-reader.ts
+@@ -38,6 +38,8 @@ import { joinPages } from './join-pages';
+ import { lookOverNotes, type GreyPage } from './tuplet-number';
+ import { loadTemplates, type TemplateMark } from './tuplet-digits';
+ import { OMR_MODEL } from './stamp';
++import type { ReadMetres } from './metre-client';
++import type { MetreSeen } from './metre-witness';
+ import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
+ 
+ /**
+@@ -89,6 +91,8 @@ export interface ReaderDeps {
+ 	create(prefer: PreferredBackend): Promise<Recognizer>;
+ 	/** Reads a region of a page image, to look for a printed 3 (`tuplet-number.ts`). Absent: the join reads homr's output alone. */
+ 	decode?: DecodeRegion;
++	/** Reads the time signatures printed on a page's voice staves (`metre-client.ts`). Absent: the join states homr's metre, as before row 57. */
++	metres?: ReadMetres;
+ }
+ 
+ /** A recognizer, with why it is not on WebGPU if it was not asked to be. */
+@@ -170,19 +174,26 @@ export async function joinLookingAtPages(
+ 	images: readonly Blob[],
+ 	decode: DecodeRegion,
+ 	templates: () => Promise<readonly TemplateMark[]> = loadTemplates,
+-): Promise<{ musicXml: string; looked: number; numbers: number[] }> {
++	seen?: readonly (readonly MetreSeen[] | null)[],
++): Promise<{ musicXml: string; looked: number; numbers: number[]; metreLog: string[] }> {
+ 	const key = (page: number, notes: readonly { x: number; y: number }[]) => `${page}:${notes.map((n) => `${n.x},${n.y}`).join(';')}`;
+ 	const answers = new Map<string, Seen | null>();
+ 	let known: readonly TemplateMark[] | null = null;
+ 	let musicXml = '';
++	let metreLog: string[] = [];
+ 	for (let round = 0; round < 3; round++) {
+ 		const asked = new Map<string, { page: number; notes: { x: number; y: number }[] }>();
+-		musicXml = joinPages(xmls, (page, notes) => {
+-			const k = key(page, notes);
+-			if (answers.has(k)) return answers.get(k) ?? null;
+-			asked.set(k, { page, notes: [...notes] });
+-			return null;
+-		});
++		metreLog = [];
++		musicXml = joinPages(
++			xmls,
++			(page, notes) => {
++				const k = key(page, notes);
++				if (answers.has(k)) return answers.get(k) ?? null;
++				asked.set(k, { page, notes: [...notes] });
++				return null;
++			},
++			seen ? { pages: seen, log: metreLog } : undefined,
++		);
+ 		if (asked.size === 0) break;
+ 		known ??= await templates();
+ 		for (const [k, q] of asked) {
+@@ -207,7 +218,7 @@ export async function joinLookingAtPages(
+ 		}
+ 	}
+ 	const all = [...answers.values()].filter((a): a is Seen => a !== null);
+-	return { musicXml, looked: all.length, numbers: all.flatMap((a) => a.numbers.map((n) => n.n)) };
++	return { musicXml, looked: all.length, numbers: all.flatMap((a) => a.numbers.map((n) => n.n)), metreLog };
+ }
+ 
+ /** What one pass over the pages found. */
+@@ -217,6 +228,8 @@ interface Pass {
+ 	staves: (number | null)[];
+ 	/** For each page in `xmls`, the index of its image. */
+ 	image: number[];
++	/** For each page in `xmls`, what the time-signature reader saw on it, read while homr reads the next page. */
++	metres: Promise<MetreSeen[] | null>[];
+ 	/** The error that stopped the pass, if one did. `not_music` never stops it. */
+ 	failure: { error: string; log: string } | null;
+ }
+@@ -274,6 +287,7 @@ export function makeReader(deps: ReaderDeps): Reader {
+ 		const xmls: string[] = [];
+ 		const staves: (number | null)[] = [];
+ 		const image: number[] = [];
++		const metres: Promise<MetreSeen[] | null>[] = [];
+ 		for (let i = 0; i < images.length; i++) {
+ 			const result = await rec.recognizePage(images[i], {
+ 				ocr: false,
+@@ -283,6 +297,7 @@ export function makeReader(deps: ReaderDeps): Reader {
+ 				xmls.push(result.musicXml);
+ 				staves.push(Array.isArray(result.staves) ? result.staves.length : null);
+ 				image.push(i);
++				metres.push(deps.metres && Array.isArray(result.staves) ? deps.metres(images[i], result.musicXml, result.staves) : Promise.resolve(null));
+ 				continue;
+ 			}
+ 			if (result.error === 'not_music') continue;
+@@ -291,9 +306,9 @@ export function makeReader(deps: ReaderDeps): Reader {
+ 				// `worker_lost` from then on, so it is disposed and the next scan makes another.
+ 				void dispose(mine, rec);
+ 			}
+-			return { xmls, staves, image, failure: { error: result.error, log: result.log } };
++			return { xmls, staves, image, metres, failure: { error: result.error, log: result.log } };
+ 		}
+-		return { xmls, staves, image, failure: null };
++		return { xmls, staves, image, metres, failure: null };
+ 	}
+ 
+ 	async function read(images: readonly Blob[], onProgress?: (p: OmrProgress) => void): Promise<OmrReadResult> {
+@@ -342,15 +357,17 @@ export function makeReader(deps: ReaderDeps): Reader {
+ 			return { ok: false, error: 'not_music', log: `homr found no music on any page${note ? ` (${note})` : ''}` };
+ 		}
+ 		const song = withoutCovers(
+-			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]] })),
++			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]], metres: found.metres[i] })),
+ 			found.staves,
+ 		);
+ 		let musicXml: string;
+ 		try {
+ 			if (deps.decode) {
+-				const joined = await joinLookingAtPages(song.map((p) => p.xml), song.map((p) => p.image), deps.decode);
++				const seen = deps.metres ? await Promise.all(song.map((p) => p.metres)) : undefined;
++				const joined = await joinLookingAtPages(song.map((p) => p.xml), song.map((p) => p.image), deps.decode, loadTemplates, seen);
+ 				musicXml = joined.musicXml;
+ 				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} bars, read ${joined.numbers.length}${joined.numbers.length ? ` (${joined.numbers.join(', ')})` : ''}`);
++				for (const line of joined.metreLog) console.info(`[omr] metre: ${line}`);
+ 			} else musicXml = joinPages(song.map((p) => p.xml));
+ 		} catch (err) {
+ 			return { ok: false, error: 'join_failed', log: message(err) };
+@@ -378,6 +395,10 @@ const reader = makeReader({
+ 			createRecognizer({ baseUrl: OMR_MODELS_BASE, model: OMR_MODEL, prefer, wasmPaths: ORT_WASM_BASE }),
+ 		),
+ 	decode: typeof OffscreenCanvas === 'undefined' ? undefined : decodeRegionInBrowser,
++	metres:
++		typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined'
++			? undefined
++			: (image, xml, staves) => import('./metre-client').then(({ readMetresInWorker }) => readMetresInWorker(image, xml, staves)),
+ });
+ 
+ /** True once a recognizer has been made in this session. */
+diff --git a/apps/web/src/lib/omr/join-pages.ts b/apps/web/src/lib/omr/join-pages.ts
+index 385a97b..e3e55e4 100644
+--- a/apps/web/src/lib/omr/join-pages.ts
++++ b/apps/web/src/lib/omr/join-pages.ts
+@@ -43,7 +43,14 @@
+  *   (`pianoAlonePages`);
+  * - leaves out the bars at the end of the song that come after its last
+  *   double bar line and hold neither note nor rest: a voice staff printed
+- *   blank on to the margin after the voice has ended (`dropBarsAfterTheEnd`).
++ *   blank on to the margin after the voice has ended (`dropBarsAfterTheEnd`);
++ * - with what the time-signature reader saw on the pages (`metre-model.ts`),
++ *   states each signature it saw where the bars it governs add up to it
++ *   (`metre-witness.ts`, "seen and summed"). A stated signature holds until
++ *   the reader's next one: homr's own metres in between are left out, and
++ *   the tuplet checks run under the stated one. Where the reader's next
++ *   signature is not stated, homr's metre in force there takes over again.
++ *   Where the reader saw nothing, the join is as it was without it.
+  *
+  * It works on the text of homr's output, not on a DOM, so it runs the same in
+  * the browser and in vitest (which has no `DOMParser`). It reads elements,
+@@ -53,6 +60,7 @@
+  */
+ 
+ import { completeTriplets, readMetre, type PageLook } from './triplets';
++import { barFacts, barOfWindow, labelOf, timeElement, witness, type MetreSeen, type Proposal } from './metre-witness';
+ 
+ /** One element found in a fragment of XML, with its place in that fragment. */
+ interface Span {
+@@ -182,6 +190,18 @@ interface InForce {
+ 	divisions: number | null;
+ 	/** Set when the bar before changed the divisions for its triplets (`triplets.ts`): the divisions to put back. */
+ 	restoreDivisions: number | null;
++	/** The `<time>` homr's own reading has in force, which `time` follows except while a stated signature governs. */
++	homrTime: string | null;
++	/** The stated signature that governs, or null. */
++	forced: string | null;
++	/** Which tuplet rule changed the last bar written (`triplets.ts`), or null. */
++	lastRule: 1 | 2 | 3 | 'page' | null;
++}
++
++/** What a bar does with the reader's signatures: states one, or ends one and gives homr's metre back. */
++interface Plan {
++	start?: string;
++	resume?: boolean;
+ }
+ 
+ /**
+@@ -189,7 +209,11 @@ interface InForce {
+  * measure of a later page) no restatement of what is already in force.
+  * Updates `state` with what the measure states.
+  */
+-function rewriteMeasure(measure: string, number: number, state: InForce, firstOfPage: boolean, dropRestatements: boolean, look?: PageLook): string {
++function rewriteMeasure(measure: string, number: number, state: InForce, firstOfPage: boolean, dropRestatements: boolean, look?: PageLook, plan: Plan = {}): string {
++	if (plan.start) {
++		state.forced = squash(plan.start);
++		state.time = state.forced;
++	} else if (plan.resume) state.forced = null;
+ 	const span = childElements(measure)[0];
+ 	const body = inner(measure, span);
+ 	const kids = childElements(body);
+@@ -226,6 +250,12 @@ function rewriteMeasure(measure: string, number: number, state: InForce, firstOf
+ 	// because the measure is written back with a closing tag.
+ 	const open = span.open.replace(/\snumber="[^"]*"/, ` number="${number}"`).replace(/\s*\/>$/, '>');
+ 	const children = silent(kept) ? kept.filter((t) => !TIMED.test(t)) : kept;
++	if (plan.start) children.unshift(`<attributes>${plan.start}</attributes>`);
++	// A stated signature ends here: homr's metre in force takes over again, stated where it differs.
++	if (plan.resume && state.homrTime !== null && labelOf(state.time) !== labelOf(state.homrTime)) {
++		children.unshift(`<attributes>${state.homrTime}</attributes>`);
++		state.time = squash(state.homrTime.replace(/^<time\b[^>]*>|<\/time>$/g, ''));
++	}
+ 	// The bar before ran in three times the divisions for its triplets: put them back,
+ 	// unless this bar states its own before its first note.
+ 	const restore = state.restoreDivisions;
+@@ -240,9 +270,12 @@ function rewriteMeasure(measure: string, number: number, state: InForce, firstOf
+ 	// force: homr reads only a time signature's lower figure and works out the upper one
+ 	// from the page's bar lengths, so the metre it states may not be the one printed.
+ 	const printsMetre = kids.some((k, idx) => k.name === 'attributes' && idx !== writersTime && /<time[\s>]/.test(inner(body, k)));
+-	const statesMetre = printsMetre || children.some((t) => /^<attributes>[\s\S]*<time[\s>]/.test(t));
++	// Under a signature the reader saw and the bars confirmed, the metre is the printed one,
++	// so the tuplet checks run under it, in its first bar too.
++	const statesMetre = state.forced === null && (printsMetre || children.some((t) => /^<attributes>[\s\S]*<time[\s>]/.test(t)));
+ 	const triplets = completeTriplets(children, readMetre(state.time), state.divisions, statesMetre, look);
+ 	if (triplets.divisions !== null) state.restoreDivisions = state.divisions;
++	state.lastRule = triplets.rule;
+ 	return `${open}${triplets.children.join('')}</measure>`;
+ }
+ 
+@@ -290,6 +323,16 @@ function rewriteAttributes(body: string, state: InForce, dropRestatements: boole
+ 			if (d > 0) state.divisions = d;
+ 		}
+ 		if (k.name === 'time' && dropTime) continue;
++		if (k.name === 'time') {
++			const value = squash(inner(body, k));
++			state.homrTime = squash(text);
++			// while a stated signature governs, homr's own metre is not written
++			if (state.forced !== null) continue;
++			if (dropRestatements && value === state.time) continue;
++			state.time = value;
++			out.push(text);
++			continue;
++		}
+ 		if (k.name === 'clef') {
+ 			const n = attr(k.open, 'number');
+ 			if (n !== null && n !== '1') continue;
+@@ -299,10 +342,10 @@ function rewriteAttributes(body: string, state: InForce, dropRestatements: boole
+ 			out.push(text);
+ 			continue;
+ 		}
+-		if (k.name === 'key' || k.name === 'time') {
++		if (k.name === 'key') {
+ 			const value = squash(inner(body, k));
+-			if (dropRestatements && value === state[k.name]) continue;
+-			state[k.name] = value;
++			if (dropRestatements && value === state.key) continue;
++			state.key = value;
+ 			out.push(text);
+ 			continue;
+ 		}
+@@ -442,6 +485,35 @@ export function notesAt(xs: readonly number[], x: number): number {
+ 	return n - 1 + (x - xs[n - 1]) / Math.max(1, Math.abs(xs[n - 1] - xs[n - 2]));
+ }
+ 
++/** What the time-signature reader saw on each page, in the order of `pages` (null where it read nothing), and where the join says what it did. */
++export interface SeenMetres {
++	pages: readonly (readonly MetreSeen[] | null)[];
++	log?: string[];
++}
++
++/** The reader's signatures as proposals on the join's bars, in bar order, one a bar; courtesies and unplaced ones go to the log. */
++function proposalsOf(pageMeasures: readonly (readonly string[])[], metres: SeenMetres): Proposal[] {
++	const out = new Map<number, Proposal>();
++	let offset = 0;
++	pageMeasures.forEach((measures, page) => {
++		for (const w of metres.pages[page] ?? []) {
++			if (!w.lab) continue;
++			if (w.courtesy) {
++				metres.log?.push(`page ${page + 1}: ${w.lab} after the staff's last bar line set aside as a courtesy signature`);
++				continue;
++			}
++			const bar = barOfWindow(measures, w);
++			if (bar === null) {
++				metres.log?.push(`page ${page + 1}: ${w.lab} seen where no bar of the voice begins, set aside`);
++				continue;
++			}
++			if (!out.has(offset + bar)) out.set(offset + bar, { bar: offset + bar, lab: w.lab, page });
++		}
++		offset += measures.length;
++	});
++	return [...out.values()].sort((a, b) => a.bar - b.bar);
++}
++
+ /**
+  * Joins homr-web's MusicXML for each page, in page order, into one
+  * MusicXML string holding the voice part only. Throws `JoinPagesError` when
+@@ -449,32 +521,57 @@ export function notesAt(xs: readonly number[], x: number): number {
+  * reads longer than its metre is checked against the page for a printed tuplet number
+  * (`triplets.ts`); without it the join reads homr's output alone.
+  */
+-export function joinPages(pages: readonly string[], look?: LookAtPage): string {
++export function joinPages(pages: readonly string[], look?: LookAtPage, metres?: SeenMetres): string {
+ 	if (pages.length === 0) throw new JoinPagesError('no pages');
+ 	const parts = pages.map((p, i) => firstPart(p, i + 1));
+ 	const tacet = pianoAlonePages(pages);
+-	const state: InForce = { key: null, time: null, clef: null, divisions: null, restoreDivisions: null };
+-	const measures: string[] = [];
+-	parts.forEach((part, pageIndex) => {
+-		part.measures.forEach((raw, mIndex) => {
+-			const m = tacet[pageIndex] ? withoutNotes(raw) : raw;
+-			const dropRestatements = pageIndex > 0 && mIndex === 0;
+-			const onPage: PageLook | undefined = look
+-				? (notes) => {
+-						const at = fillPlaces(notes.map(placeOf));
+-						if (!at) return null;
+-						const seen = look(pageIndex, at);
+-						if (!seen) return null;
+-						const xs = at.map((p) => p.x);
+-						return {
+-							numbers: seen.numbers.map((n) => ({ n: n.n, m: n.m, at: notesAt(xs, n.x) })),
+-							marksAt: seen.centres.map((c) => notesAt(xs, c)),
+-						};
+-					}
+-				: undefined;
+-			measures.push(rewriteMeasure(m, measures.length + 1, state, mIndex === 0, dropRestatements, onPage));
++	const build = (stated: ReadonlyMap<number, string>, ends: ReadonlySet<number>) => {
++		const state: InForce = { key: null, time: null, clef: null, divisions: null, restoreDivisions: null, homrTime: null, forced: null, lastRule: null };
++		const measures: string[] = [];
++		const timeBefore: (string | null)[] = [];
++		/** Bars the tuplet checks changed from homr's notes alone (rules 1 to 3), with no printed number read. */
++		const guessed = new Set<number>();
++		parts.forEach((part, pageIndex) => {
++			part.measures.forEach((raw, mIndex) => {
++				const m = tacet[pageIndex] ? withoutNotes(raw) : raw;
++				const dropRestatements = pageIndex > 0 && mIndex === 0;
++				const onPage: PageLook | undefined = look
++					? (notes) => {
++							const at = fillPlaces(notes.map(placeOf));
++							if (!at) return null;
++							const seen = look(pageIndex, at);
++							if (!seen) return null;
++							const xs = at.map((p) => p.x);
++							return {
++								numbers: seen.numbers.map((n) => ({ n: n.n, m: n.m, at: notesAt(xs, n.x) })),
++								marksAt: seen.centres.map((c) => notesAt(xs, c)),
++							};
++						}
++					: undefined;
++				const n = measures.length;
++				const lab = stated.get(n);
++				const plan: Plan = lab ? { start: timeElement(lab) } : ends.has(n) && state.forced !== null ? { resume: true } : {};
++				timeBefore.push(state.time);
++				measures.push(rewriteMeasure(m, n + 1, state, mIndex === 0, dropRestatements, onPage, plan));
++				if (state.lastRule !== null && state.lastRule !== 'page') guessed.add(n);
++			});
+ 		});
++		return { measures, timeBefore, guessed };
++	};
++	const proposals = metres ? proposalsOf(parts.map((p) => p.measures), metres) : [];
++	const ends = new Set(proposals.map((p) => p.bar));
++	const stated = new Map<number, string>();
++	proposals.forEach((p, i) => {
++		const trial = build(new Map([...stated, [p.bar, p.lab]]), ends);
++		const bars = barFacts(trial.measures);
++		const end = proposals[i + 1]?.bar ?? bars.length;
++		const span = Array.from({ length: Math.max(0, end - p.bar) }, (_, k) => p.bar + k);
++		const next = proposals[i + 1]?.bar === p.bar + 1 ? proposals[i + 1].lab : null;
++		const v = witness(bars, span, p.lab, labelOf(trial.timeBefore[p.bar] ?? null), next, trial.guessed);
++		if (v.stated) stated.set(p.bar, p.lab);
++		metres?.log?.push(`bar ${p.bar + 1} (page ${p.page + 1}): ${p.lab} ${v.stated ? 'stated' : 'not stated'}: ${v.why}`);
+ 	});
++	const { measures } = build(stated, ends);
+ 	dropBarsAfterTheEnd(measures, parts.flatMap((part) => part.measures));
+ 	const scorePart = parts[0].scorePart;
+ 	const id = attr(scorePart, 'id') ?? 'P1';
+== apps/web/src/lib/omr/metre-client.ts
+35c6429f9f8caeb58398f4afaa48985ca512b9af51c57d37ce3da03e7fbcf901  apps/web/src/lib/omr/metre-client.ts
+== apps/web/src/lib/omr/metre-witness.test.ts
+1185cc63d33c364ce2fae1b61438ec391a785bb11270e03a9e4030127abbdba7  apps/web/src/lib/omr/metre-witness.test.ts
+== apps/web/src/lib/omr/metre-witness.ts
+4f3d5e18d5e33c573d9f0bca8a48864e305f6e9774a7c6d6f5340dde79b6bcb2  apps/web/src/lib/omr/metre-witness.ts
+== apps/web/src/lib/omr/metre.worker.ts
+8ae2f0af51154650b9a349fe86888e68b16eb59464ae9191ee2ce869f32aa322  apps/web/src/lib/omr/metre.worker.ts

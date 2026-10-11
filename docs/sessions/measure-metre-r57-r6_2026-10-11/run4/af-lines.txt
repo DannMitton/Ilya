@@ -1,0 +1,17 @@
+scans 8, unseen six 6, truths 6; D is the opened Gurilyov: yes
+A: truth paired by name
+A: read on webgpu, 0.57 min
+A: stated 0, agreeing 0 (by length); false 0
+B: truth paired by name
+B: read on webgpu, 0.60 min
+B: stated 1, agreeing 1 (by length); false 0
+C: truth paired by name
+C: read on webgpu, 0.64 min
+C: stated 0, agreeing 0 (by length); false 0
+E: truth paired by name
+E: read on webgpu, 1.36 min
+E: stated 2, agreeing 2 (by length); false 0
+F: truth paired by name
+F: read on webgpu, 0.59 min
+F: stated 1, agreeing 1 (by length); false 0
+A to F: false signatures 0

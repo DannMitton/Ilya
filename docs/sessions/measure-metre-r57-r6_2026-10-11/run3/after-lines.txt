@@ -1,0 +1,51 @@
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/tch.read.json [(99, 222)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/sun1.read.json [(18, 115)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/sun4.read.json [(29, 145)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/sun5.read.json [(64, 320)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/sun6.read.json [(55, 187)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k01.read.json [(67, 162)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k02.read.json [(41, 100)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k03.read.json [(52, 175)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k04.read.json [(39, 165)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k06.read.json [(37, 169)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k07.read.json [(53, 182)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k08.read.json [(32, 164)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k09.read.json [(39, 168)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/k10.read.json [(83, 172)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/gur.read.json [(31, 170)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/grech.read.json [(58, 180)]
+/Users/dannmitton/Downloads/_code-metre-r6/after/scored/varl.read.json [(26, 68)]
+tch: webgpu; 171 of 174 right; missing 0; extra 0; pitch misreads 3; length misreads 0; bars read 99 of 99; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 98.3 PASS; no note marked UNSURE
+  scorer metre (by length): right 83 of 83 paired
+sun1: webgpu; 94 of 96 right; missing 0; extra 0; pitch misreads 0; length misreads 2; bars read 18 of 18; octave shift 12; metre as printed NOT SCORED (the truth carries no figures); score 97.9 PASS; no note marked UNSURE
+  scorer metre (by length): right 17 of 17 paired
+sun4: webgpu; 116 of 116 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 29 of 29; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 100.0 PASS; no note marked UNSURE
+  scorer metre (by length): right 27 of 27 paired
+sun5: webgpu; 246 of 258 right; missing 1; extra 10; pitch misreads 9; length misreads 2; bars read 64 of 61; octave shift 12; metre as printed NOT SCORED (the truth carries no figures); score 91.5 BELOW; no note marked UNSURE
+  scorer metre (by length): right 58 of 58 paired
+sun6: webgpu; 155 of 161 right; missing 0; extra 0; pitch misreads 6; length misreads 0; bars read 55 of 55; octave shift 12; metre as printed NOT SCORED (the truth carries no figures); score 96.3 PASS; no note marked UNSURE
+  scorer metre (by length): right 48 of 48 paired
+k01: webgpu; 150 of 152 right; missing 0; extra 0; pitch misreads 1; length misreads 1; bars read 67 of 67; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 98.7 PASS; no note marked UNSURE
+  scorer metre (by length): right 61 of 61 paired
+k02: webgpu; 93 of 157 right; missing 64; extra 0; pitch misreads 0; length misreads 0; bars read 41 of 70; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 59.2 BELOW; no note marked UNSURE
+  scorer metre (by length): right 37 of 37 paired
+k03: webgpu; 157 of 157 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 52 of 52; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 100.0 PASS; no note marked UNSURE
+  scorer metre (by length): right 44 of 44 paired
+k04: webgpu; 150 of 151 right; missing 0; extra 0; pitch misreads 1; length misreads 0; bars read 39 of 39; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 99.3 PASS; no note marked UNSURE
+  scorer metre (by length): right 32 of 32 paired
+k06: webgpu; 153 of 153 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 37 of 37; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 100.0 PASS; no note marked UNSURE
+  scorer metre (by length): right 34 of 34 paired
+k07: webgpu; 160 of 163 right; missing 0; extra 0; pitch misreads 0; length misreads 3; bars read 53 of 53; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 98.2 PASS; no note marked UNSURE
+  scorer metre (by length): right 39 of 39 paired
+k08: webgpu; 154 of 154 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 32 of 32; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 100.0 PASS; no note marked UNSURE
+  scorer metre (by length): right 31 of 31 paired
+k09: webgpu; 143 of 149 right; missing 0; extra 0; pitch misreads 6; length misreads 0; bars read 39 of 39; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 96.0 PASS; no note marked UNSURE
+  scorer metre (by length): right 31 of 31 paired
+k10: webgpu; 154 of 156 right; missing 0; extra 0; pitch misreads 2; length misreads 0; bars read 83 of 83; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 98.7 PASS; no note marked UNSURE
+  scorer metre (by length): right 70 of 70 paired
+gur: webgpu; 152 of 153 right; missing 0; extra 0; pitch misreads 0; length misreads 1; bars read 31 of 31; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 99.3 PASS; no note marked UNSURE
+  scorer metre (by length): right 29 of 29 paired
+grech: webgpu; 153 of 154 right; missing 0; extra 0; pitch misreads 1; length misreads 0; bars read 58 of 58; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 99.4 PASS; no note marked UNSURE
+  scorer metre (by length): right 9 of 56 paired
+varl: webgpu; 61 of 63 right; missing 0; extra 1; pitch misreads 0; length misreads 2; bars read 26 of 26; octave shift 0; metre as printed NOT SCORED (the truth carries no figures); score 95.2 PASS; no note marked UNSURE
+  scorer metre (by length): right 24 of 24 paired
