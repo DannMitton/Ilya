@@ -2977,3 +2977,7 @@ Q7, the desk: what does the singer need from the measures that are not findings 
 2. **Treble comments are computed and not shown**: `comments.ts:307-308`, *"the pane does not show them yet (the treble wording is not ruled)"*. So a soprano today sees no turn or resonance comment at all, and the treble wording is owed by Dann.
 3. **The crossing line and Markup's red crossing squircle** say the tone "will want to turn full and heady, toward a whoop" (`:1648`, `:2002`). As words, a tendency, not a fault. As a mark, NOT ESTABLISHED for a treble voice: if it rings most high notes of a soprano part, it becomes a mark on everything (`CONTRACT.md` §6). Walk with a treble profile before deciding.
 4. **A French gap:** `insights.r2.vowels.noTurn` carries the English in its `fr` slot (`i18n.ts:1786`). Owed: a French draft for Dann.
+
+**`insights.r2.vowels.noTurn` French RULED by Dann 2026-10-11 16:11 ("B"):** « {s}, aucune première résonance mesurée lors de votre calibration ». Drafted by the desk from the file's own French (« première résonance », `insights.r2.sourcesLine`; « calibration », the voice pane). Not yet in the tree (`i18n.ts:1786`); goes to Code with the next French brief.
+
+**N.183, numbered 2026-10-11 19:02.** The 32nd (key 2) and the 64th (key 1) in the editing controls, by key and by touch. Ruled in by Dann 18:59; offered by the desk. Spec: `../sessions/brief-code-n183-32nd-and-64th_r1_2026-10-11.md` (QUEUE row 75). French RATIFIED by Dann 2026-10-11 19:00 ("I approve the French"): « Triple croche » (32nd), « Quadruple croche » (64th).

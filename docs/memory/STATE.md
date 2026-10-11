@@ -47,6 +47,20 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
+> ### UPDATE OF 2026-10-11 17:00 (Opus desk thread opened 15:03). READ FIRST, THEN THE HANDOVER UNDER IT.
+>
+> **Floor `4f7421e`** (Dann shipped row 57 runs 3 and 4 at 15:04). **The treble test set is DRAFTED** (`../sessions/draft-treble-test-set_r1_2026-10-11.md`): 27 Russian songs for soprano and mezzo, scores unopened, none in the held-out sets (`../sessions/memo-sonnet-treble-repertoire_r1_2026-10-11.md`); two profiles from Miller 1986 (pp. 134-135) and McKinney 1994 (pp. 111, 113), Lamarche 2010 as cross-check (Dann 16:22). A typical comfortable working zone by voice type: NOT ESTABLISHED. **Correction:** the 15:05 handover's "lyric soprano" for Miller Fig. 10.1 is wrong; the caption reads "Soprano". **Correction:** extraction MCK-041 misread McKinney Fig. 3 (see the draft).
+>
+> **Ruled this thread:** the singer's zone is "comfortable working zone" / « zone de travail confortable », tessitura names a piece (`PRODUCT.md`, "Tessitura, as Ilya uses the word", amended 16:39 after Hoch 2014 and the Académie); `insights.r2.vowels.noTurn` French B (`OPEN.md`). Brief QUEUE row 73.
+>
+> **Running: Code on the Mac (Sonnet), QUEUE row 74** (`../sessions/brief-code-m-and-p-after-the-metre_r2_2026-10-11.md`, r2 after an Opus review found three blocking faults): K, L, M, P re-read at `4f7421e`; the six spent songs, lines only; M's cover rule restored if no song falls. Started about 16:56. **Next desk: read its report whole.**
+>
+> **Next after row 74: a fresh held-out set** for the 95 claim, from the treble list (all ten sealed songs are now opened or spent). IMSLP refuses automated downloads (302 to `friendlyredirect.html`, from the Mac's shell 16:57); downloads go through Dann's Chrome. Truth files drafted by a helper, as for heldout2.
+>
+> **19:05: row 74 DONE on the code** (see QUEUE row 74): M 100.0 with the cover rule; P 77.6, held by its duplets, not the metre. **Held-out set 3 EXISTS:** ten fresh songs from the treble list, fetched through Dann's Chrome 17:10, truth drafted by two Opus helpers (339k and 367k tokens), all ten self-checked; one bar read by Dann (18:56). Files outside the tree: `~/Downloads/_desk-heldout3-private/` (`MANIFEST.md`, `truth/`, the helpers' memos). Never opened by a reader lane. 16 notes UNSURE, most where Balakirev and Borodin split the voice between languages (rule for which line to score: NOT ESTABLISHED; the helpers recorded the Russian). **NEXT: the final test on held-out set 3**, row 55's protocol, the deployed site, after this ship. Brief not yet written.
+>
+> **This thread's mistakes, each recorded where it happened:** "singers say it that way in the studio", a claim with no source (`../sessions/draft-comfortable-working-zone-strings_r1_2026-10-11.md`); "a tessitura by voice type", a phrase the desk coined.
+
 > ### HANDOVER OF 2026-10-11 15:05 (the Opus desk thread opened 04:40). READ FIRST.
 >
 > **Row 57 (the printed metre) is DONE on the code:** runs 3 and 4 report every r6 condition met: 0 false signatures on 11 unseen songs; 29 of 32 printed places stated on the 17, none false; metre field 666 to 674 of 721; no song's notes lower (`../sessions/report-code-the-metre-seen-and-summed_r6-run3_2026-10-11.md`, `..._run4_...`, read whole by the desk). Ship paste given to Dann 15:01 (gate 4 2180). If the ship landed, row 57 closes after Dann's look.
@@ -59,9 +73,7 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 >
 > **Also open:** the Guide rewrite (N.84) waits until Ilya is built, Dann 14:55; its notes are in `INBOX.md` (2026-10-11). A French draft owed: `insights.r2.vowels.noTurn` carries English in its `fr` slot (`i18n.ts:1786`). This thread's mistakes, each recorded where it happened: two DOIs given from memory (one wrong); "Erickson not in the library" (a search showed only its first 40 matches); "Ilya asks the experience stage" (it asks seven questions); a claim about French vowels too broad (corrected by Dann).
 
-> ### UPDATE OF 2026-10-11 04:50 (Opus desk thread opened 04:40). READ FIRST, THEN THE HANDOVER UNDER IT.
->
-> **Two lanes are running, both sent by Dann.** (1) **Code on the Mac (Opus): row 57 r6, runs 1 and 2**, brief `../sessions/brief-code-the-metre-seen-and-summed_r6-runs1-2_2026-10-11.md`, written by this desk. Run 2 starts only if run 1's step 0 finds no same-length false signature; Code stops after run 2. Reports `../sessions/report-code-the-metre-seen-and-summed_r6-run1_2026-10-11.md` and `..._r6-run2_...`. No sealed song is read. Runs 3 and 4 need a new brief after the desk reads both reports. (2) **The cloud lane (Sonnet): rows 64, 65, 63, 66**, started about 04:49 on `cloud-lane`, which Dann moved up to `9ad4082` at 04:48. Told not to edit `docs/memory/`; each row's state is at the top of its report. **At 05:10 the desk added a second batch to the cloud session, with Dann's yes, typed through his Chrome** (session `https://claude.ai/code/session_016NrzTesypawG8rdfVc4fxs`, running Opus 5.5, not Sonnet, by Dann's slip, "nbd"): after row 66, rows 36, 50, 25, 11, 12, 17, and 51 slice 1 (modules and tests only). The "after Dann reads it" gate on 11, 12, and 17 dropped by the desk under the 2026-10-04 22:27 rule. Row 13 left for the Mac. **Dann away from 05:15. His grant, 05:14:** *"You can wrangle whatever Cloud needs while I'm gone, that why we set you up in my browser."* Desk check-ins scheduled in this thread at 07:00, 09:00 (the one message to Dann), and 11:00 (`send_later`; cancel at the close with `list_triggers`, `delete_trigger`). caffeinate is running in a second Terminal window on the Mac. **07:00 check-in:** the cloud session's own plan shows rows 64 to 66 done, row 36 pushed, row 50 under way; not stuck, nothing sent to it. **By 12:30: both lanes FINISHED.** Code's runs 1 and 2 reported at 05:35 and 06:15 (step 0: 0 same-length false; the TypeScript port agrees with Python on 811 of 811 windows found; gate 4 2105). The cloud lane finished all eleven rows by 08:34 (`cloud-lane` `f8d8ca3`, gate 4 2150). A power outage in Toronto took the Mac offline before 09:00, after both lanes had finished; the tree showed no lock files and run 2's files intact at 12:25. Ship script baselines moved for the merge (242, 2167, 653/658, PREDICTED), backup `ilya-ship.sh.bak-2088-2026-10-11`. Row 34's brief written (`../sessions/brief-code-markup-crossing-takes-the-loupe-squircle_r1_2026-10-11.md`). **13:32: two lanes running again.** Code on the Mac (Opus): row 57 runs 3 and 4 (`../sessions/brief-code-the-metre-seen-and-summed_r6-runs3-4_2026-10-11.md`), in the session "Metre seen and summed R6 runs". Cloud lane (Opus by Dann's slip): rows 69 then 34, after a fast-forward to `8cc6202`. Shipped today by Dann: `4bc9bcd` (cloud rows and runs 1-2), `8cc6202` (docs). Rulings today: placeholder design, word, English and French (`OPEN.md`, STAND-INS ARE LABELLED); article filing rule (`CONTRACT.md` §6). Owed to Dann for a look: row 66's three choices; row 25's Markup page 1 hiding systems below the footer (Tchaikovsky); row 63's French drafts. **Next desk: read both lanes' reports whole, rule, then write the runs 3 and 4 brief and the merge paste.** **French Guide conventions RATIFIED 04:55; QUEUE row 67, after row 57 run 2 reports** (no edit lands in `apps/` while run 2 hashes it). Uncommitted from this thread: `STATE.md`, `QUEUE.md` (row 57 line, row 67), `OPEN.md` (conventions line), the runs 1 and 2 brief, the conventions draft and its brief; backups in `.desk-backup/2026-10-11-0450/`.
+> ### UPDATE OF 2026-10-11 04:50: moved verbatim to `../sessions/LOG.md` at 2026-10-11 19:10. Both lanes it names finished; its rulings live in `OPEN.md` (STAND-INS ARE LABELLED) and `CONTRACT.md` §6.
 
 > ### HANDOVER OF 2026-10-11, written 04:40 (the Opus desk thread opened 2026-10-10 23:45). READ FIRST.
 >
@@ -120,6 +132,10 @@ section says what is open; that file says what comes first and why. **Six
 dependencies fix the order and everything else floats**; the rest of this file
 does not repeat them.
 
+
+### Numbered 2026-10-11
+
+- `[ ]` **N.183. The 32nd and the 64th in the editing controls (keys 2 and 1, as in Finale).** Offered by the desk 18:58 from the Mussorgsky bar; ruled in by Dann 18:59 (*"yes, add Finale's other two digits"*). DESK DEFAULT number. Spec: the brief, QUEUE row 75.
 
 ### Numbered 2026-10-09
 

@@ -1,0 +1,2004 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<score-partwise version="4.0">
+<work>
+    <work-title />
+  </work>
+<identification>
+    <encoding>
+      <software>homr</software>
+    </encoding>
+  </identification>
+<defaults />
+<part-list><score-part id="P1">
+      <part-name>Voice</part-name>
+      <score-instrument id="P1-I1">
+        <instrument-name>Voice</instrument-name>
+        <instrument-sound>voice</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P1-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>54</midi-program>
+        <volume>100</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part></part-list>
+<part id="P1">
+<measure number="1"><attributes><time><beats>4</beats><beat-type>4</beat-type></time></attributes><attributes><divisions>2</divisions></attributes><attributes><clef number="1">
+          <sign>F</sign>
+          <line>4</line>
+        </clef><key>
+          <fifths>5</fifths>
+        </key></attributes></measure>
+<measure number="2"></measure>
+<measure number="3"></measure>
+<measure number="4"><note>
+        <rest />
+        <duration>4</duration>
+        <type>half</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3374, 1011 -->
+      </note><note>
+        <rest />
+        <duration>2</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3941, 1015 -->
+      </note><note>
+        <rest />
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 4123, 1041 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 4205, 977 -->
+      </note></measure>
+<measure number="5"><print new-system="yes" /><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1022, 2196 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1179, 2230 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1433, 2215 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1605, 2203 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1802, 2224 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1994, 2253 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2147, 2212 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2330, 2234 -->
+      </note></measure>
+<measure number="6"><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>6</duration>
+        <type>half</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2652, 2187 -->
+      </note><note>
+        <rest />
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3908, 2281 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3664, 2223 -->
+      </note></measure>
+<measure number="7"><print new-system="yes" /><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1024, 3416 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1210, 3461 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1390, 3464 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1552, 3477 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1758, 3482 -->
+      </note><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2017, 3507 -->
+      </note><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2209, 3491 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2347, 3470 -->
+      </note></measure>
+<measure number="8"><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2633, 3525 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2969, 3527 -->
+      </note><note>
+        <rest />
+        <duration>4</duration>
+        <type>half</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3561, 3514 -->
+      </note></measure>
+<measure number="9"><print new-system="yes" /><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1021, 4618 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1364, 4649 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1508, 4620 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1818, 4648 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2012, 4667 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2150, 4636 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2318, 4649 -->
+      </note></measure>
+<measure number="10"><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2593, 4604 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3130, 4642 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3297, 4652 -->
+      </note><note>
+        <rest />
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3859, 4670 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 4004, 4654 -->
+      </note></measure>
+<measure number="11"><attributes><divisions>4</divisions></attributes><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 780, 592 -->
+      </note><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 976, 637 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1199, 633 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1419, 640 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1600, 616 -->
+      </note><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1873, 619 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2065, 573 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2297, 614 -->
+      </note></measure>
+<measure number="12"><note>
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>6</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2611, 653 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3100, 651 -->
+      </note><note>
+        <rest />
+        <duration>8</duration>
+        <type>half</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3313, 625 -->
+      </note></measure>
+<measure number="13"><print new-system="yes" /><note>
+        <rest />
+        <duration>8</duration>
+        <type>half</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 780, 1942 -->
+      </note><note>
+        <rest />
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1381, 1956 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1499, 1974 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1625, 1958 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1735, 1957 -->
+      </note></measure>
+<measure number="14"><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>6</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1879, 1906 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2220, 1916 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2435, 1929 -->
+      </note><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2568, 1943 -->
+      </note><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2700, 1968 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2762, 1954 -->
+      </note></measure>
+<measure number="15"><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="start" />
+        <type>half</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations>
+          <tied type="start" />
+        </notations>
+        <!-- imgpos: 3048, 1934 -->
+      </note><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop" />
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations>
+          <tied type="stop" />
+        </notations>
+        <!-- imgpos: 3593, 1973 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3695, 1938 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3870, 1913 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 4010, 1953 -->
+      </note></measure>
+<measure number="16"><print new-system="yes" /><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>6</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 745, 3097 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1077, 3064 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1210, 3103 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1313, 3153 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1440, 3111 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1491, 3156 -->
+      </note></measure>
+<measure number="17"><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>6</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1745, 3130 -->
+      </note><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2116, 3179 -->
+      </note><note>
+        <rest />
+        <duration>4</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2283, 3176 -->
+      </note><note>
+        <rest />
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2479, 3163 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2599, 3188 -->
+      </note></measure>
+<measure number="18"><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>eighth</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2777, 3176 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>16th</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2952, 3194 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start" />
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations>
+          <tied type="start" />
+        </notations>
+        <!-- imgpos: 3099, 3193 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <tie type="stop" />
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations>
+          <tied type="stop" />
+        </notations>
+        <!-- imgpos: 3491, 3104 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3586, 3132 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          <alter>2</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3753, 3169 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3878, 3173 -->
+      </note></measure>
+<measure number="19"><print new-system="yes" /><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>6</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 714, 4434 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1196, 4526 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>6</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1341, 4479 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1849, 4504 -->
+      </note></measure>
+<measure number="20"><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>6</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2091, 4439 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3033, 4467 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>4</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3298, 4509 -->
+      </note><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3710, 4526 -->
+      </note></measure>
+<measure number="21"><attributes><divisions>2</divisions></attributes><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 927, 314 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1195, 362 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1496, 396 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1732, 365 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2058, 382 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2384, 396 -->
+      </note></measure>
+<measure number="22"></measure>
+<measure number="23"></measure>
+<measure number="24"><print new-system="yes" /><note>
+        <rest />
+        <duration>4</duration>
+        <type>half</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 956, 1813 -->
+      </note><note>
+        <rest />
+        <duration>2</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1578, 1822 -->
+      </note><note>
+        <rest />
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1841, 1830 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1977, 1770 -->
+      </note></measure>
+<measure number="25"><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2162, 1745 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2805, 1757 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3127, 1749 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3395, 1785 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3662, 1750 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3851, 1767 -->
+      </note></measure>
+<measure number="26"><print new-system="yes" /><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 935, 3080 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1555, 3116 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>2</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1805, 3128 -->
+      </note><note>
+        <rest />
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2248, 3163 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2339, 3135 -->
+      </note></measure>
+<measure number="27"><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2628, 3065 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2807, 3097 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2912, 3116 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3127, 3116 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3313, 3127 -->
+      </note><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3676, 3153 -->
+      </note><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3871, 3135 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 4042, 3120 -->
+      </note></measure>
+<measure number="28"><print new-system="yes" /><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 950, 4441 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1595, 4478 -->
+      </note><note>
+        <rest />
+        <duration>2</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1893, 4463 -->
+      </note><note>
+        <rest />
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2409, 4454 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2663, 4472 -->
+      </note></measure>
+<measure number="29"><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2979, 4451 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3437, 4449 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations>
+          <articulations>
+            <breath-mark />
+          </articulations>
+        </notations>
+        <!-- imgpos: 3570, 4420 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3995, 4460 -->
+      </note></measure>
+<measure number="30"><attributes><time><beats>3</beats><beat-type>2</beat-type></time></attributes><attributes><divisions>2</divisions></attributes><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 824, 703 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 962, 708 -->
+      </note><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1221, 690 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1353, 655 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start" />
+        <type>half</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations>
+          <tied type="start" />
+        </notations>
+        <!-- imgpos: 1665, 614 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <tie type="stop" />
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations>
+          <tied type="stop" />
+        </notations>
+        <!-- imgpos: 2211, 660 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2305, 614 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2460, 627 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2521, 617 -->
+      </note></measure>
+<measure number="31"><attributes><time><beats>4</beats><beat-type>4</beat-type></time></attributes><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2895, 580 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3312, 578 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3360, 585 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3506, 583 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3659, 602 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3845, 586 -->
+      </note></measure>
+<measure number="32"><print new-system="yes" /><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 767, 1989 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1058, 2061 -->
+      </note><note>
+        <rest />
+        <duration>2</duration>
+        <type>quarter</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1210, 2023 -->
+      </note><note>
+        <rest />
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1457, 2010 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1575, 2018 -->
+      </note></measure>
+<measure number="33"><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1742, 2007 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2106, 1964 -->
+      </note><note>
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2326, 1984 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2790, 2019 -->
+      </note></measure>
+<measure number="34"><note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2940, 1978 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3149, 1982 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3201, 1940 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3369, 1887 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3275, 1951 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 3952, 1982 -->
+      </note></measure>
+<measure number="35"><print new-system="yes" /><note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 830, 3177 -->
+      </note><note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1323, 3153 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>3</duration>
+        <type>quarter</type>
+        <dot />
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1474, 3178 -->
+      </note><note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 1995, 3162 -->
+      </note></measure>
+<measure number="36"><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2215, 3181 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2425, 3167 -->
+      </note><note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2583, 3172 -->
+      </note><note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>1</duration>
+        <type>eighth</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations />
+        <!-- imgpos: 2734, 3184 -->
+      </note><note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          <alter>1</alter>
+        </pitch>
+        <duration>4</duration>
+        <type>half</type>
+        <voice>1</voice>
+        <staff>1</staff>
+        <notations>
+          <slur number="1" type="start" />
+        </notations>
+        <!-- imgpos: 2928, 3167 -->
+      </note></measure>
+<measure number="37"><print new-system="yes" /></measure>
+<measure number="38"></measure>
+<measure number="39"><barline location="right">
+        <bar-style>heavy-heavy</bar-style>
+      </barline></measure>
+</part>
+</score-partwise>

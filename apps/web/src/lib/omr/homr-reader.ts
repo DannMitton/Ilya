@@ -103,22 +103,34 @@ interface Held {
 	reason: string | null;
 }
 
+/** A staff counts as one of music when its box is at least this share of the page's width (every staff of music on the opened songs is 0.69 to 0.90; the borders and lettering of a cover are 0.02 to 0.60). */
+export const MUSIC_STAFF_WIDTH = 0.5;
+
+/** How many of a page's staff boxes are at least `MUSIC_STAFF_WIDTH` of the page wide; null where the answer gave no boxes. */
+export function wideStaves(boxes: unknown): number | null {
+	if (!Array.isArray(boxes)) return null;
+	return boxes.filter((b) => typeof b?.w === 'number' && b.w >= MUSIC_STAFF_WIDTH).length;
+}
+
 /**
  * The pages of the song, without the cover in front of it.
  *
- * homr can find a staff in the ruled border of a title page and read two bars
- * of music from it (Gurilyov, «Раскаяние», Jurgenson 1895, page 1: one staff
- * 30 pixels tall, a C clef and a whole-note chord). A page of a song prints a
- * system of two staves or more, the voice over the piano, and the title page
- * comes before it. So a page before the first page on which homr found two or
- * more staves, on which it found a single staff, is a cover and is left out. A
- * page whose answer does not say how many staves it found is kept, and so is
- * every page of a song in which no page has two staves or more.
+ * homr can find staves in the ruled border or the lettering of a title page
+ * and read bars of music from them (Gurilyov, «Раскаяние», Jurgenson 1895,
+ * page 1: one staff 30 pixels tall, a C clef and a whole-note chord; Lyadov,
+ * «Колыбельная», Belaieff 1898, pages 1 and 2: four and three "staves" in
+ * a decorative cover). A page of a song prints a system of two staves or
+ * more, the voice over the piano, each most of the page wide, and the title
+ * page comes before it. So a page before the first page with two wide staves
+ * or more, on which fewer than two wide staves were found, is a cover and is
+ * left out. A page whose answer does not say how many staves it found is
+ * kept, and so is every page of a song in which no page has two wide staves
+ * or more.
  */
 export function withoutCovers<T>(pages: readonly T[], staves: readonly (number | null)[]): T[] {
 	const first = staves.findIndex((n) => n !== null && n >= 2);
 	if (first <= 0) return [...pages];
-	return pages.filter((_, i) => i >= first || staves[i] !== 1);
+	return pages.filter((_, i) => i >= first || staves[i] === null);
 }
 
 /** A rectangle of a page image, in its pixels. */
@@ -224,7 +236,7 @@ export async function joinLookingAtPages(
 /** What one pass over the pages found. */
 interface Pass {
 	xmls: string[];
-	/** For each page in `xmls`, the staves homr found on it, or null where its answer did not say. */
+	/** For each page in `xmls`, the staves homr found on it that are wide enough to be music (`wideStaves`), or null where its answer did not say. */
 	staves: (number | null)[];
 	/** For each page in `xmls`, the index of its image. */
 	image: number[];
@@ -295,7 +307,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 			});
 			if (result.ok) {
 				xmls.push(result.musicXml);
-				staves.push(Array.isArray(result.staves) ? result.staves.length : null);
+				staves.push(wideStaves(result.staves));
 				image.push(i);
 				metres.push(deps.metres && Array.isArray(result.staves) ? deps.metres(images[i], result.musicXml, result.staves) : Promise.resolve(null));
 				continue;

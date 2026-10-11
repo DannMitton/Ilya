@@ -7,7 +7,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { Recognizer } from 'homr-web';
-import { joinLookingAtPages, makeReader, withoutCovers, type ReaderDeps } from './homr-reader';
+import { joinLookingAtPages, makeReader, wideStaves, withoutCovers, type ReaderDeps } from './homr-reader';
 import { joinPages } from './join-pages';
 import type { PathChoice, PreferredBackend } from './path-choice';
 
@@ -247,6 +247,31 @@ describe('a cover in front of the song', () => {
 		if (result.ok) {
 			expect(result.pagesRead).toBe(1);
 			expect(result.pages).toBe(2);
+			expect(result.musicXml).not.toContain('data-cover');
+		}
+	});
+});
+
+describe('a decorative cover that homr reads as several staves', () => {
+	it('leaves out two cover pages whose staff boxes are narrow, however many staves homr found on them', async () => {
+		// Lyadov, «Колыбельная», Belaieff 1898: pages 1 and 2 are a cover and a decorative title page. homr found
+		// 4 and 3 "staves" in the borders and lettering, 0.60, 0.03, 0.03, 0.04 and 0.13, 0.02, 0.32 of the page wide.
+		const boxes = (ws: number[]) => ws.map((w, index) => ({ cx: 0.5, cy: 0.1 * (index + 1), h: 0.02, index, w }));
+		expect(wideStaves(boxes([0.6, 0.03, 0.03, 0.04]))).toBe(1);
+		expect(wideStaves(boxes([0.13, 0.02, 0.32]))).toBe(0);
+		expect(wideStaves(boxes([0.8, 0.8, 0.8]))).toBe(3);
+		expect(wideStaves(undefined)).toBeNull();
+		expect(withoutCovers(['cover', 'title', 'p3'], [1, 0, 3])).toEqual(['p3']);
+		const COVER1 = { ok: true, musicXml: PAGE_XML.replace(/<measure /, '<measure data-cover="one" '), staves: boxes([0.6, 0.03, 0.03, 0.04]) } as unknown as Answer;
+		const COVER2 = { ok: true, musicXml: PAGE_XML.replace(/<measure /, '<measure data-cover="two" '), staves: boxes([0.13, 0.02, 0.32]) } as unknown as Answer;
+		const SONG = { ok: true, musicXml: PAGE_XML, staves: boxes([0.8, 0.8, 0.8, 0.8]) } as unknown as Answer;
+		const g = fake('webgpu', [COVER1, COVER2, SONG]);
+		const { d } = deps(WEBGPU, async () => g.rec);
+		const result = await makeReader(d).read(pages(3));
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.pagesRead).toBe(1);
+			expect(result.pages).toBe(3);
 			expect(result.musicXml).not.toContain('data-cover');
 		}
 	});
