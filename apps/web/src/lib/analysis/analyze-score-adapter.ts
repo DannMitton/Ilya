@@ -36,6 +36,7 @@ import { t, type Language } from '$lib/i18n';
 import type { CalibratedFormant, VoiceCharacteristics, Vowel } from '$lib/voice/engine/types';
 import { DERIV_SOURCE, deriveFrom } from '$lib/voice/engine/derivations';
 import { checkPlausibility, isUsable } from '$lib/voice/engine/plausibility';
+import { fillStandIns, type StandInReport } from '$lib/voice/engine/stand-ins';
 
 /**
  * Which analysis dimensions rest on real singer input. Derived from the
@@ -56,6 +57,12 @@ export interface AnalysisCompleteness {
 export interface AdaptedProfile {
 	snapshot: VoiceProfileSnapshot;
 	completeness: AnalysisCompleteness;
+	/**
+	 * QUEUE row 17: what the stand-ins did, absent when nothing is sung. `retake`
+	 * lists sung vowels the fit left out (off its shape) or the guard failed,
+	 * for the calibration summary to offer a retake; nothing draws it yet.
+	 */
+	standIns?: StandInReport;
 }
 
 /**
@@ -148,6 +155,8 @@ export function buildVoiceProfileSnapshot(
 	characteristics: VoiceCharacteristics | undefined,
 	label?: string,
 	intake?: IntakeAnswers,
+	/** The declared voice type (Tier 1 id), which picks the stand-ins' starting staff (QUEUE row 17). */
+	voiceType?: string,
 ): AdaptedProfile {
 	// QUEUE row 11: every gate below, and `deriveFrom`, reads the judged copy.
 	const formants = judgeUnchecked(sampled);
@@ -176,8 +185,8 @@ export function buildVoiceProfileSnapshot(
 	// is still kept: the tri-state ruling says absence of a window is not a failure.
 	const fR1: Record<string, number> = {};
 	// QUEUE row 12: where each number came from (`VoiceProfileSnapshot.fR1Source`).
-	const fR1Source: Record<string, 'sung' | 'derived'> = {};
-	const fR2Source: Record<string, 'sung' | 'derived'> = {};
+	const fR1Source: Record<string, 'sung' | 'derived' | 'surrogate'> = {};
+	const fR2Source: Record<string, 'sung' | 'derived' | 'surrogate'> = {};
 	for (const [vowel, formant] of Object.entries(formants) as [Vowel, CalibratedFormant | undefined][]) {
 		if (
 			formant &&
@@ -255,6 +264,17 @@ export function buildVoiceProfileSnapshot(
 		}
 	}
 
+	// QUEUE row 17: no vowel left blank (Dann 2026-09-16; the method ruled 2026-10-01 02:56).
+	// Every gap the loops above left takes a stand-in from Bozeman's staff fitted to the
+	// singer, flagged 'surrogate' (`stand-ins.ts`). Only once a vowel is sung: a voice with
+	// no reading keeps the page that says nothing was measured (DESK DEFAULT).
+	const implausible = (Object.entries(formants) as [Vowel, CalibratedFormant | undefined][])
+		.filter(([, f]) => f && !isUsable(f))
+		.map(([v]) => v);
+	const standIns: StandInReport | undefined = Object.values(fR1Source).includes('sung')
+		? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType, implausible)
+		: undefined;
+
 	const c = characteristics;
 	const hasRange = c?.rangeLow !== undefined && c?.rangeHigh !== undefined;
 	const hasTessitura = c?.tessituraLow !== undefined && c?.tessituraHigh !== undefined;
@@ -293,6 +313,7 @@ export function buildVoiceProfileSnapshot(
 
 	return {
 		snapshot,
+		...(standIns ? { standIns } : {}),
 		completeness: completenessOf(snapshot),
 	};
 }

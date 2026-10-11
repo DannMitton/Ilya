@@ -137,7 +137,7 @@
 	const dims = PAGE_SIZES.letter;
 
 	// ── The chain, as `MarkupPane` runs it ───────────────────────
-	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, intake));
+	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, intake, voiceType?.voiceType));
 	const parsed = $derived(ingested?.result.score ?? null);
 	const octaveShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
 	const printedReading = $derived(parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed);

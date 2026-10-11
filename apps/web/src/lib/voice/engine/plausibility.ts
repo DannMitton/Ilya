@@ -43,11 +43,11 @@ export type VoiceTypeBucket = 'soprano' | 'tenor-mezzo' | 'baritone' | 'bass' | 
  * not in the calibration roster (Grayson's mono-phonemic /o/ ruling; see the
  * Story-of-o grounding memo, 2026-07-11). The other four roster vowels
  * ([ɨ] [ɪ] [a] [ʌ]) take anchor-derived windows below. */
-type BozemanVowel = 'i' | 'e' | 'ɛ' | 'ɑ' | 'o' | 'u';
+export type BozemanVowel = 'i' | 'e' | 'ɛ' | 'ɑ' | 'o' | 'u';
 
 /** Core fR1 bands in Hz (A440 equal temperament), [floor, ceiling].
  * Note names in comments are the transcription record's ground truth. */
-const CORE_BANDS: Record<Exclude<VoiceTypeBucket, 'union'>, Record<BozemanVowel, [number, number]>> = {
+export const CORE_BANDS: Record<Exclude<VoiceTypeBucket, 'union'>, Record<BozemanVowel, [number, number]>> = {
 	soprano: {
 		i: [329.63, 440.0], // E4–A4
 		e: [493.88, 659.26], // B4–E5

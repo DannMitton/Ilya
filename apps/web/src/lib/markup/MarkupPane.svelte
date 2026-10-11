@@ -134,6 +134,8 @@
 		/** The piece's composer and poet, for the running head (QUEUE row 64). */
 		composer?: string;
 		poet?: string;
+		/** The declared voice type, which picks the stand-in vowels' starting staff (QUEUE row 17). */
+		voiceType?: string;
 		/**
 		 * Engraving preferences from the drawer panel (Dann's ruling,
 		 * 2026-07-13). Defaults to the Appendix-derived values so the
@@ -269,6 +271,7 @@
 		scoreTitle = undefined,
 		composer = '',
 		poet = '',
+		voiceType = undefined,
 		engraving = ENGRAVING_DEFAULTS,
 		onrendered = undefined,
 		onpagesdrawn = undefined,
@@ -519,7 +522,7 @@
 	// only, correctly (§A.35). This replaces notationOnlyOverlay: with no
 	// resolvable vowels or no fR1, analyzeScore omits every event, so the
 	// same plain vocal line renders, no acoustic claim made.
-	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName));
+	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, undefined, voiceType));
 
 	/**
 	 * The vowels the FORECAST reads, which is not the same as the vowels that

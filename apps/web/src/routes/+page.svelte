@@ -4862,7 +4862,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				characteristics={voiceCharacteristics}
 				{language}
 				ingested={correctedScore}
-				scoreTitle={doc.metadata.title} composer={doc.metadata.composer} poet={doc.metadata.poet}
+				scoreTitle={doc.metadata.title} composer={doc.metadata.composer} poet={doc.metadata.poet} voiceType={voiceTypeChoice?.voiceType}
 				{engraving}
 				{notationPrefs}
 				openSyllabification={doc.openSyllabification}
