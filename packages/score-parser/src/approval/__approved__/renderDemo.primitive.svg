@@ -50,7 +50,6 @@
 <ellipse data-analysis="turning-notehead" cx="391.2" cy="96" rx="6" ry="4.4" fill="#9585A2" opacity="0.85" transform="rotate(-18 391.2 96)"/>
 <ellipse cx="391.2" cy="54" rx="6.2" ry="4.6" fill="none" stroke="#1a1612" stroke-width="1.6" transform="rotate(-18 391.2 54)"/>
 <line x1="396.7" y1="53" x2="396.7" y2="12" stroke="#1a1612" stroke-width="1.5"/>
-<rect data-analysis="crossing" x="380.2" y="43" width="22" height="22" rx="7" fill="none" stroke="#b23b3b" stroke-width="1.8"/>
 </g>
 <line x1="507.2" y1="72" x2="507.2" y2="120" stroke="#3a352f" stroke-width="1"/>
 <g data-event-id="n7" pointer-events="none">

@@ -47,7 +47,6 @@
 <text data-analysis="turning-notehead" opacity="0.85" x="377.48" y="96" font-size="48px" font-family="Bravura" fill="#9585A2"></text>
 <text x="377.48" y="54" font-size="48px" font-family="Bravura" fill="#1a1612"></text>
 <line x1="390.92" y1="51.98" x2="390.92" y2="12" stroke="#1a1612" stroke-width="1.44"/>
-<rect data-analysis="crossing" x="373.56" y="43" width="22" height="22" rx="7" fill="none" stroke="#b23b3b" stroke-width="1.8"/>
 </g>
 <line x1="500.56" y1="72" x2="500.56" y2="120" stroke="#3a352f" stroke-width="1.92"/>
 <g data-event-id="n7" pointer-events="none">

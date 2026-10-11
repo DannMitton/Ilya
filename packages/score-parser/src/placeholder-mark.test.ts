@@ -1,8 +1,9 @@
 /**
  * placeholder-mark.test.ts: a mark that rests on a placeholder fR1 is drawn
  * dashed (QUEUE row 69). The overlay engine flags the note from the
- * snapshot's `fR1Source`; the renderer dashes the crossing squircle and the
- * turning marks of that note and of no other.
+ * snapshot's `fR1Source`; the renderer dashes the turning marks of that note
+ * and of no other. The crossing squircle is the page's since row 34, and
+ * `crossing-ring.test.ts` in the app checks its dash.
  */
 import { describe, expect, it } from 'vitest';
 import { placeholderMark, PLACEHOLDER_DASH, PLACEHOLDER_DASH_FINE } from './placeholder-mark';
@@ -67,16 +68,6 @@ describe.each([
   ['primitive glyphs', undefined],
   ['SMuFL glyphs', { font: syntheticSmuflFont(), fontFamily: 'TestFont' }],
 ] as Array<[string, StaffRenderOptions | undefined]>)('the renderer, %s', (_name, options) => {
-  it('dashes the crossing squircle on a placeholder vowel', () => {
-    // n6 is [i] and crosses (the demo's own criterion 3).
-    const solid = marks(render(demoProfile, options), 'crossing');
-    expect(solid.length).toBeGreaterThan(0);
-    expect(solid.every((m) => !m.includes('stroke-dasharray'))).toBe(true);
-    const dashed = marks(render({ ...demoProfile, fR1Source: { i: 'surrogate' } }, options), 'crossing');
-    expect(dashed.length).toBe(solid.length);
-    expect(dashed.every((m) => m.includes(`stroke-dasharray="${PLACEHOLDER_DASH}"`) && m.includes('data-placeholder="true"'))).toBe(true);
-  });
-
   it('dashes the turning marks of the placeholder vowel, and of no other', () => {
     const svg = render({ ...demoProfile, fR1Source: { i: 'surrogate' } }, options);
     const heads = marks(svg, 'turning-notehead');

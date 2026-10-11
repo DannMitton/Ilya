@@ -92,7 +92,7 @@
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/analysis/analyze-score-adapter';
 	import { placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
-	import { afterGround } from '$lib/score/system-ground';
+	import { drawCrossingRings, selectionAnchor } from '$lib/score/crossing-ring';
 	import { entryGroup, RING_RADIUS, ringBox } from '$lib/score/selection-ring';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/score/engraving';
 	import { buildWatchList } from '$lib/analysis/watchlist';
@@ -384,7 +384,19 @@
 		   it is still skipped by the loupe's ink survey; it is still removed by
 		   the same cleanup; its coordinates are the system's, and the group
 		   carries no transform, so leaving the group changes no number. */
-		sysEl.insertBefore(ring, afterGround(sysEl));
+		sysEl.insertBefore(ring, selectionAnchor(sysEl)); // over any crossing ring it shares a box with (row 34)
+	});
+
+	// QUEUE row 34: each crossing's red squircle takes the selection ring's box (`crossing-ring.ts`). Redrawn
+	// with the page, and once the fonts are in, since the box is measured from the glyphs' ink.
+	$effect(() => {
+		void scorePages;
+		const crossings = Object.values(analyzed?.events ?? {}).filter((e) => e.crossing).map((e) => ({ id: e.eventId, placeholder: !!e.placeholder }));
+		const draw = () => { for (const page of document.querySelectorAll('.markup-paper-container')) drawCrossingRings(page, crossings); };
+		draw();
+		let live = true;
+		void document.fonts?.ready.then(() => live && draw());
+		return () => { live = false; };
 	});
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte's convention.

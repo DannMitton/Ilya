@@ -3120,12 +3120,8 @@ export function renderAnalyzedStaff(
       }
     }
 
-    // Red squircle around an fR1/fo crossing.
-    if (a?.crossing) {
-      parts.push(placeholderMark(a.placeholder, `<rect data-analysis="crossing" x="${nx - 11}" y="${y - 11}" width="22" height="22" rx="7" fill="none" stroke="#b23b3b" stroke-width="1.8"/>`, 'stroke'));
-      lowestInk = Math.max(lowestInk, y + 11);
-      highestInk = Math.min(highestInk, y - 11);
-    }
+    // The red crossing squircle is drawn by the page from the selection ring's box (QUEUE row 34,
+    // `apps/web/src/lib/score/crossing-ring.ts`), so the renderer no longer draws one of its own.
 
     // Phonation break: collected for the IPA line, drawn after the loop.
     if (a?.phonationBreak) {

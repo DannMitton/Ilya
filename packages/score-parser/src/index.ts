@@ -55,6 +55,7 @@ export {
 	METER_RUN_IN_SP,
 	type StaffRenderOptions,
 } from './staff-renderer';
+export { placeholderMark, PLACEHOLDER_DASH, PLACEHOLDER_DASH_FINE, PLACEHOLDER_OUTLINE, type PlaceholderStyle } from './placeholder-mark';
 export { stemLegendDrawing, type StemLegendDirection, type StemLegendDrawing } from './stem-legend';
 export { chooseClef, chooseClefForSpan, clefFromSource, type RenderClef } from './clef-select';
 export { resolveVocalReadingOctave, shiftVocalOctave } from './vocal-octave';
