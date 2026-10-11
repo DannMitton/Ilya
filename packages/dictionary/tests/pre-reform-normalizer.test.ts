@@ -14,7 +14,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { hasAbolishedLetter, modernisePreReform, normalizePreReform } from '../src/pre-reform-normalizer';
+import { hasAbolishedLetter, lookupOnlyTwin, modernisePreReform, normalizePreReform, oldEndingCandidates } from '../src/pre-reform-normalizer';
 
 describe('normalizePreReform: the abolished letters', () => {
 	it('maps ѣ (yat) → е (дѣти → дети)', () => {
@@ -206,4 +206,41 @@ describe('modernisePreReform: NFC on the way out', () => {
 		const out = modernisePreReform('дѣти');
 		expect(out).toBe((out as string).normalize('NFC'));
 	});
+});
+
+// ── QUEUE row 25: the old endings, proposals only ─────────────────────
+describe('oldEndingCandidates (N.12 increment 2)', () => {
+  it('proposes -ого for -аго, keeping case and punctuation', () => {
+    expect(oldEndingCandidates('шумнаго')).toEqual(['шумного']);
+    expect(oldEndingCandidates('Шумнаго,')).toEqual(['Шумного,']);
+    expect(oldEndingCandidates('ШУМНАГО')).toEqual(['ШУМНОГО']);
+  });
+  it('proposes -его for -яго', () => {
+    expect(oldEndingCandidates('синяго')).toEqual(['синего']);
+    expect(oldEndingCandidates('последняго')).toEqual(['последнего']);
+  });
+  it('proposes -его first, then -ого, after ж, ц, ч, ш, щ, for the dictionary to choose', () => {
+    expect(oldEndingCandidates('хорошаго')).toEqual(['хорошего', 'хорошого']);
+    expect(oldEndingCandidates('большаго')).toEqual(['большего', 'большого']);
+  });
+  it('proposes nothing for a word that does not end in -аго or -яго', () => {
+    expect(oldEndingCandidates('тревоге')).toEqual([]);
+    expect(oldEndingCandidates('аго')).toEqual([]);
+  });
+});
+
+describe('lookupOnlyTwin', () => {
+  it('reads the closed pronoun table', () => {
+    expect(lookupOnlyTwin('онѣ')).toBe('они');
+    expect(lookupOnlyTwin('Ея')).toBe('её');
+    expect(lookupOnlyTwin('однѣхъ,')).toBe('одних');
+  });
+  it('proposes -ые for -ыя and -ие for -ія', () => {
+    expect(lookupOnlyTwin('печальныя')).toBe('печальные');
+    expect(lookupOnlyTwin('большія')).toBe('большие');
+  });
+  it('proposes nothing for a modern word', () => {
+    expect(lookupOnlyTwin('моя')).toBeNull();
+    expect(lookupOnlyTwin('они')).toBeNull();
+  });
 });

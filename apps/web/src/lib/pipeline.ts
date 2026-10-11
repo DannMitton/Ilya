@@ -39,6 +39,7 @@ import { buildDisplayLog } from '@ilya/blurb';
 
 import { applyReconstitution } from './reconstitution';
 import { markLatinWords } from './latin';
+import { adoptOldEnding, lookupOnlyTwinFor, stripForLookup } from './old-spelling';
 
 import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, YoToggle } from './types';
 import { joinAfterNe } from './ne-join';
@@ -494,6 +495,7 @@ export function processText(
           isHomograph: tw.wordData.isHomograph,
           originalInput: tw.wordData.originalInput,
           dictionaryForm: tw.wordData.dictionaryForm,
+          preReformSource: tw.wordData.preReformSource,
           yoSource: tw.wordData.yoSource,
           fullGlossEn,
           fullGlossFr,
@@ -561,12 +563,9 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   //   those. A wholly modern word costs nothing here: `modernisePreReform` returns
   //   null and the lookup is never reached.
   const modernisedCandidate = modernisePreReform(rawNormalized);
-  const candidateIsKnown =
-    modernisedCandidate !== null &&
-    GraysonEngine.lookupStress(
-      modernisedCandidate.replace(/[«»]/g, '').replace(/[-–—]+$/, ''),
-    ) !== null;
-  const modernisedForm = candidateIsKnown ? modernisedCandidate : null;
+  const candidateIsKnown = modernisedCandidate !== null && GraysonEngine.lookupStress(stripForLookup(modernisedCandidate)) !== null;
+  // QUEUE row 25: an old genitive ending (-аго, -яго) modernises too, on a known form whose lemma agrees (`old-spelling.ts`).
+  const modernisedForm = adoptOldEnding(modernisedCandidate ?? rawNormalized, rawNormalized) ?? (candidateIsKnown ? modernisedCandidate : null);
   const word = modernisedForm ?? rawNormalized;
   const preReformSource = modernisedForm !== null ? rawNormalized : null;
 
@@ -577,8 +576,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   //   gives 1, and the engine has already deleted the і from the IPA. The gloss is
   //   still trusted, because the census found the pre-reform and modern glosses
   //   agree where the stress values do not.
-  const unresolvedPreReform =
-    modernisedCandidate !== null && !candidateIsKnown && hasAbolishedLetter(word);
+  const unresolvedPreReform = modernisedCandidate !== null && modernisedForm === null && hasAbolishedLetter(word);
 
   // Strip guillemets and trailing hyphens for dictionary lookups only; word retains them for display
   const bareWord = word.replace(/[«»]/g, '').replace(/[-–—]+$/, '');
@@ -588,6 +586,9 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   const punctuation = trailingPunctMatch ? trailingPunctMatch[0] : '';
 
   let lookup = GraysonEngine.lookupStress(bareWord);
+  // QUEUE row 25: -ыя, -ія, онѣ, ея, нея take stress and gloss from a modern twin; the page keeps the word (`old-spelling.ts`).
+  const twin = lookupOnlyTwinFor(rawNormalized, lookup);
+  if (twin) lookup = twin.lookup;
 
   // Normalisation fallback, tried ONLY when the direct lookup above misses.
   // That ordering is the safety property the whole design rests on: a word
@@ -648,7 +649,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   let stressSource: string;
   let yoSource: string | null;
 
-  if (unresolvedPreReform) {
+  if (unresolvedPreReform && !twin) {
     // Abstention, and it outranks ё detection: whatever the stress would have
     // been, the transcription below is built from a spelling the engine cannot
     // read, so no mark on it would be honest.
@@ -674,9 +675,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   }
 
   // Clean word for pipeline use (strip punctuation and dashes)
-  const cleanWord = displayWord
-    .replace(PUNCTUATION_REGEX, '')
-    .replace(DASH_REGEX, '');
+  const cleanWord = (twin?.letters ?? displayWord).replace(PUNCTUATION_REGEX, '').replace(DASH_REGEX, '');
 
   // ── Yo alternation detection ──────────────────────────────────
   // Detect whether this word has a genuine ё ↔ е alternation,

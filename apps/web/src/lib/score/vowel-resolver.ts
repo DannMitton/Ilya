@@ -153,7 +153,8 @@ export interface ScoreWord {
 	cells: Array<{ eventId: string; text: string }>;
 }
 
-export const CYRILLIC_VOWEL = /[аеёиоуыэюя]/iu;
+// QUEUE row 25: ѣ, і, and ѵ are vowels too, so a score printed in the old spelling («гѣ», «мір») counts the syllables the modern word has.
+export const CYRILLIC_VOWEL = /[аеёиоуыэюяѣіѵ]/iu;
 
 export function cleanForAlignment(s: string): string {
 	// Letters and combining marks only (a score syllable can carry a
@@ -163,6 +164,49 @@ export function cleanForAlignment(s: string): string {
 		.normalize('NFC')
 		.replace(/[^\p{L}\p{M}]/gu, '')
 		.toLowerCase();
+}
+
+/**
+ * QUEUE row 25. The spelling a pipeline word had on the page: the engraver's
+ * where intake modernised an old one (`preReformSource`), the singer's where ё
+ * was restored (`originalInput`), else the word as transcribed.
+ */
+export function printedSpelling(w: WordStackData): string {
+	return w.preReformSource ?? w.originalInput ?? w.cleanWord;
+}
+
+/**
+ * Does the score's cleaned word spell these pipeline words? In their modern
+ * form, as printed, or as Text displays them (a lookup-only twin keeps the
+ * printed word on the page and reads its letter-mapped form, QUEUE row 25).
+ */
+function spellsAs(words: readonly WordStackData[], clean: string): boolean {
+	const keys = [words.map((w) => w.cleanWord), words.map(printedSpelling), words.map((w) => w.cyrillic)];
+	return keys.some((parts) => cleanForAlignment(parts.join('')) === clean);
+}
+
+/**
+ * The score's syllables respelled letter by letter in `modern`, a word's modern
+ * spelling, lowercased and letters only. The old spelling maps one letter to one
+ * letter (ѣ → е, і → и, -аго → -ого) except a hard sign that ends a word or a
+ * part of one, which the modern word drops; punctuation, case, and the score's
+ * own division are kept. Null if the letters do not line up, and the score's
+ * text then stands.
+ */
+export function modernSyllables(texts: readonly string[], modern: string): string[] | null {
+	const m = [...modern];
+	let p = 0;
+	const out = texts.map((text) =>
+		[...text.normalize('NFC')]
+			.map((c) => {
+				if (!/[\p{L}\p{M}]/u.test(c)) return c;
+				if ((c === 'ъ' || c === 'Ъ') && m[p] !== 'ъ') return '';
+				const next = m[p++] ?? '';
+				return c !== c.toLowerCase() ? next.toUpperCase() : next;
+			})
+			.join(''),
+	);
+	return p === m.length ? out : null;
 }
 
 /** One in-progress word: sung syllables in order, each with its events. */
@@ -358,6 +402,13 @@ export interface UnderlayResolvers {
 	/** The full syllable IPA for display; present only at syllable onset. */
 	ipa: (event: VocalLineEvent) => string | undefined;
 	/**
+	 * QUEUE row 25: the Cyrillic to print under a note whose word the score
+	 * spells the old way, in the modern spelling Text shows, divided where the
+	 * score divides it («шум-на-го» prints «шум-но-го»). Undefined for every
+	 * other note, which prints the score's own text.
+	 */
+	cyrillic?: (event: VocalLineEvent) => string | undefined;
+	/**
 	 * N.10b: true at a syllable ONSET this builder declined to transcribe.
 	 *
 	 * Dann's ruling of 7 August, E.29 §5.1 ruled A. Every abstention in this
@@ -400,6 +451,7 @@ export function buildUnderlayResolvers(
 ): UnderlayResolvers {
 	const byEventVowel = new Map<string, string>();
 	const byEventIpa = new Map<string, string>();
+	const byEventCyrillic = new Map<string, string>();
 	// N.10b: the onsets this builder declined to transcribe.
 	const withheldOnsets = new Set<string>();
 	/** Withhold every nucleus of a word, at its onset event. */
@@ -436,6 +488,7 @@ export function buildUnderlayResolvers(
 	};
 
 	const scoreWords = collectScoreWords(parsed, verseNumber);
+	const byId = new Map(parsed.vocalLine.map((e) => [e.id, e]));
 	if (scoreWords.length > 0) {
 		let pipelineWords: WordStackData[] = [];
 		try {
@@ -457,7 +510,7 @@ export function buildUnderlayResolvers(
 			donorWords.length > 0
 				? matchDonors(
 						scoreWords.map((w) => w.clean),
-						donorWords.map((w) => cleanForAlignment(w.cleanWord)),
+						donorWords.map((w) => cleanForAlignment(printedSpelling(w))),
 					)
 				: [];
 
@@ -473,16 +526,12 @@ export function buildUnderlayResolvers(
 			let matched: WordStackData[] | null = null;
 			if (!localLost) {
 				const one = pipelineWords[j];
-				if (one && cleanForAlignment(one.cleanWord) === sw.clean) {
+				if (one && spellsAs([one], sw.clean)) {
 					matched = [one];
 					j += 1;
 				} else {
 					const two = pipelineWords[j + 1];
-					if (
-						one &&
-						two &&
-						cleanForAlignment(one.cleanWord + two.cleanWord) === sw.clean
-					) {
+					if (one && two && spellsAs([one, two], sw.clean)) {
 						matched = [one, two];
 						j += 2;
 					}
@@ -563,6 +612,14 @@ export function buildUnderlayResolvers(
 				continue;
 			}
 
+			// QUEUE row 25: a word intake modernised prints its modern spelling under the notes.
+			if (matched.some((w) => w.preReformSource)) {
+				const events = sw.slots.flat().filter((id) => byId.get(id) && verseSyllableOf(byId.get(id)!, verseNumber));
+				const texts = events.map((id) => verseSyllableOf(byId.get(id)!, verseNumber)!.text);
+				const modern = modernSyllables(texts, cleanForAlignment(matched.map((w) => w.cyrillic).join('')));
+				if (modern) events.forEach((id, k) => modern[k] !== texts[k] && byEventCyrillic.set(id, modern[k]));
+			}
+
 			for (let k = 0; k < sw.slots.length; k++) {
 				const owner = sylOwners[k];
 				const slot = sw.slots[k];
@@ -618,6 +675,7 @@ export function buildUnderlayResolvers(
 	return {
 		vowel: (event) => byEventVowel.get(event.id),
 		ipa: (event) => byEventIpa.get(event.id),
+		cyrillic: (event) => byEventCyrillic.get(event.id),
 		withheld: (event) => withheldOnsets.has(event.id)
 	};
 }

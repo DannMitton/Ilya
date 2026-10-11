@@ -116,6 +116,8 @@ export interface WordStackData {
   originalInput: string | null;
   /** Dictionary form after ё restoration (null if no restoration). */
   dictionaryForm: string | null;
+  /** The engraver's spelling where intake modernised an old one (N.12; QUEUE row 25), so Markup can pair the score's word with it. */
+  preReformSource?: string | null;
   /** Source of ё: yo-restored or null. */
   yoSource: string | null;
 

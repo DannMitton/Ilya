@@ -83,19 +83,26 @@
  * `claude/e33-a-rule-dann-never-made_2026-08-08.md`. Before restating a ruling as
  * standing, read the document that recorded it, not the document that cited it.
  *
- * SCOPE, and it is deliberately partial. The reform also rewrote grammatical
- * ENDINGS: -аго → -ого and -яго → -его (with -аго → -его after ж, ц, ч, ш, щ),
- * plural -ыя/-ія → -ые/-ие, онѣ → они, and ея → ее. Those are morphological
- * rather than orthographic, and a character map cannot reach them: новаго
- * survives this module unchanged, because а, г, and о are all modern letters,
- * and so it still misses the dictionary and still prints unmarked. The ending
- * rules were RULED IN by Dann on 2026-08-08 ("let's aim for completeness") as
- * N.12 increment 2, which is blocked on his ruling on the rhyme conflict:
- * Pushkin rhymes онѣ with женѣ and Tyutchev rhymes моя with нея, so a
- * normalised lookup can return an IPA that contradicts the rhyme the composer
- * set. They are NOT built here, and when they are, the irregular pronouns need
- * a closed TABLE rather than a rule, because ѣ→е turns онѣ into оне, which is
- * wrong. This module closes the letter-substitution and hard-sign half only.
+ * SCOPE. The reform also rewrote grammatical ENDINGS: -аго → -ого and -яго →
+ * -его (with -аго → -его after ж, ц, ч, ш, щ), plural -ыя/-ія → -ые/-ие,
+ * онѣ → они, and ея → ее. Those are morphological rather than orthographic, so
+ * the character map above cannot reach them: новаго has only modern letters.
+ * They were RULED IN by Dann on 2026-08-08 ("let's aim for completeness") as
+ * N.12 increment 2, and are BUILT since QUEUE row 25 (2026-10-11), at the end
+ * of this file, as proposals the caller's dictionary disposes of
+ * (`apps/web/src/lib/old-spelling.ts`):
+ *
+ * - `oldEndingCandidates`: -аго and -яго change for the page, the
+ *   transcription, and the lookup, as the abolished letters do.
+ * - `lookupOnlyTwin`: -ыя, -ія, онѣ, однѣ and its forms, ея and нея change for
+ *   THE LOOKUP ONLY. Stress and gloss come from the modern twin; the page and
+ *   the transcription keep the word as the letter map leaves it. The
+ *   irregular pronouns are a closed TABLE, because ѣ→е turns онѣ into оне.
+ *
+ * The note that stood here, that the endings waited on a ruling about the
+ * rhyme conflict (Pushkin rhymes онѣ with женѣ, Tyutchev моя with нея), was
+ * stale: the conflict was dissolved on 2026-08-08, the day it was raised. The
+ * lookup-only rule keeps the printed letters in the IPA, so no rhyme moves.
  *
  * COMPOSITION with the poetic normaliser, which is no longer a composition.
  * Because this module now runs at INTAKE, `pipeline.ts` has already modernised
@@ -303,4 +310,75 @@ export function modernisePreReform(token: string): string | null {
 export function normalizePreReform(token: string): string[] {
 	const modern = modernisePreReform(token);
 	return modern === null ? [] : [modern];
+}
+
+// ── N.12 increment 2, the old endings (QUEUE row 25) ──────────────────
+
+const HUSHING_OR_TS = /[жцчшщЖЦЧШЩ]$/;
+
+/**
+ * The old genitive endings' modern spellings, as PROPOSALS for the caller's
+ * dictionary to dispose of: -аго becomes -ого, or -его after ж, ц, ч, ш, щ,
+ * and -яго becomes -его. After a hushing consonant or ц both are proposed,
+ * -его first, because the reform wrote -его there only where the ending was
+ * unstressed: хорошаго → хорошего, but большаго → большого. The dictionary's
+ * lemma decides which (measured on the dictionary, 2026-10-11: «большаго»
+ * proposes «большего», whose lemma is «больший», and «большого», whose lemma
+ * agrees).
+ *
+ * Run on the LETTER-MAPPED token (`modernisePreReform`'s output, or the token
+ * itself when it carries no abolished letter), so «послѣдняго» reaches here as
+ * «последняго». Case and trailing punctuation are kept. Empty when the token
+ * does not end in -аго or -яго.
+ *
+ * NOTHING HERE IS ADOPTED BLINDLY. A modern word ending in -аго («благо»,
+ * «саго», «Чикаго», «Сантьяго», «имаго») proposes a form no dictionary holds
+ * («блого», «сого»), so it stays as it is.
+ */
+export function oldEndingCandidates(token: string): string[] {
+	const m = /^(.*?)([аяАЯ][гГ][оО])([^\p{L}]*)$/u.exec(token.normalize('NFC'));
+	if (!m) return [];
+	const [, stem, ending, tail] = m;
+	if (!stem) return [];
+	const lowerEnding = ending.toLowerCase();
+	if (lowerEnding !== 'аго' && lowerEnding !== 'яго') return [];
+	const forms = lowerEnding === 'яго' ? ['его'] : HUSHING_OR_TS.test(stem) ? ['его', 'ого'] : ['ого'];
+	const upper = ending === ending.toUpperCase();
+	return forms.map((f) => stem + (upper ? f.toUpperCase() : f) + tail);
+}
+
+/**
+ * Old spellings whose MODERN TWIN gives the stress and the gloss, while the
+ * page and the transcription keep the word as the letter map leaves it (QUEUE
+ * row 25, DESK DEFAULT: how these are sung is Dann's to say, and he has not
+ * been asked). A closed table, as the header asks for the irregular pronouns:
+ * ѣ → е turns онѣ into оне, which is not они.
+ */
+const LOOKUP_ONLY_TABLE: ReadonlyMap<string, string> = new Map([
+	['онѣ', 'они'],
+	['однѣ', 'одни'],
+	['однѣхъ', 'одних'],
+	['однѣмъ', 'одним'],
+	['однѣми', 'одними'],
+	['ея', 'её'],
+	['нея', 'неё'],
+]);
+
+/**
+ * The modern twin a printed word takes its stress and gloss from, lowercase and
+ * bare, or null. The closed table first; then the plural adjective endings:
+ * -ыя → -ые, and -ія → -ие (on the letter-mapped stem). A proposal only: the
+ * caller looks the twin up and checks the lemma.
+ *
+ * @param token - Cyrillic word, any case, punctuation permitted.
+ */
+export function lookupOnlyTwin(token: string): string | null {
+	const bare = token.normalize('NFC').toLowerCase().replace(/[^\p{L}\p{M}]/gu, '').normalize('NFC');
+	if (!bare) return null;
+	const table = LOOKUP_ONLY_TABLE.get(bare);
+	if (table) return table;
+	const mapped = modernisePreReform(bare) ?? bare;
+	if (bare.endsWith('ыя') && bare.length > 2) return mapped.slice(0, -2) + 'ые';
+	if (bare.endsWith('ія') && bare.length > 2) return mapped.slice(0, -2) + 'ие';
+	return null;
 }

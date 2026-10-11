@@ -652,7 +652,15 @@
 	// N.55b R6: the Cyrillic channel. A score that arrived with no lyric
 	// underlay has no other source for the word under the note.
 	const cyrPreview = $derived.by(() => {
-		const cyr = pairedCyrillic(pairings, blankUnderlay);
+		/* QUEUE row 25: a word the score spells the old way prints its modern
+		   spelling, as Text shows it; the singer's pairing still wins. */
+		const modern: Record<string, string> = {};
+		for (const ev of readingScore?.vocalLine ?? []) {
+			const m = underlayResolvers?.cyrillic?.(ev);
+			if (m !== undefined) modern[ev.id] = m;
+		}
+		const paired = pairedCyrillic(pairings, blankUnderlay);
+		const cyr = paired || Object.keys(modern).length ? { ...modern, ...(paired ?? {}) } : paired;
 		if (!cyr || !showStressDiacritics) return cyr;
 		// N.159: the drawing step has already found each seat's word.
 		return drawnUnderlay

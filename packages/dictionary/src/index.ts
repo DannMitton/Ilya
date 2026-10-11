@@ -30,6 +30,8 @@ export {
 export {
   hasAbolishedLetter,
   modernisePreReform,
+  oldEndingCandidates,
+  lookupOnlyTwin,
   normalizePreReform,
 } from './pre-reform-normalizer';
 
