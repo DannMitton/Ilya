@@ -467,7 +467,8 @@
 
 {#snippet apparatus(withFootnote: boolean)}
 	{#if withFootnote}
-		<p class="footnote"><sup>1</sup>&#8201;{@html T('insights.footnote.tessitura')} <span class="unverified">{T('insights.citationUnverified')}</span></p>
+		<!-- QUEUE row 50: Pacheco 2013 is verified (the desk, 2026-10-08, p. 559), so no marker follows it. -->
+		<p class="footnote"><sup>1</sup>&#8201;{@html T('insights.footnote.tessitura')}</p>
 	{/if}
 	<p class="method">{methodLine}</p>
 {/snippet}
@@ -639,12 +640,6 @@
 	.footnote,
 	.method {
 		margin: 0;
-	}
-
-	.unverified {
-		font-family: var(--font-mono);
-		font-size: 8.5px;
-		letter-spacing: 0.04em;
 	}
 
 	sup {

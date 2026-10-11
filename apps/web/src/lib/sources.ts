@@ -152,8 +152,13 @@ export const WORKS: Record<string, Work> = {
 		container: { title: 'Journal of Singing', volume: '69, no. 5' },
 		url: null,
 		group: 'voice',
-		// Insights prints this reference beside "CITATION NOT YET VERIFIED" (`insights.footnote.tessitura`).
-		record: '`i18n.ts`, `insights.footnote.tessitura`; NOT VERIFIED against the article',
+		// VERIFIED by the desk 2026-10-08 02:10 (QUEUE row 50): the NATS *Journal of Singing* index lists
+		// "Angelica Catalani's Voice According to a Method of Statistical Analysis", Pacheco, Alberto José
+		// Vieira, 2013 May/Jun, vol. 69, no. 5, start page 557; Dann's copy, `~/Documents/Voice Pedagogy
+		// Library/V-Z/Vieira_Pacheco_AJ (2013) - Angelica Catalanis Voice According to a Method of Statistical
+		// Analysis - JOS 069_05.pdf`, runs pp. 557 to 566, and p. 559, under "Tessitura", gives the method
+		// the footnote paraphrases. Insights no longer prints "CITATION NOT YET VERIFIED" beside it.
+		record: '`i18n.ts`, `insights.footnote.tessitura`; verified against the article, p. 559 (the desk, 2026-10-08)',
 	},
 	richter2002: {
 		key: 'richter2002',
