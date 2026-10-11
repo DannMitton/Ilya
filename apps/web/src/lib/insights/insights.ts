@@ -64,6 +64,10 @@ export interface SungKey {
 	stopFor(tr: WatchTransposition | undefined): KeyChoice | null;
 	/** "Try this key": Markup comes forward with the ruler open on `stop`. */
 	tryKey(stop: KeyChoice): void;
+	/** The ruler's readout for `stop` as Ilya's pick, or undefined as printed (QUEUE row 66). */
+	readoutFor(stop: KeyChoice, language: Language): string | undefined;
+	/** The key `stop` lands in, named, or undefined as printed (QUEUE row 66). */
+	keyNameFor(stop: KeyChoice, language: Language): string | undefined;
 }
 
 /** Where a measured span sits against the span the singer typed. */
@@ -250,6 +254,12 @@ export interface InsightsModel {
 	phonation: PhonationSection;
 	/** Null when nothing pitched is sung. */
 	figure: TessituragramModel | null;
+	/**
+	 * The printed bars whose notes the gated watch list places near a typed
+	 * passaggio, in bar order, each once (QUEUE row 66: "Notes in eleven bars
+	 * sit near your passaggio"). Empty without a watch list.
+	 */
+	passaggioBars: string[];
 }
 
 export interface InsightsInputs {
@@ -475,7 +485,7 @@ export function groupFindings(watchList: WatchList | null, analysisScore: Parsed
  * so one call to `secondsFor` for a single quaver prices every figure on the
  * page, and the section and the findings cannot disagree about the tempo.
  */
-function secondsPerQuaver(score: ParsedScore): { tempo: TempoResolution; price: (q: number) => SecondsFigure } | null {
+export function secondsPerQuaver(score: ParsedScore): { tempo: TempoResolution; price: (q: number) => SecondsFigure } | null {
 	const one = secondsFor({ numerator: 1, denominator: 1 }, score);
 	if (!one) return null;
 	const range = one.secondsRange;
@@ -766,7 +776,15 @@ export function buildInsights({ analysisScore, profile, watchList, vowelForEvent
 		figure: phonation.nothingSung
 			? null
 			: tessituragram(analysisScore, profile, findings, tessitura, range, phonation.zones),
+		passaggioBars: barsNearPassaggio(gated),
 	};
+}
+
+/** The bars of the watch list's passaggio entries, each once, in bar order. */
+export function barsNearPassaggio(watchList: WatchList | null): string[] {
+	const bars = new Set((watchList?.entries ?? []).filter((e) => e.kinds.includes('passaggio')).map((e) => e.bar));
+	const n = (b: string) => (Number.isFinite(parseFloat(b)) ? parseFloat(b) : Infinity);
+	return [...bars].sort((a, b) => n(a) - n(b) || a.localeCompare(b));
 }
 
 /**

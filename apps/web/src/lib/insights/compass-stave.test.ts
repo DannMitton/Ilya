@@ -44,7 +44,7 @@ describe('the compass stave', () => {
 	it('says "Compass {low} to {high}" under the stave, in either language', () => {
 		const en = draw(P('C', 3, 1), P('D', 4));
 		expect(en.text.text).toBe('Compass C♯3 to D4');
-		expect(draw(P('C', 3, 1), P('D', 4), 'bass', 'fr').text.text).toBe('Ambitus C♯3 à D4');
+		expect(draw(P('C', 3, 1), P('D', 4), 'bass', 'fr').text.text).toBe('Ambitus do♯2 à ré3');
 		const lowest = Math.max(...en.staveYs, ...en.notes.map((n) => n.y));
 		expect(en.text.y).toBeGreaterThan(lowest);
 		// Right-aligned to the stave's right edge.

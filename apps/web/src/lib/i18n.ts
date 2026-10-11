@@ -1724,6 +1724,72 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.figure.captionQuavers': { en: 'Phonation per pitch, in quavers', fr: 'Phonation par hauteur, en croches' },
 	// Unrendered since r2 (the focus segment is gone), kept as ratified.
 	'insights.figure.captionFocus': { en: 'dark: sung on {vowels}',      fr: 'en foncé\u00a0: chanté sur {vowels}' },
+	// ── INSIGHTS FOR THE SINGER, Design round 2 (QUEUE row 66; accepted by Dann
+	// 2026-10-11 03:50). RATIFIED unless a line says `[FR: desk draft owed]`:
+	// the French table `docs/sessions/french-insights-r2_r1_2026-10-11.md` (rows
+	// cited by number; ratified 04:12 and 04:14, « plis vocaux » ruled 04:12),
+	// the teacher lines (`OPEN.md`, THE TEACHER LINE, 00:12 to 00:21), and the
+	// "unlikely" sentence (`OPEN.md`, 03:19). A line marked owed carries its
+	// English in both languages until the desk drafts the French.
+	'insights.r2.frame':           { en: 'Ilya does not invent advice. It notices conditions in this piece and in your voice that the voice pedagogy literature addresses, and names each source so you can read it. Check any approach it suggests with your teacher.', fr: 'Ilya n’invente pas de conseils. Il relève dans cette pièce et dans votre voix des conditions dont traite la littérature en pédagogie du chant, et nomme chaque source pour que vous puissiez la consulter. Vérifiez avec votre professeure ou professeur toute approche qu’il propose.' },
+	'insights.r2.teacherA':        { en: 'Check this approach with your teacher.', fr: 'Vérifiez cette approche en cours de chant.' },
+	'insights.r2.teacherC':        { en: 'Review these sources with your teacher, who can weigh in on which of them truly apply to your voice.', fr: 'Passez ces sources en revue avec votre professeure ou professeur, qui pourra donner son avis sur celles qui s’appliquent vraiment à votre voix.' },
+	'insights.r2.unlikely.shareHeld': { en: 'In this key, {n} percent of the singing lies above your primo passaggio, {primo}, and bar {bar} holds {a} {pitch} {vowel} for about {s} seconds, above your secondo, {secondo}.', fr: 'Dans cette tonalité, {n} % du chant se situe au-dessus de votre *primo passaggio*, {primo}, et la mesure {bar} prolonge un {vowel} sur {pitch} pendant environ {s} secondes, au-dessus de votre *secondo*, {secondo}.' },
+	'insights.r2.unlikely.together': { en: 'Together, these make the song unlikely to sit comfortably in your voice as written.', fr: 'Ensemble, ces éléments font que la pièce, telle qu’écrite, a peu de chances de reposer avec aisance dans votre voix.' },
+	// [FR: desk draft owed] for the next five: the "unlikely" paragraph when only one reason, or a note out of range, exists.
+	'insights.r2.unlikely.share':  { en: 'In this key, {n} percent of the singing lies above your primo passaggio, {primo}.', fr: 'In this key, {n} percent of the singing lies above your *primo passaggio*, {primo}.' },
+	'insights.r2.unlikely.held':   { en: 'In this key, bar {bar} holds {a} {pitch} {vowel} for about {s} seconds, above your secondo, {secondo}.', fr: 'In this key, bar {bar} holds {a} {pitch} {vowel} for about {s} seconds, above your *secondo*, {secondo}.' },
+	'insights.r2.unlikely.range':  { en: 'Bar {bar} reaches {a} {pitch}, outside the range you typed, {low} to {high}.', fr: 'Bar {bar} reaches {a} {pitch}, outside the range you typed, {low} to {high}.' },
+	'insights.r2.unlikely.alone':  { en: 'This makes the song unlikely to sit comfortably in your voice as written.', fr: 'This makes the song unlikely to sit comfortably in your voice as written.' },
+	'insights.r2.noBetterKey':     { en: 'No other key within a tritone fits your voice better.', fr: 'No other key within a tritone fits your voice better.' },
+	// Row 1, ratified for a whole tone down; any other interval is [FR: desk draft owed].
+	'insights.r2.better.tone':     { en: 'This key suits your voice. A tone lower would keep more of the line below your passaggio.', fr: 'Cette tonalité convient à votre voix. Un ton plus bas garderait une plus grande part de la ligne sous votre *passaggio*.' },
+	'insights.r2.better.interval': { en: 'This key suits your voice. {A} lower would keep more of the line below your passaggio.', fr: 'This key suits your voice. {A} lower would keep more of the line below your *passaggio*.' },
+	// Row 2.
+	'insights.r2.inKey':           { en: 'In {key}, {n} percent of the singing lies at or above your primo, and the {pitch} of bar {bar} becomes {pitch2}, under your secondo.', fr: 'En {key}, {n} % du chant se situe sur votre *primo* ou au-dessus, et le {pitch} de la mesure {bar} devient {pitch2}, sous votre *secondo*.' },
+	// [FR: desk draft owed]: row 2 without the held note.
+	'insights.r2.inKeyShare':      { en: 'In {key}, {n} percent of the singing lies at or above your primo.', fr: 'In {key}, {n} percent of the singing lies at or above your *primo*.' },
+	// Rows 3 and 4.
+	'insights.r2.reason.range':    { en: 'Range',                         fr: 'Ambitus' },
+	'insights.r2.reason.key':      { en: 'What another key would change', fr: 'Ce que changerait une autre tonalité' },
+	// Row 6; its outside form is [FR: desk draft owed].
+	'insights.r2.range.inside':    { en: 'Compass {low} to {high} sits inside your range, {lo} to {hi}, typed.', fr: 'L’ambitus de la pièce, {low} à {high}, entre dans le vôtre, {lo} à {hi}, tel que vous l’avez indiqué.' },
+	'insights.r2.range.outside':   { en: 'Compass {low} to {high} reaches outside your range, {lo} to {hi}, typed.', fr: 'Compass {low} to {high} reaches outside your range, {lo} to {hi}, typed.' },
+	// Row 7; its form with time above the secondo is [FR: desk draft owed].
+	'insights.r2.primo.none':      { en: '{n} percent of the singing lies at or above your primo passaggio, {p}, and none above your secondo, {s}.', fr: '{n} % du chant se situe sur votre *primo passaggio*, {p}, ou au-dessus, et rien au-dessus de votre *secondo*, {s}.' },
+	'insights.r2.primo.some':      { en: '{n} percent of the singing lies at or above your primo passaggio, {p}, and {m} percent above your secondo, {s}.', fr: '{n} percent of the singing lies at or above your *primo passaggio*, {p}, and {m} percent above your *secondo*, {s}.' },
+	// [FR: desk draft owed]: the better-key board's comparison.
+	'insights.r2.compare':         { en: 'A key {interval} lower would bring that to {m} percent, and the compass, {low} to {high}, stays inside your range.', fr: 'A key {interval} lower would bring that to {m} percent, and the compass, {low} to {high}, stays inside your range.' },
+	// Row 8; more than one note is [FR: desk draft owed].
+	'insights.r2.fr1.one':         { en: 'One note meets a vowel’s first resonance (fR1): the {vowel} of bar {bar}, in “{heading}.”', fr: 'Une note rencontre la première résonance (fR1) d’une voyelle : le {vowel} de la mesure {bar}, dans « {heading} ».' },
+	'insights.r2.fr1.many':        { en: '{count} notes meet a vowel’s first resonance (fR1), in “{heading}.”', fr: '{count} notes meet a vowel’s first resonance (fR1), in “{heading}.”' },
+	// Row 9; one bar is [FR: desk draft owed].
+	'insights.r2.nearPassaggio':   { en: 'Notes in {count} bars sit near your passaggio: {bars}.', fr: 'Dans {count} mesures, des notes se situent près de votre *passaggio* : {bars}.' },
+	'insights.r2.nearPassaggioOne': { en: 'Notes in bar {bars} sit near your passaggio.', fr: 'Notes in bar {bars} sit near your *passaggio*.' },
+	// The three squircles: row 8's quoted heading, the existing tap, row 10.
+	'insights.r2.moments':         { en: 'Where this piece meets your voice', fr: 'Là où cette pièce rencontre votre voix' },
+	'insights.r2.totals':          { en: 'The measures behind these reasons', fr: 'Ce sur quoi reposent ces constats' },
+	// Rows 11 to 14, « plis vocaux » by the ruling of 04:12.
+	'insights.r2.cycles':          { en: 'Your vocal folds contact about {n} times while singing this piece from beginning to end.', fr: 'Vos plis vocaux entrent en contact environ {n} fois pendant que vous chantez cette pièce du début à la fin.' },
+	'insights.r2.cycles.under':    { en: '{n} under your tessitura',      fr: '{n} sous votre tessiture' },
+	'insights.r2.cycles.within':   { en: '{n} within your tessitura, {low} to {high}, typed', fr: '{n} dans votre tessiture, {low} à {high}, telle que vous l’avez indiquée' },
+	'insights.r2.cycles.above':    { en: '{n} above your tessitura',      fr: '{n} au-dessus de votre tessiture' },
+	// Rows 15 to 20; a vowel with no fR1 is [FR: desk draft owed].
+	'insights.r2.vowels.against':  { en: 'against where each vowel turns in your voice', fr: 'selon la hauteur où chaque voyelle change de timbre dans votre voix' },
+	'insights.r2.vowels.ring':     { en: '{n}% of your singing lies past the turn.', fr: '{n} % de votre chant se situe après le changement de timbre.' },
+	'insights.r2.vowels.before':   { en: 'before the turn',               fr: 'avant le changement de timbre' },
+	'insights.r2.vowels.past':     { en: 'past the turn',                 fr: 'après le changement de timbre' },
+	'insights.r2.vowels.allPast':  { en: '{s}, all past the turn',        fr: '{s}, entièrement après le changement' },
+	'insights.r2.vowels.somePast': { en: '{s}, {p} past',                 fr: '{s}, dont {p} après le changement' },
+	'insights.r2.vowels.turns':    { en: 'turns about {pitch}',           fr: 'change de timbre autour de {pitch}' },
+	'insights.r2.vowels.noTurn':   { en: '{s}, no first resonance in your calibration', fr: '{s}, no first resonance in your calibration' },
+	// Row 21, « plis vocaux » by the ruling of 04:12.
+	'insights.r2.sourcesLine':     { en: 'A vowel turns about an octave under its first resonance in your voice (Bozeman 2010 and 2014; Titze 2007, p. 200; Titze 2012, p. 544). The cycle dose counts vocal-fold cycles (Titze, Švec, and Popolo 2003), set beside your tessitura after Titze 2008.', fr: 'Dans votre voix, une voyelle change de timbre environ une octave sous sa première résonance (Bozeman 2010 et 2014; Titze 2007, p. 200; Titze 2012, p. 544). La dose de cycles compte les cycles des plis vocaux (Titze, Švec et Popolo 2003); elle est placée à côté de votre tessiture d’après Titze 2008.' },
+	// Rows 22 and 23.
+	'insights.r2.pieceTessitura':  { en: 'this piece’s tessitura',   fr: 'la tessiture de la pièce' },
+	'insights.r2.yourTessitura':   { en: 'your tessitura, typed',         fr: 'votre tessiture, telle que vous l’avez indiquée' },
+	// The key to French pitch names, once, in the method line of a French page whose prose names a pitch (DESK DEFAULT, `OPEN.md` 04:12). The English is never printed: English pitch names need no key.
+	'insights.r2.pitchKey':        { en: '(A4\u00a0=\u00a0440\u00a0Hz)',                              fr: '(la3 = 440 Hz)' },
 
 	// ── N.168, first slice: the note comments (`brief-code-n168-first-slice_r2`) ──
 	//    `comment-text.ts` assembles them; `comment.<register>.<part>` falls back to

@@ -338,6 +338,12 @@ export const OWED: Record<string, string> = {
 	'Lindblom 1983': 'Learn `:3571-3572`: "economy of speech gestures", no title',
 	'Derwing 1980': 'Learn `:3639`: "Derwing and Priestly (1980, 76–87)", no title',
 	'Bolla 1980': 'Learn `:3384`: "Bolla 1980, 8", no title',
+	// Insights round 2's sources line (`i18n.ts`, `insights.r2.sourcesLine`, QUEUE row 66), as the accepted drawing cites them; no full reference is on file yet.
+	'Bozeman 2010': 'Insights `insights.r2.sourcesLine`: "Bozeman 2010 and 2014", no title',
+	'Titze 2007': 'Insights `insights.r2.sourcesLine`: "Titze 2007, p. 200", no title',
+	'Titze 2012': 'Insights `insights.r2.sourcesLine`: "Titze 2012, p. 544", no title',
+	'Titze 2008': 'Insights `insights.r2.sourcesLine`: "after Titze 2008", no title',
+	'Popolo 2003': 'Insights `insights.r2.sourcesLine`: "Titze, Švec, and Popolo 2003", the vocal loading index (*JSLHR* 46(4), pp. 919-932, as `singing-measures.ts` cites it); not registered',
 };
 
 /**

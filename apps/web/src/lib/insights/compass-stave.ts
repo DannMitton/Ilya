@@ -12,7 +12,7 @@
  */
 import { smuflFontSizePx, spToPx } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
-import { pitchLabel } from '$lib/voice/note-picker';
+import { pitchName } from '$lib/voice/note-picker';
 import { diatonicOf, type TessituragramModel } from './insights';
 import { STAVE_LINES, type GlyphOf, type Measure } from './tessituragram-layout';
 
@@ -83,7 +83,7 @@ export function layoutCompassStave(
 		return { pitch: n.pitch, x: n.x, y: y(d), ledgers: ledgers.map(y), accX: n.pitch.alter ? n.x - headHalf - 2 - (acc ? sp(acc.widthSp) : 7) : null };
 	});
 
-	const words = t('insights.fit.compass', language).replace('{low}', pitchLabel(low)).replace('{high}', pitchLabel(high));
+	const words = t('insights.fit.compass', language).replace('{low}', pitchName(low, language)).replace('{high}', pitchName(high, language));
 	const textW = measure(words, LABEL, 500);
 	const width = Math.max(staveRight, textW);
 	const offset = width - staveRight;

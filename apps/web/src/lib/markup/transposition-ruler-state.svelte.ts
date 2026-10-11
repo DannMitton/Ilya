@@ -23,10 +23,13 @@ import {
 	drawInKey,
 	pageHeader,
 	printedKey,
+	readout,
 	stopForSuggestion,
+	stopKey,
 	type NamedKey,
 	type RulerOpening,
 } from './transposition-ruler';
+import { keyName } from '$lib/analysis/watchlist';
 
 /**
  * Built during the page shell's initialisation, because the two effects need
@@ -126,6 +129,14 @@ export function transpositionRulerState(
 		/** The score the page draws, from the printed reading (`drawInKey`). */
 		draw(reading: ParsedScore): ParsedScore {
 			return drawInKey(reading, printed, drawn);
+		},
+		/** The ruler's readout for `stop` as Ilya's pick ("Down a whole tone · C minor · Ilya's recommendation"), or undefined as printed (QUEUE row 66). */
+		readoutFor(stop: KeyChoice, language: Language): string | undefined {
+			return printed ? readout(stop, printed, stop, language) : undefined;
+		},
+		/** The key `stop` lands in, named ("C minor", « do mineur »), or undefined as printed (QUEUE row 66). */
+		keyNameFor(stop: KeyChoice, language: Language): string | undefined {
+			return printed ? keyName(stopKey(stop, printed), language) : undefined;
 		},
 		/** The page's header line (ruling 13), or undefined as printed. */
 		header(language: Language): string | undefined {

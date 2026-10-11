@@ -1,46 +1,39 @@
 <script lang="ts">
 	/**
-	 * N.127 Insights, increment 1: Studio's third document, page one without
-	 * the compass.
+	 * INSIGHTS, Studio's third document (N.127), as Design round 2 draws it
+	 * (QUEUE row 66; accepted by Dann 2026-10-11 03:50; brief
+	 * `docs/sessions/brief-code-insights-for-the-singer_r1_2026-10-11.md`).
 	 *
-	 * RULED, all Dann's 2026-09-11 unless dated otherwise (`STATE.md`, the N.127
-	 * block, and `brief-n127-insights-inc1_r1_2026-09-12.md` §1): read-only and
-	 * never an input surface; every line computed or a sourced string a
-	 * predicate fired; the content in a squircle inheriting the watch band
-	 * (`NotesColumn.svelte`, `.watch-band`: 12 px radius, 1 px dusty rose,
-	 * cream inside); governing colour dusty rose, label ink `--rose-ink`, `--rose`
-	 * for lines and marks only (both moved at colour stage 4, 2026-09-14); page one fixed at one page; section headers on
-	 * `TitleHeader.svelte`'s `.metadata-line` recipe in rose; the foot one
-	 * apparatus block with the lieder.net clause struck; silence is a finding.
-	 * The composition is Design's R3, drawing 1a
-	 * (`docs/sessions/n127-design-pack/design-return-insights_r3_2026-09-11.dc.html`).
+	 * The purpose, ratified 2026-10-10 23:17: a singer learns how this piece
+	 * meets their voice in this key, to decide whether to sing it as written,
+	 * work on it, try another key, or move on. The structure, ratified
+	 * 2026-10-11 03:53 (`PRODUCT.md`, "How an Insights page is organized"): the
+	 * opening frame (teacher line B); the conclusion, unboxed and first; then
+	 * three squircles, the moments, the totals, and the sources as endnotes.
 	 *
-	 * NOTHING HERE IS CLICKABLE, EDITABLE, OR FOCUSABLE. It is a document.
-	 * ONE EXCEPTION, N.164 (Dann, 2026-09-25): with no range typed, the verdict
-	 * line offers the range, with a link to the Range fields and a quiet "No
-	 * thanks". Neither control prints (`CONTRACT.md` §6).
-	 * A SECOND, N.168 (Dann, 2026-09-25 03:35): each note comment carries "More
-	 * to explore, and why" (renamed 2026-09-30), which opens its other suggestions and full references.
-	 * It does not print; a printed Insights ends with "Sources cited" instead.
+	 * THE PAGE FLOWS. `singer-blocks.ts` decides every sentence as a list of
+	 * blocks; this pane draws each block once off screen at its printed width,
+	 * measures it, and `paginate.ts` breaks the blocks into letter pages, a
+	 * squircle continuing across a page break open at the break. Nothing is
+	 * placed past a page's room: "collisions and overlaps are forbidden" (Dann,
+	 * 03:42). On the phone the same blocks run in one column (the phone board).
 	 *
-	 * THE ANALYSIS CHAIN IS `MarkupPane`'S, repeated rather than shared.
-	 * The same six derivations in the same order (snapshot, reading octave,
-	 * performance order, resolvers, analysis, watch list), so the findings
-	 * here are the marks the score page draws. Lifting them into one module is
-	 * N.123's work, and brief §6 says not to build N.123. The two panes are
-	 * never mounted together, so the chain runs once either way.
+	 * READ-ONLY, as N.127 ruled, with the controls it already had: the range
+	 * offer (N.164), "Try this key" (N.94 slice 2), and the comments behind
+	 * "more observations" (N.168). None of them prints.
+	 *
+	 * THE ANALYSIS CHAIN IS `MarkupPane`'S, repeated rather than shared, so the
+	 * moments here are the marks the score page draws.
 	 */
 	import { tick, untrack } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
-	import Italics, { italicRuns } from '$lib/components/Italics.svelte';
-	import Tessituragram from '$lib/insights/Tessituragram.svelte';
+	import Italics from '$lib/components/Italics.svelte';
 	import CompassStave from '$lib/insights/CompassStave.svelte';
-	import FitTable from '$lib/insights/FitTable.svelte';
-	import { cycleDoseSentence } from '$lib/insights/cycle-dose';
+	import SingerBlock from '$lib/insights/SingerBlock.svelte';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
-	import { PAGE_SIZES, MARGINS, HEADER_GAP, formatRunningHeader } from '$lib/page-config';
+	import { PAGE_SIZES, MARGINS, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, formatRunningHeader } from '$lib/page-config';
 	import type { LineData } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, formatNameForPaper } from '$lib/composers-poets';
@@ -54,34 +47,34 @@
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
 		type IntakeAnswers,
+		type KeyChoice,
 		type Pitch,
 	} from '@ilya/score-parser';
 	import { isTreble, noteComments, noteFacts, registerFor, selectComments } from '$lib/insights/comments';
 	import { renderComments, songSeed, speaks, type RenderedComment } from '$lib/insights/comment-text';
-	import { fullReference, worksCited, type Run } from '$lib/insights/comment-sources';
 	import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
 	import { withPairedVowel, type PairingMap, type DrawnUnderlay } from '$lib/score/pairings';
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
 	import { buildWatchList } from '$lib/analysis/watchlist';
-	import { pitchLabel } from '$lib/voice/note-picker';
+	import { pitchName } from '$lib/voice/note-picker';
 	import {
 		buildInsights,
 		strikeLiederClause,
-		PAGE_ONE_FINDINGS,
 		formatSeconds,
 		formatSecondsFine,
 		formatTempo,
-		vowelChartRows,
+		secondsPerQuaver,
 		verdictLine,
 		printsNoFindingsLine,
-		type Finding,
 		type PhonationSection,
-		type SecondsFigure,
 		type SungKey,
 	} from '$lib/insights/insights';
+	import { cycleDoseSplit } from '$lib/insights/singing-measures';
+	import { firstOutsideRange, longestAboveSecondo, searchBetterKey, shareAfter, vowelTurns } from '$lib/insights/singer-page';
+	import { singerBlocks, type KeyForward, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
-	import { accidentalParts, textParts, wordOf } from '$lib/insights/text-parts';
 	import { composeIdentityLine } from '$lib/insights/identity';
 	import { isUsable } from '$lib/voice/engine/plausibility';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
@@ -240,15 +233,17 @@
 	const hasComments = $derived(
 		renderedComments.shown.length > 0 || (commentSelection?.hiddenBySettings ?? 0) > 0,
 	);
-	/* "Sources cited": only the works the printed page cites, which are the
-	   visible suggestions of the comments shown (the tap does not print). */
-	const sourcesCited = $derived(worksCited(renderedComments.shown.flatMap((r) => r.printedRows)));
 
 	function commentTag(r: RenderedComment): string {
 		const m = analysisScore?.measures[r.comment.measureIndex];
 		const bar = m?.number || String(r.comment.measureIndex + 1);
 		const pitch = analysisScore?.vocalLine.find((e) => e.id === r.comment.eventId)?.pitch;
 		return [T('loupe.measureTagShort').replace('%m', bar), pitch ? P(pitch) : ''].filter(Boolean).join(' · ');
+	}
+
+	/** The printed bar a comment sits in. */
+	function commentBar(r: RenderedComment): string {
+		return analysisScore?.measures[r.comment.measureIndex]?.number || String(r.comment.measureIndex + 1);
 	}
 
 	// ── The identity head (composed in `identity.ts`, voice type slice A) ──
@@ -259,191 +254,24 @@
 	let headerHeight = $state(0);
 	const contentTop = $derived(MARGINS.vertical + headerHeight + HEADER_GAP);
 	let runningHeight = $state(0);
-	const subsequentTop = $derived(MARGINS.vertical + runningHeight + HEADER_GAP);
-
-	// ── Pages ──────────────────────────────────────────────────────────
-	/* PLACEMENT, N.123 with N.127 increment 2: phonation time and the
-	   tessituragram are one unit on page one, in the compass's place (Dann,
-	   2026-09-23 01:40). Page one is fixed at one page and page two is only
-	   earned (ruled 2026-09-11).
-
-	   PAGE ONE IS FILLED BY MEASURING WHAT IT RENDERS (brief
-	   `brief-code-tessituragram-fit_r1_2026-09-23.md` §1, DESK DEFAULT). It
-	   starts with everything: the unit with its vowel list, and up to
-	   `PAGE_ONE_FINDINGS` findings. While the squircle's bottom passes the
-	   foot's top, one step at a time: the vowel list opens page two, then the
-	   lightest finding on page one follows it, and at least one finding
-	   stays. Past that nothing shrinks; the overflow is logged. Every score
-	   and every language is measured afresh, so no height is written here. */
-	const untrusted = $derived(model && !model.phonation.nothingSung ? model.phonation.untrustedMeasures : null);
-	const vowels = $derived(model && !model.phonation.nothingSung && model.phonation.vowels?.length ? model.phonation.vowels : null);
-
-	/* The cycle dose is a sentence of the page's own, last before the method line. */
-	const doseSentence = $derived(model?.figure ? cycleDoseSentence(model.figure.cycles, language) : null);
-	let vowelsOnPageOne = $state(true);
-	let pageOneCount = $state(PAGE_ONE_FINDINGS);
-	/* The cycle dose is the last thing to leave page one, and only when nothing else can (QUEUE row 60). */
-	let doseOnPageOne = $state(true);
-	/* Each new model or language starts from everything again. */
-	$effect(() => {
-		void model;
-		void language;
-		vowelsOnPageOne = true;
-		pageOneCount = PAGE_ONE_FINDINGS;
-		doseOnPageOne = true;
-	});
-
-	/* MEASURED FROM LAYOUT, after each render. The effect reads the offsets
-	   itself, because the size bindings (the machinery behind `headerHeight`
-	   and `runningHeight`) report through a ResizeObserver, which a hidden
-	   tab never runs: observed 2026-09-23, the bound height stayed at 60 px
-	   while the squircle was 731. The bindings stay so a late change, a font
-	   arriving, still re-measures. Offsets are layout values, so a phone's
-	   fitted scale does not touch them.
-
-	   IT MEASURES AFTER `tick()`, NOT IN THE EFFECT'S OWN RUN. Walk finding
-	   2026-09-24 (Cupid, French, a visible tab): page one printed over its
-	   foot until a language switch. Logged in headless Chromium the same
-	   day: the effect ran with `contentTop` at 191 while the squircle's
-	   `style.top` still read 64 px, and again at 291 while it read 191. The
-	   squircle is drawn in `PageFit`'s snippet, so its `top` is a child's
-	   template effect, which runs after this component's `$effect`. A
-	   measure in the effect's own run therefore reads the page as it was,
-	   fits, and nothing asks again: the header's height arrives late, the
-	   squircle moves without changing size, and no size binding fires.
-	   `tick()` resolves once every pending update is in the DOM, the child's
-	   included. It is a microtask, so a hidden tab still runs it.
-
-	   `contentTop` is an input for the same reason: a header that grows
-	   moves page one without resizing it. */
-	let pageOneEl = $state<HTMLElement | null>(null);
-	let pageOneHeight = $state(0);
-	const footHeights = $state([0, 0, 0, 0]);
-	const footEls = $state<Array<HTMLElement | null>>([null, null, null, null]);
-
-	function fitPageOne() {
-		const squircle = pageOneEl;
-		const foot = footEls[1];
-		if (!model || !squircle || !foot) return;
-		const over = squircle.offsetTop + squircle.offsetHeight - foot.offsetTop;
-		if (over <= 0) return;
-		if (vowels && vowelsOnPageOne) {
-			vowelsOnPageOne = false;
-			return;
-		}
-		const shown = Math.min(pageOneCount, model.findings.length);
-		if (shown > 1) {
-			pageOneCount = shown - 1;
-			return;
-		}
-		if (doseSentence && doseOnPageOne) {
-			doseOnPageOne = false;
-			return;
-		}
-		console.warn(`[Ilya] Insights page one overflows the foot by ${over.toFixed(1)} px with nothing left to move.`);
-	}
-
-	$effect(() => {
-		// Every input that changes page one's height or position re-measures it.
-		void model;
-		void language;
-		void vowelsOnPageOne;
-		void pageOneCount;
-		void doseOnPageOne;
-		void pageOneHeight;
-		void contentTop;
-		void footHeights[1];
-		void pageOneEl;
-		void footEls[1];
-		let current = true;
-		tick().then(() => {
-			if (current) untrack(fitPageOne);
-		});
-		return () => {
-			current = false;
-		};
-	});
-
-	const pageOneFindings = $derived(model ? model.findings.slice(0, pageOneCount) : []);
-	const deferredFindings = $derived(model ? model.findings.slice(pageOneCount) : []);
-	const vowelsOnPageTwo = $derived(!!vowels && !vowelsOnPageOne);
-	const doseOnPageTwo = $derived(!!doseSentence && !doseOnPageOne);
-	const hasPageTwo = $derived(!!model && (deferredFindings.length > 0 || !!untrusted || vowelsOnPageTwo || doseOnPageTwo));
-	/* N.168: the comments take a page of their own after the findings. DESK
-	   DEFAULT: page one is fixed and full, and a comment with its tap open
-	   needs room to grow, so this page grows with its content on screen. */
-	const commentsPage = $derived(!!model && hasComments ? (hasPageTwo ? 3 : 2) : null);
-	const totalPages = $derived(commentsPage ?? (hasPageTwo ? 2 : 1));
+	const subsequentTop = $derived(MARGINS.vertical + (runningHeight || HEADER_HEIGHTS_AT_LETTER.subsequent) + HEADER_GAP);
 
 	const attribution = $derived(strikeLiederClause(T('footer.attribution')));
 	const hasTypedCharacteristics = $derived(
 		adapted.completeness.range || adapted.completeness.tessitura || adapted.completeness.passaggio,
 	);
+	/* A French page whose prose names a pitch keys the solfège once, here (DESK DEFAULT, `OPEN.md` 04:12). */
 	const methodLine = $derived(
-		!model
+		(!model
 			? T('insights.method.silent')
-			: fill(T(hasTypedCharacteristics ? 'insights.method.typed' : 'insights.method.untyped'), {
-					date: calibratedOn ?? '',
-				}),
+			: fill(T(hasTypedCharacteristics ? 'insights.method.typed' : 'insights.method.untyped'), { date: calibratedOn ?? '' })) +
+			(model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : ''),
 	);
-	/* The footnote prints on the page that cites it, and only then. */
-	const citesTessitura = $derived(!!model?.tessitura.measured);
 
 	// ── Words for the model ────────────────────────────────────────────
-	const P = (p: Pitch) => pitchLabel(p);
+	const P = (p: Pitch) => pitchName(p, language);
 
-	function findingTag(f: Finding): string {
-		const parts = [T('loupe.measureTagShort').replace('%m', f.measure), P(f.pitch)];
-		return parts.join(' · ');
-	}
-
-	function findingBody(f: Finding): string {
-		const vowel = `[${f.vowel}]`;
-		switch (f.kind) {
-			case 'range':
-				return T(f.rangeDirection === 'below' ? 'insights.finding.rangeBelow' : 'insights.finding.rangeAbove');
-			case 'crossing':
-				return fill(T('insights.finding.crossing'), { vowel });
-			case 'cover':
-			case 'tracking':
-				return fill(T('insights.finding.tighten'), { vowel });
-			case 'turnover':
-				return fill(T('insights.finding.turnover'), { vowel });
-			case 'passaggio':
-				return T('insights.finding.passaggio');
-			case 'timbre':
-				return fill(
-					T(
-						f.timbreDirection === 'close-to-open'
-							? 'insights.finding.timbreCloseToOpen'
-							: 'insights.finding.timbreOpenToClose',
-					),
-					{ vowel },
-				);
-			case 'sustain':
-				return fill(T('insights.finding.sustain'), { vowel });
-		}
-	}
-
-	function furtherLine(f: Finding): string {
-		const n = f.instances - 1;
-		if (n <= 0) return '';
-		return n === 1 ? T('insights.findings.furtherOne') : fill(T('insights.findings.furtherMany'), { n });
-	}
-
-	// ── Phonation time (N.123) ─────────────────────────────────────────
-	function secondsText(f: SecondsFigure): string {
-		return f.kind === 'point'
-			? formatSeconds(f.seconds)
-			: fill(T('insights.fit.span'), { low: formatSeconds(f.low), high: formatSeconds(f.high) });
-	}
-
-	function shareText(n: number): string {
-		return fill(T('insights.phonation.share'), { n });
-	}
-
-	/* Row 4 replaces the section's numbers when there is no tempo; the zones
-	   and the vowel order still print as shares, which need no tempo. */
+	/* Row 4 replaces the section's numbers when there is no tempo. */
 	function headlineOf(ph: PhonationSection): string {
 		if (ph.timing === 'none' || !ph.phonation || !ph.tempo) return T('insights.phonation.noTempo');
 		if (ph.phonation.kind === 'range') {
@@ -460,30 +288,6 @@
 		});
 	}
 
-	/* The chart's rows and their order live in `vowelChartRows`, where a test can reach them. */
-	const vowelChart = $derived(vowelChartRows(model?.phonation.vowels));
-
-	/** A vowel's time: one decimal under a second, and a range where the tempo is a word. */
-	function vowelValue(v: { share: number; seconds: SecondsFigure | null; absent: boolean }): string {
-		// A vowel never sung prints a whole zero, "0 s" or "0%", never "0.0 s".
-		if (v.absent) return v.seconds ? formatSeconds(0) : shareText(0);
-		if (!v.seconds) return shareText(Math.round(v.share * 100));
-		return v.seconds.kind === 'point'
-			? formatSecondsFine(v.seconds.seconds, language)
-			: fill(T('insights.fit.span'), {
-					low: formatSecondsFine(v.seconds.low, language),
-					high: formatSecondsFine(v.seconds.high, language),
-				});
-	}
-
-	function findingSeconds(f: Finding): string {
-		if (!f.seconds) return '';
-		const seconds = secondsText(f.seconds);
-		return f.instances === 1
-			? fill(T('insights.phonation.findingOne'), { seconds })
-			: fill(T('insights.phonation.finding'), { n: f.instances, seconds });
-	}
-
 	// ── The range offer (N.164) ────────────────────────────────────────
 	/* Read once per mount; the decline holds for every song and every reload. */
 	let offerDeclined = $state(rangeOfferDeclined(browserStore()));
@@ -492,315 +296,273 @@
 		offerDeclined = true;
 	}
 	const verdict = $derived(model ? verdictLine(model, offerDeclined) : null);
-	/* THE FINDINGS LIST keeps its own heading, and only where findings exist.
-	   "Nothing in this piece is flagged" joins the closing verdict instead (Dann,
-	   2026-10-09 01:47, "THE INSIGHTS PAGE, REARRANGED"), so an empty section
-	   no longer stands under a heading of its own. */
-	const findingsSectionShown = $derived(!!model && pageOneFindings.length > 0);
-	/* A page with nothing to say under the heading (no verdict, and no "nothing flagged") prints no heading. */
-	const noneInVerdict = $derived(!!model && pageOneFindings.length === 0 && printsNoFindingsLine(model.verdict));
-	const verdictSectionShown = $derived(!!verdict && (verdict.kind !== 'nothing' || noneInVerdict));
+	const noneFlagged = $derived(!!model && model.findings.length === 0 && printsNoFindingsLine(model.verdict));
 
-	const remainderLine = $derived(
-		deferredFindings.length === 1
-			? T('insights.findings.remainderOne')
-			: fill(T('insights.findings.remainderMany'), { n: deferredFindings.length }),
+	// ── The way forward: a key that fits better ────────────────────────
+	/* Nothing out of range: the second search (`searchBetterKey`). A note out of
+	   range: the watch list's own key, which "Try this key" already opened. */
+	const better = $derived.by((): KeyForward | null => {
+		if (!model || !analysisScore) return null;
+		let semitones: number;
+		let key: { fifths: number; mode: 'major' | 'minor' } | null = null;
+		let compass: { low: Pitch; high: Pitch } | null = null;
+		let shareThen: number | null;
+		let score = null;
+		const found = searchBetterKey(analysisScore, adapted.snapshot, model);
+		if (found) {
+			({ semitones, key, compass, shareThen } = found);
+			score = found.score;
+		} else {
+			const tr = model.findings.find((f) => f.kind === 'range' && f.transposition)?.transposition;
+			if (!tr || tr.semitones.length === 0) return null;
+			semitones = tr.semitones[0];
+			key = tr.keys?.[0] ?? null;
+			shareThen = shareAfter(analysisScore, adapted.snapshot, semitones);
+			score = { ...analysisScore, vocalLine: analysisScore.vocalLine.map((e) => (e.pitch ? { ...e, pitch: shift(e.pitch, semitones) } : e)) };
+		}
+		const stop = key ? (keyRuler?.stopFor({ semitones: [semitones], keys: [key] }) ?? null) : null;
+		return {
+			semitones,
+			...(stop ? { stop, readout: keyRuler?.readoutFor(stop, language), keyName: keyRuler?.keyNameFor(stop, language) } : {}),
+			shareThen,
+			compass,
+			score,
+		};
+	});
+	/* A pitch moved by `n` semitones, for naming a note in another key; only its MIDI number is read. */
+	function shift(p: Pitch, n: number): Pitch {
+		const midi = pitchToMidi(p) + n;
+		const names: Array<[Pitch['step'], number]> = [['C', 0], ['C', 1], ['D', 0], ['E', -1], ['E', 0], ['F', 0], ['F', 1], ['G', 0], ['A', -1], ['A', 0], ['B', -1], ['B', 0]];
+		const [step, alter] = names[((midi % 12) + 12) % 12];
+		return { step, alter, octave: Math.floor(midi / 12) - 1 } as Pitch;
+	}
+
+	// ── The blocks ─────────────────────────────────────────────────────
+	const facts = $derived(commentNotes ? noteFacts(commentNotes, adapted.snapshot) : null);
+	const blocks = $derived.by((): PlacedBlock[] => {
+		if (!analysisScore) return [{ group: 'free', block: { kind: 'silence', lines: [T('insights.silence.noScore')] } }];
+		if (!model) {
+			return [
+				{
+					group: 'totals',
+					block: {
+						kind: 'silence',
+						heading: T('profile.withheld.heading'),
+						lines: [T('insights.silence.unmeasured')],
+						withheld: [T('profile.withheld.item3'), T('insights.silence.findings')],
+					},
+				},
+			];
+		}
+		const pricing = secondsPerQuaver(analysisScore);
+		const typed = adapted.snapshot.tessitura;
+		const untrusted = model.phonation.untrustedMeasures;
+		return singerBlocks(
+			{
+				language,
+				model,
+				profile: adapted.snapshot,
+				verdict,
+				noneFlagged,
+				held: longestAboveSecondo(facts, analysisScore),
+				outside: firstOutsideRange(analysisScore, adapted.snapshot, (id) => vowelResolver?.({ id } as never)),
+				better,
+				comments: renderedComments.shown,
+				more: renderedComments.more,
+				hiddenBySettings: commentSelection?.hiddenBySettings ?? 0,
+				tagOf: commentTag,
+				barOf: commentBar,
+				phonationHeadline: model.phonation.nothingSung ? null : headlineOf(model.phonation),
+				untrustedLine: untrusted
+					? fill(T(untrusted.length === 1 ? 'insights.phonation.untrustedOne' : 'insights.phonation.untrustedMany'), { measures: untrusted.join(', ') })
+					: null,
+				split:
+					model.figure && typed
+						? cycleDoseSplit(model.figure.rows, pricing ? pricing.price : null, { low: pitchToMidi(typed.low), high: pitchToMidi(typed.high) })
+						: null,
+				cycles: model.figure?.cycles ?? null,
+				turns: vowelResolver ? vowelTurns(analysisScore, adapted.snapshot, vowelResolver) : null,
+			},
+			(s) => formatSecondsFine(s, language),
+		);
+	});
+
+	// ── Measuring, then pages ──────────────────────────────────────────
+	/* The text column is the page's width less its margins; a squircle's
+	   blocks sit inside its 1 px border and 26 px padding. */
+	const COLUMN = dims.width - 2 * MARGINS.horizontal;
+	const INSIDE = COLUMN - 2 * 27;
+	const GEOMETRY = { gap: 16, inner: 12, pad: 17, openPad: 5 };
+	/* Clear space between the last content and the footer's notes: Unlikely
+	   page 3's spacing, which Dann held up as the standard (03:42). DESK DEFAULT. */
+	const CLEAR = 40;
+	const widthOf = (b: PlacedBlock) => (b.group === 'free' ? COLUMN : INSIDE);
+
+	let measureEls = $state<Array<HTMLElement | null>>([]);
+	let heights = $state<number[]>([]);
+	let footProbe = $state<HTMLElement | null>(null);
+	let footHeight = $state(0);
+	let fontsReady = $state(0);
+	$effect(() => {
+		document.fonts?.ready.then(() => (fontsReady += 1));
+	});
+	/* MEASURED AFTER `tick()`, as the old page-one fit did: a child's layout
+	   lands after this component's effect, and a ResizeObserver does not run
+	   in a hidden browser tab. */
+	$effect(() => {
+		void blocks;
+		void fontsReady;
+		void language;
+		let current = true;
+		tick().then(() => {
+			if (!current) return;
+			untrack(() => {
+				heights = measureEls.slice(0, blocks.length).map((el) => el?.offsetHeight ?? 0);
+				footHeight = footProbe?.offsetHeight ?? 0;
+			});
+		});
+		return () => {
+			current = false;
+		};
+	});
+
+	const printed = $derived(blocks.map((b, k) => ({ b, k })).filter(({ b }) => !b.screenOnly));
+	const pages = $derived.by((): Segment[][] => {
+		const room = (top: number) => dims.height - MARGINS.vertical - footHeight - CLEAR - top;
+		const segs = paginate(
+			printed.map(({ b }) => b.group),
+			printed.map(({ k }) => heights[k] ?? 0),
+			{ ...GEOMETRY, capacity: (n) => room(n === 0 ? contentTop : subsequentTop) },
+		);
+		// Back from printed indices to block indices; a screen-only block rides with the block before it.
+		const back = printed.map(({ k }) => k);
+		const pagesOut = segs.map((page) => page.map((s) => ({ ...s, blocks: s.blocks.map((j) => back[j]) })));
+		blocks.forEach((b, k) => {
+			if (!b.screenOnly) return;
+			for (const page of pagesOut) for (const s of page) if (s.blocks.includes(k - 1)) s.blocks.push(k);
+		});
+		return pagesOut;
+	});
+	const totalPages = $derived(pages.length);
+	/* The footnote prints on the page that shows the piece's tessitura, and only there. */
+	const footnotePage = $derived(
+		model?.tessitura.measured ? pages.findIndex((page) => page.some((s) => s.blocks.some((k) => blocks[k]?.block.kind === 'pitches'))) : -1,
 	);
 
-	/* ONE RUNNING HEAD FOR ALL THREE TABS (QUEUE row 64; Dann 2026-10-11
-	   03:23): the piece on the left, the tab on the right, the rule in rose. The
-	   identity line ("Insights for Dann · Bass · calibrated …") leaves it and
-	   stays on page 1. */
+	let flowWidth = $state(358);
+	/* The phone's one column: each free block alone, each squircle's blocks together. */
+	const flowSegments = $derived.by((): Segment[] => {
+		const out: Segment[] = [];
+		blocks.forEach((b, k) => {
+			const last = out[out.length - 1];
+			if (b.group !== 'free' && last?.group === b.group) last.blocks.push(k);
+			else out.push({ group: b.group, blocks: [k], openTop: false, openBottom: false });
+		});
+		return out;
+	});
+
 	const runningHeader = $derived(formatRunningHeader(composer, scoreTitle ?? '', poet));
+	const tryKey = (stop: KeyChoice) => keyRuler?.tryKey(stop);
 </script>
 
-{#snippet sectionHead(text: string)}
-	<p class="section-head">{text}</p>
+{#snippet apparatus(withFootnote: boolean)}
+	{#if withFootnote}
+		<p class="footnote"><sup>1</sup>&#8201;{@html T('insights.footnote.tessitura')} <span class="unverified">{T('insights.citationUnverified')}</span></p>
+	{/if}
+	<p class="method">{methodLine}</p>
 {/snippet}
 
-{#snippet finding(f: Finding)}
-	<div class="finding">
-		<p class="finding-tag">{findingTag(f)}{' \u00b7 '}<span class="ipa">[{f.vowel}]</span>{#if wordOf(f)}{' \u00b7 '}{wordOf(f)}{/if}</p>
-		<p class="finding-body"><Italics text={findingBody(f)} />{#if furtherLine(f)}{' '}<span class="finding-further">{furtherLine(f)}</span>{/if}{#if findingSeconds(f)}{' '}<span class="finding-further">{findingSeconds(f)}</span>{/if}</p>
-		{#if f.kind === 'range' && keyRuler?.stopFor(f.transposition)}<button type="button" class="try-key" onclick={() => keyRuler?.tryKey(keyRuler.stopFor(f.transposition)!)}>{T('insights.tryKey')}</button>{/if}
-	</div>
+{#snippet header()}
+	<!-- Page 1 names its tab, above the compass, which keeps its place (QUEUE row 64). -->
+	<RunningHeader headerText="" tabName={T('tab.insights')} accentInk="var(--rose-ink)" tabOnly />
+	<TitleHeader
+		title={scoreTitle ?? ''}
+		composer={composerDisplay}
+		poet={identityLine}
+		translator=""
+		opus=""
+		{language}
+		note={keyRuler?.header(language)}
+		onheightchange={(h) => (headerHeight = h)}
+		versionAccent="#AB7F7F"
+		markAccent="#AB7F7F"
+		ruleAccent="#AB7F7F"
+		labelInk="var(--rose-ink)"
+	>
+		{#snippet aside()}
+			{#if model?.figure}<CompassStave compass={model.figure.compass} clef={model.figure.clef} {language} />{/if}
+		{/snippet}
+	</TitleHeader>
 {/snippet}
 
-{#snippet prose(text: string)}{#each textParts(text) as part, j (j)}{#if part.ipa}<span class="ipa">{part.text}</span>{:else if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
-
-{#snippet runs(list: Run[])}{#each list as r, j (j)}{#if r.title}<em>{r.text}</em>{:else if r.sub}<sub>{r.text}</sub>{:else}{@render prose(r.text)}{/if}{/each}{/snippet}
-
-{#snippet comment(r: RenderedComment)}
-	<div class="comment">
-		<p class="finding-tag">{@render prose(commentTag(r))}{' \u00b7 '}<span class="ipa">[{r.comment.vowel}]</span></p>
-		<p class="comment-body">{@render runs(r.frame)}{#if r.consequence.length}{' '}{@render runs(r.consequence)}{/if}{#each r.visible as s (s.id)}{' '}{@render runs(s.runs)}{/each}</p>
-		<details class="comment-tap">
-			<summary>{#if r.count}<span class="comment-count">{r.count}</span>{' \u00b7 '}{/if}<span class="comment-tap-label">{T('comment.tap')}</span></summary>
-			{#each r.hidden as s (s.id)}
-				<p class="comment-body">{@render runs(s.runs)}</p>
-			{/each}
-			<ol class="comment-references">
-				{#each r.references as ref, j (j)}
-					<li>{@render runs(ref)}</li>
-				{/each}
-			</ol>
-		</details>
-	</div>
+{#snippet blockAt(k: number, width: number)}
+	<SingerBlock block={blocks[k].block} {language} {width} ontry={keyRuler ? tryKey : undefined} onaddrange={() => onaddrange?.()} ondecline={declineOffer} />
 {/snippet}
 
-{#snippet phonationView(ph: PhonationSection)}
-	<!-- THE HISTOGRAM LEADS THE PAGE (Dann, 2026-10-09): the phonation sentence is not
-	     important enough to be its first prose, so it stands under the figure, above
-	     the compatibility table. -->
-	{#if !ph.nothingSung && model?.figure}
-		<div class="figure">
-			<Tessituragram figure={model.figure} {language} />
+{#snippet segment(s: Segment, column: number, inside: number)}
+	{#if s.group === 'free'}
+		{#each s.blocks as k (k)}<div class:screen-only={blocks[k].screenOnly}>{@render blockAt(k, column)}</div>{/each}
+	{:else}
+		<div class="squircle" class:open-top={s.openTop} class:open-bottom={s.openBottom}>
+			{#each s.blocks as k (k)}<div class:screen-only={blocks[k].screenOnly}>{@render blockAt(k, inside)}</div>{/each}
 		</div>
 	{/if}
-	<div class="section">
-		{@render sectionHead(T('insights.phonation.heading'))}
-		{#if ph.nothingSung}
-			<p class="prose">{T('insights.fit.nothingSung')}</p>
-		{:else}
-			<p class="prose">{headlineOf(ph)}</p>
-			<!-- Without both passaggi the figure draws no lines and no shares,
-			     and the fit table alone says so. -->
-			{#if vowels && vowelsOnPageOne}
-				{@render vowelTimes()}
-			{/if}
-		{/if}
+{/snippet}
+
+<!-- The measurer: every block once, off screen, at its printed width. Inert, so its controls are never reached. -->
+<div class="measurer" aria-hidden="true" inert>
+	{#each blocks as b, k (k)}
+		<div bind:this={measureEls[k]} style="width: {widthOf(b)}px;">{@render blockAt(k, widthOf(b))}</div>
+	{/each}
+	<div class="foot-probe" bind:this={footProbe} style="width: {COLUMN}px;">
+		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution}>
+			{#snippet apparatus()}{@render apparatusBody(true)}{/snippet}
+		</PageFooter>
 	</div>
-{/snippet}
+</div>
 
-{#snippet vowelTimes()}
-	<p class="sub-head">{T(model?.phonation.timing === 'none' ? 'insights.phonation.byVowelShare' : 'insights.phonation.byVowel')}</p>
-	<!-- One bar per vowel in the ruled order (after Dann's Figure 6.10). A
-	     vowel a finding names draws its bar and label in the dark rose of the
-	     pitch bars it sits on. -->
-	<ul class="vowel-chart">
-		{#each vowelChart as v (v.vowel)}
-			<li class:flagged={v.flagged}>
-				<span class="vowel-label ipa">[{v.vowel}]</span>
-				<span class="vowel-track">{#if !v.absent}<span class="vowel-bar" style="width: {v.width * 170}px;"></span>{/if}<span class="vowel-value">{vowelValue(v)}</span></span>
-			</li>
-		{/each}
-	</ul>
-{/snippet}
+{#snippet apparatusBody(withFootnote: boolean)}{@render apparatus(withFootnote)}{/snippet}
 
-{#snippet foot(pageNumber: number, withFootnote: boolean)}
-	<!-- ONE FOOTER FOR ALL THREE TABS (QUEUE row 64; Dann 2026-10-11 03:22):
-	     Text's and Markup's `PageFooter`, its line in rose. The footnote and the
-	     method line sit above the line; the credits sit below it, beside the
-	     page count. The page still measures this footer: `element` gives the
-	     page-one fit its offsets, and the height reaches `footHeights`. -->
-	<PageFooter
-		{pageNumber}
-		{totalPages}
-		{language}
-		hairlineAccent="var(--rose, #ab7f7f)"
-		{attribution}
-		bind:element={footEls[pageNumber]}
-		onheightchange={(h) => (footHeights[pageNumber] = h)}
-	>
-		{#snippet apparatus()}
-			{#if withFootnote}
-				<p class="footnote">
-					<sup>1</sup>&#8201;{@html T('insights.footnote.tessitura')}
-					<span class="unverified">{T('insights.citationUnverified')}</span>
-				</p>
-			{/if}
-			<p class="method">{methodLine}</p>
-		{/snippet}
-	</PageFooter>
-{/snippet}
-
-<PageFit fit={isMobile} pageWidth={dims.width}>
-	{#snippet content()}
-		<div class="insights-container">
-			<article
-				class="paper-page insights-page"
-				style="width: {dims.width}px; height: {dims.height}px;"
-				aria-label={fill(T('insights.pageAria'), { n: 1, total: totalPages })}
-			>
-				<!-- Page 1 names its tab, above the compass, which keeps its place (QUEUE row 64). -->
-				<RunningHeader headerText="" tabName={T('tab.insights')} accentInk="var(--rose-ink)" tabOnly />
-				<TitleHeader
-					title={scoreTitle ?? ''}
-					composer={composerDisplay}
-					poet={identityLine}
-					translator=""
-					opus=""
-					{language}
-					note={keyRuler?.header(language)}
-					onheightchange={(h) => (headerHeight = h)}
-					versionAccent="#AB7F7F"
-					markAccent="#AB7F7F"
-					ruleAccent="#AB7F7F"
-					labelInk="var(--rose-ink)"
-				>
-					{#snippet aside()}
-						{#if model?.figure}<CompassStave compass={model.figure.compass} clef={model.figure.clef} {language} />{/if}
-					{/snippet}
-				</TitleHeader>
-
-				<div class="squircle" style="top: {contentTop}px;" bind:offsetHeight={pageOneHeight} bind:this={pageOneEl}>
-					{#if !analysisScore}
-						<p class="silence">{T('insights.silence.noScore')}</p>
-					{:else if !model}
-						<!-- The page with no measured voice. The heading and the third
-						     line are the score page's withheld statement, reused with
-						     their French (`profile.withheld.*`); nothing on it is a
-						     number. -->
-						<div class="section">
-							{@render sectionHead(T('profile.withheld.heading'))}
-							<p class="prose">{T('insights.silence.unmeasured')}</p>
-							<ul class="withheld-list">
-								<li><Italics text={T('profile.withheld.item3')} /></li>
-								<li>{T('insights.silence.findings')}</li>
-							</ul>
-						</div>
-					{:else}
-						{@render phonationView(model.phonation)}
-
-						<div class="section">
-							{@render sectionHead(T('insights.fit.heading'))}
-							<FitTable {model} {language} />
-						</div>
-
-						{#if verdictSectionShown}
-						<div class="section">
-							{@render sectionHead(T('insights.verdict.heading'))}
-							{#if verdict?.kind === 'verdict'}
-								<!-- One paragraph: the verdict and "nothing flagged" both say how the piece sits. -->
-								<p class="verdict">{T(verdict.key)}{#if noneInVerdict}{' '}{T('insights.findings.none')}{/if}</p>
-							{:else if verdict?.kind === 'offer'}
-								<!-- N.164: one sentence around a link, then a quiet decline.
-								     On paper the sentence is plain text and the decline is gone. -->
-								<p class="verdict">
-									{T('insights.offer.before')}{' '}<button type="button" class="offer-link" onclick={() => onaddrange?.()}>{T('insights.offer.link')}</button>{T('insights.offer.after')}{' '}<button type="button" class="offer-decline" onclick={declineOffer}>{T('insights.offer.decline')}</button>
-								</p>
-							{/if}
-							{#if noneInVerdict && verdict?.kind !== 'verdict'}
-								<p class="verdict">{T('insights.findings.none')}</p>
-							{/if}
-						</div>
-						{/if}
-
-						{#if findingsSectionShown}
-							<div class="section">
-								{@render sectionHead(T('insights.findings.heading'))}
-								{#each pageOneFindings as f (f.key)}
-									{@render finding(f)}
-								{/each}
-								{#if deferredFindings.length > 0}
-									<p class="remainder">{remainderLine}</p>
-								{/if}
-							</div>
-						{/if}
-
-						{#if doseSentence && doseOnPageOne}
-							<p class="prose dose">{doseSentence}</p>
-						{/if}
-					{/if}
-				</div>
-
-				{@render foot(1, citesTessitura)}
-			</article>
-
-			{#if model && hasPageTwo}
-				<!-- PAGE TWO, earned. It names the measures phonation time could not
-				     vouch for and lists time per vowel, then carries the findings
-				     page one's count line promises (brief §4.3), numbered on from
-				     page one. -->
-				<article
-					class="paper-page insights-page"
-					style="width: {dims.width}px; height: {dims.height}px;"
-					aria-label={fill(T('insights.pageAria'), { n: 2, total: totalPages })}
-				>
-					<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose, #ab7f7f)" onheightchange={(h) => (runningHeight = h)} />
-					<div class="squircle" style="top: {subsequentTop}px;">
-						{#if untrusted || vowelsOnPageTwo}
-							<div class="section">
-								{@render sectionHead(T('insights.phonation.heading'))}
-								{#if untrusted}
-									<p class="remainder">
-										{fill(T(untrusted.length === 1 ? 'insights.phonation.untrustedOne' : 'insights.phonation.untrustedMany'), {
-											measures: untrusted.join(', '),
-										})}
-									</p>
-								{/if}
-								{#if vowelsOnPageTwo}
-									{@render vowelTimes()}
-								{/if}
-							</div>
-						{/if}
-						{#if deferredFindings.length > 0}
-							<div class="section">
-								{@render sectionHead(T('insights.findings.deferredHeading'))}
-								{#each deferredFindings as f (f.key)}
-									{@render finding(f)}
-								{/each}
-							</div>
-						{/if}
-						{#if doseOnPageTwo}
-							<p class="prose dose">{doseSentence}</p>
-						{/if}
-					</div>
-					{@render foot(2, false)}
-				</article>
-			{/if}
-
-			{#if commentsPage}
-				<!-- N.168: the note comments, up to five, in the order the singer
-				     meets them; the rest behind "more observations"; then, in its
-				     own squircle, the works this page cites. -->
-				<article
-					class="paper-page insights-page comments-page"
-					style="width: {dims.width}px; min-height: {dims.height}px;"
-					aria-label={fill(T('insights.pageAria'), { n: commentsPage, total: totalPages })}
-				>
-					<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose, #ab7f7f)" onheightchange={(h) => (runningHeight = h)} />
-					<div class="comments-flow" style="padding-top: {subsequentTop}px; padding-bottom: {footHeights[commentsPage] + 72}px;">
-						<div class="squircle in-flow">
-							<div class="section">
-								{@render sectionHead(T('comment.heading'))}
-								{#each renderedComments.shown as r (r.comment.eventId)}
-									{@render comment(r)}
-								{/each}
-								{#if renderedComments.more.length > 0}
-									<details class="comment-more">
-										<summary>{renderedComments.more.length === 1 ? T('comment.more.one') : fill(T('comment.more.many'), { n: renderedComments.more.length })}</summary>
-										{#each renderedComments.more as r (r.comment.eventId)}
-											{@render comment(r)}
-										{/each}
-									</details>
-								{/if}
-								{#if (commentSelection?.hiddenBySettings ?? 0) > 0}
-									<p class="remainder">
-										{commentSelection?.hiddenBySettings === 1 ? T('comment.hidden.one') : fill(T('comment.hidden.many'), { n: commentSelection?.hiddenBySettings ?? 0 })}
-									</p>
-								{/if}
-							</div>
-						</div>
-						{#if sourcesCited.length > 0}
-							<div class="squircle in-flow sources-cited">
-								<div class="section">
-									{@render sectionHead(T('comment.sourcesCited'))}
-									<ul class="sources-list">
-										{#each sourcesCited as key (key)}
-											<li>{@render runs(fullReference(key, language))}</li>
-										{/each}
-									</ul>
-								</div>
-							</div>
-						{/if}
-					</div>
-					{@render foot(commentsPage, false)}
-				</article>
-			{/if}
+{#if isMobile}
+	<!-- THE PHONE, one column (the phone board, Dann 03:11: "this reads well"). -->
+	<div class="insights-flow">
+		<div class="flow-head">{@render header()}</div>
+		<div class="flow-body" bind:clientWidth={flowWidth}>
+			{#each flowSegments as seg, j (j)}{@render segment(seg, flowWidth, flowWidth - 2 * 17)}{/each}
 		</div>
-	{/snippet}
-</PageFit>
+		<div class="flow-foot">
+			<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution}>
+				{#snippet apparatus()}{@render apparatusBody(footnotePage >= 0)}{/snippet}
+			</PageFooter>
+		</div>
+	</div>
+{:else}
+	<PageFit fit={false} pageWidth={dims.width}>
+		{#snippet content()}
+			<div class="insights-container">
+				{#each pages as page, n (n)}
+					<article
+						class="paper-page insights-page"
+						style="width: {dims.width}px; height: {dims.height}px;"
+						aria-label={fill(T('insights.pageAria'), { n: n + 1, total: totalPages })}
+					>
+						{#if n === 0}
+							{@render header()}
+						{:else}
+							<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose, #ab7f7f)" onheightchange={(h) => (runningHeight = h)} />
+						{/if}
+						<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px;">
+							{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
+						</div>
+						<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution}>
+							{#snippet apparatus()}{@render apparatusBody(n === footnotePage)}{/snippet}
+						</PageFooter>
+					</article>
+				{/each}
+			</div>
+		{/snippet}
+	</PageFit>
+{/if}
 
 <style>
 	/* The page stack: `MarkupPane`'s `.markup-paper-container`, whose
@@ -821,242 +583,59 @@
 		flex-shrink: 0;
 	}
 
-	/* ── The squircle ─────────────────────────────────────────
-	   The watch band's outline: 12 px radius, 1 px dusty rose, cream inside.
-	   It sizes to its content (Design R3); the paper is what is fixed. */
-	.squircle {
+	.column {
 		position: absolute;
 		left: 96px;
 		right: 96px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	/* ── The squircle ─────────────────────────────────────────
+	   The watch band's outline: 12 px radius, 1 px dusty rose, cream inside.
+	   Open at a page break, as the accepted drawing shows. */
+	.squircle {
 		box-sizing: border-box;
-		border: 1px solid var(--rose, #ab7f7f);
+		border: 1px solid var(--rose);
 		border-radius: 12px;
-		background: var(--paper-cream);
-		padding: 18px 26px 20px;
+		padding: 16px 26px;
 		display: flex;
 		flex-direction: column;
-		gap: 15px;
+		gap: 12px;
 	}
 
-	.section {
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
+	.squircle.open-top {
+		border-top: none;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+		padding-top: 5px;
 	}
 
-	/* `TitleHeader.svelte`'s `.metadata-line`, in rose label ink, ruled by
-	   Dann 2026-09-11. Small caps must clear 4.5 on cream. Since colour stage
-	   4 (2026-09-14) it is `--rose-ink`, #674141 at 7.33, per ruling 4 of 4
-	   of 2026-09-13; it was the literal #8A5C5C. */
-	.section-head {
-		margin: 0;
-		font-family: var(--font-sans);
-		font-size: 14px;
-		font-weight: 600;
-		letter-spacing: 1.5px;
-		line-height: 1.6;
-		font-variant-caps: all-small-caps;
-		color: var(--rose-ink);
+	.squircle.open-bottom {
+		border-bottom: none;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		padding-bottom: 5px;
 	}
 
-	.prose,
-	.silence {
-		margin: 0;
-		font-family: var(--font-serif);
-		font-size: 14px;
-		line-height: 1.45;
-		color: var(--ink-primary);
-	}
-
-	.withheld-list {
-		margin: 0;
-		padding-left: 1.1rem;
-		font-family: var(--font-serif);
-		font-size: 12.5px;
-		line-height: 1.45;
-		color: var(--ink-secondary);
-	}
-
-	sup {
-		font-size: 0.62em;
-		line-height: 0;
-	}
-
-	.verdict {
-		margin: 0;
-		padding-top: 2px;
-		font-family: var(--font-serif);
-		font-size: 16px;
-		line-height: 1.4;
-		color: var(--ink-primary);
-	}
-
-	/* ── The range offer (N.164) ────────────────────────────────
-	   JUDGEMENT, the desk's, Dann's to wave off: the link reads as a link in
-	   the page's label ink, and the decline sits after it smaller and in the
-	   tertiary ink, so it is findable and never louder than the offer. */
-	.offer-link,
-	.offer-decline {
-		margin: 0;
-		padding: 0;
-		border: 0;
-		background: none;
-		font: inherit;
-		color: inherit;
-		cursor: pointer;
-	}
-
-	.offer-link {
-		color: var(--rose-ink);
-		text-decoration: underline;
-		text-underline-offset: 2px;
-	}
-
-	.offer-decline {
-		margin-left: 4px;
-		font-family: var(--font-sans);
-		font-size: 11px;
-		letter-spacing: 0.04em;
-		color: var(--ink-tertiary);
-		text-decoration: underline;
-		text-decoration-color: rgba(120, 113, 108, 0.45);
-		text-underline-offset: 2px;
-	}
-
-	/* ── Findings ───────────────────────────────────────────── */
-
-	.finding {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-	}
-
-	/* The Loupe's measure tag (`Loupe.svelte`, `.loupe-tag`). */
-	.finding-tag {
-		margin: 0;
-		font-family: var(--font-sans);
-		font-size: 11px;
-		font-weight: 600;
-		letter-spacing: 0.06em;
-		color: var(--ink-tertiary);
-	}
-
-	.ipa {
-		font-family: 'Lato IPA', var(--font-sans);
-		letter-spacing: 0;
-	}
-
-	.finding-body {
-		margin: 0;
-		font-family: var(--font-serif);
-		font-size: 14px;
-		line-height: 1.4;
-		color: var(--ink-primary);
-		text-wrap: pretty;
-	}
-
-	/* At the right end of the tag row, in its 18 px: no height (N.94 slice 2 addendum). */
-	.try-key {
+	.measurer {
 		position: absolute;
+		left: -20000px;
 		top: 0;
-		right: 0;
-		padding: 0 0.6rem;
-		font: 500 0.75rem/16px var(--font-sans);
-		white-space: nowrap;
-		color: var(--ink-primary);
-		background: #fff;
-		border: 1px solid var(--ink-primary);
-		border-radius: 999px;
-		cursor: pointer;
+		visibility: hidden;
+		pointer-events: none;
 	}
 
-	.finding-further,
-	.remainder {
-		color: var(--ink-tertiary);
+	.measurer > div {
+		box-sizing: border-box;
 	}
 
-	.remainder {
-		margin: 0;
-		font-family: var(--font-serif);
-		font-size: 12.5px;
-		line-height: 1.4;
+	/* The probe's footer sits in flow, so its height is the footer's own. */
+	.foot-probe :global(.page-footer) {
+		position: static;
 	}
 
-	/* ── Phonation time and the tessituragram (N.123, N.127) ── */
-	.figure {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		margin-top: 4px;
-	}
-
-	.sub-head {
-		margin: 6px 0 0;
-		font-family: var(--font-sans);
-		font-size: 10px;
-		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--ink-tertiary);
-	}
-
-	/* The vowel chart. The bars are the pitch bars' `--rose`, 6 px, as in
-	   the desk's sparse drawing; a vowel with a finding takes `--rose-ink`. */
-	.vowel-chart {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		font-family: var(--font-sans);
-		font-size: 11px;
-		line-height: 1.2;
-	}
-
-	.vowel-chart li {
-		display: grid;
-		grid-template-columns: 30px 1fr;
-		column-gap: 6px;
-		align-items: center;
-	}
-
-	.vowel-label {
-		text-align: right;
-		font-size: 12.5px;
-		color: var(--ink-primary);
-	}
-
-	.vowel-track {
-		display: flex;
-		align-items: center;
-		gap: 4px;
-	}
-
-	.vowel-bar {
-		height: 6px;
-		background: var(--rose);
-	}
-
-	.vowel-value {
-		font-size: 10px;
-		color: var(--ink-tertiary);
-		white-space: nowrap;
-	}
-
-	.vowel-chart .flagged .vowel-label {
-		font-weight: 700;
-		color: var(--rose-ink);
-	}
-
-	.vowel-chart .flagged .vowel-bar {
-		background: var(--rose-ink);
-	}
-
-	/* ── The foot's own notes, above the line ──────────────────
-	   `PageFooter` sets their type (sans, 9.5 px, stone). The method line is
-	   in sentence case, as Dann's drawing of 2026-10-11 has it. */
 	.footnote,
 	.method {
 		margin: 0;
@@ -1068,95 +647,50 @@
 		letter-spacing: 0.04em;
 	}
 
-	/* ── The note comments (N.168) ──────────────────────────────
-	   The findings' recipes, so a comment reads as a finding's sibling. The
-	   page grows with an open tap; the squircles sit in the flow. */
-	.comments-flow {
-		display: flex;
-		flex-direction: column;
-		gap: 18px;
-		padding-left: 96px;
-		padding-right: 96px;
+	sup {
+		font-size: 0.62em;
+		line-height: 0;
 	}
 
-	.squircle.in-flow {
+	/* ── The phone: one column, the same blocks ── */
+	.insights-flow {
+		box-sizing: border-box;
+		background: var(--paper-cream);
+		padding: 24px 16px 32px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		max-width: 100%;
+	}
+
+	.flow-head {
+		position: relative;
+	}
+
+	.flow-head :global(.title-header),
+	.flow-head :global(.tab-mark) {
+		position: relative;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+
+	.flow-head :global(.tab-mark) {
+		text-align: right;
+	}
+
+	.flow-body {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.flow-body .squircle {
+		padding: 14px 16px;
+	}
+
+	.flow-foot :global(.page-footer) {
 		position: static;
-	}
-
-	.comment {
-		display: flex;
-		flex-direction: column;
-		gap: 3px;
-		padding-top: 4px;
-	}
-
-	.comment-body {
-		margin: 0;
-		font-family: var(--font-serif);
-		font-size: 14px;
-		line-height: 1.45;
-		color: var(--ink-primary);
-		text-wrap: pretty;
-	}
-
-	.comment-body .acc,
-	.finding-tag .acc {
-		font-family: var(--font-sans);
-	}
-
-	.comment-tap summary,
-	.comment-more summary {
-		cursor: pointer;
-		font-family: var(--font-sans);
-		font-size: 11px;
-		letter-spacing: 0.04em;
-		color: var(--ink-tertiary);
-	}
-
-	.comment-tap-label {
-		color: var(--rose-ink);
-		text-decoration: underline;
-		text-underline-offset: 2px;
-	}
-
-	.comment-tap[open] > .comment-body {
-		margin-top: 6px;
-	}
-
-	.comment-references {
-		margin: 6px 0 0;
-		padding-left: 1.1rem;
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		font-family: var(--font-serif);
-		font-size: 11.5px;
-		line-height: 1.4;
-		color: var(--ink-secondary);
-	}
-
-	.comment-more {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-
-	.sources-list {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		font-family: var(--font-serif);
-		font-size: 12.5px;
-		line-height: 1.4;
-		color: var(--ink-secondary);
-	}
-
-	.sources-list li {
-		padding-left: 1.2em;
-		text-indent: -1.2em;
 	}
 
 	@media print {
@@ -1165,21 +699,7 @@
 			background: white;
 		}
 
-		/* N.168: the tap and "more observations" do not print; "Sources cited" does. */
-		.comment-tap,
-		.comment-more {
-			display: none;
-		}
-
-		/* N.164: on paper the offer is a plain sentence and the decline is gone. */
-		.offer-link {
-			color: inherit;
-			text-decoration: none;
-			cursor: auto;
-		}
-
-		.offer-decline,
-		.try-key {
+		.screen-only {
 			display: none;
 		}
 	}

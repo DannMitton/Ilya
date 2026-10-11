@@ -27,7 +27,8 @@ describe('one running head for all three tabs', () => {
 		expect(textN).toMatch(/<RunningHeader[^>]*tabName=\{t\('tab\.text', language\)\}/);
 		expect(markup).toMatch(/<RunningHeader headerText=\{runningHeader\} \{tabName\} accent="#9585A2"/);
 		expect(markup).toContain("const tabName = $derived(T('tab.markedScore'));");
-		expect(insights.match(/<RunningHeader headerText=\{runningHeader\} tabName=\{T\('tab\.insights'\)\}/g)).toHaveLength(2);
+		// Insights draws its pages in one loop since QUEUE row 66, so one call serves every page from 2 on.
+		expect(insights).toMatch(/<RunningHeader headerText=\{runningHeader\} tabName=\{T\('tab\.insights'\)\}/);
 	});
 
 	it('names the tab on page 1, alone', () => {
@@ -59,7 +60,8 @@ describe('one footer for all three tabs', () => {
 	});
 
 	it('Insights still measures its footer', () => {
-		expect(insights).toContain('bind:element={footEls[pageNumber]}');
-		expect(insights).toContain('onheightchange={(h) => (footHeights[pageNumber] = h)}');
+		// Since QUEUE row 66 the page measures a probe footer, the tallest one (with the footnote), and reserves its height on every page.
+		expect(insights).toContain('bind:this={footProbe}');
+		expect(insights).toContain('footHeight = footProbe?.offsetHeight ?? 0');
 	});
 });

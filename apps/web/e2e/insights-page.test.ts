@@ -59,7 +59,7 @@ async function openInsights(page: Page, language: 'en' | 'fr', voiceType = 'bass
 	await page.locator('input[type="file"].hidden-input').setInputFiles(FIXTURE);
 	await expect(page.locator('.receipt-score')).toBeVisible({ timeout: 20_000 });
 	await page.locator('#tab-insights').click();
-	await expect(page.locator('.insights-container .paper-page svg.tessituragram').first()).toBeVisible({ timeout: 20_000 });
+	await expect(page.locator('.insights-container .paper-page .pitch-seconds svg').first()).toBeVisible({ timeout: 20_000 });
 	await page.waitForTimeout(1_500);
 }
 
@@ -92,79 +92,62 @@ test('the compass is a small stave in the top-right corner, in the same place in
 	}
 });
 
-test('page one runs phonation, compatibility, the closing verdict, then the findings, then the cycle dose, and fits above its foot', async ({ page }) => {
+test('the page runs the frame, the conclusion, then the moments, the totals, and the sources, and nothing reaches a footer', async ({ page }) => {
 	await openInsights(page, 'en');
-	const headings = await page.locator('.insights-container .paper-page').first().locator('.section-head, .section h2, .section .head').allTextContents();
-	const text = (await page.locator('.insights-container .paper-page').first().innerText()).replace(/\s+/g, ' ');
-	const order = ['Phonation time', 'compatibility from these three measurements', 'How this key sits for you'].map((w) => text.toLowerCase().indexOf(w.toLowerCase()));
-	expect(order.every((i) => i >= 0), `the three headings are on page one: ${JSON.stringify(headings)}`).toBe(true);
+	// Round 2's order (QUEUE row 66; `PRODUCT.md`, "How an Insights page is organized").
+	const text = (await page.locator('.insights-container').innerText()).replace(/\s+/g, ' ');
+	const order = ['Ilya does not invent advice', 'How this key sits for you', 'The measures behind these reasons'].map((w) => text.indexOf(w));
+	expect(order.every((i) => i >= 0), JSON.stringify(order)).toBe(true);
 	expect([...order].sort((a, b) => a - b)).toEqual(order);
-	// The histogram sits between the phonation sentence and the compatibility table.
-	const y = async (sel: string) => (await page.locator(`.insights-container .paper-page >> nth=0 >> ${sel}`).first().boundingBox())?.y ?? NaN;
-	const figure = await y('svg.tessituragram');
-	const table = await y('.fit-table');
-	expect(figure).toBeLessThan(table);
-	// The phonation sentence is no longer the page's first prose: the figure leads it.
-	const phonation = (await page.locator('.insights-container .paper-page >> nth=0 >> text=/^Phonation time$/i').first().boundingBox())!.y;
-	expect(figure).toBeLessThan(phonation);
-	expect(phonation).toBeLessThan(table);
-	const verdict = await y('.verdict');
-	expect(table).toBeLessThan(verdict);
-	// Where findings are listed their list follows the verdict; the cycle dose comes after them, last on the page's flow.
-	const dose = page.locator('.insights-container .paper-page >> nth=0 >> .dose');
-	if (await dose.count()) {
-		expect(verdict).toBeLessThan((await dose.first().boundingBox())!.y);
-		const flagged = page.locator('.insights-container .paper-page >> nth=0 >> text=/What is flagged/i');
-		if (await flagged.count()) expect((await flagged.first().boundingBox())!.y).toBeLessThan((await dose.first().boundingBox())!.y);
+	const moments = text.indexOf('Where this piece meets your voice');
+	if (moments >= 0) {
+		expect(moments).toBeGreaterThan(order[1]);
+		expect(moments).toBeLessThan(order[2]);
 	}
-	// The squircle's bottom clears the foot.
-	const over = await page.evaluate(() => {
-		const p = document.querySelector('.insights-container .paper-page') as HTMLElement;
-		const sq = p.querySelector('.squircle') as HTMLElement;
-		const foot = p.querySelector('.page-footer') as HTMLElement;
-		return sq.offsetTop + sq.offsetHeight - foot.offsetTop;
-	});
-	expect(over).toBeLessThanOrEqual(0);
+	// "Collisions and overlaps are forbidden" (Dann, 2026-10-11 03:42): on every page, the last block ends above the footer's top.
+	const over = await page.evaluate(() =>
+		[...document.querySelectorAll('.insights-container .paper-page')].map((p) => {
+			const page = p.getBoundingClientRect();
+			const foot = (p.querySelector('.page-footer') as HTMLElement).getBoundingClientRect();
+			const blocks = [...p.querySelectorAll('.column .block, .column .squircle')].map((b) => b.getBoundingClientRect().bottom);
+			return { gap: foot.top - Math.max(...blocks), inside: Math.max(...blocks) <= page.bottom };
+		}),
+	);
+	expect(over.length).toBeGreaterThan(0);
+	for (const [n, o] of over.entries()) {
+		expect(o.gap, `page ${n + 1}: room between the last block and the footer`).toBeGreaterThan(0);
+		expect(o.inside).toBe(true);
+	}
 });
 
-test('no label of the histogram touches another label, a bar, or a line, in either language', async ({ page }) => {
+test('no label of the pitch chart touches another label, a bar, or a line, in either language', async ({ page }) => {
 	for (const language of ['en', 'fr'] as const) {
 		await openInsights(page, language);
 		const counts = await page.evaluate(() => {
-			const svg = document.querySelector('.insights-container .paper-page svg.tessituragram') as SVGSVGElement;
+			const svg = document.querySelector('.insights-container .pitch-seconds svg') as SVGSVGElement;
 			type B = { x: number; y: number; width: number; height: number };
-			const labels = [...svg.querySelectorAll('text')]
-				.map((t) => {
-					const bb = t.getBBox();
-					const y = +t.getAttribute('y')!;
-					const size = +(t.getAttribute('font-size') ?? 10);
-					const glyph = /[-]/.test(t.textContent ?? '');
-					return { t: (t.textContent ?? '').trim(), glyph, b: { x: bb.x, width: bb.width, y: y - 0.74 * size, height: 0.99 * size } as B };
-				})
-				.filter((l) => l.t && !l.glyph && l.b.y > 8);
-			const bars = [...svg.querySelectorAll('rect')]
-				.filter((r) => !r.getAttribute('opacity') || r.getAttribute('opacity') === '1')
-				.map((r) => ({ x: +r.getAttribute('x')!, y: +r.getAttribute('y')!, width: +r.getAttribute('width')!, height: +r.getAttribute('height')! }))
-				.filter((r) => r.width > 18);
-			const lines = [...svg.querySelectorAll('line')].map((l) => {
-				const x1 = +l.getAttribute('x1')!, x2 = +l.getAttribute('x2')!, y1 = +l.getAttribute('y1')!, y2 = +l.getAttribute('y2')!;
-				return { x1, x2, y1, y2 };
+			// The glyphs' box, as the old figure's test measured it: ascent .74 and descent .25 of the size, from the baseline.
+			const labels = [...svg.querySelectorAll('text')].map((t) => {
+				const bb = t.getBBox();
+				const y = +t.getAttribute('y')!;
+				const size = parseFloat(getComputedStyle(t).fontSize);
+				return { t: (t.textContent ?? '').trim(), b: { x: bb.x, y: y - 0.74 * size, width: bb.width, height: 0.99 * size } as B };
 			});
+			const bars = [...svg.querySelectorAll('rect.bar')].map((r) => (r as SVGGraphicsElement).getBBox() as B);
+			const lines = [...svg.querySelectorAll('line, path')].map((l) => (l as SVGGraphicsElement).getBBox() as B);
 			const hit = (a: B, b: B) => a.x < b.x + b.width - 0.25 && b.x < a.x + a.width - 0.25 && a.y < b.y + b.height - 0.25 && b.y < a.y + a.height - 0.25;
-			let textText = 0, textBar = 0, textLine = 0;
+			let textText = 0, textBar = 0, textLine = 0, lineBar = 0;
 			labels.forEach((a, i) => {
 				for (let j = i + 1; j < labels.length; j++) if (hit(a.b, labels[j].b)) textText++;
 				for (const b of bars) if (hit(a.b, b)) textBar++;
-				for (const l of lines) {
-					// Horizontal and vertical rules only: a leader is a line a label's own run ends short of.
-					if (Math.abs(l.y1 - l.y2) < 0.01) {
-						if (hit(a.b, { x: Math.min(l.x1, l.x2) - 0.5, y: l.y1 - 0.5, width: Math.abs(l.x2 - l.x1) + 1, height: 1 })) textLine++;
-					}
-				}
+				for (const l of lines) if (hit(a.b, { ...l, height: Math.max(l.height, 1) })) textLine++;
 			});
-			return { labels: labels.length, textText, textBar, textLine };
+			// A passaggio's dashed line runs between two rows, never through a bar.
+			for (const l of [...svg.querySelectorAll('line.passaggio')].map((x) => (x as SVGGraphicsElement).getBBox() as B))
+				for (const b of bars) if (hit({ ...l, height: Math.max(l.height, 1) }, b)) lineBar++;
+			return { labels: labels.length, textText, textBar, textLine, lineBar };
 		});
 		expect(counts.labels, language).toBeGreaterThan(5);
-		expect([counts.textText, counts.textBar, counts.textLine], `${language}: text-text, text-bar, text-line`).toEqual([0, 0, 0]);
+		expect([counts.textText, counts.textBar, counts.textLine, counts.lineBar], `${language}: text-text, text-bar, text-line, line-bar`).toEqual([0, 0, 0, 0]);
 	}
 });

@@ -28,7 +28,7 @@
 
 import { hzToPitch, type Pitch } from '@ilya/score-parser';
 import { hasString, t, type Language } from '$lib/i18n';
-import { pitchLabel } from '$lib/voice/note-picker';
+import { pitchName } from '$lib/voice/note-picker';
 import { COMMENT_DEFAULTS, STAKES_ORDER, type Challenge, type NoteComment, type Register } from './comments';
 import { ROWS, WORKS, rowReference, shortCitation, type Run } from './comment-sources';
 
@@ -332,7 +332,7 @@ export function frameRuns(c: NoteComment, ctx: RenderContext, nameFR1: boolean):
 	const { language, register } = ctx;
 	const T = (part: string) => t(partKey(register, part, language), language);
 	const pitch = ctx.pitchOf(c.eventId);
-	const vars: Record<string, string | number> = { vowel: c.vowel, pitch: pitch ? pitchLabel(pitch) : '' };
+	const vars: Record<string, string | number> = { vowel: c.vowel, pitch: pitch ? pitchName(pitch, language) : '' };
 	let namedFR1 = false;
 	const resonance = () => {
 		if (!c.resonance) return null;
@@ -343,7 +343,7 @@ export function frameRuns(c: NoteComment, ctx: RenderContext, nameFR1: boolean):
 
 	const parts: string[] = [];
 	if (c.turn) {
-		parts.push(fill(T(c.turn.justPast ? 'where.turnJustPast' : 'where.turnPast'), { ...vars, turn: pitchLabel(hzToPitch(c.turn.turningHz)) }));
+		parts.push(fill(T(c.turn.justPast ? 'where.turnJustPast' : 'where.turnPast'), { ...vars, turn: pitchName(hzToPitch(c.turn.turningHz), language) }));
 	} else if (c.kinds.includes('closedU')) {
 		const secondo = secondoPart(c.toSecondo);
 		if (secondo) parts.push(fill(T(secondo), vars));
@@ -391,7 +391,7 @@ export function suggestionRuns(
 ): Run[] {
 	const { language, register } = ctx;
 	const pitch = ctx.pitchOf(c.eventId);
-	const vars = { vowel: c.vowel, pitch: pitch ? pitchLabel(pitch) : '' };
+	const vars = { vowel: c.vowel, pitch: pitch ? pitchName(pitch, language) : '' };
 	const action = fill(t(partKey(register, `try.${s.id}.action`, language), language), vars);
 	const author = WORKS[ROWS[s.row].work].author;
 	const lead = opener === 'own' ? action : fill(t(`comment.opener.${opener}`, language), { action, author, de: de(action) });

@@ -134,6 +134,40 @@ export function cycleDose(rows: readonly FigureRow[], price: ((quavers: number) 
 	return point ? { kind: 'point', cycles: low } : { kind: 'range', low: Math.min(low, high), high: Math.max(low, high) };
 }
 
+/** The cycle dose under, within, and above the typed tessitura, low to high. */
+export interface CycleDoseSplit {
+	under: CycleDose;
+	within: CycleDose;
+	above: CycleDose;
+}
+
+/**
+ * THE CYCLE DOSE SPLIT BY THE TYPED TESSITURA (QUEUE row 66; Dann's look of
+ * 2026-10-11 03:42: the bar runs low to high, under, within, then above your
+ * tessitura). A row ON either edge of the tessitura is within it. Null without
+ * a tempo or a typed tessitura: a split against nothing is no split.
+ */
+export function cycleDoseSplit(
+	rows: readonly FigureRow[],
+	price: ((quavers: number) => SecondsFigure) | null,
+	tessitura: { low: number; high: number } | null,
+): CycleDoseSplit | null {
+	const whole = cycleDose(rows, price);
+	if (!whole || !tessitura) return null;
+	const zero: CycleDose = whole.kind === 'point' ? { kind: 'point', cycles: 0 } : { kind: 'range', low: 0, high: 0 };
+	const part = (keep: (midi: number) => boolean) => cycleDose(rows.filter((r) => keep(r.midi)), price) ?? zero;
+	return {
+		under: part((m) => m < tessitura.low),
+		within: part((m) => m >= tessitura.low && m <= tessitura.high),
+		above: part((m) => m > tessitura.high),
+	};
+}
+
+/** A dose as one number, for a bar's proportions: a span's midpoint. */
+export function doseValue(d: CycleDose): number {
+	return d.kind === 'point' ? d.cycles : (d.low + d.high) / 2;
+}
+
 /**
  * A count to two significant figures (DESK DEFAULT), grouped as the language
  * groups thousands: "14,000"; « 14 000 » with a no-break space (U+00A0).
