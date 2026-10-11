@@ -1281,7 +1281,12 @@
 		overflow: hidden;
 	}
 
-	.score-window :global(svg) {
+	/* THE PAGE'S SVG ONLY, never the systems inside it (QUEUE row 72). A bare
+	   descendant selector also matched each nested system `<svg>`, and CSS
+	   `height: auto` outranks its `height` attribute: every system grew to the
+	   page's full height and centred its staff inside it, which drew page 1's
+	   systems about 270 px low and cut the last ones off at the footer. */
+	.score-window > :global(svg) {
 		display: block;
 		width: 100%;
 		height: auto;
