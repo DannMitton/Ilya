@@ -17,7 +17,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeScore } from '@ilya/score-parser';
 import type { ParsedScore, Pitch, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
-import { buildVoiceProfileSnapshot, completenessOf, composeBroadNote, isBroadAnalysis } from './analyze-score-adapter';
+import { buildVoiceProfileSnapshot, completenessOf, composeBroadNote, isBroadAnalysis, judgeUnchecked } from './analyze-score-adapter';
 import type { CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 
 // ── fixtures ────────────────────────────────────────────────────────
@@ -128,15 +128,44 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(completeness.formants).toBe(true);
 	});
 
-	it('keeps readings the guard never judged: absent or unchecked is not a verdict', () => {
+	// QUEUE row 11: a reading the guard never judged is judged first, with no voice type (the union bands).
+	it('judges a reading the guard never judged: kept inside the union window, dropped outside it', () => {
 		const { snapshot } = buildVoiceProfileSnapshot(
 			{
-				a: formant(800), // no plausibility field: predates the guard
-				o: { ...formant(500), plausibility: 'unchecked' }, // window unavailable
-			} as Partial<Record<'a' | 'o', CalibratedFormant>>,
+				u: formantF2(320, 800, 'clear'), // no plausibility field, inside the union [u] window
+				i: formantF2(1063, 2250, 'clear'), // no plausibility field: Dann's stored [i] of INBOX "I.N.110 candidate"
+				o: { ...formant(500), plausibility: 'unchecked' }, // a verdict already, kept as before
+			} as Partial<Record<'u' | 'i' | 'o', CalibratedFormant>>,
 			undefined,
 		);
-		expect(snapshot.fR1).toEqual({ a: 800, o: 500 });
+		expect(snapshot.fR1.u).toBe(320);
+		expect(snapshot.fR1.o).toBe(500);
+		expect(snapshot.fR1.i).toBeUndefined();
+		expect(snapshot.fR2?.i).toBeUndefined();
+	});
+
+	it('derives no [ɨ] or [ɪ] from an unjudged [i] the union window fails', () => {
+		const anchors = { u: formantF2(320, 800, 'clear'), e: formantF2(450, 1900, 'clear') };
+		const judged = buildVoiceProfileSnapshot({ ...anchors, i: formantF2(1063, 2250, 'clear') } as Partial<Record<'u' | 'e' | 'i', CalibratedFormant>>, undefined).snapshot;
+		expect(judged.fR1['ɨ']).toBeUndefined();
+		expect(judged.fR1['ɪ']).toBeUndefined();
+		// The same [i] at an honest 300 Hz anchors both, so the gate is the verdict and nothing else.
+		const honest = buildVoiceProfileSnapshot({ ...anchors, i: formantF2(300, 2250, 'clear') } as Partial<Record<'u' | 'e' | 'i', CalibratedFormant>>, undefined).snapshot;
+		expect(honest.fR1['ɨ']).toBeGreaterThan(0);
+		expect(honest.fR1['ɪ']).toBeGreaterThan(0);
+	});
+
+	it('keeps an unjudged reading the singer kept, unchanged, and never mutates the formants handed in', () => {
+		const formants = {
+			i: { ...formantF2(1063, 2250, 'clear'), plausibilityOverride: true as const },
+			u: formantF2(320, 800, 'clear'),
+		} as Partial<Record<'i' | 'u', CalibratedFormant>>;
+		const before = JSON.stringify(formants);
+		const { snapshot } = buildVoiceProfileSnapshot(formants, undefined);
+		expect(snapshot.fR1.i).toBe(1063);
+		expect(JSON.stringify(formants)).toBe(before);
+		expect(judgeUnchecked(formants).i).toEqual(formants.i);
+		expect(judgeUnchecked(formants).u?.plausibility).toBe('plausible');
 	});
 
 	// fR2 wiring (§A.153): the second resonance is carried per vowel for the
