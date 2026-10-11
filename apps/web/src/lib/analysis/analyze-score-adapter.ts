@@ -175,6 +175,9 @@ export function buildVoiceProfileSnapshot(
 	// with a verdict. `unchecked`, the guard's own answer where no window exists,
 	// is still kept: the tri-state ruling says absence of a window is not a failure.
 	const fR1: Record<string, number> = {};
+	// QUEUE row 12: where each number came from (`VoiceProfileSnapshot.fR1Source`).
+	const fR1Source: Record<string, 'sung' | 'derived'> = {};
+	const fR2Source: Record<string, 'sung' | 'derived'> = {};
 	for (const [vowel, formant] of Object.entries(formants) as [Vowel, CalibratedFormant | undefined][]) {
 		if (
 			formant &&
@@ -183,6 +186,7 @@ export function buildVoiceProfileSnapshot(
 			isUsable(formant)
 		) {
 			fR1[vowel] = formant.f1;
+			fR1Source[vowel] = 'sung';
 		}
 	}
 
@@ -204,6 +208,7 @@ export function buildVoiceProfileSnapshot(
 			isUsable(formant)
 		) {
 			fR2[vowel] = formant.f2;
+			fR2Source[vowel] = 'sung';
 		}
 	}
 
@@ -242,9 +247,11 @@ export function buildVoiceProfileSnapshot(
 		if (!derived) continue;
 		if (fR1[vowel] === undefined && typeof derived.f1 === 'number' && derived.f1 > 0) {
 			fR1[vowel] = derived.f1;
+			fR1Source[vowel] = 'derived';
 		}
 		if (fR2[vowel] === undefined && typeof derived.f2 === 'number' && derived.f2 > 0) {
 			fR2[vowel] = derived.f2;
+			fR2Source[vowel] = 'derived';
 		}
 	}
 
@@ -274,7 +281,8 @@ export function buildVoiceProfileSnapshot(
 
 	const snapshot: VoiceProfileSnapshot = {
 		fR1,
-		...(Object.keys(fR2).length > 0 ? { fR2 } : {}),
+		fR1Source,
+		...(Object.keys(fR2).length > 0 ? { fR2, fR2Source } : {}),
 		...(range ? { range } : {}),
 		...(tessitura ? { tessitura } : {}),
 		...(passaggio ? { passaggio } : {}),

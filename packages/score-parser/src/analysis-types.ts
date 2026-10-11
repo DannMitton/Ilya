@@ -56,6 +56,22 @@ export interface VoiceProfileSnapshot {
   fR2?: Record<string, number>;
 
   /**
+   * Where each vowel's fR1 came from, keyed as `fR1` is (QUEUE row 12). Dann,
+   * 2026-09-16 (`docs/memory/INBOX.md:179`): Ilya operates on a complete set
+   * of Grayson's ten sung vowels; any gap is filled from Bozeman's values,
+   * FLAGGED, and placed on a continuum, so the profile is a hybrid of sung,
+   * derived, and surrogate values. This is the flag's channel. `'sung'`: the
+   * singer's own measured reading. `'derived'`: computed from the singer's
+   * anchors (`derivations.ts`). `'surrogate'`: a value from Bozeman's table;
+   * nothing writes it yet, because the surrogate values are not ruled.
+   * Optional, so a snapshot built elsewhere need not carry it.
+   */
+  fR1Source?: Record<string, 'sung' | 'derived' | 'surrogate'>;
+
+  /** Where each vowel's fR2 came from, keyed as `fR2` is; as `fR1Source`. */
+  fR2Source?: Record<string, 'sung' | 'derived' | 'surrogate'>;
+
+  /**
    * The singer's absolute range (lowest and highest singable pitch).
    * Absent when the singer skipped the wizard phase that supplies it:
    * genuine absence, not a permissive default (Dann, 2026-07-15, Option A).

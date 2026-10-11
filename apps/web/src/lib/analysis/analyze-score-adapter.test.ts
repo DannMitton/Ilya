@@ -168,6 +168,37 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(judgeUnchecked(formants).u?.plausibility).toBe('plausible');
 	});
 
+	// QUEUE row 12: the snapshot says where each vowel's number came from (Dann, 2026-09-16).
+	describe('fR1Source and fR2Source', () => {
+		const anchors = { i: formantF2(300, 2250, 'clear'), u: formantF2(320, 800, 'clear'), e: formantF2(450, 1900, 'clear') };
+
+		it('has a source for every fR1 and fR2 key, and no source without a number', () => {
+			const { snapshot } = buildVoiceProfileSnapshot(anchors as Partial<Record<'i' | 'u' | 'e', CalibratedFormant>>, undefined);
+			expect(Object.keys(snapshot.fR1Source ?? {}).sort()).toEqual(Object.keys(snapshot.fR1).sort());
+			expect(Object.keys(snapshot.fR2Source ?? {}).sort()).toEqual(Object.keys(snapshot.fR2 ?? {}).sort());
+		});
+
+		it('reads a derived [ɨ] as derived, and the sung anchors as sung', () => {
+			const { snapshot } = buildVoiceProfileSnapshot(anchors as Partial<Record<'i' | 'u' | 'e', CalibratedFormant>>, undefined);
+			expect(snapshot.fR1Source?.['ɨ']).toBe('derived');
+			expect(snapshot.fR2Source?.['ɨ']).toBe('derived');
+			expect(snapshot.fR1Source?.i).toBe('sung');
+		});
+
+		it('reads a sung [ɨ] as sung, and no derived value displaces it', () => {
+			const sungIgh = formantF2(360, 1500, 'clear');
+			const { snapshot } = buildVoiceProfileSnapshot({ ...anchors, 'ɨ': sungIgh } as Partial<Record<'i' | 'u' | 'e' | 'ɨ', CalibratedFormant>>, undefined);
+			expect(snapshot.fR1['ɨ']).toBe(360);
+			expect(snapshot.fR1Source?.['ɨ']).toBe('sung');
+			expect(snapshot.fR2Source?.['ɨ']).toBe('sung');
+		});
+
+		it('writes no surrogate: the surrogate values are not ruled', () => {
+			const { snapshot } = buildVoiceProfileSnapshot(anchors as Partial<Record<'i' | 'u' | 'e', CalibratedFormant>>, undefined);
+			expect(Object.values(snapshot.fR1Source ?? {})).not.toContain('surrogate');
+		});
+	});
+
 	// fR2 wiring (§A.153): the second resonance is carried per vowel for the
 	// higher-voice work, gated like fR1 plus the f2-specific quality.
 	it('maps fR2 per vowel when quality is usable, and omits fR2 entirely when none is', () => {
