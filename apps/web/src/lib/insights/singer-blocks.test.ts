@@ -131,3 +131,40 @@ describe('the round 2 page, block by block', () => {
 		expect(joinList(['11', '18', '64'], 'fr')).toBe('11, 18 et 64');
 	});
 });
+
+describe('placeholders (QUEUE row 69)', () => {
+	const sc = score([P('C', 3), P('D', 3), P('E', 3), P('F', 3)]);
+	const commentsOf = (blocks: ReturnType<typeof singerBlocks>) =>
+		blocks.map((b) => b.block).filter((b): b is Extract<Block, { kind: 'comment' }> => b.kind === 'comment');
+
+	it('a comment that reads a placeholder fR1 says so in its own sentence', () => {
+		const [c] = commentsOf(singerBlocks(inputs(sc, { comments: [comment('n1', true)], placeholders: ['u'] }), String));
+		expect(c.placeholder).toBe('This finding rests on a placeholder value for [u].');
+	});
+
+	it('in French too, on the desk draft', () => {
+		const [c] = commentsOf(singerBlocks(inputs(sc, { language: 'fr', comments: [comment('n1', true)], placeholders: ['u'] }), String));
+		expect(c.placeholder).toBe('Ce constat repose sur une valeur par défaut pour la voyelle [u].');
+	});
+
+	it('says nothing when the vowel was sampled, or when the comment reads no resonance', () => {
+		expect(commentsOf(singerBlocks(inputs(sc, { comments: [comment('n1', true)], placeholders: ['a'] }), String))[0].placeholder).toBeUndefined();
+		expect(commentsOf(singerBlocks(inputs(sc, { comments: [comment('n1', false)], placeholders: ['u'] }), String))[0].placeholder).toBeUndefined();
+	});
+
+	it('the vowel figure dashes a row whose turn rests on a placeholder, and says so', () => {
+		const turns = {
+			maxShare: 0.6,
+			pastShare: 0.2,
+			rows: [
+				{ vowel: 'a', sung: true, share: 0.6, pastShare: 0.1, seconds: null, past: null, turn: P('E', 4) },
+				{ vowel: 'u', sung: true, share: 0.4, pastShare: 0.1, seconds: null, past: null, turn: P('E', 3) },
+			],
+		} as unknown as BlockInputs['turns'];
+		const v = singerBlocks(inputs(sc, { turns, placeholders: ['u'] }), String)
+			.map((b) => b.block)
+			.find((b): b is Extract<Block, { kind: 'vowels' }> => b.kind === 'vowels')!;
+		expect(v.rows.map((r) => !!r.placeholder)).toEqual([false, true]);
+		expect(v.placeholder).toBe('The turn of [u] rests on a placeholder value, so its bar is drawn dashed.');
+	});
+});

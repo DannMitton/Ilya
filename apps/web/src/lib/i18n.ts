@@ -1784,6 +1784,20 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.r2.vowels.somePast': { en: '{s}, {p} past',                 fr: '{s}, dont {p} après le changement' },
 	'insights.r2.vowels.turns':    { en: 'turns about {pitch}',           fr: 'change de timbre autour de {pitch}' },
 	'insights.r2.vowels.noTurn':   { en: '{s}, no first resonance in your calibration', fr: '{s}, no first resonance in your calibration' },
+
+	// ── Placeholder vowels (QUEUE row 69; Dann 2026-10-11, `OPEN.md` "STAND-INS ARE LABELLED") ──
+	//    A vowel the singer has not sampled carries a stand-in fR1 (row 17). The
+	//    line at the top of Markup and Insights: English RATIFIED 12:41, the French
+	//    plural RATIFIED 12:42 (« valeur par défaut », OQLF GDT). The French
+	//    singular is DESK-DERIVED from the ratified plural, not itself ratified.
+	'placeholder.line.many': { en: 'Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on a placeholder are drawn dashed.', fr: 'Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu\u2019à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
+	'placeholder.line.one': { en: 'Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on it are drawn dashed.', fr: 'Votre voyelle {vowels} repose sur une valeur par défaut jusqu\u2019à ce que vous l\u2019échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
+	//    PROPOSED, both languages, [FR: desk draft for Dann]: a comment, and the
+	//    vowel figure's caption, saying in their own sentence that they rest on a
+	//    placeholder. Not ratified.
+	'placeholder.comment': { en: 'This finding rests on a placeholder value for {vowel}.', fr: 'Ce constat repose sur une valeur par défaut pour la voyelle {vowel}.' },
+	'placeholder.turns.one': { en: 'The turn of {vowels} rests on a placeholder value, so its bar is drawn dashed.', fr: 'Le changement de timbre de la voyelle {vowels} repose sur une valeur par défaut\u00a0: sa barre est tracée en pointillé.' },
+	'placeholder.turns.many': { en: 'The turns of {vowels} rest on placeholder values, so their bars are drawn dashed.', fr: 'Les changements de timbre des voyelles {vowels} reposent sur des valeurs par défaut\u00a0: leurs barres sont tracées en pointillé.' },
 	// Row 21, « plis vocaux » by the ruling of 04:12.
 	'insights.r2.sourcesLine':     { en: 'A vowel turns about an octave under its first resonance in your voice (Bozeman 2010 and 2014; Titze 2007, p. 200; Titze 2012, p. 544). The cycle dose counts vocal-fold cycles (Titze, Švec, and Popolo 2003), set beside your tessitura after Titze 2008.', fr: 'Dans votre voix, une voyelle change de timbre environ une octave sous sa première résonance (Bozeman 2010 et 2014; Titze 2007, p. 200; Titze 2012, p. 544). La dose de cycles compte les cycles des plis vocaux (Titze, Švec et Popolo 2003); elle est placée à côté de votre tessiture d’après Titze 2008.' },
 	// Rows 22 and 23.
@@ -1819,6 +1833,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'comment.working.where.and': { en: ' and ', fr: ' et ' },
 	'comment.working.where.above': { en: 'above the first resonance{fR1} of your sung [{vowel}]', fr: 'au-dessus de la première résonance{fR1} de votre [{vowel}] chanté' },
 	'comment.working.where.under': { en: 'a little under the first resonance{fR1} of your sung [{vowel}]', fr: 'un peu en dessous de la première résonance{fR1} de votre [{vowel}] chanté' },
+	// QUEUE row 69, PROPOSED, [FR: desk draft for Dann]: the two above without "sung", for a vowel whose fR1 is a placeholder.
+	'comment.working.where.abovePlaceholder': { en: 'above the first resonance{fR1} of your [{vowel}]', fr: 'au-dessus de la première résonance{fR1} de votre [{vowel}]' },
+	'comment.working.where.underPlaceholder': { en: 'a little under the first resonance{fR1} of your [{vowel}]', fr: 'un peu en dessous de la première résonance{fR1} de votre [{vowel}]' },
 	'comment.working.where.turnJustPast': { en: 'just past where your [{vowel}] turns (about {turn})', fr: 'juste après la hauteur où votre [{vowel}] change de timbre (autour de {turn})' },
 	// COMPOSED: "past", at 2 semitones or more over the turning pitch.
 	'comment.working.where.turnPast': { en: 'past where your [{vowel}] turns (about {turn})', fr: 'après la hauteur où votre [{vowel}] change de timbre (autour de {turn})' },

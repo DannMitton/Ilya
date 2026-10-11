@@ -90,6 +90,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/analysis/analyze-score-adapter';
+	import { placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { afterGround } from '$lib/score/system-ground';
 	import { entryGroup, RING_RADIUS, ringBox } from '$lib/score/selection-ring';
@@ -708,6 +709,8 @@
 			? resolveAdvice(analyzeScore(analysisScore, adapted.snapshot, vowelResolver))
 			: null,
 	);
+	// QUEUE row 69: the vowels this page rests on that the singer never sampled, named under the title.
+	const placeholderNote = $derived(placeholderLine(placeholderVowels(analyzed), language));
 
 	// ── The "For your consideration" list (design C) ─────────────────────
 	// Built purely from the marks the overlay already computed (watchlist.ts);
@@ -853,7 +856,7 @@
 	// instead says why there are none.
 	// N.173: the box says only what passes the gates (`gates.ts`).
 	const watchBox = $derived(watchList && analysisScore && analyzed && vowelResolver ? gateBand({ watchList, analysisScore, ...(readingScore ? { readingScore } : {}), analyzed, profile: adapted.snapshot, vowelForEvent: vowelResolver }) : null);
-	const bandLines = $derived(watchBox ? gatedLines(watchBox.shown, language) : []);
+	const bandLines = $derived(watchBox ? gatedLines(watchBox.shown, language, (id) => !!analyzed?.events[id]?.placeholder) : []);
 	const hasCommentaryPage = $derived(showOctaveNotice || bandLines.length > 0 || showWithheld);
 	// The notes run on to as many sheets as they need, never cut: `NotesColumn` measures, `packNotes` fills.
 	let notesMeasure: NotesMeasure | null = $state(null);
@@ -974,7 +977,7 @@
 						translator=""
 						opus=""
 						{language}
-						note={keyRuler?.header(language)}
+						note={[keyRuler?.header(language), placeholderNote]}
 						legendItems={markupLegend}
 						{notationFont}
 						onheightchange={handleHeaderHeight}

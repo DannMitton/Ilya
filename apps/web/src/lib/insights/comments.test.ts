@@ -425,6 +425,20 @@ describe('the rotation', () => {
 			expect(all).not.toMatch(/\btry\b|\bhold/i);
 		}
 	});
+	it('does not call a placeholder vowel "sung" (QUEUE row 69)', () => {
+		const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
+		const withResonance = page.filter((c) => c.resonance);
+		expect(withResonance.length).toBeGreaterThan(0);
+		for (const language of ['en', 'fr'] as const) {
+			const sung = language === 'en' ? /your sung \[/ : /\] chanté/;
+			const frames = (placeholders?: Set<string>) =>
+				renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf, ...(placeholders ? { placeholders } : {}) })
+					.filter((x) => x.comment.resonance)
+					.map((x) => runsText(x.frame));
+			expect(frames().every((f) => sung.test(f))).toBe(true);
+			expect(frames(new Set(withResonance.map((c) => c.vowel))).some((f) => sung.test(f))).toBe(false);
+		}
+	});
 });
 
 describe('citations', () => {

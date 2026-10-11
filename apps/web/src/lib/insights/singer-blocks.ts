@@ -12,6 +12,7 @@
 import { pitchToMidi, type KeyChoice, type ParsedScore, type Pitch, type VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import { pitchName } from '$lib/voice/note-picker';
+import { placeholderCommentSentence, placeholderTurnsSentence } from '$lib/analysis/placeholder-line';
 import type { Run } from './comment-sources';
 import type { RenderedComment } from './comment-text';
 import type { InsightsModel, TessituragramModel, VerdictLine } from './insights';
@@ -49,12 +50,12 @@ export type Block =
 			forward: { readout?: string; stop?: KeyChoice; sentence?: string; teacher?: string } | null;
 			reasons: Reason[];
 	  }
-	| { kind: 'comment'; heading?: string; tag: string; comment: RenderedComment; teacher?: string }
-	| { kind: 'more'; label: string; comments: Array<{ tag: string; comment: RenderedComment; teacher?: string }> }
+	| { kind: 'comment'; heading?: string; tag: string; comment: RenderedComment; teacher?: string; placeholder?: string }
+	| { kind: 'more'; label: string; comments: Array<{ tag: string; comment: RenderedComment; teacher?: string; placeholder?: string }> }
 	| { kind: 'note'; heading?: string; text: string }
 	| { kind: 'cycles'; heading?: string; sentence: string; bar: { under: number; within: number; above: number } | null; legend: string[] }
 	| { kind: 'pitches'; heading?: string; caption: string; figure: TessituragramModel; typedTessitura: { low: Pitch; high: Pitch } | null }
-	| { kind: 'vowels'; heading?: string; caption: string; sub: string; turns: VowelTurns; ring: string | null; rows: Array<{ vowel: string; before: number; past: number; text: string; turn: string }> }
+	| { kind: 'vowels'; heading?: string; caption: string; sub: string; turns: VowelTurns; ring: string | null; rows: Array<{ vowel: string; before: number; past: number; text: string; turn: string; placeholder?: true }>; placeholder?: string }
 	| { kind: 'prose'; heading?: string; text: string; small?: boolean }
 	| { kind: 'endnote'; heading?: string; teacher?: string; tag: string; suggestions: Run[][]; references: Run[][] };
 
@@ -100,6 +101,8 @@ export interface BlockInputs {
 	split: CycleDoseSplit | null;
 	cycles: CycleDose | null;
 	turns: VowelTurns | null;
+	/** The vowels the page uses whose fR1 is a placeholder (QUEUE row 69). */
+	placeholders?: readonly string[];
 }
 
 const fill = (s: string, vars: Record<string, string | number>) =>
@@ -126,6 +129,7 @@ function secondsText(s: { kind: 'point'; seconds: number } | { kind: 'range'; lo
 /** The blocks, in reading order, each with its squircle. */
 export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => string): PlacedBlock[] {
 	const { language, model, profile } = i;
+	const placeholders = new Set(i.placeholders ?? []);
 	const T = (key: string) => t(key, language);
 	const N = (p: Pitch) => pitchName(p, language);
 	const out: PlacedBlock[] = [];
@@ -251,10 +255,14 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 	});
 
 	// ── Squircle 1, the moments ───────────────────────────────────────
+	// QUEUE row 69: a comment whose firing reads a placeholder fR1 says so in its own sentence.
+	const onPlaceholder = (c: RenderedComment) =>
+		placeholders.has(c.comment.vowel) && (!!c.comment.resonance || !!c.comment.turn || (c.comment.challenges ?? []).some((ch) => ch === 'resonance' || ch === 'turn' || ch === 'closedU'));
 	const moment = (c: RenderedComment) => ({
 		tag: i.tagOf(c),
 		comment: c,
 		...(suggestsApproach(c) ? { teacher: T('insights.r2.teacherA') } : {}),
+		...(onPlaceholder(c) ? { placeholder: placeholderCommentSentence(c.comment.vowel, language) } : {}),
 	});
 	const moments: Block[] = i.comments.map((c) => ({ kind: 'comment', ...moment(c) }));
 	if (i.hiddenBySettings > 0) {
@@ -330,8 +338,10 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 					past: row.pastShare / (i.turns!.maxShare || 1),
 					text,
 					turn: row.turn ? fill(T('insights.r2.vowels.turns'), { pitch: N(row.turn) }) : '',
+					...(row.turn && placeholders.has(row.vowel) ? { placeholder: true as const } : {}),
 				};
 			});
+			const dashed = placeholderTurnsSentence(rows.filter((r) => r.placeholder).map((r) => r.vowel), language);
 			totals.push({
 				kind: 'vowels',
 				caption: T(model.phonation.timing === 'none' ? 'insights.phonation.byVowelShare' : 'insights.phonation.byVowel'),
@@ -339,6 +349,7 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 				turns: i.turns,
 				ring: i.turns.pastShare !== null ? fill(T('insights.r2.vowels.ring'), { n: percent(i.turns.pastShare) }) : null,
 				rows,
+				...(dashed ? { placeholder: dashed } : {}),
 			});
 		}
 		if (i.phonationHeadline) totals.push({ kind: 'prose', text: i.phonationHeadline });
