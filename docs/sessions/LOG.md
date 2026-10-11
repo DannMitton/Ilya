@@ -8668,3 +8668,65 @@ Its rulings and Dann's words are homed in `CONTRACT.md` (THE POSTURE, the paragr
 > **Saved outside the tree:** the backup of `docs/memory/` as this thread found it, `~/Downloads/_desk-2026-10-08/memory-backup_2026-10-08_2200/`; the desk's scripts for rendering Design's frames, `~/Downloads/_desk-2026-10-08/design-render-scripts/` (`ENVIRONMENT.md`, WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08). **This file stands at 600 lines after this close, at its tripwire; the tracker sections of September are the place to prune next, each line checked for a home first.**
 
 
+
+
+## Block "note of 2026-10-10 03:20" (moved 2026-10-10 23:44)
+
+> ### NOTE OF 2026-10-10 03:20 (Opus desk, Dann on his phone). READ FIRST.
+>
+> **Row 57 r4 is written and twice reviewed by Fable** (`../sessions/brief-code-the-metre-seen-and-summed_r4_2026-10-10.md`): a trained classifier, judged by whole signature (Dann 03:02: *"Whatever works reliably."*), with Dann's five-witness reading model (03:11, `INBOX.md`). **Not sent.** Order at Dann's desktop, his choice 03:18: (1) the desk reads row 61's uncommitted diff (it touches `join-pages.ts` and `homr-reader.ts`, which r4 may change); (2) Dann ships row 61; (3) Dann pastes r4 to Code on the Mac, Opus. Corrections of this thread are in `INBOX.md` 03:05 and 03:22.
+
+
+## Block "handover of 2026-10-09 12:10" (moved 2026-10-10 23:44)
+
+> ### HANDOVER OF 2026-10-09, about 12:10 (the Opus desk thread that opened 2026-10-09 00:30; closed on Dann's question at 12:02, the thread having grown long). READ THIS FIRST.
+>
+> **THE ONE THING is unchanged:** the scan reader reads at least 95 of every 100 printed notes, pitch and length as printed, on unseen songs, on the singer's path. **Next: the final test, QUEUE row 55** (`../sessions/brief-code-the-final-test_r2_2026-10-08.md`, for Code on the Mac, Opus): a rehearsal on Grechaninov and Varlamov first, then the ten sealed songs, one run, Code stops at the lines; opening a BELOW song is Dann's decision. Dann chose at 02:19 to wait for row 57 round 3 before spending the sealed set; round 3 is done (parked), so the wait is over. The deployed alias serves `472ed96` (no reader change since `53035bd`, so the rehearsal's counts compare with row 56's "after" lines).
+>
+> **Shipped this thread:** `53035bd` (00:49; row 56, tuplets of any number; row 37's scorer change) and `472ed96` (12:05; the cloud lane's rows 51, 58, 59, 60 and the tessitura check, merged by fast-forward from `cloud-lane` `c422dae`; row 57's reports). All eight gates at baseline; gate 4 is **2087** (`~/Downloads/ilya-ship.sh`).
+>
+> **Row 57, the printed metre, PARKED** (QUEUE row 57): font templates (round 2) and these editions' own figures (round 3) both give false figures on rendered sets and read at most 4 to 6 of 32 printed signatures; no opened scan prints a 0, 1, 5, 7, or 9 figure. Dann's Mac holds none either (`../sessions/memo-sonnet-metre-sources_r1_2026-10-09.md`). The open-corpus route (OpenScore Lieder, IMSLP: scan plus encoding, labels for free) waits for Dann's yes. Ilya states homr's metre (666 of 721 bars, row 37).
+>
+> **Dann's, waiting, one at a time:**
+> 1. **His look at the merged work on the alias:** the Insights page rearranged (compass top right, grey stave behind the histogram, histogram before the phonation sentence, « Comment cette tonalité vous convient »); the header legend (Markup page 1, and whether a sixth system returns on his own voice: NOT ESTABLISHED, the cloud measured a synthetic voice); print (no blank last page); the note picker's bass clef in his voice characteristics; [prɑ] in «не проглядная» with the space restored.
+> 2. **The cloud session's open question:** a small marker beside the tessitura band for a doubtful bar, or the page-two note alone (`OPEN.md`, THE INSIGHTS PAGE, REARRANGED).
+> 3. **Row 8c's walk:** the "lean toward [ʊ]" comment (Miller 1986 p. 158) needs a song where it fires; the desk owes finding one.
+>
+> **Ruled this thread** (all in `OPEN.md` unless named): Corrections items 15 to 17 (« Stable »; French remove labels on two lines; no dashed borders); N.168's two Miller comments in both languages; N.176 amended (legend to the header line); the blank print page; the note picker's clef by voice type; THE INSIGHTS PAGE, REARRANGED (heading superseded the same morning by « Comment cette tonalité vous convient », his ruling in the cloud session, confirmed 11:45); N.181 numbered («не» joined for lookup); the checkpoint of 2026-10-09 dropped by the desk (`SCHEDULE.md`).
+>
+> **Walked by Dann this thread** (QUEUE rows 14, 10, 7, 15): Clear by scope and its Undo, print, Insights in English, the French italics. **Walked by the desk:** the phone layout in a 390 px frame (`OWED.md`).
+>
+> **This thread's mistakes:**
+> 1. 02:20: the desk edited row 57 r3's brief and copied it to the Mac in the same parallel step; the unfixed text arrived. Code followed the prompt. Copy a file only after its last edit returns.
+> 2. 11:41: the desk told Dann he had not asked the cloud session for the 11:21 change, from his not noticing it. He had. Read the source before saying who asked for what.
+>
+> **Saved outside the tree:** `~/Downloads/_desk-2026-10-09/` (the memory backup of 00:32; the ship script before 2035 and before 2087; row 57 r2's brief before it entered the tree).
+
+## Block "note of 2026-10-09 16:20", moved from STATE.md at the close of 2026-10-11 04:40
+
+> ### NOTE OF 2026-10-09 16:20 (Opus desk). READ BEFORE THE HANDOVER BELOW.
+>
+> **The final test ran (QUEUE row 55): 76.8 with UNSURE set aside; 6 of 10 pass; K, L, M, P below.** Dann opened the four at 12:30; Row 61 reported 20:35 (`../sessions/report-code-the-four-below_r1_2026-10-09.md`, uncommitted): K 99.3 (100.0 on corrected truth), L 95.0 on corrected truth with UNSURE aside, M 88.7 and P 77.6 unchanged; the fixes for M (covers) and P (metre) changed sealed song I and were taken out. Whether to unseal I is Dann's decision, not yet put to him.
+> **Walked by Dann today:** N.168's comment, N.172's questions, row 59's clef, N.176's legend (`OPEN.md`).
+> **The Insights review is HELD at Dann's word 16:19** and restarts from purpose questions, one at a time (`OPEN.md`, INSIGHTS, REVIEWED AS A PAGE FOR THE SINGER; `CONTRACT.md`, the paragraph of 2026-10-09 16:19).
+> **Queued today:** rows 61 (the four below) and 62 (Enter settles a field). Inbox lines: 12:59 (two). Titze, Švec, and Popolo 2003 filed in Dann's library, `S-U`.
+
+
+## Block "handover of 2026-10-10 23:44", moved from STATE.md at the close of 2026-10-11 04:40
+
+> ### HANDOVER OF 2026-10-10, written 23:44 (the Opus desk thread opened 09:25). READ FIRST.
+>
+> **THE ONE THING is unchanged:** the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
+>
+> **Running now: QUEUE row 57 r4 in Code on Dann's Mac (Opus), pasted about 21:38.** Its report will be `../sessions/report-code-the-metre-seen-and-summed_r3_2026-10-10.md`; Code sets QUEUE row 57 and stops. **At 23:45 the report file and `../sessions/measure-metre-r57-r4_2026-10-10/` existed, unread by the desk; whether Code had finished is NOT ESTABLISHED.** **Next:** ask Dann whether Code has stopped, read the report whole, then act on r4 section 4. Nothing is committed from this thread yet: commit after Code stops, so its files land whole.
+>
+> **Shipped this thread:** `a7161ce` (21:20), row 61: a page of the piano alone is the voice resting; homr-web `0.2.0-ilya.6`; r4 amended for row 61 (its last section). All eight gates at baseline; gate 4 is now **2088** (`~/Downloads/ilya-ship.sh`, old copy in `~/Downloads/_desk-2026-10-10/`). `.desk-backup/` is in `.git/info/exclude` so the ship script does not refuse on it.
+>
+> **The Insights review restarted from purpose and the PURPOSE IS RATIFIED (23:17).** Eight questions and Dann's verbatim answers, his rulings (findings grouped by what helps; another key fits better; time per vowel against each vowel's turning pitch; cycle dose beside tessitura), and the seven-point purpose are in `OPEN.md`, "INSIGHTS, REVIEWED AS A PAGE FOR THE SINGER". **Design brief r2 is written** (`../sessions/brief-design-insights-for-the-singer_r2_2026-10-10.md`, saved 23:17). **Waiting on Dann: yes or no to the Design round 2 farm-out (Opus, about 300k tokens at worst).** Owed by the desk: add Dann's ruling of 2026-08-07 ("a recommendation is admissible when the singer can see every term that produced it", project doc `claude/repertoire-information-what-teachers-want_2026-08-07.md`) to r2 as a source; verify every page in the vowel memo before Ilya cites it; fix D. Miller 2008's [i] passage to p. 92 or 93 on the page image; draft the teacher line in English and French.
+>
+> **Research this thread:** `../sessions/memo-sonnet-dose-tessitura-fatigue_r1_2026-10-10.md` (13 papers; no paper measures time per vowel; no norms for cycle dose; tessitura fatigue thin, nothing on low voices; Dann's accommodation claim unsupported, so Insights does not assert it) and `../sessions/memo-sonnet-vowels-by-voice_r1_2026-10-10.md` (one page wrong, caught by the desk; R. Miller 1986 chapters 5, 9, 10 unread). Dann named next: search JOS and the *Journal of Voice* with him for tessitura fatigue in low male voices. Chapman's vowel pages: not found among the 1,070 photos in `~/Downloads` by OCR (rough; NOT ESTABLISHED).
+>
+> **Added to both rewrites (N.84 Guide and Insights), Dann 21:56:** the teacher's filtering of Ilya's advice, woven in subtly (`OPEN.md`).
+>
+> **This thread's mistakes** (each in `INBOX.md`): sent `claude --model opus` for Terminal, when Code is the desktop app's Code tab (`ENVIRONMENT.md` index already said so); wrote "Miller" as one author of two books (Richard, *Structure*; Donald, *Resonance*); stated a file time (23:25) without reading a clock; promised this handover in three minutes and ended the turn without writing it.
+

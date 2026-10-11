@@ -317,6 +317,7 @@ next session the same hour it cost the last one.
 | Design's return is in Downloads, not the tree | `WHAT THE DESK LEARNED ON 2026-10-08` |
 | reading a digit or letter off a scan with Tesseract | `WHAT THE DESK LEARNED ON 2026-10-08` |
 | sending Claude Design a brief that is not yet shipped | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| checking a Design canvas before Dann looks; a shell line ate a file name | `CHECKING A DESIGN CANVAS BEFORE DANN LOOKS` |
 | showing Dann a design made on a Design canvas | `WHAT THE DESK LEARNED ON 2026-10-09, THE DESIGN ROUND` |
 | about to open a page in Chrome while Dann walks in the desk's tab | `WHAT THE DESK LEARNED ON 2026-10-09, THE DESIGN ROUND` |
 | forecasting how long a helper will run | `WHAT THE DESK LEARNED ON 2026-10-09, THE DESIGN ROUND` |
@@ -4706,3 +4707,10 @@ Dann's Chrome window would not shrink by `resize_window` (it reported success; `
 - **A helper's run time is not forecastable from its token budget.** The Opus design helper of 2026-10-09 used 216k tokens and ran about 2 h 40 min; the desk had told Dann 30 to 60 minutes. While an Agent call runs, the desk cannot reply to him at all. Say both before it starts, and quote no duration.
 - **Claude in Chrome's `zoom` takes the screenshot's coordinate frame**, which changes with the window; take a fresh screenshot first. `javascript_tool` output that reads like page text can come back `[BLOCKED: Cookie/query string data]`; `read_page` on an element's ref reads it instead.
 - **A Cloudflare-fronted repository refuses `curl` from the bridge** ("Just a moment…" HTML saved as a .pdf). In Dann's Chrome, `fetch(location.href)` on the PDF page and a blob download land the real file in `~/Downloads`.
+
+## CHECKING A DESIGN CANVAS BEFORE DANN LOOKS. Learned 2026-10-11
+
+- **Design helpers do not render their own boards** (the canvas type forbids it), so every layout claim they return is arithmetic. Dann found a collision on a board the desk had not checked; the desk had looked at three of nine. **Measure every board, every time.**
+- The instrument: read the boards with the Artifact tool (`paths`, `out_dir` in the scratchpad), strip `<script src="./support.js">` and the Google Fonts link, inject `@font-face` rules from `@fontsource/source-sans-3` and `@fontsource/source-serif-4` (latin subset; it lacks ♩, so a missing quarter-note sign is the instrument), render in Playwright at 816 x 1056, and for each board report the lowest element inside `.col` against the top of `.foot`. The script is kept at `~/Downloads/_desk-2026-10-11/design-check/check.cjs` (`node check.cjs <dir holding project/> <@fontsource dir>`; expects Playwright at `/opt/npm-tools/node_modules/playwright`). Dann's standard: the squircle closes, clear space, the method line, the footer's line; nothing clipped, no `overflow:hidden` used to make anything fit.
+- **A shell `printf` with backticks inside double quotes runs them as commands.** It swallowed a file name in `OPEN.md` the same night. Write Markdown with a Python heredoc (`<<'EOF'`), never with backticks inside double quotes.
+

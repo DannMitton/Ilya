@@ -1,0 +1,19 @@
+Sun Oct 11 00:16:11 EDT 2026
+{"fold": 0, "held": "tch", "font": "Bravura", "text_out": "Academico Bold", "tune": ["k01", "k04", "k08", "k06"], "scale": [0.72, 1.1], "secs": {"trainA": 186, "trainB": 334, "readings": 300, "total": 826}}
+{"fold": 1, "held": "sun1", "font": "Leland", "text_out": "Charis SIL Bold", "tune": ["k08", "k03", "varl", "k02"], "scale": [0.72, 1.1], "secs": {"trainA": 218, "trainB": 345, "readings": 273, "total": 842}}
+{"fold": 2, "held": "sun4", "font": "FinaleMaestro", "text_out": "Crimson Bold", "tune": ["k01", "k08", "sun1", "sun6"], "scale": [0.72, 1.1], "secs": {"trainA": 177, "trainB": 290, "readings": 304, "total": 776}}
+{"fold": 3, "held": "sun5", "font": "FinaleEngraver", "text_out": "Crimson Text Bold", "tune": ["sun6", "sun1", "sun4", "k07"], "scale": [0.72, 1.1], "secs": {"trainA": 369, "trainB": 562, "readings": 480, "total": 1419}}
+{"fold": 4, "held": "sun6", "font": "FinaleBroadway", "text_out": "Domine Bold", "tune": ["k06", "k10", "gur", "k04"], "scale": [0.72, 1.1], "secs": {"trainA": 349, "trainB": 573, "readings": 467, "total": 1399}}
+{"fold": 5, "held": "k01", "font": "FinaleAsh", "text_out": "Doulos SIL", "tune": ["k06", "tch", "k10", "k08"], "scale": [0.72, 1.1], "secs": {"trainA": 338, "trainB": 570, "readings": 476, "total": 1391}}
+{"fold": 6, "held": "k02", "font": "FinaleJazz", "text_out": "Gentium Plus Bold", "tune": ["k01", "k04", "k03", "varl"], "scale": [0.72, 1.1], "secs": {"trainA": 316, "trainB": 565, "readings": 456, "total": 1344}}
+{"fold": 7, "held": "k03", "font": "FinaleLegacy", "text_out": "Golden Age Regular", "tune": ["k09", "k06", "gur", "k07"], "scale": [0.72, 1.1], "secs": {"trainA": 340, "trainB": 580, "readings": 441, "total": 1369}}
+{"fold": 8, "held": "k04", "font": "Petaluma", "text_out": "Lato Black", "tune": ["sun5", "sun6", "varl", "k06"], "scale": [0.72, 1.1], "secs": {"trainA": 315, "trainB": 552, "readings": 455, "total": 1331}}
+{"fold": 9, "held": "k06", "font": "Sebastian", "text_out": "Libre Baskerville Bold", "tune": ["sun6", "gur", "k09", "k01"], "scale": [0.72, 1.1], "secs": {"trainA": 325, "trainB": 536, "readings": 431, "total": 1298}}
+Sun Oct 11 03:36:16 EDT 2026
+{"fold": 16, "held": "varl", "font": "FinaleJazz", "text_out": "Academico Bold", "tune": ["k08", "k03", "k02", "gur"], "scale": [0.72, 1.1], "secs": {"trainA": 404, "trainB": 552, "readings": 492, "total": 1452}}
+{"fold": 15, "held": "grech", "font": "FinaleAsh", "text_out": "Sebastian Text", "tune": ["k07", "k10", "k06", "k09"], "scale": [0.72, 1.1], "secs": {"trainA": 364, "trainB": 552, "readings": 490, "total": 1410}}
+{"fold": 14, "held": "gur", "font": "FinaleBroadway", "text_out": "Petaluma Script", "tune": ["k07", "k01", "k06", "sun1"], "scale": [0.72, 1.1], "secs": {"trainA": 360, "trainB": 546, "readings": 483, "total": 1393}}
+{"fold": 13, "held": "k10", "font": "FinaleEngraver", "text_out": "Noto Sans JP Black", "tune": ["k09", "k08", "gur", "k07"], "scale": [0.72, 1.1], "secs": {"trainA": 321, "trainB": 537, "readings": 491, "total": 1353}}
+{"fold": 12, "held": "k09", "font": "FinaleMaestro", "text_out": "Nepomuk Bold", "tune": ["sun5", "gur", "varl", "k03"], "scale": [0.72, 1.1], "secs": {"trainA": 353, "trainB": 551, "readings": 460, "total": 1369}}
+{"fold": 11, "held": "k08", "font": "Leland", "text_out": "Montserrat Black", "tune": ["sun1", "k03", "k10", "k09"], "scale": [0.72, 1.1], "secs": {"trainA": 328, "trainB": 529, "readings": 475, "total": 1337}}
+{"fold": 10, "held": "k07", "font": "Bravura", "text_out": "Libre Bodoni Bold", "tune": ["k06", "k10", "sun5", "varl"], "scale": [0.75, 1.1], "secs": {"trainA": 333, "trainB": 502, "readings": 421, "total": 1261}}

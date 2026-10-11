@@ -1,0 +1,286 @@
+{
+ "music": [
+  {
+   "font": "Bravura",
+   "path": "/Library/Fonts/Bravura.otf",
+   "licence": "file: apps/web/static/fonts/bravura/OFL.txt"
+  },
+  {
+   "font": "Leland",
+   "path": "/Library/Fonts/Leland.otf",
+   "licence": "file: apps/web/static/fonts/leland/LICENSE.txt"
+  },
+  {
+   "font": "FinaleMaestro",
+   "path": "/Library/Fonts/FinaleMaestro.otf",
+   "licence": "file: apps/web/static/fonts/finale-maestro/OFL.txt (Reserved Font Names Finale, Maestro, Broadway, Engraver, Jazz, Ash, Legacy)"
+  },
+  {
+   "font": "FinaleEngraver",
+   "path": "/Library/Fonts/FinaleEngraver.otf",
+   "licence": "file: apps/web/static/fonts/finale-maestro/OFL.txt (Reserved Font Names Finale, Maestro, Broadway, Engraver, Jazz, Ash, Legacy)"
+  },
+  {
+   "font": "FinaleBroadway",
+   "path": "/Library/Fonts/FinaleBroadway.otf",
+   "licence": "file: apps/web/static/fonts/finale-maestro/OFL.txt (Reserved Font Names Finale, Maestro, Broadway, Engraver, Jazz, Ash, Legacy)"
+  },
+  {
+   "font": "FinaleAsh",
+   "path": "/Library/Fonts/FinaleAsh.otf",
+   "licence": "file: apps/web/static/fonts/finale-maestro/OFL.txt (Reserved Font Names Finale, Maestro, Broadway, Engraver, Jazz, Ash, Legacy)"
+  },
+  {
+   "font": "FinaleJazz",
+   "path": "/Library/Fonts/FinaleJazz.otf",
+   "licence": "file: apps/web/static/fonts/finale-maestro/OFL.txt (Reserved Font Names Finale, Maestro, Broadway, Engraver, Jazz, Ash, Legacy)"
+  },
+  {
+   "font": "FinaleLegacy",
+   "path": "/Library/Fonts/FinaleLegacy.otf",
+   "licence": "file: apps/web/static/fonts/finale-maestro/OFL.txt (Reserved Font Names Finale, Maestro, Broadway, Engraver, Jazz, Ash, Legacy)"
+  },
+  {
+   "font": "Petaluma",
+   "path": "/Library/Fonts/Petaluma.otf",
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Sebastian",
+   "path": "/Library/Fonts/Sebastian.otf",
+   "licence": "smufl.org's statement that it is SIL OFL (Dann, 2026-10-11)"
+  }
+ ],
+ "text": [
+  {
+   "font": "Academico Bold",
+   "family": "Academico",
+   "path": "/Library/Fonts/Academico-Bold.otf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Bravura Text",
+   "family": "Bravura Text",
+   "path": "/Library/Fonts/BravuraText.otf",
+   "weight": 400,
+   "licence": "file: apps/web/static/fonts/bravura/OFL.txt"
+  },
+  {
+   "font": "Charis SIL Bold",
+   "family": "Charis SIL",
+   "path": "/Users/dannmitton/Library/Fonts/CharisSIL-B.ttf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Crimson Bold",
+   "family": "Crimson",
+   "path": "/Library/Fonts/Crimson-Bold.otf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Crimson Text Bold",
+   "family": "Crimson Text",
+   "path": "/Users/dannmitton/Library/Fonts/CrimsonText-Bold.ttf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Domine Bold",
+   "family": "Domine",
+   "path": "/Users/dannmitton/Library/Fonts/Domine-Bold.ttf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Doulos SIL",
+   "family": "Doulos SIL",
+   "path": "/Users/dannmitton/Library/Fonts/DoulosSILR.ttf",
+   "weight": 400,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Gentium Plus Bold",
+   "family": "Gentium Plus",
+   "path": "/Users/dannmitton/Library/Fonts/GentiumPlus-Bold.ttf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Golden Age Regular",
+   "family": "Golden Age",
+   "path": "/Library/Fonts/Golden Age.otf",
+   "weight": 400,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Lato Black",
+   "family": "Lato",
+   "path": "/Library/Fonts/Lato-Black.ttf",
+   "weight": 900,
+   "licence": "file: apps/web/static/fonts/lato-OFL.txt"
+  },
+  {
+   "font": "Leland Text",
+   "family": "Leland Text",
+   "path": "/Library/Fonts/LelandText.otf",
+   "weight": 400,
+   "licence": "file: apps/web/static/fonts/leland/LICENSE.txt"
+  },
+  {
+   "font": "Libre Baskerville Bold",
+   "family": "Libre Baskerville",
+   "path": "/Users/dannmitton/Library/Fonts/LibreBaskerville-Bold.ttf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Libre Bodoni Bold",
+   "family": "Libre Bodoni",
+   "path": "/Library/Fonts/LibreBodoni-Bold.otf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Montserrat Black",
+   "family": "Montserrat",
+   "path": "/Users/dannmitton/Library/Fonts/Montserrat-Black.ttf",
+   "weight": 900,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Nepomuk Bold",
+   "family": "Nepomuk",
+   "path": "/Library/Fonts/Nepomuk-Bold.otf",
+   "weight": 700,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Noto Sans JP Black",
+   "family": "Noto Sans JP",
+   "path": "/Library/Fonts/NotoSansJP-Black.otf",
+   "weight": 900,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Petaluma Script",
+   "family": "Petaluma Script",
+   "path": "/Library/Fonts/PetalumaScript.otf",
+   "weight": 400,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Petaluma Text Regular",
+   "family": "Petaluma Text",
+   "path": "/Library/Fonts/PetalumaText.otf",
+   "weight": 400,
+   "licence": "licence field of the font file"
+  },
+  {
+   "font": "Sebastian Text",
+   "family": "Sebastian Text",
+   "path": "/Library/Fonts/SebastianText.otf",
+   "weight": 400,
+   "licence": "licence field of the font file"
+  }
+ ],
+ "unlicensed": [
+  "Arial Unicode.ttf",
+  "Arvo-Bold.ttf",
+  "Arvo-BoldItalic.ttf",
+  "Arvo-Italic.ttf",
+  "Arvo-Regular.ttf",
+  "CODE2000.TTF",
+  "CODE2001.TTF",
+  "CODE2002.TTF",
+  "CYRIL1.TTF",
+  "CYRIL2.TTF",
+  "Constantin_b.ttf",
+  "Constantin_i.ttf",
+  "Constantin_n.ttf",
+  "Cyril1_Basic.ttf",
+  "Cyril2_Gothic.ttf",
+  "Cyril_b.ttf",
+  "Cyril_i.ttf",
+  "Cyril_ib.ttf",
+  "Cyril_n.ttf",
+  "Earlgn__.ttf",
+  "Finale Copyist Text Ext.ttf",
+  "Finale Copyist Text.ttf",
+  "Finale Lyrics Bold.ttf",
+  "Finale Lyrics Italic.ttf",
+  "Finale Lyrics.ttf",
+  "Finale Numerics.ttf",
+  "FinaleAshText.otf",
+  "FinaleBroadwayLegacyText.otf",
+  "FinaleBroadwayText.otf",
+  "FinaleJazzText.otf",
+  "FinaleJazzTextLowercase.otf",
+  "FinaleLyrics-Bold.otf",
+  "FinaleLyrics-Italic.otf",
+  "FinaleLyrics-Regular.otf",
+  "FinaleMaestroText-Bold.otf",
+  "FinaleMaestroText-BoldItalic.otf",
+  "FinaleMaestroText-Italic.otf",
+  "FinaleMaestroText-Regular.otf",
+  "GLYPH1.TTF",
+  "GLYPH2.TTF",
+  "GLYPH3.TTF",
+  "GLYPH4.TTF",
+  "IP139828.TTF",
+  "IP183708.TTF",
+  "IP298367.TTF",
+  "IP457788.TTF",
+  "IP511308.TTF",
+  "IP708098.TTF",
+  "IP769292.TTF",
+  "IP876763.TTF",
+  "KRCKAN.TTF",
+  "LHANDW.TTF",
+  "Leipzig.ttf",
+  "MaestroTimes Bold Italic.ttf",
+  "MaestroTimes Bold.ttf",
+  "MaestroTimes Italic.ttf",
+  "MaestroTimes.ttf",
+  "Roboto-Black.ttf",
+  "Roboto-BlackItalic.ttf",
+  "Roboto-Bold.ttf",
+  "Roboto-BoldItalic.ttf",
+  "Roboto-Italic.ttf",
+  "Roboto-Light.ttf",
+  "Roboto-LightItalic.ttf",
+  "Roboto-Medium.ttf",
+  "Roboto-MediumItalic.ttf",
+  "Roboto-Regular.ttf",
+  "Roboto-Thin.ttf",
+  "Roboto-ThinItalic.ttf",
+  "Shelley Volante BT.ttf",
+  "adolescence.ttf",
+  "damase_v.2.ttf",
+  "dilyan.ttf",
+  "euglag70.TTF",
+  "glagolj.ttf",
+  "xsoldrus.TTF"
+ ],
+ "files": 174,
+ "text_digits": [
+  "Academico Bold",
+  "Charis SIL Bold",
+  "Crimson Bold",
+  "Crimson Text Bold",
+  "Domine Bold",
+  "Doulos SIL",
+  "Gentium Plus Bold",
+  "Golden Age Regular",
+  "Lato Black",
+  "Libre Baskerville Bold",
+  "Libre Bodoni Bold",
+  "Montserrat Black",
+  "Nepomuk Bold",
+  "Noto Sans JP Black",
+  "Petaluma Script",
+  "Sebastian Text"
+ ]
+}

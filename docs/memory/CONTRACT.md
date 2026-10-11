@@ -753,6 +753,9 @@ applies without being read.
   of."* A letter or sound named alone is masculine (« le [ɑ] »); a heading with no noun
   (« Mesuré dans cette pièce ») agrees with an implied « ce qui est », masculine singular;
   everything else agrees with its written noun. Say which referent you checked.
+- **French nouns naming a person take the full pair, feminine first: « votre professeure ou professeur ».** Ruled by Dann 2026-10-11 00:19 (*"Let's place the feminine first"*; the Guide *"should align to our house style for inclusive language and gendered nouns"*). Source of the form: the OQLF, which recommends full pairs in running text and keeps « professeur(e) » for tables and forms. **Where the pair reads as too much, as on a line that repeats, a neutral wording that names no person replaces it** (Dann 2026-10-11 00:21: *"substitute the genderless when the inclusive pair seems a bit much"*; his example, the desk's wording « Vérifiez cette approche en cours de chant »). Default, with its exception: a quotation or a title stays as written.
+- **French pitches: solfège syllable (fixed do) with the French octave index, la3 = 440 Hz (Larousse).** Ruled by Dann 2026-10-11 04:12, *"until proven otherwise"*. Scientific A3 is la2. Never carry the English number across.
+- **« plis vocaux », never « cordes vocales », in Ilya's own French** (Dann 2026-10-11 04:12; DeCS/MeSH). Exception: a quoted source or a dictionary gloss keeps its words.
 - Do not remove the guillemets from `profile.subtitleNamed`.
 - Do not open the formant extractor before saying how a fix gets verified against
   his voice; read the N.49 document first.

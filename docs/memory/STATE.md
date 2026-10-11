@@ -47,39 +47,29 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### NOTE OF 2026-10-10 03:20 (Opus desk, Dann on his phone). READ FIRST.
+> ### HANDOVER OF 2026-10-11, written 04:40 (the Opus desk thread opened 2026-10-10 23:45). READ FIRST.
 >
-> **Row 57 r4 is written and twice reviewed by Fable** (`../sessions/brief-code-the-metre-seen-and-summed_r4_2026-10-10.md`): a trained classifier, judged by whole signature (Dann 03:02: *"Whatever works reliably."*), with Dann's five-witness reading model (03:11, `INBOX.md`). **Not sent.** Order at Dann's desktop, his choice 03:18: (1) the desk reads row 61's uncommitted diff (it touches `join-pages.ts` and `homr-reader.ts`, which r4 may change); (2) Dann ships row 61; (3) Dann pastes r4 to Code on the Mac, Opus. Corrections of this thread are in `INBOX.md` 03:05 and 03:22.
+> **THE ONE THING is unchanged:** the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
+>
+> **Row 57 (the printed metre).** r4 and r5 read whole: on the 17 real songs every variant states 0 false signatures; on renders of unseen fonts the reader alone misnames figures, and witness 5 (the bars that follow) catches all but same-length swaps. The desk dropped its own render bar and wrote **r6** (`../sessions/brief-code-the-metre-seen-and-summed_r6_2026-10-11.md`, Fable-reviewed, 13 findings taken). **Code stopped r6 at its estimate: 12 to 14 hours** (`../sessions/report-code-the-metre-seen-and-summed_r5_2026-10-11.md`). **The desk split it into four runs** (`OPEN.md`, "ROW 57 r6 SPLIT INTO FOUR RUNS"). **Next: send run 1 to Code on the Mac (Opus): Python only, nothing in `apps/`, ends at step 0's same-length stop.** The run-1 prompt is not yet written; write it from that `OPEN.md` paragraph and r6. Dann agreed to spend the six sealed songs once (04:17) and to fresh test songs from IMSLP (04:18).
+>
+> **Insights.** Design round 2 ACCEPTED (03:50; canvas `https://claude.ai/artifact/LKANkyy67TcChk4hAkQfRW`, twelve boards, each measured). Structure ruled (`PRODUCT.md`, "How an Insights page is organized"); teacher line, French table, pitch names, « plis vocaux », gendered nouns all ruled (`OPEN.md`, `CONTRACT.md` §6). **Build brief: QUEUE row 66** (cloud lane, Sonnet, after row 64).
+>
+> **Queued tonight, cloud lane, in order after this commit is pushed:** row 64 (one running head, one footer, page 1 names its tab), row 65 (« plis vocaux »), row 63 (French gendered nouns, drafts only), row 66 (Insights).
+>
+> **Owed by the desk:** the French Guide's conventions section (`OPEN.md`, "THE FRENCH GUIDE STATES ITS CONVENTIONS"); a Quebec source for octave numbering (lead: Karine St-Pierre, Dann's call).
+>
+> **This thread's mistakes** (each recorded where it happened): three of nine design boards checked before Dann looked (he found a collision; `ENVIRONMENT.md`, CHECKING A DESIGN CANVAS); a shell line ate a file name (same section); French octave numbers carried over from English (`OPEN.md`, FRENCH PITCH NAMES); a cited web page called a source when it was a wiki mirror; a copy of a brief left in the repository root (moved to `.desk-backup/`).
+>
+> **Commit state:** Dann ran `git add docs` at 04:35; the ship of tonight's `docs/` follows. `apps/` was at HEAD `a7161ce` when checked 04:36.
 
-> ### NOTE OF 2026-10-09 16:20 (Opus desk). READ BEFORE THE HANDOVER BELOW.
->
-> **The final test ran (QUEUE row 55): 76.8 with UNSURE set aside; 6 of 10 pass; K, L, M, P below.** Dann opened the four at 12:30; Row 61 reported 20:35 (`../sessions/report-code-the-four-below_r1_2026-10-09.md`, uncommitted): K 99.3 (100.0 on corrected truth), L 95.0 on corrected truth with UNSURE aside, M 88.7 and P 77.6 unchanged; the fixes for M (covers) and P (metre) changed sealed song I and were taken out. Whether to unseal I is Dann's decision, not yet put to him.
-> **Walked by Dann today:** N.168's comment, N.172's questions, row 59's clef, N.176's legend (`OPEN.md`).
-> **The Insights review is HELD at Dann's word 16:19** and restarts from purpose questions, one at a time (`OPEN.md`, INSIGHTS, REVIEWED AS A PAGE FOR THE SINGER; `CONTRACT.md`, the paragraph of 2026-10-09 16:19).
-> **Queued today:** rows 61 (the four below) and 62 (Enter settles a field). Inbox lines: 12:59 (two). Titze, Švec, and Popolo 2003 filed in Dann's library, `S-U`.
+> ### HANDOVER OF 2026-10-10 23:44: moved verbatim to `../sessions/LOG.md`, block "handover of 2026-10-10 23:44", at the close of 2026-10-11 04:40. Every open line in it is carried by the handover above or closed (row 57 r4 read and answered; Design r2 run and accepted; the four owed items done).
 
-> ### HANDOVER OF 2026-10-09, about 12:10 (the Opus desk thread that opened 2026-10-09 00:30; closed on Dann's question at 12:02, the thread having grown long). READ THIS FIRST.
->
-> **THE ONE THING is unchanged:** the scan reader reads at least 95 of every 100 printed notes, pitch and length as printed, on unseen songs, on the singer's path. **Next: the final test, QUEUE row 55** (`../sessions/brief-code-the-final-test_r2_2026-10-08.md`, for Code on the Mac, Opus): a rehearsal on Grechaninov and Varlamov first, then the ten sealed songs, one run, Code stops at the lines; opening a BELOW song is Dann's decision. Dann chose at 02:19 to wait for row 57 round 3 before spending the sealed set; round 3 is done (parked), so the wait is over. The deployed alias serves `472ed96` (no reader change since `53035bd`, so the rehearsal's counts compare with row 56's "after" lines).
->
-> **Shipped this thread:** `53035bd` (00:49; row 56, tuplets of any number; row 37's scorer change) and `472ed96` (12:05; the cloud lane's rows 51, 58, 59, 60 and the tessitura check, merged by fast-forward from `cloud-lane` `c422dae`; row 57's reports). All eight gates at baseline; gate 4 is **2087** (`~/Downloads/ilya-ship.sh`).
->
-> **Row 57, the printed metre, PARKED** (QUEUE row 57): font templates (round 2) and these editions' own figures (round 3) both give false figures on rendered sets and read at most 4 to 6 of 32 printed signatures; no opened scan prints a 0, 1, 5, 7, or 9 figure. Dann's Mac holds none either (`../sessions/memo-sonnet-metre-sources_r1_2026-10-09.md`). The open-corpus route (OpenScore Lieder, IMSLP: scan plus encoding, labels for free) waits for Dann's yes. Ilya states homr's metre (666 of 721 bars, row 37).
->
-> **Dann's, waiting, one at a time:**
-> 1. **His look at the merged work on the alias:** the Insights page rearranged (compass top right, grey stave behind the histogram, histogram before the phonation sentence, « Comment cette tonalité vous convient »); the header legend (Markup page 1, and whether a sixth system returns on his own voice: NOT ESTABLISHED, the cloud measured a synthetic voice); print (no blank last page); the note picker's bass clef in his voice characteristics; [prɑ] in «не проглядная» with the space restored.
-> 2. **The cloud session's open question:** a small marker beside the tessitura band for a doubtful bar, or the page-two note alone (`OPEN.md`, THE INSIGHTS PAGE, REARRANGED).
-> 3. **Row 8c's walk:** the "lean toward [ʊ]" comment (Miller 1986 p. 158) needs a song where it fires; the desk owes finding one.
->
-> **Ruled this thread** (all in `OPEN.md` unless named): Corrections items 15 to 17 (« Stable »; French remove labels on two lines; no dashed borders); N.168's two Miller comments in both languages; N.176 amended (legend to the header line); the blank print page; the note picker's clef by voice type; THE INSIGHTS PAGE, REARRANGED (heading superseded the same morning by « Comment cette tonalité vous convient », his ruling in the cloud session, confirmed 11:45); N.181 numbered («не» joined for lookup); the checkpoint of 2026-10-09 dropped by the desk (`SCHEDULE.md`).
->
-> **Walked by Dann this thread** (QUEUE rows 14, 10, 7, 15): Clear by scope and its Undo, print, Insights in English, the French italics. **Walked by the desk:** the phone layout in a 390 px frame (`OWED.md`).
->
-> **This thread's mistakes:**
-> 1. 02:20: the desk edited row 57 r3's brief and copied it to the Mac in the same parallel step; the unfixed text arrived. Code followed the prompt. Copy a file only after its last edit returns.
-> 2. 11:41: the desk told Dann he had not asked the cloud session for the 11:21 change, from his not noticing it. He had. Read the source before saying who asked for what.
->
-> **Saved outside the tree:** `~/Downloads/_desk-2026-10-09/` (the memory backup of 00:32; the ship script before 2035 and before 2087; row 57 r2's brief before it entered the tree).
+> ### NOTE OF 2026-10-10 03:20: moved verbatim to `../sessions/LOG.md` at the close of 2026-10-10 23:44; its three steps are done (row 61 read, shipped `a7161ce`; r4 sent to Code).
+
+> ### NOTE OF 2026-10-09 16:20: moved verbatim to `../sessions/LOG.md`, block "note of 2026-10-09 16:20", at the close of 2026-10-11 04:40. Its results live in `QUEUE.md` (rows 55, 61) and `OPEN.md`.
+
+> ### THE HANDOVER OF 2026-10-09 12:10: moved verbatim to `../sessions/LOG.md`, block "handover of 2026-10-09 12:10", at the close of 2026-10-10 23:44. Its rulings live in `OPEN.md`. Its open waits on Dann carry: his look at the merged work on the alias; the cloud session's marker question (absorbed by the Insights review); row 8c was walked 2026-10-09 13:10 (`OPEN.md`).
 
 > ### THE HANDOVER OF 2026-10-09 00:30 AND ITS UPDATES TO 11:41: moved verbatim to `../sessions/LOG.md`, block "handover of 2026-10-09 00:30 to 11:41", at the close of 2026-10-09 12:10. Its rulings live in `OPEN.md` and `QUEUE.md`.
 

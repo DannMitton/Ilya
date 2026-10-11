@@ -1,0 +1,1435 @@
+{
+ "choice": "A9+checks+w5",
+ "tot": {
+  "A1": {
+   "found": 1964,
+   "none": 2021,
+   "missed": 1076,
+   "false": 39
+  },
+  "A1+w5": {
+   "found": 1793,
+   "none": 2021,
+   "missed": 1286
+  },
+  "A1+checks": {
+   "found": 1919,
+   "none": 2021,
+   "missed": 1126,
+   "false": 34
+  },
+  "A1+checks+w5": {
+   "found": 1717,
+   "none": 2021,
+   "missed": 1362
+  },
+  "A9": {
+   "found": 2036,
+   "none": 2021,
+   "missed": 1024,
+   "false": 19
+  },
+  "A9+w5": {
+   "found": 1568,
+   "none": 2021,
+   "missed": 1511
+  },
+  "A9+checks": {
+   "found": 1975,
+   "none": 2021,
+   "missed": 1084,
+   "false": 20
+  },
+  "A9+checks+w5": {
+   "found": 1504,
+   "none": 2021,
+   "missed": 1575
+  },
+  "AB18": {
+   "found": 1941,
+   "none": 2021,
+   "missed": 1125,
+   "false": 13
+  },
+  "AB18+w5": {
+   "found": 1449,
+   "none": 2021,
+   "missed": 1630
+  },
+  "AB18+checks": {
+   "found": 1869,
+   "none": 2021,
+   "missed": 1200,
+   "false": 10
+  },
+  "AB18+checks+w5": {
+   "found": 1392,
+   "none": 2021,
+   "missed": 1687
+  }
+ },
+ "font": {
+  "A1": {
+   "Bravura": {
+    "found": 323,
+    "none": 238,
+    "missed": 36,
+    "false": 3
+   },
+   "Leland": {
+    "found": 184,
+    "none": 242,
+    "missed": 174
+   },
+   "FinaleMaestro": {
+    "found": 225,
+    "none": 236,
+    "missed": 136,
+    "false": 3
+   },
+   "FinaleEngraver": {
+    "found": 347,
+    "missed": 23,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "found": 176,
+    "none": 251,
+    "missed": 171,
+    "false": 2
+   },
+   "FinaleAsh": {
+    "missed": 185,
+    "false": 16,
+    "none": 237,
+    "found": 162
+   },
+   "FinaleJazz": {
+    "missed": 157,
+    "found": 212,
+    "none": 227,
+    "false": 4
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "found": 167,
+    "missed": 9,
+    "false": 9
+   },
+   "Petaluma": {
+    "missed": 176,
+    "none": 116,
+    "found": 8
+   },
+   "Sebastian": {
+    "found": 160,
+    "none": 129,
+    "missed": 9,
+    "false": 2
+   }
+  },
+  "A1+w5": {
+   "Bravura": {
+    "found": 270,
+    "none": 238,
+    "missed": 92
+   },
+   "Leland": {
+    "found": 295,
+    "none": 242,
+    "missed": 63
+   },
+   "FinaleMaestro": {
+    "missed": 197,
+    "found": 167,
+    "none": 236
+   },
+   "FinaleEngraver": {
+    "missed": 150,
+    "found": 220,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "found": 211,
+    "none": 251,
+    "missed": 138
+   },
+   "FinaleAsh": {
+    "missed": 198,
+    "none": 237,
+    "found": 165
+   },
+   "FinaleJazz": {
+    "missed": 169,
+    "none": 227,
+    "found": 204
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "missed": 71,
+    "found": 114
+   },
+   "Petaluma": {
+    "missed": 159,
+    "none": 116,
+    "found": 25
+   },
+   "Sebastian": {
+    "found": 122,
+    "none": 129,
+    "missed": 49
+   }
+  },
+  "A1+checks": {
+   "Bravura": {
+    "found": 315,
+    "none": 238,
+    "missed": 44,
+    "false": 3
+   },
+   "Leland": {
+    "found": 194,
+    "none": 242,
+    "missed": 163,
+    "false": 1
+   },
+   "FinaleMaestro": {
+    "found": 218,
+    "none": 236,
+    "missed": 143,
+    "false": 3
+   },
+   "FinaleEngraver": {
+    "found": 340,
+    "missed": 30,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "found": 170,
+    "none": 251,
+    "missed": 178,
+    "false": 1
+   },
+   "FinaleAsh": {
+    "missed": 195,
+    "false": 14,
+    "none": 237,
+    "found": 154
+   },
+   "FinaleJazz": {
+    "missed": 171,
+    "found": 198,
+    "none": 227,
+    "false": 4
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "found": 165,
+    "missed": 13,
+    "false": 7
+   },
+   "Petaluma": {
+    "missed": 176,
+    "none": 116,
+    "found": 8
+   },
+   "Sebastian": {
+    "found": 157,
+    "none": 129,
+    "missed": 13,
+    "false": 1
+   }
+  },
+  "A1+checks+w5": {
+   "Bravura": {
+    "found": 263,
+    "none": 238,
+    "missed": 99
+   },
+   "Leland": {
+    "found": 288,
+    "none": 242,
+    "missed": 70
+   },
+   "FinaleMaestro": {
+    "missed": 203,
+    "found": 161,
+    "none": 236
+   },
+   "FinaleEngraver": {
+    "missed": 154,
+    "found": 216,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "found": 184,
+    "none": 251,
+    "missed": 165
+   },
+   "FinaleAsh": {
+    "missed": 196,
+    "none": 237,
+    "found": 167
+   },
+   "FinaleJazz": {
+    "missed": 189,
+    "none": 227,
+    "found": 184
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "missed": 73,
+    "found": 112
+   },
+   "Petaluma": {
+    "missed": 161,
+    "none": 116,
+    "found": 23
+   },
+   "Sebastian": {
+    "found": 119,
+    "none": 129,
+    "missed": 52
+   }
+  },
+  "A9": {
+   "Bravura": {
+    "found": 279,
+    "none": 238,
+    "missed": 83
+   },
+   "Leland": {
+    "found": 279,
+    "none": 242,
+    "missed": 79
+   },
+   "FinaleMaestro": {
+    "found": 305,
+    "none": 236,
+    "missed": 58,
+    "false": 1
+   },
+   "FinaleEngraver": {
+    "found": 319,
+    "missed": 51,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "found": 166,
+    "none": 251,
+    "missed": 180,
+    "false": 3
+   },
+   "FinaleAsh": {
+    "missed": 194,
+    "false": 4,
+    "none": 237,
+    "found": 165
+   },
+   "FinaleJazz": {
+    "missed": 158,
+    "none": 227,
+    "found": 209,
+    "false": 6
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "found": 153,
+    "missed": 28,
+    "false": 4
+   },
+   "Petaluma": {
+    "missed": 168,
+    "none": 116,
+    "found": 16
+   },
+   "Sebastian": {
+    "found": 145,
+    "none": 129,
+    "missed": 25,
+    "false": 1
+   }
+  },
+  "A9+w5": {
+   "Bravura": {
+    "found": 232,
+    "none": 238,
+    "missed": 130
+   },
+   "Leland": {
+    "found": 258,
+    "none": 242,
+    "missed": 100
+   },
+   "FinaleMaestro": {
+    "missed": 214,
+    "found": 150,
+    "none": 236
+   },
+   "FinaleEngraver": {
+    "missed": 163,
+    "found": 207,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "found": 176,
+    "none": 251,
+    "missed": 173
+   },
+   "FinaleAsh": {
+    "missed": 223,
+    "none": 237,
+    "found": 140
+   },
+   "FinaleJazz": {
+    "missed": 202,
+    "none": 227,
+    "found": 171
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "missed": 80,
+    "found": 105
+   },
+   "Petaluma": {
+    "missed": 165,
+    "none": 116,
+    "found": 19
+   },
+   "Sebastian": {
+    "found": 110,
+    "none": 129,
+    "missed": 61
+   }
+  },
+  "A9+checks": {
+   "Bravura": {
+    "found": 274,
+    "none": 238,
+    "missed": 88
+   },
+   "Leland": {
+    "found": 271,
+    "none": 242,
+    "missed": 87
+   },
+   "FinaleMaestro": {
+    "found": 293,
+    "none": 236,
+    "missed": 70,
+    "false": 1
+   },
+   "FinaleEngraver": {
+    "found": 313,
+    "missed": 57,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "found": 162,
+    "none": 251,
+    "missed": 185,
+    "false": 2
+   },
+   "FinaleAsh": {
+    "missed": 208,
+    "false": 4,
+    "none": 237,
+    "found": 151
+   },
+   "FinaleJazz": {
+    "missed": 163,
+    "none": 227,
+    "found": 202,
+    "false": 8
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "found": 151,
+    "missed": 30,
+    "false": 4
+   },
+   "Petaluma": {
+    "missed": 169,
+    "none": 116,
+    "found": 15
+   },
+   "Sebastian": {
+    "found": 143,
+    "none": 129,
+    "missed": 27,
+    "false": 1
+   }
+  },
+  "A9+checks+w5": {
+   "Bravura": {
+    "found": 228,
+    "none": 238,
+    "missed": 134
+   },
+   "Leland": {
+    "found": 252,
+    "none": 242,
+    "missed": 106
+   },
+   "FinaleMaestro": {
+    "missed": 219,
+    "found": 145,
+    "none": 236
+   },
+   "FinaleEngraver": {
+    "missed": 166,
+    "found": 204,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "found": 159,
+    "none": 251,
+    "missed": 190
+   },
+   "FinaleAsh": {
+    "missed": 235,
+    "none": 237,
+    "found": 128
+   },
+   "FinaleJazz": {
+    "missed": 214,
+    "none": 227,
+    "found": 159
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "missed": 82,
+    "found": 103
+   },
+   "Petaluma": {
+    "missed": 166,
+    "none": 116,
+    "found": 18
+   },
+   "Sebastian": {
+    "found": 108,
+    "none": 129,
+    "missed": 63
+   }
+  },
+  "AB18": {
+   "Bravura": {
+    "found": 264,
+    "none": 238,
+    "missed": 98
+   },
+   "Leland": {
+    "found": 261,
+    "none": 242,
+    "missed": 97
+   },
+   "FinaleMaestro": {
+    "found": 297,
+    "none": 236,
+    "missed": 67
+   },
+   "FinaleEngraver": {
+    "found": 306,
+    "missed": 64,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "missed": 170,
+    "none": 251,
+    "found": 176,
+    "false": 3
+   },
+   "FinaleAsh": {
+    "missed": 221,
+    "none": 237,
+    "found": 140,
+    "false": 2
+   },
+   "FinaleJazz": {
+    "missed": 176,
+    "none": 227,
+    "found": 194,
+    "false": 3
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "found": 143,
+    "missed": 38,
+    "false": 4
+   },
+   "Petaluma": {
+    "missed": 163,
+    "none": 116,
+    "found": 21
+   },
+   "Sebastian": {
+    "found": 139,
+    "none": 129,
+    "missed": 31,
+    "false": 1
+   }
+  },
+  "AB18+w5": {
+   "Bravura": {
+    "found": 218,
+    "none": 238,
+    "missed": 144
+   },
+   "Leland": {
+    "found": 243,
+    "none": 242,
+    "missed": 115
+   },
+   "FinaleMaestro": {
+    "missed": 220,
+    "found": 144,
+    "none": 236
+   },
+   "FinaleEngraver": {
+    "missed": 173,
+    "found": 197,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "missed": 194,
+    "none": 251,
+    "found": 155
+   },
+   "FinaleAsh": {
+    "missed": 245,
+    "none": 237,
+    "found": 118
+   },
+   "FinaleJazz": {
+    "missed": 217,
+    "none": 227,
+    "found": 156
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "missed": 88,
+    "found": 97
+   },
+   "Petaluma": {
+    "missed": 167,
+    "none": 116,
+    "found": 17
+   },
+   "Sebastian": {
+    "found": 104,
+    "none": 129,
+    "missed": 67
+   }
+  },
+  "AB18+checks": {
+   "Bravura": {
+    "found": 260,
+    "none": 238,
+    "missed": 102
+   },
+   "Leland": {
+    "found": 255,
+    "none": 242,
+    "missed": 103
+   },
+   "FinaleMaestro": {
+    "found": 287,
+    "none": 236,
+    "missed": 77
+   },
+   "FinaleEngraver": {
+    "found": 300,
+    "missed": 70,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "missed": 185,
+    "none": 251,
+    "found": 163,
+    "false": 1
+   },
+   "FinaleAsh": {
+    "missed": 231,
+    "none": 237,
+    "found": 130,
+    "false": 2
+   },
+   "FinaleJazz": {
+    "missed": 194,
+    "none": 227,
+    "found": 177,
+    "false": 2
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "found": 141,
+    "missed": 40,
+    "false": 4
+   },
+   "Petaluma": {
+    "missed": 164,
+    "none": 116,
+    "found": 20
+   },
+   "Sebastian": {
+    "found": 136,
+    "none": 129,
+    "missed": 34,
+    "false": 1
+   }
+  },
+  "AB18+checks+w5": {
+   "Bravura": {
+    "found": 215,
+    "none": 238,
+    "missed": 147
+   },
+   "Leland": {
+    "found": 238,
+    "none": 242,
+    "missed": 120
+   },
+   "FinaleMaestro": {
+    "missed": 224,
+    "found": 140,
+    "none": 236
+   },
+   "FinaleEngraver": {
+    "missed": 176,
+    "found": 194,
+    "none": 230
+   },
+   "FinaleBroadway": {
+    "missed": 207,
+    "none": 251,
+    "found": 142
+   },
+   "FinaleAsh": {
+    "missed": 253,
+    "none": 237,
+    "found": 110
+   },
+   "FinaleJazz": {
+    "missed": 233,
+    "none": 227,
+    "found": 140
+   },
+   "FinaleLegacy": {
+    "none": 115,
+    "missed": 90,
+    "found": 95
+   },
+   "Petaluma": {
+    "missed": 168,
+    "none": 116,
+    "found": 16
+   },
+   "Sebastian": {
+    "found": 102,
+    "none": 129,
+    "missed": 69
+   }
+  }
+ },
+ "falses": {
+  "A1": [
+   [
+    "Bravura",
+    "cut",
+    "C"
+   ],
+   [
+    "Bravura",
+    "3/8",
+    "3/4"
+   ],
+   [
+    "Bravura",
+    "2/1",
+    "12/1"
+   ],
+   [
+    "FinaleMaestro",
+    "1/4",
+    "4/4"
+   ],
+   [
+    "FinaleMaestro",
+    "3/4",
+    "8/4"
+   ],
+   [
+    "FinaleMaestro",
+    "3/8",
+    "4/8"
+   ],
+   [
+    "FinaleBroadway",
+    "5/8",
+    "5/2"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleAsh",
+    "1/2",
+    "1/1"
+   ],
+   [
+    "FinaleAsh",
+    "11/8",
+    "1/8"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "3/1",
+    "3/4"
+   ],
+   [
+    "FinaleLegacy",
+    "4/16",
+    "1/16"
+   ],
+   [
+    "FinaleLegacy",
+    "1/1",
+    "1/4"
+   ],
+   [
+    "FinaleLegacy",
+    "5/4",
+    "5/1"
+   ],
+   [
+    "FinaleLegacy",
+    "5/4",
+    "5/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "3/4",
+    "13/4"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "6/16",
+    "8/16"
+   ],
+   [
+    "FinaleLegacy",
+    "3/4",
+    "3/1"
+   ],
+   [
+    "Sebastian",
+    "cut",
+    "C"
+   ],
+   [
+    "Sebastian",
+    "6/4",
+    "5/4"
+   ],
+   [
+    "FinaleBroadway",
+    "cut",
+    "C"
+   ],
+   [
+    "FinaleAsh",
+    "11/4",
+    "1/4"
+   ],
+   [
+    "FinaleAsh",
+    "12/4",
+    "2/4"
+   ],
+   [
+    "FinaleAsh",
+    "2/4",
+    "1/4"
+   ],
+   [
+    "FinaleAsh",
+    "5/4",
+    "3/4"
+   ],
+   [
+    "FinaleAsh",
+    "13/4",
+    "3/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/1",
+    "1/1"
+   ],
+   [
+    "FinaleAsh",
+    "11/1",
+    "1/1"
+   ],
+   [
+    "FinaleAsh",
+    "12/2",
+    "2/2"
+   ],
+   [
+    "FinaleAsh",
+    "12/2",
+    "2/2"
+   ],
+   [
+    "FinaleAsh",
+    "13/8",
+    "3/8"
+   ],
+   [
+    "FinaleAsh",
+    "11/4",
+    "1/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleAsh",
+    "7/16",
+    "7/1"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ]
+  ],
+  "A1+w5": [],
+  "A1+checks": [
+   [
+    "Bravura",
+    "cut",
+    "C"
+   ],
+   [
+    "Bravura",
+    "3/8",
+    "3/4"
+   ],
+   [
+    "Bravura",
+    "2/1",
+    "12/1"
+   ],
+   [
+    "Leland",
+    "2/2",
+    "13/2"
+   ],
+   [
+    "FinaleMaestro",
+    "1/4",
+    "4/4"
+   ],
+   [
+    "FinaleMaestro",
+    "3/4",
+    "8/4"
+   ],
+   [
+    "FinaleMaestro",
+    "3/8",
+    "4/8"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleAsh",
+    "1/2",
+    "1/1"
+   ],
+   [
+    "FinaleAsh",
+    "11/8",
+    "1/8"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "3/1",
+    "3/4"
+   ],
+   [
+    "FinaleLegacy",
+    "1/1",
+    "1/4"
+   ],
+   [
+    "FinaleLegacy",
+    "5/4",
+    "5/1"
+   ],
+   [
+    "FinaleLegacy",
+    "5/4",
+    "5/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "3/4",
+    "13/4"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "3/4",
+    "3/1"
+   ],
+   [
+    "Sebastian",
+    "cut",
+    "C"
+   ],
+   [
+    "FinaleBroadway",
+    "cut",
+    "C"
+   ],
+   [
+    "FinaleAsh",
+    "11/4",
+    "1/4"
+   ],
+   [
+    "FinaleAsh",
+    "12/4",
+    "2/4"
+   ],
+   [
+    "FinaleAsh",
+    "5/4",
+    "3/4"
+   ],
+   [
+    "FinaleAsh",
+    "13/4",
+    "3/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/1",
+    "1/1"
+   ],
+   [
+    "FinaleAsh",
+    "11/1",
+    "1/1"
+   ],
+   [
+    "FinaleAsh",
+    "12/2",
+    "2/2"
+   ],
+   [
+    "FinaleAsh",
+    "12/2",
+    "2/2"
+   ],
+   [
+    "FinaleAsh",
+    "11/4",
+    "1/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleAsh",
+    "7/16",
+    "7/1"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ]
+  ],
+  "A1+checks+w5": [],
+  "A9": [
+   [
+    "FinaleMaestro",
+    "3/8",
+    "4/8"
+   ],
+   [
+    "FinaleBroadway",
+    "2/8",
+    "2/2"
+   ],
+   [
+    "FinaleBroadway",
+    "5/8",
+    "5/2"
+   ],
+   [
+    "FinaleBroadway",
+    "8/4",
+    "2/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleAsh",
+    "1/2",
+    "1/1"
+   ],
+   [
+    "FinaleJazz",
+    "5/1",
+    "5/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/2",
+    "9/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleLegacy",
+    "5/4",
+    "5/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "3/4",
+    "3/1"
+   ],
+   [
+    "Sebastian",
+    "cut",
+    "C"
+   ],
+   [
+    "FinaleAsh",
+    "5/4",
+    "3/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/8",
+    "9/8"
+   ]
+  ],
+  "A9+w5": [],
+  "A9+checks": [
+   [
+    "FinaleMaestro",
+    "3/8",
+    "4/8"
+   ],
+   [
+    "FinaleBroadway",
+    "2/8",
+    "2/2"
+   ],
+   [
+    "FinaleBroadway",
+    "8/4",
+    "2/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleAsh",
+    "1/2",
+    "1/1"
+   ],
+   [
+    "FinaleJazz",
+    "5/1",
+    "5/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/2",
+    "9/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleLegacy",
+    "5/4",
+    "5/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "3/4",
+    "3/1"
+   ],
+   [
+    "Sebastian",
+    "cut",
+    "C"
+   ],
+   [
+    "FinaleAsh",
+    "5/4",
+    "3/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/8",
+    "9/8"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleJazz",
+    "7/8",
+    "9/8"
+   ]
+  ],
+  "A9+checks+w5": [],
+  "AB18": [
+   [
+    "FinaleBroadway",
+    "2/8",
+    "2/2"
+   ],
+   [
+    "FinaleBroadway",
+    "5/8",
+    "5/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/2",
+    "9/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleLegacy",
+    "5/4",
+    "5/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "3/4",
+    "3/1"
+   ],
+   [
+    "Sebastian",
+    "cut",
+    "C"
+   ],
+   [
+    "FinaleBroadway",
+    "cut",
+    "C"
+   ],
+   [
+    "FinaleAsh",
+    "5/4",
+    "3/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ]
+  ],
+  "AB18+w5": [],
+  "AB18+checks": [
+   [
+    "FinaleBroadway",
+    "2/8",
+    "2/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/2",
+    "9/2"
+   ],
+   [
+    "FinaleJazz",
+    "7/4",
+    "9/4"
+   ],
+   [
+    "FinaleLegacy",
+    "5/4",
+    "5/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "2/4",
+    "2/1"
+   ],
+   [
+    "FinaleLegacy",
+    "3/4",
+    "3/1"
+   ],
+   [
+    "Sebastian",
+    "cut",
+    "C"
+   ],
+   [
+    "FinaleAsh",
+    "5/4",
+    "3/4"
+   ],
+   [
+    "FinaleAsh",
+    "11/2",
+    "1/2"
+   ]
+  ],
+  "AB18+checks+w5": []
+ },
+ "bar": {
+  "config2_false": 0,
+  "config1": "A9+checks",
+  "config1_false": 20,
+  "config1_max_font": 8
+ }
+}

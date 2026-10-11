@@ -1120,3 +1120,16 @@ His words: *"Colleagues' recordings will never be public!"* Asked by the desk fr
 
 Offered by the desk with three alternatives (« exercée », « éduquée », « sage »). Usito's sense 2 of « averti »: « Qui est expérimenté et a un jugement sûr », « public averti ». **His reservation, kept on record:** *"I'm just itchy about avertissement meaning warning. I don't want to imply The Warned Ear, but I think l'oreille avertie is probably the best we can hope for."* Usito's sense 1 is « informé et sur ses gardes »; a better French may replace it if one is found. Feminine: « oreille avertie ». **Confirmed by Dann 03:19:** *"Yes, discerning is a very good modal translation for the kind of informed I mean. I ratify l'oreille avertie."*
 
+## How an Insights page is organized. Ratified by Dann 2026-10-11 03:53
+
+**The structural guide for any edit to Insights' content.** Offered by the desk at 03:52 when Dann asked whether the page's parts follow a logic; ratified in his words: *"moments, totals and sources makes sense. and I love that the conclusions are unboxed and take priority above the squircles. This is very good logic... We will want to align with these structural guides."* The names "conclusion", "moments", "totals", and "sources" are the desk's coinage, used for this guide only; the page prints none of them as headers.
+
+1. **The conclusion, unboxed and first.** The verdict ("How this key sits for you") and its reasons, grouped in the ruled order: range, what another key would change, what practice changes (`OPEN.md`, the purpose ratified 2026-10-10 23:17, point 4). This is the only part of the page that concludes anything.
+2. **Squircle 1, the moments: where in the score.** "Where this piece meets your voice": single events, each tied to a bar, a note, and a vowel; local and actionable.
+3. **Squircle 2, the totals: how much, across the whole piece.** "The measures behind these reasons": the cycle dose, seconds per pitch, time per vowel against its turn; the evidence the reasons' figures come from.
+4. **Squircle 3, the sources: why, and where to read further.** "More to explore, and why": further approaches per moment, with full references; printed as endnotes (Dann 2026-10-09 13:03).
+
+**The test for new content:** a new element goes where its kind lives. A conclusion goes unboxed at the top; a located event goes with the moments; a whole-piece figure goes with the totals; a reference or a further approach goes with the sources. Something that fits none of the four is a case to bring to Dann, not a fifth box.
+
+**Considered and not taken, 2026-10-11:** the desk's proposal to swap squircles 1 and 2 (totals before moments). Dann kept moments, totals, sources.
+

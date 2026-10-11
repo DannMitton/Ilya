@@ -1,0 +1,105 @@
+{
+ "wrong": [
+  "1/2",
+  "1/4",
+  "1/8",
+  "11/4",
+  "13/2",
+  "13/4",
+  "14/8",
+  "15/2",
+  "2/16",
+  "2/2",
+  "2/4",
+  "2/8",
+  "3/4",
+  "3/8",
+  "4/4",
+  "4/8",
+  "5/1",
+  "5/2",
+  "5/4",
+  "5/8",
+  "6/2",
+  "7/2",
+  "7/4",
+  "9/1",
+  "9/4",
+  "C",
+  "cut"
+ ],
+ "windows": 814,
+ "unmapped": 188,
+ "res": {
+  "other length / rejected": 15392,
+  "same length / rejected": 153,
+  "same length / accepted": 681,
+  "other length / no countable bar": 100,
+  "other length / accepted": 2
+ },
+ "per": {
+  "gur": {
+   "other length / rejected": 648,
+   "same length / rejected": 14,
+   "same length / accepted": 40
+  },
+  "k01": {
+   "other length / rejected": 1404
+  },
+  "k02": {
+   "same length / accepted": 111,
+   "other length / rejected": 851
+  },
+  "k03": {
+   "same length / accepted": 132,
+   "other length / rejected": 1012
+  },
+  "k04": {
+   "other length / rejected": 723,
+   "same length / accepted": 57
+  },
+  "k06": {
+   "other length / rejected": 790,
+   "same length / accepted": 68
+  },
+  "k07": {
+   "other length / rejected": 937,
+   "same length / rejected": 31,
+   "same length / accepted": 4
+  },
+  "k08": {
+   "other length / rejected": 720,
+   "same length / accepted": 60
+  },
+  "k09": {
+   "other length / rejected": 747,
+   "same length / accepted": 60
+  },
+  "k10": {
+   "other length / rejected": 1664
+  },
+  "sun1": {
+   "other length / rejected": 403,
+   "other length / accepted": 2
+  },
+  "sun4": {
+   "other length / rejected": 623,
+   "same length / accepted": 53
+  },
+  "sun5": {
+   "other length / rejected": 1320,
+   "same length / rejected": 108,
+   "same length / accepted": 2
+  },
+  "sun6": {
+   "other length / rejected": 1128,
+   "same length / accepted": 94
+  },
+  "tch": {
+   "other length / rejected": 1872
+  },
+  "varl": {
+   "other length / rejected": 650
+  }
+ }
+}
