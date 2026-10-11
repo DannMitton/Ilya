@@ -127,6 +127,7 @@ forty-seven of its predecessors were written and thrown away.
 
 ## Closing a session
 
+0. **Check every open line against `git log` first. Added 2026-10-11 19:40 after an audit found 28 stale lines** (`../sessions/audit-memory-vs-git_r1_2026-10-11.md`): N.168 and N.172 read "not walked" two days after Dann walked them, and nine QUEUE rows read "ready" after they shipped. Run `git --no-optional-locks --no-pager log --since=<the last close> --format="%h %s"` and, for every row or item a commit names, set its line in `QUEUE.md`, `SCHEDULE.md`, and `STATE.md` §THE TRACKER in the same pass. A walk Dann reports goes into all three the moment he reports it, not at the close.
 1. Update `STATE.md`: the one thing, the tracker marks, what moved. **If an item
    closes, its spec leaves `OPEN.md` in the same pass;** if Dann numbers a new
    one, its spec enters `OPEN.md` and its mark enters `STATE.md` §THE TRACKER.

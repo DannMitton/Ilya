@@ -1,0 +1,26 @@
+"""Row 76 rehearsal: K and M (held-out set 2) through the deployed site, as row 74's run.py did on the dev server."""
+import glob, json, os, shutil, subprocess, sys
+HOME = os.path.expanduser('~'); REPO = f'{HOME}/Desktop/ilya-rewrite'; HERE = os.path.dirname(os.path.abspath(__file__))
+CONV = f'{REPO}/docs/sessions/measure-checks_r1_2026-10-05/scripts/scorer/conv.py'
+LINE = f'{REPO}/docs/sessions/measure-final-test_r1_2026-10-08/final-line.ts'
+base = f'{HOME}/Downloads/_desk-2026-10-08/heldout2'
+scans = sorted(glob.glob(base + '-scans/*.pdf')); letters = dict(zip('GHIJKLMNOP', scans))
+out = f'{HERE}/rehearsal'; os.makedirs(out, exist_ok=True)
+env = dict(os.environ, SITE='https://ilya-git-shane-dannmittons-projects.vercel.app/')
+for L in sys.argv[1:]:
+    scan = letters[L]; stem = os.path.basename(scan)[:-4]; pdf = f'{out}/{L}.pdf'; shutil.copyfile(scan, pdf)
+    d = subprocess.run(['node', f'{HERE}/drop.mjs', L, pdf, out + '/drops'], capture_output=True, text=True, env=env)
+    print(d.stdout.strip() or f'{L}: drop failed {d.stderr[-200:]}', flush=True); os.remove(pdf)
+    dj = json.load(open(f'{out}/drops/{L}.json'))
+    tdir = base + '-truth-r2/truth/'
+    truths = [('original', tdir + stem + '.truth.json')]
+    c = tdir + stem + '.truth.corrected.json'
+    if os.path.exists(c): truths.append(('corrected', c))
+    elif L == 'M': truths.append(('corrected', tdir + stem + '.truth.json'))
+    if dj['refused']: print(f'{L}: refused {dj["refused"]}'); continue
+    rd = f'{out}/{L}.read.json'
+    subprocess.run(['python3', CONV, rd, f'{out}/drops/{L}.musicxml'], check=True, capture_output=True)
+    for name, t in truths:
+        keep = f'{out}/keep-{name}'; os.makedirs(keep, exist_ok=True)
+        r = subprocess.run(['npx', '--no-install', 'tsx', LINE, 'song', L, dj['backend'], t, rd, keep], capture_output=True, text=True, cwd=REPO)
+        print(f'{name}: ' + (r.stdout.strip() or r.stderr.strip()), flush=True)

@@ -25,3 +25,13 @@ A singer correcting a bar can choose a 32nd or a 64th, by key (2 and 1, as in Fi
 ## Done when
 
 Both lengths can be entered by key and by touch, in both languages; all gates at baseline plus the new tests; seen rendered on a phone-width window. Report `docs/sessions/report-code-n183-32nd-and-64th_r1_2026-10-11.md` with "Could not establish". NOT ESTABLISHED beats a complete invented answer. Do not edit `docs/memory/`. Do not commit.
+
+
+## Amendments after Fable's review, 2026-10-11 19:30. THESE OVERRIDE THE TEXT ABOVE WHERE THEY DIFFER.
+
+Reviewed by Fable against HEAD `8e74f39` (167k tokens). Anchor every `i18n.ts` edit by key, never by line number. The safe order across the i18n briefs is rows 72, 70, 73, 68, 75, 62.
+
+- **The third list:** `+page.svelte:880-886`, `DURATION_KEY`, feeds the undo label and the status line (`:969`, `:1444`, `:1504`). The key handler is `+page.svelte:1275`. Change both.
+- `correction.ts:126-127` is `BASE_FRACTION`. Both glyphs are in `FinaleMaestro.json` `glyphBBoxes` (checked by Fable).
+- **Committing:** on the cloud lane, commit and push to `cloud-lane` only; on the Mac, leave it uncommitted.
+- All eight gates; report gate 4's new count.

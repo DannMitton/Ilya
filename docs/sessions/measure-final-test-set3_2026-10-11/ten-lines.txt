@@ -1,0 +1,21 @@
+Q: read on webgpu, 0.65 min
+Q: webgpu; 83 of 83 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 35 of 41; octave shift 0; metre as printed 32 of 32 bars (9 bars with no matched note or rest not judged); score 100.0 PASS; no note marked UNSURE
+R: read on webgpu, 1.64 min
+R: webgpu; 175 of 178 right; missing 0; extra 0; pitch misreads 2; length misreads 1; bars read 99 of 99; octave shift 0; metre as printed 93 of 93 bars (6 bars with no matched note or rest not judged); score 98.3 PASS; no note marked UNSURE
+S: read on webgpu, 1.56 min
+S: webgpu; 115 of 116 right; missing 0; extra 32; pitch misreads 0; length misreads 1; bars read 86 of 86; octave shift 0; metre as printed 64 of 64 bars (22 bars with no matched note or rest not judged); score 71.6 BELOW; with 8 notes marked UNSURE set aside 70.4 BELOW
+T: read on webgpu, 1.56 min
+T: webgpu; 196 of 197 right; missing 0; extra 14; pitch misreads 0; length misreads 1; bars read 80 of 80; octave shift 0; metre as printed 61 of 61 bars (19 bars with no matched note or rest not judged); score 92.4 BELOW; with 8 notes marked UNSURE set aside 92.1 BELOW
+U: read on webgpu, 0.56 min
+U: webgpu; 70 of 70 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 41 of 41; octave shift 0; metre as printed 36 of 36 bars (5 bars with no matched note or rest not judged); score 100.0 PASS; no note marked UNSURE
+V: read on webgpu, 0.76 min
+V: webgpu; 123 of 130 right; missing 0; extra 0; pitch misreads 0; length misreads 7; bars read 31 of 31; octave shift 0; metre as printed 20 of 20 bars (11 bars with no matched note or rest not judged); score 94.6 BELOW; with 1 note marked UNSURE set aside 94.6 BELOW
+W: read on webgpu, 0.69 min
+W: webgpu; 83 of 87 right; missing 0; extra 0; pitch misreads 4; length misreads 0; bars read 20 of 20; octave shift 0; metre as printed 16 of 17 bars (3 bars with no matched note or rest not judged); score 95.4 PASS; no note marked UNSURE
+X: read on webgpu, 0.79 min
+X: webgpu; 122 of 144 right; missing 0; extra 0; pitch misreads 6; length misreads 16; bars read 35 of 35; octave shift 0; metre as printed 25 of 29 bars (6 bars with no matched note or rest not judged); score 84.7 BELOW; no note marked UNSURE
+Y: read on webgpu, 1.39 min
+Y: webgpu; 172 of 175 right; missing 0; extra 1; pitch misreads 3; length misreads 0; bars read 54 of 54; octave shift 0; metre as printed 46 of 46 bars (8 bars with no matched note or rest not judged); score 97.7 PASS; no note marked UNSURE
+Z: read on webgpu, 2.06 min
+Z: webgpu; 275 of 278 right; missing 1; extra 0; pitch misreads 1; length misreads 1; bars read 106 of 106; octave shift 0; metre as printed 75 of 75 bars (31 bars with no matched note or rest not judged); score 98.9 PASS; no note marked UNSURE
+Total of 10 songs: webgpu; 1414 of 1458 right; missing 1; extra 47; pitch misreads 16; length misreads 27; bars read 587 of 593; metre as printed 468 of 473 bars in 10 songs; score 93.8 BELOW; with 17 notes marked UNSURE set aside 93.8 BELOW; songs below 95.0 with UNSURE set aside: 4 of 10
