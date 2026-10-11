@@ -53,7 +53,7 @@
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
-	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS } from '$lib/page-config';
+	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS, formatRunningHeader } from '$lib/page-config';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import type { LineData, PageSize } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
@@ -131,6 +131,9 @@
 		 * conflict rules are the deferred §A.6 behaviours.
 		 */
 		scoreTitle?: string;
+		/** The piece's composer and poet, for the running head (QUEUE row 64). */
+		composer?: string;
+		poet?: string;
 		/**
 		 * Engraving preferences from the drawer panel (Dann's ruling,
 		 * 2026-07-13). Defaults to the Appendix-derived values so the
@@ -264,6 +267,8 @@
 		pageSize = 'letter',
 		ingested = null,
 		scoreTitle = undefined,
+		composer = '',
+		poet = '',
 		engraving = ENGRAVING_DEFAULTS,
 		onrendered = undefined,
 		onpagesdrawn = undefined,
@@ -901,10 +906,11 @@
 		);
 	});
 
-	// Interim running-header text for pages 2+: the song title when the
-	// singer has one in the shared metadata, else the profile subtitle.
-	// Interim copy, flagged for Dann's eye with the §A.6 behaviours.
-	const runningHeader = $derived(scoreTitle?.trim() ? scoreTitle : subtitle);
+	// The running head for pages 2+: Text's "Composer | Poet — Title", one
+	// head for all three tabs (QUEUE row 64; Dann 2026-10-11 03:23). With no
+	// title it falls back to the profile subtitle, as it did before.
+	const runningHeader = $derived(formatRunningHeader(composer, scoreTitle ?? '', poet) || subtitle);
+	const tabName = $derived(T('tab.markedScore'));
 
 	// The status lines' words (`profile-status.ts`).
 	let statusLine = $derived(statusLineFor(analysedVowels.length, language));
@@ -949,6 +955,7 @@
 				aria-label={T('profile.scorePageAria').replace('{n}', String(i + 1)).replace('{total}', String(scorePages.length))}
 			>
 				{#if i === 0}
+					<RunningHeader headerText="" {tabName} accentInk="var(--lavender-ink)" tabOnly />
 					<TitleHeader
 						title={scoreTitle ?? ''}
 						composer={subtitle}
@@ -970,7 +977,7 @@
 						{@html page}
 					</div>
 				{:else}
-					<RunningHeader headerText={runningHeader} />
+					<RunningHeader headerText={runningHeader} {tabName} accent="#9585A2" />
 					<div class="score-window" style="top: {subsequentTop}px; bottom: {contentBottom}px;">
 						{@html page}
 					</div>
@@ -988,7 +995,7 @@
 				style="width: {dims.width}px; height: {dims.height}px;"
 				aria-label={T('profile.notesPageAria')}
 			>
-				<RunningHeader headerText={runningHeader} />
+				<RunningHeader headerText={runningHeader} {tabName} accent="#9585A2" />
 				<NotesColumn withheld={showWithheld ? withheld : null} octave={showOctaveNotice ? OCTAVE_NOTICE : null} bandHeader={T('watch.header')} lines={bandLines} {sheet} top={subsequentTop} bottom={contentBottom} />
 				{#if j === 0}
 					<NotesColumn withheld={showWithheld ? withheld : null} octave={showOctaveNotice ? OCTAVE_NOTICE : null} bandHeader={T('watch.header')} lines={bandLines} onmeasure={(m) => (notesMeasure = m)} />
@@ -1033,6 +1040,7 @@
 	     catching up to it, not a new decision. An empty title still falls
 	     through to TitleHeader's own placeholder, so the no-metadata state is
 	     unchanged. -->
+	<RunningHeader headerText="" {tabName} accentInk="var(--lavender-ink)" tabOnly />
 	<TitleHeader
 		title={scoreTitle ?? ''}
 		composer={subtitle}

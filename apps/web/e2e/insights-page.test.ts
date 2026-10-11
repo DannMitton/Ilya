@@ -121,7 +121,7 @@ test('page one runs phonation, compatibility, the closing verdict, then the find
 	const over = await page.evaluate(() => {
 		const p = document.querySelector('.insights-container .paper-page') as HTMLElement;
 		const sq = p.querySelector('.squircle') as HTMLElement;
-		const foot = p.querySelector('.insights-foot') as HTMLElement;
+		const foot = p.querySelector('.page-footer') as HTMLElement;
 		return sq.offsetTop + sq.offsetHeight - foot.offsetTop;
 	});
 	expect(over).toBeLessThanOrEqual(0);

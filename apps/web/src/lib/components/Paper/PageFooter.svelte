@@ -4,6 +4,7 @@
 	import LegendItems from './LegendItems.svelte';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		pageNumber: number;
@@ -29,11 +30,34 @@
 		richterCredit?: boolean;
 		/** The page's notation font, so a stems key draws with the same heads the stave does (N.176). */
 		notationFont?: { prepared: PreparedSmuflFont; family: string } | null;
+		/**
+		 * A page's own notes, drawn above the line after the legend and the
+		 * broad note: Insights' footnote and method line (QUEUE row 64, one
+		 * footer for all three tabs; Dann 2026-10-11 03:22).
+		 */
+		apparatus?: Snippet;
+		/** The credit line, when a tab prints its own form of it (Insights strikes the lieder.net clause). */
+		attribution?: string;
+		/** The footer element, for a page that measures its offsets directly (Insights' page-one fit). */
+		element?: HTMLElement | null;
 	}
 
-	let { pageNumber, totalPages, language, legendItems = [], broadNote, hairlineAccent = 'var(--sage)', richterCredit = false, notationFont = null, onheightchange }: Props = $props();
+	let {
+		pageNumber,
+		totalPages,
+		language,
+		legendItems = [],
+		broadNote,
+		hairlineAccent = 'var(--sage)',
+		richterCredit = false,
+		notationFont = null,
+		onheightchange,
+		apparatus,
+		attribution: attributionOverride,
+		element = $bindable(null),
+	}: Props = $props();
 
-	const attribution = $derived(t('footer.attribution', language));
+	const attribution = $derived(attributionOverride ?? t('footer.attribution', language));
 	const richterLine = $derived(richterCredit ? t('footer.richter', language) : '');
 
 	/** Measured height of this footer: legend, broad note, hairline and colophon. */
@@ -51,6 +75,7 @@
 	class:is-last-page={pageNumber === totalPages}
 	style="--footer-accent: {hairlineAccent};"
 	bind:offsetHeight={measuredHeight}
+	bind:this={element}
 >
 	{#if legendItems.length > 0}
 		<div class="provenance-legend">
@@ -60,6 +85,10 @@
 
 	{#if broadNote}
 		<p class="broad-legend" role="note"><Italics text={broadNote} /></p>
+	{/if}
+
+	{#if apparatus}
+		<div class="apparatus">{@render apparatus()}</div>
 	{/if}
 
 	<div class="footer-hairline"></div>
@@ -104,6 +133,17 @@
 		flex-wrap: wrap;
 		justify-content: flex-end;
 		gap: 4px 12px;
+	}
+
+	/* A page's own notes above the line: the broad note's type (sans, 9.5 px,
+	   stone, sentence case), so Insights' footnote and method line read as the
+	   notes above Text's and Markup's line do. */
+	.apparatus {
+		margin-bottom: 8px;
+		font-family: var(--font-sans);
+		font-size: 9.5px;
+		line-height: 1.45;
+		color: #78716c;
 	}
 
 	/* ── Sage hairline ─────────────────────────────────────── */

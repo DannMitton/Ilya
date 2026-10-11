@@ -9,6 +9,7 @@
 	import TitleHeader from './TitleHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
+	import RunningHeader from './RunningHeader.svelte';
 	import { showsRichterIpa } from '$lib/latin';
 	import type { EmptyTextNotice } from '$lib/one-action';
 
@@ -147,6 +148,8 @@
 	style="width: {dims.width}px; height: {dims.height}px;"
 >
 	<!-- Header layer: absolute, pinned to top margin -->
+	<!-- Page 1 names its tab (QUEUE row 64; Dann 2026-10-11 03:24). -->
+	<RunningHeader headerText="" tabName={t('tab.text', language)} tabOnly />
 	<TitleHeader
 		title={metadata.title}
 		composer={composerDisplay}

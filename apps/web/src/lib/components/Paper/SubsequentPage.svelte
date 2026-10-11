@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { WordStackData, PageSize, LineData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
-	import type { Language } from '$lib/i18n';
+	import { t, type Language } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
 	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, ROW_HEIGHT } from '$lib/page-config';
 	import RunningHeader from './RunningHeader.svelte';
@@ -75,7 +75,7 @@
 	style="width: {dims.width}px; height: {dims.height}px;"
 >
 	<!-- Header layer: absolute, pinned to top margin -->
-	<RunningHeader headerText={runningHeader} onheightchange={handleHeaderHeight} />
+	<RunningHeader headerText={runningHeader} tabName={t('tab.text', language)} onheightchange={handleHeaderHeight} />
 
 	<!-- Content layer: flex column, rows grow if they wrap -->
 	<div

@@ -32,13 +32,15 @@
 	 */
 	import { tick, untrack } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
+	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
+	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import Italics, { italicRuns } from '$lib/components/Italics.svelte';
 	import Tessituragram from '$lib/insights/Tessituragram.svelte';
 	import CompassStave from '$lib/insights/CompassStave.svelte';
 	import FitTable from '$lib/insights/FitTable.svelte';
 	import { cycleDoseSentence } from '$lib/insights/cycle-dose';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
-	import { PAGE_SIZES, MARGINS, HEADER_GAP } from '$lib/page-config';
+	import { PAGE_SIZES, MARGINS, HEADER_GAP, formatRunningHeader } from '$lib/page-config';
 	import type { LineData } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, formatNameForPaper } from '$lib/composers-poets';
@@ -99,6 +101,8 @@
 		ingested?: IngestedScore | null;
 		scoreTitle?: string;
 		composer?: string;
+		/** The piece's poet, for the running head (QUEUE row 64). */
+		poet?: string;
 		transcribedLines?: readonly LineData[];
 		pairings?: PairingMap;
 		/** N.159: the drawn vowel outranks the stored one, so Insights names
@@ -123,6 +127,7 @@
 		ingested = null,
 		scoreTitle = undefined,
 		composer = '',
+		poet = '',
 		transcribedLines = undefined,
 		pairings = undefined,
 		drawnUnderlay = undefined,
@@ -502,9 +507,11 @@
 			: fill(T('insights.findings.remainderMany'), { n: deferredFindings.length }),
 	);
 
-	const runningHeader = $derived(
-		[scoreTitle?.trim() ?? '', identityLine].filter((s) => s.length > 0).join(' · '),
-	);
+	/* ONE RUNNING HEAD FOR ALL THREE TABS (QUEUE row 64; Dann 2026-10-11
+	   03:23): the piece on the left, the tab on the right, the rule in rose. The
+	   identity line ("Insights for Dann · Bass · calibrated …") leaves it and
+	   stays on page 1. */
+	const runningHeader = $derived(formatRunningHeader(composer, scoreTitle ?? '', poet));
 </script>
 
 {#snippet sectionHead(text: string)}
@@ -581,8 +588,21 @@
 {/snippet}
 
 {#snippet foot(pageNumber: number, withFootnote: boolean)}
-	<footer class="insights-foot" bind:offsetHeight={footHeights[pageNumber]} bind:this={footEls[pageNumber]}>
-		<div class="apparatus">
+	<!-- ONE FOOTER FOR ALL THREE TABS (QUEUE row 64; Dann 2026-10-11 03:22):
+	     Text's and Markup's `PageFooter`, its line in rose. The footnote and the
+	     method line sit above the line; the credits sit below it, beside the
+	     page count. The page still measures this footer: `element` gives the
+	     page-one fit its offsets, and the height reaches `footHeights`. -->
+	<PageFooter
+		{pageNumber}
+		{totalPages}
+		{language}
+		hairlineAccent="var(--rose, #ab7f7f)"
+		{attribution}
+		bind:element={footEls[pageNumber]}
+		onheightchange={(h) => (footHeights[pageNumber] = h)}
+	>
+		{#snippet apparatus()}
 			{#if withFootnote}
 				<p class="footnote">
 					<sup>1</sup>&#8201;{@html T('insights.footnote.tessitura')}
@@ -590,13 +610,8 @@
 				</p>
 			{/if}
 			<p class="method">{methodLine}</p>
-			<p class="attribution">
-				{@html attribution}&nbsp;&nbsp;&nbsp;<a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a>
-			</p>
-		</div>
-		<div class="foot-hairline"></div>
-		<p class="page-count">{T('footer.page')} {pageNumber} {T('footer.of')} {totalPages}</p>
-	</footer>
+		{/snippet}
+	</PageFooter>
 {/snippet}
 
 <PageFit fit={isMobile} pageWidth={dims.width}>
@@ -607,6 +622,8 @@
 				style="width: {dims.width}px; height: {dims.height}px;"
 				aria-label={fill(T('insights.pageAria'), { n: 1, total: totalPages })}
 			>
+				<!-- Page 1 names its tab, above the compass, which keeps its place (QUEUE row 64). -->
+				<RunningHeader headerText="" tabName={T('tab.insights')} accentInk="var(--rose-ink)" tabOnly />
 				<TitleHeader
 					title={scoreTitle ?? ''}
 					composer={composerDisplay}
@@ -700,10 +717,7 @@
 					style="width: {dims.width}px; height: {dims.height}px;"
 					aria-label={fill(T('insights.pageAria'), { n: 2, total: totalPages })}
 				>
-					<header class="running-header" bind:offsetHeight={runningHeight}>
-						<span class="running-text">{runningHeader}</span>
-						<div class="running-rule"></div>
-					</header>
+					<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose, #ab7f7f)" onheightchange={(h) => (runningHeight = h)} />
 					<div class="squircle" style="top: {subsequentTop}px;">
 						{#if untrusted || vowelsOnPageTwo}
 							<div class="section">
@@ -745,10 +759,7 @@
 					style="width: {dims.width}px; min-height: {dims.height}px;"
 					aria-label={fill(T('insights.pageAria'), { n: commentsPage, total: totalPages })}
 				>
-					<header class="running-header" bind:offsetHeight={runningHeight}>
-						<span class="running-text">{runningHeader}</span>
-						<div class="running-rule"></div>
-					</header>
+					<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose, #ab7f7f)" onheightchange={(h) => (runningHeight = h)} />
 					<div class="comments-flow" style="padding-top: {subsequentTop}px; padding-bottom: {footHeights[commentsPage] + 72}px;">
 						<div class="squircle in-flow">
 							<div class="section">
@@ -1043,49 +1054,11 @@
 		background: var(--rose-ink);
 	}
 
-	/* ── The running head on the earned page ─────────────────
-	   `RunningHeader.svelte`'s recipe, in rose. That component draws its rule
-	   in sage and its siblings are untouched, so the recipe is repeated here. */
-	.running-header {
-		position: absolute;
-		top: 48px;
-		left: 96px;
-		right: 96px;
-	}
-
-	.running-text {
-		font-family: var(--font-sans);
-		font-size: 14px;
-		font-weight: 600;
-		color: var(--ink-secondary);
-		letter-spacing: 1.5px;
-		line-height: 1.4;
-		font-variant-caps: all-small-caps;
-	}
-
-	.running-rule {
-		border-bottom: 1px solid var(--rose, #ab7f7f);
-		margin-top: 4px;
-	}
-
-	/* ── The foot: one apparatus block, one hairline ───────── */
-
-	.insights-foot {
-		position: absolute;
-		bottom: 48px;
-		left: 96px;
-		right: 96px;
-	}
-
-	.apparatus {
-		margin-bottom: 8px;
-		font-family: var(--font-sans);
-		font-size: 9.5px;
-		line-height: 1.45;
-		color: #78716c;
-	}
-
-	.apparatus p {
+	/* ── The foot's own notes, above the line ──────────────────
+	   `PageFooter` sets their type (sans, 9.5 px, stone). The method line is
+	   in sentence case, as Dann's drawing of 2026-10-11 has it. */
+	.footnote,
+	.method {
 		margin: 0;
 	}
 
@@ -1093,38 +1066,6 @@
 		font-family: var(--font-mono);
 		font-size: 8.5px;
 		letter-spacing: 0.04em;
-	}
-
-	.method {
-		font-variant-caps: all-small-caps;
-		letter-spacing: 0.06em;
-	}
-
-	.attribution {
-		text-align: justify;
-		font-variant-caps: all-small-caps;
-		letter-spacing: 1px;
-		color: var(--ink-secondary);
-	}
-
-	.attribution :global(a) {
-		color: var(--ink-secondary);
-		text-decoration: none;
-	}
-
-	.foot-hairline {
-		border-top: 1px solid var(--rose, #ab7f7f);
-		margin-bottom: 8px;
-	}
-
-	.page-count {
-		margin: 0;
-		text-align: right;
-		font-family: var(--font-sans);
-		font-size: 9.5pt;
-		font-variant-caps: all-small-caps;
-		letter-spacing: 1px;
-		color: var(--ink-secondary);
 	}
 
 	/* ── The note comments (N.168) ──────────────────────────────
