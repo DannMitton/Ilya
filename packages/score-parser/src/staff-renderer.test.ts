@@ -2480,3 +2480,54 @@ describe('N.155: a word broken across a system takes a hyphen at the line end', 
     expect(x(b)).toBe(x(a));
   });
 });
+
+// ── QUEUE row 36: every multimeasure rest keeps bar 1's room at its right end ──
+//
+// Dann, 2026-10-05 15:16, on a Tchaikovsky reading: bar 1's H-bar ends with
+// clear space before its barline, the last bar's runs almost into the final
+// barline. "Can we adopt the spacing of m.1 for all multimeasure rests?"
+// Measured here on the demo score, in the primitive drawing, where the H-bar is
+// a rect and every barline a line: the gap is from the H-bar's end to the
+// nearest ink of the barline beside it, in stave-spaces.
+describe('multimeasure rest: the same room at both ends, whatever barline closes it', () => {
+  const scoreSilentIn = (silent: number[]): ParsedScore => {
+    const parsed = demoScore();
+    return { ...parsed, vocalLine: parsed.vocalLine.filter((e) => !silent.includes(e.measureIndex)) };
+  };
+  const gaps = (silent: number[], finalBarline: boolean) => {
+    const parsed = scoreSilentIn(silent);
+    const analyzed = analyzeScore(parsed, demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
+    const lineGap = 10;
+    const svg = renderAnalyzedStaff(parsed, analyzed, { lineGap, finalBarline });
+    const group = svg.slice(svg.indexOf('<g data-tacet'));
+    const bar = /<rect x="([-\d.]+)" y="[-\d.]+" width="([-\d.]+)"/.exec(group)!;
+    const left = Number(bar[1]);
+    const right = left + Number(bar[2]);
+    // Vertical lines only: barlines. Each is [centre, stroke width].
+    const strokes = [...svg.matchAll(/<line x1="([-\d.]+)" y1="([-\d.]+)" x2="([-\d.]+)" y2="([-\d.]+)" stroke="[^"]+" stroke-width="([\d.]+)"/g)]
+      .filter((m) => m[1] === m[3] && m[2] !== m[4])
+      .map((m) => ({ x: Number(m[1]), w: Number(m[5]) }));
+    const before = strokes.filter((s) => s.x < left).sort((a, b) => b.x - a.x)[0];
+    const after = strokes.filter((s) => s.x > right).sort((a, b) => a.x - b.x)[0];
+    return { left: (left - (before.x + before.w / 2)) / lineGap, right: (after.x - after.w / 2 - right) / lineGap };
+  };
+
+  const mid = gaps([1, 2], false);
+  const systemEnd = gaps([3, 4], false);
+  const pieceEnd = gaps([3, 4], true);
+
+  it('leaves the same air at both ends of a run inside the system', () => {
+    expect(Math.abs(mid.right - mid.left)).toBeLessThanOrEqual(0.1);
+  });
+
+  it('leaves the same air before a system-ending single barline', () => {
+    expect(Math.abs(systemEnd.right - mid.left)).toBeLessThanOrEqual(0.1);
+    expect(Math.abs(systemEnd.left - mid.left)).toBeLessThanOrEqual(0.1);
+  });
+
+  it('leaves the same air before the final thin-plus-thick barline, measured to its thin stroke', () => {
+    expect(Math.abs(pieceEnd.right - mid.left)).toBeLessThanOrEqual(0.1);
+    // The air is real, a little over a stave-space, not the quarter space the thick stroke left.
+    expect(pieceEnd.right).toBeGreaterThan(1);
+  });
+});

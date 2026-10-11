@@ -45,6 +45,7 @@
  * editable bindings.
  */
 
+import { closingBarlineStrokeX } from './barline-geometry';
 import type { Fraction, NoteBase, ParsedScore, Pitch, TimeSignature, VocalLineEvent } from './types';
 import type { AnalyzedEvent, AnalyzedScore } from './analysis-types';
 import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from './smufl-metadata';
@@ -2486,7 +2487,7 @@ export function renderAnalyzedStaff(
        column's usual one, which `layoutColumns` placed the run-in past the
        digits. A run that opens the system is bounded by the head's last symbol. */
     const left = newMeasure ? tx - BARLINE_TO_COLUMN_PX : headMeter ? meterRight + sp(Math.max(0, o.meterRunInSp - TACET_REST.barInsetSp)) : ksEnd;
-    const right = nextX === undefined ? contentRight : nextX - BARLINE_TO_COLUMN_PX - nextMeterRoom;
+    const right = nextX === undefined ? closingBarlineStrokeX(contentRight, !!options.finalBarline, { thin: smufl ? round2(sp(ed!.thinBarlineThickness)) : 1, thick: smufl ? round2(sp(ed!.thickBarlineThickness)) : 1.6, halfSpace: sp(0.5) }) : nextX - BARLINE_TO_COLUMN_PX - nextMeterRoom; // QUEUE row 36: the nearest stroke's centre, as a mid-system barline gives
     const centre = (left + right) / 2;
     if (newMeasure) {
       const barX = left - meterRoom;

@@ -7,7 +7,7 @@
   "ceilings": {
     "apps/web/src/routes/+page.svelte": 6003,
     "apps/web/src/lib/components/Reading/LearnContent.svelte": 4099,
-    "packages/score-parser/src/staff-renderer.ts": 3493,
+    "packages/score-parser/src/staff-renderer.ts": 3494,
     "apps/web/src/lib/score/Loupe.svelte": 3013,
     "apps/web/src/lib/components/Drawer/InspectorPanel.svelte": 2432,
     "packages/phonology/src/engine.ts": 2278,
