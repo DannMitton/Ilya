@@ -1,0 +1,1 @@
+{"letter":"A","refused":null,"minutes":0.6105833333333334,"backend":"webgpu","stamp":"homr-web@0.2.0-ilya.6/465","logs":["[omr] metre: page read in 4.6 s, 7 windows, 0 stating a signature","[omr] metre: page read in 4.5 s, 9 windows, 0 stating a signature","[omr] homr read 2 of 2 pages of A.pdf in 29111 ms on webgpu"]}

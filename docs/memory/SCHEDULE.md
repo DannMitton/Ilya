@@ -145,6 +145,8 @@ design rows.
 - [~] **2026-10-10 23:45 to 2026-10-11 04:40 (Opus desk).** Row 57: r4 read (`../sessions/report-code-the-metre-seen-and-summed_r3_2026-10-10.md`), r5 run and read (`report-..._r4_2026-10-10.md`), r6 stopped at its estimate (`report-..._r5_2026-10-11.md`), split into four runs. Insights: Design round 2 accepted; French ratified (`french-insights-r2_r1_2026-10-11.md`); vowel memo page-checked; briefs for rows 63 to 66 written.
 - [x] **Friday 2026-10-09, the checkpoint. DROPPED by the desk (Opus) 2026-10-09 01:10:** its rule (design-bound work moves to LATER to keep the date) is the date sizing the work, which `CONTRACT.md` posture 6 (Dann, 2026-09-27 20:50) forbids; his amendment of 2026-09-26 made 2026-10-30 a target. Nothing moves to LATER. Earlier: Anything design-bound not yet in Code moves to LATER.
 
+- [~] **2026-10-11 15:03 to 19:05 (Opus desk).** Treble test set drafted (`../sessions/draft-treble-test-set_r1_2026-10-11.md`, `memo-sonnet-treble-repertoire_r1_2026-10-11.md`). "Comfortable working zone" ruled and briefed (QUEUE row 73). Row 74 built (`report-code-m-and-p-after-the-metre_r1_2026-10-11.md`): M passes. Held-out set 3 made, outside the tree.
+
 ## Week 5. Monday 2026-10-12 to Sunday 2026-10-18. Clean house. (Monday is Thanksgiving.)
 
 - [ ] **N.170 steps 1 and 2**: freeze the review build and draft the review packet. **Ruled by Dann 2026-09-24 21:03:** *"I don't want to freeze this stage of the build. If we still have five weeks, I want to wait three more until Ilya has really taken shape."* The desk's proposal of weeks 3 and 4 in `OPEN.md` §N.170 is superseded.

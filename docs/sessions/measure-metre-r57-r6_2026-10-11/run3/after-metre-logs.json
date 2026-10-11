@@ -1,0 +1,147 @@
+{
+ "seconds_added": {
+  "tch": 9.6,
+  "sun1": 4.2,
+  "sun4": 6.6,
+  "sun5": 9.0,
+  "sun6": 6.0,
+  "k01": 9.0,
+  "k02": 8.4,
+  "k03": 9.0,
+  "k04": 6.6,
+  "k06": 7.8,
+  "k07": 9.0,
+  "k08": 7.2,
+  "k09": 8.4,
+  "k10": 12.6,
+  "gur": 7.8,
+  "grech": 1.8,
+  "varl": 3.6
+ },
+ "logs": {
+  "tch": [
+   "[omr] metre: page read in 10.2 s, 30 windows, 1 stating a signature",
+   "[omr] metre: page read in 12.2 s, 36 windows, 0 stating a signature",
+   "[omr] metre: page read in 11.8 s, 36 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 3/8 stated: 4 bars add up to 3/8"
+  ],
+  "sun1": [
+   "[omr] metre: page read in 4.5 s, 10 windows, 1 stating a signature",
+   "[omr] metre: page read in 4.4 s, 11 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 6/4 stated: 4 bars add up to 6/4"
+  ],
+  "sun4": [
+   "[omr] metre: page read in 6.0 s, 15 windows, 1 stating a signature",
+   "[omr] metre: page read in 7.1 s, 19 windows, 2 stating a signature",
+   "[omr] metre: bar 1 (page 1): C stated: 4 bars add up to C",
+   "[omr] metre: bar 22 (page 2): 2/4 stated: one bar, between printed signatures, adds up to 2/4",
+   "[omr] metre: bar 23 (page 2): C stated: 4 bars add up to C"
+  ],
+  "sun5": [
+   "[omr] metre: page read in 2.6 s, 5 windows, 1 stating a signature, 1 small staves set aside",
+   "[omr] metre: page read in 4.4 s, 9 windows, 0 stating a signature",
+   "[omr] metre: page read in 4.0 s, 9 windows, 0 stating a signature",
+   "[omr] metre: page read in 4.3 s, 10 windows, 0 stating a signature",
+   "[omr] metre: page read in 4.6 s, 11 windows, 0 stating a signature",
+   "[omr] metre: page read in 6.2 s, 15 windows, 0 stating a signature",
+   "[omr] metre: page read in 7.6 s, 21 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): C stated: 4 bars add up to C"
+  ],
+  "sun6": [
+   "[omr] metre: page read in 5.0 s, 10 windows, 1 stating a signature",
+   "[omr] metre: page read in 5.8 s, 13 windows, 0 stating a signature",
+   "[omr] metre: page read in 6.1 s, 14 windows, 0 stating a signature",
+   "[omr] metre: page read in 5.4 s, 12 windows, 0 stating a signature",
+   "[omr] metre: page read in 5.4 s, 12 windows, 0 stating a signature",
+   "[omr] metre: page read in 4.9 s, 13 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): C stated: 4 bars add up to C"
+  ],
+  "k01": [
+   "[omr] metre: page read in 11.2 s, 27 windows, 1 stating a signature",
+   "[omr] metre: page read in 8.2 s, 18 windows, 0 stating a signature",
+   "[omr] metre: page read in 7.9 s, 20 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 3/4 stated: 4 bars add up to 3/4"
+  ],
+  "k02": [
+   "[omr] metre: page read in 9.9 s, 22 windows, 1 stating a signature",
+   "[omr] metre: page read in 8.2 s, 22 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 2/4 stated: 4 bars add up to 2/4"
+  ],
+  "k03": [
+   "[omr] metre: page read in 6.2 s, 12 windows, 1 stating a signature",
+   "[omr] metre: page read in 7.0 s, 16 windows, 0 stating a signature",
+   "[omr] metre: page read in 6.9 s, 15 windows, 0 stating a signature",
+   "[omr] metre: page read in 6.6 s, 17 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 4/8 stated: 4 bars add up to 4/8"
+  ],
+  "k04": [
+   "[omr] metre: page read in 8.0 s, 17 windows, 2 stating a signature",
+   "[omr] metre: page read in 6.7 s, 14 windows, 1 stating a signature",
+   "[omr] metre: page read in 5.0 s, 10 windows, 2 stating a signature",
+   "[omr] metre: bar 1 (page 1): 4/4 stated: 4 bars add up to 4/4",
+   "[omr] metre: bar 14 (page 1): 3/4 stated: 2 bars add up to 3/4",
+   "[omr] metre: bar 16 (page 2): 4/4 stated: 4 bars add up to 4/4",
+   "[omr] metre: bar 35 (page 3): 2/4 stated: one bar, between printed signatures, adds up to 2/4",
+   "[omr] metre: bar 36 (page 3): 4/4 stated: 4 bars add up to 4/4"
+  ],
+  "k06": [
+   "[omr] metre: page read in 7.0 s, 15 windows, 1 stating a signature",
+   "[omr] metre: page read in 6.5 s, 12 windows, 5 stating a signature",
+   "[omr] metre: page read in 6.3 s, 16 windows, 0 stating a signature",
+   "[omr] metre: page 2: 4/4 after the staff's last bar line set aside as a courtesy signature",
+   "[omr] metre: bar 1 (page 1): 4/4 stated: 4 bars add up to 4/4",
+   "[omr] metre: bar 20 (page 2): 2/4 stated: one bar, between printed signatures, adds up to 2/4",
+   "[omr] metre: bar 21 (page 2): 4/4 stated: one bar, between printed signatures, adds up to 4/4",
+   "[omr] metre: bar 22 (page 2): 2/4 stated: one bar, between printed signatures, adds up to 2/4",
+   "[omr] metre: bar 23 (page 2): 4/4 stated: 4 bars add up to 4/4"
+  ],
+  "k07": [
+   "[omr] metre: page read in 6.4 s, 12 windows, 0 stating a signature",
+   "[omr] metre: page read in 6.9 s, 15 windows, 0 stating a signature",
+   "[omr] metre: page read in 2.8 s, 4 windows, 0 stating a signature",
+   "[omr] metre: page read in 5.8 s, 11 windows, 0 stating a signature",
+   "[omr] metre: page read in 6.7 s, 17 windows, 2 stating a signature",
+   "[omr] metre: bar 47 (page 5): 9/8 stated: one bar, between printed signatures, adds up to 9/8",
+   "[omr] metre: bar 48 (page 5): 6/8 stated: 3 bars add up to 6/8"
+  ],
+  "k08": [
+   "[omr] metre: page read in 5.4 s, 11 windows, 1 stating a signature",
+   "[omr] metre: page read in 6.9 s, 14 windows, 0 stating a signature",
+   "[omr] metre: page read in 5.9 s, 13 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 4/4 stated: 4 bars add up to 4/4"
+  ],
+  "k09": [
+   "[omr] metre: page read in 6.7 s, 13 windows, 1 stating a signature",
+   "[omr] metre: page read in 5.9 s, 11 windows, 0 stating a signature",
+   "[omr] metre: page read in 5.8 s, 10 windows, 1 stating a signature",
+   "[omr] metre: page read in 5.7 s, 14 windows, 2 stating a signature",
+   "[omr] metre: page 3: 3/2 after the staff's last bar line set aside as a courtesy signature",
+   "[omr] metre: bar 1 (page 1): 4/4 stated: 4 bars add up to 4/4",
+   "[omr] metre: bar 30 (page 4): 3/2 stated: one bar, between printed signatures, adds up to 3/2",
+   "[omr] metre: bar 31 (page 4): 4/4 stated: 4 bars add up to 4/4"
+  ],
+  "k10": [
+   "[omr] metre: page read in 11.8 s, 30 windows, 1 stating a signature",
+   "[omr] metre: page read in 8.8 s, 21 windows, 0 stating a signature",
+   "[omr] metre: page read in 9.9 s, 27 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 3/4 stated: 4 bars add up to 3/4"
+  ],
+  "gur": [
+   "[omr] metre: page read in 0.3 s, 0 windows, 0 stating a signature, 1 voice staves not found",
+   "[omr] metre: page read in 7.7 s, 19 windows, 1 stating a signature",
+   "[omr] metre: page read in 7.1 s, 19 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): C stated: 4 bars add up to C"
+  ],
+  "grech": [
+   "[omr] metre: page read in 0.3 s, 0 windows, 0 stating a signature, 3 voice staves not found",
+   "[omr] metre: page read in 0.2 s, 0 windows, 0 stating a signature, 4 voice staves not found",
+   "[omr] metre: page read in 1.2 s, 1 windows, 0 stating a signature, 3 voice staves not found",
+   "[omr] metre: page read in 0.1 s, 0 windows, 0 stating a signature, 4 voice staves not found"
+  ],
+  "varl": [
+   "[omr] metre: page read in 9.7 s, 22 windows, 1 stating a signature",
+   "[omr] metre: page read in 3.9 s, 9 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 3/8 stated: 4 bars add up to 3/8"
+  ]
+ }
+}
