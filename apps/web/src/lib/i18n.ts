@@ -1710,9 +1710,11 @@ const strings: Record<string, Record<Language, string>> = {
 	// read as "half the song"; « centre » ratified as built.
 	// The cycle-dose line is RATIFIED in both languages (22:03 to 22:04; the
 	// parenthetical is Dann's, the French the desk's; caveat struck 22:04).
+	// The French term changed by Dann's ruling of 2026-10-11 04:12: « plis
+	// vocaux » replaces « cordes vocales » (QUEUE row 65).
 	'insights.figure.halfMass':    { en: 'half the singing',             fr: 'la moitié du temps chanté' },
 	'insights.figure.centre':      { en: 'centre',                       fr: 'centre' },
-	'insights.figure.cycleDose':   { en: 'Cycle dose: about {cycles} (number of fold collisions in this piece)', fr: 'Dose de cycles\u00a0: environ {cycles} (nombre de collisions des cordes vocales dans cette pièce)' },
+	'insights.figure.cycleDose':   { en: 'Cycle dose: about {cycles} (number of fold collisions in this piece)', fr: 'Dose de cycles\u00a0: environ {cycles} (nombre de collisions des plis vocaux dans cette pièce)' },
 	// The key under the tessituragram (QUEUE row 42), RATIFIED in both languages
 	// by Dann 2026-10-07 22:48. Each names a mark the figure draws; none prints
 	// when the figure does not draw its mark.
