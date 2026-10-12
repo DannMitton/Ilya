@@ -14,7 +14,8 @@
  * the live page is `e2e/markup-pages-lose-no-bars.test.ts`.
  */
 import { describe, expect, it } from 'vitest';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyzeScore, MusicXmlScoreParser, paginateScore, type ParsedScore } from '@ilya/score-parser';
@@ -42,15 +43,23 @@ describe('the stylesheet sizes the page, never a system inside it', () => {
 	});
 });
 
-/** Every tracked `.musicxml` under the repository, outside dependencies. */
-function scores(dir: string, out: string[] = []): string[] {
-	for (const name of readdirSync(dir)) {
-		if (name === 'node_modules' || name.startsWith('.')) continue;
-		const p = join(dir, name);
-		if (statSync(p).isDirectory()) scores(p, out);
-		else if (name.endsWith('.musicxml')) out.push(p);
+/**
+ * Every `.musicxml` that git tracks under `apps/`, `docs/`, and `tools/`. It asks
+ * git, not the disk, so a git-ignored file on one machine never changes the count.
+ */
+function trackedScores(): string[] {
+	let out: string;
+	try {
+		out = execFileSync('git', ['ls-files', '-z', '--', '*.musicxml'], { cwd: ROOT, encoding: 'utf8' });
+	} catch (e) {
+		const message = e instanceof Error ? e.message : String(e);
+		throw new Error('markup-pages: git ls-files failed (is this a git checkout with git installed?): ' + message);
 	}
-	return out;
+	return out
+		.split('\0')
+		.filter((p) => p !== '')
+		.filter((p) => /^(apps|docs|tools)\//.test(p))
+		.map((p) => join(ROOT, p));
 }
 
 async function parse(path: string): Promise<ParsedScore> {
@@ -63,7 +72,7 @@ async function parse(path: string): Promise<ParsedScore> {
 const GEOMETRY = { pageWidth: 624, pageHeight: 727, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, ...ENGRAVING_DEFAULTS };
 
 describe('every bar on exactly one page, every system inside its page', () => {
-	const files = scores(join(ROOT, 'apps')).concat(scores(join(ROOT, 'docs')), scores(join(ROOT, 'tools')));
+	const files = trackedScores();
 
 	it('finds the tree’s scores', () => {
 		expect(files.length).toBeGreaterThan(50);
