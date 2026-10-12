@@ -1803,8 +1803,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// Rows 22 and 23.
 	'insights.r2.pieceTessitura':  { en: 'this piece’s tessitura',   fr: 'la tessiture de la pièce' },
 	'insights.r2.yourTessitura':   { en: 'your comfortable working zone, typed',         fr: 'votre zone de travail confortable, telle que vous l’avez indiquée' },
-	// The key to French pitch names, once, in the method line of a French page whose prose names a pitch (DESK DEFAULT, `OPEN.md` 04:12). The English is never printed: English pitch names need no key.
-	'insights.r2.pitchKey':        { en: '(A4\u00a0=\u00a0440\u00a0Hz)',                              fr: '(la3 = 440 Hz)' },
+	// The key to the octave index, once, in the method line of a French page whose prose names a pitch (DESK DEFAULT). French pitches are letters with the American index since QUEUE row 68 (Dann 2026-10-11 04:58); the key stays because a French reader's own index puts 440 Hz at la3. The English is never printed.
+	'insights.r2.pitchKey':        { en: '(A4\u00a0=\u00a0440\u00a0Hz)',                              fr: '(A4\u00a0=\u00a0440\u00a0Hz)' },
 
 	// ── N.168, first slice: the note comments (`brief-code-n168-first-slice_r2`) ──
 	//    `comment-text.ts` assembles them; `comment.<register>.<part>` falls back to

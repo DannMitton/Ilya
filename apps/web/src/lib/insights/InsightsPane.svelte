@@ -264,7 +264,7 @@
 	const hasTypedCharacteristics = $derived(
 		adapted.completeness.range || adapted.completeness.tessitura || adapted.completeness.passaggio,
 	);
-	/* A French page whose prose names a pitch keys the solfège once, here (DESK DEFAULT, `OPEN.md` 04:12). */
+	/* A French page names its octave index once, here: « (A4 = 440 Hz) » (QUEUE row 68; DESK DEFAULT). */
 	const methodLine = $derived(
 		(!model
 			? T('insights.method.silent')
