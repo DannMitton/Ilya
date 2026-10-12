@@ -102,6 +102,8 @@ Read this every session. It is short on purpose.
 4. **When he returns, ask what the desk needs one question at a time** (19:26: *"Ask me everything you want to, one question at a time now."*).
 5. **Never defend; explain from fact or stop** (15:31: *"Stop defending yourself. Either explain from fact or shut the fuck up."*). Accountability is shown by what changes, not by saying it (15:24).
 
+**Said on 2026-10-11 at 22:36 to 22:37, to the Opus desk.** The desk had sent Code four briefs that evening (QUEUE rows 77 to 80) without Fable's review; Dann: *"I'm uneasy about having sent Code a brief that you did not vet through Fable"*. The desk proposed the rule; Dann: *"I consent yes"*. **So: every Code brief is reviewed by Fable before Code gets it, and the review's amendments are applied first.** Who offered it: the desk. Who ruled it in: Dann. Default, with its condition: a brief that only measures and keeps nothing may start while its review runs, and the review then goes over its report.
+
 The tethers below are how you stay honest while doing this. They are not a
 reason to stop.
 

@@ -1,0 +1,5 @@
+M measure A: song notes kept 13, song notes dropped 49; extra notes kept 0, extra notes dropped 0
+M measure B: song notes kept 36, song notes dropped 26; extra notes kept 0, extra notes dropped 0
+M measure C: song notes kept 33, song notes dropped 29; extra notes kept 0, extra notes dropped 0
+M measure D: song notes kept 32, song notes dropped 30; extra notes kept 0, extra notes dropped 0
+M measure E: song notes kept 23, song notes dropped 39; extra notes kept 0, extra notes dropped 0

@@ -1,0 +1,5 @@
+K measure A: song notes kept 78, song notes dropped 56; extra notes kept 0, extra notes dropped 0
+K measure B: song notes kept 96, song notes dropped 38; extra notes kept 0, extra notes dropped 0
+K measure C: song notes kept 114, song notes dropped 20; extra notes kept 0, extra notes dropped 0
+K measure D: song notes kept 116, song notes dropped 18; extra notes kept 0, extra notes dropped 0
+K measure E: song notes kept 54, song notes dropped 80; extra notes kept 0, extra notes dropped 0

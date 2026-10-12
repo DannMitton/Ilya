@@ -1,0 +1,25 @@
+ 49 G4   x 1800 extra         near cen          lat  A:drop B:drop C:keep D:keep E:keep | cen[l/l] Ja,[l/c] ras,[l/l] || E: сео[c] да,[c] ras,[l]
+ 49 G4   x 1838 song  да    ? near cen          lat  A:drop B:drop C:keep D:keep E:keep | cen[l/l] Ja,[l/c] ras,[l/l] || E: сео[c] да,[c] ras,[l]
+ 49 G4   x 2041 extra         near tu           lat  A:drop B:drop C:drop D:drop E:keep | tu[l/l] || E: 
+ 49 G4   x 2226 extra         near ries         lat  A:drop B:keep C:keep D:keep E:keep | ries[l/l] прой[c/c] tres[l/l] || E: прой[c] tres[l]
+ 49 G4   x 2238 song  прой  ? near ries         lat  A:drop B:keep C:keep D:keep E:keep | ries[l/l] прой[c/c] tres[l/l] || E: прой[c] tres[l]
+ 69 E5   x 1762 extra         near -            -    A:drop B:keep C:keep D:keep E:keep |  || E: 
+ 69 E5   x 1785 song        ? near -            -    A:drop B:keep C:keep D:keep E:keep |  || E: 
+ 69 E5   x 2024 extra         near que          lat  A:drop B:drop C:drop D:drop E:drop | que[l/l] || E: que[l]
+ 69 E5   x 2200 extra         near for          lat  A:drop B:keep C:keep D:keep E:keep | for[l/l] какЪ[c/c] mon[l/l] || E: for[l] какЪ[c] mon[l]
+ 69 E5   x 2224 song  какъ  ? near for          lat  A:drop B:keep C:keep D:keep E:keep | for[l/l] какЪ[c/c] mon[l/l] || E: for[l] какЪ[c] mon[l]
+ 70 G5   x 2504 extra         near thee         lat  A:drop B:drop C:drop D:drop E:drop | thee[l/l] || E: thee[l]
+ 70 A5   x 2465 song  жизнь ? near thee         lat  A:drop B:drop C:drop D:drop E:drop | thee[l/l] || E: thee[l]
+ 71 A5   x  429 song        ? near -            -    A:drop B:keep C:keep D:keep E:keep |  || E: 
+ 71 G5   x  504 extra         near -            -    A:drop B:keep C:keep D:keep E:keep |  || E: 
+ 71 A4   x  610 extra         near el           lat  A:drop B:drop C:drop D:drop E:drop | el[l/l] || E: el[l]
+ 71 A4   x  753 song  мо    ? near MO           lat  A:drop B:drop C:drop D:keep E:keep | MO[l/l] le[l/l] || E: "EU[l] мо[c] le[l]
+ 72 D4   x 1124 extra         near guide.       lat  A:drop B:keep C:drop D:keep E:keep | guide.[l/l] ю.[c/l] me[l/l] a[l/l] || E: guide.[l] ю.[c] me[l] a[l]
+ 72 D4   x 1099 extra         near guide.       lat  A:drop B:keep C:drop D:keep E:keep | guide.[l/l] ю.[c/l] me[l/l] a[l/l] || E: guide.[l] ю.[c] me[l] a[l]
+ 73 D4   x 1810 extra         near -            -    A:drop B:keep C:keep D:keep E:keep |  || E: 
+ 73 D4   x 2041 song  ю     ? near r            lat  A:drop B:drop C:keep D:drop E:drop | r[l/c] me.[l/l] || E: r[l] me.[l]
+S measure A: song notes kept 5, song notes dropped 111; extra notes kept 0, extra notes dropped 12
+S measure B: song notes kept 63, song notes dropped 53; extra notes kept 7, extra notes dropped 5
+S measure C: song notes kept 76, song notes dropped 40; extra notes kept 6, extra notes dropped 6
+S measure D: song notes kept 89, song notes dropped 27; extra notes kept 8, extra notes dropped 4
+S measure E: song notes kept 103, song notes dropped 13; extra notes kept 9, extra notes dropped 3

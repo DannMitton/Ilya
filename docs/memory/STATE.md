@@ -86,6 +86,8 @@ does not repeat them.
 
 ### Numbered 2026-10-11
 
+- `[ ]` **N.184. Ilya reads the pre-reform spelling (ѣ, ѳ, ѵ, і) in a score's underlay.** Ruled in by Dann 2026-10-11 23:32 (*"We need this capability"*); DESK DEFAULT number. Plan: rows 81 (baseline) and 82 (a fine-tuned Russian model). Spec in `OPEN.md`.
+
 - `[ ]` **N.183. The 32nd and the 64th in the editing controls (keys 2 and 1, as in Finale).** Offered by the desk 18:58 from the Mussorgsky bar; ruled in by Dann 18:59 (*"yes, add Finale's other two digits"*). DESK DEFAULT number. Spec: the brief, QUEUE row 75.
 
 ### Numbered 2026-10-09
