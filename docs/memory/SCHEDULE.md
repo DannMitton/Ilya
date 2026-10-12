@@ -148,6 +148,7 @@ design rows.
 - [~] **2026-10-11 15:03 to 19:05 (Opus desk).** Treble test set drafted (`../sessions/draft-treble-test-set_r1_2026-10-11.md`, `memo-sonnet-treble-repertoire_r1_2026-10-11.md`). "Comfortable working zone" ruled and briefed (QUEUE row 73). [CHECKED 2026-10-11 19:40 against git log: **Row 74 is committed as `232c5a7`; deployment is not established.**] Row 74 built (`report-code-m-and-p-after-the-metre_r1_2026-10-11.md`): M passes. Held-out set 3 made, outside the tree.
 
 - [~] **2026-10-11 19:45 (Opus desk), close.** Final test on held-out set 3 ran (QUEUE row 76, `../sessions/report-code-the-final-test-set3_r1_2026-10-11.md`): 93.8, 6 of 10 pass. Memory audited against `git log` and corrected (`../sessions/audit-memory-vs-git_r1_2026-10-11.md`). Seven briefs Fable-reviewed and sent to the cloud lane.
+- [~] **2026-10-11 23:55 (Opus desk), close.** Shipped `b80b543` (row 77, set 3 to 7 of 10) and `fd1c86a` (cloud lane rows 72, 70, 73, 68, 75, 62, 67, 69, 34; row 71 held). Row 80 measured (`../sessions/report-code-the-russian-line-by-its-underlay_r1_2026-10-11.md`). Rows 78a to 78c and 79 written and Fable-reviewed (`../sessions/review-fable-briefs-78-80_r1_2026-10-11.md`), not sent. N.184 numbered. Voice-family draft r2 made by a helper, not yet read by the desk. Next: `STATE.md` handover of 23:55.
 
 ## Week 5. Monday 2026-10-12 to Sunday 2026-10-18. Clean house. (Monday is Thanksgiving.)
 

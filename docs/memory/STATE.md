@@ -47,25 +47,30 @@ git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/De
 
 ## THE ONE THING
 
-> ### HANDOVER OF 2026-10-11 19:45 (the Opus desk thread opened 15:03). READ FIRST.
+> ### HANDOVER OF 2026-10-11 23:55 (the Opus desk thread that followed the 19:45 close). READ FIRST.
 >
-> **Floor `8e74f39`** (shipped by Dann 19:06; `232c5a7` at 19:02 carries row 74). THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
+> **Floor `fd1c86a`** (Dann's ship 23:51, all eight gates at baseline; gate 4 is now 2448, see `ENVIRONMENT.md` "WHAT THE DESK LEARNED ON 2026-10-11 LATE"). It merges `cloud-lane` up to `1a35871` through `1a02b11`: rows 72, 70, 73, 68, 75, 62, 67, 69, and 34 are in the tree, **none walked by Dann yet**. Row 77 shipped earlier as `b80b543` (set 3 from 6 to 7 of 10). THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
 >
-> **THE FINAL TEST ON SET 3 REPORTED at about 19:45 (`../sessions/report-code-the-final-test-set3_r1_2026-10-11.md`, read whole by the desk): 93.8 BELOW, 6 of 10 pass.** Rehearsal K and M equal row 74's lines exactly, so the instrument held. Below: S 71.6 (Balakirev, extra 32), T 92.4 (Borodin, extra 14), V 94.6 (Mussorgsky, 7 length misreads), X 84.7 (Rimsky-Korsakov, 6 pitch and 16 length misreads). Letters map by glob order of `truth/*.pdf` (the desk, from the manifest). DESK INFERENCE, not established: S and T are the two songs whose voice splits between languages, so their extras may be the other language's notes, a truth question as much as a reader one. **Opening the four for diagnosis is Dann's decision (irreversible); the next desk asks it first, one question.** Code saw the file names in a directory listing (its report, last section); it did not open any content.
+> **Where THE ONE THING stands.** Row 80 measured (`../sessions/report-code-the-russian-line-by-its-underlay_r1_2026-10-11.md`): no rule separates the Russian line from the French or English printed beside it in split bars yet. Leads, in the desk's order: (a) **row 81**, a measure: Tesseract with Russian only and with the Cyrillic script model on the underlay strip, plus "one place read twice is one event"; (b) **row 82**, fine-tune a Russian Tesseract on rendered lines that include ѣ, ѳ, ѵ, and і (N.184, ruled in by Dann 23:32); (c) N.135, the underlay reader; (d) the pasted poem's syllable counts for the row's language. **Neither row 81 nor 82 is written. Both go through Fable before Code** (`CONTRACT.md`, the Fable-review paragraph). Then held-out set 4 is made, because set 3 is now spent.
 >
-> **One lane is RUNNING (the final test finished), both started in this thread; their reports are the next desk's first reads.**
-> 1. **DONE: Code on the Mac (Sonnet): QUEUE row 76, THE FINAL TEST on held-out set 3**, ten fresh songs (letters Q to Z) through the drop box on the alias at `8e74f39`. Report `../sessions/report-code-the-final-test-set3_r1_2026-10-11.md`. Read the two rehearsal lines (K, M) against row 74's first; if they differ, nothing else in the report counts. The set's files are outside the tree, `~/Downloads/_desk-heldout3-private/` (`MANIFEST.md`, `truth/`, the helpers' memos); opening any of them is Dann's decision.
-> 2. **The cloud lane (session_016NrzTesypawG8rdfVc4fxs, Opus by Dann's slip): rows 72, 70, 73, 68, 75, 62, 67, 71 in that order**, sent by the desk through Dann's Chrome at 19:21. Rows 69 (`297eeba8`) and 34 (`01551e20`) finished before that; whether both reached `origin/cloud-lane` is NOT ESTABLISHED (one push command failed; the queue's step 0 checks). The lane ends with one summary. **Then a ship that merges `cloud-lane`.**
+> **Ready and not sent:** rows 78a, 78b, 78c (in that order), then 79, all Fable-reviewed, for the cloud lane (`QUEUE.md`). Send through Dann's Chrome or the cloud prompt, each brief pasted whole between BEGIN and END markers.
 >
-> **Waiting on Dann, one at a time, after the final test:** row 69's five French strings (placeholder labels, marked `[FR: desk draft for Dann]`) and its three taste calls with pictures (`../sessions/report-code-placeholder-vowels-labelled_r1_2026-10-11.md`, `report-code-markup-crossing-squircle_r1_2026-10-11.md`): a selected crossing hides its red; dashed turning noteheads; up to 150 dashes for a partly calibrated voice.
+> **Held:** row 71 (N.182, suggesting a key) is on `cloud-lane` after `1a35871` and is not merged. It is reworked after the voice-family table (`OPEN.md` "ROW 71's KEY LINES, RULED"). **N.182 has no line in THE TRACKER; NOT ESTABLISHED whether it ever had one.**
 >
-> **Done this thread:** treble test set (`../sessions/draft-treble-test-set_r1_2026-10-11.md`); "comfortable working zone" ruled, tessitura amended after Hoch and the Académie (`PRODUCT.md`); row 74 shipped (M 100.0; P 77.6, held by its duplets); held-out set 3 made; N.183 numbered (row 75); N.123 part 2 CLOSED as superseded (Dann 19:15, `OPEN.md`); seven briefs Fable-reviewed and amended; the memory audit (`../sessions/audit-memory-vs-git_r1_2026-10-11.md`) applied as `[CHECKED 2026-10-11 19:40 ...]` markers; `README.md` closing step 0 added.
+> **Next desk, one at a time:**
+> 1. Present the voice-family draft r2 family by family, soprano first, reading each family whole before showing it (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-voice-families_r2_*`, 262 rows; `PRODUCT.md` "What Ilya watches for depends on the voice"). The desk has not read r2 whole.
+> 2. Write rows 81 and 82; Fable reviews; then Code.
+> 3. Send 78a to 78c and 79.
+> 4. French owed: row 66's, row 70's five desk-derived sentences, row 67's three open items.
+> 5. Taste calls owed: row 75's seven-length row wrap at 375 px; row 62's "Saved" placement; the 32nd and 64th as tuplet units.
+> 6. A small Code row: `markup-pages.test` counts git-ignored `.musicxml` under `tools/e16-harness/output/`; it should use `git ls-files` (why gate 4 read 2448 on the Mac).
+> 7. Offered to Dann, not asked: hide row 66's voice-blind primo line for trebles now, before the voice-family table lands.
 >
-> **Still owed, carried from the 04:40 handover:** a Quebec source for octave numbering (lead: Karine St-Pierre, Dann's call). **New:** a standing rule for which underlay line a truth file scores when the voice splits between languages (set 3's helpers recorded the Russian). P below 95 because homr writes printed duplets as other lengths (`report-code-m-and-p-after-the-metre_r1_2026-10-11.md`, step 4).
+> **Still owed, carried from 19:45:** a Quebec source for octave numbering (lead: Karine St-Pierre, Dann's call); a standing rule for which underlay line a truth file scores when the voice splits between languages (DESK DEFAULT in row 77's brief §3.3: the Russian line).
 >
-> **This thread's mistakes, each recorded where it happened:** "singers say it that way in the studio" (no source); "a tessitura by voice type" (desk-coined); "the touch buttons read the same table" (`CorrectionSurface.svelte:207` has its own); the 15:05 handover's "lyric soprano" for Miller Fig. 10.1.
+> **This thread's mistakes, each owned when made:** "boxes move whole" (`paginate.ts` already breaks them); "page 1 fills under the rule" (drawing it showed otherwise); "Ilya never needs Tesseract's spelling" (Dann: photographed scores are the common path); citing Dann's 19:58 sentence as a constraint mid-design; misreading 19:47 as dropping the per-comment remedy; row 80's brief saying homr has no positions (Fable caught it; corrected to Code). Ship-paste order and iCloud " 2" duplicates: `ENVIRONMENT.md`.
 >
-> ### Older handovers: all in `../sessions/LOG.md`, the latest block "update of 2026-10-11 17:00 ... moved at the close of 2026-10-11 19:45". Every block before it was already there; each pointer line that stood here is in that block.
+> ### Older handovers: all in `../sessions/LOG.md`, the latest block "handover of 2026-10-11 19:45 ... moved at the close of 2026-10-11 23:55". Every block before it was already there.
 
 
 
@@ -88,7 +93,7 @@ does not repeat them.
 
 - `[ ]` **N.184. Ilya reads the pre-reform spelling (ѣ, ѳ, ѵ, і) in a score's underlay.** Ruled in by Dann 2026-10-11 23:32 (*"We need this capability"*); DESK DEFAULT number. Plan: rows 81 (baseline) and 82 (a fine-tuned Russian model). Spec in `OPEN.md`.
 
-- `[ ]` **N.183. The 32nd and the 64th in the editing controls (keys 2 and 1, as in Finale).** Offered by the desk 18:58 from the Mussorgsky bar; ruled in by Dann 18:59 (*"yes, add Finale's other two digits"*). DESK DEFAULT number. Spec: the brief, QUEUE row 75.
+- `[~]` **SHIPPED `fd1c86a` 2026-10-11 23:51 (QUEUE row 75); not walked.** **N.183. The 32nd and the 64th in the editing controls (keys 2 and 1, as in Finale).** Offered by the desk 18:58 from the Mussorgsky bar; ruled in by Dann 18:59 (*"yes, add Finale's other two digits"*). DESK DEFAULT number. Spec: the brief, QUEUE row 75.
 
 ### Numbered 2026-10-09
 

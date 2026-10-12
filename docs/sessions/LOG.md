@@ -8811,3 +8811,24 @@ Its rulings and Dann's words are homed in `CONTRACT.md` (THE POSTURE, the paragr
 > ### CLOSE OF 2026-09-30, about 19:50: moved verbatim to `../sessions/LOG.md`, block "close of 2026-09-30, about 19:50", at 2026-10-01 00:05. Its rulings are in `OPEN.md` (N.174; sing first, then fry) and its one thing (row 2d) is built.
 
 > ### CLOSE OF 2026-09-29, about 22:20: moved verbatim to `../sessions/LOG.md`, block "close of 2026-09-29, about 22:20". Its rulings were seated in `PRODUCT.md` that night; its one thing (the Fable distillation) is done.
+
+### Block "handover of 2026-10-11 19:45", moved verbatim from STATE.md at the close of 2026-10-11 23:55. Its open items are carried by the handover of 23:55; its rulings live in OPEN.md and PRODUCT.md.
+
+> ### HANDOVER OF 2026-10-11 19:45 (the Opus desk thread opened 15:03). READ FIRST.
+>
+> **Floor `8e74f39`** (shipped by Dann 19:06; `232c5a7` at 19:02 carries row 74). THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
+>
+> **THE FINAL TEST ON SET 3 REPORTED at about 19:45 (`../sessions/report-code-the-final-test-set3_r1_2026-10-11.md`, read whole by the desk): 93.8 BELOW, 6 of 10 pass.** Rehearsal K and M equal row 74's lines exactly, so the instrument held. Below: S 71.6 (Balakirev, extra 32), T 92.4 (Borodin, extra 14), V 94.6 (Mussorgsky, 7 length misreads), X 84.7 (Rimsky-Korsakov, 6 pitch and 16 length misreads). Letters map by glob order of `truth/*.pdf` (the desk, from the manifest). DESK INFERENCE, not established: S and T are the two songs whose voice splits between languages, so their extras may be the other language's notes, a truth question as much as a reader one. **Opening the four for diagnosis is Dann's decision (irreversible); the next desk asks it first, one question.** Code saw the file names in a directory listing (its report, last section); it did not open any content.
+>
+> **One lane is RUNNING (the final test finished), both started in this thread; their reports are the next desk's first reads.**
+> 1. **DONE: Code on the Mac (Sonnet): QUEUE row 76, THE FINAL TEST on held-out set 3**, ten fresh songs (letters Q to Z) through the drop box on the alias at `8e74f39`. Report `../sessions/report-code-the-final-test-set3_r1_2026-10-11.md`. Read the two rehearsal lines (K, M) against row 74's first; if they differ, nothing else in the report counts. The set's files are outside the tree, `~/Downloads/_desk-heldout3-private/` (`MANIFEST.md`, `truth/`, the helpers' memos); opening any of them is Dann's decision.
+> 2. **The cloud lane (session_016NrzTesypawG8rdfVc4fxs, Opus by Dann's slip): rows 72, 70, 73, 68, 75, 62, 67, 71 in that order**, sent by the desk through Dann's Chrome at 19:21. Rows 69 (`297eeba8`) and 34 (`01551e20`) finished before that; whether both reached `origin/cloud-lane` is NOT ESTABLISHED (one push command failed; the queue's step 0 checks). The lane ends with one summary. **Then a ship that merges `cloud-lane`.**
+>
+> **Waiting on Dann, one at a time, after the final test:** row 69's five French strings (placeholder labels, marked `[FR: desk draft for Dann]`) and its three taste calls with pictures (`../sessions/report-code-placeholder-vowels-labelled_r1_2026-10-11.md`, `report-code-markup-crossing-squircle_r1_2026-10-11.md`): a selected crossing hides its red; dashed turning noteheads; up to 150 dashes for a partly calibrated voice.
+>
+> **Done this thread:** treble test set (`../sessions/draft-treble-test-set_r1_2026-10-11.md`); "comfortable working zone" ruled, tessitura amended after Hoch and the Académie (`PRODUCT.md`); row 74 shipped (M 100.0; P 77.6, held by its duplets); held-out set 3 made; N.183 numbered (row 75); N.123 part 2 CLOSED as superseded (Dann 19:15, `OPEN.md`); seven briefs Fable-reviewed and amended; the memory audit (`../sessions/audit-memory-vs-git_r1_2026-10-11.md`) applied as `[CHECKED 2026-10-11 19:40 ...]` markers; `README.md` closing step 0 added.
+>
+> **Still owed, carried from the 04:40 handover:** a Quebec source for octave numbering (lead: Karine St-Pierre, Dann's call). **New:** a standing rule for which underlay line a truth file scores when the voice splits between languages (set 3's helpers recorded the Russian). P below 95 because homr writes printed duplets as other lengths (`report-code-m-and-p-after-the-metre_r1_2026-10-11.md`, step 4).
+>
+> **This thread's mistakes, each recorded where it happened:** "singers say it that way in the studio" (no source); "a tessitura by voice type" (desk-coined); "the touch buttons read the same table" (`CorrectionSurface.svelte:207` has its own); the 15:05 handover's "lyric soprano" for Miller Fig. 10.1.
+>
