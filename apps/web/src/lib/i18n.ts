@@ -269,15 +269,15 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Metadata fields ─────────────────────────────────────
 	'meta.heading':                { en: 'Metadata',                     fr: 'Métadonnées' },
 	'meta.title':                  { en: 'Aria or song title',            fr: 'Aria ou titre du chant' },
-	'meta.composer':               { en: 'Composer',                     fr: 'Compositeur' },
+	'meta.composer':               { en: 'Composer',                     fr: 'Compositrice ou compositeur' },
 	'meta.poet':                   { en: 'Poet or librettist',            fr: 'Poète ou librettiste' },
 	'meta.opus':                   { en: 'Opera, song cycle, opus number', fr: 'Opéra, cycle de mélodies, numéro d\u2019opus' },
 	'meta.transcriber':            { en: 'Transcriber name',             fr: 'Nom du transcripteur' },
-	'meta.translator':             { en: 'Translator',                   fr: 'Traducteur' },
+	'meta.translator':             { en: 'Translator',                   fr: 'Traductrice ou traducteur' },
 	'meta.transl':                 { en: 'TRANSL.',                      fr: 'TRAD.' },
 	'meta.reset':                  { en: 'Reset',                        fr: 'Réinitialiser' },
 	'meta.textBy':                 { en: 'Text by',                      fr: 'Texte de' },
-	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
+	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur la compositrice ou le compositeur, l\u2019opus et la ou le poète' },
 
 	// ── Notation options (IPA display toggles) ──────────────
 	'cosmetic.heading':            { en: 'Notation',                     fr: 'Notation' },
@@ -668,18 +668,18 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Stress source labels ─────────────────────────────────
 	'stress.dictionary':           { en: 'Verified from dictionary',     fr: 'Vérifié dans le dictionnaire' },
-	'stress.supplement':           { en: 'Singer supplement',            fr: 'Supplément pour chanteurs' },
+	'stress.supplement':           { en: 'Singer supplement',            fr: 'Supplément pour chanteuses et chanteurs' },
 	'stress.yoRule':               { en: 'Derived from ё',              fr: 'Dérivé de ё' },
 	'stress.yoRestored':           { en: 'ё restored from dictionary',  fr: 'ё restauré du dictionnaire' },
 	'stress.inferred':             { en: 'Algorithmically inferred',    fr: 'Inféré algorithmiquement' },
 	'stress.unknown':              { en: 'Unknown \u2014 verify manually', fr: 'Inconnu \u2014 vérifier manuellement' },
 	'stress.userDictionary':       { en: 'User verified',               fr: 'Vérifié par l\u2019utilisateur' },
-	'stress.userComposer':         { en: 'Composer setting',            fr: 'Choix du compositeur' },
+	'stress.userComposer':         { en: 'Composer setting',            fr: 'Choix de la partition' },
 	'stress.userOverride':         { en: 'User assignment',             fr: 'Choix de l\u2019utilisateur' },
 
 	// ── Stress assignment (Inspector) ─────────────────────────
 	'inspector.stressAssign.dictionary':    { en: 'Dictionary',          fr: 'Dictionnaire' },
-	'inspector.stressAssign.composer':      { en: 'Composer',            fr: 'Compositeur' },
+	'inspector.stressAssign.composer':      { en: 'Composer',            fr: 'Compositrice ou compositeur' },
 	'inspector.stressAssign.myAssignment':  { en: 'My assignment',       fr: 'Mon choix' },
 	'inspector.stressAssign.default':       { en: 'Default',             fr: 'Par défaut' },
 	'inspector.yoToggle':                   { en: 'ё \u2194 е',         fr: 'ё \u2194 е' },
@@ -818,7 +818,7 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Per-page provenance legend ───────────────────────────
 	'legend.user-dictionary':      { en: 'Verified in dictionary',       fr: 'Vérifié dans le dictionnaire' },
-	'legend.user-composer':        { en: 'Composer setting',             fr: 'Réglage du compositeur' },
+	'legend.user-composer':        { en: 'Composer setting',             fr: 'Réglage de la partition' },
 	'legend.user-override':        { en: 'User override',                fr: 'Correction manuelle' },
 	'legend.yo':                   { en: 'ё stress',                     fr: 'Accent de ё' },
 	'legend.inferred':             { en: 'Verify stress',                fr: 'Vérifier l\u2019accent' },
@@ -869,7 +869,7 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Provenance labels (for Inspector inline display) ─────
 	'provenance.dictionary':       { en: 'Stress verified from dictionary',      fr: 'Accent vérifié dans le dictionnaire' },
-	'provenance.supplement':       { en: 'Stress from singer supplement',        fr: 'Accent du supplément pour chanteurs' },
+	'provenance.supplement':       { en: 'Stress from singer supplement',        fr: 'Accent du supplément pour chanteuses et chanteurs' },
 	'provenance.yo':               { en: 'Stress derived from ё',               fr: 'Accent dérivé de ё' },
 	'provenance.inferred':         { en: 'Stress algorithmically inferred',      fr: 'Accent inféré algorithmiquement' },
 	'provenance.unknown':          { en: 'Unknown stress \u2014 verify manually', fr: 'Accent inconnu \u2014 vérifier manuellement' },
@@ -1188,7 +1188,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// pacifier.beginPhonating RATIFIED by Dann 2026-09-30 21:00, English and
 	// French (`docs/sessions/draft-sing-first-cue_r1_2026-09-30.md`, REVISION 21:05).
 	'calib.capture.cueSuffix': { en: 'vowel to begin. First sing it as you usually do, to set the shape of your vocal tract. Then stop, keep that shape, and begin again in vocal fry. Ilya measures only the fry.', fr: 'pour commencer. Chantez-la d\u2019abord comme d\u2019habitude, pour régler la forme de votre conduit vocal. Puis arrêtez, gardez cette forme et recommencez en friture vocale. Ilya ne mesure que la friture.' },
-	'calib.capture.paused': { en: 'Paused. Resume when you\'re ready.', fr: 'En pause. Reprenez quand vous serez prêt.' },
+	'calib.capture.paused': { en: 'Paused. Resume when you\'re ready.', fr: 'En pause. Reprenez au moment qui vous convient.' },
 	'calib.capture.resumeButton': { en: 'Resume', fr: 'Reprendre' },
 	'calib.capture.hold.captured': { en: ', captured.', fr: ', captée.' },
 	'calib.capture.hold.rolledBack': { en: 'New sample was less certain, so the previous one was kept.', fr: 'Le nouvel échantillon était moins certain, donc le précédent a été conservé.' },

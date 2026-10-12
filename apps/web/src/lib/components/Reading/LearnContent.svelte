@@ -13,7 +13,7 @@
 </script>
 
 						{#if language === 'fr'}
-						<h1 id="learn-title">La diction lyrique russe pour chanteurs</h1>
+						<h1 id="learn-title">La diction lyrique russe pour chanteuses et chanteurs</h1>
 
 						<p>Les sons du russe chanté ne sont pas aussi éloignés de ce que vous connaissez déjà qu'il n'y paraît au premier abord&#160;: nombre de consonnes se comportent exactement comme leurs équivalents dans les langues que vous avez étudiées, et le système vocalique, bien qu'il obéisse à des règles différentes, est plus restreint et plus ordonné que celui de l'anglais. Ce que le russe vous demande n'est pas un saut dans l'inconnu, mais une extension de compétences que vous possédez déjà, guidée par un cadre phonologique rigoureux et bien documenté.</p>
 
@@ -27,9 +27,9 @@
 
 						<h2 id="learn-about">À propos de ce module</h2>
 
-						<p>LEÇONS présente les principes fondamentaux de la diction lyrique russe tels qu'établis par Craig Grayson dans sa thèse de doctorat de 2012, <em>Russian Lyric Diction: A practical guide with introduction and annotations and a bibliography with annotations on selected sources</em> (Université de Washington). Ce qui suit est une réorganisation pédagogique du travail de Grayson, conçue pour les chanteurs plutôt que pour les linguistes, et structurée pour construire progressivement à partir de vos acquis.</p>
+						<p>LEÇONS présente les principes fondamentaux de la diction lyrique russe tels qu'établis par Craig Grayson dans sa thèse de doctorat de 2012, <em>Russian Lyric Diction: A practical guide with introduction and annotations and a bibliography with annotations on selected sources</em> (Université de Washington). Ce qui suit est une réorganisation pédagogique du travail de Grayson, conçue pour le chant plutôt que pour la linguistique, et structurée pour construire progressivement à partir de vos acquis.</p>
 
-						<p>Grayson n'est pas le premier à couvrir ce terrain. Depuis le volume pionnier de Natalia Challis sur Rachmaninov (1989), en passant par les transcriptions de Piatak et Avrashov (1991), les six volumes de Richter (1999-2008), les libretti de Belov (2004), et les contributions d'Olin (2012), de McMaster (dans le livre de Sheil, 2012) et de Thomas (dans le livre de Karna, 2010), les chanteurs ont disposé de ressources de valeur et d'ampleur croissantes. Ce que Grayson apporte est une synthèse&#160;: un guide de diction adossé à l'API orthodoxe, informé par la phonologie russe, et suffisamment rigoureux pour permettre au lecteur de produire des transcriptions originales avec un réel degré d'autonomie. Dans la taxinomie utile de Sarah Dailey, les ressources antérieures servaient principalement de « guides accélérés » fournissant des transcriptions prêtes à l'emploi, tandis que Grayson propose un « guide d'étude autonome » qui enseigne le système sous-jacent.</p>
+						<p>Grayson n'est pas le premier à couvrir ce terrain. Depuis le volume pionnier de Natalia Challis sur Rachmaninov (1989), en passant par les transcriptions de Piatak et Avrashov (1991), les six volumes de Richter (1999-2008), les libretti de Belov (2004), et les contributions d'Olin (2012), de McMaster (dans le livre de Sheil, 2012) et de Thomas (dans le livre de Karna, 2010), les chanteuses et chanteurs ont disposé de ressources de valeur et d'ampleur croissantes. Ce que Grayson apporte est une synthèse&#160;: un guide de diction adossé à l'API orthodoxe, informé par la phonologie russe, et suffisamment rigoureux pour vous permettre de produire des transcriptions originales avec un réel degré d'autonomie. Dans la taxinomie utile de Sarah Dailey, les ressources antérieures servaient principalement de « guides accélérés » fournissant des transcriptions prêtes à l'emploi, tandis que Grayson propose un « guide d'étude autonome » qui enseigne le système sous-jacent.</p>
 
 						<p>Trois limites protègent notre propos. Ceci n'est pas un cours de langue russe&#160;: nous enseignons la prononciation, non la grammaire, sauf lorsque la conscience grammaticale affecte directement la prononciation d'un mot. Ceci n'est pas un substitut à la thèse de Grayson&#160;: l'appareil savant complet demeure dans la source, et nous l'honorons en nous y appuyant plutôt qu'en le reproduisant. Et ceci n'est pas un guide d'utilisation d'Ilya; l'onglet Guide enseigne l'outil. LEÇONS enseigne la diction.</p>
 
@@ -66,7 +66,7 @@
 						<table>
 						<thead><tr><th>#</th><th>Lettre</th><th>Nom</th><th>Catégorie</th><th>Ancrage</th><th>Notes</th></tr></thead>
 						<tbody>
-						<tr><td>1</td><td><strong>А а</strong></td><td>а <code>[ɑ]</code></td><td>voyelle</td><td><code>[ɑ]</code></td><td>Voyelle ouverte postérieure. Le chanteur la connaît du français.</td></tr>
+						<tr><td>1</td><td><strong>А а</strong></td><td>а <code>[ɑ]</code></td><td>voyelle</td><td><code>[ɑ]</code></td><td>Voyelle ouverte postérieure. Vous la connaissez du français.</td></tr>
 						<tr><td>2</td><td><strong>Б б</strong></td><td>бэ <code>[bɛ]</code></td><td>consonne</td><td><code>[b]</code></td><td>Occlusive bilabiale voisée.</td></tr>
 						<tr><td>3</td><td><strong>В в</strong></td><td>вэ <code>[vɛ]</code></td><td>consonne</td><td><code>[v]</code></td><td>Fricative labiodentale voisée. Ressemble au B latin; se prononce comme V.</td></tr>
 						<tr><td>4</td><td><strong>Г г</strong></td><td>гэ <code>[gɛ]</code></td><td>consonne</td><td><code>[ɡ]</code></td><td>Occlusive vélaire voisée.</td></tr>
@@ -94,7 +94,7 @@
 						<tr><td>26</td><td><strong>Ш ш</strong></td><td>ша <code>[ʃɑ]</code></td><td>consonne</td><td><code>[ʃ]</code></td><td>Fricative postalvéolaire sourde. Toujours dure, sauf dans le mot vieilli пшют (Grayson, p. 163).</td></tr>
 						<tr><td>27</td><td><strong>Щ щ</strong></td><td>ща <code>[ʃtʃʲɑ]</code></td><td>consonne</td><td><code>[ʃʲʃʲ]</code></td><td>Fricative postalvéolaire palatalisée longue. Toujours molle. Notation moderne de Grayson.</td></tr>
 						<tr><td>28</td><td><strong>Ъ ъ</strong></td><td>твёрдый знак <code>[ˈtvʲor dɨj znɑk]</code></td><td>signe</td><td>—</td><td>Le signe dur. Un marqueur de frontière. Aucun son propre.</td></tr>
-						<tr><td>29</td><td><strong>Ы ы</strong></td><td>ы <code>[ɨ]</code></td><td>voyelle</td><td><code>[ɨ]</code></td><td>Voyelle fermée centrale. Le son véritablement nouveau pour la plupart des chanteurs.</td></tr>
+						<tr><td>29</td><td><strong>Ы ы</strong></td><td>ы <code>[ɨ]</code></td><td>voyelle</td><td><code>[ɨ]</code></td><td>Voyelle fermée centrale. Le son véritablement nouveau pour la plupart des chanteuses et chanteurs.</td></tr>
 						<tr><td>30</td><td><strong>Ь ь</strong></td><td>мягкий знак <code>[mʲɑxʲ kʲij znɑk]</code></td><td>signe</td><td>—</td><td>Le signe mou. Palatalise la consonne qui le précède. Aucun son propre.</td></tr>
 						<tr><td>31</td><td><strong>Э э</strong></td><td>э <code>[ɛ]</code></td><td>voyelle</td><td><code>[ɛ]</code></td><td>Voyelle mi-ouverte antérieure. Proche du ⟨è⟩ français ou du ⟨e⟩ ouvert italien.</td></tr>
 						<tr><td>32</td><td><strong>Ю ю</strong></td><td>ю <code>[ju]</code></td><td>voyelle</td><td><code>[ju]</code></td><td>Voyelle iotée. Après une consonne, le <code>[j]</code> est absorbé sous forme de palatalisation.</td></tr>
@@ -110,27 +110,27 @@
 
 						<h4 id="learn-u1-familiar">Ce que vous connaissez déjà</h4>
 
-						<p>Vous connaissez déjà plus de l'alphabet cyrillique que vous ne le pensez peut-être. Les tableaux ci-dessous regroupent les lettres selon leur degré de familiarité pour les lecteurs de l'alphabet latin. Il s'agit d'un tri purement visuel, et non phonologique&#160;: il porte sur la reconnaissance des formes, et non sur le fonctionnement des sons.</p>
+						<p>Vous connaissez déjà plus de l'alphabet cyrillique que vous ne le pensez peut-être. Les tableaux ci-dessous regroupent les lettres selon leur degré de familiarité pour qui lit l'alphabet latin. Il s'agit d'un tri purement visuel, et non phonologique&#160;: il porte sur la reconnaissance des formes, et non sur le fonctionnement des sons.</p>
 
 						<p><strong>Formes familières</strong></p>
 
 						<p>Ces lettres ressemblent à leurs équivalents latins et se comportent comme on s'y attend. Aucune surprise ici.</p>
 
 						<table>
-						<thead><tr><th>Cyrillique</th><th>Équivalent latin</th><th>API</th><th>Ce que le chanteur connaît déjà</th></tr></thead>
+						<thead><tr><th>Cyrillique</th><th>Équivalent latin</th><th>API</th><th>Ce que vous connaissez déjà</th></tr></thead>
 						<tbody>
 						<tr><td><strong>А а</strong></td><td>A a</td><td><code>[ɑ]</code></td><td>Le <code>[ɑ]</code> italien, comme dans «&nbsp;pâte&nbsp;». Le russe utilise par défaut le <code>[ɑ]</code> ouvert postérieur; le <code>[a]</code> plus clair (pizza!) n'apparaît que dans certains environnements palataux spécifiques (Section 3).</td></tr>
-						<tr><td><strong>Е е</strong></td><td>E e</td><td><code>[jɛ]</code></td><td>La forme est familière; le son inclut une glissante que le ⟨e⟩ français ne comporte pas. Le chanteur qui lit <code>[ɛ]</code> du français ou de l'italien est déjà presque à destination.</td></tr>
+						<tr><td><strong>Е е</strong></td><td>E e</td><td><code>[jɛ]</code></td><td>La forme est familière; le son inclut une glissante que le ⟨e⟩ français ne comporte pas. Si vous lisez <code>[ɛ]</code> du français ou de l'italien, vous êtes déjà presque à destination.</td></tr>
 						<tr><td><strong>К к</strong></td><td>K k</td><td><code>[k]</code></td><td>Identique.</td></tr>
 						<tr><td><strong>М м</strong></td><td>M m</td><td><code>[m]</code></td><td>Identique.</td></tr>
 						<tr><td><strong>О о</strong></td><td>O o</td><td><code>[o]</code></td><td>La forme est identique. Le <code>[o]</code> russe se situe légèrement plus ouvert que le <code>[o]</code> allemand, et peut comporter un glissement lorsqu'il termine un mot. Nous y reviendrons.</td></tr>
-						<tr><td><strong>Т т</strong></td><td>T t</td><td><code>[t]</code></td><td>Le russe le place aux dents (dental) plutôt qu'à la crête alvéolaire. Le chanteur qui a chanté les dentales italiennes ou françaises effectue déjà cet ajustement.</td></tr>
+						<tr><td><strong>Т т</strong></td><td>T t</td><td><code>[t]</code></td><td>Le russe le place aux dents (dental) plutôt qu'à la crête alvéolaire. Si vous avez chanté les dentales italiennes ou françaises, vous effectuez déjà cet ajustement.</td></tr>
 						</tbody>
 						</table>
 
 						<p><strong>Faux amis</strong></p>
 
-						<p>Ces lettres ressemblent peut-être à quelque chose que vous reconnaissez de l'alphabet latin, mais elles représentent des sons différents de ceux auxquels les chanteurs non natifs sont habitués. Ce sont des pièges, et ils méritent un moment d'attention maintenant, pour ne pas vous surprendre plus tard.</p>
+						<p>Ces lettres ressemblent peut-être à quelque chose que vous reconnaissez de l'alphabet latin, mais elles représentent des sons différents de ceux auxquels les chanteuses et chanteurs non natifs sont habitués. Ce sont des pièges, et ils méritent un moment d'attention maintenant, pour ne pas vous surprendre plus tard.</p>
 
 						<table>
 						<thead><tr><th>Cyrillique</th><th>Ressemble à</th><th>Se prononce en réalité</th><th>API</th></tr></thead>
@@ -144,7 +144,7 @@
 						</tbody>
 						</table>
 
-						<p>Un chanteur déchiffrant le cyrillique pour la première fois commettra presque certainement une erreur de lecture sur au moins l'une de ces lettres. C'est normal. Les connaître, c'est déjà s'en protéger.</p>
+						<p>Qui déchiffre le cyrillique pour la première fois commettra presque certainement une erreur de lecture sur au moins l'une de ces lettres. C'est normal. Les connaître, c'est déjà s'en protéger.</p>
 
 						<p><strong>Formes nouvelles</strong></p>
 
@@ -190,7 +190,7 @@
 
 						<h4 id="learn-u1-yo">Note sur ⟨Ё⟩</h4>
 
-						<p>La lettre ⟨ё⟩ mérite une mise en garde particulière. Il est exaspérant de constater à quel point les imprimés russes, y compris les partitions musicales, omettent couramment le tréma et impriment ⟨ё⟩ comme ⟨е⟩. Or, ces deux lettres représentent des sons radicalement différents&#160;: ⟨ё⟩ est toujours accentuée et produit <code>[jo]</code> (ou <code>[o]</code> après une consonne), tandis que ⟨е⟩ produit <code>[jɛ]</code> (ou <code>[ɛ]</code> après une consonne). Lorsque le tréma (<em>umlaut</em> en allemand, <em>diaeresis</em> en anglais) est absent, le chanteur non natif doit savoir, soit par le contexte, soit par un dictionnaire, quelle lettre l'éditeur avait en tête. Le dictionnaire d'<em>Ilya</em> restaure automatiquement ⟨ё⟩ là où il convient et signale la transformation, mais le chanteur travaillant à partir d'une partition imprimée sans l'aide d'<em>Ilya</em> fait face à un véritable défi. C'est l'un des nombreux problèmes pratiques liés aux textes russes qu'un outil comme <em>Ilya</em> existe pour résoudre.</p>
+						<p>La lettre ⟨ё⟩ mérite une mise en garde particulière. Il est exaspérant de constater à quel point les imprimés russes, y compris les partitions musicales, omettent couramment le tréma et impriment ⟨ё⟩ comme ⟨е⟩. Or, ces deux lettres représentent des sons radicalement différents&#160;: ⟨ё⟩ est toujours accentuée et produit <code>[jo]</code> (ou <code>[o]</code> après une consonne), tandis que ⟨е⟩ produit <code>[jɛ]</code> (ou <code>[ɛ]</code> après une consonne). Lorsque le tréma (<em>umlaut</em> en allemand, <em>diaeresis</em> en anglais) est absent, la chanteuse ou le chanteur non natif doit savoir, soit par le contexte, soit par un dictionnaire, quelle lettre l'éditeur avait en tête. Le dictionnaire d'<em>Ilya</em> restaure automatiquement ⟨ё⟩ là où il convient et signale la transformation, mais sans l'aide d'<em>Ilya</em>, une partition imprimée pose un véritable défi. C'est l'un des nombreux problèmes pratiques liés aux textes russes qu'un outil comme <em>Ilya</em> existe pour résoudre.</p>
 
 						<h4 id="learn-u1-glyphs">Le tableau des glyphes</h4>
 
@@ -665,7 +665,7 @@
 
 
 
-						<p>La raison de présenter chaque lettre sous plusieurs formes est de garantir que, peu importe où vous rencontreriez une lettre, vous pourriez la reconnaître. Les chanteurs rencontrent le cyrillique dans les partitions imprimées (souvent en sérif), dans les éditions contemporaines (souvent en sans sérif), dans les ressources savantes (souvent en italique), et occasionnellement dans des annotations manuscrites ou des manuscrits historiques (cursive). Remarquez à quel point certaines formes de lettres changent radicalement entre les versions régulière, italique et cursive.</p>
+						<p>La raison de présenter chaque lettre sous plusieurs formes est de garantir que, peu importe où vous rencontreriez une lettre, vous pourriez la reconnaître. On rencontre le cyrillique dans les partitions imprimées (souvent en sérif), dans les éditions contemporaines (souvent en sans sérif), dans les ressources savantes (souvent en italique), et occasionnellement dans des annotations manuscrites ou des manuscrits historiques (cursive). Remarquez à quel point certaines formes de lettres changent radicalement entre les versions régulière, italique et cursive.</p>
 
 						<h4 id="learn-u1-try">Essayez</h4>
 
@@ -683,7 +683,7 @@
 							<div class="band-deck">Ici, c'est l'accent qui gouverne chaque son.</div>
 						</div>
 
-						<p>En italien, l'accent tombe presque toujours sur la syllabe pénultième. En français, il se pose sur la dernière syllabe du groupe rythmique. Ni l'anglais ni le russe ne nous offrent cette régularité. L'accent tonique russe est lexical&#160;: il doit être appris mot par mot, vérifié mot par mot, et il peut se déplacer lorsqu'un mot change de forme grammaticale. C'est le fait le plus déterminant de la prononciation russe pour les chanteurs. Et c'est la raison pour laquelle <em>Ilya</em> intègre un dictionnaire de près d'un million d'entrées plutôt que de tenter de dériver l'accent à partir de règles.</p>
+						<p>En italien, l'accent tombe presque toujours sur la syllabe pénultième. En français, il se pose sur la dernière syllabe du groupe rythmique. Ni l'anglais ni le russe ne nous offrent cette régularité. L'accent tonique russe est lexical&#160;: il doit être appris mot par mot, vérifié mot par mot, et il peut se déplacer lorsqu'un mot change de forme grammaticale. C'est le fait le plus déterminant de la prononciation russe chantée. Et c'est la raison pour laquelle <em>Ilya</em> intègre un dictionnaire de près d'un million d'entrées plutôt que de tenter de dériver l'accent à partir de règles.</p>
 
 						<p>Selon la manière dont l'accent les affecte, nous pouvons classer les voyelles russes en trois catégories. Cette classification gouverne l'ensemble des Sections 3 et 4&#160;:</p>
 
@@ -714,7 +714,7 @@
 						</tbody>
 						</table>
 
-						<p>Ce ne sont pas des cas marginaux. Les chanteurs rencontrent des homographes dans le répertoire courant, et un accent mal placé produit un autre mot. Dans ⟨мука⟩, l'accent détermine à lui seul si le chanteur déplore un tourment ou parle de pâtisserie.</p>
+						<p>Ce ne sont pas des cas marginaux. Le répertoire courant contient des homographes, et un accent mal placé produit un autre mot. Dans ⟨мука⟩, l'accent détermine à lui seul si l’on déplore un tourment ou si l’on parle de pâtisserie.</p>
 
 						<h4 id="learn-u2-moves">L'accent se déplace.</h4>
 
@@ -729,17 +729,17 @@
 						</tbody>
 						</table>
 
-						<p>La voyelle ⟨о⟩ de la première syllabe sonne de manière tout à fait différente selon la forme rencontrée&#160;: <code>/ʌ/</code> lorsqu'elle est inaccentuée, <code>/o/</code> lorsqu'elle porte l'accent. Grayson identifie sept schémas d'accentuation distincts pour les seuls substantifs russes, auxquels s'ajoutent des schémas supplémentaires pour les verbes et leurs dérivés. Le chanteur n'a pas besoin de maîtriser cette grammaire. Il a besoin de savoir qu'elle existe, de sorte que lorsque l'accent d'un mot paraît inhabituel dans un cas oblique ou une forme conjuguée, le réflexe soit de vérifier plutôt que de deviner.</p>
+						<p>La voyelle ⟨о⟩ de la première syllabe sonne de manière tout à fait différente selon la forme rencontrée&#160;: <code>/ʌ/</code> lorsqu'elle est inaccentuée, <code>/o/</code> lorsqu'elle porte l'accent. Grayson identifie sept schémas d'accentuation distincts pour les seuls substantifs russes, auxquels s'ajoutent des schémas supplémentaires pour les verbes et leurs dérivés. Vous n'avez pas besoin de maîtriser cette grammaire. Il a besoin de savoir qu'elle existe, de sorte que lorsque l'accent d'un mot paraît inhabituel dans un cas oblique ou une forme conjuguée, le réflexe soit de vérifier plutôt que de deviner.</p>
 
 						<h4 id="learn-u2-dictionary">L'accent est un problème de dictionnaire.</h4>
 
-						<p>Des schémas existent, certes, mais les exceptions sont si nombreuses qu'une attribution fiable de l'accent exige bel et bien la consultation d'un dictionnaire. C'est le conseil pratique de Grayson, et il valide la conception <em>d'Ilya</em>&#160;: le moteur résout l'accent par un dictionnaire de 943 096 entrées, et non par des règles de dérivation. Comme l'observe Baytukalov&#160;: «&nbsp;Believe me, it's a lot of rules&nbsp;» («&nbsp;Croyez-moi, les règles sont nombreuses&nbsp;»). La responsabilité du chanteur est de vérifier l'accent auprès d'une source fiable, et non nécessairement de mémoriser les règles qui le gouvernent.</p>
+						<p>Des schémas existent, certes, mais les exceptions sont si nombreuses qu'une attribution fiable de l'accent exige bel et bien la consultation d'un dictionnaire. C'est le conseil pratique de Grayson, et il valide la conception <em>d'Ilya</em>&#160;: le moteur résout l'accent par un dictionnaire de 943 096 entrées, et non par des règles de dérivation. Comme l'observe Baytukalov&#160;: «&nbsp;Believe me, it's a lot of rules&nbsp;» («&nbsp;Croyez-moi, les règles sont nombreuses&nbsp;»). Votre responsabilité est de vérifier l'accent auprès d'une source fiable, et non nécessairement de mémoriser les règles qui le gouvernent.</p>
 
-						<p>Lorsqu'<em>Ilya</em> rencontre un homographe, il sélectionne la première de plusieurs possibilités, qu'elle soit juste ou non. L'utilisateur doit choisir le bon homographe à l'aide d'indices contextuels ou d'une consultation externe. Lorsqu'<em>Ilya</em> rencontre un mot absent de son dictionnaire, il le signale pour attribution manuelle par un encadré À VÉRIFIER en pointillés. Dans les deux cas, le principe est le même&#160;: l'accent est trop déterminant pour être laissé à l'inférence.</p>
+						<p>Lorsqu'<em>Ilya</em> rencontre un homographe, il sélectionne la première de plusieurs possibilités, qu'elle soit juste ou non. Vous devez choisir le bon homographe à l'aide d'indices contextuels ou d'une consultation externe. Lorsqu'<em>Ilya</em> rencontre un mot absent de son dictionnaire, il le signale pour attribution manuelle par un encadré À VÉRIFIER en pointillés. Dans les deux cas, le principe est le même&#160;: l'accent est trop déterminant pour être laissé à l'inférence.</p>
 
 						<h4 id="learn-u2-sounds">Comment l'accent sonne.</h4>
 
-						<p>En chant, nous communiquons l'accent par l'intensité et l'engagement articulatoire, et non par la durée, qui nous est prescrite. Le compositeur écrit un rythme; le chanteur ne peut prolonger une syllabe accentuée au-delà de ce que la valeur de note permet. Mais même dans les passages <em>legato</em> où toutes les syllabes reçoivent un son soutenu, la syllabe accentuée porte un investissement physique plus grand&#160;: une voyelle plus engagée, une cible articulatoire plus nette, un noyau sonore plus brillant, et peut-être un peu plus d'intensité par comparaison avec les notes voisines. En russe chanté, les syllabes inaccentuées servent l'accent.</p>
+						<p>En chant, nous communiquons l'accent par l'intensité et l'engagement articulatoire, et non par la durée, qui nous est prescrite. La partition fixe un rythme; on ne peut prolonger une syllabe accentuée au-delà de ce que la valeur de note permet. Mais même dans les passages <em>legato</em> où toutes les syllabes reçoivent un son soutenu, la syllabe accentuée porte un investissement physique plus grand&#160;: une voyelle plus engagée, une cible articulatoire plus nette, un noyau sonore plus brillant, et peut-être un peu plus d'intensité par comparaison avec les notes voisines. En russe chanté, les syllabes inaccentuées servent l'accent.</p>
 
 						<h4 id="learn-u2-try">Essayez dans Ilya.</h4>
 
@@ -747,7 +747,7 @@
 
 						<h4 id="learn-u2-yo">Repérer le ⟨ё⟩ manquant.</h4>
 
-						<p>Les imprimeurs russes omettent couramment le tréma de ⟨ё⟩, l'imprimant comme ⟨е⟩. Puisque ⟨ё⟩ porte toujours l'accent et produit toujours <code>/o/</code>, un tréma manquant peut silencieusement déplacer l'accent et modifier la qualité vocalique d'un mot. Grayson identifie ceci comme la source d'erreur de prononciation la plus fréquente chez les chanteurs non natifs. <em>Ilya</em> restaure automatiquement ⟨ё⟩ à partir de son dictionnaire et signale la restauration par le sigle ё, mais le chanteur gagne à savoir reconnaitre les suffixes courants où ⟨ё⟩ se dissimule&#160;:</p>
+						<p>Les imprimeurs russes omettent couramment le tréma de ⟨ё⟩, l'imprimant comme ⟨е⟩. Puisque ⟨ё⟩ porte toujours l'accent et produit toujours <code>/o/</code>, un tréma manquant peut silencieusement déplacer l'accent et modifier la qualité vocalique d'un mot. Grayson identifie ceci comme la source d'erreur de prononciation la plus fréquente chez les chanteuses et chanteurs non natifs. <em>Ilya</em> restaure automatiquement ⟨ё⟩ à partir de son dictionnaire et signale la restauration par le sigle ё, mais vous gagnez à savoir reconnaitre les suffixes courants où ⟨ё⟩ se dissimule&#160;:</p>
 
 						<table>
 						<thead><tr><th>Suffixe</th><th>Exemple</th><th>Sens</th></tr></thead>
@@ -769,7 +769,7 @@
 							<div class="band-deck" id="learn-u3-inventory">Ce sont les voyelles accentuées qui constituent les cibles.</div>
 						</div>
 
-						<p>Lorsqu'une voyelle russe porte l'accent, elle sonne comme elle-même, comme l'on attend. Ce sont les sons vocaliques cardinaux stables — ceux sur lesquels le chanteur peut compter avant que quoi que ce soit ne se transforme. La plupart de ces voyelles russes nous sont déjà familières grâce à l'italien, au français et à l'allemand. Apprenez ceux-ci d'abord; tout ce qui suit dans les Sections 4&#160;à&#160;7 est une transformation de ce que vous entendez ici.</p>
+						<p>Lorsqu'une voyelle russe porte l'accent, elle sonne comme elle-même, comme l'on attend. Ce sont les sons vocaliques cardinaux stables — ceux sur lesquels vous pouvez compter avant que quoi que ce soit ne se transforme. La plupart de ces voyelles russes nous sont déjà familières grâce à l'italien, au français et à l'allemand. Apprenez ceux-ci d'abord; tout ce qui suit dans les Sections 4&#160;à&#160;7 est une transformation de ce que vous entendez ici.</p>
 
 						<p>Le russe chanté possède six voyelles accentuées&#160;:</p>
 
@@ -788,7 +788,7 @@
 								<tr><td><code>/ɛ/</code></td><td>⟨э⟩, ⟨е⟩</td><td>Mi-ouverte antérieure</td><td>Le /ɛ/ français de <em>fête</em>, le <em>e</em> ouvert italien de <em>bello</em>.</td></tr>
 								<tr><td><code>/i/</code></td><td>⟨и⟩</td><td>Fermée antérieure</td><td>Le même /i/ en italien, en français, en allemand et en anglais (<em>see</em>).</td></tr>
 								<tr><td><code>/u/</code></td><td>⟨у⟩, ⟨ю⟩</td><td>Fermée postérieure arrondie, stable, langue haute en arrière</td><td>Le /u/ italien de <em>luna</em>. Le /u/ français de <em>toujours</em>. Pas de diphtongue.</td></tr>
-								<tr><td><code>[ɨ]</code></td><td>⟨ы⟩</td><td>Version vélarisée de /i/&#160;: langue entre les positions /i/ et /u/, lèvres non arrondies</td><td>Aucun analogue proche. Le seul son véritablement nouveau pour de nombreux chanteurs.</td></tr>
+								<tr><td><code>[ɨ]</code></td><td>⟨ы⟩</td><td>Version vélarisée de /i/&#160;: langue entre les positions /i/ et /u/, lèvres non arrondies</td><td>Aucun analogue proche. Le seul son véritablement nouveau pour de nombreuses chanteuses et de nombreux chanteurs.</td></tr>
 							</tbody>
 						</table>
 
@@ -800,11 +800,11 @@
 						     de la rangée [o] du tableau de calibration. Fondée sur Grayson
 						     (2012), annexe K, « The Story of /o/ », p. 359–397. -->
 						<h4 id="learn-u3-note-o">Un mot sur le /o/</h4>
-						<p>Grayson décrit le /o/ russe comme une légère diphtongue idiomatique [oːʌ], la voyelle se relâchant vers [ʌ], et après des consonnes labiales, un [ʷoːʌ] labialisé, mais cette spécificité ne se note jamais. Grayson le simplifie en /o/ dans toutes ses transcriptions, et <em>Ilya</em> suit cette convention. Le chanteur doit savoir que le /o/ russe est beaucoup plus détendu que le /o/ fermé allemand ou français, et beaucoup plus arrondi que le /ɔ/ ouvert italien, tout en restant loin du /ɔ/ semi-ouvert français (celui de «&#160;<em>sauvage</em>&#160;»). Il vit entre ces voisins.</p>
+						<p>Grayson décrit le /o/ russe comme une légère diphtongue idiomatique [oːʌ], la voyelle se relâchant vers [ʌ], et après des consonnes labiales, un [ʷoːʌ] labialisé, mais cette spécificité ne se note jamais. Grayson le simplifie en /o/ dans toutes ses transcriptions, et <em>Ilya</em> suit cette convention. Sachez que le /o/ russe est beaucoup plus détendu que le /o/ fermé allemand ou français, et beaucoup plus arrondi que le /ɔ/ ouvert italien, tout en restant loin du /ɔ/ semi-ouvert français (celui de «&#160;<em>sauvage</em>&#160;»). Il vit entre ces voisins.</p>
 
 						<p>Ouverte ou fermée, cette voyelle a véritablement divisé les autorités. Des quatre guides classiques de diction lyrique russe, deux la transcrivent /o/ et deux /ɔ/, et les phonéticiens ne font pas mieux&#160;: Daniel Jones la plaçait entre mi-fermée et mi-ouverte. La parole peut cacher la question dans la chute de la voyelle; le chant ne le peut pas, car il faut décider ce qu'est la voyelle lorsqu'elle est soutenue. L'analyse spectrale de Grayson (annexe K, «&#160;The Story of /o/&#160;») montre pourquoi personne ne pouvait s'entendre&#160;: la voyelle se comporte comme un /o/ fermé dans les lèvres et l'arrière de la langue, et comme un /ɔ/ ouvert dans l'avant de la langue. Le /o/ russe chanté est une voyelle de fusion&#160;: les lèvres d'un /o/ fermé à l'italienne sur la langue d'un /ɔ/ ouvert. Pour la trouver, partez du /ɔ/ ouvert et arrondissez lentement les lèvres vers le /o/ fermé, ou partez du /o/ fermé et abaissez lentement la langue.</p>
 
-						<p>Si Grayson transcrit ce phonème /o/ plutôt que /ɔ/, c'est pour une raison pédagogique&#160;: la vue du /ɔ/ invite le chanteur à élargir les lèvres, exactement la mauvaise direction. Un /o/ fermé à l'européenne sonne encore plus russe qu'un /ɔ/ grand ouvert; mieux vaut pécher par trop fermé que par trop ouvert. Et puisque le russe ne possède qu'un seul phonème o, sans paire ouvert/fermé à confondre comme en italien ou en français, le chanteur peut le nuancer pour la beauté du timbre, plus rond ou moins rond, langue plus haute ou plus basse, sans sacrifier l'intelligibilité, pourvu que la voyelle reste arrondie et ne se relâche jamais vers /a/.</p>
+						<p>Si Grayson transcrit ce phonème /o/ plutôt que /ɔ/, c'est pour une raison pédagogique&#160;: la vue du /ɔ/ invite à élargir les lèvres, exactement la mauvaise direction. Un /o/ fermé à l'européenne sonne encore plus russe qu'un /ɔ/ grand ouvert; mieux vaut pécher par trop fermé que par trop ouvert. Et puisque le russe ne possède qu'un seul phonème o, sans paire ouvert/fermé à confondre comme en italien ou en français, vous pouvez le nuancer pour la beauté du timbre, plus rond ou moins rond, langue plus haute ou plus basse, sans sacrifier l'intelligibilité, pourvu que la voyelle reste arrondie et ne se relâche jamais vers /a/.</p>
 
 						<h4 id="learn-u3-interpalatal">Deux voyelles changent de couleur au voisinage des consonnes molles.</h4>
 
@@ -867,10 +867,10 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr><td>⟨я⟩</td><td>[jɑ]</td><td>le /ɑ/ que le chanteur connaît déjà</td></tr>
-								<tr><td>⟨е⟩</td><td>[jɛ]</td><td>le /ɛ/ que le chanteur connaît déjà</td></tr>
-								<tr><td>⟨ё⟩</td><td>[jo]</td><td>le /o/ que le chanteur connaît déjà</td></tr>
-								<tr><td>⟨ю⟩</td><td>[ju]</td><td>le /u/ que le chanteur connaît déjà</td></tr>
+								<tr><td>⟨я⟩</td><td>[jɑ]</td><td>le /ɑ/ que vous connaissez déjà</td></tr>
+								<tr><td>⟨е⟩</td><td>[jɛ]</td><td>le /ɛ/ que vous connaissez déjà</td></tr>
+								<tr><td>⟨ё⟩</td><td>[jo]</td><td>le /o/ que vous connaissez déjà</td></tr>
+								<tr><td>⟨ю⟩</td><td>[ju]</td><td>le /u/ que vous connaissez déjà</td></tr>
 							</tbody>
 						</table>
 
@@ -896,7 +896,7 @@
 							<div class="band-deck">Lorsqu’une voyelle perd l’accent, elle se transforme.</div>
 						</div>
 
-						<p>Le russe est une langue à rythme accentuel, comme l’anglais. Il se déroule en une série de syllabes accentuées et inaccentuées, où l’intervalle entre les syllabes accentuées reste à peu près constant, tandis que les syllabes inaccentuées s’accommodent de ces pulsations régulières en se comprimant entre elles et en perdant leur spécificité vocalique. Cette perte de spécificité s’appelle la réduction vocalique. La voyelle perd sa distinction par rapport à sa valeur cardinale par défaut, dérivant vers un son plus centralisé et moins engagé. En russe chanté, le compositeur prescrit les durées rythmiques, de sorte que la compression temporelle évidente d’une langue à rythme accentuel dans la parole spontanée ne peut pas se manifester&#160;: elle est contrôlée par le rythme et la vitesse de la mélodie. Mais en tant que conteurs, la réduction qualitative de la prosodie parlée continue d’éclairer notre approche des textes russes chantés. La diction lyrique préserve davantage de qualité vocalique pour le chant que la parole, mais le principe demeure&#160;: une voyelle inaccentuée n’a pas le même son défini qu’a une voyelle accentuée.</p>
+						<p>Le russe est une langue à rythme accentuel, comme l’anglais. Il se déroule en une série de syllabes accentuées et inaccentuées, où l’intervalle entre les syllabes accentuées reste à peu près constant, tandis que les syllabes inaccentuées s’accommodent de ces pulsations régulières en se comprimant entre elles et en perdant leur spécificité vocalique. Cette perte de spécificité s’appelle la réduction vocalique. La voyelle perd sa distinction par rapport à sa valeur cardinale par défaut, dérivant vers un son plus centralisé et moins engagé. En russe chanté, la partition prescrit les durées rythmiques, de sorte que la compression temporelle évidente d’une langue à rythme accentuel dans la parole spontanée ne peut pas se manifester&#160;: elle est contrôlée par le rythme et la vitesse de la mélodie. Mais en tant que conteurs, la réduction qualitative de la prosodie parlée continue d’éclairer notre approche des textes russes chantés. La diction lyrique préserve davantage de qualité vocalique pour le chant que la parole, mais le principe demeure&#160;: une voyelle inaccentuée n’a pas le même son défini qu’a une voyelle accentuée.</p>
 
 						<p>La Section 3 a établi les six cibles vocaliques accentuées&#160;: <code>/ɑ/</code>, <code>/ɛ/</code>, <code>/i/</code>, <code>/o/</code>, <code>/u/</code> et <code>[ɨ]</code>. Trois d’entre elles — <code>/i/</code>, <code>/u/</code> et <code>[ɨ]</code> — traversent l’accent sans changer&#160;: elles conservent leur son cardinal, qu’elles soient accentuées ou non. Voilà qui rassurera ceux d’entre nous qui aspirent à des règles fiables en russe chanté. Les trois restantes, et les plus fréquentes — <code>/ɑ/</code>, <code>/ɛ/</code> et <code>/o/</code> — se transforment lorsqu’elles perdent l’accent. La nature précise de la transformation dépend de deux facteurs&#160;: l’identité de la lettre vocalique au départ, et sa proximité par rapport à la syllabe accentuée.</p>
 
@@ -906,7 +906,7 @@
 						<thead><tr><th>API</th><th>Source</th><th>Ce que cela sonne</th></tr></thead>
 						<tbody>
 						<tr><td><code>/ɑ/</code></td><td>⟨а⟩ ou ⟨о⟩ inaccentué en position privilégiée</td><td>La même voyelle ouverte postérieure de la Section 3, mais sans l’engagement articulatoire de l’accent.</td></tr>
-						<tr><td><code>[ʌ]</code></td><td>⟨а⟩ ou ⟨о⟩ inaccentué en position éloignée</td><td>Une voyelle centralisée, détendue; c’est le schwa du russe chanté&#160;: plus postérieur que le <code>[ə]</code> français, sans arrondissement labial. Grayson note ce son <code>[ʌ]</code> plutôt que <code>[ə]</code> précisément pour éviter que les chanteurs formés en diction française n’arrondissent les lèvres. <code>[ʌ]</code> n’apparaît jamais en position accentuée&#160;: il signale toujours une réduction.</td></tr>
+						<tr><td><code>[ʌ]</code></td><td>⟨а⟩ ou ⟨о⟩ inaccentué en position éloignée</td><td>Une voyelle centralisée, détendue; c’est le schwa du russe chanté&#160;: plus postérieur que le <code>[ə]</code> français, sans arrondissement labial. Grayson note ce son <code>[ʌ]</code> plutôt que <code>[ə]</code> précisément pour éviter que les chanteuses et chanteurs formés en diction française n’arrondissent les lèvres. <code>[ʌ]</code> n’apparaît jamais en position accentuée&#160;: il signale toujours une réduction.</td></tr>
 						<tr><td><code>[ɪ]</code></td><td>⟨е⟩ ou ⟨я⟩ inaccentué après une consonne palatalisée</td><td>Une version relaxée et centralisée de /i/. La seule voyelle de l’inventaire de Grayson sans référence cardinale sur le quadrilatère vocalique de Jones. <code>[ɪ]</code> n’apparaît jamais en position accentuée&#160;: il signale toujours une réduction.</td></tr>
 						<tr><td><code>/i/</code></td><td>⟨е⟩ ou ⟨я⟩ inaccentué en environnement interpalatal</td><td>Le /i/ complet de la Section 3, antériorisé par les consonnes palatalisées environnantes.</td></tr>
 						<tr><td><code>[ɨ]</code></td><td>⟨е⟩ inaccentué après une consonne toujours dure (⟨ж⟩, ⟨ш⟩, ⟨ц⟩)</td><td>Le même i vélaire de la Section 3. Ces consonnes rejettent la palatalisation; la voyelle se vélarise au lieu de se réduire à <code>[ɪ]</code>.</td></tr>
@@ -955,7 +955,7 @@
 
 						<h4 id="learn-u4-reconstitution">La reconstitution est un choix éclairé, non une obligation.</h4>
 
-						<p>La reconstitution est la décision d’annuler la réduction complète, ou de ramener une voyelle réduite vers sa valeur non réduite. En chant, où les valeurs de note peuvent soutenir une voyelle bien au-delà de sa durée parlée, un son pleinement réduit peut sembler trop informel pour être chanté comme valeur vocalique soutenue dans la livraison d’un texte poétique. La reconstitution offre au chanteur une option raisonnée pour restaurer la formalité et la distinction vocalique sans abandonner le système phonologique de Grayson.</p>
+						<p>La reconstitution est la décision d’annuler la réduction complète, ou de ramener une voyelle réduite vers sa valeur non réduite. En chant, où les valeurs de note peuvent soutenir une voyelle bien au-delà de sa durée parlée, un son pleinement réduit peut sembler trop informel pour être chanté comme valeur vocalique soutenue dans la livraison d’un texte poétique. La reconstitution vous offre une option raisonnée pour restaurer la formalité et la distinction vocalique sans abandonner le système phonologique de Grayson.</p>
 
 						<p>Le processus inverse la chaîne de réduction entièrement pour la plupart des voyelles, mais seulement partiellement pour ⟨о⟩&#160;:</p>
 
@@ -977,12 +977,12 @@
 						<p><strong>Un point de désaccord respectueux, de la part de Dann.</strong></p>
 						<p>Grayson écrit que «&#160;⟨и⟩ read as [ɨ] (stressed or unstressed) and unstressed ⟨е⟩ read as [ɨ] after a hard consonant (on long or short notes), remain sung as [ɨ]&#160;» (« ⟨и⟩ lu [ɨ] (accentué ou non) et ⟨е⟩ inaccentué lu [ɨ] après une consonne dure (sur des notes longues ou courtes), restent chantés [ɨ] ») (p. 129). Cette phrase contient deux affirmations, et à mon avis, elles ne sont pas équivalentes.</p>
 						<p>La première affirmation est juste. Lorsque ⟨и⟩ suit une consonne dure, le [ɨ] qui en résulte n’est pas une réduction&#160;: c’est l’identité de la voyelle dans cet environnement. Les russophones savent et comprennent que dans ce cas ⟨и⟩ se prononce [ɨ], ou peut-être pouvons-nous comprendre que [ɨ] s’écrit ⟨и⟩ dans ce cas; cela revient au même. Il n’y a pas de voyelle source vers laquelle reconstituer, c’est simplement la voyelle traditionnelle qui s’exécute dans cette circonstance, reconnaissant que [ɨ] doit suivre une consonne non palatalisée, jamais [i]. La consonne dure impose l’expression du i vélaire. Je suis d’accord avec Grayson ici; la reconstitution ne s’applique pas.</p>
-						<p>Je crois que sa seconde affirmation mérite qu’on en réfléchisse. Lorsque ⟨е⟩ inaccentué suit l’une des consonnes toujours dures (⟨ж⟩, ⟨ш⟩, ⟨ц⟩) pour produire [ɨ], la voyelle sous-jacente est /ɛ/. /ɛ/ se réduit pour devenir [ɨ] dans ce cas, et par conséquent la logique de la reconstitution devrait rester disponible. J’affirme que sur des notes tenues ou dans des tempi plus lents, le chanteur peut reconstituer vers [ɛ]. D’après mon expérience, les locuteurs natifs russes et les coaches préconisent systématiquement ce choix. Le Dʳ Alexei Kochetov, locuteur natif russe et phonéticien à l’Université de Toronto, a offert précisément cette note sur mon exécution de l’Op. 52, nº 2 de Kabalevsky&#160;: «&#160;[toj ʒɨ] should probably be [toj ʒɛ] (with no reduction)&#160;» («&#160;[toj ʒɨ] devrait probablement être [toj ʒɛ] (sans réduction)&#160;»).</p>
+						<p>Je crois que sa seconde affirmation mérite qu’on en réfléchisse. Lorsque ⟨е⟩ inaccentué suit l’une des consonnes toujours dures (⟨ж⟩, ⟨ш⟩, ⟨ц⟩) pour produire [ɨ], la voyelle sous-jacente est /ɛ/. /ɛ/ se réduit pour devenir [ɨ] dans ce cas, et par conséquent la logique de la reconstitution devrait rester disponible. J’affirme que sur des notes tenues ou dans des tempi plus lents, on peut reconstituer vers [ɛ]. D’après mon expérience, les locutrices et locuteurs natifs russes et les coachs préconisent systématiquement ce choix. Le Dʳ Alexei Kochetov, locuteur natif russe et phonéticien à l’Université de Toronto, a offert précisément cette note sur mon exécution de l’Op. 52, nº 2 de Kabalevsky&#160;: «&#160;[toj ʒɨ] should probably be [toj ʒɛ] (with no reduction)&#160;» («&#160;[toj ʒɨ] devrait probablement être [toj ʒɛ] (sans réduction)&#160;»).</p>
 						<p>Un point de vue articulatoire peut-il soutenir la reconstitution dans ce cas? Les postures linguales de [ɛ] et des consonnes toujours dures [ʃ], [ʒ] et [ts] occupent le même voisinage médian; [ɛ] n’est pas assez antériorisé pour imposer un conflit. Ce n’est pas analogue à la tentative de produire /i/ après une consonne dure, où l’antériorisation contredit véritablement l’environnement consonantique.</p>
 						<p>C’est le seul point sur lequel <em>Ilya</em> s’écarte des règles de reconstitution de Grayson. Lorsque le basculeur de reconstitution est actif, ⟨е⟩ inaccentué après une consonne toujours dure se reconstitue en [ɛ]. Néanmoins, si vous n’êtes pas d’accord avec moi et souhaitez observer l’engagement de Grayson envers l’inviolabilité de [ɨ] dans ce cas, vous pouvez cliquer sur la case «&#160;Réduction ponctuelle&#160;» sous la pile de mots dans le panneau, et votre [ɨ] réapparaîtra dûment.</p>
 						</blockquote>
 
-						<p>Le moment de reconstituer est une question de contexte et de goût. Une note brève sur un temps faible dans un tempo vif peut accueillir la réduction complète. Une note tenue sur un temps fort dans un tempo lent peut appeler la reconstitution. Les Russes semblent attendre moins de réduction dans la déclamation de textes poétiques, comme un moyen de distinguer l’art du discours quotidien. La meilleure confirmation vient d’un coach russe natif; Ilya offre les deux options par le biais du basculeur de reconstitution, afin que le chanteur puisse comparer les deux lectures et faire un choix éclairé.</p>
+						<p>Le moment de reconstituer est une question de contexte et de goût. Une note brève sur un temps faible dans un tempo vif peut accueillir la réduction complète. Une note tenue sur un temps fort dans un tempo lent peut appeler la reconstitution. Les Russes semblent attendre moins de réduction dans la déclamation de textes poétiques, comme un moyen de distinguer l’art du discours quotidien. La meilleure confirmation vient d’une ou d’un coach de langue maternelle russe; Ilya offre les deux options par le biais du basculeur de reconstitution, afin que vous puissiez comparer les deux lectures et faire un choix éclairé.</p>
 
 						<h4 id="learn-u4-try">Essayez dans Ilya.</h4>
 
@@ -998,13 +998,13 @@
 							<div class="band-deck">La majorité de ces consonnes, vous les connaissez déjà. Seule une poignée est véritablement nouvelle.</div>
 						</div>
 
-						<p>Le russe compte vingt-et-une lettres consonantiques. Bonne nouvelle&#160;: la majorité de ces consonnes produisent des sons que le chanteur connaît déjà de l’anglais, de l’italien, de l’allemand ou du français. Quelques-unes exigent un ajustement, et seule une poignée est véritablement nouvelle. Nous commençons par le familier, puis concentrons notre attention sur ce qui ne l’est pas.</p>
+						<p>Le russe compte vingt-et-une lettres consonantiques. Bonne nouvelle&#160;: la majorité de ces consonnes produisent des sons que vous connaissez déjà de l’anglais, de l’italien, de l’allemand ou du français. Quelques-unes exigent un ajustement, et seule une poignée est véritablement nouvelle. Nous commençons par le familier, puis concentrons notre attention sur ce qui ne l’est pas.</p>
 
-						<p>Une différence systématique gouverne l’inventaire entier. Alors que les consonnes anglaises sont typiquement alvéolaires (la langue touche la crête située derrière les dents supérieures), les consonnes russes sont dentales&#160;: la pointe de la langue touche le dos des dents supérieures elles-mêmes, comme en italien. Les chanteurs formés en diction italienne ou française ont déjà intériorisé cet ajustement. Ceux qui viennent de l’anglais ou de l’allemand constateront qu’avancer consciemment la langue de quelques millimètres produit la clarté caractéristique de l’articulation consonantique russe.</p>
+						<p>Une différence systématique gouverne l’inventaire entier. Alors que les consonnes anglaises sont typiquement alvéolaires (la langue touche la crête située derrière les dents supérieures), les consonnes russes sont dentales&#160;: la pointe de la langue touche le dos des dents supérieures elles-mêmes, comme en italien. Les chanteuses et chanteurs formés en diction italienne ou française ont déjà intériorisé cet ajustement. Si vous venez de l’anglais ou de l’allemand, vous constaterez qu’avancer consciemment la langue de quelques millimètres produit la clarté caractéristique de l’articulation consonantique russe.</p>
 
 						<h4 id="learn-u5-familiar">Dans quelle mesure le système consonantique russe est-il familier?</h4>
 
-						<p>De ce sous-ensemble de vingt-et-une lettres consonantiques, treize produisent des sons essentiellement identiques à des consonnes que le chanteur connaît de l’italien ou d’une autre langue de diction standard&#160;: ⟨б⟩, ⟨в⟩, ⟨г⟩, ⟨д⟩, ⟨з⟩, ⟨й⟩, ⟨к⟩, ⟨м⟩, ⟨н⟩, ⟨п⟩, ⟨с⟩, ⟨т⟩, ⟨ф⟩. Deux autres sont assez proches pour qu’une brève remarque suffise&#160;: ⟨р⟩ (roulez-le légèrement) et ⟨ж⟩ (les chanteurs francophones l’ont déjà). Nous distinguons le ⟨х⟩ du russe chanté de l’<em>achlaut</em> allemand («&#160;uvulaire&#160;»), <code>[χ]</code>). Les cinq restantes exigent une attention ciblée et sont présentées dans le tableau ci-dessous.</p>
+						<p>De ce sous-ensemble de vingt-et-une lettres consonantiques, treize produisent des sons essentiellement identiques à des consonnes que vous connaissez de l’italien ou d’une autre langue de diction standard&#160;: ⟨б⟩, ⟨в⟩, ⟨г⟩, ⟨д⟩, ⟨з⟩, ⟨й⟩, ⟨к⟩, ⟨м⟩, ⟨н⟩, ⟨п⟩, ⟨с⟩, ⟨т⟩, ⟨ф⟩. Deux autres sont assez proches pour qu’une brève remarque suffise&#160;: ⟨р⟩ (roulez-le légèrement) et ⟨ж⟩ (les francophones l’ont déjà). Nous distinguons le ⟨х⟩ du russe chanté de l’<em>achlaut</em> allemand («&#160;uvulaire&#160;»), <code>[χ]</code>). Les cinq restantes exigent une attention ciblée et sont présentées dans le tableau ci-dessous.</p>
 
 						<table>
 						<thead><tr><th>Lettre</th><th>Nom</th><th>API</th><th>Équivalent le plus proche</th><th>Notes</th></tr></thead>
@@ -1035,7 +1035,7 @@
 
 						<h4 id="learn-u5-pairs">Quelles consonnes forment des paires voisées et non voisées?</h4>
 
-						<p>Les consonnes russes s’organisent en paires systématiques qui partagent la même articulation mais diffèrent par leur voisement. Le chanteur formé en diction allemande comprend déjà ce principe&#160;: une consonne voisée et sa partenaire non voisée préparent des configurations identiques du conduit vocal, sauf que l’une fait vibrer les plis vocaux (souvent appelés «&nbsp;cordes vocales&nbsp;») (voisée) et l’autre non (non voisée).</p>
+						<p>Les consonnes russes s’organisent en paires systématiques qui partagent la même articulation mais diffèrent par leur voisement. La chanteuse ou le chanteur formé en diction allemande comprend déjà ce principe&#160;: une consonne voisée et sa partenaire non voisée préparent des configurations identiques du conduit vocal, sauf que l’une fait vibrer les plis vocaux (souvent appelés «&nbsp;cordes vocales&nbsp;») (voisée) et l’autre non (non voisée).</p>
 
 						<p>Ces paires prennent toute leur importance à la Section 7, où nous abordons l’assimilation de voisement (une consonne non voisée devenant voisée devant une voisine voisée, ou vice versa), en plus du dévoisement final (une consonne voisée perdant son voisement à la fin d’un mot, comme en allemand). Retenez ces paires.</p>
 
@@ -1055,7 +1055,7 @@
 
 						<p>L’affriquée <code>/ts/</code> (⟨ц⟩) et l’affriquée palatalisée <code>/tʃʲ/</code> (⟨ч⟩) partagent deux traits uniques&#160;: ni l’une ni l’autre n’est notée ici avec son propre symbole API dédié. L’une s’écrit comme un digraphe indivisible, l’autre comme un trigraphe. Toutes deux possèdent des contreparties voisées qui n’apparaissent que par assimilation à la frontière du mot, mais jamais au travers d’un glyphe orthographique qui leur est propre. Contrairement à ces deux sons, la fricative <code>/ʃʲʃʲ/</code> se voit attribuer sa propre lettre, ⟨щ⟩. Les formes voisées allophoniques de ces lettres sont traitées à la Section 7.</p>
 
-						<h4 id="learn-u5-attention">Quels sons exigent l’attention ciblée du chanteur?</h4>
+						<h4 id="learn-u5-attention">Quels sons exigent une attention ciblée?</h4>
 
 						<h5 id="learn-u5-l">Les deux sons du ⟨л⟩ russe</h5>
 
@@ -1078,7 +1078,7 @@
 
 						<h5 id="learn-u5-x">⟨х⟩&#160;: la fricative vélaire</h5>
 
-						<p>Les chanteurs formés en diction allemande savent produire <code>/χ/</code> pour l’<em>achlaut</em> («&#160;uvulaire&#160;»). Le <code>/x/</code> russe s’en approche, bien que Grayson note qu’il est «&#160;articulated on the front of the velum&#160;» («&#160;articulé sur l’avant du voile du palais&#160;») plutôt que plus en arrière. Les consonnes vélaires <code>[k]</code> et <code>[ɡ]</code> se forment toutes deux par contact entre la base de la langue et le palais mou; de même, <code>[x]</code> et sa partenaire voisée <code>[ɣ]</code> se forment au même endroit. Au fur et à mesure que vous alternez entre occlusion et friction au palais mou, variez le voisement et le dévoisement pour maîtriser ces quatre consonnes spécifiquement localisées, et pour affiner la capacité à distinguer votre <code>[x]</code> de votre <code>[χ]</code>.</p>
+						<p>Les chanteuses et chanteurs formés en diction allemande savent produire <code>/χ/</code> pour l’<em>achlaut</em> («&#160;uvulaire&#160;»). Le <code>/x/</code> russe s’en approche, bien que Grayson note qu’il est «&#160;articulated on the front of the velum&#160;» («&#160;articulé sur l’avant du voile du palais&#160;») plutôt que plus en arrière. Les consonnes vélaires <code>[k]</code> et <code>[ɡ]</code> se forment toutes deux par contact entre la base de la langue et le palais mou; de même, <code>[x]</code> et sa partenaire voisée <code>[ɣ]</code> se forment au même endroit. Au fur et à mesure que vous alternez entre occlusion et friction au palais mou, variez le voisement et le dévoisement pour maîtriser ces quatre consonnes spécifiquement localisées, et pour affiner la capacité à distinguer votre <code>[x]</code> de votre <code>[χ]</code>.</p>
 
 						<h5 id="learn-u5-r">⟨р⟩&#160;: le roulement</h5>
 
@@ -1086,15 +1086,15 @@
 
 						<h5 id="learn-u5-hushers">Les chuintantes&#160;: ⟨ж⟩, ⟨ш⟩ et ⟨щ⟩</h5>
 
-						<p>⟨ж⟩ et ⟨ш⟩ forment une paire voisée-non voisée. Toutes deux se produisent avec une langue caractéristiquement en forme de louche&#160;: la pointe se recourbe légèrement et l’air passe en dessous, produisant un timbre sombre et large, bien différent du «&#160;ch&#160;» français ou du <em>sh</em> anglais («&#160;ch&#160;»). Les chanteurs francophones reconnaîtront ⟨ж⟩ de <em>je</em>, <em>jour</em>, <em>rouge</em>.</p>
+						<p>⟨ж⟩ et ⟨ш⟩ forment une paire voisée-non voisée. Toutes deux se produisent avec une langue caractéristiquement en forme de louche&#160;: la pointe se recourbe légèrement et l’air passe en dessous, produisant un timbre sombre et large, bien différent du «&#160;ch&#160;» français ou du <em>sh</em> anglais («&#160;ch&#160;»). Les francophones reconnaîtront ⟨ж⟩ de <em>je</em>, <em>jour</em>, <em>rouge</em>.</p>
 
-						<p>⟨щ⟩ se distingue. Là où ⟨ш⟩ est une fricative courte unique, ⟨щ⟩ est une fricative palatalisée de double longueur&#160;: <code>/ʃʲʃʲ/</code>. Grayson préfère la notation <code>/ʃʲʃʲ/</code> à <code>/ʃʲː/</code> parce que les locuteurs russes tendent à réarticuler ce son plutôt qu’à simplement le soutenir. La prononciation moscovite <code>/ʃʲʃʲ/</code> est la norme en diction lyrique; une variante pétersbourgeoise plus ancienne <code>/ʃʲtʃʲ/</code> peut se rencontrer dans certaines références, mais n’est pas ce qu’Ilya produit. Les apprenants non natifs peuvent se concentrer sur une différence de hauteur pour distinguer les deux&#160;: ⟨ш⟩ <code>[ʃ]</code> est un son grave et chaud, tandis que ⟨щ⟩ <code>/ʃʲʃʲ/</code> sonne plus aigu et d’une certaine façon plus rapide. La cause en est la forme de la langue. Pour ⟨ш⟩ <code>[ʃ]</code> la langue est plate ou en forme de louche, tandis que pour ⟨щ⟩ <code>/ʃʲʃʲ/</code> la langue prend la forme de la voyelle <code>[i]</code>, forçant l’air sortant à traverser une ouverture plus étroite, élevant la perception de la hauteur. Davantage sur les voyelles palatalisées plus loin.</p>
+						<p>⟨щ⟩ se distingue. Là où ⟨ш⟩ est une fricative courte unique, ⟨щ⟩ est une fricative palatalisée de double longueur&#160;: <code>/ʃʲʃʲ/</code>. Grayson préfère la notation <code>/ʃʲʃʲ/</code> à <code>/ʃʲː/</code> parce que les russophones tendent à réarticuler ce son plutôt qu’à simplement le soutenir. La prononciation moscovite <code>/ʃʲʃʲ/</code> est la norme en diction lyrique; une variante pétersbourgeoise plus ancienne <code>/ʃʲtʃʲ/</code> peut se rencontrer dans certaines références, mais n’est pas ce qu’Ilya produit. Les apprenants non natifs peuvent se concentrer sur une différence de hauteur pour distinguer les deux&#160;: ⟨ш⟩ <code>[ʃ]</code> est un son grave et chaud, tandis que ⟨щ⟩ <code>/ʃʲʃʲ/</code> sonne plus aigu et d’une certaine façon plus rapide. La cause en est la forme de la langue. Pour ⟨ш⟩ <code>[ʃ]</code> la langue est plate ou en forme de louche, tandis que pour ⟨щ⟩ <code>/ʃʲʃʲ/</code> la langue prend la forme de la voyelle <code>[i]</code>, forçant l’air sortant à traverser une ouverture plus étroite, élevant la perception de la hauteur. Davantage sur les voyelles palatalisées plus loin.</p>
 
 						<h5 id="learn-u5-affricates">Les affriquées&#160;: ⟨ц⟩ et ⟨ч⟩</h5>
 
-						<p>⟨ц⟩ produit <code>/ts/</code>, un phonème unique malgré son écriture en deux symboles API, un digraphe indivisible. Cette affriquée n’est pas un <code>/t/</code> suivi d’un <code>/s/</code> même si ces symboles ont été appariés et adoptés pour la décrire&#160;: l’air est projeté à travers un point d’occlusion unique, et le son ne devrait pas prendre plus de temps à prononcer qu’un seul <code>/t/</code> ou <code>/s/</code>. Les chanteurs germanophones connaissent ce son de <em>Katze</em> («&#160;chat&#160;»), <em>Herz</em> («&#160;cœur&#160;»), <em>Mozart</em>.</p>
+						<p>⟨ц⟩ produit <code>/ts/</code>, un phonème unique malgré son écriture en deux symboles API, un digraphe indivisible. Cette affriquée n’est pas un <code>/t/</code> suivi d’un <code>/s/</code> même si ces symboles ont été appariés et adoptés pour la décrire&#160;: l’air est projeté à travers un point d’occlusion unique, et le son ne devrait pas prendre plus de temps à prononcer qu’un seul <code>/t/</code> ou <code>/s/</code>. Les germanophones connaissent ce son de <em>Katze</em> («&#160;chat&#160;»), <em>Herz</em> («&#160;cœur&#160;»), <em>Mozart</em>.</p>
 
-						<p>⟨ч⟩ produit <code>/tʃʲ/</code>, similairement un phonème unique. Les chanteurs italophones le connaissent de <em>ciao</em> («&#160;salut&#160;») et <em>dolce</em> («&#160;doux&#160;»), bien qu’en russe il porte une palatalisation inhérente que la version italienne ne possède pas. L’anglais palatalise cette affriquée <em>à la russe</em> dans les mots <em>cheese</em> («&#160;fromage&#160;»), <em>cheer</em> («&#160;acclamation&#160;»), <em>chief</em> («&#160;chef&#160;»), <em>chinos</em> («&#160;chinos&#160;»), ou partout où le locuteur prononce cette affriquée en se préparant à la suivre de la voyelle <code>[i]</code>. Davantage sur ce sujet dans la discussion à venir sur la palatalisation.</p>
+						<p>⟨ч⟩ produit <code>/tʃʲ/</code>, similairement un phonème unique. Les italophones le connaissent de <em>ciao</em> («&#160;salut&#160;») et <em>dolce</em> («&#160;doux&#160;»), bien qu’en russe il porte une palatalisation inhérente que la version italienne ne possède pas. L’anglais palatalise cette affriquée <em>à la russe</em> dans les mots <em>cheese</em> («&#160;fromage&#160;»), <em>cheer</em> («&#160;acclamation&#160;»), <em>chief</em> («&#160;chef&#160;»), <em>chinos</em> («&#160;chinos&#160;»), ou partout où cette affriquée se prononce en préparation de la voyelle <code>[i]</code>. Davantage sur ce sujet dans la discussion à venir sur la palatalisation.</p>
 
 						<h4 id="learn-u5-fixed">Quelles consonnes ne changent jamais de dureté ou de mollesse?</h4>
 
@@ -1146,7 +1146,7 @@
 
 						<p>Lorsque ⟨ь⟩ se trouve entre une consonne précédente et une voyelle iotée suivante (⟨я⟩, ⟨е⟩, ⟨ё⟩, ⟨ю⟩), il palatalise dûment la consonne précédente mais force également l’insertion d’un glide <code>/j/</code> audible entre le signe mou et la voyelle qui suit. Cette dynamique implique aussi une aspiration notable, particulièrement pour les occlusives ou sibilantes qui précèdent le signe mou. Le mot дьявол («&#160;diable&#160;»), par exemple, se prononce <code>/ˈdʲjɑ vʌɫ/</code>&#160;: le ⟨ь⟩ palatalise le ⟨д⟩ et introduit le glide <code>/j/</code> avant ⟨я⟩.</p>
 
-						<p>Le mécanisme de la palatalisation elle-même fait l’objet de la Section 6. Ici, nous nommons simplement le rôle du signe mou&#160;: d’habitude il indique au chanteur que la consonne précédente est molle.</p>
+						<p>Le mécanisme de la palatalisation elle-même fait l’objet de la Section 6. Ici, nous nommons simplement le rôle du signe mou&#160;: d’habitude il indique que la consonne précédente est molle.</p>
 
 						<h5 id="learn-u5-hard">⟨ъ⟩ (твёрдый знак)&#160;: le signe dur</h5>
 
@@ -1164,7 +1164,7 @@
 
 						<h4 id="learn-u5-devoicing">Qu’arrive-t-il aux consonnes voisées à la fin d’un mot?</h4>
 
-						<p>Les chanteurs formés en diction allemande connaissent déjà cette règle&#160;: les consonnes voisées se dévoisent à la fin d’un mot, indépendamment de l’orthographe. Le russe suit le même principe. Un ⟨б⟩ final sonne comme <code>/p/</code>, un ⟨д⟩ final comme <code>/t/</code>, un ⟨г⟩ final comme <code>/k/</code>, et ainsi de suite pour les six paires voisées-non voisées. Le dévoisement s’applique également aux consonnes palatalisées&#160;: le ⟨дь⟩ final sonne comme <code>/tʲ/</code>, le ⟨зь⟩ final comme <code>/sʲ/</code>.</p>
+						<p>Les chanteuses et chanteurs formés en diction allemande connaissent déjà cette règle&#160;: les consonnes voisées se dévoisent à la fin d’un mot, indépendamment de l’orthographe. Le russe suit le même principe. Un ⟨б⟩ final sonne comme <code>/p/</code>, un ⟨д⟩ final comme <code>/t/</code>, un ⟨г⟩ final comme <code>/k/</code>, et ainsi de suite pour les six paires voisées-non voisées. Le dévoisement s’applique également aux consonnes palatalisées&#160;: le ⟨дь⟩ final sonne comme <code>/tʲ/</code>, le ⟨зь⟩ final comme <code>/sʲ/</code>.</p>
 
 						<table>
 						<thead><tr><th>Orthographe</th><th>Prononciation</th><th>API</th><th>Sens</th></tr></thead>
@@ -1213,8 +1213,8 @@
 						transcrit /tʲuk/&#160;: trois phonèmes. Si ce que vous produisez ressemble à
 						/tjuk/, la langue arrive en retard. Prolongeant ce principe, Grayson
 						emploie [ɲ] au lieu du techniquement correct [nʲ], en raison de sa
-						familiarité pour les chanteurs habitués à la diction lyrique française
-						et italienne. Un débutant risque moins de confondre [ɲ] avec [nj], alors
+						familiarité pour les chanteuses et chanteurs habitués à la diction lyrique française
+						et italienne. Une débutante ou un débutant risque moins de confondre [ɲ] avec [nj], alors
 						que [nʲ] et [nj] peuvent sembler à peine distincts sur la page. Le mot
 						russe ⟨нет⟩ (non) est très souvent chanté incorrectement avec quatre
 						phonèmes, [njɛt], alors que sa transcription en [ɲɛt] met en valeur une
@@ -1347,8 +1347,7 @@
 						chanté confirment que les effets sur les résonances du conduit vocal
 						sont présents mais subtils&#160;: <em>f</em><sub>R2</sub> s’élève tandis que
 						<em>f</em><sub>R1</sub> s’abaisse, reproduisant le profil acoustique de
-						la voyelle [i] qu’elle simule (Mitton 2020, 131–132). Le chanteur qui
-						palatalise bien optimise simultanément le conduit vocal pour une
+						la voyelle [i] qu’elle simule (Mitton 2020, 131–132). Bien palataliser optimise simultanément le conduit vocal pour une
 						résonance efficace.</p>
 						<h4 id="learn-u6-signals">Comment repérer la palatalisation à l’écrit?</h4>
 						<p>Les voyelles ne peuvent pas être palatalisées. La palatalisation ne
@@ -1403,12 +1402,10 @@
 						exposant qui suit la consonne. Grayson adopte cette notation à la suite
 						de la convention de Kiel (1989) de l’Association phonétique
 						internationale, qui a abandonné un ensemble de symboles plus anciens au
-						profit de cet exposant uniforme (Grayson 2012, 61–62). Le chanteur qui
-						consulte la sortie d’Ilya voit [ʲ] partout où une consonne est
+						profit de cet exposant uniforme (Grayson 2012, 61–62). Dans la sortie d’Ilya, [ʲ] apparait partout où une consonne est
 						palatalisée&#160;: /tʲ/, /dʲ/, /sʲ/, /mʲ/, et ainsi de suite. La seule
 						exception est [ɲ], traitée en 6.1.</p>
-						<p>Les symboles abandonnés méritent une brève mention, car le chanteur
-						les rencontrera dans d’autres ressources. Avant 1989, l’API marquait la
+						<p>Les symboles abandonnés méritent une brève mention, car vous les rencontrerez dans d’autres ressources. Avant 1989, l’API marquait la
 						palatalisation par des crochets palataux&#160;: de petites courbes
 						descendantes apposées à la base des lettres consonantiques. L’ouvrage de
 						Natalia Challis, <em>The Singer’s Rachmaninoff</em> (2006), parmi
@@ -1450,15 +1447,11 @@
 						marqueurs de palatalisation API modernes adoptés lors de la convention
 						de Kiel de 1989. Les divergences entre les autres systèmes sont légion&#160;:
 						crochets palataux anciens, usage incohérent de l’exposant, et choix de
-						notation qui obscurcissent la distinction même que le chanteur a besoin
-						de voir. Ilya met en œuvre les conventions de notation de Grayson d’un
-						bout à l’autre, avec la souplesse nécessaire pour les modifier. Le
-						chanteur qui consulte d’autres ressources doit savoir que les symboles
-						peuvent différer, et s’y adapter.</p>
+						notation qui obscurcissent la distinction même qu’il faut voir. Ilya met en œuvre les conventions de notation de Grayson d’un
+						bout à l’autre, avec la souplesse nécessaire pour les modifier. Dans d’autres ressources, les symboles peuvent différer&#160;: il faut s’y adapter.</p>
 						<h4 id="learn-u6-stops">Qu’est-ce qui arrête la propagation?</h4>
 						<p>La palatalisation régressive se propage en arrière au sein d’un
-						groupe consonantique, mais pas indéfiniment. Le chanteur qui connait les
-						agents palatalisants (6.2) et les six frontières ci-dessous peut prédire
+						groupe consonantique, mais pas indéfiniment. Si vous connaissez les agents palatalisants (6.2) et les six frontières ci-dessous, vous pouvez prédire
 						la palatalisation pour à peu près n’importe quel mot.</p>
 						<table>
 						<colgroup>
@@ -1529,14 +1522,12 @@
 						</tr>
 						</tbody>
 						</table>
-						<p>La frontière que le chanteur rencontre le plus fréquemment à
-						l’intérieur d’un mot est la première&#160;: une consonne toujours dure. Nous
+						<p>La frontière la plus fréquente à l’intérieur d’un mot est la première&#160;: une consonne toujours dure. Nous
 						avons rencontré ⟨ж⟩, ⟨ш⟩ et ⟨ц⟩ en section 5 comme des consonnes qui ne
 						sont presque jamais palatalisées. Ici, elles jouent le rôle de murs contre la
 						palatalisation régressive. Dans большой, le ⟨ь⟩ palatalise le ⟨л⟩, mais
 						le ⟨ш⟩ à sa gauche est imperméable. La palatalisation s’arrête, et le
-						⟨б⟩ conserve sa dureté. Le chanteur qui a intériorisé les trois
-						consonnes toujours dures de la section 5 connait déjà la frontière la
+						⟨б⟩ conserve sa dureté. Si vous avez intériorisé les trois consonnes toujours dures de la section 5, vous connaissez déjà la frontière la
 						plus importante du système.</p>
 						<p>La frontière vocalique mérite une brève clarification. Une voyelle
 						interrompt la chaine consonantique, mais la voyelle peut elle-même être
@@ -1560,15 +1551,14 @@
 						et [e] soient formellement reconnus en diction lyrique russe comme
 						allophones secondaires » (Grayson 2012, 208).</p>
 						<h4 id="learn-u6-paired">Consonnes appariées et non appariées</h4>
-						<p>Le chanteur sait désormais ce qu’est la palatalisation (6.1), ce qui
+						<p>Vous savez désormais ce qu’est la palatalisation (6.1), ce qui
 						la déclenche (6.2) et ce qui l’arrête (6.3). La question suivante
 						s’impose naturellement&#160;: quelles consonnes peuvent être palatalisées?</p>
 						<p>La plupart des consonnes russes sont appariées&#160;: elles existent sous
 						une forme dure et une forme molle, et la distinction entre les deux est
 						phonémique. Cinq consonnes sont non appariées&#160;: trois sont toujours
 						dures et ne peuvent jamais être palatalisées; deux sont toujours molles
-						et ne se prononcent jamais sans palatalisation. Le chanteur les a toutes
-						rencontrées en section 5. Nous consolidons ici le tableau complet.</p>
+						et ne se prononcent jamais sans palatalisation. Vous les avez toutes rencontrées en section 5. Nous consolidons ici le tableau complet.</p>
 						<table>
 						<colgroup>
 						<col />
@@ -1609,10 +1599,9 @@
 						</tr>
 						</tbody>
 						</table>
-						<p>Vingt consonnes en tout. Quinze sont appariées; cinq sont fixes. Le
-						chanteur qui a intériorisé ce tableau peut examiner n’importe quelle
+						<p>Vingt consonnes en tout. Quinze sont appariées; cinq sont fixes. Ce tableau intériorisé, vous pouvez examiner n’importe quelle
 						consonne d’un mot russe et savoir immédiatement si elle est susceptible
-						de palatalisation. Si elle est appariée, il cherche un agent à sa
+						de palatalisation. Si elle est appariée, cherchez un agent à sa
 						droite. Si elle est toujours dure, c’est un mur. Si elle est toujours
 						molle, c’est un agent.</p>
 						<h4 id="learn-u6-clusters">La palatalisation régressive dans les groupes consonantiques</h4>
@@ -1731,10 +1720,9 @@
 						section 5), et non en /sʲkʲij/&#160;: le i vélaire [ɨ] apparait ici parce que
 						la palatalisation ne s’applique pas à cette terminaison morphologique
 						particulière.</p>
-						<p>Chaque exemple s’appuie sur le précédent. Le chanteur qui peut
-						expliquer pourquoi мять [matʲ] (<em>froisser</em>) contient [a] là où мать [mɑtʲ] (<em>mère</em>) contient [ɑ], et
+						<p>Chaque exemple s’appuie sur le précédent. Si vous pouvez expliquer pourquoi мять [matʲ] (<em>froisser</em>) contient [a] là où мать [mɑtʲ] (<em>mère</em>) contient [ɑ], et
 						pourquoi le ⟨ш⟩ de большой bloque ce que le groupe consonantique de
-						сестрёнка laisse passer, a intériorisé le système.</p>
+						сестрёнка laisse passer, vous avez intériorisé le système.</p>
 						<h4 id="learn-u6-velari">Le i vélaire [ɨ]</h4>
 						<p>Le i vélaire occupe l’espace où la palatalisation ne peut pas aller.
 						C’est le son vocalique qui apparait lorsque ⟨и⟩ suit une consonne
@@ -1761,8 +1749,7 @@
 						lui interdit), et c’est [ɨ] qui en résulte. Ces deux sons ne sont pas
 						des phonèmes distincts en russe; ce sont des variantes positionnelles
 						d’une même voyelle, conditionnées entièrement par la dureté ou la
-						mollesse de la consonne précédente. Le chanteur ne choisit pas entre les
-						deux. C’est la consonne qui choisit.</p>
+						mollesse de la consonne précédente. Il n’y a pas à choisir entre les deux. C’est la consonne qui choisit.</p>
 						<p>Considérons жить /ʒɨtʲ/ (« vivre »)&#160;: le ⟨ж⟩ toujours dur force le
 						⟨и⟩ à se rétracter vers [ɨ], mais le ⟨ь⟩ palatalise le ⟨т⟩. Ou цирк
 						/tsɨrk/ (« cirque »)&#160;: le ⟨ц⟩ toujours dur rétracte de nouveau la
@@ -1846,15 +1833,15 @@
 						</tbody>
 						</table>
 
-						<p>Le chanteur reconnaitra les six premières paires dans l’inventaire consonantique de la section 5. Les trois dernières méritent qu’on s’y arrête. Les formes voisées <code>[dz]</code>, <code>[dʒʲ]</code> et <code>[ʒʲʒʲ]</code> ne possèdent aucune lettre cyrillique qui leur soit propre; elles n’apparaissent que comme produits de l’assimilation de voisement, le plus souvent aux frontières de mots, mais suffisamment fréquentes ailleurs pour justifier un œil attentif. Nous avons aperçu ces formes dans la discussion des affriquées à la section 5&#160;: ce sont les contreparties allophoniques voisées qui ne naissent que du processus, jamais de la graphie. Rares au sein d’un mot, le chanteur doit savoir qu’elles existent, car Ilya les produira lorsque les conditions les exigeront.</p>
+						<p>Vous reconnaitrez les six premières paires dans l’inventaire consonantique de la section 5. Les trois dernières méritent qu’on s’y arrête. Les formes voisées <code>[dz]</code>, <code>[dʒʲ]</code> et <code>[ʒʲʒʲ]</code> ne possèdent aucune lettre cyrillique qui leur soit propre; elles n’apparaissent que comme produits de l’assimilation de voisement, le plus souvent aux frontières de mots, mais suffisamment fréquentes ailleurs pour justifier un œil attentif. Nous avons aperçu ces formes dans la discussion des affriquées à la section 5&#160;: ce sont les contreparties allophoniques voisées qui ne naissent que du processus, jamais de la graphie. Rares au sein d’un mot, elles existent pourtant, car Ilya les produira lorsque les conditions les exigeront.</p>
 
 						<p>Par contraste, une classe de consonnes appelées <em>sonantes</em> ne participe pas au processus. Les consonnes du mnémonique «&#160;normal&#160;» (<code>/l/</code>, <code>/m/</code>, <code>/n/</code> et <code>/r/</code>, ainsi que leurs homologues palatalisées) ne déclenchent pas l’assimilation de voisement et ne la subissent pas non plus. Les sonantes sont imperméables au voisement régressif&#160;: elles ne le transmettent ni ne le reçoivent. La chaine de voisement s’arrête à la sonante. En diction lyrique russe, les sonantes ne sont jamais dévoisées, bien que nos collègues linguistes puissent attester qu’elles le sont dans le russe parlé (par ex. <code>[l̥ m̥ n̥ r̥ l̥ʲ m̥ʲ ɲ̥ r̥ʲ]</code>); ces suprasegmentaux de voisement propres à la parole n’apparaitront jamais dans la sortie d’Ilya.</p>
 
 						<div class="learn-callout">
 						<p><strong>L’exception du ⟨в⟩</strong></p>
 						<p>Sous la graphie ⟨в⟩, le phonème <code>/v/</code> est phonémiquement faible en russe. Il ne déclenche pas l’assimilation de voisement. La lettre ⟨в⟩ est influencée par les consonnes adjacentes (elle subit l’assimilation et se dévoise en <code>/f/</code> devant une consonne sourde), mais elle n’exerce aucune force assimilatrice propre. Lorsque le son <code>/v/</code> est produit en tant que variante voisée de ⟨ф⟩, cette restriction ne s’applique évidemment pas.</p>
-						<p>Ce comportement n’est pas intuitif pour le chanteur qui aborde la diction lyrique russe. On sait que <code>/v/</code> est voisé, et on s’attend à ce qu’il voise ce qui le précède, à l’instar de <code>/b/</code> ou <code>/d/</code>. Il n’en fait rien. Le contraste est parlant&#160;: dans сбор, le ⟨б⟩ voise le ⟨с⟩ qui le précède, produisant <code>/zbor/</code>. Dans свобода, le ⟨в⟩ ne voise pas le ⟨с⟩, et le mot commence par <code>/sv/</code>, non <code>/zv/</code>. Le contexte est identique (une consonne voisée suit le ⟨с⟩), mais le résultat diffère parce que ⟨в⟩ est phonémiquement faible&#160;: il se soumet à ses voisins sans jamais leur imposer quoi que ce soit.</p>
-						<p>Cette exception s’applique de façon constante et fréquente. Chaque fois que le chanteur rencontre la lettre ⟨в⟩ devant une autre consonne, le voisement de la consonne précédente n’est pas modifié par le ⟨в⟩. C’est l’une des règles les plus utiles de cette section, et l’une des plus faciles à sous-estimer.</p>
+						<p>Ce comportement n’est pas intuitif quand on aborde la diction lyrique russe. On sait que <code>/v/</code> est voisé, et on s’attend à ce qu’il voise ce qui le précède, à l’instar de <code>/b/</code> ou <code>/d/</code>. Il n’en fait rien. Le contraste est parlant&#160;: dans сбор, le ⟨б⟩ voise le ⟨с⟩ qui le précède, produisant <code>/zbor/</code>. Dans свобода, le ⟨в⟩ ne voise pas le ⟨с⟩, et le mot commence par <code>/sv/</code>, non <code>/zv/</code>. Le contexte est identique (une consonne voisée suit le ⟨с⟩), mais le résultat diffère parce que ⟨в⟩ est phonémiquement faible&#160;: il se soumet à ses voisins sans jamais leur imposer quoi que ce soit.</p>
+						<p>Cette exception s’applique de façon constante et fréquente. Chaque fois que la lettre ⟨в⟩ précède une autre consonne, le voisement de la consonne précédente n’est pas modifié par le ⟨в⟩. C’est l’une des règles les plus utiles de cette section, et l’une des plus faciles à sous-estimer.</p>
 						</div>
 
 						<p>Une dernière exception mérite d’être signalée ici. Il s’agit d’une relation particulière entre les trois vélaires (<code>/k ɡ x/</code>) dans le russe chanté. La lettre ⟨г⟩, lorsqu’elle est suivie de ⟨к⟩ ou de ⟨ч⟩ à l’intérieur d’un mot, ne suit pas sa paire sourde habituelle. Au lieu de s’assourdir en <code>/k/</code> (son partenaire normal), elle emprunte exceptionnellement la fricative vélaire <code>/x/</code>&#160;:</p>
@@ -1872,9 +1859,9 @@
 
 						<p><strong>Seules les obstruantes déclenchent l’assimilation de voisement.</strong> L’assimilation de voisement est un processus d’obstruante à obstruante. Trois catégories de sons, bien qu’intrinsèquement voisés, ne la déclenchent pas. Les voyelles sont voisées&#160;: les plis vocaux vibrent tout au long de leur production. Mais une voyelle n’est pas une obstruante. Une voyelle placée après une consonne sourde ne voise pas cette consonne. Les sonantes ne déclenchent pas non plus le processus. Nous l’avons vu à la section 7.2 avec le mnémonique «&#160;normal&#160;»&#160;: les consonnes <code>/l/</code>, <code>/m/</code>, <code>/n/</code> et <code>/r/</code> (ainsi que leurs homologues palatalisées) ne subissent pas l’assimilation de voisement et ne la transmettent pas. Le glide <code>/j/</code> se comporte de la même manière. Le principe est simple&#160;: si le son à droite n’est pas une obstruante, la chaine de voisement ne démarre pas.</p>
 
-						<p><strong>Les sonantes bloquent la transmission.</strong> Une sonante n’est pas simplement un son que la chaine traverserait sans effet; c’est un mur auquel la chaine s’arrête. Si le chanteur rencontre un groupe de la forme obstruante + sonante + obstruante, le voisement de l’obstruante la plus à droite ne traverse pas la sonante pour atteindre l’obstruante la plus à gauche. La chaine prend fin à la frontière de la sonante.</p>
+						<p><strong>Les sonantes bloquent la transmission.</strong> Une sonante n’est pas simplement un son que la chaine traverserait sans effet; c’est un mur auquel la chaine s’arrête. Dans un groupe de la forme obstruante + sonante + obstruante, le voisement de l’obstruante la plus à droite ne traverse pas la sonante pour atteindre l’obstruante la plus à gauche. La chaine prend fin à la frontière de la sonante.</p>
 
-						<p><strong>L’exception du ⟨в⟩.</strong> Nous avons traité ce point en détail dans l’encadré de la section 7.2 et le mentionnons ici pour compléter le tableau. La lettre ⟨в⟩ subit l’assimilation (elle s’assourdit en <code>/f/</code> devant une consonne sourde) mais ne la déclenche pas. Le chanteur a déjà intégré le contraste&#160;: le ⟨б⟩ de сбор voise le ⟨с⟩ précédent, produisant <code>/zbor/</code>, tandis que le ⟨в⟩ de свобода ne le fait pas, et le mot commence par <code>/sv/</code>.</p>
+						<p><strong>L’exception du ⟨в⟩.</strong> Nous avons traité ce point en détail dans l’encadré de la section 7.2 et le mentionnons ici pour compléter le tableau. La lettre ⟨в⟩ subit l’assimilation (elle s’assourdit en <code>/f/</code> devant une consonne sourde) mais ne la déclenche pas. Vous avez déjà intégré le contraste&#160;: le ⟨б⟩ de сбор voise le ⟨с⟩ précédent, produisant <code>/zbor/</code>, tandis que le ⟨в⟩ de свобода ne le fait pas, et le mot commence par <code>/sv/</code>.</p>
 
 						<p><strong>La ponctuation constitue la frontière absolue.</strong> Aucune assimilation, de quelque nature qu’elle soit, ne franchit la ponctuation. C’est l’énoncé de frontière le plus fort du système, et il s’applique non seulement à l’assimilation de voisement, mais à tous les processus assimilatoires, palatalisation comprise (nous rejoignons ici la sixième frontière de la section 6). La ponctuation marque un moment où le conduit vocal se réinitialise. Dans le chant, cette réinitialisation porte un sens poétique&#160;: la virgule, le point, le point-virgule, le point d’interrogation signalent chacun une frontière que le système phonologique respecte de manière absolue.</p>
 
@@ -1908,9 +1895,9 @@
 						</tbody>
 						</table>
 
-						<p>C’est ici que le chanteur voit l’assimilation transfrontalière rendue visible dans Ilya. La notation fléchée (→) relie un clitique à son hôte, et Ilya traite l’ensemble comme un domaine phonologique unique.</p>
+						<p>C’est ici que l’assimilation transfrontalière devient visible dans Ilya. La notation fléchée (→) relie un clitique à son hôte, et Ilya traite l’ensemble comme un domaine phonologique unique.</p>
 
-						<p><strong>Trois sons qui n’existent que par ce processus.</strong> Trois consonnes voisées n’apparaissent que comme produits de l’assimilation de voisement transfrontalière&#160;: <code>[dz]</code>, <code>[dʒʲ]</code> et <code>[ɣ]</code>. Ces sons ne possèdent pas de graphie propre; ils émergent lorsqu’une obstruante sourde se voise par-delà une frontière devant une obstruante voisée dans le mot suivant. Peu fréquents mais non rares, le chanteur doit savoir qu’ils existent, car Ilya les produira lorsque les conditions les exigeront.</p>
+						<p><strong>Trois sons qui n’existent que par ce processus.</strong> Trois consonnes voisées n’apparaissent que comme produits de l’assimilation de voisement transfrontalière&#160;: <code>[dz]</code>, <code>[dʒʲ]</code> et <code>[ɣ]</code>. Ces sons ne possèdent pas de graphie propre; ils émergent lorsqu’une obstruante sourde se voise par-delà une frontière devant une obstruante voisée dans le mot suivant. Peu fréquents mais non rares, ils existent, car Ilya les produira lorsque les conditions les exigeront.</p>
 
 						<table>
 						<thead><tr><th>Syntagme</th><th>API</th><th>Allophone produit</th></tr></thead>
@@ -1920,13 +1907,13 @@
 						</tbody>
 						</table>
 
-						<p><strong>Quand les frontières interviennent.</strong> La continuité est l’état par défaut, mais le chanteur ou le compositeur choisit quand la rompre. La ponctuation, comme nous l’avons établi à la section 7.3, constitue la frontière absolue&#160;: aucune assimilation ne la franchit. Un souffle interrompt la phonation continue qui rend possible l’assimilation transfrontalière. Une pause, même sans souffle, réinitialise le conduit vocal. Ces interruptions servent le sens poétique; elles ne sont pas des défaillances de continuité.</p>
+						<p><strong>Quand les frontières interviennent.</strong> La continuité est l’état par défaut, mais l’interprète ou la partition choisit quand la rompre. La ponctuation, comme nous l’avons établi à la section 7.3, constitue la frontière absolue&#160;: aucune assimilation ne la franchit. Un souffle interrompt la phonation continue qui rend possible l’assimilation transfrontalière. Une pause, même sans souffle, réinitialise le conduit vocal. Ces interruptions servent le sens poétique; elles ne sont pas des défaillances de continuité.</p>
 
-						<p><strong>Le traitement d’Ilya.</strong> Ilya traite les clitiques de manière explicite&#160;: proclitiques et enclitiques sont joints à leurs mots hôtes et traités comme des unités phonologiques uniques. Les flèches dans la ligne API indiquent l’endroit où le clitique s’est rattaché. Ilya ne peut toutefois pas modéliser toutes les dimensions de la phonation liée. L’outil opérationnalise une compréhension de la façon dont les frontières de mots fonctionnent dans le russe chanté, dérivée des règles de Grayson. L’oreille du chanteur, son répétiteur et son instinct interprétatif demeurent indispensables là où le modèle d’Ilya atteint ses limites.</p>
+						<p><strong>Le traitement d’Ilya.</strong> Ilya traite les clitiques de manière explicite&#160;: proclitiques et enclitiques sont joints à leurs mots hôtes et traités comme des unités phonologiques uniques. Les flèches dans la ligne API indiquent l’endroit où le clitique s’est rattaché. Ilya ne peut toutefois pas modéliser toutes les dimensions de la phonation liée. L’outil opérationnalise une compréhension de la façon dont les frontières de mots fonctionnent dans le russe chanté, dérivée des règles de Grayson. Votre oreille, votre répétitrice ou répétiteur et votre instinct interprétatif demeurent indispensables là où le modèle d’Ilya atteint ses limites.</p>
 
 						<h4 id="learn-u7-deletion">Où est passé le L? L’effacement consonantique</h4>
 
-						<p>L’<em>effacement</em> dans un groupe consonantique se produit lorsque la prononciation se simplifie par l’omission d’un ou de plusieurs phonèmes attendus. La graphie conserve une lettre vestigiale, mais la langue parlée et chantée ne la réalise pas. Le chanteur connait déjà ce phénomène par le français&#160;: le ⟨p⟩ de «&#160;sculpture&#160;» ne se prononce pas, pas plus que le ⟨p⟩ de «&#160;baptême&#160;» ou le ⟨g⟩ de «&#160;doigt&#160;». Le russe possède son propre ensemble de groupes où l’effacement se produit, et ceux-ci sont finis, précis et mémorisables. Ilya les traite tous automatiquement.</p>
+						<p>L’<em>effacement</em> dans un groupe consonantique se produit lorsque la prononciation se simplifie par l’omission d’un ou de plusieurs phonèmes attendus. La graphie conserve une lettre vestigiale, mais la langue parlée et chantée ne la réalise pas. Vous connaissez déjà ce phénomène par le français&#160;: le ⟨p⟩ de «&#160;sculpture&#160;» ne se prononce pas, pas plus que le ⟨p⟩ de «&#160;baptême&#160;» ou le ⟨g⟩ de «&#160;doigt&#160;». Le russe possède son propre ensemble de groupes où l’effacement se produit, et ceux-ci sont finis, précis et mémorisables. Ilya les traite tous automatiquement.</p>
 
 						<table>
 						<thead><tr><th>Groupe</th><th>Lecture</th><th>Effacé</th><th>Exemple</th></tr></thead>
@@ -1947,7 +1934,7 @@
 						<p><strong>сердце</strong> [sʲɛrtsɨ] (<em>cœur</em>)&#160;: le ⟨д⟩ est muet. Parmi les mots les plus fréquents de la littérature vocale russe.</p>
 						<p><strong>поздно</strong> [poznʌ] (<em>tard</em>)&#160;: le ⟨д⟩ est muet. Fréquent dans la mélodie et l’opéra.</p>
 						<p><strong>солнце</strong> [sontsɨ] (<em>soleil</em>)&#160;: le ⟨л⟩ est muet. C’est lui qui a inspiré le titre de cette sous-section.</p>
-						<p><strong>здравствуйте</strong> [zdrɑstvujtʲɪ] (<em>bonjour</em>)&#160;: le premier ⟨в⟩ est muet. Chaque chanteur de russe connait cette salutation.</p>
+						<p><strong>здравствуйте</strong> [zdrɑstvujtʲɪ] (<em>bonjour</em>)&#160;: le premier ⟨в⟩ est muet. Quiconque chante en russe connait cette salutation.</p>
 
 						<h4 id="learn-u7-mergers">Fusions et absorptions</h4>
 
@@ -1987,11 +1974,11 @@
 
 						<p>Notons les contre-exemples. конечный conserve <code>/tʃʲn/</code>&#160;: <code>/kɑ ˈɲɛtʃʲ nɨj/</code>. нечто conserve <code>/tʃʲt/</code>&#160;: <code>/ˈɲɛtʃʲ tʌ/</code>. Ces formes confirment que l’exception est propre au mot, et non un schéma généralisable.</p>
 
-						<p>Un dernier phénomène nous attend. Lorsqu’une même consonne apparait deux fois, par la graphie ou au point de rencontre de deux mots, le chanteur la prononce-t-il une fois ou deux? C’est la question de la section 7.8.</p>
+						<p>Un dernier phénomène nous attend. Lorsqu’une même consonne apparait deux fois, par la graphie ou au point de rencontre de deux mots, la prononce-t-on une fois ou deux? C’est la question de la section 7.8.</p>
 
 						<h4 id="learn-u7-geminates">Deux fois plutôt qu’une&#160;: les géminées</h4>
 
-						<p>De façon nuancée. Le chanteur qui arrive de la diction italienne doit recalibrer ses attentes. Les géminées russes ne sont pas emphatiques; elles sont discrètes, d’une durée à peine supérieure à celle d’une consonne simple. Grayson formule le principe ainsi (p. 226)&#160;: «&#160;think of speaking the single consonant twice without any break in between&#160;», sans pulsation sur la seconde itération.</p>
+						<p>De façon nuancée. Si vous arrivez de la diction italienne, recalibrez vos attentes. Les géminées russes ne sont pas emphatiques; elles sont discrètes, d’une durée à peine supérieure à celle d’une consonne simple. Grayson formule le principe ainsi (p. 226)&#160;: «&#160;think of speaking the single consonant twice without any break in between&#160;», sans pulsation sur la seconde itération.</p>
 
 						<p>La plupart des consonnes doublées à l’écrit, au sein d’un mot russe, se prononcent comme une consonne simple. Un exemple récurrent est le mot русский, qui s’écrit avec deux ⟨сс⟩ mais se prononce avec un seul <code>/s/</code>&#160;: <code>/ˈru sʲkʲij/</code>. Les doublements aux frontières de mots sont en revanche généralement prononcés comme des consonnes doublées.</p>
 
@@ -2007,7 +1994,7 @@
 						</tbody>
 						</table>
 
-						<p><strong>Les contrôles d’Ilya.</strong> La notation par défaut des géminées dans Ilya correspond à la préférence de Grayson pour les symboles API doublés. Le basculeur de géminées, dans la section Notation du Tiroir, permet d’appliquer un changement global à la notation des géminées. La case à cocher dans les entrées pertinentes du Tiroir permet de contrôler la notation localement, mot par mot. Ces contrôles existent parce que la décision simple ou double relève souvent de l’interprétation, non de l’absolu. Là encore, rien ne remplace l’oreille d’un répétiteur natif.</p>
+						<p><strong>Les contrôles d’Ilya.</strong> La notation par défaut des géminées dans Ilya correspond à la préférence de Grayson pour les symboles API doublés. Le basculeur de géminées, dans la section Notation du Tiroir, permet d’appliquer un changement global à la notation des géminées. La case à cocher dans les entrées pertinentes du Tiroir permet de contrôler la notation localement, mot par mot. Ces contrôles existent parce que la décision simple ou double relève souvent de l’interprétation, non de l’absolu. Là encore, rien ne remplace l’oreille d’une répétitrice ou d’un répétiteur natif.</p>
 
 						<h4 id="learn-u7-tryit">&Agrave; vous de jouer dans Ilya</h4>
 
@@ -2025,7 +2012,7 @@
 
 						<p><strong>Les géminées.</strong> Transcrivez русский (russe). La graphie montre deux ⟨сс⟩, mais la ligne API affiche un seul <code>/s/</code>. Ouvrez le Tiroir et repérez les contrôles de géminées.</p>
 
-						<p>La couche d’enseignement du module LEÇONS est complète. Chaque règle dont le chanteur a besoin pour lire un texte russe à l’aide d’Ilya a été présentée, de l’alphabet jusqu’à l’assimilation. Pour le comportement complet de chaque lettre, la Couche de référence est alphabétisée, reliée par hyperliens et encyclopédique. Et pour ce qu’aucune règle ni aucun outil ne saurait entièrement saisir, il y a l’oreille d’un répétiteur natif.</p>
+						<p>La couche d’enseignement du module LEÇONS est complète. Chaque règle dont vous avez besoin pour lire un texte russe à l’aide d’Ilya a été présentée, de l’alphabet jusqu’à l’assimilation. Pour le comportement complet de chaque lettre, la Couche de référence est alphabétisée, reliée par hyperliens et encyclopédique. Et pour ce qu’aucune règle ni aucun outil ne saurait entièrement saisir, il y a l’oreille d’une répétitrice ou d’un répétiteur natif.</p>
 
 						<p><em>Grayson source&#160;: Ch. 5 §§2–5 (pp. 150–262), Ch. 7 §2 (pp. 247–258). Appendix F (pp. 312–313).</em></p>
 
@@ -2037,17 +2024,17 @@
 
 						<p><em>Avons-nous tout couvert? Est-ce possible? Qui comble les vides?</em></p>
 
-						<p>Les sections précédentes enseignent un système&#160;: les règles phonologiques de la diction lyrique russe telles que les formule Craig Grayson. Ce système est puissant. Un chanteur qui en maîtrise les principes peut aborder un texte russe inconnu et, en appliquant les règles de Grayson, parvenir à une transcription défendable la plupart du temps. Ilya vit ici, dans ce premier palier de savoir phonologique&#160;: celui où les règles prédisent les résultats et où le chanteur peut les appliquer à des mots jamais rencontrés.</p>
+						<p>Les sections précédentes enseignent un système&#160;: les règles phonologiques de la diction lyrique russe telles que les formule Craig Grayson. Ce système est puissant. Qui en maîtrise les principes peut aborder un texte russe inconnu et, en appliquant les règles de Grayson, parvenir à une transcription défendable la plupart du temps. Ilya vit ici, dans ce premier palier de savoir phonologique&#160;: celui où les règles prédisent les résultats et où vous pouvez les appliquer à des mots jamais rencontrés.</p>
 
 						<p>Or, toute prononciation correcte en diction lyrique russe n’est pas déductible des règles de cette manière. Certaines prononciations établies résistent entièrement à la déduction&#160;: des pratiques observées qui échappent à la systématisation.</p>
 
-						<p>Prenons quelques cas déjà rencontrés au fil de ces sections. L’assourdissement final est une règle phonologique&#160;: on l’apprend une fois, on l’applique partout. Mais le <code>/sʲ/</code> palatalisé de смерть <code>/sʲmʲerʲtʲ/</code> (<em>mort</em>) relève d’un tout autre ordre. On peut en nommer la cause (une tradition théâtrale dite prononciation scénique, attestée par Avanesov, Derwing et Priestly, et Grayson), mais aucun principe phonologique ne permet au chanteur de prédire que ce <code>/s/</code> précis se palatalise. Savoir pourquoi enrichit la compréhension sans modifier la consigne&#160;: devant смерть, palatalisez le <code>/s/</code>. Considérons ensuite скучно <code>/ˈsku ʃnʌ/</code> (<em>ennuyeux</em>), où la composante occlusive <code>/t/</code> de l’affriquée ⟨ч⟩ <code>/tʃʲ/</code> s’efface pour ne laisser que <code>[ʃn]</code>. On peut décrire ce qui se produit, mais on ne peut prédire quels mots le subissent. конечно <code>/kɑ ˈɲɛ ʃnʌ/</code> (<em>bien sûr</em>) oui; точно <code>/ˈto tʃʲnʌ/</code> (<em>exactement</em>) non. Considérons aussi сейчас <code>/sɪj ˈtʃʲɑs/</code> (<em>maintenant</em>), l’un des mots les plus fréquents de la mélodie russe. Sa prononciation courante est si fortement réduite que le chanteur formé uniquement à l’oreille risque d’importer des habitudes de parole dans le registre lyrique. La forme intégrale en diction lyrique, avec son glide intact et sa qualité vocalique délibérée, est un savoir que le chanteur doit simplement posséder. Aucune règle phonologique des sections 1 à 7 ne signale que ce mot précis exige une attention particulière; c’est la fréquence et la convention qui le font.</p>
+						<p>Prenons quelques cas déjà rencontrés au fil de ces sections. L’assourdissement final est une règle phonologique&#160;: on l’apprend une fois, on l’applique partout. Mais le <code>/sʲ/</code> palatalisé de смерть <code>/sʲmʲerʲtʲ/</code> (<em>mort</em>) relève d’un tout autre ordre. On peut en nommer la cause (une tradition théâtrale dite prononciation scénique, attestée par Avanesov, Derwing et Priestly, et Grayson), mais aucun principe phonologique ne permet de prédire que ce <code>/s/</code> précis se palatalise. Savoir pourquoi enrichit la compréhension sans modifier la consigne&#160;: devant смерть, palatalisez le <code>/s/</code>. Considérons ensuite скучно <code>/ˈsku ʃnʌ/</code> (<em>ennuyeux</em>), où la composante occlusive <code>/t/</code> de l’affriquée ⟨ч⟩ <code>/tʃʲ/</code> s’efface pour ne laisser que <code>[ʃn]</code>. On peut décrire ce qui se produit, mais on ne peut prédire quels mots le subissent. конечно <code>/kɑ ˈɲɛ ʃnʌ/</code> (<em>bien sûr</em>) oui; точно <code>/ˈto tʃʲnʌ/</code> (<em>exactement</em>) non. Considérons aussi сейчас <code>/sɪj ˈtʃʲɑs/</code> (<em>maintenant</em>), l’un des mots les plus fréquents de la mélodie russe. Sa prononciation courante est si fortement réduite qu’une formation uniquement à l’oreille risque d’importer des habitudes de parole dans le registre lyrique. La forme intégrale en diction lyrique, avec son glide intact et sa qualité vocalique délibérée, est un savoir qu’il faut simplement posséder. Aucune règle phonologique des sections 1 à 7 ne signale que ce mot précis exige une attention particulière; c’est la fréquence et la convention qui le font.</p>
 
 						<p>Ces cas occupent deux paliers distincts au-delà des règles phonologiques. Dans l’un, la cause est connue mais son application est imprévisible. Dans l’autre, le mécanisme est descriptible mais sa survenance est gouvernée par le lexique. Le fil conducteur des deux paliers est étymologique et traditionnel, non phonologique. On peut nommer la cause après coup. On ne peut engendrer la règle d’avance.</p>
 
-						<p>Ilya rend compte de ces cas par des annotations ciblées&#160;: propres à chaque mot, référencées, et délibérément non généralisantes. Ilya ne présente pas ces cas comme des règles que le chanteur aurait manquées, car aucune règle n’existait à manquer.</p>
+						<p>Ilya rend compte de ces cas par des annotations ciblées&#160;: propres à chaque mot, référencées, et délibérément non généralisantes. Ilya ne présente pas ces cas comme des règles que vous auriez manquées, car aucune règle n’existait à manquer.</p>
 
-						<p>Ce qu’Ilya ne pourra jamais faire, c’est remplacer le savoir qui vit dans le corps, dans la tradition et dans le studio. Ilya prépare le chanteur à ces conversations, mais ne saurait s’y substituer. Nous sommes convaincus que cette forme de transmission exigera toujours une expertise humaine, et nous y voyons une richesse de l’art vocal, non une limite.</p>
+						<p>Ce qu’Ilya ne pourra jamais faire, c’est remplacer le savoir qui vit dans le corps, dans la tradition et dans le studio. Ilya vous prépare à ces conversations, mais ne saurait s’y substituer. Nous sommes convaincus que cette forme de transmission exigera toujours une expertise humaine, et nous y voyons une richesse de l’art vocal, non une limite.</p>
 
 						<h2 id="learn-try">Essayez</h2>
 
