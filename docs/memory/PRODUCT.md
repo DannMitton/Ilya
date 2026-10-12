@@ -1147,3 +1147,42 @@ Offered by the desk with three alternatives (« exercée », « éduquée », «
 **English, read 2026-10-11 16:33 for comparison.** Merriam-Webster: "the general range of a melody or voice part"; specifically "the part of the register in which most of the tones of a melody or voice part lie" (its usage citations also apply it to singers, e.g. "across her full tessitura"). Britannica: "the general range of pitches found in a melody or vocal part"; "which part of the range is most consistently used". So the English dictionaries define a melody's or a part's; the French put the voice first. Dann 16:31: the Académie's sense 1 reads as range (« ambitus »); its sense 2 is correct.
 
 **Hoch, *A Dictionary for the Modern Singer* (Rowman & Littlefield, 2014), p. 177, photographed by Dann 2026-10-11 16:37, read by the desk from the photograph.** "tessitura. The limited range of notes in which a singer feels most comfortable singing for extended periods of time. While many classically trained singers possess at least a two-octave range, most trained singers would fatigue if they sang in the wrong tessitura (either too high or too low) for an extended period of time. Tessitura is also the property of a musical score, referring to the range of notes in which a piece of music primarily "lies" (or "sits"). Voice teachers often examine scores to determine whether the tessitura is right for the singer to whom he or she is assigning the song or aria." (Hoch's parenthesis is a dash pair in print.) So an English singing dictionary puts the singer first and the score second. Its first sense is close to Ilya's "comfortable working zone" ("most comfortable singing for extended periods of time").
+
+## Markup is a scholarly edition, not a performance score
+
+**Said by Dann 2026-10-11 20:15**, on agreeing that the notes make room for the red crossing ring (`OPEN.md`, "THE RED CROSSING RING STANDS OUTSIDE THE SELECTION RING"): *"I feel comfortable with this because we are not generating performance scores, we are generating scholarly editions for thoughtful inspection."* (transcribed with his typing corrected). The desk reads it as a default, with its condition per tether 19: where the analysis needs room on the page, the engraving may give it, as long as the score stays legible to a singer (the acceptance criterion in `AGENTS.md`); a departure from performance-score spacing is not a fault on Markup.
+
+## No empty space mid-document: how Text, Markup, and Insights fill their pages
+
+**Asked by Dann 2026-10-11 21:38 to 21:46, on Insights for *Without Sun*, no. 1 (four pages, three gaps of 120 to 395 px measured in his Chrome at 21:39):** *"I'm noticing that the typesetting and graphs impose voids in the document and I want to eliminate them. What rule or process can we adopt that will allow most of Ilya's output to occupy page real estate responsibly?"* Scope (21:46): Text, Markup, and Insights; the last page may end short; Text's concession of its sixth system and Insights' page-breaking squircles stay. **The rules below were devised by the desk (21:47 to 21:50, after Dann asked for its advice on what was foreign to him) and RATIFIED by Dann 21:50** (*"Yes I accept the strategy you devised. Ratified!"*). Who offered it: the desk. Who ruled it in: Dann. Each is a default with its condition, per tether 19.
+
+1. **Nothing changes order.** Music systems keep their sequence; prose keeps its sequence. Only figures move.
+2. **Boxes and prose break across pages**, between paragraphs, list items, and suggestions, and inside a paragraph between lines, with at least two lines on each page. Never inside a figure or a music system. A heading never ends a page.
+3. **Figures float.** A figure stays where it falls if it fits; otherwise it goes to the top of the next page and the prose after it moves up. Never more than one page, and never ahead of the text that introduces it.
+4. **Pages of music share out their leftover space** evenly between the systems on the page, up to a maximum gap between systems; beyond it the rest stays at the foot. The maximum is a desk default, shown to Dann in pictures. Whether Gould states vertical justification is NOT ESTABLISHED; cite only the extraction, or mark it JUDGEMENT.
+5. **Type does not shrink.**
+6. **Ilya checks itself.** A test fails when any page but the last is more than a set share empty (15 percent to start, a desk default checked against real songs).
+
+7. **Insights' notes are endnotes, RULED by Dann 2026-10-11 21:54** on the desk's recommendation (he asked at 21:53 whether endnotes would be wiser than footnotes for referential content). A section headed "Notes" / « Notes » sits at the end, before "Further reading": the numbered notes (today, Pacheco's definition of tessitura, `1`), their markers unchanged in the text, and the method line as the last item, no longer above page 1's footer. Why: footnotes take varying room from their own page, which fights the page-filling rules; the document is short; and Insights already closes with endnotes. Default, with its condition: a note the reader cannot do without on that page may be argued back to a footnote.
+
+The brief is QUEUE row 79.
+
+## Correspondence between the documents: the singer finds what Ilya discusses
+
+**Asked by Dann 2026-10-11 22:01 to 22:03:** *"I want the user to be able to locate whatever Ilya discusses quickly and easily."* Three rules offered by the desk (22:05) and adopted by Dann 22:16 *"for now... We may massage them and modify them as we discuss"*. Defaults, open to revision.
+
+1. **One address everywhere: the bar number.** Text, Markup, Insights, and Corrections point with "bar N". Bar numbers print as Gould and Ilya already do: at the start of each system and after a multimeasure rest (Dann 22:05: *"Musicians are accustomed to counting measures"*; the desk's proposal to number every bar was declined).
+2. **When Insights discusses one note, it names bar, pitch, and syllable** (for example "m. 6 · A3 · ду [u]"), so the singer counts to the bar and finds the note by the word under it.
+3. **Whatever Markup marks in red, Insights discusses.**
+
+Also ruled 22:01: Insights' summary line says a note "sits close to" a vowel's first resonance (« s'approche de »), not "meets", because it counts every comment resting on fR1 while Markup's red ring marks only fo within a semitone of fR1.
+
+## What Ilya watches for depends on the voice
+
+**Said by Dann 2026-10-11 22:09 to 22:16.** Context, his words: in his dissertation's sixteen markups (the Mussorgsky and Kabalevsky cycles) red squircles are few; *"The squircles show collisions of fR1 and fo, which in a bass voice is a notable event requiring adjustment. This criteria doesn't work with treble voices where they routinely sing at and above the pitch of turning: if so, treble printouts would be full of red squircles and large regions of whoop timbre... So it serves basses. But it would not serve sopranos."* The need: *"Help me develop that so that users of every voice type benefit from Ilya's insights and markups."*
+
+- **The singer's question, offered by the desk 22:10, embraced by Dann 22:16:** "Show me the places in this piece where my voice, specifically, has something to manage."
+- **What makes an event notable, a living definition (desk 22:10, Dann's open third clause 22:16):** an event is notable for a voice when (1) it is uncommon for that voice, (2) the literature says it calls for an adjustment in that voice, or (3) a reason still to be found in discussion.
+- **How Ilya applies it (desk 22:10; Dann 22:16 *"I like your idea of a voice type lookup table"*):** a table of notable events by voice family, built from the literature, decides what to watch; the piece's own demands (how often, how long, how loud, for this voice) decide how much it matters (Dann 22:16: *"Yes to the demands of the melodic writing"*).
+- **Seeds named by Dann 22:16:** the soprano's middle voice (his recollection, about D4 to F4, exact values to come from the literature; already on record: Dann ruled on 2026-09-25 at 02:44 to 02:45 that "the treble middle voice counts as a register demand, as Miller's weak region (MIL04-021) plus the passaggio edges", `OPEN.md`, N.173); tenors and formant tuning, sometimes on fR2, after Bozeman.
+- **Next:** a literature extraction by voice family from his library, Downloads, and the existing `Insights Research` harvest.

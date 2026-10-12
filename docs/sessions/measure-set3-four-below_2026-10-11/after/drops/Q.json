@@ -1,0 +1,1 @@
+{"letter":"Q","refused":null,"minutes":0.59985,"backend":"webgpu","stamp":"homr-web@0.2.0-ilya.7/465","logs":["[omr] metre: page read in 0.3 s, 0 windows, 0 stating a signature, 3 voice staves not found","[omr] metre: page read in 0.1 s, 0 windows, 0 stating a signature, 3 voice staves not found","[omr] homr read 2 of 2 pages of Q.pdf in 28738 ms on webgpu"]}

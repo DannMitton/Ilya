@@ -34,6 +34,15 @@
  *   a return to the metre before it (Kabalevsky op. 52 no. 6, bars 20 to 22),
  *   governs one bar only; it is stated when that bar is countable and adds up
  *   to it. A return is a signature of the same length as the metre before.
+ * - **A return the reader did not see (QUEUE row 77, 2026-10-11).** Where
+ *   the first countable bars, two or more, add up to the proposal, and the
+ *   next countable bar adds up to the metre in force before it, the change
+ *   is printed for those bars only, and the page returns to the metre before
+ *   it at that bar with a signature the reader did not see (Rimsky-Korsakov
+ *   op. 8 no. 2, «Ночь»: two bars of 3/2 in C, twice; the reader saw both
+ *   3/2s and neither C). The proposal is stated for those bars, and homr's
+ *   metre takes over again at the return (`until`). A bar cannot add up to
+ *   two metres of different lengths, so the bar names the return.
  *
  * Bar lengths are in quarter notes. Cut C is 2/2, four quarters.
  */
@@ -186,6 +195,8 @@ export function countable(bars: readonly BarFacts[], i: number, L: Q): boolean {
 export interface Verdict {
 	stated: boolean;
 	why: string;
+	/** Where a stated proposal ends early: the bar of a return the reader did not see. */
+	until?: number;
 }
 
 /**
@@ -216,6 +227,12 @@ export function witness(
 	const first = counted.slice(0, 4);
 	if (first.length < 2) return { stated: false, why: `${first.length} countable bar${first.length === 1 ? '' : 's'} before the next signature, not 2` };
 	const off = first.find((i) => !qEq(bars[i].len, L));
-	if (off !== undefined) return { stated: false, why: `${show(off)} quarters, not ${L.n}/${L.d}` };
+	if (off !== undefined) {
+		const summed = counted.slice(0, counted.indexOf(off));
+		if (summed.length >= 2 && before !== null && !qEq(lengthOf(before), L) && qEq(bars[off].len, lengthOf(before))) {
+			return { stated: true, why: `${summed.length} bars add up to ${lab}; ${show(off)} quarters, the metre before it: a return not seen`, until: off };
+		}
+		return { stated: false, why: `${show(off)} quarters, not ${L.n}/${L.d}` };
+	}
 	return { stated: true, why: `${first.length} bars add up to ${lab}` };
 }

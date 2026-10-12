@@ -1,4 +1,5 @@
 // Changed by the Ilya project, 2026-10-05: homr main's brace filter and scoring (brace_dot_detection.py, model.py, 560ca5c) for model 465.
+// Changed by the Ilya project, 2026-10-11 (0.2.0-ilya.7): a voice braced to the piano's upper staff is regrouped (pianoBracedAtTheBottom).
 /**
  * Which staffs play together. Port of brace_dot_detection.py from
  * _filter_for_tall_elements on, and of MultiStaff.create_grandstaffs with its
@@ -16,6 +17,7 @@
 
 import { median } from "../image/numeric.js";
 import { followsHomrMain } from "../model/homr-version.js";
+import { DetectionError } from "../model/pipeline.js";
 import {
   GRANDSTAFF_X_DISTANCE_THRESHOLD_FACTOR,
   GRANDSTAFF_Y_OVERLAP_THRESHOLD_FACTOR,
@@ -302,7 +304,70 @@ export function findBracesBracketsAndGrandStaffLines(
       result.push(createMultiStaff([staff]));
     }
   }
-  return mergeMultiStaffsSharingAStaff(result).map((multiStaff) =>
-    createGrandstaffs(multiStaff, tall)
+  const systems = mergeMultiStaffsSharingAStaff(result);
+  return pianoBracedAtTheBottom(
+    systems,
+    systems.map((multiStaff) => createGrandstaffs(multiStaff, tall))
   );
+}
+
+/**
+ * Added by the Ilya project (0.2.0-ilya.7). A system whose voice homr braced
+ * to the piano's upper staff, regrouped as voice over piano.
+ *
+ * In a song the piano's two staffs are joined by a brace below the voice, and
+ * the voice's staff is never braced to the piano's upper staff while its lower
+ * staff stands alone. Where the brace of one system is not found and a mark
+ * at the left of the voice and the piano's upper staff scores as one, homr
+ * makes those two a grand staff and leaves the piano's lower staff single
+ * (Balakirev, «Пѣсня золотой рыбки», Carl Fischer, page 8, the last system:
+ * the piano's right hand was read as the voice for four bars).
+ *
+ * A musician reads that system as the page's other systems print it. So, with
+ * model 465: on a page where a system holds a single staff directly above a
+ * grand staff (a voice over its piano), a system of three staffs made a grand staff
+ * of its top two and left its bottom one single is made its top staff single
+ * and its bottom two the grand staff.
+ */
+export function pianoBracedAtTheBottom(
+  systems: readonly MultiStaff[],
+  grouped: readonly MultiStaff[]
+): MultiStaff[] {
+  if (!followsHomrMain()) {
+    return [...grouped];
+  }
+  // Within one system: across systems, a page of nothing but this fault
+  // would read as a single staff above the next system's grand staff.
+  const songLayout = grouped.some(({ staffs }) =>
+    staffs.some(
+      (staff, i) => !staff.isGrandstaff && staffs[i + 1]?.isGrandstaff === true
+    )
+  );
+  if (!songLayout) {
+    return [...grouped];
+  }
+  return grouped.map((system, i) => {
+    const [voice, upper, lower] = systems[i]?.staffs ?? [];
+    const [first, second, third] = system.staffs;
+    if (
+      voice === undefined ||
+      upper === undefined ||
+      lower === undefined ||
+      systems[i]?.staffs.length !== 3 ||
+      third !== undefined ||
+      first?.isGrandstaff !== true ||
+      second === undefined ||
+      second.isGrandstaff
+    ) {
+      return system;
+    }
+    try {
+      return createMultiStaff([voice, mergeStaffs(upper, lower)], system.connections);
+    } catch (error) {
+      if (error instanceof DetectionError) {
+        return system;
+      }
+      throw error;
+    }
+  });
 }

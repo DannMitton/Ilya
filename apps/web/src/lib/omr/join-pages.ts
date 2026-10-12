@@ -569,6 +569,8 @@ export function joinPages(pages: readonly string[], look?: LookAtPage, metres?: 
 		const next = proposals[i + 1]?.bar === p.bar + 1 ? proposals[i + 1].lab : null;
 		const v = witness(bars, span, p.lab, labelOf(trial.timeBefore[p.bar] ?? null), next, trial.guessed);
 		if (v.stated) stated.set(p.bar, p.lab);
+		// A return the reader did not see: homr's metre takes over again at that bar (`metre-witness.ts`).
+		if (v.stated && v.until !== undefined) ends.add(v.until);
 		metres?.log?.push(`bar ${p.bar + 1} (page ${p.page + 1}): ${p.lab} ${v.stated ? 'stated' : 'not stated'}: ${v.why}`);
 	});
 	const { measures } = build(stated, ends);

@@ -1,7 +1,7 @@
 # Changes by the Ilya project
 
 This copy of homr-web 0.2.0 (commit `cb333a5`) was changed by the Ilya
-project on 2026-10-05, 2026-10-06, 2026-10-08, and 2026-10-09 and is published as `0.2.0-ilya.6`. It is not a release
+project on 2026-10-05, 2026-10-06, 2026-10-08, 2026-10-09, and 2026-10-11 and is published as `0.2.0-ilya.7`. It is not a release
 by homr-web's author. It stays under the GNU Affero General Public License
 version 3, as homr and homr-web are; LICENSE and NOTICE are unchanged.
 
@@ -64,6 +64,8 @@ All homr paths are at commit `560ca5c` unless said otherwise.
 | `README.md`, `package.json` (0.2.0-ilya.5) | version `0.2.0-ilya.5` | none |
 | `src/pipeline/staff-image.ts` (0.2.0-ilya.6) | the new `voiceOverPiano`; `ensureSameNumberOfStaffsMain`, on a page that prints the voice above the piano, where no period is found, keeps the systems as detected | none: a departure from homr main, `homr/staff_parsing.py` `_ensure_same_number_of_staffs` |
 | `README.md`, `package.json` (0.2.0-ilya.6) | version `0.2.0-ilya.6` | none |
+| `src/geometry/braces.ts` (0.2.0-ilya.7) | the new `pianoBracedAtTheBottom`; `findBracesBracketsAndGrandStaffLines`, on a page that prints the voice above the piano, regroups a system of three staffs read as a grand staff over a single one | none: a departure from homr main, `homr/brace_dot_detection.py` and `MultiStaff.create_grandstaffs` in `homr/model.py` |
+| `README.md`, `package.json` (0.2.0-ilya.7) | version `0.2.0-ilya.7` | none |
 
 ## Not ported
 
@@ -227,4 +229,27 @@ the bars that hold a note only, so that a whole-bar rest (which homr counts
 as a whole note's length) does not set it (Zhitomirsky's op. 6 no. 2, page
 2, in 12/8, read as 5/4). Each changed the reading of a song of the final
 test that passes, which the test does not allow (QUEUE row 61).
+
+## 0.2.0-ilya.7, 2026-10-11
+
+One departure from homr main, with `model: "465"` only, found on a song of
+Ilya's third unseen set (QUEUE row 77).
+
+**A voice braced to the piano's upper staff.** In a song the piano's two
+staffs are joined by a brace below the voice. homr makes a pair of staffs a
+grand staff where a brace scores with it (`selectGrandstaffs`). On
+Balakirev's «Пѣсня золотой рыбки» (Carl Fischer, 1922), page 8, the brace of
+the last system was not found, and a mark at the left of the voice and the
+piano's upper staff scored with those two: the system detected as `g, v`
+(the voice and the right hand one grand staff, the left hand single) where
+the page's other systems detect as `v, g`. The voice's part then held the
+right hand's notes for four bars: 20 notes too many.
+
+Now, on a page where a system holds a single staff directly above a grand
+staff, a system of three staffs made a grand staff of its top two and left its
+bottom one single is made its top staff single and its bottom two the grand
+staff (`pianoBracedAtTheBottom`). A musician reads a voice's staff as never
+braced to the piano's upper staff while the lower stands alone. A page with
+no single staff directly above a grand staff, a system of any other shape,
+and model 396 are read as before.
 

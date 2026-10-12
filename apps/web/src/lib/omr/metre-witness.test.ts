@@ -88,6 +88,21 @@ describe('joinPages with what the reader saw', () => {
 		expect(log[1]).toMatch(/2\/4 not stated: 1 countable bar before the next signature, not 2/);
 	});
 
+	it('states a change for the bars that add up to it, and gives homr’s metre back at a return the reader did not see', () => {
+		// «Ночь» (Rimsky-Korsakov op. 8 no. 2): C, two bars of 3/2, then C again, and the reader saw the 3/2 alone
+		const p = page([bar(0, 4, homr44), bar(1, 4), bar(2, 6), bar(3, 6), bar(4, 4), bar(5, 4)]);
+		const log: string[] = [];
+		const xml = joinPages([p], undefined, { pages: [[seen(2, '3/2')]], log });
+		expect(times(xml)).toEqual([[1, '4/4'], [3, '3/2'], [5, '4/4']]);
+		expect(xml).not.toContain('<time-modification>');
+		expect(log[0]).toBe('bar 3 (page 1): 3/2 stated: 2 bars add up to 3/2; bar 5 holds 4/1 quarters, the metre before it: a return not seen');
+		// one bar of the change is not enough, and a bar of another length is not a return
+		const one = page([bar(0, 4, homr44), bar(1, 4), bar(2, 6), bar(3, 4), bar(4, 4)]);
+		expect(joinPages([one], undefined, { pages: [[seen(2, '3/2')]] })).toBe(joinPages([one], undefined, { pages: [[]] }));
+		const other = page([bar(0, 4, homr44), bar(1, 4), bar(2, 6), bar(3, 6), bar(4, 5), bar(5, 4)]);
+		expect(times(joinPages([other], undefined, { pages: [[seen(2, '3/2')]] }))).not.toContainEqual([3, '3/2']);
+	});
+
 	it('sets a courtesy signature aside', () => {
 		const log: string[] = [];
 		const xml = joinPages([fourBarsOfThree], undefined, { pages: [[seen(3, '3/4', true)]], log });

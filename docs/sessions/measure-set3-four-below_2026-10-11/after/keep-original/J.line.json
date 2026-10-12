@@ -1,0 +1,21 @@
+{
+ "label": "J",
+ "path": "webgpu",
+ "refused": null,
+ "shift": 0,
+ "printed": 91,
+ "right": 91,
+ "missing": 0,
+ "extra": 0,
+ "pitchMisreads": 0,
+ "lengthMisreads": 0,
+ "barsRead": 49,
+ "barsPrinted": 49,
+ "metre": {
+  "right": 30,
+  "paired": 30,
+  "unpaired": 19
+ },
+ "unsureNotes": 0,
+ "unsureRight": 0
+}
