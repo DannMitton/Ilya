@@ -97,3 +97,12 @@ All pass.
 - **Other browsers.** Whether Safari and Firefox apply `height: auto` to a nested `<svg>` the same way was not tested. The fix is correct in every browser: the rule no longer reaches the systems.
 - **The Playwright spec in its own runner.** It was not run with `pnpm test:e2e` in this session; its check was run as a script over all 124 files.
 - **What Fable's amendments to this brief say.** They are not on the remote.
+
+## Fable's amendments, checked after the commit
+
+The amendments (2026-10-11 19:30) reached the remote at `7bb929a4`, after this row was pushed as `9dd24fe4`. Read then, each is met:
+
+- **"If the bar set can only be read from a rendered page, write the test as a Playwright test beside `apps/web/e2e/print-pages.test.ts`."** Done. `apps/web/e2e/markup-pages-lose-no-bars.test.ts` reads the live page.
+  - The pagination half also has a unit test (`markup-pages.test.ts`), which reads `paginateScore`'s output directly and needs no rune.
+- **"`insights/paginate.ts` is Insights' paginator, not Markup's: not a lead."** Agreed. Neither fix touches it: cause 1 is in `MarkupPane.svelte` and cause 2 in `packages/score-parser/src/page-layout.ts`.
+- **"All eight gates; report gate 4's new count."** 2328, as in "The eight gates".
