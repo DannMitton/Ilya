@@ -333,6 +333,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.delete':              { en: 'Remove this note',              fr: 'Supprimer cette note' },
 	'correct.deselect':            { en: 'Done',                          fr: 'Terminé' },
 	'correct.length':              { en: 'Length',                        fr: 'Durée' },
+	// QUEUE row 62: a settled one-line field. RATIFIED by Dann 2026-10-11 05:11 (*"yes"*), on the OQLF GDT's « enregistrer » = save (« sauvegarder » = back up).
+	'field.saved':                 { en: 'Saved',                         fr: 'Enregistré' },
 	'correct.dot':                 { en: 'Dot',                           fr: 'Point' },
 	// N.183, QUEUE row 75: RATIFIED in both languages by Dann 2026-10-11 19:00.
 	'correct.len64th':             { en: 'Sixty-fourth',                  fr: 'Quadruple croche' },
