@@ -37,7 +37,7 @@ export interface SystemChild {
 	tagName: string;
 	/** The `width` attribute, as a number; NaN where absent. */
 	width: number;
-	/** A hit rectangle, a selection ring or a held-measure rectangle. */
+	/** A hit rectangle, a selection ring, a crossing ring, or a held-measure rectangle. */
 	marked: boolean;
 }
 
@@ -69,6 +69,7 @@ export function afterGround(system: Element): Element | null {
 			marked:
 				el.hasAttribute('data-hit') ||
 				el.hasAttribute('data-selection-ring') ||
+				el.hasAttribute('data-crossing-ring') || // Markup's crossing squircle, QUEUE row 34
 				el.hasAttribute('data-held-measure'),
 		})),
 		Number(system.getAttribute('width')),

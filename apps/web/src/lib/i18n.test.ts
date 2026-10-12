@@ -19,6 +19,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { stringKeys, t } from './i18n';
 
 describe('N.62 accessible names', () => {
@@ -130,6 +131,26 @@ describe('French spacing follows the OQLF table', () => {
 		expect(faults('<span style="width:14px;height:7px">x</span>')).toEqual([]);
 		expect(faults('lui-même {cite:RMR-057}; mais')).toEqual([]);
 		expect(faults('lui-même {cite:RMR-057} ; mais')).toEqual(['space before ;']);
+	});
+
+	/* QUEUE row 70 (Fable's amendment of 2026-10-11 19:30): the same table over
+	   the French branch of the two Reading files, where French prose lives in
+	   markup rather than in this file. Entities are decoded first, since the
+	   markup writes its no-break spaces as `&#160;`. A colon inside an English
+	   title keeps its source's punctuation (row 68's rule for a quotation). */
+	it('the French branch of Learn and the Guide follows the table', () => {
+		const ENGLISH_TITLES = ['Russian Lyric Diction: A', 'Classical Singer: The'];
+		for (const [file, open] of [['./components/Reading/LearnContent.svelte', "{#if language === 'fr'}"], ['./components/Reading/GuideContent.svelte', "{#if language === 'fr'}"]] as const) {
+			const src = readFileSync(new URL(file, import.meta.url), 'utf8');
+			const start = src.indexOf(open);
+			const end = src.indexOf('{:else}', start);
+			expect(start, file).toBeGreaterThan(0);
+			let fr = src.slice(start + open.length, end).replace(/&#160;|&nbsp;/g, '\u00a0').replace(/&#8239;/g, '\u202f');
+			for (const title of ENGLISH_TITLES) fr = fr.replaceAll(title, '');
+			expect(faults(fr), file).toEqual([]);
+			// Not vacuous: each branch holds French colons and guillemets.
+			expect((fr.match(/\u00a0:/g) ?? []).length, file).toBeGreaterThan(5);
+		}
 	});
 
 	it('every French value in i18n.ts follows the table', () => {

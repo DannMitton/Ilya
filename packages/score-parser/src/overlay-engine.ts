@@ -228,6 +228,7 @@ export function analyzeScore(
       turningPitch: hzToPitch(turningHz),
       crossing,
       aboveFirstResonance,
+      ...(profile.fR1Source?.[vowel] === 'surrogate' ? { placeholder: true as const } : {}),
       phonationBreak: false, // set by the diction layer / correction UI
       ...(inPassaggio !== undefined ? { inPassaggio } : {}),
       ...(rangeStatus !== undefined ? { rangeStatus } : {}),

@@ -397,6 +397,10 @@ export function paginateScore(
     if (!isLast && gapCount > 0) {
       gap = Math.max(o.systemGap, (innerBottom - o.marginTop - inkHeight) / gapCount);
       establishedGap = gap;
+    } else if (gapCount > 0) {
+      // QUEUE row 72: the carried spacing never pushes the last page's systems past its bottom. The
+      // groups were packed at `o.systemGap`, so that floor always fits; a wider carried gap may not.
+      gap = Math.max(o.systemGap, Math.min(establishedGap, (innerBottom - o.marginTop - inkHeight) / gapCount));
     }
 
     // NO BACKGROUND, N.133, Dann's ruling of 2026-09-13: every surface

@@ -47,6 +47,7 @@ import {
 } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import { isRare, watchEntryLine, WATCH_OPENERS, type WatchEntry, type WatchKind, type WatchList, type WatchOpener } from './watchlist';
+import { placeholderCommentSentence } from './placeholder-line';
 
 // ── The numbers ──────────────────────────────────────────────────────
 
@@ -290,7 +291,14 @@ export function applyGates(input: GateInput): GateResult {
  * by the language's own list ("3, 7, and 9"; « 3, 7 et 9 »). It drops the
  * word, since its bars may carry different words (gate 4).
  */
-export function gatedLines(shown: readonly GatedEntry[], language: Language): string[] {
+/** The watch kinds computed from a vowel's fR1 (`overlay-engine.ts`); range, passaggio, and sustain are not. */
+const FROM_FR1: ReadonlySet<WatchKind> = new Set(['crossing', 'cover', 'tracking', 'turnover', 'timbre']);
+
+/**
+ * `placeholderAt`: whether a note's fR1 is a placeholder (QUEUE row 69). A line
+ * whose kinds read that fR1 says so in a sentence of its own after it.
+ */
+export function gatedLines(shown: readonly GatedEntry[], language: Language, placeholderAt?: (eventId: string) => boolean): string[] {
 	const list = new Intl.ListFormat(language, { type: 'conjunction' });
 	const render = (g: GatedEntry, opener: WatchOpener) => {
 		if (g.bars.length < 2) return watchEntryLine(g.entry, language, opener);
@@ -308,7 +316,11 @@ export function gatedLines(shown: readonly GatedEntry[], language: Language): st
 		return true;
 	});
 	let k = 0;
-	return unique.map((g) => render(g, g.entry.advice ? WATCH_OPENERS[k++ % WATCH_OPENERS.length] : 2));
+	const flagged = (g: GatedEntry) => !!placeholderAt?.(g.entry.eventId) && g.entry.kinds.some((kind) => FROM_FR1.has(kind));
+	return unique.map((g) => {
+		const line = render(g, g.entry.advice ? WATCH_OPENERS[k++ % WATCH_OPENERS.length] : 2);
+		return flagged(g) ? `${line} ${placeholderCommentSentence(g.entry.vowel, language)}` : line;
+	});
 }
 
 /**

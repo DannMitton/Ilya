@@ -269,15 +269,15 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Metadata fields ─────────────────────────────────────
 	'meta.heading':                { en: 'Metadata',                     fr: 'Métadonnées' },
 	'meta.title':                  { en: 'Aria or song title',            fr: 'Aria ou titre du chant' },
-	'meta.composer':               { en: 'Composer',                     fr: 'Compositeur' },
+	'meta.composer':               { en: 'Composer',                     fr: 'Compositrice ou compositeur' },
 	'meta.poet':                   { en: 'Poet or librettist',            fr: 'Poète ou librettiste' },
 	'meta.opus':                   { en: 'Opera, song cycle, opus number', fr: 'Opéra, cycle de mélodies, numéro d\u2019opus' },
 	'meta.transcriber':            { en: 'Transcriber name',             fr: 'Nom du transcripteur' },
-	'meta.translator':             { en: 'Translator',                   fr: 'Traducteur' },
+	'meta.translator':             { en: 'Translator',                   fr: 'Traductrice ou traducteur' },
 	'meta.transl':                 { en: 'TRANSL.',                      fr: 'TRAD.' },
 	'meta.reset':                  { en: 'Reset',                        fr: 'Réinitialiser' },
 	'meta.textBy':                 { en: 'Text by',                      fr: 'Texte de' },
-	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur le compositeur, l\u2019opus et le poète' },
+	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur la compositrice ou le compositeur, l\u2019opus et la ou le poète' },
 
 	// ── Notation options (IPA display toggles) ──────────────
 	'cosmetic.heading':            { en: 'Notation',                     fr: 'Notation' },
@@ -333,7 +333,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.delete':              { en: 'Remove this note',              fr: 'Supprimer cette note' },
 	'correct.deselect':            { en: 'Done',                          fr: 'Terminé' },
 	'correct.length':              { en: 'Length',                        fr: 'Durée' },
+	// QUEUE row 62: a settled one-line field. RATIFIED by Dann 2026-10-11 05:11 (*"yes"*), on the OQLF GDT's « enregistrer » = save (« sauvegarder » = back up).
+	'field.saved':                 { en: 'Saved',                         fr: 'Enregistré' },
 	'correct.dot':                 { en: 'Dot',                           fr: 'Point' },
+	// N.183, QUEUE row 75: RATIFIED in both languages by Dann 2026-10-11 19:00.
+	'correct.len64th':             { en: 'Sixty-fourth',                  fr: 'Quadruple croche' },
+	'correct.len32nd':             { en: 'Thirty-second',                 fr: 'Triple croche' },
 	'correct.len16th':             { en: 'Sixteenth',                     fr: 'Double croche' },
 	'correct.len8th':              { en: 'Eighth',                        fr: 'Croche' },
 	'correct.lenQuarter':          { en: 'Quarter',                       fr: 'Noire' },
@@ -668,18 +673,18 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Stress source labels ─────────────────────────────────
 	'stress.dictionary':           { en: 'Verified from dictionary',     fr: 'Vérifié dans le dictionnaire' },
-	'stress.supplement':           { en: 'Singer supplement',            fr: 'Supplément pour chanteurs' },
+	'stress.supplement':           { en: 'Singer supplement',            fr: 'Supplément pour chanteuses et chanteurs' },
 	'stress.yoRule':               { en: 'Derived from ё',              fr: 'Dérivé de ё' },
 	'stress.yoRestored':           { en: 'ё restored from dictionary',  fr: 'ё restauré du dictionnaire' },
 	'stress.inferred':             { en: 'Algorithmically inferred',    fr: 'Inféré algorithmiquement' },
 	'stress.unknown':              { en: 'Unknown \u2014 verify manually', fr: 'Inconnu \u2014 vérifier manuellement' },
 	'stress.userDictionary':       { en: 'User verified',               fr: 'Vérifié par l\u2019utilisateur' },
-	'stress.userComposer':         { en: 'Composer setting',            fr: 'Choix du compositeur' },
+	'stress.userComposer':         { en: 'Composer setting',            fr: 'Choix de la partition' },
 	'stress.userOverride':         { en: 'User assignment',             fr: 'Choix de l\u2019utilisateur' },
 
 	// ── Stress assignment (Inspector) ─────────────────────────
 	'inspector.stressAssign.dictionary':    { en: 'Dictionary',          fr: 'Dictionnaire' },
-	'inspector.stressAssign.composer':      { en: 'Composer',            fr: 'Compositeur' },
+	'inspector.stressAssign.composer':      { en: 'Composer',            fr: 'Compositrice ou compositeur' },
 	'inspector.stressAssign.myAssignment':  { en: 'My assignment',       fr: 'Mon choix' },
 	'inspector.stressAssign.default':       { en: 'Default',             fr: 'Par défaut' },
 	'inspector.yoToggle':                   { en: 'ё \u2194 е',         fr: 'ё \u2194 е' },
@@ -818,7 +823,7 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Per-page provenance legend ───────────────────────────
 	'legend.user-dictionary':      { en: 'Verified in dictionary',       fr: 'Vérifié dans le dictionnaire' },
-	'legend.user-composer':        { en: 'Composer setting',             fr: 'Réglage du compositeur' },
+	'legend.user-composer':        { en: 'Composer setting',             fr: 'Réglage de la partition' },
 	'legend.user-override':        { en: 'User override',                fr: 'Correction manuelle' },
 	'legend.yo':                   { en: 'ё stress',                     fr: 'Accent de ё' },
 	'legend.inferred':             { en: 'Verify stress',                fr: 'Vérifier l\u2019accent' },
@@ -869,7 +874,7 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Provenance labels (for Inspector inline display) ─────
 	'provenance.dictionary':       { en: 'Stress verified from dictionary',      fr: 'Accent vérifié dans le dictionnaire' },
-	'provenance.supplement':       { en: 'Stress from singer supplement',        fr: 'Accent du supplément pour chanteurs' },
+	'provenance.supplement':       { en: 'Stress from singer supplement',        fr: 'Accent du supplément pour chanteuses et chanteurs' },
 	'provenance.yo':               { en: 'Stress derived from ё',               fr: 'Accent dérivé de ё' },
 	'provenance.inferred':         { en: 'Stress algorithmically inferred',      fr: 'Accent inféré algorithmiquement' },
 	'provenance.unknown':          { en: 'Unknown stress \u2014 verify manually', fr: 'Accent inconnu \u2014 vérifier manuellement' },
@@ -1188,7 +1193,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// pacifier.beginPhonating RATIFIED by Dann 2026-09-30 21:00, English and
 	// French (`docs/sessions/draft-sing-first-cue_r1_2026-09-30.md`, REVISION 21:05).
 	'calib.capture.cueSuffix': { en: 'vowel to begin. First sing it as you usually do, to set the shape of your vocal tract. Then stop, keep that shape, and begin again in vocal fry. Ilya measures only the fry.', fr: 'pour commencer. Chantez-la d\u2019abord comme d\u2019habitude, pour régler la forme de votre conduit vocal. Puis arrêtez, gardez cette forme et recommencez en friture vocale. Ilya ne mesure que la friture.' },
-	'calib.capture.paused': { en: 'Paused. Resume when you\'re ready.', fr: 'En pause. Reprenez quand vous serez prêt.' },
+	'calib.capture.paused': { en: 'Paused. Resume when you\'re ready.', fr: 'En pause. Reprenez au moment qui vous convient.' },
 	'calib.capture.resumeButton': { en: 'Resume', fr: 'Reprendre' },
 	'calib.capture.hold.captured': { en: ', captured.', fr: ', captée.' },
 	'calib.capture.hold.rolledBack': { en: 'New sample was less certain, so the previous one was kept.', fr: 'Le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
@@ -1271,11 +1276,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.characteristics.rangeLowLabel': { en: 'Lowest comfortable note', fr: 'Note la plus grave confortable' },
 	'calib.characteristics.rangeHighLabel': { en: 'Highest comfortable note', fr: 'Note la plus aiguë confortable' },
 	'calib.characteristics.rangeInvertedNote': { en: 'The lowest note is set above the highest.', fr: 'La note la plus grave est placée au-dessus de la plus aiguë.' },
-	'calib.characteristics.tessituraHeading': { en: 'Tessitura', fr: 'Tessiture' },
+	'calib.characteristics.tessituraHeading': { en: 'Comfortable working zone', fr: 'Zone de travail confortable' },
 	'calib.characteristics.tessituraHint': { en: 'Where you live, not your edges.', fr: 'Dans votre zone de confort, et non aux extrémités de votre ambitus.' },
-	'calib.characteristics.tessituraLowLabel': { en: 'Tessitura floor', fr: 'Plancher de la tessiture' },
-	'calib.characteristics.tessituraHighLabel': { en: 'Tessitura ceiling', fr: 'Plafond de la tessiture' },
-	'calib.characteristics.tessituraInvertedNote': { en: 'The tessitura floor is set above its ceiling.', fr: 'Le plancher de la tessiture est placé au-dessus de son plafond.' },
+	'calib.characteristics.tessituraLowLabel': { en: 'Working zone floor', fr: 'Plancher de la zone de travail' },
+	'calib.characteristics.tessituraHighLabel': { en: 'Working zone ceiling', fr: 'Plafond de la zone de travail' },
+	'calib.characteristics.tessituraInvertedNote': { en: 'The working zone\'s floor is set above its ceiling.', fr: 'Le plancher de la zone de travail est placé au-dessus de son plafond.' },
 	'calib.characteristics.passaggioHeading': { en: 'Passaggio', fr: '*Passaggio*' },
 	'calib.characteristics.passaggioHint': { en: 'The zona lies between two turns, a lower and an upper. Enter both to flag it; with either blank it stays unmarked, which does not mean it is absent.', fr: 'La *zona* se situe entre deux événements vocaux acoustiques, l\u2019un inférieur et l\u2019autre supérieur. Saisissez les deux pour la signaler. Si l\u2019un des deux reste vide, elle demeure non marquée, ce qui ne veut pas dire qu\u2019elle est absente.' },
 	'calib.characteristics.passaggioPrimaryLabel': { en: 'Primary passaggio', fr: '*Passaggio* primaire' },
@@ -1322,7 +1327,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.withheld.lede': { en: 'Ilya has read your score, but no voice has been measured, so there is nothing to compare this line against.', fr: 'Ilya a lu votre partition, mais aucune voix n’a été mesurée, donc il n’y a rien à quoi comparer cette ligne.' },
 	'profile.withheld.item1': { en: 'Every acoustic mark: no crossings, no timbre turns.', fr: 'Toute marque acoustique\u00a0: aucun croisement, aucun changement de timbre.' },
 	'profile.withheld.item2': { en: 'The watch list, entirely. An empty list is the truthful output here.', fr: 'La liste des points à surveiller, entièrement. Une liste vide est ici la réponse honnête.' },
-	'profile.withheld.item3': { en: 'Any reading of your range, your tessitura, or your passaggio.', fr: 'Toute lecture de votre ambitus, de votre tessiture ou de votre *passaggio*.' },
+	'profile.withheld.item3': { en: 'Any reading of your range, your comfortable working zone, or your passaggio.', fr: 'Toute lecture de votre ambitus, de votre zone de travail confortable ou de votre *passaggio*.' },
 	// ── NotePicker (N.50) ─────────────────
 	//    Scope B, ruled by Dann E.43: the three aria-labels, Clear, the
 	//    empty readout, and the five accidental options. The accidental
@@ -1626,7 +1631,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.verdict.heading':    { en: 'How this key sits for you', fr: 'Comment cette tonalité vous convient' },
 	'insights.verdict.fit':        { en: 'This key seems like a good fit for you.', fr: 'Cette tonalité semble vous convenir.' },
 	'insights.verdict.outsideRange': { en: 'This key takes the piece outside the range you typed.', fr: 'Cette tonalité place la pièce hors de l\u2019ambitus que vous avez indiqué.' },
-	'insights.verdict.outsideTessitura': { en: 'The compass fits the range you typed, but the piece sits outside the tessitura you typed.', fr: 'L\u2019ambitus de la pièce entre dans celui que vous avez indiqué, mais la pièce se situe hors de la tessiture que vous avez indiquée.' },
+	'insights.verdict.outsideTessitura': { en: 'The compass fits the range you typed, but the piece\'s tessitura sits outside the comfortable working zone you typed.', fr: 'L\u2019ambitus de la pièce entre dans celui que vous avez indiqué, mais la tessiture de la pièce se situe hors de la zone de travail confortable que vous avez indiquée.' },
 	'insights.verdict.rangeOnly':  { en: 'The compass fits the range you typed, and nothing on this page compares the tessitura.', fr: 'L\u2019ambitus de la pièce entre dans celui que vous avez indiqué, et rien sur cette page ne compare la tessiture.' },
 	// N.164, ruled by Dann 2026-09-25: `cannotSay` is no longer rendered. With no range typed,
 	// Insights offers the range instead (`insights.offer.*`). Kept so the ruling's history reads.
@@ -1772,9 +1777,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.r2.totals':          { en: 'The measures behind these reasons', fr: 'Ce sur quoi reposent ces constats' },
 	// Rows 11 to 14, « plis vocaux » by the ruling of 04:12.
 	'insights.r2.cycles':          { en: 'Your vocal folds contact about {n} times while singing this piece from beginning to end.', fr: 'Vos plis vocaux entrent en contact environ {n} fois pendant que vous chantez cette pièce du début à la fin.' },
-	'insights.r2.cycles.under':    { en: '{n} under your tessitura',      fr: '{n} sous votre tessiture' },
-	'insights.r2.cycles.within':   { en: '{n} within your tessitura, {low} to {high}, typed', fr: '{n} dans votre tessiture, {low} à {high}, telle que vous l’avez indiquée' },
-	'insights.r2.cycles.above':    { en: '{n} above your tessitura',      fr: '{n} au-dessus de votre tessiture' },
+	'insights.r2.cycles.under':    { en: '{n} under your comfortable working zone',      fr: '{n} sous votre zone de travail confortable' },
+	'insights.r2.cycles.within':   { en: '{n} within your comfortable working zone, {low} to {high}, typed', fr: '{n} dans votre zone de travail confortable, {low} à {high}, telle que vous l’avez indiquée' },
+	'insights.r2.cycles.above':    { en: '{n} above your comfortable working zone',      fr: '{n} au-dessus de votre zone de travail confortable' },
 	// Rows 15 to 20; a vowel with no fR1 is [FR: desk draft owed].
 	'insights.r2.vowels.against':  { en: 'against where each vowel turns in your voice', fr: 'selon la hauteur où chaque voyelle change de timbre dans votre voix' },
 	'insights.r2.vowels.ring':     { en: '{n}% of your singing lies past the turn.', fr: '{n} % de votre chant se situe après le changement de timbre.' },
@@ -1783,14 +1788,28 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.r2.vowels.allPast':  { en: '{s}, all past the turn',        fr: '{s}, entièrement après le changement' },
 	'insights.r2.vowels.somePast': { en: '{s}, {p} past',                 fr: '{s}, dont {p} après le changement' },
 	'insights.r2.vowels.turns':    { en: 'turns about {pitch}',           fr: 'change de timbre autour de {pitch}' },
-	'insights.r2.vowels.noTurn':   { en: '{s}, no first resonance in your calibration', fr: '{s}, no first resonance in your calibration' },
+	'insights.r2.vowels.noTurn':   { en: '{s}, no first resonance in your calibration', fr: '{s}, aucune première résonance mesurée lors de votre calibration' },
+
+	// ── Placeholder vowels (QUEUE row 69; Dann 2026-10-11, `OPEN.md` "STAND-INS ARE LABELLED") ──
+	//    A vowel the singer has not sampled carries a stand-in fR1 (row 17). The
+	//    line at the top of Markup and Insights: English RATIFIED 12:41, the French
+	//    plural RATIFIED 12:42 (« valeur par défaut », OQLF GDT). The French
+	//    singular is DESK-DERIVED from the ratified plural, not itself ratified.
+	'placeholder.line.many': { en: 'Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on a placeholder are drawn dashed.', fr: 'Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu\u2019à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
+	'placeholder.line.one': { en: 'Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on it are drawn dashed.', fr: 'Votre voyelle {vowels} repose sur une valeur par défaut jusqu\u2019à ce que vous l\u2019échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
+	//    PROPOSED, both languages, [FR: desk draft for Dann]: a comment, and the
+	//    vowel figure's caption, saying in their own sentence that they rest on a
+	//    placeholder. Not ratified.
+	'placeholder.comment': { en: 'This finding rests on a placeholder value for {vowel}.', fr: 'Ce constat repose sur une valeur par défaut pour la voyelle {vowel}.' },
+	'placeholder.turns.one': { en: 'The turn of {vowels} rests on a placeholder value, so its bar is drawn dashed.', fr: 'Le changement de timbre de la voyelle {vowels} repose sur une valeur par défaut\u00a0: sa barre est tracée en pointillé.' },
+	'placeholder.turns.many': { en: 'The turns of {vowels} rest on placeholder values, so their bars are drawn dashed.', fr: 'Les changements de timbre des voyelles {vowels} reposent sur des valeurs par défaut\u00a0: leurs barres sont tracées en pointillé.' },
 	// Row 21, « plis vocaux » by the ruling of 04:12.
-	'insights.r2.sourcesLine':     { en: 'A vowel turns about an octave under its first resonance in your voice (Bozeman 2010 and 2014; Titze 2007, p. 200; Titze 2012, p. 544). The cycle dose counts vocal-fold cycles (Titze, Švec, and Popolo 2003), set beside your tessitura after Titze 2008.', fr: 'Dans votre voix, une voyelle change de timbre environ une octave sous sa première résonance (Bozeman 2010 et 2014; Titze 2007, p. 200; Titze 2012, p. 544). La dose de cycles compte les cycles des plis vocaux (Titze, Švec et Popolo 2003); elle est placée à côté de votre tessiture d’après Titze 2008.' },
+	'insights.r2.sourcesLine':     { en: 'A vowel turns about an octave under its first resonance in your voice (Bozeman 2010 and 2014; Titze 2007, p. 200; Titze 2012, p. 544). The cycle dose counts vocal-fold cycles (Titze, Švec, and Popolo 2003), set beside your comfortable working zone after Titze 2008.', fr: 'Dans votre voix, une voyelle change de timbre environ une octave sous sa première résonance (Bozeman 2010 et 2014; Titze 2007, p. 200; Titze 2012, p. 544). La dose de cycles compte les cycles des plis vocaux (Titze, Švec et Popolo 2003); elle est placée à côté de votre zone de travail confortable d’après Titze 2008.' },
 	// Rows 22 and 23.
 	'insights.r2.pieceTessitura':  { en: 'this piece’s tessitura',   fr: 'la tessiture de la pièce' },
-	'insights.r2.yourTessitura':   { en: 'your tessitura, typed',         fr: 'votre tessiture, telle que vous l’avez indiquée' },
-	// The key to French pitch names, once, in the method line of a French page whose prose names a pitch (DESK DEFAULT, `OPEN.md` 04:12). The English is never printed: English pitch names need no key.
-	'insights.r2.pitchKey':        { en: '(A4\u00a0=\u00a0440\u00a0Hz)',                              fr: '(la3 = 440 Hz)' },
+	'insights.r2.yourTessitura':   { en: 'your comfortable working zone, typed',         fr: 'votre zone de travail confortable, telle que vous l’avez indiquée' },
+	// The key to the octave index, once, in the method line of a French page whose prose names a pitch (DESK DEFAULT). French pitches are letters with the American index since QUEUE row 68 (Dann 2026-10-11 04:58); the key stays because a French reader's own index puts 440 Hz at la3. The English is never printed.
+	'insights.r2.pitchKey':        { en: '(A4\u00a0=\u00a0440\u00a0Hz)',                              fr: '(A4\u00a0=\u00a0440\u00a0Hz)' },
 
 	// ── N.168, first slice: the note comments (`brief-code-n168-first-slice_r2`) ──
 	//    `comment-text.ts` assembles them; `comment.<register>.<part>` falls back to
@@ -1819,6 +1838,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'comment.working.where.and': { en: ' and ', fr: ' et ' },
 	'comment.working.where.above': { en: 'above the first resonance{fR1} of your sung [{vowel}]', fr: 'au-dessus de la première résonance{fR1} de votre [{vowel}] chanté' },
 	'comment.working.where.under': { en: 'a little under the first resonance{fR1} of your sung [{vowel}]', fr: 'un peu en dessous de la première résonance{fR1} de votre [{vowel}] chanté' },
+	// QUEUE row 69, PROPOSED, [FR: desk draft for Dann]: the two above without "sung", for a vowel whose fR1 is a placeholder.
+	'comment.working.where.abovePlaceholder': { en: 'above the first resonance{fR1} of your [{vowel}]', fr: 'au-dessus de la première résonance{fR1} de votre [{vowel}]' },
+	'comment.working.where.underPlaceholder': { en: 'a little under the first resonance{fR1} of your [{vowel}]', fr: 'un peu en dessous de la première résonance{fR1} de votre [{vowel}]' },
 	'comment.working.where.turnJustPast': { en: 'just past where your [{vowel}] turns (about {turn})', fr: 'juste après la hauteur où votre [{vowel}] change de timbre (autour de {turn})' },
 	// COMPOSED: "past", at 2 semitones or more over the turning pitch.
 	'comment.working.where.turnPast': { en: 'past where your [{vowel}] turns (about {turn})', fr: 'après la hauteur où votre [{vowel}] change de timbre (autour de {turn})' },

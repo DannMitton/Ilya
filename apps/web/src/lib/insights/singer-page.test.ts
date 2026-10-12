@@ -246,11 +246,14 @@ describe('words the sentences need', () => {
 		expect(articleFor(P('D', 4))).toBe('a');
 	});
 
-	it('names French pitches in solfège with the French octave index, la 440 Hz in octave 3', () => {
-		expect(pitchName(P('A', 3), 'fr')).toBe('la2');
-		expect(pitchName(P('E', 4), 'fr')).toBe('mi3');
-		expect(pitchName(P('D', 4, 1), 'fr')).toBe('ré♯3');
-		expect(pitchName(P('A', 4), 'fr')).toBe('la3');
-		expect(pitchName(P('D', 4, 1), 'en')).toBe('D♯4');
+	it('names a pitch as English does in both languages: letter, accidental, American index (QUEUE row 68)', () => {
+		for (const language of ['en', 'fr'] as const) {
+			expect(pitchName(P('A', 4), language)).toBe('A4'); // 440 Hz
+			expect(pitchName(P('C', 4), language)).toBe('C4'); // middle C
+			expect(pitchName(P('D', 4, 1), language)).toBe('D♯4');
+			expect(pitchName(P('E', 3, -1), language)).toBe('E♭3');
+		}
+		// No solfège and no French index survive in the French path.
+		expect(pitchName(P('A', 4), 'fr')).not.toMatch(/la|3/);
 	});
 });

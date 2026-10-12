@@ -52,6 +52,7 @@ import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from 
 import { chooseClef, type RenderClef } from './clef-select';
 import { arcOutline } from './arc-outline';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
+import { placeholderMark } from './placeholder-mark';
 
 /**
  * N.10b: the sigla for a syllable the resolver declined to transcribe.
@@ -3032,7 +3033,7 @@ export function renderAnalyzedStaff(
          the loupe's filter drops them with the rest (N.71's argument for the
          handle, made again). */
       for (const l of drawLedgerLines(tx, ty, TURNING_COLOUR, 0.85)) {
-        parts.push(analysisMark(l, 'turning-ledger'));
+        parts.push(placeholderMark(a.placeholder, analysisMark(l, 'turning-ledger'), 'stroke'));
       }
 
       if (drawsAcc) {
@@ -3041,21 +3042,16 @@ export function renderAnalyzedStaff(
         // far right of it, so the `Math.max` is a no-op there.
         const gx = Math.max(tx - tHeadW / 2 - tAccGap - tAccW, newMeasure ? (smufl ? nx - 16 : nx - 13) : -Infinity);
         if (smufl) {
-          parts.push(analysisMark(glyphAt(accName!, gx, ty, TURNING_COLOUR, true), 'turning-accidental'));
+          parts.push(placeholderMark(a.placeholder, analysisMark(glyphAt(accName!, gx, ty, TURNING_COLOUR, true), 'turning-accidental'), 'tag'));
         } else {
-          parts.push(`<text data-analysis="turning-accidental" x="${round2(gx)}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${accChar}</text>`);
+          parts.push(placeholderMark(a.placeholder, `<text data-analysis="turning-accidental" x="${round2(gx)}" y="${ty + 4}" font-size="14" fill="${TURNING_COLOUR}">${accChar}</text>`, 'tag'));
         }
         turningAcc[tKey] = tp.alter;
       }
       if (smufl) {
-        parts.push(
-          analysisMark(
-            glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '),
-            'turning-notehead',
-          ),
-        );
+        parts.push(placeholderMark(a.placeholder, analysisMark(glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '), 'turning-notehead'), 'outline'));
       } else {
-        parts.push(`<ellipse data-analysis="turning-notehead" cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`);
+        parts.push(placeholderMark(a.placeholder, `<ellipse data-analysis="turning-notehead" cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`, 'outline'));
       }
       lowestInk = Math.max(lowestInk, ty + 6);
       highestInk = Math.min(highestInk, ty - 6);
@@ -3124,12 +3120,8 @@ export function renderAnalyzedStaff(
       }
     }
 
-    // Red squircle around an fR1/fo crossing.
-    if (a?.crossing) {
-      parts.push(`<rect data-analysis="crossing" x="${nx - 11}" y="${y - 11}" width="22" height="22" rx="7" fill="none" stroke="#b23b3b" stroke-width="1.8"/>`);
-      lowestInk = Math.max(lowestInk, y + 11);
-      highestInk = Math.min(highestInk, y - 11);
-    }
+    // The red crossing squircle is drawn by the page from the selection ring's box (QUEUE row 34,
+    // `apps/web/src/lib/score/crossing-ring.ts`), so the renderer no longer draws one of its own.
 
     // Phonation break: collected for the IPA line, drawn after the loop.
     if (a?.phonationBreak) {

@@ -57,6 +57,7 @@
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
 	import { buildWatchList } from '$lib/analysis/watchlist';
+	import { placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
 	import { pitchName } from '$lib/voice/note-picker';
 	import {
 		buildInsights,
@@ -157,6 +158,8 @@
 			? resolveAdvice(analyzeScore(analysisScore, adapted.snapshot, vowelResolver))
 			: null,
 	);
+	// QUEUE row 69: the vowels the page rests on that the singer never sampled.
+	const placeholders = $derived(placeholderVowels(analyzed));
 	const watchList = $derived(
 		readingScore && analyzed && analysisScore && vowelResolver
 			? buildWatchList(readingScore, analyzed, 1, {
@@ -227,6 +230,7 @@
 			imagery: intake?.imagery !== false,
 			all: intake?.suggestions === 'all',
 			pitchOf: (id) => pitchById.get(id),
+			placeholders: new Set(placeholders),
 		});
 		return { shown: rendered.slice(0, commentSelection.shown.length), more: rendered.slice(commentSelection.shown.length) };
 	});
@@ -260,7 +264,7 @@
 	const hasTypedCharacteristics = $derived(
 		adapted.completeness.range || adapted.completeness.tessitura || adapted.completeness.passaggio,
 	);
-	/* A French page whose prose names a pitch keys the solfège once, here (DESK DEFAULT, `OPEN.md` 04:12). */
+	/* A French page names its octave index once, here: « (A4 = 440 Hz) » (QUEUE row 68; DESK DEFAULT). */
 	const methodLine = $derived(
 		(!model
 			? T('insights.method.silent')
@@ -382,6 +386,7 @@
 						: null,
 				cycles: model.figure?.cycles ?? null,
 				turns: vowelResolver ? vowelTurns(analysisScore, adapted.snapshot, vowelResolver) : null,
+				placeholders,
 			},
 			(s) => formatSecondsFine(s, language),
 		);
@@ -483,7 +488,7 @@
 		translator=""
 		opus=""
 		{language}
-		note={keyRuler?.header(language)}
+		note={[keyRuler?.header(language), placeholderLine(placeholders, language)]}
 		onheightchange={(h) => (headerHeight = h)}
 		versionAccent="#AB7F7F"
 		markAccent="#AB7F7F"

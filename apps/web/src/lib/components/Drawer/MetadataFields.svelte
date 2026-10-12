@@ -10,6 +10,8 @@
 -->
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
+	import { savedFlag, settle } from '$lib/components/Field/settle-field';
+	import SavedNote from '$lib/components/Field/SavedNote.svelte';
 	import { COMPOSERS, POETS, type PersonEntry } from '$lib/composers-poets';
 	import type { SongMetadata } from '$lib/types';
 	import SearchableSelect from './SearchableSelect.svelte';
@@ -47,6 +49,12 @@
 		fromScore = undefined,
 		onrevert = undefined,
 	}: Props = $props();
+
+	// QUEUE row 62: Enter or leaving a field settles it, and a quiet "Saved" follows.
+	let titleSaved = $state(false);
+	let opusSaved = $state(false);
+	const titleFlag = savedFlag((v) => (titleSaved = v));
+	const opusFlag = savedFlag((v) => (opusSaved = v));
 
 	function handleMetaField(field: keyof SongMetadata, value: string) {
 		onchange({ ...metadata, [field]: value });
@@ -95,7 +103,8 @@
 				placeholder={t('meta.title', language)}
 				value={metadata.title}
 				oninput={(e) => handleMetaField('title', (e.target as HTMLInputElement).value)}
-			/>
+				use:settle={{ onsettle: titleFlag.show }}
+			/><SavedNote shown={titleSaved} {language} />
 			{#if fromScore?.has('title')}<span class="meta-from-score">{t('meta.fromScore', language)}</span>{/if}
 		</div>
 
@@ -106,7 +115,8 @@
 				placeholder={t('meta.opus', language)}
 				value={metadata.opus}
 				oninput={(e) => handleMetaField('opus', (e.target as HTMLInputElement).value)}
-			/>
+				use:settle={{ onsettle: opusFlag.show }}
+			/><SavedNote shown={opusSaved} {language} />
 			{#if fromScore?.has('opus')}<span class="meta-from-score">{t('meta.fromScore', language)}</span>{/if}
 		</div>
 

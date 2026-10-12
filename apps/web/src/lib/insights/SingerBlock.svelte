@@ -44,10 +44,12 @@
 
 {#snippet heading(text: string | undefined)}{#if text}<p class="section-head">{text}</p>{/if}{/snippet}
 
-{#snippet comment(tag: string, c: RenderedComment, teacher: string | undefined)}
-	<div class="comment">
+{#snippet comment(tag: string, c: RenderedComment, teacher: string | undefined, placeholder: string | undefined)}
+	<!-- QUEUE row 69: a comment resting on a placeholder fR1 is ruled dashed and says so in its own sentence. -->
+	<div class="comment" class:on-placeholder={!!placeholder} data-placeholder={placeholder ? 'true' : undefined}>
 		<p class="tag">{@render prose(tag)}{' · '}<span class="ipa">[{c.comment.vowel}]</span></p>
 		<p class="body">{@render runs(c.frame)}{#if c.consequence.length}{' '}{@render runs(c.consequence)}{/if}{#each c.visible as s (s.id)}{' '}{@render runs(s.runs)}{/each}</p>
+		{#if placeholder}<p class="placeholder-note">{@render prose(placeholder)}</p>{/if}
 		{#if teacher}<p class="teacher">{teacher}</p>{/if}
 	</div>
 {/snippet}
@@ -82,11 +84,11 @@
 		{/if}
 	{:else if block.kind === 'comment'}
 		{@render heading(block.heading)}
-		{@render comment(block.tag, block.comment, block.teacher)}
+		{@render comment(block.tag, block.comment, block.teacher, block.placeholder)}
 	{:else if block.kind === 'more'}
 		<details class="more">
 			<summary>{block.label}</summary>
-			{#each block.comments as m (m.comment.comment.eventId)}{@render comment(m.tag, m.comment, m.teacher)}{/each}
+			{#each block.comments as m (m.comment.comment.eventId)}{@render comment(m.tag, m.comment, m.teacher, m.placeholder)}{/each}
 		</details>
 	{:else if block.kind === 'note'}
 		{@render heading(block.heading)}
@@ -131,10 +133,11 @@
 		<div class="vowel-rows" style="grid-template-columns: 30px {TRACK}px 1fr;">
 			{#each block.rows as row (row.vowel)}
 				<span class="vowel ipa">[{row.vowel}]</span>
-				<span class="track"><span class="before" style="width: {row.before * TRACK}px;"></span><span class="past" style="width: {row.past * TRACK}px;"></span></span>
+				<span class="track" class:dashed={!!row.placeholder} data-placeholder={row.placeholder ? 'true' : undefined}><span class="before" style="width: {row.before * TRACK}px;"></span><span class="past" style="width: {row.past * TRACK}px;"></span></span>
 				<span class="vowel-text">{row.text}{#if row.turn}{' · '}<b>{@render prose(row.turn)}</b>{/if}</span>
 			{/each}
 		</div>
+		{#if block.placeholder}<p class="placeholder-note">{@render prose(block.placeholder)}</p>{/if}
 	{:else if block.kind === 'prose'}
 		{@render heading(block.heading)}
 		<p class:prose={!block.small} class:source-line={block.small}>{@render rich(block.text)}</p>
@@ -337,6 +340,33 @@
 
 	.before {
 		background: #d9c4c4;
+	}
+
+	/* QUEUE row 69: a row whose turn rests on a placeholder fR1 is drawn dashed, as an outline. */
+	.track.dashed .before,
+	.track.dashed .past {
+		box-sizing: border-box;
+		background: transparent;
+	}
+
+	.track.dashed .before {
+		border: 1px dashed #b48a8a;
+	}
+
+	.track.dashed .past {
+		border: 1px dashed var(--rose-ink);
+	}
+
+	.comment.on-placeholder {
+		border-left: 1.5px dashed var(--rose-ink);
+		padding-left: 9px;
+	}
+
+	.placeholder-note {
+		font-family: var(--font-serif);
+		font-size: 13px;
+		line-height: 1.4;
+		color: var(--rose-ink);
 	}
 
 	.legend {

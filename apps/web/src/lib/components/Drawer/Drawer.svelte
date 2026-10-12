@@ -561,7 +561,7 @@
 						<ul class="toc-list">
 							<li>
 								<button class="toc-link toc-title" class:active={isActive('learn-title')} data-heading-id="learn-title" onclick={() => handleTocClick('learn-title')}>
-									{language === 'fr' ? 'La diction lyrique russe pour chanteurs' : 'Russian Lyric Diction for Singers'}
+									{language === 'fr' ? 'La diction lyrique russe pour chanteuses et chanteurs' : 'Russian Lyric Diction for Singers'}
 								</button>
 							</li>
 							<li>

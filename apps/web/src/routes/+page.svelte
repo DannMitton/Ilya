@@ -876,8 +876,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	);
 	const { push: pushUndo, undo: handleUndo, redo: handleRedo } = undoHistory;
 
-	/** The five duration words the surface already ships, by base. */
+	/** The seven duration words the surface ships, by base (the 32nd and 64th since N.183). */
 	const DURATION_KEY: Partial<Record<NoteBase, string>> = {
+		'64th': 'correct.len64th', '32nd': 'correct.len32nd',
 		'16th': 'correct.len16th',
 		eighth: 'correct.len8th',
 		quarter: 'correct.lenQuarter',

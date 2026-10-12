@@ -141,15 +141,15 @@ const at = (cs: NoteComment[], id: string) => cs.find((c) => c.eventId === id);
  * r7 in French: RATIFIED by Dann 2026-09-30 12:08 (table A) and 12:25 (section C), as `norm` compares it.
  * The words are the ratified ones. The spacing before « ; » follows Dann's OQLF ruling of 2026-09-30
  * 21:39 (no space before « ; », « ? », « ! »), which postdates the ratification. Its pitch names
- * follow Dann's ruling of 2026-10-11 03:17 and 04:12, which also postdates it: solfège with the
- * French octave index, so E4 is « mi3 » (QUEUE row 66).
+ * follow Dann's ruling of 2026-10-11 04:58, which also postdates it: letters with the American
+ * octave index, as in English, so E4 is « E4 » (QUEUE row 68, superseding row 66's solfège).
  */
 const FR_E4 =
-	"Ce [i] sur mi3 se prolonge environ 4 secondes, au-dessus de la première résonance (fR1) de votre [i] chanté. Ici, le [i] tend de lui-même vers un timbre youhou; mais le resserrer au lieu d'ouvrir la bouche tend à l'amincir (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, p. 97 et 115). Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l'avant, et observer si le [i] garde sa couleur (Miller, Solutions for Singers, 2004, p. 163).";
+	"Ce [i] sur E4 se prolonge environ 4 secondes, au-dessus de la première résonance (fR1) de votre [i] chanté. Ici, le [i] tend de lui-même vers un timbre youhou; mais le resserrer au lieu d'ouvrir la bouche tend à l'amincir (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, p. 97 et 115). Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l'avant, et observer si le [i] garde sa couleur (Miller, Solutions for Singers, 2004, p. 163).";
 const FR_EB4 =
-	"Ce [ɛ] sur mi♭3 se prolonge environ 3 secondes, juste après la hauteur où votre [ɛ] change de timbre (autour de ré3). La couleur tend ici à se fermer d'elle-même; mais la garder ouverte peut la pousser vers un cri (Bozeman, Practical Vocal Acoustics, 2025, p. 45 et 65). Bozeman propose de garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà. Observez si la couleur se ferme plus facilement (Kinesthetic Voice Pedagogy 2, 2021, p. 18-19).";
+	"Ce [ɛ] sur E♭4 se prolonge environ 3 secondes, juste après la hauteur où votre [ɛ] change de timbre (autour de D4). La couleur tend ici à se fermer d'elle-même; mais la garder ouverte peut la pousser vers un cri (Bozeman, Practical Vocal Acoustics, 2025, p. 45 et 65). Bozeman propose de garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà. Observez si la couleur se ferme plus facilement (Kinesthetic Voice Pedagogy 2, 2021, p. 18-19).";
 const FR_D4 =
-	"Ce [u] sur ré3 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u] chanté. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 158); mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
+	"Ce [u] sur D4 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u] chanté. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 158); mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
 const POINTS: (IntakePoint | undefined)[] = [1, 2, 3, 4, 5, 'not-sure', undefined];
 
 describe('the intake answers', () => {
@@ -423,6 +423,20 @@ describe('the rotation', () => {
 			expect(all).not.toMatch(/\{[a-zA-Z0-9:+-]+\}|\*/);
 			expect(all.match(/\(fR1\)/g)).toHaveLength(1);
 			expect(all).not.toMatch(/\btry\b|\bhold/i);
+		}
+	});
+	it('does not call a placeholder vowel "sung" (QUEUE row 69)', () => {
+		const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
+		const withResonance = page.filter((c) => c.resonance);
+		expect(withResonance.length).toBeGreaterThan(0);
+		for (const language of ['en', 'fr'] as const) {
+			const sung = language === 'en' ? /your sung \[/ : /\] chanté/;
+			const frames = (placeholders?: Set<string>) =>
+				renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf, ...(placeholders ? { placeholders } : {}) })
+					.filter((x) => x.comment.resonance)
+					.map((x) => runsText(x.frame));
+			expect(frames().every((f) => sung.test(f))).toBe(true);
+			expect(frames(new Set(withResonance.map((c) => c.vowel))).some((f) => sung.test(f))).toBe(false);
 		}
 	});
 });

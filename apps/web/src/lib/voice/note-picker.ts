@@ -138,18 +138,17 @@ export function pitchLabel(p: Pitch): string {
 	return `${p.step}${ALTER_GLYPH[p.alter] ?? ''}${p.octave}`;
 }
 
-const SOLFEGE: Record<Pitch['step'], string> = { C: 'do', D: 'ré', E: 'mi', F: 'fa', G: 'sol', A: 'la', B: 'si' };
-
 /**
- * The name a page prints in the reader's language. English: "F♯4", as
- * `pitchLabel`. French: fixed-do solfège with the French octave index, which
- * numbers the octave holding la 440 Hz as 3, one less than the scientific
- * index, so A3 is « la2 » and E4 is « mi3 » (Dann 2026-10-11 03:17 and 04:12,
- * `OPEN.md`, PITCH NAMES IN FRENCH; Larousse names « la3 » the diapason).
+ * The name a page prints in the reader's language. Both languages write a
+ * pitch as English does, letter plus the American octave index: A4 = 440 Hz,
+ * C4 = middle C, D♯4, the digit flush to the name and no space before the
+ * accidental (Dann 2026-10-11 04:58, `CONTRACT.md` §6; Roberge, *GDRM*,
+ * https://roberge.mus.ulaval.ca/gdrm/04-notes.htm). This supersedes the
+ * fixed-do solfège with the French index of 04:12 (QUEUE row 68). The
+ * language stays a parameter so a caller says which page it writes for.
  */
-export function pitchName(p: Pitch, language: 'en' | 'fr'): string {
-	if (language !== 'fr') return pitchLabel(p);
-	return `${SOLFEGE[p.step]}${ALTER_GLYPH[p.alter] ?? ''}${p.octave - 1}`;
+export function pitchName(p: Pitch, _language: 'en' | 'fr'): string {
+	return pitchLabel(p);
 }
 
 /**

@@ -188,6 +188,14 @@ describe('gate 4, patterns fold', () => {
 		expect(gatedLines(r.shown, 'fr')[0]).toMatch(/^Mesures 3 et 7 : votre \[ɑ\] tombe/);
 	});
 
+	it('a line read from a placeholder fR1 says so after it; a passaggio line does not (QUEUE row 69)', () => {
+		const g = r.shown[0];
+		expect(gatedLines([g], 'en', () => true)).toEqual(gatedLines([g], 'en'));
+		const turn = { ...g, entry: { ...g.entry, kinds: ['timbre' as const] } };
+		expect(gatedLines([turn], 'en', () => true)[0]).toBe(`${gatedLines([turn], 'en')[0]} This finding rests on a placeholder value for [ɑ].`);
+		expect(gatedLines([turn], 'en', () => false)).toEqual(gatedLines([turn], 'en'));
+	});
+
 	it('three bars take the Oxford comma in English', () => {
 		const g = { ...r.shown[0], bars: ['3', '7', '9'] };
 		expect(gatedLines([g], 'en')[0]).toMatch(/^Bars 3, 7, and 9: /);

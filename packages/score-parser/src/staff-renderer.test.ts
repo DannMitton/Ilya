@@ -926,8 +926,14 @@ describe('staff renderer: the four analytical criteria', () => {
   it('2. sage stemless turning-pitch noteheads', () => {
     expect(svg.includes('fill="#9585A2"')).toBe(true);
   });
-  it('3. red squircle at the fR1/fo crossing (n6)', () => {
-    expect(svg.includes('stroke="#b23b3b"')).toBe(true);
+  it('3. the fR1/fo crossing (n6) is the analysis\'s; the page draws its squircle, not the renderer (QUEUE row 34)', () => {
+    // Since row 34 the red squircle takes the selection ring's box, which is
+    // measured from the live DOM (`crossing-ring.ts` in the app), so the
+    // renderer draws no fixed rectangle of its own.
+    const a = analyzeScore(demoScore(), demoProfile, demoResolver, { generatedAt: '2026-07-12T00:00:00.000Z' });
+    expect(a.events.n6.crossing).toBe(true);
+    expect(svg.includes('#b23b3b')).toBe(false);
+    expect(svg.includes('data-analysis="crossing"')).toBe(false);
   });
   it('4. dual Cyrillic / IPA underlay', () => {
     expect(svg.includes('>Ты<')).toBe(true);
@@ -943,7 +949,8 @@ describe('staff renderer: the four analytical criteria', () => {
     // could be found by their ink and the phonation break could not, which is
     // why the handle exists: a filter that caught three of four would suppress
     // half a layer. Asserted here so a later edit cannot drop one silently.
-    for (const kind of ['turning-notehead', 'turning-accidental', 'crossing', 'phonation-break']) {
+    // `crossing` left the renderer at QUEUE row 34; the page stamps its own squircle with the same handle.
+    for (const kind of ['turning-notehead', 'turning-accidental', 'phonation-break']) {
       expect(svg.includes(`data-analysis="${kind}"`), kind).toBe(true);
     }
     // And nothing the ENGRAVING draws carries it: the count is the count of
@@ -957,7 +964,6 @@ describe('staff renderer: the four analytical criteria', () => {
       (svg.match(/data-analysis="turning-notehead"/g) ?? []).length +
         (svg.match(/data-analysis="turning-accidental"/g) ?? []).length +
         (svg.match(/data-analysis="turning-ledger"/g) ?? []).length +
-        (svg.match(/data-analysis="crossing"/g) ?? []).length +
         (svg.match(/data-analysis="phonation-break"/g) ?? []).length,
     );
   });
@@ -1104,7 +1110,6 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
   });
 
   it('keeps the analytical marks and event bindings intact in glyph mode', () => {
-    expect(svg.includes('stroke="#b23b3b"')).toBe(true);
     expect(svg.includes('>[#]<')).toBe(true);
     expect(svg.includes('data-event-id="n13"')).toBe(true);
     expect(svg.includes('>Ты<')).toBe(true);

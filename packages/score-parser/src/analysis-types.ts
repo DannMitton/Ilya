@@ -208,6 +208,15 @@ export interface AnalyzedEvent {
    */
   aboveFirstResonance: boolean;
 
+  /**
+   * This note's vowel's fR1 is a placeholder (`fR1Source` reads `'surrogate'`,
+   * QUEUE row 17), so its timbre, turning pitch, and crossing rest on a value
+   * the singer never sang. Set only when true. The renderer draws the marks
+   * that rest on it dashed (QUEUE row 69; Dann 2026-10-11, `OPEN.md` "STAND-INS
+   * ARE LABELLED"). A derived vowel (`'derived'`) is not a placeholder.
+   */
+  placeholder?: true;
+
   // ── Diction mark (Grayson; Dann's '#') ──
   /**
    * Intentional legato interruption on the first note of the pair, for

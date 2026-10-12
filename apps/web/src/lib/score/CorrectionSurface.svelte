@@ -38,10 +38,10 @@
 	import { centredViewBox, commonInkBox, type InkBox } from '$lib/score/loupe';
 	import type { NoteBase } from '@ilya/score-parser';
 	import type { ShiftDirection } from '$lib/score/pairings';
+	import { LENGTH_CELLS } from '$lib/score/correction';
 	import {
 		stepCount,
 		stepValue,
-		TUPLET_VALUES,
 		type TupletDefinition,
 	} from '$lib/score/entry';
 	import { onMount, type Snippet } from 'svelte';
@@ -204,13 +204,7 @@
 	   glyph is `aria-hidden` and a screen reader hears "Eighth", never a
 	   codepoint. Where the font has not loaded, the word is drawn instead, so
 	   nobody ever meets a row of empty boxes. */
-	const DURATIONS: { base: NoteBase; glyph: string; key: string }[] = [
-		{ base: '16th', glyph: '\uE1D9', key: 'correct.len16th' },
-		{ base: 'eighth', glyph: '\uE1D7', key: 'correct.len8th' },
-		{ base: 'quarter', glyph: '\uE1D5', key: 'correct.lenQuarter' },
-		{ base: 'half', glyph: '\uE1D3', key: 'correct.lenHalf' },
-		{ base: 'whole', glyph: '\uE1D2', key: 'correct.lenWhole' },
-	];
+	const DURATIONS = LENGTH_CELLS; // the table lives in `correction.ts` since N.183, so its test can read it
 	/** SMuFL `augmentationDot`, the one duration glyph the renderer draws too. */
 	const DOT_GLYPH = '\uE1E7';
 
@@ -417,7 +411,7 @@
 		aria-label={T('loupe.nolet.step')}
 		onclick={() => set(stepValue(base, 1))}
 	>
-		{@render cell(DURATIONS[TUPLET_VALUES.indexOf(base)]?.glyph ?? '', noteCommon, NOTE_H, base)}
+		{@render cell(DURATIONS.find((d) => d.base === base)?.glyph ?? '', noteCommon, NOTE_H, base)}
 	</button>
 {/snippet}
 

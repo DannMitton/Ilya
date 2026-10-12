@@ -4,7 +4,7 @@
 	import type { DictionaryEntry } from '@ilya/dictionary';
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
-	import { t, type Language } from '$lib/i18n';
+	import { t, type Language } from '$lib/i18n'; import { savedFlag, settle } from '$lib/components/Field/settle-field'; import SavedNote from '$lib/components/Field/SavedNote.svelte';
 	import { resolveFullGloss } from '$lib/gloss-resolve';
 
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
@@ -825,7 +825,7 @@
 
 	// ── Dictionary panel state ──────────────────────────────────
 	let dictPanelOpen = $state(false);
-	let dictGlossInput = $state('');
+	let dictGlossInput = $state(''); let glossSaved = $state(false); const glossFlag = savedFlag((v) => (glossSaved = v)); // QUEUE row 62
 	let dictPanelEl: HTMLElement | undefined = $state(undefined);
 	let dictButtonEl: HTMLElement | undefined = $state(undefined);
 
@@ -1040,10 +1040,10 @@
 							type="text"
 							maxlength="20"
 							value={dictGlossInput}
-							oninput={handleGlossInput}
+							oninput={handleGlossInput} use:settle={{ onsettle: glossFlag.show }}
 							aria-label={language === 'en' ? 'Edit gloss' : 'Modifier la glose'}
 						/>
-						<p class="dict-capacity">{t('inspector.dictCapacity', language)}</p>
+						<p class="dict-capacity">{t('inspector.dictCapacity', language)}<SavedNote shown={glossSaved} {language} /></p>
 					</div>
 
 					<div class="dict-separator" aria-hidden="true"></div>

@@ -21,6 +21,8 @@
 	 * component holds no state of its own: the wizard owns the stored voice.
 	 */
 	import { t, type Language } from '$lib/i18n';
+	import { savedFlag, settle } from '$lib/components/Field/settle-field';
+	import SavedNote from '$lib/components/Field/SavedNote.svelte';
 	import type { VoiceTypeChoice } from './profileStore';
 	import { OTHER, TIER1, TIER2, isTier1, withTier1 } from './voiceTypes';
 
@@ -31,6 +33,9 @@
 	}
 
 	let { value, language, onchange }: Props = $props();
+	// QUEUE row 62: Enter or leaving the field settles it, and a quiet "Saved" follows.
+	let otherSaved = $state(false);
+	const otherFlag = savedFlag((v) => (otherSaved = v));
 
 	const T = (key: string) => t(key, language);
 	/* Only the three fields: the wizard may pass the whole stored voice. */
@@ -109,7 +114,8 @@
 				aria-label={T('voiceType.other')}
 				value={value.voiceTypeOther ?? ''}
 				oninput={(e) => setOther(e.currentTarget.value)}
-			/>
+				use:settle={{ onsettle: otherFlag.show }}
+			/><SavedNote shown={otherSaved} {language} />
 			{#if value.voiceTypeSpecific !== undefined}
 				<button type="button" class="vt-clear" onclick={() => setSpecific(undefined)}>
 					{T('voiceIntake.clear')}

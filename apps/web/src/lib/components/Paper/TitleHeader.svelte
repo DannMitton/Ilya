@@ -44,8 +44,10 @@
 		 * N.94: one line under the metadata saying the page is in a key the
 		 * singer chose, and from which key (drawing r4, plate 3; ruling 13 of
 		 * 2026-08-07). Absent on every page as printed, so no other page moves.
+		 * Several lines stand one under another: Markup's placeholder line
+		 * (QUEUE row 69) joins the key's. A bracketed vowel draws in the IPA face.
 		 */
-		note?: string;
+		note?: string | Array<string | null | undefined>;
 		/**
 		 * The Markup legend (the stems key and, when present, the withheld-syllable
 		 * sigla), drawn on the subtitle's line, right-aligned, at the subtitle's
@@ -202,9 +204,9 @@
 		{/if}
 	</div>
 
-	{#if note}
-		<p class="header-note" style="color: {labelInk}">{note}</p>
-	{/if}
+	{#each (Array.isArray(note) ? note : [note]).filter((n): n is string => !!n) as line, i (i)}
+		<p class="header-note" style="color: {labelInk}">{#each line.split(/(\[[^\]]+\])/) as part, j (j)}{#if /^\[.+\]$/.test(part)}<span class="ipa">{part}</span>{:else}{part}{/if}{/each}</p>
+	{/each}
 
 	<div class="header-rule" style="border-bottom-color: {ruleAccent}"></div>
 </header>
@@ -401,6 +403,10 @@
 	}
 
 	/* ── N.94: the chosen key, in the document's label ink ─── */
+
+	.header-note .ipa {
+		font-family: var(--font-sans);
+	}
 
 	.header-note {
 		margin: 0 0 8px;
