@@ -17,3 +17,13 @@ A French reader of the Guide finds, in « Licences et remerciements », every co
 ## Report
 
 `docs/sessions/report-code-french-guide-conventions_r1_2026-10-11.md`: the diff's `path:line`, the gates, a screenshot of the French section if you can take one, and **Could not establish**. NOT ESTABLISHED beats a complete invented answer. `WRITTEN`; `DONE` is Dann's look.
+
+
+## Amendments after Fable's review, 2026-10-11 19:30. THESE OVERRIDE THE TEXT ABOVE WHERE THEY DIFFER.
+
+Reviewed by Fable against HEAD `8e74f39` (167k tokens). Anchor every `i18n.ts` edit by key, never by line number. The safe order across the i18n briefs is rows 72, 70, 73, 68, 75, 62.
+
+- **French spacing in Svelte files:** the OQLF drift test reads only `i18n.ts` (`i18n.test.ts:100-135`), so it cannot check a `.svelte` file. Apply the OQLF table by hand to every French string you write in a Svelte file (U+00A0 or `&#160;` before « : » and inside « »; no space before « ; », « ? », « ! »), and extend the test's `faults` check to the French branch of each Svelte file you change, or report the Guide's spacing as NOT ESTABLISHED.
+- Stop rule: `french-italics.test.ts` stays green (it requires *passaggio*, *legato*, *crescendo* in `<em>` in the Guide).
+- The pitch line is letters with the American index (A4 = 440 Hz), as the draft says; ignore any solfège wording elsewhere.
+- All eight gates; report gate 4's new count.

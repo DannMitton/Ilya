@@ -22,3 +22,11 @@ A singer's own zone is no longer called "tessitura". Tessitura names a piece or 
 ## Report
 
 `docs/sessions/report-code-comfortable-working-zone_r1_2026-10-11.md`: what changed, the gate counts, the tests touched, and a section "Could not establish". NOT ESTABLISHED beats a complete invented answer. Do not edit `docs/memory/`.
+
+
+## Amendments after Fable's review, 2026-10-11 19:30. THESE OVERRIDE THE TEXT ABOVE WHERE THEY DIFFER.
+
+Reviewed by Fable against HEAD `8e74f39` (167k tokens). Anchor every `i18n.ts` edit by key, never by line number. The safe order across the i18n briefs is rows 72, 70, 73, 68, 75, 62.
+
+- **Opening sentence replaced:** Ilya names the two spans it compares differently: a piece has a tessitura; the singer has a comfortable working zone (Dann 2026-10-11 16:39, `PRODUCT.md`, "Tessitura, as Ilya uses the word").
+- All eight gates; report gate 4's new count.

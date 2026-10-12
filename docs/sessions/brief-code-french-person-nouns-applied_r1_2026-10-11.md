@@ -31,3 +31,12 @@ Written by the desk (Opus) 2026-10-11 about 14:50. For Code, cloud lane or the M
 ## Report
 
 `docs/sessions/report-code-french-person-nouns-applied_r1_2026-10-11.md`: state first; each change with its `path:line`; the grep check; gates; **Could not establish**.
+
+
+## Amendments after Fable's review, 2026-10-11 19:30. THESE OVERRIDE THE TEXT ABOVE WHERE THEY DIFFER.
+
+Reviewed by Fable against HEAD `8e74f39` (167k tokens). Anchor every `i18n.ts` edit by key, never by line number. The safe order across the i18n briefs is rows 72, 70, 73, 68, 75, 62.
+
+- **French spacing in Svelte files:** the OQLF drift test reads only `i18n.ts` (`i18n.test.ts:100-135`), so it cannot check a `.svelte` file. Apply the OQLF table by hand to every French string you write in a Svelte file (U+00A0 or `&#160;` before « : » and inside « »; no space before « ; », « ? », « ! »), and extend the test's `faults` check to the French branch of each Svelte file you change, or report the Guide's spacing as NOT ESTABLISHED.
+- Where a draft shows « … », change only the quoted words and keep the rest of the sentence as printed.
+- All eight gates; report gate 4's new count.

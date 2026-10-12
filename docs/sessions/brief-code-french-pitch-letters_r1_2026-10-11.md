@@ -16,3 +16,12 @@ Dann 2026-10-11 04:58 (`CONTRACT.md` §6): in Ilya's French, a pitch is written 
 ## Report
 
 `docs/sessions/report-code-french-pitch-letters_r1_2026-10-11.md`: the list from step 1, the diff by `path:line`, gates, **Could not establish**. NOT ESTABLISHED beats a complete invented answer.
+
+
+## Amendments after Fable's review, 2026-10-11 19:30. THESE OVERRIDE THE TEXT ABOVE WHERE THEY DIFFER.
+
+Reviewed by Fable against HEAD `8e74f39` (167k tokens). Anchor every `i18n.ts` edit by key, never by line number. The safe order across the i18n briefs is rows 72, 70, 73, 68, 75, 62.
+
+- Both holds are met at `8e74f39`.
+- **The formatter is `pitchName`** (`apps/web/src/lib/voice/note-picker.ts:150-153`, comment `:143-149`), called from `comment-text.ts:335,346,394`, `PitchSeconds.svelte:33`, `singer-blocks.ts:130`, `InsightsPane.svelte:272`, `compass-stave.ts:86`. The test at `singer-page.test.ts:253` asserts `la3` and must change.
+- All eight gates; report gate 4's new count.

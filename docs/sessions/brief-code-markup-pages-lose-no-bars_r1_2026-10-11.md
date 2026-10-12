@@ -17,3 +17,12 @@ Found by the cloud lane on row 25 (`docs/sessions/report-code-old-spelling-endin
 ## Report
 
 `docs/sessions/report-code-markup-pages-lose-no-bars_r1_2026-10-11.md`: the answer first (the cause); the test; pictures; changes with `path:line`; gates; **Could not establish**.
+
+
+## Amendments after Fable's review, 2026-10-11 19:30. THESE OVERRIDE THE TEXT ABOVE WHERE THEY DIFFER.
+
+Reviewed by Fable against HEAD `8e74f39` (167k tokens). Anchor every `i18n.ts` edit by key, never by line number. The safe order across the i18n briefs is rows 72, 70, 73, 68, 75, 62.
+
+- If the bar set can only be read from a rendered page (runes are inert under vitest, `ENVIRONMENT.md:648`), write the test as a Playwright test beside `apps/web/e2e/print-pages.test.ts` and say so.
+- `insights/paginate.ts` is Insights' paginator, not Markup's: not a lead.
+- All eight gates; report gate 4's new count.

@@ -23,3 +23,11 @@ No git command that writes. Gates at baseline; say gate 4's new count. Nothing o
 ## Report
 
 `docs/sessions/report-code-enter-settles-a-field_r1_2026-10-09.md`: the inventory, what changed where, the tests, gate counts, and **Could not establish**. NOT ESTABLISHED beats a complete invented answer.
+
+
+## Amendments after Fable's review, 2026-10-11 19:30. THESE OVERRIDE THE TEXT ABOVE WHERE THEY DIFFER.
+
+Reviewed by Fable against HEAD `8e74f39` (167k tokens). Anchor every `i18n.ts` edit by key, never by line number. The safe order across the i18n briefs is rows 72, 70, 73, 68, 75, 62.
+
+- **Step 4 replaced:** `field.saved`: English "Saved"; French « Enregistré », RATIFIED by Dann 2026-10-11 05:11 (QUEUE row 62). Say so in the key's comment. Quiet type, the field's label colour. Ignore any "mark it PROPOSED" wording.
+- All eight gates; report gate 4's new count.
