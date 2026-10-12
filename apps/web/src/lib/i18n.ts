@@ -334,6 +334,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.deselect':            { en: 'Done',                          fr: 'Terminé' },
 	'correct.length':              { en: 'Length',                        fr: 'Durée' },
 	'correct.dot':                 { en: 'Dot',                           fr: 'Point' },
+	// N.183, QUEUE row 75: RATIFIED in both languages by Dann 2026-10-11 19:00.
+	'correct.len64th':             { en: 'Sixty-fourth',                  fr: 'Quadruple croche' },
+	'correct.len32nd':             { en: 'Thirty-second',                 fr: 'Triple croche' },
 	'correct.len16th':             { en: 'Sixteenth',                     fr: 'Double croche' },
 	'correct.len8th':              { en: 'Eighth',                        fr: 'Croche' },
 	'correct.lenQuarter':          { en: 'Quarter',                       fr: 'Noire' },

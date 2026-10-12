@@ -103,17 +103,38 @@ export type CorrectionMap = Record<string, NoteCorrection>;
 const STEPS: Pitch['step'][] = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 
 /**
- * The five digits Finale's Speedy Entry binds, kept because Dann knows them in
- * his fingers. The map is exported so the touch buttons and the key handler
+ * The seven digits Finale's Speedy Entry binds, kept because Dann knows them in
+ * his fingers. 2 and 1 (the 32nd and the 64th) joined at N.183, QUEUE row 75
+ * (Dann 2026-10-11 18:59). The map is exported so the touch buttons and the key handler
  * cannot drift apart: there is one table, and both read it.
  */
 export const DIGIT_BASE: Record<string, NoteBase> = {
+	'1': '64th',
+	'2': '32nd',
 	'3': '16th',
 	'4': 'eighth',
 	'5': 'quarter',
 	'6': 'half',
 	'7': 'whole'
 };
+
+/**
+ * The lengths a singer chooses from on touch, in order 64th to whole, each with
+ * its SMuFL metronome-note glyph (the stem-up form) and its word (N.92 slice 2;
+ * the 32nd and 64th since N.183, QUEUE row 75). `metNote64thUp` U+E1DD and
+ * `metNote32ndUp` U+E1DB follow SMuFL's sequence, as the five before them do
+ * (`metNote16thUp` U+E1D9, `metNote8thUp` U+E1D7); Finale Maestro carries both
+ * (`FinaleMaestro.json`, `glyphBBoxes`). `CorrectionSurface.svelte` draws them.
+ */
+export const LENGTH_CELLS: ReadonlyArray<{ base: NoteBase; glyph: string; key: string }> = [
+	{ base: '64th', glyph: '\uE1DD', key: 'correct.len64th' },
+	{ base: '32nd', glyph: '\uE1DB', key: 'correct.len32nd' },
+	{ base: '16th', glyph: '\uE1D9', key: 'correct.len16th' },
+	{ base: 'eighth', glyph: '\uE1D7', key: 'correct.len8th' },
+	{ base: 'quarter', glyph: '\uE1D5', key: 'correct.lenQuarter' },
+	{ base: 'half', glyph: '\uE1D3', key: 'correct.lenHalf' },
+	{ base: 'whole', glyph: '\uE1D2', key: 'correct.lenWhole' },
+];
 
 /** Whole-note units of each base, before dots. */
 const BASE_FRACTION: Record<NoteBase, Fraction> = {

@@ -19,6 +19,7 @@ import {
 	type VocalLineEvent
 } from '@ilya/score-parser';
 import { parseXml } from './ingestion/mini-dom';
+import { t } from '$lib/i18n';
 import {
 	applyCorrections,
 	clearCorrection,
@@ -26,6 +27,7 @@ import {
 	currentPitch,
 	DIGIT_BASE,
 	durationFraction,
+	LENGTH_CELLS,
 	firstNoteId,
 	flatPitch,
 	migrateCorrectionIds,
@@ -188,6 +190,26 @@ describe('N.92 durations', () => {
 		expect(DIGIT_BASE['5']).toBe('quarter');
 		expect(DIGIT_BASE['6']).toBe('half');
 		expect(DIGIT_BASE['7']).toBe('whole');
+	});
+
+	it('maps 2 to a 32nd and 1 to a 64th, as Finale does (N.183)', () => {
+		expect(DIGIT_BASE['2']).toBe('32nd');
+		expect(DIGIT_BASE['1']).toBe('64th');
+		expect(Object.keys(DIGIT_BASE).sort()).toEqual(['1', '2', '3', '4', '5', '6', '7']);
+	});
+
+	it('offers seven lengths on touch, 64th to whole, each a digit\u2019s length with its word (N.183)', () => {
+		expect(LENGTH_CELLS.map((c) => c.base)).toEqual(['64th', '32nd', '16th', 'eighth', 'quarter', 'half', 'whole']);
+		expect(LENGTH_CELLS.map((c) => c.base)).toEqual(['1', '2', '3', '4', '5', '6', '7'].map((d) => DIGIT_BASE[d]));
+		expect(LENGTH_CELLS[0]).toMatchObject({ glyph: '\uE1DD', key: 'correct.len64th' });
+		expect(LENGTH_CELLS[1]).toMatchObject({ glyph: '\uE1DB', key: 'correct.len32nd' });
+		for (const c of LENGTH_CELLS) {
+			expect(t(c.key, 'en'), c.key).not.toMatch(/MISSING/);
+			expect(t(c.key, 'fr'), c.key).not.toMatch(/MISSING/);
+		}
+		expect([t('correct.len32nd', 'en'), t('correct.len32nd', 'fr'), t('correct.len64th', 'en'), t('correct.len64th', 'fr')]).toEqual(['Thirty-second', 'Triple croche', 'Sixty-fourth', 'Quadruple croche']);
+		expect(durationFraction('32nd', 0)).toEqual({ numerator: 1, denominator: 32 });
+		expect(durationFraction('64th', 1)).toEqual({ numerator: 3, denominator: 128 });
 	});
 
 	it('computes a dotted length as half again, reduced', () => {
