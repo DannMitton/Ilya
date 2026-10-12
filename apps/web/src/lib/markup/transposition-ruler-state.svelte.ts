@@ -130,9 +130,13 @@ export function transpositionRulerState(
 		draw(reading: ParsedScore): ParsedScore {
 			return drawInKey(reading, printed, drawn);
 		},
-		/** The ruler's readout for `stop` as Ilya's pick ("Down a whole tone · C minor · Ilya's recommendation"), or undefined as printed (QUEUE row 66). */
-		readoutFor(stop: KeyChoice, language: Language): string | undefined {
-			return printed ? readout(stop, printed, stop, language) : undefined;
+		/**
+		 * The ruler's readout for `stop` ("Down a whole tone · C minor"), or undefined as printed (QUEUE row 66).
+		 * With `asPick` it adds "Ilya's recommendation"; N.182's key lines pass false, since Ilya presents and the
+		 * singer chooses (QUEUE row 71).
+		 */
+		readoutFor(stop: KeyChoice, language: Language, asPick = true): string | undefined {
+			return printed ? readout(stop, printed, asPick ? stop : null, language) : undefined;
 		},
 		/** The key `stop` lands in, named ("C minor", « do mineur »), or undefined as printed (QUEUE row 66). */
 		keyNameFor(stop: KeyChoice, language: Language): string | undefined {

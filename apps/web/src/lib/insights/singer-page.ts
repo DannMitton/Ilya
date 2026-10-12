@@ -10,15 +10,13 @@
 import {
 	aggregatePhonation,
 	fractionToNumber,
-	keyAfterTransposition,
 	pitchToMidi,
 	spellPitch,
-	transposeScore,
 	type ParsedScore,
 	type Pitch,
 	type VoiceProfileSnapshot,
 } from '@ilya/score-parser';
-import { buildInsights, secondsPerQuaver, type InsightsModel, type SecondsFigure } from './insights';
+import { secondsPerQuaver, type InsightsModel, type SecondsFigure } from './insights';
 import type { NoteFacts } from './comments';
 import { VOWELS } from '$lib/voice/engine/types';
 import type { VowelForEvent } from '@ilya/score-parser';
@@ -143,72 +141,8 @@ export function firstOutsideRange(
 	return null;
 }
 
-// ── A key that fits better ───────────────────────────────────────────
-
-export interface BetterKey {
-	/** Signed semitones from the key the page reads. */
-	semitones: number;
-	/** The target key signature, when the score declares a mode. */
-	key: { fifths: number; mode: 'major' | 'minor' } | null;
-	/** Share at or above the primo in this key and in the better one. */
-	shareNow: number;
-	shareThen: number;
-	/** The better key's compass. */
-	compass: { low: Pitch; high: Pitch } | null;
-	/** The score in the better key, so a note can be named there. */
-	score: ParsedScore;
-}
-
-/**
- * THE SECOND KEY SEARCH (brief §1 item 3, DESK DEFAULT), for a piece whose
- * notes all sit in the typed range; the watch list's search
- * (`suggestTranspositions`) runs only when a note is out of range. Within the
- * same window, a key qualifies when it keeps the range and the tessitura
- * contained, adds no crossing of either typed passaggio, and lowers the share
- * of phonation at or above the primo by at least `BETTER_KEY_MIN_DROP`. Among
- * those, the largest drop wins, then the smaller move, then the lower key.
- *
- * Null without a typed range, tessitura, and both passaggi; when a note is
- * already out of range; or when no key qualifies.
- */
-export function searchBetterKey(
-	score: ParsedScore,
-	profile: VoiceProfileSnapshot,
-	current: Pick<InsightsModel, 'range' | 'crossings' | 'phonation'>,
-	window = KEY_SEARCH_WINDOW,
-): BetterKey | null {
-	if (!profile.range || !profile.tessitura || !profile.passaggio) return null;
-	if (current.range.flag !== 'contained') return null;
-	const shareNow = shareAtOrAbovePrimo(current);
-	const crossNow = current.crossings.measured;
-	if (shareNow === null || !crossNow) return null;
-
-	const source = score.keySignatures[0]?.signature;
-	const found: BetterKey[] = [];
-	for (let s = -window; s <= window; s++) {
-		if (s === 0) continue;
-		const shifted = transposeScore(score, s);
-		const m = buildInsights({ analysisScore: shifted, profile, watchList: null });
-		if (m.range.flag !== 'contained' || m.tessitura.flag !== 'contained') continue;
-		const cross = m.crossings.measured;
-		if (!cross || cross.primo > crossNow.primo || cross.secondo > crossNow.secondo) continue;
-		const shareThen = shareAtOrAbovePrimo(m);
-		if (shareThen === null || shareNow - shareThen < BETTER_KEY_MIN_DROP - 1e-9) continue;
-		found.push({ semitones: s, key: keyAfterTransposition(source, s), shareNow, shareThen, compass: m.range.measured, score: shifted });
-	}
-	found.sort(
-		(a, b) =>
-			b.shareNow - b.shareThen - (a.shareNow - a.shareThen) ||
-			Math.abs(a.semitones) - Math.abs(b.semitones) ||
-			a.semitones - b.semitones,
-	);
-	return found[0] ?? null;
-}
-
-/** The share at or above the primo after a move of `semitones`, for a key the watch list chose. */
-export function shareAfter(score: ParsedScore, profile: VoiceProfileSnapshot, semitones: number): number | null {
-	return shareAtOrAbovePrimo(buildInsights({ analysisScore: transposeScore(score, semitones), profile, watchList: null }));
-}
+// The key search that stood here (`searchBetterKey`, `shareAfter`) is replaced by N.182's
+// (`key-suggest.ts`, QUEUE row 71), the one source of keys on Insights.
 
 // ── Where each vowel turns ───────────────────────────────────────────
 

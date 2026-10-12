@@ -63,7 +63,7 @@ function inputs(sc: ParsedScore, over: Partial<BlockInputs> = {}): BlockInputs {
 		noneFlagged: true,
 		held: null,
 		outside: null,
-		better: null,
+		keys: null,
 		comments: [],
 		more: [],
 		hiddenBySettings: 0,
@@ -108,10 +108,10 @@ describe('the round 2 page, block by block', () => {
 		const out = singerBlocks(inputs(fitting), String);
 		const c = out[1].block as Extract<Block, { kind: 'conclusion' }>;
 		expect(c.paragraph).toBe(`${t('insights.verdict.fit', 'en')} ${t('insights.findings.none', 'en')}`);
-		expect(c.forward).toBeNull();
+		expect(c.keys).toBeNull();
 	});
 
-	it('words the unlikely case with the ratified sentence when both reasons exist, and offers no key when none fits', () => {
+	it('words the unlikely case with the ratified sentence when both reasons exist; the keys are N.182\'s, passed through', () => {
 		// Inside the typed range, but the band (C4 to E4) passes the typed tessitura (C3 to A3) by far more than a whole tone.
 		const high = score([P('C', 4), P('D', 4), P('E', 4), P('E', 4), P('E', 4), P('D', 4)]);
 		const held = { eventId: 'n2', measure: '1', pitch: P('E', 4), vowel: 'i', seconds: 4.2 };
@@ -119,7 +119,7 @@ describe('the round 2 page, block by block', () => {
 		const c = out[1].block as Extract<Block, { kind: 'conclusion' }>;
 		expect(c.paragraph).toContain('In this key, 100 percent of the singing lies above your primo passaggio, A3, and bar 1 holds an E4 [i] for about 4 seconds, above your secondo, D4.');
 		expect(c.paragraph).toContain(t('insights.r2.unlikely.together', 'en'));
-		expect(c.forward).toEqual({ sentence: t('insights.r2.noBetterKey', 'en'), teacher: t('insights.r2.teacherA', 'en') });
+		expect(c.keys).toBeNull();
 	});
 
 	it('lists the bars near the passaggio in words and with an Oxford comma', () => {

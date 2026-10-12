@@ -65,7 +65,7 @@ export interface SungKey {
 	/** "Try this key": Markup comes forward with the ruler open on `stop`. */
 	tryKey(stop: KeyChoice): void;
 	/** The ruler's readout for `stop` as Ilya's pick, or undefined as printed (QUEUE row 66). */
-	readoutFor(stop: KeyChoice, language: Language): string | undefined;
+	readoutFor(stop: KeyChoice, language: Language, asPick?: boolean): string | undefined;
 	/** The key `stop` lands in, named, or undefined as printed (QUEUE row 66). */
 	keyNameFor(stop: KeyChoice, language: Language): string | undefined;
 }

@@ -47,6 +47,7 @@
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
 		type IntakeAnswers,
+		keyAfterTransposition,
 		type KeyChoice,
 		type Pitch,
 	} from '@ilya/score-parser';
@@ -72,8 +73,10 @@
 		type SungKey,
 	} from '$lib/insights/insights';
 	import { cycleDoseSplit } from '$lib/insights/singing-measures';
-	import { firstOutsideRange, longestAboveSecondo, searchBetterKey, shareAfter, vowelTurns } from '$lib/insights/singer-page';
-	import { singerBlocks, type KeyForward, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import { firstOutsideRange, longestAboveSecondo, vowelTurns } from '$lib/insights/singer-page';
+	import { suggestKeys } from '$lib/insights/key-suggest';
+	import { keyWords, moveWords } from '$lib/insights/key-lines';
+	import { singerBlocks, type PlacedBlock } from '$lib/insights/singer-blocks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
 	import { composeIdentityLine } from '$lib/insights/identity';
@@ -302,47 +305,22 @@
 	const verdict = $derived(model ? verdictLine(model, offerDeclined) : null);
 	const noneFlagged = $derived(!!model && model.findings.length === 0 && printsNoFindingsLine(model.verdict));
 
-	// ── The way forward: a key that fits better ────────────────────────
-	/* Nothing out of range: the second search (`searchBetterKey`). A note out of
-	   range: the watch list's own key, which "Try this key" already opened. */
-	const better = $derived.by((): KeyForward | null => {
-		if (!model || !analysisScore) return null;
-		let semitones: number;
-		let key: { fifths: number; mode: 'major' | 'minor' } | null = null;
-		let compass: { low: Pitch; high: Pitch } | null = null;
-		let shareThen: number | null;
-		let score = null;
-		const found = searchBetterKey(analysisScore, adapted.snapshot, model);
-		if (found) {
-			({ semitones, key, compass, shareThen } = found);
-			score = found.score;
-		} else {
-			const tr = model.findings.find((f) => f.kind === 'range' && f.transposition)?.transposition;
-			if (!tr || tr.semitones.length === 0) return null;
-			semitones = tr.semitones[0];
-			key = tr.keys?.[0] ?? null;
-			shareThen = shareAfter(analysisScore, adapted.snapshot, semitones);
-			score = { ...analysisScore, vocalLine: analysisScore.vocalLine.map((e) => (e.pitch ? { ...e, pitch: shift(e.pitch, semitones) } : e)) };
-		}
-		const stop = key ? (keyRuler?.stopFor({ semitones: [semitones], keys: [key] }) ?? null) : null;
-		return {
-			semitones,
-			...(stop ? { stop, readout: keyRuler?.readoutFor(stop, language), keyName: keyRuler?.keyNameFor(stop, language) } : {}),
-			shareThen,
-			compass,
-			score,
-		};
-	});
-	/* A pitch moved by `n` semitones, for naming a note in another key; only its MIDI number is read. */
-	function shift(p: Pitch, n: number): Pitch {
-		const midi = pitchToMidi(p) + n;
-		const names: Array<[Pitch['step'], number]> = [['C', 0], ['C', 1], ['D', 0], ['E', -1], ['E', 0], ['F', 0], ['F', 1], ['G', 0], ['A', -1], ['A', 0], ['B', -1], ['B', 0]];
-		const [step, alter] = names[((midi % 12) + 12) % 12];
-		return { step, alter, octave: Math.floor(midi / 12) - 1 } as Pitch;
-	}
-
 	// ── The blocks ─────────────────────────────────────────────────────
 	const facts = $derived(commentNotes ? noteFacts(commentNotes, adapted.snapshot) : null);
+	// ── The way forward: N.182's keys (QUEUE row 71), the one source of keys on Insights ──
+	const keySuggestion = $derived(
+		model && analysisScore
+			? suggestKeys({ score: analysisScore, profile: adapted.snapshot, facts, ...(vowelResolver ? { vowelForEvent: vowelResolver } : {}), ...(intake ? { intake } : {}) })
+			: null,
+	);
+	/* A move named in the ruler's words without "Ilya's recommendation", with its stop to try when the score names its key. */
+	function nameMove(semitones: number): { readout: string; stop?: KeyChoice } {
+		const key = analysisScore ? keyAfterTransposition(analysisScore.keySignatures[0]?.signature, semitones) : null;
+		const stop = key ? (keyRuler?.stopFor({ semitones: [semitones], keys: [key] }) ?? null) : null;
+		const readout = (stop && keyRuler?.readoutFor(stop, language, false)) || moveWords(semitones, language);
+		return stop ? { readout, stop } : { readout };
+	}
+	const keyLinesFor = $derived(keySuggestion ? keyWords(keySuggestion, nameMove, language, intake) : null);
 	const blocks = $derived.by((): PlacedBlock[] => {
 		if (!analysisScore) return [{ group: 'free', block: { kind: 'silence', lines: [T('insights.silence.noScore')] } }];
 		if (!model) {
@@ -370,7 +348,7 @@
 				noneFlagged,
 				held: longestAboveSecondo(facts, analysisScore),
 				outside: firstOutsideRange(analysisScore, adapted.snapshot, (id) => vowelResolver?.({ id } as never)),
-				better,
+				keys: keyLinesFor,
 				comments: renderedComments.shown,
 				more: renderedComments.more,
 				hiddenBySettings: commentSelection?.hiddenBySettings ?? 0,

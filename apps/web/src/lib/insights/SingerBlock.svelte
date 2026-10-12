@@ -67,12 +67,20 @@
 			<p class="verdict">{T('insights.offer.before')}{' '}<button type="button" class="offer-link" onclick={() => onaddrange?.()}>{T('insights.offer.link')}</button>{T('insights.offer.after')}{' '}<button type="button" class="offer-decline" onclick={() => ondecline?.()}>{T('insights.offer.decline')}</button></p>
 		{/if}
 		{#if block.paragraph}<p class="verdict">{@render rich(block.paragraph)}</p>{/if}
-		{#if block.forward}
-			{#if block.forward.readout}
-				<p class="forward">{@render prose(block.forward.readout)}{#if block.forward.stop && ontry}{' '}<button type="button" class="try-key" onclick={() => ontry?.(block.forward!.stop!)}>{T('insights.tryKey')}</button>{/if}</p>
+		{#if block.keys}
+			<!-- N.182 (QUEUE row 71): a one-line answer, or up to three keys, each the singer may try; the rest behind the reveal. -->
+			{#if block.keys.note}<p class="verdict">{@render rich(block.keys.note)}</p>{/if}
+			{#each block.keys.lines as line, j (j)}
+				<p class="verdict key-line">{@render rich(line.text)}{#if line.stop && ontry}{' '}<button type="button" class="try-key" onclick={() => ontry?.(line.stop!)}>{T('insights.tryKey')}</button>{/if}</p>
+			{/each}
+			{#if block.keys.reveal}
+				<details class="key-reveal">
+					<summary>{block.keys.reveal.label}</summary>
+					{#each block.keys.reveal.lines as line, j (j)}
+						<p class="verdict key-line">{@render rich(line.text)}{#if line.stop && ontry}{' '}<button type="button" class="try-key" onclick={() => ontry?.(line.stop!)}>{T('insights.tryKey')}</button>{/if}</p>
+					{/each}
+				</details>
 			{/if}
-			{#if block.forward.sentence}<p class="verdict">{@render rich(block.forward.sentence)}</p>{/if}
-			{#if block.forward.teacher}<p class="teacher">{block.forward.teacher}</p>{/if}
 		{/if}
 		{#if block.reasons.length}
 			<div class="reasons">
@@ -510,7 +518,8 @@
 		color: var(--ink-secondary);
 	}
 
-	.more summary {
+	.more summary,
+	.key-reveal summary {
 		cursor: pointer;
 		font-family: var(--font-sans);
 		font-size: 11.5px;
@@ -520,7 +529,8 @@
 	@media print {
 		.try-key,
 		.offer-decline,
-		.more {
+		.more,
+		.key-reveal {
 			display: none;
 		}
 

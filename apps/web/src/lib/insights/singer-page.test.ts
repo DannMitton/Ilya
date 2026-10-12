@@ -10,12 +10,10 @@ import { pitchToMidi, type Measure, type ParsedScore, type Pitch, type VocalLine
 import { buildInsights, type InsightsModel } from './insights';
 import { cycleDose, cycleDoseSplit } from './singing-measures';
 import {
-	BETTER_KEY_MIN_DROP,
 	articleFor,
 	countWord,
 	isUnlikely,
 	longestAboveSecondo,
-	searchBetterKey,
 	shareAtOrAbovePrimo,
 	suggestsApproach,
 	vowelTurns,
@@ -101,64 +99,6 @@ describe('the longest note held above the secondo', () => {
 		expect(longestAboveSecondo([fact(1, -3, 9)], sc)).toBeNull();
 		expect(longestAboveSecondo([fact(0, 1, 6, true, false)], sc)).toBeNull();
 		expect(longestAboveSecondo(null, sc)).toBeNull();
-	});
-});
-
-describe('a key that fits better', () => {
-	const profile: VoiceProfileSnapshot = {
-		fR1: { a: 650 },
-		range: { lowest: P('G', 2), highest: P('F', 4) },
-		tessitura: { low: P('C', 3), high: P('A', 3) },
-		passaggio: { primo: P('A', 3), secondo: P('D', 4) },
-	};
-	const model = (sc: ParsedScore) => buildInsights({ analysisScore: sc, profile, watchList: null });
-
-	it('qualifies a key that keeps everything contained and lowers the share at or above the primo by at least 10 points', () => {
-		// A3 six times, G3 twice: 12 of 16 quavers at or above the primo, A3. Every key
-		// from a semitone to six semitones down sings all of it under A3, keeps the
-		// band (the longest pitch alone) inside C3 to A3, and crosses the primo no more.
-		const sc = score(quarters([...repeat(P('A', 3), 6), ...repeat(P('G', 3), 2)]));
-		const m = model(sc);
-		expect(shareAtOrAbovePrimo(m)).toBe(12 / 16);
-		const better = searchBetterKey(sc, profile, m)!;
-		expect(better).not.toBeNull();
-		expect(better.shareThen).toBe(0);
-		// Every qualifying key drops the share by the same 75 points, so the tie-break decides.
-		expect(better.semitones).toBe(-1);
-	});
-
-	it('breaks a tie on the drop by the smaller move, then the lower key', () => {
-		// Up a semitone raises the share; the search never offers it. Down one is the smallest qualifying move.
-		const sc = score(quarters([...repeat(P('A', 3), 6), ...repeat(P('G', 3), 2)]));
-		const better = searchBetterKey(sc, profile, model(sc), 2)!;
-		expect(better.semitones).toBe(-1);
-	});
-
-	it('prefers the larger drop over the smaller move', () => {
-		// B3 twice, A3 twice, G3 four times: 8 of 16 quavers at or above A3.
-		// Down 1: B♭3 2, A♭3 2, F♯3 4 -> B♭3 only, 4 of 16 (drop 25 points).
-		// Down 2: A3 2, G3 2, F3 4 -> A3 only, 4 of 16 (drop 25 points).
-		// Down 3: A♭3, F♯3, E3 -> nothing at or above A3 (drop 50 points). The band
-		// (E3, the longest) stays in C3 to A3, so down three wins on its drop.
-		const sc = score(quarters([P('B', 3), P('B', 3), P('A', 3), P('A', 3), ...repeat(P('G', 3), 4)]));
-		const m = model(sc);
-		expect(shareAtOrAbovePrimo(m)).toBe(8 / 16);
-		const better = searchBetterKey(sc, profile, m)!;
-		expect(better.semitones).toBe(-3);
-		expect(better.shareThen).toBe(0);
-	});
-
-	it('does not qualify a key whose drop is under 10 points', () => {
-		// One quarter of A3 among ten of G3: 2 of 22 quavers, about 9 points, is all any key could take away.
-		const sc = score(quarters([P('A', 3), ...repeat(P('G', 3), 10)]));
-		const m = model(sc);
-		expect(shareAtOrAbovePrimo(m)! < BETTER_KEY_MIN_DROP).toBe(true);
-		expect(searchBetterKey(sc, profile, m)).toBeNull();
-	});
-
-	it('does not search when a note is already out of range: the watch list’s own search covers that', () => {
-		const sc = score(quarters([P('G', 4), ...repeat(P('A', 3), 6)]));
-		expect(searchBetterKey(sc, profile, model(sc))).toBeNull();
 	});
 });
 
