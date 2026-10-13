@@ -1,0 +1,812 @@
+file	bar	metre	actual	expected	diff	notes	offers	set_aside
+apps/web/src/lib/omr/fixtures/sun3-2.musicxml	2	6/4	4	6	-2	eighth eighth eighth eighth eighth r:eighth quarter	none	
+apps/web/src/lib/omr/fixtures/sun3-2.musicxml	3	6/4	3.875	6	-2.125	quarter. eighth eighth. 32nd eighth eighth	none	
+apps/web/src/lib/omr/fixtures/sun3-2.musicxml	4	6/4	4	6	-2	quarter eighth r:eighth r:eighth eighth eighth eighth	none	
+apps/web/src/lib/omr/fixtures/sun3-2.musicxml	8	6/4	9	6	3	half whole quarter quarter[3:2] eighth[3:2] r:eighth[3:2] quarter[3:2]	none	
+apps/web/src/lib/omr/fixtures/sun3-2.musicxml	9	6/4	10	6	4	half whole quarter half quarter	none	
+apps/web/src/lib/omr/fixtures/sun3-2.musicxml	12	6/4	6.25	6	0.25	r:quarter quarter quarter half eighth r:eighth 16th	none	2 single-note changes make the bar fit, so none is offered
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	1	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	2	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	3	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	4	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	5	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	6	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	7	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	8	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	9	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	10	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	11	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	12	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	13	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	14	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	15	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	16	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	17	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	18	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	19	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	20	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	21	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	22	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	23	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	24	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	25	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	26	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	27	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	28	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	29	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	30	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	31	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	32	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	33	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	34	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+apps/web/src/lib/omr/fixtures/tch-2.musicxml	35	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	1	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	2	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	3	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	4	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	5	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	6	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	7	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	8	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	9	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	10	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	11	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	12	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	13	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	14	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	15	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	16	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	17	1/4	1.5	1	0.5	r:eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	18	1/4	1.5	1	0.5	eighth eighth r:16th 16th	none	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	19	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	20	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	21	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	22	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	23	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	24	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	25	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	26	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	27	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	28	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	29	1/4	1.5	1	0.5	eighth eighth. 16th	none	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	30	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	31	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	32	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	33	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	34	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	35	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	36	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/omr/fixtures/tch-3.musicxml	37	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml	17	12/8	14	12	2	half r:quarter half[2:3] half[2:3]	note:shorter@0->quarter	
+docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun1.musicxml	17	6/4	7	6	1	half r:quarter half half	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun4.musicxml	22	4/4	2	4	-2	quarter eighth eighth	none	
+docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun5.musicxml	1	4/4	4.5	4	0.5	r:half r:quarter r:eighth quarter	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun5.musicxml	9	4/4	3.5	4	-0.5	eighth eighth 16th 16th quarter. eighth	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun5.musicxml	11	4/4	3	4	-1	quarter quarter quarter	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun5.musicxml	65	4/4	5.5	4	1.5	quarter. half. quarter	note:shorter@1->quarter.	
+docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun5.musicxml	66	4/4	5	4	1	half. half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-checks_r1_2026-10-05/joined/sun1.musicxml	17	6/4	7	6	1	half r:quarter half half	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-checks_r1_2026-10-05/joined/sun4.musicxml	22	4/4	2	4	-2	quarter eighth eighth	none	
+docs/sessions/measure-checks_r1_2026-10-05/joined/sun5.musicxml	1	4/4	4.5	4	0.5	r:half r:quarter r:eighth quarter	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-checks_r1_2026-10-05/joined/sun5.musicxml	9	4/4	3.5	4	-0.5	eighth eighth 16th 16th quarter. eighth	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-checks_r1_2026-10-05/joined/sun5.musicxml	11	4/4	3	4	-1	quarter quarter quarter	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-checks_r1_2026-10-05/joined/sun5.musicxml	65	4/4	5.5	4	1.5	quarter. half. quarter	note:shorter@1->quarter.	
+docs/sessions/measure-final-test-set3_2026-10-11/rehearsal/drops/K.musicxml	33	4/4	4.5	4	0.5	r:eighth eighth quarter eighth quarter. eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/R.musicxml	39	3/4	4	3	1	half r:half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml	50	3/4	5.5	3	2.5	quarter half eighth quarter quarter	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml	68	3/4	6	3	3	r:eighth quarter eighth eighth r:quarter r:eighth quarter r:quarter	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml	69	3/4	10	3	7	r:eighth half. quarter half eighth eighth eighth r:eighth quarter eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml	70	3/4	11.5	3	8.5	eighth r:eighth quarter r:eighth half eighth eighth eighth r:quarter quarter eighth r:eighth quarter quarter eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml	71	3/4	11.5	3	8.5	r:eighth half. half. quarter half eighth eighth r:eighth eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml	72	3/4	6	3	3	half half quarter quarter	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml	73	3/4	7	3	4	half. half. r:quarter	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml	74	3/4	7	3	4	quarter r:whole eighth r:eighth r:quarter	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml	22	4/4	6	4	2	quarter quarter quarter half quarter	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml	23	4/4	4.5	4	0.5	quarter quarter quarter quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml	42	4/4	6	4	2	quarter quarter quarter half eighth r:eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml	44	4/4	6	4	2	quarter quarter quarter. half eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml	74	4/4	5	4	1	quarter. eighth quarter eighth quarter eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml	75	4/4	7	4	3	quarter half quarter r:quarter quarter eighth eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml	76	4/4	5	4	1	eighth quarter. eighth eighth quarter. eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml	77	4/4	6	4	2	quarter half quarter r:half	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/V.musicxml	5	4/4	4.333	4	0.333	quarter 16th[3:2] 16th[3:2] 16th[3:2] 16th[3:2] 16th[3:2] 16th 16th eighth eighth 16th 16th 16th 16th	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/V.musicxml	6	4/4	3.75	4	-0.25	eighth. 32nd 64th 64th eighth 64th 64th 64th 64th eighth r:eighth eighth. 16th	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/W.musicxml	16	9/4	6	9	-3	half. half quarter	note:longer@0->whole.	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/X.musicxml	4	16/16	24	16	8	quarter eighth eighth quarter eighth eighth quarter eighth r:eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/X.musicxml	21	4/4	3.5	4	-0.5	quarter eighth r:half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/X.musicxml	30	4/4	6	4	2	quarter eighth eighth quarter eighth eighth quarter eighth r:eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/Y.musicxml	40	4/4	5	4	1	quarter r:eighth eighth eighth eighth eighth quarter eighth	none	
+docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/Z.musicxml	52	6/8	7	6	1	quarter. eighth r:eighth r:eighth eighth	note:undot@0->quarter | A:4:3@1 | B:3:2@2	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/C.musicxml	3	5/4	6	5	1	r:half. r:quarter r:eighth eighth eighth[3:2] eighth[3:2] eighth[3:2]	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/C.musicxml	6	5/4	6	5	1	quarter 16th 16th 16th 16th 16th 16th 16th 16th quarter eighth r:eighth eighth[3:2] eighth[3:2] eighth[3:2]	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/C.musicxml	10	6/4	5	6	-1	half. r:half	note:dot@1->half.	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/C.musicxml	11	6/4	5	6	-1	r:half r:quarter r:quarter r:eighth eighth	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/C.musicxml	15	6/4	5	6	-1	quarter. eighth eighth eighth eighth eighth eighth 32nd 32nd 32nd 32nd	none	the bar fits only under two tuplet runs together, so no tuplet is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	22	4/4	6	4	2	quarter eighth quarter eighth eighth eighth eighth quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	23	4/4	6	4	2	quarter 16th 16th quarter eighth r:quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	24	4/4	6	4	2	quarter. quarter eighth quarter eighth eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	25	4/4	6	4	2	quarter. eighth eighth eighth quarter. r:quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	26	4/4	6	4	2	quarter eighth quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	27	4/4	6	4	2	quarter. quarter. quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	28	4/4	6	4	2	quarter eighth quarter eighth quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	29	4/4	6	4	2	half. r:quarter r:eighth r:quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	30	4/4	6	4	2	half. r:quarter r:eighth quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	31	4/4	6	4	2	half. r:quarter eighth quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	32	4/4	6	4	2	quarter. quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	33	4/4	6	4	2	quarter eighth eighth eighth eighth quarter. r:quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	34	4/4	6	4	2	r:eighth r:eighth eighth quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	35	4/4	6	4	2	quarter eighth eighth eighth eighth quarter. r:eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	36	4/4	6	4	2	quarter eighth quarter. r:eighth r:eighth eighth quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml	37	4/4	6	4	2	half. r:quarter. quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	10	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	11	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	12	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	13	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	14	4/8	6	4	2	quarter. quarter 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	15	4/8	6	4	2	quarter. quarter 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	16	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	17	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	18	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	19	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	20	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	21	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	22	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	23	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	24	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	25	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	26	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	27	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	28	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	29	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	30	4/8	6	4	2	quarter eighth quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	31	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	32	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	33	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	34	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	35	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	36	4/8	6	4	2	quarter. eighth r:eighth 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	37	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	38	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	39	4/8	6	4	2	quarter. quarter r:16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	40	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	41	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	42	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	43	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	44	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	45	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	46	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	47	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	48	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	49	4/8	6	4	2	quarter. r:eighth r:eighth r:16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	50	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	51	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	52	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	53	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	54	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	55	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml	56	4/8	6	4	2	eighth r:eighth r:eighth r:quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/gur.musicxml	7	4/4	4.5	4	0.5	half r:eighth eighth eighth quarter	note:shorter@4->eighth | A:3:2@1	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k01.musicxml	36	3/4	2.5	3	-0.5	quarter eighth eighth eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k07.musicxml	38	6/8	5.5	6	-0.5	eighth. 16th 16th 16th eighth 16th 16th 16th	A:2:3@1 | B:2:3@6	7 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k07.musicxml	45	6/8	5	6	-1	quarter eighth eighth eighth	A:2:3@2	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/sun1.musicxml	17	6/4	7	6	1	half r:quarter half half	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/sun5.musicxml	36	4/4	3.5	4	-0.5	eighth eighth eighth quarter. eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/sun5.musicxml	60	4/4	5	4	1	quarter half. quarter	note:undot@1->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/sun5.musicxml	61	4/4	5	4	1	half. half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/varl.musicxml	17	3/8	11	3	8	eighth whole eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	10	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	11	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	12	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	13	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	14	4/8	6	4	2	quarter. quarter 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	15	4/8	6	4	2	quarter. quarter 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	16	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	17	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	18	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	19	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	20	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	21	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	22	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	23	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	24	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	25	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	26	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	27	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	28	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	29	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	30	4/8	6	4	2	quarter eighth quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	31	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	32	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	33	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	34	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	35	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	36	4/8	6	4	2	quarter. eighth r:eighth 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	37	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	38	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	39	4/8	6	4	2	quarter. quarter r:16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	40	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	41	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	42	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	43	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	44	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	45	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	46	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	47	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	48	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	49	4/8	6	4	2	quarter. r:eighth r:eighth r:16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	50	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	51	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	52	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	53	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	54	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	55	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml	56	4/8	6	4	2	eighth r:eighth r:eighth r:quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/C.musicxml	3	5/4	6	5	1	r:half. r:quarter r:eighth eighth eighth[3:2] eighth[3:2] eighth[3:2]	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/C.musicxml	6	5/4	6	5	1	quarter 16th 16th 16th 16th 16th 16th 16th 16th quarter eighth r:eighth eighth[3:2] eighth[3:2] eighth[3:2]	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/C.musicxml	10	6/4	5	6	-1	half. r:half	note:dot@1->half.	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/C.musicxml	11	6/4	5	6	-1	r:half r:quarter r:quarter r:eighth eighth	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/C.musicxml	15	6/4	5	6	-1	quarter. eighth eighth eighth eighth eighth eighth 32nd 32nd 32nd 32nd	none	the bar fits only under two tuplet runs together, so no tuplet is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	22	4/4	6	4	2	quarter eighth quarter eighth eighth eighth eighth quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	23	4/4	6	4	2	quarter 16th 16th quarter eighth r:quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	24	4/4	6	4	2	quarter. quarter eighth quarter eighth eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	25	4/4	6	4	2	quarter. eighth eighth eighth quarter. r:quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	26	4/4	6	4	2	quarter eighth quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	27	4/4	6	4	2	quarter. quarter. quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	28	4/4	6	4	2	quarter eighth quarter eighth quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	29	4/4	6	4	2	half. r:quarter r:eighth r:quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	30	4/4	6	4	2	half. r:quarter r:eighth quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	31	4/4	6	4	2	half. r:quarter eighth quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	32	4/4	6	4	2	quarter. quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	33	4/4	6	4	2	quarter eighth eighth eighth eighth quarter. r:quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	34	4/4	6	4	2	r:eighth r:eighth eighth quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	35	4/4	6	4	2	quarter eighth eighth eighth eighth quarter. r:eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	36	4/4	6	4	2	quarter eighth quarter. r:eighth r:eighth eighth quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml	37	4/4	6	4	2	half. r:quarter. quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	10	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	11	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	12	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	13	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	14	4/8	6	4	2	quarter. quarter 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	15	4/8	6	4	2	quarter. quarter 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	16	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	17	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	18	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	19	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	20	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	21	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	22	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	23	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	24	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	25	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	26	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	27	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	28	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	29	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	30	4/8	6	4	2	quarter eighth quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	31	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	32	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	33	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	34	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	35	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	36	4/8	6	4	2	quarter. eighth r:eighth 16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	37	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	38	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	39	4/8	6	4	2	quarter. quarter r:16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	40	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	41	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	42	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	43	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	44	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	45	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	46	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	47	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	48	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	49	4/8	6	4	2	quarter. r:eighth r:eighth r:16th 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	50	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	51	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	52	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	53	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	54	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	55	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml	56	4/8	6	4	2	eighth r:eighth r:eighth r:quarter.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/gur.musicxml	7	4/4	4.5	4	0.5	half r:eighth eighth eighth quarter	note:shorter@4->eighth | A:3:2@1	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k01.musicxml	36	3/4	2.5	3	-0.5	quarter eighth eighth eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k07.musicxml	38	6/8	5.5	6	-0.5	eighth. 16th 16th 16th eighth 16th 16th 16th	A:2:3@1 | B:2:3@6	7 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k07.musicxml	45	6/8	5	6	-1	quarter eighth eighth eighth	A:2:3@2	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/sun1.musicxml	17	6/4	7	6	1	half r:quarter half half	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/sun5.musicxml	36	4/4	3.5	4	-0.5	eighth eighth eighth quarter. eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/sun5.musicxml	60	4/4	5	4	1	quarter half. quarter	note:undot@1->half	
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/sun5.musicxml	61	4/4	5	4	1	half. half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/varl.musicxml	17	3/8	11	3	8	eighth whole eighth. 16th	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/K.musicxml	33	4/4	4.5	4	0.5	r:eighth eighth quarter eighth quarter. eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/M.musicxml	9	4/8	8	4	4	whole	note:shorter@0->half	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	2	10/8	8.667	10	-1.333	r:quarter r:eighth r:quarter r:eighth eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2]	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	3	10/8	12	10	2	quarter. quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	4	10/8	12	10	2	quarter eighth quarter eighth half.	note:undot@4->half	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	5	10/8	12	10	2	quarter. quarter. quarter. quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	8	10/8	12	10	2	quarter. quarter. r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	9	10/8	12.4	10	2.4	r:quarter r:eighth quarter. quarter[5:4] quarter[5:4] quarter[5:4] quarter[5:4]	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	10	10/8	9	10	-1	quarter. quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	13	10/8	12	10	2	quarter. r:quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	19	10/8	9	10	-1	quarter eighth quarter. quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	20	10/8	9	10	-1	quarter. quarter. quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	21	10/8	9	10	-1	quarter. quarter eighth quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	22	10/8	8	10	-2	quarter. quarter r:eighth eighth eighth	note:longer@1->half	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	23	10/8	6	10	-4	eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	24	10/8	9	10	-1	quarter eighth half.	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	25	10/8	9	10	-1	quarter. quarter eighth quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	26	10/8	9	10	-1	half. quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	27	10/8	9	10	-1	r:quarter r:eighth r:quarter r:eighth quarter eighth	none	6 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	28	10/8	9	10	-1	quarter. quarter. quarter eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	30	11/8	12	11	1	r:quarter r:eighth r:quarter r:eighth quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	31	11/8	12	11	1	quarter. quarter. quarter. quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	33	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	34	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	35	11/8	12	11	1	half. quarter. r:quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	36	11/8	12	11	1	half. quarter. quarter.	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	37	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	38	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	39	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	40	11/8	12	11	1	quarter. quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	43	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	44	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml	45	11/8	12	11	1	quarter. r:quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/H.musicxml	16	2/2	2.25	2	0.25	r:quarter quarter quarter quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/H.musicxml	21	2/2	2.25	2	0.25	quarter eighth quarter quarter quarter	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/I.musicxml	19	9/8	7	9	-2	r:quarter. r:eighth eighth eighth eighth	none	the bar fits only under two tuplet runs together, so no tuplet is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/N.musicxml	52	3/4	4	3	1	eighth eighth quarter quarter quarter	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/N.musicxml	54	3/4	4	3	1	eighth eighth quarter quarter quarter	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/H.musicxml	16	2/2	2.25	2	0.25	r:quarter quarter quarter quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/H.musicxml	21	2/2	2.25	2	0.25	quarter eighth quarter quarter quarter	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/I.musicxml	16	9/8	7	9	-2	r:quarter. r:eighth eighth eighth eighth	none	the bar fits only under two tuplet runs together, so no tuplet is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/K.musicxml	33	4/4	4.5	4	0.5	r:eighth eighth quarter eighth quarter. eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/N.musicxml	52	3/4	4	3	1	eighth eighth quarter quarter quarter	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/N.musicxml	54	3/4	4	3	1	eighth eighth quarter quarter quarter	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	2	10/8	8.667	10	-1.333	r:quarter r:eighth r:quarter r:eighth eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2]	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	3	10/8	12	10	2	quarter. quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	4	10/8	12	10	2	quarter eighth quarter eighth half.	note:undot@4->half	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	5	10/8	12	10	2	quarter. quarter. quarter. quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	8	10/8	12	10	2	quarter. quarter. r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	9	10/8	12.4	10	2.4	r:quarter r:eighth quarter. quarter[5:4] quarter[5:4] quarter[5:4] quarter[5:4]	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	10	10/8	9	10	-1	quarter. quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	13	10/8	12	10	2	quarter. r:quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	19	10/8	9	10	-1	quarter eighth quarter. quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	20	10/8	9	10	-1	quarter. quarter. quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	21	10/8	9	10	-1	quarter. quarter eighth quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	22	10/8	8	10	-2	quarter. quarter r:eighth eighth eighth	note:longer@1->half	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	23	10/8	6	10	-4	eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	24	10/8	9	10	-1	quarter eighth half.	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	25	10/8	9	10	-1	quarter. quarter eighth quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	26	10/8	9	10	-1	half. quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	27	10/8	9	10	-1	r:quarter r:eighth r:quarter r:eighth quarter eighth	none	6 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	28	10/8	9	10	-1	quarter. quarter. quarter eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	30	11/8	12	11	1	r:quarter r:eighth r:quarter r:eighth quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	31	11/8	12	11	1	quarter. quarter. quarter. quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	33	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	34	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	35	11/8	12	11	1	half. quarter. r:quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	36	11/8	12	11	1	half. quarter. quarter.	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	37	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	38	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	39	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	40	11/8	12	11	1	quarter. quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	43	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	44	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml	45	11/8	12	11	1	quarter. r:quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/C.musicxml	3	5/4	6	5	1	r:half. r:quarter r:eighth eighth eighth[3:2] eighth[3:2] eighth[3:2]	note:undot@0->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/C.musicxml	6	5/4	6	5	1	quarter 16th 16th 16th 16th 16th 16th 16th 16th quarter eighth r:eighth eighth[3:2] eighth[3:2] eighth[3:2]	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/C.musicxml	10	6/4	5	6	-1	half. r:half	note:dot@1->half.	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/C.musicxml	11	6/4	5	6	-1	r:half r:quarter r:quarter r:eighth eighth	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/C.musicxml	15	6/4	5	6	-1	quarter. eighth eighth eighth eighth eighth eighth 32nd 32nd 32nd 32nd	none	the bar fits only under two tuplet runs together, so no tuplet is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	22	4/4	6	4	2	quarter eighth quarter eighth eighth eighth eighth quarter.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	23	4/4	6	4	2	quarter 16th 16th quarter eighth r:quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	24	4/4	6	4	2	quarter. quarter eighth quarter eighth eighth eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	25	4/4	6	4	2	quarter. eighth eighth eighth quarter. r:quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	26	4/4	6	4	2	quarter eighth quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	27	4/4	6	4	2	quarter. quarter. quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	28	4/4	6	4	2	quarter eighth quarter eighth quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	29	4/4	6	4	2	half. r:quarter r:eighth r:quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	30	4/4	6	4	2	half. r:quarter r:eighth quarter.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	31	4/4	6	4	2	half. r:quarter eighth quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	32	4/4	6	4	2	quarter. quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	33	4/4	6	4	2	quarter eighth eighth eighth eighth quarter. r:quarter r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	34	4/4	6	4	2	r:eighth r:eighth eighth quarter eighth quarter. eighth eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	35	4/4	6	4	2	quarter eighth eighth eighth eighth quarter. r:eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	36	4/4	6	4	2	quarter eighth quarter. r:eighth r:eighth eighth quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml	37	4/4	6	4	2	half. r:quarter. quarter.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/H.musicxml	16	2/2	2.25	2	0.25	r:quarter quarter quarter quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/H.musicxml	21	2/2	2.25	2	0.25	quarter eighth quarter quarter quarter	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/I.musicxml	16	9/8	7	9	-2	r:quarter. r:eighth eighth eighth eighth	none	the bar fits only under two tuplet runs together, so no tuplet is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/K.musicxml	33	4/4	4.5	4	0.5	r:eighth eighth quarter eighth quarter. eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/N.musicxml	52	3/4	4	3	1	eighth eighth quarter quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/N.musicxml	54	3/4	4	3	1	eighth eighth quarter quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	2	10/8	8.667	10	-1.333	r:quarter r:eighth r:quarter r:eighth eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2]	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	3	10/8	12	10	2	quarter. quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	4	10/8	12	10	2	quarter eighth quarter eighth half.	note:undot@4->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	5	10/8	12	10	2	quarter. quarter. quarter. quarter r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	8	10/8	12	10	2	quarter. quarter. r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	9	10/8	12.4	10	2.4	r:quarter r:eighth quarter. quarter[5:4] quarter[5:4] quarter[5:4] quarter[5:4]	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	10	10/8	9	10	-1	quarter. quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	13	10/8	12	10	2	quarter. r:quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	19	10/8	9	10	-1	quarter eighth quarter. quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	20	10/8	9	10	-1	quarter. quarter. quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	21	10/8	9	10	-1	quarter. quarter eighth quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	22	10/8	8	10	-2	quarter. quarter r:eighth eighth eighth	note:longer@1->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	23	10/8	6	10	-4	eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	24	10/8	9	10	-1	quarter eighth half.	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	25	10/8	9	10	-1	quarter. quarter eighth quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	26	10/8	9	10	-1	half. quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	27	10/8	9	10	-1	r:quarter r:eighth r:quarter r:eighth quarter eighth	none	6 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	28	10/8	9	10	-1	quarter. quarter. quarter eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	30	11/8	12	11	1	r:quarter r:eighth r:quarter r:eighth quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	31	11/8	12	11	1	quarter. quarter. quarter. quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	33	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	34	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	35	11/8	12	11	1	half. quarter. r:quarter r:eighth	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	36	11/8	12	11	1	half. quarter. quarter.	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	37	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	38	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	39	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	40	11/8	12	11	1	quarter. quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	43	11/8	12	11	1	quarter. quarter. quarter. quarter.	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	44	11/8	12	11	1	half. half.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml	45	11/8	12	11	1	quarter. r:quarter r:eighth r:quarter r:eighth r:quarter r:eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/R.musicxml	39	3/4	4	3	1	half r:half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/S.musicxml	50	3/4	5.5	3	2.5	quarter half eighth quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/S.musicxml	70	3/4	5.5	3	2.5	eighth eighth r:eighth r:quarter quarter quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/S.musicxml	71	3/4	6	3	3	half. half.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/S.musicxml	72	3/4	6	3	3	half half quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/S.musicxml	73	3/4	7	3	4	half. half. r:quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/S.musicxml	74	3/4	7	3	4	quarter r:whole eighth r:eighth r:quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml	22	4/4	6	4	2	quarter quarter quarter half quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml	23	4/4	4.5	4	0.5	quarter quarter quarter quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml	42	4/4	6	4	2	quarter quarter quarter half eighth r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml	44	4/4	6	4	2	quarter quarter quarter. half eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml	74	4/4	5	4	1	quarter. eighth quarter eighth quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml	75	4/4	7	4	3	quarter half quarter r:quarter quarter eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml	76	4/4	5	4	1	eighth quarter. eighth eighth quarter. eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml	77	4/4	6	4	2	quarter half quarter r:half	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/V.musicxml	5	4/4	4.333	4	0.333	quarter 16th[3:2] 16th[3:2] 16th[3:2] 16th[3:2] 16th[3:2] 16th 16th eighth eighth 16th 16th 16th 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/V.musicxml	6	4/4	3.75	4	-0.25	eighth. 32nd 64th 64th eighth 64th 64th 64th 64th eighth r:eighth eighth. 16th	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/W.musicxml	16	9/4	6	9	-3	half. half quarter	note:longer@0->whole.	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/X.musicxml	21	4/4	3.5	4	-0.5	quarter eighth r:half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/Y.musicxml	40	4/4	5	4	1	quarter r:eighth eighth eighth eighth eighth quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/Z.musicxml	52	6/8	7	6	1	quarter. eighth r:eighth r:eighth eighth	note:undot@0->quarter | A:4:3@1 | B:3:2@2	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	10	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	11	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	12	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	13	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	14	4/8	6	4	2	quarter. quarter 16th 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	15	4/8	6	4	2	quarter. quarter 16th 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	16	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	17	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	18	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	19	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	20	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	21	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	22	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	23	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	24	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	25	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	26	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	27	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	28	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	29	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	30	4/8	6	4	2	quarter eighth quarter.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	31	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	32	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	33	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	34	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	35	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	36	4/8	6	4	2	quarter. eighth r:eighth 16th 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	37	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	38	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	39	4/8	6	4	2	quarter. quarter r:16th 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	40	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	41	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	42	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	43	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	44	4/8	6	4	2	quarter. eighth. 16th eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	45	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	46	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	47	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	48	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	49	4/8	6	4	2	quarter. r:eighth r:eighth r:16th 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	50	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	51	4/8	6	4	2	quarter. quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	52	4/8	6	4	2	quarter. eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	53	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	54	4/8	6	4	2	quarter. eighth r:eighth. 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	55	4/8	6	4	2	half.	note:undot@0->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml	56	4/8	6	4	2	eighth r:eighth r:eighth r:quarter.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/gur.musicxml	7	4/4	4.5	4	0.5	half r:eighth eighth eighth quarter	note:shorter@4->eighth | A:3:2@1	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k01.musicxml	36	3/4	2.5	3	-0.5	quarter eighth eighth eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k07.musicxml	38	6/8	5.5	6	-0.5	eighth. 16th 16th 16th eighth 16th 16th 16th	A:2:3@1 | B:2:3@6	7 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k07.musicxml	45	6/8	5	6	-1	quarter eighth eighth eighth	A:2:3@2	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/sun1.musicxml	17	6/4	7	6	1	half r:quarter half half	none	3 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/sun5.musicxml	36	4/4	3.5	4	-0.5	eighth eighth eighth quarter. eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/sun5.musicxml	60	4/4	5	4	1	quarter half. quarter	note:undot@1->half	
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/sun5.musicxml	61	4/4	5	4	1	half. half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/after/drops/varl.musicxml	17	3/8	11	3	8	eighth whole eighth. 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml	50	3/4	5.5	3	2.5	quarter half eighth quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml	68	3/4	6	3	3	r:eighth quarter eighth eighth r:quarter r:eighth quarter r:quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml	69	3/4	10	3	7	r:eighth half. quarter half eighth eighth eighth r:eighth quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml	70	3/4	11.5	3	8.5	eighth r:eighth quarter r:eighth half eighth eighth eighth r:quarter quarter eighth r:eighth quarter quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml	71	3/4	11.5	3	8.5	r:eighth half. half. quarter half eighth eighth r:eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml	72	3/4	6	3	3	half half quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml	73	3/4	7	3	4	half. half. r:quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml	74	3/4	7	3	4	quarter r:whole eighth r:eighth r:quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml	22	4/4	6	4	2	quarter quarter quarter half quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml	23	4/4	4.5	4	0.5	quarter quarter quarter quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml	42	4/4	6	4	2	quarter quarter quarter half eighth r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml	44	4/4	6	4	2	quarter quarter quarter. half eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml	74	4/4	5	4	1	quarter. eighth quarter eighth quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml	75	4/4	7	4	3	quarter half quarter r:quarter quarter eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml	76	4/4	5	4	1	eighth quarter. eighth eighth quarter. eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml	77	4/4	6	4	2	quarter half quarter r:half	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/V.musicxml	5	4/4	4.333	4	0.333	quarter 16th[3:2] 16th[3:2] 16th[3:2] 16th[3:2] 16th[3:2] 16th 16th eighth eighth 16th 16th 16th 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/V.musicxml	6	4/4	3.75	4	-0.25	eighth. 32nd 64th 64th eighth 64th 64th 64th 64th eighth r:eighth eighth. 16th	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/X.musicxml	4	16/16	24	16	8	quarter eighth eighth quarter eighth eighth quarter eighth r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/X.musicxml	21	4/4	3.5	4	-0.5	quarter eighth r:half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/before/drops/X.musicxml	30	4/4	6	4	2	quarter eighth eighth quarter eighth eighth quarter eighth r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/fixA/drops/X.musicxml	21	4/4	3.5	4	-0.5	quarter eighth r:half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/S.musicxml	50	3/4	5.5	3	2.5	quarter half eighth quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/S.musicxml	70	3/4	5.5	3	2.5	eighth eighth r:eighth r:quarter quarter quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/S.musicxml	71	3/4	6	3	3	half. half.	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/S.musicxml	72	3/4	6	3	3	half half quarter quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/S.musicxml	73	3/4	7	3	4	half. half. r:quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/S.musicxml	74	3/4	7	3	4	quarter r:whole eighth r:eighth r:quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml	22	4/4	6	4	2	quarter quarter quarter half quarter	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml	23	4/4	4.5	4	0.5	quarter quarter quarter quarter eighth	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml	42	4/4	6	4	2	quarter quarter quarter half eighth r:eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml	44	4/4	6	4	2	quarter quarter quarter. half eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml	74	4/4	5	4	1	quarter. eighth quarter eighth quarter eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml	75	4/4	7	4	3	quarter half quarter r:quarter quarter eighth eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml	76	4/4	5	4	1	eighth quarter. eighth eighth quarter. eighth	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml	77	4/4	6	4	2	quarter half quarter r:half	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/V.musicxml	5	4/4	4.333	4	0.333	quarter 16th[3:2] 16th[3:2] 16th[3:2] 16th[3:2] 16th[3:2] 16th 16th eighth eighth 16th 16th 16th 16th	none	
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/V.musicxml	6	4/4	3.75	4	-0.25	eighth. 32nd 64th 64th eighth 64th 64th 64th 64th eighth r:eighth eighth. 16th	none	4 single-note changes make the bar fit, so none is offered
+docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/X.musicxml	21	4/4	3.5	4	-0.5	quarter eighth r:half	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	2	4/4	7.5	4	3.5	quarter. half eighth quarter half eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	4	4/4	8	4	4	quarter. half eighth quarter quarter r:quarter eighth r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	5	4/4	9.5	4	5.5	r:half r:half eighth eighth eighth quarter. half eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	6	4/4	8	4	4	quarter half eighth r:eighth quarter quarter eighth eighth r:eighth r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	7	4/4	8	4	4	half half quarter quarter r:quarter eighth r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	8	4/4	8	4	4	eighth. quarter 16th eighth quarter eighth eighth. half 16th eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	9	4/4	8	4	4	quarter. whole eighth quarter quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	10	4/4	8.5	4	4.5	quarter quarter quarter eighth r:eighth r:eighth r:half r:quarter r:eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	11	4/4	8	4	4	quarter. whole eighth eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	12	4/4	8	4	4	eighth quarter r:eighth r:quarter eighth r:eighth r:half r:eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml	13	4/4	8	4	4	quarter. half eighth quarter. half eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	1	4/4	9	4	5	quarter half eighth half half eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	2	4/4	7.5	4	3.5	eighth half eighth eighth eighth eighth half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	3	4/4	8	4	4	quarter. half eighth eighth. half 16th eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	4	4/4	8	4	4	quarter quarter eighth eighth r:eighth r:eighth r:half r:eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	5	4/4	12	4	8	half quarter quarter quarter quarter half quarter quarter quarter quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	6	4/4	12.5	4	8.5	half quarter quarter quarter quarter r:quarter quarter r:quarter quarter quarter quarter r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	7	4/4	12	4	8	half quarter quarter quarter quarter half quarter quarter quarter quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	8	4/4	12	4	8	half quarter quarter quarter quarter quarter quarter eighth quarter r:eighth quarter eighth r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	9	4/4	12	4	8	half quarter quarter quarter quarter half quarter quarter quarter eighth r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	10	4/4	12.5	4	8.5	half quarter quarter quarter quarter half quarter quarter quarter quarter r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	11	4/4	10	4	6	quarter quarter eighth quarter r:eighth quarter quarter quarter quarter r:quarter eighth r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml	12	4/4	10.75	4	6.75	r:quarter quarter quarter quarter quarter quarter half quarter quarter r:eighth 16th	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	1	4/4	8	4	4	eighth half r:eighth r:eighth eighth eighth half eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	2	4/4	8	4	4	quarter quarter r:eighth eighth r:eighth eighth quarter. half eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	3	4/4	7.5	4	3.5	eighth half eighth eighth eighth quarter quarter eighth r:eighth 16th r:16th	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	7	4/4	7.5	4	3.5	half half quarter r:quarter quarter r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	8	4/4	11	4	7	half r:eighth half eighth half quarter quarter quarter eighth r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	9	4/4	10	4	6	quarter. whole eighth eighth half eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	10	4/4	8	4	4	quarter quarter eighth eighth r:eighth r:eighth r:half r:quarter quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	11	4/4	8.5	4	4.5	quarter whole quarter[3:2] quarter[3:2] quarter[3:2] quarter[3:2] eighth[3:2] r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	12	4/4	9.5	4	5.5	quarter whole quarter quarter quarter quarter[3:2] eighth[3:2] r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	15	4/4	13.9	4	9.9	eighth[3:2] eighth eighth quarter[5:4] eighth quarter[5:4] r:eighth eighth quarter[5:4] eighth quarter[5:4] eighth quarter[5:4] eighth quarter[5:4] eighth quarter[5:4] eighth quarter[3:2] eighth eighth quarter[5:4] eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	16	4/4	9	4	5	eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth[3:2] eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml	18	4/4	6	4	2	eighth eighth eighth eighth eighth eighth eighth eighth eighth quarter eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	1	4/4	12.533	4	8.533	eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth[3:2] quarter eighth eighth quarter[5:4] eighth quarter[5:4] eighth quarter[5:4] eighth quarter[5:4] eighth quarter eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	2	4/4	10.167	4	6.167	eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth[3:2] eighth eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	3	4/4	6	4	2	eighth eighth eighth eighth eighth eighth eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	4	4/4	6	4	2	eighth eighth eighth eighth eighth eighth eighth eighth eighth quarter eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	7	2/2	9.208	2	7.208	eighth[3:2] eighth half eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter[3:2] quarter quarter. eighth[3:2] eighth[3:2] eighth[3:2] eighth r:eighth r:eighth[3:2] eighth[3:2] eighth[3:2] eighth. eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth quarter. eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2]	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	8	2/2	6.25	2	4.25	16th 16th 16th 16th 16th 16th 16th 16th r:eighth r:eighth quarter quarter. eighth eighth r:half r:quarter 16th 16th 16th 16th 16th 16th 16th 16th r:eighth r:eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	9	4/4	8.5	4	4.5	eighth[3:2] eighth r:eighth r:eighth[3:2] eighth[3:2] r:eighth eighth[3:2] eighth r:eighth eighth[3:2] r:eighth[3:2] r:eighth r:eighth eighth[3:2] half eighth[3:2] eighth[3:2]	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	10	4/4	8	4	4	quarter quarter eighth eighth r:eighth r:eighth quarter. half eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	11	4/4	8.5	4	4.5	quarter eighth r:eighth r:eighth r:quarter r:eighth r:eighth r:half r:quarter r:eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	12	4/4	8	4	4	quarter. half eighth eighth. quarter 16th eighth quarter eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	13	4/4	8	4	4	quarter quarter eighth eighth r:eighth r:eighth r:half half	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	14	4/4	5.25	4	1.25	eighth r:eighth r:eighth eighth 16th r:eighth r:eighth half	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	17	4/4	3	4	-1	half quarter	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml	18	4/4	2.25	4	-1.75	eighth 16th 16th 16th quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	15	4/4	3.875	4	-0.125	quarter. eighth eighth. 32nd eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	17	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	18	4/4	6	4	2	half quarter r:quarter r:quarter quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	19	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	20	4/4	9	4	5	half whole quarter quarter[3:2] eighth[3:2] r:eighth[3:2] quarter[3:2]	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	21	4/4	10	4	6	half whole quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	22	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	23	4/4	6	4	2	quarter eighth r:eighth quarter quarter quarter r:quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	24	4/4	6.25	4	2.25	r:quarter quarter quarter half eighth r:eighth 16th	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	28	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	29	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	32	4/4	4.5	4	0.5	eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter eighth	note:shorter@9->eighth	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	34	4/4	5	4	1	eighth[3:2] eighth[3:2] eighth[3:2] quarter eighth eighth[3:2] eighth[3:2] eighth[3:2] quarter eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	35	4/4	5	4	1	eighth eighth eighth eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth eighth eighth	none	the bar fits only under two tuplet runs together, so no tuplet is offered
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml	36	2/2	3.5	2	1.5	eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter[3:2] eighth[3:2] eighth[3:2] r:eighth[3:2] eighth[3:2] eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page2.musicxml	2	6/4	4	6	-2	eighth eighth eighth eighth eighth r:eighth quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page2.musicxml	3	6/4	3.875	6	-2.125	quarter. eighth eighth. 32nd eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page2.musicxml	4	6/4	4	6	-2	quarter eighth r:eighth r:eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page2.musicxml	8	6/4	9	6	3	half whole quarter quarter[3:2] eighth[3:2] r:eighth[3:2] quarter[3:2]	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page2.musicxml	9	6/4	10	6	4	half whole quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page2.musicxml	12	6/4	6.25	6	0.25	r:quarter quarter quarter half eighth r:eighth 16th	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page3.musicxml	4	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page3.musicxml	5	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page3.musicxml	8	4/4	4.5	4	0.5	eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter eighth	note:shorter@9->eighth	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page4.musicxml	3	2/2	3.5	2	1.5	eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter[3:2] eighth[3:2] eighth[3:2] r:eighth[3:2] eighth[3:2] eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	15	4/4	3.875	4	-0.125	quarter. eighth eighth. 32nd eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	17	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	18	4/4	6	4	2	half quarter r:quarter r:quarter quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	19	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	20	4/4	9	4	5	half whole quarter quarter[3:2] eighth[3:2] r:eighth[3:2] quarter[3:2]	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	21	4/4	10	4	6	half whole quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	22	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	23	4/4	6	4	2	quarter eighth r:eighth quarter quarter quarter r:quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	24	4/4	6.25	4	2.25	r:quarter quarter quarter half eighth r:eighth 16th	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	28	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	29	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	32	4/4	4.5	4	0.5	eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter eighth	note:shorter@9->eighth	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	34	4/4	5	4	1	eighth[3:2] eighth[3:2] eighth[3:2] quarter eighth eighth[3:2] eighth[3:2] eighth[3:2] quarter eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	35	4/4	5	4	1	eighth eighth eighth eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth eighth eighth	none	the bar fits only under two tuplet runs together, so no tuplet is offered
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml	36	2/2	3.5	2	1.5	eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter[3:2] eighth[3:2] eighth[3:2] r:eighth[3:2] eighth[3:2] eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page2.musicxml	2	6/4	4	6	-2	eighth eighth eighth eighth eighth r:eighth quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page2.musicxml	3	6/4	3.875	6	-2.125	quarter. eighth eighth. 32nd eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page2.musicxml	4	6/4	4	6	-2	quarter eighth r:eighth r:eighth eighth eighth eighth	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page2.musicxml	8	6/4	9	6	3	half whole quarter quarter[3:2] eighth[3:2] r:eighth[3:2] quarter[3:2]	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page2.musicxml	9	6/4	10	6	4	half whole quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page2.musicxml	12	6/4	6.25	6	0.25	r:quarter quarter quarter half eighth r:eighth 16th	none	2 single-note changes make the bar fit, so none is offered
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page3.musicxml	4	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page3.musicxml	5	4/4	6	4	2	half quarter half quarter	none	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page3.musicxml	8	4/4	4.5	4	0.5	eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter eighth	note:shorter@9->eighth	
+docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page4.musicxml	3	2/2	3.5	2	1.5	eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] eighth[3:2] quarter[3:2] eighth[3:2] eighth[3:2] r:eighth[3:2] eighth[3:2] eighth eighth eighth eighth eighth eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	1	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	2	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	3	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	4	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	5	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	6	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	7	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	8	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	9	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	10	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	11	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	12	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	13	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	14	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	15	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	16	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	17	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	18	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	19	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	20	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	21	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	22	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	23	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	24	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	25	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	26	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	27	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	28	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	29	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	30	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	31	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	32	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	33	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	34	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml	35	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	1	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	2	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	3	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	4	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	5	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	6	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	7	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	8	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	9	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	10	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	11	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	12	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	13	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	14	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	15	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	16	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	17	1/4	1.5	1	0.5	r:eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	18	1/4	1.5	1	0.5	eighth eighth r:16th 16th	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	19	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	20	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	21	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	22	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	23	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	24	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	25	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	26	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	27	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	28	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	29	1/4	1.5	1	0.5	eighth eighth. 16th	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	30	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	31	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	32	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	33	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	34	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	35	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	36	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml	37	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	1	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	2	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	3	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	4	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	5	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	6	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	7	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	8	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	9	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	10	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	11	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	12	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	13	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	14	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	15	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	16	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	17	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	18	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	19	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	20	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	21	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	22	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	23	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	24	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	25	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	26	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	27	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	28	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	29	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	30	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	31	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	32	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	33	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	34	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml	35	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	1	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	2	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	3	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	4	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	5	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	6	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	7	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	8	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	9	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	10	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	11	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	12	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	13	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	14	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	15	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	16	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	17	1/4	1.5	1	0.5	r:eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	18	1/4	1.5	1	0.5	eighth eighth r:16th 16th	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	19	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	20	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	21	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	22	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	23	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	24	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	25	1/4	1.5	1	0.5	eighth eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	26	1/4	1.5	1	0.5	quarter eighth	note:shorter@0->eighth	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	27	1/4	1.5	1	0.5	r:eighth r:eighth eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	28	1/4	1.5	1	0.5	eighth. 16th eighth	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	29	1/4	1.5	1	0.5	eighth eighth. 16th	none	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	30	1/4	1.5	1	0.5	quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	31	1/4	1.5	1	0.5	eighth r:eighth r:eighth	A:3:2@0	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	32	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	33	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	34	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	35	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	36	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
+docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml	37	1/4	1.5	1	0.5	r:quarter.	note:undot@0->quarter	
