@@ -24,6 +24,8 @@ next session the same hour it cost the last one.
 | you drew something and sent it to Dann | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
 | looking for a mockup or ruling from an earlier session | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
 | ship anything at all | `Gate baselines` |
+| searching TPL databases, NATS sign-in failing, or finding a dissertation | `WHAT THE DESK LEARNED ON 2026-10-12 EARLY` |
+| downloading from IMSLP's mirror, stamping a time, or starting a cloud row while `cloud-lane` holds a held row | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-12` |
 | you sent a file to the Mac, or are about to hand Dann a ship command | `REPORT SUCCESS AND WRITE NOTHING` |
 | you sent a file to the Mac and are about to say it is saved | `device_commit_files CAN REPORT SUCCESS` |
 | move a gate number | `Moving a gate baseline` |
@@ -4723,3 +4725,28 @@ Dann's Chrome window would not shrink by `resize_window` (it reported success; `
 - **iCloud " 2" duplicates appeared in new, untracked files during the ship (23:34)**, in seven briefs and reports and 29 files plus one folder of row 80's measure folder; `git add` of the folder staged them. The bridge cannot read them ("Resource deadlock avoided") but can move them: they went, unread, to `apps/web/test-results/_desk-hold/icloud-dupes-2026-10-11/`. Then `git reset -q` and the `git add` list again. Before handing Dann a `git add` of a folder, `find` it for `"* 2"` and `"* 2.*"` first. The older " 2" folders under `apps/web/build`, `.svelte-kit`, `src/lib 2`, and `tools/e16-harness` were left alone; the ship did not list them.
 - **A desk scratch commit trips the session's stop hook** ("unpushed" or "unverified" commits on `Shane`). It is a local clone that is never pushed; delete it when its job is done.
 - **Gate 4 differs between a clean clone and Dann's Mac.** Row 72's every-score test (`apps/web/src/lib/markup/markup-pages.test.ts`) paginates every `.musicxml` under `apps/`, `docs/`, and `tools/` on disk, including the 46 git-ignored readings in `tools/e16-harness/output/*/homr-raw` and `mxl_extract`. A clean clone counted 2402; the Mac counted 2448, all passing (2026-10-11 23:42). The ship script now expects 2448. Owed (a small Code row): the test should list files with `git ls-files`, so the count is the same everywhere and nothing private is read.
+
+
+## WHAT THE DESK LEARNED ON 2026-10-12 EARLY (the Opus thread after the 23:55 close)
+
+- **Code is the desktop app's Code tab, never Terminal. Missed a second time on 2026-10-12 00:27** although the index row "you are about to send Dann a terminal command that starts `claude`" exists. Before any instruction that starts Code, search this file for `Claude Code, and where the building`.
+- **A Terminal window may be running `caffeinate -i`.** Before telling Dann to paste into "your Terminal window", ask which windows are open or tell him to open a new one with Command-N (`AN UNATTENDED RUN NEEDS AN AWAKE MAC`).
+- **TPL's Gale Academic OneFile can be searched by publication from Dann's Chrome once he is signed in to TPL.** Path: `https://www.torontopubliclibrary.ca/detail.jsp?Entt=RDMEDB0001&R=EDB0001`, the "Academic OneFile" link, then "Go to Publication Search". A title search URL works directly: `.../ps/publicationSearch.do?inputFieldValues%5B0%5D=<words joined by +>&inputFieldNames%5B0%5D=PU&type=getPublications&searchType=PublicationSearchForm&method=doSearch&requestType=GET_GTX_PUBLICATIONS&prodId=AONE&userGroupName=tplmain&searchMethod=submit+search`. Spaces written as `%20` did not reload the page; use `+`. **Positive control: "Journal of Singing" is found.** Checked 2026-10-12 01:08: neither *Logopedics Phoniatrics Vocology* nor *Journal of the Acoustical Society of America* is held.
+- **nats.org can refuse a sign-in with no message** when it is overloaded. On 2026-10-12 at 01:18 the page read "Direct page access is temporarily limited due to severe system load." The login form showed nothing wrong; the overload page appeared only after a password reset. Do not send Dann through a reset first; look for this message and tell him to try later.
+- **Free reprints of the UNSW voice acoustics papers (Wolfe, Smith, Henrich, Garnier) are at `https://www.phys.unsw.edu.au/jw/reprints/`**, and the device shell can download them with `curl`. Two filed 2026-10-12 (G-I).
+- **Dann's dissertations are in `~/Documents/Voice Pedagogy Research/Dissertations`, not the Voice Pedagogy Library.** Chenez 2011 and Thoresen 2012 (both countertenor) are there. Ask for that folder when a dissertation is cited.
+
+
+## WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-12
+
+- **IMSLP's mirror path hashes the file name WITHOUT the `IMSLP<index>-` prefix.** `https://vmirror.imslp.org/files/imglnks/usimg/<a>/<ab>/IMSLP<index>-<name>`, where `<a>` and `<ab>` are the first one and two hex digits of md5(`<name>`), spaces as underscores. Hashing the prefixed name returns 404 (set 4's helper, 2026-10-12). Curl from the desk's workspace still works; byte sizes matched IMSLP's.
+- **The desk stamped six records about forty minutes AHEAD of the clock** (wrote 02:00 to 02:50 at 01:44 to 01:50). Caught at 01:50 by `date -u` and corrected in every file by search and replace. The existing rule held and was not followed: run `date` in the device shell before every stamp; Toronto is UTC minus four until 2026-11-01.
+- **`cloud-lane` still holds row 71 (held by Dann 2026-10-11 23:21).** A new cloud row started on it would carry row 71 into his merge. Row 83 was started on a NEW branch, `cloud-lane-2`, cut from `origin/Shane` by the cloud session itself (DESK DEFAULT under the ruling of 2026-10-02 02:37). The claude.ai/code page still preselects `cloud-lane`; the prompt carried the branch instruction first.
+- **The claude.ai/code task box accepted one long paragraph typed by Claude in Chrome** and sent on Return. The model picker sits at the right under the box (Sonnet chosen for row 83).
+- **A Sonnet reader of journal articles spends about 30k tokens an article read whole** (eight articles, 255k, 2026-10-12); scanned method books with no text layer were left unread at that budget.
+
+
+**Added at the close of 2026-10-12 20:15:**
+- The scorer's bar numbers (`measureIndex`, file indices) count from 0. Dann counts measures from 1, the opening bar as m. 1. Convert before you speak, and send every bar you name.
+- A helper's result lands only in the thread that spawned it. Have every review helper write its result to a file in `docs/sessions/` (or the desk saves it there on landing), so a thread that closes early loses nothing.
+- Read the report before you call a result NOT ESTABLISHED. A claim of absence needs a read, just as a claim of presence does.

@@ -1,102 +1,47 @@
 # Ilya project memory — START HERE
 
-**This folder is the project's memory. It lives in the repository, beside the code,
-under git. It replaces the per-session thread opener.**
+r1 draft, 2026-10-12. This folder is the project's memory. It lives in the repository, beside the code, under git. Read this page, then only what it sends you to. Do not read the whole folder.
 
-Read this page. Then read only what it sends you to. Do not read the whole folder.
+## The one thing
 
----
-
-## THE ONE THING
-
-> **Whatever `STATE.md` says it is. Open that file and read its first section.**
->
-> **Do not restate the one thing here.** On 2026-08-14 this block still named a
-> commit that `STATE.md` had never heard of, and the session opened on a
-> contradiction it had to resolve before it could start.
->
-> **It happened again and was caught on 2026-09-13.** This block still carried
-> "the syllable station and the note click are `WRITTEN`, not `DONE`" and sent
-> the reader to `STATE.md` §The walk. Neither phrase appeared anywhere in
-> `STATE.md` any more, and there is no §The walk: the four-step walk lives in
-> §THE FIXTURE. **Both lines are struck.** The rule this block states is the rule
-> it kept breaking, so: nothing after the first line of this block ever names an
-> item, a commit, a state, or a section of `STATE.md`.
-
-Nothing else is in progress. Everything else is in `STATE.md` or `INBOX.md` and is
-waiting, on purpose.
-
----
+Whatever `STATE.md` says it is. Open that file and read its first section. Nothing after this line names an item, a commit, a state, or a section of `STATE.md`: twice (2026-08-14, 2026-09-13) this block named one and was stale.
 
 ## Read order for a new session
 
-1. **`CONTRACT.md`** — how we work. The tethers, the ceiling, and the things you
-   must not do. **Read this every time. It is the shortest and the most expensive
-   to skip.**
-2. **`STATE.md`** — the one thing, the tracker, and the rulings Dann owes.
-   **Then `QUEUE.md`**, every Code brief that has not shipped (created 2026-09-30). Read it every session; update it at every close.
-3. **`ENVIRONMENT.md`** — only when you are about to touch a tool, a path, or a
-   gate. It is a lookup table, not a read-through, and since 2026-09-01 it
-   opens with an index keyed by symptom. Use the index.
-4. **`PRODUCT.md`** — only before forming an opinion about what Ilya should do or
-   look like.
-5. **`OPEN.md`** — the specs for the numbered items that are open and not
-   started. **NOT part of the opening read.** Open it when the one thing closes
-   and you need the next item's spec, or when Dann names an item by its number.
-   Split out of `STATE.md` on 2026-09-13; nothing in it was reworded.
+1. **`CONTRACT.md`**: how we work. The posture, the opening ritual, the tethers, the ceiling and git, style, French, and what not to do. Read it every time.
+2. **`STATE.md`**: the one thing, the latest handover, and the tracker of open items. Then **`QUEUE.md`**: every Code brief that is open, or shipped and not walked.
+3. **`ENVIRONMENT.md`**: only when you are about to touch a tool, a path, or a gate. It opens with an index keyed by symptom; use the index.
+4. **`PRODUCT.md`**: only before forming an opinion about what Ilya should do or look like.
 
-6. **`SEQUENCE.md`** — the build order for the open cardinals, and the
-   dependencies that fix it. **NOT part of the opening read.** Open it when the
-   one thing closes and the next is being chosen, or when Dann asks to work
-   through the queue. Created 2026-09-15.
+Not part of the opening read; open each when its moment comes:
 
-7. **`SCHEDULE.md`** — the week-by-week road to the release on 2026-10-30.
-   Open it when choosing what to do next, and tick it at every close. Created
-   2026-09-16.
+- **`OPEN.md`**: the specs behind the tracker's marks. Open it when the one thing closes, or when Dann names an item by number.
+- **`SEQUENCE.md`**: the build order and the dependencies that fix it. Open it when the next item is being chosen.
+- **`SCHEDULE.md`**: the week-by-week road to the release. Open it when choosing what to do next; tick it at every close.
+- **`OWED.md`**: standing debts and unsettled questions. Open it when one of its items comes up or when Dann asks what is outstanding.
+- **`INBOX.md`**: append-only; you do not open it unless Dann asks.
 
-8. **`OWED.md`** — the standing debts and the unsettled questions: what the desk
-   owes, what Dann owes, what has never been settled, and the retired register's
-   live rows. **NOT part of the opening read.** Open it when one of its items
-   comes up, when Dann asks what is outstanding, or when the one thing closes and
-   the next is being chosen. **Split out of `STATE.md` on 2026-09-20 on Dann's
-   ruling**, which took `STATE.md` from 1,141 lines to 547 and under its own
-   tripwire for the first time. Nothing was reworded.
+The archives are records, never authority. **The code beats this folder, and this folder beats the archive.**
 
-`INBOX.md` is append-only and **you do not open it unless Dann asks.**
+- `CONTRACT-archive.md`: the accounts of what each rule cost, and every earlier wording, verbatim.
+- `STATE-archive.md` and `../sessions/LOG.md`: closed rows, superseded floors, old handovers and colophons.
+- `QUEUE-archive.md`: every row's full history.
+- `../sessions/`: thread openers, handovers, briefs, reports, and returned memos.
 
-`../sessions/LOG.md` is the archive behind `STATE.md`, split out 2026-09-01.
-**Nothing in the read order opens it.** Go there to check what a superseded
-ruling said, and nowhere else.
-
-`../sessions/` holds the archived thread openers, handovers, and returned memos.
-Nothing there is authoritative. **The code beats this folder, and this folder
-beats the archive.**
-
----
-
-## The four lifespans, which is why this is split up
+## Who writes what
 
 | file | changes | who writes it |
 |---|---|---|
-| `CONTRACT.md` | rarely, when Dann rules a new tether | Dann rules, you transcribe |
-| `PRODUCT.md` | rarely, when something is settled | Dann rules, you transcribe |
-| `ENVIRONMENT.md` | when a tool, path, or baseline moves | you, when you learn it the hard way |
-| `OPEN.md` | when an item is numbered, ruled, or starts | you |
-| `SEQUENCE.md` | when an item closes or is numbered | you |
-| `OWED.md` | when a debt is incurred or paid, or a question is settled | you |
-| `STATE.md` | **every session, at the close** | you |
-| `INBOX.md` | any time Dann digresses | you, one line, immediately |
-
-The old openers rewrote all four every time. That is why there were forty-eight of
-them and why the project knowledge estate filled up four times in a month.
-
----
+| `CONTRACT.md`, `PRODUCT.md` | rarely, when Dann rules | Dann rules, you transcribe |
+| `ENVIRONMENT.md` | when a tool, path, or baseline moves | you, with an index row |
+| `OPEN.md`, `SEQUENCE.md`, `OWED.md` | when an item is numbered, ruled, started, closed, or a debt moves | you |
+| `STATE.md`, `QUEUE.md`, `SCHEDULE.md` | every session, at the close | you |
+| `INBOX.md` | any time Dann digresses | you, one line, at once |
+| the archives | at a close, when something leaves a working file | you, verbatim |
 
 ## Opening a session
 
-Dann pastes this and nothing else. Everything it used to say now lives in the
-files above, which is the whole point of this folder.
-
+Dann pastes this and nothing else:
 ```
 Claude, I'm Dann.
 
@@ -107,55 +52,28 @@ Your first call is device_request_folder_access for
 /Users/dannmitton/Desktop/ilya-rewrite and /Users/dannmitton/Downloads.
 Folder grants do not carry between sessions.
 
-Once the reads are done, emit the sequence-position block from CONTRACT.md §0.
+Once the reads are done, emit the sequence-position block from CONTRACT.md §2.
 Nothing else happens before it.
 
 Then ask me for the repository state in one line. You do not write with git,
-ever. Read-only git is allowed; CONTRACT.md §5 says which commands.
+ever. Read-only git is allowed; CONTRACT.md §4 says which commands.
 
 Then start on THE ONE THING in STATE.md. Do not bring me an engineering
 choice. Before any helper runs, tell me how long you will be silent.
 ```
 
-**If that prompt ever needs to grow, something has gone wrong in this folder
-instead.** The E.48 opener it replaced ran to about six thousand words, and
-forty-seven of its predecessors were written and thrown away.
-
-**Its last line was changed by the desk at the close of 2026-10-05.** It read "Then start on THE ONE THING in STATE.md and stop after one question." Dann's rule of 2026-10-04 22:27 (`CONTRACT.md`) is that he says what he wants and the desk decides how, so the opener no longer invites a question. A DESK DEFAULT, his to overrule.
-
----
+If that prompt ever needs to grow, something has gone wrong in this folder instead. Its last line was changed by the desk at the close of 2026-10-05 under Dann's rule of 2026-10-04 22:27 (he says what he wants, the desk decides how), a DESK DEFAULT, his to overrule.
 
 ## Closing a session
 
-0. **Check every open line against `git log` first. Added 2026-10-11 19:40 after an audit found 28 stale lines** (`../sessions/audit-memory-vs-git_r1_2026-10-11.md`): N.168 and N.172 read "not walked" two days after Dann walked them, and nine QUEUE rows read "ready" after they shipped. Run `git --no-optional-locks --no-pager log --since=<the last close> --format="%h %s"` and, for every row or item a commit names, set its line in `QUEUE.md`, `SCHEDULE.md`, and `STATE.md` §THE TRACKER in the same pass. A walk Dann reports goes into all three the moment he reports it, not at the close.
-1. Update `STATE.md`: the one thing, the tracker marks, what moved. **If an item
-   closes, its spec leaves `OPEN.md` in the same pass;** if Dann numbers a new
-   one, its spec enters `OPEN.md` and its mark enters `STATE.md` §THE TRACKER.
-   **A new debt or an unsettled question goes to `OWED.md`, not here.** `STATE.md`
-   is the session's state; `OWED.md` is what is open and not moving.
-
-   **AND CHECK WHERE THE RULINGS LANDED. Learned the hard way 2026-09-20:** moving
-   a closed item's account to `LOG.md` can carry Dann's rulings into the archive,
-   which this page says is not authoritative. **Six of his rulings went that way in
-   one pass and were only caught because the next move was checked first.** Before
-   you move an account, grep each ruling it carries and confirm it also lives in
-   `OPEN.md`, `CONTRACT.md` or `PRODUCT.md`.
-1b. **Tick `SCHEDULE.md` from the day's memos and reports. Added 2026-09-30 after Dann rediscovered a walk done on 2026-09-24 that no schedule line recorded.** For every `memo-*` or `report-*` written today, find the `SCHEDULE.md` or `QUEUE.md` line it answers and mark it there, with the file name. A ruling made inside a brief is copied to `OPEN.md`, `PRODUCT.md`, or `SCHEDULE.md` LATER in the same pass; a brief is not a ruling's home.
-2. **Move what closed to `../sessions/LOG.md`.** Ruled by Dann 2026-09-01:
-   **`STATE.md` holds only what is open. Anything that closes moves to `LOG.md` at
-   the close of the session that closed it.** Size is an output, not a target.
-   **Tripwire, not an allowance: over 600 lines means something failed to move.
-   Go and find it.**
-3. Add anything hard-won to `ENVIRONMENT.md`, **and add its row to the index at
-   the top of that file.** A trap nobody can find costs the next session the same
-   hour it cost the last one.
-4. Ask Dann to commit. **No agent commits, ever, and no agent stages.** The
-   narrowed rule, ratified by Dann 2026-09-13, is in `CONTRACT.md` §5: every
-   git command that WRITES is forbidden; `status`, `log`, `diff`, `show`,
-   `ls-files` and `check-ignore` are allowed.
+0. **Check every open line against `git log` first.** Run `git --no-optional-locks --no-pager log --since=<the last close> --format="%h %s"` and, for every row or item a commit names, set its line in `QUEUE.md`, `SCHEDULE.md`, and `STATE.md` §THE TRACKER in the same pass. A walk Dann reports goes into all three the moment he reports it, not at the close. (Added 2026-10-11 after an audit found 28 stale lines: `../sessions/audit-memory-vs-git_r1_2026-10-11.md`.)
+1. **Update `STATE.md`:** the one thing, the handover, the tracker marks. If an item closes, its spec leaves `OPEN.md` and its row goes to `STATE-archive.md` in the same pass; if Dann numbers a new one, its spec enters `OPEN.md` and its mark enters the tracker. A new debt or unsettled question goes to `OWED.md`. Ruled by Dann 2026-09-01: `STATE.md` holds only what is open; anything that closes moves out at the close of the session that closed it. Tripwire, not an allowance: over 200 lines means something failed to move.
+2. **Before any row moves, check where its rulings landed.** Grep each ruling the row carries and confirm it also lives in `OPEN.md`, `CONTRACT.md`, or `PRODUCT.md`; a ruling made inside a brief is copied there in the same pass, because a brief is not a ruling's home. (Six rulings nearly went to the archive on 2026-09-20.)
+3. **Update `QUEUE.md`:** a shipped row becomes one line until Dann walks it, then its history moves to `QUEUE-archive.md` verbatim. Tick `SCHEDULE.md` from the day's `memo-*` and `report-*` files, with the file name.
+4. Add anything hard-won to `ENVIRONMENT.md`, with its row in the index at the top.
+5. Ask Dann to commit. No agent commits, ever, and no agent stages (`CONTRACT.md` §4; the two branch exceptions are there too).
 
 That is the whole ritual. There is no handover document and no opener to write.
 
 ---
-*Created 2026-08-13 from `claude/e48-thread-opener_v1_2026-08-13.md`, read in full.
-Everything in this folder is SOURCED from that opener unless marked otherwise.*
+*Created 2026-08-13 from `claude/e48-thread-opener_v1_2026-08-13.md`; r1 draft 2026-10-12 after the split of the archives. The accounts of why the folder is split this way are in `CONTRACT-archive.md` and `STATE-archive.md`.*

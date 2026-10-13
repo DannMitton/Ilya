@@ -1,0 +1,65 @@
+device check, two rows whole: CPU and MPS match
+   cpu: Ш. И. И. | mps: Ш. И. И.
+   cpu: Сангъ, сигъвыѣлѣ ар-миз, тягъ как же на ни | mps: Сангъ, сигъвыѣлѣ ар-миз, тягъ как же на ни
+device used: mps
+S p1s1r2: 4 chunks
+S p1s2r2: 5 chunks
+S p2s1r2: 5 chunks
+S p2s2r2: 5 chunks
+S p2s3r2: 6 chunks
+S p3s1r2: 4 chunks
+S p3s2r2: 7 chunks
+S p3s3r2: 7 chunks
+S p4s1r2: 4 chunks
+S p4s2r2: 5 chunks
+S p4s3r2: 5 chunks
+S p5s1r2: 5 chunks
+S p5s2r2: 5 chunks
+S p5s3r2: 6 chunks
+S p6s1r2: 4 chunks
+S p6s2r2: 6 chunks
+S p6s3r2: 6 chunks
+S p7s1r3: 3 chunks
+T p1s1r1: 7 chunks
+T p1s2r1: 7 chunks
+T p2s1r1: 5 chunks
+T p2s2r1: 3 chunks
+T p2s3r1: 7 chunks
+T p2s4r1: 6 chunks
+T p3s1r1: 7 chunks
+T p3s2r1: 5 chunks
+T p3s3r1: 6 chunks
+T p4s1r1: 5 chunks
+T p4s2r1: 7 chunks
+T p4s3r1: 3 chunks
+T p5s1r1: 7 chunks
+T p5s2r1: 6 chunks
+T p5s3r1: 6 chunks
+T p6s1r1: 8 chunks
+T p6s2r1: 4 chunks
+T p6s3r1: 7 chunks
+T p6s4r1: 2 chunks
+K p1s1r1: 6 chunks
+K p1s2r1: 5 chunks
+K p1s3r1: 6 chunks
+K p2s1r1: 4 chunks
+K p2s2r1: 7 chunks
+K p2s3r1: 5 chunks
+K p3s1r1: 6 chunks
+K p3s2r1: 7 chunks
+K p3s3r1: 4 chunks
+K p4s1r1: 7 chunks
+K p4s2r1: 8 chunks
+K p4s3r1: 3 chunks
+M p1s1r1: 6 chunks
+M p1s2r1: 6 chunks
+M p2s1r1: 6 chunks
+M p2s2r1: 6 chunks
+M p2s3r1: 5 chunks
+M p2s4r1: 5 chunks
+longest whole-row output, tokens: 210
+whole rows that ended without the end token: 0 []
+chunks per row: {"S p1s1r2": 4, "S p1s2r2": 5, "S p2s1r2": 5, "S p2s2r2": 5, "S p2s3r2": 6, "S p3s1r2": 4, "S p3s2r2": 7, "S p3s3r2": 7, "S p4s1r2": 4, "S p4s2r2": 5, "S p4s3r2": 5, "S p5s1r2": 5, "S p5s2r2": 5, "S p5s3r2": 6, "S p6s1r2": 4, "S p6s2r2": 6, "S p6s3r2": 6, "S p7s1r3": 3, "T p1s1r1": 7, "T p1s2r1": 7, "T p2s1r1": 5, "T p2s2r1": 3, "T p2s3r1": 7, "T p2s4r1": 6, "T p3s1r1": 7, "T p3s2r1": 5, "T p3s3r1": 6, "T p4s1r1": 5, "T p4s2r1": 7, "T p4s3r1": 3, "T p5s1r1": 7, "T p5s2r1": 6, "T p5s3r1": 6, "T p6s1r1": 8, "T p6s2r1": 4, "T p6s3r1": 7, "T p6s4r1": 2, "K p1s1r1": 6, "K p1s2r1": 5, "K p1s3r1": 6, "K p2s1r1": 4, "K p2s2r1": 7, "K p2s3r1": 5, "K p3s1r1": 6, "K p3s2r1": 7, "K p3s3r1": 4, "K p4s1r1": 7, "K p4s2r1": 8, "K p4s3r1": 3, "M p1s1r1": 6, "M p1s2r1": 6, "M p2s1r1": 6, "M p2s2r1": 6, "M p2s3r1": 5, "M p2s4r1": 5}
+seconds per row on mps: mean 1.31, median 1.19, n 54
+seconds per chunk on mps: mean 0.40, median 0.40, n 302
+seconds per box on mps: mean 0.27, median 0.26, n 725

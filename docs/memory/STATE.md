@@ -1,577 +1,158 @@
 # STATE — where we are
 
-**Rewritten clean at the close of E.48, 2026-08-13. Again at E.51, 2026-08-15.
-Again at E.52, 2026-08-16.** Updated at the close of every session. This is the
-only file that changes often, and it is the handover.
+r1 draft, 2026-10-12. Updated at the close of every session; this is the handover. It holds only what is open. Closed rows, superseded floors, and the colophons of 2026-09-19 to 2026-09-22 are in `STATE-archive.md`, verbatim; the older archive is `../sessions/LOG.md`. Tripwire: over 200 lines means something failed to move.
 
-Repository: branch `Shane`.
+Repository: branch `Shane`. **This file never names HEAD, and cannot.** It names a **floor**: everything below was true at or before the floor, and a tree ahead of it tells you only that work has landed since. **The push range is the check, not the memo.**
 
-**THIS FILE NEVER NAMES HEAD, AND CANNOT.** The commit carrying this line cannot
-name itself, which is why every previous attempt was stale within the hour and
-cost a minute at the next session's open, twice.
+**Floor: `9f9e896`** (unchanged at the handover of 2026-10-12). The earlier floors, `9d1baa6` (2026-09-27, walked by Dann on the alias), `1987157` (2026-09-24), `f6d2184` (2026-09-22, walked in French: *"This looks as it should!"*), and the thirty-nine before them, are listed in `STATE-archive.md` and `../sessions/LOG.md`.
 
-**FLOOR MOVED at the close of N.174, 2026-09-27, to `9d1baa6`**, walked by Dann on the alias (THE ONE THING). **Before that, at the close of 2026-09-24, to `1987157`**, walked on Dann's library in French by the desk; `190cc74` above it is walked in part (THE ONE THING, "The tree at this close"). The older floor text follows for its history.
-
-What it names instead is a **FLOOR**: everything described below was true at or
-before **`f6d2184`**, "N.165: the loupe reads measure ownership from the score, not from an
-id's spelling", shipped 2026-09-22 13:49, all five gates at baseline and **walked by Dann on
-the alias in French 2026-09-22 13:54**: *"This looks as it should!"* (the previous floors,
-`1b0d645`, `b29ee8c`,
-`b29ee8c`, `8bd1aff`, `5f7be82`, `9b05ddd`, `9782d8e`, `44c5830`,
-`46ac52f`, `2fb7516`, `1d18514`,
-`0f7375c`, `46f1d31`, `9801308`, `a86e985`, `fda5b9c`, `8cb9b51`, `7e28272`, `f4e31a2`, `6e98057`,
-`fe4d2c7`, `7c596f7`, `aca2dbb`, `76b24a3`, `eb918ed`,
-`d6580af`, `8bb406c`, `78f3db8`, `490c12d` and earlier, are in
-`../sessions/LOG.md`). A floor cannot go stale,
-because further commits only move HEAD forward and never make the floor false.
-If the tree is ahead of it, that is expected and tells you only that work has
-landed since.
-
-**The ten superseded floors that used to be listed here, `2b81f5a` through
-`2d54185`, are in `../sessions/LOG.md`, block 5.** They are closed, and closed
-things do not live in this file.
-
-**The push range is the check, not the memo.** A floor that predates its own content
-is the stale number this paragraph exists to prevent.
-
-**Ask Dann for the state in one line. You do not WRITE with git, ever.**
-Read-only git is allowed under the narrowed CONTRACT §5, ratified 2026-09-13:
-`status`, `log`, `diff`, `show`, `ls-files`, `check-ignore`. Asking Dann is
-still the courtesy and still the habit.
+Ask Dann for the state in one line. Read-only git is allowed (`CONTRACT.md` section 4); asking is still the habit.
 
 ```
-git -C ~/Desktop/ilya-rewrite --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-pager status --porcelain
+git -C ~/Desktop/ilya-rewrite --no-optional-locks --no-pager log -1 --format="%H %cI" && git -C ~/Desktop/ilya-rewrite --no-optional-locks --no-pager status --porcelain
 ```
 
 ---
 
 ## THE ONE THING
 
-> ### HANDOVER OF 2026-10-11 23:55 (the Opus desk thread that followed the 19:45 close). READ FIRST.
+**The scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.** Set 3 scored 93.8 (QUEUE row 76); its four low songs were opened and two fixes shipped (row 77, `b80b543`); set 4 is sealed and its final test is READY (row 86). The goal behind it: a working beta. PDF and photograph stay in it. MIDI is OUT, ruled by Dann 2026-10-01 01:25 (`PRODUCT.md`, "Closed and not to be reopened").
+
+### CLOSE OF 2026-10-12 20:15 (Opus desk; the thread compacted, so Dann closed it). THE NEXT DESK STARTS HERE.
+
+> **Floor unchanged, `9f9e896`.** Nothing shipped since. The order of work, one paste at a time, each after Dann says the last is done:
 >
-> **Floor `fd1c86a`** (Dann's ship 23:51, all eight gates at baseline; gate 4 is now 2448, see `ENVIRONMENT.md` "WHAT THE DESK LEARNED ON 2026-10-11 LATE"). It merges `cloud-lane` up to `1a35871` through `1a02b11`: rows 72, 70, 73, 68, 75, 62, 67, 69, and 34 are in the tree, **none walked by Dann yet**. Row 77 shipped earlier as `b80b543` (set 3 from 6 to 7 of 10). THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
+> 1. **Row 88 is DONE** (Code on the Mac, report written 2026-10-12 20:07, `../sessions/report-code-trocr-teacher_r1_2026-10-12.md`; QUEUE row 88 holds the numbers). The model in ink-gap chunks reads ѣ 21 of 21, word-final ъ 98 of 101, syllables 385 of 493; і 6 of 6 only with a one-line map from Latin i. Code recommends it as row 82's teacher. The next desk reads the report whole and amends row 82's brief to use it. The desk wrote "RUNNING" here at 20:15 without checking the disk; corrected 20:17.
+> 2. **Row 89's Fable review landed at 20:16: SEND WITH AMENDMENTS, seven of them** (`../sessions/review-fable-brief-row89_r1_2026-10-12.md`, md5 `517ccac4badd299d9e96646b191d3404`). Apply all seven as r2 (`brief-code-4f-quadruplet-and-double-flat_r2_2026-10-12.md`), then set row 89 READY. Headline: the brief named the wrong function (`lookForTupletNumber` answers only a 3; the reader calls `lookOverNotes`). Row 89 runs on the Mac, after the ship.
+> 3. **The ship, now unblocked** (row 88 is done). One paste for Dann: merge `origin/cloud-lane-2` (row 83 at `e7acf7f`, row 87 at `aac1949`), add the untracked files of rows 78a to 88, move the ship script's gate baselines (`~/Downloads/ilya-ship.sh:116-117`, with a backup), check for iCloud " 2" duplicates, then ship. Known counts before the merge: gate 4 2479, gate 5 675 passed and 5 skipped, gate 2 242 (row 87 takes it to 248). Row 83 removes ignored files from gate 4's count, so measure the merged gates; do not compute them. Row 79 is partly built (STATE handover below, update 11:42); confirm with Code whether it finished before shipping.
+> 4. **After the ship:** row 82 (paste ready); row 84 (fill in the shipped sha); row 84 also carries one sentence in `AGENTS.md` naming the cloud-lane exception (`OWED.md`, found 20:13); then row 89; check row 71 (held on `cloud-lane`) against the ruled voice-family table.
 >
-> **Where THE ONE THING stands.** Row 80 measured (`../sessions/report-code-the-russian-line-by-its-underlay_r1_2026-10-11.md`): no rule separates the Russian line from the French or English printed beside it in split bars yet. Leads, in the desk's order: (a) **row 81**, a measure: Tesseract with Russian only and with the Cyrillic script model on the underlay strip, plus "one place read twice is one event"; (b) **row 82**, fine-tune a Russian Tesseract on rendered lines that include ѣ, ѳ, ѵ, and і (N.184, ruled in by Dann 23:32); (c) N.135, the underlay reader; (d) the pasted poem's syllable counts for the row's language. **Neither row 81 nor 82 is written. Both go through Fable before Code** (`CONTRACT.md`, the Fable-review paragraph). Then held-out set 4 is made, because set 3 is now spent.
+> **Dann's rulings this thread, each homed:** baritone and bass families (`PRODUCT.md`); the twelve French strings (row 85, built); "primo passaggio" and "secondo passaggio" in full (`PRODUCT.md`); the tidy's administrative choices deferred to the desk (14:48); 4F opened (19:58); quadruplets matter, "triplets are not the only tuplets" (20:10, row 89).
 >
-> **Ready and not sent:** rows 78a, 78b, 78c (in that order), then 79, all Fable-reviewed, for the cloud lane (`QUEUE.md`). Send through Dann's Chrome or the cloud prompt, each brief pasted whole between BEGIN and END markers.
+> **Open, not established:** set 4's bar counts above the truth (4A 57 of 54, 4E 45 of 42) and partial metre judging (4D 0 of 24, 4J 23 of 42).
 >
-> **Held:** row 71 (N.182, suggesting a key) is on `cloud-lane` after `1a35871` and is not merged. It is reworked after the voice-family table (`OPEN.md` "ROW 71's KEY LINES, RULED"). **N.182 has no line in THE TRACKER; NOT ESTABLISHED whether it ever had one.**
+> **Set 4's label map** (4A to 4J, glob order) is private: `~/Downloads/_desk-heldout4-private/row86-label-map.md`. Only 4F may be opened.
+
+### HANDOVER OF 2026-10-12, the night thread from 01:28 (Opus desk, Dann asleep from about 01:37). READ FIRST.
+
+> **Floor unchanged, `9f9e896`.** Nothing shipped; nothing committed. THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
 >
-> **Next desk, one at a time:**
-> 1. Present the voice-family draft r2 family by family, soprano first, reading each family whole before showing it (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-voice-families_r2_*`, 262 rows; `PRODUCT.md` "What Ilya watches for depends on the voice"). The desk has not read r2 whole.
-> 2. Write rows 81 and 82; Fable reviews; then Code.
-> 3. Send 78a to 78c and 79.
-> 4. French owed: row 66's, row 70's five desk-derived sentences, row 67's three open items.
-> 5. Taste calls owed: row 75's seven-length row wrap at 375 px; row 62's "Saved" placement; the 32nd and 64th as tuplet units.
-> 6. A small Code row: `markup-pages.test` counts git-ignored `.musicxml` under `tools/e16-harness/output/`; it should use `git ls-files` (why gate 4 read 2448 on the Mac).
-> 7. Offered to Dann, not asked: hide row 66's voice-blind primo line for trebles now, before the voice-family table lands.
+> **RESULT 2026-10-12 19:55: THE FINAL TEST ON HELD-OUT SET 4 (row 86) READS 97.5 PASS, 1422 of 1456 printed notes, on the singer's path** (headless Chrome, WebGPU, the deployed alias at `9f9e896`, reader `homr-web@0.2.0-ilya.7/465`, deployment unchanged before and after; `../sessions/report-code-the-final-test-set4_r1_2026-10-12.md`, read whole by the desk). **Nine of ten songs pass; 4F reads 89.2 BELOW** (91.7 with its UNSURE notes set aside). 4F is the song whose truth carries the most uncertainty (the desk holds the label map privately; its truth notes name a blotted note and two bars of double flats); whether its misreads are the reader's or the truth's is NOT ESTABLISHED, and opening it is Dann's call. Unexplained in the lines: bar counts above the truth (4A 57 of 54, 4E 45 of 42) and partial metre judging (4D 0 of 24, 4J 23 of 42). Set 4 is now spent as a verdict for any song that is opened.
 >
-> **Still owed, carried from 19:45:** a Quebec source for octave numbering (lead: Karine St-Pierre, Dann's call); a standing rule for which underlay line a truth file scores when the voice splits between languages (DESK DEFAULT in row 77's brief §3.3: the Russian line).
+> **4F OPENED by Dann's word, 2026-10-12 19:58, and corrected.** Of its 11 misreads, 5 were the truth file's (mm. 2, 6, 14, 16, 17 counting the opening bar as m. 1; file indices 1, 5, 13, 15, 16; each checked by the desk against the scan at 300 dpi; the reader was right), 2 are the reader's in m. 22 (it read B♭4 where the print has a double flat, B𝄫4; Dann read mm. 21 to 23 at 20:05 and confirmed the truth), and 4 are the reader's in m. 24 (a printed "4" bracket, four quarters in the time of three, read as triplets). The corrected truth is `truth/<4F>.truth.corrected.json` in the private folder. **Corrected scores: 4F 94.1 BELOW; set 4 in total 97.9 PASS, 1427 of 1456; 9 of 10 songs pass.** The two reader gaps are general: a double flat read as a single flat, and a quadruplet read as a triplet.
 >
-> **This thread's mistakes, each owned when made:** "boxes move whole" (`paginate.ts` already breaks them); "page 1 fills under the rule" (drawing it showed otherwise); "Ilya never needs Tesseract's spelling" (Dann: photographed scores are the common path); citing Dann's 19:58 sentence as a constraint mid-design; misreading 19:47 as dropping the per-comment remedy; row 80's brief saying homr has no positions (Fable caught it; corrected to Code). Ship-paste order and iCloud " 2" duplicates: `ENVIRONMENT.md`.
+> **Done this thread (each in its file):**
+> 1. **Row 82 is READY** (`../sessions/brief-code-prereform-model_r2_2026-10-12.md`, all fifteen of Fable's amendments). For Code on the Mac after rows 78a to 79. It reads `~/Downloads/_desk-heldout-exclusions_2026-10-12.md` first (set 4 now listed).
+> 2. **Held-out set 4 chosen and downloaded, sealed** in `~/Downloads/_desk-heldout4-private/` (ten pre-1918 songs, three bass-clef; J swapped to Glière Op.12 No.6 because set 2 holds Artsybushev Op.5 No.1; manifest there). Truth drafts: two Opus helpers running from about 01:53 (brief in the same folder).
+> 3. **Baritone and bass ready to present**: `../sessions/present-voice-families-baritone-bass_r1_2026-10-12.md`. Draft r3 with eight new rows: `Insights Research/_synthesis/draft-voice-families_r3_2026-10-12.md`; claims from eight articles read whole: `claims-baritone-bass_r1_2026-10-12.md` there. Not read: Nava 1899, Nava 1872, Marzo 1906 (no text layer).
+> 4. **French owed, drafted for Dann's ruling**: `../sessions/draft-french-owed_r1_2026-10-12.md` (row 66's twelve strings, row 70's five as built, row 67's three items: two now sourced from the OQLF, one closed by his 04:58 ruling).
+> 5. **Rows 83 and 84 written and Fable-reviewed** (`../sessions/review-fable-briefs-83-84_r1_2026-10-12.md`). **Row 83 RUNNING in the cloud lane on a new branch `cloud-lane-2`** (session https://claude.ai/code/session_019AMrv87SSa5Rtk4X3pxvBk). Row 84 waits for the ship of rows 78a to 79.
+> 6. **Debts paid:** SCHEDULE week 5 housekeeping (`PRODUCT.md` §"A hue names one idea"; INBOX-17 and -31 were already there); St-Pierre §3.1.1 re-verified against the PDF, and her Chapter 4 does give performance lengths (`OWED.md`).
 >
-> ### Older handovers: all in `../sessions/LOG.md`, the latest block "handover of 2026-10-11 19:45 ... moved at the close of 2026-10-11 23:55". Every block before it was already there.
-
-
-
-## THE TRACKER
-
-**The goal: a working beta. PDF and photograph stay in it. MIDI is OUT, ruled by Dann 2026-10-01 01:25 (`PRODUCT.md`, "Closed and not to be reopened").**
-
-Marks: `[x]` closed · `[ ]` open · `[D]` Dann's to rule · `[~]` parked
-
-**The specs these marks point at live in `OPEN.md` from 2026-09-13.** This
-section carries the marks; that file carries the items.
-
-**AND THE ORDER THEY ARE BUILT IN LIVES IN `SEQUENCE.md` from 2026-09-15.** This
-section says what is open; that file says what comes first and why. **Six
-dependencies fix the order and everything else floats**; the rest of this file
-does not repeat them.
-
-
-### Numbered 2026-10-11
-
-- `[ ]` **N.184. Ilya reads the pre-reform spelling (ѣ, ѳ, ѵ, і) in a score's underlay.** Ruled in by Dann 2026-10-11 23:32 (*"We need this capability"*); DESK DEFAULT number. Plan: rows 81 (baseline) and 82 (a fine-tuned Russian model). Spec in `OPEN.md`.
-
-- `[~]` **SHIPPED `fd1c86a` 2026-10-11 23:51 (QUEUE row 75); not walked.** **N.183. The 32nd and the 64th in the editing controls (keys 2 and 1, as in Finale).** Offered by the desk 18:58 from the Mussorgsky bar; ruled in by Dann 18:59 (*"yes, add Finale's other two digits"*). DESK DEFAULT number. Spec: the brief, QUEUE row 75.
-
-### Numbered 2026-10-09
-
-- `[~]` [CHECKED 2026-10-11 19:40 against git log: **Shipped `d0b65a9`; Dann's walk is not recorded.**] **N.181. A word after «не» that the dictionary does not hold is looked up joined to «не».** Offered by the desk 2026-10-09 01:21 from Dann's walk (*Without Sun*, no. 1: «не проглядная» drew [pro], unreduced); ruled in by Dann 01:23 (*"yes"*). DESK DEFAULT number (N.180 was struck). Spec in `OPEN.md`.
-
-### Found unlisted 2026-10-02
-
-- `[~]` [CHECKED 2026-10-11 19:40 against git log: **Shipped `e3e2c33`; DONE is Dann's walk.**] **N.12, increment 2. The old spelling's endings.** Ruled in by Dann 2026-08-08 (*"let's aim for completeness"*, as `packages/dictionary/src/pre-reform-normalizer.ts:92-93` records it) and never built; it was in no memory file until Dann met its effect on 2026-10-02 19:40 ([go] under «шумнаго»). The desk takes his words as settling the one question the 2026-08-08 notes left open: -аго is sung as -ого. `QUEUE.md` row 25.
-
-### Numbered 2026-10-01
-
-- ~~**N.180.**~~ **STRUCK 2026-10-01 14:20 as a DUPLICATE of N.135** ("The page reader reads the text underlay", ruled by Dann 2026-09-14). The desk numbered it at 03:21 without searching the tracker (tether 16). Its notes now sit under N.135 in `OPEN.md`.
-- `[~]` [CHECKED 2026-10-11 19:40 against git log: **Shipped `a3dde11`; 'this measure' and Undo walked 2026-10-09; 'to the end', 'whole piece' and Place from here are not walked.**] **N.179. Clear placements by scope, and place from here (after Finale).** Ruled ready for a brief by Dann 2026-10-01 02:43; DESK DEFAULT number. `QUEUE.md` row 14.
-- `[ ]` **N.177. Dynamics: a layer the singer can add and edit, and dynamics read from MusicXML.** Numbered by Dann 2026-10-01 02:39. After N.120. Spec in `OPEN.md`.
-- `[ ]` [CHECKED 2026-10-11 19:40 against git log: **Widened to the scan reader; first reading by homr shipped `0976735`; tempo words and dynamics from scans are unbuilt.**] **N.178. Reading tempo words and dynamics from scans and photographs.** Numbered by Dann 2026-10-01 02:39. A research item, measured on real pages before any accuracy is promised. After N.177. Spec in `OPEN.md`.
-- `[x]` [CHECKED 2026-10-11 19:40 against git log: **Shipped `a3b239e`, walked 2026-10-09, legend moved to the header line.**] **N.176. The Markup legend explains the stems (up = close timbre, down = open timbre).** Asked by Dann 2026-10-01 01:51 from his dissertation, Appendix B; DESK DEFAULT number. Brief `../sessions/brief-code-markup-legend-stems_r1_2026-10-01.md`; French PROPOSED, awaiting his ruling.
-- `[ ]` **N.175. Video walkthroughs, English and French, on an Ilya YouTube channel.** **NUMBERED BY DANN 2026-10-01 01:15.** Made from the finished build; the Guide links to them. Spec in `OPEN.md`.
-
-### Numbered 2026-09-24, evening
-
-- `[ ]` **N.173. How Insights chooses what to say: the curation rules.** **2026-09-25: seven sections on how Insights speaks ruled into `PRODUCT.md`; the rules themselves still a living draft.** **NUMBERED BY DANN 2026-09-24 23:45**, a living draft, deliberately not ruled. Draft `../sessions/draft-curation-rules_r1_2026-09-24.md`; spec in `OPEN.md`.
-
-- `[ ]` **N.172. The singer says how experienced they are (Dreyfus's five stages), and Insights adjusts.** **2026-09-25: the intake is RATIFIED in both languages (14:27 to 14:51); built with N.168's first slice.** **NUMBERED BY DANN 2026-09-24 23:14.** Spec in `OPEN.md`. Built with the first Insights connections that use the ranking, not before (the desk's placement; **agreed by Dann 23:16**).
-
-- `[x]` **N.171. Switch on the `#` repair.** CLOSED by Dann 2026-09-28 19:46; shipped `6ede257`. Account in `../sessions/LOG.md`.
-
-### Numbered 2026-09-23
-
-- `[ ]` **N.168. Insights intake: filling the three stores.** **NUMBERED BY DANN 2026-09-23 17:29**, *"we should engage in it ASAP."* The plan is `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md` (seven steps: condition map, frequency run, coverage audit, targeted extraction, composing, Dann's vetting, encoding and tests). It rests on the five Insights principles ratified the same afternoon (`PRODUCT.md`, "What Insights is for" to "How Insights stays trustworthy"). Spec in `OPEN.md`. **2026-09-23 late: steps 1 to 3 done, step 2 shipped `10e090c`, step 4 under way (the READ THIS FIRST block).**
-- `[ ]` **N.170. Outside eyes: refine Ilya with singers and outside reviewers.** **[AUDIT 2026-09-30: placed by Dann 2026-09-24 21:03 in weeks 5 and 6, `SCHEDULE.md`; the "unscheduled, weeks 3 and 4" below is superseded.]** **NUMBERED BY DANN 2026-09-24 15:54.** Seven steps, spec in `OPEN.md`; the review packet is step 2. Unscheduled; the desk proposed weeks 3 and 4.
-
-### Numbered 2026-09-22
-
-- `[~]` [CHECKED 2026-10-11 19:40 against git log: **Shipped `350a2e5`; whether Dann saw it in French is not established.**] **N.167. A French singer can sit through the whole reader wait reading English.**
-  **RULED IN BY DANN 2026-09-22**, on the desk's revised recommendation. **Found by Code**
-  while checking its own string ship. **OBSERVED, and this part is solid:** in the browser
-  pane the drawer was in French, its toggle offering « English », and the page reader's
-  waiting line came up in English and stayed English for the whole wait. **CODE'S READING of
-  the mechanism, NOT established by the desk:** the line's text is fixed once from the
-  `language` value in play at that moment (`ScoreUploader.svelte:134`) and never
-  re-translated, so a restore beginning before the stored language loads stays English
-  throughout. **It predates the 2026-09-22 string replacement and is not caused by it.**
-  **Dann's own screen disagrees with the pane:** his screenshot the same morning showed
-  « Préparation du lecteur de page » in French on the alias, **so whether he ever sees the
-  English is NOT ESTABLISHED.** **Why it is not a parity tidy-up:** `PRODUCT.md` §"Both
-  languages, start to finish", stated by Dann the same day. A singer who cannot read English
-  gets no information at all, for about a minute, **on the one screen whose whole job is to
-  explain why nothing is happening.** Spec in `OPEN.md`.
-
-- `[ ]` **N.163. Ilya shows a singer a word that is not on the page.** **RULED IN BY DANN
-  2026-09-22** from N.146's walk finding 4, on the desk's recommendation that it meets the
-  freeze rule's false-statement test. The OCR read «То» as «Го» (the page shows a stem with
-  a bar across both sides; the reading has the bar on the right only), **and Transcription
-  then drew it as `'go` with the gloss "go"**, so a false word reached the singer with a
-  confident gloss beside it. Spec in `OPEN.md`. **NOT ESTABLISHED: whether the fix belongs
-  at the OCR layer, at the dictionary seam, or in how an unknown word is presented.**
-- `[x]` [CHECKED 2026-10-11 19:40 against git log: **Remainder absorbed by the Insights page review (OPEN.md) and rebuilt in `dfad53d` and `88529f8`.**] **N.164. Insights states two things at once that cannot both hold.** **2026-09-25: lines 3 and 4 FIXED, shipped `f5decd3`, seen by the desk on the alias; the compass and the empty region remain.** **RULED IN BY
-  DANN 2026-09-22** from N.146's walk finding 7. On a read with no typed range it prints
-  *"Without the range you typed, this page cannot say whether this key suits you."*
-  **immediately followed by "Nothing in this piece is flagged for your voice."** Also on the
-  same screen: a compass of **A3 to F♯6**, implausible for a sung line in that song, and a
-  tall empty region at the top of the Insights box. Spec in `OPEN.md`. **All three are NOT
-  ESTABLISHED as faults until the code is read.**
-- `[ ]` [CHECKED 2026-10-11 19:40 against git log: **Reloads are fast after the first (`bbe524b`); the first-reload cost remains.**] **N.166. A stored scan may need the page reader to redisplay.** DESK DEFAULT number,
-  found by the desk 2026-09-22 while investigating N.165. **The same song, the same library,
-  the same origin, in the desk's own tab: the score never drew**, and the drawer sat on
-  `upload.status.preparingReader` for over twenty seconds with no PARTITION receipt.
-  **The desk's instrument was sound**: `Kabalevsky T05` rendered in the same tab, 28 SVGs
-  and 834 elements. **If real, every scan-derived song re-runs the reader on every load**;
-  Dann's 23-page PDF took 97.2 s on 2026-09-17. **NOT ESTABLISHED**, and the brief says to
-  report it rather than fix it. Same brief as N.165. **ESTABLISHED REAL AND MEASURED BY CODE 2026-09-22, and NOT FIXED**,
-  per the brief. `ScoreUploader.svelte:771-776` restores a song by calling
-  `handleFile(file, restore.answers)`, **which sends the stored ink back through
-  `ingestScoreFile` with `readPages`**, so the page is read again from scratch. **Measured
-  after a reload of a ONE-page PDF: « Préparation du lecteur de page » showed from 3.8 s to
-  61.3 s, and the score appeared at 61.3 s.** Dann's 23-page PDF would pay about its 97.2 s
-  read on every reload plus the warm-up, **which is an estimate from the one-page timing,
-  not a measurement.** **The string says "This will only happen once."**
-
-### Numbered 2026-09-21
-
-- `[ ]` **N.162. A caret and a note compete for the same thumb.** Numbered 2026-09-21,
-  DESK DEFAULT number, split off at N.153's close **on Dann's ruling to close N.153 rather
-  than hold it open for this.** **Measured by Code's stage 5 scan, 2026-09-21: a caret's hit
-  centre sits 15.6 to 21.4 px from the nearest note's hit centre**, and `nearestTarget` pools
-  notes and carets and resolves by nearest centre, so the catchment around a caret is about
-  eight to ten pixels. A thumb that drifts past it selects the note and the insert does not
-  happen. **It is a different mechanism from N.153's**, which was spacing: caret-to-caret now
-  clears 44 px and this does not move with it. **Clause 13's literal words are met and its
-  reasoning is not:** the clause was prompted by a caret 22 px from a note, and the distance
-  is now worse than that. **NOT ESTABLISHED: whether a note must stay tappable inside
-  Corrections**, which decides the shape of any fix; the desk has not read that interaction.
-  **Clause 3's fallback condition may be live**, and Dann hears about it before a chip row is
-  built. Spec not yet written.
-
-- `[ ]` **N.160. The work, and its two views.** DESK DEFAULT number. **The model is Dann's**
-  (`PRODUCT.md`). **STEPS 1, 2 AND 3 ARE CLOSED 2026-09-21**, shipped `1d18514`, `2fb7516` and
-  `46ac52f`, each walked. The heal wrote 14 of his 96 seats and the dry run afterwards reads
-  91 address, 1 rejected, 4 unfound. **Steps 4 and 5 wait until after 2026-10-30.** Spec in
-  `OPEN.md`, plan in `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`. **The deferred
-  ruling is STILL NOT ASKED, and not because the count is missing:** it is five notes, all
-  «одинокая», and Code's reading is that they may be blocked by a seat that already holds the
-  word rather than orphaned by a word that left. **Settle that before putting it to Dann.**
-### Numbered 2026-09-20
-
-- `[ ]` **N.157. Replacing a score does not re-derive the seats.** Numbered 2026-09-20,
-  DESK DEFAULT number. **The defect under the period.** A replacement keeps every stored
-  seat with its old text, never seats the note the new file adds, and `refreshPairings`
-  updates a seat only on an exact origin match. Spec in `OPEN.md`. **The desk patched
-  Dann's own library by hand as a one-off:** song `39ae51c9`, key `m17-1-2`, « я » to
-  « я. ». That is not the fix.
-- `[~]` [CHECKED 2026-10-11 19:40 against git log: **Shipped `b53a6df` and `9801308`; whether the lyric-line disagreement defect is fixed is not established.**] **N.156. The Sunless 01 fixture is missing its final syllable and a note.**
-  Numbered 2026-09-20, **ruled in by Dann at 14:21**, who chose the real fix over
-  retagging «ка». **Found by N.155's line-end hyphen on the first page it was drawn on.**
-  The Lamm scan sets «о-ди-но-ка-я» on five notes; the fixture has four and never closes
-  the word. **A second defect rides with it: lyric lines 1 and 2 disagree about
-  «непроглядная» from measure 4 and line 2 lags by one note at the end.** Brief
-  `../sessions/brief-n156-sunless01-fixture_r1_2026-09-20.md`.
-
-> **N.155's DUPLICATE OPEN ROW WAS STRUCK HERE 2026-09-21.** It said the item was open
-> with its spec in `OPEN.md`, while the closed row above says it shipped in `b53a6df` and
-> was walked. **Both rows stood from 2026-09-20 to 2026-09-21** and the count of open
-> items was wrong by one for a day. The two deferred items it named are carried on the
-> closed row, so nothing is lost.
-
-### Numbered 2026-09-17
-
-- `[ ]` **N.151. The measure edit surface, with insert.** Numbered 2026-09-17, DESK
-  DEFAULT number. **THIS ROW WAS MISSING UNTIL 2026-09-21 and the item was invisible to
-  the read order:** a 695-line spec in `OPEN.md` that `STATE.md`, `SEQUENCE.md`,
-  `SCHEDULE.md` and `OWED.md` all failed to name. Found when Dann asked how close the
-  open work was. **Insertion is BUILT, as N.92 slice 3** (`correction.ts:48-100`,
-  `:305-345`, `:496`, `:382-433`, reached through `CorrectionSurface.svelte:539-541`),
-  **so the item is tether 22, not a missing capability: it exists and is hard to find.**
-  **IT CARRIES NINE OF DANN'S RULINGS OF 2026-09-17**, and four of them are
-  product-level rather than item-level: WYSIWYG (*"if it appears on Ilya's page, it can
-  be printed"*), no stopping rule for the singer, the edited score comes back out as an
-  edited copy with the singer's own tempo counted, and deliberate destruction only.
-  **Those four want transcribing to `PRODUCT.md`; see `OWED.md`.** Report
-  `../sessions/report-n151-note-entry_r1_2026-09-17.md`. **NOT ESTABLISHED: its size, and
-  where it sits against the release.**
-
-### Numbered 2026-09-16
-
-- `[ ]` **N.92. Notation editing.** Numbered by Dann 2026-08-24. Slices 1 to 3 are
-  shipped, insertion included. **The caret reach is DRAWN and shipped over six commits
-  2026-09-17 to 2026-09-18, and is not usable on a phone: see N.153, which owns that.**
-  Open here: the four singer's marks, tie to the note before, and the page flag for a
-  measure left over.
-  Spec `../sessions/spec-n92-edit-surface_r1_2026-09-17.md`, audit
-  `../sessions/memo-n92-edit-audit_r1_2026-09-17.md`.
-- `[~]` **N.152. Playback of the Markup.** LATER, its own cardinal, asked for by Dann
-  2026-09-17. Spec in `OPEN.md`.
-### Numbered 2026-09-14
-
-- `[ ]` [CHECKED 2026-10-11 19:40 against git log: **The tie crossing no longer waits on N.142 (counted zero 2026-09-24); no week carries it.**] **N.141. The squircle has no grammar. THE HEIGHT RULE CLOSED 2026-09-21**, shipped `6101e01` and walked (*"Yes this is ideal"*). **Dann amended his own one-height ruling on 2026-09-20 to get it**; the amendment is in `OPEN.md` §N.141. **Open here: the squircle across a tie, which waits on N.142**, and the viewBox clamp binding on two notes. No longer `[D]`: the two questions that were his are ruled. Found by Dann on the walk of
-  `d6580af`, 2026-09-14: the ring takes the IPA on one measure and not on three,
-  it is trimmed inside the measure region only sometimes, and an accidental of the
-  taken note can meet its edge. **Marked `[D]` because two of its three questions
-  are his taste, not the desk's:** what the squircle encloses, and whether it may
-  extend past the measure's region. The number is a DESK DEFAULT. Spec in
-  `OPEN.md`, including the permission to re-engrave the measure for the loupe and
-  what that permission costs.
-
-- `[ ]` **N.140. The loupe guarantees a stave space, and scrolls rather than
-  shrinking below it.** **MOSTLY BUILT, found by the code audit 2026-09-24 and recorded on Dann's instruction** (*"That's great news, please update our records"*): only the question of the sideways scroll against a syllable tap remains (`OPEN.md` §N.140). Dann's own design, ruled 2026-09-14, over the desk's
-  recommendation to do nothing; both cases are recorded in `OPEN.md`. **A
-  phone-portrait item:** the desktop branch already derives its magnification to
-  hit a 12 px target (`Loupe.svelte:152`, `:686-691`), and Dann reads the loupe
-  well on his desk. **He owes two things: the floor in CSS pixels, and whether
-  the scroll may take a gesture on a surface where the swipe dismisses and the
-  tap places a syllable.**
-
-- `[ ]` **N.135. The page reader reads the text underlay.** Ruled by Dann
-  2026-09-14. Cost measured the same night in
-  `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. Spec in `OPEN.md`.
-
-### Numbered 2026-09-13
-
-- `[x]` **N.130. Insights has no French. CLOSED 2026-09-24: walked and every ruling seated, `2f955e6`.** About 58 entries at `i18n.ts:1417-1475`,
-  all English in both languages, found while checking the loupe's undo clauses.
-  **Belongs in the release cut's IN bucket:** the ruled release sentence names
-  Insights, and a document in the wrong language is wrong rather than
-  half-built. Spec in `OPEN.md`. **THE DESK DRAFTS THE FRENCH AND DANN RULES ON IT, ruled 2026-09-19**, superseding *"Dann owes the French; nothing is coined"*. His words: *"I prefer to have you suggest translations that I can react to. That saves me cognitive bandwidth."* **So never hand him blank slates.** Draft from the French already in the file, say which entries the glossary came from, flag the choices that are genuinely his, and let him ratify, edit, or decline. **Nothing reaches the tree until he ratifies it**, which is the one clause of the old rule that survives. **BUILT 2026-09-19: all 59 Insights entries are French** (`71ae880`), drafts and rulings in `../sessions/insights-french_r1_2026-09-19.md`. **UNWALKED.** **AND THE ROW'S OWN RANGE WAS WRONG: only 12 of the 59 sat in `:1417-1475`; the other 47 ran `:1476` to `:1522`.** A brief written to the cited range would have fixed twelve strings and reported Insights done.
-- `[x]` **N.131. French parity everywhere else.** **[AUDIT 2026-09-30: CLOSED 2026-09-24, `1987157`, `SCHEDULE.md` week 3 and LOG 7556; the account below is history.]** The 64 or so untranslated
-  entries outside Insights. **DESK DEFAULT on splitting this from N.130, and Dann
-  can merge them with a word:** the two differ in urgency, and one number would
-  bury the release-blocking half. **Its real size is NOT ESTABLISHED** until a
-  triage separates the genuinely untranslated from the words that are identical
-  in French on purpose. Not release-blocking. Spec in `OPEN.md`.
-
-### THE BLOCKING SET IS EMPTY, 2026-08-21
-
-**Nothing blocks the beta.** N.67 (the save function) CLOSED WHOLE 2026-08-18;
-N.72 (no singer can ever receive a fix) CLOSED 2026-08-21; N.58 (MIDI import)
-DEFERRED TO FUTURE DEVELOPMENT by Dann 2026-08-21; N.59 (the reader in the
-browser) PARKED AT TIER 2, answered no, 2026-08-18. **The four rows with their
-full accounts moved to `../sessions/LOG.md` block 10 at the close of
-2026-09-10 late.** Still open inside them and carried here: N.59 step 3, the
-brace rule, is `WRITTEN` and not `DONE`; a singer on Chrome for iPhone can
-never install Ilya to the home screen (Dann to rule).
-
-> **The "Closed and parked" table (N.80, N.81, N.79, N.62, N.63, the colon audit, N.78, N.70, N.71, N.68, N.55b, N.56, N.32, N.55a, N.47, N.69) moved to `../sessions/LOG.md` block 9 at the close of 2026-09-10.** All closed or parked; nothing in it is open.
-
-### The visible list. Built only if a day finishes early
-
-~~**N.62**~~ (now THE ONE THING, 2026-08-23) · ~~**N.63**~~ (closed 2026-08-23) ·
-**N.45's remainder** · ~~the **French colon spacing**~~ (closed as the colon
-audit, `9d314de`) · **N.51** · **N.17** · **N.19** · **N.61** · **N.6** · and,
-unnumbered, **the watch band's English header** (`watchlist.ts:92`, printed
-in French mode; Dann to rule).
-**N.27 now has a home, and the recommendation is IN THE TREE** as a comment at
-the reporting seam (`library.ts`, `Library.save`), recorded by N.67 step 6 and
-deliberately not built: when N.27 is built, `profileStore.saveStore`
-(`profileStore.ts:217-225`, which the step 6 brief cited as `:216-224`) routes
-through that seam. It is the last catch-and-drop of its kind in the tree.
-**N.28** ships on N.67's step 5 binder.
+> **Update 2026-10-12 11:42.** **Set 4's ten truth files are done**, all self-checked, in `~/Downloads/_desk-heldout4-private/truth/` (manifest updated; 4J is post-reform, so nine of ten are pre-reform). **Row 83 is built** on `cloud-lane-2` at `e7acf7f`, for Dann's merge. **Code on the Mac hit its usage limit:** rows 78a, 78b, 78c are WRITTEN and reported; row 79 is partly built (Text and Insights rules done; Insights line breaks, Markup's shared space, the 15 percent check, the after table, and its gates left). All uncommitted on `Shane`. Gates 4 and 5 moved (2461, 673 + 5 skipped) and the ship script's lines are the desk's to move. Code raised `staff-renderer.ts`'s ratchet 3486 to 3489 (DESK DEFAULT: accepted, the brief put the ring's reach in the renderer). One collision for Dann's eye at the walk: the tie between bars 56 and 57 of the Tchaikovsky song runs through two red rings. The section-heading back-fill is 6 of 19 files (`OWED.md`).
+>
+> **Not done, and why:** the `section_heading` back-fill (`OWED.md`) waits for a helper slot; it is about 1,700 rows across 25 files and needs a plan before a helper is sent.
+>
+> **This thread's mistakes, each owned when made:** gave Dann 4F's bars as the files' 0-based indices ("bar 21") while he counts from m. 1, corrected 20:07; told Dann at 14:37 that the ъЪ collapse lifts syllables 295 to 297 (a) and 315 to 317 (c); those are the ѣ rule's gains without the collapse. The collapse's gain with the ѣ rule on is 297 to 304 (a), 310 to 315 (b), 317 to 318 (c) (`../sessions/memo-yat-dictionary-correction_r1_2026-10-12.md`), corrected 14:41; told Dann at 14:13 that set 3's 93.8 was NOT ESTABLISHED on the singer's path without reading row 76's report; it was taken on headless Chrome, WebGPU, the deployed alias, through the file input (`../sessions/report-code-the-final-test-set3_r1_2026-10-11.md`, "The adapter"), corrected at 14:20; stamped six records about forty minutes ahead of the clock, corrected by search and replace (`ENVIRONMENT.md`, night of 2026-10-12); created an empty `docs/sessions/_stage` folder the bridge cannot remove (git ignores it).
+>
+> Older handovers: all in `../sessions/LOG.md`, the latest block "STATE.md handover of 2026-10-12 01:20, moved at the desk thread of 2026-10-12 01:28 onward".
 
 ---
 
+## THE TRACKER
 
-> **Five sections moved to `../sessions/LOG.md` on 2026-09-01, Dann's ruling.**
-> The N.67 document list, the E.54 and 2026-08-16 ruling records, the N.67
-> step 4 split, and the second-score measurement. All verbatim, block 4.
+Marks: `[ ]` open · `[D]` Dann's to rule · `[~]` shipped, not walked, or parked. Specs live in `OPEN.md` (from 2026-09-13); build order in `SEQUENCE.md` (from 2026-09-15; six dependencies fix the order and everything else floats); the week plan in `SCHEDULE.md`; debts and unsettled questions in `OWED.md` (from 2026-09-20). Every row below was checked against `git log` on 2026-10-11 19:40 unless its date says otherwise.
 
-## OWED, and the rulings Dann owes, moved to `OWED.md` on 2026-09-20
+### Numbered 2026-10-11
 
-**Both sections, with their three subsections, are verbatim in `OWED.md`.** They are
-open and not moving, which is why they are no longer here.
+- `[ ]` **N.184. Ilya reads the pre-reform spelling (ѣ, ѳ, ѵ, і) in a score's underlay.** Ruled in by Dann 2026-10-11 23:32 (*"We need this capability"*); DESK DEFAULT number. Plan: rows 81 (baseline, measured) and 82 (a fine-tuned Russian model, READY). Spec in `OPEN.md`.
+- `[~]` **N.183. The 32nd and the 64th in the editing controls (keys 2 and 1, as in Finale).** SHIPPED `fd1c86a` 2026-10-11 23:51 (QUEUE row 75); not walked. Offered by the desk 18:58 from the Mussorgsky bar; ruled in by Dann 18:59 (*"yes, add Finale's other two digits"*). DESK DEFAULT number. Spec: the brief, QUEUE row 75.
 
+### Numbered 2026-10-09
 
-## THE SCHEMA. It has survived ten sessions
+- `[~]` **N.181. A word after «не» that the dictionary does not hold is looked up joined to «не».** Shipped `d0b65a9`; Dann's walk is not recorded. Offered by the desk 2026-10-09 01:21 from Dann's walk (*Without Sun*, no. 1: «не проглядная» drew [pro], unreduced); ruled in by Dann 01:23 (*"yes"*). DESK DEFAULT number (N.180 was struck as a duplicate of N.135). Spec in `OPEN.md`.
+
+### Found unlisted 2026-10-02
+
+- `[~]` **N.12, increment 2. The old spelling's endings.** Shipped `e3e2c33`; DONE is Dann's walk. Ruled in by Dann 2026-08-08 (*"let's aim for completeness"*, as `packages/dictionary/src/pre-reform-normalizer.ts:92-93` records it) and never built until Dann met its effect on 2026-10-02 19:40 ([go] under «шумнаго»). The desk takes his words as settling the one question the 2026-08-08 notes left open: -аго is sung as -ого. `QUEUE.md` row 25.
+
+### Numbered 2026-10-01
+
+- `[~]` **N.179. Clear placements by scope, and place from here (after Finale).** Shipped `a3dde11`; 'this measure' and Undo walked 2026-10-09; 'to the end', 'whole piece', and Place from here are not walked. Ruled ready for a brief by Dann 2026-10-01 02:43; DESK DEFAULT number. `QUEUE.md` row 14.
+- `[ ]` **N.177. Dynamics: a layer the singer can add and edit, and dynamics read from MusicXML.** Numbered by Dann 2026-10-01 02:39. After N.120. Spec in `OPEN.md`.
+- `[ ]` **N.178. Reading tempo words and dynamics from scans and photographs.** Numbered by Dann 2026-10-01 02:39. Widened to the scan reader; first reading by homr shipped `0976735`; tempo words and dynamics from scans are unbuilt. A research item, measured on real pages before any accuracy is promised. After N.177. Spec in `OPEN.md`.
+- `[ ]` **N.175. Video walkthroughs, English and French, on an Ilya YouTube channel.** Numbered by Dann 2026-10-01 01:15. Made from the finished build; the Guide links to them. Spec in `OPEN.md`.
+
+### Numbered 2026-09-24, evening
+
+- `[ ]` **N.173. How Insights chooses what to say: the curation rules.** Numbered by Dann 2026-09-24 23:45, a living draft, deliberately not ruled. 2026-09-25: seven sections on how Insights speaks ruled into `PRODUCT.md`; the rules themselves still a living draft, `../sessions/draft-curation-rules_r1_2026-09-24.md`; spec in `OPEN.md`.
+- `[ ]` **N.172. The singer says how experienced they are (Dreyfus's five stages), and Insights adjusts.** Numbered by Dann 2026-09-24 23:14. 2026-09-25: the intake is RATIFIED in both languages (14:27 to 14:51); built with N.168's first slice. Built with the first Insights connections that use the ranking, not before (the desk's placement; agreed by Dann 23:16). Spec in `OPEN.md`.
+
+### Numbered 2026-09-23
+
+- `[ ]` **N.168. Insights intake: filling the three stores.** Numbered by Dann 2026-09-23 17:29, *"we should engage in it ASAP."* The plan is `~/Documents/Voice Pedagogy Library/Insights Research/plan-intake_r1_2026-09-23.md` (seven steps: condition map, frequency run, coverage audit, targeted extraction, composing, Dann's vetting, encoding and tests), resting on the five Insights principles ratified the same afternoon (`PRODUCT.md`, "What Insights is for" to "How Insights stays trustworthy"). Steps 1 to 3 done, step 2 shipped `10e090c`, step 4 under way. Spec in `OPEN.md`.
+- `[ ]` **N.170. Outside eyes: refine Ilya with singers and outside reviewers.** Numbered by Dann 2026-09-24 15:54; placed by Dann 2026-09-24 21:03 in weeks 5 and 6 (`SCHEDULE.md`). Seven steps, spec in `OPEN.md`; the review packet is step 2.
+
+### Numbered 2026-09-22
+
+- `[~]` **N.167. A French singer can sit through the whole reader wait reading English.** Shipped `350a2e5`; whether Dann saw it in French is not established. Ruled in by Dann 2026-09-22 on the desk's revised recommendation; found by Code. Code's reading of the mechanism, not established by the desk: the waiting line's text is fixed once from the `language` value in play (`ScoreUploader.svelte:134`) and never re-translated. Dann's own screenshot the same morning showed « Préparation du lecteur de page » in French on the alias. Why it is not a tidy-up: `PRODUCT.md` §"Both languages, start to finish". Row 41 (the wait on the Paper) folds it in. Spec in `OPEN.md`.
+- `[ ]` **N.163. Ilya shows a singer a word that is not on the page.** Ruled in by Dann 2026-09-22 from N.146's walk finding 4, on the desk's recommendation that it meets the freeze rule's false-statement test. The OCR read «То» as «Го», and Transcription drew it as `'go` with the gloss "go". Spec in `OPEN.md`. NOT ESTABLISHED: whether the fix belongs at the OCR layer, at the dictionary seam, or in how an unknown word is presented.
+- `[ ]` **N.166. A stored scan may need the page reader to redisplay.** DESK DEFAULT number, found 2026-09-22. Established real and measured by Code 2026-09-22: `ScoreUploader.svelte:771-776` restores by calling `handleFile(file, restore.answers)`, which re-reads the page (one-page PDF: 3.8 s to 61.3 s). Reloads are fast after the first since `bbe524b` (first reload 44 s, later 0.4 s; QUEUE row 38); the first-reload cost remains, and row 13's measure is still owed. The string says "This will only happen once."
+
+### Numbered 2026-09-21
+
+- `[ ]` **N.162. A caret and a note compete for the same thumb.** DESK DEFAULT number, split off at N.153's close on Dann's ruling to close N.153 rather than hold it open for this. Measured by Code 2026-09-21: a caret's hit centre sits 15.6 to 21.4 px from the nearest note's hit centre, and `nearestTarget` pools notes and carets by nearest centre, so the catchment round a caret is about eight to ten pixels. A different mechanism from N.153's spacing (caret-to-caret now clears 44 px). Clause 13's literal words are met and its reasoning is not. NOT ESTABLISHED: whether a note must stay tappable inside Corrections. Clause 3's fallback condition may be live, and Dann hears about it before a chip row is built. Spec not yet written.
+- `[ ]` **N.160. The work, and its two views.** DESK DEFAULT number; the model is Dann's (`PRODUCT.md`). Steps 1 to 3 closed 2026-09-21 (`1d18514`, `2fb7516`, `46ac52f`, each walked); the heal wrote 14 of his 96 seats and the dry run reads 91 address, 1 rejected, 4 unfound. Steps 4 and 5 wait until after 2026-10-30. Spec in `OPEN.md`, plan `../sessions/memo-n160b-the-approach_r1_2026-09-21.md`. The deferred ruling is still not asked: five notes, all «одинокая», which Code reads as possibly blocked by a seat that already holds the word; settle that before putting it to Dann.
+
+### Numbered 2026-09-20
+
+- `[ ]` **N.157. Replacing a score does not re-derive the seats.** DESK DEFAULT number. A replacement keeps every stored seat with its old text, never seats the note the new file adds, and `refreshPairings` updates a seat only on an exact origin match. Spec in `OPEN.md`. The desk patched Dann's library by hand once (song `39ae51c9`, key `m17-1-2`, « я » to « я. »); that is not the fix.
+- `[~]` **N.156. The Sunless 01 fixture is missing its final syllable and a note.** Shipped `b53a6df` and `9801308`; whether the lyric-line disagreement defect (lines 1 and 2 disagree about «непроглядная» from measure 4; line 2 lags by one note at the end) is fixed is not established. Ruled in by Dann 2026-09-20 14:21, who chose the real fix over retagging «ка». Brief `../sessions/brief-n156-sunless01-fixture_r1_2026-09-20.md`.
+
+### Numbered 2026-09-17
+
+- `[ ]` **N.151. The measure edit surface, with insert.** DESK DEFAULT number. Insertion is built as N.92 slice 3 (`correction.ts:48-100`, `:305-345`, `:496`, `:382-433`, reached through `CorrectionSurface.svelte:539-541`), so the item is tether 22: it exists and is hard to find. It carries nine of Dann's rulings of 2026-09-17, four of them product-level (WYSIWYG, *"if it appears on Ilya's page, it can be printed"*; no stopping rule for the singer; the edited score comes back out as an edited copy with the singer's own tempo counted; deliberate destruction only), transcribed to `PRODUCT.md` on 2026-09-22. Report `../sessions/report-n151-note-entry_r1_2026-09-17.md`. NOT ESTABLISHED: its size, and where it sits against the release.
+
+### Numbered 2026-09-16
+
+- `[ ]` **N.92. Notation editing.** Numbered by Dann 2026-08-24. Slices 1 to 3 shipped, insertion included; the caret reach is drawn (N.153 owned the phone). Open: the four singer's marks, tie to the note before, and the page flag for a measure left over. Spec `../sessions/spec-n92-edit-surface_r1_2026-09-17.md`, audit `../sessions/memo-n92-edit-audit_r1_2026-09-17.md`.
+- `[~]` **N.152. Playback of the Markup.** LATER, its own cardinal, asked for by Dann 2026-09-17. Spec in `OPEN.md`.
+
+### Numbered 2026-09-14
+
+- `[ ]` **N.141. The squircle has no grammar.** The height rule closed 2026-09-21, `6101e01`, walked (*"Yes this is ideal"*); Dann amended his own one-height ruling on 2026-09-20 to get it (`OPEN.md` §N.141). Open: the squircle across a tie (no longer waits on N.142; counted zero 2026-09-24; no week carries it), and the viewBox clamp binding on two notes. DESK DEFAULT number. Spec in `OPEN.md`, including the permission to re-engrave the measure for the loupe and its cost. **His ruling of 2026-09-14, "I don't want Ilya dropping hyphens", sits at `OPEN.md:1250` inside this spec and must be rehomed before N.141 closes (`OWED.md`).**
+- `[ ]` **N.140. The loupe guarantees a stave space, and scrolls rather than shrinking below it.** Dann's own design, ruled 2026-09-14, over the desk's recommendation to do nothing. Mostly built (code audit 2026-09-24, recorded on his instruction: *"That's great news, please update our records"*); only the sideways scroll against a syllable tap remains (`OPEN.md` §N.140). He owes the floor in CSS pixels, and whether the scroll may take a gesture on a surface where the swipe dismisses and the tap places a syllable.
+- `[ ]` **N.135. The page reader reads the text underlay.** Ruled by Dann 2026-09-14. Cost measured in `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. N.180's notes sit under it in `OPEN.md`. N.184 and row 81's row reader lean on it.
+
+### Older open residue
+
+- **Nothing blocks the beta** (2026-08-21): N.67, N.72 closed; N.58 (MIDI import) deferred by Dann 2026-08-21; N.59 (the reader in the browser) parked at tier 2, answered no, 2026-08-18. Still open inside them: N.59 step 3, the brace rule, is `WRITTEN` and not `DONE`; a singer on Chrome for iPhone can never install Ilya to the home screen (Dann to rule). Full accounts in `../sessions/LOG.md` block 10; the closed and parked table in block 9.
+- **The visible list, built only if a day finishes early:** N.45's remainder · N.51 · N.17 · N.19 · N.61 · N.6 · and, unnumbered, the watch band's English header (`watchlist.ts:92`, printed in French mode; Dann to rule). **N.27** has a home in the tree as a comment at the reporting seam (`library.ts`, `Library.save`), recorded by N.67 step 6 and deliberately not built: when N.27 is built, `profileStore.saveStore` (`profileStore.ts:217-225`) routes through that seam; it is the last catch-and-drop of its kind. **N.28** ships on N.67's step 5 binder.
+- Open work the rulings audit found not truant (N.84, N.120, N.123, N.122, N.115, N.117, the poem-box warning) is listed in `QUEUE.md`, "Open work, not truant".
+
+---
+
+## THE SCHEMA
 
 1. Only blocking work gets built.
-2. **A new cardinal displaces a named one or waits. Say which.**
+2. A new cardinal displaces a named one or waits. Say which.
 3. Half of every build day is reserved for what the previous day's walk found.
 4. Every build day ends in a deploy and a walk.
 5. N.48 may be unclosable; it needs a `[u]` that fails.
 
----
-
 ## THE FIXTURE. Read out of the file, do not re-derive it
 
-`~/Downloads/no-lyrics-control.musicxml` is the only instrument that exercises
-the no-underlay path; all three of Dann's own scores carry lyrics.
+`~/Downloads/no-lyrics-control.musicxml` is the only instrument that exercises the no-underlay path; all three of Dann's own scores carry lyrics. It holds five pitched notes and one half rest: C4 D4 E4 F4 quarters, G4 half, then a half rest. It is NOT six notes. Its stripped lyric line was five syllables, «Я тебя любил»; its header title is a different text. The walk: transcribe some Russian (or nothing draws); switch to Fit before touching any file input; upload the control; press *Continue to analysis*; expect `5 / 5`, syllables under the notes, the rest bare, no dashed boxes (walked 2026-08-13). The print fixture (E.51): Marshak's Russian of Sonnet 90 under Kabalevsky op. 52 no. 9, fourteen lines, fills exactly two letter sheets. *(DESK DEFAULT: this section belongs in `ENVIRONMENT.md`; it stays here until moved.)*
 
-**It holds five pitched notes and one half rest:** C4 D4 E4 F4 quarters, G4 half,
-then a half rest. **It is NOT six notes.** Its stripped lyric line was five
-syllables, «Я тебя любил». **Its header title is a different text from its lyric
-line.**
+## Rulings whose only recorded home is this file (flagged for rehoming)
 
-**The walk, four steps.** Transcribe some Russian, or the queue is empty and
-nothing draws. Switch to Fit **before touching any file input.** Upload the
-control, press *Continue to analysis*. **Expect `5 / 5`, syllables under the
-notes, the rest bare, no dashed boxes.** Walked and confirmed 2026-08-13.
-
-**This same walk is N.67 step 3's observation**, with the expectation stated
-before the walk: re-uploading the control over placed syllables no longer erases
-them.
-
-**The print fixture, E.51.** Marshak's Russian of Shakespeare's Sonnet 90, under
-Kabalevsky op. 52 no. 9, fourteen lines. **It fills exactly two letter sheets.**
+**RULED 2026-08-16, on E.55's walk findings** (N.70, N.71, N.55b are closed; LOG.md blocks 9 and 10 were not checked for these lines):
+- The walk's findings come before N.67 step 4, per the schema's own rule that half of every build day is reserved for what the previous walk found.
+- N.70 and N.71 are numbered. The third finding, no cursor on a note, is FOLDED INTO N.71 rather than tracked: one CSS declaration on the same element as N.71's fix.
+- N.55b's row is corrected rather than left tidy, Dann's words.
+- The N.70 fix is Dann's own third option, better than either I posed: filtered on desktop, no `accept` at all on iOS. Named consequence, accepted: the tree's `isMobile` is a WIDTH test, so a narrow desktop window also gets the unfiltered picker.
 
 ---
+*r1 draft of 2026-10-12, from `STATE.md` as of that date. What moved, and where, is in `CHANGELOG_r1.md`.*
 
-## RULED 2026-08-16, ON E.55'S WALK FINDINGS
-
-- **The walk's findings come before N.67 step 4**, per the schema's own rule
-  that half of every build day is reserved for what the previous walk found.
-- **N.70 and N.71 are numbered. The third finding, no cursor on a note, is
-  FOLDED INTO N.71** rather than tracked: one CSS declaration on the same
-  element as N.71's fix.
-- **N.55b's row is corrected rather than left tidy**, Dann's words.
-- **The N.70 fix is Dann's own third option**, better than either I posed:
-  filtered on desktop, no `accept` at all on iOS. Named consequence, accepted:
-  the tree's `isMobile` is a WIDTH test, so a narrow desktop window also gets
-  the unfiltered picker.
-
-## STILL UNSETTLED and the retired register's live rows moved to `OWED.md` on 2026-09-20
-
-**Verbatim.** Same reason: open, and not moving.
-
-
----
-
-
----
-*Split 2026-09-01; backup `STATE.md.bak-2026-09-01`. The closing colophons of
-2026-09-10 to 2026-09-17 (early morning) moved to `../sessions/LOG.md` block 21 at the
-close of 2026-09-17, about 02:00.*
-
-*Close of 2026-09-19, about 22:00. Seven commits, `02dd6d2` to `438f08f`, all
-pushed, none walked, so the floor stays at `637acc1`. The ILYA REGISTER is retired
-and project knowledge now holds no canon. Insights and N.131's real 25 are French;
-N.130's recorded range was wrong and is corrected. The held measure's page mark is
-gone and clause 16 is closed. The desk drafts the French from now on, ruled by Dann.
-`SCHEDULE.md` gained N.154 and gated N.84 on it; `ENVIRONMENT.md` gained the
-transfer fault; `INBOX.md` gained two N.84 notes; `OPEN.md` closed clause 16. The
-twelve-versus-five gaps count is reconciled: five remain, and seven were located.
-N.153 was not touched. Memory NOT committed.*
-
-*Close of 2026-09-20, about 22:00. N.153 stages 2 and 3a shipped, `c3ca3f5` and `0f7375c`;
-stage 2 walked and passed, 3a NOT walked. The floor moves to `0f7375c`. Gate 4's baseline
-moved to 1333 on Dann's ruling. The Sunless 01 fixture is edited and uncommitted with
-twenty tests failing; the revert is in THE ONE THING and Dann has not run it.
-`ENVIRONMENT.md` gained four rows. Memory NOT committed.*
-
-*Close of 2026-09-21, about 02:50. Four ships walked: `6101e01` (N.141's height rule),
-`b4320d2` (N.119, the stress acutes), `b543620` (N.119b), and `345d943` (the N.159 and N.160
-design record, no code). **The release path was rehearsed live and is proven**; `SCHEDULE.md`
-week 5's "How the release goes out" is closed and `main` carries `2b980e7`. **Dann ruled the
-musico-textual model**, transcribed to `PRODUCT.md`, and it reframes N.136, N.158 and N.159
-into one item, N.160. **His library was read through the branch alias and holds 25 frozen
-seats of 96**, of which 15 carry a word still in the poem. `ENVIRONMENT.md` gained six
-sections with index rows, `OPEN.md` gained N.158, N.159, N.160 and N.141's amendment,
-`PRODUCT.md` gained the stress acutes' purpose and the work-and-views model, and
-`SCHEDULE.md` records that the week-5 buffer is spent. **The desk was wrong loudly and
-repeatedly between 00:40 and 01:15**, on four claims it had not read, and the recovery was
-reading before speaking. Memory NOT committed.*
-
-*Close of 2026-09-21, about 03:50. One ship, `1d18514`, walked, and it closed three tracker
-items: N.159, N.136 and N.158. The score obeys every Notation switch, drawn fresh from the live
-poem on every render, with nothing stored. Gate 4 moved 1354 to 1360 with Dann's permission;
-backup `~/Downloads/ilya-ship.sh.bak-1354-2026-09-21`. **The seat instrument fired on Dann's
-own library for the first time: 67 drawn live, 29 kept as stored, of 96 seated**, so the
-planning number for N.160 steps 2 and 3 is 29 rather than 25. His account of what
-reconstitution is moved to `PRODUCT.md` before N.158's spec went to the archive.
-`ENVIRONMENT.md` gained two sections with index rows, a correction on the execute bit, and a
-gate-table update that was 91 tests behind the script. The walk was driven from Dann's own
-Chrome and he ruled on the pictures. **NOT MEASURED: paint on a phone. NOT ESTABLISHED: where
-the four seats beyond the predicted 25 come from, and whether `ilya:openSyllabification` was
-left as it was found.** Memory NOT committed.*
-
-*Close of 2026-09-21, about 19:15. Three ships, all walked: `1d18514` (N.159, closing N.136 and
-N.158), `2fb7516` (N.160 step 2, the dry run) and `46ac52f` (N.160 step 3, the stored seated
-text and the heal). The floor moves to `46ac52f`. **The heal wrote 14 of Dann's 96 seats and
-the dry run afterwards read 91 address, 1 rejected, 4 unfound, which was the prediction
-exactly.** Gate 4 moved three times in one day, 1354 to 1360 to 1368 to 1378, with his
-permission each time. **N.161 is numbered and its plan is agreed between the desk and Code**,
-which corrected the desk on three points; the account is in `../sessions/LOG.md` block 28.
-`OPEN.md` gained N.161 and lost N.158 and N.159; `OWED.md` gained the retirement debt, the
-`updatedAt` write and the stress-switch drift; `ENVIRONMENT.md` gained the two gate moves and
-the wrong-document trap; `BRIEF-TEMPLATE.md` gained a displacement line, because Code had to
-mark a displacement NOT ESTABLISHED that was never its to establish. **The bridge dropped
-mid-edit at about 16:00 and one `STATE.md` write was lost; it was found by reading the file
-rather than assumed, and rewritten.** Memory NOT committed.*
-
-*Close of 2026-09-21, about 20:10. **Five ships, every one walked**, and the floor moves to
-`9782d8e`: `1d18514` (N.159, closing N.136 and N.158), `2fb7516` and `46ac52f` (N.160 steps 2
-and 3), `44c5830` and `9782d8e` (N.161 and N.161b). **Everything `SCHEDULE.md` put in week 2 is
-closed on the week's first day.** Gate 4 moved five times, 1354 to 1385, with Dann's permission
-each time. **A read-only Sonnet sweep, spawned by the desk on his instruction, found a fourth
-call site the desk and Code had both missed**, for 160k tokens against a 200k quote; its one
-unverified row is in `OWED.md`. **The desk was corrected by Code four times across the day** and
-each correction is recorded in `../sessions/LOG.md` blocks 28 and 29 rather than smoothed away;
-the sharpest is that both shapes the desk offered for N.161b were wrong, and obeying the brief
-would have built the worse one. `ENVIRONMENT.md` gained the five gate moves, the
-wrong-document trap, and how to hold a loading window open. **NOT MEASURED: paint on a phone.
-NOT ESTABLISHED: the five «одинокая» notes, `#onRemoteWrite`'s race, and the `updatedAt` write
-on every load.** **Memory IS committed this time:** `2cd4094` carries every file named above,
-and this corrected line rides the commit after it. A clean `git status` at the next session's
-open is expected, not a surprise.*
-
-*Close of 2026-09-21, about 22:20. **One ship, `9b05ddd`, carrying Code's `15b7d1a`**, five
-gates at baseline. **N.153 is CLOSED ON SCOPE by Dann's ruling at 22:07** and all five stages
-are in: caret-to-caret separation went from 1.13 to 7.89 px on 2026-09-18 to **44.00 to 44.16
-px as drawn** on all 17 measures that carry notes. **Stage 4 retired nothing**: `OPEN.md`'s
-"mostly retire with the crop" did not survive contact with the tree, because stage 3b
-repointed the same arithmetic at the loupe's own render rather than leaving a dead path. A
-read-only Sonnet audit established that, **for 268,709 tokens against the desk's 200k quote,
-which was the desk's miss.** **The close almost buried two unbuilt parts of Dann's spacing
-ruling of 2026-09-20**, which lived only inside N.153's spec; checking before the move is what
-caught them, and they now stand as `OPEN.md` §THE CARET clause 16. **Dann ruled clause 15**,
-the beam exception, on the desk's recommendation. `OWED.md` gained four debts, `LOG.md` gained
-block 30, `ENVIRONMENT.md` gained three traps with index rows, `SEQUENCE.md` discharged
-dependency 7, `SCHEDULE.md` recorded the close, and **N.162 is numbered**. **NOT MEASURED:
-paint on a phone, still. NOT ESTABLISHED: m. 7's `minGap`, what clause 13's "its neighbour"
-covers, and behaviour at any width but 390 px.** Memory NOT committed at the time of writing.*
-
-*Close of 2026-09-21, about 23:40. **Three ships, two of them walked in both languages**,
-and the floor moves to `8bd1aff`: `5f7be82` (N.132, the ratified names and the 0.5 rem
-padding), `8bd1aff` (N.154's first row, the banner naming a dead tab), and the
-« PARTITION » receipt fix riding this close. Five gates at baseline on every one.
-**N.132's padding turned out to be load-bearing:** before it, `Insights` and « Aperçus »
-were clipped off a 390 px screen entirely, 71 px over in English and 107 px in French, and
-`DeskHead.svelte`'s own comment had called that Dann's to rule since N.127 without anyone
-asking him. He ruled it off a drawing of three states, then walked the live build.
-**Dependency 2 is discharged and N.130 and N.131 are unblocked.** Dann ruled label harmony
-into N.131. A read-only Sonnet sweep of all 614 dictionary entries **found no stale string
-the desk had not already found by hand**, which bounded the rename's damage to three keys.
-`PRODUCT.md`'s tabs table was three names out of date and is corrected, with the
-one-padding-value-at-every-width ratification beside it. `OWED.md` gained five debts,
-`ENVIRONMENT.md` gained five traps and two corrections with index rows, `LOG.md` gained
-block 31, `OPEN.md` lost N.132 and gained N.131's label clause, `SEQUENCE.md` discharged
-dependency 2, and `SCHEDULE.md` ticked N.132. **The desk was wrong three times and Code
-caught two:** a test grep that missed `apps/web/e2e-phone/` and stated an absence from it,
-a fixed 62 px width chosen from one font on one machine, and a token quote low by a factor
-of three. **The desk also failed to use `ENVIRONMENT.md`'s own index** and spent four calls
-rediscovering `CHROME WILL NOT GO BELOW ABOUT 555 CSS PX`. **Code reported correcting a
-stale memory note and no such change was on disk**; the two stale tab names it meant are
-repaired at this close by the desk. **NOT MEASURED: paint on a phone, still. NOT
-ESTABLISHED: a photograph at 390 px, `resize_window` having reported success without moving
-the window twice; whether « PARTITION » fits 62 px in Consolas or Android's monospace; and
-why the `zoom` region's coordinate frame is not `frameWidth / innerWidth`.** **The
-« PARTITION » walk is the one thing owed from tonight.** Memory IS committed with this
-close.*
-
-*Addendum, 2026-09-21 about 23:50, after the close. **Dann asked how close the open work
-was and the answer was that the records could not say**, so a bookkeeping audit ran. **Five
-faults, four repaired in this pass.** N.155 was marked closed AND open and the ghost row is
-struck. N.160's steps 2 and 3 were marked closed AND open in `SCHEDULE.md` and the
-duplicate is struck. Week 1's caret-reach box was unchecked while the work had shipped, and
-is ticked. **And N.151, "the measure edit surface, with insert", numbered 2026-09-17 with a
-695-line spec carrying nine of Dann's rulings, had NO tracker row and appeared in no
-sequence, schedule or debt list: nothing in the read order pointed at any of it.** It now
-has a row. **The fifth fault is recorded rather than repaired, on purpose:** three closed
-items' specs still sit in `OPEN.md` and each carries rulings that a move would bury in the
-archive, which is the 2026-09-20 failure exactly. That triage, plus N.151's four
-product-level rulings that belong in `PRODUCT.md`, plus four of week 1's boxes whose status
-is NOT ESTABLISHED, are all in `OWED.md`. **The desk quoted this audit at twenty minutes
-and was wrong for the third time tonight**; the safe part took that long and the triage is
-a session of its own.*
-
-*Addendum 2, 2026-09-22 about 13:20. **The ruling triage ran and it was not bookkeeping.**
-`OPEN.md` held three closed items' specs, and none was archivable as it stood. **N.146
-carried three of Dann's rulings and NINE LIVE WALK FINDINGS**, four of them things a singer
-sees: a false word drawn from OCR, a text PDF's words landing in a new song rather than the
-one holding the score, "Nothing in this piece is flagged for your voice" printed directly
-under a sentence saying nothing could be checked, and New song needing two clicks. **They
-are now `OWED.md` §"The N.146 walk findings" and none is numbered.** N.147's five ruled
-defaults and N.151's four product-level rulings are transcribed to `PRODUCT.md`, which
-gained three sections. N.155's residue is in `OWED.md`. **All three specs are archived in
-`LOG.md` blocks 32 and 33, and `OPEN.md` now holds only open items.** **Week 1's four
-remaining boxes are ESTABLISHED as never started**, searched across memory, the sessions
-folder and `LOG.md`. **And one fault survives at the next level down:** Dann's ruling of
-2026-09-14, "I don't want Ilya dropping hyphens", sits at `OPEN.md:1250` nested inside
-N.141's 804-line spec, so it will go to the archive the day N.141 closes. Recorded in
-`OWED.md`, not fixed, because N.141 is open. **The pattern across the whole triage: every
-time the records were checked, more open work appeared, and none of it was new.**
-
-*Addendum 3, 2026-09-22 about 13:30. **Four items numbered, and the tripwire fired
-correctly.** Dann ruled in N.163 (Ilya shows a singer a word that is not on the page) and
-N.164 (Insights states two things at once that cannot both hold), both from N.146's buried
-findings, on the desk's recommendation that they meet the freeze rule's false-statement
-test. **He then found a live defect on his own screen:** the loupe opens with no notes in
-it, twice, on a song whose measures report « trop pleine ». That is N.165, DESK DEFAULT
-number, and **his hypothesis and the desk's are both live and unseparated**, which the brief
-puts to Code as its first reading. **N.166 came out of investigating it:** the same song, in
-the desk's own tab, never drew at all and sat on the page reader, which for a stored score
-it should not. **The desk's instrument was controlled before that was reported.** Brief
-`../sessions/brief-n165-n166-blank-loupe-and-the-reloaded-scan_r1_2026-09-22.md`. **The desk
-created an empty song `8ff79b63` in Dann's library setting up a control test and did not
-delete it**, deletion being destructive and unauthorized; the previously active song was
-`0714215b`. **And `STATE.md` crossed its own 600-line tripwire at 601**, which found sixteen
-closed rows that had never moved; they are `LOG.md` block 34 and this file is back to under
-500. **One dangling citation was repaired on the way**, N.129's row pointing at an
-`OPEN.md` §N.129 that no longer exists. **NOT ESTABLISHED: the cause of the blank loupe, the
-squircle's missing bottom edge, whether a stored scan re-reads on load, and all three of
-N.164's parts.***
-
-*Addendum 4, 2026-09-22 about 22:40, written at the close and **the thread ended because it
-compacted**, which is itself the session's sharpest finding. **Three ships closed and walked
-in French on the alias**: N.165's blank loupe (`f6d2184`, account now `LOG.md` block 35), the
-reader's waiting note in Dann's own ruled words, and the « PARTITION » receipt gap. **N.130's
-walk was started and is parked ten rows in at `finding.passaggio`, at Dann's word**, with
-nine B1 rulings banked in `../sessions/insights-french-as-built_r3_2026-09-22.md`. **Dann
-killed "phonation mass" as the desk's own coinage**, not a term from the literature, and
-ruled `PRODUCT.md` §"Clarity for a receptive user, not compactness" over it. **He then ruled
-that the code is not a constraint on the product** — *"there is always a way"* — which struck
-one of the desk's own refusals the day it was written and **may want to be tether 23**;
-that question is `OWED.md` row 3. **Karine St-Pierre's dissertation was read on his
-instruction** and produced a memo and a proposal now at r2, whose strongest finding is
-**performance length**: the field calls it impractical because a printed guide must name one
-number for everyone, and **Ilya does not print for everyone**. **THE TRAP THAT ENDED THE
-THREAD: the desk held that census in context intending to report it, and the compaction took
-it.** The r2 proposal's figures therefore carry a provenance warning and must be re-verified
-against the PDF. Trap and path in `ENVIRONMENT.md` §`A LONG READ DIES AT THE COMPACTION` and
-§`THE BRIDGE CARRIES A THIRD FOLDER`. **NOT ESTABLISHED: whether St-Pierre adopted
-performance length in her own Chapter 4; whether `fit.heading`'s new "compatibility" is
-allowed to break one-term-per-concept against `tab.fit`; paint on a phone; and « PARTITION »
-in Consolas.***
+> **The tidy, 2026-10-12 about 14:50.** `CONTRACT.md`, `STATE.md`, `QUEUE.md`, and `README.md` were restructured by Fable into these shapes (drafts and change log `../sessions/tidy-r1_2026-10-12/`); everything moved went verbatim to `CONTRACT-archive.md`, `STATE-archive.md`, and `QUEUE-archive.md` beside them. Dann deferred the administrative choices to the desk at 14:48 (*"it is a managerial and administrative issue that I am happy to defer to you. If you need my ratification, you have it."*, typing corrected). The pre-tidy originals are in `_pre-tidy-2026-10-12/` and in git.

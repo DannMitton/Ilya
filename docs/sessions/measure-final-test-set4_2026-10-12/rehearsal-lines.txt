@@ -1,0 +1,9 @@
+K: read on webgpu, 1.24 min
+K: stamp homr-web@0.2.0-ilya.7/465 (as required)
+original: K: webgpu; 133 of 134 right; missing 0; extra 0; pitch misreads 0; length misreads 1; bars read 51 of 53; octave shift 0; metre as printed 33 of 33 bars (20 bars with no matched note or rest not judged); score 99.3 PASS; with 1 note marked UNSURE set aside 100.0 PASS
+corrected: K: webgpu; 134 of 134 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 51 of 53; octave shift 0; metre as printed 33 of 33 bars (20 bars with no matched note or rest not judged); score 100.0 PASS; with 1 note marked UNSURE set aside 100.0 PASS
+M: read on webgpu, 0.87 min
+M: stamp homr-web@0.2.0-ilya.7/465 (as required)
+original: M: webgpu; 62 of 62 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 26 of 26; octave shift 0; metre as printed 19 of 19 bars (7 bars with no matched note or rest not judged); score 100.0 PASS; no note marked UNSURE
+corrected: M: webgpu; 62 of 62 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 26 of 26; octave shift 0; metre as printed 19 of 19 bars (7 bars with no matched note or rest not judged); score 100.0 PASS; no note marked UNSURE
+rehearsal lines equal row 76: yes

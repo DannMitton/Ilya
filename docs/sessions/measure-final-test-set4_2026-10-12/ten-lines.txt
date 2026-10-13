@@ -1,0 +1,31 @@
+4A: read on webgpu, 1.54 min
+4A: stamp homr-web@0.2.0-ilya.7/465
+4A: webgpu; 142 of 148 right; missing 0; extra 0; pitch misreads 3; length misreads 3; bars read 57 of 54; octave shift 0; metre as printed 32 of 37 bars (17 bars with no matched note or rest not judged); score 95.9 PASS; no note marked UNSURE
+4B: read on webgpu, 1.10 min
+4B: stamp homr-web@0.2.0-ilya.7/465
+4B: webgpu; 165 of 165 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 44 of 44; octave shift 0; metre as printed 44 of 44 bars (0 bars with no matched note or rest not judged); score 100.0 PASS; no note marked UNSURE
+4C: read on webgpu, 0.83 min
+4C: stamp homr-web@0.2.0-ilya.7/465
+4C: webgpu; 105 of 105 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 39 of 39; octave shift 0; metre as printed 32 of 32 bars (7 bars with no matched note or rest not judged); score 100.0 PASS; with 1 note marked UNSURE set aside 100.0 PASS
+4D: read on webgpu, 0.72 min
+4D: stamp homr-web@0.2.0-ilya.7/465
+4D: webgpu; 69 of 70 right; missing 0; extra 2; pitch misreads 0; length misreads 1; bars read 32 of 49; octave shift 0; metre as printed 0 of 24 bars (25 bars with no matched note or rest not judged); score 95.7 PASS; no note marked UNSURE
+4E: read on webgpu, 0.92 min
+4E: stamp homr-web@0.2.0-ilya.7/465
+4E: webgpu; 159 of 161 right; missing 0; extra 0; pitch misreads 0; length misreads 2; bars read 45 of 42; octave shift 0; metre as printed 17 of 35 bars (7 bars with no matched note or rest not judged); score 98.8 PASS; with 2 notes marked UNSURE set aside 99.4 PASS
+4F: read on webgpu, 1.24 min
+4F: stamp homr-web@0.2.0-ilya.7/465
+4F: webgpu; 91 of 102 right; missing 0; extra 0; pitch misreads 7; length misreads 4; bars read 40 of 40; octave shift 0; metre as printed 38 of 38 bars (2 bars with no matched note or rest not judged); score 89.2 BELOW; with 6 notes marked UNSURE set aside 91.7 BELOW
+4G: read on webgpu, 0.94 min
+4G: stamp homr-web@0.2.0-ilya.7/465
+4G: webgpu; 100 of 104 right; missing 0; extra 0; pitch misreads 2; length misreads 2; bars read 28 of 33; octave shift 0; metre as printed 26 of 26 bars (7 bars with no matched note or rest not judged); score 96.2 PASS; with 1 note marked UNSURE set aside 96.1 PASS
+4H: read on webgpu, 1.28 min
+4H: stamp homr-web@0.2.0-ilya.7/465
+4H: webgpu; 184 of 189 right; missing 0; extra 0; pitch misreads 1; length misreads 4; bars read 96 of 104; octave shift 0; metre as printed 69 of 69 bars (35 bars with no matched note or rest not judged); score 97.4 PASS; no note marked UNSURE
+4I: read on webgpu, 1.77 min
+4I: stamp homr-web@0.2.0-ilya.7/465
+4I: webgpu; 270 of 275 right; missing 0; extra 0; pitch misreads 5; length misreads 0; bars read 66 of 66; octave shift 0; metre as printed 47 of 47 bars (19 bars with no matched note or rest not judged); score 98.2 PASS; no note marked UNSURE
+4J: read on webgpu, 1.11 min
+4J: stamp homr-web@0.2.0-ilya.7/465
+4J: webgpu; 137 of 137 right; missing 0; extra 0; pitch misreads 0; length misreads 0; bars read 57 of 57; octave shift 0; metre as printed 23 of 42 bars (15 bars with no matched note or rest not judged); score 100.0 PASS; no note marked UNSURE
+Total of 10 songs: webgpu; 1422 of 1456 right; missing 0; extra 2; pitch misreads 18; length misreads 16; bars read 504 of 528; metre as printed 328 of 394 bars in 10 songs; score 97.5 PASS; with 10 notes marked UNSURE set aside 97.8 PASS; songs below 95.0 with UNSURE set aside: 1 of 10

@@ -162,7 +162,7 @@ design rows.
   traps are in `ENVIRONMENT.md` §`HOW A RELEASE ACTUALLY GOES OUT`. **The public URL
   is `ilya.dannmitton.com`, not the apex** (§`THE PUBLIC ILYA URL`).
 - [x] **N.85** (README, CONTRIBUTING, code of conduct; shipped `8127e01`): README, CONTRIBUTING, code of conduct. The desk drafts; Dann reads every word.
-- [ ] **Desk housekeeping**: COLOUR-7, INBOX-17, INBOX-31 into `PRODUCT.md`.
+- [x] **Desk housekeeping**: COLOUR-7, INBOX-17, INBOX-31 into `PRODUCT.md`. **PAID 2026-10-12 by the desk (Opus):** COLOUR-7 transcribed as `PRODUCT.md` §"A hue names one idea"; INBOX-17 was already there (§"The squircle", and the radii row of §"The drawer grammar", with its 2026-09-02 fourth radius); INBOX-31 was already there (§"The drawer grammar", the ⓘ on the Russian-o row).
 - [x] **N.154** (walked in French 16:03; shipped `8127e01`). ** EVERY USER-FACING STRING SAYS WHAT THE APP NOW IS, both languages.**
   Numbered 2026-09-19, DESK DEFAULT number, on Dann's instruction: *"we need to
   align all of our text with the actual evolved app."* **The seed, found

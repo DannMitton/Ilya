@@ -1,0 +1,45 @@
+row calls: step 4 variant brief
+song model | Russian notes kept | Russian notes dropped | extra notes kept | extra notes dropped || after the column only: Russian dropped, extras dropped
+S a | 15 | 101 | 8 | 4 || 101, 4
+S b | 16 | 100 | 5 | 7 || 100, 7
+S c | 7 | 109 | 4 | 8 || 109, 8
+T a | 41 | 156 | 2 | 12 || 156, 12
+T b | 44 | 153 | 2 | 12 || 153, 12
+T c | 20 | 177 | 1 | 13 || 177, 13
+K a | 47 | 87 | 0 | 0 || 87, 0
+K b | 43 | 91 | 0 | 0 || 91, 0
+K c | 37 | 97 | 0 | 0 || 97, 0
+M a | 34 | 28 | 0 | 0 || 28, 0
+M b | 27 | 35 | 0 | 0 || 35, 0
+M c | 27 | 35 | 0 | 0 || 35, 0
+
+row calls: step 4 variant joint
+song model | Russian notes kept | Russian notes dropped | extra notes kept | extra notes dropped || after the column only: Russian dropped, extras dropped
+S a | 53 | 63 | 10 | 2 || 63, 2
+S b | 53 | 63 | 7 | 5 || 63, 5
+S c | 66 | 50 | 6 | 6 || 50, 6
+T a | 81 | 116 | 3 | 11 || 116, 9
+T b | 106 | 91 | 3 | 11 || 91, 9
+T c | 94 | 103 | 4 | 10 || 102, 7
+K a | 106 | 28 | 0 | 0 || 28, 0
+K b | 88 | 46 | 0 | 0 || 46, 0
+K c | 86 | 48 | 0 | 0 || 48, 0
+M a | 34 | 28 | 0 | 0 || 28, 0
+M b | 34 | 28 | 0 | 0 || 28, 0
+M c | 27 | 35 | 0 | 0 || 35, 0
+
+row calls: step 4 variant syll
+song model | Russian notes kept | Russian notes dropped | extra notes kept | extra notes dropped || after the column only: Russian dropped, extras dropped
+S a | 96 | 20 | 11 | 1 || 20, 1
+S b | 107 | 9 | 10 | 2 || 9, 2
+S c | 103 | 13 | 9 | 3 || 13, 3
+T a | 151 | 46 | 7 | 7 || 45, 3
+T b | 165 | 32 | 7 | 7 || 31, 3
+T c | 175 | 22 | 5 | 9 || 20, 5
+K a | 133 | 1 | 0 | 0 || 1, 0
+K b | 124 | 10 | 0 | 0 || 10, 0
+K c | 120 | 14 | 0 | 0 || 14, 0
+M a | 51 | 11 | 0 | 0 || 11, 0
+M b | 55 | 7 | 0 | 0 || 7, 0
+M c | 59 | 3 | 0 | 0 || 3, 0
+

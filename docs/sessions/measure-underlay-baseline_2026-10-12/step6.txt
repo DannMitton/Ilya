@@ -1,0 +1,37 @@
+== S: 4 pairs
+S bar 49 G4: first [x 2226 y 342 quarter (1/4) v1 extra] second [x 2238 y 396 quarter (1/4) v3 song прой]
+    bar sums over both voices 11/8 (truth 3/4); longer keeps tie; shorter keeps tie; metre keeps none
+    head (brief's, at imgpos): 8 / 6 px, first; head-at-pitch (Code's, pitch y 368): 57 / 57 px, same size   (space 27.5)
+S bar 69 E5: first [x 1762 y 3093 eighth (1/8) v1 extra] second [x 1785 y 3110 eighth (1/8) v2 song]
+    bar sums over both voices 11/8 (truth 3/4); longer keeps tie; shorter keeps tie; metre keeps none
+    head (brief's, at imgpos): 9 / 30 px, second; head-at-pitch (Code's, pitch y 3124): 35 / 29 px, same size   (space 27.4)
+S bar 69 E5: first [x 2200 y 3108 quarter (1/4) v1 extra] second [x 2224 y 3146 quarter (1/4) v2 song какъ]
+    bar sums over both voices 11/8 (truth 3/4); longer keeps tie; shorter keeps tie; metre keeps none
+    head (brief's, at imgpos): 33 / 25 px, first; head-at-pitch (Code's, pitch y 3124): 36 / 29 px, same size   (space 27.4)
+S bar 72 D4: first [x 1124 y 438 half (3/4) v1 extra] second [x 1099 y 495 half (3/4) v2 extra]
+    bar sums over both voices 7/4 (truth 3/4); longer keeps tie; shorter keeps tie; metre keeps none
+    head (brief's, at imgpos): 4 / 33 px, second; head-at-pitch (Code's, pitch y 470): 57 / 37 px, first   (space 27.5)
+== T: 7 pairs
+T bar 21 F4: first [x 1588 y 3429 quarter (1/4) v1 extra] second [x 1568 y 3382 half (1/2) v2 song рой]
+    bar sums over both voices 3/2 (truth 1); longer keeps second; shorter keeps first; metre keeps first
+    head (brief's, at imgpos): 5 / 4 px, same size; head-at-pitch (Code's, pitch y 3408): 45 / 51 px, same size   (space 27.1)
+T bar 22 C#4: first [x 2108 y 3469 quarter (1/4) v1 song и] second [x 2122 y 3391 quarter (1/4) v2 song про]
+    bar sums over both voices 9/8 (truth 1); longer keeps tie; shorter keeps tie; metre keeps none
+    head (brief's, at imgpos): 18 / 55 px, second; head-at-pitch (Code's, pitch y 3436): 36 / 36 px, same size   (space 27.1)
+T bar 41 G4: first [x 1579 y 532 quarter (1/4) v1 extra] second [x 1549 y 477 half (1/2) v2 song шитъ]
+    bar sums over both voices 3/2 (truth 1); longer keeps second; shorter keeps first; metre keeps first
+    head (brief's, at imgpos): 45 / 3 px, first; head-at-pitch (Code's, pitch y 499): 57 / 57 px, same size   (space 27.8)
+T bar 43 D5: first [x 2934 y 446 quarter (3/8) v1 extra] second [x 2912 y 407 half (1/2) v2 song дитъ]
+    bar sums over both voices 3/2 (truth 1); longer keeps second; shorter keeps first; metre keeps first
+    head (brief's, at imgpos): 2 / 44 px, second; head-at-pitch (Code's, pitch y 444): 3 / 54 px, second   (space 27.8)
+T bar 73 F#4: first [x 1735 y 2447 eighth (1/8) v1 extra] second [x 1737 y 2349 quarter (1/4) v2 song етъ]
+    bar sums over both voices 5/4 (truth 1); longer keeps second; shorter keeps first; metre keeps first
+    head (brief's, at imgpos): 19 / 2 px, first; head-at-pitch (Code's, pitch y 2406): 57 / 57 px, same size   (space 28.1)
+T bar 75 E4: first [x 2691 y 2438 eighth (1/8) v1 song у] second [x 2670 y 2390 quarter (3/8) v2 song да]
+    bar sums over both voices 5/4 (truth 1); longer keeps second; shorter keeps first; metre keeps none
+    head (brief's, at imgpos): 57 / 1 px, first; head-at-pitch (Code's, pitch y 2420): 57 / 57 px, same size   (space 28.1)
+T bar 76 D#4: first [x 524 y 3446 quarter (1/4) v1 song де] second [x 552 y 3418 half (1/2) v2 extra]
+    bar sums over both voices 3/2 (truth 1); longer keeps second; shorter keeps first; metre keeps first
+    head (brief's, at imgpos): 50 / 55 px, same size; head-at-pitch (Code's, pitch y 3448): 55 / 55 px, same size   (space 27.2)
+== K: 0 pairs
+== M: 0 pairs

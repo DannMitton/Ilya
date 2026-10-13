@@ -1,0 +1,6 @@
+S (a): Russian notes dropped by the column, no syllable of their own 2, with a syllable 18
+S (b): Russian notes dropped by the column, no syllable of their own 1, with a syllable 8
+S (c): Russian notes dropped by the column, no syllable of their own 3, with a syllable 10
+T (a): Russian notes dropped by the column, no syllable of their own 0, with a syllable 45
+T (b): Russian notes dropped by the column, no syllable of their own 0, with a syllable 31
+T (c): Russian notes dropped by the column, no syllable of their own 0, with a syllable 20

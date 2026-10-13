@@ -1,0 +1,11 @@
+misread syllables with no pre-reform letter: 69 {'shares a token with a neighbour': 50, 'one-to-one, wrong letters': 19}
+  S p2s1r2: printed «е», read «жи»
+  S p2s1r2: printed «жи-», read «жи»
+  S p2s3r2: printed «зо-», read «Ву»
+  S p2s3r2: printed «ву», read «Ву»
+  S p3s3r2: printed «се-», read «ее»
+  S p4s1r2: printed «та-», read «лый»
+  S p4s1r2: printed «лый», read «лый»
+  S p5s3r2: printed «у-», read «у»
+  S p5s3r2: printed «та-», read «у»
+  T p1s2r1: printed «шеб-», read «теб»

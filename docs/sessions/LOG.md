@@ -8832,3 +8832,50 @@ Its rulings and Dann's words are homed in `CONTRACT.md` (THE POSTURE, the paragr
 >
 > **This thread's mistakes, each recorded where it happened:** "singers say it that way in the studio" (no source); "a tessitura by voice type" (desk-coined); "the touch buttons read the same table" (`CorrectionSurface.svelte:207` has its own); the 15:05 handover's "lyric soprano" for Miller Fig. 10.1.
 >
+
+### Block "handover of 2026-10-11 23:55", moved verbatim from STATE.md at the close of 2026-10-12 01:20. Its open items are carried by the handover of 01:20; its rulings live in OPEN.md and PRODUCT.md.
+
+> ### HANDOVER OF 2026-10-11 23:55 (the Opus desk thread that followed the 19:45 close). READ FIRST.
+>
+> **Floor `fd1c86a`** (Dann's ship 23:51, all eight gates at baseline; gate 4 is now 2448, see `ENVIRONMENT.md` "WHAT THE DESK LEARNED ON 2026-10-11 LATE"). It merges `cloud-lane` up to `1a35871` through `1a02b11`: rows 72, 70, 73, 68, 75, 62, 67, 69, and 34 are in the tree, **none walked by Dann yet**. Row 77 shipped earlier as `b80b543` (set 3 from 6 to 7 of 10). THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
+>
+> **Where THE ONE THING stands.** Row 80 measured (`../sessions/report-code-the-russian-line-by-its-underlay_r1_2026-10-11.md`): no rule separates the Russian line from the French or English printed beside it in split bars yet. Leads, in the desk's order: (a) **row 81**, a measure: Tesseract with Russian only and with the Cyrillic script model on the underlay strip, plus "one place read twice is one event"; (b) **row 82**, fine-tune a Russian Tesseract on rendered lines that include ѣ, ѳ, ѵ, and і (N.184, ruled in by Dann 23:32); (c) N.135, the underlay reader; (d) the pasted poem's syllable counts for the row's language. **Neither row 81 nor 82 is written. Both go through Fable before Code** (`CONTRACT.md`, the Fable-review paragraph). Then held-out set 4 is made, because set 3 is now spent.
+>
+> **Ready and not sent:** rows 78a, 78b, 78c (in that order), then 79, all Fable-reviewed, for the cloud lane (`QUEUE.md`). Send through Dann's Chrome or the cloud prompt, each brief pasted whole between BEGIN and END markers.
+>
+> **Held:** row 71 (N.182, suggesting a key) is on `cloud-lane` after `1a35871` and is not merged. It is reworked after the voice-family table (`OPEN.md` "ROW 71's KEY LINES, RULED"). **N.182 has no line in THE TRACKER; NOT ESTABLISHED whether it ever had one.**
+>
+> **Next desk, one at a time:**
+> 1. Present the voice-family draft r2 family by family, soprano first, reading each family whole before showing it (`~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/draft-voice-families_r2_*`, 262 rows; `PRODUCT.md` "What Ilya watches for depends on the voice"). The desk has not read r2 whole.
+> 2. Write rows 81 and 82; Fable reviews; then Code.
+> 3. Send 78a to 78c and 79.
+> 4. French owed: row 66's, row 70's five desk-derived sentences, row 67's three open items.
+> 5. Taste calls owed: row 75's seven-length row wrap at 375 px; row 62's "Saved" placement; the 32nd and 64th as tuplet units.
+> 6. A small Code row: `markup-pages.test` counts git-ignored `.musicxml` under `tools/e16-harness/output/`; it should use `git ls-files` (why gate 4 read 2448 on the Mac).
+> 7. Offered to Dann, not asked: hide row 66's voice-blind primo line for trebles now, before the voice-family table lands.
+>
+> **Still owed, carried from 19:45:** a Quebec source for octave numbering (lead: Karine St-Pierre, Dann's call); a standing rule for which underlay line a truth file scores when the voice splits between languages (DESK DEFAULT in row 77's brief §3.3: the Russian line).
+>
+> **This thread's mistakes, each owned when made:** "boxes move whole" (`paginate.ts` already breaks them); "page 1 fills under the rule" (drawing it showed otherwise); "Ilya never needs Tesseract's spelling" (Dann: photographed scores are the common path); citing Dann's 19:58 sentence as a constraint mid-design; misreading 19:47 as dropping the per-comment remedy; row 80's brief saying homr has no positions (Fable caught it; corrected to Code). Ship-paste order and iCloud " 2" duplicates: `ENVIRONMENT.md`.
+>
+
+## STATE.md handover of 2026-10-12 01:20, moved at the desk thread of 2026-10-12 01:28 onward
+
+> ### HANDOVER OF 2026-10-12 01:20 (the Opus desk thread after the 23:55 close). READ FIRST.
+>
+> **Floor unchanged, `9f9e896`** (the 23:55 close). Nothing shipped this thread. Uncommitted at the close: `PRODUCT.md`, `QUEUE.md`, this file, `ENVIRONMENT.md`, `../sessions/LOG.md`, briefs 81 (r1, r2) and 82 (r1), Fable's review of row 81, and Code's row 81 report and its measure folder. THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
+>
+> **Row 81 is MEASURED by Code (Opus) on the Mac** (`../sessions/report-code-underlay-baseline_r1_2026-10-12.md`, 20 KB). **The desk has NOT read it.** QUEUE row 81 carries Code's summary: of 493 Russian syllables, (a) rus best_int 295, (b) rus best 309, (c) Cyrillic 315 right; yat read right 0 of 21 by every model; decimal i 3 of 6 by (c) only; word-final hard sign 77, 86, 97 of 101.
+>
+> **Next desk: start from `../sessions/plan-autonomous_r1_2026-10-12.md`** (curated 01:40 at Dann's request: seven rows the desk can do without him). **Dann 01:25: cloud credit is free to spend, so cloud-lane rows need no yes for cost.** Row 3's IMSLP downloads still need his yes. **Rows 78a to 79 are running in Code on his Mac, pasted by Dann about 01:26 (confirmed 01:26): do not send them to the cloud; read their reports as they land.** His cloud instance is open in his Chrome for the cloud lane's other rows. The list below is the same work in short.
+>
+> **Next desk, one at a time:**
+> 1. Read row 81's report whole. Then Fable reviews row 82's brief (`../sessions/brief-code-prereform-model_r1_2026-10-12.md`) against it, as the QUEUE row says, and the desk applies the amendments before Code gets it.
+> 2. Continue the voice-family presentation with the **baritone** (draft r2 section, then bass). Soprano, mezzo, contralto, and tenor are ruled; the countertenor is HELD (all in `PRODUCT.md`, "What Ilya watches for depends on the voice").
+> 3. Countertenor sources owed: Richard Miller, "Countertenoring", *Journal of Singing* 57(2), 2000, and Scott McCoy, "Falsetto and the Male High Voice", *JOS* 59(5), 2003, through Dann's NATS sign-in (nats.org was overloaded at 01:18, see `ENVIRONMENT.md`); Sundberg and Hogset 2001 (*LPV* 26) and Tom et al. 2001 (*JASA* 109) are not reachable through TPL's Academic OneFile; any other route goes through a person and is Dann's.
+> 4. Rows 78a to 78c and 79 are still READY and not sent (carried from 23:55), with the rest of the 23:55 list (French owed, taste calls, the `markup-pages.test` row, row 66's treble line).
+>
+> **Files read whole this thread** (for the next desk's citations): `draft-voice-families_r2_2026-10-11.md` (soprano, mezzo, contralto, countertenor, tenor, treble (shared), male (shared)); Richard Miller, *Training Soprano Voices* (2000), pp. 24 to 27 and 144 to 145 on Dann's photos IMG_6172, IMG_6173, IMG_6086; Howell 2015 (lecture-recital, text pages); Echternach et al. 2011; Herbst et al. 2009; Henrich Bernardoni et al. 2014 (newly filed, G-I); Chenez 2011 (pp. 30 to 75 extract). By Sonnet helpers: Braithwaite 2020; Thoresen 2012. Henrich et al. 2011 is filed (G-I), abstract only read.
+>
+> **This thread's mistakes, each owned when made:** sent `claude --model opus` for Terminal, when Code is the desktop app's Code tab (the `ENVIRONMENT.md` index already said so; second time, see LOG 8731); first pointed Dann at the caffeinated Terminal window; cited "Miller 2000, Fig. 2.8, p. 145" as one place (it is Fig. 2.8 on p. 25 and the text on p. 145); wrote "Miller 2000" without author and title; called Miller's high contralto primo an outlier against his own prose, corrected the same hour from p. 145.
+>
