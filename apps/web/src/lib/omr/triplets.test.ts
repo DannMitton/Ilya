@@ -174,6 +174,44 @@ describe('completeTriplets', () => {
 		expect(out.children.filter((t) => t.includes('<actual-notes>7</actual-notes><normal-notes>6</normal-notes>'))).toHaveLength(7);
 	});
 
+	it('makes four quarters the page prints a 4 over in 3/4 a quadruplet, 4 in the space of 3, where rule 3 made three of them a triplet (4F, bar 24)', () => {
+		// divisions 2, 3/4: four plain quarters, 4/4 where the bar holds 3/4; the 4 stands over the run's middle.
+		const bar = [n('quarter', 2), n('quarter', 2), n('quarter', 2), n('quarter', 2)];
+		const look = () => ({ numbers: [{ n: 4, m: null, at: 1.476 }], marksAt: [1.476, 2.05, 3.05] });
+		const out = completeTriplets(bar, { beats: 3, beatType: 4 }, 2, false, look);
+		expect(out.rule).toBe('page');
+		expect(out.children.filter((t) => t.includes('<actual-notes>4</actual-notes><normal-notes>3</normal-notes>'))).toHaveLength(4);
+		// Each quarter is three quarters of 2 divisions: the bar runs in twice the divisions.
+		expect(out.divisions).toBe(4);
+		expect(durations(out.children)).toEqual([3, 3, 3, 3]);
+		// With no page, rule 3 still reads the first three as a triplet, as before.
+		expect(completeTriplets(bar, { beats: 3, beatType: 4 }, 2, false).rule).toBe(3);
+	});
+
+	it('makes two eighths the page prints a 2 over in 3/8 a duplet, 2 in the space of 3, beside notes that stand', () => {
+		// divisions 2, 3/8: two plain eighths, 2/8 where the bar holds 3/8, a bar too short.
+		const bar = [n('eighth', 1), n('eighth', 1)];
+		const look = () => ({ numbers: [{ n: 2, m: null, at: 0.5 }], marksAt: [0.5] });
+		const out = completeTriplets(bar, { beats: 3, beatType: 8 }, 2, false, look);
+		expect(out.rule).toBe('page');
+		expect(out.children.filter((t) => t.includes('<actual-notes>2</actual-notes><normal-notes>3</normal-notes>'))).toHaveLength(2);
+		expect(durations(out.children)).toEqual([3, 3]);
+	});
+
+	it('gives a number with no space by convention none where the bar would need a space of n/2 or less, or where two such numbers stand', () => {
+		const C34 = { beats: 3, beatType: 4 };
+		// Four eighths and two quarters in 3/4: a 4 over the eighths would need the space of 2, half of 4.
+		const full = [n('eighth', 1), n('eighth', 1), n('eighth', 1), n('eighth', 1), n('quarter', 2), n('quarter', 2)];
+		expect(completeTriplets(full, C34, 2, false, () => ({ numbers: [{ n: 4, m: null, at: 1.5 }], marksAt: [1.5] })).rule).toBeNull();
+		// Four sixteenths and a dotted half in 3/4: the 4 would need no space at all.
+		const over = [n('16th', 1), n('16th', 1), n('16th', 1), n('16th', 1), n('half', 12, '<dot />')];
+		expect(completeTriplets(over, C34, 4, false, () => ({ numbers: [{ n: 4, m: null, at: 1.5 }], marksAt: [1.5] })).rule).toBeNull();
+		// Two 4s over eight quarters in 3/4: which space each takes is not named by the bar, so neither is read.
+		const two = Array.from({ length: 8 }, () => n('quarter', 2));
+		const both = () => ({ numbers: [{ n: 4, m: null, at: 1.5 }, { n: 4, m: null, at: 5.5 }], marksAt: [1.5, 5.5] });
+		expect(completeTriplets(two, C34, 2, false, both).rule).toBeNull();
+	});
+
 	it('changes nothing where a number read does not make the bar fit its metre', () => {
 		const bar = [n('quarter', 4), ...[0, 1, 2, 3, 4].map(() => n('16th', 1))];
 		const out = completeTriplets(bar, { beats: 2, beatType: 4 }, 4, false, () => ({ numbers: [{ n: 6, m: null, at: 3 }], marksAt: [3] }));

@@ -52,7 +52,10 @@
  * of n notes of one plain value whose middle it stands over, within half a
  * note, and that run is made n in the space of m: the printed m, or else
  * `conventionalSpace` (a desk default, to be checked against Gould's Table
- * 2, p. 203). A bar too short is looked at too, because a missed duplet in
+ * 2, p. 203). A number with no space by convention (a power of two in simple
+ * metre: a quadruplet in 3/4, a duplet in 3/8), where it is the bar's only
+ * one, fills the space that leaves the bar exactly full (QUEUE row 89; Dann,
+ * 2026-10-12: "triplets are not the only tuplets"). A bar too short is looked at too, because a missed duplet in
  * 6/8 leaves the bar short. Rules 2 and 3 work on any ratio (rule 3 on 3:2,
  * and on 2:3 and 4:3 in compound metre), and where the page has been read,
  * rule 3 chooses only among runs with a numeral-sized mark over their middle,
@@ -312,24 +315,48 @@ export function completeTriplets(
 	const byPage: (Ratio | null)[] = notes.map(() => null);
 	const reading = look ? look(sounding) : null;
 	if (reading) {
-		for (const number of [...reading.numbers].sort((a, b) => a.at - b.at)) {
-			const m = number.m ?? conventionalSpace(number.n, metre);
-			if (m === null) continue;
-			const ratio = { n: number.n, m };
-			// The run of n notes the number stands over: its middle nearest the number, within half a note.
+		// The run of n notes a number stands over: its middle nearest the number, within half a note; -1 where none or two.
+		const runUnder = (at: number, ratio: Ratio): number => {
 			let best = -1;
 			let bestOff = Number.POSITIVE_INFINITY;
 			let tie = false;
 			for (let s0 = 0; s0 + ratio.n <= notes.length; s0++) {
 				if (byPage.slice(s0, s0 + ratio.n).some((r) => r !== null)) continue;
 				if (!isRun(notes.slice(s0, s0 + ratio.n), ratio.n, ratio)) continue;
-				const off = Math.abs(number.at - (s0 + (ratio.n - 1) / 2));
+				const off = Math.abs(at - (s0 + (ratio.n - 1) / 2));
 				if (off > 0.5 + 1e-9) continue;
 				if (Math.abs(off - bestOff) < 1e-9) tie = true;
 				else if (off < bestOff) ((best = s0), (bestOff = off), (tie = false));
 			}
-			if (best < 0 || tie) continue;
+			return tie ? -1 : best;
+		};
+		const unspaced: { n: number; at: number }[] = [];
+		for (const number of [...reading.numbers].sort((a, b) => a.at - b.at)) {
+			const m = number.m ?? conventionalSpace(number.n, metre);
+			if (m === null) {
+				unspaced.push(number);
+				continue;
+			}
+			const ratio = { n: number.n, m };
+			const best = runUnder(number.at, ratio);
+			if (best < 0) continue;
 			for (let k = best; k < best + ratio.n; k++) if (notes[k].ratio === null) byPage[k] = ratio;
+		}
+		// A number printed alone with no space by convention (a quadruplet in 3/4, a duplet in 3/8; QUEUE row 89,
+		// 4F, bar 24): where it is the bar's only such number, its n notes fill the space of the m of their value
+		// that leaves the bar exactly full, the bar's other notes as they stand. The reason: the printed number names
+		// the notes and the bar names their time. JUDGEMENT: m lies between n/2 and 2n, and is not n.
+		if (unspaced.length === 1) {
+			const { n, at } = unspaced[0];
+			const s0 = runUnder(at, { n, m: 0 });
+			if (s0 >= 0) {
+				const run = notes.slice(s0, s0 + n);
+				const others = notes.reduce((s, r, i) => (i >= s0 && i < s0 + n ? s : add(s, byPage[i] ? mul(r.written, fr(byPage[i]!.m, byPage[i]!.n)) : r.written)), ZERO);
+				const left = add(bar, mul(others, { n: -1, d: 1 }));
+				const space = mul(left, fr(run[0].printed.d, run[0].printed.n));
+				const m = space.d === 1 ? space.n : 0;
+				if (m !== n && 2 * m > n && m < 2 * n) for (let k = s0; k < s0 + n; k++) byPage[k] = { n, m };
+			}
 		}
 		if (byPage.some((r) => r !== null)) {
 			rule = 'page';

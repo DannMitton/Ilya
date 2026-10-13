@@ -1,0 +1,17 @@
+── ilya-ship r2 ──────────────────────────────────────
+Modified, and these are what would be committed:
+    docs/memory/CONTRACT.md
+    docs/memory/OWED.md
+    docs/memory/QUEUE.md
+    docs/sessions/brief-code-n86-notation-overlay_r2_2026-10-12.md
+──────────────────────────────────────────────────────
+  1  phonology     OK    251 passed (251)
+  2  dictionary    OK    248 passed (248)
+  3  web-check     OK    found 0 errors and 12 warnings in 5 files
+  4  web-test      OK    2433 passed (2433)
+  5  score-parser  OK    675 passed | 5 skipped (680)
+  6  blurb         OK    145 passed (145)
+  7  integration   OK    55 passed (55)
+  8  ratchets      OK    ratchets: OK.
+──────────────────────────────────────────────────────
+All eight gates at baseline.

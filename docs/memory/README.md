@@ -26,6 +26,7 @@ The archives are records, never authority. **The code beats this folder, and thi
 - `CONTRACT-archive.md`: the accounts of what each rule cost, and every earlier wording, verbatim.
 - `STATE-archive.md` and `../sessions/LOG.md`: closed rows, superseded floors, old handovers and colophons.
 - `QUEUE-archive.md`: every row's full history.
+- `SCHEDULE-archive.md`: the r1 schedule of 2026-09-16 to 2026-10-12, verbatim.
 - `../sessions/`: thread openers, handovers, briefs, reports, and returned memos.
 
 ## Who writes what

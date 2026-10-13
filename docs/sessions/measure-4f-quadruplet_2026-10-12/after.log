@@ -1,0 +1,140 @@
+4F: second drop after a load fault
+4F: read on webgpu, 1.17 min
+original: 4F: webgpu; 95 of 102 right; missing 0; extra 0; pitch misreads 7; length misreads 0; bars read 40 of 40; octave shift 0; metre as printed 38 of 38 bars (2 bars with no matched note or rest not judged); score 93.1 BELOW; with 6 notes marked UNSURE set aside 95.8 PASS
+corrected: 4F: webgpu; 100 of 102 right; missing 0; extra 0; pitch misreads 2; length misreads 0; bars read 40 of 40; octave shift 0; metre as printed 38 of 38 bars (2 bars with no matched note or rest not judged); score 98.0 PASS; with 1 note marked UNSURE set aside 98.0 PASS
+pitch wrong: file index 21, «го?..»; truth Bbb4 (midi 69), 1/2; reading 70 (midi 70), 1/2
+pitch wrong: file index 21, «Все»; truth Bbb4 (midi 69), 1/4; reading 70 (midi 70), 1/4
+2 differences
+A: read on webgpu, 0.57 min
+B: read on webgpu, 0.57 min
+C: read on webgpu, 0.65 min
+E: read on webgpu, 1.36 min
+F: read on webgpu, 0.60 min
+grech: read on webgpu, 1.19 min
+gur: read on webgpu, 0.81 min
+k01: read on webgpu, 1.15 min
+k02: read on webgpu, 0.78 min
+k03: read on webgpu, 1.09 min
+k04: read on webgpu, 1.11 min
+k06: read on webgpu, 1.12 min
+k07: read on webgpu, 1.42 min
+k08: read on webgpu, 1.00 min
+k09: read on webgpu, 1.25 min
+k10: read on webgpu, 1.03 min
+sun1: read on webgpu, 0.52 min
+sun4: read on webgpu, 0.71 min
+sun5: read on webgpu, 1.94 min
+sun6: read on webgpu, 1.43 min
+tch: read on webgpu, 1.15 min
+varl: read on webgpu, 0.70 min
+K: read on webgpu, 1.15 min
+L: read on webgpu, 1.14 min
+M: read on webgpu, 0.76 min
+P: read on webgpu, 1.46 min
+G: read on webgpu, 1.08 min
+H: read on webgpu, 1.25 min
+I: read on webgpu, 0.89 min
+J: read on webgpu, 1.10 min
+N: read on webgpu, 1.33 min
+O: read on webgpu, 0.90 min
+Q: read on webgpu, 0.64 min
+R: read on webgpu, 1.64 min
+U: read on webgpu, 0.51 min
+W: read on webgpu, 0.71 min
+Y: read on webgpu, 1.46 min
+Z: read on webgpu, 2.17 min
+4A: read on webgpu, 1.65 min
+4B: read on webgpu, 1.01 min
+4C: read on webgpu, 0.86 min
+4D: read on webgpu, 0.75 min
+4E: read on webgpu, 0.85 min
+4G: read on webgpu, 0.99 min
+4H: read on webgpu, 1.29 min
+4I: read on webgpu, 1.87 min
+4J: read on webgpu, 1.08 min
+A same
+B same
+C same
+E same
+F same
+grech same
+gur same
+k01 same
+k02 same
+k03 same
+k04 same
+k06 same
+k07 same
+k08 same
+k09 same
+k10 same
+sun1 same
+sun4 same
+sun5 same
+sun6 same
+tch same
+varl same
+K same
+L same
+M same
+P same
+G same
+H same
+I same
+J same
+N same
+O same
+Q same
+R same
+U same
+W same
+Y same
+Z same
+A same
+B same
+C same
+E same
+F same
+grech same
+gur same
+k01 same
+k02 same
+k03 same
+k04 same
+k06 same
+k07 same
+k08 same
+k09 same
+k10 same
+sun1 same
+sun4 same
+sun5 same
+sun6 same
+tch same
+varl same
+K same
+L same
+M same
+P same
+G same
+H same
+I same
+J same
+N same
+O same
+Q same
+R same
+U same
+W same
+Y same
+Z same
+4A same
+4B same
+4C same
+4D same
+4E same
+4G same
+4H same
+4I same
+4J same
+ALLDONE
