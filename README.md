@@ -102,6 +102,8 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for contributor guidelines and the dict
 
 Copyright (c) 2026 Dann Mitton. MIT. See [LICENSE](./LICENSE).
 
+Ilya includes homr's music reader, which is licensed under the AGPL-3.0, so Ilya as a whole is distributed under the AGPL-3.0. Code written for Ilya remains MIT. See [NOTICES.md](./NOTICES.md).
+
 ## Acknowledgements
 
 Craig M. Grayson, *Russian Lyric Diction: A Practical Guide with Introduction and Annotations and a Bibliography with Annotations on Selected Sources* (D.M.A. dissertation, University of Washington, 2012).

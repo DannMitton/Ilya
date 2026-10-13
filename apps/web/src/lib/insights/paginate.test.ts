@@ -50,4 +50,58 @@ describe('paginate', () => {
 		});
 		expect(pages.flat().flatMap((s) => s.blocks)).toEqual(groups.map((_, k) => k));
 	});
+
+	it('floats a figure that does not fit to the next page, and the prose after it moves up (row 79, rule 3)', () => {
+		// totals: prose 100, figure 300, prose 60, prose 60. Page 1 holds 400: 20 + 100 + 5 + 300 would be 425.
+		const groups = ['totals', 'totals', 'totals', 'totals'] as Group[];
+		const pages = paginate(groups, [100, 300, 60, 60], geo(400, 600), [false, true, false, false]);
+		expect(pages.map((p) => p.map((s) => s.blocks))).toEqual([[[0, 2, 3]], [[1]]]);
+		expect(pages[0][0]).toMatchObject({ openTop: false, openBottom: true });
+		expect(pages[1][0]).toMatchObject({ openTop: true, openBottom: false });
+	});
+
+	it('moves only the prose that fits, and never a block ahead of the one that introduces the figure', () => {
+		const groups = ['totals', 'totals', 'totals', 'totals'] as Group[];
+		const pages = paginate(groups, [100, 300, 300, 60], geo(400, 800), [false, true, false, false]);
+		// 20 + 100 + 5 + 300 + 20 = 445: the 300 of prose does not fit beside the 100, so nothing moves up and the order is kept.
+		expect(pages.map((p) => p.map((s) => s.blocks))).toEqual([[[0]], [[1, 2, 3]]]);
+		expect(pages.flat().flatMap((s) => s.blocks)[0]).toBe(0);
+	});
+
+	it('does not pull prose from another squircle, nor a second figure', () => {
+		const pages = paginate(['totals', 'totals', 'totals', 'sources'] as Group[], [100, 300, 60, 60], geo(400, 600), [false, true, true, false]);
+		expect(pages.map((p) => p.map((s) => s.blocks))).toEqual([[[0]], [[1, 2], [3]]]);
+	});
+
+	it('breaks a paragraph between its lines to fill the page, and carries the rest on (row 79, rule 2)', () => {
+		// moments: 100, then a 300 block whose lines start every 20 px (breaks at 40 .. 260). Page 1 holds 300:
+		// 20 + 100 + 5 + b + 20 <= 300, so b <= 155, and the lowest break that fits is 140.
+		const breaks = [[], [40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]];
+		const pages = paginate(['moments', 'moments'] as Group[], [100, 300], geo(300, 600), [], breaks);
+		expect(pages.map((p) => p.map((s) => s.blocks))).toEqual([[[0, 1]], [[1]]]);
+		expect(pages[0][0].cuts).toEqual({ 1: [0, 140] });
+		expect(pages[1][0].cuts).toEqual({ 1: [140, 300] });
+		expect(pages[0][0].openBottom).toBe(true);
+		expect(pages[1][0].openTop).toBe(true);
+	});
+
+	it('keeps two lines on each page: a part that would leave fewer moves whole', () => {
+		// The only break is at 40 (two lines above), and 20 + 100 + 5 + 40 + 20 = 185 > 150: nothing fits, so the block moves.
+		const pages = paginate(['moments', 'moments'] as Group[], [100, 80], geo(150, 600), [], [[], [40]]);
+		expect(pages.map((p) => p.map((s) => s.blocks))).toEqual([[[0]], [[1]]]);
+		expect(pages[1][0].cuts).toBeUndefined();
+	});
+
+	it('breaks a remainder again, two lines on from where it began', () => {
+		const tops = Array.from({ length: 30 }, (_, k) => 20 * k).slice(2, 29);
+		const pages = paginate(['free'] as Group[], [600], geo(250, 250), [], [tops]);
+		const parts = pages.map((p) => p[0].cuts![0]);
+		expect(parts[0][0]).toBe(0);
+		for (let k = 1; k < parts.length; k++) {
+			expect(parts[k][0]).toBe(parts[k - 1][1]);
+			expect(parts[k][1] - parts[k][0]).toBeGreaterThanOrEqual(40);
+		}
+		expect(parts[parts.length - 1][1]).toBe(600);
+		for (const [a, b] of parts) expect(b - a).toBeLessThanOrEqual(250);
+	});
 });

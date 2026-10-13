@@ -490,8 +490,10 @@ describe('the leader', () => {
 			const before = draw(f, lang);
 			expect(l.texts.find((t) => t.kind === 'centre')).toBeTruthy();
 			expect(l.texts.some((t) => t.kind === 'half')).toBe(true);
-			// Two more leaders than the open layout has: the two labels the wall displaced.
-			expect(l.leaders.length - before.leaders.length).toBe(2);
+			// More leaders than the open layout has: the labels the wall displaced. Since row 85 ("primo passaggio" in full,
+			// Dann 2026-10-12 11:49) the French open layout already gives "centre" its leader, the longer « primo passaggio »
+			// label taking its near place, so there the wall adds one; in English, two.
+			expect(l.leaders.length - before.leaders.length).toBe(lang === 'fr' ? 1 : 2);
 			for (const s of l.leaders.slice(before.leaders.length)) {
 				expect([s.width, s.stroke, s.dash]).toEqual([0.6, 'var(--rose-ink)', undefined]);
 				// A diagonal, not a second bracket: it moves sideways and up or down.

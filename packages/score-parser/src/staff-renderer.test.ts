@@ -623,9 +623,10 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // note displaced LEFT, to cx 646, through the sung note's own accidental
     // space. E3 takes an up-stem, so the sung unit's right edge is the stem's
     // at 660 + 5.5 + 0.75, and the turning head lands at 677.05. N.139 lays the head out FORWARDS from the stave's edge at 0, so the demo's first column moved from 92 to 117.2 (clef indent 12, clef 24, 12, flat 9, 12, meter 18, run-in 24, half a notehead 6.2) and every x after it moved by +25.2. So
-    // 702.25, and the retired left displacement would be 671.2.
-    expect(svg.includes('cx="702.25"')).toBe(true);
-    expect(svg.includes('cx="671.2"')).toBe(false);
+    // 702.25, and the retired left displacement would be 671.2. Row 78c: n6 crosses, and the notes make room for its
+    // red ring, so every column after it moves by one `CROSSING_RING_REACH`, 8.9: 711.15, and 680.1.
+    expect(svg.includes('cx="711.15"')).toBe(true);
+    expect(svg.includes('cx="680.1"')).toBe(false);
   });
 
   it('brackets the triplet in black with its numeral', () => {
@@ -642,7 +643,8 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // and grew by a quarter of a pixel, which every column after it inherits.
     // That single column is the ONLY place the ink term binds on this fixture.
     // N.139 lays the head out FORWARDS from the stave's edge at 0, so the demo's first column moved from 92 to 117.2 (clef indent 12, clef 24, 12, flat 9, 12, meter 18, run-in 24, half a notehead 6.2) and every x after it moved by +25.2. So 786.45.
-    expect(svg.includes('x="786.45" y="58"')).toBe(true);
+    // Row 78c: n6's red ring adds `CROSSING_RING_REACH`, 8.9, to every column after it. So 795.35.
+    expect(svg.includes('x="795.35" y="58"')).toBe(true);
   });
 });
 

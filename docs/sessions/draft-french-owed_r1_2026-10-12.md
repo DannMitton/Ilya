@@ -29,6 +29,8 @@ Read in the tree 2026-10-12: `apps/web/src/lib/i18n.ts:1749-1788`, filled by `ap
 
 Built by Code (`docs/sessions/report-code-french-person-nouns-applied_r1_2026-10-11.md`, "For Dann"; shipped `fd1c86a`). Each follows your rulings of 2026-10-11 13:56 to 14:47, but its words were not given. The desk read each against its ruling and has no change to offer; they are listed so you can ratify or edit them.
 
+**RATIFIED by Dann 2026-10-12 20:28, all five as built** (*"Ratified"*). Already in the tree since `fd1c86a`; nothing to build.
+
 | # | Where | As built |
 |---|---|---|
 | 1 | Guide, row 15 | « … prioriser votre autonomie croissante, plutôt que de préconiser un modèle où vous restez tributaire de la disponibilité de ressources imprimées … » (« tributaire » is épicène, so no « limité(e) ») |
@@ -38,6 +40,8 @@ Built by Code (`docs/sessions/report-code-french-person-nouns-applied_r1_2026-10
 | 5 | Learn, row 104 | « … laisse passer, vous avez intériorisé le système. » (completes the ratified « Si vous pouvez expliquer ») |
 
 ## C. Row 67: the three open items in `draft-french-guide-conventions_r1_2026-10-11.md`
+
+**RATIFIED by Dann 2026-10-12 20:30, both draft lines (items 1 and 3) as drafted** (*"I ratify both."*). Not in the tree; QUEUE row 90 seats them in the Guide's conventions list.
 
 1. **The source of feminine-first order. Now sourced.** The OQLF says the order in a doublet is generally free, and that a fixed order may be adopted, masculine-first or feminine-first (« Qu'est-ce qu'un doublet? », *Banque de dépannage linguistique*, https://vitrinelinguistique.oqlf.gouv.qc.ca/23991/, read 2026-10-12 about 01:42). The same page prefers the masculine noun nearest an agreeing adjective, which feminine-first gives. **Draft line for the Guide's conventions list:** « Le féminin en premier : l'OQLF laisse l'ordre libre et recommande de placer le masculin le plus près de l'adjectif qui s'accorde; Ilya place donc le féminin en premier. » Your choice remains yours: the OQLF permits it, it does not require it.
 2. **Quebec octave usage. Closed by your ruling, nothing owed.** Your ruling of 2026-10-11 04:58 (letters with the American index, after Roberge) replaced the French index, so Quebec's own octave usage no longer decides anything Ilya prints. The pitch key « (A4 = 440 Hz) » stays for a French reader whose index puts 440 Hz at la3 (`i18n.ts:1822`, desk's comment).

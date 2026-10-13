@@ -6,7 +6,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { stemLegendDrawing } from './stem-legend';
+import { stemLegendDrawing, turningHeadLegendDrawing, TURNING_LEGEND_LINE_GAP } from './stem-legend';
+import { PLACEHOLDER_HOLLOW_STROKE_SP } from './placeholder-mark';
 import { syntheticSmuflFont } from './demo-fixture';
 
 const lines = (inner: string) =>
@@ -57,5 +58,30 @@ describe.each([
         }
       }
     }
+  });
+});
+
+describe.each([
+  ['the music font', { font: syntheticSmuflFont(), fontFamily: 'TestFont' }],
+  ['the primitive shapes, before the font loads', {}],
+] as const)('turningHeadLegendDrawing with %s (QUEUE row 78b)', (_name, options) => {
+  it('draws the filled head in lavender, solid, with no stem', () => {
+    const d = turningHeadLegendDrawing('filled', options);
+    expect(d.inner).toContain('fill="#9585A2"');
+    expect(d.inner).toContain('opacity="0.85"');
+    expect(d.inner).not.toContain('<line');
+    expect(d.inner).not.toContain('fill="none"');
+  });
+
+  it('draws the hollow head as the stave does: a lavender circle, solid stroke, inside its box', () => {
+    const d = turningHeadLegendDrawing('hollow', options);
+    expect(d.inner.startsWith('<circle data-placeholder="true"')).toBe(true);
+    expect(d.inner).toContain('fill="none"');
+    expect(d.inner).toContain('stroke="#9585A2"');
+    expect(d.inner).not.toContain('stroke-dasharray');
+    const r = Number(/ r="([\d.]+)"/.exec(d.inner)![1]);
+    const w = Number(/ stroke-width="([\d.]+)"/.exec(d.inner)![1]);
+    expect(2 * r + w).toBeLessThanOrEqual(d.height);
+    expect(w).toBeCloseTo(PLACEHOLDER_HOLLOW_STROKE_SP * TURNING_LEGEND_LINE_GAP, 1);
   });
 });

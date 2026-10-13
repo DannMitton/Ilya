@@ -23,22 +23,11 @@
 
 import { CYR_FONT_SIZE, IPA_FONT_FAMILY, IPA_FONT_SIZE, IPA_TO_CYR_BASELINE } from '@ilya/score-parser';
 
-/** Horizontal air between the note's own ink and the ring's edge. */
-export const RING_PAD_X = 4;
-/** Air above the system's highest note ink, and below a note with no underlay. */
-export const RING_PAD_Y = 9;
-/** The narrowest the box may be, so a bare notehead is not shrink-wrapped. */
-export const RING_MIN_W = 15;
-export const RING_RADIUS = 6;
-/** The stroke, which the stylesheet also sets: the clamps have to know it. */
-export const RING_STROKE = 2;
-
-/**
- * How far the ring can reach above the highest ink it encloses, stroke
- * included. The loupe's crop leaves at least this much above the page's ink, or
- * the ring's top is cut.
- */
-export const RING_REACH = RING_PAD_Y + RING_STROKE / 2;
+/* The ring's numbers live in `@ilya/score-parser` since QUEUE row 78c (`ring-geometry.ts`), because the renderer
+   now leaves room for the red crossing ring and must read the same padding and stroke. Re-exported here under
+   their old names, so every reader of this module is unchanged. */
+import { RING_MIN_W, RING_PAD_X, RING_PAD_Y, RING_STROKE } from '@ilya/score-parser';
+export { RING_MIN_W, RING_PAD_X, RING_PAD_Y, RING_RADIUS, RING_REACH, RING_STROKE } from '@ilya/score-parser';
 
 /** The ring's box, in the system's own user units. */
 export interface RingBox {

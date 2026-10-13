@@ -16,7 +16,8 @@
  * renderer's do.
  */
 
-import { headNameOf, inkMetrics, STEM_LENGTH_SP, type StaffRenderOptions } from './staff-renderer';
+import { headNameOf, inkMetrics, STEM_LENGTH_SP, TURNING_COLOUR, type StaffRenderOptions } from './staff-renderer';
+import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
 import type { NoteBase } from './types';
 
 export type StemLegendDirection = 'up' | 'down';
@@ -101,4 +102,39 @@ export function stemLegendDrawing(direction: StemLegendDirection, options: Staff
   const width = round2(xs[3] + headHalf('half') + pad + 1);
   const height = round2(pad * 2 + stemLen + sp(0.7) + sp(1.2));
   return { width, height, inner: parts.join('') };
+}
+
+export type TurningHeadLegendKind = 'filled' | 'hollow';
+
+/**
+ * The staff space the turning-head entries are drawn at, in px. JUDGEMENT (row 78b): at the stems key's 3.5 px a lone
+ * head is about 3.7 px tall and the hollow circle's stroke under 1 px, too small to tell hollow from filled beside a
+ * 9.5 px label, so these two entries draw at twice that.
+ */
+export const TURNING_LEGEND_LINE_GAP = 7;
+
+/**
+ * The Markup legend's turning-head entries (QUEUE row 78b; Dann 2026-10-11 19:56 to 20:04, entries RATIFIED 20:01):
+ * the stave's own turning head, lavender, stemless, filled for a value from the singer's voice and hollow for a
+ * placeholder. Filled is the renderer's head at its opacity; hollow is `placeholderMark`'s circle, the same call the
+ * stave makes, so the legend and the page cannot disagree.
+ */
+export function turningHeadLegendDrawing(kind: TurningHeadLegendKind, options: StaffRenderOptions = {}): StemLegendDrawing {
+  const L = TURNING_LEGEND_LINE_GAP;
+  const smufl = options.font;
+  const k = L / STAVE_LINE_GAP;
+  const pad = 1;
+  const half = smufl?.glyph('noteheadHalf');
+  const d = half ? (half.bBoxNE[1] - half.bBoxSW[1]) * L : rotatedEllipseHeight(6, 4.4, 18) * k;
+  const black = smufl?.glyph('noteheadBlack');
+  const w = black ? black.widthSp * L : 2 * 6.2 * k;
+  const width = round2(Math.max(w, d) + 2 * pad);
+  const height = round2(d + 2 * pad);
+  const cx = round2(width / 2);
+  const cy = round2(height / 2);
+  const filled = smufl
+    ? `<text data-analysis="turning-notehead" opacity="0.85" x="${round2(cx - w / 2)}" y="${cy}" font-size="${4 * L}px" font-family="${options.fontFamily ?? 'Bravura'}" fill="${TURNING_COLOUR}">${black!.char}</text>`
+    : `<ellipse data-analysis="turning-notehead" cx="${cx}" cy="${cy}" rx="${round2(6 * k)}" ry="${round2(4.4 * k)}" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${cx} ${cy})"/>`;
+  const inner = kind === 'filled' ? filled : placeholderMark(true, filled, { cx, cy, d, space: L });
+  return { width, height, inner };
 }

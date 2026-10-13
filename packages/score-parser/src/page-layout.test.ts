@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeScore, pitchToHz } from './overlay-engine';
 import { demoProfile, demoResolver, demoScore } from './demo-fixture';
-import { LAST_SYSTEM_JUSTIFY_FILL, paginateScore, sliceScore, sliceWidth } from './page-layout';
+import { LAST_SYSTEM_JUSTIFY_FILL, MAX_SYSTEM_GAP_FACTOR, paginateScore, sliceScore, sliceWidth } from './page-layout';
 import { BAR_NUMBER } from './staff-renderer';
 import type { AnalyzedScore, VoiceProfileSnapshot } from './analysis-types';
 import type { ParsedScore, Pitch, VocalLineEvent } from './types';
@@ -304,7 +304,11 @@ describe('page layout: system packing and page assembly', () => {
       expect(b[0].y).toBe(opts.marginTop);
       if (b.length < 2) continue; // a page holding one tall system cannot fill
       distributed++;
-      expect(b[b.length - 1].y + b[b.length - 1].h).toBeCloseTo(innerBottom, 1);
+      // Row 79, rule 4: the slack is shared out up to the maximum gap; a page either reaches the bottom margin or
+      // stands every gap at the maximum, with the rest at the foot.
+      const reaches = Math.abs(b[b.length - 1].y + b[b.length - 1].h - innerBottom) < 0.1;
+      const capped = gapsOf(b).every((g) => Math.abs(g - opts.systemGap * MAX_SYSTEM_GAP_FACTOR) < 0.01);
+      expect(reaches || capped).toBe(true);
       for (const g of gapsOf(b)) expect(g).toBeGreaterThanOrEqual(opts.systemGap);
     }
     expect(distributed).toBeGreaterThan(0);
@@ -318,6 +322,32 @@ describe('page layout: system packing and page assembly', () => {
     expect(prevGaps[0]).toBeGreaterThan(opts.systemGap); // else this is vacuous
     expect(lastGaps.length).toBeGreaterThan(0); // else the inheritance is untested
     for (const g of lastGaps) expect(g).toBeCloseTo(prevGaps[0], 1);
+  });
+
+  it('never widens a gap past the maximum, leaving the rest at the foot (row 79, rule 4)', () => {
+    const base = { pageWidth: 500, marginTop: 40, marginBottom: 40, systemGap: 10 };
+    const heights = paginateScore(parsed, analyzed, { ...base, pageHeight: 100000 }).systems.map((s) => s.height);
+    const head = heights.slice(0, 2);
+    // Room for the two systems and a gap of 10, plus 200 of slack: far more than one gap may take, but too little
+    // for the third system, so page 1 stays a full page of two.
+    const slack = Math.min(200, Math.min(...heights.slice(2)) - 1);
+    const opts = { ...base, pageHeight: 80 + head[0] + head[1] + 10 + slack };
+    const out = paginateScore(parsed, analyzed, opts);
+    expect(out.pageCount).toBeGreaterThan(1);
+    const ys = [...out.pages[0].matchAll(/<svg x="[\d.]+" y="([\d.]+)" width="[\d.]+" height="([\d.]+)"/g)].map((m) => [Number(m[1]), Number(m[2])]);
+    expect(ys).toHaveLength(2);
+    expect(ys[1][0] - (ys[0][0] + ys[0][1])).toBeCloseTo(Math.min(10 + slack, 10 * MAX_SYSTEM_GAP_FACTOR), 6);
+  });
+
+  it('packs every page after the first against its own window (row 79)', () => {
+    const base = { pageWidth: 500, marginTop: 0, marginBottom: 0, systemGap: 10 };
+    const heights = paginateScore(parsed, analyzed, { ...base, pageHeight: 100000 }).systems.map((s) => s.height);
+    const one = heights[0];
+    const short = paginateScore(parsed, analyzed, { ...base, pageHeight: one + 1 });
+    const taller = paginateScore(parsed, analyzed, { ...base, pageHeight: one + 1, laterPageHeight: 100000 });
+    expect(short.pageCount).toBe(heights.length);
+    expect(taller.pageCount).toBe(2);
+    expect(taller.pages[1]).toContain('viewBox="0 0 500 100000"');
   });
 
   it('keeps each system’s coordinate space intact via nested svg', () => {

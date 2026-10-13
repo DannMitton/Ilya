@@ -192,7 +192,7 @@ describe('gate 4, patterns fold', () => {
 		const g = r.shown[0];
 		expect(gatedLines([g], 'en', () => true)).toEqual(gatedLines([g], 'en'));
 		const turn = { ...g, entry: { ...g.entry, kinds: ['timbre' as const] } };
-		expect(gatedLines([turn], 'en', () => true)[0]).toBe(`${gatedLines([turn], 'en')[0]} This finding rests on a placeholder value for [ɑ].`);
+		expect(gatedLines([turn], 'en', () => true)[0]).toBe(`${gatedLines([turn], 'en')[0]} This finding rests on a placeholder value for [ɑ]. To replace it with your own value, sample [ɑ] in vocal fry.`);
 		expect(gatedLines([turn], 'en', () => false)).toEqual(gatedLines([turn], 'en'));
 	});
 

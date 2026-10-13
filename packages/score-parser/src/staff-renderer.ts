@@ -52,7 +52,8 @@ import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from 
 import { chooseClef, type RenderClef } from './clef-select';
 import { arcOutline } from './arc-outline';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
-import { placeholderMark } from './placeholder-mark';
+import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
+import { CROSSING_RING_HEADROOM, CROSSING_RING_REACH } from './ring-geometry';
 
 /**
  * N.10b: the sigla for a syllable the resolver declined to transcribe.
@@ -862,7 +863,7 @@ const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
  * and the turning pitches are formant-derived VOICE DATA. Sage, which codes
  * the score document and its text, was miscoding them.
  */
-const TURNING_COLOUR = '#9585A2';
+export const TURNING_COLOUR = '#9585A2';
 
 /**
  * The width a primitive-mode turning accidental is treated as having, in px.
@@ -1465,6 +1466,8 @@ export interface ColumnInk {
   right: number;
   /** True where `right` is a turning unit N.106 displaced. */
   turningDisplaced: boolean;
+  /** Row 78c: a crossing's red ring stands this far beyond its ink and syllable on each side (`CROSSING_RING_REACH`). */
+  ringReach?: number;
 }
 
 /**
@@ -1556,7 +1559,7 @@ export function columnInk(
     }
   }
 
-  return { left, right, turningDisplaced };
+  return { left, right, turningDisplaced, ...(a?.crossing ? { ringReach: CROSSING_RING_REACH } : {}) };
 }
 
 export function columnAdvance(
@@ -1576,9 +1579,9 @@ export function columnAdvance(
   // there, and half a stave-space put the last syllable hard against it
   // (Dann at the browser, 2026-08-06, on [nuf]).
   const textNeed =
-    underlayHalfWidth(prevEv, options) +
+    underlayHalfWidth(prevEv, options) + (prevInk?.ringReach ?? 0) +
     (ev
-      ? underlayHalfWidth(ev, options) +
+      ? underlayHalfWidth(ev, options) + (nextInk?.ringReach ?? 0) +
         // N.129 step 2: inside a word the gap must hold a hyphen.
         Math.max(lineGap * 0.5, joinsWord(prevEv, ev, options) ? HYPHEN_GAP_PX : 0)
       : lineGap);
@@ -1597,8 +1600,8 @@ export function columnAdvance(
      is the previous column's own ink plus the clearance. That keeps a displaced
      turning unit off the barline it runs into. */
   const inkNeed = prevInk
-    ? prevInk.right +
-      (nextInk ? nextInk.left : 0) +
+    ? prevInk.right + (prevInk.ringReach ?? 0) +
+      (nextInk ? nextInk.left + (nextInk.ringReach ?? 0) : 0) +
       lineGap * (prevInk.turningDisplaced ? TURNING_TRAIL_SP : INK_CLEAR_SP)
     : 0;
   return Math.max(minGap, prevDurWhole * pxPerWhole, textNeed, inkNeed);
@@ -1622,7 +1625,7 @@ export interface LayoutColumn {
   /**
    * N.139. The px the meter adds between the measure's barline and this column,
    * unstretched: the barline draws at `x - BARLINE_TO_COLUMN_PX - meterRoom`.
-   * 0 where no meter draws.
+   * 0 where no meter draws, plus a crossing ring's reach where the column opening the measure crosses (row 78c).
    */
   meterRoom: number;
 }
@@ -1726,7 +1729,7 @@ export function layoutColumns(
       advance:
         columns.length === 0
           ? 0
-          : (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk) : 0) + BARLINE_ROOM + room.meterRoom,
+          : (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk) : 0) + BARLINE_ROOM + (prevInk?.ringReach ?? 0) + room.meterRoom,
       newMeasure: columns.length > 0,
       ...room,
     });
@@ -1749,13 +1752,13 @@ export function layoutColumns(
     let advance: number;
     let room: { meter?: TimeSignature; meterRoom: number } = { meterRoom: 0 };
     if (owedByTacet > 0) {
-      room = meterRoomFor(ev.measureIndex, ink.left);
+      room = meterRoomFor(ev.measureIndex, ink.left); room = { ...room, meterRoom: room.meterRoom + (ink.ringReach ?? 0) };
       advance = owedByTacet + BARLINE_ROOM + room.meterRoom;
       owedByTacet = 0;
     } else if (prevEv) {
-      if (newMeasure) room = meterRoomFor(ev.measureIndex, ink.left);
+      if (newMeasure) { room = meterRoomFor(ev.measureIndex, ink.left); room = { ...room, meterRoom: room.meterRoom + (ink.ringReach ?? 0) }; }
       advance =
-        columnAdvance(prevEv, ev, prevDurWhole, options, prevInk, ink) + (newMeasure ? BARLINE_ROOM : 0) + room.meterRoom;
+        columnAdvance(prevEv, ev, prevDurWhole, options, prevInk, ink) + (newMeasure ? BARLINE_ROOM + (prevInk?.ringReach ?? 0) : 0) + room.meterRoom;
     } else {
       advance = 0;
     }
@@ -3033,7 +3036,7 @@ export function renderAnalyzedStaff(
          the loupe's filter drops them with the rest (N.71's argument for the
          handle, made again). */
       for (const l of drawLedgerLines(tx, ty, TURNING_COLOUR, 0.85)) {
-        parts.push(placeholderMark(a.placeholder, analysisMark(l, 'turning-ledger'), 'stroke'));
+        parts.push(placeholderMark(a.placeholder, analysisMark(l, 'turning-ledger'), 'tag'));
       }
 
       if (drawsAcc) {
@@ -3049,9 +3052,9 @@ export function renderAnalyzedStaff(
         turningAcc[tKey] = tp.alter;
       }
       if (smufl) {
-        parts.push(placeholderMark(a.placeholder, analysisMark(glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '), 'turning-notehead'), 'outline'));
+        parts.push(placeholderMark(a.placeholder, analysisMark(glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '), 'turning-notehead'), { cx: tx, cy: ty, d: sp(smufl!.glyph('noteheadHalf').bBoxNE[1] - smufl!.glyph('noteheadHalf').bBoxSW[1]), space: o.lineGap }));
       } else {
-        parts.push(placeholderMark(a.placeholder, `<ellipse data-analysis="turning-notehead" cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`, 'outline'));
+        parts.push(placeholderMark(a.placeholder, `<ellipse data-analysis="turning-notehead" cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`, { cx: tx, cy: ty, d: rotatedEllipseHeight(6, 4.4, 18), space: o.lineGap }));
       }
       lowestInk = Math.max(lowestInk, ty + 6);
       highestInk = Math.min(highestInk, ty - 6);
@@ -3479,7 +3482,7 @@ export function renderAnalyzedStaff(
   //
   // `paginateScore` MUST read this viewBox's min-y. `viewBoxOf` was written
   // when the origin was always 0.
-  const top = Math.max(0, Math.floor(Math.min(highestInk, staffTop) - sp(1)));
+  const top = Math.max(0, Math.floor(Math.min(highestInk, staffTop) - sp(1) - (placed.some((p) => analyzed.events[p.ev.id]?.crossing) ? CROSSING_RING_HEADROOM : 0)));
   const height = cyrY + 20 - top;
   parts[0] = `<svg viewBox="0 ${top} ${width} ${height}" xmlns="http://www.w3.org/2000/svg" font-family="'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif">`;
   return parts.join('\n');

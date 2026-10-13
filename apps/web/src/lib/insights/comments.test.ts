@@ -145,11 +145,11 @@ const at = (cs: NoteComment[], id: string) => cs.find((c) => c.eventId === id);
  * octave index, as in English, so E4 is « E4 » (QUEUE row 68, superseding row 66's solfège).
  */
 const FR_E4 =
-	"Ce [i] sur E4 se prolonge environ 4 secondes, au-dessus de la première résonance (fR1) de votre [i] chanté. Ici, le [i] tend de lui-même vers un timbre youhou; mais le resserrer au lieu d'ouvrir la bouche tend à l'amincir (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, p. 97 et 115). Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l'avant, et observer si le [i] garde sa couleur (Miller, Solutions for Singers, 2004, p. 163).";
+	"Ce [i] sur E4 se prolonge environ 4 secondes, au-dessus de la première résonance (fR1) de votre [i]. Ici, le [i] tend de lui-même vers un timbre youhou; mais le resserrer au lieu d'ouvrir la bouche tend à l'amincir (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, p. 97 et 115). Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l'avant, et observer si le [i] garde sa couleur (Miller, Solutions for Singers, 2004, p. 163).";
 const FR_EB4 =
 	"Ce [ɛ] sur E♭4 se prolonge environ 3 secondes, juste après la hauteur où votre [ɛ] change de timbre (autour de D4). La couleur tend ici à se fermer d'elle-même; mais la garder ouverte peut la pousser vers un cri (Bozeman, Practical Vocal Acoustics, 2025, p. 45 et 65). Bozeman propose de garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà. Observez si la couleur se ferme plus facilement (Kinesthetic Voice Pedagogy 2, 2021, p. 18-19).";
 const FR_D4 =
-	"Ce [u] sur D4 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u] chanté. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 158); mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
+	"Ce [u] sur D4 se situe juste au-dessus de votre secondo passaggio et un peu en dessous de la première résonance de votre [u]. Ici, le [u] tend à s'ouvrir un peu de lui-même (Miller, The Structure of Singing, 1986, p. 158); mais le garder fermé tend vers un timbre youhou (Bozeman, Practical Vocal Acoustics, 2025, p. 94). Si cela convient à votre voix, laissez-le pencher vers [ʊ], et observez si le [u] garde sa couleur.";
 const POINTS: (IntakePoint | undefined)[] = [1, 2, 3, 4, 5, 'not-sure', undefined];
 
 describe('the intake answers', () => {
@@ -360,7 +360,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 	it('E4 [i], English and French', () => {
 		const en = forced(at(t01, 'e4')!, T01, 'en');
 		expect(en.text).toBe(
-			'This [i] on E4 is sustained for about 4 seconds, above the first resonance (fR1) of your sung [i]. Here the [i] tends toward whoop timbre on its own; but narrowing it instead of opening the mouth tends to thin it (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, pp. 97 and 115). You might let the jaw drop with the pitch, tongue tip forward, and notice whether the [i] keeps its colour (Miller, Solutions for Singers, 2004, p. 163).',
+			'This [i] on E4 is sustained for about 4 seconds, above the first resonance (fR1) of your [i]. Here the [i] tends toward whoop timbre on its own; but narrowing it instead of opening the mouth tends to thin it (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, pp. 97 and 115). You might let the jaw drop with the pitch, tongue tip forward, and notice whether the [i] keeps its colour (Miller, Solutions for Singers, 2004, p. 163).',
 		);
 		expect(en.count).toBe('1 more thing to explore');
 		expect(forced(at(t01, 'e4')!, T01, 'fr').text).toBe(FR_E4);
@@ -376,7 +376,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 	it('D4 [u], English and French', () => {
 		const en = forced(at(t01, 'e11')!, T01, 'en', false);
 		expect(en.text).toBe(
-			'This [u] on D4 sits just above your secondo passaggio and a little under the first resonance of your sung [u]. Here the [u] tends to open a little on its own (Miller, The Structure of Singing, 1986, p. 158); but keeping it closed tends toward whoop timbre (Bozeman, Practical Vocal Acoustics, 2025, p. 94). If it suits your voice, let it lean toward [ʊ], and notice whether the [u] keeps its colour.',
+			'This [u] on D4 sits just above your secondo passaggio and a little under the first resonance of your [u]. Here the [u] tends to open a little on its own (Miller, The Structure of Singing, 1986, p. 158); but keeping it closed tends toward whoop timbre (Bozeman, Practical Vocal Acoustics, 2025, p. 94). If it suits your voice, let it lean toward [ʊ], and notice whether the [u] keeps its colour.',
 		);
 		expect(en.count).toBe('3 more things to explore');
 		expect(forced(at(t01, 'e11')!, T01, 'fr', false).text).toBe(FR_D4);
@@ -425,18 +425,16 @@ describe('the rotation', () => {
 			expect(all).not.toMatch(/\btry\b|\bhold/i);
 		}
 	});
-	it('does not call a placeholder vowel "sung" (QUEUE row 69)', () => {
+	it('calls no vowel "sung" in either language, since every calibration reading is taken in fry (QUEUE row 78a)', () => {
 		const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
 		const withResonance = page.filter((c) => c.resonance);
 		expect(withResonance.length).toBeGreaterThan(0);
 		for (const language of ['en', 'fr'] as const) {
-			const sung = language === 'en' ? /your sung \[/ : /\] chanté/;
-			const frames = (placeholders?: Set<string>) =>
-				renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf, ...(placeholders ? { placeholders } : {}) })
-					.filter((x) => x.comment.resonance)
-					.map((x) => runsText(x.frame));
-			expect(frames().every((f) => sung.test(f))).toBe(true);
-			expect(frames(new Set(withResonance.map((c) => c.vowel))).some((f) => sung.test(f))).toBe(false);
+			const frames = renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf })
+				.filter((x) => x.comment.resonance)
+				.map((x) => runsText(x.frame));
+			expect(frames.length).toBe(withResonance.length);
+			expect(frames.some((f) => /\bsung\b|chanté/.test(f))).toBe(false);
 		}
 	});
 });
@@ -451,7 +449,9 @@ describe('citations', () => {
 		]);
 	});
 	it('prints only what was read: no ISBN or publisher where none was recorded', () => {
-		expect(runsText(fullReference('bozeman2025'))).toBe('Bozeman, Kenneth. Practical Vocal Acoustics, 2nd ed. 2025.');
+		// Bozeman 2025's place, publisher, and ISBN supplied by Dann 2026-10-11 21:36 and 21:37 (QUEUE row 78a).
+		expect(runsText(fullReference('bozeman2025'))).toBe('Bozeman, Kenneth. Practical Vocal Acoustics, 2nd ed. New York: Bloomsbury, 2025. ISBN 979-8-7651-6228-6.');
+		expect(runsText(fullReference('challis2006'))).not.toMatch(/ISBN|null/);
 		expect(runsText(fullReference('miller2004'))).toBe(
 			'Miller, Richard. Solutions for Singers: Tools for Performers and Teachers. Oxford University Press, 2004. ISBN 978-0-19-516005-5.',
 		);

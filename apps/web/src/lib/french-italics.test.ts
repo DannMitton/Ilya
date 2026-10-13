@@ -64,7 +64,7 @@ describe('the French in i18n.ts', () => {
 		const named: Record<string, string> = {
 			'calib.characteristics.passaggioHeading': '*Passaggio*',
 			'calib.characteristics.passaggioPrimaryLabel': '*Passaggio* primaire',
-			'insights.figure.secondo': '*secondo*',
+			'insights.figure.secondo': '*secondo passaggio*', // in full since row 85 (Dann 2026-10-12 11:49)
 			'comment.working.where.secondoAt': 'sur votre *secondo passaggio*',
 			'comment.working.try.decrescendo.action': 'aborder la note avec un léger *decrescendo*',
 			'voiceIntake.topic.passaggi': 'La traversée des <em>passaggi</em>',

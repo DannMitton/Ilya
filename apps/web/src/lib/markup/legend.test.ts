@@ -10,7 +10,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildMarkupLegend, MARKUP_WITHHELD_TYPE, MARKUP_STEMS_UP_TYPE, MARKUP_STEMS_DOWN_TYPE } from './legend';
+import { buildMarkupLegend, MARKUP_WITHHELD_TYPE, MARKUP_STEMS_UP_TYPE, MARKUP_STEMS_DOWN_TYPE, MARKUP_TURN_FILLED_TYPE, MARKUP_TURN_HOLLOW_TYPE } from './legend';
 import { WITHHELD_SIGLA } from '@ilya/score-parser';
 
 describe('the withheld-syllable entry (N.10b)', () => {
@@ -89,5 +89,22 @@ describe('the stems key (N.176)', () => {
 		expect(en.map((i) => i.emphasis)).toEqual(['close', 'open']);
 		expect(fr.map((i) => i.emphasis)).toEqual(['fermé', 'ouvert']);
 		for (const i of [...en, ...fr]) expect(i.label).toContain(i.emphasis!);
+	});
+});
+
+describe('the turning-head entries (QUEUE row 78b)', () => {
+	it('come after the stems entries; the hollow one only when a placeholder head is drawn', () => {
+		const sampled = buildMarkupLegend('en', { stems: true, turningHeads: true, hollowHeads: false });
+		expect(sampled.map((i) => i.type)).toEqual([MARKUP_STEMS_UP_TYPE, MARKUP_STEMS_DOWN_TYPE, MARKUP_TURN_FILLED_TYPE]);
+		const withPlaceholder = buildMarkupLegend('en', { stems: true, turningHeads: true, hollowHeads: true, withheldSyllables: true });
+		expect(withPlaceholder.map((i) => i.type)).toEqual([MARKUP_STEMS_UP_TYPE, MARKUP_STEMS_DOWN_TYPE, MARKUP_TURN_FILLED_TYPE, MARKUP_TURN_HOLLOW_TYPE, MARKUP_WITHHELD_TYPE]);
+		expect(withPlaceholder.filter((i) => i.head).map((i) => i.head)).toEqual(['filled', 'hollow']);
+		expect(buildMarkupLegend('en', { stems: false, turningHeads: false, hollowHeads: true })).toEqual([]);
+	});
+
+	it('says what Dann ratified at 20:01, in both languages, the apostrophes typographic', () => {
+		const label = (language: 'en' | 'fr') => buildMarkupLegend(language, { turningHeads: true, hollowHeads: true }).map((i) => i.label);
+		expect(label('en')).toEqual(['= the pitch where this vowel turns, from your voice', '= the same, from a placeholder value']);
+		expect(label('fr')).toEqual(['= la hauteur où cette voyelle change de timbre, d’après votre voix', '= la même, d’après une valeur par défaut']);
 	});
 });

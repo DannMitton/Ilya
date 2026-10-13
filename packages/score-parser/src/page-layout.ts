@@ -35,6 +35,11 @@ export interface PageLayoutOptions extends StaffRenderOptions {
   /** Page size in px at 96 dpi. Defaults: US letter, 816 × 1056. */
   pageWidth?: number;
   pageHeight?: number;
+  /**
+   * QUEUE row 79: the height of every page after the first, where a page's window differs from page 1's (Markup's
+   * page 1 carries the title block, the others a running head). Defaults to `pageHeight`.
+   */
+  laterPageHeight?: number;
   /** Inner margins in px. */
   marginTop?: number;
   marginRight?: number;
@@ -53,6 +58,15 @@ const PAGE_DEFAULTS = {
   marginLeft: 72,
   systemGap: 28,
 };
+
+/**
+ * PAGES OF MUSIC SHARE OUT THEIR LEFTOVER SPACE UP TO A MAXIMUM GAP (QUEUE row 79; Dann 2026-10-11 21:50, `PRODUCT.md`
+ * "No empty space mid-document", rule 4): the gap between systems on a full page never exceeds this many times the
+ * normal `systemGap`, and the rest stays at the foot. JUDGEMENT (the brief's DESK DEFAULT of twice the normal gap):
+ * Gould's extraction holds no rule on vertical justification that the desk could find (NOT ESTABLISHED that none
+ * exists), so the number is taste, shown to Dann in pictures.
+ */
+export const MAX_SYSTEM_GAP_FACTOR = 2;
 
 // The advance arithmetic is NOT mirrored here: `layoutColumns` is imported
 // from the renderer and produces the columns BOTH modules walk, so the estimate
@@ -229,7 +243,8 @@ export function paginateScore(
 ): PaginatedScore {
   const o = { ...PAGE_DEFAULTS, ...options };
   const innerWidth = o.pageWidth - o.marginLeft - o.marginRight;
-  const innerBottom = o.pageHeight - o.marginBottom;
+  /** A page's inner bottom: page 1's, or every later page's (row 79). */
+  const bottomOf = (pageIndex: number): number => (pageIndex === 0 ? o.pageHeight : (o.laterPageHeight ?? o.pageHeight)) - o.marginBottom;
   const measureCount = parsed.measures.length;
 
   // Resolve the clef ONCE for the whole score (v37 §A.17): a slice-level
@@ -283,7 +298,7 @@ export function paginateScore(
     let used = 0;
     for (const s of systems) {
       const need = group.length === 0 ? s.height : used + o.systemGap + s.height;
-      if (group.length > 0 && o.marginTop + need > innerBottom) {
+      if (group.length > 0 && o.marginTop + need > bottomOf(pageGroups.length)) {
         pageGroups.push(group);
         group = [s];
         used = s.height;
@@ -394,20 +409,22 @@ export function paginateScore(
     const inkHeight = group.reduce((total, s) => total + s.height, 0);
     const gapCount = group.length - 1;
     let gap = establishedGap;
+    const pageBottom = bottomOf(pageIndex);
     if (!isLast && gapCount > 0) {
-      gap = Math.max(o.systemGap, (innerBottom - o.marginTop - inkHeight) / gapCount);
+      // Row 79, rule 4: shared out up to `MAX_SYSTEM_GAP_FACTOR` times the normal gap; beyond it the rest stays at the foot.
+      gap = Math.max(o.systemGap, Math.min(o.systemGap * MAX_SYSTEM_GAP_FACTOR, (pageBottom - o.marginTop - inkHeight) / gapCount));
       establishedGap = gap;
     } else if (gapCount > 0) {
       // QUEUE row 72: the carried spacing never pushes the last page's systems past its bottom. The
       // groups were packed at `o.systemGap`, so that floor always fits; a wider carried gap may not.
-      gap = Math.max(o.systemGap, Math.min(establishedGap, (innerBottom - o.marginTop - inkHeight) / gapCount));
+      gap = Math.max(o.systemGap, Math.min(establishedGap, (pageBottom - o.marginTop - inkHeight) / gapCount));
     }
 
     // NO BACKGROUND, N.133, Dann's ruling of 2026-09-13: every surface
     // provides its own ground. The white page rectangle that stood here was
     // stripped by its only consumer before it ever drew.
     const pageParts: string[] = [
-      `<svg viewBox="0 0 ${o.pageWidth} ${o.pageHeight}" xmlns="http://www.w3.org/2000/svg" data-score-page="${pageIndex + 1}">`,
+      `<svg viewBox="0 0 ${o.pageWidth} ${pageBottom + o.marginBottom}" xmlns="http://www.w3.org/2000/svg" data-score-page="${pageIndex + 1}">`,
     ];
     let y = o.marginTop;
     for (const s of group) {

@@ -55,8 +55,8 @@ export {
 	METER_RUN_IN_SP,
 	type StaffRenderOptions,
 } from './staff-renderer';
-export { placeholderMark, PLACEHOLDER_DASH, PLACEHOLDER_DASH_FINE, PLACEHOLDER_OUTLINE, type PlaceholderStyle } from './placeholder-mark';
-export { stemLegendDrawing, type StemLegendDirection, type StemLegendDrawing } from './stem-legend';
+export { placeholderMark, rotatedEllipseHeight, PLACEHOLDER_DASH, PLACEHOLDER_HOLLOW_STROKE_SP, type HollowHead, type PlaceholderStyle } from './placeholder-mark';
+export { stemLegendDrawing, turningHeadLegendDrawing, TURNING_LEGEND_LINE_GAP, type StemLegendDirection, type StemLegendDrawing, type TurningHeadLegendKind } from './stem-legend';
 export { chooseClef, chooseClefForSpan, clefFromSource, type RenderClef } from './clef-select';
 export { resolveVocalReadingOctave, shiftVocalOctave } from './vocal-octave';
 export { scoreInPerformanceOrder, type PerformanceOrderScore } from './performance-order';
@@ -112,6 +112,7 @@ export {
   type PageLayoutOptions,
   type PaginatedScore,
   type SystemSlice,
+  MAX_SYSTEM_GAP_FACTOR,
 } from './page-layout';
 
 /*
@@ -213,3 +214,4 @@ export {
   type LexiconHit,
   type TempoLanguage,
 } from './tempo-lexicon';
+export * from './ring-geometry';

@@ -292,8 +292,6 @@ export interface RenderContext {
 	register: Register;
 	/** The spelled pitch of a sung event. */
 	pitchOf: (eventId: string) => Pitch | undefined;
-	/** Vowels whose fR1 is a placeholder (QUEUE row 69): the frame does not call them "sung". */
-	placeholders?: ReadonlySet<string>;
 }
 
 export interface RenderedSuggestion {
@@ -338,7 +336,7 @@ export function frameRuns(c: NoteComment, ctx: RenderContext, nameFR1: boolean):
 	let namedFR1 = false;
 	const resonance = () => {
 		if (!c.resonance) return null;
-		const part = (c.resonance.side === 'above' ? 'where.above' : 'where.under') + (ctx.placeholders?.has(c.vowel) ? 'Placeholder' : '');
+		const part = c.resonance.side === 'above' ? 'where.above' : 'where.under';
 		const s = fill(T(part), { ...vars, fR1: nameFR1 ? FR1 : '' });
 		namedFR1 = nameFR1;
 		return s;
@@ -443,11 +441,11 @@ export function renderComment(
 export function renderComments(
 	comments: readonly NoteComment[],
 	seed: number,
-	o: SuggestionOptions & { register: Register; pitchOf: RenderContext['pitchOf']; placeholders?: ReadonlySet<string> },
+	o: SuggestionOptions & { register: Register; pitchOf: RenderContext['pitchOf'] },
 ): RenderedComment[] {
 	const orders = comments.map((c) => orderSuggestions(c, o));
 	const voicings = rotate(comments, orders, seed);
-	const ctx: RenderContext = { language: o.language, register: o.register, pitchOf: o.pitchOf, ...(o.placeholders ? { placeholders: o.placeholders } : {}) };
+	const ctx: RenderContext = { language: o.language, register: o.register, pitchOf: o.pitchOf };
 	let named = false;
 	return comments.map((c, k) => {
 		const r = renderComment(c, orders[k], voicings[k], ctx, !named);

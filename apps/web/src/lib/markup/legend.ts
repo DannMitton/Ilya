@@ -26,6 +26,9 @@
  * The copy sits here rather than in `i18n.ts` under E.22 §4's licence for this
  * item: "minimal form, hardcoded copy, no configurability". RATIFIED by Dann
  * 2026-09-30 23:42, English and French, as built.
+ *
+ * Since QUEUE row 78b the legend also keys the turning heads, after the stems
+ * entries: filled for a value from the singer's voice, hollow for a placeholder.
  */
 
 import type { Language } from '../i18n';
@@ -58,6 +61,26 @@ const MARKUP_STEMS_COPY: Record<'up' | 'down', Record<Language, { label: string;
 	}
 };
 
+/**
+ * The two turning-head entries (QUEUE row 78b). RATIFIED by Dann 2026-10-11 20:01, both languages, as the desk drafted
+ * them (`OPEN.md`, "PLACEHOLDER TURNING NOTES ARE HOLLOW"); each is drawn with its head, in lavender, before the words.
+ * "from your voice", not "from your sample", because a derived vowel also draws filled. The record has straight
+ * apostrophes in « d'après »; built with U+2019, as « n’est » below.
+ */
+export const MARKUP_TURN_FILLED_TYPE = 'markup-turn-filled';
+export const MARKUP_TURN_HOLLOW_TYPE = 'markup-turn-hollow';
+
+const MARKUP_TURN_COPY: Record<'filled' | 'hollow', Record<Language, string>> = {
+	filled: {
+		en: '= the pitch where this vowel turns, from your voice',
+		fr: '= la hauteur où cette voyelle change de timbre, d\u2019après votre voix'
+	},
+	hollow: {
+		en: '= the same, from a placeholder value',
+		fr: '= la même, d\u2019après une valeur par défaut'
+	}
+};
+
 const MARKUP_WITHHELD_COPY: Record<Language, string> = {
 	en: 'The score and Ilya divide this word differently, so nothing is transcribed here rather than guessed.',
 	fr: 'La partition et Ilya divisent ce mot différemment\u00a0: rien n’est transcrit ici plutôt que deviné.'
@@ -77,10 +100,14 @@ const MARKUP_WITHHELD_COPY: Record<Language, string> = {
  * legend and the page can never show two different glyphs. The stems entries
  * are drawn by `PageFooter` from `stemLegendDrawing`, the renderer's own
  * heads, stems, beam, and ink.
+ *
+ * The filled turning-head entry shows whenever the page draws a turning head
+ * (`turningHeads`, the stems entries' condition); the hollow one only when at
+ * least one is hollow (`hollowHeads`, DESK DEFAULT).
  */
 export function buildMarkupLegend(
 	language: Language,
-	options: { withheldSyllables?: boolean; stems?: boolean } = {}
+	options: { withheldSyllables?: boolean; stems?: boolean; turningHeads?: boolean; hollowHeads?: boolean } = {}
 ): LegendItem[] {
 	const items: LegendItem[] = [];
 	if (options.stems) {
@@ -92,6 +119,16 @@ export function buildMarkupLegend(
 				label: copy.label,
 				stems: dir,
 				emphasis: copy.emphasis
+			});
+		}
+	}
+	if (options.turningHeads) {
+		for (const head of options.hollowHeads ? (['filled', 'hollow'] as const) : (['filled'] as const)) {
+			items.push({
+				type: head === 'filled' ? MARKUP_TURN_FILLED_TYPE : MARKUP_TURN_HOLLOW_TYPE,
+				icon: 'head',
+				label: MARKUP_TURN_COPY[head][language],
+				head
 			});
 		}
 	}

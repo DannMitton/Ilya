@@ -6,8 +6,10 @@
  * A vowel the singer has not sampled carries a stand-in fR1 since row 17, and
  * the overlay engine marks each note that rests on one (`AnalyzedEvent
  * .placeholder`). This module names those vowels in roster order and builds
- * the words: the line at the top of Markup and Insights (ratified), and the
- * sentences a comment and the vowel figure carry (proposed). A derived vowel,
+ * the words: the line at the top of Markup and Insights, and the sentences a
+ * comment and the vowel figure carry, all RATIFIED by Dann 2026-10-11 (12:41 to
+ * 19:51, `OPEN.md`). Markup's line ends on its own sentence, which names the
+ * hollow head (Dann 20:06). A derived vowel,
  * "Estimated" in Voice, is not a placeholder and is not named here.
  *
  * PURE: an analysis and a language in, strings out.
@@ -41,18 +43,19 @@ export function vowelList(vowels: readonly string[], language: Language): string
 		.join('');
 }
 
-/** The line at the top of the page, or null when the page uses no placeholder. */
-export function placeholderLine(vowels: readonly string[], language: Language): string | null {
+/** The line at the top of the page, or null when the page uses no placeholder. Markup's ends "drawn hollow or dashed". */
+export function placeholderLine(vowels: readonly string[], language: Language, page: 'insights' | 'markup' = 'insights'): string | null {
 	if (vowels.length === 0) return null;
-	return t(vowels.length === 1 ? 'placeholder.line.one' : 'placeholder.line.many', language).replace('{vowels}', vowelList(vowels, language));
+	const key = `placeholder.line${page === 'markup' ? '.markup' : ''}.${vowels.length === 1 ? 'one' : 'many'}`;
+	return t(key, language).replace('{vowels}', vowelList(vowels, language));
 }
 
-/** A comment's own sentence when its vowel is a placeholder (PROPOSED words). */
+/** A comment's own sentences when its vowel is a placeholder: the finding, then the remedy (RATIFIED 19:49). */
 export function placeholderCommentSentence(vowel: string, language: Language): string {
-	return t('placeholder.comment', language).replace('{vowel}', `[${vowel}]`);
+	return t('placeholder.comment', language).replaceAll('{vowel}', `[${vowel}]`);
 }
 
-/** The vowel figure's sentence, or null when no row rests on a placeholder (PROPOSED words). */
+/** The vowel figure's sentence, or null when no row rests on a placeholder (RATIFIED). */
 export function placeholderTurnsSentence(vowels: readonly string[], language: Language): string | null {
 	if (vowels.length === 0) return null;
 	return t(vowels.length === 1 ? 'placeholder.turns.one' : 'placeholder.turns.many', language).replace('{vowels}', vowelList(vowels, language));

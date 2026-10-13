@@ -129,7 +129,7 @@ describe('a full reference in French', () => {
 	it('prints a book as an OQLF notice: a comma between place and publisher', () => {
 		expect(fr('reid1975')).toBe('REID, Cornelius L. Voice: Psyche and Soma, New York, Joseph Patelson Music House, 1975, 3e tirage, 1999. ISBN 0-915282-00-3.');
 		expect(fr('howell2025')).toBe('HOWELL, Ian. Hearing Singing, Lanham (MD), Rowman & Littlefield, 2025.');
-		expect(fr('bozeman2025')).toBe('BOZEMAN, Kenneth. Practical Vocal Acoustics, 2e éd., 2025.');
+		expect(fr('bozeman2025')).toBe('BOZEMAN, Kenneth. Practical Vocal Acoustics, 2e éd., New York, Bloomsbury, 2025. ISBN 979-8-7651-6228-6.');
 		expect(fr('mckinney1994')).toBe('McKINNEY, James C. The Diagnosis and Correction of Vocal Faults, Waveland, 1994, réédition, 2005.');
 	});
 

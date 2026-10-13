@@ -42,7 +42,7 @@ describe('one running head for all three tabs', () => {
 		expect(markup).toContain("formatRunningHeader(composer, scoreTitle ?? '', poet)");
 		expect(insights).toContain("formatRunningHeader(composer, scoreTitle ?? '', poet)");
 		expect(formatRunningHeader('Modest Mussorgsky', 'Without Sun, no. 1', 'Arseny Golenishchev-Kutuzov')).toBe(
-			'MUSSORGSKY | GOLENISHCHEV-KUTUZOV — WITHOUT SUN, NO. 1',
+			'MUSSORGSKY | GOLENISHCHEV-KUTUZOV | WITHOUT SUN, NO. 1',
 		);
 	});
 
@@ -52,15 +52,16 @@ describe('one running head for all three tabs', () => {
 });
 
 describe('one footer for all three tabs', () => {
-	it('Insights draws PageFooter, its line in rose, its notes above the line', () => {
+	it('Insights draws PageFooter, its line in rose; its notes are endnotes, not above the line (QUEUE row 79)', () => {
 		expect(insights).toContain('<PageFooter');
 		expect(insights).toContain('hairlineAccent="var(--rose, #ab7f7f)"');
-		expect(insights).toContain('{#snippet apparatus()}');
+		expect(insights).not.toContain('{#snippet apparatus()}');
+		expect(insights).toContain('notesBlock(methodLine');
 		expect(insights).not.toContain('class="insights-foot"');
 	});
 
 	it('Insights still measures its footer', () => {
-		// Since QUEUE row 66 the page measures a probe footer, the tallest one (with the footnote), and reserves its height on every page.
+		// Since QUEUE row 66 the page measures a probe footer and reserves its height on every page; since row 79 every footer is the same.
 		expect(insights).toContain('bind:this={footProbe}');
 		expect(insights).toContain('footHeight = footProbe?.offsetHeight ?? 0');
 	});

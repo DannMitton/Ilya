@@ -73,7 +73,8 @@
 	} from '$lib/insights/insights';
 	import { cycleDoseSplit } from '$lib/insights/singing-measures';
 	import { firstOutsideRange, longestAboveSecondo, searchBetterKey, shareAfter, vowelTurns } from '$lib/insights/singer-page';
-	import { singerBlocks, type KeyForward, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import { notesBlock, singerBlocks, type KeyForward, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
 	import { composeIdentityLine } from '$lib/insights/identity';
@@ -230,7 +231,6 @@
 			imagery: intake?.imagery !== false,
 			all: intake?.suggestions === 'all',
 			pitchOf: (id) => pitchById.get(id),
-			placeholders: new Set(placeholders),
 		});
 		return { shown: rendered.slice(0, commentSelection.shown.length), more: rendered.slice(commentSelection.shown.length) };
 	});
@@ -344,7 +344,11 @@
 	// ── The blocks ─────────────────────────────────────────────────────
 	const facts = $derived(commentNotes ? noteFacts(commentNotes, adapted.snapshot) : null);
 	const blocks = $derived.by((): PlacedBlock[] => {
-		if (!analysisScore) return [{ group: 'free', block: { kind: 'silence', lines: [T('insights.silence.noScore')] } }];
+		if (!analysisScore)
+			return [
+				{ group: 'free', block: { kind: 'silence', lines: [T('insights.silence.noScore')] } },
+				{ group: 'free', block: notesBlock(methodLine, null, language) },
+			];
 		if (!model) {
 			return [
 				{
@@ -356,6 +360,7 @@
 						withheld: [T('profile.withheld.item3'), T('insights.silence.findings')],
 					},
 				},
+				{ group: 'free', block: notesBlock(methodLine, null, language) },
 			];
 		}
 		const pricing = secondsPerQuaver(analysisScore);
@@ -387,6 +392,8 @@
 				cycles: model.figure?.cycles ?? null,
 				turns: vowelResolver ? vowelTurns(analysisScore, adapted.snapshot, vowelResolver) : null,
 				placeholders,
+				method: methodLine,
+				footnote: model.tessitura.measured ? T('insights.footnote.tessitura') : null,
 			},
 			(s) => formatSecondsFine(s, language),
 		);
@@ -405,6 +412,10 @@
 
 	let measureEls = $state<Array<HTMLElement | null>>([]);
 	let heights = $state<number[]>([]);
+	/* QUEUE row 79, rule 2: where each prose block may break between lines. Figures, the conclusion with its
+	   controls, and the cycles bar never break. */
+	const BREAKS = new Set(['comment', 'prose', 'endnote', 'note', 'notes']);
+	let breakTops = $state<number[][]>([]);
 	let footProbe = $state<HTMLElement | null>(null);
 	let footHeight = $state(0);
 	let fontsReady = $state(0);
@@ -423,6 +434,7 @@
 			if (!current) return;
 			untrack(() => {
 				heights = measureEls.slice(0, blocks.length).map((el) => el?.offsetHeight ?? 0);
+				breakTops = measureEls.slice(0, blocks.length).map((el, k) => (el && BREAKS.has(blocks[k].block.kind) ? breakOffsets(lineBoxes(el)) : []));
 				footHeight = footProbe?.offsetHeight ?? 0;
 			});
 		});
@@ -438,21 +450,28 @@
 			printed.map(({ b }) => b.group),
 			printed.map(({ k }) => heights[k] ?? 0),
 			{ ...GEOMETRY, capacity: (n) => room(n === 0 ? contentTop : subsequentTop) },
+			// QUEUE row 79, rule 3: the two charts float; the cycles block carries its squircle's heading and stays.
+			printed.map(({ b }) => b.block.kind === 'pitches' || b.block.kind === 'vowels'),
+			printed.map(({ k }) => breakTops[k] ?? []),
 		);
 		// Back from printed indices to block indices; a screen-only block rides with the block before it.
 		const back = printed.map(({ k }) => k);
-		const pagesOut = segs.map((page) => page.map((s) => ({ ...s, blocks: s.blocks.map((j) => back[j]) })));
+		const pagesOut = segs.map((page) =>
+			page.map((s) => ({
+				...s,
+				blocks: s.blocks.map((j) => back[j]),
+				...(s.cuts ? { cuts: Object.fromEntries(Object.entries(s.cuts).map(([j, c]) => [back[Number(j)], c])) } : {}),
+			})),
+		);
 		blocks.forEach((b, k) => {
 			if (!b.screenOnly) return;
-			for (const page of pagesOut) for (const s of page) if (s.blocks.includes(k - 1)) s.blocks.push(k);
+			// It rides with the part of the block before it that ends that block.
+			for (const page of pagesOut)
+				for (const s of page) if (s.blocks.includes(k - 1) && !(s.cuts?.[k - 1] && s.cuts[k - 1][1] < (heights[k - 1] ?? 0))) s.blocks.push(k);
 		});
 		return pagesOut;
 	});
 	const totalPages = $derived(pages.length);
-	/* The footnote prints on the page that shows the piece's tessitura, and only there. */
-	const footnotePage = $derived(
-		model?.tessitura.measured ? pages.findIndex((page) => page.some((s) => s.blocks.some((k) => blocks[k]?.block.kind === 'pitches'))) : -1,
-	);
 
 	let flowWidth = $state(358);
 	/* The phone's one column: each free block alone, each squircle's blocks together. */
@@ -470,13 +489,6 @@
 	const tryKey = (stop: KeyChoice) => keyRuler?.tryKey(stop);
 </script>
 
-{#snippet apparatus(withFootnote: boolean)}
-	{#if withFootnote}
-		<!-- QUEUE row 50: Pacheco 2013 is verified (the desk, 2026-10-08, p. 559), so no marker follows it. -->
-		<p class="footnote"><sup>1</sup>&#8201;{@html T('insights.footnote.tessitura')}</p>
-	{/if}
-	<p class="method">{methodLine}</p>
-{/snippet}
 
 {#snippet header()}
 	<!-- Page 1 names its tab, above the compass, which keeps its place (QUEUE row 64). -->
@@ -507,11 +519,23 @@
 
 {#snippet segment(s: Segment, column: number, inside: number)}
 	{#if s.group === 'free'}
-		{#each s.blocks as k (k)}<div class:screen-only={blocks[k].screenOnly}>{@render blockAt(k, column)}</div>{/each}
+		{#each s.blocks as k (k)}{@render part(s, k, column)}{/each}
 	{:else}
 		<div class="squircle" class:open-top={s.openTop} class:open-bottom={s.openBottom}>
-			{#each s.blocks as k (k)}<div class:screen-only={blocks[k].screenOnly}>{@render blockAt(k, inside)}</div>{/each}
+			{#each s.blocks as k (k)}{@render part(s, k, inside)}{/each}
 		</div>
+	{/if}
+{/snippet}
+
+<!-- QUEUE row 79, rule 2: a block broken between lines shows in a window of its part's height, shifted up by where
+     the part begins, so the lines are the measured lines and nothing reflows. -->
+{#snippet part(s: Segment, k: number, width: number)}
+	{#if s.cuts?.[k]}
+		<div class="part" class:screen-only={blocks[k].screenOnly} style="height: {s.cuts[k][1] - s.cuts[k][0]}px;">
+			<div style="margin-top: {-s.cuts[k][0]}px;">{@render blockAt(k, width)}</div>
+		</div>
+	{:else}
+		<div class:screen-only={blocks[k].screenOnly}>{@render blockAt(k, width)}</div>
 	{/if}
 {/snippet}
 
@@ -521,13 +545,10 @@
 		<div bind:this={measureEls[k]} style="width: {widthOf(b)}px;">{@render blockAt(k, widthOf(b))}</div>
 	{/each}
 	<div class="foot-probe" bind:this={footProbe} style="width: {COLUMN}px;">
-		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution}>
-			{#snippet apparatus()}{@render apparatusBody(true)}{/snippet}
-		</PageFooter>
+		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution} />
 	</div>
 </div>
 
-{#snippet apparatusBody(withFootnote: boolean)}{@render apparatus(withFootnote)}{/snippet}
 
 {#if isMobile}
 	<!-- THE PHONE, one column (the phone board, Dann 03:11: "this reads well"). -->
@@ -537,9 +558,7 @@
 			{#each flowSegments as seg, j (j)}{@render segment(seg, flowWidth, flowWidth - 2 * 17)}{/each}
 		</div>
 		<div class="flow-foot">
-			<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution}>
-				{#snippet apparatus()}{@render apparatusBody(footnotePage >= 0)}{/snippet}
-			</PageFooter>
+			<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution} />
 		</div>
 	</div>
 {:else}
@@ -560,9 +579,8 @@
 						<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px;">
 							{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
 						</div>
-						<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution}>
-							{#snippet apparatus()}{@render apparatusBody(n === footnotePage)}{/snippet}
-						</PageFooter>
+						<!-- QUEUE row 79: the footnote and the method line are endnotes now, in Notes; every page's footer is the same. -->
+						<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution} />
 					</article>
 				{/each}
 			</div>
@@ -625,6 +643,10 @@
 		padding-bottom: 5px;
 	}
 
+	.part {
+		overflow: hidden;
+	}
+
 	.measurer {
 		position: absolute;
 		left: -20000px;
@@ -640,16 +662,6 @@
 	/* The probe's footer sits in flow, so its height is the footer's own. */
 	.foot-probe :global(.page-footer) {
 		position: static;
-	}
-
-	.footnote,
-	.method {
-		margin: 0;
-	}
-
-	sup {
-		font-size: 0.62em;
-		line-height: 0;
 	}
 
 	/* ── The phone: one column, the same blocks ── */

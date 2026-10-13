@@ -1,0 +1,62 @@
+# Fable's review of brief-code-prereform-model_r3 (r1, 2026-10-12)
+
+Scope: only what r3 changed against r2 (`diff` run this session: header, the "Before you start" line, section 1's row 88 bullet, new step 3b, steps 5 and 6, section 5's one-shot and ceilings bullets, section 6's new line). r2's text was reviewed earlier and is not re-opened.
+
+## Verdict
+
+**SEND WITH AMENDMENTS** (10). The idea is sound and the teacher's numbers are cited right. The filter as written cannot run: `lookupFullEntry` reads a module-level dictionary that is empty until `setGlossDictionary` is called, and `modernisePreReform` returns null for every modern-spelled word, so a literal reading of step 3b drops every row. The filter also drops the old adjective endings that only `oldEndingCandidates` and `lookupOnlyTwin` handle, which starves the corpus of exactly the pre-reform rows it is there to gather.
+
+## Citations checked
+
+| Brief (r3 line) | Claim | Source read | Result |
+|---|---|---|---|
+| 3, 14 | `taiga75/ru-trocr-1700s`, revision `d556...4878`, MIT | report-code-trocr-teacher_r1 lines 33, 41 | right; the report adds "no separate LICENSE file", the brief drops that |
+| 14 | ѣ 21 of 21, і 6 of 6, ъ# 98 of 101, 390 of 493 (t-imap) | report lines 84, 94, 102, 112 (ъ 96 + Ъ 2) | right |
+| 14 | 69 misread syllables with no pre-reform letter, 50 sharing a token | report line 118 | right as counts; see finding 5 for the gloss |
+| 14 | 1,339,228,897 bytes, float32; 0.40 s a chunk on MPS | report lines 35, 139 | right |
+| 14 | installed at `~/Downloads/_desk-trocr/` (venv, `HF_HOME`, and the chunker) | report lines 5, 32, 34 | venv and `HF_HOME` right; the chunker's name and path are not in the report (NOT ESTABLISHED) |
+| 41 | `imap.py` | report line 75 | right |
+| 41 | row 81's `raster.mjs` and `rows.py` | report-code-underlay-baseline_r1 line 24 | right, but `rows.py` cuts row 80's bands, made by `systems.py`, with cover pages skipped by hand (S 0, T 0, K 1, M 2); the brief names neither |
+| 42 | `modernisePreReform`, `pre-reform-normalizer.ts:237` | file line 237 | right; returns `string | null`, null when nothing changed (line 299) |
+| 42 | `lookupFullEntry`, `gloss.ts:53` | file lines 29, 35, 53-77 | right; reads `_dictionary`, which is `{}` until `setGlossDictionary` (line 35) runs |
+| 44 | credit: Maria Levchenko, 2025, doi 10.57967/hf/3942 | report line 43 | right |
+| 40 | exclusions file covers S, T, K, M and sets 1 to 4 | `_desk-heldout-exclusions` lines 7-73 | right; set 4's titles are "as printed on IMSLP's pages" |
+| 40 | "no set 1 to 4 scan may be a training line" | report-code-trocr-teacher_r1 line 151 | the brief's exclusion matches it |
+
+## Findings
+
+1. **The lookup cannot work as written.** `lookupFullEntry` consults `_dictionary` (`gloss.ts:60`), set only by `setGlossDictionary` (`gloss.ts:35`), initial value `{}` (`gloss.ts:29`). The brief says "say how the dictionary was loaded" but never says that loading means calling that setter, and nothing in the two files names the dictionary's data file (NOT ESTABLISHED). Unloaded, every word is null and every row is dropped, and the report would read as "the teacher produced no usable rows".
+2. **`modernisePreReform` returns null for a modern-spelled word** (`pre-reform-normalizer.ts:238, 299`). `lookupFullEntry(modernisePreReform(w))` throws on null (`.normalize` at `gloss.ts:55`). The module's own idiom is `modernisePreReform(bare) ?? bare` (`:380`).
+3. **The filter starves the pre-reform rows.** `modernisePreReform` maps the four letters and drops a part-final ъ, nothing else (`:243-273`). The old genitive -аго/-яго lives in `oldEndingCandidates` (`:338`); -ыя/-ія plurals and онѣ, ея, нея in `lookupOnlyTwin` (`:375`). Verse underlay is full of these; each such word fails the lookup and drops its row whole. That removes rows in proportion to how pre-reform they are. The dictionary does hold inflected forms with a lemma field (`gloss.ts:11, 41`; большіе at `pre-reform-normalizer.ts:214`), so the lookup is the right gate once the full chain is used.
+4. **Hyphens.** `lookupFullEntry` strips a trailing hyphen only (`gloss.ts:58`). Rejoining "та- лый" is the caller's job and the brief says so, but it does not say what joins a chunk's readings into a row's text, nor what happens to a word split at the end of a row (row-final "та-" and the next row's "лый"), which no rejoin inside one row can mend; and rejoining a hyphenated compound (изъ-подъ, `pre-reform-normalizer.ts:159`) by deleting the hyphen produces a form the dictionary will not hold. Splits at row ends are common in underlay, so these rows go too.
+5. **A cause dressed as an observation** (line 14): "Its misses fall on the type generally." The report measures 69 misread syllables holding no pre-reform letter, 50 sharing a token with a neighbour (line 118), of about 103 misses in all (493 less 390). Where the other 34 fall is not printed. Say the counts, not the gloss.
+6. **The 90 percent test has no denominator.** An underlay row is mostly hyphens and spaces; "90 percent Cyrillic letters" of all characters would fail clean rows.
+7. **A known contamination passes both tests.** The first chunk of a row takes in the system's bracket, read as a stray "О" (report line 60): one Cyrillic letter, and «о» is a word. The 40-row check is the only thing that sees it.
+8. **Held-out.** Matching a manifest row to the exclusions file by composer, opus, and title needs only IMSLP's work page, not the scan, so the exclusion can be done without opening a sealed song. Two gaps: an IMSLP file is often a whole opus (six romances in one PDF), so a listed song can sit inside a downloaded file that the manifest names by the collection; and "where a manifest row cannot be checked against the file (title NOT ESTABLISHED there), leave the song out" does not say which song. The report in the tree must count exclusions without naming a sealed song; the brief does not say so.
+9. **IMSLP access.** Read this session: IMSLP's API page documents two read-only listing endpoints with a `disclaimer=accepted` parameter and says nothing about rate limits or downloads; its copyright page says the main servers hold only works public domain in Canada and that US public domain is "first published before 1931", so every pre-1918 file meets the brief's US condition. Whether file downloads need a wait page, a login, or tolerate a script is NOT ESTABLISHED; the brief's money rule covers a membership wall, but not a block.
+10. **The 40-row check decides one thing and decides it.** About 40 rows by 30 to 40 letters is 1,200 to 1,600 letters; 3 in 100 is 36 to 48 wrong letters, a usable gate. It measures the kept rows' labels, not how many good rows the filter dropped (finding 3), and its judge is Code's eye on engraved pre-reform type, unmeasured. The 40, the 3, the 90 percent, the 40 songs, and the 6 publishers are desk numbers with no DESK DEFAULT mark.
+11. **One-shot and checkpoints.** Training on teacher lines from other songs does not touch S, T, K, or M, so the one-shot rule holds. The checkpoint rule holds as written, but the synthetic held-out set holds no real engraving, so no checkpoint can see whether the real lines help; the first and only measure of that is the one shot. The second model's permitted change ("the share of real lines") would then be chosen by the real songs' result, which the rule forbids for checkpoints and permits for a named change. Consistent, but blind until the shot.
+
+## Amendments
+
+1. **Line 42, after "say how the dictionary was loaded":** replace with "load the dictionary into the module with `setGlossDictionary` (`packages/dictionary/src/gloss.ts:35`), report the data file's path and byte count, and before filtering look up «и» and «ночь»; if either is null, stop and report". Reason: `lookupFullEntry` reads an empty map until that setter runs (`gloss.ts:29, 60`).
+2. **Line 42, replace "is found by Ilya's dictionary after `modernisePreReform` (...)":** "is found by `lookupFullEntry` under at least one of: the word as read; `modernisePreReform(word) ?? word` (`pre-reform-normalizer.ts:237`, null when nothing changed, `:299`); each of `oldEndingCandidates` on that mapped form (`:338`); `lookupOnlyTwin(word)` (`:375`). Report, by count, which of the four found each kept word." Reason: findings 2 and 3; the lookup chain Ilya itself uses.
+3. **Line 41, after "apply row 88's Latin-i map (`imap.py`)":** add "A row's text is its chunks' readings in x order, joined by one space. For the lookup test, a token ending in a hyphen is joined to the next token, across a row boundary too where the next row is the next in `rows.py` order; a word holding an inner hyphen is looked up both with the hyphen and without. The training line keeps the text as printed, hyphens included." Reason: finding 4.
+4. **Line 42, replace "at least 90 percent Cyrillic letters":** "at least 90 percent Cyrillic letters, counting letters only (spaces, hyphens, and punctuation left out of both counts), and at least 8 letters". Reason: finding 6.
+5. **Line 41, replace "Raster each scan with row 81's `raster.mjs` and cut rows with `rows.py`":** "Raster each scan with row 81's `raster.mjs`, find systems with row 80's `systems.py` (cover pages skipped by eye, count reported per scan), cut rows with `rows.py`, and chunk with row 88's chunker, whose path and md5 the report names (the report does not name it)". Reason: `rows.py` cuts bands that `systems.py` makes (baseline report line 24).
+6. **Line 40, replace the sentence from "where a manifest row cannot be checked":** "A downloaded file that holds any listed song, by composer and opus or by title, is left out whole, not by page. A composer and opus the file lists with title NOT ESTABLISHED excludes every scan of that opus. The report gives counts only and names no song from sets 3 or 4." Reason: finding 8.
+7. **Line 40, "at least 40 songs and at least 6 publishers"; line 43, "40 kept rows" and "3 letters in 100"; line 42, "90 percent":** append "(DESK DEFAULT)" to each. Reason: desk numbers presented bare (rule 9).
+8. **Line 14, replace "Its misses fall on the type generally: 69 syllables holding no pre-reform letter, 50 of them run together with a neighbour.":** "Of its 103 missed syllables, 69 hold no pre-reform letter, and 50 of those share a token with a neighbouring syllable (report line 118); where the other 34 fall is not printed." Reason: finding 5.
+9. **Line 43, after "every pre-reform letter wrong":** add "and, in the same picture, note any row whose first token is a single letter (the bracket read as «О», row 88's section 4); count these across all kept rows and report the count". Reason: finding 7, a known false label the filter passes.
+10. **Line 40, after "IMSLP file number, and URL":** add "Fetch one file at a time through IMSLP's own download page, with at least 10 seconds between files; if IMSLP shows a login, a membership wall, or a block, stop and report (section 5's money rule), and do not run a crawler". Reason: finding 9; download mechanics NOT ESTABLISHED and a block would end the row.
+
+One item for Dann, not an amendment: whether to set aside 10 percent of the kept teacher rows, by scan, as a real held-out slice used beside the synthetic set for checkpoint choice. Cost of yes: a change to the r2 rule "checkpoints by the synthetic held-out set only". Cost of no: the real lines' effect is unseen until the one shot (finding 11). Fable recommends yes.
+
+## Could not establish
+
+- The chunker's script name and location (row 88's report names `imap.py`, `misread.py`, and the measurement folder, not the chunker).
+- The dictionary data file Ilya loads into `setGlossDictionary`, and its coverage of nineteenth-century verse vocabulary; the files read show inflected forms with a lemma field, not breadth.
+- IMSLP's download gate, wait page, login, and any rate limit; its API and copyright pages read this session say nothing about them.
+- Whether Code's eye on engraved pre-reform type is accurate enough to judge the teacher at 3 in 100; row 88 checked cuts by eye, not letters.
+- Whether 3 hours covers step 3b: 40 songs by roughly 4 pages by 15 rows by 6 chunks at 0.40 s is about 1.6 hours of reading alone (my arithmetic from report lines 58 and 139, page and row counts assumed), before downloads, rastering, and filtering.
+- The report's licence statement rests on the card's metadata; no LICENSE file is in the repository (report line 41).

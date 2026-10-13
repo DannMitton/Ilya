@@ -57,7 +57,9 @@ export type Block =
 	| { kind: 'pitches'; heading?: string; caption: string; figure: TessituragramModel; typedTessitura: { low: Pitch; high: Pitch } | null }
 	| { kind: 'vowels'; heading?: string; caption: string; sub: string; turns: VowelTurns; ring: string | null; rows: Array<{ vowel: string; before: number; past: number; text: string; turn: string; placeholder?: true }>; placeholder?: string }
 	| { kind: 'prose'; heading?: string; text: string; small?: boolean }
-	| { kind: 'endnote'; heading?: string; teacher?: string; tag: string; suggestions: Run[][]; references: Run[][] };
+	| { kind: 'endnote'; heading?: string; teacher?: string; tag: string; suggestions: Run[][]; references: Run[][] }
+	/** QUEUE row 79: the page's notes, once, at the end: the numbered footnote (HTML from i18n), then the method line. */
+	| { kind: 'notes'; heading: string; footnote: string | null; method: string };
 
 export interface PlacedBlock {
 	group: Group;
@@ -103,6 +105,9 @@ export interface BlockInputs {
 	turns: VowelTurns | null;
 	/** The vowels the page uses whose fR1 is a placeholder (QUEUE row 69). */
 	placeholders?: readonly string[];
+	/** QUEUE row 79: the method line, and the tessitura footnote where the page prints its marker. */
+	method?: string;
+	footnote?: string | null;
 }
 
 const fill = (s: string, vars: Record<string, string | number>) =>
@@ -229,7 +234,7 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 		if (better && !unlikely && better.shareThen !== null && better.compass) {
 			keyLines.push(
 				fill(T('insights.r2.compare'), {
-					interval: t(`key.ruler.interval.${Math.abs(better.semitones)}`, language),
+					interval: lowerFirst(t(`key.ruler.interval.${Math.abs(better.semitones)}`, language)),
 					m: percent(better.shareThen),
 					low: N(better.compass.low),
 					high: N(better.compass.high),
@@ -358,6 +363,9 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 	withHeading(totals[0], T('insights.r2.totals'));
 	for (const b of totals) out.push({ group: 'totals', block: b });
 
+	// ── Notes, unboxed, before the sources (QUEUE row 79, rule 7) ─────
+	if (i.method) out.push({ group: 'free', block: notesBlock(i.method, i.footnote ?? null, language) });
+
 	// ── Squircle 3, the sources, as endnotes ──────────────────────────
 	const notes: Block[] = i.comments
 		.filter((c) => c.hidden.length > 0 || c.references.length > 0)
@@ -371,6 +379,15 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 	return out;
 }
 
+/**
+ * THE NOTES ARE ENDNOTES (QUEUE row 79; Dann 2026-10-11 21:54, `PRODUCT.md` rule 7). Footnotes took varying room from
+ * their own page, which fought the page-filling rules. Unboxed, in the small type of `insights.r2.sourcesLine` (DESK
+ * DEFAULT); the markers in the text keep their numbers; the method line is the last item.
+ */
+export function notesBlock(method: string, footnote: string | null, language: Language): Extract<Block, { kind: 'notes' }> {
+	return { kind: 'notes', heading: t('insights.r2.notes', language), footnote, method };
+}
+
 /** A squircle's heading rides on its first block, so a page never ends on a heading alone. */
 function withHeading(b: Block | undefined, heading: string): void {
 	if (b) (b as { heading?: string }).heading = heading;
@@ -378,4 +395,9 @@ function withHeading(b: Block | undefined, heading: string): void {
 
 function capital(s: string): string {
 	return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/** The interval mid-sentence: the French ruler's values begin with a capital (« Une tierce mineure »), QUEUE row 85. */
+function lowerFirst(s: string): string {
+	return s.charAt(0).toLowerCase() + s.slice(1);
 }

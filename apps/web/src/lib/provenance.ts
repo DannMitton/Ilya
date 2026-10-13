@@ -40,6 +40,11 @@ export interface LegendItem {
 	 * (`stemLegendDrawing`).
 	 */
 	stems?: 'up' | 'down';
+	/**
+	 * Markup's turning-head entries (QUEUE row 78b): the stave's lavender turning
+	 * head, filled or hollow, drawn by `turningHeadLegendDrawing`.
+	 */
+	head?: 'filled' | 'hollow';
 	/** A word of `label` to underline, as the dissertation's Appendix B does. */
 	emphasis?: string;
 }

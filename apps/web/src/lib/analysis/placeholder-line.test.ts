@@ -1,12 +1,13 @@
 /**
  * placeholder-line.test.ts: the line at the top of Markup and Insights names
  * the placeholder vowels the page uses (QUEUE row 69). The English and the
- * French plural are Dann's ratified words of 2026-10-11, pinned here
- * character for character; the French singular is the desk's derivation.
+ * French are Dann's ratified words of 2026-10-11 (the French singular 19:51,
+ * Markup's own last sentence 20:06, the comment's remedy 19:49), pinned here
+ * character for character.
  */
 import { describe, expect, it } from 'vitest';
 import type { AnalyzedScore } from '@ilya/score-parser';
-import { placeholderLine, placeholderVowels, vowelList } from './placeholder-line';
+import { placeholderCommentSentence, placeholderLine, placeholderVowels, vowelList } from './placeholder-line';
 
 const analysed = (events: Array<[string, boolean]>): AnalyzedScore =>
 	({
@@ -42,9 +43,37 @@ describe('the line', () => {
 			'Vos voyelles [ɛ], [o] et [u] reposent sur des valeurs par défaut jusqu’à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.',
 		);
 	});
-	it('French, one (desk-derived)', () => {
+	it('French, one (ratified 19:51)', () => {
 		expect(placeholderLine(['ɛ'], 'fr')).toBe(
 			'Votre voyelle [ɛ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.',
+		);
+	});
+	it('Markup, English, several: ends "drawn hollow or dashed" (row 78a)', () => {
+		expect(placeholderLine(['ɛ', 'o', 'u'], 'en', 'markup')).toBe(
+			'Your [ɛ], [o], and [u] use placeholder values until you sample them in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on a placeholder are drawn hollow or dashed.',
+		);
+	});
+	it('Markup, English, one', () => {
+		expect(placeholderLine(['ɛ'], 'en', 'markup')).toBe(
+			'Your [ɛ] uses a placeholder value until you sample it in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on it are drawn hollow or dashed.',
+		);
+	});
+	it('Markup, French, several', () => {
+		expect(placeholderLine(['ɛ', 'o', 'u'], 'fr', 'markup')).toBe(
+			'Vos voyelles [ɛ], [o] et [u] reposent sur des valeurs par défaut jusqu’à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.',
+		);
+	});
+	it('Markup, French, one', () => {
+		expect(placeholderLine(['ɛ'], 'fr', 'markup')).toBe(
+			'Votre voyelle [ɛ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.',
+		);
+	});
+	it('a comment names the placeholder, then the remedy, in either language (ratified 19:49)', () => {
+		expect(placeholderCommentSentence('ɑ', 'en')).toBe(
+			'This finding rests on a placeholder value for [ɑ]. To replace it with your own value, sample [ɑ] in vocal fry.',
+		);
+		expect(placeholderCommentSentence('ɑ', 'fr')).toBe(
+			'Ce constat repose sur une valeur par défaut pour la voyelle [ɑ]. Pour obtenir votre propre valeur, échantillonnez [ɑ] en friture vocale.',
 		);
 	});
 	it('joins a pair on the profile separators', () => {

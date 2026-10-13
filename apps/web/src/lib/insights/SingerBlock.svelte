@@ -138,6 +138,12 @@
 			{/each}
 		</div>
 		{#if block.placeholder}<p class="placeholder-note">{@render prose(block.placeholder)}</p>{/if}
+	{:else if block.kind === 'notes'}
+		<!-- QUEUE row 79: the notes as endnotes; the footnote's marker in the text keeps its number. QUEUE row 50:
+		     Pacheco 2013 is verified (the desk, 2026-10-08, p. 559), so no marker follows it. -->
+		{@render heading(block.heading)}
+		{#if block.footnote}<p class="source-line"><sup>1</sup>&#8201;{@html block.footnote}</p>{/if}
+		<p class="source-line">{block.method}</p>
 	{:else if block.kind === 'prose'}
 		{@render heading(block.heading)}
 		<p class:prose={!block.small} class:source-line={block.small}>{@render rich(block.text)}</p>
@@ -284,6 +290,11 @@
 		font-size: 11.5px;
 		line-height: 1.4;
 		color: var(--ink-secondary);
+	}
+
+	.source-line sup {
+		font-size: 0.62em;
+		line-height: 0;
 	}
 
 	.caption {

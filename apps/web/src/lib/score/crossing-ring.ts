@@ -14,11 +14,20 @@
  * ring is drawn here, on the page, and no longer by `staff-renderer.ts`: the
  * renderer emits a string and has no ink to measure.
  *
- * THE PAGE'S RULE, NOT THE LOUPE'S (`OPEN.md` §N.141): the ring never
- * re-spaces the music, and a collision with a neighbour's accidental is
- * accepted. It goes under the music, at the front of its system, as the
- * selection ring does; when the taken note is also a crossing, the two share
- * one box and the selection ring draws over the red (`selectionAnchor`).
+ * IT STANDS OUTSIDE THE SELECTION RING, ALWAYS (QUEUE row 78c; Dann
+ * 2026-10-11 20:11 to 20:12, `OPEN.md` "THE RED CROSSING RING STANDS OUTSIDE
+ * THE SELECTION RING"): `ringBox`'s box grown on every side by
+ * `CROSSING_RING_OFFSET`, the selection ring's stroke plus an equal gap, with
+ * the corner grown to match, so when the note is taken the two nest and both
+ * show. The selection ring is unchanged and still draws after the red
+ * (`selectionAnchor`).
+ *
+ * AND THE NOTES MAKE ROOM FOR IT (Dann 20:14, the same heading), replacing row
+ * 34's "the ring re-spaces nothing": the renderer knows each crossing before
+ * layout and spaces its column and its system's headroom by
+ * `CROSSING_RING_REACH` and `CROSSING_RING_HEADROOM` (`@ilya/score-parser`,
+ * `ring-geometry.ts`). It goes under the music, at the front of its system,
+ * as the selection ring does.
  *
  * WHAT IT KEEPS: the colour `#b23b3b`, which carries "crossing"; the stroke
  * weight 1.8; and the handle `data-analysis="crossing"`, by which the loupe and
@@ -28,14 +37,18 @@
  * PRINTS AS IT SHOWS (WYSIWYG): the ring is an element of the page's SVG, not
  * a screen-only overlay, and nothing hides it in print.
  */
-import { PLACEHOLDER_DASH } from '@ilya/score-parser';
-import { entryGroup, RING_RADIUS, ringBox, type RingBox } from './selection-ring';
+import { CROSSING_INK, CROSSING_RING_OFFSET, CROSSING_RING_RADIUS, CROSSING_STROKE, PLACEHOLDER_DASH } from '@ilya/score-parser';
+import { entryGroup, ringBox, type RingBox } from './selection-ring';
 import { afterGround } from './system-ground';
 
-/** The crossing's ink, unchanged from the renderer's rectangle. */
-export const CROSSING_INK = '#b23b3b';
-/** Its stroke, unchanged; the selection ring's is `RING_STROKE` (2). */
-export const CROSSING_STROKE = 1.8;
+/** The crossing's ink and stroke, unchanged since row 34 (`ring-geometry.ts`); the selection ring's stroke is 2. */
+export { CROSSING_INK, CROSSING_STROKE };
+
+/** The red ring's box: the selection ring's, grown by `CROSSING_RING_OFFSET` on every side (row 78c). Pure. */
+export function crossingBox(box: RingBox): RingBox {
+	const o = CROSSING_RING_OFFSET;
+	return { x: box.x - o, y: box.y - o, width: box.width + 2 * o, height: box.height + 2 * o };
+}
 
 /** A note the analysis says crosses, and whether its fR1 is a placeholder. */
 export interface Crossing {
@@ -52,7 +65,7 @@ export function crossingRingAttributes(box: RingBox, placeholder: boolean): Arra
 		['y', String(box.y)],
 		['width', String(box.width)],
 		['height', String(box.height)],
-		['rx', String(RING_RADIUS)],
+		['rx', String(CROSSING_RING_RADIUS)],
 		['fill', 'none'],
 		['stroke', CROSSING_INK],
 		['stroke-width', String(CROSSING_STROKE)],
@@ -80,7 +93,8 @@ export function drawCrossingRings(root: ParentNode, crossings: Iterable<Crossing
 		const box = hit && group ? ringBox(hit, group, c.id) : null;
 		if (!sysEl || !box) continue;
 		const ring = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-		for (const [k, v] of crossingRingAttributes(box, c.placeholder)) ring.setAttribute(k, v);
+		for (const [k, v] of crossingRingAttributes(crossingBox(box), c.placeholder)) ring.setAttribute(k, v);
+		ring.setAttribute('data-crossing-of', c.id); // its note, a handle as `data-ipa-of` is (row 78c)
 		sysEl.insertBefore(ring, afterGround(sysEl));
 		drawn++;
 	}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { LegendItem } from '$lib/provenance';
-	import { WITHHELD_SIGLA, stemLegendDrawing, type PreparedSmuflFont } from '@ilya/score-parser';
+	import { WITHHELD_SIGLA, stemLegendDrawing, turningHeadLegendDrawing, type PreparedSmuflFont } from '@ilya/score-parser';
 	import { MARKUP_WITHHELD_TYPE } from '$lib/markup/legend';
 
 	/**
@@ -31,6 +31,10 @@
 			     renderer's own heads, stems, beam and ink (`stemLegendDrawing`). -->
 			{@const d = stemLegendDrawing(item.stems, notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {})}
 			<svg class="legend-stems" width={d.width} height={d.height} viewBox="0 0 {d.width} {d.height}" aria-hidden="true" data-stems={item.stems}>{@html d.inner}</svg>
+		{:else if item.head}
+			<!-- QUEUE row 78b: the stave's turning head, lavender, filled or hollow, from the renderer's own call. -->
+			{@const d = turningHeadLegendDrawing(item.head, notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {})}
+			<svg class="legend-stems" width={d.width} height={d.height} viewBox="0 0 {d.width} {d.height}" aria-hidden="true" data-head={item.head}>{@html d.inner}</svg>
 		{:else if !item.textOnly}
 			<span class="legend-circle" aria-hidden="true">
 			{#if item.type === 'user-dictionary'}

@@ -102,24 +102,51 @@ export const LINES_PER_PAGE = 10;
 const CYRILLIC_RE = /[А-Яа-яЁё]/;
 
 /**
- * Budget a line's slot cost: 1 for normal, 2 for wide lines
- * that will visually wrap in the flex layout.
- *
- * Simple word-count threshold. Lines with more than 7 Cyrillic
- * display words are budgeted as 2 slots.
+ * The words a printed row holds, for the budget: the threshold this file has always used ("more than 7 display
+ * words" wraps). Checked 2026-10-12 (QUEUE row 79) on the Tchaikovsky song, whose poem reaches Text as one line of
+ * 95 words: it drew about twelve rows at desktop width, seven or eight words a row, so seven is the safe side.
  */
-function slotCost(line: LineData): 1 | 2 {
-	const displayWords = line.words.filter(
-		w => w.latin || CYRILLIC_RE.test(w.cyrillic || '')
-	);
-	return displayWords.length > 7 ? 2 : 1;
+export const WORDS_PER_ROW = 7;
+
+/** The words a line shows (with `w.latin`, VerseLine's display filter). */
+function displayed(line: LineData): number {
+	return line.words.filter((w) => w.latin || CYRILLIC_RE.test(w.cyrillic || '')).length;
+}
+
+/** A line's rows on the page, estimated: a row per `WORDS_PER_ROW` words, at least one. */
+export function rowsOf(line: LineData): number {
+	return Math.max(1, Math.ceil(displayed(line) / WORDS_PER_ROW));
+}
+
+/**
+ * The line cut after its first `rows` rows: the words up to that many displayed words, never leaving a proclitic
+ * at the end of the first part, since it leans on the word after it. Both parts keep the line's number; every word
+ * carries its own `lineIndex` and `wordIndex`, so a click on either part finds its word.
+ */
+function cutAfterRows(line: LineData, rows: number): [LineData, LineData] {
+	let shown = 0;
+	let at = line.words.length;
+	for (let i = 0; i < line.words.length; i++) {
+		const w = line.words[i];
+		if (w.latin || CYRILLIC_RE.test(w.cyrillic || '')) {
+			if (shown === rows * WORDS_PER_ROW) { at = i; break; }
+			shown++;
+		}
+	}
+	while (at > 1 && line.words[at - 1].isProclitic) at--;
+	const { endsStanza, ...rest } = line;
+	return [{ ...rest, words: line.words.slice(0, at) }, { ...line, words: line.words.slice(at) }];
 }
 
 /**
  * Slice an array of verse lines into pages.
  *
- * Each page fills up to its budget in slots. A wide line (>7 display
- * words) costs 2 slots. All other lines cost 1.
+ * Each page fills up to its budget in rows. A line costs its estimated rows (`rowsOf`).
+ *
+ * NO EMPTY SPACE MID-DOCUMENT (QUEUE row 79; Dann 2026-10-11 21:50, `PRODUCT.md` rule 2): a stanza is a paragraph
+ * (DESK DEFAULT), so a line that does not fit breaks between its rows, leaving at least two rows on each page; a
+ * line that would leave fewer moves whole to the next page. Before row 79 a line cost at most two rows, so a poem
+ * that reaches Text as one long line (a score's underlay) printed as one page and ran off it.
  *
  * @param lines - All verse lines to paginate
  * @param page1Budget - Row-slot budget for the first page (default: LINES_PER_PAGE).
@@ -136,18 +163,35 @@ export function sliceLinesToPages(lines: LineData[], page1Budget: number = LINES
 	const pages: LineData[][] = [];
 	let currentPage: LineData[] = [];
 	let currentUnits = 0;
+	const budget = () => (pages.length === 0 ? page1Budget : LINES_PER_PAGE);
+	const turn = () => {
+		pages.push(currentPage);
+		currentPage = [];
+		currentUnits = 0;
+	};
 
-	for (const line of lines) {
-		const cost = slotCost(line);
-
-		const currentBudget = pages.length === 0 ? page1Budget : LINES_PER_PAGE;
-		if (currentUnits + cost > currentBudget && currentPage.length > 0) {
-			pages.push(currentPage);
-			currentPage = [line];
-			currentUnits = cost;
-		} else {
+	const queue = [...lines];
+	while (queue.length > 0) {
+		const line = queue.shift()!;
+		const cost = rowsOf(line);
+		const room = budget() - currentUnits;
+		if (cost <= room || currentPage.length === 0 && cost <= budget()) {
 			currentPage.push(line);
 			currentUnits += cost;
+		} else if (room >= 2 && cost - room >= 2) {
+			const [head, tail] = cutAfterRows(line, room);
+			currentPage.push(head);
+			turn();
+			queue.unshift(tail);
+		} else if (currentPage.length === 0) {
+			// Longer than a whole page on an empty page: it must break here.
+			const [head, tail] = cutAfterRows(line, Math.max(2, Math.min(budget(), cost - 2)));
+			currentPage.push(head);
+			turn();
+			queue.unshift(tail);
+		} else {
+			turn();
+			queue.unshift(line);
 		}
 	}
 
@@ -179,7 +223,8 @@ export function extractSurname(name: string): string {
 /**
  * Format a running header string for subsequent pages.
  *
- * Returns "COMPOSER SURNAME | POET SURNAME — TITLE" in uppercase.
+ * Returns "COMPOSER SURNAME | POET SURNAME | TITLE" in uppercase: one pipe joins every part, since no
+ * em dash is shown to the singer (`AGENTS.md`; the pipe, Dann 2026-10-11 22:00, QUEUE row 78a).
  * Poet omitted if empty. Composer omitted if empty.
  * If title is empty, returns empty string.
  */
@@ -202,5 +247,5 @@ export function formatRunningHeader(composer: string, title: string, poet?: stri
 		return titleUpper;
 	}
 
-	return `${nameParts.join(' | ')} \u2014 ${titleUpper}`;
+	return `${nameParts.join(' | ')} | ${titleUpper}`;
 }

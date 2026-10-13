@@ -204,11 +204,12 @@ export const WORKS: Record<string, Work> = {
 		fullTitle: 'Practical Vocal Acoustics',
 		year: 2025,
 		edition: '2nd ed.',
-		// NOT ESTABLISHED: no record read this session names the publisher or ISBN.
-		place: null,
-		publisher: null,
+		// Publisher and ISBN supplied by Dann 2026-10-11 21:36 (the ISBN's check digit verified by the desk), the place
+		// 21:37 (`OPEN.md`; QUEUE row 78a).
+		place: 'New York',
+		publisher: 'Bloomsbury',
 		printing: null,
-		isbn: null,
+		isbn: '979-8-7651-6228-6',
 		group: 'voice',
 		degree: null,
 		container: null,

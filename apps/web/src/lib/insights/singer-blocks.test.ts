@@ -117,7 +117,7 @@ describe('the round 2 page, block by block', () => {
 		const held = { eventId: 'n2', measure: '1', pitch: P('E', 4), vowel: 'i', seconds: 4.2 };
 		const out = singerBlocks(inputs(high, { held }), String);
 		const c = out[1].block as Extract<Block, { kind: 'conclusion' }>;
-		expect(c.paragraph).toContain('In this key, 100 percent of the singing lies above your primo passaggio, A3, and bar 1 holds an E4 [i] for about 4 seconds, above your secondo, D4.');
+		expect(c.paragraph).toContain('In this key, 100 percent of the singing lies above your primo passaggio, A3, and bar 1 holds an E4 [i] for about 4 seconds, above your secondo passaggio, D4.');
 		expect(c.paragraph).toContain(t('insights.r2.unlikely.together', 'en'));
 		expect(c.forward).toEqual({ sentence: t('insights.r2.noBetterKey', 'en'), teacher: t('insights.r2.teacherA', 'en') });
 	});
@@ -139,12 +139,12 @@ describe('placeholders (QUEUE row 69)', () => {
 
 	it('a comment that reads a placeholder fR1 says so in its own sentence', () => {
 		const [c] = commentsOf(singerBlocks(inputs(sc, { comments: [comment('n1', true)], placeholders: ['u'] }), String));
-		expect(c.placeholder).toBe('This finding rests on a placeholder value for [u].');
+		expect(c.placeholder).toBe('This finding rests on a placeholder value for [u]. To replace it with your own value, sample [u] in vocal fry.');
 	});
 
-	it('in French too, on the desk draft', () => {
+	it('in French too (ratified 19:49)', () => {
 		const [c] = commentsOf(singerBlocks(inputs(sc, { language: 'fr', comments: [comment('n1', true)], placeholders: ['u'] }), String));
-		expect(c.placeholder).toBe('Ce constat repose sur une valeur par défaut pour la voyelle [u].');
+		expect(c.placeholder).toBe('Ce constat repose sur une valeur par défaut pour la voyelle [u]. Pour obtenir votre propre valeur, échantillonnez [u] en friture vocale.');
 	});
 
 	it('says nothing when the vowel was sampled, or when the comment reads no resonance', () => {
@@ -166,5 +166,38 @@ describe('placeholders (QUEUE row 69)', () => {
 			.find((b): b is Extract<Block, { kind: 'vowels' }> => b.kind === 'vowels')!;
 		expect(v.rows.map((r) => !!r.placeholder)).toEqual([false, true]);
 		expect(v.placeholder).toBe('The turn of [u] rests on a placeholder value, so its bar is drawn dashed.');
+	});
+});
+
+describe('the notes are endnotes (QUEUE row 79, rule 7)', () => {
+	it('stand unboxed after the totals and before the sources, the footnote first and the method line last', () => {
+		const out = singerBlocks(inputs(fitting, { comments: [comment('a', true, true)], method: 'Method: the line.', footnote: 'Tessitura by Pacheco.' }), String);
+		const k = out.findIndex((b) => b.block.kind === 'notes');
+		expect(k).toBeGreaterThan(0);
+		expect(out[k].group).toBe('free');
+		expect(out.slice(0, k).some((b) => b.group === 'totals')).toBe(true);
+		expect(out.slice(k + 1).every((b) => b.group === 'sources')).toBe(true);
+		expect(out.slice(k + 1).length).toBeGreaterThan(0);
+		expect(out[k].block).toEqual({ kind: 'notes', heading: 'Notes', footnote: 'Tessitura by Pacheco.', method: 'Method: the line.' });
+	});
+
+	it('are headed « Notes » in French, and absent where no method line is given', () => {
+		const fr = singerBlocks(inputs(fitting, { language: 'fr', method: 'Méthode.' }), String).find((b) => b.block.kind === 'notes');
+		expect((fr!.block as Extract<Block, { kind: 'notes' }>).heading).toBe('Notes');
+		expect(singerBlocks(inputs(fitting), String).some((b) => b.block.kind === 'notes')).toBe(false);
+	});
+});
+
+describe('the better key in French (QUEUE row 85)', () => {
+	const better = { semitones: -3, shareThen: 0.07, compass: { low: P('A', 2, 1), high: P('B', 3) }, score: null };
+	const text = (language: 'en' | 'fr') => JSON.stringify(singerBlocks(inputs(fitting, { language, better }), String));
+
+	it('lower-cases the interval mid-sentence: « Transposée une tierce mineure plus bas »', () => {
+		expect(text('fr')).toContain('Transposée une tierce mineure plus bas, la pièce ramènerait cette part à 7');
+		expect(text('fr')).not.toContain('Une tierce mineure plus bas, la pièce');
+	});
+
+	it('leaves the English interval as it was', () => {
+		expect(text('en')).toContain('A key a minor third lower would bring that to 7');
 	});
 });

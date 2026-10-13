@@ -1,12 +1,15 @@
 /**
- * placeholder-mark.test.ts: a mark that rests on a placeholder fR1 is drawn
- * dashed (QUEUE row 69). The overlay engine flags the note from the
- * snapshot's `fR1Source`; the renderer dashes the turning marks of that note
- * and of no other. The crossing squircle is the page's since row 34, and
- * `crossing-ring.test.ts` in the app checks its dash.
+ * placeholder-mark.test.ts: a mark that rests on a placeholder fR1 says so
+ * (QUEUE row 69). The turning notehead is a hollow lavender circle of the
+ * half-note head's height, solid and stemless (row 78b, Dann 2026-10-11 19:56
+ * and 20:03 to 20:04); its ledger lines and accidental are solid and tagged.
+ * The overlay engine flags the note from the snapshot's `fR1Source`; the
+ * renderer marks the turning marks of that note and of no other. The crossing
+ * squircle is the page's since row 34, and `crossing-ring.test.ts` in the app
+ * checks its dash.
  */
 import { describe, expect, it } from 'vitest';
-import { placeholderMark, PLACEHOLDER_DASH, PLACEHOLDER_DASH_FINE } from './placeholder-mark';
+import { placeholderMark, rotatedEllipseHeight, PLACEHOLDER_DASH, PLACEHOLDER_HOLLOW_STROKE_SP } from './placeholder-mark';
 import { analyzeScore } from './overlay-engine';
 import { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
 import { demoProfile, demoResolver, demoScore, syntheticSmuflFont } from './demo-fixture';
@@ -33,12 +36,18 @@ describe('placeholderMark', () => {
     expect(placeholderMark(true, m, 'tag')).toBe('<text data-placeholder="true" data-analysis="turning-accidental" x="1" fill="#9585A2">♯</text>');
   });
 
-  it('draws a filled mark as its own dashed outline, in its own colour', () => {
-    const out = placeholderMark(true, '<ellipse data-analysis="turning-notehead" cx="1" fill="#9585A2" opacity="0.85"/>', 'outline');
-    expect(out).toContain('fill="none"');
-    expect(out).toContain('stroke="#9585A2"');
-    expect(out).toContain(`stroke-dasharray="${PLACEHOLDER_DASH_FINE}"`);
-    expect(out).toContain('data-placeholder="true"');
+  it('draws a notehead as a hollow circle of the given height: solid, in its own colour, at its own opacity (row 78b)', () => {
+    const out = placeholderMark(true, '<ellipse data-analysis="turning-notehead" cx="1" fill="#9585A2" opacity="0.85"/>', { cx: 10, cy: 20, d: 12.77, space: 12 });
+    const w = PLACEHOLDER_HOLLOW_STROKE_SP * 12;
+    expect(out).toBe(
+      `<circle data-placeholder="true" data-analysis="turning-notehead" cx="10" cy="20" r="${Math.round(((12.77 - w) / 2) * 100) / 100}" fill="none" stroke="#9585A2" stroke-width="${Math.round(w * 100) / 100}" opacity="0.85"/>`,
+    );
+    expect(out).not.toContain('stroke-dasharray');
+  });
+
+  it('measures the primitive head\'s footprint: an ellipse of 6 by 4.4 turned 18 degrees is about 9.15 px tall', () => {
+    expect(rotatedEllipseHeight(6, 4.4, 18)).toBeCloseTo(9.15, 2);
+    expect(rotatedEllipseHeight(6, 4.4, 0)).toBeCloseTo(8.8, 6);
   });
 });
 
@@ -68,16 +77,29 @@ describe.each([
   ['primitive glyphs', undefined],
   ['SMuFL glyphs', { font: syntheticSmuflFont(), fontFamily: 'TestFont' }],
 ] as Array<[string, StaffRenderOptions | undefined]>)('the renderer, %s', (_name, options) => {
-  it('dashes the turning marks of the placeholder vowel, and of no other', () => {
+  it('draws the placeholder vowel\'s turning heads hollow, of the half-note head\'s height, and no other (row 78b)', () => {
     const svg = render({ ...demoProfile, fR1Source: { i: 'surrogate' } }, options);
     const heads = marks(svg, 'turning-notehead');
-    const dashedHeads = heads.filter((m) => m.includes('data-placeholder'));
+    const hollow = heads.filter((m) => m.includes('data-placeholder'));
     const iNotes = Object.values(analyzeScore(demoScore(), demoProfile, demoResolver, AT).events).filter((e) => e.vowel === 'i').length;
-    expect(dashedHeads.length).toBe(iNotes);
-    expect(heads.length).toBeGreaterThan(dashedHeads.length);
-    for (const m of dashedHeads) expect(m).toContain('fill="none"');
-    for (const m of marks(svg, 'turning-ledger').filter((x) => x.includes('data-placeholder'))) expect(m).toContain('stroke-dasharray');
-    // The accidental stays solid: tagged, never outlined.
+    expect(hollow.length).toBe(iNotes);
+    expect(heads.length).toBeGreaterThan(hollow.length);
+    const space = 12; // the renderer's default lineGap
+    const half = options?.font ? options.font.glyph('noteheadHalf') : null;
+    const d = half ? (half.bBoxNE[1] - half.bBoxSW[1]) * space : rotatedEllipseHeight(6, 4.4, 18);
+    for (const m of hollow) {
+      expect(m.startsWith('<circle ')).toBe(true);
+      expect(m).toContain('fill="none"');
+      expect(m).toContain('opacity="0.85"');
+      expect(m).not.toContain('stroke-dasharray');
+      const r = Number(/ r="([\d.]+)"/.exec(m)![1]);
+      const w = Number(/ stroke-width="([\d.]+)"/.exec(m)![1]);
+      expect(2 * r + w).toBeCloseTo(d, 1);
+    }
+    // A sampled vowel's head is filled.
+    for (const m of heads.filter((x) => !x.includes('data-placeholder'))) expect(m).not.toContain('fill="none"');
+    // Ledger lines and the accidental are solid lavender: tagged, never dashed or outlined.
+    for (const m of marks(svg, 'turning-ledger').filter((x) => x.includes('data-placeholder'))) expect(m).not.toContain('stroke-dasharray');
     for (const m of marks(svg, 'turning-accidental').filter((x) => x.includes('data-placeholder'))) expect(m).not.toContain('fill="none"');
   });
 
