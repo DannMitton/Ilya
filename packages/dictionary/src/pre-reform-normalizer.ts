@@ -181,8 +181,15 @@ const ABOLISHED_LETTERS: ReadonlyMap<string, string> = new Map([
  * separator in modern Russian (объять, съесть) and carries meaning. Grayson:
  * ignore ъ word-finally, "but recognize that it usually has some significance
  * when used internally."
+ *
+ * A RUN of word-final hard signs (спитъЪ) is an OCR misread of one heavy printed
+ * hard sign, read as two glyphs (QUEUE row 81), so the whole run goes. No Russian
+ * word known to the desk ends in two hard signs (not verified against a source),
+ * and of row 81's 101 printed word-final hard signs none is doubled on the page.
+ * The capture class omits ъ and Ъ, and the lookahead class keeps them out of
+ * "followed by a letter", so a doubled MEDIAL hard sign (съЪесть) is not collapsed.
  */
-const PART_FINAL_HARD_SIGN = /([а-яА-ЯёЁ])[ъЪ](?![а-яА-ЯёЁ])/g;
+const PART_FINAL_HARD_SIGN = /([а-щы-яА-ЩЫ-ЯёЁ])[ъЪ]+(?![а-яА-ЯёЁ])/g;
 
 /**
  * Attempt to normalise a pre-1918 spelling to its modern dictionary form.

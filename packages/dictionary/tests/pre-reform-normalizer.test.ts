@@ -156,6 +156,30 @@ describe('modernisePreReform: the intake entry point', () => {
 		expect(modernisePreReform('съесть')).toBeNull();
 	});
 
+	it('reads a doubled word-final hard sign from OCR as one (спитъЪ → спит)', () => {
+		expect(modernisePreReform('спитъЪ')).toBe('спит');
+	});
+
+	it('reads a doubled word-final hard sign in the other order as one (спитЪъ → спит)', () => {
+		expect(modernisePreReform('спитЪъ')).toBe('спит');
+	});
+
+	it('reads a tripled word-final hard sign as one (спитъЪъ → спит)', () => {
+		expect(modernisePreReform('спитъЪъ')).toBe('спит');
+	});
+
+	it('drops a doubled part-final hard sign in a compound (изъЪ-подъ → из-под)', () => {
+		expect(modernisePreReform('изъЪ-подъ')).toBe('из-под');
+	});
+
+	it('returns null for a token that is only a run of hard signs (ъЪ), never an empty string', () => {
+		expect(modernisePreReform('ъЪ')).toBeNull();
+	});
+
+	it('does NOT collapse a doubled MEDIAL hard sign, which is out of scope (съЪесть)', () => {
+		expect(modernisePreReform('съЪесть')).toBeNull();
+	});
+
 	it('agrees with normalizePreReform, which delegates to it', () => {
 		for (const w of ['дѣти', 'окно', 'контръ-адмиралъ', 'ъ', 'объять', 'мараѳонъ,']) {
 			const one = modernisePreReform(w);
