@@ -37,6 +37,7 @@ The maintainer's `node_modules` is macOS-built, so a copy of his working tree ca
 
 - **Read this repository freely. Do not write to it.** Claude places files; Dann reviews and commits by hand via GitHub Desktop.
 - **No agent commits. No agent opens a pull request.** Ever.
+- **Two exceptions, each one branch, each ruled by Dann:** the `audit` branch (2026-09-26 00:25), and the cloud lane (2026-10-02 02:37), where a cloud session may commit to and push its one dedicated branch, never `Shane` or `main`, and opens no pull request (`docs/memory/CONTRACT.md` §4).
 - The protocol assumes a **single writer**. Two agents editing one tree produces a working tree nobody can explain.
 - When reporting on code, **quote it and name where you read it**: the branch, the commit, and whether the working tree was dirty. A confident report from a stale checkout is a known failure mode here.
 

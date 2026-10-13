@@ -119,10 +119,12 @@
 		/**
 		 * The accepted upload from the score uploader (live wiring, v36 §E.7).
 		 * When present, the envelope's content window carries the rendered
-		 * score pages instead of the interim copy. Slice 1 (Dann's scope
-		 * ruling, 2026-07-13) renders notation only: real systems and
-		 * underlay through paginateScore, no acoustic marks (see
-		 * notation-overlay.ts for why that is the engine's own semantics).
+		 * score pages instead of the interim copy: real systems and
+		 * underlay through paginateScore, with the acoustic marks
+		 * analyzeScore resolves against the active profile (see the overlay
+		 * block below). With no resolvable vowel or no fR1, analyzeScore
+		 * omits every event and the plain vocal line renders; that is the
+		 * engine's own semantics, not a bypass.
 		 */
 		ingested?: IngestedScore | null;
 		/**
@@ -532,9 +534,9 @@
 	// missing dimension with a permissive default (see analyze-score-adapter
 	// for the sentinel proof). buildVowelResolver supplies Ilya's per-event
 	// sung vowel; a non-Russian score resolves nothing and renders notation
-	// only, correctly (§A.35). This replaces notationOnlyOverlay: with no
-	// resolvable vowels or no fR1, analyzeScore omits every event, so the
-	// same plain vocal line renders, no acoustic claim made.
+	// only, correctly (§A.35). With no resolvable vowels or no fR1,
+	// analyzeScore omits every event, so the plain vocal line renders, no
+	// acoustic claim made.
 	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, undefined, voiceType));
 
 	/**
@@ -963,8 +965,9 @@
 	<!-- Score state (live wiring slice 1): the uploaded score's systems,
 	     paginated into the envelope's exact page geometry and furniture,
 	     mirroring Paper.svelte's TitlePage/SubsequentPage pattern. The
-	     SVG pages come from paginateScore, notation only for now (no
-	     acoustic marks; see notation-overlay.ts). -->
+	     SVG pages come from paginateScore over the analysed score; marks
+	     appear only where a vowel resolved against the profile, and an
+	     empty events map draws the plain vocal line. -->
 	<!-- data-analysis-notices carries the unfolder's flag codes (machine tags,
 	     not user copy) for a later notice UI to read; absent when the sung order
 	     was computed cleanly. No visible surface is built here (§M0.3). -->
