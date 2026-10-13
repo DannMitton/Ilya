@@ -45,7 +45,7 @@ Grace: the parsers drop grace notes before the event list exists (`musicxml-pars
 | 11/8 | 12 of 11 | quarter. quarter. quarter. quarter. | none | 9 | 3 |
 | 4/8 | 6 of 4 | quarter. quarter 16th 16th | none | 8 | 4 |
 
-By direction: 482 bars long, 82 short (short = `actual` below `expected`). 
+By direction: 721 bars long, 90 short (short = `actual` below `expected`).
 
 **An observation, not a finding I can explain:** the commonest named bars sit in metres of `1/4`, `4/8`, and `11/8`, reading as `1.5 of 1`, `6 of 4`, and `12 of 11`. Those look like misread time signatures in the scan fixtures, not music. I did not check which fixtures carry them or why. The offers there are arithmetic against a wrong metre.
 
@@ -64,7 +64,7 @@ By direction: 482 bars long, 82 short (short = `actual` below `expected`).
 
 ## Offers for every bar in section 3.2
 
-Across the 811 bars: **130 offer one note's length** (of which 5 also offer a tuplet), **129 offer only a tuplet**, **552 offer nothing**. The set-aside reasons on the 552: 437 have no candidate at all; 115 had two or more single-note changes (of which 8 also fit only under two runs together). The per-bar offers are in the TSV, column `offers`.
+Across the 811 bars: **130 offer one note's length** (of which 5 also offer a tuplet), **129 offer only a tuplet**, **552 offer nothing**. The set-aside reasons on the 552: 437 have no candidate at all; 107 had two or more single-note changes (so none was offered); 8 fit only under two tuplet runs together. These three groups do not overlap (437 + 107 + 8 = 552). The per-bar offers are in the TSV, column `offers`.
 
 ## Tests
 
