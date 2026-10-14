@@ -586,3 +586,27 @@ Everything in this folder is SOURCED from that opener unless marked otherwise.*
 > **This thread's mistakes, each owned when made:** pointed Dann at Terminal instead of the Code tab; called the rose bar "purple"; named the tab "Markup" while the app was in French (« ANNOTATION »); sent him to a one-line test fixture for *Within Four Walls*; said the desk would diagnose and then stopped; predicted gate 4 at 2447 when it measured 2448 (`markup-pages.test.ts:47-53` counts P.musicxml); a cloud prompt typed without focus did not land; `os.rename` removed row 93's r1 brief (restored); the web helper spent about 343k tokens against a stated 300k; marked Miller 2000 and McCoy 2003 NOT ESTABLISHED before searching the JOS index.
 >
 > The closes of 2026-10-12 20:15 and of the night thread are in `STATE-archive.md`, verbatim.
+
+
+## Moved at the close of 2026-10-14 03:35, verbatim
+
+### CLOSE OF 2026-10-13 23:35 (Opus desk; the thread compacted once, and Dann asked to close it). THE NEXT DESK STARTS HERE.
+
+> **Floor unchanged: `1ec2ef2`.** No code changed this thread. Dann's git status at open (2026-10-12 23:4x): HEAD `1ec2ef2`, branch Shane, +0 -0; `docs/memory` modified, harness untracked.
+>
+> **THE ONE THING:** row 93 (Markup blank on «Средь шумного бала») is still unexplained. Code's report (`../sessions/report-code-markup-blank-tchaikovsky_r1_2026-10-12.md`) could not reproduce it in 7 cases (340 Cyrillic and 340 IPA each); its lead is `staff-renderer.ts:3157-3158` (`options.ipaPreview?.[ev.id] ?? a?.vowel`), pairings keyed by event id (`MarkupPane.svelte:224-228`). **Next diagnostic:** Dann's own stored record of the song, read-only, in his Chrome on the live alias. The order of work in the 2026-10-12 close (now in `STATE-archive.md`) stands from step 2 on.
+>
+> **This thread was Insights research (N.168), at Dann's direction.** Everything is in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/`:
+> - `draft-musical-analysis-module_r1_2026-10-13.md`: the living plan, with every ruling timestamped. Ruled tonight: experience stage used (21:25); self-report live (21:30); two origins labelled (21:33); practice suggestions as "One approach many teachers use: … (Author year, p. n). Ask your teacher or coach whether it suits your voice." (22:01, amends 2026-09-25); the guiding principle (22:03); no overall difficulty grade (22:18); no goal question in intake (23:01); authors' disagreements named (23:04); causal claims only when a source makes them, Ilya a curator not an oracle (23:06); facts, claims, and frames as the comment grammar (23:09); challenges split from a score-facts strip (23:26).
+> - **Guide statement RATIFIED, EN 23:11 and 23:14, FR 23:14** (text in the plan). Owed: a QUEUE row to place it (row 94, below).
+> - `draft-challenge-list_r1_2026-10-13.md` (23 rows) and `fable-critique-challenge-list_r1_2026-10-13.md` (Fable, about 196k tokens against a stated 150k). **Next: challenge list r2**, applying the 23:26 ruling and the critique's changes 2 to 5 (DESK DEFAULT): merge the critical-note cluster; row 18 sourced from Christensen 2023; repair the miscitations; name the threshold disagreements and merge rows 7 and 8.
+> - `ohs-extraction/` (251 claims from ten Oxford Handbook of Singing chapters, two Sonnet helpers, about 492k against a stated 400k); `_ocr-ohs/`, `_ocr-arneson/`; source texts for Christensen 2023, St. Pierre 2016, Ralston 1999.
+> - `curation-sources-for-insights_r1_2026-10-12.md`: the ten OHS chapters and about twenty reference-list papers filed by Dann's naming convention; Ralston 1999 (P-R), Christensen 2023, St-Pierre 2016, NATS rubrics, Arneson 2014 (selected pp. 7-70; title page owed by Dann to confirm author order with Athey-Janka).
+> - Still owed for step 2: Gobet and Chassy (NOT READ; never cite until read); Grayson 2012 pages for consonant clusters; OHS reference lists for chapters 7 (second read), 8, 10, 13, 29, 30, 52; whether OHS ch. 30 references continue on p. 620.
+>
+> **This thread's mistakes, each owned when made:** said Dann did not own the OHS; gave iPhone menu steps that were not on his screen; proposed "a way to practise" against the 2026-09-25 ruling; re-asked the already-ruled comment budget; conflated Garyth and Angelika Nair and recorded an opinion of a colleague (removed); guessed a missing p. 599 (it is a part title); cited Gobet and Chassy unread; downloaded a second Nix 2002; moved Dann's St-Pierre download to `_to_delete` (restored at once); left two stray empty files (moved to `_to_delete`); helpers over their stated worst cases twice.
+>
+> **Stray, untouched:** `~/Downloads/Chapter 8.png`. Files to delete by Dann: `Insights Research/_to_delete/`, `~/Downloads/_to_delete/`.
+
+
+**N.185**, numbered by the desk 2026-10-14 (DESK DEFAULT, accepting Code's console label): a stored scan's seats filed under the old reader's note names find their notes again. SHIPPED `6c69161`, ratified by Dann 02:56. Closed in the session that numbered it.

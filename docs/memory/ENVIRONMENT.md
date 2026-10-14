@@ -127,6 +127,9 @@ next session the same hour it cost the last one.
 | you are about to count carets with a selector | `THE CARETS CARRY NO CLASS` |
 | you need a 390 px window in his Chrome | `CHROME WILL NOT GO BELOW ABOUT 555 CSS PX` |
 | reading the console of Dann's own Chrome tab | `THE EXTENSION CANNOT SEE HIS TAB` |
+| reading Dann's stored songs without running Ilya | `READ HIS LIBRARY FROM A STATIC FILE ON THE ALIAS` |
+| seats that draw nothing on a stored scan | `OLD READER IDS AGAINST HOMR` |
+| downloading from IMSLP through his Chrome | `IMSLP THROUGH CLAUDE IN CHROME` |
 | a click or zoom lands in the wrong place in his Chrome | `THE SCREENSHOT FRAME IS NOT CONSTANT` |
 | the extension goes dead after you close a tab | `CLOSING THE LAST TAB CAN QUIT CHROME` |
 | a reading of 0 changes, or the dictionary never loads, in a tab you drove | `THE EXTENSION'S OWN TAB LANDS BEHIND` |
@@ -4773,3 +4776,16 @@ Dann's Chrome window would not shrink by `resize_window` (it reported success; `
 - **OCR on the Mac:** background processes die at the end of each bridge call. Run OCR in resumable foreground chunks of about 150 s (`pdftoppm -r 200 -gray`, then `tesseract`), skipping pages already done.
 - **`mv` from Downloads into the library copies and then fails to remove the source** (no delete on the bridge); move the Downloads original into `~/Downloads/_to_delete/` afterwards.
 - **Check the library for an existing copy before downloading** (Nix 2002 was fetched twice).
+
+
+## READ HIS LIBRARY FROM A STATIC FILE ON THE ALIAS. 2026-10-14
+
+To read Dann's stored songs without running any Ilya code (so nothing reopens, re-seats, or saves), open a static file on the same origin in a tab of the desk's own, for example `https://ilya-git-shane-dannmittons-projects.vercel.app/manifest.webmanifest`, and read IndexedDB with `javascript_tool`. Check `indexedDB.databases()` first, open `ilya-library` with no version and abort any `onupgradeneeded` (so a missing database is never created), and use `readonly` transactions. Stores: `songs` (keyPath `id`; `pairings`, `poem`, `corrections`), `sources` (keyPath `songId`; `bytes`, `reading.musicXml`, `reading.stamp`), `meta`. The voice is `localStorage['shane.profiles.v2']`. Long `javascript_tool` returns truncate near 1,500 characters, and some strings trip a "Cookie/query string data" block: return compact summaries.
+
+## OLD READER IDS AGAINST HOMR. 2026-10-14
+
+Scans seated before homr became the first reader (2026-10-04) carry seats keyed `r{bar}-{x}`; a homr reading has no `<note id>`, so the parser names events `m{bar}-{num}-{den}` (`packages/score-parser/src/musicxml-parser.ts:729-731`) and nothing matches. N.185 (`6c69161`, `apps/web/src/lib/score/old-reader-seats.ts`) re-keys on reopen; the old reader still runs at `?reader=ilya` for reproductions. The `N.160 seats` console line counts map entries, drawn or not; it is not evidence that seats draw.
+
+## IMSLP THROUGH CLAUDE IN CHROME. 2026-10-14
+
+A "Download this file" link inside IMSLP's collapsed "N more" list does not fire from a click. Navigate to `https://imslp.org/wiki/Special:ImagefromIndex/<file number>` instead; with Dann's subscription it opens the PDF in Chrome's viewer, whose download button saves to `~/Downloads` with no dialog. Downloads need Dann's yes with file name, source, and size first. IMSLP's 1752 Quantz first edition exists only as twelve part files.

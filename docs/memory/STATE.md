@@ -4,7 +4,7 @@ r1 draft, 2026-10-12. Updated at the close of every session; this is the handove
 
 Repository: branch `Shane`. **This file never names HEAD, and cannot.** It names a **floor**: everything below was true at or before the floor, and a tree ahead of it tells you only that work has landed since. **The push range is the check, not the memo.**
 
-**Floor: `1ec2ef2`** (2026-10-12 23:32). The earlier floors, `72b564f` (2026-10-12), `9f9e896`, `9d1baa6` (2026-09-27, walked by Dann on the alias), `1987157` (2026-09-24), `f6d2184` (2026-09-22, walked in French: *"This looks as it should!"*), and the thirty-nine before them, are listed in `STATE-archive.md` and `../sessions/LOG.md`.
+**Floor: `6c69161`** (2026-10-14 01:24). The earlier floors, `1ec2ef2` (2026-10-12 23:32), `72b564f` (2026-10-12), `9f9e896`, `9d1baa6` (2026-09-27, walked by Dann on the alias), `1987157` (2026-09-24), `f6d2184` (2026-09-22, walked in French: *"This looks as it should!"*), and the thirty-nine before them, are listed in `STATE-archive.md` and `../sessions/LOG.md`.
 
 Ask Dann for the state in one line. Read-only git is allowed (`CONTRACT.md` section 4); asking is still the habit.
 
@@ -18,24 +18,23 @@ git -C ~/Desktop/ilya-rewrite --no-optional-locks --no-pager log -1 --format="%H
 
 **The scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.** Set 3 scored 93.8 (QUEUE row 76); its four low songs were opened and two fixes shipped (row 77, `b80b543`); set 4 is sealed and its final test is READY (row 86). The goal behind it: a working beta. PDF and photograph stay in it. MIDI is OUT, ruled by Dann 2026-10-01 01:25 (`PRODUCT.md`, "Closed and not to be reopened").
 
-### CLOSE OF 2026-10-13 23:35 (Opus desk; the thread compacted once, and Dann asked to close it). THE NEXT DESK STARTS HERE.
+### CLOSE OF 2026-10-14 03:35 (Opus desk). THE NEXT DESK STARTS HERE.
 
-> **Floor unchanged: `1ec2ef2`.** No code changed this thread. Dann's git status at open (2026-10-12 23:4x): HEAD `1ec2ef2`, branch Shane, +0 -0; `docs/memory` modified, harness untracked.
+> **Floor: `6c69161`** (2026-10-14 01:24, N.185 / row 93). The previous close's stamp of "2026-10-13 23:35" was written about 23:2x by Dann's clock; that desk's clock ran ahead (Dann 23:33). Uncommitted at this close: `docs/memory/` only.
 >
-> **THE ONE THING:** row 93 (Markup blank on «Средь шумного бала») is still unexplained. Code's report (`../sessions/report-code-markup-blank-tchaikovsky_r1_2026-10-12.md`) could not reproduce it in 7 cases (340 Cyrillic and 340 IPA each); its lead is `staff-renderer.ts:3157-3158` (`options.ipaPreview?.[ev.id] ?? a?.vowel`), pairings keyed by event id (`MarkupPane.svelte:224-228`). **Next diagnostic:** Dann's own stored record of the song, read-only, in his Chrome on the live alias. The order of work in the 2026-10-12 close (now in `STATE-archive.md`) stands from step 2 on.
+> **THE ONE THING is unchanged: the scan reader at 95 on unseen songs, on the singer's path.** Row 93 is DONE: the cause was the song's 170 seats filed under the old reader's note names (`r{bar}-{x}`), which the homr reading (no `<note id>`) never produces; N.185 re-keys them on reopen (`apps/web/src/lib/score/old-reader-seats.ts`, `+page.svelte` `applyArrival`). Dann then re-seated the song on the print's text; 172 of 172 sung notes seated (desk read of his record, 02:31).
 >
-> **This thread was Insights research (N.168), at Dann's direction.** Everything is in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/`:
-> - `draft-musical-analysis-module_r1_2026-10-13.md`: the living plan, with every ruling timestamped. Ruled tonight: experience stage used (21:25); self-report live (21:30); two origins labelled (21:33); practice suggestions as "One approach many teachers use: … (Author year, p. n). Ask your teacher or coach whether it suits your voice." (22:01, amends 2026-09-25); the guiding principle (22:03); no overall difficulty grade (22:18); no goal question in intake (23:01); authors' disagreements named (23:04); causal claims only when a source makes them, Ilya a curator not an oracle (23:06); facts, claims, and frames as the comment grammar (23:09); challenges split from a score-facts strip (23:26).
-> - **Guide statement RATIFIED, EN 23:11 and 23:14, FR 23:14** (text in the plan). Owed: a QUEUE row to place it (row 94, below).
-> - `draft-challenge-list_r1_2026-10-13.md` (23 rows) and `fable-critique-challenge-list_r1_2026-10-13.md` (Fable, about 196k tokens against a stated 150k). **Next: challenge list r2**, applying the 23:26 ruling and the critique's changes 2 to 5 (DESK DEFAULT): merge the critical-note cluster; row 18 sourced from Christensen 2023; repair the miscitations; name the threshold disagreements and merge rows 7 and 8.
-> - `ohs-extraction/` (251 claims from ten Oxford Handbook of Singing chapters, two Sonnet helpers, about 492k against a stated 400k); `_ocr-ohs/`, `_ocr-arneson/`; source texts for Christensen 2023, St. Pierre 2016, Ralston 1999.
-> - `curation-sources-for-insights_r1_2026-10-12.md`: the ten OHS chapters and about twenty reference-list papers filed by Dann's naming convention; Ralston 1999 (P-R), Christensen 2023, St-Pierre 2016, NATS rubrics, Arneson 2014 (selected pp. 7-70; title page owed by Dann to confirm author order with Athey-Janka).
-> - Still owed for step 2: Gobet and Chassy (NOT READ; never cite until read); Grayson 2012 pages for consonant clusters; OHS reference lists for chapters 7 (second read), 8, 10, 13, 29, 30, 52; whether OHS ch. 30 references continue on p. 620.
+> **Next, in order:** (1) **QUEUE row 96**: the Insights chart runs into the page footer on «Средь шумного бала» p. 3, *"must not be allowed in production"*: brief, Fable review, Code. (2) Row 78b's stroke constant 0.098 (`OPEN.md`, ruled 03:11), with row 96. (3) **N.135, ruled a priority by Dann 02:44** (*"We need to buiold that"*): Ilya reads no words from a scan today; rows 81 (measured), 88 (teacher, 385 of 493 syllables), 82 (READY) are its parts; the text it builds to is `OPEN.md`, "THE TEXT UNDER THE NOTES: A MIXED DEFAULT". (4) Row 95 (the scan banner's false "no words", EN and FR drafts put to Dann, not ratified). (5) Rows 47, 48 (tempo; row 48 now carries the body's-step principle, `OPEN.md`, and Dann's walk finding that "states no tempo" is false on a *Moderato* print). (6) Insights curation for tomorrow (INBOX 03:10: six pages too long, repeats, «One more observation», Further reading by source), with challenge list r2 (written this session, `Insights Research/_synthesis/draft-challenge-list_r2_2026-10-14.md`; open item: how many lead).
 >
-> **This thread's mistakes, each owned when made:** said Dann did not own the OHS; gave iPhone menu steps that were not on his screen; proposed "a way to practise" against the 2026-09-25 ruling; re-asked the already-ruled comment budget; conflated Garyth and Angelika Nair and recorded an opinion of a colleague (removed); guessed a missing p. 599 (it is a part title); cited Gobet and Chassy unread; downloaded a second Nix 2002; moved Dann's St-Pierre download to `_to_delete` (restored at once); left two stray empty files (moved to `_to_delete`); helpers over their stated worst cases twice.
+> **Ruled this session** (all in `OPEN.md`): the mixed default for the text under the notes (02:54); the limit of Ilya's changes, tethered to Grayson ch. 8 (02:44, 02:47); the underlay follows the score (N.135 addendum, 01:44, restating July's rulings); open syllables stays a personal option, off by default (INBOX 01:53); the body's-step tempo principle (03:20); placeholder stroke 0.098 sp (03:11).
 >
-> **Stray, untouched:** `~/Downloads/Chapter 8.png`. Files to delete by Dann: `Insights Research/_to_delete/`, `~/Downloads/_to_delete/`.
-
+> **Walk findings for the reader** (QUEUE archive, row 93): bar 36 read D♯ where the print has D; bar 40's G♮ read G♯; bars 62 and 70 empty in the reading.
+>
+> **This session's mistakes, each owned when made:** stated a cause for bar 18 and a lag "to the end" as fact before establishing either; recorded the score-over-poem rule as new without searching the July rulings; modernized «печальныя» in a text against Dann's default; sent an amendment to Code without Fable's review (said so at the time, DESK DEFAULT under §1 item 19).
+>
+> **Filed:** Quantz 1752, Hauptstück XVII Abschnitte 6-7, in `~/Documents/Voice Pedagogy Library/P-R/` (md5 fcce9c318390ac7f3c852357d9e4fdec); the IMSLP download remains in `~/Downloads/`. Not filed: London, *Hearing in Time*. The library list `Insights Research/_synthesis/library-files_2026-10-12.txt` predates it.
+>
+> The close of 2026-10-13 23:35 is in `STATE-archive.md`, verbatim.
 ---
 
 ## THE TRACKER
@@ -101,7 +100,7 @@ Marks: `[ ]` open · `[D]` Dann's to rule · `[~]` shipped, not walked, or parke
 
 - `[ ]` **N.141. The squircle has no grammar.** The height rule closed 2026-09-21, `6101e01`, walked (*"Yes this is ideal"*); Dann amended his own one-height ruling on 2026-09-20 to get it (`OPEN.md` §N.141). Open: the squircle across a tie (no longer waits on N.142; counted zero 2026-09-24; no week carries it), and the viewBox clamp binding on two notes. DESK DEFAULT number. Spec in `OPEN.md`, including the permission to re-engrave the measure for the loupe and its cost. **His ruling of 2026-09-14, "I don't want Ilya dropping hyphens", sits at `OPEN.md:1250` inside this spec and must be rehomed before N.141 closes (`OWED.md`).**
 - `[ ]` **N.140. The loupe guarantees a stave space, and scrolls rather than shrinking below it.** Dann's own design, ruled 2026-09-14, over the desk's recommendation to do nothing. Mostly built (code audit 2026-09-24, recorded on his instruction: *"That's great news, please update our records"*); only the sideways scroll against a syllable tap remains (`OPEN.md` §N.140). He owes the floor in CSS pixels, and whether the scroll may take a gesture on a surface where the swipe dismisses and the tap places a syllable.
-- `[ ]` **N.135. The page reader reads the text underlay.** Ruled by Dann 2026-09-14. Cost measured in `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. N.180's notes sit under it in `OPEN.md`. N.184 and row 81's row reader lean on it.
+- `[ ]` **N.135. The page reader reads the text underlay.** Ruled by Dann 2026-09-14. **Ruled a priority by Dann 2026-10-14 02:44**; the text it builds to is `OPEN.md`, "THE TEXT UNDER THE NOTES: A MIXED DEFAULT". Cost measured in `../sessions/memo-n135-ocr-measurement_r1_2026-09-14.md`. N.180's notes sit under it in `OPEN.md`. N.184 and row 81's row reader lean on it.
 
 ### Older open residue
 

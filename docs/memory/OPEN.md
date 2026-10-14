@@ -2740,6 +2740,39 @@ A read-only Sonnet sweep read about 43 of the project's 374 documents (`claude/*
 
 **Corrections the desk owes before the brief:** Ilya merges tenor and mezzo (`plausibility.ts:61`) and cites its baritone to a website PDF (`:89`); the 2013 page has separate Mezzo and Tenor staves and a printed baritone. Read both staves note by note against the 2021 figure before splitting. Henrich, Smith & Wolfe 2011 figures were seen through a fetch summary only, NOT READ in the article.
 
+## TEMPO WHEN NOTHING ON THE PAGE GIVES ONE: THE BODY'S STEP. Offered by Dann 2026-10-14 03:13 to 03:19, refined by the desk, ratified 03:20
+
+Default: the felt beat stays within the range a body can step or sway to; a slower tempo is felt in subdivisions, not in a longer beat (3/8 in three or in one, as the music asks). Dann: *"the human body in space, in a leap or a dance step must obey gravity, and this stops folks from languid tempi"*; on the sarabande refinement, *"Yes! I like your expansion to sarabande"*. Attribution, DESK DEFAULT under his name: "after Jeanne Lamon, as Dann Mitton received it" (learned second-hand; no written source of hers found; Bruce Duffie's interview of 1993-11-11 read in full and silent on it). Written tether read: Quantz 1752, Hauptstück XVII, Abschnitt VII, § 51, pp. 263-264 (tempo by the pulse; one pulse to the bar in 2/4 and fast 6/8 Allegro), a Baroque and galant reference, not a rule for Romantic repertoire. Condition: a printed tempo word or metronome mark, or the singer's own tempo, outranks it. Where it is built: QUEUE row 48.
+
+## PLACEHOLDER HEADS: THE THINNEST STROKE. Ruled by Dann 2026-10-14 03:11 on Code's picture
+
+*"thinnest 0.098 has my vote for the placeholder circles"*: `PLACEHOLDER_HOLLOW_STROKE_SP` (`packages/score-parser/src/placeholder-mark.ts:44`) goes from 0.198 to 0.098. Owed to Code.
+
+## THE TEXT UNDER THE NOTES: A MIXED DEFAULT. Ruled by Dann 2026-10-14 02:54, on the desk's critique of 02:52; supersedes the punctuation clause of the two entries below it
+
+Dann: *"If we have a two-tiered aopproach it would be to apply the poet's punctuation unless hte composer has written repeats so commas are allowable. But I think adopting the score's capitalization hurts no one? The user has contorl over these elements just like I did toingiht through the iNput field. SO I feel comfortable declaring a mixed default with agency for the singer to change it to their liking."* (transcribed as written)
+
+| Element | Default | Source of the default |
+|---|---|---|
+| Punctuation | the poet's | Gould rule 10, p. 438 |
+| Punctuation around a composer's repeat | the score's commas | Gould rule 11, p. 438 |
+| Capitals | the score's | Dann 02:54 |
+| Word breaks (syllables) | the score's; Ilya's own rule where the print cannot be read | Dann 02:51 (*"punctuation and syllabification inbcluded"*); DESK READING that 02:54 left this standing |
+| Spelling | modernized per Grayson where the sound and the syllable count are unchanged | the entry below; Dann 02:47 |
+| Which words, and how often | the score's | July rulings, below |
+
+Condition: every element stays the singer's to change in Input. Building it needs the score's own words read (N.135) beside the poem.
+
+## THE LIMIT OF ILYA'S CHANGES TO A PRINTED TEXT. Offered by the desk 2026-10-14 02:41; ruled by Dann 02:44 (*"If not, we will go with your recommendation. I just want to tether our practice to his thoughts."*), tethered to Grayson the same night
+
+Default: **Ilya changes only spelling that leaves the sound unchanged, and keeps everything else from the print:** the words, their repeats, punctuation, capitals, and where words break into syllables; Ilya's own syllable rule is the fallback where the print cannot be read. Condition for departing: a modern form that changes the sound or the syllable count is used only where the musical setting allows it.
+
+The tether, read in full this session from `~/Downloads/Grayson - 2012 - Russian Lyric Diction.pdf` (Chapter 8, Section 1, "Orthography"): *"A singer should simply substitute the modern letters for the defunct ones to decipher the old-fashioned printing"* (p. 291, on ѣ, і, ѵ, ѳ); a final hard sign the singer *"must simply ignore"* (p. 193); for the old pronoun forms, changing ея to её is *"acceptable, if not expected"*, while the one-syllable мя and тя take the modern two-syllable forms *"only... if the musical setting allows"* (p. 292). Grayson does not address punctuation, capitals, or word division; those rest on the desk's recommendation as ruled, and on the rulings of July (`claude/reconciliation-principles_2026-07-16.md`, principle 2; `claude/e16-vision-and-staged-plan_2026-07-22.md`). Dann, 02:47: *"yes let's adopt Grayon's advice on modernization if it doesn't alter the musical elements in the score."* and *"Punctuation. capoptaisl and were wrod break are all orthographic, and none of them affect sound. ALl good."* (transcribed as written; whether punctuation, capitals, and word breaks stay as printed or may be modernized was put back to him at 02:48). Dann also ruled N.135 a priority at 02:44: *"HOly shit. We need to buiold that."* (transcribed as written)
+
+## N.135, ADDENDUM 2026-10-14: the underlay follows the score's own text. Suggested by Dann 2026-10-14 01:44, recorded by the desk as his default
+
+Dann, walking «Средь шумного бала» after `6c69161`: *"the score does not capiltalize те -бя... we should make a decision whether we go with the score (my suggestion) or strictly stick to the published form of the poem?"* (transcribed as written). Default: where Ilya can read the score's own underlay, the text under the notes follows the score (its punctuation, its capitals, its word breaks), not the poem as published. Condition for departing: a score whose underlay Ilya cannot read, or reads with low confidence, keeps the typed poem. Today, on a scan with a typed poem, Ilya draws the typed poem, because the scan's underlay is not yet read (this item). **This restates rulings already made, which the desk did not search before recording it (corrected 01:55):** `claude/reconciliation-principles_2026-07-16.md`, principle 2, *"The sung text governs content... The poem is authoritative only for the language of the words that are sung"*; `claude/e16-vision-and-staged-plan_2026-07-22.md`, *"the score is the sole authority on repetition and sung structure"*; the shell's `VarianceKind` includes `'recurrence'` (`claude/e32-session-record_2026-08-08.md` §4). Dann 2026-10-14 01:52: *"Composers often repeasst text that the poen does not. WE have discussed this at length"*. Third case from the same walk: the print repeats «грустно» in bars 77 to 78. Two findings from the same walk are this rule's first cases: the comma after «суеты» (bar 16) is in the print and not in the typed poem, and «те-бя» is lower-case in the print and «Тебя» in the poem.
+
 ## N.135, ADDENDUM 2026-10-01 (was N.180, struck 14:20 as a duplicate; the desk numbered it without searching the tracker)
 
 **What is true today, read by the desk 2026-10-01:** a score file that carries words fills the poem box and seats them (`+page.svelte:3259`); a scanned or photographed SCORE yields notes only, and Ilya says so (`upload.banner.reader`, `i18n.ts:917`; `upload.banner.noLyrics`, `+page.svelte:4464`); a page with no staves is read as a poem by OCR (`ScoreUploader.svelte:290`, `:405`; the guard in `ingestion/ocr-guard.ts`).

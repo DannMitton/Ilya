@@ -12,20 +12,20 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 ## Where it stands, 2026-10-12 23:45
 
-- **THE ONE THING, the scan reader at 95 on unseen songs:** set 4 passes on all ten songs; 4F reads 98.0 after row 89 (`1ec2ef2`). The double flat is still read as a single flat (row 26, after row 93).
-- **The need is met on an engraved score and not yet shown on a scan:** «Within Four Walls» from MusicXML draws Text, Markup, and Insights in both languages; «Средь шумного бала» from a scan draws no syllables in Markup (row 93). Desk's reading, 2026-10-12 21:50.
+- **THE ONE THING, the scan reader at 95 on unseen songs:** set 4 passes on all ten songs; 4F reads 98.0 after row 89 (`1ec2ef2`). The double flat is still read as a single flat (row 26).
+- **The need is met on an engraved score and not yet shown on a scan:** «Within Four Walls» from MusicXML draws Text, Markup, and Insights in both languages; «Средь шумного бала» from a scan draws all its syllables in Markup since `6c69161` (row 93, ratified 2026-10-14 02:56), from a typed poem, because Ilya reads no words from a scan (N.135). Desk's reading, 2026-10-12 21:50.
 - **Shipped and not walked by Dann:** about 40 rows (`QUEUE.md`, "Shipped, not walked").
 
 ## This week. Tuesday 2026-10-13 to Sunday 2026-10-18
 
 **Mac**
 - [x] **Row 89**: the quadruplet in 4F. SHIPPED `1ec2ef2`; 4F 98.0 PASS. The double flat was not built.
-- [ ] **Row 93**: why Annotation draws no syllables on a scan with a typed poem. Measures only. Sent to the Mac 23:39. Then a fix row, which the desk writes from its report.
+- [x] **Row 93**: Markup blank on a stored scan. Cause found by the desk 2026-10-14 (seats under the old reader's note names); fix SHIPPED `6c69161` (N.185, `../sessions/report-code-row93-seats-under-old-names_r1_2026-10-13.md`); ratified by Dann 02:56.
 - [ ] **Row 82**: the pre-reform model (N.184). Up to 11 hours of the Mac; runs when the Mac is free for a long stretch, overnight if Dann asks for that.
 - [ ] **Corrections slice 4** (`QUEUE.md` row 5, slices 4 to 6): the station code leaves the page, no visible change. After row 93's fix.
 
 **Cloud**
-- [ ] **Row 84**: N.86's dead code. BUILT `9e1af16`; goes in with the next ship.
+- [x] **Row 84**: N.86's dead code. SHIPPED `1ec2ef2` (desk check 2026-10-14).
 - [x] **Row 51, Corrections slice 2**: what Ilya can offer for a bar. SHIPPED `1ec2ef2`.
 - [ ] **Corrections slice 3**: the singer's answer kept per bar. Brief not written; pure, so cloud.
 - [ ] **Row 90**: tonight's ruled strings (the Insights frame line, the two Guide conventions lines). Brief not written.
@@ -33,7 +33,8 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 **Dann**
 - [ ] **The next ship**: rows 84, 89 (when walked by the desk), and the cloud rows that land. The desk prepares it.
-- [ ] **The walk of rows 78a, 78b, 78c** on «Средь шумного бала», after row 93's fix.
+- [ ] **The walk of rows 78a, 78b, 78c** on «Средь шумного бала». Begun 2026-10-14 03:00: 78a's Insights lines and running head shown to Dann by picture (his ruling on them not given); 78b ruled by picture, stroke to 0.098 sp (one constant owed to Code); placeholder items cannot show on this song with his voice; 78c not yet looked at.
+- [ ] **Row 96 FIRST at the next session**: the Insights chart running into the page footer (page 3, «Средь шумного бала»). Then row 95 (the scan banner), N.135 (ruled a priority 2026-10-14 02:44).
 - [ ] **The Shane switch at release** (`apps/web/src/lib/wall.ts:6-7`): what it does on 2026-10-30. Dann's ruling, owed since r1 of this file.
 
 ## Week of Monday 2026-10-19 to Sunday 2026-10-25
