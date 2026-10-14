@@ -31,7 +31,7 @@ those marks point at.
 > 24 px (`:2658`) and tie depth is fixed at 0.9 lineGap (`:2602`). Gould
 > 151: one design for both. Gould's slur pages 109-112 never photographed,
 > so the arch height is Dann's eye: the brief asks Code for three renders
-> per number. Brief WRITTEN, UNTRACKED:
+> per number. Brief WRITTEN, now tracked (modified in `34b143c`):
 > `docs/sessions/brief-n125-slurs-as-objects_r1_2026-09-11.md`.
 >
 
@@ -85,7 +85,7 @@ on it, and none of them can be answered from a picture.
 - **N.125**, this item: which block draws the arc Dann flagged.
 - **N.141** case 2: a squircle opens on a TIE across a barline and stays closed
   on a MELISMA. See §N.141 §EVIDENCE.
-- **N.142**, the tie predicate itself, which is not built.
+- **N.142**, the tie predicate itself, which shipped as `c868540` (2026-09-16).
 
 **The cheap instrument settles all three at once: read `data-tie` and
 `data-slur` off the rendered page rather than off a screenshot** (they are on
@@ -519,7 +519,7 @@ Questions 7, 8, 10, and 11 of the distillation are still open; question 6 ("try"
 
 **Depends on:** the dynamics lexicon (`OWED.md`) for the dynamic dimension; score files for the dissertation's songs (only Sunless 1 is in the tree, NOT ESTABLISHED where the rest are).
 
-## N.130. INSIGHTS HAS NO FRENCH. Numbered by Dann 2026-09-13. UNPLACED.
+## N.130. INSIGHTS HAS NO FRENCH. Numbered by Dann 2026-09-13. SHIPPED `2f955e6` 2026-09-24 (was UNPLACED).
 
 **The item.** Every string on Insights is English in both languages. A singer
 working in French meets Ilya's third document speaking English from its identity
@@ -565,7 +565,7 @@ triage that separates those two groups has not been run.**
 
 ---
 
-## N.131. FRENCH PARITY EVERYWHERE ELSE. Numbered by Dann 2026-09-13. UNPLACED.
+## N.131. FRENCH PARITY EVERYWHERE ELSE. Numbered by Dann 2026-09-13. CLOSED 2026-09-24, `1987157` (`STATE-archive.md`); the spec below is history.
 
 **DESK DEFAULT on the split, and Dann can merge this into N.130 with a word.**
 He asked for "the whole thing" numbered. The desk kept Insights as its own
@@ -697,7 +697,7 @@ phone, and Dann walks it.
 
 ## N.141. THE SQUIRCLE HAS NO GRAMMAR. Numbered 2026-09-14. THE NUMBER IS A DESK DEFAULT. UNPLACED.
 
-**ADDED 2026-10-05. MARKUP'S SQUIRCLE TAKES THE LOUPE'S TREATMENT. Asked by Dann at 06:55, on a picture of Markup that shows a red squircle round one notehead over «слу»** (`../sessions/picture-dann-markup-squircle_2026-10-05.png`): *"I have to be honest, I hate the appearance of the red squircles. We went to a lot of trouble when programming the Loupe to define an appropriate squircle with minimum dimensions that captures the first line of IPA. The squircle is supposed to highlight a formant/harmonic interaction. Right now it highlights an isolated notehead. Please adopt the Loupe's squircle treatment for Markup."* **Not built, and no brief is written** (`QUEUE.md` row 34). The desk that received it opened neither the rest of this spec nor the Loupe's ring code, so how the two treatments differ in the tree is NOT ESTABLISHED.
+**ADDED 2026-10-05. MARKUP'S SQUIRCLE TAKES THE LOUPE'S TREATMENT. Asked by Dann at 06:55, on a picture of Markup that shows a red squircle round one notehead over «слу»** (`../sessions/picture-dann-markup-squircle_2026-10-05.png`): *"I have to be honest, I hate the appearance of the red squircles. We went to a lot of trouble when programming the Loupe to define an appropriate squircle with minimum dimensions that captures the first line of IPA. The squircle is supposed to highlight a formant/harmonic interaction. Right now it highlights an isolated notehead. Please adopt the Loupe's squircle treatment for Markup."* **Built: QUEUE row 34 shipped `fd1c86a` (2026-10-11), built in `01551e2`.** The desk that received it opened neither the rest of this spec nor the Loupe's ring code, so how the two treatments differ in the tree is NOT ESTABLISHED.
 
 **Found by Dann on the walk of `d6580af`, 2026-09-14, across four measures of
 Without Sun song 1. His words are the finding and are not a claim to be tested:**
@@ -1005,7 +1005,7 @@ on both scores, and Dann walks it.
 ### A LATER INCREMENT: THE SQUIRCLE SPANS A TIE. Raised by Dann 2026-09-15
 
 **NOT part of the current build. It depends on N.142**, which gives the tie
-predicate, and N.142 is not built.
+predicate, and N.142 shipped as `c868540` (2026-09-16).
 
 **His words:** *"the tied note is one entity, so the squircle could capture the
 primary note and its subsequent tied value(s). This will complicate things for the
@@ -2145,19 +2145,19 @@ Built and shipped (`7d2fcd6`, `8127e01`); walked by Dann 2026-09-28 14:47 and 16
 
     | quantity | today | ruled | build state, read 2026-09-21 |
     |---|---|---|---|
-    | meter run-in | 2 sp, Gould rule 240 p. 42 | **1 sp in the loupe; the page keeps 2** | **NOT BUILT** |
+    | meter run-in | 2 sp, Gould rule 240 p. 42 | **1 sp in the loupe; the page keeps 2** | **BUILT, `757f002` (2026-10-02), `LOUPE_METER_RUN_IN_SP = 1` at `loupe.ts:394`** |
     | stave run-on past the closing barline | 4.6 sp | **1 sp** | **BUILT** |
 
     - **The run-on is built.** `EXCERPT_TAIL_SP = 1` (`loupe.ts:598`), spent at
       `Loupe.svelte:935`, and zero on a final barline.
-    - **The meter run-in is NOT BUILT.** `METER_RUN_IN_SP = 2`
+    - **The meter run-in is BUILT since `757f002` (2026-10-02); the text below is the 2026-09-21 reading.** `METER_RUN_IN_SP = 2`
       (`staff-renderer.ts:169`) is the only value in the tree, and the loupe's
       render passes no override: `bundleRenderOptions`
       (`loupe-render.ts:58-69`) carries spacing, clef, the five previews and the
       font, and `renderLoupeMeasure` (`:79-89`) adds `minGap` and deletes
       `targetWidth`. So the loupe draws its meter at the page's 2 sp.
     - **THE TIE RUNS INTO THE RUN-ON, tapered**, as if reaching a note that is not
-      shown. **NOT BUILT.** No `taper` appears in `Loupe.svelte`, `loupe.ts` or
+      shown. **BUILT since `07f535a` (2026-10-02); the text below is the 2026-09-21 reading.** No `taper` appeared in `Loupe.svelte`, `loupe.ts` or
       `loupe-render.ts`, and the tail panel draws only `<line>` elements
       (`Loupe.svelte:2590-2597`).
     - **His instruction on how much to think about the run-on:** *"Do not overthink

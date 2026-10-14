@@ -61,13 +61,13 @@ tab, which is exactly the work-done-twice this row existed to prevent.
 **3. N.136 comes before N.119, and shrinks it.** N.119 asks which notation
 toggles reach Score markup. The 2026-09-15 re-audit established that four of the
 five claimed do reach the DRAWN text, traced to `staff-renderer.ts:2547`, and that
-`openSyllabification` does not, which is N.136. **So N.136 is the live half.**
+`openSyllabification` does not, which is N.136. **So N.136 was the live half; it closed 2026-09-21 (`1d18514`) and this dependency is discharged.**
 What remains of N.119 afterwards is two toggles that reach nothing at all:
 `showStressDiacritics`, never passed to `VoiceProfilePane`, and `reconstitution`,
 declared "Phase 3, not wired yet" at `engine.ts:35`.
 
 **4. N.123 comes before N.124.** Stated in N.124's own spec: *"Needs: N.123."*
-**AMENDED 2026-09-23, READ IN THE TREE: THE MULTI-VOICE LIBRARY EXISTS.** `ProfileStore` holds `voices: StoredVoice[]` with an `activeId` (`apps/web/src/lib/voice/profileStore.ts`, `interface ProfileStore`); each voice has a free-text name (`StoredVoice.name`), its measured formants (`formants`), and its typed range and passaggi (`characteristics`); switched by `ProfileSwitcher.svelte`; built 2026-07-11 (`CalibrationWizard.svelte:33-39`). **What is not built is reading one song against several voices at once:** Insights takes one voice's snapshot (`insights.ts:115-116`). Dann also ruled there is no teacher mode (`OPEN.md`, N.124). The sentence that follows is superseded: **N.124 also needs a multi-voice library, which is NOT ESTABLISHED as existing**,
+**AMENDED 2026-09-23, READ IN THE TREE: THE MULTI-VOICE LIBRARY EXISTS.** `ProfileStore` holds `voices: StoredVoice[]` with an `activeId` (`apps/web/src/lib/voice/profileStore.ts`, `interface ProfileStore`); each voice has a free-text name (`StoredVoice.name`), its measured formants (`formants`), and its typed range and passaggi (`characteristics`); switched by `ProfileSwitcher.svelte`; built 2026-07-11 (`CalibrationWizard.svelte:33-39`). **What is not built is reading one song against several voices at once:** Insights takes one voice's snapshot (`insights.ts:268`). Dann also ruled there is no teacher mode (`OPEN.md`, N.124). The sentence that follows is superseded: **N.124 also needs a multi-voice library, which is NOT ESTABLISHED as existing**,
 and the singer's floor and ceiling from calibration, also NOT ESTABLISHED. Those
 are prerequisites nobody has checked.
 
@@ -119,8 +119,8 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 | item | why here |
 |---|---|
 | ~~**N.132**~~ **DONE 2026-09-21**, `5f7be82`, walked | The ratified names and the 0.5 rem padding, both on screen in both languages. **The padding was load-bearing:** at 0.7 rem the French pair ran 4.31 px over the 342 px head, and before the rename `Insights` was clipped off the screen entirely, by 71 px in English and 107 px in French. |
-| **N.130** | Insights' French, about 58 entries. Release-blocking. |
-| **N.131** | The rest, about 64 entries. **Its real size is NOT ESTABLISHED** until a triage separates the genuinely untranslated from words identical in French on purpose. The loupe's share of that triage is already done in `spec-loupe-french_r1_2026-09-14.md`. |
+| ~~**N.130**~~ SHIPPED `2f955e6` 2026-09-24 | Insights' French, about 58 entries. Release-blocking. |
+| **N.131** | **CLOSED 2026-09-24, `1987157`** (`STATE-archive.md`, N.131, audit note of 2026-09-30). History: the rest, about 64 entries. **Its real size was NOT ESTABLISHED** until a triage separates the genuinely untranslated from words identical in French on purpose. The loupe's share of that triage is already done in `spec-loupe-french_r1_2026-09-14.md`. |
 
 ### Tier 3. The drawer
 
@@ -129,7 +129,7 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 | *(ratify the drawer grammar)* | Dann's, not a build. Unblocks the three below. |
 | **N.120** + the Tempo station | The station grammar itself. |
 | **N.122** | The capture surface as a landmark. Drawn r1, belongs with N.120. |
-| **N.94** | The transposition control. **The engine already ships** (`transposition.ts`, wired at `watchlist.ts:476`); only the control is missing. Re-read `e31-late-rulings` first, it is 37 days old. |
+| **N.94** | The transposition control. **The engine already ships** (`transposition.ts`, wired at `watchlist.ts:507`); only the control is missing. Re-read `e31-late-rulings` first, it is 37 days old. |
 | **N.121** (c) and (d) | Both wait on rulings from Dann, not on code: the pill's fate, and the undo clause for Start placement over. |
 | **N.117** | The progress bar. Independent and small. What it measures is NOT ESTABLISHED. |
 
@@ -139,13 +139,13 @@ rather than half-built."* N.131 is explicitly not release-blocking.
 |---|---|
 | **N.123** | The aggregation layer under four figures. Feeds everything below it. |
 | **N.127**'s later increments | Insights. Increment 1 is built and its five decisions are unreviewed. |
-| **N.124** | Repertoire for a studio. Needs N.123, plus two prerequisites NOT ESTABLISHED. |
+| **N.124** | Repertoire for a studio. Needs N.123. Of its two prerequisites, the multi-voice library was found built 2026-09-23 (dependency 4, amended); the singer's floor and ceiling from calibration is NOT ESTABLISHED. |
 
 ### Tier 5. The loupe's remainder
 
 | item | why here |
 |---|---|
-| **N.141** | Two increments shipped. The last (a tie spanning the squircle) waits on N.142. |
+| **N.141** | Two increments shipped. The last (a tie spanning the squircle) no longer waits on N.142 (shipped `c868540`). |
 | **N.140** | The stave-space floor. **Insurance rather than an improvement**: on today's scores the scroll would never fire, and landscape already answers the mobile case. Lowest priority of anything numbered. |
 
 ### Tier 6. The reader
@@ -234,7 +234,7 @@ asked for a profile of what could run without his rulings.
 - **N.128's two other consumers.** One question: do `sustain.ts:61-84` and
   `watchlist.ts:229-244` read the corrected line or the reader's events? Pure code
   reading. `OWED.md` §OWED.
-- **Remove `bits-ui`** from `apps/web/package.json`. Ruled 2026-08-16, lockfile only,
+- **DONE: `bits-ui` is no longer in `apps/web/package.json`** (desk grep, 2026-10-14; the removing commit is not identified). History: **Remove `bits-ui`** from `apps/web/package.json`. Ruled 2026-08-16, lockfile only,
   on its own commit.
 - **The reading half of N.86's dead-code audit.** What the Shane switch does at release
   stays Dann's.
