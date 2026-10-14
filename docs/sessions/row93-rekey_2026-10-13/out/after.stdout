@@ -1,0 +1,8 @@
+old {"songs":1,"entries":170,"oldKeys":170,"cursorKeys":0,"firstKeys":["r7-2883","r8-2996","r8-3093"],"lastKey":"r90-1244","kinds":{"syllable":170},"corrections":0,"source":{"fileName":"Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf","byteLength":319128,"stamp":null,"xmlLen":0,"notes":0,"notesWithId":0,"imgpos":0}}
+reopen1 {"songs":1,"entries":170,"oldKeys":2,"cursorKeys":168,"firstKeys":["m7-1-4","m8-0-1","m8-1-8"],"lastKey":"m90-5-16","kinds":{"syllable":170},"corrections":0,"source":{"fileName":"Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf","byteLength":319128,"stamp":"homr-web@0.2.0-ilya.7/465","xmlLen":64765,"notes":222,"notesWithId":0,"imgpos":222}} {"other":1301,"cyrillic":336,"latinOrIpa":336} [
+  '[Ilya] N.185 re-key: 168 seats moved, 2 left under old names, 2 bars left'
+]
+reopen2 {"songs":1,"entries":170,"oldKeys":2,"cursorKeys":168,"firstKeys":["m7-1-4","m8-0-1","m8-1-8"],"lastKey":"m90-5-16","kinds":{"syllable":170},"corrections":0,"source":{"fileName":"Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf","byteLength":319128,"stamp":"homr-web@0.2.0-ilya.7/465","xmlLen":64765,"notes":222,"notesWithId":0,"imgpos":222}} {"other":1301,"cyrillic":336,"latinOrIpa":336} [
+  '[Ilya] N.185 re-key: 0 seats moved, 2 left under old names, 2 bars left'
+]
+redrop true {"songs":1,"entries":170,"oldKeys":2,"cursorKeys":168,"firstKeys":["m7-1-4","m8-0-1","m8-1-8"],"lastKey":"m90-5-16","kinds":{"syllable":170},"corrections":0,"source":{"fileName":"Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf","byteLength":319128,"stamp":"homr-web@0.2.0-ilya.7/465","xmlLen":64765,"notes":222,"notesWithId":0,"imgpos":222}} {"other":1301,"cyrillic":336,"latinOrIpa":336} []

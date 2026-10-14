@@ -1,0 +1,119 @@
+{
+ "tag": "C-fixture-8of10",
+ "source": "fixture",
+ "sampled": [
+  "i",
+  "e",
+  "ɪ",
+  "ɛ",
+  "a",
+  "ʌ",
+  "o",
+  "u"
+ ],
+ "fresh": {
+  "minutes": 2.16,
+  "scoreArrived": true,
+  "poemTyped": false,
+  "seatLine": null,
+  "dryLine": null,
+  "poemLen": 557,
+  "svgs": 33,
+  "systems": 14,
+  "pages": 3,
+  "texts": 1997,
+  "counts": {
+   "smufl": 1279,
+   "cyrillic": 344,
+   "latinOrIpa": 348,
+   "other": 26
+  },
+  "cyrSample": [
+   "Средь",
+   "шум",
+   "но",
+   "го",
+   "ба",
+   "ла",
+   "слу",
+   "чай"
+  ],
+  "ipaSample": [
+   "ˈsrʲetʲ",
+   "ˈʃum",
+   "nʌ",
+   "vʌ",
+   "ˈbɑ",
+   "ɫɑ",
+   "sɫu",
+   "ˈtʃʲaj"
+  ],
+  "otherSample": [
+   "10",
+   "18",
+   "26",
+   "10",
+   "18",
+   "26",
+   "33",
+   "40"
+  ],
+  "provisionalLines": [
+   "= la même, d’après une valeur par défaut",
+   "Votre voyelle [ɑ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé."
+  ],
+  "textWords": 95
+ },
+ "reopen": {
+  "seatLineAppeared": false,
+  "seatLine": null,
+  "dryLine": null,
+  "libraryEntries": [],
+  "poemLen": 557,
+  "svgs": 33,
+  "systems": 14,
+  "pages": 3,
+  "texts": 1997,
+  "counts": {
+   "smufl": 1279,
+   "cyrillic": 344,
+   "latinOrIpa": 348,
+   "other": 26
+  },
+  "cyrSample": [
+   "Средь",
+   "шум",
+   "но",
+   "го",
+   "ба",
+   "ла",
+   "слу",
+   "чай"
+  ],
+  "ipaSample": [
+   "ˈsrʲetʲ",
+   "ˈʃum",
+   "nʌ",
+   "vʌ",
+   "ˈbɑ",
+   "ɫɑ",
+   "sɫu",
+   "ˈtʃʲaj"
+  ],
+  "otherSample": [
+   "10",
+   "18",
+   "26",
+   "10",
+   "18",
+   "26",
+   "33",
+   "40"
+  ],
+  "provisionalLines": [
+   "= la même, d’après une valeur par défaut",
+   "Votre voyelle [ɑ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé."
+  ],
+  "textWords": 95
+ }
+}

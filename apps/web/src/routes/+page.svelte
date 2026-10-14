@@ -158,6 +158,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/score/clitic-seat';
 	import { seatScoreWords } from '$lib/score/score-seat';
 	import { shouldFoldOnArrival, shouldSeatFirstTranscription } from '$lib/score/first-seat';
+	import { rekeyOnArrival } from '$lib/score/old-reader-seats';
 	import { seatWaitingScore } from '$lib/score/waiting-seat';
 	import { collectScoreWords, scoreWordsText } from '$lib/score/vowel-resolver';
 	import {
@@ -1354,8 +1355,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			studioDocument === 'markup' &&
 			!!ingestedScore,
 	);
-
-
 
 	/* THE HELD MEASURE, and in a gap it is the anchor's. A gap is a place
 	   between two entries, so it has no measure of its own; the measure the
@@ -3259,6 +3258,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// as belonging to a note the score no longer has. `syllableTargetIds`
 		// narrows further, for `firstPass` alone: a tie's continuation may
 		// never begin a syllable (`pairings.ts`).
+		const rekeyed = rekeyOnArrival(doc.pairings, ingested.result.score.vocalLine, () => file.text()); // row 93, before the merge counts orphans
+		doc.pairings = (rekeyed instanceof Promise ? await rekeyed : rekeyed).map;
 		const foldOnArrival = shouldFoldOnArrival(doc.pairings);
 		const merged = mergeOnUpload(
 			doc.pairings,
@@ -5062,7 +5063,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		gap: 6px;
 		margin: 0 18px;
 	}
-
 
 	/* N.73 S3 ship one. The takeover's own column, so the ritual keeps the
 	   drawer's left edge. The wizard drops its own outer padding in favour of

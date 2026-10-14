@@ -1,0 +1,119 @@
+{
+ "tag": "G-pdf-poemafter-8of10",
+ "source": "pdf",
+ "sampled": [
+  "i",
+  "e",
+  "ɪ",
+  "ɛ",
+  "a",
+  "ʌ",
+  "o",
+  "u"
+ ],
+ "fresh": {
+  "minutes": 1.18,
+  "scoreArrived": true,
+  "poemTyped": true,
+  "seatLine": "[Ilya] N.160 seats: 170 drawn live, 0 kept as stored, of 170 seated",
+  "dryLine": "[Ilya] N.160 dry run: 170 seated = 170 address + 0 anchor + 0 joined + 0 rejected + 0 unfound. Nothing written.",
+  "poemLen": 535,
+  "svgs": 32,
+  "systems": 13,
+  "pages": 3,
+  "texts": 1975,
+  "counts": {
+   "smufl": 1269,
+   "other": 26,
+   "cyrillic": 340,
+   "latinOrIpa": 340
+  },
+  "cyrSample": [
+   "Средь",
+   "шум",
+   "но",
+   "го",
+   "ба",
+   "ла,",
+   "слу",
+   "чай"
+  ],
+  "ipaSample": [
+   "ˈsrʲetʲ",
+   "ˈʃum",
+   "nʌ",
+   "vʌ",
+   "ˈbɑ",
+   "ɫɑ",
+   "sɫu",
+   "ˈtʃʲaj"
+  ],
+  "otherSample": [
+   "[8]",
+   "14",
+   "22",
+   "29",
+   "[8]",
+   "14",
+   "22",
+   "29"
+  ],
+  "provisionalLines": [
+   "= la même, d’après une valeur par défaut",
+   "Votre voyelle [ɑ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé."
+  ],
+  "textWords": 94
+ },
+ "reopen": {
+  "seatLineAppeared": true,
+  "seatLine": "[Ilya] N.160 seats: 170 drawn live, 0 kept as stored, of 170 seated",
+  "dryLine": "[Ilya] N.160 dry run: 170 seated = 170 address + 0 anchor + 0 joined + 0 rejected + 0 unfound. Nothing written.",
+  "libraryEntries": [],
+  "poemLen": 535,
+  "svgs": 32,
+  "systems": 13,
+  "pages": 3,
+  "texts": 1975,
+  "counts": {
+   "smufl": 1269,
+   "other": 26,
+   "cyrillic": 340,
+   "latinOrIpa": 340
+  },
+  "cyrSample": [
+   "Средь",
+   "шум",
+   "но",
+   "го",
+   "ба",
+   "ла,",
+   "слу",
+   "чай"
+  ],
+  "ipaSample": [
+   "ˈsrʲetʲ",
+   "ˈʃum",
+   "nʌ",
+   "vʌ",
+   "ˈbɑ",
+   "ɫɑ",
+   "sɫu",
+   "ˈtʃʲaj"
+  ],
+  "otherSample": [
+   "[8]",
+   "14",
+   "22",
+   "29",
+   "[8]",
+   "14",
+   "22",
+   "29"
+  ],
+  "provisionalLines": [
+   "= la même, d’après une valeur par défaut",
+   "Votre voyelle [ɑ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé."
+  ],
+  "textWords": 94
+ }
+}

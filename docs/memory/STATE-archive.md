@@ -517,3 +517,72 @@ That is the whole ritual. There is no handover document and no opener to write.
 ---
 *Created 2026-08-13 from `claude/e48-thread-opener_v1_2026-08-13.md`, read in full.
 Everything in this folder is SOURCED from that opener unless marked otherwise.*
+
+
+## Moved from STATE.md at the close of 2026-10-12 23:45
+
+### CLOSE OF 2026-10-12 20:15 (Opus desk; the thread compacted, so Dann closed it). THE NEXT DESK STARTS HERE.
+
+> **Floor unchanged, `9f9e896`.** Nothing shipped since. The order of work, one paste at a time, each after Dann says the last is done:
+>
+> 1. **Row 88 is DONE** (Code on the Mac, report written 2026-10-12 20:07, `../sessions/report-code-trocr-teacher_r1_2026-10-12.md`; QUEUE row 88 holds the numbers). The model in ink-gap chunks reads ѣ 21 of 21, word-final ъ 98 of 101, syllables 385 of 493; і 6 of 6 only with a one-line map from Latin i. Code recommends it as row 82's teacher. The next desk reads the report whole and amends row 82's brief to use it. The desk wrote "RUNNING" here at 20:15 without checking the disk; corrected 20:17.
+> 2. **Row 89's Fable review landed at 20:16: SEND WITH AMENDMENTS, seven of them** (`../sessions/review-fable-brief-row89_r1_2026-10-12.md`, md5 `517ccac4badd299d9e96646b191d3404`). Apply all seven as r2 (`brief-code-4f-quadruplet-and-double-flat_r2_2026-10-12.md`), then set row 89 READY. Headline: the brief named the wrong function (`lookForTupletNumber` answers only a 3; the reader calls `lookOverNotes`). Row 89 runs on the Mac, after the ship.
+> 3. **The ship, now unblocked** (row 88 is done). One paste for Dann: merge `origin/cloud-lane-2` (row 83 at `e7acf7f`, row 87 at `aac1949`), add the untracked files of rows 78a to 88, move the ship script's gate baselines (`~/Downloads/ilya-ship.sh:116-117`, with a backup), check for iCloud " 2" duplicates, then ship. Known counts before the merge: gate 4 2479, gate 5 675 passed and 5 skipped, gate 2 242 (row 87 takes it to 248). Row 83 removes ignored files from gate 4's count, so measure the merged gates; do not compute them. Row 79 is partly built (STATE handover below, update 11:42); confirm with Code whether it finished before shipping.
+> 4. **After the ship:** row 82 (paste ready); row 84 (fill in the shipped sha); row 84 also carries one sentence in `AGENTS.md` naming the cloud-lane exception (`OWED.md`, found 20:13); then row 89; check row 71 (held on `cloud-lane`) against the ruled voice-family table.
+>
+> **Dann's rulings this thread, each homed:** baritone and bass families (`PRODUCT.md`); the twelve French strings (row 85, built); "primo passaggio" and "secondo passaggio" in full (`PRODUCT.md`); the tidy's administrative choices deferred to the desk (14:48); 4F opened (19:58); quadruplets matter, "triplets are not the only tuplets" (20:10, row 89).
+>
+> **Open, not established:** set 4's bar counts above the truth (4A 57 of 54, 4E 45 of 42) and partial metre judging (4D 0 of 24, 4J 23 of 42).
+>
+> **Set 4's label map** (4A to 4J, glob order) is private: `~/Downloads/_desk-heldout4-private/row86-label-map.md`. Only 4F may be opened.
+
+### HANDOVER OF 2026-10-12, the night thread from 01:28 (Opus desk, Dann asleep from about 01:37). READ FIRST.
+
+> **Floor unchanged, `9f9e896`.** Nothing shipped; nothing committed. THE ONE THING is unchanged: the scan reader reads at least 95 of every 100 printed notes on unseen songs, on the singer's path.
+>
+> **RESULT 2026-10-12 19:55: THE FINAL TEST ON HELD-OUT SET 4 (row 86) READS 97.5 PASS, 1422 of 1456 printed notes, on the singer's path** (headless Chrome, WebGPU, the deployed alias at `9f9e896`, reader `homr-web@0.2.0-ilya.7/465`, deployment unchanged before and after; `../sessions/report-code-the-final-test-set4_r1_2026-10-12.md`, read whole by the desk). **Nine of ten songs pass; 4F reads 89.2 BELOW** (91.7 with its UNSURE notes set aside). 4F is the song whose truth carries the most uncertainty (the desk holds the label map privately; its truth notes name a blotted note and two bars of double flats); whether its misreads are the reader's or the truth's is NOT ESTABLISHED, and opening it is Dann's call. Unexplained in the lines: bar counts above the truth (4A 57 of 54, 4E 45 of 42) and partial metre judging (4D 0 of 24, 4J 23 of 42). Set 4 is now spent as a verdict for any song that is opened.
+>
+> **4F OPENED by Dann's word, 2026-10-12 19:58, and corrected.** Of its 11 misreads, 5 were the truth file's (mm. 2, 6, 14, 16, 17 counting the opening bar as m. 1; file indices 1, 5, 13, 15, 16; each checked by the desk against the scan at 300 dpi; the reader was right), 2 are the reader's in m. 22 (it read B♭4 where the print has a double flat, B𝄫4; Dann read mm. 21 to 23 at 20:05 and confirmed the truth), and 4 are the reader's in m. 24 (a printed "4" bracket, four quarters in the time of three, read as triplets). The corrected truth is `truth/<4F>.truth.corrected.json` in the private folder. **Corrected scores: 4F 94.1 BELOW; set 4 in total 97.9 PASS, 1427 of 1456; 9 of 10 songs pass.** The two reader gaps are general: a double flat read as a single flat, and a quadruplet read as a triplet.
+>
+> **Done this thread (each in its file):**
+> 1. **Row 82 is READY** (`../sessions/brief-code-prereform-model_r2_2026-10-12.md`, all fifteen of Fable's amendments). For Code on the Mac after rows 78a to 79. It reads `~/Downloads/_desk-heldout-exclusions_2026-10-12.md` first (set 4 now listed).
+> 2. **Held-out set 4 chosen and downloaded, sealed** in `~/Downloads/_desk-heldout4-private/` (ten pre-1918 songs, three bass-clef; J swapped to Glière Op.12 No.6 because set 2 holds Artsybushev Op.5 No.1; manifest there). Truth drafts: two Opus helpers running from about 01:53 (brief in the same folder).
+> 3. **Baritone and bass ready to present**: `../sessions/present-voice-families-baritone-bass_r1_2026-10-12.md`. Draft r3 with eight new rows: `Insights Research/_synthesis/draft-voice-families_r3_2026-10-12.md`; claims from eight articles read whole: `claims-baritone-bass_r1_2026-10-12.md` there. Not read: Nava 1899, Nava 1872, Marzo 1906 (no text layer).
+> 4. **French owed, drafted for Dann's ruling**: `../sessions/draft-french-owed_r1_2026-10-12.md` (row 66's twelve strings, row 70's five as built, row 67's three items: two now sourced from the OQLF, one closed by his 04:58 ruling).
+> 5. **Rows 83 and 84 written and Fable-reviewed** (`../sessions/review-fable-briefs-83-84_r1_2026-10-12.md`). **Row 83 RUNNING in the cloud lane on a new branch `cloud-lane-2`** (session https://claude.ai/code/session_019AMrv87SSa5Rtk4X3pxvBk). Row 84 waits for the ship of rows 78a to 79.
+> 6. **Debts paid:** SCHEDULE week 5 housekeeping (`PRODUCT.md` §"A hue names one idea"; INBOX-17 and -31 were already there); St-Pierre §3.1.1 re-verified against the PDF, and her Chapter 4 does give performance lengths (`OWED.md`).
+>
+> **Update 2026-10-12 11:42.** **Set 4's ten truth files are done**, all self-checked, in `~/Downloads/_desk-heldout4-private/truth/` (manifest updated; 4J is post-reform, so nine of ten are pre-reform). **Row 83 is built** on `cloud-lane-2` at `e7acf7f`, for Dann's merge. **Code on the Mac hit its usage limit:** rows 78a, 78b, 78c are WRITTEN and reported; row 79 is partly built (Text and Insights rules done; Insights line breaks, Markup's shared space, the 15 percent check, the after table, and its gates left). All uncommitted on `Shane`. Gates 4 and 5 moved (2461, 673 + 5 skipped) and the ship script's lines are the desk's to move. Code raised `staff-renderer.ts`'s ratchet 3486 to 3489 (DESK DEFAULT: accepted, the brief put the ring's reach in the renderer). One collision for Dann's eye at the walk: the tie between bars 56 and 57 of the Tchaikovsky song runs through two red rings. The section-heading back-fill is 6 of 19 files (`OWED.md`).
+>
+> **Not done, and why:** the `section_heading` back-fill (`OWED.md`) waits for a helper slot; it is about 1,700 rows across 25 files and needs a plan before a helper is sent.
+>
+> **This thread's mistakes, each owned when made:** gave Dann 4F's bars as the files' 0-based indices ("bar 21") while he counts from m. 1, corrected 20:07; told Dann at 14:37 that the ъЪ collapse lifts syllables 295 to 297 (a) and 315 to 317 (c); those are the ѣ rule's gains without the collapse. The collapse's gain with the ѣ rule on is 297 to 304 (a), 310 to 315 (b), 317 to 318 (c) (`../sessions/memo-yat-dictionary-correction_r1_2026-10-12.md`), corrected 14:41; told Dann at 14:13 that set 3's 93.8 was NOT ESTABLISHED on the singer's path without reading row 76's report; it was taken on headless Chrome, WebGPU, the deployed alias, through the file input (`../sessions/report-code-the-final-test-set3_r1_2026-10-11.md`, "The adapter"), corrected at 14:20; stamped six records about forty minutes ahead of the clock, corrected by search and replace (`ENVIRONMENT.md`, night of 2026-10-12); created an empty `docs/sessions/_stage` folder the bridge cannot remove (git ignores it).
+>
+> Older handovers: all in `../sessions/LOG.md`, the latest block "STATE.md handover of 2026-10-12 01:20, moved at the desk thread of 2026-10-12 01:28 onward".
+
+---
+
+## STATE.md close of 2026-10-12 23:45, moved verbatim at the close of 2026-10-13 23:35
+
+### CLOSE OF 2026-10-12 23:45 (Opus desk; the thread compacted once, and Dann asked to close it). THE NEXT DESK STARTS HERE.
+
+> **Floor `1ec2ef2`** (pushed 23:32; all eight gates at baseline: 251, 248, 0 errors, 2448, 675 + 5 skipped, 145, 55, ratchets OK). The ship before it was `72b564f` (rows 78a to 88, merged with `cloud-lane-2`).
+>
+> **THE ONE THING, measured:** set 4 now passes on all ten songs. 4F reads 98.0 PASS against its corrected truth (row 89; 4F was opened, so this is not an unseen verdict). The quadruplet in m. 24 is fixed (`apps/web/src/lib/omr/triplets.ts`). The double flat in m. 22 is not: homr's model chooses one flat (`decoder.ts:130`).
+>
+> **The order of work, one paste at a time:**
+> 1. **Row 93 on the Mac, Code tab, a new session** (sent to Dann 23:39; brief `../sessions/brief-code-markup-blank-tchaikovsky_r2_2026-10-12.md`). Measures only, fixes nothing: why Annotation draws no syllables for «Средь шумного бала» (scan plus typed poem). Fable's lead: `MarkupPane.svelte:633-635`. Read its report whole, then write the fix row. Its untracked report files mean the next ship waits for it.
+> 2. **Then walk rows 78a, 78b, 78c** (shipped `72b564f`; blocked by row 93).
+> 3. **Row 82 on the Mac** (r3 READY, long). Then Corrections slice 4.
+> 4. **Briefs owed by the desk, each with a Fable review:** row 90 (the Guide conventions lines; `insights.r2.frame` with its clause cut, `i18n.ts:1742`, pinned at `ratified-lines.test.ts:12`), row 91 (reflexive -ся is hard; the [ʌ] of -ться reconstitutes to [ɑ], after Grayson pp. 109, 128, 284; `OWED.md` N.123), Corrections slice 3.
+> 5. **The double flat:** Ilya's own accidental-sign check (row 26, held), placed after row 93. Dann's point (about 23:00): the engraving shows two separate flats; a rule (two flats at the notehead's height, nothing between them) can infer the double.
+>
+> **Dann's rulings this thread, each homed:** section B and section C items 1 and 3 of the owed French (20:28, 20:30, `../sessions/draft-french-owed_r1_2026-10-12.md`); the frame line amended (20:55, `OPEN.md`); N.123 items 2 and 3 to Grayson (`OWED.md`); N.115 (orphaned last measure) set aside, raised a third time (21:10, `OPEN.md`); the desk may drive Claude Code in his Chrome (20:40, `CONTRACT.md` §4); the Corrections redesign runs beside the reader work; Insights uses two tiers of sources (22:04); Nair 2016 and Nair, *The Tongue as a Gateway*, excluded.
+>
+> **Insights research (N.168), in `~/Documents/Voice Pedagogy Library/Insights Research/_synthesis/`:** `curation-sources-for-insights_r1_2026-10-12.md` is the working list (tiers, JVoice and JOS additions; Miller 2000 "Countertenoring" and McCoy 2003 confirmed in the JOS index). Seven PDFs filed by his naming convention (Echternach 2016 and 2024, Mainka 2015, Miller and Schutte 2019, Cruz 2026, Garcia 1894, Lablache 1920). Still empty: the contralto and the bass as their own voices. **Open question to Dann, unanswered:** may the desk read `~/Documents/Low Male Voice` for leads.
+>
+> **Set 4's label map** stays private (`~/Downloads/_desk-heldout4-private/row86-label-map.md`). Row 89's sealed drops are in `apps/web/test-results/_desk-hold/row89-drops_2026-10-12/` (ignored by git); never commit them.
+>
+> **This thread's mistakes, each owned when made:** pointed Dann at Terminal instead of the Code tab; called the rose bar "purple"; named the tab "Markup" while the app was in French (« ANNOTATION »); sent him to a one-line test fixture for *Within Four Walls*; said the desk would diagnose and then stopped; predicted gate 4 at 2447 when it measured 2448 (`markup-pages.test.ts:47-53` counts P.musicxml); a cloud prompt typed without focus did not land; `os.rename` removed row 93's r1 brief (restored); the web helper spent about 343k tokens against a stated 300k; marked Miller 2000 and McCoy 2003 NOT ESTABLISHED before searching the JOS index.
+>
+> The closes of 2026-10-12 20:15 and of the night thread are in `STATE-archive.md`, verbatim.

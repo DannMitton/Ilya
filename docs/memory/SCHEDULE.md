@@ -10,23 +10,23 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 ---
 
-## Where it stands, 2026-10-12 22:05
+## Where it stands, 2026-10-12 23:45
 
-- **THE ONE THING, the scan reader at 95 on unseen songs:** set 4 reads 97.9 in total, 9 of 10 songs pass; 4F reads 94.1 (`STATE.md`, the close of 2026-10-12). Row 89 is fixing its two misses.
+- **THE ONE THING, the scan reader at 95 on unseen songs:** set 4 passes on all ten songs; 4F reads 98.0 after row 89 (`1ec2ef2`). The double flat is still read as a single flat (row 26, after row 93).
 - **The need is met on an engraved score and not yet shown on a scan:** «Within Four Walls» from MusicXML draws Text, Markup, and Insights in both languages; «Средь шумного бала» from a scan draws no syllables in Markup (row 93). Desk's reading, 2026-10-12 21:50.
 - **Shipped and not walked by Dann:** about 40 rows (`QUEUE.md`, "Shipped, not walked").
 
 ## This week. Tuesday 2026-10-13 to Sunday 2026-10-18
 
 **Mac**
-- [ ] **Row 89**: the quadruplet and the double flat in 4F. RUNNING since 20:45. Then 4F re-scored against 95.
-- [ ] **Row 93**: why Markup draws no syllables on a scan with a typed poem. Measures only; after row 89. Then a fix row, which the desk writes from its report.
+- [x] **Row 89**: the quadruplet in 4F. SHIPPED `1ec2ef2`; 4F 98.0 PASS. The double flat was not built.
+- [ ] **Row 93**: why Annotation draws no syllables on a scan with a typed poem. Measures only. Sent to the Mac 23:39. Then a fix row, which the desk writes from its report.
 - [ ] **Row 82**: the pre-reform model (N.184). Up to 11 hours of the Mac; runs when the Mac is free for a long stretch, overnight if Dann asks for that.
 - [ ] **Corrections slice 4** (`QUEUE.md` row 5, slices 4 to 6): the station code leaves the page, no visible change. After row 93's fix.
 
 **Cloud**
 - [ ] **Row 84**: N.86's dead code. BUILT `9e1af16`; goes in with the next ship.
-- [ ] **Row 51, Corrections slice 2**: what Ilya can offer for a bar. RUNNING in the cloud from about 22:20 (brief r2, Fable-reviewed).
+- [x] **Row 51, Corrections slice 2**: what Ilya can offer for a bar. SHIPPED `1ec2ef2`.
 - [ ] **Corrections slice 3**: the singer's answer kept per bar. Brief not written; pure, so cloud.
 - [ ] **Row 90**: tonight's ruled strings (the Insights frame line, the two Guide conventions lines). Brief not written.
 - [ ] **Row 91**: reflexive -ся read hard, and -ться's [ʌ] reconstituting to [ɑ], after Grayson (ruled 20:33). Brief not written.

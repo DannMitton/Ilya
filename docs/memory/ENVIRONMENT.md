@@ -4750,3 +4750,26 @@ Dann's Chrome window would not shrink by `resize_window` (it reported success; `
 - The scorer's bar numbers (`measureIndex`, file indices) count from 0. Dann counts measures from 1, the opening bar as m. 1. Convert before you speak, and send every bar you name.
 - A helper's result lands only in the thread that spawned it. Have every review helper write its result to a file in `docs/sessions/` (or the desk saves it there on landing), so a thread that closes early loses nothing.
 - Read the report before you call a result NOT ESTABLISHED. A claim of absence needs a read, just as a claim of presence does.
+
+
+## WHAT THE DESK LEARNED ON THE EVENING OF 2026-10-12 (close at 23:45)
+
+- **A prompt typed into claude.ai/code by Claude in Chrome needs a click in the task box first.** Without focus the text went nowhere (2026-10-12). Click, read the box back, then send.
+- **The Journal of Singing index answers a POST** to `https://www.nats.org/cgi/page.cgi/_subscription.html` with the fields author, title, description, body, year, month, and a hidden cmd, from Dann's signed-in tab. Faster than the page's own form for many searches.
+- **`markup-pages.test.ts:47-53` counts every tracked `.musicxml` in the tree.** Committing a diagnostic score (row 89's P.musicxml) moves gate 4. Count tracked MusicXML before predicting the gate.
+- **Sealed held-out drops must never reach the tree.** Code writes them under `apps/web/test-results/`; move them to `_desk-hold/` (ignored) before a ship, or the ship's `git add` path carries sealed titles.
+- **`os.rename` over the bridge replaces the target silently.** It cost row 93's r1 brief once. Copy, check, then move.
+- **ScienceDirect and JASA refuse scripted downloads and show a bot check.** Do not bypass; Dann downloads those himself into Downloads, and the desk files them.
+
+## WHAT THE DESK LEARNED ON 2026-10-13 (the Opus thread, 2026-10-12 23:41 to 2026-10-13 23:35)
+
+- **iPhone scans to the Mac: the Notes route works; AirDrop was unreliable that night.** Dann scans with Notes on the iPhone (Scan Documents); the note syncs to Notes on the Mac (a reboot of the iMac fixed a stalled sync). The desk exports with computer use: in Notes, full screen, click the chevron beside the scan heading, choose **Open Attachment** (it opens the whole multipage scan in Preview), then Preview's menu **File > Export…** ("Export as PDF…" is disabled), release the app, click **Save**. Long chapters may be split across two notes; merge with `qpdf --empty --pages a.pdf b.pdf -- out.pdf`. Never give Dann iPhone menu steps the desk cannot see.
+- **Computer-use access lapses after about 30 minutes idle;** resolve and request it again.
+- **JVoice (jvoice.org) PDFs, in Dann's Chrome while he is signed in:** open the article's `/fulltext` URL (not `/pdf`), find `a[href^="/action/showPdf"]`, `fetch` it with credentials, check the first five bytes are `%PDF-`, save through a blob anchor with the target filename.
+- **JOS index (nats.org):** POST to `/cgi/page.cgi/_subscription.html` with `author`, `title`, `description`, `body`, `year`, `month`, `cmd=do_search`; each article page has a "Download Article" link.
+- **Toronto Public Library gives JSTOR:** `https://onlineresources.tpl.ca/login?url=https://www.jstor.org/stable/<id>`. JavaScript is denied on that domain, so Dann clicks download and accepts the terms himself.
+- **TSpace (utoronto.scholaris.ca) bitstream links download directly.** **J-STAGE** was blocked in Chrome but reachable from the container; download there and commit to the Mac.
+- **Crossref and Unpaywall** (from the container) settle DOIs and open-access status before any hunt.
+- **OCR on the Mac:** background processes die at the end of each bridge call. Run OCR in resumable foreground chunks of about 150 s (`pdftoppm -r 200 -gray`, then `tesseract`), skipping pages already done.
+- **`mv` from Downloads into the library copies and then fails to remove the source** (no delete on the bridge); move the Downloads original into `~/Downloads/_to_delete/` afterwards.
+- **Check the library for an existing copy before downloading** (Nix 2002 was fetched twice).

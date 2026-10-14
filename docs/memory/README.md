@@ -73,6 +73,7 @@ If that prompt ever needs to grow, something has gone wrong in this folder inste
 3. **Update `QUEUE.md`:** a shipped row becomes one line until Dann walks it, then its history moves to `QUEUE-archive.md` verbatim. Tick `SCHEDULE.md` from the day's `memo-*` and `report-*` files, with the file name.
 4. Add anything hard-won to `ENVIRONMENT.md`, with its row in the index at the top.
 5. Ask Dann to commit. No agent commits, ever, and no agent stages (`CONTRACT.md` §4; the two branch exceptions are there too).
+6. **Give Dann the opener for the next thread by copying the fenced block under "Opening a session" from this file, read this session.** Never retype it or compose it from memory. (Added 2026-10-13 23:37, DESK DEFAULT: the close of 2026-10-13 handed him an opener citing `CONTRACT.md` §0 and §5, the pre-tidy section numbers.)
 
 That is the whole ritual. There is no handover document and no opener to write.
 

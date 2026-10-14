@@ -1,0 +1,2041 @@
+{
+ "r7-2883": {
+  "kind": "syllable",
+  "cyrillic": "Средь",
+  "ipa": "ˈsrʲetʲ",
+  "vowel": "e",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Средь"
+  }
+ },
+ "r8-2996": {
+  "kind": "syllable",
+  "cyrillic": "шум",
+  "ipa": "ˈʃum",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "шумного"
+  }
+ },
+ "r8-3093": {
+  "kind": "syllable",
+  "cyrillic": "но",
+  "ipa": "nʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "шумного"
+  }
+ },
+ "r8-3182": {
+  "kind": "syllable",
+  "cyrillic": "го",
+  "ipa": "vʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 1,
+   "slotIndex": 2,
+   "word": "шумного"
+  }
+ },
+ "r9-614": {
+  "kind": "syllable",
+  "cyrillic": "ба",
+  "ipa": "ˈbɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "бала"
+  }
+ },
+ "r9-776": {
+  "kind": "syllable",
+  "cyrillic": "ла,",
+  "ipa": "ɫɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "бала"
+  }
+ },
+ "r10-1066": {
+  "kind": "syllable",
+  "cyrillic": "слу",
+  "ipa": "sɫu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "случайно"
+  }
+ },
+ "r11-1185": {
+  "kind": "syllable",
+  "cyrillic": "чай",
+  "ipa": "ˈtʃʲaj",
+  "vowel": "a",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "случайно"
+  }
+ },
+ "r11-1375": {
+  "kind": "syllable",
+  "cyrillic": "но,",
+  "ipa": "nʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 0,
+   "wordIndex": 3,
+   "slotIndex": 2,
+   "word": "случайно"
+  }
+ },
+ "r12-1650": {
+  "kind": "syllable",
+  "cyrillic": "В тре",
+  "ipa": "ftrʲɪ",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 1,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "тревоге"
+  }
+ },
+ "r13-1778": {
+  "kind": "syllable",
+  "cyrillic": "во",
+  "ipa": "ˈvo",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 1,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "тревоге"
+  }
+ },
+ "r13-1855": {
+  "kind": "syllable",
+  "cyrillic": "ге",
+  "ipa": "ɡʲɪ",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 1,
+   "wordIndex": 1,
+   "slotIndex": 2,
+   "word": "тревоге"
+  }
+ },
+ "r13-1947": {
+  "kind": "syllable",
+  "cyrillic": "мирс",
+  "ipa": "mʲirs",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 1,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "мирской"
+  }
+ },
+ "r14-2094": {
+  "kind": "syllable",
+  "cyrillic": "кой",
+  "ipa": "ˈkoj",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 1,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "мирской"
+  }
+ },
+ "r14-2186": {
+  "kind": "syllable",
+  "cyrillic": "су",
+  "ipa": "su",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 1,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "суеты"
+  }
+ },
+ "r14-2280": {
+  "kind": "syllable",
+  "cyrillic": "е",
+  "ipa": "jɪ",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 1,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "суеты"
+  }
+ },
+ "r15-2398": {
+  "kind": "syllable",
+  "cyrillic": "ты",
+  "ipa": "ˈtɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 1,
+   "wordIndex": 3,
+   "slotIndex": 2,
+   "word": "суеты"
+  }
+ },
+ "r15-2556": {
+  "kind": "syllable",
+  "cyrillic": "Те",
+  "ipa": "tʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Тебя"
+  }
+ },
+ "r16-2680": {
+  "kind": "syllable",
+  "cyrillic": "бя",
+  "ipa": "ˈbʲɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 0,
+   "slotIndex": 1,
+   "word": "Тебя"
+  }
+ },
+ "r16-2771": {
+  "kind": "syllable",
+  "cyrillic": "я",
+  "ipa": "ˈjɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "я"
+  }
+ },
+ "r16-2862": {
+  "kind": "syllable",
+  "cyrillic": "у",
+  "ipa": "u",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "увидел"
+  }
+ },
+ "r17-3009": {
+  "kind": "syllable",
+  "cyrillic": "ви",
+  "ipa": "ˈvʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "увидел"
+  }
+ },
+ "r18-763": {
+  "kind": "syllable",
+  "cyrillic": "дел,",
+  "ipa": "dʲɪɫ",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 2,
+   "slotIndex": 2,
+   "word": "увидел"
+  }
+ },
+ "r19-894": {
+  "kind": "syllable",
+  "cyrillic": "но",
+  "ipa": "ˈno",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "но"
+  }
+ },
+ "r19-1038": {
+  "kind": "syllable",
+  "cyrillic": "тай",
+  "ipa": "ˈtɑj",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "тайна"
+  }
+ },
+ "r20-1330": {
+  "kind": "syllable",
+  "cyrillic": "на",
+  "ipa": "nɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 2,
+   "wordIndex": 4,
+   "slotIndex": 1,
+   "word": "тайна"
+  }
+ },
+ "r21-1456": {
+  "kind": "syllable",
+  "cyrillic": "Тво",
+  "ipa": "tvɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 3,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Твои"
+  }
+ },
+ "r21-1548": {
+  "kind": "syllable",
+  "cyrillic": "и",
+  "ipa": "ˈi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 3,
+   "wordIndex": 0,
+   "slotIndex": 1,
+   "word": "Твои"
+  }
+ },
+ "r21-1651": {
+  "kind": "syllable",
+  "cyrillic": "пок",
+  "ipa": "pʌk",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 3,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "покрывала"
+  }
+ },
+ "r22-1776": {
+  "kind": "syllable",
+  "cyrillic": "ры",
+  "ipa": "rɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 3,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "покрывала"
+  }
+ },
+ "r22-1874": {
+  "kind": "syllable",
+  "cyrillic": "ва",
+  "ipa": "ˈvɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 3,
+   "wordIndex": 1,
+   "slotIndex": 2,
+   "word": "покрывала"
+  }
+ },
+ "r22-1974": {
+  "kind": "syllable",
+  "cyrillic": "ла",
+  "ipa": "ɫɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 3,
+   "wordIndex": 1,
+   "slotIndex": 3,
+   "word": "покрывала"
+  }
+ },
+ "r23-2107": {
+  "kind": "syllable",
+  "cyrillic": "чер",
+  "ipa": "tʃʲɪr",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 3,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "черты"
+  }
+ },
+ "r24-2526": {
+  "kind": "syllable",
+  "cyrillic": "ты.",
+  "ipa": "ˈtɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 3,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "черты"
+  }
+ },
+ "r25-2651": {
+  "kind": "syllable",
+  "cyrillic": "Лишь",
+  "ipa": "ˈlʲiʃ",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Лишь"
+  }
+ },
+ "r25-2750": {
+  "kind": "syllable",
+  "cyrillic": "о",
+  "ipa": "ˈo",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "очи"
+  }
+ },
+ "r25-2845": {
+  "kind": "syllable",
+  "cyrillic": "чи",
+  "ipa": "tʃʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "очи"
+  }
+ },
+ "r26-2993": {
+  "kind": "syllable",
+  "cyrillic": "пе",
+  "ipa": "pʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "печально"
+  }
+ },
+ "r26-3176": {
+  "kind": "syllable",
+  "cyrillic": "чаль",
+  "ipa": "ˈtʃʲalʲ",
+  "vowel": "a",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "печально"
+  }
+ },
+ "r27-771": {
+  "kind": "syllable",
+  "cyrillic": "но",
+  "ipa": "nʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 2,
+   "slotIndex": 2,
+   "word": "печально"
+  }
+ },
+ "r28-892": {
+  "kind": "syllable",
+  "cyrillic": "гля",
+  "ipa": "ɡlʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "глядели"
+  }
+ },
+ "r28-1090": {
+  "kind": "syllable",
+  "cyrillic": "де",
+  "ipa": "ˈdʲe",
+  "vowel": "e",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "глядели"
+  }
+ },
+ "r29-1393": {
+  "kind": "syllable",
+  "cyrillic": "ли,",
+  "ipa": "lʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 4,
+   "wordIndex": 3,
+   "slotIndex": 2,
+   "word": "глядели"
+  }
+ },
+ "r30-1525": {
+  "kind": "syllable",
+  "cyrillic": "А",
+  "ipa": "ˈɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 5,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "А"
+  }
+ },
+ "r30-1635": {
+  "kind": "syllable",
+  "cyrillic": "го",
+  "ipa": "ˈɡo",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 5,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "голос"
+  }
+ },
+ "r30-1744": {
+  "kind": "syllable",
+  "cyrillic": "лос",
+  "ipa": "ɫʌs",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 5,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "голос"
+  }
+ },
+ "r31-1868": {
+  "kind": "syllable",
+  "cyrillic": "так",
+  "ipa": "ˈtɑɡ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 5,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "так"
+  }
+ },
+ "r31-1967": {
+  "kind": "syllable",
+  "cyrillic": "див",
+  "ipa": "ˈdʲiv",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 5,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "дивно"
+  }
+ },
+ "r31-2072": {
+  "kind": "syllable",
+  "cyrillic": "но",
+  "ipa": "nʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 5,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "дивно"
+  }
+ },
+ "r32-2189": {
+  "kind": "syllable",
+  "cyrillic": "зву",
+  "ipa": "zvu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 5,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "звучал"
+  }
+ },
+ "r32-2343": {
+  "kind": "syllable",
+  "cyrillic": "чал,",
+  "ipa": "ˈtʃʲɑɫ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 5,
+   "wordIndex": 4,
+   "slotIndex": 1,
+   "word": "звучал"
+  }
+ },
+ "r33-2460": {
+  "kind": "syllable",
+  "cyrillic": "Как",
+  "ipa": "ˈkɑɡ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Как"
+  }
+ },
+ "r33-2579": {
+  "kind": "syllable",
+  "cyrillic": "звон",
+  "ipa": "ˈzvon",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "звон"
+  }
+ },
+ "r33-2675": {
+  "kind": "syllable",
+  "cyrillic": "от",
+  "ipa": "ʌd",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "отдалённой"
+  }
+ },
+ "r34-2812": {
+  "kind": "syllable",
+  "cyrillic": "да",
+  "ipa": "dɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "отдалённой"
+  }
+ },
+ "r34-2968": {
+  "kind": "syllable",
+  "cyrillic": "лён",
+  "ipa": "ˈlʲon",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 2,
+   "slotIndex": 2,
+   "word": "отдалённой"
+  }
+ },
+ "r35-3244": {
+  "kind": "syllable",
+  "cyrillic": "ной",
+  "ipa": "nʌj",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 2,
+   "slotIndex": 3,
+   "word": "отдалённой"
+  }
+ },
+ "r36-586": {
+  "kind": "syllable",
+  "cyrillic": "сви",
+  "ipa": "svʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "свирели"
+  }
+ },
+ "r36-789": {
+  "kind": "syllable",
+  "cyrillic": "ре",
+  "ipa": "ˈrʲe",
+  "vowel": "e",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "свирели"
+  }
+ },
+ "r37-1154": {
+  "kind": "syllable",
+  "cyrillic": "ли,",
+  "ipa": "lʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 6,
+   "wordIndex": 3,
+   "slotIndex": 2,
+   "word": "свирели"
+  }
+ },
+ "r38-1288": {
+  "kind": "syllable",
+  "cyrillic": "Как",
+  "ipa": "ˈkɑk",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 7,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Как"
+  }
+ },
+ "r38-1389": {
+  "kind": "syllable",
+  "cyrillic": "мо",
+  "ipa": "mɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 7,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "моря"
+  }
+ },
+ "r38-1480": {
+  "kind": "syllable",
+  "cyrillic": "ря",
+  "ipa": "ˈrʲɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 7,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "моря"
+  }
+ },
+ "r39-1607": {
+  "kind": "syllable",
+  "cyrillic": "иг",
+  "ipa": "iɡ",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 7,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "играющий"
+  }
+ },
+ "r39-1718": {
+  "kind": "syllable",
+  "cyrillic": "ра",
+  "ipa": "ˈrɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 7,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "играющий"
+  }
+ },
+ "r39-1823": {
+  "kind": "syllable",
+  "cyrillic": "ю",
+  "ipa": "ju",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 7,
+   "wordIndex": 2,
+   "slotIndex": 2,
+   "word": "играющий"
+  }
+ },
+ "r40-1962": {
+  "kind": "syllable",
+  "cyrillic": "щий",
+  "ipa": "ʃʲʃʲij",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 7,
+   "wordIndex": 2,
+   "slotIndex": 3,
+   "word": "играющий"
+  }
+ },
+ "r41-2453": {
+  "kind": "syllable",
+  "cyrillic": "вал.",
+  "ipa": "ˈvɑɫ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 7,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "вал"
+  }
+ },
+ "r42-2607": {
+  "kind": "syllable",
+  "cyrillic": "Мне",
+  "ipa": "ˈmɲɛ",
+  "vowel": "ɛ",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Мне"
+  }
+ },
+ "r42-2733": {
+  "kind": "syllable",
+  "cyrillic": "стан",
+  "ipa": "ˈstɑn",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "стан"
+  }
+ },
+ "r42-2843": {
+  "kind": "syllable",
+  "cyrillic": "твой",
+  "ipa": "ˈtvoj",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "твой"
+  }
+ },
+ "r43-3004": {
+  "kind": "syllable",
+  "cyrillic": "пон",
+  "ipa": "pɑn",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "понравился"
+  }
+ },
+ "r43-3114": {
+  "kind": "syllable",
+  "cyrillic": "ра",
+  "ipa": "ˈrɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "понравился"
+  }
+ },
+ "r43-3223": {
+  "kind": "syllable",
+  "cyrillic": "вил",
+  "ipa": "vʲiɫ",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 3,
+   "slotIndex": 2,
+   "word": "понравился"
+  }
+ },
+ "r44-589": {
+  "kind": "syllable",
+  "cyrillic": "ся",
+  "ipa": "sʲɪ",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 3,
+   "slotIndex": 3,
+   "word": "понравился"
+  }
+ },
+ "r44-736": {
+  "kind": "syllable",
+  "cyrillic": "тон",
+  "ipa": "ˈton",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "тонкий"
+  }
+ },
+ "r45-1037": {
+  "kind": "syllable",
+  "cyrillic": "кий",
+  "ipa": "kɨj",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 8,
+   "wordIndex": 4,
+   "slotIndex": 1,
+   "word": "тонкий"
+  }
+ },
+ "r46-1161": {
+  "kind": "syllable",
+  "cyrillic": "И",
+  "ipa": "ˈi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 9,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "И"
+  }
+ },
+ "r46-1269": {
+  "kind": "syllable",
+  "cyrillic": "весь",
+  "ipa": "ˈvʲesʲ",
+  "vowel": "e",
+  "origin": {
+   "lineIndex": 9,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "весь"
+  }
+ },
+ "r46-1377": {
+  "kind": "syllable",
+  "cyrillic": "твой",
+  "ipa": "ˈtvoj",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 9,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "твой"
+  }
+ },
+ "r47-1503": {
+  "kind": "syllable",
+  "cyrillic": "за",
+  "ipa": "zɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 9,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "задумчивый"
+  }
+ },
+ "r47-1608": {
+  "kind": "syllable",
+  "cyrillic": "дум",
+  "ipa": "ˈdum",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 9,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "задумчивый"
+  }
+ },
+ "r47-1699": {
+  "kind": "syllable",
+  "cyrillic": "чи",
+  "ipa": "tʃʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 9,
+   "wordIndex": 3,
+   "slotIndex": 2,
+   "word": "задумчивый"
+  }
+ },
+ "r48-1805": {
+  "kind": "syllable",
+  "cyrillic": "вый",
+  "ipa": "vɨj",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 9,
+   "wordIndex": 3,
+   "slotIndex": 3,
+   "word": "задумчивый"
+  }
+ },
+ "r49-2220": {
+  "kind": "syllable",
+  "cyrillic": "вид,",
+  "ipa": "ˈvʲit",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 9,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "вид"
+  }
+ },
+ "r50-2351": {
+  "kind": "syllable",
+  "cyrillic": "А",
+  "ipa": "ˈɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "А"
+  }
+ },
+ "r50-2482": {
+  "kind": "syllable",
+  "cyrillic": "смех",
+  "ipa": "ˈsʲmʲɛx",
+  "vowel": "ɛ",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "смех"
+  }
+ },
+ "r50-2587": {
+  "kind": "syllable",
+  "cyrillic": "твой,",
+  "ipa": "ˈtvoj",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "твой"
+  }
+ },
+ "r51-2709": {
+  "kind": "syllable",
+  "cyrillic": "и",
+  "ipa": "ˈi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "и"
+  }
+ },
+ "r51-2821": {
+  "kind": "syllable",
+  "cyrillic": "груст",
+  "ipa": "ˈɡrusn",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "грустный"
+  }
+ },
+ "r51-2914": {
+  "kind": "syllable",
+  "cyrillic": "ный",
+  "ipa": "ɨj",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 4,
+   "slotIndex": 1,
+   "word": "грустный"
+  }
+ },
+ "r52-3057": {
+  "kind": "syllable",
+  "cyrillic": "и",
+  "ipa": "ˈi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 5,
+   "slotIndex": 0,
+   "word": "и"
+  }
+ },
+ "r52-3254": {
+  "kind": "syllable",
+  "cyrillic": "звон",
+  "ipa": "ˈzvon",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 6,
+   "slotIndex": 0,
+   "word": "звонкий"
+  }
+ },
+ "r53-746": {
+  "kind": "syllable",
+  "cyrillic": "кий,",
+  "ipa": "kɨj",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 10,
+   "wordIndex": 6,
+   "slotIndex": 1,
+   "word": "звонкий"
+  }
+ },
+ "r54-891": {
+  "kind": "syllable",
+  "cyrillic": "С тех",
+  "ipa": "ˈstʲɛx",
+  "vowel": "ɛ",
+  "origin": {
+   "lineIndex": 11,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "тех"
+  }
+ },
+ "r54-1008": {
+  "kind": "syllable",
+  "cyrillic": "пор",
+  "ipa": "ˈpor",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 11,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "пор"
+  }
+ },
+ "r54-1128": {
+  "kind": "syllable",
+  "cyrillic": "в мо",
+  "ipa": "vmɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 11,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "моём"
+  }
+ },
+ "r55-1256": {
+  "kind": "syllable",
+  "cyrillic": "ём",
+  "ipa": "ˈjom",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 11,
+   "wordIndex": 4,
+   "slotIndex": 1,
+   "word": "моём"
+  }
+ },
+ "r55-1361": {
+  "kind": "syllable",
+  "cyrillic": "серд",
+  "ipa": "ˈsʲɛrts",
+  "vowel": "ɛ",
+  "origin": {
+   "lineIndex": 11,
+   "wordIndex": 5,
+   "slotIndex": 0,
+   "word": "сердце"
+  }
+ },
+ "r55-1457": {
+  "kind": "syllable",
+  "cyrillic": "це",
+  "ipa": "ɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 11,
+   "wordIndex": 5,
+   "slotIndex": 1,
+   "word": "сердце"
+  }
+ },
+ "r56-1563": {
+  "kind": "syllable",
+  "cyrillic": "зву",
+  "ipa": "zvu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 11,
+   "wordIndex": 6,
+   "slotIndex": 0,
+   "word": "звучит"
+  }
+ },
+ "r57-1860": {
+  "kind": "syllable",
+  "cyrillic": "чит.",
+  "ipa": "ˈtʃʲit",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 11,
+   "wordIndex": 6,
+   "slotIndex": 1,
+   "word": "звучит"
+  }
+ },
+ "r58-2293": {
+  "kind": "syllable",
+  "cyrillic": "В ча",
+  "ipa": "ftʃʲɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "часы"
+  }
+ },
+ "r59-2430": {
+  "kind": "syllable",
+  "cyrillic": "сы",
+  "ipa": "ˈsɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "часы"
+  }
+ },
+ "r59-2519": {
+  "kind": "syllable",
+  "cyrillic": "о",
+  "ipa": "ʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "одинокие"
+  }
+ },
+ "r59-2612": {
+  "kind": "syllable",
+  "cyrillic": "ди",
+  "ipa": "dʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "одинокие"
+  }
+ },
+ "r60-2733": {
+  "kind": "syllable",
+  "cyrillic": "но",
+  "ipa": "ˈno",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 2,
+   "slotIndex": 2,
+   "word": "одинокие"
+  }
+ },
+ "r60-2862": {
+  "kind": "syllable",
+  "cyrillic": "ки",
+  "ipa": "kʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 2,
+   "slotIndex": 3,
+   "word": "одинокие"
+  }
+ },
+ "r60-2943": {
+  "kind": "syllable",
+  "cyrillic": "е",
+  "ipa": "jɪ",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 2,
+   "slotIndex": 4,
+   "word": "одинокие"
+  }
+ },
+ "r62-618": {
+  "kind": "syllable",
+  "cyrillic": "но",
+  "ipa": "ˈno",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "ночи"
+  }
+ },
+ "r62-815": {
+  "kind": "syllable",
+  "cyrillic": "чи",
+  "ipa": "tʃʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 12,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "ночи"
+  }
+ },
+ "r63-1147": {
+  "kind": "syllable",
+  "cyrillic": "Люб",
+  "ipa": "lʲub",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 13,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Люблю"
+  }
+ },
+ "r64-1292": {
+  "kind": "syllable",
+  "cyrillic": "лю",
+  "ipa": "ˈlʲu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 13,
+   "wordIndex": 0,
+   "slotIndex": 1,
+   "word": "Люблю"
+  }
+ },
+ "r64-1404": {
+  "kind": "syllable",
+  "cyrillic": "я,",
+  "ipa": "ˈjɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 13,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "я"
+  }
+ },
+ "r64-1518": {
+  "kind": "syllable",
+  "cyrillic": "ус",
+  "ipa": "us",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 13,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "усталый"
+  }
+ },
+ "r65-1659": {
+  "kind": "syllable",
+  "cyrillic": "та",
+  "ipa": "ˈtɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 13,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "усталый"
+  }
+ },
+ "r65-1764": {
+  "kind": "syllable",
+  "cyrillic": "лый,",
+  "ipa": "ɫɨj",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 13,
+   "wordIndex": 2,
+   "slotIndex": 2,
+   "word": "усталый"
+  }
+ },
+ "r65-1878": {
+  "kind": "syllable",
+  "cyrillic": "при",
+  "ipa": "prʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 13,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "прилечь"
+  }
+ },
+ "r66-2004": {
+  "kind": "syllable",
+  "cyrillic": "лечь",
+  "ipa": "ˈlʲetʃʲ",
+  "vowel": "e",
+  "origin": {
+   "lineIndex": 13,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "прилечь"
+  }
+ },
+ "r66-2181": {
+  "kind": "syllable",
+  "cyrillic": "Я",
+  "ipa": "ˈjɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Я"
+  }
+ },
+ "r67-2321": {
+  "kind": "syllable",
+  "cyrillic": "ви",
+  "ipa": "ˈvʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "вижу"
+  }
+ },
+ "r67-2436": {
+  "kind": "syllable",
+  "cyrillic": "жу",
+  "ipa": "ʒu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "вижу"
+  }
+ },
+ "r67-2548": {
+  "kind": "syllable",
+  "cyrillic": "пе",
+  "ipa": "pʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "печальные"
+  }
+ },
+ "r68-2689": {
+  "kind": "syllable",
+  "cyrillic": "чаль",
+  "ipa": "ˈtʃʲalʲ",
+  "vowel": "a",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "печальные"
+  }
+ },
+ "r68-2821": {
+  "kind": "syllable",
+  "cyrillic": "ны",
+  "ipa": "nɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 2,
+   "slotIndex": 2,
+   "word": "печальные"
+  }
+ },
+ "r68-2909": {
+  "kind": "syllable",
+  "cyrillic": "е",
+  "ipa": "jɪ",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 2,
+   "slotIndex": 3,
+   "word": "печальные"
+  }
+ },
+ "r70-611": {
+  "kind": "syllable",
+  "cyrillic": "о",
+  "ipa": "ˈo",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "очи"
+  }
+ },
+ "r70-775": {
+  "kind": "syllable",
+  "cyrillic": "чи,",
+  "ipa": "tʃʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 14,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "очи"
+  }
+ },
+ "r71-1072": {
+  "kind": "syllable",
+  "cyrillic": "Я",
+  "ipa": "ˈjɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 15,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Я"
+  }
+ },
+ "r72-1194": {
+  "kind": "syllable",
+  "cyrillic": "слы",
+  "ipa": "ˈsɫɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 15,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "слышу"
+  }
+ },
+ "r72-1284": {
+  "kind": "syllable",
+  "cyrillic": "шу",
+  "ipa": "ʃu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 15,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "слышу"
+  }
+ },
+ "r72-1379": {
+  "kind": "syllable",
+  "cyrillic": "ве",
+  "ipa": "vʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 15,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "весёлую"
+  }
+ },
+ "r73-1509": {
+  "kind": "syllable",
+  "cyrillic": "сё",
+  "ipa": "ˈsʲo",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 15,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "весёлую"
+  }
+ },
+ "r73-1609": {
+  "kind": "syllable",
+  "cyrillic": "лу",
+  "ipa": "ɫu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 15,
+   "wordIndex": 2,
+   "slotIndex": 2,
+   "word": "весёлую"
+  }
+ },
+ "r73-1696": {
+  "kind": "syllable",
+  "cyrillic": "ю",
+  "ipa": "ju",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 15,
+   "wordIndex": 2,
+   "slotIndex": 3,
+   "word": "весёлую"
+  }
+ },
+ "r74-1809": {
+  "kind": "syllable",
+  "cyrillic": "речь;",
+  "ipa": "ˈrʲetʃʲ",
+  "vowel": "e",
+  "origin": {
+   "lineIndex": 15,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "речь"
+  }
+ },
+ "r75-2205": {
+  "kind": "syllable",
+  "cyrillic": "И",
+  "ipa": "ˈi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "И"
+  }
+ },
+ "r76-2326": {
+  "kind": "syllable",
+  "cyrillic": "груст",
+  "ipa": "ˈɡrusn",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "грустно"
+  }
+ },
+ "r76-2433": {
+  "kind": "syllable",
+  "cyrillic": "но",
+  "ipa": "ʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "грустно"
+  }
+ },
+ "r76-2535": {
+  "kind": "syllable",
+  "cyrillic": "я",
+  "ipa": "ˈjɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "я"
+  }
+ },
+ "r77-2677": {
+  "kind": "syllable",
+  "cyrillic": "так",
+  "ipa": "ˈtɑɡ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "так"
+  }
+ },
+ "r77-2825": {
+  "kind": "syllable",
+  "cyrillic": "за",
+  "ipa": "zʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "засыпаю"
+  }
+ },
+ "r77-2902": {
+  "kind": "syllable",
+  "cyrillic": "сы",
+  "ipa": "sɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 4,
+   "slotIndex": 1,
+   "word": "засыпаю"
+  }
+ },
+ "r78-3134": {
+  "kind": "syllable",
+  "cyrillic": "па",
+  "ipa": "ˈpɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 4,
+   "slotIndex": 2,
+   "word": "засыпаю"
+  }
+ },
+ "r78-3208": {
+  "kind": "syllable",
+  "cyrillic": "ю,",
+  "ipa": "ju",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 16,
+   "wordIndex": 4,
+   "slotIndex": 3,
+   "word": "засыпаю"
+  }
+ },
+ "r79-617": {
+  "kind": "syllable",
+  "cyrillic": "И",
+  "ipa": "ˈi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 17,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "И"
+  }
+ },
+ "r79-714": {
+  "kind": "syllable",
+  "cyrillic": "в грё",
+  "ipa": "ˈvɡrʲo",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 17,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "грёзах"
+  }
+ },
+ "r79-861": {
+  "kind": "syllable",
+  "cyrillic": "зах",
+  "ipa": "zɑx",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 17,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "грёзах"
+  }
+ },
+ "r80-993": {
+  "kind": "syllable",
+  "cyrillic": "не",
+  "ipa": "ɲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 17,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "неведомых"
+  }
+ },
+ "r80-1085": {
+  "kind": "syllable",
+  "cyrillic": "ве",
+  "ipa": "ˈvʲɛ",
+  "vowel": "ɛ",
+  "origin": {
+   "lineIndex": 17,
+   "wordIndex": 3,
+   "slotIndex": 1,
+   "word": "неведомых"
+  }
+ },
+ "r80-1202": {
+  "kind": "syllable",
+  "cyrillic": "до",
+  "ipa": "dʌ",
+  "vowel": "ʌ",
+  "origin": {
+   "lineIndex": 17,
+   "wordIndex": 3,
+   "slotIndex": 2,
+   "word": "неведомых"
+  }
+ },
+ "r81-1329": {
+  "kind": "syllable",
+  "cyrillic": "мых",
+  "ipa": "mɨx",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 17,
+   "wordIndex": 3,
+   "slotIndex": 3,
+   "word": "неведомых"
+  }
+ },
+ "r81-1443": {
+  "kind": "syllable",
+  "cyrillic": "сплю",
+  "ipa": "ˈsplʲu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 17,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "сплю"
+  }
+ },
+ "r81-1523": {
+  "kind": "syllable",
+  "cyrillic": "Люб",
+  "ipa": "lʲub",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Люблю"
+  }
+ },
+ "r82-1684": {
+  "kind": "syllable",
+  "cyrillic": "лю",
+  "ipa": "ˈlʲu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 0,
+   "slotIndex": 1,
+   "word": "Люблю"
+  }
+ },
+ "r84-2378": {
+  "kind": "syllable",
+  "cyrillic": "ли",
+  "ipa": "lʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "ли"
+  }
+ },
+ "r85-2502": {
+  "kind": "syllable",
+  "cyrillic": "те",
+  "ipa": "tʲi",
+  "vowel": "i",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "тебя"
+  }
+ },
+ "r85-2588": {
+  "kind": "syllable",
+  "cyrillic": "бя",
+  "ipa": "ˈbʲɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 2,
+   "slotIndex": 1,
+   "word": "тебя"
+  }
+ },
+ "r85-2682": {
+  "kind": "syllable",
+  "cyrillic": "я",
+  "ipa": "ˈjɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "я"
+  }
+ },
+ "r86-2797": {
+  "kind": "syllable",
+  "cyrillic": "не",
+  "ipa": "ɲɪ",
+  "vowel": "ɪ",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "не"
+  }
+ },
+ "r86-2883": {
+  "kind": "syllable",
+  "cyrillic": "зна",
+  "ipa": "ˈznɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 5,
+   "slotIndex": 0,
+   "word": "знаю"
+  }
+ },
+ "r86-2974": {
+  "kind": "syllable",
+  "cyrillic": "ю,",
+  "ipa": "ju",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 18,
+   "wordIndex": 5,
+   "slotIndex": 1,
+   "word": "знаю"
+  }
+ },
+ "r87-3075": {
+  "kind": "syllable",
+  "cyrillic": "Но",
+  "ipa": "ˈno",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 19,
+   "wordIndex": 0,
+   "slotIndex": 0,
+   "word": "Но"
+  }
+ },
+ "r87-3221": {
+  "kind": "syllable",
+  "cyrillic": "ка",
+  "ipa": "ˈkɑ",
+  "vowel": "ɑ",
+  "origin": {
+   "lineIndex": 19,
+   "wordIndex": 1,
+   "slotIndex": 0,
+   "word": "кажется"
+  }
+ },
+ "r88-744": {
+  "kind": "syllable",
+  "cyrillic": "же",
+  "ipa": "ʒɨ",
+  "vowel": "ɨ",
+  "origin": {
+   "lineIndex": 19,
+   "wordIndex": 1,
+   "slotIndex": 1,
+   "word": "кажется"
+  }
+ },
+ "r89-845": {
+  "kind": "syllable",
+  "cyrillic": "тся",
+  "ipa": "tːsʌ",
+  "origin": {
+   "lineIndex": 19,
+   "wordIndex": 1,
+   "slotIndex": 2,
+   "word": "кажется"
+  }
+ },
+ "r89-932": {
+  "kind": "syllable",
+  "cyrillic": "мне,",
+  "ipa": "ˈmɲɛ",
+  "vowel": "ɛ",
+  "origin": {
+   "lineIndex": 19,
+   "wordIndex": 2,
+   "slotIndex": 0,
+   "word": "мне"
+  }
+ },
+ "r89-1023": {
+  "kind": "syllable",
+  "cyrillic": "что",
+  "ipa": "ˈʃto",
+  "vowel": "o",
+  "origin": {
+   "lineIndex": 19,
+   "wordIndex": 3,
+   "slotIndex": 0,
+   "word": "что"
+  }
+ },
+ "r90-1153": {
+  "kind": "syllable",
+  "cyrillic": "люб",
+  "ipa": "lʲub",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 19,
+   "wordIndex": 4,
+   "slotIndex": 0,
+   "word": "люблю"
+  }
+ },
+ "r90-1244": {
+  "kind": "syllable",
+  "cyrillic": "лю!",
+  "ipa": "ˈlʲu",
+  "vowel": "u",
+  "origin": {
+   "lineIndex": 19,
+   "wordIndex": 4,
+   "slotIndex": 1,
+   "word": "люблю"
+  }
+ }
+}

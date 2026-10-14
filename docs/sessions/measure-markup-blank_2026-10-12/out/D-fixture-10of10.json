@@ -1,0 +1,104 @@
+{
+ "tag": "D-fixture-10of10",
+ "source": "fixture",
+ "sampled": null,
+ "fresh": {
+  "minutes": 2.16,
+  "scoreArrived": true,
+  "poemTyped": false,
+  "seatLine": null,
+  "dryLine": null,
+  "poemLen": 557,
+  "svgs": 30,
+  "systems": 14,
+  "pages": 3,
+  "texts": 2043,
+  "counts": {
+   "smufl": 1325,
+   "cyrillic": 344,
+   "latinOrIpa": 348,
+   "other": 26
+  },
+  "cyrSample": [
+   "Средь",
+   "шум",
+   "но",
+   "го",
+   "ба",
+   "ла",
+   "слу",
+   "чай"
+  ],
+  "ipaSample": [
+   "ˈsrʲetʲ",
+   "ˈʃum",
+   "nʌ",
+   "vʌ",
+   "ˈbɑ",
+   "ɫɑ",
+   "sɫu",
+   "ˈtʃʲaj"
+  ],
+  "otherSample": [
+   "10",
+   "18",
+   "26",
+   "33",
+   "10",
+   "18",
+   "26",
+   "33"
+  ],
+  "provisionalLines": [],
+  "textWords": 95
+ },
+ "reopen": {
+  "seatLineAppeared": false,
+  "seatLine": null,
+  "dryLine": null,
+  "libraryEntries": [],
+  "poemLen": 557,
+  "svgs": 30,
+  "systems": 14,
+  "pages": 3,
+  "texts": 2043,
+  "counts": {
+   "smufl": 1325,
+   "cyrillic": 344,
+   "latinOrIpa": 348,
+   "other": 26
+  },
+  "cyrSample": [
+   "Средь",
+   "шум",
+   "но",
+   "го",
+   "ба",
+   "ла",
+   "слу",
+   "чай"
+  ],
+  "ipaSample": [
+   "ˈsrʲetʲ",
+   "ˈʃum",
+   "nʌ",
+   "vʌ",
+   "ˈbɑ",
+   "ɫɑ",
+   "sɫu",
+   "ˈtʃʲaj"
+  ],
+  "otherSample": [
+   "10",
+   "18",
+   "26",
+   "33",
+   "10",
+   "18",
+   "26",
+   "33"
+  ],
+  "provisionalLines": [],
+  "textWords": 95
+ }
+}

@@ -1,0 +1,275 @@
+{
+ "tag": "after",
+ "old": {
+  "minutes": 0.71,
+  "arrived": true,
+  "seat": [
+   "[Ilya] N.160 seats: 170 drawn live, 0 kept as stored, of 170 seated"
+  ],
+  "dry": [
+   "[Ilya] N.160 dry run: 170 seated = 170 address + 0 anchor + 0 joined + 0 rejected + 0 unfound. Nothing written.",
+   "[Ilya] N.160 dry run, address (170): note 1 r7-2883 «Средь» of «Средь» 0-0.0 | note 2 r8-2996 «шум» of «шумного» 0-1.0 | note 3 r8-3093 «но» of «шумного» 0-1.1 | note 4 r8-3182 «го» of «шумного» 0-1.2 | note 5 r9-614 «ба» of «бала» 0-2.0 | note 6 r9-776 «ла,» of «бала» 0-2.1 | note 7 r10-1066 «слу» of «случайно» 0-3.0 | note 8 r11-1185 «чай» of «случайно» 0-3.1 | note 9 r11-1375 «но,» of «случайно» 0-3.2 | note 10 r12-1650 «В тре» of «тревоге» 1-1.0 | note 11 r13-1778 «во» of «тревоге» 1-1.1 | note 12 r13-1855 «ге» of «тревоге» 1-1.2 | note 13 r13-1947 «мирс» of «мирской» 1-2.0 | note 14 r14-2"
+  ],
+  "rekey": [],
+  "omr": [],
+  "errors": [],
+  "vault": {
+   "songs": 1,
+   "entries": 170,
+   "oldKeys": 170,
+   "cursorKeys": 0,
+   "firstKeys": [
+    "r7-2883",
+    "r8-2996",
+    "r8-3093"
+   ],
+   "lastKey": "r90-1244",
+   "kinds": {
+    "syllable": 170
+   },
+   "corrections": 0,
+   "source": {
+    "fileName": "Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf",
+    "byteLength": 319128,
+    "stamp": null,
+    "xmlLen": 0,
+    "notes": 0,
+    "notesWithId": 0,
+    "imgpos": 0
+   }
+  },
+  "markup": {
+   "band": "open",
+   "systems": 12,
+   "counts": {
+    "other": 1041,
+    "cyrillic": 340,
+    "latinOrIpa": 340
+   },
+   "cyrSample": [
+    "Средь",
+    "шум",
+    "но",
+    "го",
+    "ба",
+    "ла,"
+   ],
+   "ipaSample": [
+    "ˈsrʲetʲ",
+    "ˈʃum",
+    "nʌ",
+    "vʌ",
+    "ˈbɑ",
+    "ɫɑ"
+   ],
+   "orphanLine": null,
+   "bandText": " Voix : « Dann » Recalibrer Ce navigateur peut supprimer le stockage d’Ilya après une période d’inactivité. Exportez vos chants pour les garder en sécurité. "
+  }
+ },
+ "reopen1": {
+  "minutes": 1.16,
+  "seat": [
+   "[Ilya] N.160 seats: 170 drawn live, 0 kept as stored, of 170 seated"
+  ],
+  "dry": [
+   "[Ilya] N.160 dry run: 170 seated = 170 address + 0 anchor + 0 joined + 0 rejected + 0 unfound. Nothing written.",
+   "[Ilya] N.160 dry run, address (170): no note r7-2883 «Средь» of «Средь» 0-0.0 | no note r8-2996 «шум» of «шумного» 0-1.0 | no note r8-3093 «но» of «шумного» 0-1.1 | no note r8-3182 «го» of «шумного» 0-1.2 | no note r9-614 «ба» of «бала» 0-2.0 | no note r9-776 «ла,» of «бала» 0-2.1 | no note r10-1066 «слу» of «случайно» 0-3.0 | no note r11-1185 «чай» of «случайно» 0-3.1 | no note r11-1375 «но,» of «случайно» 0-3.2 | no note r12-1650 «В тре» of «тревоге» 1-1.0 | no note r13-1778 «во» of «тревоге» 1-1.1 | no note r13-1855 «ге» of «тревоге» 1-1.2 | no note r13-1947 «мирс» of «мирской» 1-2.0 | no n"
+  ],
+  "rekey": [
+   "[Ilya] N.185 re-key: 168 seats moved, 2 left under old names, 2 bars left"
+  ],
+  "omr": [
+   "[omr] metre: page read in 11.0 s, 30 windows, 1 stating a signature",
+   "[omr] metre: page read in 13.5 s, 36 windows, 0 stating a signature",
+   "[omr] metre: page read in 12.2 s, 36 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 3/8 stated: 4 bars add up to 3/8"
+  ],
+  "errors": [],
+  "vault": {
+   "songs": 1,
+   "entries": 170,
+   "oldKeys": 2,
+   "cursorKeys": 168,
+   "firstKeys": [
+    "m7-1-4",
+    "m8-0-1",
+    "m8-1-8"
+   ],
+   "lastKey": "m90-5-16",
+   "kinds": {
+    "syllable": 170
+   },
+   "corrections": 0,
+   "source": {
+    "fileName": "Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf",
+    "byteLength": 319128,
+    "stamp": "homr-web@0.2.0-ilya.7/465",
+    "xmlLen": 64765,
+    "notes": 222,
+    "notesWithId": 0,
+    "imgpos": 222
+   }
+  },
+  "markup": {
+   "band": "open",
+   "systems": 13,
+   "counts": {
+    "other": 1301,
+    "cyrillic": 336,
+    "latinOrIpa": 336
+   },
+   "cyrSample": [
+    "Средь",
+    "шум",
+    "но",
+    "го",
+    "ба",
+    "ла,"
+   ],
+   "ipaSample": [
+    "ˈsrʲetʲ",
+    "ˈʃum",
+    "nʌ",
+    "vʌ",
+    "ˈbɑ",
+    "ɫɑ"
+   ],
+   "orphanLine": "2 placements n’ont plus de note dans cette partition.",
+   "bandText": " Voix : « Dann » Recalibrer 2 placements n’ont plus de note dans cette partition. Ils ont été conservés. "
+  }
+ },
+ "reopen2": {
+  "minutes": 0.15,
+  "seat": [
+   "[Ilya] N.160 seats: 170 drawn live, 0 kept as stored, of 170 seated"
+  ],
+  "dry": [
+   "[Ilya] N.160 dry run: 170 seated = 170 address + 0 anchor + 0 joined + 0 rejected + 0 unfound. Nothing written.",
+   "[Ilya] N.160 dry run, address (170): note 1 m7-1-4 «Средь» of «Средь» 0-0.0 | note 2 m8-0-1 «шум» of «шумного» 0-1.0 | note 3 m8-1-8 «но» of «шумного» 0-1.1 | note 4 m8-1-4 «го» of «шумного» 0-1.2 | note 5 m9-0-1 «ба» of «бала» 0-2.0 | note 6 m9-1-4 «ла,» of «бала» 0-2.1 | note 7 m10-1-4 «слу» of «случайно» 0-3.0 | note 8 m11-0-1 «чай» of «случайно» 0-3.1 | note 9 m11-1-4 «но,» of «случайно» 0-3.2 | note 10 m12-1-4 «В тре» of «тревоге» 1-1.0 | note 11 m13-0-1 «во» of «тревоге» 1-1.1 | note 12 m13-1-8 «ге» of «тревоге» 1-1.2 | note 13 m13-1-4 «мирс» of «мирской» 1-2.0 | note 14 m14-0-1 «кой» of"
+  ],
+  "rekey": [
+   "[Ilya] N.185 re-key: 0 seats moved, 2 left under old names, 2 bars left"
+  ],
+  "omr": [],
+  "errors": [],
+  "vault": {
+   "songs": 1,
+   "entries": 170,
+   "oldKeys": 2,
+   "cursorKeys": 168,
+   "firstKeys": [
+    "m7-1-4",
+    "m8-0-1",
+    "m8-1-8"
+   ],
+   "lastKey": "m90-5-16",
+   "kinds": {
+    "syllable": 170
+   },
+   "corrections": 0,
+   "source": {
+    "fileName": "Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf",
+    "byteLength": 319128,
+    "stamp": "homr-web@0.2.0-ilya.7/465",
+    "xmlLen": 64765,
+    "notes": 222,
+    "notesWithId": 0,
+    "imgpos": 222
+   }
+  },
+  "markup": {
+   "band": "open",
+   "systems": 13,
+   "counts": {
+    "other": 1301,
+    "cyrillic": 336,
+    "latinOrIpa": 336
+   },
+   "cyrSample": [
+    "Средь",
+    "шум",
+    "но",
+    "го",
+    "ба",
+    "ла,"
+   ],
+   "ipaSample": [
+    "ˈsrʲetʲ",
+    "ˈʃum",
+    "nʌ",
+    "vʌ",
+    "ˈbɑ",
+    "ɫɑ"
+   ],
+   "orphanLine": "2 placements n’ont plus de note dans cette partition.",
+   "bandText": " Voix : « Dann » Recalibrer 2 placements n’ont plus de note dans cette partition. Ils ont été conservés. "
+  }
+ },
+ "redrop": {
+  "minutes": 1.8,
+  "askDialog": true,
+  "dialog": "Ce n’est pas la même musique. Cette partition n’est pas celle sur laquelle ce chant a été construit. 2 de vos 170 placements de syllabes n’y ont aucune note. Continuer remplace le chant entier, son titre, son fichier de partition et tous ses placements. Ilya ne peut pas annuler cette action. Exportez ce chant d’abord si vous voulez le conserver. Remplacer ce chantExporter ce chant d’abord Conserve",
+  "seat": [],
+  "dry": [],
+  "rekey": [],
+  "omr": [
+   "[omr] metre: page read in 11.4 s, 30 windows, 1 stating a signature",
+   "[omr] metre: page read in 13.6 s, 36 windows, 0 stating a signature",
+   "[omr] metre: page read in 12.7 s, 36 windows, 0 stating a signature",
+   "[omr] metre: bar 1 (page 1): 3/8 stated: 4 bars add up to 3/8"
+  ],
+  "errors": [],
+  "vault": {
+   "songs": 1,
+   "entries": 170,
+   "oldKeys": 2,
+   "cursorKeys": 168,
+   "firstKeys": [
+    "m7-1-4",
+    "m8-0-1",
+    "m8-1-8"
+   ],
+   "lastKey": "m90-5-16",
+   "kinds": {
+    "syllable": 170
+   },
+   "corrections": 0,
+   "source": {
+    "fileName": "Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf",
+    "byteLength": 319128,
+    "stamp": "homr-web@0.2.0-ilya.7/465",
+    "xmlLen": 64765,
+    "notes": 222,
+    "notesWithId": 0,
+    "imgpos": 222
+   }
+  },
+  "markup": {
+   "band": "open",
+   "systems": 13,
+   "counts": {
+    "other": 1301,
+    "cyrillic": 336,
+    "latinOrIpa": 336
+   },
+   "cyrSample": [
+    "Средь",
+    "шум",
+    "но",
+    "го",
+    "ба",
+    "ла,"
+   ],
+   "ipaSample": [
+    "ˈsrʲetʲ",
+    "ˈʃum",
+    "nʌ",
+    "vʌ",
+    "ˈbɑ",
+    "ɫɑ"
+   ],
+   "orphanLine": "2 placements n’ont plus de note dans cette partition.",
+   "bandText": " Voix : « Dann » Recalibrer 2 placements n’ont plus de note dans cette partition. Ils ont été conservés. "
+  }
+ }
+}
