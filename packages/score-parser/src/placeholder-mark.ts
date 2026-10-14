@@ -33,15 +33,15 @@
 export const PLACEHOLDER_DASH = '3 2';
 
 /**
- * The hollow circle's stroke, in staff spaces. MEASURED 2026-10-12 (row 78b)
- * from `FinaleMaestro.otf`'s `noteheadHalf`, rasterised at 100 px a space: its
- * rim is 0.098 sp at its thinnest and 0.297 sp at its thickest, the shortest
- * distance from each point of the hole's edge to the outside. This is their
- * mean. Chosen on the picture `docs/sessions/placeholder-shots/hollow-strokes.png`:
- * at stave size the thinnest nearly vanishes and the thickest reads as a dark
- * ring easily taken for a filled head.
+ * The hollow circle's stroke, in staff spaces: the rim's thinnest. MEASURED
+ * 2026-10-12 (row 78b) from `FinaleMaestro.otf`'s `noteheadHalf`, rasterised at
+ * 100 px a space: its rim is 0.098 sp at its thinnest and 0.297 sp at its
+ * thickest, the shortest distance from each point of the hole's edge to the
+ * outside. Chosen by Dann on 2026-10-14 on the picture
+ * `docs/sessions/placeholder-shots/hollow-strokes.png`: "thinnest 0.098 has my
+ * vote for the placeholder circles".
  */
-export const PLACEHOLDER_HOLLOW_STROKE_SP = 0.198;
+export const PLACEHOLDER_HOLLOW_STROKE_SP = 0.098;
 
 /** Where a hollow head stands: its centre, its outer diameter in px, and the staff space in px. */
 export interface HollowHead {

@@ -116,3 +116,53 @@ for (const [song, file] of Object.entries(SONGS)) {
 		}
 	}
 }
+
+/*
+ * NOTHING RUNS INTO THE FOOTER (QUEUE row 96; Dann 2026-10-14 03:10, "That is unaccveptable and must not be allowed
+ * in production", transcribed as written). On every page, the last included, of Text, Markup, and Insights, in
+ * English and French, on screen and under print, nothing painted reaches the top of the page's footer: `measure()`'s
+ * `empty` is never below zero. Insights is measured again with "N more observations" opened, its one screen-only block.
+ */
+async function overlaps(page: Page, label: string): Promise<string[]> {
+	const out: string[] = [];
+	for (const media of ['screen', 'print'] as const) {
+		await page.emulateMedia({ media });
+		await page.waitForTimeout(500);
+		(await measure(page)).forEach((p, n) => {
+			if (p.empty < 0) out.push(`${label}, ${media}, page ${n + 1}: content runs ${Math.round(-p.empty * 10) / 10} px into the footer`);
+		});
+	}
+	await page.emulateMedia({ media: 'screen' });
+	return out;
+}
+
+for (const [song, file] of Object.entries(SONGS)) {
+	for (const doc of ['text', 'markup', 'insights'] as const) {
+		for (const language of ['en', 'fr'] as const) {
+			test(`${song}, ${doc}, ${language}: nothing on any page reaches its footer`, async ({ page }) => {
+				test.setTimeout(180_000);
+				await page.addInitScript(([l, s]) => {
+					localStorage.setItem('ilya:language', l);
+					localStorage.setItem('shane.profiles.v2', s);
+				}, [language, JSON.stringify(storedVoice())]);
+				await page.goto('/');
+				await page.locator('input[type="file"].hidden-input').setInputFiles(file);
+				await page.waitForTimeout(8000);
+				await page.evaluate((d) => (document.querySelector(`#tab-${d}`) as HTMLElement | null)?.click(), doc);
+				await page.waitForTimeout(doc === 'markup' ? 10_000 : 7000);
+				expect(await page.locator('.paper-page:visible').count()).toBeGreaterThan(0);
+				const failures = await overlaps(page, `${song}, ${doc}, ${language}${doc === 'insights' ? ', list closed' : ''}`);
+				if (doc === 'insights') {
+					const more = page.locator('.paper-page:visible details.more > summary');
+					if ((await more.count()) === 0) console.log(`NO MORE BLOCK: ${song}, ${language}; the opened case passes`);
+					else {
+						await more.first().click();
+						await page.waitForTimeout(1000);
+						failures.push(...(await overlaps(page, `${song}, ${doc}, ${language}, list opened`)));
+					}
+				}
+				expect(failures, failures.join('\n')).toEqual([]);
+			});
+		}
+	}
+}

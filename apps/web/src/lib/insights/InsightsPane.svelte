@@ -25,7 +25,7 @@
 	 * THE ANALYSIS CHAIN IS `MarkupPane`'S, repeated rather than shared, so the
 	 * moments here are the marks the score page draws.
 	 */
-	import { tick, untrack } from 'svelte';
+	import { flushSync, tick, untrack } from 'svelte';
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
@@ -414,7 +414,7 @@
 	let heights = $state<number[]>([]);
 	/* QUEUE row 79, rule 2: where each prose block may break between lines. Figures, the conclusion with its
 	   controls, and the cycles bar never break. */
-	const BREAKS = new Set(['comment', 'prose', 'endnote', 'note', 'notes']);
+	const BREAKS = new Set(['comment', 'prose', 'endnote', 'note', 'notes', 'more']);
 	let breakTops = $state<number[][]>([]);
 	let footProbe = $state<HTMLElement | null>(null);
 	let footHeight = $state(0);
@@ -443,7 +443,32 @@
 		};
 	});
 
-	const printed = $derived(blocks.map((b, k) => ({ b, k })).filter(({ b }) => !b.screenOnly));
+	/* NOTHING RUNS INTO THE FOOTER (QUEUE row 96; Dann 2026-10-14 03:10). "N more observations", the one screen-only
+	   block, was never counted, so opening it ran its observations over the footer. Closed, it still rides uncounted
+	   with the block before it: its summary line fits inside `CLEAR`, and print, which hides it, keeps the same pages.
+	   Opened, it is paged like any block, at its opened height (the measurer draws it open), and the pages after it
+	   re-flow on screen. Print closes it first (`beforeprint`), so paper always holds the closed pages. */
+	let moreOpen = $state(false);
+	$effect(() => {
+		let reopen = false;
+		const before = () => {
+			if (!moreOpen) return;
+			reopen = true;
+			moreOpen = false;
+			flushSync();
+		};
+		const after = () => {
+			if (reopen) moreOpen = true;
+			reopen = false;
+		};
+		window.addEventListener('beforeprint', before);
+		window.addEventListener('afterprint', after);
+		return () => {
+			window.removeEventListener('beforeprint', before);
+			window.removeEventListener('afterprint', after);
+		};
+	});
+	const printed = $derived(blocks.map((b, k) => ({ b, k })).filter(({ b }) => !b.screenOnly || moreOpen));
 	const pages = $derived.by((): Segment[][] => {
 		const room = (top: number) => dims.height - MARGINS.vertical - footHeight - CLEAR - top;
 		const segs = paginate(
@@ -464,7 +489,7 @@
 			})),
 		);
 		blocks.forEach((b, k) => {
-			if (!b.screenOnly) return;
+			if (!b.screenOnly || moreOpen) return;
 			// It rides with the part of the block before it that ends that block.
 			for (const page of pagesOut)
 				for (const s of page) if (s.blocks.includes(k - 1) && !(s.cuts?.[k - 1] && s.cuts[k - 1][1] < (heights[k - 1] ?? 0))) s.blocks.push(k);
@@ -513,8 +538,17 @@
 	</TitleHeader>
 {/snippet}
 
-{#snippet blockAt(k: number, width: number)}
-	<SingerBlock block={blocks[k].block} {language} {width} ontry={keyRuler ? tryKey : undefined} onaddrange={() => onaddrange?.()} ondecline={declineOffer} />
+{#snippet blockAt(k: number, width: number, measuring = false)}
+	<SingerBlock
+		block={blocks[k].block}
+		{language}
+		{width}
+		ontry={keyRuler ? tryKey : undefined}
+		onaddrange={() => onaddrange?.()}
+		ondecline={declineOffer}
+		open={measuring || moreOpen}
+		ontoggle={measuring ? undefined : (o) => (moreOpen = o)}
+	/>
 {/snippet}
 
 {#snippet segment(s: Segment, column: number, inside: number)}
@@ -542,7 +576,7 @@
 <!-- The measurer: every block once, off screen, at its printed width. Inert, so its controls are never reached. -->
 <div class="measurer" aria-hidden="true" inert>
 	{#each blocks as b, k (k)}
-		<div bind:this={measureEls[k]} style="width: {widthOf(b)}px;">{@render blockAt(k, widthOf(b))}</div>
+		<div bind:this={measureEls[k]} style="width: {widthOf(b)}px;">{@render blockAt(k, widthOf(b), true)}</div>
 	{/each}
 	<div class="foot-probe" bind:this={footProbe} style="width: {COLUMN}px;">
 		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution} />

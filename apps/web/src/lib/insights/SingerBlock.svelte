@@ -3,7 +3,8 @@
 	 * ONE BLOCK OF THE ROUND 2 PAGE (QUEUE row 66). `singer-blocks.ts` decides
 	 * the words; this draws them. The pane draws every block twice: once off
 	 * screen to measure it, once on its page. So nothing here holds state of
-	 * its own, and the two copies are identical.
+	 * its own, and the two copies are identical, but for "N more observations":
+	 * the pane holds whether it is open, and measures it open (QUEUE row 96).
 	 *
 	 * Controls, as built: the range offer's link and decline, and "Try this
 	 * key". None of them prints (`CONTRACT.md` §6); on paper the key prints as
@@ -25,9 +26,12 @@
 		ontry?: (stop: KeyChoice) => void;
 		onaddrange?: () => void;
 		ondecline?: () => void;
+		/** "N more observations" (`kind: 'more'`): open, and told when the singer opens or closes it. */
+		open?: boolean;
+		ontoggle?: (open: boolean) => void;
 	}
 
-	let { block, language, width, ontry, onaddrange, ondecline }: Props = $props();
+	let { block, language, width, ontry, onaddrange, ondecline, open = false, ontoggle }: Props = $props();
 	const T = (key: string) => t(key, language);
 
 	/* The ring's circumference at r = 32. */
@@ -86,7 +90,7 @@
 		{@render heading(block.heading)}
 		{@render comment(block.tag, block.comment, block.teacher, block.placeholder)}
 	{:else if block.kind === 'more'}
-		<details class="more">
+		<details class="more" {open} ontoggle={(e) => ontoggle?.(e.currentTarget.open)}>
 			<summary>{block.label}</summary>
 			{#each block.comments as m (m.comment.comment.eventId)}{@render comment(m.tag, m.comment, m.teacher, m.placeholder)}{/each}
 		</details>
