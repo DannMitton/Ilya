@@ -1018,7 +1018,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'wait.once': { en: 'Ilya reads each score once and keeps the reading.', fr: 'Ilya ne lit chaque partition qu’une fois et en garde la lecture.' },
 	'upload.format.imageReader':   { en: 'Format: photograph → MusicXML', fr: 'Format\u00a0: photographie → MusicXML' },
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
-	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. The words are not in a picture; type them into the Input field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Les paroles ne sont pas dans une image; saisissez-les dans le champ Entrée.' },
+	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. Ilya does not read the words printed in an image; type them into the Input field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Ilya ne lit pas les paroles imprimées dans une image; saisissez-les dans le champ Entrée.' },
 
 	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
 	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
@@ -1350,7 +1350,13 @@ const strings: Record<string, Record<Language, string>> = {
 	// N.55a/N.55b (Dann's ruling, E.47; French ratified by Dann, E.47).
 	// %s is the file name, substituted with .replace('%s', ...) at the
 	// call site, the convention 'upload.err.xmlRootIs' already uses.
-	'upload.banner.noLyrics': { en: 'This score has no words in it. Your text is under the notes, one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Votre texte se trouve sous les notes, une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
+	// QUEUE row 95 (ratified by Dann 2026-10-14 16:36). This string carries no
+	// %s slot any more, so the .replace('%s', ...) at the call site is a no-op.
+	'upload.banner.noLyrics': { en: 'This score has no words in it. The text you added is under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Le texte que vous avez ajouté se trouve sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
+	// Row 95: the same courtesy message for a scan or photograph, where the
+	// print may well carry words that Ilya does not read. Chosen by
+	// noLyricsNoticeKey (lib/score/no-lyrics-notice.ts).
+	'upload.banner.noLyricsScan': { en: 'Ilya does not read the words printed in an image. The text you added is under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous avez ajouté se trouve sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	// N.65 ship B. `station.syllables` IS DELETED. Dann ruled the SYLLABLES
 	// header away on 2026-08-21 and its text became the first element under
 	// SHIFT LYRICS. Checked before deleting, the way ship A checked its six:

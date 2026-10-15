@@ -70,6 +70,21 @@ export const fidelityBanner = (p: IngestProvenance): 'denigma' | 'reader' | null
 	return null;
 };
 
+/**
+ * QUEUE row 95. Which courtesy message a wordless arrival earns.
+ *
+ * A file with no lyric elements really has no words in it, and says so. A scan
+ * or photograph is different: its print may carry words that Ilya's reader
+ * does not read, so its wordlessness is Ilya's limit, not a fact about the
+ * song. The two are told apart by the field `fidelityBanner` reads,
+ * `provenance.via === 'reader'`. A pure function because `+page.svelte` is
+ * inert under vitest.
+ */
+export type NoLyricsNoticeKey = 'upload.banner.noLyrics' | 'upload.banner.noLyricsScan';
+
+export const noLyricsNoticeKey = (p: IngestProvenance): NoLyricsNoticeKey =>
+	p.via === 'reader' ? 'upload.banner.noLyricsScan' : 'upload.banner.noLyrics';
+
 export interface IngestedScore {
 	fileName: string;
 	provenance: IngestProvenance;

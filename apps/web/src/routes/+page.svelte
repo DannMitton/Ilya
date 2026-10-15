@@ -211,7 +211,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import { keyOwnedElsewhere, LoupePanel } from '$lib/score/loupe-panel.svelte';
 	import { createPressAndHold } from '$lib/score/press-and-hold';
 	import { pitchLabel } from '$lib/voice/note-picker';
-	import type { IngestedScore } from '$lib/score/ingestion/ingest';
+	import { noLyricsNoticeKey, type IngestedScore, type NoLyricsNoticeKey } from '$lib/score/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
 	import { storedWithReading, type KeptReading } from '$lib/omr/restore';
@@ -372,7 +372,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// `doc.saveFailure` and `doc.loadFailure` carry the reason the whole song
 	// save or load reported, and the drawer shows it exactly as before.
 	// French ratified by Dann, 2026-08-14.
-	let noLyricsFile = $state<string | null>(null);
+	let noLyricsFile = $state<string | null>(null), noLyricsKey = $state<NoLyricsNoticeKey>('upload.banner.noLyrics'); // row 95: a scan is not a file
 	/* THE QUEUE, AND WHERE IT COMES FROM WHEN THE SINGER HAS TYPED NOTHING.
 
 	   N.111 increment 3, ruled by Dann 2026-09-04: on a lyric-bearing score the
@@ -3201,7 +3201,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		// overturned: a score carrying words seats them on its own notes, from the
 		// file's own mapping, below.
 		const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
-		noLyricsFile = noLyrics ? ingested.fileName : null;
+		noLyricsFile = noLyrics ? ingested.fileName : null; noLyricsKey = noLyricsNoticeKey(ingested.provenance);
 		// A new score arrives: clear whatever the previous score filled, then
 		// fill the blanks from this score's header if it carries one. A score
 		// with no header still clears, and that case is the whole point: at E.23,
@@ -4455,7 +4455,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 								     a file name dates a printed study sheet to an export
 								     rather than to a song. Unstyled on purpose for the first
 								     walk. -->
-								<p>{t('upload.banner.noLyrics', language).replace('%s', noLyricsFile)}</p>
+								<p>{t(noLyricsKey, language).replace('%s', noLyricsFile)}</p>
 							{/if}
 						{/if}
 					{/snippet}
