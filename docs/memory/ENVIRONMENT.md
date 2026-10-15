@@ -9,7 +9,7 @@ a path, or a gate. Every line here cost someone an hour.
 
 **Find your symptom in the tables. Each row names the section that answers it.
 Search this file for that heading text.** Do not read top to bottom: this file is
-ordered by when each trap was learned, not by subject, and it is 2,000 lines.
+ordered by when each trap was learned, not by subject, and it is more than 4,700 lines.
 The index was added 2026-09-01. Nothing below it was moved, reworded, or removed.
 
 **When you add a section, add its row here.** A trap nobody can find costs the
@@ -390,7 +390,7 @@ before.
 ## YOU DO NOT NEED A PIXEL TO SETTLE WHETHER AN SVG MARK IS COVERED. 2026-09-14
 
 **SVG paints in document order and has no `z-index`.** The project states this in
-its own source, at `VoiceProfilePane.svelte:513`. So "is this mark hidden behind
+its own source, at `apps/web/src/lib/markup/MarkupPane.svelte:369` (`VoiceProfilePane.svelte:513` before the rename). So "is this mark hidden behind
 that one" is answerable from the DOM, and three things settle it without a
 screenshot:
 
@@ -428,8 +428,8 @@ screenshot.
 **This cost a whole exchange on 2026-09-15.** Dann sent two pictures of arcs and
 the desk reasoned about which block drew them from where each arc's terminal
 appeared to sit: a tie starts at the notehead's own level
-(`staff-renderer.ts:2757`, `ey = y1 ± 4`), a slur above the stave (`:2817`,
-`sy = top - 6`). **That reasoning is sound and it is still not evidence.** The
+(`packages/score-parser/src/staff-renderer.ts:3217` (`:2757` when written), `ey = y1 ± 4`), a slur above the stave (`:2817` when written, now `:3268`,
+`sy = top - 6` then, `staffTop - sp(SLUR_CLEAR_SP)` now). **That reasoning is sound and it is still not evidence.** The
 attribute is one call away and it is the answer.
 
 **The general form: before reasoning about a rendered mark, ask whether the
@@ -437,12 +437,12 @@ renderer named it.** In this project it usually did.
 
 ## Gate baselines
 
-| gate | baseline |
+| gate (five listed; the ship script has run eight since 2026-09-27: blurb, integration, and ratchets were added) | baseline |
 |---|---|
-| phonology | 216 |
-| dictionary | 235 |
+| phonology | 216 (251 in `docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:78`, 2026-10-12) |
+| dictionary | 235 (248 in `docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:79`, 2026-10-12) |
 | web-check | **0 errors, 12 warnings, 5 files** |
-| web-test | **1385 passed (1385)** |
+| web-test | **1385 passed (1385)** (stale: the Mac script expected 2448 on 2026-10-11, `ENVIRONMENT.md:4730`; a clean clone counted 2433 on 2026-10-12, `docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:110`; the live script holds the baseline) |
 
 **AND TWICE AGAIN, 2026-09-21 EVENING: 1378 → 1381 (N.161, three tests in `first-seat.test.ts`)
 and 1381 → 1385 (N.161b, four tests in `waiting-seat.test.ts`).** **Five ships in one day moved
@@ -479,7 +479,7 @@ before quoting any number here.
 *(2026-09-16, N.145: web-test 1201 → 1206, five `first-seat.test.ts` tests; web-check 7 → 8 warnings and 4 → 5 files, one new warning, the unused `.btn-primary` left in `IntakePanel.svelte` on purpose to keep the four-file button twin (memo §7). DESK DEFAULT to accept it. Script backup `ilya-ship.sh.bak-before-n145-2026-09-16`.)*
 
 *(web-test moved 1187 → 1199 → 1201 on 2026-09-16 late: N.142's twelve tests, then the loupe French build's two. Script backup `ilya-ship.sh.bak-before-n142-2026-09-16`.)*
-| score-parser | **567 passed, 5 skipped (572)** |
+| score-parser | **567 passed, 5 skipped (572)** (675 passed, 5 skipped (680) in `docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:111`, 2026-10-12) |
 
 **MOVED 2026-09-16 late: web-test 1181 → 1187, score-parser 564 → 567 (N.143, nine new tests across both halves).** The desk moved `~/Downloads/ilya-ship.sh:79-80` before the ship; the old script is `ilya-ship.sh.bak-before-n143-2026-09-16`.
 
@@ -591,7 +591,7 @@ drops the bit too**, leaving `-rw-------`. The desk moved gate 4 to 1360 that wa
 `chmod +x` afterwards. **So the rule is about writing the file at all, whatever the tool.
 Always `chmod +x` and read `ls -l` back.**
 
-**In Claude Code the five gates run in about a minute, all five, in one command.**
+**In Claude Code the five gates ran in about a minute, all five, in one command (written 2026-08-16; the ship script has run eight gates since 2026-09-27 and the timing has not been re-measured on the Mac).**
 That is the whole reason the build moved off the bridge. Run them yourself and
 tell Dann the numbers; do not make him paste output back.
 
@@ -838,7 +838,7 @@ eleven applied to the walk instead of to a script.
 
 ---
 
-## `app.css:93` BREAKS NATIVE MODALS. Measured 2026-08-16
+## `app.css:93` BREAKS NATIVE MODALS. Measured 2026-08-16 (the reset is at `app.css:232-238` now)
 
 **`*, *::before, *::after { margin: 0 }` overrides the user agent's
 `dialog { margin: auto }`**, which is the rule that centres a modal. A
@@ -876,26 +876,26 @@ actually sets, every time.**
 **The paper's geometry, so you can reason about it without re-deriving it:**
 
 - `.paper-page` carries an INLINE `style="width: {dims.width}px; height: {dims.height}px"`
-  (`TitlePage.svelte:122`, `SubsequentPage.svelte:57`). **A rule with `!important`
+  (`TitlePage.svelte:148`, `SubsequentPage.svelte:75`; `:122` and `:57` when written). **A rule with `!important`
   beats an inline style**, which is how `height: auto !important` unmade the page.
 - `.page-content` is `position: absolute`, inset by
-  `style="top: {contentTop}px; bottom: {contentBottom}px"` (`TitlePage.svelte:138`).
+  `style="top: {contentTop}px; bottom: {contentBottom}px"` (`TitlePage.svelte:166`; `:138` when written).
   That inset is the band the header and footer live outside of.
-- `.title-header` is `position: absolute; top: 48px` (`TitleHeader.svelte:104-105`).
-  `.page-footer` is `position: absolute; bottom: 48px` (`PageFooter.svelte:90-91`).
+- `.title-header` is `position: absolute; top: 48px` (`TitleHeader.svelte:216-217`; `:104-105` when written).
+  `.page-footer` is `position: absolute; bottom: 48px` (`PageFooter.svelte:110-111`; `:90-91` when written).
   **Both depend on the page being letter-height and the content being inset.**
   Break either and they land in the middle of the words.
-- `app.css:134-225` is the document-wide print block: `@page { margin: 0; size: letter }`
-  at 221-224, which suppresses the browser's own header and footer, and
+- `app.css:277-398` (`:134-225` when written) is the document-wide print block: `@page { margin: 0; size: letter }`
+  at `app.css:394-397` (221-224 when written), which suppresses the browser's own header and footer, and
   `.header-bar, .drawer, .drawer-lip, .tab-bar, .ribbon { display: none !important }`
-  at 200-206.
-- `ReadingPaper.svelte:235` has the same bare width query and is CORRECTLY left
+  at `app.css:361-367` (200-206 when written).
+- `ReadingPaper.svelte:466` (`:235` when written) has the same bare width query and is CORRECTLY left
   alone: it governs the Guide's padding and font sizes, not the transcription
   paper.
 
 **There is no second renderer, and saying so to Dann is a mistake.** Portrait and
 landscape are the same Paper components with different CSS; his N.45 ruling keeps
-the pages in the DOM and removes only the seam (`Paper.svelte:109-112`). But when
+the pages in the DOM and removes only the seam (`Paper.svelte:109-112` when written, `Paper.svelte:121-124` now, where a comment records that N.45's seam rule is gone and N.73 portrait C restored discrete sheets). But when
 he says *"print the WYSIWYG,"* he is right and the correct reading is
 operational, not architectural: **every difference between screen and paper is a
 bug until proven otherwise.** Telling him there is nothing to point at cost E.51
@@ -907,7 +907,7 @@ five build passes. The paper is ALWAYS letter geometry, 816 × 1056 from
 1. **CSS that forgot to say `screen`.** A bare `@media (max-width: 767px)` has no
    media type, defaults to `all`, and matches `print`.
 2. **Print restyling the document.** `app.css` set `line-height: normal` on
-   `.paper-page` at print while the screen used `1.5` from `body:106`. Print
+   `.paper-page` at print while the screen used `1.5` from `body` (`app.css:249` now; `:106` when written). Print
    re-metriced every line box after the layout had been measured.
 3. **A measurement taken at the wrong width.** `TitlePage` derives `contentTop`
    from `TitleHeader`'s `bind:offsetHeight`. On a phone `.paper-page` is 100%
@@ -928,7 +928,7 @@ at 29.0, measured at 816px with the real fonts. That is what makes
 **Do not "tune" one page to look like the other. That is what produced 18 against
 8 and it cannot be made to agree.**
 
-**`VoiceProfilePane.svelte:295-313` still duplicates the OLD arithmetic**, its own
+**`apps/web/src/lib/markup/MarkupPane.svelte:461-465` and `:504` (`VoiceProfilePane.svelte:295-313` before the rename) still duplicate the OLD arithmetic**, its own
 `TITLE_HEADER_GAP = 18` and `HEADER_HEIGHTS.subsequent + GAP`, and `HEADER_HEIGHTS`
 stays in `page-config.ts` only because of it. Markup's paper does not yet share the
 single `HEADER_GAP`.
@@ -939,7 +939,7 @@ footer: there are no `.paper-page` elements and `.paper-container` is
 useless as a test**, because blank is also what a broken print stylesheet
 produces. It has no positive control.
 
-### The two Print buttons
+### The two Print buttons (AMENDED: N.65, Dann's ruling of 2026-08-21, moved Print out of the drawer. One always-live `.sheet-print-btn` now sits under the sheet at `apps/web/src/routes/+page.svelte:4918`, calling `handlePrint` at `:2557`, still a bare `window.print()`. `RootPanel.svelte:51-55` records the move. The two bullets below describe the drawer buttons that no longer exist)
 
 Both call the same bare `window.print()` (`+page.svelte`, `handlePrint`), so **neither
 does anything Safari's Share → Print does not.** What they add is a gate:
@@ -1020,7 +1020,7 @@ so if Dann remembers it being stripped, it was never committed.
 empty `localStorage` and the test text has to be pasted again. Four iterations in
 E.51 cost four re-pastes. The branch alias
 `ilya-git-shane-dannmittons-projects.vercel.app` would persist across ships at
-the cost of not being sha-pinned. **Unruled; ask Dann before switching.**
+the cost of not being sha-pinned. **Unruled when written. The branch alias was used from 2026-08-21 (see `THE BRANCH ALIAS IS THE N.72 INSTRUMENT` below).**
 
 **THE BRANCH ALIAS LAGS READY.** `get_deployment` reports READY well before
 `ilya-git-shane-dannmittons-projects.vercel.app` flips to that build; on
@@ -1290,7 +1290,7 @@ under.**
   and stops at the next for lack of a quorum.
 - **Cropping the frame does not fix it.** Interior gate 0.897266, one row still
   passes. The scan border was a symptom, not the cause.
-- **`substrate.py` is a SENTINEL, not a decider** (`reader.py:377-379`). Its
+- **`substrate.py` is a SENTINEL, not a decider** (`tools/e16-harness/reader/reader.py:544-550`; `:377-379` when written). Its
   binding rule is ratified: downstream of every decision, upstream of none.
 - **Concentration cannot be a decider and this is measured, not argued.** Any
   row whose ink is a single run scores exactly 1.0000 regardless of mass: one
@@ -1430,7 +1430,7 @@ npmjs.com package pages, and bundlephobia all refuse.**
   all-zero spectrum, which reads downstream as perfect silence rather than "no
   measurement." Guard on length yourself.
 - **`stripBackingRect` matches `fill="#FFFFFF"` while `staff-renderer.ts` paints
-  `#F0EBE0`.** Unsettled.
+  `#F0EBE0`.** Unsettled when written. SETTLED by N.133 (`eb918ed8`, 2026-09-14): the renderer paints no ground and `stripBackingRect` is gone (`apps/web/src/lib/markup/MarkupPane.svelte:506-509`, `packages/score-parser/src/staff-renderer.ts:2155-2159`).
 - **`git clone --depth` implies `--single-branch`.** A branch missing from such a
   clone is a blind spot, not an absence; the desk claimed "no Shane branch on the
   remote" from one on 2026-09-11. Verify with `--no-single-branch` or
@@ -1634,7 +1634,7 @@ read the lines anyway.
   pinned at version 1 and upgrading it would break the dictionary loader.
   **Dev dependency added 2026-08-16, Dann's ruling: `fake-indexeddb` 6.2.5,
   Apache-2.0, zero runtime deps, dev-only, zero shipped bytes.**
-- **Ilya ALREADY uses IndexedDB.** `apps/web/src/lib/loader.ts:103-115` opens
+- **Ilya ALREADY uses IndexedDB.** `apps/web/src/lib/loader.ts:125-137` (`:103-115` when written) opens
   database **`ilya-data`**, version **1**, object store **`cache`**, holding the
   dictionary as chunked NDJSON. **`claude/e45-n67-storage-architecture_2026-08-13.md`
   recommends IndexedDB as though it were new. It is wrong about that.** A song
@@ -1648,7 +1648,7 @@ read the lines anyway.
   compressed" is wrong.** Dann's real scores run **64 KB to 146 KB and stay there.**
 - **PDF, image, and MIDI are in the picker and then refused.**
   `ScoreUploader.svelte:48` accepts them; `:184-187` classifies each as a "coming
-  soon" note, copy at `i18n.ts:273-275`. **No heavy format is ingested today**, so
+  soon" note, copy at `i18n.ts:273-275`. **No heavy format was ingested when this was measured (E.52). PDF and image import shipped in N.59 step 8 (see PDF IMPORT below; `ScoreUploader.svelte:290-296` reads them), and the three line citations above no longer point at the picker or its copy**, so
   nothing is yet built on the wrong storage assumption.
 - **Thirteen live storage keys.** **Changed at `4568e01`, N.67 step 0:** the six
   per-song keys (`ilya:inputText`, `ilya:metadata`, `ilya:metadataFromScore`,
@@ -1658,15 +1658,15 @@ read the lines anyway.
   `loadPairings` are no longer called from it. The other seven are unchanged and
   stay device preferences: `ilya:language`, `ilya:notationPrefs`,
   `ilya:showStressDiacritics`, `ilya:activeTab`, `ilya:drawerCollapsed`,
-  `shane.profiles.v2` (v1 migration at `profileStore.ts:173-205`), and the
-  sessionStorage `ilya-ios-hint-shown` at `InstallPrompt.svelte:52`.
+  `shane.profiles.v2` (v1 migration at `profileStore.ts:215-279`; `:173-205` when written), and the
+  sessionStorage `ilya-ios-hint-shown` at `InstallPrompt.svelte:52` when written; it is now `DEAD_IOS_KEY` at `apps/web/src/lib/install-decline.ts:29`, dead and removed on first run.
 - **The five formerly silent write sites now report.** The poem, the metadata,
   its tags, the glosses, and the syllabification choice used to `catch {}` and
   say nothing; they ride the song save's outcome now and surface through
   `doc.saveFailure` at the drawer notice. N.27's own site
-  (`profileStore.ts:216-224`) is still silent and still open.
-- **`profileStore.ts:216-224` swallows its quota failure silently.** That is N.27.
-  `pairings.ts:390-422` is the model to copy instead: an outcome with a reason,
+  (`profileStore.ts:281-290`; `:216-224` when written) is still silent and still open.
+- **`profileStore.ts:281-290` (`:216-224` when written) swallows its quota failure silently.** That is N.27.
+  `pairings.ts:692-740` (`:390-422` when written) is the model to copy instead: an outcome with a reason,
   surfaced at `+page.svelte`'s drawer storage notice, now keyed on
   `doc.saveFailure` / `doc.loadFailure`.
 
@@ -1778,7 +1778,7 @@ in this file about that page's `s`.** Full account and every table:
 - **A STAFF LINE ON STAFF 12 OCCUPIES 71 PAGE ROWS.** On staff 7 it occupies
   12. On staff 12, line 2 begins **48 rows before line 1 ends**: adjacent staff
   lines overlap in row space, so no proximity rule can separate them.
-- **THE TOLERANCE. Line grouping at `reader.py:291` needs |shear| ≲ 0.12°.**
+- **THE TOLERANCE. Line grouping at `reader.py:341` (`_lines_from_rows`; `:291` when written) needs |shear| ≲ 0.12°.**
   Lines merge once `D + thickness + 3 ≥ s`, so `D ≥ 11` at `s ≈ 19`. **Only
   staves within ±0.12° of flat survive, which is exactly the two the deskew was
   fitted to.** Any fix must cut shear roughly twentyfold.
@@ -1823,7 +1823,7 @@ Either name the three pages or stop quoting the gate.
 
 ## `page_substrate` HARDCODES `img < 128`
 
-`substrate.py:140`. Otsu on `score-page32-deskewed.png` picks **118**. Every
+`substrate.py:186` (`:140` when written). Otsu on `score-page32-deskewed.png` picks **118**. Every
 substrate number in the E.60 memos is therefore taken at 128, which is the
 reader's own threshold. Measured 2026-08-18: the separation answer does not flip
 between the two, but a marginal window at `g = 3` does.
@@ -2071,7 +2071,7 @@ CONTRACT §6 reads: **"Do not put a control on the paper. Drawer manipulates,
 page displays and prints."** Read fast, that forbids any control outside the
 drawer. **It does not.** It forbids controls on the sheet.
 
-**`DeskHead.svelte:245-249` settles it in the tree**:
+**`DeskHead.svelte:262-266` (`:245-249` when written) settles it in the tree**:
 
 ```
 @media print {
@@ -2083,7 +2083,7 @@ with the component's own comment above it: *"The desk head is chrome. The page
 prints; the desk does not."* The desk head is desk furniture that happens to sit
 above the sheet. It already carries controls and always has: the
 Transcription / Score Markup pair at `:43`, and the Learn and Guide links at
-`:44`.
+`:44` (the pair is now Text / Markup / Insights at `DeskHead.svelte:113`, the links at `:129`).
 
 **So a control may be added to the desk head.** Ruled by Dann 2026-08-20 for
 `Print`, in his own words: *"to be clear I dont want a control on the paper. I
@@ -2093,7 +2093,7 @@ want it to float next to the Transcribe / Score Markup selector."*
 The bar's ruled geometry puts the pair flush with the sheet's left edge and the
 links flush right (`DeskHead.svelte:98` and following, and the layout rules at
 `:129-160`), so a new control takes the empty span between them or it displaces
-something Dann ruled. And the desk head renders on all four destinations,
+something Dann ruled. And the desk head renders on all three destinations (four when written; Studio, Learn, and Guide since N.127),
 including Learn and Guide, where there is nothing to print.
 
 **The test to apply next time, rather than re-reading the sentence:** does it
@@ -2116,7 +2116,7 @@ close the rest**, and the residue is not a tuning problem.
 
 **The 6 px is `.station-body`'s flex gap between two siblings inside one
 station.** The 20 px crosses a station boundary and decomposes as **8 px** of
-`.dz-wrap`'s own `margin-bottom` (`ScoreUploader.svelte:766`) plus **12 px**
+`.dz-wrap`'s own `margin-bottom` (`ScoreUploader.svelte:766` when measured; the rule was deleted in N.108 increment 2, recorded at `ScoreUploader.svelte:1116-1120`) plus **12 px**
 from the uploader's bottom to the next section's top.
 
 **That 12 px is Dann's ruled station recipe**, from his walk of `f59f7d2`: "6px
@@ -2194,7 +2194,7 @@ is already on disk.** A pixel he has already sent beats a test he has to run.
 
 ## `.drawer-lip:hover` LATCHES ON iOS, AND NOTHING IN `Drawer.svelte` IS HOVER-GUARDED
 
-`Drawer.svelte:1052-1054` sets `background: #fff` on hover. `grep -n "hover: hover"
+`Drawer.svelte:1052-1054` set `background: #fff` on hover (`.drawer-lip`, `.sil-fill` and the rules below were deleted in N.108 increment 1a; `Drawer.svelte:1529-1535` records it, and the line numbers here are those of the file as it stood). `grep -n "hover: hover"
 apps/web/src/lib/components/Drawer/Drawer.svelte` **returns nothing**, so no rule
 in that file is guarded. A tap on iOS latches `:hover` until the next touch
 elsewhere, so the tab paints pure white against the drawer's `#FAF8F5`.
@@ -2426,19 +2426,19 @@ Wikipedia article titles instead, one source for all 62. Both passes are in
 
 ## THE CAPTURE CHAIN, AS IT ACTUALLY IS. Read 2026-08-23, Opus memo and Dann's console
 
-`apps/web/src/lib/voice/engine/`. Constraints at `live.ts:337-343` already
+`apps/web/src/lib/voice/engine/`. Constraints at `live.ts:339-346` already
 turn off `echoCancellation`, `noiseSuppression`, and `autoGainControl`, and
 Dann's iMac honours them (`track settings` on the console). 48 kHz, no
-highpass anywhere, pre-emphasis 0.97 in `extract.ts` only. `live.ts:665`
+highpass anywhere, pre-emphasis 0.97 in `extract.ts` only. `live.ts:668`
 trims 0.5 s from each end, so **`runCapture` sees about 2.5 s, not the 3.5
 the brief assumed.** The live gate judges 1 s; the post-sweep `detect()`
 judged the whole buffer until `d491d22`, which slices to the guard's best
 window first. The routes to Provisional are the stationarity guard
-(`guard.ts`) and the in-buffer SNR proxy under 12 dB (`analyze.ts:36`),
+(`guard.ts`) and the in-buffer SNR proxy under 12 dB (`analyze.ts:97`),
 plus the wizard's plausibility demotion; the fry detector re-prompts
 instead. **The SNR proxy is a level meter in disguise**, one dB per dB of
 voice level, and Dann's takes sit 18 to 26 dB above its floor, so it is not
-what fails him. **`DEBUG = true` at `live.ts:173` in the deployed build**:
+what fails him. **`DEBUG = true` at `live.ts:175` in the deployed build**:
 filter the console on `voice-live` (`shane-live` before N.174) and the `outcome:` line carries the
 formant, the guard verdict, and since `230cad3` the guard's four numbers
 with the name of the failing test. Ask for that line before theorizing.
@@ -3162,7 +3162,7 @@ refills whenever the desk sends Dann a picture, and each time it blocks a ship.
 
 **Settled 2026-09-13, DESK DEFAULT, Dann free to wave it off:** it is ignored
 rather than committed or moved. Committing puts disposable PNGs into an
-open-source history forever; moving fixes today and not tomorrow. `.gitignore:46`
+open-source history forever; moving fixes today and not tomorrow. `.gitignore:53`
 now reads `Claude outputs/`.
 
 **The quoting trap, which cost one cycle.** `git status` prints the path quoted,
@@ -3255,7 +3255,7 @@ were both in that list**, because they match `tesseract`. The desk read the list
 as "the Pyodide files" and never checked which term had matched.
 
 Ilya has shipped OCR since before this project's memory folder existed:
-`apps/web/package.json:25` declares `tesseract.js`, `ScoreUploader.svelte:300-326`
+`apps/web/package.json:27` declares `tesseract.js`, `ScoreUploader.svelte:449-450`
 runs `createWorker('rus')` on a photographed poem, and **`PRODUCT.md` states it
 on its face**, under the tabs table, which the desk had not opened that session.
 
@@ -3485,7 +3485,7 @@ tab-closing step in the SAME message, before he walks.
 
 ## THE UNDERLAY DRAWS STORED TEXT. 2026-09-20
 
-**Score Markup's Cyrillic is `pairedCyrillic(pairings)` (`pairings.ts:789-800`), which
+**Score Markup's Cyrillic is `pairedCyrillic(pairings)` (`pairings.ts:804-815`), which
 returns each STORED pairing's own `cyrillic` string.** It does no punctuation work and
 never reads the score file once a pairing exists.
 
@@ -3736,7 +3736,7 @@ only into the conversation.**
 
 **What it cost, measured rather than asserted.** On 2026-09-17 the desk drew two
 mockups, `n92-carets-on-the-measure.html` and `n151-measure-edit-surface.html`.
-`OPEN.md:1348` records the second as *"sent in the session, not in the tree."* A third,
+`OPEN.md:1526` records the second as *"sent in the session, not in the tree."* A third,
 the loupe's two-panel design, was drawn the same night and Dann chose option A from it.
 **All three vanished.** On 2026-09-20 the desk spent a long stretch of Dann's evening
 looking for the third one and told him twice it could not be found, before he produced
@@ -3836,10 +3836,10 @@ host.**
 **AMENDED BY N.174, 2026-09-27:** the variable is `PUBLIC_INCLUDE_MARKUP_INSIGHTS`
 (`wall.ts`), and `apps/web/.env` sets it. The old name below no longer opens the wall.
 
-`apps/web/src/lib/wall.ts:6-7` reads `import.meta.env.PUBLIC_INCLUDE_SHANE` at build time,
+`apps/web/src/lib/wall.ts:9-10` reads `import.meta.env.PUBLIC_INCLUDE_SHANE` at build time,
 and Rollup tree-shakes every branch behind it when it is not `'true'`. It gates
-`DeskHead.svelte:51` (the tab pair collapses to `['transcription']`), `destinations.ts:103`
-and `:105`, and five blocks in `+page.svelte`.
+`DeskHead.svelte:54` (the tab pair collapses to `['transcription']`), `destinations.ts:105`
+and `:107`, and five blocks in `+page.svelte`.
 
 **The Vercel project has exactly one environment variable, `BLOB_READ_WRITE_TOKEN`.
 `PUBLIC_INCLUDE_SHANE` has never been set there.** It is supplied instead by
@@ -4259,7 +4259,7 @@ reading, about 250k; one Sonnet web literature search, about 127k. **The desk's 
 
 **Symptom.** Sunless 2, 3, 5, and 6 read an octave low everywhere: Insights, the tessituragram, and Score markup. Sunless 2 showed A1 to E♭3.
 
-**Cause, found by Code and cited:** `packages/score-parser/src/vocal-octave.ts` (the rule was at `:51`, now about `:60`) shifted any vocal line in an explicit treble-8vb clef down an octave, assuming written pitch. The fixture's `<octave>` values already give sounding pitch: A2 to E♭4 in `tools/e16-harness/output/mussorgsky---sunless-02---you-did-not-recognize-me/mxl_extract/score.musicxml`, part P1, under `<clef-octave-change>-1</clef-octave-change>`. **Fixed in `ccb790c` for MusicXML; MNX keeps the old rule, its convention NOT ESTABLISHED.** `staff-renderer.ts:418` changed to match.
+**Cause, found by Code and cited:** `packages/score-parser/src/vocal-octave.ts` (the rule was at `:51`; it is now the `marked <= -1` branch at `:53`) shifted any vocal line in an explicit treble-8vb clef down an octave, assuming written pitch. The fixture's `<octave>` values already give sounding pitch: A2 to E♭4 in `tools/e16-harness/output/mussorgsky---sunless-02---you-did-not-recognize-me/mxl_extract/score.musicxml`, part P1, under `<clef-octave-change>-1</clef-octave-change>`. **Fixed in `ccb790c` for MusicXML; MNX keeps the old rule, its convention NOT ESTABLISHED.** `staff-renderer.ts:418` changed to match.
 
 **How it was caught:** the desk compared Code's reported row names with the fixture's own octaves and the dissertation's stated range (printed p. 92). **Check a reported range against the source file and one independent source before shipping.**
 
@@ -4389,7 +4389,7 @@ run them all:
   install. Remove them by editing the file before anything is committed.
 - **Playwright:** the sandbox's Chromium is revision 1194 and the pinned Playwright
   wants 1208. Set `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome`
-  (the override is in `apps/web/playwright.config.ts` on the `audit` branch). Never
+  (the override is in `apps/web/playwright.config.ts` on `Shane`, lines 27 and 44). Never
   run `playwright install` there.
 - **The desk layout needs a viewport of at least 1,400 px.** Playwright's default is
   1,280, which silently runs the phone layout. The desktop tests set 1,440.
@@ -4420,7 +4420,7 @@ Vowel reconstitution (Grayson Ch. 3 §8) is built at `apps/web/src/lib/reconstit
 ## READ GRAYSON BEFORE YOU CORRECT A CLAIM. 2026-09-26
 
 **The desk's own error.** An explanation said ⟨ц⟩ softens in -ция. The engine
-(`engine.ts:237`) and Learn both said ⟨ц⟩ never palatalizes, so the desk "corrected"
+(`engine.ts:238`) and Learn both said ⟨ц⟩ never palatalizes, so the desk "corrected"
 the explanation to match them, in both languages, without opening Grayson. Grayson
 pp. 168 and 283–284 supported the explanation; the engine and Learn were the ones
 departing from him. Dann asked for Grayson to be read, and the correction had to
@@ -4502,7 +4502,7 @@ The desk gave Dann `git add apps/web/src/lib docs` at 12:52 to stage the day's n
 
 ## READING DANN'S CALIBRATION CAPTURES (THE HARNESS SIDECARS)
 
-Learned 2026-09-30. With `?harness=1` on the local dev server, every calibration take drops `ilya-capture-<vowel>-<UTC>.wav` and `.json` in `~/Downloads`. They are Dann's own recordings: read them in place, never copy them into the repository. Each sidecar holds `outcome.formant` (f1, f2, confidence, reading), `outcome.guard` (`reading`, `segmentS`, and `diag.full` / `diag.best` with a `failed` list: `rate_cv`, `fr1_cv`, `fr2_cv`, `envcorr`), and `trace` (the extractor's chosen method, `closed-phase` or `ltas`). A refused take shows `outcome.reason: "not-fry"`. **"Provisional" in the summary is `analyze.ts:58-62`: guard Provisional, detector refusal, or SNR under 12 dB**, and on 2026-09-30 every one came from the guard. Read the whole set in one bridge call with a short `python3 -c` over `glob('ilya-capture-*.json')`; do not ask Dann what the screen said when the files already say it.
+Learned 2026-09-30. With `?harness=1` on the local dev server, every calibration take drops `ilya-capture-<vowel>-<UTC>.wav` and `.json` in `~/Downloads`. They are Dann's own recordings: read them in place, never copy them into the repository. Each sidecar holds `outcome.formant` (f1, f2, confidence, reading), `outcome.guard` (`reading`, `segmentS`, and `diag.full` / `diag.best` with a `failed` list: `rate_cv`, `fr1_cv`, `fr2_cv`, `envcorr`), and `trace` (the extractor's chosen method, `closed-phase` or `ltas`). A refused take shows `outcome.reason: "not-fry"`. **"Provisional" in the summary is `analyze.ts:97-104` since row 2d (2026-09-30; it was `analyze.ts:58-62` before): split-half fR1 disagreement, detector refusal, or SNR under 12 dB**. On 2026-09-30, before row 2d, every one came from the guard. Read the whole set in one bridge call with a short `python3 -c` over `glob('ilya-capture-*.json')`; do not ask Dann what the screen said when the files already say it.
 
 ## `burg.py` NEEDS SCIPY, AND THE BRIDGE HAS NONE
 
@@ -4684,7 +4684,7 @@ Learned 2026-10-01 while drawing project map r8 and reading Bozeman's chart.
 - **The bridge shell has node 22.23, tsx (`/usr/local/lib/node_modules_global/bin/tsx`), and python 3.10** (read 2026-10-09 00:20). The desk tested `final-line.ts` there against the ten truth files, with scratch in `$HOME/desk-scratch/` (outside `mnt/`, so never in `git status`). It is a Linux machine, not the Mac's node: a script proven there is NOT ESTABLISHED on the Mac until Code runs it.
 - **tsx compiled a `.ts` script to CommonJS there, and a top-level `await` failed.** Wrap the body in `async function main()` and call it, as `../sessions/measure-final-test_r1_2026-10-08/final-line.ts` does.
 - **A tick in `SCHEDULE.md`, or a status in `QUEUE.md`, is a lead.** At 23:58 the desk called the comment templates "not started" from an unticked line; they had shipped (`apps/web/src/lib/insights/comment-text.ts`, commits `6d87638`, `477ba5b`, `14e4cb5`, `019bc7f`). Before telling Dann whether an item is built, open the file and cite `path:line`.
-- **Before asking Dann what an edit leaves behind, read what the tree's buttons already do.** The desk asked what a removed note leaves in the bar when Rest (`apps/web/src/routes/+page.svelte:1086`) and remove (`:982`) already answered it.
+- **Before asking Dann what an edit leaves behind, read what the tree's buttons already do.** The desk asked what a removed note leaves in the bar when Rest (`apps/web/src/routes/+page.svelte:1088`) and remove (`:984`) already answered it.
 - **Read the clock before every stamp:** `date -u` in the bridge shell; Toronto is four hours behind it until the clocks change on 2026-11-01. This thread stamped three records from a guess.
 - **A promise made before a compaction is not kept by the summary.** The desk told Dann it was starting the close writes and the thread compacted before one was made. Write first, then say it.
 
@@ -4727,7 +4727,7 @@ Dann's Chrome window would not shrink by `resize_window` (it reported success; `
 - **Measure the merged gates before the ship, in the desk's own workspace:** clone `Shane`, fetch the lane, merge, `pnpm install --frozen-lockfile`, run the eight gates (about 15 minutes there). Row 72's every-score test counts each `.musicxml` in the tree, so a measure folder that adds readings moves gate 4 (51 readings from row 77 added 51 tests). Move the ship script's baselines to the measured counts with a backup.
 - **iCloud " 2" duplicates appeared in new, untracked files during the ship (23:34)**, in seven briefs and reports and 29 files plus one folder of row 80's measure folder; `git add` of the folder staged them. The bridge cannot read them ("Resource deadlock avoided") but can move them: they went, unread, to `apps/web/test-results/_desk-hold/icloud-dupes-2026-10-11/`. Then `git reset -q` and the `git add` list again. Before handing Dann a `git add` of a folder, `find` it for `"* 2"` and `"* 2.*"` first. The older " 2" folders under `apps/web/build`, `.svelte-kit`, `src/lib 2`, and `tools/e16-harness` were left alone; the ship did not list them.
 - **A desk scratch commit trips the session's stop hook** ("unpushed" or "unverified" commits on `Shane`). It is a local clone that is never pushed; delete it when its job is done.
-- **Gate 4 differs between a clean clone and Dann's Mac.** Row 72's every-score test (`apps/web/src/lib/markup/markup-pages.test.ts`) paginates every `.musicxml` under `apps/`, `docs/`, and `tools/` on disk, including the 46 git-ignored readings in `tools/e16-harness/output/*/homr-raw` and `mxl_extract`. A clean clone counted 2402; the Mac counted 2448, all passing (2026-10-11 23:42). The ship script now expects 2448. Owed (a small Code row): the test should list files with `git ls-files`, so the count is the same everywhere and nothing private is read.
+- **Gate 4 differs between a clean clone and Dann's Mac.** Row 72's every-score test (`apps/web/src/lib/markup/markup-pages.test.ts`) paginates every `.musicxml` under `apps/`, `docs/`, and `tools/` on disk, including the 46 git-ignored readings in `tools/e16-harness/output/*/homr-raw` and `mxl_extract`. A clean clone counted 2402; the Mac counted 2448, all passing (2026-10-11 23:42). The ship script now expects 2448. That owed row has shipped as QUEUE row 83 (`e7acf7f`, merged in `ad99ed4`): the test lists tracked files with `git ls-files`, so the count is the same everywhere and nothing private is read.
 
 
 ## WHAT THE DESK LEARNED ON 2026-10-12 EARLY (the Opus thread after the 23:55 close)
@@ -4759,7 +4759,7 @@ Dann's Chrome window would not shrink by `resize_window` (it reported success; `
 
 - **A prompt typed into claude.ai/code by Claude in Chrome needs a click in the task box first.** Without focus the text went nowhere (2026-10-12). Click, read the box back, then send.
 - **The Journal of Singing index answers a POST** to `https://www.nats.org/cgi/page.cgi/_subscription.html` with the fields author, title, description, body, year, month, and a hidden cmd, from Dann's signed-in tab. Faster than the page's own form for many searches.
-- **`markup-pages.test.ts:47-53` counts every tracked `.musicxml` in the tree.** Committing a diagnostic score (row 89's P.musicxml) moves gate 4. Count tracked MusicXML before predicting the gate.
+- **`markup-pages.test.ts:50-63` counts every tracked `.musicxml` in the tree.** Committing a diagnostic score (row 89's P.musicxml) moves gate 4. Count tracked MusicXML before predicting the gate.
 - **Sealed held-out drops must never reach the tree.** Code writes them under `apps/web/test-results/`; move them to `_desk-hold/` (ignored) before a ship, or the ship's `git add` path carries sealed titles.
 - **`os.rename` over the bridge replaces the target silently.** It cost row 93's r1 brief once. Copy, check, then move.
 - **ScienceDirect and JASA refuse scripted downloads and show a bot check.** Do not bypass; Dann downloads those himself into Downloads, and the desk files them.

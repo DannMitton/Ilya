@@ -70,11 +70,11 @@ asks what is outstanding, or when the one thing closes and the next is being cho
   analysis-layer measurement; it belongs with N.103's spacing work. Source:
   `docs/sessions/memo-n106-turning-right_r1_2026-09-02.md`, NOT ESTABLISHED.
 - **THREE RESIDUES OF N.104's LOUPE FIX. None is a regression, all three predate
-  it, and all three want numbers.** (1) `Loupe.svelte:276-277` still bounds
+  it, and all three want numbers.** (1) `loupe-ink.ts:201` (moved out of `Loupe.svelte`) still bounds
   `pageMetrics`' head on `[data-hit]`, which is a different question from the
   head's crop: bringing it onto `MUSIC_MARK` makes system 1's tacet measure a
   candidate measure and resizes the loupe's window on every system of the page.
-  (2) `Loupe.svelte:218` skips a whole system from the page's ink survey when it
+  (2) `loupe-ink.ts:155` (moved out of `Loupe.svelte`) skips a whole system from the page's ink survey when it
   carries no notes, so a system of nothing but a tacet run draws a numeral the
   survey never sees. **Cannot bite on this document**, where every system with a
   run also carries notes. (3) **`MUSIC_MARK` is pinned by no test.**
@@ -96,11 +96,11 @@ asks what is outstanding, or when the one thing closes and the next is being cho
     stems down for open. A Gould prior may bound a DIMENSION; it may not decide
     a MEANING; where a score carries a legend, the legend outranks Gould.
     **This is a constraint on N.59 tier 3, not on tier 2.**
-- **Trace `stem_dir`'s consumers in the reader.** `beams.py:264-265` computes
-  it and `:310` carries it into the note record. **Whether any stage treats it
+- **Trace `stem_dir`'s consumers in the reader.** `beams.py:304-324` computes
+  it and `:350` carries it into the note record. **Whether any stage treats it
   as evidence is NOT ESTABLISHED.** If one does, it is a defect against Dann's
   own scores, which a photograph of Ilya's own output would expose.
-  `beams.py:133` reads "S5: one rule, both directions, no directional term",
+  `beams.py:143` reads "S5: one rule, both directions, no directional term",
   read out of a grep and not in context; confirm it.
 - **`staff-renderer.ts`'s `positionalUp` now has its citation.** v7 records that
   the helper's beamed-group stem direction is an inference derived from a chord
@@ -134,7 +134,7 @@ asks what is outstanding, or when the one thing closes and the next is being cho
 2. **The new phone scan exits non-zero on one violation, so its gate is red.**
    Rule 5a, m. 17: a caret stands 2.90 px right of the middle of its space,
    because `closingBarline` returns the final double bar's OUTER edge
-   (`loupe.ts:691`) and the placement uses that as the boundary. On a single
+   (`loupe.ts:732`) and the placement uses that as the boundary. On a single
    barline the two edges differ by about 0.28 px, which is why every other measure
    passes. **Whether the space ends at the thin line facing the measure is
    unsettled, and Code changed nothing.** A permanently red acceptance test trains
@@ -146,7 +146,7 @@ asks what is outstanding, or when the one thing closes and the next is being cho
 
 ### New from Code's report of 2026-09-26 evening. Engine defects, found while building the я reconstitution rule
 
-1. **A second ё in a word sends a Cyrillic letter out as IPA.** Stress locks to the first ё (`engine.ts:1127-1135`); the second has no unstressed branch and falls through `return vowel;` (`:1246`). трёхколёсный comes out `ˈtrʲox kʌ lʲёs nɨj`; with reconstitution on, every later vowel slides one place. 32 dictionary words have two ё, 31 misaligned. **Code's line numbers, not re-read by the desk.** Needs Dann's ruling on how the unstressed ё of a compound is read; Grayson's page not yet found.
+1. **A second ё in a word sends a Cyrillic letter out as IPA.** Stress locks to the first ё (`engine.ts:1127-1135`); the second has no unstressed branch and falls through `return vowel;` (`:1245`). трёхколёсный comes out `ˈtrʲox kʌ lʲёs nɨj`; with reconstitution on, every later vowel slides one place. 32 dictionary words have two ё, 31 misaligned. **Code's line numbers, not re-read by the desk.** Needs Dann's ruling on how the unstressed ё of a compound is read; Grayson's page not yet found.
 2. **Reflexive -ся without т comes out soft**: учился `u ˈtʃʲiɫ sʲɑ`, моюся `ˈmo ju sʲɪ`. Code reads Grayson pp. 281 to 282 and 284 as saying the reflexive -ся is always hard. **RULED 2026-10-12 20:33: Dann defers to Grayson** (*"for Item 2 I defer to Grayson"*, said of item 3; the desk applies it here too, because the same passage answers it, DESK DEFAULT, his to overrule). Grayson, read by the desk 2026-10-12 in `~/Downloads/Grayson - 2012 - Russian Lyric Diction.pdf`: p. 284, "whenever the combination -ся is specifically a reflexive particle, it is read as /sɑ/ or /sʌ/, in Russian lyric diction (from the Old Muscovite tradition)"; p. 282, "when singing Russian, the ending -ся is read as /sʌ/, based upon Old Muscovite tradition". So учился and моюся take a hard /s/. QUEUE row 91.
 3. **Reflexive -ться and -тся carry no vowel entry**, so reconstitution never sees their [ʌ] (`engine.ts:321-324`, `:569-573`, `:1618-1640`, per Code). Grayson's p. 128 chart has no reflexive row. Whether it reconstitutes to [ɑ] is Dann's to rule; a yes means the engine logs the vowel separately. **RULED 2026-10-12 20:33: Dann defers to Grayson** (*"I defer to Grayson"*). Grayson, read by the desk 2026-10-12: p. 109 lists я "only when part of the reflexive verbal ending (suffix) -ться or -тся" under [ʌ], and says "the allophone [ʌ] is a reduced /ɑ/" and "it is perfectly acceptable for the singer to modify the vowel back toward /ɑ/"; p. 128, Section 8, "[ʌ] reverts to /ɑ/". Joining the two pages is the desk's reading, not one sentence of Grayson's: the reflexive's [ʌ] reconstitutes to [ɑ]. QUEUE row 91.
 
@@ -189,8 +189,8 @@ established fact.**
 
 **THE DESIGN IS NOT THE PROBLEM.** Ilya is voice-type-agnostic by his ruling of 2026-09-16,
 *"a declared voice type plays NO part in choosing values, because fach is bound up with
-identity"*, and the code honours it: `profileStore.ts:85` keeps `voiceType` optional and
-`analyze.ts:31` takes it as `_voiceType`, unused. **A soprano gets her own measured formants
+identity"*, and the code honours it: `profileStore.ts:95` keeps `voiceType` optional and
+`analyze.ts:78` (and `:125`) takes it as `_voiceType`, unused. **A soprano gets her own measured formants
 and her own typed range.** This is a deliberate departure from St-Pierre, whose high and low
 tessitura are defined per voice type against McKinney's ideal ranges, **and Ilya's is the
 better instrument for it.**
@@ -239,8 +239,8 @@ singer sees.**
    routing**, and it is the shape of fault the freeze rule's false-statement test exists for.
 6. **A 23-page PDF takes 97.2 s behind one static label, and eleven pages go unread.** Pages
    4, 8, 12, 14, 16, 18, 19, 20, 21, 22 and 23. The label is `upload.status.readingPage`
-   (`i18n.ts:888`), shown while `probeFile` reads page 1
-   (`ScoreUploader.svelte:464-468`); pages render at 400 dpi (`page-pdf.ts:52`).
+   (`i18n.ts:1014`), shown while `probeFile` reads page 1
+   (`probeFile` is at `ScoreUploader.svelte:709`, called at `:546`); pages render at 400 dpi (`page-pdf.ts:52`).
    **N.146's own part passed:** it chose "score", as ruled. NOT ESTABLISHED whether the wait
    predates N.146.
 7. **NUMBERED N.164 ON 2026-09-22 and no longer a loose debt. Insights states two things at
@@ -278,7 +278,7 @@ toggle offering « English », **and the page reader's waiting line came up in E
 stayed English for the whole wait.**
 
 **CODE'S READING of the mechanism, not established by the desk:** the line's text is fixed
-once from the `language` value in play at that moment (`ScoreUploader.svelte:134`) and is
+once from the `language` value in play at that moment (`ScoreUploader.svelte:134` at Code's reading; the tree now draws the line at `:978` through `readingWait.line(language)`) and is
 never re-translated, **so a restore that begins before the stored language has loaded stays
 in English for the entire wait.** The desk has not read `:530` or `:556` in context to
 confirm how the value is held.
@@ -328,7 +328,7 @@ and are correct as history.** The two code comments are not.
 records could not say.** Four of the five faults are repaired; **this row is the fifth and
 it is the one that needs care rather than speed.**
 
-1. **THREE CLOSED ITEMS' SPECS ARE STILL IN `OPEN.md` AND CANNOT SIMPLY BE MOVED.**
+1. **THREE CLOSED ITEMS' SPECS WERE STILL IN `OPEN.md` ON 2026-09-21; none of the three has a heading there now.**
    N.146 (39 lines), N.147 (24), N.155 (61). **Each carries rulings that would land in
    `../sessions/LOG.md`, which `README.md` says is not authoritative.** This is the exact
    failure of 2026-09-20, when six of Dann's rulings went into the archive in one pass.
@@ -399,7 +399,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
 
 - What he sees when Ilya reads the Tchaikovsky PDF with the newer build on his iMac (the walk of `QUEUE.md` rows 29 and 30).
 - Which model sits at the desk (`OPEN.md`, "N.178 AND THE SCAN READER", item 23).
-- The Guide's credit sentence, untrue since the port is a changed copy (`apps/web/src/lib/components/Reading/GuideContent.svelte:566` and `:287`). The desk drafts the English and proposes the French.
+- The Guide's credit sentence said nothing of the changed copy. It does now: `apps/web/src/lib/components/Reading/GuideContent.svelte:574` (English) and `:295` (French) say Ilya uses a copy of homr-web changed to read with homr's newer model (since `0976735d`, 2026-10-05, N.178).
 - The French of the Guide's credits as built on 2026-10-04, a proposal he has not reacted to.
 - What he sees for the collapsed rests (step 1b of 2026-10-04).
 - `~/Downloads/tch-op38-3-from-scan_modern.musicxml` dropped on Ilya.
@@ -411,7 +411,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
 - The record of July and October on homr, given to him plainly every time the subject returns (`../sessions/memo-desk-july-and-october-on-homr_r1_2026-10-04.md`; his question of 2026-10-04 21:59).
 - The wait message made true for a slow device (`upload.status.preparingReader`), before the scan reader reaches singers. The reader has not been tried on a phone.
 - An attribution note for the two frequency data files held out of the repository (`apps/web/test-results/_desk-hold/freq-prototype-2026-10-04/`; CC BY-SA and CC BY sources).
-- The Tchaikovsky file as printed, in the old spelling, walked on Ilya. A citation carried from the note of 2026-10-05 01:00 and not reopened at this close: `apps/web/src/lib/score/vowel-resolver.ts:156` tests a cell for a vowel without ѣ, і, or ѵ.
+- The Tchaikovsky file as printed, in the old spelling, walked on Ilya. A citation carried from the note of 2026-10-05 01:00 and not reopened at this close: `apps/web/src/lib/score/vowel-resolver.ts:157` (`CYRILLIC_VOWEL`) now counts ѣ, і, and ѵ as vowels (`e3e2c33`, QUEUE row 25).
 - The desk's word of 2026-10-04 that it does the training work itself, on a scripted run, if training becomes necessary. Set aside with the reader's accuracy work.
 
 **Unsettled, found on 2026-10-05. None is a question for Dann yet.**
@@ -430,7 +430,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
 
 ### ADDED AT THE CLOSE OF 2026-09-22. Five, and the first two block N.130
 
-1. **`finding.passaggio`, `i18n.ts:1501`. PARKED AT DANN'S OWN WORD, mid-walk.** The whole
+1. **`insights.finding.passaggio`, `i18n.ts:1656`. PARKED AT DANN'S OWN WORD, mid-walk.** The whole
    question is preserved in `../sessions/insights-french-as-built_r3_2026-09-22.md`: **is
    Ilya's "turning" the vowel's or the register's?** It decides between
    « le changement de registre », « changement de timbre », and no noun at all. **The
@@ -486,7 +486,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
   `:419`, `:422`, read 2026-09-16).** The desk offered them to him again on
   2026-09-16 before tether 16 caught it. `loupe.beat` and `loupe.beatPulse`
   were RULED 2026-09-16 (« temps %b », « temps %b, division %p »), same spec.
-  **The loupe's French is now fully ruled and wholly unbuilt.**
+  **The loupe's French was fully ruled and wholly unbuilt on 2026-09-16. It is built now** (`i18n.ts:450`, `:451`, `:467`, `:468`, `:489`, `:490`, `:535`, `:541`).
   ~~**THREE FRENCH STRINGS ARE ENGLISH, found 2026-09-13 while checking the clause
   list above.** `i18n.ts:388` `loupe.undo.placed` reads fr 'syllable placed';
   `:391` `loupe.undo.melisma` reads fr 'melisma set'; `:392`
@@ -499,7 +499,7 @@ decides whether N.162 is a defect against a ruling or a new ruling Dann owes.
   a wall:** what does not fit by the date goes to FLAGGED or LATER. The dialogue
   that produced it continues below, one question at a time. The sort of the
   inventory into IN, FLAGGED and LATER is still owed.
-- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: the sort is done, `../sessions/sort-release_r1_2026-09-16.md`:3]** **SORT RULINGS, 2026-09-16** (proposal `../sessions/sort-release_r1_2026-09-16.md`): **N.94 IN**, and its place is ruled: *"it belongs in the Score Markup section between Corrections and Voice."* (supersedes the 2026-09-13 note placing it in a `Melody` band station). **N.131 IN**, whole. **N.123 IN** (his word, over the desk's LATER), restated 2026-09-16: *"we absolutely need to have this visual. Non-negotiable."* **The visual, in his words 2026-09-16:** *"'this visual' means the range and the tessituragram with passaggio zone indicated."* So **N.127 increment 2 (the compass stave: the piece's range against the singer's) is IN**, and N.123's tessituragram carries the passaggio zone shaded (already in its spec as "the singer's turning points shaded"). **N.85 IN, N.86 IN, N.87 LATER** (his words: *"this is fine as you have marked them"*); **N.88: Dann's own optional afternoon task, probably 2026-10-29** (his words: *"if I feel like it"*). **THE SORT IS DONE 2026-09-16 AND THE FREEZE RULE IS IN FORCE.** IN: 24 rows, listed in `../sessions/sort-release_r1_2026-09-16.md`. **SIZED 2026-09-16, DESK INFERENCE on Dann's request:** `../sessions/estimate-release_r1_2026-09-16.md`. About 45 to 75 build cycles needed against about 100 available at the week's pace: **achievable if the freeze holds, the three design rows (N.94, N.123, N.84) start early, and the pace holds.** DESK DEFAULT checkpoint: **Friday 2026-10-09**; a design row not in Code by then moves to LATER and the date stands. **THE SCHEDULE: `SCHEDULE.md`, written 2026-09-16, starts 2026-09-17.** INBOX-37 (the loupe tap) is numbered **N.147**, DESK DEFAULT number.
+- **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: the sort is done, `../sessions/sort-release_r1_2026-09-16.md`:3]** **SORT RULINGS, 2026-09-16** (proposal `../sessions/sort-release_r1_2026-09-16.md`): **N.94 IN**, and its place is ruled: *"it belongs in the Score Markup section between Corrections and Voice."* (supersedes the 2026-09-13 note placing it in a `Melody` band station). **N.131 IN**, whole. **N.123 IN** (his word, over the desk's LATER), restated 2026-09-16: *"we absolutely need to have this visual. Non-negotiable."* **The visual, in his words 2026-09-16:** *"'this visual' means the range and the tessituragram with passaggio zone indicated."* So **N.127 increment 2 (the compass stave: the piece's range against the singer's) is IN**, and N.123's tessituragram carries the passaggio zone shaded (already in its spec as "the singer's turning points shaded"). **N.85 IN, N.86 IN, N.87 LATER** (his words: *"this is fine as you have marked them"*); **N.88: Dann's own optional afternoon task, probably 2026-10-29** (his words: *"if I feel like it"*). **THE SORT IS DONE 2026-09-16 AND THE FREEZE RULE IS IN FORCE.** IN: 24 rows, listed in `../sessions/sort-release_r1_2026-09-16.md`. **SIZED 2026-09-16, DESK INFERENCE on Dann's request:** `../sessions/estimate-release_r1_2026-09-16.md`. About 45 to 75 build cycles needed against about 100 available at the week's pace: **achievable if the freeze holds, the three design rows (N.94, N.123, N.84) start early, and the pace holds.** DESK DEFAULT checkpoint: **Friday 2026-10-09**, DROPPED by the desk 2026-10-09 01:10 (`SCHEDULE-archive.md:152`); a design row not in Code by then was to move to LATER and the date to stand. **THE SCHEDULE: `SCHEDULE.md`, written 2026-09-16, starts 2026-09-17.** INBOX-37 (the loupe tap) is numbered **N.147**, DESK DEFAULT number.
 - ~~**FOR THE SORT: START PLACEMENT OVER CANNOT BE UNDONE.**~~ **FIXED BY N.144, `ceeb214`.** Established by
   Code 2026-09-16 (`memo-loupe-french-build_r1_2026-09-16.md`):
   `handleStartPlacementOver` never calls `pushUndo`, yet it rebuilds every
@@ -621,7 +621,7 @@ French Dann has not seen.
   because saving is continuous.
 
 - **A singer on Chrome for iPhone can never install Ilya to the home screen.**
-  Chrome on iOS offers no Add to Home Screen and `InstallPrompt.svelte:48`
+  Chrome on iOS offers no Add to Home Screen and `InstallPrompt.svelte:82`
   already excludes `CriOS` and `FxiOS`. Established by reading, carried over
   from N.72 where it was named and never ruled.
   **CLOSED AS KNOWN**, per `../sessions/LOG.md` ("N.72 residue: CLOSED AS KNOWN, no build"); confirmed by the CHECK-row audit of 2026-09-24. No build.
@@ -653,11 +653,11 @@ French Dann has not seen.
 - **D3's Job A**, per-verse reprints, ruled in E.36 and still unnumbered.
 - **The per-format score arrival audit**, asked for in E.45 and never written.
 - ~~`stripBackingRect` matches `fill="#FFFFFF"` while `staff-renderer.ts` paints
-  `#F0EBE0`.~~ **SETTLED 2026-09-07 by Dann's print preview: the cream prints. Ruled: the page prints white. Paste written (INBOX), not yet run.** **BUILT 2026-09-14 as N.133, uncommitted.** The paste was never found: `INBOX.md:97` records it only as sent to a second Code thread, and no commit touches `stripBackingRect`. Its aim, no cream on paper, is part of N.133, which removed both rectangles and `stripBackingRect`.
+  `#F0EBE0`.~~ **SETTLED 2026-09-07 by Dann's print preview: the cream prints. Ruled: the page prints white. Paste written (INBOX), not yet run.** **BUILT 2026-09-14 as N.133, since committed (`eb918ed8`, 2026-09-14).** The paste was never found: `INBOX.md:97` records it only as sent to a second Code thread, and no commit touches `stripBackingRect`. Its aim, no cream on paper, is part of N.133, which removed both rectangles and `stripBackingRect`.
 - **The marks on the printed page.** E.51's prints carry a dashed `VERIFY` box
   and a `USER OVERRIDE` badge on paper. CONTRACT §6 forbids a mark that says Ilya
   is unsure. **Whether these are the ruled exception was not checked.**
-- **`VoiceProfilePane.svelte:295-313` duplicates the old header arithmetic.**
+- **`VoiceProfilePane.svelte:295-313` duplicated the old header arithmetic.** The file is no longer in `apps/web/src` (only the design-pack copy at `docs/sessions/n127-design-pack/VoiceProfilePane.svelte` remains), so the citation has no target; the Fit surface was removed (see the N.22 row below).
   Fit's paper does not yet share the Transcribe paper's single `HEADER_GAP`.
 - **[CLOSED BY THE AUDIT OF 2026-09-30 22:40: passed, `SCHEDULE.md` UNSETTLED-6 (six of seven formats, 2026-09-24)]** **Whether `.mscz` ingest actually succeeds in a browser.** The path is live in
   code (`ScoreUploader.svelte:106-137`) but `i18n.ts:272` still carries a
@@ -797,7 +797,7 @@ remaining 8 are:
 | item | source | note |
 |---|---|---|
 | Three `notation.*.desc` keys write bare vowel glyphs | `e40-handover` §8 | |
-| The stress-acutes toggle governs Transcription only | `NotationFields.svelte:14-21` | never numbered |
+| The stress-acutes toggle governed Transcription only; N.119 now carries it to Markup | `NotationFields.svelte:14-21` | never numbered |
 | A third touch-geometry exemption for the Notation header | E.41 | still unanswered |
 | Three elements still measured in `100vh` | `+layout.svelte:12-17` | N.17 |
 | The toggles are not freely combinable | E.38 audit | the Guide says *"freely combined"* |
@@ -828,7 +828,7 @@ None of these is numbered; `CONTRACT.md` §3.1 holds until Dann rules one in.
 3. **The dynamics lexicon:** Dann wants it, on the model of `tempo-lexicon.ts`. Not numbered. Leaps and phrase length both need it.
 4. **The probe session** Dann asked for: phrase marks, dynamics, comma detection from scans, the timed legato intake test. Not scheduled.
 5. **The tempo pointer's French**, « Vous pouvez indiquer vos tempi vous-même dans la loupe. », proposed, not ratified. It shows only once the Loupe has a tempo control.
-6. **Loose end, held, not a question:** `StoredVoice.voiceType` is still a routing key to Bozeman value-sets (`profileStore.ts:78-85`), against Dann's 2026-09-16 ruling that a declared voice type plays no part in choosing values. The leaps agent also found a stale comment at `analysis-types.ts:72-73` saying the passaggi come from voice-type norms; the adapter uses the singer's typed values. Raise only if it bites.
+6. **Loose end, held, not a question:** `StoredVoice.voiceType` is still a routing key to Bozeman value-sets (`profileStore.ts:95`), against Dann's 2026-09-16 ruling that a declared voice type plays no part in choosing values. The leaps agent also found a stale comment at `analysis-types.ts:89` saying the passaggi come from voice-type norms; the adapter uses the singer's typed values. Raise only if it bites.
 
 - **Back-fill `section_heading` in every `_extraction/claims_*.csv` row. Owed by the desk from 2026-09-25**, on Dann's ruling of 03:06 (`../sessions/draft-curation-rules_r1_2026-09-24.md`, citations section). Mechanical; a Sonnet pass reading the source pages already photographed or in `_primary-text/`. New extractions carry the column from the KVP2 run on. **PARTLY PAID 2026-10-12 about 02:35 by a Sonnet helper (259k tokens):** 6 of 19 files, 199 rows, 114 headings, 85 NOT ESTABLISHED (Miller 2004 and Chen 2017 exist only as phone photographs), in `Insights Research/_extraction/_backfill/` with `LOG.md`; originals untouched. Not reached: the 13 files from `claims_jvoice-B` on, about 1,350 rows. **Measured cost: about 1.3k tokens a row, so the rest is about 1.8M tokens;** the desk held it there rather than spend that overnight on a mechanical pass. Swapping the six back-filled files in for the originals is a desk step still to do.
 
@@ -838,7 +838,7 @@ None of these is numbered; `CONTRACT.md` §3.1 holds until Dann rules one in.
 
 Read in Grayson (PDF in `~/Downloads`, logical page = physical page minus 16)
 at Dann's request, 2026-09-26 09:29. **The engine and Learn say ⟨ж⟩, ⟨ш⟩, and
-⟨ц⟩ never palatalize** (`packages/phonology/src/engine.ts:237`, `:908`; Learn's
+⟨ц⟩ never palatalize** (`packages/phonology/src/engine.ts:238`, `:909`; Learn's
 alphabet table, both languages). Grayson gives exceptions:
 
 - **⟨ц⟩:** palatalized in цвет and its derivatives, and in some proper names
@@ -861,7 +861,7 @@ explanations already follow Grayson on the `audit` branch (`f60ddb2`).
 
 Ilya drops every word with no Cyrillic letter (`VerseLine.svelte:20–21`), so the
 Latin in «Семинарист» vanishes from the page. **Dann:** *"option 1 now, and
-option 2 once I can show you Richter's page."* Option 1 is briefed:
+option 2 once I can show you Richter's page."* Option 1 is built (`VerseLine.svelte:19-23` keeps Latin words through `apps/web/src/lib/latin.ts`; since `f5d0dd41`, 2026-09-27) and was briefed in:
 `../sessions/brief-code-latin-words-on-the-page_r1_2026-09-26.md`. **Option 2
 waits on Dann:** a photo of the Seminarian's page in Laurence R. Richter,
 *Musorgsky's Complete Song Texts* (Leyerle, 2002), which Dann believes shows the
@@ -925,7 +925,7 @@ than deleting them.
 - **`OPEN.md` line 458 (at D.2.3) says `score-metrics.ts` records the diction fold as waiting on a ruling;** the file's header says the fold is applied upstream. Only the path was changed.
 - **`PRODUCT.md`'s file table listed `SyllableStation.svelte`, which does not exist;** Code dropped it in D.2.6. Where it went is not established.
 - **A Guide link opened from Text does not open the Guide.** Old `#guide-fit-*` links now land on the renamed sections, but only when the Guide is the stored destination; this was true before N.174 too (Code, D.3).
-- **Two ambiguous "Fit" mentions left as they are** (step E): "her Fit note", `apps/web/src/lib/score/vowel-resolver.ts:417`, and "paraphrase-then-*Fit:*", `AGENTS.md:57`. Each may be the title of a record rather than the old name.
+- **Two ambiguous "Fit" mentions left as they are** (step E): "her Fit note", `apps/web/src/lib/score/vowel-resolver.ts:469`, and "paraphrase-then-*Fit:*", `AGENTS.md:58`. Each may be the title of a record rather than the old name.
 - **The stray fixture** `sunless-01-engraved.musicxml.bak-before-ja-2026-09-20` now sits in `apps/web/src/lib/score/ingestion/fixtures/`. Deleting it stays Dann's, under "Dead code found by the audit".
 - **Process, owned:** Code used `git stash` and `git checkout` in D.2.2 (CONTRACT §5; nothing was lost). Every later brief banned them by name and Code saved the rule to its own memory. In D.2.6 Code also changed a path inside one dated line of `INBOX.md`, which is append-only; the meaning did not change.
 
@@ -966,7 +966,7 @@ From `../sessions/report-code-cloud-lane_r1_2026-10-02.md`, read in full by the 
 - **French tempo indications from the score print roman** (« au tempo qu'indique habituellement Andante tranquillo », Aperçus, Sunless 1). The ruling's Roberge sentence puts an indication of tempo in italics (`PRODUCT.md`, "ITALICS ON FOREIGN WORDS IN THE FRENCH"). Found on the walk; a brief for the cloud lane.
 - **The stem legend costs page 1 a system on Sunless 1:** five systems with it, six in the build before. Seen on the walk; the cause is not read. For Dann's eye.
 - **Row 7, item 3:** what Insights prints on Sunless 1 and «Скучай» for the six test voices, before and after. It needs Dann's Finale files, so it is Code's on the Mac.
-- **Citations into `i18n.ts` are off by 77 lines** since `8694424` (row 16 put the key-prefix index at the top of the file). Repair by naming the key, not by a new number.
+- **Citations into `i18n.ts` were off by 77 lines** after `8694424`, and are off by more now (`upload.status.readingPage` cited at 888 stands at 1014, 126 lines; `insights.finding.passaggio` cited at 1501 stands at 1656, 155 lines) (row 16 put the key-prefix index at the top of the file). Repair by naming the key, not by a new number.
 - **`insights.fit.*` has no comment saying why its name stayed.** The other two legacy keys have one.
 - **`station.startOver` and `loupe.undo.startOver` are unused** since row 14.
 - **Ratchet ceilings the cloud raised, accepted as a DESK DEFAULT:** `CalibrationWizard.svelte` 2123 to 2124, `InsightsPane.svelte` 1350 to 1351, `Loupe.svelte` 3041 to 3044; `+page.svelte` lowered 6028 to 5992.
