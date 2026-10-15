@@ -262,6 +262,10 @@
 		isMobile?: boolean;
 		/** N.94: the song's key, and the Transposition ruler that floats over this page. */
 		keyRuler?: TranspositionRulerState;
+		/** Row 47: the singer has chosen to read this song as written (`SongRecord.octaveReading`). */
+		octaveAsWritten?: boolean;
+		/** Row 47: the octave line's tap, which flips that choice. */
+		ontoggleoctave?: () => void;
 	}
 
 	let {
@@ -289,6 +293,8 @@
 		selectedEventId = null,
 		isMobile = false,
 		keyRuler = undefined,
+		octaveAsWritten = false,
+		ontoggleoctave = undefined,
 	}: Props = $props();
 
 	// N.55b R4. The score is injected as an SVG STRING, so there is no
@@ -560,15 +566,20 @@
 	// declared range and read BOTH the analysis and the render there, so the
 	// marks and the engraving stay coherent (a shifted-down line lands in bass
 	// clef via the tessitura heuristic). Non-destructive; `parsed` is untouched.
-	const octaveShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
+	// ROW 47: what the range asks for, and what is applied. "As written" turns the shift
+	// off for this song; everything below follows `octaveShift` with no second switch.
+	const suggestedShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
+	const octaveShift = $derived(octaveAsWritten ? 0 : suggestedShift);
 	const printedReading = $derived(
 		parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed,
 	);
 	// N.94: the key, at the same seam, over the octave (`transposition-ruler-state.svelte.ts`).
 	const readingScore = $derived(printedReading && (keyRuler?.draw(printedReading) ?? printedReading));
-	const showOctaveNotice = $derived(octaveShift !== 0);
-	// Approved copy (Dann, 2026-07-18); shown only when the reading octave shifted.
-	const OCTAVE_NOTICE = $derived(T('profile.octaveNotice'));
+	// ROW 47: the long notice (`profile.octaveNotice`, approved by Dann 2026-07-18) is retired;
+	// the quiet line replaces it, shown wherever a shift WOULD apply (Dann, 2026-10-08).
+	const octaveLine = $derived(
+		suggestedShift !== 0 ? { shift: suggestedShift < 0 ? (-1 as const) : (1 as const), applied: octaveShift !== 0 } : null,
+	);
 
 	// ── Performance order for the analysis path (M0 jump-family wiring) ───
 	// analyzeScore and the watch list should see the score as it is actually
@@ -875,7 +886,7 @@
 	// N.173: the box says only what passes the gates (`gates.ts`).
 	const watchBox = $derived(watchList && analysisScore && analyzed && vowelResolver ? gateBand({ watchList, analysisScore, ...(readingScore ? { readingScore } : {}), analyzed, profile: adapted.snapshot, vowelForEvent: vowelResolver }) : null);
 	const bandLines = $derived(watchBox ? gatedLines(watchBox.shown, language, (id) => !!analyzed?.events[id]?.placeholder) : []);
-	const hasCommentaryPage = $derived(showOctaveNotice || bandLines.length > 0 || showWithheld);
+	const hasCommentaryPage = $derived(octaveLine !== null || bandLines.length > 0 || showWithheld);
 	// The notes run on to as many sheets as they need, never cut: `NotesColumn` measures, `packNotes` fills.
 	let notesMeasure: NotesMeasure | null = $state(null);
 	const notesSheets: NotesSheet[] = $derived(
@@ -1029,9 +1040,9 @@
 				aria-label={T('profile.notesPageAria')}
 			>
 				<RunningHeader headerText={runningHeader} {tabName} accent="#9585A2" />
-				<NotesColumn withheld={showWithheld ? withheld : null} octave={showOctaveNotice ? OCTAVE_NOTICE : null} bandHeader={T('watch.header')} lines={bandLines} {sheet} top={subsequentTop} bottom={contentBottom} />
+				<NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} {sheet} top={subsequentTop} bottom={contentBottom} />
 				{#if j === 0}
-					<NotesColumn withheld={showWithheld ? withheld : null} octave={showOctaveNotice ? OCTAVE_NOTICE : null} bandHeader={T('watch.header')} lines={bandLines} onmeasure={(m) => (notesMeasure = m)} />
+					<NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} onmeasure={(m) => (notesMeasure = m)} />
 				{/if}
 				<PageFooter pageNumber={totalPages - notesSheets.length + j + 1} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="#9585A2" />
 			</article>

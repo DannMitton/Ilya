@@ -165,3 +165,30 @@ describe('French spacing follows the OQLF table', () => {
 		expect(count('«')).toBeGreaterThanOrEqual(7);
 	});
 });
+
+describe('the octave line strings (QUEUE row 47, ratified by Dann 2026-10-08 01:20)', () => {
+	const RATIFIED: Record<string, [string, string]> = {
+		'octave.readLower': ['Voice line read an octave lower, for your range', 'Ligne vocale lue une octave plus bas, pour votre ambitus'],
+		'octave.readHigher': ['Voice line read an octave higher, for your range', 'Ligne vocale lue une octave plus haut, pour votre ambitus'],
+		'octave.asWrittenState': ['Voice line as written', 'Ligne vocale telle qu\u2019\u00e9crite'],
+		'octave.toAsWritten': ['As written', 'Telle qu\u2019\u00e9crite'],
+		'octave.toForRange': ['Read for your range', 'Lire pour votre ambitus'],
+	};
+
+	it('carry the ratified words in both languages, and only these five exist', () => {
+		for (const [key, [en, fr]] of Object.entries(RATIFIED)) {
+			expect(t(key, 'en'), key).toBe(en);
+			expect(t(key, 'fr'), key).toBe(fr);
+		}
+		expect(stringKeys().filter((k) => k.startsWith('octave.')).sort()).toEqual(Object.keys(RATIFIED).sort());
+	});
+
+	it('take the typographic apostrophe, and no colon or guillemets, in French', () => {
+		for (const key of Object.keys(RATIFIED)) {
+			const fr = t(key, 'fr');
+			expect(fr, key).not.toMatch(/[:«»']/);
+		}
+		expect(t('octave.asWrittenState', 'fr')).toContain('\u2019');
+		expect(t('octave.toAsWritten', 'fr')).toContain('\u2019');
+	});
+});

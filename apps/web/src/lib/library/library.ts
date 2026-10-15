@@ -32,6 +32,7 @@ import {
 	type FailureReason,
 	type GlossRow,
 	type LoadResult,
+	type OctaveReading,
 	type Outcome,
 	type PageProvenance,
 	type SongRecord,
@@ -58,6 +59,8 @@ export interface SongFields {
 	seatedText: string;
 	/** N.94: the key the singer chose, or null for as printed (`SongRecord.transposition`). */
 	transposition: KeyChoice | null;
+	/** Row 47: 'as-written', or null for "for your range" (`SongRecord.octaveReading`). */
+	octaveReading: OctaveReading | null;
 }
 
 /* ── Record and page state, converted in one place ──────────────── */
@@ -85,6 +88,7 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		corrections: migrateCorrectionIds(record.corrections),
 		seatedText: record.seatedText ?? record.poem,
 		transposition: record.transposition ?? null,
+		octaveReading: record.octaveReading ?? null,
 	};
 }
 
@@ -97,7 +101,8 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 	// N.160 step 3. Stored only while it differs from the poem, so it is
 	// dropped from `base` first and put back only then.
 	// N.94, the same shape: stored only while the singer has chosen a key.
-	const { seatedText: _stored, transposition: _key, ...rest } = base;
+	// Row 47, the same shape: stored only while the singer has chosen as written.
+	const { seatedText: _stored, transposition: _key, octaveReading: _octave, ...rest } = base;
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
 		key,
 		gloss,
@@ -114,6 +119,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		corrections: fields.corrections,
 		...(fields.seatedText !== fields.inputText ? { seatedText: fields.seatedText } : {}),
 		...(fields.transposition ? { transposition: { ...fields.transposition } } : {}),
+		...(fields.octaveReading ? { octaveReading: fields.octaveReading } : {}),
 	};
 }
 
@@ -210,6 +216,10 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 			record.transposition = { semitones: semitones as number, fifths: fifths as number };
 		} else malformed();
 	} else if (value.transposition !== undefined) malformed();
+	// Row 47, additive, and its default is ABSENCE, which reads "for your range".
+	// The one allowed value or nothing: anything else is not carried.
+	if (value.octaveReading === 'as-written') record.octaveReading = 'as-written';
+	else if (value.octaveReading !== undefined) malformed();
 
 	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
 	// This function rebuilds the record field by field from `emptySongRecord`,

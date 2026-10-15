@@ -109,6 +109,10 @@
 		onaddrange?: () => void;
 		/** N.94 slice 2: the chosen key, which Insights reads (curation rule 3), and "Try this key". */
 		keyRuler?: SungKey;
+		/** Row 47: the singer has chosen to read this song as written (`SongRecord.octaveReading`). */
+		octaveAsWritten?: boolean;
+		/** Row 47: the octave line's tap, which flips that choice. */
+		ontoggleoctave?: () => void;
 	}
 
 	let {
@@ -130,6 +134,8 @@
 		isMobile = false,
 		onaddrange = undefined,
 		keyRuler = undefined,
+		octaveAsWritten = false,
+		ontoggleoctave = undefined,
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
@@ -141,7 +147,11 @@
 	// ── The chain, as `MarkupPane` runs it ───────────────────────
 	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, intake, voiceType?.voiceType));
 	const parsed = $derived(ingested?.result.score ?? null);
-	const octaveShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
+	/* ROW 47. What the typed range asks for, and what is applied: the singer's
+	   "as written" turns the shift off for this song, and every readout below
+	   follows `octaveShift` with no second switch. */
+	const suggestedShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
+	const octaveShift = $derived(octaveAsWritten ? 0 : suggestedShift);
 	const printedReading = $derived(parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed);
 	const readingScore = $derived(printedReading && (keyRuler?.draw(printedReading) ?? printedReading));
 	const analysisScore = $derived(readingScore ? scoreInPerformanceOrder(readingScore).score : null);
@@ -382,6 +392,7 @@
 				tagOf: commentTag,
 				barOf: commentBar,
 				phonationHeadline: model.phonation.nothingSung ? null : headlineOf(model.phonation),
+				octave: suggestedShift !== 0 ? { shift: suggestedShift < 0 ? -1 : 1, applied: octaveShift !== 0 } : null,
 				untrustedLine: untrusted
 					? fill(T(untrusted.length === 1 ? 'insights.phonation.untrustedOne' : 'insights.phonation.untrustedMany'), { measures: untrusted.join(', ') })
 					: null,
@@ -546,6 +557,7 @@
 		ontry={keyRuler ? tryKey : undefined}
 		onaddrange={() => onaddrange?.()}
 		ondecline={declineOffer}
+		onoctave={measuring ? undefined : () => ontoggleoctave?.()}
 		open={measuring || moreOpen}
 		ontoggle={measuring ? undefined : (o) => (moreOpen = o)}
 	/>

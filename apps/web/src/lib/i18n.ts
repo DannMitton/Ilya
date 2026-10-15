@@ -1318,7 +1318,20 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.provisional.listSepFinal': { en: ', and ', fr: ' et ' },
 	'profile.provisional.listSepMedial': { en: ', ', fr: ', ' },
 	'profile.emptyState': { en: 'Calibrate your voice to begin.', fr: 'Calibrez votre voix pour commencer.' },
+	// RETIRED FROM MARKUP by row 47 (Dann's ruling of 2026-10-08, 01:11 to 01:20)
+	// and DRAWN BY NOTHING since: both tabs now say it in one quiet line, the five
+	// `octave.*` keys below. The copy was approved by Dann on 2026-07-18 and is
+	// kept as the record, not deleted.
 	'profile.octaveNotice': { en: 'This voice line is notated in treble clef but sits an octave above the range you gave, so it\'s being read an octave lower to match your voice, as lower voices often sing treble parts. Check the score\'s clef if that\'s not right.', fr: 'Cette ligne vocale est notée en clé de sol, mais se situe une octave au-dessus de l\u2019ambitus que vous avez indiqué. Elle est donc lue une octave plus bas pour correspondre à votre voix, comme les voix graves chantent souvent des parties en clé de sol. Vérifiez la clé de la partition si ce n\u2019est pas le cas.' },
+	// ── The voice line read an octave up or down for the singer's range (row 47) ──
+	//    RATIFIED by Dann 2026-10-08 01:20, in this wording, for both tabs. The line
+	//    reads: a circled 8, the state sentence, a middle dot, the tap. French
+	//    carries the typographic apostrophe.
+	'octave.readLower': { en: 'Voice line read an octave lower, for your range', fr: 'Ligne vocale lue une octave plus bas, pour votre ambitus' },
+	'octave.readHigher': { en: 'Voice line read an octave higher, for your range', fr: 'Ligne vocale lue une octave plus haut, pour votre ambitus' },
+	'octave.asWrittenState': { en: 'Voice line as written', fr: 'Ligne vocale telle qu\u2019\u00e9crite' },
+	'octave.toAsWritten': { en: 'As written', fr: 'Telle qu\u2019\u00e9crite' },
+	'octave.toForRange': { en: 'Read for your range', fr: 'Lire pour votre ambitus' },
 	'profile.scoreRegionAria': { en: 'Markup', fr: 'Annotation' },
 	'profile.scorePageAria': { en: 'Score page {n} of {total}', fr: 'Page {n} sur {total} de la partition' },
 	'profile.notesPageAria': { en: 'Analysis notes', fr: 'Notes d\u2019analyse' },

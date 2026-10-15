@@ -17,6 +17,7 @@
 	import { richParts, textParts } from '$lib/insights/text-parts';
 	import type { Block } from '$lib/insights/singer-blocks';
 	import PitchSeconds from '$lib/insights/PitchSeconds.svelte';
+	import OctaveLine from '$lib/components/OctaveLine.svelte';
 
 	interface Props {
 		block: Block;
@@ -26,12 +27,14 @@
 		ontry?: (stop: KeyChoice) => void;
 		onaddrange?: () => void;
 		ondecline?: () => void;
+		/** Row 47: the octave line's tap (`kind: 'octave'`). */
+		onoctave?: () => void;
 		/** "N more observations" (`kind: 'more'`): open, and told when the singer opens or closes it. */
 		open?: boolean;
 		ontoggle?: (open: boolean) => void;
 	}
 
-	let { block, language, width, ontry, onaddrange, ondecline, open = false, ontoggle }: Props = $props();
+	let { block, language, width, ontry, onaddrange, ondecline, onoctave, open = false, ontoggle }: Props = $props();
 	const T = (key: string) => t(key, language);
 
 	/* The ring's circumference at r = 32. */
@@ -151,6 +154,8 @@
 	{:else if block.kind === 'prose'}
 		{@render heading(block.heading)}
 		<p class:prose={!block.small} class:source-line={block.small}>{@render rich(block.text)}</p>
+	{:else if block.kind === 'octave'}
+		<OctaveLine {language} shift={block.shift} applied={block.applied} ontoggle={onoctave} interactive={!!onoctave} />
 	{:else if block.kind === 'endnote'}
 		{@render heading(block.heading)}
 		{#if block.teacher}<p class="teacher-c">{block.teacher}</p>{/if}

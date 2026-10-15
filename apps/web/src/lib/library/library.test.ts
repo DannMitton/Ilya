@@ -116,6 +116,52 @@ describe('N.94, the chosen key on the song', () => {
 	});
 });
 
+describe('the octave reading (row 47)', () => {
+	it('a record with none reads for the range, and writes none back', () => {
+		const record = emptySongRecord('x', NOW);
+		const fields = fieldsFromRecord(record);
+
+		expect(fields.octaveReading).toBeNull();
+		expect('octaveReading' in recordFromFields(record, fields)).toBe(false);
+	});
+
+	it('as written round-trips through the record', () => {
+		const record = { ...emptySongRecord('x', NOW), octaveReading: 'as-written' as const };
+		const stored = recordFromFields(emptySongRecord('x', NOW), { ...fieldsFromRecord(record) });
+
+		expect(stored.octaveReading).toBe('as-written');
+		expect(validateRecord(stored, 'x', LATER).record.octaveReading).toBe('as-written');
+		expect(fieldsFromRecord(stored).octaveReading).toBe('as-written');
+	});
+
+	it('turning it back to "for your range" removes it', () => {
+		const record = { ...emptySongRecord('x', NOW), octaveReading: 'as-written' as const };
+
+		expect('octaveReading' in recordFromFields(record, { ...fieldsFromRecord(record), octaveReading: null })).toBe(false);
+	});
+
+	it('calls any other value malformed and does not carry it', () => {
+		for (const bad of ['for-range', 'AS-WRITTEN', 1, true, null, {}]) {
+			const result = validateRecord({ octaveReading: bad }, 'x', NOW);
+
+			expect(result.reason).toBe('malformed');
+			expect(result.record.octaveReading).toBeUndefined();
+		}
+	});
+
+	it('does not disturb the key choice beside it', () => {
+		const record = {
+			...emptySongRecord('x', NOW),
+			octaveReading: 'as-written' as const,
+			transposition: { semitones: -3, fifths: 5 },
+		};
+		const stored = recordFromFields(emptySongRecord('x', NOW), fieldsFromRecord(record));
+
+		expect(stored.transposition).toEqual({ semitones: -3, fifths: 5 });
+		expect(stored.octaveReading).toBe('as-written');
+	});
+});
+
 describe('validateRecord', () => {
 	it('accepts a whole record unchanged', () => {
 		const record = seededRecord();

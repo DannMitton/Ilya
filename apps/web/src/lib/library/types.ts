@@ -20,6 +20,9 @@ import type { PairingMap } from '$lib/score/pairings';
 import type { CorrectionMap } from '$lib/score/correction';
 import type { KeyChoice } from '@ilya/score-parser';
 
+/** Row 47: the one stored value of `SongRecord.octaveReading`; absent is "for your range". */
+export type OctaveReading = 'as-written';
+
 /**
  * One stored gloss: the word key, the gloss, and the word the gloss was
  * written for. Exactly today's serialized row, the object literal
@@ -125,6 +128,23 @@ export interface SongRecord {
 	 * (`validateRecord` copies only what it knows), so no schema bump.
 	 */
 	transposition?: KeyChoice;
+	/**
+	 * ROW 47, 2026-10-15. THE SINGER'S CHOICE TO READ THIS SONG AS WRITTEN,
+	 * where Ilya would otherwise read the voice line an octave down or up to
+	 * fit the range they typed (`resolveVocalReadingOctave`). The one stored
+	 * value is `'as-written'`; ABSENCE IS THE DEFAULT, "for your range", the
+	 * reading Ilya makes when it is not told otherwise.
+	 *
+	 * THE CHOICE, NEVER THE SHIFT (`CONTRACT.md` §6, store nothing derived):
+	 * the shift is worked out again from the typed range on every render, so a
+	 * range typed later still applies. On the song because the preference is a
+	 * fact about this song as this singer sings it.
+	 *
+	 * OPTIONAL AND ADDITIVE, `transposition`'s pattern: an older record has
+	 * none and reads for the range, and an older Ilya importing a newer binder
+	 * drops it (`validateRecord` copies only what it knows), so no schema bump.
+	 */
+	octaveReading?: OctaveReading;
 	source: SongSource | null;
 }
 

@@ -15,6 +15,8 @@
 	 * transform does not reach them, where it would reach a bounding rect.
 	 */
 	import type { NotesMeasure, NotesSheet } from './notes-pages';
+	import OctaveLine from '$lib/components/OctaveLine.svelte';
+	import type { Language } from '$lib/i18n';
 
 	interface Withheld {
 		heading: string;
@@ -25,7 +27,11 @@
 
 	interface Props {
 		withheld: Withheld | null;
-		octave: string | null;
+		/** Row 47: the quiet octave line, or null where no shift applies. */
+		octave: { shift: -1 | 1; applied: boolean } | null;
+		language: Language;
+		/** Row 47: the line's tap. */
+		ontoggleoctave?: () => void;
 		bandHeader: string;
 		/** Every line of the band; empty when the band does not print. */
 		lines: string[];
@@ -37,7 +43,7 @@
 		onmeasure?: (m: NotesMeasure) => void;
 	}
 
-	let { withheld, octave, bandHeader, lines, sheet, top = 0, bottom = 0, onmeasure }: Props = $props();
+	let { withheld, octave, language, ontoggleoctave = undefined, bandHeader, lines, sheet, top = 0, bottom = 0, onmeasure }: Props = $props();
 
 	const all: NotesSheet = $derived({ withheld: !!withheld, octave: !!octave, lines: lines.length > 0 ? [0, lines.length] : null });
 	const share = $derived(sheet ?? all);
@@ -91,7 +97,7 @@
 		</aside>
 	{/if}
 	{#if octave && share.octave}
-		<aside class="octave-notice">{octave}</aside>
+		<aside class="octave-notice"><OctaveLine {language} shift={octave.shift} applied={octave.applied} ontoggle={ontoggleoctave} interactive={!!sheet} /></aside>
 	{/if}
 	{#if share.lines}
 		<aside class="watch-band" aria-label={bandHeader}>

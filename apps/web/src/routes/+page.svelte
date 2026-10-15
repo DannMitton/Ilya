@@ -941,6 +941,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		() => handleTabChange('markup'),
 		() => isPhone,
 	);
+	/* Row 47: the quiet octave line's tap, in Insights and Markup alike. */
+	const toggleOctaveReading = () => (doc.octaveReading = doc.octaveReading ? null : 'as-written');
 	/* N.92 mobile slice 2. A PHONE IS A SMALLEST-SIDE TEST, not a width test,
 	   and the two answer different questions. `isMobile` asks whether THIS
 	   frame is narrower than the page, which is what decides the fit and which
@@ -4475,6 +4477,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				openSyllabification={doc.openSyllabification}
 				onaddrange={openRangeFields}
 				{keyRuler}
+				octaveAsWritten={doc.octaveReading === 'as-written'}
+				ontoggleoctave={toggleOctaveReading}
 			/>
 		{:else if destination === 'studio'}
 			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture
@@ -4506,6 +4510,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{showStressDiacritics}
 				onpagesdrawn={handlePagesDrawn}
 				{keyRuler}
+				octaveAsWritten={doc.octaveReading === 'as-written'}
+				ontoggleoctave={toggleOctaveReading}
 			/>
 		{:else}
 			<ReadingPaper {language}>
