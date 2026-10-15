@@ -13,5 +13,12 @@
         }
       ]
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "**": false,
+      "Shane": true,
+      "main": true
+    }
+  }
 }
