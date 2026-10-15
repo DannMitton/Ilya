@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import type { Language } from '$lib/i18n';
   import { DEAD_IOS_KEY, DECLINE_KEY, declineIsFresh } from '$lib/install-decline';
+  import { installPlatform } from '$lib/install-platform';
 
   interface Props {
     language?: Language;
@@ -17,7 +18,19 @@
     userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
   }
 
-  const strings = {
+  interface Strings {
+    heading: string;
+    body: string;
+    install: string;
+    dismiss: string;
+    ios_heading: string;
+    ios_body: string;
+    /** Owed to Dann; drafted in docs/sessions/draft-strings-chrome-ios-install_r1_2026-10-15.md. The banner stays down for Chrome on iOS until this holds a ratified string. */
+    ios_chrome_body: string | null;
+    ios_dismiss: string;
+  }
+
+  const strings: Record<'en' | 'fr', Strings> = {
     en: {
       heading: 'Make <em>Ilya</em> yours',
       body: 'Install <em>Ilya</em> on this device for your own persistent workspace — it works offline too.',
@@ -25,6 +38,7 @@
       dismiss: 'Not now',
       ios_heading: 'Add <em>Ilya</em> to your Home Screen',
       ios_body: 'Tap the <strong>Share</strong> button below, then choose <strong>Add to Home Screen</strong>.',
+      ios_chrome_body: null, // owed to Dann (see Strings)
       ios_dismiss: 'Got it'
     },
     fr: {
@@ -34,6 +48,7 @@
       dismiss: 'Plus tard',
       ios_heading: 'Ajoutez <em>Ilya</em> à votre écran d’accueil',
       ios_body: 'Appuyez sur le bouton <strong>Partager</strong> en bas, puis choisissez <strong>Sur l’écran d’accueil</strong>.',
+      ios_chrome_body: null, // owed to Dann (see Strings)
       ios_dismiss: 'Compris'
     }
   };
@@ -41,6 +56,7 @@
   let deferredPrompt = $state<BeforeInstallPromptEvent | null>(null);
   let visible = $state(false);
   let isIos = $state(false);
+  let isChrome = $state(false);
 
   // N.105. Every storage call here is wrapped, because a private-mode Safari
   // throws on write and a thrown decline must not take the banner's own logic
@@ -79,11 +95,13 @@
     }
 
     const ua = navigator.userAgent;
-    const ios = /iphone|ipad|ipod/i.test(ua) && !(ua.includes('CriOS') || ua.includes('FxiOS'));
+    const platform = installPlatform(ua);
 
-    if (ios) {
+    if (platform !== 'other') {
       isIos = true;
-      if (mayAsk()) {
+      isChrome = platform === 'ios-chrome';
+      // Chrome on iOS is held down until its instruction line is a ratified string.
+      if (mayAsk() && (!isChrome || typeof t.ios_chrome_body === 'string')) {
         setTimeout(() => { visible = true; }, 6000);
       }
       return;
@@ -126,7 +144,7 @@
   <div class="install-prompt" role="region" aria-label={isIos ? t.ios_heading : t.heading}>
     <div class="install-prompt-inner">
       <p class="install-heading">{@html isIos ? t.ios_heading : t.heading}</p>
-      <p class="install-body">{@html isIos ? t.ios_body : t.body}</p>
+      <p class="install-body">{@html isIos ? (isChrome ? (t.ios_chrome_body ?? '') : t.ios_body) : t.body}</p>
       <div class="install-actions">
         {#if !isIos}
           <button class="install-btn-primary" onclick={install}>{t.install}</button>
