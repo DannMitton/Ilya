@@ -33,6 +33,7 @@ import {
 	type GlossRow,
 	type LoadResult,
 	type OctaveReading,
+	type TempoChoice,
 	type Outcome,
 	type PageProvenance,
 	type SongRecord,
@@ -61,6 +62,8 @@ export interface SongFields {
 	transposition: KeyChoice | null;
 	/** Row 47: 'as-written', or null for "for your range" (`SongRecord.octaveReading`). */
 	octaveReading: OctaveReading | null;
+	/** Row 48: the singer's tempo, or null where the score decides (`SongRecord.tempo`). */
+	tempo: TempoChoice | null;
 }
 
 /* ── Record and page state, converted in one place ──────────────── */
@@ -89,6 +92,7 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		seatedText: record.seatedText ?? record.poem,
 		transposition: record.transposition ?? null,
 		octaveReading: record.octaveReading ?? null,
+		tempo: record.tempo ?? null,
 	};
 }
 
@@ -102,7 +106,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 	// dropped from `base` first and put back only then.
 	// N.94, the same shape: stored only while the singer has chosen a key.
 	// Row 47, the same shape: stored only while the singer has chosen as written.
-	const { seatedText: _stored, transposition: _key, octaveReading: _octave, ...rest } = base;
+	const { seatedText: _stored, transposition: _key, octaveReading: _octave, tempo: _tempo, ...rest } = base;
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
 		key,
 		gloss,
@@ -120,10 +124,14 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		...(fields.seatedText !== fields.inputText ? { seatedText: fields.seatedText } : {}),
 		...(fields.transposition ? { transposition: { ...fields.transposition } } : {}),
 		...(fields.octaveReading ? { octaveReading: fields.octaveReading } : {}),
+		...(fields.tempo ? { tempo: { ...fields.tempo } } : {}),
 	};
 }
 
 /* ── Validation ─────────────────────────────────────────────────── */
+
+/** The beat units `resolveTempo` knows (`feltBeatInWholes`), which a stored tempo may name. */
+const TEMPO_UNITS: readonly string[] = ['whole', 'half', 'quarter', 'eighth', '16th', '32nd'];
 
 function isStringRecord(value: unknown): value is Record<string, unknown> {
 	return !!value && typeof value === 'object' && !Array.isArray(value);
@@ -220,6 +228,18 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 	// The one allowed value or nothing: anything else is not carried.
 	if (value.octaveReading === 'as-written') record.octaveReading = 'as-written';
 	else if (value.octaveReading !== undefined) malformed();
+	// Row 48, additive, default ABSENCE (the score decides). A positive finite bpm, a beat unit
+	// the seam knows, and dots 0 to 2, or nothing: a tempo the control could not have offered is not carried.
+	if (isStringRecord(value.tempo)) {
+		const { bpm, beatUnit, beatUnitDots } = value.tempo as Record<string, unknown>;
+		if (
+			typeof bpm === 'number' && Number.isFinite(bpm) && bpm > 0 &&
+			typeof beatUnit === 'string' && TEMPO_UNITS.includes(beatUnit) &&
+			Number.isInteger(beatUnitDots) && (beatUnitDots as number) >= 0 && (beatUnitDots as number) <= 2
+		) {
+			record.tempo = { bpm, beatUnit: beatUnit as TempoChoice['beatUnit'], beatUnitDots: beatUnitDots as number };
+		} else malformed();
+	} else if (value.tempo !== undefined) malformed();
 
 	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
 	// This function rebuilds the record field by field from `emptySongRecord`,

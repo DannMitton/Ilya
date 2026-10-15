@@ -98,6 +98,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	} from '$lib/destinations';
 	import { INCLUDE_MARKUP_INSIGHTS } from '$lib/wall';
 	import { transpositionRulerState } from '$lib/markup/transposition-ruler-state.svelte';
+	import TempoControl from '$lib/tempo/TempoControl.svelte';
+	import { tempoUi } from '$lib/tempo/tempo-ui.svelte';
 	import PieceKeyLine from '$lib/markup/PieceKeyLine.svelte';
 	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
@@ -943,6 +945,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	);
 	/* Row 47: the quiet octave line's tap, in Insights and Markup alike. */
 	const toggleOctaveReading = () => (doc.octaveReading = doc.octaveReading ? null : 'as-written');
+	// Row 48: the tempo control reads and writes the song's own tempo; the Insights sentence and the Input receipt open it.
+	tempoUi.bind(() => doc, () => correctedScore?.result.score);
 	/* N.92 mobile slice 2. A PHONE IS A SMALLEST-SIDE TEST, not a width test,
 	   and the two answer different questions. `isMobile` asks whether THIS
 	   frame is narrower than the page, which is what decides the fit and which
@@ -4479,6 +4483,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{keyRuler}
 				octaveAsWritten={doc.octaveReading === 'as-written'}
 				ontoggleoctave={toggleOctaveReading}
+				tempoChoice={doc.tempo}
+				ontempo={tempoUi.openControl}
 			/>
 		{:else if destination === 'studio'}
 			<!-- The Voice Profile envelope (handover v30 §C.1, page furniture
@@ -4512,6 +4518,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{keyRuler}
 				octaveAsWritten={doc.octaveReading === 'as-written'}
 				ontoggleoctave={toggleOctaveReading}
+				tempoChoice={doc.tempo}
 			/>
 		{:else}
 			<ReadingPaper {language}>
@@ -4530,6 +4537,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 				{/snippet}
 			</ReadingPaper>
 		{/if}
+		<TempoControl {language} />
 		<!-- PRINT, UNDER THE SHEET AND FLUSH WITH ITS LEFT EDGE. N.65, and it
 		     is Dann's amended ruling of 2026-08-21 rather than his first one.
 		     He first asked for it beside the pair: "I want it to float next to

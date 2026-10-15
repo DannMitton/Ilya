@@ -99,7 +99,7 @@ export interface NoteCondition {
    * the same §A.117 threshold is applied to the seconds below. `fermata-only`
    * where the score has no tempo at all. JUDGEMENT.
    */
-  heldBasis: 'is-long-sustain' | 'inferred-tempo' | 'fermata-only';
+  heldBasis: 'is-long-sustain' | 'inferred-tempo' | 'singer-tempo' | 'fermata-only';
 
   // ── The five new dimensions.
   /** n in {3, 4, 5} with n·fo within 50 cents of fR1; `null` none; `undefined` not assessed. */
@@ -180,7 +180,12 @@ export function noteConditions(
 ): NoteConditionsResult {
   const tempoOptions = options.tempo ?? {};
   const resolution = resolveTempo(parsed, tempoOptions);
-  const tempo: TempoState = !resolution ? 'none' : resolution.provenance === 'inferred' ? 'inferred' : 'stated';
+  // DESK DEFAULT (row 48): an estimate is a band like a printed word's, so the held-note flags treat it as 'inferred'.
+  const tempo: TempoState = !resolution
+    ? 'none'
+    : resolution.provenance === 'inferred' || resolution.provenance === 'estimated'
+      ? 'inferred'
+      : 'stated';
 
   // Each bar's sounding length is read the way `aggregatePhonation` chose.
   const chosen = new Map<number, 'notation' | 'fraction'>();
@@ -308,7 +313,7 @@ export function noteConditions(
     const head = members[0].ev;
     let held: boolean;
     let basis: NoteCondition['heldBasis'];
-    if (tempo === 'stated') {
+    if (tempo === 'stated' && resolution?.provenance !== 'user') {
       // The overlay's own test, over one event spanning the chain.
       const spanning: VocalLineEvent = {
         ...head,
@@ -317,6 +322,13 @@ export function noteConditions(
       };
       held = isLongSustain(spanning, parsed.tempoMarkings);
       basis = 'is-long-sustain';
+    } else if (tempo === 'stated') {
+      // THE SINGER'S OWN TEMPO (row 48): a point with no printed mark behind it, which
+      // `isLongSustain` cannot read (it reads `parsed.tempoMarkings` alone), so the
+      // seam's seconds decide, as they do for a band.
+      const s = secondsOfWholes(wholes);
+      held = fermata || (s !== undefined && s >= SUSTAIN_SECONDS_THRESHOLD);
+      basis = 'singer-tempo';
     } else if (tempo === 'inferred') {
       const s = secondsOfWholes(wholes);
       held = fermata || (s !== undefined && s >= SUSTAIN_SECONDS_THRESHOLD);

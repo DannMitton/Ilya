@@ -18,7 +18,18 @@ import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/score/pairings';
 import type { CorrectionMap } from '$lib/score/correction';
-import type { KeyChoice } from '@ilya/score-parser';
+import type { KeyChoice, NoteBase } from '@ilya/score-parser';
+
+/**
+ * Row 48: the singer's own tempo for a song, the choice and never a derivation.
+ * A positive finite bpm of a known beat unit, dots 0 to 2. The estimate is
+ * derived from the score on every render and is never stored.
+ */
+export interface TempoChoice {
+	bpm: number;
+	beatUnit: NoteBase;
+	beatUnitDots: number;
+}
 
 /** Row 47: the one stored value of `SongRecord.octaveReading`; absent is "for your range". */
 export type OctaveReading = 'as-written';
@@ -145,6 +156,15 @@ export interface SongRecord {
 	 * drops it (`validateRecord` copies only what it knows), so no schema bump.
 	 */
 	octaveReading?: OctaveReading;
+	/**
+	 * ROW 48, 2026-10-15. THE SINGER'S TEMPO for this song, set in the tempo
+	 * control (`TempoChoice`). Absence means the singer set none and the score
+	 * decides: a printed mark, a printed word, or Ilya's labelled estimate.
+	 * OPTIONAL AND ADDITIVE, `transposition`'s pattern: an older record reads as
+	 * having none, and an older Ilya importing a newer binder drops it
+	 * (`validateRecord` copies only what it knows).
+	 */
+	tempo?: TempoChoice;
 	source: SongSource | null;
 }
 

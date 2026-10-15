@@ -56,7 +56,8 @@ export type Block =
 	| { kind: 'cycles'; heading?: string; sentence: string; bar: { under: number; within: number; above: number } | null; legend: string[] }
 	| { kind: 'pitches'; heading?: string; caption: string; figure: TessituragramModel; typedTessitura: { low: Pitch; high: Pitch } | null }
 	| { kind: 'vowels'; heading?: string; caption: string; sub: string; turns: VowelTurns; ring: string | null; rows: Array<{ vowel: string; before: number; past: number; text: string; turn: string; placeholder?: true }>; placeholder?: string }
-	| { kind: 'prose'; heading?: string; text: string; small?: boolean }
+	/* `link` (row 48): the "Change the tempo" label that follows the phonation sentence, set as a tap that opens the tempo control. */
+	| { kind: 'prose'; heading?: string; text: string; small?: boolean; link?: string }
 	/** Row 47: the quiet octave line, directly under the phonation sentence. `shift` is the direction the range asks for; `applied` is whether it is. */
 	| { kind: 'octave'; heading?: string; shift: -1 | 1; applied: boolean }
 	| { kind: 'endnote'; heading?: string; teacher?: string; tag: string; suggestions: Run[][]; references: Run[][] }
@@ -103,6 +104,8 @@ export interface BlockInputs {
 	phonationHeadline: string | null;
 	/** Row 47: set only where the singer's range would shift the voice line, else absent or null. */
 	octave?: { shift: -1 | 1; applied: boolean } | null;
+	/** Row 48: the label of the tap that opens the tempo control, drawn after the phonation sentence. Absent draws none. */
+	tempoLink?: string | null;
 	untrustedLine: string | null;
 	split: CycleDoseSplit | null;
 	cycles: CycleDose | null;
@@ -361,7 +364,7 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 				...(dashed ? { placeholder: dashed } : {}),
 			});
 		}
-		if (i.phonationHeadline) totals.push({ kind: 'prose', text: i.phonationHeadline });
+		if (i.phonationHeadline) totals.push({ kind: 'prose', text: i.phonationHeadline, ...(i.tempoLink ? { link: i.tempoLink } : {}) });
 		/* ROW 47. THE QUIET OCTAVE LINE sits directly after the phonation
 		   sentence, as Dann's drawing has it. Row 48 rewrites that sentence and
 		   adds a link inside it; this block follows it whatever it says. */

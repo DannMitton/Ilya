@@ -109,7 +109,19 @@ const SPOT_RECONSTITUTION = 'spot-reconstitution';
  * than from any word's `stressSource`. Appending it leaves `LEGEND_ORDER`'s own
  * ё-first, user-types-after shape untouched.
  */
-const LEGEND_DISPLAY_ORDER: string[] = [...LEGEND_ORDER, SPOT_RECONSTITUTION];
+/**
+ * The tempo Ilya estimated (row 48, 2026-10-15), marked ≈ where a tempo prints.
+ * Like the spot `R`, it is not a stress source, so it is NOT a member of
+ * `LEGEND_ORDER` (the stress scan's allowlist); a caller that prints the sigil
+ * on a page passes `tempoEstimated` to `buildProvenanceLegend`. The singer's own
+ * tempo uses the existing torso (`user-override`), and a printed tempo shows no
+ * sigil at all (normal operation, as above). The TEMPO receipt in the Input
+ * band, which wears the sigil today, is not a printed page, so no printed
+ * legend carries this entry yet.
+ */
+export const TEMPO_ESTIMATED = 'tempo-estimated';
+
+const LEGEND_DISPLAY_ORDER: string[] = [...LEGEND_ORDER, SPOT_RECONSTITUTION, TEMPO_ESTIMATED];
 
 // ── Icon mapping ─────────────────────────────────────────────────
 
@@ -125,6 +137,8 @@ const PROVENANCE_ICONS: Record<string, string> = {
 	/* The mark IS the character, as it is for `yo-restored`. `WordStack`
 	   prints a literal `R`; `PageFooter` draws a traced one at legend size. */
 	[SPOT_RECONSTITUTION]: 'R',
+	/* A text character like `ё`, not a drawing (row 48). */
+	[TEMPO_ESTIMATED]: '\u2248',
 };
 
 // ── Legend i18n key mapping ───────────────────────────────────────
@@ -138,6 +152,7 @@ const LEGEND_KEYS: Record<string, string> = {
 	'user-composer': 'legend.user-composer',
 	'user-override': 'legend.user-override',
 	[SPOT_RECONSTITUTION]: 'legend.spot-reconstitution',
+	[TEMPO_ESTIMATED]: 'legend.tempo-estimated',
 };
 
 // ── Legend builder ────────────────────────────────────────────────
@@ -159,7 +174,9 @@ const LEGEND_KEYS: Record<string, string> = {
 export function buildProvenanceLegend(
 	lines: LineData[],
 	language: Language,
-	spotReconstitution?: Map<string, boolean>
+	spotReconstitution?: Map<string, boolean>,
+	/** Row 48: the page prints the ≈ sigil beside a tempo Ilya estimated. Absent prints none. */
+	tempoEstimated = false
 ): LegendItem[] {
 	// Collect unique provenance types on this page
 	const seen = new Set<string>();
@@ -203,6 +220,8 @@ export function buildProvenanceLegend(
 			}
 		}
 	}
+
+	if (tempoEstimated) seen.add(TEMPO_ESTIMATED);
 
 	if (seen.size === 0) {
 		return [];

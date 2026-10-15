@@ -42,6 +42,7 @@ import {
 	type FailureReason,
 	type LoadResult,
 	type OctaveReading,
+	type TempoChoice,
 	type Outcome,
 	type SongRecord,
 	type SongSource,
@@ -97,6 +98,13 @@ export class SongDocument {
 	 * as `transposition`: the choice, never the shift (`SongRecord.octaveReading`).
 	 */
 	octaveReading = $state<OctaveReading | null>(null);
+
+	/**
+	 * Row 48, the singer's tempo for this song, or null where the score decides.
+	 * Saved through the same path as `transposition`: the choice, never the
+	 * estimate (`SongRecord.tempo`).
+	 */
+	tempo = $state<TempoChoice | null>(null);
 
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
@@ -265,6 +273,7 @@ export class SongDocument {
 			seatedText: this.seatedText,
 			transposition: this.transposition,
 			octaveReading: this.octaveReading,
+			tempo: this.tempo,
 		};
 	}
 
@@ -315,6 +324,7 @@ export class SongDocument {
 		this.seatedText = fields.seatedText;
 		this.transposition = fields.transposition;
 		this.octaveReading = fields.octaveReading;
+		this.tempo = fields.tempo;
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {

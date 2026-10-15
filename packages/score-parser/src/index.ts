@@ -191,6 +191,9 @@ export {
 export {
   resolveTempo,
   tempoCaveats,
+  estimateBeat,
+  dominantTimeSignature,
+  ESTIMATE_BAND,
   feltBeat,
   feltBeatInWholes,
   timeSignatureAt,

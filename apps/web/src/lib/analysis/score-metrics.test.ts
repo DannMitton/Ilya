@@ -69,10 +69,11 @@ describe('scoreMetrics: what it sums', () => {
 		expect(typeof phonation.total.denominator).toBe('number');
 		expect(phonation.total.denominator).not.toBe(0);
 		expect(tessitura).toBeDefined();
-		// demoScore states no tempo of any kind. See the abstention block below.
-		expect(tempo).toBeUndefined();
-		expect(seconds).toBeUndefined();
-		expect(foldCycles).toBeUndefined();
+		// demoScore states no tempo of any kind, so since row 48 the seam ESTIMATES one
+		// (a labelled band) where it used to abstain. See the estimate block below.
+		expect(tempo?.provenance).toBe('estimated');
+		expect(seconds?.secondsRange).toBeDefined();
+		expect(foldCycles?.cyclesRange).toBeDefined();
 	});
 
 	it('sums 22 quavers, and the per-pitch distribution matches the printed note values', () => {
@@ -158,7 +159,7 @@ describe('scoreMetrics: Pacheco tessitura', () => {
 });
 
 describe('scoreMetrics: abstention, and what it costs to break it', () => {
-	it('NEGATIVE CONTROL: no stated tempo means no seconds and no cycle count', () => {
+	it('NEGATIVE CONTROL: no stated tempo means an ESTIMATED band, never a point (row 48; it used to abstain)', () => {
 		// Fired on real input from the population this seam reads: demoScore
 		// carries an empty `tempoMarkings` and no `tempoWords` at all.
 		const score = demoScore();
@@ -166,9 +167,9 @@ describe('scoreMetrics: abstention, and what it costs to break it', () => {
 		expect(score.tempoWords).toBeUndefined();
 
 		const m = scoreMetrics(score);
-		expect(m.tempo).toBeUndefined();
-		expect(m.seconds).toBeUndefined();
-		expect(m.foldCycles).toBeUndefined();
+		expect(m.tempo?.provenance).toBe('estimated');
+		expect(m.seconds?.secondsRange).toBeDefined();
+		expect(m.foldCycles?.cyclesRange).toBeDefined();
 		// And the tempo-free half is still fully present. Abstaining on one
 		// quantity must not suppress another.
 		expect(asNumber(m.phonation.total)).toBeCloseTo(EXPECTED_TOTAL_QUAVERS, 10);

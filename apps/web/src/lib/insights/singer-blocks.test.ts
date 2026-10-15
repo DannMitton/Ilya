@@ -232,3 +232,23 @@ describe('the quiet octave line (QUEUE row 47)', () => {
 		expect(out[at + 1].block.kind).toBe('prose');
 	});
 });
+
+describe('the tempo link (QUEUE row 48)', () => {
+	it('rides on the phonation sentence, as its "Change the tempo" tap', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: 'A sentence.', tempoLink: t('tempo.change', 'en') }), String);
+		const at = out.findIndex((b) => b.block.kind === 'prose' && (b.block as { text: string }).text === 'A sentence.');
+		expect(at).toBeGreaterThan(-1);
+		expect(out[at].block).toEqual({ kind: 'prose', text: 'A sentence.', link: 'Change the tempo' });
+	});
+
+	it('is absent without the label, and never on the sources line', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: 'A sentence.', tempoLink: null }), String);
+		expect(out.filter((b) => b.block.kind === 'prose' && 'link' in b.block)).toEqual([]);
+	});
+
+	it('leaves the octave line directly after the sentence, as row 47 built it', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: 'A sentence.', tempoLink: 'x', octave: { shift: 1, applied: true } }), String);
+		const at = out.findIndex((b) => b.block.kind === 'octave');
+		expect(out[at - 1].block).toMatchObject({ kind: 'prose', text: 'A sentence.', link: 'x' });
+	});
+});

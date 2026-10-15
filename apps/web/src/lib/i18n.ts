@@ -1689,7 +1689,25 @@ const strings: Record<string, Record<Language, string>> = {
 	// (`docs/sessions/insights-phonation-time_r1_2026-09-22.md`).
 	'insights.phonation.heading':  { en: 'Phonation time',               fr: 'Temps de phonation' },
 	'insights.phonation.headline': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}.' },
+	// ── Row 48: every song gets a tempo, estimated when none is printed, and the singer can change it ──
+	//    RATIFIED by Dann 2026-10-08 01:40, except the two `estimated*` sentences, whose replacements he
+	//    RATIFIED 2026-10-15 09:09 (the old ones began "This score states no tempo", which Ilya cannot
+	//    know of a scan: it reads no words from one). `{beat}` is a metronome note drawn in the notation face.
+	'insights.phonation.estimatedMetre': { en: 'Ilya estimates {beat} = {low} to {high} from this score\'s {metre} metre, so you phonate for about {t1} to {t2}.', fr: 'Ilya estime le tempo \u00e0 {beat} = {low} \u00e0 {high} d\u2019apr\u00e8s la mesure \u00e0 {metre} de cette partition; votre phonation occupe donc environ {t1} \u00e0 {t2}.' },
+	'insights.phonation.estimatedWalking': { en: 'Ilya estimates {beat} = {low} to {high}, a walking pace, so you phonate for about {t1} to {t2}.', fr: 'Ilya estime le tempo \u00e0 {beat} = {low} \u00e0 {high}, l\u2019allure de la marche; votre phonation occupe donc environ {t1} \u00e0 {t2}.' },
+	'insights.phonation.headlineYours': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}, your tempo.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pi\u00e8ce, \u00e0 {tempo}, votre tempo.' },
+	'tempo.change': { en: 'Change the tempo', fr: 'Modifier le tempo' },
+	'tempo.hint': { en: 'Your tempo. Every figure follows.', fr: 'Votre tempo. Tous les r\u00e9sultats en tiennent compte.' },
+	'tempo.useEstimate': { en: 'Use Ilya\'s estimate', fr: 'Utiliser l\u2019estimation d\u2019Ilya' },
+	'intake.tempo.label': { en: 'TEMPO', fr: 'TEMPO' },
+	'intake.tempo.estimated': { en: 'estimated', fr: 'estim\u00e9' },
+	'intake.tempo.printed': { en: 'printed', fr: 'imprim\u00e9' },
+	'intake.tempo.yours': { en: 'your tempo', fr: 'votre tempo' },
+	'legend.tempo-estimated': { en: 'tempo estimated by Ilya', fr: 'tempo estim\u00e9 par Ilya' },
 	'insights.phonation.headlineInferred': { en: 'Your phonation takes about {low} to {high} of this piece, at the speed {tempoWord} usually means.', fr: 'Votre phonation occupe environ {low} à {high} de la pièce, au tempo qu’indique habituellement {tempoWord}.' },
+	// DRAWN BY NOTHING since row 48 (2026-10-15). `resolveTempo` no longer abstains, so a score always
+	// has a tempo and this sentence cannot be reached. Dann, 2026-10-14 03:10: "We must not declare
+	// indefensible statements with confidence." Kept as the record, not deleted.
 	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo; le temps de phonation ne peut donc pas être donné en secondes.' },
 	// RATIFIED by Dann 2026-09-23 03:14, with the vowel chart's fixed order
 	// (`docs/memory/OPEN.md`, N.123, "THE VOWEL CHART'S ORDER").

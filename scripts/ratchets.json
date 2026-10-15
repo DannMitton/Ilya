@@ -5,7 +5,7 @@
     "apps/web/src/lib/i18n.ts": "The bilingual string table. It is data, and it grows with every ruled string."
   },
   "ceilings": {
-    "apps/web/src/routes/+page.svelte": 5644,
+    "apps/web/src/routes/+page.svelte": 5652,
     "apps/web/src/lib/components/Reading/LearnContent.svelte": 4099,
     "packages/score-parser/src/staff-renderer.ts": 3489,
     "apps/web/src/lib/score/Loupe.svelte": 3013,
@@ -13,7 +13,7 @@
     "packages/phonology/src/engine.ts": 2278,
     "apps/web/src/lib/voice/CalibrationWizard.svelte": 2124,
     "apps/web/src/lib/components/Drawer/Drawer.svelte": 1990,
-    "apps/web/src/lib/markup/MarkupPane.svelte": 1363,
+    "apps/web/src/lib/markup/MarkupPane.svelte": 1371,
     "apps/web/src/lib/score/pairings.ts": 1423,
     "apps/web/src/lib/insights/InsightsPane.svelte": 1351,
     "apps/web/src/lib/score/ScoreUploader.svelte": 1358,

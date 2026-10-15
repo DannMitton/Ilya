@@ -56,6 +56,8 @@
 	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS, formatRunningHeader } from '$lib/page-config';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import type { LineData, PageSize } from '$lib/types';
+	import { withSingerTempo } from '$lib/tempo/singer-tempo';
+	import type { TempoChoice } from '$lib/library/types';
 	import { t, type Language } from '$lib/i18n';
 	import { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
@@ -264,6 +266,8 @@
 		keyRuler?: TranspositionRulerState;
 		/** Row 47: the singer has chosen to read this song as written (`SongRecord.octaveReading`). */
 		octaveAsWritten?: boolean;
+		/** Row 48: the singer's tempo for this song (`SongRecord.tempo`). */
+		tempoChoice?: TempoChoice | null;
 		/** Row 47: the octave line's tap, which flips that choice. */
 		ontoggleoctave?: () => void;
 	}
@@ -294,6 +298,7 @@
 		isMobile = false,
 		keyRuler = undefined,
 		octaveAsWritten = false,
+		tempoChoice = null,
 		ontoggleoctave = undefined,
 	}: Props = $props();
 
@@ -505,7 +510,8 @@
 	// (the smaller window, since the measured TitleHeader outweighs the
 	// running header), so every page's systems fit every page type; pages
 	// after the first simply carry a little extra room at the bottom.
-	const parsed = $derived(ingested?.result.score ?? null);
+	// Row 48: the singer's tempo rides on the score (`ParsedScore.singerTempo`), so every reading below follows it.
+	const parsed = $derived(withSingerTempo(ingested?.result.score ?? null, tempoChoice));
 	const contentWidth = $derived(dims.width - 2 * MARGINS.horizontal);
 	const subsequentTop = MARGINS.vertical + HEADER_HEIGHTS.subsequent + GAP;
 
@@ -767,9 +773,11 @@
 	// The resolver is passed only when there is one. Its absence makes the
 	// per-vowel totals ABSENT rather than empty, which is the seam's own
 	// discipline: no vowel was ever asked for, so no claim is made about any.
-	// No tempo override is passed, because the singer has no way to set one yet
-	// (A9 is unbuilt). The seam then abstains wherever the score states no
-	// tempo, and never invents a bpm.
+	// THE SINGER'S TEMPO RIDES ON THE SCORE (row 48, 2026-10-15): `parsed` above
+	// carries `singerTempo`, every copy derived from it spreads it, and the seam
+	// reads it as the override that tops every other tempo, so no option is passed
+	// here. Where the score states no tempo and the singer set none, the seam
+	// returns Ilya's labelled estimate (a band) instead of abstaining.
 	//
 	// NOT RENDERED HERE, and deliberately so. The same treatment as
 	// `analysisNotices` above: the data path lands, the pixels wait on Dann's

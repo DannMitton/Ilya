@@ -61,8 +61,12 @@ const mark = (bpm: number) => [
 ];
 
 describe('the precedence, and each layer shown beating the one below it', () => {
-	it('4. abstains when the score states nothing', () => {
-		expect(resolveTempo(scoreOf({}))).toBeUndefined();
+	it('4. estimates from the metre when the score states nothing (row 48, replacing "abstain")', () => {
+		const r = resolveTempo(scoreOf({}))!;
+		expect(r.provenance).toBe('estimated');
+		expect(r.range).toEqual([60, 72]);
+		expect(r.bpm).toBe(66);
+		expect(r.rangeExact).toEqual([{ numerator: 60, denominator: 1 }, { numerator: 72, denominator: 1 }]);
 	});
 
 	it('3. a printed WORD resolves to a Quantz tier and is labelled inferred, with its band', () => {
@@ -96,8 +100,9 @@ describe('the precedence, and each layer shown beating the one below it', () => 
 	});
 
 	it('NEGATIVE CONTROL: a word it cannot resolve does NOT produce a tempo', () => {
-		expect(resolveTempo(scoreOf({ words: [{ measureIndex: 0, text: 'con meditazione' }] }))).toBeUndefined();
-		expect(resolveTempo(scoreOf({ words: [{ measureIndex: 0, text: 'zzzz' }] }))).toBeUndefined();
+		// Row 48: they fall through to rung 4, the labelled estimate, never to 'inferred'.
+		expect(resolveTempo(scoreOf({ words: [{ measureIndex: 0, text: 'con meditazione' }] }))!.provenance).toBe('estimated');
+		expect(resolveTempo(scoreOf({ words: [{ measureIndex: 0, text: 'zzzz' }] }))!.provenance).toBe('estimated');
 	});
 });
 
@@ -119,7 +124,9 @@ describe('gradual cues are counted, never fed to the tier resolver', () => {
 		// "a tempo" restores something; it states nothing. Resolving it to a tier
 		// would be a category error, and the design puts it explicitly out of scope.
 		const s = scoreOf({ words: [{ measureIndex: 3, text: 'poco rall.' }, { measureIndex: 5, text: 'a tempo' }] });
-		expect(resolveTempo(s)).toBeUndefined();
+		const r = resolveTempo(s)!;
+		expect(r.provenance).toBe('estimated'); // row 48: nothing steady was printed, so rung 4
+		expect(r.gradualCues.map((c) => c.text)).toEqual(['poco rall.', 'a tempo']);
 	});
 
 	it('is skipped when scanning for a steady term, so a later real term still wins', () => {
@@ -240,10 +247,14 @@ describe('the band travels into seconds and cycles', () => {
 		expect(hi / lo).toBeCloseTo(112 / 66, 6);
 	});
 
-	it('abstains all the way down when the tempo is unresolvable', () => {
+	it('prices an estimated band all the way down when the tempo is unresolvable (row 48)', () => {
 		const s = scoreOf({ line: [note('whole')] });
-		expect(secondsFor(oneWhole, s)).toBeUndefined();
-		expect(totalFoldCycles(aggregatePhonation(s), s)).toBeUndefined();
+		const r = secondsFor(oneWhole, s)!;
+		expect(r.tempo.provenance).toBe('estimated');
+		// A whole note is four felt quarters; 72 to 60 a minute is 3.33 to 4 seconds, faster end first.
+		expect(r.secondsRange![0]).toBeCloseTo(60 * 4 / 72, 9);
+		expect(r.secondsRange![1]).toBeCloseTo(4, 9);
+		expect(totalFoldCycles(aggregatePhonation(s), s)).toBeDefined();
 	});
 
 	it('refuses a malformed score rather than guessing', () => {
@@ -458,7 +469,7 @@ describe('the five-language lexicon', () => {
 
 	it('NEGATIVE CONTROL: an EXPRESSION mark is not a tempo in any language', () => {
 		for (const t of ['cantabile, con meditazione', 'con dolore', 'senza espressione', 'sordo - misterioso']) {
-			expect(resolveTempo(w(t)), t).toBeUndefined();
+			expect(resolveTempo(w(t))!.provenance, t).toBe('estimated'); // row 48: rung 4, not a tempo word
 		}
 	});
 

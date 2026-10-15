@@ -73,6 +73,9 @@
 	} from '$lib/insights/insights';
 	import { cycleDoseSplit } from '$lib/insights/singing-measures';
 	import { firstOutsideRange, longestAboveSecondo, searchBetterKey, shareAfter, vowelTurns } from '$lib/insights/singer-page';
+	import { phonationHeadline } from '$lib/insights/phonation-headline';
+	import { withSingerTempo } from '$lib/tempo/singer-tempo';
+	import type { TempoChoice } from '$lib/library/types';
 	import { notesBlock, singerBlocks, type KeyForward, type PlacedBlock } from '$lib/insights/singer-blocks';
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
@@ -111,6 +114,10 @@
 		keyRuler?: SungKey;
 		/** Row 47: the singer has chosen to read this song as written (`SongRecord.octaveReading`). */
 		octaveAsWritten?: boolean;
+		/** Row 48: the singer's tempo for this song (`SongRecord.tempo`); the score reads it as the override that tops every other tempo. */
+		tempoChoice?: TempoChoice | null;
+		/** Row 48: the sentence's "Change the tempo" tap, which opens the tempo control. */
+		ontempo?: () => void;
 		/** Row 47: the octave line's tap, which flips that choice. */
 		ontoggleoctave?: () => void;
 	}
@@ -135,6 +142,8 @@
 		onaddrange = undefined,
 		keyRuler = undefined,
 		octaveAsWritten = false,
+		tempoChoice = null,
+		ontempo = undefined,
 		ontoggleoctave = undefined,
 	}: Props = $props();
 
@@ -146,7 +155,8 @@
 
 	// ── The chain, as `MarkupPane` runs it ───────────────────────
 	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, intake, voiceType?.voiceType));
-	const parsed = $derived(ingested?.result.score ?? null);
+	// Row 48: the singer's tempo rides on the score, so every readout below that prices time follows it.
+	const parsed = $derived(withSingerTempo(ingested?.result.score ?? null, tempoChoice));
 	/* ROW 47. What the typed range asks for, and what is applied: the singer's
 	   "as written" turns the shift off for this song, and every readout below
 	   follows `octaveShift` with no second switch. */
@@ -285,22 +295,8 @@
 	// ── Words for the model ────────────────────────────────────────────
 	const P = (p: Pitch) => pitchName(p, language);
 
-	/* Row 4 replaces the section's numbers when there is no tempo. */
-	function headlineOf(ph: PhonationSection): string {
-		if (ph.timing === 'none' || !ph.phonation || !ph.tempo) return T('insights.phonation.noTempo');
-		if (ph.phonation.kind === 'range') {
-			return fill(T('insights.phonation.headlineInferred'), {
-				low: formatSeconds(ph.phonation.low),
-				high: formatSeconds(ph.phonation.high),
-				tempoWord: ph.tempo.printedText ?? ph.tempo.term ?? '',
-			});
-		}
-		return fill(T('insights.phonation.headline'), {
-			phonation: formatSeconds(ph.phonation.seconds),
-			length: formatSeconds(ph.length ?? ph.phonation.seconds),
-			tempo: formatTempo(ph.tempo, language),
-		});
-	}
+	/* The phonation sentence, by where the tempo came from (`phonation-headline.ts`, row 48). */
+	const headlineOf = (ph: PhonationSection): string => phonationHeadline(ph, { language, T, fill, formatSeconds, formatTempo });
 
 	// ── The range offer (N.164) ────────────────────────────────────────
 	/* Read once per mount; the decline holds for every song and every reload. */
@@ -392,6 +388,7 @@
 				tagOf: commentTag,
 				barOf: commentBar,
 				phonationHeadline: model.phonation.nothingSung ? null : headlineOf(model.phonation),
+				tempoLink: ontempo ? T('tempo.change') : null,
 				octave: suggestedShift !== 0 ? { shift: suggestedShift < 0 ? -1 : 1, applied: octaveShift !== 0 } : null,
 				untrustedLine: untrusted
 					? fill(T(untrusted.length === 1 ? 'insights.phonation.untrustedOne' : 'insights.phonation.untrustedMany'), { measures: untrusted.join(', ') })
@@ -558,6 +555,7 @@
 		onaddrange={() => onaddrange?.()}
 		ondecline={declineOffer}
 		onoctave={measuring ? undefined : () => ontoggleoctave?.()}
+		ontempo={measuring ? undefined : () => ontempo?.()}
 		open={measuring || moreOpen}
 		ontoggle={measuring ? undefined : (o) => (moreOpen = o)}
 	/>
