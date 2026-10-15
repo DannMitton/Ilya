@@ -671,6 +671,9 @@ his.**
 Code's single desktop observation, 1024 px, T05 m. 15: head 155.7 px, panel
 23.4 px, body 188.6 px in a 692 px window. Nowhere near the cap.
 
+**RULED 2026-10-14 23:43: THE FLOOR IS 3.96 CSS PX** (the desk's recommendation, the smallest scale Dann approved on 2026-09-14; Dann: *"Yes"*). Below it, the phone's Loupe scrolls sideways instead of shrinking.
+**RULED 2026-10-14 23:43: DIRECTION DECIDES THE GESTURE** (the desk's recommendation; Dann: *"yes"*): a finger that barely moves taps (places a syllable); one moving mostly sideways scrolls, and its lift never places a syllable; one moving mostly downward past the dismiss distance closes the Loupe. Distances are a DESK DEFAULT, set and tested by feel. Both of Dann's owed answers are now given; what remains is a small build of the gesture separation.
+
 **TWO THINGS DANN OWES, AND NEITHER IS THE DESK'S.**
 
 1. **The floor, in CSS pixels.** The only datum anyone has: he looked at all five scales drawn at true size on 2026-09-14 (`drawing-loupe-stave-scales_r1_2026-09-14.html`) and said they all read well, including 3.96 px. **So the floor is at or below 3.96, and on Sunless 01 at 390 px the scroll would never trigger.**

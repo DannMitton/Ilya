@@ -610,3 +610,24 @@ Everything in this folder is SOURCED from that opener unless marked otherwise.*
 
 
 **N.185**, numbered by the desk 2026-10-14 (DESK DEFAULT, accepting Code's console label): a stored scan's seats filed under the old reader's note names find their notes again. SHIPPED `6c69161`, ratified by Dann 02:56. Closed in the session that numbered it.
+
+
+## From `STATE.md`, moved at the close of 2026-10-14 23:50: the close of 2026-10-14 03:35, verbatim
+
+### CLOSE OF 2026-10-14 03:35 (Opus desk). THE NEXT DESK STARTS HERE.
+
+> **Floor: `6c69161`** (2026-10-14 01:24, N.185 / row 93). The previous close's stamp of "2026-10-13 23:35" was written about 23:2x by Dann's clock; that desk's clock ran ahead (Dann 23:33). Uncommitted at this close: `docs/memory/` only.
+>
+> **THE ONE THING is unchanged: the scan reader at 95 on unseen songs, on the singer's path.** Row 93 is DONE: the cause was the song's 170 seats filed under the old reader's note names (`r{bar}-{x}`), which the homr reading (no `<note id>`) never produces; N.185 re-keys them on reopen (`apps/web/src/lib/score/old-reader-seats.ts`, `+page.svelte` `applyArrival`). Dann then re-seated the song on the print's text; 172 of 172 sung notes seated (desk read of his record, 02:31).
+>
+> **Next, in order:** (1) **QUEUE row 96**: the Insights chart runs into the page footer on «Средь шумного бала» p. 3, *"must not be allowed in production"*. **Brief r1 WRITTEN 2026-10-14 about 03:50 (Opus desk, short session after `dbe41af`): `../sessions/brief-code-row96-nothing-over-the-footer_r1_2026-10-14.md`; it carries row 78b's 0.098. Taken since: the Fable review ran and r2 applies its seven amendments (`../sessions/review-fable-brief-row96_r1_2026-10-14.md`, `../sessions/brief-code-row96-nothing-over-the-footer_r2_2026-10-14.md`), and row 96 is RUNNING in the cloud lane on `cloud-lane-3` (QUEUE row 96).** The desk's lead, not measured: the screen-only "N more observations" block is left out of `paginate` (`InsightsPane.svelte:446`) and added to the page after (`:466-470`). (2) Row 78b's stroke constant 0.098 (`OPEN.md`, ruled 03:11), with row 96. (3) **N.135, ruled a priority by Dann 02:44** (*"We need to buiold that"*): Ilya reads no words from a scan today; rows 81 (measured), 88 (teacher, 385 of 493 syllables), 82 (READY) are its parts; the text it builds to is `OPEN.md`, "THE TEXT UNDER THE NOTES: A MIXED DEFAULT". (4) Row 95 (the scan banner's false "no words", EN and FR drafts put to Dann, not ratified). (5) Rows 47, 48 (tempo; row 48 now carries the body's-step principle, `OPEN.md`, and Dann's walk finding that "states no tempo" is false on a *Moderato* print). (6) Insights curation for tomorrow (INBOX 03:10: six pages too long, repeats, «One more observation», Further reading by source), with challenge list r2 (written this session, `Insights Research/_synthesis/draft-challenge-list_r2_2026-10-14.md`; open item: how many lead).
+>
+> **Ruled this session** (all in `OPEN.md`): the mixed default for the text under the notes (02:54); the limit of Ilya's changes, tethered to Grayson ch. 8 (02:44, 02:47); the underlay follows the score (N.135 addendum, 01:44, restating July's rulings); open syllables stays a personal option, off by default (INBOX 01:53); the body's-step tempo principle (03:20); placeholder stroke 0.098 sp (03:11).
+>
+> **Walk findings for the reader** (QUEUE archive, row 93): bar 36 read D♯ where the print has D; bar 40's G♮ read G♯; bars 62 and 70 empty in the reading.
+>
+> **This session's mistakes, each owned when made:** stated a cause for bar 18 and a lag "to the end" as fact before establishing either; recorded the score-over-poem rule as new without searching the July rulings; modernized «печальныя» in a text against Dann's default; sent an amendment to Code without Fable's review (said so at the time, DESK DEFAULT under §1 item 19).
+>
+> **Filed:** Quantz 1752, Hauptstück XVII Abschnitte 6-7, in `~/Documents/Voice Pedagogy Library/P-R/` (md5 fcce9c318390ac7f3c852357d9e4fdec); the IMSLP download remains in `~/Downloads/`. Not filed: London, *Hearing in Time*. The library list `Insights Research/_synthesis/library-files_2026-10-12.txt` predates it.
+>
+> The close of 2026-10-13 23:35 is in `STATE-archive.md`, verbatim.

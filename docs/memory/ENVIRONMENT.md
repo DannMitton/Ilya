@@ -20,6 +20,11 @@ next session the same hour it cost the last one.
 | you are about to, or you are seeing | search for |
 |---|---|
 | Code reports a preview serving an old build on port 4173 | `A STALE PREVIEW HOLDS PORT 4173` |
+| Vercel's storage fills, or a cloud-lane push builds a preview | `EVERY BRANCH BUILDS ON VERCEL, 480 MB EACH` |
+| you need the size of a build, or what a singer downloads first | `MEASURING THE SITE'S WEIGHT` |
+| a PDF will not read in a test browser (getOrInsertComputed) | `THE PDF LIBRARY NEEDS A NEW BROWSER FUNCTION` |
+| starting a cloud session by typing into claude.ai/code | `STARTING A CLOUD SESSION, 2026-10-14` |
+| you need a cloud branch's report and gh says access is not enabled | `READING A CLOUD BRANCH WITHOUT GH` |
 | writing a brief for Code | `A BRIEF THAT CARRIES A CAUSE COSTS A PASS` |
 | you drew something and sent it to Dann | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
 | looking for a mockup or ruling from an earlier session | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
@@ -4789,3 +4794,28 @@ Scans seated before homr became the first reader (2026-10-04) carry seats keyed 
 ## IMSLP THROUGH CLAUDE IN CHROME. 2026-10-14
 
 A "Download this file" link inside IMSLP's collapsed "N more" list does not fire from a click. Navigate to `https://imslp.org/wiki/Special:ImagefromIndex/<file number>` instead; with Dann's subscription it opens the PDF in Chrome's viewer, whose download button saves to `~/Downloads` with no dialog. Downloads need Dann's yes with file name, source, and size first. IMSLP's 1752 Quantz first edition exists only as twelve part files.
+
+
+## WHAT THE DESK LEARNED ON 2026-10-14 (the Opus thread of 13:05 to 23:50)
+
+### EVERY BRANCH BUILDS ON VERCEL, 480 MB EACH
+- Until `vercel.json` carries the `git.deploymentEnabled` allow-list (QUEUE row 98, running on `cloud-lane-7` at this close), **every push to any branch, cloud lanes included, builds a full Vercel preview.** On 2026-10-14 the project held 9 builds (about 4.3 GB): production (`main`, 2026-09-20), Shane `50a5f85`, Shane `db7fc43`, and six cloud-lane builds. List them with the Vercel connector: `list_deployments`, `slug` `dannmittons-projects`, `projectId` `ilya`.
+- **`list_deployment_files` answers 404 for git-built deployments**; it cannot give a build's size. Build the commit yourself instead (below).
+- The desk may not delete deployments (permanent after Vercel's 30-day recovery). Dann deletes them in the dashboard; give him the list. Keep production and the newest Shane.
+
+### MEASURING THE SITE'S WEIGHT
+- **One build of `50a5f85` is 480 MB:** `build/omr` 245 MB (five homr models, fp32 and fp16 sets, one used per singer by `src/lib/omr/path-choice.ts:75`, plus the onnxruntime engine), `build/data` 166 MB (the dictionary, four JSON files), `build/_app` 60 MB.
+- **A first visit downloads 12.1 MB on the Shane alias, 9.9 MB on production;** about 10.7 MB of it is the dictionary, fetched eagerly. Method: Playwright 1.58.2 in the desk's workspace, a fresh context, CDP `Network.loadingFinished` `encodedDataLength` summed after `networkidle` plus 8 s.
+- **Building in the desk's workspace works:** `git clone --depth 1 --branch Shane https://github.com/DannMitton/ilya` (public; the proxy serves it), `npm i -g pnpm@9.15.9` (corepack's pnpm 12 download fails), `pnpm install --frozen-lockfile`, `pnpm --filter @ilya/web build`. About 10 minutes.
+- **The scan reader can be driven headless:** serve `apps/web/build` with `python3 -m http.server 5199`, give a 300 dpi PNG of a scan page (`pdftoppm -r 300`) to the second `input[type=file]`. It reads on wasm in about 97 s (Fable's run). The engine loads only from `/omr/ort/`.
+
+### THE PDF LIBRARY NEEDS A NEW BROWSER FUNCTION
+- Headless Chromium 1194 fails a PDF with `[ScoreUploader] the PDF could not be rasterized: TypeError: …getOrInsertComputed is not a function`. A singer on a browser without that function may not read PDFs at all. Which browsers lack it is NOT ESTABLISHED; owed to the trimming audit. Pictures read fine.
+
+### STARTING A CLOUD SESSION, 2026-10-14
+- The model picker under the task box ignores a coordinate click on a menu item; use `find` for "Sonnet 5.5 option" and click its ref. Read the button's label back before sending.
+- Long prompts (27,000 characters) type in one `type` action. Briefs go inside the prompt flattened to one line (newlines become " / "), never committed by the session.
+- The Send button: `find` "Send button", click the ref. Return in the box also sends, but an open environment menu can swallow it.
+
+### READING A CLOUD BRANCH WITHOUT GH
+- `gh api` answers "GitHub access to this repository is not enabled for this session". The repository is public: `git ls-remote https://github.com/DannMitton/ilya refs/heads/<branch>` and `GIT_LFS_SKIP_SMUDGE=1 git clone --depth 4 --branch <branch> …` work through the proxy. `add_repo` with read access confirms it and attaches nothing.

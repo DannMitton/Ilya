@@ -28,13 +28,13 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 - [x] **Row 84**: N.86's dead code. SHIPPED `1ec2ef2` (desk check 2026-10-14).
 - [x] **Row 51, Corrections slice 2**: what Ilya can offer for a bar. SHIPPED `1ec2ef2`.
 - [ ] **Corrections slice 3**: the singer's answer kept per bar. Brief not written; pure, so cloud.
-- [ ] **Row 90**: tonight's ruled strings (the Insights frame line, the two Guide conventions lines). Brief not written.
+- [x] **Row 90** SHIPPED `0b0c52a` 2026-10-14 (with rows 94, 95, 97; `../sessions/report-code-rows90-94_r1_2026-10-14.md`). Was: tonight's ruled strings (the Insights frame line, the two Guide conventions lines). Brief not written.
 - [ ] **Row 91**: reflexive -ся read hard, and -ться's [ʌ] reconstituting to [ɑ], after Grayson (ruled 20:33). Brief not written.
 
 **Dann**
-- [ ] **The next ship**: rows 84 and 89 went out in `1ec2ef2`; this ship carries `6c69161` and the cloud rows that land (row 96). The desk prepares it.
-- [ ] **The walk of rows 78a, 78b, 78c** on «Средь шумного бала». Begun 2026-10-14 03:00: 78a's Insights lines and running head shown to Dann by picture (his ruling on them not given); 78b ruled by picture, stroke to 0.098 sp (one constant owed to Code); placeholder items cannot show on this song with his voice; 78c not yet looked at.
-- [ ] **Row 96, RUNNING in the cloud lane on `cloud-lane-3` (QUEUE row 96); its report comes FIRST at the next session**: the Insights chart running into the page footer (page 3, «Средь шумного бала»). Then row 95 (the scan banner), N.135 (ruled a priority 2026-10-14 02:44).
+- [x] **The next ship** went out as `50a5f85` (row 96) and `0b0c52a` (rows 95, 97, 90, 94) on 2026-10-14. Was: rows 84 and 89 went out in `1ec2ef2`; this ship carries `6c69161` and the cloud rows that land (row 96). The desk prepares it.
+- [x] **The walk of rows 78a, 78b, 78c**: ACCEPTED without a walk, Dann 2026-10-14 22:26 (backlog cleared, `QUEUE.md`). Was: the walk on «Средь шумного бала». Begun 2026-10-14 03:00: 78a's Insights lines and running head shown to Dann by picture (his ruling on them not given); 78b ruled by picture, stroke to 0.098 sp (one constant owed to Code); placeholder items cannot show on this song with his voice; 78c not yet looked at.
+- [x] **Row 96** SHIPPED `50a5f85` 2026-10-14 (`../sessions/report-code-row96-nothing-over-the-footer_r1_2026-10-14.md`). Was: RUNNING in the cloud lane on `cloud-lane-3` (QUEUE row 96); its report comes FIRST at the next session**: the Insights chart running into the page footer (page 3, «Средь шумного бала»). Then row 95 (the scan banner), N.135 (ruled a priority 2026-10-14 02:44).
 - [ ] **The Shane switch at release** (`apps/web/src/lib/wall.ts:6-7`): what it does on 2026-10-30. Dann's ruling, owed since r1 of this file.
 
 ## Week of Monday 2026-10-19 to Sunday 2026-10-25
