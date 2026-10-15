@@ -465,7 +465,7 @@ Do not rename a vowel.
 
 **The Transposition ruler. Ruled by Dann 2026-09-28 21:14:** *"I prefer Transposition ruler to key ruler because it is named for its function. Please adopt this everywhere."* N.94's control. Older records and the drawings `drawing-key-ruler_r1` to `r4` keep "key ruler" as written.
 
-**"Insights forecasts, it does not declare."** Ruled by Dann 2026-09-27 in Code's N.174 D.3 thread, replacing "Fit forecasts, it does not declare" where the code quotes the principle. The Guide's shown heading still says Fit and is N.154's.
+**SUPERSEDED 2026-10-14 21:57: the Guide heading becomes "What Insights forecasts" / « Ce que prévoient les Aperçus »** (Dann, option 1 of the desk's two, after he struck the same slogan from paragraph A as posturing with no consequence; QUEUE row 97). The older ruling, kept as history: **"Insights forecasts, it does not declare."** Ruled by Dann 2026-09-27 in Code's N.174 D.3 thread, replacing "Fit forecasts, it does not declare" where the code quotes the principle. The Guide's shown heading still says Fit and is N.154's.
 
 ---
 

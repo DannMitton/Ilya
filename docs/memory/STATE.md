@@ -39,6 +39,8 @@ git -C ~/Desktop/ilya-rewrite --no-optional-locks --no-pager log -1 --format="%H
 
 ## THE TRACKER
 
+> **2026-10-14 22:26, Dann:** every `[~]` row below (shipped, not walked) is ACCEPTED without a walk as a one-time clearing of the backlog; walks resume for new work a singer would see that Dann has not seen (`QUEUE.md`, the note under "Shipped, not walked"). DROPPED the same minute: N.152 (playback) and N.175 (video walkthroughs), and QUEUE rows 6, 26, 31, 32. The Chinese translation question (INBOX 2026-09-30) was abandoned at 22:20.
+
 Marks: `[ ]` open · `[D]` Dann's to rule · `[~]` shipped, not walked, or parked. Specs live in `OPEN.md` (from 2026-09-13); build order in `SEQUENCE.md` (from 2026-09-15; six dependencies fix the order and everything else floats); the week plan in `SCHEDULE.md`; debts and unsettled questions in `OWED.md` (from 2026-09-20). Every row below was checked against `git log` on 2026-10-11 19:40, and rechecked by the audit of 2026-10-14 (`../sessions/audit-memory-staleness_r1_2026-10-14.md`), unless its date says otherwise.
 
 ### Numbered 2026-10-11
