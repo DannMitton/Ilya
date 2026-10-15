@@ -169,13 +169,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		tapBand,
 	} from '$lib/score/loupe';
 	import {
-		applyTuplet,
 		arrivalPitch,
 		beatOfEntry,
 		canTie,
 		currentTie,
 		currentType,
-		DEFAULT_TUPLET,
 		enterEntry,
 		isEnteredId,
 		measureFill,
@@ -184,8 +182,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		previousEntry,
 		toggleRest,
 		toggleTie,
-		tupletRun,
-		type TupletDefinition,
 	} from '$lib/score/entry';
 	import type { NoteBase, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
 	import {
@@ -204,12 +200,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		stepAllowed,
 		stepPitch,
 		withCorrection,
-		type CorrectionMap
 	} from '$lib/score/correction';
 	import { stackLabel, UndoHistory } from '$lib/score/undo-history.svelte';
 	import { CorrectionCursor } from '$lib/score/correction-cursor.svelte';
 	import { keyOwnedElsewhere, LoupePanel } from '$lib/score/loupe-panel.svelte';
 	import { createPressAndHold } from '$lib/score/press-and-hold';
+	import { TupletRow } from '$lib/score/tuplet-row.svelte';
 	import { pitchLabel } from '$lib/voice/note-picker';
 	import { noLyricsNoticeKey, type IngestedScore, type NoLyricsNoticeKey } from '$lib/score/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
@@ -1127,45 +1123,17 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	const { onhold, stopHold } = createPressAndHold();
 
 	/* ── THE NOLET ROW ───────────────────────────────────────────────────
-	   The DURATION station swapped in place for one definition row, and the
-	   definition applies LIVE with no confirm, which is ruling 5 holding here
-	   as it does on every other verb.
-
-	   ONE UNDO REVERSES THE WHOLE OPERATION, and that is what `tupletBase`
-	   exists for. Every nudge of a triangle re-applies the definition from the
-	   map as it stood BEFORE the row was first applied, so ten nudges leave one
-	   change on the stack rather than ten, and the pill reverses the tuplet
-	   rather than the last nudge of it. */
-	let tupletOpen = $state(false);
-	/** The last definition, kept as the session default (Finale's own rule). */
-	let tupletDef = $state<TupletDefinition>({ ...DEFAULT_TUPLET });
-	let tupletBase: CorrectionMap | null = null;
-
-	const tupletFits = $derived(
-		!inGap && !!selectedEventId && tupletRun(correctedLine, selectedEventId, tupletDef.actualNotes).length > 0,
-	);
-
-	function openTuplet(): void {
-		tupletOpen = true;
-		tupletBase = null;
-	}
-
-	function closeTuplet(): void {
-		tupletOpen = false;
-		tupletBase = null;
-	}
-
-	function applyTupletDefinition(next: TupletDefinition): void {
-		tupletDef = next;
-		const id = selectedEventId;
-		if (!id) return;
-		if (tupletRun(correctedLine, id, next.actualNotes).length === 0) return;
-		if (tupletBase === null) {
-			tupletBase = doc.corrections;
-			pushUndo({ kind: 'text', key: 'loupe.undo.tuplet' });
-		}
-		doc.corrections = applyTuplet(tupletBase, correctedLine, id, next);
-	}
+	   The definition row, its one-undo rule, and the fit test live in
+	   `$lib/score/tuplet-row.svelte.ts` (audit phase 4, slice 4). The page
+	   hands in what it reads and the one function that writes the corrections. */
+	const tuplet = new TupletRow({
+		corrections: () => doc.corrections,
+		setCorrections: (next) => (doc.corrections = next),
+		line: () => correctedLine,
+		selectedEventId: () => selectedEventId,
+		inGap: () => inGap,
+		pushUndo,
+	});
 
 	/* THE KEYBOARD, active wherever the insertion bar stands. Finale's own digit
 	   mapping, kept because Dann knows it in his fingers.
@@ -1760,7 +1728,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function dismissLoupe(): void {
 		loupeOpen = false;
 		setCursor(null);
-		closeTuplet();
+		tuplet.close();
 		stopHold();
 	}
 
@@ -4965,12 +4933,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{restoreAvailable}
 			placed={placedSlotCount}
 			total={slotQueue.length}
-			{tupletOpen}
-			{tupletDef}
-			{tupletFits}
-			onopentuplet={openTuplet}
-			onclosetuplet={closeTuplet}
-			ontupletdef={applyTupletDefinition}
+			tupletOpen={tuplet.open}
+			tupletDef={tuplet.def}
+			tupletFits={tuplet.fits}
+			onopentuplet={tuplet.openRow}
+			onclosetuplet={tuplet.close}
+			ontupletdef={tuplet.apply}
 			{onhold}
 		/>
 {/snippet}
