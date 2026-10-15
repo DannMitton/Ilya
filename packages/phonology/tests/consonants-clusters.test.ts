@@ -436,6 +436,119 @@ describe('Task 7b: Consonants and Clusters', () => {
   });
 
   // ─────────────────────────────────────────────────────────────────
+  // REFLEXIVE -ся READ HARD, ITS я [ʌ] (QUEUE row 91)
+  // Grayson pp. 282, 284; Dann, "I defer to Grayson", 2026-10-12.
+  // Expected strings are the engine's own output with only the particle
+  // changed (read from a run before and after the change, 2026-10-15).
+  // ─────────────────────────────────────────────────────────────────
+
+  describe('reflexive -ся: hard с, vowel [ʌ] (row 91)', () => {
+    const entry = (stress: number, pos: string, lemma: string) =>
+      ({ stress, gloss: { en: lemma }, pos, lemma });
+    const ROW91_DICTIONARY: Record<string, any> = {
+      ...TEST_DICTIONARY,
+      'учился': entry(1, 'verb', 'учиться'),
+      'смеялся': entry(1, 'verb', 'смеяться'),
+      'улыбнулся': entry(2, 'verb', 'улыбнуться'),
+      'вся': entry(0, 'adv', 'весь'),
+      'гуся': entry(1, 'noun', 'гусь'),
+      'неся': entry(1, 'verb', 'нести'),
+      'беречься': entry(1, 'verb', 'беречь'),
+      'вася': entry(0, 'name', 'Вася'),
+      'нёсся': entry(0, 'verb', 'нестись'),
+    };
+    const lastTwo = (word: string) => transcribeWord(word).transcriptionLog.slice(-2);
+
+    it('учился → uˈtʃʲiɫsʌ', () => {
+      setStressDictionary(ROW91_DICTIONARY);
+      expect(transcribeWord('учился').ipa).toBe('uˈtʃʲiɫsʌ');
+    });
+
+    it('смеялся → sʲmʲiˈjɑɫsʌ (the с before мʲ stays soft)', () => {
+      setStressDictionary(ROW91_DICTIONARY);
+      expect(transcribeWord('смеялся').ipa).toBe('sʲmʲiˈjɑɫsʌ');
+    });
+
+    it('улыбнулся → uɫɨbˈnuɫsʌ', () => {
+      setStressDictionary(ROW91_DICTIONARY);
+      expect(transcribeWord('улыбнулся').ipa).toBe('uɫɨbˈnuɫsʌ');
+    });
+
+    it('беречься (a -чься infinitive whose lemma is the bare verb) reads hard', () => {
+      setStressDictionary(ROW91_DICTIONARY);
+      expect(transcribeWord('беречься').ipa).toBe('bʲiˈrʲetʃʲsʌ');
+    });
+
+    it('нёсся: the hard с does not carry softness back to the с before it', () => {
+      setStressDictionary(ROW91_DICTIONARY);
+      expect(transcribeWord('нёсся').ipa).toBe('ˈɲossʌ'); // was ˈɲosʲsʲɑ
+    });
+
+    it('a reflexive under the stress reads [ɑ], not [ʌ] (DESK INFERENCE from p. 284 "/sɑ/ or /sʌ/")', () => {
+      // No stress dictionary: the engine stresses the last syllable of an unknown word.
+      setStressDictionary({});
+      expect(transcribeWord('учился').ipa).toBe('utʃʲiɫsɑ');
+    });
+
+    it('logs the я of учился as its own vowel entry, exception reflexive', () => {
+      setStressDictionary(ROW91_DICTIONARY);
+      const [s, ya] = lastTwo('учился');
+      expect(s).toMatchObject({ char: 'с', ipa: 's', features: { type: 'consonant', soft: false, reflexive: true } });
+      expect(ya.char).toBe('я');
+      expect(ya.ipa).toBe('ʌ');
+      expect(ya.features.type).toBe('vowel');
+      expect(ya.features.exception).toBe('reflexive');
+    });
+
+    it('logs the я of купаться as its own vowel entry, and the cluster as тьс', () => {
+      const log = transcribeWord('купаться').transcriptionLog;
+      const last = log[log.length - 1];
+      expect(last.char).toBe('я');
+      expect(last.ipa).toBe('ʌ');
+      expect(last.features.type).toBe('vowel');
+      expect(last.features.exception).toBe('reflexive');
+      const cluster = log.find((e) => e.features.type === 'cluster');
+      expect(cluster?.char).toBe('тьс');
+      expect(cluster?.ipa).toBe('tːs');
+    });
+
+    it('syllabify is unchanged: учился and купаться', () => {
+      expect(GraysonEngine.syllabify('учился')).toEqual(['у', 'чил', 'ся']);
+      expect(GraysonEngine.syllabify('купаться')).toEqual(['ку', 'па', 'ться']);
+    });
+
+    describe('controls that stay soft, with the word in the dictionary (clause 2) and without (clause 3)', () => {
+      it.each([
+        ['вся', 'ˈfsʲɑ', 'ˈfsʲɑ'],
+        ['гуся', 'ɡuˈsʲɑ', 'ɡusʲɑ'],
+        ['неся', 'ɲiˈsʲɑ', 'ɲesʲɑ'],
+        ['вася', 'ˈvɑsʲɑ', 'vɑsʲɑ'],
+      ])('%s', (word, withEntry, withoutEntry) => {
+        setStressDictionary(ROW91_DICTIONARY);
+        expect(transcribeWord(word).ipa).toBe(withEntry);
+        setStressDictionary({});
+        expect(transcribeWord(word).ipa).toBe(withoutEntry);
+      });
+
+      it('беречься without an entry reads hard too (clause 1 does not need the dictionary)', () => {
+        setStressDictionary({});
+        expect(transcribeWord('беречься').ipa).toBe('bʲerʲetʃʲsɑ');
+      });
+    });
+
+    it('моюся with no dictionary entry reads hard by the -юся rule (Fable review amendment 2b)', () => {
+      // OWED.md:150 applied Dann's ruling to моюся; the -юся rule gives it with no supplement entry.
+      setStressDictionary({});
+      expect(transcribeWord('моюся').ipa).toBe('mojusɑ');
+    });
+
+    it('Дуся with no dictionary entry stays soft (an unknown vowel + ся is not treated as reflexive)', () => {
+      setStressDictionary({});
+      expect(transcribeWord('дуся').ipa).toBe('dusʲɑ');
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────
   // GEMINATE SIMPLIFICATION
   // ─────────────────────────────────────────────────────────────────
 

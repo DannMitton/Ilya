@@ -11,6 +11,7 @@
  * @module @ilya/phonology
  */
 import { lexicalSoftIndices } from './lexical-palatalization';
+import { reflexiveParticleAt } from './reflexive';
 
 // ─────────────────────────────────────────────────────────────────────
 // TYPES
@@ -319,9 +320,10 @@ export const GraysonEngine = {
   // Reflexive verb suffix clusters (Grayson p. 237-238)
   // "The clusters -тс-/-дс- and -тьс-/-дьс- resemble /ts/ but have an elongated stop"
   // These are ONLY checked at word end (suffix position)
+  // The consonants only, before a word-final я: the я is its own vowel entry, [ʌ] (reflexive.ts)
   reflexiveSuffixes: {
-    'ться': 'tːsʌ',  // купаться → /kuˈpɑtːsʌ/
-    'тся': 'tːsʌ',   // боится → /bɑˈitːsʌ/
+    'тьс': 'tːs',  // купаться → /kuˈpɑtːsʌ/
+    'тс': 'tːs',   // боится → /bɑˈitːsʌ/
   } as Record<string, string>,
 
   // Word-specific cluster overrides (p. 239-240)
@@ -565,11 +567,11 @@ export const GraysonEngine = {
 
     // Check reflexive suffixes (only at word end)
     for (const [suffix, ipa] of Object.entries(this.reflexiveSuffixes)) {
-      if (cleanWord.endsWith(suffix)) {
-        const startIdx = cleanWord.length - suffix.length;
+      if (cleanWord.endsWith(suffix + 'я')) {
+        const startIdx = cleanWord.length - 1 - suffix.length;
         clusters.push({
           startIndex: startIdx,
-          endIndex: cleanWord.length - 1,
+          endIndex: cleanWord.length - 2,
           cluster: suffix,
           ipa: ipa
         });
@@ -848,7 +850,7 @@ export const GraysonEngine = {
   // Pass 3: Progressive palatalization of р (Grayson p. 209, footnote 277)
   //
   // Returns a Map of character indices that should be palatalized.
-  computeCompletePalatalizationMap(word: string, syllables: string[], stressIndex: number, lexicalSoft: ReadonlySet<number> = new Set()): Map<number, boolean> {
+  computeCompletePalatalizationMap(word: string, syllables: string[], stressIndex: number, lexicalSoft: ReadonlySet<number> = new Set(), lexicalHard: ReadonlySet<number> = new Set()): Map<number, boolean> {
     const chars = [...word.toLowerCase()];
     const softIndices = new Map<number, boolean>([...lexicalSoft].map((i) => [i, true])); // index -> true if palatalized; seeded with lexical ц, ш (Grayson pp. 163, 168, 283-284)
 
@@ -874,7 +876,7 @@ export const GraysonEngine = {
 
     // PASS 1: Mark directly palatalized consonants (before indicator letters or ь)
     for (let i = 0; i < chars.length; i++) {
-      if (this.isConsonant(chars[i])) {
+      if (this.isConsonant(chars[i]) && !lexicalHard.has(i)) { // lexicalHard: the reflexive с (reflexive.ts)
         if (this.isPalatalized(chars[i], chars[i + 1])) {
           softIndices.set(i, true);
         }
@@ -1567,8 +1569,10 @@ export const GraysonEngine = {
     // Compute COMPLETE palatalization map for the whole word (Grayson p. 207-209)
     // This includes regressive AND progressive palatalization (for р after front vowels)
     // Architecture: single source of truth computed BEFORE any transcription
-    const lexicalSoft = new Set(lexicalSoftIndices(cleanWord, this.lookupStress(cleanWord))); // ц, ш softened by lemma (Grayson pp. 163, 168, 283-284)
-    const softIndices = this.computeCompletePalatalizationMap(cleanWord, syllables, effectiveStress, lexicalSoft);
+    const lookup = this.lookupStress(cleanWord);
+    const lexicalSoft = new Set(lexicalSoftIndices(cleanWord, lookup)); // ц, ш softened by lemma (Grayson pp. 163, 168, 283-284)
+    const reflexiveS = reflexiveParticleAt(cleanWord, lookup); // the с of a reflexive -ся reads hard, Grayson pp. 282, 284
+    const softIndices = this.computeCompletePalatalizationMap(cleanWord, syllables, effectiveStress, lexicalSoft, new Set(reflexiveS >= 0 ? [reflexiveS] : []));
 
     // Build a map of character position in full word to track palatalization
     let charIndexInWord = 0;
@@ -1715,6 +1719,12 @@ export const GraysonEngine = {
             vowelFeatures.exception = 'aya-suffix';
           }
 
+          // Reflexive -ся: я is [ʌ], or [ɑ] under the stress (Grayson pp. 282, 284; reconstitutes via the vowel entry)
+          if (vowelIpa === null && reflexiveS >= 0 && globalIndex === cleanWord.length - 1) {
+            vowelIpa = position === 'stressed' ? 'ɑ' : 'ʌ';
+            vowelFeatures.exception = 'reflexive';
+          }
+
           // Check for Old Muscovite velar adjectival suffix -кий/-гий/-хий (Grayson p. 301-303)
           // When config adjectival='stage': и → [ɨ] after hard velar
           const velarAdj = this.checkVelarAdjectival(cleanWord, globalIndex);
@@ -1838,6 +1848,8 @@ export const GraysonEngine = {
           if (isGenitiveG) {
             // Genitive г → /v/
             consonantIpa = 'v';
+          } else if (globalIndex === reflexiveS) {
+            consonantIpa = this.inventory.consonants['с']; // hard, whatever precedes it (reflexive.ts)
           } else if (velarAdj.isVelarAdjectival && velarAdj.charRole === 'velar' && config.adjectival === 'stage') {
             // Force hard velar: output base consonant without palatalization
             consonantIpa = this.inventory.consonants[char] || char;
@@ -1868,7 +1880,8 @@ export const GraysonEngine = {
               type: 'consonant',
               soft: isSoft,
               softTrigger: softTrigger,
-              genitiveEnding: isGenitiveG
+              genitiveEnding: isGenitiveG,
+              ...(globalIndex === reflexiveS && { reflexive: true })
             },
             syllableIndex: sylIdx,
             position: globalIndex

@@ -19,7 +19,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { setStressDictionary, transcribeWord } from '@ilya/phonology';
 import { applyReconstitution } from './reconstitution';
 
-const STRESS: Record<string, { stress: number }> = {
+const STRESS: Record<string, { stress: number; pos?: string; lemma?: string }> = {
   рябина: { stress: 1 },
   пятилетка: { stress: 2 },
   явить: { stress: 1 },
@@ -27,6 +27,9 @@ const STRESS: Record<string, { stress: number }> = {
   пятно: { stress: 1 },
   пять: { stress: 0 },
   мясо: { stress: 0 },
+  // Row 91: pos and lemma let the reflexive predicate see the verb
+  купаться: { stress: 1, pos: 'verb', lemma: 'купаться' },
+  учился: { stress: 1, pos: 'verb', lemma: 'учиться' },
 };
 
 beforeAll(() => setStressDictionary(STRESS));
@@ -99,5 +102,20 @@ describe('existing rules hold', () => {
     expect(vowel(log, 'я').features.position).toBe('stressed');
     expect(reduced).toBe('ˈmʲɑ sʌ');
     expect(reconstituted).toBe('ˈmʲɑ sɑ');
+  });
+});
+
+describe('the reflexive я reconstitutes to [ɑ] (row 91; Grayson pp. 109, 128 joined: the desk\'s reading)', () => {
+  it('купаться: [ʌ] becomes [ɑ]', () => {
+    const { reduced, reconstituted, log } = both('купаться');
+    expect(vowel(log, 'я').features).toMatchObject({ exception: 'reflexive' });
+    expect(reduced).toBe('ku ˈpɑ tːsʌ');
+    expect(reconstituted).toBe('ku ˈpɑ tːsɑ');
+  });
+
+  it('учился: hard с, [ʌ] becomes [ɑ]', () => {
+    const { reduced, reconstituted } = both('учился');
+    expect(reduced).toBe('u ˈtʃʲiɫ sʌ');
+    expect(reconstituted).toBe('u ˈtʃʲiɫ sɑ');
   });
 });

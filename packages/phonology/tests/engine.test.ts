@@ -268,9 +268,10 @@ describe('GraysonEngine extraction', () => {
 
     it('finds reflexive suffix -ться', () => {
       const clusters = GraysonEngine.findSpecialClusters('купаться');
-      const refl = clusters.find(c => c.cluster === 'ться');
+      // Row 91: the cluster is the consonants only; the я is its own vowel entry, [ʌ]
+      const refl = clusters.find(c => c.cluster === 'тьс');
       expect(refl).toBeDefined();
-      expect(refl!.ipa).toBe('tːsʌ');
+      expect(refl!.ipa).toBe('tːs');
     });
 
     it('finds чн → ʃn in конечно', () => {
