@@ -25,6 +25,7 @@ next session the same hour it cost the last one.
 | a PDF will not read in a test browser (getOrInsertComputed) | `THE PDF LIBRARY NEEDS A NEW BROWSER FUNCTION` |
 | starting a cloud session by typing into claude.ai/code | `STARTING A CLOUD SESSION, 2026-10-14` |
 | you need a cloud branch's report and gh says access is not enabled | `READING A CLOUD BRANCH WITHOUT GH` |
+| driving the Code tab on the Mac, typing a long cloud prompt, or the cloud workspace restarted | `THE CLAUDE APP CANNOT BE DRIVEN` |
 | writing a brief for Code | `A BRIEF THAT CARRIES A CAUSE COSTS A PASS` |
 | you drew something and sent it to Dann | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
 | looking for a mockup or ruling from an earlier session | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
@@ -4819,3 +4820,9 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 
 ### READING A CLOUD BRANCH WITHOUT GH
 - `gh api` answers "GitHub access to this repository is not enabled for this session". The repository is public: `git ls-remote https://github.com/DannMitton/ilya refs/heads/<branch>` and `GIT_LFS_SKIP_SMUDGE=1 git clone --depth 4 --branch <branch> …` work through the proxy. `add_repo` with read access confirms it and attaches nothing.
+
+
+### THE CLAUDE APP CANNOT BE DRIVEN. Learned 2026-10-15
+- `computer_resolve_access` with `["Claude"]` returned `apps: []` ("No requested app could be resolved"), listing Chrome and Terminal under `willHide`. The desk cannot type into the Code tab of the Claude desktop app. Terminal is click-tier only. A Mac-lane row is started by Dann pasting one prompt.
+- A long prompt typed into claude.ai/code by `computer` `type` (45,076 characters) froze the tab's renderer for over a minute and then SENT the prompt whole, without an Enter from the desk (session `01JFfuUPLHQi5LBSE6DZH7nz`, 2026-10-15 about 09:12). Read the box or the page after any long type before typing again.
+- The cloud workspace restarted overnight 2026-10-14 to 15; background agents had finished and their files in `/mnt/user-data/outputs/` and the scratchpad survived, but the desk lost about eight hours. Copy every agent output to the Mac (`device_commit_files`) as soon as it lands.

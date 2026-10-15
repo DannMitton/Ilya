@@ -15,6 +15,30 @@ and is not maintained.*
 
 ---
 
+## THE SEQUENCE OF 2026-10-15. Supersedes the orders below until Dann says otherwise
+
+Written by the desk (Opus) 2026-10-15 about 00:50, at the end of the keep-or-drop walk (`../sessions/memo-open-work-decisions_r1_2026-10-14.md`, 36 items; decisions in `STATE.md` THE TRACKER), as Dann asked 2026-10-14 23:31. DESK DEFAULT throughout; his to overrule. The orders below this section are history.
+
+**The fixed dependencies:** row 48 before N.120 before N.177 before N.178 (Corrections slice 8 waits on N.120 and N.177); N.27 before N.28 and N.29; the trimming audit before N.117; row 5 (the page refactor) before N.17 and N.92's remainder, which touch `+page.svelte`; Gould pp. 14 and 15 read before N.6; the pooled norms table r2 before row 9; Corrections slice 6 walked before N.84's body and N.170.
+
+**Wave 1, now to 2026-10-18.**
+- Desk: N.135's brief (THE ONE THING's priority); row 97's captions drafted EN and FR for Dann's ruling; briefs for row 91, N.27, N.157, the Chrome-on-iPhone banner, row 13, and the trimming audit; each Fable-reviewed.
+- Cloud (free credit): row 5 (Corrections slices 4 to 6), rows 47 and 48, row 91, N.27, the Chrome-on-iPhone banner, row 13 (measure only); then the trimming audit. **Lanes amended 2026-10-15 00:55 on Dann's question (*"Are you sure they haev to run on my mac? we still have free credits on Cloud"*):** rows 5, 47, 48 move to the cloud lane, DESK DEFAULT, departing the 2026-09-26 audit-plan default (written before the cloud lane) and the briefs' "For Code on the Mac" (written 2026-10-08).
+- Mac (the desk drives Code by screen control, Dann's grant 2026-10-15): row 82; N.135's measurements. Both need files only the Mac holds (git-ignored truth files, the held-out list).
+- Dann: rule the captions; delete old Vercel builds; two photos of Gould pp. 14 and 15 when convenient.
+
+**Wave 2, 2026-10-19 to 2026-10-25.**
+- Mac: N.135's build. Cloud: N.92's remainder and N.17 after row 5; N.162.
+- Cloud: N.157; row 71 rebuilt from `Shane` (French drafted by the desk); N.6 after the photos; N.140's small build; N.141's tie; N.117 after the trimming audit.
+- Desk: the pooled norms table r2 (unblocks row 9); N.168's harvest; N.173 kept as a living draft.
+
+**Wave 3, 2026-10-26 onward.**
+- N.120, then N.177, then N.178; Corrections slices 7 to 11 per `SCHEDULE.md`; N.84 once slice 6 is walked; N.28 and N.29 after N.27 (copyright question to Dann first); row 9; N.170.
+
+**After the release:** N.160 steps 4 and 5; N.122 (plate 5's four questions to Dann one at a time).
+
+---
+
 ## The open cardinals, sequenced. First written 2026-09-15
 
 **What this is.** A build order for the open numbered items, ordered so that
