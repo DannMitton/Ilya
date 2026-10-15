@@ -6,7 +6,7 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 **How to use it.** Each line is one piece of work, its lane, and what it waits on. A line is ticked when Dann has walked it, not when it is written. **The desk keeps this file true at every close and whenever a row moves** (`CONTRACT.md` §1 item 8, Dann 2026-10-12 21:53: *"you are the Project Manager. I expect you to be on top of current file accuracy"*). Run order inside a lane is `QUEUE.md`'s; this file says what remains before the release and in which week.
 
-**The lanes.** *Mac*: Code in the desktop app's Code tab, one row at a time; the reader and anything that needs set 3, set 4, or Dann's songs runs here. *Cloud*: a Claude Code cloud session the desk starts in Dann's Chrome, on `cloud-lane-2`; pure modules, strings, and docs. *Desk*: briefs, reviews, drafts, walks the desk can take. *Dann*: rulings, French, walks, the ship.
+**The lanes.** *Mac*: Code in the desktop app's Code tab, one row at a time; the reader and anything that needs set 3, set 4, or Dann's songs runs here. *Cloud*: a Claude Code cloud session the desk starts in Dann's Chrome, on a fresh branch per row (`cloud-lane-2` is merged; row 96 runs on `cloud-lane-3`); pure modules, strings, and docs. *Desk*: briefs, reviews, drafts, walks the desk can take. *Dann*: rulings, French, walks, the ship.
 
 ---
 
@@ -22,7 +22,7 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 - [x] **Row 89**: the quadruplet in 4F. SHIPPED `1ec2ef2`; 4F 98.0 PASS. The double flat was not built.
 - [x] **Row 93**: Markup blank on a stored scan. Cause found by the desk 2026-10-14 (seats under the old reader's note names); fix SHIPPED `6c69161` (N.185, `../sessions/report-code-row93-seats-under-old-names_r1_2026-10-13.md`); ratified by Dann 02:56.
 - [ ] **Row 82**: the pre-reform model (N.184). Up to 11 hours of the Mac; runs when the Mac is free for a long stretch, overnight if Dann asks for that.
-- [ ] **Corrections slice 4** (`QUEUE.md` row 5, slices 4 to 6): the station code leaves the page, no visible change. After row 93's fix.
+- [ ] **Corrections slice 4** (`QUEUE.md` row 5, slices 4 to 6): the station code leaves the page, no visible change. Row 93's fix has shipped (`6c69161`); this is not started.
 
 **Cloud**
 - [x] **Row 84**: N.86's dead code. SHIPPED `1ec2ef2` (desk check 2026-10-14).
@@ -32,9 +32,9 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 - [ ] **Row 91**: reflexive -ся read hard, and -ться's [ʌ] reconstituting to [ɑ], after Grayson (ruled 20:33). Brief not written.
 
 **Dann**
-- [ ] **The next ship**: rows 84, 89 (when walked by the desk), and the cloud rows that land. The desk prepares it.
+- [ ] **The next ship**: rows 84 and 89 went out in `1ec2ef2`; this ship carries `6c69161` and the cloud rows that land (row 96). The desk prepares it.
 - [ ] **The walk of rows 78a, 78b, 78c** on «Средь шумного бала». Begun 2026-10-14 03:00: 78a's Insights lines and running head shown to Dann by picture (his ruling on them not given); 78b ruled by picture, stroke to 0.098 sp (one constant owed to Code); placeholder items cannot show on this song with his voice; 78c not yet looked at.
-- [ ] **Row 96 FIRST at the next session**: the Insights chart running into the page footer (page 3, «Средь шумного бала»). Then row 95 (the scan banner), N.135 (ruled a priority 2026-10-14 02:44).
+- [ ] **Row 96, RUNNING in the cloud lane on `cloud-lane-3` (QUEUE row 96); its report comes FIRST at the next session**: the Insights chart running into the page footer (page 3, «Средь шумного бала»). Then row 95 (the scan banner), N.135 (ruled a priority 2026-10-14 02:44).
 - [ ] **The Shane switch at release** (`apps/web/src/lib/wall.ts:6-7`): what it does on 2026-10-30. Dann's ruling, owed since r1 of this file.
 
 ## Week of Monday 2026-10-19 to Sunday 2026-10-25
@@ -49,7 +49,7 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 **Desk and Dann**
 - [ ] **N.84, the Guide**: rewritten for the interface as it is, English and French, with new screenshots; carries the fry essay (N.174). Four English drafts exist (2026-10-01). Starts once Corrections slice 6 is walked, because the Guide describes the review. Its size is NOT ESTABLISHED.
-- [ ] **N.170 steps 1 and 2**: freeze a review build and draft the packet for outside readers. Dann ruled 2026-09-24 21:03 to wait *"until Ilya has really taken shape"*; the desk puts the question to him once row 93's fix and Corrections slice 6 are walked.
+- [ ] **N.170 steps 1 and 2**: freeze a review build and draft the packet for outside readers. Dann ruled 2026-09-24 21:03 to wait *"until Ilya has really taken shape"*; the desk puts the question to him once Corrections slice 6 is walked (row 93's fix, `6c69161`, was ratified by Dann 2026-10-14 02:56).
 - [ ] **Walks**: the desk takes the shipped rows it can walk on the alias and reports each; Dann walks what needs his eye, a few a sitting.
 
 ## Week of Monday 2026-10-26 to Friday 2026-10-30
@@ -71,7 +71,7 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 ## Done since r1, for the record
 
-The weeks of 2026-09-17 to 2026-10-12 are closed in `SCHEDULE-archive.md`. Since the r1 checks of 2026-10-11: `b80b543`, `fd1c86a`, `72b564f` shipped; set 4 measured at 97.5 and corrected to 97.9; rows 79 and 85 walked by Dann 2026-10-12; N.168's first-slice French found already ratified (2026-09-30) and ticked; N.86's dead code built (row 84).
+The weeks of 2026-09-17 to 2026-10-12 are closed in `SCHEDULE-archive.md`. Since the r1 checks of 2026-10-11: `b80b543`, `fd1c86a`, `72b564f` shipped; set 4 measured at 97.5 (97.8 with the 10 UNSURE set aside, QUEUE row 86; the figure 97.9 here has no source in the working files, desk check 2026-10-14); rows 79 and 85 walked by Dann 2026-10-12; N.168's first-slice French found already ratified (2026-09-30) and ticked; N.86's dead code built (row 84).
 
 ---
 

@@ -1,0 +1,902 @@
+[
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "and it is 2,000 lines.",
+  "new": "and it is more than 4,700 lines.",
+  "evidence": "wc -l docs/memory/ENVIRONMENT.md reads 4791 (2026-10-14)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "at `VoiceProfilePane.svelte:513`",
+  "new": "at `apps/web/src/lib/markup/MarkupPane.svelte:369` (`VoiceProfilePane.svelte:513` before the rename)",
+  "evidence": "apps/web/src/lib/markup/MarkupPane.svelte:369 (\"SVG paints in document order and has no `z-index`\"); ENVIRONMENT.md:1898 (VoiceProfilePane renamed MarkupPane); no VoiceProfilePane.svelte in the tree"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`staff-renderer.ts:2757`",
+  "new": "`packages/score-parser/src/staff-renderer.ts:3217` (`:2757` when written)",
+  "evidence": "packages/score-parser/src/staff-renderer.ts:3217 (const ey = y1 + (up ? -4 : 4))"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`:2817`,\n`sy = top - 6`)",
+  "new": "(`:2817` when written, now `:3268`,\n`sy = top - 6` then, `staffTop - sp(SLUR_CLEAR_SP)` now)",
+  "evidence": "packages/score-parser/src/staff-renderer.ts:3268 (let sy = staffTop - sp(SLUR_CLEAR_SP)); :3264 records that `sy = top - 6` was the old form"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "| gate | baseline |",
+  "new": "| gate (five listed; the ship script has run eight since 2026-09-27: blurb, integration, and ratchets were added) | baseline |",
+  "evidence": "docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:115-117 (gates 6 to 8, added 2026-09-27 per its comment); package.json scripts test:blurb, test:integration, ratchets"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "| phonology | 216 |",
+  "new": "| phonology | 216 (251 in `docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:78`, 2026-10-12) |",
+  "evidence": "docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:78 (gate 1 phonology \"251 passed (251)\")"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "| dictionary | 235 |",
+  "new": "| dictionary | 235 (248 in `docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:79`, 2026-10-12) |",
+  "evidence": "docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:79 (gate 2 dictionary \"248 passed (248)\")"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "| web-test | **1385 passed (1385)** |",
+  "new": "| web-test | **1385 passed (1385)** (stale: the Mac script expected 2448 on 2026-10-11, `ENVIRONMENT.md:4730`; a clean clone counted 2433 on 2026-10-12, `docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:110`; the live script holds the baseline) |",
+  "evidence": "docs/memory/ENVIRONMENT.md:4730 (Mac 2448, clean clone 2402, 2026-10-11); docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:110 (\"2433 passed (2433)\", clean clone); docs/memory/QUEUE.md:13 and :17 record later moves (2448 to 2457, then 2479)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "| score-parser | **567 passed, 5 skipped (572)** |",
+  "new": "| score-parser | **567 passed, 5 skipped (572)** (675 passed, 5 skipped (680) in `docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:111`, 2026-10-12) |",
+  "evidence": "docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:111 (gate 5 \"675 passed | 5 skipped (680)\"); QUEUE.md row 78c: gate 5 668/673 to 673/678"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "**In Claude Code the five gates run in about a minute, all five, in one command.**",
+  "new": "**In Claude Code the five gates ran in about a minute, all five, in one command (written 2026-08-16; the ship script has run eight gates since 2026-09-27 and the timing has not been re-measured on the Mac).**",
+  "evidence": "docs/sessions/measure-4f-quadruplet_2026-10-12/gates-scratch.sh:115-117; docs/memory/ENVIRONMENT.md:4727 (eight gates, about 15 minutes in a clean clone)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "## `app.css:93` BREAKS NATIVE MODALS. Measured 2026-08-16",
+  "new": "## `app.css:93` BREAKS NATIVE MODALS. Measured 2026-08-16 (the reset is at `app.css:232-238` now)",
+  "evidence": "apps/web/src/app.css:232-238 (the *, *::before, *::after { margin: 0 } reset)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`TitlePage.svelte:122`, `SubsequentPage.svelte:57`)",
+  "new": "(`TitlePage.svelte:148`, `SubsequentPage.svelte:75`; `:122` and `:57` when written)",
+  "evidence": "TitlePage.svelte:148 and SubsequentPage.svelte:75 (style=\"width: {dims.width}px; height: {dims.height}px;\")"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`TitlePage.svelte:138`)",
+  "new": "(`TitlePage.svelte:166`; `:138` when written)",
+  "evidence": "apps/web/src/lib/components/Paper/TitlePage.svelte:166 (style=\"top: {contentTop}px; bottom: {contentBottom}px; ...\")"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`TitleHeader.svelte:104-105`)",
+  "new": "(`TitleHeader.svelte:216-217`; `:104-105` when written)",
+  "evidence": "apps/web/src/lib/components/Paper/TitleHeader.svelte:216-217 (.title-header position: absolute; top: 48px)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`PageFooter.svelte:90-91`)",
+  "new": "(`PageFooter.svelte:110-111`; `:90-91` when written)",
+  "evidence": "apps/web/src/lib/components/Paper/PageFooter.svelte:110-111 (.page-footer position: absolute; bottom: 48px)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "- `app.css:134-225` is the document-wide print block",
+  "new": "- `app.css:277-398` (`:134-225` when written) is the document-wide print block",
+  "evidence": "apps/web/src/app.css:277 (@media print) to :398"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "  at 221-224, which suppresses",
+  "new": "  at `app.css:394-397` (221-224 when written), which suppresses",
+  "evidence": "apps/web/src/app.css:394-397 (@page { margin: 0; size: letter; })"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "  at 200-206.",
+  "new": "  at `app.css:361-367` (200-206 when written).",
+  "evidence": "apps/web/src/app.css:361-367 (.header-bar, .drawer, .drawer-lip, .tab-bar, .ribbon { display: none !important })"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`ReadingPaper.svelte:235` has the same bare width query",
+  "new": "`ReadingPaper.svelte:466` (`:235` when written) has the same bare width query",
+  "evidence": "apps/web/src/lib/components/Paper/ReadingPaper.svelte:466 (@media (max-width: 767px))"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`Paper.svelte:109-112`)",
+  "new": "(`Paper.svelte:109-112` when written, `Paper.svelte:121-124` now, where a comment records that N.45's seam rule is gone and N.73 portrait C restored discrete sheets)",
+  "evidence": "apps/web/src/lib/components/Paper/Paper.svelte:121-124 (comment: N.45's seam rule stood here; N.73 portrait C put the pages back as discrete sheets)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "from `body:106`.",
+  "new": "from `body` (`app.css:249` now; `:106` when written).",
+  "evidence": "apps/web/src/app.css:249 (line-height: 1.5 in the body rule)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "**`VoiceProfilePane.svelte:295-313` still duplicates the OLD arithmetic**",
+  "new": "**`apps/web/src/lib/markup/MarkupPane.svelte:461-465` and `:504` (`VoiceProfilePane.svelte:295-313` before the rename) still duplicate the OLD arithmetic**",
+  "evidence": "apps/web/src/lib/markup/MarkupPane.svelte:461-465 (TITLE_HEADER_GAP = 18) and :504 (HEADER_HEIGHTS.subsequent + GAP); page-config.ts:44 HEADER_GAP = 16"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "### The two Print buttons",
+  "new": "### The two Print buttons (AMENDED: N.65, Dann's ruling of 2026-08-21, moved Print out of the drawer. One always-live `.sheet-print-btn` now sits under the sheet at `apps/web/src/routes/+page.svelte:4918`, calling `handlePrint` at `:2557`, still a bare `window.print()`. `RootPanel.svelte:51-55` records the move. The two bullets below describe the drawer buttons that no longer exist)",
+  "evidence": "apps/web/src/lib/components/Drawer/RootPanel.svelte:51-55 (Print left the drawer, N.65, ruling of 2026-08-21); apps/web/src/routes/+page.svelte:4918 (.sheet-print-btn) and :2557 (handlePrint, window.print()); commit 7294b429 (N.65, 2026-08-20)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "**Unruled; ask Dann before switching.**",
+  "new": "**Unruled when written. The branch alias was used from 2026-08-21 (see `THE BRANCH ALIAS IS THE N.72 INSTRUMENT` below).**",
+  "evidence": "docs/memory/ENVIRONMENT.md:2382-2392 (THE BRANCH ALIAS IS THE N.72 INSTRUMENT: used successfully 2026-08-21 to close N.72)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`reader.py:377-379`)",
+  "new": "(`tools/e16-harness/reader/reader.py:544-550`; `:377-379` when written)",
+  "evidence": "tools/e16-harness/reader/reader.py:544-550 (THE SENTINEL, ratified 2026-07-28)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`#F0EBE0`.** Unsettled.",
+  "new": "`#F0EBE0`.** Unsettled when written. SETTLED by N.133 (`eb918ed8`, 2026-09-14): the renderer paints no ground and `stripBackingRect` is gone (`apps/web/src/lib/markup/MarkupPane.svelte:506-509`, `packages/score-parser/src/staff-renderer.ts:2155-2159`).",
+  "evidence": "apps/web/src/lib/markup/MarkupPane.svelte:506-509 (stripBackingRect stood here; N.133 renderer paints no ground); packages/score-parser/src/staff-renderer.ts:2155-2159 (NO BACKGROUND, N.133); commit eb918ed8 (N.133, 2026-09-14)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`apps/web/src/lib/loader.ts:103-115` opens",
+  "new": "`apps/web/src/lib/loader.ts:125-137` (`:103-115` when written) opens",
+  "evidence": "apps/web/src/lib/loader.ts:58-59 (DB_NAME, STORE_NAME) and :125-137 (openDB, indexedDB.open(DB_NAME, 1))"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "**No heavy format is ingested today**",
+  "new": "**No heavy format was ingested when this was measured (E.52). PDF and image import shipped in N.59 step 8 (see PDF IMPORT below; `ScoreUploader.svelte:290-296` reads them), and the three line citations above no longer point at the picker or its copy**",
+  "evidence": "apps/web/src/lib/score/ScoreUploader.svelte:290-296 (kind === 'pdf' reads the PDF); docs/memory/ENVIRONMENT.md:1344 (PDF IMPORT, N.59 STEP 8); apps/web/src/lib/i18n.ts:273-275 now holds meta.poet, meta.opus, meta.transcriber"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(v1 migration at `profileStore.ts:173-205`)",
+  "new": "(v1 migration at `profileStore.ts:215-279`; `:173-205` when written)",
+  "evidence": "apps/web/src/lib/voice/profileStore.ts:215-279 (loadStore, migrating a v1 single profile)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "at `InstallPrompt.svelte:52`.",
+  "new": "at `InstallPrompt.svelte:52` when written; it is now `DEAD_IOS_KEY` at `apps/web/src/lib/install-decline.ts:29`, dead and removed on first run.",
+  "evidence": "apps/web/src/lib/install-decline.ts:26-29 (DEAD_IOS_KEY = 'ilya-ios-hint-shown', \"Dead, and removed on first run\"); commit 21e9ce21 (N.105, 2026-09-02)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`profileStore.ts:216-224`) is still silent",
+  "new": "(`profileStore.ts:281-290`; `:216-224` when written) is still silent",
+  "evidence": "apps/web/src/lib/voice/profileStore.ts:281-290 (saveStore, catch with a comment only)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "- **`profileStore.ts:216-224` swallows",
+  "new": "- **`profileStore.ts:281-290` (`:216-224` when written) swallows",
+  "evidence": "apps/web/src/lib/voice/profileStore.ts:281-290 (saveStore)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`pairings.ts:390-422` is the model",
+  "new": "`pairings.ts:692-740` (`:390-422` when written) is the model",
+  "evidence": "apps/web/src/lib/score/pairings.ts:692-740 (SaveOutcome, savePairings :710, loadPairings :728)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "Line grouping at `reader.py:291`",
+  "new": "Line grouping at `reader.py:341` (`_lines_from_rows`; `:291` when written)",
+  "evidence": "tools/e16-harness/reader/reader.py:341 (_lines_from_rows, the proximity grouping lifted out of detect_staves); commit fe74eced (N.83, 2026-08-23)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`substrate.py:140`. Otsu on",
+  "new": "`substrate.py:186` (`:140` when written). Otsu on",
+  "evidence": "tools/e16-harness/reader/substrate.py:186 (ink = img < 128 inside page_substrate, def at :175)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`DeskHead.svelte:245-249` settles",
+  "new": "`DeskHead.svelte:262-266` (`:245-249` when written) settles",
+  "evidence": "apps/web/src/lib/components/DeskHead.svelte:262-266 (@media print { .desk-head { display: none; } }, comment at :261)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "Transcription / Score Markup pair at `:43`, and the Learn and Guide links at\n`:44`.",
+  "new": "Transcription / Score Markup pair at `:43`, and the Learn and Guide links at\n`:44` (the pair is now Text / Markup / Insights at `DeskHead.svelte:113`, the links at `:129`).",
+  "evidence": "apps/web/src/lib/components/DeskHead.svelte:113 (div.pair, Text / Markup / Insights) and :129 (div.links)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "And the desk head renders on all four destinations,",
+  "new": "And the desk head renders on all three destinations (four when written; Studio, Learn, and Guide since N.127),",
+  "evidence": "apps/web/src/lib/destinations.ts:35 (Destination = 'studio' | 'learn' | 'guide'); AGENTS.md (three destinations: Studio, Learn, Guide)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`ScoreUploader.svelte:766`) plus",
+  "new": "(`ScoreUploader.svelte:766` when measured; the rule was deleted in N.108 increment 2, recorded at `ScoreUploader.svelte:1116-1120`) plus",
+  "evidence": "apps/web/src/lib/score/ScoreUploader.svelte:1116-1120 (the dropzone's rules, including .dz-wrap, deleted in N.108 increment 2); no .dz-wrap rule remains in apps/web/src; commit 7f5b8e83 (N.174, 2026-09-27, ScoreUploader rules at its current state)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`Drawer.svelte:1052-1054` sets `background: #fff` on hover.",
+  "new": "`Drawer.svelte:1052-1054` set `background: #fff` on hover (`.drawer-lip`, `.sil-fill` and the rules below were deleted in N.108 increment 1a; `Drawer.svelte:1529-1535` records it, and the line numbers here are those of the file as it stood).",
+  "evidence": "apps/web/src/lib/components/Drawer/Drawer.svelte:1529-1535 (THE BOTTOM PULL, N.108 increment 1a: it replaces `.drawer-lip`, `.lip-silhouette`, `.sil-fill`, all deleted); commit 60e6615a (N.108-1a, 2026-09-02)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`live.ts:337-343`",
+  "new": "`live.ts:339-346`",
+  "evidence": "apps/web/src/lib/voice/engine/live.ts:339-346 (getUserMedia call; the three flags at :341-343)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`live.ts:665`",
+  "new": "`live.ts:668`",
+  "evidence": "apps/web/src/lib/voice/engine/live.ts:113 (TRIM_S = 0.5) and :668 (const trim = Math.floor(TRIM_S * sr))"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`analyze.ts:36`)",
+  "new": "(`analyze.ts:97`)",
+  "evidence": "apps/web/src/lib/voice/engine/analyze.ts:97 (const snrLow = det.snrDb !== null && det.snrDb < 12); :36 is now f1Steadiness"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`DEBUG = true` at `live.ts:173`",
+  "new": "`DEBUG = true` at `live.ts:175`",
+  "evidence": "apps/web/src/lib/voice/engine/live.ts:175 (const DEBUG = true;) and :177 (console.info('[voice-live]'))"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`.gitignore:46`",
+  "new": "`.gitignore:53`",
+  "evidence": ".gitignore:53 (Claude outputs/)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`apps/web/package.json:25` declares",
+  "new": "`apps/web/package.json:27` declares",
+  "evidence": "apps/web/package.json:27 (\"tesseract.js\": \"^7.0.0\")"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`ScoreUploader.svelte:300-326`",
+  "new": "`ScoreUploader.svelte:449-450`",
+  "evidence": "apps/web/src/lib/score/ScoreUploader.svelte:449-450 (await import('tesseract.js'); createWorker('rus'))"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`pairings.ts:789-800`)",
+  "new": "(`pairings.ts:804-815`)",
+  "evidence": "apps/web/src/lib/score/pairings.ts:804-815 (export function pairedCyrillic)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`OPEN.md:1348`",
+  "new": "`OPEN.md:1526`",
+  "evidence": "docs/memory/OPEN.md:1526 (n151-measure-edit-surface.html, sent in the session, not in the tree)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`apps/web/src/lib/wall.ts:6-7`",
+  "new": "`apps/web/src/lib/wall.ts:9-10`",
+  "evidence": "apps/web/src/lib/wall.ts:9-10 (export const INCLUDE_MARKUP_INSIGHTS ... === 'true'); the AMENDED note above this paragraph already carries the name change"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`DeskHead.svelte:51`",
+  "new": "`DeskHead.svelte:54`",
+  "evidence": "apps/web/src/lib/components/DeskHead.svelte:54 (const pairIds ... INCLUDE_MARKUP_INSIGHTS ? ['text','markup','insights'] : ['text'])"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`destinations.ts:103`\nand `:105`",
+  "new": "`destinations.ts:105`\nand `:107`",
+  "evidence": "apps/web/src/lib/destinations.ts:105 and :107 (INCLUDE_MARKUP_INSIGHTS ? surfaceFor('markup') / ('insights'))"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(the rule was at `:51`, now about `:60`)",
+  "new": "(the rule was at `:51`; it is now the `marked <= -1` branch at `:53`)",
+  "evidence": "packages/score-parser/src/vocal-octave.ts:53 (if (marked <= -1) {), comment to :66"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(the override is in `apps/web/playwright.config.ts` on the `audit` branch)",
+  "new": "(the override is in `apps/web/playwright.config.ts` on `Shane`, lines 27 and 44)",
+  "evidence": "apps/web/playwright.config.ts:27 and :44 (process.env.PW_CHROMIUM_PATH ? { launchOptions: { executablePath ... } })"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "(`engine.ts:237`)",
+  "new": "(`engine.ts:238`)",
+  "evidence": "packages/phonology/src/engine.ts:238 (alwaysHard: new Set(['ж','ш','ц']))"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`analyze.ts:58-62`: guard Provisional, detector refusal, or SNR under 12 dB**, and on 2026-09-30 every one came from the guard.",
+  "new": "`analyze.ts:97-104` since row 2d (2026-09-30; it was `analyze.ts:58-62` before): split-half fR1 disagreement, detector refusal, or SNR under 12 dB**. On 2026-09-30, before row 2d, every one came from the guard.",
+  "evidence": "apps/web/src/lib/voice/engine/analyze.ts:8-20 (row 2d: the guard's verdict no longer makes a take Provisional on its own) and :97-104 (confidence = !st.steady || !det.accept || snrLow ? 'low'; reading = 'provisional'); :58-62 is now f2Quality"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "Rest (`apps/web/src/routes/+page.svelte:1086`) and remove (`:982`)",
+  "new": "Rest (`apps/web/src/routes/+page.svelte:1088`) and remove (`:984`)",
+  "evidence": "apps/web/src/routes/+page.svelte:1088 (function handleRest) and :984 (function handleDeleteNote)"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "Owed (a small Code row): the test should list files with `git ls-files`, so the count is the same everywhere and nothing private is read.",
+  "new": "That owed row has shipped as QUEUE row 83 (`e7acf7f`, merged in `ad99ed4`): the test lists tracked files with `git ls-files`, so the count is the same everywhere and nothing private is read.",
+  "evidence": "e7acf7f (QUEUE row 83: every-score test lists tracked .musicxml only); ad99ed4 merge; apps/web/src/lib/markup/markup-pages.test.ts:46-63 (trackedScores runs git ls-files); docs/memory/QUEUE.md:20"
+ },
+ {
+  "file": "docs/memory/ENVIRONMENT.md",
+  "old": "`markup-pages.test.ts:47-53`",
+  "new": "`markup-pages.test.ts:50-63`",
+  "evidence": "apps/web/src/lib/markup/markup-pages.test.ts:50-63 (function trackedScores)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> word, UNPLACED, its own Code thread (`staff-renderer.ts` only, off the",
+  "new": "> word, DONE 2026-09-16 (`34b143c`, `570d76f`), its own Code thread (`staff-renderer.ts` only, off the",
+  "evidence": "docs/memory/SEQUENCE.md:110: N.125 DONE 2026-09-16, `34b143c`, `570d76f`"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "the paths already). Whoever takes N.142 should be told this.",
+  "new": "the paths already). N.142 is done (`c868540`); the instrument stands for any later tie or slur question.",
+  "evidence": "docs/memory/SEQUENCE.md:113: N.142 DONE 2026-09-16, `c868540`; OPEN.md:88"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "DESK DEFAULT. After N.114 unless he places it.",
+  "new": "DESK DEFAULT. BUILT: its brief ran 2026-09-14 (see the carry-over block below), and `buildSlotQueue` (`pairings.ts:203`) gives the word's last syllable its trailing punctuation through `WordStackData.punctuation` (`pairings.ts:187-192`). The line numbers above are from 2026-09-09: `cyrOfSyllable` is now at `pairings.ts:154` and `pairedCyrillic` at `:804`.",
+  "evidence": "apps/web/src/lib/score/pairings.ts:187-192 (N.118 comment: last syllable carries the word's punctuation via WordStackData.punctuation); buildSlotQueue at pairings.ts:203; cyrOfSyllable :154; pairedCyrillic :804; OPEN.md:1290; 8b24e509 (Close of 2026-09-14: N.134 and N.118 shipped and walked)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> **N.119, the Notation toggles reach Score markup live.** Dann: \"I want",
+  "new": "> **N.119, the Notation toggles reach Score markup live. CLOSED 2026-09-21 with N.136 as N.159, `1d18514` (`SCHEDULE-archive.md:76`); the stress acutes shipped as `b4320d2` and `b543620`. The tree facts below are of 2026-09-10: `VoiceProfilePane.svelte` is now `MarkupPane.svelte`, where `underlayResolvers` is at `:594`.** Dann: \"I want",
+  "evidence": "docs/memory/SCHEDULE-archive.md:76 (N.136 with N.119 CLOSED 2026-09-21 as N.159, `1d18514`); docs/memory/STATE-archive.md:183 (`b4320d2`, `b543620`); SEQUENCE.md:61-67; underlayResolvers now apps/web/src/lib/markup/MarkupPane.svelte:594"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "In Code with the path pass.",
+  "new": "BUILT (`apps/web/src/lib/i18n.ts:730`).",
+  "evidence": "apps/web/src/lib/i18n.ts:730 ('intake.placeholder' = Paste, type, or drop your poem here.)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "« 37 / 94 placées ». In Code. (c)",
+  "new": "« 37 / 94 placées ». BUILT (`apps/web/src/lib/i18n.ts:758`). (c)",
+  "evidence": "apps/web/src/lib/i18n.ts:758 ('intake.placed' = %s / %s placed)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "if it only fits, \"Fit to score\" / « Ajuster à la partition », coined.",
+  "new": "if it only fits, \"Fit to score\" / « Ajuster à la partition », coined. SETTLED 2026-09-16: Dann ruled the button away (`PRODUCT.md:70-75`), and no file but `i18n.ts:255` names `input.transcribe`.",
+  "evidence": "docs/memory/PRODUCT.md:70-75 (Dann 2026-09-16 on removing Continue to analysis and Transcribe and fit); no caller of 'input.transcribe' outside apps/web/src/lib/i18n.ts:255; OPEN.md:2663 (button removed). Note docs/memory/SEQUENCE.md:133 still lists the pill's fate as awaiting a ruling"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`packages/score-parser/src/phonation.ts:298`)",
+  "new": "(`packages/score-parser/src/phonation.ts:306`)",
+  "evidence": "packages/score-parser/src/phonation.ts:306 (export function aggregatePhonation)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "`totalFoldCycles` is `phonation.ts:540`",
+  "new": "`totalFoldCycles` is `phonation.ts:551`",
+  "evidence": "packages/score-parser/src/phonation.ts:551 (export function totalFoldCycles)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> UNPLACED, displaces nothing until he places it.** One layer under four",
+  "new": "> PLACED IN by Dann 2026-09-16 (the CORRECTED block above); part 1 built in `ccb790c`.** One layer under four",
+  "evidence": "OPEN.md:163 (Placed IN by Dann 2026-09-16); OPEN.md:167 (tessituragram built in `ccb790c`); docs/memory/SCHEDULE-archive.md:49 (N.123 part 1 designed, built and walked)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> Code thread whenever, different files from the sequence.",
+  "new": "> Code thread whenever, different files from the sequence. BUILT 2026-09-14 as N.133 (`eb918ed`): the renderer paints no ground and `stripBackingRect` is gone (`MarkupPane.svelte:506-509`, `OWED.md:656`).",
+  "evidence": "apps/web/src/lib/markup/MarkupPane.svelte:506-509 (stripBackingRect stood here; N.133 removed it); eb918ed8 (N.133: the renderer stops painting its own ground, 2026-09-14); docs/memory/OWED.md:656 (N.133 removed both rectangles and stripBackingRect); no F0EBE0 rect emission in packages/score-parser/src/staff-renderer.ts (only a comment at :2157)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> `loupe.undo.melisma*`, `loupe.melisma`, `paper.empty.mobile`).",
+  "new": "> `loupe.undo.melisma*`, `loupe.melisma`, `paper.empty.mobile`). DONE: each has French in `i18n.ts` (`:144`, `:245`, `:467`, `:468`, `:489`, `:490`, `:535`, `:819`, and `intake.*`); `input.transcribe` (`:255`) is English in both languages and has no caller.",
+  "evidence": "apps/web/src/lib/i18n.ts:144,245,467,468,489,490,535,819 all carry French; every single-line intake.* entry differs between en and fr; input.transcribe (i18n.ts:255) is English in both and has no caller"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> courtesies), N.94, N.82 (the watch band's French), N.89 (document",
+  "new": "> courtesies), N.94 (parts 1 and 2 shipped, `de31e22` and `3ab034b`), N.82 (the watch band's French), N.89 (document",
+  "evidence": "docs/memory/SCHEDULE-archive.md:132 (N.94 part 1 shipped `de31e22` 2026-09-28) and :145 (part 2, shipped `3ab034b`); apps/web/src/lib/i18n.ts:2084-2116"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "analysis-types.ts:63-77",
+  "new": "analysis-types.ts:74-93",
+  "evidence": "packages/score-parser/src/analysis-types.ts:74-93 (range :79, tessitura :85, passaggio :93)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Next: the French (desk drafts), the tap contents vetted, then the first-slice Code brief (`../sessions/brief-code-n168-first-slice_r1_2026-09-25.md`) updated to these templates.",
+  "new": "Taken since: the French is ratified and built (`SCHEDULE-archive.md:162`), and the comment templates and the first slice shipped as `de802cd` (2026-09-25) (`SCHEDULE-archive.md:141-142`). The first-slice brief is `../sessions/brief-code-n168-first-slice_r1_2026-09-25.md`.",
+  "evidence": "docs/memory/SCHEDULE-archive.md:162 (N.168 French for the first slice already RATIFIED and built, i18n.ts:1838-1842); :141 (comment templates BUILT AND SHIPPED); :142 (first slice SHIPPED `de802cd`)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "`profileStore.ts:81-88`",
+  "new": "`profileStore.ts:88-95`",
+  "evidence": "apps/web/src/lib/voice/profileStore.ts:88-95 (voiceType doc comment and field)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "**Slice A BUILT by Code 2026-09-30, uncommitted**",
+  "new": "**Slice A BUILT by Code 2026-09-30, SHIPPED `6d87638` 2026-09-30**",
+  "evidence": "docs/memory/QUEUE.md:46 (row 2: SHIPPED `6d87638` 2026-09-30); QUEUE-archive.md:18"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Not in the tree until a brief seats it and removes `frenchOwed` from row `mixed` (`apps/web/src/lib/insights/comment-text.ts:81`).",
+  "new": "Seated in `526166e` (2026-10-09, QUEUE row 58): `frenchOwed` is `false` on row `mixed` (`apps/web/src/lib/insights/comment-text.ts:81`) and the ratified strings are in `i18n.ts`.",
+  "evidence": "526166e (Row 58: seat the two ratified comment actions); apps/web/src/lib/insights/comment-text.ts:81 reads frenchOwed: false; QUEUE-archive.md:88"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Not in the tree until a brief seats it and removes `frenchOwed` from row `preface` (`apps/web/src/lib/insights/comment-text.ts:85`).",
+  "new": "Seated in `526166e` (2026-10-09, QUEUE row 58): `frenchOwed` is `false` on row `preface` (`apps/web/src/lib/insights/comment-text.ts:85`) and the ratified strings are in `i18n.ts`.",
+  "evidence": "526166e; apps/web/src/lib/insights/comment-text.ts:85 reads frenchOwed: false"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "`apps/web/src/lib/score/Loupe.svelte:1215-1223`",
+  "new": "`apps/web/src/lib/score/Loupe.svelte:1011-1017`",
+  "evidence": "apps/web/src/lib/score/Loupe.svelte:1011-1017 (clause 8 comment and `const scale = unitPx * magnification;` at :1017); :1215-1223 is now the nudge-clip comment"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "WHOEVER BUILDS IT MUST START FROM.** Today there is ONE ring:",
+  "new": "WHOEVER BUILDS IT MUST START FROM.** On 2026-09-14 there was ONE ring (now two: the loupe draws its own with `ringBox`, `Loupe.svelte:1125` and `:1165`, and the page's is made at `MarkupPane.svelte:356`):",
+  "evidence": "apps/web/src/lib/score/Loupe.svelte:1125 (strips the cloned ring) and :1150-1165 (draws its own via ringBox); apps/web/src/lib/markup/MarkupPane.svelte:356 (page ring); docs/memory/PRODUCT.md:484 (VoiceProfilePane.svelte is now MarkupPane.svelte); OPEN.md:911-914 (closed 6101e01)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`VoiceProfilePane.svelte`, the ring's own rule)",
+  "new": "(`MarkupPane.svelte:1157-1174`, the ring's own rule; the file was `VoiceProfilePane.svelte`)",
+  "evidence": "apps/web/src/lib/markup/MarkupPane.svelte:1157-1174; docs/memory/PRODUCT.md:484"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "loupe today is a CROP of the page's own SVG:",
+  "new": "loupe was, on 2026-09-14, a CROP of the page's own SVG (N.153 stage 3b, closed 2026-09-21 as `9b05ddd`, now renders one measure at its own spacing, `Loupe.svelte:1144-1148`):",
+  "evidence": "apps/web/src/lib/score/Loupe.svelte:1144-1148 (the render is now one measure at a spacing of its own); docs/memory/SEQUENCE.md:224 (N.153 CLOSED 2026-09-21, `9b05ddd`)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "- The ring is created at `VoiceProfilePane.svelte:501` and styled at `:1326`,\n  `:1335` and `:1339`.",
+  "new": "- The ring is created at `MarkupPane.svelte:356` (was `VoiceProfilePane.svelte:501`) and styled at `:1157`,\n  `:1166` and `:1170` (were `:1326`, `:1335` and `:1339`).",
+  "evidence": "apps/web/src/lib/markup/MarkupPane.svelte:356 (createElementNS rect) and :1157, :1166, :1170 (styles)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> Increment 2 is the compass.",
+  "new": "> Increment 2 was the compass; it shipped as `0ccda31` and `ccb790c` (`SCHEDULE-archive.md:130`).",
+  "evidence": "docs/memory/SCHEDULE-archive.md:130 (N.127 increment 2 built `0ccda31`/`ccb790c`, walked 2026-09-24)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Stage 4 is the one thing above.",
+  "new": "Stage 4 shipped as `aa2b419` (2026-09-14).",
+  "evidence": "aa2b4199 (Colour story stage 4: the twenty values, 2026-09-14); a7c6370e (stage 4 to LOG block 15); 8b24e509 (Close of 2026-09-14: N.134 and N.118 shipped and walked)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> Dann 2026-09-13. UNPLACED.** `underlay-widths.ts:690`",
+  "new": "> Dann 2026-09-13. CLOSED 2026-09-20, `e75d6f3` and `7bd3d04`.** `underlay-widths.ts:690`",
+  "evidence": "docs/memory/SCHEDULE-archive.md:74 (N.129 CLOSED 2026-09-20, `e75d6f3` and `7bd3d04`); packages/score-parser/src/staff-renderer.ts:1103 (CYR_FONT_FAMILY Source Serif 4), :1076 (HYPHEN_GAP_PX)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "**`INBOX.md:144` still carries it",
+  "new": "**`INBOX.md:135` still carries it",
+  "evidence": "docs/memory/INBOX.md:135 (the 27.72 figure)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Insights follows the chosen key under curation rule 3. Not in the tree until a grep shows it.",
+  "new": "Insights follows the chosen key under curation rule 3. In the tree: `apps/web/src/lib/i18n.ts:2110-2116`.",
+  "evidence": "apps/web/src/lib/i18n.ts:2110-2116 (key.ruler.doubleFlatOne ... key.dock.pick, insights.tryKey); docs/memory/SCHEDULE-archive.md:145 (N.94 part 2 shipped `3ab034b`)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> au choix de l’interprète. » **Not in the tree until a grep shows it.**",
+  "new": "> au choix de l’interprète. » **In the tree: `apps/web/src/lib/i18n.ts:2086-2105`.**",
+  "evidence": "apps/web/src/lib/i18n.ts:2086-2105 (key.band.*, key.ruler.*, key.page.header)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> `watchlist.ts:476`. Only the control is missing.",
+  "new": "> `watchlist.ts:507`. Only the control is missing.",
+  "evidence": "apps/web/src/lib/analysis/watchlist.ts:507 (suggestTranspositions call); docs/memory/SEQUENCE.md:132"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "> **Design's returned HTML lives only in Dann's Downloads; commit the\n> latest into the pack at the next touch.**",
+  "new": "> **Design's R3 returned HTML is now in the pack\n> (`design-return-insights_r3_2026-09-11.dc.html`).**",
+  "evidence": "docs/sessions/n127-design-pack/design-return-insights_r3_2026-09-11.dc.html is tracked (git ls-files)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "reads it through Chrome on the branch alias. Build only if the count is not zero.",
+  "new": "reads it through Chrome on the branch alias. CLOSED 2026-09-24: the count from the 2026-09-21 export was zero, so there is nothing to build (`SCHEDULE-archive.md:46`).",
+  "evidence": "docs/memory/SCHEDULE-archive.md:46 (N.142 step 2 CLOSED 2026-09-24: counted zero from the 2026-09-21 export, nothing to build)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "`correction.ts` carries `entered: { after }` (`:48-100`), `applyCorrections` emits hand-entered events (`:305-345`), `synthesize` seats them (`:496`), `reflowOnsets` re-times the measure (`:382-433`)",
+  "new": "`correction.ts` carries `entered: { after }` (`:76`), `applyCorrections` emits hand-entered events (`:348-400`), `synthesize` seats them (`:539`), `reflowOnsets` re-times the measure (`:425-476`)",
+  "evidence": "apps/web/src/lib/score/correction.ts:76 (entered), :348-400 (applyCorrections), :539-569 (synthesize), :425-476 (reflowOnsets)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "In the tree: `lib/score/correction.ts:198-214`.",
+  "new": "In the tree: `lib/score/correction.ts:218-238`.",
+  "evidence": "apps/web/src/lib/score/correction.ts:218-238 (comment 218-229, PITCH_FLOOR_MIDI :230, PITCH_CEILING_MIDI :231, stepAllowed :233-238)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "WHEN CODE TOUCHES `Loupe.svelte:682-687`, IT RECORDS THE RETRACTION THERE.",
+  "new": "WHEN CODE TOUCHED `Loupe.svelte:682-687`, IT RECORDED THE RETRACTION THERE (DONE: the comment now stands at `Loupe.svelte:598-613` with 'RETRACTED ON A DESK, 2026-09-18').",
+  "evidence": "apps/web/src/lib/score/Loupe.svelte:598-613 comment now carries 'RETRACTED ON A DESK, 2026-09-18 (clause 1.0.2)' and 'AMENDED BY DANN 2026-09-28 01:34' at :1012"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`staff-renderer.ts:2879`)",
+  "new": "(`staff-renderer.ts:2929`)",
+  "evidence": "packages/score-parser/src/staff-renderer.ts:2929 (parts.push(`<g data-event-id=...`)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "it is why carets appear on opening today.",
+  "new": "it was why carets appeared on opening on 2026-09-18. N.149 has since closed, and in Syllables mode there are no carets (see THE LOUPE'S TWO MODES below, clause 4).",
+  "evidence": "OPEN.md:2173-2174 ('N.148, N.149 and N.150 are closed') and OPEN.md:2193 ('IN SYLLABLES MODE THERE ARE NO CARETS'); OPEN.md:1515 heading"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Two of its three parts are not built, so it is live work, not a",
+  "new": "Two of its three parts were not built when it was lifted (all three are built since 2026-10-02: `757f002`, `07f535a`), so it was live work, not a",
+  "evidence": "Table at OPEN.md:2148-2149 (meter run-in BUILT 757f002, run-on BUILT) and OPEN.md:2160 (tie taper BUILT 07f535a); apps/web/src/lib/score/loupe.ts:394 LOUPE_METER_RUN_IN_SP = 1"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`loupe.ts:598`), spent at\n      `Loupe.svelte:935`",
+  "new": "(`loupe.ts:624`), spent at\n      `Loupe.svelte:718`",
+  "evidence": "apps/web/src/lib/score/loupe.ts:624 (export const EXCERPT_TAIL_SP = 1); apps/web/src/lib/score/Loupe.svelte:718 (tailSpanUnits = ... EXCERPT_TAIL_SP * lineGap)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(rule 240, p. 42, `staff-renderer.ts:150-169`)",
+  "new": "(rule 240, p. 42, `staff-renderer.ts:153-173`)",
+  "evidence": "packages/score-parser/src/staff-renderer.ts:153-173 (comment :153, export const METER_RUN_IN_SP = 2 at :173)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`OPEN.md:1340`)",
+  "new": "(N.149's section, now in `../sessions/LOG.md` block 25)",
+  "evidence": "OPEN.md:1515 ('N.148, N.149 and N.150 are CLOSED. Their account moved to ../sessions/LOG.md block 25'); OPEN.md:1338-1342 now holds the Reading voice paragraph, not N.149's question"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "`refreshPairings` (`+page.svelte:417`)",
+  "new": "`refreshPairings` (`+page.svelte:473`)",
+  "evidence": "apps/web/src/routes/+page.svelte:473 (const shownPairings = $derived(refreshPairings(doc.pairings, slotQueue))); import at :17; STATE.md:87 keeps N.157 open"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Today the message is in one Guide paragraph only (`GuideContent.svelte:339`, French `:61`) and nowhere in Insights. For Insights, the desk's advice of 21:58 (in the thread, not ruled): on every comment that suggests an approach, and once in the page's frame and print endnotes; not under every comment.\n\n**Done when:**",
+  "new": "Before the teacher lines of 2026-10-11 the message was in one Guide paragraph only (`GuideContent.svelte:347`, French `:61`); Insights carries it since the teacher lines of 2026-10-11 (`insights.r2.teacherA` and `insights.r2.teacherC`, `apps/web/src/lib/i18n.ts:1745-1746`, used at `apps/web/src/lib/insights/singer-blocks.ts:194`). For Insights, the desk's advice of 21:58 (in the thread, not ruled): on every comment that suggests an approach, and once in the page's frame and print endnotes; not under every comment.\n\n**Done when:**",
+  "evidence": "apps/web/src/lib/components/Reading/GuideContent.svelte:347 (English, 'hands the decisions to them and their teacher') and :61 (French); apps/web/src/lib/i18n.ts:1745-1746 insights.r2.teacherA and teacherC; apps/web/src/lib/insights/singer-blocks.ts:194; QUEUE row 65/66 shipped 88529f8"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`packages/score-parser/src/staff-renderer.ts:3377-3378`, `:1171`)",
+  "new": "(`packages/score-parser/src/staff-renderer.ts:3332-3333`, `:1127`)",
+  "evidence": "packages/score-parser/src/staff-renderer.ts:3332-3333 (ipaY, cyrY = ipaY + IPA_TO_CYR_BASELINE) and :1127 (export const IPA_TO_CYR_BASELINE = 20)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Replacement test songs are owed (truth exists for ten Kabalevsky songs; their scans NOT ESTABLISHED).",
+  "new": "Replacement test songs were owed (truth exists for ten Kabalevsky songs; their scans were found 2026-10-06 00:40, next bullet).",
+  "evidence": "OPEN.md:2805 ('The replacement test songs, found 2026-10-06 00:40'): Kabalevsky op52 - 01.pdf to - 10.pdf found, image-only"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Parts of Ilya's own reader are to be used in the checks. Not built.",
+  "new": "Parts of Ilya's own reader are to be used in the checks. Built in part since this ruling: checks over homr's output shipped in `8f59ba6`, `6b7c3de`, `53035bd`, and `a7161ce` (`apps/web/src/lib/omr/`).",
+  "evidence": "6b7c3de (QUEUE 54, tuplet-number.ts, triplets.ts, join-pages.ts), 53035bd (rows 56 and 37), a7161ce (row 61, join-pages.ts), 8f59ba6 (QUEUE 49): checks over homr's output under apps/web/src/lib/omr/"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "is marked, never changed. Not built.",
+  "new": "is marked, never changed. Built as `barsToConfirm` in `322015f` (2026-10-09, `apps/web/src/lib/score/bars-to-confirm.ts`); double bars are not applied, because the parser drops bar-style.",
+  "evidence": "322015f (Row 51 slice 1: barsToConfirm, apps/web/src/lib/score/bars-to-confirm.ts; short first bar, short pair, repeat signs; double bars not applied because the parser drops bar-style)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`../sessions/report-opus-bring-the-port-up-to-homr-main_r1_2026-10-05.md`). Not in Ilya.",
+  "new": "(`../sessions/report-opus-bring-the-port-up-to-homr-main_r1_2026-10-05.md`). In Ilya since: homr-web `0.2.0-ilya.7` (`apps/web/package.json:24`, `third_party/homr-web/CHANGES-ilya.md:15-27`).",
+  "evidence": "apps/web/package.json:24 (homr-web 0.2.0-ilya.7); third_party/homr-web/CHANGES-ilya.md:4 and :15-27 (followsHomrMain, homr main's MusicXML writer for model 465); a7161ce, b80b543"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "`apps/web/src/lib/score/selection-ring.ts:27`, `:31`, `:320-331`",
+  "new": "`packages/score-parser/src/ring-geometry.ts:16`, `:23`, re-exported by `apps/web/src/lib/score/selection-ring.ts`, whose `ringBox` is at `:249`",
+  "evidence": "packages/score-parser/src/ring-geometry.ts:16 (RING_PAD_X = 4), :23 (RING_STROKE = 2); apps/web/src/lib/score/selection-ring.ts:29-30 import and re-export; ringBox at selection-ring.ts:249"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`apps/web/src/routes/+page.svelte:1086`, `handleRest`; the button at `apps/web/src/lib/score/CorrectionSurface.svelte:701`), and removing a note leaves nothing (`+page.svelte:982`, `handleDeleteNote`)",
+  "new": "(`apps/web/src/routes/+page.svelte:1088`, `handleRest`; the button at `apps/web/src/lib/score/CorrectionSurface.svelte:695`), and removing a note leaves nothing (`+page.svelte:984`, `handleDeleteNote`)",
+  "evidence": "apps/web/src/routes/+page.svelte:1088 (function handleRest), :984 (function handleDeleteNote); apps/web/src/lib/score/CorrectionSurface.svelte:695 (onclick={onrest})"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Found on his print walk of 2026-10-09. Not briefed yet.",
+  "new": "Found on his print walk of 2026-10-09. Built in `f001647` (QUEUE row 59 part 2, 2026-10-09); walked below.",
+  "evidence": "f001647 (Row 59 part 2: the Markup legend moves to the subtitle's line, 2026-10-09); walked by Dann 13:13 at OPEN.md:2892"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "with no type declared or \"Not sure\", the pitch rule stays. Not briefed yet.",
+  "new": "with no type declared or \"Not sure\", the pitch rule stays. Built in `fdd0f45` (QUEUE row 59 part 3, 2026-10-09); walked 13:10 (see \"Walked by Dann 2026-10-09 13:10\" below).",
+  "evidence": "fdd0f45 (Row 59 part 3: the note picker's clef follows the singer's voice type, 2026-10-09); walked by Dann 13:10 at OPEN.md:2928"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "a print-to-PDF page count is the test.",
+  "new": "a print-to-PDF page count is the test. FIXED in `8f8b20a` (QUEUE row 59 part 1, 2026-10-09): Markup's and Insights' page stacks carried 2rem of bottom padding that spilled onto one more page; `apps/web/e2e/print-pages.test.ts` guards the count.",
+  "evidence": "8f8b20a (Row 59 part 1: a print holds exactly the pages Ilya numbers; app.css names .markup-paper-container and .insights-container in the print reset, e2e guard apps/web/e2e/print-pages.test.ts); apps/web/src/app.css:354-357 and :336-337"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(`apps/web/src/app.css:345-348`; every page breaks after, `:327-328`)",
+  "new": "(`apps/web/src/app.css:354-357`; every page breaks after, `:336-337`)",
+  "evidence": "apps/web/src/app.css:354-357 (.paper-page:last-child) and :336-337 (page-break-after: always; break-after: page)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "**Next:** the desk asks Dann the brief's questions one at a time, writes the Design brief, and tells him before it goes.",
+  "new": "**Taken:** the Design brief was written (`../sessions/brief-design-insights-for-the-singer_r1_2026-10-09.md`; r2 is `_r2_2026-10-10.md`), and round 1 returned and was held 2026-10-09 16:19 (below).",
+  "evidence": "OPEN.md:2930 names the Design brief; docs/sessions/brief-design-insights-for-the-singer_r1_2026-10-09.md and _r2_2026-10-10.md exist (ls-files); OPEN.md:2932-2934 round 1 returned and held"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Today the message is in one Guide paragraph only (`GuideContent.svelte:339`, French `:61`) and nowhere in Insights. For Insights, the desk's advice of 21:58 (in the thread, not ruled): on every comment that suggests an approach, and once in the page's frame and print endnotes; not under every comment.\nQ4, the desk:",
+  "new": "Before the teacher lines of 2026-10-11 the message was in one Guide paragraph only (`GuideContent.svelte:347`, French `:61`); Insights carries it since the teacher lines of 2026-10-11 (`insights.r2.teacherA` and `insights.r2.teacherC`, `apps/web/src/lib/i18n.ts:1745-1746`, used at `apps/web/src/lib/insights/singer-blocks.ts:194`). For Insights, the desk's advice of 21:58 (in the thread, not ruled): on every comment that suggests an approach, and once in the page's frame and print endnotes; not under every comment.\nQ4, the desk:",
+  "evidence": "same as line 2691: GuideContent.svelte:347 and :61; i18n.ts:1745-1746; singer-blocks.ts:194"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "**Next: the desk writes Design brief r2 from this purpose and tells Dann before it goes.**",
+  "new": "**Taken: Design brief r2 was written (`../sessions/brief-design-insights-for-the-singer_r2_2026-10-10.md`); Design round 2 returned and Dann accepted it 2026-10-11 03:50 (below).**",
+  "evidence": "docs/sessions/brief-design-insights-for-the-singer_r2_2026-10-10.md exists; OPEN.md:2955 (Design round 2 returned) and :2973 (accepted by Dann 2026-10-11 03:50)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Owed next by the desk: the French table for every string marked `[FR: desk draft owed]`, then the Code brief that builds the page.",
+  "new": "Both then taken: the French table was ruled 2026-10-11 04:12 (below), and the Code brief (`../sessions/brief-code-insights-for-the-singer_r1_2026-10-11.md`) shipped as QUEUE row 66 in `88529f8`.",
+  "evidence": "OPEN.md:2975 (French table ruled 04:12, docs/sessions/french-insights-r2_r1_2026-10-11.md); docs/sessions/brief-code-insights-for-the-singer_r1_2026-10-11.md and report-code-insights-for-the-singer_r1_2026-10-11.md exist; 88529f8 (Row 66: Insights as Design round 2 drew it)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "(as built, `apps/web/src/lib/insights/singer-page.ts:198-203` sorts by largest drop first; the cloud lane's bass voice was offered a tritone). Not yet briefed.",
+  "new": "(as built, `apps/web/src/lib/insights/singer-page.ts:199-204` sorts by largest drop first; the cloud lane's bass voice was offered a tritone). Briefed since as QUEUE row 71 (`../sessions/brief-code-n182-suggesting-a-key_r2_2026-10-11.md`), HELD by Dann 2026-10-11 23:00 (`QUEUE.md:30`).",
+  "evidence": "docs/memory/QUEUE.md:30 (row 71: brief r2 written, Fable-reviewed, HELD 2026-10-11 23:00); docs/sessions/brief-code-n182-suggesting-a-key_r2_2026-10-11.md; apps/web/src/lib/insights/singer-page.ts:199-204 (found.sort( ... largest drop first)"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "**Owed by the desk:** check Insights' existing vowel-turn section",
+  "new": "**Done by the desk 2026-10-11 15:00 (report: THE LOW-VOICE-NORM CHECK OF INSIGHTS, below):** check Insights' existing vowel-turn section",
+  "evidence": "OPEN.md:3020 ('THE LOW-VOICE-NORM CHECK OF INSIGHTS, desk 2026-10-11 15:00 (owed from NO LOW-VOICE NORM)')"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "EN `:339`, `:353`, `:556`",
+  "new": "EN `:347`, `:361`, `:564`",
+  "evidence": "apps/web/src/lib/components/Reading/GuideContent.svelte:347, :361, :564 (English 'Fit forecasts', 'Fit's analysed score', 'Fit's analysis model'); French :61, :74, :277 still hold"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Not yet in the tree (`i18n.ts:1786`); goes to Code with the next French brief.",
+  "new": "In the tree since `7b7ec12` (2026-10-12, `i18n.ts:1796`).",
+  "evidence": "apps/web/src/lib/i18n.ts:1796 ('insights.r2.vowels.noTurn' fr: '{s}, aucune première résonance mesurée lors de votre calibration'); 7b7ec12 (Row 73) added it"
+ },
+ {
+  "file": "docs/memory/OPEN.md",
+  "old": "Brief to follow, Fable-reviewed before Code.",
+  "new": "Brief written (`../sessions/brief-code-n182-suggesting-a-key_r2_2026-10-11.md`) and Fable-reviewed (`../sessions/review-fable-n182_r1_2026-10-11.md`); row 71 is HELD by Dann (`QUEUE.md:30`).",
+  "evidence": "docs/memory/QUEUE.md:30 (row 71: brief r2 `brief-code-n182-suggesting-a-key_r2_2026-10-11.md`, Fable-reviewed `review-fable-n182_r1_2026-10-11.md`, HELD by Dann 2026-10-11 23:00)"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`Loupe.svelte:276-277` still bounds",
+  "new": "`loupe-ink.ts:201` (moved out of `Loupe.svelte`) still bounds",
+  "evidence": "apps/web/src/lib/score/loupe-ink.ts:201 (heads from [data-hit]) ; Loupe.svelte:1034 only calls pageMetrics"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "(2) `Loupe.svelte:218` skips",
+  "new": "(2) `loupe-ink.ts:155` (moved out of `Loupe.svelte`) skips",
+  "evidence": "apps/web/src/lib/score/loupe-ink.ts:154-155 (`const hit = sys.querySelector('[data-hit]'); if (!hit) continue;`)"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`beams.py:264-265` computes\n  it and `:310` carries it",
+  "new": "`beams.py:304-324` computes\n  it and `:350` carries it",
+  "evidence": "tools/e16-harness/reader/beams.py:304-324 (stem direction returned as dir=updown) and :350 (stem_dir=(st['dir'] if st else None))"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`beams.py:133` reads",
+  "new": "`beams.py:143` reads",
+  "evidence": "tools/e16-harness/reader/beams.py:143 (`S5: one rule, both directions, no directional term.`)"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "(`loupe.ts:691`)",
+  "new": "(`loupe.ts:732`)",
+  "evidence": "apps/web/src/lib/score/loupe.ts:724-733: closingBarline, `const right = Math.max(...)` at :732"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "(`:1246`)",
+  "new": "(`:1245`)",
+  "evidence": "packages/phonology/src/engine.ts:1245 reads `    return vowel;` ; findYoSyllable at :1127 still matches"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`profileStore.ts:85` keeps `voiceType` optional and\n`analyze.ts:31` takes it as `_voiceType`",
+  "new": "`profileStore.ts:95` keeps `voiceType` optional and\n`analyze.ts:78` (and `:125`) takes it as `_voiceType`",
+  "evidence": "apps/web/src/lib/voice/profileStore.ts:95 `voiceType?: VoiceType;`; apps/web/src/lib/voice/engine/analyze.ts:78 and :125 `_voiceType?: VoiceType`"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "(`i18n.ts:888`)",
+  "new": "(`i18n.ts:1014`)",
+  "evidence": "apps/web/src/lib/i18n.ts:1014 `'upload.status.readingPage'`"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "(`ScoreUploader.svelte:464-468`)",
+  "new": "(`probeFile` is at `ScoreUploader.svelte:709`, called at `:546`)",
+  "evidence": "apps/web/src/lib/score/ScoreUploader.svelte:709 (async function probeFile) and :546 (await probeFile(file)); :464-468 is now a comment on the OCR guard"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "(`ScoreUploader.svelte:134`)",
+  "new": "(`ScoreUploader.svelte:134` at Code's reading; the tree now draws the line at `:978` through `readingWait.line(language)`)",
+  "evidence": "apps/web/src/lib/score/ScoreUploader.svelte:134 is now a comment; :978 `{ui.key ? (readingWait.line(language) ?? T(ui.key)) : ui.label}`; omr/wait.ts:61"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "**THREE CLOSED ITEMS' SPECS ARE STILL IN `OPEN.md` AND CANNOT SIMPLY BE MOVED.**",
+  "new": "**THREE CLOSED ITEMS' SPECS WERE STILL IN `OPEN.md` ON 2026-09-21; none of the three has a heading there now.**",
+  "evidence": "docs/memory/OPEN.md: no `## N.146`, `## N.147`, or `## N.155` heading (headings present: N.140 :627, N.141 :698, N.148-150 :1515, N.151 :1522); OWED.md:155 'Its spec was archived 2026-09-22' and :217 'before that spec was archived'"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "The Guide's credit sentence, untrue since the port is a changed copy (`apps/web/src/lib/components/Reading/GuideContent.svelte:566` and `:287`). The desk drafts the English and proposes the French.",
+  "new": "The Guide's credit sentence said nothing of the changed copy. It does now: `apps/web/src/lib/components/Reading/GuideContent.svelte:574` (English) and `:295` (French) say Ilya uses a copy of homr-web changed to read with homr's newer model (since `0976735d`, 2026-10-05, N.178).",
+  "evidence": "apps/web/src/lib/components/Reading/GuideContent.svelte:574 and :295; 0976735d (N.178, 2026-10-05: the Guide credit sentence names the changed copy)"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`apps/web/src/lib/score/vowel-resolver.ts:156` tests a cell for a vowel without ѣ, і, or ѵ.",
+  "new": "`apps/web/src/lib/score/vowel-resolver.ts:157` (`CYRILLIC_VOWEL`) now counts ѣ, і, and ѵ as vowels (`e3e2c33`, QUEUE row 25).",
+  "evidence": "e3e2c33 diff: `CYRILLIC_VOWEL = /[аеёиоуыэюя]/` -> `/[аеёиоуыэюяѣіѵ]/`; apps/web/src/lib/score/vowel-resolver.ts:157"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`finding.passaggio`, `i18n.ts:1501`",
+  "new": "`insights.finding.passaggio`, `i18n.ts:1656`",
+  "evidence": "apps/web/src/lib/i18n.ts:1656 `'insights.finding.passaggio'`"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "**The loupe's French is now fully ruled and wholly unbuilt.**",
+  "new": "**The loupe's French was fully ruled and wholly unbuilt on 2026-09-16. It is built now** (`i18n.ts:450`, `:451`, `:467`, `:468`, `:489`, `:490`, `:535`, `:541`).",
+  "evidence": "apps/web/src/lib/i18n.ts:468 `'loupe.undo.placed' fr 'syllabe placée'`, :489 `'mélisme défini'`, :490 `'mélisme effacé'`, :467 `'Refaire : %s'`, :450-451 `temps %b`, :535 `Mélisme`, :541; OWED.md:469 already marks the sibling row built"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "DESK DEFAULT checkpoint: **Friday 2026-10-09**; a design row not in Code by then moves to LATER and the date stands.",
+  "new": "DESK DEFAULT checkpoint: **Friday 2026-10-09**, DROPPED by the desk 2026-10-09 01:10 (`SCHEDULE-archive.md:152`); a design row not in Code by then was to move to LATER and the date to stand.",
+  "evidence": "docs/memory/SCHEDULE-archive.md:25 '[CHECKED 2026-10-11 19:40 against git log: The 2026-10-09 checkpoint was dropped on 2026-10-09 01:10; nothing moves to LATER.]' and :152"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`InstallPrompt.svelte:48`",
+  "new": "`InstallPrompt.svelte:82`",
+  "evidence": "apps/web/src/lib/components/InstallPrompt.svelte:82 (`!(ua.includes('CriOS') || ua.includes('FxiOS'))`)"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "**BUILT 2026-09-14 as N.133, uncommitted.**",
+  "new": "**BUILT 2026-09-14 as N.133, since committed (`eb918ed8`, 2026-09-14).**",
+  "evidence": "apps/web/src/lib/markup/MarkupPane.svelte:506 '`stripBackingRect` stood here and removed the white full-page rect'; eb918ed8 (N.133); no stripBackingRect function remains in apps/ or packages/; 807d0e4 (2026-10-08) is the first commit in this clone carrying the removal"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "**`VoiceProfilePane.svelte:295-313` duplicates the old header arithmetic.**",
+  "new": "**`VoiceProfilePane.svelte:295-313` duplicated the old header arithmetic.** The file is no longer in `apps/web/src` (only the design-pack copy at `docs/sessions/n127-design-pack/VoiceProfilePane.svelte` remains), so the citation has no target; the Fit surface was removed (see the N.22 row below).",
+  "evidence": "git ls-files lists VoiceProfilePane.svelte only at docs/sessions/n127-design-pack/VoiceProfilePane.svelte; OWED.md:700 'The Fit surface was removed in `c2a01b3`'"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "| The stress-acutes toggle governs Transcription only |",
+  "new": "| The stress-acutes toggle governed Transcription only; N.119 now carries it to Markup |",
+  "evidence": "apps/web/src/lib/components/Drawer/NotationFields.svelte:14-21 'THE SEVENTH TOGGLE NOW REACHES MARKUP (N.119) ... MarkupPane takes showStressDiacritics'"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "(`profileStore.ts:78-85`)",
+  "new": "(`profileStore.ts:95`)",
+  "evidence": "apps/web/src/lib/voice/profileStore.ts:95 `voiceType?: VoiceType;`"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`analysis-types.ts:72-73`",
+  "new": "`analysis-types.ts:89`",
+  "evidence": "packages/score-parser/src/analysis-types.ts:89 '(from voice-type norms and the profile)'"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`packages/phonology/src/engine.ts:237`, `:908`",
+  "new": "`packages/phonology/src/engine.ts:238`, `:909`",
+  "evidence": "packages/phonology/src/engine.ts:238 `alwaysHard: new Set(['ж', 'ш', 'ц'])`; :909 `// ж, ш, ц never palatalize`"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "Option 1 is briefed:",
+  "new": "Option 1 is built (`VerseLine.svelte:19-23` keeps Latin words through `apps/web/src/lib/latin.ts`; since `f5d0dd41`, 2026-09-27) and was briefed in:",
+  "evidence": "apps/web/src/lib/components/Paper/VerseLine.svelte:19-23 `words.filter(w => w.latin || /[А-Яа-яЁё]/...)`; apps/web/src/lib/latin.ts exists; f5d0dd41 (2026-09-27, Latin words on the page)"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`apps/web/src/lib/score/vowel-resolver.ts:417`",
+  "new": "`apps/web/src/lib/score/vowel-resolver.ts:469`",
+  "evidence": "apps/web/src/lib/score/vowel-resolver.ts:469 '... which her Fit note calls the right priority'"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "`AGENTS.md:57`",
+  "new": "`AGENTS.md:58`",
+  "evidence": "AGENTS.md:58 contains 'paraphrase-then-*Fit:* shape'"
+ },
+ {
+  "file": "docs/memory/OWED.md",
+  "old": "**Citations into `i18n.ts` are off by 77 lines** since `8694424`",
+  "new": "**Citations into `i18n.ts` were off by 77 lines** after `8694424`, and are off by more now (`upload.status.readingPage` cited at 888 stands at 1014, 126 lines; `insights.finding.passaggio` cited at 1501 stands at 1656, 155 lines)",
+  "evidence": "apps/web/src/lib/i18n.ts:1014 and :1656 against OWED.md:243 (`i18n.ts:888`) and :433 (`i18n.ts:1501`), both written 2026-09-22"
+ }
+]

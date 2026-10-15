@@ -171,7 +171,7 @@ had marked it *"Dann's eye"* and unruled; his walk is the ratification.
 ### AND A RULING IS NESTED WHERE IT WILL BE LOST. Found 2026-09-22
 
 **Dann's ruling of 2026-09-14, *"I don't want Ilya dropping hyphens"*, lives at
-`OPEN.md:1250`, inside N.141's 804-line spec**, as a quoted block belonging to N.129.
+`OPEN.md:1396`, inside N.141's 804-line spec**, as a quoted block belonging to N.129.
 N.129 itself closed 2026-09-20 and its own spec is gone. **So the day N.141 closes, that
 ruling goes into the archive with it**, which is the fault this whole triage exists to
 repair, one level down.
@@ -905,7 +905,7 @@ not proposed. Each is a lead from the audit's tools, checked where marked.
   reachable only from each other and the unreachable component above.
   `reconciliation/types.ts` is live. **`CONTRACT.md` §6: do not rebuild anything
   in `reconciliation/`.**
-- The i18n key `tab.fit` (`i18n.ts:108`): no caller (desk grep, 2026-09-26).
+- The i18n key `tab.fit` is gone: `apps/web/src/lib/i18n.ts` holds no `tab.fit` (snapshot grep, 2026-10-14); the removing commit is not identified.
 
 N.174's inventory will surface more; its spec lists unused keys for Dann rather
 than deleting them.
@@ -1029,4 +1029,4 @@ Each stood in a close block of 2026-10-01 under "Waiting on Dann, never to be pu
 
 - **Found 2026-10-12 14:30 in Code's row 85 picture (Dann's screenshot): the Insights pitch figure clips its comfortable-zone bracket label at the right edge at 390 px in French (« votre zone de travail c… »).** Code calls it pre-existing, not row 85's. Not numbered; a candidate for row 79's or a later Insights row. Desk, Opus.
 
-- **Found 2026-10-12 20:13 (cloud session, row 87): `AGENTS.md` says no agent commits, while CONTRACT.md carries Dann's ruling of 2026-10-02 02:37 that a cloud session may commit and push one dedicated branch (never `Shane` or `main`).** Every cloud session meets the contradiction. Fix: one sentence in `AGENTS.md` naming the exception, to ride with QUEUE row 84. Desk, Opus.
+- **Found 2026-10-12 20:13 (cloud session, row 87): `AGENTS.md` says no agent commits, while CONTRACT.md carries Dann's ruling of 2026-10-02 02:37 that a cloud session may commit and push one dedicated branch (never `Shane` or `main`).** Every cloud session meets the contradiction. DONE: `9e1af16` added the sentence to `AGENTS.md` (shipped in `1ec2ef2` with row 84). Desk, Opus.
