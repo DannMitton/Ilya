@@ -1,0 +1,16 @@
+RULE R2. Words of two or more letters read on the Russian rows, by group and reader: a whole word or whole printed syllable of the song / not of the song but a dictionary entry (a misread that is itself a word) / not a dictionary entry (a non-word)
+U (a): 319 words; of the song 208 (65%); dictionary-word misreads 33 (10%); non-words 78 (24%)
+U (c): 351 words; of the song 230 (66%); dictionary-word misreads 33 (9%); non-words 88 (25%)
+U (t-imap): 362 words; of the song 242 (67%); dictionary-word misreads 30 (8%); non-words 90 (25%)
+P (a): 65 words; of the song 32 (49%); dictionary-word misreads 2 (3%); non-words 31 (48%)
+P (c): 63 words; of the song 31 (49%); dictionary-word misreads 3 (5%); non-words 29 (46%)
+P (t-imap): 69 words; of the song 35 (51%); dictionary-word misreads 5 (7%); non-words 29 (42%)
+B (a): 775 words; of the song 593 (77%); dictionary-word misreads 59 (8%); non-words 123 (16%)
+B (c): 765 words; of the song 556 (73%); dictionary-word misreads 67 (9%); non-words 142 (19%)
+B (t-imap): 773 words; of the song 589 (76%); dictionary-word misreads 63 (8%); non-words 121 (16%)
+STKM (a): 284 words; of the song 150 (53%); dictionary-word misreads 37 (13%); non-words 97 (34%)
+STKM (c): 277 words; of the song 173 (62%); dictionary-word misreads 23 (8%); non-words 81 (29%)
+STKM (t-imap): 281 words; of the song 217 (77%); dictionary-word misreads 19 (7%); non-words 45 (16%)
+all (a): 1443 words; of the song 983; dictionary-word misreads 131; non-words 329
+all (c): 1456 words; of the song 990; dictionary-word misreads 126; non-words 340
+all (t-imap): 1485 words; of the song 1083; dictionary-word misreads 117; non-words 285

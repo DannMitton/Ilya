@@ -1,0 +1,84 @@
+RULE R2, tokens as the reader gave them (row 81's). Syllables read right, per song and reader (letter for letter / in sound after modernisePreReform), of the printed syllables of the transcription (truth syllables; S, T, K, M row 81 poem.txt)
+song | printed | (a) letter | (a) sound | (c) letter | (c) sound | (t-imap) letter | (t-imap) sound | (t-syl) letter | (t-syl) sound
+U1 | 97 | 44 | 45 | 52 | 53 | 56 | 57 | 52 | 52
+U4 | 112 | 48 | 48 | 51 | 51 | 40 | 40 | 43 | 43
+U5 | 258 | 159 | 161 | 154 | 159 | 160 | 162 | 134 | 135
+U6 | 152 | 105 | 108 | 98 | 101 | 102 | 103 | 93 | 95
+P | 177 | 48 | 50 | 65 | 65 | 89 | 89 | 50 | 50
+B01 | 147 | 85 | 89 | 88 | 92 | 99 | 103 | 62 | 64
+B02 | 86 | 65 | 67 | 60 | 61 | 64 | 65 | 21 | 21
+B03 | 147 | 103 | 103 | 94 | 95 | 108 | 108 | 60 | 60
+B04 | 148 | 60 | 62 | 67 | 69 | 82 | 86 | 51 | 52
+B06 | 142 | 53 | 53 | 64 | 65 | 73 | 74 | 37 | 38
+B07 | 151 | 76 | 76 | 84 | 86 | 83 | 83 | 49 | 49
+B08 | 141 | 70 | 71 | 82 | 82 | 80 | 81 | 53 | 54
+B09 | 139 | 86 | 87 | 90 | 91 | 98 | 98 | 53 | 54
+B10 | 148 | 74 | 76 | 73 | 74 | 74 | 74 | 40 | 41
+S | 109 | 82 | 82 | 76 | 76 | 99 | 99 | 101 | 101
+T | 200 | 113 | 113 | 135 | 135 | 148 | 149 | 137 | 137
+K | 131 | 83 | 83 | 83 | 83 | 95 | 95 | 82 | 82
+M | 53 | 17 | 17 | 21 | 21 | 48 | 48 | 41 | 41
+U1-6 (pre-reform, with German) | 619 | 356 | 362 | 355 | 364 | 358 | 362 | 322 | 325
+P (pre-reform) | 177 | 48 | 50 | 65 | 65 | 89 | 89 | 50 | 50
+B (modern) | 1249 | 672 | 684 | 702 | 715 | 761 | 772 | 426 | 433
+S,T,K,M | 493 | 295 | 295 | 315 | 315 | 390 | 391 | 361 | 361
+all | 2538 | 1371 | 1391 | 1437 | 1459 | 1598 | 1614 | 1159 | 1169
+
+Pre-reform letters, all songs: what each reader read in place of each printed one (the printed letter counted in the transcription as typed; the truth of U, P, B is Dann's engraving, which may be modern where the print is not)
+ѣ: in the transcription 32
+   (a) ∅ 9, Ъ 8, в 3, Ф 3, Б 3, (missed) 2, ъ 1, и 1, е 1, Н 1
+   (c) ъ 9, ∅ 4, Ъ 3, в 2, ћ 2, (missed) 1, В 1, и 1, Ё 1, ё 1, Б 1, Ђ 1
+   (t-imap) ѣ 31, ї 1
+   (t-syl) ѣ 26, ъ 2, Т 2, с 1, ∅ 1
+і: in the transcription 11
+   (a) ∅ 3, К 3, и 2, Ш 1, Т 1, И 1
+   (c) і 5, и 2, ії 1, І 1, Ї 1, ю 1
+   (t-imap) і 8, ї 1, ∅ 1, І 1
+   (t-syl) і 5, ї 2, ∅ 2, у 1, Е 1
+ѳ: printed 0
+ѵ: printed 0
+ъ#: in the transcription 124
+   (a) ъ 70, ъЪ 19, Ъ 17, ∅ 6, (missed) 3, М 2, ъот 1, ъне 1, ъсплю 1, ълЪ 1, ъЪъ 1, Ь 1
+   (c) ъ 104, Ъ 10, ∅ 2, (missed) 2, ъЪ 2, ъот 1, ъвъмоемъсерд 1, н 1, К 1
+   (t-imap) ъ 114, Ъ 3, ь 2, ъот 1, д 1, х 1, ъне 1, Т 1
+   (t-syl) ъ 103, Ъ 6, Т 4, ∅ 2, ѣ 2, ъот 1, д 1, х 1, ъне 1, ь 1, ъхх 1, ъц 1
+
+Printed syllables with ё in the transcription (the print has none where checked; counts right in sound, not in letter), and tokens covering two or more printed syllables, per song and reader
+U1: ё 2; covered (a) 25 (c) 21 (t-imap) 19 (t-syl) 20
+U4: ё 1; covered (a) 28 (c) 28 (t-imap) 32 (t-syl) 31
+U5: ё 4; covered (a) 36 (c) 35 (t-imap) 34 (t-syl) 44
+U6: ё 3; covered (a) 12 (c) 7 (t-imap) 12 (t-syl) 9
+P: ё 0; covered (a) 52 (c) 43 (t-imap) 30 (t-syl) 52
+B01: ё 5; covered (a) 20 (c) 18 (t-imap) 15 (t-syl) 25
+B02: ё 2; covered (a) 6 (c) 8 (t-imap) 4 (t-syl) 23
+B03: ё 1; covered (a) 15 (c) 15 (t-imap) 8 (t-syl) 21
+B04: ё 5; covered (a) 37 (c) 33 (t-imap) 23 (t-syl) 34
+B06: ё 3; covered (a) 37 (c) 29 (t-imap) 25 (t-syl) 33
+B07: ё 1; covered (a) 25 (c) 18 (t-imap) 26 (t-syl) 28
+B08: ё 3; covered (a) 30 (c) 22 (t-imap) 22 (t-syl) 32
+B09: ё 0; covered (a) 16 (c) 14 (t-imap) 13 (t-syl) 20
+B10: ё 3; covered (a) 26 (c) 27 (t-imap) 22 (t-syl) 32
+S: ё 0; covered (a) 1 (c) 4 (t-imap) 4 (t-syl) 2
+T: ё 0; covered (a) 21 (c) 13 (t-imap) 17 (t-syl) 14
+K: ё 0; covered (a) 19 (c) 17 (t-imap) 11 (t-syl) 14
+M: ё 0; covered (a) 7 (c) 7 (t-imap) 1 (t-syl) 1
+
+Pre-reform letters in each song's transcription (ѣ і ѳ ѵ, and word-final ъ): the spelling of the truth, per song
+U1: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+U4: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+U5: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+U6: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+P: ѣ=11 і=5 ѳ=0 ѵ=0 ъ#=23
+B01: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B02: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B03: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B04: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B06: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B07: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B08: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B09: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B10: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+S: ѣ=3 і=0 ѳ=0 ѵ=0 ъ#=17
+T: ѣ=12 і=2 ѳ=0 ѵ=0 ъ#=60
+K: ѣ=3 і=2 ѳ=0 ѵ=0 ъ#=20
+M: ѣ=3 і=2 ѳ=0 ѵ=0 ъ#=4

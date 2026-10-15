@@ -1,0 +1,50 @@
+{
+ "supplement lines after exclusions": 20744,
+ "supplement drops": {
+  "already in the pool": 281,
+  "line holds an excluded four-word run": 2
+ },
+ "supplement real lines: train authors / held-out authors": [
+  19730,
+  1014
+ ],
+ "real supplement letter counts, train": {
+  "real ѣ": 9836,
+  "real ѳ": 20354,
+  "real ѵ": 165,
+  "real і": 6447,
+  "real finalъ": 31434
+ },
+ "training lines: main / added": [
+  22000,
+  2006
+ ],
+ "added lines as a share of the corpus": 0.0836,
+ "added by kind": {
+  "added: real line holding ѵ": 163,
+  "added: real line holding ѳ": 1208,
+  "added: synthetic, real line with real ѵ words inserted": 635
+ },
+ "training letter counts": {
+  "ѣ": 13342,
+  "ѳ": 2051,
+  "ѵ": 2052,
+  "і": 7525,
+  "finalъ": 35867
+ },
+ "held-out lines: main / added": [
+  500,
+  212
+ ],
+ "held-out letter counts": {
+  "ѣ": 414,
+  "ѳ": 130,
+  "ѵ": 131,
+  "і": 322,
+  "finalъ": 1086
+ },
+ "held-out lines after removing any that equal a training line": 712,
+ "training lines: distinct pages": 936,
+ "training lines: distinct authors": 489,
+ "held-out lines: distinct authors": 55
+}

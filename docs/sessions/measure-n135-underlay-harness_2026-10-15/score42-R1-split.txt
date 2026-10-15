@@ -1,0 +1,81 @@
+RULE R1, tokens split at an internal non-letter. Syllables read right, per song and reader (letter for letter / in sound after modernisePreReform), of the printed syllables of the transcription (truth syllables; S, T, K, M row 81 poem.txt)
+song | printed | (a) letter | (a) sound | (c) letter | (c) sound | (t-imap) letter | (t-imap) sound
+U1 | 97 | 83 | 85 | 88 | 91 | 68 | 69
+U4 | 112 | 25 | 25 | 35 | 36 | 27 | 27
+U5 | 258 | 155 | 157 | 153 | 157 | 149 | 150
+U6 | 152 | 28 | 30 | 31 | 33 | 63 | 65
+P | 177 | 94 | 97 | 102 | 102 | 100 | 100
+B01 | 147 | 108 | 112 | 103 | 107 | 103 | 107
+B02 | 86 | 68 | 70 | 64 | 65 | 64 | 65
+B03 | 147 | 119 | 119 | 111 | 112 | 108 | 108
+B04 | 148 | 91 | 94 | 112 | 116 | 87 | 91
+B06 | 142 | 88 | 91 | 99 | 102 | 78 | 79
+B07 | 151 | 101 | 101 | 104 | 104 | 83 | 83
+B08 | 141 | 105 | 107 | 109 | 110 | 76 | 77
+B09 | 139 | 89 | 90 | 99 | 100 | 100 | 100
+B10 | 131 | 79 | 81 | 83 | 84 | 72 | 72
+S | 109 | 82 | 82 | 76 | 76 | 99 | 99
+T | 200 | 124 | 125 | 139 | 139 | 148 | 149
+K | 131 | 110 | 112 | 99 | 99 | 99 | 99
+M | 53 | 17 | 17 | 21 | 21 | 48 | 48
+U1-6 (pre-reform, with German) | 619 | 291 | 297 | 307 | 317 | 307 | 311
+P (pre-reform) | 177 | 94 | 97 | 102 | 102 | 100 | 100
+B (modern) | 1232 | 848 | 865 | 884 | 900 | 771 | 782
+S,T,K,M | 493 | 333 | 336 | 335 | 335 | 394 | 395
+all | 2521 | 1566 | 1595 | 1628 | 1654 | 1572 | 1588
+
+Pre-reform letters, all songs: what each reader read in place of each printed one (the printed letter counted in the transcription as typed; the truth of U, P, B is Dann's engraving, which may be modern where the print is not)
+ѣ: in the transcription 32
+   (a) ∅ 9, Ъ 8, в 3, Ф 3, Б 3, В 1, о 1, ъ 1, и 1, е 1, Н 1
+   (c) ъ 9, ∅ 5, Ъ 3, В 2, в 2, ћ 2, и 1, Ё 1, ё 1, Б 1, Ђ 1, Л 1
+   (t-imap) ѣ 31, ї 1
+і: in the transcription 11
+   (a) ∅ 3, К 3, и 2, Ш 1, Т 1, И 1
+   (c) і 6, и 2, І 1, Й 1, ю 1
+   (t-imap) і 8, ∅ 2, І 1
+ѳ: printed 0
+ѵ: printed 0
+ъ#: in the transcription 124
+   (a) ъ 72, ъЪ 19, Ъ 17, ∅ 4, М 2, ъдив 1, ъот 1, (missed) 1, ф 1, ъне 1, ъсплю 1, ълЪ 1
+   (c) ъ 105, Ъ 10, (missed) 2, ъЪ 2, ъднв 1, ъот 1, ъвъмоемъсерд 1, н 1, К 1
+   (t-imap) ъ 114, Ъ 3, ь 2, ъот 1, д 1, х 1, ъне 1, Т 1
+
+Printed syllables with ё in the transcription (the print has none where checked; counts right in sound, not in letter), and tokens covering two or more printed syllables, per song and reader
+U1: ё 2; covered (a) 4 (c) 1 (t-imap) 13
+U4: ё 1; covered (a) 36 (c) 32 (t-imap) 34
+U5: ё 4; covered (a) 35 (c) 32 (t-imap) 31
+U6: ё 3; covered (a) 37 (c) 38 (t-imap) 24
+P: ё 0; covered (a) 27 (c) 23 (t-imap) 24
+B01: ё 5; covered (a) 7 (c) 9 (t-imap) 13
+B02: ё 2; covered (a) 4 (c) 6 (t-imap) 4
+B03: ё 1; covered (a) 7 (c) 5 (t-imap) 8
+B04: ё 5; covered (a) 20 (c) 7 (t-imap) 20
+B06: ё 3; covered (a) 15 (c) 7 (t-imap) 22
+B07: ё 1; covered (a) 12 (c) 8 (t-imap) 26
+B08: ё 3; covered (a) 12 (c) 7 (t-imap) 24
+B09: ё 0; covered (a) 13 (c) 9 (t-imap) 12
+B10: ё 3; covered (a) 16 (c) 13 (t-imap) 22
+S: ё 0; covered (a) 1 (c) 4 (t-imap) 4
+T: ё 0; covered (a) 13 (c) 11 (t-imap) 17
+K: ё 0; covered (a) 3 (c) 6 (t-imap) 9
+M: ё 0; covered (a) 7 (c) 7 (t-imap) 1
+
+Pre-reform letters in each song's transcription (ѣ і ѳ ѵ, and word-final ъ): the spelling of the truth, per song
+U1: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+U4: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+U5: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+U6: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+P: ѣ=11 і=5 ѳ=0 ѵ=0 ъ#=23
+B01: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B02: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B03: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B04: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B06: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B07: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B08: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B09: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+B10: ѣ=0 і=0 ѳ=0 ѵ=0 ъ#=0
+S: ѣ=3 і=0 ѳ=0 ѵ=0 ъ#=17
+T: ѣ=12 і=2 ѳ=0 ѵ=0 ъ#=60
+K: ѣ=3 і=2 ѳ=0 ѵ=0 ъ#=20
+M: ѣ=3 і=2 ѳ=0 ѵ=0 ъ#=4

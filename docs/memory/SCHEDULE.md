@@ -22,14 +22,14 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 - [x] **Row 89**: the quadruplet in 4F. SHIPPED `1ec2ef2`; 4F 98.0 PASS. The double flat was not built.
 - [x] **Row 93**: Markup blank on a stored scan. Cause found by the desk 2026-10-14 (seats under the old reader's note names); fix SHIPPED `6c69161` (N.185, `../sessions/report-code-row93-seats-under-old-names_r1_2026-10-13.md`); ratified by Dann 02:56.
 - [ ] **Row 82**: the pre-reform model (N.184). Up to 11 hours of the Mac; runs when the Mac is free for a long stretch, overnight if Dann asks for that.
-- [ ] **Corrections slice 4** (`QUEUE.md` row 5, slices 4 to 6): the station code leaves the page, no visible change. Row 93's fix has shipped (`6c69161`); this is not started.
+- [ ] **Corrections slice 4** BUILT on `cloud-lane-9` (slices 4 to 7, `eeb055c` branch tip), not merged at the close of 2026-10-15. (`QUEUE.md` row 5, slices 4 to 6): the station code leaves the page, no visible change. Row 93's fix has shipped (`6c69161`); this is not started.
 
 **Cloud**
 - [x] **Row 84**: N.86's dead code. SHIPPED `1ec2ef2` (desk check 2026-10-14).
 - [x] **Row 51, Corrections slice 2**: what Ilya can offer for a bar. SHIPPED `1ec2ef2`.
 - [ ] **Corrections slice 3**: the singer's answer kept per bar. Brief not written; pure, so cloud.
 - [x] **Row 90** SHIPPED `0b0c52a` 2026-10-14 (with rows 94, 95, 97; `../sessions/report-code-rows90-94_r1_2026-10-14.md`). Was: tonight's ruled strings (the Insights frame line, the two Guide conventions lines). Brief not written.
-- [ ] **Row 91**: reflexive -ся read hard, and -ться's [ʌ] reconstituting to [ɑ], after Grayson (ruled 20:33). Brief not written.
+- [x] **Row 91** SHIPPED `b21ce8a` 2026-10-15 (`../sessions/report-code-row91-reflexive-sya_r1_2026-10-15.md`), with rows 99, 100, 101, 102. Was: reflexive -ся read hard, and -ться's [ʌ] reconstituting to [ɑ], after Grayson (ruled 20:33).
 
 **Dann**
 - [x] **The next ship** went out as `50a5f85` (row 96) and `0b0c52a` (rows 95, 97, 90, 94) on 2026-10-14. Was: rows 84 and 89 went out in `1ec2ef2`; this ship carries `6c69161` and the cloud rows that land (row 96). The desk prepares it.

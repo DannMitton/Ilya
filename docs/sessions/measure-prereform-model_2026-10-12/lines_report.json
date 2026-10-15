@@ -1,0 +1,36 @@
+{
+ "words in S poem.txt": 60,
+ "words in T poem.txt": 119,
+ "words in K poem.txt": 64,
+ "words in M poem.txt": 25,
+ "private titles (count only)": 35,
+ "pages fetched to take trigrams of listed poems (count only)": 39,
+ "exclusion 4-grams": 6879,
+ "exclusion 5-grams": 6927,
+ "drops": {
+  "line holds an excluded four-word run": 18,
+  "page shares 2+ five-word runs with an excluded poem": 7,
+  "duplicate line": 171
+ },
+ "candidate lines": 76323,
+ "train pool": 68422,
+ "held-out pool (authors whose md5 mod 10 is 0)": 7901,
+ "letters in train pool": {
+  "ѣ": 38379,
+  "ѳ": 84,
+  "ѵ": 1,
+  "і": 19868,
+  "І": 207,
+  "ъ": 99830,
+  "final ъ": 99257
+ },
+ "letters in held-out pool": {
+  "ѣ": 4613,
+  "ѳ": 7,
+  "ѵ": 0,
+  "і": 2940,
+  "І": 7,
+  "ъ": 11362,
+  "final ъ": 11304
+ }
+}

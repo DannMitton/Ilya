@@ -1,0 +1,20 @@
+Loading weights:   0%|          | 0/480 [00:00<?, ?it/s]Loading weights: 100%|██████████| 480/480 [00:00<00:00, 22832.36it/s]
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer RobertaTokenizer. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+U1 chunks 86 51 s
+U4 chunks 83 54 s
+U5 chunks 251 150 s
+U6 chunks 202 113 s
+P chunks 130 89 s
+B01 chunks 154 94 s
+B02 chunks 95 57 s
+B03 chunks 173 101 s
+B04 chunks 164 96 s
+B06 chunks 139 83 s
+B07 chunks 177 105 s
+B08 chunks 148 87 s
+B09 chunks 186 105 s
+B10 chunks 150 85 s
+S chunks 129 77 s
+T chunks 227 142 s
+K chunks 135 83 s
+M chunks 60 36 s

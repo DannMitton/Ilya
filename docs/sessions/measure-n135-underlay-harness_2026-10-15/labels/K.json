@@ -1,0 +1,24 @@
+{
+"rows": {
+"p1s1r1": "russian",
+"p1s1r2": "other",
+"p1s2r1": "russian",
+"p1s3r1": "russian",
+"p2s1r1": "russian",
+"p2s2r1": "russian",
+"p2s3r1": "russian",
+"p3s1r1": "russian",
+"p3s1r2": "other",
+"p3s2r1": "russian",
+"p3s3r1": "russian",
+"p3s3r2": "notext",
+"p4s1r1": "russian",
+"p4s1r2": "other",
+"p4s2r1": "russian",
+"p4s2r2": "other",
+"p4s2r3": "other",
+"p4s3r1": "russian",
+"p4s3r2": "notext"
+},
+"systems": []
+}

@@ -1,0 +1,118 @@
+[
+ {
+  "case": "(a) rus 4.0.0_best_int, gz as the app fetches it",
+  "init": 0.1282000000011176,
+  "error": null,
+  "rows": [
+   {
+    "s": "U1-1-s1-r1.png",
+    "seconds": 0.12629999999888242,
+    "text": "|                      гоом-нат.ка тес. на. я.        ти. ха - Я.      МИ    - Ла .я;"
+   },
+   {
+    "s": "B01-1-s1-r1.png",
+    "seconds": 0.06730000000074506,
+    "text": "}                                                 Те. 0е ль ме    НЯ    при. дет . ся хо.ро."
+   },
+   {
+    "s": "U6-2-s1-r1.png",
+    "seconds": 0.10340000000037253,
+    "text": "| У      Мол   -   _ О ча смМбот = рю     Я.    на"
+   }
+  ],
+  "requested": [
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js",
+   "/lang/a/rus.traineddata.gz"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js": 3905767,
+   "/lang/a/rus.traineddata.gz": 2679598,
+   "/crops/U1-1-s1-r1.png": 18175,
+   "/crops/B01-1-s1-r1.png": 3820,
+   "/crops/U6-2-s1-r1.png": 15117
+  },
+  "console": [
+   "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+ },
+ {
+  "case": "(c) Cyrillic best (float), uncompressed",
+  "init": 0.12330000000074506,
+  "error": "RuntimeError: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i). Build with -sASSERTIONS for more info.",
+  "rows": [],
+  "requested": [
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js",
+   "/lang/c/Cyrillic.traineddata"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js": 3905767,
+   "/lang/c/Cyrillic.traineddata": 36730735,
+   "/crops/U1-1-s1-r1.png": 18175
+  },
+  "console": [
+   "error: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i)",
+   "pageerror: Error: RuntimeError: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i). Build with -sASSERTIONS for more info."
+  ]
+ },
+ {
+  "case": "(c) Cyrillic best (float), gzip",
+  "init": 0.44409999999962746,
+  "error": "RuntimeError: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i). Build with -sASSERTIONS for more info.",
+  "rows": [],
+  "requested": [
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js",
+   "/lang/c/Cyrillic.traineddata.gz"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js": 3905767,
+   "/lang/c/Cyrillic.traineddata.gz": 19830479,
+   "/crops/U1-1-s1-r1.png": 18175
+  },
+  "console": [
+   "error: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i)",
+   "pageerror: Error: RuntimeError: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i). Build with -sASSERTIONS for more info."
+  ]
+ },
+ {
+  "case": "(e) eng (Homebrew 5.5.3 file), uncompressed",
+  "init": 0.07080000000074506,
+  "error": null,
+  "rows": [
+   {
+    "s": "U1-1-s1-r1.png",
+    "seconds": 0.08429999999888241,
+    "text": "t                      MOM.HaT.Ka Tec . Ha. A.        tn. Ka. A,      MH    - Jactnvr."
+   },
+   {
+    "s": "B01-1-s1-r1.png",
+    "seconds": 0.04270000000111759,
+    "text": "|                                                 Le . 6e@ 7b Me    HA    HOM. Fer . cA xo.pno_"
+   },
+   {
+    "s": "U6-2-s1-r1.png",
+    "seconds": 0.04909999999962747,
+    "text": "“      Mon   .   — Ya cMOrT - pw ___     A.    Ha"
+   }
+  ],
+  "requested": [
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js",
+   "/lang/e/eng.traineddata"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js": 3905767,
+   "/lang/e/eng.traineddata": 4113088,
+   "/crops/U1-1-s1-r1.png": 18175,
+   "/crops/B01-1-s1-r1.png": 3820,
+   "/crops/U6-2-s1-r1.png": 15117
+  },
+  "console": []
+ }
+]

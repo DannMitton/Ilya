@@ -1,0 +1,49 @@
+RULE R2. P: the truth is the desk's draft (truth-draft-tchaikovsky-op38-3-voice_r2_2026-10-02.json), not proofed by Dann. Per check: the draft syllables, then per reader and rule the token(s) seated on each of their notes, and whether the letters are right (case folded, marks out) and whether the text is exact (case and marks kept, a hyphen out) (raw reader text; ∅ = nothing seated; ✗ = the note was not read by homr).
+(a) the comma after «суеты» (bar 16): draft су | е | ты, (bars [14, 15])
+    rule 1: су | е | ты,   letters right; EXACT: case and marks as the draft has them
+    rule 3: су | е | ты,   letters right; EXACT: case and marks as the draft has them
+(a) «те-бя» lower-case: draft те | бя (bars [15, 16])
+    rule 1: те | бя   letters right; EXACT: case and marks as the draft has them
+    rule 3: те | бя   letters right; EXACT: case and marks as the draft has them
+(a) «грустно» twice (bars 77 to 78): draft груст | но | я, | груст | но (bars [76, 77])
+    rule 1: груст | но | я, | груст | но   letters right; EXACT: case and marks as the draft has them
+    rule 3: груст | но | я, | груст | но   letters right; EXACT: case and marks as the draft has them
+(a) «звучитъ!» with its mark: draft зву | читъ! (bars [55, 56])
+    rule 1: зву | читъ!   letters right; EXACT: case and marks as the draft has them
+    rule 3: зву | читъ!   letters right; EXACT: case and marks as the draft has them
+(c) the comma after «суеты» (bar 16): draft су | е | ты, (bars [14, 15])
+    rule 1: су | е | ты,   letters right; EXACT: case and marks as the draft has them
+    rule 3: су | е | ты,   letters right; EXACT: case and marks as the draft has them
+(c) «те-бя» lower-case: draft те | бя (bars [15, 16])
+    rule 1: те | бя   letters right; EXACT: case and marks as the draft has them
+    rule 3: те | бя   letters right; EXACT: case and marks as the draft has them
+(c) «грустно» twice (bars 77 to 78): draft груст | но | я, | груст | но (bars [76, 77])
+    rule 1: груст | но | я, | груст | но   letters right; EXACT: case and marks as the draft has them
+    rule 3: груст | но | я, | груст | но   letters right; EXACT: case and marks as the draft has them
+(c) «звучитъ!» with its mark: draft зву | читъ! (bars [55, 56])
+    rule 1: зву | читъ!   letters right; EXACT: case and marks as the draft has them
+    rule 3: зву | читъ!   letters right; EXACT: case and marks as the draft has them
+(t-imap) the comma after «суеты» (bar 16): draft су | е | ты, (bars [14, 15])
+    rule 1: су | е | гы,   letters NOT all right; not exact (case or a mark differs)
+    rule 3: су | е | гы,   letters NOT all right; not exact (case or a mark differs)
+(t-imap) «те-бя» lower-case: draft те | бя (bars [15, 16])
+    rule 1: те | бя   letters right; EXACT: case and marks as the draft has them
+    rule 3: те | бя   letters right; EXACT: case and marks as the draft has them
+(t-imap) «грустно» twice (bars 77 to 78): draft груст | но | я, | груст | но (bars [76, 77])
+    rule 1: ∅ | но | я, | груст | но   letters NOT all right; not exact (case or a mark differs)
+    rule 3: груст | но | я, | груст | но   letters right; EXACT: case and marks as the draft has them
+(t-imap) «звучитъ!» with its mark: draft зву | читъ! (bars [55, 56])
+    rule 1: зву | чных!   letters NOT all right; not exact (case or a mark differs)
+    rule 3: зву | чных!   letters NOT all right; not exact (case or a mark differs)
+(t-syl) the comma after «суеты» (bar 16): draft су | е | ты, (bars [14, 15])
+    rule 1: су- | е | ты,   letters right; EXACT: case and marks as the draft has them
+    rule 3: су- | е | ты,   letters right; EXACT: case and marks as the draft has them
+(t-syl) «те-бя» lower-case: draft те | бя (bars [15, 16])
+    rule 1: Те | бя   letters right; not exact (case or a mark differs)
+    rule 3: Те | бя   letters right; not exact (case or a mark differs)
+(t-syl) «грустно» twice (bars 77 to 78): draft груст | но | я, | груст | но (bars [76, 77])
+    rule 1: груст | но | я, | груст | но   letters right; EXACT: case and marks as the draft has them
+    rule 3: груст | но | я, | груст | но   letters right; EXACT: case and marks as the draft has them
+(t-syl) «звучитъ!» with its mark: draft зву | читъ! (bars [55, 56])
+    rule 1: ∅ | чных!   letters NOT all right; not exact (case or a mark differs)
+    rule 3: ∅ | чных!   letters NOT all right; not exact (case or a mark differs)

@@ -1,0 +1,93 @@
+RULE R1. Language of a row, four decisions (1 dictionary witness; 2 two readings by dictionary count; 3 position; 4 dictionary witness with the transcription as poem).
+Per song and reader: Russian rows called Russian / other-language rows called Russian / not-text rows called Russian / Russian rows missed; short rows (two or fewer countable words) in brackets as Russian called of Russian, false calls
+U1 (a) d1: 6/2/0/0 of R6 o5 n4 [short R 0/0, false 1] | d2: 6/2/2/0 of R6 o5 n4 [short R 0/0, false 1] | d3: 6/0/0/0 of R6 o5 n4 [short R 0/0, false 0] | d4: 6/0/0/0 of R6 o5 n4 [short R 0/0, false 0]
+U1 (c) d1: 6/2/0/0 of R6 o6 n4 [short R 0/0, false 1] | d2: 6/3/2/0 of R6 o6 n4 [short R 0/0, false 1] | d3: 6/0/0/0 of R6 o6 n4 [short R 0/0, false 0] | d4: 5/1/0/1 of R6 o6 n4 [short R 0/0, false 0]
+U1 (t-imap) d1: 6/1/1/0 of R6 o5 n3 [short R 0/0, false 1] | d2: 6/3/3/0 of R6 o5 n3 [short R 0/0, false 1] | d3: 6/0/0/0 of R6 o5 n3 [short R 0/0, false 0] | d4: 6/0/0/0 of R6 o5 n3 [short R 0/0, false 0]
+U4 (a) d1: 5/2/1/2 of R7 o7 n1 [short R 0/0, false 0] | d2: 4/4/0/3 of R7 o7 n1 [short R 0/0, false 0] | d3: 2/1/0/5 of R7 o7 n1 [short R 0/0, false 1] | d4: 3/0/0/4 of R7 o7 n1 [short R 0/0, false 0]
+U4 (c) d1: 4/3/1/3 of R7 o6 n1 [short R 0/0, false 0] | d2: 5/4/0/2 of R7 o6 n1 [short R 0/0, false 0] | d3: 2/1/0/5 of R7 o6 n1 [short R 0/0, false 1] | d4: 4/0/0/3 of R7 o6 n1 [short R 0/0, false 0]
+U4 (t-imap) d1: 3/1/0/4 of R7 o4 n0 [short R 0/0, false 1] | d2: 4/1/0/3 of R7 o4 n0 [short R 0/0, false 0] | d3: 2/0/0/5 of R7 o4 n0 [short R 0/0, false 2] | d4: 3/0/0/4 of R7 o4 n0 [short R 0/0, false 0]
+U5 (a) d1: 19/5/7/3 of R22 o20 n10 [short R 0/1, false 2] | d2: 11/4/4/11 of R22 o20 n10 [short R 0/1, false 1] | d3: 17/1/0/5 of R22 o20 n10 [short R 0/1, false 1] | d4: 15/1/0/7 of R22 o20 n10 [short R 0/1, false 2]
+U5 (c) d1: 16/3/0/4 of R20 o19 n5 [short R 1/3, false 6] | d2: 12/3/1/8 of R20 o19 n5 [short R 0/3, false 1] | d3: 16/1/0/4 of R20 o19 n5 [short R 1/3, false 1] | d4: 19/1/0/1 of R20 o19 n5 [short R 1/3, false 1]
+U5 (t-imap) d1: 20/4/3/2 of R22 o15 n8 [short R 0/1, false 6] | d2: 15/4/0/7 of R22 o15 n8 [short R 0/1, false 3] | d3: 16/1/0/6 of R22 o15 n8 [short R 1/1, false 1] | d4: 18/0/1/4 of R22 o15 n8 [short R 0/1, false 0]
+U6 (a) d1: 8/0/1/6 of R14 o6 n1 [short R 5/7, false 3] | d2: 6/0/1/8 of R14 o6 n1 [short R 1/7, false 2] | d3: 2/2/0/12 of R14 o6 n1 [short R 3/7, false 2] | d4: 2/0/0/12 of R14 o6 n1 [short R 4/7, false 1]
+U6 (c) d1: 8/0/0/5 of R13 o6 n1 [short R 4/8, false 2] | d2: 3/0/0/10 of R13 o6 n1 [short R 1/8, false 0] | d3: 4/2/0/9 of R13 o6 n1 [short R 1/8, false 2] | d4: 3/0/0/10 of R13 o6 n1 [short R 3/8, false 0]
+U6 (t-imap) d1: 9/0/0/8 of R17 o6 n1 [short R 1/4, false 5] | d2: 6/0/0/11 of R17 o6 n1 [short R 0/4, false 2] | d3: 3/1/0/14 of R17 o6 n1 [short R 2/4, false 3] | d4: 6/0/0/11 of R17 o6 n1 [short R 1/4, false 1]
+P (a) d1: 6/7/0/4 of R10 o8 n0 [short R 1/1, false 0] | d2: 10/5/0/0 of R10 o8 n0 [short R 1/1, false 0] | d3: 6/4/0/4 of R10 o8 n0 [short R 1/1, false 0] | d4: 5/2/0/5 of R10 o8 n0 [short R 1/1, false 1]
+P (c) d1: 7/0/0/3 of R10 o3 n0 [short R 0/1, false 1] | d2: 9/0/0/1 of R10 o3 n0 [short R 0/1, false 0] | d3: 6/3/0/4 of R10 o3 n0 [short R 1/1, false 1] | d4: 8/0/0/2 of R10 o3 n0 [short R 1/1, false 0]
+P (t-imap) d1: 6/1/0/4 of R10 o1 n0 [short R 1/1, false 1] | d2: 9/1/0/1 of R10 o1 n0 [short R 1/1, false 0] | d3: 6/1/0/4 of R10 o1 n0 [short R 1/1, false 3] | d4: 7/0/0/3 of R10 o1 n0 [short R 1/1, false 0]
+B01 (a) d1: 11/2/0/1 of R12 o3 n0 [short R 0/0, false 1] | d2: 9/0/0/3 of R12 o3 n0 [short R 0/0, false 1] | d3: 12/0/0/0 of R12 o3 n0 [short R 0/0, false 0] | d4: 10/0/0/2 of R12 o3 n0 [short R 0/0, false 0]
+B01 (c) d1: 12/1/0/0 of R12 o1 n0 [short R 0/0, false 2] | d2: 11/0/0/1 of R12 o1 n0 [short R 0/0, false 1] | d3: 12/0/0/0 of R12 o1 n0 [short R 0/0, false 0] | d4: 11/0/0/1 of R12 o1 n0 [short R 0/0, false 3]
+B01 (t-imap) d1: 12/0/0/0 of R12 o0 n0 [short R 0/0, false 0] | d2: 11/0/0/1 of R12 o0 n0 [short R 0/0, false 0] | d3: 12/0/0/0 of R12 o0 n0 [short R 0/0, false 0] | d4: 11/0/0/1 of R12 o0 n0 [short R 0/0, false 0]
+B02 (a) d1: 7/1/0/0 of R7 o2 n0 [short R 0/0, false 1] | d2: 7/1/0/0 of R7 o2 n0 [short R 0/0, false 0] | d3: 7/1/0/0 of R7 o2 n0 [short R 0/0, false 0] | d4: 7/0/0/0 of R7 o2 n0 [short R 0/0, false 0]
+B02 (c) d1: 7/1/0/0 of R7 o1 n0 [short R 0/0, false 1] | d2: 6/0/0/1 of R7 o1 n0 [short R 0/0, false 0] | d3: 7/1/0/0 of R7 o1 n0 [short R 0/0, false 0] | d4: 6/0/0/1 of R7 o1 n0 [short R 0/0, false 0]
+B02 (t-imap) d1: 5/1/0/2 of R7 o1 n0 [short R 0/0, false 0] | d2: 7/1/0/0 of R7 o1 n0 [short R 0/0, false 0] | d3: 7/1/0/0 of R7 o1 n0 [short R 0/0, false 0] | d4: 7/0/0/0 of R7 o1 n0 [short R 0/0, false 0]
+B03 (a) d1: 12/6/0/1 of R13 o9 n0 [short R 1/1, false 2] | d2: 13/4/0/0 of R13 o9 n0 [short R 1/1, false 0] | d3: 13/0/0/0 of R13 o9 n0 [short R 1/1, false 0] | d4: 12/0/0/1 of R13 o9 n0 [short R 0/1, false 1]
+B03 (c) d1: 11/1/0/2 of R13 o1 n0 [short R 0/1, false 2] | d2: 11/0/0/2 of R13 o1 n0 [short R 0/1, false 0] | d3: 13/0/0/0 of R13 o1 n0 [short R 1/1, false 0] | d4: 11/0/0/2 of R13 o1 n0 [short R 0/1, false 1]
+B03 (t-imap) d1: 13/0/0/0 of R13 o1 n0 [short R 0/1, false 5] | d2: 10/0/0/3 of R13 o1 n0 [short R 0/1, false 3] | d3: 13/0/0/0 of R13 o1 n0 [short R 1/1, false 0] | d4: 13/0/0/0 of R13 o1 n0 [short R 0/1, false 0]
+B04 (a) d1: 11/2/0/0 of R11 o4 n0 [short R 0/0, false 5] | d2: 10/2/0/1 of R11 o4 n0 [short R 0/0, false 1] | d3: 11/0/0/0 of R11 o4 n0 [short R 0/0, false 0] | d4: 10/0/0/1 of R11 o4 n0 [short R 0/0, false 3]
+B04 (c) d1: 11/0/0/0 of R11 o1 n0 [short R 0/0, false 3] | d2: 10/0/0/1 of R11 o1 n0 [short R 0/0, false 0] | d3: 11/0/0/0 of R11 o1 n0 [short R 0/0, false 0] | d4: 11/0/0/0 of R11 o1 n0 [short R 0/0, false 1]
+B04 (t-imap) d1: 10/0/0/0 of R10 o0 n0 [short R 1/1, false 0] | d2: 10/0/0/0 of R10 o0 n0 [short R 0/1, false 0] | d3: 10/0/0/0 of R10 o0 n0 [short R 1/1, false 0] | d4: 10/0/0/0 of R10 o0 n0 [short R 1/1, false 0]
+B06 (a) d1: 10/0/0/0 of R10 o2 n0 [short R 1/1, false 1] | d2: 9/0/0/1 of R10 o2 n0 [short R 0/1, false 0] | d3: 6/0/0/4 of R10 o2 n0 [short R 1/1, false 2] | d4: 10/0/0/0 of R10 o2 n0 [short R 1/1, false 2]
+B06 (c) d1: 9/1/0/1 of R10 o1 n0 [short R 1/1, false 2] | d2: 9/0/0/1 of R10 o1 n0 [short R 0/1, false 0] | d3: 6/0/0/4 of R10 o1 n0 [short R 1/1, false 2] | d4: 9/0/0/1 of R10 o1 n0 [short R 1/1, false 0]
+B06 (t-imap) d1: 10/0/0/0 of R10 o0 n0 [short R 1/1, false 0] | d2: 8/0/0/2 of R10 o0 n0 [short R 1/1, false 0] | d3: 6/0/0/4 of R10 o0 n0 [short R 1/1, false 2] | d4: 10/0/0/0 of R10 o0 n0 [short R 1/1, false 0]
+B07 (a) d1: 13/2/2/0 of R13 o3 n2 [short R 1/1, false 4] | d2: 11/1/2/2 of R13 o3 n2 [short R 0/1, false 1] | d3: 11/1/0/2 of R13 o3 n2 [short R 1/1, false 2] | d4: 13/0/1/0 of R13 o3 n2 [short R 1/1, false 2]
+B07 (c) d1: 10/1/0/4 of R14 o3 n0 [short R 0/0, false 0] | d2: 9/0/0/5 of R14 o3 n0 [short R 0/0, false 0] | d3: 12/1/0/2 of R14 o3 n0 [short R 0/0, false 2] | d4: 11/0/0/3 of R14 o3 n0 [short R 0/0, false 0]
+B07 (t-imap) d1: 12/0/0/2 of R14 o0 n1 [short R 0/0, false 2] | d2: 11/0/1/3 of R14 o0 n1 [short R 0/0, false 1] | d3: 12/0/0/2 of R14 o0 n1 [short R 0/0, false 3] | d4: 14/0/0/0 of R14 o0 n1 [short R 0/0, false 0]
+B08 (a) d1: 10/1/0/1 of R11 o1 n0 [short R 0/0, false 1] | d2: 10/1/0/1 of R11 o1 n0 [short R 0/0, false 0] | d3: 7/0/0/4 of R11 o1 n0 [short R 0/0, false 0] | d4: 11/0/0/0 of R11 o1 n0 [short R 0/0, false 0]
+B08 (c) d1: 11/1/0/0 of R11 o1 n0 [short R 0/0, false 1] | d2: 11/1/0/0 of R11 o1 n0 [short R 0/0, false 0] | d3: 7/0/0/4 of R11 o1 n0 [short R 0/0, false 0] | d4: 11/0/0/0 of R11 o1 n0 [short R 0/0, false 0]
+B08 (t-imap) d1: 10/0/0/0 of R10 o0 n0 [short R 1/1, false 1] | d2: 10/0/0/0 of R10 o0 n0 [short R 0/1, false 0] | d3: 6/0/0/4 of R10 o0 n0 [short R 1/1, false 0] | d4: 10/0/0/0 of R10 o0 n0 [short R 1/1, false 0]
+B09 (a) d1: 12/3/2/1 of R13 o5 n3 [short R 0/0, false 1] | d2: 10/4/3/3 of R13 o5 n3 [short R 0/0, false 1] | d3: 10/1/0/3 of R13 o5 n3 [short R 0/0, false 0] | d4: 13/1/0/0 of R13 o5 n3 [short R 0/0, false 0]
+B09 (c) d1: 12/1/0/1 of R13 o2 n0 [short R 0/0, false 1] | d2: 9/0/0/4 of R13 o2 n0 [short R 0/0, false 1] | d3: 10/0/0/3 of R13 o2 n0 [short R 0/0, false 1] | d4: 13/0/0/0 of R13 o2 n0 [short R 0/0, false 1]
+B09 (t-imap) d1: 13/0/0/0 of R13 o0 n0 [short R 0/0, false 3] | d2: 9/0/0/4 of R13 o0 n0 [short R 0/0, false 1] | d3: 10/0/0/3 of R13 o0 n0 [short R 0/0, false 1] | d4: 13/0/0/0 of R13 o0 n0 [short R 0/0, false 1]
+B10 (a) d1: 9/2/1/1 of R10 o2 n1 [short R 1/1, false 0] | d2: 9/0/1/1 of R10 o2 n1 [short R 1/1, false 0] | d3: 7/0/0/3 of R10 o2 n1 [short R 1/1, false 0] | d4: 9/0/0/1 of R10 o2 n1 [short R 1/1, false 0]
+B10 (c) d1: 9/0/0/1 of R10 o0 n0 [short R 1/1, false 0] | d2: 7/0/0/3 of R10 o0 n0 [short R 1/1, false 0] | d3: 8/0/0/2 of R10 o0 n0 [short R 0/1, false 0] | d4: 8/0/0/2 of R10 o0 n0 [short R 0/1, false 0]
+B10 (t-imap) d1: 9/0/0/2 of R11 o0 n0 [short R 0/0, false 2] | d2: 8/0/0/3 of R11 o0 n0 [short R 0/0, false 0] | d3: 8/0/0/3 of R11 o0 n0 [short R 0/0, false 0] | d4: 8/0/0/3 of R11 o0 n0 [short R 0/0, false 1]
+S (a) d1: 10/13/2/4 of R14 o34 n6 [short R 4/4, false 8] | d2: 13/5/1/1 of R14 o34 n6 [short R 1/4, false 3] | d3: 0/16/0/14 of R14 o34 n6 [short R 0/4, false 2] | d4: 9/0/0/5 of R14 o34 n6 [short R 4/4, false 1]
+S (c) d1: 12/11/0/2 of R14 o34 n2 [short R 3/4, false 4] | d2: 13/3/0/1 of R14 o34 n2 [short R 1/4, false 1] | d3: 0/17/0/14 of R14 o34 n2 [short R 0/4, false 1] | d4: 10/0/0/4 of R14 o34 n2 [short R 3/4, false 1]
+S (t-imap) d1: 13/6/1/1 of R14 o29 n2 [short R 4/4, false 9] | d2: 14/1/1/0 of R14 o29 n2 [short R 1/4, false 3] | d3: 0/14/0/14 of R14 o29 n2 [short R 0/4, false 4] | d4: 13/0/0/1 of R14 o29 n2 [short R 4/4, false 2]
+T (a) d1: 12/7/1/5 of R17 o15 n2 [short R 1/2, false 3] | d2: 12/0/0/5 of R17 o15 n2 [short R 1/2, false 1] | d3: 17/0/0/0 of R17 o15 n2 [short R 2/2, false 0] | d4: 11/0/0/6 of R17 o15 n2 [short R 2/2, false 0]
+T (c) d1: 14/3/1/3 of R17 o15 n2 [short R 1/2, false 1] | d2: 15/0/0/2 of R17 o15 n2 [short R 1/2, false 0] | d3: 17/0/0/0 of R17 o15 n2 [short R 2/2, false 0] | d4: 15/0/0/2 of R17 o15 n2 [short R 1/2, false 0]
+T (t-imap) d1: 14/6/0/2 of R16 o16 n1 [short R 3/3, false 2] | d2: 14/3/0/2 of R16 o16 n1 [short R 2/3, false 1] | d3: 16/0/0/0 of R16 o16 n1 [short R 3/3, false 0] | d4: 15/0/0/1 of R16 o16 n1 [short R 3/3, false 0]
+K (a) d1: 9/0/1/2 of R11 o2 n1 [short R 1/1, false 1] | d2: 4/1/0/7 of R11 o2 n1 [short R 1/1, false 1] | d3: 11/0/0/0 of R11 o2 n1 [short R 1/1, false 0] | d4: 7/0/0/4 of R11 o2 n1 [short R 1/1, false 0]
+K (c) d1: 8/0/0/3 of R11 o1 n0 [short R 1/1, false 2] | d2: 5/1/0/6 of R11 o1 n0 [short R 1/1, false 1] | d3: 11/0/0/0 of R11 o1 n0 [short R 1/1, false 0] | d4: 8/0/0/3 of R11 o1 n0 [short R 1/1, false 0]
+K (t-imap) d1: 10/0/1/1 of R11 o1 n2 [short R 1/1, false 1] | d2: 7/0/1/4 of R11 o1 n2 [short R 1/1, false 1] | d3: 11/0/0/0 of R11 o1 n2 [short R 1/1, false 0] | d4: 10/0/0/1 of R11 o1 n2 [short R 1/1, false 0]
+M (a) d1: 3/1/1/3 of R6 o3 n2 [short R 0/0, false 1] | d2: 4/1/1/2 of R6 o3 n2 [short R 0/0, false 0] | d3: 6/0/0/0 of R6 o3 n2 [short R 0/0, false 0] | d4: 0/0/0/6 of R6 o3 n2 [short R 0/0, false 0]
+M (c) d1: 3/0/0/3 of R6 o1 n0 [short R 0/0, false 0] | d2: 3/0/0/3 of R6 o1 n0 [short R 0/0, false 0] | d3: 6/0/0/0 of R6 o1 n0 [short R 0/0, false 0] | d4: 3/0/0/3 of R6 o1 n0 [short R 0/0, false 0]
+M (t-imap) d1: 4/0/0/1 of R5 o0 n0 [short R 1/1, false 1] | d2: 3/0/0/2 of R5 o0 n0 [short R 0/1, false 0] | d3: 5/0/0/0 of R5 o0 n0 [short R 1/1, false 0] | d4: 4/0/0/1 of R5 o0 n0 [short R 1/1, false 0]
+
+By group
+U1-6 (a) d1: 38/9/9/11 of R49 o38 n16 [short R 5/8, false 6] | d2: 27/10/7/22 of R49 o38 n16 [short R 1/8, false 4] | d3: 27/4/0/22 of R49 o38 n16 [short R 3/8, false 4] | d4: 26/1/0/23 of R49 o38 n16 [short R 4/8, false 3]
+U1-6 (c) d1: 34/8/1/12 of R46 o37 n11 [short R 5/11, false 9] | d2: 26/10/3/20 of R46 o37 n11 [short R 1/11, false 2] | d3: 28/4/0/18 of R46 o37 n11 [short R 2/11, false 4] | d4: 31/2/0/15 of R46 o37 n11 [short R 4/11, false 1]
+U1-6 (t-imap) d1: 38/6/4/14 of R52 o30 n12 [short R 1/5, false 13] | d2: 31/8/3/21 of R52 o30 n12 [short R 0/5, false 6] | d3: 27/2/0/25 of R52 o30 n12 [short R 3/5, false 6] | d4: 33/0/1/19 of R52 o30 n12 [short R 1/5, false 1]
+P (a) d1: 6/7/0/4 of R10 o8 n0 [short R 1/1, false 0] | d2: 10/5/0/0 of R10 o8 n0 [short R 1/1, false 0] | d3: 6/4/0/4 of R10 o8 n0 [short R 1/1, false 0] | d4: 5/2/0/5 of R10 o8 n0 [short R 1/1, false 1]
+P (c) d1: 7/0/0/3 of R10 o3 n0 [short R 0/1, false 1] | d2: 9/0/0/1 of R10 o3 n0 [short R 0/1, false 0] | d3: 6/3/0/4 of R10 o3 n0 [short R 1/1, false 1] | d4: 8/0/0/2 of R10 o3 n0 [short R 1/1, false 0]
+P (t-imap) d1: 6/1/0/4 of R10 o1 n0 [short R 1/1, false 1] | d2: 9/1/0/1 of R10 o1 n0 [short R 1/1, false 0] | d3: 6/1/0/4 of R10 o1 n0 [short R 1/1, false 3] | d4: 7/0/0/3 of R10 o1 n0 [short R 1/1, false 0]
+B (a) d1: 95/19/5/5 of R100 o31 n6 [short R 4/4, false 16] | d2: 88/13/6/12 of R100 o31 n6 [short R 2/4, false 4] | d3: 84/3/0/16 of R100 o31 n6 [short R 4/4, false 4] | d4: 95/1/1/5 of R100 o31 n6 [short R 3/4, false 8]
+B (c) d1: 92/7/0/9 of R101 o11 n0 [short R 2/3, false 12] | d2: 83/1/0/18 of R101 o11 n0 [short R 1/3, false 2] | d3: 86/2/0/15 of R101 o11 n0 [short R 2/3, false 5] | d4: 91/0/0/10 of R101 o11 n0 [short R 1/3, false 6]
+B (t-imap) d1: 94/1/0/6 of R100 o2 n1 [short R 3/4, false 13] | d2: 84/1/1/16 of R100 o2 n1 [short R 1/4, false 5] | d3: 84/1/0/16 of R100 o2 n1 [short R 4/4, false 6] | d4: 96/0/0/4 of R100 o2 n1 [short R 3/4, false 2]
+S,T,K,M (a) d1: 34/21/5/14 of R48 o54 n11 [short R 6/7, false 13] | d2: 33/7/2/15 of R48 o54 n11 [short R 3/7, false 5] | d3: 34/16/0/14 of R48 o54 n11 [short R 3/7, false 2] | d4: 27/0/0/21 of R48 o54 n11 [short R 7/7, false 1]
+S,T,K,M (c) d1: 37/14/1/11 of R48 o51 n4 [short R 5/7, false 7] | d2: 36/4/0/12 of R48 o51 n4 [short R 3/7, false 2] | d3: 34/17/0/14 of R48 o51 n4 [short R 3/7, false 1] | d4: 36/0/0/12 of R48 o51 n4 [short R 5/7, false 1]
+S,T,K,M (t-imap) d1: 41/12/2/5 of R46 o46 n5 [short R 9/9, false 13] | d2: 38/4/2/8 of R46 o46 n5 [short R 4/9, false 5] | d3: 32/14/0/14 of R46 o46 n5 [short R 5/9, false 4] | d4: 42/0/0/4 of R46 o46 n5 [short R 9/9, false 2]
+all (a) d1: 173/56/19/34 of R207 o131 n33 [short R 16/20, false 35] | d2: 158/35/15/49 of R207 o131 n33 [short R 7/20, false 13] | d3: 151/27/0/56 of R207 o131 n33 [short R 11/20, false 10] | d4: 153/4/1/54 of R207 o131 n33 [short R 15/20, false 13]
+all (c) d1: 170/29/2/35 of R205 o102 n15 [short R 12/22, false 29] | d2: 154/15/3/51 of R205 o102 n15 [short R 5/22, false 6] | d3: 154/26/0/51 of R205 o102 n15 [short R 8/22, false 11] | d4: 166/2/0/39 of R205 o102 n15 [short R 11/22, false 8]
+all (t-imap) d1: 179/20/6/29 of R208 o79 n18 [short R 14/19, false 40] | d2: 162/14/6/46 of R208 o79 n18 [short R 6/19, false 16] | d3: 149/18/0/59 of R208 o79 n18 [short R 13/19, false 19] | d4: 178/0/1/30 of R208 o79 n18 [short R 14/19, false 5]
+
+Pages that pass section 5's DESK DEFAULT (decision 1 calls at least one Russian row in every system of the page, and at least half of the sewn words of the called rows are in the dictionary), per song and reader: passing pages / pages
+U1: (a) 2/2 (c) 2/2 (t-imap) 2/2
+U4: (a) 0/2 (c) 1/2 (t-imap) 1/2
+U5: (a) 4/7 (c) 3/7 (t-imap) 5/7
+U6: (a) 3/6 (c) 2/6 (t-imap) 2/6
+P: (a) 2/3 (c) 0/3 (t-imap) 1/3
+B01: (a) 3/3 (c) 3/3 (t-imap) 3/3
+B02: (a) 1/2 (c) 2/2 (t-imap) 0/2
+B03: (a) 4/4 (c) 2/4 (t-imap) 4/4
+B04: (a) 3/3 (c) 3/3 (t-imap) 3/3
+B06: (a) 2/3 (c) 2/3 (t-imap) 2/3
+B07: (a) 4/5 (c) 0/5 (t-imap) 3/5
+B08: (a) 2/3 (c) 3/3 (t-imap) 3/3
+B09: (a) 3/4 (c) 1/4 (t-imap) 3/4
+B10: (a) 2/3 (c) 1/3 (t-imap) 1/3
+S: (a) 6/7 (c) 7/7 (t-imap) 7/7
+T: (a) 2/6 (c) 4/6 (t-imap) 4/6
+K: (a) 2/4 (c) 2/4 (t-imap) 3/4
+M: (a) 1/2 (c) 0/2 (t-imap) 2/2

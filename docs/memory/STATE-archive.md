@@ -631,3 +631,31 @@ Everything in this folder is SOURCED from that opener unless marked otherwise.*
 > **Filed:** Quantz 1752, Hauptstück XVII Abschnitte 6-7, in `~/Documents/Voice Pedagogy Library/P-R/` (md5 fcce9c318390ac7f3c852357d9e4fdec); the IMSLP download remains in `~/Downloads/`. Not filed: London, *Hearing in Time*. The library list `Insights Research/_synthesis/library-files_2026-10-12.txt` predates it.
 >
 > The close of 2026-10-13 23:35 is in `STATE-archive.md`, verbatim.
+
+---
+
+*Moved verbatim from `STATE.md` at the close of 2026-10-15 about 16:10:*
+
+### CLOSE OF 2026-10-14 23:50 (Opus desk, thread of 13:05). THE NEXT DESK STARTS HERE.
+
+> **Floor: `0b0c52a`** (2026-10-14 22:58). Shipped this session: `db7fc43`, `50a5f85` (row 96 and the octopus merge of `cloud-lane-3` and `cloud-lane-4`), `0b0c52a` (rows 95, 97, 90, 94 and the merge of `cloud-lane-5` and `cloud-lane-6`). Uncommitted at this close: `docs/memory/` and four new files in `docs/sessions/` (row 98's brief r2 and review, both already copied in).
+>
+> **THE ONE THING is unchanged: the scan reader at 95 on unseen songs, on the singer's path.** N.135 (reading the words under the notes) stays the priority with it.
+>
+> **Running at this close: QUEUE row 98 on `cloud-lane-7`** (Sonnet, https://claude.ai/code/session_01WmwcmtbeAx6AaWKGx3SDJG): one copy of the reader engine, and `vercel.json` builds only `Shane` and `main`. **First thing next session:** read its report from GitHub (`ENVIRONMENT.md`, `READING A CLOUD BRANCH WITHOUT GH`), give Dann the merge and ship steps, then have him read ONE scan on the alias (the WebGPU path the cloud cannot test); revert the commit if that fails. Check that `cloud-lane-7` itself started no Vercel build.
+>
+> **Then, in order:**
+> 1. **Resume the keep-or-drop walk at item 13 of 36, N.157** (replacing a score keeps the old seats; desk recommends keep), from `../sessions/memo-open-work-decisions_r1_2026-10-14.md`. One item at a time: what it is, what it is for, where it stands, if dropped, the desk's recommendation. Decisions so far are in THE TRACKER's note of 22:26 below.
+> 2. **When the walk ends, Dann asked for an optimal sequence of every kept item** (23:31). Row 48 is provisionally next after row 98; row 5 runs alone in the cloud lane (it edits `+page.svelte`).
+> 3. **The trimming audit, in the cloud lane:** dead code, unused assets, the dictionary loaded on demand (10.7 MB of the first visit), the non-jsep engine pair (13.6 MB, unreferenced per Fable), and the PDF library's `getOrInsertComputed` failure (`ENVIRONMENT.md`). Dann: *"Ask Cloud to audit once we've resolved its greedy consumption"* (22:42), so after row 98 lands.
+> 4. **Dann deletes old Vercel builds in the dashboard** (the desk may not delete): keep production and the newest Shane; the list is in `ENVIRONMENT.md`, `EVERY BRANCH BUILDS ON VERCEL`.
+> 5. **Row 97's two Guide captions:** the desk drafts new captions from the measurements and pictures in `../sessions/report-code-row97-fit-out-of-the-guide_r1_2026-10-14.md` and `../sessions/row97-guide-shots/`, EN and FR, for Dann's ruling.
+> 6. **N.168's next work:** compose connections from the harvest already made (1,701 claims), plus targeted harvests for the gaps (passaggio advice for «Скучай» and *Sunless* 1; treble voice families) and for the red squircle's cited strategies.
+>
+> **Ruled this session** (all in `PRODUCT.md` or `OPEN.md`): Markup and Insights share one set of observations; the red squircle marks a notable coordination demand (definition in `PRODUCT.md`, "What a red squircle marks"), may mark an opportunity, and many songs carry none; two tiers, no second mark; "your voice" in singer prose; explain once, then "see also mm.", then pointers; style rules are defaults, the finished prose judged by ear; the Guide's three "Fit" passages and the heading "What Insights forecasts"; row 95's strings; N.140's floor 3.96 px and direction-decides gestures; the backlog accepted without walks; drops listed in THE TRACKER's note. Cloud credit is free to spend (`CONTRACT.md` §4).
+>
+> **Records of this session:** `../sessions/draft-markup-insights-one-set_r1_2026-10-14.md`, `memo-dann-authorial-voice_r2_2026-10-14.md` (his voice rules, with the 15:39 addendum), `memo-research-varied-generation_r1_2026-10-14.md`, the two audits (`audit-memory-staleness_r1_2026-10-14.md`, `audit-memory-staleness-big-three_r1_2026-10-14.md`), `memo-open-work-decisions_r1_2026-10-14.md`.
+>
+> **This session's mistakes, each owned when made:** the voice brief's sample premise (a bass's pitch meeting [ɑ]'s fR1) was impossible by Dann's thesis; three cost estimates ran over (190k on 150k, 151k on 100k twice); "a later entry carries no citation" misstated his pointer grammar; reported the duplicate engine as unchecked instead of checking it; stated the 2026-09-26 refactor ruling's scope from a summary instead of reading it (it predates the cloud lane). Lesson for the next desk: read the ruling, not the line that cites it.
+>
+> The close of 2026-10-14 03:35 is in `STATE-archive.md`, verbatim.

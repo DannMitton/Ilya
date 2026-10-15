@@ -1,0 +1,6 @@
+WRONG d S p4s1r2 духъ printed ъ# read ъте
+WRONG d T p1s1r1 лѣ- printed ѣ read ѣв
+WRONG d T p2s2r1 лѣсъ printed ѣ read в
+WRONG d M p1s2r1 тикъ printed ъ# read е
+WRONG d M p2s1r1 бѣ printed ѣ read ∅
+WRONG d M p2s3r1 чекъ printed ъ# read ∅

@@ -1,0 +1,12 @@
+1000 BCER eval=4.855, BWER eval=14.275
+2000 BCER eval=4.756, BWER eval=13.472
+3000 BCER eval=2.817, BWER eval=8.234
+4000 BCER eval=2.738, BWER eval=7.766
+5000 BCER eval=2.930, BWER eval=8.329
+6000 BCER eval=2.414, BWER eval=6.968
+7000 BCER eval=2.476, BWER eval=6.954
+8000 BCER eval=2.125, BWER eval=6.334
+9000 BCER eval=1.597, BWER eval=4.492
+10000 BCER eval=1.355, BWER eval=3.850
+
+[exited with code 0]

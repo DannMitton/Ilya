@@ -1,0 +1,18 @@
+Seconds per page on this Mac (recognition on R1 rows, model loaded), by reader; pages are the songs' raster pages that hold read notes (so pages of covers are not counted)
+(a) Tesseract rus best_int, Node default core, 1 thread: 37 s over 69 pages in 18 songs = 0.5 s a page; per song 0.3 to 0.7
+(c) Tesseract Cyrillic best, Node SIMD-LSTM core, 1 thread: 48 s over 69 pages in 18 songs = 0.7 s a page; per song 0.4 to 1.1
+(e) Tesseract eng, Node default core, 1 thread: 22 s over 69 pages in 18 songs = 0.3 s a page; per song 0.2 to 0.4
+(t-imap) TrOCR ru-trocr-1700s on CPU, torch 4 threads: 1679 s over 69 pages in 18 songs = 24.3 s a page; per song 17.5 to 39.8; 2540 chunks, 0.66 s a chunk (row 88 on MPS: 0.40)
+(t-syl) TrOCR, one ink piece a chunk, Russian rows of R2 only, CPU 4 threads: 1609 s over 69 pages = 23.3 s a page; 2689 chunks, 0.60 s a chunk
+
+Bytes on disk, and in the browser (the files a worker would fetch: tesseract.min.js 62,961; worker.min.js 111,307; the core it picks 3,905,767)
+(a) rus.traineddata.gz as the app fetches it / unzipped: 2,679,598 / 5,053,706
+(c) Cyrillic.traineddata / gzipped by me: 36,730,735 / 19,830,479
+(e) eng.traineddata (Homebrew 5.5.3): 4,113,088
+(t-imap) model.safetensors, float32: 1,335,747,032 (row 88: 1,339,228,897 in 12 files); not a browser candidate.
+
+Does it load through createWorker in headless Chrome (Chrome 155, tesseract.js 7.0.0 browser bundle)?
+(a) rus 4.0.0_best_int, gz as the app fetches it: loaded (init 0.13 s; rows read in 0.13, 0.07, 0.10 s); core fetched: tesseract-core-relaxedsimd-lstm.wasm.js; bytes served: 6,585,365 for the model and core
+(c) Cyrillic best (float), uncompressed: FAILED: RuntimeError: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i). Build with -sASSERTIONS for more info.; core fetched: tesseract-core-relaxedsimd-lstm.wasm.js; bytes served: 40,636,502 for the model and core
+(c) Cyrillic best (float), gzip: FAILED: RuntimeError: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i). Build with -sASSERTIONS for more info.; core fetched: tesseract-core-relaxedsimd-lstm.wasm.js; bytes served: 23,736,246 for the model and core
+(e) eng (Homebrew 5.5.3 file), uncompressed: loaded (init 0.07 s; rows read in 0.08, 0.04, 0.05 s); core fetched: tesseract-core-relaxedsimd-lstm.wasm.js; bytes served: 8,018,855 for the model and core

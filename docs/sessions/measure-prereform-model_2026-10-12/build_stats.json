@@ -1,0 +1,10 @@
+{
+ "pages fetched": 3520,
+ "dropped: author not resolvable": 1344,
+ "dropped: has a translator": 553,
+ "dropped: author death year not on Wikidata": 148,
+ "dropped: author died 1946 or later": 43,
+ "pages kept after authors": 1432,
+ "dropped: not in old spelling (final ъ ratio)": 373,
+ "pages kept after spelling check": 1059
+}
