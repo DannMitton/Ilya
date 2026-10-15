@@ -176,13 +176,13 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import {
 		applyCorrections,
 		currentPitch,
-		DIGIT_BASE,
 		orphanIds,
 	} from '$lib/score/correction';
 	import { stackLabel, UndoHistory } from '$lib/score/undo-history.svelte';
 	import { CorrectionCursor } from '$lib/score/correction-cursor.svelte';
-	import { keyOwnedElsewhere, LoupePanel } from '$lib/score/loupe-panel.svelte';
+	import { LoupePanel } from '$lib/score/loupe-panel.svelte';
 	import { createPressAndHold } from '$lib/score/press-and-hold';
+	import { createCorrectionKeys } from '$lib/score/correction-keys';
 	import { CorrectionVerbs } from '$lib/score/correction-verbs.svelte';
 	import { TupletRow } from '$lib/score/tuplet-row.svelte';
 	import { pitchLabel } from '$lib/voice/note-picker';
@@ -885,120 +885,26 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		pushUndo,
 	});
 
-	/* THE KEYBOARD, active wherever the insertion bar stands. Finale's own digit
-	   mapping, kept because Dann knows it in his fingers.
-
-	   IT WAS GATED ON A SELECTED NOTE and is gated on a CURSOR now, which is
-	   slice 4 finishing what slice 3 started: the bar can stand in a gap, and a
-	   keyboard that went dead there would be a second grammar to learn.
-
-	   EVERY KEY GOES THROUGH THE SURFACE'S OWN HANDLER, not past it. The digits
-	   call `handleDurationCell` and the dot calls `handleDotCell`, which is
-	   what the DURATION cells call, so a digit in a gap enters an entry exactly
-	   as a tap on the cell does and a digit on a note re-times it. One grammar,
-	   two ways in.
-
-	   THE VERBS THAT NEED A NOTE STAND DOWN IN A GAP, the same ones the surface
-	   greys: pitch, and delete.
-
-	   ESCAPE DISMISSES THE LOUPE, ruled by Dann 2026-08-27, rather than merely
-	   dropping the selection: on a fine pointer it is the chevron's twin, and
-	   the surfaces leave together as they do by every other route.
-
-	   It stands down inside a text field. A singer typing a title or a poem
-	   must not have `5` swallowed by the score, and `closest` covers the
-	   contenteditable case as well as inputs. */
-	function handleCorrectionKey(e: KeyboardEvent): void {
-		/* THE FIELD GUARD COMES FIRST, ahead of every branch below it. It used
-		   to sit under the cursor test, which was harmless while the only keys
-		   this function claimed were bare ones. N.113a's Undo and Redo run with
-		   no cursor, so the guard has to be the first thing that happens. */
-		if (keyOwnedElsewhere(e.target)) return; // fields, and since calm-loupe slice 6 a tablist
-
-		/* ── N.113a. UNDO AND REDO AS HOTKEYS ─────────────────────────────
-		   RULED BY DANN 2026-09-07: *"on the desk, Cmd-Z (macOS) / Ctrl-Z
-		   executes Undo as a hotkey."* Shift-Cmd-Z and Ctrl-Y for Redo are the
-		   DESK DEFAULT that came with it, and so is the field rule: neither
-		   fires while a text field has focus, so the poem keeps the browser's
-		   own undo and a singer typing into the intake is never surprised.
-
-		   THE SAME STACK THE PILLS USE. `handleUndo` and `handleRedo` are the
-		   functions the loupe dock and the Corrections station already call,
-		   so a hotkey and a press cannot diverge (N.111-3b: one stack extended,
-		   never a second one added).
-
-		   IT RUNS WITH NO LOUPE OPEN, which is why it sits above the `cursor`
-		   test rather than inside the switch. The Undo pill in the drawer has
-		   never needed a taken note and neither does this.
-
-		   AN EMPTY STACK IS NOT CLAIMED. With nothing to undo the event is left
-		   alone rather than swallowed, so anything else on the page that wants
-		   Cmd-Z still gets it. */
-		if ((e.metaKey || e.ctrlKey) && !e.altKey) {
-			const k = e.key.toLowerCase();
-			const redo = (k === 'z' && e.shiftKey) || (k === 'y' && !e.shiftKey);
-			const undo = k === 'z' && !e.shiftKey;
-			if (redo && undoHistory.redoStack.length > 0) {
-				handleRedo();
-				e.preventDefault();
-				return;
-			}
-			if (undo && undoHistory.undoStack.length > 0) {
-				handleUndo();
-				e.preventDefault();
-				return;
-			}
-		}
-
-		if (!cursor) return;
-		if (e.metaKey || e.ctrlKey || e.altKey) return;
-		/* Calm-loupe slice 1: in Syllables mode only the moves act (`LoupePanel.musicKeys`). */
-		if (!loupePanel.musicKeys && !['ArrowLeft', 'ArrowRight', 'Escape'].includes(e.key)) return;
-
-		switch (e.key) {
-			case 'ArrowUp':
-				if (inGap) return;
-				e.shiftKey ? handleOctave(1) : handleStep(1);
-				break;
-			case 'ArrowDown':
-				if (inGap) return;
-				e.shiftKey ? handleOctave(-1) : handleStep(-1);
-				break;
-			case '+':
-			case '=':
-				if (inGap) return;
-				handleSemitone(1);
-				break;
-			case '-':
-			case '_':
-				if (inGap) return;
-				handleSemitone(-1);
-				break;
-			case 'ArrowLeft':
-				handleMove(-1);
-				break;
-			case 'ArrowRight':
-				handleMove(1);
-				break;
-			case '.':
-				handleDotCell();
-				break;
-			case 'Delete':
-			case 'Backspace':
-				if (inGap) return;
-				handleDeleteNote();
-				break;
-			case 'Escape':
-				dismissLoupe();
-				break;
-			default:
-				if (DIGIT_BASE[e.key]) handleDurationCell(DIGIT_BASE[e.key]);
-				else return;
-		}
-		// Reached only where a branch above acted, so a key this surface does
-		// not claim still reaches the rest of the app.
-		e.preventDefault();
-	}
+	/* THE KEYBOARD, active wherever the insertion bar stands, lives in
+	   `$lib/score/correction-keys.ts` (audit phase 4, slice 6), with the rulings
+	   that shape it. It calls every other slice, so the page wires them in. */
+	const handleCorrectionKey = createCorrectionKeys({
+		cursor: () => cursor,
+		inGap: () => inGap,
+		musicKeys: () => loupePanel.musicKeys,
+		canUndo: () => undoHistory.undoStack.length > 0,
+		canRedo: () => undoHistory.redoStack.length > 0,
+		undo: handleUndo,
+		redo: handleRedo,
+		step: handleStep,
+		octave: handleOctave,
+		semitone: handleSemitone,
+		move: handleMove,
+		dotCell: handleDotCell,
+		deleteNote: handleDeleteNote,
+		durationCell: handleDurationCell,
+		dismiss: dismissLoupe,
+	});
 
 	/** The score the renderer sees: the read, with the hand corrections applied. */
 	const correctedScore = $derived.by(() => {
