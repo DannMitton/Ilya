@@ -60,6 +60,8 @@
 
 						<p>À partir d’une poignée d’échantillons en friture vocale sur un micro grand public, <em>Ilya</em> mesure vos résonances, et les Aperçus prévoient comment une pièce du répertoire est susceptible de solliciter votre voix : où le timbre va probablement basculer, le rapport de la pièce à votre <em>zona di passaggio</em>, et où l’ambitus devient exigeant. Votre voix s’accordera peut-être avec la prévision des Aperçus, peut-être pas, et cette différence est elle aussi une information. Les Aperçus vous offrent un regard plus approfondi sur les exigences de la musique que vous explorez, et vous fournissent des défis précis à aborder avec votre professeure ou professeur.</p>
 
+						<p>Les conseils d’<em>Ilya</em> rassemblent ce qu’un large éventail de la littérature établie en pédagogie du chant dit des conditions qu’il relève dans une pièce et dans votre voix. Sans professeure ou professeur de chant dans la conversation, ces conseils peuvent vous induire en erreur, ou ne pas convenir à votre voix. Discutez de tout ce qu’<em>Ilya</em> propose sur la technique avec votre professeure ou professeur de chant. <em>Ilya</em> est conçu pour travailler en partenariat avec l’oreille avertie d’une professeure ou d’un professeur.</p>
+
 						<!-- Caractéristiques vocales (E.5 tranche 3, 2026-07-13).
 						     Traduction française attentive mais non native, à valider lors
 						     de la passe française de l'interface de calibration. -->
@@ -285,9 +287,10 @@
 						<ul>
 							<li><strong>Espacement et ponctuation.</strong> Selon l’<a href="https://vitrinelinguistique.oqlf.gouv.qc.ca/22039/la-typographie/espacement/espacement-avant-et-apres-les-signes-de-ponctuation-et-les-symboles" target="_blank" rel="noopener">Office québécois de la langue française</a> (OQLF)&#160;: une espace insécable avant le deux-points et à l’intérieur des guillemets, et aucune espace avant le point-virgule, le point d’interrogation et le point d’exclamation.</li>
 							<li><strong>Termes musicaux italiens.</strong> En italique, selon le <a href="https://roberge.mus.ulaval.ca/gdrm/" target="_blank" rel="noopener"><em>Guide des difficultés de rédaction en musique</em></a> de Marc-André Roberge (Université Laval)&#160;: <em>passaggio</em>, <em>legato</em>, <em>crescendo</em>. Tout autre mot étranger suit l’OQLF&#160;: en italique s’il n’est pas francisé, en romain s’il est d’usage courant en français.</li>
-							<li><strong>Noms de personnes.</strong> Les doublets complets, que l’OQLF recommande dans les textes suivis, le féminin en premier&#160;: «&#160;votre professeure ou professeur&#160;». Là où le doublet alourdirait une phrase qui revient souvent, une formulation neutre le remplace.</li>
+							<li><strong>Noms de personnes.</strong> Les doublets complets, que l’OQLF recommande dans les textes suivis, le féminin en premier&#160;: «&#160;votre professeure ou professeur&#160;». Là où le doublet alourdirait une phrase qui revient souvent, une formulation neutre le remplace. Le féminin en premier&#160;: l’<a href="https://vitrinelinguistique.oqlf.gouv.qc.ca/23991/" target="_blank" rel="noopener">OQLF</a> laisse l’ordre libre et recommande de placer le masculin le plus près de l’adjectif qui s’accorde; <em>Ilya</em> place donc le féminin en premier.</li>
 							<li><strong>Hauteurs.</strong> Une note est désignée par sa lettre, de A à G, suivie du chiffre de son octave, comme en anglais (<em>scientific pitch notation</em>), selon l’usage que recommande <a href="https://roberge.mus.ulaval.ca/gdrm/04-notes.htm" target="_blank" rel="noopener">Marc-André Roberge</a> afin d’éviter les confusions entre traditions&#160;: le do central est C4, et le la du diapason, à 440&#160;Hz, est A4.</li>
 							<li><strong>Plis vocaux.</strong> <em>Ilya</em> emploie «&#160;plis vocaux&#160;», le descripteur du vocabulaire médical <a href="https://decs.bvsalud.org/fr/ths/resource/?id=15228" target="_blank" rel="noopener">DeCS</a> (BIREME), qui garde «&#160;cordes vocales&#160;» comme terme d’entrée. Une citation conserve les mots de sa source.</li>
+							<li><strong>Références</strong>&#160;: selon la <a href="https://vitrinelinguistique.oqlf.gouv.qc.ca/23245/" target="_blank" rel="noopener">notice bibliographique de l’OQLF</a> (lieu, éditeur, année).</li>
 						</ul>
 
 						<p><strong>Polices.</strong> Chaque police intégrée est publiée sous la SIL Open Font License, version 1.1, et le texte de chaque licence est distribué avec les fichiers de police : Bravura, © 2015 Steinberg Media Technologies GmbH; Leland, © 2025 MuseScore BVBA; Finale Maestro, © 2021 MakeMusic, Inc.; et Lato, © 2010–2014 tyPoland Łukasz Dziedzic.</p>
@@ -345,6 +348,8 @@
 							     French pass. -->
 							<h4 id="guide-markup-forecast">What Insights forecasts</h4>
 							<p>From a handful of fry samples on a consumer mic, <em>Ilya</em> measures your resonances, and Insights forecasts how a piece of repertoire is likely to meet your voice: where the timbre will probably turn, the song’s relationship to your zona di passaggio, and where the range gets demanding. Your voice may align with Insights’ forecast, or may not, and that difference is information too. Insights offers you a deeper perspective on the demands of the music you are exploring, equipping you with specific challenges to bring to your teacher.</p>
+
+							<p><em>Ilya</em>’s advice gathers what a wide range of established singing voice pedagogy literature says about the conditions it finds in a piece and in your voice. Without a teacher in the conversation, that advice can mislead you, or not suit your voice. Bring anything <em>Ilya</em> offers about technique to your voice teacher. <em>Ilya</em> is made to work in partnership with a teacher’s informed ear.</p>
 
 							<!-- Voice characteristics (E.5 slice 3, 2026-07-13): the GUIDE's
 							     paraphrase of the wizard phase, same-commit with the phase

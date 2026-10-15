@@ -3,18 +3,19 @@
  * 21:21 to 21:52), pinned character for character in both languages, the
  * apostrophes typographic (QUEUE row 78a).
  */
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { t } from '$lib/i18n';
 
 describe('ratified Insights lines (row 78a)', () => {
-	it('the frame line, English (21:21)', () => {
+	it('the frame line, English (21:21; the clause « from technique building to transposition options » dropped 2026-10-12 20:55, row 90)', () => {
 		expect(t('insights.r2.frame', 'en')).toBe(
-			'Ilya’s advice, from technique building to transposition options, is drawn from the intersection of your voice as you calibrate and describe it, and the demands of the music you are investigating. Citations connect Ilya’s findings to specific voice pedagogy literature. Since a computer program cannot experience your actual singing, discuss anything Ilya suggests with your voice teacher.',
+			'Ilya’s advice is drawn from the intersection of your voice as you calibrate and describe it, and the demands of the music you are investigating. Citations connect Ilya’s findings to specific voice pedagogy literature. Since a computer program cannot experience your actual singing, discuss anything Ilya suggests with your voice teacher.',
 		);
 	});
-	it('the frame line, French (21:27)', () => {
+	it('the frame line, French (21:27; the clause « du travail technique aux options de transposition » dropped 2026-10-12 20:55, row 90)', () => {
 		expect(t('insights.r2.frame', 'fr')).toBe(
-			'Les conseils d’Ilya, du travail technique aux options de transposition, sont tirés de la rencontre entre votre voix, telle que vous la calibrez et la décrivez, et les exigences de la musique que vous étudiez. Des citations relient les constats d’Ilya à des passages précis de la littérature en pédagogie du chant. Comme un logiciel ne peut pas percevoir votre chant réel, discutez des suggestions d’Ilya avec votre professeure ou professeur de chant.',
+			'Les conseils d’Ilya sont tirés de la rencontre entre votre voix, telle que vous la calibrez et la décrivez, et les exigences de la musique que vous étudiez. Des citations relient les constats d’Ilya à des passages précis de la littérature en pédagogie du chant. Comme un logiciel ne peut pas percevoir votre chant réel, discutez des suggestions d’Ilya avec votre professeure ou professeur de chant.',
 		);
 	});
 	it('the teacher lines A (21:32) and C (21:34)', () => {
@@ -30,5 +31,56 @@ describe('ratified Insights lines (row 78a)', () => {
 		expect(t('comment.tap', 'fr')).toBe('Lectures complémentaires');
 		expect(t('insights.r2.cycles', 'en')).toBe('Your vocal folds contact about {n} times as you sing this piece.');
 		expect(t('insights.r2.cycles', 'fr')).toBe('Vos plis vocaux entrent en contact environ {n} fois pendant que vous chantez cette pièce.');
+	});
+});
+
+/* QUEUE rows 90 and 94. The Guide keeps its prose in markup, not in i18n.ts, so
+   these pins read GuideContent.svelte as source, as no-fit-name.test.ts does.
+   Row 90 (a): two lines in the French conventions list, ratified 2026-10-12
+   20:30. Row 94: the teacher-as-intermediary paragraph, ratified 2026-10-13
+   23:11 (English) and 23:14 (French). U+2019 apostrophes, U+00A0 before French
+   colons (written `&#160;` in the markup). */
+describe('ratified Guide lines (rows 90 and 94)', () => {
+	const guide = readFileSync(new URL('../components/Reading/GuideContent.svelte', import.meta.url), 'utf8');
+	const a = guide.indexOf("{#if language === 'fr'}");
+	const b = guide.indexOf('{:else}', a);
+	const fr = guide.slice(a, b);
+	const en = guide.slice(0, a) + guide.slice(b);
+	const OQLF1 = 'https://vitrinelinguistique.oqlf.gouv.qc.ca/23991/';
+	const OQLF3 = 'https://vitrinelinguistique.oqlf.gouv.qc.ca/23245/';
+
+	it('row 90 (a), item 1: « le féminin en premier » and its source, in the Noms de personnes item', () => {
+		expect(fr).toContain(
+			`Le féminin en premier&#160;: l’<a href="${OQLF1}" target="_blank" rel="noopener">OQLF</a> laisse l’ordre libre et recommande de placer le masculin le plus près de l’adjectif qui s’accorde; <em>Ilya</em> place donc le féminin en premier.</li>`,
+		);
+		// Seated inside the existing item, after its own text.
+		const li = fr.slice(fr.indexOf('<strong>Noms de personnes.</strong>'), fr.indexOf('</li>', fr.indexOf('<strong>Noms de personnes.</strong>')));
+		expect(li).toContain('une formulation neutre le remplace. Le féminin en premier');
+	});
+	it('row 90 (a), item 3: Références, linked to the OQLF bibliographic notice, after Plis vocaux', () => {
+		const line = `<li><strong>Références</strong>&#160;: selon la <a href="${OQLF3}" target="_blank" rel="noopener">notice bibliographique de l’OQLF</a> (lieu, éditeur, année).</li>`;
+		expect(fr).toContain(line);
+		expect(fr.indexOf('<strong>Plis vocaux.</strong>')).toBeLessThan(fr.indexOf(line));
+		expect(fr.indexOf(line)).toBeLessThan(fr.indexOf('</ul>', fr.indexOf(line)));
+	});
+	it('row 90 (a) adds no English: the English Guide has no OQLF doublet link', () => {
+		expect(en).not.toContain(OQLF1);
+		expect(en).not.toContain(OQLF3);
+	});
+	it('row 94, English: the teacher paragraph sits directly after paragraph A', () => {
+		const para =
+			'<p><em>Ilya</em>’s advice gathers what a wide range of established singing voice pedagogy literature says about the conditions it finds in a piece and in your voice. Without a teacher in the conversation, that advice can mislead you, or not suit your voice. Bring anything <em>Ilya</em> offers about technique to your voice teacher. <em>Ilya</em> is made to work in partnership with a teacher’s informed ear.</p>';
+		expect(en).toContain(para);
+		const at = en.indexOf('equipping you with specific challenges to bring to your teacher.</p>');
+		expect(at).toBeGreaterThan(0);
+		expect(en.slice(at).replace(/\s+/g, ' ')).toContain('</p> ' + para);
+	});
+	it('row 94, French: the teacher paragraph sits directly after paragraph A', () => {
+		const para =
+			'<p>Les conseils d’<em>Ilya</em> rassemblent ce qu’un large éventail de la littérature établie en pédagogie du chant dit des conditions qu’il relève dans une pièce et dans votre voix. Sans professeure ou professeur de chant dans la conversation, ces conseils peuvent vous induire en erreur, ou ne pas convenir à votre voix. Discutez de tout ce qu’<em>Ilya</em> propose sur la technique avec votre professeure ou professeur de chant. <em>Ilya</em> est conçu pour travailler en partenariat avec l’oreille avertie d’une professeure ou d’un professeur.</p>';
+		expect(fr).toContain(para);
+		const at = fr.indexOf('des défis précis à aborder avec votre professeure ou professeur.</p>');
+		expect(at).toBeGreaterThan(0);
+		expect(fr.slice(at).replace(/\s+/g, ' ')).toContain('</p> ' + para);
 	});
 });

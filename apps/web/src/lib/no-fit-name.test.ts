@@ -23,7 +23,10 @@ import { stringKeys, t } from './i18n';
  * the desk drafts new captions for Dann's ruling in a later row.
  */
 const FIT = /\bFit\b/;
-const KNOWN_FIGCAPTION_LINES = [94, 381];
+/* Named by their words, not their line numbers: rows 90 and 94 added lines above
+   them, and a list of numbers goes stale on every edit. At `50a5f85` they were
+   `GuideContent.svelte:94` (FR) and `:381` (EN). */
+const KNOWN_FIGCAPTIONS = ['Transcription, Fit, Leçons et Guide', 'Transcription, Fit, Learn, and Guide'];
 
 /** Keys kept on purpose, exempt by name (N.145; IntakePanel.svelte records it). Neither is drawn. */
 const EXEMPT_KEYS = ['input.transcribe', 'input.transcribeLoading'];
@@ -68,15 +71,9 @@ describe('row 97: the old name "Fit" is not in anything a singer reads', () => {
 	});
 
 	it('the only figcaptions that still say Fit are the two the row measures for a later ruling', () => {
-		const lines = guide.split('\n');
-		const found: number[] = [];
-		let open = false;
-		lines.forEach((l, i) => {
-			if (l.includes('<figcaption')) open = true;
-			if (open && FIT.test(l)) found.push(i + 1);
-			if (l.includes('</figcaption>')) open = false;
-		});
-		for (const n of found) expect(KNOWN_FIGCAPTION_LINES, `figcaption at line ${n}`).toContain(n);
+		const found = [...stripComments(guide).matchAll(/<figcaption>[\s\S]*?<\/figcaption>/g)].map((m) => m[0]).filter((c) => FIT.test(c));
+		expect(found.length).toBeLessThanOrEqual(KNOWN_FIGCAPTIONS.length);
+		for (const c of found) expect(KNOWN_FIGCAPTIONS.some((k) => c.includes(k)), c.slice(0, 80)).toBe(true);
 	});
 
 	it('the Guide heading for the forecast reads as ruled, in both languages, and keeps its id', () => {
