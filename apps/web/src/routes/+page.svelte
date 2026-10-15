@@ -169,42 +169,21 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		tapBand,
 	} from '$lib/score/loupe';
 	import {
-		arrivalPitch,
 		beatOfEntry,
-		canTie,
-		currentTie,
-		currentType,
-		enterEntry,
-		isEnteredId,
 		measureFill,
-		middleLine,
 		positionsInMeasure,
-		previousEntry,
-		toggleRest,
-		toggleTie,
 	} from '$lib/score/entry';
-	import type { NoteBase, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
 	import {
 		applyCorrections,
-		clearCorrection,
-		currentDuration,
 		currentPitch,
 		DIGIT_BASE,
-		flatPitch,
-		naturalPitch,
-		neighbourId,
-		octavePitch,
 		orphanIds,
-		semitonePitch,
-		sharpPitch,
-		stepAllowed,
-		stepPitch,
-		withCorrection,
 	} from '$lib/score/correction';
 	import { stackLabel, UndoHistory } from '$lib/score/undo-history.svelte';
 	import { CorrectionCursor } from '$lib/score/correction-cursor.svelte';
 	import { keyOwnedElsewhere, LoupePanel } from '$lib/score/loupe-panel.svelte';
 	import { createPressAndHold } from '$lib/score/press-and-hold';
+	import { CorrectionVerbs } from '$lib/score/correction-verbs.svelte';
 	import { TupletRow } from '$lib/score/tuplet-row.svelte';
 	import { pitchLabel } from '$lib/voice/note-picker';
 	import { noLyricsNoticeKey, type IngestedScore, type NoLyricsNoticeKey } from '$lib/score/ingestion/ingest';
@@ -780,31 +759,11 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   it, so a note the singer deleted by hand is not counted as lost. */
 	const orphanCount = $derived(orphanIds(readLine, doc.corrections).length);
 
-	const selectedEvent = $derived(
-		selectedEventId ? correctedLine.find((ev) => ev.id === selectedEventId) : undefined,
-	);
-
-	/* THE ARMED DURATION, which is what a gap has instead of a selection.
-	   Speedy arms a value and types it; the brief asks for a rest "of the lit
-	   duration", so something has to be lit when no entry is taken. Tapping a
-	   value both arms it and enters it, so the armed value is always the last
-	   one the singer used and the row is never lit at nothing. */
-	let armedBase = $state<NoteBase>('quarter');
-	let armedDots = $state(0);
-
 	/** The clef in force, for the middle-line arrival where a part is empty. */
 	const scoreClef = $derived(
 		ingestedScore?.result.score.clefs?.[0]?.clef ??
 			ingestedScore?.result.score.measures[0]?.clef,
 	);
-
-	/** The pitch a note entered at the bar would arrive at. */
-	const arrival = $derived(
-		cursor ? arrivalPitch(correctedLine, cursor, scoreClef) : middleLine(scoreClef),
-	);
-
-	/** The entry the bar follows, which the gap sentence and PITCH label name. */
-	const gapAnchor = $derived(cursor ? previousEntry(correctedLine, cursor) : null);
 
 	/* WHAT THE HELD MEASURE HOLDS against what its signature asks for, or null
 	   where they agree. Ruled by Dann 2026-08-26: entering into a full bar is
@@ -834,21 +793,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			: null,
 	);
 
-	const selectedLabel = $derived.by(() => {
-		const ev = selectedEvent;
-		if (!ev) return null;
-		const p = currentPitch(ev, doc.corrections);
-		return p ? pitchLabel(p) : null;
-	});
-
-	const selectedBase = $derived(
-		selectedEvent ? currentDuration(selectedEvent, doc.corrections).base : null,
-	);
-	const selectedDots = $derived(
-		selectedEvent ? currentDuration(selectedEvent, doc.corrections).dots : 0,
-	);
-	const selectedDotted = $derived(selectedDots > 0);
-
 	/* ── THE NAMED UNDO (N.92 mobile slice 2) ────────────────────────────
 	   The stack, the snapshot, and the rules they keep live in
 	   `$lib/score/undo-history.svelte.ts` (audit phase 4, slice 1). What
@@ -873,247 +817,53 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	);
 	const { push: pushUndo, undo: handleUndo, redo: handleRedo } = undoHistory;
 
-	/** The seven duration words the surface ships, by base (the 32nd and 64th since N.183). */
-	const DURATION_KEY: Partial<Record<NoteBase, string>> = {
-		'64th': 'correct.len64th', '32nd': 'correct.len32nd',
-		'16th': 'correct.len16th',
-		eighth: 'correct.len8th',
-		quarter: 'correct.lenQuarter',
-		half: 'correct.lenHalf',
-		whole: 'correct.lenWhole',
-	};
-
-	function durationWord(base: NoteBase): string {
-		const key = DURATION_KEY[base];
-		return key ? t(key, language) : base;
-	}
-
-	function correct(change: Parameters<typeof withCorrection>[2]): void {
-		const id = selectedEventId;
-		if (!id) return;
-		doc.corrections = withCorrection(doc.corrections, id, change);
-	}
-
-	function handleStep(direction: 1 | -1): void {
-		const ev = selectedEvent;
-		const p = ev && currentPitch(ev, doc.corrections);
-		const next = p && stepPitch(p, direction);
-		if (!p || !next || !stepAllowed(p, next)) return;
-		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
-		correct({ pitch: next });
-	}
-
-	function handleOctave(direction: 1 | -1): void {
-		const ev = selectedEvent;
-		const p = ev && currentPitch(ev, doc.corrections);
-		const next = p && octavePitch(p, direction);
-		if (!p || !next || !stepAllowed(p, next)) return;
-		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
-		correct({ pitch: next });
-	}
-
-	/* N.92 slice 2. The context the spelling policy reads: the key in force in
-	   this note's own measure, and the note before it in the line.
-
-	   THE KEY COMES FROM THE MEASURE, not from the score's first key
-	   signature, so a mid-score change of key spells the notes after it
-	   correctly. `Measure.keySignature` is snapshotted per measure by the
-	   parsers, which is what makes that a lookup rather than a scan.
-
-	   The previous note is read by the policy ONLY where a score carries no key
-	   at all. It is passed anyway, because working it out here costs one
-	   lookup and leaves the policy with everything its own fallback needs. */
-	function spellingContextFor(ev: VocalLineEvent): SpellingContext {
-		const key = ingestedScore?.result.score.measures.find(
-			(m) => m.index === ev.measureIndex,
-		)?.keySignature;
-		const previousId = neighbourId(readLine, doc.corrections, ev.id, -1);
-		const previousEvent = previousId ? readLine.find((e) => e.id === previousId) : undefined;
-		const previous = previousEvent ? currentPitch(previousEvent, doc.corrections) : undefined;
-		return { ...(key ? { key } : {}), ...(previous ? { previous } : {}) };
-	}
-
-	function handleSemitone(direction: 1 | -1): void {
-		const ev = selectedEvent;
-		const p = ev && currentPitch(ev, doc.corrections);
-		const next = p && ev && semitonePitch(p, direction, spellingContextFor(ev));
-		if (!p || !next || !stepAllowed(p, next)) return;
-		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
-		correct({ pitch: next });
-	}
-
-	/* The accidental verbs. Cumulative, capped at doubles, and the policy is
-	   NOT consulted: a spelling the singer chose by hand is the answer, and
-	   nothing re-spells it afterwards. */
-	function handleAccidental(kind: 'flat' | 'natural' | 'sharp'): void {
-		const ev = selectedEvent;
-		const p = ev && currentPitch(ev, doc.corrections);
-		if (!p) return;
-		const next =
-			kind === 'flat' ? flatPitch(p) : kind === 'sharp' ? sharpPitch(p) : naturalPitch(p);
-		// A capped click returns the same pitch, so the map is left alone and no
-		// correction is recorded for a decision that changed nothing. The stack
-		// stays out of it for the same reason: a pill offering to reverse a
-		// change that never happened would be a lie.
-		if (next === p) return;
-		pushUndo({ kind: 'change', from: pitchLabel(p), to: pitchLabel(next) });
-		correct({ pitch: next });
-	}
-
-	function handleBase(base: (typeof DIGIT_BASE)[string]): void {
-		const ev = selectedEvent;
-		const from = ev ? currentDuration(ev, doc.corrections).base : null;
-		if (from && from !== base) {
-			pushUndo({ kind: 'change', from: durationWord(from), to: durationWord(base) });
-		}
-		correct({ base });
-	}
-
-	function handleDot(): void {
-		const ev = selectedEvent;
-		if (!ev) return;
-		const on = currentDuration(ev, doc.corrections).dots > 0;
-		pushUndo({ kind: 'text', key: on ? 'loupe.undo.dotOff' : 'loupe.undo.dotOn' });
-		correct({ dots: on ? 0 : 1 });
-	}
-
-	function handleDeleteNote(): void {
-		const id = selectedEventId;
-		if (!id) return;
-		// Move the selection off the note before removing it, so the singer is
-		// left somewhere rather than nowhere. Forward first, then back, because
-		// a run of false positives is usually deleted left to right.
-		const next =
-			neighbourId(readLine, doc.corrections, id, 1) ??
-			neighbourId(readLine, doc.corrections, id, -1);
-		pushUndo({ kind: 'text', key: 'loupe.undo.deleted' });
-		doc.corrections = withCorrection(doc.corrections, id, { deleted: true });
-		stationCursor.selectedEventId = next;
-	}
-
-	/* THE PER-NOTE RESTORE, back by Dann's ruling of 2026-08-27 and re-homed
-	   into the shared surface, so both containers carry it. It clears every
-	   correction on ONE note at once, which the named Undo pill cannot do: the
-	   pill reverses the LAST verb, and this reverses all of them on one entry.
-
-	   IT IS OFFERED ONLY WHERE THERE IS SOMETHING TO RESTORE TO. A hand-entered
-	   entry's record IS the entry, so clearing it would delete the note rather
-	   than restore it, and Delete is the verb for that and says so. The test is
-	   therefore a correction on an entry the READ still carries. */
-	const restoreAvailable = $derived(
-		!inGap &&
-			!!selectedEventId &&
-			selectedEventId in doc.corrections &&
-			!isEnteredId(selectedEventId),
-	);
-
-	function handleRestoreNote(): void {
-		if (!selectedEventId || !restoreAvailable) return;
-		pushUndo({ kind: 'text', key: 'loupe.undo.restored' });
-		doc.corrections = clearCorrection(doc.corrections, selectedEventId);
-	}
-
-	/* ── THE ENTRY GRAMMAR (N.92 slice 3) ────────────────────────────────
-	   Speedy under touch. Every one of these acts through `entry.ts`, which is
-	   pure and tested, so what this file holds is the wiring and the undo
-	   sentence and nothing else. */
-
-	/**
-	 * A duration cell. In a gap it ENTERS an entry; on one it re-times it.
-	 *
-	 * THE ARRIVAL PITCH IS THE RULING, Dann 2026-08-25: a fresh note takes the
-	 * previous entry's pitch and the pitch verbs finish it, and where the part
-	 * has no previous entry it arrives on the staff's middle line.
-	 *
-	 * THIS DEPARTS FROM THE SCHEMATIC'S §4 ON PURPOSE. That section reads
-	 * Speedy strictly, where a duration typed in a gap with no pitch enters a
-	 * REST. The brief of 2026-08-26 rules the other way for this surface: a
-	 * duration enters a NOTE at the arrival pitch, and Rest is the cell that
-	 * enters a rest. The brief is the later instruction and it is the one
-	 * built; the divergence is named in the memo rather than buried.
-	 */
-	function handleDurationCell(base: NoteBase): void {
-		armedBase = base;
-		const c = cursor;
-		if (!c || !inGap) {
-			handleBase(base);
-			return;
-		}
-		const { map, id } = enterEntry(doc.corrections, c, {
-			base,
-			dots: armedDots,
-			pitch: arrival,
-		});
-		pushUndo({ kind: 'text', key: 'loupe.undo.entered' });
-		doc.corrections = map;
-		setCursor({ kind: 'entry', id });
-	}
-
-	/**
-	 * The dot, CUMULATIVE, ruled by Dann 2026-08-27: dot, double dot, none, the
-	 * accidental verbs' own grammar. It is an action rather than a state, which
-	 * is why it carries no `aria-pressed` reading of "on"; what the entry shows
-	 * is on the readout, spelled out.
-	 *
-	 * IN A GAP IT ARMS the same three states, so the value a fresh entry takes
-	 * is the value the row is lit at.
-	 */
-	function handleDotCell(): void {
-		if (inGap) {
-			armedDots = (armedDots + 1) % 3;
-			return;
-		}
-		const ev = selectedEvent;
-		if (!ev) return;
-		const now = currentDuration(ev, doc.corrections).dots;
-		const next = (now + 1) % 3;
-		pushUndo({
-			kind: 'text',
-			key: next === 1 ? 'loupe.undo.dotOn' : next === 2 ? 'loupe.undo.dotDouble' : 'loupe.undo.dotOff',
-		});
-		correct({ dots: next });
-	}
-
-	/**
-	 * Rest. In a gap it enters one; on an entry it converts, both ways.
-	 *
-	 * ONE VERB, BOTH DIRECTIONS, because the singer's question is the same in
-	 * both: is there a sound here. A rest converted back returns the note that
-	 * was there rather than the arrival guess, which `entry.ts` remembers.
-	 */
-	function handleRest(): void {
-		const c = cursor;
-		if (!c) return;
-		if (c.kind === 'gap') {
-			const { map, id } = enterEntry(doc.corrections, c, { base: armedBase, dots: armedDots });
-			pushUndo({ kind: 'text', key: 'loupe.undo.rest' });
-			doc.corrections = map;
-			setCursor({ kind: 'entry', id });
-			return;
-		}
-		pushUndo({ kind: 'text', key: 'loupe.undo.rest' });
-		doc.corrections = toggleRest(doc.corrections, correctedLine, c.id, arrival);
-	}
-
-	/** Tie, on a note whose neighbour can legally take one. */
-	function handleTie(): void {
-		const ev = selectedEvent;
-		if (!ev || !tieAvailable) return;
-		pushUndo({ kind: 'text', key: 'loupe.undo.tie' });
-		doc.corrections = toggleTie(doc.corrections, ev);
-	}
-
-	/** Whether the taken entry may start a tie: Gould's conditions, in code. */
-	const tieAvailable = $derived(
-		!inGap && !!selectedEventId && canTie(correctedLine, doc.corrections, selectedEventId),
-	);
-
-	const selectedIsRest = $derived(
-		selectedEvent ? currentType(selectedEvent, doc.corrections) === 'rest' : false,
-	);
-	const selectedTied = $derived(
-		selectedEvent ? currentTie(selectedEvent, doc.corrections) : false,
-	);
+	/* ── THE VERBS, and the readings of the taken entry they act on, live in
+	   `$lib/score/correction-verbs.svelte.ts` (audit phase 4, slice 5). The page
+	   hands in what it reads and the one function that writes the corrections,
+	   and keeps the names every prop, comment, and the keyboard below already
+	   use, each a `$derived` read of the class or a verb taken from it. */
+	const verbs = new CorrectionVerbs({
+		corrections: () => doc.corrections,
+		setCorrections: (next) => (doc.corrections = next),
+		line: () => correctedLine,
+		readLine: () => readLine,
+		cursor: () => cursor,
+		inGap: () => inGap,
+		selectedEventId: () => selectedEventId,
+		setCursor,
+		selectEntry: (id) => (stationCursor.selectedEventId = id),
+		keyOf: (measureIndex) =>
+			ingestedScore?.result.score.measures.find((m) => m.index === measureIndex)?.keySignature,
+		clef: () => scoreClef,
+		label: pitchLabel,
+		word: (key) => t(key, language),
+		pushUndo,
+	});
+	const selectedEvent = $derived(verbs.selectedEvent);
+	const armedBase = $derived(verbs.armedBase);
+	const armedDots = $derived(verbs.armedDots);
+	const gapAnchor = $derived(verbs.gapAnchor);
+	const selectedLabel = $derived(verbs.selectedLabel);
+	const selectedBase = $derived(verbs.selectedBase);
+	const selectedDots = $derived(verbs.selectedDots);
+	const selectedDotted = $derived(verbs.selectedDotted);
+	const restoreAvailable = $derived(verbs.restoreAvailable);
+	const tieAvailable = $derived(verbs.tieAvailable);
+	const selectedIsRest = $derived(verbs.selectedIsRest);
+	const selectedTied = $derived(verbs.selectedTied);
+	const {
+		durationWord,
+		handleStep,
+		handleOctave,
+		handleSemitone,
+		handleAccidental,
+		handleDeleteNote,
+		handleRestoreNote,
+		handleDurationCell,
+		handleDotCell,
+		handleRest,
+		handleTie,
+	} = verbs;
 
 	/* ── PRESS AND HOLD REPEATS (N.92 slice 3) ───────────────────────────
 	   The timers, the two delays, and the rules they keep live in
