@@ -6,8 +6,11 @@
  * which runs its models with onnxruntime-web. onnxruntime fetches its
  * `.wasm` and the `.mjs` that loads it at run time from the folder named by
  * homr-web's `wasmPaths` option, which the reader sets to `/omr/ort/`, this
- * folder. Two pairs are copied: the plain WebAssembly build, and the `jsep`
- * build that onnxruntime uses for WebGPU.
+ * folder. One pair is copied: the `jsep` build, which onnxruntime uses for
+ * WebGPU and, in the entry this app resolves (`ort.min.mjs`, see
+ * `vite.config.ts`), for WebAssembly too. The plain WebAssembly build
+ * (`ort-wasm-simd-threaded.mjs` and `.wasm`) was copied until QUEUE row 102
+ * proved nothing in the built site names it.
  *
  * THE COPIES ARE GENERATED, NEVER EDITED, AND NEVER COMMITTED, for
  * copy-pdfjs-wasm.mjs's reason: `static/omr/` is git-ignored, and the
@@ -44,8 +47,6 @@ try {
 
 const DEST = fileURLToPath(new URL('../static/omr/ort/', import.meta.url));
 const FILES = [
-	'ort-wasm-simd-threaded.mjs',
-	'ort-wasm-simd-threaded.wasm',
 	'ort-wasm-simd-threaded.jsep.mjs',
 	'ort-wasm-simd-threaded.jsep.wasm',
 ];
