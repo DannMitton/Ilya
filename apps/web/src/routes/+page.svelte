@@ -714,7 +714,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 * the stepper.
 	 */
 	function handleLoupePickGap(after: string | null): void {
-		setCursor({ kind: 'gap', after });
+		// The loupe is holding the measure whose carets were drawn (cause 1c).
+		setCursor({
+			kind: 'gap',
+			after,
+			...(heldMeasureIndex !== null ? { measureIndex: heldMeasureIndex } : {}),
+		});
 	}
 
 	/* ── N.92, the correction minimum ────────────────────────────────────
@@ -805,6 +810,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			pairings: doc.pairings,
 			selected: selectedEventId,
 			gapAfter,
+			gapMeasure: stationCursor.gapMeasure,
 			seatedText: doc.seatedText,
 		}),
 		(entry) => {
@@ -813,6 +819,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			doc.seatedText = entry.seatedText;
 			stationCursor.selectedEventId = entry.selected;
 			stationCursor.gapAfter = entry.gapAfter;
+			stationCursor.gapMeasure = entry.gapMeasure;
 		},
 	);
 	const { push: pushUndo, undo: handleUndo, redo: handleRedo } = undoHistory;
@@ -980,15 +987,19 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			!!ingestedScore,
 	);
 
-	/* THE HELD MEASURE, and in a gap it is the anchor's. A gap is a place
-	   between two entries, so it has no measure of its own; the measure the
-	   loupe holds is the one the bar stands in, which is the measure of the
-	   entry it follows, and the head gap belongs to the first measure. */
+	/* THE HELD MEASURE. In a gap it is the measure the bar was put in
+	   (`Cursor.measureIndex`, cause 1c), because the head gap of measure k and
+	   the tail gap of k − 1 are one place and the anchor cannot say which the
+	   singer is looking at. A gap that carries none falls back to the anchor's
+	   measure, as before: the entry it follows, the first measure at the head. */
 	const heldMeasureIndex = $derived(
 		selectedEvent
 			? selectedEvent.measureIndex
 			: inGap
-				? (gapAnchor?.measureIndex ?? correctedLine[0]?.measureIndex ?? null)
+				? (stationCursor.gapMeasure ??
+					gapAnchor?.measureIndex ??
+					correctedLine[0]?.measureIndex ??
+					null)
 				: null,
 	);
 

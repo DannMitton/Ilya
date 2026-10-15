@@ -32,7 +32,14 @@ import type { CorrectionMap, NoteCorrection } from './correction';
  * `after` names it. Speedy's bar is always in one of these places, and the
  * schematic's §1 and §4 draw the two states.
  */
-export type Cursor = { kind: 'entry'; id: string } | { kind: 'gap'; after: string | null };
+export type Cursor =
+	| { kind: 'entry'; id: string }
+	/* `measureIndex` (cause 1c, 2026-10-15): the measure whose caret run the bar
+	   stands in. A gap has no measure of its own, because the head gap of
+	   measure k and the tail gap of k − 1 are one place; this says which of the
+	   two the singer is looking at. OPTIONAL, and `sameCursor` ignores it, so
+	   every place that names a gap without a measure reads as it always did. */
+	| { kind: 'gap'; after: string | null; measureIndex?: number };
 
 /** Two cursors naming the same place. */
 export function sameCursor(a: Cursor | null, b: Cursor | null): boolean {
@@ -218,8 +225,12 @@ export function enterEntry(
 ): { map: CorrectionMap; id: string } {
 	const id = nextEnteredId(map);
 	const after = cursor.kind === 'gap' ? cursor.after : cursor.id;
+	/* THE GAP'S MEASURE TRAVELS WITH THE ENTRY (cause 1c). A note entered at the
+	   head caret of measure k is anchored to the last entry of k − 1, so the
+	   anchor alone would seat it in k − 1 while the loupe showed k. */
+	const measureIndex = cursor.kind === 'gap' ? cursor.measureIndex : undefined;
 	const entry: NoteCorrection = {
-		entered: { after },
+		entered: { after, ...(measureIndex !== undefined ? { measureIndex } : {}) },
 		base: spec.base,
 		dots: spec.dots,
 		type: spec.pitch ? 'note' : 'rest',
