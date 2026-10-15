@@ -19,10 +19,12 @@
  *
  * localStorage, client-side only (the app is adapter-static with SSR off,
  * but every entry point guards for a missing window so svelte-check and
- * any future SSR pass stay clean). Every function is failure-silent by
- * design: a private-browsing window, a full quota, or a corrupt entry
- * degrades to an empty store and the session lives on in memory.
- * Persistence must never throw into the calibration UI.
+ * any future SSR pass stay clean). `saveStore` REPORTS: it returns an
+ * `Outcome` and publishes the reason to `profile-save.svelte.ts`, so the
+ * drawer can say when a full quota refused the voice (N.27). Every other
+ * function degrades: a private-browsing window or a corrupt entry gives an
+ * empty store and the session lives on in memory. Persistence must never
+ * throw into the calibration UI, and `saveStore` never does.
  *
  * Shape note: the engine schema's VoiceProfile (engine/types.ts) declares
  * calibratedFormants as a complete Record<Vowel, CalibratedFormant>, which
@@ -34,6 +36,8 @@
 import type { IntakeAnswers } from '@ilya/score-parser';
 import type { Vowel, CalibratedFormant, VoiceCharacteristics, VoiceType } from './engine/types';
 import type { FryRangeVerdict } from './engine/readiness';
+import type { Outcome } from '$lib/library/types';
+import { profileSave } from './profile-save.svelte';
 
 /**
  * What the readiness gate found at the moment this voice was calibrated (item
@@ -278,13 +282,34 @@ export function loadStore(migratedName: string): ProfileStore {
 	}
 }
 
-/** Write the whole store. Overwrites the previous save. */
-export function saveStore(store: ProfileStore): void {
+/**
+ * Write the whole store. Overwrites the previous save. Never throws.
+ *
+ * The outcome is also published to `profileSave.failure` (null on success), so
+ * a caller that ignores the return value, as the wizard's `persistStore` does,
+ * still lets the drawer say when the write refused. On a failure the in-memory
+ * session store stands.
+ */
+export function saveStore(store: ProfileStore): Outcome {
+	const outcome = write(store);
+	profileSave.failure = outcome.ok ? null : outcome.reason;
+	return outcome;
+}
+
+function write(store: ProfileStore): Outcome {
 	const s = storage();
-	if (!s) return;
+	if (!s) return { ok: false, reason: 'no-storage' };
 	try {
 		s.setItem(KEY, JSON.stringify(store));
-	} catch {
-		// Quota or serialization failure: the in-memory session store stands.
+		return { ok: true };
+	} catch (err) {
+		// The same test as `reasonFor` in `library/driver.ts`, copied rather than
+		// imported so the voice folder does not depend on the vault's driver.
+		return {
+			ok: false,
+			reason: err instanceof DOMException && (err.name === 'QuotaExceededError' || err.code === 22)
+				? 'quota-exceeded'
+				: 'write-failed',
+		};
 	}
 }

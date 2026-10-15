@@ -333,7 +333,7 @@ export class Library {
 	 * a value replaces them and `null` deletes them, in the same transaction as
 	 * the record.
 	 *
-	 * ── THE REPORTING SEAM, AND A STANDING RECOMMENDATION FOR N.27 ──────────
+	 * ── THE REPORTING SEAM, AND WHAT N.27 DID WITH IT ──────────────────────
 	 *
 	 * This method and `load` above are the seam: every write in the library
 	 * returns an `Outcome` carrying a `FailureReason`, the page renders that
@@ -342,19 +342,14 @@ export class Library {
 	 * add a second silent save site while N.27 is open" (CONTRACT §6), by
 	 * construction rather than by discipline.
 	 *
-	 * **THE RECOMMENDATION, RECORDED HERE AND NOT BUILT (N.67 step 6):** when
-	 * N.27 is built, `profileStore.saveStore` (`profileStore.ts:217-225`, which
-	 * the brief cited as `:216-224`; read off the tree at this commit) routes
-	 * through this seam. It is the last catch-and-drop of its kind in the tree:
-	 * it writes the singer's voice profile to `localStorage`, and on quota or a
-	 * serialization failure it swallows the exception and returns `void`, so a
-	 * caller cannot know the write refused and the singer is never told. Giving
-	 * it an outcome type and a reason is the whole change; the sentence it needs
-	 * already exists as `storage.quotaFull` and `storage.saveFailed.generic`.
+	 * **BUILT 2026-10-15 (N.27):** `profileStore.saveStore`, the last
+	 * catch-and-drop of its kind in the tree, now returns an `Outcome` with a
+	 * `FailureReason` and publishes it to `voice/profile-save.svelte.ts`, which
+	 * `drawerNotices` reads. The quota sentence is `storage.quotaFull`.
 	 *
-	 * **N.27 IS NOT BUILT HERE.** The voice profile is not a song, it does not
-	 * live in this vault (design §2.2 leaves `shane.profiles.v2` where it is),
-	 * and moving it would be its own step with its own walk.
+	 * **THE PROFILE STAYS WHERE IT WAS.** It is not a song, it does not live in
+	 * this vault (design §2.2 leaves `shane.profiles.v2` where it is), and
+	 * moving it would be its own step with its own walk.
 	 */
 	async save(record: SongRecord, source?: SourceBytes | null): Promise<Outcome> {
 		const stamped = { ...record, updatedAt: this.#now() };

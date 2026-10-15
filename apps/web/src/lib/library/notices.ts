@@ -182,6 +182,8 @@ export function drawerNotices(input: {
 	saveFailure: FailureReason | null;
 	loadFailure: FailureReason | null;
 	reading: StorageReading;
+	/** Why the voice profile's last save refused (N.27); absent means none. */
+	profileSaveFailure?: FailureReason | null;
 }): NoticeLine[] {
 	const lines = [...input.boot];
 	if (input.saveFailure) {
@@ -189,6 +191,18 @@ export function drawerNotices(input: {
 	} else {
 		const song = songNotice(input.loadFailure);
 		if (song) lines.push(song);
+	}
+	// THE VOICE SPEAKS ONLY FOR SPACE. A full origin is the one profile failure
+	// with a ratified sentence that fits, and the song's own `storage.quotaFull`
+	// is the same sentence, so the dedupe below says it once whichever hit first.
+	// `no-storage` adds nothing: `bootNotices` already says `storage.none` when
+	// the song side has no storage, and a browser that keeps songs in IndexedDB
+	// while refusing `localStorage` would make "Nothing can be saved in this
+	// browsing mode" untrue. `write-failed` adds nothing either: no ratified
+	// sentence names the voice, and `storage.saveFailed.generic` names syllable
+	// placements. Both are owed to Dann (the N.27 report).
+	if (input.profileSaveFailure === 'quota-exceeded') {
+		lines.push(...saveNotice('quota-exceeded', input.reading));
 	}
 	// **NO SENTENCE IS SAID TWICE, AND THIS ONE IS NOT TIDINESS.** A browser with
 	// no storage at all reports `no-storage` at boot AND on the first write, so

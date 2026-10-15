@@ -114,6 +114,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
 	import { hasAnyReadings, type VoiceTypeChoice } from '$lib/voice/profileStore';
+	import { profileSave } from '$lib/voice/profile-save.svelte';
 	// N.115: the ten sung vowels as a value, so Score markup's state line can
 	// count the denominator of "10 of 10" without reading the wizard's queue.
 	import { VOWELS } from '$lib/voice/engine/types';
@@ -3329,13 +3330,12 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			saveFailure: doc.saveFailure,
 			loadFailure: doc.loadFailure,
 			reading: storageReading,
+			profileSaveFailure: profileSave.failure,
 		}),
 	);
 	$effect(() => {
-		// A REAL FIGURE OR NONE. The notice appends "Storage: x of y used" only
-		// where the browser answered with numbers, and the numbers worth showing
-		// are the ones from the moment the write refused.
-		if (doc.saveFailure !== 'quota-exceeded') return;
+		// A REAL FIGURE OR NONE: the numbers worth showing are from the moment a write refused.
+		if (doc.saveFailure !== 'quota-exceeded' && profileSave.failure !== 'quota-exceeded') return;
 		void readStorageEstimate().then((reading) => {
 			storageReading = reading;
 		});

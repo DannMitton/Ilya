@@ -220,6 +220,53 @@ describe('the drawer, in order', () => {
 	});
 });
 
+describe('the voice profile, in the drawer (N.27)', () => {
+	const REAL: { persisted: boolean | null; usage?: number; quota?: number } = {
+		persisted: null,
+		usage: 5_000_000,
+		quota: 10_000_000,
+	};
+
+	it('says the quota sentence once, with the figures, when only the voice hit the quota', () => {
+		const lines = drawerNotices({
+			boot: [],
+			saveFailure: null,
+			loadFailure: null,
+			reading: REAL,
+			profileSaveFailure: 'quota-exceeded',
+		});
+
+		expect(keys(lines)).toEqual(['storage.quotaFull', 'storage.quotaNumbers']);
+	});
+
+	it('says the quota sentence once when the song and the voice both hit it', () => {
+		const lines = drawerNotices({
+			boot: [],
+			saveFailure: 'quota-exceeded',
+			loadFailure: null,
+			reading: REAL,
+			profileSaveFailure: 'quota-exceeded',
+		});
+
+		expect(keys(lines)).toEqual(['storage.quotaFull', 'storage.quotaNumbers']);
+	});
+
+	it('leaves the lines unchanged for write-failed and no-storage, which have no ratified sentence for the voice', () => {
+		for (const reason of ['write-failed', 'no-storage'] as const) {
+			const without = drawerNotices({ boot: [], saveFailure: null, loadFailure: null, reading: REAL });
+			const withVoice = drawerNotices({
+				boot: [],
+				saveFailure: null,
+				loadFailure: null,
+				reading: REAL,
+				profileSaveFailure: reason,
+			});
+			expect(withVoice).toEqual(without);
+			expect(withVoice).toEqual([]);
+		}
+	});
+});
+
 describe('filling the slots', () => {
 	it('fills every %s in order, which one replace() call does not', () => {
 		expect(fillNotice('Storage: %s of %s used.', ['1 MB', '1 GB'])).toBe('Storage: 1 MB of 1 GB used.');
