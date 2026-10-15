@@ -158,6 +158,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		seatCliticFolds,
 	} from '$lib/score/clitic-seat';
 	import { seatScoreWords } from '$lib/score/score-seat';
+	import { reseatOnReplace } from '$lib/score/replace-seat';
 	import { shouldFoldOnArrival, shouldSeatFirstTranscription } from '$lib/score/first-seat';
 	import { rekeyOnArrival } from '$lib/score/old-reader-seats';
 	import { seatWaitingScore } from '$lib/score/waiting-seat';
@@ -3270,6 +3271,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			noLyrics,
 		);
 		doc.pairings = merged.map;
+		// N.157: a replacement re-derives its seats (`replace-seat.ts`); a restore or a first upload does not.
+		const reseated = origin === 'upload' && !foldOnArrival ? reseatOnReplace(doc.pairings, ingested.result.score, lines) : null;
+		if (reseated) doc.pairings = reseated.map;
 		/* N.111 increment 3, RULED BY DANN 2026-09-04: Ilya seats a vowelless
 		   clitic with its host HERE, at ingest, with no proposal and no button.
 		   A lone vowelless clitic cannot exist on the page.
@@ -3282,25 +3286,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		   end, up to 60 decided notes, on a plain reload. */
 		if (foldOnArrival) doc.pairings = seatCliticFolds(ingested.result.score, doc.pairings);
 		// Kept, never dropped, and reported as a count.
-		orphanedCount = merged.orphaned.length;
+		orphanedCount = reseated?.orphaned ?? merged.orphaned.length;
 		/* N.134, RULED BY DANN 2026-09-14: the words the box was just filled with
 		   are seated on the notes the file engraved them under.
-
-		   ONLY INTO A FRESH MAP, the same gate `firstPass` runs behind: a song
-		   that already carries placements has decisions on it, and this seat is
-		   not one of the singer's.
-
-		   AFTER THE CLITIC SEAT, AND THE ORDER IS MEASURED, not preferred
-		   (`score-seat.test.ts`). The fold writes the run from «в» to the end and
-		   leaves the piece's last note undecided. Seating first would put the
-		   last syllable on that note, the fold would then put it on the note
-		   before, and the page would read `ка ка`, which is the close Dann walked
-		   on 2026-09-04. Seating second, every slot the fold placed is already
-		   placed and is skipped.
-
-		   WITH THE DICTIONARY STILL LOADING, `lines` is empty and there is
-		   nothing to seat against, so the seat waits for the transcription
-		   (`scoreSeatWaiting`). */
+		   ONLY INTO A FRESH MAP, the gate `firstPass` runs behind: a song with
+		   placements has decisions on it (a replacement is N.157's, above).
+		   AFTER THE CLITIC SEAT, AND THE ORDER IS MEASURED (`score-seat.test.ts`).
+		   The fold writes the run from «в» to the end and leaves the last note
+		   undecided. Seating first would put the last syllable there, the fold
+		   would move it to the note before, and the page would read `ка ка`
+		   (Dann, 2026-09-04). Seating second, every slot the fold placed is
+		   skipped.
+		   WITH THE DICTIONARY STILL LOADING, `lines` is empty, so the seat waits
+		   for the transcription (`scoreSeatWaiting`). A replacement in that window
+		   re-seats nothing, and `scoreSeatWaiting` does not cover it. */
 		if (fillText !== '' && !merged.proposed && Object.keys(merged.map).length === 0) {
 			if (transcribedText === fillText && lines.length > 0) seatFilledPoem(ingested);
 			else scoreSeatWaiting = ingested;
