@@ -1,0 +1,96 @@
+[
+ {
+  "case": "float, corePath = directory (tesseract.js picks)",
+  "init": 0.6817999999999883,
+  "error": "RuntimeError: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i). Build with -sASSERTIONS for more info.",
+  "rows": [],
+  "requested": [
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js",
+   "/lang/dfloat/rus_prereform.traineddata"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js": 3905767,
+   "/lang/dfloat/rus_prereform.traineddata": 7827478,
+   "/crops/U1-1-s1-r1.png": 18175
+  },
+  "console": [
+   "error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "error: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i)",
+   "pageerror: Error: RuntimeError: Aborted(missing function: _ZN9tesseract13DotProductSSEEPKfS1_i). Build with -sASSERTIONS for more info."
+  ]
+ },
+ {
+  "case": "float, corePath = tesseract-core-simd-lstm.wasm.js",
+  "init": 0.5379000000000232,
+  "error": null,
+  "rows": [
+   {
+    "s": "U1-1-s1-r1.png",
+    "seconds": 0.4064000000000233,
+    "text": "-                      Хом.нат. ка тес - на . я.        ти „ ха : я.      ми    - Ла . я:"
+   },
+   {
+    "s": "B01-1-s1-r1.png",
+    "seconds": 0.18420000000001163,
+    "text": "ге - фФе ль ме    ня    при - дет ся хо.пто."
+   },
+   {
+    "s": "U6-2-s1-r1.png",
+    "seconds": 0.18320000000001163,
+    "text": "-      Мол   ча смот - рю—     я    на"
+   }
+  ],
+  "requested": [
+   "/core/tesseract-core-simd-lstm.wasm.js",
+   "/lang/dfloat/rus_prereform.traineddata"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-simd-lstm.wasm.js": 3899472,
+   "/lang/dfloat/rus_prereform.traineddata": 7827478,
+   "/crops/U1-1-s1-r1.png": 18175,
+   "/crops/B01-1-s1-r1.png": 3820,
+   "/crops/U6-2-s1-r1.png": 15117
+  },
+  "console": []
+ },
+ {
+  "case": "float, corePath = tesseract-core-lstm.wasm.js (no SIMD)",
+  "init": 0.4550999999999767,
+  "error": null,
+  "rows": [
+   {
+    "s": "U1-1-s1-r1.png",
+    "seconds": 0.814,
+    "text": "-                      Хом.нат. ка тес - на . я.        ти „ ха : я.      ми    - Ла . я:"
+   },
+   {
+    "s": "B01-1-s1-r1.png",
+    "seconds": 0.48379999999998835,
+    "text": "ге - фФе ль ме    ня    при - дет ся хо.пто."
+   },
+   {
+    "s": "U6-2-s1-r1.png",
+    "seconds": 0.5046000000000349,
+    "text": "-      Мол   ча смот - рю—     я    на"
+   }
+  ],
+  "requested": [
+   "/core/tesseract-core-lstm.wasm.js",
+   "/lang/dfloat/rus_prereform.traineddata"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-lstm.wasm.js": 3896484,
+   "/lang/dfloat/rus_prereform.traineddata": 7827478,
+   "/crops/U1-1-s1-r1.png": 18175,
+   "/crops/B01-1-s1-r1.png": 3820,
+   "/crops/U6-2-s1-r1.png": 15117
+  },
+  "console": []
+ }
+]

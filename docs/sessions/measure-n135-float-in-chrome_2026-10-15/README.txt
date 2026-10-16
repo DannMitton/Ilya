@@ -1,0 +1,1 @@
+Desk measure, 2026-10-15 night: the float form of rus_prereform r2 as reader (dfloat), read in headless Chromium on the SIMD core. Extends docs/sessions/measure-row82-retrain_2026-10-15/harness/ (copy its other files beside these to re-run). Report: ../report-desk-n135-float-form-in-chrome_r1_2026-10-15.md
