@@ -10,7 +10,14 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 ---
 
-## Where it stands, 2026-10-12 23:45
+## Where it stands, 2026-10-16 12:50
+
+- **THE ONE THING:** the notes from a scan are met on unseen songs (set 4, 97.5; QUEUE row 86). The words from a scan: the browser reader is decided (the float form of `rus_prereform` r2 on the SIMD core, `report-desk-n135-float-form-in-chrome_r1_2026-10-15.md`); 1 of 16 build songs seats 9 of 10; the photocopied pages and the Tchaikovsky are the limit; the next model is row 105 (Mac, after Sunday).
+- **Ruled 2026-10-16:** Input's two views, Poem and Lyrics (`OPEN.md`, "N.135 STAGE 3"); row 104 running in the cloud lane since 12:30.
+- **Shipped since 2026-10-12:** `cloud-lane-5` (rows 90, 94, 95, 97), `cloud-lane-7` (row 98), `cloud-lane-10` (rows 91, 99, 100, 101, 102), `cloud-lane-9` (rows 5, 47, 13, 48), row 82's retrain report. The unwalked backlog was accepted 2026-10-14 22:26; the keep-or-drop walk left 27 kept, 8 dropped.
+- **The lanes this week:** the shared pool is at 95 percent with a run-out before Sunday 05:00, so the Mac lane waits for Sunday; the cloud credit ($63 to 5 November) carries row 104, then stage 2a and row 106.
+
+## Where it stood, 2026-10-12 23:45
 
 - **THE ONE THING, the scan reader at 95 on unseen songs:** set 4 passes on all ten songs; 4F reads 98.0 after row 89 (`1ec2ef2`). The double flat is still read as a single flat (row 26).
 - **The need is met on an engraved score and not yet shown on a scan:** «Within Four Walls» from MusicXML draws Text, Markup, and Insights in both languages; «Средь шумного бала» from a scan draws all its syllables in Markup since `6c69161` (row 93, ratified 2026-10-14 02:56), from a typed poem, because Ilya reads no words from a scan (N.135). Desk's reading, 2026-10-12 21:50.
@@ -21,8 +28,8 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 **Mac**
 - [x] **Row 89**: the quadruplet in 4F. SHIPPED `1ec2ef2`; 4F 98.0 PASS. The double flat was not built.
 - [x] **Row 93**: Markup blank on a stored scan. Cause found by the desk 2026-10-14 (seats under the old reader's note names); fix SHIPPED `6c69161` (N.185, `../sessions/report-code-row93-seats-under-old-names_r1_2026-10-13.md`); ratified by Dann 02:56.
-- [ ] **Row 82**: the pre-reform model (N.184). Up to 11 hours of the Mac; runs when the Mac is free for a long stretch, overnight if Dann asks for that.
-- [ ] **Corrections slice 4** BUILT on `cloud-lane-9` (slices 4 to 7, `eeb055c` branch tip), not merged at the close of 2026-10-15. (`QUEUE.md` row 5, slices 4 to 6): the station code leaves the page, no visible change. Row 93's fix has shipped (`6c69161`); this is not started.
+- [x] **Row 82**: the pre-reform model (N.184). First model 2026-10-15 (`report-code-prereform-model_r1_2026-10-12.md`), retrain to 30,000 the same evening (`report-code-row82-retrain_r1_2026-10-15.md`, shipped `01b638a`); the float form is the browser reader. The next model is row 105.
+- [x] **Corrections slice 4** SHIPPED `263aa48a` 2026-10-15 (merge of `cloud-lane-9`; `report-code-row5_r1_2026-10-15.md`). Was: BUILT on `cloud-lane-9`, not merged. (`QUEUE.md` row 5, slices 4 to 6): the station code leaves the page, no visible change. Row 93's fix has shipped (`6c69161`); this is not started.
 
 **Cloud**
 - [x] **Row 84**: N.86's dead code. SHIPPED `1ec2ef2` (desk check 2026-10-14).
@@ -41,7 +48,7 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 **Mac**
 - [ ] **Corrections slices 5, 6, 7** (`../sessions/plan-corrections-build_r1_2026-10-08.md`): the rail and the fixed panel; the mark, the line, and the review; removal over a reach and "Through the bar". Each walked before the next starts.
-- [ ] **Rows 47 and 48**: the octave line for the singer's range, and the tempo estimate. Strings ratified 2026-10-08.
+- [x] **Rows 47 and 48** SHIPPED `263aa48a` 2026-10-15 (`report-code-row47_r1_2026-10-15.md`, `report-code-row48_r1_2026-10-15.md`); DONE is Dann's look. Was: the octave line for the singer's range, and the tempo estimate. Strings ratified 2026-10-08 and 2026-10-15.
 
 **Cloud**
 - [ ] **Corrections slice 9**: "Same in m. 22", the comparator (pure part).
@@ -65,7 +72,7 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 - **Corrections slice 8**, the singer's tempo, dynamic, and hairpin marks: waits on N.120 (row 48) and N.177 (dynamics as a layer).
 - **Row 9**, voice type slice B: waits on the pooled norms table r2.
-- **Row 13**, where a stored scan's minute goes: partly overtaken by `bbe524b`.
+- **Row 13** SHIPPED `263aa48a` (measure only, `report-code-row13_r1_2026-10-15.md`): a scan dropped now does not read again on its first reopen; the second question is read at the next close.
 - **N.115**, moving a bar between systems by hand, and the lone last bar: set aside by Dann 2026-10-12 21:10 until a user reports it.
 - **The Corrections redesign runs beside the reader work, not after it** (Dann 2026-10-12 21:50: *"We will handle the Corrections redesign in parallel with the OCR/OMR improvements."*).
 

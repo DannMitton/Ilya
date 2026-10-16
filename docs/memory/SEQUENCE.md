@@ -15,7 +15,34 @@ and is not maintained.*
 
 ---
 
-## THE SEQUENCE OF 2026-10-15. Supersedes the orders below until Dann says otherwise
+## THE SEQUENCE OF 2026-10-16. Supersedes the orders below until Dann says otherwise
+
+Written by the desk (Fable) 2026-10-16 about 12:50, from the tour Dann asked for at 2026-10-15 23:26 and the rulings of 2026-10-16 00:32 to 01:18. DESK DEFAULT throughout; his to overrule. Every count is from a file read that night; sizes are NOT ESTABLISHED unless a report gives one.
+
+**The fixed dependencies:** row 104 (Input's two views) before row 106 (typed hyphens) and before stage 3's alignment; N.135 stage 2a before 2b; row 105 (the reader's next model) before 2b's flag comes off; row 48 (shipped `263aa48a`) before N.120 before N.177 before N.178 and Corrections slice 8; Corrections slice 3 and 5 before 6; slice 6 walked before N.84's body and N.170; N.27 (shipped `b21ce8a`) before N.28 and N.29; the trimming audit (shipped) before N.117; Gould pp. 14 and 15 photographed before N.6; the pooled norms table r2 before row 9.
+
+**A. The words under the notes (N.135, N.184, N.163; THE ONE THING's priority).**
+1. Row 104, Input's two views (cloud, running 2026-10-16 12:30); then row 106, typed hyphens (cloud).
+2. N.135 stage 2a, the pure modules (cloud, credit): rows cut at ink valleys, tokens split at internal marks, three seating rules, words written as `<lyric>`.
+3. Row 105, the reader's next model (Mac, after Sunday 05:00): photocopy-like rendering and real pre-1918 rows; measured against `report-desk-n135-float-form-in-chrome_r1_2026-10-15.md`.
+4. Stage 2b, the float reader on the SIMD core in the scan path behind a flag (Mac, Opus); N.163 inside it; the two banner strings to Dann.
+5. Stage 3, the poem as second witness: the two papers read and filed, then the alignment design to Dann one question at a time with a drawing; the region rule for the reader (ruling default 13).
+
+**B. Corrections** (beside A, Dann 2026-10-12). Slices 1, 2, 4 shipped. 6. Slice 3 (cloud). 7. Slice 5 (Mac). 8. Slice 6 (Mac; needs 3 and 5; its walk gates N.84 and N.170). 9. Slices 7, 9, 10, 11. 10. Slice 8 after N.120 and N.177; the hairpin gesture polled from Finale, Dorico, Sibelius, and MuseScore first (Dann 2026-10-15 23:54).
+
+**C. Tempo and dynamics.** 11. Row 48 shipped; Dann's look is its walk. 12. N.120. 13. N.177. 14. N.178 (research first).
+
+**D. Insights.** 15. N.168 step 4 on, widened harvest (desk). 16. N.173, living draft. 17. Row 71 rebuilt from `Shane` (cloud; French to Dann). 18. Row 9 after the pooled norms table r2 (desk). 19. N.28 and N.29 (copyright question to Dann first).
+
+**E. Small builds, unblocked by `263aa48a`.** 20. N.92's remainder. 21. N.17. 22. N.162 (spec first). 23. N.140 and N.141. 24. N.6 after the two photos. 25. N.117 after the remaining load is measured (row 102's report). 26. N.166 closes or names its remainder after row 13's report is read whole.
+
+**F. Strings owed to Dann, as each comes up:** row 104's struck placeholder and two French flags; row 99's `write-failed` sentence; row 100's `ios_chrome_body` (after the iPhone menu path); the Guide pictures re-shot, then captions; row 71's French; N.135's banner.
+
+**G. The Guide, the outside eyes, and the release.** 27. N.84 after slice 6 is walked. 28. N.170 after slice 6. 29. The format walk and a print walk, N.83, the Shane switch ruling (`wall.ts:6-7`), then the fast-forward of `Shane` onto `main`; 30 October is a target.
+
+**After the release:** N.160 steps 4 and 5; N.122; a phone photo of a curved page and HEIC.
+
+## THE SEQUENCE OF 2026-10-15. Superseded 2026-10-16; kept for the record
 
 Written by the desk (Opus) 2026-10-15 about 00:50, at the end of the keep-or-drop walk (`../sessions/memo-open-work-decisions_r1_2026-10-14.md`, 36 items; decisions in `STATE.md` THE TRACKER), as Dann asked 2026-10-14 23:31. DESK DEFAULT throughout; his to overrule. The orders below this section are history.
 
