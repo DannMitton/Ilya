@@ -1,0 +1,18 @@
+U1 systems 6 rows 18 {'russian': 6, 'other': 8, 'notext': 4} {'ok': 6, 'first-row': 0, 'ambiguous': 0, 'none': 0} russian rows taller than 2.2 spaces: 0
+U4 systems 7 rows 16 {'russian': 7, 'other': 8, 'notext': 1} {'ok': 5, 'first-row': 2, 'ambiguous': 0, 'none': 0} russian rows taller than 2.2 spaces: 4
+U5 systems 24 rows 63 {'russian': 23, 'other': 23, 'notext': 17} {'ok': 21, 'first-row': 2, 'ambiguous': 0, 'none': 1} russian rows taller than 2.2 spaces: 6
+U6 systems 21 rows 43 {'russian': 21, 'other': 12, 'notext': 10} {'ok': 12, 'first-row': 9, 'ambiguous': 0, 'none': 0} russian rows taller than 2.2 spaces: 16
+P systems 11 rows 20 {'russian': 11, 'other': 9, 'notext': 0} {'ok': 11, 'first-row': 0, 'ambiguous': 0, 'none': 0} russian rows taller than 2.2 spaces: 1
+B01 systems 12 rows 18 {'russian': 12, 'other': 6, 'notext': 0} {'ok': 12, 'first-row': 0, 'ambiguous': 0, 'none': 0} russian rows taller than 2.2 spaces: 0
+B02 systems 8 rows 10 {'russian': 7, 'other': 3, 'notext': 0} {'ok': 7, 'first-row': 0, 'ambiguous': 1, 'none': 0} russian rows taller than 2.2 spaces: 0
+B03 systems 14 rows 30 {'russian': 14, 'other': 12, 'notext': 4} {'ok': 14, 'first-row': 0, 'ambiguous': 0, 'none': 0} russian rows taller than 2.2 spaces: 0
+B04 systems 11 rows 23 {'russian': 11, 'other': 9, 'notext': 3} {'ok': 11, 'first-row': 0, 'ambiguous': 0, 'none': 0} russian rows taller than 2.2 spaces: 0
+B06 systems 12 rows 18 {'russian': 11, 'other': 6, 'notext': 1} {'ok': 11, 'first-row': 0, 'ambiguous': 0, 'none': 1} russian rows taller than 2.2 spaces: 4
+B07 systems 15 rows 27 {'russian': 14, 'other': 7, 'notext': 6} {'ok': 14, 'first-row': 0, 'ambiguous': 1, 'none': 0} russian rows taller than 2.2 spaces: 2
+B08 systems 11 rows 13 {'russian': 11, 'other': 1, 'notext': 1} {'ok': 11, 'first-row': 0, 'ambiguous': 0, 'none': 0} russian rows taller than 2.2 spaces: 4
+B09 systems 15 rows 28 {'russian': 13, 'other': 9, 'notext': 6} {'ok': 13, 'first-row': 0, 'ambiguous': 1, 'none': 1} russian rows taller than 2.2 spaces: 3
+B10 systems 12 rows 15 {'russian': 11, 'other': 2, 'notext': 2} {'ok': 11, 'first-row': 0, 'ambiguous': 1, 'none': 0} russian rows taller than 2.2 spaces: 3
+S {'russian': 18, 'other': 45, 'notext': 10}
+T {'russian': 19, 'other': 19, 'notext': 2}
+K {'russian': 12, 'other': 5, 'notext': 2}
+M {'russian': 6, 'other': 5, 'notext': 3}

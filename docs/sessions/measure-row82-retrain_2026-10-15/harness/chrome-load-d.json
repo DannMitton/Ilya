@@ -1,0 +1,112 @@
+[
+ {
+  "case": "(d) rus_prereform r2, integer form, uncompressed",
+  "init": 0.06980000000074506,
+  "error": null,
+  "rows": [
+   {
+    "s": "U1-1-s1-r1.png",
+    "seconds": 0.09069999999925495,
+    "text": "-                      Хом.нат. ка тес - на . я.        ти „ ха - я.      ми    - Ла . я:"
+   },
+   {
+    "s": "B01-1-s1-r1.png",
+    "seconds": 0.0495,
+    "text": "ге - фФе ль ме    ня    при - дет ся хо.по."
+   },
+   {
+    "s": "U6-2-s1-r1.png",
+    "seconds": 0.05010000000149012,
+    "text": "-      Мол ча смот - рю—     я    на"
+   }
+  ],
+  "requested": [
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js",
+   "/lang/d/rus_prereform.traineddata"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js": 3905767,
+   "/lang/d/rus_prereform.traineddata": 1016969,
+   "/crops/U1-1-s1-r1.png": 18175,
+   "/crops/B01-1-s1-r1.png": 3820,
+   "/crops/U6-2-s1-r1.png": 15117
+  },
+  "console": [
+   "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+ },
+ {
+  "case": "(d) rus_prereform r2, integer form, gzip",
+  "init": 0.06960000000149012,
+  "error": null,
+  "rows": [
+   {
+    "s": "U1-1-s1-r1.png",
+    "seconds": 0.09419999999925494,
+    "text": "-                      Хом.нат. ка тес - на . я.        ти „ ха - я.      ми    - Ла . я:"
+   },
+   {
+    "s": "B01-1-s1-r1.png",
+    "seconds": 0.0515,
+    "text": "ге - фФе ль ме    ня    при - дет ся хо.по."
+   },
+   {
+    "s": "U6-2-s1-r1.png",
+    "seconds": 0.053,
+    "text": "-      Мол ча смот - рю—     я    на"
+   }
+  ],
+  "requested": [
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js",
+   "/lang/dz/rus_prereform.traineddata.gz"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js": 3905767,
+   "/lang/dz/rus_prereform.traineddata.gz": 895290,
+   "/crops/U1-1-s1-r1.png": 18175,
+   "/crops/B01-1-s1-r1.png": 3820,
+   "/crops/U6-2-s1-r1.png": 15117
+  },
+  "console": []
+ },
+ {
+  "case": "(a) rus 4.0.0_best_int, gz as the app fetches it (control)",
+  "init": 0.109,
+  "error": null,
+  "rows": [
+   {
+    "s": "U1-1-s1-r1.png",
+    "seconds": 0.10889999999850988,
+    "text": "|                      гоом-нат.ка тес. на. я.        ти. ха - Я.      МИ    - Ла .я;"
+   },
+   {
+    "s": "B01-1-s1-r1.png",
+    "seconds": 0.057,
+    "text": "}                                                 Те. 0е ль ме    НЯ    при. дет . ся хо.ро."
+   },
+   {
+    "s": "U6-2-s1-r1.png",
+    "seconds": 0.09040000000223518,
+    "text": "| У      Мол   -   _ О ча смМбот = рю     Я.    на"
+   }
+  ],
+  "requested": [
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js",
+   "/lang/a/rus.traineddata.gz"
+  ],
+  "bytes": {
+   "/lib/tesseract.min.js": 62961,
+   "/lib/worker.min.js": 111307,
+   "/core/tesseract-core-relaxedsimd-lstm.wasm.js": 3905767,
+   "/lang/a/rus.traineddata.gz": 2679598,
+   "/crops/U1-1-s1-r1.png": 18175,
+   "/crops/B01-1-s1-r1.png": 3820,
+   "/crops/U6-2-s1-r1.png": 15117
+  },
+  "console": []
+ }
+]

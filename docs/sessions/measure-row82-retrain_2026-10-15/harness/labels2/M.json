@@ -1,0 +1,21 @@
+{
+"rows": {
+"p1s1r1": "russian",
+"p1s1r2": "other",
+"p1s2r1": "russian",
+"p2s1r1": "russian",
+"p2s1r2": "notext",
+"p2s2r1": "russian",
+"p2s2r2": "other",
+"p2s2r3": "notext",
+"p2s2r4": "other",
+"p2s3r1": "russian",
+"p2s3r2": "other",
+"p2s3r3": "other",
+"p2s3r4": "other",
+"p2s3r5": "other",
+"p2s4r1": "russian",
+"p2s4r2": "other"
+},
+"systems": []
+}

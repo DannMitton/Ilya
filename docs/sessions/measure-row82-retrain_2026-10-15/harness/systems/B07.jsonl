@@ -1,0 +1,15 @@
+{"page": 1, "system": 1, "bars": [1, 2], "staffTop": 850, "staffBottom": 973, "space": 30.8, "y0": 1019, "y1": 1175, "x0": 0, "x1": 4400}
+{"page": 1, "system": 2, "bars": [3, 5], "staffTop": 2070, "staffBottom": 2195, "space": 31.2, "y0": 2241, "y1": 2465, "x0": 0, "x1": 4400}
+{"page": 1, "system": 3, "bars": [6, 8], "staffTop": 3351, "staffBottom": 3473, "space": 30.5, "y0": 3518, "y1": 3736, "x0": 0, "x1": 4400}
+{"page": 1, "system": 4, "bars": [9, 11], "staffTop": 4554, "staffBottom": 4676, "space": 30.6, "y0": 4722, "y1": 4922, "x0": 0, "x1": 4400}
+{"page": 2, "system": 1, "bars": [12, 15], "staffTop": 716, "staffBottom": 839, "space": 30.8, "y0": 885, "y1": 1055, "x0": 0, "x1": 4400}
+{"page": 2, "system": 2, "bars": [16, 18], "staffTop": 1998, "staffBottom": 2121, "space": 30.8, "y0": 2167, "y1": 2361, "x0": 0, "x1": 4400}
+{"page": 2, "system": 3, "bars": [19, 21], "staffTop": 3313, "staffBottom": 3435, "space": 30.5, "y0": 3480, "y1": 3692, "x0": 0, "x1": 4400}
+{"page": 3, "system": 1, "bars": [28, 29], "staffTop": 2598, "staffBottom": 2722, "space": 30.9, "y0": 2767, "y1": 3120, "x0": 0, "x1": 4400}
+{"page": 3, "system": 2, "bars": [30, 31], "staffTop": 4139, "staffBottom": 4262, "space": 30.8, "y0": 4308, "y1": 4649, "x0": 0, "x1": 4400}
+{"page": 4, "system": 1, "bars": [32, 33], "staffTop": 712, "staffBottom": 835, "space": 30.9, "y0": 881, "y1": 1097, "x0": 0, "x1": 4400}
+{"page": 4, "system": 2, "bars": [34, 35], "staffTop": 1949, "staffBottom": 2072, "space": 30.6, "y0": 2117, "y1": 2792, "x0": 0, "x1": 4400}
+{"page": 4, "system": 3, "bars": [36, 37], "staffTop": 3341, "staffBottom": 3463, "space": 30.5, "y0": 3508, "y1": 3685, "x0": 0, "x1": 4400}
+{"page": 4, "system": 4, "bars": [38, 38], "staffTop": 4713, "staffBottom": 4836, "space": 30.8, "y0": 4882, "y1": 5452, "x0": 0, "x1": 4400}
+{"page": 5, "system": 1, "bars": [43, 45], "staffTop": 1610, "staffBottom": 1731, "space": 30.1, "y0": 1775, "y1": 2005, "x0": 0, "x1": 4400}
+{"page": 5, "system": 2, "bars": [46, 49], "staffTop": 3111, "staffBottom": 3237, "space": 31.5, "y0": 3284, "y1": 3472, "x0": 0, "x1": 4400}

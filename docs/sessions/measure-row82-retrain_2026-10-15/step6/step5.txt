@@ -1,0 +1,26 @@
+Syllables read right, per song and model (letter for letter / in sound after step 3's normalising), of the printed syllables
+song | printed | (a) letter | (a) sound | (b) letter | (b) sound | (c) letter | (c) sound | (d) letter | (d) sound
+S | 109 | 82 | 82 | 83 | 83 | 76 | 76 | 87 | 87
+T | 200 | 113 | 113 | 119 | 119 | 135 | 135 | 164 | 164
+K | 131 | 83 | 83 | 84 | 84 | 83 | 83 | 102 | 102
+M | 53 | 17 | 17 | 23 | 23 | 21 | 21 | 23 | 23
+all | 493 | 295 | 295 | 309 | 309 | 315 | 315 | 376 | 376
+
+Pre-reform letters: what each model read in place of each printed one (∅ = nothing; (missed) = the syllable had no token)
+ѣ: printed 21
+   (a) Ъ 7, ∅ 4, Б 3, в 2, ъ 1, и 1, е 1, Ф 1, Н 1
+   (b) Ъ 6, ∅ 6, Б 3, в 2, ъ 1, и 1, е 1, Ф 1
+   (c) ъ 6, ∅ 3, Ъ 3, ћ 2, Б 1, Ђ 1, Л 1, к 1, ї 1, б 1, К 1
+   (d) ѣ 20, ∅ 1
+і: printed 6
+   (a) и 1, ∅ 1, Ш 1, Т 1, К 1, И 1
+   (b) ∅ 2, и 1, Ш 1, Т 1, И 1
+   (c) і 2, и 1, І 1, Ї 1, ю 1
+   (d) і 5, І 1
+ѳ: printed 0
+ѵ: printed 0
+ъ#: printed 101
+   (a) ъ 60, Ъ 17, ъЪ 17, М 2, ∅ 1, ълЪ 1, ъЪъ 1, Ь 1, О 1
+   (b) ъ 56, Ъ 30, ъЪ 11, М 1, ь 1, ∅ 1, ълЪ 1
+   (c) ъ 87, Ъ 10, ъЪ 2, ∅ 1, К 1
+   (d) ъ 98, Ъ 1, е 1, ∅ 1

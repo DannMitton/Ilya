@@ -1,0 +1,18 @@
+row calls: step 4 variant brief
+song model | Russian notes kept | Russian notes dropped | extra notes kept | extra notes dropped || after the column only: Russian dropped, extras dropped
+S a | 15 | 101 | 8 | 4 || 101, 4
+S b | 16 | 100 | 5 | 7 || 100, 7
+S c | 7 | 109 | 4 | 8 || 109, 8
+S d | 8 | 108 | 5 | 7 || 108, 7
+T a | 41 | 156 | 2 | 12 || 156, 12
+T b | 44 | 153 | 2 | 12 || 153, 12
+T c | 20 | 177 | 1 | 13 || 177, 13
+T d | 32 | 165 | 4 | 10 || 165, 10
+K a | 47 | 87 | 0 | 0 || 87, 0
+K b | 43 | 91 | 0 | 0 || 91, 0
+K c | 37 | 97 | 0 | 0 || 97, 0
+K d | 33 | 101 | 0 | 0 || 101, 0
+M a | 34 | 28 | 0 | 0 || 28, 0
+M b | 27 | 35 | 0 | 0 || 35, 0
+M c | 27 | 35 | 0 | 0 || 35, 0
+M d | 38 | 24 | 0 | 0 || 24, 0
