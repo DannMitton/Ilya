@@ -39,6 +39,8 @@ export interface RichPart {
 	ipa?: boolean;
 	acc?: boolean;
 	sub?: boolean;
+	/** A private-use SMuFL character (a metronome note), set in the notation face (row 48). */
+	mus?: boolean;
 }
 
 /**
@@ -53,12 +55,13 @@ export function richParts(text: string): RichPart[] {
 		if (!piece) continue;
 		const em = piece.length > 2 && piece.startsWith('*') && piece.endsWith('*');
 		const body = em ? piece.slice(1, -1) : piece;
-		for (const p of body.split(/(\[[^\]]+\]|[♭♯]+|fR1)/)) {
+		for (const p of body.split(/(\[[^\]]+\]|[♭♯]+|fR1|[\uE000-\uF8FF]+)/)) {
 			if (!p) continue;
 			const run: RichPart = { text: p, ...(em ? { em } : {}) };
 			if (p === 'fR1') out.push({ ...run, text: 'f' }, { ...run, text: 'R1', sub: true });
 			else if (p.startsWith('[')) out.push({ ...run, ipa: true });
 			else if (/^[♭♯]+$/.test(p)) out.push({ ...run, acc: true });
+			else if (/^[\uE000-\uF8FF]+$/.test(p)) out.push({ ...run, mus: true });
 			else out.push(run);
 		}
 	}

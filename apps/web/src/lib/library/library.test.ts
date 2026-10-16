@@ -116,6 +116,106 @@ describe('N.94, the chosen key on the song', () => {
 	});
 });
 
+describe('the octave reading (row 47)', () => {
+	it('a record with none reads for the range, and writes none back', () => {
+		const record = emptySongRecord('x', NOW);
+		const fields = fieldsFromRecord(record);
+
+		expect(fields.octaveReading).toBeNull();
+		expect('octaveReading' in recordFromFields(record, fields)).toBe(false);
+	});
+
+	it('as written round-trips through the record', () => {
+		const record = { ...emptySongRecord('x', NOW), octaveReading: 'as-written' as const };
+		const stored = recordFromFields(emptySongRecord('x', NOW), { ...fieldsFromRecord(record) });
+
+		expect(stored.octaveReading).toBe('as-written');
+		expect(validateRecord(stored, 'x', LATER).record.octaveReading).toBe('as-written');
+		expect(fieldsFromRecord(stored).octaveReading).toBe('as-written');
+	});
+
+	it('turning it back to "for your range" removes it', () => {
+		const record = { ...emptySongRecord('x', NOW), octaveReading: 'as-written' as const };
+
+		expect('octaveReading' in recordFromFields(record, { ...fieldsFromRecord(record), octaveReading: null })).toBe(false);
+	});
+
+	it('calls any other value malformed and does not carry it', () => {
+		for (const bad of ['for-range', 'AS-WRITTEN', 1, true, null, {}]) {
+			const result = validateRecord({ octaveReading: bad }, 'x', NOW);
+
+			expect(result.reason).toBe('malformed');
+			expect(result.record.octaveReading).toBeUndefined();
+		}
+	});
+
+	it('does not disturb the key choice beside it', () => {
+		const record = {
+			...emptySongRecord('x', NOW),
+			octaveReading: 'as-written' as const,
+			transposition: { semitones: -3, fifths: 5 },
+		};
+		const stored = recordFromFields(emptySongRecord('x', NOW), fieldsFromRecord(record));
+
+		expect(stored.transposition).toEqual({ semitones: -3, fifths: 5 });
+		expect(stored.octaveReading).toBe('as-written');
+	});
+});
+
+describe('the singer\'s tempo on the song (row 48)', () => {
+	const mine = { bpm: 72, beatUnit: 'quarter' as const, beatUnitDots: 1 };
+
+	it('is absent by default, and a song without one writes none back', () => {
+		const record = emptySongRecord('x', NOW);
+		const fields = fieldsFromRecord(record);
+
+		expect(fields.tempo).toBeNull();
+		expect('tempo' in recordFromFields(record, fields)).toBe(false);
+	});
+
+	it('round-trips through the record and the validator', () => {
+		const stored = recordFromFields(emptySongRecord('x', NOW), { ...fieldsFromRecord(emptySongRecord('x', NOW)), tempo: mine });
+
+		expect(stored.tempo).toEqual(mine);
+		expect(validateRecord(stored, 'x', LATER).record.tempo).toEqual(mine);
+		expect(fieldsFromRecord(stored).tempo).toEqual(mine);
+	});
+
+	it('resetting to the estimate removes it', () => {
+		const record = { ...emptySongRecord('x', NOW), tempo: mine };
+
+		expect('tempo' in recordFromFields(record, { ...fieldsFromRecord(record), tempo: null })).toBe(false);
+	});
+
+	it.each([
+		['a zero bpm', { ...mine, bpm: 0 }],
+		['a negative bpm', { ...mine, bpm: -60 }],
+		['a bpm that is not finite', { ...mine, bpm: Infinity }],
+		['a bpm that is a string', { ...mine, bpm: '72' }],
+		['an unknown beat unit', { ...mine, beatUnit: 'breve' }],
+		['three dots', { ...mine, beatUnitDots: 3 }],
+		['half a dot', { ...mine, beatUnitDots: 0.5 }],
+		['a missing field', { bpm: 72 }],
+	])('drops %s as malformed and does not carry it', (_name, bad) => {
+		const result = validateRecord({ tempo: bad }, 'x', NOW);
+
+		expect(result.reason).toBe('malformed');
+		expect(result.record.tempo).toBeUndefined();
+	});
+
+	it('sits beside the key choice and the octave reading without disturbing either', () => {
+		const record = {
+			...emptySongRecord('x', NOW),
+			tempo: mine,
+			octaveReading: 'as-written' as const,
+			transposition: { semitones: -3, fifths: 5 },
+		};
+		const stored = recordFromFields(emptySongRecord('x', NOW), fieldsFromRecord(record));
+
+		expect([stored.tempo, stored.octaveReading, stored.transposition]).toEqual([mine, 'as-written', { semitones: -3, fifths: 5 }]);
+	});
+});
+
 describe('validateRecord', () => {
 	it('accepts a whole record unchanged', () => {
 		const record = seededRecord();

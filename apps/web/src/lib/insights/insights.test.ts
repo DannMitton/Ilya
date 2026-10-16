@@ -223,10 +223,11 @@ describe('N.123 phonation time', () => {
 		expect(ph.tempo?.printedText).toBe('Andante');
 	});
 
-	it('invents no tempo, and still divides the time into shares', () => {
+	it('estimates a labelled band where no tempo is printed (row 48), and still divides the time into shares', () => {
 		const ph = buildInsights({ analysisScore: score(line, 3), profile, watchList: null }).phonation;
-		expect(ph.timing).toBe('none');
-		expect(ph.phonation).toBeNull();
+		expect(ph.timing).toBe('range');
+		expect(ph.tempo?.provenance).toBe('estimated');
+		expect(ph.phonation?.kind).toBe('range');
 		// Primo F3 is 53, secondo D4 is 62. Below: A2 4 and D3 12. On the primo,
 		// so between: F3 4. Above: E♭4 4. Of 24 quavers.
 		expect(ph.zones).toEqual({ below: 16 / 24, between: 4 / 24, above: 4 / 24 });
@@ -318,7 +319,7 @@ describe('N.123 the tessituragram', () => {
 		// Shares 16, 4, 4 of 24 as whole percents.
 		expect(f.zones).toEqual({ below: 67, between: 17, above: 16 });
 		expect(f.scale).toBe('quavers');
-		expect(f.longest.seconds).toBeNull();
+		expect(f.longest.seconds?.kind).toBe('range'); // the estimate's band (row 48); it was null with no tempo
 	});
 
 	it('names a MusicXML treble-8vb line by the pitches it sounds, A2 to E♭4, as the pane reads it', () => {

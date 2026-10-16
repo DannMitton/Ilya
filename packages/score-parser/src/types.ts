@@ -76,6 +76,17 @@ export interface ParsedScore {
   tempoMarkings: TempoMarking[];
 
   /**
+   * The singer's own tempo for this song (QUEUE row 48, 2026-10-15). SET BY THE
+   * APP, NEVER BY A PARSER: the page copies the stored choice onto the score it
+   * hands the panes, and `resolveTempo` reads it as the override that tops every
+   * other source. It rides on the score, which every derived copy (an octave
+   * shift, a key, performance order) spreads, so every readout that prices time
+   * follows without a tempo argument through each call. Absent means the singer
+   * set none.
+   */
+  singerTempo?: { bpm: number; beatUnit: NoteBase; beatUnitDots: number };
+
+  /**
    * Verbal tempo directions as printed, in document order. Optional so every
    * existing consumer is unaffected; absent means the parser did not collect
    * them, NOT that the score has none.

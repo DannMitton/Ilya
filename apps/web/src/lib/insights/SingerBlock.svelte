@@ -17,6 +17,7 @@
 	import { richParts, textParts } from '$lib/insights/text-parts';
 	import type { Block } from '$lib/insights/singer-blocks';
 	import PitchSeconds from '$lib/insights/PitchSeconds.svelte';
+	import OctaveLine from '$lib/components/OctaveLine.svelte';
 
 	interface Props {
 		block: Block;
@@ -26,12 +27,16 @@
 		ontry?: (stop: KeyChoice) => void;
 		onaddrange?: () => void;
 		ondecline?: () => void;
+		/** Row 47: the octave line's tap (`kind: 'octave'`). */
+		onoctave?: () => void;
+		/** Row 48: the tap that opens the tempo control (`kind: 'prose'` with a `link`). */
+		ontempo?: () => void;
 		/** "N more observations" (`kind: 'more'`): open, and told when the singer opens or closes it. */
 		open?: boolean;
 		ontoggle?: (open: boolean) => void;
 	}
 
-	let { block, language, width, ontry, onaddrange, ondecline, open = false, ontoggle }: Props = $props();
+	let { block, language, width, ontry, onaddrange, ondecline, onoctave, ontempo, open = false, ontoggle }: Props = $props();
 	const T = (key: string) => t(key, language);
 
 	/* The ring's circumference at r = 32. */
@@ -40,7 +45,7 @@
 	const TRACK = $derived(Math.max(80, Math.min(300, width - 250)));
 </script>
 
-{#snippet rich(text: string)}{#each richParts(text) as p, j (j)}{#if p.sub}<sub class:em={p.em}>{p.text}</sub>{:else if p.ipa}<span class="ipa">{p.text}</span>{:else if p.acc}<span class="acc">{p.text}</span>{:else if p.em}<em>{p.text}</em>{:else}{p.text}{/if}{/each}{/snippet}
+{#snippet rich(text: string)}{#each richParts(text) as p, j (j)}{#if p.sub}<sub class:em={p.em}>{p.text}</sub>{:else if p.ipa}<span class="ipa">{p.text}</span>{:else if p.acc}<span class="acc">{p.text}</span>{:else if p.mus}<span class="mus">{p.text}</span>{:else if p.em}<em>{p.text}</em>{:else}{p.text}{/if}{/each}{/snippet}
 
 {#snippet prose(text: string)}{#each textParts(text) as part, j (j)}{#if part.ipa}<span class="ipa">{part.text}</span>{:else if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
 
@@ -150,7 +155,9 @@
 		<p class="source-line">{block.method}</p>
 	{:else if block.kind === 'prose'}
 		{@render heading(block.heading)}
-		<p class:prose={!block.small} class:source-line={block.small}>{@render rich(block.text)}</p>
+		<p class:prose={!block.small} class:source-line={block.small}>{@render rich(block.text)}{#if block.link}{' '}<button type="button" class="tempo-link" tabindex={ontempo ? 0 : -1} onclick={() => ontempo?.()}>{block.link}</button>{/if}</p>
+	{:else if block.kind === 'octave'}
+		<OctaveLine {language} shift={block.shift} applied={block.applied} ontoggle={onoctave} interactive={!!onoctave} />
 	{:else if block.kind === 'endnote'}
 		{@render heading(block.heading)}
 		{#if block.teacher}<p class="teacher-c">{block.teacher}</p>{/if}
@@ -324,6 +331,35 @@
 
 	.acc {
 		font-family: var(--font-sans);
+	}
+
+	/* A metronome note in the notation face (row 48), the page's own Finale Maestro. */
+	.mus {
+		font-family: 'Finale Maestro', serif;
+		font-style: normal;
+		font-size: 1.15em;
+		line-height: 1;
+		vertical-align: -0.1em;
+	}
+
+	/* "Change the tempo" (row 48): a quiet tap after the sentence, screen only. */
+	.tempo-link {
+		appearance: none;
+		margin: 0;
+		padding: 0.1rem 0.15rem;
+		border: 0;
+		background: none;
+		font: inherit;
+		color: var(--lavender-ink, #6b5b7a);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		cursor: pointer;
+	}
+
+	.tempo-link:focus-visible {
+		outline: 2px solid var(--lavender, #9585a2);
+		outline-offset: 2px;
+		border-radius: 3px;
 	}
 
 	sub {
@@ -535,6 +571,7 @@
 	@media print {
 		.try-key,
 		.offer-decline,
+		.tempo-link,
 		.more {
 			display: none;
 		}

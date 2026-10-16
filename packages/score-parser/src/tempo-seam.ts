@@ -16,7 +16,27 @@
  *   2. An ENCODED metronome mark wins over a word.
  *   3. A verbal term resolves to Quantz's tier, labelled `inferred`, carrying
  *      the tier's honest band rather than a bare number.
- *   4. Nothing at all: abstain. Never a default bpm.
+ *   4. THE METRE ESTIMATE (row 48, 2026-10-15; the rung that was "abstain, never
+ *      a default bpm" until then). See "Rung 4" below.
+ *
+ * ── Rung 4: the metre estimate, and on whose authority ────────────────
+ *
+ * Until 2026-10-08 this rung abstained: "Nothing at all. Never a default bpm"
+ * (the 2026-07-17 design). Dann replaced it that day, 01:28 to 01:40: *"Failing
+ * all three, it returns something, and this something can be edited easily by
+ * the user."* An estimate is therefore labelled (`provenance: 'estimated'`),
+ * carries a BAND and not a number, and is never passed off as the composer's.
+ *
+ * AFTER JEANNE LAMON, AS DANN MITTON RECEIVED IT (2026-10-14, 03:13 to 03:20):
+ * the felt beat is where a dancing body lands. Flight is bounded by gravity, so
+ * a slow tempo is felt in subdivisions, not in a longer beat; the felt beat
+ * stays within the range a body can step or sway to; 3/8 is felt in three or in
+ * one. Written tether, as the desk gave it (not checked against the book by
+ * this module): Quantz 1752, *Versuch einer Anweisung die Flöte traversiere zu
+ * spielen*, Hauptstück XVII, Abschnitt VII, § 51, pp. 263-264, which gives each
+ * metre and tempo word its note value per *Pulsschlag*. The 60 to 72 band and
+ * the two departures in `estimateBeat` are the desk's values under that
+ * principle, JUDGEMENT, and the singer can change them.
  *
  * ── Why the answer is a band and not a number ─────────────────────────
  *
@@ -69,7 +89,9 @@ export type TempoProvenance =
 	/** A metronome mark or `<sound tempo>` in the score. Firmer, not firm. */
 	| 'encoded'
 	/** Resolved from a printed tempo WORD via Quantz's tiers. A learned guess. */
-	| 'inferred';
+	| 'inferred'
+	/** No tempo anywhere on the page: estimated from the metre (rung 4). Labelled, a band, editable. */
+	| 'estimated';
 
 /**
  * A tempo directive that is not a steady term.
@@ -127,6 +149,8 @@ export interface TempoResolution {
 	modifiers?: string[];
 	/** Set when the marking was read through the non-Italian lexicon. */
 	language?: TempoLanguage;
+	/** `estimated` only: the metre the estimate read, or absent where the score states none (a walking pace). */
+	estimateMetre?: { beats: number; beatType: number };
 	/**
 	 * Every distinct steady tempo the score states. More than one means a single
 	 * bpm describes the piece only approximately, and a consumer should say so.
@@ -360,6 +384,75 @@ export function bandPosition(repBpm: number, band: [number, number], delta: numb
 	return Math.max(0, Math.min(1, natural + delta));
 }
 
+/** The estimate's felt-beat band, beats a minute: a walking pace. DESK DEFAULT, JUDGEMENT (see "Rung 4"). */
+export const ESTIMATE_BAND: readonly [number, number] = [60, 72];
+
+type Beat = { unit: NoteBase; dots: number; glyph: string };
+
+/** The next smaller undotted note value, the second chip's reading of any metre. */
+const NEXT_SMALLER: Partial<Record<NoteBase, NoteBase>> = {
+	whole: 'half',
+	half: 'quarter',
+	quarter: 'eighth',
+	eighth: '16th',
+	'16th': '32nd',
+};
+const GLYPH_OF: Record<string, string> = { whole: '\u{1D15D}', half: '\u{1D15E}', quarter: '\u2669', eighth: '\u266A', '16th': '\u{1D161}', '32nd': '\u{1D162}' };
+
+/**
+ * The beat the ESTIMATE counts, and the second reading beside it.
+ *
+ * `feltBeat` is wrapped, not changed: it serves the word path, which Dann
+ * measured against (2026-07-31), and its 3/8 default depends on a tier the
+ * estimate does not have. Two departures, for the estimate only, under the
+ * principle in "Rung 4": 3/8 takes the DOTTED QUARTER (one to the bar, the
+ * eighth as the alternative), and 6/4, 9/4, 12/4 take the DOTTED HALF (where
+ * `feltBeat` gives the quarter). No metre at all takes the quarter.
+ *
+ * The alternative is always filled, so the control can show two chips: the
+ * eighth under a compound or 3/8 dotted-quarter reading, and otherwise the next
+ * smaller note value under the felt beat. JUDGEMENT.
+ */
+export function estimateBeat(ts: TimeSignature | undefined): Beat & { alternative: Beat } {
+	const compound = (b: number, bt: number) => bt === 4 && b > 3 && b % 3 === 0;
+	let primary: Beat;
+	let alt: Beat | undefined;
+	if (ts?.beatType === 8 && ts.beats === 3) {
+		const f = feltBeat(ts, 'fast'); // the dotted quarter, with the eighth beside it
+		primary = { unit: f.unit, dots: f.dots, glyph: f.glyph };
+		alt = f.alternative;
+	} else if (ts && compound(ts.beats, ts.beatType)) {
+		primary = { unit: 'half', dots: 1, glyph: '\u{1D15E}.' };
+		alt = { unit: 'quarter', dots: 0, glyph: GLYPH_OF.quarter };
+	} else {
+		const f = feltBeat(ts);
+		primary = { unit: f.unit, dots: f.dots, glyph: f.glyph };
+		if (ts?.beatType === 8 && ts.beats % 3 === 0 && ts.beats > 3) alt = { unit: 'eighth', dots: 0, glyph: GLYPH_OF.eighth };
+		else alt = f.alternative;
+	}
+	if (!alt) {
+		const smaller = NEXT_SMALLER[primary.unit] ?? 'eighth';
+		alt = { unit: smaller, dots: 0, glyph: GLYPH_OF[smaller] ?? '\u266A' };
+	}
+	return { ...primary, alternative: alt };
+}
+
+/** The metre that holds the most bars (one tempo per song in row 48); the first stated wins a tie. */
+export function dominantTimeSignature(parsed: ParsedScore): TimeSignature | undefined {
+	const counts = new Map<string, { ts: TimeSignature; n: number }>();
+	for (const m of Array.isArray(parsed.measures) ? parsed.measures : []) {
+		const ts = m.timeSignature;
+		if (!ts) continue;
+		const key = `${ts.beats}/${ts.beatType}`;
+		const hit = counts.get(key);
+		if (hit) hit.n += 1;
+		else counts.set(key, { ts, n: 1 });
+	}
+	let best: { ts: TimeSignature; n: number } | undefined;
+	for (const c of counts.values()) if (!best || c.n > best.n) best = c;
+	return best?.ts ?? parsed.timeSignatures?.[0]?.signature;
+}
+
 export interface ResolveTempoOptions {
 	/**
 	 * The singer's own bpm for this piece. Wins over everything. Omit it and the
@@ -379,10 +472,10 @@ function firstEncoded(markings: TempoMarking[] | undefined): TempoMarking | unde
 /**
  * The tempo in force for the piece, with provenance.
  *
- * Returns `undefined` only when the score states no tempo of any kind and the
- * singer set none. That is an abstention, and it is correct: a fabricated bpm
- * would make every duration and every oscillation count downstream a guess
- * wearing a number's confidence.
+ * Never returns `undefined` since row 48 (2026-10-15): where the score states
+ * no tempo and the singer set none, rung 4 estimates one from the metre and
+ * says so (`provenance: 'estimated'`, a band). The return type keeps
+ * `undefined` for callers written before then.
  */
 export function resolveTempo(parsed: ParsedScore, options: ResolveTempoOptions = {}): TempoResolution | undefined {
 	if (!parsed || typeof parsed !== 'object') {
@@ -409,14 +502,19 @@ export function resolveTempo(parsed: ParsedScore, options: ResolveTempoOptions =
 	).size;
 
 	// ── 1. The singer's override tops everything ──
-	const ov = options.overrideBpm;
+	// The singer's choice may ride on the score (`ParsedScore.singerTempo`), so
+	// every derived copy of it carries the override with no argument threaded.
+	const carried = parsed.singerTempo;
+	const ov = options.overrideBpm ?? carried?.bpm;
+	const ovUnit = options.overrideBeatUnit ?? carried?.beatUnit;
+	const ovDots = options.overrideBeatUnitDots ?? carried?.beatUnitDots;
 	if (typeof ov === 'number' && Number.isFinite(ov) && ov > 0) {
 		return {
 			bpm: ov,
 			provenance: 'user',
-			beatUnit: options.overrideBeatUnit ?? feltBeat(timeSignatureAt(parsed, 0)).unit,
-			beatUnitDots: options.overrideBeatUnitDots ?? feltBeat(timeSignatureAt(parsed, 0)).dots,
-			beatGlyph: feltBeat(timeSignatureAt(parsed, 0)).glyph,
+			beatUnit: ovUnit ?? feltBeat(timeSignatureAt(parsed, 0)).unit,
+			beatUnitDots: ovDots ?? feltBeat(timeSignatureAt(parsed, 0)).dots,
+			beatGlyph: ovUnit ? `${GLYPH_OF[ovUnit] ?? ovUnit}${'.'.repeat(ovDots ?? 0)}` : feltBeat(timeSignatureAt(parsed, 0)).glyph,
 			steadyMarkingCount,
 			gradualCues,
 			...(words[0]?.text ? { printedText: words[0].text } : {}),
@@ -516,8 +614,28 @@ export function resolveTempo(parsed: ParsedScore, options: ResolveTempoOptions =
 		};
 	}
 
-	// ── 4. Nothing. Abstain. ──
-	return undefined;
+	// ── 4. The metre estimate (row 48). See "Rung 4" in the header. ──
+	const metre = dominantTimeSignature(parsed);
+	const beat = estimateBeat(metre);
+	const [lo, hi] = ESTIMATE_BAND;
+	const mid: Fraction = normalizeFraction({ numerator: lo + hi, denominator: 2 });
+	return {
+		bpm: fractionToNumber(mid),
+		bpmExact: mid,
+		provenance: 'estimated',
+		range: [lo, hi],
+		rangeExact: [
+			{ numerator: lo, denominator: 1 },
+			{ numerator: hi, denominator: 1 },
+		],
+		beatUnit: beat.unit,
+		beatUnitDots: beat.dots,
+		beatGlyph: beat.glyph,
+		beatAlternative: beat.alternative,
+		...(metre ? { estimateMetre: { beats: metre.beats, beatType: metre.beatType } } : {}),
+		steadyMarkingCount,
+		gradualCues,
+	};
 }
 
 /**
@@ -537,6 +655,12 @@ export function tempoCaveats(r: TempoResolution): string[] {
 	if (r.provenance === 'encoded') {
 		// Not exact. Sourced caveat, 2026-07-17 research pass 1.
 		out.push('Tempo taken from the score’s own metronome mark. Even a composer’s own marks are contested in practice.');
+	}
+	if (r.provenance === 'estimated') {
+		out.push(
+			`Tempo estimated by Ilya, not stated by the score: ${r.range ? `${r.range[0]}–${r.range[1]}` : 'a walking pace'} beats a minute of the felt beat` +
+				`${r.estimateMetre ? ` of the ${r.estimateMetre.beats}/${r.estimateMetre.beatType} metre` : ''}, a walking pace. The singer can change it.`,
+		);
 	}
 	if (r.steadyMarkingCount > 1) {
 		out.push(`This piece states ${r.steadyMarkingCount} different steady tempi; a single figure averages across them.`);

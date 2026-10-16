@@ -172,7 +172,9 @@ export interface VowelTime {
 export interface PhonationSection {
 	/**
 	 * `point` for an encoded or singer-set tempo, `range` for a tempo inferred
-	 * from a word, `none` when the score states no tempo.
+	 * from a word or estimated from the metre (row 48), `none` only where no
+	 * price can be made (since row 48 the seam always answers, so a score with
+	 * notes never reads `none`).
 	 */
 	timing: 'point' | 'range' | 'none';
 	/** Total sounding time. Null when `timing` is `none`. */
@@ -521,7 +523,8 @@ export function phonationSection(
 ): PhonationSection {
 	const totals = aggregatePhonation(score, vowelForEvent ? { vowelForEvent } : {});
 	const pricing = secondsPerQuaver(score);
-	const timing = !pricing ? 'none' : pricing.tempo.provenance === 'inferred' ? 'range' : 'point';
+	// Row 48: an estimate is a band, as a printed word's tempo is, so it is a 'range' too.
+	const timing = !pricing ? 'none' : pricing.tempo.provenance === 'inferred' || pricing.tempo.provenance === 'estimated' ? 'range' : 'point';
 	const tempo = pricing?.tempo ?? null;
 	const total = fractionToNumber(totals.total);
 	const untrustedMeasures =
@@ -640,7 +643,7 @@ export function tessituragram(
 			share: longest.quavers / total,
 			seconds: pricing ? pricing.price(longest.quavers) : null,
 		},
-		scale: pricing && pricing.tempo.provenance !== 'inferred' ? 'seconds' : 'quavers',
+		scale: pricing && pricing.tempo.provenance !== 'inferred' && pricing.tempo.provenance !== 'estimated' ? 'seconds' : 'quavers',
 		quiet: findings.length === 0,
 		tessitura: tessitura.measured ? { low: tessitura.measured.low, high: tessitura.measured.high } : null,
 		passaggio: profile.passaggio ? { primo: profile.passaggio.primo, secondo: profile.passaggio.secondo } : null,

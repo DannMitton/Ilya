@@ -201,3 +201,54 @@ describe('the better key in French (QUEUE row 85)', () => {
 		expect(text('en')).toContain('A key a minor third lower would bring that to 7');
 	});
 });
+
+describe('the quiet octave line (QUEUE row 47)', () => {
+	const kinds = (over: Partial<BlockInputs>) => singerBlocks(inputs(fitting, over), String).map((b) => b.block.kind);
+
+	it('sits directly under the phonation sentence, in the totals', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: 'The vowels are sung.', octave: { shift: 1, applied: true } }), String);
+		const at = out.findIndex((b) => b.block.kind === 'octave');
+		expect(at).toBeGreaterThan(0);
+		expect(out[at - 1].block).toEqual({ kind: 'prose', text: 'The vowels are sung.' });
+		expect(out[at].group).toBe('totals');
+		expect(out[at].block).toEqual({ kind: 'octave', shift: 1, applied: true });
+	});
+
+	it('is followed by the sources line, whatever the sentence above it says', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: 'x', octave: { shift: -1, applied: false } }), String);
+		const at = out.findIndex((b) => b.block.kind === 'octave');
+		expect(out[at + 1].block).toMatchObject({ kind: 'prose', text: t('insights.r2.sourcesLine', 'en'), small: true });
+	});
+
+	it('is absent where no shift applies, and where the input is missing or null', () => {
+		expect(kinds({})).not.toContain('octave');
+		expect(kinds({ octave: null })).not.toContain('octave');
+	});
+
+	it('still follows the sentence position when there is no sentence', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: null, octave: { shift: 1, applied: true } }), String);
+		const at = out.findIndex((b) => b.block.kind === 'octave');
+		expect(at).toBeGreaterThan(0);
+		expect(out[at + 1].block.kind).toBe('prose');
+	});
+});
+
+describe('the tempo link (QUEUE row 48)', () => {
+	it('rides on the phonation sentence, as its "Change the tempo" tap', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: 'A sentence.', tempoLink: t('tempo.change', 'en') }), String);
+		const at = out.findIndex((b) => b.block.kind === 'prose' && (b.block as { text: string }).text === 'A sentence.');
+		expect(at).toBeGreaterThan(-1);
+		expect(out[at].block).toEqual({ kind: 'prose', text: 'A sentence.', link: 'Change the tempo' });
+	});
+
+	it('is absent without the label, and never on the sources line', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: 'A sentence.', tempoLink: null }), String);
+		expect(out.filter((b) => b.block.kind === 'prose' && 'link' in b.block)).toEqual([]);
+	});
+
+	it('leaves the octave line directly after the sentence, as row 47 built it', () => {
+		const out = singerBlocks(inputs(fitting, { phonationHeadline: 'A sentence.', tempoLink: 'x', octave: { shift: 1, applied: true } }), String);
+		const at = out.findIndex((b) => b.block.kind === 'octave');
+		expect(out[at - 1].block).toMatchObject({ kind: 'prose', text: 'A sentence.', link: 'x' });
+	});
+});

@@ -61,6 +61,8 @@ export interface UndoState {
 	   nothing. */
 	selected: string | null;
 	gapAfter: string | null | undefined;
+	/** Cause 1c. The measure the bar stood in, in a gap; absent reads as the anchor's. */
+	gapMeasure?: number;
 	/* N.160 step 3. The text these pairings describe. The stack outlives a
 	   text edit, so an undo can bring back seats made against an older
 	   poem, and the seated text has to come back with them or the next

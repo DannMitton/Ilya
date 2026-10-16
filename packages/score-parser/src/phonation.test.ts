@@ -275,10 +275,12 @@ describe('the totals themselves', () => {
 describe('quavers to seconds', () => {
 	const oneWhole = { numerator: 8, denominator: 1 }; // eight quavers
 
-	it('abstains when the score states no tempo', () => {
+	it('estimates a band when the score states no tempo (row 48: it used to abstain)', () => {
 		const s = scoreOf([measure(0, 4, 4)], [note(0, 'C', 4, dur('whole'))], []);
-		expect(secondsFor(oneWhole, s)).toBeUndefined();
-		expect(nominalOscillations(69, oneWhole, s)).toBeUndefined();
+		const r = secondsFor(oneWhole, s)!;
+		expect(r.tempo.provenance).toBe('estimated');
+		expect(r.secondsRange).toBeDefined();
+		expect(nominalOscillations(69, oneWhole, s)).toBeDefined();
 	});
 
 	it('converts at a stated quarter-note tempo', () => {

@@ -39,6 +39,8 @@ import { previousEntry, stepCursor, type Cursor } from './entry';
 export class CorrectionCursor {
 	selectedEventId = $state<string | null>(null);
 	gapAfter = $state<string | null | undefined>(undefined);
+	/** Cause 1c. The measure whose caret run the bar stands in, while it is in a gap. */
+	gapMeasure = $state<number | undefined>(undefined);
 
 	readonly #line: () => readonly VocalLineEvent[];
 	readonly #gapsAreStops: () => boolean;
@@ -56,7 +58,11 @@ export class CorrectionCursor {
 
 	get cursor(): Cursor | null {
 		return this.gapAfter !== undefined
-			? { kind: 'gap', after: this.gapAfter }
+			? {
+					kind: 'gap',
+					after: this.gapAfter,
+					...(this.gapMeasure !== undefined ? { measureIndex: this.gapMeasure } : {}),
+				}
 			: this.selectedEventId
 				? { kind: 'entry', id: this.selectedEventId }
 				: null;
@@ -74,14 +80,17 @@ export class CorrectionCursor {
 		if (!next) {
 			this.selectedEventId = null;
 			this.gapAfter = undefined;
+			this.gapMeasure = undefined;
 			return;
 		}
 		if (next.kind === 'entry') {
 			this.selectedEventId = next.id;
 			this.gapAfter = undefined;
+			this.gapMeasure = undefined;
 		} else {
 			this.selectedEventId = null;
 			this.gapAfter = next.after;
+			this.gapMeasure = next.measureIndex;
 		}
 	};
 
@@ -126,6 +135,13 @@ export class CorrectionCursor {
 		let next = stepCursor(line, c, direction);
 		if (!this.#gapsAreStops()) {
 			while (next?.kind === 'gap') next = stepCursor(line, next, direction);
+		}
+		/* CAUSE 1c. A gap stepped into from an entry is the gap the singer sees
+		   from that entry's measure: Left from the first entry of k lands on k's
+		   head caret, which is also k − 1's tail, and the loupe stays on k. */
+		if (c.kind === 'entry' && next?.kind === 'gap') {
+			const measureIndex = line.find((e) => e.id === c.id)?.measureIndex;
+			if (measureIndex !== undefined) next = { ...next, measureIndex };
 		}
 		if (next) this.set(next);
 	};

@@ -5,7 +5,7 @@
 	import { countText } from './bandState';
 	import IntakeCamera, { pointer } from './IntakeCamera.svelte';
 	import type { TextArrival } from '$lib/one-action';
-
+	import TempoReceipt from '$lib/tempo/TempoReceipt.svelte';
 	/*
 	 * IntakePanel.svelte — THE INPUT GROUP'S CONTENTS AND NOTHING ELSE.
 	 *
@@ -470,6 +470,7 @@
 				<button type="button" class="receipt-btn" onclick={onclearscore}>{t('intake.clear', language)}</button>
 				<button type="button" class="receipt-btn" onclick={chooseFile}>{t('intake.replace', language)}</button>
 			</div>
+			<TempoReceipt {language} />
 		{/if}
 
 		<!-- THE SYLLABLE LINE THAT STOOD HERE (N.114, 2026-09-07 and

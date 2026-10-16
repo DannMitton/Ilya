@@ -1318,7 +1318,20 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.provisional.listSepFinal': { en: ', and ', fr: ' et ' },
 	'profile.provisional.listSepMedial': { en: ', ', fr: ', ' },
 	'profile.emptyState': { en: 'Calibrate your voice to begin.', fr: 'Calibrez votre voix pour commencer.' },
+	// RETIRED FROM MARKUP by row 47 (Dann's ruling of 2026-10-08, 01:11 to 01:20)
+	// and DRAWN BY NOTHING since: both tabs now say it in one quiet line, the five
+	// `octave.*` keys below. The copy was approved by Dann on 2026-07-18 and is
+	// kept as the record, not deleted.
 	'profile.octaveNotice': { en: 'This voice line is notated in treble clef but sits an octave above the range you gave, so it\'s being read an octave lower to match your voice, as lower voices often sing treble parts. Check the score\'s clef if that\'s not right.', fr: 'Cette ligne vocale est notée en clé de sol, mais se situe une octave au-dessus de l\u2019ambitus que vous avez indiqué. Elle est donc lue une octave plus bas pour correspondre à votre voix, comme les voix graves chantent souvent des parties en clé de sol. Vérifiez la clé de la partition si ce n\u2019est pas le cas.' },
+	// ── The voice line read an octave up or down for the singer's range (row 47) ──
+	//    RATIFIED by Dann 2026-10-08 01:20, in this wording, for both tabs. The line
+	//    reads: a circled 8, the state sentence, a middle dot, the tap. French
+	//    carries the typographic apostrophe.
+	'octave.readLower': { en: 'Voice line read an octave lower, for your range', fr: 'Ligne vocale lue une octave plus bas, pour votre ambitus' },
+	'octave.readHigher': { en: 'Voice line read an octave higher, for your range', fr: 'Ligne vocale lue une octave plus haut, pour votre ambitus' },
+	'octave.asWrittenState': { en: 'Voice line as written', fr: 'Ligne vocale telle qu\u2019\u00e9crite' },
+	'octave.toAsWritten': { en: 'As written', fr: 'Telle qu\u2019\u00e9crite' },
+	'octave.toForRange': { en: 'Read for your range', fr: 'Lire pour votre ambitus' },
 	'profile.scoreRegionAria': { en: 'Markup', fr: 'Annotation' },
 	'profile.scorePageAria': { en: 'Score page {n} of {total}', fr: 'Page {n} sur {total} de la partition' },
 	'profile.notesPageAria': { en: 'Analysis notes', fr: 'Notes d\u2019analyse' },
@@ -1676,7 +1689,25 @@ const strings: Record<string, Record<Language, string>> = {
 	// (`docs/sessions/insights-phonation-time_r1_2026-09-22.md`).
 	'insights.phonation.heading':  { en: 'Phonation time',               fr: 'Temps de phonation' },
 	'insights.phonation.headline': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}.' },
+	// ── Row 48: every song gets a tempo, estimated when none is printed, and the singer can change it ──
+	//    RATIFIED by Dann 2026-10-08 01:40, except the two `estimated*` sentences, whose replacements he
+	//    RATIFIED 2026-10-15 09:09 (the old ones began "This score states no tempo", which Ilya cannot
+	//    know of a scan: it reads no words from one). `{beat}` is a metronome note drawn in the notation face.
+	'insights.phonation.estimatedMetre': { en: 'Ilya estimates {beat} = {low} to {high} from this score\'s {metre} metre, so you phonate for about {t1} to {t2}.', fr: 'Ilya estime le tempo \u00e0 {beat} = {low} \u00e0 {high} d\u2019apr\u00e8s la mesure \u00e0 {metre} de cette partition; votre phonation occupe donc environ {t1} \u00e0 {t2}.' },
+	'insights.phonation.estimatedWalking': { en: 'Ilya estimates {beat} = {low} to {high}, a walking pace, so you phonate for about {t1} to {t2}.', fr: 'Ilya estime le tempo \u00e0 {beat} = {low} \u00e0 {high}, l\u2019allure de la marche; votre phonation occupe donc environ {t1} \u00e0 {t2}.' },
+	'insights.phonation.headlineYours': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}, your tempo.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pi\u00e8ce, \u00e0 {tempo}, votre tempo.' },
+	'tempo.change': { en: 'Change the tempo', fr: 'Modifier le tempo' },
+	'tempo.hint': { en: 'Your tempo. Every figure follows.', fr: 'Votre tempo. Tous les r\u00e9sultats en tiennent compte.' },
+	'tempo.useEstimate': { en: 'Use Ilya\'s estimate', fr: 'Utiliser l\u2019estimation d\u2019Ilya' },
+	'intake.tempo.label': { en: 'TEMPO', fr: 'TEMPO' },
+	'intake.tempo.estimated': { en: 'estimated', fr: 'estim\u00e9' },
+	'intake.tempo.printed': { en: 'printed', fr: 'imprim\u00e9' },
+	'intake.tempo.yours': { en: 'your tempo', fr: 'votre tempo' },
+	'legend.tempo-estimated': { en: 'tempo estimated by Ilya', fr: 'tempo estim\u00e9 par Ilya' },
 	'insights.phonation.headlineInferred': { en: 'Your phonation takes about {low} to {high} of this piece, at the speed {tempoWord} usually means.', fr: 'Votre phonation occupe environ {low} à {high} de la pièce, au tempo qu’indique habituellement {tempoWord}.' },
+	// DRAWN BY NOTHING since row 48 (2026-10-15). `resolveTempo` no longer abstains, so a score always
+	// has a tempo and this sentence cannot be reached. Dann, 2026-10-14 03:10: "We must not declare
+	// indefensible statements with confidence." Kept as the record, not deleted.
 	'insights.phonation.noTempo':  { en: 'This score states no tempo, so phonation time cannot be given in seconds.', fr: 'Cette partition n’indique aucun tempo; le temps de phonation ne peut donc pas être donné en secondes.' },
 	// RATIFIED by Dann 2026-09-23 03:14, with the vowel chart's fixed order
 	// (`docs/memory/OPEN.md`, N.123, "THE VOWEL CHART'S ORDER").

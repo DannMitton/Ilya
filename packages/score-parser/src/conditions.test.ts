@@ -174,19 +174,43 @@ describe('noteConditions: held or short', () => {
     expect(byId.n6.heldBasis).toBe('is-long-sustain');
   });
 
-  it('with no tempo, only a fermata makes a note held, and no seconds are claimed', () => {
+  it('with no stated tempo the estimate is a band: tempo is inferred, and a fermata still holds (row 48)', () => {
+    // Rung 4 now estimates (60 to 72 felt beats a minute), so 'none' is no longer
+    // reachable through the seam; the held-note rule reads the estimate as it
+    // reads a printed word's band (DESK DEFAULT, `conditions.ts`).
     const { byId, tempo } = run(
       [ev('a', 0, 0, 'half', P('A', 3), { vowel: 'a' }), ev('b', 0, 2, 'half', P('A', 3), { vowel: 'a', fermata: true })],
       1,
       [],
     );
-    expect(tempo).toBe('none');
-    expect(byId.a.held).toBe(false);
-    expect(byId.b.held).toBe(true);
-    expect(byId.b.heldBasis).toBe('fermata-only');
-    expect(byId.a).not.toHaveProperty('seconds');
-    expect(byId.b).not.toHaveProperty('onsetPhonationSeconds');
-    expect(byId.b.onsetPhonationQuavers).toBe(4);
+    expect(tempo).toBe('inferred');
+    expect(byId.a.heldBasis).toBe('inferred-tempo');
+    expect(byId.b.held).toBe(true); // the fermata
+    expect(byId.b.heldBasis).toBe('inferred-tempo');
+  });
+});
+
+describe('noteConditions: the singer\'s own tempo (row 48)', () => {
+  const events = [ev('a', 0, 0, 'whole', P('A', 3), { vowel: 'a' })];
+  const withTempo = (singerTempo?: { bpm: number; beatUnit: NoteBase; beatUnitDots: number }) => {
+    const parsed: ParsedScore = { ...scoreOf(events, 1, []), ...(singerTempo ? { singerTempo } : {}) };
+    const analyzed = analyzeScore(parsed, profile, bySyllable, { generatedAt: '2026-10-15T00:00:00.000Z' });
+    return noteConditions(parsed, profile, analyzed.events, { vowelForEvent: bySyllable });
+  };
+
+  it('with none the tempo is the estimate, a band', () => {
+    expect(withTempo().tempo).toBe('inferred');
+  });
+
+  it('a slow tempo of the singer\'s holds a whole note, a quick one does not, and the flags follow at once', () => {
+    // A whole note is four quarters: at 30 a minute that is 8 s, at 240 a minute 1 s.
+    const slow = withTempo({ bpm: 30, beatUnit: 'quarter', beatUnitDots: 0 });
+    expect(slow.tempo).toBe('stated');
+    expect(slow.notes[0].held).toBe(true);
+    expect(slow.notes[0].heldBasis).toBe('singer-tempo');
+    const fast = withTempo({ bpm: 240, beatUnit: 'quarter', beatUnitDots: 0 });
+    expect(fast.notes[0].held).toBe(false);
+    expect(fast.notes[0].heldBasis).toBe('singer-tempo');
   });
 });
 

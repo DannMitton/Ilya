@@ -72,8 +72,17 @@ export interface NoteCorrection {
 	 * in one gap form a chain whose order cannot be ambiguous. An id, never an
 	 * index, for the reason the whole diff is keyed by id: an index into the
 	 * read moves when the next pass finds one more event.
+	 *
+	 * `measureIndex` (cause 1c, 2026-10-15, ADDITIVE like every field in this
+	 * block) is the measure the singer entered it in. A gap has no measure of
+	 * its own, so the head gap of measure k is anchored to the last entry of
+	 * k − 1; without this the note would be seated at the end of k − 1 while
+	 * the loupe showed k. ABSENT MEANS THE ANCHOR'S MEASURE, which is what every
+	 * record written before this field reads as. A record written with it and
+	 * read by an older build loses the field and seats the note in the anchor's
+	 * measure, which is the old behaviour.
 	 */
-	entered?: { after: string | null };
+	entered?: { after: string | null; measureIndex?: number };
 
 	/**
 	 * Note or rest, overriding what the read said. Absent means untouched,
@@ -369,7 +378,17 @@ export function applyCorrections(
 		// A cycle in the anchors, which nothing should be able to write, would
 		// otherwise be an infinite line. Bounded rather than trusted.
 		if (depth > 512) return;
-		for (const id of enteredAfter.get(anchorId) ?? []) {
+		/* Entries in one gap keep the order they were entered in, EXCEPT that one
+		   naming a later measure (cause 1c) comes after those that stay in the
+		   anchor's: it is past the barline. A stable sort on the measure each
+		   names, so records without the field are not reordered. */
+		const anchorMeasure = anchor ? anchor.measureIndex : 0;
+		const ids = [...(enteredAfter.get(anchorId) ?? [])].sort(
+			(a, b) =>
+				(map[a]?.entered?.measureIndex ?? anchorMeasure) -
+				(map[b]?.entered?.measureIndex ?? anchorMeasure)
+		);
+		for (const id of ids) {
 			const c = map[id];
 			if (!c || c.deleted) continue;
 			const ev = synthesize(id, c, anchor);
@@ -433,6 +452,7 @@ function reflowOnsets(
 	type Slot = { base: Fraction; before: Fraction | null };
 	const startOf = new Map<string, Slot>();
 	const endOf = new Map<string, Slot>();
+	const readMeasure = new Map<string, number>();
 	let measure = Number.NaN;
 	let sum: Fraction | null = ZERO;
 	for (const ev of read) {
@@ -442,14 +462,32 @@ function reflowOnsets(
 		}
 		const onset = ev.rhythmicPosition.fraction;
 		const length = summable(ev.duration.fraction) ? ev.duration.fraction : null;
+		readMeasure.set(ev.id, ev.measureIndex);
 		startOf.set(ev.id, { base: onset, before: sum });
 		sum = sum && length ? addFractions(sum, length) : null;
 		endOf.set(ev.id, { base: length ? addFractions(onset, length) : onset, before: sum });
 	}
 
+	/* The measure an anchor sits in, entered ones included (cause 1c). */
+	const measureOf = (id: string, depth = 0): number | undefined => {
+		const e = map[id]?.entered;
+		if (!e) return readMeasure.get(id);
+		if (e.measureIndex !== undefined) return e.measureIndex;
+		if (e.after === null) return 0;
+		return depth > 512 ? undefined : measureOf(e.after, depth + 1);
+	};
+
 	const slotOf = (id: string, depth = 0): Slot | undefined => {
 		const after = map[id]?.entered ? map[id].entered!.after : undefined;
 		if (after === undefined) return startOf.get(id);
+		/* AN ENTRY THAT NAMES A LATER MEASURE THAN ITS ANCHOR'S (cause 1c) opens
+		   that measure: its base is the downbeat, as at the head of the part,
+		   not the anchor's end, which is the other side of the barline. */
+		const named = map[id].entered!.measureIndex;
+		if (named !== undefined) {
+			const anchorMeasure = after === null ? 0 : measureOf(after);
+			if (anchorMeasure !== undefined && anchorMeasure !== named) return { base: ZERO, before: ZERO };
+		}
 		if (after === null) return { base: ZERO, before: ZERO };
 		if (depth > 512) return undefined;
 		return map[after]?.entered ? slotOf(after, depth + 1) : endOf.get(after);
@@ -553,10 +591,14 @@ function synthesize(
 	   downbeat of measure 0. The anchor here is the read event, so where the
 	   anchor's own duration was corrected `reflowOnsets` moves this onset to
 	   the corrected end. */
-	const measureIndex = anchor ? anchor.measureIndex : 0;
-	const onset = anchor
-		? addFractions(anchor.rhythmicPosition.fraction, anchor.duration.fraction)
-		: { numerator: 0, denominator: 1 };
+	const anchorMeasure = anchor ? anchor.measureIndex : 0;
+	const measureIndex = c.entered?.measureIndex ?? anchorMeasure;
+	/* Across a barline (cause 1c) the anchor's end is the wrong base: the entry
+	   opens the measure it names, so it starts on that downbeat. */
+	const onset =
+		anchor && measureIndex === anchorMeasure
+			? addFractions(anchor.rhythmicPosition.fraction, anchor.duration.fraction)
+			: { numerator: 0, denominator: 1 };
 	return {
 		id,
 		type,
