@@ -106,6 +106,13 @@ export class SongDocument {
 	 */
 	tempo = $state<TempoChoice | null>(null);
 
+	/**
+	 * N.135 stage 3, the poet's published text: the Poem view of Input. Saved
+	 * through the same path as `tempo`, and stored only while it is not empty
+	 * (`SongRecord.publishedPoem`). Nothing seats or transcribes from it.
+	 */
+	publishedPoem = $state('');
+
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
 	/** Why the load did not come back whole. Replaces `pairingsLoadFailed`. */
@@ -274,6 +281,7 @@ export class SongDocument {
 			transposition: this.transposition,
 			octaveReading: this.octaveReading,
 			tempo: this.tempo,
+			publishedPoem: this.publishedPoem,
 		};
 	}
 
@@ -325,6 +333,7 @@ export class SongDocument {
 		this.transposition = fields.transposition;
 		this.octaveReading = fields.octaveReading;
 		this.tempo = fields.tempo;
+		this.publishedPoem = fields.publishedPoem;
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {

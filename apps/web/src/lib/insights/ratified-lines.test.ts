@@ -5,7 +5,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { t } from '$lib/i18n';
+import { hasString, t, tIfPresent, tOrEnglish } from '$lib/i18n';
 
 describe('ratified Insights lines (row 78a)', () => {
 	it('the frame line, English (21:21; the clause « from technique building to transposition options » dropped 2026-10-12 20:55, row 90)', () => {
@@ -82,5 +82,60 @@ describe('ratified Guide lines (rows 90 and 94)', () => {
 		const at = fr.indexOf('des défis précis à aborder avec votre professeure ou professeur.</p>');
 		expect(at).toBeGreaterThan(0);
 		expect(fr.slice(at).replace(/\s+/g, ' ')).toContain('</p> ' + para);
+	});
+});
+
+/* N.135 STAGE 3. Input's two views, the strings Dann ratified 2026-10-16 01:18
+   in both languages (`OPEN.md`, "N.135 STAGE 3", item 14), pinned character for
+   character so a later edit cannot move them unseen. The French colon carries
+   the file's no-break space. The Lyrics placeholder is the exception: its
+   English is the review's proposal for Dann (amendment 1) and its French is
+   owed, so it is pinned EMPTY and a ruling has to change this test. */
+describe('ratified Input view lines (N.135 stage 3)', () => {
+	const LINES: Record<string, [string, string]> = {
+		'intake.view.poem': ['Poem', 'Poème'],
+		'intake.view.lyrics': ['Lyrics', 'Paroles'],
+		'intake.view.poemLine': [
+			'Edits here change the published poem. The sung words come from your score; edit them in Lyrics.',
+			'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans Paroles.',
+		],
+		'intake.view.lyricsLine': [
+			'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.',
+			'Les paroles telles que chantées, comme la partition les place. Les mots en couleur diffèrent du poème : une reprise, un changement ou un ajout.',
+		],
+		'intake.view.omittedLine': [
+			'Greyed words are those left out of the song by the composer.',
+			'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.',
+		],
+		'intake.view.landedLyrics': [
+			'Your score\'s sung words are in Lyrics. Paste or type the published poem here, whole.',
+			'Les paroles chantées de votre partition sont dans Paroles. Collez ou saisissez ici le poème publié, en entier.',
+		],
+		'intake.view.landedPoem': [
+			'This page read as a poem and is in Poem. The sung words in Lyrics may differ from it.',
+			'Cette page a été lue comme un poème; elle est dans Poème. Les paroles chantées, dans Paroles, peuvent en différer.',
+		],
+		'input.watermarkLyrics': ['lyrics', 'paroles'],
+		'intake.placeholder': ['Paste, type, or drop your poem here.', 'Collez, saisissez ou déposez votre poème ici.'],
+	};
+	for (const [key, [en, fr]] of Object.entries(LINES)) {
+		it(`${key}, both languages`, () => {
+			expect(t(key, 'en')).toBe(en);
+			expect(t(key, 'fr')).toBe(fr);
+		});
+	}
+	it('the Lyrics placeholder: the review\'s English, and no French until Dann rules (amendment 1)', () => {
+		expect(t('intake.placeholderLyrics', 'en')).toBe('Your score\'s sung words appear here. You can also paste or type them.');
+		expect(hasString('intake.placeholderLyrics', 'fr')).toBe(false);
+		expect(tIfPresent('intake.placeholderLyrics', 'fr')).toBe('');
+		expect(tIfPresent('intake.placeholderLyrics', 'en')).toBe(t('intake.placeholderLyrics', 'en'));
+	});
+	it('the replace question is a desk draft in English with its French owed, and the dialog falls back to English', () => {
+		for (const key of ['intake.poemReplace.title', 'intake.poemReplace.body', 'intake.poemReplace.replace', 'intake.poemReplace.keep']) {
+			expect(hasString(key, 'en'), key).toBe(true);
+			expect(hasString(key, 'fr'), key).toBe(false);
+			expect(tOrEnglish(key, 'fr'), key).toBe(t(key, 'en'));
+		}
+		expect(tOrEnglish('intake.view.poem', 'fr')).toBe('Poème');
 	});
 });

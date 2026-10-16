@@ -20,7 +20,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { stringKeys, t } from './i18n';
+import { hasString, stringKeys, t } from './i18n';
 
 describe('N.62 accessible names', () => {
 	it('speaks the ratified French, and never [MISSING, for all four keys', () => {
@@ -154,10 +154,11 @@ describe('French spacing follows the OQLF table', () => {
 	});
 
 	it('every French value in i18n.ts follows the table', () => {
-		const found = stringKeys().flatMap((k) => faults(t(k, 'fr')).map((f) => `${k}: ${f}`));
+		// A key whose French is owed (empty on purpose) reads `[MISSING: key]`, which is not French prose.
+		const found = stringKeys().filter((k) => hasString(k, 'fr')).flatMap((k) => faults(t(k, 'fr')).map((f) => `${k}: ${f}`));
 		expect(found).toEqual([]);
 		// Not vacuous: on 2026-09-30 the table carried 16 « ; », 21 « ? », 62 « : », and 8 « » pairs in French prose.
-		const count = (c: string) => stringKeys().reduce((n, k) => n + [...prose(t(k, 'fr'))].filter((x) => x === c).length, 0);
+		const count = (c: string) => stringKeys().filter((k) => hasString(k, 'fr')).reduce((n, k) => n + [...prose(t(k, 'fr'))].filter((x) => x === c).length, 0);
 		expect(count(';')).toBeGreaterThanOrEqual(16);
 		expect(count('?')).toBeGreaterThanOrEqual(21);
 		expect(count(':')).toBeGreaterThanOrEqual(62);

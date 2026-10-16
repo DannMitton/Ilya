@@ -63,6 +63,13 @@ describe('proposeName, design §2.3 layer 3', () => {
 		expect(proposeName(song('a', { poem: 'Я вас любил любовь ещё быть может' }))).toBe('Я вас любил любовь');
 	});
 
+	it('names an unnamed song from the poet\'s text before the sung words (N.135 stage 3, DESK DEFAULT)', () => {
+		expect(proposeName(song('a', { poem: 'Я вас любил любовь ещё', publishedPoem: 'Средь шумного бала случайно' }))).toBe(
+			'Средь шумного бала случайно',
+		);
+		expect(proposeName(song('a', { poem: 'Я вас любил любовь ещё', publishedPoem: '  ' }))).toBe('Я вас любил любовь');
+	});
+
 	it('RETURNS NOTHING when there is nothing to name a song after', () => {
 		// The honest answer for a song created a moment ago. Inventing a name
 		// here is what put "Untitled" into records that later had a real title.

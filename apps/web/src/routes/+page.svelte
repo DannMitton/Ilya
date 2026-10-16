@@ -7,7 +7,7 @@
 	import { processText, wordGrid } from '$lib/pipeline';
 	import { applyOpenSyllabificationToLines } from '$lib/syllable-utils';
 	import type { LineData, WordStackData, SongMetadata, UserStressOverride, YoToggle, SyllableOverride } from '$lib/types';
-	import { t, type Language } from '$lib/i18n';
+	import { t, tOrEnglish, type Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
 	import {
@@ -32,6 +32,9 @@
 	import { clearPlacements, placeFromHere, unplacedSlots, type ClearScope, type PlacementControls, type PlacementNote } from '$lib/score/placement-scope';
 	import { applyHeal, dryRunLog, healLog, planHeal } from '$lib/score/heal';
 	import { seatedTextDiff } from '$lib/score/seated-text';
+	import { inputViews } from '$lib/text/input-views.svelte';
+	import { resetWord } from '$lib/word-reset';
+	import { routePoemPage } from '$lib/text/poem-page';
 	// N.67 step 0: the song document owns the per-song state and is the only
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
 	// longer called from here; the legacy driver writes the same key.
@@ -2363,48 +2366,16 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// ── Per-word reset: clear all overrides for the selected word ──
 	function handleReset() {
 		if (!selectedWord) return;
-		const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
-		let needsPipeline = false;
-		// Clear stress override
-		if (userStressOverrides.has(wordKey)) {
-			const newStress = new Map(userStressOverrides);
-			newStress.delete(wordKey);
-			userStressOverrides = newStress;
-			needsPipeline = true;
-		}
-		// Clear ё toggles for this word (keys are "lineIndex-wordIndex-charIndex")
-		const yoPrefix = `${wordKey}-`;
-		const hasYoToggles = [...yoToggles.keys()].some(k => k.startsWith(yoPrefix));
-		if (hasYoToggles) {
-			const newYo = new Map(yoToggles);
-			for (const k of [...newYo.keys()]) {
-				if (k.startsWith(yoPrefix)) newYo.delete(k);
-			}
-			yoToggles = newYo;
-			needsPipeline = true;
-		}
-		// Clear syllable override
-		if (syllableOverrides.has(wordKey)) {
-			const newSyll = new Map(syllableOverrides);
-			newSyll.delete(wordKey);
-			syllableOverrides = newSyll;
-		}
-		// Clear spot reconstitution
-		if (spotReconstitution.has(wordKey)) {
-			const newSpot = new Map(spotReconstitution);
-			newSpot.delete(wordKey);
-			spotReconstitution = newSpot;
-		}
-		// Clear gloss override
-		if (doc.glossOverrides.has(wordKey)) {
-			const newGloss = new Map(doc.glossOverrides);
-			newGloss.delete(wordKey);
-			doc.glossOverrides = newGloss;
-			const newAnchors = new Map(doc.glossAnchors);
-			newAnchors.delete(wordKey);
-			doc.glossAnchors = newAnchors;
-		}
-		if (needsPipeline) runPipeline();
+		const r = resetWord(`${selectedWord.lineIndex}-${selectedWord.wordIndex}`, {
+			stress: userStressOverrides, yo: yoToggles, syllables: syllableOverrides,
+			spot: spotReconstitution, glosses: doc.glossOverrides, anchors: doc.glossAnchors,
+		});
+		if (r.stress) userStressOverrides = r.stress;
+		if (r.yo) yoToggles = r.yo;
+		if (r.syllables) syllableOverrides = r.syllables;
+		if (r.spot) spotReconstitution = r.spot;
+		if (r.glosses && r.anchors) [doc.glossOverrides, doc.glossAnchors] = [r.glosses, r.anchors];
+		if (r.pipeline) runPipeline();
 	}
 	/**
 	 * The one field changed.
@@ -2463,6 +2434,28 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.inputText = text;
 		nameIfUnnamed();
 		joinText(how);
+	}
+	/* N.135 STAGE 3, RULED BY DANN 2026-10-16: INPUT HAS TWO VIEWS. Lyrics is
+	   `doc.inputText`, the sung text that seats and transcribes; Poem is the
+	   poet's text, `doc.publishedPoem`. A Poem edit writes that field and seats
+	   nothing. A page read as a poem lands in Poem whichever view shows, and
+	   asks first where Poem already holds text (`routePoemPage`). */
+	function handlePoemEdit(text: string): void {
+		doc.publishedPoem = text;
+		nameIfUnnamed();
+	}
+	function handlePoemPage(text: string): void {
+		const say = (key: string) => tOrEnglish(key, language);
+		routePoemPage(text, {
+			held: doc.publishedPoem,
+			put: handlePoemEdit,
+			land: (where) => inputViews.land(where),
+			ask: (replace) =>
+				void askToReplace(say('intake.poemReplace.title'), say('intake.poemReplace.body'), [
+					{ label: say('intake.poemReplace.replace'), destructive: true, run: replace },
+					{ label: say('intake.poemReplace.keep') },
+				]),
+		});
 	}
 
 	/* ── N.67 step 4a: a different piece has arrived ───────────────── */
@@ -2884,7 +2877,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			origin === 'upload' && !noLyrics && doc.inputText.trim() === ''
 				? scoreWordsText(collectScoreWords(ingested.result.score, 1))
 				: '';
-		if (fillText !== '') handleInput(fillText);
+		if (fillText !== '') { handleInput(fillText); inputViews.land('lyrics'); }
 		// N.67 step 3, design §2.6. THE MERGE RULE, and where N.68 closed: an
 		// upload never destroys placements; only the singer does, on purpose,
 		// with Start placement over or with the replace dialog above.
@@ -4031,6 +4024,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{#snippet inputGroup()}
 				<IntakePanel
 					inputText={shownPoem}
+					songId={doc.id}
+					poemText={doc.publishedPoem}
+					onpoemedit={handlePoemEdit}
+					onclearpoem={() => (doc.publishedPoem = '')}
 					poemDerived={derivedPoem !== ''}
 					{loaderState}
 					{canTranscribe}
@@ -4085,7 +4082,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 									oningested={(ingested, file, origin, page, scan) =>
 										void handleArrival(ingested, file, origin, page, scan)}
 									onreading={(reading) => restoreSource && doc.keepReading(storedWithReading(doc.id, restoreSource, doc.source, reading), reading)}
-									onpoem={(text) => handleInput(text)}
+									onpoem={handlePoemPage}
 									{loaderState}
 								/>
 							{/key}

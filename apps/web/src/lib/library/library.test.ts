@@ -216,6 +216,49 @@ describe('the singer\'s tempo on the song (row 48)', () => {
 	});
 });
 
+describe('the poet\'s published text on the song (N.135 stage 3)', () => {
+	const poet = 'Средь шумного бала,\nСлучайно, в тревоге мирской суеты';
+
+	it('is absent by default, loads as an empty Poem, and a song without one writes none back', () => {
+		const record = emptySongRecord('x', NOW);
+		const fields = fieldsFromRecord(record);
+
+		expect(fields.publishedPoem).toBe('');
+		expect('publishedPoem' in recordFromFields(record, fields)).toBe(false);
+	});
+
+	it('round-trips through the record and the validator, beside the sung text', () => {
+		const base = { ...emptySongRecord('x', NOW), poem: 'Средь шумного бала' };
+		const stored = recordFromFields(base, { ...fieldsFromRecord(base), publishedPoem: poet });
+
+		expect(stored.publishedPoem).toBe(poet);
+		expect(stored.poem).toBe('Средь шумного бала');
+		expect(validateRecord(stored, 'x', LATER).record.publishedPoem).toBe(poet);
+		expect(fieldsFromRecord(stored).publishedPoem).toBe(poet);
+		expect(fieldsFromRecord(stored).inputText).toBe('Средь шумного бала');
+	});
+
+	it('is dropped from the stored record when the Poem is cleared', () => {
+		const record = { ...emptySongRecord('x', NOW), publishedPoem: poet };
+
+		expect('publishedPoem' in recordFromFields(record, { ...fieldsFromRecord(record), publishedPoem: '' })).toBe(false);
+	});
+
+	it('marks a non-string as malformed and does not carry it', () => {
+		const result = validateRecord({ publishedPoem: 7 }, 'x', NOW);
+
+		expect(result.reason).toBe('malformed');
+		expect(result.record.publishedPoem).toBeUndefined();
+	});
+
+	it('an existing song keeps its text as the sung text and starts with an empty Poem (ruling default 3)', () => {
+		const old = validateRecord({ ...seededRecord() }, 'test-song', LATER).record;
+
+		expect(fieldsFromRecord(old).inputText).toBe('Я тебя любил');
+		expect(fieldsFromRecord(old).publishedPoem).toBe('');
+	});
+});
+
 describe('validateRecord', () => {
 	it('accepts a whole record unchanged', () => {
 		const record = seededRecord();
