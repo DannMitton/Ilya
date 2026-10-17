@@ -85,19 +85,19 @@ describe('ratified Guide lines (rows 90 and 94)', () => {
 	});
 });
 
-/* N.135 STAGE 3. Input's two views, the strings Dann ratified 2026-10-16 01:18
-   in both languages (`OPEN.md`, "N.135 STAGE 3", item 14), pinned character for
-   character so a later edit cannot move them unseen. The French colon carries
-   the file's no-break space. The Lyrics placeholder is the exception: its
-   English is the review's proposal for Dann (amendment 1) and its French is
-   owed, so it is pinned EMPTY and a ruling has to change this test. */
+/* N.135 STAGE 3. Input's two views: the strings Dann ratified 2026-10-16 01:18
+   (`OPEN.md`, "N.135 STAGE 3", item 14) and the rest of them between 19:54 and
+   20:11 the same day (the Lyrics placeholder, the French of three lines, the
+   replace question), in both languages, pinned character for character so a
+   later edit cannot move them unseen. The French colon carries the file's
+   no-break space; the apostrophe in « s’affichent » is U+2019. */
 describe('ratified Input view lines (N.135 stage 3)', () => {
 	const LINES: Record<string, [string, string]> = {
 		'intake.view.poem': ['Poem', 'Poème'],
 		'intake.view.lyrics': ['Lyrics', 'Paroles'],
 		'intake.view.poemLine': [
 			'Edits here change the published poem. The sung words come from your score; edit them in Lyrics.',
-			'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans Paroles.',
+			'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ Paroles.',
 		],
 		'intake.view.lyricsLine': [
 			'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.',
@@ -109,13 +109,24 @@ describe('ratified Input view lines (N.135 stage 3)', () => {
 		],
 		'intake.view.landedLyrics': [
 			'Your score\'s sung words are in Lyrics. Paste or type the published poem here, whole.',
-			'Les paroles chantées de votre partition sont dans Paroles. Collez ou saisissez ici le poème publié, en entier.',
+			'Les paroles chantées de votre partition sont dans le champ Paroles. Collez ou saisissez ici le poème publié, en entier.',
 		],
 		'intake.view.landedPoem': [
 			'This page read as a poem and is in Poem. The sung words in Lyrics may differ from it.',
-			'Cette page a été lue comme un poème; elle est dans Poème. Les paroles chantées, dans Paroles, peuvent en différer.',
+			'Cette page a été lue comme un poème; elle est dans le champ Poème. Les paroles chantées, dans le champ Paroles, peuvent en différer.',
 		],
 		'input.watermarkLyrics': ['lyrics', 'paroles'],
+		'intake.placeholderLyrics': [
+			'Your score\'s sung words appear here. You can also paste or type them.',
+			'Les paroles chantées de votre partition s\u2019affichent ici. Vous pouvez aussi les coller ou les saisir.',
+		],
+		'intake.poemReplace.title': ['Replace the poem?', 'Remplacer le poème?'],
+		'intake.poemReplace.body': [
+			'This page was read as a poem, and Poem already holds one. Ilya cannot undo its replacement.',
+			'Cette page a été lue comme un poème, et le champ Poème en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci.',
+		],
+		'intake.poemReplace.replace': ['Replace the poem', 'Remplacer le poème'],
+		'intake.poemReplace.keep': ['Keep the poem', 'Conserver le poème'],
 		'intake.placeholder': ['Paste, type, or drop your poem here.', 'Collez, saisissez ou déposez votre poème ici.'],
 	};
 	for (const [key, [en, fr]] of Object.entries(LINES)) {
@@ -124,18 +135,10 @@ describe('ratified Input view lines (N.135 stage 3)', () => {
 			expect(t(key, 'fr')).toBe(fr);
 		});
 	}
-	it('the Lyrics placeholder: the review\'s English, and no French until Dann rules (amendment 1)', () => {
-		expect(t('intake.placeholderLyrics', 'en')).toBe('Your score\'s sung words appear here. You can also paste or type them.');
-		expect(hasString('intake.placeholderLyrics', 'fr')).toBe(false);
-		expect(tIfPresent('intake.placeholderLyrics', 'fr')).toBe('');
-		expect(tIfPresent('intake.placeholderLyrics', 'en')).toBe(t('intake.placeholderLyrics', 'en'));
-	});
-	it('the replace question is a desk draft in English with its French owed, and the dialog falls back to English', () => {
-		for (const key of ['intake.poemReplace.title', 'intake.poemReplace.body', 'intake.poemReplace.replace', 'intake.poemReplace.keep']) {
-			expect(hasString(key, 'en'), key).toBe(true);
-			expect(hasString(key, 'fr'), key).toBe(false);
-			expect(tOrEnglish(key, 'fr'), key).toBe(t(key, 'en'));
-		}
-		expect(tOrEnglish('intake.view.poem', 'fr')).toBe('Poème');
+	it('tIfPresent and tOrEnglish still fall back for a key that lacks a language, and read the French where it exists', () => {
+		expect(tIfPresent('intake.placeholderLyrics', 'fr')).toBe(t('intake.placeholderLyrics', 'fr'));
+		expect(tOrEnglish('intake.poemReplace.title', 'fr')).toBe('Remplacer le poème?');
+		expect(tIfPresent('no.such.key', 'fr')).toBe('');
+		expect(tOrEnglish('no.such.key', 'fr')).toBe('[MISSING: no.such.key]');
 	});
 });
