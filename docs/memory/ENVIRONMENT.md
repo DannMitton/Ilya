@@ -298,6 +298,7 @@ next session the same hour it cost the last one.
 | a network call that was refused | `Network refusals` |
 | the project knowledge estate filling | `Project knowledge capacity` |
 | Code unable to read a ruling you cited | `CLAUDE CODE CANNOT READ` |
+| a Fable subagent stops with "weekly limit"; Dann's replies seem not to arrive | `FABLE'S LIMIT STOPS A SUBAGENT MID-RUN` |
 | a date, before you stamp one on anything | `THE MOUNT'S FILE TIMESTAMPS ARE NOT THE DATE` |
 | prune `STATE.md`, or script an edit inside a blockquote | `PRUNING A MEMORY FILE` |
 | quote Ilya's size, or a byte count of anything | `ILYA'S SIZE` |
@@ -4838,3 +4839,9 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 
 ### A REFUSED SHIP STILL LEAVES THE MERGE COMMIT TO PUSH. Learned 2026-10-15 22:3x
 - `git merge --no-edit origin/<lane>` makes the merge commit before the ship script runs. If the script then refuses on untracked files (Code's report and measure folder, written while the desk was away), the gates have not run on the Mac, and the `git push` that follows pushes the merge commit anyway. So the paste for a lane merge is: `git add` of every new file first (list them from `git status --porcelain`, after checking for `" 2"` iCloud duplicates), then merge, then the ship script, then push. The desk's own measure of the identical tree (same tree hash; compare `git log -1 --format=%T` on both) is what stood in for the Mac's gates on 2026-10-15; the next ship ran them at baseline. Check for untracked files before handing a ship paste, not after.
+
+### FABLE'S LIMIT STOPS A SUBAGENT MID-RUN, AND IT RESUMES. Learned 2026-10-16 21:3x to 2026-10-18 18:2x
+- A Fable subagent spawned with the Agent tool fails with "You've hit your weekly limit · resets <day> 5am" (HTTP 429) the moment Fable's own weekly limit is reached; its work so far is kept. After the reset, `SendMessage` to the same agent id resumes it from where it stopped; the resumed run returned a full review in under 4 minutes. Do not spawn a new agent for the same brief.
+- While the desk's own thread is stopped the same way, Dann's replies queue and reach the desk only with his next message after the reset (his "1" of 2026-10-17 00:47 and 13:41 arrived 2026-10-18 18:21). Say so to him at the open, and do not read his silence as a decision.
+- Cost estimates for a Fable review of a two-row brief against a sparse checkout: 137,554 and 163,830 tokens (harness counts) against stated worst cases of 100k and 150k. State 200k for the next one of that size.
+- The Claude in Chrome tab group does not survive a long pause: `tabs_context_mcp` reports no group; `navigate` with no tabId makes a new one. The cloud session page keeps its state; only the tab is new.
