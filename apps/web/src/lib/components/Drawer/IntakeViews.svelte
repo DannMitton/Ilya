@@ -5,6 +5,7 @@
 	import { comparePoem, lyricsSegments, poemSegments } from '$lib/text/poem-compare';
 	import { inputViews, type InputView } from '$lib/text/input-views.svelte';
 	import { pointer } from './IntakeCamera.svelte';
+	import ViewPair from '../ViewPair.svelte';
 	/*
 	 * IntakeViews.svelte: INPUT'S TWO VIEWS OF ONE FIELD: POEM AND LYRICS.
 	 * N.135 STAGE 3, RULED BY DANN 2026-10-16 00:32 to 00:51 (`OPEN.md`,
@@ -199,43 +200,17 @@
 			onflush();
 		}
 	}
-
-	/* The pair's keyboard, `DeskHead.svelte`'s `handlePairKeydown` for two members. */
-	function onPairKeydown(e: KeyboardEvent): void {
-		const at = VIEWS.indexOf(view);
-		let next = at;
-		if (e.key === 'ArrowRight') next = (at + 1) % VIEWS.length;
-		else if (e.key === 'ArrowLeft') next = (at - 1 + VIEWS.length) % VIEWS.length;
-		else if (e.key === 'Home') next = 0;
-		else if (e.key === 'End') next = VIEWS.length - 1;
-		else return;
-		e.preventDefault();
-		if (next !== at) {
-			inputViews.show(VIEWS[next]);
-			document.getElementById(`intake-tab-${VIEWS[next]}`)?.focus();
-		}
-	}
 </script>
 
 <div class="views-head">
-	<div class="pair" role="tablist" aria-label={t('source.heading', language)}>
-		{#each VIEWS as id (id)}
-			<button
-				type="button"
-				class="pair-member"
-				class:active={view === id}
-				role="tab"
-				id="intake-tab-{id}"
-				aria-selected={view === id}
-				aria-controls="intake-view-panel"
-				tabindex={view === id ? 0 : -1}
-				onclick={() => inputViews.show(id)}
-				onkeydown={onPairKeydown}
-			>
-				{t(id === 'poem' ? 'intake.view.poem' : 'intake.view.lyrics', language)}
-			</button>
-		{/each}
-	</div>
+	<ViewPair
+		items={VIEWS.map((id) => ({ id, label: t(id === 'poem' ? 'intake.view.poem' : 'intake.view.lyrics', language) }))}
+		active={view}
+		idPrefix="intake-tab"
+		controls="intake-view-panel"
+		name={t('source.heading', language)}
+		onchoose={(id) => inputViews.show(id as InputView)}
+	/>
 </div>
 
 <div class="views-lines" aria-live="polite">
@@ -282,69 +257,7 @@
 		}
 	}
 
-	/* `overflow: hidden` is DeskHead's, to round the active member's fill. It
-	   would also clip the touch hit areas, so the corners are rounded on the
-	   members instead: the border's 4px less its own 1px is 3px, which is the
-	   curve the clip drew. */
-	.pair {
-		display: inline-flex;
-		border: 1px solid var(--ink-primary, #1a1612);
-		border-radius: 4px;
-	}
-
-	.pair-member {
-		position: relative;
-		border: none;
-		background: transparent;
-		color: var(--ink-primary, #1a1612);
-		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
-		font-size: 0.7rem;
-		font-weight: 600;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		/* 0.5 rem, not 0.7, N.132: ruled by Dann 2026-09-13 and on screen
-		   2026-09-21. ONE value at every width. */
-		padding: 0.3rem 0.5rem;
-		cursor: pointer;
-	}
-
-	.pair-member:first-child {
-		border-radius: 3px 0 0 3px;
-	}
-
-	.pair-member:last-child {
-		border-radius: 0 3px 3px 0;
-	}
-
-	/* THE DIVIDER, at the track's weight and full ink. */
-	.pair-member + .pair-member {
-		border-left: 1px solid var(--ink-primary, #1a1612);
-	}
-
-	/* Treatment C: the card. */
-	.pair-member.active {
-		background: var(--paper-cream, #F0EBE0);
-		cursor: default;
-	}
-
-	.pair-member:not(.active):hover {
-		background: rgba(26, 22, 18, 0.06);
-	}
-
-	/* THE 44px TOUCH FLOOR WITHOUT CHANGING THE DRAWN HEIGHT: a transparent
-	   strip 44px tall, centred on the member, taps as the member does. It
-	   reaches past the pair's border, which is why `.pair` does not clip. */
-	@media (pointer: coarse) {
-		.pair-member::after {
-			content: '';
-			position: absolute;
-			left: 0;
-			right: 0;
-			top: 50%;
-			height: 44px;
-			transform: translateY(-50%);
-		}
-	}
+	/* The pair's own rules are `ViewPair.svelte`'s now (moved unchanged, row 110). */
 
 	/* ── The lines under the control ─────────────────────────────────────── */
 	/* `.intake-drop-hint`'s recipe: sans, 0.75rem, tertiary ink. */

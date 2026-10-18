@@ -124,3 +124,66 @@ test.describe('Text shows the witness there is (rows 109 and 110)', () => {
 		expect(s.poem).toBe('');
 	});
 });
+
+const FIXTURE = 'src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml';
+
+test.describe('the pair in Text (row 110)', () => {
+	test('with both texts differing: Lyrics on open, Poem on choice whole with its unset words grey, back to Lyrics, seats unchanged', async ({ page }) => {
+		test.setTimeout(180_000);
+		await page.goto('/');
+		await page.waitForFunction(() => {
+			const t = document.querySelector<HTMLTextAreaElement>('textarea.text-input');
+			return t && !t.disabled;
+		}, undefined, { timeout: 60_000 });
+		await page.getByRole('button', { name: /drawer/i }).first().tap();
+		const seated = page.waitForEvent('console', { predicate: (m) => m.text().startsWith('[Ilya] N.160 seats:'), timeout: 90_000 });
+		await page.locator('input.hidden-input').setInputFiles(FIXTURE);
+		await seated;
+		await page.waitForTimeout(2500);
+		await page.locator('#intake-tab-lyrics').tap();
+		const lyricsWords = (await page.locator('textarea.text-input').inputValue()).trim().split(/\s+/);
+		// The poem: the song's words, the last 6 left out, the 11th replaced (a test text, not a published poem).
+		const poemWords = lyricsWords.slice(0, lyricsWords.length - 6);
+		poemWords[10] = 'ИЗМЕНЁННОЕ';
+		await page.locator('#intake-tab-poem').tap();
+		await page.locator('textarea.text-input').fill(poemWords.join(' '));
+		await page.waitForTimeout(2500);
+		const before = await song(page);
+		expect(before.seats).toBeGreaterThan(0);
+		// Closed drawer shows the Text page.
+		await page.getByRole('button', { name: /paper/i }).first().tap();
+		await expect(page.locator('#text-tab-lyrics')).toHaveAttribute('aria-selected', 'true');
+		const onLyrics = await words(page);
+		expect(onLyrics).toBe(lyricsWords.length);
+		await page.locator('#text-tab-poem').tap();
+		await expect(page.locator('#text-tab-poem')).toHaveAttribute('aria-selected', 'true');
+		await expect.poll(() => words(page), { timeout: 15_000 }).toBe(poemWords.length);
+		expect(await page.locator('.paper-container .word-stack.muted').count()).toBe(1);
+		await page.locator('#text-tab-lyrics').tap();
+		await expect.poll(() => words(page), { timeout: 15_000 }).toBe(lyricsWords.length);
+		expect(await page.locator('.paper-container .word-stack.muted').count()).toBe(0);
+		await page.waitForTimeout(2500);
+		const after = await song(page);
+		expect(after.seats).toBe(before.seats);
+		expect(after.lyrics).toBe(before.lyrics);
+	});
+
+	test('with both texts the same words: no pair', async ({ page }) => {
+		await open(page);
+		await page.locator('#intake-tab-lyrics').tap();
+		await page.locator('textarea.text-input').fill('Тебя я увидел');
+		await page.locator('#intake-tab-poem').tap();
+		await page.locator('textarea.text-input').fill('тебя, я увидел.');
+		await page.waitForTimeout(1500);
+		await page.getByRole('button', { name: /paper/i }).first().tap();
+		await expect(page.locator('#text-tab-poem')).toHaveCount(0);
+	});
+
+	test('with only a poem or only Lyrics: no pair', async ({ page }) => {
+		await open(page);
+		await page.locator('textarea.text-input').fill(POEM);
+		await page.waitForTimeout(1500);
+		await page.getByRole('button', { name: /paper/i }).first().tap();
+		await expect(page.locator('#text-tab-poem')).toHaveCount(0);
+	});
+});
