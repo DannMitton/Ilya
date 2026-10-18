@@ -28,7 +28,9 @@ git -C ~/Desktop/ilya-rewrite --no-optional-locks --no-pager log -1 --format="%H
 >
 > **Plans not yet built, each with its record:** row 108 (the poem's line breaks in Lyrics), row 109 and row 110 (brief r2 `../sessions/brief-code-rows109-110-poem-transcription_r2_2026-10-16.md`, Fable-reviewed 20:56), row 111 (stage 3's reconciliation, after stage 2a and the alignment design). The Guide paragraph waits for Dann's ratification and enters with rows 109 and 110.
 >
-> **This session's mistakes, each owned when made:** said the file had no French for "appear" when the struck line Dann had ratified used « apparaissent »; offered option 1 claiming a later score refills Lyrics, which N.134 prevents; stated a 100k worst case for Fable's review, which cost 137,554.
+> **2026-10-18 18:2x, resumed after Fable's reset:** review r2 of rows 109 and 110 returned (12 amendments, brief r4 READY). Dann ruled 18:26: 2026-10-30 is the date he shares Ilya with colleagues, not the release (`SCHEDULE.md`). Dann's replies of "1" at 2026-10-17 00:47 and 13:41 reached the desk only on 2026-10-18 18:21, so nothing ran Saturday.
+>
+> **This session's mistakes, each owned when made:** said the file had no French for "appear" when the struck line Dann had ratified used « apparaissent »; offered option 1 claiming a later score refills Lyrics, which N.134 prevents; stated a 100k worst case for Fable's review, which cost 137,554. Stated 150k for review r2, which cost 163,830 (harness count); the next review of this size is stated at 200k. Cited `upload.banner.reader` at `i18n.ts:730` three times (to Dann at 21:00, in brief r3, and in the alignment table); it is `:1021` on `Shane` and `:1058` on `cloud-lane-11`, and `:730` is `intake.placeholder` (caught by review r2). Also told Dann `intake.placeholder` is `i18n.ts:1021`; it is `:730`.
 
 ### SESSION OF 2026-10-15 16:05 TO 2026-10-16 (Fable desk after 16:08; Opus for the first three minutes). THE NEXT DESK STARTS HERE. Updated during the session; the close line is the last bullet.
 
