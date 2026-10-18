@@ -34,6 +34,9 @@ test.describe('opening a score', () => {
 		const wordCount = await page.locator('[data-word-index]').count();
 		expect(wordCount).toBeGreaterThan(1);
 
+		// Row 109 C: a new song opens Input on Poem, so the score's words, which go to
+		// Lyrics, are read from Lyrics (`OPEN.md` N.186; the report's first finding).
+		await page.locator('#intake-tab-lyrics').click();
 		const textarea = page.locator('textarea.text-input');
 		await expect(textarea).not.toHaveValue('');
 	});

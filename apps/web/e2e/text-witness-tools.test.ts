@@ -18,6 +18,8 @@ test('a gloss on a poem word stays on the poem and survives a reload', async ({ 
 	await expect(page.locator('#text-tab-poem')).toBeVisible();
 	await page.locator('#text-tab-poem').click();
 	await page.waitForSelector('.paper-container [data-word-index="0-0"]');
+	// Lyrics' typed text transcribes after its quiet pause and clears any selection (`resetTranscriptionView`); let it settle.
+	await page.waitForTimeout(1500);
 	await page.locator('.paper-container [data-word-index="0-0"]').click();
 	await expandStation(page, 'Analysis');
 	await page.locator('.dict-button').click();
