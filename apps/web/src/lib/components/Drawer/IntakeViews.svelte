@@ -53,8 +53,8 @@
 		disabled?: boolean;
 		/** A Lyrics edit, and HOW it arrived: a paste transcribes at once, a keystroke after a pause. */
 		oninput: (text: string, how: TextArrival) => void;
-		/** A Poem edit. Nothing seats or transcribes from it. */
-		onpoemedit: (text: string) => void;
+		/** A Poem edit, and HOW it arrived (a paste or a typed key), which decides whether a wordless score's Lyrics takes it (row 109 B). */
+		onpoemedit: (text: string, how: TextArrival) => void;
 		onflush: () => void;
 		/** The camera glyph, which stands in the field's top right corner. */
 		corner?: Snippet;
@@ -188,7 +188,7 @@
 	function onInput(e: Event): void {
 		const value = (e.target as HTMLTextAreaElement).value;
 		inputViews.edited();
-		if (view === 'poem') onpoemedit(value);
+		if (view === 'poem') onpoemedit(value, arrivalOf(e));
 		else oninput(value, arrivalOf(e));
 	}
 

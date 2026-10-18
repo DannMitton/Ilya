@@ -11,10 +11,11 @@
 		language?: Language;
 		spotReconstitution?: Map<string, boolean>;
 		glossOverrides?: Map<string, string>;
+		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, glossOverrides, onwordclick }: Props = $props();
+	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, glossOverrides, mutedWords, onwordclick }: Props = $props();
 
 	// Render words containing Cyrillic, and Latin words (`latin.ts`), which keep
 	// their place in the line. A punctuation-only token never becomes a word
@@ -76,6 +77,7 @@
 			spotReconstituted={spotReconstitution?.has(wordKey) ?? false}
 			adjacentCliticReconstituted={adjacentCliticReconFlags[i] ?? false}
 			glossOverride={glossOverrides?.get(wordKey)}
+			muted={mutedWords?.has(wordKey) ?? false}
 			{onwordclick}
 		/>
 	{/each}

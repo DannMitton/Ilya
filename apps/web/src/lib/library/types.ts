@@ -186,6 +186,17 @@ export interface SongRecord {
 	 * `origin` is already a pairing's slot and an arrival's source.
 	 */
 	publishedPoem?: string;
+	/**
+	 * ROW 109, 2026-10-18. THE GLOSSES THE SINGER SET ON THE POEM'S OWN WORDS,
+	 * as `glosses` holds them for the sung text: `[key, gloss, anchor]` with the
+	 * key the POEM's `"lineIndex-wordIndex"`. Text can show the poem as its
+	 * transcription (`publishedPoem`), and a gloss on it must survive a reload
+	 * and a binder, as one on Lyrics does. Stored only while not empty; absent
+	 * means none. The poem's stress, ё, syllable, and spot marks are session
+	 * state, as Lyrics' are (review r2, amendment 5, parity). OPTIONAL AND
+	 * ADDITIVE, `publishedPoem`'s pattern: an older Ilya drops it.
+	 */
+	publishedGlosses?: GlossRow[];
 	source: SongSource | null;
 }
 

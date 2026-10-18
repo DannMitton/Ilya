@@ -259,6 +259,48 @@ describe('the poet\'s published text on the song (N.135 stage 3)', () => {
 	});
 });
 
+describe('the glosses on the poem\'s own words (row 109)', () => {
+	const rows: [string, string, string][] = [['0-1', 'noisy', 'шумного']];
+
+	it('are absent by default and a song without them writes none back', () => {
+		const record = emptySongRecord('x', NOW);
+		const fields = fieldsFromRecord(record);
+		expect(fields.publishedGlosses.size).toBe(0);
+		expect('publishedGlosses' in recordFromFields(record, fields)).toBe(false);
+	});
+
+	it('round-trip through the record, the validator, and back to the page\'s maps', () => {
+		const base = emptySongRecord('x', NOW);
+		const fields = {
+			...fieldsFromRecord(base),
+			publishedGlosses: new Map([['0-1', 'noisy']]),
+			publishedGlossAnchors: new Map([['0-1', 'шумного']]),
+		};
+		const stored = recordFromFields(base, fields);
+		expect(stored.publishedGlosses).toEqual(rows);
+		const validated = validateRecord(JSON.parse(JSON.stringify(stored)), 'x', LATER);
+		expect(validated.reason).toBeUndefined();
+		expect(validated.record.publishedGlosses).toEqual(rows);
+		const back = fieldsFromRecord(validated.record);
+		expect([...back.publishedGlosses]).toEqual([['0-1', 'noisy']]);
+		expect([...back.publishedGlossAnchors]).toEqual([['0-1', 'шумного']]);
+	});
+
+	it('keep the sung text\'s glosses apart from the poem\'s', () => {
+		const base = { ...emptySongRecord('x', NOW), glosses: [['0-0', 'sung', 'слово']] as [string, string, string][] };
+		const stored = recordFromFields(base, { ...fieldsFromRecord(base), publishedGlosses: new Map([['0-0', 'poet']]), publishedGlossAnchors: new Map([['0-0', 'слово']]) });
+		expect(stored.glosses).toEqual([['0-0', 'sung', 'слово']]);
+		expect(stored.publishedGlosses).toEqual([['0-0', 'poet', 'слово']]);
+	});
+
+	it('drops a malformed row and marks a non-array malformed', () => {
+		expect(validateRecord({ publishedGlosses: [['0-0', 'x', '']] }, 'x', NOW).record.publishedGlosses).toBeUndefined();
+		const bad = validateRecord({ publishedGlosses: 'no' }, 'x', NOW);
+		expect(bad.reason).toBe('malformed');
+		expect(bad.record.publishedGlosses).toBeUndefined();
+	});
+});
+
 describe('validateRecord', () => {
 	it('accepts a whole record unchanged', () => {
 		const record = seededRecord();

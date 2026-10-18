@@ -101,6 +101,17 @@ describe('exportBinder', () => {
 		expect(fieldsFromRecord(read.songs[1].record).publishedPoem).toBe('');
 	});
 
+	it('carries the glosses on the poem\'s words through a binder (row 109)', async () => {
+		const withGlosses = record('a', { name: 'With', publishedPoem: 'poet', publishedGlosses: [['0-0', 'poet', 'слово']] });
+		const result = await exportBinder(deps({ openRecord: withGlosses }));
+		expect(result.ok).toBe(true);
+		if (!result.ok) return;
+		const read = await readBinder(result.bytes, NOW);
+		expect(read.ok).toBe(true);
+		if (!read.ok) return;
+		expect(read.songs[0].record.publishedGlosses).toEqual([['0-0', 'poet', 'слово']]);
+	});
+
 	it('takes every OTHER song from the vault', async () => {
 		const result = await exportBinder(deps({ ids: ['a', 'b'] }));
 

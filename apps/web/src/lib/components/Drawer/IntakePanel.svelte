@@ -55,7 +55,7 @@
 		 */
 		songId: string;
 		poemText: string;
-		onpoemedit: (text: string) => void;
+		onpoemedit: (text: string, how: TextArrival) => void;
 		onclearpoem: () => void;
 		/**
 		 * The score engine's answers, rendered under the frame. A snippet

@@ -7,20 +7,16 @@ import { describe, it, expect, vi } from 'vitest';
 import { initialView, inputViews } from './input-views.svelte';
 import { routePoemPage } from './poem-page';
 
-describe('initialView (ruling default 3, Dann 00:36)', () => {
-	it('opens Lyrics the first time, whatever else is true', () => {
-		expect(initialView('', '')).toBe('lyrics');
+describe('initialView (row 109 C, revising row 104)', () => {
+	it('opens Poem where Lyrics holds no text, whatever the Poem holds', () => {
+		expect(initialView('', '')).toBe('poem');
+		expect(initialView('', 'Средь шумного бала')).toBe('poem');
+		expect(initialView('  \n', '   ')).toBe('poem');
+	});
+
+	it('opens Lyrics where Lyrics holds text, with or without a Poem', () => {
 		expect(initialView('Тебя я увидел', '')).toBe('lyrics');
 		expect(initialView('Тебя я увидел', 'Тебя я увидел')).toBe('lyrics');
-	});
-
-	it('opens Poem where Lyrics is empty and Poem is not', () => {
-		expect(initialView('', 'Средь шумного бала')).toBe('poem');
-		expect(initialView('  \n', 'Средь шумного бала')).toBe('poem');
-	});
-
-	it('does not open Poem for a blank Poem', () => {
-		expect(initialView('', '   ')).toBe('lyrics');
 	});
 });
 
@@ -127,5 +123,22 @@ describe('routePoemPage (ruling default 9)', () => {
 		inputViews.open('score-song', '', '');
 		inputViews.land('lyrics');
 		expect(inputViews.landed).toBe('lyrics');
+	});
+});
+
+describe('a new empty song, and the witness Text transcribes (rows 109 and 110)', () => {
+	it('opens Input on Poem for a song with no text at all', () => {
+		inputViews.open('brand-new', '', '');
+		expect(inputViews.view).toBe('poem');
+	});
+
+	it('remembers the witness the singer chose per song, for the session, Lyrics until then', () => {
+		expect(inputViews.witnessChoice['w-a'] ?? 'lyrics').toBe('lyrics');
+		inputViews.chooseWitness('w-a', 'poem');
+		inputViews.chooseWitness('w-b', 'lyrics');
+		expect(inputViews.witnessChoice['w-a']).toBe('poem');
+		expect(inputViews.witnessChoice['w-b']).toBe('lyrics');
+		inputViews.chooseWitness('w-a', 'lyrics');
+		expect(inputViews.witnessChoice['w-a']).toBe('lyrics');
 	});
 });

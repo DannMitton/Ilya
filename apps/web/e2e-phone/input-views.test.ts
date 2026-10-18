@@ -83,6 +83,9 @@ async function seats(page: Page): Promise<Record<string, unknown>> {
 test.describe('Input, two views (N.135 stage 3)', () => {
 	test('the pair shows, each view holds its own text, and the line says which view this is', async ({ page }) => {
 		await openDrawer(page);
+		// Row 109 C: a song with no text opens Input on Poem.
+		await expect(page.locator('#intake-tab-poem')).toHaveAttribute('aria-selected', 'true');
+		await page.locator('#intake-tab-lyrics').tap();
 		await expect(page.locator('#intake-tab-lyrics')).toHaveAttribute('aria-selected', 'true');
 		await expect(page.locator('.views-line').first()).toContainText('The words as sung');
 		const ta = page.locator('textarea.text-input');
@@ -99,6 +102,7 @@ test.describe('Input, two views (N.135 stage 3)', () => {
 
 	test('the colour layer sits exactly under the textarea\'s own text, coloured or not', async ({ page }) => {
 		await openDrawer(page);
+		await page.locator('#intake-tab-lyrics').tap();
 		const ta = page.locator('textarea.text-input');
 		const poem = 'Средь шумного бала, случайно, в тревоге мирской суеты, тебя я увидел.';
 		const lyrics = 'Средь шумного бала, шумного бала,\nслучайно в тревоге суеты, тебя я увидал, увидал.\n';

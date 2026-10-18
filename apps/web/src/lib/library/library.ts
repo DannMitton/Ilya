@@ -66,6 +66,9 @@ export interface SongFields {
 	tempo: TempoChoice | null;
 	/** N.135 stage 3: the poet's published text, or '' where none was given (`SongRecord.publishedPoem`). */
 	publishedPoem: string;
+	/** Row 109: glosses on the poem's own words, key to gloss and key to anchor (`SongRecord.publishedGlosses`). */
+	publishedGlosses: ReadonlyMap<string, string>;
+	publishedGlossAnchors: ReadonlyMap<string, string>;
 }
 
 /* ── Record and page state, converted in one place ──────────────── */
@@ -96,6 +99,8 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		octaveReading: record.octaveReading ?? null,
 		tempo: record.tempo ?? null,
 		publishedPoem: record.publishedPoem ?? '',
+		publishedGlosses: new Map((record.publishedGlosses ?? []).map(([key, gloss]) => [key, gloss])),
+		publishedGlossAnchors: new Map((record.publishedGlosses ?? []).map(([key, , anchor]) => [key, anchor])),
 	};
 }
 
@@ -110,7 +115,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 	// N.94, the same shape: stored only while the singer has chosen a key.
 	// Row 47, the same shape: stored only while the singer has chosen as written.
 	// N.135 stage 3, the same shape: stored only while the poem is not empty.
-	const { seatedText: _stored, transposition: _key, octaveReading: _octave, tempo: _tempo, publishedPoem: _published, ...rest } = base;
+	const { seatedText: _stored, transposition: _key, octaveReading: _octave, tempo: _tempo, publishedPoem: _published, publishedGlosses: _poemGlosses, ...rest } = base;
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
 		key,
 		gloss,
@@ -130,6 +135,9 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		...(fields.octaveReading ? { octaveReading: fields.octaveReading } : {}),
 		...(fields.tempo ? { tempo: { ...fields.tempo } } : {}),
 		...(fields.publishedPoem !== '' ? { publishedPoem: fields.publishedPoem } : {}),
+		...(fields.publishedGlosses.size > 0
+			? { publishedGlosses: [...fields.publishedGlosses].map(([key, gloss]): GlossRow => [key, gloss, fields.publishedGlossAnchors.get(key) ?? '']) }
+			: {}),
 	};
 }
 
@@ -248,6 +256,14 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 	// N.135 stage 3, additive, default ABSENCE (no poem given). A string or nothing.
 	if (typeof value.publishedPoem === 'string') record.publishedPoem = value.publishedPoem;
 	else if (value.publishedPoem !== undefined) malformed();
+	// Row 109, additive, default ABSENCE: the glosses' own row shape and filter.
+	if (Array.isArray(value.publishedGlosses)) {
+		record.publishedGlosses = value.publishedGlosses.filter(
+			(row): row is GlossRow =>
+				Array.isArray(row) && typeof row[0] === 'string' && typeof row[1] === 'string' && typeof row[2] === 'string' && row[2] !== '',
+		);
+		if (record.publishedGlosses.length === 0) delete record.publishedGlosses;
+	} else if (value.publishedGlosses !== undefined) malformed();
 
 	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
 	// This function rebuilds the record field by field from `emptySongRecord`,

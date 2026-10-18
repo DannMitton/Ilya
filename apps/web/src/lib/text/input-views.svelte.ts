@@ -20,13 +20,16 @@
 export type InputView = 'poem' | 'lyrics';
 
 /**
- * The view a song opens on the first time: Lyrics, unless Lyrics is empty and
- * the Poem is not (ruling default 3 and Dann 00:36: "if Lyrics is the only
- * populated option, it should take focus over the blank Poem field" and, the
- * mirror, a song with only a poem opens on the poem).
+ * The view a song opens on the first time. ROW 109, REVISING ROW 104 (Dann
+ * 2026-10-16 21:06, "dropped text should always land in Poem", Poem is entered
+ * by the singer): a song whose Lyrics holds no text opens Input on Poem, where
+ * the singer enters or drops it; a song whose Lyrics holds text opens on
+ * Lyrics. `lyrics` is what the field shows, so a score's derived words count as
+ * Lyrics' text. Row 104 opened on Poem only where Lyrics was empty AND the Poem
+ * was not.
  */
-export function initialView(lyrics: string, poem: string): InputView {
-	return lyrics.trim() === '' && poem.trim() !== '' ? 'poem' : 'lyrics';
+export function initialView(lyrics: string, _poem: string): InputView {
+	return lyrics.trim() === '' ? 'poem' : 'lyrics';
 }
 
 class InputViews {
@@ -34,6 +37,12 @@ class InputViews {
 	view = $state<InputView>('lyrics');
 	/** Where the last dropped file went, until the next edit or view change; null otherwise. */
 	landed = $state<InputView | null>(null);
+	/**
+	 * ROW 110: WHICH WITNESS TEXT TRANSCRIBES, per song, for the session, never
+	 * stored (review r2, amendment 10; `OPEN.md` N.186: "the choice is remembered
+	 * per song for the session and not stored"). Lyrics until the singer chooses.
+	 */
+	witnessChoice = $state<Record<string, InputView>>({});
 	#memory = new Map<string, InputView>();
 	#song = '';
 
@@ -54,6 +63,11 @@ class InputViews {
 		this.view = view;
 		this.#memory.set(this.#song, view);
 		if (!keepLanding) this.landed = null;
+	}
+
+	/** The singer chose which witness Text transcribes for this song. */
+	chooseWitness(songId: string, witness: InputView): void {
+		this.witnessChoice = { ...this.witnessChoice, [songId]: witness };
 	}
 
 	/** The singer edited a text: the line goes back to saying what the view is. */
