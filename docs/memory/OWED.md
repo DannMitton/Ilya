@@ -1030,3 +1030,14 @@ Each stood in a close block of 2026-10-01 under "Waiting on Dann, never to be pu
 - **Found 2026-10-12 14:30 in Code's row 85 picture (Dann's screenshot): the Insights pitch figure clips its comfortable-zone bracket label at the right edge at 390 px in French (« votre zone de travail c… »).** Code calls it pre-existing, not row 85's. Not numbered; a candidate for row 79's or a later Insights row. Desk, Opus.
 
 - **Found 2026-10-12 20:13 (cloud session, row 87): `AGENTS.md` says no agent commits, while CONTRACT.md carries Dann's ruling of 2026-10-02 02:37 that a cloud session may commit and push one dedicated branch (never `Shane` or `main`).** Every cloud session meets the contradiction. DONE: `9e1af16` added the sentence to `AGENTS.md` (shipped in `1ec2ef2` with row 84). Desk, Opus.
+
+## Added 2026-10-16 (Fable desk, the thread of 2026-10-15 16:05)
+
+- **Row 104's strings, to Dann before the merge:** the struck Lyrics placeholder (EN proposed "Your score's sung words appear here. You can also paste or type them."; FR draft in `OPEN.md`, "N.135 STAGE 3", item 14); the review's two French flags (« les place » against « mis en musique » for "sets", one term per concept; the bare « dans Paroles » where the file writes « le champ Entrée »).
+- **The wider Clear warning** (`PRODUCT.md:632-635`): whether it still stands after N.160 step 3 (QUEUE row 107); Dann's question.
+- **The two papers for stage 3's alignment,** to be read in full and filed in the library before the design: Yalniz and Manmatha, "A Fast Alignment Scheme for Automatic OCR Evaluation of Books," ICDAR 2011; Fremerey, Müller, and Clausen, "Handling Repeats and Jumps in Score-Performance Synchronization," ISMIR 2010. Titles confirmed by search 2026-10-15; not read; not filed.
+- **The hairpin gesture poll** (Finale first, then Dorico, Sibelius, MuseScore) before Corrections slice 8 and N.177 (Dann 2026-10-15 23:54).
+- **The empty song "Untitled, 2026-10-16"** the walk made in Dann's Repertoire: his to delete (Delete is irreversible).
+- **The earlier session that lost a poem block on a staved page** (Dann 2026-10-16 00:49, "earlier we had trouble"): NOT ESTABLISHED which; to be searched in `docs/sessions/` before the region rule is briefed.
+- **Dann's look at rows 47 and 48** on «Средь шумного бала» (the circled 8; the tempo line and control), their DONE.
+

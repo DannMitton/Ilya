@@ -9,3 +9,5 @@ Scan: `~/Downloads/Tchaikovsky_Op38-3_Sred-shumnogo-bala_Jurgenson-1878.pdf` (31
 - **Step 0, 23:57.** The alias opened with the empty song "Untitled, 2026-10-15" selected (the desk's WebGPU test song of 00:18 and 12:16). Insights reads "No score has been added, so there is nothing of this piece to measure." Voice line: "INSIGHTS FOR DANN · SERIÖSERBASS · CALIBRATED 2026-09-27".
 - **Step 1, 23:58.** Desk pressed New song. "Untitled, 2026-10-16" is selected at the top of Repertoire.
 - **00:14 to 00:36, before step 2:** Dann questioned the desk's "one text" line; the dialogue ruled the two views of Input (Poem | Lyrics), Text transcribing the lyrics, and the rest, recorded in `docs/memory/OPEN.md`, "N.135 STAGE 3: TWO VIEWS OF INPUT". Walk resumes at step 2.
+- **Paused at step 2, 2026-10-16 00:46**, on Dann's word (*"we are not walking right now we are talking design"*); the design conversation's rulings are in `OPEN.md`, "N.135 STAGE 3". The shared tab was closed by the desk at the close of 12:5x; the empty song "Untitled, 2026-10-16" remains in Repertoire (Dann's to delete). The walk resumes from step 2 (a fresh New song, the drag) whenever Dann wants it.
+
