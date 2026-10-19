@@ -48,7 +48,8 @@ export function proposeName(record: SongRecord): string {
 	if (composer) return composer;
 	const fromFile = fileBaseName(record.source?.fileName ?? '');
 	if (fromFile) return fromFile;
-	return record.poem.trim().split(/\s+/).filter(Boolean).slice(0, 4).join(' ');
+	// N.135 stage 3, DESK DEFAULT: the poet's text names an unnamed song before the sung words do.
+	return (record.publishedPoem?.trim() ? record.publishedPoem : record.poem).trim().split(/\s+/).filter(Boolean).slice(0, 4).join(' ');
 }
 
 /**

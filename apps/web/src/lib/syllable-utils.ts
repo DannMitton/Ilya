@@ -45,8 +45,13 @@ function lastVowelIndex(chars: string | undefined, isVowel: (ch: string) => bool
  *
  * Returns a new array; does not mutate the original.
  */
-export function openSyllabify(syllables: SyllableData[]): SyllableData[] {
+export function openSyllabify(syllables: SyllableData[], typedBreaks?: readonly number[]): SyllableData[] {
 	if (!syllables || syllables.length <= 1) return syllables;
+
+	// Row 106: a boundary the singer typed (a letter offset, as `WordStackData.typedBreaks`
+	// holds it) is left where it is; only the boundaries Ilya supplied open.
+	const typed = new Set(typedBreaks ?? []);
+	let offset = 0;
 
 	// Deep copy to avoid mutating engine data
 	const result: SyllableData[] = syllables.map(s => ({ ...s }));
@@ -54,6 +59,8 @@ export function openSyllabify(syllables: SyllableData[]): SyllableData[] {
 	for (let i = 0; i < result.length - 1; i++) {
 		const left = result[i];
 		const right = result[i + 1];
+		offset += syllables[i]?.cyrillic?.length ?? 0;
+		if (typed.has(offset)) continue;
 
 		if (!left || !right || !left.cyrillic || !right.cyrillic) continue;
 
@@ -271,7 +278,7 @@ export function reslicedSyllables(
 	}
 	if (globalOpenSyllabification) {
 		// Global open syllabification for non-overridden words
-		return openSyllabify(word.syllables);
+		return openSyllabify(word.syllables, word.typedBreaks);
 	}
 	// No transform: keep engine defaults
 	return undefined;

@@ -75,7 +75,7 @@ async function load(page: Page, c: (typeof CASES)[number]) {
 const line = (page: Page) => page.locator('[data-octave-line]:visible').first();
 
 async function openTab(page: Page, which: 'markup' | 'insights') {
-	await page.getByRole('tab').nth(which === 'markup' ? 1 : 2).click();
+	await page.locator('.desk-head').getByRole('tab').nth(which === 'markup' ? 1 : 2).click();
 	await page.waitForTimeout(which === 'markup' ? 2500 : 3500);
 }
 
@@ -137,7 +137,7 @@ for (const c of CASES) {
 			await page.reload();
 			await waitForDictionary(page);
 			// The song comes back from the library; the page may reopen on the tab it left.
-			await page.getByRole('tab').nth(1).waitFor({ timeout: 30_000 });
+			await page.locator('.desk-head').getByRole('tab').nth(1).waitFor({ timeout: 30_000 });
 			await openTab(page, 'markup');
 			await expect(line(page)).toHaveAttribute('data-applied', 'false');
 			await expect(line(page)).toContainText(EN.written);

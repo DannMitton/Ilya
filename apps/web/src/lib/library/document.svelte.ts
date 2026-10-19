@@ -106,6 +106,21 @@ export class SongDocument {
 	 */
 	tempo = $state<TempoChoice | null>(null);
 
+	/**
+	 * N.135 stage 3, the poet's published text: the Poem view of Input. Saved
+	 * through the same path as `tempo`, and stored only while it is not empty
+	 * (`SongRecord.publishedPoem`). Nothing seats or transcribes from it.
+	 */
+	publishedPoem = $state('');
+
+	/**
+	 * Row 109, the glosses on the poem's own words (`SongRecord.publishedGlosses`),
+	 * kept beside `glossOverrides` and saved through the same path. Keyed by the
+	 * POEM's `"lineIndex-wordIndex"`.
+	 */
+	publishedGlosses = $state<Map<string, string>>(new Map());
+	publishedGlossAnchors = $state<Map<string, string>>(new Map());
+
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
 	/** Why the load did not come back whole. Replaces `pairingsLoadFailed`. */
@@ -274,6 +289,9 @@ export class SongDocument {
 			transposition: this.transposition,
 			octaveReading: this.octaveReading,
 			tempo: this.tempo,
+			publishedPoem: this.publishedPoem,
+			publishedGlosses: this.publishedGlosses,
+			publishedGlossAnchors: this.publishedGlossAnchors,
 		};
 	}
 
@@ -325,6 +343,9 @@ export class SongDocument {
 		this.transposition = fields.transposition;
 		this.octaveReading = fields.octaveReading;
 		this.tempo = fields.tempo;
+		this.publishedPoem = fields.publishedPoem;
+		this.publishedGlosses = fields.publishedGlosses as Map<string, string>;
+		this.publishedGlossAnchors = fields.publishedGlossAnchors as Map<string, string>;
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {

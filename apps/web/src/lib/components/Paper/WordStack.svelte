@@ -12,10 +12,12 @@
 		spotReconstituted?: boolean;
 		adjacentCliticReconstituted?: boolean;
 		glossOverride?: string;
+		/** Rows 109 and 110: a poem word the song does not set, drawn grey as Input's Poem view draws it. */
+		muted?: boolean;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
-	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, adjacentCliticReconstituted = false, glossOverride, onwordclick }: Props = $props();
+	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, adjacentCliticReconstituted = false, glossOverride, muted = false, onwordclick }: Props = $props();
 
 	// Bidirectional XOR: spot always inverts the global setting for this word.
 	// Global OFF + spot ON → reconstituted. Global ON + spot ON → reduced.
@@ -140,6 +142,7 @@
 	class:has-top-right-icon={hasTopRightIcon}
 	class:is-inferred={isInferred}
 	class:is-latin={word.latin}
+	class:muted
 	role="button"
 	tabindex={word.latin ? -1 : 0}
 	aria-disabled={word.latin || undefined}
@@ -387,6 +390,11 @@
 		white-space: nowrap;
 		line-height: 1;
 		z-index: 1;
+	}
+
+	/* A poem word the song does not set (`--ink-tertiary`'s grey, as Input draws it). */
+	.word-stack.muted {
+		opacity: 0.45;
 	}
 
 	@media print {

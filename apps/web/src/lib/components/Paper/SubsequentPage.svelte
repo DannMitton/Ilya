@@ -21,6 +21,8 @@
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
 		glossOverrides?: Map<string, string>;
+		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
+		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
 	}
 
@@ -36,6 +38,7 @@
 		showStressDiacritics = false,
 		spotReconstitution,
 		glossOverrides,
+		mutedWords,
 		onwordclick,
 	}: Props = $props();
 
@@ -84,7 +87,7 @@
 	>
 		{#each lines as line (line.lineNumber)}
 			<div class="verse-row">
-				<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} {onwordclick} />
+				<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} {mutedWords} {onwordclick} />
 			</div>
 		{/each}
 	</div>

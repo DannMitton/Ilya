@@ -19,6 +19,8 @@
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
 		glossOverrides?: Map<string, string>;
+		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
+		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
 		/** Row 2j: what page 1 says with no lines (`emptyTextNotice`). */
 		emptyNotice?: EmptyTextNotice;
@@ -34,6 +36,7 @@
 		showStressDiacritics = false,
 		spotReconstitution = new Map(),
 		glossOverrides = new Map(),
+		mutedWords,
 		onwordclick,
 		emptyNotice = 'enter',
 	}: Props = $props();
@@ -84,6 +87,7 @@
 				{showStressDiacritics}
 				{spotReconstitution}
 				{glossOverrides}
+				{mutedWords}
 				{onwordclick}
 				onbudgetchange={handleBudgetChange}
 				{emptyNotice}
@@ -101,6 +105,7 @@
 				{showStressDiacritics}
 				{spotReconstitution}
 				{glossOverrides}
+				{mutedWords}
 				{onwordclick}
 			/>
 		{/if}

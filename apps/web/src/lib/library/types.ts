@@ -165,6 +165,38 @@ export interface SongRecord {
 	 * (`validateRecord` copies only what it knows).
 	 */
 	tempo?: TempoChoice;
+	/**
+	 * N.135 STAGE 3, 2026-10-16. THE POET'S PUBLISHED TEXT, which the singer
+	 * sees as the POEM view of Input (`IntakePanel`). Absent means no poem has
+	 * been given; it is stored only while it is not empty, and nothing derives
+	 * it from a score (Dann 2026-10-16 00:38: a reconstructed poem would offer
+	 * itself as the authoritative origin text).
+	 *
+	 * THE ENGLISH WORDS ARE INVERTED AGAINST THE FIELDS, ON PURPOSE. `poem`
+	 * above is the text that SEATS: it loads into `doc.inputText`, feeds the
+	 * transcription, and is diffed against `seatedText`. The singer now sees
+	 * that text as LYRICS, the sung words. Renaming it would have inverted the
+	 * field under every reader that exists and lost the seating on an older
+	 * import; adding a field costs one optional string. So `poem` stays the sung
+	 * text and THIS is the poet's.
+	 *
+	 * OPTIONAL AND ADDITIVE, `tempo`'s pattern: an older Ilya importing a newer
+	 * binder drops it (`validateRecord` copies only what it knows) and keeps
+	 * `poem` and the seats, so no schema bump. Named `publishedPoem` because
+	 * `origin` is already a pairing's slot and an arrival's source.
+	 */
+	publishedPoem?: string;
+	/**
+	 * ROW 109, 2026-10-18. THE GLOSSES THE SINGER SET ON THE POEM'S OWN WORDS,
+	 * as `glosses` holds them for the sung text: `[key, gloss, anchor]` with the
+	 * key the POEM's `"lineIndex-wordIndex"`. Text can show the poem as its
+	 * transcription (`publishedPoem`), and a gloss on it must survive a reload
+	 * and a binder, as one on Lyrics does. Stored only while not empty; absent
+	 * means none. The poem's stress, ё, syllable, and spot marks are session
+	 * state, as Lyrics' are (review r2, amendment 5, parity). OPTIONAL AND
+	 * ADDITIVE, `publishedPoem`'s pattern: an older Ilya drops it.
+	 */
+	publishedGlosses?: GlossRow[];
 	source: SongSource | null;
 }
 

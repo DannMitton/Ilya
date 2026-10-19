@@ -4,6 +4,8 @@
 	import { t, type Language } from '$lib/i18n';
 	import { countText } from './bandState';
 	import IntakeCamera, { pointer } from './IntakeCamera.svelte';
+	import IntakeViews from './IntakeViews.svelte';
+	import { inputViews } from '$lib/text/input-views.svelte';
 	import type { TextArrival } from '$lib/one-action';
 	import TempoReceipt from '$lib/tempo/TempoReceipt.svelte';
 	/*
@@ -42,6 +44,19 @@
 		canTranscribe: boolean;
 		transcribeError: string;
 		language: Language;
+		/**
+		 * N.135 STAGE 3, RULED BY DANN 2026-10-16: THE FIELD HAS TWO VIEWS, Poem
+		 * and Lyrics (`IntakeViews.svelte`). `inputText` is the LYRICS (the sung
+		 * text, what seats and transcribes, `SongRecord.poem`); these four carry
+		 * the other view. `songId` lets the view last used be remembered for the
+		 * session, `poemText` is the poet's published text, `onpoemedit` is a
+		 * Poem edit (it seats nothing), and `onclearpoem` is Clear on the Poem
+		 * receipt, which empties only the Poem.
+		 */
+		songId: string;
+		poemText: string;
+		onpoemedit: (text: string, how: TextArrival) => void;
+		onclearpoem: () => void;
 		/**
 		 * The score engine's answers, rendered under the frame. A snippet
 		 * rather than props, so the uploader's wiring (its restore source, its
@@ -124,6 +139,10 @@
 
 	let {
 		inputText,
+		songId,
+		poemText,
+		onpoemedit,
+		onclearpoem,
 		loaderState,
 		canTranscribe,
 		transcribeError,
@@ -148,7 +167,10 @@
 	   the sage hover together by Dann's ruling of 2026-08-20; the watermark
 	   was retired 2026-09-03 and the hover is the one reader left. The name
 	   stays, because the poem's receipt reads it too. */
-	const sourceIsEmpty = $derived(inputText === '');
+	const view = $derived(inputViews.view);
+	const shownText = $derived(view === 'poem' ? poemText : inputText);
+	const sourceIsEmpty = $derived(shownText === '');
+	const shownLines = $derived(view === 'poem' ? poemText.split('\n').filter((l) => l.trim() !== '').length : lineCount);
 
 	const charCount = $derived(inputText.length);
 	const showWarning = $derived(charCount > 5000);
@@ -188,7 +210,7 @@
 	const acceptList = $derived(isMobile ? undefined : ACCEPT);
 
 	let dragging = $state(false);
-	let textareaEl = $state<HTMLTextAreaElement | undefined>(undefined);
+	let views = $state<ReturnType<typeof IntakeViews> | undefined>(undefined);
 	let fileInputEl = $state<HTMLInputElement | undefined>(undefined);
 
 	function chooseFile(): void {
@@ -228,8 +250,7 @@
 	 *  Replace means where it did not: the poem is selected and the next thing
 	 *  typed or pasted takes its place. Nothing is destroyed by pressing it. */
 	function replacePoem(): void {
-		textareaEl?.focus();
-		textareaEl?.select();
+		views?.selectAll();
 	}
 	/* `dictReady` IS GONE with `.root-panel`. It set a `status-ok` class on
 	   that wrapper, and nothing in this file or any other ever declared a rule
@@ -254,50 +275,9 @@
 	   read it cannot see: the wait and the refusal both appear under the field,
 	   where `ScoreUploader` renders every other answer about a file. */
 
-	/**
-	 * Whether this input was typed or arrived whole.
-	 *
-	 * N.108-5. `inputType` is the platform's own answer and this reads it
-	 * rather than guessing from the length of the change: a paste, a drag of
-	 * text into the field, and a dictation insert all arrive whole and should
-	 * transcribe at once, while a keystroke and a backspace should not.
-	 *
-	 * ANYTHING IT CANNOT NAME IS TREATED AS TYPING, which is the safe way
-	 * round: the worst case is a 600 ms pause before a transcription the
-	 * singer was going to get anyway, where the other way round is the
-	 * pipeline running on every keystroke of a long poem.
-	 *
-	 * `undo` AND `redo` COUNT AS WHOLE, because a singer who presses Cmd-Z has
-	 * finished changing the text rather than started.
-	 */
-	const WHOLE = new Set([
-		'insertFromPaste',
-		'insertFromPasteAsQuotation',
-		'insertFromDrop',
-		'insertFromYank',
-		'insertReplacementText',
-		'insertTranspose',
-		'historyUndo',
-		'historyRedo',
-	]);
-
-	function arrivalOf(e: Event): TextArrival {
-		const kind = (e as InputEvent).inputType;
-		return typeof kind === 'string' && WHOLE.has(kind) ? 'paste' : 'typing';
-	}
-
-	/* ── Existing handlers ─────────────────────────────────── */
-
-	/* N.145, 2026-09-16: CALLS `onflush`, NOT THE REMOVED BUTTON. Cmd+Enter
-	   still means "transcribe now, skip the pause"; it used to reach that
-	   through Transcribe and fit's own handler and now calls `flushText`
-	   directly. */
-	function handleKeydown(e: KeyboardEvent) {
-		if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-			e.preventDefault();
-			onflush();
-		}
-	}
+	/* WHETHER AN INPUT WAS TYPED OR ARRIVED WHOLE (`arrivalOf`, `WHOLE`, N.108-5)
+	   AND CMD+ENTER (`onflush`, N.145) MOVED WITH THE TEXTAREA to
+	   `IntakeViews.svelte`, unchanged. */
 </script>
 
 <!-- ── THE INTAKE. N.108, ruled 2026-09-02: it has NO STATION ROW and it is
@@ -368,29 +348,38 @@
 		     name of the band this field sits in. `upload.watermark` is still
 		     `score` and still ratified in both languages; the poem's French is
 		     owed. -->
-		<textarea
-			class="text-input"
-			class:beside-camera={pointer.coarse}
-			bind:this={textareaEl}
-			placeholder={t('intake.placeholder', language)}
-			value={inputText}
-			oninput={(e) => oninput((e.target as HTMLTextAreaElement).value, arrivalOf(e))}
-			onkeydown={handleKeydown}
-			rows="6"
-			disabled={loaderState.isLoading}
-		></textarea>
+		<!-- THE FIELD, AS TWO VIEWS (N.135 stage 3, ruled 2026-10-16): the pair
+		     Poem | Lyrics above its top right corner, a line under it that says
+		     which view this is, and the one textarea, which shows the active
+		     view's text. `IntakeViews.svelte` holds all of it; the frame, the
+		     drop target, and everything below stay here.
 
-		<!-- THE CAMERA RETURNED 2026-09-30 (row 2e), on Dann's request, and it
+		     THE CAMERA RETURNED 2026-09-30 (row 2e), on Dann's request, and it
 		     amends N.108 increment 4. That day's icon picked a FILE for OCR, and
 		     it went because it, Choose a file, and Read a score from a
 		     photograph "all serve the same function". This one opens the
 		     CAMERA, which no other control does. On a coarse pointer (row 2k,
 		     the sixth clause of 2026-08-10), not by width: a mouse-driven browser
 		     ignores `capture`, so it would open Choose a file. It goes via `onPick` like any picked
-		     picture (`ScoreUploader.take`, N.146). See `IntakeCamera.svelte`. -->
-		{#if pointer.coarse}
-			<IntakeCamera {language} disabled={loaderState.isLoading} onpick={onPick} />
-		{/if}
+		     picture (`ScoreUploader.take`, N.146). See `IntakeCamera.svelte`.
+		     It stands in the field's corner, so it is the field's `corner`. -->
+		<IntakeViews
+			bind:this={views}
+			{language}
+			{songId}
+			lyricsText={inputText}
+			{poemText}
+			disabled={loaderState.isLoading}
+			{oninput}
+			{onpoemedit}
+			{onflush}
+		>
+			{#snippet corner()}
+				{#if pointer.coarse}
+					<IntakeCamera {language} disabled={loaderState.isLoading} onpick={onPick} />
+				{/if}
+			{/snippet}
+		</IntakeViews>
 
 		<!-- ── THE HINT IS THE FIELD'S CAPTION. N.114a, RULED BY DANN
 		     2026-09-09 walking `3765314`: it moves from the foot of the frame,
@@ -449,15 +438,17 @@
 		     the word the field named it in. -->
 		{#if !sourceIsEmpty}
 			<div class="intake-receipt receipt-poem">
-				<span class="tag">{t('input.watermark', language)}</span>
-				<span class="line">{countText(lineCount, 'line', language)}</span>
-				{#if hasResults}
+				<span class="tag">{t(view === 'poem' ? 'input.watermark' : 'input.watermarkLyrics', language)}</span>
+				<span class="line">{countText(shownLines, 'line', language)}</span>
+				{#if hasResults && view === 'lyrics'}
 					<span class="count">{countText(wordCount, 'word', language)}</span>
 				{/if}
-				{#if poemFromScore}
+				{#if poemFromScore && view === 'lyrics'}
 					<span class="from-score">{t('meta.fromScore', language)}</span>
 				{/if}
-				{#if !poemDerived}
+				{#if view === 'poem'}
+					<button type="button" class="receipt-btn" onclick={onclearpoem}>{t('intake.clear', language)}</button>
+				{:else if !poemDerived}
 					<button type="button" class="receipt-btn" onclick={onclear}>{t('intake.clear', language)}</button>
 				{/if}
 				<button type="button" class="receipt-btn" onclick={replacePoem}>{t('intake.replace', language)}</button>
@@ -764,115 +755,12 @@
 		display: none;
 	}
 
-	/* THE BORDER IS 1px, AND THE WEIGHT CHANGE IS NOT RULED. Brief §3.6
-	   proposes it and Dann rules it by looking at it on the walk. It was
-	   `3px solid var(--sage)`. THE HUE IS UNCHANGED AND MUST STAY: sage
-	   names the text intake and lavender names the score intake, which is
-	   hue naming place, and Dann ruled that right. Every lighter sage token
-	   measures worse against the white fill than #839275's own 3.32:1, so
-	   weight is the only lever that does not cost contrast.
-
-	   The body font stays `var(--font-serif)`. Its contents are a poem, so
-	   the Reading voice is correct there, and §3.6 says so in as many
-	   words. */
-	.text-input {
-		width: 100%;
-		font-family: var(--font-serif);
-		font-size: 0.9rem;
-		color: var(--ink-primary);
-		/* TRANSPARENT, with the fill on `.intake`. See that rule. */
-		background: transparent;
-		/* `display: block` because the default `inline-block` put the textarea
-		   on a text baseline, which left a 7px strip of wrapper below it,
-		   MEASURED on the desk before this change: wrapper 154.47px tall
-		   against the textarea's 147.47px. That strip was invisible while the
-		   wrapper had no background and would be a white shelf under the field
-		   now that it has one. It was never a designed gap. */
-		display: block;
-		/* `position: relative` and `z-index: 1` are gone with the watermark
-		   (2026-09-03). They lifted this field above the mark so the
-		   placeholder and any typed poem painted over it rather than under
-		   it; there is no mark to be above. */
-		border: 1px solid var(--sage);
-		border-radius: 4px;
-		padding: 0.5rem 0.6rem;
-		/* ── 75 PERCENT OF ITS OWN HEIGHT, AT EITHER FONT SIZE ────────
-		   Dann's ruling, 2026-08-20, on his walk of the silhouette ship.
-
-		   THE HEIGHT IS NOT ONE NUMBER, AND THAT IS WHY THIS IS AN
-		   EXPRESSION. `app.css`'s N.23 focus-zoom rule names `textarea`, so
-		   this field renders at 14.4px on the desk and 16px on a phone.
-		   MEASURED before the change: 147.56px on the desk, 162px at
-		   360 x 640. A fixed pixel height would have cut the phone by 32
-		   percent while cutting the desk by 25.
-
-		   The field's own height is `rows` x `line-height` plus its padding
-		   and border: 6 x 1.5em + 18px, which is 9em + 18px. Three quarters
-		   of that is 6.75em + 13.5px, and `em` here resolves against this
-		   field's own font, so the fraction holds at both sizes. Computed:
-		   110.7px on the desk, 121.5px on the phone, each exactly 75 percent.
-
-		   `rows="6"` STAYS in the markup as the no-CSS fallback; an explicit
-		   height outranks it. `resize: vertical` is untouched, so this is a
-		   starting height and the singer can still drag the field taller. */
-		height: calc(6.75em + 13.5px);
-		resize: vertical;
-		line-height: 1.5;
-		box-sizing: border-box;
-		transition: border-color 150ms ease;
-	}
-
-	/* Came here from a `!important` global in `+page.svelte` that reached
-	   into `.drawer-content textarea`. Nothing competes with it here, so the
-	   `!important` is gone with the move. */
-	.text-input:focus {
-		border-color: var(--sage-deep, #7A8A6C);
-	}
-
-	/* RULED by Dann 2026-08-20: "just make it consistent with its twin."
-	   The italic is deleted. `.meta-input::placeholder` sets colour only,
-	   and a placeholder is instruction, which belongs to the Instrument
-	   voice. Italic is the paper's mannerism. */
-	.text-input::placeholder {
-		color: var(--ink-tertiary);
-		/* THE FAMILY AND THE SIZE, not just the italic. Measured 2026-08-20
-		   before this change: every other placeholder in the drawer rendered
-		   Source Sans 3 at 12.8px and this one rendered Source Serif 4 at
-		   14.4px, because a `::placeholder` inherits the control's own font
-		   and the control is deliberately serif for the poem it holds. The
-		   italic that two earlier passes deleted was the smallest of the
-		   three differences and never the one Dann was pointing at.
-
-		   Brief §3.6 already ruled the principle: "The placeholder is
-		   instruction, so it belongs to the Instrument voice." Instruction is
-		   sans at the field size. The BODY stays `var(--font-serif)` at
-		   0.9rem, which the same section rules is not a defect.
-
-		   On a coarse pointer `app.css`'s N.23 block raises this to 16px with
-		   every other placeholder, so the two displays each show one size. */
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-	}
-
-	.text-input:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	/* THE OCR CAMERA BUTTON'S RULES ARE GONE, N.108 increment 4, with the
-	   button they drew: `.ocr-btn`, its hover and disabled states,
-	   `.ocr-file-input`, `.ocr-spinner`, the `ocr-spin` keyframes, and
-	   `.ocr-error`. They are deleted rather than left, because `svelte-check`
-	   counts an unused selector as a warning and gate 3's baseline is 7.
-
-	   `.intake`'s `position: relative` STAYS, and since 2026-09-30 it
-	   contains the camera again. */
-
-	/* Typed lines wrap short of the camera's glyph rather than run under
-	   it: its box ends 50px inside the frame, the field begins 12px in. */
-	.text-input.beside-camera {
-		padding-right: calc(50px - 12px);
-	}
+	/* THE FIELD'S OWN RULES (`.text-input`, its focus, placeholder, disabled
+	   state, `.beside-camera`, and the 75-percent height with the rulings that
+	   set them: the 1px border, the Reading voice, the Instrument-voice
+	   placeholder) MOVED WITH THE TEXTAREA to `IntakeViews.svelte`, word for
+	   word, N.135 stage 3. The camera's own rules went to `IntakeCamera` long
+	   before (N.108 increment 4), and `.intake`'s `position: relative` stays. */
 
 	.char-warning {
 		font-size: 0.7rem;

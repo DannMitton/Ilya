@@ -243,6 +243,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// the new one; « poème » is the likely answer and Dann has not ruled it, so
 	// the `fr` slot carries the English until he does.
 	'input.watermark':             { en: 'poem',                         fr: 'poème' },
+	// N.135 STAGE 3, RATIFIED by Dann 2026-10-16 01:18 in both languages: the
+	// receipt tag of the Lyrics view, beside the Poem view's `input.watermark`.
+	'input.watermarkLyrics':       { en: 'lyrics',                       fr: 'paroles' },
 	'input.warning':               { en: 'characters. Large texts may be slow to process.', fr: 'caractères. Les textes longs peuvent être lents à traiter.' },
 	// RENAMED 2026-09-07 BY DANN, N.108-5: the button reads "Transcribe and
 	// fit", because after this ship one press does both halves. It read
@@ -728,6 +731,40 @@ const strings: Record<string, Record<Language, string>> = {
 	//    under it. "Poem" stays over "text", because Text is the band under
 	//    Input.
 	'intake.placeholder': { en: 'Paste, type, or drop your poem here.', fr: 'Collez, saisissez ou déposez votre poème ici.' },
+	// ═══ INPUT'S TWO VIEWS, N.135 STAGE 3 ═══════════════════════════════════
+	// RATIFIED BY DANN 2026-10-16 01:18 in both languages ("I love them all,
+	// Ratified!"), after his edits of 01:13 to 01:15 and the desk's counter-
+	// drafts of 01:14 (`OPEN.md`, "N.135 STAGE 3", item 14). The key names are
+	// the desk's and stand. Adopted from this file: « poème », « paroles »,
+	// « partition », « chant », « collez », « saisissez », « reprises », the
+	// non-breaking space before a colon. Coined by the desk: « grisés »,
+	// « laissés de côté », « en couleur », « un ajout », « en entier ».
+	//
+	// The French of `poemLine`, `landedLyrics`, `landedPoem`, the Lyrics
+	// placeholder, and the replace question below was RATIFIED by Dann
+	// 2026-10-16 19:54 to 20:11, with the English of the replace question.
+	// They name the field (« le champ Paroles », « le champ Poème »), as this
+	// file writes « le champ Entrée ».
+	'intake.view.poem':          { en: 'Poem',   fr: 'Poème' },
+	'intake.view.lyrics':        { en: 'Lyrics', fr: 'Paroles' },
+	'intake.view.poemLine':      { en: 'Edits here change the published poem. The sung words come from your score; edit them in Lyrics.', fr: 'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ Paroles.' },
+	'intake.view.lyricsLine':    { en: 'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.', fr: 'Les paroles telles que chantées, comme la partition les place. Les mots en couleur diffèrent du poème\u00a0: une reprise, un changement ou un ajout.' },
+	'intake.view.omittedLine':   { en: 'Greyed words are those left out of the song by the composer.', fr: 'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.' },
+	'intake.view.landedLyrics':  { en: 'Your score\'s sung words are in Lyrics. Paste or type the published poem here, whole.', fr: 'Les paroles chantées de votre partition sont dans le champ Paroles. Collez ou saisissez ici le poème publié, en entier.' },
+	'intake.view.landedPoem':    { en: 'This page read as a poem and is in Poem. The sung words in Lyrics may differ from it.', fr: 'Cette page a été lue comme un poème; elle est dans le champ Poème. Les paroles chantées, dans le champ Paroles, peuvent en différer.' },
+	// THE LYRICS PLACEHOLDER: the line ratified 2026-10-16 01:18 told the singer
+	// to type hyphens, which this slice cannot read (a typed hyphen reaches the
+	// dictionary as a letter, `pipeline.ts`), so the review struck it. Its
+	// English (the review's) and its French are RATIFIED by Dann 2026-10-16
+	// 19:54 to 20:11.
+	'intake.placeholderLyrics':  { en: 'Your score\'s sung words appear here. You can also paste or type them.', fr: 'Les paroles chantées de votre partition s’affichent ici. Vous pouvez aussi les coller ou les saisir.' },
+	// THE QUESTION ASKED BEFORE A POEM PAGE REPLACES A POEM, on the page's one
+	// replace dialog (`askToReplace`, safe answer last; ruling default 9). Both
+	// languages RATIFIED by Dann 2026-10-16 19:54 to 20:11.
+	'intake.poemReplace.title':   { en: 'Replace the poem?', fr: 'Remplacer le poème?' },
+	'intake.poemReplace.body':    { en: 'This page was read as a poem, and Poem already holds one. Ilya cannot undo its replacement.', fr: 'Cette page a été lue comme un poème, et le champ Poème en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci.' },
+	'intake.poemReplace.replace': { en: 'Replace the poem', fr: 'Remplacer le poème' },
+	'intake.poemReplace.keep':    { en: 'Keep the poem', fr: 'Conserver le poème' },
 	// THE FIELD'S CAPTION, N.115, ruled with its French 2026-09-10. It is drawn
 	// only while the field is empty and no score is in, which is the opposite
 	// guard from `intake.dropHint` and deliberately so: this one says what else
@@ -2167,6 +2204,29 @@ export function t(key: string, lang: Language): string {
 /** Every key in the table, for tests that sweep every string (`i18n.test.ts`). */
 export function stringKeys(): string[] {
 	return Object.keys(strings);
+}
+
+/**
+ * The key in this language, or the empty string where the language has none.
+ * Written for `intake.placeholderLyrics` (N.135 stage 3) while its French was
+ * unruled; that French is RATIFIED (Dann's ruling is dated 2026-10-16, 19:54 to
+ * 20:11) and the function stays for a key that may lack a language. It is a
+ * different function from `t` so that `approval/i18n-keys.test.ts`, which holds
+ * every key written out in a call of `t` to both languages, keeps meaning what
+ * it says.
+ */
+export function tIfPresent(key: string, lang: Language): string {
+	return strings[key]?.[lang] ?? '';
+}
+
+/**
+ * The key in this language, or in English where the language has none. Written
+ * for `intake.poemReplace.*` (N.135 stage 3) while their French was unruled;
+ * that French is RATIFIED (Dann's ruling is dated 2026-10-16, 19:54 to 20:11) and
+ * the function stays for a key that may lack a language.
+ */
+export function tOrEnglish(key: string, lang: Language): string {
+	return strings[key]?.[lang] ? strings[key][lang] : t(key, 'en');
 }
 
 /** True when the key carries a value in this language. `comment-text.ts` uses it to fall back between registers. */

@@ -5,7 +5,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { t } from '$lib/i18n';
+import { hasString, t, tIfPresent, tOrEnglish } from '$lib/i18n';
 
 describe('ratified Insights lines (row 78a)', () => {
 	it('the frame line, English (21:21; the clause « from technique building to transposition options » dropped 2026-10-12 20:55, row 90)', () => {
@@ -82,5 +82,63 @@ describe('ratified Guide lines (rows 90 and 94)', () => {
 		const at = fr.indexOf('des défis précis à aborder avec votre professeure ou professeur.</p>');
 		expect(at).toBeGreaterThan(0);
 		expect(fr.slice(at).replace(/\s+/g, ' ')).toContain('</p> ' + para);
+	});
+});
+
+/* N.135 STAGE 3. Input's two views: the strings Dann ratified 2026-10-16 01:18
+   (`OPEN.md`, "N.135 STAGE 3", item 14) and the rest of them between 19:54 and
+   20:11 the same day (the Lyrics placeholder, the French of three lines, the
+   replace question), in both languages, pinned character for character so a
+   later edit cannot move them unseen. The French colon carries the file's
+   no-break space; the apostrophe in « s’affichent » is U+2019. */
+describe('ratified Input view lines (N.135 stage 3)', () => {
+	const LINES: Record<string, [string, string]> = {
+		'intake.view.poem': ['Poem', 'Poème'],
+		'intake.view.lyrics': ['Lyrics', 'Paroles'],
+		'intake.view.poemLine': [
+			'Edits here change the published poem. The sung words come from your score; edit them in Lyrics.',
+			'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ Paroles.',
+		],
+		'intake.view.lyricsLine': [
+			'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.',
+			'Les paroles telles que chantées, comme la partition les place. Les mots en couleur diffèrent du poème : une reprise, un changement ou un ajout.',
+		],
+		'intake.view.omittedLine': [
+			'Greyed words are those left out of the song by the composer.',
+			'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.',
+		],
+		'intake.view.landedLyrics': [
+			'Your score\'s sung words are in Lyrics. Paste or type the published poem here, whole.',
+			'Les paroles chantées de votre partition sont dans le champ Paroles. Collez ou saisissez ici le poème publié, en entier.',
+		],
+		'intake.view.landedPoem': [
+			'This page read as a poem and is in Poem. The sung words in Lyrics may differ from it.',
+			'Cette page a été lue comme un poème; elle est dans le champ Poème. Les paroles chantées, dans le champ Paroles, peuvent en différer.',
+		],
+		'input.watermarkLyrics': ['lyrics', 'paroles'],
+		'intake.placeholderLyrics': [
+			'Your score\'s sung words appear here. You can also paste or type them.',
+			'Les paroles chantées de votre partition s\u2019affichent ici. Vous pouvez aussi les coller ou les saisir.',
+		],
+		'intake.poemReplace.title': ['Replace the poem?', 'Remplacer le poème?'],
+		'intake.poemReplace.body': [
+			'This page was read as a poem, and Poem already holds one. Ilya cannot undo its replacement.',
+			'Cette page a été lue comme un poème, et le champ Poème en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci.',
+		],
+		'intake.poemReplace.replace': ['Replace the poem', 'Remplacer le poème'],
+		'intake.poemReplace.keep': ['Keep the poem', 'Conserver le poème'],
+		'intake.placeholder': ['Paste, type, or drop your poem here.', 'Collez, saisissez ou déposez votre poème ici.'],
+	};
+	for (const [key, [en, fr]] of Object.entries(LINES)) {
+		it(`${key}, both languages`, () => {
+			expect(t(key, 'en')).toBe(en);
+			expect(t(key, 'fr')).toBe(fr);
+		});
+	}
+	it('tIfPresent and tOrEnglish still fall back for a key that lacks a language, and read the French where it exists', () => {
+		expect(tIfPresent('intake.placeholderLyrics', 'fr')).toBe(t('intake.placeholderLyrics', 'fr'));
+		expect(tOrEnglish('intake.poemReplace.title', 'fr')).toBe('Remplacer le poème?');
+		expect(tIfPresent('no.such.key', 'fr')).toBe('');
+		expect(tOrEnglish('no.such.key', 'fr')).toBe('[MISSING: no.such.key]');
 	});
 });

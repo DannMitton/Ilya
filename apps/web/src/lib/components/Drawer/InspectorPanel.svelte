@@ -113,7 +113,7 @@
 				return applyNotationPreferences(base, notationPrefs, true);
 			}
 			if (openSyllabification) {
-				const resliced = openSyllabify(word.syllables);
+				const resliced = openSyllabify(word.syllables, word.typedBreaks);
 				const base = rebuildIpaFromSyllables(resliced);
 				return applyNotationPreferences(base, notationPrefs, true);
 			}
@@ -132,7 +132,7 @@
 			return applySyllableOverride(word.syllables, charIpas, syllableOverride);
 		}
 		if (openSyllabification) {
-			return openSyllabify(word.syllables);
+			return openSyllabify(word.syllables, word.typedBreaks);
 		}
 		return word.syllables;
 	});

@@ -48,7 +48,7 @@ async function load(page: Page, file: string, lang: 'en' | 'fr' = 'en') {
 }
 
 async function insights(page: Page) {
-	await page.getByRole('tab').nth(2).click();
+	await page.locator('.desk-head').getByRole('tab').nth(2).click();
 	await page.waitForTimeout(3500);
 }
 

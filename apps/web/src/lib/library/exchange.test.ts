@@ -21,6 +21,7 @@ import {
 	type ImportOutcome,
 } from './exchange';
 import { readBinder, type BinderSong } from './binder';
+import { fieldsFromRecord } from './library';
 import { utf8 } from './zip-writer';
 import { emptySongRecord, type SongRecord } from './types';
 import { summarize, type SongSummary, type SourceBytes } from './driver';
@@ -80,6 +81,35 @@ describe('exportBinder', () => {
 		if (!read.ok) return;
 		expect(read.songs[0].record.poem).toBe('live text');
 		expect(read.songs[0].name).toBe('The open one');
+	});
+
+	it('carries the poet\'s published text through a binder, and a song without one imports with an empty Poem (N.135 stage 3)', async () => {
+		const withPoem = record('a', { name: 'With', poem: 'sung', publishedPoem: 'poet' });
+		const without = record('b', { name: 'Without', poem: 'sung' });
+		const result = await exportBinder(
+			deps({ ids: ['a', 'b'], openRecord: withPoem, load: async () => ({ record: without }) }),
+		);
+
+		expect(result.ok).toBe(true);
+		if (!result.ok) return;
+		const read = await readBinder(result.bytes, NOW);
+		expect(read.ok).toBe(true);
+		if (!read.ok) return;
+		expect(read.songs[0].record.publishedPoem).toBe('poet');
+		expect(read.songs[0].record.poem).toBe('sung');
+		expect(read.songs[1].record.publishedPoem).toBeUndefined();
+		expect(fieldsFromRecord(read.songs[1].record).publishedPoem).toBe('');
+	});
+
+	it('carries the glosses on the poem\'s words through a binder (row 109)', async () => {
+		const withGlosses = record('a', { name: 'With', publishedPoem: 'poet', publishedGlosses: [['0-0', 'poet', 'слово']] });
+		const result = await exportBinder(deps({ openRecord: withGlosses }));
+		expect(result.ok).toBe(true);
+		if (!result.ok) return;
+		const read = await readBinder(result.bytes, NOW);
+		expect(read.ok).toBe(true);
+		if (!read.ok) return;
+		expect(read.songs[0].record.publishedGlosses).toEqual([['0-0', 'poet', 'слово']]);
 	});
 
 	it('takes every OTHER song from the vault', async () => {

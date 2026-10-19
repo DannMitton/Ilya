@@ -7,7 +7,7 @@
 	import { processText, wordGrid } from '$lib/pipeline';
 	import { applyOpenSyllabificationToLines } from '$lib/syllable-utils';
 	import type { LineData, WordStackData, SongMetadata, UserStressOverride, YoToggle, SyllableOverride } from '$lib/types';
-	import { t, type Language } from '$lib/i18n';
+	import { t, tOrEnglish, type Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
 	import {
@@ -32,6 +32,11 @@
 	import { clearPlacements, placeFromHere, unplacedSlots, type ClearScope, type PlacementControls, type PlacementNote } from '$lib/score/placement-scope';
 	import { applyHeal, dryRunLog, healLog, planHeal } from '$lib/score/heal';
 	import { seatedTextDiff } from '$lib/score/seated-text';
+	import { inputViews } from '$lib/text/input-views.svelte';
+	import { resetWord } from '$lib/word-reset';
+	import { routePoemPage } from '$lib/text/poem-page';
+	import { WordMarks } from '$lib/text/word-marks.svelte';
+	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
 	// N.67 step 0: the song document owns the per-song state and is the only
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
 	// longer called from here; the legacy driver writes the same key.
@@ -86,6 +91,7 @@
 	import Paper from '$lib/components/Paper/Paper.svelte';
 	import ReadingAid from '$lib/components/ReadingAid.svelte';
 import InstallPrompt from '$lib/components/InstallPrompt.svelte';
+import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	import ReadingPaper from '$lib/components/Paper/ReadingPaper.svelte';
 	import DeskHead from '$lib/components/DeskHead.svelte';
 	import {
@@ -417,23 +423,47 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	   an upload does, then applies the act. From then on it is an ordinary
 	   poem. A song that stores placements is never claimed; see there. */
 	const derivedPoem = $derived(doc.inputText.trim() === '' ? scoreText : '');
+	/* The word marks of each witness Text can transcribe (`word-marks.svelte.ts`),
+	   session state keyed by THAT text's words. Lyrics' are the ones every other surface reads. */
+	const lyricsMarks = new WordMarks();
+	const poemMarks = new WordMarks();
 	const derivedLines = $derived.by((): LineData[] => {
 		if (derivedPoem === '' || loaderState.isLoading || loaderState.entryCount === 0) return [];
 		try {
 			return processText(derivedPoem, {
 				language,
-				userStressOverrides: userStressOverrides.size > 0 ? userStressOverrides : undefined,
-				yoToggles: yoToggles.size > 0 ? yoToggles : undefined,
+				userStressOverrides: lyricsMarks.stress.size > 0 ? lyricsMarks.stress : undefined,
+				yoToggles: lyricsMarks.yo.size > 0 ? lyricsMarks.yo : undefined,
 			});
 		} catch (e: unknown) {
 			console.error('[Ilya] Transcription error (derived poem):', e);
 			return [];
 		}
 	});
-	/** What Text shows: the singer's transcription, or else the derived poem's. */
-	const textLines = $derived(lines.length > 0 ? lines : derivedLines);
+	/* ROWS 109 AND 110 (N.186), RULED BY DANN 2026-10-16 21:06: TEXT SHOWS THE
+	   WITNESS THERE IS, Lyrics where it holds text, else the Poem. THE SWITCH POINT
+	   IS `textLines`: it alone feeds `effectiveLines`, `Paper`, and `ReadingAid`;
+	   raw `lines` stays Lyrics' for the seats, Markup, and Insights. Every Text
+	   tool works on `marks`, the shown witness's. */
 	/** What the drawer shows in the poem box. */
 	const shownPoem = $derived(derivedPoem !== '' ? derivedPoem : doc.inputText);
+	const lyricsHas = $derived(doc.inputText.trim() !== '' || derivedPoem !== '');
+	const poemHas = $derived(doc.publishedPoem.trim() !== '');
+	const witnessDiffer = $derived(lyricsHas && poemHas && witnessesDiffer(shownPoem, doc.publishedPoem));
+	const shown = $derived(shownWitness(lyricsHas, poemHas, witnessDiffer, inputViews.witnessChoice[doc.id] ?? 'lyrics'));
+	const marks = $derived(shown === 'poem' ? poemMarks : lyricsMarks);
+	const shownText = $derived(shown === 'poem' ? doc.publishedPoem : shownPoem);
+	const shownGlosses = $derived(shown === 'poem' ? doc.publishedGlosses : doc.glossOverrides);
+	const poemLines = $derived(
+		shown === 'poem' && !loaderState.isLoading && loaderState.entryCount > 0 ? witnessLines(doc.publishedPoem, language, poemMarks) : [],
+	);
+	const mutedWords = $derived(shown === 'poem' && lyricsHas ? unsetPoemWords(shownPoem, doc.publishedPoem, poemLines) : new Set<string>());
+	$effect(() => {
+		void shown;
+		untrack(() => { selectedWord = null; lastFocusedWord = null; });
+	});
+	/** What Text shows: the shown witness's transcription. */
+	const textLines = $derived(shown === 'poem' ? poemLines : lines.length > 0 ? lines : derivedLines);
 	/* N.55b: the pairing layer, wired. `refreshPairings` brings a re-divided
 	   word's TEXT forward: the nucleus the singer paired is still the same
 	   nucleus, so its text is stale rather than wrong.
@@ -1580,19 +1610,6 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// The open-syllabification choice is `doc.openSyllabification`, N.67 step
 	// 0. Its localStorage key is unchanged, and stays the default for new
 	// songs when step 4 makes songs plural (design §2.2).
-	// Spot reconstitution: ephemeral per-word overrides, keyed by "lineIndex-wordIndex"
-	// Cleared on every transcribe or clear action
-	let spotReconstitution = $state<Map<string, boolean>>(new Map());
-	// User stress overrides: keyed by "lineIndex-wordIndex"
-	// Cleared on every fresh transcription
-	let userStressOverrides = $state<Map<string, UserStressOverride>>(new Map());
-	// Character-level ё toggles: keyed by "lineIndex-wordIndex-charIndex"
-	// Cleared on every fresh transcription
-	let yoToggles = $state<Map<string, YoToggle>>(new Map());
-	// Per-word syllable boundary overrides: keyed by "lineIndex-wordIndex"
-	// Cleared when the global open syllabification toggle changes in either direction,
-	// and on every fresh transcription or clear action.
-	let syllableOverrides = $state<Map<string, SyllableOverride>>(new Map());
 	// Per-word gloss overrides are `doc.glossOverrides`, keyed by
 	// "lineIndex-wordIndex", cleared on every fresh transcription or clear
 	// action, and by per-word reset.
@@ -1781,8 +1798,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// Apply open syllabification as a display-time transform (no pipeline re-run).
 	// Per-word syllable overrides take precedence when present.
 	const effectiveLines = $derived.by(() => {
-		if (doc.openSyllabification || syllableOverrides.size > 0) {
-			return applyOpenSyllabificationToLines(textLines, syllableOverrides, doc.openSyllabification);
+		if (doc.openSyllabification || marks.syllables.size > 0) {
+			return applyOpenSyllabificationToLines(textLines, marks.syllables, doc.openSyllabification);
 		}
 		return textLines;
 	});
@@ -1801,8 +1818,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		drawPairings(shownPairings, lines, {
 			openSyllabification: doc.openSyllabification,
 			reconstitution: notationPrefs.reconstitution,
-			spotReconstitution,
-			syllableOverrides,
+			spotReconstitution: lyricsMarks.spot,
+			syllableOverrides: lyricsMarks.syllables,
 		}),
 	);
 	/* N.160's instrument, and only an instrument: once per song per load, the
@@ -1848,8 +1865,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			const start = performance.now();
 			const result = processText(doc.inputText, {
 				language,
-				userStressOverrides: userStressOverrides.size > 0 ? userStressOverrides : undefined,
-				yoToggles: yoToggles.size > 0 ? yoToggles : undefined,
+				userStressOverrides: lyricsMarks.stress.size > 0 ? lyricsMarks.stress : undefined,
+				yoToggles: lyricsMarks.yo.size > 0 ? lyricsMarks.yo : undefined,
 			});
 			transcribeMs = Math.round(performance.now() - start);
 			lines = result;
@@ -1898,10 +1915,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 */
 	function resetSessionState() {
 		resetTranscriptionView();
-		spotReconstitution = new Map();
-		userStressOverrides = new Map();
-		yoToggles = new Map();
-		syllableOverrides = new Map();
+		lyricsMarks.clear();
 		transcribedGrid = [];
 	}
 	/**
@@ -2055,10 +2069,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	 */
 	function carryOverridesAcross(diff: TextDiff): void {
 		if (diff.unchanged) return;
-		spotReconstitution = rekeyByWord(spotReconstitution, diff);
-		userStressOverrides = rekeyByWord(userStressOverrides, diff);
-		syllableOverrides = rekeyByWord(syllableOverrides, diff);
-		yoToggles = rekeyByWordChar(yoToggles, diff);
+		lyricsMarks.carry(diff);
 		doc.glossOverrides = rekeyByWord(doc.glossOverrides, diff);
 		doc.glossAnchors = rekeyByWord(doc.glossAnchors, diff);
 	}
@@ -2244,86 +2255,60 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	function handleOpenSyllabificationChange(value: boolean) {
 		doc.openSyllabification = value;
 		// Spec requirement: toggling global in either direction clears all per-word overrides
-		syllableOverrides = new Map();
+		lyricsMarks.syllables = new Map();
+		poemMarks.syllables = new Map();
+	}
+	/* The inspector's tools work on the SHOWN witness's marks (`marks`), keyed by
+	   the word Text shows. A mark that changes the sound re-runs the shown text:
+	   Lyrics through `runPipeline`, the poem through its derived lines, from
+	   which the selected word is read afresh. */
+	const selectedKey = () => `${selectedWord!.lineIndex}-${selectedWord!.wordIndex}`;
+	function rerunShown(): void {
+		if (shown === 'lyrics') return runPipeline();
+		const word = selectedWord && poemLines[selectedWord.lineIndex]?.words?.[selectedWord.wordIndex];
+		if (word) selectedWord = word;
 	}
 	// Toggle spot reconstitution for the currently selected word
 	function handleSpotReconToggle() {
-		if (!selectedWord) return;
-		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
-		const newMap = new Map(spotReconstitution);
-		if (newMap.has(key)) {
-			newMap.delete(key);
-		} else {
-			newMap.set(key, true);
-		}
-		spotReconstitution = newMap;
+		if (selectedWord) marks.toggleSpot(selectedKey());
 	}
 	// ── Stress assignment handler ────────────────────────────────
 	function handleStressAssign(syllableIndex: number, source: string) {
 		if (!selectedWord) return;
 		claimDerivedPoem();
 		if (!selectedWord) return;
-		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
-		const existingOverride = userStressOverrides.get(key);
-		const isClitic = selectedWord.isProclitic || selectedWord.isEnclitic || existingOverride?.promotedFromClitic;
-		const newMap = new Map(userStressOverrides);
-		newMap.set(key, {
-			stressIndex: syllableIndex,
-			stressSource: source as UserStressOverride['stressSource'],
-			...(isClitic ? { promotedFromClitic: true } : {}),
-		});
-		userStressOverrides = newMap;
-		runPipeline();
+		marks.assignStress(selectedKey(), selectedWord, syllableIndex, source);
+		rerunShown();
 	}
 	// ── Stress revert handler ────────────────────────────────────
 	function handleStressRevert() {
 		if (!selectedWord) return;
 		claimDerivedPoem();
 		if (!selectedWord) return;
-		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
-		const newMap = new Map(userStressOverrides);
-		newMap.delete(key);
-		userStressOverrides = newMap;
-		runPipeline();
+		marks.revertStress(selectedKey());
+		rerunShown();
 	}
 	// ── Character-level ё toggle handler ─────────────────────────
 	function handleYoCharToggle(charIndex: number, source: string | null) {
 		if (!selectedWord) return;
 		claimDerivedPoem();
 		if (!selectedWord) return;
-		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}-${charIndex}`;
-		const newMap = new Map(yoToggles);
-		if (source === null) {
-			// Revert: remove the toggle
-			newMap.delete(key);
-		} else {
-			newMap.set(key, { source: source as YoToggle['source'] });
-		}
-		yoToggles = newMap;
-		runPipeline();
+		marks.toggleYo(`${selectedKey()}-${charIndex}`, source);
+		rerunShown();
 	}
-	// ── Per-word syllable override handler ────────────────────────
-	function handleSyllableOverride(lineIndex: number, wordIndex: number, override: SyllableOverride) {
-		const key = `${lineIndex}-${wordIndex}`;
-		const newMap = new Map(syllableOverrides);
-		newMap.set(key, override);
-		syllableOverrides = newMap;
-	}
-	// ── Per-word syllable override removal ────────────────────────
-	function handleSyllableOverrideClear(lineIndex: number, wordIndex: number) {
-		const key = `${lineIndex}-${wordIndex}`;
-		const newMap = new Map(syllableOverrides);
-		newMap.delete(key);
-		syllableOverrides = newMap;
+	// ── Per-word syllable override handler, and its removal (a null override) ──
+	function handleSyllableOverride(lineIndex: number, wordIndex: number, override: SyllableOverride | null) {
+		marks.setSyllable(`${lineIndex}-${wordIndex}`, override);
 	}
 	// ── Per-word gloss override handler ───────────────────────────
 	function handleGlossOverride(gloss: string | null) {
 		if (!selectedWord) return;
 		claimDerivedPoem();
 		if (!selectedWord) return;
-		const key = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
-		const newMap = new Map(doc.glossOverrides);
-		const newAnchors = new Map(doc.glossAnchors);
+		const key = selectedKey();
+		const poem = shown === 'poem';
+		const newMap = new Map(poem ? doc.publishedGlosses : doc.glossOverrides);
+		const newAnchors = new Map(poem ? doc.publishedGlossAnchors : doc.glossAnchors);
 		if (gloss === null) {
 			newMap.delete(key);
 			newAnchors.delete(key);
@@ -2331,8 +2316,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			newMap.set(key, gloss);
 			newAnchors.set(key, selectedWord.cleanWord);
 		}
-		doc.glossOverrides = newMap;
-		doc.glossAnchors = newAnchors;
+		if (poem) [doc.publishedGlosses, doc.publishedGlossAnchors] = [newMap, newAnchors];
+		else [doc.glossOverrides, doc.glossAnchors] = [newMap, newAnchors];
 	}
 	// ---- N.57: gloss persistence and the survival guard -------------
 	//
@@ -2363,48 +2348,20 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	// ── Per-word reset: clear all overrides for the selected word ──
 	function handleReset() {
 		if (!selectedWord) return;
-		const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`;
-		let needsPipeline = false;
-		// Clear stress override
-		if (userStressOverrides.has(wordKey)) {
-			const newStress = new Map(userStressOverrides);
-			newStress.delete(wordKey);
-			userStressOverrides = newStress;
-			needsPipeline = true;
+		const poem = shown === 'poem';
+		const r = resetWord(selectedKey(), {
+			stress: marks.stress, yo: marks.yo, syllables: marks.syllables, spot: marks.spot,
+			glosses: shownGlosses, anchors: poem ? doc.publishedGlossAnchors : doc.glossAnchors,
+		});
+		if (r.stress) marks.stress = r.stress;
+		if (r.yo) marks.yo = r.yo;
+		if (r.syllables) marks.syllables = r.syllables;
+		if (r.spot) marks.spot = r.spot;
+		if (r.glosses && r.anchors) {
+			if (poem) [doc.publishedGlosses, doc.publishedGlossAnchors] = [r.glosses, r.anchors];
+			else [doc.glossOverrides, doc.glossAnchors] = [r.glosses, r.anchors];
 		}
-		// Clear ё toggles for this word (keys are "lineIndex-wordIndex-charIndex")
-		const yoPrefix = `${wordKey}-`;
-		const hasYoToggles = [...yoToggles.keys()].some(k => k.startsWith(yoPrefix));
-		if (hasYoToggles) {
-			const newYo = new Map(yoToggles);
-			for (const k of [...newYo.keys()]) {
-				if (k.startsWith(yoPrefix)) newYo.delete(k);
-			}
-			yoToggles = newYo;
-			needsPipeline = true;
-		}
-		// Clear syllable override
-		if (syllableOverrides.has(wordKey)) {
-			const newSyll = new Map(syllableOverrides);
-			newSyll.delete(wordKey);
-			syllableOverrides = newSyll;
-		}
-		// Clear spot reconstitution
-		if (spotReconstitution.has(wordKey)) {
-			const newSpot = new Map(spotReconstitution);
-			newSpot.delete(wordKey);
-			spotReconstitution = newSpot;
-		}
-		// Clear gloss override
-		if (doc.glossOverrides.has(wordKey)) {
-			const newGloss = new Map(doc.glossOverrides);
-			newGloss.delete(wordKey);
-			doc.glossOverrides = newGloss;
-			const newAnchors = new Map(doc.glossAnchors);
-			newAnchors.delete(wordKey);
-			doc.glossAnchors = newAnchors;
-		}
-		if (needsPipeline) runPipeline();
+		if (r.pipeline) rerunShown();
 	}
 	/**
 	 * The one field changed.
@@ -2463,6 +2420,33 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 		doc.inputText = text;
 		nameIfUnnamed();
 		joinText(how);
+	}
+	/* N.135 STAGE 3, RULED BY DANN 2026-10-16: INPUT HAS TWO VIEWS. Lyrics is
+	   `doc.inputText`, the sung text that seats and transcribes; Poem is the
+	   poet's text, `doc.publishedPoem`. A Poem edit writes that field and seats
+	   nothing. A page read as a poem lands in Poem whichever view shows, and
+	   asks first where Poem already holds text (`routePoemPage`). */
+	/* ROW 109 B: a poem that arrives whole (`how` 'paste') onto a wordless score's
+	   empty Lyrics is taken by Lyrics and seated (`lyricsTakesPoem`); a typed key is not. */
+	function handlePoemEdit(text: string, how: TextArrival = 'paste'): void {
+		const carried = carryPoemEdit(doc.publishedPoem, text, poemMarks, doc.publishedGlosses, doc.publishedGlossAnchors);
+		if (carried) [doc.publishedGlosses, doc.publishedGlossAnchors] = [carried.glosses, carried.anchors];
+		doc.publishedPoem = text;
+		if (lyricsTakesPoem(how === 'paste' && noLyricsFile !== null && ingestedScore !== null, doc.inputText, text, Object.keys(doc.pairings).length)) handleInput(text, 'paste');
+		else nameIfUnnamed();
+	}
+	function handlePoemPage(text: string): void {
+		const say = (key: string) => tOrEnglish(key, language);
+		routePoemPage(text, {
+			held: doc.publishedPoem,
+			put: handlePoemEdit,
+			land: (where) => inputViews.land(where),
+			ask: (replace) =>
+				void askToReplace(say('intake.poemReplace.title'), say('intake.poemReplace.body'), [
+					{ label: say('intake.poemReplace.replace'), destructive: true, run: replace },
+					{ label: say('intake.poemReplace.keep') },
+				]),
+		});
 	}
 
 	/* ── N.67 step 4a: a different piece has arrived ───────────────── */
@@ -2884,7 +2868,9 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			origin === 'upload' && !noLyrics && doc.inputText.trim() === ''
 				? scoreWordsText(collectScoreWords(ingested.result.score, 1))
 				: '';
-		if (fillText !== '') handleInput(fillText);
+		if (fillText !== '') { handleInput(fillText); inputViews.land('lyrics', doc.publishedPoem.trim() === ''); }
+		// ROW 109 B: a score with no words onto an empty Lyrics takes the poem's text, and the seat below runs on it.
+		else if (lyricsTakesPoem(origin === 'upload' && noLyrics, doc.inputText, doc.publishedPoem, 0)) handleInput(doc.publishedPoem, 'paste');
 		// N.67 step 3, design §2.6. THE MERGE RULE, and where N.68 closed: an
 		// upload never destroys placements; only the singer does, on purpose,
 		// with Start placement over or with the replace dialog above.
@@ -3207,6 +3193,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			// document lands, so nothing of one song is ever drawn against the
 			// other's music.
 			resetSessionState();
+			poemMarks.clear();
 			ingestedScore = null;
 			lines = [];
 			transcribeMs = 0;
@@ -4031,6 +4018,10 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			{#snippet inputGroup()}
 				<IntakePanel
 					inputText={shownPoem}
+					songId={doc.id}
+					poemText={doc.publishedPoem}
+					onpoemedit={handlePoemEdit}
+					onclearpoem={() => (doc.publishedPoem = '')}
 					poemDerived={derivedPoem !== ''}
 					{loaderState}
 					{canTranscribe}
@@ -4085,7 +4076,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 									oningested={(ingested, file, origin, page, scan) =>
 										void handleArrival(ingested, file, origin, page, scan)}
 									onreading={(reading) => restoreSource && doc.keepReading(storedWithReading(doc.id, restoreSource, doc.source, reading), reading)}
-									onpoem={(text) => handleInput(text)}
+									onpoem={handlePoemPage}
 									{loaderState}
 								/>
 							{/key}
@@ -4181,7 +4172,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 								{@const wordYoToggles = (() => {
 									const prefix = `${wordKey}-`;
 									const m = new Map<number, import('$lib/types').YoToggle>();
-									for (const [k, v] of yoToggles) {
+									for (const [k, v] of marks.yo) {
 										if (k.startsWith(prefix)) {
 											const ci = parseInt(k.substring(prefix.length), 10);
 											if (!isNaN(ci)) m.set(ci, v);
@@ -4195,18 +4186,18 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 									{notationPrefs}
 									openSyllabification={doc.openSyllabification}
 									{showStressDiacritics}
-									syllableOverride={syllableOverrides.get(wordKey) ?? null}
-									spotReconstituted={spotReconstitution.has(wordKey)}
-									promotedFromClitic={userStressOverrides.get(wordKey)?.promotedFromClitic ?? false}
+									syllableOverride={marks.syllables.get(wordKey) ?? null}
+									spotReconstituted={marks.spot.has(wordKey)}
+									promotedFromClitic={marks.stress.get(wordKey)?.promotedFromClitic ?? false}
 									yoCharToggles={wordYoToggles}
 									onspotrecontoggle={handleSpotReconToggle}
 									onstressassign={handleStressAssign}
 									onstressrevert={handleStressRevert}
 									onyochartoggle={handleYoCharToggle}
 									onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
-									onsyllableoverrideclear={() => handleSyllableOverrideClear(selectedWord!.lineIndex, selectedWord!.wordIndex)}
+									onsyllableoverrideclear={() => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, null)}
 									onreset={handleReset}
-									glossOverride={doc.glossOverrides.get(wordKey)}
+									glossOverride={shownGlosses.get(wordKey)}
 									onglossoverride={handleGlossOverride}
 								/>
 							{/if}
@@ -4414,7 +4405,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     would mean the phone and the desk stopped showing the same
 			     document. -->
 			{#snippet transcriptionPaper()}
-				<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} {spotReconstitution} glossOverrides={doc.glossOverrides} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownPoem, loaderState)} />
+				{#if witnessDiffer}<TextWitnessPair {language} witness={shown} onchoose={(w) => inputViews.chooseWitness(doc.id, w)} />{/if}
+				<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={marks.spot} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownText, loaderState)} />
 			{/snippet}
 			{#if isMobile}
 				<!-- N.73 portrait C. The stage holds both views. The one that is
@@ -4448,8 +4440,8 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 								{notationPrefs}
 								{language}
 								{showStressDiacritics}
-								{spotReconstitution}
-								glossOverrides={doc.glossOverrides}
+								spotReconstitution={marks.spot}
+								glossOverrides={shownGlosses}
 								onreturn={() => void showPortraitView('page')}
 							/>
 						</div>

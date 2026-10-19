@@ -88,6 +88,7 @@
 
 import { processText } from '$lib/pipeline';
 import { openSyllabify } from '$lib/syllable-utils';
+import { modernSyllables } from '$lib/typed-hyphens';
 import { flattenTranscribedWords, matchDonors } from './underlay-donor';
 
 /**
@@ -185,29 +186,8 @@ function spellsAs(words: readonly WordStackData[], clean: string): boolean {
 	return keys.some((parts) => cleanForAlignment(parts.join('')) === clean);
 }
 
-/**
- * The score's syllables respelled letter by letter in `modern`, a word's modern
- * spelling, lowercased and letters only. The old spelling maps one letter to one
- * letter (ѣ → е, і → и, -аго → -ого) except a hard sign that ends a word or a
- * part of one, which the modern word drops; punctuation, case, and the score's
- * own division are kept. Null if the letters do not line up, and the score's
- * text then stands.
- */
-export function modernSyllables(texts: readonly string[], modern: string): string[] | null {
-	const m = [...modern];
-	let p = 0;
-	const out = texts.map((text) =>
-		[...text.normalize('NFC')]
-			.map((c) => {
-				if (!/[\p{L}\p{M}]/u.test(c)) return c;
-				if ((c === 'ъ' || c === 'Ъ') && m[p] !== 'ъ') return '';
-				const next = m[p++] ?? '';
-				return c !== c.toLowerCase() ? next.toUpperCase() : next;
-			})
-			.join(''),
-	);
-	return p === m.length ? out : null;
-}
+// `modernSyllables` moved to `$lib/typed-hyphens` (row 106) so the pipeline can use it; re-exported for its callers.
+export { modernSyllables };
 
 /** One in-progress word: sung syllables in order, each with its events. */
 interface OpenWord {
@@ -481,7 +461,7 @@ export function buildUnderlayResolvers(
 	const syllablesOf = (w: WordStackData): readonly SyllableData[] => {
 		let s = slicedByWord.get(w);
 		if (!s) {
-			s = options.openSyllabification ? openSyllabify(w.result.syllables) : w.result.syllables;
+			s = options.openSyllabification ? openSyllabify(w.result.syllables, w.typedBreaks) : w.result.syllables;
 			slicedByWord.set(w, s);
 		}
 		return s;
