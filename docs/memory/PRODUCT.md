@@ -1226,3 +1226,9 @@ Transcribed 2026-10-12 by the desk (Opus) from `INBOX.md` (the line of 2026-09-1
 **In the tree, read 2026-10-12:** `apps/web/src/app.css:33-39` states the principle ("A hue names one idea: sage the words, rose your voice, cobalt information, lavender the melody, umber the book") and cites the spec, `docs/sessions/spec-colour_r1_2026-09-13.md`; `--umber` is Learn's accent (`app.css:58-59`). The tree's comment says "lavender the melody" where the ruling says "notation and voice"; the desk reads these as one idea and changes neither.
 
 Who offered it: Dann, correcting the desk, which had wrongly called cobalt on Piece a collision (withdrawn 2026-09-13).
+
+## The target, in Dann's words. Ruled 2026-10-18 18:44
+
+*"a colleague drops a photocopied scan or pdf [amended by Dann 18:48: "scan, PDF, or photograph"] of a Russian song, and Ilya gives back the correct transcription (Text), the marked-up melody with the sung syllables seated under it, in IPA and syllabified modern Cyrillic (Markup), reading at least 9 of 10 syllables without anyone typing the poem, and reasonable, relevant, and human-sounding insights germane to the user's voice and the piece in the key presented (Insights)."*
+
+Who offered it: the desk read THE ONE THING back to him widened from the notes to the words; he amended it to name all three tabs. The same minute he re-dated 2026-10-30 as the day he shares Ilya with colleagues, not the release (`SCHEDULE.md`).

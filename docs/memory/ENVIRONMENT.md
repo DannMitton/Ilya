@@ -77,6 +77,9 @@ next session the same hour it cost the last one.
 | planning a large round of helpers when the session limit may be near | `WHAT THE DESK LEARNED IN THE SECOND THREAD OF 2026-10-05` |
 | changing what Ilya claims about Russian phonology, anywhere | `READ GRAYSON BEFORE YOU CORRECT A CLAIM` |
 | a test passes in one place and fails in another, or a pitch sits exactly on a threshold | `A SEMITONE IS NOT ALWAYS 100 CENTS` |
+| drafting a truth file for a scanned page (row 114's set, or any new test song) | `THE TRUTH KIT: AUDIVERIS HEADS, READING BY EYE, VEROVIO PROOF SHEETS` |
+| Audiveris in the cloud workspace (an OMR Ilya does not use, as a second instrument) | `THE TRUTH KIT: AUDIVERIS HEADS, READING BY EYE, VEROVIO PROOF SHEETS` |
+| a scanned page's voice staff is not the first staff of its system; bass-clef heads named as treble | `THE TRUTH KIT: AUDIVERIS HEADS, READING BY EYE, VEROVIO PROOF SHEETS` |
 | reading Dann's iPhone photos (HEIC) of book pages | `READING HEIC PAGE PHOTOS IN THE CONTAINER` |
 | a subagent quotes a source, or a summary does | `A SUMMARY'S QUOTATION IS NOT A QUOTATION` |
 | a tool call comes back "rejected" just as Dann sends a message | `A REJECTION MAY ONLY MEAN HE TYPED` |
@@ -298,6 +301,7 @@ next session the same hour it cost the last one.
 | a network call that was refused | `Network refusals` |
 | the project knowledge estate filling | `Project knowledge capacity` |
 | Code unable to read a ruling you cited | `CLAUDE CODE CANNOT READ` |
+| a Fable subagent stops with "weekly limit"; Dann's replies seem not to arrive | `FABLE'S LIMIT STOPS A SUBAGENT MID-RUN` |
 | a date, before you stamp one on anything | `THE MOUNT'S FILE TIMESTAMPS ARE NOT THE DATE` |
 | prune `STATE.md`, or script an edit inside a blockquote | `PRUNING A MEMORY FILE` |
 | quote Ilya's size, or a byte count of anything | `ILYA'S SIZE` |
@@ -4773,8 +4777,21 @@ Dann's Chrome window would not shrink by `resize_window` (it reported success; `
 - **`os.rename` over the bridge replaces the target silently.** It cost row 93's r1 brief once. Copy, check, then move.
 - **ScienceDirect and JASA refuse scripted downloads and show a bot check.** Do not bypass; Dann downloads those himself into Downloads, and the desk files them.
 
+
+## THE TRUTH KIT: AUDIVERIS HEADS, READING BY EYE, VEROVIO PROOF SHEETS (2026-10-18, the desk on Fable, for row 114)
+
+Scripts: `docs/sessions/truthkit-row114_2026-10-18/` (`prep.py`, `truth.py`, `render.js`, `proof.py`, `build.sh`, `BRIEF.md` for a helper). Runs in the desk's cloud workspace, not on the Mac and not in the tree.
+
+- **Audiveris 5.11.0** runs headless in the cloud container from the Ubuntu 24.04 `.deb` on its GitHub release page (`dpkg-deb -x`, no install; the release download is allowed through the proxy, the API is not): `lib/runtime/bin/java -Djava.awt.headless=true -Dtessdata.prefix=<dir with rus.traineddata> -cp "lib/app/*" Audiveris -batch -export -output <dir> <image>`. On a whole page of this edition its system grouping breaks (the voice staff is unbraced, the lines curve from the spine) and CURVES throws; its `.omr` (a zip, `sheet#1/sheet#1.xml`) still holds every staff's line points, and on a crop of one voice staff it reads notes and, above all, **every notehead with its staff-position pitch** (`<head pitch=… shape=…>`; `NOTEHEAD_BLACK_SMALL` is a grace note). Pitch is by position only: apply the key and the accidentals yourself. **Bass-clef crops are named as treble** (seen on printed pages 11 to 21 and 33 to 38); convert by staff position.
+- **The page's voice staves:** `prep.py` groups staves by the gap between them and takes the first of each group; on this edition that chose a piano staff on many pages (both helpers' reports). Helper B's `regroup-helperB.py` chose by Audiveris's part structure (a one-staff part is the voice) and was right on most pages; fold that into `prep.py` before the next set.
+- **Reading by eye:** the kit cuts each voice crop into three zoomed pieces (1.8 times); a four-times zoom of one bar settles a head's space or line. The desk's error rate on page 2: five of 66 notes, two of them grace notes, one a hollow head the second instrument misnamed, two pitches a space off.
+- **The notation** (`truth.py` docstring): one bar a line, `C#5/8. "syl"`, `r/4`, `g:` grace, `t3[ … ]` tuplet, `~` tie, `-` melisma; `// system N` splits the proof sheet; a time signature after the bar number changes the metre; it checks every bar's sum and writes MusicXML (with beams by beat and tuplet brackets) and the harness's `truth.json`. Limits met: one key signature per page (write accidentals out), no double flat, no divisi (record the upper note, name the lower in a comment).
+- **The proof sheet:** `render.js` (Verovio 5.6.0 from npm, lyric font forced to DejaVu Serif for Cyrillic; cairosvg to PNG on a white ground) and `proof.py` stack each printed system's crop over the draft's rendering. Dann reads it in the chat and names the bars that differ.
+- **Cost:** about 75 s a page to prepare, about four minutes a page for an Opus helper to draft and self-check (418k tokens for 20 pages, 451k for 24).
+
 ## WHAT THE DESK LEARNED ON 2026-10-13 (the Opus thread, 2026-10-12 23:41 to 2026-10-13 23:35)
 
+- **iPhone scans to the Mac, 2026-10-18 (the route below still works, by the desk from the cloud with computer use):** the chevron beside the scan heading is a pop-up control, so `computer_app_click` refuses it in the background; `computer_request_full_control`, then click the chevron, **Open Attachment**, then in Preview **File > Export…** (the menu's Export… sits about 300 px down the File menu at the Mac's 1456 by 819 frame). In the export sheet `cmd+a` is refused: double-click the name, press `shift+home`, type the name, check with a zoom (one try appended the name after the old one), then click **Save**. Notes raised itself over Preview once while the second scan synced; re-click Preview and repeat Export. Two scans of 21 and 24 pages exported as 85 and 108 MB PDFs in about three minutes.
 - **iPhone scans to the Mac: the Notes route works; AirDrop was unreliable that night.** Dann scans with Notes on the iPhone (Scan Documents); the note syncs to Notes on the Mac (a reboot of the iMac fixed a stalled sync). The desk exports with computer use: in Notes, full screen, click the chevron beside the scan heading, choose **Open Attachment** (it opens the whole multipage scan in Preview), then Preview's menu **File > Export…** ("Export as PDF…" is disabled), release the app, click **Save**. Long chapters may be split across two notes; merge with `qpdf --empty --pages a.pdf b.pdf -- out.pdf`. Never give Dann iPhone menu steps the desk cannot see.
 - **Computer-use access lapses after about 30 minutes idle;** resolve and request it again.
 - **JVoice (jvoice.org) PDFs, in Dann's Chrome while he is signed in:** open the article's `/fulltext` URL (not `/pdf`), find `a[href^="/action/showPdf"]`, `fetch` it with credentials, check the first five bytes are `%PDF-`, save through a blob anchor with the target filename.
@@ -4838,3 +4855,9 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 
 ### A REFUSED SHIP STILL LEAVES THE MERGE COMMIT TO PUSH. Learned 2026-10-15 22:3x
 - `git merge --no-edit origin/<lane>` makes the merge commit before the ship script runs. If the script then refuses on untracked files (Code's report and measure folder, written while the desk was away), the gates have not run on the Mac, and the `git push` that follows pushes the merge commit anyway. So the paste for a lane merge is: `git add` of every new file first (list them from `git status --porcelain`, after checking for `" 2"` iCloud duplicates), then merge, then the ship script, then push. The desk's own measure of the identical tree (same tree hash; compare `git log -1 --format=%T` on both) is what stood in for the Mac's gates on 2026-10-15; the next ship ran them at baseline. Check for untracked files before handing a ship paste, not after.
+
+### FABLE'S LIMIT STOPS A SUBAGENT MID-RUN, AND IT RESUMES. Learned 2026-10-16 21:3x to 2026-10-18 18:2x
+- A Fable subagent spawned with the Agent tool fails with "You've hit your weekly limit · resets <day> 5am" (HTTP 429) the moment Fable's own weekly limit is reached; its work so far is kept. After the reset, `SendMessage` to the same agent id resumes it from where it stopped; the resumed run returned a full review in under 4 minutes. Do not spawn a new agent for the same brief.
+- While the desk's own thread is stopped the same way, Dann's replies queue and reach the desk only with his next message after the reset (his "1" of 2026-10-17 00:47 and 13:41 arrived 2026-10-18 18:21). Say so to him at the open, and do not read his silence as a decision.
+- Cost estimates for a Fable review of a two-row brief against a sparse checkout: 137,554 and 163,830 tokens (harness counts) against stated worst cases of 100k and 150k. State 200k for the next one of that size.
+- The Claude in Chrome tab group does not survive a long pause: `tabs_context_mcp` reports no group; `navigate` with no tabId makes a new one. The cloud session page keeps its state; only the tab is new.

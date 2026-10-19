@@ -43,6 +43,10 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 - [x] **The walk of rows 78a, 78b, 78c**: ACCEPTED without a walk, Dann 2026-10-14 22:26 (backlog cleared, `QUEUE.md`). Was: the walk on «Средь шумного бала». Begun 2026-10-14 03:00: 78a's Insights lines and running head shown to Dann by picture (his ruling on them not given); 78b ruled by picture, stroke to 0.098 sp (one constant owed to Code); placeholder items cannot show on this song with his voice; 78c not yet looked at.
 - [x] **Row 96** SHIPPED `50a5f85` 2026-10-14 (`../sessions/report-code-row96-nothing-over-the-footer_r1_2026-10-14.md`). Was: RUNNING in the cloud lane on `cloud-lane-3` (QUEUE row 96); its report comes FIRST at the next session**: the Insights chart running into the page footer (page 3, «Средь шумного бала»). Then row 95 (the scan banner), N.135 (ruled a priority 2026-10-14 02:44).
 - [ ] **The Shane switch at release** (`apps/web/src/lib/wall.ts:6-7`): what it does on 2026-10-30. Dann's ruling, owed since r1 of this file.
+- [x] **The audit "deeper, not bigger"** DELIVERED 2026-10-18 (`../sessions/audit-deeper-not-bigger_r1_2026-10-18.md`); its two questions answered by Dann 19:02 and 19:06; rows 113 to 119 enter `QUEUE.md`.
+- [x] **Row 114, the sealed set** LANDED 2026-10-18 21:01 (45 pages of the 1967 Mussorgsky collection, Notes scans exported through Preview); truth DRAFTED for all 45 pages by 23:3x (page 2 by the desk, corrected five times by Dann; 44 by two Opus helpers with the truth kit, `../sessions/truthkit-row114_2026-10-18/`); proof sheets in `~/Downloads/_colleague-pages/truth/`, `INDEX-f1.md` and `INDEX-f2.md`. Dann's look: page 2 done; 44 pages owed, at his pace.
+- [x] **The Guide paragraph on Poem and Lyrics** RATIFIED 2026-10-18 23:00 and 23:02 (`../sessions/draft-guide-two-witnesses_r2_2026-10-18.md`); enters with rows 109 and 110.
+- [x] **Row 119's three questions** RATIFIED 2026-10-18 23:09.
 
 ## Week of Monday 2026-10-19 to Sunday 2026-10-25
 
@@ -51,10 +55,14 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 - [x] **Rows 47 and 48** SHIPPED `263aa48a` 2026-10-15 (`report-code-row47_r1_2026-10-15.md`, `report-code-row48_r1_2026-10-15.md`); DONE is Dann's look. Was: the octave line for the singer's range, and the tempo estimate. Strings ratified 2026-10-08 and 2026-10-15.
 
 **Cloud**
+- [ ] **Rows 109 and 110** (running since 2026-10-18 18:50 on `cloud-lane-11`): read the report, measure the merged gates, move the ship script's baselines, then fetch, merge, ship; the Guide paragraph r2 goes in with them.
+- [ ] **Rows 115, 116, 117**: the per-syllable loss ledger and per-source spread, two-reader agreement, and the preprocessing measure on B01 to B10 (the audit's measures before row 105 widens); each measure only.
+- [ ] **Row 113**: the HEIF decoder.
 - [ ] **Corrections slice 9**: "Same in m. 22", the comparator (pure part).
 - [ ] **Row 71**: N.182, how Ilya suggests a key. HELD by Dann 2026-10-11 23:00; the desk checks it against the ruled voice-family table before asking to release it.
 
 **Desk and Dann**
+- [ ] **Row 114's proofing**: Dann looks at the 44 remaining proof sheets at his pace, one page at a sitting, and names the bars that differ; the desk folds each correction into the draft and rebuilds. Then the reader is measured on the set, on the singer's path (Ilya in Chrome on the alias), per source class with its low end.
 - [ ] **N.84, the Guide**: rewritten for the interface as it is, English and French, with new screenshots; carries the fry essay (N.174). Four English drafts exist (2026-10-01). Starts once Corrections slice 6 is walked, because the Guide describes the review. Its size is NOT ESTABLISHED.
 - [ ] **N.170 steps 1 and 2**: freeze a review build and draft the packet for outside readers. Dann ruled 2026-09-24 21:03 to wait *"until Ilya has really taken shape"*; the desk puts the question to him once Corrections slice 6 is walked (row 93's fix, `6c69161`, was ratified by Dann 2026-10-14 02:56).
 - [ ] **Walks**: the desk takes the shipped rows it can walk on the alias and reports each; Dann walks what needs his eye, a few a sitting.
