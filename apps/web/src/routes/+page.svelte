@@ -165,7 +165,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		readScoreText,
 		seatCliticFolds,
 	} from '$lib/score/clitic-seat';
-	import { seatScoreWords } from '$lib/score/score-seat';
+	import { rekeySeatsToLines, seatScoreWords } from '$lib/score/score-seat';
 	import { musicPhraseEnds, phraseEndsKey, shouldRerunForPhraseEnds } from '$lib/score/phrase-ends';
 	import { reseatOnReplace } from '$lib/score/replace-seat';
 	import { shouldFoldOnArrival, shouldSeatFirstTranscription } from '$lib/score/first-seat';
@@ -653,7 +653,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		let next: PairingMap | null;
 		if (scoreText !== '' && doc.inputText === scoreText) {
 			const seated = seatScoreWords(parsed, doc.pairings, lines);
-			next = seated.seated > 0 ? seatCliticFolds(parsed, seated.map) : null;
+			next = seated.seated > 0 ? rekeySeatsToLines(seatCliticFolds(parsed, seated.map), lines).map : null;
 		} else {
 			const placed = placeFromHere(doc.pairings, placementNotes, selectedEventId, slotQueue);
 			next = placed && seatCliticFolds(parsed, placed);
@@ -2768,7 +2768,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	 */
 	function seatFilledPoem(ingested: IngestedScore): void {
 		const parsed = ingested.result.score;
-		doc.pairings = seatCliticFolds(parsed, seatScoreWords(parsed, doc.pairings, lines).map);
+		doc.pairings = rekeySeatsToLines(seatCliticFolds(parsed, seatScoreWords(parsed, doc.pairings, lines).map), lines).map;
 	}
 
 	/**

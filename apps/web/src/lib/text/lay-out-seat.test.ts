@@ -1,20 +1,16 @@
 /**
- * lay-out-seat.test.ts: WHY LYRICS IS NOT YET LAID OUT IN THE POEM'S LINES.
- * N.135 stage 3, ruling default 4 ("Lyrics adopts the poem's line breaks"),
- * built as `layOutLikePoem` and NOT wired, because of what this pins.
+ * lay-out-seat.test.ts: LYRICS LAID OUT IN THE POEM'S LINES STILL SEATS.
+ * N.135 stage 3, ruling default 4 ("Lyrics adopts the poem's line breaks").
  *
- * The score's own seat reads the page's `lines`, and `seatScoreWords` refuses a
- * poem that is not one line (`score-seat.ts`: "The fill inserts no line breaks,
- * so either means the poem is not the text this was built for"). Its callers
- * hand it the page's `lines`: Place from here (`+page.svelte`), the arrival's
- * first seat (`seatFilledPoem`), and the N.157 re-seat on a score replacement
- * (`replace-seat.ts`). Lay Lyrics out in several lines and all three seat
- * nothing, silently. The brief expected four string comparisons to be the only
- * gates; this is a fifth, and it is a different kind. The positive control is
- * the same text in one line, which seats.
- *
- * When `seatScoreWords` and `align` (keyed on `wordIndex` alone) take several
- * lines, this test is the one to change, and `layOutLikePoem` is ready.
+ * Until row 108 A this test pinned a gap: `seatScoreWords` refused a Lyrics
+ * that was not one line, and `align` keyed a queue slot's word by
+ * `origin.wordIndex` alone, which restarts at 0 on every line, so laying
+ * Lyrics out in several lines made the arrival's seat, Place from here, and
+ * the N.157 re-seat seat NOTHING, silently. `align` now takes the flattened
+ * lines and `seatScoreWords` takes every line (`score-seat.ts`,
+ * `clitic-seat.ts`), so the six-line layout seats exactly what the one-line
+ * fill does, each slot on the same note with the same text. The positive
+ * control is still the same text in one line.
  */
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -42,7 +38,7 @@ async function parse(): Promise<ParsedScore> {
 }
 
 describe('laying Lyrics out in the poem\'s lines against the score\'s own seat', () => {
-	it('the one-line fill seats; the same words in the poem\'s lines seat nothing', async () => {
+	it('the one-line fill seats 96; the same words in the poem\'s lines seat 96 too', async () => {
 		const score = await parse();
 		const one = scoreWordsText(collectScoreWords(score, 1));
 		// A stand-in poem: the file's own words broken into lines of seven. It is
@@ -57,7 +53,12 @@ describe('laying Lyrics out in the poem\'s lines against the score\'s own seat',
 		const seatedOne = seatScoreWords(score, {}, processText(one, { language: 'en' }));
 		const seatedLaid = seatScoreWords(score, {}, processText(laid, { language: 'en' }));
 
-		expect(seatedOne.seated).toBeGreaterThan(0);
-		expect(seatedLaid.seated).toBe(0);
+		expect(seatedOne.seated).toBe(96);
+		expect(seatedLaid.seated).toBe(96);
+		// the same note, the same text, the same slot, for every seat. (Not the IPA: with no phrase ends passed, the six lines read
+		// «полёт» as [ˈlʲot] where the one line reads [ˈlʲod]; Part C's `phrase-ends.test.ts` g holds that.)
+		const view = (m: typeof seatedOne.map) =>
+			Object.fromEntries(Object.entries(m).map(([id, p]) => [id, p.kind === 'syllable' ? [p.cyrillic, p.origin.word, p.origin.slotIndex] : p.kind]));
+		expect(view(seatedLaid.map)).toEqual(view(seatedOne.map));
 	});
 });

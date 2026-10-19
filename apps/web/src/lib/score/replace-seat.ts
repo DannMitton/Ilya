@@ -42,7 +42,7 @@
  */
 
 import { buildSlotQueue, refreshPairings, type PairingMap } from './pairings';
-import { seatScoreWords } from './score-seat';
+import { rekeySeatsToLines, seatScoreWords } from './score-seat';
 import type { LineData } from '$lib/types';
 import type { ParsedScore } from '@ilya/score-parser';
 
@@ -74,9 +74,10 @@ export function reseatOnReplace(
 	const refreshedLive = refreshPairings(live, buildSlotQueue(lines));
 	const refreshed = Object.keys(live).filter((id) => refreshedLive[id] !== live[id]).length;
 	const { map: seatedLive, seated } = seatScoreWords(parsed, refreshedLive, lines);
+	const rekeyedLive = rekeySeatsToLines(seatedLive, lines).map;
 
 	return {
-		map: { ...seatedLive, ...orphans },
+		map: { ...rekeyedLive, ...orphans },
 		refreshed,
 		seated,
 		orphaned: Object.keys(orphans).length,

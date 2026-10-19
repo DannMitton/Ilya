@@ -183,12 +183,18 @@ export function align(
 	words: readonly ScoreWord[],
 	pipelineWords: readonly WordStackData[],
 	queue: readonly Slot[],
+	lineWidths: readonly number[] = [],
 ): Aligned[] | null {
+	// ROW 108 A. A slot's word is its place in the FLATTENED lines, since `wordIndex` restarts at 0 on every
+	// line. `lineWidths` is the word count of each line; a one-line text needs none.
+	const starts = lineWidths.map((_, i) => lineWidths.slice(0, i).reduce((a, b) => a + b, 0));
+	const ordinal = (o: { lineIndex: number; wordIndex: number }): number => (starts[o.lineIndex] ?? 0) + o.wordIndex;
 	const firstSlot = new Map<number, number>();
 	const lastSlot = new Map<number, number>();
 	queue.forEach((s, i) => {
-		if (!firstSlot.has(s.origin.wordIndex)) firstSlot.set(s.origin.wordIndex, i);
-		lastSlot.set(s.origin.wordIndex, i);
+		const at = ordinal(s.origin);
+		if (!firstSlot.has(at)) firstSlot.set(at, i);
+		lastSlot.set(at, i);
 	});
 	const slotsOf = (index: number): number =>
 		lastSlot.has(index) ? lastSlot.get(index)! - firstSlot.get(index)! + 1 : 0;

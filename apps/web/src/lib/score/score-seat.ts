@@ -28,9 +28,10 @@
  *
  * - A word whose two counts disagree, the score's slots against the poem
  *   queue's slots for the same word. The brief's own instruction.
- * - The whole seat, where the two walks lose sync (`align` returns null) or the
- *   poem is not one line. The fill inserts no line breaks, so either means the
- *   poem is not the text this was built for.
+ * - The whole seat, where the two walks lose sync (`align` returns null). Row 108
+ *   A: the poem may be in several lines (the singer's, or the poem's own line
+ *   breaks laid over Lyrics); the walk reads the lines as one run of words, and
+ *   a line break changes no word.
  * - A note that already carries a decision, whoever made it.
  * - A slot some note already carries. That is what makes this safe to run
  *   after `seatCliticFolds` has seated its run: the fold's slots are already
@@ -64,9 +65,37 @@ export interface ScoreSeatResult {
 	withheld: number;
 }
 
-/** `"lineIndex-wordIndex-slotIndex"`, the queue's own identity for one slot. */
-function slotKey(o: { lineIndex: number; wordIndex: number; slotIndex: number }): string {
-	return `${o.lineIndex}-${o.wordIndex}-${o.slotIndex}`;
+/**
+ * A slot's identity across line layouts (row 108 A): the word's place in the
+ * flattened lines and the slot's index in it. A seat made on one line
+ * (`lineIndex` 0, `wordIndex` the flat place) and the same slot on six lines
+ * therefore agree. The word itself tells two texts apart.
+ */
+function slotKey(o: { lineIndex: number; wordIndex: number; slotIndex: number }, starts: readonly number[]): string {
+	return `${(starts[o.lineIndex] ?? 0) + o.wordIndex}-${o.slotIndex}`;
+}
+
+/**
+ * The fold's seats and the one-line seats describe the Lyrics as ONE line;
+ * once Lyrics is several lines, re-key each seat whose word stands elsewhere
+ * to the word that stands at its flat place (row 108 A, item 4). A seat whose
+ * word is nowhere to be found is left exactly as stored and counted
+ * (`reseat.ts` leaves one the same way). Runs LAST at each caller, after both
+ * the seat and the fold, because the callers run them in different orders.
+ */
+export function rekeySeatsToLines(map: PairingMap, lines: readonly LineData[]): { map: PairingMap; unmatched: number } {
+	if (lines.length <= 1) return { map, unmatched: 0 };
+	const flat = lines.flatMap((l, li) => l.words.map((w, wi) => ({ li, wi, word: w.cleanWord })));
+	const next: PairingMap = { ...map };
+	let unmatched = 0;
+	for (const [id, p] of Object.entries(map)) {
+		if (p.kind !== 'syllable' || p.origin.word === undefined) continue;
+		if (lines[p.origin.lineIndex]?.words[p.origin.wordIndex]?.cleanWord === p.origin.word) continue;
+		const target = p.origin.lineIndex === 0 ? flat[p.origin.wordIndex] : undefined;
+		if (target && target.word === p.origin.word) next[id] = { ...p, origin: { ...p.origin, lineIndex: target.li, wordIndex: target.wi } };
+		else unmatched++;
+	}
+	return { map: next, unmatched };
 }
 
 /**
@@ -82,16 +111,23 @@ export function seatScoreWords(
 	verseNumber = 1,
 ): ScoreSeatResult {
 	const words = collectScoreWords(parsed, verseNumber);
-	if (words.length === 0 || lines.length !== 1) return { map, seated: 0, withheld: 0 };
+	if (words.length === 0 || lines.length === 0) return { map, seated: 0, withheld: 0 };
 	const queue = buildSlotQueue(lines);
-	const rows = align(words, lines[0].words, queue);
+	const widths = lines.map((l) => l.words.length);
+	const starts = widths.map((_, i) => widths.slice(0, i).reduce((a, b) => a + b, 0));
+	const rows = align(words, lines.flatMap((l) => l.words), queue, widths);
 	if (!rows) return { map, seated: 0, withheld: 0 };
 
 	const next: PairingMap = { ...map };
-	const placed = new Set<string>();
+	// slot -> the word it was made for; a seat with no word (stored before `origin.word`) blocks the slot, as before
+	const placed = new Map<string, string | undefined>();
 	for (const p of Object.values(map)) {
-		if (p.kind === 'syllable') placed.add(slotKey(p.origin));
+		if (p.kind === 'syllable') placed.set(slotKey(p.origin, starts), p.origin.word);
 	}
+	const blocked = (slot: { origin: Parameters<typeof slotKey>[0] & { word?: string } }): boolean => {
+		const at = slotKey(slot.origin, starts);
+		return placed.has(at) && (placed.get(at) === undefined || placed.get(at) === slot.origin.word);
+	};
 
 	let seated = 0;
 	let withheld = 0;
@@ -105,7 +141,7 @@ export function seatScoreWords(
 		for (let k = 0; k < owned; k++) {
 			const slot = queue[row.firstSlot + k];
 			const cell = nuclei[k];
-			if (next[cell.eventId] !== undefined || placed.has(slotKey(slot.origin))) continue;
+			if (next[cell.eventId] !== undefined || blocked(slot)) continue;
 			next[cell.eventId] = {
 				kind: 'syllable',
 				// The file's own punctuation, where the text is the same word
@@ -116,7 +152,7 @@ export function seatScoreWords(
 				vowel: slot.vowel,
 				origin: slot.origin,
 			};
-			placed.add(slotKey(slot.origin));
+			placed.set(slotKey(slot.origin, starts), slot.origin.word);
 			seated++;
 		}
 	}

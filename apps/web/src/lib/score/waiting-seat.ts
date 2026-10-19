@@ -28,7 +28,7 @@
 import { seatCliticFolds } from './clitic-seat';
 import { shouldFoldOnArrival } from './first-seat';
 import type { PairingMap } from './pairings';
-import { seatScoreWords } from './score-seat';
+import { rekeySeatsToLines, seatScoreWords } from './score-seat';
 import type { LineData } from '$lib/types';
 import type { ParsedScore } from '@ilya/score-parser';
 
@@ -43,5 +43,5 @@ export function seatWaitingScore(
 	lines: LineData[],
 ): PairingMap {
 	const folded = shouldFoldOnArrival(pairings) ? seatCliticFolds(parsed, pairings) : pairings;
-	return seatScoreWords(parsed, folded, lines).map;
+	return rekeySeatsToLines(seatScoreWords(parsed, folded, lines).map, lines).map;
 }
