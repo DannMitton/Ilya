@@ -43,12 +43,14 @@ import { adoptOldEnding, lookupOnlyTwinFor, stripForLookup } from './old-spellin
 
 import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, YoToggle } from './types';
 import { joinAfterNe } from './ne-join';
+import { carryBreaks, cutAlongTypedBreaks, expandHyphenatedParticles, reinsertBreaks, resolveTypedHyphens, resolvesToWord, settleBreaks } from './typed-hyphens';
+import type { KnownForm, ToClean } from './typed-hyphens';
 
 // ── Constants ────────────────────────────────────────────────────
 
 const PUNCTUATION_REGEX = /[.,!?;:"""''–—…()«»]/g;
-const TRAILING_PUNCT_REGEX = /[.,!?;:"""''\-–—]+$/;
-const DASH_REGEX = /[-–—]/g;
+const TRAILING_PUNCT_REGEX = /[.,!?;:"""''\-\u2010\u2011–—]+$/;
+const DASH_REGEX = /[-\u2010\u2011–—]/g;
 
 const CYRILLIC_VOWELS = new Set([
   'а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
@@ -59,52 +61,16 @@ function hasVowel(word: string): boolean {
   return Array.from(word).some((char) => CYRILLIC_VOWELS.has(char));
 }
 
-// Hyphenated enclitic particles that should be split from their host
-// word for independent lookup and enclitic treatment. Lowercase forms
-// only; matching is case-insensitive.
-const HYPHENATED_PARTICLES = new Set(['ли', 'ль', 'бы', 'б', 'же', 'ж']);
-
-/**
- * Expand hyphenated particles into separate tokens.
- *
- * "велит-ли" → ["велит-", "ли"]  (hyphen preserved on host for display)
- * "места-б," → ["места-", "б,"]  (trailing punct stays on particle)
- * "кое-что"  → ["кое-что"]       (unchanged: "что" is not a particle)
- *
- * Splits on the LAST hyphen only. The hyphen character stays on the
- * host word as trailing punctuation so the Paper faithfully renders
- * the source text.
- */
-function expandHyphenatedParticles(tokens: string[]): string[] {
-  const result: string[] = [];
-  for (const token of tokens) {
-    // Find the last hyphen (regular, en-dash, or em-dash)
-    const lastHyphen = Math.max(
-      token.lastIndexOf('-'),
-      token.lastIndexOf('–'),
-      token.lastIndexOf('—'),
-    );
-    if (lastHyphen > 0 && lastHyphen < token.length - 1) {
-      const before = token.slice(0, lastHyphen + 1); // includes hyphen
-      const after = token.slice(lastHyphen + 1);
-      // Strip trailing punctuation from the suffix to test against particle set
-      const afterClean = after.replace(TRAILING_PUNCT_REGEX, '').toLowerCase();
-      if (HYPHENATED_PARTICLES.has(afterClean)) {
-        result.push(before, after);
-        continue;
-      }
-    }
-    result.push(token);
-  }
-  return result;
-}
-
 // ── Intermediate types (internal to pipeline) ────────────────────
 
 /** Word data after stress lookup, before engine transcription. */
 interface PreTranscribeWord {
   cyrillic: string;
   cleanWord: string;
+  /** The resolved spelling, punctuation and dashes out but a lexical hyphen kept: the Dictionary panel's key. */
+  lookupWord: string;
+  /** Row 106: letter offsets of the typed syllable hyphens that cut a syllable. */
+  typedBreaks: number[];
   punctuation: string;
   stress: number;
   stressSource: string;
@@ -218,8 +184,8 @@ function splitIntoPreLines(
           return cleaned.length > 0;
         });
 
-      // Expand hyphenated particles into separate tokens before lookup
-      const expanded = expandHyphenatedParticles(words);
+      // Expand hyphenated particles into separate tokens before lookup (unless the whole token is a word)
+      const expanded = expandHyphenatedParticles(words, (t) => resolvesToWord(t, knownForm, toClean));
 
       return {
         rawIndex: entry.rawIndex,
@@ -324,7 +290,7 @@ export function processText(
             // Map from cleanWord index to cyrillic index (skipping punctuation/dashes)
             let cleanIdx = 0;
             for (let ci = 0; ci < chars.length; ci++) {
-              const isPunct = /[.,!?;:"""''–—\-«»]/.test(chars[ci]);
+              const isPunct = /[.,!?;:"""''–—\-\u2010\u2011«»]/.test(chars[ci]);
               if (isPunct) continue;
               if (wordToggles.includes(cleanIdx)) {
                 switch (chars[ci]) {
@@ -400,7 +366,7 @@ export function processText(
         // ── Dictionary panel: full entry lookup ──────────────────
         // Retrieve the raw dictionary entry with E/F (full gloss) fields
         // for the Inspector's Dictionary expansion panel.
-        const rawEntry = lookupFullEntry(tw.cleanWord);
+        const rawEntry = lookupFullEntry(tw.wordData.lookupWord);
         let fullGlossEn = '';
         let fullGlossFr = '';
         let allDictEntries: DictionaryEntry[] | null = null;
@@ -467,6 +433,7 @@ export function processText(
         return {
           cyrillic: tw.wordData.cyrillic,
           cleanWord: tw.cleanWord,
+          typedBreaks: tw.wordData.typedBreaks,
           punctuation: tw.punct,
           stressIndex: effectiveStressIndex >= 0 ? effectiveStressIndex : tw.wordData.stress,
           stressSource: tw.wordData.stressSource,
@@ -518,10 +485,8 @@ export function processText(
 
 // ── Step 1 helper: stress lookup and ё restoration ──────────────
 
-function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = false): PreTranscribeWord {
-  // Normalize NFC so precomposed ё is preserved, then strip combining acutes
-  const rawNormalized = rawWord.normalize('NFC').replace(/\u0301/g, '');
-
+/** The dictionary's reading of one spelling (N.12, row 25, the twin, the poetic forms), with no side effects. */
+function readSpelling(rawNormalized: string) {
   // ── N.12: INTAKE MODERNISATION ──────────────────────────────────
   // Dann ruled on 2026-08-08 that a pre-1918 spelling is modernised HERE, at the
   // top, before anything downstream sees the word. One string then serves all
@@ -567,25 +532,10 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   // QUEUE row 25: an old genitive ending (-аго, -яго) modernises too, on a known form whose lemma agrees (`old-spelling.ts`).
   const modernisedForm = adoptOldEnding(modernisedCandidate ?? rawNormalized, rawNormalized) ?? (candidateIsKnown ? modernisedCandidate : null);
   const word = modernisedForm ?? rawNormalized;
-  const preReformSource = modernisedForm !== null ? rawNormalized : null;
-
-  //   AND WHEN THE GATE DECLINES, ABSTAIN. Dann ruled on 2026-08-08 that a printed
-  //   form still carrying an abolished letter gets no stress mark at all. It is a
-  //   word Ilya could not resolve, so it says so, rather than borrowing the
-  //   pre-reform entry's number: большіе's own entry gives stress 0 where большие
-  //   gives 1, and the engine has already deleted the і from the IPA. The gloss is
-  //   still trusted, because the census found the pre-reform and modern glosses
-  //   agree where the stress values do not.
-  const unresolvedPreReform = modernisedCandidate !== null && modernisedForm === null && hasAbolishedLetter(word);
-
   // Strip guillemets and trailing hyphens for dictionary lookups only; word retains them for display
-  const bareWord = word.replace(/[«»]/g, '').replace(/[-–—]+$/, '');
-
-  // Extract trailing punctuation
-  const trailingPunctMatch = word.match(TRAILING_PUNCT_REGEX);
-  const punctuation = trailingPunctMatch ? trailingPunctMatch[0] : '';
-
+  const bareWord = stripForLookup(word);
   let lookup = GraysonEngine.lookupStress(bareWord);
+  const direct = lookup;
   // QUEUE row 25: -ыя, -ія, онѣ, ея, нея take stress and gloss from a modern twin; the page keeps the word (`old-spelling.ts`).
   const twin = lookupOnlyTwinFor(rawNormalized, lookup);
   if (twin) lookup = twin.lookup;
@@ -623,6 +573,45 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
       }
     }
   }
+  return { modernisedCandidate, modernisedForm, word, bareWord, lookup, direct, twin, normalizedToForm };
+}
+
+/** Is a candidate a word the dictionary holds? N.12 and row 25 apply. A twin reads bare letters, so it cannot vouch for a form still carrying a hyphen. */
+const knownForm: KnownForm = (form) => { const r = readSpelling(form.normalize('NFC').replace(/\u0301/g, '')); return r.direct !== null || (r.lookup !== null && !r.bareWord.includes('-')); };
+/** What `cleanWord` keeps: no punctuation, no dash. */
+const toClean: ToClean = (s) => s.replace(PUNCTUATION_REGEX, '').replace(DASH_REGEX, '');
+
+// Row 106: the token is RESOLVED FIRST (`typed-hyphens.ts`), so every lookup below reads a word it can find.
+// `cyrillic` is still what was typed (hyphens back in); `typedBreaks` are where the engine's syllables are cut.
+function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = false): PreTranscribeWord {
+  const typed = resolveTypedHyphens(rawWord.normalize('NFC').replace(/\u0301/g, ''), knownForm, toClean);
+  const word = buildResolvedWord(typed.spelling, suppressYoRestore);
+  const breaks = carryBreaks(typed.breaks, toClean(typed.spelling), word.cleanWord);
+  return {
+    ...word,
+    cyrillic: reinsertBreaks(word.cyrillic, breaks, toClean),
+    typedBreaks: settleBreaks(word.cleanWord, breaks).kept,
+    originalInput: word.originalInput === null ? null : rawWord,
+  };
+}
+
+function buildResolvedWord(rawWord: string, suppressYoRestore: boolean = false): PreTranscribeWord {
+  // Normalize NFC so precomposed ё is preserved, then strip combining acutes
+  const rawNormalized = rawWord.normalize('NFC').replace(/\u0301/g, '');
+  const { modernisedCandidate, modernisedForm, word, bareWord, lookup, twin, normalizedToForm } = readSpelling(rawNormalized);
+  const preReformSource = modernisedForm !== null ? rawNormalized : null;
+
+  //   AND WHEN THE GATE DECLINES, ABSTAIN. Dann ruled on 2026-08-08 that a printed
+  //   form still carrying an abolished letter gets no stress mark at all. It is a
+  //   word Ilya could not resolve, so it says so, rather than borrowing the
+  //   pre-reform entry's number: большіе's own entry gives stress 0 where большие
+  //   gives 1, and the engine has already deleted the і from the IPA. The gloss is
+  //   still trusted, because the census found the pre-reform and modern glosses
+  //   agree where the stress values do not.
+  const unresolvedPreReform = modernisedCandidate !== null && modernisedForm === null && hasAbolishedLetter(word);
+  // Extract trailing punctuation
+  const trailingPunctMatch = word.match(TRAILING_PUNCT_REGEX);
+  const punctuation = trailingPunctMatch ? trailingPunctMatch[0] : '';
 
   let displayWord = word;
   let wasYoRestored = false;
@@ -675,7 +664,8 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   }
 
   // Clean word for pipeline use (strip punctuation and dashes)
-  const cleanWord = (twin?.letters ?? displayWord).replace(PUNCTUATION_REGEX, '').replace(DASH_REGEX, '');
+  const cleanWord = toClean(twin?.letters ?? displayWord);
+  const lookupWord = (twin?.letters ?? displayWord).replace(PUNCTUATION_REGEX, '').replace(/[\u2010\u2011–—]/g, '').replace(/-+$/, '');
 
   // ── Yo alternation detection ──────────────────────────────────
   // Detect whether this word has a genuine ё ↔ е alternation,
@@ -688,7 +678,7 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
     // For yo-restored words (user typed е-form, engine restored ё),
     // the original form is the toggle target. Covers все/всё and similar pairs
     // where Russians conventionally omit the dieresis.
-    const cleanOriginal = word.replace(PUNCTUATION_REGEX, '').replace(DASH_REGEX, '');
+    const cleanOriginal = toClean(word);
     yoAlternation = true;
     yoAlternateForm = cleanOriginal;
   } else {
@@ -728,6 +718,8 @@ function buildPreTranscribeWord(rawWord: string, suppressYoRestore: boolean = fa
   return {
     cyrillic: displayWord,
     cleanWord,
+    lookupWord,
+    typedBreaks: [],
     punctuation,
     stress,
     stressSource,
@@ -859,6 +851,10 @@ function transcribeLine(
         procliticPosition,
         engineConfig,
       );
+      // Row 106: the engine's own syllables are cut along the typed hyphens, before anything reads them.
+      if (wordData.typedBreaks.length > 0) {
+        cutAlongTypedBreaks(engineResult, wordData.typedBreaks, buildDisplayLog(engineResult.transcriptionLog).map((e) => e.ipa ?? ''), (part) => GraysonEngine.syllabify(part));
+      }
 
       return {
         wordData,

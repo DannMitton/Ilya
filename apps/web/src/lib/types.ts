@@ -47,6 +47,12 @@ export interface WordStackData {
   cyrillic: string;
   /** Cyrillic stripped of punctuation and dashes. */
   cleanWord: string;
+  /**
+   * Row 106: the letter offsets (into `cleanWord`) where the singer typed a
+   * syllable hyphen that cuts a syllable; absent or empty where none did. The
+   * open-syllables switch leaves these boundaries alone.
+   */
+  typedBreaks?: number[];
   /** Trailing punctuation stripped from the word. */
   punctuation: string;
   /** Stress index (0-based syllable). -1 = clitic, -2 = unknown. */

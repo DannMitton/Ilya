@@ -27,7 +27,7 @@ import { GraysonEngine, type StressLookupResult } from '@ilya/phonology';
 import { hasAbolishedLetter, lookupOnlyTwin, modernisePreReform, oldEndingCandidates } from '@ilya/dictionary';
 
 /** The probe `pipeline.ts` already uses: guillemets and a trailing dash go, as `bareWord` strips them. */
-export const stripForLookup = (s: string): string => s.replace(/[«»]/g, '').replace(/[-–—]+$/, '');
+export const stripForLookup = (s: string): string => s.replace(/[«»]/g, '').replace(/[-\u2010\u2011–—]+$/, '');
 
 /** Every lemma an entry names, in modern spelling and lowercase, so «нашъ» and «наш» agree. */
 function lemmasOf(r: StressLookupResult | null): string[] {
