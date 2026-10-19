@@ -75,9 +75,16 @@ class InputViews {
 		this.landed = null;
 	}
 
-	/** A file's content went to one of the views. */
-	land(where: InputView): void {
+	/**
+	 * A file's content went to one of the views. Where it went to Lyrics while
+	 * Poem is blank and Input is showing that blank Poem, Lyrics takes focus
+	 * (Dann 2026-10-16 00:36: "if Lyrics is the only populated option, it should
+	 * take focus over the blank Poem field"), unless the singer chose a view by
+	 * tapping for this song (`#memory` holds only a tapped choice).
+	 */
+	land(where: InputView, poemBlank = false): void {
 		this.landed = where;
+		if (where === 'lyrics' && poemBlank && this.view === 'poem' && !this.#memory.has(this.#song)) this.view = 'lyrics';
 	}
 }
 

@@ -142,3 +142,33 @@ describe('a new empty song, and the witness Text transcribes (rows 109 and 110)'
 		expect(inputViews.witnessChoice['w-a']).toBe('lyrics');
 	});
 });
+
+describe('a score\'s words landing in Lyrics take focus over a blank Poem (Dann 2026-10-16 00:36)', () => {
+	it('shows Lyrics when Input is on the blank Poem it opened on', () => {
+		inputViews.open('land-a', '', '');
+		expect(inputViews.view).toBe('poem');
+		inputViews.land('lyrics', true);
+		expect(inputViews.view).toBe('lyrics');
+		expect(inputViews.landed).toBe('lyrics');
+	});
+
+	it('does not switch when Poem holds text', () => {
+		inputViews.open('land-b', '', 'Средь шумного бала');
+		inputViews.land('lyrics', false);
+		expect(inputViews.view).toBe('poem');
+	});
+
+	it('does not override a view the singer chose by tapping', () => {
+		inputViews.open('land-c', '', '');
+		inputViews.show('poem');
+		inputViews.land('lyrics', true);
+		expect(inputViews.view).toBe('poem');
+	});
+
+	it('does not move a landing in Poem', () => {
+		inputViews.open('land-d', 'слова', '');
+		inputViews.show('lyrics');
+		inputViews.land('poem', true);
+		expect(inputViews.view).toBe('lyrics');
+	});
+});

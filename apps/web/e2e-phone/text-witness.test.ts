@@ -127,6 +127,28 @@ test.describe('Text shows the witness there is (rows 109 and 110)', () => {
 
 const FIXTURE = 'src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml';
 
+test('a score with words dropped on a new song shows Lyrics with no tap, and a tapped Poem stays', async ({ page }) => {
+	test.setTimeout(120_000);
+	await open(page);
+	await expect(page.locator('#intake-tab-poem')).toHaveAttribute('aria-selected', 'true');
+	const seated = page.waitForEvent('console', { predicate: (m) => m.text().startsWith('[Ilya] N.160 seats:'), timeout: 90_000 });
+	await page.locator('input.hidden-input').setInputFiles('src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml');
+	await seated;
+	await expect(page.locator('#intake-tab-lyrics')).toHaveAttribute('aria-selected', 'true');
+	await expect(page.locator('textarea.text-input')).not.toHaveValue('');
+});
+
+test('a Poem the singer tapped stays when a score with words arrives', async ({ page }) => {
+	test.setTimeout(120_000);
+	await open(page);
+	await page.locator('#intake-tab-poem').tap();
+	const seated = page.waitForEvent('console', { predicate: (m) => m.text().startsWith('[Ilya] N.160 seats:'), timeout: 90_000 });
+	await page.locator('input.hidden-input').setInputFiles('src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml');
+	await seated;
+	await page.waitForTimeout(1500);
+	await expect(page.locator('#intake-tab-poem')).toHaveAttribute('aria-selected', 'true');
+});
+
 test.describe('the pair in Text (row 110)', () => {
 	test('with both texts differing: Lyrics on open, Poem on choice whole with its unset words grey, back to Lyrics, seats unchanged', async ({ page }) => {
 		test.setTimeout(180_000);

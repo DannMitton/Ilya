@@ -2868,7 +2868,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 			origin === 'upload' && !noLyrics && doc.inputText.trim() === ''
 				? scoreWordsText(collectScoreWords(ingested.result.score, 1))
 				: '';
-		if (fillText !== '') { handleInput(fillText); inputViews.land('lyrics'); }
+		if (fillText !== '') { handleInput(fillText); inputViews.land('lyrics', doc.publishedPoem.trim() === ''); }
 		// ROW 109 B: a score with no words onto an empty Lyrics takes the poem's text, and the seat below runs on it.
 		else if (lyricsTakesPoem(origin === 'upload' && noLyrics, doc.inputText, doc.publishedPoem, 0)) handleInput(doc.publishedPoem, 'paste');
 		// N.67 step 3, design §2.6. THE MERGE RULE, and where N.68 closed: an
