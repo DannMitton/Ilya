@@ -46,10 +46,10 @@
 
 import { processText } from '$lib/pipeline';
 import {
-	cleanForAlignment,
 	collectScoreWords,
 	CYRILLIC_VOWEL,
 	scoreWordsText,
+	spellsAs,
 	type ScoreWord,
 } from './vowel-resolver';
 import { buildSlotQueue, type PairingMap, type Slot } from './pairings';
@@ -201,10 +201,10 @@ export function align(
 		const one = pipelineWords[j];
 		const two = pipelineWords[j + 1];
 		let matched: number[] | null = null;
-		if (one && cleanForAlignment(one.cleanWord) === w.clean) {
+		if (one && spellsAs([one], w.clean)) {
 			matched = [j];
 			j += 1;
-		} else if (one && two && cleanForAlignment(one.cleanWord + two.cleanWord) === w.clean) {
+		} else if (one && two && spellsAs([one, two], w.clean)) {
 			matched = [j, j + 1];
 			j += 2;
 		}

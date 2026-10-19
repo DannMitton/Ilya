@@ -43,6 +43,7 @@ import { adoptOldEnding, lookupOnlyTwinFor, stripForLookup } from './old-spellin
 
 import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, YoToggle } from './types';
 import { joinAfterNe } from './ne-join';
+import { autoDetectBoundaries } from './boundaries';
 import { carryBreaks, cutAlongTypedBreaks, expandHyphenatedParticles, reinsertBreaks, resolveTypedHyphens, resolvesToWord, settleBreaks } from './typed-hyphens';
 import type { KnownForm, ToClean } from './typed-hyphens';
 
@@ -95,7 +96,7 @@ interface PreTranscribeWord {
   yoSource: string | null;
   hasYo: boolean;
   rightBoundary: 'hard' | 'soft' | 'clitic';
-  boundarySource: 'user' | 'auto' | 'punctuation';
+  boundarySource: 'user' | 'auto' | 'punctuation' | 'score';
   /** Engine's original stress (before any user override). */
   originalStress: number;
   /** Engine's original stress source (before any user override). */
@@ -136,7 +137,7 @@ interface TranscribedWord {
   ipaSurface: string;
   skipFinalDevoicing: boolean;
   rightBoundary: 'hard' | 'soft' | 'clitic';
-  boundarySource: 'user' | 'auto' | 'punctuation';
+  boundarySource: 'user' | 'auto' | 'punctuation' | 'score';
   ipaContent?: string;
   ipaDisplay?: string;
   ipaReconstituted?: string;
@@ -240,6 +241,7 @@ export function processText(
     language = 'en' as GlossLanguage,
     userStressOverrides,
     yoToggles,
+    phraseEnds,
   } = options;
 
   if (!text.trim()) return [];
@@ -323,12 +325,18 @@ export function processText(
   // ── Step 2: Auto-detect boundaries per line ───────────────────
 
   // «не» + a word the dictionary lacks borrows the joined word's stress (`ne-join.ts`), after every override.
-  preLines.forEach((line) => { joinAfterNe(line, (w) => GraysonEngine.lookupStress(w)); autoDetectBoundaries(line); });
+  preLines.forEach((line, lineIdx) => { joinAfterNe(line, (w) => GraysonEngine.lookupStress(w)); autoDetectBoundaries(line, GraysonEngine, phraseEnds, lineIdx); });
 
   // ── Step 3: Transcribe each line with cross-word assimilation ─
 
+  // Row 108 C: the engine runs over every line first, and cross-word assimilation once over all of them,
+  // so it crosses a line end the music does not end (`boundaries.ts`). A `hard` boundary stops it, as before.
+  const transcribedLines = preLines.map((preLine, lineIdx) => transcribeWords(preLine, lineIdx, engineConfig));
+  GraysonEngine.applyCrossWordAssimilation(transcribedLines.flat());
+  transcribedLines.forEach(finishLine);
+
   const lineDataArray: LineData[] = preLines.map((preLine, lineIdx) => {
-    const transcribedWords = transcribeLine(preLine, lineIdx, engineConfig);
+    const transcribedWords = transcribedLines[lineIdx];
 
     // ── Step 4: Build final WordStackData for each word ─────────
 
@@ -746,55 +754,9 @@ function buildResolvedWord(rawWord: string, suppressYoRestore: boolean = false):
   };
 }
 
-// ── Step 2 helper: boundary detection ───────────────────────────
-
-/**
- * Auto-detect word boundaries within a line.
- * Mirrors GraysonEngine.autoDetectBoundaries() but operates on
- * PreTranscribeWord[] before engine transcription.
- */
-function autoDetectBoundaries(words: PreTranscribeWord[]): void {
-  const punctuationRegex = /[.,!?;:"""''–—«»]$/;
-
-  words.forEach((word, i) => {
-    // Preserve user-set boundaries (future feature)
-    if (word.boundarySource === 'user') return;
-
-    const isLastWord = i === words.length - 1;
-    const cleanLower = word.cleanWord.toLowerCase();
-    const hasPunctuation = punctuationRegex.test(word.cyrillic);
-    const isProclitic = GraysonEngine.proclitics.has(cleanLower) && !word.promotedFromClitic;
-
-    // Check if next word is enclitic
-    const nextWord = words[i + 1];
-    const nextCleanLower = nextWord ? nextWord.cleanWord.toLowerCase() : null;
-    const nextIsEnclitic =
-      nextCleanLower != null && GraysonEngine.enclitics.has(nextCleanLower) && !nextWord.promotedFromClitic;
-
-    // Apply rules in priority order
-    if (isLastWord) {
-      word.rightBoundary = 'hard';
-      word.boundarySource = 'auto';
-    } else if (hasPunctuation) {
-      word.rightBoundary = 'hard';
-      word.boundarySource = 'punctuation';
-    } else if (isProclitic) {
-      word.rightBoundary = 'clitic';
-      word.boundarySource = 'auto';
-    } else if (nextIsEnclitic) {
-      word.rightBoundary = 'clitic';
-      word.boundarySource = 'auto';
-    } else {
-      // Default: SOFT -- assimilation happens automatically
-      word.rightBoundary = 'soft';
-      word.boundarySource = 'auto';
-    }
-  });
-}
-
 // ── Step 3: per-line transcription with cross-word assimilation ──
 
-function transcribeLine(
+function transcribeWords(
   preLine: PreTranscribeWord[],
   lineIdx: number,
   engineConfig: EngineConfig,
@@ -882,10 +844,11 @@ function transcribeLine(
     },
   );
 
-  // ── Cross-word assimilation ──
+  return transcribedWords;
+}
 
-  GraysonEngine.applyCrossWordAssimilation(transcribedWords);
-
+/** The rest of a line's transcription, after cross-word assimilation: syllable IPA, reconstitution, clitic merging. */
+function finishLine(transcribedWords: TranscribedWord[]): void {
   // ── Post-process: update syllable IPA after assimilation ──
 
   transcribedWords.forEach((tw) => {
@@ -1050,7 +1013,6 @@ function transcribeLine(
     }
   }
 
-  return transcribedWords;
 }
 
 // ── Re-export for convenience ────────────────────────────────────

@@ -110,7 +110,7 @@ export interface BoundaryWord {
   ipaSurface: string;
   ipaUnderlying: string;
   rightBoundary: 'hard' | 'soft' | 'clitic';
-  boundarySource: 'user' | 'auto' | 'punctuation';
+  boundarySource: 'user' | 'auto' | 'punctuation' | 'score';
   skipFinalDevoicing: boolean;
   cleanWord?: string;
   [key: string]: any;

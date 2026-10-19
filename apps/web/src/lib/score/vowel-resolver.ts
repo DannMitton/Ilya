@@ -181,7 +181,7 @@ export function printedSpelling(w: WordStackData): string {
  * form, as printed, or as Text displays them (a lookup-only twin keeps the
  * printed word on the page and reads its letter-mapped form, QUEUE row 25).
  */
-function spellsAs(words: readonly WordStackData[], clean: string): boolean {
+export function spellsAs(words: readonly WordStackData[], clean: string): boolean {
 	const keys = [words.map((w) => w.cleanWord), words.map(printedSpelling), words.map((w) => w.cyrillic)];
 	return keys.some((parts) => cleanForAlignment(parts.join('')) === clean);
 }

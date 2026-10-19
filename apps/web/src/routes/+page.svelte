@@ -166,6 +166,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		seatCliticFolds,
 	} from '$lib/score/clitic-seat';
 	import { seatScoreWords } from '$lib/score/score-seat';
+	import { musicPhraseEnds, phraseEndsKey, shouldRerunForPhraseEnds } from '$lib/score/phrase-ends';
 	import { reseatOnReplace } from '$lib/score/replace-seat';
 	import { shouldFoldOnArrival, shouldSeatFirstTranscription } from '$lib/score/first-seat';
 	import { rekeyOnArrival } from '$lib/score/old-reader-seats';
@@ -1867,6 +1868,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 				language,
 				userStressOverrides: lyricsMarks.stress.size > 0 ? lyricsMarks.stress : undefined,
 				yoToggles: lyricsMarks.yo.size > 0 ? lyricsMarks.yo : undefined,
+				phraseEnds,
 			});
 			transcribeMs = Math.round(performance.now() - start);
 			lines = result;
@@ -2518,6 +2520,11 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	 * whose freshness it describes.
 	 */
 	let transcribedText = $state<string | null>(null);
+
+	// Row 108 C: where the music ends a phrase, read from the TRANSCRIBED text, never `doc.inputText` (it changes per key).
+	const phraseEnds = $derived(ingestedScore ? musicPhraseEnds(ingestedScore.result.score, doc.pairings, wordGrid(transcribedText ?? '')) : undefined);
+	let lastPhraseEndsKey = '';
+	$effect(() => { const key = phraseEndsKey(phraseEnds); untrack(() => { if (shouldRerunForPhraseEnds(lastPhraseEndsKey, key, transcribedText, doc.inputText, lines.length > 0)) runPipeline(); lastPhraseEndsKey = key; }); });
 
 	/**
 	 * The word grid the current `lines` were built from. N.112.

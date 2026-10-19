@@ -174,6 +174,11 @@ export interface ProcessTextOptions {
   userStressOverrides?: Map<string, UserStressOverride>;
   /** Character-level ё ↔ е toggles keyed by "lineIndex-wordIndex-charIndex". */
   yoToggles?: Map<string, YoToggle>;
+  /**
+   * Row 108 C: where the music ends a phrase, keyed "lineIndex-wordIndex"
+   * (`score/phrase-ends.ts`). Absent: a line end is a phrase end.
+   */
+  phraseEnds?: ReadonlyMap<string, boolean>;
 }
 
 // ── WYSIWYG Paper ────────────────────────────────────────────────
