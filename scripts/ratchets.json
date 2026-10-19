@@ -5,7 +5,7 @@
     "apps/web/src/lib/i18n.ts": "The bilingual string table. It is data, and it grows with every ruled string."
   },
   "ceilings": {
-    "apps/web/src/routes/+page.svelte": 5652,
+    "apps/web/src/routes/+page.svelte": 5640,
     "apps/web/src/lib/components/Reading/LearnContent.svelte": 4099,
     "packages/score-parser/src/staff-renderer.ts": 3489,
     "apps/web/src/lib/score/Loupe.svelte": 3013,

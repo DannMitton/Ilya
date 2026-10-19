@@ -35,6 +35,9 @@
 	import { inputViews } from '$lib/text/input-views.svelte';
 	import { resetWord } from '$lib/word-reset';
 	import { routePoemPage } from '$lib/text/poem-page';
+	import { sameWords } from '$lib/text/same-words';
+	import { lyricsInPoemLines } from '$lib/text/relining';
+	import { survivingGlosses } from '$lib/text/gloss-survival';
 	import { WordMarks } from '$lib/text/word-marks.svelte';
 	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
 	// N.67 step 0: the song document owns the per-song state and is the only
@@ -404,7 +407,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	   out, and it would need a new field on `SongRecord`. What this costs,
 	   stated rather than hidden: an edit that restores the exact text brings the
 	   tag back, and clearing the score takes the tag away while the words stay. */
-	const poemFromScore = $derived(scoreText !== '' && doc.inputText === scoreText);
+	const poemFromScore = $derived(scoreText !== '' && sameWords(doc.inputText, scoreText));
 	/* THE DERIVED POEM. RULED BY DANN 2026-09-24 09:57 and 09:59: "Text in the
 	   system must yield a transcription if that text populates Markup." DESK
 	   DEFAULT of the same day on how: SHOWN, DERIVED, NEVER STORED. With the
@@ -651,7 +654,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		flushText();
 		const parsed = ingestedScore.result.score;
 		let next: PairingMap | null;
-		if (scoreText !== '' && doc.inputText === scoreText) {
+		if (scoreText !== '' && sameWords(doc.inputText, scoreText)) {
 			const seated = seatScoreWords(parsed, doc.pairings, lines);
 			next = seated.seated > 0 ? rekeySeatsToLines(seatCliticFolds(parsed, seated.map), lines).map : null;
 		} else {
@@ -2007,13 +2010,14 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 			if (
 				waiting === ingestedScore &&
 				lines.length > 0 &&
-				doc.inputText === scoreWordsText(collectScoreWords(waiting.result.score, 1))
+				sameWords(doc.inputText, scoreWordsText(collectScoreWords(waiting.result.score, 1)))
 			) {
 				/* N.161b. NOT `seatFilledPoem`: the singer can place by hand
 				   while the dictionary loads, and its fold would rewrite them.
 				   `seatWaitingScore` fills empty notes only, and folds only a
 				   map with no syllable in it (`waiting-seat.ts`). */
 				doc.pairings = seatWaitingScore(waiting.result.score, doc.pairings, lines);
+				queueMicrotask(() => adoptPoemLines('paste')); // after this run ends, never inside it
 			}
 		}
 		/* N.145, "close the gap." A first transcription diffs as unchanged
@@ -2032,7 +2036,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		   words verbatim. */
 		if (ingestedScore && shouldSeatFirstTranscription(doc.pairings, true)) {
 			const parsed = ingestedScore.result.score;
-			if (scoreText !== '' && doc.inputText === scoreText) {
+			if (scoreText !== '' && sameWords(doc.inputText, scoreText)) {
 				seatFilledPoem(ingestedScore);
 			} else {
 				const noLyrics = ingestedScore.result.warnings.some((w) => w.code === 'no-lyrics-found');
@@ -2321,31 +2325,11 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		if (poem) [doc.publishedGlosses, doc.publishedGlossAnchors] = [newMap, newAnchors];
 		else [doc.glossOverrides, doc.glossAnchors] = [newMap, newAnchors];
 	}
-	// ---- N.57: gloss persistence and the survival guard -------------
-	//
-	// The comparison is lowercased and yo-folded, because the dictionary is
-	// keyed by lowercase word form (curated-glosses.ts) and a yo toggle
-	// re-spells a word without making it a different word.
-	function glossAnchorForm(word: string): string {
-		return word.toLowerCase().replace(/\u0451/g, '\u0435');
-	}
-	// The gloss rows are assembled and written by the library now
-	// (`library.ts`, `recordFromFields`), in the same shape and under the same
-	// key. `persistGlosses()` is gone: assigning the maps is the save.
+	// ---- N.57: gloss persistence and the survival guard (`text/gloss-survival.ts`) ----
+	// The gloss rows are assembled and written by the library now (`library.ts`, `recordFromFields`): assigning the maps is the save.
 	function keepSurvivingGlosses() {
-		const nextGloss = new Map<string, string>(), nextAnchor = new Map<string, string>();
-		for (const [key, gloss] of doc.glossOverrides) {
-			const anchor = doc.glossAnchors.get(key);
-			if (!anchor) continue;
-			const [lineIdx, wordIdx] = key.split('-').map(Number);
-			const word = lines[lineIdx]?.words?.[wordIdx];
-			if (word && glossAnchorForm(word.cleanWord) === glossAnchorForm(anchor)) {
-				nextGloss.set(key, gloss);
-				nextAnchor.set(key, anchor);
-			}
-		}
-		// Only a drop is assigned: a new Map is a change to the autosave effect, so assigning always saved every song on open.
-		if (nextGloss.size !== doc.glossOverrides.size || nextAnchor.size !== doc.glossAnchors.size) [doc.glossOverrides, doc.glossAnchors] = [nextGloss, nextAnchor];
+		const kept = survivingGlosses(doc.glossOverrides, doc.glossAnchors, lines);
+		if (kept) [doc.glossOverrides, doc.glossAnchors] = kept;
 	}
 	// ── Per-word reset: clear all overrides for the selected word ──
 	function handleReset() {
@@ -2423,6 +2407,11 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		nameIfUnnamed();
 		joinText(how);
 	}
+	/* ROW 108 B (ruling default 4): Lyrics holding the score's words, in Ilya's own line breaks, takes the poem's (`text/relining.ts`). */
+	function adoptPoemLines(how: TextArrival, previousPoem = ''): void {
+		const laid = lyricsInPoemLines(doc.inputText, doc.publishedPoem, previousPoem, scoreText);
+		if (laid !== null) handleInput(laid, how);
+	}
 	/* N.135 STAGE 3, RULED BY DANN 2026-10-16: INPUT HAS TWO VIEWS. Lyrics is
 	   `doc.inputText`, the sung text that seats and transcribes; Poem is the
 	   poet's text, `doc.publishedPoem`. A Poem edit writes that field and seats
@@ -2431,11 +2420,12 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	/* ROW 109 B: a poem that arrives whole (`how` 'paste') onto a wordless score's
 	   empty Lyrics is taken by Lyrics and seated (`lyricsTakesPoem`); a typed key is not. */
 	function handlePoemEdit(text: string, how: TextArrival = 'paste'): void {
+		const before = doc.publishedPoem;
 		const carried = carryPoemEdit(doc.publishedPoem, text, poemMarks, doc.publishedGlosses, doc.publishedGlossAnchors);
 		if (carried) [doc.publishedGlosses, doc.publishedGlossAnchors] = [carried.glosses, carried.anchors];
 		doc.publishedPoem = text;
 		if (lyricsTakesPoem(how === 'paste' && noLyricsFile !== null && ingestedScore !== null, doc.inputText, text, Object.keys(doc.pairings).length)) handleInput(text, 'paste');
-		else nameIfUnnamed();
+		else { nameIfUnnamed(); adoptPoemLines(how, before); }
 	}
 	function handlePoemPage(text: string): void {
 		const say = (key: string) => tOrEnglish(key, language);
@@ -2935,7 +2925,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		   for the transcription (`scoreSeatWaiting`). A replacement in that window
 		   re-seats nothing, and `scoreSeatWaiting` does not cover it. */
 		if (fillText !== '' && !merged.proposed && Object.keys(merged.map).length === 0) {
-			if (transcribedText === fillText && lines.length > 0) seatFilledPoem(ingested);
+			if (transcribedText === fillText && lines.length > 0) { seatFilledPoem(ingested); adoptPoemLines('paste'); }
 			else scoreSeatWaiting = ingested;
 		}
 	}

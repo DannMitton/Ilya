@@ -154,6 +154,9 @@ test.describe('Input, two views (N.135 stage 3)', () => {
 		await page.waitForTimeout(3000);
 		const after = await seats(page);
 		expect(Object.keys(after).length).toBe(Object.keys(before).length);
-		expect(after).toEqual(before);
+		// Row 108 B: Lyrics now takes the poem's line breaks, so each seat's ORIGIN moves to its new line;
+		// its note, its text, its IPA, and its slot are what "moves no seat" means, and those are unchanged.
+		const noOrigin = (m: Record<string, unknown>) => Object.fromEntries(Object.entries(m).map(([k, p]) => [k, { ...(p as object), origin: undefined }]));
+		expect(noOrigin(after)).toEqual(noOrigin(before));
 	});
 });

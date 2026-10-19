@@ -11,13 +11,17 @@
  * four go through this: same words in the same order, whitespace of any kind
  * and any width counting as one space. DESK DEFAULT (the review's amendment 3).
  *
- * Case, punctuation, and hyphens are NOT folded. A capital the singer changed
- * is an edit, and the `from score` tag clears on it, as it does today.
+ * A SYLLABLE HYPHEN IS FOLDED (row 108 B, after row 106): `-`, U+2010, and
+ * U+2011 between two letters, the set row 106 made syllable hyphens
+ * (`typed-hyphens.ts`). A typed division changes no word (`cleanWord` is letters
+ * only) and is never coloured, so «Ком-нат-ка» holds the score's «Комнатка».
+ * Case and punctuation are NOT folded. A capital the singer changed is an
+ * edit, and the `from score` tag clears on it, as it does today.
  */
 export function sameWords(a: string, b: string): boolean {
 	return squash(a) === squash(b);
 }
 
 function squash(text: string): string {
-	return text.split(/\s+/).filter(Boolean).join(' ');
+	return text.replace(/(?<=\p{L})[-\u2010\u2011](?=\p{L})/gu, '').split(/\s+/).filter(Boolean).join(' ');
 }
