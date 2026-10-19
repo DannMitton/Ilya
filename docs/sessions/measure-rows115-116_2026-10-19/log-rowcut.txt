@@ -1,0 +1,18 @@
+transcription syllables 2538 | truth syllables by system (U,P,B,S,T) 2434
+truth syllables on systems with no Russian row: {'B02': 68, 'B06': 1, 'B07': 1, 'B09': 9} total 79
+systems with 2+ Russian rows: []
+F by row height class (read True/False): {('ok', False): 567, ('ok', True): 1730, ('tall(>2.2)', True): 145, ('tall(>2.2)', False): 96}
+UNATTR P p2s4r1 1 съ | F made no token for it; the crop holds it (read right by t-i | rowheight 2.23
+UNATTR P p2s4r1 4 въ | F made no token for it; no other reader read it, so whether  | rowheight 2.23
+UNATTR P p2s4r1 5 мо- | F made no token for it; no other reader read it, so whether  | rowheight 2.23
+UNATTR B10 p1s2r2 1 ной, | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 2 раз- | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 3 но- | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 4 об- | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 5 ра- | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 6 зьем | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 7 пе- | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 8 ре- | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 9 мен | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 10 не- | F made no token for it; no other reader read it, so whether  | rowheight 1.89
+UNATTR B10 p1s2r2 11 ждан- | F made no token for it; no other reader read it, so whether  | rowheight 1.89

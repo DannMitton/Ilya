@@ -29,6 +29,8 @@ next session the same hour it cost the last one.
 | writing a brief for Code | `A BRIEF THAT CARRIES A CAUSE COSTS A PASS` |
 | a float Tesseract model aborts in the browser (DotProductSSE) | `A FLOAT MODEL LOADS WHEN corePath NAMES THE SIMD CORE FILE` |
 | running N.135's underlay harness without the Mac | `THE UNDERLAY HARNESS RUNS IN THE DESK'S WORKSPACE` |
+| a helper or a brief cannot find `/home/claude/...` | `HOME IS /root, AND WRITE IS NOT` |
+| a long brief must reach a cloud Code session | `A LONG PROMPT GOES INTO CODE AS A PASTE EVENT` |
 | the ship script refuses on untracked files after a merge | `A REFUSED SHIP STILL LEAVES THE MERGE COMMIT TO PUSH` |
 | you drew something and sent it to Dann | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
 | looking for a mockup or ruling from an earlier session | `A DRAWING NOT IN THE TREE DOES NOT SURVIVE` |
@@ -4861,3 +4863,10 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 - While the desk's own thread is stopped the same way, Dann's replies queue and reach the desk only with his next message after the reset (his "1" of 2026-10-17 00:47 and 13:41 arrived 2026-10-18 18:21). Say so to him at the open, and do not read his silence as a decision.
 - Cost estimates for a Fable review of a two-row brief against a sparse checkout: 137,554 and 163,830 tokens (harness counts) against stated worst cases of 100k and 150k. State 200k for the next one of that size.
 - The Claude in Chrome tab group does not survive a long pause: `tabs_context_mcp` reports no group; `navigate` with no tabId makes a new one. The cloud session page keeps its state; only the tab is new.
+
+### HOME IS /root, AND WRITE IS NOT. Learned 2026-10-19 00:1x
+- In the desk's cloud workspace, Bash's `~` is `/root`, while the Write tool's working directory is `/home/claude`. A clone made with `cd ~ && git clone` lands in `/root/<name>`; a file written with Write to `/home/claude/<name>/` is somewhere else. Brief a helper with absolute paths taken from `ls` of both, never from memory. On 2026-10-19 the desk briefed `/home/claude/shane` and `/home/claude/lane11`; both helpers found `/root/...` themselves.
+
+### A LONG PROMPT GOES INTO CODE AS A PASTE EVENT. Learned 2026-10-19 02:0x
+- Typing a long brief with the Chrome `type` action is slow and a newline sends the message. Instead, in the cloud session's tab, set the text into a page variable with `javascript_tool` (`String.raw` with every backtick written as a placeholder and restored by `replaceAll`), check its length and a 31-multiplier hash against the same hash of the file computed in the workspace with node, then dispatch a `ClipboardEvent('paste')` carrying a `DataTransfer` with `text/plain` on `.tiptap.ProseMirror`, then press Return. A 26,250-character brief arrived intact on 2026-10-19 (row 106, hash 3681666595).
+

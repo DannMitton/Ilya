@@ -1,0 +1,67 @@
+CONTROL (this script, F=dfloat, sound, split): 1875 of 2538
+ledger rows 2538
+STAGES overall {'letter recognition': 345, 'read': 1875, 'token splitting': 298, 'unattributed': 3, 'row cutting': 17}
+unattributed detail: Counter({'no other reader': 2, 'crop holds': 1})
+token splitting detail: Counter({'covers>=2': 162, 'cut': 136})
+STAGES U1 {'letter recognition': 1, 'read': 93, 'token splitting': 3}
+STAGES U4 {'read': 79, 'token splitting': 26, 'letter recognition': 7}
+STAGES U5 {'token splitting': 21, 'read': 206, 'letter recognition': 31}
+STAGES U6 {'read': 119, 'letter recognition': 17, 'token splitting': 16}
+STAGES P {'read': 101, 'letter recognition': 26, 'token splitting': 47, 'unattributed': 3}
+STAGES B01 {'letter recognition': 34, 'read': 106, 'token splitting': 7}
+STAGES B02 {'letter recognition': 13, 'read': 73}
+STAGES B03 {'letter recognition': 27, 'read': 106, 'token splitting': 14}
+STAGES B04 {'token splitting': 19, 'letter recognition': 15, 'read': 114}
+STAGES B06 {'letter recognition': 27, 'token splitting': 30, 'read': 85}
+STAGES B07 {'letter recognition': 25, 'read': 94, 'token splitting': 32}
+STAGES B08 {'letter recognition': 17, 'read': 102, 'token splitting': 22}
+STAGES B09 {'read': 89, 'letter recognition': 26, 'token splitting': 24}
+STAGES B10 {'token splitting': 22, 'read': 91, 'row cutting': 17, 'letter recognition': 18}
+STAGES S {'read': 91, 'letter recognition': 14, 'token splitting': 4}
+STAGES T {'letter recognition': 30, 'read': 164, 'token splitting': 6}
+STAGES K {'letter recognition': 13, 'read': 116, 'token splitting': 2}
+STAGES M {'read': 46, 'letter recognition': 4, 'token splitting': 3}
+SEAT of the read, rule 1 {'ok': 1409, 'wrong': 281, 'no_note': 1, 'n_a': 184}
+SEAT of the read, rule 2 {'ok': 1517, 'wrong': 173, 'no_note': 1, 'n_a': 184}
+SEAT of the read, rule 3 {'ok': 1449, 'wrong': 241, 'no_note': 1, 'n_a': 184}
+SEAT rule2 read U1 {'ok': 93}
+SEAT rule2 read U4 {'ok': 73, 'wrong': 6}
+SEAT rule2 read U5 {'wrong': 11, 'ok': 194, 'no_note': 1}
+SEAT rule2 read U6 {'ok': 105, 'wrong': 14}
+SEAT rule2 read P {'ok': 95, 'wrong': 6}
+SEAT rule2 read B01 {'wrong': 6, 'ok': 100}
+SEAT rule2 read B02 {'ok': 64, 'wrong': 9}
+SEAT rule2 read B03 {'ok': 99, 'wrong': 7}
+SEAT rule2 read B04 {'ok': 98, 'wrong': 16}
+SEAT rule2 read B06 {'wrong': 19, 'ok': 66}
+SEAT rule2 read B07 {'ok': 78, 'wrong': 16}
+SEAT rule2 read B08 {'ok': 82, 'wrong': 20}
+SEAT rule2 read B09 {'ok': 75, 'wrong': 14}
+SEAT rule2 read B10 {'ok': 75, 'wrong': 16}
+SEAT rule2 read S {'ok': 89, 'wrong': 2}
+SEAT rule2 read T {'ok': 131, 'n_a': 22, 'wrong': 11}
+SEAT rule2 read K {'n_a': 116}
+SEAT rule2 read M {'n_a': 46}
+AGREE ALL 2538 agree_right=1584 agree_wrong=226 disagree_F_right=290 disagree_c_right=186 disagree_both_wrong=235 one_or_both_no_token=17
+AGREE U1 97 agree_right=91 agree_wrong=2 disagree_F_right=2 disagree_c_right=0 disagree_both_wrong=2 one_or_both_no_token=0
+AGREE U4 112 agree_right=68 agree_wrong=21 disagree_F_right=10 disagree_c_right=4 disagree_both_wrong=8 one_or_both_no_token=1
+AGREE U5 258 agree_right=178 agree_wrong=21 disagree_F_right=28 disagree_c_right=16 disagree_both_wrong=15 one_or_both_no_token=0
+AGREE U6 152 agree_right=95 agree_wrong=10 disagree_F_right=24 disagree_c_right=7 disagree_both_wrong=16 one_or_both_no_token=0
+AGREE P 177 agree_right=90 agree_wrong=33 disagree_F_right=11 disagree_c_right=13 disagree_both_wrong=25 one_or_both_no_token=5
+AGREE B01 147 agree_right=93 agree_wrong=6 disagree_F_right=13 disagree_c_right=16 disagree_both_wrong=19 one_or_both_no_token=0
+AGREE B02 86 agree_right=61 agree_wrong=3 disagree_F_right=12 disagree_c_right=6 disagree_both_wrong=4 one_or_both_no_token=0
+AGREE B03 147 agree_right=95 agree_wrong=10 disagree_F_right=11 disagree_c_right=16 disagree_both_wrong=15 one_or_both_no_token=0
+AGREE B04 148 agree_right=93 agree_wrong=11 disagree_F_right=21 disagree_c_right=14 disagree_both_wrong=9 one_or_both_no_token=0
+AGREE B06 142 agree_right=76 agree_wrong=18 disagree_F_right=9 disagree_c_right=15 disagree_both_wrong=24 one_or_both_no_token=0
+AGREE B07 151 agree_right=75 agree_wrong=24 disagree_F_right=19 disagree_c_right=20 disagree_both_wrong=13 one_or_both_no_token=0
+AGREE B08 141 agree_right=93 agree_wrong=19 disagree_F_right=9 disagree_c_right=9 disagree_both_wrong=11 one_or_both_no_token=0
+AGREE B09 139 agree_right=79 agree_wrong=11 disagree_F_right=10 disagree_c_right=17 disagree_both_wrong=22 one_or_both_no_token=0
+AGREE B10 148 agree_right=74 agree_wrong=9 disagree_F_right=17 disagree_c_right=12 disagree_both_wrong=25 one_or_both_no_token=11
+AGREE S 109 agree_right=74 agree_wrong=10 disagree_F_right=17 disagree_c_right=3 disagree_both_wrong=5 one_or_both_no_token=0
+AGREE T 200 agree_right=132 agree_wrong=10 disagree_F_right=32 disagree_c_right=10 disagree_both_wrong=16 one_or_both_no_token=0
+AGREE K 131 agree_right=94 agree_wrong=5 disagree_F_right=22 disagree_c_right=6 disagree_both_wrong=4 one_or_both_no_token=0
+AGREE M 53 agree_right=23 agree_wrong=3 disagree_F_right=23 disagree_c_right=2 disagree_both_wrong=2 one_or_both_no_token=0
+SHARES: both-token 2521 agree 1810 agree right 1584 disagree 711 F right 290 c right 186
+STRICT (both one-to-one): 1949 agree 1626 agree right 1558 disagree 323 F right 107 c right 142
+F right overall 1875 c right overall 1801 of 2538
+F right where c has no token / F has no token: 1 0

@@ -1,0 +1,66 @@
+LOST 663
+| song | read | lost | row cutting | token splitting | letter recognition | unattributed |
+| U1 | 93/97 | 4 | 0 (0%) | 3 (75%) | 1 (25%) | 0 (0%) |
+| U4 | 79/112 | 33 | 0 (0%) | 26 (79%) | 7 (21%) | 0 (0%) |
+| U5 | 206/258 | 52 | 0 (0%) | 21 (40%) | 31 (60%) | 0 (0%) |
+| U6 | 119/152 | 33 | 0 (0%) | 16 (48%) | 17 (52%) | 0 (0%) |
+| P | 101/177 | 76 | 0 (0%) | 47 (62%) | 26 (34%) | 3 (4%) |
+| B01 | 106/147 | 41 | 0 (0%) | 7 (17%) | 34 (83%) | 0 (0%) |
+| B02 | 73/86 | 13 | 0 (0%) | 0 (0%) | 13 (100%) | 0 (0%) |
+| B03 | 106/147 | 41 | 0 (0%) | 14 (34%) | 27 (66%) | 0 (0%) |
+| B04 | 114/148 | 34 | 0 (0%) | 19 (56%) | 15 (44%) | 0 (0%) |
+| B06 | 85/142 | 57 | 0 (0%) | 30 (53%) | 27 (47%) | 0 (0%) |
+| B07 | 94/151 | 57 | 0 (0%) | 32 (56%) | 25 (44%) | 0 (0%) |
+| B08 | 102/141 | 39 | 0 (0%) | 22 (56%) | 17 (44%) | 0 (0%) |
+| B09 | 89/139 | 50 | 0 (0%) | 24 (48%) | 26 (52%) | 0 (0%) |
+| B10 | 91/148 | 57 | 17 (30%) | 22 (39%) | 18 (32%) | 0 (0%) |
+| S | 91/109 | 18 | 0 (0%) | 4 (22%) | 14 (78%) | 0 (0%) |
+| T | 164/200 | 36 | 0 (0%) | 6 (17%) | 30 (83%) | 0 (0%) |
+| K | 116/131 | 15 | 0 (0%) | 2 (13%) | 13 (87%) | 0 (0%) |
+| M | 46/53 | 7 | 0 (0%) | 3 (43%) | 4 (57%) | 0 (0%) |
+| ALL | 1875/2538 | 663 | 17 (3%) | 298 (45%) | 345 (52%) | 3 (0%) |
+Counter({'letter recognition (1 syllable, 1 token, wrong sound)': 345, 'token splitting: token covers 2 printed syllables': 162, 'token splitting: one printed syllable cut into 2+ tokens': 136, 'row cutting: BY EYE, one row: the printed words stand': 17, 'unattributed: F made no token for it; no other reader ': 2, 'unattributed: F made no token for it; the crop holds i': 1})
+PER U1 NOT ESTABLIS read 95.9 (93/97) seated r2 95.8 (92/96)
+PER U4 NOT ESTABLIS read 70.5 (79/112) seated r2 70.4 (76/108)
+PER U5 NOT ESTABLIS read 79.8 (206/258) seated r2 77.3 (194/251)
+PER U6 NOT ESTABLIS read 78.3 (119/152) seated r2 72.9 (105/144)
+PER P photocopy? ( read 57.1 (101/177) seated r2 62.2 (107/172)
+PER B01 photocopy (b read 72.1 (106/147) seated r2 69.9 (102/146)
+PER B02 photocopy (b read 84.9 (73/86) seated r2 41.8 (61/146)
+PER B03 photocopy (b read 72.1 (106/147) seated r2 73.3 (107/146)
+PER B04 photocopy (b read 77.0 (114/148) seated r2 74.0 (108/146)
+PER B06 photocopy (b read 59.9 (85/142) seated r2 50.0 (70/140)
+PER B07 photocopy (b read 62.3 (94/151) seated r2 63.5 (94/148)
+PER B08 photocopy (b read 72.3 (102/141) seated r2 69.3 (97/140)
+PER B09 photocopy (b read 64.0 (89/139) seated r2 58.9 (86/146)
+PER B10 photocopy (b read 61.5 (91/148) seated r2 54.1 (79/146)
+PER S engraving (b read 83.5 (91/109) seated r2 78.9 (90/114)
+PER T engraving (b read 82.0 (164/200) seated r2 78.6 (154/196)
+PER K engraving (b read 88.5 (116/131) seated r2 n/a (no syllable truth)
+PER M engraving (b read 86.8 (46/53) seated r2 n/a (no syllable truth)
+SPREAD engraving S,T,K,M n 4 read median 85.1 lowest 82.0 (T) | seated n 2 median 78.8 lowest 78.6 (T)
+SPREAD photocopy B01-B10 n 9 read median 72.1 lowest 59.9 (B06) | seated n 9 median 63.5 lowest 41.8 (B02)
+SPREAD P (class: photocopy per row82 line 153) n 1 read median 57.1 lowest 57.1 (P) | seated n 1 median 62.2 lowest 62.2 (P)
+SPREAD U1-U6 (class NOT ESTABLISHED) n 4 read median 79.1 lowest 70.5 (U4) | seated n 4 median 75.1 lowest 70.4 (U4)
+SPREAD photocopy B01-B10 + P (n=11): read median 68.1 lowest 57.1 (P) | seated median 62.9 lowest 41.8 (B02)
+SEAT of the 1875 read, rule 2: {'ok': 1517, 'wrong': 173, 'no_note': 1, 'n_a': 184}
+| song | agree_right | agree_wrong | disagree_F_right | disagree_c_right | disagree_both_wrong | one_or_both_no_token |
+| U1 | 91 | 2 | 2 | 0 | 2 | 0 |
+| U4 | 68 | 21 | 10 | 4 | 8 | 1 |
+| U5 | 178 | 21 | 28 | 16 | 15 | 0 |
+| U6 | 95 | 10 | 24 | 7 | 16 | 0 |
+| P | 90 | 33 | 11 | 13 | 25 | 5 |
+| B01 | 93 | 6 | 13 | 16 | 19 | 0 |
+| B02 | 61 | 3 | 12 | 6 | 4 | 0 |
+| B03 | 95 | 10 | 11 | 16 | 15 | 0 |
+| B04 | 93 | 11 | 21 | 14 | 9 | 0 |
+| B06 | 76 | 18 | 9 | 15 | 24 | 0 |
+| B07 | 75 | 24 | 19 | 20 | 13 | 0 |
+| B08 | 93 | 19 | 9 | 9 | 11 | 0 |
+| B09 | 79 | 11 | 10 | 17 | 22 | 0 |
+| B10 | 74 | 9 | 17 | 12 | 25 | 11 |
+| S | 74 | 10 | 17 | 3 | 5 | 0 |
+| T | 132 | 10 | 32 | 10 | 16 | 0 |
+| K | 94 | 5 | 22 | 6 | 4 | 0 |
+| M | 23 | 3 | 23 | 2 | 2 | 0 |
+| ALL | 1584 | 226 | 290 | 186 | 235 | 17 |

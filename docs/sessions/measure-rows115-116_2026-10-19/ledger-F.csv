@@ -1,0 +1,2539 @@
+song,page,system,row,row_id,syl_index,syllable,F_tokens,stage,detail,seat_rule1,seat_rule2,seat_rule3
+U1,1,1,1,p1s1r1,1,Ком-,Хом,letter recognition,token Хом,,,
+U1,1,1,1,p1s1r1,2,нат-,нат,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,3,ка,ка,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,4,тес-,тес,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,5,на-,на,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,6,"я,",я,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,7,ти-,ти,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,8,ха-,ха,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,9,"я,",я,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,10,ми-,ми,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,11,ла-,Ла,read,,ok,ok,ok
+U1,1,1,1,p1s1r1,12,я;,я,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,1,тень,Т|нь,token splitting,1 printed syllable aligned to 2 tokens: Т|нь,,,
+U1,1,2,1,p1s2r1,2,не,не,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,3,про-,про,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,4,гляд-,гляд,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,5,на-,на,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,6,"я,",я,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,7,тень,тень,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,8,без,безъ,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,9,от-,от,read,,wrong,ok,wrong
+U1,1,2,1,p1s2r1,10,вет-,вет,read,,wrong,ok,wrong
+U1,1,2,1,p1s2r1,11,на-,на,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,12,я;,я,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,13,ду-,Ду,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,14,ма,ма,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,15,глу-,глу,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,16,бо-,бо,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,17,ка-,ка,read,,ok,ok,ok
+U1,1,2,1,p1s2r1,18,"я,",я,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,1,пес-,пес,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,2,ня,ня,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,3,у-,у,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,4,ны-,ны,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,5,ла-,ла,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,6,я;,я,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,7,в,В,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,8,бью-,бью,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,9,щем-,щем,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,10,ся,ся,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,11,серд-,серд,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,12,це,це,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,13,на-,на,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,14,деж-,деж,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,15,да,да,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,16,за-,за,read,,wrong,ok,wrong
+U1,1,3,1,p1s3r1,17,вет-,вет,read,,wrong,ok,wrong
+U1,1,3,1,p1s3r1,18,на-,на,read,,ok,ok,ok
+U1,1,3,1,p1s3r1,19,"я,",я,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,1,быст-,Быстрый,token splitting,2 printed syllables aligned to 1 token(s): Быстрый,,,
+U1,2,1,1,p2s1r1,2,рый,Быстрый,token splitting,2 printed syllables aligned to 1 token(s): Быстрый,,,
+U1,2,1,1,p2s1r1,3,по-,по,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,4,лёт,лет,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,5,за,за,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,6,мгно-,мгно,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,7,ве-,ве,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,8,ньем,ньем,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,9,мгно-,мгно,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,10,ве-,ве,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,11,ни-,ни,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,12,я;,я,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,13,взор,Взор,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,14,не-,не,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,15,под-,под,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,16,виж-,виж,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,17,ный,ный,read,,ok,ok,ok
+U1,2,1,1,p2s1r1,18,на,на,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,1,сча-,сча,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,2,стье,стье,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,3,да-,да,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,4,лё-,ле,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,5,ко-,ко,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,6,е;,е,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,7,мно-,мно,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,8,го,го,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,9,сом-,сом,read,,wrong,ok,ok
+U1,2,2,1,p2s2r1,10,не-,не,read,,wrong,ok,ok
+U1,2,2,1,p2s2r1,11,ни-,ни,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,12,"я,",я,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,13,мно-,мно,read,,wrong,ok,ok
+U1,2,2,1,p2s2r1,14,го,го,read,,wrong,ok,ok
+U1,2,2,1,p2s2r1,15,тер-,тер,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,16,пе-,пе,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,17,ни-,ни,read,,ok,ok,ok
+U1,2,2,1,p2s2r1,18,я.,я,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,1,Вот,Вот,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,2,о-,о,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,3,"на,",на,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,4,ночь,ночь,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,5,мо-,мо,read,,wrong,ok,ok
+U1,2,3,1,p2s3r1,6,"я,",я,read,,wrong,ok,ok
+U1,2,3,1,p2s3r1,7,ночь,ночь,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,8,о-,о,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,9,ди-,ди,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,10,но-,но,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,11,ка-,ка,read,,ok,ok,ok
+U1,2,3,1,p2s3r1,12,я.,я,read,,ok,ok,ok
+U4,1,1,2,p1s1r2,1,Ску-,Ску,read,,ok,ok,ok
+U4,1,1,2,p1s1r2,2,чай.,чай,read,,wrong,ok,wrong
+U4,1,1,2,p1s1r2,3,Ты,Тысоз,token splitting,2 printed syllables aligned to 1 token(s): Тысоз,,,
+U4,1,1,2,p1s1r2,4,соз-,Тысоз,token splitting,2 printed syllables aligned to 1 token(s): Тысоз,,,
+U4,1,1,2,p1s1r2,5,да-,да,read,,wrong,wrong,ok
+U4,1,1,2,p1s1r2,6,на,на,read,,ok,ok,ok
+U4,1,1,2,p1s1r2,7,для,для,read,,ok,ok,ok
+U4,1,1,2,p1s1r2,8,ску-,ску,read,,wrong,ok,ok
+U4,1,1,2,p1s1r2,9,ки.,ки,read,,wrong,ok,ok
+U4,1,1,2,p1s1r2,10,Без,Без,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,1,жгу-,жгу,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,2,чих,чихчувствот,token splitting,2 printed syllables aligned to 1 token(s): чихчувствот,,,
+U4,1,2,1,p1s2r1,3,чувств,чихчувствот,token splitting,2 printed syllables aligned to 1 token(s): чихчувствот,,,
+U4,1,2,1,p1s2r1,4,от-,ра,token splitting,2 printed syllables aligned to 1 token(s): ра,,,
+U4,1,2,1,p1s2r1,5,ра-,ра,token splitting,2 printed syllables aligned to 1 token(s): ра,,,
+U4,1,2,1,p1s2r1,6,ды,ды,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,7,"нет,",нет,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,8,как,Как,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,9,нет,нет,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,10,воз-,воз,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,11,вра-,врата,token splitting,2 printed syllables aligned to 1 token(s): врата,,,
+U4,1,2,1,p1s2r1,12,та,врата,token splitting,2 printed syllables aligned to 1 token(s): врата,,,
+U4,1,2,1,p1s2r1,13,без,безраз,token splitting,2 printed syllables aligned to 1 token(s): безраз,,,
+U4,1,2,1,p1s2r1,14,раз-,безраз,token splitting,2 printed syllables aligned to 1 token(s): безраз,,,
+U4,1,2,1,p1s2r1,15,лу-,лу,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,16,"ки,",ки,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,17,как,Какбез,token splitting,2 printed syllables aligned to 1 token(s): Какбез,,,
+U4,1,2,1,p1s2r1,18,без,Какбез,token splitting,2 printed syllables aligned to 1 token(s): Какбез,,,
+U4,1,2,1,p1s2r1,19,бо-,бо,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,20,ре-,ре,read,,ok,ok,ok
+U4,1,2,1,p1s2r1,21,нья,нья,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,1,нет,нет,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,2,по-,по,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,3,бед.,бед,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,4,Ску-,Ску,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,5,чай.,чай,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,6,Ску-,Ску,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,7,"чай,",чай,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,8,сло-,сло,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,9,вам,вам,read,,ok,ok,ok
+U4,1,3,1,p1s3r1,10,люб-,люб,read,,wrong,wrong,wrong
+U4,2,1,1,p2s1r1,1,ви,ви,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,2,вни-,зни,letter recognition,token зни,,,
+U4,2,1,1,p2s1r1,3,ма-,ма,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,4,"я,",я,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,5,в,Вти,token splitting,2 printed syllables aligned to 1 token(s): Вти,,,
+U4,2,1,1,p2s1r1,6,ти-,Вти,token splitting,2 printed syllables aligned to 1 token(s): Вти,,,
+U4,2,1,1,p2s1r1,7,ши,ши,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,8,сер-,сер,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,9,деч-,деч,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,10,ной,ной,read,,wrong,wrong,wrong
+U4,2,1,1,p2s1r1,11,пу-,пу,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,12,сто-,сто,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,13,"ты,",ТЫы,letter recognition,token ТЫы,,,
+U4,2,1,1,p2s1r1,14,при-,При,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,15,ве-,ве,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,16,том,том,read,,wrong,wrong,wrong
+U4,2,1,1,p2s1r1,17,лжи-,лжи,read,,ok,ok,ok
+U4,2,1,1,p2s1r1,18,вым,вым,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,1,от-,от,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,2,ве-,ве,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,3,ча-,ча,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,4,я,я,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,5,на,На,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,6,прав-,прав,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,7,ду,ду,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,8,дев-,дгев,letter recognition,token дгев,,,
+U4,2,2,1,p2s2r1,9,ствен-,ствен,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,10,ной,ной,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,11,меч-,меч,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,12,ты.,ты,read,,ok,ok,ok
+U4,2,2,1,p2s2r1,13,Ску-,Ску,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,1,чай.,чай,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,2,С,Срсеж,token splitting,2 printed syllables aligned to 1 token(s): Срсеж,,,
+U4,2,3,1,p2s3r1,3,рож-,Срсеж,token splitting,2 printed syllables aligned to 1 token(s): Срсеж,,,
+U4,2,3,1,p2s3r1,4,де-,де,read,,wrong,ok,ok
+U4,2,3,1,p2s3r1,5,нья,нья,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,6,до,до,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,7,мо-,мо,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,8,ги-,ги,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,9,лы,лы,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,10,за-,За,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,11,ра-,ра,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,12,не,не,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,13,путь,пуѵть,letter recognition,token пуѵть,,,
+U4,2,3,1,p2s3r1,14,на-,на,read,,ok,wrong,ok
+U4,2,3,1,p2s3r1,15,чер-,чер,read,,wrong,ok,ok
+U4,2,3,1,p2s3r1,16,тан,тан,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,17,твой:,твсй,letter recognition,token твсй,,,
+U4,2,3,1,p2s3r1,18,по,По,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,19,кап-,кап,read,,ok,ok,ok
+U4,2,3,1,p2s3r1,20,ле,ле,read,,ok,ok,ok
+U4,2,4,1,p2s4r1,1,ты,ты,token splitting,2 printed syllables aligned to 1 token(s): ты,,,
+U4,2,4,1,p2s4r1,2,ис-,ты,token splitting,2 printed syllables aligned to 1 token(s): ты,,,
+U4,2,4,1,p2s4r1,3,тра-,истратишъ,token splitting,2 printed syllables aligned to 1 token(s): истратишъ,,,
+U4,2,4,1,p2s4r1,4,тишь,истратишъ,token splitting,2 printed syllables aligned to 1 token(s): истратишъ,,,
+U4,2,4,1,p2s4r1,5,си-,си,read,,ok,ok,ok
+U4,2,4,1,p2s4r1,6,"лы,",ль,letter recognition,token ль,,,
+U4,2,4,1,p2s4r1,7,по-,По,read,,ok,ok,ok
+U4,2,4,1,p2s4r1,8,том,том,read,,ok,ok,ok
+U4,2,4,1,p2s4r1,9,ум-,ум,read,,ok,ok,ok
+U4,2,4,1,p2s4r1,10,"рёшь,",решь,read,,ok,ok,ok
+U4,2,4,1,p2s4r1,11,и,и,read,,ok,ok,ok
+U4,2,4,1,p2s4r1,12,бог,богс,token splitting,2 printed syllables aligned to 1 token(s): богс,,,
+U4,2,4,1,p2s4r1,13,с,богс,token splitting,2 printed syllables aligned to 1 token(s): богс,,,
+U4,2,4,1,p2s4r1,14,то-,тсбой,token splitting,2 printed syllables aligned to 1 token(s): тсбой,,,
+U4,2,4,1,p2s4r1,15,бой...,тсбой,token splitting,2 printed syllables aligned to 1 token(s): тсбой,,,
+U4,2,4,1,p2s4r1,16,и,и,read,,ok,ok,ok
+U4,2,4,1,p2s4r1,17,бог,бсг,letter recognition,token бсг,,,
+U4,2,4,1,p2s4r1,18,с,с,read,,wrong,wrong,wrong
+U4,2,4,1,p2s4r1,19,то-,тобсй,token splitting,2 printed syllables aligned to 1 token(s): тобсй,,,
+U4,2,4,1,p2s4r1,20,бой!,тобсй,token splitting,2 printed syllables aligned to 1 token(s): тобсй,,,
+U5,1,1,2,p1s1r2,1,В,ди|БВ,token splitting,1 printed syllable aligned to 2 tokens: ди|БВ,,,
+U5,1,1,2,p1s1r2,2,ту-,ту,read,,wrong,wrong,wrong
+U5,1,1,2,p1s1r2,3,ма-,ма,read,,ok,ok,ok
+U5,1,1,2,p1s1r2,4,не,не,read,,ok,ok,ok
+U5,1,1,2,p1s1r2,5,дрем-,лрем,letter recognition,token лрем,,,
+U5,1,1,2,p1s1r2,6,лет,лет,read,,ok,ok,ok
+U5,1,2,1,p1s2r1,1,ночь.,ночь,read,,ok,ok,ok
+U5,1,2,1,p1s2r1,2,Без-,Без,read,,ok,ok,ok
+U5,1,2,1,p1s2r1,3,молв-,мслв,letter recognition,token мслв,,,
+U5,1,2,1,p1s2r1,4,на-,не,letter recognition,token не,,,
+U5,1,2,1,p1s2r1,5,я,я,read,,ok,ok,ok
+U5,1,2,1,p1s2r1,6,звез-,звез,read,,ok,ok,ok
+U5,1,2,1,p1s2r1,7,да,да,read,,ok,ok,ok
+U5,1,2,1,p1s2r1,8,сквозь,Сквозь,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,1,дым-,лым,letter recognition,token лым,,,
+U5,2,1,1,p2s1r1,2,ку,ху,letter recognition,token ху,,,
+U5,2,1,1,p2s1r1,3,об-,об,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,4,ла-,па,letter recognition,token па,,,
+U5,2,1,1,p2s1r1,5,ков,ков,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,6,мер-,мер,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,7,ца-,ца,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,8,ет,ет,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,9,о-,о,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,10,ди-,ди,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,11,но-,но,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,12,ко.,ко,read,,ok,ok,ok
+U5,2,1,1,p2s1r1,13,Зве-,Зве,read,,ok,ok,ok
+U5,2,2,1,p2s2r1,1,нят,нят,read,,ok,ok,ok
+U5,2,2,1,p2s2r1,2,бу-,бу,read,,ok,ok,ok
+U5,2,2,1,p2s2r1,3,бен-,бен,read,,ok,ok,ok
+U5,2,2,1,p2s2r1,4,ца-,ца,read,,ok,ok,ok
+U5,2,2,1,p2s2r1,5,ми,ми,read,,ok,ok,ok
+U5,2,2,1,p2s2r1,6,у-,у,read,,ok,ok,ok
+U5,2,3,1,p2s3r1,1,ны-,т|Ны,token splitting,1 printed syllable aligned to 2 tokens: т|Ны,,,
+U5,2,3,1,p2s3r1,2,ло,ло,read,,ok,ok,ok
+U5,2,3,1,p2s3r1,3,и,и,read,,ok,ok,ok
+U5,2,3,1,p2s3r1,4,да-,да,read,,ok,ok,ok
+U5,2,3,1,p2s3r1,5,лё-,ле,read,,ok,ok,ok
+U5,2,3,1,p2s3r1,6,ко,ко,read,,ok,ok,ok
+U5,2,3,1,p2s3r1,7,ко-,жо,letter recognition,token жо,,,
+U5,2,4,1,p2s4r1,1,ней,ней,read,,ok,ok,ok
+U5,2,4,1,p2s4r1,2,па-,па,read,,ok,ok,ok
+U5,2,4,1,p2s4r1,3,су-,су,read,,ok,ok,ok
+U5,2,4,1,p2s4r1,4,щих-,шихся,token splitting,2 printed syllables aligned to 1 token(s): шихся,,,
+U5,2,4,1,p2s4r1,5,ся,шихся,token splitting,2 printed syllables aligned to 1 token(s): шихся,,,
+U5,2,4,1,p2s4r1,6,ста-,Ета,letter recognition,token Ета,,,
+U5,2,4,1,p2s4r1,7,да.,да,read,,ok,ok,ok
+U5,2,4,1,p2s4r1,8,Как,Как,read,,ok,ok,ok
+U5,3,1,1,p3s1r1,1,но-,но,read,,ok,ok,ok
+U5,3,1,1,p3s1r1,2,чи,чия,letter recognition,token чия,,,
+U5,3,1,1,p3s1r1,3,об-,об,read,,ok,ok,ok
+U5,3,1,1,p3s1r1,4,ла-,па,letter recognition,token па,,,
+U5,3,1,1,p3s1r1,5,"ка,",кхе,letter recognition,token кхе,,,
+U5,3,1,1,p3s1r1,6,из-,еиз,letter recognition,token еиз,,,
+U5,3,1,1,p3s1r1,7,мен-,мен,read,,wrong,ok,ok
+U5,3,1,1,p3s1r1,8,чи-,чи,read,,wrong,ok,ok
+U5,3,1,1,p3s1r1,9,вы-,вы,read,,ok,ok,ok
+U5,3,1,1,p3s1r1,10,е,е,read,,ok,ok,ok
+U5,3,1,1,p3s1r1,11,ду-,ду,read,,ok,ok,ok
+U5,3,1,1,p3s1r1,12,мы,мы,read,,ok,ok,ok
+U5,3,1,1,p3s1r1,13,не-,пе,letter recognition,token пе,,,
+U5,3,2,1,p3s2r1,1,сут-,сѵт,letter recognition,token сѵт,,,
+U5,3,2,1,p3s2r1,2,ся,ся,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,3,на-,на,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,4,до,до,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,5,"мной,",мной,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,6,тре-,тре,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,7,вож-,вож,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,8,ны,ны,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,9,и,и,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,10,у-,у,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,11,грю-,грю,read,,ok,ok,ok
+U5,3,2,1,p3s2r1,12,мы;,мы,read,,wrong,wrong,wrong
+U5,3,2,1,p3s2r1,13,в,В,read,,wrong,wrong,wrong
+U5,3,2,1,p3s2r1,14,них,них,read,,wrong,wrong,wrong
+U5,3,3,1,p3s3r1,1,от-,от,read,,ok,ok,ok
+U5,3,3,1,p3s3r1,2,блес-,блес,read,,ok,ok,ok
+U5,3,3,1,p3s3r1,3,ки,ки,read,,ok,ok,ok
+U5,3,3,1,p3s3r1,4,на-,на,read,,ok,ok,ok
+U5,3,3,1,p3s3r1,5,"дежд,",дежд,read,,ok,ok,ok
+U5,3,3,1,p3s3r1,6,ког-,Ког,read,,ok,ok,ok
+U5,4,1,1,p4s1r1,1,да-,Да,read,,ok,ok,ok
+U5,4,1,1,p4s1r1,2,то,то,read,,ok,ok,ok
+U5,4,1,1,p4s1r1,3,до-,до,read,,ok,ok,ok
+U5,4,1,1,p4s1r1,4,ро-,ро,read,,ok,ok,ok
+U5,4,1,1,p4s1r1,5,"гих,",ГИх,read,,ok,ok,ok
+U5,4,1,1,p4s1r1,6,дав-,Дав,read,,ok,ok,ok
+U5,4,2,1,p4s2r1,1,но,НО,read,,ok,ok,ok
+U5,4,2,1,p4s2r1,2,по-,по,read,,ok,ok,ok
+U5,4,2,1,p4s2r1,3,те-,те,read,,ok,ok,ok
+U5,4,2,1,p4s2r1,4,рян-,рянных,token splitting,2 printed syllables aligned to 1 token(s): рянных,,,
+U5,4,2,1,p4s2r1,5,"ных,",рянных,token splitting,2 printed syllables aligned to 1 token(s): рянных,,,
+U5,4,2,1,p4s2r1,6,дав-,дав,read,,ok,ok,ok
+U5,4,2,1,p4s2r1,7,но,но,read,,ok,ok,ok
+U5,4,2,1,p4s2r1,8,уж,ѵж,letter recognition,token ѵж,,,
+U5,4,2,1,p4s2r1,9,не,не,read,,ok,ok,ok
+U5,4,2,1,p4s2r1,10,жи-,жи,read,,ok,ok,ok
+U5,4,2,1,p4s2r1,11,вых.,вых,read,,ok,ok,ok
+U5,4,3,1,p4s3r1,1,В,них,token splitting,2 printed syllables aligned to 1 token(s): них,,,
+U5,4,3,1,p4s3r1,2,них,них,token splitting,2 printed syllables aligned to 1 token(s): них,,,
+U5,4,3,1,p4s3r1,3,со-,со,read,,ok,ok,wrong
+U5,4,3,1,p4s3r1,4,жа-,жа,read,,ok,ok,wrong
+U5,4,3,1,p4s3r1,5,ле-,ле,read,,ok,ok,wrong
+U5,4,3,1,p4s3r1,6,ни-,ни,read,,ok,ok,wrong
+U5,4,3,1,p4s3r1,7,я…,я,read,,ok,ok,wrong
+U5,4,3,1,p4s3r1,8,и,и,read,,ok,ok,wrong
+U5,4,3,1,p4s3r1,9,слё-,сле,read,,ok,ok,wrong
+U5,4,3,1,p4s3r1,10,зы.,ЗЫ,read,,ok,ok,ok
+U5,4,3,1,p4s3r1,11,Не-,пе,letter recognition,token пе,,,
+U5,5,1,1,p5s1r1,1,сут-,су|г,token splitting,1 printed syllable aligned to 2 tokens: су|г,,,
+U5,5,1,1,p5s1r1,2,ся,ся,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,3,ду-,ду,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,4,мы,мы,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,5,те,те,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,6,без,без,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,7,це-,це,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,8,ли,ли,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,9,и,и,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,10,кон-,кон,read,,ok,ok,wrong
+U5,5,1,1,p5s1r1,11,ца;,ца,read,,wrong,ok,wrong
+U5,5,1,1,p5s1r1,12,"то,",го,letter recognition,token го,,,
+U5,5,1,1,p5s1r1,13,пре-,пре,read,,ok,ok,ok
+U5,5,1,1,p5s1r1,14,вра-,вра,read,,ok,ok,ok
+U5,5,1,1,p5s1r1,15,тясь,тясь,read,,ok,ok,ok
+U5,5,1,1,p5s1r1,16,в,вчер,token splitting,2 printed syllables aligned to 1 token(s): вчер,,,
+U5,5,1,1,p5s1r1,17,чер-,вчер,token splitting,2 printed syllables aligned to 1 token(s): вчер,,,
+U5,5,1,1,p5s1r1,18,ты,ты,read,,ok,ok,ok
+U5,5,1,1,p5s1r1,19,лю-,лю,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,1,би-,би,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,2,мо-,мо,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,3,го,го,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,4,ли-,ли,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,5,"ца,",ца,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,6,зо-,Зо,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,7,"вут,",зут,letter recognition,token зут,,,
+U5,5,2,1,p5s2r1,8,рож-,рож,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,9,да-,да,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,10,я,я,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,11,вновь,вновь,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,12,в,в,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,13,ду-,ду,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,14,ше,ше,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,15,бы-,бы,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,16,лы-,лы,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,17,е,е,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,18,грё-,гре,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,19,"зы,",зы,read,,ok,ok,ok
+U5,5,2,1,p5s2r1,20,"то,",То,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,1,слив-,сСлив,letter recognition,token сСлив,,,
+U5,5,3,2,p5s3r2,2,шись,шись,read,,wrong,wrong,wrong
+U5,5,3,2,p5s3r2,3,в,в,read,,wrong,wrong,wrong
+U5,5,3,2,p5s3r2,4,чёр-,чер,read,,wrong,wrong,wrong
+U5,5,3,2,p5s3r2,5,ный,ный,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,6,"мрак,",мрак,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,7,пол-,пол,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,8,ны,ны,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,9,не-,не,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,10,мой,мой,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,11,у-,у,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,12,гро-,гро,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,13,"зы,",зы,read,,ok,ok,ok
+U5,5,3,2,p5s3r2,14,гря-,Гря,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,1,ду-,ду,read,,no_note: homr did not read the note,no_note: homr did not read the note,no_note: homr did not read the note
+U5,6,1,1,p6s1r1,2,ще-,щше,letter recognition,token щше,,,
+U5,6,1,1,p6s1r1,3,го,го,read,,ok,wrong,wrong
+U5,6,1,1,p6s1r1,4,борь-,борьбой,token splitting,2 printed syllables aligned to 1 token(s): борьбой,,,
+U5,6,1,1,p6s1r1,5,бой,борьбой,token splitting,2 printed syllables aligned to 1 token(s): борьбой,,,
+U5,6,1,1,p6s1r1,6,пу-,пу,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,7,га-,га,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,8,ют,ют,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,9,роб-,роб,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,10,кий,кий,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,11,"ум,",ум,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,12,и,И,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,13,слы-,слы,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,14,шит-,шит,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,15,ся,ся,read,,ok,ok,ok
+U5,6,1,1,p6s1r1,16,вда-,вда,read,,ok,ok,ok
+U5,6,2,1,p6s2r1,1,ли,ли,read,,ok,ok,ok
+U5,6,2,1,p6s2r1,2,не-,ке,letter recognition,token ке,,,
+U5,6,2,1,p6s2r1,3,строй-,строй,read,,ok,ok,ok
+U5,6,2,1,p6s2r1,4,ной,ной,read,,ok,ok,ok
+U5,6,2,1,p6s2r1,5,жиз-,жиз,read,,ok,ok,ok
+U5,6,2,1,p6s2r1,6,ни,ни,read,,ok,ok,ok
+U5,6,2,1,p6s2r1,7,"шум,",шум,read,,ok,ok,ok
+U5,6,2,1,p6s2r1,8,тол-,Ттоя,letter recognition,token Ттоя,,,
+U5,6,3,1,p6s3r1,1,пы,пы,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,2,без-,без,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,3,душ-,душ,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,4,ной,ной,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,5,"смех,",смех,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,6,враж-,враж,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,7,ды,ды,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,8,ко-,ко,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,9,вар-,вар,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,10,ный,ной,letter recognition,token ной,,,
+U5,6,3,1,p6s3r1,11,ро-,ро,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,12,"пот,",пот,read,,ok,ok,ok
+U5,6,3,1,p6s3r1,13,жи-,Жи,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,1,тей-,тей,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,2,ской,ской,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,3,ме-,ме,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,4,ло-,ло,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,5,чи,чи,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,6,не-,не,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,7,за-,за,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,8,глу-,глу,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,9,ши-,ши,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,10,мый,мый,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,11,шо-,шо,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,12,"пот,",пот,read,,ok,ok,ok
+U5,6,4,1,p6s4r1,13,у-,У,read,,ok,ok,ok
+U5,7,1,1,p7s1r1,1,ны-,ны,read,,ok,ok,ok
+U5,7,1,1,p7s1r1,2,лый,лыи,letter recognition,token лыи,,,
+U5,7,1,1,p7s1r1,3,смер-,смер,read,,ok,ok,ok
+U5,7,1,1,p7s1r1,4,ти,ти,read,,ok,ok,ok
+U5,7,1,1,p7s1r1,5,звон!...,ЗБОН,letter recognition,token ЗБОН,,,
+U5,7,1,1,p7s1r1,6,Пред-,ПЧлел,letter recognition,token ПЧлел,,,
+U5,7,2,1,p7s2r1,1,вест-,вест,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,2,ни-,ни,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,3,ца,па,letter recognition,token па,,,
+U5,7,2,1,p7s2r1,4,звез-,звез,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,5,"да,",да,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,6,как,Как,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,7,буд-,буд,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,8,то,то,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,9,пол-,пол,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,10,на-,на,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,11,я,я,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,12,сты-,стыда,token splitting,2 printed syllables aligned to 1 token(s): стыда,,,
+U5,7,2,1,p7s2r1,13,"да,",стыда,token splitting,2 printed syllables aligned to 1 token(s): стыда,,,
+U5,7,2,1,p7s2r1,14,скры-,Скры,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,15,ва-,ва,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,16,ет,ет,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,17,свет-,светЛый,token splitting,2 printed syllables aligned to 1 token(s): светЛый,,,
+U5,7,2,1,p7s2r1,18,лый,светЛый,token splitting,2 printed syllables aligned to 1 token(s): светЛый,,,
+U5,7,2,1,p7s2r1,19,лик,лик,read,,ok,wrong,wrong
+U5,7,2,1,p7s2r1,20,в,в,read,,ok,wrong,wrong
+U5,7,2,1,p7s2r1,21,ту-,ту,read,,ok,wrong,wrong
+U5,7,2,1,p7s2r1,22,ма-,ма,read,,ok,ok,ok
+U5,7,2,1,p7s2r1,23,не,небез,token splitting,2 printed syllables aligned to 1 token(s): небез,,,
+U5,7,2,1,p7s2r1,24,без-,небез,token splitting,2 printed syllables aligned to 1 token(s): небез,,,
+U5,7,2,1,p7s2r1,25,от-,от,read,,ok,ok,ok
+U5,7,3,1,p7s3r1,1,рад-,рад,read,,ok,ok,ok
+U5,7,3,1,p7s3r1,2,"ном,",ном,read,,ok,ok,ok
+U5,7,3,1,p7s3r1,3,как,как,read,,ok,ok,ok
+U5,7,3,1,p7s3r1,4,бу-,оу,letter recognition,token оу,,,
+U5,7,3,1,p7s3r1,5,дущ-,дущшность,token splitting,2 printed syllables aligned to 1 token(s): дущшность,,,
+U5,7,3,1,p7s3r1,6,ность,дущшность,token splitting,2 printed syllables aligned to 1 token(s): дущшность,,,
+U5,7,3,1,p7s3r1,7,мо-,мо,read,,ok,ok,ok
+U5,7,3,1,p7s3r1,8,"я,",я,read,,wrong,ok,wrong
+U5,7,3,1,p7s3r1,9,не-,не,read,,ok,ok,ok
+U5,7,3,1,p7s3r1,10,мом,мом,read,,ok,ok,ok
+U5,7,3,1,p7s3r1,11,и,Ии,letter recognition,token Ии,,,
+U5,7,4,1,p7s4r1,1,не-,Нне,letter recognition,token Нне,,,
+U5,7,4,1,p7s4r1,2,про-,про,read,,ok,ok,ok
+U5,7,4,1,p7s4r1,3,гляд-,глад,letter recognition,token глад,,,
+U5,7,4,1,p7s4r1,4,ном.,ном,read,,ok,ok,ok
+U6,1,1,1,p1s1r1,1,Ме-,ме,read,,ok,ok,ok
+U6,1,1,1,p1s1r1,2,сяц,сяц,read,,ok,ok,ok
+U6,1,1,1,p1s1r1,3,за-,за,read,,ok,ok,ok
+U6,1,1,1,p1s1r1,4,дум-,пдуѵм,letter recognition,token пдуѵм,,,
+U6,1,1,1,p1s1r1,5,чи-,Чи,read,,ok,ok,ok
+U6,1,1,1,p1s1r1,6,"вый,",вый,read,,ok,ok,ok
+U6,1,2,1,p1s2r1,1,звёз-,звез,read,,ok,ok,ok
+U6,1,2,1,p1s2r1,2,ды,ды,read,,ok,ok,ok
+U6,1,2,1,p1s2r1,3,да-,ла,letter recognition,token ла,,,
+U6,1,2,1,p1s2r1,4,лё-,ле,read,,ok,ok,ok
+U6,1,2,1,p1s2r1,5,ки-,ки,read,,ok,ok,ok
+U6,1,2,1,p1s2r1,6,е,е,read,,ok,ok,ok
+U6,1,2,1,p1s2r1,7,с,ѵ,letter recognition,token ѵ,,,
+U6,1,2,1,p1s2r1,8,си-,си,read,,wrong,wrong,wrong
+U6,1,2,1,p1s2r1,9,не-,не,read,,ok,ok,ok
+U6,1,2,1,p1s2r1,10,го,го,read,,ok,ok,ok
+U6,1,3,1,p1s3r1,1,не-,не,read,,ok,ok,ok
+U6,1,3,1,p1s3r1,2,ба,ба,read,,ok,ok,ok
+U6,1,3,1,p1s3r1,3,во-,во,read,,ok,ok,ok
+U6,1,3,1,p1s3r1,4,да-,лда,letter recognition,token лда,,,
+U6,1,3,1,p1s3r1,5,ми,ми,read,,ok,ok,ok
+U6,1,3,1,p1s3r1,6,лю-,лю,read,,ok,ok,ok
+U6,1,3,1,p1s3r1,7,бу-,ру,letter recognition,token ру,,,
+U6,1,3,1,p1s3r1,8,ют-,ЮТ,read,,wrong,wrong,wrong
+U6,1,3,1,p1s3r1,9,ся.,С|Я,token splitting,1 printed syllable aligned to 2 tokens: С|Я,,,
+U6,2,1,1,p2s1r1,1,Мол-,Мол,read,,ok,ok,ok
+U6,2,1,1,p2s1r1,2,ча,ча,read,,ok,ok,ok
+U6,2,1,1,p2s1r1,3,смот-,смот,read,,wrong,wrong,wrong
+U6,2,1,1,p2s1r1,4,рю,рю,read,,ok,ok,ok
+U6,2,1,1,p2s1r1,5,я,я,read,,ok,ok,ok
+U6,2,1,1,p2s1r1,6,на,на,read,,ok,ok,ok
+U6,2,2,1,p2s2r1,1,во-,во,read,,ok,ok,ok
+U6,2,2,1,p2s2r1,2,ды,ды,read,,ok,ok,ok
+U6,2,2,1,p2s2r1,3,глу-,глу,read,,wrong,wrong,wrong
+U6,2,2,1,p2s2r1,4,бо-,бо,read,,ok,ok,ok
+U6,2,2,1,p2s2r1,5,ки-,ки,read,,ok,ok,ok
+U6,2,2,1,p2s2r1,6,е;,е,read,,ok,ok,ok
+U6,2,3,2,p2s3r2,1,тай-,Тай,read,,ok,ok,ok
+U6,2,3,2,p2s3r2,2,ны,ны,read,,ok,ok,ok
+U6,2,3,2,p2s3r2,3,вол-,вол,read,,ok,ok,ok
+U6,2,3,2,p2s3r2,4,шеб-,шеб,read,,ok,ok,ok
+U6,2,3,2,p2s3r2,5,ны-,ны,read,,ok,ok,ok
+U6,2,3,2,p2s3r2,6,е,е,read,,ok,ok,ok
+U6,2,3,2,p2s3r2,7,серд-,серд,read,,ok,ok,ok
+U6,2,3,2,p2s3r2,8,цем,цем,read,,ok,wrong,wrong
+U6,2,3,2,p2s3r2,9,в,в,read,,ok,wrong,wrong
+U6,2,3,2,p2s3r2,10,них,них,read,,ok,wrong,wrong
+U6,2,4,1,p2s4r1,1,чу-,зу,letter recognition,token зу,,,
+U6,2,4,1,p2s4r1,2,ют-,ют,read,,ok,ok,ok
+U6,2,4,1,p2s4r1,3,ся.,ся,read,,ok,ok,ok
+U6,2,4,1,p2s4r1,4,Пле-,Пле,read,,ok,ok,ok
+U6,2,4,1,p2s4r1,5,"шут,",щут,letter recognition,token щут,,,
+U6,2,4,1,p2s4r1,6,та-,та,read,,ok,ok,ok
+U6,2,4,1,p2s4r1,7,ят-,ят,read,,ok,ok,ok
+U6,2,4,1,p2s4r1,8,"ся,",ся,read,,ok,ok,ok
+U6,2,4,1,p2s4r1,9,лас-,лас,read,,wrong,wrong,wrong
+U6,3,1,1,p3s1r1,1,ка-,ка,read,,ok,ok,ok
+U6,3,1,1,p3s1r1,2,тель-,тель,read,,wrong,wrong,wrong
+U6,3,1,1,p3s1r1,3,но,но,read,,wrong,wrong,wrong
+U6,3,1,1,p3s1r1,4,неж-,неж,read,,wrong,wrong,ok
+U6,3,1,1,p3s1r1,5,ны-,ны,read,,wrong,wrong,ok
+U6,3,1,1,p3s1r1,6,е;,е,read,,ok,ok,wrong
+U6,3,1,1,p3s1r1,7,мно-,мно,read,,ok,ok,wrong
+U6,3,1,1,p3s1r1,8,го,го,read,,ok,ok,wrong
+U6,3,1,1,p3s1r1,9,в,в,read,,ok,ok,wrong
+U6,3,1,1,p3s1r1,10,их,их,read,,ok,ok,wrong
+U6,3,2,1,p3s2r1,1,ро-,ро,read,,ok,ok,ok
+U6,3,2,1,p3s2r1,2,по-,по,read,,ok,ok,ok
+U6,3,2,1,p3s2r1,3,те,те,read,,ok,ok,ok
+U6,3,2,1,p3s2r1,4,си-,си,read,,ok,ok,ok
+U6,3,2,1,p3s2r1,5,лы,лы,read,,ok,ok,ok
+U6,3,2,1,p3s2r1,6,ча-,ча,read,,ok,ok,ok
+U6,3,2,1,p3s2r1,7,ру-,ру,read,,ok,ok,ok
+U6,3,2,1,p3s2r1,8,ю-,ю,read,,ok,ok,ok
+U6,3,2,1,p3s2r1,9,"щей,",щеи,letter recognition,token щеи,,,
+U6,3,3,1,p3s3r1,1,Слы-,олы,letter recognition,token олы,,,
+U6,3,3,1,p3s3r1,2,шат-,шат,read,,ok,ok,ok
+U6,3,3,1,p3s3r1,3,ся,ся,read,,ok,ok,ok
+U6,3,3,1,p3s3r1,4,ду-,ду,read,,ok,ok,ok
+U6,3,3,1,p3s3r1,5,мы,М|о,token splitting,1 printed syllable aligned to 2 tokens: М|о,,,
+U6,3,3,1,p3s3r1,6,и,и,read,,ok,ok,ok
+U6,3,4,1,p3s4r1,1,стра-,стсва,letter recognition,token стсва,,,
+U6,3,4,1,p3s4r1,2,сти,сти,read,,ok,ok,ok
+U6,3,4,1,p3s4r1,3,без-,осз|орези,token splitting,1 printed syllable aligned to 2 tokens: осз|орези,,,
+U6,3,4,1,p3s4r1,4,бреж-,пБв|і,token splitting,1 printed syllable aligned to 2 tokens: пБв|і,,,
+U6,3,4,1,p3s4r1,5,ны-,СЕ,token splitting,2 printed syllables aligned to 1 token(s): СЕ,,,
+U6,3,4,1,p3s4r1,6,е…,СЕ,token splitting,2 printed syllables aligned to 1 token(s): СЕ,,,
+U6,4,1,1,p4s1r1,1,Го-,Гѣ,letter recognition,token Гѣ,,,
+U6,4,1,1,p4s1r1,2,лос,лос,read,,ok,ok,ok
+U6,4,1,1,p4s1r1,3,не-,не,read,,ok,ok,ok
+U6,4,1,1,p4s1r1,4,ве-,ве,read,,ok,ok,ok
+U6,4,1,1,p4s1r1,5,до-,до,read,,ok,ok,ok
+U6,4,1,1,p4s1r1,6,"мый,",мый,read,,ok,ok,ok
+U6,4,2,1,p4s2r1,1,ду-,л|у,token splitting,1 printed syllable aligned to 2 tokens: л|у,,,
+U6,4,2,1,p4s2r1,2,шу,шу,read,,ok,ok,ok
+U6,4,2,1,p4s2r1,3,вол-,вол,read,,ok,ok,ok
+U6,4,2,1,p4s2r1,4,ну-,ну,read,,ok,ok,ok
+U6,4,2,1,p4s2r1,5,ю-,ю,read,,ok,ok,ok
+U6,4,2,1,p4s2r1,6,щий.,щии,letter recognition,token щии,,,
+U6,4,3,1,p4s3r1,1,Не-,пе,letter recognition,token пе,,,
+U6,4,3,1,p4s3r1,2,"жит,",жит,read,,ok,ok,ok
+U6,4,3,1,p4s3r1,3,пу-,пу,read,,ok,ok,ok
+U6,4,3,1,p4s3r1,4,га-,га,read,,ok,ok,ok
+U6,4,3,1,p4s3r1,5,"ет,",ет,read,,ok,ok,ok
+U6,4,3,1,p4s3r1,6,на-,на,read,,ok,ok,ok
+U6,4,4,1,p4s4r1,1,во-,во,read,,ok,ok,ok
+U6,4,4,1,p4s4r1,2,дит,дит,read,,ok,ok,ok
+U6,4,4,1,p4s4r1,3,сом-,сом,read,,ok,ok,ok
+U6,4,4,1,p4s4r1,4,не-,не,read,,ok,ok,ok
+U6,4,4,1,p4s4r1,5,ни-,ни,read,,ok,ok,ok
+U6,4,4,1,p4s4r1,6,е.,е,read,,ok,ok,ok
+U6,5,1,1,p5s1r1,1,Слу-,солу,letter recognition,token солу,,,
+U6,5,1,1,p5s1r1,2,шать,шатьъ,read,,ok,ok,ok
+U6,5,1,1,p5s1r1,3,ве-,ве,read,,ok,ok,ok
+U6,5,1,1,p5s1r1,4,лит-,лит,read,,ok,ok,ok
+U6,5,1,1,p5s1r1,5,ли,ли,read,,ok,ok,ok
+U6,5,1,1,p5s1r1,6,он?,он|г,token splitting,1 printed syllable aligned to 2 tokens: он|г,,,
+U6,5,2,1,p5s2r1,1,с,с,read,,ok,ok,ok
+U6,5,2,1,p5s2r1,2,ме-,ме|г,token splitting,1 printed syllable aligned to 2 tokens: ме|г,,,
+U6,5,2,1,p5s2r1,3,ста,ста|о,token splitting,1 printed syllable aligned to 2 tokens: ста|о,,,
+U6,5,2,1,p5s2r1,4,б,не,token splitting,2 printed syllables aligned to 1 token(s): не,,,
+U6,5,2,1,p5s2r1,5,не,не,token splitting,2 printed syllables aligned to 1 token(s): не,,,
+U6,5,2,1,p5s2r1,6,сдви-,сдви,read,,ok,ok,ok
+U6,5,2,1,p5s2r1,7,нул-,нул,read,,ok,ok,ok
+U6,5,2,1,p5s2r1,8,ся;,с|я,token splitting,1 printed syllable aligned to 2 tokens: с|я,,,
+U6,5,3,1,p5s3r1,1,го-,сго,letter recognition,token сго,,,
+U6,5,3,1,p5s3r1,2,нит-,нит,read,,wrong,ok,ok
+U6,5,3,1,p5s3r1,3,ли,ли,read,,wrong,ok,ok
+U6,5,3,1,p5s3r1,4,прочь?,прочь,read,,ok,ok,ok
+U6,5,3,1,p5s3r1,5,у-,ое,token splitting,2 printed syllables aligned to 1 token(s): ое,,,
+U6,5,3,1,p5s3r1,6,бе-,ое,token splitting,2 printed syllables aligned to 1 token(s): ое,,,
+U6,5,4,1,p5s4r1,1,жал,жал,read,,ok,ok,ok
+U6,5,4,1,p5s4r1,2,бы,оы,letter recognition,token оы,,,
+U6,5,4,1,p5s4r1,3,в,в,read,,ok,ok,ok
+U6,5,4,1,p5s4r1,4,смя-,см|я,token splitting,1 printed syllable aligned to 2 tokens: см|я,,,
+U6,5,4,1,p5s4r1,5,те-,те,read,,ok,ok,ok
+U6,5,4,1,p5s4r1,6,ни-,ни,read,,ok,ok,ok
+U6,5,4,1,p5s4r1,7,и.,и,read,,ok,ok,ok
+U6,6,1,1,p6s1r1,1,В,В,read,,wrong,wrong,wrong
+U6,6,1,1,p6s1r1,2,глубь,глубу,letter recognition,token глубу,,,
+U6,6,1,1,p6s1r1,3,ли,ли,read,,ok,ok,ok
+U6,6,1,1,p6s1r1,4,зо-,зо,read,,ok,ok,ok
+U6,6,1,1,p6s1r1,5,вёт?,вет,read,,wrong,wrong,ok
+U6,6,1,1,p6s1r1,6,без,без,read,,ok,ok,wrong
+U6,6,1,1,p6s1r1,7,о-,о,read,,ok,ok,wrong
+U6,6,1,1,p6s1r1,8,гляд-,гляд,read,,ok,ok,wrong
+U6,6,1,1,p6s1r1,9,ки,ки,read,,ok,ok,wrong
+U6,6,1,1,p6s1r1,10,б,б,read,,ok,ok,wrong
+U6,6,1,1,p6s1r1,11,я,я,read,,ok,ok,ok
+U6,6,2,1,p6s2r1,1,ки-,кѵ,read,,ok,ok,ok
+U6,6,2,1,p6s2r1,2,нул-,нул,read,,ok,ok,ok
+U6,6,2,1,p6s2r1,3,ся!..,ся,read,,ok,ok,ok
+P,1,1,1,p1s1r1,1,Средь,Средь,read,,ok,ok,ok
+P,1,1,1,p1s1r1,2,шум-,штм,letter recognition,token штм,,,
+P,1,1,1,p1s1r1,3,на-,на,read,,ok,ok,ok
+P,1,1,1,p1s1r1,4,го,го,read,,ok,ok,ok
+P,1,2,2,p1s2r2,1,ба-,ба,read,,ok,ok,ok
+P,1,2,2,p1s2r2,2,ла,ла,read,,ok,ok,ok
+P,1,2,2,p1s2r2,3,слу-,слу,read,,ok,ok,ok
+P,1,2,2,p1s2r2,4,чай-,чан,letter recognition,token чан,,,
+P,1,2,2,p1s2r2,5,"но,",но,read,,ok,ok,ok
+P,1,2,2,p1s2r2,6,въ,вътре,token splitting,2 printed syllables aligned to 1 token(s): вътре,,,
+P,1,2,2,p1s2r2,7,тре-,вътре,token splitting,2 printed syllables aligned to 1 token(s): вътре,,,
+P,1,2,2,p1s2r2,8,во-,во,read,,ok,ok,ok
+P,1,2,2,p1s2r2,9,гѣ,гѣмірс,token splitting,2 printed syllables aligned to 1 token(s): гѣмірс,,,
+P,1,2,2,p1s2r2,10,мір-,гѣмірс,token splitting,2 printed syllables aligned to 1 token(s): гѣмірс,,,
+P,1,2,2,p1s2r2,11,ской,кон,letter recognition,token кон,,,
+P,1,2,2,p1s2r2,12,су-,су,read,,wrong,ok,ok
+P,1,2,2,p1s2r2,13,е-,е,read,,wrong,ok,ok
+P,1,2,2,p1s2r2,14,"ты,",ты,read,,ok,ok,ok
+P,1,2,2,p1s2r2,15,те-,те,read,,ok,ok,ok
+P,1,2,2,p1s2r2,16,бя,бя,read,,ok,ok,ok
+P,1,2,2,p1s2r2,17,я,я,read,,ok,ok,ok
+P,1,2,2,p1s2r2,18,у-,у,read,,ok,ok,ok
+P,1,2,2,p1s2r2,19,ви-,вни,letter recognition,token вни,,,
+P,1,2,2,p1s2r2,20,"дѣлъ,",дѣлъ,read,,ok,ok,ok
+P,1,3,1,p1s3r1,1,но,но,read,,ok,ok,ok
+P,1,3,1,p1s3r1,2,тай-,тан,letter recognition,token тан,,,
+P,1,3,1,p1s3r1,3,на,на,read,,ok,ok,ok
+P,1,3,1,p1s3r1,4,тво-,тво|н,token splitting,1 printed syllable aligned to 2 tokens: тво|н,,,
+P,1,3,1,p1s3r1,5,и,по,token splitting,2 printed syllables aligned to 1 token(s): по,,,
+P,1,3,1,p1s3r1,6,по-,по,token splitting,2 printed syllables aligned to 1 token(s): по,,,
+P,1,3,1,p1s3r1,7,кры-,кры,read,,wrong,wrong,ok
+P,1,3,1,p1s3r1,8,ва-,ва,read,,wrong,wrong,ok
+P,1,3,1,p1s3r1,9,ла,ла,read,,ok,ok,ok
+P,1,3,1,p1s3r1,10,чер-,чер,read,,ok,ok,ok
+P,1,3,1,p1s3r1,11,ты;,ты,read,,ok,ok,ok
+P,1,3,1,p1s3r1,12,лишь,лишь,read,,ok,ok,ok
+P,1,3,1,p1s3r1,13,о-,о,read,,ok,ok,ok
+P,1,3,1,p1s3r1,14,чи,чн,letter recognition,token чн,,,
+P,1,3,1,p1s3r1,15,пе-,пе,read,,ok,ok,ok
+P,1,3,1,p1s3r1,16,чаль-,чаль,read,,ok,ok,ok
+P,1,3,1,p1s3r1,17,но,но,read,,ok,ok,ok
+P,2,1,2,p2s1r2,1,гля-,гля,read,,ok,ok,ok
+P,2,1,2,p2s1r2,2,дѣ-,дѣ,read,,ok,ok,ok
+P,2,1,2,p2s1r2,3,"ли,",ли,read,,ok,ok,ok
+P,2,1,2,p2s1r2,4,а,а,read,,ok,ok,ok
+P,2,1,2,p2s1r2,5,го-,то,letter recognition,token то,,,
+P,2,1,2,p2s1r2,6,лосъ,лосътакъ,token splitting,2 printed syllables aligned to 1 token(s): лосътакъ,,,
+P,2,1,2,p2s1r2,7,такъ,лосътакъ,token splitting,2 printed syllables aligned to 1 token(s): лосътакъ,,,
+P,2,1,2,p2s1r2,8,див-,днв,letter recognition,token днв,,,
+P,2,1,2,p2s1r2,9,но,но,read,,ok,ok,ok
+P,2,1,2,p2s1r2,10,зву-,зву,read,,ok,ok,ok
+P,2,1,2,p2s1r2,11,чалъ,чалъ,read,,ok,ok,ok
+P,2,1,2,p2s1r2,12,какъ,какъзвонъот,token splitting,2 printed syllables aligned to 1 token(s): какъзвонъот,,,
+P,2,1,2,p2s1r2,13,звонъ,какъзвонъот,token splitting,2 printed syllables aligned to 1 token(s): какъзвонъот,,,
+P,2,1,2,p2s1r2,14,от-,да,token splitting,2 printed syllables aligned to 1 token(s): да,,,
+P,2,1,2,p2s1r2,15,да-,да,token splitting,2 printed syllables aligned to 1 token(s): да,,,
+P,2,1,2,p2s1r2,16,лен-,лен,read,,ok,ok,ok
+P,2,1,2,p2s1r2,17,ной,нон,letter recognition,token нон,,,
+P,2,1,2,p2s1r2,18,сви-,Свн,letter recognition,token Свн,,,
+P,2,2,1,p2s2r1,1,рѣ-,рѣ,read,,ok,ok,ok
+P,2,2,1,p2s2r1,2,"ли,",лн,letter recognition,token лн,,,
+P,2,2,1,p2s2r1,3,какъ,какъ,read,,ok,ok,ok
+P,2,2,1,p2s2r1,4,мо-,мо,read,,ok,ok,ok
+P,2,2,1,p2s2r1,5,ря,ря,read,,ok,ok,ok
+P,2,2,1,p2s2r1,6,иг-,нг,letter recognition,token нг,,,
+P,2,2,1,p2s2r1,7,ра-,ра,read,,ok,ok,ok
+P,2,2,1,p2s2r1,8,ю-,ю,read,,ok,ok,ok
+P,2,2,1,p2s2r1,9,щій,щін,letter recognition,token щін,,,
+P,2,2,1,p2s2r1,10,валъ.,валъ,read,,ok,ok,ok
+P,2,2,1,p2s2r1,11,Мнѣ,Инѣ,letter recognition,token Инѣ,,,
+P,2,2,1,p2s2r1,12,станъ,станътвойнон,token splitting,2 printed syllables aligned to 1 token(s): станътвойнон,,,
+P,2,2,1,p2s2r1,13,твой,станътвойнон,token splitting,2 printed syllables aligned to 1 token(s): станътвойнон,,,
+P,2,2,1,p2s2r1,14,пон-,ра,token splitting,2 printed syllables aligned to 1 token(s): ра,,,
+P,2,2,1,p2s2r1,15,ра-,ра,token splitting,2 printed syllables aligned to 1 token(s): ра,,,
+P,2,2,1,p2s2r1,16,вил-,вил,read,,wrong,ok,ok
+P,2,2,1,p2s2r1,17,ся,ся,read,,wrong,ok,ok
+P,2,3,1,p2s3r1,1,тон-,тон,read,,ok,ok,ok
+P,2,3,1,p2s3r1,2,кій,кій|н,token splitting,1 printed syllable aligned to 2 tokens: кій|н,,,
+P,2,3,1,p2s3r1,3,и,весь,token splitting,2 printed syllables aligned to 1 token(s): весь,,,
+P,2,3,1,p2s3r1,4,весь,весь,token splitting,2 printed syllables aligned to 1 token(s): весь,,,
+P,2,3,1,p2s3r1,5,твой,твон,letter recognition,token твон,,,
+P,2,3,1,p2s3r1,6,за-,за,read,,ok,ok,ok
+P,2,3,1,p2s3r1,7,дум-,дум,read,,ok,ok,ok
+P,2,3,1,p2s3r1,8,чи-,чн,letter recognition,token чн,,,
+P,2,3,1,p2s3r1,9,вый,вый,read,,wrong,wrong,ok
+P,2,3,1,p2s3r1,10,"видъ,",видъ,token splitting,2 printed syllables aligned to 1 token(s): видъ,,,
+P,2,3,1,p2s3r1,11,а,видъ,token splitting,2 printed syllables aligned to 1 token(s): видъ,,,
+P,2,3,1,p2s3r1,12,смѣхъ,асмѣхътвой,token splitting,2 printed syllables aligned to 1 token(s): асмѣхътвой,,,
+P,2,3,1,p2s3r1,13,"твой,",асмѣхътвой,token splitting,2 printed syllables aligned to 1 token(s): асмѣхътвой,,,
+P,2,3,1,p2s3r1,14,и,н,letter recognition,token н,,,
+P,2,3,1,p2s3r1,15,груст-,грустный,token splitting,2 printed syllables aligned to 1 token(s): грустный,,,
+P,2,3,1,p2s3r1,16,"ный,",грустный,token splitting,2 printed syllables aligned to 1 token(s): грустный,,,
+P,2,3,1,p2s3r1,17,и,и,read,,ok,ok,ok
+P,2,3,1,p2s3r1,18,звон-,звон,read,,ok,ok,ok
+P,2,3,1,p2s3r1,19,кій,кій,read,,ok,ok,ok
+P,2,4,1,p2s4r1,1,съ,,unattributed,"F made no token for it; the crop holds it (read right by t-imap,t-syl)",,,
+P,2,4,1,p2s4r1,2,тѣхъ,сСътѣхъпоръвъмоемъ,token splitting,2 printed syllables aligned to 1 token(s): сСътѣхъпоръвъмоемъ,,,
+P,2,4,1,p2s4r1,3,поръ,сСътѣхъпоръвъмоемъ,token splitting,2 printed syllables aligned to 1 token(s): сСътѣхъпоръвъмоемъ,,,
+P,2,4,1,p2s4r1,4,въ,,unattributed,"F made no token for it; no other reader read it, so whether any crop holds it is not shown",,,
+P,2,4,1,p2s4r1,5,мо-,,unattributed,"F made no token for it; no other reader read it, so whether any crop holds it is not shown",,,
+P,2,4,1,p2s4r1,6,емъ,серд,token splitting,2 printed syllables aligned to 1 token(s): серд,,,
+P,2,4,1,p2s4r1,7,серд-,серд,token splitting,2 printed syllables aligned to 1 token(s): серд,,,
+P,2,4,1,p2s4r1,8,цѣ,цѣ,read,,ok,ok,ok
+P,2,4,1,p2s4r1,9,зву-,зву,read,,ok,ok,ok
+P,2,4,1,p2s4r1,10,читъ!,Чнтъ,letter recognition,token Чнтъ,,,
+P,2,4,1,p2s4r1,11,Въ,Въча,token splitting,2 printed syllables aligned to 1 token(s): Въча,,,
+P,2,4,1,p2s4r1,12,ча-,Въча,token splitting,2 printed syllables aligned to 1 token(s): Въча,,,
+P,2,4,1,p2s4r1,13,сы,сы,read,,ok,ok,ok
+P,2,4,1,p2s4r1,14,о-,о,read,,ok,ok,ok
+P,2,4,1,p2s4r1,15,ди-,ди,read,,ok,ok,ok
+P,2,4,1,p2s4r1,16,но-,но,read,,ok,ok,ok
+P,2,4,1,p2s4r1,17,кі-,кі,read,,ok,ok,ok
+P,2,4,1,p2s4r1,18,е,ѳ,letter recognition,token ѳ,,,
+P,3,1,2,p3s1r2,1,но-,но,read,,ok,ok,ok
+P,3,1,2,p3s1r2,2,чи,чи,read,,ok,ok,ok
+P,3,1,2,p3s1r2,3,люб-,люб,read,,ok,ok,ok
+P,3,1,2,p3s1r2,4,лю,лю,read,,ok,ok,ok
+P,3,1,2,p3s1r2,5,я,я,read,,ok,ok,ok
+P,3,1,2,p3s1r2,6,ус-,ус,read,,ok,ok,ok
+P,3,1,2,p3s1r2,7,та-,та,read,,ok,ok,ok
+P,3,1,2,p3s1r2,8,лый,лыш,letter recognition,token лыш,,,
+P,3,1,2,p3s1r2,9,при-,прн,letter recognition,token прн,,,
+P,3,1,2,p3s1r2,10,"лечь,",лечъ,letter recognition,token лечъ,,,
+P,3,1,2,p3s1r2,11,я,я,read,,wrong,wrong,wrong
+P,3,1,2,p3s1r2,12,ви-,вн,letter recognition,token вн,,,
+P,3,1,2,p3s1r2,13,жу,жу,read,,ok,ok,ok
+P,3,1,2,p3s1r2,14,пе-,пе,read,,ok,ok,ok
+P,3,1,2,p3s1r2,15,чаль-,чаль,read,,ok,ok,ok
+P,3,1,2,p3s1r2,16,ны-,ны,read,,ok,ok,ok
+P,3,1,2,p3s1r2,17,я,я,read,,ok,ok,ok
+P,3,2,1,p3s2r1,1,о-,о,read,,ok,ok,ok
+P,3,2,1,p3s2r1,2,"чи,",чн,letter recognition,token чн,,,
+P,3,2,1,p3s2r1,3,я,я,read,,ok,ok,ok
+P,3,2,1,p3s2r1,4,слы-,слы,read,,ok,ok,ok
+P,3,2,1,p3s2r1,5,шу,шу,read,,ok,ok,ok
+P,3,2,1,p3s2r1,6,ве-,ве,read,,ok,ok,ok
+P,3,2,1,p3s2r1,7,се-,се,read,,ok,ok,ok
+P,3,2,1,p3s2r1,8,лу-,лу,read,,wrong,ok,ok
+P,3,2,1,p3s2r1,9,ю,ю,read,,wrong,ok,ok
+P,3,2,1,p3s2r1,10,"рѣчь,",рѣчь|н,token splitting,1 printed syllable aligned to 2 tokens: рѣчь|н,,,
+P,3,2,1,p3s2r1,11,и,груст,token splitting,2 printed syllables aligned to 1 token(s): груст,,,
+P,3,2,1,p3s2r1,12,груст-,груст,token splitting,2 printed syllables aligned to 1 token(s): груст,,,
+P,3,2,1,p3s2r1,13,но,но,read,,ok,ok,ok
+P,3,2,1,p3s2r1,14,"я,",я,read,,ok,ok,ok
+P,3,2,1,p3s2r1,15,груст-,груст,read,,ok,ok,ok
+P,3,2,1,p3s2r1,16,но,но,read,,ok,ok,ok
+P,3,2,1,p3s2r1,17,такъ,такъ,read,,ok,ok,ok
+P,3,2,1,p3s2r1,18,за-,за,read,,ok,ok,ok
+P,3,2,1,p3s2r1,19,сы-,зы,letter recognition,token зы,,,
+P,3,3,1,p3s3r1,1,па-,па,read,,wrong,ok,ok
+P,3,3,1,p3s3r1,2,"ю,",ю,token splitting,2 printed syllables aligned to 1 token(s): ю,,,
+P,3,3,1,p3s3r1,3,и,ю,token splitting,2 printed syllables aligned to 1 token(s): ю,,,
+P,3,3,1,p3s3r1,4,въ,н,token splitting,2 printed syllables aligned to 1 token(s): н,,,
+P,3,3,1,p3s3r1,5,гре-,н,token splitting,2 printed syllables aligned to 1 token(s): н,,,
+P,3,3,1,p3s3r1,6,захъ,въгрезахъне,token splitting,2 printed syllables aligned to 1 token(s): въгрезахъне,,,
+P,3,3,1,p3s3r1,7,не-,въгрезахъне,token splitting,2 printed syllables aligned to 1 token(s): въгрезахъне,,,
+P,3,3,1,p3s3r1,8,вѣ-,вѣ,token splitting,2 printed syllables aligned to 1 token(s): вѣ,,,
+P,3,3,1,p3s3r1,9,до-,вѣ,token splitting,2 printed syllables aligned to 1 token(s): вѣ,,,
+P,3,3,1,p3s3r1,10,мыхъ,домыхъсплю,token splitting,2 printed syllables aligned to 1 token(s): домыхъсплю,,,
+P,3,3,1,p3s3r1,11,сплю...,домыхъсплю,token splitting,2 printed syllables aligned to 1 token(s): домыхъсплю,,,
+P,3,3,1,p3s3r1,12,Люб-,Люб,read,,wrong,wrong,ok
+P,3,3,1,p3s3r1,13,лю,лю,read,,wrong,wrong,ok
+P,3,3,1,p3s3r1,14,ли,лн,letter recognition,token лн,,,
+P,3,3,1,p3s3r1,15,те-,те,read,,ok,ok,ok
+P,3,3,1,p3s3r1,16,бя,бя,read,,ok,ok,ok
+P,3,3,1,p3s3r1,17,я,я,read,,ok,ok,ok
+P,3,3,1,p3s3r1,18,не,не,read,,ok,ok,ok
+P,3,3,1,p3s3r1,19,зна-,зна,read,,ok,ok,ok
+P,3,3,1,p3s3r1,20,"ю,",ю,read,,ok,ok,ok
+P,3,4,1,p3s4r1,1,но,но,read,,ok,ok,ok
+P,3,4,1,p3s4r1,2,ка-,ка,read,,ok,ok,ok
+P,3,4,1,p3s4r1,3,жет-,жет,read,,ok,ok,ok
+P,3,4,1,p3s4r1,4,ся,ся,read,,ok,ok,ok
+P,3,4,1,p3s4r1,5,мнѣ,мнѣчто,token splitting,2 printed syllables aligned to 1 token(s): мнѣчто,,,
+P,3,4,1,p3s4r1,6,что,мнѣчто,token splitting,2 printed syllables aligned to 1 token(s): мнѣчто,,,
+P,3,4,1,p3s4r1,7,люб-,люб,read,,ok,ok,ok
+P,3,4,1,p3s4r1,8,лю!,лю,read,,ok,ok,ok
+B01,1,1,1,p1s1r1,1,Те-,ге,letter recognition,token ге,,,
+B01,1,1,1,p1s1r1,2,бе,фФе,letter recognition,token фФе,,,
+B01,1,1,1,p1s1r1,3,ль,ль,read,,wrong,wrong,wrong
+B01,1,1,1,p1s1r1,4,ме-,ме,read,,wrong,wrong,wrong
+B01,1,1,1,p1s1r1,5,ня,ня,read,,ok,ok,ok
+B01,1,1,1,p1s1r1,6,при-,при,read,,ok,ok,ok
+B01,1,1,1,p1s1r1,7,дёт-,дет,read,,ok,ok,ok
+B01,1,1,1,p1s1r1,8,ся,ся,read,,ok,ok,ok
+B01,1,1,1,p1s1r1,9,хо-,хо,read,,ok,ok,ok
+B01,1,1,1,p1s1r1,10,ро-,пто,letter recognition,token пто,,,
+B01,1,2,1,p1s2r1,1,нить,нить,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,2,иль,иль,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,3,мне,мне,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,4,те-,те,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,5,"бя,",оя,letter recognition,token оя,,,
+B01,1,2,1,p1s2r1,6,не,не,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,7,зна-,зн,letter recognition,token зн,,,
+B01,1,2,1,p1s2r1,8,"ю,",ю,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,9,друг,друг,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,10,мой,мой,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,11,ми-,ми,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,12,лый.,льти,letter recognition,token льти,,,
+B01,1,2,1,p1s2r1,13,Но,нНо,letter recognition,token нНо,,,
+B01,1,2,1,p1s2r1,14,пусть,пусть,read,,ok,ok,ok
+B01,1,2,1,p1s2r1,15,судь-,судь,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,1,бы,ОЬ,letter recognition,token ОЬ,,,
+B01,1,3,1,p1s3r1,2,тво-,тво,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,3,ей,еи,letter recognition,token еи,,,
+B01,1,3,1,p1s3r1,4,пре-,пре,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,5,рвёт-,рвет,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,6,ся,ся,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,7,"нить,",нить,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,8,твой,твой,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,9,об-,об,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,10,раз,раз,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,11,не,не,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,12,ис-,ис,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,13,чез-,чез,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,14,нет,нет,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,15,за,за,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,16,мо-,мо,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,17,ги-,ги,read,,ok,ok,ok
+B01,1,3,1,p1s3r1,18,лой.,лой,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,1,Ты,Хът,letter recognition,token Хът,,,
+B01,1,4,1,p1s4r1,2,со-,со,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,3,хра-,хра,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,4,нишь,нишъь,letter recognition,token нишъь,,,
+B01,1,4,1,p1s4r1,5,и,и,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,6,"жизнь,",жизнь,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,7,и,и,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,8,кра-,кра,read,,wrong,ok,ok
+B01,1,4,1,p1s4r1,9,со-,со,read,,wrong,ok,ok
+B01,1,4,1,p1s4r1,10,"ту,",ту,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,11,а,а,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,12,от,от,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,13,ме-,ме,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,14,ня,ня,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,15,ни-,ни,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,16,что,что,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,17,не,не,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,18,со-,со,read,,ok,ok,ok
+B01,1,4,1,p1s4r1,19,хра-,ѵѣа,letter recognition,token ѵѣа,,,
+B01,2,1,1,p2s1r1,1,нит-,Н|Ит,token splitting,1 printed syllable aligned to 2 tokens: Н|Ит,,,
+B01,2,1,1,p2s1r1,2,ся.,ся,read,,ok,ok,ok
+B01,2,1,1,p2s1r1,3,На,На,read,,ok,ok,ok
+B01,2,1,1,p2s1r1,4,клад-,клад,read,,ok,ok,ok
+B01,2,1,1,p2s1r1,5,би-,ф|Фи,token splitting,1 printed syllable aligned to 2 tokens: ф|Фи,,,
+B01,2,1,1,p2s1r1,6,ще,ше,letter recognition,token ше,,,
+B01,2,1,1,p2s1r1,7,по-,по,read,,wrong,wrong,wrong
+B01,2,1,1,p2s1r1,8,кой,кой,read,,wrong,wrong,wrong
+B01,2,1,1,p2s1r1,9,я,я,read,,ok,ok,ok
+B01,2,1,1,p2s1r1,10,об-,об,read,,ok,ok,ok
+B01,2,1,1,p2s1r1,11,ре-,е,letter recognition,token е,,,
+B01,2,1,1,p2s1r1,12,"ту,",ту,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,1,а,а,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,2,твой,твой,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,3,при-,при,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,4,ют,ют,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,5,от-,от,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,6,кры-,кты,letter recognition,token кты,,,
+B01,2,2,1,p2s2r1,7,та-,та,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,8,я,я,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,9,гроб-,гроб,read,,ok,ok,ok
+B01,2,2,1,p2s2r1,10,ни-,ни,read,,ok,ok,ok
+B01,2,3,1,p2s3r1,1,ца.,на,letter recognition,token на,,,
+B01,2,3,1,p2s3r1,2,Твой,Ттвой,letter recognition,token Ттвой,,,
+B01,2,3,1,p2s3r1,3,па-,па,read,,ok,ok,ok
+B01,2,3,1,p2s3r1,4,мят-,мят,read,,wrong,ok,ok
+B01,2,3,1,p2s3r1,5,ник,ник,read,,wrong,ok,ok
+B01,2,3,1,p2s3r1,6,вос-,вос,read,,ok,ok,ok
+B01,2,3,1,p2s3r1,7,тор-,тор,read,,ok,ok,ok
+B01,2,3,1,p2s3r1,8,жен-,жени,letter recognition,token жени,,,
+B01,2,3,1,p2s3r1,9,ный,ньыти,letter recognition,token ньыти,,,
+B01,2,3,1,p2s3r1,10,мой,мок,letter recognition,token мок,,,
+B01,2,4,1,p2s4r1,1,стих.,стих,read,,ok,ok,ok
+B01,2,4,1,p2s4r1,2,Кто,ѣто,letter recognition,token ѣто,,,
+B01,2,4,1,p2s4r1,3,не,не,read,,ok,ok,ok
+B01,2,4,1,p2s4r1,4,рож-,рож,read,,wrong,wrong,ok
+B01,2,4,1,p2s4r1,5,дён,ден,read,,wrong,wrong,ok
+B01,2,4,1,p2s4r1,6,е-,е,read,,ok,ok,ok
+B01,2,4,1,p2s4r1,7,"щё,",ще,read,,ok,ok,ok
+B01,2,4,1,p2s4r1,8,е-,е,read,,ok,ok,ok
+B01,2,4,1,p2s4r1,9,го,то,letter recognition,token то,,,
+B01,2,4,1,p2s4r1,10,у-,у,read,,ok,ok,ok
+B01,2,4,1,p2s4r1,11,слы-,сльт,letter recognition,token сльт,,,
+B01,3,1,1,p3s1r1,1,шит.,шит,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,2,И,мир,token splitting,2 printed syllables aligned to 1 token(s): мир,,,
+B01,3,1,1,p3s1r1,3,мир,мир,token splitting,2 printed syllables aligned to 1 token(s): мир,,,
+B01,3,1,1,p3s1r1,4,по-,по,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,5,вто-,вто,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,6,рит,рит,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,7,по-,по,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,8,весть,весть,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,9,дней,дней,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,10,тво-,тво,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,11,"их,",их,read,,ok,ok,ok
+B01,3,1,1,p3s1r1,12,Ког-,Ко,letter recognition,token Ко,,,
+B01,3,1,1,p3s1r1,13,да,гла,letter recognition,token гла,,,
+B01,3,1,1,p3s1r1,14,ум-,ум,read,,ok,ok,ok
+B01,3,2,1,p3s2r1,1,рут,рут,read,,ok,ok,ok
+B01,3,2,1,p3s2r1,2,все,все,read,,ok,ok,ok
+B01,3,2,1,p3s2r1,3,"те,",те,read,,ok,ok,ok
+B01,3,2,1,p3s2r1,4,кто,кто,read,,ok,ok,ok
+B01,3,2,1,p3s2r1,5,ны-,ньтне,token splitting,2 printed syllables aligned to 1 token(s): ньтне,,,
+B01,3,2,1,p3s2r1,6,не,ньтне,token splitting,2 printed syllables aligned to 1 token(s): ньтне,,,
+B01,3,2,1,p3s2r1,7,ды-,пдь,letter recognition,token пдь,,,
+B01,3,2,1,p3s2r1,8,шит.,ЕШТИиТ,letter recognition,token ЕШТИиТ,,,
+B01,3,2,1,p3s2r1,9,Ты,гы,letter recognition,token гы,,,
+B01,3,2,1,p3s2r1,10,бу-,оу,letter recognition,token оу,,,
+B01,3,2,1,p3s2r1,11,дешь,лешь,letter recognition,token лешь,,,
+B01,3,3,1,p3s3r1,1,"жить,",жить,read,,ok,ok,ok
+B01,3,3,1,p3s3r1,2,зем-,зем,read,,ok,ok,ok
+B01,3,3,1,p3s3r1,3,ной,нои,letter recognition,token нои,,,
+B01,3,3,1,p3s3r1,4,по-,по,read,,ok,ok,ok
+B01,3,3,1,p3s3r1,5,ки-,ки,read,,ok,ok,ok
+B01,3,3,1,p3s3r1,6,нув,нув,read,,ok,ok,ok
+B01,3,3,1,p3s3r1,7,"прах,",прах,read,,ok,ok,ok
+B01,3,3,1,p3s3r1,8,"там,",там,read,,ok,ok,ok
+B01,3,3,1,p3s3r1,9,где,тгдле,letter recognition,token тгдле,,,
+B01,3,3,1,p3s3r1,10,жи-,жи,read,,ok,ok,ok
+B01,3,4,1,p3s4r1,1,вёт,вет,read,,ok,ok,ok
+B01,3,4,1,p3s4r1,2,ды-,дъь,letter recognition,token дъь,,,
+B01,3,4,1,p3s4r1,3,ха-,ха,read,,ok,ok,ok
+B01,3,4,1,p3s4r1,4,"нье,",нье,read,,ok,ok,ok
+B01,3,4,1,p3s4r1,5,на,на,read,,ok,ok,ok
+B01,3,4,1,p3s4r1,6,ус-,ѵ,letter recognition,token ѵ,,,
+B01,3,4,1,p3s4r1,7,тах!,ста|х,token splitting,1 printed syllable aligned to 2 tokens: ста|х,,,
+B02,1,1,1,p1s1r1,1,Тру-,Гру,letter recognition,token Гру,,,
+B02,1,1,1,p1s1r1,2,да-,да,read,,wrong,ok,ok
+B02,1,1,1,p1s1r1,3,ми,ми,read,,wrong,ok,ok
+B02,1,1,1,p1s1r1,4,из-,из,read,,wrong,ok,ok
+B02,1,1,1,p1s1r1,5,ну-,ну,read,,wrong,ok,ok
+B02,1,1,1,p1s1r1,6,"рён,",рен,read,,ok,ok,ok
+B02,1,1,1,p1s1r1,7,хо-,хо,read,,ok,ok,ok
+B02,1,1,1,p1s1r1,8,чу,чу,read,,ok,ok,ok
+B02,1,1,1,p1s1r1,9,у-,у,read,,ok,ok,ok
+B02,1,1,1,p1s1r1,10,"снуть,",снуть,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,1,бла-,ола,letter recognition,token ола,,,
+B02,1,2,1,p1s2r1,2,жен-,жен,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,3,ный,ный,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,4,от-,от,read,,wrong,ok,wrong
+B02,1,2,1,p1s2r1,5,дых,дых,read,,wrong,ok,wrong
+B02,1,2,1,p1s2r1,6,об-,об,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,7,ре-,ре,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,8,сти,сти,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,9,в,в,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,10,по-,по,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,11,сте-,сте,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,12,ли.,ли,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,13,Но,но,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,14,толь-,толь,read,,ok,ok,ok
+B02,1,2,1,p1s2r1,15,ко,ко,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,1,ля-,ля,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,2,"гу,",гу,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,3,вновь,вновь,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,4,пус-,пус,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,5,ка-,ка,read,,wrong,ok,wrong
+B02,1,3,1,p1s3r1,6,юсь,юсь,read,,wrong,ok,wrong
+B02,1,3,1,p1s3r1,7,в,в,read,,wrong,wrong,wrong
+B02,1,3,1,p1s3r1,8,путь,нуть,letter recognition,token нуть,,,
+B02,1,3,1,p1s3r1,9,в,в,read,,wrong,wrong,wrong
+B02,1,3,1,p1s3r1,10,сво-,сво,read,,wrong,wrong,wrong
+B02,1,3,1,p1s3r1,11,их,их,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,12,меч-,меч,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,13,тах,тах,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,14,к,К,read,,ok,ok,ok
+B02,1,3,1,p1s3r1,15,од-,од,read,,ok,ok,ok
+B02,1,4,1,p1s4r1,1,ной,нотп,letter recognition,token нотп,,,
+B02,1,4,1,p1s4r1,2,и,и,read,,ok,ok,ok
+B02,1,4,1,p1s4r1,3,той,той,read,,ok,ok,ok
+B02,1,4,1,p1s4r1,4,же,же,read,,ok,ok,ok
+B02,1,4,1,p1s4r1,5,це-,не,letter recognition,token не,,,
+B02,1,4,1,p1s4r1,6,ли.,ли,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,1,Мо-,мо,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,2,и,и,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,3,меч-,меч,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,4,ты,ты,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,5,и,и,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,6,чув-,чув,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,7,ства,етва,letter recognition,token етва,,,
+B02,2,1,1,p2s1r1,8,в,в,read,,wrong,wrong,wrong
+B02,2,1,1,p2s1r1,9,со-,со,read,,wrong,wrong,wrong
+B02,2,1,1,p2s1r1,10,тый,тьти,letter recognition,token тьти,,,
+B02,2,1,1,p2s1r1,11,раз,раз,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,12,и-,И,read,,wrong,wrong,wrong
+B02,2,1,1,p2s1r1,13,дут,дут,read,,wrong,wrong,wrong
+B02,2,1,1,p2s1r1,14,к,к,read,,ok,ok,ok
+B02,2,1,1,p2s1r1,15,те-,те,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,1,бе,бе,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,2,до-,до,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,3,ро-,то,letter recognition,token то,,,
+B02,2,2,1,p2s2r1,4,гой,гок,letter recognition,token гок,,,
+B02,2,2,1,p2s2r1,5,пи-,пи,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,6,ли-,ли,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,7,гри-,три,letter recognition,token три,,,
+B02,2,2,1,p2s2r1,8,"ма,",ма,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,9,"и,",и,read,,wrong,ok,ok
+B02,2,2,1,p2s2r1,10,не,не,read,,wrong,ok,ok
+B02,2,2,1,p2s2r1,11,смы-,смь,letter recognition,token смь,,,
+B02,2,2,1,p2s2r1,12,ка-,ка,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,13,я,я,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,14,у-,у,read,,ok,ok,ok
+B02,2,2,1,p2s2r1,15,том-,том,read,,ok,ok,ok
+B02,2,3,1,p2s3r1,1,лён-,лен,read,,ok,ok,ok
+B02,2,3,1,p2s3r1,2,ных,ньтх,letter recognition,token ньтх,,,
+B02,2,3,1,p2s3r1,3,"глаз,",глаз,read,,ok,ok,ok
+B02,2,3,1,p2s3r1,4,я,я,read,,ok,ok,ok
+B02,2,3,1,p2s3r1,5,ви-,ви,read,,ok,ok,ok
+B02,2,3,1,p2s3r1,6,жу,жу,read,,ok,ok,ok
+B02,2,3,1,p2s3r1,7,"тьму,",Тьмгу,letter recognition,token Тьмгу,,,
+B02,2,3,1,p2s3r1,8,что,что,read,,ok,wrong,wrong
+B02,2,3,1,p2s3r1,9,и,и,read,,wrong,wrong,wrong
+B02,2,3,1,p2s3r1,10,сле-,сле,read,,wrong,ok,ok
+B03,1,1,1,p1s1r1,1,Люб-,Уюб,letter recognition,token Уюб,,,
+B03,1,1,1,p1s1r1,2,лю,лю,read,,ok,ok,ok
+B03,1,1,1,p1s1r1,3,но,но,read,,ok,ok,ok
+B03,1,1,1,p1s1r1,4,ре-,ре,read,,ok,ok,ok
+B03,1,1,1,p1s1r1,5,же,же,read,,ok,ok,ok
+B03,1,1,1,p1s1r1,6,го-,го,read,,ok,ok,ok
+B03,1,1,1,p1s1r1,7,во-,во,read,,ok,ok,ok
+B03,1,2,1,p1s2r1,1,рю,рю,read,,ok,ok,ok
+B03,1,2,1,p1s2r1,2,об,об,read,,ok,ok,ok
+B03,1,2,1,p1s2r1,3,э-,э,read,,ok,ok,ok
+B03,1,2,1,p1s2r1,4,"том,",том,read,,ok,ok,ok
+B03,1,2,1,p1s2r1,5,люб-,люб,read,,wrong,ok,ok
+B03,1,2,1,p1s2r1,6,лю,лю,read,,wrong,ok,ok
+B03,1,2,1,p1s2r1,7,неж-,неж,read,,wrong,ok,ok
+B03,1,2,1,p1s2r1,8,ней,ней,read,,ok,ok,ok
+B03,1,2,1,p1s2r1,9,но,но,read,,ok,ok,ok
+B03,1,2,1,p1s2r1,10,не,не,read,,wrong,ok,ok
+B03,1,2,1,p1s2r1,11,для,для,read,,ok,wrong,wrong
+B03,1,2,1,p1s2r1,12,мно-,хно,letter recognition,token хно,,,
+B03,1,2,1,p1s2r1,13,гих,гг,letter recognition,token гг,,,
+B03,1,3,1,p1s3r1,1,глаз.,глаз,read,,ok,ok,ok
+B03,1,3,1,p1s3r1,2,Тор-,Гор,letter recognition,token Гор,,,
+B03,1,3,1,p1s3r1,3,гу-,гу,read,,ok,ok,ok
+B03,1,3,1,p1s3r1,4,ет,ет,read,,ok,ok,ok
+B03,1,3,1,p1s3r1,5,чув-,чув,read,,ok,ok,ok
+B03,1,3,1,p1s3r1,6,ством,ством,read,,ok,ok,ok
+B03,1,3,1,p1s3r1,7,"тот,",тот,read,,ok,ok,ok
+B03,1,3,1,p1s3r1,8,кто,кто,read,,wrong,ok,ok
+B03,1,3,1,p1s3r1,9,пе-,пе,read,,wrong,ok,ok
+B03,1,3,1,p1s3r1,10,ред,релд,letter recognition,token релд,,,
+B03,2,1,1,p2s1r1,1,све-,све,read,,ok,ok,ok
+B03,2,1,1,p2s1r1,2,том,том,read,,ok,ok,ok
+B03,2,1,1,p2s1r1,3,всю,всю,read,,ok,ok,ok
+B03,2,1,1,p2s1r1,4,ду-,ду,read,,ok,ok,ok
+B03,2,1,1,p2s1r1,5,шу,штуу,letter recognition,token штуу,,,
+B03,2,1,1,p2s1r1,6,вы-,вы,read,,wrong,ok,ok
+B03,2,1,1,p2s1r1,7,став-,став,read,,wrong,ok,ok
+B03,2,1,1,p2s1r1,8,ля-,ля,read,,ok,ok,ok
+B03,2,1,1,p2s1r1,9,ет,ет,read,,ok,ok,ok
+B03,2,1,1,p2s1r1,10,на-,на,read,,ok,ok,ok
+B03,2,1,1,p2s1r1,11,по-,по,read,,ok,ok,ok
+B03,2,1,1,p2s1r1,12,каз.,Каз,read,,ok,ok,ok
+B03,2,2,1,p2s2r1,1,Те-,ге,letter recognition,token ге,,,
+B03,2,2,1,p2s2r1,2,бя,бя,read,,ok,ok,ok
+B03,2,2,1,p2s2r1,3,встре-,встре,read,,ok,ok,ok
+B03,2,2,1,p2s2r1,4,чал,чал,read,,ok,ok,ok
+B03,2,2,1,p2s2r1,5,я,яЯ,letter recognition,token яЯ,,,
+B03,2,2,1,p2s2r1,6,пе-,не,letter recognition,token не,,,
+B03,2,2,1,p2s2r1,7,"сней,",сней,read,,ok,ok,ok
+B03,2,2,1,p2s2r1,8,как,как,read,,ok,ok,ok
+B03,2,2,1,p2s2r1,9,при-,при,read,,ok,ok,ok
+B03,2,3,1,p2s3r1,1,ве-,ве,read,,ok,ok,ok
+B03,2,3,1,p2s3r1,2,"том,",том,read,,ok,ok,ok
+B03,2,3,1,p2s3r1,3,ког-,ко,letter recognition,token ко,,,
+B03,2,3,1,p2s3r1,4,да,гда,letter recognition,token гда,,,
+B03,2,3,1,p2s3r1,5,лю-,лю,read,,ok,ok,ok
+B03,2,3,1,p2s3r1,6,бовь,Ѳовъ,letter recognition,token Ѳовъ,,,
+B03,2,3,1,p2s3r1,7,но-,но,read,,ok,ok,ok
+B03,2,3,1,p2s3r1,8,ва,ва,read,,ok,ok,ok
+B03,2,3,1,p2s3r1,9,бы-,бъя,letter recognition,token бъя,,,
+B03,2,3,1,p2s3r1,10,ла,ла,read,,ok,ok,ok
+B03,2,3,1,p2s3r1,11,для,для,read,,ok,ok,ok
+B03,2,3,1,p2s3r1,12,нас.,нас,read,,ok,ok,ok
+B03,2,4,1,p2s4r1,1,Так,Так,read,,ok,ok,wrong
+B03,2,4,1,p2s4r1,2,со-,со,read,,ok,ok,wrong
+B03,2,4,1,p2s4r1,3,ло-,ло,read,,ok,ok,wrong
+B03,2,4,1,p2s4r1,4,вей,вей,read,,ok,ok,wrong
+B03,2,4,1,p2s4r1,5,гре-,гре,read,,ok,ok,wrong
+B03,2,4,1,p2s4r1,6,мит,мит,read,,ok,ok,wrong
+B03,2,4,1,p2s4r1,7,в,в,read,,wrong,wrong,wrong
+B03,2,4,1,p2s4r1,8,пол-,пол,read,,wrong,wrong,wrong
+B03,2,4,1,p2s4r1,9,ноч-,ноч,read,,wrong,wrong,ok
+B03,2,4,1,p2s4r1,10,ный,ный,read,,ok,ok,ok
+B03,2,4,1,p2s4r1,11,час,час,read,,ok,ok,ok
+B03,2,4,1,p2s4r1,12,вес-,вес,read,,ok,ok,ok
+B03,2,4,1,p2s4r1,13,"ной,",ной,read,,ok,ok,ok
+B03,2,4,1,p2s4r1,14,но,но,read,,ok,ok,ok
+B03,3,1,1,p3s1r1,1,флей-,солейи,letter recognition,token солейи,,,
+B03,3,1,1,p3s1r1,2,ту,ту,read,,ok,ok,ok
+B03,3,1,1,p3s1r1,3,за-,за,read,,ok,ok,ok
+B03,3,1,1,p3s1r1,4,бы-,бь,letter recognition,token бь,,,
+B03,3,1,1,p3s1r1,5,ва-,ва,read,,ok,ok,ok
+B03,3,1,1,p3s1r1,6,ет,ет,read,,ok,ok,ok
+B03,3,1,1,p3s1r1,7,ле-,ле,read,,ok,ok,ok
+B03,3,1,1,p3s1r1,8,том.,том,read,,ok,ok,ok
+B03,3,2,1,p3s2r1,1,Ночь,почъ,letter recognition,token почъ,,,
+B03,3,2,1,p3s2r1,2,не,не,read,,ok,ok,ok
+B03,3,2,1,p3s2r1,3,ли-,ли,read,,ok,ok,ok
+B03,3,2,1,p3s2r1,4,шит-,птит,letter recognition,token птит,,,
+B03,3,2,1,p3s2r1,5,ся,ся,read,,ok,ok,ok
+B03,3,2,1,p3s2r1,6,пре-,пре,read,,wrong,ok,ok
+B03,3,2,1,p3s2r1,7,ле-,ле,read,,wrong,ok,ok
+B03,3,2,1,p3s2r1,8,сти,сети,letter recognition,token сети,,,
+B03,3,2,1,p3s2r1,9,сво-,сво,read,,ok,ok,ok
+B03,3,2,1,p3s2r1,10,"ей,",еи,letter recognition,token еи,,,
+B03,3,3,1,p3s3r1,1,ког-,ко,letter recognition,token ко,,,
+B03,3,3,1,p3s3r1,2,да,гда,letter recognition,token гда,,,
+B03,3,3,1,p3s3r1,3,е-,е,read,,ok,ok,ok
+B03,3,3,1,p3s3r1,4,го,тоѳ,token splitting,2 printed syllables aligned to 1 token(s): тоѳ,,,
+B03,3,3,1,p3s3r1,5,у-,тоѳ,token splitting,2 printed syllables aligned to 1 token(s): тоѳ,,,
+B03,3,3,1,p3s3r1,6,молк-,ѵ|молк,token splitting,1 printed syllable aligned to 2 tokens: ѵ|молк,,,
+B03,3,3,1,p3s3r1,7,нут,нут,read,,ok,ok,ok
+B03,3,3,1,p3s3r1,8,из-,из,read,,wrong,ok,ok
+B03,3,3,1,p3s3r1,9,ли-,ли,read,,wrong,ok,ok
+B03,3,3,1,p3s3r1,10,я-,я,read,,ok,ok,ok
+B03,3,3,1,p3s3r1,11,нья.,вьъя,letter recognition,token вьъя,,,
+B03,3,3,1,p3s3r1,12,Но,но,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,1,му-,му,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,2,зы-,зы,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,3,"ка,",ка,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,4,зву-,зву,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,5,ча,ча,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,6,со,со,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,7,всех,всех,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,8,вет-,вет,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,9,"вей,",веи,letter recognition,token веи,,,
+B03,3,4,1,p3s4r1,10,о-,о,read,,ok,ok,wrong
+B03,3,4,1,p3s4r1,11,быч-,ѣъ|ч,token splitting,1 printed syllable aligned to 2 tokens: ѣъ|ч,,,
+B03,3,4,1,p3s4r1,12,ной,ной,read,,wrong,wrong,ok
+B03,3,4,1,p3s4r1,13,"став,",став,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,14,те-,те,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,15,ря-,ря,read,,ok,ok,ok
+B03,3,4,1,p3s4r1,16,ет,ет,read,,wrong,wrong,wrong
+B03,3,4,1,p3s4r1,17,о-,оѳо,letter recognition,token оѳо,,,
+B03,3,4,1,p3s4r1,18,ба-,ба,read,,wrong,ok,ok
+B03,4,1,1,p4s1r1,1,я-,ча,letter recognition,token ча,,,
+B03,4,1,1,p4s1r1,2,нье.,ѣ|э,token splitting,1 printed syllable aligned to 2 tokens: ѣ|э,,,
+B03,4,2,1,p4s2r1,1,И,и,read,,ok,ok,ok
+B03,4,2,1,p4s2r1,2,я,я,read,,ok,ok,ok
+B03,4,2,1,p4s2r1,3,у-,у,read,,ok,ok,ok
+B03,4,2,1,p4s2r1,4,"молк,",м|ол,token splitting,1 printed syllable aligned to 2 tokens: м|ол,,,
+B03,4,2,1,p4s2r1,5,по-,к|по,token splitting,1 printed syllable aligned to 2 tokens: к|по,,,
+B03,4,2,1,p4s2r1,6,доб-,Ддоб,letter recognition,token Ддоб,,,
+B03,4,2,1,p4s2r1,7,но,но,read,,wrong,wrong,wrong
+B03,4,2,1,p4s2r1,8,со-,С|О,token splitting,1 printed syllable aligned to 2 tokens: С|О,,,
+B03,4,2,1,p4s2r1,9,ло-,ло,read,,ok,ok,ok
+B03,4,3,1,p4s3r1,1,вью:,Вью,read,,ok,ok,ok
+B03,4,3,1,p4s3r1,2,сво-,сво|е,token splitting,1 printed syllable aligned to 2 tokens: сво|е,,,
+B03,4,3,1,p4s3r1,3,ё,про,token splitting,2 printed syllables aligned to 1 token(s): про,,,
+B03,4,3,1,p4s3r1,4,про-,про,token splitting,2 printed syllables aligned to 1 token(s): про,,,
+B03,4,3,1,p4s3r1,5,пел,пел,read,,ok,ok,ok
+B03,4,3,1,p4s3r1,6,и,и,read,,ok,ok,ok
+B03,4,3,1,p4s3r1,7,боль-,бо|ляълие,token splitting,1 printed syllable aligned to 2 tokens: бо|ляълие,,,
+B03,4,3,1,p4s3r1,8,ше,не,token splitting,2 printed syllables aligned to 1 token(s): не,,,
+B03,4,3,1,p4s3r1,9,не,не,token splitting,2 printed syllables aligned to 1 token(s): не,,,
+B03,4,3,1,p4s3r1,10,по-,пно,letter recognition,token пно,,,
+B03,4,3,1,p4s3r1,11,ю.,ю,read,,ok,ok,ok
+B04,1,1,1,p1s1r1,1,Ког-,ѣ|г,token splitting,1 printed syllable aligned to 2 tokens: ѣ|г,,,
+B04,1,1,1,p1s1r1,2,да,гд|а,token splitting,1 printed syllable aligned to 2 tokens: гд|а,,,
+B04,1,1,1,p1s1r1,3,на,Еа,letter recognition,token Еа,,,
+B04,1,2,1,p1s2r1,1,суд,с|у,token splitting,1 printed syllable aligned to 2 tokens: с|у,,,
+B04,1,2,1,p1s2r1,2,без-,д|без,token splitting,1 printed syllable aligned to 2 tokens: д|без,,,
+B04,1,2,1,p1s2r1,3,молв-,молв,read,,ok,ok,ok
+B04,1,2,1,p1s2r1,4,"ных,",ных,read,,ok,ok,ok
+B04,1,2,1,p1s2r1,5,тай-,тай,read,,ok,ok,ok
+B04,1,2,1,p1s2r1,6,ных,ных,read,,ok,ok,ok
+B04,1,2,1,p1s2r1,7,дум,ду|м,token splitting,1 printed syllable aligned to 2 tokens: ду|м,,,
+B04,1,2,1,p1s2r1,8,я,я,read,,ok,ok,ok
+B04,1,2,1,p1s2r1,9,вы-,вы,read,,ok,ok,ok
+B04,1,2,1,p1s2r1,10,зы-,зьт,letter recognition,token зьт,,,
+B04,1,2,1,p1s2r1,11,ва-,в|а,token splitting,1 printed syllable aligned to 2 tokens: в|а,,,
+B04,1,2,1,p1s2r1,12,ю,ю,read,,wrong,wrong,wrong
+B04,1,2,1,p1s2r1,13,го-,го,read,,ok,ok,ok
+B04,1,2,1,p1s2r1,14,ло-,ло,read,,ok,ok,ok
+B04,1,2,1,p1s2r1,15,са,с|а,token splitting,1 printed syllable aligned to 2 tokens: с|а,,,
+B04,1,2,1,p1s2r1,16,бы-,бъ,letter recognition,token бъ,,,
+B04,1,3,1,p1s3r1,1,ло-,лю,letter recognition,token лю,,,
+B04,1,3,1,p1s3r1,2,"го,",го,read,,ok,ok,ok
+B04,1,3,1,p1s3r1,3,у-,у,read,,ok,ok,ok
+B04,1,3,1,p1s3r1,4,тра-,тра,read,,ok,ok,ok
+B04,1,3,1,p1s3r1,5,ты,тът,letter recognition,token тът,,,
+B04,1,3,1,p1s3r1,6,все,все,read,,ok,ok,ok
+B04,1,3,1,p1s3r1,7,при-,при,read,,wrong,wrong,wrong
+B04,1,3,1,p1s3r1,8,хо-,хо,read,,wrong,wrong,wrong
+B04,1,3,1,p1s3r1,9,дят,дя|т,token splitting,1 printed syllable aligned to 2 tokens: дя|т,,,
+B04,1,3,1,p1s3r1,10,мне,мне,read,,wrong,wrong,wrong
+B04,1,3,1,p1s3r1,11,на,на,read,,wrong,wrong,wrong
+B04,1,3,1,p1s3r1,12,"ум,",ум,read,,ok,ok,ok
+B04,1,3,1,p1s3r1,13,и,и,read,,ok,ok,ok
+B04,1,3,1,p1s3r1,14,ста-,ста,read,,ok,ok,ok
+B04,1,3,1,p1s3r1,15,рой,рой,read,,ok,ok,ok
+B04,1,3,1,p1s3r1,16,бо-,ооль,letter recognition,token ооль,,,
+B04,1,4,1,p1s4r1,1,лью,ю,letter recognition,token ю,,,
+B04,1,4,1,p1s4r1,2,я,я,read,,ok,ok,wrong
+B04,1,4,1,p1s4r1,3,бо-,бФо,letter recognition,token бФо,,,
+B04,1,4,1,p1s4r1,4,ле-,ле,read,,ok,ok,wrong
+B04,1,4,1,p1s4r1,5,ю,ю,read,,ok,ok,wrong
+B04,1,4,1,p1s4r1,6,сно-,с|но,token splitting,1 printed syllable aligned to 2 tokens: с|но,,,
+B04,1,4,1,p1s4r1,7,ва.,ва,read,,ok,ok,ok
+B04,1,4,1,p1s4r1,8,Из,Из,read,,ok,ok,ok
+B04,1,4,1,p1s4r1,9,"глаз,",глаз,read,,ok,ok,ok
+B04,1,4,1,p1s4r1,10,не,не,read,,ok,ok,ok
+B04,1,4,1,p1s4r1,11,знав-,знав,read,,ok,ok,ok
+B04,1,4,1,p1s4r1,12,ших,ших,read,,wrong,ok,ok
+B04,1,4,1,p1s4r1,13,"слёз,",слез,read,,wrong,ok,ok
+B04,1,4,1,p1s4r1,14,я,я,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,1,слё-,сле,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,2,зы,зът,letter recognition,token зът,,,
+B04,2,1,1,p2s1r1,3,лью,лью,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,4,о,о,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,5,"тех,",тех,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,6,ко-,Ко,read,,wrong,ok,ok
+B04,2,1,1,p2s1r1,7,го,го,read,,wrong,ok,ok
+B04,2,1,1,p2s1r1,8,во,во,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,9,тьме,тьме,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,10,та-,та,read,,wrong,ok,ok
+B04,2,1,1,p2s1r1,11,ит,ит,read,,wrong,ok,ok
+B04,2,1,1,p2s1r1,12,мо-,мо,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,13,ги-,ги,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,14,"ла,",ла,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,15,и-,и,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,16,щу,щу,read,,ok,ok,ok
+B04,2,1,1,p2s1r1,17,лю-,лю,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,1,бовь,бовьъ,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,2,по-,по,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,3,гиб-,гиб,read,,wrong,ok,wrong
+B04,2,2,1,p2s2r1,4,шу-,шу,read,,wrong,ok,wrong
+B04,2,2,1,p2s2r1,5,ю,ю,read,,wrong,ok,wrong
+B04,2,2,1,p2s2r1,6,сво-,сво,read,,wrong,ok,wrong
+B04,2,2,1,p2s2r1,7,ю,ю,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,8,и,и,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,9,"всё,",все,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,10,что,что,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,11,в,в,read,,wrong,wrong,wrong
+B04,2,2,1,p2s2r1,12,жиз-,жиз,read,,wrong,wrong,wrong
+B04,2,2,1,p2s2r1,13,ни,ни,read,,wrong,wrong,wrong
+B04,2,2,1,p2s2r1,14,мне,мне,read,,ok,wrong,ok
+B04,2,2,1,p2s2r1,15,ка-,ка,read,,wrong,wrong,wrong
+B04,2,2,1,p2s2r1,16,за-,за,read,,wrong,wrong,wrong
+B04,2,2,1,p2s2r1,17,лось,лось,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,18,ми-,ми,read,,ok,ok,ok
+B04,2,2,1,p2s2r1,19,ло.,ло,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,1,Ве-,Ве,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,2,ду,лу|а,token splitting,1 printed syllable aligned to 2 tokens: лу|а,,,
+B04,2,3,1,p2s3r1,3,я,счет,token splitting,2 printed syllables aligned to 1 token(s): счет,,,
+B04,2,3,1,p2s3r1,4,счёт,счет,token splitting,2 printed syllables aligned to 1 token(s): счет,,,
+B04,2,3,1,p2s3r1,5,по-,по,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,6,те-,те,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,7,рян-,рян,read,,wrong,wrong,wrong
+B04,2,3,1,p2s3r1,8,но-,но,read,,wrong,wrong,wrong
+B04,2,3,1,p2s3r1,9,му,му,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,10,мной,мно|й,token splitting,1 printed syllable aligned to 2 tokens: мно|й,,,
+B04,2,3,1,p2s3r1,11,и,и,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,12,у-,у,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,13,жа-,жа,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,14,са-,са,read,,ok,ok,ok
+B04,2,3,1,p2s3r1,15,юсь,юсь,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,1,вновь,вноевь,letter recognition,token вноевь,,,
+B04,2,4,1,p2s4r1,2,по-,по,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,3,те-,те,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,4,ре,ре,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,5,каж-,каж,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,6,"дой,",дой,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,7,и,и,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,8,вновь,вно|въ,token splitting,1 printed syllable aligned to 2 tokens: вно|въ,,,
+B04,2,4,1,p2s4r1,9,пла-,пла,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,10,чу,чу,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,11,я,я,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,12,до-,до,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,13,ро-,ро,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,14,гой,го|й,token splitting,1 printed syllable aligned to 2 tokens: го|й,,,
+B04,2,4,1,p2s4r1,15,це-,це,read,,ok,ok,ok
+B04,2,4,1,p2s4r1,16,ной,но|й,token splitting,1 printed syllable aligned to 2 tokens: но|й,,,
+B04,2,4,1,p2s4r1,17,за,з|ѣ,token splitting,1 printed syllable aligned to 2 tokens: з|ѣ,,,
+B04,3,1,1,p3s1r1,1,"то,",то,read,,ok,ok,ok
+B04,3,1,1,p3s1r1,2,за,зѣ,letter recognition,token зѣ,,,
+B04,3,1,1,p3s1r1,3,что,что,read,,ok,ok,ok
+B04,3,1,1,p3s1r1,4,пла-,пла,read,,ok,ok,ok
+B04,3,1,1,p3s1r1,5,тил,тил,read,,ok,ok,ok
+B04,3,1,1,p3s1r1,6,у-,у,read,,ok,ok,ok
+B04,3,1,1,p3s1r1,7,же,же,read,,ok,ok,ok
+B04,3,1,1,p3s1r1,8,од-,оюд,letter recognition,token оюд,,,
+B04,3,1,1,p3s1r1,9,наж-,наж,read,,ok,ok,ok
+B04,3,1,1,p3s1r1,10,ды!,дът,letter recognition,token дът,,,
+B04,3,2,1,p3s2r1,1,Но,Но,read,,ok,ok,ok
+B04,3,2,1,p3s2r1,2,про-,про,read,,ok,ok,ok
+B04,3,2,1,p3s2r1,3,шло-,шло,read,,ok,ok,ok
+B04,3,2,1,p3s2r1,4,е,е,read,,ok,ok,ok
+B04,3,2,1,p3s2r1,5,я,я,read,,ok,ok,ok
+B04,3,2,1,p3s2r1,6,на-,на,read,,wrong,ok,wrong
+B04,3,2,1,p3s2r1,7,хо-,хо,read,,wrong,ok,wrong
+B04,3,2,1,p3s2r1,8,жу,жу,read,,wrong,ok,wrong
+B04,3,2,1,p3s2r1,9,в,в,read,,wrong,wrong,wrong
+B04,3,2,1,p3s2r1,10,те-,те,read,,wrong,wrong,wrong
+B04,3,2,1,p3s2r1,11,бе,бе,read,,wrong,wrong,wrong
+B04,3,2,1,p3s2r1,12,и,и,read,,ok,ok,ok
+B04,3,3,1,p3s3r1,1,всё,вс|е,token splitting,1 printed syllable aligned to 2 tokens: вс|е,,,
+B04,3,3,1,p3s3r1,2,го-,го,read,,ok,ok,ok
+B04,3,3,1,p3s3r1,3,тов,тов,read,,ok,ok,ok
+B04,3,3,1,p3s3r1,4,про-,про,read,,ok,ok,ok
+B04,3,3,1,p3s3r1,5,стить,стить,read,,ok,ok,ok
+B04,3,3,1,p3s3r1,6,сво-,с|во,token splitting,1 printed syllable aligned to 2 tokens: с|во,,,
+B04,3,3,1,p3s3r1,7,ей,ей,read,,ok,ok,wrong
+B04,3,3,1,p3s3r1,8,судь-,судъ,letter recognition,token судъ,,,
+B04,3,3,1,p3s3r1,9,бе.,Ѳе,letter recognition,token Ѳе,,,
+B06,1,1,1,p1s1r1,1,Не,лпе,letter recognition,token лпе,,,
+B06,1,1,1,p1s1r1,2,из-,и|з,token splitting,1 printed syllable aligned to 2 tokens: и|з,,,
+B06,1,1,1,p1s1r1,3,ме-,ме,read,,wrong,wrong,wrong
+B06,1,2,1,p1s2r1,1,няй-,няй,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,2,"ся,",ся,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,3,будь,будь,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,4,са-,са,read,,wrong,ok,ok
+B06,1,2,1,p1s2r1,5,мим,мим,read,,wrong,ok,ok
+B06,1,2,1,p1s2r1,6,со-,со,read,,wrong,ok,ok
+B06,1,2,1,p1s2r1,7,бой.,бой,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,8,Ты,Ты,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,9,мо-,мо,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,10,жешь,жешь,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,11,быть,бытьъ,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,12,со-,со,read,,ok,ok,ok
+B06,1,2,1,p1s2r1,13,"бой,",бом,letter recognition,token бом,,,
+B06,1,2,1,p1s2r1,14,по-,по,read,,wrong,ok,ok
+B06,1,2,1,p1s2r1,15,ка,ка,read,,wrong,ok,ok
+B06,1,2,1,p1s2r1,16,жи-,жи,read,,ok,ok,ok
+B06,1,3,1,p1s3r1,1,вёшь.,Ве|ш,token splitting,1 printed syllable aligned to 2 tokens: Ве|ш,,,
+B06,1,3,1,p1s3r1,2,Ког-,ь|ко,token splitting,1 printed syllable aligned to 2 tokens: ь|ко,,,
+B06,1,3,1,p1s3r1,3,да,гда,letter recognition,token гда,,,
+B06,1,3,1,p1s3r1,4,же,же,read,,ok,ok,ok
+B06,1,3,1,p1s3r1,5,смерть,с|мерть,token splitting,1 printed syllable aligned to 2 tokens: с|мерть,,,
+B06,1,3,1,p1s3r1,6,раз-,раз,read,,wrong,wrong,wrong
+B06,1,3,1,p1s3r1,7,ру-,ру,read,,wrong,wrong,wrong
+B06,1,3,1,p1s3r1,8,шит,шит,read,,ok,ok,ok
+B06,1,3,1,p1s3r1,9,об-,об,read,,wrong,wrong,wrong
+B06,1,3,1,p1s3r1,10,раз,раз,read,,wrong,wrong,wrong
+B06,1,3,1,p1s3r1,11,"твой,",твѳи,letter recognition,token твѳи,,,
+B06,1,3,1,p1s3r1,12,пусть,пусть,read,,wrong,ok,wrong
+B06,1,3,1,p1s3r1,13,бу-,бу,read,,wrong,ok,wrong
+B06,1,3,1,p1s3r1,14,дет,дет,read,,wrong,ok,wrong
+B06,1,4,1,p1s4r1,1,кто-,кхто,letter recognition,token кхто,,,
+B06,1,4,1,p1s4r1,2,то,то,read,,ok,ok,ok
+B06,1,4,1,p1s4r1,3,на,на,read,,ok,ok,ok
+B06,1,4,1,p1s4r1,4,те-,те,read,,ok,ok,ok
+B06,1,4,1,p1s4r1,5,бя,О|я,token splitting,1 printed syllable aligned to 2 tokens: О|я,,,
+B06,1,4,1,p1s4r1,6,по-,по,read,,ok,ok,ok
+B06,1,4,1,p1s4r1,7,хож.,хо|ж,token splitting,1 printed syllable aligned to 2 tokens: хо|ж,,,
+B06,1,4,1,p1s4r1,8,Те-,Те,read,,wrong,ok,wrong
+B06,1,4,1,p1s4r1,9,бе,бе,read,,wrong,ok,wrong
+B06,1,4,1,p1s4r1,10,при-,при,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,1,ро-,во,letter recognition,token во,,,
+B06,2,1,1,p2s1r1,2,дой,дой,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,3,кра-,кра,read,,wrong,ok,wrong
+B06,2,1,1,p2s1r1,4,со-,со,read,,wrong,ok,wrong
+B06,2,1,1,p2s1r1,5,та,та,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,6,да-,да,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,7,на,на,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,8,на,на,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,9,о-,о,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,10,чень,ченъ,letter recognition,token ченъ,,,
+B06,2,1,1,p2s1r1,11,крат-,крат,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,12,кий,к|ий,token splitting,1 printed syllable aligned to 2 tokens: к|ий,,,
+B06,2,1,1,p2s1r1,13,"срок,",сроюк,letter recognition,token сроюк,,,
+B06,2,1,1,p2s1r1,14,и,и,read,,ok,ok,ok
+B06,2,1,1,p2s1r1,15,по-,по,read,,wrong,wrong,wrong
+B06,2,1,1,p2s1r1,16,то-,е,token splitting,2 printed syllables aligned to 1 token(s): е,,,
+B06,2,1,1,p2s1r1,17,му,е,token splitting,2 printed syllables aligned to 1 token(s): е,,,
+B06,2,1,1,p2s1r1,18,пус-,С,letter recognition,token С,,,
+B06,2,1,1,p2s1r1,19,кай,І|ѣ,token splitting,1 printed syllable aligned to 2 tokens: І|ѣ,,,
+B06,2,1,1,p2s1r1,20,по,А|С,token splitting,1 printed syllable aligned to 2 tokens: А|С,,,
+B06,2,2,1,p2s2r1,1,пра-,пра,read,,ok,ok,ok
+B06,2,2,1,p2s2r1,2,ву,ву,read,,ok,ok,ok
+B06,2,2,1,p2s2r1,3,пе-,зе,letter recognition,token зе,,,
+B06,2,2,1,p2s2r1,4,рей-,рейдет,token splitting,2 printed syllables aligned to 1 token(s): рейдет,,,
+B06,2,2,1,p2s2r1,5,дёт,рейдет,token splitting,2 printed syllables aligned to 1 token(s): рейдет,,,
+B06,2,2,1,p2s2r1,6,о-,на,token splitting,2 printed syllables aligned to 1 token(s): на,,,
+B06,2,2,1,p2s2r1,7,на,на,token splitting,2 printed syllables aligned to 1 token(s): на,,,
+B06,2,2,1,p2s2r1,8,к,к,read,,ok,ok,wrong
+B06,2,2,1,p2s2r1,9,на-,на,read,,ok,ok,wrong
+B06,2,2,1,p2s2r1,10,след-,елед,letter recognition,token елед,,,
+B06,2,2,1,p2s2r1,11,ни-,ни,read,,ok,ok,ok
+B06,2,2,1,p2s2r1,12,ку,ху,letter recognition,token ху,,,
+B06,2,2,1,p2s2r1,13,пря-,пРа,letter recognition,token пРа,,,
+B06,2,2,1,p2s2r1,14,мо-,ме|ѵ,token splitting,1 printed syllable aligned to 2 tokens: ме|ѵ,,,
+B06,2,2,1,p2s2r1,15,му,тее,token splitting,2 printed syllables aligned to 1 token(s): тее,,,
+B06,2,2,1,p2s2r1,16,тво-,тее,token splitting,2 printed syllables aligned to 1 token(s): тее,,,
+B06,2,2,1,p2s2r1,17,е-,е,read,,wrong,wrong,wrong
+B06,2,2,1,p2s2r1,18,му.,му,read,,wrong,ok,ok
+B06,2,3,1,p2s3r1,1,В,В,read,,ok,ok,wrong
+B06,2,3,1,p2s3r1,2,за-,за,read,,ok,ok,wrong
+B06,2,3,1,p2s3r1,3,бот-,бот,read,,wrong,wrong,ok
+B06,2,3,1,p2s3r1,4,ли-,ли,read,,wrong,wrong,ok
+B06,2,3,1,p2s3r1,5,вых,вътх,letter recognition,token вътх,,,
+B06,2,3,1,p2s3r1,6,ру-,ру,read,,ok,ok,ok
+B06,2,3,1,p2s3r1,7,ках,ках,read,,wrong,wrong,ok
+B06,2,3,1,p2s3r1,8,пре-,п|ре,token splitting,1 printed syllable aligned to 2 tokens: п|ре,,,
+B06,2,3,1,p2s3r1,9,крас-,крас,read,,wrong,wrong,wrong
+B06,2,3,1,p2s3r1,10,ный,нъ,letter recognition,token нъ,,,
+B06,2,3,1,p2s3r1,11,дом,дом,token splitting,2 printed syllables aligned to 1 token(s): дом,,,
+B06,2,3,1,p2s3r1,12,не,дом,token splitting,2 printed syllables aligned to 1 token(s): дом,,,
+B06,2,4,1,p2s4r1,1,дрог-,рог,letter recognition,token рог,,,
+B06,2,4,1,p2s4r1,2,нет,нет,read,,ok,ok,ok
+B06,2,4,1,p2s4r1,3,пе-,пе,read,,ok,ok,ok
+B06,2,4,1,p2s4r1,4,ред,ред,read,,ok,ok,ok
+B06,2,4,1,p2s4r1,5,на-,на,read,,ok,ok,ok
+B06,2,4,1,p2s4r1,6,тис-,ти,letter recognition,token ти,,,
+B06,2,4,1,p2s4r1,7,ком,ском,letter recognition,token ском,,,
+B06,2,4,1,p2s4r1,8,зи-,зи,read,,ok,ok,ok
+B06,2,4,1,p2s4r1,9,"мы,",мъ,letter recognition,token мъ,,,
+B06,2,4,1,p2s4r1,10,и,и,read,,ok,ok,ok
+B06,2,4,1,p2s4r1,11,ни-,ни,read,,wrong,ok,ok
+B06,2,4,1,p2s4r1,12,ког-,ко,letter recognition,token ко,,,
+B06,2,4,1,p2s4r1,13,да,тда,letter recognition,token тда,,,
+B06,2,4,1,p2s4r1,14,не,не,read,,ok,ok,ok
+B06,2,4,1,p2s4r1,15,во-,во,read,,ok,ok,ok
+B06,2,4,1,p2s4r1,16,ца-,ца,read,,wrong,ok,ok
+B06,2,4,1,p2s4r1,17,рит-,рит,read,,wrong,ok,ok
+B06,2,4,1,p2s4r1,18,ся,он,letter recognition,token он,,,
+B06,3,1,1,p3s1r1,1,в,в,read,,ok,ok,ok
+B06,3,1,1,p3s1r1,2,нём,нем,read,,ok,ok,ok
+B06,3,1,1,p3s1r1,3,ды-,дь,letter recognition,token дь,,,
+B06,3,1,1,p3s1r1,4,ха-,х|а,token splitting,1 printed syllable aligned to 2 tokens: х|а,,,
+B06,3,1,1,p3s1r1,5,нье,нье,read,,ok,ok,ok
+B06,3,1,1,p3s1r1,6,смер-,смер,read,,ok,ok,ok
+B06,3,1,1,p3s1r1,7,"ти,",Тт|и,token splitting,1 printed syllable aligned to 2 tokens: Тт|и,,,
+B06,3,1,1,p3s1r1,8,хо-,хо,read,,wrong,wrong,wrong
+B06,3,1,1,p3s1r1,9,ло-,ло,read,,ok,ok,ok
+B06,3,1,1,p3s1r1,10,да,да,read,,wrong,wrong,wrong
+B06,3,1,1,p3s1r1,11,и,и,read,,wrong,wrong,wrong
+B06,3,1,1,p3s1r1,12,тьмы.,ть|мы,token splitting,1 printed syllable aligned to 2 tokens: ть|мы,,,
+B06,3,2,1,p3s2r1,1,"О,",О,read,,ok,ok,wrong
+B06,3,2,1,p3s2r1,2,"пусть,",пусть,read,,ok,ok,wrong
+B06,3,2,1,p3s2r1,3,ког-,ко,letter recognition,token ко,,,
+B06,3,2,1,p3s2r1,4,да,гда,letter recognition,token гда,,,
+B06,3,2,1,p3s2r1,5,на-,на,read,,ok,ok,wrong
+B06,3,2,1,p3s2r1,6,ста-,с|та,token splitting,1 printed syllable aligned to 2 tokens: с|та,,,
+B06,3,2,1,p3s2r1,7,нет,нет,read,,wrong,wrong,wrong
+B06,3,2,1,p3s2r1,8,твой,т|вои,token splitting,1 printed syllable aligned to 2 tokens: т|вои,,,
+B06,3,2,1,p3s2r1,9,ко-,ко,read,,wrong,wrong,ok
+B06,3,3,1,p3s3r1,1,"нец,",не|н,token splitting,1 printed syllable aligned to 2 tokens: не|н,,,
+B06,3,3,1,p3s3r1,2,зву-,зву,read,,ok,wrong,ok
+B06,3,3,1,p3s3r1,3,чат,чат,read,,ok,wrong,ok
+B06,3,3,1,p3s3r1,4,сло-,ело,letter recognition,token ело,,,
+B06,3,3,1,p3s3r1,5,ва:,в|а,token splitting,1 printed syllable aligned to 2 tokens: в|а,,,
+B06,3,3,1,p3s3r1,6,—Был,Э|ыл,token splitting,1 printed syllable aligned to 2 tokens: Э|ыл,,,
+B06,3,3,1,p3s3r1,7,у,х,letter recognition,token х,,,
+B06,3,3,1,p3s3r1,8,ме-,ме,read,,wrong,wrong,wrong
+B06,3,3,1,p3s3r1,9,ня,н|я,token splitting,1 printed syllable aligned to 2 tokens: н|я,,,
+B06,3,3,1,p3s3r1,10,о-,О,read,,ok,ok,ok
+B07,1,1,1,p1s1r1,1,Ты,Тъ,letter recognition,token Тъ,,,
+B07,1,1,1,p1s1r1,2,му-,мѵ,letter recognition,token мѵ,,,
+B07,1,1,1,p1s1r1,3,зы-,Зы,read,,wrong,ok,ok
+B07,1,1,1,p1s1r1,4,"ка,",Ка,read,,wrong,ok,ok
+B07,1,1,1,p1s1r1,5,но,но,read,,ok,ok,ok
+B07,1,2,1,p1s2r1,1,зву-,звут,letter recognition,token звут,,,
+B07,1,2,1,p1s2r1,2,кам,кам,read,,ok,ok,ok
+B07,1,2,1,p1s2r1,3,му-,м|у,token splitting,1 printed syllable aligned to 2 tokens: м|у,,,
+B07,1,2,1,p1s2r1,4,зы-,зыьы,letter recognition,token зыьы,,,
+B07,1,2,1,p1s2r1,5,каль-,каль,read,,ok,ok,ok
+B07,1,2,1,p1s2r1,6,ным,н|ым,token splitting,1 printed syllable aligned to 2 tokens: н|ым,,,
+B07,1,2,1,p1s2r1,7,ты,т|ы,token splitting,1 printed syllable aligned to 2 tokens: т|ы,,,
+B07,1,2,1,p1s2r1,8,внем-,ввнем,letter recognition,token ввнем,,,
+B07,1,2,1,p1s2r1,9,лешь,лешь,read,,wrong,wrong,wrong
+B07,1,2,1,p1s2r1,10,с,с,read,,wrong,wrong,wrong
+B07,1,2,1,p1s2r1,11,не-,не,read,,wrong,wrong,wrong
+B07,1,2,1,p1s2r1,12,по-,по,read,,wrong,wrong,wrong
+B07,1,2,1,p1s2r1,13,нят-,нят,read,,wrong,wrong,wrong
+B07,1,2,1,p1s2r1,14,но-,но,read,,wrong,wrong,wrong
+B07,1,2,1,p1s2r1,15,ю,ю,read,,wrong,wrong,wrong
+B07,1,2,1,p1s2r1,16,тос-,то,letter recognition,token то,,,
+B07,1,3,1,p1s3r1,1,кой.,ской,letter recognition,token ской,,,
+B07,1,3,1,p1s3r1,2,За-,За,read,,ok,ok,ok
+B07,1,3,1,p1s3r1,3,чем,чем,read,,ok,ok,ok
+B07,1,3,1,p1s3r1,4,же,же,read,,ok,ok,ok
+B07,1,3,1,p1s3r1,5,лю-,лю,read,,ok,ok,ok
+B07,1,3,1,p1s3r1,6,бишь,бишь,read,,ok,ok,ok
+B07,1,3,1,p1s3r1,7,"то,",то,read,,ok,ok,ok
+B07,1,3,1,p1s3r1,8,что,что,read,,ok,ok,ok
+B07,1,3,1,p1s3r1,9,так,так,read,,ok,ok,ok
+B07,1,3,1,p1s3r1,10,пе-,пе,read,,ok,ok,ok
+B07,1,4,1,p1s4r1,1,чаль-,ча|ль,token splitting,1 printed syllable aligned to 2 tokens: ча|ль,,,
+B07,1,4,1,p1s4r1,2,"но,",но,read,,ok,ok,ok
+B07,1,4,1,p1s4r1,3,встре-,встре,read,,ok,ok,ok
+B07,1,4,1,p1s4r1,4,ча-,ча,read,,wrong,wrong,wrong
+B07,1,4,1,p1s4r1,5,ешь,е|шьъ,token splitting,1 printed syllable aligned to 2 tokens: е|шьъ,,,
+B07,1,4,1,p1s4r1,6,му-,м|у,token splitting,1 printed syllable aligned to 2 tokens: м|у,,,
+B07,1,4,1,p1s4r1,7,ку,ку,read,,ok,ok,ok
+B07,1,4,1,p1s4r1,8,ра-,ра,read,,ok,ok,ok
+B07,1,4,1,p1s4r1,9,дос-,до,letter recognition,token до,,,
+B07,1,4,1,p1s4r1,10,тью,стью,letter recognition,token стью,,,
+B07,1,4,1,p1s4r1,11,та-,та,read,,ok,ok,ok
+B07,1,4,1,p1s4r1,12,кой?,кои,letter recognition,token кои,,,
+B07,2,1,1,p2s1r1,1,Где,де,letter recognition,token де,,,
+B07,2,1,1,p2s1r1,2,тай-,тай,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,3,на-,на,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,4,я,я,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,5,при-,при,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,6,чи-,чи,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,7,на,на,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,8,э-,э,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,9,той,тои,letter recognition,token тои,,,
+B07,2,1,1,p2s1r1,10,му-,мѵ|у,token splitting,1 printed syllable aligned to 2 tokens: мѵ|у,,,
+B07,2,1,1,p2s1r1,11,ки?,ки,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,12,Не,ЯНе,letter recognition,token ЯНе,,,
+B07,2,1,1,p2s1r1,13,по-,по,read,,ok,ok,ok
+B07,2,1,1,p2s1r1,14,то-,то,read,,ok,ok,ok
+B07,2,2,1,p2s2r1,1,му,м|у,token splitting,1 printed syllable aligned to 2 tokens: м|у,,,
+B07,2,2,1,p2s2r1,2,ли,ли,read,,ok,ok,ok
+B07,2,2,1,p2s2r1,3,гру-,гтру|С,token splitting,1 printed syllable aligned to 2 tokens: гтру|С,,,
+B07,2,2,1,p2s2r1,4,стью,Тт|Ью,token splitting,1 printed syllable aligned to 2 tokens: Тт|Ью,,,
+B07,2,2,1,p2s2r1,5,ты,Тьт,letter recognition,token Тьт,,,
+B07,2,2,1,p2s2r1,6,объ-,объ,read,,ok,ok,ok
+B07,2,2,1,p2s2r1,7,"ят,",ят,read,,ok,ok,ok
+B07,2,2,1,p2s2r1,8,что,ч|т,token splitting,1 printed syllable aligned to 2 tokens: ч|т,,,
+B07,2,2,1,p2s2r1,9,строй-,О|строи,token splitting,1 printed syllable aligned to 2 tokens: О|строи,,,
+B07,2,2,1,p2s2r1,10,но,но,read,,ok,ok,ok
+B07,2,2,1,p2s2r1,11,со-,со,read,,ok,ok,ok
+B07,2,2,1,p2s2r1,12,гла-,гла,read,,ok,ok,ok
+B07,2,2,1,p2s2r1,13,со-,со,read,,ok,ok,ok
+B07,2,2,1,p2s2r1,14,ван-,в|ан,token splitting,1 printed syllable aligned to 2 tokens: в|ан,,,
+B07,2,2,1,p2s2r1,15,ны-,ные,token splitting,2 printed syllables aligned to 1 token(s): ные,,,
+B07,2,2,1,p2s2r1,16,е,ные,token splitting,2 printed syllables aligned to 1 token(s): ные,,,
+B07,2,3,1,p2s3r1,1,зву-,зву,read,,ok,ok,ok
+B07,2,3,1,p2s3r1,2,ки,ки|у,token splitting,1 printed syllable aligned to 2 tokens: ки|у,,,
+B07,2,3,1,p2s3r1,3,уп-,пре,token splitting,2 printed syllables aligned to 1 token(s): пре,,,
+B07,2,3,1,p2s3r1,4,рё-,пре,token splitting,2 printed syllables aligned to 1 token(s): пре,,,
+B07,2,3,1,p2s3r1,5,ком,ком,read,,ok,ok,ok
+B07,2,3,1,p2s3r1,6,о-,о,read,,ok,ok,ok
+B07,2,3,1,p2s3r1,7,ди-,ди,read,,ok,ok,ok
+B07,2,3,1,p2s3r1,8,но-,но,read,,ok,ok,ok
+B07,2,3,1,p2s3r1,9,чест-,честву,token splitting,2 printed syllables aligned to 1 token(s): честву,,,
+B07,2,3,1,p2s3r1,10,ву,честву,token splitting,2 printed syllables aligned to 1 token(s): честву,,,
+B07,2,3,1,p2s3r1,11,зву-,зву,read,,wrong,wrong,ok
+B07,2,3,1,p2s3r1,12,чат?,чат|г,token splitting,1 printed syllable aligned to 2 tokens: чат|г,,,
+B07,3,1,1,p3s1r1,1,При-,При,read,,ok,ok,ok
+B07,3,1,1,p3s1r1,2,слу-,слѵ,letter recognition,token слѵ,,,
+B07,3,1,1,p3s1r1,3,шай-,шай,read,,ok,ok,ok
+B07,3,1,1,p3s1r1,4,"ся,",еся,letter recognition,token еся,,,
+B07,3,1,1,p3s1r1,5,как,к|ак,token splitting,1 printed syllable aligned to 2 tokens: к|ак,,,
+B07,3,2,1,p3s2r1,1,дру-,тот,letter recognition,token тот,,,
+B07,3,2,1,p3s2r1,2,же-,же,read,,ok,ok,ok
+B07,3,2,1,p3s2r1,3,ствен-,ствен,read,,ok,ok,ok
+B07,3,2,1,p3s2r1,4,но,но,read,,ok,ok,ok
+B07,3,2,1,p3s2r1,5,стру-,стру,read,,ok,ok,ok
+B07,3,2,1,p3s2r1,6,ны,нъз,letter recognition,token нъз,,,
+B07,3,2,1,p3s2r1,7,всту-,всту,read,,ok,ok,ok
+B07,3,2,1,p3s2r1,8,па-,па,read,,ok,ok,ok
+B07,3,2,1,p3s2r1,9,ют,ют,read,,ok,ok,ok
+B07,4,1,1,p4s1r1,1,в,в,read,,wrong,wrong,wrong
+B07,4,1,1,p4s1r1,2,строй,строи,letter recognition,token строи,,,
+B07,4,1,1,p4s1r1,3,и,и,read,,ok,ok,ok
+B07,4,1,1,p4s1r1,4,го-,го,read,,ok,ok,ok
+B07,4,1,1,p4s1r1,5,лос,лос,read,,ok,ok,ok
+B07,4,1,1,p4s1r1,6,по-,по,read,,ok,ok,ok
+B07,4,1,1,p4s1r1,7,да-,да,read,,ok,ok,ok
+B07,4,1,1,p4s1r1,8,"ют,",ют|К,token splitting,1 printed syllable aligned to 2 tokens: ют|К,,,
+B07,4,1,1,p4s1r1,9,как,а|к,token splitting,1 printed syllable aligned to 2 tokens: а|к,,,
+B07,4,2,1,p4s2r1,1,буд-,буд,read,,ok,ok,ok
+B07,4,2,1,p4s2r1,2,то,т|о,token splitting,1 printed syllable aligned to 2 tokens: т|о,,,
+B07,4,2,1,p4s2r1,3,"мать,",матъь,letter recognition,token матъь,,,
+B07,4,2,1,p4s2r1,4,о-,о,read,,ok,ok,ok
+B07,4,2,1,p4s2r1,5,тец,тец,read,,ok,ok,ok
+B07,4,2,1,p4s2r1,6,и,и,read,,ok,ok,ok
+B07,4,2,1,p4s2r1,7,от-,о|т,token splitting,1 printed syllable aligned to 2 tokens: о|т,,,
+B07,4,2,1,p4s2r1,8,рок,о|К,token splitting,1 printed syllable aligned to 2 tokens: о|К,,,
+B07,4,3,1,p4s3r1,1,ю-,ю,read,,ok,ok,ok
+B07,4,3,1,p4s3r1,2,ный,ныи,letter recognition,token ныи,,,
+B07,4,3,1,p4s3r1,3,в,в,read,,ok,wrong,wrong
+B07,4,3,1,p4s3r1,4,счаст-,счаст,read,,ok,wrong,wrong
+B07,4,3,1,p4s3r1,5,ли-,ли,read,,ok,ok,ok
+B07,4,3,1,p4s3r1,6,вом,вом,read,,ok,ok,ok
+B07,4,3,1,p4s3r1,7,е-,е,read,,ok,ok,ok
+B07,4,3,1,p4s3r1,8,ди-,ди,read,,ok,ok,ok
+B07,4,3,1,p4s3r1,9,не-,не,read,,ok,ok,ok
+B07,4,3,1,p4s3r1,10,ни-,ни,read,,ok,ok,ok
+B07,4,3,1,p4s3r1,11,и,и,read,,ok,ok,ok
+B07,4,3,1,p4s3r1,12,по-,по,read,,ok,ok,ok
+B07,5,1,1,p5s1r1,1,Нам,Нам,read,,ok,ok,ok
+B07,5,1,1,p5s1r1,2,го-,го,read,,ok,ok,ok
+B07,5,1,1,p5s1r1,3,во-,во,read,,ok,ok,ok
+B07,5,1,1,p5s1r1,4,рит,рит,read,,ok,ok,ok
+B07,5,1,1,p5s1r1,5,со-,со,read,,ok,ok,ok
+B07,5,1,1,p5s1r1,6,гла-,тла,letter recognition,token тла,,,
+B07,5,1,1,p5s1r1,7,сье,сье,read,,wrong,ok,wrong
+B07,5,1,1,p5s1r1,8,струн,струн,read,,ok,ok,ok
+B07,5,1,1,p5s1r1,9,в,в,read,,wrong,wrong,wrong
+B07,5,1,1,p5s1r1,10,кон-,кон,read,,wrong,wrong,wrong
+B07,5,1,1,p5s1r1,11,цер-,цер,read,,wrong,wrong,wrong
+B07,5,1,1,p5s1r1,12,"те,",те,read,,wrong,wrong,wrong
+B07,5,2,1,p5s2r1,1,что,ч|Т,token splitting,1 printed syllable aligned to 2 tokens: ч|Т,,,
+B07,5,2,1,p5s2r1,2,о-,О,read,,ok,ok,ok
+B07,5,2,1,p5s2r1,3,ди-,о|дИ,token splitting,1 printed syllable aligned to 2 tokens: о|дИ,,,
+B07,5,2,1,p5s2r1,4,но-,не,letter recognition,token не,,,
+B07,5,2,1,p5s2r1,5,кий,к|ий,token splitting,1 printed syllable aligned to 2 tokens: к|ий,,,
+B07,5,2,1,p5s2r1,6,путь,путь,read,,ok,ok,ok
+B07,5,2,1,p5s2r1,7,по-,но,letter recognition,token но,,,
+B07,5,2,1,p5s2r1,8,до-,до,read,,ok,ok,ok
+B07,5,2,1,p5s2r1,9,бен,оен,letter recognition,token оен,,,
+B07,5,2,1,p5s2r1,10,смер-,сме|р,token splitting,1 printed syllable aligned to 2 tokens: сме|р,,,
+B07,5,2,1,p5s2r1,11,ти.,е|а,token splitting,1 printed syllable aligned to 2 tokens: е|а,,,
+B08,1,1,1,p1s1r1,1,Ты,Еъь,letter recognition,token Еъь,,,
+B08,1,1,1,p1s1r1,2,по-,по,read,,ok,ok,ok
+B08,1,1,1,p1s1r1,3,гру-,гру,read,,ok,ok,ok
+B08,1,1,1,p1s1r1,4,"сти,",сти,read,,ok,ok,ok
+B08,1,1,1,p1s1r1,5,ко-,ко,read,,ok,ok,ok
+B08,1,1,1,p1s1r1,6,гда,грда,letter recognition,token грда,,,
+B08,1,1,1,p1s1r1,7,у-,у,read,,wrong,ok,ok
+B08,1,1,1,p1s1r1,8,мрёт,мует,letter recognition,token мует,,,
+B08,1,1,1,p1s1r1,9,по-,по,read,,ok,ok,ok
+B08,1,2,1,p1s2r1,1,"эт,",Т,letter recognition,token Т,,,
+B08,1,2,1,p1s2r1,2,по-,по,read,,ok,ok,wrong
+B08,1,2,1,p1s2r1,3,ку-,ку,read,,wrong,ok,wrong
+B08,1,2,1,p1s2r1,4,да,да,read,,wrong,ok,wrong
+B08,1,2,1,p1s2r1,5,звон,з|вон,token splitting,1 printed syllable aligned to 2 tokens: з|вон,,,
+B08,1,2,1,p1s2r1,6,бли-,б|ли,token splitting,1 printed syllable aligned to 2 tokens: б|ли,,,
+B08,1,2,1,p1s2r1,7,жай-,жай,read,,wrong,wrong,wrong
+B08,1,2,1,p1s2r1,8,шей,шей,read,,wrong,wrong,wrong
+B08,1,2,1,p1s2r1,9,из,из,read,,wrong,wrong,wrong
+B08,1,2,1,p1s2r1,10,церк-,церк,read,,ok,ok,wrong
+B08,1,2,1,p1s2r1,11,вей,вей,read,,ok,ok,wrong
+B08,1,2,1,p1s2r1,12,не,не,read,,wrong,ok,wrong
+B08,1,2,1,p1s2r1,13,воз-,воз,read,,wrong,ok,ok
+B08,1,2,1,p1s2r1,14,вес-,ве,letter recognition,token ве,,,
+B08,1,3,1,p1s3r1,1,"тит,",Стит,letter recognition,token Стит,,,
+B08,1,3,1,p1s3r1,2,что,что,read,,ok,ok,ok
+B08,1,3,1,p1s3r1,3,э-,зэ,letter recognition,token зэ,,,
+B08,1,3,1,p1s3r1,4,тот,тот,read,,ok,ok,ok
+B08,1,3,1,p1s3r1,5,низ-,низ,read,,ok,ok,ok
+B08,1,3,1,p1s3r1,6,кий,кии,letter recognition,token кии,,,
+B08,1,3,1,p1s3r1,7,свет,свет,read,,ok,ok,ok
+B08,1,3,1,p1s3r1,8,я,я,read,,ok,ok,ok
+B08,1,3,1,p1s3r1,9,про-,нпро,letter recognition,token нпро,,,
+B08,1,3,1,p1s3r1,10,ме-,ме,read,,wrong,ok,ok
+B08,1,3,1,p1s3r1,11,нял,нял,read,,ok,ok,ok
+B08,1,3,1,p1s3r1,12,на,на,read,,wrong,ok,ok
+B08,1,3,1,p1s3r1,13,низ-,низ,read,,wrong,ok,ok
+B08,1,3,1,p1s3r1,14,ший,ший,read,,wrong,ok,ok
+B08,1,3,1,p1s3r1,15,мир,мир,read,,wrong,ok,ok
+B08,1,3,1,p1s3r1,16,чер-,чер,read,,wrong,ok,ok
+B08,2,1,1,p2s1r1,1,вей.,вей,read,,ok,ok,ok
+B08,2,1,1,p2s1r1,2,"И,",и,read,,ok,ok,wrong
+B08,2,1,1,p2s1r1,3,ес-,ес,read,,ok,ok,wrong
+B08,2,1,1,p2s1r1,4,ли,ли,read,,ok,ok,wrong
+B08,2,1,1,p2s1r1,5,пе-,пе,read,,ok,ok,wrong
+B08,2,1,1,p2s1r1,6,ре-,ре,read,,ok,ok,wrong
+B08,2,1,1,p2s1r1,7,чтёшь,чтешь,read,,wrong,ok,wrong
+B08,2,1,1,p2s1r1,8,ты,тьы,letter recognition,token тьы,,,
+B08,2,1,1,p2s1r1,9,мой,мой,read,,wrong,ok,wrong
+B08,2,1,1,p2s1r1,10,со-,со,read,,ok,ok,wrong
+B08,2,1,1,p2s1r1,11,"нет,",не|т,token splitting,1 printed syllable aligned to 2 tokens: не|т,,,
+B08,2,1,1,p2s1r1,12,ты,тьы,letter recognition,token тьы,,,
+B08,2,1,1,p2s1r1,13,о,о,read,,ok,ok,wrong
+B08,2,1,1,p2s1r1,14,ру-,ъ|т,token splitting,1 printed syllable aligned to 2 tokens: ъ|т,,,
+B08,2,2,1,p2s2r1,1,ке,к|е,token splitting,1 printed syllable aligned to 2 tokens: к|е,,,
+B08,2,2,1,p2s2r1,2,ос-,ос,read,,ok,ok,wrong
+B08,2,2,1,p2s2r1,3,тыв-,тыв,read,,ok,ok,wrong
+B08,2,2,1,p2s2r1,4,шей,шей,read,,ok,ok,wrong
+B08,2,2,1,p2s2r1,5,не,не,read,,ok,ok,wrong
+B08,2,2,1,p2s2r1,6,жа-,жа,read,,ok,ok,wrong
+B08,2,2,1,p2s2r1,7,лей.,лей,read,,ok,ok,wrong
+B08,2,2,1,p2s2r1,8,Я,Я,read,,ok,ok,ok
+B08,2,2,1,p2s2r1,9,не,не,read,,wrong,ok,ok
+B08,2,2,1,p2s2r1,10,хо-,хо,read,,wrong,ok,ok
+B08,2,2,1,p2s2r1,11,чу,чу,read,,ok,ok,ok
+B08,2,2,1,p2s2r1,12,ту-,ту,read,,wrong,wrong,ok
+B08,2,2,1,p2s2r1,13,ма-,ма,read,,wrong,wrong,ok
+B08,2,2,1,p2s2r1,14,нить,нить,read,,wrong,ok,ok
+B08,2,2,1,p2s2r1,15,неж-,неж,read,,wrong,wrong,wrong
+B08,2,2,1,p2s2r1,16,ный,нъыи,letter recognition,token нъыи,,,
+B08,2,3,1,p2s3r1,1,цвет,пвет,letter recognition,token пвет,,,
+B08,2,3,1,p2s3r1,2,о-,о,read,,ok,ok,ok
+B08,2,3,1,p2s3r1,3,чей,чейи,letter recognition,token чейи,,,
+B08,2,3,1,p2s3r1,4,лю-,лю,read,,ok,ok,ok
+B08,2,3,1,p2s3r1,5,би-,б|и,token splitting,1 printed syllable aligned to 2 tokens: б|и,,,
+B08,2,3,1,p2s3r1,6,мых,мых,read,,ok,ok,ok
+B08,2,3,1,p2s3r1,7,па-,па,read,,wrong,wrong,wrong
+B08,2,3,1,p2s3r1,8,мять-,мят|ъ,token splitting,1 printed syllable aligned to 2 tokens: мят|ъ,,,
+B08,2,3,1,p2s3r1,9,ю,ю,read,,wrong,wrong,wrong
+B08,2,3,1,p2s3r1,10,сво-,сво,read,,wrong,wrong,wrong
+B08,2,3,1,p2s3r1,11,ей.,ейи,letter recognition,token ейи,,,
+B08,2,4,1,p2s4r1,1,Я,з,letter recognition,token з,,,
+B08,2,4,1,p2s4r1,2,не,не,read,,ok,ok,ok
+B08,2,4,1,p2s4r1,3,хо-,хо,read,,ok,ok,ok
+B08,2,4,1,p2s4r1,4,"чу,",чу,read,,ok,ok,ok
+B08,2,4,1,p2s4r1,5,чтоб,чтоб,read,,wrong,ok,ok
+B08,2,4,1,p2s4r1,6,э-,э,read,,wrong,ok,ok
+B08,2,4,1,p2s4r1,7,хо,хо,read,,ok,ok,ok
+B08,2,4,1,p2s4r1,8,э-,э,read,,ok,ok,ok
+B08,2,4,1,p2s4r1,9,тих,тих,read,,ok,ok,ok
+B08,2,4,1,p2s4r1,10,строк,строк,read,,ok,ok,ok
+B08,2,4,1,p2s4r1,11,ме-,ме,read,,ok,ok,ok
+B08,3,1,1,p3s1r1,1,ня,ѣЯ,letter recognition,token ѣЯ,,,
+B08,3,1,1,p3s1r1,2,на-,на,read,,ok,ok,ok
+B08,3,1,1,p3s1r1,3,по-,по,read,,ok,ok,ok
+B08,3,1,1,p3s1r1,4,ми-,ми,read,,ok,ok,ok
+B08,3,1,1,p3s1r1,5,на-,на,read,,ok,ok,ok
+B08,3,1,1,p3s1r1,6,ло,ло,read,,ok,ok,ok
+B08,3,1,1,p3s1r1,7,вновь,вновь,read,,ok,ok,ok
+B08,3,1,1,p3s1r1,8,и,и,read,,ok,ok,ok
+B08,3,1,1,p3s1r1,9,вновь.,в|новь,token splitting,1 printed syllable aligned to 2 tokens: в|новь,,,
+B08,3,1,1,p3s1r1,10,Пу-,Пу,read,,ok,wrong,ok
+B08,3,1,1,p3s1r1,11,скай,скай,read,,wrong,ok,wrong
+B08,3,1,1,p3s1r1,12,за-,за,read,,wrong,wrong,wrong
+B08,3,1,1,p3s1r1,13,мрут,мрут,read,,wrong,wrong,wrong
+B08,3,1,1,p3s1r1,14,в,в,read,,wrong,wrong,wrong
+B08,3,1,1,p3s1r1,15,о-,о,read,,wrong,wrong,wrong
+B08,3,1,1,p3s1r1,16,дин,д|ин,token splitting,1 printed syllable aligned to 2 tokens: д|ин,,,
+B08,3,1,1,p3s1r1,17,и,тот,token splitting,2 printed syllables aligned to 1 token(s): тот,,,
+B08,3,1,1,p3s1r1,18,тот,тот,token splitting,2 printed syllables aligned to 1 token(s): тот,,,
+B08,3,1,1,p3s1r1,19,же,ж|е,token splitting,1 printed syllable aligned to 2 tokens: ж|е,,,
+B08,3,2,1,p3s2r1,1,срок,сро|к,token splitting,1 printed syllable aligned to 2 tokens: сро|к,,,
+B08,3,2,1,p3s2r1,2,мо-,мо|е,token splitting,1 printed syllable aligned to 2 tokens: мо|е,,,
+B08,3,2,1,p3s2r1,3,ё,ды,token splitting,2 printed syllables aligned to 1 token(s): ды,,,
+B08,3,2,1,p3s2r1,4,ды-,ды,token splitting,2 printed syllables aligned to 1 token(s): ды,,,
+B08,3,2,1,p3s2r1,5,ха-,ха,read,,ok,ok,ok
+B08,3,2,1,p3s2r1,6,нье,нье,read,,ok,wrong,wrong
+B08,3,2,1,p3s2r1,7,и,и,read,,wrong,wrong,wrong
+B08,3,2,1,p3s2r1,8,тво-,тво|н,token splitting,1 printed syllable aligned to 2 tokens: тво|н,,,
+B08,3,2,1,p3s2r1,9,я,лю,token splitting,2 printed syllables aligned to 1 token(s): лю,,,
+B08,3,2,1,p3s2r1,10,лю-,лю,token splitting,2 printed syllables aligned to 1 token(s): лю,,,
+B08,3,2,1,p3s2r1,11,бовь,бовь,read,,ok,ok,ok
+B08,3,2,1,p3s2r1,12,Я,Я,read,,ok,ok,ok
+B08,3,2,1,p3s2r1,13,не,не,read,,ok,ok,ok
+B08,3,2,1,p3s2r1,14,хо-,хо,read,,ok,ok,ok
+B08,3,3,1,p3s3r1,1,"чу,",З|ѣ,token splitting,1 printed syllable aligned to 2 tokens: З|ѣ,,,
+B08,3,3,1,p3s3r1,2,что-,что,read,,ok,ok,ok
+B08,3,3,1,p3s3r1,3,бы,бы,read,,ok,ok,ok
+B08,3,3,1,p3s3r1,4,сво-,сво,read,,ok,ok,ok
+B08,3,3,1,p3s3r1,5,ей,ей,read,,ok,ok,ok
+B08,3,3,1,p3s3r1,6,то-,то,read,,ok,ok,ok
+B08,3,3,1,p3s3r1,7,ской,ской,read,,ok,ok,ok
+B08,3,3,1,p3s3r1,8,ты,т|ы,token splitting,1 printed syllable aligned to 2 tokens: т|ы,,,
+B08,3,3,1,p3s3r1,9,пре-,пре,read,,wrong,wrong,wrong
+B08,3,3,1,p3s3r1,10,да-,да,read,,wrong,wrong,wrong
+B08,3,3,1,p3s3r1,11,ла,ла,read,,ok,ok,ok
+B08,3,3,1,p3s3r1,12,се-,се,read,,wrong,wrong,wrong
+B08,3,3,1,p3s3r1,13,бя,бя,read,,wrong,wrong,wrong
+B08,3,3,1,p3s3r1,14,мол-,мол,read,,ok,ok,ok
+B08,3,4,1,p3s4r1,1,ве,ве,read,,ok,ok,ok
+B08,3,4,1,p3s4r1,2,люд-,люд,read,,ok,ok,ok
+B08,3,4,1,p3s4r1,3,ской.,ской|а,token splitting,1 printed syllable aligned to 2 tokens: ской|а,,,
+B09,1,2,1,p1s2r1,1,ес-,ес,read,,ok,ok,ok
+B09,1,2,1,p1s2r1,2,ли,ли,read,,ok,ok,ok
+B09,1,2,1,p1s2r1,3,ты,ть,letter recognition,token ть,,,
+B09,1,2,1,p1s2r1,4,раз-,раз,read,,ok,ok,ok
+B09,1,2,1,p1s2r1,5,лю-,лю,read,,ok,ok,ok
+B09,1,2,1,p1s2r1,6,бишь,й|ишь,token splitting,1 printed syllable aligned to 2 tokens: й|ишь,,,
+B09,1,2,1,p1s2r1,7,так,так,read,,ok,ok,ok
+B09,1,2,1,p1s2r1,8,те-,те,read,,ok,ok,ok
+B09,1,2,1,p1s2r1,9,"перь,",пет|ь,token splitting,1 printed syllable aligned to 2 tokens: пет|ь,,,
+B09,1,2,1,p1s2r1,10,те-,Т|е,token splitting,1 printed syllable aligned to 2 tokens: Т|е,,,
+B09,1,3,1,p1s3r1,1,"перь,",петь,letter recognition,token петь,,,
+B09,1,3,1,p1s3r1,2,ко-,ко,read,,ok,ok,ok
+B09,1,3,1,p1s3r1,3,гда,г|да,token splitting,1 printed syllable aligned to 2 tokens: г|да,,,
+B09,1,3,1,p1s3r1,4,весь,весь,read,,ok,ok,ok
+B09,1,3,1,p1s3r1,5,мир,мир,read,,ok,ok,ok
+B09,1,3,1,p1s3r1,6,со,со,read,,ok,ok,ok
+B09,1,3,1,p1s3r1,7,мной,мнои,letter recognition,token мнои,,,
+B09,1,3,1,p1s3r1,8,в,в,read,,wrong,wrong,wrong
+B09,1,3,1,p1s3r1,9,раз-,раз,read,,wrong,wrong,wrong
+B09,1,3,1,p1s3r1,10,до-,до,read,,ok,ok,ok
+B09,1,3,1,p1s3r1,11,ре.,ре,read,,ok,ok,ok
+B09,1,4,1,p1s4r1,1,Будь,Бу|д,token splitting,1 printed syllable aligned to 2 tokens: Бу|д,,,
+B09,1,4,1,p1s4r1,2,са-,ъ|са,token splitting,1 printed syllable aligned to 2 tokens: ъ|са,,,
+B09,1,4,1,p1s4r1,3,мой,жой,letter recognition,token жой,,,
+B09,1,4,1,p1s4r1,4,горь-,гторь,letter recognition,token гторь,,,
+B09,1,4,1,p1s4r1,5,кой,кой,read,,ok,ok,ok
+B09,1,4,1,p1s4r1,6,из,из,read,,ok,ok,ok
+B09,1,4,1,p1s4r1,7,мо-,мо,read,,ok,ok,ok
+B09,1,4,1,p1s4r1,8,их,и|х,token splitting,1 printed syllable aligned to 2 tokens: и|х,,,
+B09,1,4,1,p1s4r1,9,по-,по,read,,wrong,wrong,wrong
+B09,1,4,1,p1s4r1,10,"терь,",терь,read,,wrong,wrong,wrong
+B09,1,4,1,p1s4r1,11,но,но,read,,ok,ok,ok
+B09,2,1,1,p2s1r1,1,толь-,толъьъ,letter recognition,token толъьъ,,,
+B09,2,1,1,p2s1r1,2,ко,ѵо,letter recognition,token ѵо,,,
+B09,2,1,1,p2s1r1,3,не,не,read,,ok,ok,ok
+B09,2,1,1,p2s1r1,4,по-,по,read,,ok,ok,ok
+B09,2,1,1,p2s1r1,5,след-,след,read,,ok,ok,ok
+B09,2,1,1,p2s1r1,6,ней,неи,letter recognition,token неи,,,
+B09,2,1,1,p2s1r1,7,кап-,кан,letter recognition,token кан,,,
+B09,2,1,1,p2s1r1,8,лей,лей,read,,ok,ok,ok
+B09,2,1,1,p2s1r1,9,го-,г|О,token splitting,1 printed syllable aligned to 2 tokens: г|О,,,
+B09,2,1,1,p2s1r1,10,ря!,ря,read,,ok,ok,ok
+B09,2,2,1,p2s2r1,1,И,й,letter recognition,token й,,,
+B09,2,2,1,p2s2r1,2,ес-,ес,read,,ok,ok,ok
+B09,2,2,1,p2s2r1,3,ли,ли,read,,ok,ok,ok
+B09,2,2,1,p2s2r1,4,скорбь,скорб|ь,token splitting,1 printed syllable aligned to 2 tokens: скорб|ь,,,
+B09,2,2,1,p2s2r1,5,да-,да,read,,wrong,wrong,wrong
+B09,2,2,1,p2s2r1,6,но,но,read,,ok,wrong,wrong
+B09,2,2,1,p2s2r1,7,мне,мне,read,,ok,wrong,wrong
+B09,2,2,1,p2s2r1,8,пре-,превоз,token splitting,2 printed syllables aligned to 1 token(s): превоз,,,
+B09,2,2,1,p2s2r1,9,воз-,превоз,token splitting,2 printed syllables aligned to 1 token(s): превоз,,,
+B09,2,2,1,p2s2r1,10,"мочь,",мочъ,letter recognition,token мочъ,,,
+B09,2,2,1,p2s2r1,11,не,не,read,,ok,ok,ok
+B09,2,2,1,p2s2r1,12,на-,на,read,,ok,ok,ok
+B09,2,2,1,p2s2r1,13,но-,но,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,1,си,С|И,token splitting,1 printed syllable aligned to 2 tokens: С|И,,,
+B09,2,3,1,p2s3r1,2,у-,у,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,3,да-,да,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,4,ра,ра,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,5,из,из,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,6,за-,за,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,7,са-,са,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,8,ды.,дъы,letter recognition,token дъы,,,
+B09,2,3,1,p2s3r1,9,Пусть,Шуеть,letter recognition,token Шуеть,,,
+B09,2,3,1,p2s3r1,10,бур-,бур,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,11,на-,на,read,,wrong,wrong,wrong
+B09,2,3,1,p2s3r1,12,я,я,read,,wrong,wrong,wrong
+B09,2,3,1,p2s3r1,13,не,не,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,14,раз-,раз,read,,ok,ok,ok
+B09,2,3,1,p2s3r1,15,ре-,ре|о,token splitting,1 printed syllable aligned to 2 tokens: ре|о,,,
+B09,3,1,1,p3s1r1,1,ут-,ут,read,,ok,ok,ok
+B09,3,1,1,p3s1r1,2,ром,ром,read,,ok,ok,ok
+B09,3,1,1,p3s1r1,3,без,бе|з,token splitting,1 printed syllable aligned to 2 tokens: бе|з,,,
+B09,3,1,1,p3s1r1,4,от-,от,read,,ok,ok,ok
+B09,3,1,1,p3s1r1,5,ра-,ра,read,,ok,ok,ok
+B09,3,1,1,p3s1r1,6,ды.,ды,read,,ok,ok,ok
+B09,3,2,1,p3s2r1,1,О-,о,read,,ok,ok,ok
+B09,3,2,1,p3s2r1,2,ставь,етавь,letter recognition,token етавь,,,
+B09,3,2,1,p3s2r1,3,ме-,ме,read,,ok,ok,ok
+B09,3,2,1,p3s2r1,4,"ня,",ня,read,,ok,ok,ok
+B09,3,2,1,p3s2r1,5,но,но,read,,ok,ok,ok
+B09,3,2,1,p3s2r1,6,не,не,read,,ok,ok,ok
+B09,3,2,1,p3s2r1,7,в,в,read,,ok,ok,ok
+B09,3,2,1,p3s2r1,8,по-,по,read,,ok,ok,ok
+B09,3,3,1,p3s3r1,1,след-,С|ле,token splitting,1 printed syllable aligned to 2 tokens: С|ле,,,
+B09,3,3,1,p3s3r1,2,ний,д|ний,token splitting,1 printed syllable aligned to 2 tokens: д|ний,,,
+B09,3,3,1,p3s3r1,3,"миг,",миг,read,,ok,ok,ok
+B09,3,3,1,p3s3r1,4,ко-,о,letter recognition,token о,,,
+B09,3,3,1,p3s3r1,5,гда,гда,read,,ok,ok,ok
+B09,3,3,1,p3s3r1,6,от,от,read,,wrong,ok,wrong
+B09,3,3,1,p3s3r1,7,мел-,мел,read,,wrong,ok,wrong
+B09,3,3,1,p3s3r1,8,ких,ких,read,,wrong,ok,wrong
+B09,3,3,1,p3s3r1,9,бед,бел,letter recognition,token бел,,,
+B09,3,3,1,p3s3r1,10,я,я,read,,wrong,ok,wrong
+B09,3,3,1,p3s3r1,11,о-,о,read,,ok,ok,ok
+B09,3,3,1,p3s3r1,12,сла-,сла,read,,ok,ok,ok
+B09,3,4,1,p3s4r1,1,бе-,бое,letter recognition,token бое,,,
+B09,3,4,1,p3s4r1,2,ю.,ю|ѣ,token splitting,1 printed syllable aligned to 2 tokens: ю|ѣ,,,
+B09,3,4,1,p3s4r1,3,Ос-,ставь,token splitting,2 printed syllables aligned to 1 token(s): ставь,,,
+B09,3,4,1,p3s4r1,4,тавь,ставь,token splitting,2 printed syllables aligned to 1 token(s): ставь,,,
+B09,3,4,1,p3s4r1,5,сей-,сеи,letter recognition,token сеи,,,
+B09,3,4,1,p3s4r1,6,"час,",чае,letter recognition,token чае,,,
+B09,3,4,1,p3s4r1,7,чтоб,чт|об,token splitting,1 printed syllable aligned to 2 tokens: чт|об,,,
+B09,4,1,1,p4s1r1,1,сра-,спа,letter recognition,token спа,,,
+B09,4,1,1,p4s1r1,2,зу,зу,read,,ok,ok,ok
+B09,4,1,1,p4s1r1,3,я,я,read,,ok,ok,ok
+B09,4,1,1,p4s1r1,4,по-,по,read,,ok,ok,ok
+B09,4,1,1,p4s1r1,5,"стиг,",стит,letter recognition,token стит,,,
+B09,4,1,1,p4s1r1,6,что,что,read,,ok,ok,ok
+B09,4,1,1,p4s1r1,7,э-,э,read,,ok,ok,ok
+B09,4,1,1,p4s1r1,8,то,то,read,,ok,ok,ok
+B09,4,1,1,p4s1r1,9,го-,го,read,,ok,ok,ok
+B09,4,1,1,p4s1r1,10,ре,вРе,letter recognition,token вРе,,,
+B09,4,1,1,p4s1r1,11,всех,всех,read,,wrong,ok,ok
+B09,4,1,1,p4s1r1,12,не-,не,read,,wrong,ok,ok
+B09,4,1,1,p4s1r1,13,взгод,взгод,read,,wrong,ok,ok
+B09,4,1,1,p4s1r1,14,боль-,Фооль,letter recognition,token Фооль,,,
+B09,4,2,1,p4s2r1,1,не-,те,letter recognition,token те,,,
+B09,4,2,1,p4s2r1,2,е.,ѳе,letter recognition,token ѳе,,,
+B09,4,2,1,p4s2r1,3,Что,то,letter recognition,token то,,,
+B09,4,2,1,p4s2r1,4,нет,нет,read,,ok,ok,ok
+B09,4,2,1,p4s2r1,5,не-,не,read,,ok,ok,ok
+B09,4,2,1,p4s2r1,6,"взгод,",взгод,read,,ok,ok,ok
+B09,4,2,1,p4s2r1,7,а,а,read,,ok,ok,ok
+B09,4,2,1,p4s2r1,8,есть,есть,read,,ok,ok,ok
+B09,4,2,1,p4s2r1,9,од-,од,read,,ok,ok,ok
+B09,4,2,1,p4s2r1,10,на,на,read,,wrong,wrong,wrong
+B09,4,2,1,p4s2r1,11,бе-,бе,read,,wrong,wrong,wrong
+B09,4,2,1,p4s2r1,12,да,да,read,,wrong,wrong,wrong
+B09,4,2,1,p4s2r1,13,тво-,т|во,token splitting,1 printed syllable aligned to 2 tokens: т|во,,,
+B09,4,3,1,p4s3r1,1,ей,е|й,token splitting,1 printed syllable aligned to 2 tokens: е|й,,,
+B09,4,3,1,p4s3r1,2,люб-,люб,read,,ok,ok,ok
+B09,4,3,1,p4s3r1,3,ви,ви,read,,ok,ok,ok
+B09,4,3,1,p4s3r1,4,ли-,ли,read,,ok,ok,ok
+B09,4,3,1,p4s3r1,5,шить-,ши|ть,token splitting,1 printed syllable aligned to 2 tokens: ши|ть,,,
+B09,4,3,1,p4s3r1,6,ся,ся,read,,wrong,wrong,wrong
+B09,4,3,1,p4s3r1,7,на,на,read,,ok,ok,ok
+B09,4,3,1,p4s3r1,8,всег-,вСе|г,token splitting,1 printed syllable aligned to 2 tokens: вСе|г,,,
+B09,4,3,1,p4s3r1,9,да.,да,read,,wrong,wrong,wrong
+B10,1,1,1,p1s1r1,1,У-,а,token splitting,2 printed syllables aligned to 1 token(s): а,,,
+B10,1,1,1,p1s1r1,2,"вы,",а,token splitting,2 printed syllables aligned to 1 token(s): а,,,
+B10,1,1,1,p1s1r1,3,мой,Т|мой,token splitting,1 printed syllable aligned to 2 tokens: Т|мой,,,
+B10,1,1,1,p1s1r1,4,стих,стих,read,,ok,ok,wrong
+B10,1,1,1,p1s1r1,5,не,не,read,,ok,ok,ok
+B10,1,1,1,p1s1r1,6,бле-,бле,read,,ok,ok,ok
+B10,1,1,1,p1s1r1,7,щет,щет,read,,ok,ok,ok
+B10,1,1,1,p1s1r1,8,но-,но,read,,ok,ok,ok
+B10,1,1,1,p1s1r1,9,виз-,виз,read,,ok,ok,ok
+B10,1,2,2,p1s2r2,1,"ной,",,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,2,раз-,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,3,но-,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,4,об-,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,5,ра-,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,6,зьем,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,7,пе-,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,8,ре-,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,9,мен,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,10,не-,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,11,ждан-,,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,12,ных.,И,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,13,Не,И,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,14,по-,У,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,15,ис-,У,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,16,кать,т,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,2,2,p1s2r2,17,ли,т,row cutting,"BY EYE, one row: the printed words stand in the crop of row 1 (crops2/B10-1-s2-r1.png); the row labelled Russian (r2) is a 79 px strip of staff",,,
+B10,1,3,2,p1s3r2,1,мне,т,token splitting,2 printed syllables aligned to 1 token(s): т,,,
+B10,1,3,2,p1s3r2,2,тро-,т,token splitting,2 printed syllables aligned to 1 token(s): т,,,
+B10,1,3,2,p1s3r2,3,пы,а,token splitting,2 printed syllables aligned to 1 token(s): а,,,
+B10,1,3,2,p1s3r2,4,и-,а,token splitting,2 printed syllables aligned to 1 token(s): а,,,
+B10,1,3,2,p1s3r2,5,"ной,",мов,token splitting,2 printed syllables aligned to 1 token(s): мов,,,
+B10,1,3,2,p1s3r2,6,при-,мов,token splitting,2 printed syllables aligned to 1 token(s): мов,,,
+B10,1,3,2,p1s3r2,7,ё-,е,token splitting,2 printed syllables aligned to 1 token(s): е,,,
+B10,1,3,2,p1s3r2,8,мов,е,token splitting,2 printed syllables aligned to 1 token(s): е,,,
+B10,1,3,2,p1s3r2,9,но-,вых,token splitting,2 printed syllables aligned to 1 token(s): вых,,,
+B10,1,3,2,p1s3r2,10,"вых,",вых,token splitting,2 printed syllables aligned to 1 token(s): вых,,,
+B10,1,3,2,p1s3r2,11,со-,со,read,,ok,ok,ok
+B10,1,3,2,p1s3r2,12,че-,че,read,,ok,ok,ok
+B10,1,3,2,p1s3r2,13,та-,Та,read,,ok,ok,ok
+B10,1,3,2,p1s3r2,14,ний,ний,read,,ok,ok,ok
+B10,1,3,2,p1s3r2,15,стран-,стран,read,,ok,ok,ok
+B10,1,3,2,p1s3r2,16,ных?,ных,read,,ok,ok,ok
+B10,1,4,1,p1s4r1,1,Я,ѣ|Е,token splitting,1 printed syllable aligned to 2 tokens: ѣ|Е,,,
+B10,1,4,1,p1s4r1,2,по-,ѣ|ѵ,token splitting,1 printed syllable aligned to 2 tokens: ѣ|ѵ,,,
+B10,1,4,1,p1s4r1,3,вто-,тт,token splitting,2 printed syllables aligned to 1 token(s): тт,,,
+B10,1,4,1,p1s4r1,4,ря-,тт,token splitting,2 printed syllables aligned to 1 token(s): тт,,,
+B10,2,1,1,p2s1r1,1,ю,ю,read,,ok,ok,wrong
+B10,2,1,1,p2s1r1,2,преж-,преж,read,,ok,ok,wrong
+B10,2,1,1,p2s1r1,3,не-,не,read,,ok,ok,wrong
+B10,2,1,1,p2s1r1,4,е,е,read,,ok,ok,wrong
+B10,2,1,1,p2s1r1,5,о-,о,read,,ok,ok,wrong
+B10,2,1,1,p2s1r1,6,"пять,",пять,read,,ok,ok,wrong
+B10,2,1,1,p2s1r1,7,в,в,read,,wrong,wrong,wrong
+B10,2,1,1,p2s1r1,8,о-,о,read,,wrong,wrong,wrong
+B10,2,1,1,p2s1r1,9,деж-,деж,read,,ok,ok,wrong
+B10,2,1,1,p2s1r1,10,де,де,read,,ok,ok,wrong
+B10,2,1,1,p2s1r1,11,ста-,ст|а,token splitting,1 printed syllable aligned to 2 tokens: ст|а,,,
+B10,2,1,1,p2s1r1,12,рой,рои,letter recognition,token рои,,,
+B10,2,1,1,p2s1r1,13,по-,по,read,,wrong,wrong,ok
+B10,2,1,1,p2s1r1,14,яв-,яв,read,,wrong,wrong,ok
+B10,2,2,1,p2s2r1,1,ля-,лЯя,letter recognition,token лЯя,,,
+B10,2,2,1,p2s2r1,2,юсь,юсь,read,,ok,ok,ok
+B10,2,2,1,p2s2r1,3,сно-,сно,read,,ok,ok,ok
+B10,2,2,1,p2s2r1,4,ва.,Ва,read,,ok,ok,ok
+B10,2,2,1,p2s2r1,5,И,и,read,,wrong,wrong,ok
+B10,2,2,1,p2s2r1,6,ка-,ка,read,,wrong,wrong,ok
+B10,2,2,1,p2s2r1,7,жет-,жет,read,,wrong,wrong,ok
+B10,2,2,1,p2s2r1,8,"ся,",ся,read,,wrong,wrong,ok
+B10,2,2,1,p2s2r1,9,по,по,read,,wrong,wrong,ok
+B10,2,2,1,p2s2r1,10,и-,и,read,,ok,ok,ok
+B10,2,2,1,p2s2r1,11,ме-,ме,read,,ok,ok,ok
+B10,2,2,1,p2s2r1,12,ни,ни,read,,ok,ok,ok
+B10,2,2,1,p2s2r1,13,на-,на,read,,wrong,wrong,ok
+B10,2,2,1,p2s2r1,14,звать,звать,read,,wrong,wrong,ok
+B10,2,3,1,p2s3r1,1,ме-,ме,read,,ok,wrong,ok
+B10,2,3,1,p2s3r1,2,ня,ня,read,,wrong,wrong,wrong
+B10,2,3,1,p2s3r1,3,в,в,read,,wrong,wrong,wrong
+B10,2,3,1,p2s3r1,4,сти-,ети,letter recognition,token ети,,,
+B10,2,3,1,p2s3r1,5,хах,ха|х,token splitting,1 printed syllable aligned to 2 tokens: ха|х,,,
+B10,2,3,1,p2s3r1,6,лю-,лю,read,,ok,ok,ok
+B10,2,3,1,p2s3r1,7,бо-,бо,read,,ok,ok,ok
+B10,2,3,1,p2s3r1,8,е,е,read,,ok,ok,ok
+B10,2,3,1,p2s3r1,9,мо-,может,token splitting,2 printed syllables aligned to 1 token(s): может,,,
+B10,2,3,1,p2s3r1,10,жет,может,token splitting,2 printed syllables aligned to 1 token(s): может,,,
+B10,2,3,1,p2s3r1,11,сло-,ело,letter recognition,token ело,,,
+B10,2,3,1,p2s3r1,12,во.,во,read,,ok,ok,ok
+B10,2,3,1,p2s3r1,13,Всё,ѣ|се,token splitting,1 printed syllable aligned to 2 tokens: ѣ|се,,,
+B10,2,3,1,p2s3r1,14,э-,э,read,,ok,ok,ok
+B10,2,3,1,p2s3r1,15,то,то,read,,ok,ok,ok
+B10,2,3,1,p2s3r1,16,от-,отТ,letter recognition,token отТ,,,
+B10,2,3,1,p2s3r1,17,то-,то,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,1,"го,",ГО,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,2,что,то,letter recognition,token то,,,
+B10,2,4,1,p2s4r1,3,вновь,вновъ,letter recognition,token вновъ,,,
+B10,2,4,1,p2s4r1,4,и,и,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,5,вновь,вновъ,letter recognition,token вновъ,,,
+B10,2,4,1,p2s4r1,6,ре-,ре,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,7,ша-,ша,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,8,ю,ю,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,9,я,я,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,10,од-,од,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,11,ну,ну,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,12,сво-,сво,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,13,ю,ю,read,,ok,ok,ok
+B10,2,4,1,p2s4r1,14,за-,за,read,,wrong,wrong,ok
+B10,2,4,1,p2s4r1,15,да-,да,read,,wrong,wrong,ok
+B10,2,4,1,p2s4r1,16,чу:,чу,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,1,я,я,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,2,о,о,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,3,те-,сте,letter recognition,token сте,,,
+B10,3,1,1,p3s1r1,4,бе,ѳѣе,letter recognition,token ѳѣе,,,
+B10,3,1,1,p3s1r1,5,по-,по,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,6,"ю,",ю,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,7,мо-,мо,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,8,я,я,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,9,лю-,лю,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,10,"бовь,",бовъ,letter recognition,token бовъ,,,
+B10,3,1,1,p3s1r1,11,и,и,read,,wrong,ok,ok
+B10,3,1,1,p3s1r1,12,то,то,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,13,же,же,read,,ok,ok,ok
+B10,3,1,1,p3s1r1,14,серд-,серд,read,,wrong,ok,ok
+B10,3,1,1,p3s1r1,15,"це,",це,read,,wrong,ok,ok
+B10,3,2,1,p3s2r1,1,те,те,read,,ok,ok,ok
+B10,3,2,1,p3s2r1,2,же,же,read,,ok,ok,ok
+B10,3,2,1,p3s2r1,3,си-,си,read,,ok,ok,ok
+B10,3,2,1,p3s2r1,4,лы,льт,letter recognition,token льт,,,
+B10,3,2,1,p3s2r1,5,тра-,тра,read,,ok,ok,ok
+B10,3,2,1,p3s2r1,6,чу.,чу,read,,ok,ok,ok
+B10,3,2,1,p3s2r1,7,Всё,бѣсе,letter recognition,token бѣсе,,,
+B10,3,2,1,p3s2r1,8,то,то,read,,ok,ok,ok
+B10,3,2,1,p3s2r1,9,же,же,read,,ok,ok,ok
+B10,3,2,1,p3s2r1,10,солн-,солн,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,1,це,ке,letter recognition,token ке,,,
+B10,3,3,1,p3s3r1,2,хо-,хо,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,3,дит,дит,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,4,на-,на,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,5,до,до,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,6,"мной,",мной,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,7,но,чо,letter recognition,token чо,,,
+B10,3,3,1,p3s3r1,8,и,и,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,9,о-,о,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,10,но,но,read,,ok,ok,ok
+B10,3,3,1,p3s3r1,11,не,не,read,,ok,ok,ok
+B10,3,4,1,p3s4r1,1,бле-,оле,letter recognition,token оле,,,
+B10,3,4,1,p3s4r1,2,щет,шет,letter recognition,token шет,,,
+B10,3,4,1,p3s4r1,3,но-,но,read,,ok,ok,ok
+B10,3,4,1,p3s4r1,4,виз-,виз,read,,ok,ok,ok
+B10,3,4,1,p3s4r1,5,ной.,кой,letter recognition,token кой,,,
+S,1,1,2,p1s1r2,1,Ди-,ди,read,,ok,ok,ok
+S,1,1,2,p1s1r2,2,тя,тя,read,,ok,ok,ok
+S,1,1,2,p1s1r2,3,мо-,мо,read,,ok,ok,ok
+S,1,2,2,p1s2r2,1,е,е,read,,ok,ok,ok
+S,1,2,2,p1s2r2,2,Ос-,Ос,read,,ok,ok,ok
+S,1,2,2,p1s2r2,3,тань-,тань,read,,ok,ok,ok
+S,1,2,2,p1s2r2,4,ся,ся,read,,ok,ok,ok
+S,1,2,2,p1s2r2,5,здѣсь,здѣсь,read,,ok,ok,ok
+S,1,2,2,p1s2r2,6,со,со,read,,ok,ok,ok
+S,1,2,2,p1s2r2,7,мной,мнои,letter recognition,token мнои,,,
+S,1,2,2,p1s2r2,8,Въ,Въ,read,,ok,ok,ok
+S,1,2,2,p1s2r2,9,во-,во,read,,ok,ok,ok
+S,2,1,2,p2s1r2,1,дѣ,дѣ,read,,ok,ok,ok
+S,2,1,2,p2s1r2,2,при-,при,read,,ok,ok,ok
+S,2,1,2,p2s1r2,3,воль-,воль,read,,ok,ok,ok
+S,2,1,2,p2s1r2,4,но-,но,read,,ok,ok,ok
+S,2,1,2,p2s1r2,5,е,е,read,,ok,ok,ok
+S,2,1,2,p2s1r2,6,жи-,жи,read,,ok,ok,ok
+S,2,2,2,p2s2r2,1,тье,ТЬе,read,,ok,ok,ok
+S,2,2,2,p2s2r2,2,И,И,read,,ok,ok,ok
+S,2,2,2,p2s2r2,3,хо-,хо,read,,ok,ok,ok
+S,2,2,2,p2s2r2,4,лодъ,лодъ,read,,ok,ok,ok
+S,2,2,2,p2s2r2,5,и,и,read,,ok,ok,ok
+S,2,2,2,p2s2r2,6,по-,по,read,,ok,ok,ok
+S,2,2,2,p2s2r2,7,кой,кои,letter recognition,token кои,,,
+S,2,3,2,p2s3r2,1,Я,со,token splitting,2 printed syllables aligned to 1 token(s): со,,,
+S,2,3,2,p2s3r2,2,со-,со,token splitting,2 printed syllables aligned to 1 token(s): со,,,
+S,2,3,2,p2s3r2,3,зо-,зо,read,,ok,ok,ok
+S,2,3,2,p2s3r2,4,ву,ву,read,,ok,ok,ok
+S,2,3,2,p2s3r2,5,мо-,мо,read,,ok,ok,ok
+S,3,1,2,p3s1r2,1,ихъ,ихъ,read,,ok,ok,ok
+S,3,1,2,p3s1r2,2,сес-,сес,read,,ok,ok,ok
+S,3,1,2,p3s1r2,3,теръ,теръ,read,,ok,ok,ok
+S,3,1,2,p3s1r2,4,Мы,мы,read,,ok,ok,ok
+S,3,2,2,p3s2r2,1,пляс-,пляс,read,,ok,ok,ok
+S,3,2,2,p3s2r2,2,кой,кои,letter recognition,token кои,,,
+S,3,2,2,p3s2r2,3,кру-,кру,read,,ok,ok,ok
+S,3,2,2,p3s2r2,4,го-,го,read,,ok,ok,ok
+S,3,2,2,p3s2r2,5,вой,вои,letter recognition,token вои,,,
+S,3,2,2,p3s2r2,6,Раз-,Раз,read,,ok,ok,ok
+S,3,3,2,p3s3r2,1,ве-,ве,read,,ok,ok,ok
+S,3,3,2,p3s3r2,2,се-,се,read,,ok,ok,ok
+S,3,3,2,p3s3r2,3,лимъ,лимъ,read,,ok,ok,ok
+S,3,3,2,p3s3r2,4,ту-,ту,read,,ok,ok,ok
+S,3,3,2,p3s3r2,5,ман-,ман,read,,ok,ok,ok
+S,3,3,2,p3s3r2,6,ный,ныи,letter recognition,token ныи,,,
+S,3,3,2,p3s3r2,7,взоръ,взоръ,read,,ok,ok,ok
+S,3,3,2,p3s3r2,8,И,и,read,,wrong,wrong,wrong
+S,4,1,2,p4s1r2,1,духъ,духъ,read,,ok,ok,ok
+S,4,1,2,p4s1r2,2,ус-,ус,read,,ok,ok,ok
+S,4,1,2,p4s1r2,3,та-,та,read,,ok,ok,ok
+S,4,1,2,p4s1r2,4,лый,лыи,letter recognition,token лыи,,,
+S,4,1,2,p4s1r2,5,твой,твои,letter recognition,token твои,,,
+S,4,2,2,p4s2r2,1,У-,у,read,,ok,ok,ok
+S,4,2,2,p4s2r2,2,сни,сни,read,,ok,ok,ok
+S,4,2,2,p4s2r2,3,пос-,пос,read,,ok,ok,ok
+S,4,2,2,p4s2r2,4,тель,тель,read,,ok,ok,ok
+S,4,2,2,p4s2r2,5,тво-,тво,read,,ok,ok,ok
+S,4,2,2,p4s2r2,6,я,я,read,,ok,ok,ok
+S,4,2,2,p4s2r2,7,мя-,мя,read,,ok,ok,ok
+S,4,3,2,p4s3r2,1,гка,гка,read,,ok,ok,ok
+S,4,3,2,p4s3r2,2,Про-,Про,read,,ok,ok,ok
+S,4,3,2,p4s3r2,3,зра-,зра,read,,ok,ok,ok
+S,4,3,2,p4s3r2,4,ченъ,ченъ,read,,ok,ok,ok
+S,4,3,2,p4s3r2,5,твой,твой,read,,ok,ok,ok
+S,4,3,2,p4s3r2,6,по-,по,read,,ok,ok,ok
+S,4,3,2,p4s3r2,7,кровъ,кровъ,read,,ok,ok,ok
+S,5,1,2,p5s1r2,1,Прой-,Прой,read,,ok,ok,ok
+S,5,1,2,p5s1r2,2,дутъ,дутъ,read,,ok,ok,ok
+S,5,1,2,p5s1r2,3,го-,го,read,,ok,ok,ok
+S,5,1,2,p5s1r2,4,да,да,read,,ok,ok,ok
+S,5,1,2,p5s1r2,5,прой-,прой,read,,ok,ok,ok
+S,5,1,2,p5s1r2,6,дутъ,дутъ,read,,ok,ok,ok
+S,5,1,2,p5s1r2,7,вѣ-,вѣ,read,,ok,ok,ok
+S,5,2,2,p5s2r2,1,ка,ка,read,,ok,ok,ok
+S,5,2,2,p5s2r2,2,Подъ,Цодъ,letter recognition,token Цодъ,,,
+S,5,2,2,p5s2r2,3,го-,го,read,,ok,ok,ok
+S,5,2,2,p5s2r2,4,воръ,воръ,read,,ok,ok,ok
+S,5,2,2,p5s2r2,5,чуд-,чуд,read,,ok,ok,ok
+S,5,2,2,p5s2r2,6,ныхъ,ныхъ,read,,ok,ok,ok
+S,5,2,2,p5s2r2,7,сновъ,сновъ,read,,ok,ok,ok
+S,5,3,2,p5s3r2,1,О,о,read,,ok,ok,ok
+S,5,3,2,p5s3r2,2,ми-,ми,read,,ok,ok,ok
+S,5,3,2,p5s3r2,3,лый,льыи,letter recognition,token льыи,,,
+S,5,3,2,p5s3r2,4,мой,мои,letter recognition,token мои,,,
+S,5,3,2,p5s3r2,5,не,не,read,,ok,ok,ok
+S,5,3,2,p5s3r2,6,у-,у,read,,ok,ok,ok
+S,5,3,2,p5s3r2,7,та-,та,read,,ok,ok,ok
+S,6,1,2,p6s1r2,1,ю,ю,read,,ok,ok,ok
+S,6,1,2,p6s1r2,2,Что,что,read,,ok,ok,ok
+S,6,1,2,p6s1r2,3,я,я,read,,ok,ok,ok
+S,6,1,2,p6s1r2,4,те-,те,read,,ok,ok,ok
+S,6,1,2,p6s1r2,5,бя,дя,letter recognition,token дя,,,
+S,6,1,2,p6s1r2,6,люб-,лю|о,token splitting,1 printed syllable aligned to 2 tokens: лю|о,,,
+S,6,1,2,p6s1r2,7,лю,лю,read,,ok,ok,ok
+S,6,2,2,p6s2r2,1,Люб-,Люб,read,,ok,ok,ok
+S,6,2,2,p6s2r2,2,лю,лю,read,,ok,ok,ok
+S,6,2,2,p6s2r2,3,какъ,какъ,read,,ok,ok,ok
+S,6,2,2,p6s2r2,4,воль-,воль,read,,ok,ok,ok
+S,6,2,2,p6s2r2,5,ну-,ну,read,,ok,ok,ok
+S,6,2,2,p6s2r2,6,ю,ю,read,,ok,ok,ok
+S,6,2,2,p6s2r2,7,стру-,стру,read,,ok,ok,ok
+S,6,3,2,p6s3r2,1,ю,Ю,read,,ok,ok,ok
+S,6,3,2,p6s3r2,2,Люб-,люо,letter recognition,token люо,,,
+S,6,3,2,p6s3r2,3,лю,люьь,letter recognition,token люьь,,,
+S,6,3,2,p6s3r2,4,какъ,какъ,read,,ok,ok,ok
+S,6,3,2,p6s3r2,5,жизнь,жизнь|ньЬ,token splitting,1 printed syllable aligned to 2 tokens: жизнь|ньЬ,,,
+S,7,1,3,p7s1r3,1,мо-,ѣо,letter recognition,token ѣо,,,
+S,7,1,3,p7s1r3,2,ю,Ю,read,,wrong,wrong,wrong
+T,1,1,1,p1s1r1,1,Спитъ,Снитъ,letter recognition,token Снитъ,,,
+T,1,1,1,p1s1r1,2,спитъ,спитъ,read,,ok,ok,ok
+T,1,1,1,p1s1r1,3,въ,вълѣ,token splitting,2 printed syllables aligned to 1 token(s): вълѣ,,,
+T,1,1,1,p1s1r1,4,лѣ-,вълѣ,token splitting,2 printed syllables aligned to 1 token(s): вълѣ,,,
+T,1,1,1,p1s1r1,5,су,су,read,,ok,ok,ok
+T,1,1,1,p1s1r1,6,глу-,глу,read,,ok,ok,ok
+T,1,1,1,p1s1r1,7,хомъ,хомъ,read,,ok,ok,ok
+T,1,1,1,p1s1r1,8,спитъ,спитъ,read,,ok,ok,ok
+T,1,1,1,p1s1r1,9,княж-,княж,read,,ok,ok,ok
+T,1,1,1,p1s1r1,10,на,на,read,,ok,ok,ok
+T,1,1,1,p1s1r1,11,вол-,вол,read,,ok,ok,ok
+T,1,2,1,p1s2r1,1,шеб-,шеб,read,,ok,ok,ok
+T,1,2,1,p1s2r1,2,нымъ,нымъ,read,,ok,ok,ok
+T,1,2,1,p1s2r1,3,сномъ,еномъ,letter recognition,token еномъ,,,
+T,1,2,1,p1s2r1,4,спитъ,спитъ,read,,ok,ok,ok
+T,1,2,1,p1s2r1,5,подъ,подъ,read,,ok,ok,ok
+T,1,2,1,p1s2r1,6,кро-,кро,read,,ok,ok,ok
+T,1,2,1,p1s2r1,7,вомъ,вомъ,read,,ok,ok,ok
+T,1,2,1,p1s2r1,8,тем-,тем,read,,ok,ok,ok
+T,1,2,1,p1s2r1,9,ной,нои,letter recognition,token нои,,,
+T,1,2,1,p1s2r1,10,но-,но,read,,ok,ok,ok
+T,1,2,1,p1s2r1,11,чи,чв,letter recognition,token чв,,,
+T,2,1,1,p2s1r1,1,сонъ,сонъ,read,,ok,ok,ok
+T,2,1,1,p2s1r1,2,ско-,ско,read,,ok,ok,ok
+T,2,1,1,p2s1r1,3,валъ,валъ,read,,ok,ok,ok
+T,2,1,1,p2s1r1,4,ей,еи,letter recognition,token еи,,,
+T,2,1,1,p2s1r1,5,крѣп-,крѣп,read,,ok,ok,ok
+T,2,1,1,p2s1r1,6,ко,ко,read,,ok,ok,ok
+T,2,1,1,p2s1r1,7,о-,о,read,,ok,ok,ok
+T,2,1,1,p2s1r1,8,чи,чи,read,,ok,ok,ok
+T,2,1,1,p2s1r1,9,Спитъ,Спитъ,read,,ok,ok,ok
+T,2,1,1,p2s1r1,10,Спитъ,Спитъ,read,,ok,ok,ok
+T,2,2,1,p2s2r1,1,Вотъ,Вотъ,read,,ok,ok,ok
+T,2,2,1,p2s2r1,2,и,и,read,,ok,ok,ok
+T,2,2,1,p2s2r1,3,лѣсъ,лѣсъ,read,,ok,ok,ok
+T,2,2,1,p2s2r1,4,глу-,глу,read,,ok,ok,ok
+T,2,3,1,p2s3r1,1,хой,хои,letter recognition,token хои,,,
+T,2,3,1,p2s3r1,2,оч-,оч,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,2,3,1,p2s3r1,3,нул-,пул,letter recognition,token пул,,,
+T,2,3,1,p2s3r1,4,ся,ея,letter recognition,token ея,,,
+T,2,3,1,p2s3r1,5,съ,съди,token splitting,2 printed syllables aligned to 1 token(s): съди,,,
+T,2,3,1,p2s3r1,6,ди-,съди,token splitting,2 printed syllables aligned to 1 token(s): съди,,,
+T,2,3,1,p2s3r1,7,кимъ,кимъ,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,2,3,1,p2s3r1,8,смѣ-,смѣ,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,2,3,1,p2s3r1,9,хомъ,хомъ,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,2,3,1,p2s3r1,10,вдругъ,вдругъ,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,2,3,1,p2s3r1,11,про-,про,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,2,3,1,p2s3r1,12,снул-,сенул,letter recognition,token сенул,,,
+T,2,3,1,p2s3r1,13,ся,ся,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,2,4,1,p2s4r1,1,вѣдьмъ,вѣдьмъ,read,,ok,ok,ok
+T,2,4,1,p2s4r1,2,и,и,read,,ok,ok,ok
+T,2,4,1,p2s4r1,3,лѣ-,лѣ,read,,ok,ok,ok
+T,2,4,1,p2s4r1,4,шихъ,шихъ,read,,ok,ok,ok
+T,2,4,1,p2s4r1,5,шум-,шум,read,,ok,ok,ok
+T,2,4,1,p2s4r1,6,ный,ный,read,,ok,ok,ok
+T,2,4,1,p2s4r1,7,рой,рой,read,,wrong,wrong,wrong
+T,2,4,1,p2s4r1,8,и,и,read,,wrong,wrong,wrong
+T,2,4,1,p2s4r1,9,про-,про,read,,ok,ok,ok
+T,2,4,1,p2s4r1,10,мчал-,мчал,read,,ok,ok,ok
+T,2,4,1,p2s4r1,11,ся,ся,read,,ok,ok,ok
+T,2,4,1,p2s4r1,12,надъ,надъ,read,,ok,ok,ok
+T,2,4,1,p2s4r1,13,кня-,кня,read,,ok,ok,ok
+T,2,4,1,p2s4r1,14,жной,жной,read,,ok,ok,ok
+T,3,1,1,p3s1r1,1,Лишь,Лишь,read,,ok,ok,ok
+T,3,1,1,p3s1r1,2,кня-,кня,read,,ok,ok,ok
+T,3,1,1,p3s1r1,3,жна,жна,read,,ok,ok,ok
+T,3,1,1,p3s1r1,4,въ,вълѣ,token splitting,2 printed syllables aligned to 1 token(s): вълѣ,,,
+T,3,1,1,p3s1r1,5,лѣ-,вълѣ,token splitting,2 printed syllables aligned to 1 token(s): вълѣ,,,
+T,3,1,1,p3s1r1,6,су,су,read,,ok,ok,ok
+T,3,1,1,p3s1r1,7,глу-,глу,read,,ok,ok,ok
+T,3,1,1,p3s1r1,8,хомъ,хомъ,read,,ok,ok,ok
+T,3,1,1,p3s1r1,9,спитъ,епитъ,letter recognition,token епитъ,,,
+T,3,1,1,p3s1r1,10,все,все,read,,wrong,ok,ok
+T,3,1,1,p3s1r1,11,тѣмъ,тѣмъ,read,,wrong,ok,ok
+T,3,1,1,p3s1r1,12,же,же,read,,wrong,ok,ok
+T,3,1,1,p3s1r1,13,мерт-,мерт,read,,ok,ok,ok
+T,3,1,1,p3s1r1,14,вымъ,вымъ,read,,ok,ok,ok
+T,3,1,1,p3s1r1,15,сномъ,еномъ,letter recognition,token еномъ,,,
+T,3,2,1,p3s2r1,1,Спитъ,Спитъ,read,,ok,ok,ok
+T,3,2,1,p3s2r1,2,Спитъ,Спитъ,read,,ok,ok,ok
+T,3,3,1,p3s3r1,1,Слухъ,Слухъ,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,2,прошелъ,шрошелъ,letter recognition,token шрошелъ,,,
+T,3,3,1,p3s3r1,3,что,что,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,4,въ,въ,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,5,лѣсъ,лѣсъ,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,6,дре-,дре,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,7,му-,му,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,8,чій,чій,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,9,бо-,бо,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,10,га-,га,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,11,тырь,тырь,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,12,при-,при,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,13,детъ,детъ,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,14,мо-,мо,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,15,гу-,гу,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,3,3,1,p3s3r1,16,чій,чій,read,,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes,n_a: poem row does not map one-to-one to truth notes
+T,4,1,1,p4s1r1,1,ча-,ча,read,,ok,ok,ok
+T,4,1,1,p4s1r1,2,ры,ры,read,,ok,ok,ok
+T,4,1,1,p4s1r1,3,си-,си,read,,ok,ok,ok
+T,4,1,1,p4s1r1,4,лой,лой,read,,ok,ok,ok
+T,4,1,1,p4s1r1,5,со-,со,read,,ok,ok,ok
+T,4,1,1,p4s1r1,6,кру-,кру,read,,ok,ok,ok
+T,4,1,1,p4s1r1,7,шитъ,шитъ,read,,wrong,wrong,wrong
+T,4,1,1,p4s1r1,8,сонъ,сонъ,read,,ok,ok,ok
+T,4,1,1,p4s1r1,9,вол-,вол,read,,wrong,ok,ok
+T,4,1,1,p4s1r1,10,шеб-,шеб,read,,wrong,ok,ok
+T,4,1,1,p4s1r1,11,ный,ньый,letter recognition,token ньый,,,
+T,4,1,1,p4s1r1,12,по-,по,read,,ok,ok,ok
+T,4,1,1,p4s1r1,13,бѣ-,бѣ,read,,ok,ok,ok
+T,4,1,1,p4s1r1,14,дитъ,дитъ,read,,wrong,wrong,wrong
+T,4,2,1,p4s2r1,1,и,и,read,,ok,ok,ok
+T,4,2,1,p4s2r1,2,кня-,кня,read,,wrong,ok,ok
+T,4,2,1,p4s2r1,3,жну,жну,read,,wrong,ok,ok
+T,4,2,1,p4s2r1,4,о-,о,read,,ok,ok,ok
+T,4,2,1,p4s2r1,5,сво-,сво,read,,ok,ok,ok
+T,4,2,1,p4s2r1,6,бо-,Оо,letter recognition,token Оо,,,
+T,4,2,1,p4s2r1,7,дитъ,дитъ,read,,ok,ok,ok
+T,4,2,1,p4s2r1,8,о-,о,read,,ok,ok,ok
+T,4,2,1,p4s2r1,9,сво-,ево,letter recognition,token ево,,,
+T,4,2,1,p4s2r1,10,бо-,ОО,letter recognition,token ОО,,,
+T,4,3,1,p4s3r1,1,дитъ,питъ,letter recognition,token питъ,,,
+T,4,3,1,p4s3r1,2,Но,Но,read,,ok,ok,ok
+T,4,3,1,p4s3r1,3,про-,про,read,,ok,ok,ok
+T,5,1,1,p5s1r1,1,хо-,ХО,read,,ok,ok,ok
+T,5,1,1,p5s1r1,2,дятъ,дятъ,read,,ok,ok,ok
+T,5,1,1,p5s1r1,3,дни,дни,read,,ok,ok,ok
+T,5,1,1,p5s1r1,4,за,за,read,,ok,ok,ok
+T,5,1,1,p5s1r1,5,дня-,дня,read,,ok,ok,ok
+T,5,1,1,p5s1r1,6,ми,ми,read,,ok,ok,ok
+T,5,1,1,p5s1r1,7,го-,го,read,,ok,ok,ok
+T,5,1,1,p5s1r1,8,ды,дьыь,letter recognition,token дьыь,,,
+T,5,1,1,p5s1r1,9,и-,и,read,,ok,ok,ok
+T,5,1,1,p5s1r1,10,дутъ,дутъ,read,,ok,ok,ok
+T,5,1,1,p5s1r1,11,за,за,read,,ok,ok,ok
+T,5,1,1,p5s1r1,12,го-,го,read,,ok,ok,ok
+T,5,1,1,p5s1r1,13,да-,да,read,,ok,ok,ok
+T,5,1,1,p5s1r1,14,ми,ми,read,,ok,ok,ok
+T,5,1,1,p5s1r1,15,ни,ни,read,,ok,ok,ok
+T,5,1,1,p5s1r1,16,ду-,ду,read,,ok,ok,ok
+T,5,2,1,p5s2r1,1,ши,ши,read,,ok,ok,ok
+T,5,2,1,p5s2r1,2,жи-,жи,read,,ok,ok,ok
+T,5,2,1,p5s2r1,3,вой,вои,letter recognition,token вои,,,
+T,5,2,1,p5s2r1,4,кру-,кру,read,,ok,ok,ok
+T,5,2,1,p5s2r1,5,гомъ,гомъ,read,,ok,ok,ok
+T,5,2,1,p5s2r1,6,все,все,read,,ok,ok,ok
+T,5,2,1,p5s2r1,7,объ-,объ,read,,ok,ok,ok
+T,5,2,1,p5s2r1,8,я-,я,read,,ok,ok,ok
+T,5,2,1,p5s2r1,9,то,то,read,,ok,ok,ok
+T,5,2,1,p5s2r1,10,мерт-,мерт,read,,ok,ok,ok
+T,5,2,1,p5s2r1,11,вымъ,вымъ,read,,ok,ok,ok
+T,5,2,1,p5s2r1,12,сномъ,сномъ,read,,ok,ok,ok
+T,5,3,1,p5s3r1,1,Такъ,Такъ,read,,ok,ok,ok
+T,5,3,1,p5s3r1,2,княж-,киняж,letter recognition,token киняж,,,
+T,5,3,1,p5s3r1,3,на,на,read,,wrong,wrong,wrong
+T,5,3,1,p5s3r1,4,въ,въ,read,,wrong,wrong,wrong
+T,5,3,1,p5s3r1,5,лѣ-,жѣ,letter recognition,token жѣ,,,
+T,5,3,1,p5s3r1,6,су,су,read,,ok,ok,ok
+T,5,3,1,p5s3r1,7,глу-,глу,read,,ok,ok,ok
+T,5,3,1,p5s3r1,8,хомъ,хомъ,read,,ok,ok,ok
+T,5,3,1,p5s3r1,9,ти-,ти,read,,ok,ok,ok
+T,5,3,1,p5s3r1,10,хо,хо,read,,ok,ok,ok
+T,5,3,1,p5s3r1,11,спитъ,Сспитъ,letter recognition,token Сспитъ,,,
+T,5,3,1,p5s3r1,12,глу-,глу,read,,ok,ok,ok
+T,6,1,1,p6s1r1,1,бо-,Оо,letter recognition,token Оо,,,
+T,6,1,1,p6s1r1,2,кимъ,кимъ,read,,ok,ok,ok
+T,6,1,1,p6s1r1,3,сномъ,сномъ,read,,ok,ok,ok
+T,6,1,1,p6s1r1,4,сонъ,сонъ,read,,ok,ok,ok
+T,6,1,1,p6s1r1,5,ско-,еко,letter recognition,token еко,,,
+T,6,1,1,p6s1r1,6,валъ,валъ,read,,wrong,ok,ok
+T,6,1,1,p6s1r1,7,ей,еи,letter recognition,token еи,,,
+T,6,1,1,p6s1r1,8,крѣп-,крѣп,read,,ok,ok,ok
+T,6,1,1,p6s1r1,9,ко,ко,read,,ok,ok,ok
+T,6,1,1,p6s1r1,10,о-,о,read,,wrong,ok,ok
+T,6,1,1,p6s1r1,11,чи,чи,read,,wrong,ok,ok
+T,6,1,1,p6s1r1,12,спитъ,епитъ,letter recognition,token епитъ,,,
+T,6,1,1,p6s1r1,13,о-,о,read,,wrong,wrong,wrong
+T,6,1,1,p6s1r1,14,на,на,read,,wrong,ok,ok
+T,6,1,1,p6s1r1,15,и,и,read,,ok,ok,ok
+T,6,2,1,p6s2r1,1,дни,лни,letter recognition,token лни,,,
+T,6,2,1,p6s2r1,2,и,и,read,,ok,ok,ok
+T,6,2,1,p6s2r1,3,но-,но,read,,ok,ok,ok
+T,6,2,1,p6s2r1,4,чи,чи,read,,ok,ok,ok
+T,6,2,1,p6s2r1,5,спитъ,спитъ,read,,ok,ok,ok
+T,6,2,1,p6s2r1,6,Спитъ,Спитъ,read,,ok,ok,ok
+T,6,3,1,p6s3r1,1,И,п,letter recognition,token п,,,
+T,6,3,1,p6s3r1,2,ни-,ни,read,,ok,ok,ok
+T,6,3,1,p6s3r1,3,кто,кто,read,,ok,ok,ok
+T,6,3,1,p6s3r1,4,не,не,read,,ok,ok,ok
+T,6,3,1,p6s3r1,5,зна-,зна,read,,wrong,wrong,wrong
+T,6,3,1,p6s3r1,6,етъ,етъ,read,,ok,ok,ok
+T,6,3,1,p6s3r1,7,ско-,ско,read,,wrong,wrong,wrong
+T,6,3,1,p6s3r1,8,роль,роль,read,,ok,ok,ok
+T,6,3,1,p6s3r1,9,часъ,часъ,read,,wrong,wrong,wrong
+T,6,3,1,p6s3r1,10,у-,у,read,,wrong,wrong,wrong
+T,6,3,1,p6s3r1,11,да-,да,read,,ok,ok,ok
+T,6,3,1,p6s3r1,12,ритъ,рнтъ,letter recognition,token рнтъ,,,
+T,6,3,1,p6s3r1,13,про-,про,read,,ok,ok,ok
+T,6,3,1,p6s3r1,14,буж-,оузж,letter recognition,token оузж,,,
+T,6,4,1,p6s4r1,1,де-,де,read,,ok,ok,ok
+T,6,4,1,p6s4r1,2,нья,нья,read,,ok,ok,ok
+K,1,1,1,p1s1r1,1,Каждый,Каждыи,letter recognition,token Каждыи,,,
+K,1,1,1,p1s1r1,2,день,день,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,1,1,p1s1r1,3,въ,въ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,1,1,p1s1r1,4,са-,са,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,1,1,p1s1r1,5,ду,ду,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,1,1,p1s1r1,6,га-,га,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,1,1,p1s1r1,7,ре-,рѳе,letter recognition,token рѳе,,,
+K,1,1,1,p1s1r1,8,ма,ма,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,1,1,p1s1r1,9,у,у,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,1,1,p1s1r1,10,шу-,шу,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,1,мя-,мя,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,2,ща-,ща,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,3,го,го,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,4,фон-,фон,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,5,та-,та,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,6,на,на,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,7,гор-,гор,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,8,дымъ,дымъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,9,ле-,ле,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,10,бе-,бе,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,11,демъ,демъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,2,1,p1s2r1,12,про-,про,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,1,хо-,Хо,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,2,дитъ,дитъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,3,дочь,дочь,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,4,ве-,ве,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,5,ли-,ли,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,6,ка-,на,letter recognition,token на,,,
+K,1,3,1,p1s3r1,7,го,го,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,8,сул-,сул,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,9,та-,та,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,1,3,1,p1s3r1,10,на,на,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,1,1,p2s1r1,1,У,У,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,1,1,p2s1r1,2,шу-,шу,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,1,1,p2s1r1,3,мя-,мя,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,1,1,p2s1r1,4,ща-,ща,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,1,1,p2s1r1,5,го,го,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,1,1,p2s1r1,6,фон-,Фон,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,1,1,p2s1r1,7,та-,та,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,1,1,p2s1r1,8,на,на,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,1,блѣд-,блѣд,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,2,ный,ныи,letter recognition,token ныи,,,
+K,2,2,1,p2s2r1,3,съ,съ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,4,впа-,впа,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,5,лы-,лы,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,6,ми,Ми,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,7,ще-,ще,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,8,ка-,ка,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,9,ми,ми,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,10,каждый,каждый,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,11,разъ,равъ,letter recognition,token равъ,,,
+K,2,2,1,p2s2r1,12,сто-,сто,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,13,итъ,итъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,14,не-,не,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,2,1,p2s2r1,15,вольникъ,вольникъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,3,1,p2s3r1,1,и,и,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,3,1,p2s3r1,2,слѣ-,слѣ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,3,1,p2s3r1,3,дитъ,дитъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,3,1,p2s3r1,4,за,за,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,3,1,p2s3r1,5,ней,нем,letter recognition,token нем,,,
+K,2,3,1,p2s3r1,6,о-,о,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,3,1,p2s3r1,7,ча-,ча,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,2,3,1,p2s3r1,8,ми,ми,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,1,Разъ,Разъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,2,о-,о,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,3,на,на,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,4,ос-,ос,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,5,та-,та,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,6,но-,но,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,7,ви-,ви,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,8,лась,лась,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,9,под-,под,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,10,ня-,ня,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,11,ла,ла,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,1,1,p3s1r1,12,гла-,гла,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,1,за,за,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,2,боль-,ооль,letter recognition,token ооль,,,
+K,3,2,1,p3s2r1,3,ші-,ші,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,4,е,е,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,5,и,и,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,6,от-,от,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,7,ры-,ры,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,8,вис-,вие,letter recognition,token вие,,,
+K,3,2,1,p3s2r1,9,то,то,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,10,спро-,епро,letter recognition,token епро,,,
+K,3,2,1,p3s2r1,11,си-,еси,letter recognition,token еси,,,
+K,3,2,1,p3s2r1,12,ла,ла,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,13,и-,и,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,2,1,p3s2r1,14,мя,мя,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,3,1,p3s3r1,1,ро-,ро,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,3,1,p3s3r1,2,ди-,Ди,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,3,1,p3s3r1,3,на,на,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,3,1,p3s3r1,4,род-,род,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,3,1,p3s3r1,5,ны-,ны,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,3,3,1,p3s3r1,6,е,е,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,1,Зовусь,Зовусь,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,2,Ма-,Ма,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,3,го-,го,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,4,ме-,ме,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,5,томъ,томъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,6,я,я,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,7,І-,І,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,8,е-,е,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,9,менъ,менъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,10,ро-,ро,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,11,ди-,ди,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,12,на,на,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,13,а,а,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,14,кровью,кровъю,letter recognition,token кровъю,,,
+K,4,1,1,p4s1r1,15,я,я,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,1,1,p4s1r1,16,изъ,изъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,1,Аф-,Аф,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,2,ровъ,ровъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,3,гдѣ,гдѣ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,4,рядомъ,рядомъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,5,смерть,смерть,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,6,и-,и,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,7,детъ,детъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,8,съ,съ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,9,лю-,лю,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,10,бо-,бо,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,11,вью,вьъю,letter recognition,token вьъю,,,
+K,4,2,1,p4s2r1,12,да,да,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,13,рядомъ,рядомъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,14,смерть,смерть,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,15,и-,и,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,16,детъ,детъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,2,1,p4s2r1,17,съ,сълю,token splitting,2 printed syllables aligned to 1 token(s): сълю,,,
+K,4,2,1,p4s2r1,18,лю-,сълю,token splitting,2 printed syllables aligned to 1 token(s): сълю,,,
+K,4,3,1,p4s3r1,1,бо-,бо,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+K,4,3,1,p4s3r1,2,вью,въю,letter recognition,token въю,,,
+M,1,1,1,p1s1r1,1,Ко-,Ко,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,1,1,p1s1r1,2,тинь-,тинь,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,1,1,p1s1r1,3,ка,ка,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,1,1,p1s1r1,4,ко-,Ко,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,1,1,p1s1r1,5,токъ,ТоОКъЪ,letter recognition,token ТоОКъЪ,,,
+M,1,1,1,p1s1r1,6,Ко-,ћо,letter recognition,token ћо,,,
+M,1,1,1,p1s1r1,7,тя,тя,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,1,1,p1s1r1,8,сѣ-,сѣ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,1,1,p1s1r1,9,рень-,рень,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,1,кій,Кій,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,2,хво-,хво,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,3,стокъ,стокъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,4,при-,при,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,5,ди,ди,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,6,ко-,ко,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,7,тикъ,Ттикъ,letter recognition,token Ттикъ,,,
+M,1,2,1,p1s2r1,8,но-,но,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,9,че-,че,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,1,2,1,p1s2r1,10,вать,вать,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,1,мо-,мо,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,2,е-,е,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,3,го,го,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,4,ди-,ди,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,5,тя,тя,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,6,ка-,ка,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,7,чать,чать|л,token splitting,1 printed syllable aligned to 2 tokens: чать|л,,,
+M,2,1,1,p2s1r1,8,Я,те,token splitting,2 printed syllables aligned to 1 token(s): те,,,
+M,2,1,1,p2s1r1,9,те-,те,token splitting,2 printed syllables aligned to 1 token(s): те,,,
+M,2,1,1,p2s1r1,10,бѣ,бѣ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,11,ко-,ко,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,1,1,p2s1r1,12,ту,ту,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,1,за,за,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,2,ра-,ра,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,3,бо-,бо,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,4,ту,ту,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,5,за-,зЗа,letter recognition,token зЗа,,,
+M,2,2,1,p2s2r1,6,пла-,пла,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,7,чу,чу,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,8,бѣ-,бѣ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,9,лень-,лень,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,10,кій,кій,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,2,1,p2s2r1,11,пла-,пла,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,3,1,p2s3r1,1,то-,То,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,3,1,p2s3r1,2,чекъ,чекъ,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,3,1,p2s3r1,3,на,На,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,3,1,p2s3r1,4,ше-,ше,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,3,1,p2s3r1,5,ю,ю,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,3,1,p2s3r1,6,на-,На,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,3,1,p2s3r1,7,вя-,вя,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,3,1,p2s3r1,8,жу,жу,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,4,1,p2s4r1,1,Бай,Бай,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,4,1,p2s4r1,2,бай,бай,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
+M,2,4,1,p2s4r1,3,бай,бай,read,,n_a: no syllable truth,n_a: no syllable truth,n_a: no syllable truth
