@@ -24,6 +24,14 @@ Changes of 2026-10-19 (Dann's proof findings, desk decisions):
  10. Ossia: a line `b18 oss: <events>` directly under `b18:` holds the lower option; it must sum like the bar. Drawn as
      voice 2 on the same staff (stems down, voice 1 stems up in that bar), lyrics on voice 1 only. Truth JSON:
      ossia [{measureIndex, notes:[... option: "lower"]}]. Its accidentals follow the same rule, voice by voice.
+ 12. Slurs (2026-10-19): `(` after a note's value (after its dots) starts a slur on it, `)` ends one on it; they may
+     stand in any order with `~` and the @marks (`D5/8( "ми-" | C#5/8) -`; `B4/4)(` ends one slur and starts the next).
+     Slurs nest only as written: a `)` closes the most recently opened slur. A tie stays `~` and is never a slur.
+     MusicXML: <slur type="start|stop" number="L"/> (L the lowest level free when it starts). A slur that crosses a
+     system break is drawn open on both sides (an invisible grace note carries each far end, as for ties); a `(` with
+     no `)` on the page leaves the page; a `)` with no `(` arrives from the previous page. Truth JSON: slurStart: n and
+     slurStop: n on the note, n the slur's number on the page (1, 2, ... in order of their starts; a slur arriving from
+     the previous page is numbered where it stops); a note that starts or stops two slurs carries a list.
  11. Ties across a break: `~` before a pitch marks the end of a tie that arrives from the previous page (truth JSON
      tieStop: true). A tie that leaves the page, or crosses a system break, draws its arc on both sides: Verovio
      draws no arc for a tie with one end missing, so the kit ties to an invisible grace note (print-object="no").
@@ -39,6 +47,7 @@ Events:
   g:E5/16          a grace note (not counted in the bar sum)
   t3[ ... ]        a tuplet, 3 in the time of 2 (t5 = 5 in 4, t7 = 7 in 4, t3:2 explicit)
   ~ after a note   tie to the next note (the next carries no syllable)
+  ( ) after a note a slur starts / stops on this note (see 12)
   @acc ...         markings, after the value, dots, and tie
   // text          a comment
 Header lines: key: 3 ; time: 4/4 ; clef: G2 ; title: ... ; page: ... ; anacrusis: yes ; showtime: yes
@@ -115,11 +124,14 @@ def parse_events(s):
             if rm:
                 ev.append({'kind':'rest','pitch':'r','value':1,'dots':0,'tie':False,'grace':False,'syl':None,
                            'measure_rest':True,'marks':marks_of(rm.group(1))}); continue
-            nm = re.match(r'^(r|' + PITCH + r')/(\d+)(\.*)(~?)((?:@[a-z]+[\^_]?)*)$', t)
+            nm = re.match(r'^(r|' + PITCH + r')/(\d+)(\.*)((?:~|\(|\)|@[a-z]+[\^_]?)*)$', t)
             if not nm: raise SystemExit(f'bad token: {t}')
+            sfx = nm.group(9)
+            if sfx.count('~') > 1: raise SystemExit(f'bad token (two ties): {t}')
             e = {'kind':'rest' if nm.group(1)=='r' else 'note', 'pitch':nm.group(1), 'value':int(nm.group(7)),
-                 'dots':len(nm.group(8)), 'tie':bool(nm.group(9)), 'grace':grace, 'syl':None, 'marks':marks_of(nm.group(10)),
-                 'tie_in': tie_in}
+                 'dots':len(nm.group(8)), 'tie':'~' in sfx, 'grace':grace, 'syl':None, 'marks':marks_of(sfx),
+                 'tie_in': tie_in, 'slur_ops': re.findall(r'[()]', re.sub(r'@[a-z]+[\^_]?', '', sfx))}
+            if e['slur_ops'] and e['kind'] != 'note': raise SystemExit(f'a slur starts and stops on a note: {t}')
             if e['kind'] == 'note':
                 e['step'], e['acc'], e['oct'] = nm.group(2), nm.group(3) or '', int(nm.group(4))
                 e['force'] = bool(nm.group(5)); e['paren'] = bool(nm.group(6))
@@ -140,8 +152,31 @@ def marks_of(s):
 
 def tokenize(s):
     mk = r'(?:@[a-z]+[\^_]?)*'
-    pat = (r'"[^"]*"|t\d+(?::\d+)?\[|\]|\||R' + mk + r'(?=\s|\||$)|(?:g:)?~?(?:r|[A-G](?:##|bb|#|b|n)?\d!?(?:\(\))?)/\d+\.*~?' + mk + r'|-')
+    pat = (r'"[^"]*"|t\d+(?::\d+)?\[|\]|\||R' + mk + r'(?=\s|\||$)|(?:g:)?~?(?:r|[A-G](?:##|bb|#|b|n)?\d!?(?:\(\))?)/\d+\.*(?:~|\(|\)|@[a-z]+[\^_]?)*|-')
     return re.findall(pat, s)
+
+def number_slurs(bars, field='events'):
+    """Number the page's slurs and give each a MusicXML level. Sets e['slur_start'] / e['slur_stop'] = [(n, level)]
+    on every event and b[field + '_slur_in'] = the slurs open as bar b begins; returns the slurs open at the page's end."""
+    stack = []; nxt = 1; arriving = []
+    for b in bars:
+        b[field + '_slur_in'] = list(stack)
+        for e in flat(b[field] or []):
+            e['slur_start'] = []; e['slur_stop'] = []
+            for op in e.get('slur_ops', []):
+                if op == '(':
+                    used = {l for _, l in stack}; L = 1
+                    while L in used: L += 1
+                    s = (nxt, L); nxt += 1; stack.append(s); e['slur_start'].append(s)
+                elif stack:
+                    e['slur_stop'].append(stack.pop())
+                else:   # arrives from the previous page
+                    s = (nxt, 1); nxt += 1; e['slur_stop'].append(s); arriving.append(s)
+    for s in arriving:   # open from the page's start until its stop
+        for b in bars:
+            b[field + '_slur_in'] = [s] + b[field + '_slur_in']
+            if any(s in e['slur_stop'] for e in flat(b[field] or [])): break
+    return list(stack)
 
 def dur(e, metre=None):
     if e.get('measure_rest'): return metre
@@ -202,6 +237,12 @@ def hidden_grace(e, key, voice, kind):
     return (f'<note print-object="no"><grace/><pitch><step>{e["step"]}</step>{f"<alter>{alter}</alter>" if alter else ""}<octave>{e["oct"]}</octave></pitch>'
             f'<tie type="{kind}"/><voice>{voice}</voice><type>eighth</type><notations><tied type="{kind}"/></notations></note>')
 
+def hidden_slur_grace(e, key, voice, kind, slurs):
+    # an invisible grace note that carries the far end of slurs whose real partner is on another system or page
+    alter = alter_of(e, key); sl = ''.join(f'<slur type="{kind}" number="{l}"/>' for _, l in slurs)
+    return (f'<note print-object="no"><grace/><pitch><step>{e["step"]}</step>{f"<alter>{alter}</alter>" if alter else ""}<octave>{e["oct"]}</octave></pitch>'
+            f'<voice>{voice}</voice><type>eighth</type><notations>{sl}</notations></note>')
+
 def emit_notes(out, evs, metre, key, voice, stem, beams, tup_edges, accs, st, divisions, last_lyric, lyrics, close_tie, shared=()):
     """st: per-voice state {'tied': bool, 'first': bool, 'incoming': bool}; shared: ids of ossia events that the upper
     option already draws (same onset, pitch, and value): drawn invisible, so the print's single head shows once"""
@@ -234,6 +275,8 @@ def emit_notes(out, evs, metre, key, voice, stem, beams, tup_edges, accs, st, di
         if is_note and e['tie']: nots.append('<tied type="start"/>')
         if is_note and prev_tied: nots.append('<tied type="stop"/>')
         if beams[ei]: out.append(f'<beam number="1">{beams[ei]}</beam>')
+        for _, l in e.get('slur_stop', []): nots.append(f'<slur type="stop" number="{l}"/>')
+        for _, l in e.get('slur_start', []): nots.append(f'<slur type="start" number="{l}"/>')
         te = tup_edges.get(id(e))
         if te: nots.append(f'<tuplet type="{te}" bracket="yes" show-number="actual"/>')
         arts = []
@@ -256,7 +299,7 @@ def emit_notes(out, evs, metre, key, voice, stem, beams, tup_edges, accs, st, di
     if close_tie and st['tied'] and st.get('last') is not None:
         out.append(hidden_grace(st['last'], key, voice, 'stop')); st['tied'] = False
 
-def to_musicxml(hdr, bars, ctx, divisions=96, show_first_time=True, courtesy_key=None, system_end=False, incoming=False, incoming2=False):
+def to_musicxml(hdr, bars, ctx, divisions=96, show_first_time=True, courtesy_key=None, system_end=False, incoming=False, incoming2=False, slur_out=()):
     tn, td = ctx[0][0]; key = ctx[0][1]
     out = ['<?xml version="1.0" encoding="UTF-8"?>',
            '<score-partwise version="4.0"><part-list><score-part id="P1"><part-name>Голос</part-name></score-part></part-list><part id="P1">']
@@ -292,8 +335,14 @@ def to_musicxml(hdr, bars, ctx, divisions=96, show_first_time=True, courtesy_key
         last = bi == len(bars) - 1
         oss = b.get('oss')
         evs = list(flat(b['events']))
+        first_note = next((e for e in evs if e['kind'] == 'note' and not e['grace']), None)
+        last_note = next((e for e in reversed(evs) if e['kind'] == 'note' and not e['grace']), None)
+        if bi == 0 and b.get('events_slur_in') and first_note is not None:
+            out.append(hidden_slur_grace(first_note, key, 1, 'start', b['events_slur_in']))   # slurs arriving from before
         emit_notes(out, evs, metre, key, 1, 'up' if oss else None, beam_plan(evs, metre), tuplet_edges(b['events']),
                    accs, st1, divisions, last_lyric, True, last)
+        if last and slur_out and last_note is not None:
+            out.append(hidden_slur_grace(last_note, key, 1, 'stop', slur_out))   # slurs leaving the system or page
         if oss:
             out.append(f'<backup><duration>{int(metre * 4 * divisions)}</duration></backup>')
             ev2 = list(flat(oss))
@@ -381,6 +430,9 @@ def note_records(evs, bi, key, expect, abs_onset, accs, prefix='m'):
             if accs.get(id(e)):
                 a, par = accs[id(e)]; rec['printedAccidental'] = ALTER_TRUTH[a]
                 if par: rec['printedAccidentalParenthesized'] = True
+        for fld, key_ in (('slur_start', 'slurStart'), ('slur_stop', 'slurStop')):
+            ns = [n for n, _ in e.get(fld, [])]
+            if ns: rec[key_] = ns[0] if len(ns) == 1 else ns
         arts = [MARKS[nm] for nm, _ in e.get('marks', []) if nm != 'ferm']
         if arts: rec['articulations'] = arts
         if any(nm == 'ferm' for nm, _ in e.get('marks', [])): rec['fermata'] = True
@@ -413,8 +465,9 @@ def to_truth(hdr, bars, ctx, piece_id):
 if __name__ == '__main__':
     src = open(sys.argv[1], encoding='utf-8').read(); stem = sys.argv[1].rsplit('.', 1)[0]
     hdr, bars = parse(src); ctx = context(hdr, bars)
+    page_open = number_slurs(bars); number_slurs(bars, 'oss')
     for m in check(hdr, bars, ctx): print('CHECK', m)
-    open(stem + '.musicxml', 'w', encoding='utf-8').write(to_musicxml(hdr, bars, ctx, show_first_time=hdr['showtime']))
+    open(stem + '.musicxml', 'w', encoding='utf-8').write(to_musicxml(hdr, bars, ctx, show_first_time=hdr['showtime'], slur_out=page_open))
     starts = hdr['systems'] + [len(bars)]
     for si in range(len(starts) - 1):
         a, z = starts[si], starts[si + 1]
@@ -428,9 +481,16 @@ if __name__ == '__main__':
         prev2 = list(flat(bars[a - 1]['oss'])) if a > 0 and bars[a - 1].get('oss') else []
         incoming2 = bool(prev2) and prev2[-1]['kind'] == 'note' and prev2[-1]['tie']
         open(f'{stem}-s{si + 1}.musicxml', 'w', encoding='utf-8').write(
-            to_musicxml(h2, bars[a:z], ctx[a:z], show_first_time=show, courtesy_key=ck, system_end=True, incoming=incoming, incoming2=incoming2))
+            to_musicxml(h2, bars[a:z], ctx[a:z], show_first_time=show, courtesy_key=ck, system_end=True, incoming=incoming, incoming2=incoming2,
+                        slur_out=bars[z]['events_slur_in'] if z < len(bars) else page_open))
     json.dump(to_truth(hdr, bars, ctx, stem.split('/')[-1]), open(stem + '.truth.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     n = sum(1 for b in bars for e in flat(b['events']) if e['kind'] == 'note')
     s = sum(1 for b in bars for e in flat(b['events']) if e['kind'] == 'note' and e['syl'] and e['syl'] != '-')
     pb = sum(1 for b in bars if b['piano'])
     print(f'{len(bars)} bars, {n} notes, {s} syllables, {pb} piano-only bars, {len(starts) - 1} systems')
+    cnt = {}
+    for b in bars:
+        for e in flat(b['events']):
+            cnt['slurs'] = cnt.get('slurs', 0) + len(e.get('slur_start', [])) + sum(1 for s in e.get('slur_stop', []) if s not in [x for bb in bars for ee in flat(bb['events']) for x in ee.get('slur_start', [])])
+            for nm, _ in e.get('marks', []): cnt[nm] = cnt.get(nm, 0) + 1
+    print('markings:', ' '.join(f'{k}={v}' for k, v in sorted(cnt.items())) or 'none')

@@ -805,6 +805,10 @@ bind Ilya.**
 
 ---
 
+## WHAT THE READER ALREADY HAS, ILYA DOES NOT THROW AWAY AND GUESS BACK BY RULE. Offered by the desk 2026-10-19 15:25, ruled by Dann 15:26
+
+His words: *"You and I agree, abd thanks for phrasing this better than I Did"* (transcribed as written), on the desk's sentence, with his reasoning of 15:25: *"if the OMR detects elements, those elements have a higher change of being correct if we preserve them."* A read score starts as an accurate replication of the print (N.190, Dann 13:09): its printed accidentals, slurs, accents, staccati, and other note markings are kept from the reader's output and drawn as printed; Ilya's own rules (`advanceAccidentalState`, the melisma slur) serve only what the singer enters. The condition, the desk's and agreed in the same exchange: a kind of mark is drawn once its measured accuracy on Dann's proofed pages earns it, so a detection error is not drawn as the composer's. Specs: `OPEN.md` N.188, N.190.
+
 ## ILYA SORTS WHAT IT IS GIVEN, AND NEVER SAYS SO. Ruled by Dann 2026-09-16
 
 **TRANSCRIBED HERE 2026-09-22 from `OPEN.md` §N.146 before that spec was archived.** Dann's
