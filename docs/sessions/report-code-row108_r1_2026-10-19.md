@@ -142,3 +142,63 @@ The brief's three, with what building them showed.
 - **Re-keying on a score with more than one fold,** and **whether `healFrozenSeats` touches a re-lined seat;** not traced.
 - **The Lamm scan in this lane,** not run.
 - **WebKit and Firefox,** not run.
+
+## 7. Follow-up (2026-10-19): stored seats follow the phrase ends; re-lining needs half of Lyrics' words
+
+The desk's decisions on section 6, built. Items 2 and 4 of section 6 (the microtask, the unread `unmatched` count) are unchanged, as ruled.
+
+### 7.1 Stored seats follow the phrase ends (section 6, item 1)
+
+After the phrase-end re-run the page runs `refreshPairings` against the new slot queue and assigns `doc.pairings` only when a seat changed, so the stored IPA is the live IPA and the assignment cannot re-trigger the effect (the key reads origins and words, not IPA). `e2e-phone/phrase-ends.test.ts` now reads IndexedDB: on Tchaikovsky the stored «так» seats read `22:ˈtɑɡ` and `77:ˈtɑk`.
+
+**The desk expected both «так» seats to read `ˈtɑk`; only one does, and that is right.** The song has two «так». The one at index 77 follows a rest and reads `ˈtɑk`. The one at index 22 has «дивно» after it with no rest, so the music does not end a phrase there and it keeps its voiced `ˈtɑɡ`, in Text and in the stored seat alike (before this change both stored seats read `ˈtɑɡ`). The test asserts exactly that, and asserts Text's label for index 22.
+
+### 7.2 The agreement rule (section 6, item 3)
+
+`lyricsInPoemLines` re-lines only where the matched pairs number at least half of Lyrics' distinct words, by the comparison's own folded form: `2 * pairs >= distinct`. The Poem's side is gone. The comment in `relining.ts` still says "the desk's number, not Dann's".
+
+Measured on every pair in `text/relining.test.ts` (the test asserts each pair's decision and the inequality):
+
+| Pair (Poem against Lyrics) | Matched pairs | Lyrics' distinct words | Result |
+|---|---|---|---|
+| the stand-in (lines of seven) against Sunless | 39 | 36 | re-lined |
+| row 104's 33-word text against Sunless | 32 | 36 | re-lined |
+| the Pushkin quatrain against Sunless | 0 | 36 | left |
+| the Pushkin quatrain against Tchaikovsky | 3 | 71 | left |
+| Tchaikovsky in lines of seven against Sunless | 2 | 36 | left |
+| Sunless in lines of seven against Tchaikovsky | 2 | 71 | left |
+| Sunless sung three times against the stand-in | 39 | 36 | re-lined |
+| Sunless sung twice against the stand-in | 39 | 36 | re-lined |
+| Tchaikovsky against its own lines of seven | 95 | 71 | re-lined |
+| the first five words as Poem against Sunless | 5 | 36 | left |
+
+The new test: the stand-in's first five words as Poem leave Lyrics on one line, and so does every prefix of one to ten words.
+
+### 7.3 A defect this exposed, and its fix
+
+With the stricter rule, test bb (the stand-in typed into Poem key by key) began to fail in two ways, both real:
+
+1. **A rebuild of Text fired while the Poem was still being typed.** Lyrics now changes only when the layout changes, and a stretch of Poem keys that leaves the layout alone let Lyrics' own 600 ms pause run out. A Poem key now keeps a pending pause waiting (`if (quietTimer) joinText(how)` in `handlePoemEdit`), so Text is rebuilt once, after the Poem typing stops (654 ms after the last key, measured).
+2. **Lyrics stopped being re-lined half-way and ended `7,7,13,12`** instead of `7,7,7,7,7,4`. The layout of a partial poem is not a fixed point of itself (measured: from the 121st character of the stand-in on), so the brief's "Lyrics equals `layOutLikePoem(Lyrics, previous Poem)` exactly" stopped recognising Ilya's own lines. The page now keeps the text Ilya last wrote (`lastLaid`), and `lyricsInPoemLines` takes `lastLaid` as one more witness that the line breaks are Ilya's: Lyrics is one line, or exactly `lastLaid`, or the fixed-point test. A singer's edit changes Lyrics, so it no longer equals `lastLaid`, and her lines stay hers. A unit test types the stand-in key by key with and without the witness and reads `7,7,7,7,7,4` against `7,7,13,12`.
+
+This adds the one deviation from the brief's wording of condition 2; the intent (Ilya changes only line breaks it wrote) is the same, and the witness is stricter, not looser.
+
+### 7.4 Gates, final tree
+
+| Gate | Result |
+|---|---|
+| phonology | 267 |
+| dictionary | 248 |
+| web-check | 0 errors, 12 warnings in 5 files |
+| web-test | 2842 (was 2839: 2 in the pair-measurement tests, 1 for the typed-poem test, all in `text/relining.test.ts`) |
+| score-parser | 709 passed, 5 skipped |
+| blurb | 145 |
+| integration | 55 |
+| ratchets | OK; `+page.svelte` ceiling raised from 5640 to 5641 on purpose (the `lastLaid` witness is one line), `pipeline.ts` 1022 |
+
+Playwright, both projects on the final tree: phone 21 passed, 1 skipped; chromium 72 passed, 2 failed, of 74 (the two known: `e2e/insights-page.test.ts:95` and `e2e/singer-paths.test.ts:169`).
+
+### 7.5 Not established
+
+- Whether a real singer's Poem, typed or pasted, ever sits between a tenth and a half of Lyrics' distinct words long enough to matter; the rule is the desk's number, tested only on the fixtures and the pairs above.
+- The stored-seat refresh on the other transcription paths: it runs after the phrase-end re-run only. Every other path already refreshes through `reseatByDiff`.

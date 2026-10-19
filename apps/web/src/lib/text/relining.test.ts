@@ -15,7 +15,7 @@ import { seatedTextDiff } from '$lib/score/seated-text';
 import { musicPhraseEnds } from '$lib/score/phrase-ends';
 import { inLines, loadFixture, loadRealDictionary, oneLine, SUNLESS, TCHAIKOVSKY } from '$lib/score/row108.support';
 import today from '$lib/score/phrase-ends.today.json';
-import { layOutLikePoem } from './poem-compare';
+import { comparePoem, layOutLikePoem, tokenize } from './poem-compare';
 import { lyricsInPoemLines } from './relining';
 import { sameWords } from './same-words';
 
@@ -216,5 +216,67 @@ describe('the named undo across a re-lining (section 5, item 6): simulated, not 
 		const polyot = processText(laid, { phraseEnds: ends }).flatMap((l) => l.words)[20];
 		// MEASURED 2026-10-19: until the next transcription, 18 seats draw live and 78 from their stored text; «полёт» reads as the six lines do with no phrase end to cross
 		expect({ live, stored, ipa: polyot.ipaDisplay, keys: ends.size }).toEqual({ live: 18, stored: 78, ipa: 'pɑ ˈlʲot', keys: 6 });
+	});
+});
+
+describe('the agreement rule: matched pairs against Lyrics’ distinct words (follow-up, 2026-10-19)', () => {
+	const distinctOf = (text: string) => new Set(tokenize(text).map((t) => t.folded).filter(Boolean)).size;
+
+	it('measures every pair, and re-lines exactly where the pairs reach half of Lyrics’ distinct words', async () => {
+		const sun = oneLine(await loadFixture(SUNLESS));
+		const tch = oneLine(await loadFixture(TCHAIKOVSKY));
+		const w = sun.split(' ');
+		const test33 = [...w.slice(0, 10), 'ИЗМЕНЁННОЕ', ...w.slice(11, 33)].join(' ');
+		const rows: Array<[string, string, string, boolean]> = [
+			['stand-in against Sunless (q, r, s)', sun, inLines(sun), true],
+			['row 104 text against Sunless (w)', sun, test33, true],
+			['Pushkin against Sunless (u)', sun, PUSHKIN, false],
+			['Pushkin against Tchaikovsky (u)', tch, PUSHKIN, false],
+			['Tchaikovsky in sevens against Sunless (v)', sun, inLines(tch), false],
+			['Sunless in sevens against Tchaikovsky (v)', tch, inLines(sun), false],
+			['Sunless sung three times against the stand-in (aa)', Array(3).fill(sun).join(' '), inLines(sun), true],
+			['Sunless sung twice against the stand-in (aa)', Array(2).fill(sun).join(' '), inLines(sun), true],
+			['Tchaikovsky against its own lines of seven', tch, inLines(tch), true],
+			['the first five words as Poem against Sunless', sun, w.slice(0, 5).join(' '), false],
+		];
+		const measured = rows.map(([name, lyrics, poem, relines]) => {
+			const cmp = comparePoem(lyrics, poem)!;
+			const pairs = cmp.pairs.length;
+			const d = distinctOf(lyrics);
+			expect(lyricsInPoemLines(lyrics, poem, '', lyrics) !== null, name).toBe(relines);
+			expect(2 * pairs >= d, name).toBe(relines);
+			return `${name}: ${pairs} pairs, ${d} distinct Lyrics words, ${relines ? 're-lined' : 'left'}`;
+		});
+		expect(measured).toHaveLength(rows.length);
+	});
+
+	it('the stand-in’s first five words as Poem leave Lyrics on one line', async () => {
+		const sun = oneLine(await loadFixture(SUNLESS));
+		expect(lyricsInPoemLines(sun, sun.split(' ').slice(0, 5).join(' '), '', sun)).toBeNull();
+		// a Poem typed key by key never gets Lyrics re-lined before it reaches half of Lyrics' distinct words
+		const poem = sun.split(' ');
+		for (let n = 1; n <= 10; n += 1) expect(lyricsInPoemLines(sun, poem.slice(0, n).join(' '), '', sun), `${n} words`).toBeNull();
+	});
+});
+
+describe('a Poem typed key by key', () => {
+	it('ends with Lyrics in the poem’s lines: the partial poem’s layout is not a fixed point, so Ilya’s own last text is the witness', async () => {
+		const one = oneLine(await loadFixture(SUNLESS));
+		const poem = inLines(one);
+		const run = (witness: boolean) => {
+			let lyr = one;
+			let prev = '';
+			let last = '';
+			for (let i = 1; i <= poem.length; i += 1) {
+				const p = poem.slice(0, i);
+				const laid = lyricsInPoemLines(lyr, p, prev, one, witness ? last : '');
+				if (laid !== null) [lyr, last] = [laid, laid];
+				prev = p;
+			}
+			return lineLengths(lyr);
+		};
+		expect(run(true)).toEqual([7, 7, 7, 7, 7, 4]);
+		// without the witness, the previous-Poem test lets go half-way (the defect this fixes)
+		expect(run(false)).toEqual([7, 7, 13, 12]);
 	});
 });

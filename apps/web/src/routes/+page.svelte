@@ -2408,9 +2408,10 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		joinText(how);
 	}
 	/* ROW 108 B (ruling default 4): Lyrics holding the score's words, in Ilya's own line breaks, takes the poem's (`text/relining.ts`). */
+	let lastLaid = ''; // the text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
 	function adoptPoemLines(how: TextArrival, previousPoem = ''): void {
-		const laid = lyricsInPoemLines(doc.inputText, doc.publishedPoem, previousPoem, scoreText);
-		if (laid !== null) handleInput(laid, how);
+		const laid = lyricsInPoemLines(doc.inputText, doc.publishedPoem, previousPoem, scoreText, lastLaid);
+		if (laid !== null) { lastLaid = laid; handleInput(laid, how); }
 	}
 	/* N.135 STAGE 3, RULED BY DANN 2026-10-16: INPUT HAS TWO VIEWS. Lyrics is
 	   `doc.inputText`, the sung text that seats and transcribes; Poem is the
@@ -2425,7 +2426,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		if (carried) [doc.publishedGlosses, doc.publishedGlossAnchors] = [carried.glosses, carried.anchors];
 		doc.publishedPoem = text;
 		if (lyricsTakesPoem(how === 'paste' && noLyricsFile !== null && ingestedScore !== null, doc.inputText, text, Object.keys(doc.pairings).length)) handleInput(text, 'paste');
-		else { nameIfUnnamed(); adoptPoemLines(how, before); }
+		else { nameIfUnnamed(); adoptPoemLines(how, before); if (quietTimer) joinText(how); /* a Poem key keeps a pending pause waiting */ }
 	}
 	function handlePoemPage(text: string): void {
 		const say = (key: string) => tOrEnglish(key, language);
@@ -2514,7 +2515,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	// Row 108 C: where the music ends a phrase, read from the TRANSCRIBED text, never `doc.inputText` (it changes per key).
 	const phraseEnds = $derived(ingestedScore ? musicPhraseEnds(ingestedScore.result.score, doc.pairings, wordGrid(transcribedText ?? '')) : undefined);
 	let lastPhraseEndsKey = '';
-	$effect(() => { const key = phraseEndsKey(phraseEnds); untrack(() => { if (shouldRerunForPhraseEnds(lastPhraseEndsKey, key, transcribedText, doc.inputText, lines.length > 0)) runPipeline(); lastPhraseEndsKey = key; }); });
+	$effect(() => { const key = phraseEndsKey(phraseEnds); untrack(() => { if (shouldRerunForPhraseEnds(lastPhraseEndsKey, key, transcribedText, doc.inputText, lines.length > 0)) { runPipeline(); const fresh = refreshPairings(doc.pairings, buildSlotQueue(lines)); if (Object.keys(fresh).some((k) => fresh[k] !== doc.pairings[k])) doc.pairings = fresh; } lastPhraseEndsKey = key; }); });
 
 	/**
 	 * The word grid the current `lines` were built from. N.112.

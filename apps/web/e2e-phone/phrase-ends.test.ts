@@ -36,8 +36,9 @@ test('Tchaikovsky onto an empty song: 172 seats, and «так» reads [ˈtɑk] i
 	await page.waitForTimeout(3000);
 	// Text and the reading aid both draw the word; the first is Text's
 	await expect(page.locator('[data-word-index="0-77"]').first()).toHaveAttribute('aria-label', 'так: ˈtɑk');
-	// The stored seat keeps the IPA it was made with; Markup draws the live slot's (`drawPairings`), which is what Text shows.
-	const tak = Object.values(await seats(page)).filter((p) => p.kind === 'syllable' && p.origin?.word === 'так');
-	console.log('stored seat IPA for «так»:', JSON.stringify(tak.map((p) => p.ipa)));
-	expect(tak).toHaveLength(2); // the two «так» of the song
+	// The phrase-end re-run refreshes the stored seats (follow-up 2026-10-19): IndexedDB carries what Text shows.
+	// The song has two «так». The one at index 77 follows a rest and reads ˈtɑk; the one at 22 has «дивно» after it with no
+	// rest, so it keeps its voiced ˈtɑɡ, in Text and in the stored seat alike (the desk expected both ˈtɑk; the music says one).
+	await expect(page.locator('[data-word-index="0-22"]').first()).toHaveAttribute('aria-label', 'так: ˈtɑɡ');
+	await expect.poll(async () => Object.values(await seats(page)).filter((p) => p.kind === 'syllable' && p.origin?.word === 'так').map((p) => `${p.origin?.wordIndex}:${p.ipa}`).sort(), { timeout: 15_000 }).toEqual(['22:ˈtɑɡ', '77:ˈtɑk']);
 });
