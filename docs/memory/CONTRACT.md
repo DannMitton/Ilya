@@ -27,7 +27,7 @@ r1 draft, 2026-10-12. Replaces the 787-line CONTRACT.md once Dann ratifies it. E
 
 ## 2. The opening ritual
 
-Read `README.md`, this file, `STATE.md`, and `QUEUE.md`. Then emit this block, then ask Dann for the repository state in one line. No work begins before it. Fill every line or write `NOT ESTABLISHED` and stop; re-emit when the item or its scope changes.
+Read `README.md`, this file, `STATE.md`, and `QUEUE.md`. Then emit this block, then read the repository state yourself from the bridge with read-only git (`git --no-optional-locks log -1` and `status --porcelain`, §4) and report it in one line; ask Dann only if the bridge cannot reach the repository (Dann 2026-10-20 12:32: *"Can we change "Then ask me for the repository state in one line."? You can do this yourself without my invovlement, cant you?"*, transcribed as written). No work begins before it. Fill every line or write `NOT ESTABLISHED` and stop; re-emit when the item or its scope changes.
 
 ```
 SEQUENCE POSITION

@@ -4891,3 +4891,4 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 
 ### WHAT THE DESK LEARNED ON 2026-10-20
 - **Never write a file into Dann's folder after giving him a ship paste and before it runs, and never send a second paste that supersedes the first.** Dann follows pastes in order, as he should. On 2026-10-20 the desk gave a ship paste, then filed batch B's brief and review and sent a replacement paste; he ran the first, and the ship script refused on the two new untracked files (11:50). Write every file first, then give one paste; if something must be added after, wait for the ship and add it to the next one.
+- **In an idle cloud session, Return in the message box did not send** (2026-10-20 11:5x; the text stayed in the box). Clicking the Send button (found by `find`, "send message button") sent it. Look at the page after Return before assuming it went.

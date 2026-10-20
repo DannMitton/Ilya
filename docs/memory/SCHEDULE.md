@@ -17,7 +17,7 @@ r3, written by the desk (Opus) 2026-10-20 about 02:50, at Dann's request of 02:4
 **Why:** work already paid for helps no one until it reaches the alias, and landing it costs little. **Done means:** each row shipped and walked.
 
 - [x] **Row 127, the octave clef.** DONE: shipped `c68f9a0f` (merge `209aaeb1`), closed by Dann's look 2026-10-20 03:11. *Solves:* a low voice reading a treble-printed line an octave down saw the key signature an octave too high and had no choice of bass clef; now notes and key sit where the print has them, and bass is the singer's choice. *Opens:* low voices can use Markup on treble-printed songs; Dann's clef ask of 2026-10-14 closes.
-- [ ] **Row 128, the tempo chips.** BUILT `6d2bdcfc`, gates measured; ships next, then Dann's look. *Solves:* the notes in the tempo buttons sit too high (Dann's screenshot, 2026-10-19 23:18); they get an even margin, like the other buttons. *Opens:* the tempo control looks finished.
+- [ ] **Row 128, the tempo chips.** SHIPPED `dbb97773` 2026-10-20 11:56; Dann's look owed. *Solves:* the notes in the tempo buttons sit too high (Dann's screenshot, 2026-10-19 23:18); they get an even margin, like the other buttons. *Opens:* the tempo control looks finished.
 - [ ] **Row 129, triplets as the publisher draws them.** Brief r2 reviewed (batch A). *Solves:* Ilya adds a bracket the print does not have (song 1, bar 10); the 3 goes over the middle stem's meeting with the beam. *Opens:* Markup looks like the page a colleague compares it to.
 - [ ] **The uncommitted documents.** *Solves:* records held only on Dann's disk can be lost, and untracked files stop the ship script. *Opens:* every later ship runs clean.
 
@@ -97,3 +97,4 @@ Rows 107, 132, 136, 137, 138, and 140 (the WCAG audit; no level claimed before i
 - 2026-10-20 03:3x, the desk: row 147 added to meta 3 on Dann's ruling of 03:29.
 - 2026-10-20 03:3x, the desk: row 148 added to meta 3 from Dann's screenshot of 03:33.
 - 2026-10-20 03:3x, the desk: row 149 added at the head of meta 3 on Dann's ruling of 03:37.
+- 2026-10-20 11:5x, the desk: row 128 shipped; batches A and B sent to the cloud.

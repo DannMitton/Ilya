@@ -56,14 +56,14 @@ Folder grants do not carry between sessions.
 Once the reads are done, emit the sequence-position block from CONTRACT.md §2.
 Nothing else happens before it.
 
-Then ask me for the repository state in one line. You do not write with git,
-ever. Read-only git is allowed; CONTRACT.md §4 says which commands.
+Then read the repository state yourself with read-only git (CONTRACT.md §4)
+and report it in one line. You do not write with git, ever.
 
 Then start on THE ONE THING in STATE.md. Do not bring me an engineering
 choice. Before any helper runs, tell me how long you will be silent.
 ```
 
-If that prompt ever needs to grow, something has gone wrong in this folder instead. Its last line was changed by the desk at the close of 2026-10-05 under Dann's rule of 2026-10-04 22:27 (he says what he wants, the desk decides how), a DESK DEFAULT, his to overrule.
+If that prompt ever needs to grow, something has gone wrong in this folder instead. Its line on the repository state was changed by the desk at the close of 2026-10-20 at Dann's request of 12:32 (*"Can we change "Then ask me for the repository state in one line."? You can do this yourself without my invovlement, cant you?"*, transcribed as written). Its last line was changed by the desk at the close of 2026-10-05 under Dann's rule of 2026-10-04 22:27 (he says what he wants, the desk decides how), a DESK DEFAULT, his to overrule.
 
 ## Closing a session
 
