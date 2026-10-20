@@ -379,7 +379,7 @@ export function planPrintedSlurs(
     let yB = freeB ? NaN : levelAt(to);
     // The brackets this slur must pass over: only above, and only those it overlaps in x.
     const overlaps = (a: number, b: number): BracketRec[] => (dir === 'above' ? clearBrackets.filter((br) => br.xb >= a && br.xa <= b) : []);
-    const bracketLevel = (br: BracketRec): number => br.yBr + s * clear;
+    const bracketLevel = (br: BracketRec): number => (br.bare ? numeralBox(br).top : br.yBr) + s * clear;
     if (freeB) xB = c.contentRight + (c.o.runOnTieSp && c.o.runOnTieSp > 0 ? sp(c.o.runOnTieSp) : 0);
     if (freeA) xA = c.contentLeft;
     const over = overlaps(xA, xB);

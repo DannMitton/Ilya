@@ -187,6 +187,6 @@
 <line x1="601.1" y1="147" x2="641.1" y2="141" stroke="#1a1612" stroke-width="6" data-beam-level="2"/>
 <line x1="800.02" y1="156" x2="880.02" y2="144" stroke="#1a1612" stroke-width="6" data-beam-level="1"/>
 <line x1="1054.0200000000002" y1="162" x2="1094.0200000000002" y2="156" stroke="#1a1612" stroke-width="6" data-beam-level="1"/>
-<g data-tuplet="3"><line x1="798.38" y1="45" x2="798.38" y2="40" stroke="#1a1612" stroke-width="1.92"/><line x1="798.38" y1="40" x2="839.38" y2="40" stroke="#1a1612" stroke-width="1.92"/><line x1="853.38" y1="40" x2="894.38" y2="40" stroke="#1a1612" stroke-width="1.92"/><line x1="894.38" y1="40" x2="894.38" y2="45" stroke="#1a1612" stroke-width="1.92"/><text x="846.38" y="43.5" text-anchor="middle" font-size="11" font-style="italic" fill="#1a1612">3</text></g>
+<g data-tuplet="3"><text x="846.38" y="43.5" text-anchor="middle" font-size="11" font-style="italic" fill="#1a1612">3</text></g>
 <line x1="1259.42" y1="72" x2="1259.42" y2="120" stroke="#3a352f" stroke-width="1.92"/>
 </svg>

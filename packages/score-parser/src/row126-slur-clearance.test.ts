@@ -48,8 +48,16 @@ const beamTopAt = (svg: string, x: number): number | null => {
 	for (const b of beams(svg)) if (x >= b.x1 - 0.01 && x <= b.x2 + 0.01) return b.y1 + ((b.y2 - b.y1) * (x - b.x1)) / (b.x2 - b.x1) - b.w / 2;
 	return null;
 };
+/** Every `data-tuplet="3"` group, in either form: the bracket (row 126) or the numeral alone (row 129, a beamed triplet).
+    For the bare form `xa` and `xb` are the numeral's own edges and `t` is 0. */
 const brackets = (svg: string) =>
-	[...svg.matchAll(/<g data-tuplet="3"><line x1="([\d.-]+)" y1="([\d.-]+)" x2="[\d.-]+" y2="([\d.-]+)" stroke="#1a1612" stroke-width="([\d.]+)"\/><line x1="[\d.-]+" y1="[\d.-]+" x2="([\d.-]+)"[^>]*\/><line x1="([\d.-]+)" y1="[\d.-]+" x2="([\d.-]+)"/g)].map((m) => ({ xa: +m[1], yBr: +m[3], t: +m[4], midX: (+m[5] + +m[6]) / 2, xb: +m[7] }));
+	[...svg.matchAll(/<g data-tuplet="3">(.*?)<\/g>/g)].map((g) => {
+		const num = g[1].match(/<text x="([\d.-]+)" y="([\d.-]+)"/)!;
+		const lines = [...g[1].matchAll(/<line x1="([\d.-]+)" y1="([\d.-]+)" x2="([\d.-]+)" y2="([\d.-]+)" stroke="#1a1612" stroke-width="([\d.]+)"\/>/g)];
+		const midX = +num[1];
+		if (lines.length === 0) return { xa: midX - 7, xb: midX + 7, yBr: +num[2] - 3.5, t: 0, midX, bare: true };
+		return { xa: +lines[0][1], yBr: +lines[0][4], t: +lines[0][5], midX, xb: +lines[3][1], bare: false };
+	});
 
 describe('row 126: bar 10, the first slur arches over the beam', () => {
 	it('both ends stand at or above the beam’s top at their stems, and no point of the curve dips between the heads and the beam', async () => {
