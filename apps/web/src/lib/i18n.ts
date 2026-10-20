@@ -508,6 +508,44 @@ const strings: Record<string, Record<Language, string>> = {
 	// three, and none of them carries behaviour here.
 	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },
 	'loupe.rest':                  { en: 'Rest',                         fr: 'Silence' },
+	// ROW 133, ratified by Dann 2026-10-19 23:41 (`docs/sessions/ratified-loupe-dot-words_2026-10-19.md`):
+	// the loupe and a tempo chip name a dotted value in words, and a French rest by its own name.
+	// Whole phrases, not words assembled by grammar, so the French agreement stays as ratified.
+	'loupe.value.whole.1':         { en: 'Dotted whole',          fr: 'Ronde pointée' },
+	'loupe.value.whole.2':         { en: 'Double-dotted whole',   fr: 'Ronde doublement pointée' },
+	'loupe.value.half.1':          { en: 'Dotted half',           fr: 'Blanche pointée' },
+	'loupe.value.half.2':          { en: 'Double-dotted half',    fr: 'Blanche doublement pointée' },
+	'loupe.value.quarter.1':       { en: 'Dotted quarter',        fr: 'Noire pointée' },
+	'loupe.value.quarter.2':       { en: 'Double-dotted quarter', fr: 'Noire doublement pointée' },
+	'loupe.value.eighth.1':        { en: 'Dotted eighth',         fr: 'Croche pointée' },
+	'loupe.value.eighth.2':        { en: 'Double-dotted eighth',  fr: 'Croche doublement pointée' },
+	'loupe.value.16th.1':          { en: 'Dotted sixteenth',      fr: 'Double croche pointée' },
+	'loupe.value.16th.2':          { en: 'Double-dotted sixteenth', fr: 'Double croche doublement pointée' },
+	'loupe.value.32nd.1':          { en: 'Dotted thirty-second',  fr: 'Triple croche pointée' },
+	'loupe.value.32nd.2':          { en: 'Double-dotted thirty-second', fr: 'Triple croche doublement pointée' },
+	'loupe.value.64th.1':          { en: 'Dotted sixty-fourth',   fr: 'Quadruple croche pointée' },
+	'loupe.value.64th.2':          { en: 'Double-dotted sixty-fourth', fr: 'Quadruple croche doublement pointée' },
+	'loupe.restValue.whole.0':     { en: 'Rest · Whole',          fr: 'Pause' },
+	'loupe.restValue.whole.1':     { en: 'Rest · Dotted whole',   fr: 'Pause pointée' },
+	'loupe.restValue.whole.2':     { en: 'Rest · Double-dotted whole', fr: 'Pause doublement pointée' },
+	'loupe.restValue.half.0':      { en: 'Rest · Half',           fr: 'Demi-pause' },
+	'loupe.restValue.half.1':      { en: 'Rest · Dotted half',    fr: 'Demi-pause pointée' },
+	'loupe.restValue.half.2':      { en: 'Rest · Double-dotted half', fr: 'Demi-pause doublement pointée' },
+	'loupe.restValue.quarter.0':   { en: 'Rest · Quarter',        fr: 'Soupir' },
+	'loupe.restValue.quarter.1':   { en: 'Rest · Dotted quarter', fr: 'Soupir pointé' },
+	'loupe.restValue.quarter.2':   { en: 'Rest · Double-dotted quarter', fr: 'Soupir doublement pointé' },
+	'loupe.restValue.eighth.0':    { en: 'Rest · Eighth',         fr: 'Demi-soupir' },
+	'loupe.restValue.eighth.1':    { en: 'Rest · Dotted eighth',  fr: 'Demi-soupir pointé' },
+	'loupe.restValue.eighth.2':    { en: 'Rest · Double-dotted eighth', fr: 'Demi-soupir doublement pointé' },
+	'loupe.restValue.16th.0':      { en: 'Rest · Sixteenth',      fr: 'Quart de soupir' },
+	'loupe.restValue.16th.1':      { en: 'Rest · Dotted sixteenth', fr: 'Quart de soupir pointé' },
+	'loupe.restValue.16th.2':      { en: 'Rest · Double-dotted sixteenth', fr: 'Quart de soupir doublement pointé' },
+	'loupe.restValue.32nd.0':      { en: 'Rest · Thirty-second',  fr: 'Huitième de soupir' },
+	'loupe.restValue.32nd.1':      { en: 'Rest · Dotted thirty-second', fr: 'Huitième de soupir pointé' },
+	'loupe.restValue.32nd.2':      { en: 'Rest · Double-dotted thirty-second', fr: 'Huitième de soupir doublement pointé' },
+	'loupe.restValue.64th.0':      { en: 'Rest · Sixty-fourth',   fr: 'Seizième de soupir' },
+	'loupe.restValue.64th.1':      { en: 'Rest · Dotted sixty-fourth', fr: 'Seizième de soupir pointé' },
+	'loupe.restValue.64th.2':      { en: 'Rest · Double-dotted sixty-fourth', fr: 'Seizième de soupir doublement pointé' },
 	'loupe.tie':                   { en: 'Tie',                          fr: 'Liaison' },
 	// The visible word on the delete cell. `correct.delete` stays its
 	// accessible name, so a screen reader still hears which note goes.
@@ -870,8 +908,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// These strings contain <em> tags for italic rendering.
 	// PageFooter.svelte uses {@html} to render them.
 	'footer.attribution':          {
-		en: 'Free and open source, <em>Ilya</em>\u00a02026a operationalizes Craig Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>), test text via <a href="https://www.lieder.net" target="_blank" rel="noopener">www.lieder.net</a>. Made with love in Canada\u00a0<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>',
-		fr: 'Gratuit et à code ouvert, <em>Ilya</em>\u00a02026a met en \u0153uvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012). Données d\u2019accentuation et glossaires de traduction via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>), textes d\u2019essai via <a href="https://www.lieder.net" target="_blank" rel="noopener">www.lieder.net</a>. Fait avec amour au Canada\u00a0<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>'
+		en: 'Free and open source, <em>Ilya</em>\u00a02026a operationalizes Craig Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>). Made with love in Canada\u00a0<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>',
+		fr: 'Gratuit et à code ouvert, <em>Ilya</em>\u00a02026a met en \u0153uvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012). Données d\u2019accentuation et glossaires de traduction via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>). Fait avec amour au Canada\u00a0<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>'
 	},
 	// The Latin brief's addendum (Dann 2026-09-27 00:58, "unassailable citation"):
 	// on a page that shows a Latin word's IPA, the footer credits Richter.

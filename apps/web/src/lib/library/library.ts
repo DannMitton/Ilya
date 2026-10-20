@@ -60,8 +60,10 @@ export interface SongFields {
 	seatedText: string;
 	/** N.94: the key the singer chose, or null for as printed (`SongRecord.transposition`). */
 	transposition: KeyChoice | null;
-	/** Row 47 and row 127: 'as-written', 'bass', or null for "for your range" (`SongRecord.octaveReading`). */
+	/** Row 47 and row 127: 'as-written', 'bass', 'ottava', or null for "for your range" (`SongRecord.octaveReading`). */
 	octaveReading: OctaveReading | null;
+	/** Row 144: whether the clef chip has been shown for this song (`SongRecord.clefChipShown`). */
+	clefChipShown: boolean;
 	/** Row 48: the singer's tempo, or null where the score decides (`SongRecord.tempo`). */
 	tempo: TempoChoice | null;
 	/** N.135 stage 3: the poet's published text, or '' where none was given (`SongRecord.publishedPoem`). */
@@ -97,6 +99,7 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		seatedText: record.seatedText ?? record.poem,
 		transposition: record.transposition ?? null,
 		octaveReading: record.octaveReading ?? null,
+		clefChipShown: record.clefChipShown === true,
 		tempo: record.tempo ?? null,
 		publishedPoem: record.publishedPoem ?? '',
 		publishedGlosses: new Map((record.publishedGlosses ?? []).map(([key, gloss]) => [key, gloss])),
@@ -113,9 +116,9 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 	// N.160 step 3. Stored only while it differs from the poem, so it is
 	// dropped from `base` first and put back only then.
 	// N.94, the same shape: stored only while the singer has chosen a key.
-	// Row 47, the same shape: stored only while the singer has chosen as written.
+	// Row 47, the same shape: stored only while the singer has chosen as written. Row 144's chip flag likewise, only while true.
 	// N.135 stage 3, the same shape: stored only while the poem is not empty.
-	const { seatedText: _stored, transposition: _key, octaveReading: _octave, tempo: _tempo, publishedPoem: _published, publishedGlosses: _poemGlosses, ...rest } = base;
+	const { seatedText: _stored, transposition: _key, octaveReading: _octave, clefChipShown: _chip, tempo: _tempo, publishedPoem: _published, publishedGlosses: _poemGlosses, ...rest } = base;
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
 		key,
 		gloss,
@@ -133,6 +136,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		...(fields.seatedText !== fields.inputText ? { seatedText: fields.seatedText } : {}),
 		...(fields.transposition ? { transposition: { ...fields.transposition } } : {}),
 		...(fields.octaveReading ? { octaveReading: fields.octaveReading } : {}),
+		...(fields.clefChipShown ? { clefChipShown: true } : {}),
 		...(fields.tempo ? { tempo: { ...fields.tempo } } : {}),
 		...(fields.publishedPoem !== '' ? { publishedPoem: fields.publishedPoem } : {}),
 		...(fields.publishedGlosses.size > 0
@@ -239,8 +243,11 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 	} else if (value.transposition !== undefined) malformed();
 	// Row 47, additive, and its default is ABSENCE, which reads "for your range".
 	// The one allowed value or nothing: anything else is not carried.
-	if (value.octaveReading === 'as-written' || value.octaveReading === 'bass') record.octaveReading = value.octaveReading;
+	if (value.octaveReading === 'as-written' || value.octaveReading === 'bass' || value.octaveReading === 'ottava') record.octaveReading = value.octaveReading;
 	else if (value.octaveReading !== undefined) malformed();
+	// Row 144, additive: the chip was shown. `true` or nothing.
+	if (value.clefChipShown === true) record.clefChipShown = true;
+	else if (value.clefChipShown !== undefined && value.clefChipShown !== false) malformed();
 	// Row 48, additive, default ABSENCE (the score decides). A positive finite bpm, a beat unit
 	// the seam knows, and dots 0 to 2, or nothing: a tempo the control could not have offered is not carried.
 	if (isStringRecord(value.tempo)) {

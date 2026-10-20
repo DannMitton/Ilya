@@ -3,6 +3,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
+	import { hasProvenanceIcon } from './provenance-icon';
 
 	interface Props {
 		word: WordStackData;
@@ -118,9 +119,12 @@
 	// A Latin word has no Russian stress to verify (`latin.ts`).
 	const isInferred = $derived(word.stressSource === 'inferred' && !isClitic && !word.latin);
 
+	// The frame draws only where one of its four icons applies (row 148: no empty circle over a word).
+	const iconed = $derived(showProvenance && hasProvenanceIcon(word.stressSource));
+
 	// Whether any top-right icon is present (provenance or R sigla)
 	// R sigla shows whenever spot inverts the global, in either direction
-	const hasTopRightIcon = $derived((showProvenance && !isInferred) || spotReconstituted);
+	const hasTopRightIcon = $derived(iconed || spotReconstituted);
 
 	// A Latin word opens no Inspector: nothing there applies to it, and a stress
 	// set there would print a stress mark the brief forbids.
@@ -152,9 +156,9 @@
 	aria-label="{word.cyrillic}: {displayIpa}"
 >
 	<!-- Top-right icon area: provenance icons and/or R sigla -->
-	{#if (showProvenance && !isInferred) || spotReconstituted}
+	{#if iconed || spotReconstituted}
 		<span class="icon-area" aria-hidden="true">
-			{#if showProvenance && !isInferred}
+			{#if iconed}
 				<span class="provenance-icon">
 					{#if word.stressSource === 'user-dictionary'}
 						<svg viewBox="0 0 16 16" class="prov-svg"><path d="M8 2C6.5 1 4 .5 1 1v11c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2V1c-3-.5-5.5 0-7 1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" stroke-width="1"/></svg>

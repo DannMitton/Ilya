@@ -495,3 +495,20 @@ describe('page layout: the ink term reaches pagination (N.103)', () => {
     expect(sliceWidth(parsed, 0, 3, opts, silent(parsed))).toBe(sliceWidth(parsed, 0, 3, opts));
   });
 });
+
+describe('page layout: where the last page ends (row 142)', () => {
+  it('reports the last page, where its last system ends, and the gap it used', () => {
+    const { parsed: p, analyzed } = demo();
+    const out = paginateScore(p, analyzed, { pageWidth: 500, marginLeft: 0, marginRight: 0 });
+    expect(out.lastPage).not.toBeNull();
+    const last = out.lastPage!;
+    expect(last.index).toBe(out.pageCount - 1);
+    // The page's own SVG holds the last system at endY less its height.
+    const lastSys = out.systems[out.systems.length - 1];
+    const ys = [...out.pages[last.index].matchAll(/<svg x="[\d.]+" y="([\d.]+)" width="[\d.]+" height="([\d.]+)"/g)].map((m) => ({ y: Number(m[1]), h: Number(m[2]) }));
+    const tail = ys[ys.length - 1];
+    expect(last.endY).toBeCloseTo(tail.y + tail.h, 1);
+    expect(tail.h).toBeCloseTo(lastSys.height, 1);
+    expect(last.gap).toBeGreaterThanOrEqual(28);
+  });
+});

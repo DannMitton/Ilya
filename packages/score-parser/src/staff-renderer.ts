@@ -52,7 +52,8 @@ import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from 
 import { chooseClef, type RenderClef } from './clef-select';
 import { drawMarkings, type MarkingsResult } from './markings';
 import { isReadScan } from './printed-marks';
-import { bracketMarkup, type BracketRec } from './tuplet-bracket';
+import { bracketMarkup, bracketSpan, type BracketRec } from './tuplet-bracket';
+import { clipRun } from './tacet-run';
 import { drawDerivedSlurs, drawPrintedSlurs, drawTies, planPrintedSlurs, type ArcCtx } from './ties-and-slurs';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
@@ -1654,9 +1655,7 @@ export function layoutColumns(
 ): { columns: LayoutColumn[]; trailing: number } {
   const lineGap = options.lineGap ?? DEFAULTS.lineGap;
   const runWidth = TACET_REST.measureSp * lineGap;
-  const runs = tacetRuns(parsed).filter(
-    (r) => r.fromMeasure >= fromMeasure && r.toMeasure <= toMeasure,
-  );
+  const runs = tacetRuns(parsed).filter((r) => r.toMeasure >= fromMeasure && r.fromMeasure <= toMeasure).map((r) => clipRun(r, fromMeasure, toMeasure));
   const events = parsed.vocalLine.filter(
     (e) => e.measureIndex >= fromMeasure && e.measureIndex <= toMeasure,
   );
@@ -2031,7 +2030,7 @@ export function renderAnalyzedStaff(
   // A group needs at least two consecutive members; it breaks at rests,
   // barlines, beat boundaries, unanalysed notes, and timbre changes
   // (semantic stems make mixed-timbre beams impossible).
-  const beamStemById = new Map<string, { sx: number; tipY: number; up: boolean }>();
+  const beamStemById = new Map<string, { sx: number; tipY: number; up: boolean; group: object }>();
   const beamParts: string[] = [];
   {
     interface BeamNote { id: string; x: number; noteY: number; flags: number }
@@ -2058,7 +2057,7 @@ export function renderAnalyzedStaff(
       }
       const beamY = (x: number): number => anchor + slope * (x - x0);
       for (const n of notes) {
-        beamStemById.set(n.id, { sx: sxOf(n), tipY: beamY(sxOf(n)), up: stemUp });
+        beamStemById.set(n.id, { sx: sxOf(n), tipY: beamY(sxOf(n)), up: stemUp, group: notes });
       }
       // Level 1 is the primary beam; higher levels draw as runs of two or
       // more, or as stubs on singletons (a stub points at its left
@@ -2300,11 +2299,9 @@ export function renderAnalyzedStaff(
         }
         const yBr = minY - 8;
         highestInk = Math.min(highestInk, yBr);
-        const xa = run[0].x - 8;
-        const xb = run[run.length - 1].x + 8;
-        const midX = (xa + xb) / 2;
+        const { xa, xb, midX, bare } = bracketSpan(run, beamStemById);
         const from = placed.indexOf(run[0]);
-        brackets.push({ from, to: from + run.length - 1, xa, xb, midX, yBr, n: t.actualNotes, thickness: tupletT });
+        brackets.push({ from, to: from + run.length - 1, xa, xb, midX, yBr, n: t.actualNotes, thickness: tupletT, bare });
       }
       run = [];
       runKey = '';

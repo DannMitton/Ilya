@@ -1,9 +1,12 @@
 <script lang="ts">
 	/**
-	 * THE CLEF RECEIPT (QUEUE row 127, ruled by Dann 2026-10-19 22:49 and 22:50): one
-	 * row in the Input band under the TEMPO receipt, a native select with the three
-	 * ratified choices, shown only where a line printed in treble is read an octave
-	 * lower. The row's strings are `upload.ask.clef*`, ratified earlier; none is new.
+	 * THE CLEF RECEIPT (QUEUE row 127, ruled by Dann 2026-10-19 22:49 and 22:50; row 144,
+	 * 2026-10-20 03:15 and 03:44): one row in the Input band under the TEMPO receipt, a
+	 * native select, as text. It is the permanent home of the choice; the chip on
+	 * Markup's page 1 speaks once and the drawn clef brings the same choices back
+	 * (`ClefControls.svelte`). It shows on every song with a voice line, and offers the
+	 * choices `clefUi.menu` names for this song's printed clef. Every string is a
+	 * ratified one (`upload.ask.clef*`, `octave.*`).
 	 *
 	 * ITS OWN COMPONENT for the reason `TempoReceipt.svelte` gives: `IntakePanel.svelte`
 	 * stands near the 1,000-line limit. Svelte scopes a rule to the file that writes the
@@ -12,23 +15,17 @@
 	 */
 	import { t, type Language } from '$lib/i18n';
 	import type { ClefChoice } from './clef-choice';
-	import { clefUi } from './clef-ui.svelte';
+	import { CLEF_CHOICE_KEY, clefUi } from './clef-ui.svelte';
 
 	let { language }: { language: Language } = $props();
-
-	const options: Array<[ClefChoice, 'upload.ask.clefTrebleOttava' | 'upload.ask.clefBass' | 'upload.ask.clefTreble']> = [
-		['ottava', 'upload.ask.clefTrebleOttava'],
-		['bass', 'upload.ask.clefBass'],
-		['as-written', 'upload.ask.clefTreble'],
-	];
 </script>
 
 {#if clefUi.shown}
 	<div class="intake-receipt receipt-clef">
 		<label class="tag" for="clef-select">{t('upload.ask.clef', language)}</label>
-		<select id="clef-select" class="clef-select" value={clefUi.choice} onchange={(e) => clefUi.choose((e.currentTarget as HTMLSelectElement).value as ClefChoice)}>
-			{#each options as [value, key] (value)}
-				<option {value}>{t(key, language)}</option>
+		<select id="clef-select" class="clef-select" value={clefUi.menu.current} onchange={(e) => clefUi.choose((e.currentTarget as HTMLSelectElement).value as ClefChoice)}>
+			{#each clefUi.menu.options as value (value)}
+				<option {value}>{t(CLEF_CHOICE_KEY[value], language)}</option>
 			{/each}
 		</select>
 	</div>

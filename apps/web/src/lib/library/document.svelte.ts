@@ -99,6 +99,9 @@ export class SongDocument {
 	 */
 	octaveReading = $state<OctaveReading | null>(null);
 
+	/** Row 144: the clef chip has been shown for this song (`SongRecord.clefChipShown`). */
+	clefChipShown = $state(false);
+
 	/**
 	 * Row 48, the singer's tempo for this song, or null where the score decides.
 	 * Saved through the same path as `transposition`: the choice, never the
@@ -288,6 +291,7 @@ export class SongDocument {
 			seatedText: this.seatedText,
 			transposition: this.transposition,
 			octaveReading: this.octaveReading,
+			clefChipShown: this.clefChipShown,
 			tempo: this.tempo,
 			publishedPoem: this.publishedPoem,
 			publishedGlosses: this.publishedGlosses,
@@ -342,6 +346,7 @@ export class SongDocument {
 		this.seatedText = fields.seatedText;
 		this.transposition = fields.transposition;
 		this.octaveReading = fields.octaveReading;
+		this.clefChipShown = fields.clefChipShown;
 		this.tempo = fields.tempo;
 		this.publishedPoem = fields.publishedPoem;
 		this.publishedGlosses = fields.publishedGlosses as Map<string, string>;

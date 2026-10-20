@@ -791,27 +791,6 @@ export function barsNearPassaggio(watchList: WatchList | null): string[] {
 }
 
 /**
- * The lieder.net clause, in whichever language `footer.attribution` carries it:
- * the comma, the lead-in words, and the link, up to and not including the
- * period that closes the sentence.
- */
-const LIEDER_CLAUSE = /, [^,<]*<a href="https:\/\/www\.lieder\.net"[^>]*>www\.lieder\.net<\/a>/g;
-
-/**
- * Insights' copy of the attribution, the lieder.net clause struck.
- *
- * Ruled by Dann 2026-09-11: Insights' foot drops the clause and its siblings
- * are untouched. So the clause is struck HERE, from the one string the tree
- * already holds, rather than kept as a second copy of a two-kilobyte string
- * that could drift from the first. The rest of the sentence is untouched in
- * both languages, and the period that closed the clause now closes the one
- * before it, so no French is written.
- */
-export function strikeLiederClause(attribution: string): string {
-	return attribution.replace(LIEDER_CLAUSE, '');
-}
-
-/**
  * How many findings page one carries before the rest go to the earned page.
  * DESK DEFAULT, N.127 increment 1, and it is set by the worst case rather than
  * the usual one, because page one is fixed at one page (Dann, 2026-09-11).

@@ -22,7 +22,6 @@
 		vacatedNotes,
 		shiftToEndOfLyric,
 		shiftToNextOpenNote,
-		mergeOnUpload,
 		placeSyllable,
 		nextOpenSyllableTarget,
 		type PairingMap,
@@ -195,6 +194,8 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	} from '$lib/score/correction';
 	import { stackLabel, UndoHistory } from '$lib/score/undo-history.svelte';
 	import { CorrectionCursor } from '$lib/score/correction-cursor.svelte';
+	import { valueParts } from '$lib/score/value-name';
+	import { mergeOnUploadObserving } from '$lib/score/slur-seat';
 	import { LoupePanel } from '$lib/score/loupe-panel.svelte';
 	import { createPressAndHold } from '$lib/score/press-and-hold';
 	import { createCorrectionKeys } from '$lib/score/correction-keys';
@@ -1108,22 +1109,10 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 				? t('loupe.gapHead', language)
 				: t('loupe.gap', language).replace('%s', name);
 		}
-		const parts: string[] = [];
-		/* A REST LEADS WITH THE WORD AND SHOWS NO PITCH. The record still
-		   remembers one, which is what lets a conversion back return the note
-		   that was there, so the readout would otherwise print a pitch for a
-		   thing that makes no sound. MEASURED on the walk: a rest read
-		   `Eighth` alone, and a rest converted back and forth read `F4 · Eighth`
-		   both ways round, so the one sentence that says what the entry IS said
-		   nothing about the only change the singer had made. */
-		if (selectedIsRest) parts.push(t('loupe.rest', language));
-		else if (selectedLabel) parts.push(selectedLabel);
-		if (selectedBase) parts.push(durationWord(selectedBase));
-		/* The readout names the dot STATE, which is what makes the cumulative
-		   cell honest: two dots and one dot are different durations and the
-		   sentence has to be able to say which. */
-		if (selectedDots === 1) parts.push(t('correct.dot', language));
-		else if (selectedDots >= 2) parts.push(t('loupe.doubleDot', language));
+		/* A REST LEADS WITH THE WORD AND SHOWS NO PITCH, and the readout names the
+		   dot STATE in words ("Dotted quarter", row 133), which is what makes the
+		   cumulative cell honest: two dots and one dot are different durations. */
+		const parts = valueParts({ isRest: selectedIsRest, label: selectedLabel, base: selectedBase, dots: selectedDots, language, word: durationWord });
 		const p = selectedEventId ? shownPairings[selectedEventId] : undefined;
 		if (p && p.kind === 'syllable') parts.push(p.cyrillic);
 		return parts.join(' \u00b7 ');
@@ -1137,13 +1126,10 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 
 	   IT REUSES THE DOCK'S OWN PARTS rather than formatting a second time, and
 	   that is the brief's instruction and the one-term rule together: the dock
-	   under the loupe prints `B♭3 · Quarter · Dot` for the same note in the
-	   same frame, and two spellings of one duration on one screen is the defect
-	   this avoids. The beat clause between them is the only new copy.
-
-	   DESK DEFAULT, and Dann's to wave off in a word: the brief's copy wrote
-	   the duration as `dotted quarter`, which would be a second name for what
-	   `readoutLine` calls `Quarter · Dot` four millimetres away.
+	   under the loupe and this line name a duration through one function
+	   (`valueParts`, row 133), so one duration has one spelling on one screen.
+	   Dann ratified the words on 2026-10-19 23:41: "Dotted quarter", « Noire
+	   pointée ». The beat clause between is the only new copy.
 
 	   THE SIGNATURE IS THE SELECTED NOTE'S OWN MEASURE'S, not the held one's,
 	   so a metre change between them cannot be counted in the wrong beat. */
@@ -1165,22 +1151,13 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		   in the dock's own sentence, and a bar standing between two entries has
 		   no note to name, no beat of its own, and no duration. */
 		if (inGap || !selectedEvent) return '';
-		const parts: string[] = [];
-		if (selectedIsRest) parts.push(t('loupe.rest', language));
-		else if (selectedLabel) parts.push(selectedLabel);
 		const b = selectedBeat;
-		if (b) {
-			parts.push(
-				b.pulse === undefined
-					? t('loupe.beat', language).replace('%b', String(b.beat))
-					: t('loupe.beatPulse', language)
-							.replace('%b', String(b.beat))
-							.replace('%p', String(b.pulse)),
-			);
-		}
-		if (selectedBase) parts.push(durationWord(selectedBase));
-		if (selectedDots === 1) parts.push(t('correct.dot', language));
-		else if (selectedDots >= 2) parts.push(t('loupe.doubleDot', language));
+		const beat = !b
+			? undefined
+			: b.pulse === undefined
+				? t('loupe.beat', language).replace('%b', String(b.beat))
+				: t('loupe.beatPulse', language).replace('%b', String(b.beat)).replace('%p', String(b.pulse));
+		const parts = valueParts({ isRest: selectedIsRest, label: selectedLabel, base: selectedBase, dots: selectedDots, language, word: durationWord, beat });
 		return parts.join(' \u00b7 ');
 	});
 
@@ -2040,13 +2017,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 				seatFilledPoem(ingestedScore);
 			} else {
 				const noLyrics = ingestedScore.result.warnings.some((w) => w.code === 'no-lyrics-found');
-				const merged = mergeOnUpload(
-					doc.pairings,
-					parsed.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
-					syllableTargetIds(parsed.vocalLine),
-					buildSlotQueue(lines),
-					noLyrics,
-				);
+				const merged = mergeOnUploadObserving(doc.pairings, parsed.vocalLine, buildSlotQueue(lines), noLyrics);
 				doc.pairings = seatCliticFolds(parsed, merged.map);
 			}
 			orphanedCount = 0;
@@ -2888,13 +2859,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		const rekeyed = rekeyOnArrival(doc.pairings, ingested.result.score.vocalLine, () => file.text()); // row 93, before the merge counts orphans
 		doc.pairings = (rekeyed instanceof Promise ? await rekeyed : rekeyed).map;
 		const foldOnArrival = shouldFoldOnArrival(doc.pairings);
-		const merged = mergeOnUpload(
-			doc.pairings,
-			ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
-			syllableTargetIds(ingested.result.score.vocalLine),
-			buildSlotQueue(lines),
-			noLyrics,
-		);
+		const merged = mergeOnUploadObserving(doc.pairings, ingested.result.score.vocalLine, buildSlotQueue(lines), noLyrics);
 		doc.pairings = merged.map;
 		// N.157: a replacement re-derives its seats (`replace-seat.ts`); a restore or a first upload does not.
 		const reseated = origin === 'upload' && !foldOnArrival ? reseatOnReplace(doc.pairings, ingested.result.score, lines) : null;
@@ -4470,7 +4435,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 				openSyllabification={doc.openSyllabification}
 				onaddrange={openRangeFields}
 				{keyRuler}
-				octaveAsWritten={doc.octaveReading === 'as-written'}
+				octaveReading={doc.octaveReading}
 				ontoggleoctave={clefUi.toggle}
 				tempoChoice={doc.tempo}
 				ontempo={tempoUi.openControl}

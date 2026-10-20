@@ -183,7 +183,7 @@ describe('the pieces the sentence and the receipt are made of', () => {
 		expect(beatGlyph('quarter', 1)).toBe(`${DOT}`);
 		expect(beatGlyph('breve', 0)).toBe('');
 		expect(beatName('eighth', 0, 'en')).toBe(t('correct.len8th', 'en'));
-		expect(beatName('half', 1, 'en')).toBe(`${t('correct.lenHalf', 'en')} · ${t('correct.dot', 'en')}`);
+		expect(beatName('half', 1, 'en')).toBe('Dotted half');
 		expect(beatName('quarter', 0, 'fr')).toBe(t('correct.lenQuarter', 'fr'));
 	});
 

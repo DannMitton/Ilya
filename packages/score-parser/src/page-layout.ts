@@ -27,8 +27,10 @@ import {
 	systemHead,
 	renderAnalyzedStaff,
 	layoutColumns,
+	tacetRuns,
 	type StaffRenderOptions,
 } from './staff-renderer';
+import { unitEnd } from './tacet-run';
 import { chooseClef } from './clef-select';
 import { slurEndsAcross, slursThrough } from './printed-marks';
 
@@ -107,6 +109,13 @@ export interface PaginatedScore {
   pages: string[];
   systems: SystemSlice[];
   pageCount: number;
+  /**
+   * Row 142: where the last page's last system ends, in the page SVG's own y
+   * (`endY`, below the system's ink, before any gap), the gap that page used
+   * (the carried one, not always `systemGap`), and the page's index. Null for a
+   * score with no systems. Markup starts its notes below this when they fit.
+   */
+  lastPage: { index: number; endY: number; gap: number } | null;
 }
 
 /** A measure-range slice with rebased indices, renderer-ready. */
@@ -259,14 +268,17 @@ export function paginateScore(
 
   // ── Pack measures into systems against the inner width ──
   const ranges: Array<[number, number]> = [];
+  /* A tacet run is one unit and a system never ends inside it (row 141): a run
+     of seven empty bars is one multimeasure rest, not six and one. A unit wider
+     than a fresh system still goes alone on its own. */
+  const runs = tacetRuns(parsed);
   let from = 0;
   while (from < measureCount) {
-    let to = from;
-    while (
-      to + 1 < measureCount &&
-      sliceWidth(parsed, from, to + 1, renderOptions, analyzed) <= innerWidth
-    ) {
-      to++;
+    let to = unitEnd(runs, from);
+    while (to + 1 < measureCount) {
+      const next = unitEnd(runs, to + 1);
+      if (sliceWidth(parsed, from, next, renderOptions, analyzed) > innerWidth) break;
+      to = next;
     }
     // A single measure wider than the page still gets its own system
     // (it will overflow horizontally rather than vanish; the correction
@@ -390,6 +402,7 @@ export function paginateScore(
   }
 
   const pages: string[] = [];
+  let lastPage: PaginatedScore['lastPage'] = null;
   // The spacing the full pages settled on, carried forward to the short one.
   let establishedGap = o.systemGap;
   pageGroups.forEach((group, pageIndex) => {
@@ -445,9 +458,10 @@ export function paginateScore(
       pageParts.push('</svg>');
       y += s.height + gap;
     }
+    if (isLast) lastPage = { index: pageIndex, endY: round2(y - gap), gap: round2(gap) };
     pageParts.push('</svg>');
     pages.push(pageParts.join('\n'));
   });
 
-  return { pages, systems, pageCount: pages.length };
+  return { pages, systems, pageCount: pages.length, lastPage };
 }

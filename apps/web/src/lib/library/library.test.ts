@@ -151,6 +151,27 @@ describe('the octave reading (row 47)', () => {
 		expect(validateRecord({ octaveReading: 'as-written' }, 'x', NOW).record.octaveReading).toBe('as-written');
 	});
 
+	it('row 144: a song saved with treble-with-an-8-below restores with it, and the clef chip flag round-trips', () => {
+		const record = { ...emptySongRecord('x', NOW), octaveReading: 'ottava' as const, clefChipShown: true };
+		const stored = recordFromFields(record, { ...fieldsFromRecord(record) });
+
+		expect(stored.octaveReading).toBe('ottava');
+		expect(stored.clefChipShown).toBe(true);
+		expect(validateRecord(stored, 'x', LATER).record.octaveReading).toBe('ottava');
+		expect(validateRecord(stored, 'x', LATER).record.clefChipShown).toBe(true);
+		expect(fieldsFromRecord(stored).clefChipShown).toBe(true);
+		// An older record has none, reads false, and writes none back.
+		const older = emptySongRecord('x', NOW);
+		expect(fieldsFromRecord(older).clefChipShown).toBe(false);
+		expect('clefChipShown' in recordFromFields(older, fieldsFromRecord(older))).toBe(false);
+		// Anything that is not a boolean is malformed and not carried.
+		for (const bad of ['yes', 1, null, {}]) {
+			const result = validateRecord({ clefChipShown: bad }, 'x', NOW);
+			expect(result.reason).toBe('malformed');
+			expect(result.record.clefChipShown).toBeUndefined();
+		}
+	});
+
 	it('calls any other value malformed and does not carry it', () => {
 		for (const bad of ['for-range', 'AS-WRITTEN', 1, true, null, {}]) {
 			const result = validateRecord({ octaveReading: bad }, 'x', NOW);
