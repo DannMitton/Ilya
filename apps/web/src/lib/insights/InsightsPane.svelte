@@ -43,7 +43,6 @@
 		analyzeScore,
 		noteConditions,
 		pitchToMidi,
-		resolveVocalReadingOctave,
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
 		type IntakeAnswers,
@@ -74,7 +73,8 @@
 	import { firstOutsideRange, longestAboveSecondo, searchBetterKey, shareAfter, vowelTurns } from '$lib/insights/singer-page';
 	import { phonationHeadline } from '$lib/insights/phonation-headline';
 	import { withSingerTempo } from '$lib/tempo/singer-tempo';
-	import type { TempoChoice } from '$lib/library/types';
+	import type { OctaveReading, TempoChoice } from '$lib/library/types';
+	import { readingClef } from '$lib/score/clef-choice';
 	import { notesBlock, singerBlocks, type KeyForward, type PlacedBlock } from '$lib/insights/singer-blocks';
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
@@ -111,8 +111,8 @@
 		onaddrange?: () => void;
 		/** N.94 slice 2: the chosen key, which Insights reads (curation rule 3), and "Try this key". */
 		keyRuler?: SungKey;
-		/** Row 47: the singer has chosen to read this song as written (`SongRecord.octaveReading`). */
-		octaveAsWritten?: boolean;
+		/** Rows 47, 127, 144: the singer's octave and clef choice (`SongRecord.octaveReading`). Insights reads its octave from `readingClef`, as Markup does. */
+		octaveReading?: OctaveReading | null;
 		/** Row 48: the singer's tempo for this song (`SongRecord.tempo`); the score reads it as the override that tops every other tempo. */
 		tempoChoice?: TempoChoice | null;
 		/** Row 48: the sentence's "Change the tempo" tap, which opens the tempo control. */
@@ -140,7 +140,7 @@
 		isMobile = false,
 		onaddrange = undefined,
 		keyRuler = undefined,
-		octaveAsWritten = false,
+		octaveReading = null,
 		tempoChoice = null,
 		ontempo = undefined,
 		ontoggleoctave = undefined,
@@ -159,8 +159,8 @@
 	/* ROW 47. What the typed range asks for, and what is applied: the singer's
 	   "as written" turns the shift off for this song, and every readout below
 	   follows `octaveShift` with no second switch. */
-	const suggestedShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
-	const octaveShift = $derived(octaveAsWritten ? 0 : suggestedShift);
+	const reading = $derived(readingClef(parsed, adapted.snapshot.range, octaveReading));
+	const { suggestedShift, shift: octaveShift } = $derived(reading);
 	const printedReading = $derived(parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed);
 	const readingScore = $derived(printedReading && (keyRuler?.draw(printedReading) ?? printedReading));
 	const analysisScore = $derived(readingScore ? scoreInPerformanceOrder(readingScore).score : null);

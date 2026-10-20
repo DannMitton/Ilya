@@ -34,9 +34,10 @@ export interface TempoChoice {
 /**
  * Row 47 and row 127: the stored values of `SongRecord.octaveReading`; absent is "for your range",
  * which draws treble with an 8 below where the line is printed in treble. `'bass'` reads the
- * octave lower and draws it in bass clef.
+ * octave lower and draws it in bass clef. Row 144 adds `'ottava'`: the singer chose treble with
+ * an 8 below (what each choice draws on each printed clef is `score/clef-choice.ts`'s table).
  */
-export type OctaveReading = 'as-written' | 'bass';
+export type OctaveReading = 'as-written' | 'bass' | 'ottava';
 
 /**
  * One stored gloss: the word key, the gloss, and the word the gloss was
@@ -160,6 +161,12 @@ export interface SongRecord {
 	 * drops it (`validateRecord` copies only what it knows), so no schema bump.
 	 */
 	octaveReading?: OctaveReading;
+	/**
+	 * Row 144: the clef chip on Markup's page 1 has been shown for this song. It speaks once, then the
+	 * choice lives in the clef itself. Absent reads false, and an older Ilya drops it (additive, like
+	 * `octaveReading`).
+	 */
+	clefChipShown?: boolean;
 	/**
 	 * ROW 48, 2026-10-15. THE SINGER'S TEMPO for this song, set in the tempo
 	 * control (`TempoChoice`). Absence means the singer set none and the score

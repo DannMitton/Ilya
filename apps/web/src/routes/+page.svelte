@@ -4447,7 +4447,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 				openSyllabification={doc.openSyllabification}
 				onaddrange={openRangeFields}
 				{keyRuler}
-				octaveAsWritten={doc.octaveReading === 'as-written'}
+				octaveReading={doc.octaveReading}
 				ontoggleoctave={clefUi.toggle}
 				tempoChoice={doc.tempo}
 				ontempo={tempoUi.openControl}

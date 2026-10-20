@@ -100,6 +100,7 @@
 	import { buildWatchList } from '$lib/analysis/watchlist';
 	import { gateBand, gatedLines } from '$lib/analysis/gates';
 	import NotesColumn from './NotesColumn.svelte';
+	import ClefControls from '$lib/score/ClefControls.svelte';
 	import { planNotes, type NotesMeasure } from './notes-pages';
 	import { scoreMetrics } from '$lib/analysis/score-metrics';
 
@@ -567,13 +568,9 @@
 	const analysedVowels = $derived(ROSTER_ORDER.filter((g) => adapted.snapshot.fR1[g] !== undefined));
 
 	// ── Vocal reading octave (denigma treble-8vb repair) ─────────────────
-	// A treble-notated lower-voice line arrives an octave too high (denigma
-	// flattens the octave clef). Resolve the octave that fits the singer's own
-	// declared range and read BOTH the analysis and the render there, so the
-	// marks and the engraving stay coherent (row 127, `clef-choice.ts`: a printed-treble line keeps treble with an 8 below;
-	// elsewhere the tessitura heuristic picks). Non-destructive; `parsed` is untouched.
-	// ROW 47: what the range asks for, and what is applied. "As written" turns the shift
-	// off for this song; everything below follows `octaveShift` with no second switch.
+	// A treble-notated lower-voice line arrives an octave too high (denigma flattens the octave clef). The
+	// song's stored choice and the singer's range decide the octave and the clef, in `clef-choice.ts`
+	// (rows 47, 127, 144): the analysis and the render read the same place. Non-destructive.
 	const reading = $derived(readingClef(parsed, adapted.snapshot.range, octaveReading));
 	const { suggestedShift, shift: octaveShift } = $derived(reading);
 	const printedReading = $derived(parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed);
@@ -1141,6 +1138,7 @@
 {/if}
 	{/snippet}
 </PageFit>
+<ClefControls {language} pages={scorePages} />
 
 <style>
 	/* N.92, the selection state. Display only, and it appears ONLY on the
