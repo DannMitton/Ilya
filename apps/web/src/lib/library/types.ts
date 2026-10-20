@@ -31,8 +31,12 @@ export interface TempoChoice {
 	beatUnitDots: number;
 }
 
-/** Row 47: the one stored value of `SongRecord.octaveReading`; absent is "for your range". */
-export type OctaveReading = 'as-written';
+/**
+ * Row 47 and row 127: the stored values of `SongRecord.octaveReading`; absent is "for your range",
+ * which draws treble with an 8 below where the line is printed in treble. `'bass'` reads the
+ * octave lower and draws it in bass clef.
+ */
+export type OctaveReading = 'as-written' | 'bass';
 
 /**
  * One stored gloss: the word key, the gloss, and the word the gloss was

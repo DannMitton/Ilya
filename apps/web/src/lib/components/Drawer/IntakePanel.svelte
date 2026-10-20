@@ -8,6 +8,7 @@
 	import { inputViews } from '$lib/text/input-views.svelte';
 	import type { TextArrival } from '$lib/one-action';
 	import TempoReceipt from '$lib/tempo/TempoReceipt.svelte';
+import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 	/*
 	 * IntakePanel.svelte — THE INPUT GROUP'S CONTENTS AND NOTHING ELSE.
 	 *
@@ -462,6 +463,7 @@
 				<button type="button" class="receipt-btn" onclick={chooseFile}>{t('intake.replace', language)}</button>
 			</div>
 			<TempoReceipt {language} />
+			<ClefReceipt {language} />
 		{/if}
 
 		<!-- THE SYLLABLE LINE THAT STOOD HERE (N.114, 2026-09-07 and

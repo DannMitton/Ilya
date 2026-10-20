@@ -140,6 +140,17 @@ describe('the octave reading (row 47)', () => {
 		expect('octaveReading' in recordFromFields(record, { ...fieldsFromRecord(record), octaveReading: null })).toBe(false);
 	});
 
+	it('row 127: a song saved with bass restores with bass, and the older values restore as before', () => {
+		const record = { ...emptySongRecord('x', NOW), octaveReading: 'bass' as const };
+		const stored = recordFromFields(record, { ...fieldsFromRecord(record) });
+
+		expect(stored.octaveReading).toBe('bass');
+		expect(validateRecord(stored, 'x', LATER).record.octaveReading).toBe('bass');
+		expect(fieldsFromRecord(stored).octaveReading).toBe('bass');
+		expect(fieldsFromRecord(emptySongRecord('x', NOW)).octaveReading).toBeNull();
+		expect(validateRecord({ octaveReading: 'as-written' }, 'x', NOW).record.octaveReading).toBe('as-written');
+	});
+
 	it('calls any other value malformed and does not carry it', () => {
 		for (const bad of ['for-range', 'AS-WRITTEN', 1, true, null, {}]) {
 			const result = validateRecord({ octaveReading: bad }, 'x', NOW);

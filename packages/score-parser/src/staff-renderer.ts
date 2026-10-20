@@ -960,9 +960,9 @@ function partOfEvent(markup: string, id: string): string {
 }
 
 /**
- * Standard per-clef octave placement for key-signature accidentals.
- * treble-8vb shares the treble tables: it is treble geometry with a
- * sounding-octave marker, not a different staff mapping.
+ * Key-signature octaves per clef, written. treble-8vb uses the treble table an
+ * octave lower: `yFor` places SOUNDING pitches there (middle line B3), so the
+ * glyphs land on the print's lines only if the octave drops by one (row 127).
  */
 const KS_OCTAVES: Record<'bass' | 'treble', { sharps: Record<Pitch['step'], number>; flats: Record<Pitch['step'], number> }> = {
   bass: {
@@ -2221,7 +2221,7 @@ export function renderAnalyzedStaff(
   const keyGlyph = (markup: string): string => markup.replace(/^<(\w+) /, '<$1 data-key-signature="" ');
   for (let i = 0; i < ksCount; i++) {
     const step = order[i];
-    const ky = yFor({ step, octave: ksTable[step], alter: 0 });
+    const ky = yFor({ step, octave: ksTable[step] - (clef === 'treble-8vb' ? 1 : 0), alter: 0 });
     if (smufl) {
       parts.push(keyGlyph(glyphAt(ksGlyphName, round2(ksX), ky, '#3a352f', true)));
     } else {
