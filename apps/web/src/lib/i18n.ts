@@ -1405,7 +1405,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.banner.noLyrics': { en: 'This score has no words in it. The text you added is under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Le texte que vous avez ajouté se trouve sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	// Row 95: the same courtesy message for a scan or photograph, where the
 	// print may well carry words that Ilya does not read. Chosen by
-	// noLyricsNoticeKey (lib/score/no-lyrics-notice.ts).
+	// noLyricsNoticeKey (lib/score/ingestion/ingest.ts).
 	'upload.banner.noLyricsScan': { en: 'Ilya does not read the words printed in an image. The text you added is under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous avez ajouté se trouve sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	// N.65 ship B. `station.syllables` IS DELETED. Dann ruled the SYLLABLES
 	// header away on 2026-08-21 and its text became the first element under

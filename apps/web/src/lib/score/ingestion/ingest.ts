@@ -32,6 +32,7 @@ import {
 	type ParseError,
 	type ParseResult,
 	type ScoreParser,
+	type SourceOrigin,
 } from '@ilya/score-parser';
 import type { ScoreReader } from '$lib/reader/score-reader';
 import type { DenigmaError, ResourceError } from '$lib/reader/errors';
@@ -76,14 +77,17 @@ export const fidelityBanner = (p: IngestProvenance): 'denigma' | 'reader' | null
  * A file with no lyric elements really has no words in it, and says so. A scan
  * or photograph is different: its print may carry words that Ilya's reader
  * does not read, so its wordlessness is Ilya's limit, not a fact about the
- * song. The two are told apart by the field `fidelityBanner` reads,
- * `provenance.via === 'reader'`. A pure function because `+page.svelte` is
- * inert under vitest.
+ * song. The two are told apart by `provenance.via === 'reader'` (the E.16
+ * reader behind `?reader=ilya`) or by the score's own `source.origin`: the
+ * singer's homr route hands its reading back as a `.musicxml` file, which
+ * ingests as `via: 'direct'`, but homr stamps `<software>homr</software>` and
+ * the parser reads that as `'homr-musicxml-from-image'` (row 121). A pure
+ * function because `+page.svelte` is inert under vitest.
  */
 export type NoLyricsNoticeKey = 'upload.banner.noLyrics' | 'upload.banner.noLyricsScan';
 
-export const noLyricsNoticeKey = (p: IngestProvenance): NoLyricsNoticeKey =>
-	p.via === 'reader' ? 'upload.banner.noLyricsScan' : 'upload.banner.noLyrics';
+export const noLyricsNoticeKey = (p: IngestProvenance, origin: SourceOrigin): NoLyricsNoticeKey =>
+	p.via === 'reader' || origin === 'homr-musicxml-from-image' ? 'upload.banner.noLyricsScan' : 'upload.banner.noLyrics';
 
 export interface IngestedScore {
 	fileName: string;

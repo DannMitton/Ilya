@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { MusicXmlScoreParser, type ScoreParser, type SourceOrigin } from '@ilya/score-parser';
 import { t } from '$lib/i18n';
-import { noLyricsNoticeKey, type IngestProvenance } from './ingestion/ingest';
+import { readingFile } from '$lib/omr/scan';
+import { parseXml } from './ingestion/mini-dom';
+import { ingestScoreFile, noLyricsNoticeKey, type IngestDeps, type IngestProvenance } from './ingestion/ingest';
 
 // QUEUE row 95. The strings are ratified by Dann (2026-10-14 16:36 to 16:37).
 // French apostrophes are typographic (U+2019), as every French value in
@@ -9,20 +13,54 @@ import { noLyricsNoticeKey, type IngestProvenance } from './ingestion/ingest';
 const direct: IngestProvenance = { format: 'musicxml', via: 'direct' };
 const scan: IngestProvenance = { format: 'musicxml', via: 'reader', sourceFormat: 'image' };
 const pdf: IngestProvenance = { format: 'musicxml', via: 'reader', sourceFormat: 'pdf' };
+const file: SourceOrigin = 'musicxml-direct';
 
 describe('row 95: which wordless message an arrival draws', () => {
 	it('a MusicXML file with no lyrics draws 1a', () => {
-		expect(noLyricsNoticeKey(direct)).toBe('upload.banner.noLyrics');
+		expect(noLyricsNoticeKey(direct, file)).toBe('upload.banner.noLyrics');
 	});
 	it('a compressed or converted file is still a file, not a picture', () => {
-		expect(noLyricsNoticeKey({ format: 'musicxml', via: 'mxl' })).toBe('upload.banner.noLyrics');
-		expect(noLyricsNoticeKey({ format: 'mnx', via: 'direct' })).toBe('upload.banner.noLyrics');
+		expect(noLyricsNoticeKey({ format: 'musicxml', via: 'mxl' }, file)).toBe('upload.banner.noLyrics');
+		expect(noLyricsNoticeKey({ format: 'mnx', via: 'direct' }, file)).toBe('upload.banner.noLyrics');
 	});
 	it('a photograph draws 1b', () => {
-		expect(noLyricsNoticeKey(scan)).toBe('upload.banner.noLyricsScan');
+		expect(noLyricsNoticeKey(scan, file)).toBe('upload.banner.noLyricsScan');
 	});
 	it('a scanned PDF draws 1b', () => {
-		expect(noLyricsNoticeKey(pdf)).toBe('upload.banner.noLyricsScan');
+		expect(noLyricsNoticeKey(pdf, file)).toBe('upload.banner.noLyricsScan');
+	});
+});
+
+// Row 121. The singer's scan route hands its reading back as a `.musicxml` file, which ingests as
+// `via: 'direct'`; the score's own origin is what says it is a scan. The real parser is fed through the
+// mini DOM, as `diction-fold-live.test.ts` does, because vitest has no `DOMParser`.
+const musicxmlParser: ScoreParser = {
+	canParse: () => true,
+	parse: (input) => new MusicXmlScoreParser().parse({ ...input, data: parseXml(input.data as string) as unknown as Document }),
+};
+const deps = { scoreReader: { convert: async () => { throw new Error('not reached'); }, dispose: () => {} }, musicxmlParser } as unknown as IngestDeps;
+const homrReading = readFileSync(new URL('../omr/fixtures/tch-1.musicxml', import.meta.url), 'utf8');
+
+async function arrive(f: File) {
+	const out = await ingestScoreFile(f, deps);
+	if (!out.ok) throw new Error('ingest failed');
+	return out.ingested;
+}
+
+describe('row 121: a scan the singer drops is known as a scan by its origin', () => {
+	it('a homr reading, handed back as a .musicxml file (via direct), draws 1b', async () => {
+		const got = await arrive(readingFile(new File([''], 'song.pdf'), homrReading));
+		expect(got.provenance.via).toBe('direct');
+		expect(got.result.score.source.origin).toBe('homr-musicxml-from-image');
+		expect(noLyricsNoticeKey(got.provenance, got.result.score.source.origin)).toBe('upload.banner.noLyricsScan');
+	});
+	it('the same notes from a plain MusicXML file draw 1a', async () => {
+		const got = await arrive(new File([homrReading.replace('<software>homr</software>', '<software>MuseScore</software>')], 'song.musicxml'));
+		expect(got.result.score.source.origin).not.toBe('homr-musicxml-from-image');
+		expect(noLyricsNoticeKey(got.provenance, got.result.score.source.origin)).toBe('upload.banner.noLyrics');
+	});
+	it('the E.16 reader (via reader) still draws 1b whatever the origin', () => {
+		expect(noLyricsNoticeKey(scan, 'musicxml-direct')).toBe('upload.banner.noLyricsScan');
 	});
 });
 

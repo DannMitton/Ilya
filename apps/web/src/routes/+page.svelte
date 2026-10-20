@@ -2826,7 +2826,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		// overturned: a score carrying words seats them on its own notes, from the
 		// file's own mapping, below.
 		const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
-		noLyricsFile = noLyrics ? ingested.fileName : null; noLyricsKey = noLyricsNoticeKey(ingested.provenance);
+		noLyricsFile = noLyrics ? ingested.fileName : null; noLyricsKey = noLyricsNoticeKey(ingested.provenance, ingested.result.score.source.origin);
 		// A new score arrives: clear whatever the previous score filled, then
 		// fill the blanks from this score's header if it carries one. A score
 		// with no header still clears, and that case is the whole point: at E.23,
