@@ -65,21 +65,28 @@ describe('row 121: a scan the singer drops is known as a scan by its origin', ()
 });
 
 describe('row 95: the ratified strings, byte for byte', () => {
+	// Row 125: the second sentence of 1a and 1b was re-ratified by Dann 2026-10-19 22:25.
 	it('1a, upload.banner.noLyrics', () => {
 		expect(t('upload.banner.noLyrics', 'en')).toBe(
-			'This score has no words in it. The text you added is under the notes, assigned one syllable per note. Click a note to move a syllable.'
+			'This score has no words in it. The text you add in Lyrics goes under the notes, assigned one syllable per note. Click a note to move a syllable.'
 		);
 		expect(t('upload.banner.noLyrics', 'fr')).toBe(
-			'Cette partition ne porte aucune parole. Le texte que vous avez ajouté se trouve sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.'
+			'Cette partition ne porte aucune parole. Le texte que vous ajoutez dans le champ Paroles se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.'
 		);
 	});
 	it('1b, upload.banner.noLyricsScan', () => {
 		expect(t('upload.banner.noLyricsScan', 'en')).toBe(
-			'Ilya does not read the words printed in an image. The text you added is under the notes, assigned one syllable per note. Click a note to move a syllable.'
+			'Ilya does not read the words printed in an image. The text you add in Lyrics goes under the notes, assigned one syllable per note. Click a note to move a syllable.'
 		);
 		expect(t('upload.banner.noLyricsScan', 'fr')).toBe(
-			'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous avez ajouté se trouve sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.'
+			'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous ajoutez dans le champ Paroles se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.'
 		);
+	});
+	it('row 125: neither wordless key claims text that nobody added, in either language', () => {
+		for (const key of ['upload.banner.noLyrics', 'upload.banner.noLyricsScan'] as const) {
+			expect(t(key, 'en')).not.toContain('The text you added');
+			expect(t(key, 'fr')).not.toContain('avez ajouté');
+		}
 	});
 	it('2, the last sentence of upload.banner.reader', () => {
 		expect(t('upload.banner.reader', 'en')).toBe(
