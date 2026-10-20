@@ -60,7 +60,7 @@ export interface SongFields {
 	seatedText: string;
 	/** N.94: the key the singer chose, or null for as printed (`SongRecord.transposition`). */
 	transposition: KeyChoice | null;
-	/** Row 47: 'as-written', or null for "for your range" (`SongRecord.octaveReading`). */
+	/** Row 47 and row 127: 'as-written', 'bass', or null for "for your range" (`SongRecord.octaveReading`). */
 	octaveReading: OctaveReading | null;
 	/** Row 48: the singer's tempo, or null where the score decides (`SongRecord.tempo`). */
 	tempo: TempoChoice | null;
@@ -239,7 +239,7 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 	} else if (value.transposition !== undefined) malformed();
 	// Row 47, additive, and its default is ABSENCE, which reads "for your range".
 	// The one allowed value or nothing: anything else is not carried.
-	if (value.octaveReading === 'as-written') record.octaveReading = 'as-written';
+	if (value.octaveReading === 'as-written' || value.octaveReading === 'bass') record.octaveReading = value.octaveReading;
 	else if (value.octaveReading !== undefined) malformed();
 	// Row 48, additive, default ABSENCE (the score decides). A positive finite bpm, a beat unit
 	// the seam knows, and dots 0 to 2, or nothing: a tempo the control could not have offered is not carried.

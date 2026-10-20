@@ -57,7 +57,8 @@
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import type { LineData, PageSize } from '$lib/types';
 	import { withSingerTempo } from '$lib/tempo/singer-tempo';
-	import type { TempoChoice } from '$lib/library/types';
+	import type { OctaveReading, TempoChoice } from '$lib/library/types';
+	import { readingClef } from '$lib/score/clef-choice';
 	import { t, type Language } from '$lib/i18n';
 	import { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
@@ -65,7 +66,6 @@
 	import {
 		paginateScore,
 		analyzeScore,
-		resolveVocalReadingOctave,
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
 		chooseClef,
@@ -264,8 +264,8 @@
 		isMobile?: boolean;
 		/** N.94: the song's key, and the Transposition ruler that floats over this page. */
 		keyRuler?: TranspositionRulerState;
-		/** Row 47: the singer has chosen to read this song as written (`SongRecord.octaveReading`). */
-		octaveAsWritten?: boolean;
+		/** Rows 47 and 127: the singer's octave and clef choice for this song (`SongRecord.octaveReading`). */
+		octaveReading?: OctaveReading | null;
 		/** Row 48: the singer's tempo for this song (`SongRecord.tempo`). */
 		tempoChoice?: TempoChoice | null;
 		/** Row 47: the octave line's tap, which flips that choice. */
@@ -297,7 +297,7 @@
 		selectedEventId = null,
 		isMobile = false,
 		keyRuler = undefined,
-		octaveAsWritten = false,
+		octaveReading = null,
 		tempoChoice = null,
 		ontoggleoctave = undefined,
 	}: Props = $props();
@@ -570,15 +570,13 @@
 	// A treble-notated lower-voice line arrives an octave too high (denigma
 	// flattens the octave clef). Resolve the octave that fits the singer's own
 	// declared range and read BOTH the analysis and the render there, so the
-	// marks and the engraving stay coherent (a shifted-down line lands in bass
-	// clef via the tessitura heuristic). Non-destructive; `parsed` is untouched.
+	// marks and the engraving stay coherent (row 127, `clef-choice.ts`: a printed-treble line keeps treble with an 8 below;
+	// elsewhere the tessitura heuristic picks). Non-destructive; `parsed` is untouched.
 	// ROW 47: what the range asks for, and what is applied. "As written" turns the shift
 	// off for this song; everything below follows `octaveShift` with no second switch.
-	const suggestedShift = $derived(parsed ? resolveVocalReadingOctave(parsed, adapted.snapshot.range) : 0);
-	const octaveShift = $derived(octaveAsWritten ? 0 : suggestedShift);
-	const printedReading = $derived(
-		parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed,
-	);
+	const reading = $derived(readingClef(parsed, adapted.snapshot.range, octaveReading));
+	const { suggestedShift, shift: octaveShift } = $derived(reading);
+	const printedReading = $derived(parsed && octaveShift !== 0 ? shiftVocalOctave(parsed, octaveShift) : parsed);
 	// N.94: the key, at the same seam, over the octave (`transposition-ruler-state.svelte.ts`).
 	const readingScore = $derived(printedReading && (keyRuler?.draw(printedReading) ?? printedReading));
 	// ROW 47: the long notice (`profile.octaveNotice`, approved by Dann 2026-07-18) is retired;
@@ -860,6 +858,7 @@
 	const scorePages = $derived(
 		readingScore && analyzed
 			? paginateScore(readingScore, analyzed, {
+					...(reading.clef ? { clef: reading.clef } : {}),
 					pageWidth: contentWidth,
 					pageHeight: page1WindowHeight,
 					laterPageHeight: dims.height - subsequentTop - contentBottom, // row 79: later pages pack against their own, taller window
@@ -937,7 +936,7 @@
 					? {
 							readingScore,
 							analyzed,
-							clef: chooseClef(readingScore),
+							clef: reading.clef ?? chooseClef(readingScore),
 							spacing: {
 								lineGap: engraving.lineGap,
 								pxPerWhole: engraving.pxPerWhole,

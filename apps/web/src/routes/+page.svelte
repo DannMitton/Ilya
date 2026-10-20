@@ -109,6 +109,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	import { transpositionRulerState } from '$lib/markup/transposition-ruler-state.svelte';
 	import TempoControl from '$lib/tempo/TempoControl.svelte';
 	import { tempoUi } from '$lib/tempo/tempo-ui.svelte';
+	import { clefUi } from '$lib/score/clef-ui.svelte';
 	import PieceKeyLine from '$lib/markup/PieceKeyLine.svelte';
 	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
@@ -979,10 +980,9 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		() => handleTabChange('markup'),
 		() => isPhone,
 	);
-	/* Row 47: the quiet octave line's tap, in Insights and Markup alike. */
-	const toggleOctaveReading = () => (doc.octaveReading = doc.octaveReading ? null : 'as-written');
 	// Row 48: the tempo control reads and writes the song's own tempo; the Insights sentence and the Input receipt open it.
 	tempoUi.bind(() => doc, () => correctedScore?.result.score);
+	clefUi.bind(() => doc, () => correctedScore?.result.score, () => (voiceCharacteristics?.rangeLow && voiceCharacteristics.rangeHigh ? { lowest: voiceCharacteristics.rangeLow, highest: voiceCharacteristics.rangeHigh } : undefined));
 	/* N.92 mobile slice 2. A PHONE IS A SMALLEST-SIDE TEST, not a width test,
 	   and the two answer different questions. `isMobile` asks whether THIS
 	   frame is narrower than the page, which is what decides the fit and which
@@ -4471,7 +4471,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 				onaddrange={openRangeFields}
 				{keyRuler}
 				octaveAsWritten={doc.octaveReading === 'as-written'}
-				ontoggleoctave={toggleOctaveReading}
+				ontoggleoctave={clefUi.toggle}
 				tempoChoice={doc.tempo}
 				ontempo={tempoUi.openControl}
 			/>
@@ -4505,8 +4505,8 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 				{showStressDiacritics}
 				onpagesdrawn={handlePagesDrawn}
 				{keyRuler}
-				octaveAsWritten={doc.octaveReading === 'as-written'}
-				ontoggleoctave={toggleOctaveReading}
+				octaveReading={doc.octaveReading}
+				ontoggleoctave={clefUi.toggle}
 				tempoChoice={doc.tempo}
 			/>
 		{:else}
