@@ -109,6 +109,13 @@ export interface PaginatedScore {
   pages: string[];
   systems: SystemSlice[];
   pageCount: number;
+  /**
+   * Row 142: where the last page's last system ends, in the page SVG's own y
+   * (`endY`, below the system's ink, before any gap), the gap that page used
+   * (the carried one, not always `systemGap`), and the page's index. Null for a
+   * score with no systems. Markup starts its notes below this when they fit.
+   */
+  lastPage: { index: number; endY: number; gap: number } | null;
 }
 
 /** A measure-range slice with rebased indices, renderer-ready. */
@@ -395,6 +402,7 @@ export function paginateScore(
   }
 
   const pages: string[] = [];
+  let lastPage: PaginatedScore['lastPage'] = null;
   // The spacing the full pages settled on, carried forward to the short one.
   let establishedGap = o.systemGap;
   pageGroups.forEach((group, pageIndex) => {
@@ -450,9 +458,10 @@ export function paginateScore(
       pageParts.push('</svg>');
       y += s.height + gap;
     }
+    if (isLast) lastPage = { index: pageIndex, endY: round2(y - gap), gap: round2(gap) };
     pageParts.push('</svg>');
     pages.push(pageParts.join('\n'));
   });
 
-  return { pages, systems, pageCount: pages.length };
+  return { pages, systems, pageCount: pages.length, lastPage };
 }

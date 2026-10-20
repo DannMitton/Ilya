@@ -100,7 +100,7 @@
 	import { buildWatchList } from '$lib/analysis/watchlist';
 	import { gateBand, gatedLines } from '$lib/analysis/gates';
 	import NotesColumn from './NotesColumn.svelte';
-	import { packNotes, type NotesMeasure, type NotesSheet } from './notes-pages';
+	import { planNotes, type NotesMeasure } from './notes-pages';
 	import { scoreMetrics } from '$lib/analysis/score-metrics';
 
 	interface Props {
@@ -855,7 +855,7 @@
 	// zone rather than as a banner above the score. Empty when nothing is broad.
 	const broadNoteText = $derived(composeBroadNote(adapted.completeness, language));
 
-	const scorePages = $derived(
+	const paginated = $derived(
 		readingScore && analyzed
 			? paginateScore(readingScore, analyzed, {
 					...(reading.clef ? { clef: reading.clef } : {}),
@@ -877,28 +877,23 @@
 					...(sylTypePreview ? { sylTypePreview } : {}),
 					...(melismaPreview ? { melismaPreview } : {}),
 					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
-				}).pages
+				})
 			: null,
 	);
+	const scorePages = $derived(paginated?.pages ?? null);
 
-	// The commentary (octave notice + watch list) prints on its own trailing
-	// page sheet AFTER the score (Dann's placement ruling, 2026-07-18), so it
-	// sits inside the page boundary like the score and expands freely there
-	// without displacing the markup. Numbered as a continuation of the score.
-	// Item 1.8: the withheld statement is a third reason for this sheet to
-	// exist. Without it there is no trailing page at all in the uncalibrated
-	// state, and the statement lands in exactly the position the watch list
-	// would have occupied: the page that would have carried the conclusions
-	// instead says why there are none.
+	// The commentary (octave notice, watch list, withheld statement) follows the score (Dann 2026-07-18)
+	// and, since row 142, starts below the last system when it fits (`notes-pages.ts` says how).
 	// N.173: the box says only what passes the gates (`gates.ts`).
 	const watchBox = $derived(watchList && analysisScore && analyzed && vowelResolver ? gateBand({ watchList, analysisScore, ...(readingScore ? { readingScore } : {}), analyzed, profile: adapted.snapshot, vowelForEvent: vowelResolver }) : null);
 	const bandLines = $derived(watchBox ? gatedLines(watchBox.shown, language, (id) => !!analyzed?.events[id]?.placeholder) : []);
 	const hasCommentaryPage = $derived(octaveLine !== null || bandLines.length > 0 || showWithheld);
-	// The notes run on to as many sheets as they need, never cut: `NotesColumn` measures, `packNotes` fills.
 	let notesMeasure: NotesMeasure | null = $state(null);
-	const notesSheets: NotesSheet[] = $derived(
-		hasCommentaryPage ? (notesMeasure ? packNotes(notesMeasure, dims.height - subsequentTop - contentBottom) : [{ withheld: true, octave: true, lines: bandLines.length ? ([0, bandLines.length] as [number, number]) : null }]) : [],
-	);
+	const lastWindowTop = $derived(paginated?.lastPage?.index === 0 ? contentTop : subsequentTop);
+	const lastNotesTop = $derived(paginated?.lastPage ? lastWindowTop + paginated.lastPage.endY + paginated.lastPage.gap : null);
+	const provisional = $derived({ withheld: true, octave: true, lines: bandLines.length ? ([0, bandLines.length] as [number, number]) : null });
+	const notesPlan = $derived(hasCommentaryPage ? planNotes(notesMeasure, dims.height - subsequentTop - contentBottom, lastNotesTop === null ? null : dims.height - contentBottom - lastNotesTop, provisional) : { onLast: null, sheets: [] });
+	const notesSheets = $derived(notesPlan.sheets);
 	const totalPages = $derived(scorePages ? scorePages.length + notesSheets.length : 0);
 
 	// The Q3 render report (see the onrendered prop doc): once per score
@@ -1033,6 +1028,9 @@
 						{@html page}
 					</div>
 				{/if}
+				{#if i === scorePages.length - 1 && notesPlan.onLast && lastNotesTop !== null}
+					<NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} sheet={notesPlan.onLast} top={lastNotesTop} bottom={contentBottom} />
+				{/if}
 				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={[]} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" {notationFont} onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
@@ -1048,12 +1046,10 @@
 			>
 				<RunningHeader headerText={runningHeader} {tabName} accent="#9585A2" />
 				<NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} {sheet} top={subsequentTop} bottom={contentBottom} />
-				{#if j === 0}
-					<NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} onmeasure={(m) => (notesMeasure = m)} />
-				{/if}
 				<PageFooter pageNumber={totalPages - notesSheets.length + j + 1} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="#9585A2" />
 			</article>
 		{/each}
+		{#if hasCommentaryPage}<div style="position: relative; width: {dims.width}px; height: 0;"><NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} onmeasure={(m) => (notesMeasure = m)} /></div>{/if}
 	</div>
 {:else}
 <!-- THE CENTRING WRAPPER (N.73 S3, second repair from Dann's walk of ship
