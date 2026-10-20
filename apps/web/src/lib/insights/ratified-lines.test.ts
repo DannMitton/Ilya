@@ -142,3 +142,27 @@ describe('ratified Input view lines (N.135 stage 3)', () => {
 		expect(tOrEnglish('no.such.key', 'fr')).toBe('[MISSING: no.such.key]');
 	});
 });
+
+/* QUEUE row 123. Two sentences in the Guide's `guide-witnesses` paragraph, ratified by Dann
+   2026-10-19 21:09 (both languages). The pins are written with escapes so a copy that loses a
+   character fails them:   is the no-break space before the French colon, and ɡ is the
+   IPA script g in [ɡ] (U+0261, the character the engine writes), not the Latin g (U+0067). */
+describe('ratified Guide lines (row 123)', () => {
+	const guide = readFileSync(new URL('../components/Reading/GuideContent.svelte', import.meta.url), 'utf8');
+	const a = guide.indexOf("{#if language === 'fr'}");
+	const b = guide.indexOf('{:else}', a);
+	const decode = (s: string): string => s.replace(/&#160;/g, ' ');
+	const fr = decode(guide.slice(a, b));
+	const en = decode(guide.slice(0, a) + guide.slice(b));
+
+	it('English: why a rest keeps «так» sounding [k], between the two sentences it follows and precedes', () => {
+		expect(en).toContain(
+			'and the sound of a sung word depends on the words beside it. Grayson (p. 248) holds that punctuation and the implied phrase, a place where a speaker could pause, are boundaries that no assimilation crosses, not even voicing. <em>Ilya</em> treats a rest in the vocal line as such a pause: where a score sets a rest between <em>так</em> and <em>засыпаю</em>, <em>так</em> keeps its [k]; sung straight on, it takes [ɡ] before the [z]. To review the authoritative poem',
+		);
+	});
+	it('French: the same, with U+2019 apostrophes and a no-break space before the colon', () => {
+		expect(fr).toContain(
+			'et le son d’un mot chanté dépend des mots qui l’entourent. Selon Grayson (p. 248), la ponctuation et la phrase implicite, là où l’on pourrait marquer une pause, sont des frontières que ne franchit aucune assimilation, pas même celle du voisement. <em>Ilya</em> traite un silence dans la ligne vocale comme une telle pause : là où une partition place un silence entre <em>так</em> et <em>засыпаю</em>, <em>так</em> garde son [k]; chanté sans interruption, il prend [ɡ] devant le [z]. Pour consulter à tout moment',
+		);
+	});
+});
