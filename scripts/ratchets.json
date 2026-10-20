@@ -7,7 +7,7 @@
   "ceilings": {
     "apps/web/src/routes/+page.svelte": 5641,
     "apps/web/src/lib/components/Reading/LearnContent.svelte": 4099,
-    "packages/score-parser/src/staff-renderer.ts": 3489,
+    "packages/score-parser/src/staff-renderer.ts": 3435,
     "apps/web/src/lib/score/Loupe.svelte": 3013,
     "apps/web/src/lib/components/Drawer/InspectorPanel.svelte": 2432,
     "packages/phonology/src/engine.ts": 2291,
@@ -19,7 +19,7 @@
     "apps/web/src/lib/score/ScoreUploader.svelte": 1358,
     "apps/web/src/lib/score/CorrectionSurface.svelte": 1265,
     "packages/score-parser/src/mnx-parser.ts": 1170,
-    "packages/score-parser/src/musicxml-parser.ts": 1168,
+    "packages/score-parser/src/musicxml-parser.ts": 1167,
     "apps/web/src/lib/pipeline.ts": 1022
   }
 }
