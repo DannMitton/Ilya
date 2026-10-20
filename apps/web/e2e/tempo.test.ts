@@ -99,7 +99,7 @@ test.describe('Tchaikovsky op. 38 no. 3, no printed tempo', () => {
 		const chips = control.locator('.chip');
 		await expect(chips).toHaveCount(2);
 		await expect(chips.nth(0)).toHaveAttribute('aria-pressed', 'true');
-		await expect(chips.nth(0)).toHaveAttribute('aria-label', /Quarter .* Dot/);
+		await expect(chips.nth(0)).toHaveAttribute('aria-label', 'Dotted quarter');
 		await expect(chips.nth(1)).toHaveAttribute('aria-label', 'Eighth');
 		await expect(control.getByRole('button', { name: "Use Ilya's estimate" })).toHaveCount(0);
 		await shot(page, 'tchaikovsky-insights-en-desk-control-open');
