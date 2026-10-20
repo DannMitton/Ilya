@@ -10,6 +10,14 @@ r2, written by the desk (Opus) 2026-10-12 about 22:05, when Dann asked for a sch
 
 ---
 
+## Where it stands, 2026-10-19 23:3x (the desk, Opus; a stopgap until the r3 rewrite owed to the next desk)
+
+- **Shipped 2026-10-19:** `99b78c08` (N.188 printed slurs, accents, fermatas; row 121 the scan's wordless banner), `885986ff` (row 123 the Guide's phrase-end sentences, row 126 slurs outside beams and brackets, row 125 the banner's second sentence). All walked on the alias; row 126 DONE by Dann's look.
+- **Row 114 measured:** 513 of 529 notes, 95.7, PASS on the singer's path.
+- **In flight:** row 127 (the clef for your range) in the cloud lane; row 128 (tempo chips) in review; row 129 (bracketless beamed triplets, as the print) owed a brief.
+- **THE ONE THING for the next thread:** the audit of dropped requests (`../sessions/audit-opus-unbuilt-requests_r1_2026-10-19.md`), ruled by Dann 23:22.
+- **2026-10-30** stays the date Dann shares Ilya with colleagues at `ilya.dannmitton.com` (ruled 2026-10-18 18:26 and 2026-10-19 19:59).
+
 ## Where it stands, 2026-10-16 12:50
 
 - **THE ONE THING:** the notes from a scan are met on unseen songs (set 4, 97.5; QUEUE row 86). The words from a scan: the browser reader is decided (the float form of `rus_prereform` r2 on the SIMD core, `report-desk-n135-float-form-in-chrome_r1_2026-10-15.md`); 1 of 16 build songs seats 9 of 10; the photocopied pages and the Tchaikovsky are the limit; the next model is row 105 (Mac, after Sunday).
