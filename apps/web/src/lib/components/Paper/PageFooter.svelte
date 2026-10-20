@@ -36,8 +36,6 @@
 		 * footer for all three tabs; Dann 2026-10-11 03:22).
 		 */
 		apparatus?: Snippet;
-		/** The credit line, when a tab prints its own form of it (Insights strikes the lieder.net clause). */
-		attribution?: string;
 		/** The footer element, for a page that measures its offsets directly (Insights' page-one fit). */
 		element?: HTMLElement | null;
 	}
@@ -53,11 +51,10 @@
 		notationFont = null,
 		onheightchange,
 		apparatus,
-		attribution: attributionOverride,
 		element = $bindable(null),
 	}: Props = $props();
 
-	const attribution = $derived(attributionOverride ?? t('footer.attribution', language));
+	const attribution = $derived(t('footer.attribution', language));
 	const richterLine = $derived(richterCredit ? t('footer.richter', language) : '');
 
 	/** Measured height of this footer: legend, broad note, hairline and colophon. */

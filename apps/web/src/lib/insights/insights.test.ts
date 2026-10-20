@@ -32,7 +32,6 @@ import {
 	formatTempo,
 	groupFindings,
 	wholePercents,
-	strikeLiederClause,
 	tessituragram,
 	verdictOf,
 	verdictLine,
@@ -430,23 +429,6 @@ describe('N.127 the findings', () => {
 		}
 		expect(groupFindings({ entries: [] }, s)).toEqual([]);
 		expect(groupFindings(null, s)).toEqual([]);
-	});
-});
-
-describe('N.127 the foot', () => {
-	it('strikes the lieder.net clause in both languages and leaves the rest of the sentence', () => {
-		for (const lang of ['en', 'fr'] as const) {
-			const whole = t('footer.attribution', lang);
-			const struck = strikeLiederClause(whole);
-			expect(whole).toContain('lieder.net');
-			expect(struck).not.toContain('lieder.net');
-			expect(struck).toContain('kaikki.org');
-			expect(struck).toContain('4.0</a>). ');
-			// Nothing else goes: the struck copy is the whole less one clause.
-			expect(whole.length - struck.length).toBeLessThan(140);
-		}
-		expect(strikeLiederClause(t('footer.attribution', 'en'))).toContain('CC BY-SA 4.0</a>). Made with love');
-		expect(strikeLiederClause(t('footer.attribution', 'fr'))).toContain('CC BY-SA 4.0</a>). Fait avec amour');
 	});
 });
 

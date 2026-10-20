@@ -61,7 +61,6 @@
 	import { pitchName } from '$lib/voice/note-picker';
 	import {
 		buildInsights,
-		strikeLiederClause,
 		formatSeconds,
 		formatSecondsFine,
 		formatTempo,
@@ -280,7 +279,6 @@
 	let runningHeight = $state(0);
 	const subsequentTop = $derived(MARGINS.vertical + (runningHeight || HEADER_HEIGHTS_AT_LETTER.subsequent) + HEADER_GAP);
 
-	const attribution = $derived(strikeLiederClause(T('footer.attribution')));
 	const hasTypedCharacteristics = $derived(
 		adapted.completeness.range || adapted.completeness.tessitura || adapted.completeness.passaggio,
 	);
@@ -589,7 +587,7 @@
 		<div bind:this={measureEls[k]} style="width: {widthOf(b)}px;">{@render blockAt(k, widthOf(b), true)}</div>
 	{/each}
 	<div class="foot-probe" bind:this={footProbe} style="width: {COLUMN}px;">
-		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution} />
+		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" />
 	</div>
 </div>
 
@@ -602,7 +600,7 @@
 			{#each flowSegments as seg, j (j)}{@render segment(seg, flowWidth, flowWidth - 2 * 17)}{/each}
 		</div>
 		<div class="flow-foot">
-			<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution} />
+			<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" />
 		</div>
 	</div>
 {:else}
@@ -624,7 +622,7 @@
 							{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
 						</div>
 						<!-- QUEUE row 79: the footnote and the method line are endnotes now, in Notes; every page's footer is the same. -->
-						<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose, #ab7f7f)" {attribution} />
+						<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose, #ab7f7f)" />
 					</article>
 				{/each}
 			</div>
