@@ -53,6 +53,7 @@ import { chooseClef, type RenderClef } from './clef-select';
 import { drawMarkings, type MarkingsResult } from './markings';
 import { isReadScan } from './printed-marks';
 import { bracketMarkup, bracketSpan, type BracketRec } from './tuplet-bracket';
+import { clipRun } from './tacet-run';
 import { drawDerivedSlurs, drawPrintedSlurs, drawTies, planPrintedSlurs, type ArcCtx } from './ties-and-slurs';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
@@ -1654,9 +1655,7 @@ export function layoutColumns(
 ): { columns: LayoutColumn[]; trailing: number } {
   const lineGap = options.lineGap ?? DEFAULTS.lineGap;
   const runWidth = TACET_REST.measureSp * lineGap;
-  const runs = tacetRuns(parsed).filter(
-    (r) => r.fromMeasure >= fromMeasure && r.toMeasure <= toMeasure,
-  );
+  const runs = tacetRuns(parsed).filter((r) => r.toMeasure >= fromMeasure && r.fromMeasure <= toMeasure).map((r) => clipRun(r, fromMeasure, toMeasure));
   const events = parsed.vocalLine.filter(
     (e) => e.measureIndex >= fromMeasure && e.measureIndex <= toMeasure,
   );
