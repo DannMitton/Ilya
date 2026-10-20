@@ -83,7 +83,7 @@ export interface NoteSpec {
 export async function buildScore(notes: NoteSpec[]): Promise<ParsedScore> {
 	const body = notes
 		.map((n) => {
-			if (n.rest) return '<note><rest/><duration>1</duration><type>quarter</type></note>';
+			if (n.rest) return `<note><rest/><duration>1</duration><type>quarter</type>${n.fermata ? '<notations><fermata/></notations>' : ''}</note>`;
 			const marks = [
 				n.tieStop ? '<tied type="stop"/>' : '',
 				n.fermata ? '<fermata/>' : '',

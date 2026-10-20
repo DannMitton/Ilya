@@ -122,6 +122,9 @@ export interface ParsedScore {
    * `transposeScore`), which spread the score and so keep this field.
    */
   dictionMarks?: DictionMarksRecord;
+
+  /** N.188. True when a printed slur found its partner; the parser sets it once, so page, print, and loupe agree on the melisma slur. */
+  carriesPrintedSlurs?: boolean;
 }
 
 /** N.171. The part of a `DictionMarkFold` that must survive on the score. */
@@ -523,6 +526,9 @@ export interface VocalLineEvent {
    * others are preserved verbatim for the renderer-output pipeline.
    */
   articulations?: Articulation[];
+
+  /** N.188. Slur ends printed on this note, in document order (MusicXML only; never on a rest). */
+  slurs?: SlurEnd[];
 }
 
 // ── Sub-event detail ─────────────────────────────────────────────
@@ -616,6 +622,17 @@ export interface TieInfo {
    * Optional pointer to the partner event by id, for non-adjacent ties.
    * Most ties are adjacency-based and do not need this field.
    */
+  partnerEventId?: string;
+}
+
+/** N.188. One printed slur end; `pairSlurs` pairs the ends over the whole line. */
+export interface SlurEnd {
+  type: 'start' | 'stop';
+  /** MusicXML `number` (default 1), which nested slurs pair by. */
+  number: number;
+  /** The file's own `placement`, when it gave one. */
+  placement?: 'above' | 'below';
+  /** The event carrying the other end; absent when no partner was found. */
   partnerEventId?: string;
 }
 
@@ -954,6 +971,7 @@ export type ParseWarningCode =
   | 'tuplet-without-normal-type'
   | 'measure-duration-mismatch'
   | 'unsupported-articulation'
+  | 'slur-ends-unpaired' // N.188: a slur end abandoned, dropped, or never closed
   | 'mnx-experimental-feature'
   | 'musicxml-pre-3-1-feature'
   /**

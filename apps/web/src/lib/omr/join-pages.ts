@@ -294,6 +294,9 @@ const TIMED = /^<(note|backup|forward)[\s>]/;
  */
 function silent(kept: readonly string[]): boolean {
 	const notes = kept.filter((t) => /^<note[\s>]/.test(t));
+	// N.188: a rest that carries a fermata is a printed mark, not silence to consolidate. The bar keeps
+	// its one rest and the fermata over it, and so is not part of a multirest.
+	if (notes.some((t) => /<fermata[\s/>]/.test(t))) return false;
 	return notes.length > 0 && notes.every((t) => /<rest[\s/>]/.test(t) && !/<pitch[\s>]/.test(t));
 }
 

@@ -59,3 +59,41 @@ export function arcOutline(
   const ret = `Q ${mid} ${round2px(inner)} ${round2px(x1)} ${back} Z`;
   return endThick === 0 ? `${out} ${ret}` : `${out} L ${round2px(x2)} ${back} ${ret}`;
 }
+
+/**
+ * The tapered arc of a PRINTED slur (N.188): `arcOutline` with the two ends at
+ * their own heights.
+ *
+ * A printed slur ends at its two noteheads, and the heads are rarely level, so
+ * the chord is sloped. The curve is the same quadratic: the control point
+ * stands at the chord's midpoint, displaced `depth` vertically, so x runs
+ * linearly in t and `y(t) = (1-t)y1 + t y2 + 2t(1-t)depth`. That identity is
+ * what lets the renderer solve for the depth that clears an inner note.
+ *
+ * LEVEL ENDS GIVE `arcOutline` BACK, byte for byte, so the thickness
+ * construction is not restated: `endThick` and `midThick` mean what they mean
+ * there. Ties and the derived melisma slur keep `arcOutline` itself, so their
+ * tests do not move.
+ *
+ * @param y1 @param y2  Each terminal's own y.
+ * @param depth         Signed height of the control point above or below the chord's midpoint: negative bows up.
+ */
+export function slopedArcOutline(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  depth: number,
+  midThick: number,
+  endThick: number,
+): string {
+  const sgn = Math.sign(depth) || 1;
+  const mid = round2px((x1 + x2) / 2);
+  const ym = (y1 + y2) / 2;
+  const inner = ym + depth - sgn * (2 * midThick - endThick);
+  const back1 = round2px(y1 - sgn * endThick);
+  const back2 = round2px(y2 - sgn * endThick);
+  const out = `M${round2px(x1)} ${round2px(y1)} Q ${mid} ${round2px(ym + depth)} ${round2px(x2)} ${round2px(y2)}`;
+  const ret = `Q ${mid} ${round2px(inner)} ${round2px(x1)} ${back1} Z`;
+  return endThick === 0 ? `${out} ${ret}` : `${out} L ${round2px(x2)} ${back2} ${ret}`;
+}

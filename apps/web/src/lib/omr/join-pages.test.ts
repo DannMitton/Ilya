@@ -257,6 +257,28 @@ describe('joinPages on small hand-built pages', () => {
 		expect(joinPages([sung, mixed]).match(/<note>/g)).toHaveLength(6);
 	});
 
+	it('N.188: keeps a rest that carries a fermata, so the bar is not silent and the fermata reaches the parser', async () => {
+		const rest = (extra = '') => `<note><rest/><duration>2</duration><type>half</type>${extra}</note>`;
+		const fermata = '<notations><fermata type="upright"/></notations>';
+		const attrs = '<attributes><divisions>2</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>';
+		const voice = page(
+			`<part id="P1"><measure number="1">${attrs}${note('C')}${note('D')}</measure><measure number="2">${rest()}${rest()}</measure><measure number="3">${rest(fermata)}${rest()}</measure></part>`,
+			LIST,
+		);
+		const out = joinPages([voice]);
+		// The bar of rests alone is left empty, as it always was; the bar whose rest carries a fermata is not.
+		expect(out).toContain('<measure number="2"></measure>');
+		expect(out).toContain('<fermata type="upright"/>');
+		expect(out.match(/<rest\/>/g)).toHaveLength(2); // both rests of the fermata bar, none of the silent bar's
+		const { score } = await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(out) as unknown as Document });
+		const kept = score.vocalLine.filter((e) => e.measureIndex === 2);
+		expect(kept.map((e) => e.type)).toEqual(['rest', 'rest']);
+		expect(kept[0].fermata).toEqual({});
+		// so that bar is sung, not tacet, and it breaks the multirest the empty bar before it would have started
+		expect(new Set(score.vocalLine.map((e) => e.measureIndex)).has(1)).toBe(false);
+		expect(new Set(score.vocalLine.map((e) => e.measureIndex)).has(2)).toBe(true);
+	});
+
 	it('refuses a page with no part', () => {
 		expect(() => joinPages(['<score-partwise version="4.0"><part-list/></score-partwise>'])).toThrow(JoinPagesError);
 		expect(() => joinPages([])).toThrow(JoinPagesError);

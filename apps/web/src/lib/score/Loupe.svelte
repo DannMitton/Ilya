@@ -1086,7 +1086,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		/* ITEM 3, THE TIE INTO THE RUN-ON (OPEN.md, the loupe's two modes, ruling 9). The renderer drew it
 		   past the barline, where the body's clip would cut it, so it comes off the clone and is drawn on
 		   its own layer across body and tail, in the body's coordinates. None on a final bar (no tail). */
-		const runOnTies = [...clone.querySelectorAll('[data-tie-runon]')];
+		const runOnTies = [...clone.querySelectorAll('[data-tie-runon], [data-slur-runon]')];
 		const runOnMarkup = tailSpanUnits > 0 ? runOnTies.map((el) => el.outerHTML).join('') : '';
 		for (const el of runOnTies) el.remove();
 		/* N.126: THE PAGE'S MEASURE NUMBERS STAY ON THE PAGE. The head crops the

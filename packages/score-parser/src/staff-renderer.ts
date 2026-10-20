@@ -50,7 +50,9 @@ import type { Fraction, NoteBase, ParsedScore, Pitch, TimeSignature, VocalLineEv
 import type { AnalyzedEvent, AnalyzedScore } from './analysis-types';
 import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from './smufl-metadata';
 import { chooseClef, type RenderClef } from './clef-select';
-import { arcOutline } from './arc-outline';
+import { drawMarkings, type MarkingsResult } from './markings';
+import { isReadScan } from './printed-marks';
+import { drawDerivedSlurs, drawPrintedSlurs, drawTies, planPrintedSlurs, type ArcCtx } from './ties-and-slurs';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
 import { CROSSING_RING_HEADROOM, CROSSING_RING_REACH } from './ring-geometry';
@@ -396,12 +398,32 @@ export interface StaffRenderOptions {
    * signature, so this is not read there.
    */
   incomingTimeSignature?: TimeSignature;
+  /**
+   * N.188. Whether the whole vocal line carries a printed slur that found its
+   * partner (`ParsedScore.carriesPrintedSlurs`). Computed once by the parser and
+   * handed in by `renderSystemSlice`, so the page, the print, and the loupe agree
+   * on whether Ilya's own melisma slur may be drawn: a slice sees only its own
+   * measures and cannot decide this alone. Absent reads from `parsed`.
+   */
+  printedSlurs?: boolean;
+  /**
+   * N.188. The slur ends of this slice whose partner is on ANOTHER system, by
+   * `slurEndKey`. Only the whole line can say whether a partner outside the slice
+   * exists, so `renderSystemSlice` computes it; an end in neither this slice nor
+   * this set has a partner that is gone, and draws nothing.
+   */
+  slurAcross?: ReadonlySet<string>;
+  /**
+   * N.188. The slurs that started before this slice and stop after it, so cross
+   * it with no end of their own on it (`slursThrough`); named by their start event.
+   */
+  slurThrough?: ReadonlyArray<{ id: string; placement?: 'above' | 'below' }>;
 }
 
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'runOnTieSp'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'runOnTieSp' | 'printedSlurs' | 'slurAcross' | 'slurThrough'>> = {
   staffMidY: 96,
   lineGap: 12,
   // N.139: the stave's own left edge, flush with the system's. DESK DEFAULT.
@@ -889,30 +911,6 @@ const PRIMITIVE_TURNING_ACC_W = 11.3;
  * the units it is stated in, not a pixel on the page.
  */
 const NO_FONT_ARC_MIDPOINT_SP = 0.2;
-
-/**
- * How far a syllabic slur's terminal sits from its notehead's centre, in stave
- * spaces, and how far it clears everything else it has to miss.
- *
- * THE HEAD ANCHOR IS THE TIE'S OWN. Dann on the walk of `34b143c`, 2026-09-16:
- * the m. 87 slur sits too high and the m. 30 tie is right. A tie anchors 4 px
- * from the notehead centre (`ey = y1 ± 4`); the slur was taking `y2 - 6` and
- * then another 6 in `sy = top - 6`, so it sat 12 px off the head, about seven
- * times the tie's clearance measured from the head's edge. One clearance now,
- * at the tie's distance. DESK DEFAULT: Dann judges the height on the walk.
- *
- * WHY THESE ARE FRACTIONS AND NOT DECIMALS. Both were px constants that ignored
- * the stave size, which is the second of the two N.4 faults this block already
- * carries a note about. Written over 5.5, the shipping `lineGap`
- * (`apps/web/src/lib/score/engraving.ts`), they draw the same pixel they drew
- * before at the shipping stave and scale everywhere else. `SLUR_CLEAR_SP` is
- * the old 6 px, unchanged in value and applied to the same two things: an
- * up-stem or beam tip, and the turning layer above its own accidental
- * clearance.
- */
-const SLUR_HEAD_ANCHOR_SP = 4 / 5.5;
-const SLUR_CLEAR_SP = 6 / 5.5;
-
 
 /**
  * Stamp an analysis mark with its own handle.
@@ -2382,6 +2380,13 @@ export function renderAnalyzedStaff(
   interface MelismaSpan { startIdx: number; endIdx: number; id: string; slur: boolean }
   const melismaSpans: MelismaSpan[] = [];
   const slurredIdx = new Set<number>(); // placed indices under a syllabic slur
+  /* N.188. The derived melisma slur is Ilya's own rule, and a score that carries
+     the print's slurs does not need it. On a score read from a scan it is never
+     drawn (Dann, 2026-10-19 20:26: "it is better to replicate a printed error
+     than to silently fix it"); on a file it is drawn only where the file prints
+     no slur at all. The extender, the hyphens, and the left-aligned syllable are
+     unchanged. DESK DEFAULT for the file case, his to overrule. */
+  const drawDerivedSlur = !isReadScan(parsed) && !(options.printedSlurs ?? parsed.carriesPrintedSlurs ?? false);
   {
     for (let i = 0; i < placed.length; i++) {
       const e = placed[i].ev;
@@ -2406,8 +2411,8 @@ export function renderAnalyzedStaff(
             && a1.pitch.step === b1.pitch.step && a1.pitch.octave === b1.pitch.octave && a1.pitch.alter === b1.pitch.alter;
           if (!tiedUnison) { needsSlur = true; break; }
         }
-        melismaSpans.push({ startIdx: i, endIdx: j - 1, id: e.id, slur: needsSlur });
-        if (needsSlur) for (let k = i; k <= j - 1; k++) slurredIdx.add(k);
+        melismaSpans.push({ startIdx: i, endIdx: j - 1, id: e.id, slur: needsSlur && drawDerivedSlur });
+        if (needsSlur && drawDerivedSlur) for (let k = i; k <= j - 1; k++) slurredIdx.add(k);
       }
     }
     // N.113: the runs the SINGER marked, found by the same rule over the same
@@ -3179,134 +3184,75 @@ export function renderAnalyzedStaff(
     }
   }
 
-  // ── Ties (melisma build 3; Dann's Gould extraction, Section R). A tie
-  // is FLAT and HEAD-ANCHORED — those two properties are its identity
-  // against the slur. It curves away from the stems when the pair shares
-  // a direction, away from the middle staff line when directions mix,
-  // and its apex is nudged off staff lines. Drawn here, before the
-  // underlay baselines are computed, because a downward tie is ink the
-  // text must clear.
-  for (let i = 0; i < placed.length; i++) {
-    const e = placed[i].ev;
-    if (e.type !== 'note' || !e.pitch || !e.tied) continue;
-    if (e.tied.type !== 'start' && e.tied.type !== 'continue') continue;
-    const nxt = placed[i + 1];
-    /* THE LOUPE'S RUN-ON (loupe remainder, item 3). A slice ends where its measure does, so a tie
-       that leaves the last note has no partner here. With `runOnTieSp` set it is drawn as if it
-       reached a note that is not shown, and tagged `data-tie-runon` so the page's `[data-tie]`
-       readers never see it. Its partner is read as the note itself: a tie joins one pitch. */
-    const runOn = !nxt && !!o.runOnTieSp && o.runOnTieSp > 0;
-    if (!runOn && (!nxt || nxt.ev.type !== 'note' || !nxt.ev.pitch)) continue;
-    const y1 = yFor(e.pitch);
-    const a1 = analyzed.events[e.id];
-    const a2 = nxt ? analyzed.events[nxt.ev.id] : a1;
-    // Direction: OPPOSITE the syllabic slur when one arches above the
-    // span (extraction r174); otherwise away from shared stems (open =
-    // stems down → tie up); mixed or unanalysed: away from the middle
-    // staff line.
-    const up = slurredIdx.has(i)
-      ? false
-      : a1 && a2 && a1.timbre === a2.timbre
-        ? a1.timbre === 'open'
-        : y1 < o.staffMidY;
-    const half1 = smufl ? sp(smufl.glyph(headNameFor(e.duration.base)).widthSp / 2) : 6.2;
-    const half2 = !nxt ? 0 : smufl ? sp(smufl.glyph(headNameFor(nxt.ev.duration.base)).widthSp / 2) : 6.2;
-    const x1 = placed[i].x + half1 + 1;
-    const x2 = nxt ? nxt.x - half2 - 1 : contentRight + sp(o.runOnTieSp!);
-    if (x2 <= x1) continue;
-    const ey = y1 + (up ? -4 : 4);
-    let depth = (up ? -1 : 1) * o.lineGap * 0.9; // shallow: flatness is identity
-    // Quadratic apex sits at ey + depth/2; keep it off staff lines.
-    const apex = ey + depth / 2;
-    if (apex >= staffTop && apex <= staffBottom && Math.abs((apex - staffTop) % o.lineGap) < 1.5) {
-      depth += up ? -3 : 3;
-    }
-    /* A FILLED TWO-CURVE OUTLINE, not a stroked path. Dann's ruling of
-       2026-08-27, from his walk: an engraved tie is a filled shape, thickest at
-       its centre and tapering to fine points at both terminals, and a stroked
-       path cannot taper at all. What stood here was one quadratic at a constant
-       1.1 px, which drew a ribbon of one width end to end.
-
-       THE SHAPE IS `arcOutline`'s, AND ITS WEIGHT IS THE FONT'S. N.125,
-       2026-09-16: the centre and terminal thicknesses are the loaded font's
-       `tieMidpointThickness` and `tieEndpointThickness`, converted from drawn
-       ink to control points there. Everything that decided WHERE the
-       tie goes is untouched: the terminals are still the two noteheads' own
-       edges (`half1`, `half2` above), the height is still `lineGap * 0.9` with
-       the staff-line nudge, and the direction is still chosen by the syllabic
-       slur, then timbre, then staff position.
-
-       MAESTRO CARRIES NO COMPOSABLE TIE. Searching all 2,728 glyph names in
-       `FinaleMaestro.json` for `tie` or `slur` returns only articulations and
-       `textTie`, which is the lyric elision character. SMuFL has none either,
-       so ties stay drawn geometry and there was never a second option. */
-    parts.push(
-      `<path d="${arcOutline(x1, x2, ey, depth, arcInk.tieMid, arcInk.tieEnd)}" fill="#1a1612" data-tie${nxt ? '' : '-runon'}="${esc(e.id)}"/>`,
-    );
-    lowestInk = Math.max(lowestInk, ey + Math.max(0, depth));
-    highestInk = Math.min(highestInk, ey + Math.min(0, depth));
+  // ── Markings, printed slurs, ties, derived slur (N.188) ──
+  // Markings first: a slur lifts over a mark standing between it and its head
+  // (Gould r70, as the project's extraction words it), so it must see them.
+  let arcCtx: ArcCtx = {
+    placed,
+    o,
+    smufl,
+    sp,
+    yFor,
+    analyzed,
+    headNameFor,
+    stemUpFor,
+    beamStemById,
+    stemLen,
+    stemHalfUp,
+    stemHalfDown,
+    staffTop,
+    staffBottom,
+    contentLeft: head.contentLeft,
+    contentRight,
+    arcInk,
+    lowestInk,
+    highestInk,
+  };
+  const widen = (out: { lowestInk: number; highestInk: number }): void => {
+    lowestInk = Math.max(lowestInk, out.lowestInk);
+    highestInk = Math.min(highestInk, out.highestInk);
+    arcCtx = { ...arcCtx, lowestInk, highestInk };
+  };
+  const marks: Pick<MarkingsResult, 'top' | 'bottom'> = { top: new Map(), bottom: new Map() };
+  if (smufl) {
+    const drawn = drawMarkings({
+      parsed,
+      font: smufl,
+      fontFamily: esc(o.fontFamily),
+      glyphSize,
+      lineGap: o.lineGap,
+      staffMidY: o.staffMidY,
+      placed,
+      yFor,
+      headOf: (ev, y) => {
+        const g = smufl.glyph(headNameFor(ev.duration.base));
+        return { top: y - sp(g.bBoxNE[1]), bottom: y - sp(g.bBoxSW[1]), halfW: M.headHalfW(ev.duration.base) };
+      },
+      stemOf: (ev, y) => {
+        const up = stemUpFor(ev, y);
+        const stemmed = ev.duration.base !== 'whole' && ev.duration.base !== 'breve';
+        return { up, tipY: stemmed ? (beamStemById.get(ev.id)?.tipY ?? y + (up ? -stemLen : stemLen)) : null };
+      },
+    });
+    parts.push(...drawn.parts);
+    marks.top = drawn.top;
+    marks.bottom = drawn.bottom;
+    widen({ lowestInk: drawn.lowest, highestInk: drawn.highest });
   }
+  let beamLow = lowestInk;
+  for (const s of beamStemById.values()) beamLow = Math.max(beamLow, s.tipY + beamT / 2);
+  const slurredBelowIdx = new Set<number>();
+  const printedPlans = planPrintedSlurs(arcCtx, options.slurAcross ?? new Set<string>(), options.slurThrough ?? [], marks, beamLow, slurredIdx, slurredBelowIdx);
 
-  // ── Syllabic slurs (melisma build 4; extraction r69, r71, r174).
-  // One arc joins the notes of a syllable, above the staff for a bass
-  // melody so the text corridor below stays untouched, cleared above the
-  // turning layer, its accidentals, and any up-stem or beam tips. Rests
-  // never sit inside a span (detection breaks at rests), so the r70
-  // suppression case cannot arise. Deeper than ties by design.
-  {
-    const accClearSlur = smufl ? Math.max(6, sp(smufl.glyph('accidentalSharp').bBoxNE[1])) : 12;
-    for (const s of melismaSpans) {
-      if (!s.slur) continue;
-      const first = placed[s.startIdx];
-      const last = placed[s.endIdx];
-      /* ONE CLEARANCE PER THING CLEARED, and the terminal's own is the tie's.
-         What stood here took `y2 - 6` off the notehead and then a second 6 in
-         `sy = top - 6`, so the two stacked and the slur floated 12 px above its
-         own head. Everything else the slur has to miss keeps the 6 px it had,
-         now as `SLUR_CLEAR_SP`. `sy` is computed directly, so no clearance can
-         pick up a second one on the way out. */
-      let sy = staffTop - sp(SLUR_CLEAR_SP);
-      for (let k = s.startIdx; k <= s.endIdx; k++) {
-        const ev2 = placed[k].ev;
-        if (!ev2.pitch) continue;
-        const y2 = yFor(ev2.pitch);
-        sy = Math.min(sy, y2 - sp(SLUR_HEAD_ANCHOR_SP));
-        const a2 = analyzed.events[ev2.id];
-        if (a2) sy = Math.min(sy, yFor(a2.turningPitch) - accClearSlur - sp(SLUR_CLEAR_SP));
-        // The same two N.4 faults the tuplet bracket had: this was gated on
-        // close timbre, so an unmeasured page's positional up-stems never
-        // pushed the slur clear, and the fallback was a hardcoded 30 px that
-        // ignored the stave size.
-        if (ev2.duration.base !== 'whole' && ev2.duration.base !== 'breve' && stemUpFor(ev2, y2)) {
-          sy = Math.min(sy, (beamStemById.get(ev2.id)?.tipY ?? y2 - stemLen) - sp(SLUR_CLEAR_SP));
-        }
-      }
-      const lift = Math.min(24, 10 + (last.x - first.x) / 20);
-      // The control point, not the apex: the quadratic peaks at half the lift,
-      // so this over-reserves rather than clipping.
-      highestInk = Math.min(highestInk, sy - lift);
-      /* THE SAME FILLED OUTLINE THE TIE USES. N.125, Dann's word of 2026-09-11:
-         "make them taper gracefully as objects". Gould 151 (project extraction,
-         `gould-vocal-engraving-rules_v7`) gives tie and slur ONE design, a
-         tapered symmetrical arc with the tie the flatter of the two, so the
-         slur cannot keep a stroked path of one width while the tie is a filled
-         lens. What stood here was a single quadratic at a constant 1.3 px.
-
-         IT IS `arcOutline`, THE SAME CALL THE TIE MAKES, and its weight is the
-         font's: `slurMidpointThickness` and `slurEndpointThickness`, which
-         Bravura and Maestro both set equal to their tie pair. If a font ever
-         parts them, the slur follows that font rather than a constant of ours
-         (Dann's ruling, 2026-09-16).
-
-         WHERE THE SLUR GOES IS UNTOUCHED. The terminals are still `first.x`
-         and `last.x` at `sy`, and the height is still the `lift` above, with
-         its cap. Only the ink changed. `data-slur` stays: N.141 and N.142 both
-         read this attribute to tell a slur from a tie. */
-      parts.push(
-        `<path d="${arcOutline(first.x, last.x, sy, -lift, arcInk.slurMid, arcInk.slurEnd)}" fill="#1a1612" data-slur="${esc(s.id)}"/>`,
-      );
-    }
-  }
+  const tiesOut = drawTies(arcCtx, slurredIdx, slurredBelowIdx);
+  parts.push(...tiesOut.parts);
+  widen(tiesOut);
+  const derivedOut = drawDerivedSlurs(arcCtx, melismaSpans);
+  parts.push(...derivedOut.parts);
+  widen(derivedOut);
+  const printedOut = drawPrintedSlurs(arcCtx, printedPlans);
+  parts.push(...printedOut.parts);
+  widen(printedOut);
 
   // Beams contribute ink below the staff on down-stem groups.
   for (const s of beamStemById.values()) {

@@ -48,7 +48,6 @@
  */
 
 import type {
-	Articulation,
 	Clef,
 	ClefChange,
 	Duration,
@@ -65,6 +64,7 @@ import type {
 	Pitch,
 	ScoreInput,
 	ScoreParser,
+	SlurEnd,
 	SyllableInfo,
 	SyllableSegment,
 	TempoMarking,
@@ -77,6 +77,7 @@ import type {
 	WorkMetadata,
 } from './types';
 import { adoptPickupMeter } from './pickup';
+import { pairSlurs, readNoteNotations, readSlurEnds } from './notations';
 
 // ── Minimal DOM surface the parser reads ───────────────────────────
 
@@ -248,21 +249,6 @@ function baseFromFraction(f: Fraction): NoteBase {
 	return best;
 }
 
-// ── Articulations (MusicXML uses the same hyphenated names) ─────────
-
-const MARKING_TO_ARTICULATION: Record<string, Articulation> = {
-	accent: 'accent',
-	'strong-accent': 'strong-accent',
-	staccato: 'staccato',
-	tenuto: 'tenuto',
-	'detached-legato': 'detached-legato',
-	staccatissimo: 'staccatissimo',
-	'breath-mark': 'breath-mark',
-	caesura: 'caesura',
-	stress: 'stress',
-	unstress: 'unstress',
-};
-
 const PITCH_STEPS = new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
 
 function syllableId(): string {
@@ -401,6 +387,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 		const metricModulations: MetricModulation[] = [];
 		const vocalLine: VocalLineEvent[] = [];
 		const tieFlags = new Map<string, { start: boolean; stop: boolean }>();
+		const slurCarry: SlurEnd[] = [];
 
 		let divisions = readInitialDivisions(vocalPart) ?? readInitialDivisions(parts[0]);
 		if (!divisions || divisions <= 0) {
@@ -533,6 +520,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 							warnedMarkingKeys,
 							verseToCanonical,
 							honourSuppliedIds: supplied.honour,
+							slurCarry,
 						});
 						break;
 					}
@@ -654,6 +642,9 @@ export class MusicXmlScoreParser implements ScoreParser {
 			if (f.start) openByPitch.set(key, ev.id);
 		}
 
+		// 5b. Slur ends, paired over the whole line (N.188).
+		const carriesPrintedSlurs = pairSlurs(vocalLine, warnings);
+
 		// 6. wordContext per verse (mirrors the MNX pass).
 		assignWordContexts(vocalLine, warnings);
 
@@ -681,6 +672,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 			tempoWords,
 			metricModulations,
 			vocalLine,
+			...(carriesPrintedSlurs ? { carriesPrintedSlurs: true } : {}),
 		};
 
 		return { score, warnings, errors };
@@ -701,11 +693,22 @@ export class MusicXmlScoreParser implements ScoreParser {
 			verseToCanonical: Map<number, number>;
 			/** N.97b: honour a `<note id>` where one is present (see `resolveSuppliedIds`). */
 			honourSuppliedIds: boolean;
+			/** N.188 A.2a: slur starts read off dropped grace notes, waiting for the next kept note. */
+			slurCarry: SlurEnd[];
 		},
 	): Fraction {
 		// Grace notes carry no rhythmic duration; skip (v1 attends to sustained events).
 		if (firstChild(note, 'grace')) {
 			ctx.warnings.push({ code: 'unrecognised-element', message: 'grace note skipped (no rhythmic duration).', location: { measureIndex } });
+			// N.188 A.2a: its slur ends move onto the kept notes either side. A start goes to
+			// the next kept note; a stop goes to the last kept note before it.
+			for (const end of readSlurEnds(note)) {
+				if (end.type === 'start') ctx.slurCarry.push(end);
+				else {
+					const prev = [...ctx.vocalLine].reverse().find((e) => e.type === 'note');
+					if (prev) (prev.slurs ??= []).push(end);
+				}
+			}
 			return cursor;
 		}
 		// A chord tone shares the previous note's position; keep the first,
@@ -777,24 +780,19 @@ export class MusicXmlScoreParser implements ScoreParser {
 			if (tieStart || tieStop) ctx.tieFlags.set(eventId, { start: tieStart, stop: tieStop });
 		}
 
-		// Notations: fermata + articulations.
-		let fermata = false;
-		let articulations: Articulation[] | undefined;
-		const notations = firstChild(note, 'notations');
-		if (notations && !isRest) {
-			if (firstChild(notations, 'fermata')) fermata = true;
-			const artBlock = firstChild(notations, 'articulations');
-			if (artBlock) {
-				for (const art of kids(artBlock)) {
-					const mapped = MARKING_TO_ARTICULATION[art.tagName];
-					if (mapped) {
-						(articulations ??= []).push(mapped);
-					} else if (!ctx.warnedMarkingKeys.has(art.tagName)) {
-						ctx.warnedMarkingKeys.add(art.tagName);
-						ctx.warnings.push({ code: 'unsupported-articulation', message: `Articulation '${art.tagName}' is not in the v1 set; ignored.`, location: { measureIndex, eventId } });
-					}
-				}
-			}
+		// Notations: fermata (a rest's too, N.188), articulations, slur ends.
+		const notations = readNoteNotations(note);
+		for (const tag of notations.unsupported) {
+			if (ctx.warnedMarkingKeys.has(tag)) continue;
+			ctx.warnedMarkingKeys.add(tag);
+			ctx.warnings.push({ code: 'unsupported-articulation', message: `Articulation '${tag}' is not in the v1 set; ignored.`, location: { measureIndex, eventId } });
+		}
+		// A rest keeps its fermata and its articulations only as the file
+		// printed them; a slur end on a rest is dropped (N.188, A.2).
+		const articulations = isRest ? undefined : notations.articulations;
+		const slurs: SlurEnd[] = isRest ? [] : [...ctx.slurCarry.splice(0), ...(notations.slurs ?? [])];
+		if (isRest && notations.slurs) {
+			ctx.warnings.push({ code: 'slur-ends-unpaired', message: 'A slur end on a rest is dropped.', location: { measureIndex, eventId } });
 		}
 
 		// Lyrics: MusicXML carries elision explicitly (a `<lyric>` may hold
@@ -850,8 +848,9 @@ export class MusicXmlScoreParser implements ScoreParser {
 			duration,
 			...(pitch ? { pitch } : {}),
 			...(syllable ? { syllable } : {}),
-			...(fermata ? { fermata: {} } : {}),
+			...(notations.fermata ? { fermata: notations.fermata } : {}),
 			...(articulations ? { articulations } : {}),
+			...(slurs.length > 0 ? { slurs } : {}),
 		});
 
 		return addFrac(cursor, soundingFraction);

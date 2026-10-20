@@ -47,6 +47,15 @@ describe('c. a mark the parser carries ends a phrase', () => {
 		expect([bare.rightBoundary, bare.boundarySource, bare.ipaDisplay]).toEqual(['soft', 'auto', 'ˈsɑd']);
 	});
 
+	it('N.188: a fermata kept on a rest changes no phrase end, because a rest already ends one', async () => {
+		const spec = (fermata: boolean) => [{ text: 'сад', step: 'C' }, { rest: true, fermata }, { text: 'и', step: 'D' }, { text: 'дом', step: 'E' }];
+		const [plain, marked] = await Promise.all([buildScore(spec(false)), buildScore(spec(true))]);
+		expect(marked.vocalLine[1]).toMatchObject({ type: 'rest', fermata: {} });
+		expect(plain.vocalLine[1].fermata).toBeUndefined();
+		const endsOf = (parsed: typeof plain) => [...musicPhraseEnds(parsed, seat(parsed), wordGrid(text)).entries()];
+		expect(endsOf(marked)).toEqual(endsOf(plain));
+	});
+
 	it('b. a line end the music does not end is soft: «сад\\nи дом» seated with no rest', async () => {
 		const parsed = await buildScore([{ text: 'сад', step: 'C' }, { text: 'и', step: 'D' }, { text: 'дом', step: 'E' }]);
 		const two = 'сад\nи дом';

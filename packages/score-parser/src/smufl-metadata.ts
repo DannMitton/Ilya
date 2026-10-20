@@ -129,6 +129,32 @@ export const SMUFL_CODEPOINTS = {
   restHBarLeft: 0xe4ef,
   restHBarMiddle: 0xe4f0,
   restHBarRight: 0xe4f1,
+  // The note markings and fermatas Markup draws as the file printed them, N.188.
+  // Codepoints are the SMuFL registry's, checked 2026-10-20 against the cmap of
+  // each shipped face (Finale Maestro, Leland, and Bravura's WOFF2): all twenty
+  // are present at these points in all three, and each has a native
+  // `glyphBBoxes` entry in all three metadata files. Leland's glyph names for
+  // them match these keys. `breathMarkTick` is not here: Leland carries none.
+  articAccentAbove: 0xe4a0,
+  articAccentBelow: 0xe4a1,
+  articStaccatoAbove: 0xe4a2,
+  articStaccatoBelow: 0xe4a3,
+  articTenutoAbove: 0xe4a4,
+  articTenutoBelow: 0xe4a5,
+  articStaccatissimoAbove: 0xe4a6,
+  articStaccatissimoBelow: 0xe4a7,
+  articMarcatoAbove: 0xe4ac,
+  articMarcatoBelow: 0xe4ad,
+  articTenutoStaccatoAbove: 0xe4b2,
+  articTenutoStaccatoBelow: 0xe4b3,
+  articStressAbove: 0xe4b6,
+  articStressBelow: 0xe4b7,
+  articUnstressAbove: 0xe4b8,
+  articUnstressBelow: 0xe4b9,
+  fermataAbove: 0xe4c0,
+  fermataBelow: 0xe4c1,
+  breathMarkComma: 0xe4ce,
+  caesura: 0xe4d1,
 } as const;
 
 export type RequiredGlyphName = keyof typeof SMUFL_CODEPOINTS;

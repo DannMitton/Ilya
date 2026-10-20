@@ -30,6 +30,7 @@ import {
 	type StaffRenderOptions,
 } from './staff-renderer';
 import { chooseClef } from './clef-select';
+import { slurEndsAcross, slursThrough } from './printed-marks';
 
 export interface PageLayoutOptions extends StaffRenderOptions {
   /** Page size in px at 96 dpi. Defaults: US letter, 816 × 1056. */
@@ -231,6 +232,11 @@ export function renderSystemSlice(
     // N.139: the meter that bar counted in, so a change on this system's
     // first measure draws at its head.
     incomingTimeSignature: parsed.measures[fromMeasure - 1]?.timeSignature,
+    // N.188: what only the whole line can say. Whether the file prints any slur
+    // at all, and which of this slice's slur ends have a partner on another system.
+    printedSlurs: parsed.carriesPrintedSlurs === true,
+    slurAcross: slurEndsAcross(parsed, fromMeasure, toMeasure),
+    slurThrough: slursThrough(parsed, fromMeasure, toMeasure),
     ...(extra.targetWidth !== undefined ? { targetWidth: extra.targetWidth } : {}),
   });
 }
