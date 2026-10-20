@@ -128,6 +128,7 @@ next session the same hour it cost the last one.
 | find the permanent URL for a deploy | `Deploys` |
 | check a deploy without asking Dann | `CAN READ VERCEL DIRECTLY` |
 | a singer is not receiving a new build | `THE BRANCH ALIAS IS THE N.72` |
+| walking Dann's alias in his Chrome, a scratch merge's refspecs, a stop hook asking for a push | `WHAT THE DESK LEARNED ON 2026-10-20` |
 | the alias is serving something stale | `The branch alias, observed` |
 | sending Dann to walk a ship | `WALK ON THE ALIAS, NEVER ON A SHA URL` |
 | giving a singer the URL, or reading Vercel's alias list | `THE PUBLIC ILYA URL IS ilya.dannmitton.com` |
@@ -4892,3 +4893,8 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 ### WHAT THE DESK LEARNED ON 2026-10-20
 - **Never write a file into Dann's folder after giving him a ship paste and before it runs, and never send a second paste that supersedes the first.** Dann follows pastes in order, as he should. On 2026-10-20 the desk gave a ship paste, then filed batch B's brief and review and sent a replacement paste; he ran the first, and the ship script refused on the two new untracked files (11:50). Write every file first, then give one paste; if something must be added after, wait for the ship and add it to the next one.
 - **In an idle cloud session, Return in the message box did not send** (2026-10-20 11:5x; the text stayed in the box). Clicking the Send button (found by `find`, "send message button") sent it. Look at the page after Return before assuming it went.
+- **Walking Dann's alias in his Chrome shares his pointer.** The first tap on a note (Markup, song 2) scrolled the page while he was moving his mouse (15:3x); the retry needed him to take his hand off. Ask for hands off before a click walk, and screenshot after each click. A reload raises once-per-song chips (the clef chip showed on his song 2 because of the desk's reload): say so when it happens.
+- **A scratch merge in the desk's workspace needs explicit refspecs.** `git fetch origin cloud-lane-12 Shane` created no remote refs; `+refs/heads/X:refs/remotes/origin/X` did. To see only a lane's own changes use the three-dot `origin/Shane...origin/cloud-lane-12`; the two-dot form shows Shane's newer files as deletions.
+- **A stop hook may ask the desk to amend and push its scratch merge commit.** Decline: it is not the real merge, and agents never push (`CONTRACT.md` §4).
+- **A lane's Playwright run can find a stale e2e that no gate runs.** `apps/web/e2e/insights-page` pins text that no longer exists in `apps/web/src`; it fails with or without the lane's change.
+
