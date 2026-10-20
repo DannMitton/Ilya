@@ -22,7 +22,6 @@
 		vacatedNotes,
 		shiftToEndOfLyric,
 		shiftToNextOpenNote,
-		mergeOnUpload,
 		placeSyllable,
 		nextOpenSyllableTarget,
 		type PairingMap,
@@ -196,6 +195,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	import { stackLabel, UndoHistory } from '$lib/score/undo-history.svelte';
 	import { CorrectionCursor } from '$lib/score/correction-cursor.svelte';
 	import { valueParts } from '$lib/score/value-name';
+	import { mergeOnUploadObserving } from '$lib/score/slur-seat';
 	import { LoupePanel } from '$lib/score/loupe-panel.svelte';
 	import { createPressAndHold } from '$lib/score/press-and-hold';
 	import { createCorrectionKeys } from '$lib/score/correction-keys';
@@ -2017,13 +2017,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 				seatFilledPoem(ingestedScore);
 			} else {
 				const noLyrics = ingestedScore.result.warnings.some((w) => w.code === 'no-lyrics-found');
-				const merged = mergeOnUpload(
-					doc.pairings,
-					parsed.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
-					syllableTargetIds(parsed.vocalLine),
-					buildSlotQueue(lines),
-					noLyrics,
-				);
+				const merged = mergeOnUploadObserving(doc.pairings, parsed.vocalLine, buildSlotQueue(lines), noLyrics);
 				doc.pairings = seatCliticFolds(parsed, merged.map);
 			}
 			orphanedCount = 0;
@@ -2865,13 +2859,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		const rekeyed = rekeyOnArrival(doc.pairings, ingested.result.score.vocalLine, () => file.text()); // row 93, before the merge counts orphans
 		doc.pairings = (rekeyed instanceof Promise ? await rekeyed : rekeyed).map;
 		const foldOnArrival = shouldFoldOnArrival(doc.pairings);
-		const merged = mergeOnUpload(
-			doc.pairings,
-			ingested.result.score.vocalLine.filter((ev) => ev.type !== 'rest').map((ev) => ev.id),
-			syllableTargetIds(ingested.result.score.vocalLine),
-			buildSlotQueue(lines),
-			noLyrics,
-		);
+		const merged = mergeOnUploadObserving(doc.pairings, ingested.result.score.vocalLine, buildSlotQueue(lines), noLyrics);
 		doc.pairings = merged.map;
 		// N.157: a replacement re-derives its seats (`replace-seat.ts`); a restore or a first upload does not.
 		const reseated = origin === 'upload' && !foldOnArrival ? reseatOnReplace(doc.pairings, ingested.result.score, lines) : null;
