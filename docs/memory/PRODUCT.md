@@ -664,6 +664,8 @@ His words, given while N.119 was being briefed:
    rule: Ilya marks stress where it knows, and stays silent where it is guessing, because
    a learner cannot tell a confident mark from a hopeful one.
 
+**`ё` is always printed with its dieresis, RULED by Dann 2026-10-20 03:29:** *"as a scholarly tool for non-Russian singers we always want diereses expressed in print."* (on the desk's note that the print titles song 2 «Веселый час»). DESK DEFAULT 03:3x: it governs every Cyrillic word Ilya prints (Text, Markup, Insights, the title, the running head), including where the source omits it, as a scan of a Soviet or pre-1918 print often does; whether each surface does so today is QUEUE row 147. Condition for departing: none stated.
+
 **`ё` never takes an acute**, being inherently stressed (`WordStack.svelte:70-71`).
 
 ## WHAT RECONSTITUTION IS. Stated by Dann 2026-09-21, and the account is his
