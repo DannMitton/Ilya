@@ -52,6 +52,7 @@ import { smuflFontSizePx, type PreparedSmuflFont, type RequiredGlyphName } from 
 import { chooseClef, type RenderClef } from './clef-select';
 import { drawMarkings, type MarkingsResult } from './markings';
 import { isReadScan } from './printed-marks';
+import { bracketMarkup, type BracketRec } from './tuplet-bracket';
 import { drawDerivedSlurs, drawPrintedSlurs, drawTies, planPrintedSlurs, type ArcCtx } from './ties-and-slurs';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
@@ -2268,7 +2269,7 @@ export function renderAnalyzedStaff(
   // Chunked by `actualNotes` (adjacent same-ratio groups split correctly);
   // rests inside a tuplet belong to its bracket. Standard black ink: the
   // appendix sample's blue is engraving cosmetics (Dann, 2026-07-12).
-  const tupletParts: string[] = [];
+  const brackets: BracketRec[] = [];
   {
     let run: Placed[] = [];
     let runKey = '';
@@ -2302,15 +2303,8 @@ export function renderAnalyzedStaff(
         const xa = run[0].x - 8;
         const xb = run[run.length - 1].x + 8;
         const midX = (xa + xb) / 2;
-        tupletParts.push(
-          `<g data-tuplet="${t.actualNotes}">` +
-          `<line x1="${xa}" y1="${yBr + 5}" x2="${xa}" y2="${yBr}" stroke="#1a1612" stroke-width="${tupletT}"/>` +
-          `<line x1="${xa}" y1="${yBr}" x2="${midX - 7}" y2="${yBr}" stroke="#1a1612" stroke-width="${tupletT}"/>` +
-          `<line x1="${midX + 7}" y1="${yBr}" x2="${xb}" y2="${yBr}" stroke="#1a1612" stroke-width="${tupletT}"/>` +
-          `<line x1="${xb}" y1="${yBr}" x2="${xb}" y2="${yBr + 5}" stroke="#1a1612" stroke-width="${tupletT}"/>` +
-          `<text x="${midX}" y="${yBr + 3.5}" text-anchor="middle" font-size="11" font-style="italic" fill="#1a1612">${t.actualNotes}</text>` +
-          `</g>`,
-        );
+        const from = placed.indexOf(run[0]);
+        brackets.push({ from, to: from + run.length - 1, xa, xb, midX, yBr, n: t.actualNotes, thickness: tupletT });
       }
       run = [];
       runKey = '';
@@ -3242,7 +3236,7 @@ export function renderAnalyzedStaff(
   let beamLow = lowestInk;
   for (const s of beamStemById.values()) beamLow = Math.max(beamLow, s.tipY + beamT / 2);
   const slurredBelowIdx = new Set<number>();
-  const printedPlans = planPrintedSlurs(arcCtx, options.slurAcross ?? new Set<string>(), options.slurThrough ?? [], marks, beamLow, slurredIdx, slurredBelowIdx);
+  const printedPlans = planPrintedSlurs(arcCtx, options.slurAcross ?? new Set<string>(), options.slurThrough ?? [], marks, brackets, beamLow, slurredIdx, slurredBelowIdx);
 
   const tiesOut = drawTies(arcCtx, slurredIdx, slurredBelowIdx);
   parts.push(...tiesOut.parts);
@@ -3391,7 +3385,10 @@ export function renderAnalyzedStaff(
 
   // Beams and tuplet brackets (drawn once, after the notes they govern).
   parts.push(...beamParts);
-  parts.push(...tupletParts);
+  for (const b of brackets) {
+    parts.push(bracketMarkup(b));
+    highestInk = Math.min(highestInk, b.yBr);
+  }
 
   // Final barline.
   // The right-hand barline, at the stave's end. Ordinary weight on every

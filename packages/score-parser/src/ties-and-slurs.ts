@@ -15,6 +15,7 @@
 import type { AnalyzedScore } from './analysis-types';
 import { arcOutline, slopedArcOutline } from './arc-outline';
 import { slurEndKey } from './printed-marks';
+import { numeralBox, type BracketRec } from './tuplet-bracket';
 import type { PreparedSmuflFont, RequiredGlyphName } from './smufl-metadata';
 import type { NoteBase, Pitch, SlurEnd, VocalLineEvent } from './types';
 
@@ -298,6 +299,13 @@ export interface PrintedSlurPlan {
  * on no system, a note deleted in Corrections, is in none of these and draws
  * nothing, with no error.
  *
+ * BEAMS AND BRACKETS (row 126). A slur above ends at a beamed up-stem's own
+ * stem x, above the beam, never between the beam and the heads (Gould p. 111:
+ * a slur "should always remain outside a beam"). A slur and a tuplet bracket
+ * never touch (Dorico's convention; Gould states no rule): a slur wholly inside
+ * a bracket's run goes under it and RAISES the bracket (`brackets` is mutated),
+ * and every other slur above that overlaps a bracket in x passes over it.
+ *
  * DIRECTION: the file's `placement` on either end, else above, the way the
  * derived melisma slur goes (Gould r71 as the extraction words it: long
  * slurs above the stave, clear of the text). A slur that bows below is kept
@@ -309,6 +317,7 @@ export function planPrintedSlurs(
   across: ReadonlySet<string>,
   through: ReadonlyArray<{ id: string; placement?: 'above' | 'below' }>,
   marks: { top: ReadonlyMap<string, number>; bottom: ReadonlyMap<string, number> },
+  brackets: BracketRec[],
   inkBelow: number,
   slurredAbove: Set<number>,
   slurredBelow: Set<number>,
@@ -333,6 +342,7 @@ export function planPrintedSlurs(
     from: number,
     to: number,
     half: 'out' | 'in' | 'through' | undefined,
+    clearBrackets: readonly BracketRec[],
   ): Omit<PrintedSlurPlan, 'id' | 'from' | 'to' | 'half'> => {
     const s = dir === 'above' ? -1 : 1;
     /** The outermost of two levels: the one further from the notes in the slur's direction. */
@@ -367,14 +377,39 @@ export function planPrintedSlurs(
     const freeB = half === 'out' || half === 'through';
     let yA = freeA ? NaN : levelAt(from);
     let yB = freeB ? NaN : levelAt(to);
+    // The brackets this slur must pass over: only above, and only those it overlaps in x.
+    const overlaps = (a: number, b: number): BracketRec[] => (dir === 'above' ? clearBrackets.filter((br) => br.xb >= a && br.xa <= b) : []);
+    const bracketLevel = (br: BracketRec): number => br.yBr + s * clear;
     if (freeB) xB = c.contentRight + (c.o.runOnTieSp && c.o.runOnTieSp > 0 ? sp(c.o.runOnTieSp) : 0);
     if (freeA) xA = c.contentLeft;
+    const over = overlaps(xA, xB);
+    // An end that stands within a bracket's span clears the bracket's line.
+    for (const br of over) {
+      if (!freeA && xA >= br.xa && xA <= br.xb) yA = outer(yA, bracketLevel(br));
+      if (!freeB && xB >= br.xa && xB <= br.xb) yB = outer(yB, bracketLevel(br));
+    }
+    /* A beamed up-stem end of a slur above sits at its stem's x, above the beam: `outer` of the
+       head's level and the beam's y at that stem less one clearance, so a mark above still counts. */
+    const beamEnd = (k: number): { x: number; y: number } | null => {
+      const ev = placed[k].ev;
+      const bs = beamStemById.get(ev.id);
+      if (dir !== 'above' || !bs || stemless(ev) || !stemUpFor(ev, yFor(ev.pitch!))) return null;
+      return { x: bs.sx, y: bs.tipY + s * clear };
+    };
+    if (!freeA) {
+      const be = beamEnd(from);
+      if (be) { yA = outer(yA, be.y); xA = be.x; }
+    }
+    if (!freeB) {
+      const be = beamEnd(to);
+      if (be) { yB = outer(yB, be.y); xB = be.x; }
+    }
     const inner: number[] = [];
     for (let k = freeA ? from : from + 1; k <= (freeB ? to : to - 1); k++) {
       if (placed[k].ev.type === 'note' && placed[k].ev.pitch) inner.push(k);
     }
     // A free end rides at the outermost level its half has to clear, so the half hangs level.
-    const floor = inner.reduce((v, k) => outer(v, clearAt(k)), dir === 'above' ? Infinity : -Infinity);
+    const floor = over.reduce((v, br) => outer(v, bracketLevel(br)), inner.reduce((v, k) => outer(v, clearAt(k)), dir === 'above' ? Infinity : -Infinity));
     if (freeB && !freeA) yB = outer(yA, floor);
     else if (freeA && !freeB) yA = outer(yB, floor);
     else if (freeA && freeB) yA = yB = Number.isFinite(floor) ? floor : c.o.staffMidY + s * 2 * c.o.lineGap;
@@ -388,6 +423,23 @@ export function planPrintedSlurs(
         const room = Math.max(2 * t * (1 - t), 0.05);
         const need = (clearAt(k) - chord) / room;
         d = dir === 'above' ? Math.min(d, need) : Math.max(d, need);
+      }
+      // A bracket is constrained at its two ends and at the numeral's upper corners; the arc is
+      // concave, so clearing those points clears the span between them.
+      for (const br of over) {
+        const box = numeralBox(br);
+        const pts = [
+          { x: Math.max(br.xa, xA), y: bracketLevel(br) },
+          { x: Math.min(br.xb, xB), y: bracketLevel(br) },
+          { x: box.left, y: box.top + s * clear },
+          { x: box.right, y: box.top + s * clear },
+        ];
+        for (const pt of pts) {
+          if (pt.x < xA || pt.x > xB) continue;
+          const t = (pt.x - xA) / (xB - xA);
+          const room = Math.max(2 * t * (1 - t), 0.05);
+          d = Math.min(d, (pt.y - (yA + (yB - yA) * t)) / room);
+        }
       }
       return d;
     };
@@ -420,7 +472,7 @@ export function planPrintedSlurs(
         if (!pick.moved) {
           pick.moved = true;
           const px = placed[pick.k].x;
-          const stemX = pick.up ? px + c.stemHalfUp : px - c.stemHalfDown;
+          const stemX = pick.up ? px + c.stemHalfUp : px + c.stemHalfDown; // `stemHalfDown` is negative: the stem stands left of the head
           if (pick.n === 0) xA = stemX;
           else xB = stemX;
         }
@@ -430,12 +482,22 @@ export function planPrintedSlurs(
     return { dir, x1: xA, y1: yA, x2: xB, y2: yB, depth };
   };
 
-  const plan = (i: number, j: number, ev: VocalLineEvent, end: SlurEnd, half?: 'out' | 'in'): void => {
+  const plan = (i: number, j: number, ev: VocalLineEvent, end: SlurEnd, half?: 'out' | 'in', clearBrackets: readonly BracketRec[] = brackets): void => {
     const wanted = placementOf(ev, end) ?? 'above';
-    let g = geometry(wanted, i, j, half);
+    let g = geometry(wanted, i, j, half, clearBrackets);
     if (wanted === 'below') {
       const lowest = Math.max(g.y1, g.y2, (g.y1 + g.y2) / 2 + g.depth / 2);
-      if (lowest > inkBelow) g = geometry('above', i, j, half);
+      if (lowest > inkBelow) g = geometry('above', i, j, half, clearBrackets);
+    }
+    // A slur drawn above and wholly inside a bracket's run raises that bracket to clear its apex (row 126).
+    const run = !half && g.dir === 'above' ? brackets.find((br) => br.from <= i && j <= br.to) : undefined;
+    if (run && clearBrackets.length === 0) {
+      let apex = Infinity;
+      for (let n = 0; n <= 50; n++) {
+        const t = n / 50;
+        apex = Math.min(apex, (1 - t) * g.y1 + t * g.y2 + 2 * t * (1 - t) * g.depth);
+      }
+      run.yBr = Math.min(run.yBr, apex - 8);
     }
     // For a half the slur's identity is the real end's event.
     const id = end.type === 'start' ? ev.id : (end.partnerEventId ?? ev.id);
@@ -443,14 +505,21 @@ export function planPrintedSlurs(
     for (let k = i; k <= j; k++) (g.dir === 'above' ? slurredAbove : slurredBelow).add(k);
   };
 
-  for (const t of through) {
-    if (placed.length === 0) break;
-    const wanted = t.placement ?? 'above';
-    let g = geometry(wanted, 0, placed.length - 1, 'through');
-    if (wanted === 'below' && Math.max(g.y1, g.y2, (g.y1 + g.y2) / 2 + g.depth / 2) > inkBelow) g = geometry('above', 0, placed.length - 1, 'through');
-    plans.push({ id: t.id, ...g, half: 'through', from: 0, to: placed.length - 1 });
-    for (let k = 0; k < placed.length; k++) (g.dir === 'above' ? slurredAbove : slurredBelow).add(k);
-  }
+  const throughJobs = (): void => {
+    for (const t of through) {
+      if (placed.length === 0) break;
+      const wanted = t.placement ?? 'above';
+      let g = geometry(wanted, 0, placed.length - 1, 'through', brackets);
+      if (wanted === 'below' && Math.max(g.y1, g.y2, (g.y1 + g.y2) / 2 + g.depth / 2) > inkBelow) g = geometry('above', 0, placed.length - 1, 'through', brackets);
+      plans.push({ id: t.id, ...g, half: 'through', from: 0, to: placed.length - 1 });
+      for (let k = 0; k < placed.length; k++) (g.dir === 'above' ? slurredAbove : slurredBelow).add(k);
+    }
+  };
+
+  /* Two phases. Slurs wholly inside a bracket's run go first, under the bracket, and raise it;
+     every other slur is planned against the brackets as they then stand. */
+  const jobs: Array<() => void> = [];
+  const insideJobs: Array<() => void> = [];
   for (let i = 0; i < placed.length; i++) {
     const ev = placed[i].ev;
     if (ev.type !== 'note' || !ev.pitch || !ev.slurs) continue;
@@ -459,15 +528,21 @@ export function planPrintedSlurs(
       const j = indexOf.get(end.partnerEventId);
       if (end.type === 'start') {
         if (j !== undefined) {
-          if (j > i && placed[j].ev.pitch) plan(i, j, ev, end);
+          if (j > i && placed[j].ev.pitch) {
+            if (brackets.some((br) => br.from <= i && j <= br.to)) insideJobs.push(() => plan(i, j, ev, end, undefined, []));
+            else jobs.push(() => plan(i, j, ev, end));
+          }
         } else if (across.has(slurEndKey(ev.id, end))) {
-          plan(i, placed.length - 1, ev, end, 'out');
+          jobs.push(() => plan(i, placed.length - 1, ev, end, 'out'));
         }
       } else if (j === undefined && across.has(slurEndKey(ev.id, end))) {
-        plan(0, i, ev, end, 'in');
+        jobs.push(() => plan(0, i, ev, end, 'in'));
       }
     }
   }
+  for (const job of insideJobs) job();
+  throughJobs();
+  for (const job of jobs) job();
   return plans;
 }
 

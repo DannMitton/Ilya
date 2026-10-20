@@ -1402,11 +1402,12 @@ const strings: Record<string, Record<Language, string>> = {
 	// call site, the convention 'upload.err.xmlRootIs' already uses.
 	// QUEUE row 95 (ratified by Dann 2026-10-14 16:36). This string carries no
 	// %s slot any more, so the .replace('%s', ...) at the call site is a no-op.
-	'upload.banner.noLyrics': { en: 'This score has no words in it. The text you added is under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Le texte que vous avez ajouté se trouve sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
+	// Row 125 (ratified by Dann 2026-10-19 22:25): the second sentence is true before and after words arrive.
+	'upload.banner.noLyrics': { en: 'This score has no words in it. The text you add in Lyrics goes under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Le texte que vous ajoutez dans le champ Paroles se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	// Row 95: the same courtesy message for a scan or photograph, where the
 	// print may well carry words that Ilya does not read. Chosen by
 	// noLyricsNoticeKey (lib/score/ingestion/ingest.ts).
-	'upload.banner.noLyricsScan': { en: 'Ilya does not read the words printed in an image. The text you added is under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous avez ajouté se trouve sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
+	'upload.banner.noLyricsScan': { en: 'Ilya does not read the words printed in an image. The text you add in Lyrics goes under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous ajoutez dans le champ Paroles se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	// N.65 ship B. `station.syllables` IS DELETED. Dann ruled the SYLLABLES
 	// header away on 2026-08-21 and its text became the first element under
 	// SHIFT LYRICS. Checked before deleting, the way ship A checked its six:
