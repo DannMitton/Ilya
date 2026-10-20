@@ -21,7 +21,10 @@
 	 * Dann if he wants one. The words are the ratified `tempo.hint` and
 	 * `tempo.useEstimate`; the − and + are the characters themselves.
 	 */
+	import { untrack } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import { centredViewBox, commonInkBox, type InkBox } from '$lib/score/loupe';
+	import { MEASURE_PX, measureGlyphInkInBrowser } from '$lib/score/loupe-ink';
 	import { beatGlyph, beatName } from './beat-glyph';
 	import { beatChips, BPM_MAX, BPM_MIN, clampBpm, convertBpm, type Beat } from './singer-tempo';
 	import { tempoUi } from './tempo-ui.svelte';
@@ -35,6 +38,46 @@
 	const estimated = $derived(cur?.provenance === 'estimated');
 	const band = $derived(estimated && cur?.range ? `${cur.range[0]}–${cur.range[1]}` : '');
 	const shown = $derived(estimated ? '' : cur ? String(Math.round(cur.bpm)) : '');
+
+	/* THE CHIPS DRAW THEIR NOTE BY ITS MEASURED INK, as Corrections' duration
+	   cells do (`CorrectionSurface.svelte`, row 128; Dann 2026-10-19: the notes
+	   sit too high in their buttons, and the buffer should be consistent). A
+	   SMuFL note's notehead sits on the baseline and its stem rises from it, so
+	   set as text it hangs off the chip's centre. The chips shown share one ink
+	   box (one scale, one margin) and each is drawn through a viewBox centred on
+	   its own ink. Until the face is measured, the chip shows its glyph as text. */
+	/** Glyphs measured into the common box besides the chips shown. Empty: the box spans the chips. For Corrections' scale, set it to `[...LENGTH_CELLS.map((c) => c.glyph), DOT]` (from `$lib/score/correction` and `./beat-glyph`). */
+	const CHIP_BOX_EXTRA: readonly string[] = [];
+	const CHIP_H = 26;
+	const chipGlyphs = $derived(chips.map((c) => beatGlyph(c.unit, c.dots)));
+	const boxGlyphs = $derived([...chipGlyphs, ...CHIP_BOX_EXTRA]);
+	let boxes = $state<Record<string, InkBox>>({});
+	const measured = new Set<string>();
+	$effect(() => {
+		if (!tempoUi.open) return;
+		const wanted = boxGlyphs.filter((g) => g && !measured.has(g));
+		if (wanted.length === 0) return;
+		for (const g of wanted) measured.add(g);
+		let alive = true;
+		measureGlyphInkInBrowser(wanted)
+			.then((next) => {
+				if (alive) boxes = { ...untrack(() => boxes), ...next };
+			})
+			.catch(() => {
+				// The face never loaded: the chips keep their text glyphs. Allow a retry.
+				for (const g of wanted) measured.delete(g);
+			});
+		return () => {
+			alive = false;
+			for (const g of wanted) if (!(g in untrack(() => boxes))) measured.delete(g);
+		};
+	});
+	const common = $derived(commonInkBox(boxGlyphs.map((g) => boxes[g]).filter((b): b is InkBox => !!b)));
+	function drawn(glyph: string): { viewBox: string; width: number; height: number } | null {
+		const box = boxes[glyph];
+		if (!box || common.height <= 0) return null;
+		return { viewBox: centredViewBox(box, common), width: (CHIP_H * common.width) / common.height, height: CHIP_H };
+	}
 
 	/** The number the steppers start from: the singer's, else the figure in force (an estimate's midpoint). */
 	const start = $derived(tempoUi.choice?.bpm ?? Math.round(cur?.bpm ?? 66));
@@ -87,8 +130,16 @@
 			<div class="chips" role="group" aria-labelledby="tempo-hint">
 				{#each chips as c (`${c.unit}.${c.dots}`)}
 					{@const on = c.unit === beat.unit && c.dots === beat.dots}
+					{@const g = beatGlyph(c.unit, c.dots)}
+					{@const d = drawn(g)}
 					<button type="button" class="chip" class:on aria-pressed={on} aria-label={beatName(c.unit, c.dots, language)} onclick={() => pickChip(c)}>
-						<span class="mus" aria-hidden="true">{beatGlyph(c.unit, c.dots)}</span>
+						{#if d}
+							<svg class="glyph" viewBox={d.viewBox} width={d.width} height={d.height} aria-hidden="true" focusable="false">
+								<text x="0" y="0" font-family="Finale Maestro" font-size={MEASURE_PX} fill="currentColor">{g}</text>
+							</svg>
+						{:else}
+							<span class="mus" aria-hidden="true">{g}</span>
+						{/if}
 					</button>
 				{/each}
 			</div>
@@ -164,6 +215,19 @@
 		cursor: pointer;
 		font: inherit;
 		line-height: 1;
+	}
+
+	/* The chip centres a box of one size for the set, so the margin is the same in every chip. */
+	.chip {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+	}
+
+	.glyph {
+		display: block;
+		overflow: visible;
 	}
 
 	.chip.on {

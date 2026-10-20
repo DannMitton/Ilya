@@ -17,7 +17,7 @@
     "apps/web/src/lib/score/pairings.ts": 1423,
     "apps/web/src/lib/insights/InsightsPane.svelte": 1351,
     "apps/web/src/lib/score/ScoreUploader.svelte": 1358,
-    "apps/web/src/lib/score/CorrectionSurface.svelte": 1265,
+    "apps/web/src/lib/score/CorrectionSurface.svelte": 1227,
     "packages/score-parser/src/mnx-parser.ts": 1170,
     "packages/score-parser/src/musicxml-parser.ts": 1167,
     "apps/web/src/lib/pipeline.ts": 1022

@@ -13,9 +13,11 @@ import {
 	headBound,
 	isRestGlyph,
 	MUSIC_MARK,
+	type InkBox,
 	type PageInk,
 	type Vertical,
 } from '$lib/score/loupe';
+import { loadNotationFont } from '$lib/score/notation-fonts';
 
 /* ONE CANVAS, MEASURED THE WAY THE GLYPH CELLS ARE. `getBBox` on an SVG
    `<text>` returns the font's LAYOUT box, not its ink, and a survey built
@@ -33,6 +35,58 @@ export function textInk(el: Element): { top: number; bottom: number } | null {
 	const y = Number(el.getAttribute('y'));
 	if (!Number.isFinite(y)) return null;
 	return { top: y - m.actualBoundingBoxAscent, bottom: y + m.actualBoundingBoxDescent };
+}
+
+/** The size glyphs are measured at, and the SVG `font-size` that draws them: the two must be equal. */
+export const MEASURE_PX = 100;
+
+/**
+ * Each glyph string's inked box, by canvas `measureText`'s `actualBoundingBox*`,
+ * relative to the origin and baseline `<text x="0" y="0">` uses. Moved out of
+ * `CorrectionSurface.svelte` (row 128) so the tempo control's chips measure the
+ * way the duration cells do. A glyph whose box is zero is left out, so the
+ * caller draws its fallback.
+ */
+export function measureGlyphInk(
+	glyphs: readonly string[],
+	ctx: Pick<CanvasRenderingContext2D, 'font' | 'measureText'>,
+): Record<string, InkBox> {
+	ctx.font = `${MEASURE_PX}px 'Finale Maestro'`;
+	const next: Record<string, InkBox> = {};
+	for (const glyph of glyphs) {
+		const m = ctx.measureText(glyph);
+		const left = m.actualBoundingBoxLeft ?? 0;
+		const right = m.actualBoundingBoxRight ?? 0;
+		const ascent = m.actualBoundingBoxAscent ?? 0;
+		const descent = m.actualBoundingBoxDescent ?? 0;
+		const width = left + right;
+		const height = ascent + descent;
+		// A browser without the inked bounds reports zeros, and a cell with
+		// no box draws its word instead. Nobody meets an empty square.
+		if (width > 0 && height > 0) {
+			next[glyph] = { x: -left, y: -ascent, width, height };
+		}
+	}
+	return next;
+}
+
+/**
+ * The browser's measurement: waits for the notation face, then for the browser
+ * to be ready to shape with it, then measures on a canvas. Resolves to an empty
+ * record where there is no canvas. Rejects where the face never loads.
+ */
+export async function measureGlyphInkInBrowser(glyphs: readonly string[]): Promise<Record<string, InkBox>> {
+	await loadNotationFont();
+	// The FontFace is registered by now; this waits for the browser to have it
+	// ready to SHAPE with, so the canvas measures the real face and not the
+	// fallback serif.
+	try {
+		await document.fonts.load(`${MEASURE_PX}px 'Finale Maestro'`);
+	} catch {
+		// A browser that refuses the check still has the face registered.
+	}
+	const ctx = document.createElement('canvas').getContext('2d');
+	return ctx ? measureGlyphInk(glyphs, ctx) : {};
 }
 
 /* ── THREE READINGS OF A SYSTEM AS DRAWN, shared by the frame and the survey ──

@@ -34,7 +34,7 @@
 	   44 PX FLOOR, unconditional, on every control here. The page's own glyphs
 	   are the ruled exemption and this surface takes none. -------------- */
 	import { t, type Language } from '$lib/i18n';
-	import { loadNotationFont } from '$lib/score/notation-fonts';
+	import { MEASURE_PX, measureGlyphInkInBrowser } from '$lib/score/loupe-ink';
 	import { centredViewBox, commonInkBox, type InkBox } from '$lib/score/loupe';
 	import type { NoteBase } from '@ilya/score-parser';
 	import type { ShiftDirection } from '$lib/score/pairings';
@@ -257,7 +257,6 @@
 	   without conversion. Measured through it, `noteQuarterUp` runs from 88.9
 	   above the baseline to 13.2 below: the notehead sits AT the origin and the
 	   stem is all of the rest, which is exactly the offset Dann saw. */
-	const MEASURE_PX = 100;
 	const NOTE_H = 26;
 	const ACCIDENTAL_H = 22;
 
@@ -278,18 +277,9 @@
 
 	onMount(() => {
 		let alive = true;
-		loadNotationFont()
-			.then(async () => {
-				// The FontFace is registered by now; this waits for the browser to
-				// have it ready to SHAPE with, so `getBBox` measures the real face
-				// rather than the fallback serif.
-				try {
-					await document.fonts.load(`${MEASURE_PX}px 'Finale Maestro'`);
-				} catch {
-					// A browser that refuses the check still has the face registered.
-				}
-				if (!alive) return;
-				measureGlyphs();
+		measureGlyphInkInBrowser(ALL_GLYPHS)
+			.then((next) => {
+				if (alive) boxes = next;
 			})
 			.catch(() => {
 				// The page falls back to primitive shapes on the same failure, and
@@ -299,28 +289,6 @@
 			alive = false;
 		};
 	});
-
-	function measureGlyphs(): void {
-		const ctx = document.createElement('canvas').getContext('2d');
-		if (!ctx) return;
-		ctx.font = `${MEASURE_PX}px 'Finale Maestro'`;
-		const next: Record<string, InkBox> = {};
-		for (const glyph of ALL_GLYPHS) {
-			const m = ctx.measureText(glyph);
-			const left = m.actualBoundingBoxLeft ?? 0;
-			const right = m.actualBoundingBoxRight ?? 0;
-			const ascent = m.actualBoundingBoxAscent ?? 0;
-			const descent = m.actualBoundingBoxDescent ?? 0;
-			const width = left + right;
-			const height = ascent + descent;
-			// A browser without the inked bounds reports zeros, and a cell with
-			// no box draws its word instead. Nobody meets an empty square.
-			if (width > 0 && height > 0) {
-				next[glyph] = { x: -left, y: -ascent, width, height };
-			}
-		}
-		boxes = next;
-	}
 
 	const noteCommon = $derived(
 		commonInkBox(
