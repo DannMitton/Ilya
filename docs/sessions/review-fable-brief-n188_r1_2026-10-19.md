@@ -1,0 +1,49 @@
+# Fable review of the N.188 brief r1, 2026-10-19
+
+Provenance: the final message of a Fable helper spawned by the desk (Opus) 2026-10-19 19:4x at Dann's request, read-only, against a clone of `Shane` at `ba6f064`; returned 20:1x; 344,735 tokens, 152 tool uses, 41 minutes (the desk had stated a worst case of 200k). Transcribed by script from the helper's transcript, unedited below the rule. All twelve amendments are applied in `brief-code-n188-markings-drawn_r2_2026-10-19.md`.
+
+---
+
+**SEND WITH AMENDMENTS.**
+
+## Amendments
+
+1. **Section D keys the scan on the wrong field; as written it never fires on the live path.** `via: 'reader'` is set only in `ingestScoreFile`'s pdf/image case, the E.16 reader behind `?reader=ilya` (`apps/web/src/lib/score/ingestion/ingest.ts:228-244`; `ScoreUploader.svelte:284-292`). The default homr route hands the joined MusicXML back as a `.musicxml` File (`apps/web/src/lib/omr/scan.ts:102, 114-117`) into `handleFile` → `ingestScoreFile`, which sniffs `score-partwise` and sets `via: 'direct'` (`ingest.ts:191-195`; `format-detection.ts:238-242`). The score itself already knows: homr writes `<software>homr</software>` (`generate-main.ts:1144-1146`), the join keeps `identification` (`join-pages.ts:173-175, 583`), and the parser sets `source.origin = 'homr-musicxml-from-image'` (`musicxml-parser.ts:1050-1052, 1102`). That field rides on `ParsedScore`, survives `sliceScore` and the loupe bundle. Replace D's key with: "the one list applies when `parsed.source.origin === 'homr-musicxml-from-image'`". Test it by parsing `apps/web/src/lib/omr/fixtures/tch-1.musicxml` (homr-stamped, 52 slur ends, 7 staccati) rather than faking a provenance. Side finding for the desk, not this brief: row 95's `noLyricsScan` banner and `fidelityBanner` read `via` too, so they do not fire on homr scans either.
+
+2. **Item 4 (fermata on a whole-bar rest) is unreachable on the scan path.** The join strips every rest from a bar that holds rests only (`join-pages.ts:252, 295-298`, `silent()`), so the fermata leaves with it before the parser runs, and the renderer draws the bar as a tacet run with no event to carry it (`staff-renderer.ts:826-844`). Add to A: "`silent()` keeps a rest that carries `<fermata>`; that bar then draws as one rest with its fermata and breaks the tacet run (DESK DEFAULT; a fermata bar is not part of a multirest)." Or scope item 4 to uploaded files and say so. Real reader output does carry fermatas on rests inside sung bars (`apps/web/src/lib/omr/fixtures/sun3-2.musicxml:952-961`, an eighth rest; `:4637-4646`, a half rest); those A.2 covers.
+
+3. **The renderer never sees the whole score, so B.1 and B.5 as written cannot be computed where the brief puts them.** Every system is a slice whose `vocalLine` is filtered to its measures (`page-layout.ts:112-129`, called at `:221`); the loupe renders one measure (`loupe-render.ts:89`). Recommend: the parser pairs slur ends over the whole line and stores `partnerEventId` on each end (precedent `TieInfo.partnerEventId`, `types.ts:615-619`; the tie partner pass at `musicxml-parser.ts:640-655`); an end whose partner is not in the slice draws a half to the system's content edge. B.5's "any printed slur on the voice line" becomes a flag computed once (in the parser's output or `paginateScore`) and passed as a `StaffRenderOptions` field, so page and loupe agree. Correct B.1's premise: a tie across a system break is not drawn on the page today (`staff-renderer.ts:3198-3199` skips it; only the loupe draws a run-on half, `runOnTieSp`). Add for the loupe: tag the leaving half `data-slur-runon` and treat it as `Loupe.svelte:1089-1091` treats `data-tie-runon`, or the body clip cuts it. A partner id absent from the whole line (a note deleted in Corrections) is a missing partner, not an error.
+
+4. **B.3 promises ends at each notehead; `arcOutline` draws both ends level** (`arc-outline.ts:41`, `:58`), which is why the syllabic slur sits at the highest head (`staff-renderer.ts:3268-3273`). Say: add a sibling function taking `y1` and `y2` for printed slurs; ties and the derived slur keep `arcOutline` so their tests stay byte-stable (DESK DEFAULT).
+
+5. **State the pairing policy; reader output is not tidy.** homr's `number` is the staff, not a slur id (`generate-main.ts:398`, `:493`), so every voice-staff slur arrives as number 1 and nesting comes only from uploaded files. On `tch-1.musicxml` staff 1 carries 18 starts and 13 stops. Add: "a second start of the same number while one is open abandons the open one (one warning) and opens the new; an end on a rest is dropped with a warning; a slur whose grace-moved start and stop land on one note draws nothing" (the usual grace-to-main slur).
+
+6. **Rule 174 breaks silently.** Tie direction reads `slurredIdx` (`staff-renderer.ts:3207`), filled only by the derived melisma (`:2410`). Once B.5 suppresses it on scored scans, ties under printed slurs lose the opposite bow. Say: printed spans populate the same set before the tie pass at `:3189`.
+
+7. **Ink accounting and order.** The viewBox top is `highestInk` (`:3485`); the underlay sits below `lowestInk` (`:3317-3318`). Say: every marking and slur updates both, as ties (`:3246-3247`) and the slur (`:3287`) do, or it is clipped. Place markings before slurs so the slur's clearance walk (`:3269-3283`) lifts over them (rule 70), and reuse that walk for stem tips, beams, and the turning layer. Make item 6 testable: "below the head only when the glyph's bottom is at or above `staffBottom`; a below slur only when its lowest point is within ink already there; otherwise above" (DESK DEFAULT). Add a test that the underlay baseline is identical with and without markings.
+
+8. **Ceilings and §8.** `staff-renderer.ts` is at its ceiling (3489 of 3489, `scripts/ratchets.json`), so even the hook lines need an extraction; name the tie and syllabic slur passes (`:3182-3309`) as the block to move beside `arc-outline.ts`. `CONTRACT.md` §8 line 126 says "Do not change `VocalLineEvent`"; `OPEN.md:3122` reads that as "without a numbered item". One line: N.188 is that item.
+
+9. **Gould rules are snippets (tether 14).** Quote 70, 71, 74, and 174 verbatim or mark each "snippet only". `staff-renderer.ts:3254-3255` calls r70 "the suppression case", which is not the brief's subject for rule 70. C.2's "a staccato sits in a space, not on a line" carries no citation.
+
+10. **Tests.** A fixture cannot hold a system break; `<print new-system>` is ignored (audit, Table 3) and Ilya reflows. Say: force it with `renderSystemSlice` on two ranges, or `paginateScore` at a narrow `pageWidth`. Item 5 will find nothing: the Sunless fixture's Bass part has 0 slurs (its 12 are the piano's; approved SVG has 0 `data-slur`); say so to save a search. Read `<fermata type="inverted">` into `FermataInfo.placement` (`types.ts:630` already has it).
+
+11. **Codepoints are not in the tree** (no `glyphnames.json`; `smufl-metadata.ts:107-113` records reading the parentheses from each cmap). Read this session from Leland's cmap, and present at the same codepoints in Finale Maestro's: `articAccentAbove` E4A0, `Below` E4A1; `articStaccato` E4A2/E4A3; `articTenuto` E4A4/E4A5; `articStaccatissimo` E4A6/E4A7; `articMarcato` E4AC/E4AD; `articTenutoStaccato` E4B2/E4B3; `articStress` E4B6/E4B7; `articUnstress` E4B8/E4B9; `fermataAbove` E4C0, `fermataBelow` E4C1; `breathMarkComma` E4CE; `caesura` E4D1. Bravura's cmap not read (WOFF2).
+
+12. **Citation fixes.** `SMUFL_CODEPOINTS` is `smufl-metadata.ts:78-132` (134-136 are the derived type and list). The slur constants are `:913-914` (893-912 is their comment). Grace skip is `:707-709`. `ScoreUploader.svelte:762` is `pageFor`, E.16-only. `~/Downloads/_colleague-pages/truth/MARKINGS.md` and the row 114 report are not in the tree; say so where cited.
+
+All other paths and lines checked and correct: `generate-main.ts:388-414, 324-339, 835-851`; `musicxml-parser.ts:253-264, 780-798, 784`; `types.ts:518, 525, 622, 638-648`; `staff-renderer.ts:53, 2375-2412, 2428-2431`; `phrase-ends.ts:32-36`; `conditions.ts:312`; `ingest.ts:56`; `mnx-parser.ts:23`; ratchets; the three fonts' `glyphBBoxes` (`breathMarkTick` absent from Leland only). Dann's quotes match `OPEN.md:3135`, `:3177`, `PRODUCT.md:808-810`; the measure figures match row 114 as given; D's "91 of 96" is the arithmetic of those figures. The brief starts from the singer and each section serves an item.
+
+## Dann's to decide
+
+- B.5's whole-score test is taste: two readings of the 15:26 principle are defensible, (a) the brief's (derive only on a score with no printed slur) and (b) never on a read score. Recommend (a); it keeps today's behaviour on slur-less files and adds no slur in the composer's ink where the engraver chose none.
+- The "9 in 10 printed" bar in D is the desk's number for the principle's unnumbered condition; it decides that staccati and tenuti wait. Reversible; recommend keeping it and saying it on the walk.
+
+## Could not establish
+
+- The text of Gould rules 70, 71, 74, 174: NOT READ (no Projects tool in this session).
+- Whether `cloud-lane-11` is behind `Shane` by docs only; the remote branch is not in this clone.
+- Whether `docs/sessions/report-code-row114-measure_r1_2026-10-19.md` is on `Shane` after `ba6f064`; the Code session may not have it.
+- Bravura's cmap for the new codepoints (its metadata has the bounding boxes).
+- Dann's 19:3x request for this review and QUEUE row 120, both after the clone's commit.
+- Whether the print-preview shot runs in the cloud; `apps/web/e2e/print-pages.test.ts` exists and the lane has run Chromium before (`STATE.md:25`), but it was not run here.

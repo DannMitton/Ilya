@@ -754,7 +754,7 @@ recorded:**
 |---|---|---|
 | **N.4** | the unmeasured page | `packages/score-parser/src/staff-renderer.test.ts:1065`; `staff-renderer.ts:895`, `:2282` |
 | **N.5** | the singer's notation preferences, 2026-08-05 | `apps/web/src/lib/markup/MarkupPane.svelte` (`notationPrefs`, `showStressDiacritics`) |
-| **N.6** | ledger-line notes' stems, **recorded and NOT implemented** | `packages/score-parser/src/staff-renderer.ts:1791` |
+| **N.6** | ledger-line notes' stems, **recorded and NOT implemented**; Gould pp. 14 and 15 READ 2026-10-19 from Dann's scan (`../sessions/gould-pp14-15-stem-length_r1_2026-10-19.md`), so the photos are no longer owed | `packages/score-parser/src/staff-renderer.ts:1803-1808` |
 | **N.8** | the singer's open-syllable preference, 2026-08-06 | `apps/web/src/lib/score/vowel-resolver.ts` (`openSyllabify`); `MarkupPane.svelte` (`openSyllabification`) |
 | **N.9** | the clitic rule: a word with no vowel can never own a slot | `apps/web/src/lib/score/pairings.ts:102`; `vowel-resolver.ts` (the vowelless-syllable merge) |
 | **N.11** | a hyphen's ink stays inside the gap between two syllables | `packages/score-parser/src/staff-renderer.ts:1175`, `:3404`; `staff-renderer.test.ts:53` |
