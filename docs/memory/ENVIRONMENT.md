@@ -4909,3 +4909,12 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 - **The fetch tool can drop a PDF page, and the cloud shell is refused by the allowlist.** Page 3 of Yalniz and Manmatha vanished on both UMass mirrors and the shell got HTTP 403 (2026-10-20). Fix that worked: open the PDF in a background tab in Dann's Chrome, read the page as a screenshot, close the tab. Say so before and after.
 - **Chrome's PDF save can leave hidden `.com.google.Chrome.*` temp files in Downloads.** Verify each is a complete PDF, copy it, and tell Dann the temp files can be deleted (the desk cannot delete). Pressing Save adds harmless duplicates.
 - **A background Fable agent dies with the session that launched it.** Before relying on its report file, check the file exists; if not, ask Dann yes or no to re-run.
+
+
+### HARD-WON, 2026-10-20 LATE EVENING (Fable agents and the desk's own claims)
+- **A Fable agent's own token report cannot be trusted; quote the runtime figure.** Two runs reported about 40k and 45k; the runtime counted 118,890 and 115,630. The second exceeded its stated 100k cap by 15.6k, inside the stated worst case of about 170k. State the worst case before a farm-out and report the runtime number after.
+- **The file an agent writes can differ from the text it returns.** The first Fable memo on disk (noclobber, mismatched authorship) differed from the returned text. Read the file on disk, compare with the return, and append an addendum for the extras; tell Dann.
+- **Do not say a feature already exists without reading it.** The desk said Undo already covered a slip on a hand-edited word. Undo is in memory only and empties on reload (`apps/web/src/lib/score/undo-history.svelte.ts:18-23`), and whether Lyrics edits enter it is NOT ESTABLISHED.
+- **Do not write an absolute into a rule Dann stated as a default.** "Never" went into `OPEN.md`; Dann objected (22:44). Write it as a default plus the named condition for departing (tether 19).
+- **Word the character-set rule in plain terms.** The desk wrote ё as if it were outside modern Cyrillic; it is an ordinary modern letter. The set is now stated as letters in use, not as a Unicode range.
+- **A search that returns no page for a named source is not a reading of it.** For the «Ну-те ж» gloss, two searches missed the lieder.net page; say so and fetch the page, never fill the meaning from memory.
