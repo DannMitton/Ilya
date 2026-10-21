@@ -353,6 +353,9 @@ next session the same hour it cost the last one.
 | about to ask Dann what an edit leaves behind | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
 | stamping a time on a record | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
 | you told Dann a write was starting, and the thread compacted | `WHAT THE DESK LEARNED IN THE NIGHT OF 2026-10-08` |
+| you need Grayson's dissertation, or a PDF whose Russian comes out as Latin letters | `GRAYSON'S PDF IS KEYBOARD-MAPPED` |
+| you are about to call a mark or a rule new, or cite a boundary or punctuation test | `THE # WAS ALREADY IN THE TREE` |
+| you wrote a scratch file or a test in the device shell | `THE DEVICE SHELL'S HOME DIES WITH THE SESSION` |
 
 ### The method traps, which are one lesson in six voices
 
@@ -4923,3 +4926,15 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 - **Use the word Dann uses for a surface, and check it against the tree.** The desk said "Inspector"; Dann asked whether it meant the Loupe. They are different (`InspectorPanel.svelte` in the drawer; `score/Loupe.svelte`, a magnified measure on Markup). Say what each is on first use.
 - **Cost of a Fable review.** The batch C review (a 12 KB brief, 65 tool calls) took the Fable limit from 92 to 96 percent and 181,880 tokens by the runtime's count, against the agent's own estimate of about 95k. Plan a review at about 4 points; tell the agent to write its file after each section.
 - **A transcription is as written, typos included, even inside quotation marks.** The desk corrected typos in an INBOX quote on 2026-10-20 and restored them. Check a quote against the source before saving.
+
+## GRAYSON'S PDF IS KEYBOARD-MAPPED. Learned 2026-10-21 (Sonnet desk)
+
+`~/Downloads/Grayson_washington_0250E_10459.pdf` (459 pages; also `Grayson - 2012 - Russian Lyric Diction.pdf`) reads with `pdftotext -layout` in the device shell (`which pdftotext` finds it), and its text layer holds Cyrillic typed through a legacy font: the Latin keys of a Russian keyboard layout. «на вас благодать» comes out `yf dfc ,kfujlfnm`. Decode with the key map (q w e r t y u i o p [ ] a s d f g h j k l ; ' z x c v b n m , . to й ц у к е н г ш щ з х ъ ф ы в а п р о л д ж э я ч с м и т ь б ю), and check every example against Grayson's own English gloss, because `,` is б and `.` is ю in the map but a real comma or period in the prose: decode letters only. Printed page number is the PDF page minus 16 (printed 255 is PDF page 271). The voicing assimilation across word boundaries is printed pp. 248 to 258: boundaries p. 248, rule p. 250, the rules and examples p. 252, "Determining the Implied Phrase" p. 253, «на вас благодать» p. 255. The page images were not viewed; if a Russian example ever matters to a ruling, render the page and look.
+
+## THE # WAS ALREADY IN THE TREE. Learned 2026-10-21 (Sonnet desk)
+
+The desk told Dann the # was a new mark and then that the build must reuse `phonationBreak`; both were wrong. It is Dann's own phonation-break mark (`packages/score-parser/src/diction-marks.ts:1-60`, ruled by him 2026-07-30), the old Guide paragraph on it sat at `GuideContent.svelte:380` and `:84`, and batch C's B3 already said so ("The # is already in the tree, from scores") and already ruled that the typed # is NOT wired to `phonationBreak` (Dann 2026-10-21 00:26). The desk read B3 only after it had spoken. Two rules: read the brief of the batch you build on before you report a finding that touches it, and `grep -rn` the noun before you call anything new. The same session repeated an older trap, citing `engine.ts:1999` as the punctuation test: it is a dead copy with no caller; the live test is `apps/web/src/lib/boundaries.ts:37`.
+
+## THE DEVICE SHELL'S HOME DIES WITH THE SESSION. Learned 2026-10-21 (Sonnet desk)
+
+A script or test written under `$HOME` in `device_bash` (the desk used `~/scratch-n194`) is deleted with the session. Copy what is wanted into `~/Downloads/_desk-<date>/` before the close; the unit logic for N.194 is there as `syntactic-break-unit.ts` and its test, and in `docs/sessions/code-n194-syntactic-break-unit_r1_2026-10-21.ts` and `.test_r1_`. `node` and `tsx` run in that shell (`/usr/bin/node`, `/usr/local/lib/node_modules_global/bin/tsx`), so a pure module and its test can be run there without touching the tree. The mounts are `$HOME/mnt/ilya-rewrite` and `$HOME/mnt/Downloads`. `device_request_folder_access` must be loaded with `ToolSearch` before its first call.
