@@ -18,7 +18,7 @@ r3, written by the desk (Opus) 2026-10-20 about 02:50, at Dann's request of 02:4
 
 - [x] **Row 127, the octave clef.** DONE: shipped `c68f9a0f` (merge `209aaeb1`), closed by Dann's look 2026-10-20 03:11. *Solves:* a low voice reading a treble-printed line an octave down saw the key signature an octave too high and had no choice of bass clef; now notes and key sit where the print has them, and bass is the singer's choice. *Opens:* low voices can use Markup on treble-printed songs; Dann's clef ask of 2026-10-14 closes.
 - [x] **Row 128, the tempo chips.** SHIPPED `dbb97773` 2026-10-20 11:56; DONE by Dann's look 2026-10-20 13:33. *Solves:* the notes in the tempo buttons sit too high (Dann's screenshot, 2026-10-19 23:18); they get an even margin, like the other buttons. *Opens:* the tempo control looks finished.
-- [ ] **Row 129, triplets as the publisher draws them.** Brief r2 reviewed (batch A). *Solves:* Ilya adds a bracket the print does not have (song 1, bar 10); the 3 goes over the middle stem's meeting with the beam. *Opens:* Markup looks like the page a colleague compares it to.
+- [x] **Row 129, triplets as the publisher draws them.** DONE for the centring (Dann's look 2026-10-20 15:45); its slur remainder travels with row 145. Brief r2 reviewed (batch A). *Solves:* Ilya adds a bracket the print does not have (song 1, bar 10); the 3 goes over the middle stem's meeting with the beam. *Opens:* Markup looks like the page a colleague compares it to.
 - [ ] **The uncommitted documents.** *Solves:* records held only on Dann's disk can be lost, and untracked files stop the ship script. *Opens:* every later ship runs clean.
 
 ## Meta 2. The words from a scan reach 9 of 10 syllables
@@ -31,6 +31,7 @@ r3, written by the desk (Opus) 2026-10-20 about 02:50, at Dann's request of 02:4
 - [ ] **Stage 2b, the reader in the scan path** (Mac, after Sunday's reset). *Solves:* a scan's words never reach Markup without typing; this runs the reader inside Ilya behind a switch. *Opens:* the measure below; N.135's two banner strings (French to Dann).
 - [ ] **Measured on row 114's songs.** *Solves:* says plainly whether THE TARGET's words are met. *Opens:* the decision point.
 - **Decision point, Monday 2026-10-26 (DESK DEFAULT):** if the measure is below 9 of 10, what colleagues get on the 30th goes to Dann as one question.
+- [ ] **The text-seating design interview (QUEUE row 150).** Q1 to Q6 answered 2026-10-20 (Q6, the three tiers, at 21:20). *Solves:* a scan whose words differ from the poem, or a file with no words, has no agreed rule for what Ilya repairs, marks, or leaves alone. *Opens:* the design in `OPEN.md` for Dann to ratify, then a brief for stage 3.
 
 ## Meta 3. Text and Markup read true to the print
 
