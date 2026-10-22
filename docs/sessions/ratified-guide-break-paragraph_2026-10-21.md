@@ -51,3 +51,7 @@ A syntactic break is a place where a coach hears one unit of the text end before
 ### French
 
 Une frontière syntaxique est un endroit où l’on entend une unité du texte se terminer avant que la suivante commence. À une frontière syntaxique, la voix fait une rupture de phonation&#160;: une interruption de la phonation continue. Une frontière syntaxique arrête l’assimilation régressive de voisement. Prenez l’exemple de <em>на вас благодать</em>&#160;: sans frontière, le <em>с</em> final de <em>вас</em> [s] devient voisé [z] devant le <em>б</em> de <em>благодать</em>, et une frontière après <em>вас</em> le laisse non voisé (Grayson 2012, p. 255). Le # vient de la linguistique, et vous le placez après la transcription API de la dernière syllabe d’un mot. Il s’écrit [#] sur la ligne API.
+
+## Pointer, 2026-10-21 13:52
+
+Dann ratified the English of `draft-guide-break-how-to-place_r1_2026-10-21.md` at 13:52. It replaces this file's fifth and sixth sentences ("The # comes from linguistics, and you place it after the IPA for the last syllable of a word. It is written [#] on the IPA line.") with the two routes for placing a #. The French of those sentences was ratified at 13:54. The text to seat is this file's final section as amended by that file.

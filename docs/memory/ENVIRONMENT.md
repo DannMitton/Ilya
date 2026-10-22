@@ -15,6 +15,14 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Desk errors recorded 2026-10-21 (afternoon desk)
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| a brief says "whatever path X uses" or names a mechanism nobody read | `a brief named a path that did not exist` |
+| a string that names a failure, before it is shown to Dann | `a string said Ilya needs a connection` |
+| a sentence is about to be shown to Dann as his own | `the desk attributed its own sentence to Dann` |
+
 ### Shipping, gates, and the ship script
 
 | you are about to, or you are seeing | search for |
@@ -4938,3 +4946,15 @@ The desk told Dann the # was a new mark and then that the build must reuse `phon
 ## THE DEVICE SHELL'S HOME DIES WITH THE SESSION. Learned 2026-10-21 (Sonnet desk)
 
 A script or test written under `$HOME` in `device_bash` (the desk used `~/scratch-n194`) is deleted with the session. Copy what is wanted into `~/Downloads/_desk-<date>/` before the close; the unit logic for N.194 is there as `syntactic-break-unit.ts` and its test, and in `docs/sessions/code-n194-syntactic-break-unit_r1_2026-10-21.ts` and `.test_r1_`. `node` and `tsx` run in that shell (`/usr/bin/node`, `/usr/local/lib/node_modules_global/bin/tsx`), so a pure module and its test can be run there without touching the tree. The mounts are `$HOME/mnt/ilya-rewrite` and `$HOME/mnt/Downloads`. `device_request_folder_access` must be loaded with `ToolSearch` before its first call.
+
+## 2026-10-21 13:5x: a brief named a path that did not exist
+
+N.194 brief r3 told Code to edit the Lyrics text "through whatever path the Lyrics field's own undo uses" and to test a Control+Z in the field. The desk had not read the field. It is a plain textarea with no undo of its own (`apps/web/src/lib/components/Drawer/IntakeViews.svelte:197-202`), and the app's named undo does not carry `inputText` (`apps/web/src/lib/score/undo-history.svelte.ts:44-70`). Found by reading, before any Fable review. r4 corrects it. Lesson for a brief: a sentence that says "whatever path X uses" is a NOT READ until the path is named with a file and line.
+
+## 2026-10-21 13:57: a string said Ilya needs a connection
+
+The desk's first wording of the offline-Refresh string ("Ilya could not connect") implied the app needs a connection to run. Dann asked whether it does. `apps/web/static/sw.js` precaches the shell on install and serves everything else cache first (the last handler), and leaves the dictionary files and the score reader (`/omr/`) to the browser's own HTTP cache, so only getting a new version needs the network. Found by Dann's question, not by the desk. The string was replaced (`docs/sessions/addendum-batch-c-b2-string_2026-10-21.md`). Lesson: a string that names a failure names the thing that failed, read from the code, before it is shown to him.
+
+## 2026-10-21 20:34: the desk attributed its own sentence to Dann
+
+The desk drafted "Ilya supports the study of a score you hold. It does not replace it." from Dann's INBOX 2026-10-20 23:53 words, listed it in STATE as "a one-line statement of purpose" for the Guide and the footer, and at 13:58 told him it was "your 2026-10-20 phrasing" before asking him to ratify it. It was the desk's paraphrase, and the INBOX line itself calls the statement a lead, "his to word". He ratified both languages on that false attribution. Found by his question, not by the desk. Lesson: before showing him a sentence as his, open the line that records it; a paraphrase in STATE is the desk's until the INBOX line says otherwise.
