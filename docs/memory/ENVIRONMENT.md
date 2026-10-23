@@ -4958,3 +4958,20 @@ The desk's first wording of the offline-Refresh string ("Ilya could not connect"
 ## 2026-10-21 20:34: the desk attributed its own sentence to Dann
 
 The desk drafted "Ilya supports the study of a score you hold. It does not replace it." from Dann's INBOX 2026-10-20 23:53 words, listed it in STATE as "a one-line statement of purpose" for the Guide and the footer, and at 13:58 told him it was "your 2026-10-20 phrasing" before asking him to ratify it. It was the desk's paraphrase, and the INBOX line itself calls the statement a lead, "his to word". He ratified both languages on that false attribution. Found by his question, not by the desk. Lesson: before showing him a sentence as his, open the line that records it; a paraphrase in STATE is the desk's until the INBOX line says otherwise.
+
+2026-10-22 21:1x: the desk quoted a code comment as the app's behaviour
+
+The desk told Dann a failed dictionary load leaves the app "in inference mode", quoting the loader's own comment (`apps/web/src/lib/loader.ts:592-594`), without reading what the page does. The page returns no lines when `loaderState.entryCount === 0` (`+page.svelte:437`, `:464`, `:1661`). Found by the desk's next read, not by Dann. Lesson: a comment describes what its author meant; read the consumer before reporting the behaviour. Also corrected the same evening: the desk said briefs r4 and the Guide brief both carried stale NOT READ lines (only the Guide brief did), and QUEUE row 134 said seven `@media print` blocks (it is 29 files).
+
+2026-10-22 21:4x: the desk sent Dann to the wrong controls in Vercel, twice
+
+From Vercel's documentation the desk told him the list's three-dot menu had a Delete command (it does not; Delete is on a deployment's own page) and that the Deployment Retention Policy was on the Security page (it is at the bottom of Build and Deployment). Found by Dann's report of what he saw. Lesson: before sending him to a control in a third-party interface, read the live page through the browser first, or say it comes from documentation and was not seen on his screen.
+
+2026-10-22: hard-won facts about the tools
+
+- The Vercel connector's `get_project` does not return the Ignored Build Step command; read it from the dashboard instead. The section collapses into "Production Overrides" and "Project Settings" rows when they differ, and the input is not in the page until the second row is expanded.
+- `javascript_tool` blocks a result it takes for query-string data; return booleans and lengths, and compare to the expected text inside the script.
+- Gmail's `get_message` with RAW format returns the full headers, including Authentication-Results, as base64; METADATA_ONLY omits them.
+- The device shell can answer "Workspace still downloading" for several minutes after a new session; `device_list_dir` still works and shows file times.
+- Vercel deletes recoverable builds for 30 days; "Recently Deleted Deployments" (Settings, Security) lists them with days left.
+
