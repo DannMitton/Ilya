@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, tick, untrack } from 'svelte';
 	import { updated } from '$app/state';
+	import { startUpdateChecks, refreshToNewVersion } from '$lib/update-check';
 	import { transcribeWord } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { loadDictionary, type LoaderState } from '$lib/loader';
@@ -1530,7 +1531,8 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		loupeBundle = bundle;
 		pageRevision += 1;
 	}
-	let updateDismissed = $state(false);
+	let updateDismissed = $state(false), updateOffline = $state(false);
+	onMount(() => startUpdateChecks({ check: updated.check, win: window, doc: document }));
 	// Active heading for TOC sync
 	let activeHeadingId = $state<string | null>(null);
 	// Tab transition animation
@@ -4611,27 +4613,16 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		corrections={loupeCorrections}
 	/>
 {/if}
-{#if updated.current && !updateDismissed}
+{#if updated.current && !updateDismissed && !calibrating}
 	<div class="update-toast screen-only" role="status">
-		<span class="update-toast-text">{t('update.notice', language)}</span>
+		<span class="update-toast-text">{t(updateOffline ? 'update.offline' : 'update.notice', language)}</span>
 		<!-- N.54: location.reload() alone lands the singer back on the OLD build.
 		     static/sw.js serves the app shell stale-while-revalidate, so a plain
 		     reload returns the cached document and only then fetches the new one.
-		     Dropping the caches that worker owns (same 'ilya-' prefix it filters
-		     on in its own activate handler) sends the reload to the network. -->
-		<button
-			class="update-toast-action"
-			onclick={async () => {
-				try {
-					const keys = await caches.keys();
-					await Promise.all(
-						keys.filter((k) => k.startsWith('ilya-')).map((k) => caches.delete(k))
-					);
-				} catch {
-					// No CacheStorage, or it refused. Reload anyway: no worse than before.
-				}
-				location.reload();
-			}}>{t('update.action', language)}</button
+		     `refreshToNewVersion` (`$lib/update-check`) drops the caches that worker
+		     owns, but only after a probe of the host succeeds; offline it keeps them
+		     and the notice says so. The notice does not rise over the calibration takeover. -->
+		<button class="update-toast-action" onclick={async () => (updateOffline = (await refreshToNewVersion()) === 'offline')}>{t('update.action', language)}</button
 		>
 		<button class="update-toast-dismiss" aria-label={t('update.dismiss', language)} onclick={() => (updateDismissed = true)}>×</button>
 	</div>

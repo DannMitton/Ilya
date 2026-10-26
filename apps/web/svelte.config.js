@@ -16,8 +16,9 @@ const config = {
 			base: ''
 		},
 		version: {
-			// Poll for new deployments so the update notice can appear.
-			pollInterval: 60_000
+			// No timer. `src/lib/update-check.ts` asks for a new deployment when Ilya opens,
+			// when the page returns to the foreground, and when the browser comes back online.
+			pollInterval: 0
 		}
 	}
 };
