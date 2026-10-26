@@ -88,6 +88,7 @@
 
 import { processText } from '$lib/pipeline';
 import { openSyllabify } from '$lib/syllable-utils';
+import { SYNTACTIC_BREAK } from '$lib/syntactic-break';
 import { modernSyllables } from '$lib/typed-hyphens';
 import { flattenTranscribedWords, matchDonors } from './underlay-donor';
 
@@ -613,6 +614,8 @@ export function buildUnderlayResolvers(
 					}
 				}
 				let ipa = ipaOfSyllable(syllablesOf(owner.word), owner.localIdx);
+				// Row 139: a typed # follows the word's last syllable in the IPA line, and nowhere else.
+				if (ipa !== undefined && owner.word.syntacticBreak && owner.localIdx === syllablesOf(owner.word).length - 1) ipa += SYNTACTIC_BREAK;
 				// N.9: the vowelless clitics that own no slot ride on the
 				// syllables at either end, following `pipeline.ts:752-758`.
 				// A stress mark stays leftmost; the clitic tucks in behind it.

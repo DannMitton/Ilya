@@ -15,7 +15,10 @@
  * U+2011 between two letters, the set row 106 made syllable hyphens
  * (`typed-hyphens.ts`). A typed division changes no word (`cleanWord` is letters
  * only) and is never coloured, so «Ком-нат-ка» holds the score's «Комнатка».
- * Case and punctuation are NOT folded. A capital the singer changed is an
+ *
+ * A TYPED # IS FOLDED TOO (row 139): a coach's syntactic break is no word and no edit of one
+ * (`syntactic-break.ts`), so «я# на правду» still holds the score's «я на правду», and the `from score` tag and
+ * the score's own seat stay on. Case and punctuation are NOT folded. A capital the singer changed is an
  * edit, and the `from score` tag clears on it, as it does today.
  */
 export function sameWords(a: string, b: string): boolean {
@@ -23,5 +26,5 @@ export function sameWords(a: string, b: string): boolean {
 }
 
 function squash(text: string): string {
-	return text.replace(/(?<=\p{L})[-\u2010\u2011](?=\p{L})/gu, '').split(/\s+/).filter(Boolean).join(' ');
+	return text.replace(/(?<=\p{L})[-\u2010\u2011](?=\p{L})/gu, '').replace(/#/g, '').split(/\s+/).filter(Boolean).join(' ');
 }

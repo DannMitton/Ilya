@@ -14,6 +14,7 @@
 import type { SyllableData } from '@ilya/phonology';
 import type { LineData, WordStackData, SyllableOverride } from './types';
 import { applyReconstitution } from './reconstitution';
+import { SYNTACTIC_BREAK } from './syntactic-break';
 
 // ── Character classification ────────────────────────────────────
 
@@ -310,6 +311,11 @@ function applyOpenSyllabificationToLineWords(
 			} catch {
 				// Fallback: use the un-reconstituted re-sliced IPA
 				ipaRecon = ipa;
+			}
+			// Row 139: the rebuilt strings come from the syllables, which carry no #.
+			if (word.syntacticBreak) {
+				ipa += SYNTACTIC_BREAK;
+				ipaRecon += SYNTACTIC_BREAK;
 			}
 			const ipaOwnRecon = ipaRecon;
 

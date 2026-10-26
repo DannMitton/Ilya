@@ -36,6 +36,7 @@ import type { LineData, SyllableOverride, WordStackData } from '$lib/types';
 import { CYRILLIC_VOWEL, vowelOfSyllable } from '$lib/score/vowel-resolver';
 import { applyReconstitution } from '$lib/reconstitution';
 import { reslicedSyllables } from '$lib/syllable-utils';
+import { graftBreak } from '$lib/syntactic-break';
 
 /**
  * The engine's stress mark, declared at `engine.ts:230` as `'stress'`.
@@ -164,9 +165,7 @@ function cyrOfSyllable(w: WordStackData, k: number): string {
 function syllableIpa(w: WordStackData, k: number): string {
 	const syl = w.syllables[k];
 	if (!syl) return '';
-	return syl.isStressed && !syl.ipa.includes(STRESS_MARK)
-		? STRESS_MARK + syl.ipa
-		: syl.ipa;
+	return graftBreak(w, k, syl.isStressed && !syl.ipa.includes(STRESS_MARK) ? STRESS_MARK + syl.ipa : syl.ipa);
 }
 
 /**

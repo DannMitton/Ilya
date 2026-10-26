@@ -14,12 +14,12 @@
     "apps/web/src/lib/voice/CalibrationWizard.svelte": 2124,
     "apps/web/src/lib/components/Drawer/Drawer.svelte": 1990,
     "apps/web/src/lib/markup/MarkupPane.svelte": 1364,
-    "apps/web/src/lib/score/pairings.ts": 1423,
+    "apps/web/src/lib/score/pairings.ts": 1422,
     "apps/web/src/lib/insights/InsightsPane.svelte": 1351,
     "apps/web/src/lib/score/ScoreUploader.svelte": 1358,
     "apps/web/src/lib/score/CorrectionSurface.svelte": 1227,
     "packages/score-parser/src/mnx-parser.ts": 1170,
     "packages/score-parser/src/musicxml-parser.ts": 1167,
-    "apps/web/src/lib/pipeline.ts": 1022
+    "apps/web/src/lib/pipeline.ts": 925
   }
 }
