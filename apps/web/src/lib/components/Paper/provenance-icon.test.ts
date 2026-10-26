@@ -58,8 +58,8 @@ describe('row 148: the provenance frame', () => {
 		for (const w of inferred) expect(hasProvenanceIcon(w.stressSource)).toBe(false);
 	});
 
-	it('the line carries the sources the desk read: «ж» is `inferred` and enclitic, the rest are the dictionary’s', () => {
+	it('the line carries the sources the desk read: «ж» is `inferred` and enclitic, «Ну-те» and «все» are the supplement’s, «разом» is the dictionary’s', () => {
 		const seen = words('Ну-те ж все разом').map((w) => `${w.cyrillic}:${w.stressSource}:${w.isEnclitic ? 'enclitic' : w.isProclitic ? 'proclitic' : '-'}`);
-		expect(seen).toEqual(['Ну-те:dictionary:-', 'ж:inferred:enclitic', 'все:supplement:-', 'разом:dictionary:-']);
+		expect(seen).toEqual(['Ну-те:supplement:-', 'ж:inferred:enclitic', 'все:supplement:-', 'разом:dictionary:-']);
 	});
 });
