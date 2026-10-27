@@ -2183,7 +2183,7 @@ export const GraysonEngine = {
       const viaV = rightInitial !== null && this.isVPhoneme(rightInitial);
       if (viaV && !this.isVoicedObstruent(leftFinal)) continue;
       const effInitial = viaV ? initialPastV(words, i, (ipa) => this.getInitialConsonant(ipa)) : rightInitial;
-      if (!effInitial || this.isSonorantConsonant(effInitial)) {
+      if (!rightInitial || !effInitial || this.isSonorantConsonant(effInitial)) {
         if (this.isVoicedObstruent(leftFinal) && keepsVoicingAtBoundary4(leftWord, this.proclitics)) {
           leftWord.skipFinalDevoicing = true;
         }

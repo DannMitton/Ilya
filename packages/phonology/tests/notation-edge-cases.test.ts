@@ -472,9 +472,9 @@ describe('Task 7c: Notation and Edge Cases', () => {
       expect(words[0].skipFinalDevoicing).toBe(true);
     });
 
-    it('preserves voicing before vowel-initial word at soft boundary (R7.14 Rule 2)', () => {
-      // глаз | открыт → ɡɫɑz (voiced) not ɡɫɑs (devoiced)
-      // Vowels allow preceding voiced consonants to retain voicing
+    it('devoices an ordinary word before a vowel-initial word at soft boundary (Grayson p. 251, rule 2; N.198)', () => {
+      // глаз | открыт → ɡɫɑs: an ordinary word is boundary #3, so a vowel does not
+      // let its final voiced consonant keep voicing (p. 252: сад наш is [sat naʃ])
       const words = [
         {
           cyrillic: 'глаз', ipaSurface: '', ipaUnderlying: 'ˈɡɫɑz',
@@ -486,13 +486,13 @@ describe('Task 7c: Notation and Edge Cases', () => {
         },
       ];
       GraysonEngine.applyCrossWordAssimilation(words);
-      expect(words[0].ipaSurface).toBe('ˈɡɫɑz');
-      expect(words[0].skipFinalDevoicing).toBe(true);
+      expect(words[0].ipaSurface).toBe('ˈɡɫɑs');
+      expect(words[0].skipFinalDevoicing).toBe(false);
     });
 
-    it('preserves voicing before sonorant-initial word at soft boundary (R7.14 Rule 2)', () => {
-      // друг | мой → druɡ (voiced) not druk (devoiced)
-      // Sonorants allow preceding voiced consonants to retain voicing
+    it('devoices an ordinary word before a sonorant-initial word at soft boundary (Grayson p. 251, rule 2; N.198)', () => {
+      // друг | мой → druk: sonorants do not influence voicing across any boundary,
+      // and an ordinary word does not sit at boundary #4
       const words = [
         {
           cyrillic: 'друг', ipaSurface: '', ipaUnderlying: 'ˈdruɡ',
@@ -504,8 +504,8 @@ describe('Task 7c: Notation and Edge Cases', () => {
         },
       ];
       GraysonEngine.applyCrossWordAssimilation(words);
-      expect(words[0].ipaSurface).toBe('ˈdruɡ');
-      expect(words[0].skipFinalDevoicing).toBe(true);
+      expect(words[0].ipaSurface).toBe('ˈdruk');
+      expect(words[0].skipFinalDevoicing).toBe(false);
     });
 
     it('still devoices before vowel-initial word at hard boundary (punctuation guard)', () => {

@@ -36,7 +36,7 @@ describe('c. a mark the parser carries ends a phrase', () => {
 	const score = (second: NoteSpec) => buildScore([{ text: 'сад', step: 'C', ...second }, { text: 'и', step: 'D' }, { text: 'дом', step: 'E' }]);
 	const seat = (parsed: Awaited<ReturnType<typeof buildScore>>) => seatScoreWords(parsed, {}, processText(text)).map;
 
-	it('a. a rest ends a phrase inside a line: «сад» is hard, from the score, [sɑt]; without the score it is soft, [sɑd]', async () => {
+	it('a. a rest ends a phrase inside a line: «сад» is hard, from the score; without the score it is soft (N.198: [sɑt] either way before «и», so the boundary fields carry the difference)', async () => {
 		const parsed = await buildScore([{ text: 'сад', step: 'C' }, { rest: true }, { text: 'и', step: 'D' }, { text: 'дом', step: 'E' }]);
 		const ends = musicPhraseEnds(parsed, seat(parsed), wordGrid(text));
 		expect(ends.get('0-0')).toBe(true);
@@ -44,7 +44,7 @@ describe('c. a mark the parser carries ends a phrase', () => {
 		const [sad] = words(text, ends);
 		expect([sad.rightBoundary, sad.boundarySource, sad.ipaDisplay]).toEqual(['hard', 'score', 'ˈsɑt']);
 		const [bare] = words(text);
-		expect([bare.rightBoundary, bare.boundarySource, bare.ipaDisplay]).toEqual(['soft', 'auto', 'ˈsɑd']);
+		expect([bare.rightBoundary, bare.boundarySource, bare.ipaDisplay]).toEqual(['soft', 'auto', 'ˈsɑt']);
 	});
 
 	it('N.188: a fermata kept on a rest changes no phrase end, because a rest already ends one', async () => {
@@ -64,7 +64,7 @@ describe('c. a mark the parser carries ends a phrase', () => {
 		const ends = musicPhraseEnds(parsed, map, wordGrid(two));
 		expect(ends.get('0-0')).toBe(false);
 		const [sad] = words(two, ends);
-		expect([sad.rightBoundary, sad.boundarySource, sad.ipaDisplay]).toEqual(['soft', 'score', 'ˈsɑd']);
+		expect([sad.rightBoundary, sad.boundarySource, sad.ipaDisplay]).toEqual(['soft', 'score', 'ˈsɑt']);
 		const [bare] = words(two);
 		expect([bare.rightBoundary, bare.boundarySource, bare.ipaDisplay]).toEqual(['hard', 'auto', 'ˈsɑt']);
 	});
