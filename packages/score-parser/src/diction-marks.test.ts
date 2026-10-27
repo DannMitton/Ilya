@@ -80,7 +80,7 @@ describe('folding # out of the syllable slot', () => {
 		// Dann's ruling: the boundary must survive where it separates the two
 		// phonemes, so a later pass can still stop assimilation across it.
 		const { score } = foldDictionMarks(sunless4Shape());
-		expect(ipaOf(score, 'n69')).toBe(`jɑ${PHONATION_BREAK_MARK}`);
+		expect(ipaOf(score, 'n69')).toBe(`jɑ\u00A0${PHONATION_BREAK_MARK}`);
 		// And no slot anywhere still holds the bare mark.
 		const bare = score.vocalLine.filter((e) =>
 			e.syllable?.versesInfo?.some((v) => v.text === PHONATION_BREAK_MARK),
@@ -137,8 +137,8 @@ describe('folding # out of the syllable slot', () => {
 		// onto whatever precedes it on the page. Here the second mark directly
 		// follows syllable [b] in the sequence, so both breaks land early and the
 		// tail loses two entries rather than one.
-		expect(ipaOf(score, 'a')).toBe('a#');
-		expect(ipaOf(score, 'b')).toBe('b#');
+		expect(ipaOf(score, 'a')).toBe('a\u00A0#');
+		expect(ipaOf(score, 'b')).toBe('b\u00A0#');
 		expect(ipaOf(score, 'c')).toBe('c');
 		expect(ipaOf(score, 'd')).toBe('d');
 		expect(ipaOf(score, 'e')).toBeUndefined();
@@ -160,7 +160,7 @@ describe('folding # out of the syllable slot', () => {
 		]);
 		const { score } = foldDictionMarks(s);
 		expect(score.vocalLine.find((e) => e.id === 'mel')?.syllable).toBeUndefined();
-		expect(ipaOf(score, 'a')).toBe('tɨ#');
+		expect(ipaOf(score, 'a')).toBe('tɨ\u00A0#');
 		expect(ipaOf(score, 'b')).toBe('i');
 		expect(ipaOf(score, 'c')).toBe('dɑ');
 	});
@@ -174,7 +174,7 @@ describe('folding # out of the syllable slot', () => {
 		};
 		const s = scoreOf([one('n69', 'я'), one('n70', '#'), one('n71', 'на'), one('n72', 'прав', 'start'), one('n73', 'ду', 'end')]);
 		const fold = foldDictionMarks(s);
-		expect(fold.score.vocalLine.map((e) => e.syllable?.text)).toEqual(['я#', 'на', 'прав', 'ду', undefined]);
+		expect(fold.score.vocalLine.map((e) => e.syllable?.text)).toEqual(['я\u00A0#', 'на', 'прав', 'ду', undefined]);
 		expect(fold.score.vocalLine[4].syllable).toBeUndefined();
 		expect([...vowelResolverAbstentions(fold, 1)]).toEqual(['n73']);
 		expect(fold.score.dictionMarks?.vacatedTailEventIds).toEqual([{ eventId: 'n73', verseNumber: 1 }]);

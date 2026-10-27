@@ -166,3 +166,33 @@ describe('ratified Guide lines (row 123)', () => {
 		);
 	});
 });
+
+/* N.194 (QUEUE row 152), the Loupe's break button. The expected strings are copied from the brief
+   (`brief-code-n194-loupe-break-button_r5_2026-10-25.md`), not read back out of `i18n.ts`: the pill's labels,
+   ruled by Dann 2026-10-21 13:42; the undo sentences, ratified 2026-10-21 20:30; the reason under an off pill,
+   ruled 2026-10-26 14:56 and ratified 14:57. */
+describe('ratified break-button lines (N.194)', () => {
+	it('the pill, English and French', () => {
+		expect(t('loupe.place.breakAfter', 'en')).toBe('Break after this word');
+		expect(t('loupe.place.breakAfter', 'fr')).toBe('Frontière après ce mot');
+		expect(t('loupe.place.breakRemove', 'en')).toBe('Remove break');
+		expect(t('loupe.place.breakRemove', 'fr')).toBe('Retirer la frontière');
+	});
+	it('the undo sentences, English and French', () => {
+		expect(t('loupe.undo.breakPlaced', 'en')).toBe('break placed');
+		expect(t('loupe.undo.breakPlaced', 'fr')).toBe('frontière placée');
+		expect(t('loupe.undo.breakRemoved', 'en')).toBe('break removed');
+		expect(t('loupe.undo.breakRemoved', 'fr')).toBe('frontière retirée');
+	});
+	it('the reason under an off pill, English and French', () => {
+		expect(t('loupe.place.breakImplied', 'en')).toBe('A break is already implied here.');
+		expect(t('loupe.place.breakImplied', 'fr')).toBe('Une frontière est déjà implicite ici.');
+	});
+	it('all five are present in both languages, and the French differs from the English', () => {
+		for (const key of ['loupe.place.breakAfter', 'loupe.place.breakRemove', 'loupe.place.breakImplied', 'loupe.undo.breakPlaced', 'loupe.undo.breakRemoved']) {
+			expect([hasString(key, 'en'), hasString(key, 'fr')], key).toEqual([true, true]);
+			expect(t(key, 'fr'), key).not.toContain('[MISSING');
+			expect(t(key, 'fr'), key).not.toBe(t(key, 'en'));
+		}
+	});
+});

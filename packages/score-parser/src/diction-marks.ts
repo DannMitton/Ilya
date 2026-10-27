@@ -192,9 +192,10 @@ export function foldDictionMarks(
 					verseNumber,
 				});
 				if (repaired.length > 0) {
-					// Concatenate, per Dann's ruling: the boundary survives in place.
+					// Concatenate, per Dann's ruling: the boundary survives in place. A no-break space sits between the word
+					// and the mark (Dann 2026-10-25 23:52 (b)), so the two stay together wherever the text is split.
 					const last = repaired[repaired.length - 1];
-					repaired[repaired.length - 1] = { text: `${last.text}${mark}`, type: last.type };
+					repaired[repaired.length - 1] = { text: `${last.text}\u00A0${mark}`, type: last.type };
 				}
 				continue;
 			}

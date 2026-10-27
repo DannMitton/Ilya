@@ -39,7 +39,7 @@ import { buildDisplayLog } from '@ilya/blurb';
 
 import { applyReconstitution } from './reconstitution';
 import { hasVowel, mergeCliticDisplay } from './clitic-merge';
-import { peelSyntacticBreaks } from './syntactic-break';
+import { peelSyntacticBreaks, tokenSpans, type TokenSpan } from './syntactic-break';
 import { markLatinWords } from './latin';
 import { adoptOldEnding, lookupOnlyTwinFor, stripForLookup } from './old-spelling';
 
@@ -163,27 +163,27 @@ interface TranscribedWord {
  * pre-1918 modernisation. A second tokenizer would agree on the day it was
  * written and drift the first time any of those five moved.
  *
- * ONE CALLER PAIR, and no behaviour change: `processText` calls this exactly
- * where the block used to sit, and `wordGrid` calls it to read `cleanWord`.
+ * ONE CALLER PAIR, and no behaviour change: `processText` calls this where the block used to sit,
+ * `wordGrid` calls it to read `cleanWord`, and `text/break-text.ts` reads `spans` (N.194 step 3).
  */
-function splitIntoPreLines(
+export function splitIntoPreLines(
   allRawLines: readonly string[],
-): { rawIndex: number; words: PreTranscribeWord[] }[] {
+): { rawIndex: number; words: PreTranscribeWord[]; spans: TokenSpan[] }[] {
   return allRawLines
     .map((line, rawIndex) => ({ line, rawIndex }))
     .filter((entry) => entry.line.trim())
     .map((entry) => {
       // Row 139: a typed # is peeled off the tokens here, onto the word before it, so no later step counts it as a word.
-      const { words, broken } = peelSyntacticBreaks(entry.line.trim().split(/\s+/), (word) => word.replace(PUNCTUATION_REGEX, '').length > 0);
+      const { words, broken, source } = peelSyntacticBreaks(tokenSpans(entry.line), (word) => word.replace(PUNCTUATION_REGEX, '').length > 0);
 
       // Expand hyphenated particles into separate tokens before lookup (unless the whole token is a word).
       // The # ends the last piece of a word that was split in two.
       const expanded = words.flatMap((word, i) =>
-        expandHyphenatedParticles([word], (t) => resolvesToWord(t, knownForm, toClean)).map((piece, k, all) => ({ piece, brk: broken[i] && k === all.length - 1 })),
+        expandHyphenatedParticles([word], (t) => resolvesToWord(t, knownForm, toClean)).map((piece, k, all) => ({ piece, brk: broken[i] && k === all.length - 1, span: source[i] })),
       );
 
       return {
-        rawIndex: entry.rawIndex,
+        rawIndex: entry.rawIndex, spans: expanded.map(({ span }) => span), // N.194 step 3: each word's raw token, for the Loupe's break button
         words: expanded.map(({ piece, brk }) => ({ ...buildPreTranscribeWord(piece), ...(brk ? { syntacticBreak: true } : {}) })),
       };
     })
@@ -736,8 +736,8 @@ function buildResolvedWord(rawWord: string, suppressYoRestore: boolean = false):
     yoSource,
     hasYo: yoSyllable !== -1,
     // Placeholder until autoDetectBoundaries() runs immediately after, in Step 2
-    // below; every word passes through one of its branches (the 'user' guard is
-    // dead code today, nothing sets boundarySource to 'user' anywhere yet), so
+    // below; every word passes through one of its branches (a typed # sets
+    // boundarySource to 'user' there, nothing sets it before), so
     // these placeholders are never observed. Matches the function's own 'soft'/
     // 'auto' default branch.
     rightBoundary: 'soft',

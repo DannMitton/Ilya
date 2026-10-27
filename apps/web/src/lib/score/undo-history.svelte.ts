@@ -68,6 +68,12 @@ export interface UndoState {
 	   poem, and the seated text has to come back with them or the next
 	   transcription would diff from the wrong text and freeze them. */
 	seatedText: string;
+	/* N.194 (the Loupe's break button). The Lyrics text, ONLY on an entry that
+	   asked for it. Every other verb leaves the text alone, and an undo of one
+	   must too: a singer who typed a word after a placement and then undoes the
+	   placement keeps the word. An entry that carries the text restores it, and
+	   the page writes it back through the path that transcribes. */
+	inputText?: string;
 }
 
 export interface UndoEntry extends UndoState {
@@ -89,34 +95,35 @@ export class UndoHistory {
 	   can never offer to restore a state that branched away. */
 	redoStack = $state<UndoEntry[]>([]);
 
-	readonly #read: () => UndoState;
+	readonly #read: (withText?: boolean) => UndoState;
 	readonly #write: (state: UndoState) => void;
 
 	/**
 	 * `read` returns the state as it stands right now, which is what both
-	 * directions save; `write` puts a saved state back.
+	 * directions save, with the Lyrics text when it is asked for; `write` puts a
+	 * saved state back.
 	 */
-	constructor(read: () => UndoState, write: (state: UndoState) => void) {
+	constructor(read: (withText?: boolean) => UndoState, write: (state: UndoState) => void) {
 		this.#read = read;
 		this.#write = write;
 	}
 
-	#snapshot(note: UndoNote): UndoEntry {
-		return { note, ...this.#read() };
+	#snapshot(note: UndoNote, withText = false): UndoEntry {
+		return { note, ...this.#read(withText) };
 	}
 
 	/* The three verbs are arrow fields so the page can hand them to a
 	   component as they are, without a wrapper to keep `this`. */
 
-	push = (note: UndoNote): void => {
-		this.undoStack = [...this.undoStack, this.#snapshot(note)];
+	push = (note: UndoNote, options?: { inputText?: boolean }): void => {
+		this.undoStack = [...this.undoStack, this.#snapshot(note, options?.inputText === true)];
 		this.redoStack = [];
 	};
 
 	undo = (): void => {
 		const top = this.undoStack[this.undoStack.length - 1];
 		if (!top) return;
-		this.redoStack = [...this.redoStack, this.#snapshot(top.note)];
+		this.redoStack = [...this.redoStack, this.#snapshot(top.note, top.inputText !== undefined)];
 		this.#write(top);
 		this.undoStack = this.undoStack.slice(0, -1);
 	};
@@ -124,7 +131,7 @@ export class UndoHistory {
 	redo = (): void => {
 		const top = this.redoStack[this.redoStack.length - 1];
 		if (!top) return;
-		this.undoStack = [...this.undoStack, this.#snapshot(top.note)];
+		this.undoStack = [...this.undoStack, this.#snapshot(top.note, top.inputText !== undefined)];
 		this.#write(top);
 		this.redoStack = this.redoStack.slice(0, -1);
 	};

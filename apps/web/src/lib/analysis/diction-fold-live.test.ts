@@ -73,7 +73,7 @@ describe('N.171 the fold at arrival, on the engraved Sunless no. 1', () => {
 			// (`diction-marks.test.ts`, "closes by exactly one note per mark"), and
 			// this file's verse 2 fuses «в бью» into one syllable at bar 7, so the
 			// second anchor is not the «я,» note. Only verse 2 is affected by that.
-			expect(verseText(score, b.afterEventId!, 2)).toBe('jɑ#');
+			expect(verseText(score, b.afterEventId!, 2)).toBe('jɑ\u00A0#');
 		}
 		const marks = score.vocalLine.filter((e) => e.syllable?.versesInfo?.some((v) => v.text === '#'));
 		expect(marks).toHaveLength(0);
@@ -108,9 +108,9 @@ describe('N.171 the fold at arrival, on the Sunless no. 4 shape in the sung vers
 	it('puts на, прав, and ду each on its own note, and the mark after я', async () => {
 		const score = await ingest('sunless-04-shape.musicxml', sunless04Shape);
 		const texts = score.vocalLine.map((e) => e.syllable?.text);
-		expect(texts).toEqual(['я#', 'на', 'прав', 'ду', undefined]);
+		expect(texts).toEqual(['я\u00A0#', 'на', 'прав', 'ду', undefined]);
 		const cells = collectScoreWords(score, 1).flatMap((w) => w.cells);
-		expect(cells.map((c) => c.text)).toEqual(['я#', 'на', 'прав', 'ду']);
+		expect(cells.map((c) => c.text)).toEqual(['я\u00A0#', 'на', 'прав', 'ду']);
 		expect(cells.map((c) => c.eventId)).toEqual(score.vocalLine.slice(0, 4).map((e) => e.id));
 	});
 

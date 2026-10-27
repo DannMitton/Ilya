@@ -34,6 +34,10 @@
  * the truth of it.
  */
 import { modernisePreReform, oldEndingCandidates } from '@ilya/dictionary';
+import { WORD_TOKEN } from './break-glue';
+
+/* A word, or a line break. The word pattern is `break-glue.ts`'s, so Ilya's own «я\u00A0#» stays one token (N.194, Dann 2026-10-25 23:52). */
+const WORD_OR_NEWLINE = new RegExp(`${WORD_TOKEN.source}|\n`, 'g');
 
 /** One word of a text, where it stands in that text, and how it compares. */
 export interface Token {
@@ -100,7 +104,7 @@ export function tokenize(text: string): Token[] {
 	const out: Token[] = [];
 	let line = 0;
 	let at = 0;
-	for (const m of text.matchAll(/\S+|\n/g)) {
+	for (const m of text.matchAll(WORD_OR_NEWLINE)) {
 		if (m[0] === '\n') {
 			line += 1;
 			continue;
