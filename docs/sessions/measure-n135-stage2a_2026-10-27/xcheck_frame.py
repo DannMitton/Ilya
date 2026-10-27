@@ -21,9 +21,10 @@ def make(i):
             x += step
     g += nrng.normal(0, rng.choice([0, 0, 3, 8]), g.shape)
     return np.clip(np.round(g), 0, 255).astype(np.uint8)
-def oracle(g, ink_height=32, pad=16):
+def oracle(g, ink_height=32, pad_ratio=0.5):
+    pad = int(round(pad_ratio * ink_height))  # a fraction of the ink height, applied after the scale (Dann 2026-10-27 14:27); 16 at 32
     h, w = g.shape; paper = int(np.argmax(np.bincount(g.ravel(), minlength=256)))
-    mask = np.pad((g < 128).astype(np.uint8) * 255, ((120, 120), (0, 0)))  # 0 and 255, so the bilinear turn keeps its gradation (a 0/1 uint8 mask is rounded back to 0/1 by warpAffine)
+    mask = np.pad((g < 128).astype(np.uint8) * 255, ((g.shape[0], g.shape[0]), (0, 0)))  # 0 and 255, so the bilinear turn keeps its gradation (a 0/1 uint8 mask is rounded back to 0/1 by warpAffine)
     mh = mask.shape[0]; best, bestv = 0.0, None
     order = [0.0]
     for k in range(1, 31): order += [k / 10, -k / 10]

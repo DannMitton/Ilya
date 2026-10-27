@@ -75,7 +75,7 @@ Each is a flat peak of the projection variance. OpenCV turns a `uint8` mask and 
 Mutants (`spec-frame.json`, `mutants-frame.txt`), 21, 19 killed. The five you named are killed: drop the deskew (3 tests), flip the angle's sign (2), closing kernel 1 by 1 (2), scale to 48 (5), pad with white on grey paper (4). Also killed: default pad, sweep range, sweep ties to the larger angle, black border, ink threshold, extent from 5 percent, extent from the first ink row, paper tone on a tie, dilate without erode, scaling a crop with no ink, three `unframe` mutants, and resizing the width only. Survivors:
 
 - **Sweep tries the negative angle first on a tie.** It only matters where the variances at +k and −k are equal to the last bit. I built no input that does that, and a test that depended on it would test the floating-point rounding. The rule (the positive angle on an exact tie) is my choice and is in the header.
-- **`SWEEP_PAD` 120 to 0.** I found no input where the padding changes the angle: 300 rows, 100 of them tilted rows that fill a crop 28 to 40 rows high, gave the same angle with and without it (`/scratchpad` run, not kept in the tree). At the best angle the turned row stays inside the frame, so padding only changes angles that lose anyway. The padding is the desk's, and I kept it.
+- **`SWEEP_PAD` 120 to 0** (superseded by the amendment below: the padding is now the crop's own height; the finding stands for it). I found no input where the padding changes the angle: 300 rows, 100 of them tilted rows that fill a crop 28 to 40 rows high, gave the same angle with and without it (`/scratchpad` run, not kept in the tree). At the best angle the turned row stays inside the frame, so padding only changes angles that lose anyway. The padding is the desk's, and I kept it.
 
 ### Timing
 
@@ -117,3 +117,17 @@ Under `docs/sessions/measure-n135-stage2a_2026-10-27/`: `spec-seat.json` and `mu
 Addenda appended to `report-code-n135-stage2a-step1_r1_2026-10-27.md` and `report-code-n135-stage2a-step2_r1_2026-10-27.md`, pointing here.
 
 Stopping, as asked.
+
+## 7. Amendment of 2026-10-27, after the commit above: proportion, never a pixel count
+
+Dann's ruling at 14:27, relayed by the desk: `frameRow` takes no absolute pixel value except `inkHeight`, which is the reader's own preferred letter size in reader pixels and the one legitimate absolute. Applied in a second commit on `cloud-lane-16`.
+
+- **The measured 16 px is now 0.5 of the ink height.** The option `pad` (px) is now `padRatio`, a fraction of `inkHeight`, default `DEFAULT_PAD_RATIO = 0.5`, applied after the scale. The padding in pixels is `Math.round(padRatio * inkHeight)`: 16 at the default 32, so the measured configuration is unchanged in effect, and 32 at `inkHeight` 64. `FrameTransform.pad` is still in framed pixels, because that is what `unframePoint` subtracts.
+- **The sweep's mask padding is the crop's own height** above and below (was 120 px), through one function, `sweepPad(h)`. `SWEEP_PAD` is gone.
+- **The closing stays 3 by 3**, and the header now says why it is the one step whose size is in page pixels: it runs before the scale, on the page's own pixels, and a broken stroke's gap is a property of the print, measured at the scan's resolution; a later row may make the kernel proportional to the staff space, which the caller knows and this module does not.
+- **Other numbers left alone, and why:** `inkHeight` 32 is the reader's own size. The ink threshold 128 is a grey level, not a length. The sweep's 3.0 degrees and 0.1 steps are angles. The 2-to-98-percent extent is a share.
+- **Tests:** the same 29. Updated for the renaming: the `pad: 0` options became `padRatio: 0`; the default-padding test now reads `DEFAULT_PAD_RATIO * DEFAULT_INK_HEIGHT` and asserts 16; the explicit-pad test now checks a ratio of 0.25 (8 px at 32, 16 px at 64, 16 more pixels of width and height at 32 and 32 more at 64). No test removed.
+- **Oracle:** kept. Its padding is now `round(0.5 * 32)` and its sweep mask padding is the crop's height. Result unchanged: 200 rows, angle differs on 3 (the same rows, 139, 181, 188), size on 0, pixels on the same 3.
+- **Mutants:** 23, of which 21 killed; the same 2 survive (the negative angle first on a tie; the sweep padding, now "120 px, not the crop's own height", still unkillable on the 300 rows tried). Two added and killed: padding an absolute 16 px with the ratio ignored (5 tests), and padding a fraction of the crop's height instead of the ink height (3). The five required mutants remain killed; `default pad 16 -> 8` became `default pad ratio 0.5 -> 0.25`, killed.
+- **Gates:** unchanged from section 3's table: web 3210 passed (3210), check 0 errors and 12 warnings in 5 files, the other six at their baselines, ratchets OK. `underlay-frame.ts` is 392 lines.
+- **Not established, added:** whether `Math.round(padRatio * inkHeight)` is the rounding the desk wants for an `inkHeight` that makes a half pixel. At 32 and 0.5 it is exact.

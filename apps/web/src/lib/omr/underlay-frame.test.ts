@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	DEFAULT_INK_HEIGHT,
-	DEFAULT_PAD,
+	DEFAULT_PAD_RATIO,
 	frameRow,
 	inkExtent,
 	paperTone,
@@ -137,7 +137,7 @@ describe('frameRow, closing', () => {
 		return c;
 	};
 	// An ink extent of 30 at inkHeight 30 keeps the scale at 1, and no padding keeps the pixels in place.
-	const framed = (gap: number) => frameRow(barWithGap(gap), { inkHeight: 30, pad: 0 });
+	const framed = (gap: number) => frameRow(barWithGap(gap), { inkHeight: 30, padRatio: 0 });
 
 	it('closes a gap of 1 px in a stroke', () => {
 		const { crop, transform } = framed(1);
@@ -157,7 +157,7 @@ describe('frameRow, closing', () => {
 	});
 
 	it('leaves the outline of a solid block where it was', () => {
-		const { crop } = frameRow(barWithGap(0), { inkHeight: 30, pad: 0 });
+		const { crop } = frameRow(barWithGap(0), { inkHeight: 30, padRatio: 0 });
 		expect(inkBox(crop)).toEqual({ x0: 20, x1: 119, y0: 15, y1: 44 });
 	});
 });
@@ -195,7 +195,7 @@ describe('frameRow, scale', () => {
 	});
 
 	it('resizes both axes by the factor', () => {
-		const { crop, transform } = frameRow(rowOf(24), { pad: 0 });
+		const { crop, transform } = frameRow(rowOf(24), { padRatio: 0 });
 		expect(crop.width).toBe(Math.round(200 * transform.scale));
 		expect(crop.height).toBe(Math.round(100 * transform.scale));
 	});
@@ -218,12 +218,14 @@ describe('frameRow, padding', () => {
 		return c;
 	};
 
-	it('pads 16 px of the paper tone on every side by default, 176 on grey paper', () => {
+	it('pads half the ink height, 16 px at 32, of the paper tone on every side by default, 176 on grey paper', () => {
 		const { crop, transform } = frameRow(withPaper(176));
-		expect(transform.pad).toBe(DEFAULT_PAD);
+		const pad = DEFAULT_PAD_RATIO * DEFAULT_INK_HEIGHT;
+		expect(pad).toBe(16);
+		expect(transform.pad).toBe(pad);
 		for (let x = 0; x < crop.width; x++) {
 			expect(crop.data[x]).toBe(176);
-			expect(crop.data[(DEFAULT_PAD - 1) * crop.width + x]).toBe(176);
+			expect(crop.data[(pad - 1) * crop.width + x]).toBe(176);
 			expect(crop.data[(crop.height - 1) * crop.width + x]).toBe(176);
 		}
 		for (let y = 0; y < crop.height; y++) {
@@ -239,10 +241,13 @@ describe('frameRow, padding', () => {
 		expect(crop.data[crop.width * crop.height - 1]).toBe(255);
 	});
 
-	it('pads by the pad it is given, and grows the crop by twice that', () => {
-		const a = frameRow(withPaper(255), { pad: 0 }).crop;
-		const b = frameRow(withPaper(255), { pad: 7 }).crop;
-		expect([b.width, b.height]).toEqual([a.width + 14, a.height + 14]);
+	it('pads by the ratio it is given, of the ink height, and grows the crop by twice that', () => {
+		const a = frameRow(withPaper(255), { padRatio: 0 }).crop;
+		const b = frameRow(withPaper(255), { padRatio: 0.25 }).crop;
+		expect([b.width, b.height]).toEqual([a.width + 16, a.height + 16]);
+		const c = frameRow(withPaper(255), { padRatio: 0.25, inkHeight: 64 }).crop;
+		const d = frameRow(withPaper(255), { padRatio: 0, inkHeight: 64 }).crop;
+		expect([c.width - d.width, c.height - d.height]).toEqual([32, 32]);
 	});
 
 	it('names the paper tone as the most frequent grey, the lowest on a tie', () => {

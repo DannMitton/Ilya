@@ -10,7 +10,8 @@
  * 1. Deskew. The angle is the rotation, positive counter-clockwise on the
  *    screen, that maximises the variance of the horizontal projection of the
  *    ink (ink: grey less than 128), swept from -3.0 to +3.0 degrees in steps of
- *    0.1 on a mask padded 120 px above and below, so the sweep loses no ink.
+ *    0.1 on a mask padded by the crop's own height above and below, so the sweep
+ *    loses no ink.
  *    Ties go to the smaller absolute angle (and to the positive one of two equal
  *    angles). The grey crop is rotated by that angle about its centre, bilinear,
  *    the border filled with the paper tone, the size kept. An angle of 0.0
@@ -24,7 +25,8 @@
  *    reaches 98 percent, both inclusive. Both axes are resized by the factor,
  *    BICUBIC (the Keys kernel with a = -0.75, edges replicated, the source
  *    sampled at (x + 0.5) / factor - 0.5). A crop with no ink is left unscaled.
- * 4. Pad every side by `pad` px of the paper tone: the most frequent grey of the
+ * 4. Pad every side, after the scale, by `padRatio` of `inkHeight` (0.5 by
+ *    default: 16 px at 32, the measured configuration) of the paper tone: the most frequent grey of the
  *    crop (the first, on a tie).
  *
  * "Its centre" is the point (w / 2, h / 2) in pixel indices, which is what
@@ -33,6 +35,19 @@
  * degrees, which moves 3.7 percent of the pixels of a text row by more than one
  * grey level because glyph edges are steep. The OpenCV idiom is used because
  * the measured configuration was most probably made with it: NOT ESTABLISHED.
+ *
+ * PROPORTION, NEVER A PIXEL COUNT (Dann, 2026-10-27 14:27). `frameRow` takes no
+ * absolute pixel value except `inkHeight`, which is the reader's own preferred
+ * letter size in reader pixels and so the one legitimate absolute. The padding is
+ * a fraction of it, applied after the scale; the sweep's mask padding is the
+ * crop's own height. The measured 16 px of padding is now 0.5 of the ink height.
+ *
+ * The ONE step whose size is in page pixels is the closing (step 2), a 3 by 3
+ * kernel. It is applied before the scale, on the page's own pixels, and what it
+ * closes is a property of the print: a broken stroke's gap is measured at the
+ * scan's resolution, not at the letter size. A later row may make it
+ * proportional to the staff space, which the caller knows and this module does
+ * not.
  *
  * The paper tone is taken once, from the crop as given, and used for both the
  * rotation's border and the padding.
@@ -52,8 +67,11 @@ import type { GreyBandLike } from './underlay-rows';
 export interface FrameOptions {
 	/** The ink's vertical extent in the framed crop, in px. */
 	inkHeight?: number;
-	/** The padding on every side, in px. */
-	pad?: number;
+	/**
+	 * The padding on every side, as a fraction of `inkHeight`, applied after the scale.
+	 * The padding in px is `Math.round(padRatio * inkHeight)`.
+	 */
+	padRatio?: number;
 }
 
 /** How a framed crop relates to the crop it came from. */
@@ -89,15 +107,13 @@ export interface PixelBox {
 }
 
 export const DEFAULT_INK_HEIGHT = 32;
-export const DEFAULT_PAD = 16;
+export const DEFAULT_PAD_RATIO = 0.5;
 /** Ink is darker than this grey. */
 export const INK_BELOW = 128;
 /** The sweep runs from minus to plus this many degrees. */
 export const SWEEP_DEGREES = 3.0;
 /** The sweep's step, in tenths of a degree (an integer, so the angles do not drift). */
 const SWEEP_TENTHS = 30;
-/** The mask is padded this many px above and below for the sweep. */
-export const SWEEP_PAD = 120;
 /** The ink extent runs from this share of the ink to its complement, as 1 over this many. */
 const TAIL_DENOMINATOR = 50;
 const CUBIC_A = -0.75;
@@ -111,10 +127,16 @@ export function paperTone(data: ArrayLike<number>): number {
 	return best;
 }
 
-/** The ink mask padded `SWEEP_PAD` px above and below: 1 where the grey is under `INK_BELOW`. */
+/** The rows added above and below the mask for the sweep: the crop's own height, so no turn within the sweep loses ink. */
+function sweepPad(h: number): number {
+	return h;
+}
+
+/** The ink mask padded by `sweepPad` above and below: 1 where the grey is under `INK_BELOW`. */
 function paddedMask(data: Uint8Array, w: number, h: number): Uint8Array {
-	const mask = new Uint8Array(w * (h + 2 * SWEEP_PAD));
-	for (let i = 0; i < w * h; i++) if (data[i] < INK_BELOW) mask[SWEEP_PAD * w + i] = 1;
+	const pad = sweepPad(h);
+	const mask = new Uint8Array(w * (h + 2 * pad));
+	for (let i = 0; i < w * h; i++) if (data[i] < INK_BELOW) mask[pad * w + i] = 1;
 	return mask;
 }
 
@@ -162,7 +184,7 @@ function projectionVariance(mask: Uint8Array, w: number, h: number, degrees: num
 /** The deskew angle in degrees, positive counter-clockwise: see the header. */
 export function skewAngle(data: Uint8Array, w: number, h: number): number {
 	const mask = paddedMask(data, w, h);
-	const hp = h + 2 * SWEEP_PAD;
+	const hp = h + 2 * sweepPad(h);
 	let best = 0;
 	let bestVariance = projectionVariance(mask, w, hp, 0);
 	for (let k = 1; k <= SWEEP_TENTHS; k++) {
@@ -311,12 +333,12 @@ function padAll(data: Uint8Array, w: number, h: number, pad: number, fill: numbe
 
 /**
  * The crop framed for a reader: deskewed, closed, scaled to `inkHeight`, and
- * padded by `pad`. A crop with no ink passes through the first three steps
+ * padded by `padRatio` of `inkHeight`. A crop with no ink passes through the first three steps
  * unchanged and is padded.
  */
 export function frameRow(crop: GreyBandLike, options: FrameOptions = {}): FramedRow {
 	const inkHeight = options.inkHeight ?? DEFAULT_INK_HEIGHT;
-	const pad = options.pad ?? DEFAULT_PAD;
+	const pad = Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * inkHeight);
 	const { width, height } = crop;
 	const grey = Uint8Array.from(crop.data as ArrayLike<number>);
 	const paper = paperTone(grey);

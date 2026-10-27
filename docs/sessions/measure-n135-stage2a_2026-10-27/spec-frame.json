@@ -29,9 +29,9 @@
     "const framed = padAll(scaled.data, scaled.width, scaled.height, pad, 255);"
    ],
    [
-    "default pad 16 -> 8",
-    "export const DEFAULT_PAD = 16;",
-    "export const DEFAULT_PAD = 8;"
+    "default pad ratio 0.5 -> 0.25",
+    "export const DEFAULT_PAD_RATIO = 0.5;",
+    "export const DEFAULT_PAD_RATIO = 0.25;"
    ],
    [
     "sweep to 1 degree",
@@ -54,9 +54,9 @@
     "const level = rotateGrey(grey, width, height, angle, 0);"
    ],
    [
-    "mask not padded for the sweep (SWEEP_PAD 120 -> 0)",
-    "export const SWEEP_PAD = 120;",
-    "export const SWEEP_PAD = 0;"
+    "sweep padding 120 px, not the crop's own height",
+    "\treturn h;\n}",
+    "\treturn 120;\n}"
    ],
    [
     "ink threshold 128 -> 200",
@@ -107,6 +107,16 @@
     "resize: both axes by the factor -> width only",
     "const nh = Math.max(1, Math.round(h * factor));",
     "const nh = h;"
+   ],
+   [
+    "padding an absolute 16 px, the ratio ignored",
+    "Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * inkHeight)",
+    "16"
+   ],
+   [
+    "padding a fraction of the crop's height, not of the ink height",
+    "Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * inkHeight)",
+    "Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * crop.height)"
    ]
   ]
  }
