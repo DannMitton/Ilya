@@ -12,6 +12,7 @@
  */
 import { lexicalSoftIndices } from './lexical-palatalization';
 import { reflexiveParticleAt } from './reflexive';
+import { initialPastV, keepsVoicingAtBoundary4, restoreBogFinish } from './voicing-rule2';
 
 // ─────────────────────────────────────────────────────────────────────
 // TYPES
@@ -112,7 +113,7 @@ export interface BoundaryWord {
   rightBoundary: 'hard' | 'soft' | 'clitic';
   boundarySource: 'user' | 'auto' | 'punctuation' | 'score';
   skipFinalDevoicing: boolean;
-  cleanWord?: string;
+  cleanWord?: string; isProclitic?: boolean;
   [key: string]: any;
 }
 
@@ -262,6 +263,7 @@ export const GraysonEngine = {
     ['от', { type: 'proclitic', canonicalIpa: 'ɑt', gloss: { en: 'from', fr: 'de' } }],
     ['ото', { type: 'proclitic', canonicalIpa: 'ɑtɑ', gloss: { en: 'from', fr: 'de' } }],
     ['без', { type: 'proclitic', canonicalIpa: 'bʲɪz', gloss: { en: 'without', fr: 'sans' } }],
+    ['меж', { type: 'proclitic', canonicalIpa: 'mʲɪʒ', gloss: { en: 'between/amongst', fr: 'entre/parmi' } }],
     ['не', { type: 'proclitic', canonicalIpa: 'ɲɪ', gloss: { en: 'not', fr: 'ne… pas' } }],
     ['ни', { type: 'proclitic', canonicalIpa: 'ɲi', gloss: { en: 'nor/not', fr: 'ni' } }],
     ['над', { type: 'proclitic', canonicalIpa: 'nɑt', gloss: { en: 'above', fr: 'au-dessus de' } }],
@@ -2176,12 +2178,13 @@ export const GraysonEngine = {
       // Skip if left word has no final consonant
       if (!leftFinal) continue;
 
-      // Voicing preservation (Grayson pp. 250-252, fn. 300-303; R7.14 Rule #2):
-      // Vowels and sonorants do not influence voicing across any boundary,
-      // but DO allow final voiced consonants to retain voicing.
-      // /v/ follows sonorant behaviour when followed by vowel or sonorant (p. 250).
-      if (!rightInitial || this.isSonorantConsonant(rightInitial) || this.isVPhoneme(rightInitial)) {
-        if (this.isVoicedObstruent(leftFinal)) {
+      // Rule 2 (Grayson p. 251): before a vowel or sonorant only boundary #4 (preposition, б, ж) keeps
+      // a final's voicing. в is ignored where it would influence: "look to the next letter in line".
+      const viaV = rightInitial !== null && this.isVPhoneme(rightInitial);
+      if (viaV && !this.isVoicedObstruent(leftFinal)) continue;
+      const effInitial = viaV ? initialPastV(words, i, (ipa) => this.getInitialConsonant(ipa)) : rightInitial;
+      if (!effInitial || this.isSonorantConsonant(effInitial)) {
+        if (this.isVoicedObstruent(leftFinal) && keepsVoicingAtBoundary4(leftWord, this.proclitics)) {
           leftWord.skipFinalDevoicing = true;
         }
         continue;
@@ -2217,20 +2220,20 @@ export const GraysonEngine = {
       }
 
       // Determine assimilation direction
-      if (this.isVoicedObstruent(rightInitial) && this.isVoicelessConsonant(leftFinal)) {
+      if (this.isVoicedObstruent(effInitial) && this.isVoicelessConsonant(leftFinal)) {
         // Voice the left final: слух был → sɫuɣ bɨɫ
         leftWord.ipaSurface = this.applyVoicingToFinal(leftWord.ipaSurface, leftFinal);
         leftWord.skipFinalDevoicing = true;
-      } else if (this.isVoicelessConsonant(rightInitial) && this.isVoicedObstruent(leftFinal)) {
+      } else if (this.isVoicelessConsonant(effInitial) && this.isVoicedObstruent(leftFinal)) {
         // Devoice the left final: друг там → druk tam
         leftWord.ipaSurface = this.applyDevoicingToFinal(leftWord.ipaSurface, leftFinal);
         leftWord.skipFinalDevoicing = true;  // Already handled
-      } else if (this.isVoicelessConsonant(rightInitial) && this.isVPhoneme(leftFinal)) {
+      } else if (this.isVoicelessConsonant(effInitial) && this.isVPhoneme(leftFinal)) {
         // Special case: /v/ devoices before voiceless consonants (в шутку → f ʃutku)
         // Grayson: /v/ doesn't TRIGGER voicing, but DOES UNDERGO devoicing
         leftWord.ipaSurface = this.applyDevoicingToFinal(leftWord.ipaSurface, leftFinal);
         leftWord.skipFinalDevoicing = true;
-      } else if (this.isVoicedObstruent(rightInitial) && this.isVoicedObstruent(leftFinal)) {
+      } else if (this.isVoicedObstruent(effInitial) && this.isVoicedObstruent(leftFinal)) {
         // N.13. Voiced obstruent before voiced obstruent: муж дома, нож брата,
         // дождь был. Nothing changes segmentally, but the following voiced
         // obstruent blocks the categorical final devoicing applied below.
@@ -2240,14 +2243,11 @@ export const GraysonEngine = {
       }
     }
 
-    // Apply final devoicing to words that didn't undergo cross-word assimilation
-    // Grayson pp. 199-202: every word-final voiced obstruent devoices categorically.
-    // Only clitic boundaries suppress devoicing (phonologically attached).
-    // Cross-word re-voicing by a following voiced obstruent is handled above
-    // (sets skipFinalDevoicing = true), so those cases are already excluded.
+    // Final devoicing (Grayson pp. 199-202) for words that did not undergo cross-word assimilation.
+    // Only clitic boundaries suppress it; the branches above set skipFinalDevoicing for the rest.
     words.forEach((word, i) => {
       if (!word.skipFinalDevoicing && word.rightBoundary !== 'clitic') {
-        word.ipaSurface = this.applyFinalDevoicing(word.ipaSurface);
+        word.ipaSurface = restoreBogFinish({ ...word, ipaSurface: this.applyFinalDevoicing(word.ipaSurface) });
       }
     });
   }
