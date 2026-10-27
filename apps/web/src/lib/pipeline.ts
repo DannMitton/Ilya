@@ -39,7 +39,7 @@ import { buildDisplayLog } from '@ilya/blurb';
 
 import { applyReconstitution } from './reconstitution';
 import { hasVowel, mergeCliticDisplay } from './clitic-merge';
-import { peelSyntacticBreaks } from './syntactic-break';
+import { peelSyntacticBreaks, splitTypedWords } from './syntactic-break';
 import { markLatinWords } from './latin';
 import { adoptOldEnding, lookupOnlyTwinFor, stripForLookup } from './old-spelling';
 
@@ -174,7 +174,7 @@ function splitIntoPreLines(
     .filter((entry) => entry.line.trim())
     .map((entry) => {
       // Row 139: a typed # is peeled off the tokens here, onto the word before it, so no later step counts it as a word.
-      const { words, broken } = peelSyntacticBreaks(entry.line.trim().split(/\s+/), (word) => word.replace(PUNCTUATION_REGEX, '').length > 0);
+      const { words, broken } = peelSyntacticBreaks(splitTypedWords(entry.line), (word) => word.replace(PUNCTUATION_REGEX, '').length > 0);
 
       // Expand hyphenated particles into separate tokens before lookup (unless the whole token is a word).
       // The # ends the last piece of a word that was split in two.
@@ -736,8 +736,8 @@ function buildResolvedWord(rawWord: string, suppressYoRestore: boolean = false):
     yoSource,
     hasYo: yoSyllable !== -1,
     // Placeholder until autoDetectBoundaries() runs immediately after, in Step 2
-    // below; every word passes through one of its branches (the 'user' guard is
-    // dead code today, nothing sets boundarySource to 'user' anywhere yet), so
+    // below; every word passes through one of its branches (a typed # sets
+    // boundarySource to 'user' there, nothing sets it before), so
     // these placeholders are never observed. Matches the function's own 'soft'/
     // 'auto' default branch.
     rightBoundary: 'soft',

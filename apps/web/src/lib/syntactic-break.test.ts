@@ -17,8 +17,8 @@ const isWord = (t: string) => t.replace(/[.,!?;:"«»–—…()]/g, '').length 
 const peel = (line: string) => peelSyntacticBreaks(line.split(/\s+/), isWord);
 
 describe('peelSyntacticBreaks', () => {
-	it('a # inside a word is ignored, and ends nothing', () => {
-		expect(peel('сло#во на')).toEqual({ words: ['слово', 'на'], broken: [false, false] });
+	it('a # inside a word is read, and belongs to that word (Dann 02:19)', () => {
+		expect(peel('сло#во на')).toEqual({ words: ['слово', 'на'], broken: [true, false] });
 	});
 	it('a # between spaces ends the word before it', () => {
 		expect(peel('я # на правду')).toEqual({ words: ['я', 'на', 'правду'], broken: [true, false, false] });
@@ -73,9 +73,10 @@ describe('done-when 1: the # blocks voicing as punctuation does, and prints only
 		expect(ipaOf('слух# был')).toEqual(ipaOf('слух # был'));
 		expect(ipaOf('слух #был')).toEqual(ipaOf('слух # был'));
 	});
-	it('the boundary is the one punctuation stamps', () => {
+	it('the boundary is hard, and its source is the singer’s: a typed # is placed, not implied (N.194 step 2)', () => {
 		const [x] = wordsOf('слух # был');
-		expect([x.rightBoundary, x.boundarySource]).toEqual(['hard', 'punctuation']);
+		expect([x.rightBoundary, x.boundarySource]).toEqual(['hard', 'user']);
+		expect(wordsOf('слух, был')[0].boundarySource).toBe('punctuation');
 	});
 });
 
@@ -108,7 +109,7 @@ describe('the # lives in its own field, and in no other', () => {
 describe('done-when 4: an enclitic stays an enclitic of its word', () => {
 	it('«Ты же # дом»: же is Ты’s enclitic, Ты is clitic, and the hard boundary sits after же', () => {
 		const [x, zhe, y] = wordsOf('Ты же # дом');
-		expect([zhe.isEnclitic, x.rightBoundary, zhe.rightBoundary, zhe.boundarySource]).toEqual([true, 'clitic', 'hard', 'punctuation']);
+		expect([zhe.isEnclitic, x.rightBoundary, zhe.rightBoundary, zhe.boundarySource]).toEqual([true, 'clitic', 'hard', 'user']);
 		expect(y.syntacticBreak).toBeUndefined();
 		const comma = ipaOf('Ты же, дом');
 		const hash = ipaOf('Ты же # дом');
@@ -123,19 +124,21 @@ describe('done-when 4: an enclitic stays an enclitic of its word', () => {
 		expect(hash[0]).toBe(comma[0] + '#');
 		expect(hash.slice(1)).toEqual(comma.slice(1));
 	});
-	it('«Ты # же дом» is a singer’s error: же still attaches to Ты, across the #, and Ты is hard', () => {
+	it('«Ты # же дом»: же still attaches to Ты, and the # takes effect at the end of their unit, as in «Ты же # дом» (N.194 step 2)', () => {
 		const [x, zhe] = wordsOf('Ты # же дом');
-		expect([zhe.isEnclitic, x.rightBoundary]).toEqual([true, 'hard']);
-		expect(ipaOf('Ты # же дом')[0]).toBe('ˈtɨ# ʒɨ');
+		expect([zhe.isEnclitic, x.rightBoundary, zhe.rightBoundary]).toEqual([true, 'clitic', 'hard']);
+		expect(ipaOf('Ты # же дом')).toEqual(ipaOf('Ты же # дом'));
+		expect(ipaOf('Ты # же дом')[0]).toBe('ˈtɨ ʒɨ#');
 	});
 });
 
-describe('a # after a proclitic follows the proclitic’s own IPA', () => {
-	it('«в # доме»: the hard boundary stops the voicing, and the # is printed where it stands', () => {
-		const [v] = wordsOf('в # доме');
-		expect(v.isProclitic && v.rightBoundary === 'hard').toBe(true);
-		expect(ipaOf('в # доме')).toEqual(['→', 'ˈf#do mʲɪ']);
-		expect(ipaOf('в доме')[1]).not.toContain('f');
+describe('a # after a proclitic takes effect at the end of the proclitic’s unit', () => {
+	it('«в # доме» is «в доме #»: the preposition keeps its voicing, and the # is printed after the unit (N.194 step 2; row 139 finding 2 closed)', () => {
+		const [v, dom] = wordsOf('в # доме');
+		expect([v.isProclitic, v.rightBoundary, dom.rightBoundary, dom.boundarySource]).toEqual([true, 'clitic', 'hard', 'user']);
+		expect(ipaOf('в # доме')).toEqual(ipaOf('в доме #'));
+		expect(ipaOf('в # доме')[1]).toBe(ipaOf('в доме')[1] + '#');
+		expect(ipaOf('в # доме')[1]).not.toContain('f');
 	});
 });
 
