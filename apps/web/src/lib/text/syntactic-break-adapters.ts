@@ -19,7 +19,7 @@
 import type { CliticSets } from '../boundaries';
 import type { UnitWord } from './syntactic-break-unit';
 
-const JOINING_HYPHEN = /^[-‐‑]$/;
+const JOINING_HYPHEN = /^[-\u2010\u2011]$/;
 
 /** What the pre-flag door reads from a word: the shape `PreTranscribeWord` and `WordStackData` share. */
 export interface PreUnitWord {

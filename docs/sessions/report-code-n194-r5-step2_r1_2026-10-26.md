@@ -10,7 +10,7 @@ Batch C's B3 had built the simpler rule, "a typed # ends the word before it" (`s
   - `moveBreaksToUnitEnds(words, sets)` (new, exported): reads every word's `syntacticBreak`, finds its unit end with `unitEnd` over `unitWordsFromPre` (step 1's pre-flag door), clears the flags, and sets them on the unit ends, in place. It is the first statement of `autoDetectBoundaries`, so it runs before any boundary is stamped and before the clitic flags exist. Idempotent.
   - `autoDetectBoundaries`: a word that carries `syntacticBreak` is `rightBoundary 'hard'`, `boundarySource 'user'`, and the branch returns. The `|| word.syntacticBreak === true` is gone from `hasPunctuation`, so a punctuation boundary stays `'punctuation'`. `BoundaryWordIn` gains `punctuation: string` (the door reads it; `PreTranscribeWord` already has it).
   - **The header comment is corrected.** It said "A `'user'` boundary wins (nothing sets one today)". It now says a typed # sets one, names the move, and says the Loupe's button reads the difference between `'user'` and `'punctuation'`.
-- `apps/web/src/lib/syntactic-break.ts`: `peelSyntacticBreaks` now reads a # inside a word (`ва#с`) as belonging to that word (B3 dropped it), and takes a ` ` that stands immediately before a # with the #. New `splitTypedWords(line)` is `line.trim().split(WORD_SPLIT)`.
+- `apps/web/src/lib/syntactic-break.ts`: `peelSyntacticBreaks` now reads a # inside a word (`ва#с`) as belonging to that word (B3 dropped it), and takes a `\u00A0` that stands immediately before a # with the #. New `splitTypedWords(line)` is `line.trim().split(WORD_SPLIT)`.
 - `apps/web/src/lib/text/break-glue.ts` (new): `WORD_SPLIT`, `WORD_TOKEN`, `GLUED_MARK`, section 5a's shared patterns. `WORD_TOKEN` is not read until step 3; it is tested here beside its sibling.
 - `apps/web/src/lib/pipeline.ts` (925 of 925, **no net line**): the import at `:42` takes `splitTypedWords`; `:177` calls it in place of `entry.line.trim().split(/\s+/)`; the stale comment at `:738-742` ("nothing sets boundarySource to 'user' anywhere yet") is reworded in the same four lines. Call lines only; nothing was moved out.
 
@@ -69,7 +69,7 @@ Five tests in `apps/web/src/lib/syntactic-break.test.ts`. They are the only exis
 | 4 | a # after a line's last word, and after a comma: **the IPA shows a bare # after the word, and nothing audible moves** («слух был #» is «слух был» plus `#` on the last word; «слух, # был» is «слух, был» plus `#` on the first); one # per line across two lines |
 | 5 | see below |
 | 6 | «ва#с благодать» is «вас# благодать»; «вас ##благодать» and «вас #благодать» too; «вас благо#дать» is «вас благодать#»; a lone # first on a line, and as `#вас`, changes nothing; the dictionary finds every word (`stressSource` equals the unmarked line's and is never `'inferred'`) |
-| 7 | «вас # благодать» is «вас# благодать», `cleanWord` «вас», dictionary entry found, `wordGrid` equal; the glued form twice, inside a word, and standing alone behind a space |
+| 7 | «вас\u00A0# благодать» is «вас# благодать», `cleanWord` «вас», dictionary entry found, `wordGrid` equal; the glued form twice, inside a word, and standing alone behind a space |
 
 Also: the four glue patterns (a plain `\s` split cuts the glued form, `WORD_SPLIT` and `WORD_TOKEN` do not), the move being idempotent and leaving a no-# word with no key, and the source labels.
 
@@ -78,7 +78,7 @@ Also: the four glue patterns (a plain `\s` split cuts the glued form, `WORD_SPLI
 | mutant | result |
 |---|---|
 | inner # not read (strips only a trailing #) | 5 failed: B3's rewritten peel test, «ва#с благодать» twice, «вас благо#дать», the glued-inside case |
-| # stripped, ` ` left behind (the brief's done-when 7 mutant) | 3 failed: all three done-when 7 tests |
+| # stripped, `\u00A0` left behind (the brief's done-when 7 mutant) | 3 failed: all three done-when 7 tests |
 | no move | 8 failed: «не # в силах» twice, «X # же Y» three, «сказал # бы», «Ты # же дом», «в # доме» |
 | source stays `'punctuation'` | 6 failed |
 

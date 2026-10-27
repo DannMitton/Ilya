@@ -483,6 +483,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.place.fromHere':        { en: 'Place from here',              fr: 'Placer à partir d\u2019ici' },
 	'loupe.undo.cleared':          { en: 'placements cleared',           fr: 'placement retiré' },
 	'loupe.undo.placedFromHere':   { en: 'syllables placed from here',   fr: 'syllabes placées à partir d\u2019ici' },
+	// N.194 (QUEUE row 152), the Loupe's break button. The pill's labels RULED by Dann 2026-10-21 13:42 and the
+	// undo sentences RATIFIED 20:30 ("yes"); « frontière » is the ratified Guide paragraph's term, « placée » is
+	// adopted from `loupe.undo.placed`, « retirée » from `loupe.undo.cleared`. The reason under an off pill RULED
+	// 2026-10-26 14:56 and RATIFIED 14:57 ("yes"). Pinned in `insights/ratified-lines.test.ts`.
+	'loupe.place.breakAfter':      { en: 'Break after this word',        fr: 'Frontière après ce mot' },
+	'loupe.place.breakRemove':     { en: 'Remove break',                 fr: 'Retirer la frontière' },
+	'loupe.place.breakImplied':    { en: 'A break is already implied here.', fr: 'Une frontière est déjà implicite ici.' },
+	'loupe.undo.breakPlaced':      { en: 'break placed',                 fr: 'frontière placée' },
+	'loupe.undo.breakRemoved':     { en: 'break removed',                fr: 'frontière retirée' },
 	// N.113. The pill reads what the press will take back, so the pair names
 	// the two directions rather than the control. RULED by Dann 2026-09-14:
 	// « défini » adopted from `loupe.undo.tuplet` below (« nolet défini »),

@@ -7,18 +7,18 @@
  * splits on whitespace.
  *
  * INSERT glues the mark to the end of the unit's last raw token with a no-break space (Dann 2026-10-25 23:52):
- * «благодать» becomes «благодать #». REMOVE deletes every # that step 2 reads into the unit, wherever the
+ * «благодать» becomes «благодать\u00A0#». REMOVE deletes every # that step 2 reads into the unit, wherever the
  * singer put it, so the unit holds no mark afterwards and the pill reads "Break after this word" again. A typed
  * # is removed where it was typed; nothing else in the text moves.
  *
- * Write the no-break space as the escape ` ` in source and in tests, never as a literal character.
+ * Write the no-break space as the escape `\u00A0` in source and in tests, never as a literal character.
  */
 import { splitIntoPreLines } from '../pipeline';
 import { tokenSpans, type TokenSpan } from '../syntactic-break';
 import { unitEnd, type UnitWord } from './syntactic-break-unit';
 
 /** What Ilya writes after a unit's last word: a no-break space, then the mark. */
-export const BREAK_MARK = ' #';
+export const BREAK_MARK = '\u00A0#';
 
 /** The first word of the unit whose last word is `end`: the smallest index that resolves to it. */
 export function unitStart(words: readonly UnitWord[], end: number): number {

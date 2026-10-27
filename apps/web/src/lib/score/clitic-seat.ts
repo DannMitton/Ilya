@@ -55,6 +55,7 @@ import {
 import { buildSlotQueue, type PairingMap, type Slot } from './pairings';
 import type { LineData, WordStackData } from '$lib/types';
 import type { ParsedScore } from '@ilya/score-parser';
+import { GLUED_MARK } from '$lib/text/break-glue';
 
 /**
  * U+00A0 NO-BREAK SPACE, the character `buildSlotQueue` puts between a clitic
@@ -366,7 +367,8 @@ export function carryPunctuation(slotText: string, fileText: string | undefined)
 	const mark = TRAILING_PUNCTUATION.exec(fileText)?.[0];
 	if (!mark) return slotText;
 	if (fileText.slice(0, fileText.length - mark.length) !== slotText) return slotText;
-	return slotText + mark;
+	// N.194: a syntactic break the score folded in (`diction-marks.ts`) is never in the Russian; its punctuation still is.
+	return slotText + mark.replace(GLUED_MARK, '');
 }
 
 /**

@@ -10,6 +10,10 @@
   It decides nothing: the page owns the presses (`+page.svelte`,
   `handleClearPlacements` and `handlePlaceFromHere`), pushes the undo entry,
   and writes. What a scope covers is `placement-scope.ts`'s.
+
+  N.194 adds a third pill, the break button, whose state and press are
+  `text/break-here.ts`'s. While it is off because the unit already ends in a
+  break the engine took for itself, one line of reason shows beside it.
 -->
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
@@ -46,6 +50,16 @@
 	<button type="button" class="loupe-place-pill" disabled={!placement.canFromHere} onclick={placement.onfromhere}
 		>{t('loupe.place.fromHere', language)}</button
 	>
+	<button
+		type="button"
+		class="loupe-place-pill"
+		disabled={placement.break.state === 'off'}
+		onclick={placement.break.onbreak}
+		>{t(placement.break.state === 'remove' ? 'loupe.place.breakRemove' : 'loupe.place.breakAfter', language)}</button
+	>
+	{#if placement.break.state === 'off' && placement.break.implied}
+		<span class="loupe-place-reason" role="note">{t('loupe.place.breakImplied', language)}</span>
+	{/if}
 </div>
 
 <style>
@@ -75,6 +89,14 @@
 	.loupe-place-pill:disabled {
 		opacity: 0.4;
 		cursor: default;
+	}
+	/* N.194 addendum: one line of reason beside the off break pill. Inside the row, so it is not part of the printed page. */
+	.loupe-place-reason {
+		align-self: center;
+		color: #4a4540;
+		font-family: var(--font-sans, system-ui, sans-serif);
+		font-size: 12px;
+		line-height: 1.2;
 	}
 	.loupe-place-pill:focus-visible {
 		outline: 2px solid var(--lavender, #9585a2);

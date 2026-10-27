@@ -21,10 +21,12 @@
  * the score's own seat stay on. Case and punctuation are NOT folded. A capital the singer changed is an
  * edit, and the `from score` tag clears on it, as it does today.
  */
+import { GLUED_MARK, WORD_SPLIT } from './break-glue';
+
 export function sameWords(a: string, b: string): boolean {
 	return squash(a) === squash(b);
 }
 
 function squash(text: string): string {
-	return text.replace(/(?<=\p{L})[-\u2010\u2011](?=\p{L})/gu, '').replace(/#/g, '').split(/\s+/).filter(Boolean).join(' ');
+	return text.replace(/(?<=\p{L})[-\u2010\u2011](?=\p{L})/gu, '').replace(GLUED_MARK, '').split(WORD_SPLIT).filter(Boolean).join(' ');
 }

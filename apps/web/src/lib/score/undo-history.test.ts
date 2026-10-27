@@ -237,3 +237,70 @@ describe('stackLabel', () => {
 		expect(stackLabel(h.history.undoStack, translate)).toBe('[second]');
 	});
 });
+
+/**
+ * N.194 (the Loupe's break button). An entry may carry the Lyrics text, and only an entry that asked for it
+ * does. Every older verb leaves the text alone, and an undo of one must too.
+ */
+describe('UndoHistory: the Lyrics text, on request', () => {
+	function withText(initialText: string) {
+		let state: UndoState = { ...empty };
+		let text = initialText;
+		const textWrites: string[] = [];
+		const history = new UndoHistory(
+			(withText) => ({ ...state, ...(withText ? { inputText: text } : {}) }),
+			(next) => {
+				state = { ...next };
+				delete state.inputText;
+				if (next.inputText !== undefined) {
+					text = next.inputText;
+					textWrites.push(next.inputText);
+				}
+			},
+		);
+		return { history, textWrites, type: (next: string) => (text = next), get text() { return text; }, set: (patch: Partial<UndoState>) => (state = { ...state, ...patch }) };
+	}
+	const note = { kind: 'text', key: 'loupe.undo.breakPlaced' } as const;
+
+	it('a push with no option saves no text, and an undo of it writes none', () => {
+		const h = withText('вас благодать');
+		h.history.push({ kind: 'text', key: 'loupe.undo.deleted' });
+		expect('inputText' in h.history.undoStack[0]).toBe(false);
+		h.type('вас благодать дом');
+		h.history.undo();
+		expect(h.text).toBe('вас благодать дом');
+		expect(h.textWrites).toEqual([]);
+		expect('inputText' in h.history.redoStack[0]).toBe(false);
+	});
+	it('a push that asks for the text saves the text as it stands before the write', () => {
+		const h = withText('вас благодать');
+		h.history.push(note, { inputText: true });
+		expect(h.history.undoStack[0].inputText).toBe('вас благодать');
+	});
+	it('undo writes the saved text back and hands the text it replaced to redo; redo mirrors it', () => {
+		const h = withText('вас благодать');
+		h.history.push(note, { inputText: true });
+		h.type('вас благодать\u00A0#');
+		h.history.undo();
+		expect(h.text).toBe('вас благодать');
+		expect(h.history.redoStack[0].inputText).toBe('вас благодать\u00A0#');
+		h.history.redo();
+		expect(h.text).toBe('вас благодать\u00A0#');
+		expect(h.history.undoStack[0].inputText).toBe('вас благодать');
+		expect(h.textWrites).toEqual(['вас благодать', 'вас благодать\u00A0#']);
+	});
+	it('a new action drops the future, text and all', () => {
+		const h = withText('вас благодать');
+		h.history.push(note, { inputText: true });
+		h.history.undo();
+		h.history.push({ kind: 'text', key: 'loupe.undo.deleted' });
+		expect(h.history.redoStack).toEqual([]);
+	});
+	it('clear empties both stacks, so a break entry cannot cross songs', () => {
+		const h = withText('вас благодать');
+		h.history.push(note, { inputText: true });
+		h.history.undo();
+		h.history.clear();
+		expect([h.history.undoStack, h.history.redoStack]).toEqual([[], []]);
+	});
+});

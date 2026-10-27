@@ -1,6 +1,6 @@
 /**
  * N.194 r5, step 2: a typed # takes effect at the end of its unit (Dann 2026-10-21 02:18 and 02:19), and the
- * glued form «я #» reads as the bare one (Dann 2026-10-25 23:52).
+ * glued form «я\u00A0#» reads as the bare one (Dann 2026-10-25 23:52).
  *
  * Every IPA is the engine's, compared with another output of the same engine. The Lyrics text lives in
  * `doc.inputText` and reaches `processText` by value, so "the text is unchanged" is tested as: the words keep
@@ -14,26 +14,26 @@ import { GLUED_MARK, WORD_SPLIT, WORD_TOKEN } from './break-glue';
 
 beforeAll(loadRealData, 60_000);
 
-const NBSP_HASH = ' #';
+const NBSP_HASH = '\u00A0#';
 const cyrillicOf = (text: string) => wordsOf(text).map((w) => w.cyrillic);
-const withoutMarks = (text: string) => text.replace(/ *#/g, '').replace(/ {2,}/g, ' ').trim();
+const withoutMarks = (text: string) => text.replace(/\u00A0*#/g, '').replace(/ {2,}/g, ' ').trim();
 const lastWord = (text: string) => wordsOf(text).at(-1)!;
 
 describe('the glue patterns', () => {
 	it('WORD_SPLIT keeps a word and its glued # together, and splits everywhere else', () => {
-		expect('я # на правду'.split(WORD_SPLIT)).toEqual(['я #', 'на', 'правду']);
-		expect('я# на правду'.split(WORD_SPLIT)).toEqual(['я#', 'на', 'правду']);
-		expect('я  # на'.split(WORD_SPLIT)).toEqual(['я', ' #', 'на']);
+		expect('я\u00A0# на правду'.split(WORD_SPLIT)).toEqual(['я\u00A0#', 'на', 'правду']);
+		expect('я# на\u00A0правду'.split(WORD_SPLIT)).toEqual(['я#', 'на', 'правду']);
+		expect('я \u00A0# на'.split(WORD_SPLIT)).toEqual(['я', '\u00A0#', 'на']);
 	});
 	it('WORD_TOKEN finds the same tokens', () => {
-		expect([...'я # на правду'.matchAll(WORD_TOKEN)].map((m) => m[0])).toEqual(['я #', 'на', 'правду']);
-		expect([...'я# на правду'.matchAll(WORD_TOKEN)].map((m) => m[0])).toEqual(['я#', 'на', 'правду']);
+		expect([...'я\u00A0# на правду'.matchAll(WORD_TOKEN)].map((m) => m[0])).toEqual(['я\u00A0#', 'на', 'правду']);
+		expect([...'я# на\u00A0правду'.matchAll(WORD_TOKEN)].map((m) => m[0])).toEqual(['я#', 'на', 'правду']);
 	});
 	it('a plain \\s split cuts the glued form, which is why the patterns exist', () => {
-		expect('я # на'.split(/\s+/)).toEqual(['я', '#', 'на']);
+		expect('я\u00A0# на'.split(/\s+/)).toEqual(['я', '#', 'на']);
 	});
 	it('GLUED_MARK takes the # and the no-break spaces before it', () => {
-		expect('вас # ва#с   #'.replace(GLUED_MARK, '')).toBe('вас вас ');
+		expect('вас\u00A0# ва#с \u00A0\u00A0#'.replace(GLUED_MARK, '')).toBe('вас вас ');
 	});
 });
 
@@ -101,7 +101,7 @@ describe('done-when 5: taking the # out returns the transcription to what it was
 		['сказал # бы он', 'сказал бы он'],
 		['вас ##благодать', 'вас благодать'],
 		['ва#с благодать', 'вас благодать'],
-		['вас # благодать', 'вас благодать'],
+		['вас\u00A0# благодать', 'вас благодать'],
 		['велит-ли # дом', 'велит-ли дом'],
 	]) {
 		it(`«${typed}»`, () => {
@@ -151,7 +151,7 @@ describe('done-when 6: a # is read wherever it stands in a token, and takes effe
 });
 
 describe('done-when 7: «вас\\u00A0# благодать» reads as «вас# благодать»', () => {
-	const glued = 'вас # благодать';
+	const glued = 'вас\u00A0# благодать';
 	it('the same IPA, cleanWord, and dictionary entry', () => {
 		expect(ipaOf(glued)).toEqual(ipaOf('вас# благодать'));
 		const [vas] = wordsOf(glued);
@@ -162,12 +162,12 @@ describe('done-when 7: «вас\\u00A0# благодать» reads as «вас# 
 	it('the Russian and the page’s word grid are those of the bare form', () => {
 		expect(cyrillicOf(glued)).toEqual(['вас', 'благодать']);
 		expect(wordGrid(glued)).toEqual(wordGrid('вас# благодать'));
-		expect(wordGrid('я # на правду')).toEqual(wordGrid('я# на правду'));
+		expect(wordGrid('я\u00A0# на правду')).toEqual(wordGrid('я# на правду'));
 	});
 	it('a glued # twice, inside a word, and standing alone behind a space', () => {
-		expect(ipaOf('вас # # благодать')).toEqual(ipaOf('вас# благодать'));
-		expect(ipaOf('ва #с благодать')).toEqual(ipaOf('вас# благодать'));
-		expect(ipaOf('вас  # благодать')).toEqual(ipaOf('вас# благодать'));
+		expect(ipaOf('вас\u00A0#\u00A0# благодать')).toEqual(ipaOf('вас# благодать'));
+		expect(ipaOf('ва\u00A0#с благодать')).toEqual(ipaOf('вас# благодать'));
+		expect(ipaOf('вас \u00A0# благодать')).toEqual(ipaOf('вас# благодать'));
 	});
 });
 
@@ -203,7 +203,7 @@ describe('where it moves', () => {
 });
 
 describe('the glued form is what a score folds', () => {
-	it('«я #» as a word of the text reads as «я#»', () => {
+	it('«я\u00A0#» as a word of the text reads as «я#»', () => {
 		const text = `правду я${NBSP_HASH} на`;
 		expect(ipaOf(text)).toEqual(ipaOf('правду я# на'));
 	});

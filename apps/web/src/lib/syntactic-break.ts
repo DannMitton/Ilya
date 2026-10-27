@@ -39,7 +39,7 @@ export function peelSyntacticBreaks<T extends { text: string }>(
 	const broken: boolean[] = [];
 	const source: T[] = [];
 	for (const tok of tokens) {
-		const [, lead, core, trail] = /^(#*)(.*?)((?: *#)*)$/u.exec(tok.text)!;
+		const [, lead, core, trail] = /^(#*)(.*?)((?:\u00A0*#)*)$/u.exec(tok.text)!;
 		if (lead && words.length > 0) broken[words.length - 1] = true;
 		if (core && isWord(core)) {
 			words.push(core.replace(GLUED_MARK, ''));
@@ -64,8 +64,8 @@ export interface TokenSpan {
 
 /**
  * A typed line's tokens with their offsets in that line, read off the UNTRIMMED line so a leading space keeps
- * them. A token is a run of non-space characters, plus a ` ` glued to a `#` (`break-glue.ts`), so the
- * glued form «я #» is one token here as it is everywhere Lyrics is split.
+ * them. A token is a run of non-space characters, plus a `\u00A0` glued to a `#` (`break-glue.ts`), so the
+ * glued form «я\u00A0#» is one token here as it is everywhere Lyrics is split.
  */
 export const tokenSpans = (line: string): TokenSpan[] =>
 	[...line.matchAll(WORD_TOKEN)].map((m) => ({ text: m[0], start: m.index!, end: m.index! + m[0].length }));

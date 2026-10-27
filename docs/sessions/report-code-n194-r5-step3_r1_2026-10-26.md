@@ -8,7 +8,7 @@ Lane `cloud-lane-15`, after step 2. Read and run in the Linux cloud sandbox at `
 - `apps/web/src/lib/syntactic-break.ts`:
   - `tokenSpans(line)` (new): the line's tokens with start and end offsets, from `matchAll(WORD_TOKEN)` over the UNTRIMMED line, so a leading space keeps its offsets (the review's amendment 5, with section 5a's `WORD_TOKEN` in place of `/\S+/g`, as the brief says).
   - `peelSyntacticBreaks` is now generic over token objects and returns `source`: the token each word came from. This replaces step 2's `splitTypedWords`, which is gone.
-- `apps/web/src/lib/text/break-text.ts` (new, 104 lines): `tokenEndOffset`, `insertBreak`, `removeBreak`, `unitStart`, `BREAK_MARK`. Every offset comes from `splitIntoPreLines`; nothing counts newlines or splits on whitespace.
+- `apps/web/src/lib/text/break-text.ts` (new, 88 lines): `tokenEndOffset`, `insertBreak`, `removeBreak`, `unitStart`, `BREAK_MARK`. Every offset comes from `splitIntoPreLines`; nothing counts newlines or splits on whitespace.
 
 **The tokenizer is still the one tokenizer.** `splitIntoPreLines` decides what a word is; `tokenSpans` and `peelSyntacticBreaks` are what it calls. `String.split(WORD_SPLIT)` in the pipeline (step 2) became `matchAll(WORD_TOKEN)` here, so `WORD_SPLIT` has no caller in `src` yet; step 4's `same-words.ts` takes it. The two patterns agree on what a token is (a test pins both on the same inputs).
 
@@ -16,7 +16,7 @@ Lane `cloud-lane-15`, after step 2. Read and run in the Linux cloud sandbox at `
 
 For a unit `[firstWord .. endWord]` in transcribed coordinates:
 
-- Every `#`, with the ` ` run immediately before it, in the raw token of each word of the unit (trailing, inside, or leading), **except** a leading run on the unit's FIRST token, which step 2 reads as the previous unit's.
+- Every `#`, with the `\u00A0` run immediately before it, in the raw token of each word of the unit (trailing, inside, or leading), **except** a leading run on the unit's FIRST token, which step 2 reads as the previous unit's.
 - Every token between the unit's first token and the next word that is only marks goes, with the whitespace run before it: «вас # благодать» becomes «вас благодать».
 - A leading run of `#` on the next word goes (step 2 reads it as the unit's).
 - Nothing else moves. A `#` on another unit, and every other line, are untouched.
@@ -27,9 +27,9 @@ I found the "except" rule by reading my own first draft: it would have deleted t
 
 `apps/web/src/lib/text/break-text.test.ts`, **32 tests**. Gate 4 moved 3150 to 3182, which is 32.
 
-**Done-when 1 (offsets).** Song 1 is the fixture `apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml` (Dann's engraving, the one `score-seat.test.ts` reads; `scoreWordsText(collectScoreWords(score, 1))`, 39 words in one line, which I counted). The desk's assumption in the brief ("assumes, NOT ESTABLISHED, that this is the song 1 the desk used") holds as far as the words go: it opens «Комнатка тесная, тихая, милая;». Every one of its 39 words ends at the end of its own token. The hand-written text is `'\n  Комнатка тесная,   тихая\n\nвот-вот велит-ли  дом\r\nя # не в силах'`: a blank line first, a leading space, an extra space, a blank line between, a hyphenated particle, a `\r\n`, and a glued mark. The expected tokens are written out by hand, not derived from the code under test.
+**Done-when 1 (offsets).** Song 1 is the fixture `apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml` (Dann's engraving, the one `score-seat.test.ts` reads; `scoreWordsText(collectScoreWords(score, 1))`, 39 words in one line, which I counted). The desk's assumption in the brief ("assumes, NOT ESTABLISHED, that this is the song 1 the desk used") holds as far as the words go: it opens «Комнатка тесная, тихая, милая;». Every one of its 39 words ends at the end of its own token. The hand-written text is `'\n  Комнатка тесная,   тихая\n\nвот-вот велит-ли  дом\r\nя\u00A0# не в силах'`: a blank line first, a leading space, an extra space, a blank line between, a hyphenated particle, a `\r\n`, and a glued mark. The expected tokens are written out by hand, not derived from the code under test.
 
-**Done-when 2.** Insert then remove returns the text byte for byte, at every unit of four texts (one with blank lines, a leading space, `\r\n`, and a comma), and on song 1 at «Комнатка»; the inserted text is ` #`.
+**Done-when 2.** Insert then remove returns the text byte for byte, at every unit of four texts (one with blank lines, a leading space, `\r\n`, and a comma), and on song 1 at «Комнатка»; the inserted text is `\u00A0#`.
 
 **Done-when 3.** Fourteen typed shapes («вас #благодать», «ва#с благодать», «вас # благодать», «вас ##благодать», the glued forms, «вас # # благодать», «не # в силах», «не #в силах», «не в# силах», «сказал # бы он», «сказал бы # он», «велит-ли # дом», «благо#дать»): the unit reads as placed before (`boundarySource 'user'`), Remove gives exactly the text without the mark, the unit reads as not placed after, and the IPA equals the unmarked text's IPA. "The pill's state returns to `'insert'`" is tested through the engine's verdict on the unit's last word, which is what step 4's state reads.
 
@@ -42,7 +42,7 @@ I found the "except" rule by reading my own first draft: it would have deleted t
 
 The brief's "each fails on r4's removal" holds for «вас #благодать» and «ва#с благодать». «вас # благодать» does NOT fail on r4's removal, which does handle a following token that is only `#`; it is there as a regression case, as the brief named it.
 
-**Also pinned:** the glued form is one token, and the end of «Комнатка # тесная» is the index after the `#` (section 5a, site 2); a word that is not there has no offset; Remove touches only its own unit and line; a mark inserted at a unit's last word makes that word the singer's boundary and no other.
+**Also pinned:** the glued form is one token, and the end of «Комнатка\u00A0# тесная» is the index after the `#` (section 5a, site 2); a word that is not there has no offset; Remove touches only its own unit and line; a mark inserted at a unit's last word makes that word the singer's boundary and no other.
 
 ## The spans settle step 1's open case
 
@@ -61,7 +61,7 @@ Step 1 reported that «слово- слово» (a hyphen on the left word, a sp
 - `pairings.ts:935`: `split(SYLLABLE_SEAM)` over a word's IPA, not Lyrics.
 - `syllable-utils.ts:22/:26`, `InspectorPanel.svelte:534/:921`: `split('')` into a character set.
 - `omr/*`, `insights/*`, `markup/*`, `TitleHeader.svelte:208`, `OutsideNote.svelte`: display strings and XML.
-- Not a split but a whitespace pattern on text that can hold a word: `analysis/watchlist.ts:628` trims `[\p{P}\s]` from a word's edges, which takes a trailing ` #` too. Not affected.
+- Not a split but a whitespace pattern on text that can hold a word: `analysis/watchlist.ts:628` trims `[\p{P}\s]` from a word's edges, which takes a trailing `\u00A0#` too. Not affected.
 
 Nothing the list lacks needs a change. `splitIntoPreLines` (through `tokenSpans`) and section 5a's two patterns are now the only places that decide what a token is, apart from the five sites step 4 still has to move onto `WORD_SPLIT` or `WORD_TOKEN`.
 
@@ -85,8 +85,8 @@ Gate 4 against step 2's 3150: +32, all in `text/break-text.test.ts`. The approva
 ## Where would this wall a singer in? (step 3's part)
 
 - **Remove deletes a `#` the singer typed elsewhere in the unit.** In «не #в силах» the `#` stands on «в» and Remove takes it. That is what the unit means, but the singer sees one press delete a mark they placed on a different word.
-- **Remove cannot tell where a `#` came from.** A mark in «вас # благодать» that the singer typed and one Ilya wrote («вас # благодать») both go the same way, as they should.
-- **A ` ` the singer cannot see.** The textarea shows it as a space; after Insert the text has a character that looks like a space and behaves like none. Copying Lyrics out of the field and into another program carries it.
+- **Remove cannot tell where a `#` came from.** A mark in «вас # благодать» that the singer typed and one Ilya wrote («вас\u00A0# благодать») both go the same way, as they should.
+- **A `\u00A0` the singer cannot see.** The textarea shows it as a space; after Insert the text has a character that looks like a space and behaves like none. Copying Lyrics out of the field and into another program carries it.
 
 ## What I could not establish
 

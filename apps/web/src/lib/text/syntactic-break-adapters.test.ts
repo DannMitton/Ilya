@@ -46,7 +46,7 @@ describe('which field carries the hyphen', () => {
 	});
 	it('a hyphen is a joiner only as the one trailing mark; a dash or a hyphen with a comma is not', () => {
 		const mark = (punctuation: string) => unitWordsFromStacks([{ isProclitic: false, isEnclitic: false, punctuation }])[0].hyphenToNext;
-		expect(['-', '‐', '‑'].map(mark)).toEqual([true, true, true]);
+		expect(['-', '\u2010', '\u2011'].map(mark)).toEqual([true, true, true]);
 		expect(['', '–', '—', ',', '-,', '--'].map(mark)).toEqual([false, false, false, false, false, false]);
 	});
 });

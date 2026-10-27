@@ -45,11 +45,11 @@ describe('done-when 1: the offset of every transcribed word lands on the end of 
 	});
 
 	// A blank line before the first line, an extra space inside a line, a leading space, a hyphenated particle, a blank line between.
-	const text = '\n  Комнатка тесная,   тихая\n\nвот-вот велит-ли  дом\r\nя # не в силах';
+	const text = '\n  Комнатка тесная,   тихая\n\nвот-вот велит-ли  дом\r\nя\u00A0# не в силах';
 	const tokens: string[][] = [
 		['Комнатка', 'тесная,', 'тихая'],
 		['вот-вот', 'велит-ли', 'велит-ли', 'дом'],
-		['я #', 'не', 'в', 'силах'],
+		['я\u00A0#', 'не', 'в', 'силах'],
 	];
 	it('hand-written lines: each word ends at the end of its own token, whatever the blank lines and spaces before it', () => {
 		const lines = processText(text);
@@ -58,7 +58,7 @@ describe('done-when 1: the offset of every transcribed word lands on the end of 
 			row.forEach((token, W) => {
 				const at = tokenEndOffset(text, L, W)!;
 				expect(text.slice(at - token.length, at), `line ${L} word ${W}`).toBe(token);
-				expect(text[at] === undefined || /\s/.test(text[at]) && text[at] !== ' ').toBe(true);
+				expect(text[at] === undefined || /\s/.test(text[at]) && text[at] !== '\u00A0').toBe(true);
 			}),
 		);
 	});
@@ -67,8 +67,8 @@ describe('done-when 1: the offset of every transcribed word lands on the end of 
 		expect(text.slice(0, tokenEndOffset(text, 1, 2)!).endsWith('велит-ли')).toBe(true);
 	});
 	it('the glued form is one token: the end of «Комнатка\\u00A0# тесная» is the index after the #', () => {
-		const glued = 'Комнатка # тесная';
-		expect(tokenEndOffset(glued, 0, 0)).toBe('Комнатка #'.length);
+		const glued = 'Комнатка\u00A0# тесная';
+		expect(tokenEndOffset(glued, 0, 0)).toBe('Комнатка\u00A0#'.length);
 		expect(tokenEndOffset(glued, 0, 1)).toBe(glued.length);
 	});
 	it('a word that is not there has no offset', () => {
@@ -109,12 +109,12 @@ describe('done-when 2: inserting then removing returns the text byte for byte', 
 		});
 	}
 	it('the inserted text is a no-break space and a #, written as the escape', () => {
-		expect(BREAK_MARK).toBe(' #');
-		expect(insertBreak('вас благодать', 0, 0)).toBe('вас # благодать');
+		expect(BREAK_MARK).toBe('\u00A0#');
+		expect(insertBreak('вас благодать', 0, 0)).toBe('вас\u00A0# благодать');
 	});
 	it('song 1, at «Комнатка»', () => {
 		const marked = insertBreak(song1, 0, 0)!;
-		expect(marked.startsWith('Комнатка # тесная,')).toBe(true);
+		expect(marked.startsWith('Комнатка\u00A0# тесная,')).toBe(true);
 		expect(marked.slice(0, 8) + marked.slice(10)).toBe(song1);
 		expect(removeBreak(marked, 0, 0, 0)).toBe(song1);
 	});
@@ -127,8 +127,8 @@ describe('done-when 3: Remove leaves no # in the unit by step 2’s rule, and th
 		['ва#с благодать', 'вас благодать'],
 		['вас # благодать', 'вас благодать'],
 		['вас ##благодать', 'вас благодать'],
-		['вас # благодать', 'вас благодать'],
-		['вас # # благодать', 'вас благодать'],
+		['вас\u00A0# благодать', 'вас благодать'],
+		['вас\u00A0#\u00A0# благодать', 'вас благодать'],
 		['вас # # благодать', 'вас благодать'],
 		['не # в силах', 'не в силах'],
 		['не #в силах', 'не в силах'],

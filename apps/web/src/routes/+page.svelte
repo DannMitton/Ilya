@@ -195,6 +195,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	} from '$lib/score/correction';
 	import { stackLabel } from '$lib/score/undo-history.svelte';
 	import { createUndoHistory } from '$lib/score/undo-wiring.svelte';
+	import { breakControl } from '$lib/text/break-here';
 	import { CorrectionCursor } from '$lib/score/correction-cursor.svelte';
 	import { valueParts } from '$lib/score/value-name';
 	import { mergeOnUploadObserving } from '$lib/score/slur-seat';
@@ -846,7 +847,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	   stays here is what the page owns: which state an entry saves, and the
 	   order it is written back in. The three names below are the ones every
 	   verb, prop, and comment in this file already uses. */
-	const undoHistory = createUndoHistory(() => doc, stationCursor);
+	const undoHistory = createUndoHistory(() => doc, stationCursor, (text) => handleInput(text, 'paste'));
 	const { push: pushUndo, undo: handleUndo, redo: handleRedo } = undoHistory;
 
 	/* ── THE VERBS, and the readings of the taken entry they act on, live in
@@ -1198,6 +1199,10 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		hasSelection: selectedEventId !== null,
 		canClear: Object.keys(doc.pairings).length > 0,
 		canFromHere: selectedEventId !== null && unplacedSlots(slotQueue, doc.pairings).length > 0,
+		break: breakControl(
+			{ text: doc.inputText, lines, slots: slotQueue, pairings: doc.pairings, selectedEventId, targetIds: eventIds },
+			{ push: pushUndo, write: (text) => handleInput(text, 'paste'), pairings: () => doc.pairings, select: (id) => setCursor({ kind: 'entry', id }) },
+		),
 	});
 
 	const dockShiftAnchor = $derived(

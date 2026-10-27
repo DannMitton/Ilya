@@ -12,15 +12,21 @@ import type { SongDocument } from '$lib/library/document.svelte';
 import type { CorrectionCursor } from './correction-cursor.svelte';
 import { UndoHistory } from './undo-history.svelte';
 
-export function createUndoHistory(doc: () => SongDocument, cursor: CorrectionCursor): UndoHistory {
+export function createUndoHistory(
+	doc: () => SongDocument,
+	cursor: CorrectionCursor,
+	/** The path that transcribes (`handleInput(text, 'paste')`): the one write of the Lyrics text that re-runs the pipeline and lets the seats follow. */
+	writeText: (text: string) => void,
+): UndoHistory {
 	return new UndoHistory(
-		() => ({
+		(withText) => ({
 			corrections: doc().corrections,
 			pairings: doc().pairings,
 			selected: cursor.selectedEventId,
 			gapAfter: cursor.gapAfter,
 			gapMeasure: cursor.gapMeasure,
 			seatedText: doc().seatedText,
+			...(withText ? { inputText: doc().inputText } : {}),
 		}),
 		(entry) => {
 			doc().corrections = entry.corrections;
@@ -29,6 +35,10 @@ export function createUndoHistory(doc: () => SongDocument, cursor: CorrectionCur
 			cursor.selectedEventId = entry.selected;
 			cursor.gapAfter = entry.gapAfter;
 			cursor.gapMeasure = entry.gapMeasure;
+			/* N.194. AFTER the pairings and the seated text are back, so the transcription this starts diffs the
+			   restored seated text against the restored input and reseats nothing. Only an entry that carries the
+			   text writes it; every other verb leaves what the singer typed. */
+			if (entry.inputText !== undefined) writeText(entry.inputText);
 		},
 	);
 }

@@ -41,6 +41,16 @@ export interface PlacementControls {
 	canClear: boolean;
 	/** A note is selected and the tray still holds a syllable. */
 	canFromHere: boolean;
+	/** N.194: the break button. Its state is computed in `text/break-here.ts` from the engine's verdict on the unit's last word. */
+	break: BreakControl;
+}
+
+/** The Loupe's third pill: "Break after this word", "Remove break", or off. */
+export interface BreakControl {
+	onbreak: () => void;
+	state: 'insert' | 'remove' | 'off';
+	/** Off because the unit already ends in a break the engine took for itself: the pill's reason line shows (the 2026-10-26 addendum). */
+	implied: boolean;
 }
 
 /** The notes a scope covers, from the selected note. Empty where it needs a selection and there is none. */

@@ -18,6 +18,7 @@ import type { Library } from './library';
 import type { FailureReason, Outcome, SongRecord } from './types';
 import { emptySongRecord } from './types';
 import type { PluralStore, SongSummary } from './driver';
+import { GLUED_MARK } from '../text/break-glue';
 
 /* ── Naming (design §2.3 layer 3) ───────────────────────────────── */
 
@@ -50,7 +51,7 @@ export function proposeName(record: SongRecord): string {
 	if (fromFile) return fromFile;
 	// N.135 stage 3, DESK DEFAULT: the poet's text names an unnamed song before the sung words do.
 	// Row 139: Poem is not ruled for a typed #, so a title ignores it as it ignores punctuation.
-	return (record.publishedPoem?.trim() ? record.publishedPoem : record.poem).replace(/#/g, '').trim().split(/\s+/).filter(Boolean).slice(0, 4).join(' ');
+	return (record.publishedPoem?.trim() ? record.publishedPoem : record.poem).replace(GLUED_MARK, '').trim().split(/\s+/).filter(Boolean).slice(0, 4).join(' ');
 }
 
 /**
