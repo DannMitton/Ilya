@@ -159,13 +159,58 @@ describe('seatTokens, the monotone rule', () => {
 		expect(noteIds(tokens, bar1(100, 200, 300), 'monotone')).toEqual([11, 12]);
 	});
 
-	it('falls back to nearest for the whole row where there are more tokens than notes', () => {
-		const seats = seatTokens([tok('a', 100), tok('b', 150), tok('c', 210)], bar1(100, 200), 'monotone');
-		expect(seats.map((s) => [s.note, s.by, s.shared])).toEqual([
-			[10, 'nearest', true],
-			[10, 'nearest', true],
-			[11, 'nearest', false],
+	it('seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index', () => {
+		// Four tokens for two notes (100, 200): the cheapest in-order pair is b@105 and c@195.
+		const tokens = [tok('a', 60), tok('b', 105), tok('c', 195), tok('d', 260)];
+		const seats = seatTokens(tokens, bar1(100, 200), 'monotone');
+		expect(seats.map((s) => [s.token, s.text, s.note, s.unseated])).toEqual([
+			[0, 'a', null, true],
+			[1, 'b', 10, false],
+			[2, 'c', 11, false],
+			[3, 'd', null, true],
 		]);
+		expect(seats.filter((s) => !s.unseated).every((s) => s.by === 'monotone' && !s.shared)).toBe(true);
+		expect(seats.filter((s) => s.unseated).every((s) => s.by === 'monotone' && s.offset === null)).toBe(true);
+	});
+
+	it('keeps order in the surplus case: a cheaper pair that crosses is not taken', () => {
+		// Tokens are taken in x order: b on 100, a on 200, and c, the farthest, is left over.
+		const seats = seatTokens([tok('a', 190), tok('b', 110), tok('c', 400)], bar1(100, 200), 'monotone');
+		expect(seats.map((s) => [s.text, s.note])).toEqual([['b', 10], ['a', 11], ['c', null]]);
+	});
+
+	it('leaves the surplus token at the end of the row unseated', () => {
+		const seats = seatTokens([tok('a', 100), tok('b', 200), tok('c', 300)], bar1(100, 200), 'monotone');
+		expect(seats.map((s) => [s.token, s.note, s.unseated])).toEqual([[0, 10, false], [1, 11, false], [2, null, true]]);
+	});
+
+	it('leaves the surplus token in the middle of the row unseated, and seats the ones around it', () => {
+		const seats = seatTokens([tok('a', 100), tok('b', 150), tok('c', 200)], bar1(100, 200), 'monotone');
+		expect(seats.map((s) => [s.token, s.note, s.unseated])).toEqual([[0, 10, false], [1, null, true], [2, 11, false]]);
+	});
+
+	it('leaves the surplus token at the start of the row unseated', () => {
+		const seats = seatTokens([tok('a', 40), tok('b', 100), tok('c', 200)], bar1(100, 200), 'monotone');
+		expect(seats.map((s) => [s.token, s.note, s.unseated])).toEqual([[0, null, true], [1, 10, false], [2, 11, false]]);
+	});
+
+	it('does not fold a surplus token onto a neighbour: no note holds two', () => {
+		const seats = seatTokens([tok('a', 100), tok('b', 102), tok('c', 104), tok('d', 200)], bar1(100, 200), 'monotone');
+		const seated = seats.filter((s) => s.note !== null);
+		expect(new Set(seated.map((s) => s.note)).size).toBe(seated.length);
+		expect(seated).toHaveLength(2);
+		expect(seats.filter((s) => s.unseated).map((s) => s.token).sort()).toEqual([1, 2]);
+		expect(seats.every((s) => !s.shared)).toBe(true);
+	});
+
+	it('leaves no token unseated, and no note without one, at equal counts', () => {
+		const seats = seatTokens([tok('a', 100), tok('b', 200)], bar1(100, 200), 'monotone');
+		expect(seats.map((s) => s.unseated)).toEqual([false, false]);
+	});
+
+	it('does not mark a hyphen, an extender, or a mark unseated', () => {
+		const seats = seatTokens([tok('a', 100), tok('-', 150, 10), tok('b', 200), tok('c', 300)], bar1(100, 200), 'monotone');
+		expect(seats.map((s) => [s.text, s.unseated])).toEqual([['a', false], ['-', false], ['b', false], ['c', true]]);
 	});
 
 	it('takes the alignment of least total distance', () => {
@@ -219,10 +264,12 @@ describe('seatTokens, tokens that are not syllables', () => {
 		]);
 	});
 
-	it('does not count them against the notes', () => {
-		// Three tokens and two notes would fall back; two syllables and two notes do not.
-		const seats = seatTokens(tokens.slice(0, 3), bar1(100, 200), 'monotone');
-		expect(seats.filter((s) => s.kind === 'syllable').map((s) => s.by)).toEqual(['monotone', 'monotone']);
+	it('does not count them against the notes: a hyphen standing on a head takes no seat from the syllable beside it', () => {
+		const seats = seatTokens([tok('Ком', 100), tok('-', 200, 10), tok('нат', 205)], bar1(100, 200), 'monotone');
+		expect(seats.filter((s) => s.kind === 'syllable').map((s) => [s.text, s.note, s.unseated])).toEqual([
+			['Ком', 10, false],
+			['нат', 11, false],
+		]);
 	});
 
 	it.each([
@@ -247,7 +294,7 @@ describe('seatTokens, nothing to seat', () => {
 	it.each(RULES)('%s seats no token where the row has no notes', (rule) => {
 		const seats = seatTokens([tok('Ком', 100)], [], rule);
 		expect(seats).toHaveLength(1);
-		expect(seats[0]).toMatchObject({ kind: 'syllable', note: null, offset: null, by: null });
+		expect(seats[0]).toMatchObject({ kind: 'syllable', note: null, offset: null, by: null, unseated: true });
 	});
 
 	it.each(RULES)('%s returns nothing for no tokens', (rule) => {

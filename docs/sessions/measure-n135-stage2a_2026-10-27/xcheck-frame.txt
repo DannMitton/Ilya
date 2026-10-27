@@ -1,0 +1,5 @@
+200 rows (8 with no ink); angle differs on 3; size differs on 0; more than 1 grey level in more than 0.5% of pixels on 3
+largest shares of pixels differing by more than 1 grey level: [(0.0715, 188, 'oracle 1.0', 'ts 1.1', 'max 37'), (0.0577, 181, 'oracle 0.5', 'ts 0', 'max 160'), (0.0124, 139, 'oracle 1.7', 'ts 1.6', 'max 39'), (0.0, 76, 'oracle -0.7', 'ts -0.7', 'max 2'), (0.0, 187, 'oracle -1.3', 'ts -1.3', 'max 2')]
+  differs: (139, 'pixels', 0.0124, 'oracle angle', 1.7, 'ts angle', 1.6, 'max diff', 39)
+  differs: (181, 'pixels', 0.0577, 'oracle angle', 0.5, 'ts angle', 0, 'max diff', 160)
+  differs: (188, 'pixels', 0.0715, 'oracle angle', 1.0, 'ts angle', 1.1, 'max diff', 37)

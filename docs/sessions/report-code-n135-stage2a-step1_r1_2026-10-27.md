@@ -111,3 +111,5 @@ Cites that moved since the brief (re-located by name, `0d42e658`):
 | `vowel-resolver.ts:243` `collectScoreWords`, `:157` `CYRILLIC_VOWEL` | `:224`, `:159` (read in step 2) |
 
 Step 2 (modules 3, 4, and 5) follows in its own commit and report.
+
+**Addendum, step 3 (2026-10-27):** this report describes `monotone` falling back to `nearest` for the whole row where tokens outnumber notes. That is superseded by the desk's amendment, applied in step 3 (`report-code-n135-stage2a-step3_r1_2026-10-27.md`): every note takes one token, the surplus tokens come back `unseated`. The counts above are those of the commit `d9584b28`.

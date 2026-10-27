@@ -17,8 +17,10 @@
  *   applied to boxes instead of old seats.
  * - `monotone`: one least-cost alignment over the row, each token to one note,
  *   order kept, the cost the x distance, a note allowed no token (a melisma or
- *   a tie), a token never without a note. A row with more tokens than notes is
- *   seated by `nearest`.
+ *   a tie), a token never without a note. Where tokens outnumber the notes,
+ *   every note takes one token, the in-order choice of least total distance, and
+ *   the surplus tokens come back `unseated`, with their index: they are not
+ *   dropped, and not folded onto a neighbouring note.
  *
  * Call it once per row, with the notes of that row's system. A token with no
  * letter is not seated: a lone hyphen, an extender, and a stray mark are
@@ -69,8 +71,13 @@ export interface Seat {
 	note: number | null;
 	/** The token's centre less the note's x, in pixels; null where `note` is. */
 	offset: number | null;
-	/** The rule that placed the token, which is `nearest` where `order` or `monotone` fell back to it; null where `note` is. */
+	/**
+	 * The rule that placed the token, which is `nearest` where `order` fell back to it; `monotone` for a token
+	 * `monotone` left over (`unseated`); null for a token that is not a syllable, or where there is no note to seat on.
+	 */
 	by: SeatRule | null;
+	/** A syllable token that no note took: `note` is null. Only `monotone` leaves a token over while there are notes. */
+	unseated: boolean;
 	/** The token holds a non-letter between letters: two syllables run together, seated whole on one note. */
 	runTogether: boolean;
 	/** Another token is seated on the same note. */
@@ -97,17 +104,28 @@ function nearestOf(cx: number, xs: number[]): number {
 	return best;
 }
 
-/** Rule `monotone`: token i to note j, or null where there are more tokens than notes. */
-function monotone(cx: number[], xs: number[]): number[] | null {
+/**
+ * Rule `monotone`: token k to note j, in order, at least total distance, or -1
+ * for a token left over. With no more tokens than notes every token is seated
+ * and a note may go without; with more tokens than notes every note is taken
+ * and the surplus tokens are left over.
+ */
+function monotone(cx: number[], xs: number[]): number[] {
 	const n = cx.length;
 	const m = xs.length;
-	if (n === 0 || n > m) return null;
+	const out = new Array<number>(n).fill(-1);
+	if (n === 0 || m === 0) return out;
 	const INF = 1e18;
-	const cost: number[][] = Array.from({ length: n + 1 }, (_, i) => new Array<number>(m + 1).fill(i === 0 ? 0 : INF));
-	const took: boolean[][] = Array.from({ length: n + 1 }, () => new Array<boolean>(m + 1).fill(false));
-	for (let i = 1; i <= n; i++) {
-		for (let j = 1; j <= m; j++) {
-			const take = cost[i - 1][j - 1] + Math.abs(cx[i - 1] - xs[j - 1]);
+	const swap = n > m;
+	// rows run over the side that is fully seated (the shorter), columns over the longer side that may skip.
+	const rows = swap ? m : n;
+	const cols = swap ? n : m;
+	const dist = (i: number, j: number) => Math.abs(swap ? cx[j - 1] - xs[i - 1] : cx[i - 1] - xs[j - 1]);
+	const cost: number[][] = Array.from({ length: rows + 1 }, (_, i) => new Array<number>(cols + 1).fill(i === 0 ? 0 : INF));
+	const took: boolean[][] = Array.from({ length: rows + 1 }, () => new Array<boolean>(cols + 1).fill(false));
+	for (let i = 1; i <= rows; i++) {
+		for (let j = 1; j <= cols; j++) {
+			const take = cost[i - 1][j - 1] + dist(i, j);
 			const skip = cost[i][j - 1];
 			if (take <= skip) {
 				cost[i][j] = take;
@@ -115,12 +133,12 @@ function monotone(cx: number[], xs: number[]): number[] | null {
 			} else cost[i][j] = skip;
 		}
 	}
-	const out = new Array<number>(n);
-	let i = n;
-	let j = m;
+	let i = rows;
+	let j = cols;
 	while (i > 0 && j > 0) {
 		if (took[i][j]) {
-			out[i - 1] = j - 1;
+			if (swap) out[j - 1] = i - 1;
+			else out[i - 1] = j - 1;
 			i--;
 			j--;
 		} else j--;
@@ -145,13 +163,10 @@ export function seatTokens(tokens: Token[], notes: NotePlace[], rule: SeatRule):
 		cx.forEach((c, k) => (at[k] = nearestOf(c, xs)));
 
 		if (rule === 'monotone') {
-			const aligned = monotone(cx, xs);
-			if (aligned) {
-				aligned.forEach((j, k) => {
-					at[k] = j;
-					by[k] = 'monotone';
-				});
-			}
+			monotone(cx, xs).forEach((j, k) => {
+				at[k] = j;
+				by[k] = 'monotone';
+			});
 		} else if (rule === 'order') {
 			const barOf = new Map<number, number[]>();
 			at.forEach((j, k) => {
@@ -184,7 +199,9 @@ export function seatTokens(tokens: Token[], notes: NotePlace[], rule: SeatRule):
 		const base = { token: i, kind: kinds[i], text: tokens[i].text, x: centre[i] };
 		const placed = seatOf.get(i);
 		if (!placed || placed.j < 0) {
-			return { ...base, note: null, offset: null, by: null, runTogether: kinds[i] === 'syllable' && RUN_TOGETHER.test(tokens[i].text), shared: false };
+			const syllable = kinds[i] === 'syllable';
+			// A token the rule left over was still placed by the rule: `monotone`, with no note.
+			return { ...base, note: null, offset: null, by: placed && staff.length > 0 ? by[placed.k] : null, unseated: syllable, runTogether: syllable && RUN_TOGETHER.test(tokens[i].text), shared: false };
 		}
 		const note = staff[placed.j];
 		return {
@@ -192,6 +209,7 @@ export function seatTokens(tokens: Token[], notes: NotePlace[], rule: SeatRule):
 			note: note.id,
 			offset: centre[i] - note.x,
 			by: by[placed.k],
+			unseated: false,
 			runTogether: RUN_TOGETHER.test(tokens[i].text),
 			shared: (heldBy.get(placed.j) ?? 0) > 1,
 		};

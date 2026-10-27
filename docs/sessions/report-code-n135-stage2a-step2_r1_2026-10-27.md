@@ -103,3 +103,5 @@ Cites that moved since the brief (re-located by name, `d9584b28`):
 | `ocr-guard.ts:59`, `join-pages.ts` `placeOf` | `:59` unchanged; `:439` |
 
 Stage 2a is on `cloud-lane-16`. I have stopped, as asked.
+
+**Addendum, step 3 (2026-10-27):** the desk's amendment to `seatTokens` (monotone, surplus tokens) arrived after steps 1 and 2 were both pushed, so it could not be the first act of step 2 as the desk asked. It is applied in step 3, in its own commit, with its report (`report-code-n135-stage2a-step3_r1_2026-10-27.md`). `Seat` gained `unseated`; `sewWords` already dropped a syllable with no note, so it drops an unseated one, and the caller sees it in the seat list.

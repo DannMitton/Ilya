@@ -1,7 +1,6 @@
-underlay-seat.ts | nearest: tie goes right (< -> <=) | KILLED by 2 of 48
+underlay-seat.ts | nearest: tie goes right (< -> <=) | KILLED by 1 of 55
       - seatTokens, equal counts seats a token midway between two notes on the left one
-      - seatTokens, the monotone rule falls back to nearest for the whole row where there are more tokens than notes
-underlay-seat.ts | nearest: picks the farthest | KILLED by 13 of 48
+underlay-seat.ts | nearest: picks the farthest | KILLED by 12 of 55
       - seatTokens, equal counts nearest seats each token under its own note
       - seatTokens, equal counts gives the token's centre less the note's x as the offset
       - seatTokens, equal counts returns tokens in x order with their own index, whatever order they came in
@@ -13,87 +12,101 @@ underlay-seat.ts | nearest: picks the farthest | KILLED by 13 of 48
       - seatTokens, the order rule across bars pairs in order in a bar whose count agrees, and falls back in the bar whose count does not
       - seatTokens, the order rule across bars counts a token in the bar of its nearest note
       - seatTokens, the monotone rule never lets two tokens share a note, where nearest does
-      - seatTokens, the monotone rule falls back to nearest for the whole row where there are more tokens than notes
-underlay-seat.ts | monotone: tie goes to skip (<= -> <) | KILLED by 1 of 48
+      - seatTokens, two syllables run together seats a token holding «су-е» on one note, whole, and reports it
+underlay-seat.ts | monotone: tie goes to skip (<= -> <) | KILLED by 1 of 55
       - seatTokens, the monotone rule never lets two tokens share a note, where nearest does
-underlay-seat.ts | monotone: no fallback when tokens outnumber notes | KILLED by 1 of 48
-      - seatTokens, the monotone rule falls back to nearest for the whole row where there are more tokens than notes
-underlay-seat.ts | monotone: cost is not the distance (zero) | KILLED by 3 of 48
+underlay-seat.ts | monotone: cost is not the distance (zero) | KILLED by 9 of 55
       - seatTokens, one melisma monotone leaves the tied note without a token
       - seatTokens, one melisma order uses the tie, where nearest and monotone cannot: a syllable printed 10 px past the tie's head
       - seatTokens, the monotone rule keeps order and lets a note go without a token
-underlay-seat.ts | monotone: notes may not be skipped | KILLED by 3 of 48
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+underlay-seat.ts | monotone: notes may not be skipped | KILLED by 9 of 55
       - seatTokens, one melisma monotone leaves the tied note without a token
       - seatTokens, one melisma order uses the tie, where nearest and monotone cannot: a syllable printed 10 px past the tie's head
       - seatTokens, the monotone rule keeps order and lets a note go without a token
-underlay-seat.ts | monotone off (rule falls through to nearest) | KILLED by 5 of 48
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+underlay-seat.ts | monotone off (rule falls through to nearest) | KILLED by 11 of 55
       - seatTokens, equal counts says which rule placed each token
       - seatTokens, a token offset by a head and a half monotone keeps it on its own note
       - seatTokens, the monotone rule never lets two tokens share a note, where nearest does
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule leaves the surplus token at the start of the row unseated
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
       - seatTokens, tokens that are not syllables returns a lone hyphen, an extender, and a mark in their place, seated on nothing
-      - seatTokens, tokens that are not syllables does not count them against the notes
-underlay-seat.ts | order off (rule falls through to nearest) | KILLED by 6 of 48
+underlay-seat.ts | order off (rule falls through to nearest) | KILLED by 6 of 55
       - seatTokens, equal counts says which rule placed each token
       - seatTokens, one melisma order uses the tie, where nearest and monotone cannot: a syllable printed 10 px past the tie's head
       - seatTokens, one melisma order reads a note under an extender as it reads a tie
       - seatTokens, a token offset by a head and a half order keeps it on its own note
       - seatTokens, the order rule across bars pairs in order in a bar whose count agrees, and falls back in the bar whose count does not
       - seatTokens, the order rule across bars counts a token in the bar of its nearest note
-underlay-seat.ts | order: tied-into notes counted as sung | KILLED by 1 of 48
+underlay-seat.ts | order: tied-into notes counted as sung | KILLED by 1 of 55
       - seatTokens, one melisma order uses the tie, where nearest and monotone cannot: a syllable printed 10 px past the tie's head
-underlay-seat.ts | order: notes under an extender counted as sung | KILLED by 1 of 48
+underlay-seat.ts | order: notes under an extender counted as sung | KILLED by 1 of 55
       - seatTokens, one melisma order reads a note under an extender as it reads a tie
-underlay-seat.ts | order: sung notes taken from every bar | KILLED by 2 of 48
+underlay-seat.ts | order: sung notes taken from every bar | KILLED by 2 of 55
       - seatTokens, the order rule across bars pairs in order in a bar whose count agrees, and falls back in the bar whose count does not
       - seatTokens, the order rule across bars counts a token in the bar of its nearest note
-underlay-seat.ts | order: pairs even where the counts differ | KILLED by 3 of 48
+underlay-seat.ts | order: pairs even where the counts differ | KILLED by 3 of 55
       - seatTokens, one melisma order falls back to nearest in a bar whose count differs, and says so
       - seatTokens, the order rule across bars pairs in order in a bar whose count agrees, and falls back in the bar whose count does not
       - seatTokens, the order rule across bars counts a token in the bar of its nearest note
-underlay-seat.ts | order: bar taken from the token's index, not its nearest note | KILLED by 2 of 48
+underlay-seat.ts | order: bar taken from the token's index, not its nearest note | KILLED by 2 of 55
       - seatTokens, the order rule across bars pairs in order in a bar whose count agrees, and falls back in the bar whose count does not
       - seatTokens, the order rule across bars counts a token in the bar of its nearest note
-underlay-seat.ts | tokens not put in x order | KILLED by 1 of 48
+underlay-seat.ts | tokens not put in x order | KILLED by 2 of 55
       - seatTokens, equal counts returns tokens in x order with their own index, whatever order they came in
-underlay-seat.ts | notes not put in x order | KILLED by 1 of 48
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+underlay-seat.ts | notes not put in x order | KILLED by 1 of 55
       - seatTokens, equal counts does not need the notes in x order
-underlay-seat.ts | shared never reported | KILLED by 2 of 48
+underlay-seat.ts | shared never reported | KILLED by 1 of 55
       - seatTokens, a token offset by a head and a half nearest puts the offset token on the next note, and marks both tokens as sharing it
-      - seatTokens, the monotone rule falls back to nearest for the whole row where there are more tokens than notes
-underlay-seat.ts | runTogether never reported | KILLED by 2 of 48
+underlay-seat.ts | runTogether never reported | KILLED by 2 of 55
       - seatTokens, two syllables run together seats a token holding «су-е» on one note, whole, and reports it
       - seatTokens, two syllables run together does not split it under any rule, and leaves the other note without a token
-underlay-seat.ts | runTogether: marks count as letters | KILLED by 3 of 48
+underlay-seat.ts | runTogether: marks count as letters | KILLED by 3 of 55
       - seatTokens, two syllables run together seats a token holding «су-е» on one note, whole, and reports it
       - seatTokens, two syllables run together does not call a mark at the end of a syllable a run together
       - seatTokens, two syllables run together does not call two tokens whose boxes overlap one token
-underlay-seat.ts | offset sign reversed | KILLED by 3 of 48
+underlay-seat.ts | offset sign reversed | KILLED by 3 of 55
       - seatTokens, equal counts gives the token's centre less the note's x as the offset
       - seatTokens, a token offset by a head and a half order keeps it on its own note
       - seatTokens, a token offset by a head and a half monotone keeps it on its own note
-underlay-seat.ts | a joint is read as a mark | KILLED by 4 of 48
+underlay-seat.ts | a joint is read as a mark | KILLED by 4 of 55
       - seatTokens, tokens that are not syllables returns a lone hyphen, an extender, and a mark in their place, seated on nothing
       - seatTokens, tokens that are not syllables reads «-» as joint
       - seatTokens, tokens that are not syllables reads «–» as joint
       - seatTokens, tokens that are not syllables reads «--» as joint
-underlay-seat.ts | an extender is read as a joint | KILLED by 3 of 48
+underlay-seat.ts | an extender is read as a joint | KILLED by 3 of 55
       - seatTokens, tokens that are not syllables returns a lone hyphen, an extender, and a mark in their place, seated on nothing
       - seatTokens, tokens that are not syllables reads «_» as extender
       - seatTokens, tokens that are not syllables reads «____» as extender
-underlay-seat.ts | non-syllable tokens counted against the notes | KILLED by 2 of 48
+underlay-seat.ts | non-syllable tokens counted against the notes | KILLED by 2 of 55
       - seatTokens, tokens that are not syllables returns a lone hyphen, an extender, and a mark in their place, seated on nothing
-      - seatTokens, tokens that are not syllables does not count them against the notes
-underlay-seat.ts | no notes: seats on note 0 anyway | KILLED by 3 of 48
+      - seatTokens, tokens that are not syllables does not count them against the notes: a hyphen standing on a head takes no seat from the syllable beside it
+underlay-seat.ts | no notes: seats on note 0 anyway | KILLED by 2 of 55
       - seatTokens, nothing to seat nearest seats no token where the row has no notes
       - seatTokens, nothing to seat order seats no token where the row has no notes
-      - seatTokens, nothing to seat monotone seats no token where the row has no notes
-underlay-seat.ts | fallback tokens report the rule asked for, not nearest | KILLED by 5 of 48
+underlay-seat.ts | fallback tokens report the rule asked for, not nearest | KILLED by 4 of 55
       - seatTokens, one melisma order falls back to nearest in a bar whose count differs, and says so
       - seatTokens, one melisma order falls back where the bar has no sung note at all
       - seatTokens, the order rule across bars pairs in order in a bar whose count agrees, and falls back in the bar whose count does not
       - seatTokens, the order rule across bars counts a token in the bar of its nearest note
-      - seatTokens, the monotone rule falls back to nearest for the whole row where there are more tokens than notes
-underlay-seat.ts | order: bar's tokens taken in reverse x order | KILLED by 8 of 48
+underlay-seat.ts | order: bar's tokens taken in reverse x order | KILLED by 8 of 55
       - seatTokens, equal counts order seats each token under its own note
       - seatTokens, equal counts does not need the notes in x order
       - seatTokens, one melisma order leaves the tied note without a token
@@ -102,3 +115,56 @@ underlay-seat.ts | order: bar's tokens taken in reverse x order | KILLED by 8 of
       - seatTokens, a token offset by a head and a half order keeps it on its own note
       - seatTokens, the order rule across bars pairs in order in a bar whose count agrees, and falls back in the bar whose count does not
       - seatTokens, the order rule across bars counts a token in the bar of its nearest note
+underlay-seat.ts | surplus: tokens are not skipped (the shorter side is not the rows) | KILLED by 6 of 55
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+underlay-seat.ts | surplus: seating ignores distance | KILLED by 6 of 55
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+underlay-seat.ts | surplus: a left-over token is folded onto its nearest note | KILLED by 7 of 55
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule leaves the surplus token at the start of the row unseated
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+underlay-seat.ts | surplus: a left-over token is not flagged unseated | KILLED by 9 of 55
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule leaves the surplus token at the start of the row unseated
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+      - seatTokens, nothing to seat nearest seats no token where the row has no notes
+      - seatTokens, nothing to seat order seats no token where the row has no notes
+      - seatTokens, nothing to seat monotone seats no token where the row has no notes
+underlay-seat.ts | surplus: a hyphen is flagged unseated | KILLED by 1 of 55
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+underlay-seat.ts | surplus: the fallback to nearest is restored for monotone | KILLED by 7 of 55
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule leaves the surplus token at the start of the row unseated
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+underlay-seat.ts | surplus: the left-over tokens are dropped from the result | KILLED by 10 of 55
+      - seatTokens, the monotone rule seats the in-order subset of least cost where tokens outnumber notes, and returns the rest unseated with their index
+      - seatTokens, the monotone rule keeps order in the surplus case: a cheaper pair that crosses is not taken
+      - seatTokens, the monotone rule leaves the surplus token at the end of the row unseated
+      - seatTokens, the monotone rule leaves the surplus token in the middle of the row unseated, and seats the ones around it
+      - seatTokens, the monotone rule leaves the surplus token at the start of the row unseated
+      - seatTokens, the monotone rule does not fold a surplus token onto a neighbour: no note holds two
+      - seatTokens, the monotone rule does not mark a hyphen, an extender, or a mark unseated
+      - seatTokens, nothing to seat nearest seats no token where the row has no notes
+      - seatTokens, nothing to seat order seats no token where the row has no notes
+      - seatTokens, nothing to seat monotone seats no token where the row has no notes

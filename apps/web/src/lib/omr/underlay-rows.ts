@@ -24,6 +24,10 @@
  * hold a tempo mark or a piano head, and the caller decides that
  * (`underlay-language.ts`).
  *
+ * The 0.3 staff-space padding was measured on 2026-10-27 as cutting through ink
+ * on 207 of 208 photocopy crops and 376 of 381 others. `frameRow`'s padding
+ * (`underlay-frame.ts`) is the remedy, so a caller frames every row box it cuts.
+ *
  * Pure: pixels in, boxes out. No DOM, no canvas.
  */
 

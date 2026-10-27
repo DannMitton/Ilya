@@ -1,0 +1,74 @@
+underlay-frame.ts | drop the deskew | KILLED by 3 of 29
+      - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
+      - frameRow, deskew reports a negative angle for a tilt the other way
+      - frameRow, deskew does not turn further than 3 degrees
+underlay-frame.ts | flip the angle's sign | KILLED by 2 of 29
+      - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
+      - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
+underlay-frame.ts | closing kernel 1 by 1 (no closing) | KILLED by 2 of 29
+      - frameRow, closing closes a gap of 1 px in a stroke
+      - frameRow, closing closes a gap of 2 px, the widest a 3 by 3 kernel closes
+underlay-frame.ts | scale to 48 | KILLED by 5 of 29
+      - frameRow, what counts as ink does not let a pale smudge set the extent
+      - frameRow, scale brings an ink extent of 48 px to 32
+      - frameRow, scale brings an ink extent of 24 px to 32
+      - frameRow, scale takes the extent between 2 and 98 percent of the ink, so a stray speck does not set it
+      - frameRow, padding is a crop of the size the transform says
+underlay-frame.ts | pad with white on grey paper | KILLED by 4 of 29
+      - frameRow, deskew fills what the turn uncovers with the paper tone
+      - frameRow, padding pads 16 px of the paper tone on every side by default, 176 on grey paper
+      - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
+      - frameRow, a crop with no ink keeps the grey it was given in the middle
+underlay-frame.ts | default pad 16 -> 8 | KILLED by 1 of 29
+      - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
+underlay-frame.ts | sweep to 1 degree | KILLED by 3 of 29
+      - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
+      - frameRow, deskew reports a negative angle for a tilt the other way
+      - frameRow, deskew does not turn further than 3 degrees
+underlay-frame.ts | sweep ties go to the larger angle | KILLED by 1 of 29
+      - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
+underlay-frame.ts | sweep tries the negative angle first on a tie | SURVIVED by 0 of 29
+underlay-frame.ts | rotation border filled with black | KILLED by 2 of 29
+      - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
+      - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
+underlay-frame.ts | mask not padded for the sweep (SWEEP_PAD 120 -> 0) | SURVIVED by 0 of 29
+underlay-frame.ts | ink threshold 128 -> 200 | KILLED by 2 of 29
+      - frameRow, what counts as ink reads grey under 128 as ink and 128 or over as paper
+      - frameRow, what counts as ink does not let a pale smudge set the extent
+underlay-frame.ts | extent from 5 percent | KILLED by 9 of 29
+      - frameRow, what counts as ink does not let a pale smudge set the extent
+      - frameRow, closing closes a gap of 1 px in a stroke
+      - frameRow, closing does not close a gap of 3 px
+      - frameRow, closing leaves the outline of a solid block where it was
+      - frameRow, scale brings an ink extent of 48 px to 32
+      - frameRow, scale brings an ink extent of 24 px to 32
+      - frameRow, scale takes the extent between 2 and 98 percent of the ink, so a stray speck does not set it
+      - frameRow, scale uses the inkHeight it is given
+      - frameRow, scale measures the extent from the top: cumulative ink at 2 and 98 percent, inclusive
+underlay-frame.ts | extent measures from the first ink row, not 2 percent | KILLED by 1 of 29
+      - frameRow, scale takes the extent between 2 and 98 percent of the ink, so a stray speck does not set it
+underlay-frame.ts | paper tone: the last of the top bins on a tie | KILLED by 1 of 29
+      - frameRow, padding names the paper tone as the most frequent grey, the lowest on a tie
+underlay-frame.ts | closing dilates but does not erode | KILLED by 7 of 29
+      - frameRow, what counts as ink does not let a pale smudge set the extent
+      - frameRow, closing closes a gap of 1 px in a stroke
+      - frameRow, closing does not close a gap of 3 px
+      - frameRow, closing leaves the outline of a solid block where it was
+      - frameRow, scale brings an ink extent of 48 px to 32
+      - frameRow, scale brings an ink extent of 24 px to 32
+      - frameRow, scale takes the extent between 2 and 98 percent of the ink, so a stray speck does not set it
+underlay-frame.ts | a crop with no ink is scaled anyway | KILLED by 2 of 29
+      - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
+      - frameRow, a crop with no ink keeps the grey it was given in the middle
+underlay-frame.ts | unframe: padding not removed | KILLED by 3 of 29
+      - frameRow, the transform back maps a glyph of the framed crop back to where it stood, within 1 px, for scale and padding
+      - frameRow, the transform back maps with the padding and the scale of the transform it is given
+      - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
+underlay-frame.ts | unframe: scale not removed | KILLED by 3 of 29
+      - frameRow, the transform back maps a glyph of the framed crop back to where it stood, within 1 px, for scale and padding
+      - frameRow, the transform back maps with the padding and the scale of the transform it is given
+      - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
+underlay-frame.ts | unframe: turn applied the wrong way | KILLED by 1 of 29
+      - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
+underlay-frame.ts | resize: both axes by the factor -> width only | KILLED by 1 of 29
+      - frameRow, scale resizes both axes by the factor

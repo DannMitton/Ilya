@@ -19,13 +19,8 @@
     "if (take < skip) {"
    ],
    [
-    "monotone: no fallback when tokens outnumber notes",
-    "if (n === 0 || n > m) return null;",
-    "if (n === 0) return null;"
-   ],
-   [
     "monotone: cost is not the distance (zero)",
-    "const take = cost[i - 1][j - 1] + Math.abs(cx[i - 1] - xs[j - 1]);",
+    "const take = cost[i - 1][j - 1] + dist(i, j);",
     "const take = cost[i - 1][j - 1];"
    ],
    [
@@ -127,6 +122,41 @@
     "order: bar's tokens taken in reverse x order",
     "ks.forEach((k, r) => {",
     "[...ks].reverse().forEach((k, r) => {"
+   ],
+   [
+    "surplus: tokens are not skipped (the shorter side is not the rows)",
+    "const swap = n > m;",
+    "const swap = false;"
+   ],
+   [
+    "surplus: seating ignores distance",
+    "const dist = (i: number, j: number) => Math.abs(swap ? cx[j - 1] - xs[i - 1] : cx[i - 1] - xs[j - 1]);",
+    "const dist = (i: number, j: number) => (swap ? 0 : Math.abs(cx[i - 1] - xs[j - 1]));"
+   ],
+   [
+    "surplus: a left-over token is folded onto its nearest note",
+    "at[k] = j;\n\t\t\t\tby[k] = 'monotone';",
+    "at[k] = j >= 0 ? j : nearestOf(cx[k], xs);\n\t\t\t\tby[k] = 'monotone';"
+   ],
+   [
+    "surplus: a left-over token is not flagged unseated",
+    "unseated: syllable,",
+    "unseated: false,"
+   ],
+   [
+    "surplus: a hyphen is flagged unseated",
+    "const syllable = kinds[i] === 'syllable';",
+    "const syllable = true;"
+   ],
+   [
+    "surplus: the fallback to nearest is restored for monotone",
+    "monotone(cx, xs).forEach((j, k) => {",
+    "(cx.length > xs.length ? cx.map((c) => nearestOf(c, xs)) : monotone(cx, xs)).forEach((j, k) => {"
+   ],
+   [
+    "surplus: the left-over tokens are dropped from the result",
+    "\treturn order.map((i): Seat => {",
+    "\treturn order.filter((i) => kinds[i] !== 'syllable' || at[sy.indexOf(i)] >= 0).map((i): Seat => {"
    ]
   ]
  }

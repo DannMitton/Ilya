@@ -1,4 +1,4 @@
-"""N.135 stage 2a: cross-check seatTokens against the stage 1 harness's score44.py rule1, rule3, and seat (copied here), on 1500 seeded random rows.
+"""N.135 stage 2a: cross-check seatTokens against the stage 1 harness's score44.py rule1, rule3, and seat (copied here), on 1500 seeded random rows. Rule 3 with more tokens than notes is checked against a brute-force least total distance instead, because the desk amendment of 2026-10-27 replaced the harness's fallback to nearest.
 Usage: python3 xcheck_seat_gen.py <out.json>; then node xcheck_seat.mjs <out.json>. `xcheck.sh` runs both."""
 import json, random, collections
 random.seed(44)
@@ -43,6 +43,11 @@ for _ in range(1500):
     T = [dict(cx=c) for c in cxs]; N = list(range(m)); want = {}
     for r in (1, 2, 3):
         if n == 0: want[r] = []; continue
+        if r == 3 and n > m:
+            # Superseded by the desk amendment of 2026-10-27: every note takes one token, in order, at least total distance; the rest are unseated. Brute force.
+            import itertools
+            best = min(sum(abs(cxs[i] - X[j]) for j, i in enumerate(c)) for c in itertools.combinations(range(n), m)) if n <= 12 else None
+            want[r] = dict(surplus=True, cost=best); continue
         a, _ = seat(r, T, N, X, bars, tie); want[r] = [a[i] for i in range(n)]
     cases.append(dict(X=X, bars=bars, tie=tie, cx=cxs, want=want))
 import sys; json.dump(cases, open(sys.argv[1], 'w')); print(len(cases), 'rows')

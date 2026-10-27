@@ -1,0 +1,113 @@
+[
+ {
+  "src": "underlay-frame.ts",
+  "test": "underlay-frame.test.ts",
+  "muts": [
+   [
+    "drop the deskew",
+    "const angle = skewAngle(grey, width, height);",
+    "const angle = 0;"
+   ],
+   [
+    "flip the angle's sign",
+    "const level = rotateGrey(grey, width, height, angle, paper);",
+    "const level = rotateGrey(grey, width, height, -angle, paper);"
+   ],
+   [
+    "closing kernel 1 by 1 (no closing)",
+    "const closed = filter3(filter3(inverted, w, h, true), w, h, false);",
+    "const closed = inverted;"
+   ],
+   [
+    "scale to 48",
+    "export const DEFAULT_INK_HEIGHT = 32;",
+    "export const DEFAULT_INK_HEIGHT = 48;"
+   ],
+   [
+    "pad with white on grey paper",
+    "const framed = padAll(scaled.data, scaled.width, scaled.height, pad, paper);",
+    "const framed = padAll(scaled.data, scaled.width, scaled.height, pad, 255);"
+   ],
+   [
+    "default pad 16 -> 8",
+    "export const DEFAULT_PAD = 16;",
+    "export const DEFAULT_PAD = 8;"
+   ],
+   [
+    "sweep to 1 degree",
+    "const SWEEP_TENTHS = 30;",
+    "const SWEEP_TENTHS = 10;"
+   ],
+   [
+    "sweep ties go to the larger angle",
+    "if (variance > bestVariance) {",
+    "if (variance >= bestVariance) {"
+   ],
+   [
+    "sweep tries the negative angle first on a tie",
+    "for (const tenths of [k, -k]) {",
+    "for (const tenths of [-k, k]) {"
+   ],
+   [
+    "rotation border filled with black",
+    "const level = rotateGrey(grey, width, height, angle, paper);",
+    "const level = rotateGrey(grey, width, height, angle, 0);"
+   ],
+   [
+    "mask not padded for the sweep (SWEEP_PAD 120 -> 0)",
+    "export const SWEEP_PAD = 120;",
+    "export const SWEEP_PAD = 0;"
+   ],
+   [
+    "ink threshold 128 -> 200",
+    "export const INK_BELOW = 128;",
+    "export const INK_BELOW = 200;"
+   ],
+   [
+    "extent from 5 percent",
+    "const TAIL_DENOMINATOR = 50;",
+    "const TAIL_DENOMINATOR = 20;"
+   ],
+   [
+    "extent measures from the first ink row, not 2 percent",
+    "if (first < 0 && sum * TAIL_DENOMINATOR >= total) first = y;",
+    "if (first < 0 && sum > 0) first = y;"
+   ],
+   [
+    "paper tone: the last of the top bins on a tie",
+    "for (let g = 1; g < 256; g++) if (bins[g] > bins[best]) best = g;",
+    "for (let g = 1; g < 256; g++) if (bins[g] >= bins[best]) best = g;"
+   ],
+   [
+    "closing dilates but does not erode",
+    "const closed = filter3(filter3(inverted, w, h, true), w, h, false);",
+    "const closed = filter3(inverted, w, h, true);"
+   ],
+   [
+    "a crop with no ink is scaled anyway",
+    "\tif (extent) {",
+    "\tif (true) {"
+   ],
+   [
+    "unframe: padding not removed",
+    "const dx = (x - t.pad) / t.scale - cx;",
+    "const dx = x / t.scale - cx;"
+   ],
+   [
+    "unframe: scale not removed",
+    "const dy = (y - t.pad) / t.scale - cy;",
+    "const dy = (y - t.pad) - cy;"
+   ],
+   [
+    "unframe: turn applied the wrong way",
+    "return { x: cx + dx * cos - dy * sin, y: cy + dx * sin + dy * cos };",
+    "return { x: cx + dx * cos + dy * sin, y: cy - dx * sin + dy * cos };"
+   ],
+   [
+    "resize: both axes by the factor -> width only",
+    "const nh = Math.max(1, Math.round(h * factor));",
+    "const nh = h;"
+   ]
+  ]
+ }
+]

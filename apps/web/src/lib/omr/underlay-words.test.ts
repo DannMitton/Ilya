@@ -26,6 +26,7 @@ function seat(text: string, note: number | null = null, offset = 0): Seat {
 		note: kind === 'syllable' ? note : null,
 		offset: kind === 'syllable' && note !== null ? offset : null,
 		by: kind === 'syllable' && note !== null ? 'monotone' : null,
+		unseated: kind === 'syllable' && note === null,
 		runTogether: false,
 		shared: false,
 	};
