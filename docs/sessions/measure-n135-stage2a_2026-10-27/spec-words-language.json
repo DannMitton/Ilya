@@ -1,0 +1,159 @@
+[
+ {
+  "src": "underlay-words.ts",
+  "test": "underlay-words.test.ts",
+  "muts": [
+   [
+    "sew: a lone hyphen does not join",
+    "if (open) glue = true;",
+    "/* mutant */"
+   ],
+   [
+    "sew: a trailing hyphen does not continue the word",
+    "glue = HYPHEN_AT_END.test(raw);",
+    "glue = false;"
+   ],
+   [
+    "sew: a leading hyphen does not join",
+    "if (open && (glue || HYPHEN_AT_START.test(raw))) open.push(syllable);",
+    "if (open && glue) open.push(syllable);"
+   ],
+   [
+    "sew: joining hyphens kept in the text",
+    "text: raw.replace(HYPHENS_AT_ENDS, ''),",
+    "text: raw,"
+   ],
+   [
+    "sew: an extender does not mark the syllable",
+    "if (open) open[open.length - 1].sustained = true;",
+    "/* mutant */"
+   ],
+   [
+    "sew: an extender breaks the word",
+    "if (open) open[open.length - 1].sustained = true;",
+    "if (open) { open[open.length - 1].sustained = true; open = null; }"
+   ],
+   [
+    "sew: syllabic middle given as begin",
+    "i === n - 1 ? 'end' : 'middle'",
+    "i === n - 1 ? 'end' : 'begin'"
+   ],
+   [
+    "sew: syllabic of one syllable not single",
+    "n === 1 ? 'single'",
+    "n === 0 ? 'single'"
+   ],
+   [
+    "sew: two tokens on a note both kept",
+    "if (!held || Math.abs(s.offset ?? 0) < Math.abs(held.offset ?? 0)) kept.set(s.note, s);",
+    "kept.set(s.note, s);"
+   ],
+   [
+    "sew: the farther token kept on a note",
+    "Math.abs(s.offset ?? 0) < Math.abs(held.offset ?? 0)",
+    "Math.abs(s.offset ?? 0) > Math.abs(held.offset ?? 0)"
+   ],
+   [
+    "sew: an unseated syllable is kept",
+    "if (seat.note === null) continue;\n\t\tconst raw",
+    "const raw"
+   ],
+   [
+    "write: a rest is written to",
+    "if (!sung || REST.test(body) || HAS_LYRIC.test(body)) continue;",
+    "if (!sung || HAS_LYRIC.test(body)) continue;"
+   ],
+   [
+    "write: a note with a lyric is written to again",
+    "if (!sung || REST.test(body) || HAS_LYRIC.test(body)) continue;",
+    "if (!sung || REST.test(body)) continue;"
+   ],
+   [
+    "write: text not escaped",
+    "text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')",
+    "text"
+   ],
+   [
+    "write: the second part is written to",
+    "const stop = partEnd < 0 ? musicXml.length : partEnd;",
+    "const stop = musicXml.length;"
+   ],
+   [
+    "write: rests not counted in the numbering",
+    "const sung = byNote.get(ordinal++);\n\t\tif (m[0].endsWith('/>')) continue;",
+    "const sung = byNote.get(ordinal);\n\t\tif (m[0].endsWith('/>')) continue;"
+   ],
+   [
+    "write: the last syllable for a note wins",
+    "if (!byNote.has(s.note)) byNote.set(s.note, s);",
+    "byNote.set(s.note, s);"
+   ],
+   [
+    "write: always LF",
+    "const [, eol, closeIndent] = tail;",
+    "const [, , closeIndent] = tail;\n\tconst eol = '\\n';"
+   ],
+   [
+    "write: note with attributes not counted",
+    "const NOTE = /<note(?=[\\s>])[^>]*>/g;",
+    "const NOTE = /<note>/g;"
+   ],
+   [
+    "write: lyric number 2, laid out",
+    "const lines = [`<lyric number=\"1\">`",
+    "const lines = [`<lyric number=\"2\">`"
+   ],
+   [
+    "write: lyric number 2, compact",
+    "text: `<lyric number=\"1\">${syllabic}${text}</lyric>`",
+    "text: `<lyric number=\"2\">${syllabic}${text}</lyric>`"
+   ]
+  ]
+ },
+ {
+  "src": "underlay-language.ts",
+  "test": "underlay-language.test.ts",
+  "muts": [
+   [
+    "language: one-letter words counted",
+    "export const MIN_LETTERS = 2;",
+    "export const MIN_LETTERS = 1;"
+   ],
+   [
+    "language: three letters needed",
+    "export const MIN_LETTERS = 2;",
+    "export const MIN_LETTERS = 3;"
+   ],
+   [
+    "language: strictly more than half",
+    "known >= RUSSIAN_SHARE * counted",
+    "known > RUSSIAN_SHARE * counted"
+   ],
+   [
+    "language: a third is enough",
+    "export const RUSSIAN_SHARE = 0.5;",
+    "export const RUSSIAN_SHARE = 0.34;"
+   ],
+   [
+    "language: an empty row is Russian",
+    "counted > 0 && known",
+    "known"
+   ],
+   [
+    "language: no ё fold",
+    "if (isWord(letters) || (letters.includes('ё') && isWord(letters.replace(/ё/g, 'е')))) known++;",
+    "if (isWord(letters)) known++;"
+   ],
+   [
+    "language: case not folded",
+    "word.replace(/[^\\p{L}]/gu, '').toLowerCase()",
+    "word.replace(/[^\\p{L}]/gu, '')"
+   ],
+   [
+    "language: marks not stripped",
+    "word.replace(/[^\\p{L}]/gu, '').toLowerCase()",
+    "word.toLowerCase()"
+   ]
+  ]
+ }
+]
