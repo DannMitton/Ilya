@@ -67,13 +67,13 @@
 	import { routePdf, type PdfRoute } from '$lib/score/ingestion/first-staved-page';
 	import { readScanAsScore, readingWait, useIlyaReader } from '$lib/omr/scan';
 	import { restoreStoredScan, type KeptReading } from '$lib/omr/restore';
+	import { formatLabelKey } from './format-label';
 	import {
 		ingestScoreFile,
 		fidelityBanner,
 		type IngestedScore,
 		type IngestError,
 		type IngestOutcome,
-		type IngestProvenance,
 		type PageRead,
 	} from './ingestion/ingest';
 	import { detectScoreFormat, isHeifImage, SNIFF_LENGTH } from './ingestion/format-detection';
@@ -174,7 +174,7 @@
 		 *  stays ON SCREEN afterwards: the format line, the fidelity banner,
 		 *  and a picture or PDF's read report, until the singer dismisses it
 		 *  or drops another file. */
-		| { kind: 'arrived'; ingested: IngestedScore; file: File }
+		| { kind: 'arrived'; ingested: IngestedScore; file: File; scanKind?: 'image' | 'pdf' }
 		| { kind: 'error'; message: string }
 		| { kind: 'soon'; message: string };
 
@@ -286,7 +286,11 @@
 			if (useIlyaReader(location.search)) await handleFile(file);
 			else await readScanAsScore(file, kind, {
 				busy: (key) => (ui = { kind: 'busy', label: '', key }),
-				ingest: async (xml, reading) => { await handleFile(xml); announceArrival({ file, reading }); },
+				ingest: async (xml, reading) => {
+					await handleFile(xml);
+					if (ui.kind === 'arrived') ui = { ...ui, scanKind: kind };
+					announceArrival({ file, reading });
+				},
 				poem: () => (kind === 'pdf' ? readPdfAsPoem(file, ink, stavesFound, stavesFound ? false : null) : readAsPoemByOcr(file, null, true, false)),
 				fail: () => (ui = { kind: 'error', message: T('upload.err.parseFailed') }),
 			});
@@ -823,18 +827,6 @@
 
 	/* ── Presentation mappings ──────────────────────────────────────── */
 
-	function formatLabel(p: IngestProvenance): string {
-		if (p.via === 'direct') {
-			return p.format === 'mnx' ? T('upload.format.mnxDirect') : T('upload.format.musicxmlDirect');
-		}
-		if (p.via === 'mxl') return T('upload.format.mxl');
-		if (p.via === 'denigma') return T('upload.format.musxDenigma');
-		if (p.via === 'reader') {
-			return T(p.sourceFormat === 'pdf' ? 'upload.format.pdfReader' : 'upload.format.imageReader');
-		}
-		return T('upload.format.msczWebmscore'); // via === 'webmscore'
-	}
-
 	/** Map a typed ingest error to user copy, and flag the "coming soon" cases
 	 *  so they render as a calm note rather than an error. CONVERSION_FAILED
 	 *  and WASM_LOAD_FAILED are shared between the denigma (.musx) and
@@ -986,7 +978,7 @@
 		     receipt's Clear and Replace already do the first job, and there is
 		     nothing left to continue to. -->
 		<div class="result">
-			<p class="format-label">{formatLabel(ui.ingested.provenance)}</p>
+			<p class="format-label">{T(formatLabelKey(ui.ingested.provenance, ui.ingested.result.score.source.origin, ui.scanKind))}</p>
 			{#if showBanner}
 				<div class="banner">
 					<p class="banner-text">

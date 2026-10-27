@@ -42,7 +42,10 @@
  * Failure modes handled:
  * - IndexedDB unavailable (private browsing) → skips caching, still loads
  * - Fetch errors → reports error, engine falls back to inference mode
- * - Manifest fetch failure → fatal (cannot determine dictionary filename)
+ * - Manifest fetch failure → the stored manifest (N.195) names the stored
+ *   dictionary; fatal only when none was ever stored (first open offline)
+ * - Supplement or blurb fetch rejected (no network) → the stored copy (N.195);
+ *   a response that is not ok still throws
  * - Malformed NDJSON lines → skipped silently
  */
 
@@ -62,7 +65,18 @@ const SUPPLEMENT_URL = '/data/singer-supplement.json';
 /** N.14: array-valued entries for spellings with more than one stress. */
 const HOMOGRAPH_URL = '/data/homographs.json';
 const BLURB_URL = '/data/blurb-composer.json';
-const CACHE_HASH_KEY = 'ilya-dict-hash';
+/**
+ * N.195. The manifest that produced the stored dictionary, written only once
+ * every chunk of it is, so a stored manifest always points at a complete copy.
+ * It replaces the old `ilya-dict-hash`, which nothing wrote or read.
+ */
+const MANIFEST_STORE_KEY = 'ilya-dict-manifest';
+/**
+ * N.195. The last good copy of each small file. NOT `supplement` or `blurb`:
+ * those are legacy keys that `cleanLegacyCache` deletes on every start.
+ */
+const SUPPLEMENT_STORE_KEY = 'data-singer-supplement';
+const BLURB_STORE_KEY = 'data-blurb-composer';
 
 // Number of NDJSON entries per IndexedDB transaction and per event loop yield
 const CHUNK_SIZE = 1500;
@@ -147,7 +161,8 @@ function openDB(): Promise<IDBDatabase> {
 // Individual transactions are ~240 KB each — well within mobile IDB limits.
 // -------------------------------------------------------------------
 
-async function setCacheChunked(baseKey: string, lines: string[]): Promise<void> {
+async function setCacheChunked(baseKey: string, lines: string[]): Promise<boolean> {
+	let complete = true;
 	try {
 		const db = await openDB();
 		const totalChunks = Math.ceil(lines.length / CHUNK_SIZE);
@@ -158,7 +173,10 @@ async function setCacheChunked(baseKey: string, lines: string[]): Promise<void> 
 				const tx = db.transaction(STORE_NAME, 'readwrite');
 				tx.objectStore(STORE_NAME).put(chunk, `${baseKey}-chunk-${i}`);
 				tx.oncomplete = () => resolve();
-				tx.onerror = () => resolve();
+				tx.onerror = () => {
+					complete = false;
+					resolve();
+				};
 			});
 			// Yield between chunk writes so we don't block the event loop
 			await yieldTurn();
@@ -169,11 +187,16 @@ async function setCacheChunked(baseKey: string, lines: string[]): Promise<void> 
 			const tx = db.transaction(STORE_NAME, 'readwrite');
 			tx.objectStore(STORE_NAME).put(totalChunks, `${baseKey}-meta`);
 			tx.oncomplete = () => resolve();
-			tx.onerror = () => resolve();
+			tx.onerror = () => {
+				complete = false;
+				resolve();
+			};
 		});
 	} catch {
 		// IndexedDB unavailable — silently skip caching
+		return false;
 	}
+	return complete;
 }
 
 async function getCachedChunked(baseKey: string): Promise<string[] | null> {
@@ -226,6 +249,38 @@ async function getCachedLegacy(key: string): Promise<string | null> {
 		});
 	} catch {
 		return null;
+	}
+}
+
+// -------------------------------------------------------------------
+// IndexedDB — single values (N.195: the manifest and the two small files)
+// -------------------------------------------------------------------
+
+async function getStored<T>(key: string): Promise<T | null> {
+	try {
+		const db = await openDB();
+		return await new Promise<T | null>((resolve) => {
+			const tx = db.transaction(STORE_NAME, 'readonly');
+			const req = tx.objectStore(STORE_NAME).get(key);
+			req.onsuccess = () => resolve((req.result as T | undefined) ?? null);
+			req.onerror = () => resolve(null);
+		});
+	} catch {
+		return null;
+	}
+}
+
+async function setStored(key: string, value: unknown): Promise<boolean> {
+	try {
+		const db = await openDB();
+		return await new Promise<boolean>((resolve) => {
+			const tx = db.transaction(STORE_NAME, 'readwrite');
+			tx.objectStore(STORE_NAME).put(value, key);
+			tx.oncomplete = () => resolve(true);
+			tx.onerror = () => resolve(false);
+		});
+	} catch {
+		return false;
 	}
 }
 
@@ -287,6 +342,12 @@ async function fetchManifest(): Promise<DictionaryManifest> {
 	return response.json();
 }
 
+/** A stored manifest is used only when it names a dictionary. */
+function isManifest(value: unknown): value is DictionaryManifest {
+	const m = value as DictionaryManifest | null;
+	return !!m && typeof m.hash === 'string' && (Array.isArray(m.files) || typeof m.file === 'string');
+}
+
 // -------------------------------------------------------------------
 // Fetch with Progress
 // -------------------------------------------------------------------
@@ -339,12 +400,27 @@ async function fetchWithProgress(
 // Simple File Loading (supplement, blurb)
 // -------------------------------------------------------------------
 
-async function loadJsonFile<T = Record<string, unknown>>(url: string): Promise<T> {
-	const response = await fetch(url);
+/**
+ * N.195. A rejected `fetch` (no network) reads the last good copy stored under
+ * `storeKey`; a response that is not ok throws, as it always did, because a
+ * server that answered is not an absent network. A good response is stored in
+ * the background for the next start without a connection.
+ */
+async function loadJsonFile<T = Record<string, unknown>>(url: string, storeKey: string): Promise<T> {
+	let response: Response;
+	try {
+		response = await fetch(url);
+	} catch (networkError) {
+		const stored = await getStored<T>(storeKey);
+		if (stored !== null) return stored;
+		throw networkError;
+	}
 	if (!response.ok) {
 		throw new Error(`HTTP ${response.status}: ${response.statusText} (${url})`);
 	}
-	return response.json();
+	const data: T = await response.json();
+	void setStored(storeKey, data);
+	return data;
 }
 
 // -------------------------------------------------------------------
@@ -619,13 +695,22 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 	try {
 		// Step 1: Fetch manifest for current content hash
 		let manifest: DictionaryManifest;
+		let manifestFromStore = false;
 		try {
 			manifest = await fetchManifest();
 		} catch (manifestError) {
-			throw new Error(
-				'Could not load dictionary manifest. ' +
-					'Please check that dictionary-manifest.json exists in /data/.'
-			);
+			// N.195: with no manifest there is no key, so the stored dictionary was
+			// never read. The manifest that produced it is stored beside it.
+			const stored = await getStored<unknown>(MANIFEST_STORE_KEY);
+			if (!isManifest(stored)) {
+				throw new Error(
+					'Could not load dictionary manifest. ' +
+						'Please check that dictionary-manifest.json exists in /data/.'
+				);
+			}
+			console.warn('[Ilya] Dictionary manifest unavailable; starting from the stored copy.');
+			manifest = stored;
+			manifestFromStore = true;
 		}
 
 		const cacheKey = `dict-${manifest.hash}`;
@@ -648,6 +733,7 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		// Parsing into a shared object before fetching the next file allows
 		// the raw lines array to be GC'd, halving peak heap on iOS Safari.
 		const dictionary: Record<string, any> = {};
+		const chunkWrites: Promise<boolean>[] = [];
 
 		for (let i = 0; i < dictionaryFiles.length; i++) {
 			const file = dictionaryFiles[i];
@@ -656,7 +742,8 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 				? `${cacheKey}-part${i}`
 				: cacheKey;
 
-			const lines = await loadDictionaryData(fileCacheKey, url, state, callbacks);
+			const { lines, written } = await loadDictionaryData(fileCacheKey, url, state, callbacks);
+			chunkWrites.push(written);
 
 			state.progress = -1;
 			callbacks.onStateChange({ ...state });
@@ -668,9 +755,19 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 			// lines goes out of scope here — eligible for GC before next fetch
 		}
 
+		// N.195: store the manifest only once every chunk it names is written, so
+		// a stored manifest always points at a complete dictionary. Chained, not
+		// awaited: the start never waits on IndexedDB (the writes were already
+		// fire-and-forget). A manifest read from the store is not written back.
+		if (!manifestFromStore) {
+			void Promise.all(chunkWrites)
+				.then((done) => (done.every(Boolean) ? setStored(MANIFEST_STORE_KEY, manifest) : false))
+				.catch(() => false);
+		}
+
 		const [supplementData, blurbData] = await Promise.all([
-			loadJsonFile(SUPPLEMENT_URL),
-			loadJsonFile<BlurbData>(BLURB_URL)
+			loadJsonFile(SUPPLEMENT_URL, SUPPLEMENT_STORE_KEY),
+			loadJsonFile<BlurbData>(BLURB_URL, BLURB_STORE_KEY)
 		]);
 
 		// Step 4: Inject into Phase 1 packages
@@ -709,7 +806,9 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 
 /**
  * Load dictionary lines from IndexedDB chunked cache or network.
- * Returns an array of NDJSON lines ready for mergeNDJSON().
+ * Returns an array of NDJSON lines ready for mergeNDJSON(), and `written`,
+ * which resolves true once those lines are complete in the chunked cache
+ * (already, for a hit) and false if a write failed. Nothing waits on it.
  *
  * Cache read path: chunked IDB (v3) → legacy single-key IDB (v2) → network
  * Cache write path: chunked IDB only (v3)
@@ -719,13 +818,13 @@ async function loadDictionaryData(
 	url: string,
 	state: LoaderState,
 	callbacks: LoaderCallbacks
-): Promise<string[]> {
+): Promise<{ lines: string[]; written: Promise<boolean> }> {
 	// Try chunked cache first (v3)
 	const cachedLines = await getCachedChunked(cacheKey);
 	if (cachedLines) {
 		state.progress = 1;
 		callbacks.onStateChange({ ...state });
-		return cachedLines;
+		return { lines: cachedLines, written: Promise.resolve(true) };
 	}
 
 	// Try legacy single-key cache (v2 — handles existing installations)
@@ -735,8 +834,7 @@ async function loadDictionaryData(
 		callbacks.onStateChange({ ...state });
 		const lines = legacyText.split(/\r?\n/).filter((l) => l.trim());
 		// Migrate to chunked cache in the background
-		setCacheChunked(cacheKey, lines);
-		return lines;
+		return { lines, written: setCacheChunked(cacheKey, lines) };
 	}
 
 	// Cache miss — fetch with progress
@@ -748,7 +846,5 @@ async function loadDictionaryData(
 	const lines = text.split(/\r?\n/).filter((l) => l.trim());
 
 	// Write to chunked cache in the background
-	setCacheChunked(cacheKey, lines);
-
-	return lines;
+	return { lines, written: setCacheChunked(cacheKey, lines) };
 }
