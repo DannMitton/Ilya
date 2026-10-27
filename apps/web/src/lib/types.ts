@@ -55,6 +55,8 @@ export interface WordStackData {
   typedBreaks?: number[];
   /** Trailing punctuation stripped from the word. */
   punctuation: string;
+  /** Row 139: the singer typed a # after this word (`syntactic-break.ts`). Absent where none did. Never in `punctuation` or `cyrillic`. */
+  syntacticBreak?: boolean;
   /** Stress index (0-based syllable). -1 = clitic, -2 = unknown. */
   stressIndex: number;
   /** Where stress came from: dictionary, supplement, yo-rule, yo-restored, inferred. */

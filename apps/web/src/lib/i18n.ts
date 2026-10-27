@@ -924,6 +924,7 @@ const strings: Record<string, Record<Language, string>> = {
 
 	// ── Update notice ─────────────────────────────────────────
 	'update.notice':               { en: 'A new version of Ilya is ready.', fr: 'Une nouvelle version d\u2019Ilya est pr\u00eate.' },
+	'update.offline':              { en: 'The new version could not be loaded. Check your connection, then press Refresh again.', fr: 'La nouvelle version n\u2019a pas pu \u00eatre charg\u00e9e. V\u00e9rifiez votre connexion, puis appuyez de nouveau sur Actualiser.' },
 	'update.action':               { en: 'Refresh',                      fr: 'Actualiser' },
 	'update.dismiss':              { en: 'Dismiss',                      fr: 'Ignorer' },
 	'footer.of':                   { en: 'of',                           fr: 'sur' },

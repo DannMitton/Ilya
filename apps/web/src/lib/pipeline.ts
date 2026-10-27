@@ -38,6 +38,8 @@ import type { GlossLanguage, BilingualGloss, DictionaryEntry } from '@ilya/dicti
 import { buildDisplayLog } from '@ilya/blurb';
 
 import { applyReconstitution } from './reconstitution';
+import { hasVowel, mergeCliticDisplay } from './clitic-merge';
+import { peelSyntacticBreaks } from './syntactic-break';
 import { markLatinWords } from './latin';
 import { adoptOldEnding, lookupOnlyTwinFor, stripForLookup } from './old-spelling';
 
@@ -53,15 +55,6 @@ const PUNCTUATION_REGEX = /[.,!?;:"""''–—…()«»]/g;
 const TRAILING_PUNCT_REGEX = /[.,!?;:"""''\-\u2010\u2011–—]+$/;
 const DASH_REGEX = /[-\u2010\u2011–—]/g;
 
-const CYRILLIC_VOWELS = new Set([
-  'а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
-  'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я',
-]);
-
-function hasVowel(word: string): boolean {
-  return Array.from(word).some((char) => CYRILLIC_VOWELS.has(char));
-}
-
 // ── Intermediate types (internal to pipeline) ────────────────────
 
 /** Word data after stress lookup, before engine transcription. */
@@ -73,6 +66,8 @@ interface PreTranscribeWord {
   /** Row 106: letter offsets of the typed syllable hyphens that cut a syllable. */
   typedBreaks: number[];
   punctuation: string;
+  /** Row 139: a typed # follows this word (`syntactic-break.ts`). */
+  syntacticBreak?: boolean;
   stress: number;
   stressSource: string;
   gloss: string | BilingualGloss | undefined;
@@ -121,6 +116,7 @@ interface TranscribedWord {
   punct: string;
   isProclitic: boolean;
   isEnclitic: boolean;
+  syntacticBreak?: boolean;
   isOInterjection: boolean;
   isFirstWord: boolean;
   lineEndsWithQuestion: boolean;
@@ -177,20 +173,18 @@ function splitIntoPreLines(
     .map((line, rawIndex) => ({ line, rawIndex }))
     .filter((entry) => entry.line.trim())
     .map((entry) => {
-      const words = entry.line
-        .trim()
-        .split(/\s+/)
-        .filter((word) => {
-          const cleaned = word.replace(PUNCTUATION_REGEX, '');
-          return cleaned.length > 0;
-        });
+      // Row 139: a typed # is peeled off the tokens here, onto the word before it, so no later step counts it as a word.
+      const { words, broken } = peelSyntacticBreaks(entry.line.trim().split(/\s+/), (word) => word.replace(PUNCTUATION_REGEX, '').length > 0);
 
-      // Expand hyphenated particles into separate tokens before lookup (unless the whole token is a word)
-      const expanded = expandHyphenatedParticles(words, (t) => resolvesToWord(t, knownForm, toClean));
+      // Expand hyphenated particles into separate tokens before lookup (unless the whole token is a word).
+      // The # ends the last piece of a word that was split in two.
+      const expanded = words.flatMap((word, i) =>
+        expandHyphenatedParticles([word], (t) => resolvesToWord(t, knownForm, toClean)).map((piece, k, all) => ({ piece, brk: broken[i] && k === all.length - 1 })),
+      );
 
       return {
         rawIndex: entry.rawIndex,
-        words: expanded.map((word) => buildPreTranscribeWord(word)),
+        words: expanded.map(({ piece, brk }) => ({ ...buildPreTranscribeWord(piece), ...(brk ? { syntacticBreak: true } : {}) })),
       };
     })
     .filter((entry) => entry.words.length > 0);
@@ -305,7 +299,7 @@ export function processText(
               cleanIdx++;
             }
             const modified = chars.join('');
-            line[wordIdx] = buildPreTranscribeWord(modified, true);
+            line[wordIdx] = { ...buildPreTranscribeWord(modified, true), ...(line[wordIdx].syntacticBreak ? { syntacticBreak: true } : {}) };
           }
         }
 
@@ -460,6 +454,7 @@ export function processText(
           gloss,
           isProclitic: tw.isProclitic,
           isEnclitic: tw.isEnclitic,
+          ...(tw.syntacticBreak ? { syntacticBreak: true } : {}),
           isVowellessClitic: tw.isVowellessClitic ?? false,
           hasYo: tw.hasYo,
           isOInterjection: tw.isOInterjection,
@@ -827,6 +822,7 @@ function transcribeWords(
         punct: wordData.punctuation,
         isProclitic,
         isEnclitic,
+        syntacticBreak: wordData.syntacticBreak,
         isOInterjection,
         isFirstWord,
         lineEndsWithQuestion,
@@ -918,100 +914,7 @@ function finishLine(transcribedWords: TranscribedWord[]): void {
     }
   });
 
-  // Second pass: merge clitic IPA into host words for display.
-  // Both ipaDisplay and ipaReconstituted are merged in parallel
-  // so the reconstituted string has the same clitic structure.
-  //
-  // Proclitic chains are processed as units: when consecutive proclitics
-  // precede a host, ALL their IPA merges into the host in correct order
-  // (closest to host first, then farther proclitics prepend).
-  // Enclitic chains work symmetrically: consecutive enclitics after a host
-  // all merge into the host in forward order (e.g., ли бы: host absorbs both).
-  let idx = 0;
-  while (idx < transcribedWords.length) {
-    const tw = transcribedWords[idx];
-
-    if (tw.isProclitic) {
-      // Collect the full proclitic chain
-      const chainStart = idx;
-      while (idx < transcribedWords.length && transcribedWords[idx].isProclitic) {
-        const p = transcribedWords[idx];
-        p.ipaDisplay = '→';
-        p.ipaReconstituted = '→';
-        p.isVowellessClitic = !hasVowel(p.cleanWord);
-        idx++;
-      }
-      // idx now points to the host (or end of array)
-      const hostWord = idx < transcribedWords.length ? transcribedWords[idx] : null;
-
-      if (hostWord) {
-        // Merge proclitics in reverse order (closest to host first).
-        // This ensures vowelless proclitics tuck into the stressed syllable
-        // correctly, and vowel-bearing proclitics prepend in reading order.
-        for (let ci = idx - 1; ci >= chainStart; ci--) {
-          const proclitic = transcribedWords[ci];
-          const isVowelless = !hasVowel(proclitic.cleanWord);
-
-          if (isVowelless) {
-            // Vowelless proclitic: tuck IPA into host's stressed syllable
-            if (hostWord.ipaDisplay?.startsWith('ˈ')) {
-              hostWord.ipaDisplay =
-                'ˈ' + proclitic.ipaContent + hostWord.ipaDisplay!.slice(1);
-            } else {
-              hostWord.ipaDisplay = (proclitic.ipaContent ?? '') + (hostWord.ipaDisplay ?? '');
-            }
-            if (hostWord.ipaReconstituted?.startsWith('ˈ')) {
-              hostWord.ipaReconstituted =
-                'ˈ' + proclitic.ipaContent + hostWord.ipaReconstituted!.slice(1);
-            } else {
-              hostWord.ipaReconstituted = (proclitic.ipaContent ?? '') + (hostWord.ipaReconstituted ?? '');
-            }
-          } else {
-            // Vowel-bearing proclitic: separate with space
-            hostWord.ipaDisplay = proclitic.ipaContent + ' ' + hostWord.ipaDisplay;
-            const cliticReconstituted = applyReconstitution(proclitic.ipaContent ?? '', proclitic.transcriptionLog);
-            hostWord.ipaReconstituted = cliticReconstituted + ' ' + hostWord.ipaReconstituted;
-          }
-        }
-      }
-      // idx already points past the chain; continue to process host or next word
-      idx++;
-    } else if (tw.isEnclitic) {
-      // Collect the full enclitic chain
-      const chainStart = idx;
-      while (idx < transcribedWords.length && transcribedWords[idx].isEnclitic) {
-        const e = transcribedWords[idx];
-        e.ipaDisplay = '←';
-        e.ipaReconstituted = '←';
-        e.isVowellessClitic = !hasVowel(e.cleanWord);
-        idx++;
-      }
-      // Host is the word before the chain
-      const hostWord = chainStart > 0 ? transcribedWords[chainStart - 1] : null;
-
-      if (hostWord && !hostWord.isProclitic) {
-        // Merge enclitics in forward order (closest to host first)
-        for (let ci = chainStart; ci < idx; ci++) {
-          const enclitic = transcribedWords[ci];
-          const isVowelless = !hasVowel(enclitic.cleanWord);
-
-          if (isVowelless) {
-            hostWord.ipaDisplay = (hostWord.ipaDisplay ?? '') + enclitic.ipaContent;
-            hostWord.ipaReconstituted = (hostWord.ipaReconstituted ?? '') + enclitic.ipaContent;
-          } else {
-            hostWord.ipaDisplay =
-              (hostWord.ipaDisplay ?? '') + ' ' + enclitic.ipaContent;
-            const encliticReconstituted = applyReconstitution(enclitic.ipaContent ?? '', enclitic.transcriptionLog);
-            hostWord.ipaReconstituted =
-              (hostWord.ipaReconstituted ?? '') + ' ' + encliticReconstituted;
-          }
-        }
-      }
-      // idx already points past the chain; no increment needed
-    } else {
-      idx++;
-    }
-  }
+  mergeCliticDisplay(transcribedWords);
 
 }
 
