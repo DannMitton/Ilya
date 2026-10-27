@@ -1,0 +1,123 @@
+# Brief r2: N.198, a final voiced consonant keeps its voicing before a vowel, a sonorant, or в only after a preposition or particle (2026-10-26)
+
+Written by the desk (Opus) 2026-10-26 about 17:1x (r1) and revised the same day (r2). Fable-reviewed 2026-10-26 (`../sessions/review-fable-brief-n198_r1_2026-10-26.md`, md5 of the reviewed r1 `e0a1522599f2c01adcec64bd56a4aee8`, verdict SEND WITH AMENDMENTS, nine amendments and one question), all amendments applied, Dann's ruling of 17:26 applied (`docs/memory/CONTRACT.md` §1 item 19). N.198 and QUEUE row 156 are DESK DEFAULT numbers, offered by the desk; Dann asked for the brief 2026-10-26 16:58: *"Please devise a brief explaining to Code the relevant issues and resolve it to more accurately reflect what Grayson says."* (transcribed as written).
+
+Dann's ruling, 2026-10-26 17:26, answering the review's Question for Dann 1: *"I choose the list in agreement with you and Fable"* (transcribed as written). It adopts the review's recommendation: a small set of voiced-final prepositions outside the clitic list, read only by the voicing branch (section 3, step 1).
+
+For Code in a cloud session, Sonnet, on a lane cut from `Shane` by Dann, after batch C ships (batch C's B3 touches the same boundary layer). **"NOT ESTABLISHED beats a complete invented answer."** Every claim below carries a `path:line` the desk read on 2026-10-26 at `Shane` `e0f4ad9` (the review re-read the tree at the same commit), or says NOT RUN or NOT ESTABLISHED. One commit per step on the lane; no pull request; no other branch; no brief file in any commit.
+
+Cost, a range and not measured: 70k to 170k Sonnet tokens (r1 said 60k to 150k; the engine entry, the preposition set, and the added pins widen it).
+
+## 1. The need
+
+Ilya operationalizes Grayson (2012). Grayson's rule 2 for voicing across word boundaries, p. 251, verbatim: "Sonorants and vowels do not influence voicing assimilation across any boundary, but do allow final voiced consonants of prepositions, particle contractions, prefixes and word roots (boundary #4) to retain voicing."
+
+Boundary #4 is defined on p. 248: "in between a preposition and its object or a prefix/suffix and a word root". Boundary #3 is "the individual word". "Word roots (boundary #4)" means the root side of a prefix or suffix junction inside a word, not any word.
+
+His examples, p. 252: «сад наш», «сад Анны», «сад ваш» are sung with a final [t] (ordinary words: the final consonant devoices); «меж нас» and «без Анны» keep [ʒ] and [z] (prepositions: voicing kept). Two more are printed under rule 2 and r1 left them out: «разлука» (a prefix before a root inside one word; Ilya already agrees) and «если б мог» (the particle contraction б before м; the contraction keeps its voicing). So the particle contractions are established as the vowelless б (for бы) and, by the same formation, ж (for же). ли is a full particle, not a contraction.
+
+On в before a vowel or sonorant, p. 251: it "follows the rules of a sonorant". Before any other consonant it "follows the rules of a non-sonorant consonant". Grayson's own technique, p. 251: "ignore /u/ (-d-) [в] when it is in a position of regressive influence and ... look to the next letter in line to apply its particular influence across both the /u/-phoneme and the word boundary." Step 1 rests on that sentence. (The comment at `engine.ts:2182` cites p. 250 for the в passage; it is p. 251.)
+
+Under rule 4 on p. 252, «кот бы» is [kod bɪ] and «гость бы» [ɡozʲdʲ bɪ]: an enclitic after a voiced obstruent is rule 4, not rule 2, and the engine already gets it («кот бы» → `ˈkod bɨ`, Fable's probe).
+
+Ilya's Learn already teaches rule 2 correctly ("sonorants and vowels beginning the next word allow a preceding preposition's final voiced consonant to keep its voicing": `apps/web/src/lib/components/Reading/LearnContent.svelte:3889`, section "Do the Same Voicing Rules Apply between Words?").
+
+## 2. What the code does (read, not run, unless marked)
+
+- `packages/phonology/src/engine.ts:2179-2188`, in `applyCrossWordAssimilation`: when the next word begins with a vowel, a sonorant, or в, and the left word ends in a voiced obstruent, it sets `leftWord.skipFinalDevoicing = true` on every boundary that is not hard, soft and clitic alike. Its comment cites "Grayson pp. 250-252 ... R7.14 Rule #2" and reads the rule as applying to every word. The branch tests only the first segment of the right word (`:2183`); `getInitialConsonant` (`:2097-2115`) returns `'v'` for «вдали», «вдруг», «взор», «вдовы», and for the bare proclitic «в».
+- `:2247-2251`: final devoicing is then skipped for any word with `skipFinalDevoicing` true, and for any word whose `rightBoundary` is `'clitic'`.
+- Boundaries are set by `apps/web/src/lib/boundaries.ts:58` (live): `'clitic'` when the word is a proclitic or the next word is an enclitic, else `'soft'` inside a line; called from `apps/web/src/lib/pipeline.ts:328`, and assimilation runs at `:335`. `engine.ts:1998-2037` is the engine's own `autoDetectBoundaries`, with no caller (its only references are the definition, `boundaries.ts:40`, and `pipeline.ts:46`, `:328`, which are the live copy; batch C's review says the same). r1 cited `:1994-2028`; the method runs `:1998-2037`.
+- The premise is true, measured by Fable's probe on the clean tree (a temporary vitest probe that loaded the real dictionary, since deleted; output in the review's probe files): «сад наш» comes out `ˈsɑd | ˈnɑʃ` where p. 252 prints [sat naʃ]. Step 0 re-measures it; the stop condition will not fire.
+- Two tests pin the current reading: `packages/phonology/tests/notation-edge-cases.test.ts:475` («глаз открыт» → `ˈɡɫɑz`, soft boundary) and `:493` («друг мой» → `ˈdruɡ`, soft boundary). Both also assert `skipFinalDevoicing` is true (`:490`, `:508`). Fable ran `pnpm test:phonology` (8 files, 267 tests, all green), so both pass today. No ruling by Dann on this reading was found (grep of `docs/` for "R7.14" and «друг мой», 2026-10-26).
+- `transcribe` devoices the same final consonant for a word in isolation and writes the «бог» exception (`engine.ts:1961-1979`); `applyCrossWordAssimilation` overwrites both at `:2161` (`word.ipaSurface = word.ipaUnderlying`). The «бог» exception (Grayson p. 144, [box]) lives in `ipaSurface` and the syllables, not in `ipaUnderlying`. The comment at `:1963` cites p. 242, where the word does not appear; the exception itself is right.
+- `BoundaryWord` (`engine.ts:108-116`) declares `rightBoundary`, `cleanWord?`, and an index signature. `'clitic'` is set both for a proclitic on the left and for an enclitic on the right (`boundaries.ts:58`), so the boundary type alone cannot tell «без Анны» from «сад ли». The pipeline passes `isProclitic`, `isEnclitic`, and `cleanWord` on every word (`pipeline.ts:821-842`, with `isProclitic` at `:829`), and its `isProclitic` excludes the «о» interjection and a word promoted from clitic (`:776-783`). Hand-built test words carry none of these.
+- `cliticData` (`engine.ts:243-287`) has no «меж»; `boundaries.ts:51` and `:58` give it `'soft'`. The same holds for every voiced-final preposition outside the list. Under r1's step 1, Fable's probe gave «меж нас» → `ˈmʲɛʃ ˈnɑs`, «сквозь нас» → `ˈskvosʲ`, «вокруг нас» → `ˈruk`, «близ Анны» → `ˈblʲis`, «средь нас» → `ˈsrʲetʲ`, «из-под Анны» → `pʌt`, each voiced today.
+
+## 3. Steps
+
+**Step 0, measure, change nothing.**
+(a) Run the pipeline on these lines and report each word's surface IPA: «сад наш», «сад Анны», «сад ваш», «друг мой», «глаз открыт», «меж нас», «без Анны», «из окна», «под водой», «об этом», «разлука», «если б мог», «сад ли», «кот бы», «сад вдали», «сад в доме», «сад в траве», «Бог мой», «Бог один», «Бог», «Бог там», «сквозь нас», «вокруг нас». If «сад наш» already ends in [t], STOP and report: the premise is wrong. Fable's probe on the clean tree found «Бог» alone and «Бог там» both `ˈbok` today; that is out of this row's scope (see step 1, part C).
+(b) Report every line of the approval corpus (`apps/web/src/lib/approval/ipa-corpus.approval.test.ts` and its `__approved__` files) whose IPA would change under step 1, by count and with the first twenty lines verbatim. Fable's probe of r1's step 1 as then worded moved one line of 40: «Как дай вам Бог любимой быть другим.» (`ˈbox` → `ˈbok`), the «бог» regression that part C below prevents. The expected count after this r2's step 1 is 0 for that line. Also report the lines that contain «меж» or any word of the preposition set below, whether or not they change.
+
+**Step 1, the rule.** Four parts, in this order, in `applyCrossWordAssimilation` and its neighbours.
+
+*Part A, the effective right initial and the three cases.* Compute an *effective right initial* before the branches: starting at the right word's first segment, skip over `v`/`vʲ` (`isVPhoneme`) to the next segment of the same word; if the right word is the bare proclitic «в» (no segment after the v), look at the first segment of the word after it. Grayson p. 251: "ignore /u/ (-d-) when it is in a position of regressive influence and ... look to the next letter in line." Then:
+
+- If the effective initial is nothing (a vowel) or a sonorant: keep the left final's voicing only where boundary #4 applies, that is, the left word is a proclitic, or is the particle contraction б or ж, or is in the preposition set of part B (amendment 4 and the 17:26 ruling say how the engine knows). Otherwise leave `skipFinalDevoicing` false and let the loop at `:2249` devoice it.
+- If the effective initial is a voiced obstruent: the existing voiced-before-voiced branch (`:2233-2240`): keep voicing. Pin: «сад вдали» → `ˈsɑd`, «сад в доме» → `ˈsɑd`, «глаз вдруг» → `ˈɡɫɑz`.
+- If the effective initial is voiceless: the existing devoicing branch (`:2224-2227`). Pin: «сад в траве» → `ˈsɑt` (the в word's own surface is still devoiced at its own boundary, as today: → `ftrɑ ˈvʲɛ`).
+
+The sibilant mergers (`:2190-2217`) and the в-before-voiceless branch (`:2228-2232`) are unchanged. Correct the comment at `:2179-2182` to quote p. 251. Why this part exists: the branch at `:2183` today keeps every voiced final before any в, so «сад вдали», «глаз вдруг», «муж вдовы», «друг взглянул», «сад взор», «сад в доме» come out right by accident. Under r1's step 1 as worded, Fable's probe devoiced all six (`ˈsɑt`, `ˈɡɫɑs`, `ˈmuʃ`, `ˈdruk`, `ˈsɑt`, `ˈsɑt`). «взор», «вдруг», «вдали», «вдоль», «взгляд», «вздох» sit in half the art-song repertoire, and a singer handed [sat vzor] has no control that puts the [d] back. Note for Code: when the right word begins with в + voiceless («встречи», «всех»), the within-word pass has already made the initial `f` (probe: «без встречи» → `bʲɪs ˈfstrʲe tʃʲi`, «без всех» → `bʲɪs ˈfsʲɛx`, right today), so the look-through only matters for в + voiced obstruent and for the bare «в».
+
+*Part B, how the engine learns that the left word keeps its voicing (amendment 4, the 17:26 ruling, and amendment 3).* Declare `isProclitic?: boolean` on `BoundaryWord` (`engine.ts:108-116`); the pipeline already supplies it (`pipeline.ts:829`). In the engine: `const clean = (leftWord.cleanWord ?? leftWord.cyrillic).replace(punctuation).toLowerCase(); const isProclitic = leftWord.isProclitic ?? this.proclitics.has(clean); const isContraction = clean === 'б' || clean === 'ж';` (the two vowelless enclitics in `cliticData` with a voiced final; «ль» ends in a sonorant and never devoices). Add the third test of the ruling: `const isPreposition = this.prepositions.has(clean);`. Keep the voicing when `isProclitic || isContraction || isPreposition`.
+
+The preposition set, ruled by Dann 2026-10-26 17:26. Add a small `prepositions` set to `GraysonEngine`, derived or declared next to `cliticData` (`engine.ts:243-287`), holding exactly: «вокруг», «сквозь», «близ», «средь», «из-под», «вслед», «вглубь», «промеж». It is read only by the voicing branch of `applyCrossWordAssimilation`. It does not touch stress, reduction, `cliticData`, `proclitics`, or `enclitics`: «вокруг» and «сквозь» keep their own stress, because they are not unstressed proclitics, and `boundaries.ts:58` still marks them `'soft'`. The ground is Grayson's rule 2 for prepositions (p. 251, with the p. 252 examples), applied to words outside Ilya's clitic list; the desk's reading that these eight are prepositions in his sense is Dann's ruling, and whether Grayson's "prepositions" includes stressed two-syllable prepositions is NOT ESTABLISHED in the text (the review found no example), so the ruling stands on Dann's choice and not on a Grayson example. Do not extend the set. A word you think belongs is listed in your report, not added.
+
+One check for Code: «из-под» carries a hyphen, and a hyphenated word is joined before lookup elsewhere in the pipeline (batch C, B1: «ну-те» is looked up as «нуте»). Read what `cleanWord` holds for «из-под» in the pipeline and key the set on that, whichever of «из-под» or «изпод» it is; state what you found. NOT ESTABLISHED by the desk.
+
+*Part C, the «бог» exception (amendment 2).* The «бог» exception (Grayson p. 144, [box]) lives in `ipaSurface` and the syllables, not in `ipaUnderlying` (`engine.ts:1961-1977`), and `:2161` discards it. In the final loop at `:2249`, after `applyFinalDevoicing`, a word whose cleaned Cyrillic is «бог» and whose surface now ends in `k` ends in `x` instead. Pin: «Бог мой» → `ˈbox`, «Бог один» → `ˈbox`; the corpus line «Как дай вам Бог любимой» keeps `ˈbox` and the corpus moves 0 lines. Report, do not change: «Бог» alone and «Бог там» give `ˈbok` today; what Grayson says of бог before a voiceless consonant is NOT ESTABLISHED.
+
+*Part D, «меж» in `cliticData` (amendment 3).* Add «меж» to `cliticData` as a proclitic, `canonicalIpa: 'mʲɪʒ'` (pretonic reduction, as «без» → `bʲɪz` at `:264`), gloss EN `between/amongst`. **FRENCH DRAFT, owed to Dann; do not seat until ratified:** « entre/parmi ». Neither word is in the file's existing French, and the glossary source is none: it is flagged as coined for Ilya.
+
+What the file's convention is for an unratified gloss, read 2026-10-26: `CliticEntry.gloss` is typed `{ en: string; fr: string }` (`engine.ts:96`), so `fr` must be a string. All 40 existing entries in `cliticData` (`:246-286`) carry a French string; none is empty, so `cliticData` has no precedent for an unratified one. The pipeline reads a clitic's gloss through `extractGloss(cliticEntry?.gloss ?? null, language)` (`pipeline.ts:353`), and `extractGloss` returns an empty string for an empty `fr` in French mode (`packages/dictionary/tests/dictionary.test.ts:110`); the dictionary data itself uses `fr: ''` for a gloss that has no French yet (`apps/web/src/lib/loader.test.ts:69-70`). `data/singer-supplement.json` has no entry with `"fr": ""` (0 matches). So: seat the entry with `fr: ''`, which compiles, shows no French gloss to a French-mode singer, and leaves the English gloss in place; do not write « entre/parmi » into the file. Dann ratifies the French, and the desk seats it afterward. Say in your report that the entry shipped with an empty `fr`, and add «меж» to "owed to Dann".
+
+Choice open to Dann (his, not Code's): whether an empty `fr` is acceptable to ship to a French-mode singer until he ratifies; the alternative, holding Part D out of the lane, would leave «меж нас» unreachable through the pipeline. DESK DEFAULT: ship with the empty `fr`.
+
+**Step 2, tests.** Every p. 252 pin runs through `processText` with the real dictionary (the pattern of `apps/web/src/lib/approval/ipa-corpus.approval.test.ts:63-99`), or at least a `BoundaryWord` test whose `rightBoundary` is the one `boundaries.ts:58` would give: «сад», «меж» without its new entry, «друг», «глаз», and every word in the preposition set are `'soft'`; «без», «из», «под», «об», and «меж» with its new entry are `'clitic'`. A hand-built test that writes `rightBoundary: 'clitic'` for «меж» would pass while the app sang [mʲɛʃ]: a test that lies.
+
+Rewrite `notation-edge-cases.test.ts:475` and `:493` to Grayson's expectation («глаз открыт» → `ˈɡɫɑs`; «друг мой» → `ˈdruk`), citing p. 251. Drop or flip the `skipFinalDevoicing` assertions at `:490` and `:508` (under step 1 the flag is false for those words). Add pins for p. 252's examples: «сад наш», «сад Анны», «сад ваш» end in [t]; «меж нас» keeps [ʒ]; «без Анны» keeps [z]. Pins for the 17:26 ruling, at least two: «сквозь нас» keeps its voicing (`ˈskvozʲ`) and «вокруг нас» keeps `ɡ` (`vɑk ˈruɡ`), and, if the lane has room, «близ Анны» (`ˈblʲiz`). Further pins: «разлука» (unchanged within a word), «если б мог» (б stays `b`; Learn prints `/ˈjeslʲi b mok/` at `LearnContent.svelte:3899`), the three в cases of part A, and the two «Бог» lines of part C.
+
+Pins on «меж нас» and «без Анны» assert the final consonant ([ʒ], [z]) and not the whole word: Grayson prints [mʲeʐ nas] and [bʲez ˈanɪ], and Ilya's proclitic reduces the vowel (`bʲɪz`; `mʲɪʒ` after part D). The reduction is outside this row. Do not assert a vowel Grayson prints and Ilya does not produce.
+
+Show failing first every pin where Grayson and the old code disagree: «сад наш», «сад Анны», «сад ваш», «глаз открыт», «друг мой». Mark the preposition, contraction, and «Бог» pins as regression guards that pass on both old and new code: «меж нас» and «без Анны» keep their voicing today, as do «сквозь нас» and «вокруг нас». For the 17:26 pins, also show them failing on r1's step 1 as it was worded (voicing for proclitics and б/ж only), which the desk expects, so the pins earn their place; say so in the report if you do not run that.
+
+**Step 3, approvals.** Do not re-approve the corpus. List each changed line in the report; the desk brings them to Dann.
+
+## 4. Constraints and the cross-site line (`docs/memory/CONTRACT.md` §4)
+
+This row changes how one number is computed: the voicing of a word's final consonant before a vowel, a sonorant, or в. Other sites that compute or depend on it:
+- `apps/web/src/lib/boundaries.ts:37`, `:50`, `:58`: the boundary type the rule reads (batch C's B3 adds the typed # as a hard boundary here). `:51` and `:58` also decide that «меж» and the eight set words are `'soft'` unless part D applies.
+- `engine.ts:2190-2245`: the other branches of the same pass (sibilant mergers, voicing before a voiced obstruent, в before a voiceless consonant); unchanged, and their tests stay green.
+- `engine.ts:1961-1979`: `transcribe` devoices the same final consonant for a word in isolation and writes the «бог» exception; `applyCrossWordAssimilation:2161` overwrites both. The pass at `:2249` must agree with `:1979` for every word whose boundary is hard, and with `:1961-1977` for «бог». Today they disagree for «бог» (isolation `ˈbok`, before a sonorant `ˈbox`) and nothing watched it; part C pins the sonorant case, and the isolation case is reported, not changed.
+- `cliticData` (`engine.ts:243-287`) and the pipeline's gloss read (`pipeline.ts:353`): part D adds one entry; its stress and reduction change «меж» everywhere it appears, and the corpus count from step 0(b) says where.
+- Stored placements carry IPA with no engine version (`apps/web/src/lib/score/pairings.ts:113`, `:124`, `ipa: string`; `STATE.md:28-30` carries the debt as pending, not ratified): a song seated before this ships keeps its old IPA on Markup until re-seated, with no sign that Lyrics now says [sat naʃ]. Report what a singer sees on an existing song, and name the surface a singer uses to re-seat, or say NOT ESTABLISHED. Change nothing.
+- Learn's explanation already matches Grayson. The Guide and the blurbs: the desk grepped on 2026-10-26 (via Fable's review) and found no sentence that states the old reading: `GuideContent.svelte` has no sentence on sonorants and voicing (its one match, `:329`, is the general "applies consonant voicing and devoicing rules"); `LearnContent.svelte:3889` states Grayson's reading; `packages/blurb/src` has none. Your grep will come back empty. Say so in the report; do not look for a sentence to change.
+- An enclitic after the word (for example «сад ли»): `boundaries.ts:58` marks it `'clitic'`, so `:2249` keeps the voicing. Grayson's particle contractions are б and ж (p. 252, «если б мог»); ли, же, бы are full particles. Whether a host word before an enclitic sits at boundary #3 or #4 is NOT ESTABLISHED (Grayson gives no host-before-ли example), so leave `:2249` as it is for «сад ли» → `ˈsɑd lʲi` and report how many corpus lines it touches.
+- QUEUE row 156 is not in the clone at `e0f4ad9`; it is a desk number. Cite it in the report as the desk's, knowing the lane cannot see it.
+- All eight gates before and after; the gate 1 and gate 4 counts will move by the tests added. Gate 4 pins a web-test count in the ship script (`ENVIRONMENT.md:541`); if the approval test goes red, the cause is a corpus line moving, which step 3 forbids you to re-approve: stop and report.
+
+## 5. Report
+
+`docs/sessions/report-code-n198_r1_2026-10-26.md`: step 0's table; the change with `path:line`, by part A to D; tests added and changed, each shown failing first or marked as a regression guard; the changed approval lines (expected 0); the eight gates before and after; what `cleanWord` held for «из-под»; what a singer sees on an already-seated song; anything owed to Dann (the «меж» French, ratification of the empty `fr`); "What I could not establish". Do not commit the brief, the report, or any `docs/memory` file; the desk files them.
+
+## Appendix: amendments and the ruling, and where each landed
+
+| Item | Applied | Section |
+|---|---|---|
+| Amendment 1, в + obstruent (effective right initial, three cases) | Yes, replacement text as the review words it | 3, step 1, part A; 2 |
+| Amendment 2, the «бог» exception | Yes, as the review words it | 3, step 1, part C; step 0(b); 4 |
+| Amendment 3, «меж» into `cliticData`; pins through `processText` | Yes; French held as a draft with `fr: ''` | 3, step 1, part D; step 2 |
+| Amendment 4, how the engine learns proclitic or contraction | Yes, replacement text as the review words it, plus the ruling's third test | 3, step 1, part B |
+| Amendment 5, failing-first claim | Yes, replacement text as the review words it | 3, step 2 |
+| Amendment 6, boundary #4 definition, «разлука», «если б мог», ли | Yes | 1; 4 (enclitic bullet) |
+| Amendment 7, cites (`:1998-2037`, p. 251, empty Guide grep, row 156) | Yes; the Learn table row cited at `:3899` (the review wrote `:3900`) | 2; 4 |
+| Amendment 8, cross-site line (`transcribe`, `:1961-1979`) | Yes | 4 |
+| Amendment 9, `Pairing.ipa` and re-seating | Yes | 4 |
+| Question for Dann 1, ruled 17:26 | Yes, the eight-word set, voicing branch only, plus pins for «сквозь нас» and «вокруг нас» | 3, step 1, part B; step 2 |
+| Marked French draft for «меж» | Carried as « entre/parmi », "FRENCH DRAFT, owed to Dann; do not seat until ratified"; `fr: ''` in the file | 3, step 1, part D |
+
+## What I could not establish
+
+- What Grayson prescribes for a host word before ли or ль («сад ли»): no example found on pp. 248-257; the code keeps [d] via the clitic boundary and this brief leaves it (Fable).
+- What Grayson prescribes for «бог» before a voiceless consonant or in isolation ([box] or [bok]); p. 144 gives the citation form /box/ only (Fable).
+- Whether Grayson's "prepositions" in rule 2 includes stressed two-syllable prepositions («вокруг»); the eight-word set rests on Dann's ruling of 17:26, not on a Grayson example.
+- What `cleanWord` holds for «из-под» in the live pipeline (hyphen kept or joined); Code reports it.
+- The effect of batch C's typed # on this row beyond the hard boundary at `engine.ts:2171`, which this pass already honours; B3's own pins were not re-run (Fable).
+- The eight gates were not run by the desk or by Fable; only `test:phonology` (267 green) and the probe. The gate 1 and gate 4 counts after step 2 are Code's.
+- Whether an empty French gloss for «меж» in `cliticData` displays cleanly to a French-mode singer. Read: `extractGloss` returns `''` for an empty `fr`. Not run in the live app.
+- The exact text of QUEUE row 156 (not in the clone).
+- Fable's probe covered r1's step 1 as then worded. Neither the desk nor Fable has run this r2's step 1, parts A to D, in code; the expected outputs above are the engine's current outputs and Grayson's printed forms, not a run of the new rule.
+
+## Addendum 2026-10-26 17:28: the «меж» French is ratified
+
+Dann 2026-10-26 17:28: *"Yes o ratify your French translation"* (transcribed as written). This supersedes part D's French hold and the paragraph after it: seat «меж» with gloss EN `between/amongst` and FR `entre/parmi` (the desk's coinage; no glossary source in the file), not `fr: ''`. Add nothing to "owed to Dann" for «меж».

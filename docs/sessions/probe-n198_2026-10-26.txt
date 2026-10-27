@@ -1,0 +1,60 @@
+== CURRENT (Shane e0f4ad9) ==
+сад наш  →  ˈsɑd | ˈnɑʃ
+сад Анны  →  ˈsɑd | ˈɑn nɨ
+сад ваш  →  ˈsɑd | ˈvɑʃ
+друг мой  →  ˈdruɡ | ˈmoj
+глаз открыт  →  ˈɡɫɑz | ɑtk ˈrɨt
+меж нас  →  ˈmʲɛʒ | ˈnɑs
+без Анны  →  → | bʲɪz ˈɑn nɨ
+из окна  →  → | iz ˈok nɑ
+под водой  →  → | pʌd vɑ ˈdoj
+об этом  →  → | ɑb ˈɛ tʌm
+разлука  →  rɑz ˈɫu kɑ
+если б мог  →  ˈjɛs lʲib | ← | ˈmok
+сад ли  →  ˈsɑd lʲi | ←
+кот бы  →  ˈkod bɨ | ←
+муж ли  →  ˈmuʒ lʲi | ←
+друг же  →  ˈdruɡ ʒɨ | ←
+друг ж мой  →  ˈdruɡʒ | ← | ˈmoj
+город ль  →  ˈɡo rʌdlʲ | ←
+без встречи  →  → | bʲɪs ˈfstrʲe tʃʲi
+сад в траве  →  ˈsɑd | → | ftrɑ ˈvʲɛ
+сад вдали  →  ˈsɑd | vdɑ ˈlʲi
+из вдоха  →  → | iz ˈvdo xɑ
+не ждёт друг мой  →  → | ɲɪ ˈʒdʲod | ˈdruɡ | ˈmoj
+
+== PATCHED (step 1 as worded: proclitic or б/ж keep voicing) ==
+сад наш  →  ˈsɑt | ˈnɑʃ
+сад Анны  →  ˈsɑt | ˈɑn nɨ
+сад ваш  →  ˈsɑt | ˈvɑʃ
+друг мой  →  ˈdruk | ˈmoj
+глаз открыт  →  ˈɡɫɑs | ɑtk ˈrɨt
+меж нас  →  ˈmʲɛʃ | ˈnɑs
+без Анны  →  → | bʲɪz ˈɑn nɨ
+из окна  →  → | iz ˈok nɑ
+под водой  →  → | pʌd vɑ ˈdoj
+об этом  →  → | ɑb ˈɛ tʌm
+разлука  →  rɑz ˈɫu kɑ
+если б мог  →  ˈjɛs lʲib | ← | ˈmok
+сад ли  →  ˈsɑd lʲi | ←
+кот бы  →  ˈkod bɨ | ←
+муж ли  →  ˈmuʒ lʲi | ←
+друг же  →  ˈdruɡ ʒɨ | ←
+друг ж мой  →  ˈdruɡʒ | ← | ˈmoj
+город ль  →  ˈɡo rʌdlʲ | ←
+без встречи  →  → | bʲɪs ˈfstrʲe tʃʲi
+сад в траве  →  ˈsɑt | → | ftrɑ ˈvʲɛ
+сад вдали  →  ˈsɑt | vdɑ ˈlʲi
+из вдоха  →  → | iz ˈvdo xɑ
+не ждёт друг мой  →  → | ɲɪ ˈʒdʲod | ˈdruk | ˈmoj
+
+== CORPUS DIFF ==
+Как дай вам Бог любимой быть другим.
+  before: ˈkɑɡ | ˈdɑj | ˈvɑm | ˈbox | lʲu ˈbʲi mʌj | ˈbɨdʲ | dru ˈɡʲim
+  after:  ˈkɑɡ | ˈdɑj | ˈvɑm | ˈbok | lʲu ˈbʲi mʌj | ˈbɨdʲ | dru ˈɡʲim
+changed lines: 1 of 40
+
+== BOUNDARY VIEW (current) ==
+сад=ˈsɑd lʲi ли=←
+если=ˈjɛs lʲib б=← мог=ˈmok
+друг=ˈdruɡʒ ж=← мой=ˈmoj

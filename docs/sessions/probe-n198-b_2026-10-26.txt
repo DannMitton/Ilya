@@ -1,0 +1,72 @@
+== CURRENT (Shane e0f4ad9) ==
+сад вдали  →  ˈsɑd | vdɑ ˈlʲi
+глаз вдруг  →  ˈɡɫɑz | ˈvdruk
+муж вдовы  →  ˈmuʒ | ˈvdo vɨ
+друг взглянул  →  ˈdruɡ | vzɡlʲɪ ˈnuɫ
+сад взор  →  ˈsɑd | ˈvzor
+друг ждёт  →  ˈdruɡ | ˈʒdʲot
+сад в траве  →  ˈsɑd | → | ftrɑ ˈvʲɛ
+сад в доме  →  ˈsɑd | → | ˈvdo mʲɪ
+Бог там  →  ˈbok | ˈtɑm
+Бог был  →  ˈbox | ˈbɨɫ
+Бог мой  →  ˈbox | ˈmoj
+Бог один  →  ˈbox | ɑ ˈdʲin
+Бог  →  ˈbok
+Бог с тобой  →  ˈbok | → | stɑ ˈboj
+без всех  →  → | bʲɪs ˈfsʲɛx
+из взора  →  → | iz ˈvzo rɑ
+под взглядом  →  → | pɑd ˈvzɡlʲɑ dʌm
+если б в саду  →  ˈjɛs lʲib | ← | → | ˈfsɑ du
+если б Анна  →  ˈjɛs lʲib | ← | ˈɑn nɑ
+сквозь нас  →  ˈskvozʲ | ˈnɑs
+вокруг нас  →  vɑk ˈruɡ | ˈnɑs
+близ Анны  →  ˈblʲiz | ˈɑn nɨ
+средь нас  →  ˈsrʲedʲ | ˈnɑs
+из-под Анны  →  ˈis pʌd | ˈɑn nɨ
+меж нами  →  ˈmʲɛʒ | ˈnɑ mʲi
+между нами  →  ˈmʲɛʒ du | ˈnɑ mʲi
+друг. Мой  →  ˈdruk | ˈmoj
+друг, мой  →  ˈdruk | ˈmoj
+друг - мой  →  ˈdruɡ |  | ˈmoj
+
+== PATCHED (step 1 as worded: proclitic or б/ж keep voicing) ==
+сад вдали  →  ˈsɑt | vdɑ ˈlʲi
+глаз вдруг  →  ˈɡɫɑs | ˈvdruk
+муж вдовы  →  ˈmuʃ | ˈvdo vɨ
+друг взглянул  →  ˈdruk | vzɡlʲɪ ˈnuɫ
+сад взор  →  ˈsɑt | ˈvzor
+друг ждёт  →  ˈdruɡ | ˈʒdʲot
+сад в траве  →  ˈsɑt | → | ftrɑ ˈvʲɛ
+сад в доме  →  ˈsɑt | → | ˈvdo mʲɪ
+Бог там  →  ˈbok | ˈtɑm
+Бог был  →  ˈbox | ˈbɨɫ
+Бог мой  →  ˈbok | ˈmoj
+Бог один  →  ˈbok | ɑ ˈdʲin
+Бог  →  ˈbok
+Бог с тобой  →  ˈbok | → | stɑ ˈboj
+без всех  →  → | bʲɪs ˈfsʲɛx
+из взора  →  → | iz ˈvzo rɑ
+под взглядом  →  → | pɑd ˈvzɡlʲɑ dʌm
+если б в саду  →  ˈjɛs lʲib | ← | → | ˈfsɑ du
+если б Анна  →  ˈjɛs lʲib | ← | ˈɑn nɑ
+сквозь нас  →  ˈskvosʲ | ˈnɑs
+вокруг нас  →  vɑk ˈruk | ˈnɑs
+близ Анны  →  ˈblʲis | ˈɑn nɨ
+средь нас  →  ˈsrʲetʲ | ˈnɑs
+из-под Анны  →  ˈis pʌt | ˈɑn nɨ
+меж нами  →  ˈmʲɛʃ | ˈnɑ mʲi
+между нами  →  ˈmʲɛʒ du | ˈnɑ mʲi
+друг. Мой  →  ˈdruk | ˈmoj
+друг, мой  →  ˈdruk | ˈmoj
+друг - мой  →  ˈdruk |  | ˈmoj
+
+== CORPUS DIFF ==
+Как дай вам Бог любимой быть другим.
+  before: ˈkɑɡ | ˈdɑj | ˈvɑm | ˈbox | lʲu ˈbʲi mʌj | ˈbɨdʲ | dru ˈɡʲim
+  after:  ˈkɑɡ | ˈdɑj | ˈvɑm | ˈbok | lʲu ˈbʲi mʌj | ˈbɨdʲ | dru ˈɡʲim
+changed lines: 1 of 40
+
+== BOUNDARY VIEW (current) ==
+сад=ˈsɑd lʲi ли=←
+если=ˈjɛs lʲib б=← мог=ˈmok
+друг=ˈdruɡʒ ж=← мой=ˈmoj

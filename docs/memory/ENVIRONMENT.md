@@ -4975,3 +4975,11 @@ From Vercel's documentation the desk told him the list's three-dot menu had a De
 - The device shell can answer "Workspace still downloading" for several minutes after a new session; `device_list_dir` still works and shows file times.
 - Vercel deletes recoverable builds for 30 days; "Recently Deleted Deployments" (Settings, Security) lists them with days left.
 
+
+## LEARNED BY THE OPUS DESK, 2026-10-25/26
+
+- **Grayson's IPA font is keyboard-mapped too, not only the Cyrillic.** In `pdftotext` output `q` is /r/, `&` after a symbol marks palatalization (`/q&/` is /rʲ/), `@` is /a/; on pp. 251-252 `r` = s, `s` = t, `m` = n, `R` = ʃ, `0` = the velar-i. Verify each glyph against Grayson's English gloss before relying on it. The printed page number heads each page; printed = PDF page minus 16.
+- **Read the whole page before building on one sentence.** The desk cited Grayson p. 242 for clusters "difficult" for Russians and missed the same page's conclusion that the deleted clusters are "far easier to pronounce than suggested by the orthography" (also p. 310). Fable's critique caught it.
+- **PubMed Central answers WebFetch with a reCAPTCHA page;** `pmc.ncbi.nlm.nih.gov` is not reliably readable from this session. ASHA's JSLHR full text is paywalled.
+- **A Fable review of six briefs cost about 30 points of the Fable week** (screenshot 15:02, 2026-10-26), against the desk's estimate of 25. Sonnet helpers ran over their stated worst cases tonight by up to 85 percent (consonant table, 276k against 150k).
+- **The desk's own errors tonight, each owned when made:** framed a consonant as sustained and a high note as a universal hazard (Dann 15:29); labelled dialogue answers "RULED" (15:42); declared that paper cannot carry links (15:42); wrote "note 158, p. 141" before reading it (it is p. 47); drafted "already marked" for an implied break (14:57).

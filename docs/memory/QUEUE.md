@@ -6,6 +6,8 @@ r1 draft, 2026-10-12. Created 2026-09-30 by the desk after Dann: *"are there any
 
 ## Open rows, in run order
 
+**UPDATE 2026-10-26 20:3x (Opus desk, close): batch C (rows 139, 151, «ну-те») RETURNED on `cloud-lane-13` at `a76ced7`, all eight gates measured green by the desk (gate 4 3012); NOT YET SHIPPED: the next desk gives Dann fetch, `git merge --ff-only origin/cloud-lane-13`, then the ship script. New row 156: N.198, voicing before a vowel, sonorant, or в kept only after a preposition or particle (Grayson 2012, 251); brief r2 Fable-reviewed and READY, `../sessions/brief-code-n198-voicing-rule2_r2_2026-10-26.md` (md5 after the «меж» addendum `73d14e066ccb6d1728288d7135499ca3`), review `../sessions/review-fable-brief-n198_r1_2026-10-26.md`; runs after batch C ships.**
+
 **UPDATE 2026-10-26 (Opus desk): Fable-reviewed and READY, all untracked:** row 122 r2, row 134 r2, row 153 (N.195) r2, row 154 (N.196) r2, row 152 (N.194) r5 with its 2026-10-26 addendum, and row 139's Guide-seating brief r2; file names and rulings in `STATE.md`, THE ONE THING, UPDATE 2026-10-26. Row cells below are not yet rewritten.
 
 **Code works down this table one row at a time and reports after each.** READY can start; NEEDS DANN waits for the ruling named; HELD waits for the desk's or Dann's release.
