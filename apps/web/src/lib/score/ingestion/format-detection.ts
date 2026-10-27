@@ -68,6 +68,8 @@ const isZip = (b: Uint8Array) =>
 	startsWithBytes(b, [0x50, 0x4b, 0x03, 0x04]) || // local file header
 	startsWithBytes(b, [0x50, 0x4b, 0x05, 0x06]); // empty archive (EOCD only)
 
+import { HEIF_BRANDS, isHeifImage } from '../../reader/heif-brand';
+
 const isMidi = (b: Uint8Array) => startsWithBytes(b, [0x4d, 0x54, 0x68, 0x64]); // "MThd"
 
 const isPdf = (b: Uint8Array) => startsWithBytes(b, [0x25, 0x50, 0x44, 0x46]); // "%PDF"
@@ -96,9 +98,7 @@ const hasBytesAt = (bytes: Uint8Array, offset: number, sig: number[]): boolean =
  * negative is the defect being fixed here.
  */
 const ISO_BMFF_IMAGE_BRANDS = [
-	'heic', 'heix', 'heim', 'heis', // HEIF still images
-	'hevc', 'hevx', 'hevm', 'hevs', // HEIF image sequences
-	'mif1', 'msf1', // generic HEIF image / image-sequence brands
+	...HEIF_BRANDS, // HEIF: heic, heix, heim, heis, hevc, hevx, hevm, hevs, mif1, msf1
 	'avif', 'avis', // AVIF, same container family
 ];
 
@@ -110,19 +110,7 @@ const isIsoBmffImage = (b: Uint8Array): boolean => {
 	return ISO_BMFF_IMAGE_BRANDS.includes(brand);
 };
 
-/** The HEIC and HEIF brands of `ISO_BMFF_IMAGE_BRANDS`, AVIF left out. */
-const HEIF_BRANDS = ISO_BMFF_IMAGE_BRANDS.filter((brand) => !brand.startsWith('avi'));
-
-/**
- * Is this picture HEIC or HEIF, by its bytes? Asked only after a browser
- * has failed to decode a picture, so that failure can name the format and
- * its way out (`upload.err.imageHeic`) instead of the generic refusal.
- */
-export function isHeifImage(bytes: Uint8Array): boolean {
-	if (!hasBytesAt(bytes, 4, FTYP)) return false;
-	const brand = String.fromCharCode(bytes[8], bytes[9], bytes[10], bytes[11]).toLowerCase();
-	return HEIF_BRANDS.includes(brand);
-}
+export { isHeifImage };
 
 const isImage = (b: Uint8Array) =>
 	startsWithBytes(b, [0x89, 0x50, 0x4e, 0x47]) || // PNG

@@ -38,6 +38,9 @@ importers:
       homr-web:
         specifier: file:../../third_party/homr-web/homr-web-0.2.0-ilya.7.tgz
         version: file:third_party/homr-web/homr-web-0.2.0-ilya.7.tgz
+      libheif-js:
+        specifier: 1.23.5
+        version: 1.23.5
       onnxruntime-web:
         specifier: 1.30.0
         version: 1.30.0
@@ -978,6 +981,10 @@ packages:
   kleur@4.1.5:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
+
+  libheif-js@1.23.5:
+    resolution: {integrity: sha512-umXZPthnWZtF3iG/5mQG+AZ2V6i0UeYpo3z2CkggTEgL8dKmIIwJT6TDuAMuabXa1yTW8uJ1ZAgR+CxNTklYYw==}
+    engines: {node: '>=8.0.0'}
 
   locate-character@3.0.0:
     resolution: {integrity: sha512-SW13ws7BjaeJ6p7Q6CO2nchbYEc3X3J6WrmTTDto7yMPqVSZTUyY5Tjbid+Ab8gLnATtygYtiDIJGQRRn2ZOiA==}
@@ -1998,6 +2005,8 @@ snapshots:
   js-tokens@9.0.1: {}
 
   kleur@4.1.5: {}
+
+  libheif-js@1.23.5: {}
 
   locate-character@3.0.0: {}
 

@@ -62,7 +62,7 @@
 	import { WorkerScoreReader } from '$lib/reader/score-reader';
 	import { WebmscoreMsczConverter } from '$lib/reader/mscz-converter';
 	import { WorkerPageReader, type ClefKeyProbe } from '$lib/reader/page-reader';
-	import { ImageUndecodableError, pieceIdFor, toGreyscalePng } from '$lib/reader/page-image';
+	import { ImageUndecodableError, inkPng, pieceIdFor, toGreyscalePng } from '$lib/reader/page-image';
 	import { hasStaves } from '$lib/reader/staff-detect';
 	import { routePdf, type PdfRoute } from '$lib/score/ingestion/first-staved-page';
 	import { readScanAsScore, readingWait, useIlyaReader } from '$lib/omr/scan';
@@ -287,7 +287,7 @@
 			else await readScanAsScore(file, kind, {
 				busy: (key) => (ui = { kind: 'busy', label: '', key }),
 				ingest: async (xml, reading) => { await handleFile(xml); announceArrival({ file, reading }); },
-				poem: () => (kind === 'pdf' ? readPdfAsPoem(file, ink, stavesFound, stavesFound ? false : null) : readAsPoemByOcr(file, null, true, false)),
+				poem: () => (kind === 'pdf' ? readPdfAsPoem(file, ink, stavesFound, stavesFound ? false : null) : readAsPoemByOcr(inkPng(file, ink), null, true, false)),
 				fail: () => (ui = { kind: 'error', message: T('upload.err.parseFailed') }),
 			});
 			return;
@@ -296,7 +296,7 @@
 		if (kind === 'pdf') {
 			await readPdfAsPoem(file, ink, false, null);
 		} else {
-			await readAsPoemByOcr(file, null, false, null);
+			await readAsPoemByOcr(inkPng(file, ink), null, false, null);
 		}
 	}
 
@@ -408,8 +408,7 @@
 			reset();
 			return;
 		}
-		const stem = file.name.replace(/\.[^.]+$/, '') || 'page';
-		await readAsPoemByOcr(new File([ink], `${stem}.png`, { type: 'image/png' }), text, stavesFound, sungLineFound);
+		await readAsPoemByOcr(inkPng(file, ink), text, stavesFound, sungLineFound);
 	}
 
 	/**
@@ -743,7 +742,7 @@
 				? () =>
 						fallback.kind === 'pdf'
 							? readPdfAsPoem(file, fallback.ink, true, false)
-							: readAsPoemByOcr(file, null, true, false)
+							: readAsPoemByOcr(inkPng(file, fallback.ink), null, true, false)
 				: undefined
 		);
 		announceArrival();

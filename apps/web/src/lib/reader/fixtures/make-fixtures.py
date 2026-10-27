@@ -68,3 +68,8 @@ lines = ["Я помню чудное мгновенье:", "Передо мно�
 for i, t in enumerate(lines):
     d.text((100, 100 + i * 180), t, fill=20, font=font)
 poem.convert("RGB").save(f"{out}/poem-page.heic", quality=-1)
+
+# two images, the second primary: a decoder that takes the first one reads a blank 640 x 480 page
+blank = Image.new("RGB", (640, 480), (255, 255, 255))
+main = page.resize((800, 1100)).convert("RGB")
+blank.save(f"{out}/two-images-second-primary.heic", format="HEIF", quality=-1, save_all=True, append_images=[main], primary_index=1)

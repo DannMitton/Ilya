@@ -95,7 +95,98 @@ Not made: a PNG of (c) (3.3 MB, not needed).
 
 Nothing in the app was changed in this step. The commit holds the fixtures, the generator, and this report.
 
-## Step 1
+## Step 1: `heic-decode.ts`, the fallback in `toGreyscalePng`, and the offline amendment
+
+Two desk amendments arrived during this step and are applied here: Dann's 14:58 ruling (the decoder must work offline once Ilya has been opened online, not only after a first HEIC; step 0 was done, so it sits in step 1 as asked), and the Fable note that `ScoreUploader.svelte` already has its own `function inkFile(original: File)` (line 770, read by `announceArrival` at line 626). **The new export is therefore `inkPng(source, ink)`, not `inkFile`**, in `page-image.ts`, in its tests, and at its four call sites. The component's own `inkFile` is untouched.
+
+### What changed
+
+| File | Change |
+|---|---|
+| `apps/web/src/lib/reader/heic-decode.ts` (new, 80 lines) | `decodeHeic(bytes, wasmBinary?)`: dynamic `import()` of the libheif glue, fetch of `/heif/libheif.wasm`, picks the primary image by `is_primary()`, treats libheif's empty array as a failure, frees the images. A fresh WebAssembly instance per call, so the heap is collectable. Runs in the page (see below) |
+| `apps/web/src/lib/reader/libheif-js.d.ts` (new) | types for the one entry; the package's own `.d.ts` lacks `HeifDecoder` and `HeifImage` |
+| `apps/web/src/lib/reader/page-image.ts` (98 to 137 lines) | on `createImageBitmap` failure, and only if the first 12 bytes sniff as HEIF, imports `heic-decode`, draws the RGBA with `putImageData` to the same `OffscreenCanvas`, and continues through `greyscaleCanvasToPng`. Any decoder failure is the existing `ImageUndecodableError`. Exports `inkPng`. `stemOf` is shared with `pieceIdFor` |
+| `apps/web/src/lib/reader/heif-brand.ts` (new) | `HEIF_BRANDS` and `isHeifImage`, **moved** from `score/ingestion/format-detection.ts` (see the departure below) |
+| `apps/web/src/lib/score/ingestion/format-detection.ts` | imports both from `reader/heif-brand.ts`; `ISO_BMFF_IMAGE_BRANDS` is now `[...HEIF_BRANDS, 'avif', 'avis']`; `isHeifImage` is re-exported. Same brand set, same behaviour |
+| `apps/web/src/lib/score/ScoreUploader.svelte` (1358 to 1357) | four call sites hand `readAsPoemByOcr(inkPng(file, ink), ...)`; the `stem` line before the PDF call is gone |
+| `apps/web/scripts/copy-heif-wasm.mjs` (new), `package.json` `dev` and `build`, `.gitignore` | writes `static/heif/libheif.wasm` and `LICENSE-libheif.txt`, rebuilt each run, exits non-zero if either is missing; wired after `copy-ort-wasm.mjs` |
+| `apps/web/package.json`, `pnpm-lock.yaml` | `libheif-js` `1.23.5`, exact. The lockfile gains 9 lines. `pnpm` 10.28 also wanted to delete the `libc:` lines elsewhere in the lockfile; I kept them, so the lockfile diff is the dependency only |
+| `NOTICES.md` | the libheif-js line, as proposed in step 0 |
+| `apps/web/static/sw.js`, `apps/web/scripts/stamp-sw.mjs` | the offline amendment, below |
+
+**Departure from the brief, and why.** The brief has `page-image.ts` call `isHeifImage` from `score/ingestion/format-detection.ts`. `pnpm ratchets` refuses it: `reader/` may not import `score/` (`scripts/ratchets.mjs`, MODULES, `reader: []`). I did not change the module table. The sniff and the HEIF brand list moved to `reader/heif-brand.ts`; `score/` may import `reader/`, so `format-detection.ts` imports them back. One definition, not two.
+
+**Where the decoder runs.** In the page. The glue is synchronous, so a 48 MP photograph blocks the page while it decodes (measured below). A Worker also loads and decodes in Chromium (step 0: 182 ms for a 1,600 by 2,200 page), so moving it is open if Dann's look on a phone finds the block too long.
+
+**Rotation.** libheif applies `irot`, `imir`, and `clap` itself and reassembles `grid` items. No orientation code was added. Fixture (b), stored 2,200 by 1,600 with an `irot` box, decodes upright. The brief's mutant "skip the orientation" cannot be built against libheif-js: it has no switch for it. Instead `heic-decode.test.ts` carries a positive control: a quarter turn of the decoded (b) is judged on its side. NOT SCORED: a decoder that really skipped `irot`.
+
+**Which image is chosen.** The primary, by `is_primary()`. libheif-js lists every top-level image in item-ID order. `two-images-second-primary.heic` (49,809 bytes, committed, made by `make-fixtures.py`) holds a blank 640 by 480 image first and the primary 800 by 1,100 page second; the test asserts 800 by 1,100.
+
+### Offline (Dann 14:58)
+
+`static/sw.js` fetches the decoder's files in the background, 3 seconds after the app shell is cached, inside the install event. The files are not in `APP_SHELL`, a failed fetch is swallowed so it cannot fail the install, and nothing is under `/omr/`. The files are: `/heif/libheif.wasm`, `/heif/LICENSE-libheif.txt`, and the decoder's JavaScript chunks. **The chunks are hashed and a lazy `import()` fails whole if any dependency is missing offline**, so `stamp-sw.mjs` finds them at build time by content (`HeifDecoder`, `/heif/libheif.wasm`), adds the chunks they import, writes the URLs into `sw.js`, and exits non-zero if it finds fewer than two. In this build that is six chunks. My first version cached only two and the offline test caught it: the glue chunk imports `Bx2EM-6T.js`, and the dynamic import failed with `Failed to fetch dynamically imported module`.
+
+**Extra bytes every visitor now downloads once**, measured on this build (`build/`, 2026-10-27):
+
+| File | Raw bytes | gzip -9 |
+|---|---|---|
+| `/heif/libheif.wasm` | 1,463,506 | 482,812 |
+| `/heif/LICENSE-libheif.txt` | 44,366 | 14,394 |
+| `KqkYyNJv.js` (libheif glue) | 89,634 | 28,008 |
+| `BDOmw9LV.js` (`heic-decode`) | 1,062 | 641 |
+| `fM3fQ8ZP.js`, `CJyy1nuf.js`, `C2qyyL9V.js`, `Bx2EM-6T.js` (shared helpers the two import) | 30,284 | not measured |
+| **Total** | **1,628,852** | about 526,000 plus the helpers |
+
+The four helper chunks are probably fetched by the app anyway; the figure that is certainly new is 1,598,568 raw. Whether the host compresses `.wasm` in transit is NOT ESTABLISHED, so the raw figure is the one to plan on. **`static/heif/` is 1,507,872 bytes (2 files). One HEIC on a visitor who has not yet had the background fetch costs the wasm, the glue, and the `heic-decode` chunk: 1,554,202 bytes raw.** The ship waits for Dann to hear these numbers (`CONTRACT.md` section 8).
+
+Limits of the offline cache, NOT hidden:
+
+- It happens at install of each new build (`CACHE_VERSION` changes every deploy), so every deploy fetches the decoder's files again, about 1.6 MB, unless the bytes are unchanged in the browser's HTTP cache. NOT ESTABLISHED how often that hits.
+- A fetch that fails (no connection at install) is not retried until the next build. The lazy path still caches the files on first use, as before.
+- The first load of a new visitor runs before the service worker controls the page, so the app's own files are cached by the worker only on the second visit. That is how the shell already behaved. The offline spec does the second online visit.
+- Offline, the reader's models under `/omr/` are held by the HTTP cache only (`sw.js` refuses that prefix). The offline spec proves the wait shows and the decode starts. Whether homr then finishes offline is NOT ESTABLISHED and is not this row's.
+
+### Tests
+
+| File | Tests | Result |
+|---|---|---|
+| `heic-decode.test.ts` | 9 run, 1 skipped (`ILYA_HEIC_REAL`) | (a) 1,600 by 2,200 with 120 dark rows and 0 dark columns; (b) upright; the quarter-turn control reads sideways; (c) paper grey between 185 and 215; (e) the grid reassembled; the primary is chosen; a truncated HEIF, non-HEIF bytes, and an unfetchable decoder each reject |
+| `page-image.test.ts` | 7 | PNG and JPEG resolve with the decoder module never loaded; a HEIF loads it once for two photographs; a decoder failure and an AVIF and unreadable bytes each give `ImageUndecodableError`; `inkPng` returns an `image/png` File named `<stem>.png` |
+| `e2e/heic-fallback.test.ts` | 1 | Playwright Chromium, dev server: `toGreyscalePng` on (a) and on its source PNG: 1,600 by 2,200 both, **100.000 percent of pixels within 2 levels, worst difference 0**. The spec also asserts this Chromium does not decode HEIC itself |
+| `e2e/heic-offline.test.ts` | 1 | Serves `build/` on 127.0.0.2 (the service worker does not register on `localhost`, `app.html`). Loads online, waits until the worker has cached the decoder files, loads once more, goes offline, reloads, drops (a): the reader's wait shows, neither refusal text appears, no `IMAGE_UNDECODABLE`. Needs `pnpm build` first and skips without it |
+
+`ILYA_HEIC_REAL=/path/to/photo.heic pnpm exec vitest run src/lib/reader/heic-decode.test.ts` runs the real-photograph test. It judges upright by comparing the variance of row means to the variance of column means (a photograph is not binary) and prints the size and both variances. **NOT SCORED here: (d) was not available to me.** The metric is untried on a real photograph, so if the desk's run fails, check the printed variances before trusting the failure.
+
+### Mutants
+
+| Mutant | Killed by |
+|---|---|
+| skip the fallback (`createImageBitmap` failure throws at once) | `page-image.test.ts`, "decodes a HEIF the browser refuses ..."; and `e2e/heic-fallback.test.ts` (failed) |
+| load the decoder for every picture (an `import()` at the top of `toGreyscalePng`) | `page-image.test.ts`, "resolves a PNG and a JPEG without loading the HEIC decoder" |
+| skip the orientation | not constructible (above); the positive control in `heic-decode.test.ts` shows the instrument can fail |
+| hand tesseract the original file | step 2 (the poem drop reads what tesseract is handed) |
+| service worker does not cache the decoder (`DECODER_FILES = []`) | `e2e/heic-offline.test.ts` (timed out waiting for the cache); restored, it passes |
+
+### Large photograph (brief section 7)
+
+A 6,000 by 8,000 (48 MP) HEIC, lossy quality 80, 202,174 bytes, made with `pillow_heif` (not committed). Playwright Chromium, headless shell, desktop, page: listing 47 ms, decode 1,284 ms (the page is blocked for about that long), WebAssembly heap 382 MB, renderer resident memory 648 MB after the decode (that includes the 192 MB RGBA array). **NOT ESTABLISHED on a phone**; the desktop figure does not bound it. The long-task observer reported 0 and I do not trust it for a synchronous block inside one call.
+
+### Gates after step 1
+
+| Gate | Before | After |
+|---|---|---|
+| phonology | 291 | 291 |
+| dictionary | 248 | 248 |
+| web check | 0 errors, 12 warnings in 5 files | 0 errors, 12 warnings in 5 files |
+| web test | 3231 | 3247 passed, 1 skipped (3248): +9 in `heic-decode.test.ts`, +7 in `page-image.test.ts` |
+| score-parser | 775 passed, 5 skipped | 775 passed, 5 skipped |
+| blurb | 145 | 145 |
+| integration | 55 | 55 |
+| ratchets | OK | OK |
+
+`ScoreUploader.svelte` is 1357 of 1358; I did not lower the ceiling in `ratchets.json` (the brief says it stays). `page-image.ts` is 137 lines, `heic-decode.ts` 80. `vite build` and `stamp-sw.mjs` run clean.
+
+## Step 2
 
 (not started)
 
