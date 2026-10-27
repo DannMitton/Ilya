@@ -1,0 +1,133 @@
+[
+ {
+  "src": "underlay-seat.ts",
+  "test": "underlay-seat.test.ts",
+  "muts": [
+   [
+    "nearest: tie goes right (< -> <=)",
+    "if (Math.abs(cx - xs[j]) < Math.abs(cx - xs[best])) best = j;",
+    "if (Math.abs(cx - xs[j]) <= Math.abs(cx - xs[best])) best = j;"
+   ],
+   [
+    "nearest: picks the farthest",
+    "if (Math.abs(cx - xs[j]) < Math.abs(cx - xs[best])) best = j;",
+    "if (Math.abs(cx - xs[j]) > Math.abs(cx - xs[best])) best = j;"
+   ],
+   [
+    "monotone: tie goes to skip (<= -> <)",
+    "if (take <= skip) {",
+    "if (take < skip) {"
+   ],
+   [
+    "monotone: no fallback when tokens outnumber notes",
+    "if (n === 0 || n > m) return null;",
+    "if (n === 0) return null;"
+   ],
+   [
+    "monotone: cost is not the distance (zero)",
+    "const take = cost[i - 1][j - 1] + Math.abs(cx[i - 1] - xs[j - 1]);",
+    "const take = cost[i - 1][j - 1];"
+   ],
+   [
+    "monotone: notes may not be skipped",
+    "const skip = cost[i][j - 1];",
+    "const skip = INF;"
+   ],
+   [
+    "monotone off (rule falls through to nearest)",
+    "if (rule === 'monotone') {",
+    "if (rule === 'monotone-off') {"
+   ],
+   [
+    "order off (rule falls through to nearest)",
+    "} else if (rule === 'order') {",
+    "} else if (rule === 'order-off') {"
+   ],
+   [
+    "order: tied-into notes counted as sung",
+    "if (n.bar === bar && !n.tiedInto && !n.underExtender) sung.push(j);",
+    "if (n.bar === bar && !n.underExtender) sung.push(j);"
+   ],
+   [
+    "order: notes under an extender counted as sung",
+    "if (n.bar === bar && !n.tiedInto && !n.underExtender) sung.push(j);",
+    "if (n.bar === bar && !n.tiedInto) sung.push(j);"
+   ],
+   [
+    "order: sung notes taken from every bar",
+    "if (n.bar === bar && !n.tiedInto && !n.underExtender) sung.push(j);",
+    "if (!n.tiedInto && !n.underExtender) sung.push(j);"
+   ],
+   [
+    "order: pairs even where the counts differ",
+    "if (sung.length !== ks.length) continue;",
+    "if (sung.length === 0) continue;"
+   ],
+   [
+    "order: bar taken from the token's index, not its nearest note",
+    "const bar = staff[j].bar;",
+    "const bar = staff[0].bar;"
+   ],
+   [
+    "tokens not put in x order",
+    "const order = tokens.map((_, i) => i).sort((a, b) => centre[a] - centre[b]);",
+    "const order = tokens.map((_, i) => i);"
+   ],
+   [
+    "notes not put in x order",
+    "const staff = [...notes].sort((a, b) => a.x - b.x);",
+    "const staff = [...notes];"
+   ],
+   [
+    "shared never reported",
+    "shared: (heldBy.get(placed.j) ?? 0) > 1,",
+    "shared: false,"
+   ],
+   [
+    "runTogether never reported",
+    "runTogether: RUN_TOGETHER.test(tokens[i].text),",
+    "runTogether: false,"
+   ],
+   [
+    "runTogether: marks count as letters",
+    "const RUN_TOGETHER = /[\\p{L}\\p{M}][^\\p{L}\\p{M}]+[\\p{L}\\p{M}]/u;",
+    "const RUN_TOGETHER = /[\\p{L}\\p{M}][^\\p{L}\\p{M}]*[\\p{L}\\p{M}]/u;"
+   ],
+   [
+    "offset sign reversed",
+    "offset: centre[i] - note.x,",
+    "offset: note.x - centre[i],"
+   ],
+   [
+    "a joint is read as a mark",
+    "if (HYPHENS.test(t)) return 'joint';",
+    "if (HYPHENS.test(t)) return 'mark';"
+   ],
+   [
+    "an extender is read as a joint",
+    "if (UNDERSCORES.test(t)) return 'extender';",
+    "if (UNDERSCORES.test(t)) return 'joint';"
+   ],
+   [
+    "non-syllable tokens counted against the notes",
+    "const sy = order.filter((i) => kinds[i] === 'syllable');",
+    "const sy = order;"
+   ],
+   [
+    "no notes: seats on note 0 anyway",
+    "if (staff.length > 0) {",
+    "if (true) {"
+   ],
+   [
+    "fallback tokens report the rule asked for, not nearest",
+    "const by = new Array<SeatRule>(sy.length).fill('nearest');",
+    "const by = new Array<SeatRule>(sy.length).fill(rule);"
+   ],
+   [
+    "order: bar's tokens taken in reverse x order",
+    "ks.forEach((k, r) => {",
+    "[...ks].reverse().forEach((k, r) => {"
+   ]
+  ]
+ }
+]

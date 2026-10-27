@@ -1,0 +1,4 @@
+400 bands; 429 rows in the harness output; 129 bands with 2+ rows; 23 R1 runs split by R2
+400 bands, 429 rows from cutRows, 0 bands differ from the harness
+1500 rows
+1500 rows x 3 rules = 4500 seatings, 0 differ from score44.py
