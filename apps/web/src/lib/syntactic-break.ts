@@ -17,13 +17,13 @@
  * (`text/syntactic-break-unit.ts`), because a break happens only at the end of a complete unit. The typed
  * text keeps the # where the singer put it, and Ilya never moves it there.
  */
-import { WORD_SPLIT, GLUED_MARK } from './text/break-glue';
+import { WORD_TOKEN, GLUED_MARK } from './text/break-glue';
 
 export const SYNTACTIC_BREAK = '#';
 
 /**
- * Splits typed whitespace tokens into the words they hold and, for each, whether a # ends it.
- * `isWord` says what a token must be to count as a word (`pipeline.ts` drops punctuation alone).
+ * Splits typed tokens (`tokenSpans`) into the words they hold and, for each, whether a # belongs to it and which
+ * token it came from. `isWord` says what a token must be to count as a word (`pipeline.ts` drops punctuation alone).
  *
  * - A trailing # belongs to the word it trails («я#»), and so does one inside the word («ва#с»): a # with
  *   letters to its left is read, never rejected (Dann 02:19).
@@ -31,18 +31,23 @@ export const SYNTACTIC_BREAK = '#';
  * - With no word before it, a # belongs to nothing and is dropped.
  * - A `\u00A0` standing immediately before a # goes with it («я\u00A0#», the form Ilya itself writes).
  */
-export function peelSyntacticBreaks(tokens: readonly string[], isWord: (token: string) => boolean): { words: string[]; broken: boolean[] } {
+export function peelSyntacticBreaks<T extends { text: string }>(
+	tokens: readonly T[],
+	isWord: (token: string) => boolean,
+): { words: string[]; broken: boolean[]; source: T[] } {
 	const words: string[] = [];
 	const broken: boolean[] = [];
-	for (const token of tokens) {
-		const [, lead, core, trail] = /^(#*)(.*?)((?:\u00A0*#)*)$/u.exec(token)!;
+	const source: T[] = [];
+	for (const tok of tokens) {
+		const [, lead, core, trail] = /^(#*)(.*?)((?: *#)*)$/u.exec(tok.text)!;
 		if (lead && words.length > 0) broken[words.length - 1] = true;
 		if (core && isWord(core)) {
 			words.push(core.replace(GLUED_MARK, ''));
 			broken.push(trail !== '' || core.includes('#'));
+			source.push(tok);
 		} else if (trail && words.length > 0) broken[words.length - 1] = true;
 	}
-	return { words, broken };
+	return { words, broken, source };
 }
 
 /** A syllable's IPA with the mark grafted after it, when `word` ends in a syntactic break and this is its last syllable. */
@@ -50,5 +55,17 @@ export function graftBreak(word: { syntacticBreak?: boolean; syllables: readonly
 	return word.syntacticBreak && k === word.syllables.length - 1 ? ipa + SYNTACTIC_BREAK : ipa;
 }
 
-/** A typed line's tokens, as `peelSyntacticBreaks` takes them: split on whitespace, but not between a word and a `\u00A0#` glued to it. */
-export const splitTypedWords = (line: string): string[] => line.trim().split(WORD_SPLIT);
+/** One typed token and where it sits in its line. */
+export interface TokenSpan {
+	text: string;
+	start: number;
+	end: number;
+}
+
+/**
+ * A typed line's tokens with their offsets in that line, read off the UNTRIMMED line so a leading space keeps
+ * them. A token is a run of non-space characters, plus a ` ` glued to a `#` (`break-glue.ts`), so the
+ * glued form «я #» is one token here as it is everywhere Lyrics is split.
+ */
+export const tokenSpans = (line: string): TokenSpan[] =>
+	[...line.matchAll(WORD_TOKEN)].map((m) => ({ text: m[0], start: m.index!, end: m.index! + m[0].length }));

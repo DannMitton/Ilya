@@ -14,7 +14,10 @@ import { ipaOf, loadRealData, wordsOf } from './syntactic-break.support';
 beforeAll(loadRealData, 60_000);
 
 const isWord = (t: string) => t.replace(/[.,!?;:"«»–—…()]/g, '').length > 0;
-const peel = (line: string) => peelSyntacticBreaks(line.split(/\s+/), isWord);
+const peel = (line: string) => {
+	const { words, broken } = peelSyntacticBreaks(line.split(/\s+/).map((text) => ({ text })), isWord);
+	return { words, broken };
+};
 
 describe('peelSyntacticBreaks', () => {
 	it('a # inside a word is read, and belongs to that word (Dann 02:19)', () => {
