@@ -60,6 +60,7 @@ next session the same hour it cost the last one.
 | every header reads the same colour in a browser check | `A HIDDEN PANE FREEZES ITS TRANSITIONS` |
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
 | the desk moved a gate number for Dann | `THE DESK MOVES THE GATE LINE` |
+| Dann scanned pages into Notes and you want the file | `A NOTES SCAN IS A PDF IN THE NOTES CONTAINER` |
 | a brief lets Code write with git, or Code ran `git stash` | `CODE RAN git stash` |
 | a change must not alter the page, and you want proof | `SCREENSHOT COMPARE` |
 | French desk captures differ by a few hundred pixels after a change that cannot reach them, or a box looks empty in the captures | `FRENCH DESK CAPTURES SHIFT PER BUILD` |
@@ -4983,3 +4984,7 @@ From Vercel's documentation the desk told him the list's three-dot menu had a De
 - **PubMed Central answers WebFetch with a reCAPTCHA page;** `pmc.ncbi.nlm.nih.gov` is not reliably readable from this session. ASHA's JSLHR full text is paywalled.
 - **A Fable review of six briefs cost about 30 points of the Fable week** (screenshot 15:02, 2026-10-26), against the desk's estimate of 25. Sonnet helpers ran over their stated worst cases tonight by up to 85 percent (consonant table, 276k against 150k).
 - **The desk's own errors tonight, each owned when made:** framed a consonant as sustained and a high note as a universal hazard (Dann 15:29); labelled dialogue answers "RULED" (15:42); declared that paper cannot carry links (15:42); wrote "note 158, p. 141" before reading it (it is p. 47); drafted "already marked" for an implied break (14:57).
+
+### A NOTES SCAN IS A PDF IN THE NOTES CONTAINER. Learned 2026-10-26 20:5x
+- A document Dann scans into Apple Notes (Continuity Camera from his Mac) lands on the Mac as `~/Library/Group Containers/group.com.apple.notes/FallbackPDFs/<note or attachment UUID>/<n>_<UUID>/FallbackPDF.pdf`, one PDF per scan, every page an image with no text layer, often with a byte-identical twin under a second UUID; the per-page images are in `Paper/Bundles/<UUID>.bundle/Assets.bundle/` under hashed names, and the thumbnails in `Previews/`. Nothing lands in Downloads unless he saves it out. The folder is grantable through `device_request_folder_access`; find the fresh scan with `find FallbackPDFs -newermt "-180 minutes" -name "*.pdf"`, check the two twins by md5, copy one out, and file it. Scan pages come in mixed orientations (portrait and rotated landscape): make a contact sheet with `pdftoppm -r 20` and PIL (both on the Mac) before naming the page range.
+- The desk told Dann twice (20:51, 20:53) that the pages had to come through Downloads, and checked Downloads instead of looking for where Notes keeps a scan. Dann: *"You must find them. Do not bothe rme with their location again.,just find them."* (transcribed as written). Lesson: when he says a file exists on his Mac, search his Mac for it (request the folder), never tell him where to put it.
