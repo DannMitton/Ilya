@@ -32,6 +32,9 @@ function seat(text: string, note: number | null = null, offset = 0): Seat {
 	};
 }
 
+/** A token whose box is 40 px wide and centred on x. */
+const tok = (text: string, x: number): Token => ({ text, x0: x - 20, x1: x + 20 });
+
 const shape = (words: Word[]) => words.map((w) => w.syllables.map((s) => [s.text, s.syllabic, s.note]));
 
 describe('sewWords', () => {
@@ -93,13 +96,66 @@ describe('sewWords', () => {
 		]);
 	});
 
-	it('keeps, of two tokens on one note, the one nearer its head', () => {
+	it('joins the texts of two tokens on one note in x order, with the hyphen between them taken out', () => {
 		const words = sewWords([seat('су-', 3, 40), seat('е', 3, -6), seat('ты', 4)]);
-		expect(shape(words)).toEqual([[['е', 'single', 3]], [['ты', 'single', 4]]]);
+		expect(shape(words)).toEqual([[['суе', 'single', 3]], [['ты', 'single', 4]]]);
 	});
 
-	it('keeps the first of two tokens on one note when they are as near', () => {
-		expect(shape(sewWords([seat('а', 3, 5), seat('б', 3, -5)]))).toEqual([[['а', 'single', 3]]]);
+	it('gives two tokens on one note, under nearest, one syllable whose text is the two joined in x order', () => {
+		const notes = [{ id: 1, x: 100, bar: 1 }, { id: 2, x: 200, bar: 1 }];
+		const seats = seatTokens([tok('е', 205), tok('су', 190)], notes, 'nearest');
+		expect(seats.filter((s) => s.note === 2)).toHaveLength(2);
+		expect(shape(sewWords(seats))).toEqual([[['суе', 'single', 2]]]);
+	});
+
+	it('joins a lone hyphen between two tokens on one note into the syllable, and does not let it glue the next word', () => {
+		const words = sewWords([seat('су', 3), seat('-'), seat('е', 3), seat('ты', 4)]);
+		expect(shape(words)).toEqual([[['суе', 'single', 3]], [['ты', 'single', 4]]]);
+	});
+
+	it('joins two tokens on one note in the order given, whichever is nearer its head', () => {
+		expect(shape(sewWords([seat('а', 3, 5), seat('б', 3, -4)]))).toEqual([[['аб', 'single', 3]]]);
+		expect(shape(sewWords([seat('а', 3, -4), seat('б', 3, 5)]))).toEqual([[['аб', 'single', 3]]]);
+	});
+
+	it('merges a token the rule left over, inside a word, into the next syllable of the word: «ны-» then «е» gives «ные»', () => {
+		const notes = [1, 2, 3].map((id) => ({ id, x: id * 100, bar: 1 }));
+		const tokens = [tok('пе-', 100), tok('чаль-', 200), tok('ны-', 250), tok('е', 300)];
+		const seats = seatTokens(tokens, notes, 'monotone');
+		expect(seats.filter((s) => s.unseated).map((s) => s.text)).toEqual(['ны-']);
+		const words = sewWords(seats);
+		expect(shape(words)).toEqual([[['пе', 'begin', 1], ['чаль', 'middle', 2], ['ные', 'end', 3]]]);
+	});
+
+	it('keeps the letters of an unseated token that ends the seats with a hyphen after it, in the last syllable', () => {
+		expect(shape(sewWords([seat('ку-', 0), seat('ха-', null)]))).toEqual([[['куха', 'single', 0]]]);
+	});
+
+	it('merges a token the rule left over at the end of a word into the last syllable of it', () => {
+		expect(shape(sewWords([seat('ку-', 0), seat('ха', null), seat('ты', 1)]))).toEqual([[['куха', 'single', 0]], [['ты', 'single', 1]]]);
+	});
+
+	it('keeps every letter of a word whose middle was left over', () => {
+		const words = sewWords([seat('пе-', 0), seat('чаль-', null), seat('ные', 1)]);
+		expect(shape(words)).toEqual([[['пе', 'begin', 0], ['чальные', 'end', 1]]]);
+	});
+
+	it('leaves out a whole unseated word between two words, and merges it into neither', () => {
+		const words = sewWords([seat('Средь', 0), seat('и', null), seat('шум', 1)]);
+		expect(shape(words)).toEqual([[['Средь', 'single', 0]], [['шум', 'single', 1]]]);
+	});
+
+	it('holds an unseated token that begins a word with a hyphen, and puts it before the syllable that continues it', () => {
+		const words = sewWords([seat('ты', 0), seat('ны-', null), seat('е', 1)]);
+		expect(shape(words)).toEqual([[['ты', 'single', 0]], [['ные', 'single', 1]]]);
+	});
+
+	it('leaves out a held unseated token that nothing continues', () => {
+		expect(shape(sewWords([seat('ты', 0), seat('ны-', null)]))).toEqual([[['ты', 'single', 0]]]);
+		expect(shape(sewWords([seat('ты', 0), seat('ны-', null), seat('-', null), seat('ха', null), seat('он', 1)]))).toEqual([
+			[['ты', 'single', 0]],
+			[['он', 'single', 1]],
+		]);
 	});
 
 	it('gives no words for no seats', () => {
@@ -282,6 +338,16 @@ describe('from homr\'s reading of Tchaikovsky op. 38 no. 3 to the words the pars
 		const words = collectScoreWords(parsed, 1);
 		const sung = parsed.vocalLine.filter((e) => e.type !== 'rest');
 		expect(words.flatMap((w) => w.cells.map((c) => c.eventId))).toEqual(sung.slice(0, 10).map((e) => e.id));
+	});
+
+	it('keeps «печальные» whole when a syllable was left over: one word of three slots, though it holds four vowels', async () => {
+		const seats3: Seat[] = [seat('пе-', at(0)), seat('чаль-', at(1)), seat('ны-', null), seat('е', at(2))];
+		const out = writeLyrics(fixture, sewWords(seats3));
+		const { score: parsed } = await parse(out);
+		const words = collectScoreWords(parsed, 1);
+		expect(words.map((w) => w.raw)).toEqual(['печальные']);
+		expect(words[0].slots).toHaveLength(3);
+		expect([...out.matchAll(/<text>([^<]*)<\/text>/g)].map((m) => m[1])).toEqual(['пе', 'чаль', 'ные']);
 	});
 
 	it('goes from boxes to lyrics: seatTokens, sewWords, writeLyrics, and the parser', async () => {

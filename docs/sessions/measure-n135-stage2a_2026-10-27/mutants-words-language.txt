@@ -1,56 +1,104 @@
-underlay-words.ts | sew: a lone hyphen does not join | KILLED by 2 of 32
+underlay-words.ts | sew: a lone hyphen does not join | KILLED by 2 of 42
       - sewWords joins the neighbours of a lone hyphen, whichever side the token's own hyphen is on
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads gives collectScoreWords the seated words, in order
-underlay-words.ts | sew: a trailing hyphen does not continue the word | KILLED by 6 of 32
+underlay-words.ts | sew: a trailing hyphen does not continue the word | KILLED by 11 of 42
       - sewWords joins a token that ends in a hyphen to the next, and gives begin, middle, and end
       - sewWords carries a word across rows: a hyphen that ends one row joins the first token of the next
       - sewWords keeps the print's punctuation, case, and old letters, and strips only the joining hyphens
       - sewWords does not let an extender break the word it stands in
+      - sewWords merges a token the rule left over, inside a word, into the next syllable of the word: «ны-» then «е» gives «ные»
+      - sewWords keeps the letters of an unseated token that ends the seats with a hyphen after it, in the last syllable
+      - sewWords merges a token the rule left over at the end of a word into the last syllable of it
+      - sewWords keeps every letter of a word whose middle was left over
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads gives collectScoreWords the seated words, in order
+      - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads keeps «печальные» whole when a syllable was left over: one word of three slots, though it holds four vowels
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads goes from boxes to lyrics: seatTokens, sewWords, writeLyrics, and the parser
-underlay-words.ts | sew: a leading hyphen does not join | KILLED by 2 of 32
+underlay-words.ts | sew: a leading hyphen does not join | KILLED by 2 of 42
       - sewWords joins the neighbours of a lone hyphen, whichever side the token's own hyphen is on
       - sewWords keeps the print's punctuation, case, and old letters, and strips only the joining hyphens
-underlay-words.ts | sew: joining hyphens kept in the text | KILLED by 7 of 32
+underlay-words.ts | sew: joining hyphens kept in the text | KILLED by 13 of 42
       - sewWords joins a token that ends in a hyphen to the next, and gives begin, middle, and end
       - sewWords joins the neighbours of a lone hyphen, whichever side the token's own hyphen is on
       - sewWords carries a word across rows: a hyphen that ends one row joins the first token of the next
       - sewWords keeps the print's punctuation, case, and old letters, and strips only the joining hyphens
       - sewWords does not let an extender break the word it stands in
+      - sewWords merges a token the rule left over, inside a word, into the next syllable of the word: «ны-» then «е» gives «ные»
+      - sewWords keeps the letters of an unseated token that ends the seats with a hyphen after it, in the last syllable
+      - sewWords merges a token the rule left over at the end of a word into the last syllable of it
+      - sewWords keeps every letter of a word whose middle was left over
+      - sewWords holds an unseated token that begins a word with a hyphen, and puts it before the syllable that continues it
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads gives collectScoreWords the seated words, in order
-      - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads goes from boxes to lyrics: seatTokens, sewWords, writeLyrics, and the parser
-underlay-words.ts | sew: an extender does not mark the syllable | KILLED by 2 of 32
+      - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads keeps «печальные» whole when a syllable was left over: one word of three slots, though it holds four vowels
+underlay-words.ts | sew: an extender does not mark the syllable | KILLED by 2 of 42
       - sewWords marks a syllable an extender follows as sustained, and no other
       - sewWords does not let an extender break the word it stands in
-underlay-words.ts | sew: an extender breaks the word | KILLED by 1 of 32
+underlay-words.ts | sew: an extender breaks the word | KILLED by 1 of 42
       - sewWords does not let an extender break the word it stands in
-underlay-words.ts | sew: syllabic middle given as begin | KILLED by 4 of 32
+underlay-words.ts | sew: syllabic middle given as begin | KILLED by 6 of 42
       - sewWords joins a token that ends in a hyphen to the next, and gives begin, middle, and end
       - sewWords carries a word across rows: a hyphen that ends one row joins the first token of the next
+      - sewWords merges a token the rule left over, inside a word, into the next syllable of the word: «ны-» then «е» gives «ные»
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads gives collectScoreWords the seated words, in order
+      - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads keeps «печальные» whole when a syllable was left over: one word of three slots, though it holds four vowels
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads goes from boxes to lyrics: seatTokens, sewWords, writeLyrics, and the parser
-underlay-words.ts | sew: syllabic of one syllable not single | KILLED by 6 of 32
+underlay-words.ts | sew: syllabic of one syllable not single | KILLED by 13 of 42
       - sewWords gives a word of one syllable the role single
       - sewWords ignores a lone hyphen before any syllable, and keeps the next word a word of its own
       - sewWords carries a word across rows: a hyphen that ends one row joins the first token of the next
       - sewWords drops a mark with no letter, and a syllable with no note
-      - sewWords keeps, of two tokens on one note, the one nearer its head
-      - sewWords keeps the first of two tokens on one note when they are as near
-underlay-words.ts | sew: two tokens on a note both kept | KILLED by 1 of 32
-      - sewWords keeps the first of two tokens on one note when they are as near
-underlay-words.ts | sew: the farther token kept on a note | KILLED by 1 of 32
-      - sewWords keeps, of two tokens on one note, the one nearer its head
-underlay-words.ts | sew: an unseated syllable is kept | KILLED by 1 of 32
+      - sewWords joins the texts of two tokens on one note in x order, with the hyphen between them taken out
+      - sewWords gives two tokens on one note, under nearest, one syllable whose text is the two joined in x order
+      - sewWords joins a lone hyphen between two tokens on one note into the syllable, and does not let it glue the next word
+      - sewWords joins two tokens on one note in the order given, whichever is nearer its head
+      - sewWords keeps the letters of an unseated token that ends the seats with a hyphen after it, in the last syllable
+      - sewWords merges a token the rule left over at the end of a word into the last syllable of it
+      - sewWords leaves out a whole unseated word between two words, and merges it into neither
+      - sewWords holds an unseated token that begins a word with a hyphen, and puts it before the syllable that continues it
+underlay-words.ts | note: two tokens on a note both kept | KILLED by 4 of 42
+      - sewWords joins the texts of two tokens on one note in x order, with the hyphen between them taken out
+      - sewWords gives two tokens on one note, under nearest, one syllable whose text is the two joined in x order
+      - sewWords joins a lone hyphen between two tokens on one note into the syllable, and does not let it glue the next word
+      - sewWords joins two tokens on one note in the order given, whichever is nearer its head
+underlay-words.ts | note: the texts are not joined (the nearer seat's text only) | KILLED by 4 of 42
+      - sewWords joins the texts of two tokens on one note in x order, with the hyphen between them taken out
+      - sewWords gives two tokens on one note, under nearest, one syllable whose text is the two joined in x order
+      - sewWords joins a lone hyphen between two tokens on one note into the syllable, and does not let it glue the next word
+      - sewWords joins two tokens on one note in the order given, whichever is nearer its head
+underlay-words.ts | note: hyphens between joined texts kept | KILLED by 1 of 42
+      - sewWords joins the texts of two tokens on one note in x order, with the hyphen between them taken out
+underlay-words.ts | note: a lone hyphen between two tokens on one note is kept | KILLED by 1 of 0
+      - FILE ERROR Transform failed with 1 error:
+/home/user/Ilya/apps/web/src/lib/omr/underlay-words.ts:78:1: ERROR: Unexpected "}"
+underlay-words.ts | unseated in a word: its letters dropped (a hyphened one) | KILLED by 4 of 42
+      - sewWords merges a token the rule left over, inside a word, into the next syllable of the word: «ны-» then «е» gives «ные»
+      - sewWords keeps the letters of an unseated token that ends the seats with a hyphen after it, in the last syllable
+      - sewWords keeps every letter of a word whose middle was left over
+      - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads keeps «печальные» whole when a syllable was left over: one word of three slots, though it holds four vowels
+underlay-words.ts | unseated in a word: the letters of one that ends the word dropped | KILLED by 1 of 42
+      - sewWords merges a token the rule left over at the end of a word into the last syllable of it
+underlay-words.ts | unseated in a word: the text kept before it dropped at the next syllable | KILLED by 3 of 42
+      - sewWords merges a token the rule left over, inside a word, into the next syllable of the word: «ны-» then «е» gives «ные»
+      - sewWords keeps every letter of a word whose middle was left over
+      - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads keeps «печальные» whole when a syllable was left over: one word of three slots, though it holds four vowels
+underlay-words.ts | unseated in a word: pending text not flushed at the end | KILLED by 1 of 42
+      - sewWords keeps the letters of an unseated token that ends the seats with a hyphen after it, in the last syllable
+underlay-words.ts | unseated word-opening token is not held | KILLED by 2 of 42
+      - sewWords holds an unseated token that begins a word with a hyphen, and puts it before the syllable that continues it
+      - sewWords leaves out a held unseated token that nothing continues
+underlay-words.ts | held text not put before the syllable that continues it | KILLED by 1 of 42
+      - sewWords holds an unseated token that begins a word with a hyphen, and puts it before the syllable that continues it
+underlay-words.ts | a whole unseated word is merged into the word before it | KILLED by 2 of 42
       - sewWords drops a mark with no letter, and a syllable with no note
-underlay-words.ts | write: a rest is written to | KILLED by 1 of 32
+      - sewWords leaves out a whole unseated word between two words, and merges it into neither
+underlay-words.ts | write: a rest is written to | KILLED by 1 of 42
       - writeLyrics counts a rest in the note numbering and writes no lyric on it
-underlay-words.ts | write: a note with a lyric is written to again | KILLED by 1 of 32
+underlay-words.ts | write: a note with a lyric is written to again | KILLED by 1 of 42
       - writeLyrics leaves a note that already has a lyric as it is
-underlay-words.ts | write: text not escaped | KILLED by 1 of 32
+underlay-words.ts | write: text not escaped | KILLED by 1 of 42
       - writeLyrics escapes what XML cannot hold
-underlay-words.ts | write: the second part is written to | KILLED by 1 of 32
+underlay-words.ts | write: the second part is written to | KILLED by 1 of 42
       - writeLyrics writes the voice, which is the first part, and leaves the second part alone
-underlay-words.ts | write: rests not counted in the numbering | KILLED by 9 of 32
+underlay-words.ts | write: rests not counted in the numbering | KILLED by 10 of 42
       - writeLyrics writes the syllabic role it is given
       - writeLyrics counts a rest in the note numbering and writes no lyric on it
       - writeLyrics counts a note that has attributes
@@ -59,19 +107,20 @@ underlay-words.ts | write: rests not counted in the numbering | KILLED by 9 of 3
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads puts each syllable on the note it was seated on, and on no rest
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads gives collectScoreWords the seated words, in order
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads seats a syllable on the event of its own note
+      - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads keeps «печальные» whole when a syllable was left over: one word of three slots, though it holds four vowels
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads goes from boxes to lyrics: seatTokens, sewWords, writeLyrics, and the parser
-underlay-words.ts | write: the last syllable for a note wins | KILLED by 1 of 32
+underlay-words.ts | write: the last syllable for a note wins | KILLED by 1 of 42
       - writeLyrics writes the first of two syllables given for one note
-underlay-words.ts | write: always LF | KILLED by 1 of 32
-      - writeLyrics keeps the line ending the file uses
-underlay-words.ts | write: note with attributes not counted | KILLED by 1 of 32
-      - writeLyrics counts a note that has attributes
-underlay-words.ts | write: lyric number 2, laid out | KILLED by 3 of 32
+underlay-words.ts | write: lyric number 2, laid out | KILLED by 3 of 42
       - writeLyrics adds one lyric number 1 with syllabic and text, laid out as the note is
       - writeLyrics keeps the line ending the file uses
       - from homr's reading of Tchaikovsky op. 38 no. 3 to the words the parser reads adds nothing but the lyrics: taking them out gives the file back byte for byte
-underlay-words.ts | write: lyric number 2, compact | KILLED by 1 of 32
+underlay-words.ts | write: lyric number 2, compact | KILLED by 1 of 42
       - writeLyrics writes into a note with no line breaks inside it without adding any
+underlay-words.ts | write: always LF | KILLED by 1 of 42
+      - writeLyrics keeps the line ending the file uses
+underlay-words.ts | write: note with attributes not counted | KILLED by 1 of 42
+      - writeLyrics counts a note that has attributes
 underlay-language.ts | language: one-letter words counted | KILLED by 2 of 13
       - rowLanguage does not count a word of one letter, either way
       - rowLanguage does not ask for a word it has already counted out

@@ -41,19 +41,42 @@ export interface Word {
 const HYPHEN_AT_START = /^[-–—‐‑]/u;
 const HYPHEN_AT_END = /[-–—‐‑]$/u;
 const HYPHENS_AT_ENDS = /^[-–—‐‑]+|[-–—‐‑]+$/gu;
+const HYPHEN_AT_END_RUN = /[-–—‐‑]+$/u;
+const HYPHEN_AT_START_RUN = /^[-–—‐‑]+/u;
+
+/** The text of a token without the hyphens that join it to its neighbours. */
+function core(text: string): string {
+	return text.trim().replace(HYPHENS_AT_ENDS, '');
+}
 
 /**
- * Of the seats that share a note, the one whose token centre is nearest the
- * note's head stays; the first on a tie. A note sings one syllable.
+ * Of the seats that share a note, ONE syllable: the note they share, and the
+ * texts of all of them joined in the order given (x order), with the hyphens
+ * between them taken out. A note sings one syllable, and a letter the reader read inside a word is not dropped: the
+ * measured scorer joined the texts of every token on a note. A lone hyphen
+ * between two seats on one note is inside the syllable and goes.
  */
 function oneToANote(seats: Seat[]): Seat[] {
-	const kept = new Map<number, Seat>();
-	for (const s of seats) {
-		if (s.kind !== 'syllable' || s.note === null) continue;
-		const held = kept.get(s.note);
-		if (!held || Math.abs(s.offset ?? 0) < Math.abs(held.offset ?? 0)) kept.set(s.note, s);
+	const onNote = new Map<number, number[]>();
+	seats.forEach((s, i) => {
+		if (s.kind !== 'syllable' || s.note === null) return;
+		const list = onNote.get(s.note);
+		if (list) list.push(i);
+		else onNote.set(s.note, [i]);
+	});
+	const drop = new Set<number>();
+	const merged = new Map<number, Seat>();
+	for (const at of onNote.values()) {
+		if (at.length < 2) continue;
+		const first = seats[at[0]].text.trim();
+		const last = seats[at[at.length - 1]].text.trim();
+		const middle = at.slice(1, -1).map((i) => core(seats[i].text));
+		const text = [first.replace(HYPHEN_AT_END_RUN, ''), ...middle, last.replace(HYPHEN_AT_START_RUN, '')].join('');
+		merged.set(at[0], { ...seats[at[0]], text });
+		for (const i of at.slice(1)) drop.add(i);
+		for (let i = at[0] + 1; i < at[at.length - 1]; i++) if (seats[i].kind === 'joint') drop.add(i);
 	}
-	return seats.filter((s) => s.kind !== 'syllable' || s.note === null || kept.get(s.note) === s);
+	return seats.flatMap((s, i) => (drop.has(i) ? [] : [merged.get(i) ?? s]));
 }
 
 /**
@@ -64,38 +87,80 @@ function oneToANote(seats: Seat[]): Seat[] {
  * A token ending in a hyphen continues into the next syllable; a token
  * beginning with one continues the last; a lone hyphen joins its neighbours
  * (row 81's `sew`). An extender after a syllable marks it `sustained`. A mark
- * with no letter is dropped. A syllable token with no note is dropped. Two
- * tokens on one note: the nearer one stays.
+ * with no letter is dropped. Two tokens on one note become one syllable
+ * (`oneToANote`).
+ *
+ * A syllable token with no note (`unseated`) never loses its letters inside a
+ * word. Where the word is open, its text joins the NEXT syllable of the word
+ * when the token's hyphen says the word goes on («ны-» then «е» gives «ные»),
+ * and the LAST syllable when the word ends at it. Where no word is open and the
+ * token ends in a hyphen, it is held and prepended to the next syllable, which
+ * then opens the word. Any other unseated token is a whole unseated word and is
+ * left out: stage 2b counts those. It is never merged into a neighbouring word.
  */
 export function sewWords(seats: Seat[]): Word[] {
 	const words: Word[] = [];
 	let open: Syllable[] | null = null;
 	let glue = false;
+	// Unseated text inside the open word, waiting for the next syllable of it.
+	let pending = '';
+	// An unseated token that began a word of its own: its text, and whether a hyphen carries it on.
+	let held: { text: string; goes: boolean } | null = null;
+	const flush = () => {
+		if (open && pending) open[open.length - 1].text += pending;
+		pending = '';
+	};
 	for (const seat of oneToANote(seats)) {
 		if (seat.kind === 'mark') continue;
 		if (seat.kind === 'joint') {
-			if (open) glue = true;
+			if (held) held.goes = true;
+			else if (open) glue = true;
 			continue;
 		}
 		if (seat.kind === 'extender') {
 			if (open) open[open.length - 1].sustained = true;
 			continue;
 		}
-		if (seat.note === null) continue;
 		const raw = seat.text.trim();
-		const syllable: Syllable = {
-			note: seat.note,
-			text: raw.replace(HYPHENS_AT_ENDS, ''),
-			syllabic: 'single',
-			sustained: false,
-		};
-		if (open && (glue || HYPHEN_AT_START.test(raw))) open.push(syllable);
+		const text = core(raw);
+		const endsHyphen = HYPHEN_AT_END.test(raw);
+		const continues = open !== null && (glue || HYPHEN_AT_START.test(raw));
+		if (seat.note === null) {
+			if (held) {
+				held.text += text;
+				held.goes = endsHyphen;
+				if (!endsHyphen) held = null;
+			} else if (continues && open) {
+				if (endsHyphen) pending += text;
+				else {
+					open[open.length - 1].text += pending + text;
+					pending = '';
+					glue = false;
+				}
+			} else if (endsHyphen) {
+				flush();
+				held = { text, goes: true };
+				glue = false;
+			}
+			continue;
+		}
+		const syllable: Syllable = { note: seat.note, text: pending + text, syllabic: 'single', sustained: false };
+		if (held) {
+			// The held token carried the word on; this syllable opens it, with the held text before its own.
+			syllable.text = held.text + syllable.text;
+			held = null;
+			open = [syllable];
+			words.push({ syllables: open });
+		} else if (continues && open) open.push(syllable);
 		else {
+			flush();
 			open = [syllable];
 			words.push({ syllables: open });
 		}
-		glue = HYPHEN_AT_END.test(raw);
+		pending = '';
+		glue = endsHyphen;
 	}
+	flush();
 	for (const word of words) {
 		const n = word.syllables.length;
 		word.syllables.forEach((s, i) => {

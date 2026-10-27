@@ -22,6 +22,13 @@
  *   the surplus tokens come back `unseated`, with their index: they are not
  *   dropped, and not folded onto a neighbouring note.
  *
+ * EVERY rule seats on the notes that sing a syllable only: a note tied into, or
+ * under an extender, takes no token (the measured configurations seat on the
+ * free notes: `step1c.py`, `cands='free'`). A syllable under a tie's second note
+ * is the walk's "one note early". Where no note sings, every syllable token is
+ * `unseated` with `by: null`. The stage 1 harness's `score44.py` seated rules 1
+ * and 3 on every note; `xcheck_seat_gen.py` checks both readings.
+ *
  * Call it once per row, with the notes of that row's system. A token with no
  * letter is not seated: a lone hyphen, an extender, and a stray mark are
  * returned in their place so that `sewWords` can read them. A token that holds
@@ -153,34 +160,35 @@ export function seatTokens(tokens: Token[], notes: NotePlace[], rule: SeatRule):
 	const kinds = tokens.map((t) => kindOf(t.text));
 	const sy = order.filter((i) => kinds[i] === 'syllable');
 	const staff = [...notes].sort((a, b) => a.x - b.x);
-	const xs = staff.map((n) => n.x);
+	// The notes that sing a syllable: not tied into, not under an extender. Every rule seats on these only; `staff`
+	// (all notes, x sorted) is kept for the bar lookup of `order`.
+	const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto && !staff[j].underExtender);
+	const xs = free.map((j) => staff[j].x);
+	const allXs = staff.map((n) => n.x);
 
 	// For each syllable token (by position in `sy`): the note position in `staff`, and the rule that placed it.
 	const at = new Array<number>(sy.length).fill(-1);
 	const by = new Array<SeatRule>(sy.length).fill('nearest');
-	if (staff.length > 0) {
+	if (free.length > 0) {
 		const cx = sy.map((i) => centre[i]);
-		cx.forEach((c, k) => (at[k] = nearestOf(c, xs)));
+		cx.forEach((c, k) => (at[k] = free[nearestOf(c, xs)]));
 
 		if (rule === 'monotone') {
 			monotone(cx, xs).forEach((j, k) => {
-				at[k] = j;
+				at[k] = j < 0 ? -1 : free[j];
 				by[k] = 'monotone';
 			});
 		} else if (rule === 'order') {
 			const barOf = new Map<number, number[]>();
-			at.forEach((j, k) => {
-				const bar = staff[j].bar;
+			cx.forEach((c, k) => {
+				const bar = staff[nearestOf(c, allXs)].bar;
 				const list = barOf.get(bar);
 				if (list) list.push(k);
 				else barOf.set(bar, [k]);
 			});
 			// `sy` is in x order, so each bar's tokens are too.
 			for (const [bar, ks] of barOf) {
-				const sung: number[] = [];
-				staff.forEach((n, j) => {
-					if (n.bar === bar && !n.tiedInto && !n.underExtender) sung.push(j);
-				});
+				const sung = free.filter((j) => staff[j].bar === bar);
 				if (sung.length !== ks.length) continue;
 				ks.forEach((k, r) => {
 					at[k] = sung[r];
@@ -201,7 +209,7 @@ export function seatTokens(tokens: Token[], notes: NotePlace[], rule: SeatRule):
 		if (!placed || placed.j < 0) {
 			const syllable = kinds[i] === 'syllable';
 			// A token the rule left over was still placed by the rule: `monotone`, with no note.
-			return { ...base, note: null, offset: null, by: placed && staff.length > 0 ? by[placed.k] : null, unseated: syllable, runTogether: syllable && RUN_TOGETHER.test(tokens[i].text), shared: false };
+			return { ...base, note: null, offset: null, by: placed && free.length > 0 ? by[placed.k] : null, unseated: syllable, runTogether: syllable && RUN_TOGETHER.test(tokens[i].text), shared: false };
 		}
 		const note = staff[placed.j];
 		return {

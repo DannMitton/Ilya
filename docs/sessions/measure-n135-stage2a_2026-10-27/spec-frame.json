@@ -15,8 +15,8 @@
    ],
    [
     "closing kernel 1 by 1 (no closing)",
-    "const closed = filter3(filter3(inverted, w, h, true), w, h, false);",
-    "const closed = inverted;"
+    "const closed = closeInk(level, width, height, closingKernel(staffSpace));",
+    "const closed = closeInk(level, width, height, 1);"
    ],
    [
     "scale to 48",
@@ -80,8 +80,8 @@
    ],
    [
     "closing dilates but does not erode",
-    "const closed = filter3(filter3(inverted, w, h, true), w, h, false);",
-    "const closed = filter3(inverted, w, h, true);"
+    "const closed = filterK(filterK(inverted, w, h, size, true), w, h, size, false);",
+    "const closed = filterK(inverted, w, h, size, true);"
    ],
    [
     "a crop with no ink is scaled anyway",
@@ -117,6 +117,36 @@
     "padding a fraction of the crop's height, not of the ink height",
     "Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * inkHeight)",
     "Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * crop.height)"
+   ],
+   [
+    "closing kernel an absolute 3, the staff space ignored",
+    "closeInk(level, width, height, closingKernel(staffSpace))",
+    "closeInk(level, width, height, 3)"
+   ],
+   [
+    "closing kernel share 0.1 -> 0.2",
+    "export const CLOSE_SHARE = 0.1;",
+    "export const CLOSE_SHARE = 0.2;"
+   ],
+   [
+    "closing kernel may be even",
+    "\tif (k % 2 === 0) k -= 1;\n",
+    "\t"
+   ],
+   [
+    "closing kernel not floored at 1",
+    "\treturn Math.max(1, k);",
+    "\treturn k;"
+   ],
+   [
+    "closing kernel rounds up to the next odd number",
+    "\tif (k % 2 === 0) k -= 1;",
+    "\tif (k % 2 === 0) k += 1;"
+   ],
+   [
+    "closing window not cut at the edges (outside counts as the opposite value)",
+    "for (let d = Math.max(0, x - r); d <= Math.min(w - 1, x + r); d++) v = pick(v, data[y * w + d]);",
+    "for (let d = x - r; d <= x + r; d++) v = pick(v, d < 0 || d >= w ? (max ? 255 : 0) : data[y * w + d]);"
    ]
   ]
  }

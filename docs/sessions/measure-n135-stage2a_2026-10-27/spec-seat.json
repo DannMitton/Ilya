@@ -40,18 +40,18 @@
    ],
    [
     "order: tied-into notes counted as sung",
-    "if (n.bar === bar && !n.tiedInto && !n.underExtender) sung.push(j);",
-    "if (n.bar === bar && !n.underExtender) sung.push(j);"
+    "const sung = free.filter((j) => staff[j].bar === bar);",
+    "const sung = staff.map((_, j) => j).filter((j) => staff[j].bar === bar && !staff[j].underExtender);"
    ],
    [
     "order: notes under an extender counted as sung",
-    "if (n.bar === bar && !n.tiedInto && !n.underExtender) sung.push(j);",
-    "if (n.bar === bar && !n.tiedInto) sung.push(j);"
+    "const sung = free.filter((j) => staff[j].bar === bar);",
+    "const sung = staff.map((_, j) => j).filter((j) => staff[j].bar === bar && !staff[j].tiedInto);"
    ],
    [
     "order: sung notes taken from every bar",
-    "if (n.bar === bar && !n.tiedInto && !n.underExtender) sung.push(j);",
-    "if (!n.tiedInto && !n.underExtender) sung.push(j);"
+    "const sung = free.filter((j) => staff[j].bar === bar);",
+    "const sung = free;"
    ],
    [
     "order: pairs even where the counts differ",
@@ -60,7 +60,7 @@
    ],
    [
     "order: bar taken from the token's index, not its nearest note",
-    "const bar = staff[j].bar;",
+    "const bar = staff[nearestOf(c, allXs)].bar;",
     "const bar = staff[0].bar;"
    ],
    [
@@ -109,11 +109,6 @@
     "const sy = order;"
    ],
    [
-    "no notes: seats on note 0 anyway",
-    "if (staff.length > 0) {",
-    "if (true) {"
-   ],
-   [
     "fallback tokens report the rule asked for, not nearest",
     "const by = new Array<SeatRule>(sy.length).fill('nearest');",
     "const by = new Array<SeatRule>(sy.length).fill(rule);"
@@ -135,8 +130,8 @@
    ],
    [
     "surplus: a left-over token is folded onto its nearest note",
-    "at[k] = j;\n\t\t\t\tby[k] = 'monotone';",
-    "at[k] = j >= 0 ? j : nearestOf(cx[k], xs);\n\t\t\t\tby[k] = 'monotone';"
+    "at[k] = j < 0 ? -1 : free[j];",
+    "at[k] = j < 0 ? free[nearestOf(cx[k], xs)] : free[j];"
    ],
    [
     "surplus: a left-over token is not flagged unseated",
@@ -157,6 +152,36 @@
     "surplus: the left-over tokens are dropped from the result",
     "\treturn order.map((i): Seat => {",
     "\treturn order.filter((i) => kinds[i] !== 'syllable' || at[sy.indexOf(i)] >= 0).map((i): Seat => {"
+   ],
+   [
+    "free notes: a note tied into is a candidate for every rule",
+    "const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto && !staff[j].underExtender);",
+    "const free = staff.map((_, j) => j).filter((j) => !staff[j].underExtender);"
+   ],
+   [
+    "free notes: a note under an extender is a candidate for every rule",
+    "const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto && !staff[j].underExtender);",
+    "const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto);"
+   ],
+   [
+    "free notes: every note is a candidate for nearest and monotone, only order uses the free list",
+    "const xs = free.map((j) => staff[j].x);",
+    "const xs = staff.map((j) => j.x);"
+   ],
+   [
+    "free notes: nearest seats on the free list but monotone on all notes",
+    "monotone(cx, xs).forEach((j, k) => {\n\t\t\t\tat[k] = j < 0 ? -1 : free[j];",
+    "monotone(cx, allXs).forEach((j, k) => {\n\t\t\t\tat[k] = j;"
+   ],
+   [
+    "free notes: with no free note the syllables are seated anyway",
+    "if (free.length > 0) {",
+    "if (staff.length > 0 && true) {"
+   ],
+   [
+    "free notes: with no free note, by is not null",
+    "by: placed && free.length > 0 ? by[placed.k] : null,",
+    "by: placed ? by[placed.k] : null,"
    ]
   ]
  }

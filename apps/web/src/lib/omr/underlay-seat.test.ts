@@ -69,12 +69,32 @@ describe('seatTokens, one melisma', () => {
 		expect(noteIds(tokens, notes, rule)).toEqual([10, 11, 13, 14]);
 	});
 
-	it('order uses the tie, where nearest and monotone cannot: a syllable printed 10 px past the tie\'s head', () => {
+	it('every rule leaves the tied note without a token: a syllable printed 10 px past the tie\'s head goes to the next free note', () => {
 		const drifted = [tok('Ком', 100), tok('нат', 200), tok('ка', 310)];
 		const withTie: NotePlace[] = [...notes.slice(0, 2), notes[2], { id: 13, x: 400, bar: 1 }];
-		expect(noteIds(drifted, withTie, 'nearest')).toEqual([10, 11, 12]);
-		expect(noteIds(drifted, withTie, 'monotone')).toEqual([10, 11, 12]);
+		expect(noteIds(drifted, withTie, 'nearest')).toEqual([10, 11, 13]);
+		expect(noteIds(drifted, withTie, 'monotone')).toEqual([10, 11, 13]);
 		expect(noteIds(drifted, withTie, 'order')).toEqual([10, 11, 13]);
+	});
+
+	it('order counts a tie and an extender out of the bar before it pairs: two tokens crowded onto one head are paired in order', () => {
+		// Five notes, one tied into and one under an extender: three sing. Three tokens, the last two both nearest the head at 400.
+		const bar: NotePlace[] = [
+			{ id: 10, x: 100, bar: 1 },
+			{ id: 11, x: 200, bar: 1, tiedInto: true },
+			{ id: 12, x: 400, bar: 1 },
+			{ id: 13, x: 500, bar: 1, underExtender: true },
+			{ id: 14, x: 600, bar: 1 },
+		];
+		const crowded = [tok('а', 100), tok('б', 440), tok('в', 470)];
+		expect(noteIds(crowded, bar, 'nearest')).toEqual([10, 12, 12]);
+		expect(noteIds(crowded, bar, 'order')).toEqual([10, 12, 14]);
+		expect(seatTokens(crowded, bar, 'order').map((s) => s.by)).toEqual(['order', 'order', 'order']);
+	});
+
+	it('nearest and monotone leave a note under an extender without a token too', () => {
+		const under: NotePlace[] = [{ id: 10, x: 100, bar: 1 }, { id: 11, x: 200, bar: 1, underExtender: true }, { id: 12, x: 300, bar: 1 }];
+		for (const rule of ['nearest', 'monotone'] as const) expect(noteIds([tok('a', 100), tok('b', 205)], under, rule)).toEqual([10, 12]);
 	});
 
 	it('order reads a note under an extender as it reads a tie', () => {
@@ -89,9 +109,10 @@ describe('seatTokens, one melisma', () => {
 		expect(seats.map((s) => s.note)).toEqual([10, 11, 13, 14]);
 	});
 
-	it('order falls back where the bar has no sung note at all', () => {
+	it.each(RULES)('%s leaves every syllable unseated, with no rule, where every note is tied into', (rule) => {
 		const allTied = notes.map((n) => ({ ...n, tiedInto: true }));
-		expect(seatTokens(tokens, allTied, 'order').map((s) => s.by)).toEqual(['nearest', 'nearest', 'nearest', 'nearest']);
+		const seats = seatTokens(tokens, allTied, rule);
+		expect(seats.map((s) => [s.note, s.unseated, s.by, s.offset])).toEqual(tokens.map(() => [null, true, null, null]));
 	});
 });
 

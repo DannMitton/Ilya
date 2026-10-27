@@ -16,9 +16,13 @@
  *    angles). The grey crop is rotated by that angle about its centre, bilinear,
  *    the border filled with the paper tone, the size kept. An angle of 0.0
  *    copies the crop.
- * 2. Closing of the ink with a 3 by 3 kernel of ones: dilate then erode on the
- *    inverted grey (255 less grey), centred anchor, then invert back. A gap of
- *    one or two pixels in a stroke closes; a gap of three does not.
+ * 2. Closing of the ink with a square kernel of ones, `closingKernel(staffSpace)`
+ *    wide: dilate then erode on the inverted grey (255 less grey), centred
+ *    anchor, the window cut at the edges (OpenCV's default morphology border),
+ *    then invert back. The kernel is the largest odd number not above
+ *    `CLOSE_SHARE` (0.1) of the staff space, and at least 1 (no closing): 3 at the
+ *    measured staff space of about 30 px. A kernel of k closes a gap of k - 1
+ *    pixels or fewer: 2 px at 30, and a gap of 3 stays open.
  * 3. Scale so that the ink's vertical extent is `inkHeight` px. The extent is
  *    the span between the row where the cumulative ink (ink pixels per row, from
  *    the top) first reaches 2 percent of the total and the row where it first
@@ -42,12 +46,14 @@
  * a fraction of it, applied after the scale; the sweep's mask padding is the
  * crop's own height. The measured 16 px of padding is now 0.5 of the ink height.
  *
- * The ONE step whose size is in page pixels is the closing (step 2), a 3 by 3
- * kernel. It is applied before the scale, on the page's own pixels, and what it
- * closes is a property of the print: a broken stroke's gap is measured at the
- * scan's resolution, not at the letter size. A later row may make it
- * proportional to the staff space, which the caller knows and this module does
- * not.
+ * The closing (step 2) is applied before the scale, on the page's own pixels,
+ * so its size cannot be a share of `inkHeight`. It is a share of the STAFF SPACE,
+ * the one length Ilya knows on both of its paths. (This replaces a fixed 3 by 3,
+ * argued from the print's resolution: that holds for a PDF, which Ilya rasters at
+ * 400 dpi, and not for a picture, whose pixels per staff space are whatever the
+ * camera gave.) Whether 0.1 is the right share at other staff spaces is NOT
+ * ESTABLISHED: row 117 measured kernels of 2, 3, 4, and 5 at one resolution only
+ * (+8, +38, +31, +32). DESK DEFAULT; stage 2b measures it.
  *
  * The paper tone is taken once, from the crop as given, and used for both the
  * rotation's border and the padding.
@@ -117,6 +123,8 @@ const SWEEP_TENTHS = 30;
 /** The ink extent runs from this share of the ink to its complement, as 1 over this many. */
 const TAIL_DENOMINATOR = 50;
 const CUBIC_A = -0.75;
+/** The closing kernel is this share of the staff space, rounded down to an odd number. */
+export const CLOSE_SHARE = 0.1;
 
 /** The most frequent grey of the crop: the first of the 256 bins at the top. */
 export function paperTone(data: ArrayLike<number>): number {
@@ -226,15 +234,15 @@ function rotateGrey(data: Uint8Array, w: number, h: number, degrees: number, fil
 	return out;
 }
 
-/** A 3 by 3 maximum (`max`) or minimum filter, the window cut at the edges. */
-function filter3(data: Uint8Array, w: number, h: number, max: boolean): Uint8Array {
+/** A square maximum (`max`) or minimum filter `size` wide, odd, the window cut at the edges. */
+function filterK(data: Uint8Array, w: number, h: number, size: number, max: boolean): Uint8Array {
+	const r = (size - 1) / 2;
 	const pick = max ? Math.max : Math.min;
 	const across = new Uint8Array(w * h);
 	for (let y = 0; y < h; y++) {
 		for (let x = 0; x < w; x++) {
 			let v = data[y * w + x];
-			if (x > 0) v = pick(v, data[y * w + x - 1]);
-			if (x < w - 1) v = pick(v, data[y * w + x + 1]);
+			for (let d = Math.max(0, x - r); d <= Math.min(w - 1, x + r); d++) v = pick(v, data[y * w + d]);
 			across[y * w + x] = v;
 		}
 	}
@@ -242,18 +250,27 @@ function filter3(data: Uint8Array, w: number, h: number, max: boolean): Uint8Arr
 	for (let y = 0; y < h; y++) {
 		for (let x = 0; x < w; x++) {
 			let v = across[y * w + x];
-			if (y > 0) v = pick(v, across[(y - 1) * w + x]);
-			if (y < h - 1) v = pick(v, across[(y + 1) * w + x]);
+			for (let d = Math.max(0, y - r); d <= Math.min(h - 1, y + r); d++) v = pick(v, across[d * w + x]);
 			out[y * w + x] = v;
 		}
 	}
 	return out;
 }
 
-/** The ink closed with a 3 by 3 kernel of ones: dilate then erode on the inverted grey, then inverted back. */
-function closeInk(data: Uint8Array, w: number, h: number): Uint8Array {
+/** The closing kernel for a staff space: the largest odd number not above `CLOSE_SHARE * staffSpace`, at least 1. */
+export function closingKernel(staffSpace: number): number {
+	if (!Number.isFinite(staffSpace) || staffSpace <= 0) return 1;
+	// The small term keeps 0.1 * 30 from reading as 2.999...
+	let k = Math.floor(CLOSE_SHARE * staffSpace + 1e-9);
+	if (k % 2 === 0) k -= 1;
+	return Math.max(1, k);
+}
+
+/** The ink closed with a kernel `size` wide: dilate then erode on the inverted grey, then inverted back. A size of 1 is no closing. */
+function closeInk(data: Uint8Array, w: number, h: number, size: number): Uint8Array {
+	if (size <= 1) return Uint8Array.from(data);
 	const inverted = data.map((g) => 255 - g);
-	const closed = filter3(filter3(inverted, w, h, true), w, h, false);
+	const closed = filterK(filterK(inverted, w, h, size, true), w, h, size, false);
 	return closed.map((g) => 255 - g);
 }
 
@@ -334,9 +351,10 @@ function padAll(data: Uint8Array, w: number, h: number, pad: number, fill: numbe
 /**
  * The crop framed for a reader: deskewed, closed, scaled to `inkHeight`, and
  * padded by `padRatio` of `inkHeight`. A crop with no ink passes through the first three steps
- * unchanged and is padded.
+ * unchanged and is padded. `staffSpace` is the staff space of the voice staff above the row, in the
+ * crop's pixels, as `cutRows` takes it; it sizes the closing.
  */
-export function frameRow(crop: GreyBandLike, options: FrameOptions = {}): FramedRow {
+export function frameRow(crop: GreyBandLike, staffSpace: number, options: FrameOptions = {}): FramedRow {
 	const inkHeight = options.inkHeight ?? DEFAULT_INK_HEIGHT;
 	const pad = Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * inkHeight);
 	const { width, height } = crop;
@@ -345,7 +363,7 @@ export function frameRow(crop: GreyBandLike, options: FrameOptions = {}): Framed
 
 	const angle = skewAngle(grey, width, height);
 	const level = rotateGrey(grey, width, height, angle, paper);
-	const closed = closeInk(level, width, height);
+	const closed = closeInk(level, width, height, closingKernel(staffSpace));
 
 	let scaled = { data: closed, width, height };
 	let scale = 1;

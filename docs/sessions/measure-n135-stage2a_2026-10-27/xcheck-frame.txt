@@ -1,5 +1,19 @@
-200 rows (8 with no ink); angle differs on 3; size differs on 0; more than 1 grey level in more than 0.5% of pixels on 3
-largest shares of pixels differing by more than 1 grey level: [(0.0715, 188, 'oracle 1.0', 'ts 1.1', 'max 37'), (0.0577, 181, 'oracle 0.5', 'ts 0', 'max 160'), (0.0124, 139, 'oracle 1.7', 'ts 1.6', 'max 39'), (0.0, 76, 'oracle -0.7', 'ts -0.7', 'max 2'), (0.0, 187, 'oracle -1.3', 'ts -1.3', 'max 2')]
-  differs: (139, 'pixels', 0.0124, 'oracle angle', 1.7, 'ts angle', 1.6, 'max diff', 39)
-  differs: (181, 'pixels', 0.0577, 'oracle angle', 0.5, 'ts angle', 0, 'max diff', 160)
-  differs: (188, 'pixels', 0.0715, 'oracle angle', 1.0, 'ts angle', 1.1, 'max diff', 37)
+[text reading] 200 rows (8 with no ink); angle differs on 3; size differs on 0; more than 1 grey level in more than 0.5% of pixels on 3; rows differing in any of these: 3
+  largest shares of pixels differing by more than 1 grey level: [(0.0715, 188, 'oracle 1.0', 'ts 1.1', 'max 37'), (0.0577, 181, 'oracle 0.5', 'ts 0', 'max 160'), (0.0124, 139, 'oracle 1.7', 'ts 1.6', 'max 39'), (0.0, 76, 'oracle -0.7', 'ts -0.7', 'max 2'), (0.0, 187, 'oracle -1.3', 'ts -1.3', 'max 2')]
+   differs: (139, 'pixels', 0.0124, 'oracle angle', 1.7, 'ts angle', 1.6, 'max diff', 39)
+   differs: (181, 'pixels', 0.0577, 'oracle angle', 0.5, 'ts angle', 0, 'max diff', 160)
+   differs: (188, 'pixels', 0.0715, 'oracle angle', 1.0, 'ts angle', 1.1, 'max diff', 37)
+[harness reading] 200 rows (8 with no ink); angle differs on 3; size differs on 6; more than 1 grey level in more than 0.5% of pixels on 137; rows differing in any of these: 143
+  largest shares of pixels differing by more than 1 grey level: [(0.4489, 16, 'oracle -2.5', 'ts -2.5', 'max 15'), (0.441, 87, 'oracle 2.4', 'ts 2.4', 'max 2'), (0.4402, 49, 'oracle 0.0', 'ts 0', 'max 2'), (0.4371, 118, 'oracle -0.6', 'ts -0.6', 'max 5'), (0.4157, 164, 'oracle -0.9', 'ts -0.9', 'max 4')]
+   differs: (0, 'pixels', 0.0326, 'oracle angle', 1.6, 'ts angle', 1.6, 'max diff', 79)
+   differs: (1, 'pixels', 0.012, 'oracle angle', 1.1, 'ts angle', 1.1, 'max diff', 55)
+   differs: (2, 'size', (152, 267), (64, 95))
+   differs: (4, 'pixels', 0.3256, 'oracle angle', 0.9, 'ts angle', 0.9, 'max diff', 56)
+   differs: (5, 'pixels', 0.0166, 'oracle angle', -1.1, 'ts angle', -1.1, 'max diff', 15)
+   differs: (6, 'pixels', 0.2583, 'oracle angle', -2.2, 'ts angle', -2.2, 'max diff', 5)
+   differs: (7, 'pixels', 0.322, 'oracle angle', -1.9, 'ts angle', -1.9, 'max diff', 56)
+   differs: (9, 'pixels', 0.3581, 'oracle angle', -0.4, 'ts angle', -0.4, 'max diff', 42)
+   differs: (12, 'pixels', 0.2992, 'oracle angle', -1.2, 'ts angle', -1.2, 'max diff', 5)
+   differs: (14, 'pixels', 0.3217, 'oracle angle', -0.7, 'ts angle', -0.7, 'max diff', 54)
+   differs: (15, 'pixels', 0.0375, 'oracle angle', -2.0, 'ts angle', -2, 'max diff', 55)
+   differs: (16, 'pixels', 0.4489, 'oracle angle', -2.5, 'ts angle', -2.5, 'max diff', 15)

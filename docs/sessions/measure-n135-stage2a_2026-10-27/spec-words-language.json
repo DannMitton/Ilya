@@ -5,23 +5,23 @@
   "muts": [
    [
     "sew: a lone hyphen does not join",
-    "if (open) glue = true;",
-    "/* mutant */"
+    "if (held) held.goes = true;\n\t\t\telse if (open) glue = true;",
+    "if (held) held.goes = true;"
    ],
    [
     "sew: a trailing hyphen does not continue the word",
-    "glue = HYPHEN_AT_END.test(raw);",
-    "glue = false;"
+    "\t\tglue = endsHyphen;\n\t}\n\tflush();",
+    "\t\tglue = false;\n\t}\n\tflush();"
    ],
    [
     "sew: a leading hyphen does not join",
-    "if (open && (glue || HYPHEN_AT_START.test(raw))) open.push(syllable);",
-    "if (open && glue) open.push(syllable);"
+    "(glue || HYPHEN_AT_START.test(raw))",
+    "(glue)"
    ],
    [
     "sew: joining hyphens kept in the text",
-    "text: raw.replace(HYPHENS_AT_ENDS, ''),",
-    "text: raw,"
+    "return text.trim().replace(HYPHENS_AT_ENDS, '');",
+    "return text.trim();"
    ],
    [
     "sew: an extender does not mark the syllable",
@@ -44,19 +44,59 @@
     "n === 0 ? 'single'"
    ],
    [
-    "sew: two tokens on a note both kept",
-    "if (!held || Math.abs(s.offset ?? 0) < Math.abs(held.offset ?? 0)) kept.set(s.note, s);",
-    "kept.set(s.note, s);"
+    "note: two tokens on a note both kept",
+    "for (const i of at.slice(1)) drop.add(i);",
+    "/* mutant */"
    ],
    [
-    "sew: the farther token kept on a note",
-    "Math.abs(s.offset ?? 0) < Math.abs(held.offset ?? 0)",
-    "Math.abs(s.offset ?? 0) > Math.abs(held.offset ?? 0)"
+    "note: the texts are not joined (the nearer seat's text only)",
+    "const text = [first.replace(HYPHEN_AT_END_RUN, ''), ...middle, last.replace(HYPHEN_AT_START_RUN, '')].join('');",
+    "const text = seats[near].text;"
    ],
    [
-    "sew: an unseated syllable is kept",
-    "if (seat.note === null) continue;\n\t\tconst raw",
-    "const raw"
+    "note: hyphens between joined texts kept",
+    "const text = [first.replace(HYPHEN_AT_END_RUN, ''), ...middle, last.replace(HYPHEN_AT_START_RUN, '')].join('');",
+    "const text = [first, ...middle, last].join('');"
+   ],
+   [
+    "note: a lone hyphen between two tokens on one note is kept",
+    "if (seats[i].kind === 'joint') drop.add(i);",
+    "/* mutant */"
+   ],
+   [
+    "unseated in a word: its letters dropped (a hyphened one)",
+    "if (endsHyphen) pending += text;",
+    "if (endsHyphen) pending += '';"
+   ],
+   [
+    "unseated in a word: the letters of one that ends the word dropped",
+    "open[open.length - 1].text += pending + text;",
+    "open[open.length - 1].text += pending;"
+   ],
+   [
+    "unseated in a word: the text kept before it dropped at the next syllable",
+    "const syllable: Syllable = { note: seat.note, text: pending + text,",
+    "const syllable: Syllable = { note: seat.note, text: text,"
+   ],
+   [
+    "unseated in a word: pending text not flushed at the end",
+    "\tflush();\n\tfor (const word of words) {",
+    "\tfor (const word of words) {"
+   ],
+   [
+    "unseated word-opening token is not held",
+    "} else if (endsHyphen) {\n\t\t\t\tflush();",
+    "} else if (false) {\n\t\t\t\tflush();"
+   ],
+   [
+    "held text not put before the syllable that continues it",
+    "syllable.text = held.text + syllable.text;",
+    "/* mutant */"
+   ],
+   [
+    "a whole unseated word is merged into the word before it",
+    "\t\t\t} else if (endsHyphen) {\n\t\t\t\tflush();",
+    "\t\t\t} else if (open && !endsHyphen) {\n\t\t\t\topen[open.length - 1].text += text;\n\t\t\t} else if (endsHyphen) {\n\t\t\t\tflush();"
    ],
    [
     "write: a rest is written to",
@@ -89,16 +129,6 @@
     "byNote.set(s.note, s);"
    ],
    [
-    "write: always LF",
-    "const [, eol, closeIndent] = tail;",
-    "const [, , closeIndent] = tail;\n\tconst eol = '\\n';"
-   ],
-   [
-    "write: note with attributes not counted",
-    "const NOTE = /<note(?=[\\s>])[^>]*>/g;",
-    "const NOTE = /<note>/g;"
-   ],
-   [
     "write: lyric number 2, laid out",
     "const lines = [`<lyric number=\"1\">`",
     "const lines = [`<lyric number=\"2\">`"
@@ -107,6 +137,16 @@
     "write: lyric number 2, compact",
     "text: `<lyric number=\"1\">${syllabic}${text}</lyric>`",
     "text: `<lyric number=\"2\">${syllabic}${text}</lyric>`"
+   ],
+   [
+    "write: always LF",
+    "const [, eol, closeIndent] = tail;",
+    "const [, , closeIndent] = tail;\n\tconst eol = '\\n';"
+   ],
+   [
+    "write: note with attributes not counted",
+    "const NOTE = /<note(?=[\\s>])[^>]*>/g;",
+    "const NOTE = /<note>/g;"
    ]
   ]
  },

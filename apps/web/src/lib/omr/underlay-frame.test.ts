@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import {
 	DEFAULT_INK_HEIGHT,
 	DEFAULT_PAD_RATIO,
+	closingKernel,
 	frameRow,
 	inkExtent,
 	paperTone,
@@ -83,28 +84,28 @@ describe('frameRow, deskew', () => {
 		const tilted = slanted(tilt);
 		const before = centroidY(tilted, 540, 590) - centroidY(tilted, 10, 60);
 		expect(before).toBeGreaterThan(12);
-		const { crop, transform } = frameRow(tilted);
+		const { crop, transform } = frameRow(tilted, 30);
 		expect(Math.abs(transform.angle - 1.5)).toBeLessThanOrEqual(0.1 + 1e-9);
 		const after = (centroidY(crop, crop.width * 0.9, crop.width * 0.98) - centroidY(crop, crop.width * 0.02, crop.width * 0.1)) / transform.scale;
 		expect(Math.abs(after)).toBeLessThan(1);
 	});
 
 	it('reports a negative angle for a tilt the other way', () => {
-		const { transform } = frameRow(slanted(-tilt));
+		const { transform } = frameRow(slanted(-tilt), 30);
 		expect(Math.abs(transform.angle + 1.5)).toBeLessThanOrEqual(0.1 + 1e-9);
 	});
 
 	it('leaves a level line at 0.0', () => {
-		expect(frameRow(slanted(0)).transform.angle).toBe(0);
+		expect(frameRow(slanted(0), 30).transform.angle).toBe(0);
 	});
 
 	it('does not turn further than 3 degrees', () => {
-		const { transform } = frameRow(slanted(Math.tan((5 * Math.PI) / 180)));
+		const { transform } = frameRow(slanted(Math.tan((5 * Math.PI) / 180)), 30);
 		expect(transform.angle).toBe(3);
 	});
 
 	it('fills what the turn uncovers with the paper tone', () => {
-		const { crop } = frameRow(slanted(tilt, 176));
+		const { crop } = frameRow(slanted(tilt, 176), 30);
 		expect(crop.data[0]).toBe(176);
 		expect(crop.data[crop.width * crop.height - 1]).toBe(176);
 		expect(inkBox(crop).x0).toBeGreaterThan(0);
@@ -124,7 +125,7 @@ describe('frameRow, what counts as ink', () => {
 		rect(c, 30, 170, 20, 68, 60); // the row, 48 rows of ink
 		rect(c, 30, 170, 80, 120, 150); // a smudge 40 rows tall that is not ink
 		expect(inkExtent(c.data, 200, 120)).toEqual([20, 67]);
-		expect(frameRow(c).transform.scale).toBeCloseTo(32 / 48, 6);
+		expect(frameRow(c, 30).transform.scale).toBeCloseTo(32 / 48, 6);
 	});
 });
 
@@ -137,7 +138,7 @@ describe('frameRow, closing', () => {
 		return c;
 	};
 	// An ink extent of 30 at inkHeight 30 keeps the scale at 1, and no padding keeps the pixels in place.
-	const framed = (gap: number) => frameRow(barWithGap(gap), { inkHeight: 30, padRatio: 0 });
+	const framed = (gap: number, staffSpace = 30) => frameRow(barWithGap(gap), staffSpace, { inkHeight: 30, padRatio: 0 });
 
 	it('closes a gap of 1 px in a stroke', () => {
 		const { crop, transform } = framed(1);
@@ -156,8 +157,39 @@ describe('frameRow, closing', () => {
 		expect(crop.data[30 * crop.width + 70]).toBeGreaterThanOrEqual(128);
 	});
 
+	it('closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5', () => {
+		expect(closingKernel(60)).toBe(5);
+		const four = framed(4, 60).crop;
+		for (let x = 69; x < 73; x++) expect(four.data[30 * four.width + x]).toBeLessThan(128);
+		const five = framed(5, 60).crop;
+		expect(five.data[30 * five.width + 71]).toBeGreaterThanOrEqual(128);
+	});
+
+	it('leaves a gap of 1 px open at a staff space of 12, where the kernel is 1 and nothing is closed', () => {
+		expect(closingKernel(12)).toBe(1);
+		const { crop } = framed(1, 12);
+		expect(crop.data[30 * crop.width + 69]).toBeGreaterThanOrEqual(128);
+	});
+
+	it('takes the largest odd kernel not above a tenth of the staff space, and at least 1', () => {
+		const kernels = [0, 5, 12, 19.9, 20, 29, 30, 31, 40, 49.9, 50, 60, 100].map(closingKernel);
+		expect(kernels).toEqual([1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 5, 5, 9]);
+		expect([NaN, Infinity, -30].map(closingKernel)).toEqual([1, 1, 1]);
+	});
+
+	it('closes with the window cut at the crop\'s edges: ink that touches an edge stays, and paper beside it does not turn to ink', () => {
+		const c = blank(60, 60);
+		rect(c, 0, 20, 0, 30); // a block against the left and top edges
+		const { crop } = frameRow(c, 30, { inkHeight: 30, padRatio: 0 });
+		expect(crop.data[0]).toBeLessThan(128);
+		expect(crop.data[29 * crop.width + 0]).toBeLessThan(128);
+		expect(crop.data[0 * crop.width + 20]).toBeGreaterThanOrEqual(128);
+		expect(crop.data[30 * crop.width + 0]).toBeGreaterThanOrEqual(128);
+		expect(crop.data[59 * crop.width + 59]).toBeGreaterThanOrEqual(128);
+	});
+
 	it('leaves the outline of a solid block where it was', () => {
-		const { crop } = frameRow(barWithGap(0), { inkHeight: 30, padRatio: 0 });
+		const { crop } = frameRow(barWithGap(0), 30, { inkHeight: 30, padRatio: 0 });
 		expect(inkBox(crop)).toEqual({ x0: 20, x1: 119, y0: 15, y1: 44 });
 	});
 });
@@ -171,13 +203,13 @@ describe('frameRow, scale', () => {
 	};
 
 	it('brings an ink extent of 48 px to 32', () => {
-		const { crop, transform } = frameRow(rowOf(48));
+		const { crop, transform } = frameRow(rowOf(48), 30);
 		expect(transform.scale).toBeCloseTo(32 / 48, 6);
 		expect(Math.abs(span(crop) - 32)).toBeLessThanOrEqual(1);
 	});
 
 	it('brings an ink extent of 24 px to 32', () => {
-		const { crop, transform } = frameRow(rowOf(24));
+		const { crop, transform } = frameRow(rowOf(24), 30);
 		expect(transform.scale).toBeCloseTo(32 / 24, 6);
 		expect(Math.abs(span(crop) - 32)).toBeLessThanOrEqual(1);
 	});
@@ -186,16 +218,16 @@ describe('frameRow, scale', () => {
 		const c = rowOf(40);
 		rect(c, 100, 101, 2, 3); // one dark pixel 18 rows above the row
 		expect(inkExtent(c.data, c.width, c.height)).toEqual([20, 59]);
-		expect(frameRow(c).transform.scale).toBeCloseTo(32 / 40, 6);
+		expect(frameRow(c, 30).transform.scale).toBeCloseTo(32 / 40, 6);
 	});
 
 	it('uses the inkHeight it is given', () => {
-		const { crop } = frameRow(rowOf(48), { inkHeight: 20 });
+		const { crop } = frameRow(rowOf(48), 30, { inkHeight: 20 });
 		expect(Math.abs(span(crop) - 20)).toBeLessThanOrEqual(1);
 	});
 
 	it('resizes both axes by the factor', () => {
-		const { crop, transform } = frameRow(rowOf(24), { padRatio: 0 });
+		const { crop, transform } = frameRow(rowOf(24), 30, { padRatio: 0 });
 		expect(crop.width).toBe(Math.round(200 * transform.scale));
 		expect(crop.height).toBe(Math.round(100 * transform.scale));
 	});
@@ -219,7 +251,7 @@ describe('frameRow, padding', () => {
 	};
 
 	it('pads half the ink height, 16 px at 32, of the paper tone on every side by default, 176 on grey paper', () => {
-		const { crop, transform } = frameRow(withPaper(176));
+		const { crop, transform } = frameRow(withPaper(176), 30);
 		const pad = DEFAULT_PAD_RATIO * DEFAULT_INK_HEIGHT;
 		expect(pad).toBe(16);
 		expect(transform.pad).toBe(pad);
@@ -236,17 +268,17 @@ describe('frameRow, padding', () => {
 	});
 
 	it('pads 255 on white paper', () => {
-		const { crop } = frameRow(withPaper(255));
+		const { crop } = frameRow(withPaper(255), 30);
 		expect(crop.data[0]).toBe(255);
 		expect(crop.data[crop.width * crop.height - 1]).toBe(255);
 	});
 
 	it('pads by the ratio it is given, of the ink height, and grows the crop by twice that', () => {
-		const a = frameRow(withPaper(255), { padRatio: 0 }).crop;
-		const b = frameRow(withPaper(255), { padRatio: 0.25 }).crop;
+		const a = frameRow(withPaper(255), 30, { padRatio: 0 }).crop;
+		const b = frameRow(withPaper(255), 30, { padRatio: 0.25 }).crop;
 		expect([b.width, b.height]).toEqual([a.width + 16, a.height + 16]);
-		const c = frameRow(withPaper(255), { padRatio: 0.25, inkHeight: 64 }).crop;
-		const d = frameRow(withPaper(255), { padRatio: 0, inkHeight: 64 }).crop;
+		const c = frameRow(withPaper(255), 30, { padRatio: 0.25, inkHeight: 64 }).crop;
+		const d = frameRow(withPaper(255), 30, { padRatio: 0, inkHeight: 64 }).crop;
 		expect([c.width - d.width, c.height - d.height]).toEqual([32, 32]);
 	});
 
@@ -256,7 +288,7 @@ describe('frameRow, padding', () => {
 	});
 
 	it('is a crop of the size the transform says', () => {
-		const { crop } = frameRow(withPaper(255));
+		const { crop } = frameRow(withPaper(255), 30);
 		expect(crop.data.length).toBe(crop.width * crop.height);
 		expect(DEFAULT_INK_HEIGHT).toBe(32);
 	});
@@ -267,7 +299,7 @@ describe('frameRow, the transform back', () => {
 		const c = blank(300, 90);
 		rect(c, 40, 60, 25, 55); // a glyph 20 by 30
 		rect(c, 200, 230, 25, 55);
-		const { crop, transform } = frameRow(c);
+		const { crop, transform } = frameRow(c, 30);
 		expect(transform.angle).toBe(0);
 		// The right-hand glyph: find its columns in the framed crop.
 		const right = { ...crop, data: crop.data.map((g, i) => (i % crop.width < crop.width / 2 ? 255 : g)) };
@@ -287,7 +319,7 @@ describe('frameRow, the transform back', () => {
 
 	it('maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px', () => {
 		const tilted = slanted(Math.tan((1.5 * Math.PI) / 180));
-		const { crop, transform } = frameRow(tilted);
+		const { crop, transform } = frameRow(tilted, 30);
 		const last = { ...crop, data: crop.data.map((g, i) => (i % crop.width < crop.width * 0.9 ? 255 : g)) };
 		const b = inkBox(last);
 		const centre = unframePoint(transform, (b.x0 + b.x1 + 1) / 2, (b.y0 + b.y1 + 1) / 2);
@@ -309,7 +341,7 @@ describe('frameRow, the transform back', () => {
 describe('frameRow, a crop with no ink', () => {
 	it('passes through steps 1 to 3 unchanged and is padded', () => {
 		const c = blank(120, 40, 200);
-		const { crop, transform } = frameRow(c);
+		const { crop, transform } = frameRow(c, 30);
 		expect(transform).toEqual({ scale: 1, pad: 16, angle: 0, width: 120, height: 40 });
 		expect([crop.width, crop.height]).toEqual([152, 72]);
 		for (let y = 0; y < crop.height; y++) {
@@ -320,7 +352,7 @@ describe('frameRow, a crop with no ink', () => {
 	it('keeps the grey it was given in the middle', () => {
 		const c = blank(30, 20, 220);
 		rect(c, 0, 30, 0, 20, 200); // not ink (200 is over 128), and the more frequent grey is 220 nowhere: 200 is
-		const { crop } = frameRow(c);
+		const { crop } = frameRow(c, 30);
 		expect(crop.data[16 * crop.width + 16]).toBe(200);
 		expect(crop.data[0]).toBe(200);
 	});
