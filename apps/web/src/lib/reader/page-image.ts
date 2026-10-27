@@ -82,11 +82,30 @@ export async function toGreyscalePng(file: File): Promise<ArrayBuffer> {
 
 const messageOf = (err: unknown): string => (err instanceof Error ? err.message : String(err));
 
+/**
+ * One decode per picture. The score routes each ask for the ink of the same File
+ * (the reader, the clef and key probe, the poem route), and a HEIC costs seconds
+ * to decode, so the fallback's ink is kept for as long as the File is. In memory
+ * only, keyed by the File object, never written anywhere. Each caller gets a copy,
+ * because a caller may transfer its buffer to a Worker and detach it.
+ */
+const heifInk = new WeakMap<File, Promise<ArrayBuffer>>();
+
 /** The fallback for a picture the browser would not decode: HEIF only, else the original refusal. */
 async function heifToGreyscalePng(file: File, cause: unknown): Promise<ArrayBuffer> {
 	if (!isHeifImage(new Uint8Array(await file.slice(0, 12).arrayBuffer()))) {
 		throw new ImageUndecodableError(messageOf(cause));
 	}
+	let ink = heifInk.get(file);
+	if (!ink) {
+		ink = decodeHeifToGreyscalePng(file);
+		heifInk.set(file, ink);
+		ink.catch(() => heifInk.delete(file));
+	}
+	return (await ink).slice(0);
+}
+
+async function decodeHeifToGreyscalePng(file: File): Promise<ArrayBuffer> {
 	let rgba: HeicRgba;
 	try {
 		const { decodeHeic } = await import('./heic-decode');

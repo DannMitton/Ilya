@@ -85,6 +85,26 @@ describe('toGreyscalePng', () => {
 		expect([image.width, image.height]).toEqual([2, 1]);
 	});
 
+	it('decodes one File once however many routes ask for its ink, and hands each its own copy', async () => {
+		const f = file(HEIC, 'IMG_0003.HEIC');
+		const first = await toGreyscalePng(f);
+		const second = await toGreyscalePng(f);
+		expect(decoder.calls).toBe(1);
+		expect(second).not.toBe(first);
+		expect(new Uint8Array(second)).toEqual(new Uint8Array(first));
+		structuredClone(first, { transfer: [first] }); // a caller that detaches its copy
+		expect(second.byteLength).toBeGreaterThan(0);
+	});
+
+	it('does not keep a failed decode: the next ask tries again', async () => {
+		const f = file(HEIC, 'IMG_0004.HEIC');
+		decoder.fail = true;
+		await expect(toGreyscalePng(f)).rejects.toBeInstanceOf(ImageUndecodableError);
+		decoder.fail = false;
+		await expect(toGreyscalePng(f)).resolves.toBeInstanceOf(ArrayBuffer);
+		expect(decoder.calls).toBe(2);
+	});
+
 	it('throws ImageUndecodableError when the decoder fails too', async () => {
 		decoder.fail = true;
 		const err = await toGreyscalePng(file(HEIC, 'broken.heic')).catch((e) => e);

@@ -105,7 +105,7 @@ Two desk amendments arrived during this step and are applied here: Dann's 14:58 
 |---|---|
 | `apps/web/src/lib/reader/heic-decode.ts` (new, 80 lines) | `decodeHeic(bytes, wasmBinary?)`: dynamic `import()` of the libheif glue, fetch of `/heif/libheif.wasm`, picks the primary image by `is_primary()`, treats libheif's empty array as a failure, frees the images. A fresh WebAssembly instance per call, so the heap is collectable. Runs in the page (see below) |
 | `apps/web/src/lib/reader/libheif-js.d.ts` (new) | types for the one entry; the package's own `.d.ts` lacks `HeifDecoder` and `HeifImage` |
-| `apps/web/src/lib/reader/page-image.ts` (98 to 137 lines) | on `createImageBitmap` failure, and only if the first 12 bytes sniff as HEIF, imports `heic-decode`, draws the RGBA with `putImageData` to the same `OffscreenCanvas`, and continues through `greyscaleCanvasToPng`. Any decoder failure is the existing `ImageUndecodableError`. Exports `inkPng`. `stemOf` is shared with `pieceIdFor` |
+| `apps/web/src/lib/reader/page-image.ts` (98 to 156 lines, with the step 2 memo) | on `createImageBitmap` failure, and only if the first 12 bytes sniff as HEIF, imports `heic-decode`, draws the RGBA with `putImageData` to the same `OffscreenCanvas`, and continues through `greyscaleCanvasToPng`. Any decoder failure is the existing `ImageUndecodableError`. Exports `inkPng`. `stemOf` is shared with `pieceIdFor` |
 | `apps/web/src/lib/reader/heif-brand.ts` (new) | `HEIF_BRANDS` and `isHeifImage`, **moved** from `score/ingestion/format-detection.ts` (see the departure below) |
 | `apps/web/src/lib/score/ingestion/format-detection.ts` | imports both from `reader/heif-brand.ts`; `ISO_BMFF_IMAGE_BRANDS` is now `[...HEIF_BRANDS, 'avif', 'avis']`; `isHeifImage` is re-exported. Same brand set, same behaviour |
 | `apps/web/src/lib/score/ScoreUploader.svelte` (1358 to 1357) | four call sites hand `readAsPoemByOcr(inkPng(file, ink), ...)`; the `stem` line before the PDF call is gone |
@@ -151,7 +151,7 @@ Limits of the offline cache, NOT hidden:
 | File | Tests | Result |
 |---|---|---|
 | `heic-decode.test.ts` | 9 run, 1 skipped (`ILYA_HEIC_REAL`) | (a) 1,600 by 2,200 with 120 dark rows and 0 dark columns; (b) upright; the quarter-turn control reads sideways; (c) paper grey between 185 and 215; (e) the grid reassembled; the primary is chosen; a truncated HEIF, non-HEIF bytes, and an unfetchable decoder each reject |
-| `page-image.test.ts` | 7 | PNG and JPEG resolve with the decoder module never loaded; a HEIF loads it once for two photographs; a decoder failure and an AVIF and unreadable bytes each give `ImageUndecodableError`; `inkPng` returns an `image/png` File named `<stem>.png` |
+| `page-image.test.ts` | 9 (7 at step 1) | PNG and JPEG resolve with the decoder module never loaded; a HEIF loads it once for two photographs; a decoder failure and an AVIF and unreadable bytes each give `ImageUndecodableError`; `inkPng` returns an `image/png` File named `<stem>.png` |
 | `e2e/heic-fallback.test.ts` | 1 | Playwright Chromium, dev server: `toGreyscalePng` on (a) and on its source PNG: 1,600 by 2,200 both, **100.000 percent of pixels within 2 levels, worst difference 0**. The spec also asserts this Chromium does not decode HEIC itself |
 | `e2e/heic-offline.test.ts` | 1 | Serves `build/` on 127.0.0.2 (the service worker does not register on `localhost`, `app.html`). Loads online, waits until the worker has cached the decoder files, loads once more, goes offline, reloads, drops (a): the reader's wait shows, neither refusal text appears, no `IMAGE_UNDECODABLE`. Needs `pnpm build` first and skips without it |
 
@@ -178,19 +178,58 @@ A 6,000 by 8,000 (48 MP) HEIC, lossy quality 80, 202,174 bytes, made with `pillo
 | phonology | 291 | 291 |
 | dictionary | 248 | 248 |
 | web check | 0 errors, 12 warnings in 5 files | 0 errors, 12 warnings in 5 files |
-| web test | 3231 | 3247 passed, 1 skipped (3248): +9 in `heic-decode.test.ts`, +7 in `page-image.test.ts` |
+| web test | 3231 | 3249 passed, 1 skipped (3250): +9 in `heic-decode.test.ts`, +9 in `page-image.test.ts` (7 at step 1, 2 added at step 2 for the memo) |
 | score-parser | 775 passed, 5 skipped | 775 passed, 5 skipped |
 | blurb | 145 | 145 |
 | integration | 55 | 55 |
 | ratchets | OK | OK |
 
-`ScoreUploader.svelte` is 1357 of 1358; I did not lower the ceiling in `ratchets.json` (the brief says it stays). `page-image.ts` is 137 lines, `heic-decode.ts` 80. `vite build` and `stamp-sw.mjs` run clean.
+`ScoreUploader.svelte` is 1357 of 1358; I did not lower the ceiling in `ratchets.json` (the brief says it stays). `page-image.ts` is 156 lines (137 at step 1, before the memo of step 2), `heic-decode.ts` 80. `vite build` and `stamp-sw.mjs` run clean.
 
-## Step 2
+## Step 2: the real path, in headless Chromium
 
-(not started)
+Run 2026-10-27 in Playwright Chromium (the bundled headless shell, revision 1243, which does not decode HEIC, so the fallback is the path that runs) against the dev server, by `apps/web/e2e/heic-reader-path.test.ts`. Pictures are in `docs/sessions/row113-heic-shots/`.
+
+### Fixtures (a) and (c), set on `input.hidden-input`
+
+| Check | (a) `staff-page.heic` | (c) `photo-page.heic` |
+|---|---|---|
+| `upload.err.imageHeic` or `upload.err.imageUndecodable` text on the page | none | none |
+| the reader's wait | `upload.status.preparingReader` shown ("Ilya is reading the notes off your page ..."), then "Reading your score, page 1 of 1" | same |
+| `IMAGE_UNDECODABLE` in the console | none | none |
+| requests after the drop to any origin other than Ilya's | none | none |
+| the decoder's requests | `/node_modules/.vite/deps/libheif-js_libheif-wasm_libheif__js.js` (the glue, from the dev server's dependency cache) and `/heif/libheif.wasm`, both on `localhost:5173` | same |
+| homr | finished in under 100 s: the drawer shows a score named `staff-page.musicxml`, tempo "estimated" | finished in under 100 s: `photo-page.musicxml` |
+
+Pictures: `wait-staff-page.png` and `wait-photo-page.png` (the drawer at the wait), `after-staff-page.png` and `after-photo-page.png` (the drawer when homr had finished). The dev glue file name is Vite's; on a build it is the hashed chunk of step 1.
+
+**Not established: the note count.** The page's notes carry no attribute the spec can count, and the fixtures are synthetic noteheads placed at random, not a score with a truth file, so a count would be NOT SCORED in any case (`CONTRACT.md` section 1, item 18). What is shown is that the reader accepted the ink and produced a MusicXML file.
+
+### Finding: the HEIC was decoded twice per drop
+
+The first run requested `/heif/libheif.wasm` twice per drop. Several routes each call `toGreyscalePng` on the same `File` (the reader, the clef and key probe, `scan.ts:41`), so each decoded the HEIC again, seconds each at 12 MP and about 1.3 s at 48 MP on this machine. **I added a memo** in `page-image.ts`: the fallback's ink is kept per `File` object in a `WeakMap`, in memory only, never stored. Each caller gets a copy (`slice(0)`), because a caller may transfer its buffer to a Worker and detach it. A failed decode is not kept. This is outside the brief's text; it is the desk's to keep or strike. With it the run requests the wasm once. Two tests cover it (same File decodes once and each caller gets its own buffer; a failure is not kept).
+
+### Third drop: a HEIC poem with no staves (`poem-page.heic`)
+
+- The busy label `intake.picture.reading` ("Reading the words out of the picture...") showed, and the poem landed: the Poem box holds four lines, `Я помню чудное мгновенье: / Передо мной явилась ты, / Как мимолётное виденье, / Как гений чистой красоты.`, with IPA and glosses on the page (`poem-landed.png`). The OCR failure literal (`OCR processing failed.`) did not appear.
+- What tesseract was handed, read from the bytes the page posts to its Worker (`payload.image`): `89 50 4e 47 0d 0a 1a 0a 00 00 00 0d`, a PNG signature. With the mutant (the original file handed over) it was handed `00 00 00 1c 66 74 79 70 68 65 69 63`, the HEIC's own `ftyp heic`, and the spec failed. That kills the mutant "hand tesseract the original file".
+- **A finding about the outside world, not about this row.** tesseract.js loads its Worker script, its WebAssembly core, and the Russian language data from `cdn.jsdelivr.net` (its defaults; `createWorker('rus')` passes no paths). The run logged the three requests: `/npm/tesseract.js@v7.0.0/dist/worker.min.js`, `/npm/tesseract.js-core@v7.0.0/tesseract-core-relaxedsimd-lstm.wasm.js`, `/npm/@tesseract.js-data/rus/4.0.0_best_int/rus.traineddata.gz`. This sandbox cannot reach that host (the proxy answers 403), so my first poem run ended in `OCR processing failed.` with no HEIC involved. For the poem run the spec serves those three files from disk (`@tesseract.js-data/rus` 1.0.0 from `npm pack`, the worker and core from `node_modules`), so the poem result above is from a run where the CDN was not used. The brief cites N.197's direction of no outside service at run time; the poem route does not meet it today, for every picture format. Not changed here.
+
+### Every place `upload.err.imageHeic` is reached, and what makes it fire
+
+`ScoreUploader.svelte:362` (a rasterize failure on the first read, in `rasterizeFirstPage`) and `:602` (a `ImageUndecodableError` on the other route), both through `undecodablePictureMessage` (`:495-498`), which returns `upload.err.imageHeic` when the bytes sniff as HEIF and `upload.err.imageUndecodable` otherwise. After this row it fires only when the decoder also fails: a damaged or truncated HEIF, a HEIF shape libheif does not read, or the decoder's files cannot be fetched (offline with no cached copy; the service worker now caches them after install, so that is a visitor whose install-time fetch failed, or a browser with no service worker). The English "Ilya cannot yet open iPhone photos in HEIC format" is then untrue for the first case and a half-truth for the others. No string was changed (brief section 5); the desk's replacement is owed before the ship.
+
+### Gates after step 2
+
+Same as the step 1 table except web test, now 3249 passed and 1 skipped (3250). Web check 0 errors and 12 warnings in 5 files, ratchets OK, the other five unchanged.
 
 ## What I could not establish
+
+- (d), the real iPhone photograph: not available to me. The `ILYA_HEIC_REAL` test is written and skipped; its upright metric (row-mean variance against column-mean variance) was never run on a real photograph.
+- Whether iOS Safari hands the page a HEIC or a JPEG, and whether Safari's own `createImageBitmap` decodes HEIC (the desk's own gaps; Dann's look on his iPhone settles them).
+- Decode time and memory on a phone. The 48 MP figures are desktop Chromium.
+- The note count for fixtures (a) and (c), and any score-against-truth reading: NOT SCORED.
+- Whether the host compresses `.wasm` in transit, and how often the browser's HTTP cache saves the decoder's re-fetch at each deploy.
 
 - libde265's licence from a file in the package (above).
 - A cold offline load of the decoder files.
