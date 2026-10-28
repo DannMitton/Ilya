@@ -4,7 +4,7 @@
  * tesseract.js worker is a fake; the real one is the desk's measure.
  */
 import { describe, expect, it } from 'vitest';
-import { makeRecognizer, recognizerPaths, wordsOf, UNDERLAY_BASE, UNDERLAY_CORE, UNDERLAY_LANG, type TesseractLike } from './underlay-recognize';
+import { makeRecognizer, recognizerPaths, startTesseract, wordsOf, UNDERLAY_BASE, UNDERLAY_CORE, UNDERLAY_LANG, type TesseractLike } from './underlay-recognize';
 
 const block = (...texts: string[]) => ({ paragraphs: [{ lines: [{ words: texts.map((text, i) => ({ text, bbox: { x0: i * 10, y0: 1, x1: i * 10 + 8, y1: 9 } })) }] }] });
 
@@ -90,5 +90,37 @@ describe('makeRecognizer', () => {
 		await Promise.resolve();
 		await expect(read(row)).rejects.toThrow('bad');
 		expect(tries).toBe(2);
+	});
+});
+
+describe('startTesseract', () => {
+	const worker = { setParameters: async () => {}, recognize: async () => ({ data: { blocks: null } }), terminate: async () => {} };
+
+	it('starts tesseract.js on the model, the SIMD core file, and the worker of this origin, with the float model\'s options', async () => {
+		let seen: unknown[] = [];
+		const made = await startTesseract(async (...args) => (seen = args, worker), 'https://ilya.example');
+		expect(made).toBe(worker);
+		expect(seen).toEqual([
+			'rus_prereform_r2_29000',
+			1,
+			{
+				workerPath: 'https://ilya.example/omr/models/underlay/worker.min.js',
+				corePath: 'https://ilya.example/omr/models/underlay/tesseract-core-simd-lstm.wasm.js',
+				langPath: 'https://ilya.example/omr/models/underlay',
+				gzip: false,
+				cacheMethod: 'none',
+				workerBlobURL: false,
+			},
+		]);
+	});
+
+	it('says where it was looking where tesseract.js rejects with nothing, as it does for a file that is not served', async () => {
+		await expect(startTesseract(async () => Promise.reject(undefined), 'https://ilya.example')).rejects.toThrow(
+			'tesseract.js did not start from /omr/models/underlay (no reason was given); are worker.min.js, tesseract-core-simd-lstm.wasm.js, and rus_prereform_r2_29000.traineddata served there?',
+		);
+	});
+
+	it('keeps the reason where tesseract.js gives one', async () => {
+		await expect(startTesseract(async () => Promise.reject('Network error while fetching the model'), '')).rejects.toThrow('(Network error while fetching the model)');
 	});
 });

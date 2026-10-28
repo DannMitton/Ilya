@@ -24,6 +24,7 @@
  * as it was. One reader is kept for the session and made again after a failure.
  */
 import type { WordBox } from './underlay-page';
+import { describeError } from './underlay-reader';
 
 /** Where the model and the core are served: under `/omr/`, which the service worker does not touch. */
 export const UNDERLAY_BASE = '/omr/models/underlay';
@@ -74,13 +75,27 @@ export function makeRecognizer(create: () => Promise<TesseractLike>): (row: Blob
 	};
 }
 
+/**
+ * Starts tesseract.js on the model and files of this origin. tesseract.js
+ * rejects with the `message` of its Worker's error event, which is undefined
+ * when a script or a model fails to load (a 404 on `worker.min.js`), so a
+ * rejection is reported with where it was looking.
+ */
+export async function startTesseract(
+	createWorker: (lang: string, oem: number, options: object) => Promise<unknown>,
+	origin: string,
+): Promise<TesseractLike> {
+	try {
+		return (await createWorker(UNDERLAY_LANG, 1, {
+			...recognizerPaths(origin),
+			gzip: false,
+			cacheMethod: 'none',
+			workerBlobURL: false,
+		})) as TesseractLike;
+	} catch (err) {
+		throw new Error(`tesseract.js did not start from ${UNDERLAY_BASE} (${describeError(err)}); are ${UNDERLAY_WORKER}, ${UNDERLAY_CORE}, and ${UNDERLAY_LANG}.traineddata served there?`);
+	}
+}
+
 /** The reader in the browser: tesseract.js, fetched only when the first row is read. */
-export const recognizeRow = makeRecognizer(async () => {
-	const { createWorker } = await import('tesseract.js');
-	return (await createWorker(UNDERLAY_LANG, 1, {
-		...recognizerPaths(location.origin),
-		gzip: false,
-		cacheMethod: 'none',
-		workerBlobURL: false,
-	})) as unknown as TesseractLike;
-});
+export const recognizeRow = makeRecognizer(async () => startTesseract((await import('tesseract.js')).createWorker as never, location.origin));
