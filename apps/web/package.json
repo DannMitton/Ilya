@@ -6,8 +6,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && node scripts/copy-ort-wasm.mjs && node scripts/fetch-omr-models.mjs && node scripts/copy-metre-model.mjs && vite dev",
-    "build": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && node scripts/copy-ort-wasm.mjs && node scripts/fetch-omr-models.mjs && node scripts/copy-metre-model.mjs && vite build && node scripts/stamp-sw.mjs",
+    "dev": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && node scripts/copy-ort-wasm.mjs && node scripts/copy-heif-wasm.mjs && node scripts/fetch-omr-models.mjs && node scripts/copy-metre-model.mjs && vite dev",
+    "build": "node scripts/copy-reader.mjs && node scripts/copy-pdfjs-wasm.mjs && node scripts/copy-ort-wasm.mjs && node scripts/copy-heif-wasm.mjs && node scripts/fetch-omr-models.mjs && node scripts/copy-metre-model.mjs && vite build && node scripts/stamp-sw.mjs",
     "preview": "vite preview",
     "prepare": "svelte-kit sync",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -22,6 +22,7 @@
     "@ilya/phonology": "workspace:*",
     "@ilya/score-parser": "workspace:*",
     "homr-web": "file:../../third_party/homr-web/homr-web-0.2.0-ilya.7.tgz",
+    "libheif-js": "1.23.5",
     "onnxruntime-web": "1.30.0",
     "pdfjs-dist": "6.2.108",
     "tesseract.js": "^7.0.0",

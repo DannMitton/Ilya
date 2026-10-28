@@ -27,9 +27,31 @@ const APP_SHELL = [
   '/icons/icon-512.png'
 ];
 
+// Row 113 (Dann 2026-10-27 14:58, singers with no data plan or wifi). The HEIC
+// decoder is loaded lazily, so a singer who has never opened a HEIC would
+// otherwise have none of its files offline. They are fetched once, in the
+// background, a few seconds after the app shell is cached, so they never
+// compete with the first paint. NOT in APP_SHELL: a failure here must not fail
+// the install. Never under /omr/ (the fetch handler refuses that prefix).
+// The two chunk URLs are hashed, so scripts/stamp-sw.mjs writes them in at
+// build time and fails if it cannot find them.
+const DECODER_FILES = [
+  '/heif/libheif.wasm',
+  '/heif/LICENSE-libheif.txt',
+  /*__HEIF_CHUNKS__*/
+];
+const DECODER_DELAY_MS = 3000;
+
+function cacheDecoderLater(cache) {
+  return new Promise((resolve) => setTimeout(resolve, DECODER_DELAY_MS))
+    .then(() => Promise.all(DECODER_FILES.map((url) => cache.add(url).catch(() => {}))));
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_STATIC).then((cache) => cache.addAll(APP_SHELL))
+    caches.open(CACHE_STATIC).then((cache) =>
+      cache.addAll(APP_SHELL).then(() => cacheDecoderLater(cache))
+    )
   );
 });
 

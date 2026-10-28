@@ -18,10 +18,16 @@
  * given. Nothing persisted is ever binary.
  */
 
+import { isHeifImage } from './heif-brand';
+import type { HeicRgba } from './heic-decode';
+
 /** Thrown where the browser cannot decode the picture at all. */
 export class ImageUndecodableError extends Error {
 	readonly code = 'IMAGE_UNDECODABLE';
 }
+
+/** The file name without its extension, `page` where nothing is left. */
+const stemOf = (file: File): string => file.name.replace(/\.[^.]+$/, '') || 'page';
 
 /**
  * A stable id for one picture: the file name's stem plus a short content hash.
@@ -31,7 +37,7 @@ export class ImageUndecodableError extends Error {
  * rather than a second one invented for the reader.
  */
 export async function pieceIdFor(file: File): Promise<string> {
-	const stem = file.name.replace(/\.[^.]+$/, '') || 'page';
+	const stem = stemOf(file);
 	const digest = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
 	const hex = [...new Uint8Array(digest)]
 		.slice(0, 4)
@@ -43,11 +49,13 @@ export async function pieceIdFor(file: File): Promise<string> {
 /**
  * Decode a picture and re-encode it as a GREYSCALE PNG.
  *
- * HEIC, named: Chromium does not decode it, so `createImageBitmap` rejects and
- * the caller turns that into a typed error asking for JPEG or PNG. Whether iOS
- * transcodes HEIC to JPEG on its way through the unfiltered picker (N.70
- * dropped the `accept` attribute on mobile) is NOT ESTABLISHED, so this path
- * exists to be honest about the failure rather than to predict it.
+ * HEIC, named: Chromium and Firefox do not decode it, so `createImageBitmap`
+ * rejects. Row 113: when the bytes sniff as HEIF, the picture is decoded in
+ * WebAssembly instead (`heic-decode.ts`, loaded only here, only then) and
+ * drawn to the same canvas, so everything after the decode is the one path.
+ * A browser that decodes HEIC itself (Safari may) never reaches the fallback;
+ * whether iOS hands the page a HEIC or a JPEG is NOT ESTABLISHED. A picture the
+ * fallback cannot decode either is the same `ImageUndecodableError` as before.
  *
  * PNG is chosen over JPEG deliberately: a photographed page is about to be read
  * for hairline staff rules and notehead geometry, and JPEG ringing around
@@ -59,7 +67,7 @@ export async function toGreyscalePng(file: File): Promise<ArrayBuffer> {
 	try {
 		bitmap = await createImageBitmap(file);
 	} catch (err) {
-		throw new ImageUndecodableError(err instanceof Error ? err.message : String(err));
+		return heifToGreyscalePng(file, err);
 	}
 	try {
 		const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
@@ -70,6 +78,56 @@ export async function toGreyscalePng(file: File): Promise<ArrayBuffer> {
 	} finally {
 		bitmap.close();
 	}
+}
+
+const messageOf = (err: unknown): string => (err instanceof Error ? err.message : String(err));
+
+/**
+ * One decode per picture. The score routes each ask for the ink of the same File
+ * (the reader, the clef and key probe, the poem route), and a HEIC costs seconds
+ * to decode, so the fallback's ink is kept for as long as the File is. In memory
+ * only, keyed by the File object, never written anywhere. Each caller gets a copy,
+ * because a caller may transfer its buffer to a Worker and detach it.
+ */
+const heifInk = new WeakMap<File, Promise<ArrayBuffer>>();
+
+/** The fallback for a picture the browser would not decode: HEIF only, else the original refusal. */
+async function heifToGreyscalePng(file: File, cause: unknown): Promise<ArrayBuffer> {
+	if (!isHeifImage(new Uint8Array(await file.slice(0, 12).arrayBuffer()))) {
+		throw new ImageUndecodableError(messageOf(cause));
+	}
+	let ink = heifInk.get(file);
+	if (!ink) {
+		ink = decodeHeifToGreyscalePng(file);
+		heifInk.set(file, ink);
+		ink.catch(() => heifInk.delete(file));
+	}
+	return (await ink).slice(0);
+}
+
+async function decodeHeifToGreyscalePng(file: File): Promise<ArrayBuffer> {
+	let rgba: HeicRgba;
+	try {
+		const { decodeHeic } = await import('./heic-decode');
+		rgba = await decodeHeic(new Uint8Array(await file.arrayBuffer()));
+	} catch (err) {
+		throw new ImageUndecodableError(messageOf(err));
+	}
+	const canvas = new OffscreenCanvas(rgba.width, rgba.height);
+	const ctx = canvas.getContext('2d', { willReadFrequently: true });
+	if (!ctx) throw new ImageUndecodableError('no 2d context for the page canvas');
+	ctx.putImageData(new ImageData(rgba.data, rgba.width, rgba.height), 0, 0);
+	return greyscaleCanvasToPng(canvas, ctx);
+}
+
+/**
+ * The ink as a PNG file named for the picture it came from. The poem route
+ * hands this to the OCR in place of the original, so tesseract reads the
+ * greyscale the score routes read and never has to decode a HEIC, a JPEG, or a
+ * PNG of its own.
+ */
+export function inkPng(source: File, ink: ArrayBuffer): File {
+	return new File([ink], `${stemOf(source)}.png`, { type: 'image/png' });
 }
 
 /**

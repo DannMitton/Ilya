@@ -196,3 +196,22 @@ describe('ratified break-button lines (N.194)', () => {
 		}
 	});
 });
+
+/* QUEUE row 113. The HEIC refusal, ratified by Dann 2026-10-27 23:30. It fires only where the HEIC
+   decoder fails (a damaged file, a shape it does not know, or its files could not be fetched). The
+   French apostrophes are U+2019. */
+describe('ratified HEIC refusal (row 113)', () => {
+	it('English', () => {
+		expect(t('upload.err.imageHeic', 'en')).toBe(
+			'Ilya could not open this iPhone photo. On a Mac, open the photo in Preview and choose File, then Export, then JPEG, and try again.',
+		);
+	});
+	it('French, with the typographic apostrophe by code point', () => {
+		const fr = t('upload.err.imageHeic', 'fr');
+		expect(fr).toBe(
+			'Ilya n\u2019a pas pu ouvrir cette photo d\u2019iPhone. Sur un Mac, ouvrez la photo dans Aperçu et choisissez Fichier, puis Exporter, puis JPEG, et réessayez.',
+		);
+		expect([...fr].filter((c) => c === '\u2019')).toHaveLength(2);
+		expect(fr).not.toContain("'");
+	});
+});

@@ -75,6 +75,11 @@ is not part of this repository.
   decoder) are homr's own release assets, served unchanged.
 - **onnxruntime-web** 1.30.0, Microsoft, <https://github.com/microsoft/onnxruntime>.
   MIT License.
+- **libheif-js** 1.23.5, <https://github.com/catdad-experiments/libheif-js>, an
+  Emscripten build of libheif, <https://github.com/strukturag/libheif>, with
+  the libde265 HEVC decoder. GNU Lesser General Public License version 3. Ilya
+  loads `libheif.wasm` unchanged, as its own file from `/heif/`, only when a
+  photograph is in HEIC format. The licence text is served beside it.
 - **@techstark/opencv-js** 4.12.0-release.1, a build of OpenCV.js,
   <https://github.com/TechStark/opencv-js>. Apache License 2.0.
 - **delaunator** 5.1.0, Mapbox, <https://github.com/mapbox/delaunator>. ISC
