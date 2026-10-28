@@ -31,6 +31,8 @@ next session the same hour it cost the last one.
 | a measure folder holds a `build/` subfolder, or a run left tens of MB in `docs/sessions/` | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
 | a cloud session has not pushed for an hour, or Dann typed into a cloud session | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
 | a gate run includes a test skipped without its file | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
+| a ship paste for a true merge, or a lane that adds a package | `LEARNED BY THE OPUS DESK, 2026-10-28` |
+| a property test times out in the desk's workspace | `LEARNED BY THE OPUS DESK, 2026-10-28` |
 | Code reports a preview serving an old build on port 4173 | `A STALE PREVIEW HOLDS PORT 4173` |
 | Vercel's storage fills, or a cloud-lane push builds a preview | `EVERY BRANCH BUILDS ON VERCEL, 480 MB EACH` |
 | you need the size of a build, or what a singer downloads first | `MEASURING THE SITE'S WEIGHT` |
@@ -5011,3 +5013,11 @@ From Vercel's documentation the desk told him the list's three-dot menu had a De
 - **Cloud sessions stop on Dann's five-hour session limit too** ("5-hour limit reached", with a Try again button in the page); the desk restarts them from Chrome after the reset. And a message Dann types in a cloud session's tab lands in that session: on 2026-10-27 his question meant for another Code window sat in stage 2b's session and the session idled on it for two hours. Check a quiet lane's page, not only `git ls-remote`.
 - **A test skipped for want of a local file changes gate 4's string** ("3283 passed | 1 skipped (3284)"), and the ship script compares the string exactly; set the line to the skipped form when such a test ships.
 - **`pkill -f pnpm` from the desk's own shell kills its own background gate run** (exit 144), as the section `THE DESK HAS NO LINE TO CODE, AND PKILL KILLS ITS OWN SHELL` warns; start gate runs with `run_in_background`, never with `&`.
+
+### LEARNED BY THE OPUS DESK, 2026-10-28
+- **A true merge refuses while new files are staged.** On 2026-10-28 15:07 Dann's `git add` of two new reports before `git merge --no-edit origin/cloud-lane-18` made git refuse the merge ("Your local changes ... would be overwritten"); the ship script then measured `Shane` without the lane (gate 4 3436). The order for a true merge is: merge first, then `git add` of new files, then the script. This settles the two older notes that disagreed (2026-10-15, add first; 2026-10-19, add after).
+- **A lane that changes `package.json` or `pnpm-lock.yaml` needs `pnpm install` on the Mac before the ship script.** Row 113 added `libheif-js`; gate 4 failed with the HEIC test file unable to load until Dann ran `pnpm install` (15:19).
+- **Every paste starts with `cd`, even mid-sequence.** Dann opens a new terminal between pastes; the desk told him he was already in the repository and he was not (15:10).
+- **`syntactic-break-unit.test.ts`'s 20,000-line property test times out at 5 s on the desk's two-core workspace** (5.5 s and 7.0 s) and passes with `--testTimeout=60000`; it passes on the Mac. Read a gate-4 failure there as timing before reading it as a fault.
+- **The real-page measure of stage 2b** needs the 18 build PDFs staged by harness letter (Kabalevsky from `~/Documents/Repertoire & Scores/Scores - vocal/`, a folder Dann must grant; *Sunless* split by pages 1-2, 9-10, 11-17, 18-23 for U1, U4, U5, U6; S and T from `_desk-heldout3-private/truth/`, the four opened files only; K and M from `_desk-2026-10-08/heldout2-scans/`; P from `~/Downloads`), the model `~/Downloads/_desk-prereform/models/rus_prereform_r2/rus_prereform_r2_29000.traineddata` (md5 `2ff2af3e`), homr's models fetched from GitHub releases, about 139 s a page on two cores, about 6 hours for 73 pages. The driver captures MusicXML before the arrival fold. Results tarball `~/Downloads/_desk-2026-10-27/desk-n135-real-results_2026-10-28.tgz`.
+- **GitHub pages are off the WebFetch allowlist; `pkg.go.dev` and Debian's tracker are on it** and carry upstream READMEs and copyright files.
