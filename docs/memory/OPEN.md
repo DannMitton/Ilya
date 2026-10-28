@@ -3306,3 +3306,10 @@ Every line is a default with its condition (`CONTRACT.md` tether 19); each was o
 - **The в look-through for a voiceless final (DESK DEFAULT from Grayson p. 251, read 2026-10-26):** a voiceless final before в plus a voiced obstruent takes the voicing across the в («лес вдали» → [lʲɛz vdɑˈlʲi]), by the technique "ignore /u/ (-d-) when it is in a position of regressive influence and ... look to the next letter in line". Condition: Dann may rule otherwise when the brief's pins are put to him. Today unchanged (`ˈlʲɛs`, Code's decision 1 in `../sessions/report-code-n198_r1_2026-10-26.md`).
 - **The Inspector blurb for a final consonant that keeps its voicing (RATIFIED 21:58, EN and FR):** `../sessions/ratified-retained-voicing-blurb_2026-10-26.md` (md5 `80e954f303c9bc427bf6aabfc107b62f`), keys `retained-voicing:<letter>` for б, в, г, д, ж, з in `processes` and `implications` of `data/blurb-composer.json`; process cited Grayson p. 251, implication pp. 251–252; the two French no-break spaces seated as `\u00A0`. Offered by the desk on Dann's question of 21:53; ruled on by him 21:58.
 - All three go to row 157's brief (`QUEUE.md`), Fable-reviewed before Code.
+
+## ROW 113: THE HEIC REFUSAL STRING (ratified by Dann 2026-10-27 23:30)
+
+`upload.err.imageHeic` (`apps/web/src/lib/i18n.ts:1154`), offered by Fable (row 113 review, amendment 7, `../sessions/review-fable-brief-row113_r1_2026-10-27.md`), ruled by Dann 23:30 (*"Yes I ratify both lines"*). After row 113 it fires only where the decoder fails or its files could not be fetched, so the old "cannot yet open" became untrue.
+
+- EN: Ilya could not open this iPhone photo. On a Mac, open the photo in Preview and choose File, then Export, then JPEG, and try again.
+- FR: Ilya n’a pas pu ouvrir cette photo d’iPhone. Sur un Mac, ouvrez la photo dans Aperçu et choisissez Fichier, puis Exporter, puis JPEG, et réessayez.

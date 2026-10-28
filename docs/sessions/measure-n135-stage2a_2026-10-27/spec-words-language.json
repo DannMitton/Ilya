@@ -1,0 +1,199 @@
+[
+ {
+  "src": "underlay-words.ts",
+  "test": "underlay-words.test.ts",
+  "muts": [
+   [
+    "sew: a lone hyphen does not join",
+    "if (held) held.goes = true;\n\t\t\telse if (open) glue = true;",
+    "if (held) held.goes = true;"
+   ],
+   [
+    "sew: a trailing hyphen does not continue the word",
+    "\t\tglue = endsHyphen;\n\t}\n\tflush();",
+    "\t\tglue = false;\n\t}\n\tflush();"
+   ],
+   [
+    "sew: a leading hyphen does not join",
+    "(glue || HYPHEN_AT_START.test(raw))",
+    "(glue)"
+   ],
+   [
+    "sew: joining hyphens kept in the text",
+    "return text.trim().replace(HYPHENS_AT_ENDS, '');",
+    "return text.trim();"
+   ],
+   [
+    "sew: an extender does not mark the syllable",
+    "if (open) open[open.length - 1].sustained = true;",
+    "/* mutant */"
+   ],
+   [
+    "sew: an extender breaks the word",
+    "if (open) open[open.length - 1].sustained = true;",
+    "if (open) { open[open.length - 1].sustained = true; open = null; }"
+   ],
+   [
+    "sew: syllabic middle given as begin",
+    "i === n - 1 ? 'end' : 'middle'",
+    "i === n - 1 ? 'end' : 'begin'"
+   ],
+   [
+    "sew: syllabic of one syllable not single",
+    "n === 1 ? 'single'",
+    "n === 0 ? 'single'"
+   ],
+   [
+    "note: two tokens on a note both kept",
+    "for (const i of at.slice(1)) drop.add(i);",
+    "/* mutant */"
+   ],
+   [
+    "note: the texts are not joined (the nearer seat's text only)",
+    "const text = [first.replace(HYPHEN_AT_END_RUN, ''), ...middle, last.replace(HYPHEN_AT_START_RUN, '')].join('');",
+    "const text = seats[near].text;"
+   ],
+   [
+    "note: hyphens between joined texts kept",
+    "const text = [first.replace(HYPHEN_AT_END_RUN, ''), ...middle, last.replace(HYPHEN_AT_START_RUN, '')].join('');",
+    "const text = [first, ...middle, last].join('');"
+   ],
+   [
+    "note: a lone hyphen between two tokens on one note is kept",
+    "if (seats[i].kind === 'joint') drop.add(i);",
+    "/* mutant */"
+   ],
+   [
+    "unseated in a word: its letters dropped (a hyphened one)",
+    "if (endsHyphen) pending += text;",
+    "if (endsHyphen) pending += '';"
+   ],
+   [
+    "unseated in a word: the letters of one that ends the word dropped",
+    "open[open.length - 1].text += pending + text;",
+    "open[open.length - 1].text += pending;"
+   ],
+   [
+    "unseated in a word: the text kept before it dropped at the next syllable",
+    "const syllable: Syllable = { note: seat.note, text: pending + text,",
+    "const syllable: Syllable = { note: seat.note, text: text,"
+   ],
+   [
+    "unseated in a word: pending text not flushed at the end",
+    "\tflush();\n\tfor (const word of words) {",
+    "\tfor (const word of words) {"
+   ],
+   [
+    "unseated word-opening token is not held",
+    "} else if (endsHyphen) {\n\t\t\t\tflush();",
+    "} else if (false) {\n\t\t\t\tflush();"
+   ],
+   [
+    "held text not put before the syllable that continues it",
+    "syllable.text = held.text + syllable.text;",
+    "/* mutant */"
+   ],
+   [
+    "a whole unseated word is merged into the word before it",
+    "\t\t\t} else if (endsHyphen) {\n\t\t\t\tflush();",
+    "\t\t\t} else if (open && !endsHyphen) {\n\t\t\t\topen[open.length - 1].text += text;\n\t\t\t} else if (endsHyphen) {\n\t\t\t\tflush();"
+   ],
+   [
+    "write: a rest is written to",
+    "if (!sung || REST.test(body) || HAS_LYRIC.test(body)) continue;",
+    "if (!sung || HAS_LYRIC.test(body)) continue;"
+   ],
+   [
+    "write: a note with a lyric is written to again",
+    "if (!sung || REST.test(body) || HAS_LYRIC.test(body)) continue;",
+    "if (!sung || REST.test(body)) continue;"
+   ],
+   [
+    "write: text not escaped",
+    "text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')",
+    "text"
+   ],
+   [
+    "write: the second part is written to",
+    "const stop = partEnd < 0 ? musicXml.length : partEnd;",
+    "const stop = musicXml.length;"
+   ],
+   [
+    "write: rests not counted in the numbering",
+    "const sung = byNote.get(ordinal++);\n\t\tif (m[0].endsWith('/>')) continue;",
+    "const sung = byNote.get(ordinal);\n\t\tif (m[0].endsWith('/>')) continue;"
+   ],
+   [
+    "write: the last syllable for a note wins",
+    "if (!byNote.has(s.note)) byNote.set(s.note, s);",
+    "byNote.set(s.note, s);"
+   ],
+   [
+    "write: lyric number 2, laid out",
+    "const lines = [`<lyric number=\"1\">`",
+    "const lines = [`<lyric number=\"2\">`"
+   ],
+   [
+    "write: lyric number 2, compact",
+    "text: `<lyric number=\"1\">${syllabic}${text}</lyric>`",
+    "text: `<lyric number=\"2\">${syllabic}${text}</lyric>`"
+   ],
+   [
+    "write: always LF",
+    "const [, eol, closeIndent] = tail;",
+    "const [, , closeIndent] = tail;\n\tconst eol = '\\n';"
+   ],
+   [
+    "write: note with attributes not counted",
+    "const NOTE = /<note(?=[\\s>])[^>]*>/g;",
+    "const NOTE = /<note>/g;"
+   ]
+  ]
+ },
+ {
+  "src": "underlay-language.ts",
+  "test": "underlay-language.test.ts",
+  "muts": [
+   [
+    "language: one-letter words counted",
+    "export const MIN_LETTERS = 2;",
+    "export const MIN_LETTERS = 1;"
+   ],
+   [
+    "language: three letters needed",
+    "export const MIN_LETTERS = 2;",
+    "export const MIN_LETTERS = 3;"
+   ],
+   [
+    "language: strictly more than half",
+    "known >= RUSSIAN_SHARE * counted",
+    "known > RUSSIAN_SHARE * counted"
+   ],
+   [
+    "language: a third is enough",
+    "export const RUSSIAN_SHARE = 0.5;",
+    "export const RUSSIAN_SHARE = 0.34;"
+   ],
+   [
+    "language: an empty row is Russian",
+    "counted > 0 && known",
+    "known"
+   ],
+   [
+    "language: no ё fold",
+    "if (isWord(letters) || (letters.includes('ё') && isWord(letters.replace(/ё/g, 'е')))) known++;",
+    "if (isWord(letters)) known++;"
+   ],
+   [
+    "language: case not folded",
+    "word.replace(/[^\\p{L}]/gu, '').toLowerCase()",
+    "word.replace(/[^\\p{L}]/gu, '')"
+   ],
+   [
+    "language: marks not stripped",
+    "word.replace(/[^\\p{L}]/gu, '').toLowerCase()",
+    "word.toLowerCase()"
+   ]
+  ]
+ }
+]

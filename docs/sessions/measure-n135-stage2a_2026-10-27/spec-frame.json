@@ -1,0 +1,153 @@
+[
+ {
+  "src": "underlay-frame.ts",
+  "test": "underlay-frame.test.ts",
+  "muts": [
+   [
+    "drop the deskew",
+    "const angle = skewAngle(grey, width, height);",
+    "const angle = 0;"
+   ],
+   [
+    "flip the angle's sign",
+    "const level = rotateGrey(grey, width, height, angle, paper);",
+    "const level = rotateGrey(grey, width, height, -angle, paper);"
+   ],
+   [
+    "closing kernel 1 by 1 (no closing)",
+    "const closed = closeInk(level, width, height, closingKernel(staffSpace));",
+    "const closed = closeInk(level, width, height, 1);"
+   ],
+   [
+    "scale to 48",
+    "export const DEFAULT_INK_HEIGHT = 32;",
+    "export const DEFAULT_INK_HEIGHT = 48;"
+   ],
+   [
+    "pad with white on grey paper",
+    "const framed = padAll(scaled.data, scaled.width, scaled.height, pad, paper);",
+    "const framed = padAll(scaled.data, scaled.width, scaled.height, pad, 255);"
+   ],
+   [
+    "default pad ratio 0.5 -> 0.25",
+    "export const DEFAULT_PAD_RATIO = 0.5;",
+    "export const DEFAULT_PAD_RATIO = 0.25;"
+   ],
+   [
+    "sweep to 1 degree",
+    "const SWEEP_TENTHS = 30;",
+    "const SWEEP_TENTHS = 10;"
+   ],
+   [
+    "sweep ties go to the larger angle",
+    "if (variance > bestVariance) {",
+    "if (variance >= bestVariance) {"
+   ],
+   [
+    "sweep tries the negative angle first on a tie",
+    "for (const tenths of [k, -k]) {",
+    "for (const tenths of [-k, k]) {"
+   ],
+   [
+    "rotation border filled with black",
+    "const level = rotateGrey(grey, width, height, angle, paper);",
+    "const level = rotateGrey(grey, width, height, angle, 0);"
+   ],
+   [
+    "sweep padding 120 px, not the crop's own height",
+    "\treturn h;\n}",
+    "\treturn 120;\n}"
+   ],
+   [
+    "ink threshold 128 -> 200",
+    "export const INK_BELOW = 128;",
+    "export const INK_BELOW = 200;"
+   ],
+   [
+    "extent from 5 percent",
+    "const TAIL_DENOMINATOR = 50;",
+    "const TAIL_DENOMINATOR = 20;"
+   ],
+   [
+    "extent measures from the first ink row, not 2 percent",
+    "if (first < 0 && sum * TAIL_DENOMINATOR >= total) first = y;",
+    "if (first < 0 && sum > 0) first = y;"
+   ],
+   [
+    "paper tone: the last of the top bins on a tie",
+    "for (let g = 1; g < 256; g++) if (bins[g] > bins[best]) best = g;",
+    "for (let g = 1; g < 256; g++) if (bins[g] >= bins[best]) best = g;"
+   ],
+   [
+    "closing dilates but does not erode",
+    "const closed = filterK(filterK(inverted, w, h, size, true), w, h, size, false);",
+    "const closed = filterK(inverted, w, h, size, true);"
+   ],
+   [
+    "a crop with no ink is scaled anyway",
+    "\tif (extent) {",
+    "\tif (true) {"
+   ],
+   [
+    "unframe: padding not removed",
+    "const dx = (x - t.pad) / t.scale - cx;",
+    "const dx = x / t.scale - cx;"
+   ],
+   [
+    "unframe: scale not removed",
+    "const dy = (y - t.pad) / t.scale - cy;",
+    "const dy = (y - t.pad) - cy;"
+   ],
+   [
+    "unframe: turn applied the wrong way",
+    "return { x: cx + dx * cos - dy * sin, y: cy + dx * sin + dy * cos };",
+    "return { x: cx + dx * cos + dy * sin, y: cy - dx * sin + dy * cos };"
+   ],
+   [
+    "resize: both axes by the factor -> width only",
+    "const nh = Math.max(1, Math.round(h * factor));",
+    "const nh = h;"
+   ],
+   [
+    "padding an absolute 16 px, the ratio ignored",
+    "Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * inkHeight)",
+    "16"
+   ],
+   [
+    "padding a fraction of the crop's height, not of the ink height",
+    "Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * inkHeight)",
+    "Math.round((options.padRatio ?? DEFAULT_PAD_RATIO) * crop.height)"
+   ],
+   [
+    "closing kernel an absolute 3, the staff space ignored",
+    "closeInk(level, width, height, closingKernel(staffSpace))",
+    "closeInk(level, width, height, 3)"
+   ],
+   [
+    "closing kernel share 0.1 -> 0.2",
+    "export const CLOSE_SHARE = 0.1;",
+    "export const CLOSE_SHARE = 0.2;"
+   ],
+   [
+    "closing kernel may be even",
+    "\tif (k % 2 === 0) k -= 1;\n",
+    "\t"
+   ],
+   [
+    "closing kernel not floored at 1",
+    "\treturn Math.max(1, k);",
+    "\treturn k;"
+   ],
+   [
+    "closing kernel rounds up to the next odd number",
+    "\tif (k % 2 === 0) k -= 1;",
+    "\tif (k % 2 === 0) k += 1;"
+   ],
+   [
+    "closing window not cut at the edges (outside counts as the opposite value)",
+    "for (let d = Math.max(0, x - r); d <= Math.min(w - 1, x + r); d++) v = pick(v, data[y * w + d]);",
+    "for (let d = x - r; d <= x + r; d++) v = pick(v, d < 0 || d >= w ? (max ? 255 : 0) : data[y * w + d]);"
+   ]
+  ]
+ }
+]

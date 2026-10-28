@@ -330,6 +330,20 @@ body {
 		line-height: 0 !important;
 	}
 
+	/* QUEUE row 134. THE PAGES KEEP THEIR SCREEN COLOURS ON PAPER. With
+	   `economy`, the initial value, a browser prints with backgrounds off and
+	   darkens light coloured text: measured 2026-10-27 in Chromium, the gloss
+	   row, the logo bracket, Insights' `.within` bar and `.band-swatch` did not
+	   print as drawn. `exact` is set on the three stacks only, never on `*` or
+	   `body`, so the Guide and the drawer are untouched. The sheet itself stays
+	   white (`--paper-cream` above, `.paper-page` below). */
+	.paper-container,
+	.markup-paper-container,
+	.insights-container {
+		print-color-adjust: exact;
+		-webkit-print-color-adjust: exact;
+	}
+
 	/* ── Page-level print rules ───────────────────────────── */
 
 	.paper-page {

@@ -1,0 +1,12 @@
+rows differing from frameRow (any of: size, or more than 1 grey level in more than 0.5% of pixels), of 200; size differs; angle differs
+  none of the three (the text reading): (3, 0, 3)
+  rotation border white only: (102, 6, 3)
+  sweep pad 120 only: (3, 0, 3)
+  paper tone after the scale only: (73, 0, 3)
+  all three (the harness reading): (143, 6, 3)
+  row 2: crop (105, 206), paper 0, oracle (harness) (152, 267) angle -1.9, frameRow (64, 95) angle -1.9, ink pixels <128: 2128, row 0 of the crop: [182 183 184 185 187]
+  row 29: crop (89, 440), paper 0, oracle (harness) (146, 595) angle -1.7, frameRow (64, 190) angle -1.7, ink pixels <128: 4176, row 0 of the crop: [153 154 155 156 157]
+  row 71: crop (67, 235), paper 0, oracle (harness) (101, 275) angle -1.0, frameRow (64, 144) angle -1, ink pixels <128: 3720, row 0 of the crop: [219 220 222 223 224]
+  row 125: crop (101, 511), paper 0, oracle (harness) (173, 743) angle 1.4, frameRow (64, 194) angle 1.4, ink pixels <128: 6509, row 0 of the crop: [216 217 218 219 220]
+  row 145: crop (63, 327), paper 0, oracle (harness) (102, 393) angle 1.8, frameRow (64, 198) angle 1.8, ink pixels <128: 5162, row 0 of the crop: [190 192 193 194 195]
+  row 160: crop (86, 251), paper 0, oracle (harness) (142, 353) angle -2.1, frameRow (64, 125) angle -2.1, ink pixels <128: 2750, row 0 of the crop: [220 221 224 226 227]

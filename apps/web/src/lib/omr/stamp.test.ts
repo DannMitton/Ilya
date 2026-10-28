@@ -4,7 +4,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { HOMR_WEB_VERSION, OMR_MODEL, READER_STAMP } from './stamp';
+import { HOMR_WEB_VERSION, OMR_MODEL, READER_STAMP, UNDERLAY_READER } from './stamp';
 
 describe('READER_STAMP', () => {
 	it('names the installed homr-web version and the model', () => {
@@ -17,5 +17,10 @@ describe('READER_STAMP', () => {
 	it('is the version the app depends on', () => {
 		const app = JSON.parse(readFileSync('package.json', 'utf8'));
 		expect(app.dependencies['homr-web']).toContain(`homr-web-${HOMR_WEB_VERSION}.tgz`);
+	});
+
+	it('does not yet carry the underlay reader: joining them re-reads every stored scan', () => {
+		expect(UNDERLAY_READER).not.toBe('');
+		expect(READER_STAMP).not.toContain(UNDERLAY_READER);
 	});
 });
