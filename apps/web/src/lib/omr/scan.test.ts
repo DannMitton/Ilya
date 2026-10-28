@@ -4,7 +4,7 @@
  * models); `read` stands in for it.
  */
 import { describe, expect, it, vi } from 'vitest';
-import { readScanAsScore, useIlyaReader, type ScanHooks } from './scan';
+import { readScanAsScore, type ScanHooks } from './scan';
 import type { OmrReadResult } from './homr-reader';
 
 function hooks() {
@@ -125,13 +125,5 @@ describe('the wait drawn on the Paper', () => {
 			await readScanAsScore(scan, 'pdf', h, async () => ({ ok: false, error, log: '' }) as OmrReadResult, wait);
 			expect(log).toEqual(['begin', 'cancel']);
 		}
-	});
-});
-
-describe('useIlyaReader', () => {
-	it('is true only for ?reader=ilya', () => {
-		expect(useIlyaReader('?reader=ilya')).toBe(true);
-		expect(useIlyaReader('?reader=homr')).toBe(false);
-		expect(useIlyaReader('')).toBe(false);
 	});
 });

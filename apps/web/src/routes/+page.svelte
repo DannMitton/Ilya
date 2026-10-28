@@ -3277,15 +3277,15 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	/**
 	 * What the uploader needs to bring a stored score back.
 	 *
-	 * N.59 step 7: a page read off a picture comes back with the clef and key it
-	 * was read with, so the restore never asks again.
+	 * The stored page's clef and key answers are no longer handed on: they were
+	 * the old page reader's (retired 2026-10-27), and `page` is kept in the
+	 * signature because `SongSource.page` still holds them for older songs.
 	 */
 	function restoreFrom(source: SourceBytes | null, page: PageProvenance | null | undefined) {
 		if (!source) return null;
 		return {
 			fileName: source.fileName,
 			bytes: source.bytes,
-			answers: page ? { clef: page.clef, octaveChange: page.octaveChange, fifths: page.fifths } : null,
 			reading: source.reading ?? null,
 		};
 	}

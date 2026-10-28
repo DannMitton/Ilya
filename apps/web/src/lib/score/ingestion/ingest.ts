@@ -41,8 +41,6 @@ import {
 	decodeScoreText,
 	type DetectionFailure,
 } from './format-detection';
-import { recognizedToMusicXml, type EngravingAnswers } from './recognized-to-musicxml';
-import type { ReadReport, RecognizedOutput } from '$lib/reader/recognized';
 import { listZipEntries, readZipEntry, ZipReadError, type ZipFailureKind } from '$lib/reader/zip-reader';
 
 // ── Provenance (drives the fidelity surface, Round 9 Item 1) ─────
@@ -52,22 +50,15 @@ export type IngestProvenance =
 	| { format: 'musicxml'; via: 'direct' }
 	| { format: 'musicxml'; via: 'mxl' }
 	| { format: 'mnx'; via: 'denigma'; sourceFormat: 'musx' }
-	| { format: 'musicxml'; via: 'webmscore'; sourceFormat: 'mscz' }
-	/** N.59, Ruling C: read off a picture by the E.16 page reader under Pyodide. */
-	| { format: 'musicxml'; via: 'reader'; sourceFormat: 'pdf' | 'image' };
+	| { format: 'musicxml'; via: 'webmscore'; sourceFormat: 'mscz' };
 
 /**
- * Which dismissible fidelity banner a provenance earns.
- *
- * N.59 adds the `reader` tier, which this function's own comment anticipated.
- * It is the LOWEST-fidelity arrival Ilya has: denigma converts one notation
- * format to another and can be wrong about details, while the reader is
- * reading ink off a photograph and can be wrong about the notes. A singer is
- * told so once, dismissibly, rather than by a mark on the page (E.47's strike).
+ * Which dismissible fidelity banner a provenance earns. The `reader` tier
+ * left with the old page reader (2026-10-27): a scan arrives as homr's
+ * MusicXML, which ingests as `via: 'direct'` and earns no banner.
  */
-export const fidelityBanner = (p: IngestProvenance): 'denigma' | 'reader' | null => {
+export const fidelityBanner = (p: IngestProvenance): 'denigma' | null => {
 	if (p.via === 'denigma') return 'denigma';
-	if (p.via === 'reader') return 'reader';
 	return null;
 };
 
@@ -77,8 +68,7 @@ export const fidelityBanner = (p: IngestProvenance): 'denigma' | 'reader' | null
  * A file with no lyric elements really has no words in it, and says so. A scan
  * or photograph is different: its print may carry words that Ilya's reader
  * does not read, so its wordlessness is Ilya's limit, not a fact about the
- * song. The two are told apart by `provenance.via === 'reader'` (the E.16
- * reader behind `?reader=ilya`) or by the score's own `source.origin`: the
+ * song. The two are told apart by the score's own `source.origin`: the
  * singer's homr route hands its reading back as a `.musicxml` file, which
  * ingests as `via: 'direct'`, but homr stamps `<software>homr</software>` and
  * the parser reads that as `'homr-musicxml-from-image'` (row 121). A pure
@@ -87,24 +77,13 @@ export const fidelityBanner = (p: IngestProvenance): 'denigma' | 'reader' | null
 export type NoLyricsNoticeKey = 'upload.banner.noLyrics' | 'upload.banner.noLyricsScan';
 
 export const noLyricsNoticeKey = (p: IngestProvenance, origin: SourceOrigin): NoLyricsNoticeKey =>
-	p.via === 'reader' || origin === 'homr-musicxml-from-image' ? 'upload.banner.noLyricsScan' : 'upload.banner.noLyrics';
+	origin === 'homr-musicxml-from-image' ? 'upload.banner.noLyricsScan' : 'upload.banner.noLyrics';
 
 export interface IngestedScore {
 	fileName: string;
 	provenance: IngestProvenance;
 	/** May carry non-fatal warnings; fatal parses become `IngestError`s. */
 	result: ParseResult;
-	/**
-	 * N.59, Ruling D. Present only on the reader route. The drawer declares
-	 * these numbers; nothing here is ever drawn on the page.
-	 */
-	readReport?: ReadReport;
-}
-
-/** What the page-reader seam hands back (N.59). */
-export interface PageRead {
-	ro: RecognizedOutput;
-	report: ReadReport;
 }
 
 // ── Errors ───────────────────────────────────────────────────────
@@ -121,18 +100,8 @@ export type IngestError =
 	| { code: 'INVALID_MNX_JSON' }
 	| { code: 'PARSE_FAILED'; errors: ParseError[] }
 	| { code: 'MSCZ_CONVERTER_UNAVAILABLE' }
-	/** N.59: the page reader was never wired in (a caller without the dep). */
+	/** A picture or PDF reached dispatch. `take()` sends every scan to homr first. */
 	| { code: 'PAGE_READER_UNAVAILABLE' }
-	/** N.59: Pyodide, its packages, or the reader modules did not load. */
-	| { code: 'PAGE_READER_LOAD_FAILED'; message: string }
-	/** N.59: the picture loaded but the read itself failed. */
-	| { code: 'PAGE_READ_FAILED'; message: string }
-	/** N.59: the browser could not decode the picture at all (HEIC on Chromium). */
-	| { code: 'IMAGE_UNDECODABLE' }
-	/** N.59 step 8: the PDF could not be opened, or carries no pages. */
-	| { code: 'PDF_UNREADABLE'; message: string }
-	/** N.96: the PDF renders blank and its own bytes carry a /JBIG2Decode filter. */
-	| { code: 'PDF_JBIG2_UNDECODED'; message: string }
 	| DenigmaError
 	| ResourceError;
 
@@ -152,21 +121,6 @@ export interface IngestDeps {
 	 * `MSCZ_CONVERTER_UNAVAILABLE` rather than a crash.
 	 */
 	msczConvert?: (bytes: Uint8Array, fileName: string) => Promise<string>;
-
-	/**
-	 * N.59, Ruling C: the page-reader seam. Whole picture in, recognized output
-	 * plus a read report out. The component owns the Worker's lifecycle, the
-	 * greyscale conversion, and the decode, exactly as it owns webmscore's.
-	 * Absent for every caller that is not the uploader, so a picture then lands
-	 * in PAGE_READER_UNAVAILABLE rather than a crash.
-	 */
-	readPages?: (file: File, answers: EngravingAnswers) => Promise<PageRead>;
-
-	/**
-	 * N.59, Ruling A: the singer's clef, key, and octave, answered in the
-	 * uploader before the read because the reader detects none of them.
-	 */
-	engravingAnswers?: EngravingAnswers;
 
 	/** Parser overrides for routing tests; real parsers by default. */
 	mnxParser?: ScoreParser;
@@ -230,38 +184,11 @@ export async function ingestScoreFile(file: File, deps: IngestDeps): Promise<Ing
 		}
 
 		case 'pdf':
-		case 'image': {
-			if (!deps.readPages || !deps.engravingAnswers) {
-				return err({ code: 'PAGE_READER_UNAVAILABLE' });
-			}
-			let read: PageRead;
-			try {
-				read = await deps.readPages(file, deps.engravingAnswers);
-			} catch (e) {
-				return err(asReaderError(e));
-			}
-			const { xml, counts } = recognizedToMusicXml(read.ro, deps.engravingAnswers);
-			const outcome = await parseMusicXmlText(xml, file.name, musicxmlParser, {
-				format: 'musicxml',
-				via: 'reader',
-				sourceFormat: detected.format,
-			});
-			if (!outcome.ok) return outcome;
-			// The Worker counts substitutions over `ro`; the converter counts what
-			// it actually EMITTED. The singer is shown the second, because that is
-			// what is on their page. The geometry and timings stay the Worker's.
-			return {
-				ok: true,
-				ingested: {
-					...outcome.ingested,
-					readReport: {
-						...read.report,
-						pitchSubstitutions: counts.pitchSubstitutions,
-						durationSubstitutions: counts.durationSubstitutions,
-					},
-				},
-			};
-		}
+		case 'image':
+			// A picture or PDF reaching dispatch is the uploader's fault: `take()`
+			// routes every scan to homr before dispatch, and homr's MusicXML is
+			// what arrives here.
+			return err({ code: 'PAGE_READER_UNAVAILABLE' });
 
 		case 'mscz': {
 			if (!deps.msczConvert) return err({ code: 'MSCZ_CONVERTER_UNAVAILABLE' });
@@ -388,24 +315,6 @@ async function readMxlRootfile(bytes: Uint8Array): Promise<Uint8Array> {
  * postMessage boundary), so `instanceof` is useless here; the code field
  * is the contract (engine errors.ts).
  */
-/**
- * Narrow a thrown page-reader failure. The Worker rejects with plain
- * `{ code, message }` objects across a postMessage boundary, so `instanceof`
- * is useless here and the code field is the contract, exactly as for denigma.
- */
-function asReaderError(e: unknown): IngestError {
-	if (typeof e === 'object' && e !== null && 'code' in e) {
-		const code = (e as { code: unknown }).code;
-		const message = String((e as { message?: unknown }).message ?? '');
-		if (code === 'READER_LOAD_FAILED') return { code: 'PAGE_READER_LOAD_FAILED', message };
-		if (code === 'READ_FAILED') return { code: 'PAGE_READ_FAILED', message };
-		if (code === 'IMAGE_UNDECODABLE') return { code: 'IMAGE_UNDECODABLE' };
-		if (code === 'PDF_UNREADABLE') return { code: 'PDF_UNREADABLE', message };
-		if (code === 'PDF_JBIG2_UNDECODED') return { code: 'PDF_JBIG2_UNDECODED', message };
-	}
-	return { code: 'PAGE_READ_FAILED', message: e instanceof Error ? e.message : String(e) };
-}
-
 function asConverterError(e: unknown): IngestError {
 	if (typeof e === 'object' && e !== null && 'code' in e) {
 		const code = (e as { code: unknown }).code;
