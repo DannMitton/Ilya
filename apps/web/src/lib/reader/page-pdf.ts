@@ -222,7 +222,7 @@ export async function rasterizePdf(
 				if (hasJbig2 && canvasIsBlank(ctx, canvas.width, canvas.height)) {
 					// Message here is dev-facing only. What the user sees is the
 					// approved bilingual string in i18n.ts, reached by `code`
-					// through `asReaderError` and `ScoreUploader`'s `classify()` --
+					// through `rasterizeFirstPage`'s catch in `ScoreUploader` --
 					// the same path `PdfUnreadableError` already takes.
 					throw new PdfJbig2UndecodedError(
 						`page ${n} rendered blank and this PDF contains a /JBIG2Decode stream`

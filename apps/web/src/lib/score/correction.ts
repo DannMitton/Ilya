@@ -541,12 +541,14 @@ function amend(ev: VocalLineEvent, c: NoteCorrection): VocalLineEvent {
 		   note that was there rather than the arrival guess.
 
 		   THE TEST IS `c.type`, NOT `type`, and an N.97b acceptance test is why.
-		   A rest the READER read can carry a pitch correction: the id resolves,
+		   A rest a reader read can carry a pitch correction: the id resolves,
 		   the correction lands, and the pitch is inert because the renderer
 		   draws the rest and never reaches it
-		   (`staff-renderer.ts:1064`). `recognized-to-musicxml.test.ts:365` pins
-		   exactly that, on a real captured page. Dropping the pitch from every
-		   rest broke it. Only the singer's own conversion drops one. */
+		   (`staff-renderer.ts:1064`). The test that pinned exactly that, on a
+		   real captured page, belonged to the old page reader's converter and
+		   went with it on 2026-10-27; no remaining test pins it. Dropping the
+		   pitch from every rest broke it. Only the singer's own conversion
+		   drops one. */
 		...(c.type === 'rest' ? { pitch: undefined } : c.pitch ? { pitch: c.pitch } : {}),
 		duration: durationChanged
 			? {
