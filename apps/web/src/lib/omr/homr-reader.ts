@@ -40,6 +40,9 @@ import { loadTemplates, type TemplateMark } from './tuplet-digits';
 import { OMR_MODEL } from './stamp';
 import type { ReadMetres } from './metre-client';
 import type { MetreSeen } from './metre-witness';
+import type { ReadUnderlay, UnderlayPage } from './underlay-page';
+import { applyUnderlay } from './underlay-song';
+import { underlayOn } from './underlay-switch';
 import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
 
 /**
@@ -93,6 +96,8 @@ export interface ReaderDeps {
 	decode?: DecodeRegion;
 	/** Reads the time signatures printed on a page's voice staves (`metre-client.ts`). Absent: the join states homr's metre, as before row 57. */
 	metres?: ReadMetres;
+	/** Reads the words printed under a page's voice staff (`underlay-page.ts`). Absent: the song is joined without words, as before N.135. Wired only with the hidden switch on. */
+	underlay?: ReadUnderlay;
 }
 
 /** A recognizer, with why it is not on WebGPU if it was not asked to be. */
@@ -242,6 +247,8 @@ interface Pass {
 	image: number[];
 	/** For each page in `xmls`, what the time-signature reader saw on it, read while homr reads the next page. */
 	metres: Promise<MetreSeen[] | null>[];
+	/** For each page in `xmls`, the words read under its voice staff, or null where they could not be (or the switch is off). */
+	underlay: Promise<UnderlayPage | null>[];
 	/** The error that stopped the pass, if one did. `not_music` never stops it. */
 	failure: { error: string; log: string } | null;
 }
@@ -253,6 +260,21 @@ export interface Reader {
 }
 
 const WASM: PreferredBackend = 'wasm-threads';
+
+/**
+ * One page's underlay read, which never rejects: a reader that throws answers
+ * null with one console line, and the song is joined as it was. Null too where
+ * there is no reader (the switch is off) or homr gave no staff boxes.
+ */
+function readWords(read: ReadUnderlay | undefined, image: Blob, musicXml: string, staves: unknown): Promise<UnderlayPage | null> {
+	if (!read || !Array.isArray(staves)) return Promise.resolve(null);
+	return Promise.resolve()
+		.then(() => read(image, musicXml, staves))
+		.catch((err) => {
+			console.info(`[omr] underlay: the page was not read (${String((err as Error)?.message ?? err)})`);
+			return null;
+		});
+}
 
 /** Makes the reader. One per app; tests make their own with fakes. */
 export function makeReader(deps: ReaderDeps): Reader {
@@ -300,6 +322,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 		const staves: (number | null)[] = [];
 		const image: number[] = [];
 		const metres: Promise<MetreSeen[] | null>[] = [];
+		const underlay: Promise<UnderlayPage | null>[] = [];
 		for (let i = 0; i < images.length; i++) {
 			const result = await rec.recognizePage(images[i], {
 				ocr: false,
@@ -310,6 +333,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 				staves.push(wideStaves(result.staves));
 				image.push(i);
 				metres.push(deps.metres && Array.isArray(result.staves) ? deps.metres(images[i], result.musicXml, result.staves) : Promise.resolve(null));
+				underlay.push(readWords(deps.underlay, images[i], result.musicXml, result.staves));
 				continue;
 			}
 			if (result.error === 'not_music') continue;
@@ -318,9 +342,9 @@ export function makeReader(deps: ReaderDeps): Reader {
 				// `worker_lost` from then on, so it is disposed and the next scan makes another.
 				void dispose(mine, rec);
 			}
-			return { xmls, staves, image, metres, failure: { error: result.error, log: result.log } };
+			return { xmls, staves, image, metres, underlay, failure: { error: result.error, log: result.log } };
 		}
-		return { xmls, staves, image, metres, failure: null };
+		return { xmls, staves, image, metres, underlay, failure: null };
 	}
 
 	async function read(images: readonly Blob[], onProgress?: (p: OmrProgress) => void): Promise<OmrReadResult> {
@@ -369,18 +393,25 @@ export function makeReader(deps: ReaderDeps): Reader {
 			return { ok: false, error: 'not_music', log: `homr found no music on any page${note ? ` (${note})` : ''}` };
 		}
 		const song = withoutCovers(
-			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]], metres: found.metres[i] })),
+			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]], metres: found.metres[i], underlay: found.underlay[i] })),
 			found.staves,
 		);
+		// The words under the voice staff, written into each page's MusicXML (the notes' text rides through the join) only where every page answered and passed.
+		let pages = song.map((p) => p.xml);
+		if (deps.underlay) {
+			const applied = applyUnderlay(pages, await Promise.all(song.map((p) => p.underlay)));
+			console.info(`[omr] underlay: ${applied.line}`);
+			pages = applied.xmls;
+		}
 		let musicXml: string;
 		try {
 			if (deps.decode) {
 				const seen = deps.metres ? await Promise.all(song.map((p) => p.metres)) : undefined;
-				const joined = await joinLookingAtPages(song.map((p) => p.xml), song.map((p) => p.image), deps.decode, loadTemplates, seen);
+				const joined = await joinLookingAtPages(pages, song.map((p) => p.image), deps.decode, loadTemplates, seen);
 				musicXml = joined.musicXml;
 				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} bars, read ${joined.numbers.length}${joined.numbers.length ? ` (${joined.numbers.join(', ')})` : ''}`);
 				for (const line of joined.metreLog) console.info(`[omr] metre: ${line}`);
-			} else musicXml = joinPages(song.map((p) => p.xml));
+			} else musicXml = joinPages(pages);
 		} catch (err) {
 			return { ok: false, error: 'join_failed', log: message(err) };
 		}
@@ -411,6 +442,11 @@ const reader = makeReader({
 		typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined'
 			? undefined
 			: (image, xml, staves) => import('./metre-client').then(({ readMetresInWorker }) => readMetresInWorker(image, xml, staves)),
+	// Only with the hidden switch on (`?words=read`): off, no Worker is made and nothing is fetched.
+	underlay:
+		underlayOn() && typeof Worker !== 'undefined' && typeof OffscreenCanvas !== 'undefined'
+			? (image, xml, staves) => import('./underlay-client').then(({ readUnderlayInWorker }) => readUnderlayInWorker(image, xml, staves))
+			: undefined,
 });
 
 /** True once a recognizer has been made in this session. */

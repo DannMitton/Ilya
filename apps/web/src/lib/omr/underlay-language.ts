@@ -32,19 +32,29 @@ function lettersOf(word: string): string {
 }
 
 /**
- * `words` are the row's sewn words, as read (`sewWords`, joined). `isWord`
- * is asked about each word of two or more letters, as its letters in lower
- * case, and, where the word holds a ё, again with it written е. A row with no
- * word of two or more letters is `other`: there is nothing to witness.
+ * Whether the dictionary holds the word: null for a word of fewer than
+ * `MIN_LETTERS` letters, which counts toward nothing; else true or false.
+ * `isWord` is asked for the word's letters in lower case, and, where the word
+ * holds a ё, again with it written е.
+ */
+export function wordKnown(word: string, isWord: (word: string) => boolean): boolean | null {
+	const letters = lettersOf(word);
+	if ([...letters].length < MIN_LETTERS) return null;
+	return isWord(letters) || (letters.includes('ё') && isWord(letters.replace(/ё/g, 'е')));
+}
+
+/**
+ * `words` are the row's sewn words, as read (`sewWords`, joined). A row with
+ * no word of two letters or more is `other`: there is nothing to witness.
  */
 export function rowLanguage(words: string[], isWord: (word: string) => boolean): RowLanguage {
 	let counted = 0;
 	let known = 0;
 	for (const word of words) {
-		const letters = lettersOf(word);
-		if ([...letters].length < MIN_LETTERS) continue;
+		const here = wordKnown(word, isWord);
+		if (here === null) continue;
 		counted++;
-		if (isWord(letters) || (letters.includes('ё') && isWord(letters.replace(/ё/g, 'е')))) known++;
+		if (here) known++;
 	}
 	return counted > 0 && known >= RUSSIAN_SHARE * counted ? 'russian' : 'other';
 }

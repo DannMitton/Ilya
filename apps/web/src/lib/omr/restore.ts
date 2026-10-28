@@ -12,7 +12,8 @@
  * Nothing here touches the browser, the library, or the screen. `read` stands
  * in for `readScan`, so every branch is a unit test.
  */
-import { READER_STAMP, type KeptReading } from './stamp';
+import type { KeptReading } from './stamp';
+import { scanStamp } from './underlay-switch';
 import type { OmrProgress, OmrReadResult } from './homr-reader';
 import { logRead, readingFile, readScan } from './scan';
 import { readingWait, type WaitHooks } from '$lib/score/reading-wait.svelte';
@@ -37,7 +38,7 @@ export type Restored =
 	| { ok: false; error: string; log: string };
 
 /** True where a kept reading was made by the reader that is installed now. */
-export function isCurrent(reading: KeptReading | null | undefined, stamp: string = READER_STAMP): reading is KeptReading {
+export function isCurrent(reading: KeptReading | null | undefined, stamp: string = scanStamp()): reading is KeptReading {
 	return !!reading && reading.stamp === stamp && typeof reading.musicXml === 'string' && reading.musicXml.length > 0;
 }
 
@@ -47,7 +48,7 @@ export async function restoreScan(
 	kept: KeptReading | null | undefined,
 	read: (file: File, kind: ScanKind, onProgress?: (p: OmrProgress) => void) => Promise<OmrReadResult>,
 	onProgress?: (p: OmrProgress) => void,
-	stamp: string = READER_STAMP,
+	stamp: string = scanStamp(),
 ): Promise<Restored> {
 	if (isCurrent(kept, stamp)) return { ok: true, musicXml: kept.musicXml, from: 'kept' };
 	const result = await read(file, kind, onProgress);

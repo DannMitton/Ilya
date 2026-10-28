@@ -1,0 +1,3 @@
+22488 words in 72 readings; 15433 letter-bearing parts by the harness, 789 words split into two parts or more; 267 words differ between splitTokens and tokens_of
+  230: a letter outside the harness's letter set (isalpha, but not in split_internal's), which splitTokens counts as a letter
+  37: a space around the harness text, which splitTokens trims
