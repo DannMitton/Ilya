@@ -223,6 +223,27 @@ The first run requested `/heif/libheif.wasm` twice per drop. Several routes each
 
 Same as the step 1 table except web test, now 3249 passed and 1 skipped (3250). Web check 0 errors and 12 warnings in 5 files, ratchets OK, the other five unchanged.
 
+## After step 2: the merge of `origin/Shane` and the ratified refusal (2026-10-28)
+
+**Merge.** `origin/Shane` at `48c36afd` (batch D, rows 122 and 134) merged into `cloud-lane-18` as `c93dac0e`. One conflict, the expected one, in `ScoreUploader.svelte`, in the `readScanAsScore` hooks. Resolved as the desk ruled: Shane's multi-line `ingest` hook (it sets `ui.scanKind` after `handleFile`, then `announceArrival`) and my poem line, `readAsPoemByOcr(inkPng(file, ink), null, true, false)`. No other file conflicted. `ScoreUploader.svelte` is 1,349 lines, the figure the desk measured; its ceiling in `ratchets.json` is Shane's.
+
+**The string.** `upload.err.imageHeic` in `i18n.ts` (line 1154) now reads, EN: "Ilya could not open this iPhone photo. On a Mac, open the photo in Preview and choose File, then Export, then JPEG, and try again." FR: "Ilya n’a pas pu ouvrir cette photo d’iPhone. Sur un Mac, ouvrez la photo dans Aperçu et choisissez Fichier, puis Exporter, puis JPEG, et réessayez." Both are the ratified words of Dann, 2026-10-27 23:30. The two apostrophes in the French are U+2019, checked by code point (the non-ASCII characters on that line are U+2019, U+2019, U+00E7, U+00E9). Pinned in `insights/ratified-lines.test.ts` beside the other ratified lines, in two tests: English, and French with the apostrophes counted by code point. The two e2e specs that matched the old English now match "could not open this iPhone photo".
+
+**Eight gates on the merged tip.**
+
+| Gate | Result |
+|---|---|
+| phonology | 291 passed (291) |
+| dictionary | 248 passed (248) |
+| web check | 0 errors, 12 warnings in 5 files |
+| web test | 3456 passed, 1 skipped (3457), 190 files, with one qualification below |
+| score-parser | 775 passed, 5 skipped (780) |
+| blurb | 145 passed (145) |
+| integration | 55 passed (55) |
+| ratchets | OK (571 source files) |
+
+**Qualification on web test.** `src/lib/text/syntactic-break-unit.test.ts`, "property: 20000 random lines ...", is Shane's. In this sandbox it runs in about 9.1 s and so times out at vitest's default 5,000 ms, alone as well as in the full run. With `--testTimeout=120000` all 19 tests in the file pass. The file is byte-identical to `origin/Shane`'s and nothing of mine touches `src/lib/text/`. I did not change the test. The desk measured it green on its own machine; a slower machine will meet the same limit.
+
 ## What I could not establish
 
 - (d), the real iPhone photograph: not available to me. The `ILYA_HEIC_REAL` test is written and skipped; its upright metric (row-mean variance against column-mean variance) was never run on a real photograph.

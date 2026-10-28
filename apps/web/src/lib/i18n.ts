@@ -1151,7 +1151,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// `imageHeic` replaces `imageUndecodable` only where the picture sniffs as
 	// HEIC or HEIF; `pictureUnclear` is every refusal of a picture the poem
 	// route could not read, the Russian guard's included.
-	'upload.err.imageHeic':        { en: 'Ilya cannot yet open iPhone photos in HEIC format. On a Mac, open the photo in Preview and choose File, then Export, then JPEG.', fr: 'Ilya ne peut pas encore ouvrir les photos d’iPhone en format HEIC. Sur un Mac, ouvrez la photo dans Aperçu et choisissez Fichier, puis Exporter, puis JPEG.' },
+	'upload.err.imageHeic':        { en: 'Ilya could not open this iPhone photo. On a Mac, open the photo in Preview and choose File, then Export, then JPEG, and try again.', fr: 'Ilya n’a pas pu ouvrir cette photo d’iPhone. Sur un Mac, ouvrez la photo dans Aperçu et choisissez Fichier, puis Exporter, puis JPEG, et réessayez.' },
 	'upload.err.pictureUnclear':   { en: 'Ilya could not read this picture clearly. A flat scan or a PDF works best.', fr: 'Ilya n’a pas pu lire cette image clairement. Une numérisation à plat ou un PDF donne de meilleurs résultats.' },
 	'upload.err.pdfUnreadable':    { en: 'Ilya could not open that PDF. If it is password protected, save an unlocked copy and try again.', fr: 'Ilya n’a pas pu ouvrir ce PDF. S’il est protégé par un mot de passe, enregistrez-en une copie déverrouillée et réessayez.' },
 	// N.96. Both strings are Dann's own wording, the French ruled 2026-08-24

@@ -15,7 +15,7 @@ const FIXTURES = 'src/lib/reader/fixtures';
 const SHOTS = process.env.HEIC_SHOTS ? '../../docs/sessions/row113-heic-shots' : null;
 const OBSERVE_MS = Number(process.env.HEIC_OBSERVE_MS ?? 0);
 const WAIT = /Ilya is reading the notes off your page|Reading the page/;
-const REFUSAL = /cannot yet open iPhone photos in HEIC|This browser cannot open that picture/;
+const REFUSAL = /could not open this iPhone photo|This browser cannot open that picture/;
 
 async function open(page: Page) {
 	const consoleLines: string[] = [];

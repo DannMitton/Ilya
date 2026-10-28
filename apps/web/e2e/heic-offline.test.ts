@@ -76,7 +76,7 @@ test('a singer offline who never opened a HEIC can open one', async ({ browser }
 	await expect(
 		page.getByText(/Ilya is reading the notes off your page|Reading the page/).first()
 	).toBeVisible({ timeout: 60_000 });
-	const refusals = page.getByText(/cannot yet open iPhone photos in HEIC|This browser cannot open that picture/);
+	const refusals = page.getByText(/could not open this iPhone photo|This browser cannot open that picture/);
 	await expect(refusals).toHaveCount(0);
 	expect(logs.filter((l) => l.includes('IMAGE_UNDECODABLE'))).toEqual([]);
 	await context.close();
