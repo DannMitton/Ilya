@@ -34,6 +34,8 @@ r1 draft, 2026-10-12. Created 2026-09-30 by the desk after Dann: *"are there any
 
 **UPDATE 2026-10-26 (Opus desk): Fable-reviewed and READY, all untracked:** row 122 r2, row 134 r2, row 153 (N.195) r2, row 154 (N.196) r2, row 152 (N.194) r5 with its 2026-10-26 addendum, and row 139's Guide-seating brief r2; file names and rulings in `STATE.md`, THE ONE THING, UPDATE 2026-10-26. Row cells below are not yet rewritten.
 
+**UPDATE 2026-10-27 23:4x (Opus desk, close).** SHIPPED tonight: batch D `6bd34b14` (rows 122, 134, N.195 row 153, N.196 row 154; not walked) and N.135 stage 2a `48c36afd`. MEASURED: row 117 (frame), frame plus C2 together (`report-desk-n135-frame-plus-c2_r1_2026-10-27.md`). Row 105 RUN on the Mac: r3 failed (2,029 against 2,086); nothing shipped. RUNNING: row 113 on `cloud-lane-18` (merging Shane with the desk's conflict resolution and committing the ratified `upload.err.imageHeic`; then the desk measures and gives the ship paste; gate 4's string carries "| 1 skipped"); stage 2b on `cloud-lane-19` (brief r2, Fable-reviewed; nearest-odd closing kernel as its first commit). READY: retirement r2 (`brief-code-retire-old-reader_r2_2026-10-27.md`), its lane after row 113 merges. Row cells below are not rewritten.
+
 **Code works down this table one row at a time and reports after each.** READY can start; NEEDS DANN waits for the ruling named; HELD waits for the desk's or Dann's release.
 
 | # | Brief | State | Evidence |

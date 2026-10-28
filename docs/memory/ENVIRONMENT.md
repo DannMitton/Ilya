@@ -27,6 +27,10 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| a desk helper's scripts and results live only in the desk's workspace | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
+| a measure folder holds a `build/` subfolder, or a run left tens of MB in `docs/sessions/` | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
+| a cloud session has not pushed for an hour, or Dann typed into a cloud session | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
+| a gate run includes a test skipped without its file | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
 | Code reports a preview serving an old build on port 4173 | `A STALE PREVIEW HOLDS PORT 4173` |
 | Vercel's storage fills, or a cloud-lane push builds a preview | `EVERY BRANCH BUILDS ON VERCEL, 480 MB EACH` |
 | you need the size of a build, or what a singer downloads first | `MEASURING THE SITE'S WEIGHT` |
@@ -4998,3 +5002,12 @@ From Vercel's documentation the desk told him the list's three-dot menu had a De
 - **The ship script with a clean tree after a merge commits nothing and pushes nothing** (`ilya-ship.sh:148-152`): the paste then ends `&& git push`. With the desk's notes uncommitted it commits them with the message and pushes, which is the usual shape.
 - **The cloud session cuts its own lane:** a prompt that opens with "create cloud-lane-N from origin/Shane at <sha>, push it with -u" works with the page still preselecting the previous lane (twice tonight, lanes 14 and 15). Confirm with `git ls-remote` before telling Dann.
 - **Gate 4 (3,057 tests) takes about 12 minutes on the workspace's two cores;** say so before measuring, and let it run (Dann 21:40).
+
+
+### LEARNED BY THE OPUS DESK, 2026-10-27 EVENING
+- **A desk helper's scripts die with the desk's workspace.** The morning's row 117, lever 2, and witness scripts were in `/home/claude/` of a workspace a later desk could not reach; they were recovered only because Dann asked the old thread to archive them (`~/Downloads/_desk-2026-10-27/desk-measure-scripts_2026-10-27.tgz`). Brief every helper to write its folder as one tarball and deliver it to `~/Downloads/_desk-<date>/` with `device_commit_files` the moment it lands, not at the close.
+- **The repository ignores any folder named `build/`** (`.gitignore:6`), including one inside `docs/sessions/measure-*`: row 105's scripts there stayed on the Mac only. Tell Code to name a script folder `scripts/`.
+- **A run's bulk goes to `apps/web/test-results/_desk-hold/`** (git-ignored, `.gitignore:45`), moved within the repository folder by the bridge (`mv` works inside one connected folder), with a note file left in the measure folder. Row 105 left 85 MB and about 4,000 files in `docs/sessions/`; the ship script refuses on untracked files, and committing them would bloat the tree.
+- **Cloud sessions stop on Dann's five-hour session limit too** ("5-hour limit reached", with a Try again button in the page); the desk restarts them from Chrome after the reset. And a message Dann types in a cloud session's tab lands in that session: on 2026-10-27 his question meant for another Code window sat in stage 2b's session and the session idled on it for two hours. Check a quiet lane's page, not only `git ls-remote`.
+- **A test skipped for want of a local file changes gate 4's string** ("3283 passed | 1 skipped (3284)"), and the ship script compares the string exactly; set the line to the skipped form when such a test ships.
+- **`pkill -f pnpm` from the desk's own shell kills its own background gate run** (exit 144), as the section `THE DESK HAS NO LINE TO CODE, AND PKILL KILLS ITS OWN SHELL` warns; start gate runs with `run_in_background`, never with `&`.
