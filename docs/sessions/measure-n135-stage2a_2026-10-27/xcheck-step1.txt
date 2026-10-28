@@ -1,0 +1,5 @@
+400 bands; 429 rows in the harness output; 129 bands with 2+ rows; 23 R1 runs split by R2
+400 bands, 429 rows from cutRows, 0 bands differ from the harness
+1500 rows
+plain: 1500 rows x 3 rules = 4500 seatings (328 of them rule 3 with more tokens than free notes, checked against brute force; 0 tokens left unseated in the rest), 0 differ from score44.py unchanged
+free: 1500 rows x 3 rules = 4500 seatings (478 of them rule 3 with more tokens than free notes, checked against brute force; 39 tokens left unseated in the rest), 0 differ from the harness rules on the free notes

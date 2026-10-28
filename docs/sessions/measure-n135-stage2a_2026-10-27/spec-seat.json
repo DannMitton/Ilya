@@ -1,0 +1,188 @@
+[
+ {
+  "src": "underlay-seat.ts",
+  "test": "underlay-seat.test.ts",
+  "muts": [
+   [
+    "nearest: tie goes right (< -> <=)",
+    "if (Math.abs(cx - xs[j]) < Math.abs(cx - xs[best])) best = j;",
+    "if (Math.abs(cx - xs[j]) <= Math.abs(cx - xs[best])) best = j;"
+   ],
+   [
+    "nearest: picks the farthest",
+    "if (Math.abs(cx - xs[j]) < Math.abs(cx - xs[best])) best = j;",
+    "if (Math.abs(cx - xs[j]) > Math.abs(cx - xs[best])) best = j;"
+   ],
+   [
+    "monotone: tie goes to skip (<= -> <)",
+    "if (take <= skip) {",
+    "if (take < skip) {"
+   ],
+   [
+    "monotone: cost is not the distance (zero)",
+    "const take = cost[i - 1][j - 1] + dist(i, j);",
+    "const take = cost[i - 1][j - 1];"
+   ],
+   [
+    "monotone: notes may not be skipped",
+    "const skip = cost[i][j - 1];",
+    "const skip = INF;"
+   ],
+   [
+    "monotone off (rule falls through to nearest)",
+    "if (rule === 'monotone') {",
+    "if (rule === 'monotone-off') {"
+   ],
+   [
+    "order off (rule falls through to nearest)",
+    "} else if (rule === 'order') {",
+    "} else if (rule === 'order-off') {"
+   ],
+   [
+    "order: tied-into notes counted as sung",
+    "const sung = free.filter((j) => staff[j].bar === bar);",
+    "const sung = staff.map((_, j) => j).filter((j) => staff[j].bar === bar && !staff[j].underExtender);"
+   ],
+   [
+    "order: notes under an extender counted as sung",
+    "const sung = free.filter((j) => staff[j].bar === bar);",
+    "const sung = staff.map((_, j) => j).filter((j) => staff[j].bar === bar && !staff[j].tiedInto);"
+   ],
+   [
+    "order: sung notes taken from every bar",
+    "const sung = free.filter((j) => staff[j].bar === bar);",
+    "const sung = free;"
+   ],
+   [
+    "order: pairs even where the counts differ",
+    "if (sung.length !== ks.length) continue;",
+    "if (sung.length === 0) continue;"
+   ],
+   [
+    "order: bar taken from the token's index, not its nearest note",
+    "const bar = staff[nearestOf(c, allXs)].bar;",
+    "const bar = staff[0].bar;"
+   ],
+   [
+    "tokens not put in x order",
+    "const order = tokens.map((_, i) => i).sort((a, b) => centre[a] - centre[b]);",
+    "const order = tokens.map((_, i) => i);"
+   ],
+   [
+    "notes not put in x order",
+    "const staff = [...notes].sort((a, b) => a.x - b.x);",
+    "const staff = [...notes];"
+   ],
+   [
+    "shared never reported",
+    "shared: (heldBy.get(placed.j) ?? 0) > 1,",
+    "shared: false,"
+   ],
+   [
+    "runTogether never reported",
+    "runTogether: RUN_TOGETHER.test(tokens[i].text),",
+    "runTogether: false,"
+   ],
+   [
+    "runTogether: marks count as letters",
+    "const RUN_TOGETHER = /[\\p{L}\\p{M}][^\\p{L}\\p{M}]+[\\p{L}\\p{M}]/u;",
+    "const RUN_TOGETHER = /[\\p{L}\\p{M}][^\\p{L}\\p{M}]*[\\p{L}\\p{M}]/u;"
+   ],
+   [
+    "offset sign reversed",
+    "offset: centre[i] - note.x,",
+    "offset: note.x - centre[i],"
+   ],
+   [
+    "a joint is read as a mark",
+    "if (HYPHENS.test(t)) return 'joint';",
+    "if (HYPHENS.test(t)) return 'mark';"
+   ],
+   [
+    "an extender is read as a joint",
+    "if (UNDERSCORES.test(t)) return 'extender';",
+    "if (UNDERSCORES.test(t)) return 'joint';"
+   ],
+   [
+    "non-syllable tokens counted against the notes",
+    "const sy = order.filter((i) => kinds[i] === 'syllable');",
+    "const sy = order;"
+   ],
+   [
+    "fallback tokens report the rule asked for, not nearest",
+    "const by = new Array<SeatRule>(sy.length).fill('nearest');",
+    "const by = new Array<SeatRule>(sy.length).fill(rule);"
+   ],
+   [
+    "order: bar's tokens taken in reverse x order",
+    "ks.forEach((k, r) => {",
+    "[...ks].reverse().forEach((k, r) => {"
+   ],
+   [
+    "surplus: tokens are not skipped (the shorter side is not the rows)",
+    "const swap = n > m;",
+    "const swap = false;"
+   ],
+   [
+    "surplus: seating ignores distance",
+    "const dist = (i: number, j: number) => Math.abs(swap ? cx[j - 1] - xs[i - 1] : cx[i - 1] - xs[j - 1]);",
+    "const dist = (i: number, j: number) => (swap ? 0 : Math.abs(cx[i - 1] - xs[j - 1]));"
+   ],
+   [
+    "surplus: a left-over token is folded onto its nearest note",
+    "at[k] = j < 0 ? -1 : free[j];",
+    "at[k] = j < 0 ? free[nearestOf(cx[k], xs)] : free[j];"
+   ],
+   [
+    "surplus: a left-over token is not flagged unseated",
+    "unseated: syllable,",
+    "unseated: false,"
+   ],
+   [
+    "surplus: a hyphen is flagged unseated",
+    "const syllable = kinds[i] === 'syllable';",
+    "const syllable = true;"
+   ],
+   [
+    "surplus: the fallback to nearest is restored for monotone",
+    "monotone(cx, xs).forEach((j, k) => {",
+    "(cx.length > xs.length ? cx.map((c) => nearestOf(c, xs)) : monotone(cx, xs)).forEach((j, k) => {"
+   ],
+   [
+    "surplus: the left-over tokens are dropped from the result",
+    "\treturn order.map((i): Seat => {",
+    "\treturn order.filter((i) => kinds[i] !== 'syllable' || at[sy.indexOf(i)] >= 0).map((i): Seat => {"
+   ],
+   [
+    "free notes: a note tied into is a candidate for every rule",
+    "const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto && !staff[j].underExtender);",
+    "const free = staff.map((_, j) => j).filter((j) => !staff[j].underExtender);"
+   ],
+   [
+    "free notes: a note under an extender is a candidate for every rule",
+    "const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto && !staff[j].underExtender);",
+    "const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto);"
+   ],
+   [
+    "free notes: every note is a candidate for nearest and monotone, only order uses the free list",
+    "const xs = free.map((j) => staff[j].x);",
+    "const xs = staff.map((j) => j.x);"
+   ],
+   [
+    "free notes: nearest seats on the free list but monotone on all notes",
+    "monotone(cx, xs).forEach((j, k) => {\n\t\t\t\tat[k] = j < 0 ? -1 : free[j];",
+    "monotone(cx, allXs).forEach((j, k) => {\n\t\t\t\tat[k] = j;"
+   ],
+   [
+    "free notes: with no free note the syllables are seated anyway",
+    "if (free.length > 0) {",
+    "if (staff.length > 0 && true) {"
+   ],
+   [
+    "free notes: with no free note, by is not null",
+    "by: placed && free.length > 0 ? by[placed.k] : null,",
+    "by: placed ? by[placed.k] : null,"
+   ]
+  ]
+ }
+]

@@ -22,6 +22,19 @@ export const OMR_MODEL = '465';
 /** What a kept reading is stamped with. */
 export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}`;
 
+/**
+ * The underlay reader's version (N.135): the reader that reads the words
+ * printed under the notes, its rule for seating them, and the sewing.
+ *
+ * NOT joined to `READER_STAMP`. A change to the stamp spends the one silent
+ * re-read every stored scan gets (`stamp.ts` above; `plan-scan-reader_r4`), and
+ * while the feature is behind its address flag that re-read would carry no
+ * words and never come again (review amendment 7). It joins `READER_STAMP` in
+ * the commit that removes the flag. `stamp.test.ts` holds the two apart until
+ * then. The value names no reader yet: the version `0` is "not wired".
+ */
+export const UNDERLAY_READER = 'underlay@0';
+
 /** A scan's reading, kept with the song: homr's joined MusicXML and the reader that made it. */
 export interface KeptReading {
 	musicXml: string;
