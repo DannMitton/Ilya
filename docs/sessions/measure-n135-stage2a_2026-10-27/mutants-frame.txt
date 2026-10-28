@@ -1,16 +1,18 @@
-underlay-frame.ts | drop the deskew | KILLED by 3 of 33
+underlay-frame.ts | drop the deskew | KILLED by 3 of 38
       - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
       - frameRow, deskew reports a negative angle for a tilt the other way
       - frameRow, deskew does not turn further than 3 degrees
-underlay-frame.ts | flip the angle's sign | KILLED by 2 of 33
+underlay-frame.ts | flip the angle's sign | KILLED by 2 of 38
       - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
       - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
-underlay-frame.ts | closing kernel 1 by 1 (no closing) | KILLED by 3 of 33
+underlay-frame.ts | closing kernel 1 by 1 (no closing) | KILLED by 3 of 38
       - frameRow, closing closes a gap of 1 px in a stroke
       - frameRow, closing closes a gap of 2 px, the widest a 3 by 3 kernel closes
       - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
-underlay-frame.ts | scale to 48 | KILLED by 8 of 33
+underlay-frame.ts | scale to 48 | KILLED by 10 of 38
       - frameRow, what counts as ink does not let a pale smudge set the extent
+      - frameRow, the sweep over the ink pixels only does not scale a crop past what an ink extent of 0.4 staff space gets: a speck is not enlarged to a letter
+      - frameRow, the sweep over the ink pixels only scales an ink extent over 0.4 staff space as before
       - frameRow, scale brings an ink extent of 48 px to 32
       - frameRow, scale brings an ink extent of 24 px to 32
       - frameRow, scale takes the extent between 2 and 98 percent of the ink, so a stray speck does not set it
@@ -18,30 +20,32 @@ underlay-frame.ts | scale to 48 | KILLED by 8 of 33
       - frameRow, padding pads by the ratio it is given, of the ink height, and grows the crop by twice that
       - frameRow, padding is a crop of the size the transform says
       - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
-underlay-frame.ts | pad with white on grey paper | KILLED by 4 of 33
+underlay-frame.ts | pad with white on grey paper | KILLED by 4 of 38
       - frameRow, deskew fills what the turn uncovers with the paper tone
       - frameRow, padding pads half the ink height, 16 px at 32, of the paper tone on every side by default, 176 on grey paper
       - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
       - frameRow, a crop with no ink keeps the grey it was given in the middle
-underlay-frame.ts | default pad ratio 0.5 -> 0.25 | KILLED by 2 of 33
+underlay-frame.ts | default pad ratio 0.5 -> 0.25 | KILLED by 2 of 38
       - frameRow, padding pads half the ink height, 16 px at 32, of the paper tone on every side by default, 176 on grey paper
       - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
-underlay-frame.ts | sweep to 1 degree | KILLED by 3 of 33
+underlay-frame.ts | sweep to 1 degree | KILLED by 4 of 38
       - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
       - frameRow, deskew reports a negative angle for a tilt the other way
       - frameRow, deskew does not turn further than 3 degrees
-underlay-frame.ts | sweep ties go to the larger angle | KILLED by 1 of 33
+      - frameRow, the sweep over the ink pixels only finds the angle of a row 3,400 wide and 50 high tilted 2.8 degrees: the sweep pads past the crop, and the ends of the turned row are kept
+underlay-frame.ts | sweep ties go to the larger angle | KILLED by 1 of 38
       - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
-underlay-frame.ts | sweep tries the negative angle first on a tie | SURVIVED by 0 of 33
-underlay-frame.ts | rotation border filled with black | KILLED by 2 of 33
+underlay-frame.ts | sweep tries the negative angle first on a tie | SURVIVED by 0 of 38
+underlay-frame.ts | rotation border filled with black | KILLED by 2 of 38
       - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
       - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
-underlay-frame.ts | sweep padding 120 px, not the crop's own height | SURVIVED by 0 of 33
-underlay-frame.ts | ink threshold 128 -> 200 | KILLED by 2 of 33
+underlay-frame.ts | sweep padding the crop's height only, not the lift of the far end | SURVIVED by 0 of 38
+underlay-frame.ts | ink threshold 128 -> 200 | KILLED by 2 of 38
       - frameRow, what counts as ink reads grey under 128 as ink and 128 or over as paper
       - frameRow, what counts as ink does not let a pale smudge set the extent
-underlay-frame.ts | extent from 5 percent | KILLED by 12 of 33
+underlay-frame.ts | extent from 5 percent | KILLED by 13 of 38
       - frameRow, what counts as ink does not let a pale smudge set the extent
+      - frameRow, the sweep over the ink pixels only scales an ink extent over 0.4 staff space as before
       - frameRow, closing closes a gap of 1 px in a stroke
       - frameRow, closing does not close a gap of 3 px
       - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
@@ -52,13 +56,13 @@ underlay-frame.ts | extent from 5 percent | KILLED by 12 of 33
       - frameRow, scale brings an ink extent of 24 px to 32
       - frameRow, scale takes the extent between 2 and 98 percent of the ink, so a stray speck does not set it
       - frameRow, scale uses the inkHeight it is given
-      - frameRow, scale measures the extent from the top: cumulative ink at 2 and 98 percent, inclusive
-underlay-frame.ts | extent measures from the first ink row, not 2 percent | KILLED by 1 of 33
+underlay-frame.ts | extent measures from the first ink row, not 2 percent | KILLED by 1 of 38
       - frameRow, scale takes the extent between 2 and 98 percent of the ink, so a stray speck does not set it
-underlay-frame.ts | paper tone: the last of the top bins on a tie | KILLED by 1 of 33
+underlay-frame.ts | paper tone: the last of the top bins on a tie | KILLED by 1 of 38
       - frameRow, padding names the paper tone as the most frequent grey, the lowest on a tie
-underlay-frame.ts | closing dilates but does not erode | KILLED by 9 of 33
+underlay-frame.ts | closing dilates but does not erode | KILLED by 10 of 38
       - frameRow, what counts as ink does not let a pale smudge set the extent
+      - frameRow, the sweep over the ink pixels only scales an ink extent over 0.4 staff space as before
       - frameRow, closing closes a gap of 1 px in a stroke
       - frameRow, closing does not close a gap of 3 px
       - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
@@ -67,22 +71,22 @@ underlay-frame.ts | closing dilates but does not erode | KILLED by 9 of 33
       - frameRow, scale brings an ink extent of 48 px to 32
       - frameRow, scale brings an ink extent of 24 px to 32
       - frameRow, scale takes the extent between 2 and 98 percent of the ink, so a stray speck does not set it
-underlay-frame.ts | a crop with no ink is scaled anyway | KILLED by 2 of 33
+underlay-frame.ts | a crop with no ink is scaled anyway | KILLED by 2 of 38
       - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
       - frameRow, a crop with no ink keeps the grey it was given in the middle
-underlay-frame.ts | unframe: padding not removed | KILLED by 3 of 33
+underlay-frame.ts | unframe: padding not removed | KILLED by 3 of 38
       - frameRow, the transform back maps a glyph of the framed crop back to where it stood, within 1 px, for scale and padding
       - frameRow, the transform back maps with the padding and the scale of the transform it is given
       - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
-underlay-frame.ts | unframe: scale not removed | KILLED by 3 of 33
+underlay-frame.ts | unframe: scale not removed | KILLED by 3 of 38
       - frameRow, the transform back maps a glyph of the framed crop back to where it stood, within 1 px, for scale and padding
       - frameRow, the transform back maps with the padding and the scale of the transform it is given
       - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
-underlay-frame.ts | unframe: turn applied the wrong way | KILLED by 1 of 33
+underlay-frame.ts | unframe: turn applied the wrong way | KILLED by 1 of 38
       - frameRow, the transform back maps a point back through the turn too: the last glyph of a tilted row, to within 1.5 px
-underlay-frame.ts | resize: both axes by the factor -> width only | KILLED by 1 of 33
+underlay-frame.ts | resize: both axes by the factor -> width only | KILLED by 1 of 38
       - frameRow, scale resizes both axes by the factor
-underlay-frame.ts | padding an absolute 16 px, the ratio ignored | KILLED by 7 of 33
+underlay-frame.ts | padding an absolute 16 px, the ratio ignored | KILLED by 7 of 38
       - frameRow, closing closes a gap of 1 px in a stroke
       - frameRow, closing closes a gap of 2 px, the widest a 3 by 3 kernel closes
       - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
@@ -90,26 +94,39 @@ underlay-frame.ts | padding an absolute 16 px, the ratio ignored | KILLED by 7 o
       - frameRow, closing leaves the outline of a solid block where it was
       - frameRow, scale resizes both axes by the factor
       - frameRow, padding pads by the ratio it is given, of the ink height, and grows the crop by twice that
-underlay-frame.ts | padding a fraction of the crop's height, not of the ink height | KILLED by 3 of 33
+underlay-frame.ts | padding a fraction of the crop's height, not of the ink height | KILLED by 3 of 38
       - frameRow, padding pads half the ink height, 16 px at 32, of the paper tone on every side by default, 176 on grey paper
       - frameRow, padding pads by the ratio it is given, of the ink height, and grows the crop by twice that
       - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
-underlay-frame.ts | closing kernel an absolute 3, the staff space ignored | KILLED by 2 of 33
+underlay-frame.ts | closing kernel an absolute 3, the staff space ignored | KILLED by 2 of 38
       - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
       - frameRow, closing leaves a gap of 1 px open at a staff space of 12, where the kernel is 1 and nothing is closed
-underlay-frame.ts | closing kernel share 0.1 -> 0.2 | KILLED by 3 of 33
+underlay-frame.ts | closing kernel share 0.1 -> 0.2 | KILLED by 5 of 38
       - frameRow, closing does not close a gap of 3 px
       - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
-      - frameRow, closing takes the largest odd kernel not above a tenth of the staff space, and at least 1
-underlay-frame.ts | closing kernel may be even | KILLED by 2 of 33
-      - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
-      - frameRow, closing takes the largest odd kernel not above a tenth of the staff space, and at least 1
-underlay-frame.ts | closing kernel not floored at 1 | KILLED by 1 of 33
-      - frameRow, closing takes the largest odd kernel not above a tenth of the staff space, and at least 1
-underlay-frame.ts | closing kernel rounds up to the next odd number | KILLED by 2 of 33
-      - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
-      - frameRow, closing takes the largest odd kernel not above a tenth of the staff space, and at least 1
-underlay-frame.ts | closing window not cut at the edges (outside counts as the opposite value) | KILLED by 3 of 33
+      - frameRow, closing leaves a gap of 1 px open at a staff space of 12, where the kernel is 1 and nothing is closed
+      - frameRow, closing takes the odd kernel nearest a tenth of the staff space, the lower on a tie, and at least 1
+      - frameRow, closing closes at every staff space the harness measured but one: 26.8 to 32.1 px all take 3
+underlay-frame.ts | closing window not cut at the edges (outside counts as the opposite value) | KILLED by 3 of 38
       - frameRow, closing closes with the window cut at the crop's edges: ink that touches an edge stays, and paper beside it does not turn to ink
       - frameRow, a crop with no ink passes through steps 1 to 3 unchanged and is padded
       - frameRow, a crop with no ink keeps the grey it was given in the middle
+underlay-frame.ts | closing kernel the largest odd number not above the share (the first version) | KILLED by 2 of 38
+      - frameRow, closing takes the odd kernel nearest a tenth of the staff space, the lower on a tie, and at least 1
+      - frameRow, closing closes at every staff space the harness measured but one: 26.8 to 32.1 px all take 3
+underlay-frame.ts | closing kernel a tie goes up, not down | KILLED by 2 of 38
+      - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
+      - frameRow, closing takes the odd kernel nearest a tenth of the staff space, the lower on a tie, and at least 1
+underlay-frame.ts | closing kernel always rounded up to the next odd number | KILLED by 4 of 38
+      - frameRow, closing closes a gap of 4 px and not 5 at a staff space of 60, where the kernel is 5
+      - frameRow, closing leaves a gap of 1 px open at a staff space of 12, where the kernel is 1 and nothing is closed
+      - frameRow, closing takes the odd kernel nearest a tenth of the staff space, the lower on a tie, and at least 1
+      - frameRow, closing closes at every staff space the harness measured but one: 26.8 to 32.1 px all take 3
+underlay-frame.ts | sweep padding 120 px (the harness's), not the crop's height and the lift | SURVIVED by 0 of 38
+underlay-frame.ts | sweep not over the ink pixels only: the angle always 0 | KILLED by 4 of 38
+      - frameRow, deskew levels a line of glyphs tilted by 1.5 degrees, and reports the angle (positive counter-clockwise)
+      - frameRow, deskew reports a negative angle for a tilt the other way
+      - frameRow, deskew does not turn further than 3 degrees
+      - frameRow, the sweep over the ink pixels only finds the angle of a row 3,400 wide and 50 high tilted 2.8 degrees: the sweep pads past the crop, and the ends of the turned row are kept
+underlay-frame.ts | scale uncapped (the floor of 0.4 staff space removed) | KILLED by 1 of 38
+      - frameRow, the sweep over the ink pixels only does not scale a crop past what an ink extent of 0.4 staff space gets: a speck is not enlarged to a letter

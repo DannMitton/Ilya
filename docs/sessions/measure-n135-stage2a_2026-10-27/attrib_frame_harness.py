@@ -9,7 +9,7 @@ exec(src)
 crops = [make(i) for i in range(200)]
 tmp = tempfile.mkdtemp(); fin, fout = f'{tmp}/in.json', f'{tmp}/out.json'
 json.dump([dict(w=c.shape[1], h=c.shape[0], data=c.ravel().tolist()) for c in crops], open(fin, 'w'))
-subprocess.run(['node', f'{HERE}/xcheck_frame.mjs', fin, fout], check=True)
+subprocess.run(['node', '--import', f'{HERE}/ts-register.mjs', f'{HERE}/xcheck_frame.mjs', fin, fout], check=True)
 got = json.load(open(fout))
 def oracle2(g, white, pad120, paper_after, ink_height=32, pad_ratio=0.5):
     h, w = g.shape; paper = int(np.argmax(np.bincount(g.ravel(), minlength=256)))

@@ -10,8 +10,8 @@
  * 1. Deskew. The angle is the rotation, positive counter-clockwise on the
  *    screen, that maximises the variance of the horizontal projection of the
  *    ink (ink: grey less than 128), swept from -3.0 to +3.0 degrees in steps of
- *    0.1 on a mask padded by the crop's own height above and below, so the sweep
- *    loses no ink.
+ *    0.1 over the ink pixels only, in rows padded by the crop's height plus
+ *    ceil(width / 2 * sin 3 degrees) above and below, so the sweep loses no ink.
  *    Ties go to the smaller absolute angle (and to the positive one of two equal
  *    angles). The grey crop is rotated by that angle about its centre, bilinear,
  *    the border filled with the paper tone, the size kept. An angle of 0.0
@@ -19,16 +19,20 @@
  * 2. Closing of the ink with a square kernel of ones, `closingKernel(staffSpace)`
  *    wide: dilate then erode on the inverted grey (255 less grey), centred
  *    anchor, the window cut at the edges (OpenCV's default morphology border),
- *    then invert back. The kernel is the largest odd number not above
- *    `CLOSE_SHARE` (0.1) of the staff space, and at least 1 (no closing): 3 at the
- *    measured staff space of about 30 px. A kernel of k closes a gap of k - 1
- *    pixels or fewer: 2 px at 30, and a gap of 3 stays open.
+ *    then invert back. The kernel is the odd number nearest `CLOSE_SHARE` (0.1)
+ *    of the staff space, the lower of two on a tie, and at least 1 (no closing):
+ *    3 from a staff space of 20 (exclusive) to 40 (inclusive), so 3 at every
+ *    staff space the harness measured but one (26.8 to 32.1 px). A kernel of k
+ *    closes a gap of k - 1 pixels or fewer: 2 px at 30, and a gap of 3 stays
+ *    open.
  * 3. Scale so that the ink's vertical extent is `inkHeight` px. The extent is
  *    the span between the row where the cumulative ink (ink pixels per row, from
  *    the top) first reaches 2 percent of the total and the row where it first
  *    reaches 98 percent, both inclusive. Both axes are resized by the factor,
  *    BICUBIC (the Keys kernel with a = -0.75, edges replicated, the source
- *    sampled at (x + 0.5) / factor - 0.5). A crop with no ink is left unscaled.
+ *    sampled at (x + 0.5) / factor - 0.5). The span is at least `MIN_ROW` staff
+ *    spaces (`underlay-rows.ts`), so a speck is not enlarged to a letter. A crop
+ *    with no ink is left unscaled.
  * 4. Pad every side, after the scale, by `padRatio` of `inkHeight` (0.5 by
  *    default: 16 px at 32, the measured configuration) of the paper tone: the most frequent grey of the
  *    crop (the first, on a tie).
@@ -68,7 +72,7 @@
  *
  * Pure: typed arrays in, typed arrays out. No DOM, no canvas.
  */
-import type { GreyBandLike } from './underlay-rows';
+import { MIN_ROW, type GreyBandLike } from './underlay-rows';
 
 export interface FrameOptions {
 	/** The ink's vertical extent in the framed crop, in px. */
@@ -123,7 +127,7 @@ const SWEEP_TENTHS = 30;
 /** The ink extent runs from this share of the ink to its complement, as 1 over this many. */
 const TAIL_DENOMINATOR = 50;
 const CUBIC_A = -0.75;
-/** The closing kernel is this share of the staff space, rounded down to an odd number. */
+/** The closing kernel is the odd number nearest this share of the staff space. */
 export const CLOSE_SHARE = 0.1;
 
 /** The most frequent grey of the crop: the first of the 256 bins at the top. */
@@ -135,69 +139,72 @@ export function paperTone(data: ArrayLike<number>): number {
 	return best;
 }
 
-/** The rows added above and below the mask for the sweep: the crop's own height, so no turn within the sweep loses ink. */
-function sweepPad(h: number): number {
-	return h;
-}
-
-/** The ink mask padded by `sweepPad` above and below: 1 where the grey is under `INK_BELOW`. */
-function paddedMask(data: Uint8Array, w: number, h: number): Uint8Array {
-	const pad = sweepPad(h);
-	const mask = new Uint8Array(w * (h + 2 * pad));
-	for (let i = 0; i < w * h; i++) if (data[i] < INK_BELOW) mask[pad * w + i] = 1;
-	return mask;
+/**
+ * The rows added above and below for the sweep: the crop's height plus what a
+ * turn of `SWEEP_DEGREES` lifts the row's far end by, half the width times the
+ * sine of the angle. No turn within the sweep puts ink outside them.
+ */
+function sweepPad(w: number, h: number): number {
+	return h + Math.ceil((w / 2) * Math.sin((SWEEP_DEGREES * Math.PI) / 180));
 }
 
 /**
- * The variance of the row sums of `mask` rotated by `degrees` counter-clockwise
- * about its centre (bilinear, zero outside).
+ * The variance of the row sums of the ink turned by `degrees` counter-clockwise
+ * about the centre of the padded crop. Only the ink pixels are turned: each is
+ * carried to where the turn puts it and shares its mass between the two rows it
+ * falls between (linear in the row), and ink that leaves the columns is lost.
+ * The row count is fixed by the padding, so the variance compares across angles.
  */
-function projectionVariance(mask: Uint8Array, w: number, h: number, degrees: number): number {
-	const sums = new Float64Array(h);
+function projectionVariance(xs: Int32Array, ys: Int32Array, w: number, pad: number, rows: number, degrees: number): number {
+	const sums = new Float64Array(rows);
 	if (degrees === 0) {
-		for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) sums[y] += mask[y * w + x];
+		for (let i = 0; i < xs.length; i++) sums[ys[i] + pad]++;
 	} else {
 		const rad = (degrees * Math.PI) / 180;
 		const cos = Math.cos(rad);
 		const sin = Math.sin(rad);
 		const cx = w / 2;
-		const cy = h / 2;
-		const at = (xx: number, yy: number) => (xx >= 0 && xx < w && yy >= 0 && yy < h ? mask[yy * w + xx] : 0);
-		for (let y = 0; y < h; y++) {
-			const dy = y - cy;
-			let row = 0;
-			for (let x = 0; x < w; x++) {
-				const dx = x - cx;
-				const sx = cx + dx * cos - dy * sin;
-				const sy = cy + dx * sin + dy * cos;
-				const x0 = Math.floor(sx);
-				const y0 = Math.floor(sy);
-				if (x0 < -1 || y0 < -1 || x0 >= w || y0 >= h) continue;
-				const fx = sx - x0;
-				const fy = sy - y0;
-				row += (at(x0, y0) * (1 - fx) + at(x0 + 1, y0) * fx) * (1 - fy) + (at(x0, y0 + 1) * (1 - fx) + at(x0 + 1, y0 + 1) * fx) * fy;
-			}
-			sums[y] = row;
+		const cy = rows / 2;
+		for (let i = 0; i < xs.length; i++) {
+			const dx = xs[i] - cx;
+			const dy = ys[i] + pad - cy;
+			const xr = cx + dx * cos + dy * sin;
+			if (xr < 0 || xr > w - 1) continue;
+			const yr = cy - dx * sin + dy * cos;
+			const r = Math.floor(yr);
+			const f = yr - r;
+			if (r >= 0 && r < rows) sums[r] += 1 - f;
+			if (r + 1 >= 0 && r + 1 < rows) sums[r + 1] += f;
 		}
 	}
 	let total = 0;
 	let squares = 0;
-	for (let y = 0; y < h; y++) {
+	for (let y = 0; y < rows; y++) {
 		total += sums[y];
 		squares += sums[y] * sums[y];
 	}
-	return squares / h - (total / h) ** 2;
+	return squares / rows - (total / rows) ** 2;
 }
 
 /** The deskew angle in degrees, positive counter-clockwise: see the header. */
 export function skewAngle(data: Uint8Array, w: number, h: number): number {
-	const mask = paddedMask(data, w, h);
-	const hp = h + 2 * sweepPad(h);
+	let n = 0;
+	for (let i = 0; i < w * h; i++) if (data[i] < INK_BELOW) n++;
+	const xs = new Int32Array(n);
+	const ys = new Int32Array(n);
+	for (let i = 0, k = 0; i < w * h; i++) {
+		if (data[i] < INK_BELOW) {
+			xs[k] = i % w;
+			ys[k++] = Math.floor(i / w);
+		}
+	}
+	const pad = sweepPad(w, h);
+	const rows = h + 2 * pad;
 	let best = 0;
-	let bestVariance = projectionVariance(mask, w, hp, 0);
+	let bestVariance = projectionVariance(xs, ys, w, pad, rows, 0);
 	for (let k = 1; k <= SWEEP_TENTHS; k++) {
 		for (const tenths of [k, -k]) {
-			const variance = projectionVariance(mask, w, hp, tenths / 10);
+			const variance = projectionVariance(xs, ys, w, pad, rows, tenths / 10);
 			if (variance > bestVariance) {
 				bestVariance = variance;
 				best = tenths;
@@ -257,13 +264,23 @@ function filterK(data: Uint8Array, w: number, h: number, size: number, max: bool
 	return out;
 }
 
-/** The closing kernel for a staff space: the largest odd number not above `CLOSE_SHARE * staffSpace`, at least 1. */
+/**
+ * The closing kernel for a staff space: the odd number nearest `CLOSE_SHARE * staffSpace`,
+ * the lower of two where the share is an even number (1 means no closing).
+ *
+ * The first version took the largest odd number not above the share. At the
+ * harness's own staff spaces (26.8 to 32.1 px, median 30.6) that gave no
+ * closing at all on 90 of 234 systems, every system of S, T, K, and M among
+ * them, where the measured configuration closed all of them with 3 by 3
+ * (`measure-n135-stage2a_2026-10-27/kernel-by-staff-space.txt`). The nearest odd
+ * number gives 3 on 233 of the 234.
+ */
 export function closingKernel(staffSpace: number): number {
 	if (!Number.isFinite(staffSpace) || staffSpace <= 0) return 1;
-	// The small term keeps 0.1 * 30 from reading as 2.999...
-	let k = Math.floor(CLOSE_SHARE * staffSpace + 1e-9);
-	if (k % 2 === 0) k -= 1;
-	return Math.max(1, k);
+	// Half the distance from 1, rounded down on a half (the small term keeps 0.1 * 40 from reading as above 4), then back to an odd number.
+	const share = CLOSE_SHARE * staffSpace;
+	// For a positive staff space this is at least 1: no floor is needed.
+	return 2 * Math.ceil((share - 1) / 2 - 0.5 - 1e-9) + 1;
 }
 
 /** The ink closed with a kernel `size` wide: dilate then erode on the inverted grey, then inverted back. A size of 1 is no closing. */
@@ -369,7 +386,9 @@ export function frameRow(crop: GreyBandLike, staffSpace: number, options: FrameO
 	let scale = 1;
 	const extent = inkExtent(closed, width, height);
 	if (extent) {
-		scale = inkHeight / (extent[1] - extent[0] + 1);
+		// The scale never exceeds what an ink extent of `MIN_ROW` staff spaces gets: a crop of one speck is not enlarged to a letter.
+		const floor = Number.isFinite(staffSpace) && staffSpace > 0 ? MIN_ROW * staffSpace : 1;
+		scale = inkHeight / Math.max(extent[1] - extent[0] + 1, floor);
 		scaled = resizeCubic(closed, width, height, scale);
 	}
 
