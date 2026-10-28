@@ -27,27 +27,52 @@ export interface UnderlayParts<Row> {
 	now?: () => number;
 }
 
+/**
+ * What a failure says. tesseract.js rejects with a string, or with an event
+ * from its Worker, as often as with an `Error`; `String(err.message)` of those is
+ * the word "undefined".
+ */
+export function describeError(err: unknown): string {
+	if (err instanceof Error && err.message) return err.message;
+	if (typeof err === 'string' && err) return err;
+	if (err && typeof err === 'object') {
+		const o = err as { message?: unknown; type?: unknown; target?: { src?: unknown; url?: unknown } };
+		if (typeof o.message === 'string' && o.message) return o.message;
+		const where = o.target && (o.target.src ?? o.target.url);
+		if (typeof o.type === 'string') return `${o.type} event${typeof where === 'string' ? ` from ${where}` : ''}`;
+		try {
+			const json = JSON.stringify(err);
+			if (json && json !== '{}') return json;
+		} catch {
+			/* not serialisable */
+		}
+	}
+	return 'no reason was given';
+}
+
 export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay {
 	const now = parts.now ?? (() => performance.now());
 	return async (image, musicXml, staves) => {
 		let stage = 'the Worker';
+		let prepared: { rows: number; ms: number } | null = null;
 		try {
-			const prepared = await parts.prepare(image, musicXml, staves);
+			const made = await parts.prepare(image, musicXml, staves);
+			prepared = { rows: made.rows.length, ms: Math.round(made.ms) };
 			stage = 'the reader';
 			const t1 = now();
 			const reads: WordBox[][] = [];
-			for (const row of prepared.rows) reads.push(await parts.recognize(row));
+			for (const row of made.rows) reads.push(await parts.recognize(row));
 			const t2 = now();
 			stage = 'the dictionary';
 			const seams = await parts.seams();
 			stage = 'the seating';
-			const seated = seatPage(prepared.layout, reads, seams);
-			const ms = { prepare: Math.round(prepared.ms), read: Math.round(t2 - t1), seat: Math.round(now() - t2) };
+			const seated = seatPage(made.layout, reads, seams);
+			const ms = { prepare: Math.round(made.ms), read: Math.round(t2 - t1), seat: Math.round(now() - t2) };
 			const page: UnderlayPage = { ...seated, ms };
 			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.passes ? '' : `; does not pass (${seated.why})`}`);
 			return page;
 		} catch (err) {
-			console.info(`[omr] underlay: the page was not read (${stage} failed: ${String((err as Error)?.message ?? err)})`);
+			console.info(`[omr] underlay: the page was not read (${stage} failed: ${describeError(err)}${prepared ? `; the Worker had framed ${prepared.rows} rows in ${prepared.ms} ms` : ''})`);
 			return null;
 		}
 	};

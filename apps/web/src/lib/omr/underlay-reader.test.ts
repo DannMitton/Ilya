@@ -4,7 +4,7 @@
  * rejects.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { makeUnderlayReader, type UnderlayParts } from './underlay-reader';
+import { describeError, makeUnderlayReader, type UnderlayParts } from './underlay-reader';
 import type { PageLayout, Seams, WordBox } from './underlay-page';
 
 const layout: PageLayout = {
@@ -54,9 +54,9 @@ describe('makeUnderlayReader', () => {
 
 	it.each([
 		['the Worker throws', { prepare: async () => { throw new Error('no 2d context'); } }, 'the Worker failed: no 2d context'],
-		['the model does not load', { recognize: async () => { throw new Error('Failed to fetch /omr/models/underlay/rus_prereform_r2_29000.traineddata'); } }, 'the reader failed: Failed to fetch /omr/models/underlay/rus_prereform_r2_29000.traineddata'],
-		['the dictionary does not load', { seams: async () => { throw new Error('the dictionary did not load'); } }, 'the dictionary failed: the dictionary did not load'],
-		['the seating throws', { seams: async () => ({ isWord: () => { throw new Error('boom'); }, cut: (w: string) => [w] }) }, 'the seating failed: boom'],
+		['the model does not load', { recognize: async () => { throw new Error('Failed to fetch /omr/models/underlay/rus_prereform_r2_29000.traineddata'); } }, 'the reader failed: Failed to fetch /omr/models/underlay/rus_prereform_r2_29000.traineddata; the Worker had framed 1 rows in 1500 ms'],
+		['the dictionary does not load', { seams: async () => { throw new Error('the dictionary did not load'); } }, 'the dictionary failed: the dictionary did not load; the Worker had framed 1 rows in 1500 ms'],
+		['the seating throws', { seams: async () => ({ isWord: () => { throw new Error('boom'); }, cut: (w: string) => [w] }) }, 'the seating failed: boom; the Worker had framed 1 rows in 1500 ms'],
 	] as const)('answers null with one console line where %s', async (_name, over, why) => {
 		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
 		const page = await makeUnderlayReader(parts(over as Partial<UnderlayParts<string>>))(image, '<xml/>', []);
@@ -90,5 +90,25 @@ describe('makeUnderlayReader', () => {
 		const seen: unknown[] = [];
 		await makeUnderlayReader(parts({ prepare: async (i, x, s) => (seen.push(i, x, s), { layout, rows: [], ms: 0 }) }))(image, '<music/>', [{ cx: 0.5, cy: 0.1, w: 0.8, h: 0.05, index: 3 }]);
 		expect(seen).toEqual([image, '<music/>', [{ cx: 0.5, cy: 0.1, w: 0.8, h: 0.05, index: 3 }]]);
+	});
+});
+
+describe('describeError', () => {
+	it('gives the message of an Error, a string as it is, and the message of an object that has one', () => {
+		expect(describeError(new Error('Failed to fetch'))).toBe('Failed to fetch');
+		expect(describeError('network error')).toBe('network error');
+		expect(describeError({ message: 'bad core' })).toBe('bad core');
+	});
+
+	it('names an event, with where it came from, where tesseract.js rejects with one', () => {
+		expect(describeError({ type: 'error', target: { src: 'http://x/omr/models/underlay/worker.min.js' } })).toBe('error event from http://x/omr/models/underlay/worker.min.js');
+		expect(describeError({ type: 'error' })).toBe('error event');
+	});
+
+	it('never says undefined: an object is shown, and nothing at all is said so', () => {
+		expect(describeError({ status: 404 })).toBe('{"status":404}');
+		expect(describeError(undefined)).toBe('no reason was given');
+		expect(describeError({})).toBe('no reason was given');
+		expect(describeError(new Error(''))).toBe('no reason was given');
 	});
 });

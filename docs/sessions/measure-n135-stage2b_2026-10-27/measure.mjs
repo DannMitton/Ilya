@@ -3,6 +3,8 @@
  * drops the PDF on the page, waits for the read, and writes the joined MusicXML and the Lyrics text to an output folder, with the console lines the read printed.
  * The desk scores these with the harness's scorer: syllables read right (of 2,538) and (b) exact, (a) nucleus, (c) word-exact seating (of 2,385), and the time per page.
  *
+ * Options: --screenshot writes <name>.png of the page when the read has ended; every request the page and its Workers made is written to <name>.requests.txt.
+ *
  * Usage (from the repository root, after a build with the underlay files in place, see apps/web/scripts/copy-underlay-model.mjs):
  *   node docs/sessions/measure-n135-stage2b_2026-10-27/measure.mjs --pdfs <folder> --out <folder> [--url http://localhost:4173] [--off] [--only <name part>] [--timeout-s 900]
  * With no --url it starts `vite preview` (port 4173) in apps/web and stops it at the end. The model and the core are NOT looked for here: they are served by the app from /omr/models/underlay/
@@ -57,6 +59,10 @@ for (const file of readdirSync(pdfs).filter((f) => f.toLowerCase().endsWith('.pd
 	const lines = [];
 	page.on('console', (m) => lines.push(`${((performance.now() - t0) / 1000).toFixed(1)}s ${m.type()}: ${m.text()}`));
 	page.on('pageerror', (e) => lines.push(`pageerror: ${String(e).slice(0, 300)}`));
+	const requests = new Set();
+	page.on('request', (r) => requests.add(new URL(r.url()).pathname));
+	// Requests made by the Workers count too.
+	context.on('request', (r) => requests.add(new URL(r.url()).pathname));
 	// The page makes the MusicXML it ingests as a File (scan.ts, readingFile); keep its text.
 	await page.addInitScript(() => {
 		const Original = window.File;
@@ -86,6 +92,8 @@ for (const file of readdirSync(pdfs).filter((f) => f.toLowerCase().endsWith('.pd
 	if (musicxml !== null) writeFileSync(join(out, `${name}.musicxml`), musicxml);
 	writeFileSync(join(out, `${name}.lyrics.txt`), lyrics);
 	writeFileSync(join(out, `${name}.console.txt`), lines.join('\n') + '\n');
+	writeFileSync(join(out, `${name}.requests.txt`), [...requests].sort().join('\n') + '\n');
+	if (args.includes('--screenshot')) await page.screenshot({ path: join(out, `${name}.png`), fullPage: false });
 	times[name] = { seconds, lyricTags: musicxml === null ? null : (musicxml.match(/<lyric /g) ?? []).length, omr: lines.filter((l) => l.includes('[omr]')).map((l) => l.replace(/^\S+ \S+: /, '')) };
 	console.log(`${name}: ${seconds === null ? 'no MusicXML' : `${seconds.toFixed(1)} s, ${times[name].lyricTags} <lyric> tags, Lyrics ${lyrics.length} characters`}`);
 	await context.close();
