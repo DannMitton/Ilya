@@ -49,7 +49,7 @@ On the repaired fixture 59 of 62 windows land exactly (45 on the copy; the contr
 
 ## Provenance (`<name>.provenance.md`, beside each)
 
-`sunless-01-engraved.musicxml`, `sunless-01-finale-lone-v.musicxml`, `sunless-01-engraved.musicxml.bak-before-ja-2026-09-20`, `tchaikovsky-op38-3-voice.musicxml`, and `packages/score-parser/src/fixtures/n188-markings.musicxml`. The clone was shallow; `git fetch --unshallow origin` made `git log --follow` reach the first commits (Sunless 1: 2026-09-04 `7875892d`, 2026-09-20 `b53a6dfa` and `46f1d310`, 2026-09-27 `7f5b8e83`; Tchaikovsky: 2026-10-02 `c601192c`, 2026-10-11 `e3e2c33b`; n188: 2026-10-20 `de9efa5c`). NOT ESTABLISHED: the md5 of the source `.musxl` and the engraved original in Dann's Downloads; the converter's source for the Tchaikovsky file. The `.bak` file's md5 equals the live file's at `b53a6dfa` (read).
+`sunless-01-engraved.musicxml`, `sunless-01-finale-lone-v.musicxml`, `sunless-01-engraved.musicxml.bak-before-ja-2026-09-20`, `tchaikovsky-op38-3-voice.musicxml`, and `packages/score-parser/src/fixtures/n188-markings.musicxml`. The clone was shallow; `git fetch --unshallow origin` made `git log --follow` reach the first commits (Sunless 1: 2026-09-04 `7875892d`, 2026-09-20 `b53a6dfa` and `46f1d310`, 2026-09-27 `7f5b8e83`; Tchaikovsky: 2026-10-02 `c601192c`, 2026-10-11 `e3e2c33b`; n188: 2026-10-20 `de9efa5c`). NOT ESTABLISHED: the md5 of the source `.musx` and the engraved original in Dann's Downloads; the converter's source for the Tchaikovsky file. The `.bak` file's md5 equals the live file's at `b53a6dfa` (read).
 
 ## Playwright
 

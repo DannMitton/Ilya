@@ -374,6 +374,7 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 			{oninput}
 			{onpoemedit}
 			{onflush}
+			scoreWords={poemDerived}
 		>
 			{#snippet corner()}
 				{#if pointer.coarse}
