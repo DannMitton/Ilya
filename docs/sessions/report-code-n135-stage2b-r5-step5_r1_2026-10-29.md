@@ -4,8 +4,8 @@ Branch `cloud-lane-21`, on top of step 4 (`1eb05e7d`). Read first, as the desk a
 
 ## The answer first
 
-1. **Built.** `cliticCalls` (`apps/web/src/lib/underlay-seams.ts:51`) takes `modern` as a third parameter, and a sewn word matches a transcribed word whose letters equal its own letters **or** the letters of `modern(word)` (where `modern` gives non-null). `loadSeams` passes `modernisePreReform` (`:69`). No «ъ» is stripped by hand.
-2. **Stamp.** `UNDERLAY_READER` is `'underlay@2'` (`omr/stamp.ts:45`), the comment extended, per amendment 9. Step 7A is withdrawn as a behaviour, so step 5 is the last step that changes the reader's output; the stamp is set here. Test: a reading kept as `...+underlay@1` is read again once (`omr/underlay-switch.test.ts`).
+1. **Built.** `cliticCalls` (`apps/web/src/lib/underlay-seams.ts:57`) takes `modern` as a third parameter, and a sewn word matches a transcribed word whose letters equal its own letters **or** the letters of `modern(word)` (where `modern` gives non-null). `loadSeams` passes `modernisePreReform` (`:81`). No «ъ» is stripped by hand.
+2. **Stamp.** `UNDERLAY_READER` is `'underlay@2'` (`omr/stamp.ts:47`), the comment extended, per amendment 9. Step 7A is withdrawn as a behaviour, so step 5 is the last step that changes the reader's output; the stamp is set here. Test: a reading kept as `...+underlay@1` is read again once (`omr/underlay-switch.test.ts`).
 3. **Not measured here:** the replay's 1,880 / 1,710 and vowelless 79. A2's captures and `real.mjs` are the desk's. Per amendment 8, a difference from 1,880 / 1,710 is a finding to report, not a failure to tune away.
 
 ## An environment finding the desk should know
