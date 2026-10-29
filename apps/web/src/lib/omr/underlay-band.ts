@@ -91,12 +91,14 @@ export function staffOfNotes(notes: readonly NotePoint[], staves: readonly Place
  * margins are in `a`'s staff spaces, and the lines are read at `a`'s centre
  * column.
  */
-export function lyricBand(a: PlacedStaff, b: PlacedStaff | null, width: number, height: number, index = 0): LyricBand | null {
+export function lyricBand(a: PlacedStaff, b: PlacedStaff | null, width: number, height: number, index = 0, bTop?: number | null): LyricBand | null {
 	const space = a.staff.space;
 	const x = centreOf(a.staff);
 	const bottom = linesAt(a.staff, x)[4];
 	const y0 = Math.ceil(bottom + MARGIN * space);
-	const y1 = Math.min(height, Math.floor(b ? linesAt(b.staff, x)[0] - MARGIN * space : bottom + BELOW * space));
+	// `bTop`, where given, is B's top line as found in the ink (`underlay-below.ts`): a number, or null for no staff below.
+	const top = bTop !== undefined ? bTop : b ? linesAt(b.staff, x)[0] : null;
+	const y1 = Math.min(height, Math.floor(top !== null ? top - MARGIN * space : bottom + BELOW * space));
 	if (!(y1 - y0 >= DROP * space)) return null;
 	return { staff: index, x0: 0, x1: width, y0, y1, space };
 }
@@ -116,7 +118,14 @@ export interface System {
  * (the staff nearest at least one note), its notes, and its band. B is the
  * next staff below A in the page's order down.
  */
-export function systemsOf(notes: readonly NotePoint[], staves: readonly PlacedStaff[], width: number, height: number): System[] {
+export function systemsOf(
+	notes: readonly NotePoint[],
+	staves: readonly PlacedStaff[],
+	width: number,
+	height: number,
+	/** B's top line for voice staff `a` and the staff below it in the page's order, found in the ink; absent, B's own `staffIn` line is used. */
+	topBelow?: (a: PlacedStaff, below: PlacedStaff | null) => number | null,
+): System[] {
 	if (staves.length === 0 || notes.length === 0) return [];
 	const owner = staffOfNotes(notes, staves);
 	const order = downThePage(staves);
@@ -125,7 +134,8 @@ export function systemsOf(notes: readonly NotePoint[], staves: readonly PlacedSt
 		const mine = owner.flatMap((s, i) => (s === a ? [i] : []));
 		if (mine.length === 0) continue;
 		const below = order[order.indexOf(a) + 1];
-		const band = lyricBand(staves[a], below === undefined ? null : staves[below], width, height, a);
+		const b = below === undefined ? null : staves[below];
+		const band = lyricBand(staves[a], b, width, height, a, topBelow ? topBelow(staves[a], b) : undefined);
 		systems.push({ staff: a, notes: mine, band });
 	}
 	return systems;

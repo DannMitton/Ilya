@@ -27,6 +27,7 @@
 import { placeOf } from './join-pages';
 import { staffIn, type Grey, type StaffBoxLike } from './metre-windows';
 import { systemsOf, type PlacedStaff } from './underlay-band';
+import { topLineBelow } from './underlay-below';
 import { frameRow, type FramedCrop } from './underlay-frame';
 import type { PageLayout, RowLayout, SystemLayout } from './underlay-page';
 import { cutRows } from './underlay-rows';
@@ -107,7 +108,7 @@ export function prepareUnderlay(page: Grey, musicXml: string, staves: readonly S
 	}
 	const systems: SystemLayout[] = [];
 	const rows: FramedCrop[] = [];
-	for (const system of systemsOf(notes.map((n) => n.at as { x: number; y: number }), placed, page.width, page.height)) {
+	for (const system of systemsOf(notes.map((n) => n.at as { x: number; y: number }), placed, page.width, page.height, (a, b) => topLineBelow(page, a, b))) {
 		const space = placed[system.staff].staff.space;
 		const mine: NotePlace[] = system.notes.map((i) => ({ id: notes[i].ordinal, x: (notes[i].at as { x: number }).x, bar: notes[i].bar, tiedInto: notes[i].tiedInto }));
 		const layoutRows: RowLayout[] = [];

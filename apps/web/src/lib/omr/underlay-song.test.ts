@@ -149,3 +149,33 @@ describe('the song\'s bars and the join\'s agree', () => {
 		}
 	});
 });
+
+describe('a page of the piano alone (brief r5 step 3)', () => {
+	const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}.musicxml`, import.meta.url), 'utf8');
+	/** tch-2 with its voice part taken out: homr's reading of a page that prints the piano alone. */
+	const alone = fixture('tch-2')
+		.replace(/<part id="P1">[\s\S]*?<\/part>\s*/, '')
+		.replace(/<score-part id="P1">[\s\S]*?<\/score-part>\s*/, '')
+		.replace(/id="P2"/g, 'id="P1"');
+	const word = (note: number, text: string) => ({ syllables: [{ note, text, syllabic: 'single' as const, sustained: false }] });
+
+	it('is read as a page with notes in its first part', () => {
+		expect(voiceNotes(alone).filter((n) => !n.rest).length).toBeGreaterThan(10);
+	});
+
+	it('does not carry the words written on it into the joined MusicXML', () => {
+		const pages = [fixture('tch-1'), alone];
+		const piano = voiceNotes(alone).filter((n) => !n.rest);
+		const voice = voiceNotes(pages[0]).filter((n) => !n.rest);
+		const written = applyUnderlay(pages, [
+			{ ...page([]), words: [word(voice[0].ordinal, 'голос')], systems: [ok()] },
+			{ ...page([]), words: piano.slice(0, 3).map((n, i) => word(n.ordinal, `слово${i}`)), systems: [ok([1, 4])] },
+		]);
+		// The piano-alone page's words are written into its own page, as the reader leaves them...
+		expect(written.xmls[1]).toContain('слово0');
+		// ...and the join takes them out with its notes.
+		const joined = joinPages(written.xmls);
+		expect(joined).toContain('голос');
+		expect(joined).not.toContain('слово');
+	});
+});
