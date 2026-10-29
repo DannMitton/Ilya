@@ -14,10 +14,10 @@
  *
  * THE THRESHOLD (brief section 4, DESK DEFAULT). A page passes when every
  * system of it that holds a voice note has a band and at least one Russian row
- * in it. That a Russian row has at least half of its sewn words of two letters or
- * more in the dictionary is what `rowLanguage` calls Russian, so over the page's
- * Russian rows the share is at least half too; `stats.words` and `stats.known`
- * report it. A system with several Russian rows is seated from
+ * in it. That a Russian row has at least `RUSSIAN_SHARE` (three in ten since
+ * brief r5 step 1) of its sewn words of two letters or more in the dictionary
+ * is what `rowLanguage` calls Russian, so over the page's Russian rows the share
+ * is at least that too; `stats.words` and `stats.known` report it. A system with several Russian rows is seated from
  * the first, the top one, which is the first verse. Whether a song's words are
  * written is decided on all its pages together (`underlay-song.ts`).
  *

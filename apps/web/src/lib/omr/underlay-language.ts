@@ -2,8 +2,9 @@
  * The language of a text row, with no poem to compare it to (N.135, stage 2a).
  *
  * Decision 1 of the stage 1 harness (4.3): "Dictionary witness". A row is
- * Russian where at least half of its sewn words of two or more letters are
- * entries of the dictionary. The singer gives no poem (Dann 2026-10-01 23:06),
+ * Russian where at least `RUSSIAN_SHARE` of its sewn words of two or more
+ * letters are entries of the dictionary (half in the harness, three in ten
+ * since brief r5 step 1). The singer gives no poem (Dann 2026-10-01 23:06),
  * so the row is judged by its own words.
  *
  * The dictionary is passed in as a function, on the pattern of
@@ -23,8 +24,13 @@ export type RowLanguage = 'russian' | 'other';
 
 /** A word counts toward the decision with this many letters or more. */
 export const MIN_LETTERS = 2;
-/** A row is Russian where this share of its counted words, or more, are entries. */
-export const RUSSIAN_SHARE = 0.5;
+/**
+ * A row is Russian where this share of its counted words, or more, are entries.
+ * 0.5 until brief r5 step 1: a replay on a fresh capture of the 18 build songs
+ * (`report-desk-n135-a2-fixes-18-songs_r1_2026-10-28.md`) read right 1,514 to
+ * 1,836 of 2,538 at 0.3, with the long-dash limit (`underlay-tokens.ts`) left as built.
+ */
+export const RUSSIAN_SHARE = 0.3;
 
 /** Letters only, lower-cased: «Ты,» is «ты». */
 function lettersOf(word: string): string {
