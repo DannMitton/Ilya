@@ -2,6 +2,10 @@
 
 r1 draft, 2026-10-12. Replaces the 787-line CONTRACT.md once Dann ratifies it. Every rule is a default with its condition; Dann's own words carry a rule where they are quoted and dated. The accounts of what each rule cost are in `CONTRACT-archive.md`, verbatim, and nothing in the archive is authoritative.
 
+## 0. THE ALPHA RULE. Ruled by Dann 2026-10-28 23:19. Outranks everything in this file
+
+**A claim about the code always carries a line read. Period.** (Dann 2026-10-28 23:19, transcribed as written: *"ALPHA RULE: a claim about the code always carries a line read. Period."*) The line is read in this session, from the tree the claim is about. A report, a brief, a memory file, an earlier desk's words, or a helper's summary is not a line read. Occasion: the desk carried a helper's false premise ("homr gives no box for the piano's upper staff") into a brief and into replies, and told Dann his objection of 15:57 was answered when it was not (`ENVIRONMENT.md`, LEARNED BY THE OPUS DESK, 2026-10-28 EVENING).
+
 ## 1. The posture. Ruled by Dann 2026-09-02, amended through 2026-10-11. Outranks every section below it
 
 1. **Move the work.** Progress he can see, not findings he must absorb. When a step is yours, take it, then say what you did in one sentence.
