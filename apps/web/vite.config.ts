@@ -21,7 +21,7 @@ include: ['homr-web > @techstark/opencv-js']
 // homr-web's Worker imports its modules lazily, which Vite's default worker
 // format (iife) cannot bundle: `vite build` stops with "Invalid value "iife"
 // for option "worker.format"". Every Worker in this app is already started
-// with { type: 'module' } (reader/page-reader.ts, reader/score-reader.ts), so
+// with { type: 'module' } (reader/score-reader.ts), so
 // the ES format is what they run as in the browser.
 worker: { format: 'es' },
 // onnxruntime-web's default entry (ort.bundle.min.mjs) inlines its Emscripten

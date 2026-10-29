@@ -19,8 +19,6 @@ describe('row 122: every provenance keeps today’s key', () => {
 		[{ format: 'musicxml', via: 'mxl' }, 'upload.format.mxl'],
 		[{ format: 'mnx', via: 'denigma', sourceFormat: 'musx' }, 'upload.format.musxDenigma'],
 		[{ format: 'musicxml', via: 'webmscore', sourceFormat: 'mscz' }, 'upload.format.msczWebmscore'],
-		[{ format: 'musicxml', via: 'reader', sourceFormat: 'pdf' }, 'upload.format.pdfReader'],
-		[{ format: 'musicxml', via: 'reader', sourceFormat: 'image' }, 'upload.format.imageReader'],
 	])('%j', (p, key) => {
 		expect(formatLabelKey(p, file)).toBe(key);
 	});

@@ -2,14 +2,13 @@
  * A dropped scan, read by homr: the file in, one MusicXML string out.
  *
  * `ScoreUploader.svelte` calls `readScanAsScore` for a PDF or a picture that
- * shows staves, unless the address carries `?reader=ilya` (`useIlyaReader`),
- * which keeps Ilya's own page reader for comparison. The MusicXML that comes
- * back is ingested the way a dropped MusicXML file is, through the
- * component's own `handleFile`, which the component passes in as `ingest`.
+ * shows staves. (Ilya's own page reader and its `?reader=ilya` route were
+ * retired on 2026-10-27.) The MusicXML that comes back is ingested the way a
+ * dropped MusicXML file is, through the component's own `handleFile`, which
+ * the component passes in as `ingest`.
  *
- * The pages are rasterized by the same functions Ilya's own reader uses:
- * `rasterizePdf` (every page of a PDF, greyscale PNG at 400 dpi) and
- * `toGreyscalePng` (a picture). homr-web and pdf.js are both imported only
+ * The pages are rasterized by `rasterizePdf` (every page of a PDF, greyscale
+ * PNG at 400 dpi) and `toGreyscalePng` (a picture). homr-web and pdf.js are both imported only
  * here, with dynamic `import()`, so a drop of any other kind pays for neither.
  */
 import { toGreyscalePng } from '$lib/reader/page-image';
@@ -20,11 +19,6 @@ import { readingWait, type WaitHooks } from '$lib/score/reading-wait.svelte';
 export type { OmrProgress, OmrReadResult };
 /** The app's one wait, re-exported for the component that echoes it in the drawer. */
 export { readingWait };
-
-/** True where the address asks for Ilya's own page reader: `?reader=ilya`. */
-export function useIlyaReader(search: string): boolean {
-	return new URLSearchParams(search).get('reader') === 'ilya';
-}
 
 /** Reads every page of the scan with homr. Never rejects. */
 export async function readScan(

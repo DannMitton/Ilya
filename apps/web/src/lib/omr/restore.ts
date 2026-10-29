@@ -2,8 +2,7 @@
  * Bringing a stored scan back: homr's reading, kept or made again.
  *
  * A song whose source is a scan (a PDF, or a picture) is restored the way a
- * dropped scan is read, by homr (`scan.ts`), and never by Ilya's own page
- * reader, which stays behind `?reader=ilya`. The reading is kept with the song
+ * dropped scan is read, by homr (`scan.ts`). The reading is kept with the song
  * (`stamp.ts`): where its stamp equals the reader's now, it is used as it is
  * and nothing is read; where it does not, or where the song has none (a song
  * stored before the homr reader), the scan is read once by homr and the new

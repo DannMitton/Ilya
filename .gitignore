@@ -21,10 +21,10 @@ data/dictionary.0982ad81.json
 scripts/flagged-glosses.json
 scripts/frwikt-enrichment-report.json
 
-# Generated copies of the E.16 page reader, put there by
-# apps/web/scripts/copy-reader.mjs at dev and build so Pyodide can fetch them.
-# The source of truth is tools/e16-harness/reader/; these are never edited and
-# never committed. Added N.59 step 2, 2026-08-16.
+# A generated copy of the old page reader, written by copy-reader.mjs at every
+# dev and build until 2026-10-27, which may remain on any machine that built
+# before then; never committed. The source is tools/e16-harness/reader/.
+# Added N.59 step 2, 2026-08-16.
 apps/web/static/reader/
 
 # Generated copy of pdfjs-dist's own WASM codecs, put there by

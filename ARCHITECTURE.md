@@ -108,8 +108,9 @@ search, page layout, and `staff-renderer.ts`, which engraves a staff as SVG.
     the notation font.
 - `src/lib/reader/` reads a score file. It is flat, with `vendor/` for the MuseScore converter's glue. `score-reader.ts`
   and its Worker convert Finale `.musx`, `mscz-converter.ts` converts
-  MuseScore, `page-reader.ts` and its Worker read a PDF or a photograph
-  (`page-pdf.ts`, `page-image.ts`, `staff-detect.ts`), `zip-reader.ts` opens
+  MuseScore, `page-pdf.ts`, `page-image.ts`, and `staff-detect.ts` prepare
+  a PDF or a photograph (the homr route under `src/lib/omr/` reads it),
+  `zip-reader.ts` opens
   zipped files, and `errors.ts` holds the reader's error tiers.
 - `src/lib/voice/` is the singer's voice. `CalibrationWizard.svelte` is the calibration wizard ("Your
   Resonances"), `profileStore.ts` keeps the saved voices (still under the

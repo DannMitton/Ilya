@@ -13,7 +13,8 @@
  * `page-pdf.ts` passes `wasmUrl: '/pdfjs-wasm/'`, which is this directory.
  *
  * THE COPIES ARE GENERATED, NEVER EDITED, AND NEVER COMMITTED, for
- * copy-reader.mjs's reason: `apps/web/static/pdfjs-wasm/` is gitignored,
+ * the reason the old page reader's copy was (`apps/web/static/reader/`):
+ * `apps/web/static/pdfjs-wasm/` is gitignored,
  * because an untracked file blocks the ship script, and because a second copy
  * of a dependency's binaries in the repository is a copy that can drift from
  * the pinned version in the lockfile. `pdfjs-dist` is pinned exactly, so the

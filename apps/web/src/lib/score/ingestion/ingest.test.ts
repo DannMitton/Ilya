@@ -328,12 +328,12 @@ describe('ingestScoreFile: .mscz via webmscore', () => {
 
 describe('ingestScoreFile: detection failures', () => {
 	/**
-	 * N.59 step 8, Dann's ruling 2026-08-16. A PDF is no longer a recognised
-	 * refusal; it goes to the page reader. With no reader wired in it lands on a
-	 * typed unavailability rather than a crash, exactly as `.mscz` does without
-	 * its converter.
+	 * N.59 step 8, Dann's ruling 2026-08-16: a PDF is no longer a recognised
+	 * refusal. Since 2026-10-27 the page reader is gone and `take()` sends every
+	 * scan to homr before dispatch, so a PDF that reaches dispatch lands on a
+	 * typed unavailability rather than a crash. That is now the only outcome.
 	 */
-	it('routes a PDF to the page reader, and says so when none is wired in', async () => {
+	it('says so when a PDF reaches dispatch', async () => {
 		const out = await ingestScoreFile(fileOf('scan.pdf', utf8('%PDF-1.7\n')), deps());
 		const error = expectErr(out);
 		expect(error.code).toBe('PAGE_READER_UNAVAILABLE');
@@ -356,89 +356,5 @@ describe('fidelityBanner', () => {
 		expect(fidelityBanner({ format: 'musicxml', via: 'direct' })).toBeNull();
 		expect(fidelityBanner({ format: 'musicxml', via: 'mxl' })).toBeNull();
 		expect(fidelityBanner({ format: 'musicxml', via: 'webmscore', sourceFormat: 'mscz' })).toBeNull();
-	});
-});
-
-/**
- * N.59, the reader route. The Worker and the rasterizer are the component's to
- * own, so dispatch sees only the seam: a picture or a PDF in, recognized output
- * and a read report out.
- */
-describe('ingestScoreFile: the page-reader route', () => {
-	const answers = { clef: { sign: 'F', line: 4 }, octaveChange: 0, fifths: 2 };
-
-	const oneNoteRead = () => ({
-		ro: {
-			pieceId: 'p',
-			clef: { sign: 'F', line: 4 },
-			keySignature: { fifths: 2 },
-			measures: [{ measureIndex: 0, metre: { beats: 4, beatType: 4 }, measureDuration: { numerator: 1, denominator: 1 } }],
-			verses: [
-				{
-					verseNumber: 1,
-					notes: [
-						{ id: 'a', type: 'note' as const, measureIndex: 0, onset: { numerator: 0, denominator: 1 }, duration: { numerator: 1, denominator: 4 }, midi: 45 },
-					],
-				},
-			],
-		},
-		report: {
-			pages: 1, systems: 4, staves: 8, staffSpace: [29], notes: 1, rests: 0, measures: 1,
-			pitchSubstitutions: [], durationSubstitutions: [], staffSelectionFallbacks: 4, failedPages: [], readSeconds: 4.5,
-		},
-	});
-
-	it('gives a PDF the reader provenance, naming pdf as the source format', async () => {
-		const out = await ingestScoreFile(
-			fileOf('scan.pdf', utf8('%PDF-1.7\n')),
-			deps({ readPages: async () => oneNoteRead(), engravingAnswers: answers }),
-		);
-		const ingested = expectOk(out);
-		expect(ingested.provenance).toEqual({ format: 'musicxml', via: 'reader', sourceFormat: 'pdf' });
-		expect(fidelityBanner(ingested.provenance)).toBe('reader');
-	});
-
-	it('gives a photograph the same provenance, naming image instead', async () => {
-		const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
-		const out = await ingestScoreFile(
-			fileOf('page.png', png),
-			deps({ readPages: async () => oneNoteRead(), engravingAnswers: answers }),
-		);
-		expect(expectOk(out).provenance).toEqual({ format: 'musicxml', via: 'reader', sourceFormat: 'image' });
-	});
-
-	it('carries the read report up, so the drawer can declare it', async () => {
-		const out = await ingestScoreFile(
-			fileOf('scan.pdf', utf8('%PDF-1.7\n')),
-			deps({ readPages: async () => oneNoteRead(), engravingAnswers: answers }),
-		);
-		const report = expectOk(out).readReport;
-		expect(report?.staffSpace).toEqual([29]);
-		expect(report?.staffSelectionFallbacks).toBe(4);
-		expect(report?.failedPages).toEqual([]);
-	});
-
-	/**
-	 * N.96 ship 1b. A page that raised is reported rather than aborting the
-	 * upload, so a multi-page read arrives with notes AND with the pages that
-	 * failed. The drawer renders one notice per entry. The only file that
-	 * exercised this end to end stopped failing when page 2 became readable, so
-	 * the seam is held here instead.
-	 */
-	it('carries failedPages up beside a partial read, so the drawer can name them', async () => {
-		const partial = () => {
-			const r = oneNoteRead();
-			return { ...r, report: { ...r.report, pages: 2, failedPages: [2] } };
-		};
-		const out = await ingestScoreFile(
-			fileOf('scan.pdf', utf8('%PDF-1.7\n')),
-			deps({ readPages: async () => partial(), engravingAnswers: answers }),
-		);
-		const ingested = expectOk(out);
-		expect(ingested.readReport?.failedPages).toEqual([2]);
-		// A partial read is a read: dispatch returns ok, with the provenance a
-		// full read would carry, and the pages that failed named beside it.
-		expect(ingested.readReport?.pages).toBe(2);
-		expect(ingested.provenance).toEqual({ format: 'musicxml', via: 'reader', sourceFormat: 'pdf' });
 	});
 });

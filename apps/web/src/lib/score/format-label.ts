@@ -30,6 +30,5 @@ export function formatLabelKey(p: IngestProvenance, origin: SourceOrigin, scanKi
 	}
 	if (p.via === 'mxl') return 'upload.format.mxl';
 	if (p.via === 'denigma') return 'upload.format.musxDenigma';
-	if (p.via === 'reader') return p.sourceFormat === 'pdf' ? 'upload.format.pdfReader' : 'upload.format.imageReader';
 	return 'upload.format.msczWebmscore'; // via === 'webmscore'
 }

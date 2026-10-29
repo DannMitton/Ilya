@@ -28,9 +28,8 @@
 	and `RootPanel` carries it with its reasons.
 
 	WHAT IS LEFT IS THE ENGINE AND EVERY ANSWER IT GIVES. The two converter
-	lifecycles, the page reader, the clef-and-key prompt, the busy labels, the
-	fidelity banner, the read report, and `classify`'s twenty-odd named errors
-	are untouched, line for line. They render UNDER the one field, because
+	lifecycles, the busy labels, the fidelity banner, and `classify`'s named
+	errors render UNDER the one field, because
 	`+page.svelte` renders this component inside the intake, which is where a
 	question about a file the singer just dropped belongs.
 
@@ -51,9 +50,12 @@
 	the question it asked (`intake.pdf.title` / `intake.picture.title`) are
 	gone; `decidePoemOrScore` (`ingestion/poem-or-score.ts`) is the pure
 	branch table behind the whole decision, including what happens where
-	NEITHER reading answers. The `asking` state below (a picture's clef and
-	key questions) is untouched: it is a different question, about a
-	different thing, and Dann's ruling did not touch it.
+	NEITHER reading answers.
+
+	2026-10-27, ruled by Dann: THE OLD PAGE READER'S ROUTE (`?reader=ilya`) IS
+	RETIRED. Its `asking` state (a picture's clef and key questions), its read
+	report, and the worker behind them are gone from this file; a scan goes to
+	homr (`$lib/omr/scan.ts`) and nowhere else.
 -->
 <script lang="ts">
 	import { onDestroy, onMount, untrack } from 'svelte';
@@ -61,11 +63,10 @@
 	import type { LoaderState } from '$lib/loader';
 	import { WorkerScoreReader } from '$lib/reader/score-reader';
 	import { WebmscoreMsczConverter } from '$lib/reader/mscz-converter';
-	import { WorkerPageReader, type ClefKeyProbe } from '$lib/reader/page-reader';
-	import { ImageUndecodableError, inkPng, pieceIdFor, toGreyscalePng } from '$lib/reader/page-image';
+	import { inkPng, toGreyscalePng } from '$lib/reader/page-image';
 	import { hasStaves } from '$lib/reader/staff-detect';
 	import { routePdf, type PdfRoute } from '$lib/score/ingestion/first-staved-page';
-	import { readScanAsScore, readingWait, useIlyaReader } from '$lib/omr/scan';
+	import { readScanAsScore, readingWait } from '$lib/omr/scan';
 	import { restoreStoredScan, type KeptReading } from '$lib/omr/restore';
 	import { formatLabelKey } from './format-label';
 	import {
@@ -74,15 +75,11 @@
 		type IngestedScore,
 		type IngestError,
 		type IngestOutcome,
-		type PageRead,
 	} from './ingestion/ingest';
 	import { detectScoreFormat, isHeifImage, SNIFF_LENGTH } from './ingestion/format-detection';
-	import { prefillFrom } from './ingestion/clef-key-prompt';
 	import { decidePoemOrScore } from './ingestion/poem-or-score';
 	import { dictionaryGuardMode, isKnownWordForGuard } from './ingestion/ocr-guard';
 	import { isKnownWord } from '$lib/pipeline';
-	import type { EngravingAnswers } from './ingestion/recognized-to-musicxml';
-	import type { ReadReport } from '$lib/reader/recognized';
 	import type { PageProvenance } from '$lib/library/types';
 
 	interface Props {
@@ -98,9 +95,9 @@
 			ingested: IngestedScore,
 			file: File,
 			origin: 'upload' | 'restore',
-			/** N.59 step 7: present only on the reader route. `file` is then the
-			 *  GREYSCALE INK, not the picture the singer supplied, because the ink
-			 *  is what the retention ruling stores and what a re-read reproduces. */
+			/** N.59 step 7: the old page reader's provenance. Always `undefined`
+			 *  since that route was retired (2026-10-27); the parameter stays
+			 *  because `+page.svelte`'s `handleArrival` is typed with it. */
 			page?: PageProvenance,
 			/** A scan homr read: the scan and its stamped reading, both kept. */
 			scan?: { file: File; reading: KeptReading },
@@ -113,9 +110,6 @@
 		restore?: {
 			fileName: string;
 			bytes: ArrayBuffer;
-			/** N.59 step 7: the clef and key this page was read with, so a
-			 *  restore never asks the two questions again. */
-			answers?: EngravingAnswers | null;
 			/** homr's stamped reading of a stored scan. */
 			reading?: KeptReading | null;
 		} | null;
@@ -161,11 +155,6 @@
 
 	type UiState =
 		| { kind: 'idle' }
-		/** N.59, Ruling A: a picture waits here while the singer answers.
-		 *  N.97: `detected` is true where the page's own clef and key signature
-		 *  are what the two controls now show. False is the old prompt, word for
-		 *  word. */
-		| { kind: 'asking'; file: File; detected: boolean }
 		| { kind: 'busy'; label: string; key?: string }
 		/** N.145, 2026-09-16: RENAMED FROM `done`. The parse already succeeded
 		 *  and `oningested` has already been called (`announceArrival`, called
@@ -186,63 +175,9 @@
 	const getReader = (): WorkerScoreReader => (reader ??= new WorkerScoreReader());
 	let converter: WebmscoreMsczConverter | null = null;
 	const getConverter = (): WebmscoreMsczConverter => (converter ??= new WebmscoreMsczConverter());
-	/** N.59, Ruling E: constructed on the first real picture, per N.26's law
-	 *  that a drop of one kind never pays for another's warm-up. Pyodide plus
-	 *  numpy, opencv-python, and matplotlib is the heaviest warm-up in the app. */
-	let pageReader: WorkerPageReader | null = null;
-	const getPageReader = (): WorkerPageReader => (pageReader ??= new WorkerPageReader());
 	onDestroy(() => {
 		reader?.dispose();
 		converter?.dispose();
-		pageReader?.dispose();
-	});
-
-	/* ── N.59: the singer's two answers (Ruling A) ──────────────────── */
-
-	/** Defaults per Ruling A: treble, no sharps or flats, no octave change. */
-	const CLEF_CHOICES: { key: string; clef: { sign: string; line: number }; octaveChange: number }[] = [
-		{ key: 'upload.ask.clefTreble', clef: { sign: 'G', line: 2 }, octaveChange: 0 },
-		{ key: 'upload.ask.clefTrebleOttava', clef: { sign: 'G', line: 2 }, octaveChange: -1 },
-		{ key: 'upload.ask.clefBass', clef: { sign: 'F', line: 4 }, octaveChange: 0 },
-	];
-	let clefChoice = $state(0);
-	let fifths = $state(0);
-
-	/**
-	 * N.97. THE PROMPT CONFIRMS WHAT THE PAGE PRINTS, or falls back to asking.
-	 *
-	 * The reader now reads the clef glyph and the run of sharps or flats beside
-	 * it, and this moves the two controls onto that reading before the singer
-	 * sees them. Everything else about the prompt is unchanged: the same two
-	 * selects, the same options, the same buttons, and the same two answers
-	 * travelling to the reader.
-	 *
-	 * THE RULE ITSELF IS IN `clef-key-prompt.ts` and tested there, because
-	 * vitest never compiles a `.svelte` file. What is left here is the
-	 * assignment.
-	 */
-	function preselect(probe: ClefKeyProbe | null): boolean {
-		const fill = prefillFrom(probe);
-		if (!fill) return false;
-		clefChoice = fill.clefChoice;
-		fifths = fill.fifths;
-		return true;
-	}
-
-	/** -7 through 7, flats first, so the list reads the way a circle of fifths does. */
-	const FIFTHS_CHOICES = Array.from({ length: 15 }, (_, i) => i - 7);
-	function fifthsLabel(n: number): string {
-		if (n === 0) return T('upload.ask.keyNone');
-		if (n === 1) return T('upload.ask.keySharp');
-		if (n === -1) return T('upload.ask.keyFlat');
-		return n > 0
-			? T('upload.ask.keySharps').replace('%s', String(n))
-			: T('upload.ask.keyFlats').replace('%s', String(-n));
-	}
-	const answers = $derived<EngravingAnswers>({
-		clef: CLEF_CHOICES[clefChoice].clef,
-		octaveChange: CLEF_CHOICES[clefChoice].octaveChange,
-		fifths,
 	});
 
 	/* ── Intake ─────────────────────────────────────────────────────── */
@@ -256,9 +191,7 @@
 	 * staves in its first four pages, or no text layer; rows 44, 45). Reader-bound
 	 * (homr, `$lib/omr/scan.ts`, every page, ingested as a dropped MusicXML file
 	 * is, no clef-and-key question): homr finding no music falls through to the
-	 * poem route (`readPdfAsPoem` / `readAsPoemByOcr`), as does no staves. `?reader=ilya`
-	 * keeps Ilya's own reader (`handleFile`, which asks the clef-and-key
-	 * question; `pendingPoemFallback` carries the poem route to `readAsked`).
+	 * poem route (`readPdfAsPoem` / `readAsPoemByOcr`), as does no staves.
 	 *
 	 * THE SNIFF IS STILL `readableKind`, WHICH IS `detectScoreFormat`, THE
 	 * SAME ONE DISPATCH USES. A file whose head cannot be read at all falls
@@ -282,9 +215,7 @@
 		const route = 'route' in rasterized ? rasterized.route : null;
 		const stavesFound = route ? route.to === 'reader' && route.stavesFound : true;
 		if (route ? route.to === 'reader' : await hasStaves(ink)) {
-			pendingPoemFallback = { kind, ink };
-			if (useIlyaReader(location.search)) await handleFile(file);
-			else await readScanAsScore(file, kind, {
+			await readScanAsScore(file, kind, {
 				busy: (key) => (ui = { kind: 'busy', label: '', key }),
 				ingest: async (xml, reading) => {
 					await handleFile(xml);
@@ -296,22 +227,12 @@
 			});
 			return;
 		}
-		pendingPoemFallback = null;
 		if (kind === 'pdf') {
 			await readPdfAsPoem(file, ink, false, null);
 		} else {
 			await readAsPoemByOcr(inkPng(file, ink), null, false, null);
 		}
 	}
-
-	/**
-	 * N.146. What the poem route needs where the score route was tried first
-	 * and fell through: which kind the file was, and the ink `take()` already
-	 * rasterized for the staff check, so the OCR fallback below never
-	 * rasterizes a PDF's first page twice. Set by `take()`, read by
-	 * `readAsked()`, cleared by `reset()`.
-	 */
-	let pendingPoemFallback: { kind: 'image' | 'pdf'; ink: ArrayBuffer } | null = null;
 
 	/**
 	 * N.146 step 2b. Callers parked here by `waitForDictionaryGuard`, spent
@@ -349,10 +270,9 @@
 	}
 
 	/**
-	 * The page's ink and, for a PDF, its route (rows 44, 45). The failure classes each throws map to the same copy `classify()` gives an `IngestOutcome`
-	 * carrying `PDF_UNREADABLE` / `PDF_JBIG2_UNDECODED` / `IMAGE_UNDECODABLE`,
-	 * because a page that cannot be rasterized at all is that same failure
-	 * whether it is met here or at the read.
+	 * The page's ink and, for a PDF, its route (rows 44, 45). A page that cannot
+	 * be rasterized at all is refused here, in `upload.err.pdfUnreadable`,
+	 * `upload.err.pdfJbig2`, `upload.err.imageHeic`, or `upload.err.imageUndecodable`.
 	 */
 	async function rasterizeFirstPage(
 		file: File,
@@ -500,11 +420,6 @@
 		return T(isHeifImage(head) ? 'upload.err.imageHeic' : 'upload.err.imageUndecodable');
 	}
 
-	/** Is this a page the reader can read? Sniffed by bytes, as dispatch will. */
-	async function isPicture(file: File): Promise<boolean> {
-		return (await readableKind(file)) !== null;
-	}
-
 	async function readableKind(file: File): Promise<'image' | 'pdf' | null> {
 		const head = new Uint8Array(await file.slice(0, SNIFF_LENGTH).arrayBuffer());
 		const detected = detectScoreFormat(file.name, head);
@@ -515,40 +430,13 @@
 	}
 
 	/**
-	 * N.59, Ruling A. A picture stops here and asks its two questions BEFORE
-	 * the read, because the reader detects neither clef nor key and E.43
-	 * measured the cost of wrong values at 38% against 73%. A restored page
-	 * does not ask again: its answers came back with it.
-	 *
-	 * `onNoSungLine`, N.146: passed only by `readAsked`, for the one call to
-	 * this function that follows a staves-found decision in `take()`. Where
-	 * the read that follows finds no sung line, this hands off to it
-	 * silently instead of showing the read's own error or `soon` note --
-	 * `readAsked` falls through to the poem route in its place. Never
-	 * touched for a restore or for a direct format (MusicXML, `.musx`, an
-	 * `.mscz`), which have no poem route to fall through to and keep
-	 * showing their own errors exactly as before.
+	 * A file that is not a picture or a PDF, dispatched by `ingestScoreFile`:
+	 * MusicXML, MNX, `.mxl`, `.musx`, `.mscz`. A scan never reaches this function:
+	 * `take()` sends it to homr, which hands back MusicXML, and that is what
+	 * arrives here.
 	 */
-	async function handleFile(
-		file: File,
-		storedAnswers?: EngravingAnswers,
-		onNoSungLine?: () => Promise<void>
-	): Promise<void> {
+	async function handleFile(file: File): Promise<void> {
 		bannerDismissed = false;
-		if (!storedAnswers && (await isPicture(file))) {
-			// N.97. The reader looks at the page BEFORE the prompt appears, so the
-			// prompt can show what it found. The wait is named honestly with the
-			// strings the read itself uses, because this IS the reader reading the
-			// page, and the first one pays Pyodide's warm-up either way.
-			ui = {
-				kind: 'busy',
-				label: WorkerPageReader.hasLoadedBefore
-					? T('upload.status.readingPage')
-					: T('upload.status.preparingReader'),
-			};
-			ui = { kind: 'asking', file, detected: preselect(await probeFile(file)) };
-			return;
-		}
 		// A .musx or .mscz routes through conversion; name the wait honestly.
 		const isMusx = /\.musx$/i.test(file.name);
 		const isMscz = /\.mscz$/i.test(file.name);
@@ -559,19 +447,13 @@
 		// longer pulls a WASM artifact it cannot use.
 		if (isMusx) getReader();
 		if (isMscz) getConverter();
-		const picture = !!storedAnswers || (await isPicture(file));
-		if (picture) getPageReader();
 		ui = {
 			kind: 'busy',
 			label: isMusx
 				? T('upload.status.converting')
 				: isMscz
 					? T('upload.status.convertingMscz')
-					: picture
-						? WorkerPageReader.hasLoadedBefore
-							? T('upload.status.readingPage')
-							: T('upload.status.preparingReader')
-						: T('upload.status.reading'),
+					: T('upload.status.reading'),
 		};
 
 		let outcome: IngestOutcome;
@@ -584,26 +466,18 @@
 					dispose: () => reader?.dispose(),
 				},
 				msczConvert: (bytes, name) => getConverter().convert(bytes, name),
-				readPages: readPages,
-				engravingAnswers: storedAnswers ?? answers,
 			});
 		} catch (err) {
 			console.error('[ScoreUploader] unexpected ingest failure:', err);
-			if (onNoSungLine) return onNoSungLine();
 			ui = { kind: 'error', message: T('upload.err.parseFailed') };
 			return;
 		}
 
-		if (onNoSungLine && !(outcome.ok && (outcome.ingested.readReport?.notes ?? 0) > 0)) {
-			return onNoSungLine();
-		}
 		if (outcome.ok) {
 			ui = { kind: 'arrived', ingested: outcome.ingested, file };
 			return;
 		}
-		const c = outcome.error.code === 'IMAGE_UNDECODABLE'
-			? { soon: false, message: await undecodablePictureMessage(file) }
-			: classify(outcome.error, isMscz);
+		const c = classify(outcome.error, isMscz);
 		ui = c.soon ? { kind: 'soon', message: c.message } : { kind: 'error', message: c.message };
 	}
 
@@ -626,159 +500,8 @@
 	 */
 	function announceArrival(scan?: { file: File; reading: KeptReading }): void {
 		if (ui.kind !== 'arrived') return;
-		const page = pageFor(ui.ingested);
-		oningested(ui.ingested, page ? inkFile(ui.file) : ui.file, 'upload', page ?? undefined, scan);
+		oningested(ui.ingested, ui.file, 'upload', undefined, scan);
 	}
-
-	/**
-	 * The page-reader seam handed to dispatch. Greyscale conversion happens
-	 * here, once, and the SAME bytes are what step 7 stores, so a restored page
-	 * re-reads to the same answer rather than an approximate one.
-	 */
-	async function readPages(file: File, forAnswers: EngravingAnswers): Promise<PageRead> {
-		const kind = await readableKind(file);
-		let inks: ArrayBuffer[];
-		try {
-			if (kind === 'pdf') {
-				// Dynamic import: pdf.js is 644 KB gzipped and nobody who has not
-				// dropped a PDF ever pays for it (N.26's law, and the same shape as
-				// denigma and webmscore above).
-				const { rasterizePdf } = await import('$lib/reader/page-pdf');
-				inks = await rasterizePdf(file);
-			} else {
-				inks = [await toGreyscalePng(file)];
-			}
-		} catch (e) {
-			if (e instanceof ImageUndecodableError) throw { code: 'IMAGE_UNDECODABLE', message: e.message };
-			if (typeof e === 'object' && e !== null && 'code' in e) throw e;
-			throw e;
-		}
-		// A PDF is STORED BYTE FOR BYTE, not as its rasters, which is Dann's own
-		// ruled precedent for `.musx`: storing the conversion would freeze the
-		// song at today's rasterizer. A photograph has no such original to keep,
-		// so its ink is both what is read and what is stored.
-		lastInk = kind === 'pdf' ? await file.arrayBuffer() : inks[0].slice(0);
-		// The original's hash is BEST EFFORT and the ink is not: `crypto.subtle`
-		// is absent outside a secure context, and losing it must cost a recorded
-		// provenance line, never the singer's page.
-		let originalHash = '';
-		try {
-			const digest = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
-			originalHash = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
-		} catch (err) {
-			console.error('[ScoreUploader] page kept, but the original could not be hashed:', err);
-		}
-		lastKind = kind;
-		lastPage = {
-			clef: forAnswers.clef,
-			octaveChange: forAnswers.octaveChange,
-			fifths: forAnswers.fifths,
-			originalName: file.name,
-			originalHash,
-			staffSpace: [],
-		};
-		return getPageReader().read(inks, {
-			clef: [forAnswers.clef.sign, forAnswers.clef.line],
-			key: forAnswers.fifths,
-			octaveChange: forAnswers.octaveChange,
-			pieceId: await pieceIdFor(file),
-		});
-	}
-
-	/**
-	 * N.59 step 7. The greyscale ink of the last picture read, and the answers
-	 * it was read with, so the owner can store them and restore without asking
-	 * again. Held here because this component is the only one that ever sees
-	 * the singer's bytes, which is why N.67 step 2 put the restore here too.
-	 */
-	let lastInk: ArrayBuffer | null = null;
-	let lastPage: PageProvenance | null = null;
-	let lastKind: 'image' | 'pdf' | null = null;
-
-	/**
-	 * N.97. The clef and key signature this page PRINTS, or null.
-	 *
-	 * Only the FIRST page is probed, because the prompt asks one question about
-	 * the whole upload and the first page is what a singer looking at their
-	 * paper will check it against. A multi-page PDF therefore rasterizes page 1
-	 * twice, once here and once for the read; that cost is named rather than
-	 * traded for a cache that would have to stay in step with the read's own
-	 * rasterizing.
-	 *
-	 * NOTHING HERE CAN FAIL THE UPLOAD. Every failure path returns null, the
-	 * prompt asks the way it always did, and the read that follows reports its
-	 * own errors in its own words.
-	 */
-	async function probeFile(file: File): Promise<ClefKeyProbe | null> {
-		try {
-			const kind = await readableKind(file);
-			let ink: ArrayBuffer;
-			if (kind === 'pdf') {
-				const { rasterizePdf } = await import('$lib/reader/page-pdf');
-				const pages = await rasterizePdf(file, 1);
-				if (pages.length === 0) return null;
-				ink = pages[0];
-			} else {
-				ink = await toGreyscalePng(file);
-			}
-			return await getPageReader().probe(ink);
-		} catch (err) {
-			console.error('[ScoreUploader] the clef and key probe failed; asking instead:', err);
-			return null;
-		}
-	}
-
-	/**
-	 * The singer pressed "Read this page". N.146: `ui.kind === 'asking'` is
-	 * now only ever reached by way of `take()`'s staves-found branch, so
-	 * `pendingPoemFallback` is always set here; the fallback closure is
-	 * skipped only as a type-safe default this function's own contract
-	 * cannot otherwise reach, not as a real path anything takes.
-	 */
-	async function readAsked(): Promise<void> {
-		if (ui.kind !== 'asking') return;
-		const { file } = ui;
-		const fallback = pendingPoemFallback;
-		await handleFile(
-			file,
-			answers,
-			fallback
-				? () =>
-						fallback.kind === 'pdf'
-							? readPdfAsPoem(file, fallback.ink, true, false)
-							: readAsPoemByOcr(inkPng(file, fallback.ink), null, true, false)
-				: undefined
-		);
-		announceArrival();
-	}
-
-	/* N.108-5's `accept()`, and N.115's `hasWaitingScore` / `acceptWaiting`
-	   that read it, ARE REMOVED, 2026-09-16 (N.145): "Transcribe and fit"
-	   is gone (Dann: "yes, remove the button"), and with no button standing
-	   at Continue there is nothing left for either to read or to press.
-	   What `accept()` did — `pageFor`, `inkFile`, and the call to
-	   `oningested` — is now `announceArrival`, above, called the instant a
-	   parse succeeds rather than on a later press. */
-
-	/** The page provenance for a reader arrival, with the measured spacing filled in. */
-	function pageFor(ingested: IngestedScore): PageProvenance | null {
-		if (ingested.provenance.via !== 'reader' || !lastPage) return null;
-		return { ...lastPage, staffSpace: ingested.readReport?.staffSpace ?? [] };
-	}
-
-	/**
-	 * What the owner stores. For a photograph that is the greyscale ink, because
-	 * there is no better original to keep. For a PDF it is the PDF itself, kept
-	 * under its own name and type.
-	 */
-	function inkFile(original: File): File {
-		if (lastKind === 'pdf') {
-			return new File([lastInk ?? new ArrayBuffer(0)], original.name, { type: 'application/pdf' });
-		}
-		const stem = original.name.replace(/\.[^.]+$/, '') || 'page';
-		return new File([lastInk ?? new ArrayBuffer(0)], `${stem}.png`, { type: 'image/png' });
-	}
-
 	/**
 	 * N.67 step 2. A song with a stored source re-ingests it on boot.
 	 *
@@ -790,8 +513,8 @@
 		if (!restore) return;
 		const file = new File([restore.bytes], restore.fileName);
 		const kind = await readableKind(file);
-		if (kind !== null && !useIlyaReader(location.search)) {
-			// A stored scan is read by homr, never Ilya's own page reader.
+		if (kind !== null) {
+			// A stored scan is read by homr.
 			await restoreStoredScan(file, kind, restore.reading, {
 				busy: (key) => (ui = { kind: 'busy', label: '', key }),
 				ingest: async (xml) => (await handleFile(xml), ui.kind === 'arrived'),
@@ -799,10 +522,9 @@
 				keep: (reading) => onreading?.(reading),
 			});
 		} else {
-			// N.59 step 7: a stored picture carries its own answers, so restoring
-			// never re-asks. Re-asking on every reload is the tool forgetting, which
-			// is the same principle N.67 step 2's restore already states.
-			await handleFile(file, restore.answers ?? undefined);
+			// A stored score file (MusicXML, .mxl, .musx, .mscz) is re-ingested here;
+			// a stored scan went to homr above.
+			await handleFile(file);
 		}
 		// N.145 RENAMED 'done' TO 'arrived'; NOTHING ELSE HERE CHANGED. This
 		// path calls `oningested` itself, with origin 'restore', and resets
@@ -821,7 +543,6 @@
 	function reset(): void {
 		ui = { kind: 'idle' };
 		bannerDismissed = false;
-		pendingPoemFallback = null;
 	}
 
 	/* ── Presentation mappings ──────────────────────────────────────── */
@@ -870,16 +591,7 @@
 			case 'MSCZ_CONVERTER_UNAVAILABLE':
 				return { soon: true, message: T('upload.soon.mscz') };
 			case 'PAGE_READER_UNAVAILABLE':
-			case 'PAGE_READER_LOAD_FAILED':
 				return { soon: false, message: T('upload.err.readerLoadFailed') };
-			case 'PAGE_READ_FAILED':
-				return { soon: false, message: T('upload.err.pageReadFailed') };
-			case 'IMAGE_UNDECODABLE':
-				return { soon: false, message: T('upload.err.imageUndecodable') };
-			case 'PDF_UNREADABLE':
-				return { soon: false, message: T('upload.err.pdfUnreadable') };
-			case 'PDF_JBIG2_UNDECODED':
-				return { soon: false, message: T('upload.err.pdfJbig2') };
 			case 'CONVERSION_FAILED':
 				return {
 					soon: false,
@@ -904,13 +616,6 @@
 		ui.kind === 'arrived' && !bannerDismissed ? fidelityBanner(ui.ingested.provenance) : null
 	);
 	const showBanner = $derived(bannerTier !== null);
-	const readReport = $derived<ReadReport | null>(
-		ui.kind === 'arrived' ? (ui.ingested.readReport ?? null) : null
-	);
-	const measureList = (subs: { measureIndex: number; count: number }[]): string =>
-		subs.map((x) => x.measureIndex + 1).join(', ');
-	const subTotal = (subs: { measureIndex: number; count: number }[]): number =>
-		subs.reduce((n, x) => n + x.count, 0);
 </script>
 
 <div class="uploader">
@@ -928,42 +633,7 @@
 	     the refusals. It
 	     is mounted inside the intake, so every one of them appears where the
 	     file landed. -->
-	{#if ui.kind === 'asking'}
-		<!-- N.59, Ruling A, as amended by N.97. Two things the reader now READS
-		     off the page and asks the singer to confirm. The drawer manipulates,
-		     so the control is lawful here; nothing about this appears on the
-		     paper.
-
-		     WHERE THE READ ABSTAINED THE OLD PROMPT RETURNS, word for word:
-		     `detected` is null, the two frame strings are `upload.ask.*` again,
-		     and the defaults are treble and no accidentals with the octave-down
-		     treble one tap away. Every other string in this block is shared by
-		     both, because only the frame changed and not the question. -->
-		<div class="ask">
-			<p class="ask-title">{ui.detected ? T('upload.confirm.title') : T('upload.ask.title')}</p>
-			<p class="ask-why">{ui.detected ? T('upload.confirm.why') : T('upload.ask.why')}</p>
-			<label class="ask-field">
-				<span class="ask-label">{T('upload.ask.clef')}</span>
-				<select class="ask-select" bind:value={clefChoice}>
-					{#each CLEF_CHOICES as choice, i (choice.key)}
-						<option value={i}>{T(choice.key)}</option>
-					{/each}
-				</select>
-			</label>
-			<label class="ask-field">
-				<span class="ask-label">{T('upload.ask.key')}</span>
-				<select class="ask-select" bind:value={fifths}>
-					{#each FIFTHS_CHOICES as n (n)}
-						<option value={n}>{fifthsLabel(n)}</option>
-					{/each}
-				</select>
-			</label>
-			<div class="result-actions">
-				<button type="button" class="btn-secondary" onclick={reset}>{T('upload.ask.cancel')}</button>
-				<button type="button" class="btn-primary" onclick={readAsked}>{T('upload.ask.read')}</button>
-			</div>
-		</div>
-	{:else if ui.kind === 'busy'}
+	{#if ui.kind === 'busy'}
 		<div class="status">
 			<span class="spinner"></span>
 			<span class="status-label">{ui.key ? (readingWait.line(language) ?? T(ui.key)) : ui.label}</span>
@@ -981,82 +651,11 @@
 			{#if showBanner}
 				<div class="banner">
 					<p class="banner-text">
-						{bannerTier === 'reader' ? T('upload.banner.reader') : T('upload.banner.denigma')}
+						{T('upload.banner.denigma')}
 					</p>
 					<button type="button" class="banner-dismiss" onclick={() => (bannerDismissed = true)}>
 						{T('upload.banner.dismiss')}
 					</button>
-				</div>
-			{/if}
-			{#if readReport}
-				<!-- N.59, Ruling D. The read report lives in the DRAWER and counts
-				     every substitution. Nothing is marked on the page: a mark that
-				     appears on everything says nothing (E.47's strike). -->
-				<div class="read-report">
-					<p class="report-title">{T('upload.report.title')}</p>
-					<p class="report-line">
-						{T('upload.report.systems')
-							.replace('%s', String(readReport.systems))
-							.replace('%s', String(readReport.staves))}
-					</p>
-					<p class="report-line">
-						{T('upload.report.events')
-							.replace('%s', String(readReport.notes))
-							.replace('%s', String(readReport.rests))
-							.replace('%s', String(readReport.measures))}
-					</p>
-					<p class="report-line">
-						{T('upload.report.spacing').replace(
-							'%s',
-							readReport.staffSpace.map((v) => v.toFixed(1)).join(', ')
-						)}
-					</p>
-					<p class="report-line">
-						{T('upload.report.seconds').replace('%s', readReport.readSeconds.toFixed(1))}
-					</p>
-					{#if readReport.pitchSubstitutions.length > 0}
-						<p class="report-sub">
-							{T('upload.report.pitchSubs')
-								.replace('%s', String(subTotal(readReport.pitchSubstitutions)))
-								.replace('%s', measureList(readReport.pitchSubstitutions))}
-						</p>
-					{/if}
-					{#if readReport.durationSubstitutions.length > 0}
-						<p class="report-sub">
-							{T('upload.report.durationSubs')
-								.replace('%s', String(subTotal(readReport.durationSubstitutions)))
-								.replace('%s', measureList(readReport.durationSubstitutions))}
-						</p>
-					{/if}
-					<!-- N.96 ship 1b. Named FIRST among the report's caveats, because a
-					     page nobody read is a bigger fact about this upload than any
-					     per-note assumption below it. One line per failed page: the
-					     ruled string takes one page number, and rendering it twice
-					     beats coining a plural nobody approved. -->
-					{#each readReport.failedPages as pageNo (pageNo)}
-						<p class="report-sub">
-							{T('upload.report.pageFailed').replace('%s', String(pageNo))}
-						</p>
-					{/each}
-					{#if readReport.staffSelectionFallbacks > 0}
-						<p class="report-sub">
-							{T('upload.report.staffFallback').replace(
-								'%s',
-								String(readReport.staffSelectionFallbacks)
-							)}
-						</p>
-					{/if}
-					<!-- N.145, 2026-09-16, DESK DEFAULT per the brief: the read report
-					     had no dismiss of its own, because it used to leave with
-					     Try another file or Continue to analysis. Both are gone, so
-					     this is now the only way to clear the whole arrived summary
-					     without dropping another file. Reuses `upload.banner.dismiss`;
-					     no string is coined. -->
-					<div class="result-actions">
-						<button type="button" class="btn-secondary" onclick={reset}>
-							{T('upload.banner.dismiss')}
-						</button>
-					</div>
 				</div>
 			{/if}
 		</div>
@@ -1199,12 +798,6 @@
 		color: var(--ink-secondary);
 	}
 
-	.result-actions {
-		display: flex;
-		gap: 0.5rem;
-		justify-content: flex-end;
-	}
-
 	/* ── Note (coming soon) and error ─────────────────────── */
 
 	.note,
@@ -1245,9 +838,7 @@
 	   buttons share its rounded ends?" Only the corners move; the fill, the
 	   border, the type and the padding are untouched.
 
-	   Both answers to every question this component asks, the PDF and picture
-	   kind question included. */
-	.btn-primary,
+	   The one button this component draws, in its refusals. */
 	.btn-secondary {
 		padding: 0.4rem 0.7rem;
 		font-family: var(--font-sans);
@@ -1259,18 +850,12 @@
 		transition: opacity 0.12s;
 	}
 
-	.btn-primary {
-		color: white;
-		background: var(--sage);
-	}
-
 	.btn-secondary {
 		color: var(--ink-secondary);
 		background: white;
 		border: 1px solid var(--stone-300);
 	}
 
-	.btn-primary:hover,
 	.btn-secondary:hover {
 		opacity: 0.85;
 	}
@@ -1279,71 +864,4 @@
 	   ruling 2026-08-20. Its `.mus-help` also carried the drop zone's only
 	   `border-top: 1px solid var(--stone-300)`, which is the line that stood
 	   between the score box and the Output row. */
-
-	/* ── N.59: the two questions, and the read report ──────── */
-
-	.ask,
-	.read-report {
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-		padding: 0.75rem;
-		border: 1px solid var(--rule);
-		border-radius: 4px;
-		background: var(--paper-cream);
-	}
-
-	.ask-title,
-	.report-title {
-		margin: 0;
-		font-weight: 600;
-		font-size: 0.9rem;
-		color: var(--ink);
-	}
-
-	.ask-why {
-		margin: 0 0 0.25rem;
-		font-size: 0.82rem;
-		line-height: 1.4;
-		color: var(--ink-soft, var(--ink));
-	}
-
-	.ask-field {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.75rem;
-		font-size: 0.85rem;
-	}
-
-	.ask-label {
-		color: var(--ink);
-	}
-
-	/* The 44px floor is the cursor's alone (CONTRACT, corrected 2026-08-14),
-	   but a select is a real touch target and takes it. */
-	.ask-select {
-		min-height: 44px;
-		flex: 1 1 auto;
-		max-width: 62%;
-		padding: 0 0.5rem;
-		font-family: inherit;
-		font-size: 0.85rem;
-		color: var(--ink);
-		background: var(--paper);
-		border: 1px solid var(--rule);
-		border-radius: 3px;
-	}
-
-	.report-line,
-	.report-sub {
-		margin: 0;
-		font-size: 0.8rem;
-		line-height: 1.4;
-		color: var(--ink-soft, var(--ink));
-	}
-
-	.report-sub {
-		color: var(--ink);
-	}
 </style>
