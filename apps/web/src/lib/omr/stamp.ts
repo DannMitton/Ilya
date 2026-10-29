@@ -31,9 +31,18 @@ export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}`;
  * while the feature is behind its address flag that re-read would carry no
  * words and never come again (review amendment 7). It joins `READER_STAMP` in
  * the commit that removes the flag. `stamp.test.ts` holds the two apart until
- * then. The value names no reader yet: the version `0` is "not wired".
+ * then.
+ *
+ * Bumped when the reader's output changes, because `isCurrent` compares a kept
+ * reading's stamp by equality (`restore.ts`) and a reading kept with the switch
+ * on would otherwise be reused and never read again. `underlay@0` was stage 2b
+ * as first built (the words written only where every page passed, a Russian
+ * row at half the words known); `underlay@1` is brief r5 (a system that cannot
+ * be read loses only itself, a Russian row at three in ten, the clitics
+ * folded, the band ended in the ink). A reading kept as `underlay@0` is read
+ * again once with the switch on.
  */
-export const UNDERLAY_READER = 'underlay@0';
+export const UNDERLAY_READER = 'underlay@1';
 
 /** A scan's reading, kept with the song: homr's joined MusicXML and the reader that made it. */
 export interface KeptReading {

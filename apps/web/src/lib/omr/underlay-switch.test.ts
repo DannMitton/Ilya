@@ -58,6 +58,14 @@ describe('a reading kept on one side of the switch, met on the other', () => {
 		expect(r.ok && r.reading?.stamp).toBe(READER_STAMP);
 	});
 
+	it('is read again when it was kept with the switch on under stage 2b as first built, underlay@0', async () => {
+		const asBuilt = kept(`${READER_STAMP}+underlay@0`);
+		expect(UNDERLAY_READER).not.toBe('underlay@0');
+		expect(isCurrent(asBuilt, scanStamp('?words=read'))).toBe(false);
+		const r = await restoreScan(new File([], 'a.pdf'), 'pdf', asBuilt, read, undefined, scanStamp('?words=read'));
+		expect(r).toMatchObject({ ok: true, from: 'homr' });
+	});
+
 	it('is judged by isCurrent against the stamp it is given', () => {
 		expect(isCurrent(kept(scanStamp('?words=read')), scanStamp(''))).toBe(false);
 		expect(isCurrent(kept(READER_STAMP), scanStamp('?words=read'))).toBe(false);
