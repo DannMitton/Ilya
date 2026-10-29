@@ -24,7 +24,7 @@ import { layOutLikePoem } from './poem-compare';
 import { sameWords } from './same-words';
 
 const xml = readFileSync(
-	fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)),
+	fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
 	'utf8',
 );
 

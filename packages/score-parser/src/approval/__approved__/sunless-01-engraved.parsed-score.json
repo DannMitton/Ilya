@@ -386,10 +386,7 @@
     "format": "musicxml",
     "languageHint": "rus",
     "origin": "musicxml-direct",
-    "sourceWarnings": [
-      "Measure 16 content lasts 7/4 whole notes against an expected 3/2.",
-      "A lyric word in verse 1 was interrupted before its end syllable; context assigned from the partial word."
-    ]
+    "sourceWarnings": []
   },
   "tempoMarkings": [],
   "tempoWords": [
@@ -5066,16 +5063,11 @@
     },
     {
       "duration": {
-        "base": "half",
-        "dots": 0,
+        "base": "quarter",
+        "dots": 1,
         "fraction": {
-          "denominator": 2,
-          "numerator": 1
-        },
-        "tuplet": {
-          "actualNotes": 2,
-          "normalNotes": 3,
-          "normalType": "half"
+          "denominator": 8,
+          "numerator": 3
         }
       },
       "id": "m16-3-4",
@@ -5112,25 +5104,20 @@
             "verseNumber": 2
           }
         ],
-        "wordContext": "о"
+        "wordContext": "одинокая."
       },
       "type": "note"
     },
     {
       "duration": {
-        "base": "half",
-        "dots": 0,
+        "base": "quarter",
+        "dots": 1,
         "fraction": {
-          "denominator": 2,
-          "numerator": 1
-        },
-        "tuplet": {
-          "actualNotes": 2,
-          "normalNotes": 3,
-          "normalType": "half"
+          "denominator": 8,
+          "numerator": 3
         }
       },
-      "id": "m16-5-4",
+      "id": "m16-9-8",
       "measureIndex": 16,
       "pitch": {
         "alter": 0,
@@ -5139,28 +5126,28 @@
       },
       "rhythmicPosition": {
         "fraction": {
-          "denominator": 4,
-          "numerator": 5
+          "denominator": 8,
+          "numerator": 9
         }
       },
       "syllable": {
         "id": "SYL_92",
-        "text": "о",
-        "type": "start",
+        "text": "ди",
+        "type": "middle",
         "verseNumber": 1,
         "verses": [
-          "о",
-          "notʃʲ"
+          "ди",
+          "dʲi"
         ],
         "versesInfo": [
           {
-            "text": "о",
-            "type": "start",
+            "text": "ди",
+            "type": "middle",
             "verseNumber": 1
           },
           {
-            "text": "notʃʲ",
-            "type": "whole",
+            "text": "dʲi",
+            "type": "middle",
             "verseNumber": 2
           }
         ],
@@ -5192,22 +5179,22 @@
       },
       "syllable": {
         "id": "SYL_93",
-        "text": "ди",
+        "text": "но",
         "type": "middle",
         "verseNumber": 1,
         "verses": [
-          "ди",
-          "ɑ"
+          "но",
+          "ˈno"
         ],
         "versesInfo": [
           {
-            "text": "ди",
+            "text": "но",
             "type": "middle",
             "verseNumber": 1
           },
           {
-            "text": "ɑ",
-            "type": "start",
+            "text": "ˈno",
+            "type": "middle",
             "verseNumber": 2
           }
         ],
@@ -5239,21 +5226,21 @@
       },
       "syllable": {
         "id": "SYL_94",
-        "text": "но",
+        "text": "ка",
         "type": "middle",
         "verseNumber": 1,
         "verses": [
-          "но",
-          "dʲi"
+          "ка",
+          "kɑ"
         ],
         "versesInfo": [
           {
-            "text": "но",
+            "text": "ка",
             "type": "middle",
             "verseNumber": 1
           },
           {
-            "text": "dʲi",
+            "text": "kɑ",
             "type": "middle",
             "verseNumber": 2
           }
@@ -5264,10 +5251,10 @@
     },
     {
       "duration": {
-        "base": "eighth",
+        "base": "quarter",
         "dots": 0,
         "fraction": {
-          "denominator": 8,
+          "denominator": 4,
           "numerator": 1
         }
       },
@@ -5286,53 +5273,6 @@
       },
       "syllable": {
         "id": "SYL_95",
-        "text": "ка",
-        "type": "middle",
-        "verseNumber": 1,
-        "verses": [
-          "ка",
-          "ˈno"
-        ],
-        "versesInfo": [
-          {
-            "text": "ка",
-            "type": "middle",
-            "verseNumber": 1
-          },
-          {
-            "text": "ˈno",
-            "type": "middle",
-            "verseNumber": 2
-          }
-        ],
-        "wordContext": "одинокая."
-      },
-      "type": "note"
-    },
-    {
-      "duration": {
-        "base": "eighth",
-        "dots": 0,
-        "fraction": {
-          "denominator": 8,
-          "numerator": 1
-        }
-      },
-      "id": "m17-5-8",
-      "measureIndex": 17,
-      "pitch": {
-        "alter": 0,
-        "octave": 3,
-        "step": "D"
-      },
-      "rhythmicPosition": {
-        "fraction": {
-          "denominator": 8,
-          "numerator": 5
-        }
-      },
-      "syllable": {
-        "id": "SYL_96",
         "text": "я.",
         "type": "end",
         "verseNumber": 1,

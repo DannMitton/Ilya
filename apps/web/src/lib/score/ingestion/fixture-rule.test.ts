@@ -17,7 +17,7 @@
  *    verse 2 text and syllabic). A one-vowel check misses a stretch shifted by one
  *    note where every note still holds one vowel (the first repair of the Sunless 1
  *    IPA verse was shifted from bar 4 and broke the rule only at bar 5). Any
- *    difference not on `UNREPAIRED` fails.
+ *    difference fails (every bar: step 10 repaired bars 17 and 18 as printed).
  *
  * The 16 truth files under `tools/e16-harness/output/truth/` are not tracked
  * (`tools/e16-harness/.gitignore:2`) and are not read from a test.
@@ -101,7 +101,7 @@ interface Allowed extends Partial<Breach> {
 }
 
 const SHIFTED_READERS =
-	'score-seat.test.ts, punctuation-slot.test.ts, seated-text.test.ts, waiting-seat.test.ts, replace-seat.test.ts, several-lines.test.ts, text/relining.test.ts, text/lay-out-seat.test.ts, text/break-text.test.ts, typed-hyphens.test.ts, phrase-ends.test.ts (through row108.support.ts SUNLESS), e2e-phone/relining.test.ts, score/typed-words-land.test.ts (LIMIT 1)';
+	'score-seat.test.ts (the three tests of the fold), punctuation-slot.test.ts ("the fold carries the punctuation once"), seated-text.test.ts, waiting-seat.test.ts, several-lines.test.ts ("without the re-key, the fold\'s 60 seats"), replace-seat.test.ts (it splits the eighth m17-5-8 that only the copy has), phrase-ends.test.ts (test g and the sevens case of i), score/typed-words-land.test.ts (LIMIT 1 and LIMIT 3)';
 
 const ALLOWED: Allowed[] = [
 	{
@@ -111,7 +111,7 @@ const ALLOWED: Allowed[] = [
 		text: 'в',
 		kind: 'no-vowel',
 		test: 'apps/web/src/lib/score/clitic-seat.test.ts',
-		reason: `Sunless 1 as Finale printed it, kept byte for byte when sunless-01-engraved.musicxml was repaired. N.111's proof needs «в» alone on a note (the fold seats it with its host and moves the 60 notes after it); the other readers (${SHIFTED_READERS}) were written for this file's 39 words, 96 seats, and lines of 7,7,7,7,7,4, which the repaired file does not give while its bars 17 and 18 are unrepaired (desk ruling a, 2026-10-29). Re-point them when the tail is repaired.`,
+		reason: `Sunless 1 as Finale printed it, kept byte for byte when sunless-01-engraved.musicxml was repaired. N.111's proof needs «в» alone on a note (the fold seats it with its host and moves the 60 notes after it). The other readers that stay on the copy (${SHIFTED_READERS}) each exist for something only the copy holds: the lone «в» and the clitic fold, N.156's «я.» eighth, or the 39-token layout. Every other reader reads the repaired file (step 10).`,
 	},
 	{
 		file: LONE_V,
@@ -310,27 +310,18 @@ export function compareWithTruth(xml: string, truth: { notes: { bar: number; ons
 	return out;
 }
 
-/**
- * The bars the repaired fixture is NOT compared in, by desk ruling (a) of 2026-10-29 (`brief-code-n135-stage2b-r5-steps5-9_r2`):
- * bars 17 and 18 hold different notes from the extract (fixture 97 voice notes, extract 96; bar 17's third onset 5/4 against 9/8;
- * bar 18 four notes against three, the N.156 «я.» eighth, `apps/web/src/lib/score/clitic-seat.test.ts:56-57`). Notes are not
- * changed (§6), and the lyrics of bar 17's third note and of bar 18 were not repaired with them.
- */
-const UNREPAIRED = new Set([17, 18]);
-
 describe('the fixtures against their truth', () => {
 	const truth = JSON.parse(read(TRUTH));
 
-	it('matches the extract note by note on every bar but 17 and 18: bar, onset, pitch, both verses, text and syllabic', () => {
-		const diff = compareWithTruth(read(SUNLESS), truth).filter((d) => !UNREPAIRED.has(d.bar));
+	it('matches the extract note by note on every bar: bar, onset, pitch, both verses, text and syllabic', () => {
+		const diff = compareWithTruth(read(SUNLESS), truth);
 		expect(diff.map((d) => `bar ${d.bar} @${d.onset}: ${d.what}`)).toEqual([]);
 	});
 
-	it('has the extract\'s 96 notes and the fixture\'s 97, the difference being in bars 17 and 18 and nowhere else', () => {
+	it('has the extract\'s 96 notes and the fixture\'s 96, and no difference', () => {
 		expect(truth.notes).toHaveLength(96);
-		expect(voiceNotesOf(read(SUNLESS))).toHaveLength(97);
-		const bars = new Set(compareWithTruth(read(SUNLESS), truth).map((d) => d.bar));
-		expect([...bars].every((b) => UNREPAIRED.has(b))).toBe(true);
+		expect(voiceNotesOf(read(SUNLESS))).toHaveLength(96);
+		expect(compareWithTruth(read(SUNLESS), truth)).toEqual([]);
 	});
 
 	it('sees a shifted stretch: the positive control moves bar 5\'s verse 2 by one note, every note still holding one vowel', () => {
@@ -342,12 +333,12 @@ describe('the fixtures against their truth', () => {
 		let shifted = bar5[2];
 		shifted = shifted.replace(a[0], `${a[1]}${b[2]}${a[3]}`).replace(b[0], `${b[1]}${a[2]}${b[3]}`);
 		expect(breachesOf(lyricNotes('x', bar5[1] + shifted + bar5[3])).length).toBe(0);
-		const bad = compareWithTruth(xml.replace(bar5[2], shifted), truth).filter((d) => !UNREPAIRED.has(d.bar));
+		const bad = compareWithTruth(xml.replace(bar5[2], shifted), truth);
 		expect(bad.length).toBeGreaterThanOrEqual(2);
 	});
 
 	it('does not compare the copy of the old file: it is the shifted engraving, and that is why it is kept', () => {
-		expect(compareWithTruth(read(LONE_V), truth).filter((d) => !UNREPAIRED.has(d.bar)).length).toBeGreaterThan(50);
+		expect(compareWithTruth(read(LONE_V), truth).length).toBeGreaterThan(50);
 		expect(PAIRS.map((p) => p.fixture)).not.toContain(LONE_V);
 	});
 });

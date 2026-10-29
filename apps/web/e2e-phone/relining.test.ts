@@ -10,9 +10,9 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 
-// Sunless 1 as Finale printed it (brief r5 step 8): this test was written for its 39 words and lines of 7,7,7,7,7,4; the repaired
-// sunless-01-engraved.musicxml reads 40 words while its bars 17 and 18 are unrepaired. Allow-listed in score/ingestion/fixture-rule.test.ts.
-const FIXTURE = 'src/lib/score/ingestion/fixtures/sunless-01-finale-lone-v.musicxml';
+// Seen in the browser (step 10): Lyrics here splits into 39 tokens on ' ', so 7,7,7,7,7,4, where the unit tests' `oneLine` (the same score) has 38 (7,7,7,7,7,3):
+// the browser's fill does not keep the no-break space of «в\u00A0бьющемся». Why is NOT ESTABLISHED.
+const FIXTURE = 'src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml';
 
 type Seats = Record<string, { kind: string; cyrillic?: string }>;
 

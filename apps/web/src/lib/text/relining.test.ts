@@ -57,23 +57,25 @@ describe('p. the `from score` tag follows sameWords', () => {
 });
 
 describe('q, r, s. Lyrics takes the poem’s lines', () => {
-	it('q. on arrival, with a Poem present: 7,7,7,7,7,4, and 96 seats on the same notes as without a Poem', async () => {
+	it('q. on arrival, with a Poem present: 7,7,8,7,7,3, and 96 seats on the same notes as without a Poem', async () => {
 		const score = await loadFixture(SUNLESS);
 		const one = oneLine(score);
 		const laid = lyricsInPoemLines(one, inLines(one), '', one)!;
-		expect(lineLengths(laid)).toEqual([7, 7, 7, 7, 7, 4]);
+		// Step 10: lines of seven TOKENS; «в бьющемся» is one token and two words, so the third line holds 8 words and the last 3.
+		expect(lineLengths(laid)).toEqual([7, 7, 8, 7, 7, 3]);
 		const withPoem = arrive(score, laid);
 		const without = arrive(score, one);
 		expect(syllables(withPoem)).toHaveLength(96);
 		expect(Object.keys(withPoem).sort()).toEqual(Object.keys(without).sort());
 	});
 
-	it('r. on a later Poem: re-lined 7,7,7,7,7,4, and the ordinary transcription path carries 96 of 96 seats on the same notes, drawn live', async () => {
+	it('r. on a later Poem: re-lined 7,7,8,7,7,3, and the ordinary transcription path carries 96 of 96 seats on the same notes, drawn live', async () => {
 		const score = await loadFixture(SUNLESS);
 		const one = oneLine(score);
 		const before = arrive(score, one);
 		const laid = lyricsInPoemLines(one, inLines(one), '', one)!;
-		expect(lineLengths(laid)).toEqual([7, 7, 7, 7, 7, 4]);
+		// Step 10: lines of seven TOKENS; «в бьющемся» is one token and two words, so the third line holds 8 words and the last 3.
+		expect(lineLengths(laid)).toEqual([7, 7, 8, 7, 7, 3]);
 		const lines = processText(laid);
 		const { diff, before: grid } = seatedTextDiff(one, laid);
 		const eventIds = score.vocalLine.filter((e) => e.type !== 'rest').map((e) => e.id);
@@ -84,12 +86,13 @@ describe('q, r, s. Lyrics takes the poem’s lines', () => {
 		expect(drawnSeatCount(drawPairings(after, lines, switches))).toEqual({ live: 96, stored: 0 });
 	});
 
-	it('s. a divided Lyrics: re-lined 7,7,7,7,7,4, the hyphens kept, 96 seats', async () => {
+	it('s. a divided Lyrics: re-lined 7,7,8,7,7,3, the hyphens kept, 96 seats', async () => {
 		const score = await loadFixture(SUNLESS);
 		const one = oneLine(score);
 		const divided = collectScoreWords(score, 1).map(typedOf).join(' ');
 		const laid = lyricsInPoemLines(divided, inLines(one), '', one)!;
-		expect(lineLengths(laid)).toEqual([7, 7, 7, 7, 7, 4]);
+		// Step 10: lines of seven TOKENS; «в бьющемся» is one token and two words, so the third line holds 8 words and the last 3.
+		expect(lineLengths(laid)).toEqual([7, 7, 8, 7, 7, 3]);
 		expect(laid).toContain('Ком-нат-ка');
 		expect(syllables(arrive(score, laid))).toHaveLength(96);
 	});
@@ -132,7 +135,8 @@ describe('w, aa. a partial match, and a repeating song', () => {
 		const w = one.split(' ');
 		const poem = [...w.slice(0, 10), 'ИЗМЕНЁННОЕ', ...w.slice(11, 33)].join(' ');
 		const laid = lyricsInPoemLines(one, poem, '', one)!;
-		expect(lineLengths(laid)).toEqual([33, 6]);
+		// Step 10: the first 33 TOKENS hold 34 words («в бьющемся» is one token, two words) and the last 5 tokens 5 words.
+		expect(lineLengths(laid)).toEqual([34, 5]);
 		const map = arrive(score, laid);
 		expect(syllables(map)).toHaveLength(96);
 		const lines = processText(laid, { phraseEnds: musicPhraseEnds(score, map, wordGrid(laid)) });
@@ -189,7 +193,8 @@ describe('dd. the layout is a fixed point, and Ilya’s own lines are recognised
 		const laid = lyricsInPoemLines(one, first, '', one)!;
 		const second = inLines(one, 10);
 		const again = lyricsInPoemLines(laid, second, first, one)!;
-		expect(lineLengths(again)).toEqual([10, 10, 10, 9]);
+		// Step 10: lines of ten tokens; the second holds «в бьющемся» (11 words) and the last 8.
+		expect(lineLengths(again)).toEqual([10, 11, 10, 8]);
 		// the previous Poem is the witness that the breaks were Ilya’s: with a different one, they are hers
 		expect(lyricsInPoemLines(laid, second, inLines(one, 5), one)).toBeNull();
 	});
@@ -215,7 +220,8 @@ describe('the named undo across a re-lining (section 5, item 6): simulated, not 
 		const ends = musicPhraseEnds(score, stepBefore, wordGrid(laid));
 		const polyot = processText(laid, { phraseEnds: ends }).flatMap((l) => l.words)[20];
 		// MEASURED 2026-10-19: until the next transcription, 18 seats draw live and 78 from their stored text; «полёт» reads as the six lines do with no phrase end to cross
-		expect({ live, stored, ipa: polyot.ipaDisplay, keys: ends.size }).toEqual({ live: 18, stored: 78, ipa: 'pɑ ˈlʲot', keys: 6 });
+		expect({ live, stored, ipa: polyot.ipaDisplay, keys: ends.size }).toEqual({ live: 18, stored: 78, ipa: 'pɑ ˈlʲod', keys: 6 });
+		// Step 10: «полёт» is [pɑ ˈlʲod] here, as the one line reads it. Before, it ended its line of seven tokens (so [ˈlʲot], no phrase end to cross); with «в бьющемся» one token, «за» follows it on the same line and the voicing carries. The test's point (seats draw live or stored) is unchanged: 18 and 78.
 	});
 });
 
@@ -275,7 +281,7 @@ describe('a Poem typed key by key', () => {
 			}
 			return lineLengths(lyr);
 		};
-		expect(run(true)).toEqual([7, 7, 7, 7, 7, 4]);
+		expect(run(true)).toEqual([7, 7, 8, 7, 7, 3]);
 		// without the witness, the previous-Poem test lets go half-way (the defect this fixes)
 		expect(run(false)).toEqual([7, 7, 13, 12]);
 	});

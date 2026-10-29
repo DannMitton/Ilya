@@ -19,7 +19,7 @@ import { unitWordsFromStacks } from './syntactic-break-adapters';
 let song1 = '';
 beforeAll(async () => {
 	loadRealData();
-	const xml = readFileSync(fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)), 'utf8');
+	const xml = readFileSync(fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)), 'utf8');
 	const { score } = await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(xml) as unknown as Document, sourcePath: 'sunless-01-engraved.musicxml' });
 	song1 = scoreWordsText(collectScoreWords(score, 1));
 }, 60_000);
@@ -34,9 +34,10 @@ function unitAt(text: string, L: number, W: number) {
 
 describe('done-when 1: the offset of every transcribed word lands on the end of the raw token it came from', () => {
 	it('song 1: 39 words in one line', () => {
-		expect(song1.split(' ')).toHaveLength(39);
+		// Words are split on any whitespace: «в бьющемся» is joined by U+00A0, as the extract's cell «в\u00A0бью» has it, and is two words (step 10).
+		expect(song1.split(/\s/u)).toHaveLength(39);
 		let end = 0;
-		song1.split(' ').forEach((token, w) => {
+		song1.split(/\s/u).forEach((token, w) => {
 			end += token.length;
 			expect(tokenEndOffset(song1, 0, w), `word ${w} «${token}»`).toBe(end);
 			end += 1;
