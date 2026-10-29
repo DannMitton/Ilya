@@ -28,11 +28,16 @@ const xml = readFileSync(
 	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
 	'utf8',
 );
+/** Sunless 1 as Finale printed it, the lone «в»: the tests of the clitic fold read it (allow-listed in `ingestion/fixture-rule.test.ts`). */
+const loneV = readFileSync(
+	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)),
+	'utf8',
+);
 
-async function parse(): Promise<ParsedScore> {
+async function parse(source = xml): Promise<ParsedScore> {
 	const res = await new MusicXmlScoreParser().parse({
 		format: 'musicxml',
-		data: parseXml(xml) as unknown as Document,
+		data: parseXml(source) as unknown as Document,
 		sourcePath: 'sunless-01-engraved.musicxml',
 	});
 	return res.score;
@@ -59,7 +64,8 @@ function arrive(score: ParsedScore, lines: LineData[]): PairingMap {
 describe('N.134 the fill text', () => {
 	it('is 39 words, beginning with the first line of the poem, punctuation included', async () => {
 		const text = scoreWordsText(collectScoreWords(await parse(), 1));
-		expect(text.split(' ')).toHaveLength(39);
+		// 38 tokens, 39 words: «в бьющемся» is one token joined by U+00A0, as the extract's cell «в\u00A0бью» has it (step 10).
+		expect(text.split(' ')).toHaveLength(38);
 		expect(text.startsWith('Комнатка тесная, тихая, милая;')).toBe(true);
 		// The file's own last word, «одинокая.», whole since N.156.
 		expect(text.endsWith(' одинокая.')).toBe(true);
@@ -79,7 +85,7 @@ describe('N.134 seating from the score, on the engraved Sunless no. 1', () => {
 	});
 
 	it('copies the file mapping before the clitic, carrying the file punctuation', async () => {
-		const score = await parse();
+		const score = await parse(loneV);
 		const map = arrive(score, poemLines(score));
 		const words = collectScoreWords(score, 1);
 		const fold = findCliticFolds(score)[0];
@@ -104,7 +110,7 @@ describe('N.134 seating from the score, on the engraved Sunless no. 1', () => {
 	});
 
 	it('leaves the clitic run as the fold ruled it, the last note undecided', async () => {
-		const score = await parse();
+		const score = await parse(loneV);
 		const map = arrive(score, poemLines(score));
 		const fold = findCliticFolds(score)[0];
 		const p = map[fold.cliticEventId];
@@ -114,7 +120,7 @@ describe('N.134 seating from the score, on the engraved Sunless no. 1', () => {
 	});
 
 	it('run on its own, puts the fused slot on the note the file gave бью', async () => {
-		const score = await parse();
+		const score = await parse(loneV);
 		const { map, seated, withheld } = seatScoreWords(score, {}, poemLines(score));
 		// The file's last word «одинокая.» now has 5 cells for its 5 slots, so it is
 		// seated like every other word and nothing is withheld.

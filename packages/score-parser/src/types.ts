@@ -941,6 +941,8 @@ export interface ParseWarning {
   code: ParseWarningCode;
   message: string;
   location?: ParseLocation;
+  /** `words-partly-read` only: the song's bars, first and last, whose printed words were not read. */
+  bars?: ReadonlyArray<readonly [number, number]>;
 }
 
 export interface ParseError {
@@ -979,7 +981,13 @@ export type ParseWarningCode =
    * cannot honour (two notes share one, or one is shaped like a generated id),
    * so the whole vocal line falls back to generated ids.
    */
-  | 'duplicate-note-ids';
+  | 'duplicate-note-ids'
+  /**
+   * N.135 stage 2b, set by the application's ingestion and not by the parser:
+   * a scanned song whose printed words were read on some systems and not
+   * others. `ParseWarning.bars` names the bars of the others.
+   */
+  | 'words-partly-read';
 
 export type ParseErrorCode =
   | 'invalid-mnx-json'

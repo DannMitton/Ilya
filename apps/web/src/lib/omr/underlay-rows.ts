@@ -74,8 +74,6 @@ export const VALLEY_EDGE = 0.7;
 export const VALLEY_RATIO = 0.45;
 /** A core is split again at most this many times (to four pieces). */
 export const SPLIT_DEPTH = 3;
-/** The paper tone is sampled on a grid of this many pixels. */
-const PAPER_GRID = 37;
 
 /** The median, taking the mean of the middle two where the count is even (numpy's). */
 function median(values: number[]): number {
@@ -84,18 +82,20 @@ function median(values: number[]): number {
 	return n % 2 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
 }
 
-function paperOf(band: GreyBandLike): number {
+/** The paper tone: the caller's, else the median of a grid one staff space apart over the band itself. */
+function paperOf(band: GreyBandLike, staffSpace: number): number {
 	if (band.paper !== undefined) return band.paper;
+	const grid = Math.max(1, Math.round(staffSpace));
 	const sample: number[] = [];
-	for (let y = 0; y < band.height; y += PAPER_GRID) {
-		for (let x = 0; x < band.width; x += PAPER_GRID) sample.push(band.data[y * band.width + x]);
+	for (let y = 0; y < band.height; y += grid) {
+		for (let x = 0; x < band.width; x += grid) sample.push(band.data[y * band.width + x]);
 	}
 	return sample.length ? median(sample) : 255;
 }
 
 /** The ink pixels in each line of the band. */
-function inkProfile(band: GreyBandLike): number[] {
-	const ink = paperOf(band) - INK_BELOW_PAPER;
+function inkProfile(band: GreyBandLike, staffSpace: number): number[] {
+	const ink = paperOf(band, staffSpace) - INK_BELOW_PAPER;
 	const profile = new Array<number>(band.height).fill(0);
 	for (let y = 0; y < band.height; y++) {
 		let count = 0;
@@ -145,7 +145,7 @@ function splitAtValleys(profile: number[], from: number, to: number, space: numb
  * at the band's top.
  */
 export function cutRows(band: GreyBandLike, staffSpace: number): RowBox[] {
-	const profile = inkProfile(band);
+	const profile = inkProfile(band, staffSpace);
 	const lineMin = LINE_SHARE * band.width;
 	const on = profile.map((count) => count > lineMin);
 

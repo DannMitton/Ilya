@@ -39,7 +39,7 @@ import { reseatOnReplace } from './replace-seat';
 import type { LineData } from '$lib/types';
 
 const original = readFileSync(
-	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
+	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)),
 	'utf8',
 );
 

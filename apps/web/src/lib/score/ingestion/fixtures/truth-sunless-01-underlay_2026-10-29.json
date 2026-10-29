@@ -1,0 +1,967 @@
+{
+ "source": "tools/e16-harness/output/truth/mussorgsky_sunless-01_within-four-walls.truth.json (read from the musx by Ilya parser, 0 warnings, 0 errors)",
+ "sourceMusx": "Mussorgsky - Sunless 01 - Within four walls.musx",
+ "note": "Every voice note of Sunless 1 in order, both verses as the truth file holds them. Desk extract 2026-10-29, for repairing apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml.",
+ "notes": [
+  {
+   "id": "m1-0-1",
+   "bar": 2,
+   "onset": "0/1",
+   "midi": 57,
+   "verse1": "Ком",
+   "syllabic1": "start",
+   "verse2": "ˈko",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m1-1-4",
+   "bar": 2,
+   "onset": "1/4",
+   "midi": 57,
+   "verse1": "нат",
+   "syllabic1": "middle",
+   "verse2": "mnɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m1-1-2",
+   "bar": 2,
+   "onset": "1/2",
+   "midi": 57,
+   "verse1": "ка",
+   "syllabic1": "end",
+   "verse2": "tkɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m1-3-4",
+   "bar": 2,
+   "onset": "3/4",
+   "midi": 58,
+   "verse1": "тес",
+   "syllabic1": "start",
+   "verse2": "ˈtʲɛ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m1-1-1",
+   "bar": 2,
+   "onset": "1/1",
+   "midi": 53,
+   "verse1": "на",
+   "syllabic1": "middle",
+   "verse2": "snɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m1-5-4",
+   "bar": 2,
+   "onset": "5/4",
+   "midi": 53,
+   "verse1": "я,",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m2-0-1",
+   "bar": 3,
+   "onset": "0/1",
+   "midi": 59,
+   "verse1": "ти",
+   "syllabic1": "start",
+   "verse2": "ˈtʲi",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m2-1-4",
+   "bar": 3,
+   "onset": "1/4",
+   "midi": 55,
+   "verse1": "ха",
+   "syllabic1": "middle",
+   "verse2": "xɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m2-1-2",
+   "bar": 3,
+   "onset": "1/2",
+   "midi": 55,
+   "verse1": "я,",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m2-3-4",
+   "bar": 3,
+   "onset": "3/4",
+   "midi": 61,
+   "verse1": "ми",
+   "syllabic1": "start",
+   "verse2": "ˈmʲi",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m2-9-8",
+   "bar": 3,
+   "onset": "9/8",
+   "midi": 57,
+   "verse1": "ла",
+   "syllabic1": "middle",
+   "verse2": "ɫɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m2-5-4",
+   "bar": 3,
+   "onset": "5/4",
+   "midi": 57,
+   "verse1": "я;",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m3-0-1",
+   "bar": 4,
+   "onset": "0/1",
+   "midi": 58,
+   "verse1": "тень",
+   "syllabic1": "whole",
+   "verse2": "tʲeɲ",
+   "syllabic2": "whole"
+  },
+  {
+   "id": "m3-1-4",
+   "bar": 4,
+   "onset": "1/4",
+   "midi": 52,
+   "verse1": "не",
+   "syllabic1": "whole",
+   "verse2": "ɲɪ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m3-1-2",
+   "bar": 4,
+   "onset": "1/2",
+   "midi": 50,
+   "verse1": "про",
+   "syllabic1": "start",
+   "verse2": "prɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m3-3-4",
+   "bar": 4,
+   "onset": "3/4",
+   "midi": 57,
+   "verse1": "гляд",
+   "syllabic1": "middle",
+   "verse2": "ˈɡlʲɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m3-9-8",
+   "bar": 4,
+   "onset": "9/8",
+   "midi": 52,
+   "verse1": "на",
+   "syllabic1": "middle",
+   "verse2": "dnɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m3-5-4",
+   "bar": 4,
+   "onset": "5/4",
+   "midi": 52,
+   "verse1": "я,",
+   "syllabic1": "end",
+   "verse2": "jɑ #",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m4-0-1",
+   "bar": 5,
+   "onset": "0/1",
+   "midi": 55,
+   "verse1": "тень",
+   "syllabic1": "whole",
+   "verse2": "tʲeɲ",
+   "syllabic2": "whole"
+  },
+  {
+   "id": "m4-1-4",
+   "bar": 5,
+   "onset": "1/4",
+   "midi": 50,
+   "verse1": "без",
+   "syllabic1": "whole",
+   "verse2": "bʲɪ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m4-1-2",
+   "bar": 5,
+   "onset": "1/2",
+   "midi": 49,
+   "verse1": "от",
+   "syllabic1": "start",
+   "verse2": "zɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m4-3-4",
+   "bar": 5,
+   "onset": "3/4",
+   "midi": 53,
+   "verse1": "вет",
+   "syllabic1": "middle",
+   "verse2": "ˈtvʲɛ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m4-9-8",
+   "bar": 5,
+   "onset": "9/8",
+   "midi": 50,
+   "verse1": "на",
+   "syllabic1": "middle",
+   "verse2": "tnɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m4-5-4",
+   "bar": 5,
+   "onset": "5/4",
+   "midi": 50,
+   "verse1": "я;",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m5-0-1",
+   "bar": 6,
+   "onset": "0/1",
+   "midi": 57,
+   "verse1": "ду",
+   "syllabic1": "start",
+   "verse2": "ˈdu",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m5-1-4",
+   "bar": 6,
+   "onset": "1/4",
+   "midi": 54,
+   "verse1": "ма",
+   "syllabic1": "end",
+   "verse2": "mɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m5-1-2",
+   "bar": 6,
+   "onset": "1/2",
+   "midi": 57,
+   "verse1": "глу",
+   "syllabic1": "start",
+   "verse2": "ɡɫu",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m5-3-4",
+   "bar": 6,
+   "onset": "3/4",
+   "midi": 62,
+   "verse1": "бо",
+   "syllabic1": "middle",
+   "verse2": "ˈbo",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m5-9-8",
+   "bar": 6,
+   "onset": "9/8",
+   "midi": 56,
+   "verse1": "ка",
+   "syllabic1": "middle",
+   "verse2": "kɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m5-5-4",
+   "bar": 6,
+   "onset": "5/4",
+   "midi": 56,
+   "verse1": "я,",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m6-0-1",
+   "bar": 7,
+   "onset": "0/1",
+   "midi": 55,
+   "verse1": "пес",
+   "syllabic1": "start",
+   "verse2": "ˈpʲe",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m6-1-4",
+   "bar": 7,
+   "onset": "1/4",
+   "midi": 55,
+   "verse1": "ня",
+   "syllabic1": "end",
+   "verse2": "sʲɲɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m6-1-2",
+   "bar": 7,
+   "onset": "1/2",
+   "midi": 55,
+   "verse1": "у",
+   "syllabic1": "start",
+   "verse2": "u",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m6-3-4",
+   "bar": 7,
+   "onset": "3/4",
+   "midi": 58,
+   "verse1": "ны",
+   "syllabic1": "middle",
+   "verse2": "ˈnɨ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m6-9-8",
+   "bar": 7,
+   "onset": "9/8",
+   "midi": 50,
+   "verse1": "ла",
+   "syllabic1": "middle",
+   "verse2": "ɫɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m6-5-4",
+   "bar": 7,
+   "onset": "5/4",
+   "midi": 50,
+   "verse1": "я;",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m7-0-1",
+   "bar": 8,
+   "onset": "0/1",
+   "midi": 52,
+   "verse1": "в бью",
+   "syllabic1": "start",
+   "verse2": "ˈvʲbʲu",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m7-1-4",
+   "bar": 8,
+   "onset": "1/4",
+   "midi": 49,
+   "verse1": "щем",
+   "syllabic1": "middle",
+   "verse2": "ʃʲːɪ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m7-1-2",
+   "bar": 8,
+   "onset": "1/2",
+   "midi": 50,
+   "verse1": "ся",
+   "syllabic1": "end",
+   "verse2": "msʌ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m7-3-4",
+   "bar": 8,
+   "onset": "3/4",
+   "midi": 54,
+   "verse1": "серд",
+   "syllabic1": "start",
+   "verse2": "ˈsʲɛ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m7-1-1",
+   "bar": 8,
+   "onset": "1/1",
+   "midi": 50,
+   "verse1": "це",
+   "syllabic1": "end",
+   "verse2": "rtsʌ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m7-11-8",
+   "bar": 8,
+   "onset": "11/8",
+   "midi": 49,
+   "verse1": "на",
+   "syllabic1": "start",
+   "verse2": "nɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m8-0-1",
+   "bar": 9,
+   "onset": "0/1",
+   "midi": 52,
+   "verse1": "деж",
+   "syllabic1": "middle",
+   "verse2": "ˈdʲɛ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m8-1-4",
+   "bar": 9,
+   "onset": "1/4",
+   "midi": 49,
+   "verse1": "да",
+   "syllabic1": "end",
+   "verse2": "ʒdɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m8-1-2",
+   "bar": 9,
+   "onset": "1/2",
+   "midi": 50,
+   "verse1": "за",
+   "syllabic1": "start",
+   "verse2": "zɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m8-3-4",
+   "bar": 9,
+   "onset": "3/4",
+   "midi": 57,
+   "verse1": "вет",
+   "syllabic1": "middle",
+   "verse2": "ˈvʲɛ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m8-9-8",
+   "bar": 9,
+   "onset": "9/8",
+   "midi": 54,
+   "verse1": "на",
+   "syllabic1": "middle",
+   "verse2": "tnɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m8-5-4",
+   "bar": 9,
+   "onset": "5/4",
+   "midi": 54,
+   "verse1": "я,",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m9-0-1",
+   "bar": 10,
+   "onset": "0/1",
+   "midi": 58,
+   "verse1": "быст",
+   "syllabic1": "start",
+   "verse2": "ˈbɨ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m9-1-4",
+   "bar": 10,
+   "onset": "1/4",
+   "midi": 52,
+   "verse1": "рый",
+   "syllabic1": "end",
+   "verse2": "strɨj",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m9-1-2",
+   "bar": 10,
+   "onset": "1/2",
+   "midi": 53,
+   "verse1": "по",
+   "syllabic1": "start",
+   "verse2": "pɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m9-3-4",
+   "bar": 10,
+   "onset": "3/4",
+   "midi": 55,
+   "verse1": "лёт",
+   "syllabic1": "end",
+   "verse2": "ˈlʲot",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m9-1-1",
+   "bar": 10,
+   "onset": "1/1",
+   "midi": 57,
+   "verse1": "за",
+   "syllabic1": "whole",
+   "verse2": "zɑ",
+   "syllabic2": "whole"
+  },
+  {
+   "id": "m9-5-4",
+   "bar": 10,
+   "onset": "5/4",
+   "midi": 58,
+   "verse1": "мгно",
+   "syllabic1": "start",
+   "verse2": "mɡnɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m10-0-1",
+   "bar": 11,
+   "onset": "0/1",
+   "midi": 60,
+   "verse1": "ве",
+   "syllabic1": "middle",
+   "verse2": "ˈvʲe",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m10-1-4",
+   "bar": 11,
+   "onset": "1/4",
+   "midi": 58,
+   "verse1": "ньем",
+   "syllabic1": "end",
+   "verse2": "ɲjɪm",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m10-1-2",
+   "bar": 11,
+   "onset": "1/2",
+   "midi": 60,
+   "verse1": "мгно",
+   "syllabic1": "start",
+   "verse2": "mɡnɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m10-3-4",
+   "bar": 11,
+   "onset": "3/4",
+   "midi": 56,
+   "verse1": "ве",
+   "syllabic1": "middle",
+   "verse2": "ˈvʲe",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m10-9-8",
+   "bar": 11,
+   "onset": "9/8",
+   "midi": 56,
+   "verse1": "ни",
+   "syllabic1": "middle",
+   "verse2": "ɲi",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m10-5-4",
+   "bar": 11,
+   "onset": "5/4",
+   "midi": 56,
+   "verse1": "я;",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m11-0-1",
+   "bar": 12,
+   "onset": "0/1",
+   "midi": 55,
+   "verse1": "взор",
+   "syllabic1": "whole",
+   "verse2": "vzor",
+   "syllabic2": "whole"
+  },
+  {
+   "id": "m11-1-4",
+   "bar": 12,
+   "onset": "1/4",
+   "midi": 52,
+   "verse1": "не",
+   "syllabic1": "start",
+   "verse2": "ɲɪ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m11-1-2",
+   "bar": 12,
+   "onset": "1/2",
+   "midi": 55,
+   "verse1": "под",
+   "syllabic1": "middle",
+   "verse2": "pɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m11-3-4",
+   "bar": 12,
+   "onset": "3/4",
+   "midi": 58,
+   "verse1": "виж",
+   "syllabic1": "middle",
+   "verse2": "ˈdʲvʲi",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m11-1-1",
+   "bar": 12,
+   "onset": "1/1",
+   "midi": 55,
+   "verse1": "ный",
+   "syllabic1": "end",
+   "verse2": "ʒnɨj",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m11-5-4",
+   "bar": 12,
+   "onset": "5/4",
+   "midi": 55,
+   "verse1": "на",
+   "syllabic1": "whole",
+   "verse2": "nɑ",
+   "syllabic2": "whole"
+  },
+  {
+   "id": "m12-0-1",
+   "bar": 13,
+   "onset": "0/1",
+   "midi": 52,
+   "verse1": "сча",
+   "syllabic1": "start",
+   "verse2": "ˈʃʲːɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m12-1-4",
+   "bar": 13,
+   "onset": "1/4",
+   "midi": 50,
+   "verse1": "стье",
+   "syllabic1": "end",
+   "verse2": "sʲtʲjɛ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m12-1-2",
+   "bar": 13,
+   "onset": "1/2",
+   "midi": 52,
+   "verse1": "да",
+   "syllabic1": "start",
+   "verse2": "dɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m12-3-4",
+   "bar": 13,
+   "onset": "3/4",
+   "midi": 58,
+   "verse1": "лё",
+   "syllabic1": "middle",
+   "verse2": "ˈlʲjo",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m12-9-8",
+   "bar": 13,
+   "onset": "9/8",
+   "midi": 55,
+   "verse1": "ко",
+   "syllabic1": "middle",
+   "verse2": "kɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m12-5-4",
+   "bar": 13,
+   "onset": "5/4",
+   "midi": 55,
+   "verse1": "е;",
+   "syllabic1": "end",
+   "verse2": "jɛ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m13-0-1",
+   "bar": 14,
+   "onset": "0/1",
+   "midi": 58,
+   "verse1": "мно",
+   "syllabic1": "start",
+   "verse2": "ˈmno",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m13-1-4",
+   "bar": 14,
+   "onset": "1/4",
+   "midi": 57,
+   "verse1": "го",
+   "syllabic1": "end",
+   "verse2": "ɡʌ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m13-1-2",
+   "bar": 14,
+   "onset": "1/2",
+   "midi": 55,
+   "verse1": "сом",
+   "syllabic1": "start",
+   "verse2": "sɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m13-3-4",
+   "bar": 14,
+   "onset": "3/4",
+   "midi": 58,
+   "verse1": "не",
+   "syllabic1": "middle",
+   "verse2": "ˈmɲe",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m13-9-8",
+   "bar": 14,
+   "onset": "9/8",
+   "midi": 57,
+   "verse1": "ни",
+   "syllabic1": "middle",
+   "verse2": "ɲi",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m13-5-4",
+   "bar": 14,
+   "onset": "5/4",
+   "midi": 57,
+   "verse1": "я,",
+   "syllabic1": "end",
+   "verse2": "jɑ #",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m14-0-1",
+   "bar": 15,
+   "onset": "0/1",
+   "midi": 58,
+   "verse1": "мно",
+   "syllabic1": "start",
+   "verse2": "ˈmno",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m14-1-4",
+   "bar": 15,
+   "onset": "1/4",
+   "midi": 57,
+   "verse1": "го",
+   "syllabic1": "end",
+   "verse2": "ɡʌ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m14-1-2",
+   "bar": 15,
+   "onset": "1/2",
+   "midi": 55,
+   "verse1": "тер",
+   "syllabic1": "start",
+   "verse2": "tʲɪ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m14-3-4",
+   "bar": 15,
+   "onset": "3/4",
+   "midi": 61,
+   "verse1": "пе",
+   "syllabic1": "middle",
+   "verse2": "ˈrpʲe",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m14-9-8",
+   "bar": 15,
+   "onset": "9/8",
+   "midi": 57,
+   "verse1": "ни",
+   "syllabic1": "middle",
+   "verse2": "ɲi",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m14-5-4",
+   "bar": 15,
+   "onset": "5/4",
+   "midi": 57,
+   "verse1": "я.",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m15-0-1",
+   "bar": 16,
+   "onset": "0/1",
+   "midi": 57,
+   "verse1": "Вот",
+   "syllabic1": "whole",
+   "verse2": "vot",
+   "syllabic2": "whole"
+  },
+  {
+   "id": "m15-3-8",
+   "bar": 16,
+   "onset": "3/8",
+   "midi": 53,
+   "verse1": "о",
+   "syllabic1": "start",
+   "verse2": "ɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m15-1-2",
+   "bar": 16,
+   "onset": "1/2",
+   "midi": 53,
+   "verse1": "на,",
+   "syllabic1": "end",
+   "verse2": "ˈnɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m15-3-4",
+   "bar": 16,
+   "onset": "3/4",
+   "midi": 55,
+   "verse1": "ночь",
+   "syllabic1": "whole",
+   "verse2": "notʃʲ",
+   "syllabic2": "whole"
+  },
+  {
+   "id": "m15-1-1",
+   "bar": 16,
+   "onset": "1/1",
+   "midi": 50,
+   "verse1": "мо",
+   "syllabic1": "start",
+   "verse2": "mɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m15-5-4",
+   "bar": 16,
+   "onset": "5/4",
+   "midi": 50,
+   "verse1": "я,",
+   "syllabic1": "end",
+   "verse2": "ˈjɑ",
+   "syllabic2": "end"
+  },
+  {
+   "id": "m16-0-1",
+   "bar": 17,
+   "onset": "0/1",
+   "midi": 52,
+   "verse1": "ночь",
+   "syllabic1": "whole",
+   "verse2": "notʃʲ",
+   "syllabic2": "whole"
+  },
+  {
+   "id": "m16-3-4",
+   "bar": 17,
+   "onset": "3/4",
+   "midi": 52,
+   "verse1": "о",
+   "syllabic1": "start",
+   "verse2": "ɑ",
+   "syllabic2": "start"
+  },
+  {
+   "id": "m16-9-8",
+   "bar": 17,
+   "onset": "9/8",
+   "midi": 52,
+   "verse1": "ди",
+   "syllabic1": "middle",
+   "verse2": "dʲi",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m17-0-1",
+   "bar": 18,
+   "onset": "0/1",
+   "midi": 54,
+   "verse1": "но",
+   "syllabic1": "middle",
+   "verse2": "ˈno",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m17-3-8",
+   "bar": 18,
+   "onset": "3/8",
+   "midi": 50,
+   "verse1": "ка",
+   "syllabic1": "middle",
+   "verse2": "kɑ",
+   "syllabic2": "middle"
+  },
+  {
+   "id": "m17-1-2",
+   "bar": 18,
+   "onset": "1/2",
+   "midi": 50,
+   "verse1": "я.",
+   "syllabic1": "end",
+   "verse2": "jɑ",
+   "syllabic2": "end"
+  }
+ ]
+}

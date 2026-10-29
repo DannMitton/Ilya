@@ -1,19 +1,20 @@
-underlay-rows.ts | ink threshold: paper less 0 (INK_BELOW_PAPER 60 -> 0) | KILLED by 3 of 23
+underlay-rows.ts | ink threshold: paper less 0 (INK_BELOW_PAPER 60 -> 0) | KILLED by 3 of 24
       - cutRows, row 81's rule reads ink as darker than the paper tone less 60, on grey paper
       - cutRows, row 81's rule does not count a pixel exactly 60 below the paper as ink, and counts one at 61 below
       - cutRows, row 81's rule takes the paper tone as the mean of the two middle samples where the samples are even in number
-underlay-rows.ts | ink threshold: paper less 200 | KILLED by 3 of 23
+underlay-rows.ts | ink threshold: paper less 200 | KILLED by 4 of 24
       - cutRows, row 81's rule reads ink as darker than the paper tone less 60, on grey paper
       - cutRows, row 81's rule does not count a pixel exactly 60 below the paper as ink, and counts one at 61 below
       - cutRows, row 81's rule takes the paper tone as the mean of the two middle samples where the samples are even in number
-underlay-rows.ts | line share 2 percent -> 0 (any ink counts) | KILLED by 3 of 23
+      - cutRows, row 81's rule samples the paper on a grid one staff space apart: the same band reads differently at another space
+underlay-rows.ts | line share 2 percent -> 0 (any ink counts) | KILLED by 3 of 24
       - cutRows, row 81's rule needs ink on more than 2 percent of the band's width for a line to count
       - cutRows, the notes of the staff above and the line below does not count a piano head that is narrower than 2 percent of the band
       - cutRows, the notes of the staff above and the line below leaves a head glued under the row out of its core
-underlay-rows.ts | line share 2 percent -> 10 percent | KILLED by 2 of 23
+underlay-rows.ts | line share 2 percent -> 10 percent | KILLED by 2 of 24
       - cutRows, row 81's rule needs ink on more than 2 percent of the band's width for a line to count
       - cutRows, the notes of the staff above and the line below does make a row of a head wider than 2 percent: cutRows says where ink is, not what it is
-underlay-rows.ts | merge gap 0.3 -> 0 (no merging) | KILLED by 21 of 23
+underlay-rows.ts | merge gap 0.3 -> 0 (no merging) | KILLED by 22 of 24
       - cutRows, row 81's rule finds one row, its core where the ink is and 0.3 staff space of padding either side
       - cutRows, row 81's rule clips the padding at the edges of the band
       - cutRows, row 81's rule keeps two rows a staff space apart as two rows
@@ -23,59 +24,61 @@ underlay-rows.ts | merge gap 0.3 -> 0 (no merging) | KILLED by 21 of 23
       - cutRows, row 81's rule reads ink as darker than the paper tone less 60, on grey paper
       - cutRows, row 81's rule does not count a pixel exactly 60 below the paper as ink, and counts one at 61 below
       - cutRows, row 81's rule takes the paper tone as the mean of the two middle samples where the samples are even in number
+      - cutRows, row 81's rule samples the paper on a grid one staff space apart: the same band reads differently at another space
       - cutRows, row 81's rule takes the paper tone the caller measured when one is given
       - cutRows, the notes of the staff above and the line below takes an extender within 0.3 staff space of the syllables into their row
-      - cutRows, the notes of the staff above and the line below does not count a piano head that is narrower than 2 percent of the band
-underlay-rows.ts | merge gap 0.3 -> 1 | KILLED by 2 of 23
+underlay-rows.ts | merge gap 0.3 -> 1 | KILLED by 3 of 24
       - cutRows, row 81's rule merges lines under 0.3 staff space apart, and not lines 0.3 apart
+      - cutRows, row 81's rule samples the paper on a grid one staff space apart: the same band reads differently at another space
       - cutRows, the split at valleys (R2) splits a core into at most four pieces
-underlay-rows.ts | min row 0.4 -> 0 (nothing dropped) | KILLED by 2 of 23
+underlay-rows.ts | min row 0.4 -> 0 (nothing dropped) | KILLED by 3 of 24
       - cutRows, row 81's rule drops a run under 0.4 staff space, and keeps one of exactly 0.4
+      - cutRows, row 81's rule samples the paper on a grid one staff space apart: the same band reads differently at another space
       - cutRows, the notes of the staff above and the line below drops a melisma extender alone: a line 2 px high is under 0.4 staff space
-underlay-rows.ts | min row 0.4 -> 0.5 | KILLED by 1 of 23
+underlay-rows.ts | min row 0.4 -> 0.5 | KILLED by 1 of 24
       - cutRows, row 81's rule drops a run under 0.4 staff space, and keeps one of exactly 0.4
-underlay-rows.ts | padding 0.3 -> 0 | KILLED by 3 of 23
+underlay-rows.ts | padding 0.3 -> 0 | KILLED by 3 of 24
       - cutRows, row 81's rule finds one row, its core where the ink is and 0.3 staff space of padding either side
       - cutRows, row 81's rule clips the padding at the edges of the band
       - cutRows, the notes of the staff above and the line below takes an extender within 0.3 staff space of the syllables into their row
-underlay-rows.ts | R2 off (SPLIT_ABOVE 1.6 -> 1000) | KILLED by 3 of 23
+underlay-rows.ts | R2 off (SPLIT_ABOVE 1.6 -> 1000) | KILLED by 3 of 24
       - cutRows, the split at valleys (R2) splits two rows a hyphen's height apart, which row 81's rule merges
       - cutRows, the split at valleys (R2) splits at a valley beside a lighter row: the Russian row over a German one
       - cutRows, the split at valleys (R2) splits a core into at most four pieces
-underlay-rows.ts | R2 split threshold 1.6 -> 1.0 | KILLED by 1 of 23
+underlay-rows.ts | R2 split threshold 1.6 -> 1.0 | KILLED by 1 of 24
       - cutRows, the split at valleys (R2) does not split a run of 1.6 staff spaces or less, however it is shaped
-underlay-rows.ts | valley ratio 0.45 -> 10 (any dip splits) | KILLED by 3 of 23
+underlay-rows.ts | valley ratio 0.45 -> 10 (any dip splits) | KILLED by 3 of 24
       - cutRows, the split at valleys (R2) looks for no valley within 0.7 staff space of either end of the core: a sliver of ink above the row stays in it
       - cutRows, the split at valleys (R2) does not split a tall run that has no valley
       - cutRows, the split at valleys (R2) does not split where the dip is shallow: a valley must hold under 0.45 of the smaller peak
-underlay-rows.ts | valley ratio 0.45 -> 0 (never splits) | KILLED by 3 of 23
+underlay-rows.ts | valley ratio 0.45 -> 0 (never splits) | KILLED by 3 of 24
       - cutRows, the split at valleys (R2) splits two rows a hyphen's height apart, which row 81's rule merges
       - cutRows, the split at valleys (R2) splits at a valley beside a lighter row: the Russian row over a German one
       - cutRows, the split at valleys (R2) splits a core into at most four pieces
-underlay-rows.ts | valley edge 0.7 -> 0 | KILLED by 1 of 23
+underlay-rows.ts | valley edge 0.7 -> 0 | KILLED by 1 of 24
       - cutRows, the split at valleys (R2) looks for no valley within 0.7 staff space of either end of the core: a sliver of ink above the row stays in it
-underlay-rows.ts | split depth 3 -> 99 (no cap on pieces) | KILLED by 1 of 23
+underlay-rows.ts | split depth 3 -> 99 (no cap on pieces) | KILLED by 1 of 24
       - cutRows, the split at valleys (R2) splits a core into at most four pieces
-underlay-rows.ts | split depth 3 -> 0 | KILLED by 3 of 23
+underlay-rows.ts | split depth 3 -> 0 | KILLED by 3 of 24
       - cutRows, the split at valleys (R2) splits two rows a hyphen's height apart, which row 81's rule merges
       - cutRows, the split at valleys (R2) splits at a valley beside a lighter row: the Russian row over a German one
       - cutRows, the split at valleys (R2) splits a core into at most four pieces
-underlay-rows.ts | piece not trimmed to its ink (leading) | KILLED by 2 of 23
+underlay-rows.ts | piece not trimmed to its ink (leading) | KILLED by 2 of 24
       - cutRows, the split at valleys (R2) splits two rows a hyphen's height apart, which row 81's rule merges
       - cutRows, the split at valleys (R2) splits at a valley beside a lighter row: the Russian row over a German one
-underlay-rows.ts | paper given by caller ignored | KILLED by 1 of 23
+underlay-rows.ts | paper given by caller ignored | KILLED by 1 of 24
       - cutRows, row 81's rule takes the paper tone the caller measured when one is given
-underlay-rows.ts | paper median of even count: lower middle only | KILLED by 1 of 23
+underlay-rows.ts | paper median of even count: lower middle only | KILLED by 1 of 24
       - cutRows, row 81's rule takes the paper tone as the mean of the two middle samples where the samples are even in number
-underlay-rows.ts | ink compared with <= paper-60 (strict < -> <=) | KILLED by 1 of 23
+underlay-rows.ts | ink compared with <= paper-60 (strict < -> <=) | KILLED by 1 of 24
       - cutRows, row 81's rule does not count a pixel exactly 60 below the paper as ink, and counts one at 61 below
-underlay-rows.ts | line test >= instead of > | KILLED by 1 of 23
+underlay-rows.ts | line test >= instead of > | KILLED by 1 of 24
       - cutRows, row 81's rule needs ink on more than 2 percent of the band's width for a line to count
-underlay-rows.ts | min-run test <= instead of < | KILLED by 1 of 23
+underlay-rows.ts | min-run test <= instead of < | KILLED by 1 of 24
       - cutRows, row 81's rule drops a run under 0.4 staff space, and keeps one of exactly 0.4
-underlay-rows.ts | merge test <= instead of < | KILLED by 1 of 23
+underlay-rows.ts | merge test <= instead of < | KILLED by 1 of 24
       - cutRows, row 81's rule merges lines under 0.3 staff space apart, and not lines 0.3 apart
-underlay-rows.ts | padding clip at band top removed | KILLED by 1 of 23
+underlay-rows.ts | padding clip at band top removed | KILLED by 1 of 24
       - cutRows, row 81's rule clips the padding at the edges of the band
-underlay-rows.ts | padding clip at band bottom removed | KILLED by 1 of 23
+underlay-rows.ts | padding clip at band bottom removed | KILLED by 1 of 24
       - cutRows, row 81's rule clips the padding at the edges of the band

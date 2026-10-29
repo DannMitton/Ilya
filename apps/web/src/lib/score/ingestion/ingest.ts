@@ -31,6 +31,7 @@ import {
 	MusicXmlScoreParser,
 	type ParseError,
 	type ParseResult,
+	type ParseWarning,
 	type ScoreParser,
 	type SourceOrigin,
 } from '@ilya/score-parser';
@@ -42,6 +43,8 @@ import {
 	type DetectionFailure,
 } from './format-detection';
 import { listZipEntries, readZipEntry, ZipReadError, type ZipFailureKind } from '$lib/reader/zip-reader';
+import { t, type Language } from '$lib/i18n';
+import { decodeBars, encodeBars, readUnreadBars, type BarRange } from '$lib/omr/unread-bars';
 
 // ── Provenance (drives the fidelity surface, Round 9 Item 1) ─────
 
@@ -78,6 +81,62 @@ export type NoLyricsNoticeKey = 'upload.banner.noLyrics' | 'upload.banner.noLyri
 
 export const noLyricsNoticeKey = (p: IngestProvenance, origin: SourceOrigin): NoLyricsNoticeKey =>
 	origin === 'homr-musicxml-from-image' ? 'upload.banner.noLyricsScan' : 'upload.banner.noLyrics';
+
+/**
+ * N.135 stage 2b, brief r5 step 2. The drawer's message for a scan, which is
+ * one of four: the two above, and the two ratified for a song whose words were
+ * read on some systems and not others (`ratified-banner-words-partly-read_2026-10-28.md`),
+ * one naming several bars and one naming a single bar.
+ */
+export type ScanNoticeKey = NoLyricsNoticeKey | 'upload.banner.wordsPartlyRead' | 'upload.banner.wordsPartlyReadOne';
+
+/**
+ * The message a parse earns, and the text its `%s`-or-bars slot is filled
+ * from (`noticeText`): the file's name for the two wordless messages, the
+ * unread bars (`encodeBars`) for the other two. Null where it earns none.
+ * A wordless score is told as ever; a score with words in it and a
+ * `words-partly-read` warning (`withUnreadBars`) is told which bars. The page
+ * is inert under vitest, so the choice is a pure function (as for
+ * `noLyricsNoticeKey`).
+ */
+export function scanNotice(warnings: readonly ParseWarning[], p: IngestProvenance, origin: SourceOrigin, fileName: string): { key: ScanNoticeKey; arg: string } | null {
+	if (warnings.some((w) => w.code === 'no-lyrics-found')) return { key: noLyricsNoticeKey(p, origin), arg: fileName };
+	const bars = warnings.find((w) => w.code === 'words-partly-read')?.bars;
+	if (!bars || bars.length === 0) return null;
+	const one = bars.length === 1 && bars[0][0] === bars[0][1];
+	return { key: one ? 'upload.banner.wordsPartlyReadOne' : 'upload.banner.wordsPartlyRead', arg: encodeBars(bars) };
+}
+
+/** «4, 9 to 12, and 39» or «4, 9 à 12 et 39»: a range of one bar is the bar alone; no comma before «et». */
+export function barsText(ranges: readonly BarRange[], language: Language): string {
+	const to = language === 'fr' ? ' à ' : ' to ';
+	const parts = ranges.map(([a, b]) => (a === b ? `${a}` : `${a}${to}${b}`));
+	if (parts.length <= 1) return parts.join('');
+	if (language === 'fr') return `${parts.slice(0, -1).join(', ')} et ${parts[parts.length - 1]}`;
+	if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
+	return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
+}
+
+/** The text of a `scanNotice`: the key's string, with the file or the bars in its slot. */
+export function noticeText(key: ScanNoticeKey, language: Language, arg: string): string {
+	if (key === 'upload.banner.wordsPartlyRead') return t('upload.banner.wordsPartlyRead', language).replace('{bars}', barsText(decodeBars(arg), language));
+	if (key === 'upload.banner.wordsPartlyReadOne') return t('upload.banner.wordsPartlyReadOne', language).replace('{bar}', barsText(decodeBars(arg), language));
+	return t(key, language).replace('%s', arg);
+}
+
+/**
+ * The parse with the bars a scan's reader could not read, if the MusicXML says
+ * so (`unread-bars.ts`): a `words-partly-read` warning. The parser reads no
+ * `<miscellaneous>` element and ceilings its own file, so the one reader of the
+ * field is here, at the seam every MusicXML passes. A kept reading reopened
+ * from its stored text passes through here again, and the warning returns.
+ */
+function withUnreadBars(result: ParseResult, text: string): ParseResult {
+	const bars = readUnreadBars(text);
+	if (bars.length === 0 || result.warnings.some((w) => w.code === 'words-partly-read')) return result;
+	const message = `Printed words were not read in bars ${encodeBars(bars)}.`;
+	return { ...result, warnings: [...result.warnings, { code: 'words-partly-read', message, bars }] };
+}
 
 export interface IngestedScore {
 	fileName: string;
@@ -234,7 +293,7 @@ async function parseMusicXmlText(
 	provenance: IngestProvenance
 ): Promise<IngestOutcome> {
 	return toOutcome(
-		await parser.parse({ format: 'musicxml', data: text, sourcePath: fileName }),
+		withUnreadBars(await parser.parse({ format: 'musicxml', data: text, sourcePath: fileName }), text),
 		fileName,
 		provenance
 	);

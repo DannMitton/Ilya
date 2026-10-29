@@ -13,7 +13,8 @@
  */
 import { toGreyscalePng } from '$lib/reader/page-image';
 import type { OmrProgress, OmrReadResult } from './homr-reader';
-import { READER_STAMP, type KeptReading } from './stamp';
+import type { KeptReading } from './stamp';
+import { scanStamp } from './underlay-switch';
 import { readingWait, type WaitHooks } from '$lib/score/reading-wait.svelte';
 
 export type { OmrProgress, OmrReadResult };
@@ -93,7 +94,7 @@ export async function readScanAsScore(
 	}
 	wait.complete();
 	logRead(file, result);
-	await hooks.ingest(readingFile(file, result.musicXml), { musicXml: result.musicXml, stamp: READER_STAMP });
+	await hooks.ingest(readingFile(file, result.musicXml), { musicXml: result.musicXml, stamp: scanStamp() });
 }
 
 /** The console line for a read that succeeded: pages, time, and the path. */

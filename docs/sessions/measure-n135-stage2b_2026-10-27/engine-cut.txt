@@ -1,0 +1,28 @@
+1349 words in 16 songs; 658 printed in two syllables or more; the engine cuts 95 of them differently from the print (14.4%); 0 words printed whole (one note) that the engine would cut in two or more.
+by song: {'B01': 8, 'B02': 6, 'B03': 5, 'B04': 3, 'B06': 4, 'B07': 6, 'B08': 9, 'B09': 11, 'B10': 4, 'P': 13, 'U1': 2, 'U4': 4, 'U5': 12, 'U6': 8}
+89 different words; the most frequent:
+    3  print ка-жет-ся  engine ка-же-тся
+    3  print ко-гда  engine ког-да
+    2  print не-взгод  engine невз-год
+    2  print не-сут-ся  engine не-су-тся
+    1  print при-дёт-ся  engine при-дё-тся
+    1  print пре-рвёт-ся  engine прер-вё-тся
+    1  print со-хра-нишь  engine сох-ра-нишь
+    1  print ни-что  engine нич-то
+    1  print со-хра-нит-ся  engine сох-ра-ни-тся
+    1  print от-кры-та-я  engine отк-ры-та-я
+    1  print у-слы-шит  engine ус-лы-шит
+    1  print по-вто-рит  engine пов-то-рит
+    1  print у-снуть  engine ус-нуть
+    1  print об-ре-сти  engine об-рес-ти
+    1  print впо-сте-ли  engine впос-те-ли
+    1  print чув-ства  engine чувст-ва
+    1  print пи-ли-гри-ма  engine пи-лиг-ри-ма
+    1  print чув-ством  engine чувст-вом
+    1  print вы-став-ля-ет  engine выс-тав-ля-ет
+    1  print пе-сней  engine пес-ней
+    1  print ли-шит-ся  engine ли-ши-тся
+    1  print пре-ле-сти  engine пре-лес-ти
+    1  print у-тра-ты  engine ут-ра-ты
+    1  print про-шло-е  engine прош-ло-е
+    1  print про-стить  engine прос-тить

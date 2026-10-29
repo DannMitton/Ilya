@@ -1456,6 +1456,14 @@ const strings: Record<string, Record<Language, string>> = {
 	// print may well carry words that Ilya does not read. Chosen by
 	// noLyricsNoticeKey (lib/score/ingestion/ingest.ts).
 	'upload.banner.noLyricsScan': { en: 'Ilya does not read the words printed in an image. The text you add in Lyrics goes under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous ajoutez dans le champ Paroles se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
+	// N.135 stage 2b, brief r5 step 2: a scan whose printed words were read on
+	// some systems and not others. RATIFIED by Dann, EN and FR, 2026-10-28 23:12;
+	// the single bar 2026-10-29 00:00 (`docs/sessions/ratified-banner-words-partly-read_2026-10-28.md`).
+	// {bars} is «23 to 30», «23 to 30 and 41 to 48», «4, 9 to 12, and 39»
+	// (`barsText`, lib/score/ingestion/ingest.ts); apostrophes U+2019. Chosen by
+	// scanNotice, only for a scan the reader read with the hidden switch on.
+	'upload.banner.wordsPartlyRead': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Type the missing words into Lyrics exactly where they fall in the song. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Saisissez les paroles manquantes dans Paroles, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.' },
+	'upload.banner.wordsPartlyReadOne': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Type the missing words into Lyrics exactly where they fall in the song. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Saisissez les paroles manquantes dans Paroles, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.' },
 	// N.65 ship B. `station.syllables` IS DELETED. Dann ruled the SYLLABLES
 	// header away on 2026-08-21 and its text became the first element under
 	// SHIFT LYRICS. Checked before deleting, the way ship A checked its six:

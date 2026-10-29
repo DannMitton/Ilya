@@ -18,7 +18,7 @@ import { seatWaitingScore } from './waiting-seat';
 import type { LineData } from '$lib/types';
 
 const xml = readFileSync(
-	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
+	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)),
 	'utf8',
 );
 

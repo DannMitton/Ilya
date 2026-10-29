@@ -212,7 +212,7 @@ describe('N.160 step 3, the heal that writes', () => {
 describe('N.160 step 3, the clitic seat recognizes a healed note', () => {
 	it('«В бью» from a capitalized poem is the fold\'s «в бью», so a reload rewrites nothing', async () => {
 		const xml = readFileSync(
-			fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
+			fileURLToPath(new URL('./ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)),
 			'utf8',
 		);
 		const parsed = (

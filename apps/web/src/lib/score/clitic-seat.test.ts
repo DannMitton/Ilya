@@ -41,8 +41,10 @@ import { scoreWordsText } from './vowel-resolver';
 
 const NBSP = '\u00A0';
 
+// Since brief r5 step 8 this is the copy of the file as Finale printed it (`sunless-01-finale-lone-v.musicxml`); `sunless-01-engraved.musicxml`
+// is repaired and has no lone «в» to fold. Allow-listed in `ingestion/fixture-rule.test.ts`.
 const xml = readFileSync(
-	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
+	fileURLToPath(new URL('./ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)),
 	'utf8',
 );
 

@@ -69,7 +69,7 @@ function inkAt(g: Grey, x: number, y: number): boolean {
 }
 
 /** Rows of ink across a strip: (centre, thickness) of each run of rows at least `frac` ink. */
-function lineRows(g: Grey, x0: number, x1: number, y0: number, y1: number, frac: number): [number, number][] {
+export function lineRows(g: Grey, x0: number, x1: number, y0: number, y1: number, frac: number): [number, number][] {
 	const rows: [number, number][] = [];
 	const n = y1 - y0;
 	const on = new Uint8Array(n);
@@ -91,7 +91,7 @@ function lineRows(g: Grey, x0: number, x1: number, y0: number, y1: number, frac:
 }
 
 /** Five evenly spaced rows: each found staff as (line heights, space, thickness). */
-function fives(rows: [number, number][]): { c: number[]; s: number; th: number }[] {
+export function fives(rows: [number, number][]): { c: number[]; s: number; th: number }[] {
 	const out: { c: number[]; s: number; th: number }[] = [];
 	const used = new Set<number>();
 	for (let i = 0; i < rows.length - 4; i++) {

@@ -39,7 +39,14 @@ export async function loadFixture(file: string): Promise<ParsedScore> {
 	return (await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(xml) as unknown as Document, sourcePath: file })).score;
 }
 
+/**
+ * Sunless 1 as repaired from the desk's extract, every bar (brief r5 steps 8 and 10): one vowel per note, 96 voice notes,
+ * «в бью» on one note. `SUNLESS_LONE_V` is the same song AS FINALE PRINTED IT (`sunless-01-finale-lone-v.musicxml`, kept byte
+ * for byte): the lone «в» on its own note and every syllable after it one note late. A test that exists for the lone «в» (the
+ * clitic fold) reads that one, and is allow-listed in `score/ingestion/fixture-rule.test.ts`.
+ */
 export const SUNLESS = 'sunless-01-engraved.musicxml';
+export const SUNLESS_LONE_V = 'sunless-01-finale-lone-v.musicxml';
 export const TCHAIKOVSKY = 'tchaikovsky-op38-3-voice.musicxml';
 
 /** The fill a drop leaves in Lyrics: the score's words on one line. */

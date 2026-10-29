@@ -3,7 +3,7 @@
  * `isKnownWord`, which the caller passes in.
  */
 import { describe, expect, it } from 'vitest';
-import { rowLanguage } from './underlay-language';
+import { RUSSIAN_SHARE, rowLanguage } from './underlay-language';
 
 const dictionary = new Set(['комнатка', 'тесная', 'тихая', 'милая', 'ты', 'и', 'мир', 'ёлка']);
 const isWord = (w: string) => dictionary.has(w);
@@ -21,12 +21,22 @@ describe('rowLanguage', () => {
 		expect(rowLanguage(['тесная', 'тихая', 'xxx', 'yyy'], isWord)).toBe('russian');
 	});
 
-	it('calls a row other where under half its words are entries', () => {
-		expect(rowLanguage(['тесная', 'xxx', 'yyy'], isWord)).toBe('other');
+	it('holds the share at three in ten (brief r5 step 1)', () => {
+		expect(RUSSIAN_SHARE).toBe(0.3);
 	});
 
-	it('calls a row other at two words in five, which is between a third and a half', () => {
-		expect(rowLanguage(['тесная', 'тихая', 'xxx', 'yyy', 'zzz'], isWord)).toBe('other');
+	it('calls a row other where under three in ten of its words are entries', () => {
+		expect(rowLanguage(['тесная', 'xxx', 'yyy', 'zzz'], isWord)).toBe('other');
+		expect(rowLanguage(['тесная', 'тихая', 'xxx', 'yyy', 'zzz', 'www', 'vvv', 'uuu'], isWord)).toBe('other');
+	});
+
+	it('calls a row Russian at exactly three words in ten', () => {
+		expect(rowLanguage(['тесная', 'тихая', 'милая', 'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1'], isWord)).toBe('russian');
+	});
+
+	it('calls a row Russian at one word in three and at two in five, which a share of a half called other (the mutant at 0.5 fails here)', () => {
+		expect(rowLanguage(['тесная', 'xxx', 'yyy'], isWord)).toBe('russian');
+		expect(rowLanguage(['тесная', 'тихая', 'xxx', 'yyy', 'zzz'], isWord)).toBe('russian');
 	});
 
 	it('counts one misread word in a row of five against it, and the row stays Russian', () => {
@@ -42,7 +52,7 @@ describe('rowLanguage', () => {
 
 	it('counts a word of two letters', () => {
 		expect(rowLanguage(['ты'], isWord)).toBe('russian');
-		expect(rowLanguage(['ты', 'xx', 'yy'], isWord)).toBe('other');
+		expect(rowLanguage(['ты', 'xx', 'yy', 'zz'], isWord)).toBe('other');
 	});
 
 	it('calls a row with nothing to count other', () => {

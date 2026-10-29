@@ -4,6 +4,7 @@
 	import type { TextArrival } from '$lib/one-action';
 	import { comparePoem, lyricsSegments, poemSegments } from '$lib/text/poem-compare';
 	import { inputViews, type InputView } from '$lib/text/input-views.svelte';
+	import { lyricsOnLeave } from '$lib/text/break-glue';
 	import { pointer } from './IntakeCamera.svelte';
 	import ViewPair from '../ViewPair.svelte';
 	/*
@@ -59,9 +60,11 @@
 		onflush: () => void;
 		/** The camera glyph, which stands in the field's top right corner. */
 		corner?: Snippet;
+		/** The field is showing the score's derived words, not text of the singer's: leaving it changes nothing (step 9). */
+		scoreWords?: boolean;
 	}
 
-	let { language, songId, lyricsText, poemText, disabled = false, oninput, onpoemedit, onflush, corner }: Props = $props();
+	let { language, songId, lyricsText, poemText, disabled = false, oninput, onpoemedit, onflush, corner, scoreWords = false }: Props = $props();
 
 	const VIEWS: InputView[] = ['poem', 'lyrics'];
 	const view = $derived(inputViews.view);
@@ -193,6 +196,20 @@
 		else oninput(value, arrivalOf(e));
 	}
 
+	/**
+	 * N.135 stage 2b r5, step 9 (Dann 2026-10-29 01:48): leaving the Lyrics field glues a `#` typed after a word with an ordinary
+	 * space («я #» to «я\u00A0#», `lyricsOnLeave`). Nothing changes while the singer types, and nothing on a paste, a Poem edit, or
+	 * a score's own text. The new text goes up as a whole arrival (`oninput(value, 'paste')`), the path a typed edit takes, so the
+	 * app's state takes it like any edit; the textarea's own undo history does not (a value set from code is not in it).
+	 */
+	function onBlur(e: FocusEvent): void {
+		if (view !== 'lyrics') return;
+		const glued = lyricsOnLeave((e.target as HTMLTextAreaElement).value, scoreWords);
+		if (glued === null) return;
+		inputViews.edited();
+		oninput(glued, 'paste');
+	}
+
 	/* N.145, 2026-09-16: Cmd+Enter skips the quiet pause (`flushText`). */
 	function onKeydown(e: KeyboardEvent): void {
 		if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
@@ -230,6 +247,7 @@
 		value={text}
 		oninput={onInput}
 		onkeydown={onKeydown}
+		onblur={onBlur}
 		onscroll={measure}
 		aria-labelledby="intake-tab-{view}"
 		rows="6"

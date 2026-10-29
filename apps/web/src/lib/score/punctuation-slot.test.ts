@@ -39,9 +39,9 @@ const NBSP = ' ';
 const queueOf = (text: string) => buildSlotQueue(processText(text, { language: 'en' }));
 const texts = (text: string) => queueOf(text).map((s) => s.cyrillic);
 
-async function sunless(): Promise<ParsedScore> {
+async function sunless(file = 'sunless-01-engraved.musicxml'): Promise<ParsedScore> {
 	const xml = readFileSync(
-		fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
+		fileURLToPath(new URL(`./ingestion/fixtures/${file}`, import.meta.url)),
 		'utf8',
 	);
 	const res = await new MusicXmlScoreParser().parse({
@@ -96,7 +96,8 @@ describe('N.118 the slot carries its word’s trailing punctuation', () => {
 		expect(punctuated).toBe(15);
 		// What still differs is the engraver's division against Ilya's, and the
 		// clitic the file seated alone. No punctuation is left on the list.
-		expect(differ).toEqual(['прог|про', 'ляд|гляд', 'в' + NBSP + 'бью|бью', 'счас|сча', 'тье|стье']);
+		// Step 10: the clitic is no longer on this list. The repaired file seats «в бью» on one note (the extract's cell «в\u00A0бью»), and «одинокая.» has its five cells for its five slots, so the closing-word branch above is no longer taken.
+		expect(differ).toEqual(['прог|про', 'ляд|гляд', 'счас|сча', 'тье|стье']);
 	});
 });
 
@@ -181,7 +182,7 @@ describe('N.118 placement, shift, and re-seat all carry it', () => {
 
 describe('N.118 on the fixture’s clitic run', () => {
 	it('the fold carries the punctuation once, never twice', async () => {
-		const fold = findCliticFolds(await sunless())[0];
+		const fold = findCliticFolds(await sunless('sunless-01-finale-lone-v.musicxml'))[0];
 		for (const { cyrillic } of fold.seat) expect(cyrillic).not.toMatch(/[,.;]{2}$/);
 		expect(fold.seat.filter((s) => /[,.;]$/.test(s.cyrillic)).map((s) => s.cyrillic)).toEqual([
 			'я,', 'я;', 'е;', 'я,', 'я.', 'на,', 'я,', 'я.',

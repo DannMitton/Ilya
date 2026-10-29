@@ -181,8 +181,8 @@
    ],
    [
     "language: no ё fold",
-    "if (isWord(letters) || (letters.includes('ё') && isWord(letters.replace(/ё/g, 'е')))) known++;",
-    "if (isWord(letters)) known++;"
+    "return isWord(letters) || (letters.includes('ё') && isWord(letters.replace(/ё/g, 'е')));",
+    "return isWord(letters);"
    ],
    [
     "language: case not folded",

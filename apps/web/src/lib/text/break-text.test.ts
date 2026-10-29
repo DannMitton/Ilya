@@ -34,9 +34,10 @@ function unitAt(text: string, L: number, W: number) {
 
 describe('done-when 1: the offset of every transcribed word lands on the end of the raw token it came from', () => {
 	it('song 1: 39 words in one line', () => {
-		expect(song1.split(' ')).toHaveLength(39);
+		// Words are split on any whitespace: «в бьющемся» is joined by U+00A0, as the extract's cell «в\u00A0бью» has it, and is two words (step 10).
+		expect(song1.split(/\s/u)).toHaveLength(39);
 		let end = 0;
-		song1.split(' ').forEach((token, w) => {
+		song1.split(/\s/u).forEach((token, w) => {
 			end += token.length;
 			expect(tokenEndOffset(song1, 0, w), `word ${w} «${token}»`).toBe(end);
 			end += 1;

@@ -10,7 +10,7 @@ import { seatCliticFolds } from './clitic-seat';
 import { seatWaitingScore } from './waiting-seat';
 import { reseatOnReplace } from './replace-seat';
 import { rekeySeatsToLines, seatScoreWords } from './score-seat';
-import { inLines, loadFixture, loadRealDictionary, oneLine, SUNLESS, TCHAIKOVSKY } from './row108.support';
+import { inLines, loadFixture, loadRealDictionary, oneLine, SUNLESS, SUNLESS_LONE_V, TCHAIKOVSKY } from './row108.support';
 
 beforeAll(loadRealDictionary, 60_000);
 
@@ -41,7 +41,8 @@ describe('l. the arrival on six lines', () => {
 	});
 
 	it('without the re-key, the fold’s 60 seats would draw from their stored text (the cost the brief measured)', async () => {
-		const score = await loadFixture(SUNLESS);
+		// Reads the copy: the 60 seats are the fold's rewrite from the lone «в» to the end, which the repaired file does not need (step 10).
+		const score = await loadFixture(SUNLESS_LONE_V);
 		const lines = processText(inLines(oneLine(score)));
 		const seated = seatScoreWords(score, seatCliticFolds(score, {}), lines).map;
 		const raw = seatCliticFolds(score, seated);
