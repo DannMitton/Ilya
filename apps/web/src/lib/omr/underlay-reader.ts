@@ -15,7 +15,7 @@
  * stage existed (`underlay-song.ts`).
  */
 import type { StaffBoxLike } from './metre-windows';
-import { seatPage, type PageLayout, type ReadUnderlay, type Seams, type UnderlayPage, type WordBox } from './underlay-page';
+import { seatPage, type PageLayout, type ReadUnderlay, type Seams, type SystemWords, type UnderlayPage, type WordBox } from './underlay-page';
 
 export interface UnderlayParts<Row> {
 	/** The Worker's half: one framed image per row, in `layout`'s order. */
@@ -50,6 +50,12 @@ export function describeError(err: unknown): string {
 	return 'no reason was given';
 }
 
+/** «; no words in system 2 (no Russian row), system 5 (no band)»: the systems of the page that took none; nothing where every one did. */
+function tookNone(systems: readonly SystemWords[]): string {
+	const none = systems.flatMap((s, i) => (s.written ? [] : [`system ${i + 1} (${s.why})`]));
+	return none.length ? `; no words in ${none.join(', ')}` : '';
+}
+
 export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay {
 	const now = parts.now ?? (() => performance.now());
 	return async (image, musicXml, staves) => {
@@ -69,7 +75,7 @@ export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay
 			const seated = seatPage(made.layout, reads, seams);
 			const ms = { prepare: Math.round(made.ms), read: Math.round(t2 - t1), seat: Math.round(now() - t2) };
 			const page: UnderlayPage = { ...seated, ms };
-			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.passes ? '' : `; does not pass (${seated.why})`}`);
+			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${tookNone(seated.systems)}`);
 			return page;
 		} catch (err) {
 			console.info(`[omr] underlay: the page was not read (${stage} failed: ${describeError(err)}${prepared ? `; the Worker had framed ${prepared.rows} rows in ${prepared.ms} ms` : ''})`);

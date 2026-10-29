@@ -43,6 +43,7 @@ import type { MetreSeen } from './metre-witness';
 import type { ReadUnderlay, UnderlayPage } from './underlay-page';
 import { applyUnderlay } from './underlay-song';
 import { underlayOn } from './underlay-switch';
+import { markUnreadBars, type BarRange } from './unread-bars';
 import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
 
 /**
@@ -396,12 +397,14 @@ export function makeReader(deps: ReaderDeps): Reader {
 			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]], metres: found.metres[i], underlay: found.underlay[i] })),
 			found.staves,
 		);
-		// The words under the voice staff, written into each page's MusicXML (the notes' text rides through the join) only where every page answered and passed.
+		// The words under the voice staff, written into each page's MusicXML (the notes' text rides through the join) on every system that has a Russian row; the bars of the others ride in the joined file (`unread-bars.ts`).
 		let pages = song.map((p) => p.xml);
+		let unreadBars: BarRange[] = [];
 		if (deps.underlay) {
 			const applied = applyUnderlay(pages, await Promise.all(song.map((p) => p.underlay)));
 			console.info(`[omr] underlay: ${applied.line}`);
 			pages = applied.xmls;
+			unreadBars = applied.unreadBars;
 		}
 		let musicXml: string;
 		try {
@@ -412,6 +415,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} bars, read ${joined.numbers.length}${joined.numbers.length ? ` (${joined.numbers.join(', ')})` : ''}`);
 				for (const line of joined.metreLog) console.info(`[omr] metre: ${line}`);
 			} else musicXml = joinPages(pages);
+			musicXml = markUnreadBars(musicXml, unreadBars);
 		} catch (err) {
 			return { ok: false, error: 'join_failed', log: message(err) };
 		}

@@ -418,7 +418,7 @@ function stavesOfParts(xml: string): number[] {
  * (homr-web 0.2.0-ilya.4 does the same for a system of the piano alone on a
  * page that also prints the voice, `systemOffsets`).
  */
-function pianoAlonePages(pages: readonly string[]): boolean[] {
+export function pianoAlonePages(pages: readonly string[]): boolean[] {
 	const staves = pages.map(stavesOfParts);
 	const voiceOverPiano = staves.some((s) => s.length >= 2 && s[0] === 1 && s.slice(1).some((n) => n >= 2));
 	return staves.map((s) => voiceOverPiano && s.length > 0 && s.every((n) => n >= 2));

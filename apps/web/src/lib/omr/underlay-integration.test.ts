@@ -10,11 +10,16 @@
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Recognizer } from 'homr-web';
-import { MusicXmlScoreParser } from '@ilya/score-parser';
+import { MusicXmlScoreParser, type ScoreParser } from '@ilya/score-parser';
 import { parseXml } from '$lib/score/ingestion/mini-dom';
 import { collectScoreWords } from '$lib/score/vowel-resolver';
 import { makeReader, type ReaderDeps } from './homr-reader';
-import { voiceNotes } from './underlay-prepare';
+import { measureCount, voiceNotes } from './underlay-prepare';
+import { readUnreadBars } from './unread-bars';
+import { restoreScan } from './restore';
+import { readingFile } from './scan';
+import { scanStamp } from './underlay-switch';
+import { ingestScoreFile, noticeText, scanNotice, type IngestDeps } from '$lib/score/ingestion/ingest';
 import type { ReadUnderlay, UnderlayPage } from './underlay-page';
 import type { Word } from './underlay-words';
 
@@ -42,11 +47,20 @@ const stats = (unseated = 0) => ({
 	systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, tokens: 3, units: 3, cuts: { cut: 0, whole: 3, mismatched: 0 }, seated: 3, unseated, words: 3, known: 3,
 });
 
-/** The first `n` pitched notes of a page, sung the given syllables: one word of one syllable each. */
-function page(xml: string, texts: string[], passes = true, unseated = 0): UnderlayPage {
+/**
+ * A page whose one system holds all the page's voice notes: it wrote the first `texts.length` syllables on the first notes
+ * (one word of one syllable each), or, with `written` false, took no words.
+ */
+function page(xml: string, texts: string[], written = true, unseated = 0): UnderlayPage {
 	const notes = voiceNotes(xml).filter((x) => !x.rest);
-	const words: Word[] = texts.map((text, i) => ({ syllables: [{ note: notes[i].ordinal, text, syllabic: 'single', sustained: false }] }));
-	return { passes, why: passes ? null : 'no Russian row in system 1', words, stats: stats(unseated), ms: { prepare: 10, read: 20, seat: 1 } };
+	const words: Word[] = written ? texts.map((text, i) => ({ syllables: [{ note: notes[i].ordinal, text, syllabic: 'single', sustained: false }] })) : [];
+	const bars = notes.map((n) => n.bar);
+	return {
+		systems: [{ written, bars: [Math.min(...bars), Math.max(...bars)], why: written ? null : 'no Russian row' }],
+		words,
+		stats: stats(unseated),
+		ms: { prepare: 10, read: 20, seat: 1 },
+	};
 }
 
 const WORDS = [['Средь', 'шумного'], ['бала', 'случайно'], ['в', 'тревоге']];
@@ -56,6 +70,18 @@ async function read(underlay: ReadUnderlay | undefined, n = 3, withStaves = true
 	const result = await makeReader(deps(underlay, withStaves)).read(blobs(n));
 	if (!result.ok) throw new Error(`${result.error}: ${result.log}`);
 	return result.musicXml;
+}
+
+const musicxmlParser: ScoreParser = {
+	canParse: () => true,
+	parse: (input) => new MusicXmlScoreParser().parse({ ...input, data: parseXml(input.data as string) as unknown as Document }),
+};
+const ingestDeps = { scoreReader: { convert: async () => { throw new Error('not reached'); }, dispose: () => {} }, musicxmlParser } as unknown as IngestDeps;
+
+async function arrive(f: File) {
+	const out = await ingestScoreFile(f, ingestDeps);
+	if (!out.ok) throw new Error('ingest failed');
+	return out.ingested;
 }
 
 async function parse(musicXml: string) {
@@ -94,21 +120,70 @@ describe('the words ride through the join', () => {
 	});
 });
 
-describe('where the words are not written, the song is joined as it was', () => {
-	it('writes nothing where one page of the song does not pass', async () => {
-		const plain = await read(undefined);
+/** Page `i`'s voice notes' first and last bar (homr's, from 1), and the song's: those plus the bars of the pages before it. */
+function barsOfPage(i: number): { page: [number, number]; song: [number, number] } {
+	const bars = voiceNotes(PAGES[i]).filter((n) => !n.rest).map((n) => n.bar);
+	const before = PAGES.slice(0, i).reduce((n, xml) => n + measureCount(xml), 0);
+	const page: [number, number] = [Math.min(...bars), Math.max(...bars)];
+	return { page, song: [page[0] + before, page[1] + before] };
+}
+
+describe('a system that cannot be read loses only itself (brief r5 step 2)', () => {
+	it('writes the words of the pages that passed where one page took none, and carries the SONG bars of that page in the joined file', async () => {
 		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
 		const second: ReadUnderlay = async (_i, xml) => page(xml, WORDS[PAGES.indexOf(xml)], PAGES.indexOf(xml) !== 1);
-		expect(await read(second)).toBe(plain);
-		expect(log.mock.calls.map((c) => String(c[0])).join('\n')).toContain('page 2 does not pass (no Russian row in system 1), so the words are not written');
+		const joined = await read(second);
+		expect(joined.match(/<lyric number="1">/g)).toHaveLength(4);
+		const { page: own, song } = barsOfPage(1);
+		expect(own[0]).toBe(1);
+		expect(song[0]).toBeGreaterThan(own[0]);
+		expect(readUnreadBars(joined)).toEqual([song]);
+		const text = log.mock.calls.map((c) => String(c[0])).join('\n');
+		expect(text).toContain(`no words in page 2 system 1 (bars ${song[0]} to ${song[1]}, no Russian row)`);
 	});
 
-	it('writes nothing where one page answers null', async () => {
-		const plain = await read(undefined);
+	it('writes the words of the pages that answered where one page answers null, and names that page\'s bars', async () => {
 		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
-		const nullSecond: ReadUnderlay = async (_i, xml) => (PAGES.indexOf(xml) === 2 ? null : page(xml, WORDS[PAGES.indexOf(xml)]));
-		expect(await read(nullSecond)).toBe(plain);
-		expect(log.mock.calls.map((c) => String(c[0])).join('\n')).toContain('page 3 could not be read');
+		const nullThird: ReadUnderlay = async (_i, xml) => (PAGES.indexOf(xml) === 2 ? null : page(xml, WORDS[PAGES.indexOf(xml)]));
+		const joined = await read(nullThird);
+		expect(joined.match(/<lyric number="1">/g)).toHaveLength(4);
+		expect(readUnreadBars(joined)).toEqual([barsOfPage(2).song]);
+		expect(log.mock.calls.map((c) => String(c[0])).join('\n')).toContain('page 3 (bars');
+	});
+
+	it('is told as the song is told today where no page took a word: no bars ride in the file', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const none: ReadUnderlay = async (_i, xml) => page(xml, WORDS[PAGES.indexOf(xml)], false);
+		const joined = await read(none);
+		expect(joined).toBe(await read(undefined));
+		expect(readUnreadBars(joined)).toEqual([]);
+	});
+
+	it('carries the bars through a parse as a warning, and the banner key and text follow', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const second: ReadUnderlay = async (_i, xml) => page(xml, WORDS[PAGES.indexOf(xml)], PAGES.indexOf(xml) !== 1);
+		const { song } = barsOfPage(1);
+		const got = await arrive(readingFile(new File([''], 'song.pdf'), await read(second)));
+		const w = got.result.warnings.find((x) => x.code === 'words-partly-read');
+		expect(w?.bars).toEqual([song]);
+		expect(got.result.warnings.map((x) => x.code)).not.toContain('no-lyrics-found');
+		const notice = scanNotice(got.result.warnings, got.provenance, got.result.score.source.origin, 'song.pdf');
+		expect(notice).toEqual({ key: 'upload.banner.wordsPartlyRead', arg: `${song[0]}-${song[1]}` });
+		expect(noticeText(notice!.key, 'en', notice!.arg)).toContain(`it could not read the words in bars ${song[0]} to ${song[1]}.`);
+	});
+
+	it('returns the banner when the song is reopened from its kept reading: the bars ride with the reading, beside its stamp', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const second: ReadUnderlay = async (_i, xml) => page(xml, WORDS[PAGES.indexOf(xml)], PAGES.indexOf(xml) !== 1);
+		const { song } = barsOfPage(1);
+		const first = await restoreScan(new File([], 'a.pdf'), 'pdf', null, async () => ({ ok: true, musicXml: await read(second), pagesRead: 3, pages: 3, backend: 'wasm', durationMs: 1 }), undefined, scanStamp('?words=read'));
+		expect(first).toMatchObject({ ok: true, from: 'homr' });
+		const kept = first.ok ? first.reading! : null;
+		// Reopened: nothing is read, the stored text is ingested again.
+		const again = await restoreScan(new File([], 'a.pdf'), 'pdf', kept, async () => { throw new Error('not read again'); }, undefined, scanStamp('?words=read'));
+		expect(again).toMatchObject({ ok: true, from: 'kept' });
+		const got = await arrive(readingFile(new File([''], 'song.pdf'), again.ok ? again.musicXml : ''));
+		expect(got.result.warnings.find((x) => x.code === 'words-partly-read')?.bars).toEqual([song]);
 	});
 
 	it('writes nothing, and says why in one console line, where the reader throws', async () => {
@@ -120,7 +195,7 @@ describe('where the words are not written, the song is joined as it was', () => 
 		expect(await read(throwing)).toBe(plain);
 		const lines = log.mock.calls.map((c) => String(c[0]));
 		expect(lines.filter((l) => l.includes('the model did not load'))).toHaveLength(3);
-		expect(lines.some((l) => l.includes('the words are not written'))).toBe(true);
+		expect(lines.some((l) => l.includes('so nothing is written'))).toBe(true);
 	});
 
 	it('writes nothing where the reader rejects', async () => {

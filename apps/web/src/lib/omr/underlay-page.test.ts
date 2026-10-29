@@ -46,8 +46,7 @@ describe('pageTokens, the dash that is a mark', () => {
 describe('seatPage', () => {
 	it('seats the words of a row under the notes of its system, a word the engine cuts across several', () => {
 		const page = seatPage(layout(system(notes(100, 200, 300, 400, 500), [row(0)])), [[box('Средь', 90, 110), box('шумного', 180, 320), box('бала', 380, 520)]], seams);
-		expect(page.passes).toBe(true);
-		expect(page.why).toBeNull();
+		expect(page.systems).toEqual([{ written: true, bars: [1, 1], why: null }]);
 		// Six units for five notes: «но» is the one the least-cost alignment leaves out, and its letters join the next syllable of the word.
 		expect(shape(page)).toEqual([
 			[['Средь', 'single', 0]],
@@ -62,18 +61,16 @@ describe('seatPage', () => {
 		expect(shape(page)).toEqual([[['Груст', 'begin', 0], ['но,', 'end', 1]]]);
 	});
 
-	it('does not seat a row that is not Russian, and does not pass', () => {
+	it('does not seat a row that is not Russian, and says the system took no words', () => {
 		const page = seatPage(layout(system(notes(100, 200), [row(0)])), [[box('Wohl', 80, 120), box('dem', 180, 220)]], seams);
-		expect(page.passes).toBe(false);
-		expect(page.why).toBe('system 1 has no Russian row');
+		expect(page.systems).toEqual([{ written: false, bars: [1, 1], why: 'no Russian row' }]);
 		expect(page.words).toEqual([]);
 		expect(page.stats).toMatchObject({ russianRows: 0, systemsRussian: 0 });
 	});
 
-	it('does not pass where a system has no band', () => {
+	it('writes nothing for a system with no band, and says why', () => {
 		const page = seatPage(layout(system(notes(100), [], false)), [], seams);
-		expect(page.passes).toBe(false);
-		expect(page.why).toBe('system 1 has no band');
+		expect(page.systems).toEqual([{ written: false, bars: [1, 1], why: 'no band' }]);
 		expect(page.stats.banded).toBe(0);
 	});
 
@@ -84,11 +81,22 @@ describe('seatPage', () => {
 		expect(page.stats).toMatchObject({ rows: 3, russianRows: 2, systemsRussian: 1 });
 	});
 
-	it('does not pass if any one system of two has no Russian row, and says which', () => {
-		const page = seatPage(layout(system(notes(100), [row(0)]), system(notesFrom(10, 100), [row(1)])), [[box('мир', 80, 120)], [box('qq', 80, 120)]], seams);
-		expect(page.passes).toBe(false);
-		expect(page.why).toBe('system 2 has no Russian row');
+	it('keeps the words of the system that has a Russian row where another of the page has none, and says which, with its bars', () => {
+		const page = seatPage(layout(system(notes(100), [row(0)]), system(notesFrom(10, 100, 200), [row(1)])), [[box('мир', 80, 120)], [box('qq', 80, 120)]], seams);
+		expect(page.systems).toEqual([
+			{ written: true, bars: [1, 1], why: null },
+			{ written: false, bars: [2, 2], why: 'no Russian row' },
+		]);
 		expect(shape(page)).toEqual([[['мир', 'single', 0]]]);
+	});
+
+	it('gives a system the first and the last bar of its notes, as homr numbers them on the page', () => {
+		const n = [{ id: 0, x: 100, bar: 7 }, { id: 1, x: 200, bar: 8 }, { id: 2, x: 300, bar: 9 }];
+		expect(seatPage(layout(system(n, [row(0)])), [[box('qq', 80, 120)]], seams).systems).toEqual([{ written: false, bars: [7, 9], why: 'no Russian row' }]);
+	});
+
+	it('gives a system with no note no bars', () => {
+		expect(seatPage(layout(system([], [], false)), [], seams).systems).toEqual([{ written: false, bars: null, why: 'no band' }]);
 	});
 
 	it('carries a word across a system break: a hyphen at the end of one row joins the first token of the next', () => {
@@ -108,20 +116,20 @@ describe('seatPage', () => {
 		expect(shape(page).flat().map((s) => s[2])).toEqual([0, 2]);
 	});
 
-	it('passes a page with no voice note, with no words', () => {
+	it('has no system, and no words, for a page with no voice note', () => {
 		const page = seatPage(layout(), [], seams);
-		expect(page).toMatchObject({ passes: true, why: null, words: [] });
+		expect(page).toMatchObject({ systems: [], words: [] });
 	});
 
 	it('counts the sewn words of two letters or more that the dictionary holds', () => {
 		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), [[box('мир', 80, 120), box('ты', 180, 220), box('zzz', 280, 320)]], seams);
 		expect(page.stats).toMatchObject({ words: 3, known: 2 });
-		expect(page.passes).toBe(true);
+		expect(page.systems.map((x) => x.written)).toEqual([true]);
 	});
 
 	it('reads nothing for a row the reader gave no answer for', () => {
 		const page = seatPage(layout(system(notes(100), [row(0)])), [], seams);
-		expect(page.passes).toBe(false);
+		expect(page.systems.map((x) => x.written)).toEqual([false]);
 		expect(page.stats.tokens).toBe(0);
 	});
 });

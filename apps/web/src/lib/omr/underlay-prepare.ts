@@ -72,6 +72,14 @@ export function voiceNotes(musicXml: string): VoiceNote[] {
 	return out;
 }
 
+/** The number of `<measure>` elements in the first `<part>` of a MusicXML text: the bars the join takes from the page. */
+export function measureCount(musicXml: string): number {
+	const start = musicXml.search(/<part(?=[\s>])/);
+	if (start < 0) return 0;
+	const end = musicXml.indexOf('</part>', start);
+	return (musicXml.slice(start, end < 0 ? undefined : end).match(/<measure(?=[\s>])/g) ?? []).length;
+}
+
 export interface Prepared {
 	layout: PageLayout;
 	/** The framed rows, in `layout`'s order: row `id` is `rows[id]`. */

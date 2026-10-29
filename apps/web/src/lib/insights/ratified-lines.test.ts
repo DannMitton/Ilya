@@ -215,3 +215,39 @@ describe('ratified HEIC refusal (row 113)', () => {
 		expect(fr).not.toContain("'");
 	});
 });
+
+/* N.135 stage 2b, brief r5 step 2. The banner for a scan whose printed words were read on some
+   systems and not others, ratified by Dann 2026-10-28 23:12 (ranges, EN and FR) and 2026-10-29 00:00
+   (the single bar; the first sentence's end only). The slots are {bars} and {bar}; the words in them
+   are `barsText` (lib/score/ingestion/ingest.ts), pinned in score/scan-notice.test.ts. The apostrophes
+   are U+2019, as in the rest of i18n.ts (DESK DEFAULT; the ratified file wrote U+0027). */
+describe('ratified banner for a scan read in part (brief r5 step 2)', () => {
+	it('ranges, English', () => {
+		expect(t('upload.banner.wordsPartlyRead', 'en')).toBe(
+			'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Type the missing words into Lyrics exactly where they fall in the song. Check every word against your score.',
+		);
+	});
+	it('ranges, French', () => {
+		expect(t('upload.banner.wordsPartlyRead', 'fr')).toBe(
+			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Saisissez les paroles manquantes dans Paroles, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
+		);
+	});
+	it('one bar, English', () => {
+		expect(t('upload.banner.wordsPartlyReadOne', 'en')).toBe(
+			'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Type the missing words into Lyrics exactly where they fall in the song. Check every word against your score.',
+		);
+	});
+	it('one bar, French', () => {
+		expect(t('upload.banner.wordsPartlyReadOne', 'fr')).toBe(
+			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Saisissez les paroles manquantes dans Paroles, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
+		);
+	});
+	it('writes every apostrophe as U+2019 and no em-dash', () => {
+		for (const key of ['upload.banner.wordsPartlyRead', 'upload.banner.wordsPartlyReadOne']) {
+			for (const lang of ['en', 'fr'] as const) {
+				expect(t(key, lang), `${key} ${lang}`).not.toContain("'");
+				expect(t(key, lang), `${key} ${lang}`).not.toContain('—');
+			}
+		}
+	});
+});

@@ -40,16 +40,16 @@ describe('makeUnderlayReader', () => {
 		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
 		const page = await makeUnderlayReader(p)(image, '<xml/>', []);
 		expect(p.asked).toEqual(['row 0']);
-		expect(page).toMatchObject({ passes: true, ms: { prepare: 1500, read: 100, seat: 100 } });
+		expect(page).toMatchObject({ systems: [{ written: true, why: null }], ms: { prepare: 1500, read: 100, seat: 100 } });
 		expect(page!.words.map((w) => w.syllables.map((s) => [s.text, s.note]))).toEqual([[['мир', 0]], [['ты', 1]]]);
 		expect(log).toHaveBeenCalledTimes(1);
 		expect(String(log.mock.calls[0][0])).toContain('page read in 1.7 s (worker 1500 ms, reader 100 ms, seating 100 ms): 1 rows in 1 systems, 2 syllables seated, 0 unseated');
 	});
 
-	it('says in the line that a page does not pass, and why', async () => {
+	it('says in the line which systems of the page took no words, and why', async () => {
 		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
 		await makeUnderlayReader(parts({ recognize: async () => [word('qq', 90, 110)] }))(image, '<xml/>', []);
-		expect(String(log.mock.calls[0][0])).toContain('does not pass (system 1 has no Russian row)');
+		expect(String(log.mock.calls[0][0])).toContain('; no words in system 1 (no Russian row)');
 	});
 
 	it.each([

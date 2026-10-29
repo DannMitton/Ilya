@@ -205,7 +205,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	import { CorrectionVerbs } from '$lib/score/correction-verbs.svelte';
 	import { TupletRow } from '$lib/score/tuplet-row.svelte';
 	import { pitchLabel } from '$lib/voice/note-picker';
-	import { noLyricsNoticeKey, type IngestedScore, type NoLyricsNoticeKey } from '$lib/score/ingestion/ingest';
+	import { noticeText, scanNotice, type IngestedScore, type ScanNoticeKey } from '$lib/score/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
 	import { storedWithReading, type KeptReading } from '$lib/omr/restore';
@@ -366,7 +366,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	// `doc.saveFailure` and `doc.loadFailure` carry the reason the whole song
 	// save or load reported, and the drawer shows it exactly as before.
 	// French ratified by Dann, 2026-08-14.
-	let noLyricsFile = $state<string | null>(null), noLyricsKey = $state<NoLyricsNoticeKey>('upload.banner.noLyrics'); // row 95: a scan is not a file
+	let noLyricsFile = $state<string | null>(null), noLyricsKey = $state<ScanNoticeKey>('upload.banner.noLyrics'); // row 95: a scan is not a file; brief r5 step 2: or a scan read in part, and then noLyricsFile holds the unread bars
 	/* THE QUEUE, AND WHERE IT COMES FROM WHEN THE SINGER HAS TYPED NOTHING.
 
 	   N.111 increment 3, ruled by Dann 2026-09-04: on a lyric-bearing score the
@@ -2788,7 +2788,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		// overturned: a score carrying words seats them on its own notes, from the
 		// file's own mapping, below.
 		const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
-		noLyricsFile = noLyrics ? ingested.fileName : null; noLyricsKey = noLyricsNoticeKey(ingested.provenance, ingested.result.score.source.origin);
+		const notice = scanNotice(ingested.result.warnings, ingested.provenance, ingested.result.score.source.origin, ingested.fileName); noLyricsFile = notice?.arg ?? null; noLyricsKey = notice?.key ?? 'upload.banner.noLyrics';
 		// A new score arrives: clear whatever the previous score filled, then
 		// fill the blanks from this score's header if it carries one. A score
 		// with no header still clears, and that case is the whole point: at E.23,
@@ -4040,7 +4040,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 								     a file name dates a printed study sheet to an export
 								     rather than to a song. Unstyled on purpose for the first
 								     walk. -->
-								<p>{t(noLyricsKey, language).replace('%s', noLyricsFile)}</p>
+								<p>{noticeText(noLyricsKey, language, noLyricsFile)}</p>
 							{/if}
 						{/if}
 					{/snippet}

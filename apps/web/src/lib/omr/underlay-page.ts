@@ -12,14 +12,17 @@
  * C2), seated on the system's notes (`seatTokens`, `monotone`), and sewn into
  * words (`sewWords`).
  *
- * THE THRESHOLD (brief section 4, DESK DEFAULT). A page passes when every
- * system of it that holds a voice note has a band and at least one Russian row
- * in it. That a Russian row has at least `RUSSIAN_SHARE` (three in ten since
- * brief r5 step 1) of its sewn words of two letters or more in the dictionary
- * is what `rowLanguage` calls Russian, so over the page's Russian rows the share
- * is at least that too; `stats.words` and `stats.known` report it. A system with several Russian rows is seated from
- * the first, the top one, which is the first verse. Whether a song's words are
- * written is decided on all its pages together (`underlay-song.ts`).
+ * THE THRESHOLD, per system (brief r5 step 2, which replaces the page and song
+ * gates of brief r2 section 4). A system takes words where it has a band and at
+ * least one Russian row in it. That a Russian row has at least `RUSSIAN_SHARE`
+ * (three in ten since brief r5 step 1) of its sewn words of two letters or more
+ * in the dictionary is what `rowLanguage` calls Russian; `stats.words` and
+ * `stats.known` report the share over the page's Russian rows. A system with
+ * several Russian rows is seated from the first, the top one, which is the
+ * first verse. A system without a band or without a Russian row takes no words
+ * and loses only itself: the page says which (`systems`), with the bars of the
+ * system's notes as homr numbers them on this page, and `underlay-song.ts` turns
+ * those into the song's bars for the banner.
  *
  * Pure.
  */
@@ -94,11 +97,19 @@ export interface UnderlayStats {
 	known: number;
 }
 
-export interface UnderlayPage {
-	/** True when the page passes the threshold; the song's words are written only if every page does. */
-	passes: boolean;
-	/** Why it does not pass, for one console line; null when it does. */
+/** What one system of the page came to: the words it took, or why it took none. */
+export interface SystemWords {
+	/** True where the system has a band and a Russian row, and its words were seated. */
+	written: boolean;
+	/** The system's first and last bar, as homr numbers them on this page (from 1 on every page); null where it holds no voice note. */
+	bars: readonly [number, number] | null;
+	/** Why it took none, for one console line; null where it did. */
 	why: string | null;
+}
+
+export interface UnderlayPage {
+	/** One entry per system of the page that holds a voice note, top to bottom. */
+	systems: SystemWords[];
 	/** The words seated on this page's notes, by the notes' ordinals in this page's MusicXML. */
 	words: Word[];
 	stats: UnderlayStats;
@@ -139,10 +150,9 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		known: 0,
 	};
 	const seats: Seat[] = [];
-	const problems: string[] = [];
-	layout.systems.forEach((system, s) => {
+	const systems: SystemWords[] = [];
+	layout.systems.forEach((system) => {
 		if (system.hasBand) stats.banded++;
-		else problems.push(`system ${s + 1} has no band`);
 		let seated = false;
 		for (const row of system.rows) {
 			stats.rows++;
@@ -170,7 +180,12 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			seats.push(...placed);
 		}
 		if (seated) stats.systemsRussian++;
-		else if (system.hasBand) problems.push(`system ${s + 1} has no Russian row`);
+		const bars = system.notes.map((n) => n.bar);
+		systems.push({
+			written: seated,
+			bars: bars.length ? [Math.min(...bars), Math.max(...bars)] : null,
+			why: seated ? null : system.hasBand ? 'no Russian row' : 'no band',
+		});
 	});
-	return { passes: problems.length === 0, why: problems.length ? problems.join('; ') : null, words: sewWords(seats), stats };
+	return { systems, words: sewWords(seats), stats };
 }
