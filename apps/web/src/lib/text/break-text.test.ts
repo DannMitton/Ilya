@@ -19,7 +19,7 @@ import { unitWordsFromStacks } from './syntactic-break-adapters';
 let song1 = '';
 beforeAll(async () => {
 	loadRealData();
-	const xml = readFileSync(fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)), 'utf8');
+	const xml = readFileSync(fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)), 'utf8');
 	const { score } = await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(xml) as unknown as Document, sourcePath: 'sunless-01-engraved.musicxml' });
 	song1 = scoreWordsText(collectScoreWords(score, 1));
 }, 60_000);

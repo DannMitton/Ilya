@@ -10,7 +10,9 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 
-const FIXTURE = 'src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml';
+// Sunless 1 as Finale printed it (brief r5 step 8): this test was written for its 39 words and lines of 7,7,7,7,7,4; the repaired
+// sunless-01-engraved.musicxml reads 40 words while its bars 17 and 18 are unrepaired. Allow-listed in score/ingestion/fixture-rule.test.ts.
+const FIXTURE = 'src/lib/score/ingestion/fixtures/sunless-01-finale-lone-v.musicxml';
 
 type Seats = Record<string, { kind: string; cyrillic?: string }>;
 

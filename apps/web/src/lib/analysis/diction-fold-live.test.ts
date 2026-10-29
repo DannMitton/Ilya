@@ -21,7 +21,17 @@ import type { ScoreReader } from '$lib/reader/score-reader';
 import { buildUnderlayResolvers, collectScoreWords } from '$lib/score/vowel-resolver';
 import { scoreMetrics } from './score-metrics';
 
+/**
+ * Sunless 1 AS FINALE PRINTED IT (`sunless-01-finale-lone-v.musicxml`): its verse 2 holds two `#` marks on notes of their
+ * own, the case the fold exists to repair, and no repair of the file may be read here. The repaired file
+ * (`sunless-01-engraved.musicxml`, brief r5 step 8) carries the fused form «jɑ\u00A0#» from the desk's extract and has no mark
+ * for the fold to find (tested below). Allow-listed in `score/ingestion/fixture-rule.test.ts` for this test: it needs the breach.
+ */
 const sunless01 = readFileSync(
+	fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)),
+	'utf8',
+);
+const sunless01Repaired = readFileSync(
 	fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
 	'utf8',
 );
@@ -77,6 +87,13 @@ describe('N.171 the fold at arrival, on the engraved Sunless no. 1', () => {
 		}
 		const marks = score.vocalLine.filter((e) => e.syllable?.versesInfo?.some((v) => v.text === '#'));
 		expect(marks).toHaveLength(0);
+	});
+
+	it('has no mark to fold in the repaired file: bars 4 and 14 of verse 2 already hold «jɑ#» fused with a no-break space (the extract\'s form)', async () => {
+		const score = await ingest('sunless-01-engraved.musicxml', sunless01Repaired);
+		expect(score.dictionMarks).toBeUndefined();
+		const fused = score.vocalLine.filter((e) => verseText(score, e.id, 2) === 'jɑ\u00A0#');
+		expect(fused).toHaveLength(2);
 	});
 
 	it('leaves the sung verse exactly as the file prints it', async () => {

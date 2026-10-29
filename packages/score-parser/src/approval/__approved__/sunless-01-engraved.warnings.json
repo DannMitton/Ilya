@@ -6,5 +6,9 @@
       "partId": "P1"
     },
     "message": "Measure 16 content lasts 7/4 whole notes against an expected 3/2."
+  },
+  {
+    "code": "unrecognised-element",
+    "message": "A lyric word in verse 1 was interrupted before its end syllable; context assigned from the partial word."
   }
 ]

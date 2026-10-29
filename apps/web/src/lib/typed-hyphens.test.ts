@@ -278,13 +278,13 @@ const arrive = (score: ParsedScore, lines: LineData[]): PairingMap => seatScoreW
 
 describe('i. the diff and the seats', () => {
 	it('wordGrid of the fixture’s one-line text and of the same text in the file’s division are equal', async () => {
-		const score = await load('sunless-01-engraved.musicxml');
+		const score = await load('sunless-01-finale-lone-v.musicxml');
 		expect(wordGrid(fileDivision(score))).toEqual(wordGrid(oneLine(score)));
 		expect(wordGrid(fileDivision(score)).flat()).toHaveLength(39);
 	});
 
 	it('96 seats before and after, on the same notes, and the re-divided words’ seats carry the typed syllables', async () => {
-		const score = await load('sunless-01-engraved.musicxml');
+		const score = await load('sunless-01-finale-lone-v.musicxml');
 		const flat = processText(oneLine(score));
 		const typed = processText(fileDivision(score));
 		const before = arrive(score, flat);
@@ -313,7 +313,7 @@ describe('j. the open-syllables switch leaves a typed break alone', () => {
 	});
 
 	it('in drawPairings and in buildUnderlayResolvers, on the score', async () => {
-		const score = await load('sunless-01-engraved.musicxml');
+		const score = await load('sunless-01-finale-lone-v.musicxml');
 		// the file divides «проглядная» про-гляд; here the singer types Ilya’s own прог-ляд, which the switch would open
 		const typed = processText(fileDivision(score).replace('про-гляд', 'прог-ляд'));
 		const untyped = processText(oneLine(score));
@@ -337,7 +337,7 @@ describe('j. the open-syllables switch leaves a typed break alone', () => {
 
 describe('k. each fixture whole, in the file’s division', () => {
 	it('«Within Four Walls»: 0 unknown words, the one-line text’s stress on all 39, 96 seats', async () => {
-		const score = await load('sunless-01-engraved.musicxml');
+		const score = await load('sunless-01-finale-lone-v.musicxml');
 		const flat = words(oneLine(score));
 		const typed = words(fileDivision(score));
 		expect(flat).toHaveLength(39);
@@ -367,7 +367,7 @@ describe('k. each fixture whole, in the file’s division', () => {
 
 describe('l. Lyrics’ colour', () => {
 	it('the fixture in the file’s division against the one-line text as a poem: 0 differing', async () => {
-		const score = await load('sunless-01-engraved.musicxml');
+		const score = await load('sunless-01-finale-lone-v.musicxml');
 		const cmp = comparePoem(fileDivision(score), oneLine(score))!;
 		expect(cmp.differing).toBe(0);
 	});

@@ -410,7 +410,7 @@
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>end</syllabic>
-          <text>jɑ</text>
+          <text>jɑ #</text>
         </lyric>
       </note>
       <barline location="right">
@@ -432,7 +432,7 @@
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>single</syllabic>
-          <text>#</text>
+          <text>tʲeɲ</text>
         </lyric>
       </note>
       <note>
@@ -448,8 +448,8 @@
           <text>без</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>single</syllabic>
-          <text>tʲeɲ</text>
+          <syllabic>begin</syllabic>
+          <text>bʲɪ</text>
         </lyric>
       </note>
       <note>
@@ -466,8 +466,8 @@
           <text>от</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>bʲɪ</text>
+          <syllabic>middle</syllabic>
+          <text>zɑ</text>
         </lyric>
       </note>
       <note>
@@ -485,7 +485,7 @@
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
-          <text>zɑ</text>
+          <text>ˈtvʲɛ</text>
         </lyric>
       </note>
       <note>
@@ -502,7 +502,7 @@
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
-          <text>ˈtvʲɛ</text>
+          <text>tnɑ</text>
         </lyric>
       </note>
       <note>
@@ -518,8 +518,8 @@
           <text>я;</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>middle</syllabic>
-          <text>tnɑ</text>
+          <syllabic>end</syllabic>
+          <text>jɑ</text>
         </lyric>
       </note>
       <note>
@@ -557,8 +557,8 @@
           <text>ду</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɑ</text>
+          <syllabic>begin</syllabic>
+          <text>ˈdu</text>
         </lyric>
       </note>
       <note>
@@ -575,8 +575,8 @@
           <text>ма</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>ˈdu</text>
+          <syllabic>end</syllabic>
+          <text>mɑ</text>
         </lyric>
       </note>
       <note>
@@ -598,8 +598,8 @@
           <text>глу</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>mɑ</text>
+          <syllabic>begin</syllabic>
+          <text>ɡɫu</text>
         </lyric>
       </note>
       <note>
@@ -616,8 +616,8 @@
           <text>бо</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>ɡɫu</text>
+          <syllabic>middle</syllabic>
+          <text>ˈbo</text>
         </lyric>
       </note>
       <note>
@@ -635,7 +635,7 @@
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
-          <text>ˈbo</text>
+          <text>kɑ</text>
         </lyric>
       </note>
       <note>
@@ -652,8 +652,8 @@
           <text>я,</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>middle</syllabic>
-          <text>kɑ</text>
+          <syllabic>end</syllabic>
+          <text>jɑ</text>
         </lyric>
       </note>
       <note>
@@ -691,8 +691,8 @@
           <text>пес</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɑ</text>
+          <syllabic>begin</syllabic>
+          <text>ˈpʲe</text>
         </lyric>
       </note>
       <note>
@@ -708,8 +708,8 @@
           <text>ня</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>ˈpʲe</text>
+          <syllabic>end</syllabic>
+          <text>sʲɲɑ</text>
         </lyric>
       </note>
       <note>
@@ -725,8 +725,8 @@
           <text>у</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>sʲɲɑ</text>
+          <syllabic>begin</syllabic>
+          <text>u</text>
         </lyric>
       </note>
       <note>
@@ -744,8 +744,8 @@
           <text>ны</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>u</text>
+          <syllabic>middle</syllabic>
+          <text>ˈnɨ</text>
         </lyric>
       </note>
       <note>
@@ -762,7 +762,7 @@
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
-          <text>ˈnɨ</text>
+          <text>ɫɑ</text>
         </lyric>
       </note>
       <note>
@@ -778,8 +778,8 @@
           <text>я;</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>middle</syllabic>
-          <text>ɫɑ</text>
+          <syllabic>end</syllabic>
+          <text>jɑ</text>
         </lyric>
       </note>
       <note>
@@ -802,26 +802,8 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>single</syllabic>
-          <text>в</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɑ</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>16</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <lyric name="verse" number="1">
           <syllabic>begin</syllabic>
-          <text>бью</text>
+          <text>в бью</text>
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>begin</syllabic>
@@ -830,7 +812,8 @@
       </note>
       <note>
         <pitch>
-          <step>D</step>
+          <step>C</step>
+          <alter>1</alter>
           <octave>3</octave>
         </pitch>
         <duration>16</duration>
@@ -847,8 +830,7 @@
       </note>
       <note>
         <pitch>
-          <step>F</step>
-          <alter>1</alter>
+          <step>D</step>
           <octave>3</octave>
         </pitch>
         <duration>16</duration>
@@ -865,12 +847,13 @@
       </note>
       <note>
         <pitch>
-          <step>D</step>
+          <step>F</step>
+          <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>16</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>quarter</type>
         <lyric name="verse" number="1">
           <syllabic>begin</syllabic>
           <text>серд</text>
@@ -878,6 +861,23 @@
         <lyric name="verse" number="2">
           <syllabic>begin</syllabic>
           <text>ˈsʲɛ</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric name="verse" number="1">
+          <syllabic>end</syllabic>
+          <text>це</text>
+        </lyric>
+        <lyric name="verse" number="2">
+          <syllabic>end</syllabic>
+          <text>rtsʌ</text>
         </lyric>
       </note>
       <note>
@@ -902,12 +902,12 @@
         <voice>1</voice>
         <type>eighth</type>
         <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>це</text>
+          <syllabic>begin</syllabic>
+          <text>на</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>rtsʌ</text>
+          <syllabic>begin</syllabic>
+          <text>nɑ</text>
         </lyric>
       </note>
       <barline location="right">
@@ -924,24 +924,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>begin</syllabic>
-          <text>на</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>nɑ</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>16</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <lyric name="verse" number="1">
           <syllabic>middle</syllabic>
           <text>деж</text>
         </lyric>
@@ -952,7 +934,8 @@
       </note>
       <note>
         <pitch>
-          <step>D</step>
+          <step>C</step>
+          <alter>1</alter>
           <octave>3</octave>
         </pitch>
         <duration>16</duration>
@@ -969,13 +952,12 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
+          <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>24</duration>
+        <duration>16</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <dot/>
         <lyric name="verse" number="1">
           <syllabic>begin</syllabic>
           <text>за</text>
@@ -987,13 +969,13 @@
       </note>
       <note>
         <pitch>
-          <step>F</step>
-          <alter>1</alter>
+          <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>24</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>quarter</type>
+        <dot/>
         <lyric name="verse" number="1">
           <syllabic>middle</syllabic>
           <text>вет</text>
@@ -1022,6 +1004,24 @@
         </lyric>
       </note>
       <note>
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric name="verse" number="1">
+          <syllabic>end</syllabic>
+          <text>я,</text>
+        </lyric>
+        <lyric name="verse" number="2">
+          <syllabic>end</syllabic>
+          <text>jɑ</text>
+        </lyric>
+      </note>
+      <note>
         <rest/>
         <duration>8</duration>
         <voice>1</voice>
@@ -1042,12 +1042,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <accidental>flat</accidental><lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>я,</text>
+          <syllabic>begin</syllabic>
+          <text>быст</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɑ</text>
+          <syllabic>begin</syllabic>
+          <text>ˈbɨ</text>
         </lyric>
       </note>
       <note>
@@ -1059,12 +1059,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>begin</syllabic>
-          <text>быст</text>
+          <syllabic>end</syllabic>
+          <text>рый</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>ˈbɨ</text>
+          <syllabic>end</syllabic>
+          <text>strɨj</text>
         </lyric>
       </note>
       <note>
@@ -1076,23 +1076,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <accidental>natural</accidental><lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>рый</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>strɨj</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>16</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <lyric name="verse" number="1">
           <syllabic>begin</syllabic>
           <text>по</text>
         </lyric>
@@ -1103,7 +1086,7 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
         <duration>16</duration>
@@ -1120,8 +1103,7 @@
       </note>
       <note>
         <pitch>
-          <step>B</step>
-          <alter>-1</alter>
+          <step>A</step>
           <octave>3</octave>
         </pitch>
         <duration>16</duration>
@@ -1134,6 +1116,24 @@
         <lyric name="verse" number="2">
           <syllabic>single</syllabic>
           <text>zɑ</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>16</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric name="verse" number="1">
+          <syllabic>begin</syllabic>
+          <text>мгно</text>
+        </lyric>
+        <lyric name="verse" number="2">
+          <syllabic>begin</syllabic>
+          <text>mɡnɑ</text>
         </lyric>
       </note>
       <barline location="right">
@@ -1150,12 +1150,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <accidental>natural</accidental><lyric name="verse" number="1">
-          <syllabic>begin</syllabic>
-          <text>мгно</text>
+          <syllabic>middle</syllabic>
+          <text>ве</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>mɡnɑ</text>
+          <syllabic>middle</syllabic>
+          <text>ˈvʲe</text>
         </lyric>
       </note>
       <note>
@@ -1168,12 +1168,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <accidental>flat</accidental><lyric name="verse" number="1">
-          <syllabic>middle</syllabic>
-          <text>ве</text>
+          <syllabic>end</syllabic>
+          <text>ньем</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>middle</syllabic>
-          <text>ˈvʲe</text>
+          <syllabic>end</syllabic>
+          <text>ɲjɪm</text>
         </lyric>
       </note>
       <note>
@@ -1185,12 +1185,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>ньем</text>
+          <syllabic>begin</syllabic>
+          <text>мгно</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>ɲjɪm</text>
+          <syllabic>begin</syllabic>
+          <text>mɡnɑ</text>
         </lyric>
       </note>
       <note>
@@ -1204,24 +1204,6 @@
         <type>quarter</type>
         <dot/>
         <accidental>flat</accidental><lyric name="verse" number="1">
-          <syllabic>begin</syllabic>
-          <text>мгно</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>mɡnɑ</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <lyric name="verse" number="1">
           <syllabic>middle</syllabic>
           <text>ве</text>
         </lyric>
@@ -1249,6 +1231,24 @@
         </lyric>
       </note>
       <note>
+        <pitch>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric name="verse" number="1">
+          <syllabic>end</syllabic>
+          <text>я;</text>
+        </lyric>
+        <lyric name="verse" number="2">
+          <syllabic>end</syllabic>
+          <text>jɑ</text>
+        </lyric>
+      </note>
+      <note>
         <rest/>
         <duration>8</duration>
         <voice>1</voice>
@@ -1268,23 +1268,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>я;</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɑ</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>16</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <lyric name="verse" number="1">
           <syllabic>single</syllabic>
           <text>взор</text>
         </lyric>
@@ -1295,7 +1278,7 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
+          <step>E</step>
           <octave>3</octave>
         </pitch>
         <duration>16</duration>
@@ -1312,6 +1295,23 @@
       </note>
       <note>
         <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>16</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric name="verse" number="1">
+          <syllabic>middle</syllabic>
+          <text>под</text>
+        </lyric>
+        <lyric name="verse" number="2">
+          <syllabic>middle</syllabic>
+          <text>pɑ</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
           <step>B</step>
           <alter>-1</alter>
           <octave>3</octave>
@@ -1321,11 +1321,11 @@
         <type>quarter</type>
         <accidental>flat</accidental><lyric name="verse" number="1">
           <syllabic>middle</syllabic>
-          <text>под</text>
+          <text>виж</text>
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
-          <text>pɑ</text>
+          <text>ˈdʲvʲi</text>
         </lyric>
       </note>
       <note>
@@ -1337,12 +1337,12 @@
         <voice>1</voice>
         <type>eighth</type>
         <lyric name="verse" number="1">
-          <syllabic>middle</syllabic>
-          <text>виж</text>
+          <syllabic>end</syllabic>
+          <text>ный</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>middle</syllabic>
-          <text>ˈdʲvʲi</text>
+          <syllabic>end</syllabic>
+          <text>ʒnɨj</text>
         </lyric>
       </note>
       <note>
@@ -1360,12 +1360,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>ный</text>
+          <syllabic>single</syllabic>
+          <text>на</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>ʒnɨj</text>
+          <syllabic>single</syllabic>
+          <text>nɑ</text>
         </lyric>
       </note>
       <barline location="right">
@@ -1382,23 +1382,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>single</syllabic>
-          <text>на</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>single</syllabic>
-          <text>nɑ</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>16</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <lyric name="verse" number="1">
           <syllabic>begin</syllabic>
           <text>сча</text>
         </lyric>
@@ -1409,7 +1392,7 @@
       </note>
       <note>
         <pitch>
-          <step>E</step>
+          <step>D</step>
           <octave>3</octave>
         </pitch>
         <duration>16</duration>
@@ -1426,15 +1409,13 @@
       </note>
       <note>
         <pitch>
-          <step>B</step>
-          <alter>-1</alter>
+          <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>24</duration>
+        <duration>16</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <dot/>
-        <accidental>flat</accidental><lyric name="verse" number="1">
+        <lyric name="verse" number="1">
           <syllabic>begin</syllabic>
           <text>да</text>
         </lyric>
@@ -1445,13 +1426,15 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
+          <step>B</step>
+          <alter>-1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>24</duration>
         <voice>1</voice>
-        <type>eighth</type>
-        <lyric name="verse" number="1">
+        <type>quarter</type>
+        <dot/>
+        <accidental>flat</accidental><lyric name="verse" number="1">
           <syllabic>middle</syllabic>
           <text>лё</text>
         </lyric>
@@ -1475,6 +1458,23 @@
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
           <text>kɑ</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric name="verse" number="1">
+          <syllabic>end</syllabic>
+          <text>е;</text>
+        </lyric>
+        <lyric name="verse" number="2">
+          <syllabic>end</syllabic>
+          <text>jɛ</text>
         </lyric>
       </note>
       <note>
@@ -1508,23 +1508,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <accidental>flat</accidental><lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>е;</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɛ</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>16</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <lyric name="verse" number="1">
           <syllabic>begin</syllabic>
           <text>мно</text>
         </lyric>
@@ -1535,7 +1518,7 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
+          <step>A</step>
           <octave>3</octave>
         </pitch>
         <duration>16</duration>
@@ -1552,14 +1535,12 @@
       </note>
       <note>
         <pitch>
-          <step>B</step>
-          <alter>-1</alter>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>24</duration>
+        <duration>16</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <dot/>
         <lyric name="verse" number="1">
           <syllabic>begin</syllabic>
           <text>сом</text>
@@ -1571,12 +1552,14 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
+          <step>B</step>
+          <alter>-1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>24</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>quarter</type>
+        <dot/>
         <lyric name="verse" number="1">
           <syllabic>middle</syllabic>
           <text>не</text>
@@ -1591,9 +1574,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>16</duration>
+        <duration>8</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <lyric name="verse" number="1">
           <syllabic>middle</syllabic>
           <text>ни</text>
@@ -1601,6 +1584,23 @@
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
           <text>ɲi</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>16</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric name="verse" number="1">
+          <syllabic>end</syllabic>
+          <text>я,</text>
+        </lyric>
+        <lyric name="verse" number="2">
+          <syllabic>end</syllabic>
+          <text>jɑ #</text>
         </lyric>
       </note>
       <barline location="right">
@@ -1618,12 +1618,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <accidental>flat</accidental><lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>я,</text>
+          <syllabic>begin</syllabic>
+          <text>мно</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɑ</text>
+          <syllabic>begin</syllabic>
+          <text>ˈmno</text>
         </lyric>
       </note>
       <note>
@@ -1635,12 +1635,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>begin</syllabic>
-          <text>мно</text>
+          <syllabic>end</syllabic>
+          <text>го</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>single</syllabic>
-          <text>#</text>
+          <syllabic>end</syllabic>
+          <text>ɡʌ</text>
         </lyric>
       </note>
       <note>
@@ -1652,12 +1652,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>го</text>
+          <syllabic>begin</syllabic>
+          <text>тер</text>
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>begin</syllabic>
-          <text>ˈmno</text>
+          <text>tʲɪ</text>
         </lyric>
       </note>
       <note>
@@ -1671,29 +1671,12 @@
         <type>quarter</type>
         <dot/>
         <lyric name="verse" number="1">
-          <syllabic>begin</syllabic>
-          <text>тер</text>
-        </lyric>
-        <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>ɡʌ</text>
-        </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <lyric name="verse" number="1">
           <syllabic>middle</syllabic>
           <text>пе</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>tʲɪ</text>
+          <syllabic>middle</syllabic>
+          <text>ˈrpʲe</text>
         </lyric>
       </note>
       <note>
@@ -1710,7 +1693,24 @@
         </lyric>
         <lyric name="verse" number="2">
           <syllabic>middle</syllabic>
-          <text>ˈrpʲe</text>
+          <text>ɲi</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric name="verse" number="1">
+          <syllabic>end</syllabic>
+          <text>я.</text>
+        </lyric>
+        <lyric name="verse" number="2">
+          <syllabic>end</syllabic>
+          <text>jɑ</text>
         </lyric>
       </note>
       <note>
@@ -1744,12 +1744,12 @@
         <type>quarter</type>
         <dot/>
         <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>я.</text>
+          <syllabic>single</syllabic>
+          <text>Вот</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>middle</syllabic>
-          <text>ɲi</text>
+          <syllabic>single</syllabic>
+          <text>vot</text>
         </lyric>
       </note>
       <note>
@@ -1761,12 +1761,12 @@
         <voice>1</voice>
         <type>eighth</type>
         <accidental>natural</accidental><lyric name="verse" number="1">
-          <syllabic>single</syllabic>
-          <text>Вот</text>
+          <syllabic>begin</syllabic>
+          <text>о</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>jɑ</text>
+          <syllabic>begin</syllabic>
+          <text>ɑ</text>
         </lyric>
       </note>
       <note>
@@ -1778,12 +1778,12 @@
         <voice>1</voice>
         <type>eighth</type>
         <lyric name="verse" number="1">
-          <syllabic>begin</syllabic>
-          <text>о</text>
+          <syllabic>end</syllabic>
+          <text>на,</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>single</syllabic>
-          <text>vot</text>
+          <syllabic>end</syllabic>
+          <text>ˈnɑ</text>
         </lyric>
       </note>
       <note>
@@ -1801,12 +1801,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>на,</text>
+          <syllabic>single</syllabic>
+          <text>ночь</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>ɑ</text>
+          <syllabic>single</syllabic>
+          <text>notʃʲ</text>
         </lyric>
       </note>
       <note>
@@ -1818,12 +1818,12 @@
         <voice>1</voice>
         <type>quarter</type>
         <lyric name="verse" number="1">
-          <syllabic>single</syllabic>
-          <text>ночь</text>
+          <syllabic>begin</syllabic>
+          <text>мо</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>ˈnɑ</text>
+          <syllabic>begin</syllabic>
+          <text>mɑ</text>
         </lyric>
       </note>
       <note>
@@ -1835,12 +1835,12 @@
         <voice>1</voice>
         <type>eighth</type>
         <lyric name="verse" number="1">
-          <syllabic>begin</syllabic>
-          <text>мо</text>
+          <syllabic>end</syllabic>
+          <text>я,</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>single</syllabic>
-          <text>notʃʲ</text>
+          <syllabic>end</syllabic>
+          <text>ˈjɑ</text>
         </lyric>
       </note>
       <note>
@@ -1863,12 +1863,12 @@
         <voice>1</voice>
         <type>half</type>
         <lyric name="verse" number="1">
-          <syllabic>end</syllabic>
-          <text>я,</text>
+          <syllabic>single</syllabic>
+          <text>ночь</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>begin</syllabic>
-          <text>mɑ</text>
+          <syllabic>single</syllabic>
+          <text>notʃʲ</text>
         </lyric>
       </note>
       <note>
@@ -1893,12 +1893,12 @@
           <tuplet number="1" type="start"/>
         </notations>
         <lyric name="verse" number="1">
-          <syllabic>single</syllabic>
-          <text>ночь</text>
+          <syllabic>begin</syllabic>
+          <text>о</text>
         </lyric>
         <lyric name="verse" number="2">
-          <syllabic>end</syllabic>
-          <text>ˈjɑ</text>
+          <syllabic>begin</syllabic>
+          <text>ɑ</text>
         </lyric>
       </note>
       <note>

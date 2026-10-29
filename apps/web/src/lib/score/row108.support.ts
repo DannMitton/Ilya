@@ -39,7 +39,14 @@ export async function loadFixture(file: string): Promise<ParsedScore> {
 	return (await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(xml) as unknown as Document, sourcePath: file })).score;
 }
 
-export const SUNLESS = 'sunless-01-engraved.musicxml';
+/**
+ * Sunless 1 AS FINALE PRINTED IT: the lone «в» on its own note, every syllable after it one note late
+ * (`sunless-01-finale-lone-v.musicxml`, the copy kept byte for byte when `sunless-01-engraved.musicxml` was repaired,
+ * brief r5 step 8). The tests that read it were written for that file's 39 words, 96 seats, and 7,7,7,7,7,4 lines; the
+ * repaired file's bars 17 and 18 are not repaired (desk ruling, 2026-10-29), so it reads 40 words and 97 slots. Allow-listed
+ * in `score/ingestion/fixture-rule.test.ts` for these readers; re-point them when the tail is repaired.
+ */
+export const SUNLESS = 'sunless-01-finale-lone-v.musicxml';
 export const TCHAIKOVSKY = 'tchaikovsky-op38-3-voice.musicxml';
 
 /** The fill a drop leaves in Lyrics: the score's words on one line. */

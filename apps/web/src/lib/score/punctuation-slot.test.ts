@@ -41,7 +41,7 @@ const texts = (text: string) => queueOf(text).map((s) => s.cyrillic);
 
 async function sunless(): Promise<ParsedScore> {
 	const xml = readFileSync(
-		fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)),
+		fileURLToPath(new URL('./ingestion/fixtures/sunless-01-finale-lone-v.musicxml', import.meta.url)),
 		'utf8',
 	);
 	const res = await new MusicXmlScoreParser().parse({

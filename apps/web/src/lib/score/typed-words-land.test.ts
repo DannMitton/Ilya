@@ -27,7 +27,11 @@ import { reseatByDiff } from './reseat';
 import { seatedTextDiff } from './seated-text';
 import { seatScoreWords } from './score-seat';
 
-const xml = readFileSync(fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)), 'utf8');
+const fixture = (name: string) => readFileSync(fileURLToPath(new URL(`./ingestion/fixtures/${name}`, import.meta.url)), 'utf8');
+/** The repaired fixture (brief r5 step 8): one vowel per note, verses 1 and 2 from the desk's extract on bars 2 to 16 and bar 17's first two notes. */
+const xml = fixture('sunless-01-engraved.musicxml');
+/** Sunless 1 as Finale printed it: «в» on a note of its own, every syllable after it one note late. */
+const lone = fixture('sunless-01-finale-lone-v.musicxml');
 
 async function parse(text: string): Promise<ParsedScore> {
 	return (await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(text) as unknown as Document, sourcePath: 'x.musicxml' })).score;
@@ -52,12 +56,12 @@ const under = (map: PairingMap, ids: readonly string[]) => ids.map((id) => (map[
  * notes that differ. `reseatByDiff` is called as `reseatAcross` calls it, with
  * `seatedTextDiff`'s diff and before grid.
  */
-async function typedBack(from: number, to: number) {
-	const whole = await parse(xml);
+async function typedBack(from: number, to: number, source = xml) {
+	const whole = await parse(source);
 	const ids = syllableTargetIds(whole.vocalLine);
 	const text0 = scoreWordsText(collectScoreWords(whole, 1));
 	const reference = seated(whole, text0).map;
-	const part = await parse(withoutWords(xml, from, to));
+	const part = await parse(withoutWords(source, from, to));
 	const text1 = scoreWordsText(collectScoreWords(part, 1));
 	expect(text1).not.toBe(text0);
 	const read = seated(part, text1);
@@ -86,7 +90,7 @@ describe('where a typed word lands, the banner\'s second sentence', () => {
 	// THE LIMITS, found by this test and reported to the desk (the sentence is untrue here). They are pinned as they
 	// are, so a change to the seating path shows as a change here.
 	it('LIMIT 1: a lone vowelless word in the stretch (bar 8, «в» on a note of its own) lands one note early, and so does every syllable after it in the stretch', async () => {
-		const { wrong } = await typedBack(8, 8);
+		const { wrong } = await typedBack(8, 8, lone);
 		expect(wrong.map(([, g, w]) => [g, w])).toEqual([
 			['в\u00a0бью', null],
 			['щем', 'в\u00a0бью'],
@@ -103,11 +107,32 @@ describe('where a typed word lands, the banner\'s second sentence', () => {
 		expect(wrong.every(([, g]) => g === null)).toBe(true);
 	});
 
-	it('LIMIT 3: bars 12 to 14, which begin inside a word (bar 12 opens with the end of «мгновенья»), seat none of their words; not every stretch that begins inside a word fails (bar 10 alone lands), and the cause is NOT ESTABLISHED', async () => {
-		const { wrong, got } = await typedBack(12, 14);
+	it('LIMIT 3 (on the file as Finale printed it only): bars 12 to 14, which begin inside a word (bar 12 opens with the end of «мгновенья»), seat none of their words; on the repaired fixture they land exactly (below), so the shifted tail is the likelier cause, and that is NOT ESTABLISHED', async () => {
+		const { wrong, got } = await typedBack(12, 14, lone);
 		// 18 of the stretch's 19 differing notes stay empty; the nineteenth, the stretch's last, holds a stray "я;" (the word's end) one note late.
 		expect(wrong.filter(([, g]) => g === null)).toHaveLength(18);
 		expect(wrong).toHaveLength(19);
 		expect(got.filter((c) => c !== null).length).toBeGreaterThan(40);
+	});
+});
+
+describe('the same stretches on the repaired fixture (brief r5 step 8)', () => {
+	it('lands the words typed back for bar 8 exactly: «в бью» is one note there now, so no vowelless word stands on a note of its own', async () => {
+		expect((await typedBack(8, 8)).wrong).toEqual([]);
+	});
+});
+
+describe('the sweep on the repaired fixture, 62 windows of one to four bars from bar 2 to bar 18 (brief r5 step 8)', () => {
+	it('lands bars 12 to 14 exactly: a stretch that begins inside a word lands, so LIMIT 3 is not a property of such stretches', async () => {
+		expect((await typedBack(12, 14)).wrong).toEqual([]);
+	});
+
+	// 59 of the 62 windows land exactly (45 on the file as Finale printed it). The three that do not seat none of their words,
+	// as LIMIT 2 does. Their cause is NOT ESTABLISHED; bars 4 and 14 each begin with a word that is also the first word after the
+	// stretch («тень» and «тень», «много» and «много»).
+	it.each([[4, 4], [14, 14], [9, 12]] as const)('LIMIT 2 and its two siblings: bars %i to %i seat none of their words', async (from, to) => {
+		const { wrong } = await typedBack(from, to);
+		expect(wrong.length).toBeGreaterThanOrEqual(6);
+		expect(wrong.every(([, g]) => g === null)).toBe(true);
 	});
 });
