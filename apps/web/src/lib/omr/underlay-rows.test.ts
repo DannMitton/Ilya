@@ -104,11 +104,20 @@ describe('cutRows, row 81\'s rule', () => {
 	});
 
 	it('takes the paper tone as the mean of the two middle samples where the samples are even in number', () => {
-		// Half the sampled lines (y 0, 37, 74) read 200 and half (111, 148, 185) read 230: the paper is 215, so ink is under 155.
-		const band = blank(200, 230);
-		ink(band, 0, W, 0, 99, 200);
-		ink(band, 100, 1900, 114, 144, 150); // between the sampled lines 111 and 148
-		expect(cutRows(band, SPACE).map((r) => r.core)).toEqual([[114, 144]]);
+		// The grid is one staff space (30): the sampled lines are y 0, 30, 60 (200) and 90, 120, 150 (230), so the paper is 215 and ink is under 155.
+		const band = blank(180, 230);
+		ink(band, 0, W, 0, 74, 200);
+		ink(band, 100, 1900, 124, 145, 150); // between the sampled lines 120 and 150
+		expect(cutRows(band, SPACE).map((r) => r.core)).toEqual([[124, 145]]);
+	});
+
+	it('samples the paper on a grid one staff space apart: the same band reads differently at another space', () => {
+		// Lines 30, 90, and 150 are dark. A grid of 30 meets them (paper 167.5, ink under 107.5); a grid of 60 does not (paper 235, ink under 175).
+		const band = blank(180, 235);
+		for (const y of [30, 90, 150]) ink(band, 0, W, y, y, 100);
+		ink(band, 100, 1900, 40, 69, 140);
+		expect(cutRows(band, 30)).toEqual([]);
+		expect(cutRows(band, 60)).toHaveLength(1);
 	});
 
 	it('takes the paper tone the caller measured when one is given', () => {

@@ -1,0 +1,431 @@
+[
+ {
+  "src": "omr/underlay-band.ts",
+  "test": "omr/underlay-band.test.ts",
+  "muts": [
+   [
+    "margin under A 1.5 -> 1 space",
+    "Math.ceil(bottom + MARGIN * space)",
+    "Math.ceil(bottom + space)"
+   ],
+   [
+    "margin over B 1.5 -> 1 space",
+    "linesAt(b.staff, x)[0] - MARGIN * space",
+    "linesAt(b.staff, x)[0] - space"
+   ],
+   [
+    "margin under A 1.5 -> 2 spaces",
+    "Math.ceil(bottom + MARGIN * space)",
+    "Math.ceil(bottom + 2 * space)"
+   ],
+   [
+    "margin over B 1.5 -> 2 spaces",
+    "linesAt(b.staff, x)[0] - MARGIN * space",
+    "linesAt(b.staff, x)[0] - 2 * space"
+   ],
+   [
+    "MARGIN constant 1.5 -> 1",
+    "export const MARGIN = 1.5;",
+    "export const MARGIN = 1;"
+   ],
+   [
+    "drop under 2 spaces -> 1",
+    "export const DROP = 2;",
+    "export const DROP = 1;"
+   ],
+   [
+    "drop under 2 spaces -> 3",
+    "export const DROP = 2;",
+    "export const DROP = 3;"
+   ],
+   [
+    "drop at exactly 2 spaces (>= -> >)",
+    "if (!(y1 - y0 >= DROP * space)) return null;",
+    "if (!(y1 - y0 > DROP * space)) return null;"
+   ],
+   [
+    "band dropped under a fixed 40 px, not 2 spaces",
+    "if (!(y1 - y0 >= DROP * space)) return null;",
+    "if (!(y1 - y0 >= 40)) return null;"
+   ],
+   [
+    "no band kept where it is thin",
+    "if (!(y1 - y0 >= DROP * space)) return null;",
+    "if (false) return null;"
+   ],
+   [
+    "20 spaces below -> 10",
+    "export const BELOW = 20;",
+    "export const BELOW = 10;"
+   ],
+   [
+    "the band not clipped at the page's end",
+    "Math.min(height, Math.floor(",
+    "(Math.floor("
+   ],
+   [
+    "lines read at the staff's left end, not its centre",
+    "const x = centreOf(a.staff);",
+    "const x = a.staff.x0;"
+   ],
+   [
+    "B is the staff two down",
+    "const below = order[order.indexOf(a) + 1];",
+    "const below = order[order.indexOf(a) + 2];"
+   ],
+   [
+    "B is the staff above",
+    "const below = order[order.indexOf(a) + 1];",
+    "const below = order[order.indexOf(a) - 1];"
+   ],
+   [
+    "a note is given the farthest staff",
+    "if (gap < bestGap) {",
+    "if (gap > bestGap || best < 0) {"
+   ],
+   [
+    "a note is given the staff by its top line, not its middle",
+    "return linesAt(st, x)[2];",
+    "return linesAt(st, x)[0];"
+   ],
+   [
+    "the staves not ordered down the page",
+    "return staves.map((_, i) => i).sort((a, b) =>",
+    "return staves.map((_, i) => i).sort((a, b) => 0 * "
+   ],
+   [
+    "a staff with no note is a system",
+    "if (mine.length === 0) continue;",
+    "/* mutant */"
+   ],
+   [
+    "the band is A's own space for B, not the margins of A",
+    "const space = a.staff.space;",
+    "const space = b ? b.staff.space : a.staff.space;"
+   ]
+  ]
+ },
+ {
+  "src": "omr/underlay-tokens.ts",
+  "test": "omr/underlay-tokens.test.ts",
+  "muts": [
+   [
+    "no split at an internal mark",
+    "const parts = text.split(INTERNAL).filter((p) => p !== '');",
+    "const parts = [text];"
+   ],
+   [
+    "no hyphen kept on the parts but the last",
+    "text: i < parts.length - 1 ? `${p}-` : p,",
+    "text: p,"
+   ],
+   [
+    "a hyphen on the last part too",
+    "text: i < parts.length - 1 ? `${p}-` : p,",
+    "text: `${p}-`,"
+   ],
+   [
+    "the box shared equally, not by letters",
+    "const width = ((token.x1 - token.x0) * letters(p)) / total;",
+    "const width = (token.x1 - token.x0) / parts.length;"
+   ],
+   [
+    "a long dash a joint always",
+    "const longDash = options.inkHeight !== undefined && kindOf(text) === 'joint' && token.x1 - token.x0 > 0.5 * options.inkHeight;",
+    "const longDash = false;"
+   ],
+   [
+    "a long dash at 1 ink height, not half",
+    "token.x1 - token.x0 > 0.5 * options.inkHeight",
+    "token.x1 - token.x0 > options.inkHeight"
+   ],
+   [
+    "any long token with no letter a mark",
+    "kindOf(text) === 'joint' &&",
+    "true &&"
+   ],
+   [
+    "text not trimmed",
+    "const text = token.text.trim();",
+    "const text = token.text;"
+   ],
+   [
+    "tokens not put in x order",
+    "for (const token of [...tokens].sort((a, b) => a.x0 - b.x0)) {",
+    "for (const token of [...tokens]) {"
+   ],
+   [
+    "the mark inside a word counted as a letter-less token",
+    "if (letters(text) === 0) {",
+    "if (letters(text) === 0 && false) {"
+   ],
+   [
+    "a combining mark counts as a non-letter",
+    "const INTERNAL = /(?<=[\\p{L}\\p{M}])[^\\p{L}\\p{M}]+(?=[\\p{L}\\p{M}])/u;",
+    "const INTERNAL = /(?<=\\p{L})[^\\p{L}]+(?=\\p{L})/u;"
+   ]
+  ]
+ },
+ {
+  "src": "omr/underlay-units.ts",
+  "test": "omr/underlay-units.test.ts",
+  "muts": [
+   [
+    "a word of one vowel is cut too",
+    "if ((word.match(VOWELS) ?? []).length < 2) {",
+    "if ((word.match(VOWELS) ?? []).length < 1) {"
+   ],
+   [
+    "a word of two vowels is left whole",
+    "if ((word.match(VOWELS) ?? []).length < 2) {",
+    "if ((word.match(VOWELS) ?? []).length < 3) {"
+   ],
+   [
+    "pieces that do not add up are accepted",
+    "|| pieces.join('') !== word.toLowerCase()",
+    "|| false"
+   ],
+   [
+    "no hyphen on the pieces",
+    "units.push({ text: p < pieces.length - 1 ? `${text[p]}-` : text[p],",
+    "units.push({ text: text[p],"
+   ],
+   [
+    "boxes shared equally, not by letters",
+    "const width = ((token.x1 - token.x0) * lengths[p]) / letterAt.length;",
+    "const width = (token.x1 - token.x0) / pieces.length;"
+   ],
+   [
+    "the engine's text, not the token's",
+    "text[pieceOfLetter[Math.max(0, seen)]] += c;",
+    "text[pieceOfLetter[Math.max(0, seen)]] += c.toLowerCase();"
+   ],
+   [
+    "a mark before the first letter lost",
+    "text[pieceOfLetter[Math.max(0, seen)]] += c;",
+    "if (seen >= 0) text[pieceOfLetter[seen]] += c;"
+   ],
+   [
+    "the cut throwing is not caught",
+    "pieces = cut(word);\n\t\t} catch {",
+    "pieces = cut(word);\n\t\t} catch (e) { throw e;"
+   ]
+  ]
+ },
+ {
+  "src": "omr/underlay-page.ts",
+  "test": "omr/underlay-page.test.ts",
+  "muts": [
+   [
+    "the page's offset not added",
+    "return { text: w.text, x0: b.x0 + row.offsetX, x1: b.x1 + row.offsetX };",
+    "return { text: w.text, x0: b.x0, x1: b.x1 };"
+   ],
+   [
+    "a row that is not Russian is seated",
+    "if (rowLanguage(words, seams.isWord) !== 'russian') continue;",
+    "if (false) continue;"
+   ],
+   [
+    "every Russian row is seated, not the first",
+    "if (seated) continue;",
+    "/* mutant */"
+   ],
+   [
+    "a system with no Russian row passes",
+    "else if (system.hasBand) problems.push(`system ${s + 1} has no Russian row`);",
+    "/* mutant */"
+   ],
+   [
+    "a system with no band passes",
+    "else problems.push(`system ${s + 1} has no band`);",
+    "/* mutant */"
+   ],
+   [
+    "the ink height not taken from the scale",
+    "inkHeight: DEFAULT_INK_HEIGHT / row.transform.scale",
+    "inkHeight: DEFAULT_INK_HEIGHT"
+   ],
+   [
+    "the hybrid cut not applied",
+    "const { units, counts } = cutUnits(tokens, seams.cut);",
+    "const { units, counts } = { units: tokens, counts: { cut: 0, whole: 0, mismatched: 0 } };"
+   ],
+   [
+    "seated by nearest, not monotone",
+    "seatTokens(units, system.notes, 'monotone')",
+    "seatTokens(units, system.notes, 'nearest')"
+   ],
+   [
+    "a row the reader gave no answer for is read as the first row's",
+    "reads[row.id] ?? []",
+    "reads[0] ?? []"
+   ],
+   [
+    "the unseated not counted",
+    "stats.unseated += placed.filter((p) => p.unseated).length;",
+    "/* mutant */"
+   ],
+   [
+    "known words not counted",
+    "if (here) stats.known++;",
+    "/* mutant */"
+   ]
+  ]
+ },
+ {
+  "src": "omr/underlay-song.ts",
+  "test": "omr/underlay-song.test.ts",
+  "muts": [
+   [
+    "a page that answers null is skipped",
+    "if (failed >= 0) return keep(",
+    "if (false) return keep("
+   ],
+   [
+    "a page that does not pass is written anyway",
+    "if (below >= 0) return keep(",
+    "if (false) return keep("
+   ],
+   [
+    "a song with no syllable is written",
+    "if (syllables === 0) return keep(",
+    "if (false) return keep("
+   ],
+   [
+    "only the first page is written",
+    "xmls: xmls.map((xml, i) => writeLyrics(xml, pages[i]!.words)),",
+    "xmls: xmls.map((xml, i) => (i === 0 ? writeLyrics(xml, pages[i]!.words) : xml)),"
+   ],
+   [
+    "the pages' words swapped",
+    "xmls: xmls.map((xml, i) => writeLyrics(xml, pages[i]!.words)),",
+    "xmls: xmls.map((xml, i) => writeLyrics(xml, pages[pages.length - 1 - i]!.words)),"
+   ]
+  ]
+ },
+ {
+  "src": "omr/underlay-reader.ts",
+  "test": "omr/underlay-reader.test.ts",
+  "muts": [
+   [
+    "the dictionary asked for before the rows are read",
+    "const reads: WordBox[][] = [];\n\t\t\tfor (const row of prepared.rows) reads.push(await parts.recognize(row));",
+    "const early = await parts.seams();\n\t\t\tconst reads: WordBox[][] = [];\n\t\t\tfor (const row of prepared.rows) reads.push(await parts.recognize(row));"
+   ],
+   [
+    "a failure is rethrown",
+    "return null;\n\t\t}\n\t};",
+    "throw err;\n\t\t}\n\t};"
+   ],
+   [
+    "no console line on failure",
+    "console.info(`[omr] underlay: the page was not read",
+    "void (`[omr] underlay: the page was not read"
+   ],
+   [
+    "a failing row is skipped, not the page",
+    "for (const row of prepared.rows) reads.push(await parts.recognize(row));",
+    "for (const row of prepared.rows) reads.push(await parts.recognize(row).catch(() => []));"
+   ]
+  ]
+ },
+ {
+  "src": "omr/underlay-recognize.ts",
+  "test": "omr/underlay-recognize.test.ts",
+  "muts": [
+   [
+    "a worker made for every row",
+    "if (!held) {",
+    "if (true) {"
+   ],
+   [
+    "the one-line mode not set",
+    "await w.setParameters({ tessedit_pageseg_mode: '7', preserve_interword_spaces: '1' });",
+    "/* mutant */"
+   ],
+   [
+    "a failed worker is kept",
+    "if (held === mine) held = null;",
+    "/* mutant */"
+   ],
+   [
+    "the word boxes not asked for",
+    "{ blocks: true }",
+    "{ blocks: false }"
+   ],
+   [
+    "the core named by its directory",
+    "corePath: `${origin}${UNDERLAY_BASE}/${UNDERLAY_CORE}`,",
+    "corePath: `${origin}${UNDERLAY_BASE}`,"
+   ],
+   [
+    "the worker script from the CDN",
+    "workerPath: `${origin}${UNDERLAY_BASE}/${UNDERLAY_WORKER}`,",
+    "workerPath: `https://cdn.jsdelivr.net/${UNDERLAY_WORKER}`,"
+   ],
+   [
+    "the lang folder on another origin",
+    "langPath: `${origin}${UNDERLAY_BASE}`,",
+    "langPath: `${UNDERLAY_BASE}`,"
+   ]
+  ]
+ },
+ {
+  "src": "omr/underlay-switch.ts",
+  "test": "omr/underlay-switch.test.ts",
+  "muts": [
+   [
+    "any value of words turns it on",
+    "return new URLSearchParams(search).get(WORDS_QUERY) === WORDS_ON;",
+    "return new URLSearchParams(search).get(WORDS_QUERY) !== null;"
+   ],
+   [
+    "reader=ilya turns it on",
+    "return new URLSearchParams(search).get(WORDS_QUERY) === WORDS_ON;",
+    "return new URLSearchParams(search).get(WORDS_QUERY) === WORDS_ON || new URLSearchParams(search).get('reader') === 'ilya';"
+   ],
+   [
+    "the stamp ignores the switch",
+    "return underlayOn(search) ? `${READER_STAMP}+${UNDERLAY_READER}` : READER_STAMP;",
+    "return READER_STAMP;"
+   ],
+   [
+    "the stamp always names both",
+    "return underlayOn(search) ? `${READER_STAMP}+${UNDERLAY_READER}` : READER_STAMP;",
+    "return `${READER_STAMP}+${UNDERLAY_READER}`;"
+   ]
+  ]
+ },
+ {
+  "src": "underlay-seams.ts",
+  "test": "underlay-seams.test.ts",
+  "muts": [
+   [
+    "the modern form not tried",
+    "isWord: (word) => known(word) || ((m) => m !== null && m !== word && known(m))(modern(word)),",
+    "isWord: (word) => known(word),"
+   ],
+   [
+    "a null modern form asked for",
+    "((m) => m !== null && m !== word && known(m))(modern(word))",
+    "((m) => known(m as string))(modern(word))"
+   ],
+   [
+    "the dictionary not waited for",
+    "for (let waited = 0; !ready(); waited += POLL_MS) {",
+    "for (let waited = 0; false; waited += POLL_MS) {"
+   ],
+   [
+    "no time out",
+    "if (waited >= READY_MS) throw new Error('the dictionary did not load');",
+    "/* mutant */"
+   ],
+   [
+    "the cut is not the engine's",
+    "(word) => GraysonEngine.syllabify(word)",
+    "(word) => [word]"
+   ]
+  ]
+ }
+]

@@ -8,6 +8,7 @@ import {
 	DEFAULT_INK_HEIGHT,
 	DEFAULT_PAD_RATIO,
 	closingKernel,
+	skewAngle,
 	frameRow,
 	inkExtent,
 	paperTone,
@@ -129,6 +130,51 @@ describe('frameRow, what counts as ink', () => {
 	});
 });
 
+describe('frameRow, the sweep over the ink pixels only', () => {
+	/** A line of glyph blocks 14 by 20 every 36 px across `width`, dropping `slope` px per px across, from `top`. */
+	function lineOf(width: number, height: number, slope: number, top: number): GreyBandLike {
+		const c = blank(width, height);
+		for (let x = 20; x + 14 < width - 20; x += 36) rect(c, x, x + 14, top + Math.round((x - width / 2) * slope), top + Math.round((x - width / 2) * slope) + 20);
+		return c;
+	}
+
+	it('sweeps a full-width row, 3,400 by 90, in under 100 ms', () => {
+		const c = lineOf(3400, 90, 0, 35);
+		const t0 = performance.now();
+		const angle = skewAngle(c.data as Uint8Array, 3400, 90);
+		const ms = performance.now() - t0;
+		expect(angle).toBe(0);
+		expect(ms).toBeLessThan(100);
+	});
+
+	it('finds the angle of a row 3,400 wide and 50 high tilted 2.8 degrees: the sweep pads past the crop, and the ends of the turned row are kept', () => {
+		// A run of glyphs 900 px long, about the most a 50-row crop holds at this tilt (900 * tan(2.8 degrees) is 44 rows, and the glyphs are 6).
+		const slope = Math.tan((2.8 * Math.PI) / 180);
+		const c = blank(3400, 50);
+		for (let x = 1250; x < 2150; x += 20) {
+			const y = 1 + Math.round((x - 1250) * slope);
+			rect(c, x, x + 10, y, y + 6);
+		}
+		const angle = skewAngle(c.data as Uint8Array, 3400, 50);
+		expect(Math.abs(angle - 2.8)).toBeLessThanOrEqual(0.2 + 1e-9);
+	});
+
+	it('does not scale a crop past what an ink extent of 0.4 staff space gets: a speck is not enlarged to a letter', () => {
+		const c = blank(200, 60);
+		rect(c, 40, 160, 28, 31); // 3 rows of ink
+		const { transform } = frameRow(c, 30);
+		expect(transform.scale).toBeCloseTo(32 / 12, 6);
+		const wide = frameRow(c, 60).transform.scale;
+		expect(wide).toBeCloseTo(32 / 24, 6);
+	});
+
+	it('scales an ink extent over 0.4 staff space as before', () => {
+		const c = blank(200, 80);
+		rect(c, 40, 160, 20, 60);
+		expect(frameRow(c, 30).transform.scale).toBeCloseTo(32 / 40, 6);
+	});
+});
+
 describe('frameRow, closing', () => {
 	/** A bar 100 by 30 with a gap `gap` px wide, cut through its whole height. */
 	const barWithGap = (gap: number) => {
@@ -171,9 +217,14 @@ describe('frameRow, closing', () => {
 		expect(crop.data[30 * crop.width + 69]).toBeGreaterThanOrEqual(128);
 	});
 
-	it('takes the largest odd kernel not above a tenth of the staff space, and at least 1', () => {
-		const kernels = [0, 5, 12, 19.9, 20, 29, 30, 31, 40, 49.9, 50, 60, 100].map(closingKernel);
-		expect(kernels).toEqual([1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 5, 5, 9]);
+	it('takes the odd kernel nearest a tenth of the staff space, the lower on a tie, and at least 1', () => {
+		const kernels = [0, 5, 12, 19.9, 20, 20.1, 27, 29, 30, 31, 35, 40, 40.1, 49.9, 50, 60, 100].map(closingKernel);
+		expect(kernels).toEqual([1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 9]);
+	});
+
+	it('closes at every staff space the harness measured but one: 26.8 to 32.1 px all take 3', () => {
+		for (const s of [26.8, 27.2, 27.5, 28.5, 29.0, 29.4, 29.9, 30.0, 30.6, 31.5, 32.1]) expect(closingKernel(s), String(s)).toBe(3);
+		expect(closingKernel(16.0)).toBe(1);
 		expect([NaN, Infinity, -30].map(closingKernel)).toEqual([1, 1, 1]);
 	});
 

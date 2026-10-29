@@ -1,0 +1,258 @@
+# Two runs: the first (76 mutants; the runner hung on 'no time out', whose loop never ends without its guard, and was stopped), then a re-run of the 7 mutants whose tests were added or strengthened. 'no time out' is killed by the test that a loop with no guard fails on a 1,000-poll limit.
+omr/underlay-band.ts | margin under A 1.5 -> 1 space | KILLED by 7 of 15
+      - lyricBand runs from A's bottom line plus 1.5 spaces to B's top line minus 1.5 spaces, across the page
+      - lyricBand takes the margins in A's staff spaces, so a larger print gives a larger band for the same spaces
+      - lyricBand runs 20 spaces under A where no staff lies below it
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+      - lyricBand reads the lines at A's centre column on a sloping staff
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+      - systemsOf gives the last staff of the page 20 spaces
+omr/underlay-band.ts | margin over B 1.5 -> 1 space | KILLED by 5 of 15
+      - lyricBand runs from A's bottom line plus 1.5 spaces to B's top line minus 1.5 spaces, across the page
+      - lyricBand takes the margins in A's staff spaces, so a larger print gives a larger band for the same spaces
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+      - lyricBand reads the lines at A's centre column on a sloping staff
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+omr/underlay-band.ts | margin under A 1.5 -> 2 spaces | KILLED by 7 of 15
+      - lyricBand runs from A's bottom line plus 1.5 spaces to B's top line minus 1.5 spaces, across the page
+      - lyricBand takes the margins in A's staff spaces, so a larger print gives a larger band for the same spaces
+      - lyricBand runs 20 spaces under A where no staff lies below it
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+      - lyricBand reads the lines at A's centre column on a sloping staff
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+      - systemsOf gives the last staff of the page 20 spaces
+omr/underlay-band.ts | margin over B 1.5 -> 2 spaces | KILLED by 5 of 15
+      - lyricBand runs from A's bottom line plus 1.5 spaces to B's top line minus 1.5 spaces, across the page
+      - lyricBand takes the margins in A's staff spaces, so a larger print gives a larger band for the same spaces
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+      - lyricBand reads the lines at A's centre column on a sloping staff
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+omr/underlay-band.ts | MARGIN constant 1.5 -> 1 | KILLED by 8 of 15
+      - lyricBand runs from A's bottom line plus 1.5 spaces to B's top line minus 1.5 spaces, across the page
+      - lyricBand takes the margins in A's staff spaces, so a larger print gives a larger band for the same spaces
+      - lyricBand runs 20 spaces under A where no staff lies below it
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+      - lyricBand is not dropped at 40 px, the harness's fixed floor, where 2 spaces are fewer: the floor is in spaces
+      - lyricBand reads the lines at A's centre column on a sloping staff
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+      - systemsOf gives the last staff of the page 20 spaces
+omr/underlay-band.ts | drop under 2 spaces -> 1 | KILLED by 1 of 15
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+omr/underlay-band.ts | drop under 2 spaces -> 3 | KILLED by 1 of 15
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+omr/underlay-band.ts | drop at exactly 2 spaces (>= -> >) | KILLED by 1 of 15
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+omr/underlay-band.ts | band dropped under a fixed 40 px, not 2 spaces | KILLED by 2 of 15
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+      - lyricBand is not dropped at 40 px, the harness's fixed floor, where 2 spaces are fewer: the floor is in spaces
+omr/underlay-band.ts | no band kept where it is thin | KILLED by 3 of 15
+      - lyricBand keeps a band of exactly 2 spaces and drops one under it
+      - lyricBand is null for an empty gap
+      - systemsOf keeps a system whose band is dropped, with a null band
+omr/underlay-band.ts | 20 spaces below -> 10 | KILLED by 3 of 15
+      - lyricBand runs 20 spaces under A where no staff lies below it
+      - lyricBand stops at the page's end where 20 spaces would pass it
+      - systemsOf gives the last staff of the page 20 spaces
+omr/underlay-band.ts | the band not clipped at the page's end | KILLED by 1 of 15
+      - lyricBand stops at the page's end where 20 spaces would pass it
+omr/underlay-band.ts | lines read at the staff's left end, not its centre | KILLED by 1 of 15
+      - lyricBand reads the lines at A's centre column on a sloping staff
+omr/underlay-band.ts | B is the staff two down | KILLED by 2 of 15
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+      - systemsOf keeps a system whose band is dropped, with a null band
+omr/underlay-band.ts | B is the staff above | KILLED by 3 of 15
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+      - systemsOf gives the last staff of the page 20 spaces
+      - systemsOf keeps a system whose band is dropped, with a null band
+omr/underlay-band.ts | a note is given the farthest staff | KILLED by 5 of 15
+      - systemsOf gives each voice note the staff nearest it, a ledger-line note above a staff included
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+      - systemsOf leaves out a staff that holds no voice note, such as the piano's
+      - systemsOf gives the last staff of the page 20 spaces
+      - systemsOf keeps a system whose band is dropped, with a null band
+omr/underlay-band.ts | a note is given the staff by its top line, not its middle | KILLED by 1 of 17
+      - systemsOf gives a note under a staff to that staff by its middle line: nearer the next staff's top line, it is still the nearer staff's
+omr/underlay-band.ts | the staves not ordered down the page | KILLED by 4 of 15
+      - systemsOf orders the staves down the page
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+      - systemsOf gives the last staff of the page 20 spaces
+      - systemsOf keeps a system whose band is dropped, with a null band
+omr/underlay-band.ts | a staff with no note is a system | KILLED by 4 of 15
+      - systemsOf makes one system of each staff that holds a voice note, with B the next staff down
+      - systemsOf leaves out a staff that holds no voice note, such as the piano's
+      - systemsOf gives the last staff of the page 20 spaces
+      - systemsOf keeps a system whose band is dropped, with a null band
+omr/underlay-band.ts | the band is A's own space for B, not the margins of A | KILLED by 1 of 17
+      - lyricBand takes the margin under A and over B in A's staff spaces, whatever space B has
+omr/underlay-tokens.ts | no split at an internal mark | KILLED by 5 of 16
+      - splitTokens splits at a hyphen, and keeps a hyphen on every part but the last so that the parts sew into one word
+      - splitTokens splits at the period or dash a reader gives where the print has a short underscore
+      - splitTokens shares the box among the parts by their letters
+      - splitTokens splits at a run of marks, not only one
+      - splitTokens keeps the marks at the ends of a part: a comma, a hyphen, a quotation mark
+omr/underlay-tokens.ts | no hyphen kept on the parts but the last | KILLED by 5 of 16
+      - splitTokens splits at a hyphen, and keeps a hyphen on every part but the last so that the parts sew into one word
+      - splitTokens splits at the period or dash a reader gives where the print has a short underscore
+      - splitTokens shares the box among the parts by their letters
+      - splitTokens splits at a run of marks, not only one
+      - splitTokens keeps the marks at the ends of a part: a comma, a hyphen, a quotation mark
+omr/underlay-tokens.ts | a hyphen on the last part too | KILLED by 5 of 16
+      - splitTokens splits at a hyphen, and keeps a hyphen on every part but the last so that the parts sew into one word
+      - splitTokens splits at the period or dash a reader gives where the print has a short underscore
+      - splitTokens shares the box among the parts by their letters
+      - splitTokens splits at a run of marks, not only one
+      - splitTokens keeps the marks at the ends of a part: a comma, a hyphen, a quotation mark
+omr/underlay-tokens.ts | the box shared equally, not by letters | KILLED by 1 of 16
+      - splitTokens shares the box among the parts by their letters
+omr/underlay-tokens.ts | a long dash a joint always | KILLED by 2 of 16
+      - splitTokens calls a lone dash wider than half the ink height a mark, and a narrower one a joint
+      - rowWords does not join a lone long dash that has become a mark
+omr/underlay-tokens.ts | a long dash at 1 ink height, not half | KILLED by 1 of 16
+      - splitTokens calls a lone dash wider than half the ink height a mark, and a narrower one a joint
+omr/underlay-tokens.ts | any long token with no letter a mark | KILLED by 1 of 16
+      - splitTokens does not call a long underscore a mark: it is an extender
+omr/underlay-tokens.ts | text not trimmed | KILLED by 1 of 17
+      - splitTokens trims the spaces a reader leaves around a word
+omr/underlay-tokens.ts | tokens not put in x order | KILLED by 1 of 16
+      - splitTokens puts the tokens in x order whatever order they came in
+omr/underlay-tokens.ts | the mark inside a word counted as a letter-less token | KILLED by 2 of 16
+      - splitTokens calls a lone dash wider than half the ink height a mark, and a narrower one a joint
+      - rowWords does not join a lone long dash that has become a mark
+omr/underlay-tokens.ts | a combining mark counts as a non-letter | KILLED by 1 of 16
+      - splitTokens keeps a combining acute inside a word
+omr/underlay-units.ts | a word of one vowel is cut too | KILLED by 2 of 12
+      - cutUnits leaves a token of one vowel or none whole
+      - cutUnits does not offer the engine a word of one vowel
+omr/underlay-units.ts | a word of two vowels is left whole | KILLED by 5 of 12
+      - cutUnits takes each piece's text from the token: its capital and its marks
+      - cutUnits keeps a hyphen that was at the token's end or start
+      - cutUnits leaves a token whole, and counts it, where the engine's pieces do not add up to it
+      - cutUnits leaves a token whole where the engine throws or returns one piece
+      - cutUnits counts the old vowels ѣ, і, and ѵ as vowels
+omr/underlay-units.ts | pieces that do not add up are accepted | KILLED by 1 of 13
+      - cutUnits leaves a token whole where the engine's pieces are as long as it is but are other letters
+omr/underlay-units.ts | no hyphen on the pieces | KILLED by 4 of 12
+      - cutUnits cuts a token of two vowels or more into the engine's syllables, each but the last ending in a hyphen
+      - cutUnits takes each piece's text from the token: its capital and its marks
+      - cutUnits keeps a hyphen that was at the token's end or start
+      - cutUnits sews into the word it came from
+omr/underlay-units.ts | boxes shared equally, not by letters | KILLED by 1 of 12
+      - cutUnits places each syllable inside the token's box in proportion to its letters
+omr/underlay-units.ts | the engine's text, not the token's | KILLED by 1 of 12
+      - cutUnits takes each piece's text from the token: its capital and its marks
+omr/underlay-units.ts | a mark before the first letter lost | KILLED by 2 of 12
+      - cutUnits takes each piece's text from the token: its capital and its marks
+      - cutUnits keeps a hyphen that was at the token's end or start
+omr/underlay-units.ts | the cut throwing is not caught | KILLED by 1 of 12
+      - cutUnits leaves a token whole where the engine throws or returns one piece
+omr/underlay-page.ts | the page's offset not added | KILLED by 1 of 14
+      - pageTokens takes a framed box back to page pixels: the padding and the scale removed, the crop's offset added
+omr/underlay-page.ts | a row that is not Russian is seated | KILLED by 4 of 14
+      - seatPage does not seat a row that is not Russian, and does not pass
+      - seatPage seats the first Russian row of a system, and skips a German row above it and a second verse below
+      - seatPage does not pass if any one system of two has no Russian row, and says which
+      - seatPage reads nothing for a row the reader gave no answer for
+omr/underlay-page.ts | every Russian row is seated, not the first | KILLED by 1 of 14
+      - seatPage seats the first Russian row of a system, and skips a German row above it and a second verse below
+omr/underlay-page.ts | a system with no Russian row passes | KILLED by 3 of 14
+      - seatPage does not seat a row that is not Russian, and does not pass
+      - seatPage does not pass if any one system of two has no Russian row, and says which
+      - seatPage reads nothing for a row the reader gave no answer for
+omr/underlay-page.ts | a system with no band passes | KILLED by 1 of 14
+      - seatPage does not pass where a system has no band
+omr/underlay-page.ts | the ink height not taken from the scale | KILLED by 1 of 15
+      - pageTokens, the dash that is a mark is a mark where it is wider than half the ink height on the page, and a joint where it is not
+omr/underlay-page.ts | the hybrid cut not applied | KILLED by 3 of 14
+      - seatPage seats the words of a row under the notes of its system, a word the engine cuts across several
+      - seatPage keeps the capital and the mark of the print on the syllable
+      - seatPage seats the first Russian row of a system, and skips a German row above it and a second verse below
+omr/underlay-page.ts | seated by nearest, not monotone | KILLED by 3 of 14
+      - seatPage seats the words of a row under the notes of its system, a word the engine cuts across several
+      - seatPage leaves a surplus token unseated and counts it, never putting it on a neighbouring note
+      - seatPage seats no token on a note a tie stops on
+omr/underlay-page.ts | a row the reader gave no answer for is read as the first row's | KILLED by 3 of 14
+      - seatPage seats the first Russian row of a system, and skips a German row above it and a second verse below
+      - seatPage does not pass if any one system of two has no Russian row, and says which
+      - seatPage carries a word across a system break: a hyphen at the end of one row joins the first token of the next
+omr/underlay-page.ts | the unseated not counted | KILLED by 2 of 14
+      - seatPage seats the words of a row under the notes of its system, a word the engine cuts across several
+      - seatPage leaves a surplus token unseated and counts it, never putting it on a neighbouring note
+omr/underlay-page.ts | known words not counted | KILLED by 1 of 14
+      - seatPage counts the sewn words of two letters or more that the dictionary holds
+omr/underlay-song.ts | a page that answers null is skipped | KILLED by 3 of 8
+      - applyUnderlay writes nothing where any page answered null
+      - applyUnderlay names the first page that fails, null before not passing
+      - applyUnderlay counts the unseated units of the pages that answered, written or not
+omr/underlay-song.ts | a page that does not pass is written anyway | KILLED by 1 of 8
+      - applyUnderlay writes nothing where any page fails, and returns the pages as they were
+omr/underlay-song.ts | a song with no syllable is written | KILLED by 1 of 8
+      - applyUnderlay writes nothing where no page has a word
+omr/underlay-song.ts | only the first page is written | KILLED by 1 of 8
+      - applyUnderlay writes the words of every page where every page passes, and says how many
+omr/underlay-song.ts | the pages' words swapped | KILLED by 2 of 8
+      - applyUnderlay writes the words of every page where every page passes, and says how many
+      - applyUnderlay leaves a page with no words as it is while it writes the others
+omr/underlay-reader.ts | the dictionary asked for before the rows are read | KILLED by 2 of 9
+      - makeUnderlayReader answers null with one console line where the dictionary does not load
+      - makeUnderlayReader does not ask for the dictionary until the rows are read
+omr/underlay-reader.ts | a failure is rethrown | KILLED by 5 of 9
+      - makeUnderlayReader answers null with one console line where the Worker throws
+      - makeUnderlayReader answers null with one console line where the model does not load
+      - makeUnderlayReader answers null with one console line where the dictionary does not load
+      - makeUnderlayReader answers null with one console line where the seating throws
+      - makeUnderlayReader stops reading rows at the first that fails
+omr/underlay-reader.ts | no console line on failure | KILLED by 4 of 9
+      - makeUnderlayReader answers null with one console line where the Worker throws
+      - makeUnderlayReader answers null with one console line where the model does not load
+      - makeUnderlayReader answers null with one console line where the dictionary does not load
+      - makeUnderlayReader answers null with one console line where the seating throws
+omr/underlay-reader.ts | a failing row is skipped, not the page | KILLED by 2 of 9
+      - makeUnderlayReader answers null with one console line where the model does not load
+      - makeUnderlayReader stops reading rows at the first that fails
+omr/underlay-recognize.ts | a worker made for every row | KILLED by 1 of 7
+      - makeRecognizer makes one worker for many rows, sets one line at a time, and asks for the word boxes
+omr/underlay-recognize.ts | the one-line mode not set | KILLED by 2 of 7
+      - makeRecognizer makes one worker for many rows, sets one line at a time, and asks for the word boxes
+      - makeRecognizer is made again where setting the line fails
+omr/underlay-recognize.ts | a failed worker is kept | KILLED by 2 of 7
+      - makeRecognizer is made again after a failure to make it, the next time a row is read
+      - makeRecognizer is made again where setting the line fails
+omr/underlay-recognize.ts | the word boxes not asked for | KILLED by 1 of 7
+      - makeRecognizer makes one worker for many rows, sets one line at a time, and asks for the word boxes
+omr/underlay-recognize.ts | the core named by its directory | KILLED by 2 of 7
+      - recognizerPaths names the worker, the core file itself, and the model's folder, all on the page's own origin
+      - recognizerPaths names the SIMD core file, not a directory, because the relaxed-SIMD core aborts on a float model
+omr/underlay-recognize.ts | the worker script from the CDN | KILLED by 1 of 7
+      - recognizerPaths names the worker, the core file itself, and the model's folder, all on the page's own origin
+omr/underlay-recognize.ts | the lang folder on another origin | KILLED by 1 of 7
+      - recognizerPaths names the worker, the core file itself, and the model's folder, all on the page's own origin
+omr/underlay-switch.ts | any value of words turns it on | KILLED by 5 of 17
+      - underlayOn is off for «?words»
+      - underlayOn is off for «?words=»
+      - underlayOn is off for «?words=Read»
+      - underlayOn is off for «?words=true»
+      - underlayOn is off for «?words=read2»
+omr/underlay-switch.ts | reader=ilya turns it on | KILLED by 1 of 17
+      - underlayOn is off for «?reader=ilya»
+omr/underlay-switch.ts | the stamp ignores the switch | KILLED by 4 of 17
+      - scanStamp names both readers with the switch on
+      - a reading kept on one side of the switch, met on the other is read again once when it was kept with the switch off and is met with it on, and kept with the new stamp
+      - a reading kept on one side of the switch, met on the other is read again once when it was kept with the switch on and is met with it off, and its words are gone
+      - a reading kept on one side of the switch, met on the other is judged by isCurrent against the stamp it is given
+omr/underlay-switch.ts | the stamp always names both | KILLED by 4 of 17
+      - scanStamp is the reader's stamp with the switch off, so a reading kept before this stage is current
+      - a reading kept on one side of the switch, met on the other is used as it is where the stamp is the one asked for
+      - a reading kept on one side of the switch, met on the other is read again once when it was kept with the switch on and is met with it off, and its words are gone
+      - a reading kept on one side of the switch, met on the other is judged by isCurrent against the stamp it is given
+underlay-seams.ts | no time out | KILLED by 1 of 13
+      - loadSeams rejects after the time it is given, so that a page whose dictionary never loads answers null
+underlay-seams.ts | the cut is not the engine's | KILLED by 1 of 13
+      - (re-run alone after the test was strengthened)
+underlay-seams.ts | the modern form not tried | KILLED by 1 of 13
+      - makeSeams knows a pre-reform word by its modern form
+underlay-seams.ts | a null modern form asked for | KILLED by 2 of 13
+      - makeSeams does not ask again for a modern form that is the same word
+      - loadSeams is the pipeline's lookup and the engine's cut once it is ready
+underlay-seams.ts | the dictionary not waited for | KILLED by 2 of 13
+      - loadSeams waits for the dictionary to load, asking again each time
+      - loadSeams rejects after the time it is given, so that a page whose dictionary never loads answers null

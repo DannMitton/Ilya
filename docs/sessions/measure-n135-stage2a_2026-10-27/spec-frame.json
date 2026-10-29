@@ -54,9 +54,9 @@
     "const level = rotateGrey(grey, width, height, angle, 0);"
    ],
    [
-    "sweep padding 120 px, not the crop's own height",
-    "\treturn h;\n}",
-    "\treturn 120;\n}"
+    "sweep padding the crop's height only, not the lift of the far end",
+    "return h + Math.ceil((w / 2) * Math.sin((SWEEP_DEGREES * Math.PI) / 180));",
+    "return h;"
    ],
    [
     "ink threshold 128 -> 200",
@@ -129,24 +129,39 @@
     "export const CLOSE_SHARE = 0.2;"
    ],
    [
-    "closing kernel may be even",
-    "\tif (k % 2 === 0) k -= 1;\n",
-    "\t"
-   ],
-   [
-    "closing kernel not floored at 1",
-    "\treturn Math.max(1, k);",
-    "\treturn k;"
-   ],
-   [
-    "closing kernel rounds up to the next odd number",
-    "\tif (k % 2 === 0) k -= 1;",
-    "\tif (k % 2 === 0) k += 1;"
-   ],
-   [
     "closing window not cut at the edges (outside counts as the opposite value)",
     "for (let d = Math.max(0, x - r); d <= Math.min(w - 1, x + r); d++) v = pick(v, data[y * w + d]);",
     "for (let d = x - r; d <= x + r; d++) v = pick(v, d < 0 || d >= w ? (max ? 255 : 0) : data[y * w + d]);"
+   ],
+   [
+    "closing kernel the largest odd number not above the share (the first version)",
+    "return 2 * Math.ceil((share - 1) / 2 - 0.5 - 1e-9) + 1;",
+    "const k = Math.floor(share + 1e-9);\n\treturn (k % 2 === 0 ? k - 1 : k);"
+   ],
+   [
+    "closing kernel a tie goes up, not down",
+    "return 2 * Math.ceil((share - 1) / 2 - 0.5 - 1e-9) + 1;",
+    "return (2 * Math.ceil((share - 1) / 2 - 0.5 + 1e-9) + 1);"
+   ],
+   [
+    "closing kernel always rounded up to the next odd number",
+    "return 2 * Math.ceil((share - 1) / 2 - 0.5 - 1e-9) + 1;",
+    "return (2 * Math.ceil((share - 1) / 2) + 1);"
+   ],
+   [
+    "sweep padding 120 px (the harness's), not the crop's height and the lift",
+    "return h + Math.ceil((w / 2) * Math.sin((SWEEP_DEGREES * Math.PI) / 180));",
+    "return 120;"
+   ],
+   [
+    "sweep not over the ink pixels only: the angle always 0",
+    "let best = 0;\n\tlet bestVariance = projectionVariance(xs, ys, w, pad, rows, 0);",
+    "let best = 0;\n\tlet bestVariance = Infinity;"
+   ],
+   [
+    "scale uncapped (the floor of 0.4 staff space removed)",
+    "scale = inkHeight / Math.max(extent[1] - extent[0] + 1, floor);",
+    "scale = inkHeight / (extent[1] - extent[0] + 1);"
    ]
   ]
  }
