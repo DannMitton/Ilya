@@ -1,0 +1,40 @@
+{
+ "round": "0",
+ "damage": {
+  "erode_mult": 1.0,
+  "dil_mult": 1.0,
+  "bold_p": 0.6,
+  "pepper_mult": 1.0,
+  "cut_p": 0.9
+ },
+ "timing": {
+  "render_200_s": 5.6,
+  "frame_200_s": 12.2
+ },
+ "kind2_rows": 200,
+ "label_check_dropped": 19,
+ "real": {
+  "rows": 85,
+  "ink_share": 0.03365331832805666,
+  "median_run": 5.0,
+  "cc_per_letter": 1.9442508710801394,
+  "cc": 2790,
+  "letters": 1435,
+  "edge_share_before_frame": 1.0
+ },
+ "kind2": {
+  "rows": 181,
+  "ink_share": 0.030447510639550784,
+  "median_run": 7.0,
+  "cc_per_letter": 2.6344799005387483,
+  "cc": 19071,
+  "letters": 7239,
+  "edge_share_before_frame": 0.8674033149171271
+ },
+ "ratio": {
+  "ink_share": 0.9047402203475072,
+  "median_run": 1.4,
+  "cc_per_letter": 1.3550102714240515,
+  "edge_share_before_frame": 0.8674033149171271
+ }
+}

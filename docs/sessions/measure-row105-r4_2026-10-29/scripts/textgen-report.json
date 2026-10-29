@@ -1,0 +1,50 @@
+{
+ "kind3": {
+  "rendered": 23591,
+  "dropped": 2,
+  "origins": {
+   "r114:song4": 2
+  },
+  "kept": 23589
+ },
+ "pool": {
+  "train_tokens": 344254,
+  "train_types": 68014,
+  "marked_tokens": 140985,
+  "preform_share": 0.4095,
+  "hold_types": 14549,
+  "dictionary_forms": 836098,
+  "dic_not_in_corpus": 808618,
+  "dic_train": 768121,
+  "dic_reserved": 40497,
+  "hold_marked_not_in_train": 2274
+ },
+ "drops": {
+  "train0": {
+   "too long": 7695,
+   "attempts": 31286
+  },
+  "train23591": {
+   "too long": 7552,
+   "attempts": 31143
+  },
+  "held0": {
+   "too long": 1023,
+   "attempts": 2025
+  }
+ },
+ "disjoint_held_words_vs_train_words": 0,
+ "lines": {
+  "kind1": 23591,
+  "kind2": 23591,
+  "held": 1000
+ },
+ "cutfail": {
+  "held": 2
+ },
+ "preform_share_in_built": {
+  "kind1": 0.4218,
+  "kind2": 0.4237,
+  "held": 0.4199
+ }
+}

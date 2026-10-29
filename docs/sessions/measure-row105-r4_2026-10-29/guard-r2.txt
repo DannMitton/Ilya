@@ -1,0 +1,6 @@
+25000 unframed BCER eval=0.347 framed BCER eval=2.290
+26000 unframed BCER eval=0.256 framed BCER eval=1.517
+27000 unframed BCER eval=0.418 framed BCER eval=1.915
+28000 unframed BCER eval=0.269 framed BCER eval=1.756
+29000 unframed BCER eval=0.186 framed BCER eval=1.602
+30000 unframed BCER eval=0.296 framed BCER eval=1.558

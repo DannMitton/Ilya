@@ -1,0 +1,109 @@
+{
+ "kind2_status": {
+  "ok": 23591
+ },
+ "kind2_font_counts": {
+  "Spectral": 2324,
+  "Palatino": 2296,
+  "Georgia": 2330,
+  "Old Standard TT": 2431,
+  "Tinos": 2288,
+  "Times New Roman": 2444,
+  "Baskerville": 2346,
+  "Didot Bold": 2409,
+  "Gentium Book Plus": 2396,
+  "PT Serif": 2327
+ },
+ "kind1_font_counts": {
+  "Baskerville": 2332,
+  "Spectral": 2362,
+  "Tinos": 2390,
+  "Old Standard TT": 2329,
+  "Palatino": 2367,
+  "Georgia": 2329,
+  "Gentium Book Plus": 2385,
+  "PT Serif": 2378,
+  "Didot Bold": 2337,
+  "Times New Roman": 2382
+ },
+ "H_min_median_max": [
+  23.0,
+  43.0,
+  60.0
+ ],
+ "sw_min_median_max": [
+  2.14,
+  4.36,
+  8.55
+ ],
+ "rot_deg_min_median_max": [
+  -3.0,
+  -0.02,
+  3.0
+ ],
+ "fade_min_median_max": [
+  0.0,
+  0.11,
+  0.4
+ ],
+ "erode_share_min_median_max": [
+  0.05,
+  0.17,
+  0.3
+ ],
+ "erode_k_over_sw_min_median_max": [
+  0.24,
+  0.5,
+  0.94
+ ],
+ "dil_share_min_median_max": [
+  0.03,
+  0.14,
+  0.25
+ ],
+ "dil_k_over_sw_min_median_max": [
+  0.23,
+  0.47,
+  0.94
+ ],
+ "salt_min_median_max": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "pepper_min_median_max": [
+  0.0,
+  0.006,
+  0.012
+ ],
+ "asc_over_H_min_median_max": [
+  0.0,
+  0.46,
+  0.71
+ ],
+ "desc_over_H_min_median_max": [
+  0.0,
+  0.43,
+  0.69
+ ],
+ "cut_asc_frac_min_median_max": [
+  0.0,
+  0.44,
+  0.9
+ ],
+ "cut_desc_frac_min_median_max": [
+  0.0,
+  0.45,
+  0.9
+ ],
+ "bold_1px_over_sw_min_median_max": [
+  0.0,
+  0.19,
+  0.46
+ ],
+ "cut_through_ascenders_share": 0.902,
+ "staff_share": 0.25,
+ "stems_share": 0.246,
+ "barline_share": 0.304,
+ "bold_share": 0.598
+}

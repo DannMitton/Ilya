@@ -1,0 +1,7 @@
+16:31:35 render-start
+16:33:23 render kind1 done
+16:36:15 render kind2 done
+16:36:30 render held done
+16:47:30 frame kind1 done
+17:06:10 frame kind2 done
+17:09:08 frame held done
