@@ -133,3 +133,21 @@ describe('seatPage', () => {
 		expect(page.stats.tokens).toBe(0);
 	});
 });
+
+describe('seatPage with the transcription\'s clitic call (brief r5 step 4)', () => {
+	const withClitics: Seams = { ...seams, clitics: (words) => words.map((w) => (w === 'в' ? 'proclitic' : null)) };
+	const row3 = [[box('в', 80, 100), box('мир', 190, 230), box('ты', 290, 320)]];
+
+	it('seats a printed «в» on the note of its host, as the slot «в мир», and leaves the next note to the next word', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), row3, withClitics);
+		expect(shape(page)).toEqual([[['в мир', 'single', 1]], [['ты', 'single', 2]]]);
+		expect(page.stats.clitics).toEqual({ folded: 1, left: 0 });
+	});
+
+	it('gives a lone «в» a note of its own where the call is not given (the stage 2b reader as built)', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), row3, seams);
+		expect(shape(page).flat().map((s) => s[2])).toEqual([0, 1, 2]);
+		expect(shape(page)[0][0][1]).toBe('single');
+		expect(page.stats.clitics).toEqual({ folded: 0, left: 0 });
+	});
+});

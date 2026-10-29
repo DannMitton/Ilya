@@ -30,7 +30,8 @@ import { DEFAULT_INK_HEIGHT, unframeBox, type FrameTransform } from './underlay-
 import { rowLanguage, wordKnown } from './underlay-language';
 import type { StaffBoxLike } from './metre-windows';
 import { seatTokens, type NotePlace, type Seat, type Token } from './underlay-seat';
-import { rowWords, splitTokens } from './underlay-tokens';
+import { foldClitics, type CliticCall } from './underlay-clitics';
+import { rowWordSpans, splitTokens } from './underlay-tokens';
 import { cutUnits, type CutCounts } from './underlay-units';
 import { sewWords, type Word } from './underlay-words';
 
@@ -75,6 +76,11 @@ export interface PageLayout {
 export interface Seams {
 	isWord(word: string): boolean;
 	cut(word: string): string[];
+	/**
+	 * The transcription's own call for each word of a row, sent through as one line (`pipeline.ts`, `isProclitic` and
+	 * `isEnclitic`): null for a word it calls neither. Absent, no clitic is folded.
+	 */
+	clitics?(words: string[]): CliticCall[];
 }
 
 export interface UnderlayStats {
@@ -95,6 +101,8 @@ export interface UnderlayStats {
 	/** Sewn words of two letters or more in the Russian rows, and how many of them the dictionary holds. */
 	words: number;
 	known: number;
+	/** Vowelless words the transcription calls clitics: folded into a host (`folded`), or left a unit of their own for want of one (`left`). */
+	clitics: { folded: number; left: number };
 }
 
 /** What one system of the page came to: the words it took, or why it took none. */
@@ -148,6 +156,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		unseated: 0,
 		words: 0,
 		known: 0,
+		clitics: { folded: 0, left: 0 },
 	};
 	const seats: Seat[] = [];
 	const systems: SystemWords[] = [];
@@ -158,7 +167,8 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			stats.rows++;
 			const tokens = pageTokens(row, reads[row.id] ?? []);
 			stats.tokens += tokens.length;
-			const words = rowWords(tokens);
+			const spans = rowWordSpans(tokens);
+			const words = spans.map((w) => w.text);
 			if (rowLanguage(words, seams.isWord) !== 'russian') continue;
 			stats.russianRows++;
 			for (const w of words) {
@@ -169,7 +179,15 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			}
 			if (seated) continue;
 			seated = true;
-			const { units, counts } = cutUnits(tokens, seams.cut);
+			const cutRow = cutUnits(tokens, seams.cut);
+			const { counts } = cutRow;
+			let units = cutRow.units;
+			if (seams.clitics) {
+				const folded = foldClitics(units, cutRow.origin, spans, seams.clitics(words));
+				units = folded.units;
+				stats.clitics.folded += folded.counts.folded;
+				stats.clitics.left += folded.counts.left;
+			}
 			stats.units += units.length;
 			stats.cuts.cut += counts.cut;
 			stats.cuts.whole += counts.whole;

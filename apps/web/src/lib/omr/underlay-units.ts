@@ -35,15 +35,18 @@ export interface CutCounts {
 }
 
 /** The units of a row: the tokens, with those of two vowels or more cut. */
-export function cutUnits(tokens: readonly Token[], cut: (word: string) => string[]): { units: Token[]; counts: CutCounts } {
+export function cutUnits(tokens: readonly Token[], cut: (word: string) => string[]): { units: Token[]; counts: CutCounts; origin: number[] } {
 	const units: Token[] = [];
+	/** For each unit, the index of the token it came from. */
+	const origin: number[] = [];
 	const counts: CutCounts = { cut: 0, whole: 0, mismatched: 0 };
-	for (const token of tokens) {
+	for (const [at, token] of tokens.entries()) {
 		const chars = Array.from(token.text);
 		const letterAt = chars.flatMap((c, i) => (LETTER.test(c) ? [i] : []));
 		const word = letterAt.map((i) => chars[i]).join('');
 		if ((word.match(VOWELS) ?? []).length < 2) {
 			units.push(token);
+			origin.push(at);
 			if (letterAt.length > 0) counts.whole++;
 			continue;
 		}
@@ -56,6 +59,7 @@ export function cutUnits(tokens: readonly Token[], cut: (word: string) => string
 		const lengths = pieces.map((p) => Array.from(p).length);
 		if (pieces.length < 2 || lengths.some((n) => n === 0) || pieces.join('') !== word.toLowerCase() || lengths.reduce((a, b) => a + b, 0) !== letterAt.length) {
 			units.push(token);
+			origin.push(at);
 			counts.mismatched++;
 			continue;
 		}
@@ -76,8 +80,9 @@ export function cutUnits(tokens: readonly Token[], cut: (word: string) => string
 		pieces.forEach((_, p) => {
 			const width = ((token.x1 - token.x0) * lengths[p]) / letterAt.length;
 			units.push({ text: p < pieces.length - 1 ? `${text[p]}-` : text[p], x0: x, x1: x + width });
+			origin.push(at);
 			x += width;
 		});
 	}
-	return { units, counts };
+	return { units, counts, origin };
 }

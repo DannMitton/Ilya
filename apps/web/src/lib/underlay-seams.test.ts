@@ -96,3 +96,24 @@ describe('the engine\'s cut, held against the words it cuts', () => {
 		expect(units.map((u) => u.text)).toEqual(['Груст-', 'но,']);
 	});
 });
+
+import { cliticCalls } from './underlay-seams';
+
+describe('cliticCalls: the transcription\'s own call, row by row (brief r5 step 4)', () => {
+	it('calls «в» before a word a proclitic and «ж» after one an enclitic, and a word with a vowel of its own neither', () => {
+		expect(cliticCalls(['в', 'тиши', 'ночи'])).toEqual(['proclitic', null, null]);
+		expect(cliticCalls(['мой', 'друг', 'ж'])).toEqual([null, null, 'enclitic']);
+	});
+
+	it('is case and mark blind, as the print has capitals and marks', () => {
+		expect(cliticCalls(['В', 'тиши,'])[0]).toBe('proclitic');
+	});
+
+	it('calls a word the transcription does not return null, never folding it', () => {
+		expect(cliticCalls(['в', '...', 'тиши'], () => [{ cleanWord: 'тиши', isProclitic: false, isEnclitic: false }])).toEqual([null, null, null]);
+	});
+
+	it('reaches a word the dictionary does not hold (N.163): it still has its syllables and takes its clitic', () => {
+		expect(cliticCalls(['к', 'Ксюштрам'])).toEqual(['proclitic', null]);
+	});
+});

@@ -20,7 +20,8 @@
  */
 import { GraysonEngine } from '@ilya/phonology';
 import { modernisePreReform } from '@ilya/dictionary';
-import { isKnownWord } from './pipeline';
+import { isKnownWord, processText } from './pipeline';
+import type { CliticCall } from './omr/underlay-clitics';
 import type { Seams } from './omr/underlay-page';
 
 /** How long to wait for the dictionary, and how often to ask. */
@@ -30,11 +31,33 @@ const POLL_MS = 200;
 const PROBE = 'мама';
 
 /** The seams over a lookup, an engine cut, and a modern form: pure, so each branch is a test. */
-export function makeSeams(known: (word: string) => boolean, cut: (word: string) => string[], modern: (word: string) => string | null): Seams {
+export function makeSeams(known: (word: string) => boolean, cut: (word: string) => string[], modern: (word: string) => string | null, clitics?: (words: string[]) => CliticCall[]): Seams {
 	return {
 		isWord: (word) => known(word) || ((m) => m !== null && m !== word && known(m))(modern(word)),
 		cut,
+		...(clitics ? { clitics } : {}),
 	};
+}
+
+const lettersOf = (s: string): string => s.replace(/[^\p{L}]/gu, '').toLowerCase();
+
+/**
+ * The transcription's call for each word of a row: the row goes through
+ * `processText` as one line, and each word takes the `isProclitic` or
+ * `isEnclitic` of the transcribed word with the same letters, in order. A word
+ * the transcription does not return (it drops a mark that is no word, and may
+ * split a hyphenated particle) is called null, so it is never folded.
+ */
+export function cliticCalls(words: string[], transcribe: (line: string) => { cleanWord: string; isProclitic: boolean; isEnclitic: boolean }[] = (line) => processText(line, { language: 'en' }).flatMap((l) => l.words)): CliticCall[] {
+	const heard = transcribe(words.join(' '));
+	let at = 0;
+	return words.map((w) => {
+		const letters = lettersOf(w);
+		const found = letters === '' ? -1 : heard.findIndex((h, k) => k >= at && lettersOf(h.cleanWord) === letters);
+		if (found < 0) return null;
+		at = found + 1;
+		return heard[found].isProclitic ? 'proclitic' : heard[found].isEnclitic ? 'enclitic' : null;
+	});
 }
 
 /** The seams of this page, once the dictionary has loaded. */
@@ -43,5 +66,5 @@ export async function loadSeams(ready: () => boolean = () => isKnownWord(PROBE),
 		if (waited >= READY_MS) throw new Error('the dictionary did not load');
 		await wait(POLL_MS);
 	}
-	return makeSeams(isKnownWord, (word) => GraysonEngine.syllabify(word), (word) => modernisePreReform(word));
+	return makeSeams(isKnownWord, (word) => GraysonEngine.syllabify(word), (word) => modernisePreReform(word), (words) => cliticCalls(words));
 }

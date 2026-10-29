@@ -67,28 +67,42 @@ export function splitTokens(tokens: readonly Token[], options: SplitOptions = {}
 	return out;
 }
 
-/** Seats for words only: each syllable token on a note of its own, as `sewWords` reads a seat. */
-function asSeats(tokens: readonly Token[]): Seat[] {
-	return [...tokens]
-		.sort((a, b) => a.x0 + a.x1 - (b.x0 + b.x1))
-		.map((t, i) => {
-			const kind = kindOf(t.text);
-			return {
-				token: i,
-				kind,
-				text: t.text,
-				x: (t.x0 + t.x1) / 2,
-				note: kind === 'syllable' ? i : null,
-				offset: null,
-				by: null,
-				unseated: false,
-				runTogether: false,
-				shared: false,
-			};
-		});
+/** The token indices in x-centre order: the order `sewWords` reads a row. */
+function byCentre(tokens: readonly Token[]): number[] {
+	return tokens.map((_, i) => i).sort((a, b) => tokens[a].x0 + tokens[a].x1 - (tokens[b].x0 + tokens[b].x1));
 }
 
-/** The words a row's tokens make: a hyphen joins, a lone hyphen joins its neighbours, and the joins' text is the word. */
+/** Seats for words only: each syllable token on a note of its own, as `sewWords` reads a seat. `note` is the token's place in x order. */
+function asSeats(tokens: readonly Token[], order: readonly number[]): Seat[] {
+	return order.map((at, i) => {
+		const t = tokens[at];
+		const kind = kindOf(t.text);
+		return {
+			token: i,
+			kind,
+			text: t.text,
+			x: (t.x0 + t.x1) / 2,
+			note: kind === 'syllable' ? i : null,
+			offset: null,
+			by: null,
+			unseated: false,
+			runTogether: false,
+			shared: false,
+		};
+	});
+}
+
+/**
+ * The words a row's tokens make, each with the indices (in the list given) of
+ * the syllable tokens that make it: a hyphen joins, a lone hyphen joins its
+ * neighbours, and the joins' text is the word.
+ */
+export function rowWordSpans(tokens: readonly Token[]): { text: string; tokens: number[] }[] {
+	const order = byCentre(tokens);
+	return sewWords(asSeats(tokens, order)).map((w) => ({ text: w.syllables.map((s) => s.text).join(''), tokens: w.syllables.map((s) => order[s.note]) }));
+}
+
+/** The words a row's tokens make: see `rowWordSpans`. */
 export function rowWords(tokens: readonly Token[]): string[] {
-	return sewWords(asSeats(tokens)).map((w) => w.syllables.map((s) => s.text).join(''));
+	return rowWordSpans(tokens).map((w) => w.text);
 }

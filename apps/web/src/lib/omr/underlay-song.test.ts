@@ -21,7 +21,7 @@ const pianoAlone = (bars: number) =>
 const withPiano = (bars: number) =>
 	`<score-partwise><part id="P1">${Array.from({ length: bars }, (_, i) => `<measure number="${i + 1}"><note><pitch/></note></measure>`).join('')}</part><part id="P2"><staves>2</staves><measure number="1"><note><pitch/><staff>2</staff></note></measure></part></score-partwise>`;
 
-const stats = (unseated = 0) => ({ systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, tokens: 1, units: 1, cuts: { cut: 0, whole: 1, mismatched: 0 }, seated: 1, unseated, words: 1, known: 1 });
+const stats = (unseated = 0) => ({ systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, tokens: 1, units: 1, cuts: { cut: 0, whole: 1, mismatched: 0 }, seated: 1, unseated, words: 1, known: 1, clitics: { folded: 0, left: 0 } });
 const ok = (bars: [number, number] = [1, 2]): SystemWords => ({ written: true, bars, why: null });
 const bare = (bars: [number, number], why = 'no Russian row'): SystemWords => ({ written: false, bars, why });
 const page = (texts: string[], systems: SystemWords[] = [ok()], unseated = 0): UnderlayPage => ({
