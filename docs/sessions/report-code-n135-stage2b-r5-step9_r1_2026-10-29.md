@@ -22,13 +22,13 @@ Branch `cloud-lane-21`, on top of step 8 (`8f8ac575`). One commit. Ruled by Dann
 
 ## Placement test (`text/glue-typed-marks.test.ts`, 24 tests)
 
-On the repaired Sunless 1 fixture's text (39 words after the changes of step 8 is 40 words; the text is whatever `scoreWordsText` gives), a `#` is typed with an ordinary space after the 3rd, 9th, and 20th words, then glued. Equal before and after: `wordGrid`; every word's `cleanWord`, `syntacticBreak`, `ipaContent`, `ipaDisplay`, and syllables; the slot queue (`cyrillic`, `ipa`, `origin`); `seatScoreWords` on each text (the whole seat map); and `seatedTextDiff(typed, glued).diff.unchanged` is true, with `reseatByDiff` returning the same map. The break sits on the word before it in both.
+On the repaired Sunless 1 fixture's text (what `scoreWordsText` gives: 40 words), a `#` is typed with an ordinary space after the 3rd, 9th, and 20th words, then glued. Equal before and after: `wordGrid`; every word's `cleanWord`, `syntacticBreak`, `ipaContent`, `ipaDisplay`, and syllables; the slot queue (`cyrillic`, `ipa`, `origin`); `seatScoreWords` on each text (the whole seat map); and `seatedTextDiff(typed, glued).diff.unchanged` is true, with `reseatByDiff` returning the same map. The break sits on the word before it in both.
 
 **Mutants:** changing the lookahead so that «я #на» is converted fails two tests ("leaves «я #на» as it is" and "is the mutant that would fuse two words"). Run, then restored.
 
 ## Undo
 
-The change goes up through `oninput(value, 'paste')`, the path a Lyrics edit takes (`IntakeViews.svelte:onBlur` to `IntakePanel`'s `oninput`, the page's `handleInput`, `+page.svelte:2380`). I did not use `handlePoemInput` (`:2362`), which claims the score's derived words; the field does not convert while it shows them (`scoreWords`, below).
+The change goes up through `oninput(value, 'paste')`, the path a Lyrics edit takes (`IntakeViews.svelte:onBlur` to `IntakePanel`'s `oninput`, the page's `handleInput`, `+page.svelte:2367`). I did not use `handlePoemInput` (`:2362`), which claims the score's derived words; the field does not convert while it shows them (`scoreWords`, below).
 
 **What I saw** (`e2e/glue-typed-marks.test.ts`, Playwright, Chromium 153, headless, Linux; typed `я иду домой #`, left the field, the field read `я иду домой #`; Control+Z in the field): the field read `я иду домой #`, the ordinary space. So in that browser the undo did restore it (a value set from code did not clear the textarea's history). **Not observed:** Cmd-Z on a Mac, Firefox, Safari, a touch keyboard's undo. And not observed: whether the app's state (the seats, the Text view) followed the undo; the test reads the field only. After an undo the next blur would glue the `#` again. The test pins what I saw, for Chromium only.
 
