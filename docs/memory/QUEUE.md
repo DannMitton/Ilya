@@ -6,6 +6,8 @@ r1 draft, 2026-10-12. Created 2026-09-30 by the desk after Dann: *"are there any
 
 ## Open rows, in run order
 
+**UPDATE 2026-10-29 00:5x (Opus desk close).** N.135 stage 2b r5 RUNNING on `cloud-lane-21` (brief `../sessions/brief-code-n135-stage2b_r5_2026-10-29.md`, two Opus reviews in place of Fable; step 0 `596930d7`). Row 155 SHIPPED `9540610f`. Row 105 r4 and row 158 step 2 wait for Fable after Sunday 04:00.
+
 **UPDATE 2026-10-28 15:5x (Opus desk).** Row 113 SHIPPED `fb2d2e37` (2026-10-28 15:19; all eight gates at baseline; gate 4 "3456 passed | 1 skipped (3457)"). Stage 2b RETURNED on `cloud-lane-19` at `383187a` (report read) and MEASURED on the real page (`report-desk-n135-stage2b-real-page_r1_2026-10-28.md`): not shippable as built; brief r3 follows A1 (`STATE.md`, THE PLAN). Retirement of `?reader=ilya` (row 155) RUNNING on `cloud-lane-20` from `fb2d2e37`, session https://claude.ai/code/session_01Vk7wM73NeWawSk1mXi6SUR. New rows 158 (the reader review) and 159 (the HEIC Guide lines).
 
 **UPDATE 2026-10-26 20:3x (Opus desk, close): batch C (rows 139, 151, «ну-те») RETURNED on `cloud-lane-13` at `a76ced7`, all eight gates measured green by the desk (gate 4 3012); NOT YET SHIPPED: the next desk gives Dann fetch, `git merge --ff-only origin/cloud-lane-13`, then the ship script. New row 156: N.198, voicing before a vowel, sonorant, or в kept only after a preposition or particle (Grayson 2012, 251); brief r2 Fable-reviewed and READY, `../sessions/brief-code-n198-voicing-rule2_r2_2026-10-26.md` (md5 after the «меж» addendum `73d14e066ccb6d1728288d7135499ca3`), review `../sessions/review-fable-brief-n198_r1_2026-10-26.md`; runs after batch C ships.**
