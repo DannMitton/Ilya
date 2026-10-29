@@ -44,7 +44,7 @@ function deps(underlay?: ReadUnderlay, withStaves = true): ReaderDeps {
 }
 
 const stats = (unseated = 0) => ({
-	systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, tokens: 3, units: 3, cuts: { cut: 0, whole: 3, mismatched: 0 }, seated: 3, unseated, words: 3, known: 3, clitics: { folded: 0, left: 0 },
+	systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, tokens: 3, units: 3, cuts: { cut: 0, whole: 3, mismatched: 0 }, seated: 3, unseated, words: 3, known: 3, clitics: { folded: 0, left: 0, ownNote: 0 }, counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, breaches: [] },
 });
 
 /**

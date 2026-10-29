@@ -33,9 +33,23 @@
  * «Тът»). A proclitic with no host after it in the row, and an enclitic with
  * none before it, stay units of their own and are counted.
  *
+ * COUNT ONLY, step 7 (desk ruling 2026-10-29 02:2x, withdrawing the proposal that
+ * Ilya follow a print that gives a clitic a note of its own): a clitic the
+ * transcription calls a clitic ALWAYS joins its host, and the note the print may
+ * have given it is left empty. Reason: a clitic left on its own note is written
+ * into `<lyric>` and, on arrival, `seatCliticFolds` moves every later syllable one
+ * note, the cascade `CONTRACT.md` §0.1 forbids. What is counted, in `ownNote`, is
+ * each folded clitic the print appears to give a note of its own, by one rule: let
+ * C be the free note nearest the clitic's box centre and H the free note nearest
+ * the centre of the unit it joined. It has a note of its own where C differs from
+ * H, unless C is also the nearest free note of the neighbouring unit on the
+ * clitic's other side (the print packs the clitic against its host and its centre
+ * drifts onto the neighbour's note). Nothing depends on the count.
+ *
  * Pure.
  */
 import type { Token } from './underlay-seat';
+import { nearestOf } from './underlay-seat';
 import { VOWEL } from './underlay-units';
 
 export const NBSP = ' ';
@@ -49,11 +63,20 @@ export interface RowWord {
 	tokens: number[];
 }
 
+/** A folded clitic the print appears to give a note of its own (counted, not acted on). */
+export interface OwnNote {
+	/** The clitic's text as read. */
+	text: string;
+	/** The clitic's box centre on the page. */
+	x: number;
+}
+
 export interface FoldCounts {
 	/** Vowelless words folded into a host. */
 	folded: number;
 	/** Clitics the transcription called that had no host in the row, and stayed units of their own. */
 	left: number;
+	ownNote: OwnNote[];
 }
 
 /**
@@ -61,19 +84,44 @@ export interface FoldCounts {
  * came from (`cutUnits`); `words` are the row's sewn words over the same tokens
  * and `calls` the transcription's call for each.
  */
-export function foldClitics(units: readonly Token[], origin: readonly number[], words: readonly RowWord[], calls: readonly CliticCall[]): { units: Token[]; counts: FoldCounts } {
+export function foldClitics(
+	units: readonly Token[],
+	origin: readonly number[],
+	words: readonly RowWord[],
+	calls: readonly CliticCall[],
+	/** The x of each free note of the system (not tied into, not under an extender), sorted ascending; absent, `ownNote` is not counted. */
+	free: readonly number[] = [],
+): { units: Token[]; counts: FoldCounts } {
 	const out = units.map((u) => ({ ...u }));
 	const gone = new Set<number>();
-	const counts: FoldCounts = { folded: 0, left: 0 };
+	const counts: FoldCounts = { folded: 0, left: 0, ownNote: [] };
 	const unitsOf = (w: RowWord) => out.flatMap((_, i) => (w.tokens.includes(origin[i]) && !gone.has(i) ? [i] : []));
 	const hasVowel = words.map((w) => VOWEL.test(w.text));
 	const text = (w: RowWord) => unitsOf(w).map((i) => out[i].text).join('');
+	const centre = (i: number) => (out[i].x0 + out[i].x1) / 2;
+	/** The nearest free note of a unit: its index in `free`. */
+	const noteOf = (i: number) => nearestOf(centre(i), free as number[]);
+	/** The unit next to `i` on one side that holds a letter and is not removed; -1 for none. */
+	const neighbour = (i: number, step: 1 | -1) => {
+		for (let k = i + step; k >= 0 && k < out.length; k += step) if (!gone.has(k) && /\p{L}/u.test(out[k].text)) return k;
+		return -1;
+	};
 	const ride = (rider: RowWord, host: number, front: boolean) => {
 		const into = unitsOf(words[host]);
 		if (into.length === 0) return false;
 		const at = front ? into[0] : into[into.length - 1];
+		const mine = unitsOf(rider);
+		if (free.length > 0 && mine.length > 0) {
+			const x = mine.reduce((t, i) => t + centre(i), 0) / mine.length;
+			const c = nearestOf(x, free as number[]);
+			if (c !== noteOf(at)) {
+				// The unit on the clitic's other side: before a proclitic, after an enclitic.
+				const other = neighbour(front ? mine[0] : mine[mine.length - 1], front ? -1 : 1);
+				if (other < 0 || noteOf(other) !== c) counts.ownNote.push({ text: text(rider), x });
+			}
+		}
 		out[at].text = front ? `${text(rider)}${NBSP}${out[at].text}` : `${out[at].text}${NBSP}${text(rider)}`;
-		for (const i of unitsOf(rider)) gone.add(i);
+		for (const i of mine) gone.add(i);
 		counts.folded++;
 		return true;
 	};

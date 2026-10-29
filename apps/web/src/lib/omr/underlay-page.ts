@@ -30,7 +30,9 @@ import { DEFAULT_INK_HEIGHT, unframeBox, type FrameTransform } from './underlay-
 import { rowLanguage, wordKnown } from './underlay-language';
 import type { StaffBoxLike } from './metre-windows';
 import { seatTokens, type NotePlace, type Seat, type Token } from './underlay-seat';
-import { foldClitics, type CliticCall } from './underlay-clitics';
+import { foldClitics, type CliticCall, type OwnNote } from './underlay-clitics';
+import { vowelsPerNote, type Breach } from './vowels-per-note';
+import { freeNoteXs, manyVowelsInUnits, manyVowelsMerged, type ManyVowelCounts } from './underlay-counts';
 import { rowWordSpans, splitTokens } from './underlay-tokens';
 import { cutUnits, type CutCounts } from './underlay-units';
 import { sewWords, type Word } from './underlay-words';
@@ -102,7 +104,12 @@ export interface UnderlayStats {
 	words: number;
 	known: number;
 	/** Vowelless words the transcription calls clitics: folded into a host (`folded`), or left a unit of their own for want of one (`left`). */
-	clitics: { folded: number; left: number };
+	clitics: { folded: number; left: number; ownNote: number };
+	/**
+	 * Folded clitics the print appears to give a note of their own, with the row they were in (counted, never acted on:
+	 * `underlay-clitics.ts`), and the units of two vowels or more (`underlay-counts.ts`): cut, and merged on one note.
+	 */
+	counted: { ownNote: (OwnNote & { system: number; row: number })[]; manyVowels: ManyVowelCounts; breaches: Breach[] };
 }
 
 /** What one system of the page came to: the words it took, or why it took none. */
@@ -156,14 +163,16 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		unseated: 0,
 		words: 0,
 		known: 0,
-		clitics: { folded: 0, left: 0 },
+		clitics: { folded: 0, left: 0, ownNote: 0 },
+		counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, breaches: [] },
 	};
 	const seats: Seat[] = [];
 	const systems: SystemWords[] = [];
-	layout.systems.forEach((system) => {
+	layout.systems.forEach((system, s) => {
 		if (system.hasBand) stats.banded++;
 		let seated = false;
-		for (const row of system.rows) {
+		const free = freeNoteXs(system.notes);
+		for (const [r, row] of system.rows.entries()) {
 			stats.rows++;
 			const tokens = pageTokens(row, reads[row.id] ?? []);
 			stats.tokens += tokens.length;
@@ -183,11 +192,14 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			const { counts } = cutRow;
 			let units = cutRow.units;
 			if (seams.clitics) {
-				const folded = foldClitics(units, cutRow.origin, spans, seams.clitics(words));
+				const folded = foldClitics(units, cutRow.origin, spans, seams.clitics(words), free);
 				units = folded.units;
 				stats.clitics.folded += folded.counts.folded;
 				stats.clitics.left += folded.counts.left;
+				stats.clitics.ownNote += folded.counts.ownNote.length;
+				stats.counted.ownNote.push(...folded.counts.ownNote.map((o) => ({ ...o, system: s + 1, row: r + 1 })));
 			}
+			stats.counted.manyVowels.cut.push(...manyVowelsInUnits(units, free));
 			stats.units += units.length;
 			stats.cuts.cut += counts.cut;
 			stats.cuts.whole += counts.whole;
@@ -195,6 +207,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			const placed = seatTokens(units, system.notes, 'monotone');
 			stats.seated += placed.filter((p) => p.kind === 'syllable' && p.note !== null).length;
 			stats.unseated += placed.filter((p) => p.unseated).length;
+			stats.counted.manyVowels.merged.push(...manyVowelsMerged(units, placed, free));
 			seats.push(...placed);
 		}
 		if (seated) stats.systemsRussian++;
@@ -205,5 +218,8 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			why: seated ? null : system.hasBand ? 'no Russian row' : 'no band',
 		});
 	});
-	return { systems, words: sewWords(seats), stats };
+	const words = sewWords(seats);
+	// Step 6's check on the page's sewn words, as written: every source of a second vowel under one note, counted (never repaired).
+	stats.counted.breaches = vowelsPerNote(words.flatMap((w) => w.syllables.map((y) => ({ id: y.note, text: y.text }))));
+	return { systems, words, stats };
 }

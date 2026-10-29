@@ -105,7 +105,7 @@ export function kindOf(text: string): SeatKind {
 }
 
 /** Index of the note nearest `cx` among `xs` (sorted ascending); the leftmost on a tie. */
-function nearestOf(cx: number, xs: number[]): number {
+export function nearestOf(cx: number, xs: number[]): number {
 	let best = 0;
 	for (let j = 1; j < xs.length; j++) if (Math.abs(cx - xs[j]) < Math.abs(cx - xs[best])) best = j;
 	return best;

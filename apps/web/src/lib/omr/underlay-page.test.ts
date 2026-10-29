@@ -141,13 +141,30 @@ describe('seatPage with the transcription\'s clitic call (brief r5 step 4)', () 
 	it('seats a printed «в» on the note of its host, as the slot «в мир», and leaves the next note to the next word', () => {
 		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), row3, withClitics);
 		expect(shape(page)).toEqual([[['в мир', 'single', 1]], [['ты', 'single', 2]]]);
-		expect(page.stats.clitics).toEqual({ folded: 1, left: 0 });
+		expect(page.stats.clitics).toEqual({ folded: 1, left: 0, ownNote: 1 });
+		// «в» is printed at x 90, nearest the first note, and its host at 210, nearest the second: counted, and still folded.
+		expect(page.stats.counted.ownNote).toEqual([{ text: 'в', x: 90, system: 1, row: 1 }]);
 	});
 
 	it('gives a lone «в» a note of its own where the call is not given (the stage 2b reader as built)', () => {
 		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), row3, seams);
 		expect(shape(page).flat().map((s) => s[2])).toEqual([0, 1, 2]);
 		expect(shape(page)[0][0][1]).toBe('single');
-		expect(page.stats.clitics).toEqual({ folded: 0, left: 0 });
+		expect(page.stats.clitics).toEqual({ folded: 0, left: 0, ownNote: 0 });
+	});
+});
+
+describe('seatPage counts the notes that break one vowel per note, and changes none (brief r5 step 7C)', () => {
+	it('counts «ного» on one note: the unit «но» the alignment left out joined the next syllable of its word', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300, 400, 500), [row(0)])), [[box('Средь', 90, 110), box('шумного', 180, 320), box('бала', 380, 520)]], seams);
+		expect(page.stats.counted.breaches.map((b) => [b.text, b.kind])).toEqual([['ного', 'many-vowels']]);
+		// Nothing moved: the words are those of the first test above.
+		expect(shape(page)[1]).toEqual([['шум', 'begin', 1], ['ного', 'end', 2]]);
+	});
+
+	it('counts nothing where every note holds one vowel', () => {
+		const page = seatPage(layout(system(notes(100, 200), [row(0)])), [[box('мир', 90, 110), box('ты', 190, 210)]], seams);
+		expect(page.stats.counted.breaches).toEqual([]);
+		expect(page.stats.counted.manyVowels).toEqual({ cut: [], merged: [] });
 	});
 });

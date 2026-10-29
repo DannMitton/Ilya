@@ -15,7 +15,7 @@
  * stage existed (`underlay-song.ts`).
  */
 import type { StaffBoxLike } from './metre-windows';
-import { seatPage, type PageLayout, type ReadUnderlay, type Seams, type SystemWords, type UnderlayPage, type WordBox } from './underlay-page';
+import { seatPage, type PageLayout, type ReadUnderlay, type Seams, type SystemWords, type UnderlayPage, type UnderlayStats, type WordBox } from './underlay-page';
 
 export interface UnderlayParts<Row> {
 	/** The Worker's half: one framed image per row, in `layout`'s order. */
@@ -50,6 +50,14 @@ export function describeError(err: unknown): string {
 	return 'no reason was given';
 }
 
+/** «; counted: 1 clitic with a note of its own, 0 units of many vowels cut, 1 merged»: counts only (`underlay-clitics.ts`, `underlay-counts.ts`); nothing where all are 0. */
+function counted(stats: UnderlayStats): string {
+	const { ownNote, manyVowels } = stats.counted;
+	const { breaches } = stats.counted;
+	if (ownNote.length + manyVowels.cut.length + manyVowels.merged.length + breaches.length === 0) return '';
+	return `; counted: ${ownNote.length} folded clitic(s) the print gives a note of its own${ownNote.map((o) => ` (system ${o.system} row ${o.row} «${o.text}»)`).join('')}, ${manyVowels.cut.length} unit(s) of two vowels or more uncut, ${manyVowels.merged.length} merged on one note, ${breaches.length} note(s) breaking one vowel per note in the words written`;
+}
+
 /** «; no words in system 2 (no Russian row), system 5 (no band)»: the systems of the page that took none; nothing where every one did. */
 function tookNone(systems: readonly SystemWords[]): string {
 	const none = systems.flatMap((s, i) => (s.written ? [] : [`system ${i + 1} (${s.why})`]));
@@ -75,7 +83,7 @@ export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay
 			const seated = seatPage(made.layout, reads, seams);
 			const ms = { prepare: Math.round(made.ms), read: Math.round(t2 - t1), seat: Math.round(now() - t2) };
 			const page: UnderlayPage = { ...seated, ms };
-			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${tookNone(seated.systems)}`);
+			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${counted(seated.stats)}${tookNone(seated.systems)}`);
 			return page;
 		} catch (err) {
 			console.info(`[omr] underlay: the page was not read (${stage} failed: ${describeError(err)}${prepared ? `; the Worker had framed ${prepared.rows} rows in ${prepared.ms} ms` : ''})`);
