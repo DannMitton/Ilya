@@ -117,3 +117,50 @@ describe('cliticCalls: the transcription\'s own call, row by row (brief r5 step 
 		expect(cliticCalls(['к', 'Ксюштрам'])).toEqual(['proclitic', null]);
 	});
 });
+
+import { modernisePreReform } from '@ilya/dictionary';
+import { foldClitics } from './omr/underlay-clitics';
+import { rowWordSpans } from './omr/underlay-tokens';
+
+describe('cliticCalls reads the modern spelling (brief r5 step 5)', () => {
+	const modern = (w: string) => modernisePreReform(w);
+	/**
+	 * The transcription as the built app gives it, with the dictionary loaded: «в» and «с» for a printed «въ» and «съ»
+	 * (`pipeline.ts`, the modern form adopted where it is a known word), each a proclitic; the desk's replay measured it
+	 * (`report-desk-n135-stage2b-r5-replay_r1_2026-10-29.md` section 3). Under vitest the dictionary is not loaded
+	 * (`GraysonEngine.lookupStress('в')` is null), so `processText` keeps «въ» and calls it nothing; a stub stands in.
+	 */
+	const loaded = (line: string) =>
+		line.split(' ').map((w) => {
+			const cleanWord = modernisePreReform(w) ?? w;
+			return { cleanWord, isProclitic: ['в', 'с'].includes(cleanWord.toLowerCase()), isEnclitic: false };
+		});
+
+	it('calls a printed «въ» and «съ» proclitics, as «в» and «с» are', () => {
+		expect(cliticCalls(['въ', 'мир'], loaded, modern)).toEqual(['proclitic', null]);
+		expect(cliticCalls(['съ', 'нею'], loaded, modern)).toEqual(['proclitic', null]);
+		expect(cliticCalls(['в', 'мир'], loaded, modern)).toEqual(['proclitic', null]);
+	});
+
+	it('does not find them comparing raw letters (the mutant: no modern form)', () => {
+		expect(cliticCalls(['въ', 'мир'], loaded)).toEqual([null, null]);
+		expect(cliticCalls(['съ', 'нею'], loaded)).toEqual([null, null]);
+	});
+
+	it('also matches a pre-reform word the transcription kept as printed (its modern form unknown to the dictionary)', () => {
+		const kept = () => [{ cleanWord: 'въ', isProclitic: true, isEnclitic: false }];
+		expect(cliticCalls(['въ'], kept, modern)).toEqual(['proclitic']);
+	});
+
+	it('folds «въ мир» and «съ нею» as «в мир» and «с нею» fold', () => {
+		const row = (a: string, b: string) => {
+			const tokens = [{ text: a, x0: 100, x1: 120 }, { text: b, x0: 150, x1: 250 }];
+			const { units, origin } = cutUnits(tokens, (w) => [w]);
+			const words = rowWordSpans(tokens);
+			return foldClitics(units, origin, words, cliticCalls(words.map((x) => x.text), loaded, modern)).units.map((u) => u.text);
+		};
+		expect(row('въ', 'мир')).toEqual(['въ\u00a0мир']);
+		expect(row('в', 'мир')).toEqual(['в\u00a0мир']);
+		expect(row('съ', 'нею')).toEqual(['съ\u00a0нею']);
+	});
+});

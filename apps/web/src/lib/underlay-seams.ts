@@ -44,16 +44,28 @@ const lettersOf = (s: string): string => s.replace(/[^\p{L}]/gu, '').toLowerCase
 /**
  * The transcription's call for each word of a row: the row goes through
  * `processText` as one line, and each word takes the `isProclitic` or
- * `isEnclitic` of the transcribed word with the same letters, in order. A word
- * the transcription does not return (it drops a mark that is no word, and may
- * split a hyphenated particle) is called null, so it is never folded.
+ * `isEnclitic` of the next transcribed word with the same letters, in order. The
+ * transcription writes the modern spelling («в» for a printed «въ»), so a word
+ * matches a transcribed word whose letters equal its own OR those of its modern
+ * form (`modern`, the conversion the factory passes to `makeSeams`: where it
+ * gives null, only the word's own letters). Both, because the pipeline keeps a
+ * pre-reform spelling it cannot resolve (`pipeline.ts`, `modernisedForm` null
+ * when the modern form is unknown). No «ъ» is stripped by hand. A word the
+ * transcription does not return (it drops a mark that is no word, and may split
+ * a hyphenated particle) is called null, so it is never folded.
  */
-export function cliticCalls(words: string[], transcribe: (line: string) => { cleanWord: string; isProclitic: boolean; isEnclitic: boolean }[] = (line) => processText(line, { language: 'en' }).flatMap((l) => l.words)): CliticCall[] {
+export function cliticCalls(
+	words: string[],
+	transcribe: (line: string) => { cleanWord: string; isProclitic: boolean; isEnclitic: boolean }[] = (line) => processText(line, { language: 'en' }).flatMap((l) => l.words),
+	modern?: (word: string) => string | null,
+): CliticCall[] {
 	const heard = transcribe(words.join(' '));
 	let at = 0;
 	return words.map((w) => {
-		const letters = lettersOf(w);
-		const found = letters === '' ? -1 : heard.findIndex((h, k) => k >= at && lettersOf(h.cleanWord) === letters);
+		const own = lettersOf(w);
+		const m = modern ? modern(w) : null;
+		const alt = m !== null && m !== undefined ? lettersOf(m) : null;
+		const found = own === '' ? -1 : heard.findIndex((h, k) => k >= at && (lettersOf(h.cleanWord) === own || (alt !== null && alt !== '' && lettersOf(h.cleanWord) === alt)));
 		if (found < 0) return null;
 		at = found + 1;
 		return heard[found].isProclitic ? 'proclitic' : heard[found].isEnclitic ? 'enclitic' : null;
@@ -66,5 +78,5 @@ export async function loadSeams(ready: () => boolean = () => isKnownWord(PROBE),
 		if (waited >= READY_MS) throw new Error('the dictionary did not load');
 		await wait(POLL_MS);
 	}
-	return makeSeams(isKnownWord, (word) => GraysonEngine.syllabify(word), (word) => modernisePreReform(word), (words) => cliticCalls(words));
+	return makeSeams(isKnownWord, (word) => GraysonEngine.syllabify(word), (word) => modernisePreReform(word), (words) => cliticCalls(words, undefined, (word) => modernisePreReform(word)));
 }

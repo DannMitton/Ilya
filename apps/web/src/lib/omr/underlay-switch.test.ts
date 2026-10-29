@@ -66,6 +66,14 @@ describe('a reading kept on one side of the switch, met on the other', () => {
 		expect(r).toMatchObject({ ok: true, from: 'homr' });
 	});
 
+	it('is read again when it was kept with the switch on under underlay@1, before the clitic match read the modern spelling', async () => {
+		const before = kept(`${READER_STAMP}+underlay@1`);
+		expect(UNDERLAY_READER).toBe('underlay@2');
+		expect(isCurrent(before, scanStamp('?words=read'))).toBe(false);
+		const r = await restoreScan(new File([], 'a.pdf'), 'pdf', before, read, undefined, scanStamp('?words=read'));
+		expect(r).toMatchObject({ ok: true, from: 'homr' });
+	});
+
 	it('is judged by isCurrent against the stamp it is given', () => {
 		expect(isCurrent(kept(scanStamp('?words=read')), scanStamp(''))).toBe(false);
 		expect(isCurrent(kept(READER_STAMP), scanStamp('?words=read'))).toBe(false);
