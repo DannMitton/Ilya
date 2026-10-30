@@ -53,3 +53,8 @@ All eight gates at baseline (`~/Downloads/ilya-ship.sh`); any change in a count 
 ## What the desk could not establish
 
 Whether Vercel can serve a fallback only for missing files under a static output with `headers` (step 1); the Syllables list's component (step 4); how many Markup columns the gap moves (step 2); where the "break placed" Undo string shows (the Loupe's Undo reads "UNDO" on screen, `i18n.ts:493`; not in scope, report only).
+
+## Step 7, added 2026-10-30 14:5x: the Poem field's words
+
+- `apps/web/src/lib/i18n.ts:780` `intake.placeholder`: EN "Paste, type, or drop the published poem here." (RATIFIED 14:49). FR « Collez, saisissez ou déposez le poème publié ici. » (RATIFIED 14:51). Check whether any field other than Poem uses this key and report it.
+- A new line under the Poem field, shown only while the Poem is empty and Lyrics shows the score's derived words (`scoreWords`, `apps/web/src/lib/components/Drawer/IntakeViews.svelte:63`): EN "Your score supplied the words in Lyrics. Add the published poem here to see where the song departs from it." (RATIFIED 14:49); FR « Votre partition a fourni les paroles du champ Paroles. Ajoutez ici le poème publié pour voir où la mise en musique s'en écarte. » (RATIFIED 14:51).
