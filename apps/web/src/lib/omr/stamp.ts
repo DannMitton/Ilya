@@ -42,9 +42,12 @@ export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}`;
  * folded, the band ended in the ink). A reading kept as `underlay@0` is read
  * again once with the switch on. `underlay@2` is brief r5 steps 5 to 9: the
  * clitic match reads the modern spelling, so a printed «въ» folds into its host
- * as a «в» does (a reading kept as `underlay@1` is read again once).
+ * as a «в» does (a reading kept as `underlay@1` is read again once). `underlay@3`
+ * is the row fallback (N.135): a system with no Russian row seats the first
+ * row the dictionary sews into words (a reading kept as `underlay@2` is read
+ * again once).
  */
-export const UNDERLAY_READER = 'underlay@2';
+export const UNDERLAY_READER = 'underlay@3';
 
 /** A scan's reading, kept with the song: homr's joined MusicXML and the reader that made it. */
 export interface KeptReading {

@@ -83,7 +83,7 @@ export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay
 			const seated = seatPage(made.layout, reads, seams);
 			const ms = { prepare: Math.round(made.ms), read: Math.round(t2 - t1), seat: Math.round(now() - t2) };
 			const page: UnderlayPage = { ...seated, ms };
-			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${counted(seated.stats)}${tookNone(seated.systems)}`);
+			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.stats.fallback ? `; the dictionary-sewing fallback seated ${seated.stats.fallback} system(s)` : ''}${counted(seated.stats)}${tookNone(seated.systems)}`);
 			return page;
 		} catch (err) {
 			console.info(`[omr] underlay: the page was not read (${stage} failed: ${describeError(err)}${prepared ? `; the Worker had framed ${prepared.rows} rows in ${prepared.ms} ms` : ''})`);

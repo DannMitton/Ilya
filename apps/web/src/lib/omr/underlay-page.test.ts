@@ -5,6 +5,7 @@
 import { describe, expect, it } from 'vitest';
 import { pageTokens, seatPage, type PageLayout, type RowLayout, type Seams, type SystemLayout, type WordBox } from './underlay-page';
 import type { FrameTransform } from './underlay-frame';
+import { applyUnderlay } from './underlay-song';
 
 const known = new Set(['шумного', 'бала', 'средь', 'и', 'грустно', 'ты', 'мир']);
 const pieces: Record<string, string[]> = { шумного: ['шум', 'но', 'го'], бала: ['ба', 'ла'], грустно: ['груст', 'но'] };
@@ -131,6 +132,47 @@ describe('seatPage', () => {
 		const page = seatPage(layout(system(notes(100), [row(0)])), [], seams);
 		expect(page.systems.map((x) => x.written)).toEqual([false]);
 		expect(page.stats.tokens).toBe(0);
+	});
+});
+
+describe('seatPage, the row fallback (dictionary sewing)', () => {
+	const sewn = new Set(['тейской', 'мелочи', 'незаглушимый', 'шопот', 'мир', 'ты']);
+	const sewing: Seams = { isWord: (w) => sewn.has(w), cut: (w) => [w.toLowerCase()] };
+	const spaced = (...texts: string[]) => texts.map((t, i) => box(t, 40 + i * 60, 80 + i * 60));
+	const print = spaced('тейской', 'ме', 'ло', 'чи', 'неза.', 'глу.', 'шимый', 'шо', 'пот,');
+
+	it('seats the row of a system where no row is Russian, its tokens as they are, and counts the system', () => {
+		const page = seatPage(layout(system(notes(...print.map((b) => b.x0 - 16)), [row(0)])), [print], sewing);
+		expect(page.systems).toEqual([{ written: true, bars: [1, 1], why: null }]);
+		expect(page.stats).toMatchObject({ fallback: 1, russianRows: 0, systemsRussian: 0, seated: 9 });
+		expect(page.words.flatMap((w) => w.syllables.map((y) => y.text))).toEqual(['тейской', 'ме', 'ло', 'чи', 'неза.', 'глу.', 'шимый', 'шо', 'пот,']);
+	});
+
+	it('leaves the banner: the system is written, so applyUnderlay does not name its bars', () => {
+		const page = seatPage(layout(system(notes(...print.map((b) => b.x0 - 16)), [row(0)])), [print], sewing);
+		const xml = `<score-partwise><part id="P1"><measure number="1"><note><pitch/></note></measure></part></score-partwise>`;
+		const out = applyUnderlay([xml], [{ ...page, ms: { prepare: 0, read: 0, seat: 0 } }]);
+		expect(out.unread).toEqual([]);
+		expect(out.unreadBars).toEqual([]);
+	});
+
+	it('seats nothing for a row of noise, and says the system took no words', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), [spaced('і', 'у', 'т')], sewing);
+		expect(page.systems).toEqual([{ written: false, bars: [1, 1], why: 'no Russian row' }]);
+		expect(page.stats.fallback).toBe(0);
+	});
+
+	it('does not run where a row already passes: the Russian row is seated, a sewable row below it is not', () => {
+		const rows = [row(0), row(1, 1, 300)];
+		const page = seatPage(layout(system(notes(100, 200), rows)), [[box('мир', 80, 120), box('ты', 180, 220)], print], sewing);
+		expect(shape(page)).toEqual([[['мир', 'single', 0]], [['ты', 'single', 1]]]);
+		expect(page.stats).toMatchObject({ fallback: 0, russianRows: 1, systemsRussian: 1 });
+	});
+
+	it('skips a system with no free note', () => {
+		const page = seatPage(layout(system([], [row(0)])), [print], sewing);
+		expect(page.systems).toEqual([{ written: false, bars: null, why: 'no Russian row' }]);
+		expect(page.stats.fallback).toBe(0);
 	});
 });
 

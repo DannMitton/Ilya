@@ -28,6 +28,7 @@
  */
 import { DEFAULT_INK_HEIGHT, unframeBox, type FrameTransform } from './underlay-frame';
 import { rowLanguage, wordKnown } from './underlay-language';
+import { fallbackRow } from './underlay-fallback';
 import type { StaffBoxLike } from './metre-windows';
 import { seatTokens, type NotePlace, type Seat, type Token } from './underlay-seat';
 import { foldClitics, type CliticCall, type OwnNote } from './underlay-clitics';
@@ -94,6 +95,8 @@ export interface UnderlayStats {
 	russianRows: number;
 	/** Systems with at least one Russian row. */
 	systemsRussian: number;
+	/** Systems no row of which passed `rowLanguage`, seated from a row the dictionary sews into words (`underlay-fallback.ts`). */
+	fallback: number;
 	tokens: number;
 	units: number;
 	cuts: CutCounts;
@@ -156,6 +159,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		rows: 0,
 		russianRows: 0,
 		systemsRussian: 0,
+		fallback: 0,
 		tokens: 0,
 		units: 0,
 		cuts: { cut: 0, whole: 0, mismatched: 0 },
@@ -172,19 +176,27 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		if (system.hasBand) stats.banded++;
 		let seated = false;
 		const free = freeNoteXs(system.notes);
+		const read = system.rows.map((row) => {
+			const tokens = pageTokens(row, reads[row.id] ?? []);
+			const spans = rowWordSpans(tokens);
+			return { tokens, spans, words: spans.map((w) => w.text) };
+		});
+		// Only where no row is Russian, and the system has a note to seat on: the row the dictionary sews into words.
+		const rescue = free.length > 0 && !read.some((p) => rowLanguage(p.words, seams.isWord) === 'russian') ? fallbackRow(read.map((p) => p.words), seams.isWord) : null;
 		for (const [r, row] of system.rows.entries()) {
 			stats.rows++;
-			const tokens = pageTokens(row, reads[row.id] ?? []);
+			const { tokens, spans, words } = read[r];
 			stats.tokens += tokens.length;
-			const spans = rowWordSpans(tokens);
-			const words = spans.map((w) => w.text);
-			if (rowLanguage(words, seams.isWord) !== 'russian') continue;
-			stats.russianRows++;
-			for (const w of words) {
-				const here = wordKnown(w, seams.isWord);
-				if (here === null) continue;
-				stats.words++;
-				if (here) stats.known++;
+			if (r === rescue) stats.fallback++;
+			else if (rowLanguage(words, seams.isWord) !== 'russian') continue;
+			else {
+				stats.russianRows++;
+				for (const w of words) {
+					const here = wordKnown(w, seams.isWord);
+					if (here === null) continue;
+					stats.words++;
+					if (here) stats.known++;
+				}
 			}
 			if (seated) continue;
 			seated = true;
@@ -210,7 +222,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			stats.counted.manyVowels.merged.push(...manyVowelsMerged(units, placed, free));
 			seats.push(...placed);
 		}
-		if (seated) stats.systemsRussian++;
+		if (seated && rescue === null) stats.systemsRussian++;
 		const bars = system.notes.map((n) => n.bar);
 		systems.push({
 			written: seated,
