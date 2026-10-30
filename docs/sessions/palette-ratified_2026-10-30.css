@@ -1,0 +1,42 @@
+/* Ilya colour story, RATIFIED by Dann 2026-10-30 16:22 ("I ratify all these changes and I want to adopt them immediately.").
+   Air: band (top bar, chapter band), desk (page background), head (drawer section header, one step deeper than the desk, label in ink), wash (lightest fills).
+   Jewel: buttons, pills, active states. Ink: all coloured text on paper (ruled 15:24).
+   Turning noteheads: --lavender-jewel, full opacity, cue size (82 percent). Chapter-band subheaders: upright, 18.7px, weight 700, white.
+   The 2026A badge in the sigil: white on 22 percent white over the band. */
+:root {
+	/* sage: Text, Input */
+	--sage: #7D9D76;
+	--sage-desk: #D8E2D6;
+	--sage-head: #C4D3C1;
+	--sage-wash: #ECF0EA;
+	--sage-jewel: #45693C;
+	--sage-ink: #365E2D;
+	/* lavender: Markup, Voice, the Loupe, turning noteheads */
+	--lavender: #9F85BC;
+	--lavender-desk: #E2DAEB;
+	--lavender-head: #D4C8E1;
+	--lavender-wash: #F1EDF5;
+	--lavender-jewel: #6C4D8C;
+	--lavender-ink: #623F84;
+	/* rose: Insights */
+	--rose: #AF858E;
+	--rose-desk: #E7DADD;
+	--rose-head: #DBC8CC;
+	--rose-wash: #F3EDEE;
+	--rose-jewel: #7C4E59;
+	--rose-ink: #73414E;
+	/* cobalt: Guide (band, desk) and Piece (head) */
+	--cobalt: #788DB1;
+	--cobalt-desk: #E1E6EF;
+	--cobalt-head: #B9CBEB;
+	--cobalt-wash: #E8EEF8;
+	--cobalt-jewel: #2953A6;
+	--cobalt-ink: #1D4BA7;
+	/* umber: Learn, in slate (token name kept until the code renames it) */
+	--umber: #5B6E80;
+	--umber-desk: #CED4D9;
+	--umber-head: #B5BEC6;
+	--umber-wash: #E6E9EC;
+	--umber-jewel: #27425A;
+	--umber-ink: #254057;
+}
