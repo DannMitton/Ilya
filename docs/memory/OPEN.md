@@ -3313,3 +3313,7 @@ Every line is a default with its condition (`CONTRACT.md` tether 19); each was o
 
 - EN: Ilya could not open this iPhone photo. On a Mac, open the photo in Preview and choose File, then Export, then JPEG, and try again.
 - FR: Ilya n’a pas pu ouvrir cette photo d’iPhone. Sur un Mac, ouvrez la photo dans Aperçu et choisissez Fichier, puis Exporter, puis JPEG, et réessayez.
+
+## N.135, THE ROW FALLBACK AND THE UNREAD BANNER. Ruled by Dann 2026-10-29 20:13 (QUEUE row 160)
+
+**Default:** where no row of a system passes the language test and the fallback (dictionary sewing) seats a row, that system leaves the unread-bars banner; the singer reads and corrects the words directly. Offered by the desk as A of three (B: stay in the banner; C: a new gentler line, needing new strings EN and FR); ruled *"A"*. Condition for departing: if a fallback is ever found to seat noise, the system returns to the banner or C is reopened. Beside it, Dann's aim for lyric reading, 2026-10-29 16:12 (`INBOX.md`): the singer will always correct some errors; *"Fewer necessary corrections is better than more."*

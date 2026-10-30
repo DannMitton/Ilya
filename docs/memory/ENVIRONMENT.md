@@ -32,6 +32,10 @@ next session the same hour it cost the last one.
 | a cloud session has not pushed for an hour, or Dann typed into a cloud session | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
 | a gate run includes a test skipped without its file | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
 | a ship paste for a true merge, or a lane that adds a package | `LEARNED BY THE OPUS DESK, 2026-10-28` |
+| a ship paste for a true merge (git refused: "local changes would be overwritten") | `LEARNED BY THE OPUS DESK, 2026-10-29` |
+| replaying a build with the desk's replay scripts | `LEARNED BY THE OPUS DESK, 2026-10-29` |
+| a desk measure is about to shape a brief | `LEARNED BY THE OPUS DESK, 2026-10-29` |
+| a long brief must reach a cloud session | `LEARNED BY THE OPUS DESK, 2026-10-29` |
 | a property test times out in the desk's workspace | `LEARNED BY THE OPUS DESK, 2026-10-28` |
 | Code reports a preview serving an old build on port 4173 | `A STALE PREVIEW HOLDS PORT 4173` |
 | Vercel's storage fills, or a cloud-lane push builds a preview | `EVERY BRANCH BUILDS ON VERCEL, 480 MB EACH` |
@@ -5034,3 +5038,12 @@ From Vercel's documentation the desk told him the list's three-dot menu had a De
 
 **Desk errors this session, each owned when made:** relayed Code's "Musorgsky printed «в» on its own note" without opening the print (Dann 01:05: "I don't believe you"); said the IPA shift began at bar 4 when it begins at bar 5's lone `#`; described a typed `#` as "leading" when Ilya attaches every `#` to the word before it; told Dann the cloud run was paid from the $250 credit, which is NOT ESTABLISHED (his Billing, Usage, and Claude Code settings pages show no such credit, read 10:5x); the survey helper ran 173k against 150k stated, the review 207k against 200k.
 
+
+
+### LEARNED BY THE OPUS DESK, 2026-10-29
+- **A true merge refuses staged files.** The 19:12 ship paste ran `git add` before `git merge`; git refused ("Your local changes to the following files would be overwritten by merge"), and the script then gated the old tree (gate 4 3404). The order for a true merge is: merge first, then `git add` of the new files, then the ship script; `git reset -q` unstages without touching files. A fast-forward ship needs a final `git push origin Shane`, because the script has nothing to commit and does not push.
+- **iCloud " 2" copies can appear between pastes.** Two `... 2.md` duplicates appeared in `docs/sessions/` at 19:13 and stopped the ship; the bridge could not read them ("Resource deadlock avoided"); same sizes as the originals; moved by Dann to `~/Downloads/_desk-2026-10-29/`. Check `ls docs/sessions | grep " 2"` right before any ship paste.
+- **The replay scripts copy the build's wiring by hand.** `real.mjs:15` rebuilds `makeSeams` itself, so a change to `loadSeams` (`underlay-seams.ts:81`, step 5) must be mirrored (`real5.mjs`, `real7.mjs`); prove the copy leaves the previous step unchanged before trusting it. Scripts: `~/Downloads/_desk-2026-10-29/replay-scripts_2026-10-29.tgz` (README with commands), `replay-step5_2026-10-29.tgz`, `confusion-table_2026-10-29.tgz`, `drift-look_2026-10-29.tgz`. Save every helper's scripts to the Mac when it lands: the morning desk's were saved only because Dann asked that thread.
+- **A desk measure that shapes a brief gets checked against the data before the brief.** Two of today's three briefs came back REDESIGN for the desk's own errors: the confusion table counted 9 moved syllable breaks as misreads; the split classification filed 74 "one syllable missing" groups as merges and assumed a scorer gap that does not exist (`common2.py:137-139` already splits at U+00A0). The third brief passed because the desk re-measured with the shipped code first (the row-call count fell from 441 to 95 when the old captures' calls were replaced by the build's).
+- **A long brief reaches a cloud session best through `Shane`.** A 23,000-character prompt is costly to send as base64 through the page; a docs-only commit by Dann (no gates; Vercel skips it) and a short prompt that says `git show origin/Shane:<path>` worked at 20:2x. The base64-into-page paste with a length and 31-hash check worked for 14,000 characters at 13:1x.
+- **Code on the Mac is in the Claude desktop app's Code tab; a ship paste is Terminal.** Dann pasted a Code prompt into Terminal at 16:16 after the desk named a window it had not seen this session (`preferences` rule 23a). Name the window he used before, or ask for a screenshot.
