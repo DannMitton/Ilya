@@ -57,7 +57,8 @@ Whether Vercel can serve a fallback only for missing files under a static output
 ## Step 7, added 2026-10-30 14:5x: the Poem field's words
 
 - `apps/web/src/lib/i18n.ts:780` `intake.placeholder`: EN "Paste, type, or drop the published poem here." (RATIFIED 14:49). FR « Collez, saisissez ou déposez le poème publié ici. » (RATIFIED 14:51). Check whether any field other than Poem uses this key and report it.
-- A new line under the Poem field, shown only while the Poem is empty and Lyrics shows the score's derived words (`scoreWords`, `apps/web/src/lib/components/Drawer/IntakeViews.svelte:63`): EN "Your score supplied the words in Lyrics. Add the published poem here to see where the song departs from it." (RATIFIED 14:49); FR « Votre partition a fourni les paroles du champ Paroles. Ajoutez ici le poème publié pour voir où la mise en musique s'en écarte. » (RATIFIED 14:51).
+- **Amended 2026-11-01 (Dann 2026-10-30 20:38):** not a new line. The existing `intake.view.landedLyrics` already shows in this state (`docs/memory/OPEN.md`, the 2026-10-16 strings table); replace its EN and FR with "Your score supplied the words in Lyrics. Add the whole published poem here to see where the song departs from it." / « Votre partition a fourni les paroles du champ Paroles. Ajoutez ici le poème publié en entier pour voir où la mise en musique s'en écarte. » The bullet below is superseded.
+- (Superseded) A new line under the Poem field, shown only while the Poem is empty and Lyrics shows the score's derived words (`scoreWords`, `apps/web/src/lib/components/Drawer/IntakeViews.svelte:63`): EN "Your score supplied the words in Lyrics. Add the published poem here to see where the song departs from it." (RATIFIED 14:49); FR « Votre partition a fourni les paroles du champ Paroles. Ajoutez ici le poème publié pour voir où la mise en musique s'en écarte. » (RATIFIED 14:51).
 
 ## Step 8, added 2026-10-30 15:0x: Learn opens as Guide does
 
