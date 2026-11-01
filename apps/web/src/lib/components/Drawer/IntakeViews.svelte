@@ -4,7 +4,7 @@
 	import type { TextArrival } from '$lib/one-action';
 	import { comparePoem, lyricsSegments, poemSegments } from '$lib/text/poem-compare';
 	import { inputViews, type InputView } from '$lib/text/input-views.svelte';
-	import { lyricsOnLeave } from '$lib/text/break-glue';
+	import { lyricsOnLeave } from '$lib/text/break-tidy';
 	import { pointer } from './IntakeCamera.svelte';
 	import ViewPair from '../ViewPair.svelte';
 	/*
@@ -197,17 +197,18 @@
 	}
 
 	/**
-	 * N.135 stage 2b r5, step 9 (Dann 2026-10-29 01:48): leaving the Lyrics field glues a `#` typed after a word with an ordinary
-	 * space («я #» to «я\u00A0#», `lyricsOnLeave`). Nothing changes while the singer types, and nothing on a paste, a Poem edit, or
-	 * a score's own text. The new text goes up as a whole arrival (`oninput(value, 'paste')`), the path a typed edit takes, so the
-	 * app's state takes it like any edit; the textarea's own undo history does not (a value set from code is not in it).
+	 * Row 163 step 3 (Dann 2026-10-30 14:27): leaving the Lyrics field tidies every typed `#` to «<unit> #» at the end of its unit
+	 * (`lyricsOnLeave`, `text/break-tidy.ts`; it widens N.135 step 9's gluing of a `#` typed after a space). Nothing changes while the
+	 * singer types, and nothing on a paste, a Poem edit, or a score's own text. The new text goes up as a whole arrival
+	 * (`oninput(value, 'paste')`), the path a typed edit takes, so the app's state takes it like any edit; the textarea's own undo
+	 * history does not (a value set from code is not in it).
 	 */
 	function onBlur(e: FocusEvent): void {
 		if (view !== 'lyrics') return;
-		const glued = lyricsOnLeave((e.target as HTMLTextAreaElement).value, scoreWords);
-		if (glued === null) return;
+		const tidy = lyricsOnLeave((e.target as HTMLTextAreaElement).value, scoreWords);
+		if (tidy === null) return;
 		inputViews.edited();
-		oninput(glued, 'paste');
+		oninput(tidy, 'paste');
 	}
 
 	/* N.145, 2026-09-16: Cmd+Enter skips the quiet pause (`flushText`). */

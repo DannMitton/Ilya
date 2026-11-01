@@ -15,7 +15,8 @@
  * WHERE IT TAKES EFFECT (N.194 step 2, Dann 2026-10-21 02:18 and 02:19). The peel puts the field on the
  * word the # belongs to by position; `boundaries.ts` then moves it to the last word of that word's unit
  * (`text/syntactic-break-unit.ts`), because a break happens only at the end of a complete unit. The typed
- * text keeps the # where the singer put it, and Ilya never moves it there.
+ * text is tidied when the singer leaves Lyrics (`text/break-tidy.ts`, row 163 step 3): every typed # is moved to the end
+ * of its unit as «<unit> #». While the singer types, and for every other reader, the # stays where it was typed.
  */
 import { WORD_TOKEN, GLUED_MARK } from './text/break-glue';
 
