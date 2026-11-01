@@ -46,6 +46,9 @@ import {
   renderAnalyzedStaff,
   tacetRuns,
   TURNING_CLEARANCE_SP,
+  TURNING_COLOUR,
+  TURNING_HEAD_SCALE,
+  WITHHELD_SIGLA,
   columnInk,
   inkMetrics,
   newAccidentalCarry,
@@ -596,16 +599,23 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
   const svg = renderDemo();
 
   it('renders the turning layer in the appendix sage, not the old grey', () => {
-    expect(svg.includes('fill="#9585A2"')).toBe(true);
+    expect(svg.includes('fill="#6C4D8C"')).toBe(true);
     expect(svg.includes('#9a968f')).toBe(false);
   });
 
+  it('draws the turning layer in the lavender jewel at cue size, and the withheld sigla agrees with it (row 165)', () => {
+    expect(TURNING_COLOUR).toBe('#6C4D8C');
+    expect(TURNING_HEAD_SCALE).toBe(0.82);
+    // WITHHELD_SIGLA is declared above TURNING_COLOUR, so it writes the value out; this keeps the two one colour.
+    expect(WITHHELD_SIGLA.colour).toBe(TURNING_COLOUR);
+  });
+
   it('shows the turning D# sharp once, then carries it through the measure', () => {
-    expect((svg.match(/fill="#9585A2">♯</g) ?? []).length).toBe(1);
+    expect((svg.match(/fill="#6C4D8C">♯</g) ?? []).length).toBe(1);
   });
 
   it('draws no turning accidental for natural turning pitches', () => {
-    expect((svg.match(/fill="#9585A2">♮/g) ?? []).length).toBe(0);
+    expect((svg.match(/fill="#6C4D8C">♮/g) ?? []).length).toBe(0);
   });
 
   it('offsets a colliding turning notehead beside the sung note (two-voice rule)', () => {
@@ -614,7 +624,8 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // down-stem, so the sung unit's right ink edge is its notehead's, at
     // 306 + 6.2, and the turning head's centre is 1.6 + 0.25x12 + 6.2 beyond
     // it: cx = 323. N.139 lays the head out FORWARDS from the stave's edge at 0, so the demo's first column moved from 92 to 117.2 (clef indent 12, clef 24, 12, flat 9, 12, meter 18, run-in 24, half a notehead 6.2) and every x after it moved by +25.2. So 348.2.
-    expect(svg.includes('cx="348.2"')).toBe(true);
+    // Row 165: the turning head is drawn at 82 percent (half-width 5.08, was 6.2), so its centre sits 1.12 nearer: 347.08.
+    expect(svg.includes('cx="347.08"')).toBe(true);
   });
 
   it('sends a LOWER turning note right as well, the retired diagonal (N.106)', () => {
@@ -625,8 +636,9 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // at 660 + 5.5 + 0.75, and the turning head lands at 677.05. N.139 lays the head out FORWARDS from the stave's edge at 0, so the demo's first column moved from 92 to 117.2 (clef indent 12, clef 24, 12, flat 9, 12, meter 18, run-in 24, half a notehead 6.2) and every x after it moved by +25.2. So
     // 702.25, and the retired left displacement would be 671.2. Row 78c: n6 crosses, and the notes make room for its
     // red ring, so every column after it moves by one `CROSSING_RING_REACH`, 8.9: 711.15, and 680.1.
-    expect(svg.includes('cx="711.15"')).toBe(true);
-    expect(svg.includes('cx="680.1"')).toBe(false);
+    // Row 165: the 82 percent turning head sits 1.12 nearer, 710.03, and the retired left displacement would be 678.98.
+    expect(svg.includes('cx="710.03"')).toBe(true);
+    expect(svg.includes('cx="678.98"')).toBe(false);
   });
 
   it('brackets the triplet in black with its numeral', () => {
@@ -644,7 +656,8 @@ describe('staff renderer: turning-layer accidentals and tuplets (increment 3)', 
     // That single column is the ONLY place the ink term binds on this fixture.
     // N.139 lays the head out FORWARDS from the stave's edge at 0, so the demo's first column moved from 92 to 117.2 (clef indent 12, clef 24, 12, flat 9, 12, meter 18, run-in 24, half a notehead 6.2) and every x after it moved by +25.2. So 786.45.
     // Row 78c: n6's red ring adds `CROSSING_RING_REACH`, 8.9, to every column after it. So 795.35.
-    expect(svg.includes('x="795.35" y="58"')).toBe(true);
+    // Row 165: the 82 percent turning head at n11 trims a quarter of a pixel off every column after it. So 795.1.
+    expect(svg.includes('x="795.1" y="58"')).toBe(true);
   });
 });
 
@@ -730,7 +743,8 @@ describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
     Number(svg.match(/<circle [^>]*cx="([-\d.]+)"[^>]*fill="#1a1612"/)![1]);
 
   const LINE_GAP = 12;      // the default stave
-  const HEAD_HALF = 6.2;    // primitive notehead half-width, sung and turning alike
+  const HEAD_HALF = 6.2;    // primitive SUNG notehead half-width
+  const TURN_HALF = Math.round(12.4 * TURNING_HEAD_SCALE / 2 * 100) / 100; // the turning head: 82 percent, cue size (row 165)
   const STEM_RIGHT = 6.25;  // STEM_HALF 5.5 + half the 1.5 px stem
   const OFFSET = 1.6 + TURNING_CLEARANCE_SP * LINE_GAP; // the air between the two units
   const ACC_W = 11.3;       // the primitive turning accidental's width
@@ -741,7 +755,7 @@ describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
     // right ink edge is the stem's, not the notehead's.
     const svg = scene(P('G', 4), P('G', 4));
     const nx = sungCx(svg);
-    expect(turningCx(svg)).toBeCloseTo(nx + STEM_RIGHT + OFFSET + HEAD_HALF, 5);
+    expect(turningCx(svg)).toBeCloseTo(nx + STEM_RIGHT + OFFSET + TURN_HALF, 5);
     expect(turningCx(svg)).toBeGreaterThan(nx);
   });
 
@@ -753,7 +767,7 @@ describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
     // cases above. The rule is one rule; the sung unit's edge is what moved.
     const svg = scene(P('G', 4), P('A', 4));
     const nx = sungCx(svg);
-    expect(turningCx(svg)).toBeCloseTo(nx + HEAD_HALF + OFFSET + HEAD_HALF, 5);
+    expect(turningCx(svg)).toBeCloseTo(nx + HEAD_HALF + OFFSET + TURN_HALF, 5);
     expect(turningCx(svg)).toBeGreaterThan(nx);
   });
 
@@ -763,7 +777,7 @@ describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
     // above goes: the side is no longer a function of the interval's sign.
     const svg = scene(P('G', 4), P('F', 4));
     const nx = sungCx(svg);
-    expect(turningCx(svg)).toBeCloseTo(nx + STEM_RIGHT + OFFSET + HEAD_HALF, 5);
+    expect(turningCx(svg)).toBeCloseTo(nx + STEM_RIGHT + OFFSET + TURN_HALF, 5);
     expect(turningCx(svg)).toBeGreaterThan(nx); // NOT left, and this is the assertion
     // And within a rounding hair of where a second ABOVE lands: the side no
     // longer depends on the interval's sign, only the sung stem does.
@@ -787,7 +801,7 @@ describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
     const dotRight = dotCx(second) + 2.4;
     expect(dotRight).toBeGreaterThan(sungCx(second) + STEM_RIGHT);
     expect(dotRight).toBeGreaterThan(sungCx(second) + HEAD_HALF);
-    expect(turningCx(second) - HEAD_HALF).toBeCloseTo(dotRight + OFFSET, 5);
+    expect(turningCx(second) - TURN_HALF).toBeCloseTo(dotRight + OFFSET, 5);
     // And nothing in the sung unit moved: the dot sits where it sits when the
     // turning pitch is a third away and nothing is displaced at all.
     expect(dotCx(second)).toBe(dotCx(third));
@@ -802,7 +816,7 @@ describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
     const nx = sungCx(svg);
     expect(turningAccX(svg)).toBeCloseTo(nx + STEM_RIGHT + OFFSET, 5);
     expect(turningAccX(svg)).toBeGreaterThan(nx);
-    expect(turningCx(svg)).toBeCloseTo(turningAccX(svg) + ACC_W + ACC_GAP + HEAD_HALF, 5);
+    expect(turningCx(svg)).toBeCloseTo(turningAccX(svg) + ACC_W + ACC_GAP + TURN_HALF, 5);
   });
 
   it('still draws a turning THIRD’s accidental left of the aligned head, as today', () => {
@@ -811,7 +825,7 @@ describe('the turning unit keeps to the right of the sung unit (N.106)', () => {
     const svg = scene(P('A', 4), P('C', 5, 1));
     const nx = sungCx(svg);
     expect(turningCx(svg)).toBe(nx);
-    expect(turningAccX(svg)).toBeCloseTo(nx - HEAD_HALF - ACC_GAP - ACC_W, 5);
+    expect(turningAccX(svg)).toBeCloseTo(nx - TURN_HALF - ACC_GAP - ACC_W, 5);
     expect(turningAccX(svg)).toBeLessThan(nx);
   });
 });
@@ -858,32 +872,32 @@ describe('the turning head counts its ledger lines (N.107)', () => {
     // Sung B4 on the middle line, turning A5 sitting on the first ledger
     // above. Six stave steps apart, so the unit is aligned and tx is nx.
     const svg = scene(P('B', 4), P('A', 5));
-    const lav = ledgers(svg, '#9585A2');
+    const lav = ledgers(svg, '#6C4D8C');
     expect(ys(lav)).toEqual([MID - 3 * GAP]);
     expect(centre(lav[0])).toBe(round2(turningCx(svg)));
     expect(lav[0]).toContain('data-analysis="turning-ledger"');
-    expect(lav[0]).toContain('opacity="0.85"'); // the head's own opacity
+    expect(lav[0]).not.toContain('opacity'); // full opacity since row 165, like the head
   });
 
   it('draws THREE for a turning head three lines above', () => {
     // Turning E6, the third ledger above. Every position between the stave
     // and the head is drawn, top-down, as the sung line has always done.
     const svg = scene(P('B', 4), P('E', 6));
-    expect(ys(ledgers(svg, '#9585A2'))).toEqual([MID - 3 * GAP, MID - 4 * GAP, MID - 5 * GAP]);
+    expect(ys(ledgers(svg, '#6C4D8C'))).toEqual([MID - 3 * GAP, MID - 4 * GAP, MID - 5 * GAP]);
   });
 
   it('draws them BELOW the stave the same way', () => {
     // Turning C4, one ledger below. The ruling is symmetric and so is the
     // arithmetic; this holds the second loop to it.
     const svg = scene(P('B', 4), P('C', 4));
-    expect(ys(ledgers(svg, '#9585A2'))).toEqual([MID + 3 * GAP]);
+    expect(ys(ledgers(svg, '#6C4D8C'))).toEqual([MID + 3 * GAP]);
   });
 
   it('draws NONE for a turning head inside the stave', () => {
     // Sung B4, turning D5, both on the stave. Nothing is drawn, which is the
     // case the old code got right by drawing nothing at all.
     const svg = scene(P('B', 4), P('D', 5));
-    expect(ledgers(svg, '#9585A2')).toEqual([]);
+    expect(ledgers(svg, '#6C4D8C')).toEqual([]);
   });
 
   it('centres a DISPLACED unit’s ledgers on tx, not on nx', () => {
@@ -893,7 +907,7 @@ describe('the turning head counts its ledger lines (N.107)', () => {
     // with the head that needs it. This is the case a ledger drawn at nx
     // would silently pass and a reader would silently misread.
     const svg = scene(P('A', 5), P('B', 5));
-    const lav = ledgers(svg, '#9585A2');
+    const lav = ledgers(svg, '#6C4D8C');
     const black = ledgers(svg, '#3a352f');
     const nx = sungCx(svg);
     expect(ys(lav)).toEqual([MID - 3 * GAP]);
@@ -926,7 +940,7 @@ describe('staff renderer: the four analytical criteria', () => {
     expect((svg.match(/stroke-width="1\.5"/g) ?? []).length).toBeGreaterThan(1);
   });
   it('2. sage stemless turning-pitch noteheads', () => {
-    expect(svg.includes('fill="#9585A2"')).toBe(true);
+    expect(svg.includes('fill="#6C4D8C"')).toBe(true);
   });
   it('3. the fR1/fo crossing (n6) is the analysis\'s; the page draws its squircle, not the renderer (QUEUE row 34)', () => {
     // Since row 34 the red squircle takes the selection ring's box, which is
@@ -976,8 +990,8 @@ describe('staff renderer: the four analytical criteria', () => {
     // insertion bar and the drawer's correction stations all carry this token
     // — and a formant-derived turning pitch is voice data. Sage codes the
     // score document and its text, and was miscoding these.
-    expect(svg.includes('fill="#9585A2"')).toBe(true);
-    expect(svg.includes('#839275')).toBe(false);
+    expect(svg.includes('fill="#6C4D8C"')).toBe(true);
+    expect(svg.includes('#7D9D76')).toBe(false); // not the sage band
   });
 
   it('keeps the handle on the turning marks whatever their ink', () => {
@@ -987,7 +1001,7 @@ describe('staff renderer: the four analytical criteria', () => {
     // every turning mark carries both its handle and the current colour.
     const turning = svg.match(/<[^>]*data-analysis="turning-[^"]*"[^>]*>/g) ?? [];
     expect(turning.length).toBeGreaterThan(0);
-    for (const mark of turning) expect(mark).toContain('#9585A2');
+    for (const mark of turning) expect(mark).toContain('#6C4D8C');
   });
 
   it('binds a note’s accidental back to it with data-of-event', () => {
@@ -1071,7 +1085,7 @@ describe('staff renderer: SMuFL glyph mode (increment 4)', () => {
   it('renders key-signature and layer accidentals as glyphs (flat, natural, sage sharp)', () => {
     expect(svg.includes(String.fromCodePoint(0xe260))).toBe(true); // accidentalFlat (key)
     expect(svg.includes(String.fromCodePoint(0xe261))).toBe(true); // accidentalNatural (n3)
-    const lavenderSharp = new RegExp(`fill="#9585A2">${String.fromCodePoint(0xe262)}<`, 'g');
+    const lavenderSharp = new RegExp(`fill="#6C4D8C">${String.fromCodePoint(0xe262)}<`, 'g');
     expect((svg.match(lavenderSharp) ?? []).length).toBe(1); // turning D#, carried
   });
 
@@ -1129,7 +1143,7 @@ describe('staff renderer: the unmeasured page (N.4)', () => {
   const stems = (s: string): number => (s.match(/stroke="#1a1612" stroke-width="1\.5"/g) ?? []).length;
 
   it('draws no acoustic marks at all: no turning layer, no crossing', () => {
-    expect(svg.includes('#9585A2')).toBe(false);
+    expect(svg.includes('#6C4D8C')).toBe(false);
     expect(svg.includes('stroke="#b23b3b"')).toBe(false);
   });
 
@@ -2023,7 +2037,7 @@ describe('courtesy accidentals across a barline (N.102 increment 1)', () => {
     });
     // The bar-1 turning sharp is drawn, which proves the fixture reaches the
     // turning-accidental path at all.
-    expect(svg).toContain(`fill="#9585A2">${SHARP}</text>`);
+    expect(svg).toContain(`fill="#6C4D8C">${SHARP}</text>`);
     // And no parenthesis of any colour reaches the page.
     expect(svg.includes(PARENS_LEFT)).toBe(false);
     expect(svg.includes(PARENS_RIGHT)).toBe(false);

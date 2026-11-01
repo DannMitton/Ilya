@@ -67,8 +67,8 @@ describe.each([
 ] as const)('turningHeadLegendDrawing with %s (QUEUE row 78b)', (_name, options) => {
   it('draws the filled head in lavender, solid, with no stem', () => {
     const d = turningHeadLegendDrawing('filled', options);
-    expect(d.inner).toContain('fill="#9585A2"');
-    expect(d.inner).toContain('opacity="0.85"');
+    expect(d.inner).toContain('fill="#6C4D8C"');
+    expect(d.inner).not.toContain('opacity'); // full opacity since row 165
     expect(d.inner).not.toContain('<line');
     expect(d.inner).not.toContain('fill="none"');
   });
@@ -77,7 +77,7 @@ describe.each([
     const d = turningHeadLegendDrawing('hollow', options);
     expect(d.inner.startsWith('<circle data-placeholder="true"')).toBe(true);
     expect(d.inner).toContain('fill="none"');
-    expect(d.inner).toContain('stroke="#9585A2"');
+    expect(d.inner).toContain('stroke="#6C4D8C"');
     expect(d.inner).not.toContain('stroke-dasharray');
     const r = Number(/ r="([\d.]+)"/.exec(d.inner)![1]);
     const w = Number(/ stroke-width="([\d.]+)"/.exec(d.inner)![1]);

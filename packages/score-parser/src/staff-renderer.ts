@@ -28,8 +28,7 @@
  *   - the four analytical marks (forced semantic stems, lavender turning-pitch
  *     noteheads, red crossing squircles, dual Cyrillic/IPA underlay) and the
  *     `#` phonation break. The turning layer (Mitton 2020, App. B pref.
- *     p. 206) renders in Calm Authority's lavender (#9585A2, the
- *     `--lavender` app
+ *     p. 206) renders in the lavender jewel (the `--lavender-jewel` app
  *     token; see the TURNING_COLOUR constant below), noteheads and
  *     accidentals in one colour, with
  *     its own per-measure accidental carry state independent of the sung
@@ -80,8 +79,9 @@ import { CROSSING_RING_HEADROOM, CROSSING_RING_REACH } from './ring-geometry';
  * `PageFooter` imports it for the legend circle, so the mark and its legend
  * entry cannot drift into being two different glyphs.
  *
- * `--lavender` in `app.css`. Markup's own accent, and a colour the
- * underlay's ink and the acoustic marks both leave alone.
+ * `--lavender-jewel` in `app.css` (the value of `TURNING_COLOUR`, which is
+ * declared below, so it is written out here; a test pins that they agree).
+ * Markup's own accent, and a colour the underlay's ink and the acoustic marks leave alone.
  */
 export const WITHHELD_SIGLA = {
 	/** The traced glyph's own coordinate box, from `PageFooter.svelte`. */
@@ -90,7 +90,7 @@ export const WITHHELD_SIGLA = {
 	w: 493,
 	h: 751,
 	path: 'M426.5 348.1c-53.8 4.4-96.8 20.7-133.1 50.3-29.3 23.9-51.8 62.6-59.9 103.1-2.1 10.7-4.5 30.4-4.5 37.7v2.8h125.9l.5-3.3c.3-1.7 1-6.6 1.6-10.7 2.7-18.4 10.2-33.1 23.5-46.6 16.8-16.8 34.3-24.3 61.2-26 38.3-2.5 72.4 14.5 86.7 43.1 5.9 11.7 7.1 17.9 7 35.5 0 16.9-1.7 25.8-6.8 37.4-7.6 17.3-25.5 34.2-57.4 54.6-41.3 26.4-54.8 36.7-66.3 50.6-25.5 30.8-32.8 56.2-31.3 108.6l.7 22.8h123.4l.6-18.8c.6-21.6 2.2-29.7 8.7-42.8 4.6-9.4 14.3-21.1 25.1-30.2 7.7-6.6 31.6-22.8 51-34.6 50.9-31.1 79.7-68 89.8-115.1 8.2-38 3.5-81.4-12.4-114-23.1-47.4-71.3-82.9-132.5-97.4-29.8-7.1-68.2-9.7-101.5-7m2 538c-18.7 1.7-38 12-50 26.7-11.4 13.7-15.9 26.8-15.9 45.7 0 8.3.6 14 1.8 18.5 6.2 22.6 23.2 41.1 45.5 49.4 9.8 3.6 15.9 4.6 29 4.6 13.8 0 24.8-2.6 36.2-8.6 38.6-20.3 51-69.7 26.3-105-11.7-16.7-32.4-29.1-51.4-30.9-3.6-.3-8.1-.7-10-.9s-7.1 0-11.5.5',
-	colour: '#9585A2',
+	colour: '#6C4D8C',
 
 	// THE RING, and it is the sigla's graphic identity rather than decoration.
 	// Dann, 8 August: "Our siglas are enclosed in a circle. This is a visual
@@ -875,24 +875,22 @@ const FLAG_SMUFL: Record<number, [RequiredGlyphName, RequiredGlyphName]> = {
 };
 
 /**
- * Turning-pitch layer colour: Calm Authority's deeper lavender,
- * `--lavender` in app.css. Baked as hex because this module is pure and
- * DOM-free; keep in sync with the app token.
- *
- * IT WAS SAGE UNTIL 2026-08-27. Dann's original ruling (2026-07-12) was to use
- * the existing colour story rather than invent an estimate, and sage was the
- * accent to hand. His correction is that the colour story had since become
- * specific: LAVENDER CODES MUSIC AND VOICE — the voice anchor, the loupe's
- * insertion bar, and the drawer's correction stations all carry this token —
- * and the turning pitches are formant-derived VOICE DATA. Sage, which codes
- * the score document and its text, was miscoding them.
+ * Turning-pitch layer colour: the lavender JEWEL step, `--lavender-jewel` in
+ * app.css (ratified 2026-10-30, row 165). Baked as hex because this module is
+ * pure and DOM-free; keep in sync with the app token. LAVENDER CODES MUSIC AND
+ * VOICE, and the turning pitches are formant-derived VOICE DATA (it was sage
+ * until 2026-08-27). The jewel and not the band, so a head stands apart from
+ * the black notes: 6.82:1 on white and 2.64:1 against the notation ink.
  */
-export const TURNING_COLOUR = '#9585A2';
+export const TURNING_COLOUR = '#6C4D8C';
+
+/** The turning head is drawn at cue size: 82 percent of a notehead (Dann 2026-10-30 16:08). */
+export const TURNING_HEAD_SCALE = 0.82;
 
 /**
  * The width a primitive-mode turning accidental is treated as having, in px.
  * There is no font to measure, so this is the width the mode's own hard-coded
- * `nx - 19` implied before N.106: the 12.4 px turning head's half-width, then
+ * `nx - 19` implied before N.106 (against the 12.4 px head of that day): its half-width, then
  * the sung line's 1.5 px of head-to-accidental clearance. Stating it as a
  * width is what lets primitive mode run the same rule SMuFL mode runs, and
  * keeps an ALIGNED primitive turning accidental on the pixel it always had.
@@ -1347,7 +1345,8 @@ export function inkMetrics(options: StaffRenderOptions = {}): InkMetrics {
     },
     dotW: smufl ? sp(smufl.glyph('augmentationDot').widthSp) : sp(0.4),
     dotClear: sp(0.5),
-    turningHeadW: smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4,
+    // Twice a two-decimal HALF-width, so the unit's centre and both edges stay on the file's two-decimal grid.
+    turningHeadW: 2 * round2px(((smufl ? sp(smufl.glyph('noteheadBlack').widthSp) : 12.4) * TURNING_HEAD_SCALE) / 2),
     turningAccW: (alter) => {
       if (smufl) {
         const name = ACCIDENTAL_SMUFL[alter];
@@ -1856,10 +1855,10 @@ export function renderAnalyzedStaff(
   const sp = (v: number): number => v * o.lineGap;
   const round2 = (v: number): number => Math.round(v * 100) / 100;
   /** Glyph text at a horizontal CENTRE (or left origin when anchorLeft). */
-  const glyphAt = (name: RequiredGlyphName, x: number, y: number, fill: string, anchorLeft = false): string => {
+  const glyphAt = (name: RequiredGlyphName, x: number, y: number, fill: string, anchorLeft = false, scale = 1): string => {
     const g = smufl!.glyph(name);
-    const gx = anchorLeft ? x : x - sp(g.widthSp / 2);
-    return `<text x="${round2(gx)}" y="${round2(y)}" font-size="${glyphSize}px" font-family="${esc(o.fontFamily)}" fill="${fill}">${g.char}</text>`;
+    const gx = anchorLeft ? x : x - sp(g.widthSp / 2) * scale;
+    return `<text x="${round2(gx)}" y="${round2(y)}" font-size="${scale === 1 ? glyphSize : round2(glyphSize * scale)}px" font-family="${esc(o.fontFamily)}" fill="${fill}">${g.char}</text>`;
   };
   const headNameFor = headNameOf;
 
@@ -3031,7 +3030,7 @@ export function renderAnalyzedStaff(
          with it, so they carry `data-analysis` like the head they serve and
          the loupe's filter drops them with the rest (N.71's argument for the
          handle, made again). */
-      for (const l of drawLedgerLines(tx, ty, TURNING_COLOUR, 0.85)) {
+      for (const l of drawLedgerLines(tx, ty, TURNING_COLOUR, 1)) {
         parts.push(placeholderMark(a.placeholder, analysisMark(l, 'turning-ledger'), 'tag'));
       }
 
@@ -3048,9 +3047,9 @@ export function renderAnalyzedStaff(
         turningAcc[tKey] = tp.alter;
       }
       if (smufl) {
-        parts.push(placeholderMark(a.placeholder, analysisMark(glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR).replace('<text ', '<text opacity="0.85" '), 'turning-notehead'), { cx: tx, cy: ty, d: sp(smufl!.glyph('noteheadHalf').bBoxNE[1] - smufl!.glyph('noteheadHalf').bBoxSW[1]), space: o.lineGap }));
+        parts.push(placeholderMark(a.placeholder, analysisMark(glyphAt('noteheadBlack', tx, ty, TURNING_COLOUR, false, TURNING_HEAD_SCALE), 'turning-notehead'), { cx: tx, cy: ty, d: sp(smufl!.glyph('noteheadHalf').bBoxNE[1] - smufl!.glyph('noteheadHalf').bBoxSW[1]) * TURNING_HEAD_SCALE, space: o.lineGap }));
       } else {
-        parts.push(placeholderMark(a.placeholder, `<ellipse data-analysis="turning-notehead" cx="${round2(tx)}" cy="${ty}" rx="6" ry="4.4" fill="${TURNING_COLOUR}" opacity="0.85" transform="rotate(-18 ${round2(tx)} ${ty})"/>`, { cx: tx, cy: ty, d: rotatedEllipseHeight(6, 4.4, 18), space: o.lineGap }));
+        parts.push(placeholderMark(a.placeholder, `<ellipse data-analysis="turning-notehead" cx="${round2(tx)}" cy="${ty}" rx="${round2(6 * TURNING_HEAD_SCALE)}" ry="${round2(4.4 * TURNING_HEAD_SCALE)}" fill="${TURNING_COLOUR}" transform="rotate(-18 ${round2(tx)} ${ty})"/>`, { cx: tx, cy: ty, d: rotatedEllipseHeight(6 * TURNING_HEAD_SCALE, 4.4 * TURNING_HEAD_SCALE, 18), space: o.lineGap }));
       }
       lowestInk = Math.max(lowestInk, ty + 6);
       highestInk = Math.min(highestInk, ty - 6);

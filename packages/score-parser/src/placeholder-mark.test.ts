@@ -11,7 +11,7 @@
 import { describe, expect, it } from 'vitest';
 import { placeholderMark, rotatedEllipseHeight, PLACEHOLDER_DASH, PLACEHOLDER_HOLLOW_STROKE_SP } from './placeholder-mark';
 import { analyzeScore } from './overlay-engine';
-import { renderAnalyzedStaff, type StaffRenderOptions } from './staff-renderer';
+import { renderAnalyzedStaff, TURNING_HEAD_SCALE, type StaffRenderOptions } from './staff-renderer';
 import { demoProfile, demoResolver, demoScore, syntheticSmuflFont } from './demo-fixture';
 import type { VoiceProfileSnapshot } from './analysis-types';
 
@@ -32,15 +32,15 @@ describe('placeholderMark', () => {
   });
 
   it('tags a mark drawn solid, and changes nothing else', () => {
-    const m = '<text data-analysis="turning-accidental" x="1" fill="#9585A2">♯</text>';
-    expect(placeholderMark(true, m, 'tag')).toBe('<text data-placeholder="true" data-analysis="turning-accidental" x="1" fill="#9585A2">♯</text>');
+    const m = '<text data-analysis="turning-accidental" x="1" fill="#6C4D8C">♯</text>';
+    expect(placeholderMark(true, m, 'tag')).toBe('<text data-placeholder="true" data-analysis="turning-accidental" x="1" fill="#6C4D8C">♯</text>');
   });
 
   it('draws a notehead as a hollow circle of the given height: solid, in its own colour, at its own opacity (row 78b)', () => {
-    const out = placeholderMark(true, '<ellipse data-analysis="turning-notehead" cx="1" fill="#9585A2" opacity="0.85"/>', { cx: 10, cy: 20, d: 12.77, space: 12 });
+    const out = placeholderMark(true, '<ellipse data-analysis="turning-notehead" cx="1" fill="#6C4D8C" opacity="0.85"/>', { cx: 10, cy: 20, d: 12.77, space: 12 });
     const w = PLACEHOLDER_HOLLOW_STROKE_SP * 12;
     expect(out).toBe(
-      `<circle data-placeholder="true" data-analysis="turning-notehead" cx="10" cy="20" r="${Math.round(((12.77 - w) / 2) * 100) / 100}" fill="none" stroke="#9585A2" stroke-width="${Math.round(w * 100) / 100}" opacity="0.85"/>`,
+      `<circle data-placeholder="true" data-analysis="turning-notehead" cx="10" cy="20" r="${Math.round(((12.77 - w) / 2) * 100) / 100}" fill="none" stroke="#6C4D8C" stroke-width="${Math.round(w * 100) / 100}" opacity="0.85"/>`,
     );
     expect(out).not.toContain('stroke-dasharray');
   });
@@ -86,11 +86,11 @@ describe.each([
     expect(heads.length).toBeGreaterThan(hollow.length);
     const space = 12; // the renderer's default lineGap
     const half = options?.font ? options.font.glyph('noteheadHalf') : null;
-    const d = half ? (half.bBoxNE[1] - half.bBoxSW[1]) * space : rotatedEllipseHeight(6, 4.4, 18);
+    const d = (half ? (half.bBoxNE[1] - half.bBoxSW[1]) * space : rotatedEllipseHeight(6, 4.4, 18)) * TURNING_HEAD_SCALE; // cue size, row 165
     for (const m of hollow) {
       expect(m.startsWith('<circle ')).toBe(true);
       expect(m).toContain('fill="none"');
-      expect(m).toContain('opacity="0.85"');
+      expect(m).not.toContain('opacity'); // full opacity since row 165
       expect(m).not.toContain('stroke-dasharray');
       const r = Number(/ r="([\d.]+)"/.exec(m)![1]);
       const w = Number(/ stroke-width="([\d.]+)"/.exec(m)![1]);
