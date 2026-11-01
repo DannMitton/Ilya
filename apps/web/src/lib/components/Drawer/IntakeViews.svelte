@@ -228,6 +228,7 @@
 		controls="intake-view-panel"
 		name={t('source.heading', language)}
 		onchoose={(id) => inputViews.show(id as InputView)}
+		activeFill="var(--sage-desk)"
 	/>
 </div>
 
