@@ -1010,9 +1010,9 @@
 						legendItems={markupLegend}
 						{notationFont}
 						onheightchange={handleHeaderHeight}
-						versionAccent="#9585A2"
-						markAccent="#9585A2"
-						ruleAccent="#9585A2"
+						versionAccent="var(--lavender-ink)"
+						markAccent="var(--lavender-ink)"
+						ruleAccent="var(--lavender)"
 						labelInk="var(--lavender-ink)"
 					/>
 					<div class="score-window" style="top: {contentTop}px; bottom: {contentBottom}px;">
@@ -1020,7 +1020,7 @@
 						{@html page}
 					</div>
 				{:else}
-					<RunningHeader headerText={runningHeader} {tabName} accent="#9585A2" />
+					<RunningHeader headerText={runningHeader} {tabName} accent="var(--lavender)" />
 					<div class="score-window" style="top: {subsequentTop}px; bottom: {contentBottom}px;">
 						{@html page}
 					</div>
@@ -1028,7 +1028,7 @@
 				{#if i === scorePages.length - 1 && notesPlan.onLast && lastNotesTop !== null}
 					<NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} sheet={notesPlan.onLast} top={lastNotesTop} bottom={contentBottom} />
 				{/if}
-				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={[]} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="#9585A2" {notationFont} onheightchange={i === 0 ? handleFooterHeight : undefined} />
+				<PageFooter pageNumber={i + 1} totalPages={totalPages} {language} legendItems={[]} broadNote={showBroadNote ? broadNoteText : undefined} hairlineAccent="var(--lavender)" {notationFont} onheightchange={i === 0 ? handleFooterHeight : undefined} />
 			</article>
 		{/each}
 		{#each notesSheets as sheet, j (j)}
@@ -1041,9 +1041,9 @@
 				style="width: {dims.width}px; height: {dims.height}px;"
 				aria-label={T('profile.notesPageAria')}
 			>
-				<RunningHeader headerText={runningHeader} {tabName} accent="#9585A2" />
+				<RunningHeader headerText={runningHeader} {tabName} accent="var(--lavender)" />
 				<NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} {sheet} top={subsequentTop} bottom={contentBottom} />
-				<PageFooter pageNumber={totalPages - notesSheets.length + j + 1} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="#9585A2" />
+				<PageFooter pageNumber={totalPages - notesSheets.length + j + 1} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="var(--lavender)" />
 			</article>
 		{/each}
 		{#if hasCommentaryPage}<div style="position: relative; width: {dims.width}px; height: 0;"><NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} onmeasure={(m) => (notesMeasure = m)} /></div>{/if}
@@ -1095,9 +1095,9 @@
 		legendItems={markupLegend}
 		{notationFont}
 		onheightchange={handleHeaderHeight}
-		versionAccent="#9585A2"
-		markAccent="#9585A2"
-		ruleAccent="#9585A2"
+		versionAccent="var(--lavender-ink)"
+		markAccent="var(--lavender-ink)"
+		ruleAccent="var(--lavender)"
 		labelInk="var(--lavender-ink)"
 	/>
 
@@ -1132,7 +1132,7 @@
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin. The
 	     Markup legend is drawn by the header, on the subtitle's line (walk
 	     finding 2026-10-09), so the footer's legend row stays empty. -->
-	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={[]} hairlineAccent="#9585A2" {notationFont} onheightchange={handleFooterHeight} />
+	<PageFooter pageNumber={1} totalPages={1} {language} legendItems={[]} hairlineAccent="var(--lavender)" {notationFont} onheightchange={handleFooterHeight} />
 </article>
 </div>
 {/if}
@@ -1168,7 +1168,7 @@
 	   the score, and the drawer manipulates while the page displays and prints. */
 	:global(rect[data-selection-ring]) {
 		fill: none;
-		stroke: var(--lavender, #9585a2);
+		stroke: var(--lavender);
 		stroke-width: 2;
 		pointer-events: none;
 	}

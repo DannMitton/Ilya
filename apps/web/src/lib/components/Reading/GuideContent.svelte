@@ -630,7 +630,7 @@
 	}
 
 	.about-website a {
-		color: var(--cobalt, #748CB9);
+		color: var(--cobalt-ink);
 		text-decoration: none;
 	}
 

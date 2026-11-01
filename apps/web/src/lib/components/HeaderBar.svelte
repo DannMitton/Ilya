@@ -70,16 +70,21 @@
 
 	/* ── Tab-responsive background ────────────────────────── */
 
+	/* Each bar sets its band and its family's jewel; the language pill and the
+	   badge below read the jewel, so a family's colours are written once. */
 	.header-bar.tab-text {
-		background: var(--sage, #839275);
+		background: var(--sage);
+		--tab-jewel: var(--sage-jewel);
 	}
 
 	.header-bar.tab-learn {
-		background: var(--umber, #A38669);
+		background: var(--slate);
+		--tab-jewel: var(--slate-jewel);
 	}
 
 	.header-bar.tab-guide {
-		background: var(--cobalt, #748CB9);
+		background: var(--cobalt);
+		--tab-jewel: var(--cobalt-jewel);
 	}
 
 	/* FOUR destinations, four hues. Ruled by Dann 2026-08-19 during the
@@ -91,16 +96,18 @@
 	   option, and its hover underline) already key to --lavender and
 	   were never changed. */
 	.header-bar.tab-markup {
-		background: var(--lavender, #9585A2);
+		background: var(--lavender);
+		--tab-jewel: var(--lavender-jewel);
 	}
 
 	/* N.127 increment 1. Insights' governing colour is dusty rose, ruled by
 	   Dann 2026-09-11, so the bar takes rose. Learn carried rose too until
-	   stage 4 of the colour story moved it to umber, 2026-09-14; Insights
+	   stage 4 of the colour story moved it to slate (then umber), 2026-09-14; Insights
 	   keeps rose, and its sigil version and language chip below keep rose's
 	   values. */
 	.header-bar.tab-insights {
-		background: var(--rose, #AB7F7F);
+		background: var(--rose);
+		--tab-jewel: var(--rose-jewel);
 	}
 
 	/* ── [Ilya] sigil: version nestled in y descender ─────── */
@@ -134,38 +141,19 @@
 		left: 34px;
 		font-family: var(--font-sans);
 		font-size: 10px;
-		color: rgba(255, 255, 255, 0.8);
+		color: #fff;
 		font-weight: 600;
 		font-variant-caps: all-small-caps;
 		letter-spacing: 0.04em;
 		line-height: 1;
 		padding: 0 3px;
 		border-radius: 2px;
+		/* ONE colour for all five bars (row 165): white text on a veil of the
+		   family's jewel over the band. 57 percent is the smallest whole percent
+		   that puts the white at 4.5:1 or better on all five bars (sage is the
+		   limit, 4.53:1; the ruled 22 percent measures 3.49 to 3.97 on four). */
+		background: color-mix(in srgb, var(--tab-jewel) 57%, transparent);
 		transition: background-color 300ms ease;
-	}
-
-	.tab-text .sigil-version {
-		background: var(--sage-deep, #7A8A6C);
-	}
-
-	.tab-learn .sigil-version {
-		background: var(--umber-chip, #82664A);
-	}
-
-	.tab-guide .sigil-version {
-		background: #4D6387;
-	}
-
-	/* Deeper shade of --lavender as it stood before stage 4 (#8E7E9B), computed the same way the
-	   Learn and Guide deepened badge shades were hand-picked, not a token
-	   that exists yet. If Kimi or Dann want a precise locked value, this is
-	   the one to revisit. */
-	.tab-markup .sigil-version {
-		background: #74677F;
-	}
-
-	.tab-insights .sigil-version {
-		background: #8F6A6A;
 	}
 
 	/* `.head-right`, `.head-pill` AND THE 1400 px ANCHOR THAT STOOD THE PAIR
@@ -201,31 +189,15 @@
 		white-space: nowrap;
 	}
 
-	/* The chip is the band's own hue one step down, white on it, ratified
-	   by Dann 2026-08-20 as option D from a drawing. Guide alone takes the
-	   hairline, drawn because its chip was its band; since stage 4
-	   (2026-09-14) the chip has its own value and the hairline was left in
-	   place. The five values live in app.css. */
+	/* The pill is the family's jewel step, white on it (row 165). Guide alone
+	   keeps its hairline. The five values live in app.css. */
 
-	.tab-text .lang-pill {
-		background: var(--sage-chip, #637156);
-	}
-
-	.tab-learn .lang-pill {
-		background: var(--umber-chip, #82664A);
+	.lang-pill {
+		background: var(--tab-jewel);
 	}
 
 	.tab-guide .lang-pill {
-		background: var(--cobalt-chip, #556C96);
 		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
-	}
-
-	.tab-markup .lang-pill {
-		background: var(--lavender-chip, #746580);
-	}
-
-	.tab-insights .lang-pill {
-		background: var(--rose-chip, #885F60);
 	}
 
 	/* Hover is NOT ruled by the brief and this is the smallest thing that

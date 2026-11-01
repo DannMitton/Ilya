@@ -350,14 +350,14 @@
 		border: 0;
 		background: none;
 		font: inherit;
-		color: var(--lavender-ink, #6b5b7a);
+		color: var(--lavender-ink);
 		text-decoration: underline;
 		text-underline-offset: 2px;
 		cursor: pointer;
 	}
 
 	.tempo-link:focus-visible {
-		outline: 2px solid var(--lavender, #9585a2);
+		outline: 2px solid var(--lavender);
 		outline-offset: 2px;
 		border-radius: 3px;
 	}
@@ -376,12 +376,12 @@
 	}
 
 	.under {
-		background: #e2d2d2;
-		box-shadow: inset 0 0 0 1px #b48a8a;
+		background: var(--rose-wash);
+		box-shadow: inset 0 0 0 1px var(--rose);
 	}
 
 	.within {
-		background: #b48a8a;
+		background: var(--rose);
 	}
 
 	.above,
@@ -390,7 +390,7 @@
 	}
 
 	.before {
-		background: #d9c4c4;
+		background: var(--rose-head);
 	}
 
 	/* QUEUE row 69: a row whose turn rests on a placeholder fR1 is drawn dashed, as an outline. */
@@ -401,7 +401,7 @@
 	}
 
 	.track.dashed .before {
-		border: 1px dashed #b48a8a;
+		border: 1px dashed var(--rose);
 	}
 
 	.track.dashed .past {
@@ -464,7 +464,7 @@
 	}
 
 	.ring-before {
-		stroke: #d9c4c4;
+		stroke: var(--rose-head);
 	}
 
 	.ring-past {

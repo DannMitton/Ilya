@@ -168,7 +168,7 @@
     transform: translateX(-50%);
     width: min(480px, calc(100vw - 32px));
     background: var(--paper, #f5f0e8);
-    border: 1px solid var(--sage, #839275);
+    border: 1px solid var(--sage);
     border-radius: 8px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.12);
     padding: 20px 24px;
@@ -211,7 +211,7 @@
     font-family: 'Source Sans 3', sans-serif;
     font-size: 13px;
     font-weight: 600;
-    background: var(--sage, #839275);
+    background: var(--sage-jewel);
     color: #fff;
     border: none;
     border-radius: 999px;
@@ -220,7 +220,7 @@
     transition: background 0.15s;
   }
 
-  .install-btn-primary:hover { background: var(--sage-deep, #7A8A6C); }
+  .install-btn-primary:hover { background: var(--sage-ink); }
 
   /* PILL ENDS, N.108 increment 4. Ruled by Dann 2026-09-03 from the
      calibration ritual's own two buttons (`CalibrationWizard.svelte`'s

@@ -216,12 +216,12 @@
 	   way, per the brief. */
 	.loupe-syl-slot.is-selected {
 		background: #ffffff;
-		outline: 1.4px solid var(--lavender, #9585a2);
+		outline: 1.4px solid var(--lavender);
 		outline-offset: -1.4px;
 		border-radius: 4px;
 	}
 	.loupe-syl-slot:focus-visible {
-		outline: 2px solid var(--lavender, #9585a2);
+		outline: 2px solid var(--lavender);
 		outline-offset: 1px;
 	}
 

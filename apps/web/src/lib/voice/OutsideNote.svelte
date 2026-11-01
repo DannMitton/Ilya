@@ -83,6 +83,6 @@
 	}
 	.outside-actions button:hover {
 		border-color: var(--sage);
-		color: var(--sage);
+		color: var(--sage-ink);
 	}
 </style>

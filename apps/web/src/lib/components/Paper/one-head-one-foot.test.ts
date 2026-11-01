@@ -25,7 +25,7 @@ const insights = read('../../insights/InsightsPane.svelte');
 describe('one running head for all three tabs', () => {
 	it('names the tab on every page from page 2 on', () => {
 		expect(textN).toMatch(/<RunningHeader[^>]*tabName=\{t\('tab\.text', language\)\}/);
-		expect(markup).toMatch(/<RunningHeader headerText=\{runningHeader\} \{tabName\} accent="#9585A2"/);
+		expect(markup).toMatch(/<RunningHeader headerText=\{runningHeader\} \{tabName\} accent="var\(--lavender\)"/);
 		expect(markup).toContain("const tabName = $derived(T('tab.markedScore'));");
 		// Insights draws its pages in one loop since QUEUE row 66, so one call serves every page from 2 on.
 		expect(insights).toMatch(/<RunningHeader headerText=\{runningHeader\} tabName=\{T\('tab\.insights'\)\}/);
@@ -54,7 +54,7 @@ describe('one running head for all three tabs', () => {
 describe('one footer for all three tabs', () => {
 	it('Insights draws PageFooter, its line in rose; its notes are endnotes, not above the line (QUEUE row 79)', () => {
 		expect(insights).toContain('<PageFooter');
-		expect(insights).toContain('hairlineAccent="var(--rose, #ab7f7f)"');
+		expect(insights).toContain('hairlineAccent="var(--rose)"');
 		expect(insights).not.toContain('{#snippet apparatus()}');
 		expect(insights).toContain('notesBlock(methodLine');
 		expect(insights).not.toContain('class="insights-foot"');

@@ -153,7 +153,7 @@
 	}
 
 	.bar {
-		fill: var(--rose-chip);
+		fill: var(--rose-jewel);
 	}
 
 	.band {

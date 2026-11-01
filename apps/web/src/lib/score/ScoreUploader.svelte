@@ -773,8 +773,8 @@
 		flex-direction: column;
 		gap: 0.4rem;
 		padding: 0.6rem 0.7rem;
-		border-left: 3px solid #7c6bb0; /* lavender, denigma tier (Round 9 Item 1) */
-		background: rgba(124, 107, 176, 0.08);
+		border-left: 3px solid var(--lavender); /* lavender, denigma tier (Round 9 Item 1) */
+		background: color-mix(in srgb, var(--lavender) 8%, transparent);
 		border-radius: 3px;
 	}
 

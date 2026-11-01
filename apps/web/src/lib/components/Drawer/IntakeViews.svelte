@@ -303,7 +303,7 @@
 	   `3px solid var(--sage)`. THE HUE IS UNCHANGED AND MUST STAY: sage
 	   names the text intake and lavender names the score intake, which is
 	   hue naming place, and Dann ruled that right. Every lighter sage token
-	   measures worse against the white fill than #839275's own 3.32:1, so
+	   measures worse against the white fill than the old sage band's own 3.32:1, so
 	   weight is the only lever that does not cost contrast.
 
 	   The body font stays `var(--font-serif)`. Its contents are a poem, so
@@ -415,7 +415,7 @@
 	}
 
 	.text-input:focus {
-		border-color: var(--sage-deep, #7A8A6C);
+		border-color: var(--sage-jewel);
 	}
 
 	/* RULED by Dann 2026-08-20: "just make it consistent with its twin."

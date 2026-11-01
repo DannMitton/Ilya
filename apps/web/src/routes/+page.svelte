@@ -4821,7 +4821,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	}
 
 	:global(.gt-cursive-h) {
-		border-bottom-color: #8ba48b !important;
+		border-bottom-color: var(--sage) !important;
 		border-bottom-width: 3px !important;
 	}
 
@@ -4874,7 +4874,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 
 	:global(.gt-cursive) {
 		background: #ebeee8 !important;
-		color: #8ba48b;
+		color: var(--sage-ink);
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
 		font-style: normal;
 		font-size: 0.6rem !important;
@@ -4886,12 +4886,12 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		font-weight: 700;
 		letter-spacing: 0.12em;
 		line-height: 48px;
-		color: var(--umber, #A38669);
+		color: var(--slate-ink);
 	}
 
 	:global(.gt-hi) {
-		background: #F0D8D8 !important;
-		box-shadow: inset 0 0 0 1.5px #C28888;
+		background: var(--rose-desk) !important;
+		box-shadow: inset 0 0 0 1.5px var(--rose);
 	}
 
 	:global(.gt-obsolete td) { background: #f8f6f0 !important; }
@@ -5076,22 +5076,22 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	   the same four. See the element's own comment. */
 
 	.app-content.tab-text {
-		--desk-fill: var(--sage-desk, #CDD3C8);
+		--desk-fill: var(--sage-desk);
 	}
 
 	.app-content.tab-learn {
-		--desk-fill: var(--umber-desk, #DACFC3);
+		--desk-fill: var(--slate-desk);
 	}
 
 	.app-content.tab-guide {
-		--desk-fill: var(--cobalt-desk, #C7D1E3);
+		--desk-fill: var(--cobalt-desk);
 	}
 
 	/* N.127: Insights' desk, rose, ruled by Dann 2026-09-11 as the document's
 	   governing colour. It reads rose's own desk token. Learn read it too until
 	   stage 4 of the colour story moved Learn to umber, 2026-09-14. */
 	.app-content.tab-insights {
-		--desk-fill: var(--rose-desk, #DDCCCC);
+		--desk-fill: var(--rose-desk);
 	}
 
 	.app-content.tab-markup {
@@ -5103,7 +5103,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		   other three. It is not --surround-voice, which is the calibration
 		   pacifier band on white and stays where it is. The bar moves with
 		   the desk (HeaderBar.svelte, .header-bar.tab-markup). */
-		--desk-fill: var(--lavender-desk, #D5CEDA);
+		--desk-fill: var(--lavender-desk);
 	}
 
 	/* ── Floating Paper: the shadow ────────────────────────── */
@@ -5274,7 +5274,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	}
 	/* ── Editorial mark callout (scholarly departure/note) ──── */
 	:global(.learn-callout) {
-		border-left: 4px solid var(--umber, #A38669);
+		border-left: 4px solid var(--slate);
 		border-top: none;
 		border-right: none;
 		border-bottom: none;
@@ -5291,7 +5291,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		font-variant: small-caps;
 		font-weight: 600;
 		letter-spacing: 0.05em;
-		color: var(--umber, #A38669);
+		color: var(--slate-ink);
 		margin-bottom: 0.5rem;
 		margin-left: -4px;
 		font-family: var(--font-sans, 'Source Sans 3', sans-serif);
@@ -5333,18 +5333,18 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	.main-content.tab-learn :global(.reading-inner h2),
 	.main-content.tab-learn :global(.reading-inner h3),
 	.main-content.tab-learn :global(.reading-inner h4) {
-		color: var(--umber, #A38669);
+		color: var(--slate-ink);
 	}
 
 	.main-content.tab-guide :global(.reading-inner h1),
 	.main-content.tab-guide :global(.reading-inner h2),
 	.main-content.tab-guide :global(.reading-inner h3),
 	.main-content.tab-guide :global(.reading-inner h4) {
-		color: var(--cobalt, #748CB9);
+		color: var(--cobalt-ink);
 	}
 
 	.main-content.tab-guide :global(.reading-inner h3) {
-		border-top-color: var(--cobalt, #748CB9);
+		border-top-color: var(--cobalt);
 	}
 
 	/* ── Text input field: the sage border (item 6) ────────
@@ -5546,7 +5546,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		border: none;
 		border-radius: 999px;
 		padding: 0.35rem 0.9rem;
-		background: var(--sage, #8a9b7e);
+		background: var(--sage-jewel);
 		color: #fff;
 		font-family: inherit;
 		font-size: 0.85rem;

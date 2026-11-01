@@ -129,7 +129,7 @@
 
 	.fit-row > span {
 		padding: 5px 0 4px;
-		border-top: 1px solid rgba(171, 127, 127, 0.35);
+		border-top: 1px solid color-mix(in srgb, var(--rose) 35%, transparent);
 	}
 
 	.fit-head > span {

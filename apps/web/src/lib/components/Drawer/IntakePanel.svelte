@@ -605,7 +605,7 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 
 	/* ── THE SAGE HOVER (N.65), KEPT AND NARROWED ───────────
 	   Dann's ruling, 2026-08-20: "Can the text input field have a sage
-	   mouseover?" It is `--sage` #839275 at 6 percent, and it stays bound to
+	   mouseover?" It is `--sage` at 6 percent, and it stays bound to
 	   `sourceIsEmpty`, which is his own correction of the same day: an
 	   unconditional hover would tint the singer's poem every time the cursor
 	   crossed it.
@@ -614,7 +614,7 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 	   same 6 percent in `--lavender`, and there is nothing left for it
 	   to describe. */
 	.intake.empty:hover {
-		background: rgba(131, 146, 117, 0.06);
+		background: color-mix(in srgb, var(--sage) 6%, transparent);
 	}
 
 	/* THE DRAG STATE IS THE SCORE BOX'S, at its own doubled tint, moved onto
@@ -622,7 +622,7 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 	   `rgba(142, 126, 155, 0.12)`; this is the same 12 percent in the sage the
 	   one field hovers in, because one field means one hue. */
 	.intake.dragging {
-		background: rgba(131, 146, 117, 0.12);
+		background: color-mix(in srgb, var(--sage) 12%, transparent);
 	}
 
 	/* ── The receipts (the prototype `:192-:196`) ───────────
@@ -846,7 +846,7 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 
 	.btn-primary {
 		color: white;
-		background: var(--sage);
+		background: var(--sage-jewel);
 	}
 
 	.action-btn:hover:not(:disabled) {

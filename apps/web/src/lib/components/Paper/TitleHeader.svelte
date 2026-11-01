@@ -69,7 +69,7 @@
 		aside?: Snippet;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage)', markAccent = 'var(--sage)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined, legendItems = [], notationFont = null, aside }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage-ink)', markAccent = 'var(--sage-ink)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined, legendItems = [], notationFont = null, aside }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -240,7 +240,7 @@
 		display: inline-block;
 		margin-bottom: 8px;
 		margin-left: -6px;
-		color: var(--sage);
+		color: var(--sage-ink);
 		font-size: 24px;
 		line-height: 1;
 	}
@@ -260,7 +260,7 @@
 		left: 36px;
 		font-family: var(--font-sans);
 		font-size: 12px;
-		color: var(--sage);
+		color: var(--sage-ink);
 		font-weight: 400;
 		font-variant-caps: all-small-caps;
 		letter-spacing: 0.04em;

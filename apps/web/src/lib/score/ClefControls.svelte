@@ -247,7 +247,7 @@
 	}
 
 	.clef-hit:focus-visible {
-		outline: 2px solid var(--lavender, #9585a2);
+		outline: 2px solid var(--lavender);
 		outline-offset: 2px;
 	}
 
@@ -260,7 +260,7 @@
 		pointer-events: auto;
 		background: var(--paper-cream, #f6f1e6);
 		color: var(--ink-primary, #1a1612);
-		border: 1px solid var(--lavender, #9585a2);
+		border: 1px solid var(--lavender);
 		box-shadow: 0 6px 24px rgba(26, 22, 18, 0.18);
 		font-family: var(--font-sans);
 	}
@@ -310,7 +310,7 @@
 		min-height: 44px;
 		padding: 0 0.8rem;
 		box-sizing: border-box;
-		border: 1px solid var(--lavender, #9585a2);
+		border: 1px solid var(--lavender);
 		border-radius: 10px;
 		background: transparent;
 		color: inherit;
@@ -321,12 +321,12 @@
 	}
 
 	.choice.on {
-		background: var(--lavender, #9585a2);
+		background: var(--lavender-jewel);
 		color: #fff;
 	}
 
 	.choice:focus-visible {
-		outline: 2px solid var(--lavender, #9585a2);
+		outline: 2px solid var(--lavender);
 		outline-offset: 2px;
 	}
 

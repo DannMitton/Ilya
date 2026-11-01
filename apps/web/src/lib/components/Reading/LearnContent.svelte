@@ -4071,8 +4071,8 @@
 		width: 18px;
 		height: 18px;
 		border-radius: 3px;
-		background: #F0D8D8;
-		border: 1.5px solid #C28888;
+		background: var(--rose-desk);
+		border: 1.5px solid var(--rose);
 		flex-shrink: 0;
 	}
 

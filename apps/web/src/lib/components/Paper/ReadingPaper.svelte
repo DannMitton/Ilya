@@ -81,7 +81,7 @@
 		font-weight: 600;
 		color: var(--ink-primary, #1a1612);
 		line-height: 1.35;
-		border-top: 1px solid var(--umber, #A38669);
+		border-top: 1px solid var(--slate);
 		margin: 3.5rem 0 1.25rem 0;
 		padding-top: 1.25rem;
 	}
@@ -130,11 +130,11 @@
 	}
 
 	.reading-inner :global(.band-learn) {
-		background: var(--umber, #A38669);
+		background: var(--slate);
 	}
 
 	.reading-inner :global(.band-guide) {
-		background: var(--cobalt, #748CB9);
+		background: var(--cobalt);
 	}
 
 	.reading-inner :global(.band-kicker) {
@@ -146,10 +146,10 @@
 	}
 
 	/* FOUR CLASSES AND ONE TYPE, AND THE COUNT IS THE WHOLE POINT.
-	   `+page.svelte:3051-3061` paints every reading heading in its tab's
-	   hue: `.main-content.tab-learn :global(.reading-inner h3)`, three
-	   classes and one type. A band title styled at three or fewer lands
-	   dusty rose on dusty rose and cobalt on cobalt, which renders a 40px
+	   `+page.svelte`'s "Tab-scoped heading colours" rules paint every reading
+	   heading in its tab's INK: `.main-content.tab-learn :global(.reading-inner h3)`,
+	   three classes and one type. A band title styled at three or fewer lands
+	   ink on its own band, which renders a 40px
 	   title that is present, sized, and completely invisible. Measured on
 	   the built page 2026-08-21, before this selector was widened.
 	   `.reading-paper` and the band's own colour class carry it to four,
@@ -205,10 +205,14 @@
 		padding-top: 0;
 	}
 
+	/* Upright, 18.7px, 700, white: that makes it large text, which is 3:1 on
+	   every band (row 165; 18.67px bold is the WCAG 2.2 large-text line). */
 	.reading-inner :global(.band-deck) {
 		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-style: italic;
-		font-size: 15px;
+		font-style: normal;
+		font-size: 18.7px;
+		font-weight: 700;
+		color: #fff;
 		line-height: 1.45;
 		margin-top: 12px;
 		max-width: 330px;
@@ -330,7 +334,7 @@
 	.reading-inner :global(code) {
 		font-family: var(--font-mono, 'Source Code Pro', monospace);
 		font-size: 0.95em;
-		background: rgba(131, 146, 117, 0.1);
+		background: color-mix(in srgb, var(--sage) 10%, transparent);
 		padding: 0.1em 0.35em;
 		border-radius: 3px;
 	}
@@ -340,8 +344,8 @@
 	.reading-inner :global(blockquote) {
 		margin: 1.5rem 0;
 		padding: 1rem 1.25rem;
-		border-left: 3px solid var(--sage, #839275);
-		background: rgba(131, 146, 117, 0.06);
+		border-left: 3px solid var(--sage);
+		background: color-mix(in srgb, var(--sage) 6%, transparent);
 		border-radius: 0 4px 4px 0;
 	}
 
@@ -373,7 +377,7 @@
 	/* ── Links ─────────────────────────────────────────────── */
 
 	.reading-inner :global(a) {
-		color: var(--rose, #AB7F7F);
+		color: var(--rose-ink);
 		text-decoration: underline;
 		text-decoration-thickness: 1px;
 		text-underline-offset: 2px;
@@ -448,7 +452,7 @@
 	}
 
 	.reading-inner :global(tbody tr:hover) {
-		background: rgba(131, 146, 117, 0.04);
+		background: color-mix(in srgb, var(--sage) 4%, transparent);
 	}
 
 	/* IPA cells: monospace for clarity */
@@ -456,7 +460,7 @@
 	.reading-inner :global(th code) {
 		font-family: var(--font-mono, 'Source Code Pro', monospace);
 		font-size: 0.9em;
-		background: rgba(131, 146, 117, 0.1);
+		background: color-mix(in srgb, var(--sage) 10%, transparent);
 		padding: 0.1em 0.3em;
 		border-radius: 2px;
 	}

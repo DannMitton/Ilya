@@ -70,19 +70,6 @@
 	--slate-jewel: #27425A;
 	--slate-ink: #254057;
 
-	/* RETIRED NAMES, kept as aliases for exactly one commit (row 165 step 1)
-	   so the tree stays green; step 2 moves every consumer and deletes them. */
-	--sage-deep: var(--sage-jewel);
-	--sage-gloss: var(--sage-ink);
-	--sage-chip: var(--sage-jewel);
-	--rose-chip: var(--rose-jewel);
-	--cobalt-chip: var(--cobalt-jewel);
-	--lavender-chip: var(--lavender-jewel);
-	--umber: var(--slate);
-	--umber-desk: var(--slate-desk);
-	--umber-ink: var(--slate-ink);
-	--umber-chip: var(--slate-jewel);
-
 	/* ── Stone palette (UI chrome) ────────────────────────── */
 	--stone-300: #d6d3d1;
 	--stone-500: #78716c;

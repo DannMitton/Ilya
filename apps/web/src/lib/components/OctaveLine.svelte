@@ -83,14 +83,14 @@
 		border: 0;
 		background: none;
 		font: inherit;
-		color: var(--lavender-ink, #6b5b7a);
+		color: var(--lavender-ink);
 		text-decoration: underline;
 		text-underline-offset: 2px;
 		cursor: pointer;
 	}
 
 	.octave-tap:focus-visible {
-		outline: 2px solid var(--lavender, #9585a2);
+		outline: 2px solid var(--lavender);
 		outline-offset: 2px;
 		border-radius: 3px;
 	}

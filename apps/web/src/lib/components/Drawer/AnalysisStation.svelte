@@ -131,7 +131,7 @@
 	   under ANALYSIS's header now, where a negative margin would eat the gap. */
 	.result-summary {
 		font-size: 0.75rem;
-		color: var(--sage);
+		color: var(--sage-ink);
 		font-family: var(--font-sans);
 		margin: 0;
 		min-height: 1.2em;

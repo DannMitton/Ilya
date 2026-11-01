@@ -281,7 +281,7 @@ export const OBLIGATIONS: readonly ContrastObligation[] = [
 		fgToken: 'lavender', fgAlpha: 1.0,
 		fillToken: 'surround-voice', fillAlpha: 1.0, backgroundToken: 'surround-voice',
 		threshold: WCAG.UI_COMPONENT, status: 'owned-exception',
-		note: 'Settled ring at 2.50:1 against the band. Its inner edge against the white interior is 3.74:1, where its legibility comes from in practice; recorded as sub-threshold under the band-governing rule, owned by Dann (2026-05-22). Colour stage 4 (2026-09-14) moved lavender to #9585A2: 2.28:1 against the band and 3.41:1 against the white interior.'
+		note: 'Settled ring at 2.50:1 against the band. Its inner edge against the white interior is 3.74:1, where its legibility comes from in practice; recorded as sub-threshold under the band-governing rule, owned by Dann (2026-05-22). Colour stage 4 (2026-09-14) moved lavender to its then-value (2.28:1 against the band, 3.41:1 against the white interior); row 165 (2026-11-01) moved it to the ratified #9F85BC (2.14:1 against the band and 3.20:1 against the white interior).'
 	},
 
 	// --- Progress arc, against the band (spec v6 §6.6) -------------------------

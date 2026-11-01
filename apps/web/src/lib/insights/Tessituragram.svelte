@@ -22,8 +22,8 @@
 	 * bar, or another label. There are no halos: a label finds a clear place,
 	 * and where none is near a hairline leader joins it to its element.
 	 *
-	 * Colour roles, one per token: `--rose-chip` the bars (about 4.6:1 on cream;
-	 * `--rose` is about 2.9:1, under the 3:1 a graphic needs), `--rose` the
+	 * Colour roles, one per token: `--rose-jewel` the bars (5.71:1 on cream;
+	 * `--rose` is 2.69:1, under the 3:1 a graphic needs), `--rose` the
 	 * tessitura band, `--rose-ink` a bar with a finding, every label but the
 	 * line names (which are tertiary ink), the passaggio lines, and the leaders.
 	 *
@@ -151,7 +151,7 @@
 		<!-- The bars: time per sounding pitch from one baseline. A finding keeps its bar dark. -->
 		<g opacity={figure.quiet ? 0.5 : 1}>
 			{#each L.rows as r (r.midi)}
-				<rect x={L.barX} y={r.cy - r.height / 2} width={r.length} height={r.height} fill={r.dark ? 'var(--rose-ink)' : 'var(--rose-chip)'} />
+				<rect x={L.barX} y={r.cy - r.height / 2} width={r.length} height={r.height} fill={r.dark ? 'var(--rose-ink)' : 'var(--rose-jewel)'} />
 			{/each}
 		</g>
 

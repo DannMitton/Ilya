@@ -533,9 +533,9 @@
 		{language}
 		note={[keyRuler?.header(language), placeholderLine(placeholders, language)]}
 		onheightchange={(h) => (headerHeight = h)}
-		versionAccent="#AB7F7F"
-		markAccent="#AB7F7F"
-		ruleAccent="#AB7F7F"
+		versionAccent="var(--rose-ink)"
+		markAccent="var(--rose-ink)"
+		ruleAccent="var(--rose)"
 		labelInk="var(--rose-ink)"
 	>
 		{#snippet aside()}
@@ -587,7 +587,7 @@
 		<div bind:this={measureEls[k]} style="width: {widthOf(b)}px;">{@render blockAt(k, widthOf(b), true)}</div>
 	{/each}
 	<div class="foot-probe" bind:this={footProbe} style="width: {COLUMN}px;">
-		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" />
+		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose)" />
 	</div>
 </div>
 
@@ -600,7 +600,7 @@
 			{#each flowSegments as seg, j (j)}{@render segment(seg, flowWidth, flowWidth - 2 * 17)}{/each}
 		</div>
 		<div class="flow-foot">
-			<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose, #ab7f7f)" />
+			<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose)" />
 		</div>
 	</div>
 {:else}
@@ -616,13 +616,13 @@
 						{#if n === 0}
 							{@render header()}
 						{:else}
-							<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose, #ab7f7f)" onheightchange={(h) => (runningHeight = h)} />
+							<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose)" onheightchange={(h) => (runningHeight = h)} />
 						{/if}
 						<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px;">
 							{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
 						</div>
 						<!-- QUEUE row 79: the footnote and the method line are endnotes now, in Notes; every page's footer is the same. -->
-						<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose, #ab7f7f)" />
+						<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose)" />
 					</article>
 				{/each}
 			</div>

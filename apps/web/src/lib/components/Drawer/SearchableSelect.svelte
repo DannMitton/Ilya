@@ -284,7 +284,7 @@
 
 	.select-trigger.active {
 		border-color: var(--sage);
-		box-shadow: 0 0 0 2px rgba(131, 146, 117, 0.15);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--sage) 15%, transparent);
 	}
 
 	.trigger-text {
@@ -377,7 +377,7 @@
 
 	.select-option:hover,
 	.select-option.highlighted {
-		background: rgba(131, 146, 117, 0.1);
+		background: color-mix(in srgb, var(--sage) 10%, transparent);
 	}
 
 	.option-primary {
@@ -394,7 +394,7 @@
 
 	.custom-option {
 		font-size: 0.78rem;
-		color: var(--sage);
+		color: var(--sage-ink);
 		font-style: italic;
 		border-top: 1px solid var(--stone-300);
 		min-height: 2.75rem;

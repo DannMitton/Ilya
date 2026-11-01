@@ -469,7 +469,7 @@
 	}
 	.ps-verbs button:hover {
 		border-color: var(--sage);
-		color: var(--sage);
+		color: var(--sage-ink);
 	}
 	.ps-confirm p {
 		margin: 0 0 0.25rem;
@@ -518,7 +518,7 @@
 		padding: 0.375rem 1rem;
 		border-radius: 999px;
 		border: 1px solid transparent;
-		background: var(--lavender);
+		background: var(--lavender-jewel);
 		color: #ffffff;
 		cursor: pointer;
 		transition: opacity 0.12s;

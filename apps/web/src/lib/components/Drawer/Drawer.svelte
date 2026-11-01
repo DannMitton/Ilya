@@ -1035,22 +1035,11 @@
 	}
 
 	/* ── THE GROUP BAND ───────────────────────────────────────
-	   Option A of `drawing-n108-group-headers_r1_2026-09-02.png`, ruled by
-	   Dann 2026-09-02: "a band of full-strength colour with reverse text in a
-	   light neutral", his own drawing over Design's three. "I honestly prefer
-	   mine."
-
-	   THE HUE IS THE LANGUAGE-CHIP TOKEN, one step down from the band hue, and
-	   THE TEXT IS WHITE RATHER THAN CREAM. That is the fix Dann ruled inside
-	   option A on the same day, because the ruled hues fail 4.5:1 against
-	   cream, cobalt included at 4.23:1. Measured on the chips: Piece 4.77:1,
-	   Text 4.58:1, Score markup 4.63:1. NO HEX IS ADDED HERE; all three tokens
-	   are `app.css`'s own, ratified 2026-08-20 as option D of the language
-	   toggle. If a band ever moves, it moves there.
-
-	   THE LABEL RECIPE IS `StationHeader.svelte`'s, reversed: 0.7rem, 600,
-	   0.12em, uppercase. The build brief rules it, and that file's header
-	   records that the recipe moved up here from the station row. */
+	   Option A of `drawing-n108-group-headers_r1_2026-09-02.png` (Dann
+	   2026-09-02), re-ruled 2026-10-30 (row 165): the family's HEAD tint, one
+	   step deeper than its desk, with the label in the family's INK (4.8 to
+	   5.7:1 on the head), not white on a solid bar. Each group sets both below.
+	   The label recipe is `StationHeader.svelte`'s: 0.7rem, 600, 0.12em, uppercase. */
 	/* N.115: THE PADDING MOVED ONTO `.band-toggle`, and its value is unchanged.
 	   The band is a button now, so the 18 px belongs to the thing a singer
 	   presses; leaving it here would have inset the button and put its focus
@@ -1060,7 +1049,6 @@
 		align-items: stretch;
 		height: 40px;
 		margin: 0;
-		color: #fff;
 		font-family: var(--font-sans);
 		font-size: 0.7rem;
 		font-weight: 600;
@@ -1103,7 +1091,8 @@
 	}
 
 	.group-piece .group-band {
-		background: var(--cobalt-chip);
+		background: var(--cobalt-head);
+		color: var(--cobalt-ink);
 	}
 
 	/* INPUT TAKES TEXT'S TOKEN, N.108-5, and that is Dann's ruling rather
@@ -1112,11 +1101,13 @@
 	   and its rule are gone with the band, N.115 increment 2; Text is a fold
 	   inside this band now. */
 	.group-input .group-band {
-		background: var(--sage-chip);
+		background: var(--sage-head);
+		color: var(--sage-ink);
 	}
 
 	.group-score .group-band {
-		background: var(--lavender-chip);
+		background: var(--lavender-head);
+		color: var(--lavender-ink);
 	}
 
 	/* THE SCORE MARKUP GROUP'S FOCUS RING IS LAVENDER, not the global sage.
@@ -1157,15 +1148,15 @@
 	}
 
 	.band-toggle:focus-visible {
-		outline: 2px solid #fff;
+		outline: 2px solid currentColor;
 		outline-offset: -2px;
 	}
 
 	/* THE STATION ROW'S OWN GLYPH AND ITS OWN TWO ROTATIONS
 	   (`StationHeader.svelte`), so one chevron means one thing at both tiers.
 	   Down when closed, up when open, on every band alike. It is BARE, ruled
-	   2026-08-19, and it is white at the band's own opacity rather than a
-	   second colour. */
+	   2026-08-19, and it is the label's ink at the band's own opacity rather
+	   than a second colour. */
 	.band-chevron {
 		flex: none;
 		opacity: 0.85;
@@ -1348,7 +1339,7 @@
 
 	   THE LAVENDER IS NOT LOST EITHER. It was the voice's rule under the S0
 	   slate of 2026-08-19; the voice is inside the Score markup group now, and
-	   that group's band is `--lavender-chip`, the same hue one step down.
+	   that group's band is `--lavender-head`.
 	   The ruling survives in a stronger form, which is the argument Design
 	   made for the takeover's own rule and it holds here for the same reason. */
 
@@ -1394,16 +1385,10 @@
 		animation: bodyIn var(--motion) both;
 	}
 
-	/* THE BAND. `.group-band`'s recipe and the Score markup group's hue,
-	   because this IS that group's Voice station filling the drawer. It
-	   replaces the 2 px lavender rule and the quiet Back this takeover wore
-	   until now. DANN'S RULING OF 2026-08-23 IS NOT REVERSED, IT IS CARRIED:
-	   he ruled that the takeover's rule is lavender, matching
-	   `.wizard-phase`'s border-top, because the takeover is the calibration
-	   ritual. `--lavender-chip` IS `--lavender` one step down
-	   (its declaration in `app.css`), so the hue survives in a stronger form, which is the
-	   argument Design made for it and the same one the anchors' rules made
-	   when they went. */
+	/* THE BAND. `.group-band`'s recipe in the Voice group's hue (lavender head,
+	   lavender ink), because this IS that group's Voice station filling the
+	   drawer. Dann's ruling of 2026-08-23 is carried, not reversed: the
+	   takeover is the calibration ritual and wears lavender. */
 	.takeover-band {
 		display: flex;
 		align-items: center;
@@ -1413,8 +1398,8 @@
 		height: 40px;
 		margin: 0;
 		padding: 0 18px;
-		background: var(--lavender-chip);
-		color: #fff;
+		background: var(--lavender-head);
+		color: var(--lavender-ink);
 		font-family: var(--font-sans);
 		font-size: 0.7rem;
 		font-weight: 600;
@@ -1455,7 +1440,7 @@
 		font-weight: 500;
 		letter-spacing: 0.04em;
 		text-transform: none;
-		color: #fff;
+		color: inherit;
 		background: transparent;
 		border: none;
 		opacity: 0.88;
@@ -1467,7 +1452,7 @@
 	}
 
 	.takeover-back:focus-visible {
-		outline: 2px solid #fff;
+		outline: 2px solid currentColor;
 		outline-offset: -2px;
 	}
 
@@ -1635,11 +1620,11 @@
 	}
 
 	.toc-heading-learn {
-		color: var(--umber, #A38669);
+		color: var(--slate-ink);
 	}
 
 	.toc-heading-guide {
-		color: var(--cobalt, #748CB9);
+		color: var(--cobalt-ink);
 	}
 
 	/* ── TOC base styles ─────────────────────────────────── */
@@ -1676,13 +1661,13 @@
 	}
 
 	.toc-link:hover {
-		border-left-color: rgba(163, 134, 105, 0.4);
-		background: rgba(163, 134, 105, 0.06);
+		border-left-color: color-mix(in srgb, var(--slate) 40%, transparent);
+		background: color-mix(in srgb, var(--slate) 6%, transparent);
 		color: var(--ink-primary, #1a1612);
 	}
 
 	.toc-link:focus-visible {
-		outline: 2px solid var(--sage, #839275);
+		outline: 2px solid var(--sage);
 		outline-offset: -2px;
 		border-radius: 2px;
 	}
@@ -1690,16 +1675,16 @@
 	/* ── Active heading indicator ─────────────────────────── */
 
 	.toc-link.active {
-		border-left-color: var(--umber, #A38669);
+		border-left-color: var(--slate);
 		border-left-width: 4px;
 		color: var(--ink-primary, #1a1612);
-		background: rgba(163, 134, 105, 0.08);
+		background: color-mix(in srgb, var(--slate) 8%, transparent);
 		font-weight: 500;
 		padding-left: calc(0.75rem - 1px);
 	}
 
 	.toc-link.active:hover {
-		border-left-color: var(--umber, #A38669);
+		border-left-color: var(--slate);
 		color: var(--ink-primary, #1a1612);
 	}
 
@@ -1786,7 +1771,7 @@
 	}
 
 	.toc-chevron.contains-active {
-		color: var(--umber, #A38669);
+		color: var(--slate-ink);
 	}
 
 	.toc-chevron-spacer {
@@ -1799,25 +1784,25 @@
 	/* -- Guide tab: cobalt colour identity ----------- */
 
 	.guide-toc .toc-link:hover {
-		border-left-color: rgba(116, 140, 185, 0.4);
-		background: rgba(116, 140, 185, 0.06);
+		border-left-color: color-mix(in srgb, var(--cobalt) 40%, transparent);
+		background: color-mix(in srgb, var(--cobalt) 6%, transparent);
 	}
 
 	.guide-toc .toc-link.active {
-		border-left-color: var(--cobalt, #748CB9);
-		background: rgba(116, 140, 185, 0.08);
+		border-left-color: var(--cobalt);
+		background: color-mix(in srgb, var(--cobalt) 8%, transparent);
 	}
 
 	.guide-toc .toc-link.active:hover {
-		border-left-color: var(--cobalt, #748CB9);
+		border-left-color: var(--cobalt);
 	}
 
 	.guide-toc .toc-chevron.contains-active {
-		color: var(--cobalt, #748CB9);
+		color: var(--cobalt-ink);
 	}
 
 	.toc-chevron:focus-visible {
-		outline: 2px solid var(--sage, #839275);
+		outline: 2px solid var(--sage);
 		outline-offset: -2px;
 		border-radius: 2px;
 	}

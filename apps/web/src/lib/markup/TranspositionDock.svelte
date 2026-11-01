@@ -327,7 +327,7 @@
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
-		background: var(--lavender);
+		background: var(--lavender-jewel);
 		color: #fff;
 		font-weight: 600;
 	}
@@ -410,7 +410,7 @@
 
 	.pill.filled {
 		color: #fff;
-		background: var(--lavender);
+		background: var(--lavender-jewel);
 		border: 1px solid var(--lavender);
 	}
 

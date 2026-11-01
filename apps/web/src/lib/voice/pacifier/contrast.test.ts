@@ -193,9 +193,9 @@ describe('contrast regression pins (spec v6 computed values)', () => {
 	it('working outline is ~3.30:1', () => {
 		expect(byKey('working', 'outline').ratio).toBeCloseTo(3.30, 1);
 	});
-	// Was ~2.50:1 until colour stage 4 (2026-09-14) moved --lavender from
-	// #8E7E9B to #9585A2 (ruling 1 of 4, 2026-09-13), 2.28:1 after that, and
-	// 2.14:1 since row 165 step 1 (2026-11-01) moved it to the ratified #9F85BC.
+	// Was ~2.50:1 until colour stage 4 (2026-09-14) moved --lavender (ruling 1
+	// of 4, 2026-09-13), 2.28:1 after that, and 2.14:1 since row 165 step 1
+	// (2026-11-01) moved it to the ratified #9F85BC.
 	it('captured outline (owned) is ~2.14:1', () => {
 		expect(byKey('captured', 'outline').ratio).toBeCloseTo(2.14, 1);
 	});

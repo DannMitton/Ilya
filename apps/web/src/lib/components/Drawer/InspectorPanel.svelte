@@ -1483,7 +1483,7 @@
 	.word-gloss {
 		font-family: var(--font-serif);
 		font-size: 0.85rem;
-		color: var(--sage);
+		color: var(--sage-ink);
 		font-style: italic;
 		line-height: 1.3;
 	}
@@ -1510,7 +1510,7 @@
 		min-width: 160px;
 		padding: 0.4rem 0.75rem;
 		margin-top: 0.25rem;
-		background: var(--sage);
+		background: var(--sage-jewel);
 		color: #fff;
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
@@ -1524,7 +1524,7 @@
 	}
 
 	.dict-button:hover {
-		background: var(--sage-deep, #7A8A6C);
+		background: var(--sage-ink);
 	}
 
 	.dict-button:focus-visible {
@@ -1533,7 +1533,7 @@
 	}
 
 	.dict-button[aria-expanded="true"] {
-		background: #6B7B5E;
+		background: var(--sage-ink);
 	}
 
 	.dict-expansion-anchor {
@@ -1602,7 +1602,7 @@
 		font-family: var(--font-serif);
 		font-size: 0.85rem;
 		font-style: italic;
-		color: var(--sage);
+		color: var(--sage-ink);
 		padding: 0.3rem 0.4rem;
 		border: 1px solid var(--sage);
 		border-radius: 3px;
@@ -1620,7 +1620,7 @@
 	.dict-capacity {
 		font-family: var(--font-sans);
 		font-size: 0.75rem;
-		color: var(--sage);
+		color: var(--sage-ink);
 		text-align: right;
 		margin: 0;
 	}
@@ -1718,7 +1718,7 @@
 		display: block;
 		font-family: var(--font-serif);
 		font-size: 0.8rem;
-		color: var(--sage);
+		color: var(--sage-ink);
 		font-style: italic;
 	}
 
@@ -1732,7 +1732,7 @@
 
 	.organism {
 		position: relative;
-		background: rgba(131, 146, 117, 0.15);
+		background: color-mix(in srgb, var(--sage) 15%, transparent);
 		border-radius: 0;
 		padding: 2px 1rem 10px;
 		margin-left: -2.5rem;
@@ -1804,7 +1804,7 @@
 	.molecule.is-stressed {
 		border: 2.5px solid var(--sage);
 		padding: 2px;
-		box-shadow: 0 0 0 2px rgba(131, 146, 117, 0.2);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--sage) 20%, transparent);
 	}
 
 	.atom-row {
@@ -1847,8 +1847,8 @@
 
 	.yo-sigla.is-yo {
 		opacity: 0.4;
-		background: var(--sage);
-		border-color: var(--sage);
+		background: var(--sage-jewel);
+		border-color: var(--sage-jewel);
 	}
 
 	.yo-sigla.is-yo .sigil-yo-char {
@@ -1958,7 +1958,7 @@
 	.atom.selected {
 		background: #FAF7F2;
 		border-color: var(--sage);
-		box-shadow: inset 0 0 6px rgba(131, 146, 117, 0.15);
+		box-shadow: inset 0 0 6px color-mix(in srgb, var(--sage) 15%, transparent);
 	}
 
 	/* Subtle blurb indicator dot */
@@ -1991,7 +1991,7 @@
 	.atom.drag-highlight {
 		border-color: var(--sage);
 		background: #faf8f4;
-		box-shadow: 0 0 0 1px rgba(131, 146, 117, 0.25);
+		box-shadow: 0 0 0 1px color-mix(in srgb, var(--sage) 25%, transparent);
 	}
 
 	/* ── Drag preview ghost slot ────────────────────────────── */
@@ -2181,20 +2181,20 @@
 	}
 
 	.stress-circle.is-stressed {
-		background: var(--sage);
-		border-color: var(--sage);
+		background: var(--sage-jewel);
+		border-color: var(--sage-jewel);
 		opacity: 1;
 	}
 
 	.stress-circle.is-stressed:hover {
-		background: var(--sage-deep, #7A8A6C);
-		border-color: var(--sage-deep, #7A8A6C);
+		background: var(--sage-ink);
+		border-color: var(--sage-ink);
 	}
 
 	.stress-circle.is-assigning {
 		border-color: var(--sage);
 		opacity: 1;
-		box-shadow: 0 0 0 2px rgba(131, 146, 117, 0.3);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--sage) 30%, transparent);
 	}
 
 	.stress-icon {
@@ -2417,7 +2417,7 @@
 	.reset-button:hover {
 		opacity: 1;
 		border-color: var(--sage);
-		color: var(--sage);
+		color: var(--sage-ink);
 	}
 
 	.reset-button:focus-visible {

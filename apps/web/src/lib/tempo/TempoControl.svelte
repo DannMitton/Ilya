@@ -176,7 +176,7 @@
 		box-sizing: border-box;
 		width: min(340px, calc(100vw - 24px));
 		padding: 0.8rem 1rem 0.9rem;
-		border: 1px solid var(--lavender, #9585a2);
+		border: 1px solid var(--lavender);
 		border-radius: 12px;
 		background: var(--paper-cream, #f6f1e6);
 		box-shadow: 0 6px 24px rgba(26, 22, 18, 0.18);
@@ -208,7 +208,7 @@
 		min-width: 44px;
 		min-height: 44px;
 		box-sizing: border-box;
-		border: 1px solid var(--lavender, #9585a2);
+		border: 1px solid var(--lavender);
 		border-radius: 10px;
 		background: transparent;
 		color: inherit;
@@ -231,7 +231,7 @@
 	}
 
 	.chip.on {
-		background: var(--lavender, #9585a2);
+		background: var(--lavender-jewel);
 		color: #fff;
 	}
 
@@ -239,7 +239,7 @@
 	.step:focus-visible,
 	.bpm:focus-visible,
 	.use-estimate:focus-visible {
-		outline: 2px solid var(--lavender, #9585a2);
+		outline: 2px solid var(--lavender);
 		outline-offset: 2px;
 	}
 
@@ -273,7 +273,7 @@
 		width: 4.4rem;
 		min-height: 44px;
 		padding: 0 0.4rem;
-		border: 1px solid var(--lavender, #9585a2);
+		border: 1px solid var(--lavender);
 		border-radius: 10px;
 		background: #fff;
 		color: inherit;
@@ -295,7 +295,7 @@
 		background: none;
 		font: inherit;
 		font-size: 0.85rem;
-		color: var(--lavender-ink, #6b5b7a);
+		color: var(--lavender-ink);
 		text-decoration: underline;
 		text-underline-offset: 2px;
 		cursor: pointer;

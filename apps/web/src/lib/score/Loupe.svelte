@@ -2759,7 +2759,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	   gated on the mode AND the panel. A tint, so it reads as state beside the
 	   lavender squircle. `aria-selected` stays on the mode alone. */
 	.loupe-pair-member.chosen {
-		background: var(--lavender-desk, #d5ceda);
+		background: var(--lavender-desk);
 		cursor: default;
 	}
 
@@ -2974,7 +2974,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 
 	.loupe-ring rect {
 		fill: none;
-		stroke: var(--lavender, #9585a2);
+		stroke: var(--lavender);
 	}
 
 	/* NO TEXT SELECTION IN THE MUSIC (calm-loupe slice 7): a selected glyph painted its FONT box, 13 by 193 px on a
@@ -2999,7 +2999,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	   adds no geometry to the SVG and cannot shift a coordinate the renderer
 	   computed. */
 	.loupe :global([data-loupe-selected]) {
-		outline: 2px solid var(--sage, #839275);
+		outline: 2px solid var(--sage);
 		outline-offset: 2px;
 		border-radius: 2px;
 	}

@@ -178,14 +178,14 @@
 	.withheld,
 	.watch-band {
 		box-sizing: border-box;
-		border: 1px solid var(--lavender, #9585a2);
+		border: 1px solid var(--lavender);
 		border-radius: 12px;
 		padding: 0.7rem 1.1rem 0.8rem;
 		background: var(--paper-cream);
 	}
 
 	/* The box's title (Dann's look, 2026-09-28: at 0.8rem in the outline
-	   lavender, #9585A2, he did not see it). Now Insights' `.section-head`,
+	   lavender, the band token, he did not see it). Now Insights' `.section-head`,
 	   which is `TitleHeader.svelte`'s `.metadata-line` recipe, in lavender
 	   label ink: the same title the sister document puts on its boxes, and
 	   --lavender-ink clears 4.5 on cream where --lavender did not. The
@@ -199,7 +199,7 @@
 		letter-spacing: 1.5px;
 		line-height: 1.6;
 		font-variant-caps: all-small-caps;
-		color: var(--lavender-ink, #554660);
+		color: var(--lavender-ink);
 	}
 
 	.withheld-lede {

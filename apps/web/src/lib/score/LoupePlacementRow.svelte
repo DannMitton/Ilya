@@ -84,7 +84,7 @@
 		border-style: dashed;
 	}
 	.loupe-place-pill[aria-expanded='true'] {
-		border-color: var(--lavender, #9585a2);
+		border-color: var(--lavender);
 	}
 	.loupe-place-pill:disabled {
 		opacity: 0.4;
@@ -99,7 +99,7 @@
 		line-height: 1.2;
 	}
 	.loupe-place-pill:focus-visible {
-		outline: 2px solid var(--lavender, #9585a2);
+		outline: 2px solid var(--lavender);
 		outline-offset: 1px;
 	}
 	/* The touch floor, as the syllable strip keeps it. */

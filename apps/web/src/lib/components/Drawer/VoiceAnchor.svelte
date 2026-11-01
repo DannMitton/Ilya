@@ -11,7 +11,7 @@
 	 * LAVENDER'S ONLY CARRIERS IN STUDIO are this line and the calibration
 	 * surfaces (`fable-ruling-s0-slate-closed_2026-08-19.md`, ruling 3). The
 	 * token is the project's `--lavender`, not the mockup's
-	 * `--lavender: #9B8AA6`, which that file declares a stand-in on its own
+	 * own stand-in value, which that file declares on its own
 	 * line 17.
 	 *
 	 * This component decides nothing. It renders what it is given and calls
@@ -111,7 +111,7 @@
 		font-size: 0.8rem;
 		font-weight: 600;
 		color: white;
-		background: var(--lavender);
+		background: var(--lavender-jewel);
 		border: none;
 		border-radius: 999px;
 		cursor: pointer;

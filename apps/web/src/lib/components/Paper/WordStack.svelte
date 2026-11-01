@@ -226,7 +226,7 @@
 	}
 
 	.word-stack:hover {
-		background-color: rgba(131, 146, 117, 0.08);
+		background-color: color-mix(in srgb, var(--sage) 8%, transparent);
 	}
 
 	.word-stack:focus-visible {
@@ -295,7 +295,7 @@
 		font-family: var(--font-serif);
 		font-size: 0.8rem;
 		font-style: italic;
-		color: var(--sage-gloss);
+		color: var(--sage-ink);
 		white-space: nowrap;
 		min-height: 1.04rem;
 	}
@@ -306,7 +306,7 @@
 	}
 
 	.clitic-arrow {
-		color: var(--sage);
+		color: var(--sage-ink);
 		font-size: 0.85rem;
 	}
 
