@@ -123,7 +123,7 @@ export function contrastRatio(a: RGB, b: RGB): number {
 // ---------------------------------------------------------------------------
 
 export const PALETTE = {
-	'lavender': hexToRgb('#9585A2'),
+	'lavender': hexToRgb('#9F85BC'),
 	'surround-voice': hexToRgb('#D8D0E0'),
 	'paper-cream': hexToRgb('#F0EBE0'),
 	'ink-primary': hexToRgb('#1A1612'),

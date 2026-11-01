@@ -68,14 +68,11 @@ describe('the colours', () => {
 describe('the wait squircle\'s wash (QUEUE row 46)', () => {
 	const css = readFileSync(new URL('../../app.css', import.meta.url), 'utf8');
 	const token = (name: string) => css.match(new RegExp(`--${name}:\\s*#([0-9A-Fa-f]{6})`))![1].toUpperCase();
-	const overWhite = (hex: string, share: number) =>
-		[0, 2, 4].map((i) => Math.round(share * parseInt(hex.slice(i, i + 2), 16) + (1 - share) * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
 
-	it('is each family\'s band at 20 percent over white, computed as the desk tokens are (40 percent)', () => {
-		for (const family of ['sage', 'lavender', 'rose']) {
-			expect(token(`${family}-wash`)).toBe(overWhite(token(family), 0.2));
-			expect(token(`${family}-desk`)).toBe(overWhite(token(family), 0.4));
-		}
-		expect(['sage', 'lavender', 'rose'].map((f) => token(`${f}-wash`))).toEqual(['E6E9E3', 'EAE7EC', 'EEE5E5']);
+	// Re-pinned 2026-11-01 (row 165 step 1): the ratified palette (Dann 2026-10-30 16:22) is not on the
+	// old "20 percent over white" arithmetic, so the washes and desks are pinned as the literals he approved.
+	it('is each family\'s ratified wash, and the desk is the ratified desk', () => {
+		expect(['sage', 'lavender', 'rose'].map((f) => token(`${f}-wash`))).toEqual(['ECF0EA', 'F1EDF5', 'F3EDEE']);
+		expect(['sage', 'lavender', 'rose'].map((f) => token(`${f}-desk`))).toEqual(['D8E2D6', 'E2DAEB', 'E7DADD']);
 	});
 });

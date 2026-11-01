@@ -30,33 +30,58 @@
 	--ink-tertiary: #6A655F;      /* lighter warm grey — captions, placeholders */
 	--ink-stave: #3A352F;         /* the stave's furniture: staff lines, clefs, barlines, rests */
 
-	/* ── The five family bands ─────────────────────────────── */
-	/* Stage 4 of the colour story, 2026-09-14. Every band sits at OKLCH
-	   L 0.640 in its family's own hue and chroma, its chip one ramp step down
-	   at L 0.530, and its label ink at L 0.420 (ruling 1 of 4, 2026-09-13,
-	   docs/sessions/spec-colour_r1_2026-09-13.md). A hue names one idea:
-	   sage the words, rose your voice, cobalt information, lavender the
-	   melody, umber the book. */
+	/* ── The five families (ratified 2026-10-30 16:22, docs/sessions/palette-ratified_2026-10-30.css) ── */
+	/* Each family has six steps. band: the top bar and the chapter band.
+	   desk: the page background. head: a drawer section header, one step deeper
+	   than the desk, its label in ink. wash: the lightest fill. jewel: buttons,
+	   pills, active states, with white text. ink: all coloured text on paper.
+	   A hue names one idea: sage the words (TEXT, INPUT), lavender the melody
+	   (MELODY, VOICE, the Loupe, the turning noteheads), rose your voice
+	   (INSIGHTS), cobalt information (GUIDE, and PIECE's drawer header), slate
+	   the book (LEARN). */
+	--sage: #7D9D76;
+	--sage-desk: #D8E2D6;
+	--sage-head: #C4D3C1;
+	--sage-wash: #ECF0EA;
+	--sage-jewel: #45693C;
+	--sage-ink: #365E2D;
+	--lavender: #9F85BC;
+	--lavender-desk: #E2DAEB;
+	--lavender-head: #D4C8E1;
+	--lavender-wash: #F1EDF5;
+	--lavender-jewel: #6C4D8C;
+	--lavender-ink: #623F84;
+	--rose: #AF858E;
+	--rose-desk: #E7DADD;
+	--rose-head: #DBC8CC;
+	--rose-wash: #F3EDEE;
+	--rose-jewel: #7C4E59;
+	--rose-ink: #73414E;
+	--cobalt: #788DB1;
+	--cobalt-desk: #E1E6EF;
+	--cobalt-head: #B9CBEB;
+	--cobalt-wash: #E8EEF8;
+	--cobalt-jewel: #2953A6;
+	--cobalt-ink: #1D4BA7;
+	--slate: #5B6E80;
+	--slate-desk: #CED4D9;
+	--slate-head: #B5BEC6;
+	--slate-wash: #E6E9EC;
+	--slate-jewel: #27425A;
+	--slate-ink: #254057;
 
-	/* ── Sage accent ──────────────────────────────────────── */
-	--sage: #839275;
-	--sage-deep: #7A8A6C;         /* sage one step deeper: fills, borders, and pointer states on screen */
-	--sage-gloss: #7A8A6C;        /* the gloss line under every word on the paper */
-
-	/* ── Dusty Rose accent (replaces terra cotta) ────────── */
-	--rose: #AB7F7F;
-	--terracotta: var(--rose);  /* backward-compatible alias */
-
-	/* ── Quiet Cobalt accent (Guide tab) ──────────────────── */
-	--cobalt: #748CB9;
-
-	/* ── Lavender accent (the melody: Markup, the Melody band) ── */
-	/* Moved here from the pacifier block at stage 4, where it sat apart from
-	   its three siblings. It is still the pacifier's captured outline. */
-	--lavender: #9585A2;
-
-	/* ── Umber accent (the book: Learn) ───────────────────── */
-	--umber: #A38669;
+	/* RETIRED NAMES, kept as aliases for exactly one commit (row 165 step 1)
+	   so the tree stays green; step 2 moves every consumer and deletes them. */
+	--sage-deep: var(--sage-jewel);
+	--sage-gloss: var(--sage-ink);
+	--sage-chip: var(--sage-jewel);
+	--rose-chip: var(--rose-jewel);
+	--cobalt-chip: var(--cobalt-jewel);
+	--lavender-chip: var(--lavender-jewel);
+	--umber: var(--slate);
+	--umber-desk: var(--slate-desk);
+	--umber-ink: var(--slate-ink);
+	--umber-chip: var(--slate-jewel);
 
 	/* ── Stone palette (UI chrome) ────────────────────────── */
 	--stone-300: #d6d3d1;
@@ -129,68 +154,9 @@
 	   A future change moves this one number. */
 	--portrait-gutter: 24px;
 
-	/* ── Desk tints, one per destination (N.73 S1) ──────────── */
-	/* Each desk carries its destination's signature hue tinted 60 percent
-	   toward white, ruled by Dann 2026-08-10: "C, Desk lightness 60%, no
-	   blotter" (N.42 §1.5). All four desks are light, so everything drawn
-	   on a desk takes dark ink (--ink-primary) by the luminance-keyed rule
-	   of the S0 slate.
-
-	   FOUR desks, one per destination. Ruled by Dann 2026-08-19: every
-	   distinct working surface carries its own hue, which ends the sharing
-	   S1 left in place. --lavender-desk is the Marked score's desk and it
-	   is NOT --surround-voice: that token is the calibration pacifier band,
-	   it sits on white rather than on a desk, and contrast.test.ts asserts
-	   its literal. The two are different surfaces and keep different names. */
-	/* Stage 4, 2026-09-14: the desk is NOT on the ramp. Each is still 40
-	   percent of its band over 60 percent white, recomputed from the ruled
-	   bands, and umber's is Learn's. */
-	--sage-desk: #CDD3C8;   /* sage at 60% */
-	--lavender-desk: #D5CEDA;          /* lavender at 60% */
-	--rose-desk: #DDCCCC;           /* rose at 60% */
-	--cobalt-desk: #C7D1E3;           /* cobalt at 60% */
-	--umber-desk: #DACFC3;           /* umber at 60% */
-	/* The wait squircle's fill (QUEUE row 46, Dann 2026-10-08 01:05, option B of
-	   drawing-wait-tint-options): each band at 20 percent over white, computed as
-	   the desk tokens are, so the squircle reads lighter than the desk around it. */
-	--sage-wash: #E6E9E3;           /* sage at 20% */
-	--lavender-wash: #EAE7EC;       /* lavender at 20% */
-	--rose-wash: #EEE5E5;           /* rose at 20% */
-
-	/* ── Language-pill chips, one per destination ──────────── */
-	/* The header carries ONE language pill, naming the language the singer
-	   is not in. Its chip is the band's own hue taken one step down, with
-	   white text on it. Ratified by Dann 2026-08-20 from a drawing,
-	   docs/sessions/lang-toggle-options_r1_2026-08-20.html, option D: "I
-	   love D. Ratified." He chose it over one translucent declaration
-	   knowing it costs four values instead of one.
-
-	   These are named here rather than inlined because the control census
-	   of 2026-07-29 flagged this exact control for carrying three
-	   hand-picked hex literals beside one real token.
-
-	   Stage 4, 2026-09-14: every chip is its family's hue and chroma at
-	   OKLCH L 0.530, one ramp step under its band, and every one clears 5.21
-	   with white text. Guide's chip was the band itself until this stage and
-	   now takes its own value like the other four. Guide's pill still draws
-	   its hairline (HeaderBar.svelte), which was drawn because the chip was
-	   the band. */
-	--sage-chip: #637156;  /* --sage, one step down */
-	--rose-chip: #885F60;          /* --rose, one step down */
-	--cobalt-chip: #556C96;  /* --cobalt, one step down */
-	--lavender-chip: #746580;         /* --lavender, one step down */
-	--umber-chip: #82664A;         /* --umber, one step down */
-
-	/* ── Label inks, one per family ────────────────────────── */
-	/* Ruling 4 of 4, 2026-09-13: every document's label ink is its own
-	   family at the ramp's OKLCH L 0.420, and every one clears 7.02 on
-	   cream. Sage for Text, lavender for Markup, rose for Insights, umber
-	   for Learn, cobalt for Guide. */
-	--sage-ink: #455238;
-	--lavender-ink: #554660;
-	--rose-ink: #674141;
-	--umber-ink: #61472C;
-	--cobalt-ink: #374D75;
+	/* --lavender-desk is the melody desk and it is NOT --surround-voice: that token is
+	   the calibration pacifier band, it sits on white rather than on a desk, and
+	   contrast.test.ts asserts its literal. Different surfaces, different names. */
 
 	/* ── A floating card's corner and lift ─────────────────── */
 	/* Named 2026-10-07 so the Loupe and the wait for the reader (ReadingWait)
