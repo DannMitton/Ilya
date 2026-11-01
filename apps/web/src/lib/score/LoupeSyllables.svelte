@@ -109,7 +109,9 @@
 				next !== undefined &&
 				next.origin.lineIndex === s.origin.lineIndex &&
 				next.origin.wordIndex === s.origin.wordIndex;
-			return { slot: s, index: i, lead, trailingHyphen };
+			// Row 163 step 4: the # of a syntactic break follows its unit's last syllable (`pairings.ts` grafts it onto
+			// `slot.ipa`, never onto `slot.cyrillic`, which `syntactic-break-surfaces.test.ts` pins).
+			return { slot: s, index: i, lead, trailingHyphen, brk: s.ipa.endsWith('#') };
 		}),
 	);
 
@@ -171,7 +173,7 @@
 				class:joins-next={it.trailingHyphen}
 				data-slot-index={it.index}
 				onclick={() => tap(it.index)}
-			>{it.slot.cyrillic}{it.trailingHyphen ? '-' : ''}</button>{/each}
+			>{it.slot.cyrillic}{it.trailingHyphen ? '-' : ''}</button>{#if it.brk}<span class="loupe-syl-hash" aria-hidden="true">#</span>{/if}{/each}
 	</div>
 {:else}
 	<!-- THE DESK PARAGRAPH: wraps at the poem's own line breaks (a real
@@ -187,7 +189,7 @@
 					class:is-placed={placedKeys.has(keyOf(it.slot))}
 					class:is-selected={selectedKey === keyOf(it.slot)}
 					onclick={() => tap(it.index)}
-				>{it.slot.cyrillic}{it.trailingHyphen ? '-' : ''}</button>{/each}</p>
+				>{it.slot.cyrillic}{it.trailingHyphen ? '-' : ''}</button>{#if it.brk}<span class="loupe-syl-hash" aria-hidden="true">#</span>{/if}{/each}</p>
 	</div>
 {/if}
 {#if placement}<LoupePlacementRow {placement} {language} />{/if}
@@ -219,6 +221,14 @@
 		outline: 1.4px solid var(--lavender, #9585a2);
 		outline-offset: -1.4px;
 		border-radius: 4px;
+	}
+	/* Row 163 step 4: THE # OF A SYNTACTIC BREAK, beside its unit's last syllable and outside the button, so a tap on it
+	   places nothing. One word space of the IPA font (256/1000 em) before it, as on Text and Markup (Dann 2026-10-30 14:17).
+	   Never in the Russian under the notes or in the Poem. On the strip it is not a syllable and claims no pan of its own. */
+	.loupe-syl-hash {
+		margin-inline-start: 0.256em;
+		color: #6a655f;
+		cursor: default;
 	}
 	.loupe-syl-slot:focus-visible {
 		outline: 2px solid var(--lavender, #9585a2);
@@ -265,6 +275,12 @@
 	   `.joins-prev`/`.joins-next` zero the one side that would otherwise open
 	   a gap next to that hyphen; the desk paragraph needs neither, since
 	   `display: inline` there carries no padding at all. */
+	.loupe-syl-row .loupe-syl-hash {
+		display: inline-flex;
+		flex: 0 0 auto;
+		align-items: center;
+		white-space: nowrap;
+	}
 	.loupe-syl-row .loupe-syl-slot.joins-prev {
 		padding-left: 0;
 	}
