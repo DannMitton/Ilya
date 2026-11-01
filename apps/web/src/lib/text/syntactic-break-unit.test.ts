@@ -75,7 +75,7 @@ it('property: 20000 random lines, results agree with the oracle and the laws hol
 			for (let j = i; j <= r; j++) expect(unitEnd(l, j)).toBe(r); // one answer for the whole unit
 		}
 	}
-});
+}, 20000); // runs 4.5 to 4.9 s against vitest's 5 s default, so it timed out under load
 
 it('terminalSlotIndex: last syllable of the unit, same line only', () => {
 	const slots = [
