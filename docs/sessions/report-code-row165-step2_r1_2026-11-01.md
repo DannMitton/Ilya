@@ -1,5 +1,7 @@
 # Report: row 165, step 2, every site moves to a token (r1, 2026-11-01)
 
+**Superseded in one number by the step 5 report: the badge veil ships at 58 percent, not 57 (57 measured 4.48:1 live on sage).**
+
 Branch `cloud-lane-23`. 41 files changed (see `git show --stat`), plus this report. Every site in the step 0 table is either moved to a token, left on purpose (listed below), or deferred to step 3 (the renderer). Re-grep after this commit, by the step 0 command: the only old values left in non-test source are the three renderer lines (`staff-renderer.ts:31,93,890`) and `--surround-voice #D8D0E0` (`app.css:177`, `contrast.ts:127`), which the review said to leave.
 
 ## What moved

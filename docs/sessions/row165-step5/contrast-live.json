@@ -1,0 +1,532 @@
+[
+ {
+  "lang": "en",
+  "tab": "text",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#7D9D76",
+    "ratio": 3.02,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#5C7F54",
+    "ratio": 4.55,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#45693C",
+    "ratio": 6.29,
+    "size": "13px",
+    "weight": "500"
+   },
+   {
+    "name": "gloss line",
+    "sel": ".gloss-row",
+    "fg": "#365E2D",
+    "bg": "#F0EBE0",
+    "ratio": 6.32,
+    "size": "12.8px",
+    "weight": "400"
+   },
+   {
+    "name": "drawer header Piece",
+    "sel": ".group-piece .group-band",
+    "fg": "#1D4BA7",
+    "bg": "#B9CBEB",
+    "ratio": 4.89,
+    "size": "11.2px",
+    "weight": "600"
+   },
+   {
+    "name": "drawer header Input",
+    "sel": ".group-input .group-band",
+    "fg": "#365E2D",
+    "bg": "#C4D3C1",
+    "ratio": 4.81,
+    "size": "11.2px",
+    "weight": "600"
+   },
+   {
+    "name": "drawer header Voice",
+    "sel": ".group-score .group-band",
+    "fg": "#623F84",
+    "bg": "#D4C8E1",
+    "ratio": 5.13,
+    "size": "11.2px",
+    "weight": "600"
+   }
+  ]
+ },
+ {
+  "lang": "en",
+  "tab": "markup",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#9F85BC",
+    "ratio": 3.2,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#8265A0",
+    "ratio": 4.86,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#6C4D8C",
+    "ratio": 6.82,
+    "size": "13px",
+    "weight": "500"
+   }
+  ]
+ },
+ {
+  "lang": "en",
+  "tab": "insights",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#AF858E",
+    "ratio": 3.2,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#916570",
+    "ratio": 4.87,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#7C4E59",
+    "ratio": 6.79,
+    "size": "13px",
+    "weight": "500"
+   }
+  ]
+ },
+ {
+  "lang": "en",
+  "tab": "guide",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#788DB1",
+    "ratio": 3.36,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#4A6BAA",
+    "ratio": 5.26,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#2953A6",
+    "ratio": 7.29,
+    "size": "13px",
+    "weight": "500"
+   },
+   {
+    "name": "chapter title",
+    "sel": ".chapter-band h2, .chapter-band h3",
+    "fg": "#FDFBF6",
+    "bg": "#788DB1",
+    "ratio": 3.25,
+    "size": "40px",
+    "weight": "700"
+   },
+   {
+    "name": "band-deck",
+    "sel": ".band-deck",
+    "fg": "#FFFFFF",
+    "bg": "#788DB1",
+    "ratio": 3.36,
+    "size": "18.7px",
+    "weight": "700"
+   },
+   {
+    "name": "reading heading h2 (ink)",
+    "sel": ".reading-inner h2:not(.chapter-band h2)",
+    "missing": true
+   },
+   {
+    "name": "reading link",
+    "sel": ".reading-inner a",
+    "fg": "#1D4BA7",
+    "bg": "#F0EBE0",
+    "ratio": 6.75,
+    "size": "16.8px",
+    "weight": "400"
+   }
+  ]
+ },
+ {
+  "lang": "en",
+  "tab": "learn",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#5B6E80",
+    "ratio": 5.27,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#3D546A",
+    "ratio": 7.86,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#27425A",
+    "ratio": 10.43,
+    "size": "13px",
+    "weight": "500"
+   },
+   {
+    "name": "chapter title",
+    "sel": ".chapter-band h2, .chapter-band h3",
+    "fg": "#FDFBF6",
+    "bg": "#5B6E80",
+    "ratio": 5.09,
+    "size": "40px",
+    "weight": "700"
+   },
+   {
+    "name": "band-deck",
+    "sel": ".band-deck",
+    "fg": "#FFFFFF",
+    "bg": "#5B6E80",
+    "ratio": 5.27,
+    "size": "18.7px",
+    "weight": "700"
+   },
+   {
+    "name": "reading heading h2 (ink)",
+    "sel": ".reading-inner h2:not(.chapter-band h2)",
+    "fg": "#254057",
+    "bg": "#F0EBE0",
+    "ratio": 9.06,
+    "size": "21.6px",
+    "weight": "600"
+   },
+   {
+    "name": "reading link",
+    "sel": ".reading-inner a",
+    "missing": true
+   }
+  ]
+ },
+ {
+  "lang": "fr",
+  "tab": "text",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#7D9D76",
+    "ratio": 3.02,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#5C7F54",
+    "ratio": 4.55,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#45693C",
+    "ratio": 6.29,
+    "size": "13px",
+    "weight": "500"
+   },
+   {
+    "name": "gloss line",
+    "sel": ".gloss-row",
+    "fg": "#365E2D",
+    "bg": "#F0EBE0",
+    "ratio": 6.32,
+    "size": "12.8px",
+    "weight": "400"
+   },
+   {
+    "name": "drawer header Piece",
+    "sel": ".group-piece .group-band",
+    "fg": "#1D4BA7",
+    "bg": "#B9CBEB",
+    "ratio": 4.89,
+    "size": "11.2px",
+    "weight": "600"
+   },
+   {
+    "name": "drawer header Input",
+    "sel": ".group-input .group-band",
+    "fg": "#365E2D",
+    "bg": "#C4D3C1",
+    "ratio": 4.81,
+    "size": "11.2px",
+    "weight": "600"
+   },
+   {
+    "name": "drawer header Voice",
+    "sel": ".group-score .group-band",
+    "fg": "#623F84",
+    "bg": "#D4C8E1",
+    "ratio": 5.13,
+    "size": "11.2px",
+    "weight": "600"
+   }
+  ]
+ },
+ {
+  "lang": "fr",
+  "tab": "markup",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#9F85BC",
+    "ratio": 3.2,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#8265A0",
+    "ratio": 4.86,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#6C4D8C",
+    "ratio": 6.82,
+    "size": "13px",
+    "weight": "500"
+   }
+  ]
+ },
+ {
+  "lang": "fr",
+  "tab": "insights",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#AF858E",
+    "ratio": 3.2,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#916570",
+    "ratio": 4.87,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#7C4E59",
+    "ratio": 6.79,
+    "size": "13px",
+    "weight": "500"
+   }
+  ]
+ },
+ {
+  "lang": "fr",
+  "tab": "guide",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#788DB1",
+    "ratio": 3.36,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#4A6BAA",
+    "ratio": 5.26,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#2953A6",
+    "ratio": 7.29,
+    "size": "13px",
+    "weight": "500"
+   },
+   {
+    "name": "chapter title",
+    "sel": ".chapter-band h2, .chapter-band h3",
+    "fg": "#FDFBF6",
+    "bg": "#788DB1",
+    "ratio": 3.25,
+    "size": "40px",
+    "weight": "700"
+   },
+   {
+    "name": "band-deck",
+    "sel": ".band-deck",
+    "fg": "#FFFFFF",
+    "bg": "#788DB1",
+    "ratio": 3.36,
+    "size": "18.7px",
+    "weight": "700"
+   },
+   {
+    "name": "reading heading h2 (ink)",
+    "sel": ".reading-inner h2:not(.chapter-band h2)",
+    "missing": true
+   },
+   {
+    "name": "reading link",
+    "sel": ".reading-inner a",
+    "fg": "#1D4BA7",
+    "bg": "#F0EBE0",
+    "ratio": 6.75,
+    "size": "16.8px",
+    "weight": "400"
+   }
+  ]
+ },
+ {
+  "lang": "fr",
+  "tab": "learn",
+  "rows": [
+   {
+    "name": "top bar: sigil name",
+    "sel": ".header-bar .sigil-name",
+    "fg": "#FFFFFF",
+    "bg": "#5B6E80",
+    "ratio": 5.27,
+    "size": "22px",
+    "weight": "400"
+   },
+   {
+    "name": "top bar: 2026A badge",
+    "sel": ".header-bar .sigil-version",
+    "fg": "#FFFFFF",
+    "bg": "#3D546A",
+    "ratio": 7.86,
+    "size": "10px",
+    "weight": "600"
+   },
+   {
+    "name": "language pill",
+    "sel": ".header-bar .lang-pill",
+    "fg": "#FFFFFF",
+    "bg": "#27425A",
+    "ratio": 10.43,
+    "size": "13px",
+    "weight": "500"
+   },
+   {
+    "name": "chapter title",
+    "sel": ".chapter-band h2, .chapter-band h3",
+    "fg": "#FDFBF6",
+    "bg": "#5B6E80",
+    "ratio": 5.09,
+    "size": "40px",
+    "weight": "700"
+   },
+   {
+    "name": "band-deck",
+    "sel": ".band-deck",
+    "fg": "#FFFFFF",
+    "bg": "#5B6E80",
+    "ratio": 5.27,
+    "size": "18.7px",
+    "weight": "700"
+   },
+   {
+    "name": "reading heading h2 (ink)",
+    "sel": ".reading-inner h2:not(.chapter-band h2)",
+    "fg": "#254057",
+    "bg": "#F0EBE0",
+    "ratio": 9.06,
+    "size": "21.6px",
+    "weight": "600"
+   },
+   {
+    "name": "reading link",
+    "sel": ".reading-inner a",
+    "missing": true
+   }
+  ]
+ }
+]

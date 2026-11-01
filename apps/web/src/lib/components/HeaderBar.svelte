@@ -149,10 +149,11 @@
 		padding: 0 3px;
 		border-radius: 2px;
 		/* ONE colour for all five bars (row 165): white text on a veil of the
-		   family's jewel over the band. 57 percent is the smallest whole percent
-		   that puts the white at 4.5:1 or better on all five bars (sage is the
-		   limit, 4.53:1; the ruled 22 percent measures 3.49 to 3.97 on four). */
-		background: color-mix(in srgb, var(--tab-jewel) 57%, transparent);
+		   family's jewel over the band. 58 percent puts the white at 4.5:1 or
+		   better on all five bars as the browser draws them (sage is the limit:
+		   4.55:1 here; 57 measured 4.48:1 live because the alpha rounds to 8
+		   bits; the ruled 22 percent measures 3.49 to 3.97 on four). */
+		background: color-mix(in srgb, var(--tab-jewel) 58%, transparent);
 		transition: background-color 300ms ease;
 	}
 

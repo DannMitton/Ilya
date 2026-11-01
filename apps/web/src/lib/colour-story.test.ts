@@ -128,7 +128,8 @@ describe('row 165: contrast of the token pairs that carry words (WCAG 2.2 AA)', 
 		const src = readFileSync(join(ROOT, 'apps/web/src/lib/components/HeaderBar.svelte'), 'utf8');
 		const m = src.match(/color-mix\(in srgb, var\(--tab-jewel\) (\d+)%, transparent\)/);
 		expect(m, 'the badge veil rule').not.toBeNull();
-		const a = Number(m![1]) / 100;
+		// The browser keeps the veil's alpha in 8 bits, and 57 percent measured 4.48:1 live for that reason.
+		const a = Math.round((Number(m![1]) / 100) * 255) / 255;
 		for (const f of FAMILIES) {
 			expect(ratio(WHITE, over(token(`${f}-jewel`), token(f), a)), `badge on ${f}`).toBeGreaterThanOrEqual(4.5);
 		}
