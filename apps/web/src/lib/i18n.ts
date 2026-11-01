@@ -777,7 +777,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    sentence becomes the field's own caption, `intake.caption`, one line
 	//    under it. "Poem" stays over "text", because Text is the band under
 	//    Input.
-	'intake.placeholder': { en: 'Paste, type, or drop your poem here.', fr: 'Collez, saisissez ou déposez votre poème ici.' },
+	// Row 163 step 7: "the published poem" in place of "your poem", RATIFIED by Dann 2026-10-30 14:49 (EN) and 14:51 (FR).
+	'intake.placeholder': { en: 'Paste, type, or drop the published poem here.', fr: 'Collez, saisissez ou déposez le poème publié ici.' },
 	// ═══ INPUT'S TWO VIEWS, N.135 STAGE 3 ═══════════════════════════════════
 	// RATIFIED BY DANN 2026-10-16 01:18 in both languages ("I love them all,
 	// Ratified!"), after his edits of 01:13 to 01:15 and the desk's counter-
@@ -797,7 +798,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'intake.view.poemLine':      { en: 'Edits here change the published poem. The sung words come from your score; edit them in Lyrics.', fr: 'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ Paroles.' },
 	'intake.view.lyricsLine':    { en: 'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.', fr: 'Les paroles telles que chantées, comme la partition les place. Les mots en couleur diffèrent du poème\u00a0: une reprise, un changement ou un ajout.' },
 	'intake.view.omittedLine':   { en: 'Greyed words are those left out of the song by the composer.', fr: 'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.' },
-	'intake.view.landedLyrics':  { en: 'Your score\'s sung words are in Lyrics. Paste or type the published poem here, whole.', fr: 'Les paroles chantées de votre partition sont dans le champ Paroles. Collez ou saisissez ici le poème publié, en entier.' },
+	// Row 163 step 7: REPLACED, RATIFIED by Dann 2026-10-30 20:38 ("I ratify both"), one line in the same place. It shows under
+	// Poem while Poem is empty and Lyrics holds the score's words (`text/input-line.ts`).
+	'intake.view.landedLyrics':  { en: 'Your score supplied the words in Lyrics. Add the whole published poem here to see where the song departs from it.', fr: 'Votre partition a fourni les paroles du champ Paroles. Ajoutez ici le poème publié en entier pour voir où la mise en musique s\u2019en écarte.' },
 	'intake.view.landedPoem':    { en: 'This page read as a poem and is in Poem. The sung words in Lyrics may differ from it.', fr: 'Cette page a été lue comme un poème; elle est dans le champ Poème. Les paroles chantées, dans le champ Paroles, peuvent en différer.' },
 	// THE LYRICS PLACEHOLDER: the line ratified 2026-10-16 01:18 told the singer
 	// to type hyphens, which this slice cannot read (a typed hyphen reaches the

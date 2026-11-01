@@ -108,8 +108,8 @@ describe('ratified Input view lines (N.135 stage 3)', () => {
 			'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.',
 		],
 		'intake.view.landedLyrics': [
-			'Your score\'s sung words are in Lyrics. Paste or type the published poem here, whole.',
-			'Les paroles chantées de votre partition sont dans le champ Paroles. Collez ou saisissez ici le poème publié, en entier.',
+			'Your score supplied the words in Lyrics. Add the whole published poem here to see where the song departs from it.',
+			'Votre partition a fourni les paroles du champ Paroles. Ajoutez ici le poème publié en entier pour voir où la mise en musique s\u2019en écarte.',
 		],
 		'intake.view.landedPoem': [
 			'This page read as a poem and is in Poem. The sung words in Lyrics may differ from it.',
@@ -127,7 +127,7 @@ describe('ratified Input view lines (N.135 stage 3)', () => {
 		],
 		'intake.poemReplace.replace': ['Replace the poem', 'Remplacer le poème'],
 		'intake.poemReplace.keep': ['Keep the poem', 'Conserver le poème'],
-		'intake.placeholder': ['Paste, type, or drop your poem here.', 'Collez, saisissez ou déposez votre poème ici.'],
+		'intake.placeholder': ['Paste, type, or drop the published poem here.', 'Collez, saisissez ou déposez le poème publié ici.'],
 	};
 	for (const [key, [en, fr]] of Object.entries(LINES)) {
 		it(`${key}, both languages`, () => {

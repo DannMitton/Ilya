@@ -4,6 +4,7 @@
 	import type { TextArrival } from '$lib/one-action';
 	import { comparePoem, lyricsSegments, poemSegments } from '$lib/text/poem-compare';
 	import { inputViews, type InputView } from '$lib/text/input-views.svelte';
+	import { introLine } from '$lib/text/input-line';
 	import { lyricsOnLeave } from '$lib/text/break-tidy';
 	import { pointer } from './IntakeCamera.svelte';
 	import ViewPair from '../ViewPair.svelte';
@@ -84,13 +85,7 @@
 	const layerText = $derived(padLast ? `${text}\u200b` : text);
 	const highlights = typeof CSS !== 'undefined' && 'highlights' in CSS && typeof Highlight !== 'undefined';
 
-	const line = $derived(
-		inputViews.landed === 'lyrics'
-			? t('intake.view.landedLyrics', language)
-			: inputViews.landed === 'poem'
-				? t('intake.view.landedPoem', language)
-				: t(view === 'poem' ? 'intake.view.poemLine' : 'intake.view.lyricsLine', language),
-	);
+	const line = $derived(t(introLine(view, inputViews.landed, scoreWords, poemText), language));
 	/* The Lyrics placeholder's French is owed and left empty, so in French the
 	   field draws none until Dann rules (`i18n.ts`, `intake.placeholderLyrics`). */
 	const placeholder = $derived(view === 'poem' ? t('intake.placeholder', language) : tIfPresent('intake.placeholderLyrics', language));
