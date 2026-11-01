@@ -50,6 +50,15 @@ export function peelSyntacticBreaks<T extends { text: string }>(
 	return { words, broken, source };
 }
 
+/**
+ * Row 163 step 2: a trailing # taken off an IPA string so a surface can draw it apart, a full word space after
+ * its host (`.ipa-break`, `app.css`). Copy and export keep the string as it is («tkʌ#»); the browser copies the
+ * # as adjacent text, and the gap is CSS margin, never a character.
+ */
+export function splitBreakMark(ipa: string): { text: string; brk: boolean } {
+	return ipa.endsWith(SYNTACTIC_BREAK) ? { text: ipa.slice(0, -1), brk: true } : { text: ipa, brk: false };
+}
+
 /** A syllable's IPA with the mark grafted after it, when `word` ends in a syntactic break and this is its last syllable. */
 export function graftBreak(word: { syntacticBreak?: boolean; syllables: readonly unknown[] }, k: number, ipa: string): string {
 	return word.syntacticBreak && k === word.syllables.length - 1 ? ipa + SYNTACTIC_BREAK : ipa;

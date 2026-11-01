@@ -1,0 +1,45 @@
+import { beforeAll, it } from 'vitest';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { MusicXmlScoreParser, analyzeScore, demoProfile, renderAnalyzedStaff, type ScoreParser } from '@ilya/score-parser';
+import { processText } from '$lib/pipeline';
+import { parseXml } from '$lib/score/ingestion/mini-dom';
+import { ingestScoreFile, type IngestDeps } from '$lib/score/ingestion/ingest';
+import type { ScoreReader } from '$lib/reader/score-reader';
+import { loadRealData } from '$lib/syntactic-break.support';
+import { drawPairings } from '$lib/score/pairings';
+import { collectScoreWords, scoreWordsText } from '$lib/score/vowel-resolver';
+import { rekeySeatsToLines, seatScoreWords } from '$lib/score/score-seat';
+
+beforeAll(loadRealData, 60_000);
+const OUT = process.env.PROBE_OUT!;
+const xml = readFileSync(fileURLToPath(new URL('../../src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)), 'utf8');
+const musicxmlParser: ScoreParser = { canParse: () => true, parse: (input) => new MusicXmlScoreParser().parse({ ...input, data: parseXml(input.data as string) as unknown as Document }) };
+const inertReader: ScoreReader = { convert: async () => { throw new Error('x'); }, dispose: () => {} };
+const deps: IngestDeps = { scoreReader: inertReader, musicxmlParser };
+
+it('probe', async () => {
+	const out = await ingestScoreFile(new File([xml], 'sunless-01-engraved.musicxml'), deps);
+	if (!out.ok) throw new Error('ingest');
+	const score = out.ingested.result.score;
+	const base = scoreWordsText(collectScoreWords(score, 1));
+	const result: Record<string, unknown> = { text: base };
+	for (const [name, text] of [['plain', base], ['hashAfterEveryWord', base.split(/\s+/).filter(Boolean).map((w) => w + ' #').join(' ')]] as const) {
+		const ls = processText(text);
+		const seated = seatScoreWords(score, {}, ls);
+		const map = rekeySeatsToLines(seated.map, ls).map;
+		const drawn = drawPairings(map, ls, { openSyllabification: false, reconstitution: false });
+		const cyrPreview = Object.fromEntries(Object.entries(drawn).map(([id, d]) => [id, d.cyrillic]));
+		const ipaPreview = Object.fromEntries(Object.entries(drawn).map(([id, d]) => [id, d.ipa]));
+		const analyzed = analyzeScore(score, demoProfile, () => 'ɑ', { generatedAt: '2026-10-26T00:00:00.000Z' });
+		const svg = renderAnalyzedStaff(score, analyzed, { cyrPreview, ipaPreview });
+		const texts = [...svg.matchAll(/<text([^>]*)>([^<]*)<\/text>/g)].map((m) => {
+			const a = m[1];
+			const g = (k: string) => new RegExp(`${k}="([^"]*)"`).exec(a)?.[1];
+			return { x: Number(g('x')), y: Number(g('y')), anchor: g('text-anchor'), ipaOf: g('data-ipa-of'), s: m[2] };
+		});
+		const heads = [...svg.matchAll(/data-event-id="([^"]+)"[^>]*>/g)].length;
+		result[name] = { seated: seated.seated, svgWidth: /<svg[^>]*width="([^"]+)"/.exec(svg)?.[1], heads, texts };
+	}
+	writeFileSync(OUT, JSON.stringify(result, null, 1));
+}, 120_000);
