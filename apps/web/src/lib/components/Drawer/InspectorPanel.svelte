@@ -985,7 +985,7 @@
 		<div class="word-header-group">
 			<div class="word-stack">
 				<h2 class="word-cyrillic">{displayCyrillic}</h2>
-				<p class="word-ipa">{headerIpa}</p>
+				<p class="word-ipa">{headerIpa.replace(/#$/, '')}{#if headerIpa.endsWith('#')}<span class="ipa-break">#</span>{/if}</p>
 				<button
 					class="dict-button"
 					bind:this={dictButtonEl}

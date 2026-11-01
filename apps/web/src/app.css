@@ -422,3 +422,12 @@ body {
 		font-size: max(1rem, 16px) !important;
 	}
 }
+
+/* ── Row 163 step 2: the # of a syntactic break, drawn apart ───────────────
+   A # is a silence between two words, not part of its host syllable, so every
+   surface that prints IPA as text stands it one word space of the IPA font
+   (256/1000 em, `packages/score-parser/src/underlay-widths.ts`) after the host.
+   The gap is margin, not a character: copied text still reads «tkʌ#». */
+.ipa-break {
+	margin-inline-start: 0.256em;
+}

@@ -8,7 +8,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { applyNotationPreferences, processText, wordGrid } from '$lib/pipeline';
 import { applyOpenSyllabificationToLines } from '$lib/syllable-utils';
-import { peelSyntacticBreaks } from './syntactic-break';
+import { peelSyntacticBreaks, splitBreakMark } from './syntactic-break';
 import { ipaOf, loadRealData, wordsOf } from './syntactic-break.support';
 
 beforeAll(loadRealData, 60_000);
@@ -174,6 +174,23 @@ describe('every IPA string the page re-derives carries the # the same way', () =
 		const ipa = wordsOf('слух # был')[0].ipaDisplay;
 		for (const reducedVowel of [true, false]) for (const geminate of [true, false]) {
 			expect(applyNotationPreferences(ipa, { reducedVowel, geminate, shcha: true, palatalNasal: true } as never, true).endsWith('#')).toBe(true);
+		}
+	});
+});
+
+describe('splitBreakMark (row 163 step 2)', () => {
+	it('takes one trailing # off, so a surface can draw it apart', () => {
+		expect(splitBreakMark('tkʌ#')).toEqual({ text: 'tkʌ', brk: true });
+		expect(splitBreakMark('ˈjɑ#')).toEqual({ text: 'ˈjɑ', brk: true });
+	});
+	it('leaves a string with no trailing # as it is', () => {
+		expect(splitBreakMark('tkʌ')).toEqual({ text: 'tkʌ', brk: false });
+		expect(splitBreakMark('')).toEqual({ text: '', brk: false });
+	});
+	it('does not move the string the engine made: the join of the parts is the original', () => {
+		for (const w of wordsOf('Слух # был, а я# на правду')) {
+			const parts = splitBreakMark(w.ipaDisplay);
+			expect(parts.text + (parts.brk ? '#' : '')).toBe(w.ipaDisplay);
 		}
 	});
 });

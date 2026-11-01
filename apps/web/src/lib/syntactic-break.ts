@@ -15,7 +15,8 @@
  * WHERE IT TAKES EFFECT (N.194 step 2, Dann 2026-10-21 02:18 and 02:19). The peel puts the field on the
  * word the # belongs to by position; `boundaries.ts` then moves it to the last word of that word's unit
  * (`text/syntactic-break-unit.ts`), because a break happens only at the end of a complete unit. The typed
- * text keeps the # where the singer put it, and Ilya never moves it there.
+ * text is tidied when the singer leaves Lyrics (`text/break-tidy.ts`, row 163 step 3): every typed # is moved to the end
+ * of its unit as «<unit> #». While the singer types, and for every other reader, the # stays where it was typed.
  */
 import { WORD_TOKEN, GLUED_MARK } from './text/break-glue';
 
@@ -48,6 +49,15 @@ export function peelSyntacticBreaks<T extends { text: string }>(
 		} else if (trail && words.length > 0) broken[words.length - 1] = true;
 	}
 	return { words, broken, source };
+}
+
+/**
+ * Row 163 step 2: a trailing # taken off an IPA string so a surface can draw it apart, a full word space after
+ * its host (`.ipa-break`, `app.css`). Copy and export keep the string as it is («tkʌ#»); the browser copies the
+ * # as adjacent text, and the gap is CSS margin, never a character.
+ */
+export function splitBreakMark(ipa: string): { text: string; brk: boolean } {
+	return ipa.endsWith(SYNTACTIC_BREAK) ? { text: ipa.slice(0, -1), brk: true } : { text: ipa, brk: false };
 }
 
 /** A syllable's IPA with the mark grafted after it, when `word` ends in a syntactic break and this is its last syllable. */

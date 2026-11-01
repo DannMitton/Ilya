@@ -18,7 +18,7 @@ describe('the footer credit', () => {
 			expect(s).toContain('4.0</a>). ');
 		}
 		expect(t('footer.attribution', 'en')).toContain('CC BY-SA 4.0</a>). Made with love');
-		expect(t('footer.attribution', 'fr')).toContain('CC BY-SA 4.0</a>). Fait avec amour');
+		expect(t('footer.attribution', 'fr')).toContain('CC BY-SA 4.0</a>). Fait avec cœur');
 	});
 
 	it('is passed to no footer as an override: every PageFooter prints the string as it is', () => {

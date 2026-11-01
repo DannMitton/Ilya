@@ -167,8 +167,11 @@ describe('Markup: the staff drawn from the typed Lyrics', () => {
 		const withMark = texts.filter((t) => t.includes('#'));
 		expect(cyrillic.length).toBeGreaterThan(0);
 		expect(cyrillic.some((t) => t.includes('#'))).toBe(false);
-		expect(withMark).toHaveLength(1);
-		expect(withMark[0]).toMatch(/ˈjɑ#$/u);
+		// Row 163 step 2: the # is its own element, a word space past its host, not part of the host's string.
+		expect(withMark).toEqual(['#']);
+		expect(texts).toContain('ˈjɑ');
+		expect(svg).toContain('data-ipa-break-of=');
+		expect(svg).not.toMatch(/data-ipa-of="[^"]*"[^>]*>[^<]*#/u);
 		expect(svg).not.toContain('phonation-break');
 		expect(svg).not.toContain('[#]');
 	});

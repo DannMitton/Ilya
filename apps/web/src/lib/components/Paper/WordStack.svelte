@@ -4,6 +4,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
 	import { hasProvenanceIcon } from './provenance-icon';
+	import { splitBreakMark } from '$lib/syntactic-break';
 
 	interface Props {
 		word: WordStackData;
@@ -53,6 +54,9 @@
 		const base = useReconstituted ? word.ipaReconstituted : word.ipaDisplay;
 		return base ? applyNotationPreferences(base, notationPrefs, true) : '';
 	});
+
+	// Row 163: a typed # is drawn as its own element a word space after its host, not fused to it.
+	const ipaParts = $derived(splitBreakMark(displayIpa));
 
 	// Apply combining acute accent to the stressed vowel in Cyrillic
 	const displayCyrillic = $derived.by(() => {
@@ -184,10 +188,10 @@
 	<!-- IPA row: fixed height -->
 	<span class="ipa-row" class:clitic-ipa={isClitic && !reconActive}>
 		{#if isClitic && !reconActive}
-			<span class="clitic-arrow">{displayIpa}</span>
+			<span class="clitic-arrow">{ipaParts.text}</span>{#if ipaParts.brk}<span class="ipa-break">#</span>{/if}
 		{:else}
 			<!-- A Latin word with no IPA keeps the row's height, as the gloss row does. -->
-			{displayIpa || (word.latin ? '\u00A0' : '')}
+			{ipaParts.text || (word.latin && !ipaParts.brk ? '\u00A0' : '')}{#if ipaParts.brk}<span class="ipa-break">#</span>{/if}
 		{/if}
 	</span>
 
