@@ -56,6 +56,7 @@ import { bracketMarkup, bracketSpan, type BracketRec } from './tuplet-bracket';
 import { clipRun } from './tacet-run';
 import { drawDerivedSlurs, drawPrintedSlurs, drawTies, planPrintedSlurs, type ArcCtx } from './ties-and-slurs';
 import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
+import { breakText, splitBreak, underlayHalves } from './break-mark';
 import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
 import { CROSSING_RING_HEADROOM, CROSSING_RING_REACH } from './ring-geometry';
 
@@ -1022,7 +1023,7 @@ function joinsWord(prevEv: VocalLineEvent, ev: VocalLineEvent, options: StaffRen
   );
 }
 
-function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions): number {
+function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions, side: 'left' | 'right'): number {
   // N.55b R6: a pairing's Cyrillic outranks the score's, because a score
   // with no underlay has none and the singer's decision is the only text
   // there is.
@@ -1030,15 +1031,11 @@ function underlayHalfWidth(ev: VocalLineEvent, options: StaffRenderOptions): num
   // N.10b: the withheld sigla occupies the IPA line's slot, so it is ink this
   // function must measure exactly as it measures a transcription. Ink the
   // spacing engine cannot see is ink that collides.
-  const ipa = options.ipaPreview?.[ev.id] ?? '';
-  const sigla = !ipa && options.withheldIpa?.has(ev.id) === true;
-  if (!cyr && !ipa && !sigla) return 0;
-  const inked = Math.max(
-    cyr ? estimateCyrillicWidthPx(cyr, CYR_FONT_SIZE) : 0,
-    ipa ? estimateIpaWidthPx(ipa, IPA_FONT_PX) : 0,
-    sigla ? WITHHELD_SIGLA_WIDTH_PX : 0,
-  );
-  return inked / 2;
+  // Row 163: a trailing # is drawn apart (`break-mark.ts`) and hangs to the right only.
+  const { ipa, brk } = splitBreak(options.ipaPreview?.[ev.id] ?? '');
+  const sigla = !ipa && !brk && options.withheldIpa?.has(ev.id) === true;
+  if (!cyr && !ipa && !brk && !sigla) return 0;
+  return underlayHalves(cyr ? estimateCyrillicWidthPx(cyr, CYR_FONT_SIZE) : 0, ipa ? estimateIpaWidthPx(ipa, IPA_FONT_PX) : 0, sigla ? WITHHELD_SIGLA_WIDTH_PX : 0, brk, IPA_FONT_PX)[side];
 }
 
 /**
@@ -1579,9 +1576,9 @@ export function columnAdvance(
   // there, and half a stave-space put the last syllable hard against it
   // (Dann at the browser, 2026-08-06, on [nuf]).
   const textNeed =
-    underlayHalfWidth(prevEv, options) + (prevInk?.ringReach ?? 0) +
+    underlayHalfWidth(prevEv, options, 'right') + (prevInk?.ringReach ?? 0) +
     (ev
-      ? underlayHalfWidth(ev, options) + (nextInk?.ringReach ?? 0) +
+      ? underlayHalfWidth(ev, options, 'left') + (nextInk?.ringReach ?? 0) +
         // N.129 step 2: inside a word the gap must hold a hyphen.
         Math.max(lineGap * 0.5, joinsWord(prevEv, ev, options) ? HYPHEN_GAP_PX : 0)
       : lineGap);
@@ -2360,7 +2357,7 @@ export function renderAnalyzedStaff(
   // Collision-aware underlay (Dann's ruling, 2026-07-12): the text lines
   // are collected during the draw and placed below the lowest ink of the
   // system, never at a fixed offset that a down-stem beam can crash into.
-  const underlay: Array<{ x: number; cyr: string; ipa: string; withheld: boolean; align: 'middle' | 'start'; sylType?: 'whole' | 'start' | 'middle' | 'end'; evId: string }> = [];
+  const underlay: Array<{ x: number; cyr: string; ipa: string; brk: boolean; withheld: boolean; align: 'middle' | 'start'; sylType?: 'whole' | 'start' | 'middle' | 'end'; evId: string }> = [];
   // Melisma detection: the data model encodes a melisma by ABSENCE of
   // syllable on continuation notes, so a syllabled note followed by an
   // unsyllabled note starts one. Its syllable left-aligns at the first
@@ -3151,18 +3148,18 @@ export function renderAnalyzedStaff(
     // re-articulated, so there is no syllable and no onset to transcribe.
     const marked = options.melismaPreview?.has(ev.id) === true;
     const cyr = marked ? '' : (options.cyrPreview?.[ev.id] ?? syl?.text ?? '');
-    const ipa = marked ? '' : (options.ipaPreview?.[ev.id] ?? a?.vowel ?? '');
+    const { ipa, brk } = splitBreak(marked ? '' : (options.ipaPreview?.[ev.id] ?? a?.vowel ?? ''));
     // N.10b. Withheld ONLY where nothing supplied ink, so the mark can never
     // displace a transcription, not even the degraded single-vowel one. A
     // melisma continuation carries no Cyrillic and is not withheld: it is
     // correctly silent, which is the distinction the mark exists to draw.
-    const withheld = !ipa && !!cyr && options.withheldIpa?.has(ev.id) === true;
-    if (cyr || ipa) {
+    const withheld = !ipa && !brk && !!cyr && options.withheldIpa?.has(ev.id) === true;
+    if (cyr || ipa || brk) {
       const isMelisma = melismaStart.has(ev.id);
       underlay.push({
         x: isMelisma ? round2(nx - headHalfW) : nx,
         cyr,
-        ipa,
+        ipa, brk,
         withheld,
         align: isMelisma ? 'start' : 'middle',
         /* N.113b item 3: THE WORD DIVISION FOLLOWS THE WORDS. `cyr` two lines
@@ -3307,6 +3304,7 @@ export function renderAnalyzedStaff(
         `</g>`,
       );
     }
+    if (u.brk) parts.push(breakText(u, esc(u.evId), ipaY, IPA_FONT_SIZE, IPA_FONT_FAMILY));
   }
   // Phonation breaks: [#] on the IPA line, in full ink for attention.
   for (const bx of breaks) {

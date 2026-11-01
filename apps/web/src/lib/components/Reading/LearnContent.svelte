@@ -13,7 +13,12 @@
 </script>
 
 						{#if language === 'fr'}
-						<h1 id="learn-title">La diction lyrique russe pour chanteuses et chanteurs</h1>
+						<h1>Leçons</h1>
+
+						<div class="chapter-band band-learn">
+							<h2 id="learn-title">La diction lyrique russe pour chanteuses et chanteurs</h2>
+							<div class="band-deck">Les règles de Grayson pour la diction lyrique russe, enseignées pour que vous puissiez aborder par vous-même le répertoire vocal russe.</div>
+						</div>
 
 						<p>Les sons du russe chanté ne sont pas aussi éloignés de ce que vous connaissez déjà qu'il n'y paraît au premier abord&#160;: nombre de consonnes se comportent exactement comme leurs équivalents dans les langues que vous avez étudiées, et le système vocalique, bien qu'il obéisse à des règles différentes, est plus restreint et plus ordonné que celui de l'anglais. Ce que le russe vous demande n'est pas un saut dans l'inconnu, mais une extension de compétences que vous possédez déjà, guidée par un cadre phonologique rigoureux et bien documenté.</p>
 
@@ -2049,7 +2054,12 @@
 						<p><em>LEÇONS est une réorganisation pédagogique du travail doctoral de Craig Grayson, préparée avec son consentement. Le contenu est rédigé par Dann Mitton et s'appuie sur sa thèse de doctorat en musique (Université de Toronto) et vingt-cinq ans de pratique et d'enseignement du répertoire de basse d'opéra.</em></p>
 
 						{:else}
-						<h1 id="learn-title">Russian Lyric Diction for Singers</h1>
+						<h1>Learn</h1>
+
+						<div class="chapter-band band-learn">
+							<h2 id="learn-title">Russian Lyric Diction for Singers</h2>
+							<div class="band-deck">Grayson's rules for Russian lyric diction, taught so you can access Russian vocal literature on your own.</div>
+						</div>
 
 						<p>The sounds of sung Russian are not as distant from what you already know as they may first appear: many of the consonants behave exactly as their counterparts do in the languages you have studied, and the vowel system, while it operates under different rules, is smaller and more orderly than English. What Russian asks of you is not a leap into the unknown but an extension of skills you already possess, guided by a clear and well-documented phonological framework.</p>
 

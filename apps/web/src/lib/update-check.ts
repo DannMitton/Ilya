@@ -55,9 +55,11 @@ export interface RefreshEnv {
 }
 
 /**
- * N.54: `location.reload()` alone lands the singer back on the OLD build, because the worker
- * serves the shell stale-while-revalidate. Dropping its caches sends the reload to the network,
- * and with no network that leaves nothing to serve. So the caches go only after a probe of the
+ * N.54: `location.reload()` alone landed the singer back on the OLD build, because the worker
+ * served the shell stale-while-revalidate. Row 163 made the shell network-first while online
+ * (`static/sw.js`), but the files under it are still served stale-while-revalidate, so dropping
+ * the caches stays right: it sends the reload to the network for all of them, and with no
+ * network that leaves nothing to serve. So the caches go only after a probe of the
  * host succeeds. The probe carries a query the worker has never cached: every other GET is
  * answered `cached || networkFetch`, and a plain `fetch('/')` would succeed offline from the
  * cached shell. Returns 'offline' when the probe failed, and nothing was deleted.

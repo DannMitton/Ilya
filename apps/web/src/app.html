@@ -2,6 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<script>
+  // Row 163. A returning singer whose browser holds an older page can ask for an
+  // entry file the last deploy removed. The page then loads again once, which
+  // fetches the current one. The flag lives in sessionStorage; where storage
+  // throws, nothing is done, so a failure can never loop.
+  (function () {
+    var KEY = 'ilya-chunk-reload';
+    var STALE = /dynamically imported module|Importing a module script failed/i;
+    function reloadOnce() {
+      try {
+        if (sessionStorage.getItem(KEY)) return;
+        sessionStorage.setItem(KEY, '1');
+      } catch (e) {
+        return;
+      }
+      location.reload();
+    }
+    window.addEventListener('unhandledrejection', function (e) {
+      var r = e.reason;
+      var m = r && (r.message || String(r));
+      if (m && STALE.test(m)) reloadOnce();
+    });
+    window.addEventListener(
+      'error',
+      function (e) {
+        var t = e.target;
+        if (t && t !== window && (t.tagName === 'SCRIPT' || t.tagName === 'LINK') && /\/_app\/immutable\//.test(t.src || t.href || '')) reloadOnce();
+      },
+      true
+    );
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="icon" href="%sveltekit.assets%/favicon.png" />
 <link rel="apple-touch-icon" href="%sveltekit.assets%/icons/apple-touch-icon.png" />

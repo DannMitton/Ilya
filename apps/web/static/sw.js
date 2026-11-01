@@ -67,6 +67,29 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Row 163. How long the page may take from the network before the stored one
+// serves in its place (a slow connection must not hold the first paint). A fetch
+// that outlasts the wait still lands in the cache, so the next open is current.
+const NAVIGATE_WAIT_MS = 3000;
+
+function networkFirstPage(request, event) {
+  const cached = () =>
+    caches.open(CACHE_STATIC).then((cache) => cache.match(request).then((hit) => hit || cache.match('/')));
+  const network = fetch(request).then((response) => {
+    if (response && response.status === 200 && response.type === 'basic') {
+      const copy = response.clone();
+      caches.open(CACHE_STATIC).then((cache) => cache.put(request, copy)).catch(() => {});
+    }
+    return response;
+  });
+  // Keep the worker alive for a fetch that loses the race, so it can still update the cache.
+  event.waitUntil(network.catch(() => {}));
+  const late = new Promise((resolve) => setTimeout(() => resolve(null), NAVIGATE_WAIT_MS));
+  return Promise.race([network, late])
+    .then((response) => (response && response.ok ? response : cached().then((hit) => hit || response || network)))
+    .catch(() => cached().then((hit) => hit || network));
+}
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -90,6 +113,16 @@ self.addEventListener('fetch', (event) => {
   // Network-first for dictionary manifest
   if (url.pathname.endsWith('dictionary-manifest.json')) {
     event.respondWith(fetch(request).catch(() => caches.match(request)));
+    return;
+  }
+
+  // Row 163 (Dann 2026-10-30 14:04). The page itself is fetched fresh while the
+  // network answers: a stored `/` names the entry files of the build that stored
+  // it, and after a deploy those files no longer exist, so serving it stale left a
+  // returning singer a blank page once. Offline (or after NAVIGATE_WAIT_MS) the
+  // stored page serves, as before.
+  if (request.mode === 'navigate' || url.pathname === '/') {
+    event.respondWith(networkFirstPage(request, event));
     return;
   }
 

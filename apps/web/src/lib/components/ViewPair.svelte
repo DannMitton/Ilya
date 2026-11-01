@@ -23,9 +23,11 @@
 		/** The tablist's accessible name. */
 		name: string;
 		onchoose: (id: string) => void;
+		/** Row 163 step 5: the active member's fill where it is not `--paper-cream`. Input's pair passes `var(--sage-desk)`. */
+		activeFill?: string;
 	}
 
-	let { items, active, idPrefix, controls, name, onchoose }: Props = $props();
+	let { items, active, idPrefix, controls, name, onchoose, activeFill }: Props = $props();
 
 	function onkeydown(e: KeyboardEvent): void {
 		const at = items.findIndex((item) => item.id === active);
@@ -49,6 +51,7 @@
 			type="button"
 			class="pair-member"
 			class:active={active === item.id}
+			style:background={active === item.id ? activeFill : undefined}
 			role="tab"
 			id="{idPrefix}-{item.id}"
 			aria-selected={active === item.id}
