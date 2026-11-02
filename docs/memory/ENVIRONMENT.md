@@ -67,6 +67,7 @@ next session the same hour it cost the last one.
 | the desk's own shell dies with exit 144, or you plan to message Code directly | `THE DESK HAS NO LINE TO CODE, AND PKILL KILLS ITS OWN SHELL` |
 | an untracked `Claude outputs/` folder appeared | `CLAUDE OUTPUTS IS THE DESKTOP APP` |
 | a stale `.git/index.lock` blocks Dann's commit | `CHECK-IGNORE TAKES THE INDEX LOCK` |
+| Dann rules on something a recent brief departed from | `A DESK DEPARTURE OUTLIVED DANN'S RULE` |
 | you are about to run ANY read-only git from the bridge | `NO-OPTIONAL-LOCKS IS THE FIX` |
 | every header reads the same colour in a browser check | `A HIDDEN PANE FREEZES ITS TRANSITIONS` |
 | a `_to_delete/` folder inside the repo blocks the ship | `_to_delete INSIDE THE REPO` |
@@ -5085,3 +5086,7 @@ The desk put Fable's "22 percent of the jewel gives white text above 4.5:1" to D
 Row 165 steps 5 to 8 and Dann's rulings of 2026-11-01 17:56 and 17:57 treated INSIGHTS' darker finding bar as live. It lived only in `Tessituragram.svelte`, unmounted since row 66 (INSIGHTS draws `PitchSeconds`, `SingerBlock.svelte:121`; `OPEN.md` 2026-10-11 already said so). Code found it at step 8 by looking for `svg.tessituragram` in the live page. Before a brief or a question to Dann names a component, grep for its mount (`<ComponentName` under `apps/web/src`) and say where it is drawn. Also learned: the cloud lane can be read without the Mac's git: `git ls-remote` and a shallow `git fetch` of the lane into a scratch repository in the desk's workspace work through the proxy, where the bridge's git gets 403.
 
 **Desk error, 2026-11-02 00:5x, owned:** the desk told the row 175 session that the ratified French comments use a no-break space U+00A0 before the colon, without reading the file; the file has an ordinary space in all 16 (Code checked and matched the file). Read a typographic claim out of the file before sending it.
+
+### A DESK DEPARTURE OUTLIVED DANN'S RULE: VOWELLESS TOKENS SEATED ON SCANS. Learned 2026-11-02 13:4x
+- The desk (Opus) wrote into stage 2b brief r5 (`../sessions/brief-code-n135-stage2b_r5_2026-10-29.md`, step 4 item 3, written about 00:0x on 2026-10-29) "a deliberate departure": a vowelless token the transcription does not call a clitic stays its own unit on the scan path. Code built it in `1eb05e7d` (`underlay-clitics.ts:28-33`). Dann ruled one vowel per note at 01:18 the same night (`CONTRACT.md` §0.1: a word with no vowel letter takes no note); no desk went back to step 4. On row 114 songs 1 to 5 it seated 38 vowelless syllables on notes (ledger, `~/Downloads/_desk-2026-11-02/m0/`).
+- The desk's error on 2026-11-02 at about 11:0x: it reported this to Dann as "Ilya breaks your rule, by design", which read as his design. It was the desk's. Dann 13:42: *"I don't want this, it's not correct."* Rule: when a ruling of Dann's lands, grep every open brief and the code built from the briefs of that week for a departure it overrides, the same night.
