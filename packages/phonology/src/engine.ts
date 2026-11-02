@@ -1939,9 +1939,8 @@ export const GraysonEngine = {
       if (!leftFinal) continue;
 
       // Rule 2 (Grayson p. 251): before a vowel or sonorant only boundary #4 (preposition, б, ж) keeps
-      // a final's voicing. в is ignored where it would influence: "look to the next letter in line".
+      // a final's voicing. в is ignored where it would influence, for a voiceless final too (row 157): "look to the next letter in line".
       const viaV = rightInitial !== null && this.isVPhoneme(rightInitial);
-      if (viaV && !this.isVoicedObstruent(leftFinal)) continue;
       const effInitial = viaV ? initialPastV(words, i, (ipa) => this.getInitialConsonant(ipa)) : rightInitial;
       if (!rightInitial || !effInitial || this.isSonorantConsonant(effInitial)) {
         if (this.isVoicedObstruent(leftFinal) && keepsVoicingAtBoundary4(leftWord, this.proclitics)) {
