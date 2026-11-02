@@ -5,6 +5,7 @@
  * host's box stands.
  */
 import { describe, expect, it } from 'vitest';
+import { assertVowelPerNote, wholeTokenOf } from './assert-vowel-per-note';
 import { foldClitics, NBSP, type CliticCall } from './underlay-clitics';
 import type { Token } from './underlay-seat';
 import { rowWordSpans } from './underlay-tokens';
@@ -13,11 +14,16 @@ import { cutUnits } from './underlay-units';
 const tok = (text: string, x0: number, x1: number): Token => ({ text, x0, x1 });
 const noCut = (w: string) => [w];
 
-/** Fold a row of tokens whose calls are `calls` by word. */
+/**
+ * Fold a row of tokens whose calls are `calls` by word, then drop what takes no note, as `seatPage` does
+ * (`underlay-page.ts`): `foldClitics` folds, `assertVowelPerNote` drops (`CONTRACT.md` §0.1).
+ */
 function fold(tokens: Token[], calls: CliticCall[], cut: (w: string) => string[] = noCut) {
-	const { units, origin } = cutUnits(tokens, cut);
+	const cutRow = cutUnits(tokens, cut);
 	const spans = rowWordSpans(tokens);
-	return foldClitics(units, origin, spans, calls);
+	const folded = foldClitics(cutRow.units, cutRow.origin, spans, calls);
+	const checked = assertVowelPerNote(folded.units, wholeTokenOf(cutRow.origin, folded.origin));
+	return { units: checked.kept, counts: folded.counts, refused: checked.refused };
 }
 
 describe('foldClitics', () => {
@@ -45,21 +51,25 @@ describe('foldClitics', () => {
 		expect(out.units.map((u) => u.text)).toEqual([`в${NBSP}с${NBSP}силах`]);
 	});
 
-	it('leaves a vowelless token the transcription does not call a clitic as a unit of its own (a misread letter), unlike buildSlotQueue', () => {
+	// Was (N.135 stage 2b): a vowelless token the transcription does not call a clitic stayed a unit of its own. Now: it is dropped (CONTRACT §0.1).
+	it('drops a vowelless token the transcription does not call a clitic (a misread letter): it takes no note', () => {
 		const out = fold([tok('мой', 100, 150), tok('т', 160, 170), tok('друг', 200, 260)], [null, null, null]);
-		expect(out.units.map((u) => u.text)).toEqual(['мой', 'т', 'друг']);
+		expect(out.units.map((u) => u.text)).toEqual(['мой', 'друг']);
+		expect(out.refused.map((r) => [r.item.text, r.why])).toEqual([['т', 'vowelless']]);
 		expect(out.counts).toMatchObject({ folded: 0, left: 0 });
 	});
 
-	it('leaves a proclitic with no host after it in the row as a unit of its own, and counts it', () => {
+	// Was: a proclitic with no host stayed a unit of its own, counted. Now: dropped, still counted.
+	it('drops a proclitic with no host after it in the row, and counts it', () => {
 		const out = fold([tok('тебя', 100, 160), tok('в', 200, 210)], [null, 'proclitic']);
-		expect(out.units.map((u) => u.text)).toEqual(['тебя', 'в']);
+		expect(out.units.map((u) => u.text)).toEqual(['тебя']);
 		expect(out.counts).toMatchObject({ folded: 0, left: 1 });
 	});
 
-	it('leaves an enclitic with no host before it, and counts it', () => {
+	// Was: an enclitic with no host stayed a unit of its own, counted. Now: dropped, still counted.
+	it('drops an enclitic with no host before it, and counts it', () => {
 		const out = fold([tok('ж', 100, 110), tok('мой', 150, 200)], ['enclitic', null]);
-		expect(out.units.map((u) => u.text)).toEqual(['ж', 'мой']);
+		expect(out.units.map((u) => u.text)).toEqual(['мой']);
 		expect(out.counts.left).toBe(1);
 	});
 
@@ -68,9 +78,16 @@ describe('foldClitics', () => {
 		expect(out.units.map((u) => u.text)).toEqual(['не', 'силах']);
 	});
 
-	it('counts ѣ, і, and ѵ as vowels, the set cutUnits uses', () => {
+	// Was: a lone «ѣ» token was a unit (it counted as a vowel). Now: a lone ѣ, і, or ѵ that is its whole token is a stray mark and is dropped.
+	it('drops a lone ѣ token as a stray mark', () => {
 		const out = fold([tok('ѣ', 100, 120), tok('силах', 150, 250)], ['proclitic', null]);
-		expect(out.units).toHaveLength(2);
+		expect(out.units.map((u) => u.text)).toEqual(['силах']);
+		expect(out.refused.map((r) => r.why)).toEqual(['stray']);
+	});
+
+	it('counts ѣ, і, and ѵ as vowels in a word that holds other letters, the set cutUnits uses', () => {
+		const out = fold([tok('гѣ', 100, 150), tok('силах', 160, 250)], [null, null]);
+		expect(out.units.map((u) => u.text)).toEqual(['гѣ', 'силах']);
 	});
 });
 

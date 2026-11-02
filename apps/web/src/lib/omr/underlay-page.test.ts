@@ -188,11 +188,13 @@ describe('seatPage with the transcription\'s clitic call (brief r5 step 4)', () 
 		expect(page.stats.counted.ownNote).toEqual([{ text: 'в', x: 90, system: 1, row: 1 }]);
 	});
 
-	it('gives a lone «в» a note of its own where the call is not given (the stage 2b reader as built)', () => {
+	// Was (the stage 2b reader as built): a lone «в» took a note of its own where the call is not given, notes [0, 1, 2].
+	// Now: a vowelless unit takes no note on any path (CONTRACT §0.1), so «в» is dropped and counted, and «мир» and «ты» keep notes 1 and 2.
+	it('drops a lone «в» where the call is not given: it takes no note', () => {
 		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), row3, seams);
-		expect(shape(page).flat().map((s) => s[2])).toEqual([0, 1, 2]);
-		expect(shape(page)[0][0][1]).toBe('single');
+		expect(shape(page).flat().map((s) => [s[0], s[2]])).toEqual([['мир', 1], ['ты', 2]]);
 		expect(page.stats.clitics).toEqual({ folded: 0, left: 0, ownNote: 0 });
+		expect(page.stats.dropped).toEqual({ vowelless: 1, stray: 0 });
 	});
 });
 

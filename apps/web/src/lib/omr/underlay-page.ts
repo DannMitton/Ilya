@@ -31,6 +31,7 @@ import { rowLanguage, wordKnown } from './underlay-language';
 import { fallbackRow } from './underlay-fallback';
 import type { StaffBoxLike } from './metre-windows';
 import { seatTokens, type NotePlace, type Seat, type Token } from './underlay-seat';
+import { assertVowelPerNote, wholeTokenOf } from './assert-vowel-per-note';
 import { foldClitics, type CliticCall, type OwnNote } from './underlay-clitics';
 import { vowelsPerNote, type Breach } from './vowels-per-note';
 import { freeNoteXs, manyVowelsInUnits, manyVowelsMerged, type ManyVowelCounts } from './underlay-counts';
@@ -106,8 +107,10 @@ export interface UnderlayStats {
 	/** Sewn words of two letters or more in the Russian rows, and how many of them the dictionary holds. */
 	words: number;
 	known: number;
-	/** Vowelless words the transcription calls clitics: folded into a host (`folded`), or left a unit of their own for want of one (`left`). */
+	/** Vowelless words the transcription calls clitics: folded into a host (`folded`), or dropped for want of one (`left`). */
 	clitics: { folded: number; left: number; ownNote: number };
+	/** Units that took no note because they hold no vowel letter (`vowelless`, clitics left for want of a host among them) or are a lone і, ѣ, or ѵ (`stray`): not seated, not written. */
+	dropped: { vowelless: number; stray: number };
 	/**
 	 * Folded clitics the print appears to give a note of their own, with the row they were in (counted, never acted on:
 	 * `underlay-clitics.ts`), and the units of two vowels or more (`underlay-counts.ts`): cut, and merged on one note.
@@ -168,6 +171,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		words: 0,
 		known: 0,
 		clitics: { folded: 0, left: 0, ownNote: 0 },
+		dropped: { vowelless: 0, stray: 0 },
 		counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, breaches: [] },
 	};
 	const seats: Seat[] = [];
@@ -203,14 +207,21 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			const cutRow = cutUnits(tokens, seams.cut);
 			const { counts } = cutRow;
 			let units = cutRow.units;
+			let origin = cutRow.origin;
 			if (seams.clitics) {
 				const folded = foldClitics(units, cutRow.origin, spans, seams.clitics(words), free);
 				units = folded.units;
+				origin = folded.origin;
 				stats.clitics.folded += folded.counts.folded;
 				stats.clitics.left += folded.counts.left;
 				stats.clitics.ownNote += folded.counts.ownNote.length;
 				stats.counted.ownNote.push(...folded.counts.ownNote.map((o) => ({ ...o, system: s + 1, row: r + 1 })));
 			}
+			// One vowel per note (`CONTRACT.md` §0.1): a unit with no vowel letter takes no note, and a stray mark is no unit.
+			// Whatever `foldClitics` could not join to a host is dropped here, on every path, with or without calls.
+			const checked = assertVowelPerNote(units, wholeTokenOf(cutRow.origin, origin));
+			units = checked.kept;
+			for (const r of checked.refused) stats.dropped[r.why]++;
 			stats.counted.manyVowels.cut.push(...manyVowelsInUnits(units, free));
 			stats.units += units.length;
 			stats.cuts.cut += counts.cut;

@@ -25,13 +25,18 @@
  * it, and the seats must agree with the cut beside them. They differ only for a
  * word whose only vowel letter is ѣ, і, or ѵ.
  *
- * A DELIBERATE DEPARTURE from `buildSlotQueue`, which also folds leftward any
- * vowelless word that is not a proclitic when a host precedes it in the line
- * (`pairings.ts`, `w.isEnclitic || (!w.isProclitic && lastInLine !== null)`):
- * here a vowelless word the transcription does not call a clitic stays a unit of
- * its own, because on a scan such a token is often a misread letter («т», «н»,
- * «Тът»). A proclitic with no host after it in the row, and an enclitic with
- * none before it, stay units of their own and are counted.
+ * ONE VOWEL PER NOTE (`CONTRACT.md` §0.1, Dann 2026-10-29 01:18 and 2026-11-02
+ * 13:46, no exceptions): a vowelless unit takes no note on any path. A clitic the
+ * transcription calls a clitic joins its host here. A proclitic with no host after
+ * it in the row, an enclitic with none before it, and any other vowelless unit
+ * (on a scan often a misread letter: «т», «н», «Тът») stay in the list this
+ * function returns, and `seatPage` drops them with `assertVowelPerNote`
+ * (`assert-vowel-per-note.ts`); nothing here seats them. `counts.left` is the
+ * number of clitics left for want of a host, which that drop then removes. The
+ * print's letters are not altered. This replaces the desk departure of
+ * 2026-10-29 (a vowelless word the transcription did not call a clitic stayed a
+ * unit of its own), which broke §0.1. `buildSlotQueue` (`pairings.ts`) agrees in
+ * effect, not in mechanism: it folds a vowelless piece leftward, the scan drops.
  *
  * COUNT ONLY, step 7 (desk ruling 2026-10-29 02:2x, withdrawing the proposal that
  * Ilya follow a print that gives a clitic a note of its own): a clitic the
@@ -74,7 +79,7 @@ export interface OwnNote {
 export interface FoldCounts {
 	/** Vowelless words folded into a host. */
 	folded: number;
-	/** Clitics the transcription called that had no host in the row, and stayed units of their own. */
+	/** Clitics the transcription called that had no host in the row: dropped by `seatPage` for want of one, never seated. */
 	left: number;
 	ownNote: OwnNote[];
 }
@@ -91,7 +96,7 @@ export function foldClitics(
 	calls: readonly CliticCall[],
 	/** The x of each free note of the system (not tied into, not under an extender), sorted ascending; absent, `ownNote` is not counted. */
 	free: readonly number[] = [],
-): { units: Token[]; counts: FoldCounts } {
+): { units: Token[]; origin: number[]; counts: FoldCounts } {
 	const out = units.map((u) => ({ ...u }));
 	const gone = new Set<number>();
 	const counts: FoldCounts = { folded: 0, left: 0, ownNote: [] };
@@ -138,5 +143,6 @@ export function foldClitics(
 		const host = words.findIndex((_, k) => k > i && hasVowel[k] && unitsOf(words[k]).length > 0);
 		if (host < 0 || !ride(words[i], host, true)) counts.left++;
 	}
-	return { units: out.filter((_, i) => !gone.has(i)), counts };
+	const kept = out.map((_, i) => i).filter((i) => !gone.has(i));
+	return { units: kept.map((i) => out[i]), origin: kept.map((i) => origin[i]), counts };
 }
