@@ -150,3 +150,53 @@ Same number computed elsewhere: `transcribe`'s isolation path (`engine.ts:1725-1
 | 6 blurb | 148 passed |
 | 7 score-parser | 785 passed, 5 skipped (790) |
 | 8 ratchets | OK; `engine.ts` 2051 to 2049 and `pipeline.ts` 925 to 901, both taken |
+
+---
+
+## Step 2: the в look-through for a voiceless final
+
+### What changed
+
+- `packages/phonology/src/engine.ts:1944` (the brief's `:2184`): the line `if (viaV && !this.isVoicedObstruent(leftFinal)) continue;` is gone, and its sentence in the comment above now says "for a voiceless final too (row 157)". A voiceless left final before в is no longer skipped; its effective initial comes from `initialPastV` (`:1944`, the line below) as a voiced one's does, and the existing voicing branch (`:1983-1986`) voices it when that initial is a voiced obstruent. Nothing else in the four branches changed. `engine.ts` is 2048 lines (ceiling lowered from 2049).
+- Removing the line reopened no type error (gate 3: 0 errors): `rightInitial` stays narrowed by the `continue` at `:1946-1951`'s block, which stays.
+
+### Pins, each shown failing first
+
+`packages/phonology/tests/voicing-rule2.test.ts`: the pin at `:128-131` ("a voiceless final before в + voiced obstruent is unchanged (decided in N.198: not extended)", «лес вдали» → `ˈlʲɛs`) is rewritten to the new reading, citing p. 251: «лес вдали» → `ˈlʲɛz`. Nine tests added. **Failed first against the unchanged engine** (four of the ten): «лес вдали» (the rewritten pin), «лес в доме», «кот вдруг», and the test of what the branch reaches through в. Pass before and after (guards): «лес в траве», a voiceless letter after the word's own в, «лес вот», «лес в лесу», «лес в мае», «лес в. доме» (a hard boundary after the bare в), «сад вдали», «слух был», «кров вдали».
+
+`apps/web/src/lib/voicing-rule2.pipeline.test.ts` (through `processText` with the real dictionary), seven `it.each` rows: «лес вдали» → `ˈlʲɛz`, «лес в доме» → `ˈlʲɛz`, «кот вдруг» → `ˈkod` (failed first); «лес в траве», «лес вот», «лес в лесу» → `ˈlʲɛs`, «сад вдали» → `ˈsɑd` (guards).
+
+### What the branch now reaches through в (pinned at engine level; the brief asks)
+
+| Phrase | The first word, after | Reading |
+|---|---|---|
+| дух вдали | `ˈduɣ` | х to ɣ, the allophone `crossWordVoicingMap` already gives without в |
+| отец вдали | `ɑˈtʲɛdz` | ц to dz |
+| врач вдали | `ˈvrɑdʒʲ` | ч to dʒʲ |
+| плащ вдали | `ˈplɑʃʲʃʲ` | щ unchanged (no entry in the map) |
+| слух был | `ˈsɫuɣ` | the same allophone without в (the comment at the voicing branch) |
+| кров вдали | `ˈkrof` | a left final в is unchanged: `v` is in neither consonant set, so it falls through to the final loop as before |
+
+Whether the х to ɣ, ц to dz, ч to dʒʲ allophones at a word boundary are Grayson's: NOT ESTABLISHED; they predate this row.
+
+### The approval corpus
+
+**0 lines move.** `ipa-corpus.approval.test.ts` passes unchanged in gate 4, so no corpus line holds a voiceless final before в plus a voiced obstruent (step 0 found none by pattern; the test confirms it by output). The corpus is not re-approved.
+
+### Leads, measured on this cut; nothing built (the brief's order)
+
+- **A final в before a voiced obstruent still devoices:** «любовь дала» → `lʲu ˈbofʲ` and «кровь брата» → `ˈkrofʲ` (the final loop devoices the в as before; the ribbon says ⟨в⟩ → [fʲ] with the final-devoicing blurb). Dann's, under p. 251.
+- **The Inspector after a cross-word voicing is a known gap, confirmed by run:** «кот бы» shows `⟨т⟩ → [t]` ("stays [t]") under `ˈkod`; «лес вдали» now shows `⟨с⟩ → [s]` ("stays [s]") under `ˈlʲɛz`; so do «лес в доме» (`ˈlʲɛz`), «кот вдруг» (`ˈkod`), and «дух вдали» (`⟨х⟩ → [x]` under `ˈduɣ`). The branches at `:1983-2003` set no log feature and the mark in `voicing-log.ts` (the block moved from `pipeline.ts:866-869`) marks devoicing only. `regressive-voicing:с` has no `{trigger}` in the template data. The symmetric mark, about ten lines, waits for Dann to see these lines.
+
+### Gates, after step 2
+
+| # | Result |
+|---|---|
+| 1 phonology | 428 passed (+9) |
+| 2 dictionary | 248 passed |
+| 3 check | 0 errors, 12 warnings |
+| 4 web unit | 3917 passed, 1 skipped (3918) (+7) |
+| 5 root integration | 98 passed |
+| 6 blurb | 148 passed |
+| 7 score-parser | 785 passed, 5 skipped (790) |
+| 8 ratchets | OK; `engine.ts` 2049 to 2048, taken |

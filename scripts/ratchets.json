@@ -10,7 +10,7 @@
     "packages/score-parser/src/staff-renderer.ts": 3427,
     "apps/web/src/lib/score/Loupe.svelte": 3012,
     "apps/web/src/lib/components/Drawer/InspectorPanel.svelte": 2432,
-    "packages/phonology/src/engine.ts": 2049,
+    "packages/phonology/src/engine.ts": 2048,
     "apps/web/src/lib/voice/CalibrationWizard.svelte": 2124,
     "apps/web/src/lib/components/Drawer/Drawer.svelte": 1990,
     "apps/web/src/lib/markup/MarkupPane.svelte": 1364,

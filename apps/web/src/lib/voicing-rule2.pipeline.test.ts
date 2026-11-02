@@ -195,3 +195,18 @@ describe('row 157: «бог» as ruled (Dann 2026-10-26 21:35): [box] except bef
 		expect(ribbon('Бог даст').features.finalDevoicing).toBe(false);
 	});
 });
+
+describe('row 157: the в look-through for a voiceless final, through the pipeline (p. 251)', () => {
+	const first = (text: string) => display(text)[0];
+	it.each([
+		['лес вдали', 'ˈlʲɛz'],
+		['лес в доме', 'ˈlʲɛz'],
+		['кот вдруг', 'ˈkod'],
+		['лес в траве', 'ˈlʲɛs'],
+		['лес вот', 'ˈlʲɛs'],
+		['лес в лесу', 'ˈlʲɛs'],
+		['сад вдали', 'ˈsɑd'],
+	])('%s: the first word reads %s', (text, expected) => {
+		expect(first(text)).toBe(expected);
+	});
+});
