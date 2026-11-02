@@ -103,11 +103,11 @@ describe('row 97: the three ratified Guide passages are seated', () => {
 		['A', 'fr', 'des défis précis à aborder avec votre professeure ou professeur.</p>'],
 		['B', 'en', 'MELODY draws its notation conventions from Mitton (2020, Appendices B and C).'],
 		['B', 'en', 'The text underlay offers the same IPA values imported from TEXT that correspond with the Cyrillic lyrics.</p>'],
-		['B', 'fr', 'L’Annotation tire ses conventions de notation de Mitton (2020, annexes B et C).'],
-		['B', 'fr', 'Sous la portée, le texte reprend les mêmes valeurs API, importées du Texte, en regard des paroles cyrilliques.</p>'],
+		['B', 'fr', 'Le CHANT tire ses conventions de notation de Mitton (2020, annexes B et C).'],
+		['B', 'fr', 'Sous la portée, le texte reprend les mêmes valeurs API, importées du TEXTE, en regard des paroles cyrilliques.</p>'],
 		['C', 'en', '<em>Ilya</em>’s main phonological authority, used with Grayson’s generous consent. MELODY and INSIGHTS implement an open and close timbre markup'],
 		['C', 'en', 'an <em>f</em><sub>R1</sub>/<em>f</em><sub>o</sub> crossing analysis, and sung-vowel modification advice.</p>'],
-		['C', 'fr', 'principale autorité phonologique d’<em>Ilya</em>, utilisée avec le généreux consentement de Grayson. L’Annotation et les Aperçus mettent en œuvre'],
+		['C', 'fr', 'principale autorité phonologique d’<em>Ilya</em>, utilisée avec le généreux consentement de Grayson. Le CHANT et les APERÇUS mettent en œuvre'],
 		['C', 'fr', 'des croisements <em>f</em><sub>R1</sub>/<em>f</em><sub>o</sub> et des conseils de modification vocalique.</p>']
 	];
 	it.each(pins)('passage %s (%s) carries %#', (_p, lang, text) => {
