@@ -38,6 +38,7 @@ import type { GlossLanguage, BilingualGloss, DictionaryEntry } from '@ilya/dicti
 import { buildDisplayLog } from '@ilya/blurb';
 
 import { applyReconstitution } from './reconstitution';
+import { writeSurfaceToWord } from './voicing-log';
 import { hasVowel, mergeCliticDisplay } from './clitic-merge';
 import { peelSyntacticBreaks, tokenSpans, type TokenSpan } from './syntactic-break';
 import { markLatinWords } from './latin';
@@ -848,32 +849,7 @@ function finishLine(transcribedWords: TranscribedWord[]): void {
   // ── Post-process: update syllable IPA after assimilation ──
 
   transcribedWords.forEach((tw) => {
-    if (tw.ipaSurface !== tw.ipaUnderlying && tw.syllables.length > 0) {
-      const lastSyl = tw.syllables[tw.syllables.length - 1];
-      const underlyingConcat = tw.syllables.map((s: SyllableData) => s.ipa).join('');
-      const surfaceClean = (tw.ipaSurface ?? '').replace(/[ˈ\s]+/g, '');
-      const prefixLen = underlyingConcat.length - lastSyl.ipa.length;
-
-      if (surfaceClean.length >= prefixLen) {
-        const newLastSylIpa = surfaceClean.slice(prefixLen);
-        lastSyl.ipa = newLastSylIpa;
-
-        // Update transcription log: mark final consonant as devoiced
-        if (tw.transcriptionLog && tw.transcriptionLog.length > 0) {
-          for (let i = tw.transcriptionLog.length - 1; i >= 0; i--) {
-            const entry = tw.transcriptionLog[i];
-            if (entry.features && entry.features.type === 'consonant') {
-              const devoicingMap = GraysonEngine.voicedToVoiceless;
-              if (devoicingMap[entry.ipa]) {
-                entry.ipa = devoicingMap[entry.ipa];
-                entry.features.finalDevoicing = true;
-              }
-              break;
-            }
-          }
-        }
-      }
-    }
+    writeSurfaceToWord(tw);
 
     // Build ipaContent from syllable data (preserves intersyllabic spaces)
     const ipaCore = tw.syllables

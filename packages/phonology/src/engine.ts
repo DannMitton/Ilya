@@ -16,7 +16,7 @@ import { annotatePalatalization, computePalatalization, softAt } from './palatal
 import { SHCHA_CLUSTERS } from './shcha-clusters';
 import { lexicalExceptionVowelIndex } from './lexical-exception';
 import { reflexiveParticleAt } from './reflexive';
-import { initialPastV, keepsVoicingAtBoundary4, restoreBogFinish } from './voicing-rule2';
+import { finishBog, initialPastV, keepsVoicingAtBoundary4 } from './voicing-rule2';
 
 // ─────────────────────────────────────────────────────────────────────
 // TYPES
@@ -1721,7 +1721,7 @@ export const GraysonEngine = {
     // For standalone words, apply devoicing now
     let ipaSurface = ipa;
     if (!isClitic) {
-      // Exception: бог → /box/ (Grayson p. 242) — г becomes /x/ not /k/
+      // Exception: бог → /box/ (Grayson p. 144) — г becomes /x/ not /k/
       // This is a Church Slavonic preservation
       if (cleanWord === 'бог' && ipa.endsWith('ɡ')) {
         ipaSurface = ipa.slice(0, -1) + 'x';
@@ -2003,13 +2003,11 @@ export const GraysonEngine = {
       }
     }
 
-    // Final devoicing (Grayson pp. 199-202) for words that did not undergo cross-word assimilation.
-    // Only clitic boundaries suppress it; the branches above set skipFinalDevoicing for the rest.
-    words.forEach((word, i) => {
-      if (!word.skipFinalDevoicing && word.rightBoundary !== 'clitic') {
-        word.ipaSurface = restoreBogFinish({ ...word, ipaSurface: this.applyFinalDevoicing(word.ipaSurface) });
-      }
+    // Final devoicing (Grayson pp. 199-202) for words that did not undergo cross-word assimilation; only clitic boundaries suppress it.
+    words.forEach((word) => {
+      if (!word.skipFinalDevoicing && word.rightBoundary !== 'clitic') word.ipaSurface = this.applyFinalDevoicing(word.ipaSurface);
     });
+    finishBog(words, (ipa) => this.getInitialConsonant(ipa), (c) => this.isVoicedObstruent(c));
   }
 };
 

@@ -76,13 +76,36 @@ export function initialPastV(
 }
 
 /**
- * «бог» keeps [x] (Grayson p. 144, [box]). `transcribe` writes it into the
- * surface and the syllables, not into `ipaUnderlying`, and the cross-word pass
- * starts from `ipaUnderlying`, so a word the pass devoices to [k] gets its [x]
- * back here. Only inside a line: before a hard boundary «бог» stays as it was
- * (reported in N.198, not ruled).
+ * «бог» AS RULED, row 157 (Dann 2026-10-26 21:35: "We can rest on general
+ * knowledge for some intelligibility issue like this, where [bog] or [bok]
+ * would certainly raise eyebrows"): [box] alone, at a hard boundary, and
+ * before a vowel, a sonorant, or a voiceless consonant; [boɣ] before a voiced
+ * obstruent; never [bok] and never [boɡ]. Grayson p. 144 gives the citation
+ * form [box] and nothing else (NOT ESTABLISHED in Grayson beyond that).
+ *
+ * `transcribe` writes [x] into the isolated word, and the cross-word pass
+ * starts from `ipaUnderlying`, so the surface comes out of the pass with the
+ * final devoiced to [k] or left voiced [ɡ]. This runs after the pass, whatever
+ * `skipFinalDevoicing` or the boundary says, and puts the ruled final on every
+ * word that is «бог». The right initial is read as the pass reads it, with в
+ * looked through (`initialPastV`, p. 251): «Бог в доме» is [boɣ], «Бог в траве»
+ * is [box] (the bare в already reads [f] by then, which is voiceless).
  */
-export function restoreBogFinish(word: { cyrillic: string; cleanWord?: string; ipaSurface: string; rightBoundary: string }): string {
-  if (word.rightBoundary === 'hard' || lettersOf(word.cleanWord ?? word.cyrillic) !== 'бог') return word.ipaSurface;
-  return word.ipaSurface.endsWith('k') ? word.ipaSurface.slice(0, -1) + 'x' : word.ipaSurface;
+export function finishBog(
+  words: ReadonlyArray<{ cyrillic: string; cleanWord?: string; ipaSurface: string; rightBoundary: string }>,
+  initialOf: (ipa: string) => string | null,
+  isVoicedObstruent: (c: string) => boolean,
+): void {
+  words.forEach((word, i) => {
+    if (lettersOf(word.cleanWord ?? word.cyrillic) !== 'бог') return;
+    const stem = word.ipaSurface.replace(/[\u0261kx]$/, '');
+    if (stem === word.ipaSurface) return;
+    let final = 'x';
+    if (word.rightBoundary !== 'hard' && words[i + 1]) {
+      const first = initialOf(words[i + 1].ipaSurface);
+      const effective = first === 'v' || first === 'vʲ' ? initialPastV(words, i, initialOf) : first;
+      if (effective && isVoicedObstruent(effective)) final = 'ɣ';
+    }
+    word.ipaSurface = stem + final;
+  });
 }
