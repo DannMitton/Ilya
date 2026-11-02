@@ -5070,3 +5070,9 @@ The desk put Fable's "22 percent of the jewel gives white text above 4.5:1" to D
 - **Chromium stores an alpha in 8 bits,** so a contrast computed at 57 percent read 4.48:1 live; compute contrast on the rendered value (row 165 step 5).
 - **`syntactic-break-unit.test.ts` ran 4.5 to 4.9 s against vitest's 5 s limit** and failed 4 of 7 full runs; it now carries an explicit 20 s timeout (`4d83817a`).
 - **A docs-only push is skipped by Vercel's Ignored Build Step** (seen again: `bddc1e27` CANCELED); a push that changes code builds.
+
+### A NOTES SCAN, WHEN THE NOTES FOLDER CANNOT BE GRANTED. Learned 2026-11-01 23:0x
+- Notes' own File > Export as > PDF and File > Print carry only the first page of a scan. The whole scan comes out through the scan's own menu (the arrow beside the scan's owner name in the note; opening it needs full-screen control), Open Attachment, which opens it in Preview; then Preview, File > Export… (Export as PDF… is disabled there) to Downloads. A save sheet in the background must be expanded with its disclosure triangle before Save is allowed. Folder requests for the Notes container and the library were refused by the session's automatic check on 2026-11-01, not by Dann.
+- 2026-11-01 23:38: the desk wrote "⟨п⟩ in «хребти»" in a draft comment (twice tonight); the letter is ⟨б⟩, which devoices to [p] before ⟨т⟩ (D&P p. 78 transcribe it хрьептьи). Dann caught it. Lesson: name the letter from the spelling, never from a transcription on the page.
+- 2026-11-01 00:0x: the desk told Dann "Grayson divides «те-рпе́ть»" from his p. 208 rule; his own n. 277 prints tʲirʲ ˈpʲetʲ. Lesson: check a source's printed examples before stating how it applies its own rule.
+- 2026-11-02 00:2x: brief r1 labelled «ветки» and «три» "D&P rows (dental soft)"; D&P print both n/c (pp. 79-80). Fable caught it. Lesson: give each test row the source that actually prints that value.
