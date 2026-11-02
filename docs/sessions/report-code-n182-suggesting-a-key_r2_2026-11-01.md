@@ -72,3 +72,63 @@ The mapping of numbers to gates is inferred (see row 172's step 0 report); the s
 - How a singer reaches the analysis in a suggested key from a line, in steps, and whether anything blocks it: traced in step 3, since it needs the wiring.
 - The cap's binding count on fixtures: measured in step 4.
 - Surrogate vowel counts on fixture voices: step 4.
+
+---
+
+## Step 1: the search (pure)
+
+### What changed
+
+- New `apps/web/src/lib/insights/key-fractions.ts` (33 lines): `fractionOf(share)` and the table.
+- New `apps/web/src/lib/insights/key-suggest.ts` (344 lines): `suggestKeys`, `measureKey`, `improves`, `matters`, `suits`, `primoApplies`, `challengeWeight`, `stakesOf`, and the types `ChallengeSet`, `Passage`, `Beyond`, `KeyOption`, `KeySuggestion`, `KeySearchInput`. Nothing else is edited: `searchBetterKey`, `shareAfter`, and `BetterKey` still stand in `singer-page.ts` until step 3, and nothing reads the new modules yet.
+- New `apps/web/src/lib/insights/key-suggest.test.ts` (30 tests).
+
+### The fraction table (DESK DEFAULT, JUDGEMENT, one table: `key-fractions.ts`)
+
+| Share of sung time | Said as |
+|---|---|
+| under 0.20 | no fraction (the line says "some", or says nothing) |
+| 0.20 to under 0.29 | about a quarter |
+| 0.29 to under 0.40 | about a third |
+| 0.40 to under 0.48 | nearly half |
+| 0.48 to under 0.55 | about half |
+| 0.55 and over | most |
+
+### Where this build departs from the old one, and from the brief's letter
+
+1. **The reference key is the score as INSIGHTS analyses it** (A1): `KeySearchInput.score` is `analysisScore`; every `semitones` is a move from it. Step 3 passes `analysisScore`.
+2. **The primo axis exists only for tenor, baritone, bass-baritone, and bass** (A2): `primoApplies`, `PRIMO_VOICES`. For any other type, "not sure", or no type: `set.primo` is absent and `primoShare` is null. The search takes the declared type as its own argument (`voiceType`), as A2 says it must.
+3. **"Suits"** (A2's consequence for rule 4): range inside, no primo challenge where the voice has one, nothing above the secondo, no sustained note above it.
+4. **Passages, never notes or pitches** (A3, Dann 2026-11-01 22:39): `Beyond` holds the farthest distance in semitones and the ranked bar runs (`Passage`: first bar, last bar, sung time out of range in whole notes). No pitch and no count of notes is in a `KeyOption`; a test fails if one appears.
+5. **`improves` is narrower than the brief's "a challenge gained or lost".** The brief says a key qualifies when it gains or loses a challenge, or a share moves by 10 points. Read literally, that shows a key that only adds challenges to a key that already has some. I did not take that to be the intent ("keys that let the singer see, and consent to, the challenges each brings" is about options that bring something better), so a group's key qualifies only when it **loses** a challenge or **lowers** a share by `BETTER_KEY_MIN_DROP`; a key that gains one thing while losing another still shows, and its line (step 2) says both. `matters` (the brief's exact test) is kept and tested. A one-line change in `suggestKeys` restores the literal reading. DESK DEFAULT; Dann's to rule; listed in "For Dann".
+6. **When the key read "suits"** the lines under it are empty (no key is offered that only adds challenges); the keys beyond the margin stay under the reveal.
+7. **Sustained note**: the identifier is `sustained`, not `held`, and its test is `NoteCondition.held` as `longestAboveSecondo` uses it (`singer-page.ts:100-120`). It needs a tempo only through `chainSeconds` for choosing the longest; a missing tempo picks the first (A7: tempo does not move a share).
+
+### Fixture voices (named, each with a typed range and typed passaggi)
+
+| Name | Range | Primo | Secondo | Declared |
+|---|---|---|---|---|
+| `TENOR` | C3 to A4 | D4 | G4 | tenor |
+| `SOPRANO` | C4 to C6 | E4 | F5 | soprano |
+| `BASS` | E2 to E4 | B2 | E3 | bass |
+
+These are test constants (the brief asks for "at least one soprano, one tenor, and one bass"; no low-voice norm in the proof). Step 4 uses real ones for the pictures.
+
+### Tests (what they pin)
+
+Fractions (bands, table ascending, a non-number); `primoApplies` for all nine Tier 1 ids plus none; the same E5 notes give a soprano no primo axis and a tenor one; the weights and `stakesOf`; passages ranked by sung time with bar runs merged; no pitch or count in the output; the two-semitone margin; a note below the range; no typed range gives nothing, no passaggi gives the range axis only; a sustained note moved by the key and a passing note not named; a surrogate vowel leaves the share past the turn and returns null when none is left, while a derived one counts; one group per challenge set, at most three, each improving; keys never worse; order by stakes, primo share, move, lower key; `suits`; `noneBetter`; `noWorkable` with all twelve keys under the reveal; the reveal nearest first; **the cap, on a real four-group piece found by a seeded search (the tenor, 16 quarters): three groups shown (-4, -5, -2), the fourth (-1) under the reveal, `capBound` true**; the intake changes the order and never which keys are shown.
+
+### Gates, after step 1
+
+| # | Result |
+|---|---|
+| 1 phonology | 407 passed |
+| 2 dictionary | 248 passed |
+| 3 check | 0 errors, 12 warnings |
+| 4 web unit | 3876 passed, 1 skipped (3877) (+30) |
+| 5 root integration | 98 passed |
+| 6 blurb | 148 passed |
+| 7 score-parser | 785 passed, 5 skipped (790) |
+| 8 ratchets | OK, nothing offered |
+
+New files are 344 and 33 lines against the 1000-line ceiling; test files are not measured.
