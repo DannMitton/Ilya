@@ -230,3 +230,43 @@ describe('row 157: the в look-through for a voiceless final (Grayson p. 251: "i
     expect(left('кров', 'ˈkrov', word('вдали', 'vdɑˈlʲi', 'hard'))).toBe('ˈkrof');
   });
 });
+
+describe('row 157: a kept voicing is marked on the word (retainedVoicing), for the Inspector blurb', () => {
+  const mark = (...words: ReturnType<typeof word>[]) => {
+    run(...words);
+    return words.map((w) => (w as { retainedVoicing?: boolean }).retainedVoicing === true);
+  };
+
+  it('меж нас, без Анны, сквозь нас: the preposition keeps its voicing before a sonorant or a vowel, and is marked', () => {
+    expect(mark(word('меж', 'mʲɪʒ', 'clitic'), word('нас', 'ˈnɑs', 'hard'))[0]).toBe(true);
+    expect(mark(word('без', 'bʲɪz', 'clitic'), word('Анны', 'ˈɑnnɨ', 'hard'))[0]).toBe(true);
+    expect(mark(word('сквозь', 'ˈskvozʲ', 'soft'), word('нас', 'ˈnɑs', 'hard'))[0]).toBe(true);
+  });
+  it('если б мог: the particle contraction б is marked', () => {
+    expect(mark(word('если', 'ˈjesʲlʲi', 'clitic'), word('б', 'b', 'soft'), word('мог', 'ˈmoɡ', 'hard'))[1]).toBe(true);
+  });
+  it('an ordinary word is not: сад наш, Бог мой', () => {
+    expect(mark(word('сад', 'ˈsɑd', 'soft'), word('наш', 'ˈnɑʃ', 'hard'))[0]).toBe(false);
+    expect(mark(word('Бог', 'ˈboɡ', 'soft'), word('мой', 'ˈmoj', 'hard'))[0]).toBe(false);
+  });
+  it('through в it is not: под водой, без вас keep their voicing as before and carry no blurb (the singer sees «водой», not a vowel)', () => {
+    expect(mark(word('под', 'pʌd', 'clitic'), word('водой', 'vɑˈdoj', 'hard'))[0]).toBe(false);
+    expect(mark(word('без', 'bʲɪz', 'clitic'), word('вас', 'ˈvɑs', 'hard'))[0]).toBe(false);
+    expect(run(word('под', 'pʌd', 'clitic'), word('водой', 'vɑˈdoj', 'hard'))[0]).toBe('pʌd');
+  });
+  it('a voiced obstruent before a voiced obstruent is regressive-voicing territory, not this: муж дома', () => {
+    expect(mark(word('муж', 'ˈmuʒ', 'soft'), word('дома', 'dɑˈmɑ', 'hard'))[0]).toBe(false);
+  });
+  it('a hard boundary after the preposition marks nothing: меж. нас', () => {
+    expect(mark(word('меж', 'mʲɪʒ', 'hard'), word('нас', 'ˈnɑs', 'hard'))[0]).toBe(false);
+  });
+  it('a mark from an earlier run does not survive the next: the pass starts every word clean', () => {
+    const a = word('меж', 'mʲɪʒ', 'clitic');
+    const b = word('нас', 'ˈnɑs', 'hard');
+    run(a, b);
+    expect((a as { retainedVoicing?: boolean }).retainedVoicing).toBe(true);
+    a.rightBoundary = 'hard';
+    run(a, b);
+    expect((a as { retainedVoicing?: boolean }).retainedVoicing).toBe(false);
+  });
+});

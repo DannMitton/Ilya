@@ -244,6 +244,8 @@ export function deriveRule(entry: TranscriptionLogEntry): string {
   if (features?.silent && features?.deletionCluster) return 'silent';
   if (features?.voicingAssimilation && features?.devoiced) return 'regressive-devoicing';
   if (features?.voicingAssimilation && features?.voiced) return 'regressive-voicing';
+  // Row 157: a kept voicing (boundary #4) is its own rule; a word cannot carry it and `finalDevoicing`.
+  if (features?.retainedVoicing) return 'retained-voicing';
   if (features?.finalDevoicing) return 'final-devoicing';
   if (features?.genitiveEnding) return 'genitive';
   if (features?.bogException) return 'bog-exception';
