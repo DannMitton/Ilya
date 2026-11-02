@@ -40,7 +40,7 @@ A concept's code name is its English screen name, in the case its kind requires.
 - A version lives inside the stored value (`{ v: 3 }`), not in the key, unless an old and a new shape must live side by side.
 - `shane.profiles.v2` breaks both rules; batch 3 renames it. Before release, Dann ruled a rename needs no carry-over read (12:00, 12:25: nobody but him holds data). After release, `ARCHITECTURE.md` invariant 10 governs: "A stored id changes only with a migration", and every rename ships a migration that reads both.
 
-**i18n keys.** Dotted segments, each lowerCamelCase; two to four segments, the last naming the concept, not the wording (`tab.melody`, never `tab.markedScore`). The 30 kebab-case `legend.*` keys stay until batch 3. New placeholders are `{name}`; `%s` (55 values) is legacy. The prefix index at the head of `i18n.ts` is hand-written, and `i18n-index.test.ts` checks its counts, prefixes, and paths against the file.
+**i18n keys.** Dotted segments, each lowerCamelCase; two to four segments, the last naming the concept, not the wording (`tab.melody`, never `tab.markedScore`). The 94 keys that carry a hyphen in a segment (`legend.` 5, `toc.` 64, `voiceType.` 25; counted from `stringKeys()` on 2026-11-02) stay until batch 3. New placeholders are `{name}`; `%s` (55 values) is legacy. The prefix index at the head of `i18n.ts` is hand-written, and `i18n-index.test.ts` checks its counts, prefixes, and paths against the file.
 
 ## 5. Comments (Dann 12:05 to 12:07)
 

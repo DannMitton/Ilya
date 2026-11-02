@@ -8,82 +8,97 @@
    THE KEY PREFIXES ARE THE FEATURE INDEX.
 
    To find the code behind words on screen, search this file for the words,
-   read the key, and look its prefix up here. Derived from this file's 881
-   keys and a search of `apps/web/src` for each prefix on 2026-10-02 (QUEUE
-   row 16). It is a map, not a rule: nothing enforces it, so a prefix may
-   have moved since. Paths are under `apps/web/src/`; a prefix is listed with
-   the files that use it most, and its key count.
+   read the key, and look its prefix up here. This is a map, not a rule, and
+   it is written by hand: `i18n-index.test.ts` fails when a prefix is missing
+   or has no keys, when a count differs from this file, when the total below
+   differs from the number of keys, or when a path named here does not exist.
+   The glosses and the choice of files are a person's. Last read against the
+   tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
+   a prefix is listed with the files that use it most and its key count.
 
-   a11y.          4  accessible names: lib/components/Drawer/Drawer.svelte, lib/components/DeskHead.svelte, lib/components/Paper/Paper.svelte, lib/score/Loupe.svelte
-   aid.           2  lib/components/ReadingAid.svelte
-   analysis.      4  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
-   app.           1  the header subtitle: no consumer found
-   binder.       10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
-   calib.        99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
-   clitic.        3  no consumer found (lib/score/clitic-seat.ts does the seating)
-   collide.       5  routes/+page.svelte
-   comment.      42  the note comments: lib/insights/comment-text.ts, lib/insights/InsightsPane.svelte
-   console.       1  lib/components/Drawer/AnalysisStation.svelte
-   correct.      21  lib/score/CorrectionSurface.svelte, routes/+page.svelte
-   cosmetic.     15  lib/components/Drawer/NotationFields.svelte
-   dict.          3  lib/components/Paper/TitlePage.svelte, lib/components/Drawer/AnalysisStation.svelte
-   display.       5  no consumer found
-   drawer.        4  lib/components/Drawer/Drawer.svelte
-   engraving.     5  no consumer found
-   footer.        4  lib/components/Paper/PageFooter.svelte, lib/insights/InsightsPane.svelte
-   group.         3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
-   guide.         5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
-   input.         7  lib/components/Drawer/IntakePanel.svelte
-   insights.     91  the Insights document: lib/insights/InsightsPane.svelte, lib/insights/Tessituragram.svelte (LEGACY KEYS: `insights.fit.*`)
-   inspector.    32  lib/components/Drawer/InspectorPanel.svelte
-   intake.       20  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/bandState.ts, lib/score/ScoreUploader.svelte
-   key.          23  the key ruler: lib/markup/TranspositionRuler.svelte, lib/markup/TranspositionDock.svelte, lib/markup/transposition-ruler.ts
-   legend.        6  the Markup legend: lib/provenance.ts, lib/markup/MarkupPane.svelte
-   loupe.        54  lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, routes/+page.svelte
-   meta.         15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
-   notation.     16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts
-   notePicker.   10  lib/voice/NotePicker.svelte
-   pacifier.     17  lib/voice/pacifier/Pacifier.svelte
-   paper.         2  lib/components/Paper/TitlePage.svelte, lib/one-action.ts
-   portrait.      2  lib/components/ReadingAid.svelte, routes/+page.svelte
-   profile.      34  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/insights/InsightsPane.svelte
-   provenance.    5  no consumer found
-   recognize.     4  routes/+page.svelte
-   replace.       4  routes/+page.svelte
-   result.        1  no consumer found
-   ribbon.        6  lib/components/Drawer/InspectorPanel.svelte
-   select.        2  lib/components/Drawer/SearchableSelect.svelte
-   shiftLyrics.   5  lib/score/CorrectionSurface.svelte
-   song.          2  lib/library/notices.ts, routes/+page.svelte
-   songs.        13  routes/+page.svelte, lib/components/Drawer/SongList.svelte
-   source.        1  lib/components/Drawer/IntakePanel.svelte, lib/library/driver.ts
-   station.       2  routes/+page.svelte
-   storage.       8  lib/library/notices.ts, lib/library/library.ts
-   stress.        9  `stressSourceLabel`, at the foot of this file
-   tab.           5  lib/components/DeskHead.svelte (LEGACY KEY: `tab.markedScore`)
-   toc.          83  the tables of contents: lib/components/Drawer/Drawer.svelte
-   underlay.      1  no consumer found
-   update.        3  routes/+page.svelte
-   upload.       75  lib/score/ScoreUploader.svelte
-   verify.        1  lib/components/Paper/WordStack.svelte
-   voice.         2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
-   voiceIntake.  60  lib/voice/InsightsIntake.svelte, lib/voice/VoiceTypeIntake.svelte
-   voiceType.    42  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
-   vowel.        11  lib/voice/pacifier/Pacifier.svelte, lib/markup/legend.ts
-   watch.        46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
-   wait.          2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
-   witness.       8  no consumer found (its component was removed)
+   This file holds 1,119 keys.
+
+   A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
+   has no literal reference, so a search for the whole key can come back empty
+   for a key that is live: search for its prefix.
+
+   a11y.           4  accessible names: lib/components/Drawer/Drawer.svelte, lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, lib/components/TextWitnessPair.svelte
+   aid.            2  lib/components/ReadingAid.svelte
+   analysis.       4  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
+   app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
+   binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
+   calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
+   clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
+   collide.        5  routes/+page.svelte
+   comment.       42  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
+   console.        2  lib/components/Drawer/AnalysisStation.svelte
+   correct.       23  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
+   cosmetic.      15  lib/components/Drawer/NotationFields.svelte
+   dict.           3  lib/components/Paper/TitlePage.svelte, lib/components/Drawer/AnalysisStation.svelte, lib/one-action.ts
+   display.        5  no literal consumer found
+   drawer.         4  lib/components/Drawer/Drawer.svelte, lib/score/CorrectionSurface.svelte
+   engraving.      5  no literal consumer found
+   field.          1  the quiet "Saved": lib/components/Field/SavedNote.svelte
+   footer.         4  lib/components/Paper/PageFooter.svelte
+   group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
+   guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
+   input.          8  lib/components/Drawer/IntakePanel.svelte
+   insights.     142  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   inspector.     36  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte
+   intake.        36  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
+   key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
+   legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
+   loupe.        107  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
+   notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
+   notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
+   octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
+   pacifier.      17  lib/voice/pacifier/Pacifier.svelte
+   paper.          2  lib/components/Paper/TitlePage.svelte, lib/one-action.ts
+   placeholder.    7  lib/analysis/placeholder-line.ts
+   portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
+   profile.       34  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
+   provenance.     5  no literal consumer found
+   recognize.      4  routes/+page.svelte
+   replace.        4  routes/+page.svelte
+   result.         1  no literal consumer found
+   ribbon.         6  lib/components/Drawer/InspectorPanel.svelte
+   select.         5  lib/components/Drawer/SearchableSelect.svelte
+   shiftLyrics.    5  lib/score/CorrectionSurface.svelte
+   song.           2  lib/omr/scan.ts, lib/library/notices.ts, routes/+page.svelte
+   songs.         13  routes/+page.svelte, lib/components/Drawer/SongList.svelte
+   source.         1  lib/components/Drawer/IntakePanel.svelte, lib/score/ingestion/ingest.ts
+   station.        2  routes/+page.svelte
+   storage.        8  lib/library/notices.ts, lib/library/library.ts
+   stress.         9  `stressSourceLabel`, at the foot of this file
+   tab.            5  lib/components/DeskHead.svelte, lib/components/Paper/RunningHeader.svelte, lib/insights/InsightsPane.svelte (LEGACY KEY: `tab.markedScore`)
+   tempo.          3  lib/tempo/TempoControl.svelte, lib/tempo/TempoReceipt.svelte
+   toc.           83  the tables of contents: lib/components/Drawer/Drawer.svelte
+   underlay.       1  read only by lib/names.ts, the record of names; no component reads it
+   update.         4  routes/+page.svelte
+   upload.        78  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
+   verify.         1  lib/components/Paper/WordStack.svelte
+   voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
+   voiceIntake.   60  lib/voice/InsightsIntake.svelte, lib/voice/VoiceTypeIntake.svelte
+   voiceType.     42  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
+   vowel.         11  lib/voice/pacifier/Pacifier.svelte, lib/markup/legend.ts
+   wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
+   watch.         46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
+   witness.        8  no literal consumer found (its component was removed)
 
    THREE LEGACY KEYS keep a name the shown word has left, because the key is a
    wire value or is cited by name across the tree. The comments that explain
    them, in this file:
-   - `group.scoreMarkup` READS "Voice" since N.150: the comment above the
-     `group.piece` entry (search "The KEY stays, because `BAND_IDS`").
-   - `tab.markedScore` READS "Markup": the comment above it (search "The KEYS
-     stay, because both are cited by name").
-   - `insights.fit.*` is the Insights page's measurement table, from when the
-     document was shown as Fit (N.174 renamed the code to Text, Markup, and
-     Insights). No comment says why these keys kept the name; the heading's
+   - `group.scoreMarkup` READS "Voice" since N.150, so it is the VOICE band's
+     name: the comment above the `group.piece` entry (search "The KEY stays,
+     because `BAND_IDS`"). Consistency batch 3 renames it.
+   - `tab.markedScore` READS "MELODY": the comment above it (search "The KEYS
+     stay, because both are cited by name"). Consistency batch 3 renames it
+     `tab.melody`.
+   - `insights.fit.*` is the INSIGHTS page's measurement table, from when the
+     document was shown as Fit. It is read by `lib/insights/FitTable.svelte`,
+     which nothing imports; consistency batch 4 decides whether the table and
+     its keys stay. No comment says why these keys kept the name; the heading's
      comment, above `insights.fit.heading`, records the wording rulings.
    ═══════════════════════════════════════════════════════════ */
 
