@@ -26,7 +26,6 @@ describe('ViewPair activeFill', () => {
 	it('only Input passes it', () => {
 		const src = (f: string) => readFileSync(join(__dirname, f), 'utf8');
 		expect(src('Drawer/IntakeViews.svelte')).toContain('activeFill="var(--sage-desk)"');
-		expect(src('TextWitnessPair.svelte')).not.toContain('activeFill');
 		expect(src('DeskHead.svelte')).not.toContain('activeFill');
 	});
 	it('uses the token, not a hex, so a new --sage-desk value lands without another edit', () => {

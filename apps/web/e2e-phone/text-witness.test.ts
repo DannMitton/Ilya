@@ -149,8 +149,8 @@ test('a Poem the singer tapped stays when a score with words arrives', async ({ 
 	await expect(page.locator('#intake-tab-poem')).toHaveAttribute('aria-selected', 'true');
 });
 
-test.describe('the pair in Text (row 110)', () => {
-	test('with both texts differing: Lyrics on open, Poem on choice whole with its unset words grey, back to Lyrics, seats unchanged', async ({ page }) => {
+test.describe('INPUT\'s pill decides what Text shows (rows 110 and 172)', () => {
+	test('with both texts differing: Lyrics on open, Poem on a tap in INPUT whole with its unset words grey, back to Lyrics, seats unchanged', async ({ page }) => {
 		test.setTimeout(180_000);
 		await page.goto('/');
 		await page.waitForFunction(() => {
@@ -172,16 +172,21 @@ test.describe('the pair in Text (row 110)', () => {
 		await page.waitForTimeout(2500);
 		const before = await song(page);
 		expect(before.seats).toBeGreaterThan(0);
-		// Closed drawer shows the Text page.
-		await page.getByRole('button', { name: /paper/i }).first().tap();
-		await expect(page.locator('#text-tab-lyrics')).toHaveAttribute('aria-selected', 'true');
-		const onLyrics = await words(page);
-		expect(onLyrics).toBe(lyricsWords.length);
-		await page.locator('#text-tab-poem').tap();
-		await expect(page.locator('#text-tab-poem')).toHaveAttribute('aria-selected', 'true');
+		// ROW 172: INPUT's pill decides what TEXT shows. The last tap was POEM (typing the poem); tap LYRICS, lower the drawer, read TEXT.
+		const pull = page.locator('.drawer-pull');
+		await page.locator('#intake-tab-lyrics').tap();
+		await pull.tap();
+		await expect.poll(() => words(page), { timeout: 15_000 }).toBe(lyricsWords.length);
+		// Raise, tap POEM, lower: the poem whole, its one unset word grey.
+		await pull.tap();
+		await page.locator('#intake-tab-poem').tap();
+		await pull.tap();
 		await expect.poll(() => words(page), { timeout: 15_000 }).toBe(poemWords.length);
 		expect(await page.locator('.paper-container .word-stack.muted').count()).toBe(1);
-		await page.locator('#text-tab-lyrics').tap();
+		// Raise, tap LYRICS, lower: Lyrics again.
+		await pull.tap();
+		await page.locator('#intake-tab-lyrics').tap();
+		await pull.tap();
 		await expect.poll(() => words(page), { timeout: 15_000 }).toBe(lyricsWords.length);
 		expect(await page.locator('.paper-container .word-stack.muted').count()).toBe(0);
 		await page.waitForTimeout(2500);
@@ -190,22 +195,22 @@ test.describe('the pair in Text (row 110)', () => {
 		expect(after.lyrics).toBe(before.lyrics);
 	});
 
-	test('with both texts the same words: no pair', async ({ page }) => {
+	test('with both texts the same words: no source line', async ({ page }) => {
 		await open(page);
 		await page.locator('#intake-tab-lyrics').tap();
 		await page.locator('textarea.text-input').fill('Тебя я увидел');
 		await page.locator('#intake-tab-poem').tap();
 		await page.locator('textarea.text-input').fill('тебя, я увидел.');
 		await page.waitForTimeout(1500);
-		await page.getByRole('button', { name: /paper/i }).first().tap();
-		await expect(page.locator('#text-tab-poem')).toHaveCount(0);
+		await page.locator('.drawer-pull').tap();
+		await expect(page.locator('#text-source')).toHaveCount(0);
 	});
 
-	test('with only a poem or only Lyrics: no pair', async ({ page }) => {
+	test('with only a poem or only Lyrics: no source line', async ({ page }) => {
 		await open(page);
 		await page.locator('textarea.text-input').fill(POEM);
 		await page.waitForTimeout(1500);
-		await page.getByRole('button', { name: /paper/i }).first().tap();
-		await expect(page.locator('#text-tab-poem')).toHaveCount(0);
+		await page.locator('.drawer-pull').tap();
+		await expect(page.locator('#text-source')).toHaveCount(0);
 	});
 });
