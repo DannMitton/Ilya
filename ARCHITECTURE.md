@@ -208,6 +208,8 @@ broken.
 
 ## Where to start
 
+- To name anything, on screen or in code: `docs/house-style/interface-text.md`
+  and `docs/house-style/code-conventions.md`.
 - To change a pronunciation rule: `packages/phonology`, with its tests, and
   Grayson's text at hand.
 - To change what a singer reads: `apps/web/src/lib/i18n.ts`. Its key prefixes

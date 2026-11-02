@@ -97,6 +97,7 @@ Rows 107, 132, 136, 137, 138, and 140 (the WCAG audit; no level claimed before i
 
 ## Changes
 
+- 2026-11-01 22:4x, the desk (Opus): by Dann's word of 11:55 the day's work was consistency (how Ilya names its parts), ahead of meta 2's reader review; rows 163 (`dcb36850`) and 165 (`6f740dbf`) shipped; consistency batch 1 running; two style guides ratified (`docs/house-style/`). Meta 2 is displaced, not dropped.
 - 2026-10-29 20:5x, the desk (Opus): stage 2b r5 shipped `f6c8ae43`; row 105 r5 no gain; the row fallback shipped `e5bad5a6`; meta 2 on the build songs (replay, not row 114): read right 1,939 of 2,538, exact 1,750 of 2,385 against the goal of 2,147; the second-look and syllable-breaks briefs came back REDESIGN and are parked; the reader review waits for Sunday by Dann's word (20:50).
 - 2026-10-28 15:5x, the desk (Opus): row 113 shipped `fb2d2e37`; stage 2b measured on the real page and held for brief r3; the plan A1 to C6 recorded in `STATE.md`; QUEUE rows 158 and 159 added.
 - 2026-10-27 23:4x, the desk (Opus): meta 2 rows 117 and 2a ticked; row 105 run and failed its measure (r2 stays); stage 2b running in the cloud, not on the Mac (DESK DEFAULT of the 02:5x plan; the desk measures the real page in its workspace). Frame plus seating together: 1,831 of 2,385 exact (76.8 percent) on the build songs, the harness, not row 114.

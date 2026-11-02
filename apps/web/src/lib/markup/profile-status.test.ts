@@ -16,7 +16,7 @@ describe('the Markup profile status lines', () => {
 	});
 
 	it('splits the provisional sentence around the vowels', () => {
-		expect(provisionalPartsFor(1, 'en')).toEqual(['Your ', ' is provisional, and you can update this value anytime through the drawer on the left.']);
+		expect(provisionalPartsFor(1, 'en')).toEqual(['Your ', ' is provisional, and you can update this value anytime through the DRAWER on the left.']);
 		expect(provisionalPartsFor(2, 'fr')[0]).toBe('Vos voyelles ');
 	});
 

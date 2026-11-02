@@ -45,7 +45,7 @@
 	class:tab-markup={activeTab === 'markup'}
 	class:tab-insights={activeTab === 'insights'}
 >
-	<h1 class="sr-only">{language === 'fr' ? 'Ilya — Diction lyrique russe' : 'Ilya — Russian Lyric Diction'}</h1>
+	<h1 class="sr-only">{t('app.title', language)}</h1>
 	<div class="sigil" aria-label="Ilya 2026a">
 		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span><span class="sigil-version">2026a</span>
 	</div>

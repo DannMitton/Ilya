@@ -28,7 +28,7 @@ describe('N.62 accessible names', () => {
 			'a11y.drawer':    { en: 'Controls',           fr: 'Commandes' },
 			'a11y.tocToggle': { en: 'Expand or collapse', fr: 'Développer ou réduire' },
 			'a11y.tabs':      { en: 'Navigation',         fr: 'Navigation' },
-			'a11y.paper':     { en: 'Text',               fr: 'Texte' }
+			'a11y.paper':     { en: 'the page',           fr: 'la page' }
 		};
 
 		for (const [key, expected] of Object.entries(ratified)) {
@@ -73,7 +73,7 @@ describe("the loupe's French", () => {
 	it('leaves the two keys the spec names as identical on purpose alone', () => {
 		const onPurpose: Record<string, string> = {
 			'loupe.pitch.octave':         'octave',
-			'loupe.station.corrections':  'Corrections'
+			'loupe.station.corrections':  'CORRECTIONS'
 		};
 
 		for (const [key, word] of Object.entries(onPurpose)) {

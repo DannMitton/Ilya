@@ -14,6 +14,8 @@ Developed under the codename Shane; shown on screen as Fit until 2026-09. N.174 
 
 ## Layout
 
+Naming on screen and in code: `docs/house-style/interface-text.md` and `docs/house-style/code-conventions.md`.
+
 A pnpm workspace monorepo, Node 18+, TypeScript, SvelteKit with Svelte 5 runes, tested with vitest.
 
 - `apps/web` (`@ilya/web`): the application. Three destinations (Studio, Learn, Guide); Studio holds three documents (Text, Markup, Insights), named in `apps/web/src/lib/destinations.ts`. Their code is in six modules under `apps/web/src/lib/`: `reader/`, `score/`, `voice/`, `analysis/`, `markup/`, and `insights/`.

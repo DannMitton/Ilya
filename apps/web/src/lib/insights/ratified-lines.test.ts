@@ -93,11 +93,11 @@ describe('ratified Guide lines (rows 90 and 94)', () => {
    no-break space; the apostrophe in « s’affichent » is U+2019. */
 describe('ratified Input view lines (N.135 stage 3)', () => {
 	const LINES: Record<string, [string, string]> = {
-		'intake.view.poem': ['Poem', 'Poème'],
-		'intake.view.lyrics': ['Lyrics', 'Paroles'],
+		'intake.view.poem': ['POEM', 'POÈME'],
+		'intake.view.lyrics': ['LYRICS', 'PAROLES'],
 		'intake.view.poemLine': [
-			'Edits here change the published poem. The sung words come from your score; edit them in Lyrics.',
-			'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ Paroles.',
+			'Edits here change the published poem. The sung words come from your score; edit them in LYRICS.',
+			'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ PAROLES.',
 		],
 		'intake.view.lyricsLine': [
 			'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.',
@@ -108,12 +108,12 @@ describe('ratified Input view lines (N.135 stage 3)', () => {
 			'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.',
 		],
 		'intake.view.landedLyrics': [
-			'Your score supplied the words in Lyrics. Add the whole published poem here to see where the song departs from it.',
-			'Votre partition a fourni les paroles du champ Paroles. Ajoutez ici le poème publié en entier pour voir où la mise en musique s\u2019en écarte.',
+			'Your score supplied the words in LYRICS. Add the whole published poem here to see where the song departs from it.',
+			'Votre partition a fourni les paroles du champ PAROLES. Ajoutez ici le poème publié en entier pour voir où la mise en musique s\u2019en écarte.',
 		],
 		'intake.view.landedPoem': [
-			'This page read as a poem and is in Poem. The sung words in Lyrics may differ from it.',
-			'Cette page a été lue comme un poème; elle est dans le champ Poème. Les paroles chantées, dans le champ Paroles, peuvent en différer.',
+			'This page read as a poem and is in POEM. The sung words in LYRICS may differ from it.',
+			'Cette page a été lue comme un poème; elle est dans le champ POÈME. Les paroles chantées, dans le champ PAROLES, peuvent en différer.',
 		],
 		'input.watermarkLyrics': ['lyrics', 'paroles'],
 		'intake.placeholderLyrics': [
@@ -122,8 +122,8 @@ describe('ratified Input view lines (N.135 stage 3)', () => {
 		],
 		'intake.poemReplace.title': ['Replace the poem?', 'Remplacer le poème?'],
 		'intake.poemReplace.body': [
-			'This page was read as a poem, and Poem already holds one. Ilya cannot undo its replacement.',
-			'Cette page a été lue comme un poème, et le champ Poème en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci.',
+			'This page was read as a poem, and POEM already holds one. Ilya cannot undo its replacement.',
+			'Cette page a été lue comme un poème, et le champ POÈME en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci.',
 		],
 		'intake.poemReplace.replace': ['Replace the poem', 'Remplacer le poème'],
 		'intake.poemReplace.keep': ['Keep the poem', 'Conserver le poème'],
@@ -224,22 +224,22 @@ describe('ratified HEIC refusal (row 113)', () => {
 describe('ratified banner for a scan read in part (brief r5 step 2)', () => {
 	it('ranges, English', () => {
 		expect(t('upload.banner.wordsPartlyRead', 'en')).toBe(
-			'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Type the missing words into Lyrics exactly where they fall in the song. Check every word against your score.',
+			'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.',
 		);
 	});
 	it('ranges, French', () => {
 		expect(t('upload.banner.wordsPartlyRead', 'fr')).toBe(
-			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Saisissez les paroles manquantes dans Paroles, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
+			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
 		);
 	});
 	it('one bar, English', () => {
 		expect(t('upload.banner.wordsPartlyReadOne', 'en')).toBe(
-			'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Type the missing words into Lyrics exactly where they fall in the song. Check every word against your score.',
+			'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.',
 		);
 	});
 	it('one bar, French', () => {
 		expect(t('upload.banner.wordsPartlyReadOne', 'fr')).toBe(
-			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Saisissez les paroles manquantes dans Paroles, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
+			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
 		);
 	});
 	it('writes every apostrophe as U+2019 and no em-dash', () => {

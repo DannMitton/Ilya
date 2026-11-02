@@ -37,7 +37,7 @@ async function load(page: Page, lang: 'en' | 'fr' = 'en') {
 	}, undefined, { timeout: 60_000 });
 	if (lang === 'fr') await page.locator('.lang-pill').tap();
 	await page.locator('input.hidden-input').setInputFiles(FILE);
-	await page.getByRole('tab', { name: lang === 'fr' ? 'Annotation' : 'Markup' }).tap();
+	await page.getByRole('tab', { name: lang === 'fr' ? 'CHANT' : 'MELODY' }).tap();
 	await page.locator('.score-page [data-clef]').first().waitFor({ state: 'attached', timeout: 30_000 });
 	await page.waitForTimeout(1000);
 }

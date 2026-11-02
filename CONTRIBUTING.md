@@ -29,7 +29,7 @@ Glosses serve singers, not linguists. A good gloss is short (twenty characters o
 
 ## Working With the Code
 
-Ilya is a monorepo using pnpm workspaces. The four packages are independently testable. [`ARCHITECTURE.md`](ARCHITECTURE.md) maps them and lists the invariants every change must keep.
+Ilya is a monorepo using pnpm workspaces. The four packages are independently testable. [`ARCHITECTURE.md`](ARCHITECTURE.md) maps them and lists the invariants every change must keep. Names, files, keys, and comments follow [`docs/house-style/code-conventions.md`](docs/house-style/code-conventions.md).
 
 **`@ilya/phonology`** contains the GraysonEngine: the rule-based transcription logic. Changes here require Vitest tests demonstrating the expected behaviour, grounded in Grayson's rules. If you are adding a phonological rule, cite the page number.
 
@@ -59,7 +59,7 @@ To save you time and effort, here is what falls outside Ilya's scope:
 
 **Changes to the IPA symbol inventory.** Ilya uses Grayson's closed set. Adding symbols (tie bars, retroflex diacritics, alveolopalatal notation) changes what Ilya is, not how well it works.
 
-**Changes to user-facing text that do not match the project's voice.** Ilya speaks with a specific register: scholarly warmth, precision without condescension, and quiet confidence. UI text, blurbs, and LEARN content are authored, not generated. If you would like to suggest improvements to user-facing language, please open an issue rather than a pull request; I will write or approve the final text.
+**Changes to user-facing text that do not match the project's voice.** Ilya speaks with a specific register: scholarly warmth, precision without condescension, and quiet confidence. UI text, blurbs, and LEARN content are authored, not generated. If you would like to suggest improvements to user-facing language, please open an issue rather than a pull request; I will write or approve the final text. The rules for how Ilya names its parts to a singer are in [`docs/house-style/interface-text.md`](docs/house-style/interface-text.md).
 
 **Changes that break bilingual parity.** Centring Canadian bilingualism, Ilya serves English and French users equally. A feature that works in one language but not the other is incomplete.
 

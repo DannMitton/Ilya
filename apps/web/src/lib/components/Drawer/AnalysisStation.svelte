@@ -99,7 +99,7 @@
 						</div>
 					{:else}
 						<p class="placeholder-hint">
-							{language === 'en' ? 'Select a word on the page to analyse it here.' : 'Sélectionnez un mot sur la page pour l’analyser ici.'}
+							{t('console.selectWord', language)}
 						</p>
 					{/if}
 				</div>
