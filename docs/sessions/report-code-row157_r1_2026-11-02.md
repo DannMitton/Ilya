@@ -106,3 +106,47 @@ Brief: `docs/sessions/brief-code-row157-bog-v-lookthrough-retained-voicing-blurb
 
 - The eight gates' names (inferred).
 - Whether a merged proclitic's or enclitic's ribbon can be opened in the Drawer (the brief's Fable question): answered in step 3, from a run.
+
+---
+
+## Step 1: «бог» as ruled
+
+### What changed
+
+- `packages/phonology/src/voicing-rule2.ts`: `restoreBogFinish` (`:85-88`) is replaced by **`finishBog(words, initialOf, isVoicedObstruent)`**, exported from the same file and importing nothing from the engine. For every word whose `lettersOf(cleanWord ?? cyrillic)` is «бог», whatever `skipFinalDevoicing` or its boundary says: a hard boundary, or no next word, makes the final `x`; otherwise the effective right initial is read as the pass reads it (the right word's own `ipaSurface` through `initialOf`; when it is `v` or `vʲ`, `initialPastV`), and a voiced obstruent there makes the final `ɣ`, anything else `x`. The segment it replaces is the word's last `ɡ`, `k`, or `x` (written as `[ɡkx]`, so no literal `ɡ` is typed into the regex). The old function's doc comment, which said "Only inside a line: before a hard boundary «бог» stays as it was", is replaced by the ruling's.
+- `packages/phonology/src/engine.ts` (2051 to 2049 lines): the import at `:19` names `finishBog`; the final loop at `:2006-2010` calls `applyFinalDevoicing` alone, and one call `finishBog(words, (ipa) => this.getInitialConsonant(ipa), (c) => this.isVoicedObstruent(c));` follows it; the two-line comment folded to one. The comment at `:1726` says p. 144, not p. 242 (the word is not on p. 242; p. 144 gives the citation form). `applyVoicingToFinal` and `applyDevoicingToFinal` are not used (their maps have no ɡ to ɣ and no ɣ).
+- **`apps/web/src/lib/voicing-log.ts` (new, 62 lines)** and `pipeline.ts` (925 to 901 lines): the brief says to put the log fix in the module step 3 creates and, if `pipeline.ts` has no headroom, "move the `:850-872` block into the module first and say so". `pipeline.ts` is at 925 of 925, so I moved it now: the block that rebuilds the last syllable from the surface and marks a devoiced final in the log (`pipeline.ts:850-876`) is `writeSurfaceToWord`, moved verbatim, and `finishLine` calls it in one line. Then the log fix: `followBogFinal` sets the `bogException` entry's `ipa` to the surface's final `x` or `ɣ`. So the Inspector's ⟨г⟩ → [ɣ] matches the IPA line, and the `bog-exception:г` template prints "[ɣ]" through its `{ipa}` (`data/blurb-composer.json`: "In the word бог, ⟨{char}⟩ is exceptionally pronounced as [{ipa}]."). `voicedToVoiceless` has no ɣ, so the devoicing mark cannot land on it; a test pins it.
+- `scripts/ratchets.json`: `engine.ts` 2051 to 2049, `pipeline.ts` 925 to 901.
+
+### Tests, each shown failing first or marked as a guard
+
+`packages/phonology/tests/voicing-rule2.test.ts` (12 tests added, on hand-built words with `ipaUnderlying: 'ˈboɡ'`): 9 failed first against the unchanged engine: «Бог» alone (hard, nothing after), «Бог, мой», «Бог там», «Бог даст» and «Бог был» (one test), «Бог ли», «Бог же» and «Бог бы», «Бог в доме», «Бог в траве», and the `cleanWord` case. They pass as guards before the change: «Бог мой» and «Бог один», «Бог в мае» (the surface already said `ˈbox`), and the two «небог» pins. Hand-built «Бог» words fail first, as the brief predicted, because those tests read `ipaSurface`. «Бог ли» (clitic boundary before a sonorant, `ˈboɡ` before) failed first at engine level; the brief calls it a guard at the display level, where the syllables already said `x`.
+
+`apps/web/src/lib/voicing-rule2.pipeline.test.ts` (15 tests added, through `processText` with the real dictionary): failing first, from the first run: «Бог», «Бог там», «Бог в траве», «Бог, мой», «Бог даст», «Бог в доме», «Бог был», and the Inspector ribbon test. My first expectations for «Бог ли», «Бог же», and «Бог бы» were `ˈbox`, `ˈboɣ`, `ˈboɣ` and failed for a reason of mine, not the code's: an enclitic shows inside its host's display (`ˈbox lʲi`, `ˈbox ʒɨ`), so I corrected the strings to `ˈbox lʲi`, `ˈboɣ ʒɨ`, `ˈboɣ bɨ` (the brief's own wording) and did not re-run those three against the unchanged code; step 0's table shows today's displays for them (`ˈbox lʲi ←`, `ˈbox ʒɨ ←`, `ˈbox bɨ ←`), so «Бог ли» is a guard and «Бог же», «Бог бы» change. Guards that pass before: «Бог мой», «Бог один», «Бог в мае», «небог» (`ɲɛ bok`).
+
+The brief asks for pins on «Бог же» → `ˈboɣ ʒɨ`, «Бог бы» → `ˈboɣ bɨ`, «Бог в мае» → `ˈbox`, «Бог был» → `ˈboɣ`, and «Бог, мой» → `ˈbox`: all pinned.
+
+### The approval corpus
+
+`ipa-corpus.approval.test.ts` passes unchanged: **0 corpus lines move.** The one line holding «бог» («Как дай вам Бог любимой быть другим.») still ends its «Бог» in `ˈbox` (the next word begins with a sonorant).
+
+### What a singer sees now, from the tests above
+
+«Бог», «Бог там», «Бог, мой», «Бог в траве» now read `ˈbox`; «Бог даст», «Бог был», «Бог в доме», and an enclitic before a voiced obstruent («Бог же», «Бог бы») read `ˈboɣ`; «Бог ли» and «Бог в мае» stay `ˈbox`. The ribbon follows (`[x]` or `[ɣ]`) and the blurb says "[ɣ]" or "[x]" through `{ipa}`.
+
+### Cross-site check (CONTRACT section 4)
+
+Same number computed elsewhere: `transcribe`'s isolation path (`engine.ts:1725-1745`) writes [x] and is unchanged; after this step it agrees with the pass's finish in every position. `pipeline.ts`: the surface (`ipaSurface`), the last syllable, and the log entry now agree for «бог» (the three that the brief names). The only other reader of `ipaSurface` in `apps/web/src` is the merged-clitic branch of `finishLine` (`pipeline.ts:905-906` before the move, now earlier), which takes the surface for a host and its clitic; it reads the word's final as `ˈboɣ` or `ˈbox` as the pass left it. No reader the brief does not name.
+
+### Gates, after step 1
+
+| # | Result |
+|---|---|
+| 1 phonology | 419 passed (+12, `voicing-rule2.test.ts`) |
+| 2 dictionary | 248 passed |
+| 3 check | 0 errors, 12 warnings |
+| 4 web unit | 3910 passed, 1 skipped (3911) (+15, `voicing-rule2.pipeline.test.ts`) |
+| 5 root integration | 98 passed |
+| 6 blurb | 148 passed |
+| 7 score-parser | 785 passed, 5 skipped (790) |
+| 8 ratchets | OK; `engine.ts` 2051 to 2049 and `pipeline.ts` 925 to 901, both taken |

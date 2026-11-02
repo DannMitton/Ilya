@@ -157,3 +157,41 @@ describe('N.198: the «бог» exception (Grayson p. 144, [box]; REGRESSION GUA
 		expect(sung('Как дай вам Бог любимой быть другим.')).toContain('ˈbox');
 	});
 });
+
+describe('row 157: «бог» as ruled (Dann 2026-10-26 21:35): [box] except before a voiced obstruent, where it is [boɣ], through the pipeline', () => {
+	it.each([
+		['Бог', 'ˈbox'],
+		['Бог там', 'ˈbox'],
+		['Бог мой', 'ˈbox'],
+		['Бог один', 'ˈbox'],
+		['Бог ли', 'ˈbox lʲi'],
+		['Бог в траве', 'ˈbox'],
+		['Бог в мае', 'ˈbox'],
+		['Бог, мой', 'ˈbox'],
+		['Бог даст', 'ˈboɣ'],
+		['Бог в доме', 'ˈboɣ'],
+		['Бог же', 'ˈboɣ ʒɨ'],
+		['Бог бы', 'ˈboɣ bɨ'],
+		['Бог был', 'ˈboɣ'],
+	])('%s: the first word reads %s (an enclitic shows inside its host)', (text, expected) => {
+		expect(display(text)[0]).toBe(expected);
+	});
+
+	it('небог still devoices to [k]', () => {
+		expect(display('небог')[0]).toBe('ɲɛ bok');
+	});
+
+	it('the Inspector follows the surface: the ribbon says [ɣ] where the IPA does, [x] where it does', () => {
+		const ribbon = (text: string) => {
+			const log = line(text)[0].displayLog.filter((e: any) => e.features?.type === 'consonant');
+			return log[log.length - 1];
+		};
+		expect(ribbon('Бог даст').ipa).toBe('ɣ');
+		expect(ribbon('Бог в доме').ipa).toBe('ɣ');
+		expect(ribbon('Бог мой').ipa).toBe('x');
+		expect(ribbon('Бог').ipa).toBe('x');
+		expect(ribbon('Бог даст').features.bogException).toBe(true);
+		// ɣ has no voiceless partner in `voicedToVoiceless`, so the devoicing mark cannot land on it.
+		expect(ribbon('Бог даст').features.finalDevoicing).toBe(false);
+	});
+});

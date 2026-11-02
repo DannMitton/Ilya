@@ -144,3 +144,50 @@ describe('N.198: the «бог» exception survives the cross-word pass (Grayson 
     expect(run(word('небог', 'ɲɪˈboɡ', 'soft'), word('мой', 'ˈmoj', 'hard'))[0]).toBe('ɲɪˈbok');
   });
 });
+
+describe('row 157: «бог» as Dann ruled it, 2026-10-26 21:35: [box] alone, at a hard boundary, and before a vowel, a sonorant, or a voiceless consonant; [boɣ] before a voiced obstruent; never [bok] or [bog]', () => {
+  const bog = (boundary: Boundary, ...after: ReturnType<typeof word>[]) => run(word('Бог', 'ˈboɡ', boundary), ...after)[0];
+
+  it('«Бог» alone ends in [x]: a hard boundary and nothing after it', () => {
+    expect(run(word('Бог', 'ˈboɡ', 'hard'))[0]).toBe('ˈbox');
+  });
+  it('Бог, мой: a hard boundary (punctuation) is [x]', () => {
+    expect(bog('hard', word('мой', 'ˈmoj', 'hard'))).toBe('ˈbox');
+  });
+  it('Бог там: a voiceless consonant is [x]', () => {
+    expect(bog('soft', word('там', 'ˈtɑm', 'hard'))).toBe('ˈbox');
+  });
+  it('Бог мой and Бог один: a sonorant and a vowel are [x] (REGRESSION GUARD)', () => {
+    expect(bog('soft', word('мой', 'ˈmoj', 'hard'))).toBe('ˈbox');
+    expect(bog('soft', word('один', 'ɑˈdʲin', 'hard'))).toBe('ˈbox');
+  });
+  it('Бог даст and Бог был: a voiced obstruent is [ɣ], never [ɡ]', () => {
+    expect(bog('soft', word('даст', 'ˈdɑst', 'hard'))).toBe('ˈboɣ');
+    expect(bog('soft', word('был', 'ˈbɨɫ', 'hard'))).toBe('ˈboɣ');
+  });
+  it('Бог ли: a clitic boundary before a sonorant is [x] (REGRESSION GUARD)', () => {
+    expect(bog('clitic', word('ли', 'lʲi', 'hard'))).toBe('ˈbox');
+  });
+  it('Бог же and Бог бы: a clitic boundary before a voiced obstruent is [ɣ]', () => {
+    expect(bog('clitic', word('же', 'ʒɨ', 'hard'))).toBe('ˈboɣ');
+    expect(bog('clitic', word('бы', 'bɨ', 'hard'))).toBe('ˈboɣ');
+  });
+  it('Бог в доме: [ɣ], the в is looked through to the д', () => {
+    expect(bog('soft', word('в', 'v', 'clitic'), word('доме', 'ˈdomʲɪ', 'hard'))).toBe('ˈboɣ');
+  });
+  it('Бог в траве: [x], the в is looked through to a voiceless т; the bare в itself reads [f]', () => {
+    const out = run(word('Бог', 'ˈboɡ', 'soft'), word('в', 'v', 'clitic'), word('траве', 'trɑˈvʲɛ', 'hard'));
+    expect(out[0]).toBe('ˈbox');
+    expect(out[1]).toBe('f');
+  });
+  it('Бог в мае: [x], a sonorant past the в', () => {
+    expect(bog('soft', word('в', 'v', 'clitic'), word('мае', 'ˈmɑjɪ', 'hard'))).toBe('ˈbox');
+  });
+  it('a word that only ends in бог is not «бог»: небог devoices to [k] before a voiced obstruent too', () => {
+    expect(run(word('небог', 'ɲɪˈboɡ', 'soft'), word('даст', 'ˈdɑst', 'hard'))[0]).toBe('ɲɪˈboɡ');
+    expect(run(word('небог', 'ɲɪˈboɡ', 'hard'))[0]).toBe('ɲɪˈbok');
+  });
+  it('reads cleanWord when the pipeline gives one: «Бог,» with its comma is still «бог»', () => {
+    expect(run(word('Бог,', 'ˈboɡ', 'hard', { cleanWord: 'Бог' }))[0]).toBe('ˈbox');
+  });
+});
