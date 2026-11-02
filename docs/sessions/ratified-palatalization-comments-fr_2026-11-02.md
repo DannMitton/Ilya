@@ -20,3 +20,7 @@ Built from the French already in `data/blurb-composer.json` (processes `soft:*`,
 16. ⟨{char}⟩ reste [{ipa}] : le son qui le suit immédiatement n'est pas palatalisé.
 
 Open choices (Dann's): (a) "softens" as the file's « se palatalise »; (b) "everyday speech" as « la langue parlée courante »; (c) "vowel letter" as « lettre voyelle »; (d) "cross back into its prefix" as « ne remonte pas de la racine jusqu'au préfixe »; (e) "doubled" as « redoublé ».
+
+## Ajout 2026-11-02 00:25, RATIFIÉ par Dann (« yes ») : raison `lexical-exception`, «счастье» et ses dérivés (Grayson 2012, 287)
+
+⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception : Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.

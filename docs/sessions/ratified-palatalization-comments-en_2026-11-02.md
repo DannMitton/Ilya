@@ -23,3 +23,7 @@ Desk draft from Dann's wordings of 2026-11-01 23:33 and 23:38. Placeholders: {ch
 | always-hard (ж ш ц) | unchanged: the existing identity templates. |
 
 Sources go in each comment's citation: Grayson 2012, 193 (hard sign), 206 (boundaries), 209 (limits, ⟨р⟩), 249 (prefix); D&P 1980, 79 (the everyday-speech line).
+
+## Added 2026-11-02 00:25, RATIFIED by Dann ("yes"): reason `lexical-exception`, «счастье» and its derivatives (Grayson 2012, 287)
+
+⟨а⟩ sits interpalatally here (between two soft consonants), where the rules usually require a fronted [a]. A known exception is «счастье» and its derivatives: Grayson shares that many Russian speakers keep the dark [ɑ], which he finds less tense and more resonant for singing.

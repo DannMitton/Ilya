@@ -206,6 +206,49 @@ export function isDismissSwipe(dx: number, dy: number): boolean {
 	return dy >= SWIPE_DISMISS_PX && dy > Math.abs(dx);
 }
 
+/** How far the singer has dragged the card from where the loupe seats it (row 164). */
+export interface DragOffset {
+	x: number;
+	y: number;
+}
+
+/**
+ * Where the card stands before any drag, and the header's own height: the
+ * header is the part that must stay on screen, because it is the handle and
+ * Close is in it.
+ */
+export interface DragHome {
+	left: number;
+	top: number;
+	width: number;
+	headerHeight: number;
+}
+
+/**
+ * The drag offset, held so the WHOLE HEADER stays on screen: its left edge no
+ * further left than `inset + gutter` (the open drawer on a desk), its right edge no
+ * further right than the viewport less the gutter, its top no higher than the
+ * gutter, and its bottom no lower than the viewport less the gutter. The card
+ * below it may run off the screen; the header may not.
+ *
+ * Where the room is smaller than the header the left and top edges win, the
+ * same order `frame.left` clamps in (`Loupe.svelte`). Pure, so the loupe can call
+ * it again when the window resizes or the drawer opens.
+ */
+export function clampDrag(
+	offset: DragOffset,
+	home: DragHome,
+	view: { width: number; height: number },
+	inset: number,
+	gutter: number,
+): DragOffset {
+	const bound = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+	return {
+		x: bound(offset.x, inset + gutter - home.left, view.width - gutter - (home.left + home.width)),
+		y: bound(offset.y, gutter - home.top, view.height - gutter - (home.top + home.headerHeight)),
+	};
+}
+
 /* THE INSERTION BAR IS GONE, N.113a. `InsertionBar` and `insertionBar` stood
    here from 2026-08-26 until 2026-09-07, when Dann walked `e1bcb67` and ruled
    the mark out: the bar drew AFTER the notehead and read as an insertion point
