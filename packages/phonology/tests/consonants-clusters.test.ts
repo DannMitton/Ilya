@@ -161,18 +161,19 @@ describe('Task 7b: Consonants and Clusters', () => {
       expect(result.ipa).toBe('\u02C8s\u02B2m\u02B2er\u02B2t\u02B2');
     });
 
-    it('does NOT palatalize dental before labial non-nasal: dver guard', () => {
-      // дверь -> ˈdvʲerʲ: д stays hard before вʲ
-      // Stage pronunciation allows dental before labial NASAL (м) only.
-      // Labial fricative в does not trigger cross-category palatalization.
+    it('palatalizes dental before labial non-nasal: dver (row 175 step 1)', () => {
+      // дверь -> ˈdʲvʲerʲ: д soft before вʲ. CHANGED PIN (row 175): this test used to pin д hard,
+      // "dental before labial NASAL (м) only". Grayson p. 209 has no limit on a dental, and Dann ruled
+      // (2026-11-01 23:27) that т д с з take palatalization from any soft consonant that follows
+      // (Grayson pp. 210-211; D&P 1980 p. 80 print зьвьерь, чьетьвьерть). Reason regressive-dental.
       const result = transcribeWord('\u0434\u0432\u0435\u0440\u044C');
-      expect(result.ipa).toBe('\u02C8dv\u02B2er\u02B2');
+      expect(result.ipa).toBe('\u02C8d\u02B2v\u02B2er\u02B2');
     });
 
     it('applies regressive palatalization in dver', () => {
-      // дверь -> ˈdvʲerʲ (v soft before e, r soft before ь)
+      // дверь -> ˈdʲvʲerʲ (v soft before e, r soft before ь, д soft before вʲ). CHANGED PIN (row 175): был ˈdvʲerʲ.
       const result = transcribeWord('\u0434\u0432\u0435\u0440\u044C');
-      expect(result.ipa).toBe('\u02C8dv\u02B2er\u02B2');
+      expect(result.ipa).toBe('\u02C8d\u02B2v\u02B2er\u02B2');
     });
 
     it('applies regressive palatalization in pesni', () => {
@@ -210,9 +211,12 @@ describe('Task 7b: Consonants and Clusters', () => {
     });
 
     it('keeps \u0446 hard and \u0438 becomes \u0268 in tsirk', () => {
-      // цирк -> ˈtsɨrʲk: ц stays hard, и after ц is ɨ (Grayson pp. 166-167)
+      // цирк -> ˈtsɨrk: ц stays hard, и after ц is ɨ (Grayson pp. 166-167).
+      // CHANGED PIN (row 175): the pin was ˈtsɨrʲk, from the old rule that softened any ⟨р⟩ after и in the
+      // stressed syllable before ANY consonant. The ratified rule (OPEN.md 2026-11-01 23:53) softens ⟨р⟩ only
+      // before a SOFT consonant; к is hard here. Reason no-soft-follower.
       const result = transcribeWord('\u0446\u0438\u0440\u043A');
-      expect(result.ipa).toBe('\u02C8ts\u0268r\u02B2k');
+      expect(result.ipa).toBe('\u02C8ts\u0268rk');
     });
 
     it('palatalizes \u0446 in tsvet, a lexical exception', () => {
@@ -340,9 +344,11 @@ describe('Task 7b: Consonants and Clusters', () => {
     });
 
     it('drops \u0442 in izvestnyj (\u0441\u0442\u043D -> sn)', () => {
-      // известный -> izˈvʲɛsnɨj
+      // известный -> izʲˈvʲɛsnɨj. CHANGED PIN (row 175): was izˈvʲɛsnɨj. The з of из- is a prefix ending in з
+      // before a palatalizing root, which Grayson p. 249 exception (ii) softens (изменять /izʲ mʲi/, p. 250);
+      // the dental rule (any soft consonant) gives the same. Reason regressive-dental.
       const result = transcribeWord('\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u044B\u0439');
-      expect(result.ipa).toBe('iz\u02C8v\u02B2\u025Bsn\u0268j');
+      expect(result.ipa).toBe('iz\u02B2\u02C8v\u02B2\u025Bsn\u0268j');
     });
 
     it('drops \u0442 in chastnyj (\u0441\u0442\u043D -> sn)', () => {
@@ -366,9 +372,11 @@ describe('Task 7b: Consonants and Clusters', () => {
     });
 
     it('merges \u0441\u0441\u0447 to \u0441\u0283\u02B2\u0283\u02B2 in rasschitat', () => {
-      // рассчитать -> rʌsʃʲʃʲiˈtɑtʲ
+      // рассчитать -> rʌsʲʃʲʃʲiˈtɑtʲ. CHANGED PIN (row 175): was rʌsʃʲʃʲiˈtɑtʲ. The first с now softens before the
+      // soft sound that сч becomes, by the dental rule (any soft consonant). NOT ESTABLISHED against Grayson:
+      // his pages on the сч merger (pp. 230-231) do not print this word. Flagged in the step 1 report.
       const result = transcribeWord('\u0440\u0430\u0441\u0441\u0447\u0438\u0442\u0430\u0442\u044C');
-      expect(result.ipa).toBe('r\u028Cs\u0283\u02B2\u0283\u02B2i\u02C8t\u0251t\u02B2');
+      expect(result.ipa).toBe('r\u028Cs\u02B2\u0283\u02B2\u0283\u02B2i\u02C8t\u0251t\u02B2');
     });
 
     it('merges \u0447\u043D to \u0283n in konechno', () => {

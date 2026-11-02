@@ -112,7 +112,7 @@ describe('N.198: the eight-word preposition set (Dann, 2026-10-26 17:26; REGRESS
 		['сквозь нас', 'ˈskvozʲ'],
 		['вокруг нас', 'vɑk ˈruɡ'],
 		['близ Анны', 'ˈblʲiz'],
-		['средь нас', 'ˈsrʲedʲ'],
+		['средь нас', 'ˈsʲrʲedʲ'], // row 175 step 1: с softens before the soft рʲ (dental rule; was ˈsrʲedʲ)
 	])('%s: the first word is %s', (text, first) => {
 		expect(display(text)[0]).toBe(first);
 	});
@@ -140,7 +140,7 @@ describe('N.198: в is ignored where it would influence (p. 251)', () => {
 	});
 
 	it.each([
-		['без встречи', 'bʲɪs ˈfstrʲe tʃʲi'],
+		['без встречи', 'bʲɪs ˈfsʲtʲrʲe tʃʲi'], // row 175 step 1: с, т soften before the soft рʲ (Grayson p. 210 сестрёнка; was ˈfstrʲe)
 		['без всех', 'bʲɪs ˈfsʲɛx'],
 	])('%s: в + voiceless is already [f] within the word (REGRESSION GUARD)', (text, ipa) => {
 		expect(sung(text)).toBe(ipa);

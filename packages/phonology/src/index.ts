@@ -42,3 +42,11 @@ export type {
   SpecialClusterInfo,
   BoundaryWord,
 } from './engine';
+
+// Palatalization map with reasons, prefix boundary, lexical exceptions (row 175)
+export { computePalatalization, softAt, softnessOfReason, SOFT_REASONS, HARD_REASONS } from './palatalization';
+export type { PalReason, PalEntry, PalMap, PalInput } from './palatalization';
+export { prefixBoundary, STOP_PREFIXES, VZS_PREFIXES, LOOK_ALIKE_ROOTS } from './prefix-boundary';
+export type { PrefixBoundary, LookAlikeRoot } from './prefix-boundary';
+export { lexicalSoftRIndices, LEXICAL_SOFT_R_LEMMAS } from './lexical-r';
+export { lexicalExceptionVowelIndex } from './lexical-exception';
