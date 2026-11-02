@@ -22,7 +22,7 @@
    has no literal reference, so a search for the whole key can come back empty
    for a key that is live: search for its prefix.
 
-   a11y.           4  accessible names: lib/components/Drawer/Drawer.svelte, lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, lib/components/TextWitnessPair.svelte
+   a11y.           4  accessible names: lib/components/Drawer/Drawer.svelte, lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, lib/components/Paper/Paper.svelte
    aid.            2  lib/components/ReadingAid.svelte
    analysis.       4  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
