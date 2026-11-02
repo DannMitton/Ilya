@@ -262,7 +262,7 @@ No code changed in this step: it is the proof and the answers the brief asks for
 | 7 | `pnpm --filter @ilya/score-parser test` | 785 passed, 5 skipped | 785 passed, 5 skipped | unmoved |
 | 8 | `pnpm ratchets` | OK | OK | `engine.ts` 2051 to 2048, `pipeline.ts` 925 to 901, both lowered |
 
-The brief expected gates 2, 3, 5, 7, 8 not to move and 1, 4, 6 to move. Gate 5's count of tests did not move; the one number it pins did, and that is the third place where an existing test knew the number of implications (the other two were `french-parity.test.ts` and, in this brief, the same file). Gate numbers are inferred, as in rows 172 and 71.
+The brief expected gates 2, 3, 5, 7, 8 not to move and 1, 4, 6 to move. Gate 5's count of tests did not move; the one number it pins did. That is the second place where an existing test knew a count the new pairs change; the first is `french-parity.test.ts`, which the brief names (its 209 to 221, here 181 to 193). Gate numbers are inferred, as in rows 172 and 71.
 
 **Playwright, desk project:** `core-loop` and `typed-hyphens` pass (22 tests, including the Inspector's ribbon tests). The throwaway run in step 3 opened the real Inspector on seven phrases. The failures that exist on the cut independently of this row (`glue-typed-marks`, `insights-page:95`, `loupe-header:47`, `print-pages:20`, `singer-paths:169`, the HEIC spec, `input-views:134` on the phone project, and `relining:95` which row 172 raised) are named in row 172's reports and were not touched.
 
