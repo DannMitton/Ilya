@@ -8,7 +8,7 @@ For Russian phonology, Ilya implements one source: Craig Grayson's doctoral diss
 
 Contributions that improve how Ilya implements Grayson are welcome. Contributions that substitute a different phonological authority, however well-intentioned, are not. If you believe Grayson is wrong about something, you may well be right, but Ilya is not the venue for that argument. Where I have departed from Grayson, I have done so transparently, with supporting citations and a visible callout in the interface. The same standard applies to any proposed departure.
 
-Two other bodies of scholarship stand beside Grayson's, each in its own place. The IPA for the Latin words that appear in some song texts follows Laurence R. Richter's *Mussorgsky's Complete Song Texts* (Leyerle, 2002), rendered in Grayson's notation; see [NOTICES.md](NOTICES.md). The guidance Insights offers about the voice draws on the voice pedagogy literature, including the sources reviewed in my doctoral dissertation.
+Two other bodies of scholarship stand beside Grayson's, each in its own place. The IPA for the Latin words that appear in some song texts follows Laurence R. Richter's *Mussorgsky's Complete Song Texts* (Leyerle, 2002), rendered in Grayson's notation; see [NOTICES.md](NOTICES.md). The guidance INSIGHTS offers about the voice draws on the voice pedagogy literature, including the sources reviewed in my doctoral dissertation.
 
 ## Reporting Transcription Errors
 
@@ -35,7 +35,7 @@ Ilya is a monorepo using pnpm workspaces. The four packages are independently te
 
 **`@ilya/dictionary`** handles dictionary loading, stress lookup, and gloss retrieval. Changes here should not break the loading pipeline or degrade French gloss coverage.
 
-**`@ilya/blurb`** generates the pedagogical explanations that appear when a singer clicks a word. Blurb content follows the voice and register documented in the project's voice instruction.
+**`@ilya/blurb`** generates the pedagogical explanations that appear when a singer clicks a word. Blurb content follows the register described under "What Will Not Be Merged" below and the words rule in [`docs/house-style/interface-text.md`](docs/house-style/interface-text.md), section 5.
 
 **`@ilya/score-parser`** parses MusicXML and MNX into one score type, analyzes it, and engraves it. It needs no browser.
 
@@ -52,6 +52,13 @@ pnpm ratchets       # Architecture checks: file size, layering, package surface
 `apps/web` also carries `pnpm check`, the type check.
 
 All tests must pass before a pull request will be reviewed.
+
+## Naming
+
+The five documents and places are TEXT, MELODY, INSIGHTS, LEARN, and GUIDE (in French TEXTE, CHANT, APERÇUS, LEÇONS, and GUIDE).
+`apps/web/src/lib/names.ts` is the list of every named part, its code names, and its retired names.
+A test (`retired-names.test.ts`) fails when a retired name appears in the interface text, LEARN, or this documentation.
+The rules are in `docs/house-style/interface-text.md` (what a singer reads) and `docs/house-style/code-conventions.md` (names, files, keys, and comments).
 
 ## What Will Not Be Merged
 

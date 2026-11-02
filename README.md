@@ -8,9 +8,9 @@ Ilya operationalizes Craig Grayson's doctoral dissertation *Russian Lyric Dictio
 
 Ilya accepts Russian text in Cyrillic and produces a paginated, printable document containing three layers for each word: IPA transcription, stress-marked Cyrillic, and a translation gloss. The document renders on screen exactly as it will print. Singers use it as a recital preparation tool: paste a song text, study the transcription, click any word to see why Ilya made the choices it did.
 
-Ilya's work runs across three documents. Text is the transcription described above. Markup lays a score beside it: upload the song as MusicXML, MNX, a Finale or MuseScore file, a PDF, or a photograph, and Ilya aligns the syllables to the notes and, once it has measured your voice, marks the places where your vowels meet your resonances and your passaggio. Insights reads the same score against your voice and forecasts how the piece suits you. It forecasts; it does not declare.
+Ilya's work runs across three documents. TEXT is the transcription described above. MELODY lays a score beside it: upload the song as MusicXML, MNX, a Finale or MuseScore file, a PDF, or a photograph, and Ilya aligns the syllables to the notes and, once it has measured your voice, marks the places where your vowels meet your resonances and your passaggio. INSIGHTS reads the same score against your voice and forecasts how the piece suits you. It forecasts; it does not declare.
 
-The LEARN module, opened from the link at the top of the page, teaches the phonological system that powers the transcription engine. Eight sections follow the singer's cognitive journey from the Cyrillic alphabet through stress, vowel quality, consonant inventory, palatalization, and assimilation. Every rule traces to Grayson's dissertation.
+LEARN, opened from its tab at the top of the page, teaches the phonological system that powers the transcription engine. Eight sections follow the singer's cognitive journey from the Cyrillic alphabet through stress, vowel quality, consonant inventory, palatalization, and assimilation. Every rule traces to Grayson's dissertation.
 
 Ilya runs in any modern browser with no installation required. It is also installable as a self-contained app on most major platforms, including mobile: visit [ilya.dannmitton.com](https://ilya.dannmitton.com), tap "Add to Home Screen," and Ilya works offline.
 
@@ -30,7 +30,7 @@ Ilya runs in any modern browser. No installation required for end users.
 
 ### For Development
 
-This project uses [pnpm](https://pnpm.io/) workspaces and requires Node.js v18 or later.
+This project uses [pnpm](https://pnpm.io/) workspaces and requires Node.js 20 or later: CI tests on Node.js 20 (`.github/workflows/ci.yml`), and Vercel builds the deployed app on Node.js 24.
 
 ```bash
 git clone git@github.com:DannMitton/Ilya.git
@@ -56,6 +56,7 @@ pnpm ratchets       # architecture checks: file size, layering, package surface
 ```
 Ilya/
 ├── apps/web/                 # The SvelteKit application (Svelte 5)
+│   └── e2e-phone/            # Playwright checks of the phone layout (not yet in CI)
 ├── packages/
 │   ├── phonology/            # The GraysonEngine: Russian to IPA, per Grayson (2012)
 │   ├── dictionary/           # Stress lookup and the English and French glosses
@@ -63,6 +64,8 @@ Ilya/
 │   └── score-parser/         # MusicXML and MNX parsing, analysis, and engraving
 ├── data/                     # The shipped dictionary and blurb data (fetched by the app as /data/)
 ├── scripts/                  # Dictionary builds and the architecture ratchets
+├── docs/                     # House style, working memory (docs/memory/), and dated session records
+├── third_party/              # homr-web, the music reader, as a changed copy with its source (AGPL-3.0)
 ├── tools/                    # Dated research harnesses; a contributor may ignore them
 └── tests/                    # Cross-package integration tests
 ```
@@ -82,9 +85,9 @@ The report's Future Work asked for a more complete rules engine, for reading tex
 
 Ilya was conceived and directed by [Dann Mitton](https://dannmitton.com) (Doctor of Musical Arts, University of Toronto), who serves as strategist, decision-maker, scholarly authority, content author, reluctant programmer, and warm, scholarly voice of all user-facing text.
 
-Claude (Opus 4.6 Extended, by Anthropic) served as project manager and implementation lead: writing the code, managing task sequencing, conducting the Grayson dissertation audit, and co-authoring the LEARN module content under Dann's editorial authority. He also served as a sounding board, toady, confidante, research assistant, makeshift tutor, and scribe.
+Claude (Opus 4.6 Extended, by Anthropic) served as project manager and implementation lead: writing the code, managing task sequencing, conducting the Grayson dissertation audit, and co-authoring the LEARN content under Dann's editorial authority. He also served as a sounding board, toady, confidante, research assistant, makeshift tutor, and scribe.
 
-As the project grew, the work divided among several Claude models, each with its own role. Claude Code, running Claude Opus 5.5 on Dann's own machine, wrote and tested the code, working from written briefs and never committing without Dann's walk-through. Claude Opus, as the "desk", wrote those briefs, checked each piece of work in its own copy of the app before Dann saw it, drafted the French for Dann's ruling, and kept the project's memory. Claude Fable, Anthropic's most capable model, was reserved for judgement: it ruled on the interface's architecture and design principles and drafted Insights' English. Claude Sonnet carried out audits, code surveys, and refactoring plans. Claude Design drew interface mockups for Dann to react to.
+As the project grew, the work divided among several Claude models, each with its own role. Claude Code, running Claude Opus 5.5 on Dann's own machine, wrote and tested the code, working from written briefs and never committing without Dann's walk-through. Claude Opus, as the "desk", wrote those briefs, checked each piece of work in its own copy of the app before Dann saw it, drafted the French for Dann's ruling, and kept the project's memory. Claude Fable, Anthropic's most capable model, was reserved for judgement: it ruled on the interface's architecture and design principles and drafted the English of INSIGHTS. Claude Sonnet carried out audits, code surveys, and refactoring plans. Claude Design drew interface mockups for Dann to react to.
 
 Every decision about what Ilya says and does remained Dann's. The models proposed; he ruled.
 

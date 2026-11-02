@@ -8,17 +8,17 @@ Guidance for AI agents working in this repository.
 
 **Ilya is not AI.** It is a rule-based, deterministic engine implementing a specific scholarly framework. Same input, same output, always. No machine learning, no neural model, no guesswork. This distinction is load-bearing for the project's credibility with singers and teachers. Never blur it, and never describe Ilya as AI-powered.
 
-**Markup** and **Insights** (on branch `Shane`, behind `PUBLIC_INCLUDE_MARKUP_INSIGHTS=true`) are Ilya's voice-analysis documents. Where Ilya answers "how do I pronounce this?", they answer "does this piece suit my voice?" They operationalise Mitton (2020), *Sung Russian for the Low Male Voice* (D.M.A.).
+**MELODY** (code name today: `markup/`) and **INSIGHTS** (on branch `Shane`, behind `PUBLIC_INCLUDE_MARKUP_INSIGHTS=true`) are Ilya's voice-analysis documents. Where Ilya answers "how do I pronounce this?", they answer "does this piece suit my voice?" They operationalise Mitton (2020), *Sung Russian for the Low Male Voice* (D.M.A.).
 
-Developed under the codename Shane; shown on screen as Fit until 2026-09. N.174 (2026-09-27) renamed the code to Text, Markup, and Insights.
+Developed under the codename Shane; shown on screen as Fit until 2026-09. N.174 (2026-09-27) renamed the code to Text, Markup, and Insights; the screen says TEXT, MELODY, and INSIGHTS since 2026-11-01.
 
 ## Layout
 
 Naming on screen and in code: `docs/house-style/interface-text.md` and `docs/house-style/code-conventions.md`.
 
-A pnpm workspace monorepo, Node 18+, TypeScript, SvelteKit with Svelte 5 runes, tested with vitest.
+A pnpm workspace monorepo, Node 20+, TypeScript, SvelteKit with Svelte 5 runes, tested with vitest.
 
-- `apps/web` (`@ilya/web`): the application. Three destinations (Studio, Learn, Guide); Studio holds three documents (Text, Markup, Insights), named in `apps/web/src/lib/destinations.ts`. Their code is in six modules under `apps/web/src/lib/`: `reader/`, `score/`, `voice/`, `analysis/`, `markup/`, and `insights/`.
+- `apps/web` (`@ilya/web`): the application. Three destinations (Studio, LEARN, GUIDE); Studio holds three documents (TEXT, MELODY, INSIGHTS), named in `apps/web/src/lib/destinations.ts`. Their code is in six modules under `apps/web/src/lib/`: `reader/`, `score/`, `voice/`, `analysis/`, `markup/` (MELODY), and `insights/`.
 - `packages/phonology` (`@ilya/phonology`): the GraysonEngine. Russian phonological analysis per Grayson (2012).
 - `packages/dictionary` (`@ilya/dictionary`): dictionary loader, stress lookup, gloss pipeline.
 - `packages/blurb` (`@ilya/blurb`): context-aware educational explanations for phonological processes.
@@ -31,7 +31,7 @@ The maintainer's `node_modules` is macOS-built, so a copy of his working tree ca
 ## Roles and write protocol
 
 - **Dann Mitton**: author and sole decision-maker. Every ruling on taste, copy, design, and scope is his.
-- **Claude (Opus)**: project manager and the sole writer of code. Claude audits, places files, and verifies.
+- **Claude (Opus)**: project manager and the sole writer of code (as of 2026-09; `README.md`, Design and Attribution, has the current division). Claude audits, places files, and verifies.
 - **Kimi**: GUI and UX authority. Specifies and reviews; Claude implements.
 - **ChatGPT / Codex**: archivist and verifier. Owns the document record: guards the corpus against drift, contradiction, and superseded copies; answers "what did we decide and where is it written"; verifies claims against sources, including Claude's claims; runs research passes.
 
@@ -45,11 +45,12 @@ The maintainer's `node_modules` is macOS-built, so a copy of his working tree ca
 
 ## Source hierarchy
 
+The handover chain, the canonical specs, and the Gould extraction live in the maintainer's project knowledge, not in this repository. Inside the repository the order is `ARCHITECTURE.md`, then `docs/memory/`, then `docs/sessions/` (`ARCHITECTURE.md`, "Where decisions are recorded").
+
 1. **The code** is authoritative for what exists. Audit it. Never claim from recollection, and never guess a type's shape from memory.
 2. **The current handover** (`phonation-tool-handover_vN`, highest N) is the resume point and names the canonical document set. The chain is incremental: older handovers are history, not live guidance.
 3. **The canonical specs** named by that handover.
-4. **`SHANE_ILYA_SOURCE_INDEX.md`** is a convenience map, not an authority. If it and the handover disagree, the handover wins.
-5. **Grayson** is the phonetics foundation. When a phonetics question arises, read Grayson. Do not re-derive from general phonetics.
+4. **Grayson** is the phonetics foundation. When a phonetics question arises, read Grayson. Do not re-derive from general phonetics.
 
 ## Gould protocol
 
@@ -67,7 +68,7 @@ Check the version marker on line 1 of any reference document before citing it. A
 - **No em-dashes in user-facing copy.** Use discrete sentences, or colons and commas.
 - **Agentless copy.** The app never speaks as an agent. The retired codename never surfaces to users.
 - **"Sustain", never "held".**
-- The documents are shown as **Text**, **Markup**, and **Insights**, in French « Texte », « Annotation », and « Aperçus ».
+- The documents are shown as **TEXT**, **MELODY**, and **INSIGHTS**, in French « TEXTE », « CHANT », and « APERÇUS ».
 - **IPA comes verbatim from the GraysonEngine.** The renderer never synthesizes IPA.
 
 ## Engraving constraints

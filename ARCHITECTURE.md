@@ -4,8 +4,7 @@
 follows matklad's advice for an `ARCHITECTURE.md`: a short map of where things
 are and what must stay true. How each module works is in its code and comments.
 
-Developed under the codename Shane; shown on screen as Fit until 2026-09.
-N.174 (2026-09-27) renamed the code to Text, Markup, and Insights.
+Developed under the codename Shane; shown on screen as Fit until 2026-09. N.174 (2026-09-27) renamed the code to Text, Markup, and Insights; the screen says TEXT, MELODY, and INSIGHTS since 2026-11-01.
 
 ## The problem Ilya solves
 
@@ -14,14 +13,14 @@ questions about it.
 
 1. **How do I pronounce this?** Ilya transcribes the text into a singable IPA,
    following Craig Grayson, *Russian Lyric Diction* (2012). This is the
-   Text document.
+   TEXT document.
 2. **Does this piece suit my voice?** Ilya reads the score, measures the
    voice the singer calibrates, and reports where the two meet. This follows
-   Mitton (2020). These are the **Markup** (« Annotation ») and **Insights**
-   (« Aperçus ») documents.
+   Mitton (2020). These are the **MELODY** (« CHANT ») and **INSIGHTS**
+   (« APERÇUS ») documents.
 
-Together, Text, Markup, and Insights are the **Paper GUI**: the three documents
-Ilya offers for print.
+Together, TEXT, MELODY, and INSIGHTS are the **page** (its folder is
+`components/Paper/`): the three documents Ilya offers for print.
 
 Ilya's analysis is rule-based and deterministic: the same input gives the
 same output, every time. No part of it is learned. The one trained component
@@ -81,16 +80,18 @@ search, page layout, and `staff-renderer.ts`, which engraves a staff as SVG.
   (`routes/notation-font-lab/` is a development page the app does not link to.)
 - `src/lib/pipeline.ts` turns text into a transcription by calling the
   packages. `src/lib/loader.ts` loads the dictionary into IndexedDB in chunks.
-- `src/lib/i18n.ts` holds the interface's words, in both languages. The Learn
-  and Guide texts are written in each language in `components/Reading/`, and
+- `src/lib/i18n.ts` holds the interface's words, in both languages. The LEARN
+  and GUIDE texts are written in each language in `components/Reading/`, and
   the word explanations come from `data/blurb-composer.json`. That file is at
   the repository root (`data/`, not `apps/web/data/`); the app fetches it as
   `/data/blurb-composer.json` (`src/lib/loader.ts`).
-- `src/lib/destinations.ts` names where the singer is (Studio, Learn, Guide)
-  and which document Studio shows (Text, Markup, Insights).
+- `src/lib/destinations.ts` names where the singer is (Studio, LEARN, GUIDE)
+  and which document Studio shows (TEXT, MELODY, INSIGHTS).
 - `src/lib/components/Drawer/` is the drawer: every control that changes
-  something. `Paper/` is the Paper GUI: what displays and prints. `Reading/` holds
-  the Learn and Guide texts.
+  something. `Paper/` is the page: what displays and prints. `Reading/` holds
+  the LEARN and GUIDE texts.
+- `src/lib/components/Field/` is the settling of a one-line field: `settle-field.ts`
+  settles it on Enter or on leaving it, and `SavedNote.svelte` says "Saved".
 - `src/lib/library/` stores songs on the device (IndexedDB) and reads and
   writes `.ilya` binder files. `document.svelte.ts` is the seam between the
   page and storage.
@@ -117,22 +118,38 @@ search, page layout, and `staff-renderer.ts`, which engraves a staff as SVG.
   `shane.profiles.v2` key, by invariant 10), `engine/` is the microphone
   capture and its signal processing, and `pacifier/` is the capture's
   visual timer.
-- `src/lib/markup/` is the Markup document. `MarkupPane.svelte` analyzes the score, paginates it (`paginateScore`
+- `src/lib/text/` is the TEXT document's own logic: where lines break (`break-*.ts`),
+  which of the song's two texts, Lyrics or Poem, is shown (`input-views.svelte.ts`),
+  what each shows (`witness-lines.ts`, `word-marks.svelte.ts`), and how the poem is
+  compared with the lyrics (`poem-compare.ts`, `relining.ts`).
+- `src/lib/omr/` reads a scan. `scan.ts` turns a PDF or a picture of staves into
+  MusicXML through homr (`homr-reader.ts`, from `third_party/homr-web/`);
+  `metre-*.ts` reads a printed time signature, and `underlay-*.ts` reads the words
+  printed under the notes.
+- `src/lib/tempo/` is the singer's own tempo: `TempoControl.svelte` is the floating
+  panel, `TempoReceipt.svelte` the Input band's row, and `singer-tempo.ts` puts the
+  choice on a score and reads it back.
+- `src/lib/approval/` holds tests only: the approval suites whose outputs sit in
+  `__approved__/`, and the tests for invariants 4 and 11.
+- `src/lib/markup/` is the MELODY document (`markup/` is its code name today; the
+  screen says MELODY). `MarkupPane.svelte` analyzes the score, paginates it (`paginateScore`
   in `packages/score-parser`), and hands each page's SVG to
   `Paper/PageFit.svelte`. `legend.ts` builds its footer legend.
-- `src/lib/insights/` is the Insights document. `insights.ts` builds the page's figures, `Tessituragram.svelte` draws
-  the tessituragram, `comments.ts`, `comment-text.ts`, and `comment-sources.ts`
+- `src/lib/insights/` is the INSIGHTS document. `insights.ts` builds the page's figures, `comments.ts`, `comment-text.ts`, and `comment-sources.ts`
   choose, word, and cite the per-note comments, and `InsightsPane.svelte`
   renders it all. `InsightsIntake.svelte` is in `voice/`, where the
-  calibration wizard mounts it.
+  calibration wizard mounts it. `Tessituragram.svelte` is not drawn today:
+  nothing imports it (`SingerBlock.svelte` mounts `PitchSeconds.svelte`), and it
+  is held for the dead-code batch (consistency batch 4).
 - `src/lib/analysis/` is what both documents read. `analyze-score-adapter.ts` turns the voice into the snapshot the
   analysis reads, `watchlist.ts` and `advice-resolver.ts` list and explain what
   is flagged, `gates.ts` decides which of it is said, and `score-metrics.ts`
   measures the piece.
-- `src/lib/wall.ts` is the one switch that includes or removes Markup and
-  Insights at build time (`PUBLIC_INCLUDE_MARKUP_INSIGHTS`).
+- `src/lib/wall.ts` is the one switch that includes or removes MELODY and
+  INSIGHTS at build time (`PUBLIC_INCLUDE_MARKUP_INSIGHTS`, set in the tracked
+  file `apps/web/.env`).
 
-Markup and Insights work in five stages: **calibrate** the voice, **ingest** a score,
+MELODY and INSIGHTS work in five stages: **calibrate** the voice, **ingest** a score,
 **resolve** which vowel each note sings, **analyse** where the voice and the
 music meet, and **engrave** the marked-up score.
 
@@ -158,13 +175,13 @@ broken.
    «Семинарист»'s Latin words only (invariant 3; Richter, p. xii), which the
    same test pins.
 5. **Same input, same output.** *Tested:* the approval suites.
-6. **The drawer hosts the controls. The Paper GUI is WYSIWYG: it displays,
+6. **The drawer hosts the controls. The page is WYSIWYG: it displays,
    and it prints what it displays.** Tapping a word shows it in the drawer.
    Tapping a note raises the loupe, an inspection and correction surface that
-   floats above the Paper GUI and never prints.
+   floats above the page and never prints.
 7. **The notes never move.** A correction to how text meets music is a side
    map keyed by event id (`pairings.ts`); it never writes into `ParsedScore`.
-8. **`VocalLineEvent` does not change shape.** Much of Markup and Insights is built on it.
+8. **`VocalLineEvent` does not change shape.** Much of MELODY and INSIGHTS is built on it.
 9. **Store what the singer said, never what Ilya derived.** Everything derived
    is recomputed on open. The one ruled exception is R8's vowel glyph.
 10. **A stored id changes only with a migration.** The destination ids in
@@ -216,8 +233,7 @@ broken.
   are the feature index: the block at the top of that file lists each prefix
   and the module it belongs to.
 - To find the code behind something on screen: search `apps/web/src/lib/i18n.ts`
-  for the words on screen and follow the key, or read
-  `docs/sessions/memo-n84-path-map_r1_2026-10-01.md` (dated 2026-10-01; it ages).
+  for the words on screen and follow the key.
 - To change the voice analysis: `packages/score-parser` for anything that needs no
   browser, `apps/web/src/lib/analysis/` for the rest.
 - Before any change: `pnpm test`, `pnpm ratchets`, and, in `apps/web`,

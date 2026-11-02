@@ -37,7 +37,7 @@ Everything a singer reads: every interface string (`apps/web/src/lib/i18n.ts`), 
 | panels of the LOUPE | `loupe.station.corrections`, `loupe.syllables` | CORRECTIONS, SYLLABLES | CORRECTIONS, SYLLABES | f. pl. | yes |
 | the sheet under the DRAWER | `drawer.paper`, `a11y.paper` | the page | la page | f. | no: an ordinary word (Dann 22:13) |
 | a syllable's place under a note | | placement | placement | m. | no |
-| spot controls | `inspector.spotRecon.*` | Spot reduction, Spot reconstitution | Réduction ponctuelle, Reconstitution ponctuelle | f. | no: controls (§4) |
+| spot controls | `inspector.spot.reduction`, `inspector.spot.reconstitution` | Spot reduction, Spot reconstitution | Réduction ponctuelle, Reconstitution ponctuelle | f. | no: controls (§4) |
 
 Open for Dann (French, flagged by the audit): the storage messages say "syllable placements" / « Vos syllabes »; `a11y.drawer` names the DRAWER "Controls" / « Commandes ». Each needs one ruling.
 
@@ -73,7 +73,7 @@ A string speaks the notation: a bar, a note, a dotted half, your score (`CONTRAC
 
 ## 6. Where text lives
 
-Every interface string lives in `i18n.ts` and is read through its key; no label is typed into a component as a language choice. **Reason:** one place to change a name, and the tests can see it. Today the tree holds 117 language choices in components, 93 of them labels; consistency batch 1 moves those 93. The GUIDE and LEARN keep their prose in their components, and every place or control they name uses the term in §2.
+Every interface string lives in `i18n.ts` and is read through its key; no label is typed into a component as a language choice. **Reason:** one place to change a name, and the tests can see it. Consistency batch 1 moved the labels out of components: the audit's grep found 117 language choices in 20 files and now finds 24 in 14, none of them a label (`report-code-consistency-1-step1_r1_2026-11-01.md`). The GUIDE and LEARN keep their prose in their components, and every place or control they name uses the term in §2.
 
 ## 7. French
 
@@ -81,8 +81,8 @@ French follows `CONTRACT.md` §7: OQLF spacing, the feminine-first pair for a pe
 
 ## 8. How the rules are kept
 
-Tests enforce what a test can see. Today: `apps/web/src/lib/no-fit-name.test.ts` keeps one retired name out of `i18n.ts` and the GUIDE. After row 171 it becomes `retired-names.test.ts` and reads every retired name from `names.ts`. Planned for batch 4: a test that every i18n key has a reader, and a test that every control the GUIDE names matches a drawn label. A rule no test can check is checked in review.
+Tests enforce what a test can see. Today: `apps/web/src/lib/retired-names.test.ts` reads every retired name from `names.ts` and keeps it out of `i18n.ts`, LEARN, and the contributors' legend; the GUIDE is read for the one retired name `Fit` until row 171 adds every pattern. Planned for batch 4: a test that every i18n key has a reader, and a test that every control the GUIDE names matches a drawn label. A rule no test can check is checked in review.
 
-## Not yet true at `6f740dbf`
+## Not yet true at `9fa20430`
 
-`names.ts` and `tab.melody` (batch 1, running on `cloud-lane-24`); the capitals in `i18n.ts` values, "the page", UNDERLAY (batch 1); `retired-names.test.ts` (row 171); the unread-key and GUIDE-controls tests (batch 4).
+`tab.melody` and the other code names that still say Markup (batch 3); the GUIDE using the names table's terms everywhere (row 171); the unread-key and GUIDE-controls tests (batch 4).
