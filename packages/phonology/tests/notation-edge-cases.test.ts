@@ -603,7 +603,7 @@ describe('Task 7c: Notation and Edge Cases', () => {
       const result = transcribeWord('счастье');
       const aEntry = result.transcriptionLog.find(e => e.char === 'а');
       expect(aEntry?.ipa).toBe('ɑ');
-      expect(aEntry?.features.exception).toBe('word-override');
+      expect(aEntry?.features.exception).toBe('lexical-exception'); // row 175 addendum: was 'word-override'
     });
 
   });

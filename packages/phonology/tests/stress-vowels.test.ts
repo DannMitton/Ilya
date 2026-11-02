@@ -356,7 +356,9 @@ describe('Task 7a: Stress and Vowels', () => {
 
     it('fronts pretonic ye to [i] in svechi (interpalatal pretonic)', () => {
       const result = transcribeWord('\u0441\u0432\u0435\u0447\u0438');
-      expect(result.ipa).toBe('sv\u02B2i\u02C8t\u0283\u02B2i');
+      // CHANGED PIN (row 175 step 1): was svʲiˈtʃʲi. The dental с softens before the soft вʲ (Grayson p. 209 sets
+      // no limit on a dental; pp. 210-211; Dann 2026-11-01 23:27). Reason regressive-dental.
+      expect(result.ipa).toBe('s\u02B2v\u02B2i\u02C8t\u0283\u02B2i');
     });
 
     it('fronts pretonic ye to [i] in yeshchyo via j-glide interpalatal', () => {
@@ -379,7 +381,7 @@ describe('Task 7a: Stress and Vowels', () => {
         e => e.char === '\u0430' && e.features.type === 'vowel'
       );
       expect(aVowel?.ipa).toBe('\u0251');
-      expect(aVowel?.features.exception).toBe('word-override');
+      expect(aVowel?.features.exception).toBe('lexical-exception'); // row 175 addendum: was 'word-override'
     });
 
   });

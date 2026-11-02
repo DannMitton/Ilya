@@ -11,6 +11,10 @@
  * @module @ilya/phonology
  */
 import { lexicalSoftIndices } from './lexical-palatalization';
+import { lexicalSoftRIndices } from './lexical-r';
+import { annotatePalatalization, computePalatalization, softAt } from './palatalization';
+import { SHCHA_CLUSTERS } from './shcha-clusters';
+import { lexicalExceptionVowelIndex } from './lexical-exception';
 import { reflexiveParticleAt } from './reflexive';
 import { initialPastV, keepsVoicingAtBoundary4, restoreBogFinish } from './voicing-rule2';
 
@@ -272,7 +276,7 @@ export const GraysonEngine = {
     ['подо', { type: 'proclitic', canonicalIpa: 'pɑdɑ', gloss: { en: 'under', fr: 'sous' } }],
     ['при', { type: 'proclitic', canonicalIpa: 'prʲi', gloss: { en: 'at/near', fr: 'près de/en présence de' } }],
     ['про', { type: 'proclitic', canonicalIpa: 'prɑ', gloss: { en: 'about', fr: 'au sujet de' } }],
-    ['для', { type: 'proclitic', canonicalIpa: 'dlʲɑ', gloss: { en: 'for', fr: 'pour' } }],
+    ['для', { type: 'proclitic', canonicalIpa: 'dʲlʲɑ', gloss: { en: 'for', fr: 'pour' } }],
     ['через', { type: 'proclitic', canonicalIpa: 'tʃʲɪrʲɪz', gloss: { en: 'through', fr: 'à travers' } }],
     ['перед', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪt', gloss: { en: 'before', fr: 'devant' } }],
     ['передо', { type: 'proclitic', canonicalIpa: 'pʲɪrʲɪdɑ', gloss: { en: 'before', fr: 'devant' } }],
@@ -292,26 +296,10 @@ export const GraysonEngine = {
   proclitics: null as unknown as Set<string>,  // Initialized below
   enclitics: null as unknown as Set<string>,   // Initialized below
 
-  // Regressive palatalization categorical restrictions (Grayson p. 209; Derwing & Priestly pp. 76-87)
-  // These consonants BLOCK regressive palatalization — consonants before them do not soften
-  // NOTE: Grayson's example сестрёнка /sʲtʲrʲ/ appears to be an error; D&P pp. 85-87 confirms
-  // that р blocks regressive palatalization. Ilya follows D&P: сестрёнка → /strʲ/
-  regressivePalatalizationBlockers: new Set(['р', 'л']), // р and л block regressive palatalization (except doubled)
-
-  // Categorical restrictions for regressive palatalization (Grayson p. 209)
-  // Velars only palatalize before palatalized velars
-  velars: new Set(['к', 'г', 'х']),
-  // Labials only palatalize before palatalized labials
-  labials: new Set(['б', 'п', 'в', 'ф', 'м']),
-  // Dentals palatalize more freely
-  dentals: new Set(['т', 'д', 'с', 'з', 'н', 'ц']),
-  // н only palatalizes before palatalized н or dental
-
   // Special consonant clusters (Grayson p. 225-247)
   // These are detected and transcribed as units before letter-by-letter processing
   specialClusters: {
-    'сч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
-    'зч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
+    ...SHCHA_CLUSTERS, // сч зч жч стч здч ссч → ʃʲʃʲ, longest first (shcha-clusters.ts; Grayson p. 236)
     // Sibilant mergers (Grayson pp. 235-236)
     'сш': 'ʃː',     // с + ш → long unvoiced postalveolar (p. 235)
     'зш': 'ʃː',     // з + ш → long unvoiced postalveolar (devoices, p. 235)
@@ -524,12 +512,9 @@ export const GraysonEngine = {
     'звёздном': { 'здн': 'zn' },
   } as Record<string, Record<string, string>>,
 
-  // Exception words where normal phonological rules don't apply (Grayson Appendix F)
+  // Exception words where normal phonological rules don't apply. The счаст- family
+  // (Grayson 2012, p. 287, ch. 6 section 5) is lexical-exception.ts.
   exceptionWords: {
-    'счастье': { vowelOverrides: { 2: 'ɑ' } },
-    'счастья': { vowelOverrides: { 2: 'ɑ' } },
-    'счастлив': { vowelOverrides: { 2: 'ɑ' } },
-    'счастливый': { vowelOverrides: { 2: 'ɑ' } },
     // русский exception (Grayson p. 233): uses modern -кий (soft), not Old Muscovite
     'русский': { skipVelarAdjectival: true },
     'русская': { skipVelarAdjectival: true },
@@ -612,7 +597,7 @@ export const GraysonEngine = {
     if (exception?.vowelOverrides?.[charIndex] !== undefined) {
       return exception.vowelOverrides[charIndex];
     }
-    return null;
+    return lexicalExceptionVowelIndex(cleanWord) === charIndex ? 'ɑ' : null;
   },
 
   // Check for -ая/-яя suffix exception (Grayson p. 124)
@@ -842,180 +827,8 @@ export const GraysonEngine = {
     return false;
   },
 
-  // COMPLETE PALATALIZATION MAP (Grayson p. 207-209; D&P pp. 76-87)
-  // Computes ALL palatalization sources upfront, before any transcription.
-  // This ensures vowel interpalatal detection knows about progressive palatalization.
-  // Architecture per Kimi's spec: single source of truth for vowels AND consonants.
-  //
-  // Pass 1: Direct palatalization (consonants before front vowels/ь)
-  // Pass 2: Regressive chain through consonant clusters
-  // Pass 3: Progressive palatalization of р (Grayson p. 209, footnote 277)
-  //
-  // Returns a Map of character indices that should be palatalized.
-  computeCompletePalatalizationMap(word: string, syllables: string[], stressIndex: number, lexicalSoft: ReadonlySet<number> = new Set(), lexicalHard: ReadonlySet<number> = new Set()): Map<number, boolean> {
-    const chars = [...word.toLowerCase()];
-    const softIndices = new Map<number, boolean>([...lexicalSoft].map((i) => [i, true])); // index -> true if palatalized; seeded with lexical ц, ш (Grayson pp. 163, 168, 283-284)
-
-    // Compute syllable boundaries: which char indices are in each syllable
-    const syllableBoundaries: Array<{ start: number; end: number; isStressed: boolean }> = [];
-    let charPos = 0;
-    syllables.forEach((syl, sylIdx) => {
-      const start = charPos;
-      const end = charPos + syl.length - 1;
-      syllableBoundaries.push({
-        start,
-        end,
-        isStressed: sylIdx === stressIndex
-      });
-      charPos += syl.length;
-    });
-
-    // Helper: check if character index is in the stressed syllable
-    const isInStressedSyllable = (index: number): boolean => {
-      const boundary = syllableBoundaries.find(b => index >= b.start && index <= b.end);
-      return boundary ? boundary.isStressed : false;
-    };
-
-    // PASS 1: Mark directly palatalized consonants (before indicator letters or ь)
-    for (let i = 0; i < chars.length; i++) {
-      if (this.isConsonant(chars[i]) && !lexicalHard.has(i)) { // lexicalHard: the reflexive с (reflexive.ts)
-        if (this.isPalatalized(chars[i], chars[i + 1])) {
-          softIndices.set(i, true);
-        }
-      }
-    }
-
-    // PASS 2: Process regressive palatalization right-to-left through clusters
-    // Working backwards, check if palatalization can step through
-    for (let i = chars.length - 2; i >= 0; i--) {
-      const char = chars[i];
-      const nextChar = chars[i + 1];
-
-      if (!this.isConsonant(char)) continue;
-      if (softIndices.has(i)) continue; // Already soft
-
-      // Check if next consonant is soft
-      const nextIsSoft = softIndices.has(i + 1);
-      if (!nextIsSoft) continue;
-
-      // Check for blockers (Grayson p. 209; D&P pp. 85-87)
-      // р and л block regressive palatalization (confirmed by D&P)
-      if (this.regressivePalatalizationBlockers.has(nextChar)) {
-        continue; // Blocked - don't palatalize through р or л
-      }
-
-      // Check categorical restrictions (Grayson p. 209)
-      if (!this.canRegressivelyPalatalize(char, nextChar)) {
-        continue; // Categorical mismatch
-      }
-
-      // Check for boundaries
-      if (this.alwaysHard.has(char)) continue; // ж, ш, ц never palatalize
-      if (chars[i + 1] === 'ъ') continue; // Hard sign blocks (except в, с, з - handled separately)
-
-      // This consonant can be regressively palatalized
-      softIndices.set(i, true);
-    }
-
-    // PASS 3: Progressive palatalization of р (Grayson p. 209, footnote 277)
-    // "Do not regressively palatalize /r/ within a cluster except...
-    // directly following -и-, -е-, or -э- (in the stressed syllable only)"
-    // Examples: смерть /sʲmʲerʲtʲ/, терпеть /tʲirʲˈpʲetʲ/, кирпич /kʲirʲˈpʲitʃʲ/
-    // NOTE: Applies only when р is in a CLUSTER (followed by consonant).
-    // Word-final р after front vowel does NOT palatalize: мир /mʲir/ not /mʲirʲ/
-    const progressiveFrontVowels = new Set(['и', 'е', 'э']);
-
-    for (let i = 0; i < chars.length; i++) {
-      if (chars[i] !== 'р') continue;
-      if (softIndices.has(i)) continue; // Already soft from Pass 1 or 2
-      if (!isInStressedSyllable(i)) continue; // Must be in stressed syllable
-
-      const prevChar = chars[i - 1];
-      if (!prevChar || !progressiveFrontVowels.has(prevChar)) continue; // Must follow front vowel
-
-      // Find what follows р (skip ь/ъ)
-      let charAfterR: string | null = null;
-      for (let j = i + 1; j < chars.length; j++) {
-        if (chars[j] === 'ь' || chars[j] === 'ъ') continue;
-        charAfterR = chars[j];
-        break;
-      }
-
-      // Cluster requirement: р must be followed by a consonant
-      if (charAfterR && this.isConsonant(charAfterR)) {
-        softIndices.set(i, true); // Progressive palatalization
-      }
-    }
-
-    return softIndices;
-  },
-
-  // Legacy wrapper for any code still calling the old function name
-  analyzeRegressivePalatalization(word: string): Map<number, boolean> {
-    // Fallback: treat as single stressed syllable (conservative)
-    return this.computeCompletePalatalizationMap(word, [word], 0);
-  },
-
-  // Check if consonant can regressively palatalize before another consonant (Grayson p. 209)
-  canRegressivelyPalatalize(consonant: string, triggerConsonant: string): boolean {
-    const c = consonant?.toLowerCase();
-    const tc = triggerConsonant?.toLowerCase();
-
-    // Always-hard consonants never palatalize
-    if (this.alwaysHard.has(c)) return false;
-
-    // л: only regressively palatalizes when doubled (лль)
-    // (Grayson p. 209 rule 1)
-    if (c === 'л') {
-      return tc === 'л'; // Only before another л
-    }
-
-    // р: never regressively palatalizes except when doubled (ррь)
-    // (Grayson p. 209 rule 2; D&P pp. 85-87)
-    // NOTE: Progressive palatalization (after front vowel in cluster) is handled separately
-    if (c === 'р') {
-      return tc === 'р'; // Only before another р
-    }
-
-    // н: only before palatalized н or dental (Grayson p. 209 rule 3)
-    if (c === 'н') {
-      return tc === 'н' || this.dentals.has(tc);
-    }
-
-    // Velars (к, г, х): only before palatalized velar (Grayson p. 209 rule 4)
-    if (this.velars.has(c)) {
-      return this.velars.has(tc);
-    }
-
-    // Labials (б, п, в, ф, м): only before palatalized labial (Grayson p. 209 rule 5)
-    if (this.labials.has(c)) {
-      return this.labials.has(tc);
-    }
-
-    // Dentals (т, д, с, з): before palatalized dental (Grayson p. 209),
-    // AND before palatalized labial nasal м (Stage pronunciation principle).
-    // Three-authority convergence for the м exception:
-    //   Derwing & Priestly Rule 3R(a), p. 86 (смерть is a worked example)
-    //   Avanesov, Орфоэпический словарь, 5th ed., 1989, p. 528 ([с'м'] permitted)
-    //   Grayson, email to Dann Mitton, Feb 26, 2026: "Stage pronunciation
-    //   palatalizes everything in similar clusters, except always-hard consonants."
-    // Dentals do NOT palatalize before other labials (д before в in дверь stays hard).
-    if (this.dentals.has(c)) {
-      return this.dentals.has(tc) || tc === 'м';
-    }
-
-    // Others: can palatalize more freely
-    return true;
-  },
-
-  // Check if a consonant at given index is palatalized (considering regressive)
-  isConsonantPalatalized(word: string, index: number, softIndices?: Map<number, boolean>): boolean {
-    if (softIndices && softIndices.has(index)) {
-      return true;
-    }
-    const chars = [...word.toLowerCase()];
-    return this.isPalatalized(chars[index], chars[index + 1]);
-  },
+  // The palatalization map, with a reason for every consonant, is computed in
+  // palatalization.ts (row 175). Direct softening by the letter that follows:
 
   // Protected suffixes that must stay together as syllable units (Grayson p. 237-238)
   // Format: { cyrillic: 'suffix', placeholder: '◊' }
@@ -1249,49 +1062,16 @@ export const GraysonEngine = {
     return vowel;
   },
 
-  transcribeConsonant(
-    consonant: string,
-    nextChar: string | undefined,
-    prevChar: string | undefined,
-    isStressedSyllable: boolean,
-    isSoftFromRegressive: boolean = false,
-    nextCharInWord: string | null = null,
-  ): string {
+  // The sung form of a consonant, given its softness from the palatalization map.
+  // The map is the only source of softness (palatalization.ts); nothing here re-derives it.
+  transcribeConsonant(consonant: string, soft: boolean): string {
     consonant = consonant.toLowerCase();
-    prevChar = prevChar?.toLowerCase();
-    // Combine direct palatalization with regressive palatalization analysis
-    const softDirect = this.isPalatalized(consonant, nextChar);
-    const soft = softDirect || isSoftFromRegressive;
     const base = this.inventory.consonants[consonant] || consonant;
-
-    // Progressive palatalization of р (Grayson p. 209, footnote 277)
-    // "Do not regressively palatalize /r/ within a cluster except...
-    // directly following -и-, -е-, or -э- (in the stressed syllable only)"
-    // Examples: смерть /sʲmʲerʲtʲ/, терпеть /tʲirʲˈpʲetʲ/, кирпич /kʲirʲˈpʲitʃʲ/
-    // NOTE: This applies only when р is IN A CLUSTER (followed by consonant)
-    // Word-final р after front vowel does NOT palatalize: мир /mʲir/ not /mʲirʲ/
-    // v5.11.21: Use nextCharInWord to check across syllable boundaries
-    if (consonant === 'р' && isStressedSyllable) {
-      const frontVowels = ['и', 'е', 'э'];
-      // Check both syllable-local nextChar AND word-level nextCharInWord
-      const effectiveNextChar = nextChar || nextCharInWord;
-      const nextIsConsonant = effectiveNextChar && this.consonants.has(effectiveNextChar.toLowerCase());
-      if (frontVowels.includes(prevChar as string) && nextIsConsonant) {
-        return 'rʲ'; // Progressive palatalization in cluster only
-      }
-    }
-
-    if (consonant === 'л') {
-      return soft ? 'lʲ' : 'ɫ';
-    }
-    if (consonant === 'н' && soft) {
-      return 'ɲ';
-    }
-
+    if (consonant === 'л') return soft ? 'lʲ' : 'ɫ';
+    if (consonant === 'н' && soft) return 'ɲ';
     if (soft && !this.alwaysSoft.has(consonant)) {
       return consonant === 'ц' ? 'tʲsʲ' : base + 'ʲ'; // ц is soft only lexically: Grayson's tʲsʲ, tie bar omitted (pp. 168, 283-284)
     }
-
     return base;
   },
 
@@ -1525,6 +1305,7 @@ export const GraysonEngine = {
     const cliticInfo = this.cliticData.get(cleanWord);
     if (cliticInfo && isClitic && !procliticPosition && this.countVowels(cleanWord) === 0) {
       // Return canonical citation form for isolated clitic
+      const cliticPal = computePalatalization({ word: cleanWord }).get(0); // reasons here too (row 175)
       return {
         ipa: cliticInfo.canonicalIpa,
         ipaUnderlying: cliticInfo.canonicalIpa,
@@ -1538,6 +1319,8 @@ export const GraysonEngine = {
           ipa: cliticInfo.canonicalIpa,
           features: {
             type: 'consonant' as const,
+            soft: (cliticPal ?? { soft: false }).soft,
+            palReason: (cliticPal ?? { reason: 'no-soft-follower' }).reason,
             source: 'isolated-clitic',
             note: 'Canonical citation form — contextual pronunciation varies'
           },
@@ -1574,7 +1357,16 @@ export const GraysonEngine = {
     const lookup = this.lookupStress(cleanWord);
     const lexicalSoft = new Set(lexicalSoftIndices(cleanWord, lookup)); // ц, ш softened by lemma (Grayson pp. 163, 168, 283-284)
     const reflexiveS = reflexiveParticleAt(cleanWord, lookup); // the с of a reflexive -ся reads hard, Grayson pp. 282, 284
-    const softIndices = this.computeCompletePalatalizationMap(cleanWord, syllables, effectiveStress, lexicalSoft, new Set(reflexiveS >= 0 ? [reflexiveS] : []));
+    const velarAdjHard = new Set<number>(); // к, г, х kept hard in -кий/-гий/-хий by the stage profile (Grayson pp. 301-303)
+    if (config.adjectival === 'stage') {
+      for (let k = 0; k < cleanWord.length; k++) if (this.checkVelarAdjectival(cleanWord, k).charRole === 'velar') velarAdjHard.add(k);
+    }
+    const palMap = computePalatalization({
+      word: cleanWord, syllables, stressIndex: effectiveStress,
+      lexicalSoft: new Set([...lexicalSoft, ...lexicalSoftRIndices(cleanWord, lookup)]),
+      lexicalHard: new Set(reflexiveS >= 0 ? [reflexiveS] : []),
+      velarAdjectivalHard: velarAdjHard,
+    });
 
     // Build a map of character position in full word to track palatalization
     let charIndexInWord = 0;
@@ -1604,7 +1396,6 @@ export const GraysonEngine = {
 
       for (let i = 0; i < chars.length; i++) {
         const char = chars[i];
-        const nextChar = chars[i + 1];
         const globalIndex = charIndexInWord + i; // Position in full word
 
         // Log soft/hard signs before skipping
@@ -1711,7 +1502,8 @@ export const GraysonEngine = {
           const vowelOverride = this.getVowelOverride(cleanWord, globalIndex);
           if (vowelOverride !== null) {
             vowelIpa = vowelOverride;
-            vowelFeatures.exception = 'word-override';
+            vowelFeatures.exception = 'lexical-exception';
+            vowelFeatures.word = cleanWord;
           }
 
           // Check for -ая/-яя suffix exception (Grayson p. 124)
@@ -1756,7 +1548,7 @@ export const GraysonEngine = {
             const isPrecededByPal = prevCluster ?
               prevCluster.ipa.includes('ʲ') :
               (prevConsonant ?
-                (softIndices.has(prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) :
+                (softAt(palMap, prevGlobalIndex) || this.isPalatalized(prevConsonant, char)) :
                 precededByJGlide);  // Word-initial iotated → preceded by /j/
 
             // Check following consonant palatalization (Grayson p. 104, 106: interpalatal requires BOTH)
@@ -1797,7 +1589,7 @@ export const GraysonEngine = {
               isFollowedByPal = clusterIPA.length > 1 && clusterIPA[1] === 'ʲ';
             } else if (followingConsonant) {
               // Normal case: check the Cyrillic consonant
-              isFollowedByPal = softIndices.has(followingConsonantGlobalIndex) ||
+              isFollowedByPal = softAt(palMap, followingConsonantGlobalIndex) ||
                 this.isPalatalized(followingConsonant, charAfterFollowingC as string | undefined);
             } else {
               // No following consonant found - check if next vowel is iotated
@@ -1833,55 +1625,21 @@ export const GraysonEngine = {
             position: globalIndex
           });
         } else if (this.isConsonant(char)) {
-          const prevChar = chars[i - 1];
-          const nextCharInWord = cleanWord[globalIndex + 1] || null; // For cross-syllable checks
-          const isStressedSyl = (position === 'stressed');
-          // Pass regressive palatalization info
-          const isSoftFromRegressive = softIndices.has(globalIndex);
+          // Softness and its reason come from the palatalization map alone (palatalization.ts).
+          const pal = palMap.get(globalIndex) ?? { soft: false, reason: 'no-soft-follower' as const };
 
-          // Check for Old Muscovite velar adjectival suffix -кий/-гий/-хий (Grayson p. 301-303)
-          // When config adjectival='stage': velar stays HARD (not palatalized)
-          const velarAdj = this.checkVelarAdjectival(cleanWord, globalIndex);
-
-          // Check for genitive ending -ого/-его: г → /v/ (Grayson p. 243)
+          // Genitive -ого/-его: г → /v/ (Grayson p. 243)
           const isGenitiveG = (char === 'г') && this.checkGenitiveEnding(cleanWord, globalIndex);
-
-          let consonantIpa: string;
-          if (isGenitiveG) {
-            // Genitive г → /v/
-            consonantIpa = 'v';
-          } else if (globalIndex === reflexiveS) {
-            consonantIpa = this.inventory.consonants['с']; // hard, whatever precedes it (reflexive.ts)
-          } else if (velarAdj.isVelarAdjectival && velarAdj.charRole === 'velar' && config.adjectival === 'stage') {
-            // Force hard velar: output base consonant without palatalization
-            consonantIpa = this.inventory.consonants[char] || char;
-          } else {
-            consonantIpa = this.transcribeConsonant(char, nextChar, prevChar, isStressedSyl, isSoftFromRegressive, nextCharInWord);
-          }
+          const consonantIpa = isGenitiveG ? 'v' : this.transcribeConsonant(char, pal.soft);
           sylIpa += consonantIpa;
-
-          // Populate transcriptionLog for consonant
-          const isSoft = consonantIpa.includes('ʲ') || consonantIpa === 'ɲ';
-          let softTrigger: string | null = null;
-          if (isSoft) {
-            // Priority: direct triggers first, then regressive
-            // A consonant before a front vowel is soft because of the vowel, not regressive assimilation
-            if (nextChar === 'ь') {
-              softTrigger = 'ь';
-            } else if (['е', 'ё', 'ю', 'я', 'и'].includes(nextChar)) {
-              softTrigger = nextChar;
-            } else if (isSoftFromRegressive) {
-              softTrigger = lexicalSoft.has(globalIndex) ? 'lexical' : 'regressive';
-            }
-          }
 
           transcriptionLog.push({
             char: char,
             ipa: consonantIpa,
             features: {
               type: 'consonant',
-              soft: isSoft,
-              softTrigger: softTrigger,
+              soft: consonantIpa.includes('ʲ') || consonantIpa === 'ɲ',
+              palReason: pal.reason,
               genitiveEnding: isGenitiveG,
               ...(globalIndex === reflexiveS && { reflexive: true })
             },
@@ -1922,6 +1680,8 @@ export const GraysonEngine = {
     });
 
     // Sync transcriptionLog to match surface IPA after voicing assimilation (v5.10.20)
+    annotatePalatalization(transcriptionLog, cleanWord, palMap, (ch) => this.inventory.consonants[ch] || ch);
+
     // The log was built before assimilation, so consonant entries may have stale IPA
     transcriptionLog.forEach(entry => {
       if (entry.features?.type === 'consonant') {

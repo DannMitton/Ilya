@@ -58,12 +58,26 @@ export function getBlurbData(): BlurbData {
 }
 
 // ---------------------------------------------------------------------------
+// Rules whose comment has no process of its own (row 175 step 3)
+// ---------------------------------------------------------------------------
+
+/**
+ * Reasons with no causal sentence to give: the comment is the letter's identity alone, which
+ * is neutral. A consonant softened by lemma, kept hard by the reflexive or the stage profile,
+ * or part of a special cluster says nothing about cause here.
+ */
+const IDENTITY_ONLY_RULES: ReadonlySet<string> = new Set([
+  'lexical-soft', 'reflexive-hard', 'adjectival-stage-hard', 'cluster', 'unexplained',
+]);
+
+// ---------------------------------------------------------------------------
 // substituteVars — Template variable replacement
 // ---------------------------------------------------------------------------
 
 /**
  * Replace {var} placeholders in template strings.
- * Available variables: char, ipa, base_ipa, trigger, cluster, profile.
+ * Available variables: char, ipa, base_ipa, trigger, cluster, profile, and for
+ * the look-alike-root and lexical-exception comments word, look, root.
  */
 export function substituteVars(
   template: string,
@@ -93,6 +107,15 @@ export function formatCitations(citations: string[]): string | null {
   const style = _data.citation_style?.en;
   if (!style) return citations.join(', ');
 
+  // A citation may name a second source after ' + ' ("pp. 209–210 + D&P 1980, p. 79"): the other
+  // sources are printed as given, after Grayson's pages, in the same parenthesis (row 175 step 3).
+  const others: string[] = [];
+  citations = citations.flatMap((c) => {
+    const [grayson, ...rest] = c.split(' + ');
+    others.push(...rest);
+    return [grayson];
+  });
+
   // Split all citations into individual page references, deduplicate
   const allPages: string[] = [];
   const seen = new Set<string>();
@@ -115,7 +138,7 @@ export function formatCitations(citations: string[]): string | null {
       ? style.plural
       : style.singular;
 
-  return style.template.replace('{pages}', `${prefix} ${joined}`);
+  return style.template.replace('{pages}', `${prefix} ${joined}${others.map((o) => `; ${o}`).join('')}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -174,16 +197,19 @@ export function deriveRuleStandard(
     // Final devoicing takes precedence (v5.5.1)
     if (features.finalDevoicing) return 'final-devoicing';
 
+    // A ц, ш, or р that a lemma softens (lexical-palatalization.ts, lexical-r.ts) is not "always hard"
+    if (features.palReason === 'lexical-soft') return 'lexical-soft';
     // Always-soft consonants (ч, щ)
     if (['ч', 'щ'].includes(lowerChar)) return 'always-soft';
     // Always-hard consonants (ж, ш, ц)
     if (['ж', 'ш', 'ц'].includes(lowerChar)) return 'always-hard';
     // Glide й
     if (lowerChar === 'й') return 'glide';
-    // Soft consonants → 'soft'
-    if (features.soft) return 'soft';
-    // Hard consonants → 'hard'
-    return 'hard';
+    // The reason the engine recorded for this consonant (palatalization.ts) is the rule. Row 175 step 3:
+    // there is no fallback to a 'soft' or 'hard' key, because a comment inferred from the output gave the
+    // wrong reason (the ⟨д⟩ of «неподвижный», "no palatalizing agent nearby"). An entry without a reason is
+    // 'unexplained' and gets its identity alone.
+    return features.palReason ?? 'unexplained';
   }
 
   if (features.type === 'sign') {
@@ -274,9 +300,11 @@ export function composeBlurb(entry: TranscriptionLogEntry): BlurbResult | null {
   }
 
   // Process lookup (required unless Identity is self-sufficient)
-  const process = _data.processes[processKey];
+  // A process is keyed by rule and letter; the palatalization comments are one string per reason,
+  // so a rule-wide key serves every letter.
+  const process = _data.processes[processKey] ?? _data.processes[rule];
   if (!process) {
-    if (identity.selfSufficient) {
+    if (identity.selfSufficient || IDENTITY_ONLY_RULES.has(rule)) {
       // Identity tells the whole story — return it alone
       const vars = {
         char: lowerChar,
@@ -310,17 +338,22 @@ export function composeBlurb(entry: TranscriptionLogEntry): BlurbResult | null {
     return null;
   }
 
-  // Implication lookup (optional; absence is valid for some processes)
+  // Implication lookup (optional; absence is valid for some processes). The articulatory sentences keyed
+  // soft:* and hard:л (pp. 204-205) are no longer reached: a palatalization comment is exactly its ratified
+  // string (row 175 step 3), and the desk rules whether those sentences return or retire.
   const implication = _data.implications?.[processKey] || null;
 
   // Template variables available for substitution
   const vars = {
     char: lowerChar,
     ipa: ipa || '',
-    base_ipa: '',
+    base_ipa: features?.baseIpa || '',
     trigger: features?.trigger || '',
     cluster: features?.clusterSource || '',
     profile: '',
+    word: features?.word || '',
+    look: features?.look || '',
+    root: features?.root || '',
   };
 
   // Assemble for each language

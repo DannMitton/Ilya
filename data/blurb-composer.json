@@ -766,296 +766,6 @@
       },
       "standalone": true
     },
-    "hard:б": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:в": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:г": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:д": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:з": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:к": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:м": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:п": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:р": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:с": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:т": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:ф": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:х": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "hard:л": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its hard form: [{ipa}].",
-        "citation": "pp. 150–151, 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme dure : [{ipa}].",
-        "citation": "pp. 150–151, 169"
-      }
-    },
-    "soft:б": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:в": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:г": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:д": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:з": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:к": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:л": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:м": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:н": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:п": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:р": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:с": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:т": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:ф": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
-    "soft:х": {
-      "en": {
-        "template": "When ⟨{char}⟩ is followed by a palatalizing agent like it is here, it palatalizes to [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Lorsque ⟨{char}⟩ est suivi, comme ici, d’un agent palatalisateur, il se palatalise en [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
     "final-devoicing:б": {
       "en": {
         "template": "When ⟨{char}⟩ falls at the end of a word like it does here, it devoices to [{ipa}].",
@@ -1534,16 +1244,6 @@
       },
       "standalone": true
     },
-    "hard:н": {
-      "en": {
-        "template": "Here, ⟨{char}⟩ has no palatalizing agent nearby, so it takes its default: [{ipa}].",
-        "citation": "p. 169"
-      },
-      "fr": {
-        "template": "Ici, aucun agent palatalisateur ne se trouve près de ⟨{char}⟩; il prend donc sa forme par défaut : [{ipa}].",
-        "citation": "p. 169"
-      }
-    },
     "pretonic-interpalatal:е": {
       "en": {
         "template": "When ⟨{char}⟩ falls in the pretonic syllable like it does here, it always reduces to [ɪ] (ikanye). Furthermore, when [ɪ] is sandwiched between two palatalizing agents as it is here, it fronts to [{ipa}]. The transformation of ⟨{char}⟩ to [{ipa}] follows two steps: reduction, then interpalatal fronting.",
@@ -1574,6 +1274,204 @@
       "fr": {
         "template": "Lorsque ⟨{char}⟩ se trouve, comme ici, dans la syllabe immédiatement avant l’accent, il se réduit toujours à [ɪ] (ikanié). De plus, lorsque [ɪ] est encadré, comme ici, par deux agents palatalisateurs, il s’antériorise en [{ipa}]. ⟨{char}⟩ devient donc [{ipa}] en deux étapes : la réduction, puis l’antériorisation interpalatale.",
         "citation": "pp. 125, 127–128"
+      },
+      "standalone": true
+    },
+    "agent-vowel": {
+      "en": {
+        "template": "⟨{char}⟩ softens to [{ipa}] before ⟨{trigger}⟩, a palatalizing vowel letter.",
+        "citation": "p. 169"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant ⟨{trigger}⟩, une lettre voyelle palatalisatrice.",
+        "citation": "p. 169"
+      },
+      "standalone": true
+    },
+    "agent-soft-sign": {
+      "en": {
+        "template": "⟨{char}⟩ softens to [{ipa}] before the soft sign ⟨ь⟩.",
+        "citation": "p. 169"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le signe mou ⟨ь⟩.",
+        "citation": "p. 169"
+      },
+      "standalone": true
+    },
+    "regressive-dental": {
+      "en": {
+        "template": "⟨{char}⟩ softens to [{ipa}] before the soft [{trigger}]: a dental consonant like [{base_ipa}] is softened by any soft consonant that follows.",
+        "citation": "pp. 209–210"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit.",
+        "citation": "pp. 209–210"
+      },
+      "standalone": true
+    },
+    "regressive-dental-dp-differs": {
+      "en": {
+        "template": "⟨{char}⟩ softens to [{ipa}] before the soft [{trigger}]: a dental consonant like [{base_ipa}] is softened by any soft consonant that follows. In everyday speech it often stays hard here.",
+        "citation": "pp. 209–210 + D&P 1980, p. 79"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit. Dans la langue parlée courante, il reste souvent dur ici.",
+        "citation": "pp. 209–210 + D&P 1980, p. 79"
+      },
+      "standalone": true
+    },
+    "regressive-homorganic": {
+      "en": {
+        "template": "⟨{char}⟩ softens to [{ipa}] before the soft [{trigger}]: a labial (or velar) like [{base_ipa}] is softened only by another soft labial (or velar).",
+        "citation": "p. 209"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une labiale (ou vélaire) comme [{base_ipa}] n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
+        "citation": "p. 209"
+      },
+      "standalone": true
+    },
+    "regressive-n": {
+      "en": {
+        "template": "⟨н⟩ softens to [{ipa}] before the soft [{trigger}]: [n] is softened only by another soft [n] or a soft dental.",
+        "citation": "p. 209"
+      },
+      "fr": {
+        "template": "⟨н⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
+        "citation": "p. 209"
+      },
+      "standalone": true
+    },
+    "geminate": {
+      "en": {
+        "template": "⟨{char}⟩ softens to [{ipa}] before a second soft ⟨{char}⟩: doubled, the pair is softened together.",
+        "citation": "p. 209"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant un second ⟨{char}⟩ palatalisé : redoublées, les deux lettres se palatalisent ensemble.",
+        "citation": "p. 209"
+      },
+      "standalone": true
+    },
+    "r-front-stressed": {
+      "en": {
+        "template": "⟨р⟩ softens to [rʲ] before the soft [{trigger}]: it follows ⟨и⟩, ⟨е⟩, or ⟨э⟩, and the stress falls on that vowel or the next.",
+        "citation": "p. 209"
+      },
+      "fr": {
+        "template": "⟨р⟩ se palatalise en [rʲ] devant le [{trigger}] palatalisé : il suit ⟨и⟩, ⟨е⟩ ou ⟨э⟩, et l'accent tombe sur cette voyelle ou sur la suivante.",
+        "citation": "p. 209"
+      },
+      "standalone": true
+    },
+    "hard-sign-vzs": {
+      "en": {
+        "template": "⟨{char}⟩ softens to [{ipa}] before the hard sign: ⟨в⟩, ⟨с⟩, and ⟨з⟩ are softened before ⟨ъ⟩.",
+        "citation": "p. 193"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le signe dur : ⟨в⟩, ⟨с⟩ et ⟨з⟩ se palatalisent devant ⟨ъ⟩.",
+        "citation": "p. 193"
+      },
+      "standalone": true
+    },
+    "blocked-class": {
+      "en": {
+        "template": "⟨{char}⟩ stays [{ipa}] though the [{trigger}] after it is soft: a labial (or velar) is softened only by another soft labial (or velar).",
+        "citation": "p. 209"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ reste [{ipa}] bien que le [{trigger}] qui le suit soit palatalisé : une labiale (ou vélaire) n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
+        "citation": "p. 209"
+      },
+      "standalone": true
+    },
+    "blocked-n": {
+      "en": {
+        "template": "⟨н⟩ stays [n] though the [{trigger}] after it is soft: [n] is softened only by another soft [n] or a soft dental.",
+        "citation": "p. 209"
+      },
+      "fr": {
+        "template": "⟨н⟩ reste [n] bien que le [{trigger}] qui le suit soit palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
+        "citation": "p. 209"
+      },
+      "standalone": true
+    },
+    "blocked-r": {
+      "en": {
+        "template": "⟨р⟩ stays [r] though the [{trigger}] after it is soft: before a soft consonant, [r] is softened only when doubled, or after ⟨и⟩, ⟨е⟩, or ⟨э⟩ with the stress on that vowel or the next.",
+        "citation": "p. 209"
+      },
+      "fr": {
+        "template": "⟨р⟩ reste [r] bien que le [{trigger}] qui le suit soit palatalisé : devant une consonne palatalisée, [r] ne se palatalise que redoublé, ou après ⟨и⟩, ⟨е⟩ ou ⟨э⟩ lorsque l'accent tombe sur cette voyelle ou sur la suivante.",
+        "citation": "p. 209"
+      },
+      "standalone": true
+    },
+    "blocked-l": {
+      "en": {
+        "template": "⟨л⟩ stays [ɫ] though the [{trigger}] after it is soft: [l] is softened by a soft consonant only when doubled.",
+        "citation": "p. 209"
+      },
+      "fr": {
+        "template": "⟨л⟩ reste [ɫ] bien que le [{trigger}] qui le suit soit palatalisé : [l] n'est palatalisé par une consonne palatalisée que s'il est redoublé.",
+        "citation": "p. 209"
+      },
+      "standalone": true
+    },
+    "boundary-hard-sign": {
+      "en": {
+        "template": "⟨{char}⟩ stays [{ipa}]: softening does not cross the hard sign ⟨ъ⟩.",
+        "citation": "p. 206"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ reste [{ipa}] : la palatalisation ne franchit pas le signe dur ⟨ъ⟩.",
+        "citation": "p. 206"
+      },
+      "standalone": true
+    },
+    "boundary-prefix": {
+      "en": {
+        "template": "⟨{char}⟩ stays [{ipa}]: softening does not cross from the root back into its prefix, unless the same consonant stands on both sides.",
+        "citation": "p. 249"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ reste [{ipa}] : la palatalisation ne remonte pas de la racine jusqu'au préfixe, sauf si la même consonne se trouve de part et d'autre.",
+        "citation": "p. 249"
+      },
+      "standalone": true
+    },
+    "no-soft-follower": {
+      "en": {
+        "template": "⟨{char}⟩ stays [{ipa}]: the sound right after it is not soft.",
+        "citation": "p. 206"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ reste [{ipa}] : le son qui le suit immédiatement n'est pas palatalisé.",
+        "citation": "p. 206"
+      },
+      "standalone": true
+    },
+    "lexical-exception": {
+      "en": {
+        "template": "⟨а⟩ sits interpalatally here (between two soft consonants), where the rules usually require a fronted [a]. A known exception is «счастье» and its derivatives: Grayson shares that many Russian speakers keep the dark [ɑ], which he finds less tense and more resonant for singing.",
+        "citation": "p. 287"
+      },
+      "fr": {
+        "template": "⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception : Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.",
+        "citation": "p. 287"
+      },
+      "standalone": true
+    },
+    "look-alike-root": {
+      "en": {
+        "template": "⟨{char}⟩ softens to [{ipa}] before the soft [{trigger}]. «{word}» looks as if it begins with the prefix «{look}-», but ⟨{char}⟩ belongs to the root «{root}-», so the softening reaches it.",
+        "citation": "p. 249"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé. «{word}» semble commencer par le préfixe «{look}-», mais ⟨{char}⟩ appartient à la racine «{root}-» : la palatalisation l'atteint donc.",
+        "citation": "p. 249"
       },
       "standalone": true
     }
@@ -1737,166 +1635,6 @@
       "fr": {
         "template": "[{ipa}] est la voyelle centrale ы; rétractez légèrement la langue depuis la position de /i/.",
         "citation": "pp. 93–94"
-      }
-    },
-    "soft:б": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:в": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:г": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:д": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:з": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:к": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:м": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:п": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:р": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:с": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:т": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:ф": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:х": {
-      "en": {
-        "template": "Like when we shape [i], the tongue rises toward the hard palate and quickly peels away from the soft palate as we perform this consonant.",
-        "citation": "pp. 204–205"
-      },
-      "fr": {
-        "template": "Comme lorsque nous formons [i], la langue s’élève vers le palais dur et se décolle rapidement du palais mou pendant l’articulation de cette consonne.",
-        "citation": "pp. 204–205"
-      }
-    },
-    "soft:н": {
-      "en": {
-        "template": "[{ipa}] is the familiar palatal nasal we know from the Italian gn in \"ogni\" or the French gn in \"agneau.\"",
-        "citation": "p. 186"
-      },
-      "fr": {
-        "template": "[{ipa}] est la nasale palatale que nous connaissons bien par le gn italien d’« ogni » ou le gn français d’« agneau ».",
-        "citation": "p. 186"
-      }
-    },
-    "soft:л": {
-      "en": {
-        "template": "[{ipa}] resembles the Italian gl in \"figlio,\" but without the friction: Russian /lʲ/ is liquid, not lisping.",
-        "citation": "p. 184"
-      },
-      "fr": {
-        "template": "[{ipa}] ressemble au gl italien de « figlio », mais sans friction : le /lʲ/ russe est une liquide, sans frottement latéral.",
-        "citation": "p. 184"
-      }
-    },
-    "hard:л": {
-      "en": {
-        "template": "[{ipa}] is the velarized dark-l; the back of the tongue rises toward the soft palate, giving it a heavier, thicker quality.",
-        "citation": "p. 150"
-      },
-      "fr": {
-        "template": "[{ipa}] est le l vélaire, ou l sombre; l’arrière de la langue s’élève vers le palais mou, ce qui lui donne une couleur plus lourde et plus épaisse.",
-        "citation": "p. 150"
       }
     },
     "final-devoicing:б": {

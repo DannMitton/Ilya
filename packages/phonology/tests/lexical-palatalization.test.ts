@@ -128,9 +128,10 @@ describe('ц stays hard everywhere else', () => {
     expect(transcribeWord('лекция').ipa).toBe('ˈlʲɛktsɨjɪ');
   });
   it('цирк is unchanged by this work (p. 166)', () => {
-    // Grayson p. 167 prints /tsɨrk/. The rʲ is the engine's existing
-    // progressive-р reading, untouched here; this test pins the ц and ɨ.
-    expect(transcribeWord('цирк').ipa).toBe('ˈtsɨrʲk');
+    // Grayson p. 167 prints /tsɨrk/. CHANGED PIN (row 175 step 1): the pin was ˈtsɨrʲk, the old rule's
+    // soft ⟨р⟩ before any consonant; the ratified ⟨р⟩ rule (OPEN.md 2026-11-01 23:53) leaves it hard before
+    // the hard к, which is what Grayson prints.
+    expect(transcribeWord('цирк').ipa).toBe('ˈtsɨrk');
   });
   it('Цюрих stays hard: Grayson allows /ˈtsu rʲix/ (p. 168); Dann, 2026-09-27', () => {
     expect(transcribeWord('цюрих').ipa).toBe('ˈtsurʲix');
@@ -181,9 +182,9 @@ describe('tʲsʲ is one segment', () => {
     expect(log.find((e) => e.char === 'ц')!.ipa).toBe('tʲsʲ');
     expect(log.find((e) => e.char === 'и')!.features.afterHard).toBe(false);
   });
-  it('the log marks a soft ц with no vowel trigger as lexical: цвет', () => {
+  it('the log gives a soft ц with no vowel trigger the reason lexical-soft: цвет', () => {
     const ts = transcribeWord('цвет').transcriptionLog.find((e) => e.char === 'ц')!;
     expect(ts.ipa).toBe('tʲsʲ');
-    expect(ts.features.softTrigger).toBe('lexical');
+    expect(ts.features.palReason).toBe('lexical-soft'); // row 175: was softTrigger 'lexical', inferred from the IPA
   });
 });

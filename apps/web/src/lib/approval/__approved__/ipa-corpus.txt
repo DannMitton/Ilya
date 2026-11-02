@@ -6,7 +6,7 @@ Dictionary entries loaded: 943106
 В душе моей угасла не совсем;
   → ˈvdu ʃɨ mɑ ˈjej u ˈɡɑs ɫɑ → ɲɪ sɑf ˈsʲɛm
 Но пусть она вас больше не тревожит;
-  ˈno ˈpusʲtʲ ɑ ˈnɑ ˈvɑz ˈbolʲ ʃɨ → ɲɪ trʲɪ ˈvo ʒɨt
+  ˈno ˈpusʲtʲ ɑ ˈnɑ ˈvɑz ˈbolʲ ʃɨ → ɲɪ tʲrʲɪ ˈvo ʒɨt
 Я не хочу печалить вас ничем.
   ˈjɑ → ɲɪ xɑ ˈtʃʲu pʲi ˈtʃʲa lʲitʲ ˈvɑs ɲi ˈtʃʲɛm
 Я вас любил безмолвно, безнадежно,
@@ -30,7 +30,7 @@ Dictionary entries loaded: 943106
 В томленьях грусти безнадежной,
   → ftom lʲe ɲjɑɣ ˈɡrusʲ tʲi bʲɪz nɑ ˈdʲoʒ nʌj
 В тревогах шумной суеты,
-  → ftrʲɪ ˈvo ɡɑx ˈʃum nʌj su jɪ ˈtɨ
+  → ftʲrʲɪ ˈvo ɡɑx ˈʃum nʌj su jɪ ˈtɨ
 Звучал мне долго голос нежный
   zvu ˈtʃʲɑɫ ˈmɲɛ ˈdoɫ ɡʌ ˈɡo ɫʌs ˈɲɛʒ nɨj
 И снились милые черты.
@@ -46,15 +46,15 @@ Dictionary entries loaded: 943106
 Что кинул он в краю родном?..
   ˈʃto ˈkʲi nuɫ ˈon → ˈfkrɑ ju rɑd ˈnom
 Играют волны, ветер свищет,
-  iɡ ˈrɑ jut ˈvoɫ nɨ ˈvʲe tʲɪr ˈsvʲi ʃʲʃʲɪt
+  iɡ ˈrɑ jut ˈvoɫ nɨ ˈvʲe tʲɪr ˈsʲvʲi ʃʲʃʲɪt
 И мачта гнется и скрыпит...
   ˈi ˈmɑtʃʲ tɑ ˈɡɲo tːsʌ ˈi skrɨ pʲit
 Увы, он счастия не ищет
-  u ˈvɨ ˈon ʃʲʃʲasʲ tʲi jɑ → ɲɪ ˈi ʃʲʃʲɪt
+  u ˈvɨ ˈon ʃʲʃʲɑsʲ tʲi jɑ → ɲɪ ˈi ʃʲʃʲɪt
 И не от счастия бежит!
-  ˈi → → ɲɪ ʌt ʃʲʃʲasʲ tʲi jɑ bʲɪ ˈʒɨt
+  ˈi → → ɲɪ ʌt ʃʲʃʲɑsʲ tʲi jɑ bʲɪ ˈʒɨt
 Под ним струя светлей лазури,
-  → pɑd ˈɲim stru ˈjɑ svʲɪt ˈlʲej ɫɑ ˈzu rʲi
+  → pɑd ˈɲim stru ˈjɑ sʲvʲitʲ ˈlʲej ɫɑ ˈzu rʲi
 Над ним луч солнца золотой...
   → nɑd ˈɲim ˈɫutʃʲ ˈsonts ɑ zʌ ɫɑ ˈtoj
 А он, мятежный, просит бури,
@@ -86,7 +86,7 @@ Dictionary entries loaded: 943106
 Шёпот, робкое дыханье,
   ˈʃo pʌt ˈrop kʌ jɪ dɨ ˈxɑ ɲjɪ
 Трели соловья,
-  ˈtrʲe lʲi sʌ ɫɑ ˈvʲjɑ
+  ˈtʲrʲe lʲi sʌ ɫɑ ˈvʲjɑ
 Серебро и колыханье
   sʲi rʲɪb ˈro ˈi ko ɫɨ xɑ ɲjɛ
 Сонного ручья,

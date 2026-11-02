@@ -26,8 +26,11 @@ const PLACEHOLDER = /\{\w+\}/g;
 const all = pairs(data).filter(([path]) => path !== '/citation_style');
 
 describe('the word explanations in French', () => {
-	it('reads all 209 templates', () => {
-		expect(all.length).toBe(209);
+	it('reads all 181 templates', () => {
+		// Row 175: 209, less the 30 retired soft:* and hard:* processes, plus 18 ratified comments (the sixteen,
+		// look-alike-root, and lexical-exception) = 197 in step 3; step 4 deletes the 16 unreached implications
+		// (soft:* and hard:л) = 181.
+		expect(all.length).toBe(181);
 	});
 
 	it('gives every template a French version', () => {

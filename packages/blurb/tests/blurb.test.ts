@@ -158,11 +158,9 @@ const TEST_BLURB_DATA: BlurbData = {
     'final-devoicing:б': {
       en: { template: 'At the end of a word, it devoices to [{ipa}].', citation: 'p. 199' },
     },
-    'hard:д': {
+    // Fixture keys named for a reason, as the composer now reads them (row 175 step 3).
+    'final-fixture:д': {
       en: { template: 'It is pronounced as hard [{ipa}].', citation: 'p. 130' },
-    },
-    'soft:д': {
-      en: { template: 'It is pronounced as palatalized [{ipa}].', citation: 'p. 132' },
     },
     'always-hard:ж': {
       en: { template: 'It is always hard, pronounced [{ipa}].', citation: 'p. 135' },
@@ -471,20 +469,21 @@ describe('@ilya/blurb', () => {
       ).toBe('stressed-interpalatal');
     });
 
-    it('returns "hard" for hard consonant', () => {
+    // Row 175 step 3: the rule of a consonant is the reason the engine recorded; 'hard' and 'soft' are retired.
+    it('returns the reason for a hard consonant', () => {
       expect(
         deriveRule({
-          char: 'д', ipa: 'd', features: { type: 'consonant' },
+          char: 'д', ipa: 'd', features: { type: 'consonant', palReason: 'no-soft-follower' },
         })
-      ).toBe('hard');
+      ).toBe('no-soft-follower');
     });
 
-    it('returns "soft" for soft consonant', () => {
+    it('returns the reason for a soft consonant', () => {
       expect(
         deriveRule({
-          char: 'д', ipa: 'dʲ', features: { type: 'consonant', soft: true },
+          char: 'д', ipa: 'dʲ', features: { type: 'consonant', soft: true, palReason: 'regressive-dental' },
         })
-      ).toBe('soft');
+      ).toBe('regressive-dental');
     });
 
     it('returns "always-hard" for ж', () => {
@@ -652,12 +651,18 @@ describe('@ilya/blurb', () => {
       expect(deriveRuleStandard({ type: 'consonant' }, 'й')).toBe('glide');
     });
 
-    it('returns "soft" for soft consonant', () => {
-      expect(deriveRuleStandard({ type: 'consonant', soft: true }, 'д')).toBe('soft');
+    it('returns the palReason for a consonant (row 175 step 3)', () => {
+      expect(deriveRuleStandard({ type: 'consonant', soft: true, palReason: 'agent-vowel' }, 'д')).toBe('agent-vowel');
+      expect(deriveRuleStandard({ type: 'consonant', palReason: 'blocked-class' }, 'к')).toBe('blocked-class');
     });
 
-    it('returns "hard" for plain consonant', () => {
-      expect(deriveRuleStandard({ type: 'consonant' }, 'д')).toBe('hard');
+    it('returns "unexplained", not "soft" or "hard", for a consonant with no reason: no fallback to the old keys', () => {
+      expect(deriveRuleStandard({ type: 'consonant', soft: true }, 'д')).toBe('unexplained');
+      expect(deriveRuleStandard({ type: 'consonant' }, 'д')).toBe('unexplained');
+    });
+
+    it('returns "lexical-soft" for a ц softened by lemma, not "always-hard"', () => {
+      expect(deriveRuleStandard({ type: 'consonant', soft: true, palReason: 'lexical-soft' }, 'ц')).toBe('lexical-soft');
     });
 
     // --- Sign rules ---
@@ -709,7 +714,7 @@ describe('@ilya/blurb', () => {
 
     it('composes identity + process when implication is absent', () => {
       const result = composeBlurb({
-        char: 'д', ipa: 'd', features: { type: 'consonant' },
+        char: 'д', ipa: 'd', features: { type: 'consonant', palReason: 'final-fixture' },
       });
       expect(result).not.toBeNull();
       const en = (result!.blurb as any).en as string;
@@ -1243,19 +1248,19 @@ describe('@ilya/blurb', () => {
   describe('CLUSTER_BREAKDOWNS', () => {
     const expectedKeys = [
       'рдц', 'лнц', 'вств', 'сс',
-      'сч', 'зч',
+      'ссч', 'стч', 'здч', 'жч', 'сч', 'зч', // row 175 step 4: Grayson p. 236 adds the first four
       'сш', 'зш', 'сж', 'зж',
       'чн', 'чт',
     ];
 
-    it('contains all 12 expected cluster keys', () => {
+    it('contains all 16 expected cluster keys', () => {
       expectedKeys.forEach((key) => {
         expect(CLUSTER_BREAKDOWNS).toHaveProperty(key);
       });
     });
 
-    it('has exactly 12 entries', () => {
-      expect(Object.keys(CLUSTER_BREAKDOWNS)).toHaveLength(12);
+    it('has exactly 16 entries', () => {
+      expect(Object.keys(CLUSTER_BREAKDOWNS)).toHaveLength(16); // was 12
     });
 
     // --- Array format structure ---
@@ -1328,6 +1333,28 @@ describe('@ilya/blurb', () => {
         expect(breakdown.members).toHaveLength(2);
         expect(breakdown.members[0].char).toBe('з');
         expect(breakdown.members[1].char).toBe('ч');
+      }
+    });
+
+    it('ссч, стч, здч, жч are merged clusters whose members spell the key (Grayson p. 236, row 175 step 4)', () => {
+      for (const key of ['ссч', 'стч', 'здч', 'жч', 'сч', 'зч']) {
+        const breakdown = CLUSTER_BREAKDOWNS[key];
+        expect(isMergedCluster(breakdown), key).toBe(true);
+        if (isMergedCluster(breakdown)) {
+          expect(breakdown.mergedIpa, key).toBe('ʃʲʃʲ');
+          expect(breakdown.members.map((m) => m.char).join(''), key).toBe(key);
+          for (const m of breakdown.members) expect(m.features.palReason, key).toBe('cluster');
+        }
+      }
+    });
+
+    it('the absorbed dental or ж is not marked soft: soft on a cluster member would be display-only (step 4)', () => {
+      for (const key of ['ссч', 'стч', 'здч', 'жч', 'сч', 'зч']) {
+        const breakdown = CLUSTER_BREAKDOWNS[key];
+        if (isMergedCluster(breakdown)) {
+          for (const m of breakdown.members.slice(0, -1)) expect(m.features.soft, `${key} ${m.char}`).toBeUndefined();
+          expect(breakdown.members.at(-1)!.features.soft, key).toBe(true); // the ч
+        }
       }
     });
 
