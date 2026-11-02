@@ -280,3 +280,106 @@ The Insights page is paginated by measuring each block off screen. Its one scree
 | 8 ratchets | OK; `InsightsPane.svelte` 760 to 744, taken |
 
 Not yet run in this step: the Playwright projects (step 4 runs the INSIGHTS and print specs).
+
+---
+
+## Step 4: the proof, "For Dann", and what could not be established
+
+### What changed
+
+- New `apps/web/e2e/insights-key-lines.test.ts`: 15 tests on the real INSIGHTS page, at 1440 px and at 390 px (the desk project with a 390 px viewport; the page's own phone layout, `.insights-flow`), with five named fixture voices on the one tracked engraved fixture (Sunless no. 1, C#3 to D4). `N182_SHOTS=<folder>` saves the pictures; without it the spec only asserts words.
+- Pictures, English: `docs/sessions/n182-shots-r2/` (14 PNGs, desktop and phone for each of seven states).
+
+### The named fixture voices (typed range, typed passaggi, declared type)
+
+| Name | Type | Range | Primo | Secondo | State it shows |
+|---|---|---|---|---|---|
+| `TENOR_T` | tenor | C3 to F♯4 | E♭4 | G4 | a key that suits |
+| `SOPRANO_S` | soprano | C4 to C6 | E4 | F5 | a key that suits, with no primo axis: the line names her secondo |
+| `BASS_B1` | bass | C2 to F♯3 | C3 | E3 | one group; the reveal |
+| `BASS_B2` | bass | D2 to C4 | E3 | G♯3 | three groups |
+| `NOVICE_N` | baritone | A2 to F3 (eight semitones) | D3 | F3 | no workable key |
+| `BARITONE` | baritone | G♯2 to B♭3 | B♭3 | D4 | more groups than the cap |
+
+These are test voices, not norms (the brief: no low-voice norm in the proof). All ten of their vowels are `'sung'` in `fR1Source` (read by running `buildVoiceProfileSnapshot` on the spec's formant table); **no fixture vowel is a surrogate**, so the surrogate exclusion is proven by the unit tests (`key-suggest.test.ts`) and not by a picture. NOT ESTABLISHED: how many vowels a singer's real, partly calibrated voice leaves as surrogate.
+
+### The pictures (read, not just taken)
+
+| State | Desktop | 390 px |
+|---|---|---|
+| Suits (tenor) | `suits-tenor-desktop.png` | `suits-tenor-phone.png` |
+| Suits, no primo axis (soprano) | `suits-soprano-desktop.png` | `suits-soprano-phone.png` |
+| One group (bass) | `one-group-bass-desktop.png` | `one-group-bass-phone.png` |
+| Three groups (bass) | `three-groups-bass-desktop.png` | `three-groups-bass-phone.png` |
+| No workable key (novice) | `no-workable-novice-desktop.png` | `no-workable-novice-phone.png` |
+| The reveal, open (bass) | `reveal-bass-desktop.png` | `reveal-bass-phone.png` |
+| The cap binding (baritone) | `cap-binds-baritone-desktop.png` | `cap-binds-baritone-phone.png` |
+
+Read: the key lines carry the rose ink they had; the "Try this key" chip is on each; the reveal's summary is grey and its lines are told apart by their words ("by a minor third", "by a major third", "by a perfect fourth"); the reveal opens in the flow and the page re-paginates around it; the novice's page shows "No key within a tritone keeps this song within reach of your voice. Whether to pursue it, or to choose other repertoire, is yours to decide." and the teacher line. I read the three-groups desktop picture, the reveal pictures at both widths, and the novice's desktop picture closely; the others only for structure (the spec asserts their words).
+
+**One thing the pictures show that I did not expect:** because INSIGHTS analyses the score after the octave reading of row 47 (A7), the same fixture reads as a soprano's song an octave up. So `SOPRANO_S` gets "suits", not "no workable key", and the no-workable picture needed a voice whose range is narrower than the song itself (`NOVICE_N`).
+
+### The path from a line to the analysis, walked in the browser
+
+`insights-key-lines.test.ts`, "from a key line to the analysis": click "Try this key" on `BASS_B2`'s first line; MELODY comes forward with the ruler open ("Use this key" is visible); returning to INSIGHTS without using the key leaves the page byte for byte as it was (the ruler closes when MELODY is left); clicking the chip again and "Use this key", then returning to INSIGHTS, gives a page whose text differs (the song is read in the chosen key). Passes. This confirms the steps in step 3's section. Nothing blocked it for these voices. The one block I named there (no chip when the printed key has no named mode) is read in the code, not exercised: NOT ESTABLISHED in the browser.
+
+### Regression: the INSIGHTS and print specs on the desk project
+
+Ran `insights-page`, `octave-line`, `tempo`, `singer-paths`, `print-pages`, and `pages-without-gaps` (which pages every document in both languages and checks that nothing reaches a footer): 44 passed, 3 failed. The three are the ones that fail identically on the untouched cut `f9797acb` (row 172, step 2): `insights-page.test.ts:95` (it looks for the frame sentence "Ilya does not invent advice", which was rewritten on 2026-10-11), `print-pages.test.ts:20`, and `singer-paths.test.ts:169`. Nothing new fails. The phone project was not re-run for this row; it has no INSIGHTS spec.
+
+### Gates, after step 4
+
+| # | Result |
+|---|---|
+| 1 phonology | 407 passed |
+| 2 dictionary | 248 passed |
+| 3 check | 0 errors, 12 warnings |
+| 4 web unit | 3895 passed, 1 skipped (3896) |
+| 5 root integration | 98 passed |
+| 6 blurb | 148 passed |
+| 7 score-parser | 785 passed, 5 skipped (790) |
+| 8 ratchets | OK, nothing offered |
+
+### How often the cap binds (the brief asks; the answer is for a grid, not for singers)
+
+A grid of 5 declared types by range, span, and primo placements, run against the two tracked fixtures (840 voices each, 1,680 in all): the cap bound in 15 of 840 for Sunless no. 1 and 28 of 840 for the Tchaikovsky (2.6 percent overall; 563 and 412 of the voices got keys to show at all). The grid is not a sample of real singers, so this says only that the cap is reachable and rare on these two songs. NOT ESTABLISHED: the rate for real voices and repertoire; that needs the voices from Dann's usage, which this lane cannot read.
+
+### For Dann
+
+**A. Strings to rule (English; PROPOSED).** All 43, in step 2's table. The ones that carry the ruling's weight, as a singer reads them:
+
+1. The key line: "Down a whole tone · C major: stays inside your range; most of the singing sits at or above your primo; some of the singing sits above your secondo."
+2. The range part names bars, never pitches or a count: "reaches above your range in bar 6", "reaches below your range in bars 7 to 9 and bars 4 to 5, and elsewhere".
+3. The reveal's reach: "…, by a minor third".
+4. The three one-line answers (suits, none better, no workable key).
+
+**B. Calls I made where the brief leaves a choice or reads two ways (each reversible).**
+
+1. **A key must improve something** (`improves`). The brief's rule 4 says "a challenge gained or lost, or a share moved by at least 10 points". Read literally, a key that only adds challenges would show. I show a key only when it loses a challenge or lowers a share by 10 points. **Look at the one-group picture:** `BASS_B1` is offered "Down a minor third · B major: reaches below your range in bars 7 to 9 and bars 4 to 5, and elsewhere; nothing sits at or above your primo." It loses a small primo share (7 percent of the singing) and gains a range challenge below. By my rule that is an improvement; you may think it is a trade not worth offering. A stricter rule (the number of challenges must go down, so a swap is not shown) is a few lines. **Your call: which?**
+2. **Teacher line under both "No workable key" and "No other key ... changes these challenges", for a piece Ilya calls unlikely**, as today (A4 recommends the first only).
+3. **Fractions** (`key-fractions.ts`): under 0.20 no fraction (the line says "some"); 0.20 a quarter, 0.29 a third, 0.40 nearly half, 0.48 half, 0.55 most. One table; yours to change.
+4. **The cap is three** (DESK DEFAULT, yours to strike); the reveal holds the rest.
+5. **`bass-baritone` counts with the primo voices; `countertenor` is treble** (A2, DESK DEFAULT).
+6. **The weights of the stakes** (1, 0.75, 0.5) are this row's own, not written back into N.173 (A8).
+7. **A line names at most two passages** (by sung time out of range, in the key suggested), then "and elsewhere".
+8. **French**: every `insights.key.*` French value is the English with `TODO-FR`; two project guards force a no-break space before four colons and asterisk italics on seven values, in the French only. The desk drafts the French after you rule the English.
+9. **Ratified text changed (CONTRACT section 1, item 11a): six keys retired** with their pin: `insights.r2.noBetterKey`, `.better.tone`, `.better.interval`, `.inKey`, `.inKeyShare`, `.compare` (full text in step 3's table).
+
+**C. Not asked, but you should know.**
+
+- The primo axis follows the *declared* type. A singer with no declared type, or "not sure", gets lines with no primo at all, as you ruled. In the proof, a soprano and a novice baritone show what that looks like.
+- INSIGHTS analyses the song after the octave reading, so the search is run on the song as that singer would read it, not as printed.
+- `readoutFor` has no reader now (Markup's ruler is untouched; I left it).
+
+### Could not establish
+
+- The cap's rate for real singers (above).
+- How many vowels of a real, partly calibrated voice are surrogate.
+- The no-chip case (a printed key with no named mode) in the browser.
+- The ship script's gate order (gate numbers are inferred, as in row 172's step 0).
+- The French of every new string (owed).
+- The phone project (`e2e-phone`) for INSIGHTS: the 390 px pictures come from the desk project at a 390 px viewport, which draws the page's phone layout but is not a touch device.
+
+### Commits on `cloud-lane-29` for this row
+
+Step 0 `2788cc88`, step 1 `a5e94cf9`, step 2 `7d993e09`, step 3 `a8931b16`, step 4 (this commit).
