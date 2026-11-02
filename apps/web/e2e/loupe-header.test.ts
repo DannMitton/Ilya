@@ -11,7 +11,7 @@ const FIXTURE = 'src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml';
 async function raise(page: Page) {
 	await page.goto('/');
 	await page.locator('input.hidden-input').setInputFiles(FIXTURE);
-	await page.getByRole('tab', { name: 'Markup' }).click();
+	await page.getByRole('tab', { name: 'MELODY' }).click();
 	await page.locator('.score-page [data-hit]').first().waitFor({ state: 'attached' });
 	await page.waitForTimeout(6_000);
 	const asWritten = page.getByRole('button', { name: 'As written' });

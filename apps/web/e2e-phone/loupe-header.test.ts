@@ -14,7 +14,7 @@ async function raise(page: Page) {
 	await page.emulateMedia({ reducedMotion: 'reduce' });
 	await page.goto('/');
 	await page.locator('input.hidden-input').setInputFiles(FIXTURE);
-	await page.getByRole('tab', { name: 'Markup' }).tap();
+	await page.getByRole('tab', { name: 'MELODY' }).tap();
 	await page.locator('.score-page [data-hit]').first().waitFor({ state: 'attached' });
 	await page.waitForTimeout(6_000);
 	const asWritten = page.getByRole('button', { name: 'As written' });
