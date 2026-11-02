@@ -68,6 +68,13 @@ export interface TranscriptionFeatures {
   source?: string;
   triggeredBy?: string;
   trigger?: string;
+  /** Row 175: why the consonant is soft or hard (palatalization.ts), and the sounds the comment names. */
+  palReason?: string;
+  baseIpa?: string;
+  /** look-alike-root and lexical-exception only: the word, the prefix it seems to begin with, the root. */
+  word?: string;
+  look?: string;
+  root?: string;
   clusterSource?: string;
   silent?: boolean;
   deletionCluster?: boolean;

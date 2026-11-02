@@ -49,26 +49,26 @@ export function isMergedCluster(
 export const CLUSTER_BREAKDOWNS: Record<string, ClusterBreakdown> = {
   // Silent consonant clusters (Grayson pp. 235-236)
   'рдц': [
-    { char: 'р', ipa: 'r', features: { type: 'consonant', soft: false } },
-    { char: 'д', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true, clusterSource: 'рдц' } },
-    { char: 'ц', ipa: 'ts', features: { type: 'consonant', soft: false, alwaysHard: true } },
+    { char: 'р', ipa: 'r', features: { type: 'consonant', palReason: 'cluster', soft: false } },
+    { char: 'д', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, deletionCluster: true, clusterSource: 'рдц' } },
+    { char: 'ц', ipa: 'ts', features: { type: 'consonant', palReason: 'cluster', soft: false, alwaysHard: true } },
   ],
   'лнц': [
-    { char: 'л', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true, clusterSource: 'лнц' } },
-    { char: 'н', ipa: 'n', features: { type: 'consonant', soft: false } },
-    { char: 'ц', ipa: 'ts', features: { type: 'consonant', soft: false, alwaysHard: true } },
+    { char: 'л', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, deletionCluster: true, clusterSource: 'лнц' } },
+    { char: 'н', ipa: 'n', features: { type: 'consonant', palReason: 'cluster', soft: false } },
+    { char: 'ц', ipa: 'ts', features: { type: 'consonant', palReason: 'cluster', soft: false, alwaysHard: true } },
   ],
   'вств': [
-    { char: 'в', ipa: '', features: { type: 'consonant', silent: true, deletionCluster: true, clusterSource: 'вств' } },
-    { char: 'с', ipa: 's', features: { type: 'consonant', soft: false } },
-    { char: 'т', ipa: 't', features: { type: 'consonant', soft: false } },
-    { char: 'в', ipa: 'v', features: { type: 'consonant', soft: false } },
+    { char: 'в', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, deletionCluster: true, clusterSource: 'вств' } },
+    { char: 'с', ipa: 's', features: { type: 'consonant', palReason: 'cluster', soft: false } },
+    { char: 'т', ipa: 't', features: { type: 'consonant', palReason: 'cluster', soft: false } },
+    { char: 'в', ipa: 'v', features: { type: 'consonant', palReason: 'cluster', soft: false } },
   ],
 
   // Geminate simplification (Grayson p. 233)
   'сс': [
-    { char: 'с', ipa: 's', features: { type: 'consonant', soft: false } },
-    { char: 'с', ipa: '', features: { type: 'consonant', silent: true, geminateSimplified: true } },
+    { char: 'с', ipa: 's', features: { type: 'consonant', palReason: 'cluster', soft: false } },
+    { char: 'с', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, geminateSimplified: true } },
   ],
 
   // Assimilated clusters — TRUE MERGERS (Grayson pp. 230-231)
@@ -77,46 +77,46 @@ export const CLUSTER_BREAKDOWNS: Record<string, ClusterBreakdown> = {
     type: 'merged',
     mergedIpa: 'ʃʲʃʲ',
     members: [
-      { char: 'с', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
-      { char: 'ч', features: { type: 'consonant', soft: true, alwaysSoft: true } },
+      { char: 'с', features: { type: 'consonant', palReason: 'cluster', soft: true, clusterAssimilation: true } },
+      { char: 'ч', features: { type: 'consonant', palReason: 'cluster', soft: true, alwaysSoft: true } },
     ],
   },
   'зч': {
     type: 'merged',
     mergedIpa: 'ʃʲʃʲ',
     members: [
-      { char: 'з', features: { type: 'consonant', soft: true, clusterAssimilation: true } },
-      { char: 'ч', features: { type: 'consonant', soft: true, alwaysSoft: true } },
+      { char: 'з', features: { type: 'consonant', palReason: 'cluster', soft: true, clusterAssimilation: true } },
+      { char: 'ч', features: { type: 'consonant', palReason: 'cluster', soft: true, alwaysSoft: true } },
     ],
   },
 
   // Sibilant mergers (Grayson pp. 235-236)
   'сш': [
-    { char: 'с', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ш' } },
-    { char: 'ш', ipa: 'ʃː', features: { type: 'consonant', soft: false, alwaysHard: true, receivesLength: true } },
+    { char: 'с', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, sibilantMerger: true, mergesInto: 'ш' } },
+    { char: 'ш', ipa: 'ʃː', features: { type: 'consonant', palReason: 'cluster', soft: false, alwaysHard: true, receivesLength: true } },
   ],
   'зш': [
-    { char: 'з', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ш', devoices: true } },
-    { char: 'ш', ipa: 'ʃː', features: { type: 'consonant', soft: false, alwaysHard: true, receivesLength: true } },
+    { char: 'з', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, sibilantMerger: true, mergesInto: 'ш', devoices: true } },
+    { char: 'ш', ipa: 'ʃː', features: { type: 'consonant', palReason: 'cluster', soft: false, alwaysHard: true, receivesLength: true } },
   ],
   'сж': [
-    { char: 'с', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ж', voices: true } },
-    { char: 'ж', ipa: 'ʒː', features: { type: 'consonant', soft: false, alwaysHard: true, receivesLength: true } },
+    { char: 'с', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, sibilantMerger: true, mergesInto: 'ж', voices: true } },
+    { char: 'ж', ipa: 'ʒː', features: { type: 'consonant', palReason: 'cluster', soft: false, alwaysHard: true, receivesLength: true } },
   ],
   'зж': [
-    { char: 'з', ipa: '', features: { type: 'consonant', silent: true, sibilantMerger: true, mergesInto: 'ж' } },
-    { char: 'ж', ipa: 'ʒː', features: { type: 'consonant', soft: false, alwaysHard: true, receivesLength: true } },
+    { char: 'з', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, sibilantMerger: true, mergesInto: 'ж' } },
+    { char: 'ж', ipa: 'ʒː', features: { type: 'consonant', palReason: 'cluster', soft: false, alwaysHard: true, receivesLength: true } },
   ],
 
   // Word-specific чн → шн (Grayson p. 239)
   'чн': [
-    { char: 'ч', ipa: 'ʃ', features: { type: 'consonant', soft: false, clusterAssimilation: true } },
-    { char: 'н', ipa: 'n', features: { type: 'consonant', soft: false } },
+    { char: 'ч', ipa: 'ʃ', features: { type: 'consonant', palReason: 'cluster', soft: false, clusterAssimilation: true } },
+    { char: 'н', ipa: 'n', features: { type: 'consonant', palReason: 'cluster', soft: false } },
   ],
 
   // Word-specific чт → шт (Grayson p. 240)
   'чт': [
-    { char: 'ч', ipa: 'ʃ', features: { type: 'consonant', soft: false, clusterAssimilation: true } },
-    { char: 'т', ipa: 't', features: { type: 'consonant', soft: false } },
+    { char: 'ч', ipa: 'ʃ', features: { type: 'consonant', palReason: 'cluster', soft: false, clusterAssimilation: true } },
+    { char: 'т', ipa: 't', features: { type: 'consonant', palReason: 'cluster', soft: false } },
   ],
 };
