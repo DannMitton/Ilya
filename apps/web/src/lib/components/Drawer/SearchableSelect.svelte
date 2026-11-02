@@ -73,10 +73,8 @@
 			? filtered.length === entries.length
 				? ''
 				: filtered.length === 0
-					? language === 'fr' ? 'Aucun résultat' : 'No results'
-					: `${filtered.length} ${filtered.length === 1
-						? (language === 'fr' ? 'résultat' : 'result')
-						: (language === 'fr' ? 'résultats' : 'results')}`
+					? t('select.noResults', language)
+					: t(filtered.length === 1 ? 'select.resultCount.one' : 'select.resultCount.many', language).replace('{n}', String(filtered.length))
 			: ''
 	);
 
