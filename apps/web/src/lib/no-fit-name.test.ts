@@ -102,7 +102,7 @@ describe('row 97: the three ratified Guide passages are seated', () => {
 		['A', 'fr', 'le rapport de la pièce à votre <em>zona di passaggio</em>'],
 		['A', 'fr', 'des défis précis à aborder avec votre professeure ou professeur.</p>'],
 		['B', 'en', 'MELODY draws its notation conventions from Mitton (2020, Appendices B and C).'],
-		['B', 'en', 'The text underlay offers the same IPA values imported from Text that correspond with the Cyrillic lyrics.</p>'],
+		['B', 'en', 'The text underlay offers the same IPA values imported from TEXT that correspond with the Cyrillic lyrics.</p>'],
 		['B', 'fr', 'L’Annotation tire ses conventions de notation de Mitton (2020, annexes B et C).'],
 		['B', 'fr', 'Sous la portée, le texte reprend les mêmes valeurs API, importées du Texte, en regard des paroles cyrilliques.</p>'],
 		['C', 'en', '<em>Ilya</em>’s main phonological authority, used with Grayson’s generous consent. MELODY and INSIGHTS implement an open and close timbre markup'],

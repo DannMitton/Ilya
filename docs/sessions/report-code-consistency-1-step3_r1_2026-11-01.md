@@ -74,3 +74,7 @@ The one e2e failure is `singer-paths.test.ts:169`, the stale pin Fable named: `:
 - Whether any screen reader spells TEXT, LEARN, or CHANT letter by letter.
 - A visual check of the drawer's bands, the LOUPE's station labels, and the stacked LEARN headings after the change: I measured only the printed TEXT head.
 - Whether `loupe.station.lyric`'s old key now misdescribes its content (key kept; batch 3 renames).
+
+## Follow-up (same day, separate commit)
+
+I missed one mention of the TEXT document in the six Guide lines: `GuideContent.svelte:378`, "imported from Text", now "imported from TEXT", with its pin in `no-fit-name.test.ts`. The French counterpart (`:82`, « importées du Texte ») sits on a draft line and is in the French drafts commit. Two other Guide mentions of the TEXT tab (`:38` « l'onglet Texte », `:333` "choose Poem in Text") are outside the six lines and stay row 171's.
