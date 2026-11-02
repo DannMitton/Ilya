@@ -27,3 +27,9 @@ Sources go in each comment's citation: Grayson 2012, 193 (hard sign), 206 (bound
 ## Added 2026-11-02 00:25, RATIFIED by Dann ("yes"): reason `lexical-exception`, «счастье» and its derivatives (Grayson 2012, 287)
 
 ⟨а⟩ sits interpalatally here (between two soft consonants), where the rules usually require a fronted [a]. A known exception is «счастье» and its derivatives: Grayson shares that many Russian speakers keep the dark [ɑ], which he finds less tense and more resonant for singing.
+
+## Added 2026-11-02 00:53, RATIFIED by Dann ("yes"): reason `look-alike-root` (Grayson 2012, 249)
+
+Shown only where the look-alike root list changed the outcome (the prefix list would have kept the consonant hard). Placeholders as above, plus {word} the word, {look} the prefix it seems to begin with, {root} the root.
+
+⟨{char}⟩ softens to [{ipa}] before the soft [{trigger}]. «{word}» looks as if it begins with the prefix «{look}-», but ⟨{char}⟩ belongs to the root «{root}-», so the softening reaches it.

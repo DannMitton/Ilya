@@ -24,3 +24,9 @@ Open choices (Dann's): (a) "softens" as the file's « se palatalise »; (b) "eve
 ## Ajout 2026-11-02 00:25, RATIFIÉ par Dann (« yes ») : raison `lexical-exception`, «счастье» et ses dérivés (Grayson 2012, 287)
 
 ⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception : Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.
+
+## Ajout 2026-11-02 00:53, RATIFIÉ par Dann (« yes ») : raison `look-alike-root` (Grayson 2012, 249)
+
+⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé. «{word}» semble commencer par le préfixe «{look}-», mais ⟨{char}⟩ appartient à la racine «{root}-» : la palatalisation l'atteint donc.
+
+Choix ratifiés : (a) « semble commencer par » ; (b) « l'atteint donc ».

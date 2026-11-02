@@ -582,3 +582,6 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-11-02 00:3x: Dann shipped batch 1 as `bf4a45ad` (pushed; confirmed by ls-remote). Row 175 STEP 0 started by the desk in the cloud, session https://claude.ai/code/session_01Vk7wM6BEdhM7o8EkneDstz, Sonnet 5.5, branch cloud-lane-26 from bf4a45ad.
 - 2026-11-02 00:3x: the brief r2 addendum (exception words) and the ratified счастье strings missed commit bf4a45ad (appended after staging); they ride the row 164 ship. Row 175's lane must fetch them before step 1. Row 164 step 4 returned on mac-row164 at 3d374874 (French seated, e2e MELODY fix, eight gates passing on the Mac, gate 4 3802); report read.
 - 2026-11-02 00:39: Dann shipped row 164 as `3a52f05e` (confirmed by ls-remote). cloud-lane-26 exists at bf4a45ad (row 175 step 0 running).
+- 2026-11-02 00:50, Dann ruled "1" on row 175 step 0: prefix list plus look-alike roots (по-двиг-, по-движ-, по-двин-, по-двиз-, отч-); recorded in OPEN.md, palatalization section.
+- 2026-11-02 00:52, Dann: a comment explaining that «подвиг» looks prefixed but its root is двиг-; drafted, RATIFIED EN and FR 00:53 (reason look-alike-root), queued to row 175 step 3.
+- 2026-11-02 01:22, Dann: the live INSIGHTS chart stays plain (no finding mark); row 165 step 8 not shipped. OPEN.md.

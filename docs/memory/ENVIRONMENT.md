@@ -27,6 +27,7 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| a ruling or brief about a component on screen (a chart, a bar, a control) | `A RULING RESTED ON A COMPONENT THE APP DOES NOT DRAW` |
 | a desk helper's scripts and results live only in the desk's workspace | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
 | a measure folder holds a `build/` subfolder, or a run left tens of MB in `docs/sessions/` | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
 | a cloud session has not pushed for an hour, or Dann typed into a cloud session | `LEARNED BY THE OPUS DESK, 2026-10-27 EVENING` |
@@ -5077,3 +5078,8 @@ The desk put Fable's "22 percent of the jewel gives white text above 4.5:1" to D
 - 2026-11-01 00:0x: the desk told Dann "Grayson divides «те-рпе́ть»" from his p. 208 rule; his own n. 277 prints tʲirʲ ˈpʲetʲ. Lesson: check a source's printed examples before stating how it applies its own rule.
 - 2026-11-02 00:2x: brief r1 labelled «ветки» and «три» "D&P rows (dental soft)"; D&P print both n/c (pp. 79-80). Fable caught it. Lesson: give each test row the source that actually prints that value.
 - 2026-11-02 00:41: desk opened no memory backup at the session open (CONTRACT, Dann's rule 6); made one before the close instead.
+
+
+## A RULING RESTED ON A COMPONENT THE APP DOES NOT DRAW (2026-11-02, Opus desk)
+
+Row 165 steps 5 to 8 and Dann's rulings of 2026-11-01 17:56 and 17:57 treated INSIGHTS' darker finding bar as live. It lived only in `Tessituragram.svelte`, unmounted since row 66 (INSIGHTS draws `PitchSeconds`, `SingerBlock.svelte:121`; `OPEN.md` 2026-10-11 already said so). Code found it at step 8 by looking for `svg.tessituragram` in the live page. Before a brief or a question to Dann names a component, grep for its mount (`<ComponentName` under `apps/web/src`) and say where it is drawn. Also learned: the cloud lane can be read without the Mac's git: `git ls-remote` and a shallow `git fetch` of the lane into a scratch repository in the desk's workspace work through the proxy, where the bridge's git gets 403.
