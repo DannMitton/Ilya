@@ -5057,3 +5057,7 @@ From Vercel's documentation the desk told him the list's three-dot menu had a De
 ## DESK ERROR 2026-11-01 13:1x: GRAYSON IS HE
 
 The desk wrote "she" and "her" for Craig Grayson (Grayson 2012), corrected by Dann 13:21 ("Grayson is male so he/him"). Grayson is he. Check a pronoun against the person before writing it; when not established, use the surname.
+
+## DESK ERROR 2026-11-01 12:45: A CONTRAST FIGURE PASSED ON UNCHECKED
+
+The desk put Fable's "22 percent of the jewel gives white text above 4.5:1" to Dann as option 2 for the 2026A badge without computing it. Code measured 3.49 to 3.97:1 at 22 percent and shipped 58 percent (4.55 to 7.86:1 live, Chromium rounds alpha to 8 bits). Compute any contrast figure before offering it as a choice.
