@@ -58,8 +58,8 @@
 		switch (id) {
 			case 'text': return T('tab.text');
 			// Studio's second document, id 'markup' since N.174 D.1. The
-			// singer reads "Markup" and « Annotation », ratified by Dann
-			// 2026-09-13 (N.132). They supersede 2026-08-19's « Partition
+			// singer reads MELODY and « CHANT », ruled by Dann 2026-10-31 20:07
+			// (the key stays until batch 3). N.132's "Markup" and « Annotation » superseded 2026-08-19's « Partition
 			// annotée », ratified for the old name. It was never called Fit, the tool's old shown name.
 			case 'markup': return T('tab.markedScore');
 			// Studio's third document, N.127. « Aperçus », ruled by Dann 2026-09-12.

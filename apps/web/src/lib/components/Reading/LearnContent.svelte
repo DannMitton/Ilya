@@ -13,7 +13,7 @@
 </script>
 
 						{#if language === 'fr'}
-						<h1>Leçons</h1>
+						<h1>LEÇONS</h1>
 
 						<div class="chapter-band band-learn">
 							<h2 id="learn-title">La diction lyrique russe pour chanteuses et chanteurs</h2>
@@ -36,7 +36,7 @@
 
 						<p>Grayson n'est pas le premier à couvrir ce terrain. Depuis le volume pionnier de Natalia Challis sur Rachmaninov (1989), en passant par les transcriptions de Piatak et Avrashov (1991), les six volumes de Richter (1999-2008), les libretti de Belov (2004), et les contributions d'Olin (2012), de McMaster (dans le livre de Sheil, 2012) et de Thomas (dans le livre de Karna, 2010), les chanteuses et chanteurs ont disposé de ressources de valeur et d'ampleur croissantes. Ce que Grayson apporte est une synthèse&#160;: un guide de diction adossé à l'API orthodoxe, informé par la phonologie russe, et suffisamment rigoureux pour vous permettre de produire des transcriptions originales avec un réel degré d'autonomie. Dans la taxinomie utile de Sarah Dailey, les ressources antérieures servaient principalement de « guides accélérés » fournissant des transcriptions prêtes à l'emploi, tandis que Grayson propose un « guide d'étude autonome » qui enseigne le système sous-jacent.</p>
 
-						<p>Trois limites protègent notre propos. Ceci n'est pas un cours de langue russe&#160;: nous enseignons la prononciation, non la grammaire, sauf lorsque la conscience grammaticale affecte directement la prononciation d'un mot. Ceci n'est pas un substitut à la thèse de Grayson&#160;: l'appareil savant complet demeure dans la source, et nous l'honorons en nous y appuyant plutôt qu'en le reproduisant. Et ceci n'est pas un guide d'utilisation d'Ilya; l'onglet Guide enseigne l'outil. LEÇONS enseigne la diction.</p>
+						<p>Trois limites protègent notre propos. Ceci n'est pas un cours de langue russe&#160;: nous enseignons la prononciation, non la grammaire, sauf lorsque la conscience grammaticale affecte directement la prononciation d'un mot. Ceci n'est pas un substitut à la thèse de Grayson&#160;: l'appareil savant complet demeure dans la source, et nous l'honorons en nous y appuyant plutôt qu'en le reproduisant. Et ceci n'est pas un guide d'utilisation d'Ilya; l'onglet GUIDE enseigne l'outil. LEÇONS enseigne la diction.</p>
 
 						<h2 id="learn-arc">L'arc d'apprentissage</h2>
 
@@ -674,7 +674,7 @@
 
 						<h4 id="learn-u1-try">Essayez</h4>
 
-						<p>Collez votre texte russe dans le champ Entrée. Vous pourriez essayer l'ouverture de «&nbsp;Где ты, звёздочка?&nbsp;» de Moussorgski ou quelques vers de n'importe quelle mélodie de votre répertoire.</p>
+						<p>Collez votre texte russe dans le champ ENTRÉE. Vous pourriez essayer l'ouverture de «&nbsp;Где ты, звёздочка?&nbsp;» de Moussorgski ou quelques vers de n'importe quelle mélodie de votre répertoire.</p>
 
 						<p>Observez les trois lignes qu'<em>Ilya</em> produit&#160;: API, cyrillique et glose de traduction. Vous pouvez déjà commencer à faire correspondre ce que vous voyez dans la ligne API aux ancrages que vous venez d'apprendre ici. Certaines lettres se seront transformées&#160;: un ⟨О⟩ non accentué peut apparaître comme <code>[ʌ]</code> plutôt que le <code>[o]</code> que vous avez rencontré dans le tableau ci-dessus. Une consonne devant ⟨Е⟩ peut porter un marqueur de palatalisation, <code>[ʲ]</code>, qui n'était pas encore démontré dans l'ancrage.</p>
 
@@ -748,7 +748,7 @@
 
 						<h4 id="learn-u2-try">Essayez dans Ilya.</h4>
 
-						<p>Collez ⟨стоит⟩ dans le champ Entrée. Assignez l'accent à la première syllabe, puis à la deuxième. Observez le changement dans la ligne API. Les voyelles se transforment&#160;: non pas parce que les lettres ont changé, mais parce que l'accent seul s'est déplacé. Cette transformation est le sujet des Sections 3 et 4.</p>
+						<p>Collez ⟨стоит⟩ dans le champ ENTRÉE. Assignez l'accent à la première syllabe, puis à la deuxième. Observez le changement dans la ligne API. Les voyelles se transforment&#160;: non pas parce que les lettres ont changé, mais parce que l'accent seul s'est déplacé. Cette transformation est le sujet des Sections 3 et 4.</p>
 
 						<h4 id="learn-u2-yo">Repérer le ⟨ё⟩ manquant.</h4>
 
@@ -993,7 +993,7 @@
 
 						<p>Transcrivez ⟨хорошо⟩. Trois ⟨о⟩ identiques produisent trois sons différents&#160;: <code>[ʌ]</code>, <code>/ɑ/</code>, <code>/o/</code>. Activez ensuite la reconstitution&#160;: le <code>[ʌ]</code> éloigné revient à <code>/ɑ/</code>, mais aucune voyelle inaccentuée ne revient à <code>/o/</code>. La porte à sens unique à l’œuvre.</p>
 
-						<p>Essayez ensuite ⟨жена⟩ (une épouse). Sans reconstitution, le ⟨е⟩ inaccentué après le ⟨ж⟩ toujours dur apparaît comme <code>[ɨ]</code>. Dans le panneau du tiroir, sous Notation, activez la reconstitution globale, et <em>Ilya</em> le restaure en <code>[ɛ]</code> — l’écart par rapport à Grayson décrit ci-dessus. Quels que soient vos paramètres globaux, si vous préférez la règle originale de Grayson, vous pouvez cliquer sur «&#160;Réduction ponctuelle&#160;» ou «&#160;Reconstitution ponctuelle&#160;» sous la pile de mots dans le tiroir (ces intitulés répondent contextuellement à vos paramètres globaux), et votre <code>[ɨ]</code> réapparaîtra dûment.</p>
+						<p>Essayez ensuite ⟨жена⟩ (une épouse). Sans reconstitution, le ⟨е⟩ inaccentué après le ⟨ж⟩ toujours dur apparaît comme <code>[ɨ]</code>. Dans le panneau du TIROIR, sous NOTATION, activez la reconstitution globale, et <em>Ilya</em> le restaure en <code>[ɛ]</code> — l’écart par rapport à Grayson décrit ci-dessus. Quels que soient vos paramètres globaux, si vous préférez la règle originale de Grayson, vous pouvez cliquer sur «&#160;Réduction ponctuelle&#160;» ou «&#160;Reconstitution ponctuelle&#160;» sous la pile de mots dans le TIROIR (ces intitulés répondent contextuellement à vos paramètres globaux), et votre <code>[ɨ]</code> réapparaîtra dûment.</p>
 
 						<p><em>Source Grayson&#160;: ch. 3 §§3, 5, 7–8 (pp. 97–129), ch. 7 §1 (pp. 263–267). Tableau de reconstitution&#160;: p. 128, note p. 129. Différenciation auditive des formes casuelles&#160;: p. 266, n. 306. Cadre accentuel&#160;: Mitton (thèse, §4.5). Note de Kochetov&#160;: communication personnelle, soutenance de récital DMA, Université de Toronto.</em></p>
 
@@ -1999,7 +1999,7 @@
 						</tbody>
 						</table>
 
-						<p><strong>Les contrôles d’Ilya.</strong> La notation par défaut des géminées dans Ilya correspond à la préférence de Grayson pour les symboles API doublés. Le basculeur de géminées, dans la section Notation du Tiroir, permet d’appliquer un changement global à la notation des géminées. La case à cocher dans les entrées pertinentes du Tiroir permet de contrôler la notation localement, mot par mot. Ces contrôles existent parce que la décision simple ou double relève souvent de l’interprétation, non de l’absolu. Là encore, rien ne remplace l’oreille d’une répétitrice ou d’un répétiteur natif.</p>
+						<p><strong>Les contrôles d’Ilya.</strong> La notation par défaut des géminées dans Ilya correspond à la préférence de Grayson pour les symboles API doublés. Le basculeur de géminées, dans la section NOTATION du TIROIR, permet d’appliquer un changement global à la notation des géminées. La case à cocher dans les entrées pertinentes du TIROIR permet de contrôler la notation localement, mot par mot. Ces contrôles existent parce que la décision simple ou double relève souvent de l’interprétation, non de l’absolu. Là encore, rien ne remplace l’oreille d’une répétitrice ou d’un répétiteur natif.</p>
 
 						<h4 id="learn-u7-tryit">&Agrave; vous de jouer dans Ilya</h4>
 
@@ -2015,7 +2015,7 @@
 
 						<p><strong>Les cas particuliers.</strong> Transcrivez конечно (bien sûr) et что (quoi). Dans les deux mots, ⟨ч⟩ a perdu sa composante occlusive et s’est réduit à <code>/ʃ/</code>.</p>
 
-						<p><strong>Les géminées.</strong> Transcrivez русский (russe). La graphie montre deux ⟨сс⟩, mais la ligne API affiche un seul <code>/s/</code>. Ouvrez le Tiroir et repérez les contrôles de géminées.</p>
+						<p><strong>Les géminées.</strong> Transcrivez русский (russe). La graphie montre deux ⟨сс⟩, mais la ligne API affiche un seul <code>/s/</code>. Ouvrez le TIROIR et repérez les contrôles de géminées.</p>
 
 						<p>La couche d’enseignement du module LEÇONS est complète. Chaque règle dont vous avez besoin pour lire un texte russe à l’aide d’Ilya a été présentée, de l’alphabet jusqu’à l’assimilation. Pour le comportement complet de chaque lettre, la Couche de référence est alphabétisée, reliée par hyperliens et encyclopédique. Et pour ce qu’aucune règle ni aucun outil ne saurait entièrement saisir, il y a l’oreille d’une répétitrice ou d’un répétiteur natif.</p>
 
@@ -2043,18 +2043,18 @@
 
 						<h2 id="learn-try">Essayez</h2>
 
-						<p>Tout au long de LEÇONS, vous trouverez des invitations à coller un mot ou une phrase dans le champ Entrée. LEÇONS énonce le principe; Ilya le démontre en direct. L'outil devient le laboratoire du module. Lorsque nous discutons de l'accent et des homographes, par exemple, vous pourriez transcrire <em>мука</em> avec l'accent sur la première syllabe, puis sur la seconde, et observer la transcription entière se transformer sous vos yeux. Lorsque nous abordons la réduction vocalique, <em>хорошо</em> offre trois ⟨о⟩ identiques à l'écrit, prononcés de trois manières différentes.</p>
+						<p>Tout au long de LEÇONS, vous trouverez des invitations à coller un mot ou une phrase dans le champ ENTRÉE. LEÇONS énonce le principe; Ilya le démontre en direct. L'outil devient le laboratoire du module. Lorsque nous discutons de l'accent et des homographes, par exemple, vous pourriez transcrire <em>мука</em> avec l'accent sur la première syllabe, puis sur la seconde, et observer la transcription entière se transformer sous vos yeux. Lorsque nous abordons la réduction vocalique, <em>хорошо</em> offre trois ⟨о⟩ identiques à l'écrit, prononcés de trois manières différentes.</p>
 
 						<h2 id="learn-notation">Note sur la notation</h2>
 
-						<p>La notation phonétique est paradigmatique, non absolue. Une comparaison de dix ressources imprimées de diction lyrique russe révèle dix approches différentes de la notation de la palatalisation seule, et des inventaires vocaliques allant de sept à dix symboles. Les choix API de Grayson représentent un ensemble cohérent et bien raisonné parmi plusieurs. Là où les autorités divergent (sur la transcription de ⟨щ⟩, sur la représentation des nasales palatalisées, sur les symboles de voyelles réduites), les différences reflètent des positions réfléchies, non des erreurs. Les sélecteurs de notation d'Ilya, dans le tiroir, rendent ces choix visibles et réversibles&#160;: vous pouvez lire à leur sujet ici, puis les voir en action là-bas. Il ne s'agit pas de tribalisme; il s'agit de comprendre les principes sous-jacents aux symboles, afin de prendre des décisions éclairées dans votre propre pratique.</p>
+						<p>La notation phonétique est paradigmatique, non absolue. Une comparaison de dix ressources imprimées de diction lyrique russe révèle dix approches différentes de la notation de la palatalisation seule, et des inventaires vocaliques allant de sept à dix symboles. Les choix API de Grayson représentent un ensemble cohérent et bien raisonné parmi plusieurs. Là où les autorités divergent (sur la transcription de ⟨щ⟩, sur la représentation des nasales palatalisées, sur les symboles de voyelles réduites), les différences reflètent des positions réfléchies, non des erreurs. Les sélecteurs de notation d'Ilya, dans le TIROIR, rendent ces choix visibles et réversibles&#160;: vous pouvez lire à leur sujet ici, puis les voir en action là-bas. Il ne s'agit pas de tribalisme; il s'agit de comprendre les principes sous-jacents aux symboles, afin de prendre des décisions éclairées dans votre propre pratique.</p>
 
 						<hr />
 
 						<p><em>LEÇONS est une réorganisation pédagogique du travail doctoral de Craig Grayson, préparée avec son consentement. Le contenu est rédigé par Dann Mitton et s'appuie sur sa thèse de doctorat en musique (Université de Toronto) et vingt-cinq ans de pratique et d'enseignement du répertoire de basse d'opéra.</em></p>
 
 						{:else}
-						<h1>Learn</h1>
+						<h1>LEARN</h1>
 
 						<div class="chapter-band band-learn">
 							<h2 id="learn-title">Russian Lyric Diction for Singers</h2>
@@ -2077,7 +2077,7 @@
 
 						<p>Grayson is not the first to cover this ground. From Natalia Challis' pioneering Rachmaninoff volume (1989) through the transcriptions of Piatak and Avrashov (1991), Richter's six-volume series (1999-2008), Belov's libretti (2004), and the contributions of Olin (2012), McMaster (in Sheil, 2012), and Thomas (in Karna, 2010), singers have had resources of increasing value and scope. What Grayson provides is a consolidation: a diction guide grounded in orthodox IPA, informed by Russian phonology, and rigorous enough that the motivated reader can produce original transcriptions with a workable level of independence. In Sarah Dailey's useful taxonomy, the earlier resources serve primarily as "fast-track guides" offering ready-made transcriptions, while Grayson proposes an "independent study guide" that teaches the underlying system.</p>
 
-						<p>Three boundaries protect our focus. This is not a Russian language course: we teach pronunciation, not grammar, except where grammatical awareness directly affects how a word sounds. This is not a substitute for Grayson's dissertation: the full scholarly apparatus lives in the source, and we honour it by building on it rather than replicating it. And this is not a guide to using Ilya; the Guide tab teaches the tool. LEARN teaches the diction.</p>
+						<p>Three boundaries protect our focus. This is not a Russian language course: we teach pronunciation, not grammar, except where grammatical awareness directly affects how a word sounds. This is not a substitute for Grayson's dissertation: the full scholarly apparatus lives in the source, and we honour it by building on it rather than replicating it. And this is not a guide to using Ilya; the GUIDE tab teaches the tool. LEARN teaches the diction.</p>
 
 						<h2 id="learn-arc">The Learning Arc</h2>
 
@@ -2715,7 +2715,7 @@
 
 						<h4 id="learn-u1-try">Try This</h4>
 
-						<p>Paste your Russian text into the Input field. You might try the opening of Musorgsky's "Где ты, звёздочка?" or a few lines from any song in your repertoire.</p>
+						<p>Paste your Russian text into the INPUT field. You might try the opening of Musorgsky's "Где ты, звёздочка?" or a few lines from any song in your repertoire.</p>
 
 						<p>Look at the three lines <em>Ilya</em> produces: IPA, Cyrillic, and translation gloss. You can already begin to match what you see in the IPA line to the anchors you have just learned. Some letters will have transformed: an unstressed ⟨О⟩ may appear as <code>[ʌ]</code> rather than the <code>[o]</code> you met in the table above. A consonant before ⟨Е⟩ may carry a palatalisation marker, <code>[ʲ]</code>, which was not demonstrated in the default anchor.</p>
 
@@ -2785,11 +2785,11 @@
 
 						<h4 id="learn-u2-sounds">How stress sounds.</h4>
 
-						<p>In singing, we communicate stress through intensity and articulatory commitment, not through duration, which is prescribed. The composer writes a rhythm; the singer cannot lengthen a stressed syllable beyond what the note value permits. But even in legato passages where all syllables receive sustained tone, the stressed syllable carries greater physical investment: a more committed vowel, a clearer articulatory target, a brighter core to the sound, and perhaps a little more intensity by comparison to adjacent notes. In sung Russian, the unstressed syllables serve the stress.</p>
+						<p>In singing, we communicate stress through intensity and articulatory commitment, not through duration, which is prescribed. The composer writes a rhythm; the singer cannot lengthen a stressed syllable beyond what the note value permits. But even in <em>legato</em> passages where all syllables receive sustained tone, the stressed syllable carries greater physical investment: a more committed vowel, a clearer articulatory target, a brighter core to the sound, and perhaps a little more intensity by comparison to adjacent notes. In sung Russian, the unstressed syllables serve the stress.</p>
 
 						<h4 id="learn-u2-try">Try this in Ilya.</h4>
 
-						<p>Paste ⟨стоит⟩ into the Input field. Assign stress to the first syllable, then to the second. Watch the IPA line change. The vowels transform: not because the letters changed, but because the stress moved. That transformation is the subject of Sections 3 and 4.</p>
+						<p>Paste ⟨стоит⟩ into the INPUT field. Assign stress to the first syllable, then to the second. Watch the IPA line change. The vowels transform: not because the letters changed, but because the stress moved. That transformation is the subject of Sections 3 and 4.</p>
 
 						<h4 id="learn-u2-yo">Spotting the missing ⟨ё⟩.</h4>
 
@@ -3025,7 +3025,7 @@
 						<p>The first claim is sound. When ⟨и⟩ follows a hard consonant, the resulting [ɨ] is not a reduction: it is the vowel’s identity in that environment. Russians know and understand that in this instance ⟨и⟩ is pronounced [ɨ], or perhaps we can understand it as [ɨ] being spelled ⟨и⟩ in this case; they amount to the same outcome. There is no source vowel to reconstitute to, it is simply the traditional vowel that is performed in this circumstance, acknowledging that [ɨ] must follow an unpalatalized consonant, never [i]. The hard consonant forces the expression of the velar-i. I agree with Grayson here; reconstitution does not apply.</p>
 						<p>I believe his second claim warrants reconsideration. When unstressed ⟨е⟩ follows one of the always-hard consonants (⟨ж⟩, ⟨ш⟩, ⟨ц⟩) to produce [ɨ], the underlying vowel is /ɛ/. /ɛ/ reduces to become [ɨ] in this case, and therefore the logic of reconstitution should still apply. I assert that on sustained notes or in slow(er) tempi, the singer can return (reconstitute) toward [ɛ]. In my experience, native Russian speakers and coaches consistently advocate this choice. Dr. Alexei Kochetov, a native Russian speaker and phonetician at the University of Toronto, offered precisely this note on my performance of Kabalevsky’s Op. 52, no. 2: “[toj ʒɨ] should probably be [toj ʒɛ] (with no reduction).”</p>
 						<p>Perhaps an articulatory argument can support reconstitution in this case? The tongue postures of [ɛ] and the always-hard consonants [ʃ], [ʒ], and [ts] occupy the same medial neighbourhood; [ɛ] is not fronted enough to impose a conflict. This is not analogous to attempting /i/ after a hard consonant, where the fronting genuinely contradicts the consonant environment.</p>
-						<p>This is the single point on which <em>Ilya</em> departs from Grayson’s reconstitution rules. When the reconstitution toggle is active, unstressed ⟨е⟩ after an always-hard consonant reconstitutes to [ɛ]. Nevertheless, if you disagree with me and wish to observe Grayson’s commitment to the inviolability of [ɨ] in this case, you can click the “Spot reduction” checkbox under the Word Stack in the Drawer and your [ɨ] will dutifully reappear.</p>
+						<p>This is the single point on which <em>Ilya</em> departs from Grayson’s reconstitution rules. When the reconstitution toggle is active, unstressed ⟨е⟩ after an always-hard consonant reconstitutes to [ɛ]. Nevertheless, if you disagree with me and wish to observe Grayson’s commitment to the inviolability of [ɨ] in this case, you can click the “Spot reduction” checkbox under the Word Stack in the DRAWER and your [ɨ] will dutifully reappear.</p>
 						</blockquote>
 
 						<p>When to reconstitute is a matter of context and taste. A short note on a weak beat in a brisk tempo may welcome full reduction. A sustained note on a strong beat in a slow tempo may call for reconstitution. Russians seem to expect less reduction in the delivery of poetic texts, perhaps as a means of setting art apart from quotidian speech. The singer’s best confirmation comes from a native Russian coach; Ilya offers both options through the reconstitution toggle, so the singer can compare the two readings and make an informed choice.</p>
@@ -3034,7 +3034,7 @@
 
 						<p>Transcribe ⟨хорошо⟩. Three identical ⟨о⟩ letters produce three different sounds: <code>[ʌ]</code>, <code>/ɑ/</code>, <code>/o/</code>. Then toggle reconstitution on: the remote <code>[ʌ]</code> returns to <code>/ɑ/</code>, but neither unstressed vowel returns to <code>/o/</code>. The one-way door at work.</p>
 
-						<p>Then try ⟨жена⟩ (a wife). With reconstitution off, the unstressed ⟨е⟩ after always-hard ⟨ж⟩ appears as <code>[ɨ]</code>. On the Drawer panel under Notation, toggle global reconstitution on, and <em>Ilya</em> restores it to <code>[ɛ]</code> — the departure from Grayson described above. Regardless of your global settings, if you prefer Grayson’s original rule, you can click “Spot reduction” or “Spot reconstitution” under the Word Stack in the Drawer (these labels respond contextually to your global settings), and your <code>[ɨ]</code> will dutifully reappear.</p>
+						<p>Then try ⟨жена⟩ (a wife). With reconstitution off, the unstressed ⟨е⟩ after always-hard ⟨ж⟩ appears as <code>[ɨ]</code>. On the DRAWER panel under NOTATION, toggle global reconstitution on, and <em>Ilya</em> restores it to <code>[ɛ]</code> — the departure from Grayson described above. Regardless of your global settings, if you prefer Grayson’s original rule, you can click “Spot reduction” or “Spot reconstitution” under the Word Stack in the DRAWER (these labels respond contextually to your global settings), and your <code>[ɨ]</code> will dutifully reappear.</p>
 
 						<p><em>Grayson source: Ch. 3 §§3, 5, 7–8 (pp. 97–129), Ch. 7 §1 (pp. 263–267). Reconstitution chart: p. 128, note p. 129. Aural differentiation of case forms: p. 266, fn. 306. Stress-timing framework: Mitton (dissertation, §4.5). Kochetov correction: personal communication, DMA recital adjudication, University of Toronto.</em></p>
 
@@ -4009,7 +4009,7 @@
 						</tbody>
 						</table>
 
-						<p><strong>Ilya’s controls.</strong> Ilya’s default notation of geminates aligns with Grayson’s preference for doubled IPA symbols. Use the geminate toggle in the Notation section of the Drawer to apply global changes to geminate notation, or choose the checkbox on relevant Drawer entries where you can control geminate notation locally per word. These controls exist because the single-vs-double decision is often interpretive, not absolute. Again, nothing replaces a native coach’s ear.</p>
+						<p><strong>Ilya’s controls.</strong> Ilya’s default notation of geminates aligns with Grayson’s preference for doubled IPA symbols. Use the geminate toggle in the NOTATION section of the DRAWER to apply global changes to geminate notation, or choose the checkbox on relevant DRAWER entries where you can control geminate notation locally per word. These controls exist because the single-vs-double decision is often interpretive, not absolute. Again, nothing replaces a native coach’s ear.</p>
 
 						<h4 id="learn-u7-tryit">Try This in Ilya</h4>
 
@@ -4025,7 +4025,7 @@
 
 						<p><strong>Rules-of-one.</strong> Transcribe конечно (of course) and что (what). In both words, ⟨ч⟩ has lost its stop component and reduced to <code>/ʃ/</code>.</p>
 
-						<p><strong>Geminates.</strong> Transcribe русский (Russian). The spelling shows two ⟨сс⟩, but the IPA line shows a single <code>/s/</code>. Open the Drawer and look for the geminate controls.</p>
+						<p><strong>Geminates.</strong> Transcribe русский (Russian). The spelling shows two ⟨сс⟩, but the IPA line shows a single <code>/s/</code>. Open the DRAWER and look for the geminate controls.</p>
 
 						<p>The Teaching Layer of LEARN is complete. Every rule the singer needs to read a Russian text with Ilya’s help has been introduced, from the alphabet through assimilation. For any letter’s complete behaviour, the Reference Layer is alphabetised, hyperlinked, and encyclopedic. And for what no rule or tool can fully capture, there is a native coach’s ear.</p>
 
@@ -4053,11 +4053,11 @@
 
 						<h2 id="learn-try">Try This</h2>
 
-						<p>Throughout LEARN, you will find prompts inviting you to paste a curated word or phrase into the Input field. LEARN names the principle; Ilya demonstrates it live. The tool becomes the laboratory for the module. When we discuss stress and homographs, for example, you might transcribe <em>мука</em> with stress on the first syllable, then the second, and watch the entire transcription change beneath your hands. When we address vowel reduction, <em>хорошо</em> offers three identically spelled ⟨о⟩ vowels pronounced three different ways.</p>
+						<p>Throughout LEARN, you will find prompts inviting you to paste a curated word or phrase into the INPUT field. LEARN names the principle; Ilya demonstrates it live. The tool becomes the laboratory for the module. When we discuss stress and homographs, for example, you might transcribe <em>мука</em> with stress on the first syllable, then the second, and watch the entire transcription change beneath your hands. When we address vowel reduction, <em>хорошо</em> offers three identically spelled ⟨о⟩ vowels pronounced three different ways.</p>
 
 						<h2 id="learn-notation">A Note on Notation</h2>
 
-						<p>Phonetic notation is paradigmatic, not absolute. A comparison of ten Russian lyric diction print resources reveals ten different approaches to the notation of palatalization alone, and vowel inventories ranging from seven to ten symbols. Grayson's IPA choices are one well-reasoned set among several. Where authorities differ (on the transcription of ⟨щ⟩, on the representation of palatalized nasals, on reduced vowel symbols), the differences reflect considered positions, not errors. Ilya's notation toggles, in the drawer, make these choices visible and reversible: you can read about them here, then see them in action there. This is not tribalism; it is understanding the principles beneath the symbols, so that you can make informed decisions in your own practice.</p>
+						<p>Phonetic notation is paradigmatic, not absolute. A comparison of ten Russian lyric diction print resources reveals ten different approaches to the notation of palatalization alone, and vowel inventories ranging from seven to ten symbols. Grayson's IPA choices are one well-reasoned set among several. Where authorities differ (on the transcription of ⟨щ⟩, on the representation of palatalized nasals, on reduced vowel symbols), the differences reflect considered positions, not errors. Ilya's notation toggles, in the DRAWER, make these choices visible and reversible: you can read about them here, then see them in action there. This is not tribalism; it is understanding the principles beneath the symbols, so that you can make informed decisions in your own practice.</p>
 
 						<hr />
 

@@ -18,7 +18,7 @@ const FIXTURE = 'src/lib/score/ingestion/fixtures/tchaikovsky-op38-3-voice.music
 async function raise(page: Page) {
 	await page.goto('/');
 	await page.locator('input.hidden-input').setInputFiles(FIXTURE);
-	await page.getByRole('tab', { name: 'Markup' }).click();
+	await page.getByRole('tab', { name: 'MELODY' }).click();
 	await page.locator('.score-page [data-hit]').first().waitFor({ state: 'attached' });
 	// The page redraws the score once its poem is seated; let that settle first.
 	await page.waitForTimeout(6_000);

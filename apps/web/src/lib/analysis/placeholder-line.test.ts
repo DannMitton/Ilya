@@ -30,42 +30,42 @@ describe('the line', () => {
 	});
 	it('English, several (ratified)', () => {
 		expect(placeholderLine(['ɛ', 'o', 'u'], 'en')).toBe(
-			'Your [ɛ], [o], and [u] use placeholder values until you sample them in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on a placeholder are drawn dashed.',
+			'Your [ɛ], [o], and [u] use placeholder values until you sample them in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on a placeholder are drawn dashed.',
 		);
 	});
 	it('English, one (ratified)', () => {
 		expect(placeholderLine(['ɛ'], 'en')).toBe(
-			'Your [ɛ] uses a placeholder value until you sample it in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on it are drawn dashed.',
+			'Your [ɛ] uses a placeholder value until you sample it in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on it are drawn dashed.',
 		);
 	});
 	it('French, several (ratified; the apostrophe typographic)', () => {
 		expect(placeholderLine(['ɛ', 'o', 'u'], 'fr')).toBe(
-			'Vos voyelles [ɛ], [o] et [u] reposent sur des valeurs par défaut jusqu’à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.',
+			'Vos voyelles [ɛ], [o] et [u] reposent sur des valeurs par défaut jusqu’à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés en pointillé.',
 		);
 	});
 	it('French, one (ratified 19:51)', () => {
 		expect(placeholderLine(['ɛ'], 'fr')).toBe(
-			'Votre voyelle [ɛ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.',
+			'Votre voyelle [ɛ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés en pointillé.',
 		);
 	});
 	it('Markup, English, several: ends "drawn hollow or dashed" (row 78a)', () => {
 		expect(placeholderLine(['ɛ', 'o', 'u'], 'en', 'markup')).toBe(
-			'Your [ɛ], [o], and [u] use placeholder values until you sample them in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on a placeholder are drawn hollow or dashed.',
+			'Your [ɛ], [o], and [u] use placeholder values until you sample them in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on a placeholder are drawn hollow or dashed.',
 		);
 	});
 	it('Markup, English, one', () => {
 		expect(placeholderLine(['ɛ'], 'en', 'markup')).toBe(
-			'Your [ɛ] uses a placeholder value until you sample it in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on it are drawn hollow or dashed.',
+			'Your [ɛ] uses a placeholder value until you sample it in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on it are drawn hollow or dashed.',
 		);
 	});
 	it('Markup, French, several', () => {
 		expect(placeholderLine(['ɛ', 'o', 'u'], 'fr', 'markup')).toBe(
-			'Vos voyelles [ɛ], [o] et [u] reposent sur des valeurs par défaut jusqu’à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.',
+			'Vos voyelles [ɛ], [o] et [u] reposent sur des valeurs par défaut jusqu’à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.',
 		);
 	});
 	it('Markup, French, one', () => {
 		expect(placeholderLine(['ɛ'], 'fr', 'markup')).toBe(
-			'Votre voyelle [ɛ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.',
+			'Votre voyelle [ɛ] repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.',
 		);
 	});
 	it('a comment names the placeholder, then the remedy, in either language (ratified 19:49)', () => {

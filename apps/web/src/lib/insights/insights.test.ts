@@ -434,8 +434,8 @@ describe('N.127 the findings', () => {
 
 describe('N.127 the tab name', () => {
 	it('carries the French Dann ruled on 2026-09-12', () => {
-		expect(t('tab.insights', 'en')).toBe('Insights');
-		expect(t('tab.insights', 'fr')).toBe('Aperçus');
+		expect(t('tab.insights', 'en')).toBe('INSIGHTS');
+		expect(t('tab.insights', 'fr')).toBe('APERÇUS');
 	});
 });
 
