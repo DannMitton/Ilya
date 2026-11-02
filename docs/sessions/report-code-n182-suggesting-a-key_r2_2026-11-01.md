@@ -218,3 +218,65 @@ Every French slot carries the English (`TODO-FR`, in the block comment above the
 | 8 ratchets | OK, nothing offered |
 
 Gates 1, 2, 5, 6, and 7 were measured at the start of the step and not re-run after the two French-guard fixes to `i18n.ts`, which no package reads; gates 3, 4, and 8 were re-run after them. `key-lines.ts` is 175 lines.
+
+---
+
+## Step 3: the wiring
+
+### What changed
+
+- `apps/web/src/lib/insights/InsightsPane.svelte` (760 to 744 lines; ceiling lowered): the `better` block and the `shift` helper (about 38 lines) are replaced by one `keys` `$derived` that calls `suggestKeys` on `analysisScore` with `voiceType?.voiceType`, the facts, the vowel resolver, and the intake, then `keyWords`. A `NameKey` function names the landing key: `keyAfterTransposition(source, semitones)` from the drawn score's own signature (A1), then `keyRuler.stopFor` and `keyNameFor`. `revealOpen` is a second screen-only disclosure beside `moreOpen` (see below). `readoutFor` is no longer called.
+- `apps/web/src/lib/insights/singer-blocks.ts` (376 lines): `KeyForward` and the `better` input are gone; `keys?: KeyWords | null` is the input. The conclusion's `forward` is `{ lines, note?, teacher? }`. A new block kind `keyreveal` (screen only, directly after the conclusion) carries "Show keys that reach higher". The teacher line stands under the answer where Ilya calls the key unlikely and no key is shown (`noWorkable` or `noneBetter`; the old build and today's page did the same for "no better key"). The "What another key would change" compare line (`insights.r2.compare`) goes with its string.
+- `apps/web/src/lib/insights/SingerBlock.svelte` (598 lines): each key line is a `<p class="forward">` (the rose ink it had) with the existing "Try this key" chip; the reveal is a `<details class="reveal">` whose summary is `--ink-secondary` (A6), hidden in print with the chip.
+- `apps/web/src/lib/insights/singer-page.ts` (241 lines): `searchBetterKey`, `shareAfter`, and `BetterKey` are removed, with their eight tests; the header comment and the `BETTER_KEY_MIN_DROP` comment are corrected. `KEY_SEARCH_WINDOW` and `BETTER_KEY_MIN_DROP` stay (the search reads them).
+- `apps/web/src/lib/insights/key-lines.ts`: `KeyWords` gains `kind`; `moveWords` no longer lowers the French interval (a French line starts with it: « Un ton plus bas »; a mid-sentence use, `reachWords`, still lowers it).
+- `apps/web/src/lib/i18n.ts`: the six retired keys are removed (below); the index reads `insights.` 179 and 1,158 keys.
+- `packages/score-parser/src/analysis-types.ts:66`: the `fR1Source` comment no longer says "nothing writes it yet"; it says `analyze-score-adapter.ts` writes `'surrogate'` (A11; `analyze-score-adapter.ts:188`, `:269`).
+- `apps/web/src/lib/insights/singer-blocks.test.ts`: the pin at `:122` now expects the key words and the teacher line; the French "better key" test goes with its string; a new block of five tests pins the forward, the one-line answers, the reveal's place, and the retirement.
+
+### Ratified text changed (`CONTRACT.md` section 1 item 11a): six keys retired, with their pin
+
+Each named one key as the better one and lost its only reader. Removed from `i18n.ts` in this commit with the pin at `singer-blocks.test.ts:122` (rewritten) and the French test at `singer-blocks.test.ts:191-203` (removed). `insights.r2.teacherA` is not retired; it is still read.
+
+| Key | English | French |
+|---|---|---|
+| `insights.r2.noBetterKey` | No other key within a tritone fits your voice better. | Aucune autre tonalité, à un triton ou moins, ne convient mieux à votre voix. |
+| `insights.r2.better.tone` | This key suits your voice. A tone lower would keep more of the line below your passaggio. | Cette tonalité convient à votre voix. Un ton plus bas garderait une plus grande part de la ligne sous votre *passaggio*. |
+| `insights.r2.better.interval` | This key suits your voice. {A} lower would keep more of the line below your passaggio. | Cette tonalité convient à votre voix. {A} plus bas garderait une plus grande part de la ligne sous votre *passaggio*. |
+| `insights.r2.compare` | A key {interval} lower would bring that to {m} percent, and the compass, {low} to {high}, stays inside your range. | Transposée {interval} plus bas, la pièce ramènerait cette part à {m} %, et son ambitus, {low} à {high}, resterait dans le vôtre. |
+| `insights.r2.inKey` | In {key}, {n} percent of the singing lies at or above your primo passaggio, and the {pitch} of bar {bar} becomes {pitch2}, under your secondo passaggio. | En {key}, {n} % du chant se situe sur votre *primo passaggio* ou au-dessus, et le {pitch} de la mesure {bar} devient {pitch2}, sous votre *secondo passaggio*. |
+| `insights.r2.inKeyShare` | In {key}, {n} percent of the singing lies at or above your primo passaggio. | En {key}, {n} % du chant se situe sur votre *primo passaggio* ou au-dessus. |
+
+### The reveal and the page's two disclosures
+
+The Insights page is paginated by measuring each block off screen. Its one screen-only block, "N more observations", rides with the block before it while closed, is measured open, and is closed for print (`InsightsPane.svelte`, the comment block above `moreOpen`). The reveal needed the same treatment and its own state, or opening one would open the other. So: a new block kind `keyreveal`, screen only, directly after the conclusion; `revealOpen` beside `moreOpen`; `openOf(k)` picks the right one for the printed list, the riding rule, the measurer, and the `<details>`; both are closed on `beforeprint` and restored on `afterprint`; `BREAKS` includes `keyreveal` so a long list can break across pages when open. The reveal does not print (the line's chip and the whole disclosure are `display: none` in print), so paper keeps the pages it had.
+
+### How a singer reaches the analysis in a suggested key, in steps (read in the code; the browser walk is in step 4)
+
+1. On INSIGHTS the line reads, for example, "Down a whole tone · C minor: stays inside your range." with a "Try this key" chip (`SingerBlock.svelte`, `keyLine`).
+2. The chip calls `keyRuler.tryKey(stop)` (`InsightsPane.svelte`, `tryKey`): it stores `requested = stop` and calls `tryAnother` (`transposition-ruler-state.svelte.ts`, `tryKey` and `tryAnother`).
+3. `tryAnother` brings MELODY forward when INSIGHTS is showing (`toMarkup()`) and sets `open = true`: the ruler floats over MELODY with that stop selected, and MELODY draws the page in that key while the ruler is open (`drawn` is `ruler.selected` while `open`).
+4. The singer taps "Use this key". `use(next)` writes `song().transposition` and closes the ruler. Cancelling or closing instead leaves the song's old choice (`drawn` falls back to it), and INSIGHTS is unchanged.
+5. The singer goes back to INSIGHTS. `readingScore = keyRuler.draw(printedReading)` draws it in the chosen key, so `analysisScore`, the model, every share, the comments, and now the search all start from the new key; the page then reads "as it stands" about it, and the new search offers moves from there.
+6. **What can block it:** (a) no chip, when the printed key has no named mode, so `printedKey` returns null and `stopFor` returns null: the line then names the move in the ruler's words and the singer moves the ruler by hand from MELODY; (b) the chip only opens the ruler: INSIGHTS does not change until "Use this key" is tapped (step 4); (c) the whole of this is behind `PUBLIC_INCLUDE_MARKUP_INSIGHTS`. Nothing else blocks it that I found.
+
+### Decisions I took (reversible; listed again in "For Dann" in step 4)
+
+- The "suits" line is shown on INSIGHTS whenever the key read suits (the brief: "No key suggested ... in one line").
+- The teacher line stands under both "No workable key" and "No other key ... changes these challenges", for an unlikely piece, as today (A4 recommends it for "No workable key" only; the second is today's behaviour kept).
+- `readoutFor` (`transposition-ruler-state.svelte.ts:134`, `insights.ts:68`) has no reader now. I left it: Markup's ruler is untouched (rule 1), and removing it is a one-line change for whoever wants it gone.
+
+### Gates, after step 3
+
+| # | Result |
+|---|---|
+| 1 phonology | 407 passed |
+| 2 dictionary | 248 passed |
+| 3 check | 0 errors, 12 warnings |
+| 4 web unit | 3895 passed, 1 skipped (3896) (-2: eight `searchBetterKey` tests and the French better-key test out, five forward and reveal tests in) |
+| 5 root integration | 98 passed |
+| 6 blurb | 148 passed |
+| 7 score-parser | 785 passed, 5 skipped (790) |
+| 8 ratchets | OK; `InsightsPane.svelte` 760 to 744, taken |
+
+Not yet run in this step: the Playwright projects (step 4 runs the INSIGHTS and print specs).

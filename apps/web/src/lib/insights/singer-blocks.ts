@@ -9,7 +9,7 @@
  * organized", 2026-10-11 03:53): the opening frame; the conclusion, unboxed;
  * squircle 1, the moments; squircle 2, the totals; squircle 3, the sources.
  */
-import { pitchToMidi, type KeyChoice, type ParsedScore, type Pitch, type VoiceProfileSnapshot } from '@ilya/score-parser';
+import { pitchToMidi, type Pitch, type VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import { pitchName } from '$lib/voice/note-picker';
 import { placeholderCommentSentence, placeholderTurnsSentence } from '$lib/analysis/placeholder-line';
@@ -17,6 +17,7 @@ import type { Run } from './comment-sources';
 import type { RenderedComment } from './comment-text';
 import type { InsightsModel, TessituragramModel, VerdictLine } from './insights';
 import { formatCycles, doseValue, type CycleDose, type CycleDoseSplit } from './singing-measures';
+import type { KeyLine, KeyWords } from './key-lines';
 import {
 	articleFor,
 	countWord,
@@ -46,10 +47,16 @@ export type Block =
 			/** The verdict paragraph, or null when the range offer stands in its place. */
 			paragraph: string | null;
 			offer: boolean;
-			/** The way forward: the key in the ruler's words, "Try this key", a sentence, or the teacher line. */
-			forward: { readout?: string; stop?: KeyChoice; sentence?: string; teacher?: string } | null;
+			/**
+			 * The way forward (N.182, row 71): one to three key lines, each with its "Try this key" stop, or the one-line
+			 * answer ("No key suggested", "No workable key"), and the teacher line where no key is shown for a piece
+			 * Ilya calls unlikely. The keys beyond the range sit in the `keyreveal` block that follows.
+			 */
+			forward: { lines: KeyLine[]; note?: string; teacher?: string } | null;
 			reasons: Reason[];
 	  }
+	/** N.182: "Show keys that reach higher", screen only, directly after the conclusion; the pane holds whether it is open. */
+	| { kind: 'keyreveal'; label: string; lines: KeyLine[] }
 	| { kind: 'comment'; heading?: string; tag: string; comment: RenderedComment; teacher?: string; placeholder?: string }
 	| { kind: 'more'; label: string; comments: Array<{ tag: string; comment: RenderedComment; teacher?: string; placeholder?: string }> }
 	| { kind: 'note'; heading?: string; text: string }
@@ -71,20 +78,6 @@ export interface PlacedBlock {
 	screenOnly?: boolean;
 }
 
-/** A key that fits better, as the page names it. */
-export interface KeyForward {
-	semitones: number;
-	/** The ruler's readout, "Down a whole tone · C minor · Ilya's recommendation". */
-	readout?: string;
-	stop?: KeyChoice;
-	/** The key named alone, for "In C minor, …". */
-	keyName?: string;
-	shareThen: number | null;
-	compass: { low: Pitch; high: Pitch } | null;
-	/** The score in that key, so a held note can be named there. */
-	score: ParsedScore | null;
-}
-
 export interface BlockInputs {
 	language: Language;
 	model: InsightsModel;
@@ -94,7 +87,8 @@ export interface BlockInputs {
 	noneFlagged: boolean;
 	held: (NamedNote & { seconds: number }) | null;
 	outside: (NamedNote & { direction: 'above' | 'below' }) | null;
-	better: KeyForward | null;
+	/** N.182: the key lines, the one-line answer, and the reveal, or null with no typed range or no score. */
+	keys?: KeyWords | null;
 	comments: RenderedComment[];
 	more: RenderedComment[];
 	hiddenBySettings: number;
@@ -157,8 +151,7 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 
 	let paragraph: string | null = null;
 	let forward: Extract<Block, { kind: 'conclusion' }>['forward'] = null;
-	const better = i.better;
-	const readoutOf = (b: KeyForward) => (b.readout ? { readout: b.readout, ...(b.stop ? { stop: b.stop } : {}) } : {});
+	const keys = i.keys ?? null;
 
 	if (unlikely) {
 		const shareOk = share !== null && share > 0 && !!primo;
@@ -186,32 +179,15 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 		else if (reasons === 1) parts.push(T('insights.r2.unlikely.alone'));
 		else if (i.verdict?.kind === 'verdict') parts.push(T(i.verdict.key));
 		paragraph = parts.join(' ');
-
-		if (better) {
-			let sentence: string | undefined;
-			const name = better.keyName ?? '';
-			const heldThen = i.held && better.score?.vocalLine.find((e) => e.id === i.held!.eventId)?.pitch;
-			if (name && better.shareThen !== null && heldThen && secondo && pitchToMidi(heldThen) < pitchToMidi(secondo)) {
-				sentence = fill(T('insights.r2.inKey'), { key: name, n: percent(better.shareThen), pitch: N(i.held!.pitch), bar: i.held!.measure, pitch2: N(heldThen) });
-			} else if (name && better.shareThen !== null) {
-				sentence = fill(T('insights.r2.inKeyShare'), { key: name, n: percent(better.shareThen) });
-			}
-			forward = { ...readoutOf(better), ...(sentence ? { sentence } : {}) };
-		} else {
-			forward = { sentence: T('insights.r2.noBetterKey'), teacher: T('insights.r2.teacherA') };
-		}
 	} else if (i.verdict?.kind === 'verdict') {
-		if (better && model.verdict === 'fit') {
-			paragraph =
-				better.semitones === -2
-					? T('insights.r2.better.tone')
-					: fill(T('insights.r2.better.interval'), { A: capital(t(`key.ruler.interval.${Math.abs(better.semitones)}`, language)) });
-		} else {
-			paragraph = T(i.verdict.key) + (i.noneFlagged ? ` ${T('insights.findings.none')}` : '');
-		}
-		if (better) forward = readoutOf(better);
+		paragraph = T(i.verdict.key) + (i.noneFlagged ? ` ${T('insights.findings.none')}` : '');
 	} else if (i.noneFlagged && i.verdict?.kind !== 'offer') {
 		paragraph = T('insights.findings.none');
+	}
+	// N.182: the way forward is the one search's words, whatever the verdict. Where Ilya calls the key unlikely and no key is shown, the teacher line stands under the answer.
+	if (keys && (keys.lines.length > 0 || keys.note)) {
+		const teacher = unlikely && keys.lines.length === 0 && (keys.kind === 'noWorkable' || keys.kind === 'noneBetter');
+		forward = { lines: keys.lines, ...(keys.note ? { note: keys.note } : {}), ...(teacher ? { teacher: T('insights.r2.teacherA') } : {}) };
 	}
 
 	// ── The reasons ───────────────────────────────────────────────────
@@ -238,16 +214,6 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 				? fill(T('insights.r2.primo.none'), { n: percent(share), p: N(primo), s: N(secondo) })
 				: fill(T('insights.r2.primo.some'), { n: percent(share), m, p: N(primo), s: N(secondo) }),
 		);
-		if (better && !unlikely && better.shareThen !== null && better.compass) {
-			keyLines.push(
-				fill(T('insights.r2.compare'), {
-					interval: lowerFirst(t(`key.ruler.interval.${Math.abs(better.semitones)}`, language)),
-					m: percent(better.shareThen),
-					low: N(better.compass.low),
-					high: N(better.compass.high),
-				}),
-			);
-		}
 	}
 	const meetings = i.comments.filter((c) => !!c.comment.resonance);
 	if (meetings.length === 1) {
@@ -265,6 +231,7 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 		group: 'free',
 		block: { kind: 'conclusion', heading: T('insights.verdict.heading'), paragraph, offer: i.verdict?.kind === 'offer', forward, reasons },
 	});
+	if (keys?.reveal) out.push({ group: 'free', screenOnly: true, block: { kind: 'keyreveal', label: keys.reveal.label, lines: keys.reveal.lines } });
 
 	// ── Squircle 1, the moments ───────────────────────────────────────
 	// QUEUE row 69: a comment whose firing reads a placeholder fR1 says so in its own sentence.
@@ -406,9 +373,4 @@ function withHeading(b: Block | undefined, heading: string): void {
 
 function capital(s: string): string {
 	return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-/** The interval mid-sentence: the French ruler's values begin with a capital (« Une tierce mineure »), QUEUE row 85. */
-function lowerFirst(s: string): string {
-	return s.charAt(0).toLowerCase() + s.slice(1);
 }

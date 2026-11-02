@@ -31,7 +31,7 @@
 		onoctave?: () => void;
 		/** Row 48: the tap that opens the tempo control (`kind: 'prose'` with a `link`). */
 		ontempo?: () => void;
-		/** "N more observations" (`kind: 'more'`): open, and told when the singer opens or closes it. */
+		/** "N more observations" (`kind: 'more'`) and "Show keys that reach higher" (`kind: 'keyreveal'`): open, and told when the singer opens or closes it. */
 		open?: boolean;
 		ontoggle?: (open: boolean) => void;
 	}
@@ -50,6 +50,8 @@
 {#snippet prose(text: string)}{#each textParts(text) as part, j (j)}{#if part.ipa}<span class="ipa">{part.text}</span>{:else if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
 
 {#snippet runs(list: Run[])}{#each list as r, j (j)}{#if r.title}<em>{r.text}</em>{:else if r.sub}<sub>{r.text}</sub>{:else}{@render prose(r.text)}{/if}{/each}{/snippet}
+
+{#snippet keyLine(l: { text: string; stop?: KeyChoice })}<p class="forward">{@render prose(l.text)}{#if l.stop && ontry}{' '}<button type="button" class="try-key" onclick={() => ontry?.(l.stop!)}>{T('insights.tryKey')}</button>{/if}</p>{/snippet}
 
 {#snippet heading(text: string | undefined)}{#if text}<p class="section-head">{text}</p>{/if}{/snippet}
 
@@ -77,10 +79,8 @@
 		{/if}
 		{#if block.paragraph}<p class="verdict">{@render rich(block.paragraph)}</p>{/if}
 		{#if block.forward}
-			{#if block.forward.readout}
-				<p class="forward">{@render prose(block.forward.readout)}{#if block.forward.stop && ontry}{' '}<button type="button" class="try-key" onclick={() => ontry?.(block.forward!.stop!)}>{T('insights.tryKey')}</button>{/if}</p>
-			{/if}
-			{#if block.forward.sentence}<p class="verdict">{@render rich(block.forward.sentence)}</p>{/if}
+			{#each block.forward.lines as l (l.text)}{@render keyLine(l)}{/each}
+			{#if block.forward.note}<p class="verdict">{@render rich(block.forward.note)}</p>{/if}
 			{#if block.forward.teacher}<p class="teacher">{block.forward.teacher}</p>{/if}
 		{/if}
 		{#if block.reasons.length}
@@ -94,6 +94,11 @@
 	{:else if block.kind === 'comment'}
 		{@render heading(block.heading)}
 		{@render comment(block.tag, block.comment, block.teacher, block.placeholder)}
+	{:else if block.kind === 'keyreveal'}
+		<details class="reveal" {open} ontoggle={(e) => ontoggle?.(e.currentTarget.open)}>
+			<summary>{block.label}</summary>
+			{#each block.lines as l (l.text)}{@render keyLine(l)}{/each}
+		</details>
 	{:else if block.kind === 'more'}
 		<details class="more" {open} ontoggle={(e) => ontoggle?.(e.currentTarget.open)}>
 			<summary>{block.label}</summary>
@@ -568,11 +573,20 @@
 		color: var(--rose-ink);
 	}
 
+	/* N.182: the keys beyond the range. The summary takes the quiet ink; each key is told apart by its words, never by shade (review A6). */
+	.reveal summary {
+		cursor: pointer;
+		font-family: var(--font-sans);
+		font-size: 11.5px;
+		color: var(--ink-secondary);
+	}
+
 	@media print {
 		.try-key,
 		.offer-decline,
 		.tempo-link,
-		.more {
+		.more,
+		.reveal {
 			display: none;
 		}
 
