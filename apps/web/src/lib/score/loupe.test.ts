@@ -24,6 +24,7 @@ import {
 	headBound,
 	inkCrop,
 	isDismissSwipe,
+	clampDrag,
 	measureWindow,
 	meterLayout,
 	ringRoom,
@@ -789,5 +790,53 @@ describe('the loupe\'s own squircle', () => {
 		expect(ringRoom(page, 5.5, 0.5, 10, 10)!.below).toBeCloseTo(68.61 + 7.25, 10);
 		expect(ringRoom(page, 5.5, 0.5, 10, 10)!.above).toBeCloseTo(13.88 + 7.25, 10);
 		expect(ringRoom(page, 5.5, 0.5, 10, 2)!.below).toBe(68.61);
+	});
+});
+
+describe('clampDrag', () => {
+	const home = { left: 300, top: 400, width: 600, headerHeight: 40 };
+	const view = { width: 1400, height: 900 };
+	const GUTTER = 24;
+
+	it('leaves an offset that keeps the header on screen alone', () => {
+		expect(clampDrag({ x: 50, y: -100 }, home, view, 0, GUTTER)).toEqual({ x: 50, y: -100 });
+	});
+
+	it('stops the header at the gutter on all four sides', () => {
+		const left = clampDrag({ x: -5000, y: 0 }, home, view, 0, GUTTER);
+		expect(home.left + left.x).toBe(GUTTER);
+		const right = clampDrag({ x: 5000, y: 0 }, home, view, 0, GUTTER);
+		expect(home.left + right.x + home.width).toBe(view.width - GUTTER);
+		const up = clampDrag({ x: 0, y: -5000 }, home, view, 0, GUTTER);
+		expect(home.top + up.y).toBe(GUTTER);
+		const down = clampDrag({ x: 0, y: 5000 }, home, view, 0, GUTTER);
+		expect(home.top + down.y + home.headerHeight).toBe(view.height - GUTTER);
+	});
+
+	it('measures the bottom edge on the header, not on the card', () => {
+		const down = clampDrag({ x: 0, y: 5000 }, home, view, 0, GUTTER);
+		// 900 - 24 - 400 - 40: the card's own height has no vote
+		expect(down.y).toBe(436);
+	});
+
+	it('keeps clear of the open drawer, and follows it when it opens', () => {
+		expect(clampDrag({ x: -5000, y: 0 }, home, view, 0, GUTTER).x).toBe(GUTTER - home.left);
+		expect(clampDrag({ x: -5000, y: 0 }, home, view, 520, GUTTER).x).toBe(520 + GUTTER - home.left);
+		// an offset the drawer's opening has left stranded is pulled back
+		expect(clampDrag({ x: -250, y: 0 }, home, view, 520, GUTTER).x).toBe(520 + GUTTER - home.left);
+	});
+
+	it('follows a smaller window', () => {
+		const small = { width: 900, height: 600 };
+		const c = clampDrag({ x: 400, y: 400 }, home, small, 0, GUTTER);
+		expect(home.left + c.x + home.width).toBe(small.width - GUTTER);
+		expect(home.top + c.y + home.headerHeight).toBe(small.height - GUTTER);
+	});
+
+	it('lets the left and top edges win where the room is smaller than the header', () => {
+		const tiny = { width: 500, height: 80 };
+		const c = clampDrag({ x: 0, y: 0 }, home, tiny, 0, GUTTER);
+		expect(home.left + c.x).toBe(GUTTER);
+		expect(home.top + c.y).toBe(GUTTER);
 	});
 });

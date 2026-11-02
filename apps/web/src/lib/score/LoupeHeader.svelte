@@ -17,6 +17,7 @@
 	   panel's Done, the phone swipe, and this button all call it. */
 	import { t, type Language } from '$lib/i18n';
 	import { stackActions } from '$lib/components/Drawer/bandState';
+	import type { LoupeDrag } from '$lib/score/loupe-drag.svelte';
 
 	interface Props {
 		language: Language;
@@ -26,14 +27,36 @@
 		onundo: () => void;
 		onredo: () => void;
 		onclose: () => void;
+		/** The desk's drag (`loupe-drag.svelte.ts`); absent on a phone, where the header is not a handle. */
+		drag?: LoupeDrag;
 	}
 
-	let { language, isPhone, undoLabel, redoLabel, onundo, onredo, onclose }: Props = $props();
+	let { language, isPhone, undoLabel, redoLabel, onundo, onredo, onclose, drag }: Props = $props();
+
+	/* The drag keeps the whole header on screen, so it needs the window's size and the band's height. */
+	let vw = $state(0), vh = $state(0), bandH = $state(0);
+	$effect(() => {
+		if (drag && vw && vh && bandH) Object.assign(drag, { viewWidth: vw, viewHeight: vh, headerHeight: bandH });
+	});
 
 	const actions = $derived(stackActions(undoLabel, redoLabel, language));
 </script>
 
-<div class="loupe-header" class:phone={isPhone}>
+<svelte:window bind:innerWidth={vw} bind:innerHeight={vh} />
+
+<!-- A handle for the pointer only: the drag has no key, and the buttons stay the keyboard's way in (`loupe-drag.svelte.ts`). -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+	class="loupe-header"
+	class:phone={isPhone}
+	class:draggable={!!drag}
+	class:grabbing={drag?.active}
+	bind:clientHeight={bandH}
+	onpointerdown={(e) => drag?.start(e)}
+	onpointermove={(e) => drag?.move(e)}
+	onpointerup={() => drag?.end()}
+	onpointercancel={() => drag?.end()}
+>
 	<span class="loupe-title">{t('loupe.title', language)}</span>
 	<div class="loupe-header-actions">
 		{#each actions as action (action.kind)}
@@ -67,6 +90,20 @@
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		white-space: nowrap;
+	}
+
+	/* The desk's handle: a grab cursor, and no text selection under a drag. */
+	.loupe-header.draggable {
+		cursor: grab;
+		user-select: none;
+	}
+
+	.loupe-header.grabbing {
+		cursor: grabbing;
+	}
+
+	.loupe-header.draggable .loupe-header-button {
+		cursor: pointer;
 	}
 
 	/* THE PHONE'S 44 PX FLOOR, for the band and for each of its buttons. */
