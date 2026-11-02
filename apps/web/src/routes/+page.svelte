@@ -95,6 +95,7 @@
 	import Paper from '$lib/components/Paper/Paper.svelte';
 	import ReadingAid from '$lib/components/ReadingAid.svelte';
 import InstallPrompt from '$lib/components/InstallPrompt.svelte';
+import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import ReadingPaper from '$lib/components/Paper/ReadingPaper.svelte';
 	import DeskHead from '$lib/components/DeskHead.svelte';
 	import {
@@ -4320,6 +4321,7 @@ import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 			     would mean the phone and the desk stopped showing the same
 			     document. -->
 			{#snippet transcriptionPaper()}
+				{#if witnessDiffer}<TextSourceLine {language} witness={shown} />{/if}
 				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={marks.spot} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownText, loaderState)} />
 			{/snippet}
 			{#if isMobile}

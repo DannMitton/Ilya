@@ -177,17 +177,20 @@ test.describe('INPUT\'s pill decides what Text shows (rows 110 and 172)', () => 
 		await page.locator('#intake-tab-lyrics').tap();
 		await pull.tap();
 		await expect.poll(() => words(page), { timeout: 15_000 }).toBe(lyricsWords.length);
+		await expect(page.locator('#text-source')).toHaveText('From LYRICS');
 		// Raise, tap POEM, lower: the poem whole, its one unset word grey.
 		await pull.tap();
 		await page.locator('#intake-tab-poem').tap();
 		await pull.tap();
 		await expect.poll(() => words(page), { timeout: 15_000 }).toBe(poemWords.length);
 		expect(await page.locator('.paper-container .word-stack.muted').count()).toBe(1);
+		await expect(page.locator('#text-source')).toHaveText('From POEM');
 		// Raise, tap LYRICS, lower: Lyrics again.
 		await pull.tap();
 		await page.locator('#intake-tab-lyrics').tap();
 		await pull.tap();
 		await expect.poll(() => words(page), { timeout: 15_000 }).toBe(lyricsWords.length);
+		await expect(page.locator('#text-source')).toHaveText('From LYRICS');
 		expect(await page.locator('.paper-container .word-stack.muted').count()).toBe(0);
 		await page.waitForTimeout(2500);
 		const after = await song(page);

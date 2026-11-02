@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,147 keys.
+   This file holds 1,149 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -74,6 +74,7 @@
    stress.         9  `stressSourceLabel`, at the foot of this file
    tab.            5  lib/components/DeskHead.svelte, lib/components/Paper/RunningHeader.svelte, lib/insights/InsightsPane.svelte (LEGACY KEY: `tab.markedScore`)
    tempo.          3  lib/tempo/TempoControl.svelte, lib/tempo/TempoReceipt.svelte
+   text.           2  lib/components/TextSourceLine.svelte
    toc.           83  the tables of contents: lib/components/Drawer/Drawer.svelte
    underlay.       1  read only by lib/names.ts, the record of names; no component reads it
    update.         4  routes/+page.svelte
@@ -838,6 +839,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// file writes « le champ Entrée ».
 	'intake.view.poem':          { en: 'POEM',   fr: 'POÈME' },
 	'intake.view.lyrics':        { en: 'LYRICS', fr: 'PAROLES' },
+	// ROW 172 (Dann 2026-11-01 13:26, capitals): the quiet line above TEXT's sheet names the witness INPUT's pill chose.
+	// TODO-FR: the French stays the English until Dann rules; the desk drafts it from `intake.view.*`.
+	'text.source.lyrics':        { en: 'From LYRICS', fr: 'From LYRICS' },
+	'text.source.poem':          { en: 'From POEM',   fr: 'From POEM' },
 	'intake.view.poemLine':      { en: 'Edits here change the published poem. The sung words come from your score; edit them in LYRICS.', fr: 'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ PAROLES.' },
 	'intake.view.lyricsLine':    { en: 'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.', fr: 'Les paroles telles que chantées, comme la partition les place. Les mots en couleur diffèrent du poème\u00a0: une reprise, un changement ou un ajout.' },
 	'intake.view.omittedLine':   { en: 'Greyed words are those left out of the song by the composer.', fr: 'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.' },
