@@ -48,7 +48,10 @@ export async function transcribe(page: Page, text: string): Promise<void> {
  * first.
  */
 export async function expandStation(page: Page, label: string): Promise<void> {
-	const button = page.getByRole('button', { name: label, exact: true });
+	// The station names are capitals by value since consistency batch 1 ("Voice"
+	// reads VOICE), and `exact: true` is case-sensitive, so match the whole name
+	// without regard to case.
+	const button = page.getByRole('button', { name: new RegExp(`^${label}$`, 'i') });
 	const expanded = await button.getAttribute('aria-expanded');
 	if (expanded !== 'true') {
 		await button.click();

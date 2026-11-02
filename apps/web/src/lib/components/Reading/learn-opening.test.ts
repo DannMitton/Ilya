@@ -14,8 +14,8 @@ const opening = (h: string) => /^\s*(<h1[^>]*>.*?<\/h1>)\s*(<div class="chapter-
 
 describe('Learn opens as Guide does', () => {
 	it.each([
-		['en', 'Learn', 'Russian Lyric Diction for Singers', "Grayson's rules for Russian lyric diction, taught so you can access Russian vocal literature on your own."],
-		['fr', 'Leçons', 'La diction lyrique russe pour chanteuses et chanteurs', 'Les règles de Grayson pour la diction lyrique russe, enseignées pour que vous puissiez aborder par vous-même le répertoire vocal russe.'],
+		['en', 'LEARN', 'Russian Lyric Diction for Singers', "Grayson's rules for Russian lyric diction, taught so you can access Russian vocal literature on your own."],
+		['fr', 'LEÇONS', 'La diction lyrique russe pour chanteuses et chanteurs', 'Les règles de Grayson pour la diction lyrique russe, enseignées pour que vous puissiez aborder par vous-même le répertoire vocal russe.'],
 	] as const)('%s: <h1>, then a band-learn holding the title as h2#learn-title and the ratified deck', (language, h1, title, deck) => {
 		const m = opening(html(LearnContent, language));
 		expect(m, 'the opening').not.toBeNull();

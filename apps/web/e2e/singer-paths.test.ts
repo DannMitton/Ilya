@@ -90,10 +90,10 @@ test.describe('bilingual Markup and Insights', () => {
 	});
 
 	test('switching EN/FR updates the Markup page\'s uncalibrated message', async ({ page }) => {
-		// The document's id is 'markup' (N.174) and it reads "Markup" /
-		// "Annotation" in the drawn UI (`tab.markedScore`). This test pins
+		// The document's id is 'markup' (N.174) and it reads MELODY /
+		// « CHANT » in the drawn UI (`tab.markedScore`). This test pins
 		// what actually renders.
-		await page.getByRole('tab', { name: 'Markup' }).click();
+		await page.getByRole('tab', { name: 'MELODY' }).click();
 
 		const empty = page.locator('.profile-empty');
 		await expect(empty).toHaveText('Calibrate your voice to begin.');
@@ -103,7 +103,7 @@ test.describe('bilingual Markup and Insights', () => {
 	});
 
 	test('switching EN/FR updates the Insights pane\'s uncalibrated message', async ({ page }) => {
-		await page.getByRole('tab', { name: 'Insights' }).click();
+		await page.getByRole('tab', { name: 'INSIGHTS' }).click();
 
 		// `insights.identityUncalibrated` (i18n.ts:1466) fills "Insights for
 		// {voice} · not calibrated", but the string arrives at this header as
@@ -167,16 +167,16 @@ test.describe('Learn and Guide', () => {
 	});
 
 	test('Learn and Guide open and show their first heading in English and French', async ({ page }) => {
-		await page.getByRole('button', { name: 'Learn', exact: true }).click();
+		await page.getByRole('button', { name: 'LEARN', exact: true }).click();
 		await expect(page.locator('#learn-title')).toHaveText('Russian Lyric Diction for Singers');
 
-		await page.getByRole('button', { name: 'Guide', exact: true }).click();
+		await page.getByRole('button', { name: 'GUIDE', exact: true }).click();
 		await expect(page.locator('main h1').first()).toHaveText('Guide');
 
 		await page.locator('.lang-pill').click();
 		await expect(page.locator('main h1').first()).toHaveText('Guide');
 
-		await page.getByRole('button', { name: 'Leçons', exact: true }).click();
+		await page.getByRole('button', { name: 'LEÇONS', exact: true }).click();
 		await expect(page.locator('#learn-title')).toHaveText('La diction lyrique russe pour chanteurs');
 	});
 });
@@ -192,7 +192,7 @@ test.describe('Markup with no calibration', () => {
 		// only in the pre-calibration branch, so its presence is itself the
 		// singer-visible signal that nothing has been measured yet. No
 		// microphone is touched.
-		await page.getByRole('tab', { name: 'Markup' }).click();
+		await page.getByRole('tab', { name: 'MELODY' }).click();
 
 		const empty = page.locator('.profile-empty');
 		await expect(empty).toBeVisible();

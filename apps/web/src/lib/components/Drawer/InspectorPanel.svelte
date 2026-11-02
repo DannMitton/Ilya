@@ -57,8 +57,8 @@
 	// Contextual label: checkbox always offers the inverse of the global setting
 	const spotCheckboxLabel = $derived(
 		notationPrefs.reconstitution
-			? (language === 'en' ? 'Spot reduction' : 'Réduction ciblée')
-			: (language === 'en' ? 'Spot reconstitution' : 'Reconstitution ciblée')
+			? t('inspector.spot.reduction', language)
+			: t('inspector.spot.reconstitution', language)
 	);
 
 	// Whether this word has distinct reduced/reconstituted forms
@@ -999,7 +999,7 @@
 				{#if hasOverrides}
 					<button
 						class="reset-button"
-						aria-label={language === 'en' ? 'Reset word to engine defaults' : 'Réinitialiser le mot aux valeurs par défaut'}
+						aria-label={t('inspector.resetWordAria', language)}
 						onclick={() => onreset?.()}
 					>
 						<svg viewBox="0 0 16 16" class="reset-svg" aria-hidden="true"><path d="M3.5 6A5 5 0 1 1 4 10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M1 5l2.5 1 1-2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1041,7 +1041,7 @@
 							maxlength="20"
 							value={dictGlossInput}
 							oninput={handleGlossInput} use:settle={{ onsettle: glossFlag.show }}
-							aria-label={language === 'en' ? 'Edit gloss' : 'Modifier la glose'}
+							aria-label={t('inspector.editGlossAria', language)}
 						/>
 						<p class="dict-capacity">{t('inspector.dictCapacity', language)}<SavedNote shown={glossSaved} {language} /></p>
 					</div>

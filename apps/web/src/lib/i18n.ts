@@ -61,6 +61,7 @@
    storage.       8  lib/library/notices.ts, lib/library/library.ts
    stress.        9  `stressSourceLabel`, at the foot of this file
    tab.           5  lib/components/DeskHead.svelte (LEGACY KEY: `tab.markedScore`)
+   toc.          83  the tables of contents: lib/components/Drawer/Drawer.svelte
    underlay.      1  no consumer found
    update.        3  routes/+page.svelte
    upload.       75  lib/score/ScoreUploader.svelte
@@ -112,7 +113,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// English stands in both slots because `t()` prints `[MISSING: key]` for an
 	// absent variant, which would put that literal on the pull. « Papier » is
 	// the obvious word and it is DANN'S TO RULE, not this ship's to assume.
-	'drawer.paper':                { en: 'Paper',                        fr: 'Papier' },
+	// RULED 2026-11-01 (consistency batch 1): the page is "the page" / « la page »,
+	// lower case; the pull's CSS sets it in capitals. It read "Paper" / « Papier ».
+	'drawer.paper':                { en: 'the page',                     fr: 'la page' },
 
 	// ── The three groups (N.108 increment 1) ─────────────────
 	//    FRENCH IS DEFERRED BY DANN'S RULING OF 2026-09-02, and these six
@@ -132,16 +135,16 @@ const strings: Record<string, Record<Language, string>> = {
 	//    The KEY stays, because `BAND_IDS.scoreMarkup` is a wire value and a
 	//    gate asserts it. It once matched `tab.markedScore`; it no longer does,
 	//    and the French « Voix » is a desk proposal awaiting Dann's ratification.
-	'group.piece':                 { en: 'Piece',                        fr: 'Pièce' },
+	'group.piece':                 { en: 'PIECE',                        fr: 'PIÈCE' },
 	//    `group.text` IS DELETED in both languages, N.115 increment 3: the
 	//    Text fold was its last reader, and Dann ruled the fold away
 	//    2026-09-10 late.
-	'group.scoreMarkup':           { en: 'Voice',                        fr: 'Voix' },
+	'group.scoreMarkup':           { en: 'VOICE',                        fr: 'VOIX' },
 	//    `group.input` JOINS THEM, N.108-5, and it is a SEVENTH owed name.
 	//    Dann named the band himself on 2026-09-07: the intake becomes its own
 	//    group between Piece and Text, "named INPUT, painted sage like Text
 	//    (hue names place: it is text)". Same slot treatment as the six above.
-	'group.input':                 { en: 'Input',                        fr: 'Entrée' },
+	'group.input':                 { en: 'INPUT',                        fr: 'ENTRÉE' },
 	//    ── A BAND'S STATE LINE, N.115, ruled with its French 2026-09-10.
 	//    A closed band shows one line under it, its state; open, the content
 	//    itself is the state. Piece's line, Input's line and Score markup's
@@ -160,7 +163,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    The binder station. Its three buttons keep their own ratified
 	//    `binder.*` strings; this names the station they sit in, which had no
 	//    name because it was a bare row inside Source.
-	'binder.heading':              { en: 'Export and import',            fr: 'Exportation et importation' },
+	'binder.heading':              { en: 'EXPORT AND IMPORT',            fr: 'EXPORTATION ET IMPORTATION' },
 	//    UNDERLAY is the English name Dann ruled 2026-08-18. It ships today as
 	//    `shiftLyrics.title` "Shift Lyrics", which keeps its ratified French
 	//    and its own call sites; this is the station name, and the two are not
@@ -171,10 +174,10 @@ const strings: Record<string, Record<Language, string>> = {
 	//    where the ruling of 2026-09-09 gives it no label at all). Kept and
 	//    marked in place rather than deleted, the way `upload.scanTooltip` is,
 	//    on Dann's ruling of 2026-09-03.
-	'underlay.heading':            { en: 'Underlay',                     fr: 'Placement des paroles' },
+	'underlay.heading':            { en: 'UNDERLAY',                     fr: 'PLACEMENT DES PAROLES' },
 	//    VOICE, the station name from E.27 §3.3. The anchor line inside it
 	//    keeps its ratified `calib.anchor.*` strings.
-	'voice.heading':               { en: 'Voice',                        fr: 'Voix' },
+	'voice.heading':               { en: 'VOICE',                        fr: 'VOIX' },
 
 	// ── Tab bar (N.36) ───────────────────────────────────────
 	//    The labels lived in the component, so French lived in two
@@ -183,27 +186,28 @@ const strings: Record<string, Record<Language, string>> = {
 	//    identical en/fr values rather than as an absence from the
 	//    dictionary. 'tab.text' was the third until N.132.
 	//    'Fit' was invariant by Dann's ruling of 13 July 2026.
-	'tab.text':                    { en: 'Text',                         fr: 'Texte' },
-	'tab.learn':                   { en: 'Learn',                        fr: 'Leçons' },
-	'tab.guide':                   { en: 'Guide',                        fr: 'Guide' },
+	'tab.text':                    { en: 'TEXT',                         fr: 'TEXTE' },
+	'tab.learn':                   { en: 'LEARN',                        fr: 'LEÇONS' },
+	'tab.guide':                   { en: 'GUIDE',                        fr: 'GUIDE' },
 	// N.73 S1. Studio's second document, named for the singer in the desk
 	// head's pair. N.132: "Markup" and « Annotation », RATIFIED by Dann
-	// 2026-09-13 with "Text" and « Texte » for 'tab.text'. They
-	// SUPERSEDE « Partition annotée », ratified 2026-08-19 for the old
+	// 2026-09-13 with "Text" and « Texte » for 'tab.text'. They read MELODY and
+	// « CHANT » since the ruling of 2026-10-31 20:07; the keys stay until
+	// batch 3. The 2026-09-13 words SUPERSEDE « Partition annotée », ratified 2026-08-19 for the old
 	// name "Marked score", later "Score markup": do not carry it forward.
 	// The KEYS stay, because both are cited by name across the tree.
 	// Fit, the tool's shown name until N.174, was invariant in French by his
 	// ruling of 2026-07-13, and the document was never called Fit.
-	'tab.markedScore':             { en: 'Markup',                       fr: 'Annotation' },
+	'tab.markedScore':             { en: 'MELODY',                       fr: 'CHANT' },
 	// N.127. Studio's third document. « Aperçus » RULED by Dann 2026-09-12,
 	// and it is the only French N.127 increment 1 writes. Every `insights.*`
 	// key below carries the English in both slots, and its French is OWED.
-	'tab.insights':                { en: 'Insights',                     fr: 'Aperçus' },
+	'tab.insights':                { en: 'INSIGHTS',                     fr: 'APERÇUS' },
 	// The drawer's pull carries no visible word (N.73 S1 §2.7, Dann's ruling
 	// of 2026-08-19: fewer text elements onscreen). The ratified word is its
 	// ACCESSIBLE name instead, with aria-expanded carrying the state, so the
 	// name stays put while the drawer opens and closes.
-	'drawer.pull':                 { en: 'Drawer',                       fr: 'Tiroir' },
+	'drawer.pull':                 { en: 'DRAWER',                       fr: 'TIROIR' },
 
 	// ── Accessible names (N.62) ──────────────────────────────
 	//    Four strings a sighted singer never sees and a screen reader always
@@ -222,7 +226,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'a11y.drawer':                 { en: 'Controls',                     fr: 'Commandes' },
 	'a11y.tocToggle':              { en: 'Expand or collapse',           fr: 'Développer ou réduire' },
 	'a11y.tabs':                   { en: 'Navigation',                   fr: 'Navigation' },
-	'a11y.paper':                  { en: 'Text',                         fr: 'Texte' },
+	'a11y.paper':                  { en: 'the page',                         fr: 'la page' },
 
 	// ── Input area ───────────────────────────────────────────
 	// UNUSED SINCE N.108 increment 2: the one intake's placeholder is
@@ -283,7 +287,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'meta.placeholderLine':        { en: 'Composer, opus, and poet information', fr: 'Informations sur la compositrice ou le compositeur, l\u2019opus et la ou le poète' },
 
 	// ── Notation options (IPA display toggles) ──────────────
-	'cosmetic.heading':            { en: 'Notation',                     fr: 'Notation' },
+	'cosmetic.heading':            { en: 'NOTATION',                     fr: 'NOTATION' },
 	'cosmetic.stressAcutes.left':  { en: 'No stress marks',             fr: 'Sans accents toniques' },
 	'cosmetic.stressAcutes.right': { en: 'Apply stress acutes',         fr: 'Appliquer les accents toniques' },
 	'cosmetic.reducedVowel.left':  { en: 'Default [ʌ]',                 fr: 'Par défaut [ʌ]' },
@@ -305,7 +309,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'display.stressDiacritics.right': { en: 'Apply stress acutes',      fr: 'Appliquer les accents toniques' },
 
 	// ── Legacy notation keys (kept for backward compatibility) ──
-	'notation.heading':            { en: 'Notation',                     fr: 'Notation' },
+	'notation.heading':            { en: 'NOTATION',                     fr: 'NOTATION' },
 	'notation.reducedVowel':       { en: 'Reduced vowel',               fr: 'Voyelle réduite' },
 	'notation.reducedVowel.desc':  { en: 'ʌ → ə',                       fr: 'ʌ → ə' },
 	'notation.palatalNasal':       { en: 'Palatal nasal',               fr: 'Nasale palatale' },
@@ -501,15 +505,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.undo.melisma':          { en: 'melisma set',                  fr: 'mélisme défini' },
 	'loupe.undo.melismaOff':       { en: 'melisma cleared',              fr: 'mélisme effacé' },
 	// The four stations, in the ruled order. Durations lead.
-	'loupe.station.duration':      { en: 'Duration',                     fr: 'Durée' },
-	'loupe.station.pitch':         { en: 'Pitch',                        fr: 'Hauteur' },
-	'loupe.station.accidental':    { en: 'Accidental \u00b7 Entry',       fr: 'Altération \u00b7 Saisie' },
-	'loupe.station.lyric':         { en: 'Lyric',                        fr: 'Texte' },
+	'loupe.station.duration':      { en: 'DURATION',                     fr: 'DURÉE' },
+	'loupe.station.pitch':         { en: 'PITCH',                        fr: 'HAUTEUR' },
+	'loupe.station.accidental':    { en: 'ACCIDENTAL \u00b7 ENTRY',       fr: 'ALTÉRATION \u00b7 SAISIE' },
+	'loupe.station.lyric':         { en: 'UNDERLAY',                        fr: 'PLACEMENT DES PAROLES' },
 	// N.147, RULED BY DANN 2026-09-17. The loupe's own SYLLABLES disclosure,
 	// under the notes: sentence case in the string, capitals by the tag
 	// style's own CSS (`.loupe-syl-label` in `Loupe.svelte`). The same key
 	// names the disclosure button's aria-label, so nothing else is coined.
-	'loupe.syllables':             { en: 'Syllables',                    fr: 'Syllabes' },
+	'loupe.syllables':             { en: 'SYLLABLES',                    fr: 'SYLLABES' },
 	/* Item 4, the loupe's zoom. English "Zoom out" and "Zoom in"; French ratified on 2026-09-30 at 11:17, drafted on 2026-09-28. */
 	'loupe.zoomOut':               { en: 'Zoom out',                     fr: 'Réduire le zoom' },
 	'loupe.zoomIn':                { en: 'Zoom in',                      fr: 'Agrandir le zoom' },
@@ -621,12 +625,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.gapHead':               { en: 'before the first entry \u00b7 the next duration enters here', fr: 'avant la première entrée \u00b7 la prochaine durée s\u2019inscrit ici' },
 	// The PITCH station's label in a gap, which turns the arrival rule into
 	// recognition instead of recall by saying it before the note exists.
-	'loupe.station.pitchTakes':    { en: 'Pitch \u00b7 takes the pitch of %s', fr: 'Hauteur \u00b7 prend la hauteur de %s' },
-	'loupe.station.pitchMiddle':   { en: 'Pitch \u00b7 arrives on the middle line', fr: 'Hauteur \u00b7 arrive sur la ligne médiane' },
+	'loupe.station.pitchTakes':    { en: 'PITCH \u00b7 takes the pitch of %s', fr: 'HAUTEUR \u00b7 prend la hauteur de %s' },
+	'loupe.station.pitchMiddle':   { en: 'PITCH \u00b7 arrives on the middle line', fr: 'HAUTEUR \u00b7 arrive sur la ligne médiane' },
 	// The LYRIC station's label in a gap. The schematic's ruling: the label
 	// states the condition as an instruction and the greying agrees with the
 	// words rather than carrying the meaning alone.
-	'loupe.station.lyricTake':     { en: 'Lyric \u00b7 take a note to shift its syllable', fr: 'Texte \u00b7 prenez une note pour décaler sa syllabe' },
+	'loupe.station.lyricTake':     { en: 'UNDERLAY \u00b7 take a note to shift its syllable', fr: 'PLACEMENT DES PAROLES \u00b7 prenez une note pour décaler sa syllabe' },
 	// The Nolet definition row, read left to right as the sentence it is:
 	// `3 of [value] in the space of 2 of [value]`.
 	'loupe.nolet.of':              { en: 'of',                            fr: 'de' },
@@ -654,7 +658,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// ACCIDENTAL · ENTRY consolidate under it and LYRIC rides inside as a
 	// labelled row. Both words are adopted, and they are the same word: the app
 	// already says `corrections` in `notation.orphans`, in both languages.
-	'loupe.station.corrections':   { en: 'Corrections',                   fr: 'Corrections' },
+	'loupe.station.corrections':   { en: 'CORRECTIONS',                   fr: 'CORRECTIONS' },
 	// THE MEASURE TAG'S ARITHMETIC, ruled by Dann 2026-08-26. An overfull or
 	// short bar is not blocked and not re-timed, and the page stays silent; the
 	// tag says what the measure holds against what its signature asks for, and
@@ -700,7 +704,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.glossMissing':      { en: 'No translation available for this form.',                              fr: 'Aucune traduction française disponible pour cette forme.' },
 
 	// ── Dictionary panel (Inspector expansion) ───────────────
-	'inspector.dictionary':         { en: 'Dictionary',                   fr: 'Dictionnaire' },
+	'inspector.dictionary':         { en: 'DICTIONARY',                   fr: 'DICTIONNAIRE' },
 	'inspector.dictEntryMissing':   { en: 'Full entry unavailable',       fr: 'Entrée complète indisponible' },
 	'inspector.glossFallbackEN':    { en: 'Gloss available in English only', fr: 'Glose disponible en anglais seulement' },
 	'inspector.glossFallbackFR':    { en: 'Gloss available in French only',  fr: 'Glose disponible en français seulement' },
@@ -793,15 +797,15 @@ const strings: Record<string, Record<Language, string>> = {
 	// 2026-10-16 19:54 to 20:11, with the English of the replace question.
 	// They name the field (« le champ Paroles », « le champ Poème »), as this
 	// file writes « le champ Entrée ».
-	'intake.view.poem':          { en: 'Poem',   fr: 'Poème' },
-	'intake.view.lyrics':        { en: 'Lyrics', fr: 'Paroles' },
-	'intake.view.poemLine':      { en: 'Edits here change the published poem. The sung words come from your score; edit them in Lyrics.', fr: 'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ Paroles.' },
+	'intake.view.poem':          { en: 'POEM',   fr: 'POÈME' },
+	'intake.view.lyrics':        { en: 'LYRICS', fr: 'PAROLES' },
+	'intake.view.poemLine':      { en: 'Edits here change the published poem. The sung words come from your score; edit them in LYRICS.', fr: 'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ PAROLES.' },
 	'intake.view.lyricsLine':    { en: 'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.', fr: 'Les paroles telles que chantées, comme la partition les place. Les mots en couleur diffèrent du poème\u00a0: une reprise, un changement ou un ajout.' },
 	'intake.view.omittedLine':   { en: 'Greyed words are those left out of the song by the composer.', fr: 'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.' },
 	// Row 163 step 7: REPLACED, RATIFIED by Dann 2026-10-30 20:38 ("I ratify both"), one line in the same place. It shows under
 	// Poem while Poem is empty and Lyrics holds the score's words (`text/input-line.ts`).
-	'intake.view.landedLyrics':  { en: 'Your score supplied the words in Lyrics. Add the whole published poem here to see where the song departs from it.', fr: 'Votre partition a fourni les paroles du champ Paroles. Ajoutez ici le poème publié en entier pour voir où la mise en musique s\u2019en écarte.' },
-	'intake.view.landedPoem':    { en: 'This page read as a poem and is in Poem. The sung words in Lyrics may differ from it.', fr: 'Cette page a été lue comme un poème; elle est dans le champ Poème. Les paroles chantées, dans le champ Paroles, peuvent en différer.' },
+	'intake.view.landedLyrics':  { en: 'Your score supplied the words in LYRICS. Add the whole published poem here to see where the song departs from it.', fr: 'Votre partition a fourni les paroles du champ PAROLES. Ajoutez ici le poème publié en entier pour voir où la mise en musique s\u2019en écarte.' },
+	'intake.view.landedPoem':    { en: 'This page read as a poem and is in POEM. The sung words in LYRICS may differ from it.', fr: 'Cette page a été lue comme un poème; elle est dans le champ POÈME. Les paroles chantées, dans le champ PAROLES, peuvent en différer.' },
 	// THE LYRICS PLACEHOLDER: the line ratified 2026-10-16 01:18 told the singer
 	// to type hyphens, which this slice cannot read (a typed hyphen reaches the
 	// dictionary as a letter, `pipeline.ts`), so the review struck it. Its
@@ -812,7 +816,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// replace dialog (`askToReplace`, safe answer last; ruling default 9). Both
 	// languages RATIFIED by Dann 2026-10-16 19:54 to 20:11.
 	'intake.poemReplace.title':   { en: 'Replace the poem?', fr: 'Remplacer le poème?' },
-	'intake.poemReplace.body':    { en: 'This page was read as a poem, and Poem already holds one. Ilya cannot undo its replacement.', fr: 'Cette page a été lue comme un poème, et le champ Poème en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci.' },
+	'intake.poemReplace.body':    { en: 'This page was read as a poem, and POEM already holds one. Ilya cannot undo its replacement.', fr: 'Cette page a été lue comme un poème, et le champ POÈME en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci.' },
 	'intake.poemReplace.replace': { en: 'Replace the poem', fr: 'Remplacer le poème' },
 	'intake.poemReplace.keep':    { en: 'Keep the poem', fr: 'Conserver le poème' },
 	// THE FIELD'S CAPTION, N.115, ruled with its French 2026-09-10. It is drawn
@@ -882,10 +886,10 @@ const strings: Record<string, Record<Language, string>> = {
 
 
 	// ── Word Console placeholder ─────────────────────────────
-	'console.placeholder':         { en: 'Analysis',                     fr: 'Analyse' },
+	'console.placeholder':         { en: 'ANALYSIS',                     fr: 'ANALYSE' },
 
 	// ── Paper empty state ────────────────────────────────────
-	'paper.empty':                 { en: 'Enter your Cyrillic text in the drawer on the left.', fr: 'Saisissez votre texte cyrillique dans le tiroir à gauche.' },
+	'paper.empty':                 { en: 'Enter your Cyrillic text in the DRAWER on the left.', fr: 'Saisissez votre texte cyrillique dans le TIROIR à gauche.' },
 	// N.73 portrait C. The pull moved to the side of the desk in S1 and this
 	// line still sent the singer to the bottom of the screen. Both languages
 	// RATIFIED by Dann 2026-08-19.
@@ -903,7 +907,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// THE FRENCH IS OWED. The English stands in both slots, as the six N.108
 	// strings above do, because `t()` prints `[MISSING: key]` for an absent
 	// variant and that literal would land on the empty page.
-	'paper.empty.mobile':          { en: 'Tap Drawer at the bottom of the screen to open the drawer.', fr: 'Touchez Tiroir au bas de l\u2019écran pour ouvrir le tiroir.' },
+	'paper.empty.mobile':          { en: 'Tap DRAWER at the bottom of the screen to open the DRAWER.', fr: 'Touchez TIROIR au bas de l\u2019écran pour ouvrir le TIROIR.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
@@ -957,7 +961,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'witness.placeOne':            { en: 'place',                        fr: 'endroit' },
 	'witness.placeMany':           { en: 'places',                       fr: 'endroits' },
 	'witness.scoreLabel':          { en: 'Score',                        fr: 'Partition' },
-	'witness.poemLabel':           { en: 'Poem',                         fr: 'Poème' },
+	'witness.poemLabel':           { en: 'POEM',                         fr: 'POÈME' },
 	'witness.measureAbbr':         { en: 'm.',                           fr: 'mes.' },
 
 	// ── Provenance labels (for Inspector inline display) ─────
@@ -1106,7 +1110,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'wait.once': { en: 'Ilya reads each score once and keeps the reading.', fr: 'Ilya ne lit chaque partition qu’une fois et en garde la lecture.' },
 	'upload.format.imageReader':   { en: 'Format: photograph → MusicXML', fr: 'Format\u00a0: photographie → MusicXML' },
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
-	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. Ilya does not read the words printed in an image; type them into the Input field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Ilya ne lit pas les paroles imprimées dans une image; saisissez-les dans le champ Entrée.' },
+	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. Ilya does not read the words printed in an image; type them into the INPUT field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Ilya ne lit pas les paroles imprimées dans une image; saisissez-les dans le champ ENTRÉE.' },
 
 	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
 	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
@@ -1359,7 +1363,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.summary.keepProfileButton': { en: 'Keep my profile', fr: 'Conserver mon profil' },
 	'calib.summary.startOverButton': { en: 'Start over', fr: 'Tout recommencer' },
 	'calib.characteristics.title': { en: 'Voice characteristics', fr: 'Caractéristiques vocales' },
-	'calib.characteristics.lede': { en: 'These optional values sharpen Markup and Insights. Any field can stay blank; where a value is missing, the analysis simply stays broad for that dimension.', fr: 'Ces valeurs facultatives précisent l\u2019Annotation et les Aperçus. Tout champ peut rester vide. Là où une valeur manque, l\u2019analyse demeure simplement générale pour cette dimension.' },
+	'calib.characteristics.lede': { en: 'These optional values sharpen MELODY and INSIGHTS. Any field can stay blank; where a value is missing, the analysis simply stays broad for that dimension.', fr: 'Ces valeurs facultatives précisent le CHANT et les APERÇUS. Tout champ peut rester vide. Là où une valeur manque, l\u2019analyse demeure simplement générale pour cette dimension.' },
 	'calib.characteristics.rangeHeading': { en: 'Range', fr: 'Ambitus' },
 	'calib.characteristics.rangeLowLabel': { en: 'Lowest comfortable note', fr: 'Note la plus grave confortable' },
 	'calib.characteristics.rangeHighLabel': { en: 'Highest comfortable note', fr: 'Note la plus aiguë confortable' },
@@ -1390,13 +1394,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.count.8': { en: 'Eight', fr: 'Huit' },
 	'profile.count.9': { en: 'Nine', fr: 'Neuf' },
 	'profile.count.10': { en: 'Ten', fr: 'Dix' },
-	'profile.lede': { en: 'Markup will appear here after Ilya processes the score you upload.', fr: 'L\u2019Annotation apparaîtra ici une fois qu\u2019Ilya aura traité la partition que vous téléversez.' },
-	'profile.provisional.noneMessage': { en: 'You can update these values anytime through the drawer on the left.', fr: 'Vous pouvez modifier ces valeurs à tout moment depuis le tiroir de gauche.' },
+	'profile.lede': { en: 'MELODY will appear here after Ilya processes the score you upload.', fr: 'Le CHANT apparaîtra ici une fois qu\u2019Ilya aura traité la partition que vous téléversez.' },
+	'profile.provisional.noneMessage': { en: 'You can update these values anytime through the DRAWER on the left.', fr: 'Vous pouvez modifier ces valeurs à tout moment depuis le TIROIR de gauche.' },
 	'profile.statusSetPlain': { en: 'Your profile is now set.', fr: 'Votre profil est maintenant établi.' },
 	'profile.statusSetMeasuredSingular': { en: 'Your profile is now set with {count} vowel measured.', fr: 'Votre profil est maintenant établi, avec {count} voyelle mesurée.' },
 	'profile.statusSetMeasuredPlural': { en: 'Your profile is now set with {count} vowels measured.', fr: 'Votre profil est maintenant établi, avec {count} voyelles mesurées.' },
-	'profile.provisional.sentenceSingular': { en: 'Your {vowels} is provisional, and you can update this value anytime through the drawer on the left.', fr: 'Votre voyelle {vowels} est provisoire, et vous pouvez modifier cette valeur à tout moment depuis le tiroir à gauche.' },
-	'profile.provisional.sentencePlural': { en: 'Your {vowels} are provisional, and you can update these values anytime through the drawer on the left.', fr: 'Vos voyelles {vowels} sont provisoires, et vous pouvez modifier ces valeurs à tout moment depuis le tiroir à gauche.' },
+	'profile.provisional.sentenceSingular': { en: 'Your {vowels} is provisional, and you can update this value anytime through the DRAWER on the left.', fr: 'Votre voyelle {vowels} est provisoire, et vous pouvez modifier cette valeur à tout moment depuis le TIROIR à gauche.' },
+	'profile.provisional.sentencePlural': { en: 'Your {vowels} are provisional, and you can update these values anytime through the DRAWER on the left.', fr: 'Vos voyelles {vowels} sont provisoires, et vous pouvez modifier ces valeurs à tout moment depuis le TIROIR à gauche.' },
 
 	// ── List separators (N.34) ───────────────────
 	//    listSep hardcoded English joins. French takes no serial comma,
@@ -1420,7 +1424,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'octave.asWrittenState': { en: 'Voice line as written', fr: 'Ligne vocale telle qu\u2019\u00e9crite' },
 	'octave.toAsWritten': { en: 'As written', fr: 'Telle qu\u2019\u00e9crite' },
 	'octave.toForRange': { en: 'Read for your range', fr: 'Lire pour votre ambitus' },
-	'profile.scoreRegionAria': { en: 'Markup', fr: 'Annotation' },
+	'profile.scoreRegionAria': { en: 'Melody', fr: 'Chant' },
 	'profile.scorePageAria': { en: 'Score page {n} of {total}', fr: 'Page {n} sur {total} de la partition' },
 	'profile.notesPageAria': { en: 'Analysis notes', fr: 'Notes d\u2019analyse' },
 	'profile.emptyStateAria': { en: 'Voice profile', fr: 'Profil vocal' },
@@ -1454,19 +1458,19 @@ const strings: Record<string, Record<Language, string>> = {
 	// QUEUE row 95 (ratified by Dann 2026-10-14 16:36). This string carries no
 	// %s slot any more, so the .replace('%s', ...) at the call site is a no-op.
 	// Row 125 (ratified by Dann 2026-10-19 22:25): the second sentence is true before and after words arrive.
-	'upload.banner.noLyrics': { en: 'This score has no words in it. The text you add in Lyrics goes under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Le texte que vous ajoutez dans le champ Paroles se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
+	'upload.banner.noLyrics': { en: 'This score has no words in it. The text you add in LYRICS goes under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Cette partition ne porte aucune parole. Le texte que vous ajoutez dans le champ PAROLES se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	// Row 95: the same courtesy message for a scan or photograph, where the
 	// print may well carry words that Ilya does not read. Chosen by
 	// noLyricsNoticeKey (lib/score/ingestion/ingest.ts).
-	'upload.banner.noLyricsScan': { en: 'Ilya does not read the words printed in an image. The text you add in Lyrics goes under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous ajoutez dans le champ Paroles se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
+	'upload.banner.noLyricsScan': { en: 'Ilya does not read the words printed in an image. The text you add in LYRICS goes under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous ajoutez dans le champ PAROLES se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
 	// N.135 stage 2b, brief r5 step 2: a scan whose printed words were read on
 	// some systems and not others. RATIFIED by Dann, EN and FR, 2026-10-28 23:12;
 	// the single bar 2026-10-29 00:00 (`docs/sessions/ratified-banner-words-partly-read_2026-10-28.md`).
 	// {bars} is «23 to 30», «23 to 30 and 41 to 48», «4, 9 to 12, and 39»
 	// (`barsText`, lib/score/ingestion/ingest.ts); apostrophes U+2019. Chosen by
 	// scanNotice, only for a scan the reader read with the hidden switch on.
-	'upload.banner.wordsPartlyRead': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Type the missing words into Lyrics exactly where they fall in the song. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Saisissez les paroles manquantes dans Paroles, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.' },
-	'upload.banner.wordsPartlyReadOne': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Type the missing words into Lyrics exactly where they fall in the song. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Saisissez les paroles manquantes dans Paroles, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.' },
+	'upload.banner.wordsPartlyRead': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.' },
+	'upload.banner.wordsPartlyReadOne': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.' },
 	// N.65 ship B. `station.syllables` IS DELETED. Dann ruled the SYLLABLES
 	// header away on 2026-08-21 and its text became the first element under
 	// SHIFT LYRICS. Checked before deleting, the way ship A checked its six:
@@ -1654,7 +1658,7 @@ const strings: Record<string, Record<Language, string>> = {
 	   ('New song', 'Delete this song'), which stays correct English because a
 	   repertoire is made of songs. Only the STATION's name changed, which is
 	   only what Dann ruled. */
-	'songs.heading': { en: 'Repertoire', fr: 'Répertoire' },
+	'songs.heading': { en: 'REPERTOIRE', fr: 'RÉPERTOIRE' },
 	'songs.new': { en: 'New song', fr: 'Nouveau chant' },
 	// The word a song is drawn under before it has anything to be named after.
 	// A KEY AND NOT A LITERAL: it was English in the French drawer for exactly as
@@ -1708,8 +1712,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    The finding descriptions adapt `watchlist.ts`'s CLOSED copy (§A.150,
 	//    Dann 2026-07-22) with its leading "Bar N:" removed, because the tag
 	//    above each description already names the measure.
-	'insights.identity':           { en: 'Insights for {voice} · {voiceType} · calibrated {date}', fr: 'Aperçus pour {voice} · {voiceType} · calibration du {date}' },
-	'insights.identityUncalibrated': { en: 'Insights for {voice} · {voiceType} · not calibrated', fr: 'Aperçus pour {voice} · {voiceType} · sans calibration' },
+	'insights.identity':           { en: 'INSIGHTS for {voice} · {voiceType} · calibrated {date}', fr: 'APERÇUS pour {voice} · {voiceType} · calibration du {date}' },
+	'insights.identityUncalibrated': { en: 'INSIGHTS for {voice} · {voiceType} · not calibrated', fr: 'APERÇUS pour {voice} · {voiceType} · sans calibration' },
 	'insights.yourVoice':          { en: 'your voice',                   fr: 'votre voix' },
 	'insights.pageAria':           { en: 'Insights, page {n} of {total}', fr: 'Aperçus, page {n} sur {total}' },
 	// The heading: English ruled by Dann 2026-09-22 (OWED.md "Rulings Dann owes"
@@ -1827,7 +1831,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// control (N.120, ruled 2026-09-23 to live in the Loupe). Printing it now
 	// would send a singer to a control that does not exist. English is Dann's
 	// (2026-09-23 01:05); the French is PROPOSED, NOT RATIFIED.
-	'insights.phonation.tempoPointer': { en: 'You may assign tempi manually using the Loupe.', fr: 'Vous pouvez indiquer vos tempi vous-même dans la loupe.' },
+	'insights.phonation.tempoPointer': { en: 'You may assign tempi manually using the LOUPE.', fr: 'Vous pouvez indiquer vos tempi vous-même dans la LOUPE.' },
 	// N.123 with N.127 increment 2, the tessituragram: English is the desk's,
 	// every French row RATIFIED by Dann 2026-09-23 01:57
 	// (`docs/sessions/brief-code-tessituragram_r1_2026-09-23.md` §5).
@@ -1937,10 +1941,10 @@ const strings: Record<string, Record<Language, string>> = {
 	//    THE WORD \"SUNG\""). Insights uses these two; Markup uses the `.markup`
 	//    pair below, whose last sentence names the hollow head (Dann 20:06, `OPEN.md`,
 	//    "PLACEHOLDER TURNING NOTES ARE HOLLOW").
-	'placeholder.line.many': { en: 'Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on a placeholder are drawn dashed.', fr: 'Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu\u2019à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
-	'placeholder.line.one': { en: 'Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on it are drawn dashed.', fr: 'Votre voyelle {vowels} repose sur une valeur par défaut jusqu\u2019à ce que vous l\u2019échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
-	'placeholder.line.markup.many': { en: 'Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on a placeholder are drawn hollow or dashed.', fr: 'Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu\u2019à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.' },
-	'placeholder.line.markup.one': { en: 'Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the drawer on the left. Findings that rest on it are drawn hollow or dashed.', fr: 'Votre voyelle {vowels} repose sur une valeur par défaut jusqu\u2019à ce que vous l\u2019échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le tiroir de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.' },
+	'placeholder.line.many': { en: 'Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on a placeholder are drawn dashed.', fr: 'Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu\u2019à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
+	'placeholder.line.one': { en: 'Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on it are drawn dashed.', fr: 'Votre voyelle {vowels} repose sur une valeur par défaut jusqu\u2019à ce que vous l\u2019échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
+	'placeholder.line.markup.many': { en: 'Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on a placeholder are drawn hollow or dashed.', fr: 'Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu\u2019à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.' },
+	'placeholder.line.markup.one': { en: 'Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on it are drawn hollow or dashed.', fr: 'Votre voyelle {vowels} repose sur une valeur par défaut jusqu\u2019à ce que vous l\u2019échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.' },
 	//    A comment, and the vowel figure's caption, saying in their own sentence
 	//    that they rest on a placeholder. RATIFIED by Dann 2026-10-11 19:42 to 19:51,
 	//    both languages (`OPEN.md`, "ROW 69's FRENCH AND THE WORD \"SUNG\""); the
@@ -2049,7 +2053,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── N.172: the Insights intake, RATIFIED by Dann 2026-09-25, English 14:32 to 14:45,
 	//    French 14:46 to 14:51 (`draft-n172-intake-survey_r1`, `draft-n172-intake-french_r1`).
 	//    *piano* and *forte* are <em> in the French, rendered with {@html} like `footer.attribution`.
-	'voiceIntake.intro': { en: '{count} quick questions so Insights understands your voice. Skip any you like, and change your answers whenever you want.', fr: '{count} questions rapides pour que les Aperçus comprennent votre voix. Passez celles que vous voulez, et modifiez vos réponses quand vous le souhaitez.' },
+	'voiceIntake.intro': { en: '{count} quick questions so INSIGHTS understands your voice. Skip any you like, and change your answers whenever you want.', fr: '{count} questions rapides pour que les APERÇUS comprennent votre voix. Passez celles que vous voulez, et modifiez vos réponses quand vous le souhaitez.' },
 	'voiceIntake.count.2': { en: 'Two', fr: 'Deux' },
 	'voiceIntake.count.3': { en: 'Three', fr: 'Trois' },
 	'voiceIntake.count.4': { en: 'Four', fr: 'Quatre' },
@@ -2099,7 +2103,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'voiceIntake.acoustics.3': { en: 'I know the main ideas: resonance, harmonics, and turning over.', fr: 'J\u2019en connais les idées principales\u00a0: la résonance, les harmoniques, le changement de timbre.' },
 	'voiceIntake.acoustics.4': { en: 'I use them in my teaching or my practice.', fr: 'Je les emploie dans mon enseignement ou ma pratique.' },
 	'voiceIntake.acoustics.5': { en: 'I read and discuss voice acoustics research.', fr: 'Je lis et commente la recherche en acoustique vocale.' },
-	'voiceIntake.topics.stem': { en: 'What would you like Insights to comment on?', fr: 'Qu\u2019aimeriez-vous que les Aperçus commentent?' },
+	'voiceIntake.topics.stem': { en: 'What would you like INSIGHTS to comment on?', fr: 'Qu\u2019aimeriez-vous que les APERÇUS commentent?' },
 	'voiceIntake.topic.high': { en: 'High notes', fr: 'Les notes aiguës' },
 	'voiceIntake.topic.low': { en: 'Low notes', fr: 'Les notes graves' },
 	'voiceIntake.topic.passaggi': { en: 'Moving through the passaggi', fr: 'La traversée des <em>passaggi</em>' },
@@ -2248,6 +2252,107 @@ const strings: Record<string, Record<Language, string>> = {
 	'key.dock.asPrinted': { en: 'As printed \u00b7 {tonic}', fr: 'Tonalit\u00e9 imprim\u00e9e \u00b7 {tonic}' },
 	'key.dock.pick': { en: 'Ilya\u2019s pick \u00b7 {tonic}', fr: 'Choix d\u2019Ilya \u00b7 {tonic}' },
 	'insights.tryKey': { en: 'Try this key', fr: 'Essayer cette tonalit\u00e9' },
+	// ── THE TABLES OF CONTENTS, drawn by Drawer.svelte ───────────────────
+	//    Moved here verbatim from language ternaries typed into the component
+	//    (consistency batch 1, step 1). Each key is `toc.<learn|guide>.<heading id>`
+	//    with the `learn-` or `guide-` prefix of the heading id dropped. The labels
+	//    are deliberately shorter than the headings they point to. The two
+	//    headings read `tab.learn` and `tab.guide`.
+	'toc.learn.aria': { en: 'Table of contents', fr: 'Table des matières' },
+	'toc.learn.title': { en: 'Russian Lyric Diction for Singers', fr: 'La diction lyrique russe pour chanteuses et chanteurs' },
+	'toc.learn.about': { en: 'About This Module', fr: 'À propos de ce module' },
+	'toc.learn.arc': { en: 'The Learning Arc', fr: 'L\u2019arc d\u2019apprentissage' },
+	'toc.learn.unit-1': { en: '1 \u00b7 The Letters', fr: '1 \u00b7 Les lettres' },
+	'toc.learn.u1-song': { en: 'The Alphabet Song', fr: 'La chanson de l\u2019alphabet' },
+	'toc.learn.u1-alphabet': { en: 'The Alphabet', fr: 'L\u2019alphabet' },
+	'toc.learn.u1-familiar': { en: 'What You Already Know', fr: 'Ce que vous connaissez d\u00e9j\u00e0' },
+	'toc.learn.u1-signs': { en: 'The Two Signs', fr: 'Les deux signes' },
+	'toc.learn.u1-yo': { en: 'A Note on \u27E8\u0401\u27E9', fr: 'Note sur \u27E8\u0401\u27E9' },
+	'toc.learn.u1-glyphs': { en: 'The Glyph Table', fr: 'Le tableau des glyphes' },
+	'toc.learn.u1-try': { en: 'Try This', fr: 'Essayez' },
+	'toc.learn.unit-2': { en: '2 \u00b7 Stress', fr: '2 \u00b7 L\u2019accent tonique' },
+	'toc.learn.u2-meaning': { en: 'Stress changes meaning', fr: 'L\u2019accent change le sens' },
+	'toc.learn.u2-moves': { en: 'Stress moves', fr: 'L\u2019accent se d\u00e9place' },
+	'toc.learn.u2-dictionary': { en: 'A dictionary problem', fr: 'Probl\u00e8me de dictionnaire' },
+	'toc.learn.u2-sounds': { en: 'How stress sounds', fr: 'Comment l\u2019accent sonne' },
+	'toc.learn.u2-try': { en: 'Try this', fr: 'Essayez' },
+	'toc.learn.unit-3': { en: '3 \u00b7 Stressed Vowels', fr: '3 \u00b7 Les voyelles accentu\u00e9es' },
+	'toc.learn.u3-inventory': { en: 'Stressed vowels are the targets', fr: 'Ce sont les voyelles accentu\u00e9es qui constituent les cibles' },
+	'toc.learn.u3-note-o': { en: 'A note on /o/', fr: 'Un mot sur le /o/' },
+	'toc.learn.u3-interpalatal': { en: 'Two vowels change colour near soft consonants', fr: 'Deux voyelles changent de couleur au voisinage des consonnes molles' },
+	'toc.learn.u3-iotated': { en: 'Four vowel letters carry a hidden consonant', fr: 'Quatre lettres vocaliques portent une consonne cach\u00e9e' },
+	'toc.learn.u3-yo': { en: '\u27E8\u0451\u27E9 is always stressed', fr: '\u27E8\u0451\u27E9 est toujours accentu\u00e9' },
+	'toc.learn.u3-try': { en: 'Try this in Ilya', fr: 'Essayez dans Ilya' },
+	'toc.learn.unit-4': { en: '4 \u00b7 Vowel Reduction', fr: '4 \u00b7 La r\u00e9duction vocalique' },
+	'toc.learn.u4-akanye': { en: '\u27E8\u043E\u27E9 and \u27E8\u0430\u27E9 when unstressed', fr: '\u27E8\u043E\u27E9 et \u27E8\u0430\u27E9 sans accent' },
+	'toc.learn.u4-ikanye': { en: '\u27E8\u0435\u27E9 and \u27E8\u044F\u27E9 toward [\u026A]', fr: '\u27E8\u0435\u27E9 et \u27E8\u044F\u27E9 vers [\u026A]' },
+	'toc.learn.u4-reconstitution': { en: 'Reconstitution', fr: 'La reconstitution' },
+	'toc.learn.u4-try': { en: 'Try this in Ilya', fr: 'Essayez dans Ilya' },
+	'toc.learn.unit-5': { en: '5 \u00b7 The Consonants', fr: '5 \u00b7 Les consonnes' },
+	'toc.learn.u5-familiar': { en: 'The consonant system', fr: 'Le syst\u00e8me consonantique' },
+	'toc.learn.u5-pairs': { en: 'Voiced-voiceless pairs', fr: 'Paires vois\u00e9es-non vois\u00e9es' },
+	'toc.learn.u5-attention': { en: 'Focused attention', fr: 'Attention cibl\u00e9e' },
+	'toc.learn.u5-fixed': { en: 'Fixed hardness or softness', fr: 'Duret\u00e9 ou mollesse fixe' },
+	'toc.learn.u5-signs': { en: 'The two signs', fr: 'Les deux signes' },
+	'toc.learn.u5-devoicing': { en: 'Final devoicing', fr: 'D\u00e9voisement final' },
+	'toc.learn.u5-try': { en: 'Try this in Ilya', fr: 'Essayez dans Ilya' },
+	'toc.learn.unit-6': { en: '6 \u00b7 Palatalization', fr: '6 \u00b7 La palatalisation' },
+	'toc.learn.u6-what': { en: 'What palatalization is', fr: 'Qu\u2019est-ce que la palatalisation?' },
+	'toc.learn.u6-signals': { en: 'Signals on the page', fr: 'Rep\u00E9rer la palatalisation \u00E0 l\u2019\u00E9crit' },
+	'toc.learn.u6-stops': { en: 'What stops the spread', fr: 'Les six fronti\u00E8res' },
+	'toc.learn.u6-paired': { en: 'Paired versus unpaired', fr: 'Appari\u00E9es et non appari\u00E9es' },
+	'toc.learn.u6-clusters': { en: 'Regressive in clusters', fr: 'R\u00E9gressive dans les groupes' },
+	'toc.learn.u6-practice': { en: 'Putting it together', fr: 'Mise en pratique' },
+	'toc.learn.u6-velari': { en: 'Velar-i [\u0268]', fr: 'Le i v\u00E9laire [\u0268]' },
+	'toc.learn.unit-7': { en: '7 \u00b7 Assimilation and Boundaries', fr: '7 \u00b7 Assimilation et fronti\u00e8res' },
+	'toc.learn.u7-two': { en: 'Two kinds of assimilation', fr: 'Deux formes d\u2019assimilation' },
+	'toc.learn.u7-voiced': { en: 'Voiced meets voiceless', fr: 'Vois\u00e9e rencontre sourde' },
+	'toc.learn.u7-stops': { en: 'What stops the spread', fr: 'Les limites du voisement' },
+	'toc.learn.u7-boundary': { en: 'Across word boundaries', fr: 'D\u2019un mot \u00e0 l\u2019autre' },
+	'toc.learn.u7-deletion': { en: 'Consonant deletion', fr: 'L\u2019effacement consonantique' },
+	'toc.learn.u7-mergers': { en: 'Mergers and acquisitions', fr: 'Fusions et absorptions' },
+	'toc.learn.u7-unusual': { en: '\u0441\u043A\u0443\u0447\u043D\u043E and \u0447\u0442\u043E', fr: '\u0441\u043A\u0443\u0447\u043D\u043E et \u0447\u0442\u043E' },
+	'toc.learn.u7-geminates': { en: 'Geminates', fr: 'Les g\u00e9min\u00e9es' },
+	'toc.learn.u7-tryit': { en: 'Try this in Ilya', fr: '\u00C0 vous de jouer' },
+	'toc.learn.coda': { en: '8 \u00b7 What These Rules Do Not Teach', fr: '8 \u00b7 Les inclassables' },
+	'toc.learn.try': { en: 'Try This', fr: 'Essayez' },
+	'toc.learn.notation': { en: 'A Note on Notation', fr: 'Note sur la notation' },
+	'toc.guide.aria': { en: 'Guide table of contents', fr: 'Table des matières du Guide' },
+	'toc.guide.how': { en: 'How Ilya Works', fr: 'Comment fonctionne Ilya' },
+	'toc.guide.what': { en: 'What does Ilya do?', fr: 'Que fait Ilya?' },
+	'toc.guide.paste': { en: 'Pasting a Russian text', fr: 'Saisie d\u2019un texte russe' },
+	'toc.guide.source': { en: 'Why only one source?', fr: 'Pourquoi une seule source?' },
+	'toc.guide.ai': { en: 'Is Ilya an AI tool?', fr: 'Ilya et l\u2019IA' },
+	'toc.guide.role': { en: 'Your role as user', fr: 'R\u00f4le de l\u2019utilisateur' },
+	'toc.guide.limits': { en: 'Limitations', fr: 'Limites d\u2019Ilya' },
+	'toc.guide.future': { en: 'Where is Ilya headed?', fr: 'O\u00f9 va Ilya?' },
+	'toc.guide.markup-forecast': { en: 'Insights forecasts, it does not declare', fr: 'Les Aper\u00e7us pr\u00e9voient, ils ne d\u00e9clarent pas' },
+	'toc.guide.markup-characteristics': { en: 'Voice characteristics', fr: 'Caract\u00e9ristiques vocales' },
+	'toc.guide.markup-notation': { en: 'The notation conventions used by MELODY', fr: 'Les conventions de notation utilisées par le CHANT' },
+	'toc.guide.walkthrough': { en: 'A Walkthrough', fr: 'Une visite guidée' },
+	'toc.guide.walk-interface': { en: 'The interface at a glance', fr: 'L’interface en un coup d’œil' },
+	'toc.guide.walk-tabs': { en: 'Navigating the tabs', fr: 'Naviguer entre les onglets' },
+	'toc.guide.walk-metadata': { en: 'Entering metadata', fr: 'Renseigner les métadonnées' },
+	'toc.guide.walk-transcribe': { en: 'Transcribing', fr: 'Transcrire' },
+	'toc.guide.walk-analysis': { en: 'Analysing words', fr: 'Analyser les mots' },
+	'toc.guide.walk-notation': { en: 'Notation preferences', fr: 'Les préférences de notation' },
+	'toc.guide.walk-print': { en: 'Printing and resetting', fr: 'Imprimer et réinitialiser' },
+	'toc.guide.contributors': { en: 'Contributors', fr: 'Collaborateurs' },
+	'toc.guide.grayson-intro': { en: 'Introduction to Russian Lyric Diction', fr: 'Introduction \u00e0 Russian Lyric Diction' },
+	'toc.guide.licences': { en: 'Licences and Acknowledgments', fr: 'Licences et remerciements' },
+	'toc.guide.mitton-note': { en: "Builder's Note", fr: 'Mot du cr\u00e9ateur' },
+
+	// ── Labels moved out of components (consistency batch 1, step 1) ──
+	//    Each was a language ternary typed into the component. Words verbatim.
+	'app.title':                   { en: 'Ilya — Russian Lyric Diction', fr: 'Ilya — Diction lyrique russe' },
+	'console.selectWord':          { en: 'Select a word on the page to analyse it here.', fr: 'Sélectionnez un mot sur la page pour l’analyser ici.' },
+	'inspector.spot.reduction':    { en: 'Spot reduction',               fr: 'Réduction ponctuelle' },
+	'inspector.spot.reconstitution': { en: 'Spot reconstitution',        fr: 'Reconstitution ponctuelle' },
+	'inspector.resetWordAria':     { en: 'Reset word to engine defaults', fr: 'Réinitialiser le mot aux valeurs par défaut' },
+	'inspector.editGlossAria':     { en: 'Edit gloss',                   fr: 'Modifier la glose' },
+	'select.noResults':            { en: 'No results',                   fr: 'Aucun résultat' },
+	'select.resultCount.one':      { en: '{n} result',                   fr: '{n} résultat' },
+	'select.resultCount.many':     { en: '{n} results',                  fr: '{n} résultats' },
 };
 
 /**

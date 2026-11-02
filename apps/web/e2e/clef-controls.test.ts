@@ -44,7 +44,7 @@ async function load(page: Page, lang: 'en' | 'fr' = 'en') {
 	}
 	await page.locator('input.hidden-input').setInputFiles(FILE);
 	await page.waitForSelector('[data-word-index="0-0"]', { timeout: 30_000 });
-	await page.getByRole('tab', { name: lang === 'fr' ? 'Annotation' : 'Markup' }).click();
+	await page.getByRole('tab', { name: lang === 'fr' ? 'CHANT' : 'MELODY' }).click();
 	await page.locator('.score-page [data-clef]').first().waitFor({ state: 'attached', timeout: 30_000 });
 }
 
@@ -75,8 +75,8 @@ test.describe('the clef choice on the Paper (row 144)', () => {
 		await expect(page.locator('.score-page [data-clef]').first()).toHaveAttribute('data-clef', 'bass');
 
 		// It does not return: another tab and back is the same song, shown once.
-		await page.getByRole('tab', { name: 'Insights' }).click();
-		await page.getByRole('tab', { name: 'Markup' }).click();
+		await page.getByRole('tab', { name: 'INSIGHTS' }).click();
+		await page.getByRole('tab', { name: 'MELODY' }).click();
 		await page.locator('.score-page [data-clef]').first().waitFor({ state: 'attached' });
 		await page.waitForTimeout(800);
 		await expect(chip).toHaveCount(0);
