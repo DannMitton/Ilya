@@ -17,7 +17,7 @@
 	   panel's Done, the phone swipe, and this button all call it. */
 	import { t, type Language } from '$lib/i18n';
 	import { stackActions } from '$lib/components/Drawer/bandState';
-	import type { LoupeDrag } from '$lib/score/loupe-drag.svelte';
+	import type { LoupePlace } from '$lib/score/loupe-place.svelte';
 
 	interface Props {
 		language: Language;
@@ -27,16 +27,16 @@
 		onundo: () => void;
 		onredo: () => void;
 		onclose: () => void;
-		/** The desk's drag (`loupe-drag.svelte.ts`); absent on a phone, where the header is not a handle. */
-		drag?: LoupeDrag;
+		/** Where the card stands (`loupe-place.svelte.ts`): the desk drags by this header, a phone taps it. */
+		place: LoupePlace;
 	}
 
-	let { language, isPhone, undoLabel, redoLabel, onundo, onredo, onclose, drag }: Props = $props();
+	let { language, isPhone, undoLabel, redoLabel, onundo, onredo, onclose, place }: Props = $props();
 
-	/* The drag keeps the whole header on screen, so it needs the window's size and the band's height. */
+	/* The drag keeps the whole header on screen, so the place needs the window's size and the band's height. */
 	let vw = $state(0), vh = $state(0), bandH = $state(0);
 	$effect(() => {
-		if (drag && vw && vh && bandH) Object.assign(drag, { viewWidth: vw, viewHeight: vh, headerHeight: bandH });
+		if (vw && vh && bandH) Object.assign(place, { viewWidth: vw, viewHeight: vh, headerHeight: bandH, draggable: !isPhone });
 	});
 
 	const actions = $derived(stackActions(undoLabel, redoLabel, language));
@@ -44,20 +44,26 @@
 
 <svelte:window bind:innerWidth={vw} bind:innerHeight={vh} />
 
-<!-- A handle for the pointer only: the drag has no key, and the buttons stay the keyboard's way in (`loupe-drag.svelte.ts`). -->
+<!-- A handle for the pointer only: the drag has no key, and the buttons stay the keyboard's way in (`loupe-place.svelte.ts`). -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class="loupe-header"
 	class:phone={isPhone}
-	class:draggable={!!drag}
-	class:grabbing={drag?.active}
+	class:draggable={!isPhone}
+	class:grabbing={place.active}
 	bind:clientHeight={bandH}
-	onpointerdown={(e) => drag?.start(e)}
-	onpointermove={(e) => drag?.move(e)}
-	onpointerup={() => drag?.end()}
-	onpointercancel={() => drag?.end()}
+	onpointerdown={(e) => place.start(e)}
+	onpointermove={(e) => place.move(e)}
+	onpointerup={() => place.end()}
+	onpointercancel={() => place.end()}
 >
-	<span class="loupe-title">{t('loupe.title', language)}</span>
+	<!-- ON A PHONE the label area is a button, named for where it will take the Loupe; it fills the band to the right
+	     until the actions begin. A swipe that starts here and closes the Loupe sends no flip (`LoupePlace.flip`). -->
+	{#if isPhone}
+		<button type="button" class="loupe-title loupe-move" aria-label={t(place.moveTo === 'top' ? 'loupe.moveTop' : 'loupe.moveBottom', language)} onclick={(e) => place.flip(e)}>{t('loupe.title', language)}</button>
+	{:else}
+		<span class="loupe-title">{t('loupe.title', language)}</span>
+	{/if}
 	<div class="loupe-header-actions">
 		{#each actions as action (action.kind)}
 			<button type="button" class="loupe-header-button" aria-label={action.sentence} onclick={() => (action.kind === 'undo' ? onundo() : onredo())}>
@@ -114,6 +120,25 @@
 	.loupe-title {
 		display: flex;
 		align-items: center;
+	}
+
+	/* The phone's flip: the whole label side of the band, no button chrome. */
+	.loupe-move {
+		flex: 1;
+		justify-content: flex-start;
+		padding: 0;
+		border: none;
+		background: none;
+		color: inherit;
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		cursor: pointer;
+	}
+
+	.loupe-move:focus-visible {
+		outline: 2px solid var(--lavender-ink);
+		outline-offset: -2px;
 	}
 
 	.loupe-header-actions {

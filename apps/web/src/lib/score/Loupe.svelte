@@ -28,7 +28,7 @@
 	import type { Cursor } from '$lib/score/entry';
 	import LoupeSyllables from '$lib/score/LoupeSyllables.svelte';
 import LoupeHeader from '$lib/score/LoupeHeader.svelte';
-	import { LoupeDrag } from '$lib/score/loupe-drag.svelte';
+	import { LoupePlace } from '$lib/score/loupe-place.svelte';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import { followEntry, GrowOnlyWidth, HeldHeight } from '$lib/score/loupe-hold';
@@ -2218,8 +2218,7 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 	 */
 	let topH = $state(0);
 	const PANEL_FOOT = 8;
-	/* The card's own vertical furniture, from `.loupe` in this file's
-	   stylesheet: none above (the header bleeds), 12 below, the border twice. */
+	/* The card's vertical furniture (`.loupe`, below): none above (the header bleeds), 12 below, the border twice. */
 	const CARD_FURNITURE = 12 + 1.4 * 2;
 	/* The bar's own height, for the one frame before `.loupe-top` is measured:
 	   the hairline and its margins (19) plus the 44 px floor. */
@@ -2234,15 +2233,10 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 		return centreY - bareHeight / 2;
 	});
 
-	/* ROW 164, THE DESK'S DRAG: an offset on the seat (`loupe-drag.svelte.ts`); the panel hangs from the card where it now stands. */
-	const drag = new LoupeDrag(() => ({ left: frame?.left ?? 0, top: anchorTop, width: frame?.width ?? 0 }), () => dockInset, GUTTER);
-	const shift = $derived(drag.shift);
-
-	const panelRoom = $derived.by(() => {
-		if (!frame) return 0;
-		const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
-		return Math.max(0, viewportHeight - PANEL_FOOT - (anchorTop + shift.y + bareHeight));
-	});
+	/* ROW 164, WHERE THE CARD STANDS (`loupe-place.svelte.ts`): the desk's drag, the phone's top and bottom. The panel hangs below, or rises above at the bottom. */
+	const place = new LoupePlace(() => ({ left: frame?.left ?? 0, top: anchorTop, width: frame?.width ?? 0, height: bareHeight }), () => dockInset, GUTTER);
+	const shift = $derived(place.shift);
+	const panelRoom = $derived(frame ? place.room(PANEL_FOOT) : 0);
 
 	/* THE MODES, in the order the pill draws them, and the roving focus the
 	   desk selector already carries (`DeskHead.svelte`, `handlePairKeydown`). */
@@ -2295,11 +2289,12 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 	<div
 		class="loupe"
 		class:eased={frame.eased}
-		class:dragging={drag.active}
-		style="left: {frame.left + shift.x}px; width: {frame.width}px; top: {anchorTop + shift.y}px;"
+		class:dragging={place.active}
+		class:up={place.edge === 'bottom' && syllablesOpen}
+		style="left: {frame.left + shift.x}px; width: {frame.width}px; {place.pin(anchorTop, PANEL_FOOT)}"
 	>
 		<div class="loupe-top" bind:offsetHeight={topH}>
-		<LoupeHeader {language} {isPhone} {undoLabel} {redoLabel} {onundo} {onredo} {onclose} drag={isPhone ? undefined : drag} />
+		<LoupeHeader {language} {isPhone} {undoLabel} {redoLabel} {onundo} {onredo} {onclose} {place} />
 		<p class="loupe-tag">{tag}</p>
 		<p class="loupe-note">{noteLine || '\u00a0'}</p>
 		<div class="loupe-window" bind:this={windowEl} style="height: {frame.windowHeight}px;">
@@ -2648,6 +2643,11 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 		transition: width 150ms ease-out, left 150ms ease-out;
 	}
 
+	/* AT THE BOTTOM, panel open: the panel rises above the header and the music (Dann 2026-11-01 13:05). */
+	.loupe.up { display: flex; flex-direction: column-reverse; }
+	.loupe.up .loupe-panel { padding-top: 10px; }
+	.loupe.up :global(.loupe-header) { border-radius: 0; }
+
 	@media (prefers-reduced-motion: reduce) {
 		.loupe,
 		.loupe.eased {
@@ -2776,9 +2776,8 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 		outline-offset: 2px;
 	}
 
-	/* ITEM 4 ON A PHONE. With Undo and Redo in the header the pill (181 px), the zoom (2 x 44), and the chevron (44)
-	   still do not fit one row of 277 px (measured 2026-11-01), so the bar takes two: the pill and the chevron, then
-	   the zoom (`display: contents` lets the right-hand group's children join the bar's own wrap). */
+	/* ITEM 4 ON A PHONE. The pill (181 px), the zoom (2 x 44), and the chevron (44) do not fit one row of 277 px
+	   (measured 2026-11-01): the pill and the chevron, then the zoom (`display: contents` joins the bar's own wrap). */
 	.loupe-bar-break {
 		display: none;
 	}
