@@ -63,7 +63,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { setStressDictionary, setSingerSupplement } from '@ilya/phonology';
+import { setStressDictionary, setSingerSupplement, softnessOfReason } from '@ilya/phonology';
 import { setGlossDictionary } from '@ilya/dictionary';
 import { processText } from '$lib/pipeline';
 
@@ -209,5 +209,29 @@ describe('processText approval: 40-line public-domain art-song corpus', () => {
 
 	it('produces the approved IPA for every line', async () => {
 		await expect(renderCorpus()).toMatchFileSnapshot('./__approved__/ipa-corpus.txt');
+	});
+
+	// Row 175 step 2, the agreement gate (brief r2): for every consonant of the corpus, the softness in the
+	// IPA agrees with the softness its reason implies. The glide ⟨й⟩ is exempt: always soft by reason, and its
+	// IPA [j] has no ʲ in Grayson's inventory. The same gate runs over the truth set in
+	// packages/phonology/tests/truth-set-palatalization.test.ts.
+	it('palatalization: the softness in the IPA agrees with the softness its reason implies, for every consonant', () => {
+		const bad: string[] = [];
+		let checked = 0;
+		for (const poem of CORPUS) {
+			for (const line of poem.lines) {
+				for (const w of processText(line)[0]?.words ?? []) {
+					for (const e of w.result.transcriptionLog) {
+						if (e.features?.type !== 'consonant' || e.char === 'й') continue;
+						checked++;
+						const implied = softnessOfReason(e.features.palReason);
+						const actual = /ʲ|ɲ/.test(e.ipa);
+						if (implied !== null && implied !== actual) bad.push(`${w.cleanWord}: ${e.char} ${e.ipa} ${e.features.palReason}`);
+					}
+				}
+			}
+		}
+		expect(bad).toEqual([]);
+		expect(checked).toBeGreaterThan(400); // 453 consonants at the time of writing
 	});
 });
