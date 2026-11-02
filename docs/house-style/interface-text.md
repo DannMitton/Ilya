@@ -12,12 +12,12 @@ Everything a singer reads: every interface string (`apps/web/src/lib/i18n.ts`), 
 
 **Rule.** Each part of Ilya has one name in English and one in French, matched one to one. **Reason:** a singer who meets two names looks for two things; the audit found one control under three French names.
 
-**The record.** Until consistency batch 1 creates `apps/web/src/lib/names.ts`, the key column of this table is the record. After it, `names.ts` is, and this table is its summary for people.
+**The record.** `apps/web/src/lib/names.ts` is the record. This table is its summary for people, and `apps/web/src/lib/names-table.test.ts` checks the English and French of every row whose key has a record there. `ARCHITECTURE.md`, "Names", is the machine-checked table of the same records.
 
 | concept | key | English | French | gender | capitals |
 |---|---|---|---|---|---|
 | transcription document | `tab.text` | TEXT | TEXTE | m. | yes |
-| score document | `tab.markedScore` (to be `tab.melody`) | MELODY | CHANT | m. | yes |
+| score document | `tab.markedScore` | MELODY | CHANT | m. | yes |
 | analysis document | `tab.insights` | INSIGHTS | APERÇUS | m. pl. | yes |
 | lessons | `tab.learn` | LEARN | LEÇONS | f. pl. | yes |
 | help | `tab.guide` | GUIDE | GUIDE | m. | yes |

@@ -153,6 +153,37 @@ MELODY and INSIGHTS work in five stages: **calibrate** the voice, **ingest** a s
 **resolve** which vowel each note sings, **analyse** where the voice and the
 music meet, and **engrave** the marked-up score.
 
+## Names
+
+Each named part of Ilya has one record in `apps/web/src/lib/names.ts`. This table
+is that record for people, in record order: `key` is the i18n key of the name on
+screen, `EN` and `FR` are what `t()` returns for it, `code today` and `folder today`
+are the names the code uses now (the screen's MELODY is still `markup/` here until
+consistency batch 3), and `retired` lists the patterns the guard keeps out of
+what a singer reads and out of this documentation. `names-table.test.ts` fails
+if a cell and its record disagree, or if either has a row the other lacks. The
+rules for naming are in `docs/house-style/`.
+
+| id | key | EN | FR | code today | folder today | retired |
+|---|---|---|---|---|---|---|
+| text | `tab.text` | TEXT | TEXTE | `text` | `apps/web/src/lib/text/` | `Transcribe and fit`, `click Transcribe`, `cliquez sur Transcrire`, `Transcription tab`, `l'onglet Transcription` |
+| melody | `tab.markedScore` | MELODY | CHANT | `markup`, `MarkupPane` | `apps/web/src/lib/markup/` | `\bMarkup\b`, `\bAnnotation\b`, `Partition annotée` |
+| insights | `tab.insights` | INSIGHTS | APERÇUS | `insights` | `apps/web/src/lib/insights/` | `\bFit\b` |
+| learn | `tab.learn` | LEARN | LEÇONS | `learn` |  |  |
+| guide | `tab.guide` | GUIDE | GUIDE | `guide` |  |  |
+| piece | `group.piece` | PIECE | PIÈCE | `piece` |  | `\bMetadata\b`, `\bMétadonnées\b` |
+| input | `group.input` | INPUT | ENTRÉE | `input` |  |  |
+| voice | `group.scoreMarkup` | VOICE | VOIX | `scoreMarkup` |  |  |
+| poem | `intake.view.poem` | POEM | POÈME |  |  |  |
+| lyrics | `intake.view.lyrics` | LYRICS | PAROLES |  |  |  |
+| corrections | `loupe.station.corrections` | CORRECTIONS | CORRECTIONS |  |  |  |
+| underlay | `underlay.heading` | UNDERLAY | PLACEMENT DES PAROLES |  |  |  |
+| analysis | `console.placeholder` | ANALYSIS | ANALYSE | `AnalysisStation` |  | `\bInspector\b`, `\bRibbon\b`, `\bInspecteur\b`, `Ruban syllabique` |
+| drawer | `drawer.pull` | DRAWER | TIROIR | `Drawer` |  | `The Handle`, `poignée du Tiroir` |
+| page | `drawer.paper` | the page | la page |  |  | `the Paper`, `le Papier` |
+| spotReduction | `inspector.spot.reduction` | Spot reduction | Réduction ponctuelle |  |  | `Réduction ciblée` |
+| spotReconstitution | `inspector.spot.reconstitution` | Spot reconstitution | Reconstitution ponctuelle |  |  | `Reconstitution ciblée` |
+
 ## Invariants
 
 Each is a default. Departing from one needs a deliberate ruling from Dann, and
@@ -225,8 +256,8 @@ broken.
 
 ## Where to start
 
-- To name anything, on screen or in code: `docs/house-style/interface-text.md`
-  and `docs/house-style/code-conventions.md`.
+- To name anything, on screen or in code: the Names table above, then
+  `docs/house-style/interface-text.md` and `docs/house-style/code-conventions.md`.
 - To change a pronunciation rule: `packages/phonology`, with its tests, and
   Grayson's text at hand.
 - To change what a singer reads: `apps/web/src/lib/i18n.ts`. Its key prefixes

@@ -10,11 +10,12 @@
  * values that carry a name, and the retired words a singer must never read
  * again.
  *
- * What reads it. NOTHING YET. `names.test.ts` checks that the record is
- * well-formed. Row 171 widens `no-fit-name.test.ts` into a guard that reads
- * `retired` across the surfaces a singer reads, and batch 2's legend test
- * reads it for the contributors' legend. Until then this is a record, not a
- * rule.
+ * What reads it. Three tests. `names.test.ts` checks that the record is
+ * well-formed. `retired-names.test.ts` (consistency batch 2) reads `retired`
+ * across `i18n.ts`, LEARN, and the contributors' legend; row 171 adds the
+ * GUIDE surface. `names-table.test.ts` reads every record and checks it
+ * against the Names table in `ARCHITECTURE.md` and the table in
+ * `docs/house-style/interface-text.md`.
  *
  * Written by consistency batch 1, step 2 (2026-11-01), from the consistency
  * audit (`docs/sessions/report-desk-consistency-audit_r1_2026-11-01.md`,
