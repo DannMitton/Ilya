@@ -212,3 +212,41 @@ describe('seatPage counts the notes that break one vowel per note, and changes n
 		expect(page.stats.counted.manyVowels).toEqual({ cut: [], merged: [] });
 	});
 });
+
+describe('seatPage, one vowel per note (CONTRACT §0.1)', () => {
+	const old = new Set([...known, 'поѣду']);
+	const oldSeams: Seams = { isWord: (w) => old.has(w), cut: (w) => (w.toLowerCase() === 'поѣду' ? ['по', 'ѣ', 'ду'] : pieces[w.toLowerCase()] ?? [w.toLowerCase()]) };
+
+	it('drops a vowelless unit between two syllables: it takes no note, and the syllables after it keep theirs', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), [[box('мир', 90, 110), box('т', 190, 210), box('ты', 290, 310)]], seams);
+		expect(shape(page)).toEqual([[['мир', 'single', 0]], [['ты', 'single', 2]]]);
+		expect(page.stats.dropped).toEqual({ vowelless: 1, stray: 0 });
+		// `units` counts what is seated: the dropped unit is not one.
+		expect(page.stats.units).toBe(2);
+	});
+
+	it('drops a lone «І» at a row\'s start as a stray mark, though і is a vowel letter', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), [[box('І', 90, 110), box('мир', 190, 210), box('ты', 290, 310)]], seams);
+		expect(shape(page)).toEqual([[['мир', 'single', 1]], [['ты', 'single', 2]]]);
+		expect(page.stats.dropped).toEqual({ vowelless: 0, stray: 1 });
+	});
+
+	it('keeps all three pieces of «поѣду» cut into «по», «ѣ», «ду»: a piece the cut made is not a stray mark', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), [[box('поѣду', 80, 320)]], oldSeams);
+		expect(shape(page).flat().map((s) => s[2])).toEqual([0, 1, 2]);
+		expect(page.words[0].syllables.map((s) => s.text.replace(/-$/, ''))).toEqual(['по', 'ѣ', 'ду']);
+		expect(page.stats.dropped).toEqual({ vowelless: 0, stray: 0 });
+	});
+
+	it('keeps «гѣ»: ѣ is a vowel in a word that holds other letters', () => {
+		const page = seatPage(layout(system(notes(100, 200), [row(0)])), [[box('гѣ', 90, 110), box('мир', 190, 210)]], oldSeams);
+		expect(shape(page).flat().map((s) => [s[0], s[2]])).toEqual([['гѣ', 0], ['мир', 1]]);
+	});
+
+	it('leaves a cue printed over the piano unseated while the voice rests, and the lyric keeps its notes (rule 2)', () => {
+		// Voice notes from x 300; «Дудка» printed at x 50. Median gap 100, reach 200, its distance 250.
+		const page = seatPage(layout(system(notes(300, 400, 500), [row(0)])), [[box('Дудка', 30, 70), box('мир', 290, 310), box('ты', 390, 410)]], seams);
+		expect(shape(page).flat().map((s) => [s[0], s[2]])).toEqual([['мир', 0], ['ты', 1]]);
+		expect(page.stats.unseated).toBe(1);
+	});
+});
