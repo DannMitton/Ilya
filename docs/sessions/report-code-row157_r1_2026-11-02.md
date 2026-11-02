@@ -200,3 +200,45 @@ Whether the х to ɣ, ц to dz, ч to dʒʲ allophones at a word boundary are Gr
 | 6 blurb | 148 passed |
 | 7 score-parser | 785 passed, 5 skipped (790) |
 | 8 ratchets | OK; `engine.ts` 2049 to 2048, taken |
+
+---
+
+## Step 3: the blurb for a kept voicing
+
+### What changed
+
+- **(a) The engine marks the word** (`packages/phonology/src/engine.ts`, 2048 lines, unchanged by this step): at the boundary #4 branch (`:1946-1951`, where `keepsVoicingAtBoundary4` keeps the voicing and sets `skipFinalDevoicing`), `if (!viaV) leftWord.retainedVoicing = true;` on the same line; so the field is set in that one place only, and only when the right word's own first segment is the vowel or the sonorant (the brief's amendment 2). The pass starts every word clean (`word.skipFinalDevoicing = word.retainedVoicing = false;`, `:1924`), so a mark does not survive a second run on the same objects (a test pins it). `BoundaryWord` declares `retainedVoicing?: boolean` beside `isProclitic` (`:119`, one line). Both edits are line-neutral, because `engine.ts` has no headroom. `pipeline.ts`'s `TranscribedWord` gains the same optional field on the `isVowellessClitic` line (`:141`; 901 lines, unchanged).
+- **(b) The log** (`apps/web/src/lib/voicing-log.ts`, now 81 lines): `markRetainedVoicing` finds the word's last consonant entry and sets `features.retainedVoicing = true`; `writeSurfaceToWord` (step 1) calls it. The module's header says why: such a word's surface equals its underlying one, so the block that marks a surface change skips it.
+- **(c) The blurb package**: `packages/blurb/src/types.ts` gains `retainedVoicing?: boolean`; `packages/blurb/src/composer.ts` `deriveRule` returns `'retained-voicing'` after `silent`, `regressive-devoicing`, and `regressive-voicing`, and before `final-devoicing`, `genitive`, and `bog-exception` (`:246`). A word cannot carry both `retainedVoicing` and `finalDevoicing`: the pipeline test on «меж нас» shows its ⟨ж⟩ entry has `retainedVoicing` and neither `finalDevoicing` nor `voicingAssimilation`.
+- **(d) `data/blurb-composer.json`**: twelve pairs, `retained-voicing:<letter>` for б, в, г, д, ж, з, in `processes` and in `implications` (inserted after each section's `final-devoicing:з`), citation `pp. 251–252` on both, the four ratified strings verbatim in both languages, the two French no-break spaces written as the six characters ` ` (never a literal), « d’un » with its U+2019. The test file reads them by code point. The file's existing 68 lines with a literal U+00A0 are untouched (the diff is 120 insertions and nothing else). **Static-data byte count (CONTRACT: say when something ships into `static/`): `data/blurb-composer.json`, which `apps/web/static/data/` links to, goes from 78,876 to 85,020 bytes (+6,144).** Whether an app already installed picks the new file up on its next online start is the loader's N.195 behaviour (it keeps the last good copy of each small file, `loader.ts` `BLURB_STORE_KEY`): NOT RUN.
+- **The counts that moved**: `packages/blurb/tests/french-parity.test.ts` reads all templates (the brief says 209 to 221; row 175 had moved the count to 181, so it is **181 to 193**, the same 12 new pairs), and `tests/palatalization-comments.test.ts:151` pins the number of implications (41 after row 175; **47** with the six new ones). Gate 5 held the second one red until I read it; it is a count, not a reading, so I moved it with a comment.
+- `data/blurb-composer.json`'s `bog-exception:г` template is untouched.
+
+### Tests (each shown failing first)
+
+- `packages/blurb/tests/retained-voicing.test.ts` (new, 16 tests): the 12 pairs verbatim and by code point; the rule order (`silent`, the two `regressive-*`, then `retained-voicing` before `final-devoicing` and `bog-exception`); each letter's composed blurb with the whole citation: ⟨ж⟩ `(Grayson, pp. 165, 174, 251–252)`, ⟨з⟩ `(Grayson, pp. 143, 251–252)`, ⟨б⟩ `(Grayson, pp. 144, 251–252)`, ⟨д⟩ `(Grayson, pp. 146, 251–252)`, ⟨г⟩ `(Grayson, pp. 145, 251–252)`, ⟨в⟩ `(Grayson, pp. 152, 251–252)`. Failed first: the 12-pair data, the code-point test, the rule-order test, and the six composed blurbs (all but the one that asserts a non-retained entry still derives `final-devoicing`, a guard).
+- `packages/phonology/tests/voicing-rule2.test.ts` (7 added, engine level, hand-built words): marked, failing first: «меж нас», «без Анны», «сквозь нас» (one test), «если б мог», and the stale-run test. Guards (pass before): «сад наш» and «Бог мой» not marked; «под водой» and «без вас» not marked (through в) and «под водой» keeps `pʌd`; «муж дома» not marked; «меж. нас» (hard boundary) not marked.
+- `apps/web/src/lib/voicing-rule2.pipeline.test.ts` (10 added, through `processText` with the real dictionary and the real blurb data): failing first: «меж нас», «без Анны», «если б мог» (the ⟨б⟩ entry, word 2), «сквозь нас», «вокруг нас» (each marked, the blurb says "it keeps its voicing as [ʒ|z|b|zʲ|ɡ]", the citation whole), the «меж нас» one-rule test, and the «сквозь нас» loses-its-soft-blurb test. Guards: «сад наш» keeps `final-devoicing:д` ("devoices to [t]"); «муж дома» keeps `regressive-voicing` and is not marked; «под водой» is not marked. An `en()` helper reads the blurb's English because `BlurbResult.blurb` is `BilingualBlurb | string` in the type (my first version failed gate 3 on it).
+
+### Things the brief asks me to say
+
+- **«сквозь нас»:** the ⟨з⟩ entry loses its present `soft` blurb ("softens to [zʲ] before the soft sign ⟨ь⟩") for the retained-voicing one, since `deriveRule` returns one rule. Confirmed by the pipeline test above. The sign ⟨ь⟩ is its own entry after it; the singer who taps it still gets the soft-sign blurb.
+- **Lines that keep their voicing through в and get no blurb** (the brief's amendment 2, left as the brief says; a в-specific sentence would be new text, Dann's): «под водой» (measured: the ⟨д⟩ entry has no `retainedVoicing`), «без вас» (same, pinned at engine level), and, by the same rule, «из воды», «об воде» and any preposition or contraction directly before a в-word. The ratified sentence says "the next word begins with a vowel or a sonorant", and the singer sees «водой».
+- **Reachable in the Drawer, from a run (the brief's Fable question):** yes, a merged proclitic's or enclitic's own ribbon opens. I ran the real page (Playwright, desk project, throwaway spec, not committed): for each of «меж нас», «без Анны», «если б мог», «сквозь нас», «вокруг нас», «близ нас», «средь нас» I clicked each word stack and opened the Analysis station. «меж» and «без» (shown "→ меж", "→ без") and «б» (shown "← б") each have their own stack and their own ribbon, and tapping ⟨ж⟩, ⟨з⟩, ⟨б⟩ there shows the retained-voicing blurb ("When ⟨ж⟩ ends a preposition or a particle like it does here, and the next word begins with a vowel or a sonorant, it keeps its voicing as [ʒ]. An ordinary word…"). «сквозь», «вокруг», «близ», «средь» show it on their own stack too. The host's stack (the stack of «нас», «Анны», «мог», and «если») shows no such blurb. So the blurb IS seen on Grayson's own p. 252 lines («меж нас», «без Анны», «если б мог»), not only on the four prepositions with their own stack.
+
+### Cross-site line (CONTRACT section 4)
+
+`deriveRule`'s order (`composer.ts:246`) is the one place the new rule is ranked; `data/blurb-composer.json` is the only data; `french-parity.test.ts` covers the new keys with its three checks (a French for each, the same placeholders and citation, no em dash). The merged proclitic and enclitic display (`pipeline.ts` `finishLine`, the clitic merge) reads `ipaSurface` and `rightBoundary`, neither of which this step changes. `boundaries.ts` is untouched.
+
+### Gates, after step 3
+
+| # | Result |
+|---|---|
+| 1 phonology | 435 passed (+7) |
+| 2 dictionary | 248 passed |
+| 3 check | 0 errors, 12 warnings |
+| 4 web unit | 3927 passed, 1 skipped (3928) (+10) |
+| 5 root integration | 98 passed (the implications pin 41 to 47, same count of tests) |
+| 6 blurb | 164 passed (+16: the new file's 16; `french-parity.test.ts`'s count changed 181 to 193, same number of tests) |
+| 7 score-parser | 785 passed, 5 skipped (790) |
+| 8 ratchets | OK, nothing offered |

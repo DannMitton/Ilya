@@ -14,6 +14,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { setStressDictionary, setSingerSupplement } from '@ilya/phonology';
+import { composeBlurb, setBlurbData } from '@ilya/blurb';
 import { setGlossDictionary } from '@ilya/dictionary';
 import { processText } from '$lib/pipeline';
 
@@ -36,6 +37,7 @@ beforeAll(() => {
 	setStressDictionary(dictionary);
 	setGlossDictionary(dictionary);
 	setSingerSupplement(JSON.parse(readFileSync(join(DATA_DIR, 'singer-supplement.json'), 'utf8')));
+	setBlurbData(JSON.parse(readFileSync(join(DATA_DIR, 'blurb-composer.json'), 'utf8')));
 }, 30_000);
 
 /** The line's words as the singer reads them. A clitic merged into its host shows as an arrow. */
@@ -208,5 +210,60 @@ describe('row 157: the в look-through for a voiceless final, through the pipeli
 		['сад вдали', 'ˈsɑd'],
 	])('%s: the first word reads %s', (text, expected) => {
 		expect(first(text)).toBe(expected);
+	});
+});
+
+describe('row 157: the Inspector blurb for a kept voicing, through the pipeline (ratified by Dann 2026-10-26 21:58)', () => {
+	/** The last consonant entry of a word's ribbon, and the blurb it composes. */
+	const ribbon = (text: string, wordIdx = 0) => {
+		const log = line(text)[wordIdx].displayLog.filter((e: any) => e.features?.type === 'consonant');
+		const entry = log[log.length - 1];
+		return { entry, blurb: composeBlurb(entry) };
+	};
+	const RETAINED = 'it keeps its voicing as [';
+	/** The English sentence of a composed blurb (`blurb` is a string or a bilingual pair in the type). */
+	const en = (b: { blurb: string | { en?: string } } | null) => (b && typeof b.blurb !== 'string' ? (b.blurb.en ?? '') : '');
+
+	it.each([
+		['меж нас', 0, 'ж', 'ʒ', '(Grayson, pp. 165, 174, 251–252)'],
+		['без Анны', 0, 'з', 'z', '(Grayson, pp. 143, 251–252)'],
+		['если б мог', 1, 'б', 'b', '(Grayson, pp. 144, 251–252)'],
+		['сквозь нас', 0, 'з', 'zʲ', '(Grayson, pp. 143, 251–252)'],
+		['вокруг нас', 0, 'г', 'ɡ', '(Grayson, pp. 145, 251–252)'],
+	])('%s (word %i): the ⟨%s⟩ entry is marked, and the blurb says it keeps its voicing as [%s], citing %s', (text, idx, char, ipa, citation) => {
+		const { entry, blurb } = ribbon(text, idx);
+		expect(entry.char).toBe(char);
+		expect(entry.ipa).toBe(ipa);
+		expect(entry.features.retainedVoicing).toBe(true);
+		expect(en(blurb)).toContain(`${RETAINED}${ipa}].`);
+		expect(en(blurb)).toContain('An ordinary word');
+		expect(blurb!.citation).toBe(citation);
+	});
+
+	it('сад наш: the ⟨д⟩ entry keeps final-devoicing (REGRESSION GUARD), and is not marked', () => {
+		const { entry, blurb } = ribbon('сад наш');
+		expect(entry.features.retainedVoicing).toBeUndefined();
+		expect(entry.features.finalDevoicing).toBe(true);
+		expect(en(blurb)).toContain('devoices to [t]');
+	});
+	it('муж дома: the ⟨ж⟩ entry is not marked: the branch for a voiced obstruent before a voiced obstruent is not boundary #4 (REGRESSION GUARD)', () => {
+		const { entry, blurb } = ribbon('муж дома');
+		expect(entry.features.retainedVoicing).toBeUndefined();
+		expect(en(blurb)).not.toContain(RETAINED);
+	});
+	it('под водой: the ⟨д⟩ entry is not marked: the right word begins with в, so the singer sees «водой» and not a vowel', () => {
+		const { entry, blurb } = ribbon('под водой');
+		expect(entry.features.retainedVoicing).toBeUndefined();
+		expect(en(blurb)).not.toContain(RETAINED);
+	});
+	it('меж нас: the ⟨ж⟩ entry carries retainedVoicing and neither finalDevoicing nor a regressive mark, so the one rule is retained-voicing', () => {
+		const { entry } = ribbon('меж нас');
+		expect(entry.features.retainedVoicing).toBe(true);
+		expect(entry.features.finalDevoicing).toBeFalsy();
+		expect(entry.features.voicingAssimilation).toBeFalsy();
+	});
+	it('сквозь нас: the ⟨з⟩ loses its "softens before the soft sign" blurb for this one, since deriveRule returns one rule', () => {
+		const { blurb } = ribbon('сквозь нас');
+		expect(en(blurb)).not.toContain('softens to [zʲ] before the soft sign');
 	});
 });

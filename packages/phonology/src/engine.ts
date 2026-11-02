@@ -117,7 +117,7 @@ export interface BoundaryWord {
   rightBoundary: 'hard' | 'soft' | 'clitic';
   boundarySource: 'user' | 'auto' | 'punctuation' | 'score';
   skipFinalDevoicing: boolean;
-  cleanWord?: string; isProclitic?: boolean;
+  cleanWord?: string; isProclitic?: boolean; retainedVoicing?: boolean;
   [key: string]: any;
 }
 
@@ -1921,7 +1921,7 @@ export const GraysonEngine = {
     // Initialize: copy ipaUnderlying to ipaSurface, set skipFinalDevoicing
     words.forEach(word => {
       word.ipaSurface = word.ipaUnderlying;
-      word.skipFinalDevoicing = false;
+      word.skipFinalDevoicing = word.retainedVoicing = false;
     });
 
     // Process each boundary
@@ -1944,7 +1944,7 @@ export const GraysonEngine = {
       const effInitial = viaV ? initialPastV(words, i, (ipa) => this.getInitialConsonant(ipa)) : rightInitial;
       if (!rightInitial || !effInitial || this.isSonorantConsonant(effInitial)) {
         if (this.isVoicedObstruent(leftFinal) && keepsVoicingAtBoundary4(leftWord, this.proclitics)) {
-          leftWord.skipFinalDevoicing = true;
+          leftWord.skipFinalDevoicing = true; if (!viaV) leftWord.retainedVoicing = true; // row 157: the Inspector says why; not through в
         }
         continue;
       }

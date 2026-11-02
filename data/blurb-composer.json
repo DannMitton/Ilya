@@ -826,6 +826,66 @@
         "citation": "pp. 199–202"
       }
     },
+    "retained-voicing:б": {
+      "en": {
+        "template": "When ⟨{char}⟩ ends a preposition or a particle like it does here, and the next word begins with a vowel or a sonorant, it keeps its voicing as [{ipa}].",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ termine, comme ici, une préposition ou une particule et que le mot suivant commence par une voyelle ou une sonante, il conserve son voisement\u00A0: [{ipa}].",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:в": {
+      "en": {
+        "template": "When ⟨{char}⟩ ends a preposition or a particle like it does here, and the next word begins with a vowel or a sonorant, it keeps its voicing as [{ipa}].",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ termine, comme ici, une préposition ou une particule et que le mot suivant commence par une voyelle ou une sonante, il conserve son voisement\u00A0: [{ipa}].",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:г": {
+      "en": {
+        "template": "When ⟨{char}⟩ ends a preposition or a particle like it does here, and the next word begins with a vowel or a sonorant, it keeps its voicing as [{ipa}].",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ termine, comme ici, une préposition ou une particule et que le mot suivant commence par une voyelle ou une sonante, il conserve son voisement\u00A0: [{ipa}].",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:д": {
+      "en": {
+        "template": "When ⟨{char}⟩ ends a preposition or a particle like it does here, and the next word begins with a vowel or a sonorant, it keeps its voicing as [{ipa}].",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ termine, comme ici, une préposition ou une particule et que le mot suivant commence par une voyelle ou une sonante, il conserve son voisement\u00A0: [{ipa}].",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:ж": {
+      "en": {
+        "template": "When ⟨{char}⟩ ends a preposition or a particle like it does here, and the next word begins with a vowel or a sonorant, it keeps its voicing as [{ipa}].",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ termine, comme ici, une préposition ou une particule et que le mot suivant commence par une voyelle ou une sonante, il conserve son voisement\u00A0: [{ipa}].",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:з": {
+      "en": {
+        "template": "When ⟨{char}⟩ ends a preposition or a particle like it does here, and the next word begins with a vowel or a sonorant, it keeps its voicing as [{ipa}].",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "Lorsque ⟨{char}⟩ termine, comme ici, une préposition ou une particule et que le mot suivant commence par une voyelle ou une sonante, il conserve son voisement\u00A0: [{ipa}].",
+        "citation": "pp. 251–252"
+      }
+    },
     "regressive-devoicing:б": {
       "en": {
         "template": "When ⟨{char}⟩ sits in a cluster before a voiceless consonant like it does here, it devoices to [{ipa}] (regressive devoicing).",
@@ -1695,6 +1755,66 @@
       "fr": {
         "template": "Le voisement disparaît (dévoisement), mais le point d’articulation reste le même.",
         "citation": "pp. 199–202, 215–219"
+      }
+    },
+    "retained-voicing:б": {
+      "en": {
+        "template": "An ordinary word's final consonant would devoice here; a preposition or a particle keeps its voicing before a vowel or a sonorant.",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "La consonne finale d’un mot ordinaire se dévoiserait ici\u00A0; une préposition ou une particule conserve son voisement devant une voyelle ou une sonante.",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:в": {
+      "en": {
+        "template": "An ordinary word's final consonant would devoice here; a preposition or a particle keeps its voicing before a vowel or a sonorant.",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "La consonne finale d’un mot ordinaire se dévoiserait ici\u00A0; une préposition ou une particule conserve son voisement devant une voyelle ou une sonante.",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:г": {
+      "en": {
+        "template": "An ordinary word's final consonant would devoice here; a preposition or a particle keeps its voicing before a vowel or a sonorant.",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "La consonne finale d’un mot ordinaire se dévoiserait ici\u00A0; une préposition ou une particule conserve son voisement devant une voyelle ou une sonante.",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:д": {
+      "en": {
+        "template": "An ordinary word's final consonant would devoice here; a preposition or a particle keeps its voicing before a vowel or a sonorant.",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "La consonne finale d’un mot ordinaire se dévoiserait ici\u00A0; une préposition ou une particule conserve son voisement devant une voyelle ou une sonante.",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:ж": {
+      "en": {
+        "template": "An ordinary word's final consonant would devoice here; a preposition or a particle keeps its voicing before a vowel or a sonorant.",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "La consonne finale d’un mot ordinaire se dévoiserait ici\u00A0; une préposition ou une particule conserve son voisement devant une voyelle ou une sonante.",
+        "citation": "pp. 251–252"
+      }
+    },
+    "retained-voicing:з": {
+      "en": {
+        "template": "An ordinary word's final consonant would devoice here; a preposition or a particle keeps its voicing before a vowel or a sonorant.",
+        "citation": "pp. 251–252"
+      },
+      "fr": {
+        "template": "La consonne finale d’un mot ordinaire se dévoiserait ici\u00A0; une préposition ou une particule conserve son voisement devant une voyelle ou une sonante.",
+        "citation": "pp. 251–252"
       }
     },
     "regressive-devoicing:б": {

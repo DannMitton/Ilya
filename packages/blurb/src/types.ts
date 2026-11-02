@@ -84,6 +84,8 @@ export interface TranscriptionFeatures {
   finalDevoicing?: boolean;
   genitiveEnding?: boolean;
   bogException?: boolean;
+  /** Row 157: a preposition's or particle's final consonant that keeps its voicing before a vowel or a sonorant (Grayson pp. 251-252). */
+  retainedVoicing?: boolean;
   alwaysHard?: boolean;
   alwaysSoft?: boolean;
   clusterAssimilation?: boolean;

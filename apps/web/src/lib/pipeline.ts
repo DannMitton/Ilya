@@ -139,7 +139,7 @@ interface TranscribedWord {
   ipaDisplay?: string;
   ipaReconstituted?: string;
   ipaOwnReconstituted?: string;
-  isVowellessClitic?: boolean;
+  isVowellessClitic?: boolean; retainedVoicing?: boolean;
 }
 
 // ── Main pipeline ────────────────────────────────────────────────
