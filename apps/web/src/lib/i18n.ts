@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,121 keys.
+   This file holds 1,164 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -43,7 +43,7 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     142  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     185  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     36  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte
    intake.        36  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
@@ -2279,6 +2279,56 @@ const strings: Record<string, Record<Language, string>> = {
 	'key.dock.asPrinted': { en: 'As printed \u00b7 {tonic}', fr: 'Tonalit\u00e9 imprim\u00e9e \u00b7 {tonic}' },
 	'key.dock.pick': { en: 'Ilya\u2019s pick \u00b7 {tonic}', fr: 'Choix d\u2019Ilya \u00b7 {tonic}' },
 	'insights.tryKey': { en: 'Try this key', fr: 'Essayer cette tonalit\u00e9' },
+	// ── HOW ILYA SUGGESTS A KEY (N.182, row 71) ──────────────────────────
+	//    EVERY ENGLISH STRING HERE IS PROPOSED, Dann to rule. EVERY FRENCH SLOT
+	//    CARRIES THE ENGLISH (TODO-FR): nothing French reaches `Shane` before he
+	//    rules, and `t()` would print `[MISSING: key]` for an absent variant.
+	//    Not a translation, and not to be read as one; the desk drafts the French
+	//    for Dann as one sheet after the English is ruled. No string here names a
+	//    tab or a pitch, counts notes, or says "held" (Dann 2026-11-01).
+	'insights.key.suits.primo': { en: 'No key suggested: as it stands, the song stays inside your range and below {primo}.', fr: 'No key suggested\u00a0: as it stands, the song stays inside your range and below {primo}.' },
+	'insights.key.suits.secondo': { en: 'No key suggested: as it stands, the song stays inside your range and below {secondo}.', fr: 'No key suggested\u00a0: as it stands, the song stays inside your range and below {secondo}.' },
+	'insights.key.suits.range': { en: 'No key suggested: as it stands, the song stays inside your range.', fr: 'No key suggested\u00a0: as it stands, the song stays inside your range.' },
+	'insights.key.noneBetter': { en: 'No other key within a tritone changes these challenges by much.', fr: 'No other key within a tritone changes these challenges by much.' },
+	'insights.key.noWorkable': { en: 'No key within a tritone keeps this song within reach of your voice. Whether to pursue it, or to choose other repertoire, is yours to decide.', fr: 'No key within a tritone keeps this song within reach of your voice. Whether to pursue it, or to choose other repertoire, is yours to decide.' },
+	'insights.key.line': { en: '{readout}: {parts}.', fr: '{readout}\u00a0: {parts}.' },
+	'insights.key.where.bar': { en: 'bar {n}', fr: 'bar {n}' },
+	'insights.key.where.bars': { en: 'bars {from} to {to}', fr: 'bars {from} to {to}' },
+	'insights.key.where.and': { en: '{a} and {b}', fr: '{a} and {b}' },
+	'insights.key.where.elsewhere': { en: '{where}, and elsewhere', fr: '{where}, and elsewhere' },
+	'insights.key.part.inside': { en: 'stays inside your range', fr: 'stays inside your range' },
+	'insights.key.part.above': { en: 'reaches above your range in {where}', fr: 'reaches above your range in {where}' },
+	'insights.key.part.below': { en: 'reaches below your range in {where}', fr: 'reaches below your range in {where}' },
+	'insights.key.part.by': { en: '{part}, by {interval}', fr: '{part}, by {interval}' },
+	'insights.key.part.semitones': { en: '{n} semitones', fr: '{n} semitones' },
+	'insights.key.part.primo': { en: '{fraction} of the singing sits at or above {primo}', fr: '{fraction} of the singing sits at or above {primo}' },
+	'insights.key.part.primoSome': { en: 'some of the singing sits at or above {primo}', fr: 'some of the singing sits at or above {primo}' },
+	'insights.key.part.primoNone': { en: 'nothing sits at or above {primo}', fr: 'nothing sits at or above {primo}' },
+	'insights.key.part.secondo': { en: '{fraction} of the singing sits above {secondo}', fr: '{fraction} of the singing sits above {secondo}' },
+	'insights.key.part.secondoSome': { en: 'some of the singing sits above {secondo}', fr: 'some of the singing sits above {secondo}' },
+	'insights.key.part.secondoNone': { en: 'nothing sits above {secondo}', fr: 'nothing sits above {secondo}' },
+	'insights.key.part.sustained': { en: 'a sustained note above {secondo}, in bar {bar}', fr: 'a sustained note above {secondo}, in bar {bar}' },
+	'insights.key.part.sustainedNone': { en: 'no sustained note above {secondo}', fr: 'no sustained note above {secondo}' },
+	'insights.key.part.turn': { en: '{fraction} of the singing sits past where your vowels turn', fr: '{fraction} of the singing sits past where your vowels turn' },
+	'insights.key.terse.above': { en: 'above your range in {where}', fr: 'above your range in {where}' },
+	'insights.key.terse.below': { en: 'below your range in {where}', fr: 'below your range in {where}' },
+	'insights.key.why.range': { en: 'past the notes you typed as your limits', fr: 'past the notes you typed as your limits' },
+	'insights.key.why.passaggio': { en: 'where the voice turns', fr: 'where the voice turns' },
+	'insights.key.why.sustained': { en: 'a long note in the upper passaggio', fr: 'a long note in the upper *passaggio*' },
+	'insights.key.fraction.quarter': { en: 'about a quarter', fr: 'about a quarter' },
+	'insights.key.fraction.third': { en: 'about a third', fr: 'about a third' },
+	'insights.key.fraction.nearHalf': { en: 'nearly half', fr: 'nearly half' },
+	'insights.key.fraction.half': { en: 'about half', fr: 'about half' },
+	'insights.key.fraction.most': { en: 'most', fr: 'most' },
+	'insights.key.noun.primo.plain': { en: 'your first passaggio', fr: 'your first *passaggio*' },
+	'insights.key.noun.primo.working': { en: 'your primo', fr: 'your *primo*' },
+	'insights.key.noun.primo.technical': { en: 'your primo passaggio', fr: 'your *primo passaggio*' },
+	'insights.key.noun.secondo.plain': { en: 'your second passaggio', fr: 'your second *passaggio*' },
+	'insights.key.noun.secondo.working': { en: 'your secondo', fr: 'your *secondo*' },
+	'insights.key.noun.secondo.technical': { en: 'your secondo passaggio', fr: 'your *secondo passaggio*' },
+	'insights.key.reveal.higher': { en: 'Show keys that reach higher', fr: 'Show keys that reach higher' },
+	'insights.key.reveal.lower': { en: 'Show keys that reach lower', fr: 'Show keys that reach lower' },
+	'insights.key.reveal.both': { en: 'Show keys that reach higher or lower', fr: 'Show keys that reach higher or lower' },
 	// ── THE TABLES OF CONTENTS, drawn by Drawer.svelte ───────────────────
 	//    Moved here verbatim from language ternaries typed into the component
 	//    (consistency batch 1, step 1). Each key is `toc.<learn|guide>.<heading id>`
