@@ -132,3 +132,89 @@ Fractions (bands, table ascending, a non-number); `primoApplies` for all nine Ti
 | 8 ratchets | OK, nothing offered |
 
 New files are 344 and 33 lines against the 1000-line ceiling; test files are not measured.
+
+---
+
+## Step 2: the words
+
+### What changed
+
+- New `apps/web/src/lib/insights/key-lines.ts` (175 lines): `keyWords`, `keyParts`, `moveWords`, `whereWords`; the types `KeyLine`, `KeyWords`, `NameKey`. Nothing reads it yet (step 3 does).
+- `apps/web/src/lib/i18n.ts`: 43 new keys under **`insights.key.*`** (A10; the ruler's `key.*` is not added to). The index at the head of the file: `insights.` 142 to 185 and the total 1,121 to 1,164 (the prefix has a line already, so no new line; `i18n-index.test.ts` passes).
+- New `apps/web/src/lib/insights/key-lines.test.ts` (21 tests).
+- **The six retired ratified keys are NOT removed in this step.** The brief says they go with their pins in one commit; `singer-blocks.ts` still reads all six until step 3 rewires it, so removing them here would break the build. Step 3 removes them with the pin at `singer-blocks.test.ts:122` and lists them under "Ratified text changed" (A4, `CONTRACT.md` §1 item 11a). This moves the "retired keys and their pins" item from my step 2 to step 3 in the plan above.
+
+### How a line is built
+
+`{move} · {key it lands in}: {parts}.`, where the move is the ruler's own interval words from the key the singer is reading in (`key.ruler.down` and `.up`, `.interval.N`), and the key is the ruler's own naming (`keyNameFor`), so a line never carries "Ilya's recommendation" and never names the offset alone (A1). The page passes a `NameKey` function that returns the landing key's name and the stop; with neither, the line names the move alone. I do not use `readoutFor` for this: its interval is measured from the PRINTED key (`transposition-ruler.ts:102-110`), so on a page the singer already redrew it would describe a different move than the page's own search made.
+
+Parts, each only where the key differs from the key read: the range (passages named by bars, the one or two with the most sung time, "and elsewhere" past two; never a pitch and never a count of notes); the share at or above the primo (a fraction, "some" when too small for one, "nothing" when the challenge is gone); the share above the secondo (same); a sustained note above the secondo, by its bar; the share past the vowels' turn as a fraction, only where it moved by 10 points and can be said as one. The order of the answers: Q1 for a range above, Q2 below, Q3 for the passaggio parts, Q4 for the sustained note; points 1 to 2 add a why, point 3 is plain, points 4 to 5 are terse where a terse form exists (the range only). The passaggi's nouns follow Q7 (`registerFor`). The answers never change which keys are shown (a test pins it).
+
+A key under the reveal that reaches beyond the margin always says where and **how far** ("by a minor third", from the ruler's interval words; "by seven semitones" beyond a tritone: a distance, not a count of notes).
+
+### French
+
+Every French slot carries the English (`TODO-FR`, in the block comment above the keys in `i18n.ts`), nothing French reaches `Shane` before Dann rules. Two of the project's own French guards still apply to those values and are met: the OQLF spacing test needs a no-break space before each colon, so the four values with a colon carry `\u00a0:`; and the Italian-terms test needs `*passaggio*`, `*primo*`, and `*secondo*` in italics, so the seven values that name them carry the asterisks (as the old build's did). Neither changes the English.
+
+### Every new English string, PROPOSED, Dann to rule
+
+| Key | English |
+|---|---|
+| `insights.key.suits.primo` | No key suggested: as it stands, the song stays inside your range and below {primo}. |
+| `insights.key.suits.secondo` | No key suggested: as it stands, the song stays inside your range and below {secondo}. |
+| `insights.key.suits.range` | No key suggested: as it stands, the song stays inside your range. |
+| `insights.key.noneBetter` | No other key within a tritone changes these challenges by much. |
+| `insights.key.noWorkable` | No key within a tritone keeps this song within reach of your voice. Whether to pursue it, or to choose other repertoire, is yours to decide. |
+| `insights.key.line` | {readout}: {parts}. |
+| `insights.key.where.bar` | bar {n} |
+| `insights.key.where.bars` | bars {from} to {to} |
+| `insights.key.where.and` | {a} and {b} |
+| `insights.key.where.elsewhere` | {where}, and elsewhere |
+| `insights.key.part.inside` | stays inside your range |
+| `insights.key.part.above` | reaches above your range in {where} |
+| `insights.key.part.below` | reaches below your range in {where} |
+| `insights.key.part.by` | {part}, by {interval} |
+| `insights.key.part.semitones` | {n} semitones |
+| `insights.key.part.primo` | {fraction} of the singing sits at or above {primo} |
+| `insights.key.part.primoSome` | some of the singing sits at or above {primo} |
+| `insights.key.part.primoNone` | nothing sits at or above {primo} |
+| `insights.key.part.secondo` | {fraction} of the singing sits above {secondo} |
+| `insights.key.part.secondoSome` | some of the singing sits above {secondo} |
+| `insights.key.part.secondoNone` | nothing sits above {secondo} |
+| `insights.key.part.sustained` | a sustained note above {secondo}, in bar {bar} |
+| `insights.key.part.sustainedNone` | no sustained note above {secondo} |
+| `insights.key.part.turn` | {fraction} of the singing sits past where your vowels turn |
+| `insights.key.terse.above` | above your range in {where} |
+| `insights.key.terse.below` | below your range in {where} |
+| `insights.key.why.range` | past the notes you typed as your limits |
+| `insights.key.why.passaggio` | where the voice turns |
+| `insights.key.why.sustained` | a long note in the upper passaggio |
+| `insights.key.fraction.quarter` | about a quarter |
+| `insights.key.fraction.third` | about a third |
+| `insights.key.fraction.nearHalf` | nearly half |
+| `insights.key.fraction.half` | about half |
+| `insights.key.fraction.most` | most |
+| `insights.key.noun.primo.plain` | your first passaggio |
+| `insights.key.noun.primo.working` | your primo |
+| `insights.key.noun.primo.technical` | your primo passaggio |
+| `insights.key.noun.secondo.plain` | your second passaggio |
+| `insights.key.noun.secondo.working` | your secondo |
+| `insights.key.noun.secondo.technical` | your secondo passaggio |
+| `insights.key.reveal.higher` | Show keys that reach higher |
+| `insights.key.reveal.lower` | Show keys that reach lower |
+| `insights.key.reveal.both` | Show keys that reach higher or lower |
+
+### Gates, after step 2
+
+| # | Result |
+|---|---|
+| 1 phonology | 407 passed |
+| 2 dictionary | 248 passed |
+| 3 check | 0 errors, 12 warnings |
+| 4 web unit | 3897 passed, 1 skipped (3898) (+21) |
+| 5 root integration | 98 passed |
+| 6 blurb | 148 passed |
+| 7 score-parser | 785 passed, 5 skipped (790) |
+| 8 ratchets | OK, nothing offered |
+
+Gates 1, 2, 5, 6, and 7 were measured at the start of the step and not re-run after the two French-guard fixes to `i18n.ts`, which no package reads; gates 3, 4, and 8 were re-run after them. `key-lines.ts` is 175 lines.
