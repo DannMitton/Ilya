@@ -26,6 +26,13 @@
  *   distance, and the surplus tokens come back `unseated`, with their index.
  *   Either way the token is not dropped and not folded onto a neighbouring note.
  *
+ * A NOTE TAKES AT MOST ONE TOKEN in the words (N.135 step 5, `CONTRACT.md` §0.1).
+ * `monotone` never seats two tokens on a note. `nearest` and `order` can, and flag
+ * both `shared`; `sewWords` (`oneToANote`) then keeps the first in x order on the
+ * note and treats each other as an unseated token, carrying its letters into the
+ * open word as it does for any unseated piece. It no longer joins them into one
+ * syllable of two vowels.
+ *
  * EVERY rule seats on the notes that sing a syllable only: a note tied into, or
  * under an extender, takes no token (the measured configurations seat on the
  * free notes: `step1c.py`, `cands='free'`). A syllable under a tie's second note

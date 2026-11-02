@@ -250,3 +250,29 @@ describe('seatPage, one vowel per note (CONTRACT §0.1)', () => {
 		expect(page.stats.unseated).toBe(1);
 	});
 });
+
+describe('seatPage counts the sung notes that carry no syllable (N.135 step 5)', () => {
+	const one = [[box('мир', 90, 110)]];
+	const kinds = (page: ReturnType<typeof seatPage>) => page.stats.counted.breaches.map((b) => [b.id, b.kind]);
+
+	it('reports a sung note with no syllable that is not a continuation, over every note of the system, not only the notes with words', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), one, seams);
+		expect(kinds(page)).toEqual([[1, 'no-syllable'], [2, 'no-syllable']]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 3, units: 1 }]);
+	});
+
+	it('takes continuation from the notes: a note tied into, or under an extender, is not a breach', () => {
+		const n = notes(100, 200, 300);
+		n[1] = { ...n[1], tiedInto: true } as (typeof n)[number];
+		n[2] = { ...n[2], underExtender: true } as (typeof n)[number];
+		const page = seatPage(layout(system(n, [row(0)])), one, seams);
+		expect(kinds(page)).toEqual([]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 1, units: 1 }]);
+	});
+
+	it('counts units after the vowelless drop, and only for a system that was seated', () => {
+		const page = seatPage(layout(system(notes(100, 200), [row(0)]), system(notesFrom(10, 100), [], false)), [[box('мир', 90, 110), box('т', 190, 210)]], seams);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 2, units: 1 }]);
+		expect(kinds(page)).toEqual([[1, 'no-syllable']]);
+	});
+});

@@ -5,14 +5,19 @@
  * two vowels or more, and a note whose text is a mark alone are breaches. It
  * reports; it changes nothing.
  *
- * - A note with no text, or only a hyphen or an underscore (a joint, an
- *   extender), is not tested.
+ * - A note with only a hyphen or an underscore (a joint, an extender) is not
+ *   tested. A note with no text is a `no-syllable` breach unless the caller says it
+ *   is a continuation (N.135 step 5, Fable's review of the reader plan, finding 3):
+ *   the caller hands in EVERY sung note of a system, not only the notes that carry
+ *   text, and what makes a note a continuation (ties today; slur interiors and
+ *   extenders later) is the caller's input, never a rule baked in here.
+ *   `noSyllable: false` turns this kind off for a caller that lists only notes
+ *   with text.
  * - A note that is a continuation (tied into, under an extender, a melisma's
- *   later note) is tested like any other: letters with no vowel on it are a
- *   breach (`CONTRACT.md` §0.1, no exceptions; until N.135 step 4 a continuation
- *   holding letters and no vowel was skipped). A continuation with no text is
- *   still not tested. The caller's `continuation` flag no longer changes the
- *   result; it is kept so that callers need not change.
+ *   later note) is tested for its letters like any other: letters with no vowel
+ *   on it are a breach (`CONTRACT.md` §0.1, no exceptions; until N.135 step 4 a
+ *   continuation holding letters and no vowel was skipped). A continuation with
+ *   no text is not a `no-syllable` breach: that is what `continuation` now means.
  * - A letter of U+00A0-joined text is part of the one unit: «в бью» is one
  *   unit with one vowel, «бью ж» one.
  * - «й» is a consonant (Dann, 2026-10-29 01:18). A mark alone, `#` above all, is
@@ -45,11 +50,11 @@ export interface NoteText {
 	id: string | number;
 	/** The syllable text, or null/empty where there is none. */
 	text: string | null | undefined;
-	/** The note sings no new syllable: tied into, under an extender, or a melisma's later note. Not read since N.135 step 4. */
+	/** The note sings no new syllable: tied into, under an extender, or a melisma's later note. Only a note with no text reads it (`no-syllable`). */
 	continuation?: boolean;
 }
 
-export type BreachKind = 'no-vowel' | 'many-vowels' | 'mark-alone';
+export type BreachKind = 'no-vowel' | 'many-vowels' | 'mark-alone' | 'no-syllable';
 
 export interface Breach {
 	id: string | number;
@@ -65,12 +70,18 @@ export function isCyrillicVerse(texts: readonly (string | null | undefined)[]): 
 }
 
 /** Each note whose text breaks the rule, in the order given. */
-export function vowelsPerNote(notes: readonly NoteText[], options: { vowelCount?: boolean } = {}): Breach[] {
+export function vowelsPerNote(notes: readonly NoteText[], options: { vowelCount?: boolean; noSyllable?: boolean } = {}): Breach[] {
 	const vowelCount = options.vowelCount ?? true;
+	const noSyllable = options.noSyllable ?? true;
 	const out: Breach[] = [];
 	for (const note of notes) {
 		const text = note.text ?? '';
-		if (text.trim() === '' || JOINT_ONLY.test(text)) continue;
+		// A sung note that is not a continuation and carries no syllable: the "no less" half of the rule (CONTRACT §0.1).
+		if (text.trim() === '') {
+			if (noSyllable && !note.continuation) out.push({ id: note.id, text, kind: 'no-syllable', vowels: 0 });
+			continue;
+		}
+		if (JOINT_ONLY.test(text)) continue;
 		if (!LETTER.test(text)) {
 			out.push({ id: note.id, text, kind: 'mark-alone', vowels: 0 });
 			continue;

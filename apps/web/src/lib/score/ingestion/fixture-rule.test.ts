@@ -75,12 +75,34 @@ export function lyricNotes(file: string, xml: string): LyricNote[] {
 	return out;
 }
 
+/**
+ * N.135 step 5: the "no less" half of the rule, COUNTED and never failed on. The sung notes of every part that carries
+ * lyrics, in document order, rests, grace notes, and chord tones left out; a note is a continuation where a tie stops or
+ * continues on it (ties only: slur interiors and extenders are a later row). `noSyllable` counts the notes of the verse
+ * that are not continuations and carry no text (`vowelsPerNote`, kind `no-syllable`).
+ */
+export function noSyllableCount(xml: string, verse = 1): { sung: number; noSyllable: number } {
+	const notes: { text: string | null; continuation: boolean }[] = [];
+	for (const part of xml.matchAll(/<part\b[^>]*>([\s\S]*?)<\/part>/g)) {
+		if (!part[1].includes('<lyric')) continue;
+		for (const n of part[1].matchAll(/<note\b[\s\S]*?<\/note>/g)) {
+			if (/<rest[\s/>]/.test(n[0]) || n[0].includes('<grace') || n[0].includes('<chord')) continue;
+			const continuation = /<tie\s[^>]*type="(?:stop|continue)"/.test(n[0]) || /<tied\s[^>]*type="(?:stop|continue)"/.test(n[0]);
+			const l = new RegExp(`<lyric\\b[^>]*number="${verse}"[^>]*>([\\s\\S]*?)</lyric>`).exec(n[0])?.[1];
+			const text = l === undefined ? null : [...l.matchAll(/<text\b[^>]*>([^<]*)<\/text>/g)].map((t) => t[1]).join('');
+			notes.push({ text, continuation });
+		}
+	}
+	const found = vowelsPerNote(notes.map((n, id) => ({ id, ...n })), { vowelCount: false });
+	return { sung: notes.length, noSyllable: found.filter((b) => b.kind === 'no-syllable').length };
+}
+
 /** The breaches of a list of lyric notes, as `file | bar | verse | text | kind`. */
 function breachesOf(notes: LyricNote[]): Breach[] {
 	const out: Breach[] = [];
 	for (const verse of [...new Set(notes.map((n) => n.verse))]) {
 		const mine = notes.filter((n) => n.verse === verse);
-		for (const b of vowelsPerNote(mine.map((n, i) => ({ id: i, text: n.text, continuation: n.continuation })), { vowelCount: isCyrillicVerse(mine.map((n) => n.text)) })) {
+		for (const b of vowelsPerNote(mine.map((n, i) => ({ id: i, text: n.text, continuation: n.continuation })), { vowelCount: isCyrillicVerse(mine.map((n) => n.text)), noSyllable: false })) {
 			out.push({ file: mine[0].file, bar: mine[b.id as number].bar, verse, text: b.text, kind: b.kind });
 		}
 	}
@@ -392,8 +414,8 @@ describe('the tracked files, after arrival through the real parser', () => {
 		const score = await arrive(file);
 		return versesOf(score).flatMap((verse) => {
 			const texts = verseTexts(score, verse);
-			// This rule's breaches: no vowel, and a mark alone. A note of two vowels is another rule (the backup copy has one: «кая.»).
-			return vowelsPerNote(texts.map((text, id) => ({ id, text })), { vowelCount: isCyrillicVerse(texts) })
+			// This rule's breaches: no vowel, and a mark alone (`no-syllable` is counted separately, below). A note of two vowels is another rule (the backup copy has one: «кая.»).
+			return vowelsPerNote(texts.map((text, id) => ({ id, text })), { vowelCount: isCyrillicVerse(texts), noSyllable: false })
 				.filter((b) => b.kind !== 'many-vowels')
 				.map((b) => `${file} verse ${verse} note ${b.id} «${b.text}» ${b.kind}`);
 		});
@@ -428,5 +450,29 @@ describe('the tracked files, after arrival through the real parser', () => {
 		expect(after).not.toContain('знь');
 		expect(after).not.toContain('в');
 		expect(after.some((t) => t !== null && /знь/.test(t))).toBe(true);
+	});
+});
+
+// ── Notes with no syllable: counted, not failed on ─────────────────
+
+describe('the tracked files: sung notes with no syllable (N.135 step 5, count only)', () => {
+	const files = TRACKED.filter((f) => /\.(musicxml|xml)(\.|$)/i.test(f)).filter((f) => read(f).includes('<score-partwise') && read(f).includes('<lyric') && /[Ѐ-ӿ]/u.test(read(f)));
+
+	it('counts, per fixture, the verse-1 notes that are not continuations and carry no syllable', () => {
+		const counts = files.map((f) => ({ file: f, ...noSyllableCount(read(f)) }));
+		// The counts are listed in the step 5 report; no fixture fails on one yet.
+		console.info(`no-syllable by fixture:\n${counts.map((c) => `${c.file}: ${c.noSyllable} of ${c.sung} sung notes`).join('\n')}`);
+		for (const c of counts) {
+			expect(c.sung).toBeGreaterThan(0);
+			expect(c.noSyllable).toBeGreaterThanOrEqual(0);
+			expect(c.noSyllable).toBeLessThanOrEqual(c.sung);
+		}
+	});
+
+	it('sees what it counts: a note with no lyric is one, a tied note, a rest, and a note with a lyric are not', () => {
+		const note = (inner: string) => `<note><pitch><step>C</step><octave>4</octave></pitch>${inner}</note>`;
+		const lyric = '<lyric number="1"><syllabic>single</syllabic><text>мир</text></lyric>';
+		const xml = `<score-partwise><part id="P1"><measure number="1">${note(lyric)}${note('')}${note('<tie type="stop"/>')}<note><rest/></note></measure></part></score-partwise>`;
+		expect(noSyllableCount(xml)).toEqual({ sung: 3, noSyllable: 1 });
 	});
 });
