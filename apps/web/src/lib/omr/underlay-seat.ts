@@ -17,10 +17,14 @@
  *   applied to boxes instead of old seats.
  * - `monotone`: one least-cost alignment over the row, each token to one note,
  *   order kept, the cost the x distance, a note allowed no token (a melisma or
- *   a tie), a token never without a note. Where tokens outnumber the notes,
- *   every note takes one token, the in-order choice of least total distance, and
- *   the surplus tokens come back `unseated`, with their index: they are not
- *   dropped, and not folded onto a neighbouring note.
+ *   a tie). A token is without a note in two cases only. (1) It is FAR: its
+ *   centre is more than `FAR_FACTOR` times the median gap between consecutive
+ *   free notes from the nearest free note, so it is text the voice does not sing
+ *   (a cue over the piano's staff while the voice rests); it is left out before
+ *   the alignment, so it takes no note and moves none. (2) Tokens outnumber the
+ *   notes: every note takes one token, the in-order choice of least total
+ *   distance, and the surplus tokens come back `unseated`, with their index.
+ *   Either way the token is not dropped and not folded onto a neighbouring note.
  *
  * EVERY rule seats on the notes that sing a syllable only: a note tied into, or
  * under an extender, takes no token (the measured configurations seat on the
@@ -39,6 +43,27 @@
  */
 
 export type SeatRule = 'nearest' | 'order' | 'monotone';
+
+/**
+ * A syllable token is not a lyric of the voice when its nearest free note is
+ * further from its centre than this many times the median gap between
+ * consecutive free notes of the system (N.135 rule 2, desk measure 2026-11-02:
+ * a cue printed over the piano's staff while the voice rests took the voice's
+ * first two notes and slid the line). 2 is the brief's value (JUDGEMENT, not a
+ * sourced number): a long note followed by a wide gap leaves its own text within
+ * one gap of its note, and the median is not moved by that one wide gap. With
+ * fewer than two free notes there is no gap to measure and the rule does not
+ * apply; a median gap of 0 (notes on one x) does not apply it either.
+ */
+export const FAR_FACTOR = 2;
+
+/** The median gap between consecutive values of `xs` (sorted ascending); 0 where there are fewer than two. */
+export function medianGap(xs: readonly number[]): number {
+	if (xs.length < 2) return 0;
+	const gaps = xs.slice(1).map((x, i) => x - xs[i]).sort((a, b) => a - b);
+	const mid = gaps.length >> 1;
+	return gaps.length % 2 ? gaps[mid] : (gaps[mid - 1] + gaps[mid]) / 2;
+}
 
 /** One reader token: its text, and the box it stands in on the page (pixels). */
 export interface Token {
@@ -83,7 +108,7 @@ export interface Seat {
 	 * `monotone` left over (`unseated`); null for a token that is not a syllable, or where there is no note to seat on.
 	 */
 	by: SeatRule | null;
-	/** A syllable token that no note took: `note` is null. Only `monotone` leaves a token over while there are notes. */
+	/** A syllable token that no note took: `note` is null. Only `monotone` leaves a token over while there are notes: a surplus token, or a token far from every free note (`FAR_FACTOR`). */
 	unseated: boolean;
 	/** The token holds a non-letter between letters: two syllables run together, seated whole on one note. */
 	runTogether: boolean;
@@ -174,9 +199,13 @@ export function seatTokens(tokens: Token[], notes: NotePlace[], rule: SeatRule):
 		cx.forEach((c, k) => (at[k] = free[nearestOf(c, xs)]));
 
 		if (rule === 'monotone') {
-			monotone(cx, xs).forEach((j, k) => {
-				at[k] = j < 0 ? -1 : free[j];
-				by[k] = 'monotone';
+			// A token far from every free note is not the voice's lyric: left out before the alignment, so it takes no note and moves none.
+			const reach = FAR_FACTOR * medianGap(xs);
+			const near = cx.flatMap((c, k) => (reach > 0 && Math.abs(c - xs[nearestOf(c, xs)]) > reach ? [] : [k]));
+			by.fill('monotone');
+			at.fill(-1);
+			monotone(near.map((k) => cx[k]), xs).forEach((j, n) => {
+				at[near[n]] = j < 0 ? -1 : free[j];
 			});
 		} else if (rule === 'order') {
 			const barOf = new Map<number, number[]>();
