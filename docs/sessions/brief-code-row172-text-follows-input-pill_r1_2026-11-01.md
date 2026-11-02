@@ -1,5 +1,7 @@
 # Brief: row 172, TEXT follows INPUT's Poem | Lyrics pill (Code, r1, 2026-11-01)
 
+**SUPERSEDED 2026-11-02 14:2x by r2.** Do not send this version.
+
 Written by the desk (Opus). NOT Fable-reviewed until its review file sits beside it.
 
 ## What the singer sees, and the ruling

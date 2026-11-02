@@ -1,0 +1,48 @@
+# Brief: the scan path keeps one vowel per note, a word far from every sung note is not a lyric, and no path writes a vowelless syllable under a note (Code, cloud lane, r3, 2026-11-02)
+
+Written by the desk (Opus) from a measure on row 114's first file (songs 1 to 5, the diagnosis half; the second file stays sealed for the gate). r3 applies all six amendments of Fable's review (`docs/sessions/review-fable-brief-scan-vowelless_r1_2026-11-02.md`, SEND WITH AMENDMENTS, 224k tokens). r3 carries each amendment's text, so it stands alone. The review is not in the cloud tree when this session starts; if `git show origin/Shane:docs/sessions/review-fable-brief-scan-vowelless_r1_2026-11-02.md` finds it, read it, and where it and this text differ, the review's amendment text wins. r1 and r2 are superseded; do not work from them.
+
+`CONTRACT.md` §0.1 governs this brief (Dann 2026-10-29 01:18, and 2026-11-02 13:46, NO EXCEPTIONS): a note must be assigned a vowel; a vowelless token is a clitic that joins its host, or it is not sung and takes no note; «й» is a consonant. It never changes how the Text view shows a transcription.
+
+## Why
+
+Dann's gate: the words from a scan reach 9 of 10 syllables exactly on row 114. On the app's own path (`Shane` `9fa20430`, built, headless Chromium, `?words=read`), songs 1 to 5 seat **328 of 590** exactly (`~/Downloads/_desk-2026-11-02/m0/report-desk-m0-row114-ledger_r1_2026-11-02.md`, ledger beside it; the 328 is a re-score of one browser run's captures, not a second run). Two causes, each measured as a scratch change on the same tree, same PDFs, same scorer:
+
+1. **A vowelless token takes a note on the scan path.** `apps/web/src/lib/omr/underlay-clitics.ts:28-34` departs from §0.1 on purpose ("a vowelless word the transcription does not call a clitic stays a unit of its own"). On the ledger's 590 truth notes, 35 carry a vowelless cut (27 vowelless, such as «п», «ч», «т», «н», «м», plus 8 lone «І», «і», «ѣ» tokens); a stray «І» or «і» (a bar line or bracket read as a letter) counts as a vowel because `VOWEL` holds і (`underlay-units.ts:24`). 47 of the 69 seating losses sat in systems where this happened. **Rule 1 result: 328 to 355** (33 gained, 6 lost).
+2. **Russian text in the score that is not sung is seated.** Song 1 prints the cue «Дудка» over the piano's upper staff (bars 1 to 2, the voice resting); read as the lyric row's first word, it takes the voice's first two notes and the line slides two notes. **Rule 2 result, on top of rule 1: 355 to 363** (8 gained, all song 1, 0 lost).
+
+## Lane
+
+Sonnet. Branch `cloud-lane-28` from `Shane` at its tip (`f9797acb` or later). Push only that branch; never `Shane` or `main`; no pull request; nothing under `docs/memory/`; no `brief-*` or `review-*` file. One commit and one report per step at `docs/sessions/report-code-n135-scan-vowel-rules-step<n>_r1_2026-11-02.md`.
+
+## Steps
+
+**Step 0.** All eight gates on the cut; record them.
+
+**Step 1, rule 1.** Replace the departure. A unit of the row with no vowel letter takes no note on any path. A known proclitic or enclitic still rides its host as today; a proclitic with no host after it in the row, an enclitic with none before it, and any other vowelless unit are dropped and counted (`counts.left` becomes the count of clitics dropped for want of a host; rewrite `underlay-clitics.ts:33-34`, `:77`, and `underlay-page.ts:109`). A dropped unit is not written into `<lyric>`; the print's letters are not altered; the unit is not sung. A unit whose letters are a single і, ѣ, or ѵ alone is a stray mark and dropped likewise. **The stray-mark test applies to a unit that is its whole token only (the only unit of its `origin`, `cutUnits`); a piece `cutUnits` made always carries a vowel the engine placed, and «по-ѣ-ду» keeps its «ѣ».** Evidence: `capfix` song 3 reads «ѵѣу» for `cap`'s «ѵѣѣу», the middle piece dropped. **Place the drop in `seatPage` after the `if (seams.clitics)` block (`underlay-page.ts:206-213`), on `units`, so it runs where no calls are passed; `foldClitics` keeps folding.** The rescue row (`underlay-page.ts:184`, `:190`) and `underlay-fallback.ts` go through the same loop and are covered there. Rewrite the header comment of `underlay-clitics.ts` to say this and cite `CONTRACT.md` §0.1.
+
+**Step 2, rule 2.** In `seatTokens` (`underlay-seat.ts`, the `monotone` call at `:176-180`): a syllable token whose distance to its nearest free note exceeds `FAR_FACTOR` (2) times the median gap between consecutive free notes of the system is left unseated (`unseated: true`, by `monotone`). `FAR_FACTOR` is one named, commented constant. With fewer than two free notes the rule does not apply. Rewrite `underlay-seat.ts:18-23` (a token may now be left without a note by this rule) and `:86`. Keep `freeNoteXs` (`underlay-counts.ts:39`) equal to the free notes the rule measures.
+
+**Step 3, tests.** Unit tests for both rules: a vowelless unit between two syllables; a lone «І» at a row's start; «поѣду» cut into three pieces keeps all three; a token over the piano intro while the voice rests; a long note followed by a wide gap, where the token under the long note still seats; a syllable under a tie's second note whose nearest free note is within 2x the median still seats, and one beyond it is unseated, by `monotone`. Pins that change, with was and now: `underlay-clitics.test.ts:48` (the vowelless «т» is now dropped), `:54` and `:60` (a clitic with no host is dropped, still counted), `:71` (a lone «ѣ» token is dropped; move the ѣ/і/ѵ-as-vowel assertion onto a word such as «гѣ», which stays).
+
+**Step 4, the rule enforced, not counted.** One shared check, `assertVowelPerNote` or similar, in one file, used by every path that writes text under a note; a syllable with no vowel letter (`CYRILLIC_VOWEL`, `score/vowel-resolver.ts:159`) never reaches a note. The writers, and where each passes the check:
+
+1. **The scan.** On `units` at `underlay-page.ts:219`, before `seatTokens` (step 1's drop is this check on the scan path). `vowelsPerNote` (`underlay-page.ts:235`) stays as the after-seating count and now reads 0.
+2. **Typed Lyrics and Poem, the Loupe, Corrections, the heal, and every re-seat.** At `buildSlotQueue`'s syllable loop, `pairings.ts:240`, which covers the eleven writers the review names (`firstPass`, `refreshPairings`, `placeSyllable`, `applyCliticSeat`, `reseatByDiff` at both sites, `seatScoreWords`, `applyHeal`, `placeFromHere`, `seatWaitingScore`, `reseatOnReplace`) and `drawPairings`. A vowelless piece there joins the neighbouring piece of its word, the leftward fold `buildSlotQueue` already applies per word (`:218`).
+3. **A file's own lyrics on arrival** (`musicxml-parser.ts:804-839`, `mnx-parser.ts:975-1008`, the `.mscz` route through the same parser, and `diction-marks.ts:249-266`), drawn at `staff-renderer.ts:1028`, `:2429`, `:3149`. **The action (DESK DEFAULT):** on arrival, a vowelless syllable on a note joins its host in the fused form Ilya already builds (`pairings.ts:224-226`, `:241`, joiner U+00A0): a known proclitic joins the next syllable, a known enclitic or `#` the syllable before it, any other vowelless syllable the syllable before it (the leftward fold of `pairings.ts:218`); its note is left with no syllable. With no host in the line, the syllable is not drawn and the console counts it. The file's bytes are not changed; this is the reading.
+4. **The check itself.** Remove `vowels-per-note.ts:78`'s skip of a `continuation` note that holds letters and no vowel; keep the empty-text skip at `:70`.
+5. **Fixtures.** Extend `score/ingestion/fixture-rule.test.ts`: after arrival through the real parser, no tracked fixture with Cyrillic lyrics has a vowelless syllable under a note, with **no** `ALLOWED` list for that assertion. The raw-file check keeps `sunless-01-finale-lone-v.musicxml` and `n188-markings.musicxml` as named inputs that breach the rule on purpose, so the repair on arrival is tested on them; say so in the test's comment. The 16 truth files are untracked and not in the cloud tree, so this test covers tracked fixtures only; the desk runs the same check over the truth files on the Mac after the merge.
+
+Name every path you found and the line where it now passes the check. If you find a writer not listed here, add it and say so.
+
+## Every other site (CONTRACT §4)
+
+`score/pairings.ts` `buildSlotQueue` decides the same question for typed text; after this brief the two paths agree in effect (no vowelless text under a note), not in mechanism (the scan drops, typed text folds), and the report says so. `omr/vowels-per-note.ts` checks after seating. `omr/underlay-units.ts` `VOWEL` and `score/vowel-resolver.ts` `CYRILLIC_VOWEL` stay equal (`underlay-units.test.ts:15-18`). `underlay-counts.ts:39` `freeNoteXs` stays equal to rule 2's free notes. `omr/underlay-fallback.ts` goes through the same loop; nothing to change there.
+
+## Measure (the desk runs it)
+
+The desk re-runs row 114 songs 1 to 5 on the lane's build with its scripts and expects at least 363 of 590 exact. One system can read differently across two browser runs (the review, section 5), so a difference of one or two notes from 363 is within the measure's noise; a larger difference goes to the report.
+
+## Report
+
+What changed; the gate lines; pins changed, with was and now; the writers and their lines; which of rule 1's losses is a truth-file breach (song 5 p18 s3 «сп», a vowelless syllable on its own note in the truth); what you could not establish. A lead for the report, not a change: whether homr gives a piano-staff box on this path, which would let a y test catch a cue printed over a bar where the voice sings. NOT ESTABLISHED beats a complete invented answer.

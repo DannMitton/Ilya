@@ -10,6 +10,7 @@ Whatever `STATE.md` says it is. Open that file and read its first section. Nothi
 
 1. **`CONTRACT.md`**: how we work. The posture, the opening ritual, the tethers, the ceiling and git, style, French, and what not to do. Read it every time.
 2. **`STATE.md`**: the one thing, the latest handover, and the tracker of open items. Then **`QUEUE.md`**: every Code brief that is open, or shipped and not walked.
+2a. **The ratified design of the one thing, before any opinion about it.** Grep `OPEN.md`, `PRODUCT.md`, and `INBOX.md` for the one thing's item numbers and subject words, and read every section that turns up, in full. This is not optional and not "when its moment comes": the 2026-11-02 desk skipped it and spent Dann's afternoon reasoning against designs he had already ratified (`ENVIRONMENT.md`, 2026-11-02 15:0x). Added by the desk 2026-11-02 15:1x, DESK DEFAULT.
 3. **`ENVIRONMENT.md`**: only when you are about to touch a tool, a path, or a gate. It opens with an index keyed by symptom; use the index.
 4. **`PRODUCT.md`**: only before forming an opinion about what Ilya should do or look like.
 

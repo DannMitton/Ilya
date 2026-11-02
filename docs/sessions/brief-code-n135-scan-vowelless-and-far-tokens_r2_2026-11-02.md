@@ -1,5 +1,7 @@
 # Brief: the scan path keeps one vowel per note, and a word far from every sung note is not a lyric (Code, cloud lane, r2, 2026-11-02)
 
+**SUPERSEDED 2026-11-02 14:0x by r3.** Do not send this version.
+
 Written by the desk (Opus) from a measure on row 114's first file (songs 1 to 5, the diagnosis half; the second file stays sealed for the gate). NOT Fable-reviewed until its review file sits beside it.
 
 ## Why
