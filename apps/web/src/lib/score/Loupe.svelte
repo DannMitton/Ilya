@@ -27,7 +27,7 @@
 	import type { PlacementControls } from '$lib/score/placement-scope';
 	import type { Cursor } from '$lib/score/entry';
 	import LoupeSyllables from '$lib/score/LoupeSyllables.svelte';
-import { stackActions } from '$lib/components/Drawer/bandState';
+import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 	import type { RequiredGlyphName } from '@ilya/score-parser';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import { followEntry, GrowOnlyWidth, HeldHeight } from '$lib/score/loupe-hold';
@@ -174,6 +174,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		redoLabel: string | null;
 		onundo: () => void;
 		onredo: () => void;
+		/** The header's Close: the page's one `dismissLoupe`. */
+		onclose: () => void;
 		/** The correction cells, mounted by the page in Corrections mode. */
 		corrections?: Snippet;
 	}
@@ -208,6 +210,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		redoLabel,
 		onundo,
 		onredo,
+		onclose,
 		corrections,
 	}: Props = $props();
 
@@ -2215,8 +2218,9 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 	let topH = $state(0);
 	const PANEL_FOOT = 8;
 	/* The card's own vertical furniture, from `.loupe` in this file's
-	   stylesheet: 10 px above, 12 below, and the 1.4 px border twice. */
-	const CARD_FURNITURE = 10 + 12 + 1.4 * 2;
+	   stylesheet: none above (the header bleeds to the border), 12 below, and
+	   the 1.4 px border twice. */
+	const CARD_FURNITURE = 12 + 1.4 * 2;
 	/* The bar's own height, for the one frame before `.loupe-top` is measured:
 	   the hairline and its margins (19) plus the 44 px floor. */
 	const BAR_ESTIMATE = 19 + 44;
@@ -2276,8 +2280,6 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 			document.getElementById(`loupe-mode-${MODES[next]}`)?.focus();
 		}
 	}
-
-	const actions = $derived(stackActions(undoLabel, redoLabel, language));
 </script>
 
 {#if open && frame}
@@ -2292,6 +2294,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		style="left: {frame.left}px; width: {frame.width}px; top: {anchorTop}px;"
 	>
 		<div class="loupe-top" bind:offsetHeight={topH}>
+		<LoupeHeader {language} {isPhone} {undoLabel} {redoLabel} {onundo} {onredo} {onclose} />
 		<p class="loupe-tag">{tag}</p>
 		<p class="loupe-note">{noteLine || '\u00a0'}</p>
 		<div class="loupe-window" bind:this={windowEl} style="height: {frame.windowHeight}px;">
@@ -2525,12 +2528,6 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 				<!-- ITEM 4, THE ZOOM, ruled by Dann 2026-09-28 01:34 and its words ratified 2026-09-30 11:17: a minus and a plus beside Undo, held for the session, applied to every measure. -->
 				<button type="button" class="loupe-action loupe-zoom" aria-label={T('loupe.zoomOut')} disabled={!loupeZoom.canOut} onclick={loupeZoom.zoomOut}><span aria-hidden="true">{'\u2212'}</span></button>
 				<button type="button" class="loupe-action loupe-zoom" aria-label={T('loupe.zoomIn')} disabled={!loupeZoom.canIn} onclick={loupeZoom.zoomIn}><span aria-hidden="true">+</span></button>
-				{#each actions as action (action.kind)}
-					<button type="button" class="loupe-action" aria-label={action.sentence} onclick={() => (action.kind === 'undo' ? onundo() : onredo())}>
-						<span aria-hidden="true">{action.kind === 'undo' ? '\u21B0' : '\u21B1'}</span>
-						<span>{action.verb}</span>
-					</button>
-				{/each}
 				<button
 					type="button"
 					class="loupe-syl-toggle"
@@ -2598,7 +2595,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		   meaning either, so nothing is lost by taking the whole surface. */
 		touch-action: none;
 		box-sizing: border-box;
-		padding: 10px 10px 12px;
+		padding: 0 10px 12px;
 		border: 1.4px solid var(--ink-secondary, #4a4540);
 		border-radius: var(--float-radius, 10px);
 		/* Hung from its top since N.149; see `anchorTop` in the script. */
@@ -2774,10 +2771,10 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		outline-offset: 2px;
 	}
 
-	/* ITEM 4 ON A PHONE. The pill, the zoom, Undo, Redo, and the chevron do not fit one row of 277 px, so the bar
-	   takes two: the pill and the chevron, then the zoom and Undo and Redo (`display: contents` lets the right-hand
-	   group's children take part in the bar's own wrap, and the break keeps the zoom off the first row). Two rows,
-	   always, so Undo appearing does not change the bar's height under the music. */
+	/* ITEM 4 ON A PHONE. Undo and Redo moved to the header (row 164), but the pill (181 px), the zoom (2 x 44), and
+	   the chevron (44) still do not fit one row of 277 px, measured 2026-11-01. So the bar takes two: the pill and the
+	   chevron, then the zoom (`display: contents` lets the right-hand group's children take part in the bar's own
+	   wrap, and the break keeps the zoom off the first row). */
 	.loupe-bar-break {
 		display: none;
 	}
@@ -2808,7 +2805,7 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		order: 3;
 	}
 
-	/* Flush right: Undo, Redo, then the chevron outermost, the rule every
+	/* Flush right: the zoom, then the chevron outermost, the rule every
 	   station header keeps. */
 	.loupe-bar-right {
 		display: flex;
@@ -2816,9 +2813,8 @@ import { stackActions } from '$lib/components/Drawer/bandState';
 		margin-left: auto;
 	}
 
-	/* Undo and Redo, clickable text in the bar's own label style, which is what
-	   the Score markup band's pair was (N.115 increment 3) and why they carry
-	   its glyphs and its `underline` on hover. */
+	/* The zoom's pair, clickable text in the bar's own label style (Undo and Redo
+	   stood here until row 164 moved them to the header). */
 	.loupe-action {
 		display: flex;
 		align-items: center;

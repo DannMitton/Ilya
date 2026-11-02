@@ -513,6 +513,11 @@ const strings: Record<string, Record<Language, string>> = {
 	/* Item 4, the loupe's zoom. English "Zoom out" and "Zoom in"; French ratified on 2026-09-30 at 11:17, drafted on 2026-09-28. */
 	'loupe.zoomOut':               { en: 'Zoom out',                     fr: 'Réduire le zoom' },
 	'loupe.zoomIn':                { en: 'Zoom in',                      fr: 'Agrandir le zoom' },
+	// Row 164, the header. The title is a place, so it is stored in capitals
+	// (`interface-text.md` §3). The French of both is NOT RATIFIED: each is the
+	// English until Dann rules.
+	'loupe.title':                 { en: 'LOUPE',                        fr: 'LOUPE' }, // TODO-FR
+	'loupe.close':                 { en: 'Close',                        fr: 'Close' }, // TODO-FR
 	// Cells the singer can see and cannot use this slice. Slice 3 takes all
 	// three, and none of them carries behaviour here.
 	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },

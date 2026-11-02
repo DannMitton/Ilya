@@ -1426,12 +1426,10 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	function handleSurfacePointerUp(e: PointerEvent): void {
 		const from = swipeFrom;
 		swipeFrom = null;
-		/* THE SWIPE IS THE PHONE'S GESTURE AND STAYS THERE. Dann's brief for
-		   slice 4: no swipe exists on desktop, do not invent one. Without this
-		   gate a mouse dragged down the loupe would dismiss it, which is a
-		   gesture nobody on a desk would try on purpose and everybody would
-		   trigger by accident while selecting. The chevron and Escape are the
-		   desk's two ways out. */
+		/* THE SWIPE IS THE PHONE'S GESTURE AND STAYS THERE (Dann, slice 4): a
+		   mouse dragged down the loupe would dismiss it, which nobody on a desk
+		   does on purpose and everybody does by accident while selecting. The
+		   desk's ways out are Escape and the header's Close. */
 		if (isPhone && from && loupeOpen && isDismissSwipe(e.clientX - from.x, e.clientY - from.y)) {
 			dismissLoupe();
 		}
@@ -4599,6 +4597,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		{redoLabel}
 		onundo={handleUndo}
 		onredo={handleRedo}
+		onclose={dismissLoupe}
 		corrections={loupeCorrections}
 	/>
 {/if}
