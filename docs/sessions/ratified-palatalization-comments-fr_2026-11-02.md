@@ -4,29 +4,32 @@ Built from the French already in `data/blurb-composer.json` (processes `soft:*`,
 
 1. ⟨{char}⟩ se palatalise en [{ipa}] devant ⟨{trigger}⟩, une lettre voyelle palatalisatrice.
 2. ⟨{char}⟩ se palatalise en [{ipa}] devant le signe mou ⟨ь⟩.
-3. ⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit.
-4. (3), puis : Dans la langue parlée courante, il reste souvent dur ici.
-5. ⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une labiale (ou vélaire) comme [{base_ipa}] n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.
-6. ⟨н⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.
-7. ⟨{char}⟩ se palatalise en [{ipa}] devant un second ⟨{char}⟩ palatalisé : redoublées, les deux lettres se palatalisent ensemble.
-8. ⟨р⟩ se palatalise en [rʲ] devant le [{trigger}] palatalisé : il suit ⟨и⟩, ⟨е⟩ ou ⟨э⟩, et l'accent tombe sur cette voyelle ou sur la suivante.
-9. ⟨{char}⟩ se palatalise en [{ipa}] devant le signe dur : ⟨в⟩, ⟨с⟩ et ⟨з⟩ se palatalisent devant ⟨ъ⟩.
-10. ⟨{char}⟩ reste [{ipa}] bien que le [{trigger}] qui le suit soit palatalisé : une labiale (ou vélaire) n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.
-11. ⟨н⟩ reste [n] bien que le [{trigger}] qui le suit soit palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.
-12. ⟨р⟩ reste [r] bien que le [{trigger}] qui le suit soit palatalisé : devant une consonne palatalisée, [r] ne se palatalise que redoublé, ou après ⟨и⟩, ⟨е⟩ ou ⟨э⟩ lorsque l'accent tombe sur cette voyelle ou sur la suivante.
-13. ⟨л⟩ reste [ɫ] bien que le [{trigger}] qui le suit soit palatalisé : [l] n'est palatalisé par une consonne palatalisée que s'il est redoublé.
-14. ⟨{char}⟩ reste [{ipa}] : la palatalisation ne franchit pas le signe dur ⟨ъ⟩.
-15. ⟨{char}⟩ reste [{ipa}] : la palatalisation ne remonte pas de la racine jusqu'au préfixe, sauf si la même consonne se trouve de part et d'autre.
-16. ⟨{char}⟩ reste [{ipa}] : le son qui le suit immédiatement n'est pas palatalisé.
+3. ⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit.
+4. (3), puis : Dans la langue parlée courante, il reste souvent dur ici.
+5. ⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une labiale (ou vélaire) comme [{base_ipa}] n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.
+6. ⟨н⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.
+7. ⟨{char}⟩ se palatalise en [{ipa}] devant un second ⟨{char}⟩ palatalisé : redoublées, les deux lettres se palatalisent ensemble.
+8. ⟨р⟩ se palatalise en [rʲ] devant le [{trigger}] palatalisé : il suit ⟨и⟩, ⟨е⟩ ou ⟨э⟩, et l'accent tombe sur cette voyelle ou sur la suivante.
+9. ⟨{char}⟩ se palatalise en [{ipa}] devant le signe dur : ⟨в⟩, ⟨с⟩ et ⟨з⟩ se palatalisent devant ⟨ъ⟩.
+10. ⟨{char}⟩ reste [{ipa}] bien que le [{trigger}] qui le suit soit palatalisé : une labiale (ou vélaire) n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.
+11. ⟨н⟩ reste [n] bien que le [{trigger}] qui le suit soit palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.
+12. ⟨р⟩ reste [r] bien que le [{trigger}] qui le suit soit palatalisé : devant une consonne palatalisée, [r] ne se palatalise que redoublé, ou après ⟨и⟩, ⟨е⟩ ou ⟨э⟩ lorsque l'accent tombe sur cette voyelle ou sur la suivante.
+13. ⟨л⟩ reste [ɫ] bien que le [{trigger}] qui le suit soit palatalisé : [l] n'est palatalisé par une consonne palatalisée que s'il est redoublé.
+14. ⟨{char}⟩ reste [{ipa}] : la palatalisation ne franchit pas le signe dur ⟨ъ⟩.
+15. ⟨{char}⟩ reste [{ipa}] : la palatalisation ne remonte pas de la racine jusqu'au préfixe, sauf si la même consonne se trouve de part et d'autre.
+16. ⟨{char}⟩ reste [{ipa}] : le son qui le suit immédiatement n'est pas palatalisé.
 
 Open choices (Dann's): (a) "softens" as the file's « se palatalise »; (b) "everyday speech" as « la langue parlée courante »; (c) "vowel letter" as « lettre voyelle »; (d) "cross back into its prefix" as « ne remonte pas de la racine jusqu'au préfixe »; (e) "doubled" as « redoublé ».
 
-## Ajout 2026-11-02 00:25, RATIFIÉ par Dann (« yes ») : raison `lexical-exception`, «счастье» et ses dérivés (Grayson 2012, 287)
+## Ajout 2026-11-02 00:25, RATIFIÉ par Dann (« yes ») : raison `lexical-exception`, «счастье» et ses dérivés (Grayson 2012, 287)
 
-⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception : Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.
+⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception : Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.
 
-## Ajout 2026-11-02 00:53, RATIFIÉ par Dann (« yes ») : raison `look-alike-root` (Grayson 2012, 249)
+## Ajout 2026-11-02 00:53, RATIFIÉ par Dann (« yes ») : raison `look-alike-root` (Grayson 2012, 249)
 
-⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé. «{word}» semble commencer par le préfixe «{look}-», mais ⟨{char}⟩ appartient à la racine «{root}-» : la palatalisation l'atteint donc.
+⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé. «{word}» semble commencer par le préfixe «{look}-», mais ⟨{char}⟩ appartient à la racine «{root}-» : la palatalisation l'atteint donc.
 
-Choix ratifiés : (a) « semble commencer par » ; (b) « l'atteint donc ».
+Choix ratifiés : (a) « semble commencer par » ; (b) « l'atteint donc ».
+
+
+**Amended 2026-11-02 09:0x (Dann 09:02, "We aligne with Canadian Frnech, I think the OQLF?"; OQLF, Vitrine linguistique, « Espacement avant et après les signes de ponctuation et les symboles »: deux-points, « Une espace insécable » before):** every space before a colon in this file is now U+00A0. The words are unchanged.
