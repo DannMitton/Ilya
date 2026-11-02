@@ -585,3 +585,5 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-11-02 00:50, Dann ruled "1" on row 175 step 0: prefix list plus look-alike roots (по-двиг-, по-движ-, по-двин-, по-двиз-, отч-); recorded in OPEN.md, palatalization section.
 - 2026-11-02 00:52, Dann: a comment explaining that «подвиг» looks prefixed but its root is двиг-; drafted, RATIFIED EN and FR 00:53 (reason look-alike-root), queued to row 175 step 3.
 - 2026-11-02 01:22, Dann: the live INSIGHTS chart stays plain (no finding mark); row 165 step 8 not shipped. OPEN.md.
+- 2026-11-02 01:4x, lead from row 175 step 3 report: vowel comments that compose to nothing show "а → ɑ" twice in the panel (stressed-interpalatal 10 of 25, aya-suffix 6 of 6, pretonic-interpalatal, velar-adjectival, reflexive). Not yet a row.
+- 2026-11-02 08:52 to 08:56: Dann rewrote the desk's LEARN ⟨р⟩ paragraph (heading "[rʲ] and the vowel before it."; "and the rules governing its palatalization can seem complex"; front vowels in parentheses) and ratified the desk's French at 08:56 ("ratified"). Home: OPEN.md, palatalization section.
