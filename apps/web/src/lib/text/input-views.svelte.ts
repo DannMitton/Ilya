@@ -65,7 +65,11 @@ class InputViews {
 		if (!keepLanding) this.landed = null;
 	}
 
-	/** The singer chose which witness Text transcribes for this song. */
+	/**
+	 * The singer tapped a pill in Input, and that is the witness Text shows for this song
+	 * (row 172, Dann 2026-11-01 13:04). Called only from `IntakeViews.svelte`'s tap;
+	 * `open` and `land` never call it, so a view Ilya changes by itself does not move Text.
+	 */
 	chooseWitness(songId: string, witness: InputView): void {
 		this.witnessChoice = { ...this.witnessChoice, [songId]: witness };
 	}
