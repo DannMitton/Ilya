@@ -5076,3 +5076,4 @@ The desk put Fable's "22 percent of the jewel gives white text above 4.5:1" to D
 - 2026-11-01 23:38: the desk wrote "⟨п⟩ in «хребти»" in a draft comment (twice tonight); the letter is ⟨б⟩, which devoices to [p] before ⟨т⟩ (D&P p. 78 transcribe it хрьептьи). Dann caught it. Lesson: name the letter from the spelling, never from a transcription on the page.
 - 2026-11-01 00:0x: the desk told Dann "Grayson divides «те-рпе́ть»" from his p. 208 rule; his own n. 277 prints tʲirʲ ˈpʲetʲ. Lesson: check a source's printed examples before stating how it applies its own rule.
 - 2026-11-02 00:2x: brief r1 labelled «ветки» and «три» "D&P rows (dental soft)"; D&P print both n/c (pp. 79-80). Fable caught it. Lesson: give each test row the source that actually prints that value.
+- 2026-11-02 00:41: desk opened no memory backup at the session open (CONTRACT, Dann's rule 6); made one before the close instead.
