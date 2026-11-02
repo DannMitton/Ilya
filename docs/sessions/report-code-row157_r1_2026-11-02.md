@@ -157,8 +157,8 @@ Same number computed elsewhere: `transcribe`'s isolation path (`engine.ts:1725-1
 
 ### What changed
 
-- `packages/phonology/src/engine.ts:1944` (the brief's `:2184`): the line `if (viaV && !this.isVoicedObstruent(leftFinal)) continue;` is gone, and its sentence in the comment above now says "for a voiceless final too (row 157)". A voiceless left final before в is no longer skipped; its effective initial comes from `initialPastV` (`:1944`, the line below) as a voiced one's does, and the existing voicing branch (`:1983-1986`) voices it when that initial is a voiced obstruent. Nothing else in the four branches changed. `engine.ts` is 2048 lines (ceiling lowered from 2049).
-- Removing the line reopened no type error (gate 3: 0 errors): `rightInitial` stays narrowed by the `continue` at `:1946-1951`'s block, which stays.
+- `packages/phonology/src/engine.ts:1944` (the brief's `:2184`): the line `if (viaV && !this.isVoicedObstruent(leftFinal)) continue;` is gone, and its sentence in the comment above now says "for a voiceless final too (row 157)". A voiceless left final before в is no longer skipped; its effective initial comes from `initialPastV` (`:1944`) as a voiced one's does, and the existing voicing branch (`:1983-1986`) voices it when that initial is a voiced obstruent. Nothing else in the four branches changed. `engine.ts` is 2048 lines (ceiling lowered from 2049).
+- Removing the line reopened no type error (gate 3: 0 errors): `rightInitial` stays narrowed by the `continue` that ends the boundary #4 block (`:1946-1951`), which stays.
 
 ### Pins, each shown failing first
 
@@ -207,9 +207,9 @@ Whether the х to ɣ, ц to dz, ч to dʒʲ allophones at a word boundary are Gr
 
 ### What changed
 
-- **(a) The engine marks the word** (`packages/phonology/src/engine.ts`, 2048 lines, unchanged by this step): at the boundary #4 branch (`:1946-1951`, where `keepsVoicingAtBoundary4` keeps the voicing and sets `skipFinalDevoicing`), `if (!viaV) leftWord.retainedVoicing = true;` on the same line; so the field is set in that one place only, and only when the right word's own first segment is the vowel or the sonorant (the brief's amendment 2). The pass starts every word clean (`word.skipFinalDevoicing = word.retainedVoicing = false;`, `:1924`), so a mark does not survive a second run on the same objects (a test pins it). `BoundaryWord` declares `retainedVoicing?: boolean` beside `isProclitic` (`:119`, one line). Both edits are line-neutral, because `engine.ts` has no headroom. `pipeline.ts`'s `TranscribedWord` gains the same optional field on the `isVowellessClitic` line (`:141`; 901 lines, unchanged).
+- **(a) The engine marks the word** (`packages/phonology/src/engine.ts`, 2048 lines, unchanged by this step): at the boundary #4 branch (`:1946-1949`, where `keepsVoicingAtBoundary4` keeps the voicing and sets `skipFinalDevoicing`, `:1947`), `if (!viaV) leftWord.retainedVoicing = true;` on the same line; so the field is set in that one place only, and only when the right word's own first segment is the vowel or the sonorant (the brief's amendment 2). The pass starts every word clean (`word.skipFinalDevoicing = word.retainedVoicing = false;`, `:1924`), so a mark does not survive a second run on the same objects (a test pins it). `BoundaryWord` declares `retainedVoicing?: boolean` beside `isProclitic` (`:120`, one line). Both edits are line-neutral, because `engine.ts` has no headroom. `pipeline.ts`'s `TranscribedWord` gains the same optional field on the `isVowellessClitic` line (`:141`; 901 lines, unchanged).
 - **(b) The log** (`apps/web/src/lib/voicing-log.ts`, now 81 lines): `markRetainedVoicing` finds the word's last consonant entry and sets `features.retainedVoicing = true`; `writeSurfaceToWord` (step 1) calls it. The module's header says why: such a word's surface equals its underlying one, so the block that marks a surface change skips it.
-- **(c) The blurb package**: `packages/blurb/src/types.ts` gains `retainedVoicing?: boolean`; `packages/blurb/src/composer.ts` `deriveRule` returns `'retained-voicing'` after `silent`, `regressive-devoicing`, and `regressive-voicing`, and before `final-devoicing`, `genitive`, and `bog-exception` (`:246`). A word cannot carry both `retainedVoicing` and `finalDevoicing`: the pipeline test on «меж нас» shows its ⟨ж⟩ entry has `retainedVoicing` and neither `finalDevoicing` nor `voicingAssimilation`.
+- **(c) The blurb package**: `packages/blurb/src/types.ts` gains `retainedVoicing?: boolean`; `packages/blurb/src/composer.ts` `deriveRule` returns `'retained-voicing'` after `silent`, `regressive-devoicing`, and `regressive-voicing`, and before `final-devoicing`, `genitive`, and `bog-exception` (`:248`). A word cannot carry both `retainedVoicing` and `finalDevoicing`: the pipeline test on «меж нас» shows its ⟨ж⟩ entry has `retainedVoicing` and neither `finalDevoicing` nor `voicingAssimilation`.
 - **(d) `data/blurb-composer.json`**: twelve pairs, `retained-voicing:<letter>` for б, в, г, д, ж, з, in `processes` and in `implications` (inserted after each section's `final-devoicing:з`), citation `pp. 251–252` on both, the four ratified strings verbatim in both languages, the two French no-break spaces written as the six characters ` ` (never a literal), « d’un » with its U+2019. The test file reads them by code point. The file's existing 68 lines with a literal U+00A0 are untouched (the diff is 120 insertions and nothing else). **Static-data byte count (CONTRACT: say when something ships into `static/`): `data/blurb-composer.json`, which `apps/web/static/data/` links to, goes from 78,876 to 85,020 bytes (+6,144).** Whether an app already installed picks the new file up on its next online start is the loader's N.195 behaviour (it keeps the last good copy of each small file, `loader.ts` `BLURB_STORE_KEY`): NOT RUN.
 - **The counts that moved**: `packages/blurb/tests/french-parity.test.ts` reads all templates (the brief says 209 to 221; row 175 had moved the count to 181, so it is **181 to 193**, the same 12 new pairs), and `tests/palatalization-comments.test.ts:151` pins the number of implications (41 after row 175; **47** with the six new ones). Gate 5 held the second one red until I read it; it is a count, not a reading, so I moved it with a comment.
 - `data/blurb-composer.json`'s `bog-exception:г` template is untouched.
@@ -228,7 +228,7 @@ Whether the х to ɣ, ц to dz, ч to dʒʲ allophones at a word boundary are Gr
 
 ### Cross-site line (CONTRACT section 4)
 
-`deriveRule`'s order (`composer.ts:246`) is the one place the new rule is ranked; `data/blurb-composer.json` is the only data; `french-parity.test.ts` covers the new keys with its three checks (a French for each, the same placeholders and citation, no em dash). The merged proclitic and enclitic display (`pipeline.ts` `finishLine`, the clitic merge) reads `ipaSurface` and `rightBoundary`, neither of which this step changes. `boundaries.ts` is untouched.
+`deriveRule`'s order (`composer.ts:248`) is the one place the new rule is ranked; `data/blurb-composer.json` is the only data; `french-parity.test.ts` covers the new keys with its three checks (a French for each, the same placeholders and citation, no em dash). The merged proclitic and enclitic display (`pipeline.ts` `finishLine`, the clitic merge) reads `ipaSurface` and `rightBoundary`, neither of which this step changes. `boundaries.ts` is untouched.
 
 ### Gates, after step 3
 
@@ -242,3 +242,61 @@ Whether the х to ɣ, ц to dz, ч to dʒʲ allophones at a word boundary are Gr
 | 6 blurb | 164 passed (+16: the new file's 16; `french-parity.test.ts`'s count changed 181 to 193, same number of tests) |
 | 7 score-parser | 785 passed, 5 skipped (790) |
 | 8 ratchets | OK, nothing offered |
+
+---
+
+## Step 4: tests, gates, and what is left
+
+No code changed in this step: it is the proof and the answers the brief asks for.
+
+### The eight gates, before row 157 and after step 3 (the tree this report describes)
+
+| # | Gate | Before (step 0) | After (step 3) | Moved by |
+|---|---|---|---|---|
+| 1 | `pnpm --filter @ilya/phonology test` | 407 | 435 | +12 `voicing-rule2.test.ts` (step 1), +9 (step 2), +7 (step 3) |
+| 2 | `pnpm --filter @ilya/dictionary test` | 248 | 248 | unmoved |
+| 3 | `pnpm --filter @ilya/web check` | 0 errors, 12 warnings | 0 errors, 12 warnings | unmoved |
+| 4 | `pnpm --filter @ilya/web test` | 3895 passed, 1 skipped | 3927 passed, 1 skipped | +15 (step 1), +7 (step 2), +10 (step 3), all in `voicing-rule2.pipeline.test.ts` |
+| 5 | `pnpm test:integration` | 98 | 98 | unmoved: one pin's number changed, `tests/palatalization-comments.test.ts:151`, 41 to 47 |
+| 6 | `pnpm --filter @ilya/blurb test` | 148 | 164 | +16, `packages/blurb/tests/retained-voicing.test.ts` (new); `french-parity.test.ts`'s count 181 to 193 moves no test |
+| 7 | `pnpm --filter @ilya/score-parser test` | 785 passed, 5 skipped | 785 passed, 5 skipped | unmoved |
+| 8 | `pnpm ratchets` | OK | OK | `engine.ts` 2051 to 2048, `pipeline.ts` 925 to 901, both lowered |
+
+The brief expected gates 2, 3, 5, 7, 8 not to move and 1, 4, 6 to move. Gate 5's count of tests did not move; the one number it pins did, and that is the third place where an existing test knew the number of implications (the other two were `french-parity.test.ts` and, in this brief, the same file). Gate numbers are inferred, as in rows 172 and 71.
+
+**Playwright, desk project:** `core-loop` and `typed-hyphens` pass (22 tests, including the Inspector's ribbon tests). The throwaway run in step 3 opened the real Inspector on seven phrases. The failures that exist on the cut independently of this row (`glue-typed-marks`, `insights-page:95`, `loupe-header:47`, `print-pages:20`, `singer-paths:169`, the HEIC spec, `input-views:134` on the phone project, and `relining:95` which row 172 raised) are named in row 172's reports and were not touched.
+
+### What a singer sees on an already-seated song (the brief's section 4, `Pairing.ipa`)
+
+The Markup page does not read `doc.pairings` as stored. It reads `shownPairings = refreshPairings(doc.pairings, slotQueue)` (`+page.svelte:491`, the same function at `:2478` when phrase ends change). `refreshPairings` (`pairings.ts:448-480`) compares a stored syllable pairing with the slot the engine now gives for the same word: where `origin.word` is the same and the IPA differs, the shown IPA is the slot's (N.119b). I checked that function directly with a throwaway test (not committed): a «Бог» pairing stored as `ˈbok` with `origin.word` set shows `ˈbox` against the new slot; **a pairing stored without `origin.word` keeps `ˈbok`**, "left exactly as it was stored" (`pairings.ts:444-446`, deliberate). So for a song seated before this ships, Markup shows the new reading wherever the stored pairing carries `origin.word`, and the old one where it does not, until the singer reseats; Text shows the new reading at once. NOT RUN in the browser: which stored songs carry `origin.word` (I did not open one); `pairings.ts` is lane 28's, and I read it and changed nothing.
+
+### Learn and the Guide
+
+I grepped `LearnContent.svelte`, `GuideContent.svelte`, and `i18n.ts` for «бог», `[box]`, `boɣ`, and "retain": no sentence about «бог» or a kept voicing exists in the Guide or in `i18n.ts`; the hits for "retain" are other verbs (a hardness that is retained, a session's work retained). Learn's rule 2 sentence (`LearnContent.svelte:3899`) already states the kept voicing ("sonorants and vowels beginning the next word allow a…"), and still reads right after this row. No Learn or Guide sentence was changed (strings are Dann's).
+
+### The leads, for the desk to take to Dann (nothing built for any of them)
+
+1. A final в before a voiced obstruent still devoices («любовь дала» `lʲu ˈbofʲ`, «кровь брата» `ˈkrofʲ`), under p. 251.
+2. The Inspector after a cross-word voicing says nothing: «кот бы», «лес вдали», «лес в доме», «кот вдруг», «дух вдали» show the unvoiced letter's "stays [x]" blurb under the voiced sound. The symmetric mark, about ten lines, waits for Dann to see these lines.
+3. Prepositions before в plus a vowel or a sonorant keep their voicing with no blurb («под водой», «без вас», «из воды»); a в-specific sentence would be new text.
+4. The x to ɣ, ц to dz, ч to dʒʲ allophones at a word boundary: Grayson's or not, NOT ESTABLISHED.
+5. «Бог» in Grayson beyond p. 144's citation form: NOT ESTABLISHED; the ruling rests on Dann's general knowledge of Russian orthoepy.
+
+### Where would this wall a singer in? (Fable's question, answered from the runs)
+
+- **«бог» sounding as unexpected with no blurb to say why.** [boɣ] before a voiced obstruent: the IPA line says `ˈboɣ` and the ribbon says ⟨г⟩ → [ɣ], and the existing blurb prints "In the word бог, ⟨г⟩ is exceptionally pronounced as [ɣ]." It states the fact and does not say why the sound changed before this next word; the reason is Dann's ruling on general orthoepy, and no source line is cited beyond p. 144. This is the case where a singer would most likely wonder.
+- **«лес вдали» voiced across в with the ribbon still saying `⟨с⟩ → [s]`.** Yes, confirmed by run (step 2's leads): the line sings `ˈlʲɛz` and the ribbon and blurb still say [s] and "stays [s]".
+- **A kept-voicing blurb on a word the singer did not know was a preposition.** «сквозь», «вокруг», «близ», «средь» show "When ⟨з⟩ ends a preposition or a particle like it does here…" on a word whose preposition-hood the singer may not know; the sentence tells them, which is its purpose. «сквозь» also loses its "softens before ⟨ь⟩" sentence for that blurb (the sign's own entry still has its own).
+- **Whether a merged proclitic's or enclitic's ribbon opens:** it does, from a run (step 3): «меж», «без», «б» each have their own stack and ribbon, so the blurb is seen on Grayson's own p. 252 lines.
+
+### What I could not establish
+
+- The eight gates' names and the ship script's order (inferred).
+- Which stored songs carry `origin.word` (so which keep `ˈbok` on Markup).
+- Whether an installed app fetches the larger `blurb-composer.json` on its next online start (N.195's loader; not run).
+- A browser walk of «Бог даст» to see `ˈboɣ` and the ribbon: the pipeline test pins the log entry, and the throwaway browser run covered the kept-voicing blurbs, not the [ɣ] ribbon.
+- What Grayson prescribes for «бог» beyond p. 144; the allophones' source (above).
+
+### Commits on `cloud-lane-29` for this row
+
+Step 0 `c16b9b81`, step 1 `9a2548c5`, step 2 `d1f54ab1`, step 3 `c7e95cf6`, step 4 (this commit).
