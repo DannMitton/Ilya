@@ -35,7 +35,7 @@ describe('ratified Insights lines (row 78a)', () => {
 });
 
 /* QUEUE rows 90 and 94. The Guide keeps its prose in markup, not in i18n.ts, so
-   these pins read GuideContent.svelte as source, as no-fit-name.test.ts does.
+   these pins read GuideContent.svelte as source, as retired-names.test.ts does for the Guide's Fit check.
    Row 90 (a): two lines in the French conventions list, ratified 2026-10-12
    20:30. Row 94: the teacher-as-intermediary paragraph, ratified 2026-10-13
    23:11 (English) and 23:14 (French). U+2019 apostrophes, U+00A0 before French
@@ -248,6 +248,63 @@ describe('ratified banner for a scan read in part (brief r5 step 2)', () => {
 				expect(t(key, lang), `${key} ${lang}`).not.toContain("'");
 				expect(t(key, lang), `${key} ${lang}`).not.toContain('—');
 			}
+		}
+	});
+});
+
+/* ROW 97, moved here by consistency batch 2, step 4 from the retired-name guard (which now reads names.ts
+   and keeps its own file for that). The three ratified passages A, B, and C of the Guide and the forecast
+   heading are pinned from source, as the rows above pin the other Guide lines. A ratified string changes
+   with its pin (CONTRACT.md section 1 item 11a): row 171 changes the forecast heading and this pin together. */
+const guideSource = readFileSync(new URL('../components/Reading/GuideContent.svelte', import.meta.url), 'utf8');
+const guideFrStart = guideSource.indexOf("{#if language === 'fr'}");
+const guideFrEnd = guideSource.indexOf('{:else}', guideFrStart);
+const branches = {
+	fr: guideSource.slice(guideFrStart, guideFrEnd),
+	en: guideSource.slice(0, guideFrStart) + guideSource.slice(guideFrEnd),
+};
+
+describe('row 97: the forecast heading', () => {
+	it('the Guide heading for the forecast reads as ruled, in both languages, and keeps its id', () => {
+		expect(branches.en).toContain('<h4 id="guide-markup-forecast">What Insights forecasts</h4>');
+		expect(branches.fr).toContain('<h4 id="guide-markup-forecast">Ce que prévoient les Aperçus</h4>');
+		expect(guideSource).not.toContain('it does not declare');
+		expect(guideSource).not.toContain('ils ne déclarent pas');
+	});
+});
+
+/* The three ratified passages (docs/sessions/ratified-guide-abc_2026-10-14.md,
+   ratified by Dann 2026-10-14 21:40), pinned by their opening and closing words
+   as the Guide writes them: U+2019 apostrophes, U+00A0 before French colons. */
+describe('row 97: the three ratified Guide passages are seated', () => {
+	const pins: Array<[string, 'en' | 'fr', string]> = [
+		['A', 'en', 'From a handful of fry samples on a consumer mic, <em>Ilya</em> measures your resonances, and Insights forecasts how a piece of repertoire is likely to meet your voice'],
+		['A', 'en', 'equipping you with specific challenges to bring to your teacher.</p>'],
+		['A', 'fr', 'À partir d’une poignée d’échantillons en friture vocale sur un micro grand public, <em>Ilya</em> mesure vos résonances, et les Aperçus prévoient comment'],
+		['A', 'fr', 'le rapport de la pièce à votre <em>zona di passaggio</em>'],
+		['A', 'fr', 'des défis précis à aborder avec votre professeure ou professeur.</p>'],
+		['B', 'en', 'MELODY draws its notation conventions from Mitton (2020, Appendices B and C).'],
+		['B', 'en', 'The text underlay offers the same IPA values imported from TEXT that correspond with the Cyrillic lyrics.</p>'],
+		['B', 'fr', 'Le CHANT tire ses conventions de notation de Mitton (2020, annexes B et C).'],
+		['B', 'fr', 'Sous la portée, le texte reprend les mêmes valeurs API, importées du TEXTE, en regard des paroles cyrilliques.</p>'],
+		['C', 'en', '<em>Ilya</em>’s main phonological authority, used with Grayson’s generous consent. MELODY and INSIGHTS implement an open and close timbre markup'],
+		['C', 'en', 'an <em>f</em><sub>R1</sub>/<em>f</em><sub>o</sub> crossing analysis, and sung-vowel modification advice.</p>'],
+		['C', 'fr', 'principale autorité phonologique d’<em>Ilya</em>, utilisée avec le généreux consentement de Grayson. Le CHANT et les APERÇUS mettent en œuvre'],
+		['C', 'fr', 'des croisements <em>f</em><sub>R1</sub>/<em>f</em><sub>o</sub> et des conseils de modification vocalique.</p>']
+	];
+	it.each(pins)('passage %s (%s) carries %#', (_p, lang, text) => {
+		expect(branches[lang]).toContain(text);
+	});
+	it('the French colons in A and B take U+00A0 before them', () => {
+		expect(branches.fr).toContain('susceptible de solliciter votre voix\u00A0: où le timbre');
+		expect(branches.fr).toContain('est sémantique\u00A0: hampe vers le bas');
+		expect(branches.fr).toContain('chaque voyelle chantée\u00A0: pleines lorsque');
+	});
+	it('the struck attribution is gone from C', () => {
+		for (const lang of ['en', 'fr'] as const) {
+			const para = branches[lang].match(/<p><strong>(?:Scholarship|Recherche savante)\.<\/strong>[^\n]*<\/p>/)?.[0] ?? '';
+			expect(para.length, lang).toBeGreaterThan(200);
+			expect(para, lang).not.toContain('Sung Russian');
 		}
 	});
 });
