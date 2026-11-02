@@ -24,8 +24,15 @@
 	 *
 	 * Colour roles, one per token: `--rose-jewel` the bars (5.71:1 on cream;
 	 * `--rose` is 2.69:1, under the 3:1 a graphic needs), `--rose` the
-	 * tessitura band, `--rose-ink` a bar with a finding, every label but the
-	 * line names (which are tertiary ink), the passaggio lines, and the leaders.
+	 * tessitura band, `--rose-ink` every label but the line names (which are
+	 * tertiary ink), the passaggio lines, and the leaders.
+	 *
+	 * A BAR WITH A FINDING takes the same `--rose-jewel` fill and a light
+	 * `--rose-wash` outline drawn wholly inside it (5.87:1 against the fill;
+	 * Dann 2026-11-01 22:47). The jewel and the ink are 1.19:1 apart, so shade
+	 * alone could not carry the cue (WCAG 2.2, 1.4.1). A bar under 4 px in
+	 * either direction is too small for an inside outline to show and is
+	 * drawn plain: no other cue is invented for it.
 	 *
 	 * A document: nothing here is clickable or focusable.
 	 */
@@ -105,6 +112,9 @@
 		),
 	);
 	const STAVE = 'var(--ink-stave, #1a1612)';
+	/** A finding bar's inside outline: its width (DESK DEFAULT), and the smallest bar it is drawn on. */
+	const FINDING_STROKE = 1.5;
+	const FINDING_MIN = 4;
 </script>
 
 {#snippet words(item: TextItem)}
@@ -148,10 +158,13 @@
 			{/each}
 		</g>
 
-		<!-- The bars: time per sounding pitch from one baseline. A finding keeps its bar dark. -->
+		<!-- The bars: time per sounding pitch from one baseline. A finding adds a light outline inside its bar. -->
 		<g opacity={figure.quiet ? 0.5 : 1}>
 			{#each L.rows as r (r.midi)}
-				<rect x={L.barX} y={r.cy - r.height / 2} width={r.length} height={r.height} fill={r.dark ? 'var(--rose-ink)' : 'var(--rose-jewel)'} />
+				<rect x={L.barX} y={r.cy - r.height / 2} width={r.length} height={r.height} fill="var(--rose-jewel)" data-finding={r.dark || undefined} />
+				{#if r.dark && r.length >= FINDING_MIN && r.height >= FINDING_MIN}
+					<rect class="finding-outline" x={L.barX + FINDING_STROKE / 2} y={r.cy - r.height / 2 + FINDING_STROKE / 2} width={r.length - FINDING_STROKE} height={r.height - FINDING_STROKE} fill="none" stroke="var(--rose-wash)" stroke-width={FINDING_STROKE} />
+				{/if}
 			{/each}
 		</g>
 
