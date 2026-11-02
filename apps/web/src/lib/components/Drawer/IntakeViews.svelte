@@ -257,7 +257,7 @@
 		idPrefix="intake-tab"
 		controls="intake-view-panel"
 		name={t('source.heading', language)}
-		onchoose={(id) => inputViews.show(id as InputView)}
+		onchoose={(id) => { inputViews.show(id as InputView); inputViews.chooseWitness(songId, id as InputView); }}
 		activeFill="var(--sage-desk)"
 	/>
 </div>
