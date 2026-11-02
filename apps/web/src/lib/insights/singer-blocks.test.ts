@@ -5,9 +5,10 @@
  */
 import { describe, expect, it } from 'vitest';
 import type { Measure, ParsedScore, Pitch, VocalLineEvent, VoiceProfileSnapshot } from '@ilya/score-parser';
-import { t } from '$lib/i18n';
+import { stringKeys, t } from '$lib/i18n';
 import { buildInsights, verdictLine } from './insights';
 import { joinList, singerBlocks, type BlockInputs, type Block } from './singer-blocks';
+import type { KeyWords } from './key-lines';
 import type { RenderedComment } from './comment-text';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
@@ -63,7 +64,7 @@ function inputs(sc: ParsedScore, over: Partial<BlockInputs> = {}): BlockInputs {
 		noneFlagged: true,
 		held: null,
 		outside: null,
-		better: null,
+		keys: null,
 		comments: [],
 		more: [],
 		hiddenBySettings: 0,
@@ -156,15 +157,16 @@ describe('the round 2 page, block by block', () => {
 		expect(c.forward).toBeNull();
 	});
 
-	it('words the unlikely case with the ratified sentence when both reasons exist, and offers no key when none fits', () => {
+	it('words the unlikely case with the ratified sentence when both reasons exist, and says so when no key is workable', () => {
 		// Inside the typed range, but the band (C4 to E4) passes the typed tessitura (C3 to A3) by far more than a whole tone.
 		const high = score([P('C', 4), P('D', 4), P('E', 4), P('E', 4), P('E', 4), P('D', 4)]);
 		const held = { eventId: 'n2', measure: '1', pitch: P('E', 4), vowel: 'i', seconds: 4.2 };
-		const out = singerBlocks(inputs(high, { held }), String);
+		const keys: KeyWords = { kind: 'noWorkable', lines: [], note: t('insights.key.noWorkable', 'en'), reveal: null };
+		const out = singerBlocks(inputs(high, { held, keys }), String);
 		const c = out[1].block as Extract<Block, { kind: 'conclusion' }>;
 		expect(c.paragraph).toContain('In this key, 100 percent of the singing lies above your primo passaggio, A3, and bar 1 holds an E4 [i] for about 4 seconds, above your secondo passaggio, D4.');
 		expect(c.paragraph).toContain(t('insights.r2.unlikely.together', 'en'));
-		expect(c.forward).toEqual({ sentence: t('insights.r2.noBetterKey', 'en'), teacher: t('insights.r2.teacherA', 'en') });
+		expect(c.forward).toEqual({ lines: [], note: t('insights.key.noWorkable', 'en'), teacher: t('insights.r2.teacherA', 'en') });
 	});
 
 	it('lists the bars near the passaggio in words and with an Oxford comma', () => {
@@ -233,17 +235,33 @@ describe('the notes are endnotes (QUEUE row 79, rule 7)', () => {
 	});
 });
 
-describe('the better key in French (QUEUE row 85)', () => {
-	const better = { semitones: -3, shareThen: 0.07, compass: { low: P('A', 2, 1), high: P('B', 3) }, score: null };
-	const text = (language: 'en' | 'fr') => JSON.stringify(singerBlocks(inputs(fitting, { language, better }), String));
+describe('the way forward: the key lines (N.182, row 71)', () => {
+	const stop = { semitones: -2, fifths: -2 };
+	const line = { text: 'Down a whole tone \u00b7 C minor: stays inside your range.', stop };
+	const keys = (over: Partial<KeyWords> = {}): KeyWords => ({ kind: 'keys', lines: [line], note: null, reveal: null, ...over });
+	const conclusion = (over: Partial<BlockInputs>) => singerBlocks(inputs(fitting, over), String)[1].block as Extract<Block, { kind: 'conclusion' }>;
 
-	it('lower-cases the interval mid-sentence: « Transposée une tierce mineure plus bas »', () => {
-		expect(text('fr')).toContain('Transposée une tierce mineure plus bas, la pièce ramènerait cette part à 7');
-		expect(text('fr')).not.toContain('Une tierce mineure plus bas, la pièce');
+	it('carries the lines, with the stop each one offers, and no teacher line', () => {
+		expect(conclusion({ keys: keys() }).forward).toEqual({ lines: [line] });
 	});
-
-	it('leaves the English interval as it was', () => {
-		expect(text('en')).toContain('A key a minor third lower would bring that to 7');
+	it('says the one-line answer, and no teacher line, for a key that fits', () => {
+		const note = t('insights.key.suits.primo', 'en');
+		expect(conclusion({ keys: keys({ kind: 'suits', lines: [], note }) }).forward).toEqual({ lines: [], note });
+	});
+	it('says nothing when there is no search, and prints the verdict as before', () => {
+		expect(conclusion({ keys: null }).forward).toBeNull();
+		expect(conclusion({ keys: keys({ kind: 'keys', lines: [], note: null }) }).forward).toBeNull();
+	});
+	it('puts "Show keys that reach higher" directly after the conclusion, on screen only, and nowhere else', () => {
+		const reveal = { label: t('insights.key.reveal.higher', 'en'), lines: [{ text: 'Up a tritone \u00b7 F\u266f minor: reaches above your range in bar 4, by a tritone.' }] };
+		const out = singerBlocks(inputs(fitting, { keys: keys({ reveal }) }), String);
+		expect(out[2]).toEqual({ group: 'free', screenOnly: true, block: { kind: 'keyreveal', ...reveal } });
+		expect(singerBlocks(inputs(fitting, { keys: keys() }), String).some((b) => b.block.kind === 'keyreveal')).toBe(false);
+	});
+	it('has retired the six strings that named one key as the better one (CONTRACT section 1, item 11a)', () => {
+		const have = new Set(stringKeys());
+		for (const k of ['noBetterKey', 'better.tone', 'better.interval', 'compare', 'inKey', 'inKeyShare']) expect(have.has(`insights.r2.${k}`), k).toBe(false);
+		expect(have.has('insights.r2.teacherA')).toBe(true);
 	});
 });
 

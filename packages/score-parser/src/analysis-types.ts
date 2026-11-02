@@ -63,7 +63,7 @@ export interface VoiceProfileSnapshot {
    * derived, and surrogate values. This is the flag's channel. `'sung'`: the
    * singer's own measured reading. `'derived'`: computed from the singer's
    * anchors (`derivations.ts`). `'surrogate'`: a value from Bozeman's table;
-   * nothing writes it yet, because the surrogate values are not ruled.
+   * written by `analyze-score-adapter.ts` where a vowel has no sung or derived value.
    * Optional, so a snapshot built elsewhere need not carry it.
    */
   fR1Source?: Record<string, 'sung' | 'derived' | 'surrogate'>;

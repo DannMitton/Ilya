@@ -42,6 +42,7 @@
 	import {
 		analyzeScore,
 		noteConditions,
+		keyAfterTransposition,
 		pitchToMidi,
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
@@ -70,12 +71,14 @@
 		type SungKey,
 	} from '$lib/insights/insights';
 	import { cycleDoseSplit } from '$lib/insights/singing-measures';
-	import { firstOutsideRange, longestAboveSecondo, searchBetterKey, shareAfter, vowelTurns } from '$lib/insights/singer-page';
+	import { firstOutsideRange, longestAboveSecondo, vowelTurns } from '$lib/insights/singer-page';
+	import { suggestKeys } from '$lib/insights/key-suggest';
+	import { keyWords, type KeyWords } from '$lib/insights/key-lines';
 	import { phonationHeadline } from '$lib/insights/phonation-headline';
 	import { withSingerTempo } from '$lib/tempo/singer-tempo';
 	import type { OctaveReading, TempoChoice } from '$lib/library/types';
 	import { readingClef } from '$lib/score/clef-choice';
-	import { notesBlock, singerBlocks, type KeyForward, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import { notesBlock, singerBlocks, type PlacedBlock } from '$lib/insights/singer-blocks';
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
@@ -305,47 +308,20 @@
 	const verdict = $derived(model ? verdictLine(model, offerDeclined) : null);
 	const noneFlagged = $derived(!!model && model.findings.length === 0 && printsNoFindingsLine(model.verdict));
 
-	// ── The way forward: a key that fits better ────────────────────────
-	/* Nothing out of range: the second search (`searchBetterKey`). A note out of
-	   range: the watch list's own key, which "Try this key" already opened. */
-	const better = $derived.by((): KeyForward | null => {
-		if (!model || !analysisScore) return null;
-		let semitones: number;
-		let key: { fifths: number; mode: 'major' | 'minor' } | null = null;
-		let compass: { low: Pitch; high: Pitch } | null = null;
-		let shareThen: number | null;
-		let score = null;
-		const found = searchBetterKey(analysisScore, adapted.snapshot, model);
-		if (found) {
-			({ semitones, key, compass, shareThen } = found);
-			score = found.score;
-		} else {
-			const tr = model.findings.find((f) => f.kind === 'range' && f.transposition)?.transposition;
-			if (!tr || tr.semitones.length === 0) return null;
-			semitones = tr.semitones[0];
-			key = tr.keys?.[0] ?? null;
-			shareThen = shareAfter(analysisScore, adapted.snapshot, semitones);
-			score = { ...analysisScore, vocalLine: analysisScore.vocalLine.map((e) => (e.pitch ? { ...e, pitch: shift(e.pitch, semitones) } : e)) };
-		}
-		const stop = key ? (keyRuler?.stopFor({ semitones: [semitones], keys: [key] }) ?? null) : null;
-		return {
-			semitones,
-			...(stop ? { stop, readout: keyRuler?.readoutFor(stop, language), keyName: keyRuler?.keyNameFor(stop, language) } : {}),
-			shareThen,
-			compass,
-			score,
-		};
-	});
-	/* A pitch moved by `n` semitones, for naming a note in another key; only its MIDI number is read. */
-	function shift(p: Pitch, n: number): Pitch {
-		const midi = pitchToMidi(p) + n;
-		const names: Array<[Pitch['step'], number]> = [['C', 0], ['C', 1], ['D', 0], ['E', -1], ['E', 0], ['F', 0], ['F', 1], ['G', 0], ['A', -1], ['A', 0], ['B', -1], ['B', 0]];
-		const [step, alter] = names[((midi % 12) + 12) % 12];
-		return { step, alter, octave: Math.floor(midi / 12) - 1 } as Pitch;
-	}
-
 	// ── The blocks ─────────────────────────────────────────────────────
 	const facts = $derived(commentNotes ? noteFacts(commentNotes, adapted.snapshot) : null);
+	/* N.182: the one search for a key. It starts from `analysisScore`, the key the singer chose on MELODY (or the printed key) after the
+	   octave reading, so every move is from the key INSIGHTS reads; the lines name the key it lands in by the ruler's own naming. */
+	const keys = $derived.by((): KeyWords | null => {
+		if (!model || !analysisScore) return null;
+		const found = suggestKeys({ score: analysisScore, profile: adapted.snapshot, voiceType: voiceType?.voiceType, facts, vowelForEvent: vowelResolver ?? undefined, intake });
+		const source = analysisScore.keySignatures[0]?.signature;
+		return found && keyWords(found, (semitones) => {
+			const key = source ? keyAfterTransposition(source, semitones) : null;
+			const stop = key ? (keyRuler?.stopFor({ semitones: [semitones], keys: [key] }) ?? null) : null;
+			return stop ? { stop, keyName: keyRuler?.keyNameFor(stop, language) } : {};
+		}, language, intake);
+	});
 	const blocks = $derived.by((): PlacedBlock[] => {
 		if (!analysisScore)
 			return [
@@ -378,7 +354,7 @@
 				noneFlagged,
 				held: longestAboveSecondo(facts, analysisScore),
 				outside: firstOutsideRange(analysisScore, adapted.snapshot, (id) => vowelResolver?.({ id } as never)),
-				better,
+				keys,
 				comments: renderedComments.shown,
 				more: renderedComments.more,
 				hiddenBySettings: commentSelection?.hiddenBySettings ?? 0,
@@ -420,7 +396,7 @@
 	let heights = $state<number[]>([]);
 	/* QUEUE row 79, rule 2: where each prose block may break between lines. Figures, the conclusion with its
 	   controls, and the cycles bar never break. */
-	const BREAKS = new Set(['comment', 'prose', 'endnote', 'note', 'notes', 'more']);
+	const BREAKS = new Set(['comment', 'prose', 'endnote', 'note', 'notes', 'more', 'keyreveal']);
 	let breakTops = $state<number[][]>([]);
 	let footProbe = $state<HTMLElement | null>(null);
 	let footHeight = $state(0);
@@ -455,17 +431,25 @@
 	   Opened, it is paged like any block, at its opened height (the measurer draws it open), and the pages after it
 	   re-flow on screen. Print closes it first (`beforeprint`), so paper always holds the closed pages. */
 	let moreOpen = $state(false);
+	/* N.182: "Show keys that reach higher" is the second screen-only disclosure; it opens and closes on its own. */
+	let revealOpen = $state(false);
+	const openOf = (k: number) => (blocks[k].block.kind === 'keyreveal' ? revealOpen : moreOpen);
 	$effect(() => {
 		let reopen = false;
+		let reopenReveal = false;
 		const before = () => {
-			if (!moreOpen) return;
-			reopen = true;
+			if (!moreOpen && !revealOpen) return;
+			reopen = moreOpen;
+			reopenReveal = revealOpen;
 			moreOpen = false;
+			revealOpen = false;
 			flushSync();
 		};
 		const after = () => {
 			if (reopen) moreOpen = true;
+			if (reopenReveal) revealOpen = true;
 			reopen = false;
+			reopenReveal = false;
 		};
 		window.addEventListener('beforeprint', before);
 		window.addEventListener('afterprint', after);
@@ -474,7 +458,7 @@
 			window.removeEventListener('afterprint', after);
 		};
 	});
-	const printed = $derived(blocks.map((b, k) => ({ b, k })).filter(({ b }) => !b.screenOnly || moreOpen));
+	const printed = $derived(blocks.map((b, k) => ({ b, k })).filter(({ b, k }) => !b.screenOnly || openOf(k)));
 	const pages = $derived.by((): Segment[][] => {
 		const room = (top: number) => dims.height - MARGINS.vertical - footHeight - CLEAR - top;
 		const segs = paginate(
@@ -495,7 +479,7 @@
 			})),
 		);
 		blocks.forEach((b, k) => {
-			if (!b.screenOnly || moreOpen) return;
+			if (!b.screenOnly || openOf(k)) return;
 			// It rides with the part of the block before it that ends that block.
 			for (const page of pagesOut)
 				for (const s of page) if (s.blocks.includes(k - 1) && !(s.cuts?.[k - 1] && s.cuts[k - 1][1] < (heights[k - 1] ?? 0))) s.blocks.push(k);
@@ -554,8 +538,8 @@
 		ondecline={declineOffer}
 		onoctave={measuring ? undefined : () => ontoggleoctave?.()}
 		ontempo={measuring ? undefined : () => ontempo?.()}
-		open={measuring || moreOpen}
-		ontoggle={measuring ? undefined : (o) => (moreOpen = o)}
+		open={measuring || openOf(k)}
+		ontoggle={measuring ? undefined : (o) => (blocks[k].block.kind === 'keyreveal' ? (revealOpen = o) : (moreOpen = o))}
 	/>
 {/snippet}
 

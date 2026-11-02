@@ -36,6 +36,8 @@ export interface KeyLine {
 }
 
 export interface KeyWords {
+	/** Which answer the search gave, so the page can tell "no key shown" from a quiet page. */
+	kind: KeySuggestion['kind'];
 	/** One to three lines to show, or none. */
 	lines: KeyLine[];
 	/** The one-line answer when no key is shown: suits, none better, or none workable. */
@@ -55,8 +57,7 @@ const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
 /** "Down a whole tone", from the ruler's own interval words; the move from the key the singer is reading in. */
 export function moveWords(semitones: number, language: Language): string {
-	const a = t(`key.ruler.interval.${Math.abs(semitones)}`, language);
-	return fill(t(semitones < 0 ? 'key.ruler.down' : 'key.ruler.up', language), { a: language === 'en' ? a : lowerFirst(a) });
+	return fill(t(semitones < 0 ? 'key.ruler.down' : 'key.ruler.up', language), { a: t(`key.ruler.interval.${Math.abs(semitones)}`, language) });
 }
 
 /** How far past the range, in the ruler's interval words, or in semitones beyond a tritone. */
@@ -171,5 +172,5 @@ export function keyWords(s: KeySuggestion, nameKey: NameKey, language: Language,
 		const down = s.reveal.some((k) => k.semitones < 0);
 		reveal = { label: T(up && down ? 'insights.key.reveal.both' : up ? 'insights.key.reveal.higher' : 'insights.key.reveal.lower'), lines: s.reveal.map(line) };
 	}
-	return { lines, note, reveal };
+	return { kind: s.kind, lines, note, reveal };
 }
