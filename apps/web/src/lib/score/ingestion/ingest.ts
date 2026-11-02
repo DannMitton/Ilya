@@ -44,6 +44,7 @@ import {
 } from './format-detection';
 import { listZipEntries, readZipEntry, ZipReadError, type ZipFailureKind } from '$lib/reader/zip-reader';
 import { t, type Language } from '$lib/i18n';
+import { foldVowelessSyllables } from './vowelless-fold';
 import { decodeBars, encodeBars, readUnreadBars, type BarRange } from '$lib/omr/unread-bars';
 
 // ── Provenance (drives the fidelity surface, Round 9 Item 1) ─────
@@ -306,7 +307,7 @@ function toOutcome(
 ): IngestOutcome {
 	const fatal = result.errors.filter((e) => e.fatal);
 	if (fatal.length > 0) return err({ code: 'PARSE_FAILED', errors: fatal });
-	return { ok: true, ingested: { fileName, provenance, result: withDictionMarksFolded(result) } };
+	return { ok: true, ingested: { fileName, provenance, result: withVowelPerNote(withDictionMarksFolded(result)) } };
 }
 
 /**
@@ -328,6 +329,20 @@ function withDictionMarksFolded(result: ParseResult): ParseResult {
 	// No vocal line, nothing to fold (and `foldDictionMarks` rightly throws).
 	if (!Array.isArray(result.score?.vocalLine)) return result;
 	const fold = foldDictionMarks(result.score);
+	return fold.score === result.score ? result : { ...result, score: fold.score };
+}
+
+/**
+ * N.135 step 4, writer 3 (`CONTRACT.md` §0.1, one vowel per note, no exceptions): a
+ * file's own syllable with no vowel letter on a note joins its host, or is not
+ * drawn (`vowelless-fold.ts`). Runs after the `#` fold, at the same seam, so every
+ * surface reads one repaired underlay. A score with nothing to repair comes back
+ * by reference. The count of syllables left undrawn goes to the console.
+ */
+function withVowelPerNote(result: ParseResult): ParseResult {
+	if (!Array.isArray(result.score?.vocalLine)) return result;
+	const fold = foldVowelessSyllables(result.score);
+	if (fold.undrawn > 0) console.warn(`${fold.undrawn} vowelless syllable${fold.undrawn === 1 ? '' : 's'} with no host in the file's lyrics, not drawn (CONTRACT 0.1)`);
 	return fold.score === result.score ? result : { ...result, score: fold.score };
 }
 

@@ -8,8 +8,11 @@
  * - A note with no text, or only a hyphen or an underscore (a joint, an
  *   extender), is not tested.
  * - A note that is a continuation (tied into, under an extender, a melisma's
- *   later note) is not tested for a missing vowel; it sings no new syllable. The
- *   caller says so with `continuation`. Two vowels on it are still a breach.
+ *   later note) is tested like any other: letters with no vowel on it are a
+ *   breach (`CONTRACT.md` §0.1, no exceptions; until N.135 step 4 a continuation
+ *   holding letters and no vowel was skipped). A continuation with no text is
+ *   still not tested. The caller's `continuation` flag no longer changes the
+ *   result; it is kept so that callers need not change.
  * - A letter of U+00A0-joined text is part of the one unit: «в бью» is one
  *   unit with one vowel, «бью ж» one.
  * - «й» is a consonant (Dann, 2026-10-29 01:18). A mark alone, `#` above all, is
@@ -42,7 +45,7 @@ export interface NoteText {
 	id: string | number;
 	/** The syllable text, or null/empty where there is none. */
 	text: string | null | undefined;
-	/** The note sings no new syllable: tied into, under an extender, or a melisma's later note. */
+	/** The note sings no new syllable: tied into, under an extender, or a melisma's later note. Not read since N.135 step 4. */
 	continuation?: boolean;
 }
 
@@ -75,7 +78,7 @@ export function vowelsPerNote(notes: readonly NoteText[], options: { vowelCount?
 		if (!vowelCount) continue;
 		const vowels = (text.match(VOWELS) ?? []).length;
 		if (vowels >= 2) out.push({ id: note.id, text, kind: 'many-vowels', vowels });
-		else if (vowels === 0 && !note.continuation) out.push({ id: note.id, text, kind: 'no-vowel', vowels });
+		else if (vowels === 0) out.push({ id: note.id, text, kind: 'no-vowel', vowels });
 	}
 	return out;
 }

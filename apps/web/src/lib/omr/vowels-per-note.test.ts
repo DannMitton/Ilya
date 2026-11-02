@@ -30,9 +30,12 @@ describe('vowelsPerNote', () => {
 	it('does not report a note with no text, or a joint', () => {
 		expect(kinds(of(null, '', '-', '_', ' '))).toEqual([]);
 	});
-	it('does not report a continuation with no vowel (tied into, under an extender, a melisma\'s later note), but reports two vowels on one', () => {
-		expect(vowelsPerNote([{ id: 0, text: 'в', continuation: true }])).toEqual([]);
+	// Was (before N.135 step 4): a continuation holding letters and no vowel was not reported, and `[]` was expected for «в».
+	// Now: a continuation is tested like any note (CONTRACT §0.1, no exceptions). A continuation with no text is still not tested.
+	it('reports a continuation (tied into, under an extender, a melisma\'s later note) with letters and no vowel, and two vowels on one', () => {
+		expect(vowelsPerNote([{ id: 0, text: 'в', continuation: true }]).map((b) => b.kind)).toEqual(['no-vowel']);
 		expect(vowelsPerNote([{ id: 0, text: 'ая', continuation: true }]).map((b) => b.kind)).toEqual(['many-vowels']);
+		expect(vowelsPerNote([{ id: 0, text: '', continuation: true }, { id: 1, text: null, continuation: true }])).toEqual([]);
 	});
 	it('reports a mark alone, a lone «#» above all, and no allow-list permits it', () => {
 		expect(kinds(of('#', '.', '#'))).toEqual([[0, 'mark-alone'], [1, 'mark-alone'], [2, 'mark-alone']]);
