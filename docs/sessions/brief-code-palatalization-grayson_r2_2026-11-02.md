@@ -50,3 +50,7 @@ All eight gates at baseline except the counts the new tests add; the truth-set t
 ## What you could not establish
 
 Every report ends with this section. NOT ESTABLISHED beats a complete invented answer.
+
+## Addendum, 2026-11-02 00:2x: exception words (Dann's screenshot of «счастье», 00:21)
+
+`exceptionWords` (`engine.ts:528-532`, applied at `:611-613`) forces [ɑ] in «счастье» and three other forms, and the comment shows no prose (`composer.ts:138`). (1) Every override records reason `lexical-exception` with the word, and the comment reads the ratified string at the end of `ratified-palatalization-comments-en_2026-11-02.md` and `…-fr_…` (Grayson 2012, 287). (2) The code comment's citation becomes "Grayson 2012, 287, ch. 6 section 5" (it says "Appendix F"; the desk read the passage on p. 287). (3) Grayson says "(including derivatives)": cover the stem счаст- (счастье, счастья, счастью, счастьем, счастлив, счастливый, счастливая, and the rest), not four forms; list in the report every form the stem matches in the dictionary, and name any that is not a derivative. (4) Step 2 adds rows счастье, счастливая. (5) Report why the panel shows the mapping twice ("а → ɑ" in two styles) and whether other exception words show the same.
