@@ -145,16 +145,11 @@ three edits later.
 - **Code font for anything typed or named by a machine**: filenames, paths,
   commands, identifiers, constants, shas, function names.
 - **Bold for interface elements** the reader clicks or taps.
-- **Interface text that singers read** (ratified by Dann 2026-10-31). In the
-  Guide, Learn, and Ilya's own messages, help a disoriented singer find what
-  the words name. A place (tab, section, field, dialog) is bold. A button is
-  bold in an outline chip drawn like Ilya's own buttons, as styled text, with
-  no shadow or hover. A message Ilya shows is in quotation marks. A term
-  defined on first use is italic. A directive is a plain numbered step. Use
-  these where they help a singer find their way, never as decoration; when a
-  rule would clutter a sentence, the sentence wins. Sources: Google developer
-  documentation style guide, "UI elements"; Microsoft Writing Style Guide,
-  "Formatting text in instructions"; the chip is Dann's.
+- **Interface text that singers read** (ratified by Dann 2026-10-31; widened
+  and moved 2026-11-01). In the GUIDE, LEARN, and Ilya's own messages, help a
+  disoriented singer find what the words name. Full rules, with the table of
+  every named place in both languages: `docs/house-style/interface-text.md`.
+  Names in code: `docs/house-style/code-conventions.md`.
 - **Unambiguous dates.** `2026-08-18`. Never `08/18/26`, which reads as
   18 August to half the world and as 8 December to the rest.
 - **Descriptive link text.** Never *click here*, never a bare URL.
