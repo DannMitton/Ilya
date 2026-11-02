@@ -7,7 +7,7 @@
  *
  * Two formats:
  * - Array format: each character has its own IPA (silent letters, sibilant mergers)
- * - Merged format: both characters produce a single shared IPA (сч, зч → щ sound)
+ * - Merged format: the letters produce a single shared IPA (ссч, стч, здч, жч, сч, зч → щ sound, Grayson p. 236)
  */
 
 import type { TranscriptionFeatures } from './types';
@@ -71,13 +71,48 @@ export const CLUSTER_BREAKDOWNS: Record<string, ClusterBreakdown> = {
     { char: 'с', ipa: '', features: { type: 'consonant', palReason: 'cluster', silent: true, geminateSimplified: true } },
   ],
 
-  // Assimilated clusters — TRUE MERGERS (Grayson pp. 230-231)
+  // Assimilated clusters — TRUE MERGERS (Grayson pp. 230-231, 236: СЧ, ЗЧ, ЖЧ, СТЧ, ЗДЧ, ССЧ all read /ʃʲʃʲ/)
   // Both letters merge into ONE sound — use merged display
+  'ссч': {
+    type: 'merged',
+    mergedIpa: 'ʃʲʃʲ',
+    members: [
+      { char: 'с', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
+      { char: 'с', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
+      { char: 'ч', features: { type: 'consonant', palReason: 'cluster', soft: true, alwaysSoft: true } },
+    ],
+  },
+  'стч': {
+    type: 'merged',
+    mergedIpa: 'ʃʲʃʲ',
+    members: [
+      { char: 'с', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
+      { char: 'т', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
+      { char: 'ч', features: { type: 'consonant', palReason: 'cluster', soft: true, alwaysSoft: true } },
+    ],
+  },
+  'здч': {
+    type: 'merged',
+    mergedIpa: 'ʃʲʃʲ',
+    members: [
+      { char: 'з', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
+      { char: 'д', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
+      { char: 'ч', features: { type: 'consonant', palReason: 'cluster', soft: true, alwaysSoft: true } },
+    ],
+  },
+  'жч': {
+    type: 'merged',
+    mergedIpa: 'ʃʲʃʲ',
+    members: [
+      { char: 'ж', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
+      { char: 'ч', features: { type: 'consonant', palReason: 'cluster', soft: true, alwaysSoft: true } },
+    ],
+  },
   'сч': {
     type: 'merged',
     mergedIpa: 'ʃʲʃʲ',
     members: [
-      { char: 'с', features: { type: 'consonant', palReason: 'cluster', soft: true, clusterAssimilation: true } },
+      { char: 'с', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
       { char: 'ч', features: { type: 'consonant', palReason: 'cluster', soft: true, alwaysSoft: true } },
     ],
   },
@@ -85,7 +120,7 @@ export const CLUSTER_BREAKDOWNS: Record<string, ClusterBreakdown> = {
     type: 'merged',
     mergedIpa: 'ʃʲʃʲ',
     members: [
-      { char: 'з', features: { type: 'consonant', palReason: 'cluster', soft: true, clusterAssimilation: true } },
+      { char: 'з', features: { type: 'consonant', palReason: 'cluster', clusterAssimilation: true } },
       { char: 'ч', features: { type: 'consonant', palReason: 'cluster', soft: true, alwaysSoft: true } },
     ],
   },

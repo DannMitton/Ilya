@@ -371,12 +371,13 @@ describe('Task 7b: Consonants and Clusters', () => {
       expect(result.ipa).toBe('\u0283\u02B2\u0283\u02B2i\u02C8t\u0251t\u02B2');
     });
 
-    it('merges \u0441\u0441\u0447 to \u0441\u0283\u02B2\u0283\u02B2 in rasschitat', () => {
-      // рассчитать -> rʌsʲʃʲʃʲiˈtɑtʲ. CHANGED PIN (row 175): was rʌsʃʲʃʲiˈtɑtʲ. The first с now softens before the
-      // soft sound that сч becomes, by the dental rule (any soft consonant). NOT ESTABLISHED against Grayson:
-      // his pages on the сч merger (pp. 230-231) do not print this word. Flagged in the step 1 report.
+    it('merges \u0441\u0441\u0447 whole to \u0283\u02B2\u0283\u02B2 in rasschitat', () => {
+      // рассчитать -> rʌʃʲʃʲiˈtɑtʲ. CHANGED PIN (row 175 step 4): was rʌsʃʲʃʲiˈtɑtʲ before row 175, and
+      // rʌsʲʃʲʃʲiˈtɑtʲ after step 1. Grayson 2012, p. 236 reads СЧ, ЗЧ, ЖЧ, СТЧ, ЗДЧ, and ССЧ all as /ʃʲʃʲ/,
+      // "as if spelled with щ", with no dental sound before it; the ССЧ row prints рассчитывать
+      // /ra ˈʃʲʃʲi tɨ vatʲ/. The cluster ссч is now read whole (specialClusters, listed before сч).
       const result = transcribeWord('\u0440\u0430\u0441\u0441\u0447\u0438\u0442\u0430\u0442\u044C');
-      expect(result.ipa).toBe('r\u028Cs\u02B2\u0283\u02B2\u0283\u02B2i\u02C8t\u0251t\u02B2');
+      expect(result.ipa).toBe('r\u028C\u0283\u02B2\u0283\u02B2i\u02C8t\u0251t\u02B2');
     });
 
     it('merges \u0447\u043D to \u0283n in konechno', () => {

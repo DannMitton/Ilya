@@ -13,6 +13,7 @@
 import { lexicalSoftIndices } from './lexical-palatalization';
 import { lexicalSoftRIndices } from './lexical-r';
 import { annotatePalatalization, computePalatalization, softAt } from './palatalization';
+import { SHCHA_CLUSTERS } from './shcha-clusters';
 import { lexicalExceptionVowelIndex } from './lexical-exception';
 import { reflexiveParticleAt } from './reflexive';
 import { initialPastV, keepsVoicingAtBoundary4, restoreBogFinish } from './voicing-rule2';
@@ -298,8 +299,7 @@ export const GraysonEngine = {
   // Special consonant clusters (Grayson p. 225-247)
   // These are detected and transcribed as units before letter-by-letter processing
   specialClusters: {
-    'сч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
-    'зч': 'ʃʲʃʲ',   // Same as щ (p. 230-231)
+    ...SHCHA_CLUSTERS, // сч зч жч стч здч ссч → ʃʲʃʲ, longest first (shcha-clusters.ts; Grayson p. 236)
     // Sibilant mergers (Grayson pp. 235-236)
     'сш': 'ʃː',     // с + ш → long unvoiced postalveolar (p. 235)
     'зш': 'ʃː',     // з + ш → long unvoiced postalveolar (devoices, p. 235)

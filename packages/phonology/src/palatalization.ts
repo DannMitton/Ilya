@@ -17,7 +17,7 @@
  *    в с з); a vowel; a hard consonant; the word end. The prefix boundary
  *    (p. 249) is in `prefix-boundary.ts`.
  * 3. Limits (p. 209): л only when doubled; н only before a soft н or a soft
- *    dental; velars only before a soft velar; labials б п в ф (p. 209 rule 5)
+ *    dental (and ч, щ: D&P p. 81 кончать); velars only before a soft velar; labials б п в ф (p. 209 rule 5)
  *    and м (D&P 1980, p. 76 3P1 and p. 78; Grayson pp. 211, 250) only before a
  *    soft labial.
  * 4. Dentals т д с з: softened by ANY soft consonant that follows (no limit
@@ -128,8 +128,12 @@ const IOTATED = new Set(['е', 'ё', 'ю', 'я']);
 const VELARS = new Set(['к', 'г', 'х']);
 /** Labials of Grayson p. 209 rule 5, plus м (D&P 1980, pp. 76, 78; Grayson pp. 211, 250). */
 const LABIALS = new Set(['б', 'п', 'в', 'ф', 'м']);
-/** Triggers of the н rule (the engine's dental set since before row 175): NOT ESTABLISHED that Grayson counts ц so. */
-const N_TRIGGERS = new Set(['т', 'д', 'с', 'з', 'н', 'ц']);
+/**
+ * Triggers of the н rule (the engine's dental set since before row 175): NOT ESTABLISHED that Grayson counts ц
+ * so. ч and щ were added in row 175 step 4 (desk default): D&P 1980, p. 81 кончать; Grayson p. 209 silent. It is
+ * the authority row 175 already uses for ч as a dental trigger.
+ */
+const N_TRIGGERS = new Set(['т', 'д', 'с', 'з', 'н', 'ц', 'ч', 'щ']);
 /** A dental softened before рь or a soft velar: D&P pp. 79 to 80 print it hard. */
 const DP_DIFFERS = new Set(['р', 'к', 'г', 'х']);
 

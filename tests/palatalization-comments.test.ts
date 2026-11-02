@@ -145,6 +145,13 @@ describe('the data holds the ratified strings verbatim', () => {
   });
 });
 
+describe('the unreached articulatory sentences are gone (row 175 step 4)', () => {
+  it('no implication is keyed soft:* or hard:*; the other implications stay', () => {
+    expect(Object.keys(DATA.implications).filter((k) => /^(soft|hard):/.test(k))).toEqual([]);
+    expect(Object.keys(DATA.implications)).toHaveLength(41);
+  });
+});
+
 describe('the engine composes each comment, with its placeholders filled', () => {
   for (const [reason, word, letter, nth] of CASES) {
     it(`${reason}: ${word.replace("'", '')} ${letter}`, () => {

@@ -22,6 +22,8 @@ import { GraysonEngine, softnessOfReason } from '../src/index';
 import type { PalReason } from '../src/index';
 
 type Exp = [letter: string, nth: number, soft: boolean, reason?: PalReason];
+/** A merged cluster (Grayson p. 236): one cluster entry carries the sound, and the absorbed letters have no consonant entry. */
+interface ClusterExp { cluster: string; ipa: string }
 interface Row {
   /** The word; an apostrophe follows the stressed vowel. */
   w: string;
@@ -29,7 +31,7 @@ interface Row {
   src: string;
   /** Grayson's printed IPA, compared by consonant skeleton (vowels, stress, spacing, length stripped). */
   g?: string;
-  c?: Exp[];
+  c?: Array<Exp | ClusterExp>;
 }
 
 const GROUPS: Array<{ title: string; rows: Row[] }> = [
@@ -62,6 +64,18 @@ const GROUPS: Array<{ title: string; rows: Row[] }> = [
       { w: 'отчё\'т', src: 'G p. 250 (boundary p. 249)', g: 'ɑt ˈtʃʲot', c: [['т', 1, false, 'boundary-prefix']] },
       { w: 'отте\'нок', src: 'G p. 250 (same consonant, p. 249 exception i)', g: 'ɑtʲ ˈtʲɛ nʌk', c: [['т', 1, true, 'regressive-dental']] },
       { w: 'изменя\'ть', src: 'G p. 250 (prefix in з, p. 249 exception ii)', g: 'izʲ mʲi ˈɲatʲ', c: [['з', 1, true, 'regressive-dental']] },
+      // p. 236: СЧ, ЗЧ, ЖЧ, СТЧ, ЗДЧ, ССЧ are all read as /ʃʲʃʲ/, "as if spelled with щ", with no dental sound before it.
+      // (row 175 step 4). The cluster entry carries the sound; the absorbed letters have no consonant entry.
+      { w: 'рассчи\'тывать', src: 'G p. 236 (ССЧ)', g: 'ra ˈʃʲʃʲi tɨ vatʲ', c: [{ cluster: 'ссч', ipa: 'ʃʲʃʲ' }] },
+      { w: 'му\'жчина', src: 'G p. 236 (ЖЧ)', g: 'ˈmu ʃʲʃʲi na', c: [{ cluster: 'жч', ipa: 'ʃʲʃʲ' }] },
+      { w: 'жё\'стче', src: 'G p. 236 (СТЧ)', g: 'ˈʒo ʃʲʃʲɪ', c: [{ cluster: 'стч', ipa: 'ʃʲʃʲ' }] },
+      { w: 'громо\'здче', src: 'G p. 236 (ЗДЧ)', g: 'ɡra ˈmo ʃʲʃʲɪ', c: [{ cluster: 'здч', ipa: 'ʃʲʃʲ' }] },
+      // резче: p. 236, as the desk quotes it, prints /ˈre ʃʲʃʲɪ/ with the р unmarked; Ilya's р is [rʲ] before е, by
+      // Grayson's own p. 206 rule (and his p. 209 n. 277 prints sʲmʲerʲtʲ with the marks). The page was not read
+      // from here, so whether the print omits the ʲ is NOT ESTABLISHED, and the row pins the cluster and the р
+      // by letter and does not compare the skeleton.
+      { w: 'ре\'зче', src: 'G p. 236 (ЗЧ); the р unmarked in the quoted print, NOT ESTABLISHED', c: [{ cluster: 'зч', ipa: 'ʃʲʃʲ' }, ['р', 1, true, 'agent-vowel']] },
+      { w: 'сча\'стье', src: 'G p. 236 (СЧ); p. 287 for the ⟨а⟩', g: 'ˈʃʲʃʲa sʲtʲjɪ', c: [{ cluster: 'сч', ipa: 'ʃʲʃʲ' }, ['с', 1, true, 'regressive-dental'], ['т', 1, true, 'agent-soft-sign']] },
     ],
   },
   {
@@ -102,6 +116,8 @@ const GROUPS: Array<{ title: string; rows: Row[] }> = [
       // ч as a trigger (D&P p. 81; Grayson is silent on these pages: NOT ESTABLISHED for him).
       { w: 'лётчик', src: 'DP p. 81 (Grayson pp. 193-211 are silent on ч as a trigger)', c: [['т', 1, true, 'regressive-dental']] },
       { w: 'ме\'длить', src: 'DP p. 81', c: [['д', 1, true, 'regressive-dental']] },
+      // н before ч, щ (row 175 step 4, desk default): D&P p. 81 кончать → коньчать; Grayson p. 209 is silent.
+      { w: 'конча\'ть', src: 'DP p. 81 (кончать; Grayson p. 209 silent; ч, щ are н triggers by desk default)', c: [['н', 1, true, 'regressive-n']] },
     ],
   },
   {
@@ -125,6 +141,12 @@ const GROUPS: Array<{ title: string; rows: Row[] }> = [
       { w: 'по\'двиг', src: 'R (по-двиг-, as неподвижный; Grayson p. 249: the д is not prefix-final)', c: [['д', 1, true, 'look-alike-root']] },
       { w: 'подви\'жный', src: 'R (по-движ-)', c: [['д', 1, true, 'look-alike-root']] },
       { w: 'о\'тчий', src: 'R (отч-)', c: [['т', 1, true, 'look-alike-root']] },
+      { w: 'о\'тчим', src: 'R (отч-)', c: [['т', 1, true, 'look-alike-root']] },
+      { w: 'о\'тчизна', src: 'R (отч-)', c: [['т', 1, true, 'look-alike-root']] },
+      // A prefixed word with a p. 236 cluster after the boundary: the д stays hard (p. 249), the сч is /ʃʲʃʲ/ (row 175 step 4).
+      { w: 'подсчита\'ть', src: 'G p. 249 (prefix под-) and p. 236 (СЧ)', c: [['д', 1, false, 'boundary-prefix'], { cluster: 'сч', ipa: 'ʃʲʃʲ' }] },
+      // The other end of the list: отч- words that are prefixed stay hard, as Grayson prints отчёт (p. 250).
+      { w: 'отчита\'ть', src: 'G p. 249 (prefix от-; отчёт p. 250 is the printed twin)', c: [['т', 1, false, 'boundary-prefix']] },
       { w: 'отвести\'', src: 'G p. 249 (prefix от-; D&P p. 79 от/лично n/c)', c: [['т', 1, false, 'boundary-prefix']] },
       { w: 'подвести\'', src: 'G p. 249 (prefix под-; D&P p. 79 под/бил n/c)', c: [['д', 1, false, 'boundary-prefix']] },
       { w: 'отли\'чно', src: 'G p. 249 (prefix от-; D&P p. 79 от/лично n/c)', c: [['т', 1, false, 'boundary-prefix']] },
@@ -158,7 +180,19 @@ for (const group of GROUPS) {
       it(`${word}: ${row.src}`, () => {
         const result = transcribe(row.w);
         if (row.g) expect(skeleton(result.ipa), `${result.ipa} against Grayson ${row.g}`).toBe(skeleton(row.g));
-        for (const [letter, nth, soft, reason] of row.c ?? []) {
+        for (const exp of row.c ?? []) {
+          if (!Array.isArray(exp)) {
+            const cl = result.transcriptionLog.find((e) => e.features?.type === 'cluster' && e.char === exp.cluster);
+            expect(cl, `cluster ${exp.cluster} in ${word}`).toBeDefined();
+            expect(cl!.ipa).toBe(exp.ipa);
+            const start = cl!.position as number;
+            const absorbed = result.transcriptionLog.filter(
+              (e) => e.features?.type === 'consonant' && (e.position as number) >= start && (e.position as number) < start + exp.cluster.length,
+            );
+            expect(absorbed.map((e) => e.char), `the letters of ${exp.cluster} have no consonant entry of their own`).toEqual([]);
+            continue;
+          }
+          const [letter, nth, soft, reason] = exp;
           const entries = result.transcriptionLog.filter((e) => e.features?.type === 'consonant' && e.char === letter);
           const e = entries[nth - 1];
           expect(e, `${letter} #${nth} in ${word}`).toBeDefined();
