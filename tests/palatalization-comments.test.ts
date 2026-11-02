@@ -4,8 +4,8 @@
  * The strings below are copied from docs/sessions/ratified-palatalization-comments-en_2026-11-02.md and
  * -fr_2026-11-02.md (RATIFIED by Dann, 2026-11-02 00:05 EN and 00:07 FR; lexical-exception 00:25), and from the
  * desk's message of 2026-11-02 for look-alike-root (RATIFIED 00:53, EN and FR). The French colon is preceded
- * by an ordinary space, as in every one of the sixteen in the file; the desk's message asked for a no-break
- * space "as in the other ratified French comments", but the file has none (0 of 16), so the file is matched.
+ * by a no-break space (the escape \u00A0 below), by Dann's ruling of 2026-11-02 09:02 (OQLF, « Une espace
+ * insécable » before the deux-points); the ratified French file carries the same character.
  *
  * Each comment is also composed from a real engine log entry, so that the placeholders {trigger}, {base_ipa},
  * {word}, {look}, and {root} are shown to be filled by the engine, not just present in the data.
@@ -42,22 +42,22 @@ const EN: Record<string, string> = {
 const FR: Record<string, string> = {
   "agent-vowel": "⟨{char}⟩ se palatalise en [{ipa}] devant ⟨{trigger}⟩, une lettre voyelle palatalisatrice.",
   "agent-soft-sign": "⟨{char}⟩ se palatalise en [{ipa}] devant le signe mou ⟨ь⟩.",
-  "regressive-dental": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit.",
-  "regressive-dental-dp-differs": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit. Dans la langue parlée courante, il reste souvent dur ici.",
-  "regressive-homorganic": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une labiale (ou vélaire) comme [{base_ipa}] n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
-  "regressive-n": "⟨н⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
-  geminate: "⟨{char}⟩ se palatalise en [{ipa}] devant un second ⟨{char}⟩ palatalisé : redoublées, les deux lettres se palatalisent ensemble.",
-  "r-front-stressed": "⟨р⟩ se palatalise en [rʲ] devant le [{trigger}] palatalisé : il suit ⟨и⟩, ⟨е⟩ ou ⟨э⟩, et l'accent tombe sur cette voyelle ou sur la suivante.",
-  "hard-sign-vzs": "⟨{char}⟩ se palatalise en [{ipa}] devant le signe dur : ⟨в⟩, ⟨с⟩ et ⟨з⟩ se palatalisent devant ⟨ъ⟩.",
-  "blocked-class": "⟨{char}⟩ reste [{ipa}] bien que le [{trigger}] qui le suit soit palatalisé : une labiale (ou vélaire) n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
-  "blocked-n": "⟨н⟩ reste [n] bien que le [{trigger}] qui le suit soit palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
-  "blocked-r": "⟨р⟩ reste [r] bien que le [{trigger}] qui le suit soit palatalisé : devant une consonne palatalisée, [r] ne se palatalise que redoublé, ou après ⟨и⟩, ⟨е⟩ ou ⟨э⟩ lorsque l'accent tombe sur cette voyelle ou sur la suivante.",
-  "blocked-l": "⟨л⟩ reste [ɫ] bien que le [{trigger}] qui le suit soit palatalisé : [l] n'est palatalisé par une consonne palatalisée que s'il est redoublé.",
-  "boundary-hard-sign": "⟨{char}⟩ reste [{ipa}] : la palatalisation ne franchit pas le signe dur ⟨ъ⟩.",
-  "boundary-prefix": "⟨{char}⟩ reste [{ipa}] : la palatalisation ne remonte pas de la racine jusqu'au préfixe, sauf si la même consonne se trouve de part et d'autre.",
-  "no-soft-follower": "⟨{char}⟩ reste [{ipa}] : le son qui le suit immédiatement n'est pas palatalisé.",
-  "lexical-exception": "⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception : Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.",
-  "look-alike-root": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé. «{word}» semble commencer par le préfixe «{look}-», mais ⟨{char}⟩ appartient à la racine «{root}-» : la palatalisation l'atteint donc.",
+  "regressive-dental": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé\u00A0: une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit.",
+  "regressive-dental-dp-differs": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé\u00A0: une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit. Dans la langue parlée courante, il reste souvent dur ici.",
+  "regressive-homorganic": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé\u00A0: une labiale (ou vélaire) comme [{base_ipa}] n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
+  "regressive-n": "⟨н⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé\u00A0: [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
+  geminate: "⟨{char}⟩ se palatalise en [{ipa}] devant un second ⟨{char}⟩ palatalisé\u00A0: redoublées, les deux lettres se palatalisent ensemble.",
+  "r-front-stressed": "⟨р⟩ se palatalise en [rʲ] devant le [{trigger}] palatalisé\u00A0: il suit ⟨и⟩, ⟨е⟩ ou ⟨э⟩, et l'accent tombe sur cette voyelle ou sur la suivante.",
+  "hard-sign-vzs": "⟨{char}⟩ se palatalise en [{ipa}] devant le signe dur\u00A0: ⟨в⟩, ⟨с⟩ et ⟨з⟩ se palatalisent devant ⟨ъ⟩.",
+  "blocked-class": "⟨{char}⟩ reste [{ipa}] bien que le [{trigger}] qui le suit soit palatalisé\u00A0: une labiale (ou vélaire) n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
+  "blocked-n": "⟨н⟩ reste [n] bien que le [{trigger}] qui le suit soit palatalisé\u00A0: [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
+  "blocked-r": "⟨р⟩ reste [r] bien que le [{trigger}] qui le suit soit palatalisé\u00A0: devant une consonne palatalisée, [r] ne se palatalise que redoublé, ou après ⟨и⟩, ⟨е⟩ ou ⟨э⟩ lorsque l'accent tombe sur cette voyelle ou sur la suivante.",
+  "blocked-l": "⟨л⟩ reste [ɫ] bien que le [{trigger}] qui le suit soit palatalisé\u00A0: [l] n'est palatalisé par une consonne palatalisée que s'il est redoublé.",
+  "boundary-hard-sign": "⟨{char}⟩ reste [{ipa}]\u00A0: la palatalisation ne franchit pas le signe dur ⟨ъ⟩.",
+  "boundary-prefix": "⟨{char}⟩ reste [{ipa}]\u00A0: la palatalisation ne remonte pas de la racine jusqu'au préfixe, sauf si la même consonne se trouve de part et d'autre.",
+  "no-soft-follower": "⟨{char}⟩ reste [{ipa}]\u00A0: le son qui le suit immédiatement n'est pas palatalisé.",
+  "lexical-exception": "⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception\u00A0: Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.",
+  "look-alike-root": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé. «{word}» semble commencer par le préfixe «{look}-», mais ⟨{char}⟩ appartient à la racine «{root}-»\u00A0: la palatalisation l'atteint donc.",
 };
 
 const CITATION: Record<string, string> = {
@@ -173,7 +173,7 @@ describe('the engine composes each comment, with its placeholders filled', () =>
     const out = composeBlurb(entryFor("по'двиг", 'д', 1) as never)!;
     expect(out.blurb).toEqual({
       en: '⟨д⟩ softens to [dʲ] before the soft [vʲ]. «подвиг» looks as if it begins with the prefix «под-», but ⟨д⟩ belongs to the root «двиг-», so the softening reaches it.',
-      fr: "⟨д⟩ se palatalise en [dʲ] devant le [vʲ] palatalisé. «подвиг» semble commencer par le préfixe «под-», mais ⟨д⟩ appartient à la racine «двиг-» : la palatalisation l'atteint donc.",
+      fr: "⟨д⟩ se palatalise en [dʲ] devant le [vʲ] palatalisé. «подвиг» semble commencer par le préfixe «под-», mais ⟨д⟩ appartient à la racine «двиг-»\u00A0: la palatalisation l'atteint donc.",
     });
     expect(out.citation).toBe('(Grayson, p. 249)');
   });

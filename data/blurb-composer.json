@@ -1305,7 +1305,7 @@
         "citation": "pp. 209–210"
       },
       "fr": {
-        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit.",
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit.",
         "citation": "pp. 209–210"
       },
       "standalone": true
@@ -1316,7 +1316,7 @@
         "citation": "pp. 209–210 + D&P 1980, p. 79"
       },
       "fr": {
-        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit. Dans la langue parlée courante, il reste souvent dur ici.",
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une consonne dentale comme [{base_ipa}] est palatalisée par toute consonne palatalisée qui la suit. Dans la langue parlée courante, il reste souvent dur ici.",
         "citation": "pp. 209–210 + D&P 1980, p. 79"
       },
       "standalone": true
@@ -1327,7 +1327,7 @@
         "citation": "p. 209"
       },
       "fr": {
-        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une labiale (ou vélaire) comme [{base_ipa}] n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : une labiale (ou vélaire) comme [{base_ipa}] n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
         "citation": "p. 209"
       },
       "standalone": true
@@ -1338,7 +1338,7 @@
         "citation": "p. 209"
       },
       "fr": {
-        "template": "⟨н⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
+        "template": "⟨н⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
         "citation": "p. 209"
       },
       "standalone": true
@@ -1349,7 +1349,7 @@
         "citation": "p. 209"
       },
       "fr": {
-        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant un second ⟨{char}⟩ palatalisé : redoublées, les deux lettres se palatalisent ensemble.",
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant un second ⟨{char}⟩ palatalisé : redoublées, les deux lettres se palatalisent ensemble.",
         "citation": "p. 209"
       },
       "standalone": true
@@ -1360,7 +1360,7 @@
         "citation": "p. 209"
       },
       "fr": {
-        "template": "⟨р⟩ se palatalise en [rʲ] devant le [{trigger}] palatalisé : il suit ⟨и⟩, ⟨е⟩ ou ⟨э⟩, et l'accent tombe sur cette voyelle ou sur la suivante.",
+        "template": "⟨р⟩ se palatalise en [rʲ] devant le [{trigger}] palatalisé : il suit ⟨и⟩, ⟨е⟩ ou ⟨э⟩, et l'accent tombe sur cette voyelle ou sur la suivante.",
         "citation": "p. 209"
       },
       "standalone": true
@@ -1371,7 +1371,7 @@
         "citation": "p. 193"
       },
       "fr": {
-        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le signe dur : ⟨в⟩, ⟨с⟩ et ⟨з⟩ se palatalisent devant ⟨ъ⟩.",
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le signe dur : ⟨в⟩, ⟨с⟩ et ⟨з⟩ se palatalisent devant ⟨ъ⟩.",
         "citation": "p. 193"
       },
       "standalone": true
@@ -1382,7 +1382,7 @@
         "citation": "p. 209"
       },
       "fr": {
-        "template": "⟨{char}⟩ reste [{ipa}] bien que le [{trigger}] qui le suit soit palatalisé : une labiale (ou vélaire) n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
+        "template": "⟨{char}⟩ reste [{ipa}] bien que le [{trigger}] qui le suit soit palatalisé : une labiale (ou vélaire) n'est palatalisée que par une autre labiale (ou vélaire) palatalisée.",
         "citation": "p. 209"
       },
       "standalone": true
@@ -1393,7 +1393,7 @@
         "citation": "p. 209"
       },
       "fr": {
-        "template": "⟨н⟩ reste [n] bien que le [{trigger}] qui le suit soit palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
+        "template": "⟨н⟩ reste [n] bien que le [{trigger}] qui le suit soit palatalisé : [n] n'est palatalisé que par un autre [n] palatalisé ou par une dentale palatalisée.",
         "citation": "p. 209"
       },
       "standalone": true
@@ -1404,7 +1404,7 @@
         "citation": "p. 209"
       },
       "fr": {
-        "template": "⟨р⟩ reste [r] bien que le [{trigger}] qui le suit soit palatalisé : devant une consonne palatalisée, [r] ne se palatalise que redoublé, ou après ⟨и⟩, ⟨е⟩ ou ⟨э⟩ lorsque l'accent tombe sur cette voyelle ou sur la suivante.",
+        "template": "⟨р⟩ reste [r] bien que le [{trigger}] qui le suit soit palatalisé : devant une consonne palatalisée, [r] ne se palatalise que redoublé, ou après ⟨и⟩, ⟨е⟩ ou ⟨э⟩ lorsque l'accent tombe sur cette voyelle ou sur la suivante.",
         "citation": "p. 209"
       },
       "standalone": true
@@ -1415,7 +1415,7 @@
         "citation": "p. 209"
       },
       "fr": {
-        "template": "⟨л⟩ reste [ɫ] bien que le [{trigger}] qui le suit soit palatalisé : [l] n'est palatalisé par une consonne palatalisée que s'il est redoublé.",
+        "template": "⟨л⟩ reste [ɫ] bien que le [{trigger}] qui le suit soit palatalisé : [l] n'est palatalisé par une consonne palatalisée que s'il est redoublé.",
         "citation": "p. 209"
       },
       "standalone": true
@@ -1426,7 +1426,7 @@
         "citation": "p. 206"
       },
       "fr": {
-        "template": "⟨{char}⟩ reste [{ipa}] : la palatalisation ne franchit pas le signe dur ⟨ъ⟩.",
+        "template": "⟨{char}⟩ reste [{ipa}] : la palatalisation ne franchit pas le signe dur ⟨ъ⟩.",
         "citation": "p. 206"
       },
       "standalone": true
@@ -1437,7 +1437,7 @@
         "citation": "p. 249"
       },
       "fr": {
-        "template": "⟨{char}⟩ reste [{ipa}] : la palatalisation ne remonte pas de la racine jusqu'au préfixe, sauf si la même consonne se trouve de part et d'autre.",
+        "template": "⟨{char}⟩ reste [{ipa}] : la palatalisation ne remonte pas de la racine jusqu'au préfixe, sauf si la même consonne se trouve de part et d'autre.",
         "citation": "p. 249"
       },
       "standalone": true
@@ -1448,7 +1448,7 @@
         "citation": "p. 206"
       },
       "fr": {
-        "template": "⟨{char}⟩ reste [{ipa}] : le son qui le suit immédiatement n'est pas palatalisé.",
+        "template": "⟨{char}⟩ reste [{ipa}] : le son qui le suit immédiatement n'est pas palatalisé.",
         "citation": "p. 206"
       },
       "standalone": true
@@ -1459,7 +1459,7 @@
         "citation": "p. 287"
       },
       "fr": {
-        "template": "⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception : Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.",
+        "template": "⟨а⟩ est ici en position interpalatale (entre deux consonnes palatalisées), où les règles exigent d'ordinaire un [a] antériorisé. «счастье» et ses dérivés font exception : Grayson rapporte que beaucoup de Russes conservent le [ɑ] sombre, qu'il juge moins tendu et plus résonnant pour le chant.",
         "citation": "p. 287"
       },
       "standalone": true
@@ -1470,7 +1470,7 @@
         "citation": "p. 249"
       },
       "fr": {
-        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé. «{word}» semble commencer par le préfixe «{look}-», mais ⟨{char}⟩ appartient à la racine «{root}-» : la palatalisation l'atteint donc.",
+        "template": "⟨{char}⟩ se palatalise en [{ipa}] devant le [{trigger}] palatalisé. «{word}» semble commencer par le préfixe «{look}-», mais ⟨{char}⟩ appartient à la racine «{root}-» : la palatalisation l'atteint donc.",
         "citation": "p. 249"
       },
       "standalone": true
