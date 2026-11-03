@@ -52,10 +52,10 @@ export interface VoiceNote {
 	inSlur: boolean;
 }
 
-/** One `<slur>` end on a note. `number` defaults to 1, as MusicXML does. */
+/** One `<slur>` end on a note. A start's `number` defaults to 1, as MusicXML does; a stop with no `number` is null and closes the most recent open start of any number. */
 export interface SlurEnd {
 	type: 'start' | 'stop';
-	number: number;
+	number: number | null;
 }
 
 /** The slur ends of one note's text, stops before starts (a note that closes one slur and opens the next has a stop and a start). */
@@ -65,7 +65,7 @@ function slurEndsOf(note: string): SlurEnd[] {
 		const type = /\btype="(start|stop)"/.exec(m[1])?.[1];
 		if (type !== 'start' && type !== 'stop') continue; // type="continue" opens and closes nothing
 		const number = /\bnumber="(\d+)"/.exec(m[1]);
-		ends.push({ type, number: number ? Number(number[1]) : 1 });
+		ends.push({ type, number: number ? Number(number[1]) : type === 'start' ? 1 : null });
 	}
 	return [...ends.filter((e) => e.type === 'stop'), ...ends.filter((e) => e.type === 'start')];
 }
@@ -76,35 +76,37 @@ function slurEndsOf(note: string): SlurEnd[] {
  *
  * Follows `slurContinuationIds` (`score/slur-seat.ts`): a span runs from its start to its stop, inclusive, and the start
  * note is not in it; overlapping or nested spans take the union; a rest inside a span does not end it and is never marked
- * (`rest[i]`). One pass over the part pairs each `start` with the next `stop` of the same `number` on a LATER note (a stop
- * on the start's own note closes the slur before it). A `start` with no such stop opens no span (`slur-seat.ts` opens none
- * for a start without a partner), and a `stop` that no start took is ignored. So a slur that crosses a page break marks
- * nothing on either page.
+ * (`rest[i]`). The pairing is a STACK (row 177 step 5): a `stop` closes the most recent open `start` of its `number`, or of
+ * any number where the stop gives none, so two starts never share one stop and overlapping slurs (start, start, stop, stop,
+ * homr writing every voice slur as number 1) each end where they end; a note stays in the union while any slur is open,
+ * including the note where the last one stops. A stop on a start's own note closes the slur before it. A `start` never closed
+ * opens no span (`slur-seat.ts` opens none for a start without a partner), and a `stop` with nothing to close is ignored. So
+ * a slur that crosses a page break marks nothing on either page.
  */
 export function slurSpans(
 	ends: readonly (readonly SlurEnd[])[],
 	rest: readonly boolean[],
 ): { inSlur: boolean[]; unmatchedStarts: number; unmatchedStops: number } {
 	const inSlur = new Array<boolean>(ends.length).fill(false);
-	const taken = new Set<string>();
-	let unmatchedStarts = 0;
+	const open: { number: number; at: number }[] = [];
+	let unmatchedStops = 0;
 	ends.forEach((here, i) => {
 		for (const end of here) {
-			if (end.type !== 'start') continue;
-			let to = -1;
-			for (let k = i + 1; k < ends.length && to < 0; k++) if (ends[k].some((e) => e.type === 'stop' && e.number === end.number)) to = k;
-			if (to < 0) {
-				unmatchedStarts++;
+			if (end.type === 'start') {
+				open.push({ number: end.number ?? 1, at: i });
 				continue;
 			}
-			taken.add(`${to}:${end.number}`);
-			for (let k = i + 1; k <= to; k++) if (!rest[k]) inSlur[k] = true;
+			let j = open.length - 1;
+			while (j >= 0 && end.number !== null && open[j].number !== end.number) j--;
+			if (j < 0 || open[j].at === i) {
+				unmatchedStops++;
+				continue;
+			}
+			const [{ at }] = open.splice(j, 1);
+			for (let k = at + 1; k <= i; k++) if (!rest[k]) inSlur[k] = true;
 		}
 	});
-	// A stop is counted once per (note, number), the same unit `taken` holds.
-	const stops = new Set<string>();
-	ends.forEach((here, i) => here.forEach((e) => e.type === 'stop' && stops.add(`${i}:${e.number}`)));
-	return { inSlur, unmatchedStarts, unmatchedStops: stops.size - taken.size };
+	return { inSlur, unmatchedStarts: open.length, unmatchedStops };
 }
 
 /** The notes of the first `<part>` of a MusicXML text, in document order. */
