@@ -31,6 +31,7 @@ next session the same hour it cost the last one.
 | a helper will run more than an hour while Dann waits | `DANN WAITED THREE HOURS WITHOUT A WORD` |
 | the cloud container restarts with a helper running | `A CONTAINER RESTART KILLS THE HELPER, NOT ITS FILES` |
 | a desk scratch gate looser than Dann's ruling | `A SCRATCH GATE WAS LOOSER THAN THE RULING` |
+| a measure needs a poem's text from lieder.net | `WEBFETCH WILL NOT TRANSCRIBE A SONG TEXT FROM LIEDER.NET` |
 
 ### Shipping, gates, and the ship script
 
@@ -5120,4 +5121,7 @@ Row 165 steps 5 to 8 and Dann's rulings of 2026-11-01 17:56 and 17:57 treated IN
 
 ### A SCRATCH GATE WAS LOOSER THAN THE RULING. 2026-11-02 21:xx (Opus evening desk)
 - Brief B told the helper to take the slur reading where the counts were "equal or nearer"; Dann's ruling (2026-10-20 03:37) says "come out even". The looser gate scored 373 and put two vowels on 2 notes (against `CONTRACT.md` §0.1); the strict gate, the ruling as written, scored 369 with none. Rule: a measure arm that stands for a ruling quotes the ruling's own words as its gate; any wider arm is labelled "not the ruling" in the brief.
+
+### WEBFETCH WILL NOT TRANSCRIBE A SONG TEXT FROM LIEDER.NET. 2026-11-02 23:xx (Opus evening desk)
+- A helper asked WebFetch for the Russian poems of row 114's songs; it declined three times ("a song text with published musical settings"), even for a public-domain poet. A plain fetch redirects to a 404; a browser user-agent was refused as bot-check circumvention. That refusal is on the content, so it is not routed around. Poems for a measure come from Dann (pasted or as files) or from Emily Ezust, placed in the workspace as text; a brief that needs them says so before a helper starts.
 
