@@ -91,6 +91,12 @@ export interface NotePlace {
 	tiedInto?: boolean;
 	/** The note is under a printed extender: it sings no new syllable. */
 	underExtender?: boolean;
+	/**
+	 * The note lies after the first note of a printed slur, up to the slur's stop (`slurSpans`, `underlay-prepare.ts`). It
+	 * is a continuation only where `seatPage` takes the slur reading for the system (the count gate); until then it is read
+	 * by nothing.
+	 */
+	inSlur?: boolean;
 }
 
 /**
