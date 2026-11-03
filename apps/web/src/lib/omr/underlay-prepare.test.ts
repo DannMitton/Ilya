@@ -6,6 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { prepareUnderlay, slurSpans, voiceNotes } from './underlay-prepare';
 import { inkExtent } from './underlay-frame';
+import { seatPage, type Seams, type WordBox } from './underlay-page';
 import type { Grey, StaffBoxLike } from './metre-windows';
 
 const W = 1200;
@@ -181,5 +182,33 @@ describe('prepareUnderlay', () => {
 		const close = prepareUnderlay(page(), music, [boxes[0], { ...boxes[1], cy: (260 + 60) / H }]);
 		// The second staff box now sits where the first row of text is; no staff is found there, so only the voice staff remains and its band runs 20 spaces.
 		expect(close.layout.systems).toHaveLength(1);
+	});
+});
+
+describe('a printed slur, from the MusicXML to the words under the notes (row 177 step 4)', () => {
+	const slurNote = (x: number, type?: 'start' | 'stop') => note(x, 160, type ? `        <notations>\n          <slur number="1" type="${type}" />\n        </notations>\n` : '');
+	// Four notes; a slur from the first to the third. Two syllables for four notes: the counts come out even only if the slur's later notes are melisma.
+	const slurMusic = xml(slurNote(300, 'start') + slurNote(500) + slurNote(700, 'stop') + slurNote(900));
+	const noSlurMusic = xml(slurNote(300) + slurNote(500) + slurNote(700) + slurNote(900));
+	const seams: Seams = { isWord: (w) => w === 'мир', cut: (w) => [w] };
+	const wordAt = (text: string, x0: number, x1: number, scale: number, pad: number): WordBox => ({ text, x0: x0 * scale + pad, x1: x1 * scale + pad, y0: 16, y1: 48 });
+	const seatOn = (musicXml: string) => {
+		const { layout } = prepareUnderlay(page(), musicXml, boxes);
+		const { scale, pad } = layout.systems[0].rows[0].transform;
+		return seatPage(layout, [[wordAt('ка', 290, 310, scale, pad), wordAt('мир', 890, 910, scale, pad)]], seams);
+	};
+
+	it('seats «ка» on the first note and «мир» on the note after the slur\'s stop, with no breach, where the slur makes the counts even', () => {
+		const out = seatOn(slurMusic);
+		expect(out.stats.counted.perSystem).toEqual([{ system: 1, free: 4, slurFree: 2, units: 2, slurReading: true }]);
+		expect(out.words.map((w) => w.syllables.map((y) => [y.text, y.note]))).toEqual([[['ка', 0]], [['мир', 3]]]);
+		expect(out.stats.counted.breaches).toEqual([]);
+	});
+
+	it('reads the same page with the slur unprinted by ties alone: two syllables on four notes, two empty notes counted', () => {
+		const out = seatOn(noSlurMusic);
+		expect(out.stats.counted.perSystem).toEqual([{ system: 1, free: 4, slurFree: 4, units: 2, slurReading: false }]);
+		expect(out.words.map((w) => w.syllables.map((y) => [y.text, y.note]))).toEqual([[['ка', 0]], [['мир', 3]]]);
+		expect(out.stats.counted.breaches.map((b) => [b.id, b.kind])).toEqual([[1, 'no-syllable'], [2, 'no-syllable']]);
 	});
 });
