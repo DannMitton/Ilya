@@ -208,7 +208,31 @@ export interface SongRecord {
 	 * ADDITIVE, `publishedPoem`'s pattern: an older Ilya drops it.
 	 */
 	publishedGlosses?: GlossRow[];
+	/**
+	 * POEM LIBRARY, BUILD 1, 2026-11-03. WHERE THE POEM ON THIS SONG CAME FROM,
+	 * stored only while `publishedPoem` is a library poem (or was, before the
+	 * singer edited it). Absent means the singer's own. `id` and `work` name the
+	 * entry and the work in the poem file named `poemHash`; `start` and `end` are
+	 * the stanza cut in that entry's `textModern` (`text/poem-source.ts`). THE
+	 * TITLE AND THE AUTHOR ARE NOT STORED: they are looked up by `work`, so a
+	 * corrected library corrects every song. `answered` is that the singer has
+	 * answered the card (kept it, or edited the poem); `edited` is that she has
+	 * changed the text. OPTIONAL AND ADDITIVE, `publishedPoem`'s pattern: an
+	 * older Ilya drops it and keeps the poem. `RECORD_SCHEMA` stays 1.
+	 */
+	poemSource?: PoemSource;
 	source: SongSource | null;
+}
+
+/** Where a library poem on a song came from (`SongRecord.poemSource`). */
+export interface PoemSource {
+	id: string;
+	work: string;
+	poemHash: string;
+	start: number;
+	end: number;
+	answered: boolean;
+	edited: boolean;
 }
 
 /**

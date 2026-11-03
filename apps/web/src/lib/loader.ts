@@ -53,7 +53,7 @@ import { setStressDictionary, setSingerSupplement } from '@ilya/phonology';
 import { setGlossDictionary } from '@ilya/dictionary';
 import { setBlurbData } from '@ilya/blurb';
 import type { BlurbData } from '@ilya/blurb';
-import { loadPoemLibrary, POEM_KEY_PREFIX, poemStoreKey, type PoemLibrary } from './text/poem-library';
+import { loadPoemLibrary, POEM_KEY_PREFIX, poemStoreKey, type LoadedPoemLibrary } from './text/poem-library';
 
 // -------------------------------------------------------------------
 // Configuration
@@ -685,8 +685,8 @@ function scheduleGlossTier(
  * amendment 13). A caller that awaits it is never left waiting on a failure,
  * and the app, on `null`, offers no poem and says nothing.
  */
-let settlePoemLibrary: (library: PoemLibrary | null) => void = () => {};
-export const poemLibrary: Promise<PoemLibrary | null> = new Promise((resolve) => {
+let settlePoemLibrary: (library: LoadedPoemLibrary | null) => void = () => {};
+export const poemLibrary: Promise<LoadedPoemLibrary | null> = new Promise((resolve) => {
 	settlePoemLibrary = resolve;
 });
 

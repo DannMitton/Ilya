@@ -44,6 +44,7 @@ import {
 	type OctaveReading,
 	type TempoChoice,
 	type Outcome,
+	type PoemSource,
 	type SongRecord,
 	type SongSource,
 } from './types';
@@ -123,6 +124,12 @@ export class SongDocument {
 	 */
 	publishedGlosses = $state<Map<string, string>>(new Map());
 	publishedGlossAnchors = $state<Map<string, string>>(new Map());
+
+	/**
+	 * Poem library, build 1: where the poem came from, or null where it is the singer's own
+	 * (`SongRecord.poemSource`). Saved through the same path as `publishedPoem`.
+	 */
+	poemSource = $state<PoemSource | null>(null);
 
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
@@ -296,6 +303,7 @@ export class SongDocument {
 			publishedPoem: this.publishedPoem,
 			publishedGlosses: this.publishedGlosses,
 			publishedGlossAnchors: this.publishedGlossAnchors,
+			poemSource: this.poemSource,
 		};
 	}
 
@@ -351,6 +359,7 @@ export class SongDocument {
 		this.publishedPoem = fields.publishedPoem;
 		this.publishedGlosses = fields.publishedGlosses as Map<string, string>;
 		this.publishedGlossAnchors = fields.publishedGlossAnchors as Map<string, string>;
+		this.poemSource = fields.poemSource;
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {

@@ -105,7 +105,7 @@ describe('loadPoemLibrary', () => {
 	it('fetches the named file, answers it, and keeps it under poems-<hash>', async () => {
 		const deps = io();
 		const got = await loadPoemLibrary(manifest, deps);
-		expect(got).toEqual(library());
+		expect(got).toEqual({ ...library(), hash: 'deadbeef' }); // the library, and the hash that names it
 		expect(deps.fetchFile).toHaveBeenCalledWith('/data/dictionary.poems.deadbeef.json');
 		expect(deps.setStored).toHaveBeenCalledWith(poemStoreKey('deadbeef'), library());
 		expect(poemStoreKey('deadbeef')).toBe('poems-deadbeef');
@@ -113,14 +113,14 @@ describe('loadPoemLibrary', () => {
 
 	it('reads the copy this device kept before it asks the network (offline start)', async () => {
 		const deps = io({ getStored: vi.fn(async () => library()) as never, fetchFile: vi.fn(async () => { throw new TypeError('Failed to fetch'); }) });
-		expect(await loadPoemLibrary(manifest, deps)).toEqual(library());
+		expect(await loadPoemLibrary(manifest, deps)).toEqual({ ...library(), hash: 'deadbeef' });
 		expect(deps.getStored).toHaveBeenCalledWith('poems-deadbeef');
 		expect(deps.fetchFile).not.toHaveBeenCalled();
 	});
 
 	it('does not trust a kept copy that fails the check: it fetches instead', async () => {
 		const deps = io({ getStored: vi.fn(async () => ({ version: 1, entries: [{ id: 'x' }] })) as never });
-		expect(await loadPoemLibrary(manifest, deps)).toEqual(library());
+		expect(await loadPoemLibrary(manifest, deps)).toEqual({ ...library(), hash: 'deadbeef' });
 		expect(deps.fetchFile).toHaveBeenCalledTimes(1);
 	});
 
@@ -157,7 +157,7 @@ describe('loadPoemLibrary', () => {
 	it('does not wait for the write that keeps the file', async () => {
 		let release!: () => void;
 		const deps = io({ setStored: vi.fn(() => new Promise<boolean>((r) => (release = () => r(true)))) });
-		expect(await loadPoemLibrary(manifest, deps)).toEqual(library());
+		expect(await loadPoemLibrary(manifest, deps)).toEqual({ ...library(), hash: 'deadbeef' });
 		release();
 	});
 });

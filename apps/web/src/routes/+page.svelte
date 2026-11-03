@@ -4,7 +4,7 @@
 	import { startUpdateChecks, refreshToNewVersion } from '$lib/update-check';
 	import { transcribeWord } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
-	import { loadDictionary, type LoaderState } from '$lib/loader';
+	import { loadDictionary, poemLibrary, type LoaderState } from '$lib/loader';
 	import { processText, wordGrid } from '$lib/pipeline';
 	import { applyOpenSyllabificationToLines } from '$lib/syllable-utils';
 	import type { LineData, WordStackData, SongMetadata, UserStressOverride, YoToggle, SyllableOverride } from '$lib/types';
@@ -37,6 +37,7 @@
 	import { routePoemPage } from '$lib/text/poem-page';
 	import { sameWords } from '$lib/text/same-words';
 	import { lyricsInPoemLines } from '$lib/text/relining';
+	import { poemOffer } from '$lib/text/poem-offer.svelte';
 	import { survivingGlosses } from '$lib/text/gloss-survival';
 	import { WordMarks } from '$lib/text/word-marks.svelte';
 	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
@@ -2358,8 +2359,8 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 
 	/** The poem box's own input. On a derived poem, the box is claimed first. */
 	function handlePoemInput(text: string, how: TextArrival): void {
-		claimDerivedPoem();
-		handleInput(text, how);
+		const wasEmpty = doc.inputText.trim() === ''; claimDerivedPoem();
+		handleInput(text, how); if (wasEmpty && how === 'paste') void poemOffer.offer(text); // POEM LIBRARY: a paste into an empty Lyrics is an arrival; never inside handleInput, which a keystroke reaches as 'paste'
 	}
 
 	function handleInput(text: string, how: TextArrival = 'paste') {
@@ -2368,7 +2369,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		joinText(how);
 	}
 	/* ROW 108 B (ruling default 4): Lyrics holding the score's words, in Ilya's own line breaks, takes the poem's (`text/relining.ts`). */
-	let lastLaid = ''; // the text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
+	let lastLaid = ''; poemOffer.attach({ doc: () => doc, library: poemLibrary, put: (t) => handlePoemEdit(t, 'paste'), setLyrics: (t) => handleInput(t, 'paste'), laid: { get: () => lastLaid, set: (v) => (lastLaid = v) } }); // the text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
 	function adoptPoemLines(how: TextArrival, previousPoem = ''): void {
 		const laid = lyricsInPoemLines(doc.inputText, doc.publishedPoem, previousPoem, scoreText, lastLaid);
 		if (laid !== null) { lastLaid = laid; handleInput(laid, how); }
@@ -2384,15 +2385,15 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		const before = doc.publishedPoem;
 		const carried = carryPoemEdit(doc.publishedPoem, text, poemMarks, doc.publishedGlosses, doc.publishedGlossAnchors);
 		if (carried) [doc.publishedGlosses, doc.publishedGlossAnchors] = [carried.glosses, carried.anchors];
-		doc.publishedPoem = text;
+		doc.publishedPoem = text; poemOffer.onPoemEdit(before, text, how);
 		if (lyricsTakesPoem(how === 'paste' && noLyricsFile !== null && ingestedScore !== null, doc.inputText, text, Object.keys(doc.pairings).length)) handleInput(text, 'paste');
 		else { nameIfUnnamed(); adoptPoemLines(how, before); if (quietTimer) joinText(how); /* a Poem key keeps a pending pause waiting */ }
 	}
 	function handlePoemPage(text: string): void {
 		const say = (key: string) => tOrEnglish(key, language);
 		routePoemPage(text, {
-			held: doc.publishedPoem,
-			put: handlePoemEdit,
+			held: poemOffer.heldForGuard(doc.publishedPoem),
+			put: (t) => { poemOffer.onReplace(); handlePoemEdit(t); },
 			land: (where) => inputViews.land(where),
 			ask: (replace) =>
 				void askToReplace(say('intake.poemReplace.title'), say('intake.poemReplace.body'), [
@@ -2826,7 +2827,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 			origin === 'upload' && !noLyrics && doc.inputText.trim() === ''
 				? scoreWordsText(collectScoreWords(ingested.result.score, 1))
 				: '';
-		if (fillText !== '') { handleInput(fillText); inputViews.land('lyrics', doc.publishedPoem.trim() === ''); }
+		if (fillText !== '') { handleInput(fillText); inputViews.land('lyrics', doc.publishedPoem.trim() === ''); void poemOffer.offer(fillText); /* POEM LIBRARY: a file's or a scan's words are an arrival */ }
 		// ROW 109 B: a score with no words onto an empty Lyrics takes the poem's text, and the seat below runs on it.
 		else if (lyricsTakesPoem(origin === 'upload' && noLyrics, doc.inputText, doc.publishedPoem, 0)) handleInput(doc.publishedPoem, 'paste');
 		// N.67 step 3, design §2.6. THE MERGE RULE, and where N.68 closed: an
@@ -3973,7 +3974,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 					songId={doc.id}
 					poemText={doc.publishedPoem}
 					onpoemedit={handlePoemEdit}
-					onclearpoem={() => (doc.publishedPoem = '')}
+					onclearpoem={() => { doc.publishedPoem = ''; poemOffer.onClear(); }}
 					poemDerived={derivedPoem !== ''}
 					{loaderState}
 					{canTranscribe}

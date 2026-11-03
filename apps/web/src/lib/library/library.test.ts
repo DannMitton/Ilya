@@ -18,7 +18,7 @@ import {
 	type SongFields,
 } from './library';
 import { createMemoryDriver, type StorageDriver } from './driver';
-import { emptySongRecord, type SongRecord } from './types';
+import { emptySongRecord, RECORD_SCHEMA, type SongRecord } from './types';
 
 const NOW = '2026-08-16T00:00:00.000Z';
 const LATER = '2026-08-16T01:00:00.000Z';
@@ -288,6 +288,100 @@ describe('the poet\'s published text on the song (N.135 stage 3)', () => {
 
 		expect(fieldsFromRecord(old).inputText).toBe('Я тебя любил');
 		expect(fieldsFromRecord(old).publishedPoem).toBe('');
+	});
+});
+
+describe('where the poem came from (poem library, build 1)', () => {
+	const source = { id: '0127a63ffe', work: '0127a63f', poemHash: 'a97f2074', start: 0, end: 375, answered: false, edited: false };
+
+	it('is absent by default, loads as null, and a song without one writes none back', () => {
+		const record = emptySongRecord('x', NOW);
+		const fields = fieldsFromRecord(record);
+
+		expect(fields.poemSource).toBeNull();
+		expect('poemSource' in recordFromFields(record, fields)).toBe(false);
+	});
+
+	it('round-trips through the record and the validator, beside the poem', () => {
+		const base = { ...emptySongRecord('x', NOW), poem: 'Дайте бокалы' };
+		const stored = recordFromFields(base, { ...fieldsFromRecord(base), publishedPoem: 'Дайте бокалы!', poemSource: source });
+
+		expect(stored.poemSource).toEqual(source);
+		expect(stored.publishedPoem).toBe('Дайте бокалы!');
+		expect(validateRecord(JSON.parse(JSON.stringify(stored)), 'x', LATER)).toEqual({ record: expect.objectContaining({ poemSource: source }) });
+		expect(fieldsFromRecord(stored).poemSource).toEqual(source);
+	});
+
+	it('keeps every flag as it was: answered, edited, and both', () => {
+		for (const flags of [{ answered: true, edited: false }, { answered: true, edited: true }, { answered: false, edited: false }]) {
+			const base = emptySongRecord('x', NOW);
+			const stored = recordFromFields(base, { ...fieldsFromRecord(base), poemSource: { ...source, ...flags } });
+			expect(fieldsFromRecord(validateRecord(JSON.parse(JSON.stringify(stored)), 'x', LATER).record).poemSource).toEqual({ ...source, ...flags });
+		}
+	});
+
+	it('is dropped from the stored record when the poem is the singer’s own again (the field is null)', () => {
+		const record = { ...emptySongRecord('x', NOW), poemSource: source };
+
+		expect('poemSource' in recordFromFields(record, { ...fieldsFromRecord(record), poemSource: null })).toBe(false);
+	});
+
+	it('stores no title and no author: they are looked up by work', () => {
+		const base = emptySongRecord('x', NOW);
+		const stored = recordFromFields(base, { ...fieldsFromRecord(base), poemSource: source });
+
+		expect(Object.keys(stored.poemSource!).sort()).toEqual(['answered', 'edited', 'end', 'id', 'poemHash', 'start', 'work']);
+	});
+
+	it('does not share the object with the page state: a change to one is not a change to the other', () => {
+		const record = { ...emptySongRecord('x', NOW), poemSource: source };
+		const fields = fieldsFromRecord(record);
+
+		expect(fields.poemSource).not.toBe(record.poemSource);
+		const stored = recordFromFields(record, fields);
+		expect(stored.poemSource).not.toBe(fields.poemSource);
+	});
+
+	it('marks a source the card could not have written as malformed and does not carry it, keeping the poem', () => {
+		for (const bad of [
+			7,
+			'x',
+			{ ...source, id: '' },
+			{ ...source, work: 3 },
+			{ ...source, poemHash: undefined },
+			{ ...source, start: -1 },
+			{ ...source, start: 1.5 },
+			{ ...source, end: source.start },
+			{ ...source, answered: 'yes' },
+			{ ...source, edited: undefined },
+		]) {
+			const result = validateRecord({ publishedPoem: 'Дайте бокалы!', poemSource: bad }, 'x', NOW);
+			expect(result.reason, JSON.stringify(bad)).toBe('malformed');
+			expect(result.record.poemSource, JSON.stringify(bad)).toBeUndefined();
+			expect(result.record.publishedPoem, JSON.stringify(bad)).toBe('Дайте бокалы!');
+		}
+	});
+
+	it('an existing song, saved before this field, loads whole with no source', () => {
+		const old = validateRecord({ ...seededRecord(), publishedPoem: 'Я тебя любил' }, 'test-song', LATER);
+
+		expect(old.reason).toBeUndefined();
+		expect(fieldsFromRecord(old.record).poemSource).toBeNull();
+	});
+
+	it('the record schema stays 1', () => {
+		expect(emptySongRecord('x', NOW).schema).toBe(1);
+		expect(RECORD_SCHEMA).toBe(1);
+	});
+
+	it('survives a save and a load through the library', async () => {
+		const driver = createMemoryDriver();
+		const library = new Library(driver, () => LATER);
+		const base = emptySongRecord('song-p', NOW);
+		await library.save(recordFromFields(base, { ...fieldsFromRecord(base), publishedPoem: 'Дайте бокалы!', poemSource: source }));
+
+		const loaded = await driver.load('song-p');
+		expect(loaded.record.poemSource).toEqual(source);
 	});
 });
 

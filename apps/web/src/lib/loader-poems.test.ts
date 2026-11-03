@@ -110,7 +110,7 @@ describe('the poem library through loadDictionary', () => {
 	it('resolves the library after the tier loads, and keeps it under poems-<poemHash>', async () => {
 		serve();
 		const { loader } = await start();
-		expect(await loader.poemLibrary).toEqual(poems);
+		expect(await loader.poemLibrary).toEqual({ ...poems, hash: POEM_HASH });
 		expect(fetched.filter((p) => p.endsWith(POEM_FILE))).toHaveLength(1);
 		await vi.waitFor(async () => expect(await keys()).toContain(`poems-${POEM_HASH}`));
 	});
@@ -122,7 +122,7 @@ describe('the poem library through loadDictionary', () => {
 		};
 		serve();
 		const { loader } = await start();
-		expect(await loader.poemLibrary).toEqual(poems);
+		expect(await loader.poemLibrary).toEqual({ ...poems, hash: POEM_HASH });
 		expect(fetched.some((p) => p.endsWith(POEM_FILE))).toBe(false);
 	});
 

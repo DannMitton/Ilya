@@ -47,6 +47,14 @@ export interface PoemLibrary {
 	entries: PoemEntry[];
 }
 
+/**
+ * The library as the loader hands it out: the file's content, and the hash that names it (`poemHash`).
+ * A song's `poemSource` stores that hash, so the offsets it keeps are known to belong to this file or not.
+ */
+export interface LoadedPoemLibrary extends PoemLibrary {
+	hash: string;
+}
+
 /** The part of the dictionary manifest this reads. */
 export interface PoemManifest {
 	poemFiles?: string[];
@@ -106,7 +114,7 @@ export function isPoemLibrary(v: unknown): v is PoemLibrary {
  * `poems-<poemHash>`; otherwise fetches the first of `poemFiles` and keeps it
  * (in the background: the answer does not wait for the write).
  */
-export async function loadPoemLibrary(manifest: PoemManifest, io: PoemIO): Promise<PoemLibrary | null> {
+export async function loadPoemLibrary(manifest: PoemManifest, io: PoemIO): Promise<LoadedPoemLibrary | null> {
 	try {
 		const file = manifest.poemFiles?.[0];
 		const hash = manifest.poemHash;
@@ -114,14 +122,14 @@ export async function loadPoemLibrary(manifest: PoemManifest, io: PoemIO): Promi
 		const key = poemStoreKey(hash);
 
 		const kept = await io.getStored<unknown>(key);
-		if (isPoemLibrary(kept)) return kept;
+		if (isPoemLibrary(kept)) return { ...kept, hash };
 
 		const response = await io.fetchFile(`/data/${file}`);
 		if (!response.ok) return null;
 		const fetched: unknown = await response.json();
 		if (!isPoemLibrary(fetched)) return null;
 		void io.setStored(key, fetched);
-		return fetched;
+		return { ...fetched, hash };
 	} catch (error) {
 		console.warn('[Ilya] Poem library unavailable (no poem will be offered):', error);
 		return null;

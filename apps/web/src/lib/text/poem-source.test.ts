@@ -1,0 +1,228 @@
+/**
+ * What fills Poem and how the stored source changes (poem library, build 1, step 4),
+ * on the real library and the real fixtures where they can be.
+ */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe, expect, it } from 'vitest';
+import type { PoemSource } from '$lib/library/types';
+import type { LoadedPoemLibrary, PoemEntry } from './poem-library';
+import { foldLetters, matchPoem } from './poem-match';
+import { bodyStanzas, edited, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
+
+const ROOT = join(__dirname, '../../../../..');
+const manifest = JSON.parse(readFileSync(join(ROOT, 'data/dictionary-manifest.json'), 'utf8'));
+const library: LoadedPoemLibrary = { ...JSON.parse(readFileSync(join(ROOT, 'data', manifest.poemFiles[0]), 'utf8')), hash: manifest.poemHash };
+const fixture = (name: string): string => readFileSync(join(ROOT, 'tools/poems/fixtures', `${name}.lyrics.txt`), 'utf8');
+const entry = (title: string): PoemEntry => library.entries.find((e) => e.title === title)!;
+
+const POEM = 'Один раз\nДва раза\n\nТри раза\nЧетыре раза\n\nПять раз\nШесть раз\n\nСемь раз\nВосемь раз';
+// stanzas: [0,17) [19,39) [41,59) [61,79) -- see the first test
+
+describe('stanzas: blank-line blocks as offsets', () => {
+	it('finds each block from its first letter to its last', () => {
+		const blocks = stanzas(POEM);
+		expect(blocks).toHaveLength(4);
+		expect(blocks.map((b) => POEM.slice(b.start, b.end))).toEqual(['Один раз\nДва раза', 'Три раза\nЧетыре раза', 'Пять раз\nШесть раз', 'Семь раз\nВосемь раз']);
+	});
+
+	it('takes lines of spaces for blank, and ignores blanks at the ends', () => {
+		const t = '\n\n  Первая строка  \nВторая\n   \n\n\nТретья\n\n';
+		expect(stanzas(t).map((b) => t.slice(b.start, b.end))).toEqual(['Первая строка  \nВторая', 'Третья']);
+	});
+
+	it('is empty for no text', () => {
+		expect(stanzas('')).toEqual([]);
+		expect(stanzas('\n \n')).toEqual([]);
+	});
+});
+
+describe('stanzaCut: the whole stanzas that hold the stretch', () => {
+	const at = (needle: string) => POEM.indexOf(needle);
+
+	it('cuts to the stanzas holding the stretch, when it covers less than the poem', () => {
+		const cut = stanzaCut(POEM, at('Четыре'), at('Шесть') + 'Шесть'.length);
+		expect(cut.whole).toBe(false);
+		expect(cut.text).toBe('Три раза\nЧетыре раза\n\nПять раз\nШесть раз');
+		expect(POEM.slice(cut.start, cut.end)).toBe(cut.text);
+	});
+
+	it('takes a stanza whole when the stretch begins or ends inside it', () => {
+		const cut = stanzaCut(POEM, at('раза\n\nТри') + 2, at('Три') + 2);
+		expect(cut.text).toBe('Один раз\nДва раза\n\nТри раза\nЧетыре раза');
+	});
+
+	it('is the whole poem, verbatim, when the stretch reaches the first and the last stanza', () => {
+		const cut = stanzaCut(POEM, 3, POEM.length - 2);
+		expect(cut).toEqual({ text: POEM, start: 0, end: POEM.length, whole: true });
+	});
+
+	it('is one stanza when the stretch lies in one', () => {
+		const cut = stanzaCut(POEM, at('Пять'), at('Пять') + 4);
+		expect(cut.text).toBe('Пять раз\nШесть раз');
+	});
+
+	it('is the whole poem for a poem of one stanza, or a stretch that names nothing', () => {
+		expect(stanzaCut('Одна\nстрофа', 2, 5).whole).toBe(true);
+		expect(stanzaCut('', 0, 0).whole).toBe(true);
+		expect(stanzaCut(POEM, 500, 600).whole).toBe(true);
+	});
+
+	it('does not count a closing dating line as a stanza the song left out', () => {
+		const dated = 'Первая\nстрофа\n\nВторая\nстрофа\n\n1830';
+		expect(bodyStanzas(dated)).toHaveLength(2);
+		const cut = stanzaCut(dated, 0, dated.indexOf('1830') - 3);
+		expect(cut.whole).toBe(true);
+		expect(cut.text).toBe(dated); // verbatim, dating line and all
+		// ... and a stretch in the first stanza alone is still a passage
+		expect(stanzaCut(dated, 0, 5).whole).toBe(false);
+		// the date forms in the library
+		for (const closing of ['Февраль 1837', '8 декабря 1840Москва']) {
+			const t = `А\nБ\n\nВ\nГ\n\n${closing}`;
+			expect(stanzaCut(t, 0, t.indexOf(closing) - 3).whole, closing).toBe(true);
+		}
+		// but a closing stanza that is verse is a stanza
+		const verse = 'А\nБ\n\nВ\nГ\n\nДа здравствует год 1830 и все, кто в нём';
+		expect(stanzaCut(verse, 0, 3).whole).toBe(false);
+	});
+});
+
+describe('stanzaCut on the real fixtures', () => {
+	const cutOf = (name: string) => {
+		const m = matchPoem(fixture(name), library)!;
+		return { m, cut: stanzaCut(m.entry.textModern, m.start, m.end) };
+	};
+
+	it('row 114 song 2 sets the whole of «Весёлый час»: the whole poem, no passage', () => {
+		const { m, cut } = cutOf('r114-song2');
+		expect(m.entry.title).toBe('Весёлый час');
+		expect(cut.whole).toBe(true);
+		expect(cut.text).toBe(m.entry.textModern);
+	});
+
+	it('fixture S sets the fish’s song: a cut of a few stanzas of «Мцыри», starting on a stanza', () => {
+		const { m, cut } = cutOf('S');
+		expect(m.entry.title).toBe('Мцыри');
+		expect(cut.whole).toBe(false);
+		expect(cut.text).toContain('Останься здесь со мной');
+		expect(cut.text).not.toContain('Немного лет тому назад');
+		expect(cut.text.length).toBeLessThan(m.entry.textModern.length / 20);
+		expect(cut.start).toBeLessThanOrEqual(m.start);
+		expect(cut.end).toBeGreaterThanOrEqual(m.end);
+		// it begins at the start of a stanza and ends at the end of one
+		expect(m.entry.textModern[cut.start - 1] === '\n' || cut.start === 0).toBe(true);
+		expect(m.entry.textModern[cut.end] === '\n' || cut.end === m.entry.textModern.length).toBe(true);
+	});
+
+	it('every filling fixture cuts to stanzas: no cut begins or ends inside a line', () => {
+		for (const name of ['P', 'S', 'T', 'U1', 'U6', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5']) {
+			const { m, cut } = cutOf(name);
+			const t = m.entry.textModern;
+			expect(cut.start === 0 || t[cut.start - 1] === '\n', name).toBe(true);
+			expect(cut.end === t.length || t[cut.end] === '\n', name).toBe(true);
+		}
+	});
+});
+
+describe('lineAt', () => {
+	it('gives the line that holds an offset, trimmed', () => {
+		const t = 'Первая строка\n  Вторая строка  \nТретья';
+		expect(lineAt(t, 0)).toBe('Первая строка');
+		expect(lineAt(t, 20)).toBe('Вторая строка');
+		expect(lineAt(t, t.length - 1)).toBe('Третья');
+		expect(lineAt(t, -1)).toBe('');
+		expect(lineAt(t, t.length)).toBe('');
+	});
+});
+
+describe('resolveSource: a stored source found again in the library', () => {
+	const koltsov = entry('Весёлый час');
+	const source = (over: Partial<PoemSource> = {}): PoemSource => ({ id: koltsov.id, work: koltsov.work, poemHash: library.hash, start: 0, end: koltsov.textModern.length, answered: false, edited: false, ...over });
+
+	it('finds the entry, its first line, and says whole', () => {
+		const r = resolveSource(source(), library)!;
+		expect(r.entry.id).toBe(koltsov.id);
+		expect(r.firstLine).toBe('Дайте бокалы!');
+		expect(r.passage).toBe(false);
+		expect(r.entry.author).toBe('Алексей Васильевич Кольцов');
+	});
+
+	it('says passage, with the cut’s first line, for a part of a poem', () => {
+		const m = matchPoem(fixture('S'), library)!;
+		const cut = stanzaCut(m.entry.textModern, m.start, m.end);
+		const r = resolveSource({ id: m.entry.id, work: m.work, poemHash: library.hash, start: cut.start, end: cut.end, answered: false, edited: false }, library)!;
+		expect(r.passage).toBe(true);
+		expect(r.firstLine).toBe('«Дитя моё,');
+		expect(r.entry.title).toBe('Мцыри');
+	});
+
+	it('does not trust offsets cut from another file: it falls back to the incipit, whole', () => {
+		const r = resolveSource(source({ poemHash: 'olderhash', start: 40, end: 90 }), library)!;
+		expect(r.firstLine).toBe(koltsov.incipit);
+		expect(r.passage).toBe(false);
+	});
+
+	it('follows the work when a later library has dropped the id: the modern entry', () => {
+		const dropped = { ...library, entries: library.entries.filter((e) => e.id !== '298e556367') };
+		const r = resolveSource({ id: '298e556367', work: 'f1a88510', poemHash: library.hash, start: 0, end: 50, answered: true, edited: false }, dropped)!;
+		expect(r.entry.work).toBe('f1a88510');
+		expect(r.entry.spelling).toBe('modern');
+		expect(r.firstLine).toBe(r.entry.incipit); // the id is gone: the offsets belong to an entry that is not this one
+	});
+
+	it('is null when the library has no entry of the work (the caller falls back to the ordinary line)', () => {
+		expect(resolveSource(source({ work: 'gone', id: 'gone' }), library)).toBeNull();
+		expect(resolveSource(source(), { entries: [], hash: library.hash })).toBeNull();
+	});
+});
+
+describe('the record’s transitions', () => {
+	const base: PoemSource = { id: 'i', work: 'w', poemHash: 'h', start: 0, end: 5, answered: false, edited: false };
+
+	it('keeping answers the card and nothing else', () => {
+		expect(kept(base)).toEqual({ ...base, answered: true });
+		expect(base.answered).toBe(false); // the argument is not changed
+	});
+
+	it('an edit sets both flags, and the source stays', () => {
+		expect(edited(base)).toEqual({ ...base, edited: true, answered: true });
+		expect(edited(kept(base))).toEqual({ ...base, edited: true, answered: true });
+	});
+
+	it('the replace guard asks over an edited or a singer’s poem, never over an unedited library one', () => {
+		expect(heldForGuard(base, 'text')).toBe('');
+		expect(heldForGuard(kept(base), 'text')).toBe('');
+		expect(heldForGuard(edited(base), 'text')).toBe('text');
+		expect(heldForGuard(null, 'text')).toBe('text');
+		expect(heldForGuard(null, '')).toBe('');
+	});
+});
+
+describe('replacesLibraryPoem: a paste into Poem that is another poem, or an edit of this one', () => {
+	const text = entry('Спящая княжна').textModern;
+	const f = foldLetters;
+
+	it('is an edit when the text still holds a run of the poem: a typo, an added line, a deleted line, a variant word', () => {
+		expect(replacesLibraryPoem(text, text.replace('глухом', 'глухомь'), f)).toBe(false);
+		expect(replacesLibraryPoem(text, text + '\nЕщё одна строка', f)).toBe(false);
+		expect(replacesLibraryPoem(text, text.split('\n').slice(2).join('\n'), f)).toBe(false);
+		expect(replacesLibraryPoem(text, text.replace('Спит', 'Спи'), f)).toBe(false);
+	});
+
+	it('is a replacement when nothing of the poem is left in it', () => {
+		expect(replacesLibraryPoem(text, entry('Могила').textModern, f)).toBe(true);
+		expect(replacesLibraryPoem(text, 'Совсем другие слова, которых здесь нет и в помине', f)).toBe(true);
+	});
+
+	it('is a replacement when the text is emptied', () => {
+		expect(replacesLibraryPoem(text, '', f)).toBe(true);
+		expect(replacesLibraryPoem(text, '  \n ', f)).toBe(true);
+	});
+
+	it('the run is 20 letters', () => {
+		expect(RUN).toBe(20);
+		const a = 'абвгдежзиклмнопрстуфхцчшщыэюя'; // 29 letters, none repeated
+		expect(replacesLibraryPoem(a, a.slice(0, 19) + 'ь' + a.slice(20), f)).toBe(true); // a run of 19 left
+		expect(replacesLibraryPoem(a, a.slice(0, 20) + 'ь' + a.slice(21), f)).toBe(false); // a run of 20 left
+	});
+});
