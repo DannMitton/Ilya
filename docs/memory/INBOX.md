@@ -593,3 +593,5 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-11-02 15:03, Dann (on the desk's line "Once the poem is known, the reader only has to find where each syllable sits"): *"Yes. This idea can also be communicated clearly to the user when Ilya shares its limitations. Becuase this pu;llquote is essentially a solution waiting to be enacted, it leverages the user's agency to seek out and input a poem that Ilya can use with certainty..."* (transcribed as written). Desk: rides on row 111 and the scan banner; string drafts after the poem-witness measure (pw).
 
 - 2026-11-02 18:2x Dann: Vercel Hobby Deployment Storage at 100% (10 GB). Cause: every push to Shane builds a preview (32 READY). Desk proposed deleting old Shane previews and setting preview retention.
+
+- 2026-11-03 10:21 Dann: offers tables of contents from his repertoire books (Richter's set, two by Sylvester, maybe Castel) as a song-based checklist for the poem library; fetch poems from free sources, he snapshots any not online, everything attributed. Desk: yes, as checklist and cross-check; book texts not copied. For build 0 onward.
