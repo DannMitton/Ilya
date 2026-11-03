@@ -3362,3 +3362,17 @@ Offered-by and ruled-by recorded on each line. Each is a default with its reason
 
 ## BATCH 1 AND ROW 164 FRENCH, RATIFIED 2026-11-02 00:10
 - Batch 1: the French drafts commit `75d7b04` (four sentences, « le CHANT ») is taken whole. Row 164: `loupe.title` « LOUPE », `loupe.close` « Fermer », `loupe.moveTop` « Placer la loupe en haut », `loupe.moveBottom` « Placer la loupe en bas ».
+
+## A SINGER'S EDITED GLOSS: LANGUAGE, SCOPE, AND THE ONE-TAP OFFER. Ruled by Dann 2026-11-03 14:22 to 14:25
+
+Offered by the desk (14:1x and 14:2x, in the thread); ruled by Dann 14:25: *"Option a with the one-tap message sound perfec.t Make it so."* (transcribed as written), after 14:22: *"I do feel like glosses can meaningfully change via context, so maybe keeping them to a particular song text is best?"* and his ask that the language defect be repaired.
+
+1. **An edited gloss belongs to one gloss language.** Today it carries none (`apps/web/src/lib/library/library.ts:122`, the row is key, gloss, anchor) and shows in place of either language's gloss (`components/Paper/WordStack.svelte:96`). Repair: each edit is stored with its language and shows only in that language.
+2. **By default an edit belongs to its song** (today's scope, kept: context changes a gloss).
+3. **Filling a missing gloss offers reuse in one tap.** When the dictionary has no gloss for the word in the current language and the singer writes one, Ilya offers once: "Use for this word in your other songs" (EN as offered by the desk; FR draft below, not ratified). On the tap, the gloss joins a personal glossary on the device, keyed by the dictionary entry and the language, and fills that word's empty gloss in the singer's other songs. A correction of a gloss the dictionary supplied stays in its song unless the singer asks otherwise.
+4. **Precedence:** the song's own edit outranks the personal glossary; the personal glossary only fills a gloss the dictionary lacks and never replaces one it has. Nothing leaves the device.
+5. **Later, not built:** an opt-in Send of the pair on the channel of stage 3 item 7, and curated French glosses shipped in a dictionary update, never overwriting a singer's own.
+
+FR draft for Dann, built from the file's French (« chant » for a song: `intake.view.omittedLine`, « ce chant »): « Utiliser pour ce mot dans vos autres chants ». RULED by Dann 2026-11-03 14:32: « vos », with the English "your other songs", because Ilya addresses the singer as « vous » throughout (sole first-person exception: `inspector.stressAssign.myAssignment`, « Mon choix »).
+
+Brief: `../sessions/brief-code-gloss-language-and-reuse_r1_2026-11-03.md` (Fable review before Code).
