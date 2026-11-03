@@ -23,6 +23,15 @@ next session the same hour it cost the last one.
 | a string that names a failure, before it is shown to Dann | `a string said Ilya needs a connection` |
 | a sentence is about to be shown to Dann as his own | `the desk attributed its own sentence to Dann` |
 
+### Desk errors and traps recorded 2026-11-02 (evening desk)
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| a measure helper of an earlier thread "has no report" | `A HELPER'S REPORT LANDED IN DOWNLOADS AND THE DESK DID NOT LOOK` |
+| a helper will run more than an hour while Dann waits | `DANN WAITED THREE HOURS WITHOUT A WORD` |
+| the cloud container restarts with a helper running | `A CONTAINER RESTART KILLS THE HELPER, NOT ITS FILES` |
+| a desk scratch gate looser than Dann's ruling | `A SCRATCH GATE WAS LOOSER THAN THE RULING` |
+
 ### Shipping, gates, and the ship script
 
 | you are about to, or you are seeing | search for |
@@ -5099,3 +5108,16 @@ Row 165 steps 5 to 8 and Dann's rulings of 2026-11-01 17:56 and 17:57 treated IN
 
 ### THE DESK STATED A DESIGN IT HAD NOT READ. 2026-11-02 15:0x (Opus desk)
 - The desk told Dann "the scan is the only witness to the composer's text" and "Ilya can promise certain spelling", without reading the INPUT design. INPUT holds POEM and LYRICS; a scan fills LYRICS, which the singer may edit; POEM is filled only by the singer, a deliberate safeguard (Dann 15:06). Fix: before describing what Ilya does or can promise, read the design (`OPEN.md`, the INPUT and N.135 stage 3 sections) or say NOT READ.
+
+### A HELPER'S REPORT LANDED IN DOWNLOADS AND THE DESK DID NOT LOOK. 2026-11-02 (Opus evening desk)
+- The afternoon thread's `sx` helper (T3, letter boxes) wrote its report to `~/Downloads/_desk-2026-11-02/sx/` at 16:47. The evening desk had looked at 15:4x, found only `cap0/`, wrote "no report", and never looked again; at 18:42 it told Dann T3 was still to run. Found at 20:xx. Rule: before planning any measure the plan lists, `ls -la` its folder in Downloads; a helper of a closed thread may still finish.
+
+### DANN WAITED THREE HOURS WITHOUT A WORD. 2026-11-02 19:13 (Opus evening desk)
+- The desk said "silent for up to 3 hours" at 16:01 and kept to it; Dann at 19:13: *"Youve been running an agent for three hours. I'm tired of waiuting. What are you doing?"* (transcribed as written). The helper had one song fail for 50 minutes and ran its two arms in series. Rule: a helper that measures in a browser reports progress to Dann in one line every hour, from the desk's own look at its folder; where a slot is free, run arms in parallel on separate ports.
+
+### A CONTAINER RESTART KILLS THE HELPER, NOT ITS FILES. 2026-11-02 20:xx (Opus evening desk)
+- The desk's cloud container restarted mid-measure; the Sonnet helper (T2) was lost with no report, but `/root/desk/` survived: 14 of 15 song captures were on disk. The desk re-ran the one missing song itself and scored the rest. Rule: helpers write captures per song to disk as they go (they do with `measure.mjs`), and the desk checks the folder before re-running anything.
+
+### A SCRATCH GATE WAS LOOSER THAN THE RULING. 2026-11-02 21:xx (Opus evening desk)
+- Brief B told the helper to take the slur reading where the counts were "equal or nearer"; Dann's ruling (2026-10-20 03:37) says "come out even". The looser gate scored 373 and put two vowels on 2 notes (against `CONTRACT.md` §0.1); the strict gate, the ruling as written, scored 369 with none. Rule: a measure arm that stands for a ruling quotes the ruling's own words as its gate; any wider arm is labelled "not the ruling" in the brief.
+
