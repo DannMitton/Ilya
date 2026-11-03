@@ -258,7 +258,7 @@ describe('seatPage counts the sung notes that carry no syllable (N.135 step 5)',
 	it('reports a sung note with no syllable that is not a continuation, over every note of the system, not only the notes with words', () => {
 		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), one, seams);
 		expect(kinds(page)).toEqual([[1, 'no-syllable'], [2, 'no-syllable']]);
-		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 3, units: 1 }]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 3, slurFree: 3, units: 1, slurReading: false }]);
 	});
 
 	it('takes continuation from the notes: a note tied into, or under an extender, is not a breach', () => {
@@ -267,12 +267,53 @@ describe('seatPage counts the sung notes that carry no syllable (N.135 step 5)',
 		n[2] = { ...n[2], underExtender: true } as (typeof n)[number];
 		const page = seatPage(layout(system(n, [row(0)])), one, seams);
 		expect(kinds(page)).toEqual([]);
-		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 1, units: 1 }]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 1, slurFree: 1, units: 1, slurReading: false }]);
 	});
 
 	it('counts units after the vowelless drop, and only for a system that was seated', () => {
 		const page = seatPage(layout(system(notes(100, 200), [row(0)]), system(notesFrom(10, 100), [], false)), [[box('мир', 90, 110), box('т', 190, 210)]], seams);
-		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 2, units: 1 }]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 2, slurFree: 2, units: 1, slurReading: false }]);
 		expect(kinds(page)).toEqual([[1, 'no-syllable']]);
+	});
+});
+
+describe('seatPage, the slur gate per system (row 177 step 2): decided, recorded, not yet applied', () => {
+	// Notes at 100, 200, 300; `slurred` lists the indices carried as `inSlur` (what `voiceNotes` marks after a slur's start).
+	const withFlags = (xs: number[], flags: Record<number, { inSlur?: boolean; tiedInto?: boolean }>) => notes(...xs).map((n, i) => ({ ...n, ...flags[i] }));
+	const gate = (n: ReturnType<typeof notes>, boxes: WordBox[]) => seatPage(layout(system(n, [row(0)])), [boxes], seams).stats.counted.perSystem;
+
+	it('takes the slur reading where the slurred notes make the free notes and the units come out even (song 2 bar 8: «ка» over two slurred notes, the next syllable after them)', () => {
+		const n = withFlags([100, 200, 300], { 1: { inSlur: true } });
+		expect(gate(n, [box('ка', 90, 110), box('мир', 290, 310)])).toEqual([{ system: 1, free: 3, slurFree: 2, units: 2, slurReading: true }]);
+	});
+
+	it('leaves a phrasing slur over a syllabic passage as today: three units on three notes, the slur makes the free notes fewer', () => {
+		const n = withFlags([100, 200, 300], { 1: { inSlur: true }, 2: { inSlur: true } });
+		expect(gate(n, [box('ка', 90, 110), box('мир', 190, 210), box('ты', 290, 310)])).toEqual([{ system: 1, free: 3, slurFree: 1, units: 3, slurReading: false }]);
+	});
+
+	it('does not take the reading where the counts disagree either way: the slur leaves more free notes than units', () => {
+		const n = withFlags([100, 200, 300, 400], { 1: { inSlur: true } });
+		expect(gate(n, [box('ка', 90, 110), box('мир', 390, 410)])).toEqual([{ system: 1, free: 4, slurFree: 3, units: 2, slurReading: false }]);
+	});
+
+	it('reads a tie and a slur on the same notes: the tied note is not free either way, the slurred free note makes the counts even', () => {
+		const n = withFlags([100, 200, 300, 400], { 1: { tiedInto: true, inSlur: true }, 2: { inSlur: true } });
+		expect(gate(n, [box('ка', 90, 110), box('мир', 390, 410)])).toEqual([{ system: 1, free: 3, slurFree: 2, units: 2, slurReading: true }]);
+	});
+
+	it('does not take the reading where the only slurred notes are already tied into: the ties-only count is the same, so there is nothing to observe', () => {
+		const n = withFlags([100, 200], { 1: { tiedInto: true, inSlur: true } });
+		expect(gate(n, [box('мир', 90, 110)])).toEqual([{ system: 1, free: 1, slurFree: 1, units: 1, slurReading: false }]);
+	});
+
+	it('does not change the seating or the breaches in this step: the decision is recorded and nothing reads it yet', () => {
+		const plain = notes(100, 200, 300);
+		const slurred = withFlags([100, 200, 300], { 1: { inSlur: true } });
+		const read = [[box('ка', 90, 110), box('мир', 290, 310)]];
+		const a = seatPage(layout(system(plain, [row(0)])), read, seams);
+		const b = seatPage(layout(system(slurred, [row(0)])), read, seams);
+		expect(shape(b)).toEqual(shape(a));
+		expect(b.stats.counted.breaches).toEqual(a.stats.counted.breaches);
 	});
 });

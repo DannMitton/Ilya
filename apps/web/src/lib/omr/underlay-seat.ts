@@ -100,6 +100,16 @@ export interface NotePlace {
 }
 
 /**
+ * The note sings no new syllable: tied into, under an extender, or in a printed slur's melisma. The ONLY reader of the
+ * three flags (CONTRACT.md §4): `seatTokens`' `free`, `freeNoteXs`, and the sung notes' `continuation` all ask it, so
+ * they cannot disagree. `inSlur` is set on a note only where `seatPage` takes the slur reading for its system; a system
+ * that does not take it hands the sites notes with `inSlur` false (`underlay-page.ts`).
+ */
+export function isContinuation(note: NotePlace): boolean {
+	return note.tiedInto === true || note.underExtender === true || note.inSlur === true;
+}
+
+/**
  * What a token is: a `syllable` (it has a letter), a `joint` (only hyphens), an
  * `extender` (only underscores), or a `mark` (anything else with no letter).
  */
