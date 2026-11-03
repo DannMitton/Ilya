@@ -53,6 +53,7 @@ import { setStressDictionary, setSingerSupplement } from '@ilya/phonology';
 import { setGlossDictionary } from '@ilya/dictionary';
 import { setBlurbData } from '@ilya/blurb';
 import type { BlurbData } from '@ilya/blurb';
+import { loadPoemLibrary, POEM_KEY_PREFIX, poemStoreKey, type PoemLibrary } from './text/poem-library';
 
 // -------------------------------------------------------------------
 // Configuration
@@ -117,6 +118,9 @@ interface DictionaryManifest {
 	files?: string[];
 	/** Lazy gloss tier (Tier 2): full E/F glosses, fetched after interactive */
 	glossFiles?: string[];
+	/** The poem library (build 1): one file, named by its content hash, fetched after interactive. */
+	poemFiles?: string[];
+	poemHash?: string;
 }
 
 export interface LoaderState {
@@ -292,8 +296,12 @@ async function setStored(key: string, value: unknown): Promise<boolean> {
  * Remove legacy two-tier cache entries and any stale dictionary chunks.
  * Uses startsWith(dict-{currentHash}) so we preserve all chunks for the
  * current hash (chunk-0, chunk-1, ..., meta) while deleting old hashes.
+ *
+ * Poem library (build 1): a `poems-` key other than `poems-{poemHash}` is a
+ * library from an earlier build and goes. With no `poemHash` (a manifest that
+ * names no library) every `poems-` key goes, since nothing will read one.
  */
-async function cleanLegacyCache(currentHash: string): Promise<void> {
+async function cleanLegacyCache(currentHash: string, poemHash?: string): Promise<void> {
 	try {
 		const db = await openDB();
 		const tx = db.transaction(STORE_NAME, 'readwrite');
@@ -315,7 +323,8 @@ async function cleanLegacyCache(currentHash: string): Promise<void> {
 					key.startsWith('dict-') && !key.startsWith(`dict-${currentHash}`);
 				const staleGloss =
 					key.startsWith('gloss-') && !key.startsWith(`gloss-${currentHash}`);
-				if (staleDict || staleGloss) {
+				const stalePoems = key.startsWith(POEM_KEY_PREFIX) && (poemHash === undefined || key !== poemStoreKey(poemHash));
+				if (staleDict || staleGloss || stalePoems) {
 					store.delete(key);
 				}
 			}
@@ -669,6 +678,35 @@ function scheduleGlossTier(
 	}
 }
 
+/**
+ * Poem library (build 1). The library as a promise: it resolves to the library
+ * once the background tier has it, and to `null` when the manifest names none,
+ * the file does not arrive, or the dictionary itself failed to load (review
+ * amendment 13). A caller that awaits it is never left waiting on a failure,
+ * and the app, on `null`, offers no poem and says nothing.
+ */
+let settlePoemLibrary: (library: PoemLibrary | null) => void = () => {};
+export const poemLibrary: Promise<PoemLibrary | null> = new Promise((resolve) => {
+	settlePoemLibrary = resolve;
+});
+
+/**
+ * Schedule the poem library to load after the app is interactive, as the gloss
+ * tier is: on an idle callback (5 s at most), else a timer. Non-blocking; a
+ * failure answers `null` and is not an error.
+ */
+function schedulePoemTier(manifest: DictionaryManifest): void {
+	const start = () => {
+		loadPoemLibrary(manifest, { fetchFile: (url) => fetch(url), getStored, setStored }).then(settlePoemLibrary, () => settlePoemLibrary(null));
+	};
+
+	if (typeof requestIdleCallback === 'function') {
+		requestIdleCallback(start, { timeout: 5000 });
+	} else {
+		setTimeout(start, 1500);
+	}
+}
+
 // -------------------------------------------------------------------
 // Public API
 // -------------------------------------------------------------------
@@ -727,7 +765,7 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		}
 
 		// Step 2: Clean legacy cache (fire-and-forget)
-		cleanLegacyCache(manifest.hash);
+		cleanLegacyCache(manifest.hash, manifest.poemHash);
 
 		// Step 3: Load and parse each dictionary file immediately after fetch.
 		// Parsing into a shared object before fetching the next file allows
@@ -789,6 +827,7 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		// the app is interactive. Non-blocking; failures are non-fatal.
 		scheduleGlossTier(manifest, dictionary);
 		scheduleHomographTier(dictionary);
+		schedulePoemTier(manifest);
 	} catch (error: unknown) {
 		const message = error instanceof Error ? error.message : String(error);
 		console.error('[Ilya] Dictionary loading failed:', message);
@@ -797,6 +836,7 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		state.error = message;
 		state.progress = 0;
 		callbacks.onStateChange({ ...state });
+		settlePoemLibrary(null);
 	}
 }
 
