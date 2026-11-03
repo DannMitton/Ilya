@@ -16,7 +16,7 @@ Lane: `cloud-lane-30`, on step 0's commit. Read on the tree before I changed it:
 2. Pairing is one pass: each `start` takes the next `stop` of the same `number` (default 1) on a **later** note. A stop on the start's own note is not its partner: a note that closes one slur and opens the next (`stop` then `start`) chains correctly. Within a note I put stops before starts whatever the file's order, so `start`-before-`stop` in one note's text reads the same. This ordering is my decision; the brief does not state it. Test: "chains slurs".
 3. A `start` with no later `stop` of its number opens no span; a `stop` that no start took is ignored (`slur-seat.ts:46-48`).
 4. Overlapping or nested spans take the union.
-5. A rest inside a span does not end it and is never marked (`slurSpans`' `rest` argument). It never reaches `NotePlace` (`prepareUnderlay` filters `!n.rest && n.at !== null`, `underlay-prepare.ts:155` at this commit).
+5. A rest inside a span does not end it and is never marked (`slurSpans`' `rest` argument). It never reaches `NotePlace` (`prepareUnderlay` filters `!n.rest && n.at !== null`, `underlay-prepare.ts:166` at this commit).
 6. `type="continue"` or anything else opens and closes nothing.
 7. The attribute order is not assumed: homr's own files write `number` before `type` (`<slur number="1" type="start" />`, read in `fixtures/tch-1.musicxml`), and the test covers both orders.
 
