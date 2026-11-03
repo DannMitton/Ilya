@@ -96,11 +96,19 @@ describe('N.171 the fold at arrival, on the engraved Sunless no. 1', () => {
 		expect(fused).toHaveLength(2);
 	});
 
-	it('leaves the sung verse exactly as the file prints it', async () => {
+	// Was: the sung verse after arrival equalled the file's, text for text and word for word. Now (N.135 step 4, `CONTRACT.md` §0.1):
+	// the copy's lone «в» on a note of its own is the one change, the arrival repair `foldVowelessSyllables` makes. «в» is a proclitic,
+	// so it joins its host «бью» on the host's note, its own note has no syllable, and nothing after it moves. The `#` fold touches verse 2 only.
+	it('leaves the sung verse as the file prints it, but for the lone «в»: it joins its host and its note has no syllable', async () => {
 		const folded = await ingest('sunless-01-engraved.musicxml', sunless01);
 		const raw = await parseUnfolded(sunless01);
-		expect(collectScoreWords(folded, 1)).toEqual(collectScoreWords(raw, 1));
-		expect(folded.vocalLine.map((e) => e.syllable?.text)).toEqual(raw.vocalLine.map((e) => e.syllable?.text));
+		// Verse 1 by name: a note that loses its verse-1 text keeps verse 2 (the IPA verse), which then becomes its primary text.
+		const rawTexts = raw.vocalLine.map((e) => verseText(raw, e.id, 1));
+		const at = rawTexts.indexOf('в');
+		expect(at).toBeGreaterThan(0);
+		expect(folded.vocalLine.map((e) => verseText(folded, e.id, 1))).toEqual(rawTexts.map((t, i) => (i === at ? undefined : i === at + 1 ? `в\u00A0${t}` : t)));
+		const words = collectScoreWords(folded, 1).map((w) => w.raw);
+		expect(words).not.toContain('в');
 	});
 });
 

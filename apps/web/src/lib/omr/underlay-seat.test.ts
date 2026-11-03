@@ -4,7 +4,8 @@
  * confusing an id with a position.
  */
 import { describe, expect, it } from 'vitest';
-import { kindOf, seatTokens, type NotePlace, type SeatRule, type Token } from './underlay-seat';
+import { freeNoteXs } from './underlay-counts';
+import { FAR_FACTOR, kindOf, medianGap, seatTokens, type NotePlace, type SeatRule, type Token } from './underlay-seat';
 
 /** A token whose box is 40 px wide and centred on x. */
 const tok = (text: string, x: number, width = 40): Token => ({ text, x0: x - width / 2, x1: x + width / 2 });
@@ -320,5 +321,88 @@ describe('seatTokens, nothing to seat', () => {
 
 	it.each(RULES)('%s returns nothing for no tokens', (rule) => {
 		expect(seatTokens([], bar1(100, 200), rule)).toEqual([]);
+	});
+});
+
+describe('seatTokens, a token far from every free note (rule 2, FAR_FACTOR)', () => {
+	/** The seat of each syllable token, in x order: the note id, or null with `unseated`. */
+	const seatsOf = (tokens: Token[], notes: NotePlace[]) =>
+		seatTokens(tokens, notes, 'monotone')
+			.filter((s) => s.kind === 'syllable')
+			.map((s) => ({ text: s.text, note: s.note, unseated: s.unseated, by: s.by }));
+
+	it('is 2 times the median gap', () => {
+		expect(FAR_FACTOR).toBe(2);
+		expect(medianGap([100, 200, 300, 600])).toBe(100);
+		expect(medianGap([100])).toBe(0);
+	});
+
+	it('leaves a cue over the piano unseated while the voice rests, and the lyric keeps its notes (mutant: without the rule the cue takes note 10 and the lyric slides)', () => {
+		// Free notes at 300, 400, 500: median gap 100, reach 200. The cue at 50 is 250 away.
+		const seats = seatsOf([tok('Дудка', 50), tok('мир', 300), tok('ты', 400)], bar1(300, 400, 500));
+		expect(seats).toEqual([
+			{ text: 'Дудка', note: null, unseated: true, by: 'monotone' },
+			{ text: 'мир', note: 10, unseated: false, by: 'monotone' },
+			{ text: 'ты', note: 11, unseated: false, by: 'monotone' },
+		]);
+	});
+
+	it('seats a token at exactly the reach: only a distance beyond 2 times the median gap is far', () => {
+		const seats = seatsOf([tok('а', 100), tok('б', 300)], bar1(300, 400, 500));
+		expect(seats.map((s) => s.unseated)).toEqual([false, false]);
+		expect(seats.map((s) => s.note)).toEqual([10, 11]);
+	});
+
+	it('still seats the token under a long note followed by a wide gap, and the text printed beyond it', () => {
+		// Free notes 100, 200, 300, 600: gaps 100, 100, 300, median 100, reach 200. The long note at 300 sings text printed to 450.
+		const seats = seatsOf([tok('а', 100), tok('б', 200), tok('вы-', 330), tok('ла', 600)], bar1(100, 200, 300, 600));
+		expect(seats.map((s) => [s.note, s.unseated])).toEqual([[10, false], [11, false], [12, false], [13, false]]);
+		const wide = seatsOf([tok('а', 100), tok('б', 200), tok('вы-', 450)], bar1(100, 200, 300, 600));
+		expect(wide.map((s) => s.unseated)).toEqual([false, false, false]);
+	});
+
+	describe('a syllable under a tie\'s second note', () => {
+		// Free notes 100, 300, 500 (the tied-into note at 700 sings no new syllable): median gap 200, reach 400.
+		const notes: NotePlace[] = [...bar1(100, 300, 500), { id: 13, x: 700, bar: 1, tiedInto: true }];
+
+		it('still seats where its nearest free note is within 2 times the median gap', () => {
+			const seats = seatsOf([tok('а', 100), tok('б', 300), tok('в', 700)], notes);
+			expect(seats.map((s) => [s.note, s.unseated])).toEqual([[10, false], [11, false], [12, false]]);
+		});
+
+		it('is unseated, by monotone, where it is beyond 2 times the median gap', () => {
+			const seats = seatsOf([tok('а', 100), tok('б', 300), tok('в', 1000)], notes);
+			expect(seats).toEqual([
+				{ text: 'а', note: 10, unseated: false, by: 'monotone' },
+				{ text: 'б', note: 11, unseated: false, by: 'monotone' },
+				{ text: 'в', note: null, unseated: true, by: 'monotone' },
+			]);
+		});
+	});
+
+	it('does not apply with fewer than two free notes: a lone free note seats a token however far', () => {
+		const seats = seatsOf([tok('а', 900)], bar1(100));
+		expect(seats).toEqual([{ text: 'а', note: 10, unseated: false, by: 'monotone' }]);
+	});
+
+	it('does not apply the rule to nearest or order', () => {
+		for (const rule of ['nearest', 'order'] as SeatRule[]) {
+			expect(noteIds([tok('Дудка', 50), tok('мир', 300)], bar1(300, 400, 500), rule).every((n) => n !== null)).toBe(true);
+		}
+	});
+
+	it('measures the free notes only: a tied-into note does not shorten the median gap, and freeNoteXs lists the same notes', () => {
+		// Free notes 100, 200, 300; tied-into notes at 150 and 250 sing nothing. Free gaps 100 (reach 200); all-note gaps 50 (reach 100).
+		const notes: NotePlace[] = [
+			{ id: 10, x: 100, bar: 1 },
+			{ id: 11, x: 150, bar: 1, tiedInto: true },
+			{ id: 12, x: 200, bar: 1 },
+			{ id: 13, x: 250, bar: 1, tiedInto: true },
+			{ id: 14, x: 300, bar: 1 },
+		];
+		expect(freeNoteXs(notes)).toEqual([100, 200, 300]);
+		expect(medianGap(freeNoteXs(notes))).toBe(100);
+		// 150 from the last free note: within the free reach (200), beyond the all-note reach (100).
+		expect(seatsOf([tok('а', 450)], notes)).toEqual([{ text: 'а', note: 14, unseated: false, by: 'monotone' }]);
 	});
 });

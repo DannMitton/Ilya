@@ -41,8 +41,6 @@ export interface Word {
 const HYPHEN_AT_START = /^[-–—‐‑]/u;
 const HYPHEN_AT_END = /[-–—‐‑]$/u;
 const HYPHENS_AT_ENDS = /^[-–—‐‑]+|[-–—‐‑]+$/gu;
-const HYPHEN_AT_END_RUN = /[-–—‐‑]+$/u;
-const HYPHEN_AT_START_RUN = /^[-–—‐‑]+/u;
 
 /** The text of a token without the hyphens that join it to its neighbours. */
 function core(text: string): string {
@@ -50,33 +48,26 @@ function core(text: string): string {
 }
 
 /**
- * Of the seats that share a note, ONE syllable: the note they share, and the
- * texts of all of them joined in the order given (x order), with the hyphens
- * between them taken out. A note sings one syllable, and a letter the reader read inside a word is not dropped: the
- * measured scorer joined the texts of every token on a note. A lone hyphen
- * between two seats on one note is inside the syllable and goes.
+ * A note takes at most ONE token (N.135 step 5; `CONTRACT.md` §0.1, Dann 2026-11-02
+ * 14:27, a second vowel under one note is never accepted as a reading). Of the
+ * syllable seats that share a note, the first in x order keeps it; each other
+ * becomes an unseated token (`note: null`, `unseated: true`), and `sewWords` treats
+ * it as it treats any unseated piece: its letters join the open word where a hyphen
+ * says the word goes on, and a whole unseated word is left out. Until step 5 the
+ * texts of all of them were joined into one syllable, which wrote a note of two
+ * vowels («тере»). The refusals are counted by `underlay-counts.ts`
+ * (`manyVowelsMerged`, shown as refused in the console line).
  */
 function oneToANote(seats: Seat[]): Seat[] {
-	const onNote = new Map<number, number[]>();
-	seats.forEach((s, i) => {
-		if (s.kind !== 'syllable' || s.note === null) return;
-		const list = onNote.get(s.note);
-		if (list) list.push(i);
-		else onNote.set(s.note, [i]);
+	const taken = new Set<number>();
+	return seats.map((s) => {
+		if (s.kind !== 'syllable' || s.note === null) return s;
+		if (!taken.has(s.note)) {
+			taken.add(s.note);
+			return s;
+		}
+		return { ...s, note: null, offset: null, unseated: true, shared: false };
 	});
-	const drop = new Set<number>();
-	const merged = new Map<number, Seat>();
-	for (const at of onNote.values()) {
-		if (at.length < 2) continue;
-		const first = seats[at[0]].text.trim();
-		const last = seats[at[at.length - 1]].text.trim();
-		const middle = at.slice(1, -1).map((i) => core(seats[i].text));
-		const text = [first.replace(HYPHEN_AT_END_RUN, ''), ...middle, last.replace(HYPHEN_AT_START_RUN, '')].join('');
-		merged.set(at[0], { ...seats[at[0]], text });
-		for (const i of at.slice(1)) drop.add(i);
-		for (let i = at[0] + 1; i < at[at.length - 1]; i++) if (seats[i].kind === 'joint') drop.add(i);
-	}
-	return seats.flatMap((s, i) => (drop.has(i) ? [] : [merged.get(i) ?? s]));
 }
 
 /**
@@ -87,8 +78,8 @@ function oneToANote(seats: Seat[]): Seat[] {
  * A token ending in a hyphen continues into the next syllable; a token
  * beginning with one continues the last; a lone hyphen joins its neighbours
  * (row 81's `sew`). An extender after a syllable marks it `sustained`. A mark
- * with no letter is dropped. Two tokens on one note become one syllable
- * (`oneToANote`).
+ * with no letter is dropped. A second token on a note is refused the note
+ * and is unseated (`oneToANote`).
  *
  * A syllable token with no note (`unseated`) never loses its letters inside a
  * word. Where the word is open, its text joins the NEXT syllable of the word

@@ -27,12 +27,23 @@ describe('vowelsPerNote', () => {
 	it('counts ѣ, і, and ѵ as vowels, the set VOWEL has', () => {
 		expect(kinds(of('дѣ', 'ѵ', 'бѣлѣ'))).toEqual([[2, 'many-vowels']]);
 	});
-	it('does not report a note with no text, or a joint', () => {
-		expect(kinds(of(null, '', '-', '_', ' '))).toEqual([]);
+	// Was: a note with no text was not reported. Now (N.135 step 5): reported `no-syllable` unless it is a continuation.
+	it('does not report a joint, and reports a note with no text as no-syllable', () => {
+		expect(kinds(of('-', '_'))).toEqual([]);
+		expect(kinds(of(null, '', ' '))).toEqual([[0, 'no-syllable'], [1, 'no-syllable'], [2, 'no-syllable']]);
+		expect(kinds(of(null, 'мир'))).toEqual([[0, 'no-syllable']]);
 	});
-	it('does not report a continuation with no vowel (tied into, under an extender, a melisma\'s later note), but reports two vowels on one', () => {
-		expect(vowelsPerNote([{ id: 0, text: 'в', continuation: true }])).toEqual([]);
+	it('takes continuation as an input: a continuation with no text is not a no-syllable breach, and the option turns the kind off', () => {
+		const notes = [{ id: 0, text: 'мир' }, { id: 1, text: null, continuation: true }, { id: 2, text: '' }];
+		expect(vowelsPerNote(notes).map((b) => [b.id, b.kind])).toEqual([[2, 'no-syllable']]);
+		expect(vowelsPerNote(notes, { noSyllable: false })).toEqual([]);
+	});
+	// Was (before N.135 step 4): a continuation holding letters and no vowel was not reported, and `[]` was expected for «в».
+	// Now: a continuation is tested like any note (CONTRACT §0.1, no exceptions). A continuation with no text is still not tested.
+	it('reports a continuation (tied into, under an extender, a melisma\'s later note) with letters and no vowel, and two vowels on one', () => {
+		expect(vowelsPerNote([{ id: 0, text: 'в', continuation: true }]).map((b) => b.kind)).toEqual(['no-vowel']);
 		expect(vowelsPerNote([{ id: 0, text: 'ая', continuation: true }]).map((b) => b.kind)).toEqual(['many-vowels']);
+		expect(vowelsPerNote([{ id: 0, text: '', continuation: true }, { id: 1, text: null, continuation: true }])).toEqual([]);
 	});
 	it('reports a mark alone, a lone «#» above all, and no allow-list permits it', () => {
 		expect(kinds(of('#', '.', '#'))).toEqual([[0, 'mark-alone'], [1, 'mark-alone'], [2, 'mark-alone']]);

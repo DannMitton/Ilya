@@ -96,16 +96,19 @@ describe('sewWords', () => {
 		]);
 	});
 
-	it('joins the texts of two tokens on one note in x order, with the hyphen between them taken out', () => {
+	// Was (before N.135 step 5): two tokens on a note were merged into one syllable. Now the second is unseated and, as the hyphen says the word goes
+	// on, its letters join the open word like any unseated piece. The result is the same text here; the next two tests show where it differs.
+	it('carries the letters of a second token on a note into the open word where a hyphen says the word goes on', () => {
 		const words = sewWords([seat('су-', 3, 40), seat('е', 3, -6), seat('ты', 4)]);
 		expect(shape(words)).toEqual([[['суе', 'single', 3]], [['ты', 'single', 4]]]);
 	});
 
-	it('gives two tokens on one note, under nearest, one syllable whose text is the two joined in x order', () => {
+	// Was: one syllable «суе» on the note. Now: the note keeps the first token in x order; the second is unseated and, with no hyphen to carry it, left out.
+	it('gives two tokens on one note, under nearest, to the first in x order and leaves the second unseated', () => {
 		const notes = [{ id: 1, x: 100, bar: 1 }, { id: 2, x: 200, bar: 1 }];
 		const seats = seatTokens([tok('е', 205), tok('су', 190)], notes, 'nearest');
 		expect(seats.filter((s) => s.note === 2)).toHaveLength(2);
-		expect(shape(sewWords(seats))).toEqual([[['суе', 'single', 2]]]);
+		expect(shape(sewWords(seats))).toEqual([[['су', 'single', 2]]]);
 	});
 
 	it('joins a lone hyphen between two tokens on one note into the syllable, and does not let it glue the next word', () => {
@@ -113,9 +116,16 @@ describe('sewWords', () => {
 		expect(shape(words)).toEqual([[['суе', 'single', 3]], [['ты', 'single', 4]]]);
 	});
 
-	it('joins two tokens on one note in the order given, whichever is nearer its head', () => {
-		expect(shape(sewWords([seat('а', 3, 5), seat('б', 3, -4)]))).toEqual([[['аб', 'single', 3]]]);
-		expect(shape(sewWords([seat('а', 3, -4), seat('б', 3, 5)]))).toEqual([[['аб', 'single', 3]]]);
+	// Was: «аб» on the note, either way. Now: the first token in the order given keeps the note, whichever is nearer its head.
+	it('keeps the first token given on a note, whichever is nearer its head', () => {
+		expect(shape(sewWords([seat('а', 3, 5), seat('б', 3, -4)]))).toEqual([[['а', 'single', 3]]]);
+		expect(shape(sewWords([seat('а', 3, -4), seat('б', 3, 5)]))).toEqual([[['а', 'single', 3]]]);
+	});
+
+	it('never writes two syllables for one note, and marks the refused token unseated (mutant: the old merge wrote «аб»)', () => {
+		const words = sewWords([seat('а', 3), seat('б', 3), seat('в', 4)]);
+		expect(words.flatMap((w) => w.syllables.map((y) => y.note))).toEqual([3, 4]);
+		expect(words.flatMap((w) => w.syllables.map((y) => y.text))).toEqual(['а', 'в']);
 	});
 
 	it('merges a token the rule left over, inside a word, into the next syllable of the word: «ны-» then «е» gives «ные»', () => {

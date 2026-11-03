@@ -36,6 +36,7 @@ import type { LineData, SyllableOverride, WordStackData } from '$lib/types';
 import { CYRILLIC_VOWEL, vowelOfSyllable } from '$lib/score/vowel-resolver';
 import { applyReconstitution } from '$lib/reconstitution';
 import { reslicedSyllables } from '$lib/syllable-utils';
+import { foldVowellessPieces } from './slot-pieces';
 import { graftBreak } from '$lib/syntactic-break';
 
 /**
@@ -226,22 +227,19 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 				}
 				continue;
 			}
-			for (let k = 0; k < w.syllables.length; k++) {
-				let ipa = syllableIpa(w, k);
-				if (k === 0 && pendingIpa) {
-					// The stress mark stays leftmost and the clitic tucks in behind
-					// it, following `vowel-resolver.ts:547-551`.
-					ipa = ipa.startsWith(STRESS_MARK)
-						? STRESS_MARK + pendingIpa + ipa.slice(STRESS_MARK.length)
-						: pendingIpa + ipa;
-				}
-				// N.118: the word's trailing punctuation, on its last syllable only.
-				const cyr = cyrOfSyllable(w, k) + (k === w.syllables.length - 1 ? w.punctuation : '');
+			// One vowel per note (`CONTRACT.md` §0.1): a piece with no vowel letter owns no slot (`slot-pieces.ts`).
+			const { pieces, carry } = foldVowellessPieces(w.syllables.length, (k) => cyrOfSyllable(w, k), (k) => syllableIpa(w, k), w.punctuation, { cyrillic: pendingCyr, ipa: pendingIpa });
+			if (carry) {
+				pendingCyr = carry.cyrillic;
+				pendingIpa = carry.ipa;
+				continue;
+			}
+			for (const [i, piece] of pieces.entries()) {
 				const slot: Slot = {
-					cyrillic: k === 0 && pendingCyr ? pendingCyr + NBSP + cyr : cyr,
-					ipa,
-					vowel: vowelOfSyllable(w, k),
-					origin: { lineIndex: w.lineIndex, wordIndex, slotIndex: k, word: w.cleanWord },
+					cyrillic: piece.cyrillic,
+					ipa: piece.ipa,
+					vowel: vowelOfSyllable(w, piece.k),
+					origin: { lineIndex: w.lineIndex, wordIndex, slotIndex: i, word: w.cleanWord },
 				};
 				queue.push(slot);
 				lastInLine = slot;

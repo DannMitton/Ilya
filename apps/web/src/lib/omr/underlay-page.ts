@@ -31,6 +31,7 @@ import { rowLanguage, wordKnown } from './underlay-language';
 import { fallbackRow } from './underlay-fallback';
 import type { StaffBoxLike } from './metre-windows';
 import { seatTokens, type NotePlace, type Seat, type Token } from './underlay-seat';
+import { assertVowelPerNote, wholeTokenOf } from './assert-vowel-per-note';
 import { foldClitics, type CliticCall, type OwnNote } from './underlay-clitics';
 import { vowelsPerNote, type Breach } from './vowels-per-note';
 import { freeNoteXs, manyVowelsInUnits, manyVowelsMerged, type ManyVowelCounts } from './underlay-counts';
@@ -106,13 +107,22 @@ export interface UnderlayStats {
 	/** Sewn words of two letters or more in the Russian rows, and how many of them the dictionary holds. */
 	words: number;
 	known: number;
-	/** Vowelless words the transcription calls clitics: folded into a host (`folded`), or left a unit of their own for want of one (`left`). */
+	/** Vowelless words the transcription calls clitics: folded into a host (`folded`), or dropped for want of one (`left`). */
 	clitics: { folded: number; left: number; ownNote: number };
+	/** Units that took no note because they hold no vowel letter (`vowelless`, clitics left for want of a host among them) or are a lone і, ѣ, or ѵ (`stray`): not seated, not written. */
+	dropped: { vowelless: number; stray: number };
 	/**
 	 * Folded clitics the print appears to give a note of their own, with the row they were in (counted, never acted on:
 	 * `underlay-clitics.ts`), and the units of two vowels or more (`underlay-counts.ts`): cut, and merged on one note.
 	 */
-	counted: { ownNote: (OwnNote & { system: number; row: number })[]; manyVowels: ManyVowelCounts; breaches: Breach[] };
+	counted: {
+		ownNote: (OwnNote & { system: number; row: number })[];
+		/** `merged`: tokens a note refused (a second token on a note is unseated, never joined: `underlay-words.ts`). */
+		manyVowels: ManyVowelCounts;
+		/** Per seated system: its free notes against the syllable units left after rule 1's drop. */
+		perSystem: { system: number; free: number; units: number }[];
+		breaches: Breach[];
+	};
 }
 
 /** What one system of the page came to: the words it took, or why it took none. */
@@ -168,9 +178,11 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		words: 0,
 		known: 0,
 		clitics: { folded: 0, left: 0, ownNote: 0 },
-		counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, breaches: [] },
+		dropped: { vowelless: 0, stray: 0 },
+		counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, perSystem: [], breaches: [] },
 	};
 	const seats: Seat[] = [];
+	const sung: { id: number; continuation: boolean }[] = [];
 	const systems: SystemWords[] = [];
 	layout.systems.forEach((system, s) => {
 		if (system.hasBand) stats.banded++;
@@ -200,17 +212,27 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			}
 			if (seated) continue;
 			seated = true;
+			// Every sung note of a seated system goes to the check, with its continuation from the caller's own data (ties and extenders).
+			sung.push(...system.notes.map((n) => ({ id: n.id, continuation: n.tiedInto === true || n.underExtender === true })));
 			const cutRow = cutUnits(tokens, seams.cut);
 			const { counts } = cutRow;
 			let units = cutRow.units;
+			let origin = cutRow.origin;
 			if (seams.clitics) {
 				const folded = foldClitics(units, cutRow.origin, spans, seams.clitics(words), free);
 				units = folded.units;
+				origin = folded.origin;
 				stats.clitics.folded += folded.counts.folded;
 				stats.clitics.left += folded.counts.left;
 				stats.clitics.ownNote += folded.counts.ownNote.length;
 				stats.counted.ownNote.push(...folded.counts.ownNote.map((o) => ({ ...o, system: s + 1, row: r + 1 })));
 			}
+			// One vowel per note (`CONTRACT.md` §0.1): a unit with no vowel letter takes no note, and a stray mark is no unit.
+			// Whatever `foldClitics` could not join to a host is dropped here, on every path, with or without calls.
+			const checked = assertVowelPerNote(units, wholeTokenOf(cutRow.origin, origin));
+			units = checked.kept;
+			stats.counted.perSystem.push({ system: s + 1, free: free.length, units: units.filter((u) => /\p{L}/u.test(u.text)).length });
+			for (const r of checked.refused) stats.dropped[r.why]++;
 			stats.counted.manyVowels.cut.push(...manyVowelsInUnits(units, free));
 			stats.units += units.length;
 			stats.cuts.cut += counts.cut;
@@ -231,7 +253,10 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		});
 	});
 	const words = sewWords(seats);
-	// Step 6's check on the page's sewn words, as written: every source of a second vowel under one note, counted (never repaired).
-	stats.counted.breaches = vowelsPerNote(words.flatMap((w) => w.syllables.map((y) => ({ id: y.note, text: y.text }))));
+	// Step 6's check on the page's sewn words, as written, now over EVERY sung note of the seated systems (N.135 step 5):
+	// a note with no syllable that is not a continuation is `no-syllable`. Counted, never repaired.
+	const textOf = new Map<number, string>();
+	for (const w of words) for (const y of w.syllables) if (!textOf.has(y.note)) textOf.set(y.note, y.text);
+	stats.counted.breaches = vowelsPerNote(sung.map((n) => ({ id: n.id, text: textOf.get(n.id) ?? null, continuation: n.continuation })));
 	return { systems, words, stats };
 }

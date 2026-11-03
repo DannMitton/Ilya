@@ -188,11 +188,13 @@ describe('seatPage with the transcription\'s clitic call (brief r5 step 4)', () 
 		expect(page.stats.counted.ownNote).toEqual([{ text: 'в', x: 90, system: 1, row: 1 }]);
 	});
 
-	it('gives a lone «в» a note of its own where the call is not given (the stage 2b reader as built)', () => {
+	// Was (the stage 2b reader as built): a lone «в» took a note of its own where the call is not given, notes [0, 1, 2].
+	// Now: a vowelless unit takes no note on any path (CONTRACT §0.1), so «в» is dropped and counted, and «мир» and «ты» keep notes 1 and 2.
+	it('drops a lone «в» where the call is not given: it takes no note', () => {
 		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), row3, seams);
-		expect(shape(page).flat().map((s) => s[2])).toEqual([0, 1, 2]);
-		expect(shape(page)[0][0][1]).toBe('single');
+		expect(shape(page).flat().map((s) => [s[0], s[2]])).toEqual([['мир', 1], ['ты', 2]]);
 		expect(page.stats.clitics).toEqual({ folded: 0, left: 0, ownNote: 0 });
+		expect(page.stats.dropped).toEqual({ vowelless: 1, stray: 0 });
 	});
 });
 
@@ -208,5 +210,69 @@ describe('seatPage counts the notes that break one vowel per note, and changes n
 		const page = seatPage(layout(system(notes(100, 200), [row(0)])), [[box('мир', 90, 110), box('ты', 190, 210)]], seams);
 		expect(page.stats.counted.breaches).toEqual([]);
 		expect(page.stats.counted.manyVowels).toEqual({ cut: [], merged: [] });
+	});
+});
+
+describe('seatPage, one vowel per note (CONTRACT §0.1)', () => {
+	const old = new Set([...known, 'поѣду']);
+	const oldSeams: Seams = { isWord: (w) => old.has(w), cut: (w) => (w.toLowerCase() === 'поѣду' ? ['по', 'ѣ', 'ду'] : pieces[w.toLowerCase()] ?? [w.toLowerCase()]) };
+
+	it('drops a vowelless unit between two syllables: it takes no note, and the syllables after it keep theirs', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), [[box('мир', 90, 110), box('т', 190, 210), box('ты', 290, 310)]], seams);
+		expect(shape(page)).toEqual([[['мир', 'single', 0]], [['ты', 'single', 2]]]);
+		expect(page.stats.dropped).toEqual({ vowelless: 1, stray: 0 });
+		// `units` counts what is seated: the dropped unit is not one.
+		expect(page.stats.units).toBe(2);
+	});
+
+	it('drops a lone «І» at a row\'s start as a stray mark, though і is a vowel letter', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), [[box('І', 90, 110), box('мир', 190, 210), box('ты', 290, 310)]], seams);
+		expect(shape(page)).toEqual([[['мир', 'single', 1]], [['ты', 'single', 2]]]);
+		expect(page.stats.dropped).toEqual({ vowelless: 0, stray: 1 });
+	});
+
+	it('keeps all three pieces of «поѣду» cut into «по», «ѣ», «ду»: a piece the cut made is not a stray mark', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), [[box('поѣду', 80, 320)]], oldSeams);
+		expect(shape(page).flat().map((s) => s[2])).toEqual([0, 1, 2]);
+		expect(page.words[0].syllables.map((s) => s.text.replace(/-$/, ''))).toEqual(['по', 'ѣ', 'ду']);
+		expect(page.stats.dropped).toEqual({ vowelless: 0, stray: 0 });
+	});
+
+	it('keeps «гѣ»: ѣ is a vowel in a word that holds other letters', () => {
+		const page = seatPage(layout(system(notes(100, 200), [row(0)])), [[box('гѣ', 90, 110), box('мир', 190, 210)]], oldSeams);
+		expect(shape(page).flat().map((s) => [s[0], s[2]])).toEqual([['гѣ', 0], ['мир', 1]]);
+	});
+
+	it('leaves a cue printed over the piano unseated while the voice rests, and the lyric keeps its notes (rule 2)', () => {
+		// Voice notes from x 300; «Дудка» printed at x 50. Median gap 100, reach 200, its distance 250.
+		const page = seatPage(layout(system(notes(300, 400, 500), [row(0)])), [[box('Дудка', 30, 70), box('мир', 290, 310), box('ты', 390, 410)]], seams);
+		expect(shape(page).flat().map((s) => [s[0], s[2]])).toEqual([['мир', 0], ['ты', 1]]);
+		expect(page.stats.unseated).toBe(1);
+	});
+});
+
+describe('seatPage counts the sung notes that carry no syllable (N.135 step 5)', () => {
+	const one = [[box('мир', 90, 110)]];
+	const kinds = (page: ReturnType<typeof seatPage>) => page.stats.counted.breaches.map((b) => [b.id, b.kind]);
+
+	it('reports a sung note with no syllable that is not a continuation, over every note of the system, not only the notes with words', () => {
+		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), one, seams);
+		expect(kinds(page)).toEqual([[1, 'no-syllable'], [2, 'no-syllable']]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 3, units: 1 }]);
+	});
+
+	it('takes continuation from the notes: a note tied into, or under an extender, is not a breach', () => {
+		const n = notes(100, 200, 300);
+		n[1] = { ...n[1], tiedInto: true } as (typeof n)[number];
+		n[2] = { ...n[2], underExtender: true } as (typeof n)[number];
+		const page = seatPage(layout(system(n, [row(0)])), one, seams);
+		expect(kinds(page)).toEqual([]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 1, units: 1 }]);
+	});
+
+	it('counts units after the vowelless drop, and only for a system that was seated', () => {
+		const page = seatPage(layout(system(notes(100, 200), [row(0)]), system(notesFrom(10, 100), [], false)), [[box('мир', 90, 110), box('т', 190, 210)]], seams);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 2, units: 1 }]);
+		expect(kinds(page)).toEqual([[1, 'no-syllable']]);
 	});
 });
