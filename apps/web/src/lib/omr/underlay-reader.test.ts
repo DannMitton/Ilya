@@ -35,6 +35,16 @@ const image = new Blob(['png']);
 afterEach(() => vi.restoreAllMocks());
 
 describe('makeUnderlayReader', () => {
+	it('prints, per system, the ties-only free notes, the slur-aware free notes, the units, and the reading taken', async () => {
+		const slurLayout: PageLayout = { ...layout, systems: [{ ...layout.systems[0], notes: [{ id: 0, x: 100, bar: 1 }, { id: 1, x: 200, bar: 1, inSlur: true }, { id: 2, x: 300, bar: 1 }] }] };
+		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
+		await makeUnderlayReader(parts({ prepare: async () => ({ layout: slurLayout, rows: ['row 0'], ms: 1 }) }))(image, '<xml/>', []);
+		expect(String(log.mock.calls[0][0])).toContain('by system (ties-only free, slur-aware free, units, the reading taken): 1: ties 3, slur-aware 2, units 2, SLUR');
+		log.mockClear();
+		await makeUnderlayReader(parts())(image, '<xml/>', []);
+		expect(String(log.mock.calls[0][0])).toContain('1: ties 2, slur-aware 2, units 2, ties');
+	});
+
 	it('prepares the page, reads each row, and seats the words', async () => {
 		const p = parts();
 		const log = vi.spyOn(console, 'info').mockImplementation(() => {});

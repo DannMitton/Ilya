@@ -208,9 +208,9 @@ export function seatTokens(tokens: Token[], notes: NotePlace[], rule: SeatRule):
 	const kinds = tokens.map((t) => kindOf(t.text));
 	const sy = order.filter((i) => kinds[i] === 'syllable');
 	const staff = [...notes].sort((a, b) => a.x - b.x);
-	// The notes that sing a syllable: not tied into, not under an extender. Every rule seats on these only; `staff`
+	// The notes that sing a syllable: not a continuation (`isContinuation`: tied into, under an extender, or in a slur's melisma). Every rule seats on these only; `staff`
 	// (all notes, x sorted) is kept for the bar lookup of `order`.
-	const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto && !staff[j].underExtender);
+	const free = staff.map((_, j) => j).filter((j) => !isContinuation(staff[j]));
 	const xs = free.map((j) => staff[j].x);
 	const allXs = staff.map((n) => n.x);
 

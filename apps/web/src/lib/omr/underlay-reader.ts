@@ -55,7 +55,9 @@ function counted(stats: UnderlayStats): string {
 	const { ownNote, manyVowels, perSystem } = stats.counted;
 	const { breaches } = stats.counted;
 	const noSyllable = breaches.filter((b) => b.kind === 'no-syllable').length;
-	const perSystemLine = perSystem.length ? `; free notes against syllable units after the vowelless drop, by system: ${perSystem.map((p) => `${p.system}: ${p.free} against ${p.units}`).join(', ')}` : '';
+	const perSystemLine = perSystem.length
+		? `; free notes against syllable units after the vowelless drop, by system (ties-only free, slur-aware free, units, the reading taken): ${perSystem.map((p) => `${p.system}: ties ${p.free}, slur-aware ${p.slurFree}, units ${p.units}, ${p.slurReading ? 'SLUR' : 'ties'}`).join('; ')}`
+		: '';
 	if (ownNote.length + manyVowels.cut.length + manyVowels.merged.length + breaches.length + perSystem.length === 0) return '';
 	return `; counted: ${ownNote.length} folded clitic(s) the print gives a note of its own${ownNote.map((o) => ` (system ${o.system} row ${o.row} «${o.text}»)`).join('')}, ${manyVowels.cut.length} unit(s) of two vowels or more uncut, ${manyVowels.merged.length} many-vowels merge(s) refused (a second token on a note is unseated), ${breaches.length} note(s) breaking one vowel per note over the sung notes (${noSyllable} with no syllable)${perSystemLine}`;
 }

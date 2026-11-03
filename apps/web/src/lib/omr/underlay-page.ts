@@ -195,6 +195,8 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		// The gate below decides after the units exist whether the system takes the slur reading; until it has, and for a
 		// system that does not take it, this is the reading (`inSlur` false on every note).
 		const tiesOnly = system.notes.map((n) => (n.inSlur ? { ...n, inSlur: false } : n));
+		// `free`, ties-only, is read before the gate by the rescue decision below (whether the system has a note to seat on at all)
+		// and by the first `foldClitics`; after the gate, every number derived from the free set reads `seatFree`.
 		const free = freeNoteXs(tiesOnly);
 		const read = system.rows.map((row) => {
 			const tokens = pageTokens(row, reads[row.id] ?? []);
@@ -224,14 +226,14 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			const { counts } = cutRow;
 			let units = cutRow.units;
 			let origin = cutRow.origin;
-			if (seams.clitics) {
-				const folded = foldClitics(units, cutRow.origin, spans, seams.clitics(words), free);
+			// `foldClitics` runs before the gate (the gate counts its units), so it first reads the ties-only free notes. The free
+			// notes enter it for the `ownNote` count alone (`underlay-clitics.ts:52`: "Nothing depends on the count"), never the
+			// units, so a system that takes the slur reading is counted again below on its slur-aware free notes.
+			const calls = seams.clitics ? seams.clitics(words) : null;
+			let folded = calls ? foldClitics(units, cutRow.origin, spans, calls, free) : null;
+			if (folded) {
 				units = folded.units;
 				origin = folded.origin;
-				stats.clitics.folded += folded.counts.folded;
-				stats.clitics.left += folded.counts.left;
-				stats.clitics.ownNote += folded.counts.ownNote.length;
-				stats.counted.ownNote.push(...folded.counts.ownNote.map((o) => ({ ...o, system: s + 1, row: r + 1 })));
 			}
 			// One vowel per note (`CONTRACT.md` §0.1): a unit with no vowel letter takes no note, and a stray mark is no unit.
 			// Whatever `foldClitics` could not join to a host is dropped here, on every path, with or without calls.
@@ -248,18 +250,30 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			const slurFree = system.notes.filter((n) => !isContinuation(n)).length;
 			const slurReading = slurFree === syllableUnits && system.notes.some((n, i) => n.inSlur === true && !isContinuation(tiesOnly[i]));
 			stats.counted.perSystem.push({ system: s + 1, free: free.length, slurFree, units: syllableUnits, slurReading });
-			// Every sung note of a seated system goes to the check, with its continuation from the notes (ties and extenders; step 3 adds the slur where the system took it).
-			sung.push(...tiesOnly.map((n) => ({ id: n.id, continuation: isContinuation(n) })));
+			// The decision reaches every site below through the notes (`CONTRACT.md` §4): a system that took the slur reading hands
+			// them its own notes, whose `inSlur` notes are continuations (`isContinuation`); any other hands the ties-only copy, on
+			// which `inSlur` changes nothing. `seatFree` is that reading's free set, for every number derived from it.
+			const seatNotes = slurReading ? system.notes : tiesOnly;
+			const seatFree = slurReading ? freeNoteXs(seatNotes) : free;
+			if (folded && calls) {
+				if (slurReading) folded = foldClitics(cutRow.units, cutRow.origin, spans, calls, seatFree);
+				stats.clitics.folded += folded.counts.folded;
+				stats.clitics.left += folded.counts.left;
+				stats.clitics.ownNote += folded.counts.ownNote.length;
+				stats.counted.ownNote.push(...folded.counts.ownNote.map((o) => ({ ...o, system: s + 1, row: r + 1 })));
+			}
+			// Every sung note of a seated system goes to the check, with its continuation from the notes the system took (ties, extenders, and the slur where the gate passed).
+			sung.push(...seatNotes.map((n) => ({ id: n.id, continuation: isContinuation(n) })));
 			for (const r of checked.refused) stats.dropped[r.why]++;
-			stats.counted.manyVowels.cut.push(...manyVowelsInUnits(units, free));
+			stats.counted.manyVowels.cut.push(...manyVowelsInUnits(units, seatFree));
 			stats.units += units.length;
 			stats.cuts.cut += counts.cut;
 			stats.cuts.whole += counts.whole;
 			stats.cuts.mismatched += counts.mismatched;
-			const placed = seatTokens(units, system.notes, 'monotone');
+			const placed = seatTokens(units, seatNotes, 'monotone');
 			stats.seated += placed.filter((p) => p.kind === 'syllable' && p.note !== null).length;
 			stats.unseated += placed.filter((p) => p.unseated).length;
-			stats.counted.manyVowels.merged.push(...manyVowelsMerged(units, placed, free));
+			stats.counted.manyVowels.merged.push(...manyVowelsMerged(units, placed, seatFree));
 			seats.push(...placed);
 		}
 		if (seated && rescue === null) stats.systemsRussian++;

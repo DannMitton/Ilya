@@ -307,13 +307,52 @@ describe('seatPage, the slur gate per system (row 177 step 2): decided, recorded
 		expect(gate(n, [box('мир', 90, 110)])).toEqual([{ system: 1, free: 1, slurFree: 1, units: 1, slurReading: false }]);
 	});
 
-	it('does not change the seating or the breaches in this step: the decision is recorded and nothing reads it yet', () => {
-		const plain = notes(100, 200, 300);
-		const slurred = withFlags([100, 200, 300], { 1: { inSlur: true } });
-		const read = [[box('ка', 90, 110), box('мир', 290, 310)]];
-		const a = seatPage(layout(system(plain, [row(0)])), read, seams);
-		const b = seatPage(layout(system(slurred, [row(0)])), read, seams);
-		expect(shape(b)).toEqual(shape(a));
+	it('applies the reading it took at every site: the melisma note takes no syllable and is not a breach, and the next syllable seats after the pair', () => {
+		// «мир» stands at 210, beside the slurred note 200. Read by ties alone it drifts onto 200 and leaves 300 empty; read by the slur the only
+		// free note left for it is 300.
+		const read = [[box('ка', 90, 110), box('мир', 190, 230)]];
+		const ties = seatPage(layout(system(notes(100, 200, 300), [row(0)])), read, seams);
+		const slur = seatPage(layout(system(withFlags([100, 200, 300], { 1: { inSlur: true } }), [row(0)])), read, seams);
+		expect(shape(ties)).toEqual([[['ка', 'single', 0]], [['мир', 'single', 1]]]);
+		expect(ties.stats.counted.breaches.map((b) => [b.id, b.kind])).toEqual([[2, 'no-syllable']]);
+		expect(shape(slur)).toEqual([[['ка', 'single', 0]], [['мир', 'single', 2]]]);
+		expect(slur.stats.counted.breaches).toEqual([]);
+	});
+
+	it('leaves a system whose counts disagree exactly as it would be with no slur flags at all', () => {
+		const flagged = withFlags([100, 200, 300], { 1: { inSlur: true }, 2: { inSlur: true } });
+		const read = [[box('ка', 90, 110), box('мир', 190, 210), box('ты', 290, 310)]];
+		const a = seatPage(layout(system(notes(100, 200, 300), [row(0)])), read, seams);
+		const b = seatPage(layout(system(flagged, [row(0)])), read, seams);
+		expect(b.words).toEqual(a.words);
 		expect(b.stats.counted.breaches).toEqual(a.stats.counted.breaches);
+		expect(b.stats.counted.manyVowels).toEqual(a.stats.counted.manyVowels);
+		expect(b.stats.counted.perSystem[0]).toMatchObject({ free: 3, slurReading: false });
+	});
+
+	it('reads a slur whose start note is the last note of one system in the next: the first system takes nothing, the second\'s first note is a melisma', () => {
+		const first = system(notes(100, 200), [row(0)]);
+		// System 2 is the page\'s second: its first note is after the slur\'s start (the last note above) and its stop; its second note is free.
+		const second = system(withFlags([100, 200], { 0: { inSlur: true } }).map((n) => ({ ...n, id: n.id + 10, bar: 2 })), [row(1)]);
+		const page = seatPage(layout(first, second), [[box('ка', 90, 110), box('мир', 190, 210)], [box('ты', 190, 210)]], seams);
+		expect(page.stats.counted.perSystem).toEqual([
+			{ system: 1, free: 2, slurFree: 2, units: 2, slurReading: false },
+			{ system: 2, free: 2, slurFree: 1, units: 1, slurReading: true },
+		]);
+		expect(shape(page)).toEqual([[['ка', 'single', 0]], [['мир', 'single', 1]], [['ты', 'single', 11]]]);
+		expect(page.stats.counted.breaches).toEqual([]);
+	});
+
+	it('counts a folded clitic\'s own note on the reading the system took (underlay-clitics.ts: the free notes enter that count only)', () => {
+		const withClitics: Seams = { ...seams, clitics: (words) => words.map((w) => (w === 'в' ? 'proclitic' : null)) };
+		const read = [[box('ка', 90, 110), box('в', 190, 210), box('мир', 290, 310)]];
+		const slurred = seatPage(layout(system(withFlags([100, 200, 300], { 1: { inSlur: true } }), [row(0)])), read, withClitics);
+		const plain = seatPage(layout(system(notes(100, 200, 300), [row(0)])), read, withClitics);
+		// The clitic stands over note 200. By ties alone 200 is a note of its own for it (counted); read as a melisma it is not a free note.
+		expect(plain.stats.clitics.ownNote).toBe(1);
+		expect(slurred.stats.counted.perSystem[0].slurReading).toBe(true);
+		expect(slurred.stats.clitics.ownNote).toBe(0);
+		// Free notes never change the units the clitic fold makes.
+		expect(shape(slurred).map((w) => w.map((y) => y[0]))).toEqual(plain.words.map((w) => w.syllables.map((y) => y.text)));
 	});
 });
