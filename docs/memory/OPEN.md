@@ -3376,3 +3376,9 @@ Offered by the desk (14:1x and 14:2x, in the thread); ruled by Dann 14:25: *"Opt
 FR draft for Dann, built from the file's French (« chant » for a song: `intake.view.omittedLine`, « ce chant »): « Utiliser pour ce mot dans vos autres chants ». RULED by Dann 2026-11-03 14:32: « vos », with the English "your other songs", because Ilya addresses the singer as « vous » throughout (sole first-person exception: `inspector.stressAssign.myAssignment`, « Mon choix »).
 
 Brief: `../sessions/brief-code-gloss-language-and-reuse_r1_2026-11-03.md` (Fable review before Code).
+
+## THE SINGER'S EXPERIENCE DRIVES EVERY DESIGN; THE POEM LIBRARY'S ARRIVAL CARD. Ruled by Dann 2026-11-03 15:00 to 15:05
+
+1. **Method (standing).** Dann, 15:00: *"the driving impulse needs to be friendliness, intuitiveness, and ease on the part of the user."* Every design opens with the singer's walk (what she sees, what she wonders, what she taps), written before any code fact; the code serves the walk. Fable reviews each brief against its walk (Dann 15:05: *"in Fable's review please enroll Fable in the UX POV I want"*).
+2. **The poem library's arrival (design 1 of three, the desk's recommendation).** Poem fills on a confident match (02:17 stands). A one-time card, where she is looking, leads with recognition (title, first line, poet), then the source, then what changed in Lyrics, then **Keep it** and **Not this poem**. Keep folds the card to a quiet source line. Not this poem is remembered with the song and offers Undo. An edit keeps attribution ("Based on…"). Brief: `../sessions/brief-code-poem-library-build1_r2_2026-11-03.md` (supersedes r1).
+3. **Desk counterpoint, owned:** the desk's r1 brief described what the code sets, not what the singer meets.
