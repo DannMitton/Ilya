@@ -8,5 +8,9 @@
   "glossFiles": [
     "dictionary.86d83340-gloss-a.json",
     "dictionary.86d83340-gloss-b.json"
-  ]
+  ],
+  "poemFiles": [
+    "dictionary.poems.a97f2074.json"
+  ],
+  "poemHash": "a97f2074"
 }
