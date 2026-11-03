@@ -16,6 +16,8 @@ git -C "$HOME/mnt/ilya-rewrite" --no-optional-locks --no-pager log -1 --format="
 
 ## THE ONE THING
 
+**UPDATE 2026-11-03 13:1x (Opus desk).** Poem-library checklists: master list `../sessions/master-list-poem-sources_r1_2026-11-03.md`. All six Richter volumes transcribed from Dann's Notes scans (Musorgsky 76, *Selected 19th C* 116, Tchaikovsky 102, Rachmaninov 82, Shostakovich 95, Prokofiev 62; TSVs beside the scans in `~/Downloads/_desk-2026-11-03/richter-*/`); Dailey 2013 extracted (80 songs). Row 114 song 1 has a witness text (Davis 2014). Next: fetch the poems from Wikisource by poet and incipit; then Sylvester, Piatak, Belov as cross-checks.
+
 **UPDATE 2026-11-03 03:2x (Opus desk, opened 02:26; Dann asleep from 02:30 with his yes to three tasks).** Build 0 part 1: 14 Wikisource entries filed (`~/Downloads/_desk-2026-11-03/poems/`, library `library-build0_r1.json`, scripts `build0-scripts/`); the matcher finds row 114 songs 2 to 5 from the scan's Lyrics by margins 0.28 to 0.50, song 1 (Grekov, no source) nothing above 0.14; threshold NOT SET (build songs first). Report `~/Downloads/_desk-2026-11-03/report-desk-poem-library-build0-part1_r1_2026-11-03.md`. Row 177 RETURNED on `cloud-lane-30` at `e5ca9b8` (steps 0 to 4; step 4 report read); its measure is owed and can share one browser run with T6. Backup: `~/Downloads/_desk-2026-11-03/memory-backup_session-open-0230.tgz`.
 
 **CLOSE OF THE 2026-11-02 EVENING DESK (Opus, 15:17 to 23:1x; Dann chose at 23:05 to close after the poem measure lands). THE NEXT DESK STARTS HERE; this paragraph wins over everything below it where they differ.**
