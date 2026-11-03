@@ -110,6 +110,19 @@ export function resolveSource(source: PoemSource, library: { entries: readonly P
 	return { entry, firstLine, passage: source.start > 0 || source.end < (body[body.length - 1]?.end ?? entry.textModern.length) };
 }
 
+/**
+ * A line of the poem as the card quotes it between «» marks: the data's own opening and closing quote marks and dashes
+ * are dropped so they are not doubled, and so is a trailing comma, colon, or semicolon that a line broken mid-sentence
+ * ends on. A `!`, a `?`, a full stop, or an ellipsis stays. DESK DEFAULT (mine), reversible.
+ */
+export function cardLine(line: string): string {
+	return line
+		.replace(/^[\s«»"“”„‘’'—–-]+/, '')
+		.replace(/[\s«»"“”„‘’']+$/, '')
+		.replace(/[,;:]+$/, '')
+		.trim();
+}
+
 /* ── The record's transitions (review amendment 6) ─────────────────── */
 
 /** The singer answered the card with "Keep this poem". */

@@ -4,7 +4,9 @@
 	import type { TextArrival } from '$lib/one-action';
 	import { comparePoem, lyricsSegments, poemSegments } from '$lib/text/poem-compare';
 	import { inputViews, type InputView } from '$lib/text/input-views.svelte';
-	import { introLine } from '$lib/text/input-line';
+	import { fillLibraryLine, introLine, libraryLineOf } from '$lib/text/input-line';
+	import { poemOffer } from '$lib/text/poem-offer.svelte';
+	import PoemLibraryCard from './PoemLibraryCard.svelte';
 	import { lyricsOnLeave } from '$lib/text/break-tidy';
 	import { pointer } from './IntakeCamera.svelte';
 	import ViewPair from '../ViewPair.svelte';
@@ -72,6 +74,8 @@
 	/* A song opening chooses its view once (`InputViews.open`); a re-render of
 	   the same song moves nothing. */
 	$effect.pre(() => inputViews.open(songId, lyricsText, poemText));
+	/* Poem library, build 1: the "Poem removed." line stands until she leaves the song. */
+	$effect.pre(() => poemOffer.visit(songId));
 
 	const text = $derived(view === 'poem' ? poemText : lyricsText);
 	const cmp = $derived(comparePoem(lyricsText, poemText));
@@ -85,7 +89,18 @@
 	const layerText = $derived(padLast ? `${text}\u200b` : text);
 	const highlights = typeof CSS !== 'undefined' && 'highlights' in CSS && typeof Highlight !== 'undefined';
 
-	const line = $derived(t(introLine(view, inputViews.landed, scoreWords, poemText), language));
+	/* Poem library, build 1: once the card is answered, Poem's line names where the poem came from; the library supplies
+	   the names (looked up by work, never stored). Where it has no entry, `poemLine` stands. */
+	const libraryPoem = $derived(poemOffer.current());
+	const lineKey = $derived(introLine(view, inputViews.landed, scoreWords, poemText, libraryLineOf(libraryPoem?.source ?? null, libraryPoem !== null)));
+	const line = $derived(
+		libraryPoem && lineKey.startsWith('intake.view.libraryPoem')
+			? fillLibraryLine(t(lineKey, language), { author: libraryPoem.resolved.entry.author, title: libraryPoem.resolved.entry.title, site: libraryPoem.resolved.entry.source.site })
+			: t(lineKey, language),
+	);
+	/* She answered the card, so the control she pressed is gone: her focus goes to the view tab, which is always there
+	   and summons no keyboard on a phone. */
+	const afterAnswer = (): void => document.getElementById(`intake-tab-${view}`)?.focus();
 	/* The Lyrics placeholder's French is owed and left empty, so in French the
 	   field draws none until Dann rules (`i18n.ts`, `intake.placeholderLyrics`). */
 	const placeholder = $derived(view === 'poem' ? t('intake.placeholder', language) : tIfPresent('intake.placeholderLyrics', language));
@@ -233,6 +248,8 @@
 		<p class="views-line">{t('intake.view.omittedLine', language)}</p>
 	{/if}
 </div>
+
+<PoemLibraryCard {language} {songId} onanswered={afterAnswer} />
 
 <div class="field" id="intake-view-panel" role="tabpanel" aria-labelledby="intake-tab-{view}">
 	<div class="layer face" class:beside-camera={pointer.coarse} style:--bar="{bar}px" bind:this={layerEl} aria-hidden="true">{#if highlights}{layerText}{:else}{#each segments as seg, i (i)}{#if seg.kind === 'plain'}{seg.text}{:else}<span class:differs={seg.kind === 'differs'} class:omitted={seg.kind === 'omitted'}>{seg.text}</span>{/if}{/each}{#if padLast}&#8203;{/if}{/if}</div>

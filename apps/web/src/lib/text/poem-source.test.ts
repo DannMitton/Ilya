@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import type { PoemSource } from '$lib/library/types';
 import type { LoadedPoemLibrary, PoemEntry } from './poem-library';
 import { foldLetters, matchPoem } from './poem-match';
-import { bodyStanzas, edited, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
+import { bodyStanzas, cardLine, edited, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
 
 const ROOT = join(__dirname, '../../../../..');
 const manifest = JSON.parse(readFileSync(join(ROOT, 'data/dictionary-manifest.json'), 'utf8'));
@@ -224,5 +224,24 @@ describe('replacesLibraryPoem: a paste into Poem that is another poem, or an edi
 		const a = 'абвгдежзиклмнопрстуфхцчшщыэюя'; // 29 letters, none repeated
 		expect(replacesLibraryPoem(a, a.slice(0, 19) + 'ь' + a.slice(20), f)).toBe(true); // a run of 19 left
 		expect(replacesLibraryPoem(a, a.slice(0, 20) + 'ь' + a.slice(21), f)).toBe(false); // a run of 20 left
+	});
+});
+
+describe('cardLine: a first line as the card quotes it', () => {
+	it('drops the data’s own quote marks and a trailing comma, so «» are not doubled', () => {
+		expect(cardLine('«Дитя моё,')).toBe('Дитя моё');
+		expect(cardLine('— Дитя моё, останься здесь со мной:')).toBe('Дитя моё, останься здесь со мной');
+		expect(cardLine('  «Дайте бокалы!»  ')).toBe('Дайте бокалы!');
+		expect(cardLine('"Quoted;"')).toBe('Quoted');
+	});
+	it('keeps the marks that end a line: an exclamation, a question, a full stop, an ellipsis', () => {
+		expect(cardLine('Дайте бокалы!')).toBe('Дайте бокалы!');
+		expect(cardLine('Куда ты?')).toBe('Куда ты?');
+		expect(cardLine('Спит княжна…')).toBe('Спит княжна…');
+		expect(cardLine('Всё.')).toBe('Всё.');
+	});
+	it('is empty for a line of nothing', () => {
+		expect(cardLine('')).toBe('');
+		expect(cardLine('«»')).toBe('');
 	});
 });
