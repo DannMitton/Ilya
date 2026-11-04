@@ -12,6 +12,7 @@
  * in for `readScan`, so every branch is a unit test.
  */
 import type { KeptReading } from './stamp';
+import { maybeMeasureStrips } from './band-strip';
 import { scanStamp } from './underlay-switch';
 import type { OmrProgress, OmrReadResult } from './homr-reader';
 import { logRead, readingFile, readScan } from './scan';
@@ -56,7 +57,7 @@ export async function restoreScan(
 		ok: true,
 		musicXml: result.musicXml,
 		from: 'homr',
-		reading: { musicXml: result.musicXml, stamp },
+		reading: { musicXml: result.musicXml, stamp, ...(result.bands ? { bands: result.bands } : {}) },
 		result,
 	};
 }
@@ -107,6 +108,7 @@ export async function restoreStoredScan(
 	if (restored.result) logRead(file, restored.result);
 	const arrived = await hooks.ingest(readingFile(file, restored.musicXml));
 	if (arrived && restored.reading) hooks.keep(restored.reading);
+	maybeMeasureStrips(file, kind, restored.reading?.bands ?? kept?.bands);
 }
 
 /**

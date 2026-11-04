@@ -198,7 +198,7 @@ export function prepareUnderlay(page: Grey, musicXml: string, staves: readonly S
 				rows.push(framed.crop);
 			}
 		}
-		systems.push({ staffSpace: space, notes: mine, hasBand: system.band !== null, rows: layoutRows, ...(ink ? { inkShare: ink.share, textLines: ink.lines } : {}) });
+		systems.push({ staffSpace: space, notes: mine, hasBand: system.band !== null, rows: layoutRows, ...(ink ? { inkShare: ink.share, textLines: ink.lines } : {}), ...(system.band ? { band: { x0: system.band.x0, x1: system.band.x1, y0: system.band.y0, y1: system.band.y1 } } : {}) });
 	}
 	return { layout: { width: page.width, height: page.height, systems, unfound }, rows };
 }

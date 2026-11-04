@@ -209,6 +209,14 @@ describe('a system that cannot be read loses only itself (brief r5 step 2)', () 
 		expect(withExtenderMelismas({}, got.result.warnings)).toEqual(Object.fromEntries(ids.map((id) => [id, { kind: 'melisma' }])));
 	});
 
+	it('hands the reading the kept systems of every page, with the scan\'s page numbers (row 181 step 3), and none where no underlay reader ran', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const withWords = await makeReader(deps(answerAll)).read(blobs(3));
+		const without = await makeReader(deps(undefined)).read(blobs(3));
+		expect(withWords.ok && withWords.bands?.map((b) => [b.page, b.why])).toEqual([[1, null], [2, null], [3, null]]);
+		expect(without.ok && without.bands).toBeUndefined();
+	});
+
 	it('writes nothing, and says why in one console line, where the reader throws', async () => {
 		const plain = await read(undefined);
 		const log = vi.spyOn(console, 'info').mockImplementation(() => {});

@@ -37,6 +37,7 @@ import { vowelsPerNote, type Breach } from './vowels-per-note';
 import { freeNoteXs, manyVowelsInUnits, manyVowelsMerged, type ManyVowelCounts } from './underlay-counts';
 import { rowWordSpans, splitTokens } from './underlay-tokens';
 import type { Look } from './underlay-looks';
+import { bandFractions, type BandFractions } from './kept-bands';
 import { markExtenderNotes, NO_EXTENDERS, type ExtenderArm, type ExtenderCounts } from './underlay-extender';
 import { cutUnits, type CutCounts } from './underlay-units';
 import { sewWords, type Word } from './underlay-words';
@@ -74,6 +75,8 @@ export interface SystemLayout {
 	 */
 	inkShare?: number;
 	textLines?: number;
+	/** The band in page pixels, `y1` exclusive; absent where the system has none (`hasBand` false). Kept as fractions of the page (`kept-bands.ts`). */
+	band?: { x0: number; x1: number; y0: number; y1: number };
 }
 
 /**
@@ -168,6 +171,8 @@ export interface SystemWords {
 	 * nothing to say, so it is not unread (Dann 2026-11-04 10:24, item 6 (c)) and `applyUnderlay` leaves it out of the banner.
 	 */
 	silent?: boolean;
+	/** The band as fractions of the page and the staff space as a fraction of its height (`kept-bands.ts`); absent where the system had none. */
+	band?: BandFractions;
 }
 
 export interface UnderlayPage {
@@ -333,6 +338,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		if (seated && rescue === null) stats.systemsRussian++;
 		const bars = system.notes.map((n) => n.bar);
 		const noInk = !seated && bandHeldNoInk(system);
+		const frac = system.band ? bandFractions(system.band, system.staffSpace, layout.width, layout.height) : null;
 		// Nothing to read and nothing to say: no ink in the band, and every sung note a tie's continuation (item 6 (c)).
 		const silent = noInk && system.notes.length > 0 && system.notes.every((n) => n.tiedInto === true);
 		if (system.hasBand) stats.inkBands.push({ system: s + 1, written: seated, inkShare: system.inkShare ?? null, textLines: system.textLines ?? null, rows: system.rows.length });
@@ -341,6 +347,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			bars: bars.length ? [Math.min(...bars), Math.max(...bars)] : null,
 			why: seated ? null : system.hasBand ? (noInk ? 'no ink' : 'no Russian row') : 'no band',
 			...(silent ? { silent: true } : {}),
+			...(frac ? { band: frac } : {}),
 		});
 	});
 	const words = sewWords(seats);
