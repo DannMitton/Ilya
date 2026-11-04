@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,139 keys.
+   This file holds 1,142 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -49,6 +49,7 @@
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
    loupe.        107  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
@@ -682,6 +683,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// `correct.dot`. Nothing is coined.
 	'loupe.doubleDot':             { en: 'Double dot',                    fr: 'Double point' },
 	'loupe.restore':               { en: 'Restore',                       fr: 'Rétablir' },
+	// ROW 181 step 5, RATIFIED by Dann 2026-11-04 14:33 and 14:34 (`docs/sessions/strings-row181_r1_2026-11-04.md`, items 6 to 8). The ratified examples carry the digit 6; {n} stands for it.
+	'lyrics.receipt.fromPoem':     { en: '{n} syllables filled from your poem', fr: '{n} syllabes complétées à partir de votre poème' },
+	'lyrics.receipt.fromPoemOne':  { en: '1 syllable filled from your poem', fr: '1 syllabe complétée à partir de votre poème' },
+	'lyrics.filled.note':          { en: 'Filled from your poem. Your score’s print read “{scan}”.', fr: 'Complété à partir de votre poème. Votre partition portait «\u00a0{scan}\u00a0».' },
 	// THE ONE HEADER, ruled by Dann 2026-08-27: DURATION, PITCH and
 	// ACCIDENTAL · ENTRY consolidate under it and LYRIC rides inside as a
 	// labelled row. Both words are adopted, and they are the same word: the app

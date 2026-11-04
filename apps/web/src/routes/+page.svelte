@@ -37,7 +37,7 @@
 	import { routePoemPage } from '$lib/text/poem-page';
 	import { sameWords } from '$lib/text/same-words';
 	import { lyricsInPoemLines } from '$lib/text/relining';
-	import { poemOffer } from '$lib/text/poem-offer.svelte';
+	import { poemOffer } from '$lib/text/poem-offer.svelte'; import { poemJoin } from '$lib/text/poem-join.svelte';
 	import { survivingGlosses } from '$lib/text/gloss-survival';
 	import { WordMarks } from '$lib/text/word-marks.svelte';
 	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
@@ -2369,7 +2369,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		joinText(how);
 	}
 	/* ROW 108 B (ruling default 4): Lyrics holding the score's words, in Ilya's own line breaks, takes the poem's (`text/relining.ts`). */
-	let lastLaid = ''; poemOffer.attach({ doc: () => doc, library: poemLibrary, put: (t) => handlePoemEdit(t, 'paste'), setLyrics: (t) => handleInput(t, 'paste'), laid: { get: () => lastLaid, set: (v) => (lastLaid = v) } }); // the text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
+	let lastLaid = ''; poemOffer.attach({ doc: () => doc, library: poemLibrary, put: (t) => handlePoemEdit(t, 'paste'), setLyrics: (t) => handleInput(t, 'paste'), laid: { get: () => lastLaid, set: (v) => (lastLaid = v) } }); poemJoin.attach({ doc: () => doc, setLyrics: (t) => handleInput(t, 'paste'), state: () => (ingestedScore && scoreText !== '' ? { scanText: scoreText, lines, events: ingestedScore.result.score.vocalLine, pairings: doc.pairings, unreadBars: ingestedScore.result.warnings.find((w) => w.code === 'words-partly-read')?.bars ?? [], ready: !loaderState.isLoading && loaderState.entryCount > 0 } : null) }); // ROW 181 step 5: the join of Poem to a scan's Lyrics (`text/poem-join.svelte.ts`). The text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
 	function adoptPoemLines(how: TextArrival, previousPoem = ''): void {
 		const laid = lyricsInPoemLines(doc.inputText, doc.publishedPoem, previousPoem, scoreText, lastLaid);
 		if (laid !== null) { lastLaid = laid; handleInput(laid, how); }
