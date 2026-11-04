@@ -35,3 +35,14 @@ export function underlayOn(search: string = here()): boolean {
 export function scanStamp(search: string = here()): string {
 	return underlayOn(search) ? `${READER_STAMP}+${UNDERLAY_READER}` : READER_STAMP;
 }
+
+/** The query that chooses the extender arm (row 181 step 1): `?extender=b`. */
+export const EXTENDER_QUERY = 'extender';
+
+/**
+ * The arm of the extender rule (`underlay-extender.ts`) for a measurement: `b` where the address carries `?extender=b`,
+ * else `a`. Not a singer's switch: the desk measures both arms on row 114 and the better one becomes the only one.
+ */
+export function extenderArm(search: string = here()): 'a' | 'b' {
+	return new URLSearchParams(search).get(EXTENDER_QUERY) === 'b' ? 'b' : 'a';
+}

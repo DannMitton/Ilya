@@ -92,7 +92,7 @@ export function applyUnderlay(xmls: readonly string[], pages: readonly (Underlay
 		}
 		page.systems.forEach((system, s) => {
 			if (system.written) writtenSystems++;
-			else if (system.bars) unread.push({ page: i + 1, system: s + 1, bars: [system.bars[0] + before[i], system.bars[1] + before[i]], why: system.why ?? 'not written' });
+			else if (system.bars && !system.silent) unread.push({ page: i + 1, system: s + 1, bars: [system.bars[0] + before[i], system.bars[1] + before[i]], why: system.why ?? 'not written' });
 		});
 	});
 	const syllables = pages.reduce((n, p, i) => n + (p && !alone[i] ? p.words.reduce((m, w) => m + w.syllables.length, 0) : 0), 0);

@@ -19,9 +19,11 @@
  *   into one word.
  * - A token with no letter is kept (a lone hyphen, an extender, a mark),
  *   because `seatTokens` and `sewWords` read it; the harness dropped it. A lone
- *   long dash, wider than half the row's ink height, is a mark and not a joint
- *   (stage 2a review, amendment 9): it becomes a token with no text, which
- *   `kindOf` reads as a mark.
+ *   long dash, wider than half the row's ink height, is not a joint (stage 2a
+ *   review, amendment 9). It was an empty mark; since row 181 step 1 (review
+ *   amendment 3) it is an `extender` token (`text: '_'`, its box unchanged,
+ *   `longDash: true`): the print's line, which sets `sustained` on the syllable
+ *   before it and, in `seatPage`, `underExtender` on the notes it lies under.
  *
  * `rowWords` sews a row's tokens into the words `rowLanguage` judges.
  *
@@ -35,7 +37,7 @@ const INTERNAL = /(?<=[\p{L}\p{M}])[^\p{L}\p{M}]+(?=[\p{L}\p{M}])/u;
 const LETTER = /\p{L}/gu;
 
 export interface SplitOptions {
-	/** The row's ink height in the pixels the boxes are in; absent, no dash is called a mark. */
+	/** The row's ink height in the pixels the boxes are in; absent, no dash is called a long dash (an extender). */
 	inkHeight?: number;
 }
 
@@ -48,7 +50,9 @@ export function splitTokens(tokens: readonly Token[], options: SplitOptions = {}
 		const text = token.text.trim();
 		if (letters(text) === 0) {
 			const longDash = options.inkHeight !== undefined && kindOf(text) === 'joint' && token.x1 - token.x0 > 0.5 * options.inkHeight;
-			out.push({ ...token, text: longDash ? '' : text });
+			// Row 181 step 1 (review amendment 3): the long dash is the print's own line. It stays a token, its box unchanged, and
+			// `kindOf` calls it an `extender`, so `sewWords` marks the syllable before it `sustained`.
+			out.push(longDash ? { ...token, text: '_', longDash: true } : { ...token, text });
 			continue;
 		}
 		const parts = text.split(INTERNAL).filter((p) => p !== '');

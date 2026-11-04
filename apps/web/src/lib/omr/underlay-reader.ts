@@ -15,6 +15,7 @@
  * stage existed (`underlay-song.ts`).
  */
 import type { StaffBoxLike } from './metre-windows';
+import type { ExtenderArm } from './underlay-extender';
 import { seatPage, type PageLayout, type ReadUnderlay, type Seams, type SystemWords, type UnderlayPage, type UnderlayStats, type WordBox } from './underlay-page';
 
 export interface UnderlayParts<Row> {
@@ -25,6 +26,8 @@ export interface UnderlayParts<Row> {
 	/** The dictionary and the engine, once they are ready; rejects where they are not. */
 	seams(): Promise<Seams>;
 	now?: () => number;
+	/** The extender arm for this read (`underlay-switch.ts`, `?extender=b`); absent, `a`. */
+	arm?: () => ExtenderArm;
 }
 
 /**
@@ -62,10 +65,20 @@ function counted(stats: UnderlayStats): string {
 	return `; counted: ${ownNote.length} folded clitic(s) the print gives a note of its own${ownNote.map((o) => ` (system ${o.system} row ${o.row} «${o.text}»)`).join('')}, ${manyVowels.cut.length} unit(s) of two vowels or more uncut, ${manyVowels.merged.length} many-vowels merge(s) refused (a second token on a note is unseated), ${breaches.length} note(s) breaking one vowel per note over the sung notes (${noSyllable} with no syllable)${perSystemLine}`;
 }
 
-/** «; no words in system 2 (no Russian row), system 5 (no band)»: the systems of the page that took none; nothing where every one did. */
+/** «; no words in system 2 (no Russian row), system 5 (no band)»: the systems of the page that took none; nothing where every one did. A silent system (no ink, every note tied) is named so, not as unread. */
 function tookNone(systems: readonly SystemWords[]): string {
-	const none = systems.flatMap((s, i) => (s.written ? [] : [`system ${i + 1} (${s.why})`]));
+	const none = systems.flatMap((s, i) => (s.written ? [] : [`system ${i + 1} (${s.silent ? `${s.why}, nothing to read` : s.why})`]));
 	return none.length ? `; no words in ${none.join(', ')}` : '';
+}
+
+/**
+ * Row 181 step 1, for the desk's measure on row 114: what the rows held that bears on a printed extender, the notes marked
+ * (arm `a` or `b`), and each banded system's ink share and text-line candidates, from which the desk sets `NO_INK_SHARE_MAX`.
+ */
+function extenderLine(stats: UnderlayStats, arm: string): string {
+	const { extender, joint, longDash, marked } = stats.extenders;
+	const bands = stats.inkBands.map((b) => `${b.system}${b.written ? 'w' : 'u'}:${b.inkShare === null ? '?' : b.inkShare.toFixed(4)}/${b.textLines ?? '?'}`).join(' ');
+	return `; extenders (arm ${arm}): ${extender} underscore, ${joint} hyphen, ${longDash} long-dash token(s), ${marked} note(s) marked under one; ink bands (system, w written or u not: ink share/text-line candidates): ${bands || 'none'}`;
 }
 
 export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay {
@@ -84,10 +97,10 @@ export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay
 			stage = 'the dictionary';
 			const seams = await parts.seams();
 			stage = 'the seating';
-			const seated = seatPage(made.layout, reads, seams);
+			const seated = seatPage(made.layout, reads, seams, { extenderArm: parts.arm?.() ?? 'a' });
 			const ms = { prepare: Math.round(made.ms), read: Math.round(t2 - t1), seat: Math.round(now() - t2) };
 			const page: UnderlayPage = { ...seated, ms };
-			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.stats.fallback ? `; the dictionary-sewing fallback seated ${seated.stats.fallback} system(s)` : ''}${counted(seated.stats)}${tookNone(seated.systems)}`);
+			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.stats.fallback ? `; the dictionary-sewing fallback seated ${seated.stats.fallback} system(s)` : ''}${counted(seated.stats)}${extenderLine(seated.stats, parts.arm?.() ?? 'a')}${tookNone(seated.systems)}`);
 			return page;
 		} catch (err) {
 			console.info(`[omr] underlay: the page was not read (${stage} failed: ${describeError(err)}${prepared ? `; the Worker had framed ${prepared.rows} rows in ${prepared.ms} ms` : ''})`);

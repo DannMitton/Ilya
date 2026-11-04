@@ -13,6 +13,7 @@ import type { Recognizer } from 'homr-web';
 import { MusicXmlScoreParser, type ScoreParser } from '@ilya/score-parser';
 import { parseXml } from '$lib/score/ingestion/mini-dom';
 import { collectScoreWords } from '$lib/score/vowel-resolver';
+import { withExtenderMelismas } from '$lib/score/slur-seat';
 import { makeReader, type ReaderDeps } from './homr-reader';
 import { measureCount, voiceNotes } from './underlay-prepare';
 import { readUnreadBars } from './unread-bars';
@@ -44,7 +45,7 @@ function deps(underlay?: ReadUnderlay, withStaves = true): ReaderDeps {
 }
 
 const stats = (unseated = 0) => ({
-	systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, fallback: 0, tokens: 3, units: 3, cuts: { cut: 0, whole: 3, mismatched: 0 }, seated: 3, unseated, words: 3, known: 3, clitics: { folded: 0, left: 0, ownNote: 0 }, dropped: { vowelless: 0, stray: 0 }, counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, perSystem: [], breaches: [] },
+	systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, fallback: 0, tokens: 3, units: 3, cuts: { cut: 0, whole: 3, mismatched: 0 }, seated: 3, unseated, words: 3, known: 3, clitics: { folded: 0, left: 0, ownNote: 0 }, dropped: { vowelless: 0, stray: 0 }, extenders: { extender: 0, joint: 0, longDash: 0, marked: 0 }, inkBands: [], counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, perSystem: [], breaches: [] },
 });
 
 /**
@@ -184,6 +185,28 @@ describe('a system that cannot be read loses only itself (brief r5 step 2)', () 
 		expect(again).toMatchObject({ ok: true, from: 'kept' });
 		const got = await arrive(readingFile(new File([''], 'song.pdf'), again.ok ? again.musicXml : ''));
 		expect(got.result.warnings.find((x) => x.code === 'words-partly-read')?.bars).toEqual([song]);
+	});
+
+	it('carries a printed extender through the join, the kept reading, and a reopening (row 181 step 1): the notes under it are melismas on the typed path', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		// Page 1's first sung note is sustained; the next notes of the page have no lyric until the second word.
+		const sustained: ReadUnderlay = async (_i, xml) => {
+			const p = page(xml, ['Средь', 'шумного'].slice(0, xml === PAGES[0] ? 2 : 0), xml === PAGES[0]);
+			const notes = voiceNotes(xml).filter((x) => !x.rest);
+			if (xml === PAGES[0]) p.words = [{ syllables: [{ note: notes[0].ordinal, text: 'Средь', syllabic: 'single', sustained: true }] }, { syllables: [{ note: notes[3].ordinal, text: 'шумного', syllabic: 'single', sustained: false }] }];
+			return p;
+		};
+		const joined = await read(sustained);
+		expect(joined).toContain('<extend type="start"/>');
+		expect(joined).toContain('ilya-extenders');
+		const first = await restoreScan(new File([], 'a.pdf'), 'pdf', null, async () => ({ ok: true, musicXml: joined, pagesRead: 3, pages: 3, backend: 'wasm', durationMs: 1 }), undefined, scanStamp('?words=read'));
+		const kept = first.ok ? first.reading! : null;
+		const again = await restoreScan(new File([], 'a.pdf'), 'pdf', kept, async () => { throw new Error('not read again'); }, undefined, scanStamp('?words=read'));
+		expect(again).toMatchObject({ ok: true, from: 'kept' });
+		const got = await arrive(readingFile(new File([''], 'song.pdf'), again.ok ? again.musicXml : ''));
+		const ids = got.result.warnings.find((x) => x.code === 'extender-notes')?.eventIds ?? [];
+		expect(ids.length).toBeGreaterThan(0);
+		expect(withExtenderMelismas({}, got.result.warnings)).toEqual(Object.fromEntries(ids.map((id) => [id, { kind: 'melisma' }])));
 	});
 
 	it('writes nothing, and says why in one console line, where the reader throws', async () => {

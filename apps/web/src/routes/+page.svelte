@@ -199,7 +199,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	import { breakControl } from '$lib/text/break-here';
 	import { CorrectionCursor } from '$lib/score/correction-cursor.svelte';
 	import { valueParts } from '$lib/score/value-name';
-	import { mergeOnUploadObserving } from '$lib/score/slur-seat';
+	import { mergeOnUploadObserving, withExtenderMelismas } from '$lib/score/slur-seat';
 	import { LoupePanel } from '$lib/score/loupe-panel.svelte';
 	import { createPressAndHold } from '$lib/score/press-and-hold';
 	import { createCorrectionKeys } from '$lib/score/correction-keys';
@@ -2850,7 +2850,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		doc.pairings = (rekeyed instanceof Promise ? await rekeyed : rekeyed).map;
 		const foldOnArrival = shouldFoldOnArrival(doc.pairings);
 		const merged = mergeOnUploadObserving(doc.pairings, ingested.result.score.vocalLine, buildSlotQueue(lines), noLyrics);
-		doc.pairings = merged.map;
+		doc.pairings = withExtenderMelismas(merged.map, ingested.result.warnings); // row 181: the print's extender line is a melisma here too
 		// N.157: a replacement re-derives its seats (`replace-seat.ts`); a restore or a first upload does not.
 		const reseated = origin === 'upload' && !foldOnArrival ? reseatOnReplace(doc.pairings, ingested.result.score, lines) : null;
 		if (reseated) doc.pairings = reseated.map;

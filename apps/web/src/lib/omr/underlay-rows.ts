@@ -105,6 +105,21 @@ function inkProfile(band: GreyBandLike, staffSpace: number): number[] {
 	return profile;
 }
 
+/**
+ * What the band holds, for the question «did it hold ink?» (row 181, step 1). `share` is the ink pixels over all the
+ * band's pixels, ink being what `cutRows` calls ink (darker than the paper tone less `INK_BELOW_PAPER`). `lines` is the
+ * number of band lines that `cutRows` counts as text-line candidates (ink on more than `LINE_SHARE` of the width), before
+ * its height and merge rules drop any: a band with one is never «no ink». One `paperOf`, one `inkProfile`, so the
+ * numbers cannot disagree with the rows cut from the same band.
+ */
+export function bandInk(band: GreyBandLike, staffSpace: number): { share: number; lines: number } {
+	const profile = inkProfile(band, staffSpace);
+	const lineMin = LINE_SHARE * band.width;
+	const total = band.width * band.height;
+	const ink = profile.reduce((n, c) => n + c, 0);
+	return { share: total > 0 ? ink / total : 0, lines: profile.filter((c) => c > lineMin).length };
+}
+
 /** `profile[from..to]`, smoothed by a moving mean whose ends see zeros beyond the slice. */
 function smoothed(profile: number[], from: number, to: number, space: number): number[] {
 	const size = Math.max(3, Math.trunc(0.08 * space)) | 1;

@@ -77,6 +77,8 @@ export interface Token {
 	text: string;
 	x0: number;
 	x1: number;
+	/** The token was a hyphen-only box wider than half the row's ink height: the print's line, kept as an `extender` (`splitTokens`). Counted, never read by a rule. */
+	longDash?: boolean;
 }
 
 /** One note of the voice staff. */

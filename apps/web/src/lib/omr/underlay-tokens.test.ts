@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { rowWords, splitTokens } from './underlay-tokens';
-import type { Token } from './underlay-seat';
+import { kindOf, type Token } from './underlay-seat';
 
 const t = (text: string, x0: number, x1: number): Token => ({ text, x0, x1 });
 
@@ -59,11 +59,14 @@ describe('splitTokens', () => {
 		expect(splitTokens([t('ка', 0, 20), t('-', 22, 30), t('___', 40, 120), t('.', 130, 134)]).map((o) => o.text)).toEqual(['ка', '-', '___', '.']);
 	});
 
-	it('calls a lone dash wider than half the ink height a mark, and a narrower one a joint', () => {
+	it('keeps a lone dash wider than half the ink height as an extender token, and a narrower one a joint (row 181 step 1, amendment 3)', () => {
 		const out = splitTokens([t('—', 0, 20), t('-', 30, 38)], { inkHeight: 32 });
-		expect(out.map((o) => o.text)).toEqual(['', '-']);
+		expect(out.map((o) => o.text)).toEqual(['_', '-']);
+		expect(out.map((o) => kindOf(o.text))).toEqual(['extender', 'joint']);
+		expect(out[0]).toMatchObject({ x0: 0, x1: 20, longDash: true });
+		expect(out[1].longDash).toBeUndefined();
 		expect(splitTokens([t('—', 0, 16)], { inkHeight: 32 }).map((o) => o.text)).toEqual(['—']);
-		expect(splitTokens([t('—', 0, 17)], { inkHeight: 32 }).map((o) => o.text)).toEqual(['']);
+		expect(splitTokens([t('—', 0, 17)], { inkHeight: 32 }).map((o) => o.text)).toEqual(['_']);
 	});
 
 	it('calls no dash a mark where the ink height is not given', () => {
@@ -85,7 +88,7 @@ describe('rowWords', () => {
 		expect(rowWords(tokens)).toEqual(['Комнат', 'ка', 'тесная']);
 	});
 
-	it('does not join a lone long dash that has become a mark', () => {
+	it('does not join a lone long dash that has become an extender', () => {
 		const tokens = splitTokens([t('ты', 0, 30), t('—', 40, 80), t('он', 90, 120)], { inkHeight: 32 });
 		expect(rowWords(tokens)).toEqual(['ты', 'он']);
 	});

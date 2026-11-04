@@ -31,7 +31,7 @@ import { systemsOf, type PlacedStaff } from './underlay-band';
 import { topLineBelow } from './underlay-below';
 import { frameRow, type FramedCrop } from './underlay-frame';
 import type { PageLayout, RowLayout, SystemLayout } from './underlay-page';
-import { cutRows } from './underlay-rows';
+import { bandInk, cutRows } from './underlay-rows';
 import type { NotePlace } from './underlay-seat';
 
 /** One note of the first part. */
@@ -179,16 +179,18 @@ export function prepareUnderlay(page: Grey, musicXml: string, staves: readonly S
 		const space = placed[system.staff].staff.space;
 		const mine: NotePlace[] = system.notes.map((i) => ({ id: notes[i].ordinal, x: (notes[i].at as { x: number }).x, bar: notes[i].bar, tiedInto: notes[i].tiedInto, inSlur: notes[i].inSlur }));
 		const layoutRows: RowLayout[] = [];
+		let ink: { share: number; lines: number } | null = null;
 		if (system.band) {
 			const { x0, x1, y0, y1 } = system.band;
 			const band = crop(page, x0, x1, y0, y1);
+			ink = bandInk(band, space);
 			for (const row of cutRows(band, space)) {
 				const framed = frameRow(crop(band, 0, band.width, row.y0, row.y1), space);
 				layoutRows.push({ id: rows.length, transform: framed.transform, offsetX: x0, offsetY: y0 + row.y0 });
 				rows.push(framed.crop);
 			}
 		}
-		systems.push({ staffSpace: space, notes: mine, hasBand: system.band !== null, rows: layoutRows });
+		systems.push({ staffSpace: space, notes: mine, hasBand: system.band !== null, rows: layoutRows, ...(ink ? { inkShare: ink.share, textLines: ink.lines } : {}) });
 	}
 	return { layout: { width: page.width, height: page.height, systems, unfound }, rows };
 }

@@ -44,6 +44,7 @@ import type { ReadUnderlay, UnderlayPage } from './underlay-page';
 import { applyUnderlay } from './underlay-song';
 import { underlayOn } from './underlay-switch';
 import { markUnreadBars, type BarRange } from './unread-bars';
+import { markExtenders } from './extend-convention';
 import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
 
 /**
@@ -415,7 +416,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} bars, read ${joined.numbers.length}${joined.numbers.length ? ` (${joined.numbers.join(', ')})` : ''}`);
 				for (const line of joined.metreLog) console.info(`[omr] metre: ${line}`);
 			} else musicXml = joinPages(pages);
-			musicXml = markUnreadBars(musicXml, unreadBars);
+			musicXml = markExtenders(markUnreadBars(musicXml, unreadBars)); // the extender line rides with the reading (`extend-convention.ts`)
 		} catch (err) {
 			return { ok: false, error: 'join_failed', log: message(err) };
 		}
