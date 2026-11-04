@@ -166,3 +166,52 @@ for (const [song, file] of Object.entries(SONGS)) {
 		}
 	}
 }
+
+/*
+ * TEXT FITS ITS PAGE FOR ANY SONG, NOT ONLY THE TRACKED FIXTURES (poem library build 1, step 7, part 1; Dann
+ * 2026-11-03 20:37 to 20:39: "fix it correctly and for posterity"; `page-fit.ts` says what was wrong). Three songs that
+ * the two fixtures above do not reach, typed into Lyrics, in both languages and both media:
+ *   - MANY SHORT LINES (36 one-row lines, with a legend in the footer): the rows and the gap come from measured heights;
+ *   - LINES THAT WRAP: seven long words a line, which the old seven-words-a-row estimate counted as one row and the
+ *     browser wraps to three, so the page's rows must be counted from the wrap, not the words;
+ *   - A TALLER FOOTER: the legend given 20 px more, standing for a footer of two legend rows, which the page reserves
+ *     because it measures the footer (a reserve of a constant 80 would run into it).
+ * The A4 case cannot be reached here (Text passes `"letter"`); it is a unit test (`page-fit.test.ts`).
+ */
+const SHORT_LINES = Array.from({ length: 36 }, () => 'елка зеленый ежик').join('\n');
+const WRAPPING_LINES = Array.from({ length: 14 }, () => 'достопримечательностями достопримечательностями достопримечательностями достопримечательностями достопримечательностями достопримечательностями достопримечательностями').join('\n');
+
+/** The pages this far down the document's height that are more than 15 percent empty and could have taken the next item. */
+async function emptyBands(page: Page, label: string): Promise<string[]> {
+	const pages = await measure(page);
+	const failures: string[] = [];
+	pages.slice(0, -1).forEach((p, n) => {
+		if (p.empty / p.content <= LIMIT) return;
+		if (pages[n + 1].first <= p.room) failures.push(`${label}, page ${n + 1}: ${Math.round((p.empty / p.content) * 1000) / 10} percent empty (${Math.round(p.empty)} px)`);
+	});
+	return failures;
+}
+
+for (const [name, lyrics, taller] of [['36 short lines', SHORT_LINES, false], ['14 wrapping lines', WRAPPING_LINES, false], ['36 short lines under a taller footer', SHORT_LINES, true]] as const) {
+	for (const language of ['en', 'fr'] as const) {
+		test(`${name}, text, ${language}: every page ends above its footer, on screen and in print, and none is left half empty`, async ({ page }) => {
+			test.setTimeout(180_000);
+			await page.addInitScript((l) => localStorage.setItem('ilya:language', l), language);
+			await page.goto('/');
+			await page.locator('textarea.text-input').waitFor();
+			await page.waitForFunction(() => !(document.querySelector('textarea.text-input') as HTMLTextAreaElement).disabled, null, { timeout: 60_000 });
+			if (taller) await page.addStyleTag({ content: '.provenance-legend { padding-bottom: 20px; }' });
+			await page.locator('#intake-tab-lyrics').click();
+			await page.locator('textarea.text-input').focus();
+			await page.keyboard.insertText(lyrics);
+			await page.waitForTimeout(3000);
+			await page.evaluate(() => (document.querySelector('#tab-text') as HTMLElement | null)?.click());
+			await page.waitForTimeout(7000);
+			const count = await page.locator('.paper-page:visible').count();
+			expect(count, 'the song needs more than one page').toBeGreaterThan(2);
+			const label = `${name}, text, ${language}`;
+			const failures = [...(await overlaps(page, label)), ...(await emptyBands(page, label))];
+			expect(failures, failures.join('\n')).toEqual([]);
+		});
+	}
+}

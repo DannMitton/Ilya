@@ -6,11 +6,8 @@
  * header, content, and footer layers.
  *
  * Content rows use min-height in a flex column. If a line wraps, it grows
- * and the next row starts below it. Page slicing budgets wide lines
- * (>7 display words) as 2 slots to prevent 11-row pages.
+ * and the next row starts below it. Text's page slicing is `page-fit.ts`.
  */
-
-import type { LineData } from './types';
 
 // ── Page dimensions (px at 96dpi) ────────────────────────────────
 
@@ -80,123 +77,39 @@ export const HEADER_HEIGHTS = {
 	subsequent: 37,
 } as const;
 
-/** Maximum footer height with text-wrap allowance (px). */
+/**
+ * The least a Text or Markup page reserves for its footer (px): the floor under the measured height (`Math.max`), never
+ * the whole answer. A one-row provenance legend makes the footer 90 px (desk, 2026-11-03; `page-fit.ts`).
+ */
 export const FOOTER_MAX_HEIGHT = 80;
 
 /** Gap between verse rows (px). Used as baseline for title page. */
 export const ROW_GAP = 20;
 
 /**
- * Minimum row height (px).
- * Normal rows render at this height. Wrapping rows grow beyond it
- * naturally via flex layout; the next row starts below.
+ * The `min-height` a row is given (px). It is NOT the height a row draws: a row draws 56.3 px, and Text's pages take the
+ * drawn height from a measurement (`page-fit.ts`). Wrapping rows grow beyond it naturally via flex layout.
  */
 export const ROW_HEIGHT = 56;
 
-/** Row-slot budget per page. */
-export const LINES_PER_PAGE = 10;
-
 // ── Page slicing ─────────────────────────────────────────────────
 
-/** Cyrillic character test (with `w.latin`, matches VerseLine's display filter). */
-const CYRILLIC_RE = /[А-Яа-яЁё]/;
+/*
+ * Text's page slicing is `page-fit.ts` (step 7, part 1): rows and gap come from heights the page measured, and the
+ * slicer is pure. `LINES_PER_PAGE`, `WORDS_PER_ROW`, `rowsOf` and `sliceLinesToPages`, which budgeted rows by a
+ * seven-words-a-row estimate against a constant, are gone with the estimate: see that file for what they got wrong.
+ */
 
 /**
- * The words a printed row holds, for the budget: the threshold this file has always used ("more than 7 display
- * words" wraps). Checked 2026-10-12 (QUEUE row 79) on the Tchaikovsky song, whose poem reaches Text as one line of
- * 95 words: it drew about twelve rows at desktop width, seven or eight words a row, so seven is the safe side.
+ * The content window's insets on the sheet (px), as `TitlePage` and `SubsequentPage` set them and as the probe that
+ * measures wraps must reproduce: its width is the sheet's less `left`, `right` and `padLeft`, and its `padTop` is inside
+ * the window. One place, so the pages and the probe cannot disagree about the width a line wraps at.
  */
-export const WORDS_PER_ROW = 7;
+export const TEXT_CONTENT = { left: 88, right: 96, padLeft: 4, padTop: 4 } as const;
 
-/** The words a line shows (with `w.latin`, VerseLine's display filter). */
-function displayed(line: LineData): number {
-	return line.words.filter((w) => w.latin || CYRILLIC_RE.test(w.cyrillic || '')).length;
-}
-
-/** A line's rows on the page, estimated: a row per `WORDS_PER_ROW` words, at least one. */
-export function rowsOf(line: LineData): number {
-	return Math.max(1, Math.ceil(displayed(line) / WORDS_PER_ROW));
-}
-
-/**
- * The line cut after its first `rows` rows: the words up to that many displayed words, never leaving a proclitic
- * at the end of the first part, since it leans on the word after it. Both parts keep the line's number; every word
- * carries its own `lineIndex` and `wordIndex`, so a click on either part finds its word.
- */
-function cutAfterRows(line: LineData, rows: number): [LineData, LineData] {
-	let shown = 0;
-	let at = line.words.length;
-	for (let i = 0; i < line.words.length; i++) {
-		const w = line.words[i];
-		if (w.latin || CYRILLIC_RE.test(w.cyrillic || '')) {
-			if (shown === rows * WORDS_PER_ROW) { at = i; break; }
-			shown++;
-		}
-	}
-	while (at > 1 && line.words[at - 1].isProclitic) at--;
-	const { endsStanza, ...rest } = line;
-	return [{ ...rest, words: line.words.slice(0, at) }, { ...line, words: line.words.slice(at) }];
-}
-
-/**
- * Slice an array of verse lines into pages.
- *
- * Each page fills up to its budget in rows. A line costs its estimated rows (`rowsOf`).
- *
- * NO EMPTY SPACE MID-DOCUMENT (QUEUE row 79; Dann 2026-10-11 21:50, `PRODUCT.md` rule 2): a stanza is a paragraph
- * (DESK DEFAULT), so a line that does not fit breaks between its rows, leaving at least two rows on each page; a
- * line that would leave fewer moves whole to the next page. Before row 79 a line cost at most two rows, so a poem
- * that reaches Text as one long line (a score's underlay) printed as one page and ran off it.
- *
- * @param lines - All verse lines to paginate
- * @param page1Budget - Row-slot budget for the first page (default: LINES_PER_PAGE).
- *   TitlePage computes this from its measured header height and passes it
- *   via Paper's reactive callback chain.
- *
- * - 0 lines → one empty page (for the empty state title page)
- */
-export function sliceLinesToPages(lines: LineData[], page1Budget: number = LINES_PER_PAGE): LineData[][] {
-	if (lines.length === 0) {
-		return [[]];
-	}
-
-	const pages: LineData[][] = [];
-	let currentPage: LineData[] = [];
-	let currentUnits = 0;
-	const budget = () => (pages.length === 0 ? page1Budget : LINES_PER_PAGE);
-	const turn = () => {
-		pages.push(currentPage);
-		currentPage = [];
-		currentUnits = 0;
-	};
-
-	const queue = [...lines];
-	while (queue.length > 0) {
-		const line = queue.shift()!;
-		const cost = rowsOf(line);
-		const room = budget() - currentUnits;
-		if (cost <= room || currentPage.length === 0 && cost <= budget()) {
-			currentPage.push(line);
-			currentUnits += cost;
-		} else if (room >= 2 && cost - room >= 2) {
-			const [head, tail] = cutAfterRows(line, room);
-			currentPage.push(head);
-			turn();
-			queue.unshift(tail);
-		} else if (currentPage.length === 0) {
-			// Longer than a whole page on an empty page: it must break here.
-			const [head, tail] = cutAfterRows(line, Math.max(2, Math.min(budget(), cost - 2)));
-			currentPage.push(head);
-			turn();
-			queue.unshift(tail);
-		} else {
-			turn();
-			queue.unshift(line);
-		}
-	}
-
-	if (currentPage.length > 0) pages.push(currentPage);
-	return pages;
+/** The width a verse line wraps at on a sheet of this size (816 - 88 - 96 - 4 = 628 at letter). */
+export function contentWidth(pageWidth: number): number {
+	return pageWidth - TEXT_CONTENT.left - TEXT_CONTENT.right - TEXT_CONTENT.padLeft;
 }
 
 // ── Running header ───────────────────────────────────────────────

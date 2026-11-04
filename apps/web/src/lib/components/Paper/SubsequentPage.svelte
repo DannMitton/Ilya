@@ -3,7 +3,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, ROW_HEIGHT } from '$lib/page-config';
+	import { PAGE_SIZES, ROW_HEIGHT, TEXT_CONTENT } from '$lib/page-config';
 	import RunningHeader from './RunningHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
 	import PageFooter from './PageFooter.svelte';
@@ -24,6 +24,12 @@
 		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
+		/** The content window's top and bottom and the gap between rows, from the measured fit. */
+		contentTop: number;
+		contentBottom: number;
+		rowGap: number;
+		/** The running header's measured height, which the window's top follows. */
+		onheaderheight?: (height: number) => void;
 	}
 
 	let {
@@ -40,37 +46,18 @@
 		glossOverrides,
 		mutedWords,
 		onwordclick,
+		contentTop,
+		contentBottom,
+		rowGap,
+		onheaderheight,
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
 
-	/** Measured running-header height (px). Updated via RunningHeader's callback. */
-	let headerHeight = $state(0);
-
-	function handleHeaderHeight(height: number) {
-		headerHeight = height;
-	}
-
-	/**
-	 * Same formula and the same HEADER_GAP as TitlePage, so the space under the
-	 * rule is identical on every page. The breakpoint override went with the
-	 * N.45 spike under N.73 portrait C, for the reason TitlePage's matching
-	 * comment gives: this page is 816px wide on every display now, so the
-	 * running header no longer wraps and the measurement needs no correcting.
+	/*
+	 * Window and gap come from `Paper.svelte` (`page-fit.ts`, step 7, part 1), the same rule as page 1, so the pages cannot
+	 * drift apart. What stood here (a fixed 28 px gap and the constant 80 for the footer) overran by 3 px under a one-row legend.
 	 */
-	const effectiveHeaderHeight = $derived(
-		headerHeight || HEADER_HEIGHTS_AT_LETTER.subsequent
-	);
-
-	const contentTop = $derived(MARGINS.vertical + effectiveHeaderHeight + HEADER_GAP);
-	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
-
-	/**
-	 * Subsequent pages have more vertical space than the title page
-	 * (shorter header). 28px row gap distributes 10 rows evenly
-	 * across the taller content aperture.
-	 */
-	const subsequentRowGap = 28;
 </script>
 
 <div
@@ -78,12 +65,12 @@
 	style="width: {dims.width}px; height: {dims.height}px;"
 >
 	<!-- Header layer: absolute, pinned to top margin -->
-	<RunningHeader headerText={runningHeader} tabName={t('tab.text', language)} onheightchange={handleHeaderHeight} />
+	<RunningHeader headerText={runningHeader} tabName={t('tab.text', language)} onheightchange={onheaderheight} />
 
 	<!-- Content layer: flex column, rows grow if they wrap -->
 	<div
 		class="page-content"
-		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-gap: {subsequentRowGap}px;"
+		style="top: {contentTop}px; bottom: {contentBottom}px; left: {TEXT_CONTENT.left}px; right: {TEXT_CONTENT.right}px; padding-top: {TEXT_CONTENT.padTop}px; padding-left: {TEXT_CONTENT.padLeft}px; --row-height: {ROW_HEIGHT}px; --row-gap: {rowGap}px;"
 	>
 		{#each lines as line (line.lineNumber)}
 			<div class="verse-row">
@@ -115,11 +102,7 @@
 
 	.page-content {
 		position: absolute;
-		left: 88px;
-		right: 96px;
 		overflow: visible;
-		padding-top: 4px;
-		padding-left: 4px;
 
 		display: flex;
 		flex-direction: column;

@@ -4,7 +4,7 @@
 	import type { Language } from '$lib/i18n';
 	import { t } from '$lib/i18n';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, ROW_HEIGHT } from '$lib/page-config';
+	import { PAGE_SIZES, ROW_HEIGHT, TEXT_CONTENT } from '$lib/page-config';
 	import { COMPOSERS, POETS, formatNameForPaper } from '$lib/composers-poets';
 	import TitleHeader from './TitleHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
@@ -28,7 +28,12 @@
 		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
-		onbudgetchange?: (maxRows: number) => void;
+		/** The content window's top and bottom (px from the sheet's edges) and the gap between rows, from the measured fit. */
+		contentTop: number;
+		contentBottom: number;
+		rowGap: number;
+		/** The title header's measured height, which the window's top follows. */
+		onheaderheight?: (height: number) => void;
 		/** Row 2j: what to say with no lines (`emptyTextNotice`); `enter` when absent. */
 		emptyNotice?: EmptyTextNotice;
 	}
@@ -47,7 +52,10 @@
 		glossOverrides,
 		mutedWords,
 		onwordclick,
-		onbudgetchange,
+		contentTop,
+		contentBottom,
+		rowGap,
+		onheaderheight,
 		emptyNotice = 'enter',
 	}: Props = $props();
 
@@ -64,86 +72,12 @@
 	const poetDisplay = $derived(formatNameForPaper(metadata.poet, POETS, language));
 	const translatorDisplay = $derived(formatNameForPaper(metadata.translator, POETS, language));
 
-	/** Measured header height (px). Updated via TitleHeader's onheightchange callback. */
-	let headerHeight = $state(0);
-
-	/**
-	 * Header-to-content gap for the title page (18px).
-	 *
-	 * Matches the perceived rule-to-content spacing on subsequent pages
-	 * (page 2 is the standard, this value was tuned to achieve visual
-	 * parity). One document, one rhythm: the gap below the horizontal
-	 * rule must feel identical on every page.
-	 *
-	 * 10 rows preserved with standard 127px header:
-	 *   available = 1056 - (48 + 127 + 18) - (48 + 80 + 8) = 727px
-	 *   10 × 56 + 9 × 18 = 722px. 5px clearance.
+	/*
+	 * The window's top, bottom, and row gap come from `Paper.svelte`, which cuts the pages from measured heights
+	 * (`page-fit.ts`; step 7, part 1). This page only reports its header's height. The sum that stood here (ten rows of a
+	 * constant 56 into a window that ignored its own 4 px padding, the gap rounded up, and a footer reserve of a constant
+	 * 80) overran page 1 by 7.4 px on the Tchaikovsky song once a poem was filled; the measured numbers are in `page-fit.ts`.
 	 */
-	/**
-	 * The height to lay out against.
-	 *
-	 * The live measurement is right and handles a title of any length. It used
-	 * to be overridden by the letter-width constant below the breakpoint,
-	 * because the N.45 spike made the page 100 percent wide there, the title
-	 * wrapped, and the measurement came out about 40px too tall for the 816px
-	 * sheet that prints. N.73 portrait C retired that spike: the page is 816px
-	 * wide on every display, so the measurement IS the letter-width
-	 * measurement and the override has nothing left to correct.
-	 *
-	 * `bind:offsetHeight` (TitleHeader.svelte) is a layout measurement and a
-	 * CSS transform does not touch it, so the scaling Paper.svelte applies in
-	 * portrait cannot move this number either.
-	 */
-	const effectiveHeaderHeight = $derived(headerHeight || HEADER_HEIGHTS_AT_LETTER.title);
-
-	/** Content window positioning (px). Bottom is fixed; top follows the header. */
-	const contentTop = $derived(MARGINS.vertical + effectiveHeaderHeight + HEADER_GAP);
-	const contentBottom = MARGINS.vertical + FOOTER_MAX_HEIGHT + GAP;
-
-	/**
-	 * Adaptive row configuration: compute rows and gap from measured header.
-	 *
-	 * Algorithm: try 10 rows first. Calculate the gap that would distribute
-	 * them evenly in the available height. If that gap falls below the
-	 * minimum (18px), cascade to 9 rows, then 8.
-	 *
-	 * minGap derivation (not a magic number):
-	 *   With measured 127px header and 18px TITLE_HEADER_GAP:
-	 *   available = 1056 - 193 - 136 = 727px
-	 *   10 rows at 56px = 560px; (727 - 560) / 9 = 18.56px → floor to 18
-	 */
-	const rowConfig = $derived.by(() => {
-		if (effectiveHeaderHeight === 0) return { rows: 9, gap: 20 };
-
-		const availableHeight = PAGE_SIZES[pageSize].height - contentTop - contentBottom;
-		const minGap = 18;
-		const maxGap = 28;
-
-		let rows = 10;
-		let gap = (availableHeight - (rows * ROW_HEIGHT)) / (rows - 1);
-
-		if (gap < minGap) {
-			rows = 9;
-			gap = (availableHeight - (rows * ROW_HEIGHT)) / (rows - 1);
-		}
-		if (gap < minGap) {
-			rows = 8;
-			gap = (availableHeight - (rows * ROW_HEIGHT)) / (rows - 1);
-		}
-
-		gap = Math.min(gap, maxGap);
-
-		return { rows, gap: Math.round(gap) };
-	});
-
-	/** Signal parent when row budget changes so Paper can re-slice. */
-	$effect(() => {
-		onbudgetchange?.(rowConfig.rows);
-	});
-
-	function handleHeaderHeight(height: number) {
-		headerHeight = height;
-	}
 </script>
 
 <div
@@ -160,13 +94,13 @@
 		translator={translatorDisplay}
 		opus={metadata.opus}
 		{language}
-		onheightchange={handleHeaderHeight}
+		onheightchange={onheaderheight}
 	/>
 
 	<!-- Content layer: flex column, rows grow if they wrap -->
 	<div
 		class="page-content"
-		style="top: {contentTop}px; bottom: {contentBottom}px; --row-height: {ROW_HEIGHT}px; --row-gap: {rowConfig.gap}px;"
+		style="top: {contentTop}px; bottom: {contentBottom}px; left: {TEXT_CONTENT.left}px; right: {TEXT_CONTENT.right}px; padding-top: {TEXT_CONTENT.padTop}px; padding-left: {TEXT_CONTENT.padLeft}px; --row-height: {ROW_HEIGHT}px; --row-gap: {rowGap}px;"
 	>
 		{#if hasContent}
 			{#each lines as line (line.lineNumber)}
@@ -208,11 +142,7 @@
 
 	.page-content {
 		position: absolute;
-		left: 88px;
-		right: 96px;
 		overflow: visible;
-		padding-top: 4px;
-		padding-left: 4px;
 
 		display: flex;
 		flex-direction: column;
