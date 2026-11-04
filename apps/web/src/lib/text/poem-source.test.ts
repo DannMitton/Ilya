@@ -278,6 +278,13 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 	it('joins lines with a space until the words reach four, drops the closing punctuation, lowers each later line’s first letter', () => {
 		expect(passageLine('«Дитя моё,\nОстанься здесь со мной:\nВ воде привольное житье', 0)).toBe('Дитя моё, останься здесь со мной');
 	});
+	it('keeps a capital after a line that ends a sentence (. ! ? …), and lowers it after a comma or nothing (part 6)', () => {
+		expect(passageLine('Весело на пашне.\nНу, тащися, сивка', 0)).toBe('Весело на пашне. Ну, тащися, сивка');
+		expect(passageLine('Дайте бокалы!\nДайте вина', 0)).toBe('Дайте бокалы! Дайте вина');
+		expect(passageLine('Куда ты?\nСпроси меня…\nЕщё раз', 0)).toBe('Куда ты? Спроси меня'); // four words reached; the closing … is dropped
+		expect(passageLine('Дитя моё,\nОстанься здесь со мной:', 0)).toBe('Дитя моё, останься здесь со мной');
+		expect(passageLine('Раз\nДва, три\nЧетыре', 0)).toBe('Раз два, три четыре');
+	});
 	it('stops at the first line when it already holds four words', () => {
 		expect(passageLine('Спит. Спит в лесу глухом,\nСпит княжна во сне', 0)).toBe('Спит. Спит в лесу глухом');
 	});
@@ -287,7 +294,7 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 		expect(passageLine(t, t.indexOf('Три'))).toBe('Три четыре пять шесть');
 	});
 	it('drops every kind of closing punctuation and quote, and a leading mark or dash', () => {
-		expect(passageLine('— Куда ты идёшь?\nСпроси у меня…»', 0)).toBe('Куда ты идёшь? спроси у меня'.replace('идёшь?', 'идёшь?'));
+		expect(passageLine('— Куда ты идёшь?\nСпроси у меня…»', 0)).toBe('Куда ты идёшь? Спроси у меня'); // a capital stays after the ?
 		expect(passageLine('Раз два три четыре!', 0)).toBe('Раз два три четыре');
 	});
 	it('is empty where there is nothing at the offset', () => {

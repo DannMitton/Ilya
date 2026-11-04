@@ -41,9 +41,11 @@
 	const naming = $derived.by(() => {
 		if (!card || !entry) return null;
 		const quoted = cardLine(card.resolved.firstLine);
+		// D1 reaches the card's own title and line (desk default, step 7 part 6): English quotes a Russian title or line in “…”, French keeps « ».
+		const [open, close] = language === 'en' ? ['“', '”'] : ['«', '»'];
 		return {
-			title: `«${entry.title}»`,
-			line: card.resolved.passage ? t('intake.poemLibrary.passage', language).replace('{line}', () => quoted) : `«${quoted}»`,
+			title: `${open}${entry.title}${close}`,
+			line: card.resolved.passage ? t('intake.poemLibrary.passage', language).replace('{line}', () => quoted) : `${open}${quoted}${close}`,
 			poet: entry.translator ? t('intake.poemLibrary.by', language).replace('{author}', () => entry.author).replace('{translator}', () => entry.translator!) : entry.author,
 			source: t(entry.spelling === 'pre-reform' ? 'intake.poemLibrary.cardSourceModernized' : 'intake.poemLibrary.cardSource', language).replace('{site}', () => siteName(entry.source.site, language)),
 		};

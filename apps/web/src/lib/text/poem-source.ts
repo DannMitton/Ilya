@@ -95,7 +95,8 @@ export const PASSAGE_WORDS = 4;
  * THE WORDING OF A PASSAGE (D4; Dann's ratified example is the oracle: «Дитя моё, останься здесь со мной»). The lines of
  * the stanza from `start` are joined with a space, from its first line until the running count of words reaches four; the
  * closing punctuation is dropped; the first letter of each line AFTER THE FIRST is lowered, as the example lowers
- * «Останься» and keeps «Дитя». DESK DEFAULT (Dann may revise), as the brief says. A joined line that begins with a proper
+ * «Останься» and keeps «Дитя», EXCEPT after a line that ends a sentence (. ! ? …), where the capital stays («Весело на пашне.
+ * Ну, тащися, сивка»; part 6, DESK DEFAULT). DESK DEFAULT (Dann may revise), as the brief says. A joined line that begins with a proper
  * noun is lowered too, which is wrong for it; the library has none today (`poem-source.test.ts` checks every stanza start of
  * every entry). It stops at the stanza's end, so it never reaches into the next stanza.
  */
@@ -108,7 +109,9 @@ export function passageLine(text: string, start: number): string {
 			if (taken.length > 0) break;
 			continue;
 		}
-		taken.push(taken.length === 0 ? line : line.replace(/\p{L}/u, (c) => c.toLowerCase()));
+		// Lower a later line's first letter, except after a sentence end (. ! ? …), where it is a new sentence (desk default, step 7 part 6).
+		const afterSentence = taken.length > 0 && /[.!?…][\s»"“”’']*$/.test(taken[taken.length - 1]);
+		taken.push(taken.length === 0 || afterSentence ? line : line.replace(/\p{L}/u, (c) => c.toLowerCase()));
 		words += line.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
 		if (words >= PASSAGE_WORDS) break;
 	}

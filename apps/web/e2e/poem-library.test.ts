@@ -75,8 +75,8 @@ test.describe('walk 1 to 3: she pastes a song, sees a card, and keeps the poem',
 
 		// What it names, in the order she wonders it.
 		await expect(card(page)).toContainText('Ilya found this poem for your song:');
-		await expect(card(page)).toContainText('«Весёлый час»');
-		await expect(card(page)).toContainText('«Дайте бокалы!»');
+		await expect(card(page)).toContainText('“Весёлый час”');
+		await expect(card(page)).toContainText('“Дайте бокалы!”'); // D1 reaches the card (part 6)
 		await expect(card(page)).toContainText('Алексей Васильевич Кольцов');
 		await expect(card(page)).not.toContainText('translated by');
 		await expect(card(page)).not.toContainText('a passage beginning');
@@ -193,7 +193,7 @@ test.describe('walk 5: she ignores the card', () => {
 		await page.reload();
 		await waitForDictionary(page);
 		await expect(card(page)).toBeVisible({ timeout: 30_000 }); // the library loads after the app is interactive
-		await expect(card(page)).toContainText('«Весёлый час»');
+		await expect(card(page)).toContainText('“Весёлый час”');
 		await page.locator('#intake-tab-poem').click();
 		await expect(field(page)).toHaveValue(/^Дайте бокалы!\nДайте вина!/);
 	});
@@ -266,7 +266,7 @@ test.describe('walk 8: her song sets a passage of a long poem', () => {
 		await open(page);
 		await pasteIntoLyrics(page, fixture('S'));
 		await expect(card(page)).toBeVisible({ timeout: 30_000 });
-		await expect(card(page)).toContainText('«Мцыри»');
+		await expect(card(page)).toContainText('“Мцыри”');
 		await expect(card(page)).toContainText('a passage beginning “Дитя моё, останься здесь со мной”'); // D1, D4
 		await expect(card(page)).toContainText('Михаил Юрьевич Лермонтов');
 		await page.locator('#intake-tab-poem').click();
@@ -374,6 +374,7 @@ test.describe('the same walk in French', () => {
 		await expect(card(page)).toBeVisible({ timeout: 30_000 });
 		await expect(card(page)).toContainText('Ilya a trouvé ce poème pour votre chant :');
 		await expect(card(page)).toContainText('Tiré de Wikisource en russe.'); // D3
+		await expect(card(page)).toContainText('«Весёлый час»'); // French keeps « » (part 6)
 		await expect(card(page).getByRole('button')).toHaveText(['Pas ce poème', 'Conserver ce poème']);
 		await card(page).getByRole('button', { name: 'Conserver ce poème' }).click();
 		await page.locator('#intake-tab-poem').click();
