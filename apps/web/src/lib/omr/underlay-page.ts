@@ -37,7 +37,7 @@ import { vowelsPerNote, type Breach } from './vowels-per-note';
 import { freeNoteXs, manyVowelsInUnits, manyVowelsMerged, type ManyVowelCounts } from './underlay-counts';
 import { rowWordSpans, splitTokens } from './underlay-tokens';
 import type { Look } from './underlay-looks';
-import { bandFractions, type BandFractions } from './kept-bands';
+import { barExtents, bandFractions, type BandFractions, type BarExtent } from './kept-bands';
 import { markExtenderNotes, NO_EXTENDERS, type ExtenderArm, type ExtenderCounts } from './underlay-extender';
 import { cutUnits, type CutCounts } from './underlay-units';
 import { sewWords, type Word } from './underlay-words';
@@ -173,6 +173,8 @@ export interface SystemWords {
 	silent?: boolean;
 	/** The band as fractions of the page and the staff space as a fraction of its height (`kept-bands.ts`); absent where the system had none. */
 	band?: BandFractions;
+	/** Each bar's extent across the page (the page's own bar numbers), for the strip cut to the bar (`kept-bands.ts`). */
+	barXs?: BarExtent[];
 }
 
 export interface UnderlayPage {
@@ -348,6 +350,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			why: seated ? null : system.hasBand ? (noInk ? 'no ink' : 'no Russian row') : 'no band',
 			...(silent ? { silent: true } : {}),
 			...(frac ? { band: frac } : {}),
+			...(frac && system.band ? { barXs: barExtents(system.notes, system.staffSpace, system.band, layout.width) } : {}),
 		});
 	});
 	const words = sewWords(seats);

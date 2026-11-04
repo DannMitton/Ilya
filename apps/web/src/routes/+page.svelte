@@ -37,7 +37,7 @@
 	import { routePoemPage } from '$lib/text/poem-page';
 	import { sameWords } from '$lib/text/same-words';
 	import { lyricsInPoemLines } from '$lib/text/relining';
-	import { poemOffer } from '$lib/text/poem-offer.svelte'; import { poemJoin } from '$lib/text/poem-join.svelte';
+	import { poemOffer } from '$lib/text/poem-offer.svelte'; import { LoupeSwipe } from '$lib/score/loupe-swipe.svelte'; import { poemJoin } from '$lib/text/poem-join.svelte'; import { loupePrint, firstNoteOfBar } from '$lib/score/loupe-print.svelte'; import { barsOf } from '$lib/omr/banner-bars'; import ScanBanner from '$lib/components/Drawer/ScanBanner.svelte';
 	import { survivingGlosses } from '$lib/text/gloss-survival';
 	import { WordMarks } from '$lib/text/word-marks.svelte';
 	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
@@ -180,7 +180,6 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	import {
 		COARSE_TAP_SPACES,
 		FINE_TAP_SPACES,
-		isDismissSwipe,
 		nearestTarget,
 		tapBand,
 	} from '$lib/score/loupe';
@@ -206,7 +205,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 	import { CorrectionVerbs } from '$lib/score/correction-verbs.svelte';
 	import { TupletRow } from '$lib/score/tuplet-row.svelte';
 	import { pitchLabel } from '$lib/voice/note-picker';
-	import { noticeText, scanNotice, type IngestedScore, type ScanNoticeKey } from '$lib/score/ingestion/ingest';
+	import { scanNotice, type IngestedScore, type ScanNoticeKey } from '$lib/score/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
 	import { storedWithReading, type KeptReading } from '$lib/omr/restore';
@@ -1316,7 +1315,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 			   it is the same flag the branch below already trusts for the same
 			   reason. It is cleared on the frame AFTER `pointerup`, so it is
 			   still standing when the click arrives. */
-			if (gestureBeganOnSurface) return;
+			if (swipe.onSurface) return;
 			/* A POINT-IN-BOX TEST, and `elementFromPoint` cannot serve here for a
 			   reason that is the ruling working: while the loupe is up the page
 			   is DEAF, `pointer-events: none`, so the topmost element at a page
@@ -1357,7 +1356,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		   the page, so the gesture that produced it is remembered on
 		   `pointerdown` and consulted here. */
 		if ((e.target as Element | null)?.closest?.('.loupe, .dock, .surface')) return;
-		if (gestureBeganOnSurface) return;
+		if (swipe.onSurface) return;
 		/* THE SHEET IS FOUND AT THE POINT, NOT FROM `e.target`, and both halves
 		   of that are measured requirements rather than preferences.
 
@@ -1409,44 +1408,8 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		stopHold();
 	}
 
-	/* SWIPE DOWN, from anywhere on either, sends both away together. Bound at
-	   the window and filtered by where the gesture STARTED, so one
-	   implementation serves the loupe and the dock and the two cannot drift.
-	   A stray tap outside the loupe deliberately does nothing: it is the
-	   easiest gesture to make by accident, and no Undo restores a lost place. */
-	let swipeFrom: { x: number; y: number } | null = null;
-	/** Whether the gesture now in flight started on the loupe or the dock. */
-	let gestureBeganOnSurface = $state(false);
-
-	function handleSurfacePointerDown(e: PointerEvent): void {
-		const el = (e.target as Element | null)?.closest?.('.loupe, .dock');
-		gestureBeganOnSurface = !!el;
-		swipeFrom = el ? { x: e.clientX, y: e.clientY } : null;
-	}
-
-	function handleSurfacePointerUp(e: PointerEvent): void {
-		const from = swipeFrom;
-		swipeFrom = null;
-		/* THE SWIPE IS THE PHONE'S GESTURE AND STAYS THERE (Dann, slice 4): a
-		   mouse dragged down the loupe would dismiss it, which nobody on a desk
-		   does on purpose and everybody does by accident while selecting. The
-		   desk's ways out are Escape and the header's Close. */
-		if (isPhone && from && loupeOpen && isDismissSwipe(e.clientX - from.x, e.clientY - from.y)) {
-			dismissLoupe();
-		}
-		/* Cleared on the NEXT frame, not here. The click that a tap synthesizes
-		   arrives after `pointerup`, and the flag has to still be standing when
-		   it does. */
-		requestAnimationFrame(() => (gestureBeganOnSurface = false));
-	}
-
-	/* A gesture the browser takes away from us, most often to scroll something.
-	   It ends the swipe without a `pointerup`, so without this the flag would
-	   stand until the next gesture and swallow one page tap. */
-	function handleSurfacePointerCancel(): void {
-		swipeFrom = null;
-		gestureBeganOnSurface = false;
-	}
+	/* SWIPE DOWN, from anywhere on either, sends both away together (`loupe-swipe.svelte.ts`, moved out of this file in row 181 step 6, with the pointer count a pinch on the print strip needs). */
+	const swipe = new LoupeSwipe({ phone: () => isPhone, open: () => loupeOpen, dismiss: () => dismissLoupe() });
 
 	/* The loupe cannot stand without something to hold. Leaving the phone, the
 	   score document, or the selection closes it, so it never survives into a
@@ -2369,7 +2332,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		joinText(how);
 	}
 	/* ROW 108 B (ruling default 4): Lyrics holding the score's words, in Ilya's own line breaks, takes the poem's (`text/relining.ts`). */
-	let lastLaid = ''; poemOffer.attach({ doc: () => doc, library: poemLibrary, put: (t) => handlePoemEdit(t, 'paste'), setLyrics: (t) => handleInput(t, 'paste'), laid: { get: () => lastLaid, set: (v) => (lastLaid = v) } }); poemJoin.attach({ doc: () => doc, setLyrics: (t) => handleInput(t, 'paste'), state: () => (ingestedScore && scoreText !== '' ? { scanText: scoreText, lines, events: ingestedScore.result.score.vocalLine, pairings: doc.pairings, unreadBars: ingestedScore.result.warnings.find((w) => w.code === 'words-partly-read')?.bars ?? [], ready: !loaderState.isLoading && loaderState.entryCount > 0 } : null) }); // ROW 181 step 5: the join of Poem to a scan's Lyrics (`text/poem-join.svelte.ts`). The text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
+	let lastLaid = ''; poemOffer.attach({ doc: () => doc, library: poemLibrary, put: (t) => handlePoemEdit(t, 'paste'), setLyrics: (t) => handleInput(t, 'paste'), laid: { get: () => lastLaid, set: (v) => (lastLaid = v) } }); poemJoin.attach({ doc: () => doc, setLyrics: (t) => handleInput(t, 'paste'), state: () => (ingestedScore && scoreText !== '' ? { scanText: scoreText, lines, events: ingestedScore.result.score.vocalLine, pairings: doc.pairings, unreadBars: ingestedScore.result.warnings.find((w) => w.code === 'words-partly-read')?.bars ?? [], ready: !loaderState.isLoading && loaderState.entryCount > 0 } : null) }); loupePrint.attach({ songId: () => doc.id, scan: () => (restoreSource?.reading?.bands ? { systems: restoreSource.reading.bands, file: new File([restoreSource.bytes], restoreSource.fileName), kind: /\.pdf$/i.test(restoreSource.fileName) ? 'pdf' : 'image' } : null), toCheck: () => barsOf(ingestedScore?.result.warnings.find((w) => w.code === 'words-partly-read')?.bars ?? []), openAt: (bar) => { const id = firstNoteOfBar(ingestedScore?.result.score.measures ?? [], correctedLine, bar); if (!INCLUDE_MARKUP_INSIGHTS || !id) return; handleTabChange('markup'); if (isPhone) drawerRaised = false; setCursor({ kind: 'entry', id }); loupeOpen = true; } }); // ROW 181 steps 5 and 6 (the print in the Loupe: `score/loupe-print.svelte.ts`): the join of Poem to a scan's Lyrics (`text/poem-join.svelte.ts`). The text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
 	function adoptPoemLines(how: TextArrival, previousPoem = ''): void {
 		const laid = lyricsInPoemLines(doc.inputText, doc.publishedPoem, previousPoem, scoreText, lastLaid);
 		if (laid !== null) { lastLaid = laid; handleInput(laid, how); }
@@ -2866,7 +2829,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		   end, up to 60 decided notes, on a plain reload. */
 		if (foldOnArrival) doc.pairings = seatCliticFolds(ingested.result.score, doc.pairings);
 		// Kept, never dropped, and reported as a count.
-		orphanedCount = reseated?.orphaned ?? merged.orphaned.length;
+		orphanedCount = reseated?.orphaned ?? merged.orphaned.length; if (origin === 'upload') loupePrint.arrived(); // row 181 step 6: the Loupe opens itself once, on a dropped scan with bars to check
 		/* N.134, RULED BY DANN 2026-09-14: the words the box was just filled with
 		   are seated on the notes the file engraved them under.
 		   ONLY INTO A FRESH MAP, the gate `firstPass` runs behind: a song with
@@ -3330,7 +3293,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 		// re-read reproduces exactly. The picture the singer supplied is recorded
 		// by name and hash inside `page` rather than kept twice.
 		const scan = arrivalScan;
-		arrivalScan = null;
+		arrivalScan = null; if (scan?.reading.bands) loupePrint.dropped(doc.id, scan.file, scan.reading.bands);
 		if (scan) file = scan.file;
 		const bytes = await file.arrayBuffer();
 		// THE HASHES ARE BEST EFFORT; THE BYTES ARE NOT. `crypto.subtle` is
@@ -3739,9 +3702,9 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 <svelte:window
 	on:keydown={handleCorrectionKey}
 	on:click={handlePageTap}
-	on:pointerdown={handleSurfacePointerDown}
-	on:pointerup={handleSurfacePointerUp}
-	on:pointercancel={handleSurfacePointerCancel}
+	on:pointerdown={(e) => swipe.down(e)}
+	on:pointerup={(e) => swipe.up(e)}
+	on:pointercancel={(e) => swipe.cancel(e)}
 />
 
 <svelte:head>
@@ -4039,7 +4002,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 								     a file name dates a printed study sheet to an export
 								     rather than to a song. Unstyled on purpose for the first
 								     walk. -->
-								<p>{noticeText(noLyricsKey, language, noLyricsFile)}</p>
+								<ScanBanner noticeKey={noLyricsKey} arg={noLyricsFile} {language} onbar={(bar) => loupePrint.goto(bar)} />
 							{/if}
 						{/if}
 					{/snippet}

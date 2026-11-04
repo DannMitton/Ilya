@@ -219,7 +219,8 @@ describe('ratified HEIC refusal (row 113)', () => {
 	});
 });
 
-/* N.135 stage 2b, brief r5 step 2. The banner for a scan whose printed words were read on some
+/* ROW 181 step 6: the middle sentence was replaced by Dann's ratification of 2026-11-04 14:33 and 14:34 (strings-row181_r1_2026-11-04.md, items 9 and 10); the first and last sentences stand as ratified below.
+   N.135 stage 2b, brief r5 step 2. The banner for a scan whose printed words were read on some
    systems and not others, ratified by Dann 2026-10-28 23:12 (ranges, EN and FR) and 2026-10-29 00:00
    (the single bar; the first sentence's end only). The slots are {bars} and {bar}; the words in them
    are `barsText` (lib/score/ingestion/ingest.ts), pinned in score/scan-notice.test.ts. The apostrophes
@@ -227,22 +228,22 @@ describe('ratified HEIC refusal (row 113)', () => {
 describe('ratified banner for a scan read in part (brief r5 step 2)', () => {
 	it('ranges, English', () => {
 		expect(t('upload.banner.wordsPartlyRead', 'en')).toBe(
-			'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.',
+			'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Choose a bar to see your score’s print there and fill the missing words. Check every word against your score.',
 		);
 	});
 	it('ranges, French', () => {
 		expect(t('upload.banner.wordsPartlyRead', 'fr')).toBe(
-			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
+			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Choisissez une mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition.',
 		);
 	});
 	it('one bar, English', () => {
 		expect(t('upload.banner.wordsPartlyReadOne', 'en')).toBe(
-			'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.',
+			'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Choose the bar to see your score’s print there and fill the missing words. Check every word against your score.',
 		);
 	});
 	it('one bar, French', () => {
 		expect(t('upload.banner.wordsPartlyReadOne', 'fr')).toBe(
-			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
+			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Choisissez la mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition.',
 		);
 	});
 	it('writes every apostrophe as U+2019 and no em-dash', () => {

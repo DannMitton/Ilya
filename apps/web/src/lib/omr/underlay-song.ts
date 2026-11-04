@@ -102,7 +102,7 @@ export function applyUnderlay(xmls: readonly string[], pages: readonly (Underlay
 			return;
 		}
 		page.systems.forEach((system, s) => {
-			if (system.bars) kept.push({ page: (scanPages?.[i] ?? i) + 1, system: s + 1, bars: [system.bars[0] + before[i], system.bars[1] + before[i]], why: whyOf(system.why), ...(system.band ? { band: system.band } : {}) });
+			if (system.bars) kept.push({ page: (scanPages?.[i] ?? i) + 1, system: s + 1, bars: [system.bars[0] + before[i], system.bars[1] + before[i]], why: whyOf(system.why), ...(system.band ? { band: system.band } : {}), ...(system.barXs ? { barXs: system.barXs.map((b) => ({ ...b, bar: b.bar + before[i] })) } : {}) });
 			if (system.written) writtenSystems++;
 			else if (system.bars && !system.silent) unread.push({ page: i + 1, system: s + 1, bars: [system.bars[0] + before[i], system.bars[1] + before[i]], why: system.why ?? 'not written' });
 		});

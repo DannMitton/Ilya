@@ -150,3 +150,65 @@ describe('PoemJoin', () => {
 		expect(wordKey('Средь шумного бала')).not.toBe(wordKey('Средь шумного бал'));
 	});
 });
+
+describe('"Fill from the poem" on a bar the count rule refused (amendment 9; Dann 2026-11-04 14:00)', () => {
+	/** Notes a to f: Средь on a, шумного on b, three notes c d e with no word, тревоге on f. The poem has «бала, в» (two slots) between. */
+	class Refused extends Rig {
+		constructor() {
+			super();
+			this.song.inputText = 'Средь шумного тревоге';
+		}
+		override stateFor(): JoinState {
+			const events: RunEvent[] = ['a', 'b', 'c', 'd', 'e', 'f'].map((id, i) => ({ id, type: 'note', measureIndex: i < 2 ? 4 : 5 }) as RunEvent);
+			return { scanText: 'Средь шумного тревоге', lines: lineOf(this.song.inputText), events, pairings: { a: syl(0, 0), b: syl(0, 1), f: syl(0, 2) }, unreadBars: [[6, 6]], ready: true };
+		}
+	}
+
+	it('draws nothing and changes nothing: the refused run is an offer, and Lyrics stay as they were', () => {
+		const r = new Refused();
+		r.join.run();
+		expect(r.sets).toEqual([]);
+		expect(r.join.lastLine).toContain('1 offered (count-refused)');
+		expect(r.join.receipt('s1', r.song.inputText)).toBeNull();
+	});
+
+	it('offers the button on a bar of the run, and not on another', () => {
+		const r = new Refused();
+		r.join.run();
+		expect(r.join.canFill(6)).toBe(true);
+		expect(r.join.canFill(5)).toBe(false);
+		expect(r.join.canFill(7)).toBe(false);
+	});
+
+	it('inserts the poem\'s words between the two neighbours when tapped, marks them, counts them, and cannot be tapped twice', () => {
+		const r = new Refused();
+		r.join.run();
+		expect(r.join.fillBar(6)).toBe(true);
+		expect(r.sets).toEqual(['Средь шумного бала, в тревоге']);
+		const text = r.song.inputText;
+		expect(r.join.marks('s1', text).map((m) => text.slice(m.start, m.end))).toEqual(['бала,', 'в']);
+		expect(r.join.receipt('s1', text)).toEqual({ syllables: 2, words: 2 });
+		expect(r.join.canFill(6)).toBe(false);
+		expect(r.join.fillBar(6)).toBe(false);
+		expect(r.song.publishedPoem).toBe(POEM);
+	});
+
+	it('is taken back with the rest of the join by Revert', () => {
+		const r = new Refused();
+		r.join.run();
+		r.join.fillBar(6);
+		r.join.revert();
+		expect(r.song.inputText).toBe('Средь шумного тревоге');
+	});
+
+	it('does nothing when the Lyrics have moved on since the plan, or the song is read-only', () => {
+		const r = new Refused();
+		r.join.run();
+		r.song.inputText = 'Средь шумного тревоге!';
+		expect(r.join.canFill(6)).toBe(false);
+		const ro = new Refused();
+		ro.join.run();
+		ro.song.readOnly = true;
+		expect(ro.join.fillBar(6)).toBe(false);
+	});
+});

@@ -36,6 +36,38 @@ export interface KeptSystem {
 	why: SystemWhy;
 	/** The band; absent where the system had none (`why` is `'no band'`). */
 	band?: BandFractions;
+	/** Where each bar of the system stands across the page, as fractions of its width (row 181 step 6: the strip is cut to the bar). Absent in a reading kept before step 6. */
+	barXs?: BarExtent[];
+}
+
+/** One bar's horizontal extent across its page, as fractions of the page's width; `bar` is the song's. */
+export interface BarExtent {
+	bar: number;
+	x0: number;
+	x1: number;
+}
+
+/** A bar's strip starts this many staff spaces left of its first note, where the print's first syllable may stand. JUDGEMENT, not measured. */
+export const BAR_LEAD = 1.5;
+/** The last bar of a system ends this many staff spaces right of its last note, where its last syllable and extender end. JUDGEMENT, not measured. */
+export const BAR_TAIL = 4;
+
+/**
+ * Where each bar of a system stands across the page, from its notes' x (the ink: `CONTRACT.md` §0.2, a position from evidence).
+ * A bar begins `BAR_LEAD` spaces left of its first note and ends where the next bar in the system begins; the last ends
+ * `BAR_TAIL` spaces right of its last note. Both are kept inside the band. Bars are the page's own numbers here; the song
+ * adds its offset (`underlay-song.ts`).
+ */
+export function barExtents(notes: readonly { x: number; bar: number }[], space: number, band: { x0: number; x1: number }, width: number): BarExtent[] {
+	if (!(width > 0) || notes.length === 0) return [];
+	const byBar = new Map<number, number[]>();
+	for (const n of notes) byBar.set(n.bar, [...(byBar.get(n.bar) ?? []), n.x]);
+	const bars = [...byBar.entries()].map(([bar, xs]) => ({ bar, first: Math.min(...xs), last: Math.max(...xs) })).sort((a, b) => a.first - b.first);
+	return bars.map((b, i) => {
+		const start = Math.max(band.x0, b.first - BAR_LEAD * space);
+		const end = Math.min(band.x1, i + 1 < bars.length ? Math.max(start + 1, bars[i + 1].first - BAR_LEAD * space) : b.last + BAR_TAIL * space);
+		return { bar: b.bar, x0: fixed(clamp01(start / width)), x1: fixed(clamp01(end / width)) };
+	});
 }
 
 const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
@@ -74,7 +106,28 @@ export function isKeptSystems(value: unknown): value is KeptSystem[] {
 			num(bars[0]) &&
 			num(bars[1]) &&
 			(k.why === null || k.why === 'no ink' || k.why === 'no Russian row' || k.why === 'no band') &&
-			(band === undefined || (typeof band === 'object' && band !== null && ['x0', 'x1', 'y0', 'y1', 'space'].every((f) => num(band[f]))))
+			(band === undefined || (typeof band === 'object' && band !== null && ['x0', 'x1', 'y0', 'y1', 'space'].every((f) => num(band[f])))) &&
+			(k.barXs === undefined || (Array.isArray(k.barXs) && k.barXs.every((b: unknown) => typeof b === 'object' && b !== null && num((b as BarExtent).bar) && num((b as BarExtent).x0) && num((b as BarExtent).x1))))
 		);
 	});
+}
+
+/** The strip is no taller than this many staff spaces: a band can run twenty spaces under the last system (`underlay-band.ts` `BELOW`), nearly all of it paper. JUDGEMENT, not measured: two lines of words and room. */
+export const STRIP_MAX_SPACES = 5;
+
+/** The system that holds a song bar and has a band, preferring one whose extents name the bar; null where none. */
+export function systemOfBar(systems: readonly KeptSystem[], bar: number): KeptSystem | null {
+	const mine = systems.filter((s) => s.band && bar >= s.bars[0] && bar <= s.bars[1]);
+	return mine.find((s) => s.barXs?.some((b) => b.bar === bar)) ?? mine[0] ?? null;
+}
+
+/**
+ * What to cut for a bar: the band, narrowed across the page to the bar's extent where the reading kept it (else the band's whole
+ * width), and no taller than `STRIP_MAX_SPACES`. As fractions of the page, so it holds at any dpi.
+ */
+export function stripRect(system: KeptSystem, bar: number): BandFractions | null {
+	const b = system.band;
+	if (!b) return null;
+	const ext = system.barXs?.find((x) => x.bar === bar);
+	return { x0: ext ? ext.x0 : b.x0, x1: ext ? ext.x1 : b.x1, y0: b.y0, y1: Math.min(b.y1, b.y0 + STRIP_MAX_SPACES * b.space), space: b.space };
 }

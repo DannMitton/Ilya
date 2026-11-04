@@ -26,7 +26,7 @@ import type { LineData } from '$lib/types';
 import type { PairingMap } from '$lib/score/pairings';
 import type { BarRange } from '$lib/omr/unread-bars';
 import { tokenize } from './poem-compare';
-import { applyProposals, crossCheck, planJoin, type JoinInput, type SlotLike } from './poem-join';
+import { applyProposals, crossCheck, planJoin, type JoinInput, type JoinResult, type JoinRun, type SlotLike } from './poem-join';
 import { buildRuns, byFromScan, joinIsWord, slotsFor, tokenMapOf, tokensIn, type RunEvent } from './poem-join-wire';
 
 /** The quiet pause, as Lyrics typing has it. */
@@ -78,6 +78,8 @@ export class PoemJoin {
 	#applied = $state<Applied | null>(null);
 	#suppressed = new Set<string>();
 	#last = '';
+	/** The last plan, for the Loupe's "Fill from the poem": the runs the count rule refused, with the poem words that stand between their anchors. Null once the Lyrics have moved on. */
+	#plan = $state.raw<{ songId: string; lyrics: string; input: JoinInput; result: JoinResult } | null>(null);
 	/** The last run's counts, for the console and the tests. */
 	lastLine = '';
 
@@ -126,6 +128,7 @@ export class PoemJoin {
 		const plan = planJoin(input);
 		const applied = applyProposals(input, plan);
 		const check = crossCheck(input, plan);
+		this.#plan = { songId: doc.id, lyrics, input, result: plan };
 		const count = (kind: string): number => plan.proposals.filter((p) => p.kind === kind).length;
 		const offers = plan.proposals.filter((p) => p.kind === 'offer');
 		const say = `${count('repair')} repaired, ${count('fill')} filled, ${count('keep-composer')} kept as the composer's, ${offers.length} offered (${[...new Set(offers.map((o) => (o.kind === 'offer' ? o.why : '')))].join(', ') || 'none'}), ${runs.runs.length} run(s) of notes with no word, ${runs.unmapped} syllable(s) not placed, ${plan.dropped.repair + plan.dropped.fill} dropped by the one-vowel check, ${check.fault} fault(s) on the second pass`;
@@ -168,6 +171,62 @@ export class PoemJoin {
 		if (!a) return [];
 		const tokens = tokenize(lyrics);
 		return a.marks.flatMap((m) => (tokens[m.token] ? [{ start: tokens[m.token].start, end: tokens[m.token].end, was: m.was }] : []));
+	}
+
+	/**
+	 * The run the Loupe's "Fill from the poem" can fill for this bar (a song bar): a run the count rule refused whose anchors are
+	 * both words, with the poem words between them (`poemFrom .. poemTo`). Null where there is none, or the Lyrics have changed
+	 * since the plan (the join runs again after the pause and makes a new one).
+	 */
+	fillable(songId: string, lyrics: string, bar: number): { run: JoinRun; poemFrom: number; poemTo: number } | null {
+		const plan = this.#plan;
+		if (!plan || plan.songId !== songId || plan.lyrics !== lyrics) return null;
+		for (const p of plan.result.proposals) {
+			if (p.kind !== 'offer' || !p.run || p.poemFrom === undefined || p.poemTo === undefined || p.why === 'no-poem') continue;
+			const run = plan.input.runs?.find((r) => r.id === p.run);
+			if (run && bar >= run.bars[0] && bar <= run.bars[1] && !Number.isNaN(run.afterWord) && !Number.isNaN(run.beforeWord)) return { run, poemFrom: p.poemFrom, poemTo: p.poemTo };
+		}
+		return null;
+	}
+
+	/** `fillable` for the open song as it stands now: what the Loupe asks to decide whether to draw its button. */
+	canFill(bar: number): boolean {
+		const doc = this.#deps?.doc();
+		return !!doc && !doc.readOnly && this.fillable(doc.id, doc.inputText, bar) !== null;
+	}
+
+	/**
+	 * "Fill from the poem" on a bar (amendment 9): ONE tap inserts the poem's words between the run's two paired neighbours into
+	 * Lyrics at that place, marked. The existing reseat seats them on the open notes in order (`score/reseat.ts`); words past the
+	 * last open note stay in Lyrics unseated, as stage 3 item 5 does, and the bar stays in the banner until she places them. It
+	 * applies even where the count rule refused the run: she asked. The receipt and Revert cover it with the rest of the join.
+	 */
+	fillBar(bar: number): boolean {
+		const deps = this.#deps;
+		if (!deps) return false;
+		const doc = deps.doc();
+		const can = this.fillable(doc.id, doc.inputText, bar);
+		const plan = this.#plan;
+		if (!can || !plan || doc.readOnly) return false;
+		const result: JoinResult = { ...plan.result, proposals: [{ kind: 'fill', run: can.run.id, afterWord: can.run.afterWord, poemFrom: can.poemFrom, poemTo: can.poemTo, slots: 0 }] };
+		const applied = applyProposals(plan.input, result);
+		if (applied.text === doc.inputText || applied.written.length === 0) return false;
+		const slots = (deps.slotsOf ?? slotsFor)(Array.from({ length: can.poemTo - can.poemFrom + 1 }, (_, k) => plan.result.comparison!.poem[can.poemFrom + k]).filter((t) => t.folded !== '').map((t) => plan.input.poem.slice(t.start, t.end))).length;
+		const marked = tokensIn(applied.text, applied.written);
+		const earlier = this.#current(doc.id, doc.inputText);
+		const shifted = (earlier?.marks ?? []).map((m) => ({ ...m, token: m.token > can.run.afterWord ? m.token + marked.length : m.token }));
+		this.#applied = {
+			songId: doc.id,
+			before: earlier?.before ?? doc.inputText,
+			key: wordKey(applied.text),
+			marks: [...shifted, ...marked.map((token) => ({ token, was: '' }))].sort((a, b) => a.token - b.token),
+			syllables: (earlier?.syllables ?? 0) + slots,
+			words: (earlier?.words ?? 0) + marked.length,
+		};
+		this.#last = `${doc.id}|${doc.publishedPoem}|${applied.text}`;
+		this.#plan = null;
+		deps.setLyrics(applied.text);
+		return true;
 	}
 
 	/** Take the join back: Lyrics as they were before it, no second join for this poem. */

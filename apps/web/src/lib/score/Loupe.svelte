@@ -35,7 +35,7 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 	import { releasesFocus, type LoupeMode } from '$lib/score/loupe-panel.svelte';
 	import { animatePanel, ModeTween, reducedMotion } from '$lib/score/loupe-tween.svelte';
 	import { floorFactor, fitSong, measureHold, singingMeasures, songKey, type MeasureHold } from '$lib/score/loupe-fit';
-	import { loupeZoom, songSizes } from '$lib/score/loupe-fit.svelte';
+	import { loupeZoom, songSizes } from '$lib/score/loupe-fit.svelte'; import LoupePrintStrip from './LoupePrintStrip.svelte'; import { loupePrint } from '$lib/score/loupe-print.svelte';
 	import { headerRightOf, musicInk, pageMetrics, restOrNoteInk, staffVerticals } from '$lib/score/loupe-ink';
 	import { deriveMinGap, fingerprint, offendingPairs, pairSeparations, renderLoupeMeasure, systemMarkup, TAP_FLOOR_EPS_PX, TAP_FLOOR_PX, type DerivedSpacing } from '$lib/score/loupe-render';
 	import {
@@ -2295,7 +2295,8 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 	>
 		<div class="loupe-top" bind:offsetHeight={topH}>
 		<LoupeHeader {language} {isPhone} {undoLabel} {redoLabel} {onundo} {onredo} {onclose} {place} />
-		<p class="loupe-tag">{tag}</p>
+		<LoupePrintStrip bar={measureLabel === null ? null : Number.parseInt(measureLabel, 10)} tag={loupePrint.tagFor(measureLabel, language) ?? tag} {language} {isPhone} />
+		<p class="loupe-tag">{loupePrint.tagFor(measureLabel, language) ?? tag}</p>
 		<p class="loupe-note">{noteLine || '\u00a0'}</p>
 		<div class="loupe-window" bind:this={windowEl} style="height: {frame.windowHeight}px;">
 			<!-- ARIA-HIDDEN for the reason the accidental glyphs already carry:
