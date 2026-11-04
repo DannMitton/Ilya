@@ -33,8 +33,11 @@ export function stanzas(text: string): { start: number; end: number }[] {
 
 /**
  * A dating line closing a poem in the library's text («1830», «Февраль 1837», «8 декабря 1840Москва»): one line, with a
- * four-digit year, of four words or fewer. It is in `textModern` as the source prints it, but nobody sings it, so it
- * does not count as a stanza the song left out. DESK DEFAULT (mine), reversible.
+ * four-digit year, of four words or fewer. `library.json` keeps it, as the source prints it, but nobody sings it: it
+ * does not count as a stanza the song left out, and it is NEVER FILLED INTO POEM (Dann 2026-11-03 19:50: "keep the date
+ * in the library's record but leave it out of POEM"; step 7, part 3). DESK DEFAULT (mine): the test for what a dating
+ * line is, reversible. All three in the library stand in a block of their own; a dateline glued to its stanza would pass
+ * through, and none exists in the file today.
  */
 const isDateline = (text: string): boolean => !text.includes('\n') && /\d{4}/.test(text) && text.trim().split(/\s+/).length <= 4;
 
@@ -56,12 +59,14 @@ export interface StanzaCut {
 
 /**
  * The whole stanzas of `textModern` that hold the stretch `[start, end)`. When those are all of the poem's
- * stanzas, the whole poem, verbatim (`whole`, dating line and all, as the brief says); the stretch of a song that
- * sets one passage cuts to that passage.
+ * stanzas, the whole body of the poem, from its start to the end of its last stanza, verbatim (`whole`); a song that
+ * sets one passage cuts to that passage. EITHER WAY A CLOSING DATING LINE IS LEFT OUT (part 3): `whole` ends where the
+ * last body stanza ends, so «Весёлый час» ends at «Видит заря!», not «1830», and is still not called a passage.
  */
 export function stanzaCut(textModern: string, start: number, end: number): StanzaCut {
-	const whole: StanzaCut = { text: textModern, start: 0, end: textModern.length, whole: true };
 	const blocks = bodyStanzas(textModern);
+	const bodyEnd = blocks.length > 0 ? blocks[blocks.length - 1].end : textModern.length;
+	const whole: StanzaCut = { text: textModern.slice(0, bodyEnd), start: 0, end: bodyEnd, whole: true };
 	if (blocks.length === 0) return whole;
 	const first = blocks.findIndex((b) => b.end > start);
 	let last = -1;

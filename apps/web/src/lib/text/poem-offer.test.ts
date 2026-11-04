@@ -98,7 +98,12 @@ describe('walk 1: she sees a card above the field', () => {
 		await paste(r, SONG2);
 		const src = r.song.poemSource!;
 		expect(src).toMatchObject({ work: '0127a63f', id: '0127a63ffe', poemHash: manifest.poemHash, answered: false, edited: false });
-		expect(r.song.publishedPoem).toBe(library.entries.find((e) => e.id === '0127a63ffe')!.textModern);
+		// the poem's body: its dating line («1830») stays in the library's record and never reaches POEM (step 7, part 3)
+		const koltsov = library.entries.find((e) => e.id === '0127a63ffe')!;
+		expect(r.song.publishedPoem).toBe(koltsov.textModern.replace(/\n\n1830$/, ''));
+		expect(r.song.publishedPoem).not.toContain('1830');
+		// the stored cut ends where the poem ends, and the card still does not call it a passage
+		expect(r.song.poemSource!.end).toBe(r.song.publishedPoem.length);
 		const now = r.offer.current()!;
 		expect(now.resolved.entry.title).toBe('Весёлый час');
 		expect(now.resolved.firstLine).toBe('Дайте бокалы!');

@@ -73,13 +73,17 @@ describe('stanzaCut: the whole stanzas that hold the stretch', () => {
 		expect(bodyStanzas(dated)).toHaveLength(2);
 		const cut = stanzaCut(dated, 0, dated.indexOf('1830') - 3);
 		expect(cut.whole).toBe(true);
-		expect(cut.text).toBe(dated); // verbatim, dating line and all
+		expect(cut.text).toBe('Первая\nстрофа\n\nВторая\nстрофа'); // the body verbatim; the dating line is never filled (part 3)
+		expect(cut.end).toBe(dated.indexOf('\n\n1830'));
+		expect(cut.text).not.toContain('1830');
 		// ... and a stretch in the first stanza alone is still a passage
 		expect(stanzaCut(dated, 0, 5).whole).toBe(false);
 		// the date forms in the library
 		for (const closing of ['Февраль 1837', '8 декабря 1840Москва']) {
 			const t = `А\nБ\n\nВ\nГ\n\n${closing}`;
-			expect(stanzaCut(t, 0, t.indexOf(closing) - 3).whole, closing).toBe(true);
+			const c = stanzaCut(t, 0, t.indexOf(closing) - 3);
+			expect(c.whole, closing).toBe(true);
+			expect(c.text, closing).toBe('А\nБ\n\nВ\nГ');
 		}
 		// but a closing stanza that is verse is a stanza
 		const verse = 'А\nБ\n\nВ\nГ\n\nДа здравствует год 1830 и все, кто в нём';
@@ -97,7 +101,30 @@ describe('stanzaCut on the real fixtures', () => {
 		const { m, cut } = cutOf('r114-song2');
 		expect(m.entry.title).toBe('Весёлый час');
 		expect(cut.whole).toBe(true);
-		expect(cut.text).toBe(m.entry.textModern);
+		// the body of the poem, without its dating line («1830»), which the library keeps and POEM does not
+		expect(cut.text).toBe(m.entry.textModern.replace(/\n\n1830$/, ''));
+		expect(cut.text).not.toContain('1830');
+		expect(cut.text.endsWith('Видит заря!')).toBe(true);
+		expect(m.entry.textModern.endsWith('1830')).toBe(true); // the library's record keeps it
+	});
+
+	it('no poem in the library fills its dating line, and each still ends on its last verse (part 3)', () => {
+		const ends: Record<string, string> = {
+			'Весёлый час': 'Видит заря!',
+			'Русская песня': 'Сам с собою грущу…',
+		};
+		for (const e of library.entries) {
+			const cut = stanzaCut(e.textModern, 0, e.textModern.length);
+			expect(cut.whole, e.title).toBe(true);
+			expect(cut.text, e.title).not.toMatch(/(^|\n)\s*(\d{1,2}\s+[а-я]+\s+)?\d{4}[А-Яа-я]*\s*$/);
+			expect(cut.text, e.title).not.toMatch(/Февраль 1837/);
+			if (ends[e.title]) expect(cut.text.endsWith(ends[e.title]), e.title).toBe(true);
+			// an entry with no dating line fills exactly its text
+			if (!/\d{4}/.test(e.textModern.split('\n\n').pop()!)) expect(cut.text, e.title).toBe(e.textModern.trimEnd());
+		}
+		const modernHymn = library.entries.find((e) => e.id === '6b51c54db7')!;
+		expect(modernHymn.textModern.endsWith('Февраль 1837')).toBe(true);
+		expect(stanzaCut(modernHymn.textModern, 0, modernHymn.textModern.length).text.endsWith('Лучшего ангела душу прекрасную.')).toBe(true);
 	});
 
 	it('fixture S sets the fish’s song: a cut of a few stanzas of «Мцыри», starting on a stanza', () => {

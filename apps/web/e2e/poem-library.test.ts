@@ -115,7 +115,11 @@ test.describe('walk 1 to 3: she pastes a song, sees a card, and keeps the poem',
 		await expect(field(page)).toHaveValue(SONG2);
 		await page.locator('#intake-tab-poem').click();
 		await expect(field(page)).toHaveValue(/^Дайте бокалы!\nДайте вина!\nРадость/);
+		// POEM ends at «Видит заря!», not at the library's dating line (step 7, part 3)
+		await expect(field(page)).toHaveValue(/Видит заря!$/);
+		await expect(field(page)).not.toHaveValue(/1830/);
 		await expect(card(page)).toBeVisible(); // the card stands over whichever view is showing
+		await expect(card(page)).not.toContainText('a passage beginning');
 	});
 
 	test('Keep this poem folds the card to one quiet line, which shows under POEM only', async ({ page }) => {
