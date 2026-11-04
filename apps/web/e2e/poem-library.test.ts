@@ -263,6 +263,19 @@ test.describe('walk 6 and 7: she edits the poem, and her own poem wins', () => {
 	});
 });
 
+test.describe('step 8: the title is not printed twice, and a whole poem fills whole', () => {
+	test('fixture P: all five stanzas of «Средь шумного бала, случайно», one title, no first-line line', async ({ page }) => {
+		await open(page);
+		await pasteIntoLyrics(page, fixture('P'));
+		await expect(card(page)).toBeVisible({ timeout: 30_000 });
+		await expect(card(page).locator('.name')).toHaveText('“Средь шумного бала, случайно”');
+		await expect(card(page).locator('.line')).toHaveCount(0);
+		await page.locator('#intake-tab-poem').click();
+		const poem = await field(page).inputValue();
+		expect(poem.split('\n\n')).toHaveLength(5);
+	});
+});
+
 test.describe('walk 8: her song sets a passage of a long poem', () => {
 	test('fixture S fills the stanzas of the fish’s song only, and the card says passage', async ({ page }) => {
 		await open(page);

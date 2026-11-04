@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import type { PoemSource } from '$lib/library/types';
 import type { LoadedPoemLibrary, PoemEntry } from './poem-library';
 import { foldLetters, matchPoem } from './poem-match';
-import { bodyStanzas, cardLine, cutFor, edited, LONG_POEM_RATIO, PASSAGE_COVERAGE, passageLine, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
+import { bodyStanzas, cardLine, cutFor, edited, LONG_POEM_RATIO, PASSAGE_COVERAGE, passageLine, showsLine, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
 
 const ROOT = join(__dirname, '../../../../..');
 const manifest = JSON.parse(readFileSync(join(ROOT, 'data/dictionary-manifest.json'), 'utf8'));
@@ -390,5 +390,27 @@ describe('cutFor: the whole poem she sings, unless she sings a passage of a long
 		expect(cutFor(mk(Math.floor(n / 5), 0.5)).whole).toBe(true); // ratio 5, coverage 0.5: whole
 		expect(cutFor(mk(Math.floor(n / 2), 0.9)).whole).toBe(true); // ratio 2: whole whatever the coverage
 		expect(cutFor(mk(Math.floor(n / 11), 0.2)).whole).toBe(false); // ratio 11: a passage whatever the coverage
+	});
+});
+
+describe('showsLine: the title is not printed twice (step 8, part 5)', () => {
+	const titled = library.entries.find((e) => e.id === '21568f1c1e')!;
+	const koltsov = library.entries.find((e) => e.id === '0127a63ffe')!;
+	it('a poem titled by its first line: no line for the whole poem, a line for a passage', () => {
+		expect(cardLine(titled.title)).toBe(cardLine(titled.incipit)); // «Средь шумного бала, случайно» both
+		expect(showsLine(titled.title, titled.incipit, false)).toBe(false);
+		expect(showsLine(titled.title, titled.incipit, true)).toBe(true);
+	});
+	it('a poem with a title of its own shows its first line', () => {
+		expect(showsLine(koltsov.title, koltsov.incipit, false)).toBe(true);
+		expect(showsLine(koltsov.title, koltsov.incipit, true)).toBe(true);
+	});
+	it('the first line the card would print is found as the resolver finds it, on the shipped entry', () => {
+		const r = resolveSource({ id: titled.id, work: titled.work, poemHash: library.hash, start: 0, end: titled.textModern.length, answered: false, edited: false }, library)!;
+		expect(showsLine(r.entry.title, r.firstLine, r.passage)).toBe(false);
+	});
+	it('the card omits the paragraph, not just empties it', () => {
+		const card = readFileSync(join(ROOT, 'apps/web/src/lib/components/Drawer/PoemLibraryCard.svelte'), 'utf8');
+		expect(card).toContain('{#if naming.line}<p class="line">{naming.line}</p>{/if}');
 	});
 });

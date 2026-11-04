@@ -189,6 +189,14 @@ export function cardLine(line: string): string {
 		.trim();
 }
 
+/**
+ * Whether the card prints the first-line line under the title. Where a whole poem is titled by its first line («Средь шумного бала,
+ * случайно»), the same words twice read as a stutter, so the line is left out; a passage always says where it begins (step 8, part 5).
+ */
+export function showsLine(title: string, firstLine: string, passage: boolean): boolean {
+	return passage || cardLine(firstLine) !== cardLine(title);
+}
+
 /* ── The record's transitions (review amendment 6) ─────────────────── */
 
 /** The singer answered the card with "Keep this poem". */

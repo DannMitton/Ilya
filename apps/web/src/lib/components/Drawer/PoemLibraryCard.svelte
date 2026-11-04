@@ -2,7 +2,7 @@
 	import { tick } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
 	import { poemOffer } from '$lib/text/poem-offer.svelte';
-	import { cardLine } from '$lib/text/poem-source';
+	import { cardLine, showsLine } from '$lib/text/poem-source';
 	import { siteName } from '$lib/text/poem-site';
 	/*
 	 * PoemLibraryCard.svelte: THE CARD THAT SAYS ILYA FILLED POEM FROM ITS LIBRARY
@@ -45,7 +45,7 @@
 		const [open, close] = language === 'en' ? ['“', '”'] : ['«\u00a0', '\u00a0»']; // French: a no-break space inside each mark (OQLF, `CONTRACT.md` 7; as the French strings under POEM have it)
 		return {
 			title: `${open}${entry.title}${close}`,
-			line: card.resolved.passage ? t('intake.poemLibrary.passage', language).replace('{line}', () => quoted) : `${open}${quoted}${close}`,
+			line: !showsLine(entry.title, card.resolved.firstLine, card.resolved.passage) ? null : card.resolved.passage ? t('intake.poemLibrary.passage', language).replace('{line}', () => quoted) : `${open}${quoted}${close}`,
 			poet: entry.translator ? t('intake.poemLibrary.by', language).replace('{author}', () => entry.author).replace('{translator}', () => entry.translator!) : entry.author,
 			// The ratified sentence, split around its `{site}`, so the site's name can be the link to the page (step 8, part 1, DESK DEFAULT):
 			// she can trust the text or check it (Dann 2026-11-04 09:40). The sentence around it is unchanged.
@@ -82,7 +82,7 @@
 	<div class="card" role="group" aria-labelledby="poem-library-card-heading" data-testid="poem-library-card">
 		<p class="heading" id="poem-library-card-heading">{t('intake.poemLibrary.cardHeading', language)}</p>
 		<p class="name">{naming.title}</p>
-		<p class="line">{naming.line}</p>
+		{#if naming.line}<p class="line">{naming.line}</p>{/if}
 		<p class="poet">{naming.poet}</p>
 		<p class="small">{naming.source.before}<a class="site-link" href={naming.source.url} target="_blank" rel="noopener noreferrer">{naming.source.site}</a>{naming.source.after}</p>
 		<p class="small">{t('intake.poemLibrary.cardColours', language)}</p>
