@@ -4359,7 +4359,7 @@ import TextWitnessPair from '$lib/components/TextWitnessPair.svelte';
 			     document. -->
 			{#snippet transcriptionPaper()}
 				{#if witnessDiffer}<TextWitnessPair {language} witness={shown} onchoose={(w) => inputViews.chooseWitness(doc.id, w)} />{/if}
-				<Paper lines={effectiveLines} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={marks.spot} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownText, loaderState)} />
+				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={marks.spot} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownText, loaderState)} />
 			{/snippet}
 			{#if isMobile}
 				<!-- N.73 portrait C. The stage holds both views. The one that is

@@ -3,6 +3,8 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
 	import { t } from '$lib/i18n';
+	import { textTabKey } from '$lib/text/text-header';
+	import type { InputView } from '$lib/text/input-views.svelte';
 	import type { LegendItem } from '$lib/provenance';
 	import { PAGE_SIZES, ROW_HEIGHT, TEXT_CONTENT } from '$lib/page-config';
 	import { COMPOSERS, POETS, formatNameForPaper } from '$lib/composers-poets';
@@ -28,6 +30,10 @@
 		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
+		/** Which text the page prints, `shown` in `+page.svelte`; the running head's tab name follows it (`text/text-header.ts`). */
+		witness?: InputView;
+		/** Whether the document prints any line at all; with none the tab name is the bare `tab.text`. */
+		documentHasLines?: boolean;
 		/** The content window's top and bottom (px from the sheet's edges) and the gap between rows, from the measured fit. */
 		contentTop: number;
 		contentBottom: number;
@@ -52,6 +58,8 @@
 		glossOverrides,
 		mutedWords,
 		onwordclick,
+		witness = 'lyrics',
+		documentHasLines = true,
 		contentTop,
 		contentBottom,
 		rowGap,
@@ -72,6 +80,9 @@
 	const poetDisplay = $derived(formatNameForPaper(metadata.poet, POETS, language));
 	const translatorDisplay = $derived(formatNameForPaper(metadata.translator, POETS, language));
 
+	/** The running head's tab name: what the page prints (`text/text-header.ts`). */
+	const tabName = $derived(t(textTabKey(witness, documentHasLines), language));
+
 	/*
 	 * The window's top, bottom, and row gap come from `Paper.svelte`, which cuts the pages from measured heights
 	 * (`page-fit.ts`; step 7, part 1). This page only reports its header's height. The sum that stood here (ten rows of a
@@ -86,7 +97,7 @@
 >
 	<!-- Header layer: absolute, pinned to top margin -->
 	<!-- Page 1 names its tab (QUEUE row 64; Dann 2026-10-11 03:24). -->
-	<RunningHeader headerText="" tabName={t('tab.text', language)} tabOnly />
+	<RunningHeader headerText="" {tabName} tabOnly />
 	<TitleHeader
 		title={metadata.title}
 		composer={composerDisplay}

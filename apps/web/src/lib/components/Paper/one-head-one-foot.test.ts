@@ -24,7 +24,9 @@ const insights = read('../../insights/InsightsPane.svelte');
 
 describe('one running head for all three tabs', () => {
 	it('names the tab on every page from page 2 on', () => {
-		expect(textN).toMatch(/<RunningHeader[^>]*tabName=\{t\('tab\.text', language\)\}/);
+		// Text's tab name follows the text the page prints (step 7, part 2), through one derived name on each Text page.
+		expect(textN).toMatch(/<RunningHeader[^>]*\{tabName\}/);
+		expect(textN).toContain('const tabName = $derived(t(textTabKey(witness, documentHasLines), language));');
 		expect(markup).toMatch(/<RunningHeader headerText=\{runningHeader\} \{tabName\} accent="var\(--lavender\)"/);
 		expect(markup).toContain("const tabName = $derived(T('tab.markedScore'));");
 		// Insights draws its pages in one loop since QUEUE row 66, so one call serves every page from 2 on.
@@ -32,7 +34,8 @@ describe('one running head for all three tabs', () => {
 	});
 
 	it('names the tab on page 1, alone', () => {
-		expect(text1).toMatch(/<RunningHeader headerText="" tabName=\{t\('tab\.text', language\)\} tabOnly \/>/);
+		expect(text1).toMatch(/<RunningHeader headerText="" \{tabName\} tabOnly \/>/);
+		expect(text1).toContain('const tabName = $derived(t(textTabKey(witness, documentHasLines), language));');
 		// Markup's score page and its empty envelope both.
 		expect(markup.match(/<RunningHeader headerText="" \{tabName\} accentInk="var\(--lavender-ink\)" tabOnly \/>/g)).toHaveLength(2);
 		expect(insights).toMatch(/<RunningHeader headerText="" tabName=\{T\('tab\.insights'\)\} accentInk="var\(--rose-ink\)" tabOnly \/>/);

@@ -2,6 +2,8 @@
 	import type { WordStackData, PageSize, LineData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
+	import { textTabKey } from '$lib/text/text-header';
+	import type { InputView } from '$lib/text/input-views.svelte';
 	import type { LegendItem } from '$lib/provenance';
 	import { PAGE_SIZES, ROW_HEIGHT, TEXT_CONTENT } from '$lib/page-config';
 	import RunningHeader from './RunningHeader.svelte';
@@ -24,6 +26,10 @@
 		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
+		/** Which text the page prints, `shown` in `+page.svelte`; the running head's tab name follows it (`text/text-header.ts`). */
+		witness?: InputView;
+		/** Whether the document prints any line at all; with none the tab name is the bare `tab.text`. */
+		documentHasLines?: boolean;
 		/** The content window's top and bottom and the gap between rows, from the measured fit. */
 		contentTop: number;
 		contentBottom: number;
@@ -46,6 +52,8 @@
 		glossOverrides,
 		mutedWords,
 		onwordclick,
+		witness = 'lyrics',
+		documentHasLines = true,
 		contentTop,
 		contentBottom,
 		rowGap,
@@ -53,6 +61,9 @@
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
+
+	/** The running head's tab name: what the page prints (`text/text-header.ts`). */
+	const tabName = $derived(t(textTabKey(witness, documentHasLines), language));
 
 	/*
 	 * Window and gap come from `Paper.svelte` (`page-fit.ts`, step 7, part 1), the same rule as page 1, so the pages cannot
@@ -65,7 +76,7 @@
 	style="width: {dims.width}px; height: {dims.height}px;"
 >
 	<!-- Header layer: absolute, pinned to top margin -->
-	<RunningHeader headerText={runningHeader} tabName={t('tab.text', language)} onheightchange={onheaderheight} />
+	<RunningHeader headerText={runningHeader} {tabName} onheightchange={onheaderheight} />
 
 	<!-- Content layer: flex column, rows grow if they wrap -->
 	<div

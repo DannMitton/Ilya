@@ -13,6 +13,7 @@
 	import TitlePage from './TitlePage.svelte';
 	import SubsequentPage from './SubsequentPage.svelte';
 	import type { EmptyTextNotice } from '$lib/one-action';
+	import type { InputView } from '$lib/text/input-views.svelte';
 
 	interface Props {
 		lines: LineData[];
@@ -29,6 +30,8 @@
 		onwordclick?: (word: WordStackData) => void;
 		/** Row 2j: what page 1 says with no lines (`emptyTextNotice`). */
 		emptyNotice?: EmptyTextNotice;
+		/** Which text `lines` is: `shown` in `+page.svelte`, the value `textLines` branches on. The running head names it (`text/text-header.ts`). */
+		witness?: InputView;
 	}
 
 	let {
@@ -44,6 +47,7 @@
 		mutedWords,
 		onwordclick,
 		emptyNotice = 'enter',
+		witness = 'lyrics',
 	}: Props = $props();
 
 	/*
@@ -174,6 +178,8 @@
 				{glossOverrides}
 				{mutedWords}
 				{onwordclick}
+				{witness}
+				documentHasLines={lines.length > 0}
 				contentTop={contentTopOf(0)}
 				{contentBottom}
 				rowGap={page.gap}
@@ -195,6 +201,8 @@
 				{glossOverrides}
 				{mutedWords}
 				{onwordclick}
+				{witness}
+				documentHasLines={lines.length > 0}
 				contentTop={contentTopOf(i)}
 				{contentBottom}
 				rowGap={page.gap}

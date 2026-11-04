@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,131 keys.
+   This file holds 1,133 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -54,7 +54,7 @@
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
    octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
    pacifier.      17  lib/voice/pacifier/Pacifier.svelte
-   paper.          2  lib/components/Paper/TitlePage.svelte, lib/one-action.ts
+   paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
    placeholder.    7  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
    profile.       34  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
@@ -202,6 +202,12 @@ const strings: Record<string, Record<Language, string>> = {
 	//    dictionary. 'tab.text' was the third until N.132.
 	//    'Fit' was invariant by Dann's ruling of 13 July 2026.
 	'tab.text':                    { en: 'TEXT',                         fr: 'TEXTE' },
+	// Step 7, part 2 (2026-11-03): THE TAB NAME ON TEXT'S PAGES NAMES WHAT THE PAGE PRINTS. RATIFIED by Dann 2026-11-03
+	// 20:21 (his 20:17 to 20:19: "they must correspond"). A POEM view with an empty POEM prints LYRICS, so it reads
+	// TEXT: LYRICS (`text/text-header.ts`). With no text at all the page prints none, and the bare `tab.text` stands.
+	// The no-break space before the colon is the file's French convention.
+	'paper.headerPoem':            { en: 'TEXT: POEM',                   fr: 'TEXTE\u00a0: POÈME' },
+	'paper.headerLyrics':          { en: 'TEXT: LYRICS',                 fr: 'TEXTE\u00a0: PAROLES' },
 	'tab.learn':                   { en: 'LEARN',                        fr: 'LEÇONS' },
 	'tab.guide':                   { en: 'GUIDE',                        fr: 'GUIDE' },
 	// N.73 S1. Studio's second document, named for the singer in the desk
