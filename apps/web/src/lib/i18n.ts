@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,134 keys.
+   This file holds 1,139 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -30,7 +30,7 @@
    calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
-   comment.       42  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
+   comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
    console.        2  lib/components/Drawer/AnalysisStation.svelte
    correct.       23  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
    cosmetic.      15  lib/components/Drawer/NotationFields.svelte
@@ -43,7 +43,7 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     142  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     149  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     36  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte
    intake.        49  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
@@ -1937,6 +1937,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// teacherA RATIFIED by Dann 2026-10-11 21:32 (« lors de vos cours de chant », never « en cours de chant »); teacherC
 	// RATIFIED 21:34 in French, its English the desk's default following the French (`OPEN.md`).
 	'insights.r2.teacherA':        { en: 'Discuss this approach with your voice teacher.', fr: 'Discutez de cette approche lors de vos cours de chant.' },
+	// teacherA.many RATIFIED by Dann 2026-11-04 09:34 (English and French), from Fable's review of Further reading: it stands in
+	// for teacherA under an observation that has a second paragraph of other approaches (`singer-blocks.ts`, the teacher line A site).
+	'insights.r2.teacherA.many':   { en: 'Discuss these approaches with your voice teacher.', fr: 'Discutez de ces approches lors de vos cours de chant.' },
 	'insights.r2.teacherC':        { en: 'Review these sources with your voice teacher, who can weigh in on which of them actually apply to your voice.', fr: 'Passez ces sources en revue avec votre professeure ou professeur de chant, qui pourra donner son avis sur celles qui s’appliquent effectivement à votre voix.' },
 	'insights.r2.unlikely.shareHeld': { en: 'In this key, {n} percent of the singing lies above your primo passaggio, {primo}, and bar {bar} holds {a} {pitch} {vowel} for about {s} seconds, above your secondo passaggio, {secondo}.', fr: 'Dans cette tonalité, {n} % du chant se situe au-dessus de votre *primo passaggio*, {primo}, et la mesure {bar} prolonge un {vowel} sur {pitch} pendant environ {s} secondes, au-dessus de votre *secondo passaggio*, {secondo}.' },
 	'insights.r2.unlikely.together': { en: 'Together, these make the song unlikely to sit comfortably in your voice as written.', fr: 'Ensemble, ces éléments font que la pièce, telle qu’écrite, a peu de chances de reposer avec aisance dans votre voix.' },
@@ -2085,15 +2088,27 @@ const strings: Record<string, Record<Language, string>> = {
 	// Ratified by Dann 2026-10-09 in both languages (`docs/memory/OPEN.md`, N.168). Miller 2004, *Solutions for Singers*, p. 79 (mixed) and p. 77 (preface).
 	'comment.working.try.mixed.action': { en: 'singing the passage first entirely on [œ], then beginning each note on the briefest [œ] and moving at once to the written vowel, before returning to the text', fr: 'chanter d\u2019abord le passage entièrement sur [œ], puis commencer chaque note sur le plus bref [œ] en passant aussitôt à la voyelle écrite, avant de revenir au texte' },
 	'comment.working.try.preface.action': { en: 'singing \u201cyou\u201d on a quick five-note descending scale, then dropping the [j] and singing only the [{vowel}], keeping the same shape of lips and face', fr: 'chanter «\u00a0you\u00a0» sur cinq notes descendantes rapides, puis omettre le [j] et ne chanter que le [{vowel}], en gardant la même forme des lèvres et du visage' },
-	// The comment's furniture. The tap label and counts RATIFIED by Dann 2026-09-30 11:02 in both languages, "try" retired
+	// The comment's furniture. The tap label and counts RATIFIED by Dann 2026-09-30 11:02 in both languages (the counts were removed
+	// 2026-11-04: nothing drew them once the other approaches moved into the observation), "try" retired
 	// 2026-09-29 (Dayme, pp. 21 to 22; `docs/memory/OPEN.md` §N.168). The other lines' French RATIFIED by Dann 2026-09-30
 	// 12:08 (`docs/sessions/french-comments_r1_2026-09-30.md`, table B): « commentaires » as `voiceIntake.appear.heading`
 	// says it, « selon vos choix » for "by your settings".
 	'comment.heading': { en: 'Comments on this piece', fr: 'Commentaires sur cette pièce' },
 	// The sources box's heading RENAMED by Dann 2026-10-11 21:40 and 21:51 (`OPEN.md`), replacing "More to explore, and why".
 	'comment.tap': { en: 'Further reading', fr: 'Lectures complémentaires' },
-	'comment.count.one': { en: '1 more thing to explore', fr: '1 autre piste à explorer' },
-	'comment.count.many': { en: '{n} more things to explore', fr: '{n} autres pistes à explorer' },
+	// DRAFTS, not ratified (desk, 2026-11-03, `docs/sessions/brief-code-insights-further-reading_r2_2026-11-03.md`): the first
+	// sentence of an observation's second paragraph, which holds its other approaches. Sentence form, each ending in a period,
+	// so the suggestion after it keeps its own capital and opener. Two variants per count; `rotate` picks one per observation.
+	// French avoids « piste », which opener 4 uses. Dann rules on the words, and on the French in particular (`CONTRACT.md` §7).
+	'insights.r2.otherApproaches.one.a': { en: 'There is another way in.', fr: 'Il existe une autre approche.' },
+	'insights.r2.otherApproaches.one.b': { en: 'You can also come at it differently.', fr: 'On peut aussi s’y prendre autrement.' },
+	'insights.r2.otherApproaches.many.a': { en: 'There are other ways in.', fr: 'Il existe d’autres approches.' },
+	'insights.r2.otherApproaches.many.b': { en: 'You can also come at it differently.', fr: 'On peut aussi s’y prendre autrement.' },
+	// DRAFTS, not ratified (desk, 2026-11-03, same brief): the topic a Further reading passage is cited for, in words, where the
+	// tag «m. 6 · A3 · [u]» encoded it. « mesure {bar} » is adopted from `insights.r2.unlikely.range`. The second line stands in
+	// when the sung note has no pitch to name; the brief gave one string, so this one is the build's addition (flagged in the report).
+	'insights.r2.readingTopic': { en: '[{vowel}] on {pitch}, bar {bar}:', fr: '[{vowel}] sur {pitch}, mesure {bar} :' },
+	'insights.r2.readingTopicNoPitch': { en: '[{vowel}], bar {bar}:', fr: '[{vowel}], mesure {bar} :' },
 	'comment.more.one': { en: 'One more observation', fr: 'Une observation de plus' },
 	'comment.more.many': { en: '{n} more observations', fr: '{n} observations de plus' },
 	'comment.hidden.one': { en: 'One observation hidden by your settings', fr: 'Une observation masquée selon vos choix' },

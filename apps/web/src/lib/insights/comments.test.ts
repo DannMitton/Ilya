@@ -34,7 +34,8 @@ import {
 	speaks,
 	SUGGESTIONS,
 } from './comment-text';
-import { WORKS, fullReference, worksCited } from './comment-sources';
+import { WORKS, fullReference, passageText, worksCited } from './comment-sources';
+import { furtherReading } from './further-reading';
 import { t } from '../i18n';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
@@ -347,7 +348,7 @@ function forced(c: NoteComment, s: ReturnType<typeof song>, language: 'en' | 'fr
 	const order = orderSuggestions(c, { language, measuredVowels: MEASURED });
 	const [voicing] = rotate([c], [order], 0);
 	const r = renderComment(c, order, voicing, { language, register: 'working', pitchOf: s.pitchOf }, nameFR1);
-	return { text: norm([r.frame, r.consequence, ...r.visible.map((v) => v.runs)].map(runsText).join(' ')), count: r.count, r };
+	return { text: norm([r.frame, r.consequence, ...r.visible.map((v) => v.runs)].map(runsText).join(' ')), r };
 }
 
 // r7, English RATIFIED by Dann 2026-09-28 23:37 and 2026-09-29 22:51 (`draft-three-comments_r7_2026-09-29.md`),
@@ -362,7 +363,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 		expect(en.text).toBe(
 			'This [i] on E4 is sustained for about 4 seconds, above the first resonance (fR1) of your [i]. Here the [i] tends toward whoop timbre on its own; but narrowing it instead of opening the mouth tends to thin it (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, pp. 97 and 115). You might let the jaw drop with the pitch, tongue tip forward, and notice whether the [i] keeps its colour (Miller, Solutions for Singers, 2004, p. 163).',
 		);
-		expect(en.count).toBe('1 more thing to explore');
+		expect(en.r.hidden).toHaveLength(1);
 		expect(forced(at(t01, 'e4')!, T01, 'fr').text).toBe(FR_E4);
 	});
 	it('E♭4 [ɛ], English and French', () => {
@@ -370,7 +371,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 		expect(en.text).toBe(
 			'This [ɛ] on E♭4 is sustained for about 3 seconds, just past where your [ɛ] turns (about D4). The colour tends to close here on its own; but keeping it open can nudge it toward a yell (Bozeman, Practical Vocal Acoustics, 2025, pp. 45 and 65). Bozeman suggests keeping a fairly close vowel posture through the turn and a little beyond it. Notice whether the colour closes more easily (Kinesthetic Voice Pedagogy 2, 2021, pp. 18 to 19).',
 		);
-		expect(en.count).toBe('2 more things to explore');
+		expect(en.r.hidden).toHaveLength(2);
 		expect(forced(t02[0], T02, 'fr', false).text).toBe(FR_EB4);
 	});
 	it('D4 [u], English and French', () => {
@@ -378,7 +379,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 		expect(en.text).toBe(
 			'This [u] on D4 sits just above your secondo passaggio and a little under the first resonance of your [u]. Here the [u] tends to open a little on its own (Miller, The Structure of Singing, 1986, p. 158); but keeping it closed tends toward whoop timbre (Bozeman, Practical Vocal Acoustics, 2025, p. 94). If it suits your voice, let it lean toward [ʊ], and notice whether the [u] keeps its colour.',
 		);
-		expect(en.count).toBe('3 more things to explore');
+		expect(en.r.hidden).toHaveLength(3);
 		expect(forced(at(t01, 'e11')!, T01, 'fr', false).text).toBe(FR_D4);
 	});
 	it('sets fR1 as Titze prints it, and the terms of art and titles in italics', () => {
@@ -389,8 +390,9 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 	});
 	it('cites the consequence rows on the printed page, and every row in the tap', () => {
 		const { r } = forced(at(t01, 'e11')!, T01, 'en', false);
-		expect(r.printedRows).toEqual(['RMR-057', 'PVA2-C-025']);
-		expect(r.references).toHaveLength(7);
+		// Hidden suggestions print in the second paragraph now, so their rows are printed rows (2026-11-03); `lean` adds none (cite: false).
+		expect(r.printedRows).toEqual(['RMR-057', 'PVA2-C-025', 'REID-057', 'MIL04-008', 'MCK-049']);
+		expect(r.rows).toHaveLength(7);
 	});
 });
 
@@ -418,7 +420,7 @@ describe('the rotation', () => {
 		const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
 		for (const language of ['en', 'fr'] as const) {
 			const r = renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf });
-			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), x.count, ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), ...x.references.map(runsText)]).join(' ');
+			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), runsText(x.otherApproaches)]).join(' ');
 			expect(all).not.toContain('MISSING');
 			expect(all).not.toMatch(/\{[a-zA-Z0-9:+-]+\}|\*/);
 			expect(all.match(/\(fR1\)/g)).toHaveLength(1);
@@ -459,4 +461,130 @@ describe('citations', () => {
 			'Reid, Cornelius L. Voice: Psyche and Soma. New York: Joseph Patelson Music House, 1975, third printing 1999. ISBN 0-915282-00-3.',
 		);
 	});
+});
+
+// ── The second paragraph (2026-11-03): the other approaches, in the observation itself ──
+// The sentence that opens it is a DESK DRAFT, not ratified (`insights.r2.otherApproaches.*`).
+describe('the second paragraph holds the hidden suggestions', () => {
+	const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
+	const page = [...commentsOf(T01), ...commentsOf(T02)].filter(speaks);
+	const render = (language: 'en' | 'fr', all = false, seed = 7) =>
+		renderComments(page, seed, { language, register: 'working', measuredVowels: MEASURED, pitchOf, all });
+
+	it('opens with one sentence per count: one hidden suggestion reads "one", several read "many"', () => {
+		const r = render('en');
+		const withHidden = r.filter((x) => x.hidden.length > 0);
+		expect(withHidden.length).toBeGreaterThan(0);
+		for (const x of withHidden) {
+			const text = runsText(x.otherApproaches);
+			const one = [t('insights.r2.otherApproaches.one.a', 'en'), t('insights.r2.otherApproaches.one.b', 'en')];
+			const many = [t('insights.r2.otherApproaches.many.a', 'en'), t('insights.r2.otherApproaches.many.b', 'en')];
+			expect(x.hidden.length === 1 ? one : many).toContain(text);
+		}
+		expect(r.some((x) => x.hidden.length === 1)).toBe(true);
+		expect(r.some((x) => x.hidden.length > 1)).toBe(true);
+	});
+	it('has no second paragraph where nothing is hidden, and with "All of them" on', () => {
+		for (const language of ['en', 'fr'] as const) {
+			for (const x of render(language).filter((y) => y.hidden.length === 0)) expect(x.otherApproaches).toEqual([]);
+			for (const x of render(language, true)) {
+				expect(x.hidden).toEqual([]);
+				expect(x.otherApproaches).toEqual([]);
+			}
+		}
+	});
+	it('keeps every hidden suggestion\'s short citation, except where the suggestion carries none by design (lean, cite: false)', () => {
+		for (const language of ['en', 'fr'] as const) {
+			for (const x of render(language)) {
+				for (const s of x.hidden) {
+					const text = runsText(s.runs);
+					if (SUGGESTIONS.find((d) => d.id === s.id)!.cite === false) expect(text).not.toMatch(/\(.*\d{4}/);
+					else expect(text).toMatch(/\([^()]*\d{4},\s+pp?\.\s*\d+[^()]*\)\.$/);
+				}
+			}
+		}
+	});
+	it('prints no short citation for a hidden `lean` (its consequence already cites the row), and adds no printed row for it', () => {
+		const c = at(commentsOf(T01), 'e11')!;
+		const lean = SUGGESTIONS.find((d) => d.id === 'lean')!;
+		const order = { visible: [], hidden: [lean] };
+		const [voicing] = rotate([c], [order], 0);
+		const r = renderComment(c, order, voicing, { language: 'en', register: 'working', pitchOf: T01.pitchOf });
+		expect(r.hidden).toHaveLength(1);
+		expect(runsText(r.hidden[0].runs)).not.toMatch(/\d{4}/);
+		// The consequence's own rows only: the lean row is among them, cited once there.
+		expect(r.printedRows).toEqual(['RMR-057', 'PVA2-C-025']);
+		expect(runsText(r.otherApproaches)).toBe(t(`insights.r2.otherApproaches.one.${voicing.paragraph}`, 'en'));
+	});
+	it('puts every printed suggestion row in printedRows and every cited row in rows, in order and once', () => {
+		for (const x of render('en')) {
+			const printed = new Set(x.printedRows);
+			for (const s of [...x.visible, ...x.hidden]) {
+				const def = SUGGESTIONS.find((d) => d.id === s.id)!;
+				if (def.cite !== false) expect(printed.has(def.row)).toBe(true);
+				for (const r of [def.row, ...def.supportRows]) expect(x.rows).toContain(r);
+			}
+			expect(new Set(x.rows).size).toBe(x.rows.length);
+		}
+	});
+	it('rotates the sentence: two observations with hidden suggestions on one page do not open alike where the pool allows, for every seed', () => {
+		for (let seed = 0; seed < 12; seed++) {
+			const orders = page.map((c) => orderSuggestions(c, { language: 'en', measuredVowels: MEASURED }));
+			const v = rotate(page, orders, seed);
+			const withHidden = v.filter((_, k) => orders[k].hidden.length > 0);
+			expect(withHidden.length).toBeGreaterThanOrEqual(2);
+			// The pool has two variants: the first two observations differ, the third may repeat.
+			expect(withHidden[0].paragraph).not.toBe(withHidden[1].paragraph);
+		}
+	});
+	it('leaves the suggestions\' own rotation alone: hidden suggestions still print their closers and take no repeated opener within a comment', () => {
+		const orders = page.map((c) => orderSuggestions(c, { language: 'en', measuredVowels: MEASURED }));
+		const v = rotate(page, orders, 3);
+		v.forEach((x, k) => {
+			const list = [...orders[k].visible, ...orders[k].hidden];
+			list.forEach((s, j) => {
+				if (j >= orders[k].visible.length && s.closer) expect(x.closers[j]).toBe(true);
+			});
+		});
+	});
+	it('has all four sentences in both languages, each ending in a period, none using "piste" in French', () => {
+		for (const language of ['en', 'fr'] as const) {
+			for (const key of ['one.a', 'one.b', 'many.a', 'many.b']) {
+				const s = t(`insights.r2.otherApproaches.${key}`, language);
+				expect(s).not.toContain('MISSING');
+				expect(s.endsWith('.')).toBe(true);
+				expect(s).not.toContain('—');
+				if (language === 'fr') expect(s).not.toMatch(/piste/i);
+			}
+		}
+	});
+});
+
+describe('Further reading loses nothing', () => {
+	const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
+	const page = [...commentsOf(T01), ...commentsOf(T02)].filter(speaks);
+	for (const language of ['en', 'fr'] as const) {
+		it(`prints every row any observation cites under its work, with its page, heading, and quotation, once per work (${language})`, () => {
+			const r = renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf });
+			const list = furtherReading(r, { language, pitchOf: (x) => x.comment.eventId, barOf: (x) => x.comment.eventId });
+			const refs = list.map((w) => runsText(w.reference));
+			expect(new Set(refs).size).toBe(refs.length);
+			expect(list.map((w) => w.topics.length).every((n) => n > 0)).toBe(true);
+			const cited = new Set(r.flatMap((x) => x.rows));
+			expect(list).toHaveLength(worksCited(cited).length);
+			for (const x of r) {
+				for (const row of x.rows) {
+					const w = worksCited([row])[0];
+					const entry = list[worksCited(cited).indexOf(w)];
+					expect(runsText(entry.reference)).toBe(runsText(fullReference(w, language)));
+					const topic = entry.topics.map(runsText).find((line) => line.startsWith(`[${x.comment.vowel}]`) && line.includes(`${x.comment.eventId}`));
+					expect(topic, `${row} under ${w}`).toBeDefined();
+					expect(topic).toContain(passageText(row, language));
+				}
+			}
+			const all = list.flatMap((w) => [...w.reference, ...w.topics.flat()].map((q) => q.text)).join(' ');
+			expect(all).not.toContain('MISSING');
+			expect(all).not.toMatch(/\{[a-zA-Z0-9:+-]+\}|\bnull\b|undefined/);
+		});
+	}
 });

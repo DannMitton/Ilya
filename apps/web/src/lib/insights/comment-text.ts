@@ -12,10 +12,12 @@
  *      the leap and the phrase's top no longer print (r5 §0).
  *   2. A CONSEQUENCE, in Dann's shape (23:14): what the voice tends to do here
  *      on its own; but what resisting it tends to bring. Every half is cited.
- *   3. SUGGESTIONS: r7's lead, visible, in its ratified words; the others
- *      behind the tap, each an offer (opener + action + a closer only where
- *      the source states an outcome the singer can hear or feel).
- *   4. A COUNT of what the tap holds, and the tap label.
+ *   3. SUGGESTIONS: r7's lead, visible, in its ratified words; the others in
+ *      a second paragraph of the same observation (2026-11-03), after a
+ *      sentence saying they are other approaches, each an offer (opener +
+ *      action + a closer only where the source states an outcome the singer
+ *      can hear or feel) with its short citation.
+ *   4. Further reading, built from `rows` in `singer-blocks.ts`.
  *
  * Every sentence is an i18n entry with placeholders. Registers: each part is
  * looked up under the singer's register and falls back to working, the only
@@ -30,7 +32,7 @@ import { hzToPitch, type Pitch } from '@ilya/score-parser';
 import { hasString, t, type Language } from '$lib/i18n';
 import { pitchName } from '$lib/voice/note-picker';
 import { COMMENT_DEFAULTS, STAKES_ORDER, type Challenge, type NoteComment, type Register } from './comments';
-import { ROWS, WORKS, rowReference, shortCitation, type Run } from './comment-sources';
+import { ROWS, WORKS, shortCitation, type Run } from './comment-sources';
 
 // ── The suggestions ──────────────────────────────────────────────────
 
@@ -184,11 +186,22 @@ export function songSeed(parts: readonly string[]): number {
 	return h >>> 0;
 }
 
+/**
+ * The variants of the sentence that opens an observation's second paragraph
+ * (`insights.r2.otherApproaches.{one,many}.{a,b}`). DESK DEFAULT 2026-11-03:
+ * two per count, rotated like the openers so no two observations on one page
+ * open their second paragraph alike where the pool allows.
+ */
+export const PARAGRAPH_OPENERS = ['a', 'b'] as const;
+export type ParagraphOpener = (typeof PARAGRAPH_OPENERS)[number];
+
 export interface Voicing {
 	/** One opener per suggestion, visible then hidden. */
 	openers: (Opener | 'own')[];
 	/** Whether each suggestion prints its closer. */
 	closers: boolean[];
+	/** The variant of the sentence that opens the second paragraph; read only where the comment has hidden suggestions. */
+	paragraph: ParagraphOpener;
 }
 
 /** ", and notice …" continues an invitation; after "One thing to explore is …" or "[Author] suggests …" it does not parse. */
@@ -205,6 +218,11 @@ export function openerFits(o: Opener | 'own', s: SuggestionDef, withCloser: bool
  * a closer is optional. r7's fixed suggestions keep their ratified words, so
  * they take no part in the page rule: two [i] comments on one page read the
  * same lead. DESK DEFAULT.
+ *
+ * The second paragraph's opening sentence (`ParagraphOpener`) follows the same
+ * page rule with its own set, `usedParagraphs`: only a comment with hidden
+ * suggestions takes one. The suggestions' own rotation is unchanged: hidden
+ * suggestions keep their closers (above) and their within-comment opener rule.
  */
 export function rotate(
 	comments: readonly NoteComment[],
@@ -213,6 +231,7 @@ export function rotate(
 ): Voicing[] {
 	const usedLeads = new Set<Opener>();
 	const usedClosers = new Set<'A' | 'B'>();
+	const usedParagraphs = new Set<ParagraphOpener>();
 	return comments.map((_, k) => {
 		const list = [...suggestions[k].visible, ...suggestions[k].hidden];
 		const visibleCount = suggestions[k].visible.length;
@@ -244,7 +263,14 @@ export function rotate(
 			}
 			openers.push(pool[0]);
 		});
-		return { openers, closers };
+
+		let paragraph: ParagraphOpener = PARAGRAPH_OPENERS[0];
+		if (suggestions[k].hidden.length > 0) {
+			const pool = PARAGRAPH_OPENERS;
+			paragraph = pool.map((_, step) => pool[(seed + k + step) % pool.length]).find((v) => !usedParagraphs.has(v)) ?? pool[(seed + k) % pool.length];
+			usedParagraphs.add(paragraph);
+		}
+		return { openers, closers, paragraph };
 	});
 }
 
@@ -307,11 +333,15 @@ export interface RenderedComment {
 	consequence: Run[];
 	visible: RenderedSuggestion[];
 	hidden: RenderedSuggestion[];
-	/** "1 more thing to explore", or empty when the tap holds no suggestion. */
-	count: string;
-	/** The tap's references: every row the comment cites, in full. */
-	references: Run[][];
-	/** Rows the printed page cites: the consequence and the visible suggestions. */
+	/**
+	 * The sentence that opens the second paragraph, "There is another way in.",
+	 * or empty when nothing is hidden ("All of them" hides nothing). The
+	 * paragraph is this sentence, then `hidden` in order, each with its own citation.
+	 */
+	otherApproaches: Run[];
+	/** Every row the comment cites, deduplicated, in the order first met: the consequence, then each suggestion's row and support rows. */
+	rows: string[];
+	/** Rows the printed page cites: the consequence and every suggestion that prints, hidden ones included (a suggestion with `cite: false` adds none). */
 	printedRows: string[];
 	/** Whether the frame printed "(fR1)", so the page prints it once. */
 	namedFR1: boolean;
@@ -415,7 +445,6 @@ export function renderComment(
 		runs: suggestionRuns(c, s, voicing.openers[j], voicing.closers[j], ctx),
 	}));
 	const n = order.hidden.length;
-	const count = n === 0 ? '' : fill(t(n === 1 ? 'comment.count.one' : 'comment.count.many', ctx.language), { n });
 	const frame = frameRuns(c, ctx, nameFR1);
 	const consequence = consequenceRuns(c, ctx);
 	const rows: string[] = [];
@@ -423,15 +452,15 @@ export function renderComment(
 	consequence.rows.forEach(add);
 	for (const s of list) [s.row, ...s.supportRows].forEach(add);
 	const printed: string[] = [];
-	for (const r of [...consequence.rows, ...order.visible.filter((s) => s.cite !== false).map((s) => s.row)]) if (!printed.includes(r)) printed.push(r);
+	for (const r of [...consequence.rows, ...list.filter((s) => s.cite !== false).map((s) => s.row)]) if (!printed.includes(r)) printed.push(r);
 	return {
 		comment: c,
 		frame: frame.runs,
 		consequence: consequence.runs,
 		visible: rendered.slice(0, order.visible.length),
 		hidden: rendered.slice(order.visible.length),
-		count,
-		references: rows.map((r) => rowReference(r, ctx.language)),
+		otherApproaches: n === 0 ? [] : toRuns(t(`insights.r2.otherApproaches.${n === 1 ? 'one' : 'many'}.${voicing.paragraph}`, ctx.language), ctx.language),
+		rows,
 		printedRows: printed,
 		namedFR1: frame.namedFR1,
 	};
