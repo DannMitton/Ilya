@@ -7,6 +7,7 @@ import {
 	encodeOffsets,
 	letterStream,
 	shipEntry,
+	textFault,
 	withPoemKeys,
 } from '../scripts/build-poem-library.mjs';
 
@@ -142,5 +143,54 @@ describe('poem library build: the committed data matches a fresh build', () => {
 		const sw = read('apps/web/static/sw.js');
 		expect(sw).toContain("if (url.pathname.includes('dictionary.') && url.pathname.endsWith('.json')) return;");
 		expect(built.name.includes('dictionary.') && built.name.endsWith('.json')).toBe(true);
+	});
+});
+
+describe('poem library build: the text check (step 8, part 3)', () => {
+	const good = library.entries[0];
+	const faults: [string, string][] = [
+		['a brace', 'Строка\n.x{margin:0}\nстрока'],
+		['a MediaWiki class', 'Строка .mw-parser-output строка'],
+		['U+200E', 'Строка\n‎строка'],
+		['U+200F', 'Строка‏ строка'],
+		['underscores', 'Строка\n\n________\nстрока'],
+		['three line breaks', 'Строка\n\n\nстрока'],
+		['a Latin letter', 'покаянiем строка'],
+		['a digit glued to a letter', 'Строка 1840Москва'],
+		['a line number', '5 Про юную пальму все снится ему'],
+		['a line number with a plain space', '12 Про юную пальму'],
+	];
+	for (const [name, text] of faults) {
+		it(`refuses ${name}`, () => {
+			expect(textFault(text), name).not.toBeNull();
+			expect(() => shipEntry({ ...good, textModern: text })).toThrow(/textModern/);
+		});
+	}
+
+	it('lets a dating line through, one line or two, and the clean library', () => {
+		expect(textFault('Строка\n\n8 декабря 1840')).toBeNull();
+		expect(textFault('Строка\n\n8 декабря 1840\nМосква')).toBeNull();
+		expect(textFault('Строка\n\nФевраль 1837')).toBeNull();
+		expect(textFault('Строка\n\n1830')).toBeNull();
+		for (const e of library.entries) expect(textFault(e.textModern), e.id).toBeNull();
+		expect(() => buildPoemFile(library)).not.toThrow();
+	});
+
+	it('the data fixes of this step hold: no stylesheet, marks, heading, or underscores; the dating line has its break; the Latin i is a letter of the edition', () => {
+		const by = (id: string) => library.entries.find((e: { id: string }) => e.id === id);
+		const heine = by('419e40dd3c');
+		expect(heine.textModern).toBe('На севере мрачном, на дикой скале,\nКедр одинокий под снегом белеет,\nИ сладко заснул он в инистой мгле\nИ сон его вьюга лелеет.\n\nПро юную пальму все снится ему,\nЧто̀ в дальних пределах Востока,\nПод пламенным небом, на знойном холму,\nСтоит и цветет одинока…');
+		expect(heine.textEdition).not.toMatch(/[{}‎]|\.mw-/);
+		expect(by('cb6998d772').textModern.startsWith('На севере дальнем')).toBe(true);
+		expect(by('cb6998d772').textEdition.startsWith('На сѣверѣ дальнемъ')).toBe(true);
+		expect(by('c1964bc3bd').textModern).not.toContain('________');
+		expect(by('c1964bc3bd').textModern).not.toMatch(/\n{3,}/);
+		expect(by('87376c1710').textModern.endsWith('8 декабря 1840\nМосква')).toBe(true);
+		const hymn = by('298e556367');
+		expect(hymn.textModern).toContain('покаянием');
+		expect(hymn.textModern).not.toMatch(/[A-Za-z]/);
+		expect(hymn.textEdition).toContain('покаянiіемъ'.replace('iі', 'і'));
+		expect(hymn.textEdition).not.toMatch(/[A-Za-z]/);
+		expect((hymn.textEdition.match(/і/g) ?? []).length).toBe(10);
 	});
 });

@@ -303,12 +303,12 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 	});
 
 	it('every stanza start of every library entry: no joined line begins with a proper noun (the list the desk reviewed is pinned)', () => {
-		// 86 stanza starts in 14 entries; 17 joined lines begin with a capital. Each is an ordinary word at the start of a verse
+		// The stanza starts of 14 entries (a dating block is not one: it is never a passage's start); some joined lines begin with a capital. Each is an ordinary word at the start of a verse
 		// line. If the library grows and a new one appears, this fails so that it is read, not lowered by habit.
 		const firsts = new Set<string>();
 		let starts = 0;
 		for (const e of library.entries) {
-			for (const b of stanzas(e.textModern)) {
+			for (const b of bodyStanzas(e.textModern)) {
 				starts++;
 				const lines: string[] = [];
 				let words = 0;
@@ -325,8 +325,8 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 				}
 			}
 		}
-		expect(starts).toBe(86);
-		expect([...firsts].sort()).toEqual(['Борону', 'В', 'Дайте', 'И', 'Из', 'Мать-земля', 'Много', 'На', 'Накормлю', 'Ночью', 'Ну', 'Останься', 'Пашней', 'С', 'Я']);
+		expect(starts).toBe(77);
+		expect([...firsts].sort()).toEqual(['Борону', 'В', 'Дайте', 'Из', 'Мать-земля', 'Много', 'На', 'Накормлю', 'Ночью', 'Ну', 'Останься', 'Пашней', 'С', 'Я']);
 	});
 });
 

@@ -92,6 +92,30 @@ export function decodeOffsets(deltas) {
 	return out;
 }
 
+/**
+ * THE FAULTS A TEXT MUST NOT CARRY (step 8, part 3). A Wikisource page read into the library once brought a stylesheet, invisible
+ * direction marks, a line number, a heading, and a Latin letter inside a Russian word; this check refuses each, so the data
+ * stays clean after the desk fixes it. Each is a regular expression over `textModern`, named for the message.
+ */
+export const TEXT_FAULTS = [
+	['a brace (web-page code)', /[{}]/],
+	['a MediaWiki class (".mw-")', /\.mw-/],
+	['a direction mark (U+200E or U+200F)', /[\u200e\u200f]/],
+	['a run of three or more underscores', /_{3,}/],
+	['a run of three or more line breaks', /\n{3,}/],
+	['a Latin letter', /\p{Script=Latin}/u],
+	['a digit glued to a letter', /\d\p{L}|\p{L}\d/u],
+];
+
+/** The first fault in a text, or null. A line number is a line of one to three digits and a space or U+00A0 and a letter, with no four-digit year (a dating line such as «8 декабря 1840» has one and passes). */
+export function textFault(text) {
+	for (const [name, re] of TEXT_FAULTS) if (re.test(text)) return name;
+	for (const line of text.split('\n')) {
+		if (/^\d{1,3}[ \u00a0]\p{L}/u.test(line) && !/\d{4}/.test(line)) return `a line number (${JSON.stringify(line.slice(0, 20))})`;
+	}
+	return null;
+}
+
 /** One library entry as the app needs it. Throws on a missing field, so a bad library fails the build, not a singer. */
 export function shipEntry(e) {
 	for (const k of ['id', 'work', 'title', 'incipit', 'author', 'spelling', 'textModern']) {
@@ -104,6 +128,8 @@ export function shipEntry(e) {
 	// line, which names the site, is the attribution). The app does not read it in build 1; it ships so a later build can.
 	const state = e.verification?.state;
 	if (state !== 'verified' && state !== 'unverified') throw new Error(`library entry ${e.id}: "verification.state" must be "verified" or "unverified"`);
+	const fault = textFault(e.textModern);
+	if (fault) throw new Error(`library entry ${e.id}: "textModern" holds ${fault}`);
 	const { letters, offsets } = letterStream(e.textModern);
 	return {
 		id: e.id,

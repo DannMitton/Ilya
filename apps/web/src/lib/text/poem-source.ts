@@ -33,14 +33,14 @@ export function stanzas(text: string): { start: number; end: number }[] {
 }
 
 /**
- * A dating line closing a poem in the library's text («1830», «Февраль 1837», «8 декабря 1840Москва»): one line, with a
- * four-digit year, of four words or fewer. `library.json` keeps it, as the source prints it, but nobody sings it: it
+ * A dating block closing a poem in the library's text («1830», «Февраль 1837», «8 декабря 1840» over «Москва»): at most two lines,
+ * four words in all, holding a four-digit year (step 8, part 3 widened it from one line, after the data restored the line break). `library.json` keeps it, as the source prints it, but nobody sings it: it
  * does not count as a stanza the song left out, and it is NEVER FILLED INTO POEM (Dann 2026-11-03 19:50: "keep the date
  * in the library's record but leave it out of POEM"; step 7, part 3). DESK DEFAULT (mine): the test for what a dating
  * line is, reversible. All three in the library stand in a block of their own; a dateline glued to its stanza would pass
  * through, and none exists in the file today.
  */
-const isDateline = (text: string): boolean => !text.includes('\n') && /\d{4}/.test(text) && text.trim().split(/\s+/).length <= 4;
+const isDateline = (text: string): boolean => text.split('\n').length <= 2 && /\d{4}/.test(text) && text.trim().split(/\s+/).length <= 4;
 
 /** The stanzas of the poem itself: the blocks of `stanzas`, less any dating lines at the end. */
 export function bodyStanzas(text: string): { start: number; end: number }[] {
