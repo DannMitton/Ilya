@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import type { PoemSource } from '$lib/library/types';
 import type { LoadedPoemLibrary, PoemEntry } from './poem-library';
 import { foldLetters, matchPoem } from './poem-match';
-import { bodyStanzas, cardLine, edited, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
+import { bodyStanzas, cardLine, edited, passageLine, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
 
 const ROOT = join(__dirname, '../../../../..');
 const manifest = JSON.parse(readFileSync(join(ROOT, 'data/dictionary-manifest.json'), 'utf8'));
@@ -179,7 +179,8 @@ describe('resolveSource: a stored source found again in the library', () => {
 		const cut = stanzaCut(m.entry.textModern, m.start, m.end);
 		const r = resolveSource({ id: m.entry.id, work: m.work, poemHash: library.hash, start: cut.start, end: cut.end, answered: false, edited: false }, library)!;
 		expect(r.passage).toBe(true);
-		expect(r.firstLine).toBe('«Дитя моё,');
+		// D4: the first lines joined until four words, the closing punctuation dropped, the later line lowered
+		expect(r.firstLine).toBe('Дитя моё, останься здесь со мной');
 		expect(r.entry.title).toBe('Мцыри');
 	});
 
@@ -270,5 +271,54 @@ describe('cardLine: a first line as the card quotes it', () => {
 	it('is empty for a line of nothing', () => {
 		expect(cardLine('')).toBe('');
 		expect(cardLine('«»')).toBe('');
+	});
+});
+
+describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя моё, останься здесь со мной»)', () => {
+	it('joins lines with a space until the words reach four, drops the closing punctuation, lowers each later line’s first letter', () => {
+		expect(passageLine('«Дитя моё,\nОстанься здесь со мной:\nВ воде привольное житье', 0)).toBe('Дитя моё, останься здесь со мной');
+	});
+	it('stops at the first line when it already holds four words', () => {
+		expect(passageLine('Спит. Спит в лесу глухом,\nСпит княжна во сне', 0)).toBe('Спит. Спит в лесу глухом');
+	});
+	it('takes the lines of one stanza only, and starts where it is told', () => {
+		const t = 'Один\nДва\n\nТри\nЧетыре\nПять\nШесть';
+		expect(passageLine(t, 0)).toBe('Один два'); // two words, and the stanza ends: it does not run on into the next
+		expect(passageLine(t, t.indexOf('Три'))).toBe('Три четыре пять шесть');
+	});
+	it('drops every kind of closing punctuation and quote, and a leading mark or dash', () => {
+		expect(passageLine('— Куда ты идёшь?\nСпроси у меня…»', 0)).toBe('Куда ты идёшь? спроси у меня'.replace('идёшь?', 'идёшь?'));
+		expect(passageLine('Раз два три четыре!', 0)).toBe('Раз два три четыре');
+	});
+	it('is empty where there is nothing at the offset', () => {
+		expect(passageLine('', 0)).toBe('');
+		expect(passageLine('\n\n', 0)).toBe('');
+	});
+
+	it('every stanza start of every library entry: no joined line begins with a proper noun (the list the desk reviewed is pinned)', () => {
+		// 86 stanza starts in 14 entries; 17 joined lines begin with a capital. Each is an ordinary word at the start of a verse
+		// line. If the library grows and a new one appears, this fails so that it is read, not lowered by habit.
+		const firsts = new Set<string>();
+		let starts = 0;
+		for (const e of library.entries) {
+			for (const b of stanzas(e.textModern)) {
+				starts++;
+				const lines: string[] = [];
+				let words = 0;
+				for (const raw of e.textModern.slice(b.start).split('\n')) {
+					const l = raw.trim();
+					if (l === '') break;
+					lines.push(l);
+					words += l.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+					if (words >= 4) break;
+				}
+				for (const l of lines.slice(1)) {
+					const w = l.replace(/^[^\p{L}]+/u, '').split(/\s+/)[0].replace(/[^\p{L}-]/gu, '');
+					if (/^\p{Lu}/u.test(w)) firsts.add(w);
+				}
+			}
+		}
+		expect(starts).toBe(86);
+		expect([...firsts].sort()).toEqual(['Борону', 'В', 'Дайте', 'И', 'Из', 'Мать-земля', 'Много', 'На', 'Накормлю', 'Ночью', 'Ну', 'Останься', 'Пашней', 'С', 'Я']);
 	});
 });

@@ -1,51 +1,77 @@
 /**
- * The poem library's strings (poem library, build 1, step 5), as the brief gives them.
+ * The poem library's strings (poem library, build 1, step 5; step 7, part 4), as Dann ratified them.
  *
- * THESE ARE DESK DRAFTS Dann has not ratified. The expected values below are copied from the brief's "Strings" table
- * (`docs/sessions/brief-code-poem-library-build1_r3_2026-11-03.md`), not read back out of `i18n.ts`, so this test fails if
- * the table drifts from the brief. When Dann rules, the table and this test change together (`CONTRACT.md` 11a).
+ * RATIFIED by Dann 2026-11-03 20:21 (every poem-card, gloss-offer, and TEXT header string), with his rulings D1 to D3 of 20:01:
+ * D1, a Russian title or line is quoted in the sentence's own language (English “…”, French « … »); D2, `cardColours`; D3, the site's
+ * name per language. The expected values are copied from the brief's table (`brief-code-poem-library-build1_r3_` for the first
+ * twelve, `..-step7_r4_` for D1 to D3), not read back out of `i18n.ts`, so this test fails if the table drifts from what he approved.
+ * Ratification is approval at that moment (`CONTRACT.md` 11a): when he rules again, the table and this test change together.
  * The French spacing is the OQLF's: a no-break space before a colon, and inside guillemets.
  */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { hasString, stringKeys, t } from '$lib/i18n';
 
 const NB = ' ';
-const DRAFTS: Record<string, [string, string]> = {
+const RATIFIED_TABLE: Record<string, [string, string]> = {
 	'intake.poemLibrary.cardHeading': ['Ilya found this poem for your song:', `Ilya a trouvé ce poème pour votre chant${NB}:`],
 	'intake.poemLibrary.by': ['{author}, translated by {translator}', '{author}, traduit par {translator}'],
-	'intake.poemLibrary.passage': ['a passage beginning «{line}»', `un passage commençant par «${NB}{line}${NB}»`],
+	'intake.poemLibrary.passage': ['a passage beginning “{line}”', `un passage commençant par «${NB}{line}${NB}»`],
 	'intake.poemLibrary.cardSource': ['From {site}.', 'Tiré de {site}.'],
 	'intake.poemLibrary.cardSourceModernized': ['From {site}, in modern spelling.', 'Tiré de {site}, en orthographe moderne.'],
-	'intake.poemLibrary.cardColours': ['Coloured words in LYRICS show where the song departs from the poem.', 'Les mots en couleur du champ PAROLES montrent où la mise en musique s’écarte du poème.'],
+	'intake.poemLibrary.cardColours': ['Coloured words in LYRICS now show where your song departs from this poem.', 'Les mots en couleur du champ PAROLES montrent maintenant où la mise en musique s’écarte de ce poème.'],
 	'intake.poemLibrary.notThis': ['Not this poem', 'Pas ce poème'],
 	'intake.poemLibrary.keep': ['Keep this poem', 'Conserver ce poème'],
-	'intake.view.libraryPoem': ['{author}, «{title}», from {site}.', `{author}, «${NB}{title}${NB}», tiré de {site}.`],
-	'intake.view.libraryPoemEdited': ['Based on {author}, «{title}», from {site}.', `D’après {author}, «${NB}{title}${NB}», tiré de {site}.`],
+	'intake.view.libraryPoem': ['{author}, “{title}”, from {site}.', `{author}, «${NB}{title}${NB}», tiré de {site}.`],
+	'intake.view.libraryPoemEdited': ['Based on {author}, “{title}”, from {site}.', `D’après {author}, «${NB}{title}${NB}», tiré de {site}.`],
 	'intake.poemLibrary.removed': ['Poem removed.', 'Poème retiré.'],
 	'intake.poemLibrary.undo': ['Undo', 'Annuler'],
+	// D3: the site's name per language, looked up by the data's own string (`text/poem-site.ts`)
+	'intake.poemLibrary.site.russianWikisource': ['Russian Wikisource', 'Wikisource en russe'],
 };
 
 describe('the poem library strings', () => {
-	it('holds the twelve keys of the brief, in both languages, exactly as drafted', () => {
-		expect(Object.keys(DRAFTS)).toHaveLength(12);
-		for (const [key, [en, fr]] of Object.entries(DRAFTS)) {
+	it('holds the twelve keys of the brief and the site name of D3, in both languages, exactly as ratified', () => {
+		expect(Object.keys(RATIFIED_TABLE)).toHaveLength(13);
+		for (const [key, [en, fr]] of Object.entries(RATIFIED_TABLE)) {
 			expect(t(key, 'en'), key).toBe(en);
 			expect(t(key, 'fr'), key).toBe(fr);
 			expect(hasString(key, 'en') && hasString(key, 'fr'), key).toBe(true);
 		}
 	});
 
-	it('holds no others under the two prefixes: nothing was added that the brief did not give', () => {
+	it('holds no others under the two prefixes: nothing was added that was not ratified', () => {
 		const ours = stringKeys().filter((k) => k.startsWith('intake.poemLibrary.') || k.startsWith('intake.view.libraryPoem'));
-		expect(ours.sort()).toEqual(Object.keys(DRAFTS).sort());
+		expect(ours.sort()).toEqual(Object.keys(RATIFIED_TABLE).sort());
 	});
 
 	it('uses no em dash in either language (house style)', () => {
-		for (const key of Object.keys(DRAFTS)) for (const lang of ['en', 'fr'] as const) expect(t(key, lang), `${key} ${lang}`).not.toContain('—');
+		for (const key of Object.keys(RATIFIED_TABLE)) for (const lang of ['en', 'fr'] as const) expect(t(key, lang), `${key} ${lang}`).not.toContain('—');
 	});
 
 	it('names the same placeholders in both languages', () => {
 		const names = (s: string) => [...s.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
-		for (const [key, [en, fr]] of Object.entries(DRAFTS)) expect(names(fr), key).toEqual(names(en));
+		for (const [key, [en, fr]] of Object.entries(RATIFIED_TABLE)) expect(names(fr), key).toEqual(names(en));
+	});
+});
+
+import { siteName } from './poem-site';
+
+describe('D3: the site is named in the interface language, by the data’s own string', () => {
+	it('prints "Russian Wikisource" in English and « Wikisource en russe » in French', () => {
+		expect(siteName('Russian Wikisource', 'en')).toBe('Russian Wikisource');
+		expect(siteName('Russian Wikisource', 'fr')).toBe('Wikisource en russe');
+	});
+	it('prints a site the table does not list as the data has it, in either language', () => {
+		expect(siteName('Gutenberg Russian', 'en')).toBe('Gutenberg Russian');
+		expect(siteName('Gutenberg Russian', 'fr')).toBe('Gutenberg Russian');
+	});
+	it('the library has one site, and the table lists it (so no entry prints the English name in French)', () => {
+		const sites = new Set<string>();
+		const lib = JSON.parse(readFileSync(join(__dirname, '../../../../../tools/poems/library.json'), 'utf8'));
+		for (const e of lib.entries) sites.add(e.source.site);
+		expect([...sites]).toEqual(['Russian Wikisource']);
+		for (const s of sites) expect(siteName(s, 'fr')).not.toBe(s);
 	});
 });

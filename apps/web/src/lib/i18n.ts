@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,133 keys.
+   This file holds 1,134 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -45,7 +45,7 @@
    input.          8  lib/components/Drawer/IntakePanel.svelte
    insights.     142  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     36  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte
-   intake.        48  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
+   intake.        49  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
    loupe.        107  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
@@ -847,27 +847,34 @@ const strings: Record<string, Record<Language, string>> = {
 	'intake.poemReplace.body':    { en: 'This page was read as a poem, and POEM already holds one. Ilya cannot undo its replacement.', fr: 'Cette page a été lue comme un poème, et le champ POÈME en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci.' },
 	'intake.poemReplace.replace': { en: 'Replace the poem', fr: 'Remplacer le poème' },
 	'intake.poemReplace.keep':    { en: 'Keep the poem', fr: 'Conserver le poème' },
-	// POEM LIBRARY, BUILD 1 (2026-11-03): THE CARD AND THE LINES. Every string here, in both languages, is a DESK
-	// DRAFT that Dann has not ratified (`brief-code-poem-library-build1_r3_2026-11-03.md`, "Strings"); the French is
-	// the desk's to draft and his to rule on (`CONTRACT.md` section 7), and changes with his word. Adopted from this
-	// file: poème, chant, « les mots en couleur », « le champ PAROLES », « la mise en musique », « s’écarte »,
-	// « Conserver », « Annuler ». Coined by the desk: « Tiré de », « en orthographe moderne », « Pas ce poème »,
-	// « D’après », « traduit par », « un passage commençant par ». Open for Dann: whether `cardColours` stays (under
-	// LYRICS it restates `intake.view.lyricsLine`), the button order, nested guillemets around a Russian title, and
-	// `{site}` in French. `{author}`, `{title}`, `{translator}`, `{line}`, and `{site}` are filled from the library.
+	// POEM LIBRARY, BUILD 1 (2026-11-03): THE CARD AND THE LINES. RATIFIED by Dann 2026-11-03 20:21 (every poem-card, gloss-offer,
+	// and TEXT header string, both languages), with his rulings D1 to D3 of 20:01 applied (step 7, part 4): D1, a Russian title or
+	// line is quoted in the sentence's own language, English “…” and French « … » (the English of `passage`, `libraryPoem`, and
+	// `libraryPoemEdited` changed); D2, `cardColours` reads "now show where your song departs from this poem"; D3, the site's
+	// name per language (`intake.poemLibrary.site.*`, below). D4, the passage's first line (the joined lines), is the code's
+	// (`text/poem-source.ts`, `passageLine`). Ratification is approval at that moment (`CONTRACT.md` 11a); a change reaches the
+	// table and its pin in `text/poem-library-strings.test.ts` together. Adopted from this file: poème, chant,
+	// « les mots en couleur », « le champ PAROLES », « la mise en musique », « s’écarte », « Conserver », « Annuler ». Coined
+	// by the desk: « Tiré de », « en orthographe moderne », « Pas ce poème », « D’après », « traduit par »,
+	// « un passage commençant par », « Wikisource en russe ». `{author}`, `{title}`, `{translator}`, `{line}`, and `{site}` are
+	// filled from the library.
 	'intake.poemLibrary.cardHeading':       { en: 'Ilya found this poem for your song:', fr: 'Ilya a trouvé ce poème pour votre chant\u00a0:' },
 	'intake.poemLibrary.by':                { en: '{author}, translated by {translator}', fr: '{author}, traduit par {translator}' },
-	'intake.poemLibrary.passage':           { en: 'a passage beginning «{line}»', fr: 'un passage commençant par «\u00a0{line}\u00a0»' },
+	'intake.poemLibrary.passage':           { en: 'a passage beginning “{line}”', fr: 'un passage commençant par «\u00a0{line}\u00a0»' },
 	'intake.poemLibrary.cardSource':        { en: 'From {site}.', fr: 'Tiré de {site}.' },
 	'intake.poemLibrary.cardSourceModernized': { en: 'From {site}, in modern spelling.', fr: 'Tiré de {site}, en orthographe moderne.' },
-	'intake.poemLibrary.cardColours':       { en: 'Coloured words in LYRICS show where the song departs from the poem.', fr: 'Les mots en couleur du champ PAROLES montrent où la mise en musique s’écarte du poème.' },
+	'intake.poemLibrary.cardColours':       { en: 'Coloured words in LYRICS now show where your song departs from this poem.', fr: 'Les mots en couleur du champ PAROLES montrent maintenant où la mise en musique s’écarte de ce poème.' },
 	'intake.poemLibrary.notThis':           { en: 'Not this poem', fr: 'Pas ce poème' },
 	'intake.poemLibrary.keep':              { en: 'Keep this poem', fr: 'Conserver ce poème' },
 	'intake.poemLibrary.removed':           { en: 'Poem removed.', fr: 'Poème retiré.' },
 	'intake.poemLibrary.undo':              { en: 'Undo', fr: 'Annuler' },
+	// D3 (ratified 20:01): THE SITE'S NAME PER LANGUAGE. The library's `source.site` is the data's English string, and the
+	// stored record keeps it; what is printed is looked up here by it (`text/poem-site.ts`), with the data's own string as the
+	// fallback for a site not listed.
+	'intake.poemLibrary.site.russianWikisource': { en: 'Russian Wikisource', fr: 'Wikisource en russe' },
 	// The two lines that stand under POEM once the card is answered (`text/input-line.ts`).
-	'intake.view.libraryPoem':              { en: '{author}, «{title}», from {site}.', fr: '{author}, «\u00a0{title}\u00a0», tiré de {site}.' },
-	'intake.view.libraryPoemEdited':        { en: 'Based on {author}, «{title}», from {site}.', fr: 'D’après {author}, «\u00a0{title}\u00a0», tiré de {site}.' },
+	'intake.view.libraryPoem':              { en: '{author}, “{title}”, from {site}.', fr: '{author}, «\u00a0{title}\u00a0», tiré de {site}.' },
+	'intake.view.libraryPoemEdited':        { en: 'Based on {author}, “{title}”, from {site}.', fr: 'D’après {author}, «\u00a0{title}\u00a0», tiré de {site}.' },
 	// THE FIELD'S CAPTION, N.115, ruled with its French 2026-09-10. It is drawn
 	// only while the field is empty and no score is in, which is the opposite
 	// guard from `intake.dropHint` and deliberately so: this one says what else

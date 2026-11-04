@@ -6,6 +6,7 @@
 	import { inputViews, type InputView } from '$lib/text/input-views.svelte';
 	import { fillLibraryLine, introLine, libraryLineOf } from '$lib/text/input-line';
 	import { poemOffer } from '$lib/text/poem-offer.svelte';
+	import { siteName } from '$lib/text/poem-site';
 	import PoemLibraryCard from './PoemLibraryCard.svelte';
 	import { lyricsOnLeave } from '$lib/text/break-tidy';
 	import { pointer } from './IntakeCamera.svelte';
@@ -95,7 +96,7 @@
 	const lineKey = $derived(introLine(view, inputViews.landed, scoreWords, poemText, libraryLineOf(libraryPoem?.source ?? null, libraryPoem !== null)));
 	const line = $derived(
 		libraryPoem && lineKey.startsWith('intake.view.libraryPoem')
-			? fillLibraryLine(t(lineKey, language), { author: libraryPoem.resolved.entry.author, title: libraryPoem.resolved.entry.title, site: libraryPoem.resolved.entry.source.site })
+			? fillLibraryLine(t(lineKey, language), { author: libraryPoem.resolved.entry.author, title: libraryPoem.resolved.entry.title, site: siteName(libraryPoem.resolved.entry.source.site, language) })
 			: t(lineKey, language),
 	);
 	/* She answered the card, so the control she pressed is gone: her focus goes to the view tab, which is always there

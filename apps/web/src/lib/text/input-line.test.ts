@@ -62,9 +62,10 @@ describe('introLine, with a library poem on the song (poem library, build 1; wal
 describe('fillLibraryLine, and the two library lines as they read', () => {
 	const naming = { author: 'Алексей Васильевич Кольцов', title: 'Весёлый час', site: 'Russian Wikisource' };
 	it('fills the author, the title, and the site as the data prints them', () => {
-		expect(fillLibraryLine(t('intake.view.libraryPoem', 'en'), naming)).toBe('Алексей Васильевич Кольцов, «Весёлый час», from Russian Wikisource.');
-		expect(fillLibraryLine(t('intake.view.libraryPoemEdited', 'en'), naming)).toBe('Based on Алексей Васильевич Кольцов, «Весёлый час», from Russian Wikisource.');
-		expect(fillLibraryLine(t('intake.view.libraryPoem', 'fr'), naming)).toBe('Алексей Васильевич Кольцов, «\u00a0Весёлый час\u00a0», tiré de Russian Wikisource.');
+		// D1: the English quotes a Russian title in “…”; the French in « … »
+		expect(fillLibraryLine(t('intake.view.libraryPoem', 'en'), naming)).toBe('Алексей Васильевич Кольцов, “Весёлый час”, from Russian Wikisource.');
+		expect(fillLibraryLine(t('intake.view.libraryPoemEdited', 'en'), naming)).toBe('Based on Алексей Васильевич Кольцов, “Весёлый час”, from Russian Wikisource.');
+		expect(fillLibraryLine(t('intake.view.libraryPoem', 'fr'), naming)).toBe('Алексей Васильевич Кольцов, «\u00a0Весёлый час\u00a0», tiré de Russian Wikisource.'); // `{site}` is filled by the caller (`siteName`)
 		expect(fillLibraryLine(t('intake.view.libraryPoemEdited', 'fr'), naming)).toBe('D’après Алексей Васильевич Кольцов, «\u00a0Весёлый час\u00a0», tiré de Russian Wikisource.');
 	});
 	it('leaves no placeholder behind, and does not read a `$` in the data as a pattern', () => {

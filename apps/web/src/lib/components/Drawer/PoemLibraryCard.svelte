@@ -3,10 +3,11 @@
 	import { t, type Language } from '$lib/i18n';
 	import { poemOffer } from '$lib/text/poem-offer.svelte';
 	import { cardLine } from '$lib/text/poem-source';
+	import { siteName } from '$lib/text/poem-site';
 	/*
 	 * PoemLibraryCard.svelte: THE CARD THAT SAYS ILYA FILLED POEM FROM ITS LIBRARY
 	 * (poem library, build 1, step 5; brief `docs/sessions/brief-code-poem-library-build1_r3_2026-11-03.md`,
-	 * the singer's walk, items 1 to 5). Its strings are desk drafts (`i18n.ts`, `intake.poemLibrary.*`).
+	 * the singer's walk, items 1 to 5). Its strings are Dann's, ratified 2026-11-03 20:21 (`i18n.ts`, `intake.poemLibrary.*`; step 7, part 4).
 	 *
 	 * IT STANDS ABOVE THE FIELD SHE IS LOOKING AT, in LYRICS or in POEM (`IntakeViews.svelte` places it before the
 	 * field, so it comes before the field in tab order), and it answers what she wonders in the order she wonders it:
@@ -44,7 +45,7 @@
 			title: `«${entry.title}»`,
 			line: card.resolved.passage ? t('intake.poemLibrary.passage', language).replace('{line}', () => quoted) : `«${quoted}»`,
 			poet: entry.translator ? t('intake.poemLibrary.by', language).replace('{author}', () => entry.author).replace('{translator}', () => entry.translator!) : entry.author,
-			source: t(entry.spelling === 'pre-reform' ? 'intake.poemLibrary.cardSourceModernized' : 'intake.poemLibrary.cardSource', language).replace('{site}', () => entry.source.site),
+			source: t(entry.spelling === 'pre-reform' ? 'intake.poemLibrary.cardSourceModernized' : 'intake.poemLibrary.cardSource', language).replace('{site}', () => siteName(entry.source.site, language)),
 		};
 	});
 

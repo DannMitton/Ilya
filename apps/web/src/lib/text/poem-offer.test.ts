@@ -415,7 +415,7 @@ describe('walk 8: her song sets a passage of a long poem', () => {
 		const now = r.offer.current()!;
 		expect(now.resolved.passage).toBe(true);
 		expect(now.resolved.entry.title).toBe('Мцыри');
-		expect(now.resolved.firstLine).toBe('«Дитя моё,');
+		expect(now.resolved.firstLine).toBe('Дитя моё, останься здесь со мной');
 	});
 
 	it('fixture S declines to Lyrics as they were, and Poem empty', async () => {

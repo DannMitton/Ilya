@@ -88,10 +88,41 @@ export function lineAt(text: string, offset: number): string {
 	return text.slice(from, to === -1 ? text.length : to).trim();
 }
 
+/** A passage's wording runs from its first line until the words so far reach this many (D4, step 7, part 4). */
+export const PASSAGE_WORDS = 4;
+
+/**
+ * THE WORDING OF A PASSAGE (D4; Dann's ratified example is the oracle: «Дитя моё, останься здесь со мной»). The lines of
+ * the stanza from `start` are joined with a space, from its first line until the running count of words reaches four; the
+ * closing punctuation is dropped; the first letter of each line AFTER THE FIRST is lowered, as the example lowers
+ * «Останься» and keeps «Дитя». DESK DEFAULT (Dann may revise), as the brief says. A joined line that begins with a proper
+ * noun is lowered too, which is wrong for it; the library has none today (`poem-source.test.ts` checks every stanza start of
+ * every entry). It stops at the stanza's end, so it never reaches into the next stanza.
+ */
+export function passageLine(text: string, start: number): string {
+	const taken: string[] = [];
+	let words = 0;
+	for (const raw of text.slice(start).split('\n')) {
+		const line = raw.trim();
+		if (line === '') {
+			if (taken.length > 0) break;
+			continue;
+		}
+		taken.push(taken.length === 0 ? line : line.replace(/\p{L}/u, (c) => c.toLowerCase()));
+		words += line.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+		if (words >= PASSAGE_WORDS) break;
+	}
+	return taken
+		.join(' ')
+		.replace(/^[\s«»"“”„‘’'—–-]+/, '')
+		.replace(/[\s,;:.!?…—–\-«»"“”„‘’']+$/, '')
+		.trim();
+}
+
 /** What the card and the lines print about a stored source, found again in the library. */
 export interface ResolvedSource {
 	entry: PoemEntry;
-	/** The first line of the stanza cut, or the entry's incipit where the stored offsets are not known to fit this library. */
+	/** The first line of the poem, or for a passage its first words joined across lines (`passageLine`); the entry's incipit where the stored offsets are not known to fit this library. */
 	firstLine: string;
 	/** True when the cut is part of the poem (the card says "a passage beginning"). */
 	passage: boolean;
@@ -110,9 +141,11 @@ export function resolveSource(source: PoemSource, library: { entries: readonly P
 	if (!entry) return null;
 	const fits = library.hash === source.poemHash && entry.id === source.id && source.end <= entry.textModern.length;
 	if (!fits) return { entry, firstLine: entry.incipit, passage: false };
-	const firstLine = lineAt(entry.textModern, source.start) || entry.incipit;
 	const body = bodyStanzas(entry.textModern);
-	return { entry, firstLine, passage: source.start > 0 || source.end < (body[body.length - 1]?.end ?? entry.textModern.length) };
+	const passage = source.start > 0 || source.end < (body[body.length - 1]?.end ?? entry.textModern.length);
+	// A passage is named by its first words, joined across lines (D4); a whole poem by its first line, as the score names it.
+	const firstLine = (passage ? passageLine(entry.textModern, source.start) : lineAt(entry.textModern, source.start)) || entry.incipit;
+	return { entry, firstLine, passage };
 }
 
 /**

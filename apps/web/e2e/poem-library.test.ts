@@ -10,7 +10,7 @@ import { waitForDictionary } from './helpers';
  * The Lyrics are the fixtures of `tools/poems/fixtures`: twelve read Lyrics, public-domain poems only.
  * "Row 114 song 2" is «Весёлый час». A paste is a real paste (the clipboard and Control+V), because a keystroke
  * and a paste reach the page differently (`IntakeViews.svelte`, `arrivalOf`) and the walk depends on it.
- * The strings are desk drafts the owner has not ratified; the English the tests read is the table's.
+ * The strings are Dann's, ratified 2026-11-03 20:21 (D1 to D3 of 20:01 applied, step 7, part 4); the English the tests read is the table's.
  */
 test.use({ viewport: { width: 1440, height: 900 }, permissions: ['clipboard-read', 'clipboard-write'] });
 
@@ -22,7 +22,7 @@ const field = (page: Page) => page.locator('textarea.text-input');
 const card = (page: Page) => page.getByTestId('poem-library-card');
 const removed = (page: Page) => page.getByTestId('poem-library-removed');
 const lines = (page: Page) => page.locator('.views-line');
-const QUIET = 'Алексей Васильевич Кольцов, «Весёлый час», from Russian Wikisource.';
+const QUIET = 'Алексей Васильевич Кольцов, “Весёлый час”, from Russian Wikisource.'; // D1: English quotes a Russian title in “…”
 const BASED_ON = `Based on ${QUIET}`;
 
 async function open(page: Page): Promise<void> {
@@ -82,7 +82,7 @@ test.describe('walk 1 to 3: she pastes a song, sees a card, and keeps the poem',
 		await expect(card(page)).not.toContainText('a passage beginning');
 		await expect(card(page)).toContainText('From Russian Wikisource.');
 		await expect(card(page)).not.toContainText('in modern spelling');
-		await expect(card(page)).toContainText('Coloured words in LYRICS show where the song departs from the poem.');
+		await expect(card(page)).toContainText('Coloured words in LYRICS now show where your song departs from this poem.'); // D2
 		const buttons = card(page).getByRole('button');
 		await expect(buttons).toHaveText(['Not this poem', 'Keep this poem']);
 
@@ -267,7 +267,7 @@ test.describe('walk 8: her song sets a passage of a long poem', () => {
 		await pasteIntoLyrics(page, fixture('S'));
 		await expect(card(page)).toBeVisible({ timeout: 30_000 });
 		await expect(card(page)).toContainText('«Мцыри»');
-		await expect(card(page)).toContainText('a passage beginning «Дитя моё»');
+		await expect(card(page)).toContainText('a passage beginning “Дитя моё, останься здесь со мной”'); // D1, D4
 		await expect(card(page)).toContainText('Михаил Юрьевич Лермонтов');
 		await page.locator('#intake-tab-poem').click();
 		const poem = await field(page).inputValue();
@@ -367,16 +367,16 @@ test.describe('nothing about the singer or the song leaves the device', () => {
 });
 
 test.describe('the same walk in French', () => {
-	test('the card and the line speak the desk’s draft French', async ({ page }) => {
+	test('the card and the line speak the ratified French', async ({ page }) => {
 		await open(page);
 		await page.locator('.lang-pill').click();
 		await pasteIntoLyrics(page, SONG2);
 		await expect(card(page)).toBeVisible({ timeout: 30_000 });
 		await expect(card(page)).toContainText('Ilya a trouvé ce poème pour votre chant :');
-		await expect(card(page)).toContainText('Tiré de Russian Wikisource.');
+		await expect(card(page)).toContainText('Tiré de Wikisource en russe.'); // D3
 		await expect(card(page).getByRole('button')).toHaveText(['Pas ce poème', 'Conserver ce poème']);
 		await card(page).getByRole('button', { name: 'Conserver ce poème' }).click();
 		await page.locator('#intake-tab-poem').click();
-		await expect(lines(page).first()).toHaveText('Алексей Васильевич Кольцов, « Весёлый час », tiré de Russian Wikisource.');
+		await expect(lines(page).first()).toHaveText('Алексей Васильевич Кольцов, « Весёлый час », tiré de Wikisource en russe.');
 	});
 });
