@@ -75,3 +75,10 @@ describe('D3: the site is named in the interface language, by the data’s own s
 		for (const s of sites) expect(siteName(s, 'fr')).not.toBe(s);
 	});
 });
+
+describe('the French card quotes with OQLF spaces (step 8, part 4)', () => {
+	it('the card component puts a no-break space inside each French guillemet, and none in English', () => {
+		const src = readFileSync(join(__dirname, '../components/Drawer/PoemLibraryCard.svelte'), 'utf8');
+		expect(src).toContain("language === 'en' ? ['“', '”'] : ['«\\u00a0', '\\u00a0»']");
+	});
+});

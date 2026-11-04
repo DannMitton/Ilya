@@ -384,7 +384,10 @@ test.describe('the same walk in French', () => {
 		await expect(card(page)).toBeVisible({ timeout: 30_000 });
 		await expect(card(page)).toContainText('Ilya a trouvé ce poème pour votre chant :');
 		await expect(card(page)).toContainText('Tiré de Wikisource en russe.'); // D3
-		await expect(card(page)).toContainText('«Весёлый час»'); // French keeps « » (part 6)
+		// French keeps « », with a no-break space inside each mark (step 8, part 4). Read as the exact characters: the matcher
+		// that toContainText uses folds a no-break space into a plain one.
+		expect(await card(page).locator('.name').textContent()).toBe('«\u00a0Весёлый час\u00a0»');
+		expect(await card(page).locator('.line').textContent()).toBe('«\u00a0Дайте бокалы!\u00a0»');
 		await expect(card(page).getByRole('button')).toHaveText(['Pas ce poème', 'Conserver ce poème']);
 		await card(page).getByRole('button', { name: 'Conserver ce poème' }).click();
 		await page.locator('#intake-tab-poem').click();

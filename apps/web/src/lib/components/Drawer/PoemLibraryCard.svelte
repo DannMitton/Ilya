@@ -42,7 +42,7 @@
 		if (!card || !entry) return null;
 		const quoted = cardLine(card.resolved.firstLine);
 		// D1 reaches the card's own title and line (desk default, step 7 part 6): English quotes a Russian title or line in “…”, French keeps « ».
-		const [open, close] = language === 'en' ? ['“', '”'] : ['«', '»'];
+		const [open, close] = language === 'en' ? ['“', '”'] : ['«\u00a0', '\u00a0»']; // French: a no-break space inside each mark (OQLF, `CONTRACT.md` 7; as the French strings under POEM have it)
 		return {
 			title: `${open}${entry.title}${close}`,
 			line: card.resolved.passage ? t('intake.poemLibrary.passage', language).replace('{line}', () => quoted) : `${open}${quoted}${close}`,
