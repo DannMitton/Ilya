@@ -258,11 +258,10 @@
 	);
 
 	function commentTag(r: RenderedComment): string {
-		const m = analysisScore?.measures[r.comment.measureIndex];
-		const bar = m?.number || String(r.comment.measureIndex + 1);
-		const pitch = analysisScore?.vocalLine.find((e) => e.id === r.comment.eventId)?.pitch;
-		return [T('loupe.measureTagShort').replace('%m', bar), pitch ? P(pitch) : ''].filter(Boolean).join(' · ');
+		return [T('loupe.measureTagShort').replace('%m', commentBar(r)), commentPitch(r)].filter(Boolean).join(' · ');
 	}
+
+	const commentPitch = (r: RenderedComment): string => { const p = analysisScore?.vocalLine.find((e) => e.id === r.comment.eventId)?.pitch; return p ? P(p) : ''; };
 
 	/** The printed bar a comment sits in. */
 	function commentBar(r: RenderedComment): string {
@@ -385,6 +384,7 @@
 				hiddenBySettings: commentSelection?.hiddenBySettings ?? 0,
 				tagOf: commentTag,
 				barOf: commentBar,
+				pitchOf: commentPitch,
 				phonationHeadline: model.phonation.nothingSung ? null : headlineOf(model.phonation),
 				tempoLink: ontempo ? T('tempo.change') : null,
 				octave: suggestedShift !== 0 ? { shift: suggestedShift < 0 ? -1 : 1, applied: octaveShift !== 0 } : null,

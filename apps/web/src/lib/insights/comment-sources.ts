@@ -4,8 +4,8 @@
  *
  * `PRODUCT.md`, "A TRAIL OF BREADCRUMBS: HOW INSIGHTS CITES" (ruled by Dann
  * 2026-09-25 12:38 to 12:47): the comment carries author, short title, year,
- * and page; the tap carries the full reference, the section heading as
- * printed, and a short quotation; a printed Insights ends with "Sources
+ * and page; Further reading carries the full reference once per work and, for
+ * each passage, the section heading as printed and a short quotation; a printed Insights ends with "Sources
  * cited", alphabetical, only the works that print cites.
  *
  * EVERY VALUE HERE WAS READ, NEVER SUPPLIED. Rows and quotations are copied
@@ -161,13 +161,17 @@ export function shortCitation(rowIds: string | readonly string[], language: 'en'
 	];
 }
 
-/** One cited row, as the tap prints it: the full reference, the page, the heading if read, the quotation if read. */
-export function rowReference(rowId: string, language: 'en' | 'fr'): Run[] {
+/**
+ * One cited row as a passage of Further reading: the page, the heading if read,
+ * the quotation if read, comma-separated. The quotation sets in “ ” in English
+ * and in « » with no-break spaces in French, as it did (OQLF, `CONTRACT.md` §7).
+ */
+export function passageText(rowId: string, language: 'en' | 'fr'): string {
 	const row = ROWS[rowId];
-	const tail = [` ${pagesText(row, language)}.`];
-	if (row.heading) tail.push(` ${row.heading}.`);
-	if (row.quote) tail.push(language === 'fr' ? ` « ${row.quote} »` : ` “${row.quote}”`);
-	return [...fullReference(row.work, language), { text: tail.join('') }];
+	const parts = [pagesText(row, language)];
+	if (row.heading) parts.push(row.heading);
+	if (row.quote) parts.push(language === 'fr' ? `«\u00a0${row.quote}\u00a0»` : `“${row.quote}”`);
+	return parts.join(', ');
 }
 
 /** The works a set of rows cites, alphabetical by author then year, each once. */

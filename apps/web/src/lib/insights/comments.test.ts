@@ -34,7 +34,8 @@ import {
 	speaks,
 	SUGGESTIONS,
 } from './comment-text';
-import { WORKS, fullReference, worksCited } from './comment-sources';
+import { WORKS, fullReference, passageText, worksCited } from './comment-sources';
+import { furtherReading } from './further-reading';
 import { t } from '../i18n';
 
 const P = (step: Pitch['step'], octave: number, alter = 0): Pitch => ({ step, octave, alter });
@@ -392,7 +393,6 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 		// Hidden suggestions print in the second paragraph now, so their rows are printed rows (2026-11-03); `lean` adds none (cite: false).
 		expect(r.printedRows).toEqual(['RMR-057', 'PVA2-C-025', 'REID-057', 'MIL04-008', 'MCK-049']);
 		expect(r.rows).toHaveLength(7);
-		expect(r.references).toHaveLength(7);
 	});
 });
 
@@ -420,7 +420,7 @@ describe('the rotation', () => {
 		const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
 		for (const language of ['en', 'fr'] as const) {
 			const r = renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf });
-			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), x.count, ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), runsText(x.otherApproaches), ...x.references.map(runsText)]).join(' ');
+			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), x.count, ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), runsText(x.otherApproaches)]).join(' ');
 			expect(all).not.toContain('MISSING');
 			expect(all).not.toMatch(/\{[a-zA-Z0-9:+-]+\}|\*/);
 			expect(all.match(/\(fR1\)/g)).toHaveLength(1);
@@ -525,7 +525,6 @@ describe('the second paragraph holds the hidden suggestions', () => {
 				for (const r of [def.row, ...def.supportRows]) expect(x.rows).toContain(r);
 			}
 			expect(new Set(x.rows).size).toBe(x.rows.length);
-			expect(x.references).toHaveLength(x.rows.length);
 		}
 	});
 	it('rotates the sentence: two observations with hidden suggestions on one page do not open alike where the pool allows, for every seed', () => {
@@ -559,4 +558,33 @@ describe('the second paragraph holds the hidden suggestions', () => {
 			}
 		}
 	});
+});
+
+describe('Further reading loses nothing', () => {
+	const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
+	const page = [...commentsOf(T01), ...commentsOf(T02)].filter(speaks);
+	for (const language of ['en', 'fr'] as const) {
+		it(`prints every row any observation cites under its work, with its page, heading, and quotation, once per work (${language})`, () => {
+			const r = renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf });
+			const list = furtherReading(r, { language, pitchOf: (x) => x.comment.eventId, barOf: (x) => x.comment.eventId });
+			const refs = list.map((w) => runsText(w.reference));
+			expect(new Set(refs).size).toBe(refs.length);
+			expect(list.map((w) => w.topics.length).every((n) => n > 0)).toBe(true);
+			const cited = new Set(r.flatMap((x) => x.rows));
+			expect(list).toHaveLength(worksCited(cited).length);
+			for (const x of r) {
+				for (const row of x.rows) {
+					const w = worksCited([row])[0];
+					const entry = list[worksCited(cited).indexOf(w)];
+					expect(runsText(entry.reference)).toBe(runsText(fullReference(w, language)));
+					const topic = entry.topics.map(runsText).find((line) => line.startsWith(`[${x.comment.vowel}]`) && line.includes(`${x.comment.eventId}`));
+					expect(topic, `${row} under ${w}`).toBeDefined();
+					expect(topic).toContain(passageText(row, language));
+				}
+			}
+			const all = list.flatMap((w) => [...w.reference, ...w.topics.flat()].map((q) => q.text)).join(' ');
+			expect(all).not.toContain('MISSING');
+			expect(all).not.toMatch(/\{[a-zA-Z0-9:+-]+\}|\bnull\b|undefined/);
+		});
+	}
 });

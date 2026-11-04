@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,123 keys.
+   This file holds 1,125 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -43,7 +43,7 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     146  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     148  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     36  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte
    intake.        36  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
@@ -2068,6 +2068,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.r2.otherApproaches.one.b': { en: 'You can also come at it differently.', fr: 'On peut aussi s’y prendre autrement.' },
 	'insights.r2.otherApproaches.many.a': { en: 'There are other ways in.', fr: 'Il existe d’autres approches.' },
 	'insights.r2.otherApproaches.many.b': { en: 'You can also come at it differently.', fr: 'On peut aussi s’y prendre autrement.' },
+	// DRAFTS, not ratified (desk, 2026-11-03, same brief): the topic a Further reading passage is cited for, in words, where the
+	// tag «m. 6 · A3 · [u]» encoded it. « mesure {bar} » is adopted from `insights.r2.unlikely.range`. The second line stands in
+	// when the sung note has no pitch to name; the brief gave one string, so this one is the build's addition (flagged in the report).
+	'insights.r2.readingTopic': { en: '[{vowel}] on {pitch}, bar {bar}:', fr: '[{vowel}] sur {pitch}, mesure {bar} :' },
+	'insights.r2.readingTopicNoPitch': { en: '[{vowel}], bar {bar}:', fr: '[{vowel}], mesure {bar} :' },
 	'comment.more.one': { en: 'One more observation', fr: 'Une observation de plus' },
 	'comment.more.many': { en: '{n} more observations', fr: '{n} observations de plus' },
 	'comment.hidden.one': { en: 'One observation hidden by your settings', fr: 'Une observation masquée selon vos choix' },

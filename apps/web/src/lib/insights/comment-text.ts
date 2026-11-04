@@ -32,7 +32,7 @@ import { hzToPitch, type Pitch } from '@ilya/score-parser';
 import { hasString, t, type Language } from '$lib/i18n';
 import { pitchName } from '$lib/voice/note-picker';
 import { COMMENT_DEFAULTS, STAKES_ORDER, type Challenge, type NoteComment, type Register } from './comments';
-import { ROWS, WORKS, rowReference, shortCitation, type Run } from './comment-sources';
+import { ROWS, WORKS, shortCitation, type Run } from './comment-sources';
 
 // ── The suggestions ──────────────────────────────────────────────────
 
@@ -343,8 +343,6 @@ export interface RenderedComment {
 	otherApproaches: Run[];
 	/** Every row the comment cites, deduplicated, in the order first met: the consequence, then each suggestion's row and support rows. */
 	rows: string[];
-	/** The tap's references: every row the comment cites, in full. Replaced by `rows` in Further reading (step 2). */
-	references: Run[][];
 	/** Rows the printed page cites: the consequence and every suggestion that prints, hidden ones included (a suggestion with `cite: false` adds none). */
 	printedRows: string[];
 	/** Whether the frame printed "(fR1)", so the page prints it once. */
@@ -467,7 +465,6 @@ export function renderComment(
 		count,
 		otherApproaches: n === 0 ? [] : toRuns(t(`insights.r2.otherApproaches.${n === 1 ? 'one' : 'many'}.${voicing.paragraph}`, ctx.language), ctx.language),
 		rows,
-		references: rows.map((r) => rowReference(r, ctx.language)),
 		printedRows: printed,
 		namedFR1: frame.namedFR1,
 	};

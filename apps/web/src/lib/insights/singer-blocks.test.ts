@@ -50,7 +50,6 @@ const comment = (id: string, approach: boolean, extras = false): RenderedComment
 		count: '',
 		otherApproaches: extras ? [{ text: 'There is another way in.' }] : [],
 		rows: extras ? ['RMR-057'] : [],
-		references: extras ? [[{ text: 'Miller 1986' }]] : [],
 		printedRows: [],
 		namedFR1: false,
 	}) as unknown as RenderedComment;
@@ -71,6 +70,7 @@ function inputs(sc: ParsedScore, over: Partial<BlockInputs> = {}): BlockInputs {
 		hiddenBySettings: 0,
 		tagOf: (r) => `m. 1 · ${r.comment.eventId}`,
 		barOf: () => '1',
+		pitchOf: () => 'E4',
 		phonationHeadline: null,
 		untrustedLine: null,
 		split: null,
@@ -98,10 +98,11 @@ describe('the round 2 page, block by block', () => {
 		expect(cs.map((c) => c.teacher)).toEqual([t('insights.r2.teacherA', 'en'), undefined]);
 	});
 
-	it('opens the sources with teacher line C, and lists only comments with more to explore', () => {
+	it('opens the sources with teacher line C, and lists only works an observation cites', () => {
 		const out = singerBlocks(inputs(fitting, { comments: [comment('a', true, true), comment('b', false)] }), String);
 		const notes = out.map((b) => b.block).filter((b): b is Extract<Block, { kind: 'endnote' }> => b.kind === 'endnote');
 		expect(notes).toHaveLength(1);
+		expect(notes[0].topics).toHaveLength(1);
 		expect(notes[0].teacher).toBe(t('insights.r2.teacherC', 'en'));
 		expect(notes[0].heading).toBe(t('comment.tap', 'en'));
 	});
@@ -110,6 +111,24 @@ describe('the round 2 page, block by block', () => {
 		const out = singerBlocks(inputs(fitting, { comments: [comment('a', true, true)] }), String);
 		const note = out.map((b) => b.block).find((b) => b.kind === 'endnote')!;
 		expect('suggestions' in note).toBe(false);
+	});
+
+	it('builds one endnote per work, in author order, with the heading and teacher line C on the first only', () => {
+		const withRows = (id: string, rows: string[]) => ({ ...comment(id, true), rows }) as RenderedComment;
+		const bars: Record<string, string> = { a: '3', b: '5' };
+		const out = singerBlocks(
+			inputs(fitting, { comments: [withRows('a', ['REID-054']), withRows('b', ['KVP2-037', 'REID-057'])], barOf: (r) => bars[r.comment.eventId] }),
+			String,
+		);
+		const notes = out.map((b) => b.block).filter((b): b is Extract<Block, { kind: 'endnote' }> => b.kind === 'endnote');
+		expect(notes).toHaveLength(2);
+		expect(notes.map((n) => n.topics.length)).toEqual([1, 2]);
+		expect(notes[0].topics[0][0].text).toMatch(/^\[u\] on E4, bar 5: pp\.\s18 to 19,/);
+		expect(notes[1].topics.map((x) => x[0].text.slice(0, 19))).toEqual(['[u] on E4, bar 3: p', '[u] on E4, bar 5: p']);
+		expect(notes[0].heading).toBe(t('comment.tap', 'en'));
+		expect(notes[0].teacher).toBe(t('insights.r2.teacherC', 'en'));
+		expect(notes[1].heading).toBeUndefined();
+		expect(notes[1].teacher).toBeUndefined();
 	});
 
 	it('prints the verdict and "nothing flagged" as one paragraph for a key that fits', () => {
