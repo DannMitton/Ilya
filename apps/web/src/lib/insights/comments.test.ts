@@ -389,7 +389,9 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 	});
 	it('cites the consequence rows on the printed page, and every row in the tap', () => {
 		const { r } = forced(at(t01, 'e11')!, T01, 'en', false);
-		expect(r.printedRows).toEqual(['RMR-057', 'PVA2-C-025']);
+		// Hidden suggestions print in the second paragraph now, so their rows are printed rows (2026-11-03); `lean` adds none (cite: false).
+		expect(r.printedRows).toEqual(['RMR-057', 'PVA2-C-025', 'REID-057', 'MIL04-008', 'MCK-049']);
+		expect(r.rows).toHaveLength(7);
 		expect(r.references).toHaveLength(7);
 	});
 });
@@ -418,7 +420,7 @@ describe('the rotation', () => {
 		const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
 		for (const language of ['en', 'fr'] as const) {
 			const r = renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf });
-			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), x.count, ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), ...x.references.map(runsText)]).join(' ');
+			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), x.count, ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), runsText(x.otherApproaches), ...x.references.map(runsText)]).join(' ');
 			expect(all).not.toContain('MISSING');
 			expect(all).not.toMatch(/\{[a-zA-Z0-9:+-]+\}|\*/);
 			expect(all.match(/\(fR1\)/g)).toHaveLength(1);
@@ -458,5 +460,103 @@ describe('citations', () => {
 		expect(runsText(fullReference('reid1975'))).toBe(
 			'Reid, Cornelius L. Voice: Psyche and Soma. New York: Joseph Patelson Music House, 1975, third printing 1999. ISBN 0-915282-00-3.',
 		);
+	});
+});
+
+// ── The second paragraph (2026-11-03): the other approaches, in the observation itself ──
+// The sentence that opens it is a DESK DRAFT, not ratified (`insights.r2.otherApproaches.*`).
+describe('the second paragraph holds the hidden suggestions', () => {
+	const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
+	const page = [...commentsOf(T01), ...commentsOf(T02)].filter(speaks);
+	const render = (language: 'en' | 'fr', all = false, seed = 7) =>
+		renderComments(page, seed, { language, register: 'working', measuredVowels: MEASURED, pitchOf, all });
+
+	it('opens with one sentence per count: one hidden suggestion reads "one", several read "many"', () => {
+		const r = render('en');
+		const withHidden = r.filter((x) => x.hidden.length > 0);
+		expect(withHidden.length).toBeGreaterThan(0);
+		for (const x of withHidden) {
+			const text = runsText(x.otherApproaches);
+			const one = [t('insights.r2.otherApproaches.one.a', 'en'), t('insights.r2.otherApproaches.one.b', 'en')];
+			const many = [t('insights.r2.otherApproaches.many.a', 'en'), t('insights.r2.otherApproaches.many.b', 'en')];
+			expect(x.hidden.length === 1 ? one : many).toContain(text);
+		}
+		expect(r.some((x) => x.hidden.length === 1)).toBe(true);
+		expect(r.some((x) => x.hidden.length > 1)).toBe(true);
+	});
+	it('has no second paragraph where nothing is hidden, and with "All of them" on', () => {
+		for (const language of ['en', 'fr'] as const) {
+			for (const x of render(language).filter((y) => y.hidden.length === 0)) expect(x.otherApproaches).toEqual([]);
+			for (const x of render(language, true)) {
+				expect(x.hidden).toEqual([]);
+				expect(x.otherApproaches).toEqual([]);
+			}
+		}
+	});
+	it('keeps every hidden suggestion\'s short citation, except where the suggestion carries none by design (lean, cite: false)', () => {
+		for (const language of ['en', 'fr'] as const) {
+			for (const x of render(language)) {
+				for (const s of x.hidden) {
+					const text = runsText(s.runs);
+					if (SUGGESTIONS.find((d) => d.id === s.id)!.cite === false) expect(text).not.toMatch(/\(.*\d{4}/);
+					else expect(text).toMatch(/\([^()]*\d{4},\s+pp?\.\s*\d+[^()]*\)\.$/);
+				}
+			}
+		}
+	});
+	it('prints no short citation for a hidden `lean` (its consequence already cites the row), and adds no printed row for it', () => {
+		const c = at(commentsOf(T01), 'e11')!;
+		const lean = SUGGESTIONS.find((d) => d.id === 'lean')!;
+		const order = { visible: [], hidden: [lean] };
+		const [voicing] = rotate([c], [order], 0);
+		const r = renderComment(c, order, voicing, { language: 'en', register: 'working', pitchOf: T01.pitchOf });
+		expect(r.hidden).toHaveLength(1);
+		expect(runsText(r.hidden[0].runs)).not.toMatch(/\d{4}/);
+		// The consequence's own rows only: the lean row is among them, cited once there.
+		expect(r.printedRows).toEqual(['RMR-057', 'PVA2-C-025']);
+		expect(runsText(r.otherApproaches)).toBe(t(`insights.r2.otherApproaches.one.${voicing.paragraph}`, 'en'));
+	});
+	it('puts every printed suggestion row in printedRows and every cited row in rows, in order and once', () => {
+		for (const x of render('en')) {
+			const printed = new Set(x.printedRows);
+			for (const s of [...x.visible, ...x.hidden]) {
+				const def = SUGGESTIONS.find((d) => d.id === s.id)!;
+				if (def.cite !== false) expect(printed.has(def.row)).toBe(true);
+				for (const r of [def.row, ...def.supportRows]) expect(x.rows).toContain(r);
+			}
+			expect(new Set(x.rows).size).toBe(x.rows.length);
+			expect(x.references).toHaveLength(x.rows.length);
+		}
+	});
+	it('rotates the sentence: two observations with hidden suggestions on one page do not open alike where the pool allows, for every seed', () => {
+		for (let seed = 0; seed < 12; seed++) {
+			const orders = page.map((c) => orderSuggestions(c, { language: 'en', measuredVowels: MEASURED }));
+			const v = rotate(page, orders, seed);
+			const withHidden = v.filter((_, k) => orders[k].hidden.length > 0);
+			expect(withHidden.length).toBeGreaterThanOrEqual(2);
+			// The pool has two variants: the first two observations differ, the third may repeat.
+			expect(withHidden[0].paragraph).not.toBe(withHidden[1].paragraph);
+		}
+	});
+	it('leaves the suggestions\' own rotation alone: hidden suggestions still print their closers and take no repeated opener within a comment', () => {
+		const orders = page.map((c) => orderSuggestions(c, { language: 'en', measuredVowels: MEASURED }));
+		const v = rotate(page, orders, 3);
+		v.forEach((x, k) => {
+			const list = [...orders[k].visible, ...orders[k].hidden];
+			list.forEach((s, j) => {
+				if (j >= orders[k].visible.length && s.closer) expect(x.closers[j]).toBe(true);
+			});
+		});
+	});
+	it('has all four sentences in both languages, each ending in a period, none using "piste" in French', () => {
+		for (const language of ['en', 'fr'] as const) {
+			for (const key of ['one.a', 'one.b', 'many.a', 'many.b']) {
+				const s = t(`insights.r2.otherApproaches.${key}`, language);
+				expect(s).not.toContain('MISSING');
+				expect(s.endsWith('.')).toBe(true);
+				expect(s).not.toContain('—');
+				if (language === 'fr') expect(s).not.toMatch(/piste/i);
+			}
+		}
 	});
 });

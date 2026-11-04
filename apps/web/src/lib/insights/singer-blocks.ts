@@ -60,7 +60,7 @@ export type Block =
 	| { kind: 'prose'; heading?: string; text: string; small?: boolean; link?: string }
 	/** Row 47: the quiet octave line, directly under the phonation sentence. `shift` is the direction the range asks for; `applied` is whether it is. */
 	| { kind: 'octave'; heading?: string; shift: -1 | 1; applied: boolean }
-	| { kind: 'endnote'; heading?: string; teacher?: string; tag: string; suggestions: Run[][]; references: Run[][] }
+	| { kind: 'endnote'; heading?: string; teacher?: string; tag: string; references: Run[][] }
 	/** QUEUE row 79: the page's notes, once, at the end: the numbered footnote (HTML from i18n), then the method line. */
 	| { kind: 'notes'; heading: string; footnote: string | null; method: string };
 
@@ -379,8 +379,8 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 
 	// ── Squircle 3, the sources, as endnotes ──────────────────────────
 	const notes: Block[] = i.comments
-		.filter((c) => c.hidden.length > 0 || c.references.length > 0)
-		.map((c) => ({ kind: 'endnote', tag: `${i.tagOf(c)} \u00b7 [${c.comment.vowel}]`, suggestions: c.hidden.map((s) => s.runs), references: c.references }));
+		.filter((c) => c.references.length > 0)
+		.map((c) => ({ kind: 'endnote', tag: `${i.tagOf(c)} \u00b7 [${c.comment.vowel}]`, references: c.references }));
 	if (notes.length > 0) {
 		const first = notes[0] as Extract<Block, { kind: 'endnote' }>;
 		first.heading = T('comment.tap');

@@ -48,6 +48,8 @@ const comment = (id: string, approach: boolean, extras = false): RenderedComment
 		visible: approach ? [{ id: 's1', runs: [{ text: 'Try this.' }] }] : [],
 		hidden: extras ? [{ id: 's2', runs: [{ text: 'Or this.' }] }] : [],
 		count: '',
+		otherApproaches: extras ? [{ text: 'There is another way in.' }] : [],
+		rows: extras ? ['RMR-057'] : [],
 		references: extras ? [[{ text: 'Miller 1986' }]] : [],
 		printedRows: [],
 		namedFR1: false,
@@ -102,6 +104,12 @@ describe('the round 2 page, block by block', () => {
 		expect(notes).toHaveLength(1);
 		expect(notes[0].teacher).toBe(t('insights.r2.teacherC', 'en'));
 		expect(notes[0].heading).toBe(t('comment.tap', 'en'));
+	});
+
+	it('carries no suggestion in an endnote: the hidden ones print in the observation\'s second paragraph', () => {
+		const out = singerBlocks(inputs(fitting, { comments: [comment('a', true, true)] }), String);
+		const note = out.map((b) => b.block).find((b) => b.kind === 'endnote')!;
+		expect('suggestions' in note).toBe(false);
 	});
 
 	it('prints the verdict and "nothing flagged" as one paragraph for a key that fits', () => {
