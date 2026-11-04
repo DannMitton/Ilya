@@ -333,8 +333,6 @@ export interface RenderedComment {
 	consequence: Run[];
 	visible: RenderedSuggestion[];
 	hidden: RenderedSuggestion[];
-	/** "1 more thing to explore", or empty when there is no hidden suggestion. Not drawn by `SingerBlock.svelte`. */
-	count: string;
 	/**
 	 * The sentence that opens the second paragraph, "There is another way in.",
 	 * or empty when nothing is hidden ("All of them" hides nothing). The
@@ -447,7 +445,6 @@ export function renderComment(
 		runs: suggestionRuns(c, s, voicing.openers[j], voicing.closers[j], ctx),
 	}));
 	const n = order.hidden.length;
-	const count = n === 0 ? '' : fill(t(n === 1 ? 'comment.count.one' : 'comment.count.many', ctx.language), { n });
 	const frame = frameRuns(c, ctx, nameFR1);
 	const consequence = consequenceRuns(c, ctx);
 	const rows: string[] = [];
@@ -462,7 +459,6 @@ export function renderComment(
 		consequence: consequence.runs,
 		visible: rendered.slice(0, order.visible.length),
 		hidden: rendered.slice(order.visible.length),
-		count,
 		otherApproaches: n === 0 ? [] : toRuns(t(`insights.r2.otherApproaches.${n === 1 ? 'one' : 'many'}.${voicing.paragraph}`, ctx.language), ctx.language),
 		rows,
 		printedRows: printed,

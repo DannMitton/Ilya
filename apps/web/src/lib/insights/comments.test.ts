@@ -348,7 +348,7 @@ function forced(c: NoteComment, s: ReturnType<typeof song>, language: 'en' | 'fr
 	const order = orderSuggestions(c, { language, measuredVowels: MEASURED });
 	const [voicing] = rotate([c], [order], 0);
 	const r = renderComment(c, order, voicing, { language, register: 'working', pitchOf: s.pitchOf }, nameFR1);
-	return { text: norm([r.frame, r.consequence, ...r.visible.map((v) => v.runs)].map(runsText).join(' ')), count: r.count, r };
+	return { text: norm([r.frame, r.consequence, ...r.visible.map((v) => v.runs)].map(runsText).join(' ')), r };
 }
 
 // r7, English RATIFIED by Dann 2026-09-28 23:37 and 2026-09-29 22:51 (`draft-three-comments_r7_2026-09-29.md`),
@@ -363,7 +363,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 		expect(en.text).toBe(
 			'This [i] on E4 is sustained for about 4 seconds, above the first resonance (fR1) of your [i]. Here the [i] tends toward whoop timbre on its own; but narrowing it instead of opening the mouth tends to thin it (Bozeman, Kinesthetic Voice Pedagogy 2, 2021, pp. 97 and 115). You might let the jaw drop with the pitch, tongue tip forward, and notice whether the [i] keeps its colour (Miller, Solutions for Singers, 2004, p. 163).',
 		);
-		expect(en.count).toBe('1 more thing to explore');
+		expect(en.r.hidden).toHaveLength(1);
 		expect(forced(at(t01, 'e4')!, T01, 'fr').text).toBe(FR_E4);
 	});
 	it('E♭4 [ɛ], English and French', () => {
@@ -371,7 +371,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 		expect(en.text).toBe(
 			'This [ɛ] on E♭4 is sustained for about 3 seconds, just past where your [ɛ] turns (about D4). The colour tends to close here on its own; but keeping it open can nudge it toward a yell (Bozeman, Practical Vocal Acoustics, 2025, pp. 45 and 65). Bozeman suggests keeping a fairly close vowel posture through the turn and a little beyond it. Notice whether the colour closes more easily (Kinesthetic Voice Pedagogy 2, 2021, pp. 18 to 19).',
 		);
-		expect(en.count).toBe('2 more things to explore');
+		expect(en.r.hidden).toHaveLength(2);
 		expect(forced(t02[0], T02, 'fr', false).text).toBe(FR_EB4);
 	});
 	it('D4 [u], English and French', () => {
@@ -379,7 +379,7 @@ describe("the three rendered comments reproduce Dann's ratified r7 text", () => 
 		expect(en.text).toBe(
 			'This [u] on D4 sits just above your secondo passaggio and a little under the first resonance of your [u]. Here the [u] tends to open a little on its own (Miller, The Structure of Singing, 1986, p. 158); but keeping it closed tends toward whoop timbre (Bozeman, Practical Vocal Acoustics, 2025, p. 94). If it suits your voice, let it lean toward [ʊ], and notice whether the [u] keeps its colour.',
 		);
-		expect(en.count).toBe('3 more things to explore');
+		expect(en.r.hidden).toHaveLength(3);
 		expect(forced(at(t01, 'e11')!, T01, 'fr', false).text).toBe(FR_D4);
 	});
 	it('sets fR1 as Titze prints it, and the terms of art and titles in italics', () => {
@@ -420,7 +420,7 @@ describe('the rotation', () => {
 		const pitchOf = (id: string) => T01.pitchOf(id) ?? T02.pitchOf(id);
 		for (const language of ['en', 'fr'] as const) {
 			const r = renderComments(page, 7, { language, register: 'working', measuredVowels: MEASURED, pitchOf });
-			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), x.count, ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), runsText(x.otherApproaches)]).join(' ');
+			const all = r.flatMap((x) => [runsText(x.frame), runsText(x.consequence), ...[...x.visible, ...x.hidden].map((s) => runsText(s.runs)), runsText(x.otherApproaches)]).join(' ');
 			expect(all).not.toContain('MISSING');
 			expect(all).not.toMatch(/\{[a-zA-Z0-9:+-]+\}|\*/);
 			expect(all.match(/\(fR1\)/g)).toHaveLength(1);

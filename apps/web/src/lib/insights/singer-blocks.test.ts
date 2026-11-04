@@ -47,7 +47,6 @@ const comment = (id: string, approach: boolean, extras = false): RenderedComment
 		consequence: [],
 		visible: approach ? [{ id: 's1', runs: [{ text: 'Try this.' }] }] : [],
 		hidden: extras ? [{ id: 's2', runs: [{ text: 'Or this.' }] }] : [],
-		count: '',
 		otherApproaches: extras ? [{ text: 'There is another way in.' }] : [],
 		rows: extras ? ['RMR-057'] : [],
 		printedRows: [],
@@ -98,6 +97,25 @@ describe('the round 2 page, block by block', () => {
 		expect(cs.map((c) => c.teacher)).toEqual([t('insights.r2.teacherA', 'en'), undefined]);
 	});
 
+	it('puts the plural teacher line A on an observation with other approaches, and the singular on one without, in both languages, on the page and in "more"', () => {
+		const plain = comment('a', true);
+		const withHidden = comment('b', true, true);
+		for (const language of ['en', 'fr'] as const) {
+			const one = t('insights.r2.teacherA', language);
+			const many = t('insights.r2.teacherA.many', language);
+			expect(many).not.toBe(one);
+			const out = singerBlocks(inputs(fitting, { language, comments: [plain, withHidden], more: [withHidden, plain] }), String);
+			const cs = out.map((b) => b.block).filter((b): b is Extract<Block, { kind: 'comment' }> => b.kind === 'comment');
+			expect(cs.map((c) => c.teacher)).toEqual([one, many]);
+			const more = out.map((b) => b.block).find((b): b is Extract<Block, { kind: 'more' }> => b.kind === 'more')!;
+			expect(more.comments.map((c) => c.teacher)).toEqual([many, one]);
+		}
+	});
+	it('puts no teacher line A on an observation that only describes, hidden suggestions or not', () => {
+		const out = singerBlocks(inputs(fitting, { comments: [comment('a', false)] }), String);
+		const cs = out.map((b) => b.block).filter((b): b is Extract<Block, { kind: 'comment' }> => b.kind === 'comment');
+		expect(cs[0].teacher).toBeUndefined();
+	});
 	it('opens the sources with teacher line C, and lists only works an observation cites', () => {
 		const out = singerBlocks(inputs(fitting, { comments: [comment('a', true, true), comment('b', false)] }), String);
 		const notes = out.map((b) => b.block).filter((b): b is Extract<Block, { kind: 'endnote' }> => b.kind === 'endnote');

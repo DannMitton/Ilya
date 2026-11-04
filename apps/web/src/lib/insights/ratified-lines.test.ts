@@ -21,6 +21,9 @@ describe('ratified Insights lines (row 78a)', () => {
 	it('the teacher lines A (21:32) and C (21:34)', () => {
 		expect(t('insights.r2.teacherA', 'en')).toBe('Discuss this approach with your voice teacher.');
 		expect(t('insights.r2.teacherA', 'fr')).toBe('Discutez de cette approche lors de vos cours de chant.');
+		// The plural, under an observation with a second paragraph of other approaches: RATIFIED by Dann 2026-11-04 09:34.
+		expect(t('insights.r2.teacherA.many', 'en')).toBe('Discuss these approaches with your voice teacher.');
+		expect(t('insights.r2.teacherA.many', 'fr')).toBe('Discutez de ces approches lors de vos cours de chant.');
 		expect(t('insights.r2.teacherC', 'en')).toBe('Review these sources with your voice teacher, who can weigh in on which of them actually apply to your voice.');
 		expect(t('insights.r2.teacherC', 'fr')).toBe(
 			'Passez ces sources en revue avec votre professeure ou professeur de chant, qui pourra donner son avis sur celles qui s’appliquent effectivement à votre voix.',

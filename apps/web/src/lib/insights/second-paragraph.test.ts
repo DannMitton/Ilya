@@ -19,9 +19,7 @@ const rc = (id: string, withHidden: boolean): RenderedComment =>
 		hidden: withHidden ? [{ id: 's2', runs: [{ text: 'Second approach' }, { text: ' (Reid, ' }, { text: 'Voice', title: true }, { text: ', 1975, p. 66).' }] }] : [],
 		otherApproaches: withHidden ? [{ text: 'There is another way in.' }] : [],
 		rows: [],
-		references: [],
 		printedRows: [],
-		count: '',
 		namedFR1: false,
 	}) as unknown as RenderedComment;
 

@@ -277,7 +277,8 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 	const moment = (c: RenderedComment) => ({
 		tag: i.tagOf(c),
 		comment: c,
-		...(suggestsApproach(c) ? { teacher: T('insights.r2.teacherA') } : {}),
+		// Under a second paragraph of other approaches the line is plural (Dann 2026-11-04 09:34); the condition is the one that draws the paragraph.
+		...(suggestsApproach(c) ? { teacher: T(c.hidden.length > 0 ? 'insights.r2.teacherA.many' : 'insights.r2.teacherA') } : {}),
 		...(onPlaceholder(c) ? { placeholder: placeholderCommentSentence(c.comment.vowel, language) } : {}),
 	});
 	const moments: Block[] = i.comments.map((c) => ({ kind: 'comment', ...moment(c) }));
