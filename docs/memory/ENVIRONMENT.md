@@ -5125,3 +5125,14 @@ Row 165 steps 5 to 8 and Dann's rulings of 2026-11-01 17:56 and 17:57 treated IN
 ### WEBFETCH WILL NOT TRANSCRIBE A SONG TEXT FROM LIEDER.NET. 2026-11-02 23:xx (Opus evening desk)
 - A helper asked WebFetch for the Russian poems of row 114's songs; it declined three times ("a song text with published musical settings"), even for a public-domain poet. A plain fetch redirects to a 404; a browser user-agent was refused as bot-check circumvention. That refusal is on the content, so it is not routed around. Poems for a measure come from Dann (pasted or as files) or from Emily Ezust, placed in the workspace as text; a brief that needs them says so before a helper starts.
 
+
+
+### LEARNED BY THE OPUS DESK, 2026-11-03
+- **Fable reviews the brief Code will get, never an earlier draft** (Dann 20:48: *"What is the use of Fable having reviewed an obsolete brief that will not see production? ... ALL briefs are run past Fable"*). A brief that changes after its review goes back to Fable; a brief that only applies the review's own amendments is treated as reviewed and says so.
+- **Verify a problem first-hand before raising it** (Dann 20:36: *"We have a long history of you raising alarm bells secondhand"*). The desk reproduced the TEXT overrun in a browser (`npx playwright test e2e/pages-without-gaps.test.ts -g ...` with `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium-1243/chrome-linux64/chrome`, from a worktree with `pnpm install`) and found the reviewer's sum fix left 1.1 px: the footer legend was the third cause. Measure before briefing.
+- **Review and helper costs ran over every stated cap today:** Fable reviews 146k to 180k against 80k to 200k stated; a Sonnet measure helper 221k against 220k, and it reported "well under". State caps from these actuals (about 150k for a Fable review), and read the task count, not the helper's own claim.
+- **Fit the review's point of view to the brief** (Dann 20:49): the singer's walk governs a brief that changes what she meets; a mostly engineering brief leads with code quality and checks the walk as the outcome.
+- **The desk's workspace reaches cdn.jsdelivr.net now** (2026-11-03, curl 200), so the row 114 browser measure runs there (about 45 minutes for five songs, `measure.mjs`, inputs from `m0-inputs_2026-11-02.tgz`). A detached `nohup` there can die after the reply; run long jobs with `run_in_background`.
+- **`git fetch` from the workspace can hang;** wrap it in `timeout 100`. The GitHub API is not enabled for this repository in the workspace; `git ls-remote` from the Mac works.
+- **Wikisource category fetch** for a poem corpus: `generator=categorymembers` with `prop=revisions`, 50 pages a request, category names «Категория:Поэзия <full name>» (`~/Downloads/_desk-2026-11-03/build0-scripts/ws_cat.py`).
+- **НЭБ (rusneb.ru) refuses Dann's Chrome** with «Отключите VPN», so it is not usable from Canada; Культура.РФ did not load either.
