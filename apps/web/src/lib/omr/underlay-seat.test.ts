@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { freeNoteXs } from './underlay-counts';
-import { FAR_FACTOR, kindOf, medianGap, seatTokens, type NotePlace, type SeatRule, type Token } from './underlay-seat';
+import { FAR_FACTOR, isContinuation, kindOf, medianGap, seatTokens, type NotePlace, type SeatRule, type Token } from './underlay-seat';
 
 /** A token whose box is 40 px wide and centred on x. */
 const tok = (text: string, x: number, width = 40): Token => ({ text, x0: x - width / 2, x1: x + width / 2 });
@@ -404,5 +404,57 @@ describe('seatTokens, a token far from every free note (rule 2, FAR_FACTOR)', ()
 		expect(medianGap(freeNoteXs(notes))).toBe(100);
 		// 150 from the last free note: within the free reach (200), beyond the all-note reach (100).
 		expect(seatsOf([tok('а', 450)], notes)).toEqual([{ text: 'а', note: 14, unseated: false, by: 'monotone' }]);
+	});
+});
+
+describe('a slur\'s melisma is a continuation at every site (row 177 step 3)', () => {
+	// Free by ties alone: 100, 150, 200, 1000. Notes 150 and 200 are in a slur, so under the slur reading the free notes are 100 and 1000.
+	const slurred = (inSlur: boolean): NotePlace[] => [
+		{ id: 10, x: 100, bar: 1 },
+		{ id: 11, x: 150, bar: 1, inSlur },
+		{ id: 12, x: 200, bar: 1, inSlur },
+		{ id: 13, x: 1000, bar: 1 },
+	];
+
+	it('isContinuation is true for a tie, an extender, or a slur, and false for a plain note', () => {
+		expect(isContinuation({ id: 0, x: 0, bar: 1 })).toBe(false);
+		expect([{ tiedInto: true }, { underExtender: true }, { inSlur: true }].map((f) => isContinuation({ id: 0, x: 0, bar: 1, ...f }))).toEqual([true, true, true]);
+		expect(isContinuation({ id: 0, x: 0, bar: 1, inSlur: false })).toBe(false);
+	});
+
+	it('freeNoteXs lists the notes seatTokens seats on, with and without the slur reading, and with all three flags at once', () => {
+		const all: NotePlace[] = [
+			{ id: 10, x: 100, bar: 1 },
+			{ id: 11, x: 200, bar: 1, tiedInto: true },
+			{ id: 12, x: 300, bar: 1, underExtender: true },
+			{ id: 13, x: 400, bar: 1, inSlur: true },
+			{ id: 14, x: 500, bar: 1, tiedInto: true, inSlur: true },
+			{ id: 15, x: 600, bar: 1 },
+		];
+		for (const notes of [all, all.map((n) => ({ ...n, inSlur: false })), slurred(true), slurred(false)]) {
+			// A token under every note: the notes that take one are the free notes, and freeNoteXs lists their x.
+			const seated = seatTokens(notes.map((n) => tok('а', n.x, 10)), notes, 'nearest').map((s) => s.note);
+			const taken = new Set(seated);
+			expect(freeNoteXs(notes)).toEqual(notes.filter((n) => taken.has(n.id)).map((n) => n.x));
+			expect(freeNoteXs(notes)).toEqual(notes.filter((n) => !isContinuation(n)).map((n) => n.x));
+		}
+	});
+
+	it('seats no token on a slur\'s melisma note, under every rule, and the free note after it takes the next one', () => {
+		const notes = bar1(100, 200, 300);
+		notes[1] = { ...notes[1], inSlur: true };
+		for (const rule of RULES) expect(noteIds([tok('ка', 100), tok('мир', 210)], notes, rule)).toEqual([10, 12]);
+	});
+
+	it('pins the FAR reach under both readings: a token far under the ties-only reading is near under the slur reading', () => {
+		// Ties-only free gaps are 50, 50, 800: median 50, reach 2 * 50 = 100. A token at 600 is 400 from the nearest free note: unseated.
+		// Slur reading: free notes 100 and 1000, one gap of 900, reach 1800: the token is 400 from the nearest free note and is seated.
+		const token = [tok('ка', 100), tok('мир', 600)];
+		const ties = seatTokens(token, slurred(false), 'monotone').map((s) => [s.text, s.note, s.unseated]);
+		const slur = seatTokens(token, slurred(true), 'monotone').map((s) => [s.text, s.note, s.unseated]);
+		expect(medianGap(freeNoteXs(slurred(false)))).toBe(50);
+		expect(medianGap(freeNoteXs(slurred(true)))).toBe(900);
+		expect(ties).toEqual([['ка', 10, false], ['мир', null, true]]);
+		expect(slur).toEqual([['ка', 10, false], ['мир', 13, false]]);
 	});
 });

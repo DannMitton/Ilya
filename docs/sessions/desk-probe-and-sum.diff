@@ -1,0 +1,45 @@
+diff --git a/apps/web/e2e/pages-without-gaps.test.ts b/apps/web/e2e/pages-without-gaps.test.ts
+index 56f8a1b4..4bd8a421 100644
+--- a/apps/web/e2e/pages-without-gaps.test.ts
++++ b/apps/web/e2e/pages-without-gaps.test.ts
+@@ -128,6 +128,18 @@ async function overlaps(page: Page, label: string): Promise<string[]> {
+ 	for (const media of ['screen', 'print'] as const) {
+ 		await page.emulateMedia({ media });
+ 		await page.waitForTimeout(500);
++		if (label.includes('Tchaikovsky') && label.includes('text, en')) {
++			const probe = await page.locator('.paper-page:visible').first().evaluate((pg) => {
++				const pr = pg.getBoundingClientRect();
++				const pc = pg.querySelector('.page-content')!.getBoundingClientRect();
++				const rows = [...pg.querySelectorAll('.verse-row')].map((r) => { const b = r.getBoundingClientRect(); let inkB = b.bottom; for (const e of r.querySelectorAll('*')) { const q = e.getBoundingClientRect(); if (q.height > 0) inkB = Math.max(inkB, q.bottom); } return [Math.round(b.height * 10) / 10, Math.round((inkB - b.bottom) * 10) / 10, Math.round((b.bottom - pr.top) * 10) / 10]; });
++				const ft = [...pg.querySelectorAll('.page-footer .apparatus > *, .page-footer .provenance-legend, .page-footer .broad-legend, .page-footer .footer-hairline')].map((e) => [e.className.split(' ')[0], Math.round((e.getBoundingClientRect().top - pr.top) * 10) / 10, Math.round(e.getBoundingClientRect().height), (e.textContent||'').trim().slice(0,60)]);
++				let worst = { b: -1, d: '' };
++				for (const e of pg.querySelectorAll('*')) { if (e.closest('.page-footer, .running-header, .tab-mark') || e.children.length > 0) continue; const q = e.getBoundingClientRect(); if (q.height < 1) continue; const b = q.bottom - pr.top; if (b > worst.b) worst = { b: Math.round(b * 10) / 10, d: e.tagName + '.' + e.className + ' «' + (e.textContent || '').slice(0, 30) + '» parent ' + (e.parentElement?.className || '') }; }
++				return { worst, pageH: pr.height, contentTop: pc.top - pr.top, contentBottomEdge: pc.bottom - pr.top, gap: getComputedStyle(pg.querySelector('.page-content')!).rowGap, rows, footerTops: ft };
++			});
++			console.log('DESKPROBE', media, JSON.stringify(probe));
++		}
+ 		(await measure(page)).forEach((p, n) => {
+ 			if (p.empty < 0) out.push(`${label}, ${media}, page ${n + 1}: content runs ${Math.round(-p.empty * 10) / 10} px into the footer`);
+ 		});
+diff --git a/apps/web/src/lib/components/Paper/TitlePage.svelte b/apps/web/src/lib/components/Paper/TitlePage.svelte
+index 19622a7f..b9d66145 100644
+--- a/apps/web/src/lib/components/Paper/TitlePage.svelte
++++ b/apps/web/src/lib/components/Paper/TitlePage.svelte
+@@ -115,7 +115,7 @@
+ 	const rowConfig = $derived.by(() => {
+ 		if (effectiveHeaderHeight === 0) return { rows: 9, gap: 20 };
+ 
+-		const availableHeight = PAGE_SIZES[pageSize].height - contentTop - contentBottom;
++		const availableHeight = PAGE_SIZES[pageSize].height - contentTop - contentBottom - 4; /* desk scratch: .page-content padding-top */
+ 		const minGap = 18;
+ 		const maxGap = 28;
+ 
+@@ -133,7 +133,7 @@
+ 
+ 		gap = Math.min(gap, maxGap);
+ 
+-		return { rows, gap: Math.round(gap) };
++		return { rows, gap: Math.floor(gap) }; /* desk scratch */
+ 	});
+ 
+ 	/** Signal parent when row budget changes so Paper can re-slice. */

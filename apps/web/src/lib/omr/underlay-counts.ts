@@ -16,7 +16,7 @@
  *
  * Pure.
  */
-import type { NotePlace, Seat, Token } from './underlay-seat';
+import { isContinuation, type NotePlace, type Seat, type Token } from './underlay-seat';
 import { VOWEL } from './underlay-units';
 
 const VOWELS = new RegExp(VOWEL.source, 'giu');
@@ -37,11 +37,11 @@ export interface ManyVowelCounts {
 const vowelsIn = (text: string): number => (text.match(VOWELS) ?? []).length;
 
 /**
- * The x of each free note: not tied into, not under an extender, as `seatTokens` takes them. These are also the notes
+ * The x of each free note: not a continuation (`isContinuation`), as `seatTokens` takes them. These are also the notes
  * whose median gap sets `FAR_FACTOR`'s reach in `seatTokens` (`underlay-seat.ts`); the filter is the same as `seatTokens`' `free`, and `underlay-seat.test.ts` holds the two equal.
  */
 export function freeNoteXs(notes: readonly NotePlace[]): number[] {
-	return notes.filter((n) => !n.tiedInto && !n.underExtender).map((n) => n.x).sort((a, b) => a - b);
+	return notes.filter((n) => !isContinuation(n)).map((n) => n.x).sort((a, b) => a - b);
 }
 
 const between = (free: readonly number[], x0: number, x1: number): number => free.filter((x) => x >= x0 && x <= x1).length;

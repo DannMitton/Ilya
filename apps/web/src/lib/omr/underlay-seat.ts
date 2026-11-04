@@ -91,6 +91,22 @@ export interface NotePlace {
 	tiedInto?: boolean;
 	/** The note is under a printed extender: it sings no new syllable. */
 	underExtender?: boolean;
+	/**
+	 * The note lies after the first note of a printed slur, up to the slur's stop (`slurSpans`, `underlay-prepare.ts`). It
+	 * is a continuation only where `seatPage` takes the slur reading for the system (the count gate); until then it is read
+	 * by nothing.
+	 */
+	inSlur?: boolean;
+}
+
+/**
+ * The note sings no new syllable: tied into, under an extender, or in a printed slur's melisma. The ONLY reader of the
+ * three flags (CONTRACT.md §4): `seatTokens`' `free`, `freeNoteXs`, and the sung notes' `continuation` all ask it, so
+ * they cannot disagree. `inSlur` is set on a note only where `seatPage` takes the slur reading for its system; a system
+ * that does not take it hands the sites notes with `inSlur` false (`underlay-page.ts`).
+ */
+export function isContinuation(note: NotePlace): boolean {
+	return note.tiedInto === true || note.underExtender === true || note.inSlur === true;
 }
 
 /**
@@ -192,9 +208,9 @@ export function seatTokens(tokens: Token[], notes: NotePlace[], rule: SeatRule):
 	const kinds = tokens.map((t) => kindOf(t.text));
 	const sy = order.filter((i) => kinds[i] === 'syllable');
 	const staff = [...notes].sort((a, b) => a.x - b.x);
-	// The notes that sing a syllable: not tied into, not under an extender. Every rule seats on these only; `staff`
+	// The notes that sing a syllable: not a continuation (`isContinuation`: tied into, under an extender, or in a slur's melisma). Every rule seats on these only; `staff`
 	// (all notes, x sorted) is kept for the bar lookup of `order`.
-	const free = staff.map((_, j) => j).filter((j) => !staff[j].tiedInto && !staff[j].underExtender);
+	const free = staff.map((_, j) => j).filter((j) => !isContinuation(staff[j]));
 	const xs = free.map((j) => staff[j].x);
 	const allXs = staff.map((n) => n.x);
 

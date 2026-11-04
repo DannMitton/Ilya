@@ -3386,3 +3386,33 @@ Brief: `../sessions/brief-code-gloss-language-and-reuse_r1_2026-11-03.md` (Fable
 ## UNTIL RELEASE, DANN'S OWN STORED DATA IS NOT A DESIGN CONSTRAINT. Ruled by Dann 2026-11-03 15:21
 
 Dann: *"I think it's a mistake to behave as if the current information in my profile is accurate or worthy of conserving ... until Ilya's release, I'm not sure my own profile is a good object of scrutiny because of all the exploration we have required"* (transcribed with his typos corrected). Standing: no brief adds migration, carry-over, or compatibility machinery for records only Dann holds; the simplest correct reading of old data wins (as `OPEN.md` 2026-11-01, "no carry-over read needed"). First use: the gloss brief r2 reads an untagged gloss as English (he typed them in English).
+
+## A POEM'S DATING LINE STAYS IN THE LIBRARY'S RECORD, NOT IN POEM. Ruled by Dann 2026-11-03 19:50
+
+Dann: *"keep the date in the library's record but leave it out of POEM."* A trailing dating line in a library entry (one line, a four-digit year, four words or fewer; Code's `bodyStanzas` test, `text/poem-source.ts`, `cloud-lane-31` step 4) is kept in `library.json` and never filled into POEM, so it never shows as a word the composer left out. Applies to «Весёлый час» (1830), «Молитва» modern (Февраль 1837), «Русская песня» (8 декабря 1840, Москва). Goes to Code as part of the poem build's step 7, with the TEXT page-budget fix.
+
+## THE POEM LIBRARY CATALOGUES AUTHORITATIVE TEXTS. Ruled by Dann 2026-11-03 19:54 (desk measures 1, 2, 4, and 5 of 19:52)
+
+Dann: *"adopt 1, 2, 4, and 5 as data-build rules now."* An authoritative poem is the poet's text in a critical edition, never the text as a composer set it. Data-build rules, standing:
+1. **A named critical edition for every entry,** preferred in order: the poet's ПСС or Собрание сочинений; Библиотека поэта (Большая, then Малая серия); Литературные памятники. Edition, volume, and page recorded. A web-only source makes the entry `unverified`.
+2. **A second, independent witness.** Each text is checked against a second copy of a critical edition (feb-web.ru, a scan of the edition, or Dann's shelf). Agreement makes it `verified`; a difference is logged as a variant, never silently chosen.
+4. **Poem and text as set stay apart.** Anthologies that print texts as set (Richter, Belov, Sylvester, and the like) are witnesses for LYRICS and variant notes, never the source of POEM.
+5. **A trail for every text:** retrieval date, page revision, a hash of the text, and a log of every correction with its reason.
+Only `verified` entries fill POEM; the others stay in the library file with their status, unused. Measure 3 (Wikisource proofreading level) and measure 6 (a singer's error report) were not adopted.
+
+## TEXT'S PAGE HEADER NAMES THE TEXT IT PRINTS. Ruled by Dann 2026-11-03 20:17 to 20:19
+
+Dann 20:17: TEXT's top-right header reads "TEXT" whichever view feeds the page; differentiate it as *"TEXT: POEM for an active Poem pane, or TEXT: LYRICS for an active lyric pane"*; where poem and lyrics differ their transcriptions differ, and where they match that is acceptable. Desk's rule, adopted 20:19 (*"Yes this is the new plan"*; *"they must correspond"*): **the header names what the page actually prints, not which pill is lit** (a POEM view with an empty Poem prints Lyrics, so it reads TEXT: LYRICS). Strings, drafts for ratification: EN "TEXT: POEM", "TEXT: LYRICS"; FR « TEXTE : POÈME », « TEXTE : PAROLES » (no-break space before the colon, OQLF; words from `tab.text`, `intake.view.poem`, `intake.view.lyrics`). Goes to the poem build's step 7 with the TEXT page-fit fix and the dating-line ruling.
+
+## POEM CARD, GLOSS OFFER, AND TEXT HEADER STRINGS RATIFIED. Dann 2026-11-03 20:01 and 20:21
+
+D1 to D4 ratified 20:01; 20:21, Dann: *"Yes I ratify all the strings and their French equivalents"* (transcribed with his typo corrected). Ratified as shown in `../sessions/ratify-poem-and-gloss-strings_r1_2026-11-03.md` with D1 to D4 applied (the desk's D5 and D6 tables in the thread, 20:0x): the twelve poem-card strings, the six gloss-offer strings, and the TEXT header strings (EN "TEXT: POEM", "TEXT: LYRICS"; FR « TEXTE : POÈME », « TEXTE : PAROLES »). Coined French now ratified: « Tiré de », « en orthographe moderne », « Pas ce poème », « D’après », « traduit par », « un passage commençant par », « maintenant », « Wikisource en russe », « Pas maintenant », « Utilisée dans », « Impossible de la conserver sur cet appareil », « De vos autres chants », « Ne plus utiliser ».
+
+## THE POEM LIBRARY'S FOURTH RULE: WHEN NO CRITICAL EDITION EXISTS. Ruled by Dann 2026-11-03 20:27
+
+Dann 19:57 asked what satisfies full attribution and fidelity to the poet's wishes without a critical edition; the desk proposed a ladder; 20:27: *"adopt it as the library's fourth rule."* The aim is the poet's last wishes for the text (as far as the desk knows, Russian textology's «последняя авторская воля»; the term NOT ESTABLISHED from a source read). Where no critical edition exists, an entry takes its text from, in order:
+1. the last edition printed in the poet's lifetime that the poet oversaw (прижизненное издание);
+2. failing that, the first printing (the journal or collection where the poem appeared);
+3. a scholarly witness that names its own source (for example Davis 2014 for Grekov), as a witness only, never the text itself;
+4. never the composer's text (that is LYRICS).
+Every entry says plainly which rung its text stands on, in its record and in its source line (for example "from his Стихотворения of 1858, the last edition in his lifetime"), and variants are logged, never chosen silently. Rules 2 (a second witness) and 5 (the trail) still apply. Which lifetime editions exist for any poet is NOT ESTABLISHED until read.
