@@ -371,6 +371,7 @@ describe('the shortlist (a large library on a phone)', () => {
 				translator: null,
 				source: { site: 's', url: 'u' },
 				spelling: 'modern' as const,
+				verified: false,
 				textModern: letters,
 				letters,
 				at: letters.split('').map((_, i) => (i === 0 ? 0 : 1)),

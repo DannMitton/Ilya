@@ -36,6 +36,7 @@ function entry(over: Partial<PoemEntry> = {}): PoemEntry {
 		translator: null,
 		source: { site: 'Russian Wikisource', url: 'https://ru.wikisource.org/w/index.php?oldid=1' },
 		spelling: 'modern',
+		verified: false,
 		textModern,
 		...stream(textModern),
 		...over,
@@ -68,6 +69,8 @@ describe('isPoemLibrary: the check a file passes before the app trusts it', () =
 		expect(isPoemLibrary({ version: 1 })).toBe(false);
 		expect(isPoemLibrary(library(entry({ title: '' })))).toBe(false);
 		expect(isPoemLibrary(library(entry({ spelling: 'old' as never })))).toBe(false);
+		expect(isPoemLibrary(library(entry({ verified: undefined as never })))).toBe(false);
+		expect(isPoemLibrary(library(entry({ verified: 'yes' as never })))).toBe(false);
 		expect(isPoemLibrary(library(entry({ translator: 3 as never })))).toBe(false);
 		expect(isPoemLibrary(library(entry({ source: { site: 'x' } as never })))).toBe(false);
 	});

@@ -23,6 +23,7 @@ const entry: PoemEntry = {
 	translator: null,
 	source: { site: 'Russian Wikisource', url: 'https://ru.wikisource.org/w/index.php?oldid=1' },
 	spelling: 'modern',
+	verified: false,
 	textModern: 'Дайте вина',
 	letters: 'даитевина',
 	at: [0, 1, 1, 1, 1, 1, 2, 1, 1],

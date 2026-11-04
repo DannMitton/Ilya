@@ -101,6 +101,8 @@ test.describe('walk 1 to 3: she pastes a song, sees a card, and keeps the poem',
 		// Before the field in tab order.
 		await page.locator('#intake-tab-lyrics').focus();
 		await page.keyboard.press('Tab');
+		await expect(card(page).locator('a.site-link')).toBeFocused(); // the source link (step 8, part 1)
+		await page.keyboard.press('Tab');
 		await expect(buttons.nth(0)).toBeFocused();
 		await page.keyboard.press('Tab');
 		await expect(buttons.nth(1)).toBeFocused();
@@ -341,6 +343,14 @@ test.describe('nothing about the singer or the song leaves the device', () => {
 		await open(page);
 		await pasteIntoLyrics(page, SONG2);
 		await expect(card(page)).toBeVisible({ timeout: 30_000 });
+		// The card's source link points at the entry's own page, and an unclicked link made no request (the log above).
+		const lib = JSON.parse(readFileSync(join(FIXTURES, '../library.json'), 'utf8'));
+		const url = lib.entries.find((e: { id: string }) => e.id === '0127a63ffe').source.url;
+		const link = card(page).locator('a.site-link');
+		await expect(link).toHaveAttribute('href', url);
+		await expect(link).toHaveAttribute('target', '_blank');
+		await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+		await expect(link).toHaveText('Russian Wikisource');
 		await page.getByRole('button', { name: 'Keep this poem' }).click();
 		await page.locator('#intake-tab-poem').click();
 		await page.waitForTimeout(1500);

@@ -47,7 +47,12 @@
 			title: `${open}${entry.title}${close}`,
 			line: card.resolved.passage ? t('intake.poemLibrary.passage', language).replace('{line}', () => quoted) : `${open}${quoted}${close}`,
 			poet: entry.translator ? t('intake.poemLibrary.by', language).replace('{author}', () => entry.author).replace('{translator}', () => entry.translator!) : entry.author,
-			source: t(entry.spelling === 'pre-reform' ? 'intake.poemLibrary.cardSourceModernized' : 'intake.poemLibrary.cardSource', language).replace('{site}', () => siteName(entry.source.site, language)),
+			// The ratified sentence, split around its `{site}`, so the site's name can be the link to the page (step 8, part 1, DESK DEFAULT):
+			// she can trust the text or check it (Dann 2026-11-04 09:40). The sentence around it is unchanged.
+			source: (() => {
+				const [before, after] = t(entry.spelling === 'pre-reform' ? 'intake.poemLibrary.cardSourceModernized' : 'intake.poemLibrary.cardSource', language).split('{site}');
+				return { before, after, site: siteName(entry.source.site, language), url: entry.source.url };
+			})(),
 		};
 	});
 
@@ -79,7 +84,7 @@
 		<p class="name">{naming.title}</p>
 		<p class="line">{naming.line}</p>
 		<p class="poet">{naming.poet}</p>
-		<p class="small">{naming.source}</p>
+		<p class="small">{naming.source.before}<a class="site-link" href={naming.source.url} target="_blank" rel="noopener noreferrer">{naming.source.site}</a>{naming.source.after}</p>
 		<p class="small">{t('intake.poemLibrary.cardColours', language)}</p>
 		<div class="actions">
 			<button type="button" class="btn" onclick={() => void notThis()}>{t('intake.poemLibrary.notThis', language)}</button>
@@ -142,6 +147,11 @@
 		font-size: 0.75rem;
 		line-height: 1.4;
 		color: var(--ink-tertiary);
+	}
+
+	.site-link {
+		color: inherit;
+		text-decoration: underline;
 	}
 
 	.actions {

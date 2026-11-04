@@ -35,6 +35,8 @@ export interface PoemEntry {
 	translator: string | null;
 	source: { site: string; url: string };
 	spelling: 'modern' | 'pre-reform';
+	/** The entry's text has been checked against a named edition (`library.json`, `verification`). Not read in build 1: any attributed entry fills. */
+	verified: boolean;
 	textModern: string;
 	/** The folded letters of `textModern` (the matcher's alphabet). */
 	letters: string;
@@ -92,6 +94,7 @@ function isEntry(v: unknown): v is PoemEntry {
 	if (e.translator !== null && !isText(e.translator)) return false;
 	if (!e.source || !isText(e.source.site) || !isText(e.source.url)) return false;
 	if (e.spelling !== 'modern' && e.spelling !== 'pre-reform') return false;
+	if (typeof e.verified !== 'boolean') return false;
 	if (typeof e.letters !== 'string' || !Array.isArray(e.at) || e.at.length !== e.letters.length) return false;
 	// Every offset lands inside the text: a map that points outside it would cut a stanza from nothing.
 	let here = 0;

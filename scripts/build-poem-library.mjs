@@ -9,7 +9,7 @@
  * (`apps/web/static/sw.js:100`) and the browser never stores it twice.
  *
  * WHAT AN ENTRY CARRIES. `id`, `work`, `title`, `incipit`, `author`,
- * `translator`, `source: { site, url }`, `spelling`, `textModern`, and the
+ * `translator`, `source: { site, url }`, `spelling`, `verified`, `textModern`, and the
  * letter stream the matcher aligns against:
  *
  *   letters   the folded letters of `textModern`, as one string.
@@ -98,8 +98,12 @@ export function shipEntry(e) {
 		if (typeof e[k] !== 'string' || e[k] === '') throw new Error(`library entry ${e.id ?? '?'}: "${k}" is missing`);
 	}
 	if (e.translator !== null && typeof e.translator !== 'string') throw new Error(`library entry ${e.id}: "translator" must be a string or null`);
-	if (!e.source || typeof e.source.site !== 'string' || typeof e.source.url !== 'string') throw new Error(`library entry ${e.id}: "source.site" and "source.url" are required`);
+	if (!e.source || typeof e.source.site !== 'string' || e.source.site === '' || typeof e.source.url !== 'string' || e.source.url === '') throw new Error(`library entry ${e.id}: "source.site" and "source.url" are required`);
 	if (e.spelling !== 'modern' && e.spelling !== 'pre-reform') throw new Error(`library entry ${e.id}: "spelling" is "${e.spelling}"`);
+	// Every entry records its verification state (Dann 2026-11-04 09:40: an unverified Wikisource text fills POEM, and the card's source
+	// line, which names the site, is the attribution). The app does not read it in build 1; it ships so a later build can.
+	const state = e.verification?.state;
+	if (state !== 'verified' && state !== 'unverified') throw new Error(`library entry ${e.id}: "verification.state" must be "verified" or "unverified"`);
 	const { letters, offsets } = letterStream(e.textModern);
 	return {
 		id: e.id,
@@ -110,6 +114,7 @@ export function shipEntry(e) {
 		translator: e.translator,
 		source: { site: e.source.site, url: e.source.url },
 		spelling: e.spelling,
+		verified: state === 'verified',
 		textModern: e.textModern,
 		letters,
 		at: encodeOffsets(offsets),

@@ -45,7 +45,7 @@ describe('poem library build: an entry and the file', () => {
 	it('carries exactly the fields the app needs, and none of the rest', () => {
 		const e = shipEntry(library.entries[0]);
 		expect(Object.keys(e).sort()).toEqual(
-			['at', 'author', 'id', 'incipit', 'letters', 'source', 'spelling', 'textModern', 'title', 'translator', 'work'].sort(),
+			['at', 'author', 'id', 'incipit', 'letters', 'source', 'spelling', 'textModern', 'title', 'translator', 'verified', 'work'].sort(),
 		);
 		expect(Object.keys(e.source).sort()).toEqual(['site', 'url']);
 		expect(e.title).toBe('Весёлый час');
@@ -64,11 +64,27 @@ describe('poem library build: an entry and the file', () => {
 		}
 	});
 
+	it('ships verified: false and the source site for an unverified entry, and verified: true only for a verified one', () => {
+		const good = library.entries[0];
+		expect(good.verification).toEqual({ state: 'unverified', edition: null, witness: null });
+		const shipped = shipEntry(good);
+		expect(shipped.verified).toBe(false);
+		expect(shipped.source.site).toBe('Russian Wikisource');
+		expect(shipEntry({ ...good, verification: { state: 'verified', edition: 'x', witness: 'y' } }).verified).toBe(true);
+		// every entry of the library is unverified today, and none is marked otherwise
+		for (const e of library.entries) expect(e.verification.state).toBe('unverified');
+		for (const e of JSON.parse(buildPoemFile(library).text).entries) expect(e.verified).toBe(false);
+	});
+
 	it('refuses a library that is wrong rather than ship it', () => {
 		const good = library.entries[0];
 		expect(() => shipEntry({ ...good, title: '' })).toThrow(/title/);
 		expect(() => shipEntry({ ...good, spelling: 'old' })).toThrow(/spelling/);
 		expect(() => shipEntry({ ...good, source: { site: 'x' } })).toThrow(/source/);
+		expect(() => shipEntry({ ...good, source: { url: 'https://x' } })).toThrow(/site/);
+		expect(() => shipEntry({ ...good, source: { site: '', url: 'https://x' } })).toThrow(/site/);
+		expect(() => shipEntry({ ...good, verification: undefined })).toThrow(/verification/);
+		expect(() => shipEntry({ ...good, verification: { state: 'checked' } })).toThrow(/verification/);
 		expect(() => shipEntry({ ...good, translator: 7 })).toThrow(/translator/);
 		expect(() => buildPoemFile({ entries: [] })).toThrow(/no entries/);
 		expect(() => buildPoemFile({ entries: [good, good] })).toThrow(/twice/);
