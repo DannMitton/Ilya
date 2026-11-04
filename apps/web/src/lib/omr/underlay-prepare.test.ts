@@ -4,8 +4,9 @@
  * and a MusicXML whose notes carry `imgpos` over the voice staff.
  */
 import { describe, expect, it } from 'vitest';
-import { prepareUnderlay, voiceNotes } from './underlay-prepare';
+import { prepareUnderlay, slurSpans, voiceNotes } from './underlay-prepare';
 import { inkExtent } from './underlay-frame';
+import { seatPage, type Seams, type WordBox } from './underlay-page';
 import type { Grey, StaffBoxLike } from './metre-windows';
 
 const W = 1200;
@@ -35,20 +36,89 @@ const music = xml(note(300, 160) + rest, note(500, 150, '        <tie type="stop
 describe('voiceNotes', () => {
 	it('lists the notes of the first part only, rests counted, with imgpos, bar, and a tie\'s stop', () => {
 		expect(voiceNotes(music)).toEqual([
-			{ ordinal: 0, rest: false, bar: 1, at: { x: 300, y: 160 }, tiedInto: false },
-			{ ordinal: 1, rest: true, bar: 1, at: { x: 400, y: 160 }, tiedInto: false },
-			{ ordinal: 2, rest: false, bar: 2, at: { x: 500, y: 150 }, tiedInto: true },
-			{ ordinal: 3, rest: false, bar: 2, at: { x: 700, y: 170 }, tiedInto: false },
+			{ ordinal: 0, rest: false, bar: 1, at: { x: 300, y: 160 }, tiedInto: false, inSlur: false },
+			{ ordinal: 1, rest: true, bar: 1, at: { x: 400, y: 160 }, tiedInto: false, inSlur: false },
+			{ ordinal: 2, rest: false, bar: 2, at: { x: 500, y: 150 }, tiedInto: true, inSlur: false },
+			{ ordinal: 3, rest: false, bar: 2, at: { x: 700, y: 170 }, tiedInto: false, inSlur: false },
 		]);
 	});
 
 	it('does not take a tie\'s start, or a note without imgpos, as anything else', () => {
 		const out = voiceNotes(xml(`      <note>\n        <pitch><step>C</step><octave>5</octave></pitch>\n        <tie type="start" />\n      </note>\n`));
-		expect(out).toEqual([{ ordinal: 0, rest: false, bar: 1, at: null, tiedInto: false }]);
+		expect(out).toEqual([{ ordinal: 0, rest: false, bar: 1, at: null, tiedInto: false, inSlur: false }]);
 	});
 
 	it('has no notes where there is no part', () => {
 		expect(voiceNotes('<score-partwise></score-partwise>')).toEqual([]);
+	});
+});
+
+describe('voiceNotes: a printed slur (row 177, step 1)', () => {
+	const slur = (...ends: [string, number?][]) => `        <notations>\n${ends.map(([type, number]) => (number === undefined ? `          <slur type="${type}" />\n` : `          <slur number="${number}" type="${type}" />\n`)).join('')}        </notations>\n`;
+	const slurred = (m: string) => voiceNotes(xml(m)).map((n) => n.inSlur);
+
+	it('marks every note after the start note up to and including the stop note, and not the start note', () => {
+		const m = note(100, 160, slur(['start'])) + note(200, 160) + note(300, 160, slur(['stop'])) + note(400, 160);
+		expect(slurred(m)).toEqual([false, true, true, false]);
+	});
+
+	it('reads number before type, as homr writes it, and number 1 where none is given', () => {
+		const m = note(100, 160, slur(['start', 1])) + note(200, 160, slur(['stop']));
+		expect(slurred(m)).toEqual([false, true]);
+	});
+
+	it('does not mark a tie, and reads a tie and a slur on the same notes: the note is tied into and in the slur', () => {
+		const m = note(100, 160, slur(['start'])) + note(200, 160, '        <tie type="stop" />\n' + slur(['stop']));
+		expect(voiceNotes(xml(m)).map((n) => [n.tiedInto, n.inSlur])).toEqual([[false, false], [true, true]]);
+	});
+
+	it('runs a span past a rest, never marks the rest, and does not end there', () => {
+		const m = note(100, 160, slur(['start'])) + rest + note(300, 160) + note(400, 160, slur(['stop']));
+		expect(voiceNotes(xml(m)).map((n) => [n.rest, n.inSlur])).toEqual([[false, false], [true, false], [false, true], [false, true]]);
+	});
+
+	it('takes the union of overlapping and nested spans with different numbers', () => {
+		// 1 runs notes 0 to 3; 2 runs notes 1 to 2 inside it; note 4 starts another span with no stop.
+		const m = note(100, 160, slur(['start', 1])) + note(200, 160, slur(['start', 2])) + note(300, 160, slur(['stop', 2])) + note(400, 160, slur(['stop', 1])) + note(500, 160, slur(['start', 1]));
+		expect(slurred(m)).toEqual([false, true, true, true, false]);
+		// Overlapping, not nested: 1 runs 0 to 2, 2 runs 1 to 3.
+		const o = note(100, 160, slur(['start', 1])) + note(200, 160, slur(['start', 2])) + note(300, 160, slur(['stop', 1])) + note(400, 160, slur(['stop', 2]));
+		expect(slurred(o)).toEqual([false, true, true, true]);
+	});
+
+	it('chains slurs: a note that stops one and starts the next ends the first and opens the second', () => {
+		const m = note(100, 160, slur(['start'])) + note(200, 160, slur(['stop'], ['start'])) + note(300, 160, slur(['stop'])) + note(400, 160);
+		expect(slurred(m)).toEqual([false, true, true, false]);
+		// Start written before stop in the file: the same reading.
+		const w = note(100, 160, slur(['start'])) + note(200, 160, slur(['start'], ['stop'])) + note(300, 160, slur(['stop']));
+		expect(slurred(w)).toEqual([false, true, true]);
+	});
+
+	it('marks nothing for a start with no stop, or a stop with no start (a slur across a page break)', () => {
+		expect(slurred(note(100, 160, slur(['start'])) + note(200, 160) + note(300, 160))).toEqual([false, false, false]);
+		expect(slurred(note(100, 160) + note(200, 160, slur(['stop'])) + note(300, 160))).toEqual([false, false, false]);
+	});
+
+	it('closes overlapping slurs as a stack: start 21, start 22, stop 24, stop 25 keeps notes 22 to 25 in the melisma and note 26 free (song 1 of row 114)', () => {
+		const m = Array.from({ length: 27 }, (_, i) => note(100 + i * 30, 160, i === 21 || i === 22 ? slur(['start']) : i === 24 || i === 25 ? slur(['stop']) : ''));
+		const out = voiceNotes(xml(m.join(''))).map((n) => n.inSlur);
+		expect(out.flatMap((v, i) => (v ? [i] : []))).toEqual([22, 23, 24, 25]);
+	});
+
+	it('gives a stop with no number to the most recent open start of any number, and a numbered stop only to its own number', () => {
+		expect(slurred(note(100, 160, slur(['start', 2])) + note(200, 160, '        <notations>\n          <slur type="stop" />\n        </notations>\n'))).toEqual([false, true]);
+		expect(slurred(note(100, 160, slur(['start', 1])) + note(200, 160, slur(['stop', 2])) + note(300, 160, slur(['stop', 1])))).toEqual([false, true, true]); // the stop 2 closes nothing; the stop 1 closes the start
+	});
+
+	it('does not pair a start with a stop of another number', () => {
+		expect(slurred(note(100, 160, slur(['start', 1])) + note(200, 160, slur(['stop', 2])))).toEqual([false, false]);
+	});
+
+	it('counts the starts and stops that found no partner', () => {
+		const e = (...t: ('start' | 'stop')[]) => t.map((type) => ({ type, number: 1 }));
+		// start, stop | stop | start, start, stop: the second stop closes nothing; the final stop closes the later start, the earlier stays open (was: both starts took the final stop, 0 unmatched).
+		expect(slurSpans([e('start'), e('stop'), e('stop'), e('start'), e('start'), e('stop')], new Array(6).fill(false))).toMatchObject({ unmatchedStarts: 1, unmatchedStops: 1 });
+		expect(slurSpans([e('start'), e(), e('start')], new Array(3).fill(false))).toMatchObject({ unmatchedStarts: 2, unmatchedStops: 0 });
 	});
 });
 
@@ -61,12 +131,18 @@ describe('prepareUnderlay', () => {
 		expect(system.staffSpace).toBeGreaterThan(28);
 		expect(system.staffSpace).toBeLessThan(32);
 		expect(system.notes).toEqual([
-			{ id: 0, x: 300, bar: 1, tiedInto: false },
-			{ id: 2, x: 500, bar: 2, tiedInto: true },
-			{ id: 3, x: 700, bar: 2, tiedInto: false },
+			{ id: 0, x: 300, bar: 1, tiedInto: false, inSlur: false },
+			{ id: 2, x: 500, bar: 2, tiedInto: true, inSlur: false },
+			{ id: 3, x: 700, bar: 2, tiedInto: false, inSlur: false },
 		]);
 		expect(system.hasBand).toBe(true);
 		expect(prepared.layout.unfound).toBe(0);
+	});
+
+	it('carries a slur\'s notes to the system\'s notes as inSlur', () => {
+		const slurMusic = xml(note(300, 160, '        <notations>\n          <slur number="1" type="start" />\n        </notations>\n') + note(500, 150) + note(700, 170, '        <notations>\n          <slur number="1" type="stop" />\n        </notations>\n'));
+		const out = prepareUnderlay(page(), slurMusic, boxes).layout.systems[0].notes;
+		expect(out.map((n) => [n.id, n.inSlur])).toEqual([[0, false], [1, true], [2, true]]);
 	});
 
 	it('finds the row between the voice staff and the piano\'s, and frames it with its ink 32 px high and 16 px of padding', () => {
@@ -117,5 +193,50 @@ describe('prepareUnderlay', () => {
 		const close = prepareUnderlay(page(), music, [boxes[0], { ...boxes[1], cy: (260 + 60) / H }]);
 		// The second staff box now sits where the first row of text is; no staff is found there, so only the voice staff remains and its band runs 20 spaces.
 		expect(close.layout.systems).toHaveLength(1);
+	});
+});
+
+describe('overlapping slurs, from the MusicXML to the words (row 177 step 5)', () => {
+	const mk = (x: number, type?: 'start' | 'stop') => note(x, 160, type ? `        <notations>\n          <slur number="1" type="${type}" />\n        </notations>\n` : '');
+	// Notes 0 and 1 start slurs, notes 3 and 4 stop them, note 5 is free: «на» on 0, «я» on 5, notes 1 to 4 the melisma.
+	const music = xml(mk(200, 'start') + mk(350, 'start') + mk(500) + mk(650, 'stop') + mk(800, 'stop') + mk(950));
+	const seams: Seams = { isWord: (w) => w === 'на', cut: (w) => [w] };
+
+	it('seats «на» on the first note and «я» on the note after the last stop, with no breach', () => {
+		const { layout } = prepareUnderlay(page(), music, boxes);
+		const { scale, pad } = layout.systems[0].rows[0].transform;
+		const at = (text: string, x0: number, x1: number): WordBox => ({ text, x0: x0 * scale + pad, x1: x1 * scale + pad, y0: 16, y1: 48 });
+		const out = seatPage(layout, [[at('на', 190, 210), at('я', 940, 960)]], seams);
+		expect(out.stats.counted.perSystem).toEqual([{ system: 1, free: 6, slurFree: 2, units: 2, slurReading: true }]);
+		expect(out.words.map((w) => w.syllables.map((y) => [y.text, y.note]))).toEqual([[['на', 0]], [['я', 5]]]);
+		expect(out.stats.counted.breaches).toEqual([]);
+	});
+});
+
+describe('a printed slur, from the MusicXML to the words under the notes (row 177 step 4)', () => {
+	const slurNote = (x: number, type?: 'start' | 'stop') => note(x, 160, type ? `        <notations>\n          <slur number="1" type="${type}" />\n        </notations>\n` : '');
+	// Four notes; a slur from the first to the third. Two syllables for four notes: the counts come out even only if the slur's later notes are melisma.
+	const slurMusic = xml(slurNote(300, 'start') + slurNote(500) + slurNote(700, 'stop') + slurNote(900));
+	const noSlurMusic = xml(slurNote(300) + slurNote(500) + slurNote(700) + slurNote(900));
+	const seams: Seams = { isWord: (w) => w === 'мир', cut: (w) => [w] };
+	const wordAt = (text: string, x0: number, x1: number, scale: number, pad: number): WordBox => ({ text, x0: x0 * scale + pad, x1: x1 * scale + pad, y0: 16, y1: 48 });
+	const seatOn = (musicXml: string) => {
+		const { layout } = prepareUnderlay(page(), musicXml, boxes);
+		const { scale, pad } = layout.systems[0].rows[0].transform;
+		return seatPage(layout, [[wordAt('ка', 290, 310, scale, pad), wordAt('мир', 890, 910, scale, pad)]], seams);
+	};
+
+	it('seats «ка» on the first note and «мир» on the note after the slur\'s stop, with no breach, where the slur makes the counts even', () => {
+		const out = seatOn(slurMusic);
+		expect(out.stats.counted.perSystem).toEqual([{ system: 1, free: 4, slurFree: 2, units: 2, slurReading: true }]);
+		expect(out.words.map((w) => w.syllables.map((y) => [y.text, y.note]))).toEqual([[['ка', 0]], [['мир', 3]]]);
+		expect(out.stats.counted.breaches).toEqual([]);
+	});
+
+	it('reads the same page with the slur unprinted by ties alone: two syllables on four notes, two empty notes counted', () => {
+		const out = seatOn(noSlurMusic);
+		expect(out.stats.counted.perSystem).toEqual([{ system: 1, free: 4, slurFree: 4, units: 2, slurReading: false }]);
+		expect(out.words.map((w) => w.syllables.map((y) => [y.text, y.note]))).toEqual([[['ка', 0]], [['мир', 3]]]);
+		expect(out.stats.counted.breaches.map((b) => [b.id, b.kind])).toEqual([[1, 'no-syllable'], [2, 'no-syllable']]);
 	});
 });

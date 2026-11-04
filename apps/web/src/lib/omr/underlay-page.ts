@@ -30,7 +30,7 @@ import { DEFAULT_INK_HEIGHT, unframeBox, type FrameTransform } from './underlay-
 import { rowLanguage, wordKnown } from './underlay-language';
 import { fallbackRow } from './underlay-fallback';
 import type { StaffBoxLike } from './metre-windows';
-import { seatTokens, type NotePlace, type Seat, type Token } from './underlay-seat';
+import { isContinuation, seatTokens, type NotePlace, type Seat, type Token } from './underlay-seat';
 import { assertVowelPerNote, wholeTokenOf } from './assert-vowel-per-note';
 import { foldClitics, type CliticCall, type OwnNote } from './underlay-clitics';
 import { vowelsPerNote, type Breach } from './vowels-per-note';
@@ -119,8 +119,12 @@ export interface UnderlayStats {
 		ownNote: (OwnNote & { system: number; row: number })[];
 		/** `merged`: tokens a note refused (a second token on a note is unseated, never joined: `underlay-words.ts`). */
 		manyVowels: ManyVowelCounts;
-		/** Per seated system: its free notes against the syllable units left after rule 1's drop. */
-		perSystem: { system: number; free: number; units: number }[];
+		/**
+		 * Per seated system: its free notes against the syllable units left after rule 1's drop (`free`, ties and extenders only),
+		 * the free notes if a printed slur's notes were continuations too (`slurFree`), and whether the count gate took the slur
+		 * reading (`slurReading`: `slurFree` equals `units` and a free note is under a slur).
+		 */
+		perSystem: { system: number; free: number; slurFree: number; units: number; slurReading: boolean }[];
 		breaches: Breach[];
 	};
 }
@@ -187,7 +191,13 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 	layout.systems.forEach((system, s) => {
 		if (system.hasBand) stats.banded++;
 		let seated = false;
-		const free = freeNoteXs(system.notes);
+		// The system's notes read by ties and extenders only, which is how every site read them before a slur was observed.
+		// The gate below decides after the units exist whether the system takes the slur reading; until it has, and for a
+		// system that does not take it, this is the reading (`inSlur` false on every note).
+		const tiesOnly = system.notes.map((n) => (n.inSlur ? { ...n, inSlur: false } : n));
+		// `free`, ties-only, is read before the gate by the rescue decision below (whether the system has a note to seat on at all)
+		// and by the first `foldClitics`; after the gate, every number derived from the free set reads `seatFree`.
+		const free = freeNoteXs(tiesOnly);
 		const read = system.rows.map((row) => {
 			const tokens = pageTokens(row, reads[row.id] ?? []);
 			const spans = rowWordSpans(tokens);
@@ -212,36 +222,58 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			}
 			if (seated) continue;
 			seated = true;
-			// Every sung note of a seated system goes to the check, with its continuation from the caller's own data (ties and extenders).
-			sung.push(...system.notes.map((n) => ({ id: n.id, continuation: n.tiedInto === true || n.underExtender === true })));
 			const cutRow = cutUnits(tokens, seams.cut);
 			const { counts } = cutRow;
 			let units = cutRow.units;
 			let origin = cutRow.origin;
-			if (seams.clitics) {
-				const folded = foldClitics(units, cutRow.origin, spans, seams.clitics(words), free);
+			// `foldClitics` runs before the gate (the gate counts its units), so it first reads the ties-only free notes. The free
+			// notes enter it for the `ownNote` count alone (`underlay-clitics.ts:52`: "Nothing depends on the count"), never the
+			// units, so a system that takes the slur reading is counted again below on its slur-aware free notes.
+			const calls = seams.clitics ? seams.clitics(words) : null;
+			let folded = calls ? foldClitics(units, cutRow.origin, spans, calls, free) : null;
+			if (folded) {
 				units = folded.units;
 				origin = folded.origin;
-				stats.clitics.folded += folded.counts.folded;
-				stats.clitics.left += folded.counts.left;
-				stats.clitics.ownNote += folded.counts.ownNote.length;
-				stats.counted.ownNote.push(...folded.counts.ownNote.map((o) => ({ ...o, system: s + 1, row: r + 1 })));
 			}
 			// One vowel per note (`CONTRACT.md` §0.1): a unit with no vowel letter takes no note, and a stray mark is no unit.
 			// Whatever `foldClitics` could not join to a host is dropped here, on every path, with or without calls.
 			const checked = assertVowelPerNote(units, wholeTokenOf(cutRow.origin, origin));
 			units = checked.kept;
-			stats.counted.perSystem.push({ system: s + 1, free: free.length, units: units.filter((u) => /\p{L}/u.test(u.text)).length });
+			// THE SLUR GATE, per system (row 177; Dann 2026-10-20 03:37, `OPEN.md` "A PRINTED SLUR IS A MELISMA ILYA OBSERVES, NOT ONE IT
+			// CREATES"): a slur printed over the voice's notes is evidence of a melisma, and the seating observes it when doing so makes
+			// the free notes and the syllable units come out EVEN; where the counts disagree the system seats one syllable per note,
+			// as today. The typed path's gate is the same test (`observedTargets`, `score/slur-seat.ts`: strict equality, and at least
+			// one observed continuation), taken over the whole song. This path has no whole-song unit count (units are cut per row and
+			// seated per system), so the gate is per system: DESK DEFAULT, the ruling names no scope. The "equal or nearer" reading is
+			// not the ruling's "even" and is not built.
+			const syllableUnits = units.filter((u) => /\p{L}/u.test(u.text)).length;
+			const slurFree = system.notes.filter((n) => !isContinuation(n)).length;
+			const slurReading = slurFree === syllableUnits && system.notes.some((n, i) => n.inSlur === true && !isContinuation(tiesOnly[i]));
+			stats.counted.perSystem.push({ system: s + 1, free: free.length, slurFree, units: syllableUnits, slurReading });
+			// The decision reaches every site below through the notes (`CONTRACT.md` §4): a system that took the slur reading hands
+			// them its own notes, whose `inSlur` notes are continuations (`isContinuation`); any other hands the ties-only copy, on
+			// which `inSlur` changes nothing. `seatFree` is that reading's free set, for every number derived from it.
+			const seatNotes = slurReading ? system.notes : tiesOnly;
+			const seatFree = slurReading ? freeNoteXs(seatNotes) : free;
+			if (folded && calls) {
+				if (slurReading) folded = foldClitics(cutRow.units, cutRow.origin, spans, calls, seatFree);
+				stats.clitics.folded += folded.counts.folded;
+				stats.clitics.left += folded.counts.left;
+				stats.clitics.ownNote += folded.counts.ownNote.length;
+				stats.counted.ownNote.push(...folded.counts.ownNote.map((o) => ({ ...o, system: s + 1, row: r + 1 })));
+			}
+			// Every sung note of a seated system goes to the check, with its continuation from the notes the system took (ties, extenders, and the slur where the gate passed).
+			sung.push(...seatNotes.map((n) => ({ id: n.id, continuation: isContinuation(n) })));
 			for (const r of checked.refused) stats.dropped[r.why]++;
-			stats.counted.manyVowels.cut.push(...manyVowelsInUnits(units, free));
+			stats.counted.manyVowels.cut.push(...manyVowelsInUnits(units, seatFree));
 			stats.units += units.length;
 			stats.cuts.cut += counts.cut;
 			stats.cuts.whole += counts.whole;
 			stats.cuts.mismatched += counts.mismatched;
-			const placed = seatTokens(units, system.notes, 'monotone');
+			const placed = seatTokens(units, seatNotes, 'monotone');
 			stats.seated += placed.filter((p) => p.kind === 'syllable' && p.note !== null).length;
 			stats.unseated += placed.filter((p) => p.unseated).length;
-			stats.counted.manyVowels.merged.push(...manyVowelsMerged(units, placed, free));
+			stats.counted.manyVowels.merged.push(...manyVowelsMerged(units, placed, seatFree));
 			seats.push(...placed);
 		}
 		if (seated && rescue === null) stats.systemsRussian++;

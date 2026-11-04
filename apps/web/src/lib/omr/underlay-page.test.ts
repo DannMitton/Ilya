@@ -258,7 +258,7 @@ describe('seatPage counts the sung notes that carry no syllable (N.135 step 5)',
 	it('reports a sung note with no syllable that is not a continuation, over every note of the system, not only the notes with words', () => {
 		const page = seatPage(layout(system(notes(100, 200, 300), [row(0)])), one, seams);
 		expect(kinds(page)).toEqual([[1, 'no-syllable'], [2, 'no-syllable']]);
-		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 3, units: 1 }]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 3, slurFree: 3, units: 1, slurReading: false }]);
 	});
 
 	it('takes continuation from the notes: a note tied into, or under an extender, is not a breach', () => {
@@ -267,12 +267,92 @@ describe('seatPage counts the sung notes that carry no syllable (N.135 step 5)',
 		n[2] = { ...n[2], underExtender: true } as (typeof n)[number];
 		const page = seatPage(layout(system(n, [row(0)])), one, seams);
 		expect(kinds(page)).toEqual([]);
-		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 1, units: 1 }]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 1, slurFree: 1, units: 1, slurReading: false }]);
 	});
 
 	it('counts units after the vowelless drop, and only for a system that was seated', () => {
 		const page = seatPage(layout(system(notes(100, 200), [row(0)]), system(notesFrom(10, 100), [], false)), [[box('мир', 90, 110), box('т', 190, 210)]], seams);
-		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 2, units: 1 }]);
+		expect(page.stats.counted.perSystem).toEqual([{ system: 1, free: 2, slurFree: 2, units: 1, slurReading: false }]);
 		expect(kinds(page)).toEqual([[1, 'no-syllable']]);
+	});
+});
+
+describe('seatPage, the slur gate per system (row 177 step 2): decided, recorded, not yet applied', () => {
+	// Notes at 100, 200, 300; `slurred` lists the indices carried as `inSlur` (what `voiceNotes` marks after a slur's start).
+	const withFlags = (xs: number[], flags: Record<number, { inSlur?: boolean; tiedInto?: boolean }>) => notes(...xs).map((n, i) => ({ ...n, ...flags[i] }));
+	const gate = (n: ReturnType<typeof notes>, boxes: WordBox[]) => seatPage(layout(system(n, [row(0)])), [boxes], seams).stats.counted.perSystem;
+
+	it('takes the slur reading where the slurred notes make the free notes and the units come out even (song 2 bar 8: «ка» over two slurred notes, the next syllable after them)', () => {
+		const n = withFlags([100, 200, 300], { 1: { inSlur: true } });
+		expect(gate(n, [box('ка', 90, 110), box('мир', 290, 310)])).toEqual([{ system: 1, free: 3, slurFree: 2, units: 2, slurReading: true }]);
+	});
+
+	it('leaves a phrasing slur over a syllabic passage as today: three units on three notes, the slur makes the free notes fewer', () => {
+		const n = withFlags([100, 200, 300], { 1: { inSlur: true }, 2: { inSlur: true } });
+		expect(gate(n, [box('ка', 90, 110), box('мир', 190, 210), box('ты', 290, 310)])).toEqual([{ system: 1, free: 3, slurFree: 1, units: 3, slurReading: false }]);
+	});
+
+	it('does not take the reading where the counts disagree either way: the slur leaves more free notes than units', () => {
+		const n = withFlags([100, 200, 300, 400], { 1: { inSlur: true } });
+		expect(gate(n, [box('ка', 90, 110), box('мир', 390, 410)])).toEqual([{ system: 1, free: 4, slurFree: 3, units: 2, slurReading: false }]);
+	});
+
+	it('reads a tie and a slur on the same notes: the tied note is not free either way, the slurred free note makes the counts even', () => {
+		const n = withFlags([100, 200, 300, 400], { 1: { tiedInto: true, inSlur: true }, 2: { inSlur: true } });
+		expect(gate(n, [box('ка', 90, 110), box('мир', 390, 410)])).toEqual([{ system: 1, free: 3, slurFree: 2, units: 2, slurReading: true }]);
+	});
+
+	it('does not take the reading where the only slurred notes are already tied into: the ties-only count is the same, so there is nothing to observe', () => {
+		const n = withFlags([100, 200], { 1: { tiedInto: true, inSlur: true } });
+		expect(gate(n, [box('мир', 90, 110)])).toEqual([{ system: 1, free: 1, slurFree: 1, units: 1, slurReading: false }]);
+	});
+
+	it('applies the reading it took at every site: the melisma note takes no syllable and is not a breach, and the next syllable seats after the pair', () => {
+		// «мир» stands at 210, beside the slurred note 200. Read by ties alone it drifts onto 200 and leaves 300 empty; read by the slur the only
+		// free note left for it is 300.
+		const read = [[box('ка', 90, 110), box('мир', 190, 230)]];
+		const ties = seatPage(layout(system(notes(100, 200, 300), [row(0)])), read, seams);
+		const slur = seatPage(layout(system(withFlags([100, 200, 300], { 1: { inSlur: true } }), [row(0)])), read, seams);
+		expect(shape(ties)).toEqual([[['ка', 'single', 0]], [['мир', 'single', 1]]]);
+		expect(ties.stats.counted.breaches.map((b) => [b.id, b.kind])).toEqual([[2, 'no-syllable']]);
+		expect(shape(slur)).toEqual([[['ка', 'single', 0]], [['мир', 'single', 2]]]);
+		expect(slur.stats.counted.breaches).toEqual([]);
+	});
+
+	it('leaves a system whose counts disagree exactly as it would be with no slur flags at all', () => {
+		const flagged = withFlags([100, 200, 300], { 1: { inSlur: true }, 2: { inSlur: true } });
+		const read = [[box('ка', 90, 110), box('мир', 190, 210), box('ты', 290, 310)]];
+		const a = seatPage(layout(system(notes(100, 200, 300), [row(0)])), read, seams);
+		const b = seatPage(layout(system(flagged, [row(0)])), read, seams);
+		expect(b.words).toEqual(a.words);
+		expect(b.stats.counted.breaches).toEqual(a.stats.counted.breaches);
+		expect(b.stats.counted.manyVowels).toEqual(a.stats.counted.manyVowels);
+		expect(b.stats.counted.perSystem[0]).toMatchObject({ free: 3, slurReading: false });
+	});
+
+	it('reads a slur whose start note is the last note of one system in the next: the first system takes nothing, the second\'s first note is a melisma', () => {
+		const first = system(notes(100, 200), [row(0)]);
+		// System 2 is the page\'s second: its first note is after the slur\'s start (the last note above) and its stop; its second note is free.
+		const second = system(withFlags([100, 200], { 0: { inSlur: true } }).map((n) => ({ ...n, id: n.id + 10, bar: 2 })), [row(1)]);
+		const page = seatPage(layout(first, second), [[box('ка', 90, 110), box('мир', 190, 210)], [box('ты', 190, 210)]], seams);
+		expect(page.stats.counted.perSystem).toEqual([
+			{ system: 1, free: 2, slurFree: 2, units: 2, slurReading: false },
+			{ system: 2, free: 2, slurFree: 1, units: 1, slurReading: true },
+		]);
+		expect(shape(page)).toEqual([[['ка', 'single', 0]], [['мир', 'single', 1]], [['ты', 'single', 11]]]);
+		expect(page.stats.counted.breaches).toEqual([]);
+	});
+
+	it('counts a folded clitic\'s own note on the reading the system took (underlay-clitics.ts: the free notes enter that count only)', () => {
+		const withClitics: Seams = { ...seams, clitics: (words) => words.map((w) => (w === 'в' ? 'proclitic' : null)) };
+		const read = [[box('ка', 90, 110), box('в', 190, 210), box('мир', 290, 310)]];
+		const slurred = seatPage(layout(system(withFlags([100, 200, 300], { 1: { inSlur: true } }), [row(0)])), read, withClitics);
+		const plain = seatPage(layout(system(notes(100, 200, 300), [row(0)])), read, withClitics);
+		// The clitic stands over note 200. By ties alone 200 is a note of its own for it (counted); read as a melisma it is not a free note.
+		expect(plain.stats.clitics.ownNote).toBe(1);
+		expect(slurred.stats.counted.perSystem[0].slurReading).toBe(true);
+		expect(slurred.stats.clitics.ownNote).toBe(0);
+		// Free notes never change the units the clitic fold makes.
+		expect(shape(slurred).map((w) => w.map((y) => y[0]))).toEqual(plain.words.map((w) => w.syllables.map((y) => y.text)));
 	});
 });
