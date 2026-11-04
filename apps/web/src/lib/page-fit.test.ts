@@ -364,6 +364,16 @@ describe('the pages take the fit from the measurement, not from constants (a gua
 		expect(probe).toContain('document.fonts?.ready');
 	});
 
+	it('the probe’s copy of a word carries no `data-word-index`, so a lookup by it never finds two (singer-paths found it)', () => {
+		const probe = read('./components/Paper/TextFitProbe.svelte');
+		const stack = read('./components/Paper/WordStack.svelte');
+		const verse = read('./components/Paper/VerseLine.svelte');
+		expect(probe).toMatch(/<VerseLine[^>]*\bprobe\b[^>]*\/>/);
+		expect(verse).toContain('{probe}');
+		expect(stack).toContain('data-word-index={probe ? undefined : `${word.lineIndex}-${word.wordIndex}`}');
+		expect(probe).toContain('aria-hidden="true" inert');
+	});
+
 	it('every page takes its window from `contentTop` and `contentBottom`, and its gap from the fit', () => {
 		for (const src of [title, next]) {
 			expect(src).toContain('--row-gap: {rowGap}px');

@@ -17,9 +17,17 @@
 		/** Rows 109 and 110: a poem word the song does not set, drawn grey as Input's Poem view draws it. */
 		muted?: boolean;
 		onwordclick?: (word: WordStackData) => void;
+		/**
+		 * THE COPY THE PAGE-FIT PROBE MEASURES (`TextFitProbe.svelte`, step 7, part 1): the same stack, drawn the same, with no
+		 * `data-word-index`, so nothing that looks a word up by it (a test's locator, `[data-word-index="0-0"]`) can find the
+		 * probe's copy beside the page's own while it is in the document. The probe's container is `aria-hidden` and `inert`,
+		 * which keeps it from a screen reader, the tab order, and a click. (The role stays static: Svelte's a11y check
+		 * needs to see it.)
+		 */
+		probe?: boolean;
 	}
 
-	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, adjacentCliticReconstituted = false, glossOverride, muted = false, onwordclick }: Props = $props();
+	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, adjacentCliticReconstituted = false, glossOverride, muted = false, onwordclick, probe = false }: Props = $props();
 
 	// Bidirectional XOR: spot always inverts the global setting for this word.
 	// Global OFF + spot ON → reconstituted. Global ON + spot ON → reduced.
@@ -154,7 +162,7 @@
 	role="button"
 	tabindex={word.latin ? -1 : 0}
 	aria-disabled={word.latin || undefined}
-	data-word-index="{word.lineIndex}-{word.wordIndex}"
+	data-word-index={probe ? undefined : `${word.lineIndex}-${word.wordIndex}`}
 	onclick={handleClick}
 	onkeydown={handleKeydown}
 	aria-label="{word.cyrillic}: {displayIpa}"

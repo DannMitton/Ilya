@@ -13,9 +13,11 @@
 		glossOverrides?: Map<string, string>;
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
+		/** The page-fit probe's copy of the line: its stacks carry no identity (`WordStack.svelte`). */
+		probe?: boolean;
 	}
 
-	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, glossOverrides, mutedWords, onwordclick }: Props = $props();
+	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, glossOverrides, mutedWords, onwordclick, probe = false }: Props = $props();
 
 	// Render words containing Cyrillic, and Latin words (`latin.ts`), which keep
 	// their place in the line. A punctuation-only token never becomes a word
@@ -79,6 +81,7 @@
 			glossOverride={glossOverrides?.get(wordKey)}
 			muted={mutedWords?.has(wordKey) ?? false}
 			{onwordclick}
+			{probe}
 		/>
 	{/each}
 </div>

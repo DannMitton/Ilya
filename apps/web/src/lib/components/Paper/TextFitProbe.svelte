@@ -22,7 +22,8 @@
 	 * and no ink. Hidden in print, where nothing is measured and the last numbers stand: the sheet is 816 by 1056 on every
 	 * display and print changes colour only (`TitlePage.svelte`, `SubsequentPage.svelte`, `WordStack.svelte`), so a count
 	 * taken on screen holds on paper. It is mounted only while there is something to measure, so its copies of the words
-	 * (and their `data-word-index`) are in the document for a moment, not for good. A CSS transform (the phone's fit) scales
+	 * are in the document for a moment, not for good, and while they are they carry no `data-word-index` (`WordStack.svelte`'s `probe`). `e2e/singer-paths.test.ts` found why: a re-measure after a gloss change put a
+	 * second `[data-word-index="0-0"]` in the page for a moment, and a locator that must match one word found two. A CSS transform (the phone's fit) scales
 	 * every rectangle; the scale is read back and divided out, since `offsetHeight` alone would round 56.3 to 56.
 	 *
 	 * IT MEASURES ONCE THE FONTS ARE IN (`document.fonts.ready`), because a word's width, and so a wrap, depends on them.
@@ -97,7 +98,7 @@
 <div class="text-fit-probe" aria-hidden="true" inert bind:this={root} style="width: {contentWidth(pageWidth)}px; --row-gap: 0px; --row-height: {ROW_HEIGHT}px;">
 	{#each pieces as piece (pieceKey(piece))}
 		<div class="probe-row" data-key={pieceKey(piece)}>
-			<VerseLine words={piece.words as WordStackData[]} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} />
+			<VerseLine words={piece.words as WordStackData[]} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} probe />
 		</div>
 	{/each}
 </div>
