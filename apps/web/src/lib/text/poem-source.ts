@@ -9,6 +9,7 @@
  */
 import type { PoemSource } from '$lib/library/types';
 import type { PoemEntry } from './poem-library';
+import { MAX_LENGTH_RATIO, type PoemMatch } from './poem-match';
 
 /** The stanzas of a text: blank-line blocks, as offsets into it. Each block starts at its first letter and ends after its last. */
 export function stanzas(text: string): { start: number; end: number }[] {
@@ -78,6 +79,30 @@ export function stanzaCut(textModern: string, start: number, end: number): Stanz
 	const cutStart = blocks[first].start;
 	const cutEnd = blocks[last].end;
 	return { text: textModern.slice(cutStart, cutEnd), start: cutStart, end: cutEnd, whole: false };
+}
+
+/**
+ * A poem this many times longer than the Lyrics is a poem of which she sings a part, whatever the alignment covers: a poor scan of
+ * the fish's song must not fill all of «Мцыри» into POEM (DESK DEFAULT, step 8, part 2).
+ */
+export const LONG_POEM_RATIO = 10;
+/** A passage is cut only where the one alignment covers at least this much of the Lyrics (DESK DEFAULT). */
+export const PASSAGE_COVERAGE = 0.8;
+
+/**
+ * WHAT FILLS POEM FOR A MATCH: the whole poem she sings, unless she sings a passage of a long one. `stanzaCut` cuts to the
+ * stanzas holding the alignment's single monotone stretch, which drops stanzas a song sings when its opening is garbled or a
+ * stanza is reordered (fixture P filled 2 of 5 stanzas). So the cut to a passage happens only when:
+ *   - the alignment covers at least `PASSAGE_COVERAGE` of the Lyrics AND the poem is longer than `MAX_LENGTH_RATIO` times them
+ *     (the same constant that refuses a cycle, read the other way round: it is only the number they share); or
+ *   - the poem is more than `LONG_POEM_RATIO` times the Lyrics, whatever the coverage.
+ * Otherwise the whole body of the poem fills. `stanzaCut` itself is unchanged.
+ */
+export function cutFor(match: PoemMatch): StanzaCut {
+	const text = match.entry.textModern;
+	const ratio = match.entry.letters.length / match.queryLetters;
+	const passage = (match.coverage >= PASSAGE_COVERAGE && ratio > MAX_LENGTH_RATIO) || ratio > LONG_POEM_RATIO;
+	return passage ? stanzaCut(text, match.start, match.end) : stanzaCut(text, 0, text.length);
 }
 
 /** The line of the text that holds `offset`, trimmed; '' where the offset is outside the text. */

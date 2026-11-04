@@ -265,6 +265,12 @@ export interface PoemMatch {
 	second: number;
 	margin: number;
 	queryLetters: number;
+	/**
+	 * How much of the Lyrics the one alignment covers: its span in the Lyrics over the Lyrics' letters. A song that sets the
+	 * whole poem with a garbled opening or a reordered stanza has a low coverage; a song that sets a passage has a high one.
+	 * Computed here and nowhere else (step 8, part 2); `cutFor` (`poem-source.ts`) reads it.
+	 */
+	coverage: number;
 	/** The matched stretch: first and last matched letter in `entry.letters`, inclusive. */
 	letterStart: number;
 	letterEnd: number;
@@ -301,6 +307,7 @@ export function evaluate(lyrics: string, library: PoemLibrary): MatchOutcome {
 			second,
 			margin: top.score - second,
 			queryLetters: letters.length,
+			coverage: (alignment.queryEnd - alignment.queryStart + 1) / letters.length,
 			letterStart: alignment.poemStart,
 			letterEnd: alignment.poemEnd,
 			start: offsets[alignment.poemStart],

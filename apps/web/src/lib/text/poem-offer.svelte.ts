@@ -29,7 +29,7 @@
 import type { PoemSource } from '$lib/library/types';
 import type { LoadedPoemLibrary } from './poem-library';
 import { foldLetters, matchPoem } from './poem-match';
-import { edited, heldForGuard, kept, replacesLibraryPoem, resolveSource, stanzaCut, type ResolvedSource } from './poem-source';
+import { edited, heldForGuard, kept, replacesLibraryPoem, resolveSource, cutFor, type ResolvedSource } from './poem-source';
 
 /** The part of the open song this reads and writes. `SongDocument` has all of it. */
 export interface OfferDoc {
@@ -111,7 +111,7 @@ export class PoemOffer {
 		// The Lyrics that were matched must still be the Lyrics. Line breaks may differ; the letters may not.
 		if (foldLetters(doc.inputText) !== foldLetters(text)) return;
 
-		const cut = stanzaCut(match.entry.textModern, match.start, match.end);
+		const cut = cutFor(match);
 		const memory: Memory = { inputText: doc.inputText, laid: deps.laid.get() };
 		// `poemSource` is null while `put` runs, so the page's Poem-edit hook reads this fill as nothing: it is not the
 		// singer's edit. The source is written after, and a test pins that order.

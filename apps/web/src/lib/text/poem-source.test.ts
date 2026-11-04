@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import type { PoemSource } from '$lib/library/types';
 import type { LoadedPoemLibrary, PoemEntry } from './poem-library';
 import { foldLetters, matchPoem } from './poem-match';
-import { bodyStanzas, cardLine, edited, passageLine, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
+import { bodyStanzas, cardLine, cutFor, edited, LONG_POEM_RATIO, PASSAGE_COVERAGE, passageLine, heldForGuard, kept, lineAt, replacesLibraryPoem, resolveSource, RUN, stanzaCut, stanzas } from './poem-source';
 
 const ROOT = join(__dirname, '../../../../..');
 const manifest = JSON.parse(readFileSync(join(ROOT, 'data/dictionary-manifest.json'), 'utf8'));
@@ -327,5 +327,68 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 		}
 		expect(starts).toBe(86);
 		expect([...firsts].sort()).toEqual(['Борону', 'В', 'Дайте', 'И', 'Из', 'Мать-земля', 'Много', 'На', 'Накормлю', 'Ночью', 'Ну', 'Останься', 'Пашней', 'С', 'Я']);
+	});
+});
+
+describe('cutFor: the whole poem she sings, unless she sings a passage of a long one (step 8, part 2)', () => {
+	// Fable's measured table (as-built review, 2026-11-04): coverage of the one alignment, poem letters over Lyrics letters, and the rule's answer.
+	const TABLE: [string, number, number, 'whole' | 'cut'][] = [
+		['P', 0.331, 3.4, 'whole'],
+		['S', 0.942, 58.4, 'cut'],
+		['T', 0.915, 1.23, 'whole'],
+		['U1', 1, 1.0, 'whole'],
+		['U6', 1, 1.1, 'whole'],
+		['r114-song2', 0.614, 0.69, 'whole'],
+		['r114-song3', 0.558, 1.3, 'whole'],
+		['r114-song4', 0.73, 1.09, 'whole'],
+		['r114-song5', 0.935, 2.14, 'whole'],
+	];
+	for (const [name, coverage, ratio, answer] of TABLE) {
+		it(`${name}: coverage ${coverage}, ratio ${ratio}, ${answer}`, () => {
+			const m = matchPoem(fixture(name), library)!;
+			expect(m.coverage, 'coverage').toBeCloseTo(coverage, 2);
+			expect(m.entry.letters.length / m.queryLetters, 'ratio').toBeCloseTo(ratio, 1);
+			const cut = cutFor(m);
+			const body = stanzaCut(m.entry.textModern, 0, m.entry.textModern.length);
+			if (answer === 'whole') {
+				expect(cut.whole).toBe(true);
+				expect(cut.text).toBe(body.text);
+			} else {
+				expect(cut.whole).toBe(false);
+				expect(cut.text.length).toBeLessThan(m.entry.textModern.length / 20);
+			}
+		});
+	}
+
+	it('P and the two row 114 songs that stanzaCut cut short now fill whole (5, 5 and 4 body stanzas; «Русская песня» has a sixth block, its dating line)', () => {
+		for (const [name, stanzaCount] of [['P', 5], ['r114-song4', 5], ['r114-song5', 4]] as const) {
+			const m = matchPoem(fixture(name), library)!;
+			const cut = cutFor(m);
+			expect(bodyStanzas(cut.text).length, name).toBe(stanzaCount);
+			expect(stanzaCut(m.entry.textModern, m.start, m.end).whole, `${name}: the old rule cut it`).toBe(false);
+		}
+	});
+
+	it('a poor scan of the fish’s song (coverage well under 0.8) still cuts, because «Мцыри» is more than ten times it', () => {
+		const words = fixture('S').split(/\s+/);
+		const noisy = words.map((w, i) => (i % 3 === 0 ? 'ааааа' : w)).join(' ');
+		const m = matchPoem(noisy, library)!;
+		expect(m, 'the noisy scan still matches').not.toBeNull();
+		expect(m.entry.title).toBe('Мцыри');
+		expect(m.coverage).toBeLessThan(PASSAGE_COVERAGE + 0.15);
+		expect(m.entry.letters.length / m.queryLetters).toBeGreaterThan(LONG_POEM_RATIO);
+		expect(cutFor(m).whole).toBe(false);
+		expect(cutFor(m).text.length).toBeLessThan(m.entry.textModern.length / 20);
+	});
+
+	it('the two clauses: a long poem at high coverage cuts; at low coverage and a ratio between 3 and 10 it fills whole', () => {
+		const entry = library.entries.find((e) => e.title === 'Спящая княжна')!;
+		const base = { entry, work: entry.work, score: 1, second: 0, margin: 1, letterStart: 0, letterEnd: 10, start: 0, end: 60 };
+		const mk = (queryLetters: number, coverage: number) => ({ ...base, queryLetters, coverage });
+		const n = entry.letters.length;
+		expect(cutFor(mk(Math.floor(n / 5), 0.9)).whole).toBe(false); // ratio 5, coverage 0.9: a passage
+		expect(cutFor(mk(Math.floor(n / 5), 0.5)).whole).toBe(true); // ratio 5, coverage 0.5: whole
+		expect(cutFor(mk(Math.floor(n / 2), 0.9)).whole).toBe(true); // ratio 2: whole whatever the coverage
+		expect(cutFor(mk(Math.floor(n / 11), 0.2)).whole).toBe(false); // ratio 11: a passage whatever the coverage
 	});
 });

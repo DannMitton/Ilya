@@ -426,6 +426,18 @@ describe('walk 8: her song sets a passage of a long poem', () => {
 	});
 });
 
+describe('the fill is the whole poem she sings (step 8, part 2)', () => {
+	it('fixture P fills all five stanzas of «Средь шумного бала», not the two the alignment’s stretch holds', async () => {
+		await paste(r, fixture('P'));
+		const src = r.song.poemSource!;
+		const entry = library.entries.find((e) => e.id === src.id)!;
+		expect(entry.title).toBe('Средь шумного бала, случайно');
+		expect(r.song.publishedPoem).toBe(entry.textModern.trimEnd());
+		expect(r.song.publishedPoem.split('\n\n')).toHaveLength(5);
+		expect(r.offer.current()!.resolved.passage).toBe(false);
+	});
+});
+
 describe('walk 9: nothing she did not ask for happens later', () => {
 	it('fills nothing for a cycle of several songs', async () => {
 		const cycle = ['r114-song1', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5'].map(fixture).join('\n');
