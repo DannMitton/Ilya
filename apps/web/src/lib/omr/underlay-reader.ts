@@ -35,6 +35,8 @@ export interface UnderlayParts<Row> {
 	now?: () => number;
 	/** The extender arm for this read (`underlay-switch.ts`, `?extender=b`); absent, `a`. */
 	arm?: () => ExtenderArm;
+	/** Whether the second look is made on this read (`underlay-switch.ts`, `?looks=off`); absent, it is. */
+	looksOn?: () => boolean;
 }
 
 /**
@@ -115,7 +117,7 @@ export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay
 			// THE SECOND LOOK (row 181 step 2; Dann 2026-11-04 10:12 items 6 (b) and 7), for a system whose band held ink and gave no Russian
 			// row. LIMIT: each such system gets each of `LOOKS` (four) at most once, so four further looks per system and no more; no look
 			// is itself looked at again. The look kept is the one whose first Russian row holds the most dictionary words.
-			const failing = parts.looks ? seated.systems.flatMap((s, i) => (s.why === 'no Russian row' && made.layout.systems[i].hasBand ? [i] : [])) : [];
+			const failing = parts.looks && (parts.looksOn?.() ?? true) ? seated.systems.flatMap((s, i) => (s.why === 'no Russian row' && made.layout.systems[i].hasBand ? [i] : [])) : [];
 			let looks: LookReport[] | undefined;
 			let lookMs = 0;
 			if (parts.looks && failing.length > 0) {

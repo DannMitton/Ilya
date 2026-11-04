@@ -11,7 +11,7 @@ import type { StaffBoxLike } from './metre-windows';
 import type { PageLayout, ReadUnderlay } from './underlay-page';
 import { makeUnderlayReader, type UnderlayParts } from './underlay-reader';
 import { recognizeRow } from './underlay-recognize';
-import { extenderArm } from './underlay-switch';
+import { extenderArm, looksOn } from './underlay-switch';
 import type { LookRows, UnderlayRequest, UnderlayResponse } from './underlay.worker';
 import type { Look } from './underlay-looks';
 
@@ -73,4 +73,5 @@ export const readUnderlayInWorker: ReadUnderlay = makeUnderlayReader<Blob>({
 	recognize: recognizeRow,
 	seams,
 	arm: () => extenderArm(),
+	looksOn: () => looksOn(),
 });

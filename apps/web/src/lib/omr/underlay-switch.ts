@@ -36,6 +36,18 @@ export function scanStamp(search: string = here()): string {
 	return underlayOn(search) ? `${READER_STAMP}+${UNDERLAY_READER}` : READER_STAMP;
 }
 
+/** The query that turns the second look off (row 181): `?looks=off`. */
+export const LOOKS_QUERY = 'looks';
+
+/**
+ * Whether the second look (`underlay-looks.ts`) is made: on, unless the address carries `?looks=off`. A measure switch like
+ * `?extender=b`, not a singer's: the desk turns it off to separate step 1's count from step 2's on row 114. It changes no
+ * stamp, so a reading kept with it off is current with it on; read the scan fresh for each arm.
+ */
+export function looksOn(search: string = here()): boolean {
+	return new URLSearchParams(search).get(LOOKS_QUERY) !== 'off';
+}
+
 /** The query that chooses the extender arm (row 181 step 1): `?extender=b`. */
 export const EXTENDER_QUERY = 'extender';
 

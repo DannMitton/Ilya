@@ -3,7 +3,7 @@
  * address, so every branch is a string.
  */
 import { describe, expect, it } from 'vitest';
-import { scanStamp, underlayOn } from './underlay-switch';
+import { looksOn, scanStamp, underlayOn } from './underlay-switch';
 import { READER_STAMP, UNDERLAY_READER } from './stamp';
 import { isCurrent, restoreScan } from './restore';
 import type { OmrReadResult } from './homr-reader';
@@ -20,6 +20,16 @@ describe('underlayOn', () => {
 
 	it('is off where there is no address at all, as in a test or a worker', () => {
 		expect(underlayOn()).toBe(false);
+	});
+});
+
+describe('looksOn (row 181: the measure switch for the second look)', () => {
+	it('is on unless the address says ?looks=off, and the stamp does not change with it', () => {
+		expect(looksOn('')).toBe(true);
+		expect(looksOn('?words=read')).toBe(true);
+		expect(looksOn('?words=read&looks=off')).toBe(false);
+		expect(looksOn('?looks=on')).toBe(true);
+		expect(scanStamp('?words=read&looks=off')).toBe(scanStamp('?words=read'));
 	});
 });
 

@@ -179,6 +179,16 @@ describe('makeUnderlayReader, the second look (row 181 step 2)', () => {
 		expect(page?.systems).toMatchObject([{ written: false, why: 'no Russian row' }]);
 	});
 
+	it('makes no second look where the measure switch turns it off (?looks=off), and the first look stands', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const asked: unknown[] = [];
+		const p = { ...withLooks({ first: bad(), 'wide-row': good() }, [{ system: 0, look: 'wide', rows: ['wide-row'], layoutRows: [row0] }], asked), looksOn: () => false };
+		const page = await makeUnderlayReader(p)(image, '<xml/>', []);
+		expect(asked).toEqual([]);
+		expect(page?.looks).toBeUndefined();
+		expect(page?.systems).toMatchObject([{ written: false, why: 'no Russian row' }]);
+	});
+
 	it('answers null with one console line where the second look throws, as every stage does', async () => {
 		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
 		const p = parts({ prepare: async () => ({ layout: failing, rows: ['first'], ms: 1 }), recognize: async () => bad(), looks: async () => { throw new Error('the Worker is gone'); } });
