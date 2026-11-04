@@ -58,6 +58,8 @@
 	<div class="comment" class:on-placeholder={!!placeholder} data-placeholder={placeholder ? 'true' : undefined}>
 		<p class="tag">{@render prose(tag)}{' · '}<span class="ipa">[{c.comment.vowel}]</span></p>
 		<p class="body">{@render runs(c.frame)}{#if c.consequence.length}{' '}{@render runs(c.consequence)}{/if}{#each c.visible as s (s.id)}{' '}{@render runs(s.runs)}{/each}</p>
+		<!-- The other approaches: a plain second paragraph of the same observation, same type, no label (2026-11-03). -->
+		{#if c.hidden.length}<p class="body other-approaches">{@render runs(c.otherApproaches)}{#each c.hidden as s (s.id)}{' '}{@render runs(s.runs)}{/each}</p>{/if}
 		{#if placeholder}<p class="placeholder-note">{@render prose(placeholder)}</p>{/if}
 		{#if teacher}<p class="teacher">{teacher}</p>{/if}
 	</div>
@@ -161,13 +163,8 @@
 	{:else if block.kind === 'endnote'}
 		{@render heading(block.heading)}
 		{#if block.teacher}<p class="teacher-c">{block.teacher}</p>{/if}
-		<p class="tag">{@render prose(block.tag)}</p>
-		{#each block.suggestions as s, j (j)}<p class="body">{@render runs(s)}</p>{/each}
-		{#if block.references.length}
-			<ol class="references">
-				{#each block.references as ref, j (j)}<li>{@render runs(ref)}</li>{/each}
-			</ol>
-		{/if}
+		<p class="reference">{@render runs(block.reference)}</p>
+		{#each block.topics as topic, j (j)}<p class="reading-topic">{@render runs(topic)}</p>{/each}
 	{/if}
 </div>
 
@@ -507,16 +504,17 @@
 		color: var(--rose-ink);
 	}
 
-	.references {
-		margin: 4px 0 0;
-		padding-left: 18px;
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
+	/* Further reading: a work's full reference on its own line, then one indented line per topic it is cited for. */
+	.reference,
+	.reading-topic {
 		font-family: var(--font-serif);
 		font-size: 11.5px;
 		line-height: 1.4;
 		color: var(--ink-secondary);
+	}
+
+	.reading-topic {
+		padding-left: 18px;
 	}
 
 	.withheld {

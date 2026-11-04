@@ -15,6 +15,7 @@ import { pitchName } from '$lib/voice/note-picker';
 import { placeholderCommentSentence, placeholderTurnsSentence } from '$lib/analysis/placeholder-line';
 import type { Run } from './comment-sources';
 import type { RenderedComment } from './comment-text';
+import { furtherReading } from './further-reading';
 import type { InsightsModel, TessituragramModel, VerdictLine } from './insights';
 import { formatCycles, doseValue, type CycleDose, type CycleDoseSplit } from './singing-measures';
 import {
@@ -60,7 +61,8 @@ export type Block =
 	| { kind: 'prose'; heading?: string; text: string; small?: boolean; link?: string }
 	/** Row 47: the quiet octave line, directly under the phonation sentence. `shift` is the direction the range asks for; `applied` is whether it is. */
 	| { kind: 'octave'; heading?: string; shift: -1 | 1; applied: boolean }
-	| { kind: 'endnote'; heading?: string; teacher?: string; tag: string; suggestions: Run[][]; references: Run[][] }
+	/** One block per work cited (Further reading, 2026-11-03): its full reference once, then one line per topic it is cited for. */
+	| { kind: 'endnote'; heading?: string; teacher?: string; reference: Run[]; topics: Run[][] }
 	/** QUEUE row 79: the page's notes, once, at the end: the numbered footnote (HTML from i18n), then the method line. */
 	| { kind: 'notes'; heading: string; footnote: string | null; method: string };
 
@@ -101,6 +103,8 @@ export interface BlockInputs {
 	tagOf: (r: RenderedComment) => string;
 	/** The printed bar a comment sits in. */
 	barOf: (r: RenderedComment) => string;
+	/** The pitch of a comment's sung note as the page names it, '' where it has none. Never parsed out of `tagOf`. */
+	pitchOf: (r: RenderedComment) => string;
 	phonationHeadline: string | null;
 	/** Row 47: set only where the singer's range would shift the voice line, else absent or null. */
 	octave?: { shift: -1 | 1; applied: boolean } | null;
@@ -273,7 +277,8 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 	const moment = (c: RenderedComment) => ({
 		tag: i.tagOf(c),
 		comment: c,
-		...(suggestsApproach(c) ? { teacher: T('insights.r2.teacherA') } : {}),
+		// Under a second paragraph of other approaches the line is plural (Dann 2026-11-04 09:34); the condition is the one that draws the paragraph.
+		...(suggestsApproach(c) ? { teacher: T(c.hidden.length > 0 ? 'insights.r2.teacherA.many' : 'insights.r2.teacherA') } : {}),
 		...(onPlaceholder(c) ? { placeholder: placeholderCommentSentence(c.comment.vowel, language) } : {}),
 	});
 	const moments: Block[] = i.comments.map((c) => ({ kind: 'comment', ...moment(c) }));
@@ -377,10 +382,8 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 	// ── Notes, unboxed, before the sources (QUEUE row 79, rule 7) ─────
 	if (i.method) out.push({ group: 'free', block: notesBlock(i.method, i.footnote ?? null, language) });
 
-	// ── Squircle 3, the sources, as endnotes ──────────────────────────
-	const notes: Block[] = i.comments
-		.filter((c) => c.hidden.length > 0 || c.references.length > 0)
-		.map((c) => ({ kind: 'endnote', tag: `${i.tagOf(c)} \u00b7 [${c.comment.vowel}]`, suggestions: c.hidden.map((s) => s.runs), references: c.references }));
+	// ── Squircle 3, Further reading: one endnote per work, in `worksCited` order ──
+	const notes: Block[] = furtherReading(i.comments, { language, pitchOf: i.pitchOf, barOf: i.barOf }).map((w) => ({ kind: 'endnote', ...w }));
 	if (notes.length > 0) {
 		const first = notes[0] as Extract<Block, { kind: 'endnote' }>;
 		first.heading = T('comment.tap');
