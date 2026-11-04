@@ -9,8 +9,9 @@
  * (`underlay-recognize.ts`). The request and reply have the shape of the metre
  * worker's (`metre.worker.ts`).
  */
-import { prepareUnderlay } from './underlay-prepare';
-import type { PageLayout } from './underlay-page';
+import { prepareLooks, prepareUnderlay } from './underlay-prepare';
+import type { Look } from './underlay-looks';
+import type { PageLayout, RowLayout } from './underlay-page';
 import type { StaffBoxLike } from './metre-windows';
 
 export interface UnderlayRequest {
@@ -18,10 +19,21 @@ export interface UnderlayRequest {
 	image: Blob;
 	musicXml: string;
 	staves: StaffBoxLike[];
+	/** Absent: the page's rows. `looks`: the second looks (row 181 step 2) for the systems in `wants`; the page is decoded again. */
+	wants?: { system: number; looks: Look[] }[];
+}
+
+/** One look at one system: its framed rows as images, and where each stands on the page (ids from 0 within the look). */
+export interface LookRows {
+	system: number;
+	look: Look;
+	rows: Blob[];
+	layoutRows: RowLayout[];
 }
 
 export type UnderlayResponse =
 	| { id: number; ok: true; layout: PageLayout; rows: Blob[]; ms: number }
+	| { id: number; ok: true; looks: LookRows[]; ms: number }
 	| { id: number; ok: false; error: string };
 
 const scope = self as unknown as { onmessage: ((e: MessageEvent<UnderlayRequest>) => void) | null; postMessage: (m: UnderlayResponse) => void };
@@ -41,7 +53,7 @@ async function png(data: Uint8Array, width: number, height: number): Promise<Blo
 }
 
 scope.onmessage = async (e) => {
-	const { id, image, musicXml, staves } = e.data;
+	const { id, image, musicXml, staves, wants } = e.data;
 	try {
 		const t0 = performance.now();
 		const bitmap = await createImageBitmap(image);
@@ -53,7 +65,16 @@ scope.onmessage = async (e) => {
 		const rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 		const data = new Uint8Array(canvas.width * canvas.height);
 		for (let i = 0; i < data.length; i++) data[i] = rgba[i * 4];
-		const { layout, rows } = prepareUnderlay({ width: canvas.width, height: canvas.height, data }, musicXml, staves);
+		const grey = { width: canvas.width, height: canvas.height, data };
+		if (wants) {
+			const looks: LookRows[] = [];
+			for (const l of prepareLooks(grey, musicXml, staves, wants)) {
+				if (l.prepared) looks.push({ system: l.system, look: l.look, rows: await Promise.all(l.prepared.rows.map((r) => png(r.data, r.width, r.height))), layoutRows: l.prepared.layoutRows });
+			}
+			scope.postMessage({ id, ok: true, looks, ms: performance.now() - t0 });
+			return;
+		}
+		const { layout, rows } = prepareUnderlay(grey, musicXml, staves);
 		const blobs = await Promise.all(rows.map((r) => png(r.data, r.width, r.height)));
 		scope.postMessage({ id, ok: true, layout, rows: blobs, ms: performance.now() - t0 });
 	} catch (err) {

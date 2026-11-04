@@ -36,6 +36,7 @@ import { foldClitics, type CliticCall, type OwnNote } from './underlay-clitics';
 import { vowelsPerNote, type Breach } from './vowels-per-note';
 import { freeNoteXs, manyVowelsInUnits, manyVowelsMerged, type ManyVowelCounts } from './underlay-counts';
 import { rowWordSpans, splitTokens } from './underlay-tokens';
+import type { Look } from './underlay-looks';
 import { markExtenderNotes, NO_EXTENDERS, type ExtenderArm, type ExtenderCounts } from './underlay-extender';
 import { cutUnits, type CutCounts } from './underlay-units';
 import { sewWords, type Word } from './underlay-words';
@@ -175,8 +176,21 @@ export interface UnderlayPage {
 	/** The words seated on this page's notes, by the notes' ordinals in this page's MusicXML. */
 	words: Word[];
 	stats: UnderlayStats;
-	/** Milliseconds: the worker's preparation, the reader, and the assembly. */
-	ms: { prepare: number; read: number; seat: number };
+	/** Milliseconds: the worker's preparation, the reader, and the assembly; `look`, where a second look was made, its Worker, reader, and seating together (not in `seat`). */
+	ms: { prepare: number; read: number; seat: number; look?: number };
+	/** The second looks made (row 181 step 2), one entry for each look of each system, in the order tried. Absent where none was. */
+	looks?: LookReport[];
+}
+
+/** One second look at one system: which, how long its rows took to read, whether a row of it was Russian and its dictionary words, and whether it was kept. */
+export interface LookReport {
+	/** 1-based, as the console names a system. */
+	system: number;
+	look: Look;
+	ms: number;
+	russian: boolean;
+	known: number;
+	kept: boolean;
 }
 
 /** Reads the underlay of one page: the page image, homr's MusicXML for it, and homr's staff boxes. Null where it could not. */
