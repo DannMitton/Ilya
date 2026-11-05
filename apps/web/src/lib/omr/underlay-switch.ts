@@ -48,13 +48,15 @@ export function looksOn(search: string = here()): boolean {
 	return new URLSearchParams(search).get(LOOKS_QUERY) !== 'off';
 }
 
-/** The query that chooses the extender arm (row 181 step 1): `?extender=b`. */
+/** The query that chooses the extender arm (row 181 step 1): `?extender=a`, `?extender=b`, or none (off). */
 export const EXTENDER_QUERY = 'extender';
 
 /**
- * The arm of the extender rule (`underlay-extender.ts`) for a measurement: `b` where the address carries `?extender=b`,
- * else `a`. Not a singer's switch: the desk measures both arms on row 114 and the better one becomes the only one.
+ * The setting of the extender rule (`underlay-extender.ts`) for a measurement: `?extender=a` or `?extender=b`; anything else,
+ * including no query, is `off` (row 181 step 8a: no note is marked at all, and a long dash sews words as a hyphen does).
+ * Not a singer's switch: the desk measures the three on row 114 and one becomes the only one.
  */
-export function extenderArm(search: string = here()): 'a' | 'b' {
-	return new URLSearchParams(search).get(EXTENDER_QUERY) === 'b' ? 'b' : 'a';
+export function extenderArm(search: string = here()): 'off' | 'a' | 'b' {
+	const v = new URLSearchParams(search).get(EXTENDER_QUERY);
+	return v === 'a' || v === 'b' ? v : 'off';
 }

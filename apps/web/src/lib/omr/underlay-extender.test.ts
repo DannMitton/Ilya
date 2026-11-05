@@ -87,11 +87,18 @@ const lay = (...systems: SystemLayout[]): PageLayout => ({ width: 1200, height: 
 
 describe('seatPage with an extender', () => {
 	it('makes the notes under the line continuations before the free notes are counted, so none is a no-syllable breach', () => {
-		const page = seatPage(lay(sys(notes(100, 200, 300), [row(0)])), [[box('мир', 90, 110), box('_', 150, 320)]], seams);
+		const page = seatPage(lay(sys(notes(100, 200, 300), [row(0)])), [[box('мир', 90, 110), box('_', 150, 320)]], seams, { extenderArm: 'a' });
 		expect(page.stats.counted.breaches).toEqual([]);
-		expect(page.stats.counted.perSystem[0]).toMatchObject({ free: 1, slurFree: 1, units: 1 });
+		expect(page.stats.counted.perSystem[0]).toMatchObject({ free: 3, units: 1, extender: true });
 		expect(page.stats.extenders).toMatchObject({ extender: 1, marked: 2 });
 		expect(page.words.map((w) => w.syllables.map((s) => [s.text, s.note, s.sustained]))).toEqual([[['мир', 0, true]]]);
+	});
+
+	it('marks nothing by default (arm off), and an underscore is not seated either, so no syllable is sustained', () => {
+		const page = seatPage(lay(sys(notes(100, 200, 300), [row(0)])), [[box('мир', 90, 110), box('_', 150, 320)]], seams);
+		expect(page.stats.extenders).toMatchObject({ extender: 1, marked: 0 });
+		expect(page.words.map((w) => w.syllables.map((s) => s.sustained))).toEqual([[false]]);
+		expect(page.stats.counted.breaches.filter((b) => b.kind === 'no-syllable')).toHaveLength(2);
 	});
 
 	it('without the line the same row leaves two notes with no syllable, which is what the line prevents', () => {
@@ -101,8 +108,8 @@ describe('seatPage with an extender', () => {
 
 	it('reads the hyphen only in arm b', () => {
 		const reads = [[box('мир', 90, 110), box('-', 190, 205)]]; // 15 px wide: a hyphen, not a long dash (half the ink height is 16)
-		const a = seatPage(lay(sys(notes(100, 200, 300), [row(0)])), reads, seams);
-		const b = seatPage(lay(sys(notes(100, 200, 300), [row(0)])), reads, seams, { extenderArm: 'b' });
+		const a = seatPage(lay(sys(notes(100, 200), [row(0)])), reads, seams, { extenderArm: 'a' });
+		const b = seatPage(lay(sys(notes(100, 200), [row(0)])), reads, seams, { extenderArm: 'b' });
 		expect(a.stats.extenders.marked).toBe(0);
 		expect(b.stats.extenders.marked).toBe(1);
 	});
@@ -170,4 +177,39 @@ describe('isContinuation still reads the flag', () => {
 	it('is the only reader: a note under the line is a continuation', () => {
 		expect(isContinuation({ id: 0, x: 0, bar: 1, underExtender: true })).toBe(true);
 	});
+});
+
+describe('the extender gate (row 181 step 8b): marks only where they bring free notes and units to equal', () => {
+	const words = new Set(['мир', 'ты', 'бал', 'он']);
+	const gseams: Seams = { isWord: (w) => words.has(w), cut: (w) => [w] };
+
+	it('leaves a system the slur reading already makes equal alone, as page 2 system 4 of row 114 song 2 (ties 16, slur 15, units 15)', () => {
+		// Five notes, the third under a slur, four words: ties 5, slur 4, units 4. A long dash after the third word lies over the fifth note.
+		const n = notes(100, 200, 300, 400, 500).map((x) => (x.x === 300 ? { ...x, inSlur: true } : x));
+		const reads = [[box('мир', 90, 110), box('ты', 190, 210), box('бал', 390, 410), box('—', 440, 520), box('он', 490, 510)]];
+		const gated = seatPage(lay(sys(n, [row(0)])), reads, gseams, { extenderArm: 'a' });
+		expect(gated.stats.counted.perSystem[0]).toMatchObject({ free: 5, slurFree: 4, units: 4, slurReading: true });
+		expect(gated.stats.counted.perSystem[0].extender).toBeUndefined();
+		expect(gated.stats.extenders).toMatchObject({ longDash: 1, marked: 0 });
+		// The same as with the extender off: the marks changed nothing.
+		const off = seatPage(lay(sys(n, [row(0)])), reads, gseams);
+		expect(gated.words).toEqual(off.words);
+		expect(gated.stats.counted.breaches).toEqual(off.stats.counted.breaches);
+	});
+
+	it('takes the marks where they bring the free notes and the units to equal', () => {
+		const page = seatPage(lay(sys(notes(100, 200, 300), [row(0)])), [[box('мир', 90, 110), box('—', 150, 320)]], gseams, { extenderArm: 'a' });
+		expect(page.stats.counted.perSystem[0]).toMatchObject({ free: 3, units: 1, extender: true });
+		expect(page.stats.extenders.marked).toBe(2);
+		expect(page.words.map((w) => w.syllables.map((s) => s.sustained))).toEqual([[true]]);
+	});
+
+	it('does not take them where they leave the counts apart, and writes no sustained syllable for a line not taken', () => {
+		const page = seatPage(lay(sys(notes(100, 200, 300, 400), [row(0)])), [[box('мир', 90, 110), box('—', 190, 220)]], gseams, { extenderArm: 'a' });
+		expect(page.stats.counted.perSystem[0]).toMatchObject({ free: 4, units: 1 });
+		expect(page.stats.counted.perSystem[0].extender).toBeUndefined();
+		expect(page.stats.extenders.marked).toBe(0);
+		expect(page.words.map((w) => w.syllables.map((s) => s.sustained))).toEqual([[false]]);
+	});
+
 });

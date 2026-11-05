@@ -33,7 +33,7 @@ export interface UnderlayParts<Row> {
 	/** The dictionary and the engine, once they are ready; rejects where they are not. */
 	seams(): Promise<Seams>;
 	now?: () => number;
-	/** The extender arm for this read (`underlay-switch.ts`, `?extender=b`); absent, `a`. */
+	/** The extender arm for this read (`underlay-switch.ts`, `?extender=a` or `b`); absent, `off`. */
 	arm?: () => ExtenderArm;
 	/** Whether the second look is made on this read (`underlay-switch.ts`, `?looks=off`); absent, it is. */
 	looksOn?: () => boolean;
@@ -68,7 +68,7 @@ function counted(stats: UnderlayStats): string {
 	const { breaches } = stats.counted;
 	const noSyllable = breaches.filter((b) => b.kind === 'no-syllable').length;
 	const perSystemLine = perSystem.length
-		? `; free notes against syllable units after the vowelless drop, by system (ties-only free, slur-aware free, units, the reading taken): ${perSystem.map((p) => `${p.system}: ties ${p.free}, slur-aware ${p.slurFree}, units ${p.units}, ${p.slurReading ? 'SLUR' : 'ties'}`).join('; ')}`
+		? `; free notes against syllable units after the vowelless drop, by system (ties-only free, slur-aware free, units, the reading taken): ${perSystem.map((p) => `${p.system}: ties ${p.free}, slur-aware ${p.slurFree}, units ${p.units}, ${p.slurReading ? 'SLUR' : p.extender ? 'EXTENDER' : 'ties'}`).join('; ')}`
 		: '';
 	if (ownNote.length + manyVowels.cut.length + manyVowels.merged.length + breaches.length + perSystem.length === 0) return '';
 	return `; counted: ${ownNote.length} folded clitic(s) the print gives a note of its own${ownNote.map((o) => ` (system ${o.system} row ${o.row} «${o.text}»)`).join('')}, ${manyVowels.cut.length} unit(s) of two vowels or more uncut, ${manyVowels.merged.length} many-vowels merge(s) refused (a second token on a note is unseated), ${breaches.length} note(s) breaking one vowel per note over the sung notes (${noSyllable} with no syllable)${perSystemLine}`;
@@ -112,7 +112,7 @@ export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay
 			stage = 'the dictionary';
 			const seams = await parts.seams();
 			stage = 'the seating';
-			const options = { extenderArm: parts.arm?.() ?? 'a' } as const;
+			const options = { extenderArm: parts.arm?.() ?? 'off' } as const;
 			let seated = seatPage(made.layout, reads, seams, options);
 			// THE SECOND LOOK (row 181 step 2; Dann 2026-11-04 10:12 items 6 (b) and 7), for a system whose band held ink and gave no Russian
 			// row. LIMIT: each such system gets each of `LOOKS` (four) at most once, so four further looks per system and no more; no look
@@ -158,7 +158,7 @@ export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay
 			}
 			const ms = { prepare: Math.round(made.ms), read: Math.round(t2 - t1), seat: Math.round(now() - t2) - lookMs, ...(looks ? { look: lookMs } : {}) };
 			const page: UnderlayPage = { ...seated, ms, ...(looks ? { looks } : {}) };
-			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.stats.fallback ? `; the dictionary-sewing fallback seated ${seated.stats.fallback} system(s)` : ''}${counted(seated.stats)}${extenderLine(seated.stats, parts.arm?.() ?? 'a')}${looksLine(looks, lookMs)}${tookNone(seated.systems)}`);
+			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.stats.fallback ? `; the dictionary-sewing fallback seated ${seated.stats.fallback} system(s)` : ''}${counted(seated.stats)}${extenderLine(seated.stats, parts.arm?.() ?? 'off')}${looksLine(looks, lookMs)}${tookNone(seated.systems)}`);
 			return page;
 		} catch (err) {
 			console.info(`[omr] underlay: the page was not read (${stage} failed: ${describeError(err)}${prepared ? `; the Worker had framed ${prepared.rows} rows in ${prepared.ms} ms` : ''})`);

@@ -19,11 +19,9 @@
  *   into one word.
  * - A token with no letter is kept (a lone hyphen, an extender, a mark),
  *   because `seatTokens` and `sewWords` read it; the harness dropped it. A lone
- *   long dash, wider than half the row's ink height, is not a joint (stage 2a
- *   review, amendment 9). It was an empty mark; since row 181 step 1 (review
- *   amendment 3) it is an `extender` token (`text: '_'`, its box unchanged,
- *   `longDash: true`): the print's line, which sets `sustained` on the syllable
- *   before it and, in `seatPage`, `underExtender` on the notes it lies under.
+ *   long dash, wider than half the row's ink height, was an empty mark (stage 2a
+ *   review, amendment 9), then an `extender` token (row 181 step 1); since step 8a it is a
+ *   joint with `longDash: true` and its box unchanged, as a hyphen is.
  *
  * `rowWords` sews a row's tokens into the words `rowLanguage` judges.
  *
@@ -37,7 +35,7 @@ const INTERNAL = /(?<=[\p{L}\p{M}])[^\p{L}\p{M}]+(?=[\p{L}\p{M}])/u;
 const LETTER = /\p{L}/gu;
 
 export interface SplitOptions {
-	/** The row's ink height in the pixels the boxes are in; absent, no dash is called a long dash (an extender). */
+	/** The row's ink height in the pixels the boxes are in; absent, no dash is called a long dash. */
 	inkHeight?: number;
 }
 
@@ -50,9 +48,11 @@ export function splitTokens(tokens: readonly Token[], options: SplitOptions = {}
 		const text = token.text.trim();
 		if (letters(text) === 0) {
 			const longDash = options.inkHeight !== undefined && kindOf(text) === 'joint' && token.x1 - token.x0 > 0.5 * options.inkHeight;
-			// Row 181 step 1 (review amendment 3): the long dash is the print's own line. It stays a token, its box unchanged, and
-			// `kindOf` calls it an `extender`, so `sewWords` marks the syllable before it `sustained`.
-			out.push(longDash ? { ...token, text: '_', longDash: true } : { ...token, text });
+			// Row 181 step 8a: a long dash is a JOINT, as a hyphen is, so a word sews across it; `longDash` records only that its box
+			// was wider than half the ink height. On row 114 the long dash is the printed hyphen between syllables (Russian editions
+			// draw it long under a melisma), not an extender: step 1 made it an `extender` token, which marked 151 notes and stopped
+			// the word sewing across it. Whether it also stands for an extender is a measured option (`?extender=a`, `underlay-extender.ts`).
+			out.push(longDash ? { ...token, text, longDash: true } : { ...token, text });
 			continue;
 		}
 		const parts = text.split(INTERNAL).filter((p) => p !== '');

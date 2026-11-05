@@ -3,7 +3,7 @@
  * address, so every branch is a string.
  */
 import { describe, expect, it } from 'vitest';
-import { looksOn, scanStamp, underlayOn } from './underlay-switch';
+import { extenderArm, looksOn, scanStamp, underlayOn } from './underlay-switch';
 import { READER_STAMP, UNDERLAY_READER } from './stamp';
 import { isCurrent, restoreScan } from './restore';
 import type { OmrReadResult } from './homr-reader';
@@ -20,6 +20,17 @@ describe('underlayOn', () => {
 
 	it('is off where there is no address at all, as in a test or a worker', () => {
 		expect(underlayOn()).toBe(false);
+	});
+});
+
+describe('extenderArm (row 181 step 8a)', () => {
+	it('is off unless the address says ?extender=a or ?extender=b', () => {
+		expect(extenderArm('')).toBe('off');
+		expect(extenderArm('?words=read')).toBe('off');
+		expect(extenderArm('?words=read&extender=a')).toBe('a');
+		expect(extenderArm('?extender=b')).toBe('b');
+		expect(extenderArm('?extender=off')).toBe('off');
+		expect(extenderArm('?extender=x')).toBe('off');
 	});
 });
 

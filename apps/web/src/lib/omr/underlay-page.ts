@@ -153,7 +153,7 @@ export interface UnderlayStats {
 		 * the free notes if a printed slur's notes were continuations too (`slurFree`), and whether the count gate took the slur
 		 * reading (`slurReading`: `slurFree` equals `units` and a free note is under a slur).
 		 */
-		perSystem: { system: number; free: number; slurFree: number; units: number; slurReading: boolean }[];
+		perSystem: { system: number; free: number; slurFree: number; units: number; slurReading: boolean; /** The extender marks were taken for the system (step 8b). */ extender?: boolean }[];
 		breaches: Breach[];
 	};
 }
@@ -218,7 +218,7 @@ export function pageTokens(row: RowLayout, words: readonly WordBox[]): Token[] {
  * (`reads[id]`, the boxes of the row `id`).
  */
 export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[])[], seams: Seams, options: { extenderArm?: ExtenderArm } = {}): Omit<UnderlayPage, 'ms'> {
-	const arm = options.extenderArm ?? 'a';
+	const arm = options.extenderArm ?? 'off';
 	const stats: UnderlayStats = {
 		systems: layout.systems.length,
 		banded: 0,
@@ -253,10 +253,12 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			const spans = rowWordSpans(tokens);
 			return { tokens, spans, words: spans.map((w) => w.text) };
 		});
-		const marked = markExtenderNotes(system.notes, read.map((p) => p.tokens), arm);
-		for (const k of ['extender', 'joint', 'longDash', 'marked'] as const) stats.extenders[k] += marked.counts[k];
-		// `notes` are the system's notes with the extender read; `system.notes` is the layout's, which the extender has not touched.
-		const notes = marked.notes;
+		// The extender marks are CANDIDATES (step 8b): `ext` holds them, `notes` does not. They are taken below, after the units exist,
+		// for a system where they bring the free notes and the syllable units to equal and nothing else does (the slur gate's rule,
+		// Dann 2026-10-20 03:37), and for no other. `notes` is the layout's, which the extender has not touched.
+		const ext = markExtenderNotes(system.notes, read.map((p) => p.tokens), arm);
+		for (const k of ['extender', 'joint', 'longDash'] as const) stats.extenders[k] += ext.counts[k];
+		const notes = system.notes;
 		// The system's notes read by ties and extenders only, which is how every site read them before a slur was observed.
 		// The gate below decides after the units exist whether the system takes the slur reading; until it has, and for a
 		// system that does not take it, this is the reading (`inSlur` false on every note).
@@ -314,10 +316,33 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			// The decision reaches every site below through the notes (`CONTRACT.md` §4): a system that took the slur reading hands
 			// them its own notes, whose `inSlur` notes are continuations (`isContinuation`); any other hands the ties-only copy, on
 			// which `inSlur` changes nothing. `seatFree` is that reading's free set, for every number derived from it.
-			const seatNotes = slurReading ? notes : tiesOnly;
-			const seatFree = slurReading ? freeNoteXs(seatNotes) : free;
+			let seatNotes = slurReading ? notes : tiesOnly;
+			let seatFree = slurReading ? freeNoteXs(seatNotes) : free;
+			// THE EXTENDER GATE (step 8b), per system, the slur gate's rule: the marks are taken only where the unmarked readings do
+			// not already make the free notes and the units equal (the ties-only count, or the slur reading) and the marked ones do.
+			// A mark that brings the counts to equal is evidence of a melisma the print draws; a mark that leaves them apart, or
+			// takes a count away from a reading that was equal (row 114 song 2, page 2 system 4: ties 16, slur 15, units 15, the slur
+			// reading right; with 1 note marked ties 15 and slur 14, the slur reading lost), is not. Where it fails the system is read
+			// as if nothing had been marked, and its extender tokens are not seated, so no `sustained` is written for a line not taken.
+			let extTaken = false;
+			if (arm !== 'off' && ext.counts.marked > 0 && free.length !== syllableUnits && !slurReading) {
+				const extTies = ext.notes.map((n) => (n.inSlur ? { ...n, inSlur: false } : n));
+				const extFree = freeNoteXs(extTies);
+				if (extFree.length === syllableUnits) {
+					seatNotes = extTies;
+					seatFree = extFree;
+					extTaken = true;
+				} else if (ext.notes.filter((n) => !isContinuation(n)).length === syllableUnits && ext.notes.some((n, i) => n.inSlur === true && !isContinuation(extTies[i]))) {
+					seatNotes = ext.notes;
+					seatFree = freeNoteXs(ext.notes);
+					extTaken = true;
+				}
+			}
+			if (extTaken) stats.extenders.marked += ext.counts.marked;
+			const counted = stats.counted.perSystem[stats.counted.perSystem.length - 1];
+			if (extTaken) counted.extender = true;
 			if (folded && calls) {
-				if (slurReading) folded = foldClitics(cutRow.units, cutRow.origin, spans, calls, seatFree);
+				if (slurReading || extTaken) folded = foldClitics(cutRow.units, cutRow.origin, spans, calls, seatFree);
 				stats.clitics.folded += folded.counts.folded;
 				stats.clitics.left += folded.counts.left;
 				stats.clitics.ownNote += folded.counts.ownNote.length;
@@ -331,7 +356,10 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			stats.cuts.cut += counts.cut;
 			stats.cuts.whole += counts.whole;
 			stats.cuts.mismatched += counts.mismatched;
-			const placed = seatTokens(units, seatNotes, 'monotone');
+			// A long dash stands for the print's line only in a system that took the marks; elsewhere it stays the joint it is.
+			const toSeat = extTaken ? units.map((u) => (u.longDash ? { ...u, text: '_' } : u)) : units;
+			// And an extender seat in a system that did not take the marks is dropped, so `sustained` is never written for a line not taken.
+			const placed = seatTokens(toSeat, seatNotes, 'monotone').filter((p) => extTaken || p.kind !== 'extender');
 			stats.seated += placed.filter((p) => p.kind === 'syllable' && p.note !== null).length;
 			stats.unseated += placed.filter((p) => p.unseated).length;
 			stats.counted.manyVowels.merged.push(...manyVowelsMerged(units, placed, seatFree));
