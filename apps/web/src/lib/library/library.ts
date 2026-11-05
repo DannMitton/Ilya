@@ -22,6 +22,7 @@ import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/score/pairings';
 import { migrateCorrectionIds, type CorrectionMap } from '$lib/score/correction';
+import { BAR_ANSWER_KINDS, barAnswersEmpty, emptyBarAnswers, type BarAnswer, type BarAnswers } from '$lib/score/bar-answers';
 import type { KeyChoice } from '@ilya/score-parser';
 import type { PluralStore, SourceBytes, StorageDriver } from './driver';
 import { requestPersistence as defaultRequestPersistence } from './quota';
@@ -74,6 +75,8 @@ export interface SongFields {
 	publishedGlossAnchors: ReadonlyMap<string, string>;
 	/** Poem library, build 1: where the poem came from, or null where it is the singer's own (`SongRecord.poemSource`). */
 	poemSource: PoemSource | null;
+	/** Corrections slice 3: what the singer answered about the bars to confirm. Never absent on the page; empty means none (`SongRecord.barAnswers`). */
+	barAnswers: BarAnswers;
 }
 
 /* ── Record and page state, converted in one place ──────────────── */
@@ -108,7 +111,15 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		publishedGlosses: new Map((record.publishedGlosses ?? []).map(([key, gloss]) => [key, gloss])),
 		publishedGlossAnchors: new Map((record.publishedGlosses ?? []).map(([key, , anchor]) => [key, anchor])),
 		poemSource: record.poemSource ? { ...record.poemSource } : null,
+		barAnswers: record.barAnswers ? copyBarAnswers(record.barAnswers) : emptyBarAnswers(),
 	};
+}
+
+/** A copy, so the page's state and the stored record never share an answer object. */
+function copyBarAnswers(answers: BarAnswers): BarAnswers {
+	const bars: Record<string, BarAnswer> = {};
+	for (const [key, a] of Object.entries(answers.bars)) bars[key] = { kind: a.kind, fingerprint: a.fingerprint };
+	return { bars, ...(answers.putAway === true ? { putAway: true as const } : {}) };
 }
 
 /**
@@ -122,7 +133,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 	// N.94, the same shape: stored only while the singer has chosen a key.
 	// Row 47, the same shape: stored only while the singer has chosen as written. Row 144's chip flag likewise, only while true.
 	// N.135 stage 3, the same shape: stored only while the poem is not empty.
-	const { seatedText: _stored, transposition: _key, octaveReading: _octave, clefChipShown: _chip, tempo: _tempo, publishedPoem: _published, publishedGlosses: _poemGlosses, poemSource: _poemSource, ...rest } = base;
+	const { seatedText: _stored, transposition: _key, octaveReading: _octave, clefChipShown: _chip, tempo: _tempo, publishedPoem: _published, publishedGlosses: _poemGlosses, poemSource: _poemSource, barAnswers: _barAnswers, ...rest } = base;
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
 		key,
 		gloss,
@@ -148,6 +159,8 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 			: {}),
 		// Poem library, build 1, the same shape: stored only while the poem is, or was, a library poem.
 		...(fields.poemSource ? { poemSource: { ...fields.poemSource } } : {}),
+		// Corrections slice 3, the same shape: stored only while there is an answer, or the line is put away.
+		...(barAnswersEmpty(fields.barAnswers) ? {} : { barAnswers: copyBarAnswers(fields.barAnswers) }),
 	};
 }
 
@@ -289,6 +302,26 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 			record.poemSource = { id: p.id, work: p.work, poemHash: p.poemHash, start: p.start as number, end: p.end as number, answered: p.answered, edited: p.edited };
 		} else malformed();
 	} else if (value.poemSource !== undefined) malformed();
+	// Corrections slice 3, additive, default ABSENCE (nothing answered). `publishedGlosses`' two-level rule
+	// (amendment 1 of the brief): the field that is not an object is `malformed()`, which costs the song its
+	// saves. Inside it, an answer that is not well formed (unknown kind, missing or empty or non-string
+	// fingerprint, a bar key that is not a whole number) is dropped and the rest kept, which costs one bar
+	// asked again. A `bars` that is not an object, or a `putAway` that is not `true`, is dropped the same way.
+	if (isStringRecord(value.barAnswers)) {
+		const stored = value.barAnswers as Record<string, unknown>;
+		const answers = emptyBarAnswers();
+		if (isStringRecord(stored.bars)) {
+			for (const [key, a] of Object.entries(stored.bars)) {
+				if (!/^\d+$/.test(key) || !isStringRecord(a)) continue;
+				const { kind, fingerprint } = a as Record<string, unknown>;
+				if (typeof kind === 'string' && (BAR_ANSWER_KINDS as readonly string[]).includes(kind) && typeof fingerprint === 'string' && fingerprint !== '') {
+					answers.bars[key] = { kind: kind as BarAnswer['kind'], fingerprint };
+				}
+			}
+		}
+		if (stored.putAway === true) answers.putAway = true;
+		if (!barAnswersEmpty(answers)) record.barAnswers = answers;
+	} else if (value.barAnswers !== undefined) malformed();
 
 	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
 	// This function rebuilds the record field by field from `emptySongRecord`,

@@ -18,6 +18,7 @@ import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/score/pairings';
 import type { CorrectionMap } from '$lib/score/correction';
+import type { BarAnswers } from '$lib/score/bar-answers';
 import type { KeyChoice, NoteBase } from '@ilya/score-parser';
 
 /**
@@ -221,6 +222,17 @@ export interface SongRecord {
 	 * older Ilya drops it and keeps the poem. `RECORD_SCHEMA` stays 1.
 	 */
 	poemSource?: PoemSource;
+	/**
+	 * CORRECTIONS SLICE 3, 2026-11-05. WHAT THE SINGER ANSWERED ABOUT THE BARS
+	 * THAT DO NOT ADD UP, kept with the song: per bar, "Matches my score" or
+	 * changed, each with a fingerprint of the bar's events at the moment of the
+	 * answer, so a bar whose notes have since changed is asked again
+	 * (`score/bar-answers.ts`). Stored only while there is an answer, or the
+	 * line is put away (NOT WIRED). Absent means none. OPTIONAL AND ADDITIVE,
+	 * `publishedGlosses`' pattern: an older Ilya drops it and keeps the song.
+	 * `RECORD_SCHEMA` stays 1.
+	 */
+	barAnswers?: BarAnswers;
 	source: SongSource | null;
 }
 
