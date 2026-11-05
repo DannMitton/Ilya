@@ -125,6 +125,7 @@ describe('PoemJoin', () => {
 		r.join.run();
 		expect(r.sets).toEqual([]);
 		expect(r.join.lastLine).toContain('does not line up');
+		expect(r.join.lastLine).toContain('after the last transcribed word, no further word against Lyrics token 5 «мирской»');
 	});
 
 	it('runs after the pause and not before, and restarts the pause on each call', () => {

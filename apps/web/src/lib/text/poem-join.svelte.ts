@@ -27,7 +27,7 @@ import type { PairingMap } from '$lib/score/pairings';
 import type { BarRange } from '$lib/omr/unread-bars';
 import { tokenize } from './poem-compare';
 import { applyProposals, crossCheck, planJoin, type JoinInput, type JoinResult, type JoinRun, type SlotLike } from './poem-join';
-import { buildRuns, byFromScan, joinIsWord, slotsFor, tokenMapOf, tokensIn, type RunEvent } from './poem-join-wire';
+import { buildRuns, byFromScan, describeFailure, joinIsWord, slotsFor, tokenMapReport, tokensIn, type RunEvent } from './poem-join-wire';
 
 /** The quiet pause, as Lyrics typing has it. */
 export const JOIN_PAUSE_MS = 600;
@@ -109,9 +109,9 @@ export class PoemJoin {
 		const sig = `${doc.id}|${poem}|${lyrics}`;
 		if (sig === this.#last || this.#suppressed.has(`${doc.id}|${poem}`)) return;
 		this.#last = sig;
-		const map = tokenMapOf(state.lines, lyrics);
+		const { map, failure } = tokenMapReport(state.lines, lyrics);
 		if (!map) {
-			this.#say('the transcription of Lyrics does not line up with its words, so nothing is joined');
+			this.#say(failure ? describeFailure(failure) : 'the transcription of Lyrics does not line up with its words, so nothing is joined');
 			return;
 		}
 		const tokens = tokenize(lyrics);

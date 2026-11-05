@@ -5,7 +5,8 @@
 import { describe, expect, it } from 'vitest';
 import type { LineData } from '$lib/types';
 import type { Pairing, PairingMap } from '$lib/score/pairings';
-import { buildRuns, byFromScan, tokenMapOf, tokensIn, type RunEvent } from './poem-join-wire';
+import { processText } from '$lib/pipeline';
+import { buildRuns, byFromScan, describeFailure, tokenMapOf, tokenMapReport, tokensIn, type RunEvent } from './poem-join-wire';
 
 const lines = (...texts: string[][]): LineData[] => texts.map((words, i) => ({ lineNumber: i + 1, words: words.map((cleanWord) => ({ cleanWord, lineIndex: i })) })) as unknown as LineData[];
 const syl = (lineIndex: number, wordIndex: number): Pairing => ({ kind: 'syllable', cyrillic: 'x', ipa: 'x', vowel: undefined, origin: { lineIndex, wordIndex, slotIndex: 0, word: 'x' } });
@@ -91,5 +92,76 @@ describe('byFromScan and tokensIn', () => {
 	it('finds the tokens inside a range, whatever the line breaks', () => {
 		expect(tokensIn('Средь шумного\nбала', [{ start: 6, end: 13 }])).toEqual([1]);
 		expect(tokensIn('Средь шумного\nбала', [{ start: 0, end: 18 }])).toEqual([0, 1, 2]);
+	});
+});
+
+describe('tokenMapOf against the real transcription, one synthetic lyric of each shape (row 181 step 8c)', () => {
+	const real = (text: string) => tokenMapOf(processText(text), text);
+
+	// Shapes that lined up before and must still: the map has one entry for every transcribed word.
+	const lined: Record<string, string> = {
+		plain: 'Средь шумного бала, в тревоге мирской',
+		'syllable hyphens inside a word': 'Ком-нат-ка тес-ная',
+		'a hyphenated word that is no particle': 'кто-то там',
+		'a no-break space before a #': 'я\u00A0# на',
+		'a # trailing its word': 'я# на',
+		'a # alone': 'я # на',
+		'a punctuation-only token': 'Средь — бала',
+		'«не» before a word': 'не проглядная ночь',
+		'pre-reform letters': 'гдѣ мір',
+		'an old genitive ending': 'шумнаго бала',
+		'ё': 'всё ёлка',
+		'guillemets': '«Средь» бала',
+		'an ellipsis': 'Средь… бала',
+		'a digit': '2 раза',
+		'a Latin word': 'hello бала',
+		'two lines': 'Средь шумного\nбала в',
+		'a blank line': 'Средь\n\nбала',
+	};
+	for (const [name, text] of Object.entries(lined)) {
+		it(`lines up: ${name}`, () => {
+			expect(real(text), text).not.toBeNull();
+		});
+	}
+
+	// Shapes that did NOT line up before step 8c, each found in the code and fixed in `tokenMapReport`.
+	it('lines up where the pipeline splits a hyphenated particle off its host: both words are the one Lyrics token (typed-hyphens.ts:146-161)', () => {
+		for (const [text, tokens] of [['велит-ли он', ['велитли', 'он']], ['ска-же ты', ['скаже', 'ты']], ['места-б, там', ['местаб', 'там']], ['мог-ль он', ['могль', 'он']], ['так-ж он', ['такж', 'он']], ['ты-бы там', ['тыбы', 'там']]] as const) {
+			const lines = processText(text);
+			const map = tokenMapOf(lines, text);
+			expect(map, text).not.toBeNull();
+			expect(lines.flatMap((l) => l.words).length, `${text}: the pipeline made more words than tokens`).toBeGreaterThan(tokens.length);
+			// Every word of the host token maps to token 0, and the next token's word to token 1.
+			expect([...map!.values()].filter((v) => v === 0).length).toBe(2);
+			expect(Math.max(...map!.values())).toBe(1);
+		}
+	});
+
+	it('lines up where a dash or a bracket stands inside a word, which `fold` keeps and `cleanWord` strips', () => {
+		for (const text of ['Сред—ь бала', 'Сред–ь бала', 'Сре(д)ь бала', 'Сре,дь бала']) {
+			expect(real(text), text).not.toBeNull();
+		}
+	});
+
+	it('still refuses what is not the same words, and names the first disagreement', () => {
+		const lines = processText('Средь шумного бала');
+		const bad = tokenMapReport(lines, 'Средь шумного бал');
+		expect(bad.map).toBeNull();
+		expect(bad.failure).toMatchObject({ line: 1, word: 2, transcription: 'бала', token: 2, tokenRaw: 'бал', tokenFolded: 'бал', words: 3, tokens: 3 });
+		expect(describeFailure(bad.failure!)).toBe('the transcription of Lyrics does not line up with its words, so nothing is joined: at line 1, word 2, the transcription\'s «бала» against Lyrics token 2 «бал» (folded «бал»); 3 transcribed word(s) and 3 Lyrics token(s) with letters');
+	});
+
+	it('names a transcription that has more words than Lyrics, and Lyrics that has more tokens', () => {
+		const more = tokenMapReport(processText('Средь шумного бала'), 'Средь шумного');
+		expect(more.failure).toMatchObject({ line: 1, word: 2, transcription: 'бала', token: null, tokenRaw: null });
+		expect(describeFailure(more.failure!)).toContain('against no further token');
+		const fewer = tokenMapReport(processText('Средь шумного'), 'Средь шумного бала');
+		expect(fewer.failure).toMatchObject({ line: null, token: 2, tokenRaw: 'бала' });
+		expect(describeFailure(fewer.failure!)).toContain('after the last transcribed word');
+	});
+
+	it('names the words read toward a token that a split word did not complete', () => {
+		const f = tokenMapReport(processText('велит-ли он'), 'велит-ли-ка он').failure!;
+		expect(f).toMatchObject({ line: 1, word: 2, transcription: 'он', read: 'велитли', token: 0, tokenFolded: 'велитлика' });
 	});
 });

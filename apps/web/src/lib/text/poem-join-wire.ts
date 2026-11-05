@@ -35,26 +35,85 @@ export function slotsFor(words: readonly string[]): SlotLike[] {
 	return buildSlotQueue(lines).map((s) => ({ word: s.origin.wordIndex, cyrillic: s.cyrillic }));
 }
 
+/** A word's letters and digits only: what two foldings of one word must agree on. `fold` strips a token's edges and its hyphens; the pipeline's `cleanWord` strips every punctuation mark and dash (`pipeline.ts` `PUNCTUATION_REGEX`), so a dash or a bracket inside a word is in one and not the other. */
+const core = (s: string): string => s.replace(/[^\p{L}\p{N}]/gu, '');
+
+/** The first place the transcription of Lyrics and Lyrics' own words part company, for the console line (row 181 step 8c). */
+export interface TokenMapFailure {
+	/** 1-based line of the transcription and 0-based word in it where it was reading; null where it had run out of words. */
+	line: number | null;
+	word: number | null;
+	/** The transcription's word, folded (`fold(cleanWord)`), and the words read toward this token so far, joined. */
+	transcription: string | null;
+	read: string;
+	/** The LYRICS token it was matching: its index in `comparePoem`'s numbering, its raw text, its folded form; null where Lyrics had run out. */
+	token: number | null;
+	tokenRaw: string | null;
+	tokenFolded: string | null;
+	/** The counts of words with letters in the transcription and tokens with letters in Lyrics. */
+	words: number;
+	tokens: number;
+}
+
+export interface TokenMapReport {
+	map: Map<string, number> | null;
+	failure?: TokenMapFailure;
+}
+
 /**
- * Which LYRICS token each transcribed word is, keyed `lineIndex:wordIndex`. The lines are the transcription of the LYRICS text,
- * so walking their words in order against the LYRICS tokens that carry letters must agree on every folded form; if one does not
- * (a word split or dropped by the transcription), the map is null and the join does nothing.
+ * Which LYRICS token each transcribed word is, keyed `lineIndex:wordIndex`, and where it first fails to be.
+ *
+ * The lines are the transcription of the LYRICS text. Walking their words in order against the LYRICS tokens that carry letters,
+ * a token may be MORE THAN ONE transcribed word: the pipeline splits a token ending in a hyphenated particle («велит-ли»,
+ * «ска-же»: `expandHyphenatedParticles`, `typed-hyphens.ts:146-161`, called at `pipeline.ts:181-183`), and both words are that
+ * token. The words read toward a token, joined, must equal the token's letters. Both sides are compared as letters and digits
+ * only (`core`), because `fold` leaves a dash or a bracket inside a word that `cleanWord` strips (a token «сред—ь» against the
+ * word «Средь»). If a word cannot be part of the token being matched, or the counts run out unequal, there is no map and the
+ * failure names the first place it happened, so the join does nothing and the console says exactly where.
  */
-export function tokenMapOf(lines: readonly LineData[], lyrics: string): Map<string, number> | null {
+export function tokenMapReport(lines: readonly LineData[], lyrics: string): TokenMapReport {
 	const tokens = tokenize(lyrics);
 	const lettered = tokens.map((t, i) => (t.folded === '' ? -1 : i)).filter((i) => i >= 0);
 	const out = new Map<string, number>();
+	let words = 0;
+	for (const line of lines) for (const w of line.words) if (core(fold(w.cleanWord)) !== '') words++;
+	const fail = (line: number | null, word: number | null, transcription: string | null, read: string, at: number | undefined): TokenMapReport => ({
+		map: null,
+		failure: { line, word, transcription, read, token: at ?? null, tokenRaw: at === undefined ? null : lyrics.slice(tokens[at].start, tokens[at].end), tokenFolded: at === undefined ? null : tokens[at].folded, words, tokens: lettered.length },
+	});
 	let next = 0;
+	let read = '';
 	for (const [lineIndex, line] of lines.entries()) {
 		for (const [wordIndex, word] of line.words.entries()) {
-			const f = fold(word.cleanWord);
+			const f = core(fold(word.cleanWord));
 			if (f === '') continue;
-			const at = lettered[next++];
-			if (at === undefined || tokens[at].folded !== f) return null;
+			const at = lettered[next];
+			if (at === undefined) return fail(lineIndex + 1, wordIndex, fold(word.cleanWord), read, undefined);
+			const target = core(tokens[at].folded);
+			const so_far = read + f;
+			if (!target.startsWith(so_far)) return fail(lineIndex + 1, wordIndex, fold(word.cleanWord), read, at);
 			out.set(`${lineIndex}:${wordIndex}`, at);
+			if (so_far === target) {
+				next++;
+				read = '';
+			} else read = so_far;
 		}
 	}
-	return next === lettered.length ? out : null;
+	if (read !== '' || next !== lettered.length) return fail(null, null, null, read, lettered[next]);
+	return { map: out };
+}
+
+/** `tokenMapReport`'s map, or null where the transcription and Lyrics do not line up. */
+export function tokenMapOf(lines: readonly LineData[], lyrics: string): Map<string, number> | null {
+	return tokenMapReport(lines, lyrics).map;
+}
+
+/** One line for the console naming the first disagreement. */
+export function describeFailure(f: TokenMapFailure): string {
+	const where = f.line === null ? 'after the last transcribed word' : `at line ${f.line}, word ${f.word}`;
+	const had = f.transcription === null ? 'no further word' : `the transcription's «${f.transcription}»${f.read ? ` (after «${f.read}»)` : ''}`;
+	const want = f.token === null ? 'no further token' : `Lyrics token ${f.token} «${f.tokenRaw}» (folded «${f.tokenFolded}»)`;
+	return `the transcription of Lyrics does not line up with its words, so nothing is joined: ${where}, ${had} against ${want}; ${f.words} transcribed word(s) and ${f.tokens} Lyrics token(s) with letters`;
 }
 
 /** The sung notes as the runs need them: `VocalLineEvent` satisfies it. */
