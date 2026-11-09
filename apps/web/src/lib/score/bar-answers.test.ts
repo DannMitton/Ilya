@@ -238,3 +238,20 @@ describe('answeredBars reads the field and tolerates a damaged one', () => {
 		expect(answeredBars(emptyBarAnswers())).toEqual([]);
 	});
 });
+
+/* Integration step 7g: one answer per bar index. It checks that "007" and "7" are listed once, the later entry in the field's own
+   order winning, and that a new answer for bar 7 removes the other spelling. If it fails a bar is asked about twice, or the stale
+   answer is honoured. */
+describe('answeredBars and withBarAnswer take a bar once, however its key is written (step 7g)', () => {
+	it('lists "007" and "7" once, the later entry winning', () => {
+		const out = answeredBars({ bars: { '7': { kind: 'changed', fingerprint: 'B' }, '007': { kind: 'matches-print', fingerprint: 'A' } } });
+		expect(out).toEqual([{ measureIndex: 7, kind: 'matches-print', fingerprint: 'A' }]);
+	});
+	it('replaces both spellings with the one new answer', () => {
+		const sc = score([4, 3, 4, 4]);
+		const next = withBarAnswer({ bars: { '007': { kind: 'changed', fingerprint: 'old' }, '2': { kind: 'changed', fingerprint: 'two' } } }, sc, 2, 'matches-print');
+		expect(Object.keys(next.bars).sort()).toEqual(['007', '2']);
+		const at7 = withBarAnswer({ bars: { '0003': { kind: 'changed', fingerprint: 'old' } } }, sc, 3, 'matches-print');
+		expect(Object.keys(at7.bars)).toEqual(['3']);
+	});
+});

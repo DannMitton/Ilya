@@ -115,10 +115,15 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 	};
 }
 
-/** A copy, so the page's state and the stored record never share an answer object. */
+/**
+ * A copy, so the page's state and the stored record never share an answer object. It also writes each key as the bar's canonical
+ * number, `String(Number(key))`, so "007" and "7" are one bar (integration step 7g). WHAT IT CHECKS: nothing; WHY: a key that is
+ * the same bar written two ways would keep two answers for one bar; WHEN TWO KEYS NAME ONE BAR the later one in object order replaces
+ * the earlier, as "the last answer replaces" says. It relates to `validateRecord`, which normalises the same way on load.
+ */
 function copyBarAnswers(answers: BarAnswers): BarAnswers {
 	const bars: Record<string, BarAnswer> = {};
-	for (const [key, a] of Object.entries(answers.bars)) bars[key] = { kind: a.kind, fingerprint: a.fingerprint };
+	for (const [key, a] of Object.entries(answers.bars)) bars[String(Number(key))] = { kind: a.kind, fingerprint: a.fingerprint };
 	return { bars, ...(answers.putAway === true ? { putAway: true as const } : {}) };
 }
 
@@ -315,7 +320,8 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 				if (!/^\d+$/.test(key) || !isStringRecord(a)) continue;
 				const { kind, fingerprint } = a as Record<string, unknown>;
 				if (typeof kind === 'string' && (BAR_ANSWER_KINDS as readonly string[]).includes(kind) && typeof fingerprint === 'string' && fingerprint !== '') {
-					answers.bars[key] = { kind: kind as BarAnswer['kind'], fingerprint };
+					// Integration step 7g: "007" and "7" are one bar, so the key is written as `String(Number(key))` and the later entry replaces the earlier.
+					answers.bars[String(Number(key))] = { kind: kind as BarAnswer['kind'], fingerprint };
 				}
 			}
 		}

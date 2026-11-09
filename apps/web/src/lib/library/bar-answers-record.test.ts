@@ -163,3 +163,24 @@ describe('SongDocument carries the field (amendment 2)', () => {
 		expect('barAnswers' in d.toRecord()).toBe(false);
 	});
 });
+
+/* Integration step 7g (Fable's review of corrections slice 3): a bar's key is its canonical number. It checks that "007" and
+   "7" load as one bar, the later entry in the object's own order replacing the earlier (an integer-like key such as "7" is
+   listed before "007" by the language, so "007" is the later one here), and that a copy writes the same. If it fails, one bar
+   keeps two answers and `answeredBars` could honour the stale one. */
+describe('a bar written two ways is one bar (step 7g)', () => {
+	const A = { kind: 'matches-print', fingerprint: 'A' };
+	const B = { kind: 'changed', fingerprint: 'B' };
+	it('loads "007" and "7" as one bar, the later entry replacing the earlier', () => {
+		const record = { ...emptySongRecord('x', NOW), barAnswers: { bars: { '7': B, '007': A } } } as unknown as SongRecord;
+		const loaded = validateRecord(JSON.parse(JSON.stringify(record)), 'x', LATER);
+		expect(loaded.reason).toBeUndefined();
+		expect(Object.keys(loaded.record.barAnswers!.bars)).toEqual(['7']);
+		expect(loaded.record.barAnswers!.bars['7']).toEqual(A);
+	});
+	it('writes the canonical key when it copies', () => {
+		const base = emptySongRecord('x', NOW);
+		const stored = recordFromFields(base, { ...fieldsFromRecord(base), barAnswers: { bars: { '007': A as never } } });
+		expect(Object.keys(stored.barAnswers!.bars)).toEqual(['7']);
+	});
+});

@@ -107,7 +107,9 @@ export function fingerprintOfBar(score: AnswerScore, measureIndex: number): stri
 export function withBarAnswer(answers: BarAnswers, score: AnswerScore, measureIndex: number, kind: BarAnswerKind): BarAnswers {
 	const fingerprint = fingerprintOfBar(score, measureIndex);
 	if (fingerprint === null) return answers;
-	return { ...answers, bars: { ...answers.bars, [String(measureIndex)]: { kind, fingerprint } } };
+	// The bar's other spellings ("007" for 7) go with the old answer, so the last answer is the only one (step 7g).
+	const bars = Object.fromEntries(Object.entries(answers.bars).filter(([key]) => !/^\d+$/.test(key) || Number(key) !== measureIndex));
+	return { ...answers, bars: { ...bars, [String(measureIndex)]: { kind, fingerprint } } };
 }
 
 /**
@@ -122,13 +124,16 @@ export function withBarAnswer(answers: BarAnswers, score: AnswerScore, measureIn
  */
 export function answeredBars(answers: BarAnswers | undefined): AnsweredBar[] {
 	if (!answers || !answers.bars) return [];
-	const out: AnsweredBar[] = [];
+	/* ONE ANSWER PER BAR INDEX (integration step 7g): "007" and "7" name one bar, so the entry that comes later in the field's
+	   own order replaces the earlier one, as a bar's last answer replaces its earlier answers. Without it a bar could be listed
+	   twice, once for each spelling. */
+	const byBar = new Map<number, AnsweredBar>();
 	for (const [key, a] of Object.entries(answers.bars)) {
 		if (!/^\d+$/.test(key)) continue;
 		if (!a || !BAR_ANSWER_KINDS.includes(a.kind) || typeof a.fingerprint !== 'string' || a.fingerprint === '') continue;
-		out.push({ measureIndex: Number(key), kind: a.kind, fingerprint: a.fingerprint });
+		byBar.set(Number(key), { measureIndex: Number(key), kind: a.kind, fingerprint: a.fingerprint });
 	}
-	return out.sort((a, b) => a.measureIndex - b.measureIndex);
+	return [...byBar.values()].sort((a, b) => a.measureIndex - b.measureIndex);
 }
 
 /**
