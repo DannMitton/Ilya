@@ -168,6 +168,7 @@
 	{:else if block.kind === 'endnote'}
 		{@render heading(block.heading)}
 		{#if block.teacher}<p class="teacher-c">{block.teacher}</p>{/if}
+		{#if block.sharedTopic}<p class="shared-topic">{block.sharedTopic}</p>{/if}
 		<p class="reference">{@render runs(block.reference)}</p>
 		{#each block.topics as topic, j (j)}<p class="reading-topic">{@render runs(topic)}</p>{/each}
 	{/if}
@@ -511,6 +512,7 @@
 
 	/* Further reading: a work's full reference on its own line, then one indented line per topic it is cited for. */
 	.reference,
+	.shared-topic,
 	.reading-topic {
 		font-family: var(--font-serif);
 		font-size: 11.5px;

@@ -15,7 +15,7 @@ import { pitchName } from '$lib/voice/note-picker';
 import { placeholderCommentSentence, placeholderTurnsSentence } from '$lib/analysis/placeholder-line';
 import type { Run } from './comment-sources';
 import type { RenderedComment } from './comment-text';
-import { furtherReading } from './further-reading';
+import { readingList } from './further-reading';
 import type { InsightsModel, TessituragramModel, VerdictLine } from './insights';
 import { formatCycles, doseValue, type CycleDose, type CycleDoseSplit } from './singing-measures';
 import type { KeyLine, KeyWords } from './key-lines';
@@ -69,7 +69,7 @@ export type Block =
 	/** Row 47: the quiet octave line, directly under the phonation sentence. `shift` is the direction the range asks for; `applied` is whether it is. */
 	| { kind: 'octave'; heading?: string; shift: -1 | 1; applied: boolean }
 	/** One block per work cited (Further reading, 2026-11-03): its full reference once, then one line per topic it is cited for. */
-	| { kind: 'endnote'; heading?: string; teacher?: string; reference: Run[]; topics: Run[][] }
+	| { kind: 'endnote'; heading?: string; teacher?: string; /** The topic the whole list serves, printed once after the teacher line (`readingList`). */ sharedTopic?: string; reference: Run[]; topics: Run[][] }
 	/** QUEUE row 79: the page's notes, once, at the end: the numbered footnote (HTML from i18n), then the method line. */
 	| { kind: 'notes'; heading: string; footnote: string | null; method: string };
 
@@ -350,11 +350,13 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 	if (i.method) out.push({ group: 'free', block: notesBlock(i.method, i.footnote ?? null, language) });
 
 	// ── Squircle 3, Further reading: one endnote per work, in `worksCited` order ──
-	const notes: Block[] = furtherReading(i.comments, { language, pitchOf: i.pitchOf, barOf: i.barOf }).map((w) => ({ kind: 'endnote', ...w }));
+	const list = readingList(i.comments, { language, pitchOf: i.pitchOf, barOf: i.barOf });
+	const notes: Block[] = list.works.map((w) => ({ kind: 'endnote', ...w }));
 	if (notes.length > 0) {
 		const first = notes[0] as Extract<Block, { kind: 'endnote' }>;
 		first.heading = T('comment.tap');
 		first.teacher = T('insights.r2.teacherC');
+		if (list.sharedTopic) first.sharedTopic = list.sharedTopic; // one topic for the whole list: once, after the teacher line (Dann 2026-11-09 12:10)
 		for (const b of notes) out.push({ group: 'sources', block: b });
 	}
 	return out;

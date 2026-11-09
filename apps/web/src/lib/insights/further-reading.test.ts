@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { render } from 'svelte/server';
-import { furtherReading } from './further-reading';
+import { furtherReading, readingList } from './further-reading';
 import { runsText, type RenderedComment } from './comment-text';
 import type { Block } from './singer-blocks';
 import SingerBlock from './SingerBlock.svelte';
@@ -78,5 +78,60 @@ describe('Further reading, as drawn', () => {
 		expect(h.match(/class="reading-topic[ "]/g)).toHaveLength(2);
 		expect(h).not.toContain('<ol');
 		expect(h.indexOf('class="reference')).toBeLessThan(h.indexOf('class="reading-topic'));
+	});
+});
+
+/* Dann 2026-11-09 12:10: where the whole list serves exactly one topic, its line prints once and each work carries only its
+   pages and passages. These check that rule from both sides: one topic shared by five works lifts the label, two topics keep
+   today's form (the second case kills a mutant that always lifts), and a list with one topic is not left labelled under every
+   work (the first kills one that never lifts). If the rule fails, "[u] on A3, bar 6:" repeats under each work, or a work loses
+   the label of a topic of its own. They relate to `furtherReading`, whose form with labels is unchanged. */
+describe('Further reading, one topic for the whole list prints once', () => {
+	const FIVE = ['REID-054', 'PVA2-B-014', 'MIL04-028', 'KVP2-037', 'KVP2-022'];
+	it('prints the label once when five works serve one topic, and each work shows no label', () => {
+		const list = readingList([rc('a', 'u', '6', 'A3', FIVE)], inputs());
+		expect(list.works.length).toBeGreaterThanOrEqual(4);
+		expect(list.sharedTopic).toBe('[u] on A3, bar 6:');
+		for (const w of list.works) {
+			const topics = w.topics.map((r) => runsText(r));
+			expect(topics.length).toBeGreaterThan(0);
+			for (const x of topics) expect(x).not.toContain('bar 6');
+			expect(runsText(w.reference)).not.toContain('bar 6');
+		}
+	});
+	it('keeps each work listed once, with its passages joined by semicolons as today', () => {
+		const list = readingList([rc('a', 'u', '6', 'A3', ['REID-054', 'REID-057'])], inputs());
+		expect(list.works).toHaveLength(1);
+		expect(runsText(list.works[0].topics[0]).replace(/\u00a0/g, ' ')).toBe('p. 65, “vowel is incapable of being articulated in the upper tonal regions”; p. 66, “there will be no real reason for modifying the vowel any longer”');
+	});
+	it('names the topic without a pitch in the same way, once', () => {
+		expect(readingList([rc('a', 'u', '6', '', ['REID-054'])], inputs()).sharedTopic).toBe('[u], bar 6:');
+	});
+	it('says the label in French once, with the no-break space before the colon', () => {
+		expect(readingList([rc('a', 'u', '6', 'A3', ['REID-054'])], inputs('fr')).sharedTopic).toBe('[u] sur A3, mesure 6\u00a0:');
+	});
+	it('changes nothing where the list serves two topics: every line keeps its own label and nothing is shared', () => {
+		const comments = [rc('a', 'u', '9', 'D4', ['REID-054']), rc('b', 'i', '6', 'E4', ['REID-057'])];
+		const list = readingList(comments, inputs());
+		expect(list.sharedTopic).toBeNull();
+		expect(list.works.map((w) => w.topics.map((r) => runsText(r)))).toEqual(furtherReading(comments, inputs()).map((w) => w.topics.map((r) => runsText(r))));
+		expect(runsText(list.works[0].topics[0])).toMatch(/^\[u\] on D4, bar 9:/);
+	});
+	it('counts two topics across works, though each work serves one of them', () => {
+		const list = readingList([rc('a', 'u', '9', 'D4', ['REID-054']), rc('b', 'i', '6', 'E4', ['MIL04-028'])], inputs());
+		expect(list.sharedTopic).toBeNull();
+		expect(list.works).toHaveLength(2);
+		for (const w of list.works) expect(runsText(w.topics[0])).toMatch(/^\[(u|i)\] on /);
+	});
+	it('is empty, with no shared topic, when nothing cites a row', () => {
+		expect(readingList([rc('a', 'u', '1', 'D4', [])], inputs())).toEqual({ sharedTopic: null, works: [] });
+	});
+	it('draws the shared topic once, after the teacher line and before the first reference', () => {
+		const list = readingList([rc('a', 'u', '6', 'A3', FIVE)], inputs());
+		const h = render(SingerBlock, { props: { block: { kind: 'endnote', heading: 'Further reading', teacher: 'T', sharedTopic: list.sharedTopic!, ...list.works[0] } as Block, language: 'en', width: 600 } }).body.replace(/<!--.*?-->/gs, '');
+		expect(h.match(/class="shared-topic/g)).toHaveLength(1);
+		expect(h.indexOf('class="teacher-c')).toBeLessThan(h.indexOf('class="shared-topic'));
+		expect(h.indexOf('class="shared-topic')).toBeLessThan(h.indexOf('class="reference'));
+		expect(h).toContain('[u] on A3, bar 6:');
 	});
 });
