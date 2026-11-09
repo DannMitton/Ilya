@@ -4,7 +4,7 @@ Branch `cloud-lane-38`, cut from `origin/Shane` (`4d73284b`). Pushed only `cloud
 
 ## The branch tip
 
-The code and every gate below are at `53f05d7b` ("Integration step 7: e2e follow the quiet pause and the stricter key rule"). Two report commits follow it (the step 7 report and this update); they change no code. `git log -1 cloud-lane-38` names the tip. The branch is about 62 commits ahead of `origin/Shane`. Pushed only `cloud-lane-38`; `Shane` and `main` untouched; no pull request; nothing under `docs/memory/` edited. Dann merges. Each step has its report: `report-code-integration-step1_r1_2026-11-09.md` to `step5`, `step5b`, `step5c`, `step5d`, `step7`.
+The code and every gate below are at `53f05d7b` ("Integration step 7: e2e follow the quiet pause and the stricter key rule"). Two report commits follow it (the step 7 report and this update); they change no code. `git log -1 cloud-lane-38` names the tip. The branch is 59 commits ahead (at the time of writing) of `origin/Shane`. Pushed only `cloud-lane-38`; `Shane` and `main` untouched; no pull request; nothing under `docs/memory/` edited. Dann merges. Each step has its report: `report-code-integration-step1_r1_2026-11-09.md` to `step5`, `step5b`, `step5c`, `step5d`, `step7`.
 
 | Step | Source | Commits here |
 |---|---|---|
