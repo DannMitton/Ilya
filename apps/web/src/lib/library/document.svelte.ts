@@ -25,6 +25,7 @@ import type { SongMetadata } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/score/pairings';
 import type { CorrectionMap } from '$lib/score/correction';
+import { emptyBarAnswers, type BarAnswers } from '$lib/score/bar-answers';
 import type { KeyChoice } from '@ilya/score-parser';
 import {
 	createSaveScheduler,
@@ -130,6 +131,14 @@ export class SongDocument {
 	 * (`SongRecord.poemSource`). Saved through the same path as `publishedPoem`.
 	 */
 	poemSource = $state<PoemSource | null>(null);
+
+	/**
+	 * Corrections slice 3: what the singer answered about the bars to confirm
+	 * (`SongRecord.barAnswers`). Saved through the same path as `poemSource`;
+	 * nothing writes it yet, slice 6 will. Left out of `#snapshot` and `#apply`
+	 * it would be rebuilt away on the first autosave.
+	 */
+	barAnswers = $state<BarAnswers>(emptyBarAnswers());
 
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
@@ -304,6 +313,7 @@ export class SongDocument {
 			publishedGlosses: this.publishedGlosses,
 			publishedGlossAnchors: this.publishedGlossAnchors,
 			poemSource: this.poemSource,
+			barAnswers: this.barAnswers,
 		};
 	}
 
@@ -360,6 +370,7 @@ export class SongDocument {
 		this.publishedGlosses = fields.publishedGlosses as Map<string, string>;
 		this.publishedGlossAnchors = fields.publishedGlossAnchors as Map<string, string>;
 		this.poemSource = fields.poemSource;
+		this.barAnswers = fields.barAnswers;
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {
