@@ -12,7 +12,7 @@ Branch `cloud-lane-38`, commit `b409a1d0`. Found by Dann 2026-11-09 12:18: row 1
 
 ## Every row against the engine
 
-All 37 names, both languages. The only difference common to many rows is that the engine marks the stress of a one-word, one-syllable name («а» gives [ˈɑ]); the table prints such a name bare. **Decision (DESK DEFAULT, reversible, for Dann):** the comparison removes that one leading ˈ on a one-word, one-syllable name and nothing else, so the 25 rows that differ only by it are left as printed. If the table should show the engine's ˈ on those names, 25 rows change and the test's `asPrinted` goes. «у»: the engine gives no IPA for a lone «у» (a clitic, merged into its neighbour), so it is exempt, and a test shows the engine's output is empty.
+All 37 names, both languages. The only difference common to many rows is that the engine marks the stress of a one-word, one-syllable name («а» gives [ˈɑ]); the table prints such a name bare. **Decision (DESK DEFAULT, reversible, for Dann):** the comparison removes that one leading ˈ on a one-word, one-syllable name and nothing else, so the 26 rows that differ only by it are left as printed. If the table should show the engine's ˈ on those names, 26 rows change and the test's `asPrinted` goes. «у»: the engine gives no IPA for a lone «у» (a clitic, merged into its neighbour), so it is exempt, and a test shows the engine's output is empty.
 
 Rows that differed otherwise, with both forms, now seated as the engine's (French and English copies both):
 
