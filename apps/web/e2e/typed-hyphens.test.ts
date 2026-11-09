@@ -12,6 +12,9 @@ test.describe('row 106: a typed hyphen under the open-syllables switch, in the I
 		await page.goto('/');
 		await waitForDictionary(page);
 		await transcribe(page, text);
+		// TEXT follows the field after the quiet pause (row 172, step 1): the words of the song restored from the first call are on the
+		// page until it ends, so wait for the page to show THIS text before clicking a word, or the Inspector reads the old word.
+		await expect(page.locator('[data-word-index="0-0"]')).toContainText(text);
 		await expandStation(page, 'Notation');
 		const open = page.locator('button[role="switch"]').last();
 		if ((await open.getAttribute('aria-checked')) !== 'true') await open.click();

@@ -7,8 +7,8 @@ import path from 'node:path';
  * typed passaggi, and a declared type, on the one tracked engraved fixture (Sunless no. 1, C#3 to D4).
  *
  *   TENOR_T   tenor, C3 to F#4, primo E-flat 4, secondo G4: the key suits
- *   BASS_B1   bass, C2 to F#3, primo C3, secondo E3: one group
- *   BASS_B2   bass, D2 to C4, primo E3, secondo G#3: three groups
+ *   BASS_B1   bass, C2 to F#3, primo C3, secondo E3: no better key (a key that only swaps one challenge for another is never offered, Dann 2026-11-05 11:49)
+ *   BASS_B2   bass, D2 to C4, primo E3, secondo G#3: two groups (three before the ruling above)
  *   SOPRANO_S soprano, C4 to C6: the key suits, and her line names the secondo only (no primo axis)
  *   NOVICE_N  baritone, A2 to F3 (eight semitones): no workable key
  *   BARITONE  baritone, G#2 to B-flat 3, primo B-flat 3, secondo D4: more groups than the cap, so the cap binds
@@ -93,22 +93,26 @@ for (const [width, viewport] of [['desktop', { width: 1440, height: 1300 }], ['p
 			await shoot(page, 'suits-tenor', width);
 		});
 
-		test('one group: one key, one line, with its "Try this key"', async ({ page }) => {
+		/* Integration step 5 (row 71), Dann 2026-11-05 11:49: a key is offered only when it has fewer challenges. BASS_B1's one key under
+		   the looser rule traded a small primo share for a range challenge below, so it is no longer offered, and the page says so. The
+		   states with exactly one group, and with the cap binding (the BARITONE voice shows three, the cap, with the reveal below),
+		   were measured by hand on this fixture; I found no voice here that gives exactly one line. */
+		test('no better key: the one-line answer, no key, and the keys under the reveal', async ({ page }) => {
 			await openInsights(page, 'BASS_B1', width);
-			const found = await lines(page, width);
-			expect(found).toHaveLength(1);
-			expect(found[0]).toMatch(KEY_LINE);
-			await expect(page.locator(`${rootOf(width)} .block-conclusion .try-key`)).toHaveCount(1);
-			await shoot(page, 'one-group-bass', width);
+			expect(await lines(page, width)).toEqual([]);
+			await expect(page.locator(rootOf(width)).getByText('No better key: no other key within a tritone eases these challenges.')).toBeVisible();
+			await expect(page.locator(`${rootOf(width)} .reveal summary`).first()).toBeVisible();
+			await shoot(page, 'no-better-bass', width);
 		});
 
-		test('three groups: three lines, each a different move', async ({ page }) => {
+		test('two groups: two lines, each a different move, each with its "Try this key"', async ({ page }) => {
 			await openInsights(page, 'BASS_B2', width);
 			const found = await lines(page, width);
-			expect(found).toHaveLength(3);
+			expect(found).toHaveLength(2);
 			for (const l of found) expect(l).toMatch(KEY_LINE);
-			expect(new Set(found.map((l) => l.split(':')[0])).size).toBe(3);
-			await shoot(page, 'three-groups-bass', width);
+			expect(new Set(found.map((l) => l.split(':')[0])).size).toBe(2);
+			await expect(page.locator(`${rootOf(width)} .block-conclusion .try-key`)).toHaveCount(2);
+			await shoot(page, 'two-groups-bass', width);
 		});
 
 		test('a key that suits a voice with no primo axis names her secondo, not a primo', async ({ page }) => {
