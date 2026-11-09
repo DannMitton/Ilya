@@ -15,6 +15,11 @@ describe('TextSourceLine', () => {
 		expect(body('lyrics')).toContain('From LYRICS');
 		expect(body('poem')).toContain('From POEM');
 	});
+	/* French ratified by Dann 2026-11-05 08:10. Checks the words and U+2019 (not a straight apostrophe): a wrong one reaches the singer's TEXT page. */
+	it('names the source in French: D’après PAROLES or D’après POÈME', () => {
+		expect(body('lyrics', 'fr')).toContain('D’après PAROLES');
+		expect(body('poem', 'fr')).toContain('D’après POÈME');
+	});
 	it('is one paragraph with the id the end-to-end tests read, and carries no control', () => {
 		const h = body('poem');
 		expect(h).toContain('id="text-source"');

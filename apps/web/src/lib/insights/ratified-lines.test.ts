@@ -168,6 +168,21 @@ describe('ratified Guide lines (row 123)', () => {
 			'et le son d’un mot chanté dépend des mots qui l’entourent. Selon Grayson (p. 248), la ponctuation et la phrase implicite, là où l’on pourrait marquer une pause, sont des frontières que ne franchit aucune assimilation, pas même celle du voisement. <em>Ilya</em> traite un silence dans la ligne vocale comme une telle pause : là où une partition place un silence entre <em>так</em> et <em>засыпаю</em>, <em>так</em> garde son [k]; chanté sans interruption, il prend [ɡ] devant le [z]. Pour consulter à tout moment',
 		);
 	});
+	/* ROW 172, ratified by Dann 2026-11-05 08:10 (he changed "shows" / « affiche » to "transcribes" / « transcrit »): the last
+	   two sentences of the same paragraph. They check the words and the characters (the no-break space before the French
+	   colon, U+00A0, the OQLF rule). If the Guide drifts back to the old pair (« l’onglet Texte ») the singer is told to
+	   use a control the app no longer has. They relate to `text.source.*` (the line above TEXT) the sentence names. */
+	it('English: the poem is reviewed through INPUT, and TEXT transcribes it', () => {
+		expect(en).toContain(
+			'To review the authoritative poem itself anytime, choose POEM in INPUT: TEXT then transcribes the whole poem as published, including any words the composer has left out, and says so in a line above the page. Choose LYRICS in INPUT to return.',
+		);
+	});
+	it('French: the same, with a no-break space before the colon', () => {
+		expect(fr).toContain(
+			'Pour consulter à tout moment le poème qui fait autorité, choisissez POÈME dans ENTRÉE : TEXTE transcrit alors le poème entier tel que publié, y compris les mots que le compositeur a laissés de côté, et le signale par une ligne au-dessus de la page. Choisissez PAROLES dans ENTRÉE pour revenir.',
+		);
+		expect(fr).not.toContain('l’onglet Texte');
+	});
 });
 
 /* N.194 (QUEUE row 152), the Loupe's break button. The expected strings are copied from the brief

@@ -840,9 +840,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'intake.view.poem':          { en: 'POEM',   fr: 'POÈME' },
 	'intake.view.lyrics':        { en: 'LYRICS', fr: 'PAROLES' },
 	// ROW 172 (Dann 2026-11-01 13:26, capitals): the quiet line above TEXT's sheet names the witness INPUT's pill chose.
-	// TODO-FR: the French stays the English until Dann rules; the desk drafts it from `intake.view.*`.
-	'text.source.lyrics':        { en: 'From LYRICS', fr: 'From LYRICS' },
-	'text.source.poem':          { en: 'From POEM',   fr: 'From POEM' },
+	// French ratified by Dann 2026-11-05 08:10: « D’après » (U+2019), PAROLES and POÈME as in `intake.view.*`.
+	'text.source.lyrics':        { en: 'From LYRICS', fr: 'D’après PAROLES' },
+	'text.source.poem':          { en: 'From POEM',   fr: 'D’après POÈME' },
 	'intake.view.poemLine':      { en: 'Edits here change the published poem. The sung words come from your score; edit them in LYRICS.', fr: 'Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ PAROLES.' },
 	'intake.view.lyricsLine':    { en: 'The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.', fr: 'Les paroles telles que chantées, comme la partition les place. Les mots en couleur diffèrent du poème\u00a0: une reprise, un changement ou un ajout.' },
 	'intake.view.omittedLine':   { en: 'Greyed words are those left out of the song by the composer.', fr: 'Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant.' },
