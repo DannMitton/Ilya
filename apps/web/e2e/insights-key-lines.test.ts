@@ -88,7 +88,7 @@ for (const [width, viewport] of [['desktop', { width: 1440, height: 1300 }], ['p
 
 		test('a key that suits: one line, no key offered under it', async ({ page }) => {
 			await openInsights(page, 'TENOR_T', width);
-			await expect(page.locator(rootOf(width)).getByText('No key suggested: as it stands, the song stays inside your range and below your primo.')).toBeVisible();
+			await expect(page.locator(rootOf(width)).getByText('No alternate key suggested: as it stands, the song stays inside your range and below your primo.')).toBeVisible();
 			expect(await lines(page, width)).toEqual([]);
 			await shoot(page, 'suits-tenor', width);
 		});
@@ -113,14 +113,14 @@ for (const [width, viewport] of [['desktop', { width: 1440, height: 1300 }], ['p
 
 		test('a key that suits a voice with no primo axis names her secondo, not a primo', async ({ page }) => {
 			await openInsights(page, 'SOPRANO_S', width);
-			await expect(page.locator(rootOf(width)).getByText('No key suggested: as it stands, the song stays inside your range and below your secondo.')).toBeVisible();
+			await expect(page.locator(rootOf(width)).getByText('No alternate key suggested: as it stands, the song stays inside your range and below your secondo.')).toBeVisible();
 			expect(await lines(page, width)).toEqual([]);
 			await shoot(page, 'suits-soprano', width);
 		});
 
 		test('no workable key: the one-line answer and the teacher line, no key', async ({ page }) => {
 			await openInsights(page, 'NOVICE_N', width);
-			await expect(page.locator(rootOf(width)).getByText('No key within a tritone keeps this song within reach of your voice.')).toBeVisible();
+			await expect(page.locator(rootOf(width)).getByText('No key within a tritone brings this song inside your range.')).toBeVisible();
 			expect(await lines(page, width)).toEqual([]);
 			await expect(page.locator(rootOf(width)).getByText('Discuss this approach with your voice teacher.').first()).toBeVisible();
 			await shoot(page, 'no-workable-novice', width);

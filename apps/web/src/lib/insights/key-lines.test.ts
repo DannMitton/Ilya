@@ -68,13 +68,13 @@ describe('the singer’s answers choose the words, in each challenge’s own que
 	const w = key({ set: { range: 'inside', primo: true }, primoShare: 0.9 });
 	const k = key({ set: { range: 'above', primo: false }, above: beyond(1, ['12', '12']), primoShare: 0 });
 	it('adds a clause of why at points 1 to 2, keeps the plain part at point 3, and goes terse at points 4 to 5 (range above: Q1)', () => {
-		expect(parts(k, w, intake({ top: 1 }))[0]).toBe('reaches above your range in bar 12, past the notes you typed as your limits');
+		expect(parts(k, w, intake({ top: 1 }))[0]).toBe('reaches above your range in bar 12, beyond the range you gave');
 		expect(parts(k, w, intake({ top: 3 }))[0]).toBe('reaches above your range in bar 12');
 		expect(parts(k, w, intake({ top: 5 }))[0]).toBe('above your range in bar 12');
 	});
 	it('reads the range below by Q2, not Q1', () => {
 		const below = key({ set: { range: 'below' }, below: beyond(1, ['9', '9']) });
-		expect(parts(below, key({}), intake({ top: 5, bottom: 1 }))[0]).toBe('reaches below your range in bar 9, past the notes you typed as your limits');
+		expect(parts(below, key({}), intake({ top: 5, bottom: 1 }))[0]).toBe('reaches below your range in bar 9, beyond the range you gave');
 	});
 	it('adds why to a passaggio challenge by Q3 and names the passaggi in the register of Q7', () => {
 		const some = key({ set: { range: 'inside', primo: true }, primoShare: 0.33 });
@@ -130,14 +130,14 @@ describe('the lines, the one-line answers, and the reveal', () => {
 	it('gives the one-line answers, the "suits" line by the axes the voice has', () => {
 		const easy = tenorScoreLow();
 		const suits = suggestKeys({ score: easy, profile: TENOR, voiceType: 'tenor', facts: null })!;
-		expect(keyWords(suits, nameKey, 'en', intake()).note).toBe('No key suggested: as it stands, the song stays inside your range and below your primo.');
-		expect(keyWords(suits, nameKey, 'en', intake({ acoustics: 1 })).note).toBe('No key suggested: as it stands, the song stays inside your range and below your first passaggio.');
+		expect(keyWords(suits, nameKey, 'en', intake()).note).toBe('No alternate key suggested: as it stands, the song stays inside your range and below your primo.');
+		expect(keyWords(suits, nameKey, 'en', intake({ acoustics: 1 })).note).toBe('No alternate key suggested: as it stands, the song stays inside your range and below your first passaggio.');
 		const soprano = suggestKeys({ score: easy, profile: { ...TENOR, range: { lowest: P('C', 3), highest: P('C', 6) } }, voiceType: 'soprano', facts: null })!;
 		expect(keyWords(soprano, nameKey, 'en', intake()).note).toContain('below your secondo.');
 		const rangeOnly = suggestKeys({ score: easy, profile: { fR1: { a: 650 }, range: TENOR.range }, voiceType: 'tenor', facts: null })!;
-		expect(keyWords(rangeOnly, nameKey, 'en', intake()).note).toBe('No key suggested: as it stands, the song stays inside your range.');
-		expect(keyWords({ ...s, kind: 'noneBetter' }, nameKey, 'en', intake()).note).toBe('No other key within a tritone changes these challenges by much.');
-		expect(keyWords({ ...s, kind: 'noWorkable' }, nameKey, 'en', intake()).note).toContain('is yours to decide');
+		expect(keyWords(rangeOnly, nameKey, 'en', intake()).note).toBe('No alternate key suggested: as it stands, the song stays inside your range.');
+		expect(keyWords({ ...s, kind: 'noneBetter' }, nameKey, 'en', intake()).note).toBe('No better key: no other key within a tritone eases these challenges.');
+		expect(keyWords({ ...s, kind: 'noWorkable' }, nameKey, 'en', intake()).note).toContain('is your decision');
 	});
 });
 
@@ -160,7 +160,7 @@ describe('no line breaks a ruling of Dann’s', () => {
 		for (const line of all) {
 			expect(line, line).not.toMatch(/%|percent/i);
 			expect(line, line).not.toMatch(/\b[A-G](♯|♭|#)?\d\b/);
-			// "past the notes you typed as your limits" is a why clause; what is banned is a number of notes.
+			// "beyond the range you gave" is a why clause; what is banned is a number of notes.
 			expect(line, line).not.toMatch(/\b(\d+|a|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(more\s+)?notes?\b/i);
 		}
 	});

@@ -13,6 +13,7 @@ import {
 	MAX_KEY_GROUPS,
 	MAX_NAMED_PASSAGES,
 	RANGE_CHALLENGE_MARGIN,
+	challengeCount,
 	challengeWeight,
 	improves,
 	matters,
@@ -275,17 +276,24 @@ describe('the keys to show (rules 1 to 9)', () => {
 		}
 	});
 
-	it('caps the groups shown at three, reports that the cap bound, and keeps the fourth under the reveal', () => {
-		// Found by a seeded search over 16-note pieces for the tenor: four groups qualify (MIDI numbers, quarters).
+	/* ROW 71, 2026-11-05 11:49: a key is offered only when it has FEWER challenges, so four qualifying groups on one real
+	   piece no longer turn up (the seeded search that found the earlier piece found none in 240 s on the new rule). The cap
+	   is therefore checked with `maxGroups`, a test-only argument, on the same piece: with a cap of two, the third group
+	   goes under the reveal and `capBound` says so. If the cap stops cutting, a singer is shown more keys than the design allows. */
+	it('caps the groups shown, reports that the cap bound, and keeps the others under the reveal', () => {
+		// Found by a seeded search over 16-note pieces for the tenor (MIDI numbers, quarters); three groups qualify on the new rule.
 		const midi = [60, 56, 52, 67, 58, 61, 57, 68, 71, 59, 58, 65, 68, 61, 54, 56];
 		const names: Array<[Pitch['step'], number]> = [['C', 0], ['C', 1], ['D', 0], ['E', -1], ['E', 0], ['F', 0], ['F', 1], ['G', 0], ['A', -1], ['A', 0], ['B', -1], ['B', 0]];
 		const sc = score(quarters(midi.map((m) => P(names[m % 12][0], Math.floor(m / 12) - 1, names[m % 12][1]))));
 		const s = suggestKeys(input(sc, TENOR, 'tenor'))!;
 		expect(s.kind).toBe('keys');
-		expect(s.shown).toHaveLength(MAX_KEY_GROUPS);
 		expect(s.shown.map((k) => k.semitones)).toEqual([-4, -5, -2]);
-		expect(s.capBound).toBe(true);
-		expect(s.reveal.filter((k) => k.workable).map((k) => k.semitones)).toEqual([-1]);
+		expect(s.shown.length).toBeLessThanOrEqual(MAX_KEY_GROUPS);
+		expect(s.capBound).toBe(false);
+		const capped = suggestKeys(input(sc, TENOR, 'tenor', { maxGroups: 2 }))!;
+		expect(capped.shown.map((k) => k.semitones)).toEqual([-4, -5]);
+		expect(capped.capBound).toBe(true);
+		expect(capped.reveal.filter((k) => k.workable).map((k) => k.semitones)).toEqual([-2]);
 	});
 
 	it('leaves the answers out of which keys are shown, and uses them only for the order', () => {
@@ -308,10 +316,25 @@ describe('what matters, as the brief words it', () => {
 		expect(matters(k({ range: 'inside', primo: true }, 0.5), k({ range: 'inside', primo: true }, 0.65))).toBe(true);
 		expect(matters(k({ range: 'inside', primo: true }, 0.5), k({ range: 'inside', primo: true }, 0.55))).toBe(false);
 	});
-	it('improves only where a challenge is lost or a share drops by ten points', () => {
+	/* ROW 71, RULED BY DANN 2026-11-05 11:49: "Recommend keys that reduce the challenges." The test counts the challenges in
+	   the set and nothing else. It pins that a swap of one challenge for another, a share that only falls, and a key that only
+	   adds challenges are never offered; if it offered a swap, a singer would be shown a key that trades one hurdle for another. */
+	it('offers a key only when it has fewer challenges', () => {
 		expect(improves(k({ range: 'inside', secondo: false }), k({ range: 'inside', secondo: true }))).toBe(true);
-		expect(improves(k({ range: 'inside', secondo: true }), k({ range: 'inside', secondo: false }))).toBe(false);
-		expect(improves(k({ range: 'inside', primo: true }, 0.4), k({ range: 'inside', primo: true }, 0.55))).toBe(true);
-		expect(improves(k({ range: 'inside', primo: true }, 0.7), k({ range: 'inside', primo: true }, 0.55))).toBe(false);
+		expect(improves(k({ range: 'inside' }), k({ range: 'above' }))).toBe(true);
+		expect(improves(k({ range: 'inside', primo: true }), k({ range: 'both', primo: true }))).toBe(true);
+	});
+	it('never offers a swap, a share that only falls, or a key that only adds', () => {
+		expect(improves(k({ range: 'below' }), k({ range: 'above' }))).toBe(false); // one for one
+		expect(improves(k({ range: 'inside', primo: true }), k({ range: 'above' }))).toBe(false); // the range goes, the primo comes
+		expect(improves(k({ range: 'inside', primo: true }, 0.4), k({ range: 'inside', primo: true }, 0.55))).toBe(false); // a share down ten points, same set
+		expect(improves(k({ range: 'inside', secondo: true }), k({ range: 'inside', secondo: false }))).toBe(false); // only adds
+		expect(improves(k({ range: 'inside' }), k({ range: 'inside' }))).toBe(false);
+	});
+	it('counts each named axis once: both sides of the range are two challenges', () => {
+		expect(challengeCount({ range: 'inside' })).toBe(0);
+		expect(challengeCount({ range: 'above' })).toBe(1);
+		expect(challengeCount({ range: 'both' })).toBe(2);
+		expect(challengeCount({ range: 'above', primo: true, secondo: true, sustained: true })).toBe(4);
 	});
 });

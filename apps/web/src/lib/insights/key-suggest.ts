@@ -21,7 +21,8 @@
  *     page's own zones count them; a sustained note above the secondo is the
  *     example a line may name. Tessitura and crossings are neither.
  *  4. Keys group by challenge set. Within a group the smallest move is shown,
- *     but only a move that improves something that matters (see `improves`).
+ *     and only a key with FEWER challenges than the key read is offered
+ *     (`improves`, Dann 2026-11-05 11:49): a swap of one challenge for another never is.
  *  5. Order by stakes for this singer (the intake weighting), then the smaller
  *     share at or above the primo, then the smaller move, then the lower key.
  *     At most `MAX_KEY_GROUPS` groups (DESK DEFAULT, Dann's to strike).
@@ -161,6 +162,8 @@ export interface KeySearchInput {
 	vowelForEvent?: VowelForEvent;
 	intake?: IntakeAnswers;
 	window?: number;
+	/** How many groups to show before the reveal; `MAX_KEY_GROUPS` when absent. Only a test passes it (the cap now binds rarely, see the row 71 report). */
+	maxGroups?: number;
 }
 
 const setKey = (s: ChallengeSet) => `${s.range}|${s.primo ?? '-'}|${s.secondo ?? '-'}|${s.sustained ?? '-'}`;
@@ -182,27 +185,36 @@ export function stakesOf(set: ChallengeSet, intake: IntakeAnswers | undefined): 
 }
 
 const moved = (a: number | null, b: number | null) => a !== null && b !== null && Math.abs(a - b) >= BETTER_KEY_MIN_DROP - 1e-9;
-const dropped = (k: number | null, w: number | null) => k !== null && w !== null && w - k >= BETTER_KEY_MIN_DROP - 1e-9;
 
 /**
- * True when `k` improves something that matters against `w` (brief rule 4,
- * which says "a challenge gained or lost, or a share moved by at least 10
- * points"). DESK DEFAULT, listed in the report: a key that only GAINS
- * challenges, or only raises a share, is no suggestion for a singer whose key
- * has some, so it qualifies only when it loses a challenge or lowers a share
- * by `BETTER_KEY_MIN_DROP`. A key that improves one thing and costs another is
- * shown, and its line says both.
+ * How many challenges a key's set holds: one for the range above, one for the range below (`both` is two), one for the
+ * primo, one for the secondo, one for a sustained note above the secondo. DESK DEFAULT, JUDGEMENT: the ruling of 11-05
+ * counts "challenges" and names no unit, so each named axis is one (a key that reaches both above and below the range
+ * has two). It reads the set only, never a share, a distance, or the singer's answers (those weigh `stakes`, not the count).
  */
-export function improves(k: KeyOption, w: KeyOption): boolean {
-	const side = (kb: Beyond | null, wb: Beyond | null) => !!wb && (!kb || kb.semitones < wb.semitones - 1e-9) && wb.semitones > 0;
-	if (side(k.above, w.above) || side(k.below, w.below)) return true;
-	if (w.set.primo && !k.set.primo) return true;
-	if (w.set.secondo && !k.set.secondo) return true;
-	if (w.set.sustained && !k.set.sustained) return true;
-	return dropped(k.primoShare, w.primoShare) || dropped(k.secondoShare, w.secondoShare);
+export function challengeCount(set: ChallengeSet): number {
+	return (set.range === 'both' ? 2 : set.range === 'inside' ? 0 : 1) + (set.primo ? 1 : 0) + (set.secondo ? 1 : 0) + (set.sustained ? 1 : 0);
 }
 
-/** True when `k` differs from `w` in a way the 10-point test or a challenge set notices (brief rule 4 as written); `improves` is the narrower test the search applies. */
+/**
+ * THE RULE OF ROW 71 (N.182), RULED BY DANN 2026-11-05 11:49 (`docs/memory/OPEN.md`, "A KEY IS SUGGESTED ONLY WHEN IT
+ * REDUCES THE CHALLENGES"): a key is offered only when the number of challenges goes down. Dann: "Recommend keys that
+ * reduce the challenges. Sometimes no alteration will rectify a song for a singer's voice and the singer can decide to
+ * proceed with the knowledge that a technical hurdle is present for them to work on."
+ *
+ * It checks `challengeCount(k.set) < challengeCount(w.set)` and nothing else. A key that trades one challenge for
+ * another (the same count), one that only lowers a share without clearing a challenge, and one that only adds
+ * challenges are never offered. WHY: a trade is not a way out, and the singer is shown only what helps. WHEN IT SAYS
+ * NO for every key: `suggestKeys` answers `noneBetter` (the written key has challenges and nothing within reach has
+ * fewer) or `noWorkable`, and the page says so as information for her decision, never as a failure. It replaces the
+ * looser test the lane first built (a lost challenge or a share lowered by `BETTER_KEY_MIN_DROP`, which offered
+ * swaps); `matters` (the brief's own wording) is kept beside it, unused by the search, so the difference is pinned.
+ */
+export function improves(k: KeyOption, w: KeyOption): boolean {
+	return challengeCount(k.set) < challengeCount(w.set);
+}
+
+/** True when `k` differs from `w` in a way the 10-point test or a challenge set notices (brief rule 4 as written). Not used by the search since the ruling of 2026-11-05 (`improves` counts challenges); kept so a test pins that the two differ. */
 export function matters(k: KeyOption, w: KeyOption): boolean {
 	return !sameSet(k.set, w.set) || moved(k.primoShare, w.primoShare) || moved(k.secondoShare, w.secondoShare);
 }
@@ -331,9 +343,10 @@ export function suggestKeys(input: KeySearchInput): KeySuggestion | null {
 			a.semitones - b.semitones,
 	);
 	const fits = suits(written);
-	const shown = fits ? [] : picks.slice(0, MAX_KEY_GROUPS);
-	const reveal = [...picks.slice(fits ? picks.length : MAX_KEY_GROUPS), ...beyond];
-	const capBound = !fits && picks.length > MAX_KEY_GROUPS;
+	const cap = input.maxGroups ?? MAX_KEY_GROUPS;
+	const shown = fits ? [] : picks.slice(0, cap);
+	const reveal = [...picks.slice(fits ? picks.length : cap), ...beyond];
+	const capBound = !fits && picks.length > cap;
 
 	let kind: KeySuggestion['kind'];
 	if (!written.workable && workable.length === 0) kind = 'noWorkable';

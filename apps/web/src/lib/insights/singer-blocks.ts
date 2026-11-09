@@ -50,7 +50,7 @@ export type Block =
 			offer: boolean;
 			/**
 			 * The way forward (N.182, row 71): one to three key lines, each with its "Try this key" stop, or the one-line
-			 * answer ("No key suggested", "No workable key"), and the teacher line where no key is shown for a piece
+			 * answer ("No alternate key suggested", "No workable key"), and the teacher line where no key is shown for a piece
 			 * Ilya calls unlikely. The keys beyond the range sit in the `keyreveal` block that follows.
 			 */
 			forward: { lines: KeyLine[]; note?: string; teacher?: string } | null;
