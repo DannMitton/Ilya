@@ -11,7 +11,7 @@ describe('READER_STAMP', () => {
 		const pkg = JSON.parse(readFileSync('node_modules/homr-web/package.json', 'utf8'));
 		expect(HOMR_WEB_VERSION).toBe(pkg.version);
 		expect(OMR_MODEL).toBe('465');
-		expect(READER_STAMP).toBe(`homr-web@${pkg.version}/465`);
+		expect(READER_STAMP).toBe(`homr-web@${pkg.version}/465+${UNDERLAY_READER}`);
 	});
 
 	it('is the version the app depends on', () => {
@@ -19,8 +19,10 @@ describe('READER_STAMP', () => {
 		expect(app.dependencies['homr-web']).toContain(`homr-web-${HOMR_WEB_VERSION}.tgz`);
 	});
 
-	it('does not yet carry the underlay reader: joining them re-reads every stored scan', () => {
+	/* Integration step 8a: the two are joined, so every scan stored before it (stamped with the homr reader alone) is read again once. If
+	   they were apart, a stored scan would never be read with its words. */
+	it('carries the underlay reader: joining them re-reads every stored scan once', () => {
 		expect(UNDERLAY_READER).not.toBe('');
-		expect(READER_STAMP).not.toContain(UNDERLAY_READER);
+		expect(READER_STAMP).toContain(`+${UNDERLAY_READER}`);
 	});
 });

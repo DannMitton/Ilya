@@ -1,39 +1,17 @@
 /**
- * The hidden switch for the underlay reader (N.135 stage 2b): `?words=read` in
- * the address.
+ * The scan reader's stamp, and the desk's measure-only switches for the underlay reader (N.135 stage 2b; row 181).
  *
- * With it off, nothing changes for a singer: no worker is made, no model is
- * fetched, the kept reading's stamp is the one it was. With it on, the scan
- * path reads the words printed under the voice staff (`underlay-page.ts`) and
- * the stamp is the reader's and the underlay reader's together, so that a
- * reading kept on one side of the switch is read again on the other, once.
- *
- * This is not `scan.ts`'s `?reader=ilya`, which is being retired (QUEUE row
- * 155); a different file, so the two lanes do not touch each other's.
- *
- * `UNDERLAY_READER` joins `READER_STAMP` itself in the commit that removes the
- * switch, after Dann has ratified the banner's new words (`stamp.ts`).
+ * The singer's switch, `?words=read`, is GONE (integration step 8a, 2026-11-09; Dann 2026-11-09 11:56: scan words ship to
+ * colleagues as a preview). The words printed under the voice staff are always read on the scan path (`homr-reader.ts`,
+ * `underlay-page.ts`), and `UNDERLAY_READER` is part of `READER_STAMP` (`stamp.ts`), so every scan kept before this change is
+ * read again once on its next opening. What stays are the desk's measure switches below (`?looks=off`, `?extender=`), which
+ * change no stamp and are not a singer's. `scanStamp` is kept as the one name the callers read the stamp by.
  */
-import { READER_STAMP, UNDERLAY_READER } from './stamp';
+import { READER_STAMP } from './stamp';
 
-/** The query that turns the underlay reader on. */
-export const WORDS_QUERY = 'words';
-export const WORDS_ON = 'read';
-
-const here = (): string => (typeof location === 'undefined' ? '' : location.search);
-
-/** True where the address carries `?words=read`. */
-export function underlayOn(search: string = here()): boolean {
-	return new URLSearchParams(search).get(WORDS_QUERY) === WORDS_ON;
-}
-
-/**
- * The stamp a reading is kept with, and compared with, on this side of the
- * switch: `READER_STAMP` with it off, as ever; `READER_STAMP+UNDERLAY_READER`
- * with it on (DESK DEFAULT on the separator).
- */
-export function scanStamp(search: string = here()): string {
-	return underlayOn(search) ? `${READER_STAMP}+${UNDERLAY_READER}` : READER_STAMP;
+/** The stamp a reading is kept with, and compared with: the reader that is installed, with the underlay reader. */
+export function scanStamp(): string {
+	return READER_STAMP;
 }
 
 /** The query that turns the second look off (row 181): `?looks=off`. */

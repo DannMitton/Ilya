@@ -3,9 +3,9 @@
  * started on the first page and kept for the session, and a promise per page;
  * on the metre client's pattern (`metre-client.ts`).
  *
- * Only a read with the hidden switch on gets here (`homr-reader.ts` imports this
- * file with a dynamic `import()` behind `underlayOn`), so a singer without the
- * switch starts no Worker and fetches nothing.
+ * Every scan read gets here, where a Worker exists (`homr-reader.ts` imports this
+ * file with a dynamic `import()`, so that no Worker starts and nothing is fetched where
+ * the browser has no Worker.
  */
 import type { StaffBoxLike } from './metre-windows';
 import type { PageLayout, ReadUnderlay } from './underlay-page';

@@ -65,10 +65,10 @@ describe('row 95: the ratified strings, byte for byte', () => {
 	});
 	it('1b, upload.banner.noLyricsScan', () => {
 		expect(t('upload.banner.noLyricsScan', 'en')).toBe(
-			'Ilya does not read the words printed in an image. The text you add in LYRICS goes under the notes, assigned one syllable per note. Click a note to move a syllable.'
+			'Ilya could not read any words from this image. You can add lyrics through the LYRICS pane and seat them under the right notes using the Loupe’s SYLLABLES controls.'
 		);
 		expect(t('upload.banner.noLyricsScan', 'fr')).toBe(
-			'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous ajoutez dans le champ PAROLES se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.'
+			'Ilya n’a pu lire aucune parole dans cette image. Vous pouvez ajouter les paroles dans le champ PAROLES, puis les placer sous les bonnes notes à l’aide des commandes SYLLABES de la loupe.'
 		);
 	});
 	it('row 125: neither wordless key claims text that nobody added, in either language', () => {
@@ -77,12 +77,12 @@ describe('row 95: the ratified strings, byte for byte', () => {
 			expect(t(key, 'fr')).not.toContain('avez ajouté');
 		}
 	});
-	it('2, the last sentence of upload.banner.reader', () => {
+	it('2, upload.banner.reader (replaced 2026-11-09: Ilya now reads printed words)', () => {
 		expect(t('upload.banner.reader', 'en')).toBe(
-			'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. Ilya does not read the words printed in an image; type them into the INPUT field.'
+			'This score is Ilya’s synthesis from an image (scan or photograph). The optical recognition of musical notes and printed text is imperfect, so you should check Ilya’s reading against your original source. You may rectify any errors through the Loupe’s CORRECTIONS pane.'
 		);
 		expect(t('upload.banner.reader', 'fr')).toBe(
-			'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Ilya ne lit pas les paroles imprimées dans une image; saisissez-les dans le champ ENTRÉE.'
+			'Cette partition est la synthèse qu’Ilya a faite à partir d’une image (numérisation ou photographie). La reconnaissance optique des notes de musique et du texte imprimé est imparfaite; vérifiez donc la lecture d’Ilya sur votre source originale. Vous pouvez corriger toute erreur dans le volet CORRECTIONS de la loupe.'
 		);
 	});
 	it('the two false sentences are gone, in both languages', () => {

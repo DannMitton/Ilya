@@ -21,19 +21,15 @@ export const HOMR_WEB_VERSION = '0.2.0-ilya.7';
 /** The model `createRecognizer` is asked for (`homr-reader.ts`). */
 export const OMR_MODEL = '465';
 
-/** What a kept reading is stamped with. */
-export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}`;
 
 /**
  * The underlay reader's version (N.135): the reader that reads the words
  * printed under the notes, its rule for seating them, and the sewing.
  *
- * NOT joined to `READER_STAMP`. A change to the stamp spends the one silent
- * re-read every stored scan gets (`stamp.ts` above; `plan-scan-reader_r4`), and
- * while the feature is behind its address flag that re-read would carry no
- * words and never come again (review amendment 7). It joins `READER_STAMP` in
- * the commit that removes the flag. `stamp.test.ts` holds the two apart until
- * then.
+ * JOINED TO `READER_STAMP` (integration step 8a, 2026-11-09, after Dann ruled on 2026-11-09 11:56 that scan words ship to
+ * colleagues as a preview and removed the `?words=read` switch). A change to the stamp spends the one silent re-read every stored
+ * scan gets (`plan-scan-reader_r4`): every scan kept before this commit has the homr-only stamp, fails `isCurrent`, and is read
+ * again once on its next opening, this time with the words. `stamp.test.ts` pins that the two are joined.
  *
  * Bumped when the reader's output changes, because `isCurrent` compares a kept
  * reading's stamp by equality (`restore.ts`) and a reading kept with the switch
@@ -52,6 +48,9 @@ export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}`;
  * lyric band stood (`bands`); a reading kept as `underlay@3` is read again once, on its next opening.
  */
 export const UNDERLAY_READER = 'underlay@4';
+
+/** What a kept reading is stamped with: the homr reader and the underlay reader together (`homr-web@V/model+underlay@N`). */
+export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}+${UNDERLAY_READER}`;
 
 /** A scan's reading, kept with the song: homr's joined MusicXML and the reader that made it. */
 export interface KeptReading {

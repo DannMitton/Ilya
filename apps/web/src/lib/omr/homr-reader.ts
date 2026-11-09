@@ -42,7 +42,6 @@ import type { ReadMetres } from './metre-client';
 import type { MetreSeen } from './metre-witness';
 import type { ReadUnderlay, UnderlayPage } from './underlay-page';
 import { applyUnderlay } from './underlay-song';
-import { underlayOn } from './underlay-switch';
 import { markUnreadBars, type BarRange } from './unread-bars';
 import { markExtenders } from './extend-convention';
 import type { KeptSystem } from './kept-bands';
@@ -453,9 +452,10 @@ const reader = makeReader({
 		typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined'
 			? undefined
 			: (image, xml, staves) => import('./metre-client').then(({ readMetresInWorker }) => readMetresInWorker(image, xml, staves)),
-	// Only with the hidden switch on (`?words=read`): off, no Worker is made and nothing is fetched.
+	// The words printed under the voice staff are read on every scan (integration step 8a). Without a Worker or an OffscreenCanvas
+	// (a test, an old browser) no underlay reader is made and the scan is read for its notes alone.
 	underlay:
-		underlayOn() && typeof Worker !== 'undefined' && typeof OffscreenCanvas !== 'undefined'
+		typeof Worker !== 'undefined' && typeof OffscreenCanvas !== 'undefined'
 			? (image, xml, staves) => import('./underlay-client').then(({ readUnderlayInWorker }) => readUnderlayInWorker(image, xml, staves))
 			: undefined,
 });

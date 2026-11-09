@@ -204,6 +204,38 @@ describe('ratified Guide lines (row 159, HEIC licences and patents)', () => {
 	});
 });
 
+/* INTEGRATION STEP 8b (strings ratified by Dann 2026-11-09 14:19 to 14:24, when scan words shipped to colleagues as a preview). The two scan
+   banners that said Ilya does not read printed words are replaced: `upload.banner.reader` (a scan's synthesis, to check) and
+   `upload.banner.noLyricsScan` (no words read at all). They check all four texts character by character: U+2019 apostrophes, no
+   space before the French semicolon. WHEN THEY FAIL: a singer is told again that Ilya does not read printed words, or reads text
+   Dann did not ratify. They relate to `no-lyrics-notice.test.ts` (which pins the same strings from the banner's side) and to the
+   partly-read strings, which stay as ratified and are pinned in `scan-notice.test.ts`. */
+describe('ratified scan banners (step 8b)', () => {
+	it('upload.banner.reader, English and French', () => {
+		expect(t('upload.banner.reader', 'en')).toBe(
+			'This score is Ilya’s synthesis from an image (scan or photograph). The optical recognition of musical notes and printed text is imperfect, so you should check Ilya’s reading against your original source. You may rectify any errors through the Loupe’s CORRECTIONS pane.',
+		);
+		expect(t('upload.banner.reader', 'fr')).toBe(
+			'Cette partition est la synthèse qu’Ilya a faite à partir d’une image (numérisation ou photographie). La reconnaissance optique des notes de musique et du texte imprimé est imparfaite; vérifiez donc la lecture d’Ilya sur votre source originale. Vous pouvez corriger toute erreur dans le volet CORRECTIONS de la loupe.',
+		);
+	});
+	it('upload.banner.noLyricsScan, English and French', () => {
+		expect(t('upload.banner.noLyricsScan', 'en')).toBe(
+			'Ilya could not read any words from this image. You can add lyrics through the LYRICS pane and seat them under the right notes using the Loupe’s SYLLABLES controls.',
+		);
+		expect(t('upload.banner.noLyricsScan', 'fr')).toBe(
+			'Ilya n’a pu lire aucune parole dans cette image. Vous pouvez ajouter les paroles dans le champ PAROLES, puis les placer sous les bonnes notes à l’aide des commandes SYLLABES de la loupe.',
+		);
+	});
+	it('has no space before a French semicolon, and uses U+2019', () => {
+		for (const key of ['upload.banner.reader', 'upload.banner.noLyricsScan'] as const) {
+			expect(t(key, 'fr')).not.toMatch(/[\u00a0 ];/);
+			expect(t(key, 'fr')).not.toContain("'");
+			expect(t(key, 'en')).not.toContain("'");
+		}
+	});
+});
+
 /* N.194 (QUEUE row 152), the Loupe's break button. The expected strings are copied from the brief
    (`brief-code-n194-loupe-break-button_r5_2026-10-25.md`), not read back out of `i18n.ts`: the pill's labels,
    ruled by Dann 2026-10-21 13:42; the undo sentences, ratified 2026-10-21 20:30; the reason under an off pill,

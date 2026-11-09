@@ -1182,7 +1182,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'wait.once': { en: 'Ilya reads each score once and keeps the reading.', fr: 'Ilya ne lit chaque partition qu’une fois et en garde la lecture.' },
 	'upload.format.imageReader':   { en: 'Format: photograph → MusicXML', fr: 'Format\u00a0: photographie → MusicXML' },
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
-	'upload.banner.reader':        { en: 'Read from a picture. Ilya worked the notes out from the ink, so check them against your own paper before you trust them. Ilya does not read the words printed in an image; type them into the INPUT field.', fr: 'Lu à partir d’une image. Ilya a déduit les notes de l’encre, alors vérifiez-les sur votre propre partition avant de vous y fier. Ilya ne lit pas les paroles imprimées dans une image; saisissez-les dans le champ ENTRÉE.' },
+	'upload.banner.reader':        { en: 'This score is Ilya’s synthesis from an image (scan or photograph). The optical recognition of musical notes and printed text is imperfect, so you should check Ilya’s reading against your original source. You may rectify any errors through the Loupe’s CORRECTIONS pane.', fr: 'Cette partition est la synthèse qu’Ilya a faite à partir d’une image (numérisation ou photographie). La reconnaissance optique des notes de musique et du texte imprimé est imparfaite; vérifiez donc la lecture d’Ilya sur votre source originale. Vous pouvez corriger toute erreur dans le volet CORRECTIONS de la loupe.' },
 
 	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
 	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
@@ -1534,7 +1534,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// Row 95: the same courtesy message for a scan or photograph, where the
 	// print may well carry words that Ilya does not read. Chosen by
 	// noLyricsNoticeKey (lib/score/ingestion/ingest.ts).
-	'upload.banner.noLyricsScan': { en: 'Ilya does not read the words printed in an image. The text you add in LYRICS goes under the notes, assigned one syllable per note. Click a note to move a syllable.', fr: 'Ilya ne lit pas les paroles imprimées dans une image. Le texte que vous ajoutez dans le champ PAROLES se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe.' },
+	'upload.banner.noLyricsScan': { en: 'Ilya could not read any words from this image. You can add lyrics through the LYRICS pane and seat them under the right notes using the Loupe’s SYLLABLES controls.', fr: 'Ilya n’a pu lire aucune parole dans cette image. Vous pouvez ajouter les paroles dans le champ PAROLES, puis les placer sous les bonnes notes à l’aide des commandes SYLLABES de la loupe.' },
 	// N.135 stage 2b, brief r5 step 2: a scan whose printed words were read on
 	// some systems and not others. RATIFIED by Dann, EN and FR, 2026-10-28 23:12;
 	// the single bar 2026-10-29 00:00 (`docs/sessions/ratified-banner-words-partly-read_2026-10-28.md`).
