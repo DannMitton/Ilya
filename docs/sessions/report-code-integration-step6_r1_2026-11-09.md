@@ -4,7 +4,7 @@ Branch `cloud-lane-38`, cut from `origin/Shane` (`4d73284b`). Pushed only `cloud
 
 ## The branch tip
 
-`4e0f3f5d` ("Integration step 5: report, row 71"), 41 commits ahead of `origin/Shane`, 140 files changed against it (9,350 insertions, 624 deletions; this includes the lane reports, 14 pictures from row 71, and the tests). The working tree was clean when I ran the gates below.
+`4e0f3f5d` ("Integration step 5: report, row 71") is the last commit that changes anything but a report, and the commit every gate above ran on. This report is committed after it, so the branch's own tip is the commit named "Integration step 6: final report" (`git log -1 cloud-lane-38`); it changes no code. At `4e0f3f5d` the branch was 41 commits ahead of `origin/Shane`, 140 files changed against it (9,350 insertions, 624 deletions; this includes the lane reports, 14 pictures from row 71, and the tests). The working tree was clean when I ran the gates below.
 
 | Step | Source | Commits here |
 |---|---|---|
