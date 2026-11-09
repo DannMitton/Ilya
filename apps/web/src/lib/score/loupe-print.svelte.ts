@@ -127,10 +127,18 @@ export class LoupePrint {
 				page = (deps.render ?? renderScanPage)(scan.file, scan.kind, system.page).catch(() => null);
 				this.#pages.set(pageKey, page);
 			}
+			/* WHEN THE STRIP CANNOT BE CUT (integration step 7f). It checks the two places a strip can be lost, the page's render and the
+			   band's cut, and says which in one console line naming the page and the bar; the strip then resolves to null and the Loupe
+			   draws none, as before. WHY: the loss was silent, so a singer's missing print could not be told from a scan with no band.
+			   It relates to `renderScanPage` and `cutBandStrip`, whose failures it names, and to the cache below, which forgets a null. */
+			const lost = (what: string): null => {
+				console.info(`[ilya] print strip: page ${system.page}, bar ${bar}: ${what}`);
+				return null;
+			};
 			made = page.then(async (blob) => {
-				if (!blob) return null;
+				if (!blob) return lost('the scan page could not be rendered');
 				const cut = await (deps.cut ?? cutBandStrip)(blob, rect).catch(() => null);
-				if (!cut) return null;
+				if (!cut) return lost('the band could not be cut from the page');
 				const spacePx = (rect.space / Math.max(1e-9, rect.y1 - rect.y0)) * cut.height;
 				return { url: (deps.url ?? URL.createObjectURL)(cut.blob), width: cut.width, height: cut.height, spacePx };
 			});

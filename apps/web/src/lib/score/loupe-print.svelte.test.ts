@@ -87,6 +87,19 @@ describe('the strip', () => {
 		expect(await rig({ render: async () => { throw new Error('no'); } }).p.strip(10)).toBeNull();
 	});
 
+	/* Integration step 7f: a strip that cannot be cut says so, once, with the page and the bar. If it stopped, a missing print could not
+	   be told from a scan with no band. */
+	it('says in one console line which page and bar lost their strip, and why', async () => {
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+		expect(await rig({ cut: async () => null }).p.strip(10)).toBeNull();
+		expect(await rig({ render: async () => { throw new Error('no'); } }).p.strip(10)).toBeNull();
+		const lines = info.mock.calls.map((c) => String(c[0]));
+		expect(lines).toHaveLength(2);
+		expect(lines[0]).toMatch(/print strip: page \d+, bar 10: the band could not be cut/);
+		expect(lines[1]).toMatch(/print strip: page \d+, bar 10: the scan page could not be rendered/);
+		info.mockRestore();
+	});
+
 	it('is drawn on every bar of a scan with bands, listed or not (item 13), and on none of a song without', () => {
 		expect(rig().p.hasScan()).toBe(true);
 		expect(rig({ scan: () => ({ systems: [sys({ band: undefined })], file: new File([], 'a.pdf'), kind: 'pdf' }) }).p.hasScan()).toBe(false);
