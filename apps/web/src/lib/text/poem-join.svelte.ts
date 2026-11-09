@@ -7,7 +7,9 @@
  *
  * WHEN. Poem arrives (the library fills it, or she pastes it) or is edited: `poemOffer` calls `schedule()`, and the join runs
  * after the 600 ms pause that Lyrics typing uses (`QUIET_MS`, `+page.svelte`). A scan's Lyrics edits do not start it: NOT BUILT.
- * It runs only for a scan whose score carries words (the page's `state()` is null otherwise), with the dictionary loaded (without
+ * It runs only for a SONG READ FROM A SCAN (Dann's ruling is titled "JOINING POEM TO LYRICS ON A SCAN", `docs/memory/OPEN.md`):
+ * the page's `state()` is null unless the score carries words AND the scan's kept reading is present (`loupePrint.hasScan()`, the
+ * reading's bands: a score opened from a MusicXML or MNX file has none, so its Lyrics are never joined to a Poem; integration step 7b), with the dictionary loaded (without
  * it every word fails and every word would be repaired), and not after Revert for the same poem.
  *
  * WHAT. The repairs and fills it applies are one Lyrics edit, sent by the path a typed edit takes (`setLyrics`), so the seats
