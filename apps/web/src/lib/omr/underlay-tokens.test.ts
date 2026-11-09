@@ -59,10 +59,11 @@ describe('splitTokens', () => {
 		expect(splitTokens([t('ка', 0, 20), t('-', 22, 30), t('___', 40, 120), t('.', 130, 134)]).map((o) => o.text)).toEqual(['ка', '-', '___', '.']);
 	});
 
-	it('keeps a lone dash wider than half the ink height a JOINT, flagged long, its box unchanged (row 181 step 8a)', () => {
+	/* Integration step 7c: a long dash ends the word: an empty mark with its box and its flag. The hyphen beside it stays a joint. */
+	it('makes a lone dash wider than half the ink height an empty mark, flagged long, its box unchanged (row 181 step 7c)', () => {
 		const out = splitTokens([t('—', 0, 20), t('-', 30, 38)], { inkHeight: 32 });
-		expect(out.map((o) => o.text)).toEqual(['—', '-']);
-		expect(out.map((o) => kindOf(o.text))).toEqual(['joint', 'joint']);
+		expect(out.map((o) => o.text)).toEqual(['', '-']);
+		expect(kindOf(out[1].text)).toBe('joint');
 		expect(out[0]).toMatchObject({ x0: 0, x1: 20, longDash: true });
 		expect(out[1].longDash).toBeUndefined();
 		expect(splitTokens([t('—', 0, 16)], { inkHeight: 32 })[0].longDash).toBeUndefined();
@@ -88,9 +89,11 @@ describe('rowWords', () => {
 		expect(rowWords(tokens)).toEqual(['Комнат', 'ка', 'тесная']);
 	});
 
-	it('sews a word across a long dash between two syllables, as it does across a hyphen (row 181 step 8a: on row 114 the long dash is the printed hyphen)', () => {
+	/* Integration step 7c: the long dash splits the word (385 of 590 seats against the joint's 376, row 114); a hyphen still sews. If
+	   this reverts, a word sews across a dash that ends it. */
+	it('ends the word at a long dash between two syllables, and sews across a hyphen (row 181 step 7c)', () => {
 		const tokens = splitTokens([t('ту', 0, 30), t('—', 40, 80), t('ман', 90, 120)], { inkHeight: 32 });
-		expect(rowWords(tokens)).toEqual(['туман']);
+		expect(rowWords(tokens)).toEqual(['ту', 'ман']);
 		expect(rowWords(splitTokens([t('ту', 0, 30), t('-', 40, 48), t('ман', 90, 120)], { inkHeight: 32 }))).toEqual(['туман']);
 	});
 

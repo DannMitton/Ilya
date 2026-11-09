@@ -37,12 +37,15 @@ describe('pageTokens, the dash that is the print\'s line', () => {
 	// A dash 20 page-pixels wide. The row's ink is 32 framed px high: 32 page px at scale 1, 16 at scale 2, 64 at scale 0.5.
 	const dash = (scale: number) => pageTokens(row(0, scale), [box('—', 100, 120, scale)]).map((t) => t.text);
 
-	it('is a joint in every case (row 181 step 8a), and is flagged long where it is wider than half the ink height on the page', () => {
+	/* Integration step 7c: a long dash ends the word, so it is an empty mark that keeps its flag (the desk measured 385 of 590
+	   against the joint's 376; `underlay-tokens.ts`). A dash not wider than half the ink height stays a hyphen, a joint. If this
+	   changes, a word sews across a dash it should end at, or splits at a hyphen it should cross. */
+	it('is an empty mark flagged long where it is wider than half the ink height on the page, and a joint where it is not (row 181 step 7c)', () => {
 		const long = (scale: number) => pageTokens(row(0, scale), [box('—', 100, 120, scale)]).map((t) => [t.text, t.longDash === true]);
-		expect(long(1)).toEqual([['—', true]]);
-		expect(long(2)).toEqual([['—', true]]);
+		expect(long(1)).toEqual([['', true]]);
+		expect(long(2)).toEqual([['', true]]);
 		expect(long(0.5)).toEqual([['—', false]]);
-		expect(dash(1)).toEqual(['—']);
+		expect(dash(1)).toEqual(['']);
 	});
 });
 

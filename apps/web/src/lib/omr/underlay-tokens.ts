@@ -20,8 +20,8 @@
  * - A token with no letter is kept (a lone hyphen, an extender, a mark),
  *   because `seatTokens` and `sewWords` read it; the harness dropped it. A lone
  *   long dash, wider than half the row's ink height, was an empty mark (stage 2a
- *   review, amendment 9), then an `extender` token (row 181 step 1); since step 8a it is a
- *   joint with `longDash: true` and its box unchanged, as a hyphen is.
+ *   review, amendment 9), then an `extender` token (row 181 step 1), then a joint (step 8a); since
+ *   integration step 7c it is an empty mark again, with `longDash: true` and its box unchanged, so it ends the word.
  *
  * `rowWords` sews a row's tokens into the words `rowLanguage` judges.
  *
@@ -48,11 +48,17 @@ export function splitTokens(tokens: readonly Token[], options: SplitOptions = {}
 		const text = token.text.trim();
 		if (letters(text) === 0) {
 			const longDash = options.inkHeight !== undefined && kindOf(text) === 'joint' && token.x1 - token.x0 > 0.5 * options.inkHeight;
-			// Row 181 step 8a: a long dash is a JOINT, as a hyphen is, so a word sews across it; `longDash` records only that its box
-			// was wider than half the ink height. On row 114 the long dash is the printed hyphen between syllables (Russian editions
-			// draw it long under a melisma), not an extender: step 1 made it an `extender` token, which marked 151 notes and stopped
-			// the word sewing across it. Whether it also stands for an extender is a measured option (`?extender=a`, `underlay-extender.ts`).
-			out.push(longDash ? { ...token, text, longDash: true } : { ...token, text });
+			// A LONG DASH ENDS THE WORD (integration step 7c, 2026-11-09, the desk's ruling on its own measure). It checks nothing and
+			// decides one thing: a hyphen-only box wider than half the ink height keeps its box and its `longDash: true` flag, and its
+			// text is '' (an empty mark, which `sewWords` drops), so the word is split at the dash and does not sew across it. WHY: the
+			// desk measured row 114's first file, the same three songs, captured three times, identical for songs 2 and 5: with the dash
+			// a joint (step 8a, a word sewing across it) 376 of 590 seats right; with the dash splitting the word, 385
+			// (`docs/sessions/report-desk-row181-c-drop_r1_2026-11-05.md`, arm S; the control, before row 181, was 369). On this print the
+			// long dash is the printed hyphen between syllables, not an extender (step 1's extender reading marked 151 notes and was
+			// withdrawn in 8a). WHAT FOLLOWS: with a joint, syllables sewed into longer words and (c) fell 121 to 99; with a split they do
+			// not. The `longDash` flag still counts the dashes for the console and for `?extender=a|b` (`underlay-extender.ts`), which
+			// reads the box and not the text, so the flag stays when the text goes. It relates to `underlay-words.ts` (`sewWords`).
+			out.push(longDash ? { ...token, text: '', longDash: true } : { ...token, text });
 			continue;
 		}
 		const parts = text.split(INTERNAL).filter((p) => p !== '');
