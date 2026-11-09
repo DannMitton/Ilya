@@ -1,39 +1,50 @@
-# Report: integration, final (step 6), 2026-11-09
+# Report: integration, final (step 6, updated after step 7), 2026-11-09
 
 Branch `cloud-lane-38`, cut from `origin/Shane` (`4d73284b`). Pushed only `cloud-lane-38`; `Shane` and `main` untouched; no pull request; nothing under `docs/memory/` edited. Dann merges. This report adds no code; the tip below is the tip of the integration before it. Steps 1 to 5 each have a report: `report-code-integration-step1_r1_2026-11-09.md` to `step5`.
 
 ## The branch tip
 
-`4e0f3f5d` ("Integration step 5: report, row 71") is the last commit that changes anything but a report, and the commit every gate above ran on. This report is committed after it, so the branch's own tip is the commit named "Integration step 6: final report" (`git log -1 cloud-lane-38`); it changes no code. At `4e0f3f5d` the branch was 41 commits ahead of `origin/Shane`, 140 files changed against it (9,350 insertions, 624 deletions; this includes the lane reports, 14 pictures from row 71, and the tests). The working tree was clean when I ran the gates below.
+The code and every gate below are at `53f05d7b` ("Integration step 7: e2e follow the quiet pause and the stricter key rule"). Two report commits follow it (the step 7 report and this update); they change no code. `git log -1 cloud-lane-38` names the tip. The branch is about 62 commits ahead of `origin/Shane`. Pushed only `cloud-lane-38`; `Shane` and `main` untouched; no pull request; nothing under `docs/memory/` edited. Dann merges. Each step has its report: `report-code-integration-step1_r1_2026-11-09.md` to `step5`, `step5b`, `step5c`, `step5d`, `step7`.
 
 | Step | Source | Commits here |
 |---|---|---|
 | 1 | merge `origin/cloud-lane-35` (Corrections slice 3) | `d645d127`, report `fce12419` |
 | 2 | merge `origin/cloud-lane-34` (row 181) | `e5c6c7d8`, report `d35567eb` |
-| 3 | row 157 (`c16b9b81` to `0ceeb22a`) and Fable's amendments | six picks, amendments `2f633daf`, report `5a233f89` |
-| 4 | row 172 (five commits) and the brief's steps 1 to 3 | five picks, `192df457`, `67033c4d`, report `255463eb` |
-| 5 | row 71 (`2788cc88` to `930ba192`), the rule, the 43 strings | five picks, the integration commit, report `4e0f3f5d` |
+| 3 | row 157 and Fable's amendments | six picks, `2f633daf`, report `5a233f89` |
+| 4 | row 172 and the brief's steps 1 to 3 | five picks, `192df457`, `67033c4d`, report `255463eb` |
+| 5 | row 71, the rule, the 43 strings | five picks, `58679982`, report `4e0f3f5d` |
+| 5b | row 159, Guide HEIC sentences | `8d9b5c02` |
+| 5c | Further reading, shared topic | `eeab1c8e` |
+| 5d | LEARN letter-name IPA | `b409a1d0` |
+| 7 | Fable's amendments 7a to 7g, e2e follow-ups | `e207d440`, `cbb35d0e`, `4f8c7415`, `922e9ed7`, `be73cc68`, `ba239d29`, `f30cb8c5`, `53f05d7b` |
+| 6 | this summary | (reports) |
 
-## The eight gates at the tip (baseline on Shane)
+## The eight gates at the code tip `53f05d7b` (baseline on Shane)
 
 | Gate | Baseline | At the tip | Move |
 |---|---|---|---|
 | 1 `pnpm test:phonology` | 407 passed (407) | 435 passed (435) | +28 (row 157) |
 | 2 `pnpm test:dictionary` | 248 passed (248) | 248 passed (248) | none |
 | 3 `pnpm --filter @ilya/web check` | found 0 errors and 12 warnings in 5 files | found 0 errors and 12 warnings in 5 files | none |
-| 4 `pnpm --filter @ilya/web test` | 4198 passed, 1 skipped (4199) | 4594 passed, 1 skipped (4595) | +396: step 1 +34; step 2 +183; step 3 +32; step 4 +8 (5 mine, 3 the lane's net); step 5 +139 (49 the lane's, 90 mine) |
+| 4 `pnpm --filter @ilya/web test` | 4198 passed, 1 skipped (4199) | 4694 passed, 1 skipped (4695) | +496: step 1 +34; 2 +183; 3 +32; 4 +8; 5 +139; 5b +2; 5c +8; 5d +75; 7 +15 |
 | 5 `pnpm --filter @ilya/score-parser test` | 785 passed, 5 skipped (790) | 785 passed, 5 skipped (790) | none |
 | 6 `pnpm test:blurb` | 148 passed (148) | 164 passed (164) | +16 (row 157) |
 | 7 `pnpm test:integration` | 125 passed (125) | 125 passed (125) | none |
-| 8 `pnpm ratchets` | ratchets: OK. | ratchets: OK. | none; it offers six lowerings, of which five are Shane's own and one is `+page.svelte` 5549 to 5534 (my steps 2 and 4); I raised nothing and lowered nothing myself |
+| 8 `pnpm ratchets` | ratchets: OK. | ratchets: OK. | none; it still offers five lowerings that are Shane's own (Drawer, LearnContent, pairings, CalibrationWizard, staff-renderer). I **lowered** the `+page.svelte` ceiling from 5549 to its line count, 5534, in step 7 |
 
-All eight exited 0. Every move is explained in the step reports. **Ceilings:** none was raised. `+page.svelte` was at its ceiling (5549) when step 4 needed room, so I moved `scrollToAnchor` out into `lib/scroll-to-anchor.ts` first (step 4).
+All eight exited 0 on the final code. Steps 5b, 5c, and 5d were each also run on a clean worktree of their own commit (reports). No ceiling was raised; `+page.svelte` needed room in step 4, and `scrollToAnchor` was moved out first.
 
 ## Playwright
 
-**Not run for steps 2 to 6**, by the desk's order. The one run, at step 1 (on the merge of `cloud-lane-35`), gave 142 passed, 14 failed, 2 skipped; the same 14 fail on `origin/Shane` (step 1's report lists them). The second run is after step 7.
+Run twice, as the desk ordered: at step 1 (the merge of `cloud-lane-35`), and after step 7.
 
-Expect movement at that run, from steps 2 to 5: the "bb" phone test and the `text-header` tests (step 4), and the lane's `insights-key-lines` states (step 5), which I could not recompute.
+- **Step 1:** 142 passed, 14 failed, 2 skipped. The same 14 were red on `origin/Shane`.
+- **After step 7** (both projects, Chromium `/opt/pw-browsers/chromium`, `--trace off`): **155 passed, 16 failed, 2 skipped** (37.7 min). Of the 16, **11 are red on Shane** and are unchanged from step 1; **5 are new** and are this integration's:
+  - `insights-key-lines` ×4 (desktop and phone: "one group", "three groups"): from step 5's stricter key rule. I rewrote the two tests to the new states; the file now passes 15 of 15.
+  - `typed-hyphens.test.ts:26` (green on Shane): from step 4's quiet pause (bisected to my pause commits; row 172's own commits are green). I changed the spec to wait for the page to show the new text; it passes.
+- **Newly green:** the three phone `text-witness` tests, red on Shane, pass now.
+- **The 11 still red, all red on Shane:** `glue-typed-marks` ×2, `heic-reader-path`, `insights-page`, `loupe-header`, `print-pages`, `singer-paths`, phone `input-views:134`, `phrase-ends:26`, `relining:70`, `relining:95` ("bb"). "bb"'s first assertion (no rebuild of TEXT while the poem is typed) passes; it fails at its second, the lines of Lyrics, on Shane and here alike.
+- The two specs I changed were re-run after the fix (both pass); I did not re-run the full suite after those two edits.
 
 ## What a singer would now see that she did not see on Shane
 
@@ -74,14 +85,33 @@ On INSIGHTS, for a voice with a typed range (behind the Insights flag):
 6. A screen-only "Show keys that reach higher" disclosure for the rest.
 7. All of it in French as ratified.
 
+### Step 5b, the Guide's licences (row 159)
+
+The Licences section now names libheif, libde265, and Kiril Vatev's libheif-js with their copyright holders under the GNU LGPL version 3, and says that HEVC, the compression inside a HEIC photograph, is covered by patents licensed through pools and that Ilya holds no licence from them. English and French, as ratified.
+
+### Step 5c, INSIGHTS Further reading
+
+When every work in the list is cited for the same vowel, pitch, and bar, that topic line appears once under the heading after the teacher line, and each work shows its reference and its pages and passages without repeating it. With two or more topics, nothing changes.
+
+### Step 5d, LEARN's letter names
+
+The glyph table shows the first word of «и краткое» and of «и десятеричное» (the English copy lacked it), the inventory's ɡ for «гэ», and the engine's form for nine other names. One of them, «мягкий знак» as `[ˈmʲɑk kɨj ˈznɑk]`, I doubt (step 5d's report).
+
+### Step 7, amendments to the joins
+
+- The join takes itself back when a melisma note would leave a syllable without a note, and says which bar in the console (so a receipt cannot claim a note is filled that is blank). It runs only on a song read from a scan with a kept reading. A hand-typed word is no longer counted as a fault. On a scan's words the long dash splits a word again. A strip that cannot be cut is named in the console.
+- Corrections slice 3: nothing visible.
+
 ## What I could not establish
 
-- **Anything in a browser** beyond step 1's run. Every singer-facing line above comes from code, tests, and the lane reports, not from seeing a page.
-- **Whether the 14 red Playwright tests of step 1 moved**, and whether steps 2 to 5 added reds.
-- **What a singer without `?words=read` gets from row 181's reader changes** (step 2, item 6).
-- **How often a key is now offered on real songs and voices** under the stricter rule (step 5).
-- **The seven-versus-five English strings** in `OPEN.md` (step 5), and the plain space before the colon in `OPEN.md`'s French Guide sentence (step 4): both seated per the ratification's intent, not its copy.
-- **The one place the teacher line's meaning does not follow** its new neighbour (step 5, "No better key").
-- **Why the 14 tests are red on Shane** (step 1).
+- **Anything seen by a person.** Every singer-facing line above comes from code, tests, and the lane reports, and from the two Playwright runs, which assert words and layout, not how a page looks.
+- **Why the 11 Playwright reds are red on Shane** (step 1 and step 7 reports).
+- **What a singer without `?words=read` gets from row 181's reader changes** (step 2's report).
+- **How often a key is now offered** on real songs and voices under the stricter rule (step 5); and the lane's seven pictures are stale for the states that moved.
+- **The one-pause staleness of TEXT** after a typed or filled Poem, now visible in `typed-hyphens` (step 7); and the first key into an empty Poem may blank TEXT for one pause.
+- **7a and 7c on real songs:** how often the seating check reverts, and the 385 against 376, which the desk measured and I did not.
+- **The seven-versus-five English strings** in `OPEN.md` (step 5), and the plain space in `OPEN.md`'s French Guide sentence (step 4).
+- **The teacher line** that does not follow "No better key" (step 5).
+- **Whether the engine is right** on three letter names (step 5d).
 
-Waiting for step 7 (Fable's amendments for steps 1 and 2).
+Waiting for the desk.
