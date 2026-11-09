@@ -192,6 +192,16 @@ describe('the cross-check', () => {
 		expect(crossCheck(inp, none).fault).toBe(1);
 	});
 
+	/* Integration step 7d: the second pass reads who wrote each word, as the first did. A hand word the first pass left alone is no fault. */
+	it('does not count a hand word as a fault, though a second pass that took it for the print would repair it', () => {
+		const inp = input('Средь шумного бапа в тревоге мирской', POEM, { by: (i) => (i === 2 ? 'hand' : 'print') });
+		const r = planJoin(inp);
+		expect(r.proposals).toEqual([]);
+		expect(crossCheck(inp, r)).toEqual({ text: 'Средь шумного бапа в тревоге мирской', fault: 0 });
+		// With no `by`, the same words are the print's and are repaired: that is the mistake the hand mark prevents.
+		expect(planJoin(input('Средь шумного бапа в тревоге мирской', POEM)).proposals.map((p) => p.kind)).toEqual(['repair']);
+	});
+
 	it('is deterministic: the same input gives the same plan', () => {
 		const inp = input('Средь шумного бапа тревоге мирской', POEM, { runs: [run({ afterWord: 2, beforeWord: 3, needs: [2] })] });
 		expect(planJoin(inp)).toEqual(planJoin(inp));

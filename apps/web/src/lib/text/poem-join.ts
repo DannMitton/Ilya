@@ -46,7 +46,7 @@
  * it stands. Pure.
  */
 import { vowelsPerNote } from '$lib/omr/vowels-per-note';
-import { comparePoem, fold, type Comparison } from './poem-compare';
+import { comparePoem, fold, tokenize, type Comparison } from './poem-compare';
 
 /** Who placed a word: the print (a scan's reader), the poem (this join), the singer's hand, or a score file. */
 export type By = 'print' | 'poem' | 'hand' | 'file';
@@ -363,8 +363,23 @@ export function applyProposals(input: Pick<JoinInput, 'lyrics' | 'poem'>, result
  */
 export function crossCheck(input: JoinInput, result: JoinResult): { text: string; fault: number } {
 	const applied = applyProposals(input, result);
-	// Words this join wrote are the poem's now: mark them so the second pass leaves them to the poem.
-	const second = planJoin({ ...input, lyrics: applied.text, runs: [], by: undefined });
+	/* WHO WROTE EACH WORD, CARRIED THROUGH (integration step 7d). It checks that the second pass reads the same authorship as the
+	   first: a word the join wrote is the poem's ('poem'), and every other word keeps the `by` of the token it was before the edit
+	   (a fill inserts tokens, so a later token's index moves by the fills before it; a repair replaces one token with one). WHY:
+	   with `by: undefined` every word read as the print's, so a word the singer typed by hand, which the first pass rightly left
+	   alone, was counted as a fault when the second pass would have repaired it. WHEN IT FAILS: a hand word is counted as a fault
+	   (the console's "N fault(s) on the second pass" is then wrong), or a word the join wrote is repaired again. */
+	const after = tokenize(applied.text);
+	const writtenAt = after.map((t) => t.folded !== '' && applied.written.some((w) => t.start < w.end && t.end > w.start));
+	const kindAt = after.map((t) => applied.written.find((w) => t.start < w.end && t.end > w.start)?.kind);
+	const before: number[] = [];
+	let inserted = 0;
+	after.forEach((_, i) => {
+		if (writtenAt[i] && kindAt[i] === 'fill') inserted++;
+		before.push(i - inserted);
+	});
+	const by = input.by;
+	const second = planJoin({ ...input, lyrics: applied.text, runs: [], by: (i) => (writtenAt[i] ? 'poem' : by ? by(before[i]) : 'print') });
 	return { text: applied.text, fault: second.proposals.filter((p) => p.kind === 'repair').length };
 }
 
