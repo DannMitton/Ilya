@@ -18,6 +18,15 @@
  * (the dotted underline), the receipt line, and Revert stand only while the Lyrics still have the words the join left, whatever
  * the line breaks; the first edit to those words ends them, which is how a hand edit clears a repaired word's mark.
  *
+ * THE SEATING CHECK (integration step 7a, 2026-11-09). `setLyrics` is the page's `handleInput(text, 'paste')`, and a paste is
+ * transcribed at once (`transcribeVerdict` says `now` where the dictionary has loaded, which `state().ready` requires), so the
+ * reseat (`reseatByDiff`) has run when `setLyrics` returns. `#seated` then counts the syllable pairings whose origin word is a
+ * word the join wrote. Where that is fewer than the syllables the join wrote, a note was left blank although the receipt would
+ * say it was filled (a run whose open notes straddle a `melisma` note passes the count, `poem-join-wire.ts` skips melisma notes,
+ * but the reseat puts each slot at the anchor plus one and leaves a slot unseated where that note already holds a pairing,
+ * `score/reseat.ts`), so the join is reverted and one console line names the bar. Where the transcription has not caught up
+ * (the token map fails) nothing can be counted: the check is skipped and the console line says so.
+ *
  * THE SELF-CHECK (Dann 2026-11-04 10:36, item 7). After the plan is made, the pure cross-check applies it and runs the tiers on
  * the result: anything it would repair a second time is a fault, counted and printed, never looped. The line printed on the
  * console is the desk's measure of the join on a real song.
@@ -146,6 +155,44 @@ export class PoemJoin {
 		this.#applied = { songId: doc.id, before: lyrics, key: wordKey(applied.text), marks: marked.map((token) => ({ token, was: wasOf.get(token) ?? '' })), syllables, words: marked.length };
 		this.#last = `${doc.id}|${poem}|${applied.text}`;
 		deps.setLyrics(applied.text);
+		const fills = plan.proposals.flatMap((p) => (p.kind === 'fill' ? [runs.runs.find((r) => r.id === p.run)?.bars] : []));
+		this.#checkSeated(applied.text, marked, syllables, `bar${fills.length === 1 ? '' : 's'} ${fills.map((b) => (b ? (b[0] === b[1] ? `${b[0]}` : `${b[0]} to ${b[1]}`) : '?')).join(', ') || 'repairs only'}`);
+	}
+
+	/**
+	 * How many syllable pairings now belong to the words `written` (token indices in `lyrics`), or null when the transcription
+	 * does not line up with `lyrics` and nothing can be counted. It reads the page's state again, after the reseat has run.
+	 */
+	#seated(lyrics: string, written: readonly number[]): number | null {
+		const state = this.#deps?.state();
+		if (!state || !state.ready) return null;
+		const { map } = tokenMapReport(state.lines, lyrics);
+		if (!map) return null;
+		const mine = new Set(written);
+		let n = 0;
+		for (const p of Object.values(state.pairings)) {
+			if (p.kind !== 'syllable') continue;
+			const token = map.get(`${p.origin.lineIndex}:${p.origin.wordIndex}`);
+			if (token !== undefined && mine.has(token)) n++;
+		}
+		return n;
+	}
+
+	/**
+	 * Checks that every syllable the join wrote has a note, after the reseat. WHEN IT FAILS (fewer seated than written) the join
+	 * is reverted, as Revert does, and one console line names the bar(s); WHEN IT CANNOT COUNT it keeps the join and says so.
+	 * Returns false only where it reverted.
+	 */
+	#checkSeated(lyrics: string, written: readonly number[], expected: number, where: string): boolean {
+		const seated = this.#seated(lyrics, written);
+		if (seated === null) {
+			this.#say(`not checked (${where}): the transcription had not caught up with the Lyrics, so the seats were not counted`);
+			return true;
+		}
+		if (seated >= expected) return true;
+		this.revert();
+		this.#say(`reverted (${where}): ${expected} syllable(s) written, ${seated} seated, a note was left blank`);
+		return false;
 	}
 
 	#say(line: string): void {
@@ -226,7 +273,7 @@ export class PoemJoin {
 		this.#last = `${doc.id}|${doc.publishedPoem}|${applied.text}`;
 		this.#plan = null;
 		deps.setLyrics(applied.text);
-		return true;
+		return this.#checkSeated(applied.text, marked, slots, `bar ${bar}`);
 	}
 
 	/** Take the join back: Lyrics as they were before it, no second join for this poem. */
