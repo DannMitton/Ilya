@@ -3513,3 +3513,16 @@ Drafted by the desk from the Guide-planning brief of 2026-10-31 (people and jobs
 5. Decide whether a song suits a voice: INSIGHTS, a suggested key or an octave, follow a citation, print.
 6. Understand Ilya and get help: LEARN, the GUIDE, report a word or a claim.
 Next: Dann tests by job from a task list (a Docs artifact, 2026-11-05), notes where he hesitates; his notes recraft the GUIDE (Start here, How do I…, then the tabs).
+
+## THE GRAYSON AND PONS COMPARISON'S EIGHT OFFERS FOR ILYA. Ruled by Dann 2026-11-08 22:12
+
+On section 3 of `~/Downloads/_desk-2026-11-08/draft-grayson-pons-comparison_r2_2026-11-08.md` (offers drawn from Pons 2008, written without a reading of Ilya's code; desk error, `ENVIRONMENT.md` 2026-11-08 22:1x). Dann, transcribed with his typos corrected:
+- 3.1, no reduction: *"Ilya already has a no-reduction mode, it is the toggle for reconstitution."* Dropped.
+- 3.2, a period switch: *"yes I like the idea of the period switch, particularly if we can auto-execute it seamlessly for the user. Very often our dates for poet birth and death and translator birth and death are available in the dropdown. I think it's just figuring out an elegant way to offer the user control?"* RULED IN as a direction; design owed (the desk ranks designs from the singer's side; the dates come from the poet and translator lists). The open default for жж and зж (desk question of 22:0x) is settled inside this design, not separately.
+- 3.3, Pons's hook under the consonant: *"NO bottom ligature."* Dropped.
+- 3.4, clitic marking: *"We offer directional arrows to show enclitics and proclitics. This is sufficient."* Dropped.
+- 3.5, the dieresis on every ё: *"Ilya already restores the dieresis on every ё."* Dropped.
+- 3.6: *"I'm satisfied with how we treat this, Grayson is transparent."* Dropped.
+- 3.7: *"We align with the IPA."* Dropped.
+- 3.8, the gloss line: *"We already do this. Are you aware of Ilya's capabilities? I don't think you looked."* Dropped.
+- 2026-11-08 23:09, Dann: *"I read the drafts and it's good. I'm fine with Grayson's POV on the contested issues"* (typos corrected). So: the Grayson and Pons comparison stands as draft r2, with no biography of Pons; Ilya keeps Grayson's readings where the two disagree (prepositions с and в before a soft consonant, Grayson p. 250; щ, Grayson pp. 172 to 173), and its comments do not name Pons's alternatives.

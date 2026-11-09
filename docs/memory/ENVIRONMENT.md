@@ -5158,3 +5158,28 @@ Row 165 steps 5 to 8 and Dann's rulings of 2026-11-01 17:56 and 17:57 treated IN
 
 - 2026-11-05 08:0x (Opus desk): FABLE RUNS ON USAGE CREDITS once its weekly limit is at 100 percent; it is not blocked (Anthropic support, via Dann 08:03). The desk told Dann at 07:45 that Fable reviews wait for the reset; that was wrong. A Fable review costs credits like any other model and does not wait for Sunday.
 - 2026-11-05 08:1x (Opus desk): told Dann "Translator: there is no dropdown and no list of names" after a grep for a TRANSLATORS list came back empty; the Translator field is a SearchableSelect over POETS (`MetadataFields.svelte:147-155`), Marshak included (`composers-poets.ts:76`). Dann caught it. A failed search for a list is not an absence: read the component that draws the field.
+
+## ESTIMATES BY KIND OF JOB (desk, 2026-11-08 20:1x; `CONTRACT.md` §4, "Estimates come from actuals")
+
+Quote the range; cap at its top; add each actual when it lands. Actuals from `STATE.md` closes of 2026-11-02 to 2026-11-05.
+
+| kind of job | actuals (tokens) | range to quote |
+|---|---|---|
+| Sonnet browser measure on row 114 f1 | 148k, 155k, 158k, 192k, 206k, 208k, 208k, 257k | 150k to 260k |
+| Fable review of a brief or design | 156k to 315k, most near 200k | 160k to 320k |
+| Opus review standing in for Fable | 130k, 170k, 171k, 183k, 215k | 130k to 220k |
+| Sonnet reading a dissertation, with a digest | Grayson 2012: 211k (two thirds), then 231k (the remainder, clipped; the reader estimated 185k) | a Sonnet reader stops near 200k to 230k whatever the cap: split a dissertation into pieces of about 250 pages or 60,000 words, one helper each, 180k to 240k per piece |
+
+| Opus voice profile from three sources | 137k (2026-11-08) | 120k to 180k |
+| Fable writing a long comparison from digests | 202k (2026-11-08; it estimated 95k) | 180k to 260k |
+| Sonnet checking every citation of a long draft against PDFs | 313k (135 rows, cap 200k not held; 2026-11-08) | 250k to 350k |
+
+| Sonnet harvest of opera provenance and texts, 109 rows | 246k (first pass), 281k (second pass) (2026-11-08) | 230k to 290k per pass |
+
+Use the harness token count, never a helper's own estimate (2026-11-08: 231k counted against 185k estimated).
+
+Learned 2026-11-08: Grayson 2012 (PDF and both Word files) is set in legacy fonts; the Cyrillic decodes exactly by the Russian keyboard layout (`/` is ё), IPA (font Ipa-samd Uclphon1 SILDoulosL) does not. Decoded text: `~/Downloads/_desk-2026-11-08/grayson-2012-text-cyrillic-decoded.txt`. Pons 2008 has no text layer; English OCR plus a Russian-only pass, integrated per page: `~/Downloads/_desk-2026-11-08/pons-2008-ocr-integrated.txt`. On the Mac, run tesseract with `OMP_THREAD_LIMIT=1` (four copies at once otherwise run 50 times slower); never mix `eng+rus` on IPA pages (it turns IPA into Cyrillic).
+- 2026-11-08 21:20, desk error owned: called Heidi Moss Erickson a collaborator on Dann's "More Than Books Can Tell" (JOS forthcoming) from an old memory line; Dann: she is a named informant, not a collaborator. The article is Dann's alone.
+- 2026-11-08 22:1x, desk error owned: sent Dann eight 'offers for Ilya' (comparison draft r2, section 3) drawn from Pons without reading Ilya's code; six of the eight Ilya already does or Dann had ruled (reconstitution toggle, clitic arrows, ё dieresis, gloss line, IPA alignment). Rule for next time: any offer of a feature for Ilya is checked against the tree first (CONTRACT §0, the Alpha Rule), each with the file and line that shows it absent.
+- 2026-11-08 22:5x, learned by the harvest helper: (1) Russian Wikisource's API answered HTTP 429 to the cloud workspace on its first call tonight but worked from the Mac's shell (device_bash); fetch poem texts from the Mac when the cloud is refused. (2) The poem library's ids, inferred by testing, not from a source: `id` = first 10 hex digits of MD5 of `source.page`; `work` = first 8 hex of MD5 of the page title up to the first '/'; all 14 entries of tools/poems/library.json reproduce. One page holding several arias would give them one id (4 groups in the aria harvest).
+- 2026-11-08 23:0x, learned the hard way: a helper running in the background was stopped when Dann interrupted one of the desk's own tool calls (20:11); its captures survived, its scoring did not, and it could not be resumed. After any interrupt, check every running helper at once (look at its workspace's newest files), not three hours later.
