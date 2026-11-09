@@ -1,33 +1,43 @@
 # Step 9: every word whose IPA changes with the г before к rule, 2026-11-09
 
-Before and after, from the engine at the parent commit and at the rule commit, with the real dictionary and singer supplement loaded (; the dictionary word alone, or the bundled song line with context). Unchanged root words are listed at the foot.
+Before and after, from the engine at the parent commit and at the rule commit, with the real dictionary and singer supplement loaded (`processText`; a dictionary entry alone, or a bundled song line with its context). Scope: every dictionary headword and every line of the bundled song texts (the poems library, `tools/poems/library.json`, the arias file) that matches the roots мягк, лёгк, легк. Unchanged matches are listed at the foot.
 
-## Dictionary words (311)
+## Dictionary headwords (368)
 
 | Word | Before | After |
 |---|---|---|
 | мягкий | ˈmʲɑk kɨj | ˈmʲɑx kɨj |
 | мягкое | ˈmʲɑk kʌ jɪ | ˈmʲɑx kʌ jɪ |
 | мягкая | ˈmʲɑk kɑ jɑ | ˈmʲɑx kɑ jɑ |
+| мягкие | ˈmʲaɡʲ kʲi jɪ | ˈmʲax kʲi jɪ |
 | мягкого | ˈmʲɑk kʌ vʌ | ˈmʲɑx kʌ vʌ |
 | мягкой | ˈmʲɑk kʌj | ˈmʲɑx kʌj |
+| мягких | ˈmʲaɡʲ kʲix | ˈmʲax kʲix |
 | мягкому | ˈmʲɑk kʌ mu | ˈmʲɑx kʌ mu |
+| мягким | ˈmʲaɡʲ kʲim | ˈmʲax kʲim |
 | мягкую | ˈmʲɑk ku ju | ˈmʲɑx ku ju |
 | мягкою | ˈmʲɑk kʌ ju | ˈmʲɑx kʌ ju |
+| мягкими | ˈmʲaɡʲ kʲi mʲi | ˈmʲax kʲi mʲi |
 | мягком | ˈmʲɑk kʌm | ˈmʲɑx kʌm |
 | мягко | ˈmʲɑk kʌ | ˈmʲɑx kʌ |
 | мягка | mʲɪk ˈkɑ | mʲɪx ˈkɑ |
+| мягки | mʲiɡʲ ˈkʲi | mʲix ˈkʲi |
 | лёгкий | ˈlʲok kɨj | ˈlʲox kɨj |
 | лёгкое | ˈlʲok kʌ jɪ | ˈlʲox kʌ jɪ |
 | лёгкая | ˈlʲok kɑ jɑ | ˈlʲox kɑ jɑ |
+| лёгкие | ˈlʲoɡʲ kʲi jɪ | ˈlʲox kʲi jɪ |
 | лёгкого | ˈlʲok kʌ vʌ | ˈlʲox kʌ vʌ |
 | лёгкой | ˈlʲok kʌj | ˈlʲox kʌj |
+| лёгких | ˈlʲoɡʲ kʲix | ˈlʲox kʲix |
 | лёгкому | ˈlʲok kʌ mu | ˈlʲox kʌ mu |
+| лёгким | ˈlʲoɡʲ kʲim | ˈlʲox kʲim |
 | лёгкую | ˈlʲok ku ju | ˈlʲox ku ju |
 | лёгкою | ˈlʲok kʌ ju | ˈlʲox kʌ ju |
+| лёгкими | ˈlʲoɡʲ kʲi mʲi | ˈlʲox kʲi mʲi |
 | лёгком | ˈlʲok kʌm | ˈlʲox kʌm |
 | легко | lʲɪk ˈko | lʲɪx ˈko |
 | легка | lʲɪk ˈkɑ | lʲɪx ˈkɑ |
+| легки | lʲiɡʲ ˈkʲi | lʲix ˈkʲi |
 | мягкий знак | ˈmʲɑk kɨj ˈznɑk | ˈmʲɑx kɨj ˈznɑk |
 | мягкость | ˈmʲɑk kʌsʲtʲ | ˈmʲɑx kʌsʲtʲ |
 | мягкости | ˈmʲɑk kʌsʲ tʲi | ˈmʲɑx kʌsʲ tʲi |
@@ -95,6 +105,7 @@ Before and after, from the engine at the parent commit and at the rule commit, w
 | лёгкостями | ˈlʲok kʌsʲ tʲi mʲi | ˈlʲox kʌsʲ tʲi mʲi |
 | лёгкостях | ˈlʲok kʌsʲ tʲɪx | ˈlʲox kʌsʲ tʲɪx |
 | легкий | lʲɛk kɨj | lʲɛx kɨj |
+| с лёгким паром | → ˈslʲoɡʲ kʲim pɑ ˈrom | → ˈslʲox kʲim pɑ ˈrom |
 | лёгкая походка | ˈlʲok kɑ jɑ pɑ ˈxot kɑ | ˈlʲox kɑ jɑ pɑ ˈxot kɑ |
 | легкость | lʲɛk kosʲtʲ | lʲɛx kosʲtʲ |
 | легковесный | lʲɪk kɑ ˈvʲɛs nɨj | lʲɪx kɑ ˈvʲɛs nɨj |
@@ -132,24 +143,48 @@ Before and after, from the engine at the parent commit and at the rule commit, w
 | легкоусвояемо | lʲɪk kʌ us vɑ ˈja jɪ mʌ | lʲɪx kʌ us vɑ ˈja jɪ mʌ |
 | легкоусвояема | lʲɪk kʌ us vɑ ˈja jɪ mʌ | lʲɪx kʌ us vɑ ˈja jɪ mʌ |
 | легкоусвояемы | lʲɪk kʌ us vɑ ˈja jɪ mɨ | lʲɪx kʌ us vɑ ˈja jɪ mɨ |
+| воспаление лёгких | vʌs pɑ ˈlʲe ɲi jɪ ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲi jɪ ˈlʲox kʲix |
 | нелегкий | ɲe lʲɛk kɨj | ɲe lʲɛx kɨj |
 | нелёгкий | ɲi ˈlʲok kɨj | ɲi ˈlʲox kɨj |
 | нелёгкое | ɲi ˈlʲok kʌ jɪ | ɲi ˈlʲox kʌ jɪ |
 | нелёгкая | ɲi ˈlʲok kɑ jɑ | ɲi ˈlʲox kɑ jɑ |
+| нелёгкие | ɲi ˈlʲoɡʲ kʲi jɪ | ɲi ˈlʲox kʲi jɪ |
 | нелёгкого | ɲi ˈlʲok kʌ vʌ | ɲi ˈlʲox kʌ vʌ |
 | нелёгкой | ɲi ˈlʲok kʌj | ɲi ˈlʲox kʌj |
+| нелёгких | ɲi ˈlʲoɡʲ kʲix | ɲi ˈlʲox kʲix |
 | нелёгкому | ɲi ˈlʲok kʌ mu | ɲi ˈlʲox kʌ mu |
+| нелёгким | ɲi ˈlʲoɡʲ kʲim | ɲi ˈlʲox kʲim |
 | нелёгкую | ɲi ˈlʲok ku ju | ɲi ˈlʲox ku ju |
 | нелёгкою | ɲi ˈlʲok kʌ ju | ɲi ˈlʲox kʌ ju |
+| нелёгкими | ɲi ˈlʲoɡʲ kʲi mʲi | ɲi ˈlʲox kʲi mʲi |
 | нелёгком | ɲi ˈlʲok kʌm | ɲi ˈlʲox kʌm |
 | нелегко | ɲi lʲɪk ˈko | ɲi lʲɪx ˈko |
 | нелегка | ɲi lʲɪk ˈkɑ | ɲi lʲɪx ˈkɑ |
+| нелегки | ɲi lʲiɡʲ ˈkʲi | ɲi lʲix ˈkʲi |
+| воспаления лёгких | vʌs pɑ ˈlʲe ɲi jɪ ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲi jɪ ˈlʲox kʲix |
+| воспалений лёгких | vʌs pɑ ˈlʲe ɲij ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲij ˈlʲox kʲix |
 | лёгкой атлетики | ˈlʲok kʌj ɑtʲ ˈlʲe tʲi kʲi | ˈlʲox kʌj ɑtʲ ˈlʲe tʲi kʲi |
 | лёгкой походки | ˈlʲok kʌj pɑ ˈxotʲ kʲi | ˈlʲox kʌj pɑ ˈxotʲ kʲi |
+| лёгкие походки | ˈlʲoɡʲ kʲi jɪ pɑ ˈxotʲ kʲi | ˈlʲox kʲi jɪ pɑ ˈxotʲ kʲi |
+| лёгких походок | ˈlʲoɡʲ kʲix pɑ ˈxo dʌk | ˈlʲox kʲix pɑ ˈxo dʌk |
 | лёгкой промышленности | ˈlʲok kʌj prɑ ˈmɨʃ lʲɪn nʌsʲ tʲi | ˈlʲox kʌj prɑ ˈmɨʃ lʲɪn nʌsʲ tʲi |
+| лёгкие промышленности | ˈlʲoɡʲ kʲi jɪ prɑ ˈmɨʃ lʲɪn nʌsʲ tʲi | ˈlʲox kʲi jɪ prɑ ˈmɨʃ lʲɪn nʌsʲ tʲi |
+| лёгких промышленностей | ˈlʲoɡʲ kʲix prɑ ˈmɨʃ lʲɪn nʌsʲ tʲij | ˈlʲox kʲix prɑ ˈmɨʃ lʲɪn nʌsʲ tʲij |
 | мягкой власти | ˈmʲɑk kʌj ˈvɫɑsʲ tʲi | ˈmʲɑx kʌj ˈvɫɑsʲ tʲi |
+| мягкие власти | ˈmʲaɡʲ kʲi jɪ ˈvɫɑsʲ tʲi | ˈmʲax kʲi jɪ ˈvɫɑsʲ tʲi |
+| мягких властей | ˈmʲaɡʲ kʲix vɫɑsʲ ˈtʲej | ˈmʲax kʲix vɫɑsʲ ˈtʲej |
 | мягкой силы | ˈmʲɑk kʌj ˈsʲi ɫɨ | ˈmʲɑx kʌj ˈsʲi ɫɨ |
+| мягкие силы | ˈmʲaɡʲ kʲi jɪ ˈsʲi ɫɨ | ˈmʲax kʲi jɪ ˈsʲi ɫɨ |
+| мягких сил | ˈmʲaɡʲ kʲix ˈsʲiɫ | ˈmʲax kʲix ˈsʲiɫ |
 | мягкого знака | ˈmʲɑk kʌ vʌ ˈznɑ kɑ | ˈmʲɑx kʌ vʌ ˈznɑ kɑ |
+| мягкие знаки | ˈmʲaɡʲ kʲi jɪ ˈznɑ kʲi | ˈmʲax kʲi jɪ ˈznɑ kʲi |
+| мягких знаков | ˈmʲaɡʲ kʲiɣ ˈznɑ kʌf | ˈmʲax kʲiɣ ˈznɑ kʌf |
+| воспалению лёгких | vʌs pɑ ˈlʲe ɲi ju ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲi ju ˈlʲox kʲix |
+| воспалением лёгких | vʌs pɑ ˈlʲe ɲi jɪm ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲi jɪm ˈlʲox kʲix |
+| воспалении лёгких | vʌs pɑ ˈlʲe ɲi ji ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲi ji ˈlʲox kʲix |
+| воспалениям лёгких | vʌs pɑ ˈlʲe ɲi jɪm ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲi jɪm ˈlʲox kʲix |
+| воспалениями лёгких | vʌs pɑ ˈlʲe ɲi ji mʲi ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲi ji mʲi ˈlʲox kʲix |
+| воспалениях лёгких | vʌs pɑ ˈlʲe ɲi jɪx ˈlʲoɡʲ kʲix | vʌs pɑ ˈlʲe ɲi jɪx ˈlʲox kʲix |
 | лёгкой атлетике | ˈlʲok kʌj ɑtʲ ˈlʲe tʲi kʲɪ | ˈlʲox kʌj ɑtʲ ˈlʲe tʲi kʲɪ |
 | лёгкую атлетику | ˈlʲok ku ju ɑtʲ ˈlʲe tʲi ku | ˈlʲox ku ju ɑtʲ ˈlʲe tʲi ku |
 | лёгкой атлетикой | ˈlʲok kʌj ɑtʲ ˈlʲe tʲi kʌj | ˈlʲox kʌj ɑtʲ ˈlʲe tʲi kʌj |
@@ -158,29 +193,50 @@ Before and after, from the engine at the parent commit and at the rule commit, w
 | лёгкую походку | ˈlʲok ku ju pɑ ˈxot ku | ˈlʲox ku ju pɑ ˈxot ku |
 | лёгкой походкой | ˈlʲok kʌj pɑ ˈxot kʌj | ˈlʲox kʌj pɑ ˈxot kʌj |
 | лёгкою походкою | ˈlʲok kʌ ju pɑ ˈxot kʌ ju | ˈlʲox kʌ ju pɑ ˈxot kʌ ju |
+| лёгким походкам | ˈlʲoɡʲ kʲim pɑ ˈxot kɑm | ˈlʲox kʲim pɑ ˈxot kɑm |
+| лёгкими походками | ˈlʲoɡʲ kʲi mʲi pɑ ˈxot kɑ mʲi | ˈlʲox kʲi mʲi pɑ ˈxot kɑ mʲi |
+| лёгких походках | ˈlʲoɡʲ kʲix pɑ ˈxot kɑx | ˈlʲox kʲix pɑ ˈxot kɑx |
 | лёгкую промышленность | ˈlʲok ku ju prɑ ˈmɨʃ lʲɪn nʌsʲtʲ | ˈlʲox ku ju prɑ ˈmɨʃ lʲɪn nʌsʲtʲ |
 | лёгкой промышленностью | ˈlʲok kʌj prɑ ˈmɨʃ lʲɪn nʌsʲ tʲju | ˈlʲox kʌj prɑ ˈmɨʃ lʲɪn nʌsʲ tʲju |
 | лёгкою промышленностью | ˈlʲok kʌ ju prɑ ˈmɨʃ lʲɪn nʌsʲ tʲju | ˈlʲox kʌ ju prɑ ˈmɨʃ lʲɪn nʌsʲ tʲju |
+| лёгким промышленностям | ˈlʲoɡʲ kʲim prɑ ˈmɨʃ lʲɪn nʌsʲ tʲɪm | ˈlʲox kʲim prɑ ˈmɨʃ lʲɪn nʌsʲ tʲɪm |
+| лёгкими промышленностями | ˈlʲoɡʲ kʲi mʲi prɑ ˈmɨʃ lʲɪn nʌsʲ tʲi mʲi | ˈlʲox kʲi mʲi prɑ ˈmɨʃ lʲɪn nʌsʲ tʲi mʲi |
+| лёгких промышленностях | ˈlʲoɡʲ kʲix prɑ ˈmɨʃ lʲɪn nʌsʲ tʲɪx | ˈlʲox kʲix prɑ ˈmɨʃ lʲɪn nʌsʲ tʲɪx |
 | мягкую власть | ˈmʲɑk ku ju ˈvɫɑsʲtʲ | ˈmʲɑx ku ju ˈvɫɑsʲtʲ |
 | мягкой властью | ˈmʲɑk kʌj ˈvɫɑsʲ tʲju | ˈmʲɑx kʌj ˈvɫɑsʲ tʲju |
 | мягкою властью | ˈmʲɑk kʌ ju ˈvɫɑsʲ tʲju | ˈmʲɑx kʌ ju ˈvɫɑsʲ tʲju |
+| мягким властям | ˈmʲaɡʲ kʲim vɫɑsʲ ˈtʲɑm | ˈmʲax kʲim vɫɑsʲ ˈtʲɑm |
+| мягкими властями | ˈmʲaɡʲ kʲi mʲi vɫɑsʲ ˈtʲa mʲi | ˈmʲax kʲi mʲi vɫɑsʲ ˈtʲa mʲi |
+| мягких властях | ˈmʲaɡʲ kʲix vɫɑsʲ ˈtʲɑx | ˈmʲax kʲix vɫɑsʲ ˈtʲɑx |
 | мягкой силе | ˈmʲɑk kʌj ˈsʲi lʲɪ | ˈmʲɑx kʌj ˈsʲi lʲɪ |
 | мягкую силу | ˈmʲɑk ku ju ˈsʲi ɫu | ˈmʲɑx ku ju ˈsʲi ɫu |
 | мягкой силой | ˈmʲɑk kʌj ˈsʲi ɫʌj | ˈmʲɑx kʌj ˈsʲi ɫʌj |
 | мягкою силою | ˈmʲɑk kʌ ju ˈsʲi ɫʌ ju | ˈmʲɑx kʌ ju ˈsʲi ɫʌ ju |
+| мягким силам | ˈmʲaɡʲ kʲim ˈsʲi ɫɑm | ˈmʲax kʲim ˈsʲi ɫɑm |
+| мягкими силами | ˈmʲaɡʲ kʲi mʲi ˈsʲi ɫɑ mʲi | ˈmʲax kʲi mʲi ˈsʲi ɫɑ mʲi |
+| мягких силах | ˈmʲaɡʲ kʲix ˈsʲi ɫɑx | ˈmʲax kʲix ˈsʲi ɫɑx |
 | мягкому знаку | ˈmʲɑk kʌ mu ˈznɑ ku | ˈmʲɑx kʌ mu ˈznɑ ku |
+| мягким знаком | ˈmʲaɡʲ kʲim ˈznɑ kʌm | ˈmʲax kʲim ˈznɑ kʌm |
 | мягком знаке | ˈmʲɑk kʌm ˈznɑ kʲɪ | ˈmʲɑx kʌm ˈznɑ kʲɪ |
+| мягким знакам | ˈmʲaɡʲ kʲim ˈznɑ kɑm | ˈmʲax kʲim ˈznɑ kɑm |
+| мягкими знаками | ˈmʲaɡʲ kʲi mʲi ˈznɑ kɑ mʲi | ˈmʲax kʲi mʲi ˈznɑ kɑ mʲi |
+| мягких знаках | ˈmʲaɡʲ kʲiɣ ˈznɑ kɑx | ˈmʲax kʲiɣ ˈznɑ kɑx |
 | прелёгкий | prʲi ˈlʲok kɨj | prʲi ˈlʲox kɨj |
 | прелёгкое | prʲi ˈlʲok kʌ jɪ | prʲi ˈlʲox kʌ jɪ |
 | прелёгкая | prʲi ˈlʲok kɑ jɑ | prʲi ˈlʲox kɑ jɑ |
+| прелёгкие | prʲi ˈlʲoɡʲ kʲi jɪ | prʲi ˈlʲox kʲi jɪ |
 | прелёгкого | prʲi ˈlʲok kʌ vʌ | prʲi ˈlʲox kʌ vʌ |
 | прелёгкой | prʲi ˈlʲok kʌj | prʲi ˈlʲox kʌj |
+| прелёгких | prʲi ˈlʲoɡʲ kʲix | prʲi ˈlʲox kʲix |
 | прелёгкому | prʲi ˈlʲok kʌ mu | prʲi ˈlʲox kʌ mu |
+| прелёгким | prʲi ˈlʲoɡʲ kʲim | prʲi ˈlʲox kʲim |
 | прелёгкую | prʲi ˈlʲok ku ju | prʲi ˈlʲox ku ju |
 | прелёгкою | prʲi ˈlʲok kʌ ju | prʲi ˈlʲox kʌ ju |
+| прелёгкими | prʲi ˈlʲoɡʲ kʲi mʲi | prʲi ˈlʲox kʲi mʲi |
 | прелёгком | prʲi ˈlʲok kʌm | prʲi ˈlʲox kʌm |
 | прелегко | prʲi lʲɪk ˈko | prʲi lʲɪx ˈko |
 | прелегка | prʲi lʲɪk ˈkɑ | prʲi lʲɪx ˈkɑ |
+| прелегки | prʲi lʲiɡʲ ˈkʲi | prʲi lʲix ˈkʲi |
 | легкомысленный | lʲɪk kɑ ˈmɨsʲ lʲɪn nɨj | lʲɪx kɑ ˈmɨsʲ lʲɪn nɨj |
 | легкомысленное | lʲɪk kɑ ˈmɨsʲ lʲɪn nʌ jɪ | lʲɪx kɑ ˈmɨsʲ lʲɪn nʌ jɪ |
 | легкомысленная | lʲɪk kɑ ˈmɨsʲ lʲɪn nɑ jɑ | lʲɪx kɑ ˈmɨsʲ lʲɪn nɑ jɑ |
@@ -226,6 +282,7 @@ Before and after, from the engine at the parent commit and at the rule commit, w
 | легковушкою | lʲɪk kɑ ˈvuʃ kʌ ju | lʲɪx kɑ ˈvuʃ kʌ ju |
 | легковушками | lʲɪk kɑ ˈvuʃ kɑ mʲi | lʲɪx kɑ ˈvuʃ kɑ mʲi |
 | легковушках | lʲɪk kɑ ˈvuʃ kɑx | lʲɪx kɑ ˈvuʃ kɑx |
+| налегке | nʌ lʲiɡʲ ˈkʲɛ | nʌ lʲix ˈkʲɛ |
 | нелегкая | ɲe lʲɛk kɑ jɑ | ɲe lʲɛx kɑ jɑ |
 | мягков | mʲɪk ˈkof | mʲɪx ˈkof |
 | мягкова | mʲɪk ˈko vɑ | mʲɪx ˈko vɑ |
@@ -318,9 +375,9 @@ Before and after, from the engine at the parent commit and at the rule commit, w
 | женщина лёгкого поведения | ˈʒeɲ ʃʲʃʲi nʌ ˈlʲok kʌ vʌ pʌ vʲi ˈdʲe ɲi jɪ | ˈʒeɲ ʃʲʃʲi nʌ ˈlʲox kʌ vʌ pʌ vʲi ˈdʲe ɲi jɪ |
 | девушка лёгкого поведения | ˈdʲɛ vuʃ kʌ ˈlʲok kʌ vʌ pʌ vʲi ˈdʲe ɲi jɪ | ˈdʲɛ vuʃ kʌ ˈlʲox kʌ vʌ pʌ vʲi ˈdʲe ɲi jɪ |
 
-## Words in bundled song texts (poems library, arias file), by line (12 lines)
+## Bundled song lines (15)
 
-Each cell is the whole line: word=IPA pairs.
+Each is a whole line: word=IPA pairs.
 
 - **Легко, не знаю почему.**
   - before: Легко=lʲɪk ˈko не=→ знаю=ɲɪ ˈznɑ ju почему=pʌ tʃʲɪ ˈmu
@@ -334,6 +391,9 @@ Each cell is the whole line: word=IPA pairs.
 - **И шла, хоть тише, — но легко,**
   - before: И=ˈi шла=ˈʃɫɑ хоть=ˈxotʲ тише=ˈtʲi ʃɨ но=ˈno легко=lʲɪk ˈko
   - after: И=ˈi шла=ˈʃɫɑ хоть=ˈxotʲ тише=ˈtʲi ʃɨ но=ˈno легко=lʲɪx ˈko
+- **Про лёгких, бешеных коней,**
+  - before: Про=→ лёгких=prɑ ˈlʲoɡʲ kʲix бешеных=ˈbʲɛ ʃɨ nɨx коней=kɑ ˈɲej
+  - after: Про=→ лёгких=prɑ ˈlʲox kʲix бешеных=ˈbʲɛ ʃɨ nɨx коней=kɑ ˈɲej
 - **Бежали дружно и легко…**
   - before: Бежали=bʲɪ ˈʒɑ lʲi дружно=ˈdruʒ nʌ и=ˈi легко=lʲɛk ko
   - after: Бежали=bʲɪ ˈʒɑ lʲi дружно=ˈdruʒ nʌ и=ˈi легко=lʲɛx ko
@@ -346,12 +406,18 @@ Each cell is the whole line: word=IPA pairs.
 - **И такъ легко, легко...**
   - before: И=ˈi так=ˈtɑk легко=lʲɪk ˈko легко=lʲɪk ˈko
   - after: И=ˈi так=ˈtɑk легко=lʲɪx ˈko легко=lʲɪx ˈko
+- **Туманом лёгким растекусь**
+  - before: Туманом=tu ˈmɑ nʌm лёгким=ˈlʲoɡʲ kʲim растекусь=rʌsʲ tʲɪ ˈkusʲ
+  - after: Туманом=tu ˈmɑ nʌm лёгким=ˈlʲox kʲim растекусь=rʌsʲ tʲɪ ˈkusʲ
 - **Хоть тенью лёгкою явись,**
   - before: Хоть=ˈxotʲ тенью=ˈtʲe ɲju лёгкою=ˈlʲok kʌ ju явись=ji ˈvʲisʲ
   - after: Хоть=ˈxotʲ тенью=ˈtʲe ɲju лёгкою=ˈlʲox kʌ ju явись=ji ˈvʲisʲ
 - **Хоть тенью лёгкою явись!**
   - before: Хоть=ˈxotʲ тенью=ˈtʲe ɲju лёгкою=ˈlʲok kʌ ju явись=ji ˈvʲisʲ
   - after: Хоть=ˈxotʲ тенью=ˈtʲe ɲju лёгкою=ˈlʲox kʌ ju явись=ji ˈvʲisʲ
+- **(Руслан ищет меч, но все для него легки, и он их бросает.)**
+  - before: Руслан=rus ɫɑn ищет=ˈi ʃʲʃʲɪt меч=ˈmʲetʃʲ но=ˈno все=ˈfsʲɛ для=→ него=dʲlʲɪ ɲɪ ˈvo легки=lʲiɡʲ ˈkʲi и=ˈi он=ˈon их=ˈiɣ бросает=bro sɑ jɛt
+  - after: Руслан=rus ɫɑn ищет=ˈi ʃʲʃʲɪt меч=ˈmʲetʃʲ но=ˈno все=ˈfsʲɛ для=→ него=dʲlʲɪ ɲɪ ˈvo легки=lʲix ˈkʲi и=ˈi он=ˈon их=ˈiɣ бросает=bro sɑ jɛt
 - **Не столь послушно, не слегка,**
   - before: Не=→ столь=ɲɪ ˈstolʲ послушно=pɑs ˈɫuʃ nʌ не=→ слегка=ɲɪ sʲlʲɪk ˈkɑ
   - after: Не=→ столь=ɲɪ ˈstolʲ послушно=pɑs ˈɫuʃ nʌ не=→ слегка=ɲɪ sʲlʲɪx ˈkɑ
@@ -359,6 +425,6 @@ Each cell is the whole line: word=IPA pairs.
   - before: Что=ˈʃtoʃ ж=← и=ˈi тогда=tɑɡ ˈdɑ легко=lʲɪk ˈko всегда=fsʲɪɡ ˈdɑ
   - after: Что=ˈʃtoʃ ж=← и=ˈi тогда=tɑɡ ˈdɑ легко=lʲɪx ˈko всегда=fsʲɪɡ ˈdɑ
 
-## Dictionary words matching the roots whose IPA did not change (57)
+## Headwords matching the roots whose IPA did not change (0)
 
-мягкие, мягких, мягким, мягкими, мягки, лёгкие, лёгких, лёгким, лёгкими, легки, с лёгким паром, воспаление лёгких, нелёгкие, нелёгких, нелёгким, нелёгкими, нелегки, воспаления лёгких, воспалений лёгких, лёгкие походки, лёгких походок, лёгкие промышленности, лёгких промышленностей, мягкие власти, мягких властей, мягкие силы, мягких сил, мягкие знаки, мягких знаков, воспалению лёгких, воспалением лёгких, воспалении лёгких, воспалениям лёгких, воспалениями лёгких, воспалениях лёгких, лёгким походкам, лёгкими походками, лёгких походках, лёгким промышленностям, лёгкими промышленностями, лёгких промышленностях, мягким властям, мягкими властями, мягких властях, мягким силам, мягкими силами, мягких силах, мягким знаком, мягким знакам, мягкими знаками, мягких знаках, прелёгкие, прелёгких, прелёгким, прелёгкими, прелегки, налегке
+none
