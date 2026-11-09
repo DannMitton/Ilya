@@ -185,6 +185,25 @@ describe('ratified Guide lines (row 123)', () => {
 	});
 });
 
+/* QUEUE row 159. The Guide's HEIC licence and patent sentences, ratified by Dann 2026-10-28 15:28 (`docs/sessions/ratified-guide-heic-licences_2026-10-28.md`),
+   in the Software paragraph of the Licences section, after the onnxruntime-web and OpenCV.js sentence and before the Svelte sentence.
+   They check the words, the U+2019 apostrophes, and the placement (between those two sentences). If the Guide drifts, a singer reads
+   an attribution or a patent notice Dann did not ratify, which is a licence failure and not a style one. Both languages are in the one file,
+   so this pin reads the file whole and finds each sentence by what surrounds it. It relates to the Guide's other ratified lines above (row 123). */
+describe('ratified Guide lines (row 159, HEIC licences and patents)', () => {
+	const guide = readFileSync(new URL('../components/Reading/GuideContent.svelte', import.meta.url), 'utf8');
+	it('English: libheif, libde265, libheif-js, LGPL 3, and the HEVC patent pools, between the OpenCV.js and Svelte sentences', () => {
+		expect(guide).toContain(
+			'OpenCV.js (Apache License 2.0). A photograph in Apple’s HEIC format is opened by libheif (© 2017–2020 struktur AG; © 2017–2025 Dirk Farin), with the libde265 HEVC decoder (© 2013–2014 struktur AG, Dirk Farin, and the openHEVC contributors), in Kiril Vatev’s libheif-js build; all are released under the GNU Lesser General Public License, version 3. HEVC, the compression inside a HEIC photograph, is covered by patents that their holders license through patent pools, among them Access Advance’s HEVC Advance pool; <em>Ilya</em> uses HEVC only to decode a photograph the singer chooses, and holds no licence from these pools. The interface is built',
+		);
+	});
+	it('French: the same, between the OpenCV.js and Svelte sentences', () => {
+		expect(guide).toContain(
+			'OpenCV.js (licence Apache 2.0). Une photographie au format HEIC d’Apple est ouverte par libheif (© 2017–2020 struktur AG; © 2017–2025 Dirk Farin), avec le décodeur HEVC libde265 (© 2013–2014 struktur AG, Dirk Farin, et les contributrices et contributeurs d’openHEVC), dans la compilation libheif-js de Kiril Vatev; tous sont publiés sous la licence publique générale limitée GNU, version 3. Le HEVC, la compression contenue dans une photographie HEIC, est couvert par des brevets que leurs titulaires concèdent sous licence par l’intermédiaire de groupements de brevets, dont le groupement HEVC Advance d’Access Advance; <em>Ilya</em> n’utilise le HEVC que pour décoder une photographie choisie par la chanteuse ou le chanteur, et ne détient aucune licence de ces groupements. L’interface est construite',
+		);
+	});
+});
+
 /* N.194 (QUEUE row 152), the Loupe's break button. The expected strings are copied from the brief
    (`brief-code-n194-loupe-break-button_r5_2026-10-25.md`), not read back out of `i18n.ts`: the pill's labels,
    ruled by Dann 2026-10-21 13:42; the undo sentences, ratified 2026-10-21 20:30; the reason under an off pill,
