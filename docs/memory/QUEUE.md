@@ -6,6 +6,8 @@ r1 draft, 2026-10-12. Created 2026-09-30 by the desk after Dann: *"are there any
 
 ## Open rows, in run order
 
+**UPDATE 2026-11-08 19:4x (Opus desk close of 2026-11-05).** Corrections slice 3: BUILT `cloud-lane-35` `989a6615`, desk read clean, Fable as built owed, not merged. Row 157: Fable as built MERGE WITH AMENDMENTS (`review-fable-row157-as-built_r1_2026-11-05.md`), cherry-pick onto `Shane` clean; fix session owed. Row 172: finish brief r2 written and reviewed; its session pushed nothing (`cloud-lane-36` absent). Row 71: strings ratified EN and FR, reduce-only rule ruled; Code brief owed. Row 181: arm D 376 (= tip); arm L running; design r2 by Fable, its review running. `STATE.md` holds the order.
+
 **UPDATE 2026-10-29 20:5x (Opus desk close).** N.135 stage 2b r5 steps 0 to 10 SHIPPED `f6c8ae43` (merge `fcb2b788` of `cloud-lane-21` at `5ee29ec2`; replay 1,880 / 1,710; browser 1,914 / 1,737; all eight gates at baseline on the Mac, gate 4 3705). Row 105 r5 RUN on the Mac, no gain, r2 stays (`report-code-row105-next-model_r2_2026-10-29.md`). New row 160 SHIPPED `e5bad5a6` (fast-forward of `cloud-lane-22`; gate 4 3718). New rows 161 and 162: briefs written and reviewed, both REDESIGN, parked. Row 158 (the reader review) waits for Sunday 2026-11-01 04:00 (Dann 20:50).
 
 **UPDATE 2026-10-29 10:5x (Opus desk close).** N.135 stage 2b r5 steps 0 to 4 RETURNED on `cloud-lane-21` at `1eb05e7` (reports read; replay: steps 1 and 2 on target, step 4 1,870 / 1,707 against 1,880 / 1,710). Steps 5 to 9 RUNNING there from brief r2 `../sessions/brief-code-n135-stage2b-r5-steps5-9_r2_2026-10-29.md` (Opus review in Fable's place). Not shipped.

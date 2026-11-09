@@ -3469,3 +3469,47 @@ Dann, transcribed with his typos corrected: *"we need to start thinking of vowel
 ## LYRICS IN MODERN LETTERS, NEVER CHANGING A SUNG VOWEL; POEM KEEPS ITS SOURCE'S SPELLING WITH A VIEW TOGGLE. Ruled by Dann 2026-11-05 00:45 to 00:47
 
 Dann 00:45 (with his typos corrected): POEM is the authoritative witness and offers the pre-1918 spelling when its source has it, with easy toggling to a modernized view (modern by default); *"Lyrics should always work in modern spelling only"*; the old spelling is a relic offered as a curiosity, since every dictionary wants modern spelling. Desk's limit, offered 00:4x and accepted by Dann 00:47 ("Yes"): Lyrics shows modern LETTERS (ѣ to е, і to и, ѳ to ф, final ъ dropped, -аго to -ого as sung per the 2026-10-02 ruling) but never changes a sung vowel: the lookup-only forms (онѣ, однѣ, ея, нея; `packages/dictionary/src/pre-reform-normalizer.ts:86-104`, ruled 2026-08-08) keep the printed vowel, so no rhyme moves. Today Lyrics on a scan is the print's words as printed (`scoreWordsText`, `apps/web/src/lib/score/vowel-resolver.ts:325-327`), so this is a change, not yet built. The print's own spelling stays visible in the Loupe's print strip; Dann 00:47 wants that contrast engineered as a teaching moment (critique in the thread 00:4x; design owed).
+
+## ROW 172: THE GUIDE'S POEM SENTENCE, RATIFIED EN AND FR. Dann 2026-11-05 08:10
+
+Ratified by Dann as he wrote them (he changed the desk's "shows" / « affiche » to "transcribes" / « transcrit »). Replaces the last two sentences of the Guide's poem-and-lyrics paragraph (`GuideContent.svelte:334` EN and `:39` FR on `cloud-lane-29` at `0ceeb22a`).
+
+- EN: To review the authoritative poem itself anytime, choose POEM in INPUT: TEXT then transcribes the whole poem as published, including any words the composer has left out, and says so in a line above the page. Choose LYRICS in INPUT to return.
+- FR: Pour consulter à tout moment le poème qui fait autorité, choisissez POÈME dans ENTRÉE : TEXTE transcrit alors le poème entier tel que publié, y compris les mots que le compositeur a laissés de côté, et le signale par une ligne au-dessus de la page. Choisissez PAROLES dans ENTRÉE pour revenir.
+
+## ROW 172: THE LINE ABOVE TEXT, FRENCH RATIFIED. Dann 2026-11-05 08:10 ("yes")
+
+`text.source.lyrics` FR « D’après PAROLES »; `text.source.poem` FR « D’après POÈME » (typographic apostrophe). English unchanged: "From LYRICS", "From POEM". « D’après » coined by the desk; PAROLES and POÈME adopted from `intake.view.*`.
+
+## ROW 71 (N.182): A KEY IS SUGGESTED ONLY WHEN IT REDUCES THE CHALLENGES. Ruled by Dann 2026-11-05 11:49
+
+On Code's call B1 (`report-code-n182-suggesting-a-key_r2_2026-11-01.md`, "For Dann", on `cloud-lane-29`) and the desk's recommendation: a key shows only when the number of challenges goes down; a key that trades one challenge for another is never offered. Dann, transcribed with his typos corrected: *"Recommend keys that reduce the challenges. Sometimes no alteration will rectify a song for a singer's voice and the singer can decide to proceed with the knowledge that a technical hurdle is present for them to work on. This in itself is good information and does not represent a failure."* So the lines for "no other key helps" and "no key brings it within reach" are written as information for her decision, never as a failure.
+
+## ROW 71 (N.182): THE 43 `insights.key.*` ENGLISH STRINGS, RATIFIED. Dann 2026-11-05 11:52
+
+Code's proposals (`cloud-lane-29` `0ceeb22a`, `apps/web/src/lib/i18n.ts:2280-2322`), ratified as written except five, which carry Dann's or the desk's wording:
+- `insights.key.suits.primo`: No alternate key suggested: as it stands, the song stays inside your range and below {primo}. (Dann's opening)
+- `insights.key.suits.secondo`: No alternate key suggested: as it stands, the song stays inside your range and below {secondo}. (Dann's opening)
+- `insights.key.suits.range`: No alternate key suggested: as it stands, the song stays inside your range. (Dann's opening)
+- `insights.key.noneBetter`: No better key: no other key within a tritone eases these challenges. (Dann's "No better key", desk's sentence)
+- `insights.key.noWorkable`: No key within a tritone brings this song inside your range. Taking it on as a technical project, or choosing other repertoire, is your decision. (desk, on Dann's 11:49 ruling)
+- `insights.key.why.range`: beyond the range you gave (desk)
+- `insights.key.fraction.most`: more than half (desk)
+All other 36 as Code proposed. French: the desk drafts next, from the file's existing French.
+
+## ROW 71 (N.182): THE 43 `insights.key.*` FRENCH STRINGS, RATIFIED. Dann 2026-11-05 11:52 to 11:59
+
+Desk's drafts, ratified with Dann's choices: « mélodie » for "song" (since « chant » means "the singing" in the same lines), « telle quelle », the parentheses in 14, and « changement de timbre » for the vowels' turn (adopted from `i18n.ts:2211`, « accepter le changement de timbre »; « bascule », « virage », « retournement », « couleur » rejected). OQLF: U+00A0 before every colon; U+2019 apostrophes; *primo*, *secondo*, *passaggio* in asterisk italics. Keys in the order of `i18n.ts:2280-2322` on `cloud-lane-29`.
+
+1 suits.primo « Aucune autre tonalité suggérée : telle quelle, la mélodie reste dans votre ambitus et sous {primo}. » · 2 suits.secondo « … et sous {secondo}. » · 3 suits.range « Aucune autre tonalité suggérée : telle quelle, la mélodie reste dans votre ambitus. » · 4 noneBetter « Aucune meilleure tonalité : aucune autre tonalité à moins d’un triton n’atténue ces difficultés. » · 5 noWorkable « Aucune tonalité à moins d’un triton ne fait entrer cette mélodie dans votre ambitus. L’aborder comme un projet technique, ou choisir un autre répertoire, vous revient. » · 6 line « {readout} : {parts}. » · 7 where.bar « la mesure {n} » · 8 where.bars « les mesures {from} à {to} » · 9 where.and « {a} et {b} » · 10 where.elsewhere « {where}, et ailleurs » · 11 part.inside « reste dans votre ambitus » · 12 part.above « dépasse votre ambitus vers l’aigu dans {where} » · 13 part.below « dépasse votre ambitus vers le grave dans {where} » · 14 part.by « {part} ({interval} au-delà) » · 15 part.semitones « {n} demi-tons » · 16 part.primo « {fraction} du chant se situe à la hauteur de {primo} ou au-dessus » · 17 part.primoSome « une partie du chant se situe à la hauteur de {primo} ou au-dessus » · 18 part.primoNone « rien ne se situe à la hauteur de {primo} ou au-dessus » · 19 part.secondo « {fraction} du chant se situe au-dessus de {secondo} » · 20 part.secondoSome « une partie du chant se situe au-dessus de {secondo} » · 21 part.secondoNone « rien ne se situe au-dessus de {secondo} » · 22 part.sustained « une note tenue au-dessus de {secondo}, à la mesure {bar} » · 23 part.sustainedNone « aucune note tenue au-dessus de {secondo} » · 24 part.turn « {fraction} du chant se situe au-delà du changement de timbre de vos voyelles » · 25 terse.above « au-dessus de votre ambitus dans {where} » · 26 terse.below « sous votre ambitus dans {where} » · 27 why.range « au-delà de l’ambitus que vous avez indiqué » · 28 why.passaggio « au changement de timbre de la voix » · 29 why.sustained « une note longue dans le *passaggio* supérieur » · 30 « environ un quart » · 31 « environ un tiers » · 32 « près de la moitié » · 33 « environ la moitié » · 34 « plus de la moitié » · 35 noun.primo.plain « votre premier *passaggio* » · 36 noun.primo.working « votre *primo* » · 37 noun.primo.technical « votre *primo passaggio* » · 38 noun.secondo.plain « votre second *passaggio* » · 39 noun.secondo.working « votre *secondo* » · 40 noun.secondo.technical « votre *secondo passaggio* » · 41 reveal.higher « Afficher les tonalités plus aiguës » · 42 reveal.lower « Afficher les tonalités plus graves » · 43 reveal.both « Afficher les tonalités plus aiguës ou plus graves »
+
+## THE SIX JOBS SINGERS COME TO ILYA FOR. Ruled by Dann 2026-11-05 12:37 ("these six jobs match how I think of Ilya")
+
+Drafted by the desk from the Guide-planning brief of 2026-10-31 (people and jobs per tab, task inventory draft 1) and the conversation of 2026-11-05 12:15 to 12:34 (Jobs to be Done, user story mapping, Diátaxis, minimalism). The backbone for the GUIDE's "How do I…", for the code's comments ("relationships"), and for ranking enhancements. People (student, teacher, scholar or researcher) cross the jobs; a teacher does 2 to 5 for someone else's voice.
+1. Get started: install, find your way, switch language, the drawer, the tabs, keep songs safe (repertoire, export, import).
+2. Pronounce a text: paste a poem, read the word stacks, settle a VERIFY word, see why a syllable sounds as it does, gloss, print or send.
+3. Put the words under the notes: bring in a score (file, PDF, scan, photo), read the banners, POEM or LYRICS, fix words, place syllables in the LOUPE, correct notes, read MELODY, print.
+4. Know your voice: a voice type or calibration, retake a sample, range and passaggi, share a profile.
+5. Decide whether a song suits a voice: INSIGHTS, a suggested key or an octave, follow a citation, print.
+6. Understand Ilya and get help: LEARN, the GUIDE, report a word or a claim.
+Next: Dann tests by job from a task list (a Docs artifact, 2026-11-05), notes where he hesitates; his notes recraft the GUIDE (Start here, How do I…, then the tabs).
