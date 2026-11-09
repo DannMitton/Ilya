@@ -2,8 +2,11 @@
  * QUEUE row 157, step 3: the Inspector blurb for a final consonant that keeps its voicing
  * (`docs/sessions/ratified-retained-voicing-blurb_2026-10-26.md`, RATIFIED by Dann 2026-10-26 21:58, English and French).
  *
- * Reads the real `data/blurb-composer.json`. The ratified strings are pinned by code point: the French has a no-break
- * space (U+00A0) before the colon and before the semicolon, and « d’un » keeps its U+2019.
+ * Reads the real `data/blurb-composer.json`. The strings are pinned by code point: the French has a no-break space
+ * (U+00A0) before the colon and none before the semicolon (OQLF; `docs/memory/CONTRACT.md` §7, Fable's review of row 157,
+ * finding 1), and « d’un » keeps its U+2019. It checks the data against the ratified words with the one OQLF correction;
+ * if the semicolon regains a no-break space, the implication pins fail (a wrong space would reach the singer's
+ * Inspector). `i18n.test.ts:103-116` runs the same rule over `i18n.ts` only, not over these templates.
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -18,7 +21,7 @@ const NBSP = ' ';
 const PROCESS_EN = 'When ⟨{char}⟩ ends a preposition or a particle like it does here, and the next word begins with a vowel or a sonorant, it keeps its voicing as [{ipa}].';
 const PROCESS_FR = `Lorsque ⟨{char}⟩ termine, comme ici, une préposition ou une particule et que le mot suivant commence par une voyelle ou une sonante, il conserve son voisement${NBSP}: [{ipa}].`;
 const IMPLICATION_EN = "An ordinary word's final consonant would devoice here; a preposition or a particle keeps its voicing before a vowel or a sonorant.";
-const IMPLICATION_FR = `La consonne finale d’un mot ordinaire se dévoiserait ici${NBSP}; une préposition ou une particule conserve son voisement devant une voyelle ou une sonante.`;
+const IMPLICATION_FR = `La consonne finale d’un mot ordinaire se dévoiserait ici; une préposition ou une particule conserve son voisement devant une voyelle ou une sonante.`;
 const LETTERS = ['б', 'в', 'г', 'д', 'ж', 'з'];
 
 const entry = (char: string, ipa: string, features: Record<string, unknown> = {}): TranscriptionLogEntry =>
@@ -33,10 +36,10 @@ describe('retained-voicing in the data: the ratified pairs, verbatim', () => {
 		expect(i.en).toEqual({ template: IMPLICATION_EN, citation: 'pp. 251–252' });
 		expect(i.fr).toEqual({ template: IMPLICATION_FR, citation: 'pp. 251–252' });
 	});
-	it('puts the two French no-break spaces and the apostrophe where the ratified file has them', () => {
+	it('puts the French no-break space before the colon only, no space before the semicolon, and the apostrophe', () => {
 		const fr = data.processes['retained-voicing:ж'].fr.template as string;
 		expect(fr).toContain(`voisement${NBSP}: [{ipa}]`);
-		expect(data.implications['retained-voicing:ж'].fr.template).toContain(`ici${NBSP}; une`);
+		expect(data.implications['retained-voicing:ж'].fr.template).toContain('ici; une');
 		expect(data.implications['retained-voicing:ж'].fr.template).toContain('d’un');
 	});
 });
