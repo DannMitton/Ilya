@@ -155,7 +155,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
 	import Loupe from '$lib/score/Loupe.svelte';
 	import CorrectionSurface from '$lib/score/CorrectionSurface.svelte';
-	import { QUIET_MS, emptyTextNotice, transcribeVerdict, type TextArrival } from '$lib/one-action';
+	import { QUIET_MS, emptyTextNotice, poemWaitsForPause, transcribeVerdict, type TextArrival } from '$lib/one-action';
+	import { scrollToAnchor } from '$lib/scroll-to-anchor';
 	import {
 		diffWordGrid,
 		emptyDiff,
@@ -463,10 +464,14 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	const marks = $derived(shown === 'poem' ? poemMarks : lyricsMarks);
 	const shownText = $derived(shown === 'poem' ? doc.publishedPoem : shownPoem);
 	const shownGlosses = $derived(shown === 'poem' ? doc.publishedGlosses : doc.glossOverrides);
+	/* ROW 172, STEP 1 (the quiet pause for Poem). While a Poem is typed key by key, Text keeps the poem as it stood when
+	   the keys began (`settledPoem`), and takes the typed one when the one quiet timer fires (`settlePoem`, below). `null`
+	   means "follow the live poem", so every path that writes `doc.publishedPoem` without a typed key needs no change here. */
+	let settledPoem = $state<string | null>(null);
 	const poemLines = $derived(
-		shown === 'poem' && !loaderState.isLoading && loaderState.entryCount > 0 ? witnessLines(doc.publishedPoem, language, poemMarks) : [],
+		shown === 'poem' && !loaderState.isLoading && loaderState.entryCount > 0 ? witnessLines(settledPoem ?? doc.publishedPoem, language, poemMarks) : [],
 	);
-	const mutedWords = $derived(shown === 'poem' && lyricsHas ? unsetPoemWords(shownPoem, doc.publishedPoem, poemLines) : new Set<string>());
+	const mutedWords = $derived(shown === 'poem' && lyricsHas ? unsetPoemWords(shownPoem, settledPoem ?? doc.publishedPoem, poemLines) : new Set<string>());
 	$effect(() => {
 		void shown;
 		untrack(() => { selectedWord = null; lastFocusedWord = null; });
@@ -2345,12 +2350,24 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	/* ROW 109 B: a poem that arrives whole (`how` 'paste') onto a wordless score's
 	   empty Lyrics is taken by Lyrics and seated (`lyricsTakesPoem`); a typed key is not. */
 	function handlePoemEdit(text: string, how: TextArrival = 'paste'): void {
-		const before = doc.publishedPoem;
+		const before = doc.publishedPoem, held = settledPoem ?? before;
 		const carried = carryPoemEdit(doc.publishedPoem, text, poemMarks, doc.publishedGlosses, doc.publishedGlossAnchors);
 		if (carried) [doc.publishedGlosses, doc.publishedGlossAnchors] = [carried.glosses, carried.anchors];
 		doc.publishedPoem = text; poemOffer.onPoemEdit(before, text, how);
 		if (lyricsTakesPoem(how === 'paste' && noLyricsFile !== null && ingestedScore !== null, doc.inputText, text, Object.keys(doc.pairings).length)) handleInput(text, 'paste');
 		else { nameIfUnnamed(); adoptPoemLines(how, before); if (quietTimer) joinText(how); /* a Poem key keeps a pending pause waiting */ }
+		settlePoem(how, held);
+	}
+	/* ROW 172, STEP 1. Checks the way the Poem arrived (`poemWaitsForPause`, `one-action.ts`): a typed key is held back from Text, on the
+	   SAME `quietTimer` and `QUIET_MS` that Lyrics typing waits on (no second timer); any other arrival (a paste, a
+	   file, a tap) shows at once. WHY: Text now follows INPUT's pill, so without this it would rebuild on every key of a
+	   poem (e2e-phone `relining.test.ts` "bb"). It runs last in `handlePoemEdit`, after `joinText`, so that a pending
+	   Lyrics pause cannot cancel it. When the timer fires (here or in `joinText`) or is cancelled, `settledPoem` goes
+	   back to null and Text follows the live poem; the join is asked again, as `joinText` asks it on the way out. */
+	function settlePoem(how: TextArrival, held: string): void {
+		if (!poemWaitsForPause(how)) { settledPoem = null; return; }
+		cancelQuietTimer(); settledPoem = held;
+		quietTimer = setTimeout(() => { quietTimer = null; settledPoem = null; joinText('paste'); }, QUIET_MS);
 	}
 	function handlePoemPage(text: string): void {
 		const say = (key: string) => tOrEnglish(key, language);
@@ -2477,7 +2494,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	function cancelQuietTimer(): void {
 		if (quietTimer === null) return;
 		clearTimeout(quietTimer);
-		quietTimer = null;
+		quietTimer = null; settledPoem = null; /* a cancelled pause lets Text follow the live poem (row 172) */
 	}
 
 	/**
@@ -2509,7 +2526,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		} else if (verdict === 'soon') {
 			cancelQuietTimer();
 			quietTimer = setTimeout(() => {
-				quietTimer = null;
+				quietTimer = null; settledPoem = null; /* the one pause also settles a typed poem (row 172) */
 				/* ASKED AGAIN ON THE WAY OUT, as `paste`, because 600 ms is long
 				   enough for the field to have been cleared or for the button to
 				   have been pressed since. The verdict is the one authority and
@@ -3443,38 +3460,6 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	}
 
 	/* ── Heading navigation from Drawer TOC ────────────────── */
-
-	/**
-	 * Scroll a lazily-rendered anchor to the top of the reading pane,
-	 * robust against post-scroll reflow. LearnContent/GuideContent fire
-	 * their ready signal in onMount, before the web fonts swap in and the
-	 * large glyph table settles, so a one-shot scrollIntoView undershoots:
-	 * the target moves down after the scroll has already landed. This
-	 * retries until the element exists, scrolls once, then re-snaps to the
-	 * target after the fonts are ready and across a short settle window,
-	 * correcting for that late reflow. Caught by Dann's sung-[o] deep link
-	 * landing at the Section 3 head instead of the note (2026-07-12).
-	 */
-	function scrollToAnchor(id: string, smoothFirst = true) {
-		let attempts = 0;
-		const snap = (behavior: ScrollBehavior) =>
-			document.getElementById(id)?.scrollIntoView({ behavior, block: 'start' });
-		const find = () => {
-			if (!document.getElementById(id)) {
-				if (attempts++ < 90) requestAnimationFrame(find);
-				return;
-			}
-			snap(smoothFirst ? 'smooth' : 'auto');
-			// Corrective re-snaps: font swap and late layout shift the
-			// target after the first scroll. Instant, so they only close
-			// the residual gap rather than re-animating.
-			[120, 300, 600].forEach((ms) => setTimeout(() => snap('auto'), ms));
-			if (typeof document !== 'undefined' && 'fonts' in document) {
-				document.fonts.ready.then(() => snap('auto')).catch(() => {});
-			}
-		};
-		find();
-	}
 
 	function handleHeadingNavigate(id: string) {
 		activeHeadingId = id;

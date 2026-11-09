@@ -16,7 +16,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { QUIET_MS, emptyTextNotice, rebuildSource, transcribeVerdict, type TranscribeState } from './one-action';
+import { QUIET_MS, emptyTextNotice, poemWaitsForPause, rebuildSource, transcribeVerdict, type TranscribeState } from './one-action';
 
 const POEM = 'Ночь была темна';
 
@@ -151,5 +151,21 @@ describe('what the Text page says with no lines to draw', () => {
 	it('says nothing, rather than something false, in any other wait', () => {
 		expect(emptyTextNotice(POEM, ready)).toBe('quiet');
 		expect(emptyTextNotice(POEM, failed)).toBe('quiet');
+	});
+});
+
+/**
+ * ROW 172, STEP 1. Checks which arrivals of a Poem wait for the quiet pause before TEXT transcribes it. It pins the
+ * rule so that the page's `settlePoem` cannot drift from the Lyrics rule above; if a paste began to wait, a pasted poem
+ * would show 600 ms late, and if a key stopped waiting, TEXT would rebuild per key.
+ */
+describe('which arrivals of a Poem wait for the pause', () => {
+	it('holds a typed key back, as Lyrics typing is held back', () => {
+		expect(poemWaitsForPause('typing')).toBe(true);
+		expect(transcribeVerdict({ poem: 'а', transcribedText: null, dictionaryReady: true }, 'typing')).toBe('soon');
+	});
+	it('shows a paste, a boot restore, or any other whole arrival at once', () => {
+		expect(poemWaitsForPause('paste')).toBe(false);
+		expect(poemWaitsForPause('boot')).toBe(false);
 	});
 });

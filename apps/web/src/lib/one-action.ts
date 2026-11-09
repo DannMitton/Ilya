@@ -49,6 +49,20 @@ export type TextArrival =
 	/** A keystroke. */
 	| 'typing';
 
+/**
+ * ROW 172, STEP 1. Whether a POEM that arrived this way waits for the quiet pause before TEXT transcribes it.
+ *
+ * It checks the arrival only: a keystroke waits, a paste, a boot restore, a file, or a tap does not (the same rule
+ * `transcribeVerdict` applies to Lyrics: ruled by Dann 2026-09-07, "while typing, transcribe after a short pause, never
+ * per keystroke"). WHY: TEXT follows INPUT's Poem | Lyrics pill, so a typed poem would otherwise rebuild TEXT on every key.
+ * When it answers wrongly, a typed poem rebuilds TEXT per key (the phone test "bb" in `e2e-phone/relining.test.ts` goes
+ * red) or a pasted poem waits 600 ms for nothing. It sits beside `QUIET_MS` and the page's `settlePoem`, its one caller,
+ * which uses the page's one `quietTimer` and never a timer of its own.
+ */
+export function poemWaitsForPause(how: TextArrival): boolean {
+	return how === 'typing';
+}
+
 /** What the page knows about the field and the pipeline. */
 export interface TranscribeState {
 	/** The intake field's contents, exactly as the singer left them. */

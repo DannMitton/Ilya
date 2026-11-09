@@ -4,7 +4,7 @@ import { waitForDictionary } from './helpers';
 /*
  * THE HEADER NAMES THE TEXT THE PAGE PRINTS (poem library build 1, step 7, part 2; Dann 2026-11-03 20:17 to 20:19: "they
  * must correspond"; strings ratified 20:21). The states are Fable's table (review r1, amendment 9), reached through the
- * real controls: what is in Lyrics, what is in Poem, and which the TEXT pair is on. Each is read in English and French,
+ * real controls: what is in Lyrics, what is in Poem, and which view INPUT's pill is on (row 172: the pair on TEXT is gone, and TEXT follows the pill). Checking nothing here has changed about the header: if a state goes red, the header or the pill's route to TEXT moved. Each is read in English and French,
  * on screen and under `emulateMedia('print')`, on page 1's mark and on page 2's running head (the header prints).
  */
 test.use({ viewport: { width: 1440, height: 1300 } });
@@ -40,8 +40,8 @@ const STATES = [
 	{ name: 'Lyrics only', en: 'TEXT: LYRICS', fr: `TEXTE${NB}: PAROLES`, setup: async (p: Page) => put(p, 'lyrics', LONG) },
 	{ name: 'Poem only, INPUT on LYRICS', en: 'TEXT: POEM', fr: `TEXTE${NB}: POÈME`, setup: async (p: Page) => { await put(p, 'poem', LONG); await p.locator('#intake-tab-lyrics').click(); } },
 	{ name: 'both and the same: no pair', en: 'TEXT: LYRICS', fr: `TEXTE${NB}: PAROLES`, setup: async (p: Page) => { await put(p, 'lyrics', LONG); await put(p, 'poem', LONG); }, noPair: true },
-	{ name: 'both, different, the pair on LYRICS', en: 'TEXT: LYRICS', fr: `TEXTE${NB}: PAROLES`, setup: async (p: Page) => { await put(p, 'lyrics', LONG); await put(p, 'poem', OTHER); } },
-	{ name: 'both, different, the pair on POEM', en: 'TEXT: POEM', fr: `TEXTE${NB}: POÈME`, setup: async (p: Page) => { await put(p, 'lyrics', LONG); await put(p, 'poem', OTHER); }, pairOnPoem: true },
+	{ name: 'both, different, INPUT on LYRICS', en: 'TEXT: LYRICS', fr: `TEXTE${NB}: PAROLES`, setup: async (p: Page) => { await put(p, 'lyrics', LONG); await put(p, 'poem', OTHER); await p.locator('#intake-tab-lyrics').click(); } },
+	{ name: 'both, different, INPUT on POEM', en: 'TEXT: POEM', fr: `TEXTE${NB}: POÈME`, setup: async (p: Page) => { await put(p, 'lyrics', LONG); await put(p, 'poem', OTHER); }, pairOnPoem: true },
 	{ name: 'a POEM view with an empty POEM', en: 'TEXT: LYRICS', fr: `TEXTE${NB}: PAROLES`, setup: async (p: Page) => { await put(p, 'lyrics', LONG); await p.locator('#intake-tab-poem').click(); } },
 ] as const;
 
@@ -53,10 +53,10 @@ for (const language of ['en', 'fr'] as const) {
 			await state.setup(page);
 			await showText(page);
 			if ('pairOnPoem' in state && state.pairOnPoem) {
-				await page.locator('#text-tab-poem').click();
+				await page.locator('#intake-tab-poem').click();
 				await page.waitForTimeout(4000);
 			}
-			if ('noPair' in state && state.noPair) await expect(page.locator('#text-tab-poem')).toHaveCount(0);
+			if ('noPair' in state && state.noPair) await expect(page.locator('#text-source')).toHaveCount(0);
 			const want = language === 'en' ? state.en : state.fr;
 			for (const media of ['screen', 'print'] as const) {
 				await page.emulateMedia({ media });
