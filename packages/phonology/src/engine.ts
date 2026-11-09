@@ -14,7 +14,7 @@ import { lexicalSoftIndices } from './lexical-palatalization';
 import { lexicalSoftRIndices } from './lexical-r';
 import { annotatePalatalization, computePalatalization, softAt } from './palatalization';
 import { SHCHA_CLUSTERS } from './shcha-clusters';
-import { lexicalExceptionVowelIndex } from './lexical-exception';
+import { lexicalExceptionVowelIndex } from './lexical-exception'; import { lexicalGk } from './lexical-gk';
 import { reflexiveParticleAt } from './reflexive';
 import { finishBog, initialPastV, keepsVoicingAtBoundary4 } from './voicing-rule2';
 
@@ -1661,7 +1661,7 @@ export const GraysonEngine = {
     });
 
     // Step 2 (Grayson p. 247): Apply regressive voicing assimilation
-    ipa = this.applyRegressiveVoicing(ipa);
+    ipa = lexicalGk(cleanWord, this.applyRegressiveVoicing(ipa), transcriptionLog); // мягк-, лёгк-: г before к is [x] (lexical-gk.ts)
 
     // Sync syllable IPAs with word-level assimilation (v5.10.20)
     // Cross-syllable clusters (e.g., кз in вок-зал) are only caught at word level
