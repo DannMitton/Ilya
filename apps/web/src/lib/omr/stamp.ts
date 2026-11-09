@@ -13,6 +13,8 @@
  * that is installed, so a bump of the dependency cannot leave it behind.
  */
 
+import type { KeptSystem } from './kept-bands';
+
 /** The `version` of the installed `homr-web` package. */
 export const HOMR_WEB_VERSION = '0.2.0-ilya.7';
 
@@ -45,12 +47,19 @@ export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}`;
  * as a «в» does (a reading kept as `underlay@1` is read again once). `underlay@3`
  * is the row fallback (N.135): a system with no Russian row seats the first
  * row the dictionary sews into words (a reading kept as `underlay@2` is read
- * again once).
+ * again once). `underlay@4` is row 181 steps 1 to 3: the print's extender line is read (a long dash is
+ * no longer dropped, `<extend>` rides with the reading), the second look is made, and the reading keeps where each system's
+ * lyric band stood (`bands`); a reading kept as `underlay@3` is read again once, on its next opening.
  */
-export const UNDERLAY_READER = 'underlay@3';
+export const UNDERLAY_READER = 'underlay@4';
 
 /** A scan's reading, kept with the song: homr's joined MusicXML and the reader that made it. */
 export interface KeptReading {
 	musicXml: string;
 	stamp: string;
+	/**
+	 * Row 181 step 3, ADDITIVE: where each voice system's lyric band stood on the scan's pages, as fractions (`kept-bands.ts`).
+	 * A reading without it reads as before. The band's picture is not kept; it is cut from the stored scan when it is asked for.
+	 */
+	bands?: KeptSystem[];
 }

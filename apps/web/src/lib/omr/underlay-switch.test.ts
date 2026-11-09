@@ -3,7 +3,7 @@
  * address, so every branch is a string.
  */
 import { describe, expect, it } from 'vitest';
-import { scanStamp, underlayOn } from './underlay-switch';
+import { extenderArm, looksOn, scanStamp, underlayOn } from './underlay-switch';
 import { READER_STAMP, UNDERLAY_READER } from './stamp';
 import { isCurrent, restoreScan } from './restore';
 import type { OmrReadResult } from './homr-reader';
@@ -20,6 +20,27 @@ describe('underlayOn', () => {
 
 	it('is off where there is no address at all, as in a test or a worker', () => {
 		expect(underlayOn()).toBe(false);
+	});
+});
+
+describe('extenderArm (row 181 step 8a)', () => {
+	it('is off unless the address says ?extender=a or ?extender=b', () => {
+		expect(extenderArm('')).toBe('off');
+		expect(extenderArm('?words=read')).toBe('off');
+		expect(extenderArm('?words=read&extender=a')).toBe('a');
+		expect(extenderArm('?extender=b')).toBe('b');
+		expect(extenderArm('?extender=off')).toBe('off');
+		expect(extenderArm('?extender=x')).toBe('off');
+	});
+});
+
+describe('looksOn (row 181: the measure switch for the second look)', () => {
+	it('is on unless the address says ?looks=off, and the stamp does not change with it', () => {
+		expect(looksOn('')).toBe(true);
+		expect(looksOn('?words=read')).toBe(true);
+		expect(looksOn('?words=read&looks=off')).toBe(false);
+		expect(looksOn('?looks=on')).toBe(true);
+		expect(scanStamp('?words=read&looks=off')).toBe(scanStamp('?words=read'));
 	});
 });
 
@@ -75,10 +96,27 @@ describe('a reading kept on one side of the switch, met on the other', () => {
 
 	it('is read again when it was kept with the switch on under underlay@2, before the row fallback', async () => {
 		const before = kept(`${READER_STAMP}+underlay@2`);
-		expect(UNDERLAY_READER).toBe('underlay@3');
+		expect(UNDERLAY_READER).toBe('underlay@4');
 		expect(isCurrent(before, scanStamp('?words=read'))).toBe(false);
 		const r = await restoreScan(new File([], 'a.pdf'), 'pdf', before, read, undefined, scanStamp('?words=read'));
 		expect(r).toMatchObject({ ok: true, from: 'homr' });
+	});
+
+	it('is read again once when it was kept under underlay@3, before the extender line, the second look, and the kept bands (row 181)', async () => {
+		const before = kept(`${READER_STAMP}+underlay@3`);
+		expect(isCurrent(before, scanStamp('?words=read'))).toBe(false);
+		const r = await restoreScan(new File([], 'a.pdf'), 'pdf', before, read, undefined, scanStamp('?words=read'));
+		expect(r).toMatchObject({ ok: true, from: 'homr' });
+		expect(r.ok && r.reading?.stamp).toBe(`${READER_STAMP}+underlay@4`);
+	});
+
+	it('keeps the bands the reader gave with the reading, and a reading kept without them reads as before', async () => {
+		const bands = [{ page: 1, system: 1, bars: [1, 4] as const, why: null, band: { x0: 0, x1: 1, y0: 0.2, y1: 0.3, space: 0.01 } }];
+		const withBands = await restoreScan(new File([], 'a.pdf'), 'pdf', null, async () => ({ ...ok, bands }), undefined, scanStamp('?words=read'));
+		expect(withBands.ok && withBands.reading?.bands).toEqual(bands);
+		const without = await restoreScan(new File([], 'a.pdf'), 'pdf', null, read, undefined, scanStamp('?words=read'));
+		expect(without.ok && without.reading).not.toHaveProperty('bands');
+		expect(isCurrent({ musicXml: '<x/>', stamp: scanStamp('?words=read') }, scanStamp('?words=read'))).toBe(true);
 	});
 
 	it('is judged by isCurrent against the stamp it is given', () => {

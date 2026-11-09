@@ -54,16 +54,16 @@ describe('noticeText', () => {
 	});
 	it('fills the bars into the ratified messages, EN and FR', () => {
 		expect(noticeText('upload.banner.wordsPartlyRead', 'en', '23-30,41-48')).toBe(
-			'Ilya’s reading of printed words is still imperfect; it could not read the words in bars 23 to 30 and 41 to 48. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.',
+			'Ilya’s reading of printed words is still imperfect; it could not read the words in bars 23 to 30 and 41 to 48. Choose a bar to see your score’s print there and fill the missing words. Check every word against your score.',
 		);
 		expect(noticeText('upload.banner.wordsPartlyRead', 'fr', '4,9-12,39')).toBe(
-			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures 4, 9 à 12 et 39. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
+			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures 4, 9 à 12 et 39. Choisissez une mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition.',
 		);
 		expect(noticeText('upload.banner.wordsPartlyReadOne', 'en', '39')).toBe(
-			'Ilya’s reading of printed words is still imperfect; it could not read the words in bar 39. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.',
+			'Ilya’s reading of printed words is still imperfect; it could not read the words in bar 39. Choose the bar to see your score’s print there and fill the missing words. Check every word against your score.',
 		);
 		expect(noticeText('upload.banner.wordsPartlyReadOne', 'fr', '39')).toBe(
-			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure 39. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.',
+			'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure 39. Choisissez la mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition.',
 		);
 	});
 });

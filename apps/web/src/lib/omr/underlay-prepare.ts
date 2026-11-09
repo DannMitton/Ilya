@@ -31,7 +31,8 @@ import { systemsOf, type PlacedStaff } from './underlay-band';
 import { topLineBelow } from './underlay-below';
 import { frameRow, type FramedCrop } from './underlay-frame';
 import type { PageLayout, RowLayout, SystemLayout } from './underlay-page';
-import { cutRows } from './underlay-rows';
+import { bandInk, cutRows } from './underlay-rows';
+import { lookWindow, stretchBand, type Look } from './underlay-looks';
 import type { NotePlace } from './underlay-seat';
 
 /** One note of the first part. */
@@ -163,8 +164,8 @@ function crop(page: Grey, x0: number, x1: number, y0: number, y1: number): { wid
 	return { width, height, data };
 }
 
-/** The page's framed rows and layout. */
-export function prepareUnderlay(page: Grey, musicXml: string, staves: readonly StaffBoxLike[]): Prepared {
+/** The staves found in the page and the systems that hold voice notes, as `prepareUnderlay` and `prepareSystem` both take them. */
+function systemsOfPage(page: Grey, musicXml: string, staves: readonly StaffBoxLike[]) {
 	const notes = voiceNotes(musicXml).filter((n) => !n.rest && n.at !== null);
 	const placed: PlacedStaff[] = [];
 	let unfound = 0;
@@ -173,22 +174,74 @@ export function prepareUnderlay(page: Grey, musicXml: string, staves: readonly S
 		if (staff) placed.push({ box, staff });
 		else unfound++;
 	}
+	const systems = systemsOf(notes.map((n) => n.at as { x: number; y: number }), placed, page.width, page.height, (a, b) => topLineBelow(page, a, b));
+	return { notes, placed, unfound, systems };
+}
+
+/** The page's framed rows and layout. */
+export function prepareUnderlay(page: Grey, musicXml: string, staves: readonly StaffBoxLike[]): Prepared {
+	const { notes, placed, unfound, systems: found } = systemsOfPage(page, musicXml, staves);
 	const systems: SystemLayout[] = [];
 	const rows: FramedCrop[] = [];
-	for (const system of systemsOf(notes.map((n) => n.at as { x: number; y: number }), placed, page.width, page.height, (a, b) => topLineBelow(page, a, b))) {
+	for (const system of found) {
 		const space = placed[system.staff].staff.space;
 		const mine: NotePlace[] = system.notes.map((i) => ({ id: notes[i].ordinal, x: (notes[i].at as { x: number }).x, bar: notes[i].bar, tiedInto: notes[i].tiedInto, inSlur: notes[i].inSlur }));
 		const layoutRows: RowLayout[] = [];
+		let ink: { share: number; lines: number } | null = null;
 		if (system.band) {
 			const { x0, x1, y0, y1 } = system.band;
 			const band = crop(page, x0, x1, y0, y1);
+			ink = bandInk(band, space);
 			for (const row of cutRows(band, space)) {
 				const framed = frameRow(crop(band, 0, band.width, row.y0, row.y1), space);
 				layoutRows.push({ id: rows.length, transform: framed.transform, offsetX: x0, offsetY: y0 + row.y0 });
 				rows.push(framed.crop);
 			}
 		}
-		systems.push({ staffSpace: space, notes: mine, hasBand: system.band !== null, rows: layoutRows });
+		systems.push({ staffSpace: space, notes: mine, hasBand: system.band !== null, rows: layoutRows, ...(ink ? { inkShare: ink.share, textLines: ink.lines } : {}), ...(system.band ? { band: { x0: system.band.x0, x1: system.band.x1, y0: system.band.y0, y1: system.band.y1 } } : {}) });
 	}
 	return { layout: { width: page.width, height: page.height, systems, unfound }, rows };
+}
+
+/** One system's rows under one look: the framed rows, and where each stands on the page (`id` is the row's place in `rows`, from 0). */
+export interface PreparedSystem {
+	rows: FramedCrop[];
+	layoutRows: RowLayout[];
+}
+
+/**
+ * One system, one look (row 181 step 2; review amendment 14): the system's band cut again as `look` says
+ * (`underlay-looks.ts`), its rows cut by `cutRows` and framed by `frameRow` exactly as `prepareUnderlay` does them. Null where
+ * the page has no system `system` (the index `prepareUnderlay` gave it), the system has no band, or the look leaves no row.
+ * Row ids are from 0; the caller renumbers them into the page's rows.
+ */
+export function prepareSystem(page: Grey, musicXml: string, staves: readonly StaffBoxLike[], system: number, look: Look): PreparedSystem | null {
+	const found = systemsOfPage(page, musicXml, staves);
+	return prepareSystemIn(page, found.placed, found.systems[system], look);
+}
+
+/** `prepareSystem` over systems already found, so a caller that looks at several systems finds them once. */
+export function prepareSystemIn(page: Grey, placed: readonly PlacedStaff[], system: ReturnType<typeof systemsOfPage>['systems'][number] | undefined, look: Look): PreparedSystem | null {
+	if (!system || !system.band) return null;
+	const space = placed[system.staff].staff.space;
+	const { x0, x1 } = system.band;
+	const window = lookWindow(system.band.y0, system.band.y1, space, page.height, look);
+	if (!window) return null;
+	const [y0, y1] = window;
+	const cut = crop(page, x0, x1, y0, y1);
+	const band = look === 'stretch' ? stretchBand(cut) : cut;
+	const rows: FramedCrop[] = [];
+	const layoutRows: RowLayout[] = [];
+	for (const row of cutRows(band, space)) {
+		const framed = frameRow(crop(band, 0, band.width, row.y0, row.y1), space);
+		layoutRows.push({ id: rows.length, transform: framed.transform, offsetX: x0, offsetY: y0 + row.y0 });
+		rows.push(framed.crop);
+	}
+	return { rows, layoutRows };
+}
+
+/** One look for each wanted system of a page, with the systems found once (the Worker's second answer). */
+export function prepareLooks(page: Grey, musicXml: string, staves: readonly StaffBoxLike[], wants: readonly { system: number; looks: readonly Look[] }[]): { system: number; look: Look; prepared: PreparedSystem | null }[] {
+	const found = systemsOfPage(page, musicXml, staves);
+	return wants.flatMap((w) => w.looks.map((look) => ({ system: w.system, look, prepared: prepareSystemIn(page, found.placed, found.systems[w.system], look) })));
 }

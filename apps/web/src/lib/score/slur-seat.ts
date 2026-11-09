@@ -17,7 +17,7 @@
  *
  * PURE. `syllableTargetIds` is unchanged; these sit beside it.
  */
-import type { SlurEnd } from '@ilya/score-parser';
+import type { ParseWarning, SlurEnd } from '@ilya/score-parser';
 import { mergeOnUpload, syllableTargetIds, type MergeResult, type Pairing, type PairingMap, type Slot, type TieAwareEvent } from './pairings';
 
 export interface SlurAwareEvent extends TieAwareEvent {
@@ -96,4 +96,20 @@ export function mergeOnUploadObserving(
 		scoreCarriesNoLyrics,
 	);
 	return merged.proposed ? { ...merged, map: withObservedMelismas(merged.map, observed.marks) } : merged;
+}
+
+/**
+ * Row 181 step 1 (review amendment 1): the notes a scan's printed extender sustains become `{ kind: 'melisma' }` decisions on
+ * the typed path, so the print's line is a continuation there as it is on the scan path (`isContinuation`,
+ * `omr/underlay-seat.ts`). `ingest.ts` (`withExtenders`) names the notes in an `extender-notes` warning; the page calls this
+ * once on the arrival path, after the merge and before any seating, on the map it holds. A note that already carries a
+ * decision keeps it (`withObservedMelismas`). The map is returned as it was where the warning is absent, which is every
+ * score but a scan read with its words.
+ */
+export function withExtenderMelismas(map: PairingMap, warnings: readonly ParseWarning[]): PairingMap {
+	const ids = warnings.find((w) => w.code === 'extender-notes')?.eventIds;
+	if (!ids || ids.length === 0) return map;
+	const marks: Record<string, Pairing> = {};
+	for (const id of ids) marks[id] = { kind: 'melisma' };
+	return withObservedMelismas(map, marks);
 }

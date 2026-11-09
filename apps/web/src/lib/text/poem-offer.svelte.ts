@@ -29,6 +29,7 @@
 import type { PoemSource } from '$lib/library/types';
 import type { LoadedPoemLibrary } from './poem-library';
 import { foldLetters, matchPoem } from './poem-match';
+import { poemJoin } from './poem-join.svelte';
 import { edited, heldForGuard, kept, replacesLibraryPoem, resolveSource, cutFor, type ResolvedSource } from './poem-source';
 
 /** The part of the open song this reads and writes. `SongDocument` has all of it. */
@@ -132,6 +133,7 @@ export class PoemOffer {
 	 * poem hers: `edited` and `answered`. Emptying it, or pasting a poem that is not this one, ends the source.
 	 */
 	onPoemEdit(previous: string, next: string, how: 'boot' | 'paste' | 'typing'): void {
+		if (how !== 'boot') poemJoin.schedule(); // row 181 step 5: the join of Poem to a scan's Lyrics, after the pause (it checks everything again)
 		const doc = this.#deps?.doc();
 		if (!doc?.poemSource) return;
 		if (next.trim() === '' || (how === 'paste' && replacesLibraryPoem(previous, next, foldLetters))) this.#end(doc);

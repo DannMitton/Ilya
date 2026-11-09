@@ -6,6 +6,7 @@
 	import { inputViews, type InputView } from '$lib/text/input-views.svelte';
 	import { fillLibraryLine, introLine, libraryLineOf } from '$lib/text/input-line';
 	import { poemOffer } from '$lib/text/poem-offer.svelte';
+	import { poemJoin } from '$lib/text/poem-join.svelte';
 	import { siteName } from '$lib/text/poem-site';
 	import PoemLibraryCard from './PoemLibraryCard.svelte';
 	import { lyricsOnLeave } from '$lib/text/break-tidy';
@@ -82,6 +83,16 @@
 	const cmp = $derived(comparePoem(lyricsText, poemText));
 	const segments = $derived(view === 'poem' ? poemSegments(poemText, cmp) : lyricsSegments(lyricsText, cmp));
 	const omitted = $derived(view === 'poem' && cmp ? cmp.omitted : 0);
+	/* ROW 181 step 5: the words the join of Poem to a scan's Lyrics wrote (dotted underline, a tap shows what the print read), and its
+	   receipt with Revert. They stand while Lyrics still have the words the join left (`text/poem-join.svelte.ts`). */
+	const written = $derived(view === 'lyrics' ? poemJoin.marks(songId, lyricsText) : []);
+	const receipt = $derived(view === 'lyrics' ? poemJoin.receipt(songId, lyricsText) : null);
+	const receiptText = $derived(receipt ? (receipt.syllables === 1 ? t('lyrics.receipt.fromPoemOne', language) : t('lyrics.receipt.fromPoem', language).replace('{n}', String(receipt.syllables))) : '');
+	let caret = $state<number | null>(null);
+	const noted = $derived(caret === null ? null : (written.find((m) => m.was !== '' && caret! >= m.start && caret! <= m.end) ?? null));
+	function onCaret(): void {
+		caret = taEl ? taEl.selectionStart : null;
+	}
 	/* Text ending in a line break needs a character on its last line, or the
 	   layer is a line shorter than the textarea and its last row does not scroll
 	   into view with it. */
@@ -154,11 +165,19 @@
 		}
 		CSS.highlights.set('intake-differs', new Highlight(...ranges.differs));
 		CSS.highlights.set('intake-omitted', new Highlight(...ranges.omitted));
+		const dotted = written.map((m) => {
+			const range = new Range();
+			range.setStart(node, m.start);
+			range.setEnd(node, m.end);
+			return range;
+		});
+		CSS.highlights.set('intake-poemwritten', new Highlight(...dotted));
 	});
 	$effect(() => () => {
 		if (!highlights) return;
 		CSS.highlights.delete('intake-differs');
 		CSS.highlights.delete('intake-omitted');
+		CSS.highlights.delete('intake-poemwritten');
 	});
 
 	/** Replace on the receipt: the field is selected and the next thing typed or pasted takes its place. */
@@ -248,6 +267,12 @@
 	{#if omitted > 0}
 		<p class="views-line">{t('intake.view.omittedLine', language)}</p>
 	{/if}
+	{#if receipt}
+		<p class="views-line receipt">{receiptText} <button type="button" class="revert" onclick={() => poemJoin.revert()}>{t('loupe.restore', language)}</button></p>
+	{/if}
+	{#if noted}
+		<p class="views-line">{t('lyrics.filled.note', language).replace('{scan}', noted.was)}</p>
+	{/if}
 </div>
 
 <PoemLibraryCard {language} {songId} onanswered={afterAnswer} />
@@ -262,6 +287,8 @@
 		value={text}
 		oninput={onInput}
 		onkeydown={onKeydown}
+		onkeyup={onCaret}
+		onclick={onCaret}
 		onblur={onBlur}
 		onscroll={measure}
 		aria-labelledby="intake-tab-{view}"
@@ -386,6 +413,31 @@
 
 	:global(::highlight(intake-omitted)) {
 		color: var(--ink-tertiary);
+	}
+
+	/* A word the join wrote from the poem: a quiet dotted underline, no colour of its own (row 181 step 5; stage 3 item 6). */
+	:global(::highlight(intake-poemwritten)) {
+		text-decoration: underline dotted;
+		text-decoration-color: var(--sage-ink);
+		text-underline-offset: 3px;
+	}
+
+	.receipt .revert {
+		font: inherit;
+		color: var(--sage-ink);
+		background: none;
+		border: none;
+		padding: 0 0 0 0.4em;
+		text-decoration: underline;
+		cursor: pointer;
+		min-height: 24px;
+	}
+
+	@media (pointer: coarse) {
+		.receipt .revert {
+			min-height: 44px;
+			min-width: 44px;
+		}
 	}
 
 	.text-input {

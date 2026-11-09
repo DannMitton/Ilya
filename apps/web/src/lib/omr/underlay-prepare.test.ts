@@ -4,7 +4,7 @@
  * and a MusicXML whose notes carry `imgpos` over the voice staff.
  */
 import { describe, expect, it } from 'vitest';
-import { prepareUnderlay, slurSpans, voiceNotes } from './underlay-prepare';
+import { prepareLooks, prepareSystem, prepareUnderlay, slurSpans, voiceNotes } from './underlay-prepare';
 import { inkExtent } from './underlay-frame';
 import { seatPage, type Seams, type WordBox } from './underlay-page';
 import type { Grey, StaffBoxLike } from './metre-windows';
@@ -238,5 +238,37 @@ describe('a printed slur, from the MusicXML to the words under the notes (row 17
 		expect(out.stats.counted.perSystem).toEqual([{ system: 1, free: 4, slurFree: 4, units: 2, slurReading: false }]);
 		expect(out.words.map((w) => w.syllables.map((y) => [y.text, y.note]))).toEqual([[['ка', 0]], [['мир', 3]]]);
 		expect(out.stats.counted.breaches.map((b) => [b.id, b.kind])).toEqual([[1, 'no-syllable'], [2, 'no-syllable']]);
+	});
+});
+
+describe('prepareSystem, the second look (row 181 step 2)', () => {
+	const first = prepareUnderlay(page(), music, boxes);
+
+	it('cuts the same text row from a widened band as the first look does, and lets its padding reach above the first band (ink starts at 270, pad 0.3 of a space is 9 rows)', () => {
+		const wide = prepareSystem(page(), music, boxes, 0, 'wide');
+		expect(wide?.rows).toHaveLength(1);
+		// The first look's band starts at 265 and clips the row's padding there; the widened band does not.
+		expect(first.layout.systems[0].rows[0].offsetY).toBe(265);
+		expect(wide?.layoutRows[0]).toMatchObject({ id: 0, offsetX: 0, offsetY: 261 });
+		expect(wide!.rows[0].height).toBeGreaterThan(first.rows[0].height - 1);
+	});
+
+	it('shifts the cut by half a staff space: the band for \'down\' starts 15 rows lower, so a row begins no higher than that', () => {
+		const down = prepareSystem(page(), music, boxes, 0, 'down');
+		expect(down?.layoutRows[0].offsetY).toBeGreaterThanOrEqual(265 + SPACE / 2);
+	});
+
+	it('finds, after the stretch, a row whose ink is too pale for the first look', () => {
+		const pale = page();
+		for (let y = 270; y < 298; y++) for (let x = 160; x < 160 + 13 * 70; x++) if (pale.data[y * W + x] === 20) pale.data[y * W + x] = 215;
+		expect(prepareUnderlay(pale, music, boxes).layout.systems[0].rows).toHaveLength(0);
+		expect(prepareSystem(pale, music, boxes, 0, 'stretch')?.rows).toHaveLength(1);
+	});
+
+	it('gives null for a system the page does not have, and one look for each wanted look of each wanted system', () => {
+		expect(prepareSystem(page(), music, boxes, 5, 'wide')).toBeNull();
+		const got = prepareLooks(page(), music, boxes, [{ system: 0, looks: ['down', 'up', 'wide', 'stretch'] }]);
+		expect(got.map((g) => g.look)).toEqual(['down', 'up', 'wide', 'stretch']);
+		expect(got.every((g) => g.system === 0)).toBe(true);
 	});
 });

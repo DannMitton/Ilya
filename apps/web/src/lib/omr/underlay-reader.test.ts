@@ -122,3 +122,77 @@ describe('describeError', () => {
 		expect(describeError(new Error(''))).toBe('no reason was given');
 	});
 });
+
+describe('makeUnderlayReader, the second look (row 181 step 2)', () => {
+	const row0 = { id: 0, transform: { scale: 1, pad: 16, angle: 0, width: 1200, height: 42 }, offsetX: 0, offsetY: 265 };
+	const failing: PageLayout = { ...layout, systems: [{ ...layout.systems[0], inkShare: 0.02, textLines: 1 }] };
+	const bad = () => [word('qq', 90, 110), word('zz', 290, 310)];
+	const good = () => [word('мир', 90, 110), word('ты', 290, 310)];
+
+	function withLooks(by: Record<string, WordBox[]>, got: { system: number; look: 'down' | 'up' | 'wide' | 'stretch'; rows: string[]; layoutRows: typeof row0[] }[], asked: unknown[] = []) {
+		return parts({
+			prepare: async () => ({ layout: failing, rows: ['first'], ms: 1 }),
+			recognize: async (r) => by[r] ?? [],
+			looks: async (_i, _x, _s, wants) => (asked.push(wants), got),
+		});
+	}
+
+	it('asks the Worker once for the four looks of a system with a band and no Russian row, and seats the page again from the look kept', async () => {
+		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
+		const asked: unknown[] = [];
+		const p = withLooks(
+			{ first: bad(), 'down-row': bad(), 'wide-row': good() },
+			[
+				{ system: 0, look: 'down', rows: ['down-row'], layoutRows: [row0] },
+				{ system: 0, look: 'wide', rows: ['wide-row'], layoutRows: [row0] },
+			],
+			asked,
+		);
+		const page = await makeUnderlayReader(p)(image, '<xml/>', []);
+		expect(asked).toEqual([[{ system: 0, looks: ['down', 'up', 'wide', 'stretch'] }]]);
+		expect(page?.systems).toMatchObject([{ written: true, why: null }]);
+		expect(page!.words.map((w) => w.syllables.map((s) => [s.text, s.note]))).toEqual([[['мир', 0]], [['ты', 1]]]);
+		expect(page?.looks?.map((l) => [l.look, l.russian, l.kept])).toEqual([['down', false, false], ['wide', true, true]]);
+		const line = String(log.mock.calls[0][0]);
+		expect(line).toContain('second look: system 1 down');
+		expect(line).toContain('wide');
+		expect(line).toContain('kept');
+	});
+
+	it('leaves the system unread, as before, where no look passes', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const p = withLooks({ first: bad(), 'up-row': bad() }, [{ system: 0, look: 'up', rows: ['up-row'], layoutRows: [row0] }]);
+		const page = await makeUnderlayReader(p)(image, '<xml/>', []);
+		expect(page?.systems).toMatchObject([{ written: false, why: 'no Russian row' }]);
+		expect(page?.looks?.every((l) => !l.kept)).toBe(true);
+	});
+
+	it('looks at nothing where every system was written, or the system has no ink to look at, and the parts have no looks', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const asked: unknown[] = [];
+		const written = parts({ looks: async (_i, _x, _s, wants) => (asked.push(wants), []) });
+		await makeUnderlayReader(written)(image, '<xml/>', []);
+		expect(asked).toEqual([]);
+		const without = parts({ prepare: async () => ({ layout: failing, rows: ['first'], ms: 1 }), recognize: async () => bad() });
+		const page = await makeUnderlayReader(without)(image, '<xml/>', []);
+		expect(page?.looks).toBeUndefined();
+		expect(page?.systems).toMatchObject([{ written: false, why: 'no Russian row' }]);
+	});
+
+	it('makes no second look where the measure switch turns it off (?looks=off), and the first look stands', async () => {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		const asked: unknown[] = [];
+		const p = { ...withLooks({ first: bad(), 'wide-row': good() }, [{ system: 0, look: 'wide', rows: ['wide-row'], layoutRows: [row0] }], asked), looksOn: () => false };
+		const page = await makeUnderlayReader(p)(image, '<xml/>', []);
+		expect(asked).toEqual([]);
+		expect(page?.looks).toBeUndefined();
+		expect(page?.systems).toMatchObject([{ written: false, why: 'no Russian row' }]);
+	});
+
+	it('answers null with one console line where the second look throws, as every stage does', async () => {
+		const log = vi.spyOn(console, 'info').mockImplementation(() => {});
+		const p = parts({ prepare: async () => ({ layout: failing, rows: ['first'], ms: 1 }), recognize: async () => bad(), looks: async () => { throw new Error('the Worker is gone'); } });
+		expect(await makeUnderlayReader(p)(image, '<xml/>', [])).toBeNull();
+		expect(String(log.mock.calls[0][0])).toContain('the second look failed: the Worker is gone');
+	});
+});

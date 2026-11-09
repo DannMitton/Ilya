@@ -28,6 +28,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { MusicXmlScoreParser, type ParsedScore, type ScoreParser } from '@ilya/score-parser';
 import { isCyrillicVerse, vowelsPerNote } from '$lib/omr/vowels-per-note';
+import { EXTEND_FIELD, hasExtenders } from '$lib/omr/extend-convention';
 import type { ScoreReader } from '$lib/reader/score-reader';
 import { parseXml } from './mini-dom';
 import { ingestScoreFile, type IngestDeps } from './ingest';
@@ -78,17 +79,26 @@ export function lyricNotes(file: string, xml: string): LyricNote[] {
 /**
  * N.135 step 5: the "no less" half of the rule, COUNTED and never failed on. The sung notes of every part that carries
  * lyrics, in document order, rests, grace notes, and chord tones left out; a note is a continuation where a tie stops or
- * continues on it (ties only: slur interiors and extenders are a later row). `noSyllable` counts the notes of the verse
+ * continues on it, or where Ilya's extender line sustains it (`hasExtenders`; slur interiors are a later row). `noSyllable` counts the notes of the verse
  * that are not continuations and carry no text (`vowelsPerNote`, kind `no-syllable`).
  */
 export function noSyllableCount(xml: string, verse = 1): { sung: number; noSyllable: number } {
 	const notes: { text: string | null; continuation: boolean }[] = [];
+	// Row 181 step 1 (review amendments 1 and 16): in a file that carries Ilya's extender convention (`omr/extend-convention.ts`), a note
+	// after a lyric with `<extend>` and before the next lyric is a continuation too, as the join reads it. Not across a rest.
+	const ilya = hasExtenders(xml);
 	for (const part of xml.matchAll(/<part\b[^>]*>([\s\S]*?)<\/part>/g)) {
 		if (!part[1].includes('<lyric')) continue;
+		let sustaining = false;
 		for (const n of part[1].matchAll(/<note\b[\s\S]*?<\/note>/g)) {
-			if (/<rest[\s/>]/.test(n[0]) || n[0].includes('<grace') || n[0].includes('<chord')) continue;
-			const continuation = /<tie\s[^>]*type="(?:stop|continue)"/.test(n[0]) || /<tied\s[^>]*type="(?:stop|continue)"/.test(n[0]);
+			if (/<rest[\s/>]/.test(n[0])) {
+				sustaining = false;
+				continue;
+			}
+			if (n[0].includes('<grace') || n[0].includes('<chord')) continue;
 			const l = new RegExp(`<lyric\\b[^>]*number="${verse}"[^>]*>([\\s\\S]*?)</lyric>`).exec(n[0])?.[1];
+			if (l !== undefined) sustaining = ilya && /<extend\b/.test(l);
+			const continuation = /<tie\s[^>]*type="(?:stop|continue)"/.test(n[0]) || /<tied\s[^>]*type="(?:stop|continue)"/.test(n[0]) || (sustaining && l === undefined);
 			const text = l === undefined ? null : [...l.matchAll(/<text\b[^>]*>([^<]*)<\/text>/g)].map((t) => t[1]).join('');
 			notes.push({ text, continuation });
 		}
@@ -474,5 +484,14 @@ describe('the tracked files: sung notes with no syllable (N.135 step 5, count on
 		const lyric = '<lyric number="1"><syllabic>single</syllabic><text>мир</text></lyric>';
 		const xml = `<score-partwise><part id="P1"><measure number="1">${note(lyric)}${note('')}${note('<tie type="stop"/>')}<note><rest/></note></measure></part></score-partwise>`;
 		expect(noSyllableCount(xml)).toEqual({ sung: 3, noSyllable: 1 });
+	});
+
+	it('counts a note under Ilya\'s extender as a continuation, only in a file that carries the convention, and not across a rest (row 181 step 1)', () => {
+		const note = (inner: string) => `<note><pitch><step>C</step><octave>4</octave></pitch>${inner}</note>`;
+		const lyric = '<lyric number="1"><syllabic>single</syllabic><text>мир</text><extend type="start"/></lyric>';
+		const body = `<part id="P1"><measure number="1">${note(lyric)}${note('')}${note('')}<note><rest/></note>${note('')}</measure></part></score-partwise>`;
+		const ilya = `<score-partwise><identification><miscellaneous><miscellaneous-field name="${EXTEND_FIELD}">1</miscellaneous-field></miscellaneous></identification>${body}`;
+		expect(noSyllableCount(ilya)).toEqual({ sung: 4, noSyllable: 1 });
+		expect(noSyllableCount(`<score-partwise>${body}`)).toEqual({ sung: 4, noSyllable: 3 });
 	});
 });

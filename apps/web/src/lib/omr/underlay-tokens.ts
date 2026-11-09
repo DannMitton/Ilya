@@ -19,9 +19,9 @@
  *   into one word.
  * - A token with no letter is kept (a lone hyphen, an extender, a mark),
  *   because `seatTokens` and `sewWords` read it; the harness dropped it. A lone
- *   long dash, wider than half the row's ink height, is a mark and not a joint
- *   (stage 2a review, amendment 9): it becomes a token with no text, which
- *   `kindOf` reads as a mark.
+ *   long dash, wider than half the row's ink height, was an empty mark (stage 2a
+ *   review, amendment 9), then an `extender` token (row 181 step 1); since step 8a it is a
+ *   joint with `longDash: true` and its box unchanged, as a hyphen is.
  *
  * `rowWords` sews a row's tokens into the words `rowLanguage` judges.
  *
@@ -35,7 +35,7 @@ const INTERNAL = /(?<=[\p{L}\p{M}])[^\p{L}\p{M}]+(?=[\p{L}\p{M}])/u;
 const LETTER = /\p{L}/gu;
 
 export interface SplitOptions {
-	/** The row's ink height in the pixels the boxes are in; absent, no dash is called a mark. */
+	/** The row's ink height in the pixels the boxes are in; absent, no dash is called a long dash. */
 	inkHeight?: number;
 }
 
@@ -48,7 +48,11 @@ export function splitTokens(tokens: readonly Token[], options: SplitOptions = {}
 		const text = token.text.trim();
 		if (letters(text) === 0) {
 			const longDash = options.inkHeight !== undefined && kindOf(text) === 'joint' && token.x1 - token.x0 > 0.5 * options.inkHeight;
-			out.push({ ...token, text: longDash ? '' : text });
+			// Row 181 step 8a: a long dash is a JOINT, as a hyphen is, so a word sews across it; `longDash` records only that its box
+			// was wider than half the ink height. On row 114 the long dash is the printed hyphen between syllables (Russian editions
+			// draw it long under a melisma), not an extender: step 1 made it an `extender` token, which marked 151 notes and stopped
+			// the word sewing across it. Whether it also stands for an extender is a measured option (`?extender=a`, `underlay-extender.ts`).
+			out.push(longDash ? { ...token, text, longDash: true } : { ...token, text });
 			continue;
 		}
 		const parts = text.split(INTERNAL).filter((p) => p !== '');

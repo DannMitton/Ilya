@@ -35,6 +35,7 @@ import type { UnderlayPage } from './underlay-page';
 import { measureCount, voiceNotes } from './underlay-prepare';
 import { writeLyrics } from './underlay-words';
 import { mergeRanges, type BarRange } from './unread-bars';
+import type { KeptSystem, SystemWhy } from './kept-bands';
 
 /** A part of the song that took no words: for the console, and the desk's measure. */
 export interface Unread {
@@ -61,6 +62,8 @@ export interface SongUnderlay {
 	unread: Unread[];
 	/** `unread`'s bars merged: what the banner names. Empty where no voice system was written, and where none was left. */
 	unreadBars: BarRange[];
+	/** Every voice system of every page the reader answered for, with its band as fractions of the page: what the reading keeps (`kept-bands.ts`). */
+	systems: KeptSystem[];
 }
 
 const range = ([a, b]: BarRange): string => (a === b ? `bar ${a}` : `bars ${a} to ${b}`);
@@ -70,7 +73,14 @@ function barsWithNotes(xml: string): number[] {
 	return [...new Set(voiceNotes(xml).filter((n) => !n.rest).map((n) => n.bar))];
 }
 
-export function applyUnderlay(xmls: readonly string[], pages: readonly (UnderlayPage | null)[]): SongUnderlay {
+/** The kept form of a system's `why`: the three reasons a system takes no words, or null. Any other string is read as «no Russian row». */
+const whyOf = (why: string | null): SystemWhy => (why === null ? null : why === 'no ink' || why === 'no band' ? why : 'no Russian row');
+
+/**
+ * @param scanPages the 0-based page of the stored scan each of `xmls` came from (a cover left out of the song makes them differ
+ * from the pages' own order); absent, the pages' own order.
+ */
+export function applyUnderlay(xmls: readonly string[], pages: readonly (UnderlayPage | null)[], scanPages?: readonly number[]): SongUnderlay {
 	const unseated = pages.reduce((n, p) => n + (p?.stats.unseated ?? 0), 0);
 	const alone = pianoAlonePages(xmls);
 	// The count of bars on every earlier page: a page's bar plus this is the song's bar.
@@ -81,6 +91,7 @@ export function applyUnderlay(xmls: readonly string[], pages: readonly (Underlay
 		count += measureCount(xml);
 	}
 	const unread: Unread[] = [];
+	const kept: KeptSystem[] = [];
 	let writtenSystems = 0;
 	pages.forEach((page, i) => {
 		if (alone[i]) return;
@@ -91,15 +102,16 @@ export function applyUnderlay(xmls: readonly string[], pages: readonly (Underlay
 			return;
 		}
 		page.systems.forEach((system, s) => {
+			if (system.bars) kept.push({ page: (scanPages?.[i] ?? i) + 1, system: s + 1, bars: [system.bars[0] + before[i], system.bars[1] + before[i]], why: whyOf(system.why), ...(system.band ? { band: system.band } : {}), ...(system.barXs ? { barXs: system.barXs.map((b) => ({ ...b, bar: b.bar + before[i] })) } : {}) });
 			if (system.written) writtenSystems++;
-			else if (system.bars) unread.push({ page: i + 1, system: s + 1, bars: [system.bars[0] + before[i], system.bars[1] + before[i]], why: system.why ?? 'not written' });
+			else if (system.bars && !system.silent) unread.push({ page: i + 1, system: s + 1, bars: [system.bars[0] + before[i], system.bars[1] + before[i]], why: system.why ?? 'not written' });
 		});
 	});
 	const syllables = pages.reduce((n, p, i) => n + (p && !alone[i] ? p.words.reduce((m, w) => m + w.syllables.length, 0) : 0), 0);
 	const notRead = pages.flatMap((p, i) => (p === null ? [`page ${i + 1} could not be read`] : []));
 	if (syllables === 0) {
 		const why = notRead.length ? `${notRead.join('; ')}, and no other page has a word, so nothing is written` : 'no voice staff with words was found, so nothing is written';
-		return { xmls: [...xmls], written: false, line: why, syllables: 0, unseated, unread, unreadBars: [] };
+		return { xmls: [...xmls], written: false, line: why, syllables: 0, unseated, unread, unreadBars: [], systems: kept };
 	}
 	const left = unread.length ? `; no words in ${unread.map((u) => `page ${u.page}${u.system === null ? '' : ` system ${u.system}`} (${range(u.bars)}, ${u.why})`).join(', ')}` : '';
 	return {
@@ -110,5 +122,6 @@ export function applyUnderlay(xmls: readonly string[], pages: readonly (Underlay
 		unseated,
 		unread,
 		unreadBars: writtenSystems > 0 ? mergeRanges(unread.map((u) => u.bars)) : [],
+		systems: kept,
 	};
 }

@@ -46,6 +46,7 @@ import { listZipEntries, readZipEntry, ZipReadError, type ZipFailureKind } from 
 import { t, type Language } from '$lib/i18n';
 import { foldVowelessSyllables } from './vowelless-fold';
 import { decodeBars, encodeBars, readUnreadBars, type BarRange } from '$lib/omr/unread-bars';
+import { extenderMelismaIds } from '$lib/omr/extend-convention';
 
 // ── Provenance (drives the fidelity surface, Round 9 Item 1) ─────
 
@@ -137,6 +138,21 @@ function withUnreadBars(result: ParseResult, text: string): ParseResult {
 	if (bars.length === 0 || result.warnings.some((w) => w.code === 'words-partly-read')) return result;
 	const message = `Printed words were not read in bars ${encodeBars(bars)}.`;
 	return { ...result, warnings: [...result.warnings, { code: 'words-partly-read', message, bars }] };
+}
+
+/**
+ * The parse with the notes a scan's printed extender sustains, if the MusicXML says so (`omr/extend-convention.ts`): an
+ * `extender-notes` warning carrying their event ids. The parser reads no `<extend>`, so this is the one reader, at the same
+ * seam as `withUnreadBars`. A kept reading reopened from its stored text passes through here again and the warning returns.
+ * An authored score does not carry the convention's field and is not read. The bars that could not be lined up are named in
+ * the message, so a loss is reported and never silent.
+ */
+function withExtenders(result: ParseResult, text: string): ParseResult {
+	if (result.warnings.some((w) => w.code === 'extender-notes')) return result;
+	const found = extenderMelismaIds(text, result.score.vocalLine);
+	if (found.ids.length === 0 && found.unaligned === 0) return result;
+	const message = `A printed extender sustains ${found.ids.length} note(s)${found.unaligned ? `; ${found.unaligned} bar(s) holding one could not be lined up with the notes and mark nothing` : ''}.`;
+	return { ...result, warnings: [...result.warnings, { code: 'extender-notes', message, eventIds: found.ids }] };
 }
 
 export interface IngestedScore {
@@ -294,7 +310,7 @@ async function parseMusicXmlText(
 	provenance: IngestProvenance
 ): Promise<IngestOutcome> {
 	return toOutcome(
-		withUnreadBars(await parser.parse({ format: 'musicxml', data: text, sourcePath: fileName }), text),
+		withExtenders(withUnreadBars(await parser.parse({ format: 'musicxml', data: text, sourcePath: fileName }), text), text),
 		fileName,
 		provenance
 	);

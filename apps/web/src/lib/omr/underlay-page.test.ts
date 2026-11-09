@@ -33,14 +33,16 @@ describe('pageTokens', () => {
 	});
 });
 
-describe('pageTokens, the dash that is a mark', () => {
+describe('pageTokens, the dash that is the print\'s line', () => {
 	// A dash 20 page-pixels wide. The row's ink is 32 framed px high: 32 page px at scale 1, 16 at scale 2, 64 at scale 0.5.
 	const dash = (scale: number) => pageTokens(row(0, scale), [box('—', 100, 120, scale)]).map((t) => t.text);
 
-	it('is a mark where it is wider than half the ink height on the page, and a joint where it is not', () => {
-		expect(dash(1)).toEqual(['']);
-		expect(dash(2)).toEqual(['']);
-		expect(dash(0.5)).toEqual(['—']);
+	it('is a joint in every case (row 181 step 8a), and is flagged long where it is wider than half the ink height on the page', () => {
+		const long = (scale: number) => pageTokens(row(0, scale), [box('—', 100, 120, scale)]).map((t) => [t.text, t.longDash === true]);
+		expect(long(1)).toEqual([['—', true]]);
+		expect(long(2)).toEqual([['—', true]]);
+		expect(long(0.5)).toEqual([['—', false]]);
+		expect(dash(1)).toEqual(['—']);
 	});
 });
 

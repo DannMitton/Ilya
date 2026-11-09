@@ -35,3 +35,28 @@ export function underlayOn(search: string = here()): boolean {
 export function scanStamp(search: string = here()): string {
 	return underlayOn(search) ? `${READER_STAMP}+${UNDERLAY_READER}` : READER_STAMP;
 }
+
+/** The query that turns the second look off (row 181): `?looks=off`. */
+export const LOOKS_QUERY = 'looks';
+
+/**
+ * Whether the second look (`underlay-looks.ts`) is made: on, unless the address carries `?looks=off`. A measure switch like
+ * `?extender=b`, not a singer's: the desk turns it off to separate step 1's count from step 2's on row 114. It changes no
+ * stamp, so a reading kept with it off is current with it on; read the scan fresh for each arm.
+ */
+export function looksOn(search: string = here()): boolean {
+	return new URLSearchParams(search).get(LOOKS_QUERY) !== 'off';
+}
+
+/** The query that chooses the extender arm (row 181 step 1): `?extender=a`, `?extender=b`, or none (off). */
+export const EXTENDER_QUERY = 'extender';
+
+/**
+ * The setting of the extender rule (`underlay-extender.ts`) for a measurement: `?extender=a` or `?extender=b`; anything else,
+ * including no query, is `off` (row 181 step 8a: no note is marked at all, and a long dash sews words as a hyphen does).
+ * Not a singer's switch: the desk measures the three on row 114 and one becomes the only one.
+ */
+export function extenderArm(search: string = here()): 'off' | 'a' | 'b' {
+	const v = new URLSearchParams(search).get(EXTENDER_QUERY);
+	return v === 'a' || v === 'b' ? v : 'off';
+}

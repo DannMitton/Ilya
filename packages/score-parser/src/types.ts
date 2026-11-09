@@ -943,6 +943,7 @@ export interface ParseWarning {
   location?: ParseLocation;
   /** `words-partly-read` only: the song's bars, first and last, whose printed words were not read. */
   bars?: ReadonlyArray<readonly [number, number]>;
+  eventIds?: ReadonlyArray<string>; // `extender-notes` only: the sung notes a printed extender sustains
 }
 
 export interface ParseError {
@@ -987,7 +988,8 @@ export type ParseWarningCode =
    * a scanned song whose printed words were read on some systems and not
    * others. `ParseWarning.bars` names the bars of the others.
    */
-  | 'words-partly-read';
+  | 'words-partly-read'
+  | 'extender-notes'; // row 181: set by the application's ingestion (a scan's printed extender); `eventIds` names the notes
 
 export type ParseErrorCode =
   | 'invalid-mnx-json'

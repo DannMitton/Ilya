@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,139 keys.
+   This file holds 1,147 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -48,7 +48,8 @@
    intake.        49  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
-   loupe.        107  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   loupe.        112  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
@@ -682,6 +683,16 @@ const strings: Record<string, Record<Language, string>> = {
 	// `correct.dot`. Nothing is coined.
 	'loupe.doubleDot':             { en: 'Double dot',                    fr: 'Double point' },
 	'loupe.restore':               { en: 'Restore',                       fr: 'Rétablir' },
+	// ROW 181 step 5, RATIFIED by Dann 2026-11-04 14:33 and 14:34 (`docs/sessions/strings-row181_r1_2026-11-04.md`, items 6 to 8). The ratified examples carry the digit 6; {n} stands for it.
+	'lyrics.receipt.fromPoem':     { en: '{n} syllables filled from your poem', fr: '{n} syllabes complétées à partir de votre poème' },
+	'lyrics.receipt.fromPoemOne':  { en: '1 syllable filled from your poem', fr: '1 syllabe complétée à partir de votre poème' },
+	// ROW 181 step 6, RATIFIED by Dann 2026-11-04 14:33 and 14:34 (`docs/sessions/strings-row181_r1_2026-11-04.md`, items 1 to 5; 9 and 10 are the two banner keys above, revised). %m, %s, %t as `loupe.measureTag`; {bar} stands for the example's 14.
+	'loupe.measureTagCheck':       { en: 'm.\u00a0%m \u00b7 to check, %s of %t', fr: 'mes.\u00a0%m \u00b7 à vérifier, %s sur %t' },
+	'loupe.checkPrev':             { en: 'Previous bar to check',         fr: 'Mesure précédente à vérifier' },
+	'loupe.checkNext':             { en: 'Next bar to check',             fr: 'Mesure suivante à vérifier' },
+	'loupe.fillFromPoem':          { en: 'Fill from the poem',            fr: 'Compléter à partir du poème' },
+	'loupe.printAlt':              { en: 'Bar {bar} as printed in your score', fr: 'La mesure {bar} telle qu’imprimée dans votre partition' },
+	'lyrics.filled.note':          { en: 'Filled from your poem. Your score’s print read “{scan}”.', fr: 'Complété à partir de votre poème. Votre partition portait «\u00a0{scan}\u00a0».' },
 	// THE ONE HEADER, ruled by Dann 2026-08-27: DURATION, PITCH and
 	// ACCIDENTAL · ENTRY consolidate under it and LYRIC rides inside as a
 	// labelled row. Both words are adopted, and they are the same word: the app
@@ -1525,8 +1536,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// {bars} is «23 to 30», «23 to 30 and 41 to 48», «4, 9 to 12, and 39»
 	// (`barsText`, lib/score/ingestion/ingest.ts); apostrophes U+2019. Chosen by
 	// scanNotice, only for a scan the reader read with the hidden switch on.
-	'upload.banner.wordsPartlyRead': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.' },
-	'upload.banner.wordsPartlyReadOne': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Type the missing words into LYRICS exactly where they fall in the song. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Saisissez les paroles manquantes dans PAROLES, exactement à leur place dans le chant. Vérifiez chaque mot sur votre partition.' },
+	'upload.banner.wordsPartlyRead': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Choose a bar to see your score’s print there and fill the missing words. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Choisissez une mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition.' },
+	'upload.banner.wordsPartlyReadOne': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Choose the bar to see your score’s print there and fill the missing words. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Choisissez la mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition.' },
 	// N.65 ship B. `station.syllables` IS DELETED. Dann ruled the SYLLABLES
 	// header away on 2026-08-21 and its text became the first element under
 	// SHIFT LYRICS. Checked before deleting, the way ship A checked its six:

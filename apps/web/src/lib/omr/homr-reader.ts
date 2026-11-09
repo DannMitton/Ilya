@@ -44,6 +44,8 @@ import type { ReadUnderlay, UnderlayPage } from './underlay-page';
 import { applyUnderlay } from './underlay-song';
 import { underlayOn } from './underlay-switch';
 import { markUnreadBars, type BarRange } from './unread-bars';
+import { markExtenders } from './extend-convention';
+import type { KeptSystem } from './kept-bands';
 import { choosePathFor, type GpuLike, type PathChoice, type PreferredBackend } from './path-choice';
 
 /**
@@ -79,6 +81,8 @@ export type OmrReadResult =
 			durationMs: number;
 			/** Why the read was not on WebGPU (no adapter, no `shader-f16`, or a retry). Absent when it was. For the console only. */
 			pathNote?: string;
+			/** Where each voice system's lyric band stood on the scan, as fractions of its page (`kept-bands.ts`). Present only when the underlay reader ran and answered. Kept with the reading. */
+			bands?: KeptSystem[];
 	  }
 	| {
 			ok: false;
@@ -394,14 +398,16 @@ export function makeReader(deps: ReaderDeps): Reader {
 			return { ok: false, error: 'not_music', log: `homr found no music on any page${note ? ` (${note})` : ''}` };
 		}
 		const song = withoutCovers(
-			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]], metres: found.metres[i], underlay: found.underlay[i] })),
+			found.xmls.map((xml, i) => ({ xml, image: images[found.image[i]], scanPage: found.image[i], metres: found.metres[i], underlay: found.underlay[i] })),
 			found.staves,
 		);
 		// The words under the voice staff, written into each page's MusicXML (the notes' text rides through the join) on every system that has a Russian row; the bars of the others ride in the joined file (`unread-bars.ts`).
 		let pages = song.map((p) => p.xml);
 		let unreadBars: BarRange[] = [];
+		let bands: KeptSystem[] | undefined;
 		if (deps.underlay) {
-			const applied = applyUnderlay(pages, await Promise.all(song.map((p) => p.underlay)));
+			const applied = applyUnderlay(pages, await Promise.all(song.map((p) => p.underlay)), song.map((p) => p.scanPage));
+			bands = applied.systems;
 			console.info(`[omr] underlay: ${applied.line}`);
 			pages = applied.xmls;
 			unreadBars = applied.unreadBars;
@@ -415,7 +421,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 				if (joined.looked > 0) console.info(`[omr] printed tuplet numbers: looked over ${joined.looked} bars, read ${joined.numbers.length}${joined.numbers.length ? ` (${joined.numbers.join(', ')})` : ''}`);
 				for (const line of joined.metreLog) console.info(`[omr] metre: ${line}`);
 			} else musicXml = joinPages(pages);
-			musicXml = markUnreadBars(musicXml, unreadBars);
+			musicXml = markExtenders(markUnreadBars(musicXml, unreadBars)); // the extender line rides with the reading (`extend-convention.ts`)
 		} catch (err) {
 			return { ok: false, error: 'join_failed', log: message(err) };
 		}
@@ -429,6 +435,7 @@ export function makeReader(deps: ReaderDeps): Reader {
 			backend: rec.backend,
 			durationMs: Math.round(performance.now() - t0),
 			...(note ? { pathNote: note } : {}),
+			...(bands && bands.length > 0 ? { bands } : {}),
 		};
 	}
 

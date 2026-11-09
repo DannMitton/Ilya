@@ -60,7 +60,6 @@ export function decodeBars(text: string): BarRange[] {
 	return mergeRanges(out);
 }
 
-const FIELD = `<miscellaneous-field name="${UNREAD_FIELD}">`;
 const FIELD_PATTERN = new RegExp(`<miscellaneous-field\\s+name="${UNREAD_FIELD}"\\s*>([^<]*)</miscellaneous-field>`);
 
 /** The bars a MusicXML text carries, merged; nothing where it carries none. */
@@ -71,17 +70,16 @@ export function readUnreadBars(xml: string): BarRange[] {
 }
 
 /**
- * The MusicXML with the bars written into its `<identification>`; the text as
- * it was where there are none. `<miscellaneous>` is the last child
- * `<identification>` allows, so the field goes in before its end; where the
- * file has no `<identification>` one is made before the first of `<defaults>`,
- * `<credit>`, and `<part-list>`. A field already there is replaced.
+ * The MusicXML with a `<miscellaneous-field name>` of the file's `<identification>` set to `value`: replaced where it is
+ * there, else added. `<miscellaneous>` is the last child `<identification>` allows, so the field goes in before its end;
+ * where the file has no `<identification>` one is made before the first of `<defaults>`, `<credit>`, and `<part-list>`.
+ * `value` holds no `<`. The text as it was where nothing can be written. Shared by the two conventions that ride this
+ * slot (`markUnreadBars`, and `extend-convention.ts`).
  */
-export function markUnreadBars(xml: string, ranges: readonly BarRange[]): string {
-	const merged = mergeRanges(ranges);
-	if (merged.length === 0) return xml;
-	const field = `${FIELD}${encodeBars(merged)}</miscellaneous-field>`;
-	if (FIELD_PATTERN.test(xml)) return xml.replace(FIELD_PATTERN, field);
+export function setMiscField(xml: string, name: string, value: string): string {
+	const field = `<miscellaneous-field name="${name}">${value}</miscellaneous-field>`;
+	const pattern = new RegExp(`<miscellaneous-field\\s+name="${name}"\\s*>[^<]*</miscellaneous-field>`);
+	if (pattern.test(xml)) return xml.replace(pattern, field);
 	const head = xml.search(/<part-list[\s>]/);
 	const end = xml.indexOf('</identification>');
 	if (end >= 0 && (head < 0 || end < head)) {
@@ -93,4 +91,11 @@ export function markUnreadBars(xml: string, ranges: readonly BarRange[]): string
 	if (/<identification\s*\/>/.test(xml)) return xml.replace(/<identification\s*\/>/, identification);
 	const at = xml.search(/<(?:defaults|credit|part-list)[\s>/]/);
 	return at < 0 ? xml : `${xml.slice(0, at)}${identification}${xml.slice(at)}`;
+}
+
+/** The MusicXML with the bars written into its `<identification>`; the text as it was where there are none. A field already there is replaced. */
+export function markUnreadBars(xml: string, ranges: readonly BarRange[]): string {
+	const merged = mergeRanges(ranges);
+	if (merged.length === 0) return xml;
+	return setMiscField(xml, UNREAD_FIELD, encodeBars(merged));
 }

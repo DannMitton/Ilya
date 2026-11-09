@@ -163,6 +163,7 @@ export function sewWords(seats: Seat[]): Word[] {
 
 const PART = /<part(?=[\s>])[^>]*>/;
 const NOTE = /<note(?=[\s>])[^>]*>/g;
+const EXTEND = '<extend type="start"/>';
 const REST = /<rest[\s/>]/;
 const HAS_LYRIC = /<lyric[\s>]/;
 
@@ -173,14 +174,17 @@ function escapeText(text: string): string {
 /** The `<lyric>` for one syllable, laid out as the note it goes into is, or compact where the note is. */
 function lyricFor(body: string, s: Syllable): { at: number; text: string } {
 	const syllabic = `<syllabic>${s.syllabic}</syllabic>`;
+	// A syllable the print sustains carries the print's line on: `<extend type="start"/>` after its text (standard MusicXML; row 181
+	// step 1, review amendment 1). The parser reads none, so `extend-convention.ts` reads it at the ingestion seam.
 	const text = `<text>${escapeText(s.text)}</text>`;
+	const extend = s.sustained ? EXTEND : '';
 	const tail = /(\r?\n)([ \t]*)$/.exec(body);
-	if (!tail) return { at: body.length, text: `<lyric number="1">${syllabic}${text}</lyric>` };
+	if (!tail) return { at: body.length, text: `<lyric number="1">${syllabic}${text}${extend}</lyric>` };
 	const [, eol, closeIndent] = tail;
 	const first = /^<note[^>]*>\r?\n([ \t]*)</.exec(body);
 	const child = first ? first[1] : closeIndent + '  ';
 	const step = child.startsWith(closeIndent) && child.length > closeIndent.length ? child.slice(closeIndent.length) : '  ';
-	const lines = [`<lyric number="1">`, `${step}${syllabic}`, `${step}${text}`, `</lyric>`];
+	const lines = [`<lyric number="1">`, `${step}${syllabic}`, `${step}${text}`, ...(extend ? [`${step}${extend}`] : []), `</lyric>`];
 	return { at: body.length - closeIndent.length, text: lines.map((l) => child + l + eol).join('') };
 }
 
