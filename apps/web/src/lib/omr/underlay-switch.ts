@@ -14,6 +14,8 @@ export function scanStamp(): string {
 	return READER_STAMP;
 }
 
+const here = (): string => (typeof location === 'undefined' ? '' : location.search);
+
 /** The query that turns the second look off (row 181): `?looks=off`. */
 export const LOOKS_QUERY = 'looks';
 

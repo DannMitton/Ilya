@@ -177,11 +177,11 @@ describe('a system that cannot be read loses only itself (brief r5 step 2)', () 
 		vi.spyOn(console, 'info').mockImplementation(() => {});
 		const second: ReadUnderlay = async (_i, xml) => page(xml, WORDS[PAGES.indexOf(xml)], PAGES.indexOf(xml) !== 1);
 		const { song } = barsOfPage(1);
-		const first = await restoreScan(new File([], 'a.pdf'), 'pdf', null, async () => ({ ok: true, musicXml: await read(second), pagesRead: 3, pages: 3, backend: 'wasm', durationMs: 1 }), undefined, scanStamp('?words=read'));
+		const first = await restoreScan(new File([], 'a.pdf'), 'pdf', null, async () => ({ ok: true, musicXml: await read(second), pagesRead: 3, pages: 3, backend: 'wasm', durationMs: 1 }), undefined, scanStamp());
 		expect(first).toMatchObject({ ok: true, from: 'homr' });
 		const kept = first.ok ? first.reading! : null;
 		// Reopened: nothing is read, the stored text is ingested again.
-		const again = await restoreScan(new File([], 'a.pdf'), 'pdf', kept, async () => { throw new Error('not read again'); }, undefined, scanStamp('?words=read'));
+		const again = await restoreScan(new File([], 'a.pdf'), 'pdf', kept, async () => { throw new Error('not read again'); }, undefined, scanStamp());
 		expect(again).toMatchObject({ ok: true, from: 'kept' });
 		const got = await arrive(readingFile(new File([''], 'song.pdf'), again.ok ? again.musicXml : ''));
 		expect(got.result.warnings.find((x) => x.code === 'words-partly-read')?.bars).toEqual([song]);
@@ -199,9 +199,9 @@ describe('a system that cannot be read loses only itself (brief r5 step 2)', () 
 		const joined = await read(sustained);
 		expect(joined).toContain('<extend type="start"/>');
 		expect(joined).toContain('ilya-extenders');
-		const first = await restoreScan(new File([], 'a.pdf'), 'pdf', null, async () => ({ ok: true, musicXml: joined, pagesRead: 3, pages: 3, backend: 'wasm', durationMs: 1 }), undefined, scanStamp('?words=read'));
+		const first = await restoreScan(new File([], 'a.pdf'), 'pdf', null, async () => ({ ok: true, musicXml: joined, pagesRead: 3, pages: 3, backend: 'wasm', durationMs: 1 }), undefined, scanStamp());
 		const kept = first.ok ? first.reading! : null;
-		const again = await restoreScan(new File([], 'a.pdf'), 'pdf', kept, async () => { throw new Error('not read again'); }, undefined, scanStamp('?words=read'));
+		const again = await restoreScan(new File([], 'a.pdf'), 'pdf', kept, async () => { throw new Error('not read again'); }, undefined, scanStamp());
 		expect(again).toMatchObject({ ok: true, from: 'kept' });
 		const got = await arrive(readingFile(new File([''], 'song.pdf'), again.ok ? again.musicXml : ''));
 		const ids = got.result.warnings.find((x) => x.code === 'extender-notes')?.eventIds ?? [];
