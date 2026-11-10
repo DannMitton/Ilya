@@ -17,8 +17,10 @@ import {
 } from './binder';
 import { listZipEntries, readZipEntry } from '$lib/reader/zip-reader';
 import { buildZip, utf8 } from './zip-writer';
-import { emptySongRecord, type SongRecord } from './types';
-import type { SourceBytes } from './driver';
+import { emptySongRecord, type MarkRow, type SongRecord } from './types';
+import { createMemoryDriver, summarize, type SourceBytes } from './driver';
+import { importBinder } from './exchange';
+import { Library, fieldsFromRecord } from './library';
 
 const NOW = '2026-08-16T00:00:00.000Z';
 const TODAY = '16 August 2026';
@@ -346,5 +348,56 @@ describe('a binder that cannot be read', () => {
 			const result = await readBinder(input, NOW);
 			expect(result.ok).toBe(false);
 		}
+	});
+});
+
+/* ── Row 182: the Inspector's word marks ride the record ────────── */
+
+describe('the binder carries the Inspector\'s word marks (row 182, step 3)', () => {
+	const lyrics: MarkRow[] = [
+		['0-0', 'stress', { stressIndex: 0, stressSource: 'user-override' }, 'я'],
+		['0-2-1', 'yo', { source: 'user-composer' }, 'любил'],
+		['0-2', 'syllables', { boundaries: [2] }, 'любил'],
+		['0-1', 'spot', false, 'тебя'],
+	];
+	const poem: MarkRow[] = [['0-1', 'spot', true, 'тебя']];
+
+	it('exports and imports into an empty library with the marks intact, both witnesses, spot choices as set', async () => {
+		const record = song();
+		record.publishedPoem = 'Я тебя любил';
+		record.wordMarks = { lyrics, poem };
+		const built = await buildBinder({ songs: [{ record, source: null, name: 'x' }], appVersion: '2026a', exportedAt: NOW });
+
+		const read = await readBinder(built, NOW);
+		expect(read.ok).toBe(true);
+		if (!read.ok) return;
+		expect(read.songs[0].record.wordMarks).toEqual({ lyrics, poem });
+
+		const library = new Library(createMemoryDriver(), () => NOW);
+		const outcome = await importBinder({
+			songs: read.songs,
+			existing: [],
+			save: (r, src) => library.save(r, src),
+			ask: async () => 'mine',
+			newId: () => 'new',
+			openId: 'other',
+		});
+		expect(outcome.added).toBe(1);
+		const stored = await library.load('song-1');
+		expect(stored.reason).toBeUndefined();
+		expect(stored.record.wordMarks).toEqual({ lyrics, poem });
+		expect(fieldsFromRecord(stored.record).wordMarks).toEqual({ lyrics, poem });
+		expect(summarize(stored.record).id).toBe('song-1');
+	});
+
+	it('a binder from before this field imports as it always did, and a damaged row is dropped alone', async () => {
+		const plain = await buildBinder({ songs: [{ record: song(), source: null, name: 'x' }], appVersion: '2026a', exportedAt: NOW });
+		const readPlain = await readBinder(plain, NOW);
+		expect(readPlain.ok && 'wordMarks' in readPlain.songs[0].record).toBe(false);
+
+		const damaged = { ...song(), wordMarks: { lyrics: [lyrics[0], ['0-0', 'stress', { stressIndex: 'x' }, 'я']] } } as unknown as SongRecord;
+		const built = await buildBinder({ songs: [{ record: damaged, source: null, name: 'x' }], appVersion: '2026a', exportedAt: NOW });
+		const read = await readBinder(built, NOW);
+		expect(read.ok && read.songs[0].record.wordMarks).toEqual({ lyrics: [lyrics[0]] });
 	});
 });
