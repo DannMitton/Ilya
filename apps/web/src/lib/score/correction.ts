@@ -103,6 +103,33 @@ export interface NoteCorrection {
 
 	/** The hand-defined tuplet group this entry belongs to. */
 	tuplet?: TupletInfo;
+
+	/* ── THE BARLINE AND TIME SIGNATURE LAYER (QUEUE row 138, 2026-11-10) ────
+	   Two more ADDITIVE fields, and a layer over the reading rather than a change
+	   to it: the kept MusicXML is never touched, so no event id is renamed and no
+	   stored correction is orphaned (`docs/sessions/review-fable-barline-correction_r1_2026-11-10.md`,
+	   findings 4 and 5). `rebar.ts` applies them after `applyCorrections`.
+	   Both sit on the ENTRY THAT OPENS THE BAR, so a mark does not move when the
+	   note before it is deleted. A record map written before this carries neither
+	   and reads back as it always did. */
+
+	/**
+	 * A barline the reading does not have (`'before'`: a bar opens at this entry),
+	 * or one it has and the singer removed (`'none'`: the reading's barline before
+	 * this entry, which must be the first of its bar, is gone). Absent means the
+	 * reading's own barlines stand.
+	 */
+	barline?: 'before' | 'none';
+
+	/**
+	 * A time signature the singer set from the bar this entry sits in. `through`
+	 * `'next'` runs to the next change of signature (the reading's own, or one of
+	 * the singer's), Finale's "to next time change"; `'end'` runs to the end of the
+	 * song and overrides the reading's later changes. Whether the notes were
+	 * re-barred is not stored: re-barring writes ordinary `barline`, `tied`, and
+	 * entered-note records (`rebar-notes.ts`).
+	 */
+	timeSignature?: { beats: number; beatType: number; through: 'next' | 'end' };
 }
 
 /** Corrections by event id, the shape `PairingMap` already established. */
@@ -321,7 +348,9 @@ export function withCorrection(
 		entry.dots === undefined &&
 		entry.type === undefined &&
 		entry.tied === undefined &&
-		entry.tuplet === undefined
+		entry.tuplet === undefined &&
+		entry.barline === undefined &&
+		entry.timeSignature === undefined
 	) {
 		const { [id]: _dropped, ...rest } = next;
 		return rest;
@@ -329,11 +358,33 @@ export function withCorrection(
 	return next;
 }
 
-/** Drop a note's whole correction, restoring exactly what the reader read. */
+/**
+ * Drop a note's corrections to the NOTE, restoring exactly what the reader read.
+ *
+ * THE BAR'S OWN MARKS STAY (review of 2026-11-10, amendment 6). "Undo my
+ * corrections to this note" is about the note; the barline and the time
+ * signature that bar carries have their own verbs and their own Undo, and a
+ * note that opens a hand-made bar must not take the bar with it.
+ */
 export function clearCorrection(map: CorrectionMap, id: string): CorrectionMap {
-	if (!(id in map)) return map;
+	const c = map[id];
+	if (!c) return map;
 	const { [id]: _dropped, ...rest } = map;
-	return rest;
+	if (c.barline === undefined && c.timeSignature === undefined) return rest;
+	return {
+		...rest,
+		[id]: {
+			...(c.barline !== undefined ? { barline: c.barline } : {}),
+			...(c.timeSignature !== undefined ? { timeSignature: c.timeSignature } : {}),
+		},
+	};
+}
+
+/** Whether a record says anything about the NOTE, beyond the bar's own marks. */
+export function amendsNote(c: NoteCorrection | undefined): boolean {
+	if (!c) return false;
+	const { barline: _b, timeSignature: _t, ...rest } = c;
+	return Object.values(rest).some((v) => v !== undefined);
 }
 
 /**

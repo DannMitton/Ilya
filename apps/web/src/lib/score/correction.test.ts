@@ -22,6 +22,7 @@ import { parseXml } from './ingestion/mini-dom';
 import { t } from '$lib/i18n';
 import {
 	applyCorrections,
+	amendsNote,
 	clearCorrection,
 	currentDuration,
 	currentPitch,
@@ -563,5 +564,32 @@ describe('N.128 a corrected duration moves the notes after it in its measure', (
 			{ clef: 'treble' }
 		);
 		expect((svg.match(/data-beam-level="1"/g) ?? []).length).toBe(2);
+	});
+});
+
+describe('the barline and time signature marks (QUEUE row 138)', () => {
+	it('a record holding only a barline is not pruned', () => {
+		const map = withCorrection({}, 'a', { barline: 'before' });
+		expect(map).toEqual({ a: { barline: 'before' } });
+	});
+	it('a record holding only a time signature is not pruned', () => {
+		const ts = { beats: 3, beatType: 4, through: 'end' as const };
+		expect(withCorrection({}, 'a', { timeSignature: ts })).toEqual({ a: { timeSignature: ts } });
+	});
+	it('a note nudged and nudged back leaves no record, but one carrying a mark keeps the mark', () => {
+		let map = withCorrection({}, 'a', { barline: 'none' });
+		map = withCorrection(map, 'a', { dots: 1 });
+		map = withCorrection(map, 'a', { dots: undefined });
+		expect(map).toEqual({ a: { barline: 'none', dots: undefined } });
+	});
+	it('restoring the note keeps the bar\'s own marks', () => {
+		const map = { a: { dots: 1, base: 'half' as const, barline: 'before' as const } };
+		expect(clearCorrection(map, 'a')).toEqual({ a: { barline: 'before' } });
+		expect(clearCorrection({ a: { dots: 1 } }, 'a')).toEqual({});
+	});
+	it('amendsNote says whether a record touches the note beyond the bar\'s marks', () => {
+		expect(amendsNote({ barline: 'before' })).toBe(false);
+		expect(amendsNote({ barline: 'before', dots: 1 })).toBe(true);
+		expect(amendsNote(undefined)).toBe(false);
 	});
 });
