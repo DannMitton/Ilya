@@ -242,6 +242,8 @@ export function deriveRule(entry: TranscriptionLogEntry): string {
 
   // Assimilation processes (checked before generic derivation)
   if (features?.silent && features?.deletionCluster) return 'silent';
+  // Step 10: the г of мягк-, лёгк-, легк- is [x] by the root, not by devoicing or by softening (a plain [x] before a soft к too).
+  if (features?.lexicalGk) return 'lexical-gk';
   if (features?.voicingAssimilation && features?.devoiced) return 'regressive-devoicing';
   if (features?.voicingAssimilation && features?.voiced) return 'regressive-voicing';
   // Row 157: a kept voicing (boundary #4) is its own rule; a word cannot carry it and `finalDevoicing`.

@@ -1076,6 +1076,16 @@
         "citation": "p. 324"
       }
     },
+    "lexical-gk:г": {
+      "en": {
+        "template": "In the roots мягк- and лёгк-/легк-, ⟨{char}⟩ before ⟨к⟩ is [{ipa}], not the [k] that devoicing would give.",
+        "citation": "p. 17"
+      },
+      "fr": {
+        "template": "Dans les racines мягк- et лёгк-/легк-, ⟨{char}⟩ devant ⟨к⟩ se prononce [{ipa}], et non le [k] que donnerait le dévoisement.",
+        "citation": "p. 17"
+      }
+    },
     "bog-exception:г": {
       "en": {
         "template": "In the word бог, ⟨{char}⟩ is exceptionally pronounced as [{ipa}].",

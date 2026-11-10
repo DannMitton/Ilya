@@ -83,6 +83,8 @@ export interface TranscriptionFeatures {
   voiced?: boolean;
   finalDevoicing?: boolean;
   genitiveEnding?: boolean;
+  /** Step 10: ⟨г⟩ before ⟨к⟩ in мягк-, лёгк-, легк- is [x] (`lexical-gk.ts` in the phonology package; Grayson 2012 p. 17). */
+  lexicalGk?: boolean;
   bogException?: boolean;
   /** Row 157: a preposition's or particle's final consonant that keeps its voicing before a vowel or a sonorant (Grayson pp. 251-252). */
   retainedVoicing?: boolean;
