@@ -220,7 +220,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		error: null,
 		entryCount: 0,
 		durationMs: 0,
-		progress: 0
+		progress: 0,
+		homographsReady: false
 	});
 	// Language
 	let language = $state<Language>('en');
@@ -438,6 +439,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	const lyricsMarks = $derived(doc.lyricsMarks);
 	const poemMarks = $derived(doc.poemMarks);
 	const derivedLines = $derived.by((): LineData[] => {
+		void loaderState.homographsReady; // read again once the late homograph tier lands
 		if (derivedPoem === '' || loaderState.isLoading || loaderState.entryCount === 0) return [];
 		try {
 			return processText(derivedPoem, {
@@ -470,8 +472,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   means "follow the live poem", so every path that writes `doc.publishedPoem` without a typed key needs no change here. */
 	let settledPoem = $state<string | null>(null);
 	const poemLines = $derived(
-		shown === 'poem' && !loaderState.isLoading && loaderState.entryCount > 0 ? witnessLines(settledPoem ?? doc.publishedPoem, language, poemMarks) : [],
+		shown === 'poem' && !loaderState.isLoading && loaderState.entryCount > 0 ? (void loaderState.homographsReady, witnessLines(settledPoem ?? doc.publishedPoem, language, poemMarks)) : [], // read again once the late homograph tier lands
 	);
+	/* A saved stress on a homograph (замо́к) must print its own gloss after a reload: the first transcription runs before the homograph tier lands, so run once more when it does. */
+	$effect(() => { if (loaderState.homographsReady) untrack(() => { if (lyricsMarks.stress.size > 0 && lines.length > 0) runPipeline(); }); });
 	const mutedWords = $derived(shown === 'poem' && lyricsHas ? unsetPoemWords(shownPoem, settledPoem ?? doc.publishedPoem, poemLines) : new Set<string>());
 	$effect(() => {
 		void shown;

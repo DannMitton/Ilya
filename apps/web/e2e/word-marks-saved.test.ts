@@ -6,10 +6,9 @@ import { test, expect, type Page } from '@playwright/test';
 import { waitForDictionary, expandStation } from './helpers';
 
 /**
- * THE STRESS IS READ OFF THE IPA ROW, NOT THE WHOLE STACK. After a reload the first transcription runs before the lazy homograph
- * tier of the dictionary lands (`loader.ts`, `scheduleHomographTier`), so the printed GLOSS of a homograph such as «замок» is its
- * first entry's until the text is transcribed again, while the stress the singer chose is applied at once. That ordering is the
- * loader's and is not this feature's (see the step 4 report); the saved mark is what this test asserts.
+ * AFTER A RELOAD THE FIRST TRANSCRIPTION RUNS BEFORE the lazy homograph tier of the dictionary lands (`loader.ts`,
+ * `scheduleHomographTier`). The page runs again when it does (`loaderState.homographsReady`), so the gloss of a homograph such as
+ * «замок» follows the stress the singer chose: after choosing the lock, the page prints the lock's gloss, before and after a reload.
  *
  * «замок» is two words in the dictionary (за́мок, замо́к), so the Inspector offers the other stress. «молоко» has reduced
  * vowels, so its box offers a spot reconstitution («замок» does not: its pretonic «а» reads the same either way).
@@ -25,6 +24,7 @@ async function markTwoWords(page: Page, tab: 'lyrics' | 'poem') {
 	const second = page.locator('.paper-container [data-word-index="0-1"]');
 	const ipa = (word: typeof first) => word.locator('.ipa-row').textContent();
 	const before = await ipa(first);
+	const glossBefore = await first.locator('.gloss-row').first().textContent();
 
 	await first.click();
 	await expandStation(page, 'Analysis');
@@ -32,20 +32,24 @@ async function markTwoWords(page: Page, tab: 'lyrics' | 'poem') {
 	await page.locator('.dict-entry-option:not(.stress-matched)').first().click();
 	await expect(first.locator('.ipa-row')).not.toHaveText(before ?? '');
 	const withStress = await ipa(first);
+	const glossWithStress = await first.locator('.gloss-row').first().textContent();
+	expect(glossWithStress).not.toBe(glossBefore);
 
 	await second.click();
 	await page.locator('.spot-checkbox').check();
 	await expect(second.locator('.recon-sigla')).toBeVisible();
-	return { first, second, before, withStress };
+	return { first, second, before, withStress, glossWithStress };
 }
 
-async function expectBothShown(page: Page, tab: 'lyrics' | 'poem', withStress: string | null) {
+async function expectBothShown(page: Page, tab: 'lyrics' | 'poem', withStress: string | null, glossWithStress: string | null) {
 	await page.waitForSelector('.paper-container [data-word-index="0-1"]');
 	await page.waitForTimeout(1500);
 	await page.locator(`#intake-tab-${tab}`).click();
 	const first = page.locator('.paper-container [data-word-index="0-0"]');
 	const second = page.locator('.paper-container [data-word-index="0-1"]');
 	await expect(first.locator('.ipa-row')).toHaveText(withStress ?? '');
+	// The homograph tier lands after the first transcription; the page runs again, and the gloss is the chosen reading's.
+	await expect(first.locator('.gloss-row').first()).toHaveText(glossWithStress ?? '');
 	await expect(second.locator('.recon-sigla')).toBeVisible();
 	await second.click();
 	await expandStation(page, 'Analysis');
@@ -55,12 +59,12 @@ async function expectBothShown(page: Page, tab: 'lyrics' | 'poem', withStress: s
 for (const tab of ['lyrics', 'poem'] as const) {
 	test(`a stress and a spot reconstitution set on song 1 are shown after a reload (${tab})`, async ({ page }) => {
 		test.setTimeout(120_000);
-		const { before, withStress } = await markTwoWords(page, tab);
+		const { before, withStress, glossWithStress } = await markTwoWords(page, tab);
 		expect(withStress).not.toBe(before);
 		// The save is debounced; give it its pause, then reload.
 		await page.waitForTimeout(3000);
 		await page.reload();
 		await waitForDictionary(page);
-		await expectBothShown(page, tab, withStress);
+		await expectBothShown(page, tab, withStress, glossWithStress);
 	});
 }
