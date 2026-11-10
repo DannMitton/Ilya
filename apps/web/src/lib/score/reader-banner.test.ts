@@ -20,7 +20,10 @@ import ScanBanner from '$lib/components/Drawer/ScanBanner.svelte';
 import { t } from '$lib/i18n';
 
 const xml = readFileSync(fileURLToPath(new URL('./ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)), 'utf8');
-const musicxmlParser: ScoreParser = { format: 'musicxml', parse: (input: { data: unknown }) => new MusicXmlScoreParser().parse({ ...input, data: parseXml(input.data as string) as unknown as Document }) } as unknown as ScoreParser;
+const musicxmlParser: ScoreParser = {
+	canParse: () => true,
+	parse: (input) => new MusicXmlScoreParser().parse({ ...input, data: parseXml(input.data as string) as unknown as Document }),
+};
 const inert: ScoreReader = { convert: async () => { throw new Error('not reached'); }, dispose: () => {} };
 const deps: IngestDeps = { scoreReader: inert, musicxmlParser };
 const originOf = async (text: string) => {
