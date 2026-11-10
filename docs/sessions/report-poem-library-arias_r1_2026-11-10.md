@@ -106,7 +106,7 @@ Tests that pin the library: `poem-library.test.ts:99` (`toHaveLength(14)`); `poe
 | row | top (r1 to r2) | second (r1 to r2) | margin (r1 to r2) | fills |
 |---|---|---|---|---|
 | P | same | f1a88510, same | 0.219, same | yes, unchanged |
-| S | same | Спящая... c1964bc3's neighbour 21568f1c to 4f94e1a3 (Queen of Spades) | 0.829 to 0.819 | yes |
+| S | same | 21568f1c to 4f94e1a3 (Queen of Spades) | 0.829 to 0.819 | yes |
 | T | same | c1964bc3 to 04cc9462 (Rusalka) | 0.658 to 0.651 | yes |
 | U1 | same | 0127a63f to a7b12193 (Boris Godunov) | 0.880 to 0.876 | yes |
 | U4 | 21568f1c 0.038 to b655d8eb (Onegin arias) 0.050 | c1964bc3 to bb52aaf5 (Snow Maiden) | 0.006 to 0.010 | no (below the floor, both) |
@@ -118,8 +118,53 @@ Tests that pin the library: `poem-library.test.ts:99` (`toHaveLength(14)`); `poe
 | r114-song4 | same | 7b9b662a to 04cc9462 | 0.408 to 0.396 | yes |
 | r114-song5 | same | c1964bc3 to b655d8eb | 0.234 to 0.227 | yes |
 
-(The "S" row's second reads: 21568f1c to 4f94e1a3.) Nine rows' second works changed to arias' works, and eleven margins moved, none below 0.10 on a row that fills. The three rows with no poem now have an aria's work on top, at 0.019 to 0.056: all far under the floor of 0.15.
+On eleven rows the second work changed, each to an aria's work, and the eleven margins moved; none is below 0.10 on a row that fills (the lowest is r114-song5, 0.227). On the three rows with no poem the top work changed too, to an aria's work at 0.019 to 0.056, all far under the floor of 0.15.
 
 **One row where the matcher is not the reference, by design.** The reference scores every work; the matcher scores the 20 sharing the most trigrams, so a second work outside them is not seen. On U4 the matcher's second is a different work (7e59d67a) from the reference's (bb52aaf5); its score is not above the reference's. U4 does not fill either way, and the test pins that. On the nine rows that fill, the matcher's second is the reference's, to three decimals. This is the existing shortlist (no change to how a score is computed), now engaged.
 
 **What I could not establish.** Whether a Lyrics could ever have its true second work outside the shortlist on a row that fills, which would overstate its margin. No fixture does; the shortlist took the true top work on all twelve.
+
+## Step 7: the threshold, both ways
+
+All by `apps/web/src/lib/text/poem-arias.test.ts` (9 tests, about 42 s) and the measurements below. The matcher, the fold, and `VocalLineEvent` are unchanged.
+
+**On the songs (back).** The tree holds twelve Lyrics, not 18 (step 0, finding 2); the run is on those twelve. Row 114 songs 2 to 5 still fill («Весёлый час», «Могила», «Русская песня», «Молитва»); song 1 still does not (`low-score`: its best work is now an aria's, The Tsar's Bride, at 0.056, far under 0.15, tied with Prince Igor at 0.056). P, S, T, U1, and U6 still fill their own poems; U4 and U5 still refuse. **No song fills from an aria**: every fill is a poem, and the best aria score on each of the twelve is under 0.15 (the test checks both). The nine fixtures that fill and the three that refuse answer exactly as `expected_r2.txt` says (the brief's and Fable's "nine held-out fixtures" are twelve files, nine of which fill; Fable's amendment 7).
+
+**From the arias (forward).** A Lyrics made from each aria's own `textModern` fills **its own entry for 89 of 89** (and its own opera's work). **The lowest margin among the arias is 0.944** (`e04061d4b4`, «Доля моя горькая!», Руслан и Людмила), which is also the lowest within one opera (an aria's margin is against the best work that is not its opera, since the arias of one opera are one work). Half of each aria's text (where that is at least 80 letters) names the same aria in more than 90 percent of cases, and never names another opera's. **What `work` per opera costs in similarity:** the highest score of any aria's text against a sibling aria of its own opera is 0.120 («Ужель та самая Татьяна» against «Пускай погибну я, но прежде»), so even if each aria were its own work the closest pair would still have a margin of 0.880, well above the 0.10 floor. Two arias of one opera never block each other.
+
+**Time** (Fable's amendment 9). Not on a phone: Chromium at 390 by 844 on this machine, with the browser's own CPU throttle standing in (`e2e-phone/poem-arias-time.test.ts`; the matcher is `poem-match.ts` unchanged, run in the page).
+
+| | 14 poems | 103 entries |
+|---|---|---|
+| longest aria's Lyrics (2,268 letters), CPU 1x | 299 ms | 1,088 ms |
+| the same, CPU 4x | 1,291 ms | 4,405 ms |
+| longest text in the library (15,173 letters), CPU 1x | 2,011 ms | 6,287 ms |
+| the same, CPU 4x | 11,583 ms | 29,075 ms |
+
+The twelve fixtures (113 to 567 letters) take 47 to 233 ms each in Node against the new library (15 to 73 ms against the poems alone). **The matcher runs on the main thread with no worker, so the page does not respond while it runs.** A Lyrics of the usual length is a fraction of a second, but a very long paste is seconds, and the library is three times what it was. No change to the matcher was asked for and none is made. If Dann wants it, moving the match to a worker is the fix, and it is its own piece of work.
+
+**What I could not establish.** The match time on an actual phone. The six build songs not in the tree. Whether a real singer pastes a Lyrics as long as 15,000 letters (the longest fixture is 567).
+
+## Step 5: empty metadata fills from the entry
+
+**Changed.**
+- New `apps/web/src/lib/text/poem-metadata.ts` (pure): `entryFields`, `fillEmpty`, `emptyWhatWasPut`, `putBack`, `poetKeyOf`, `operaLine`.
+- `poem-offer.svelte.ts`: `OfferDeps` takes an optional `metadata` getter and setter; `offer` fills the empty fields after it fills POEM; `decline` empties the fields the fill put that still hold what it put; `undo` puts them back into the fields that are still empty. What the fill put is remembered for the session only, as the Lyrics memory is.
+- `routes/+page.svelte`: one same-line edit on the `poemOffer.attach(...)` line, lending `metadata: { get: () => doc.metadata, set: (m) => handleMetadataChange(m) }`, so a fill is written by the path the singer's own edit takes. The file stays at 5,534 lines (its ratchet).
+- `PoemLibraryCard.svelte`: an aria's role and opera stand under its title (`operaLine`): English «Pimen · Boris Godunov (Борис Годунов)». This is the sentence Fable's amendment 11 found "built by no step", and the ruling of 22:13 asks for it.
+
+**What fills, decided here.**
+- **Only a libretto fills the fields.** The brief's step 5 says "when Ilya fills POEM from the library", and its content is written for a libretto. A poem's title is not the song's, and its author is not a composer, so the 14 poems still fill POEM alone, as today. Reversible: it is one condition in `entryFields`.
+- **Title** is the entry's title, the aria's opening words in Russian (ruling 22:13). **Composer** is the opera's composer as the dropdown writes it («Modest Mussorgsky (1839–1881)»); every one of the 89 is a `COMPOSERS` key. **Poet** fills only where the entry's `author` is one person who is in `POETS` (Fable's amendment 5; the data carries no `poetKey`, so the match is the Cyrillic surname and given name against the list). That is **5 of the 89** (Pushkin four times, Polonsky once); the other 84 leave Poet empty rather than put a Russian full name in a Latin field. **Translator**: no aria has one, so nothing fills.
+- **The tag.** A library-filled field wears no tag. It is neither typed nor "from score" (`metadata-provenance.ts`), and a "from score" tag would be false. A later score header fills blanks only, so it does not overwrite these fields; a new score does not clear them either.
+- **The three moves.** The fill (empty fields only; whitespace counts as empty); "Not this poem" (empties only the fields still holding what the fill put, so a field she has since edited stays hers); Undo (fills them again, into fields that are still empty, so a field she typed after the decline stays). After a reload the decline has no memory of what the fill put, so the fields stay; the same rule as the Lyrics memory (`poem-offer.svelte.ts` header).
+- **French on the card.** The data holds no French name for a role or an opera, and none is made up, so a French card prints the Russian names («Пимен · Борис Годунов»). No new string: the line is a middle dot and parentheses. Dann may want French names; that is his to give.
+
+**Tests.** `poem-offer-metadata.test.ts` (18, new): the pure functions, the five poets and the zero translators measured on the 89, and the controller (fill, typed field kept, nothing to write, two librettists, a poem touches nothing, no `metadata` dep, read-only, decline, Undo, keep, edit). `e2e/poem-library.test.ts` +2 (chromium): a pasted Pimen fills POEM, the card names «Pimen · Boris Godunov (Борис Годунов)», and Title, Composer, and Poet fill; "Not this poem" empties what the fill put and keeps a Title she edited, and Undo restores the rest.
+
+**What I could not establish.**
+- In a browser, a click on "Not this poem" made right after typing into Title, with no pause, did not register in my first run of the e2e; with a Tab and 800 ms for the field's "saved" note to settle it did. I read it as the re-render the note causes (the click landing on a node that was replaced), not as the fill's doing, but I did not trace it.
+- With a Title typed before the paste, the Lyrics tab would not take focus in my e2e (it stays on POEM), so that case is pinned in the unit test only.
+- Whether Dann wants Title to fill for the 14 poems too; I did not.
+
+**A correction to step 4's commit.** The step 4 commit left `i18n-index.test.ts` red: the two new site strings move the key index at the head of `i18n.ts` (1,186 to 1,188 keys; `intake.` 49 to 51), and I ran only the strings and composers tests before that commit. The index is corrected in the step 5 commit below; the full web suite found it.
