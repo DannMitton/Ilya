@@ -28,7 +28,7 @@ Written by the desk (Fable) 2026-10-16 about 12:50, from the tour Dann asked for
 4. Stage 2b, the float reader on the SIMD core in the scan path behind a flag (Mac, Opus); N.163 inside it; the two banner strings to Dann.
 5. Stage 3, the poem as second witness: the two papers read and filed, then the alignment design to Dann one question at a time with a drawing; the region rule for the reader (ruling default 13).
 
-**B. Corrections** (beside A, Dann 2026-10-12). Slices 1, 2, 4 shipped. 6. Slice 3 (cloud). 7. Slice 5 (Mac). 8. Slice 6 (Mac; needs 3 and 5; its walk gates N.84 and N.170). 9. Slices 7, 9, 10, 11. 10. Slice 8 after N.120 and N.177; the hairpin gesture polled from Finale, Dorico, Sibelius, and MuseScore first (Dann 2026-10-15 23:54).
+**B. Corrections** (beside A, Dann 2026-10-12). Slices 1, 2, 4 shipped. 6. Slice 3 (cloud). 7. Slice 5 (Mac). 8. Slice 6 (Mac; needs 3 and 5; its walk gates N.84 and N.170) [CLOSED 2026-11-09 by the desk (ledger r1): slice 6 no longer gates the Guide or the share; it waits until after the share (Dann 20:40, `OPEN.md` O3555 to O3556)]. 9. Slices 7, 9, 10, 11. 10. Slice 8 after N.120 and N.177; the hairpin gesture polled from Finale, Dorico, Sibelius, and MuseScore first (Dann 2026-10-15 23:54).
 
 **C. Tempo and dynamics.** 11. Row 48 shipped; Dann's look is its walk. 12. N.120. 13. N.177. 14. N.178 (research first).
 
