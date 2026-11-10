@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ResolvedGloss } from '$lib/text/gloss-edit';
 	import type { LineData, WordStackData, SongMetadata, PageSize } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
@@ -24,7 +25,7 @@
 		isMobile?: boolean;
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
-		glossOverrides?: Map<string, string>;
+		glossOverrides?: Map<string, ResolvedGloss>;
 		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
