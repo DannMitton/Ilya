@@ -17,12 +17,12 @@ export function glossAnchorForm(word: string): string {
  * or null when none was dropped (the caller then assigns nothing: a new Map is
  * a change to the autosave effect, so assigning always saved every song on open).
  */
-export function survivingGlosses(
-	glosses: ReadonlyMap<string, string>,
+export function survivingGlosses<G>(
+	glosses: ReadonlyMap<string, G>,
 	anchors: ReadonlyMap<string, string>,
 	lines: readonly LineData[],
-): [Map<string, string>, Map<string, string>] | null {
-	const nextGloss = new Map<string, string>(), nextAnchor = new Map<string, string>();
+): [Map<string, G>, Map<string, string>] | null {
+	const nextGloss = new Map<string, G>(), nextAnchor = new Map<string, string>();
 	for (const [key, gloss] of glosses) {
 		const anchor = anchors.get(key);
 		if (!anchor) continue;

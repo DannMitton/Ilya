@@ -34,6 +34,7 @@ import type { PageLayout, RowLayout, SystemLayout } from './underlay-page';
 import { bandInk, cutRows } from './underlay-rows';
 import { lookWindow, stretchBand, type Look } from './underlay-looks';
 import type { NotePlace } from './underlay-seat';
+import { skipOf, wouldSkipOf, type SkipKind, type WouldSkipKind } from './note-kinds';
 
 /** One note of the first part. */
 export interface VoiceNote {
@@ -51,6 +52,10 @@ export interface VoiceNote {
 	 * here and carried to `NotePlace`; a system reads it as a melisma only where the count gate takes it (`seatPage`).
 	 */
 	inSlur: boolean;
+	/** The note is a grace note or a chord tone and takes no syllable (`note-kinds.ts`); it stays in the XML, so no ordinal moves. */
+	skip?: SkipKind;
+	/** What would take it out in a later build, where `skip` is not set: a cue note, or voice 2 or later. Counted only. */
+	wouldSkip?: WouldSkipKind;
 }
 
 /** One `<slur>` end on a note. A start's `number` defaults to 1, as MusicXML does; a stop with no `number` is null and closes the most recent open start of any number. */
@@ -110,6 +115,14 @@ export function slurSpans(
 	return { inSlur, unmatchedStarts: open.length, unmatchedStops };
 }
 
+/** `skip` where the note is a grace note or a chord tone, else `wouldSkip` where it is a cue note or in voice 2 or later; neither key where neither. */
+function kindsOf(note: string): { skip?: SkipKind; wouldSkip?: WouldSkipKind } {
+	const skip = skipOf(note);
+	if (skip) return { skip };
+	const wouldSkip = wouldSkipOf(note);
+	return wouldSkip ? { wouldSkip } : {};
+}
+
 /** The notes of the first `<part>` of a MusicXML text, in document order. */
 export function voiceNotes(musicXml: string): VoiceNote[] {
 	const start = musicXml.search(/<part(?=[\s>])/);
@@ -134,11 +147,40 @@ export function voiceNotes(musicXml: string): VoiceNote[] {
 			at: placeOf(m[0]),
 			tiedInto: /<tie\s[^>]*type="stop"/.test(m[0]),
 			inSlur: false,
+			...kindsOf(m[0]),
 		});
 		ends.push(slurEndsOf(m[0]));
 	}
-	const { inSlur } = slurSpans(ends, out.map((n) => n.rest));
-	return out.map((n, i) => ({ ...n, inSlur: inSlur[i] }));
+	// A SKIPPED NOTE HAS NO SLUR OF ITS OWN (row 181 B0g step 6; Fable 5.2's as-built review, amendment 40-1). WHAT IT DOES: a grace note or
+	// a chord tone (`skip`) gives its slur ends to the notes that take a syllable: a start goes to the next note with no `skip`, a stop to the
+	// last non-rest note with no `skip` before it, and `slurSpans` marks no skipped note. It follows the typed path's rule
+	// (`packages/score-parser/src/musicxml-parser.ts:703-711`, N.188 A.2a: a dropped grace note's starts wait for the next kept note, its stops
+	// go to the last kept note before it). WHY: a slur that starts on a grace note before a principal note is a slur on the principal note's
+	// phrase, not a melisma that begins on the grace note; read as the grace note's own, the span marked the principal note `inSlur`, the slur
+	// gate (`seatPage`) took it where the system's count was one short, the principal note entered `sung` as a continuation, the syllable
+	// went one note late, and the no-syllable breach was silenced. WHAT FOLLOWS when it fails: that shift returns. A start with no later
+	// unskipped note, or a stop with no earlier one, is dropped (it has no partner, as `slurSpans` already treats one). RELATION: `skip`
+	// is `note-kinds.ts`'s; a carried start on a note that also holds a stop is read stop first, as `slurEndsOf` orders them.
+	const own = ends.map(() => [] as SlurEnd[]);
+	ends.forEach((here, i) => {
+		for (const end of here) {
+			if (!out[i].skip) {
+				own[i].push(end);
+				continue;
+			}
+			if (end.type === 'start') {
+				const next = out.findIndex((n, j) => j > i && !n.skip);
+				if (next >= 0) own[next].push(end);
+			} else {
+				let prev = -1;
+				for (let j = i - 1; j >= 0; j--) if (!out[j].skip && !out[j].rest) { prev = j; break; }
+				if (prev >= 0) own[prev].push(end);
+			}
+		}
+	});
+	const ordered = own.map((here) => [...here.filter((e) => e.type === 'stop'), ...here.filter((e) => e.type === 'start')]);
+	const { inSlur } = slurSpans(ordered, out.map((n) => n.rest));
+	return out.map((n, i) => ({ ...n, inSlur: n.skip ? false : inSlur[i] }));
 }
 
 /** The number of `<measure>` elements in the first `<part>` of a MusicXML text: the bars the join takes from the page. */
@@ -185,7 +227,7 @@ export function prepareUnderlay(page: Grey, musicXml: string, staves: readonly S
 	const rows: FramedCrop[] = [];
 	for (const system of found) {
 		const space = placed[system.staff].staff.space;
-		const mine: NotePlace[] = system.notes.map((i) => ({ id: notes[i].ordinal, x: (notes[i].at as { x: number }).x, bar: notes[i].bar, tiedInto: notes[i].tiedInto, inSlur: notes[i].inSlur }));
+		const mine: NotePlace[] = system.notes.map((i) => ({ id: notes[i].ordinal, x: (notes[i].at as { x: number }).x, bar: notes[i].bar, tiedInto: notes[i].tiedInto, inSlur: notes[i].inSlur, ...(notes[i].skip ? { skip: notes[i].skip } : {}), ...(notes[i].wouldSkip ? { wouldSkip: notes[i].wouldSkip } : {}) }));
 		const layoutRows: RowLayout[] = [];
 		let ink: { share: number; lines: number } | null = null;
 		if (system.band) {

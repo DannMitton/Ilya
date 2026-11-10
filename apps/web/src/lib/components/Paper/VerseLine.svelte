@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ResolvedGloss } from '$lib/text/gloss-edit';
 	import type { WordStackData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
@@ -10,7 +11,7 @@
 		showStressDiacritics?: boolean;
 		language?: Language;
 		spotReconstitution?: Map<string, boolean>;
-		glossOverrides?: Map<string, string>;
+		glossOverrides?: Map<string, ResolvedGloss>;
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
 		/** The page-fit probe's copy of the line: its stacks carry no identity (`WordStack.svelte`). */
@@ -78,7 +79,7 @@
 			{language}
 			spotReconstituted={spotReconstitution?.has(wordKey) ?? false}
 			adjacentCliticReconstituted={adjacentCliticReconFlags[i] ?? false}
-			glossOverride={glossOverrides?.get(wordKey)}
+			glossOverride={glossOverrides?.get(wordKey)?.text}
 			muted={mutedWords?.has(wordKey) ?? false}
 			{onwordclick}
 			{probe}

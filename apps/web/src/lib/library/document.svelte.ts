@@ -30,6 +30,7 @@ import type { KeyChoice } from '@ilya/score-parser';
 import { WordMarks } from '$lib/text/word-marks.svelte';
 import { wordGrid } from '$lib/pipeline';
 import { mapsFromRows, markMapsEmpty, rowsFromMaps, type WordMarkRows } from './word-mark-rows';
+import type { GlossEdit } from '$lib/text/gloss-edit';
 import {
 	createSaveScheduler,
 	fieldsFromRecord,
@@ -72,7 +73,7 @@ export class SongDocument {
 	inputText = $state('');
 	metadata = $state<SongMetadata>(emptyMetadata());
 	fromScoreFields = $state<ReadonlySet<MetadataField>>(new Set<MetadataField>());
-	glossOverrides = $state<Map<string, string>>(new Map());
+	glossOverrides = $state<Map<string, GlossEdit>>(new Map());
 	glossAnchors = $state<Map<string, string>>(new Map());
 	openSyllabification = $state(false);
 	pairings = $state<PairingMap>({});
@@ -127,7 +128,7 @@ export class SongDocument {
 	 * kept beside `glossOverrides` and saved through the same path. Keyed by the
 	 * POEM's `"lineIndex-wordIndex"`.
 	 */
-	publishedGlosses = $state<Map<string, string>>(new Map());
+	publishedGlosses = $state<Map<string, GlossEdit>>(new Map());
 	publishedGlossAnchors = $state<Map<string, string>>(new Map());
 
 	/**
@@ -464,7 +465,7 @@ export class SongDocument {
 		this.inputText = fields.inputText;
 		this.metadata = fields.metadata;
 		this.fromScoreFields = fields.fromScoreFields;
-		this.glossOverrides = fields.glossOverrides as Map<string, string>;
+		this.glossOverrides = fields.glossOverrides as Map<string, GlossEdit>;
 		this.glossAnchors = fields.glossAnchors as Map<string, string>;
 		this.openSyllabification = fields.openSyllabification;
 		this.pairings = fields.pairings;
@@ -475,7 +476,7 @@ export class SongDocument {
 		this.clefChipShown = fields.clefChipShown;
 		this.tempo = fields.tempo;
 		this.publishedPoem = fields.publishedPoem;
-		this.publishedGlosses = fields.publishedGlosses as Map<string, string>;
+		this.publishedGlosses = fields.publishedGlosses as Map<string, GlossEdit>;
 		this.publishedGlossAnchors = fields.publishedGlossAnchors as Map<string, string>;
 		this.poemSource = fields.poemSource;
 		this.barAnswers = fields.barAnswers;

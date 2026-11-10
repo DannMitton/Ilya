@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ResolvedGloss } from '$lib/text/gloss-edit';
 	/**
 	 * The reading aid (N.73 portrait C, ruled by Dann 2026-08-18, rulings 4
 	 * and 5).
@@ -26,7 +27,7 @@
 		language: Language;
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
-		glossOverrides?: Map<string, string>;
+		glossOverrides?: Map<string, ResolvedGloss>;
 		/** Return to the page. */
 		onreturn: () => void;
 	}

@@ -85,14 +85,14 @@ export function unsetPoemWords(lyrics: string, poem: string, lines: readonly Lin
 }
 
 /** The glosses whose anchor word is still the word standing at their key in this text, or null when none fell away. */
-export function survivingGlosses(
-	glosses: ReadonlyMap<string, string>,
+export function survivingGlosses<G>(
+	glosses: ReadonlyMap<string, G>,
 	anchors: ReadonlyMap<string, string>,
 	text: string,
-): { glosses: Map<string, string>; anchors: Map<string, string> } | null {
+): { glosses: Map<string, G>; anchors: Map<string, string> } | null {
 	const grid = wordGrid(text);
 	const fold = (w: string) => w.toLowerCase().replace(/ё/g, 'е');
-	const nextGloss = new Map<string, string>();
+	const nextGloss = new Map<string, G>();
 	const nextAnchor = new Map<string, string>();
 	for (const [key, gloss] of glosses) {
 		const anchor = anchors.get(key);
@@ -126,13 +126,13 @@ export function shownWitness(lyricsHas: boolean, poemHas: boolean, differ: boole
  * back as new maps, with any whose anchor word no longer stands there dropped,
  * or null where nothing changed.
  */
-export function carryPoemEdit(
+export function carryPoemEdit<G>(
 	before: string,
 	after: string,
 	marks: Marks,
-	glosses: ReadonlyMap<string, string>,
+	glosses: ReadonlyMap<string, G>,
 	anchors: ReadonlyMap<string, string>,
-): { glosses: Map<string, string>; anchors: Map<string, string> } | null {
+): { glosses: Map<string, G>; anchors: Map<string, string> } | null {
 	const diff = before.trim() === '' ? emptyDiff() : diffWordGrid(wordGrid(before), wordGrid(after));
 	// Row 184 (word marks): marks are saved now, so marks left over from a poem that was emptied (Clear, "Not this poem") must not land on
 	// the words of the next poem. There is no earlier text for them to follow, so they go.

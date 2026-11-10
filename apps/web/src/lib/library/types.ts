@@ -45,8 +45,13 @@ export type OctaveReading = 'as-written' | 'bass' | 'ottava';
  * written for. Exactly today's serialized row, the object literal
  * `persistGlosses` passes to `doc.save` in `+page.svelte`, which is what keeps
  * step 0 byte-compatible.
+ *
+ * ROW 179: a fourth element names the language the singer typed it in. It is
+ * ABSENT on every row written before then, and any value that is not `'en'` or
+ * `'fr'` reads as absent, never as malformed; an absent one reads as English
+ * (`text/gloss-edit.ts`). An older Ilya reads the row unchanged.
  */
-export type GlossRow = [key: string, gloss: string, anchorWord: string];
+export type GlossRow = [key: string, gloss: string, anchorWord: string, language?: 'en' | 'fr'];
 
 /**
  * ROW 184 (WORD MARKS), THE INSPECTOR'S WORD MARKS ON THE SONG, RULED BY DANN 2026-11-09 20:44. One mark on one word:

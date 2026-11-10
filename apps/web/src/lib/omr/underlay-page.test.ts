@@ -31,6 +31,16 @@ describe('pageTokens', () => {
 	it('splits a word at a mark inside it', () => {
 		expect(pageTokens(row(0), [box('су-е', 0, 90)]).map((t) => t.text)).toEqual(['су-', 'е']);
 	});
+
+	/* Row 181 B0 step 1: the letter boxes are taken back to the page as the word's box is, and a word without them gives a token
+	   without `syms`, exactly as before. If the offset were not added, a vowel would be placed a crop's width from its note. */
+	it('takes a word\'s letter boxes back to page pixels as it does the word\'s box, and a word without them gives a token without syms', () => {
+		const word = { ...box('ты', 50, 90, 2), symbols: [{ text: 'т', x0: 116, y0: 16, x1: 136, y1: 48 }, { text: 'ы', x0: 136, y0: 16, x1: 156, y1: 48 }] };
+		const [withSyms] = pageTokens({ ...row(0, 2), offsetX: 100 }, [word]);
+		expect(withSyms.syms).toEqual([{ c: 'т', x0: 150, x1: 160 }, { c: 'ы', x0: 160, x1: 170 }]);
+		const [without] = pageTokens({ ...row(0, 2), offsetX: 100 }, [box('ты', 50, 90, 2)]);
+		expect('syms' in without).toBe(false);
+	});
 });
 
 describe('pageTokens, the dash that is the print\'s line', () => {
@@ -137,6 +147,28 @@ describe('seatPage', () => {
 		const page = seatPage(layout(system(notes(100), [row(0)])), [], seams);
 		expect(page.systems.map((x) => x.written)).toEqual([false]);
 		expect(page.stats.tokens).toBe(0);
+	});
+});
+
+describe('seatPage, a syllable placed by its vowel\'s ink (row 181 B0)', () => {
+	/* «бала» printed 0 to 100 with its second vowel at 70 to 90. By the letter share «ла» stands at 75 and takes the note at 70; by the
+	   vowel's ink it stands at 80 and takes the note at 86. If `cutUnits` fell back to the share, the second assertion would fail. */
+	const letters = [['б', 0, 10], ['а', 15, 35], ['л', 50, 65], ['а', 70, 90]] as const;
+	const sym = (c: string, x0: number, x1: number) => ({ text: c, x0: x0 + 16, x1: x1 + 16, y0: 16, y1: 48 });
+	const withInk: WordBox = { ...box('бала', 0, 100), symbols: letters.map(([c, a, b]) => sym(c, a, b)) };
+	const noInk = box('бала', 0, 100);
+	const where = (read: WordBox) => shape(seatPage(layout(system(notes(25, 70, 86), [row(0)])), [[read]], seams)).map((w) => w.map((s) => s[2]));
+
+	it('seats the second syllable on the note at its vowel, and on the share\'s note where the reader gave no letter boxes', () => {
+		expect(where(withInk)).toEqual([[0, 2]]);
+		expect(where(noInk)).toEqual([[0, 1]]);
+	});
+
+	it('counts the boxes by the seated row: placed with ink, a token fallback without', () => {
+		const withStats = seatPage(layout(system(notes(25, 70, 86), [row(0)])), [[withInk]], seams).stats.vowelBoxes;
+		expect(withStats).toEqual({ placed: 2, fallbackNoMatch: 0, fallbackNoVowel: 0 });
+		const withoutStats = seatPage(layout(system(notes(25, 70, 86), [row(0)])), [[noInk]], seams).stats.vowelBoxes;
+		expect(withoutStats).toEqual({ placed: 0, fallbackNoMatch: 1, fallbackNoVowel: 0 });
 	});
 });
 

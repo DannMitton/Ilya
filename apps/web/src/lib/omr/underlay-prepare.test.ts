@@ -272,3 +272,36 @@ describe('prepareSystem, the second look (row 181 step 2)', () => {
 		expect(got.every((g) => g.system === 0)).toBe(true);
 	});
 });
+
+/* Row 181 B0g step 6 (Fable 5.2's as-built review, amendment 40-1): a skipped note has no slur of its own. A slur that starts on a grace note is a
+   slur on the principal note's phrase (the typed path's rule, `musicxml-parser.ts:703-711`), not a melisma beginning on the grace note. Read as
+   the grace note's own, it marked the principal note `inSlur`, the slur gate took it where the count was one short, and the syllable went one
+   note late with the breach silenced. */
+describe('a slur on a grace note (row 181 B0g step 6)', () => {
+	const sl = (type: 'start' | 'stop') => `        <notations>\n          <slur number="1" type="${type}" />\n        </notations>\n`;
+	const grace = (x: number, extra = '') => note(x, 160, `        <grace/>\n${extra}`);
+
+	it('marks the principal note after a grace note that holds the slur start inSlur false, and no skipped note inSlur', () => {
+		const out = voiceNotes(xml(note(300, 160) + grace(400, sl('start')) + note(500, 160, sl('stop')) + note(700, 160)));
+		expect(out.map((n) => [n.ordinal, n.skip ?? null, n.inSlur])).toEqual([[0, null, false], [1, 'grace', false], [2, null, false], [3, null, false]]);
+	});
+
+	it('gives a start to the next unskipped note and a stop to the last unskipped note before it, so a real slur still spans its principals', () => {
+		const spans = voiceNotes(xml(note(300, 160, sl('start')) + note(500, 160) + grace(600, sl('stop')) + note(700, 160)));
+		expect(spans.map((n) => n.inSlur)).toEqual([false, true, false, false]);
+		const into = voiceNotes(xml(note(300, 160) + grace(400, sl('start')) + note(500, 160) + note(700, 160, sl('stop')) + note(900, 160)));
+		expect(into.map((n) => n.inSlur)).toEqual([false, false, false, true, false]); // the start (carried to note 2) is not in its own span
+	});
+
+	it('seats three syllables on notes 0, 2, and 3 of four principal notes and counts the fourth as the one no-syllable breach, not as a melisma', () => {
+		const music = xml(note(300, 160) + grace(400, sl('start')) + note(500, 160, sl('stop')) + note(700, 160) + note(900, 160));
+		const { layout } = prepareUnderlay(page(), music, boxes);
+		const { scale, pad } = layout.systems[0].rows[0].transform;
+		const at = (text: string, x: number): WordBox => ({ text, x0: (x - 10) * scale + pad, x1: (x + 10) * scale + pad, y0: 16, y1: 48 });
+		const seams: Seams = { isWord: (w) => ['мир', 'свет', 'ты'].includes(w), cut: (w) => [w] };
+		const out = seatPage(layout, [[at('мир', 300), at('свет', 500), at('ты', 700)]], seams);
+		expect(out.words.map((w) => w.syllables.map((y) => [y.text, y.note]))).toEqual([[['мир', 0]], [['свет', 2]], [['ты', 3]]]);
+		expect(out.stats.counted.perSystem[0].slurReading).toBe(false);
+		expect(out.stats.counted.breaches.map((b) => [b.id, b.kind])).toEqual([[4, 'no-syllable']]);
+	});
+});

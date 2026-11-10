@@ -24,6 +24,7 @@ import type { PairingMap } from '$lib/score/pairings';
 import { migrateCorrectionIds, type CorrectionMap } from '$lib/score/correction';
 import { BAR_ANSWER_KINDS, barAnswersEmpty, emptyBarAnswers, type BarAnswer, type BarAnswers } from '$lib/score/bar-answers';
 import type { KeyChoice } from '@ilya/score-parser';
+import { editsFromRows, rowsFromEdits, type GlossEdit } from '$lib/text/gloss-edit';
 import type { PluralStore, SourceBytes, StorageDriver } from './driver';
 import { requestPersistence as defaultRequestPersistence } from './quota';
 import { validateWordMarks, type WordMarkRows } from './word-mark-rows';
@@ -50,7 +51,8 @@ export interface SongFields {
 	inputText: string;
 	metadata: SongMetadata;
 	fromScoreFields: ReadonlySet<MetadataField>;
-	glossOverrides: ReadonlyMap<string, string>;
+	/** Row 179: a word's edit by language (`text/gloss-edit.ts`); the stored rows carry the language. */
+	glossOverrides: ReadonlyMap<string, GlossEdit>;
 	glossAnchors: ReadonlyMap<string, string>;
 	openSyllabification: boolean;
 	pairings: PairingMap;
@@ -72,7 +74,7 @@ export interface SongFields {
 	/** N.135 stage 3: the poet's published text, or '' where none was given (`SongRecord.publishedPoem`). */
 	publishedPoem: string;
 	/** Row 109: glosses on the poem's own words, key to gloss and key to anchor (`SongRecord.publishedGlosses`). */
-	publishedGlosses: ReadonlyMap<string, string>;
+	publishedGlosses: ReadonlyMap<string, GlossEdit>;
 	publishedGlossAnchors: ReadonlyMap<string, string>;
 	/** Poem library, build 1: where the poem came from, or null where it is the singer's own (`SongRecord.poemSource`). */
 	poemSource: PoemSource | null;
@@ -85,12 +87,8 @@ export interface SongFields {
 /* ── Record and page state, converted in one place ──────────────── */
 
 export function fieldsFromRecord(record: SongRecord): SongFields {
-	const glossOverrides = new Map<string, string>();
-	const glossAnchors = new Map<string, string>();
-	for (const [key, gloss, anchor] of record.glosses) {
-		glossOverrides.set(key, gloss);
-		glossAnchors.set(key, anchor);
-	}
+	const { edits: glossOverrides, anchors: glossAnchors } = editsFromRows(record.glosses);
+	const { edits: publishedGlosses, anchors: publishedGlossAnchors } = editsFromRows(record.publishedGlosses ?? []);
 	return {
 		inputText: record.poem,
 		metadata: { ...record.metadata },
@@ -111,8 +109,8 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		clefChipShown: record.clefChipShown === true,
 		tempo: record.tempo ?? null,
 		publishedPoem: record.publishedPoem ?? '',
-		publishedGlosses: new Map((record.publishedGlosses ?? []).map(([key, gloss]) => [key, gloss])),
-		publishedGlossAnchors: new Map((record.publishedGlosses ?? []).map(([key, , anchor]) => [key, anchor])),
+		publishedGlosses,
+		publishedGlossAnchors,
 		poemSource: record.poemSource ? { ...record.poemSource } : null,
 		barAnswers: record.barAnswers ? copyBarAnswers(record.barAnswers) : emptyBarAnswers(),
 		wordMarks: {
@@ -146,11 +144,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 	// Row 47, the same shape: stored only while the singer has chosen as written. Row 144's chip flag likewise, only while true.
 	// N.135 stage 3, the same shape: stored only while the poem is not empty.
 	const { seatedText: _stored, transposition: _key, octaveReading: _octave, clefChipShown: _chip, tempo: _tempo, publishedPoem: _published, publishedGlosses: _poemGlosses, poemSource: _poemSource, barAnswers: _barAnswers, wordMarks: _wordMarks, ...rest } = base;
-	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
-		key,
-		gloss,
-		fields.glossAnchors.get(key) ?? '',
-	]);
+	const glosses = rowsFromEdits(fields.glossOverrides, fields.glossAnchors);
 	return {
 		...rest,
 		poem: fields.inputText,
@@ -167,7 +161,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		...(fields.tempo ? { tempo: { ...fields.tempo } } : {}),
 		...(fields.publishedPoem !== '' ? { publishedPoem: fields.publishedPoem } : {}),
 		...(fields.publishedGlosses.size > 0
-			? { publishedGlosses: [...fields.publishedGlosses].map(([key, gloss]): GlossRow => [key, gloss, fields.publishedGlossAnchors.get(key) ?? '']) }
+			? { publishedGlosses: rowsFromEdits(fields.publishedGlosses, fields.publishedGlossAnchors) }
 			: {}),
 		// Poem library, build 1, the same shape: stored only while the poem is, or was, a library poem.
 		...(fields.poemSource ? { poemSource: { ...fields.poemSource } } : {}),
