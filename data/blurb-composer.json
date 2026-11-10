@@ -1078,12 +1078,12 @@
     },
     "lexical-gk:г": {
       "en": {
-        "template": "In the roots мягк- and лёгк-/легк-, ⟨{char}⟩ before ⟨к⟩ is [{ipa}], not the [k] that devoicing would give.",
-        "citation": "p. 17"
+        "template": "Within a word, ⟨г⟩ before ⟨к⟩ is read [x], or [xʲ] before a soft [kʲ]: Grayson’s мягко/мягкий rule, found in a few very common words such as мягкий and лёгкий.",
+        "citation": "p. 240"
       },
       "fr": {
-        "template": "Dans les racines мягк- et лёгк-/легк-, ⟨{char}⟩ devant ⟨к⟩ se prononce [{ipa}], et non le [k] que donnerait le dévoisement.",
-        "citation": "p. 17"
+        "template": "À l’intérieur d’un mot, ⟨г⟩ devant ⟨к⟩ se prononce [x], ou [xʲ] devant un [kʲ] palatalisé\u00A0: c’est la règle мягко/мягкий de Grayson, propre à quelques mots très courants comme мягкий et лёгкий.",
+        "citation": "p. 240"
       }
     },
     "bog-exception:г": {

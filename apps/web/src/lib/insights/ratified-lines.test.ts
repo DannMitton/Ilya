@@ -236,6 +236,26 @@ describe('ratified scan banners (step 8b)', () => {
 	});
 });
 
+/* INTEGRATION STEP 11c (Dann 2026-11-09 20:12). The Inspector's line for the г of мягк-, лёгк-, легк-: `lexical-gk:г` in `data/blurb-composer.json`,
+   Grayson 2012 p. 240 alone. It checks the data file's two sentences character by character (U+2019 apostrophes, U+00A0 before the French
+   colon, «л» U+043B) and the citation. WHEN IT FAILS: the Inspector says something Dann did not ratify. It relates to the blurb package's own
+   `lexical-gk.test.ts`, which pins what the composer prints. */
+describe('ratified blurb line for мягк-, лёгк- (step 11c)', () => {
+	const data = JSON.parse(readFileSync(new URL('../../../../../data/blurb-composer.json', import.meta.url), 'utf8'));
+	const p = data.processes['lexical-gk:г'];
+	it('English and French, exactly', () => {
+		expect(p.en.template).toBe('Within a word, ⟨г⟩ before ⟨к⟩ is read [x], or [xʲ] before a soft [kʲ]: Grayson’s мягко/мягкий rule, found in a few very common words such as мягкий and лёгкий.');
+		expect(p.fr.template).toBe('À l’intérieur d’un mot, ⟨г⟩ devant ⟨к⟩ se prononce [x], ou [xʲ] devant un [kʲ] palatalisé\u00a0: c’est la règle мягко/мягкий de Grayson, propre à quelques mots très courants comme мягкий et лёгкий.');
+	});
+	it('cites p. 240 alone, and the Cyrillic is Cyrillic', () => {
+		expect(p.en.citation).toBe('p. 240');
+		expect(p.fr.citation).toBe('p. 240');
+		expect('\u043b').toBe('л');
+		for (const w of ['мягко', 'мягкий', 'лёгкий']) for (const c of w) expect(c.charCodeAt(0)).toBeGreaterThanOrEqual(0x400);
+		expect(p.en.template).toContain('л\u0451гкий'.replace('\u0451', 'ё'));
+	});
+});
+
 /* N.194 (QUEUE row 152), the Loupe's break button. The expected strings are copied from the brief
    (`brief-code-n194-loupe-break-button_r5_2026-10-25.md`), not read back out of `i18n.ts`: the pill's labels,
    ruled by Dann 2026-10-21 13:42; the undo sentences, ratified 2026-10-21 20:30; the reason under an off pill,
