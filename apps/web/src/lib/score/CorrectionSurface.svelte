@@ -40,6 +40,7 @@
 	import type { ShiftDirection } from '$lib/score/pairings';
 	import { LENGTH_CELLS } from '$lib/score/correction';
 	import { barlineUi } from '$lib/score/barline-ui';
+	import { tsUi } from '$lib/score/time-signature-ui.svelte';
 	import {
 		stepCount,
 		stepValue,
@@ -675,6 +676,8 @@
 			     (the last entry, inside a tuplet, a removal the layer would not honour). The face is one word beside Rest and Tie, the
 			     accessible name says which. -->
 			{#if barlineUi.mode || inGap}<button type="button" class="cell" class:engaged={barlineUi.mode === 'remove'} data-barline={barlineUi.mode ?? 'none'} disabled={inGap} aria-label={T(barlineUi.mode === 'remove' ? 'correct.barlineRemove' : 'correct.barlineAdd')} onclick={() => barlineUi.act()}>{T('loupe.barline')}</button>{/if}
+			<!-- TIME SIGNATURE (QUEUE row 138, T1): opens the card, which changes it from the bar held to the next change or the end. -->
+			<button type="button" class="cell" data-ts-open disabled={inGap || !tsUi.held} aria-haspopup="dialog" aria-label={T('correct.tsChange')} onclick={(e) => tsUi.show(e.currentTarget)}>{T('loupe.timeSignature')}</button>
 			<!-- RESTORE clears every correction on ONE entry, which the Undo pill
 			     cannot do: the pill reverses the last verb and this reverses all
 			     of them here. It is offered only where the READ still carries the

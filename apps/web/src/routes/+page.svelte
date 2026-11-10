@@ -192,6 +192,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import { currentPitch, orphanIds } from '$lib/score/correction';
 	import { BarLayer } from '$lib/score/bar-layer';
 	import { barlineUi } from '$lib/score/barline-ui';
+	import { tsUi } from '$lib/score/time-signature-ui.svelte';
 	import { stackLabel } from '$lib/score/undo-history.svelte';
 	import { createUndoHistory } from '$lib/score/undo-wiring.svelte';
 	import { breakControl } from '$lib/text/break-here';
@@ -875,8 +876,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		word: (key) => t(key, language),
 		pushUndo,
 		barlineVerb: (id) => layer.barlineVerb(id),
+		timeSignature: { held: (id) => layer.heldBar(id), write: (id, sig, through) => layer.signatureWrite(id, sig, through) },
 	});
 	barlineUi.attach({ mode: () => verbs.barline?.kind ?? null, act: () => verbs.handleBarline() });
+	tsUi.attach({ held: (id) => (id ? layer.heldBar(id) : verbs.heldBar), commit: (sig, through, id) => verbs.handleTimeSignature(sig, through, id) });
 	const selectedEvent = $derived(verbs.selectedEvent);
 	const armedBase = $derived(verbs.armedBase);
 	const armedDots = $derived(verbs.armedDots);
@@ -1285,7 +1288,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		   that measure, this one". */
 		if (loupeOpen) {
 			if (isPhone) return;
-			if ((e.target as Element | null)?.closest?.('.loupe, .surface')) return;
+			if ((e.target as Element | null)?.closest?.('.loupe, .surface, [data-ts-overlay]')) return;
 			/* THE PLACING CLICK'S OWN TARGET IS GONE BY THE TIME IT GETS HERE,
 			   and that is why the loupe closed on every placement Dann walked on
 			   `d5a49ff`. RULED BY DANN 2026-09-07: "I expected to see the change

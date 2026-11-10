@@ -345,3 +345,42 @@ describe('CorrectionVerbs, the Barline verb (QUEUE row 138, B3)', () => {
 		expect(g.corrections).toEqual({ a: { barline: 'before' } });
 	});
 });
+
+describe('CorrectionVerbs, the time signature card (QUEUE row 138, T1)', () => {
+	const sig = { beats: 3, beatType: 4 };
+	function rig(write: (id: string) => CorrectionMap | null, held: () => unknown = () => ({ bar: 0 })) {
+		const line = [note('a', P('C', 4)), note('b', P('E', 4))];
+		let corrections: CorrectionMap = {};
+		let cursor: Cursor | null = { kind: 'entry', id: 'a' };
+		const pushed: UndoNote[] = [];
+		const verbs = new CorrectionVerbs({
+			corrections: () => corrections, setCorrections: (n) => (corrections = n), line: () => line, readLine: () => line,
+			cursor: () => cursor, inGap: () => cursor?.kind === 'gap', selectedEventId: () => (cursor?.kind === 'entry' ? cursor.id : null),
+			setCursor: (n) => (cursor = n), selectEntry: (id) => (cursor = id ? { kind: 'entry', id } : null), keyOf: () => undefined,
+			clef: () => ({ sign: 'G' }), label: () => '', word: (k) => k, pushUndo: (n) => pushed.push(n),
+			timeSignature: { held: held as never, write: (id) => write(id) },
+		});
+		return { verbs, pushed, get corrections() { return corrections; }, moveTo(c: Cursor | null) { cursor = c; } };
+	}
+	it('writes what the layer returns and names the one Undo step "time signature changed"', () => {
+		const h = rig(() => ({ a: { timeSignature: { ...sig, through: 'end' as const } } }));
+		h.verbs.handleTimeSignature(sig, 'end');
+		expect(h.corrections).toEqual({ a: { timeSignature: { beats: 3, beatType: 4, through: 'end' } } });
+		expect(h.pushed).toEqual([{ kind: 'text', key: 'loupe.undo.timeSignature' }]);
+	});
+	it('pushes no step for a change that changes nothing, or that the layer refuses', () => {
+		const same = rig(() => ({}));
+		same.verbs.handleTimeSignature(sig, 'next');
+		expect(same.pushed).toEqual([]);
+		const refused = rig(() => null);
+		refused.verbs.handleTimeSignature(sig, 'next');
+		expect(refused.pushed).toEqual([]);
+	});
+	it('reads the held bar from the layer, and not in a gap', () => {
+		const h = rig(() => null, () => ({ bar: 4 }));
+		expect(h.verbs.heldBar).toEqual({ bar: 4 });
+		h.moveTo({ kind: 'gap', after: 'a', measureIndex: 0 } as never);
+		expect(h.verbs.heldBar).toBeNull();
+		expect(harness().verbs.heldBar).toBeNull();
+	});
+});

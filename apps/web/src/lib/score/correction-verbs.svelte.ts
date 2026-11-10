@@ -58,6 +58,7 @@ import {
 } from './entry';
 import type { UndoNote } from './undo-history.svelte';
 import type { BarlineVerb } from './barline-marks';
+import type { HeldBar, Through } from './time-signature';
 
 /** The clef in force, as `arrivalPitch` and `middleLine` read it. */
 type Clef = { sign: 'G' | 'F' | 'C'; octaveChange?: number };
@@ -84,6 +85,11 @@ export interface CorrectionVerbsDeps {
 	pushUndo: (note: UndoNote) => void;
 	/** The Barline verb the held entry offers, with the corrections it would write (`BarLayer.barlineVerb`); absent: none. */
 	barlineVerb?: (id: string) => BarlineVerb | null;
+	/** The time signature card's reads and writes (`BarLayer.heldBar`, `.signatureWrite`); absent: none. */
+	timeSignature?: {
+		held(id: string): HeldBar | null;
+		write(id: string, sig: { beats: number; beatType: number }, through: Through): CorrectionMap | null;
+	};
 }
 
 /** The seven duration words the surface ships, by base (the 32nd and 64th since N.183). */
@@ -165,6 +171,12 @@ export class CorrectionVerbs {
 	get restoreAvailable(): boolean {
 		const id = this.#d.selectedEventId();
 		return !this.#d.inGap() && !!id && amendsNote(this.#d.corrections()[id]) && !isEnteredId(id);
+	}
+
+	/** The bar the held note sits in, for the time signature card (QUEUE row 138, T1); null in a gap or with nothing held. */
+	get heldBar(): HeldBar | null {
+		const id = this.#d.selectedEventId();
+		return !this.#d.inGap() && id ? (this.#d.timeSignature?.held(id) ?? null) : null;
 	}
 
 	/** The Barline verb the held note offers (QUEUE row 138): Add where the next entry is in its bar, Remove where it opens the next; null where neither. */
@@ -406,5 +418,14 @@ export class CorrectionVerbs {
 		if (!v) return;
 		this.#d.pushUndo({ kind: 'text', key: v.kind === 'add' ? 'loupe.undo.barlineAdded' : 'loupe.undo.barlineRemoved' });
 		this.#d.setCorrections(v.map);
+	};
+
+	/** Change the held bar's time signature from this bar to the next change or to the end, keeping the barlines. One Undo step. */
+	handleTimeSignature = (sig: { beats: number; beatType: number }, through: Through, entryId?: string): void => {
+		const id = entryId ?? this.#d.selectedEventId();
+		const next = id ? this.#d.timeSignature?.write(id, sig, through) : null;
+		if (!next || JSON.stringify(next) === JSON.stringify(this.#d.corrections())) return;
+		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.timeSignature' });
+		this.#d.setCorrections(next);
 	};
 }

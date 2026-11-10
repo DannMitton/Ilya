@@ -100,7 +100,7 @@
 	import { buildWatchList } from '$lib/analysis/watchlist';
 	import { gateBand, gatedLines } from '$lib/analysis/gates';
 	import NotesColumn from './NotesColumn.svelte';
-	import ClefControls from '$lib/score/ClefControls.svelte';
+	import ScoreControls from '$lib/score/ScoreControls.svelte';
 	import { planNotes, type NotesMeasure } from './notes-pages';
 	import { scoreMetrics } from '$lib/analysis/score-metrics';
 
@@ -1138,7 +1138,7 @@
 {/if}
 	{/snippet}
 </PageFit>
-<ClefControls {language} pages={scorePages} />
+<ScoreControls {language} pages={scorePages} />
 
 <style>
 	/* N.92, the selection state. Display only, and it appears ONLY on the

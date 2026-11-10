@@ -22,6 +22,7 @@ import type { Measure, ParsedScore, VocalLineEvent } from '@ilya/score-parser';
 import { applyCorrections, type CorrectionMap } from './correction';
 import { barlineVerb, type BarlineVerb } from './barline-marks';
 import { IDENTITY_BARS, rebar, type BarMap } from './rebar';
+import { heldBar, setSignature, type HeldBar, type Through } from './time-signature';
 
 export interface BarLayerDeps {
 	/** The ingested score, as the reader produced it, or null. */
@@ -103,6 +104,18 @@ export class BarLayer {
 	barlineVerb(id: string): BarlineVerb | null {
 		const score = this.#d.score();
 		return score ? barlineVerb(score, this.#get().pre, this.#d.corrections(), id) : null;
+	}
+
+	/** The bar the entry sits in, its opener, and the signatures in play (`time-signature.ts`); null where none. */
+	heldBar(id: string): HeldBar | null {
+		const score = this.#d.score();
+		return score ? heldBar(score, this.#get().pre, this.#d.corrections(), id) : null;
+	}
+
+	/** The corrections after the singer sets the held bar's time signature, keeping the barlines (`time-signature.ts`); null where it cannot be. */
+	signatureWrite(id: string, sig: { beats: number; beatType: number }, through: Through): CorrectionMap | null {
+		const score = this.#d.score();
+		return score ? setSignature(score, this.#get().pre, this.#d.corrections(), id, sig, through) : null;
 	}
 
 	/** The number the PRINTED bar carries: the reading's, for the strip and the banner's list. */
