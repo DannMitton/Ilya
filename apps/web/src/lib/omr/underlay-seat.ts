@@ -79,6 +79,11 @@ export interface Token {
 	x1: number;
 	/** The token was a hyphen-only box wider than half the row's ink height: the print's line, kept as an `extender` (`splitTokens`). Counted, never read by a rule. */
 	longDash?: boolean;
+	/**
+	 * The token's letter boxes, one for each letter the reader gave, in page pixels (row 181 B0 step 1). Present only where the reader gave
+	 * them; read through `underlay-vowel-box.ts` by `splitTokens` and `cutUnits` to put a piece where its vowel's ink is (step 3). Nothing else reads it.
+	 */
+	syms?: { c: string; x0: number; x1: number }[];
 }
 
 /** One note of the voice staff. */

@@ -47,13 +47,32 @@ export interface TesseractLike {
 	recognize(image: Blob, options: object, output: { blocks: boolean }): Promise<{ data: { blocks: TesseractBlock[] | null } }>;
 	terminate(): Promise<unknown>;
 }
+type TesseractBox = { x0: number; y0: number; x1: number; y1: number };
 interface TesseractBlock {
-	paragraphs?: { lines?: { words?: { text: string; bbox: { x0: number; y0: number; x1: number; y1: number } }[] }[] }[];
+	/** `symbols` are the reader's letter boxes (tesseract.js 7, `Word.symbols`); a reader that gives none leaves a word without them. */
+	paragraphs?: { lines?: { words?: { text: string; bbox: TesseractBox; symbols?: { text: string; bbox: TesseractBox }[] }[] }[] }[];
 }
 
-/** The words of a recognition's blocks, in the order tesseract gave them. */
+/**
+ * The words of a recognition's blocks, in the order tesseract gave them, each with its letter boxes where the reader gave
+ * them (row 181 B0 step 1: `underlay-vowel-box.ts` reads them, for `splitTokens` and `cutUnits`; a word without `symbols` has
+ * no `symbols` key, so it is exactly the word of before).
+ */
 export function wordsOf(blocks: TesseractBlock[] | null | undefined): WordBox[] {
-	return (blocks ?? []).flatMap((b) => (b.paragraphs ?? []).flatMap((p) => (p.lines ?? []).flatMap((l) => (l.words ?? []).map((w) => ({ text: w.text, x0: w.bbox.x0, y0: w.bbox.y0, x1: w.bbox.x1, y1: w.bbox.y1 })))));
+	return (blocks ?? []).flatMap((b) =>
+		(b.paragraphs ?? []).flatMap((p) =>
+			(p.lines ?? []).flatMap((l) =>
+				(l.words ?? []).map((w) => ({
+					text: w.text,
+					x0: w.bbox.x0,
+					y0: w.bbox.y0,
+					x1: w.bbox.x1,
+					y1: w.bbox.y1,
+					...(w.symbols ? { symbols: w.symbols.map((y) => ({ text: y.text, x0: y.bbox.x0, y0: y.bbox.y0, x1: y.bbox.x1, y1: y.bbox.y1 })) } : {}),
+				})),
+			),
+		),
+	);
 }
 
 /** One reader for the session, made on the first row and made again after a failure. */

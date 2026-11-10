@@ -49,6 +49,8 @@ export interface WordBox {
 	y0: number;
 	x1: number;
 	y1: number;
+	/** The reader's letter boxes in the same pixels, where it gave them (`wordsOf`, row 181 B0 step 1). */
+	symbols?: { text: string; x0: number; y0: number; x1: number; y1: number }[];
 }
 
 /** What is kept of a framed row once its pixels have gone to the reader. */
@@ -205,9 +207,14 @@ export type ReadUnderlay = (image: Blob, musicXml: string, staves: readonly Staf
 
 /** A reader's answer for a row, back on the page: tokens in page pixels. */
 export function pageTokens(row: RowLayout, words: readonly WordBox[]): Token[] {
-	const raw = words.map((w) => {
+	const raw = words.map((w): Token => {
 		const b = unframeBox(row.transform, w);
-		return { text: w.text, x0: b.x0 + row.offsetX, x1: b.x1 + row.offsetX };
+		// The letter boxes are taken back to the page as the word's box is: `unframeBox`, then the row's offset (row 181 B0 step 1).
+		const syms = w.symbols?.map((y) => {
+			const u = unframeBox(row.transform, y);
+			return { c: y.text, x0: u.x0 + row.offsetX, x1: u.x1 + row.offsetX };
+		});
+		return { text: w.text, x0: b.x0 + row.offsetX, x1: b.x1 + row.offsetX, ...(syms ? { syms } : {}) };
 	});
 	// The row's ink height on the page, for the dash that is a mark and not a joint.
 	return splitTokens(raw, { inkHeight: DEFAULT_INK_HEIGHT / row.transform.scale });

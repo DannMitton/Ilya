@@ -31,6 +31,16 @@ describe('pageTokens', () => {
 	it('splits a word at a mark inside it', () => {
 		expect(pageTokens(row(0), [box('су-е', 0, 90)]).map((t) => t.text)).toEqual(['су-', 'е']);
 	});
+
+	/* Row 181 B0 step 1: the letter boxes are taken back to the page as the word's box is, and a word without them gives a token
+	   without `syms`, exactly as before. If the offset were not added, a vowel would be placed a crop's width from its note. */
+	it('takes a word\'s letter boxes back to page pixels as it does the word\'s box, and a word without them gives a token without syms', () => {
+		const word = { ...box('ты', 50, 90, 2), symbols: [{ text: 'т', x0: 116, y0: 16, x1: 136, y1: 48 }, { text: 'ы', x0: 136, y0: 16, x1: 156, y1: 48 }] };
+		const [withSyms] = pageTokens({ ...row(0, 2), offsetX: 100 }, [word]);
+		expect(withSyms.syms).toEqual([{ c: 'т', x0: 150, x1: 160 }, { c: 'ы', x0: 160, x1: 170 }]);
+		const [without] = pageTokens({ ...row(0, 2), offsetX: 100 }, [box('ты', 50, 90, 2)]);
+		expect('syms' in without).toBe(false);
+	});
 });
 
 describe('pageTokens, the dash that is the print\'s line', () => {
