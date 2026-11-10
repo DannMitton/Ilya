@@ -21,6 +21,14 @@ describe('READER_STAMP', () => {
 
 	/* Integration step 8a: the two are joined, so every scan stored before it (stamped with the homr reader alone) is read again once. If
 	   they were apart, a stored scan would never be read with its words. */
+	/* Row 181 B0 and B0g (step 4): the stamp is bumped once, from `underlay@4` to `underlay@5`, because the same page now seats differently (the
+	   vowel's ink, and no syllable for a grace note or a chord tone). If it were left at 4, a scan kept before this build would be reused and its
+	   syllables never seated again. */
+	it('is the fifth underlay reader, B0 and B0g, and a scan kept under the fourth is stale', () => {
+		expect(UNDERLAY_READER).toBe('underlay@5');
+		expect(READER_STAMP).not.toBe(`homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}+underlay@4`);
+	});
+
 	it('carries the underlay reader: joining them re-reads every stored scan once', () => {
 		expect(UNDERLAY_READER).not.toBe('');
 		expect(READER_STAMP).toContain(`+${UNDERLAY_READER}`);

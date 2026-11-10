@@ -59,8 +59,8 @@ describe('a stored reading, met by the reader that always reads the words', () =
 		expect(r.ok && r.reading?.stamp).toBe(READER_STAMP);
 	});
 
-	it.each(['underlay@0', 'underlay@1', 'underlay@2', 'underlay@3'])('is read again when it was kept under %s', async (old) => {
-		expect(UNDERLAY_READER).toBe('underlay@4');
+	it.each(['underlay@0', 'underlay@1', 'underlay@2', 'underlay@3', 'underlay@4'])('is read again when it was kept under %s', async (old) => {
+		expect(UNDERLAY_READER).toBe('underlay@5');
 		const before = kept(`${HOMR_ONLY}+${old}`);
 		expect(isCurrent(before)).toBe(false);
 		const r = await restoreScan(new File([], 'a.pdf'), 'pdf', before, read);
