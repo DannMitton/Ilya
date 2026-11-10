@@ -4090,7 +4090,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 									onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
 									onsyllableoverrideclear={() => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, null)}
 									onreset={handleReset}
-									gloss={shownGlosses.get(wordKey)} glossaryText={glossary.get(selectedWord.lemma, selectedWord.cleanWord, language)}
+									gloss={shownGlosses.get(wordKey)} {glossary} offerScope={`${doc.id}|${wordKey}`}
 									onglossoverride={handleGlossOverride}
 								/>
 							{/if}

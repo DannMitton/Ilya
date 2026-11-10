@@ -5,7 +5,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n'; import { savedFlag, settle } from '$lib/components/Field/settle-field'; import SavedNote from '$lib/components/Field/SavedNote.svelte';
-	import { resolveFullGloss } from '$lib/gloss-resolve'; import { glossToWrite, type ResolvedGloss } from '$lib/text/gloss-edit';
+	import { resolveFullGloss } from '$lib/gloss-resolve'; import { glossToWrite, type ResolvedGloss } from '$lib/text/gloss-edit'; import type { GlossaryStore } from '$lib/text/glossary.svelte'; import GlossOffer from './GlossOffer.svelte';
 
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
@@ -35,13 +35,13 @@
 		onreset?: () => void;
 		/** What the song's edit (or, later, the glossary) decides this word's gloss is, in the shown language; undefined where the dictionary decides (row 179). */
 		gloss?: ResolvedGloss;
-		/** The personal glossary's entry for this word in the shown language, if any (row 179). */
-		glossaryText?: string;
+		/** Row 179: the personal glossary, and this word in this song (`document id|line-word`) for the session's "Not now". */
+		glossary?: GlossaryStore; offerScope?: string;
 		/** Callback when the user edits the gloss in the Dictionary panel. */
 		onglossoverride?: (gloss: string | null) => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, gloss, glossaryText, onglossoverride }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, gloss, glossary, offerScope = '', onglossoverride }: Props = $props();
 
 	// Whether this word is a proclitic or enclitic (no independent stress).
 	// Declared here, ahead of displayCyrillic below, because it depends only
@@ -848,6 +848,7 @@
 		dictPanelOpen = !dictPanelOpen;
 	}
 
+	const glossaryText = $derived(glossary?.get(word.lemma, word.cleanWord, language));
 	function handleGlossInput(e: Event) {
 		const input = e.target as HTMLInputElement;
 		const value = input.value.slice(0, 20);
@@ -1041,6 +1042,7 @@
 							aria-label={t('inspector.editGlossAria', language)}
 						/>
 						<p class="dict-capacity">{t('inspector.dictCapacity', language)}<SavedNote shown={glossSaved} {language} /></p>
+						{#if glossary}<GlossOffer {language} {word} {gloss} {glossaryText} {glossary} scope={offerScope} />{/if}
 					</div>
 
 					<div class="dict-separator" aria-hidden="true"></div>

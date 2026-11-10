@@ -161,3 +161,23 @@ export function glossToWrite(typed: string, dictionaryGloss: string, glossaryTex
 	if (typed === '') return !dictionaryGloss && glossaryText ? '' : null;
 	return typed === dictionaryGloss ? null : typed;
 }
+
+/**
+ * WHICH LINE STANDS UNDER THE INSPECTOR'S FIELD (row 179, step 3). The offer is a
+ * STATE OF THE FIELD, not an event (brief, Fable r2 amendment 1): it stands
+ * whenever she has typed an edit of her own in this language, the dictionary's
+ * gloss in this language is empty, the glossary has no entry for the word, and
+ * she has not said "Not now" for this word in this song. The line "From your
+ * other songs" stands where the field shows the glossary's fill.
+ */
+export function glossLine(input: {
+	source: GlossSource | undefined;
+	songEdit: string | undefined;
+	dictionaryGloss: string;
+	glossaryText: string | undefined;
+	dismissed: boolean;
+}): 'offer' | 'fromGlossary' | null {
+	if (input.source === 'glossary') return 'fromGlossary';
+	if (input.songEdit && !input.dictionaryGloss && input.glossaryText === undefined && !input.dismissed) return 'offer';
+	return null;
+}

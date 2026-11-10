@@ -14,6 +14,8 @@ import { deviceStorage, glossaryKey, readGlossary, writeGlossary } from './gloss
 export class GlossaryStore implements GlossaryLookup {
 	private entries = $state<ReadonlyMap<string, string>>(new Map());
 	private readonly storage: Storage | undefined;
+	/** The offers she has said "Not now" to, keyed by song and word. Session state, never stored (brief, step 3). */
+	private dismissed = $state<ReadonlySet<string>>(new Set());
 
 	constructor(storage: Storage | undefined = deviceStorage()) {
 		this.storage = storage;
@@ -39,6 +41,22 @@ export class GlossaryStore implements GlossaryLookup {
 		const next = new Map(this.entries);
 		next.delete(key);
 		return this.commit(next);
+	}
+
+	offerDismissed(scope: string): boolean {
+		return this.dismissed.has(scope);
+	}
+
+	dismissOffer(scope: string): void {
+		this.dismissed = new Set(this.dismissed).add(scope);
+	}
+
+	/** "Stop using" lets a fresh edit of the word bring the offer back (walk item 5). */
+	reviveOffer(scope: string): void {
+		if (!this.dismissed.has(scope)) return;
+		const next = new Set(this.dismissed);
+		next.delete(scope);
+		this.dismissed = next;
 	}
 
 	private commit(next: Map<string, string>): Outcome {
