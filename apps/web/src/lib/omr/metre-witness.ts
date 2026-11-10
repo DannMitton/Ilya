@@ -48,6 +48,8 @@
  */
 
 /** A window of the voice staff, read: where it is on its page image and what it states. */
+import { isChordTone, isCue, isGrace } from './note-kinds';
+
 export interface MetreSeen {
 	/** Left edge, page pixels. */
 	x0: number;
@@ -166,7 +168,8 @@ export function barFacts(measures: readonly string[]): BarFacts[] {
 			if (d) div = Number(d[1]);
 			if (!/^<note[\s>]/.test(p)) continue;
 			const note = p.slice(0, p.indexOf('</note>') + 7);
-			if (/<grace[\s/>]|<chord[\s/>]|<cue[\s/>]/.test(note)) continue;
+			// The same three tests the underlay's seating reads (`note-kinds.ts`, row 181 B0g); `note-kinds.test.ts` holds them equal to the old one regex. The voice test below is this file's own and unchanged.
+			if (isGrace(note) || isChordTone(note) || isCue(note)) continue;
 			const v = /<voice>\s*(\d+)\s*<\/voice>/.exec(note);
 			if (v && v[1] !== '1') continue;
 			const du = /<duration>\s*(\d+)\s*<\/duration>/.exec(note);

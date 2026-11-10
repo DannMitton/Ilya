@@ -17,6 +17,15 @@ describe('wordsOf', () => {
 		]);
 	});
 
+	/* Row 181 B0 step 1: the letter boxes ride from the reader to the word. If they were dropped, no piece could be placed by its vowel. */
+	it('carries a word\'s letter boxes (symbols) as the word\'s own fields, and gives a word without them no symbols key', () => {
+		const sym = (text: string, x0: number, x1: number) => ({ text, bbox: { x0, y0: 1, x1, y1: 9 } });
+		const withSyms = { paragraphs: [{ lines: [{ words: [{ text: 'да', bbox: { x0: 0, y0: 1, x1: 20, y1: 9 }, symbols: [sym('д', 0, 8), sym('а', 10, 20)] }, { text: 'нет', bbox: { x0: 30, y0: 1, x1: 50, y1: 9 } }] }] }] };
+		const [a, b] = wordsOf([withSyms]);
+		expect(a).toEqual({ text: 'да', x0: 0, y0: 1, x1: 20, y1: 9, symbols: [{ text: 'д', x0: 0, y0: 1, x1: 8, y1: 9 }, { text: 'а', x0: 10, y0: 1, x1: 20, y1: 9 }] });
+		expect('symbols' in b).toBe(false);
+	});
+
 	it('gives no words for no blocks', () => {
 		expect(wordsOf(null)).toEqual([]);
 		expect(wordsOf(undefined)).toEqual([]);
