@@ -191,6 +191,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	} from '$lib/score/entry';
 	import { currentPitch, orphanIds } from '$lib/score/correction';
 	import { BarLayer } from '$lib/score/bar-layer';
+	import { barlineUi } from '$lib/score/barline-ui';
 	import { stackLabel } from '$lib/score/undo-history.svelte';
 	import { createUndoHistory } from '$lib/score/undo-wiring.svelte';
 	import { breakControl } from '$lib/text/break-here';
@@ -873,7 +874,9 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		label: pitchLabel,
 		word: (key) => t(key, language),
 		pushUndo,
+		barlineVerb: (id) => layer.barlineVerb(id),
 	});
+	barlineUi.attach({ mode: () => verbs.barline?.kind ?? null, act: () => verbs.handleBarline() });
 	const selectedEvent = $derived(verbs.selectedEvent);
 	const armedBase = $derived(verbs.armedBase);
 	const armedDots = $derived(verbs.armedDots);

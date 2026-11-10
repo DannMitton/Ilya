@@ -20,6 +20,7 @@
  */
 import type { Measure, ParsedScore, VocalLineEvent } from '@ilya/score-parser';
 import { applyCorrections, type CorrectionMap } from './correction';
+import { barlineVerb, type BarlineVerb } from './barline-marks';
 import { IDENTITY_BARS, rebar, type BarMap } from './rebar';
 
 export interface BarLayerDeps {
@@ -96,6 +97,12 @@ export class BarLayer {
 		const m = this.#get().score?.measures.find((x) => x.number.trim() === label.trim());
 		const i = m ? m.index : Number.parseInt(label, 10) - 1;
 		return Number.isFinite(i) && i >= 0 ? this.readingLabelOf(i) : label;
+	}
+
+	/** The Barline verb the entry offers, with the corrections it would write (`barline-marks.ts`); null where none, or where there is no score. */
+	barlineVerb(id: string): BarlineVerb | null {
+		const score = this.#d.score();
+		return score ? barlineVerb(score, this.#get().pre, this.#d.corrections(), id) : null;
 	}
 
 	/** The number the PRINTED bar carries: the reading's, for the strip and the banner's list. */

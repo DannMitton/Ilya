@@ -296,3 +296,52 @@ describe('CorrectionVerbs, readings', () => {
 		expect(h.verbs.durationWord('breve' as NoteBase)).toBe('breve');
 	});
 });
+
+describe('CorrectionVerbs, the Barline verb (QUEUE row 138, B3)', () => {
+	const verbFor = (kind: 'add' | 'remove', next = 'b') => (id: string) => (id === 'a' ? { kind, nextId: next, map: { [next]: { barline: kind === 'add' ? ('before' as const) : ('none' as const) } } } : null);
+	function rig(offer: (id: string) => ReturnType<ReturnType<typeof verbFor>> | null) {
+		const line = [note('a', P('C', 4)), note('b', P('E', 4))];
+		let corrections: CorrectionMap = {};
+		let cursor: Cursor | null = { kind: 'entry', id: 'a' };
+		const pushed: UndoNote[] = [];
+		const verbs = new CorrectionVerbs({
+			corrections: () => corrections, setCorrections: (n) => (corrections = n), line: () => line, readLine: () => line,
+			cursor: () => cursor, inGap: () => cursor?.kind === 'gap', selectedEventId: () => (cursor?.kind === 'entry' ? cursor.id : null),
+			setCursor: (n) => (cursor = n), selectEntry: (id) => (cursor = id ? { kind: 'entry', id } : null), keyOf: () => undefined,
+			clef: () => ({ sign: 'G' }), label: () => '', word: (k) => k, pushUndo: (n) => pushed.push(n), barlineVerb: offer,
+		});
+		return { verbs, pushed, get corrections() { return corrections; }, moveTo(c: Cursor | null) { cursor = c; } };
+	}
+	it('Add writes the mark and names the Undo "barline added"', () => {
+		const h = rig(verbFor('add'));
+		expect(h.verbs.barline?.kind).toBe('add');
+		h.verbs.handleBarline();
+		expect(h.corrections).toEqual({ b: { barline: 'before' } });
+		expect(h.pushed).toEqual([{ kind: 'text', key: 'loupe.undo.barlineAdded' }]);
+	});
+	it('Remove writes the mark and names the Undo "barline removed"', () => {
+		const h = rig(verbFor('remove'));
+		h.verbs.handleBarline();
+		expect(h.corrections).toEqual({ b: { barline: 'none' } });
+		expect(h.pushed).toEqual([{ kind: 'text', key: 'loupe.undo.barlineRemoved' }]);
+	});
+	it('does nothing in a gap, on a note with no offer, or with no layer lent', () => {
+		const h = rig(verbFor('add'));
+		h.moveTo({ kind: 'gap', after: 'a', measureIndex: 0 } as never);
+		expect(h.verbs.barline).toBeNull();
+		h.verbs.handleBarline();
+		expect(h.pushed).toEqual([]);
+		const none = rig(() => null);
+		none.verbs.handleBarline();
+		expect(none.corrections).toEqual({});
+		expect(harness().verbs.barline).toBeNull();
+	});
+	it('Restore is offered only where the note itself is amended, not where only a barline stands on it', () => {
+		const h = harness({ corrections: { a: { barline: 'before' } } });
+		expect(h.verbs.restoreAvailable).toBe(false);
+		const g = harness({ corrections: { a: { barline: 'before', dots: 1 } } });
+		expect(g.verbs.restoreAvailable).toBe(true);
+		g.verbs.handleRestoreNote();
+		expect(g.corrections).toEqual({ a: { barline: 'before' } });
+	});
+});

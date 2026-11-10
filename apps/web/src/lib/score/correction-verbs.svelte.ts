@@ -27,6 +27,7 @@
  */
 import type { NoteBase, Pitch, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
 import {
+	amendsNote,
 	clearCorrection,
 	currentDuration,
 	currentPitch,
@@ -56,6 +57,7 @@ import {
 	type Cursor,
 } from './entry';
 import type { UndoNote } from './undo-history.svelte';
+import type { BarlineVerb } from './barline-marks';
 
 /** The clef in force, as `arrivalPitch` and `middleLine` read it. */
 type Clef = { sign: 'G' | 'F' | 'C'; octaveChange?: number };
@@ -80,6 +82,8 @@ export interface CorrectionVerbsDeps {
 	/** A string from the table, in the language in force. */
 	word: (key: string) => string;
 	pushUndo: (note: UndoNote) => void;
+	/** The Barline verb the held entry offers, with the corrections it would write (`BarLayer.barlineVerb`); absent: none. */
+	barlineVerb?: (id: string) => BarlineVerb | null;
 }
 
 /** The seven duration words the surface ships, by base (the 32nd and 64th since N.183). */
@@ -160,7 +164,13 @@ export class CorrectionVerbs {
 	   therefore a correction on an entry the READ still carries. */
 	get restoreAvailable(): boolean {
 		const id = this.#d.selectedEventId();
-		return !this.#d.inGap() && !!id && id in this.#d.corrections() && !isEnteredId(id);
+		return !this.#d.inGap() && !!id && amendsNote(this.#d.corrections()[id]) && !isEnteredId(id);
+	}
+
+	/** The Barline verb the held note offers (QUEUE row 138): Add where the next entry is in its bar, Remove where it opens the next; null where neither. */
+	get barline(): BarlineVerb | null {
+		const id = this.#d.selectedEventId();
+		return !this.#d.inGap() && id ? (this.#d.barlineVerb?.(id) ?? null) : null;
 	}
 
 	/** Whether the taken entry may start a tie: Gould's conditions, in code. */
@@ -388,5 +398,13 @@ export class CorrectionVerbs {
 		if (!ev || !this.tieAvailable) return;
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.tie' });
 		this.#d.setCorrections(toggleTie(this.#d.corrections(), ev));
+	};
+
+	/** Barline: add one after the held note, or remove the one that follows it. One Undo step either way. */
+	handleBarline = (): void => {
+		const v = this.barline;
+		if (!v) return;
+		this.#d.pushUndo({ kind: 'text', key: v.kind === 'add' ? 'loupe.undo.barlineAdded' : 'loupe.undo.barlineRemoved' });
+		this.#d.setCorrections(v.map);
 	};
 }

@@ -83,7 +83,7 @@ test.describe('Tchaikovsky op. 38 no. 3, no printed tempo', () => {
 		await insights(page);
 		const s = sentence(page);
 		await expect(s).toContainText("Ilya estimates");
-		await expect(s).toContainText('= 60 to 72 from this score\'s 3/8 metre, so you phonate for about');
+		await expect(s).toContainText('= 60 to 72 from this score\'s 3/8 time signature, so you phonate for about');
 		await expect(s).not.toContainText('states no tempo');
 		await expect(s.locator('.mus').first()).toBeVisible();
 		await expect(s.locator('.tempo-link')).toHaveText('Change the tempo');
@@ -166,7 +166,7 @@ test.describe('Tchaikovsky op. 38 no. 3, no printed tempo', () => {
 		await insights(page);
 		const s = sentence(page);
 		await expect(s).toContainText('Ilya estime le tempo à');
-		await expect(s).toContainText('d’après la mesure à 3/8 de cette partition; votre phonation occupe donc environ');
+		await expect(s).toContainText('d’après le chiffrage de mesure 3/8 de cette partition; votre phonation occupe donc environ');
 		await shot(page, 'tchaikovsky-insights-fr-desk-estimated');
 		await s.locator('.tempo-link').click();
 		const control = page.locator('[data-tempo-control]');

@@ -39,6 +39,7 @@
 	import type { NoteBase } from '@ilya/score-parser';
 	import type { ShiftDirection } from '$lib/score/pairings';
 	import { LENGTH_CELLS } from '$lib/score/correction';
+	import { barlineUi } from '$lib/score/barline-ui';
 	import {
 		stepCount,
 		stepValue,
@@ -655,22 +656,10 @@
 			<!-- REST is lit in a gap, where it enters one, and on an entry, where
 			     it converts both ways. It is the one cell in this station that a
 			     gap does not disable. -->
-			<button
-				type="button"
-				class="cell"
-				class:engaged={selectedIsRest}
-				aria-pressed={!inGap && selectedIsRest}
-				onclick={onrest}>{T('loupe.rest')}</button
-			>
+			<button type="button" class="cell" class:engaged={selectedIsRest} aria-pressed={!inGap && selectedIsRest} onclick={onrest}>{T('loupe.rest')}</button>
 			<!-- DELETE IN A GAP DOES NOTHING, so it says nothing: there is no note
 			     under the bar to remove. -->
-			<button
-				type="button"
-				class="cell"
-				disabled={inGap}
-				aria-label={T('correct.delete')}
-				onclick={ondelete}>{T('loupe.delete')}</button
-			>
+			<button type="button" class="cell" disabled={inGap} aria-label={T('correct.delete')} onclick={ondelete}>{T('loupe.delete')}</button>
 			<!-- TIE joins two soundings of ONE pitch, so it is offered only where
 			     the entry after this one can legally take it. Anything else is a
 			     slur, which is a different mark with a different meaning. -->
@@ -682,6 +671,10 @@
 				disabled={!tieAvailable && !selectedTied}
 				onclick={ontie}>{T('loupe.tie')}</button
 			>
+			<!-- BARLINE (QUEUE row 138): Add after the held note, or Remove the one that follows it; hidden where neither is offered
+			     (the last entry, inside a tuplet, a removal the layer would not honour). The face is one word beside Rest and Tie, the
+			     accessible name says which. -->
+			{#if barlineUi.mode || inGap}<button type="button" class="cell" class:engaged={barlineUi.mode === 'remove'} data-barline={barlineUi.mode ?? 'none'} disabled={inGap} aria-label={T(barlineUi.mode === 'remove' ? 'correct.barlineRemove' : 'correct.barlineAdd')} onclick={() => barlineUi.act()}>{T('loupe.barline')}</button>{/if}
 			<!-- RESTORE clears every correction on ONE entry, which the Undo pill
 			     cannot do: the pill reverses the last verb and this reverses all
 			     of them here. It is offered only where the READ still carries the

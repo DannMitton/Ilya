@@ -44,7 +44,7 @@ const deps = (language: 'en' | 'fr' = 'en'): HeadlineDeps => ({
 describe('a song with no printed tempo (Tchaikovsky, 3/8)', async () => {
 	const score = await load('tchaikovsky-op38-3-voice.musicxml');
 
-	it('is estimated: the dotted quarter at 60 to 72, from the 3/8 metre', () => {
+	it('is estimated: the dotted quarter at 60 to 72, from the 3/8 time signature', () => {
 		const r = resolveTempo(score)!;
 		expect(r.provenance).toBe('estimated');
 		expect([r.beatUnit, r.beatUnitDots]).toEqual(['quarter', 1]);
@@ -74,11 +74,11 @@ describe('a song with no printed tempo (Tchaikovsky, 3/8)', async () => {
 		const model = buildInsights({ analysisScore: score, profile, watchList: null });
 		const en = phonationHeadline(model.phonation, deps('en'));
 		expect(en).toMatch(/^Ilya estimates /);
-		expect(en).toContain(`${beatGlyph('quarter', 1)} = 60 to 72 from this score's 3/8 metre, so you phonate for about `);
+		expect(en).toContain(`${beatGlyph('quarter', 1)} = 60 to 72 from this score's 3/8 time signature, so you phonate for about `);
 		expect(en).not.toMatch(/states no tempo/);
 		const fr = phonationHeadline(model.phonation, deps('fr'));
 		expect(fr).toContain('Ilya estime le tempo à ');
-		expect(fr).toContain('d’après la mesure à 3/8 de cette partition; votre phonation occupe donc environ ');
+		expect(fr).toContain('d’après le chiffrage de mesure 3/8 de cette partition; votre phonation occupe donc environ ');
 	});
 
 	it('the singer\'s tempo makes it a point, and the sentence says it is theirs', () => {
@@ -159,7 +159,7 @@ describe('the phonation sentence, branch by branch', () => {
 	it('estimated with a metre says the metre; without one it says a walking pace', () => {
 		const range = { kind: 'range', low: 60, high: 72 };
 		const withMetre = { ...base, timing: 'range', phonation: range, length: null, tempo: tempoOf({ provenance: 'estimated', range: [60, 72], estimateMetre: { beats: 6, beatType: 8 } }) } as never;
-		expect(phonationHeadline(withMetre, deps())).toContain("from this score's 6/8 metre");
+		expect(phonationHeadline(withMetre, deps())).toContain("from this score's 6/8 time signature");
 		const without = { ...base, timing: 'range', phonation: range, length: null, tempo: tempoOf({ provenance: 'estimated', range: [60, 72] }) } as never;
 		const s = phonationHeadline(without, deps());
 		expect(s).toContain(', a walking pace, so you phonate for about ');
@@ -206,10 +206,10 @@ describe('the pieces the sentence and the receipt are made of', () => {
 		expect(buildProvenanceLegend([], 'fr', undefined, true)[0].label).toBe('tempo estimé par Ilya');
 	});
 
-	it('the ratified words are exactly as Dann gave them (2026-10-08 01:40; the two estimates 2026-10-15 09:09)', () => {
-		expect(t('insights.phonation.estimatedMetre', 'en')).toBe("Ilya estimates {beat} = {low} to {high} from this score's {metre} metre, so you phonate for about {t1} to {t2}.");
+	it('the ratified words are exactly as Dann gave them (2026-10-08 01:40; the two estimates 2026-10-15 09:09; `estimatedMetre` reworded 2026-11-09 22:08 and 22:09: time signature, « chiffrage de mesure »)', () => {
+		expect(t('insights.phonation.estimatedMetre', 'en')).toBe("Ilya estimates {beat} = {low} to {high} from this score's {metre} time signature, so you phonate for about {t1} to {t2}.");
 		expect(t('insights.phonation.estimatedWalking', 'en')).toBe('Ilya estimates {beat} = {low} to {high}, a walking pace, so you phonate for about {t1} to {t2}.');
-		expect(t('insights.phonation.estimatedMetre', 'fr')).toBe('Ilya estime le tempo à {beat} = {low} à {high} d’après la mesure à {metre} de cette partition; votre phonation occupe donc environ {t1} à {t2}.');
+		expect(t('insights.phonation.estimatedMetre', 'fr')).toBe('Ilya estime le tempo à {beat} = {low} à {high} d’après le chiffrage de mesure {metre} de cette partition; votre phonation occupe donc environ {t1} à {t2}.');
 		expect(t('insights.phonation.estimatedWalking', 'fr')).toBe('Ilya estime le tempo à {beat} = {low} à {high}, l’allure de la marche; votre phonation occupe donc environ {t1} à {t2}.');
 		expect(t('insights.phonation.headlineYours', 'en')).toBe('You phonate for about {phonation} of this {length} piece, at {tempo}, your tempo.');
 		expect(t('tempo.hint', 'en')).toBe('Your tempo. Every figure follows.');

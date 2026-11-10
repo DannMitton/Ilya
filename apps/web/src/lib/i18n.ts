@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,186 keys.
+   This file holds 1,205 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -32,7 +32,7 @@
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
    console.        2  lib/components/Drawer/AnalysisStation.svelte
-   correct.       23  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
+   correct.       32  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
    cosmetic.      15  lib/components/Drawer/NotationFields.svelte
    dict.           3  lib/components/Paper/TitlePage.svelte, lib/components/Drawer/AnalysisStation.svelte, lib/one-action.ts
    display.        5  no literal consumer found
@@ -48,7 +48,7 @@
    intake.        49  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
-   loupe.        112  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   loupe.        122  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
@@ -375,6 +375,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.lenHalf':             { en: 'Half',                          fr: 'Blanche' },
 	'correct.lenWhole':            { en: 'Whole',                         fr: 'Ronde' },
 	'correct.restore':             { en: 'Undo my corrections to this note', fr: 'Annuler mes corrections sur cette note' },
+	'correct.barlineAdd': { en: 'Add a barline after this note', fr: 'Ajouter une barre de mesure après cette note' },
+	'correct.barlineRemove': { en: 'Remove the barline after this note', fr: 'Supprimer la barre de mesure après cette note' },
+	'correct.tsChange': { en: 'Change the time signature from this bar', fr: 'Changer le chiffrage de mesure à partir de cette mesure' },
+	'correct.tsBeats': { en: 'Number of beats', fr: 'Nombre de temps' },
+	'correct.tsBeatType': { en: 'Beat duration', fr: 'Unité de temps' },
+	'correct.tsToNext': { en: 'To the next time signature change', fr: 'Jusqu’au prochain changement de chiffrage' },
+	'correct.tsToEnd': { en: 'To the end of the song', fr: 'Jusqu’à la fin du chant' },
+	'correct.tsRebar': { en: 'Rebar the notes', fr: 'Redistribuer les notes' },
+	'correct.tsRebarHelp': { en: 'Moves notes across barlines to fill bars of the new time signature, tying any note that crosses one.', fr: 'Déplace les notes d’une mesure à l’autre pour remplir les mesures du nouveau chiffrage, en liant toute note qui franchit une barre de mesure.' },
 	// ── N.111, the clitic seat ───────────────────────────────
 	//    A vowelless clitic the file seated alone on a sung pitch, and what
 	//    Ilya did about it.
@@ -590,6 +599,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.restValue.64th.1':      { en: 'Rest · Dotted sixty-fourth', fr: 'Seizième de soupir pointé' },
 	'loupe.restValue.64th.2':      { en: 'Rest · Double-dotted sixty-fourth', fr: 'Seizième de soupir doublement pointé' },
 	'loupe.tie':                   { en: 'Tie',                          fr: 'Liaison' },
+	// QUEUE row 138, ratified by Dann 2026-11-09 (21:35, 21:44, 22:08, 22:09): the barline and time signature verbs. « Barre de mesure » is coined (22:09).
+	'loupe.barline': { en: 'Barline', fr: 'Barre de mesure' },
+	'loupe.timeSignature': { en: 'Time signature', fr: 'Chiffrage de mesure' },
+	'loupe.divideOffer': { en: 'This bar holds %k bars of %m.', fr: 'Cette mesure contient %k mesures à %m.' },
+	'loupe.divideOfferOpening': { en: 'This bar holds a pickup and %k bars of %m.', fr: 'Cette mesure contient une anacrouse et %k mesures à %m.' },
+	'loupe.divideOfferClosing': { en: 'This bar holds %k bars of %m and a short final bar.', fr: 'Cette mesure contient %k mesures à %m et une mesure finale incomplète.' },
+	'loupe.divide': { en: 'Divide it by the time signature', fr: 'La diviser selon le chiffrage de mesure' },
 	// The visible word on the delete cell. `correct.delete` stays its
 	// accessible name, so a screen reader still hears which note goes.
 	'loupe.delete':                { en: 'Delete',                       fr: 'Supprimer' },
@@ -673,6 +689,10 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.undo.entered':          { en: 'entry added',                   fr: 'entrée ajoutée' },
 	'loupe.undo.rest':             { en: 'rest changed',                  fr: 'silence modifié' },
 	'loupe.undo.tie':              { en: 'tie changed',                   fr: 'liaison modifiée' },
+	'loupe.undo.barlineAdded': { en: 'barline added', fr: 'barre de mesure ajoutée' },
+	'loupe.undo.barlineRemoved': { en: 'barline removed', fr: 'barre de mesure retirée' },
+	'loupe.undo.timeSignature': { en: 'time signature changed', fr: 'chiffrage de mesure modifié' },
+	'loupe.undo.divided': { en: 'bar divided', fr: 'mesure divisée' },
 	'loupe.undo.tuplet':           { en: 'tuplet defined',                fr: 'nolet défini' },
 	// The visible word on the restore cell. `correct.restore` stays its
 	// accessible name, so a screen reader still hears the whole sentence,
@@ -1866,7 +1886,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    RATIFIED by Dann 2026-10-08 01:40, except the two `estimated*` sentences, whose replacements he
 	//    RATIFIED 2026-10-15 09:09 (the old ones began "This score states no tempo", which Ilya cannot
 	//    know of a scan: it reads no words from one). `{beat}` is a metronome note drawn in the notation face.
-	'insights.phonation.estimatedMetre': { en: 'Ilya estimates {beat} = {low} to {high} from this score\'s {metre} metre, so you phonate for about {t1} to {t2}.', fr: 'Ilya estime le tempo \u00e0 {beat} = {low} \u00e0 {high} d\u2019apr\u00e8s la mesure \u00e0 {metre} de cette partition; votre phonation occupe donc environ {t1} \u00e0 {t2}.' },
+	'insights.phonation.estimatedMetre': { en: 'Ilya estimates {beat} = {low} to {high} from this score\'s {metre} time signature, so you phonate for about {t1} to {t2}.', fr: 'Ilya estime le tempo \u00e0 {beat} = {low} \u00e0 {high} d\u2019apr\u00e8s le chiffrage de mesure {metre} de cette partition; votre phonation occupe donc environ {t1} \u00e0 {t2}.' },
 	'insights.phonation.estimatedWalking': { en: 'Ilya estimates {beat} = {low} to {high}, a walking pace, so you phonate for about {t1} to {t2}.', fr: 'Ilya estime le tempo \u00e0 {beat} = {low} \u00e0 {high}, l\u2019allure de la marche; votre phonation occupe donc environ {t1} \u00e0 {t2}.' },
 	'insights.phonation.headlineYours': { en: 'You phonate for about {phonation} of this {length} piece, at {tempo}, your tempo.', fr: 'Votre phonation occupe environ {phonation} des {length} de la pi\u00e8ce, \u00e0 {tempo}, votre tempo.' },
 	'tempo.change': { en: 'Change the tempo', fr: 'Modifier le tempo' },
