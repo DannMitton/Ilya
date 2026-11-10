@@ -206,7 +206,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import { CorrectionVerbs } from '$lib/score/correction-verbs.svelte';
 	import { TupletRow } from '$lib/score/tuplet-row.svelte';
 	import { pitchLabel } from '$lib/voice/note-picker';
-	import { scanNotice, type IngestedScore, type ScanNoticeKey } from '$lib/score/ingestion/ingest';
+	import { scanNotice, readerNoticeKey, type IngestedScore, type ScanNoticeKey } from '$lib/score/ingestion/ingest';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import type { PageProvenance } from '$lib/library/types';
 	import { storedWithReading, type KeptReading } from '$lib/omr/restore';
@@ -3981,7 +3981,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 									{loaderState}
 								/>
 							{/key}
-							{#if noLyricsFile}
+							{#if readerNoticeKey(ingestedScore?.result.score.source.origin)}<ScanBanner noticeKey="upload.banner.reader" arg="" {language} onbar={() => {}} />{/if}{#if noLyricsFile}
 								<!-- N.55a's courtesy message (Dann, E.47). It lives in the
 								     DRAWER and not on the page because it names the FILE, and
 								     a file name dates a printed study sheet to an export

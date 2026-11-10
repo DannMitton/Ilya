@@ -90,7 +90,18 @@ export const noLyricsNoticeKey = (p: IngestProvenance, origin: SourceOrigin): No
  * read on some systems and not others (`ratified-banner-words-partly-read_2026-10-28.md`),
  * one naming several bars and one naming a single bar.
  */
-export type ScanNoticeKey = NoLyricsNoticeKey | 'upload.banner.wordsPartlyRead' | 'upload.banner.wordsPartlyReadOne';
+export type ScanNoticeKey = NoLyricsNoticeKey | 'upload.banner.wordsPartlyRead' | 'upload.banner.wordsPartlyReadOne' | 'upload.banner.reader';
+
+/**
+ * INTEGRATION STEP 10 (desk, 2026-11-10): the banner that says a score is Ilya's synthesis from an image, ratified by Dann
+ * (step 8b) and until now shown nowhere. It checks one thing, the score's own `source.origin`: `homr-musicxml-from-image` (a
+ * scan or photograph read by homr) earns it, and every other origin (MusicXML, MXL, MEI, MNX, a vector PDF, a MIDI file) does
+ * not. WHY: only an image reading is imperfect in the way the sentence names. WHEN IT FAILS: a singer is told to check a
+ * MusicXML file against an original it was never read from, or is not told so of a scan. The page draws it above the
+ * no-words and partly-read banners, in the same slot, and it is shown again for each scan because the origin is read from
+ * the score that is open. It relates to `scanNotice` (the other banners) and `ScanBanner.svelte`.
+ */
+export const readerNoticeKey = (origin: SourceOrigin | undefined): 'upload.banner.reader' | null => (origin === 'homr-musicxml-from-image' ? 'upload.banner.reader' : null);
 
 /**
  * The message a parse earns, and the text its `%s`-or-bars slot is filled
