@@ -65,6 +65,6 @@ describe('the banner prints the ratified sentence', () => {
 	it.each(['en', 'fr'] as const)('in %s', (language) => {
 		const html = render(ScanBanner, { props: { noticeKey: 'upload.banner.reader', arg: '', language, onbar: () => {} } }).body.replace(/<!--.*?-->/g, '');
 		expect(html).toContain(t('upload.banner.reader', language).replace(/’/g, '’').slice(0, 40));
-		expect(html).toMatch(/<p>/);
+		expect(html).toMatch(/<p[ >]/);
 	});
 });
