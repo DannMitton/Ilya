@@ -69,6 +69,23 @@ export function standInBucket(voiceType?: string): StandInBucket {
 	return 'middle';
 }
 
+/**
+ * QUEUE row 166: the five declared types (Tier 1 ids, `voiceTypes.ts`) whose
+ * stand-ins alone make a working profile, so INSIGHTS and MELODY can compute
+ * from the template when nothing is sung. Contralto, countertenor,
+ * bass-baritone, "Not sure", and no type are left out on purpose: they keep
+ * the page that says nothing was measured until row 167 rules their staves
+ * (DESK DEFAULT, Dann ratified the four profiles 2026-10-31 13:19 to 13:21).
+ * The singer's word for these values is "placeholder"; "generic" is internal.
+ */
+export const PLACEHOLDER_PROFILE_TYPES = ['soprano', 'mezzo-soprano', 'tenor', 'baritone', 'bass'] as const;
+
+/** Whether a declared type alone may stand in for a voice that has sung nothing usable. */
+export function hasPlaceholderProfile(voiceType?: string): boolean {
+	const t = (voiceType ?? '').trim().toLowerCase();
+	return (PLACEHOLDER_PROFILE_TYPES as readonly string[]).includes(t);
+}
+
 const geo = (xs: readonly number[]) => Math.exp(xs.reduce((a, x) => a + Math.log(x), 0) / xs.length);
 
 /**
