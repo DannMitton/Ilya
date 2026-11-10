@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import {
 	buildPoemFile,
 	decodeOffsets,
@@ -10,6 +11,7 @@ import {
 	operaOf,
 	shipEntry,
 	textFault,
+	workOfOpera,
 	withPoemKeys,
 } from '../scripts/build-poem-library.mjs';
 
@@ -202,7 +204,7 @@ describe('poem library build: a libretto entry (row 182, step 1)', () => {
 	const libretto = {
 		...poem,
 		id: 'aaaaaaaaaa',
-		work: 'bbbbbbbb',
+		work: crypto.createHash('md5').update('Пиковая дама'.normalize('NFC')).digest('hex').slice(0, 8),
 		kind: 'libretto',
 		author: 'Модест Ильич Чайковский',
 		provenance: {
@@ -250,5 +252,15 @@ describe('poem library build: a libretto entry (row 182, step 1)', () => {
 		}
 		expect(() => operaOf({ ...libretto, provenance: { ...libretto.provenance, voice: undefined } })).toThrow(/voice/);
 		expect(() => shipEntry({ ...poem, kind: 'aria' })).toThrow(/kind/);
+	});
+
+	it('row 182 step 2: the work is the opera\'s (first 8 hex of the MD5 of the NFC Russian title), and an id is ten hex digits', () => {
+		expect(libretto.work).toBe(workOfOpera('Пиковая дама'));
+		expect(workOfOpera('Пиковая дама')).toBe(workOfOpera('Пиковая дама'.normalize('NFD')));
+		expect(() => shipEntry({ ...libretto, work: 'bbbbbbbb' })).toThrow(/work/);
+		expect(() => shipEntry({ ...libretto, id: 'AAAAAAAAAA' })).toThrow(/id/);
+		expect(() => shipEntry({ ...libretto, id: 'aaaaaaaaa' })).toThrow(/id/);
+		// a poem's work is not an opera's: nothing checks it
+		expect(() => shipEntry(poem)).not.toThrow();
 	});
 });

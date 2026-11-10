@@ -51,3 +51,16 @@ Tests that pin the library: `poem-library.test.ts:99` (`toHaveLength(14)`); `poe
 **Gates after this step:** gate 7 128 passed. The other gates are unaffected by a build-script and type change and run in full at the end of step 3.
 
 **What I could not establish.** The app's `PoemEntry` has no entries with `kind` yet: the 89 arrive in step 3, so the opera path is tested on a synthetic libretto here and on the real data there.
+
+## Step 2: ids, checked
+
+**Changed.**
+- `scripts/build-poem-library.mjs`: `workOfOpera` (first 8 hex of the MD5 of the NFC Russian opera title), and a comment stating both formulas, why `work` is per opera, and the cost in one clause ("Not this poem" declines by `(songId, work)`, `poem-offer.svelte.ts:111`, so declining one aria declines that opera for that song). `operaOf` refuses a libretto whose `work` is not the opera's or whose `id` is not ten lowercase hex digits.
+- `apps/web/src/lib/text/poem-source.ts` (`resolveSource`): Fable's amendment 2. Where the stored id is gone and the work's entries are libretti, the work-level fallback answers null, so a card never names another aria of the opera; the caller falls back as it does for a missing work. An aria found by its id is unaffected.
+- Tests: `build-poem-library.test.ts` +1 (to 129 under gate 7); `poem-source.test.ts` +1. `src/lib/text` as a whole: 28 files, 589 passed.
+
+**Checked against the data (r3, 89 entries):** `work` reproduces for 89 of 89; `id` reproduces from the cleaned first line for 87 of 89 (step 0, finding 1). The two that do not are named in the build's comment and stand.
+
+**Other readers of `work`, read and found sound per opera** (Fable's list, re-read on the tip): the shortlist and rank (`poem-match.ts:213-231`, `:243-255`), the decline key (`poem-offer.svelte.ts:76`, `:111`, `:187`), and the stored source (`library.ts:303-307`).
+
+**What I could not establish.** Whether the two ids that do not reproduce were hashed from the speaker-labelled or the pre-cleaning first line; nothing in the tree says.

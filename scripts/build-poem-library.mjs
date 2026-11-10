@@ -137,6 +137,21 @@ export const OPERA_FIELDS = [
 	['literarySource', 'literary_source'],
 ];
 
+/**
+ * THE IDS OF A LIBRETTO ENTRY (row 182, step 2). `work` is the opera's: the first 8 hex digits of the MD5 of the opera's Russian
+ * title, NFC-normalised (`workOfOpera`; the build refuses an entry whose `work` is not that, so a mistyped one cannot ship). `id` is
+ * the first 10 hex digits of the MD5 of the opera title, "/", and the first sung line. An id is a stored identity (a song's
+ * `poemSource` names it), so it is never recomputed: the build checks that it is ten lowercase hex digits and, in `buildPoemFile`,
+ * that no two entries share one. The formula reproduces from the cleaned text's first line for 87 of the 89 arias; the other two
+ * (Кума's arioso, Гвидон's arioso) were hashed from a first line this repository does not hold, and stand as they are.
+ *
+ * `work` PER OPERA IS DELIBERATE. `rankWorks` scores a work by its best entry and the margin compares the top two works, so two
+ * arias of one opera never compete against each other and a Lyrics of one aria is not refused for resembling its neighbour. The
+ * cost: "Not this poem" declines by (songId, work) (`poem-offer.svelte.ts:111`), so declining one aria declines that opera for
+ * that song.
+ */
+export const workOfOpera = (operaRu) => crypto.createHash('md5').update(operaRu.normalize('NFC')).digest('hex').slice(0, 8);
+
 /** The opera object for a libretto entry, or a thrown error naming what is missing. */
 export function operaOf(e) {
 	const p = e.provenance;
@@ -147,6 +162,8 @@ export function operaOf(e) {
 		opera[key] = p[from];
 	}
 	opera.librettists = e.author;
+	if (e.work !== workOfOpera(opera.operaRu)) throw new Error(`library entry ${e.id}: "work" ${e.work} is not the opera's (${workOfOpera(opera.operaRu)} for "${opera.operaRu}")`);
+	if (!/^[0-9a-f]{10}$/.test(e.id)) throw new Error(`library entry ${e.id}: a libretto "id" is ten lowercase hex digits`);
 	return opera;
 }
 

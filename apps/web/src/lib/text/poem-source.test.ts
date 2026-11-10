@@ -198,6 +198,16 @@ describe('resolveSource: a stored source found again in the library', () => {
 		expect(r.firstLine).toBe(r.entry.incipit); // the id is gone: the offsets belong to an entry that is not this one
 	});
 
+	it('row 182: never names another aria of the opera when the stored aria\'s id is gone, but still finds an aria by its id', () => {
+		const opera = { composer: 'Tchaikovsky, Pyotr', operaRu: 'Пиковая дама', operaEn: 'Pique Dame', characterRu: 'Герман', characterEn: 'Hermann', number: "Hermann's arioso", voice: 'tenor', librettists: 'Модест Ильич Чайковский', literarySource: 'Pushkin, Пиковая дама' };
+		const aria = (id: string, title: string): PoemEntry => ({ ...koltsov, id, work: 'opera001', title, incipit: title, kind: 'libretto', opera });
+		const lib = { ...library, entries: [...library.entries, aria('aria000001', 'Я имени её не знаю'), aria('aria000002', 'Прости, прелестное создание')] };
+		const gone = { id: 'aria00gone', work: 'opera001', poemHash: library.hash, start: 0, end: 20, answered: true, edited: false };
+		expect(resolveSource(gone, lib)).toBeNull(); // the caller falls back as it does for a work the library no longer has
+		expect(resolveSource({ ...gone, id: 'aria000002' }, lib)!.entry.title).toBe('Прости, прелестное создание');
+		// a poem's work still follows (the test above): only a libretto is exempt
+	});
+
 	it('is null when the library has no entry of the work (the caller falls back to the ordinary line)', () => {
 		expect(resolveSource(source({ work: 'gone', id: 'gone' }), library)).toBeNull();
 		expect(resolveSource(source(), { entries: [], hash: library.hash })).toBeNull();
