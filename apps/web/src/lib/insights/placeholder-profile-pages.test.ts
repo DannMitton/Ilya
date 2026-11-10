@@ -14,6 +14,10 @@ import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
 import { placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
 import { isTreble, noteComments, noteFacts } from './comments';
 import { speaks } from './comment-text';
+import { buildInsights, verdictLine } from './insights';
+import { singerBlocks } from './singer-blocks';
+import { vowelTurns } from './singer-page';
+import type { CalibratedFormant, Vowel } from '$lib/voice/engine/types';
 
 const xml = readFileSync(fileURLToPath(new URL('../score/ingestion/fixtures/sunless-01-engraved.musicxml', import.meta.url)), 'utf8');
 const parse = async (): Promise<ParsedScore> =>
@@ -56,5 +60,47 @@ describe('row 166: a generic soprano with no typed passaggio', () => {
 		const shown = all.filter((c) => !c.treble && speaks(c));
 		expect(shown.length).toBe(all.length - all.filter((c) => !speaks(c)).length);
 		expect(all.length).toBe(0);
+	});
+});
+
+/* Step 5 (Fable's as-built review): the ring's share sums every row, so it is dashed wherever a row with a turn is a placeholder. */
+describe('step 5: the vowels block\'s ring on song 1', () => {
+	const FORMANTS: Record<string, [number, number]> = { i: [280, 2250], e: [400, 2100], 'ɪ': [330, 1900], 'ɨ': [350, 1500], 'ɛ': [520, 1800], a: [700, 1300], 'ɑ': [650, 1000], 'ʌ': [600, 1200], o: [450, 900], u: [320, 800] };
+	const sungTen = Object.fromEntries(
+		Object.entries(FORMANTS).map(([v, [f1, f2]]) => [v, { f1, f2, f2Quality: 'clear', confidence: 'high', reading: 'captured', plausibility: 'plausible', source: 'measured-user' }]),
+	) as unknown as Partial<Record<Vowel, CalibratedFormant>>;
+
+	async function vowelsBlock(sampled: Partial<Record<Vowel, CalibratedFormant>>, type: string) {
+		const adapted = buildVoiceProfileSnapshot(sampled, undefined, undefined, undefined, type);
+		const score = scoreInPerformanceOrder(await parse()).score;
+		const resolvers = buildUnderlayResolvers(score, 1, {});
+		const analyzed = resolveAdvice(analyzeScore(score, adapted.snapshot, resolvers.vowel));
+		const model = buildInsights({ analysisScore: score, profile: adapted.snapshot, watchList: null, vowelForEvent: resolvers.vowel, analyzed });
+		const blocks = singerBlocks(
+			{
+				language: 'en', model, profile: adapted.snapshot, verdict: verdictLine(model, false), noneFlagged: true, held: null, outside: null, keys: null,
+				comments: [], more: [], hiddenBySettings: 0, tagOf: () => '', barOf: () => '1', pitchOf: () => '', phonationHeadline: null, untrustedLine: null,
+				split: null, cycles: null, turns: vowelTurns(score, adapted.snapshot, resolvers.vowel), placeholders: placeholderVowels(analyzed),
+			},
+			String,
+		);
+		return blocks.map((b) => b.block).find((b) => b.kind === 'vowels');
+	}
+
+	it('a generic baritone: the ring prints, and the block carries ringPlaceholder', async () => {
+		const b = await vowelsBlock({}, 'baritone');
+		expect(b?.kind).toBe('vowels');
+		if (b?.kind !== 'vowels') return;
+		expect(b.ring).not.toBeNull();
+		expect(b.ringPlaceholder).toBe(true);
+		expect(b.rows.some((r) => r.turn && r.placeholder)).toBe(true);
+	});
+
+	it('a voice with ten sung vowels: the ring carries no flag', async () => {
+		const b = await vowelsBlock(sungTen, 'bass');
+		expect(b?.kind).toBe('vowels');
+		if (b?.kind !== 'vowels') return;
+		expect(b.ring).not.toBeNull();
+		expect(b.ringPlaceholder).toBeUndefined();
 	});
 });

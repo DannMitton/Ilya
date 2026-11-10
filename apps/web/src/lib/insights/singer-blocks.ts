@@ -63,7 +63,7 @@ export type Block =
 	| { kind: 'note'; heading?: string; text: string }
 	| { kind: 'cycles'; heading?: string; sentence: string; bar: { under: number; within: number; above: number } | null; legend: string[] }
 	| { kind: 'pitches'; heading?: string; caption: string; figure: TessituragramModel; typedTessitura: { low: Pitch; high: Pitch } | null }
-	| { kind: 'vowels'; heading?: string; caption: string; sub: string; turns: VowelTurns; ring: string | null; rows: Array<{ vowel: string; before: number; past: number; text: string; turn: string; placeholder?: true }>; placeholder?: string }
+	| { kind: 'vowels'; heading?: string; caption: string; sub: string; turns: VowelTurns; ring: string | null; ringPlaceholder?: true; rows: Array<{ vowel: string; before: number; past: number; text: string; turn: string; placeholder?: true }>; placeholder?: string }
 	/* `link` (row 48): the "Change the tempo" label that follows the phonation sentence, set as a tap that opens the tempo control. */
 	| { kind: 'prose'; heading?: string; text: string; small?: boolean; link?: string }
 	/** Row 47: the quiet octave line, directly under the phonation sentence. `shift` is the direction the range asks for; `applied` is whether it is. */
@@ -332,6 +332,8 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 				sub: T('insights.r2.vowels.against'),
 				turns: i.turns,
 				ring: i.turns.pastShare !== null ? fill(T('insights.r2.vowels.ring'), { n: percent(i.turns.pastShare) }) : null,
+				// Step 5 (Fable's as-built review): the ring's share sums every row, so it is dashed where any row with a turn rests on a placeholder.
+				...(rows.some((r) => r.placeholder) ? { ringPlaceholder: true as const } : {}),
 				rows,
 				...(dashed ? { placeholder: dashed } : {}),
 			});

@@ -41,6 +41,14 @@
 
 	/* The ring's circumference at r = 32. */
 	const C = 2 * Math.PI * 32;
+	/* Step 5: the past arc of a ring resting on a placeholder is drawn in dashes (the rows' own convention), the arc's length unchanged. */
+	const arcDash = (share: number, dashed: boolean): string => {
+		const len = share * C;
+		if (!dashed) return `${len} ${C}`;
+		const parts: number[] = [];
+		for (let at = 0; at < len; at += 7) parts.push(Math.min(4, len - at), at + 7 < len ? 3 : C);
+		return parts.length ? parts.join(' ') : `0 ${C}`;
+	};
 	/* The vowel track: 300 px on the letter page, narrower on a phone so the text column keeps room. */
 	const TRACK = $derived(Math.max(80, Math.min(300, width - 250)));
 </script>
@@ -134,7 +142,7 @@
 			<div class="ring">
 				<svg width="80" height="80" viewBox="0 0 80 80" role="img" aria-label={block.ring}>
 					<circle cx="40" cy="40" r="32" class="ring-before"></circle>
-					<circle cx="40" cy="40" r="32" class="ring-past" stroke-dasharray="{block.turns.pastShare * C} {C}" transform="rotate(-90 40 40)"></circle>
+					<circle cx="40" cy="40" r="32" class="ring-past" class:dashed={!!block.ringPlaceholder} data-placeholder={block.ringPlaceholder ? 'true' : undefined} stroke-dasharray={arcDash(block.turns.pastShare, !!block.ringPlaceholder)} transform="rotate(-90 40 40)"></circle>
 					<text x="40" y="45" text-anchor="middle">{Math.round(block.turns.pastShare * 100)}%</text>
 				</svg>
 				<div>
