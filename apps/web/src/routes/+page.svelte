@@ -37,7 +37,7 @@
 	import { routePoemPage } from '$lib/text/poem-page';
 	import { sameWords } from '$lib/text/same-words';
 	import { lyricsInPoemLines } from '$lib/text/relining';
-	import { poemOffer } from '$lib/text/poem-offer.svelte'; import { LoupeSwipe } from '$lib/score/loupe-swipe.svelte'; import { poemJoin } from '$lib/text/poem-join.svelte'; import { loupePrint } from '$lib/score/loupe-print.svelte'; import { joinDeps, printDeps } from '$lib/score/loupe-print-wiring'; import ScanBanner from '$lib/components/Drawer/ScanBanner.svelte';
+	import { poemOffer } from '$lib/text/poem-offer.svelte'; import { scanBanners } from '$lib/score/scan-banner-state.svelte'; import { LoupeSwipe } from '$lib/score/loupe-swipe.svelte'; import { poemJoin } from '$lib/text/poem-join.svelte'; import { loupePrint } from '$lib/score/loupe-print.svelte'; import { joinDeps, printDeps } from '$lib/score/loupe-print-wiring'; import ScanBanner from '$lib/components/Drawer/ScanBanner.svelte';
 	import { survivingGlosses } from '$lib/text/gloss-survival';
 	import { WordMarks } from '$lib/text/word-marks.svelte';
 	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
@@ -2114,7 +2114,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	 */
 	function handleClearScore(): void {
 		ingestedScore = null;
-		noLyricsFile = null;
+		noLyricsFile = null; scanBanners.reset();
 		orphanedCount = 0;
 		arrivalPage = null;
 		restoreSource = null;
@@ -2767,7 +2767,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		// overturned: a score carrying words seats them on its own notes, from the
 		// file's own mapping, below.
 		const noLyrics = ingested.result.warnings.some((w) => w.code === 'no-lyrics-found');
-		const notice = scanNotice(ingested.result.warnings, ingested.provenance, ingested.result.score.source.origin, ingested.fileName); noLyricsFile = notice?.arg ?? null; noLyricsKey = notice?.key ?? 'upload.banner.noLyrics';
+		const notice = scanNotice(ingested.result.warnings, ingested.provenance, ingested.result.score.source.origin, ingested.fileName); noLyricsFile = notice?.arg ?? null; noLyricsKey = notice?.key ?? 'upload.banner.noLyrics'; scanBanners.reset();
 		// A new score arrives: clear whatever the previous score filled, then
 		// fill the blanks from this score's header if it carries one. A score
 		// with no header still clears, and that case is the whole point: at E.23,
@@ -3137,7 +3137,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			transcribedText = null;
 			cancelQuietTimer();
 			orphanedCount = 0;
-			noLyricsFile = null;
+			noLyricsFile = null; scanBanners.reset();
 			restoreSource = restoreFrom(bytes, next.source?.page);
 			doc = next;
 			await refreshSongs();
@@ -3981,13 +3981,13 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 									{loaderState}
 								/>
 							{/key}
-							{#if readerNoticeKey(ingestedScore?.result.score.source.origin)}<ScanBanner noticeKey="upload.banner.reader" arg="" {language} onbar={() => {}} />{/if}{#if noLyricsFile}
+							{#if readerNoticeKey(ingestedScore?.result.score.source.origin) && !scanBanners.isDismissed('upload.banner.reader', '')}<ScanBanner noticeKey="upload.banner.reader" arg="" {language} onbar={() => {}} ondismiss={() => scanBanners.dismiss('upload.banner.reader', '')} />{/if}{#if noLyricsFile}
 								<!-- N.55a's courtesy message (Dann, E.47). It lives in the
 								     DRAWER and not on the page because it names the FILE, and
 								     a file name dates a printed study sheet to an export
 								     rather than to a song. Unstyled on purpose for the first
 								     walk. -->
-								<ScanBanner noticeKey={noLyricsKey} arg={noLyricsFile} {language} onbar={(bar) => loupePrint.goto(bar)} />
+								{#if !scanBanners.isDismissed(noLyricsKey, noLyricsFile)}<ScanBanner noticeKey={noLyricsKey} arg={noLyricsFile} {language} onbar={(bar) => loupePrint.goto(bar)} ondismiss={() => scanBanners.dismiss(noLyricsKey, noLyricsFile!)} />{/if}
 							{/if}
 						{/if}
 					{/snippet}

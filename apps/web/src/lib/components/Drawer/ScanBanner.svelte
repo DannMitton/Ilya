@@ -17,21 +17,76 @@
 		arg: string;
 		language: Language;
 		onbar: (bar: number) => void;
+		/** Step 12: the × in the corner. Absent, no × is drawn. A real button: Tab reaches it, Enter and Space dismiss. */
+		ondismiss?: () => void;
 	}
-	let { noticeKey, arg, language, onbar }: Props = $props();
+	let { noticeKey, arg, language, onbar, ondismiss }: Props = $props();
 
 	const slot = $derived(noticeKey === 'upload.banner.wordsPartlyRead' ? '{bars}' : noticeKey === 'upload.banner.wordsPartlyReadOne' ? '{bar}' : null);
 	const parts = $derived(slot ? t(noticeKey, language).split(slot) : null);
 	const pieces = $derived(slot ? barPieces(decodeBars(arg), language) : []);
 </script>
 
-{#if parts}
-	<p>{parts[0]}{#each pieces as piece, i (i)}{#if piece.bar !== undefined}<button type="button" class="bar-link" onclick={() => onbar(piece.bar!)}>{piece.text}</button>{:else}{piece.text}{/if}{/each}{parts[1] ?? ''}</p>
-{:else}
-	<p>{noticeText(noticeKey, language, arg)}</p>
-{/if}
+<!-- STEP 12 (Dann 2026-11-09 20:28, "a familiar verbatim x in the top right corner"; Calm Authority). The × is the Finale banner's dismiss control
+     (`ScoreUploader.svelte`, `upload.banner.dismiss`), drawn as a small ×, with that string as its accessible name (« Dismiss » / « Ignorer »):
+     a plain button, quiet, in the top-right corner. No click-outside dismissal: a stray tap must not hide a warning. -->
+<div class="scan-banner">
+	{#if parts}
+		<p>{parts[0]}{#each pieces as piece, i (i)}{#if piece.bar !== undefined}<button type="button" class="bar-link" onclick={() => onbar(piece.bar!)}>{piece.text}</button>{:else}{piece.text}{/if}{/each}{parts[1] ?? ''}</p>
+	{:else}
+		<p>{noticeText(noticeKey, language, arg)}</p>
+	{/if}
+	{#if ondismiss}<button type="button" class="banner-x" aria-label={t('upload.banner.dismiss', language)} onclick={ondismiss}><span aria-hidden="true">×</span></button>{/if}
+</div>
 
 <style>
+	.scan-banner {
+		position: relative;
+	}
+
+	.scan-banner > p {
+		margin: 0;
+		padding-right: 1.5rem; /* room for the × so the sentence never runs under it */
+	}
+
+	.banner-x {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 1.25rem;
+		height: 1.25rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font: inherit;
+		font-size: 1rem;
+		line-height: 1;
+		color: var(--ink-tertiary);
+		background: transparent;
+		border: none;
+		border-radius: 3px;
+		padding: 0;
+		cursor: pointer;
+	}
+
+	.banner-x:hover {
+		color: var(--ink-secondary);
+	}
+
+	.banner-x:focus-visible {
+		outline: 2px solid var(--ink-secondary);
+		outline-offset: 1px;
+	}
+
+	@media (pointer: coarse) {
+		/* a hit area that grows past the glyph without moving it, as the bar links do */
+		.banner-x::after {
+			content: '';
+			position: absolute;
+			inset: -12px;
+		}
+	}
+
 	.bar-link {
 		font: inherit;
 		color: inherit;
