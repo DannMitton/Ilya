@@ -314,6 +314,8 @@ export class SongDocument {
 			publishedGlossAnchors: this.publishedGlossAnchors,
 			poemSource: this.poemSource,
 			barAnswers: this.barAnswers,
+			// Step 1 only carries what was loaded; step 2 builds it from the marks the document owns.
+			wordMarks: this.#base.wordMarks ?? {},
 		};
 	}
 

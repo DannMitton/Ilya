@@ -14,7 +14,7 @@
  * a `doc.` and changes in no other way. The facade converts between the two,
  * in one place, and its conversion is where the tests are.
  */
-import type { SongMetadata } from '$lib/types';
+import type { SongMetadata, SyllableOverride, UserStressOverride, YoToggle } from '$lib/types';
 import type { MetadataField } from '$lib/metadata-provenance';
 import type { PairingMap } from '$lib/score/pairings';
 import type { CorrectionMap } from '$lib/score/correction';
@@ -47,6 +47,17 @@ export type OctaveReading = 'as-written' | 'bass' | 'ottava';
  * step 0 byte-compatible.
  */
 export type GlossRow = [key: string, gloss: string, anchorWord: string];
+
+/**
+ * ROW 182, THE INSPECTOR'S WORD MARKS ON THE SONG, RULED BY DANN 2026-11-09 20:44. One mark on one word:
+ * `[key, kind, value, anchor]`. `key` is the word's `"lineIndex-wordIndex"` in the witness's own text (a ё
+ * toggle adds `-charIndex`); `value` is the map's value as the page holds it (`spot`'s is the singer's CHOICE,
+ * `true` reconstituted and `false` reduced, ruled 22:20, never an inversion of the device-wide setting); `anchor`
+ * is the word's clean form, ё folded (`glossAnchorForm`), so a mark never lands on another word.
+ */
+export type MarkKind = 'stress' | 'yo' | 'syllables' | 'spot';
+export type MarkValue = UserStressOverride | YoToggle | SyllableOverride | boolean;
+export type MarkRow = [key: string, kind: MarkKind, value: MarkValue, anchorWord: string];
 
 /**
  * N.59 step 7, Ruling E: ONE additive field on the source record, carrying
@@ -204,8 +215,8 @@ export interface SongRecord {
 	 * key the POEM's `"lineIndex-wordIndex"`. Text can show the poem as its
 	 * transcription (`publishedPoem`), and a gloss on it must survive a reload
 	 * and a binder, as one on Lyrics does. Stored only while not empty; absent
-	 * means none. The poem's stress, ё, syllable, and spot marks are session
-	 * state, as Lyrics' are (review r2, amendment 5, parity). OPTIONAL AND
+	 * means none. The poem's stress, ё, syllable, and spot marks are on the song
+	 * too (`wordMarks`, row 182). OPTIONAL AND
 	 * ADDITIVE, `publishedPoem`'s pattern: an older Ilya drops it.
 	 */
 	publishedGlosses?: GlossRow[];
@@ -233,6 +244,14 @@ export interface SongRecord {
 	 * `RECORD_SCHEMA` stays 1.
 	 */
 	barAnswers?: BarAnswers;
+	/**
+	 * ROW 182, 2026-11-10. THE INSPECTOR'S PER-WORD MARKS (stress, ё, syllable boundaries, spot reconstitution)
+	 * for both witnesses, Lyrics and Poem: `MarkRow`s, each with the word it was made on. Stored only while a
+	 * witness has a row; absent means none. OPTIONAL AND ADDITIVE, `publishedGlosses`' pattern: an older Ilya
+	 * drops it and keeps the song. `RECORD_SCHEMA` stays 1. The poem join's scan-repair marks are not here: they
+	 * stay session-only (Dann, 2026-11-09 20:32).
+	 */
+	wordMarks?: { lyrics?: MarkRow[]; poem?: MarkRow[] };
 	source: SongSource | null;
 }
 

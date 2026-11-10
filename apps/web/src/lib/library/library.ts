@@ -26,6 +26,7 @@ import { BAR_ANSWER_KINDS, barAnswersEmpty, emptyBarAnswers, type BarAnswer, typ
 import type { KeyChoice } from '@ilya/score-parser';
 import type { PluralStore, SourceBytes, StorageDriver } from './driver';
 import { requestPersistence as defaultRequestPersistence } from './quota';
+import { validateWordMarks, type WordMarkRows } from './word-mark-rows';
 import {
 	emptyMetadata,
 	emptySongRecord,
@@ -77,6 +78,8 @@ export interface SongFields {
 	poemSource: PoemSource | null;
 	/** Corrections slice 3: what the singer answered about the bars to confirm. Never absent on the page; empty means none (`SongRecord.barAnswers`). */
 	barAnswers: BarAnswers;
+	/** Row 182: the Inspector's word marks of both witnesses, as stored rows (`SongRecord.wordMarks`). Empty means none. */
+	wordMarks: WordMarkRows;
 }
 
 /* ── Record and page state, converted in one place ──────────────── */
@@ -112,6 +115,10 @@ export function fieldsFromRecord(record: SongRecord): SongFields {
 		publishedGlossAnchors: new Map((record.publishedGlosses ?? []).map(([key, , anchor]) => [key, anchor])),
 		poemSource: record.poemSource ? { ...record.poemSource } : null,
 		barAnswers: record.barAnswers ? copyBarAnswers(record.barAnswers) : emptyBarAnswers(),
+		wordMarks: {
+			...(record.wordMarks?.lyrics ? { lyrics: record.wordMarks.lyrics } : {}),
+			...(record.wordMarks?.poem ? { poem: record.wordMarks.poem } : {}),
+		},
 	};
 }
 
@@ -138,7 +145,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 	// N.94, the same shape: stored only while the singer has chosen a key.
 	// Row 47, the same shape: stored only while the singer has chosen as written. Row 144's chip flag likewise, only while true.
 	// N.135 stage 3, the same shape: stored only while the poem is not empty.
-	const { seatedText: _stored, transposition: _key, octaveReading: _octave, clefChipShown: _chip, tempo: _tempo, publishedPoem: _published, publishedGlosses: _poemGlosses, poemSource: _poemSource, barAnswers: _barAnswers, ...rest } = base;
+	const { seatedText: _stored, transposition: _key, octaveReading: _octave, clefChipShown: _chip, tempo: _tempo, publishedPoem: _published, publishedGlosses: _poemGlosses, poemSource: _poemSource, barAnswers: _barAnswers, wordMarks: _wordMarks, ...rest } = base;
 	const glosses: GlossRow[] = [...fields.glossOverrides].map(([key, gloss]) => [
 		key,
 		gloss,
@@ -166,6 +173,16 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		...(fields.poemSource ? { poemSource: { ...fields.poemSource } } : {}),
 		// Corrections slice 3, the same shape: stored only while there is an answer, or the line is put away.
 		...(barAnswersEmpty(fields.barAnswers) ? {} : { barAnswers: copyBarAnswers(fields.barAnswers) }),
+		// Row 182, the same shape: stored only while a witness has a row. `base`'s copy was dropped above, so a song whose marks
+		// were all removed does not keep the old rows (Fable's amendment 7).
+		...(fields.wordMarks.lyrics?.length || fields.wordMarks.poem?.length
+			? {
+					wordMarks: {
+						...(fields.wordMarks.lyrics?.length ? { lyrics: fields.wordMarks.lyrics } : {}),
+						...(fields.wordMarks.poem?.length ? { poem: fields.wordMarks.poem } : {}),
+					},
+				}
+			: {}),
 	};
 }
 
@@ -328,6 +345,10 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 		if (stored.putAway === true) answers.putAway = true;
 		if (!barAnswersEmpty(answers)) record.barAnswers = answers;
 	} else if (value.barAnswers !== undefined) malformed();
+	// Row 182, additive, default ABSENCE (no marks). Row by row: a row that is not well formed for its kind is dropped alone
+	// (`word-mark-rows.ts`), never the song, so this field never calls `malformed()`.
+	const wordMarks = validateWordMarks(value.wordMarks);
+	if (wordMarks) record.wordMarks = wordMarks;
 
 	// THE SOURCE WAS NEVER CARRIED THROUGH, and had not been since N.67 step 1.
 	// This function rebuilds the record field by field from `emptySongRecord`,
