@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,190 keys.
+   This file holds 1,191 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -58,7 +58,7 @@
    paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
    placeholder.    7  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
-   profile.       34  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
+   profile.       35  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
    provenance.     5  no literal consumer found
    recognize.      4  routes/+page.svelte
    replace.        4  routes/+page.svelte
@@ -1021,8 +1021,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// Composed from parts so EN and FR share one structure; the two-item
 	// join is language-specific (EN "a and b", FR "a ni b": "sans X ni Y").
 	'analysis.broad.body':         { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
-	// DESK DEFAULT, UNRATIFIED (row 166): the broad note for a voice that has only placeholders, which cannot say the forecast reflects measured resonances. The sentence is the one above, less its last clause. Dann's eye.
-	'analysis.broad.body.generic': { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides.' },
+	// RATIFIED by Dann 2026-11-10 (row 166): the broad note for a voice that has only placeholders; its last sentence says what the forecast uses.
+	'analysis.broad.body.generic': { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast uses placeholder values for your voice type.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision repose sur des valeurs par défaut pour votre type de voix.' },
 	'analysis.broad.itemRange':    { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
 	'analysis.broad.itemPassaggio': { en: 'positional passaggio flags',   fr: 'le signalement des notes de *passaggio*' },
 	'analysis.broad.join':         { en: 'and',                          fr: 'ni' },
@@ -1458,6 +1458,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    migrated verbatim from the old inline WITHHELD_COPY object) ──────
 	'profile.subtitleNamed': { en: 'Formant profile: a map of {voice}\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de la voix \u00ab\u00a0{voice}\u00a0\u00bb' },
 	'profile.subtitleYours': { en: 'Formant profile: a map of your voice\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de votre voix' },
+	// QUEUE row 166, RATIFIED by Dann 2026-11-10 (12:54 to 12:59): printed in place of the two above when the voice has only placeholder values (`markup/subtitle.ts`).
+	'profile.subtitlePlaceholder': { en: 'Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de formants\u00a0: valeurs par défaut pour le type générique {voiceType}, pas encore vos propres résonances.' },
 	'profile.count.1': { en: 'One', fr: 'Une' },
 	'profile.count.2': { en: 'Two', fr: 'Deux' },
 	'profile.count.3': { en: 'Three', fr: 'Trois' },
@@ -1854,15 +1856,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.footnote.tessitura': { en: 'Tessitura by Pacheco’s method: the span from the lowest to the highest pitch sung for at least half as long as the longest-sung pitch. Alberto José Vieira Pacheco, “Angelica Catalani’s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559.', fr: 'Tessiture selon la méthode de Pacheco\u00a0: l\u2019étendue de la hauteur la plus grave à la hauteur la plus aiguë chantée au moins la moitié du temps de la hauteur la plus longuement chantée. Alberto José Vieira Pacheco, “Angelica Catalani\u2019s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559. [\u00ab\u00a0La voix d\u2019Angelica Catalani selon une méthode d\u2019analyse statistique\u00a0\u00bb.]' },
 	// Printed by nothing since QUEUE row 50 (2026-10-08: Pacheco 2013 verified); kept for a future unverified source.
 	'insights.citationUnverified': { en: 'CITATION NOT YET VERIFIED',    fr: 'CITATION NON ENCORE VÉRIFIÉE' },
-	'insights.method.typed':       { en: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date}, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
-	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises.' },
+	'insights.method.typed':       { en: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date}, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
+	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Méthode\u00a0: aucune voix n\u2019a été mesurée, donc rien sur cette page n\u2019en est calculé.' },
-	// QUEUE row 166. RATIFIED: the lede, Dann 2026-11-09 16:13 (pinned in `ratified-lines.test.ts`). It is shown only for a
+	// QUEUE row 166. RATIFIED: the lede, Dann 2026-11-09 16:13, cut to its first sentence by Dann 2026-11-10 12:56 (pinned in `ratified-lines.test.ts`). It is shown only for a
 	// voice declared as one of five types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the label the identity line prints.
-	'insights.generic.lede':       { en: 'These findings use placeholder values for a {voiceType}, not your specific voice. You can offer samples of your own vowels in vocal fry using Calibrate in the Voice section of the Drawer.', fr: 'Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier. Vous pouvez fournir des échantillons de vos propres voyelles en friture vocale à l’aide de Calibrer, dans la section Voix du Tiroir.' },
-	// DESK DEFAULT, UNRATIFIED (row 166 step 2): the method line for those findings, which must not name a calibration or its date. Dann's eye, the French above all.
-	'insights.method.generic.typed':   { en: 'Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
-	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values for your voice type and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.' },
+	'insights.generic.lede':       { en: 'These findings use placeholder values for a {voiceType}, not your specific voice.', fr: 'Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier.' },
+	// RATIFIED by Dann 2026-11-10 (row 166): the method line for those findings, which names no calibration and no date.
+	'insights.method.generic.typed':   { en: 'Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
+	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values for your voice type and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.' },
 	'insights.silence.unmeasured': { en: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:', fr: 'Aucune voix n\u2019a été mesurée, donc cette page ne compare pas cette pièce avec votre voix. Retenu jusqu\u2019à ce qu\u2019une voix le soit\u00a0:' },
 	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Toute observation sur les endroits où cette pièce pourrait solliciter votre voix.' },
 	'insights.silence.noScore':    { en: 'No score has been added, so there is nothing of this piece to measure.', fr: 'Aucune partition n\u2019a été ajoutée, il n\u2019y a donc rien de cette pièce à mesurer.' },

@@ -93,6 +93,7 @@
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/analysis/analyze-score-adapter';
 	import { placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
+	import { profileSubtitle } from './subtitle';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { drawCrossingRings, selectionAnchor } from '$lib/score/crossing-ring';
 	import { entryGroup, RING_RADIUS, ringBox } from '$lib/score/selection-ring';
@@ -141,7 +142,7 @@
 		composer?: string;
 		poet?: string;
 		/** The declared voice type, which picks the stand-in vowels' starting staff (QUEUE row 17). */
-		voiceType?: string;
+		voiceType?: string; voiceTypeChoice?: import('$lib/voice/profileStore').VoiceTypeChoice;
 		/**
 		 * Engraving preferences from the drawer panel (Dann's ruling,
 		 * 2026-07-13). Defaults to the Appendix-derived values so the
@@ -283,7 +284,7 @@
 		scoreTitle = undefined,
 		composer = '',
 		poet = '',
-		voiceType = undefined,
+		voiceType = undefined, voiceTypeChoice = undefined,
 		engraving = ENGRAVING_DEFAULTS,
 		onrendered = undefined,
 		onpagesdrawn = undefined,
@@ -432,11 +433,6 @@
 	// rendered "de Voix 1's" in French. The guillemets in the French also
 	// dodge elision: a bare "de {voice}" breaks on a vowel-initial name
 	// ("d’Anne", not "de Anne"). Dann's ruling, 2026-08-11.
-	const subtitle = $derived(
-		voiceName
-			? T('profile.subtitleNamed').replace('{voice}', voiceName)
-			: T('profile.subtitleYours'),
-	);
 
 	// The roster's canonical display order (wizard spec v1 §2: the seven
 	// defaults in the fixed counterclockwise order, then the three optional
@@ -551,6 +547,8 @@
 	// analyzeScore omits every event, so the plain vocal line renders, no
 	// acoustic claim made.
 	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, undefined, voiceType));
+	// The subtitle (see the N.22 note above, which still governs the two named forms; `subtitle.ts`) reads `adapted`, so it sits after it.
+	const subtitle = $derived(profileSubtitle({ generic: adapted.generic, voiceName, voiceType: voiceTypeChoice, language }));
 
 	/**
 	 * The vowels the FORECAST reads, which is not the same as the vowels that
@@ -807,7 +805,7 @@
 	// needs a note with a timbre analysis, so it sits here, after both.
 	// Row 78b: the turning-head entries; the hollow one only when a placeholder head is drawn.
 	const hollowHeads = $derived(!!analyzed && Object.values(analyzed.events).some((e) => e.placeholder));
-	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!withheldIpa, stems: hasAcousticMarks, turningHeads: hasAcousticMarks, hollowHeads }));
+	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!withheldIpa, stems: hasAcousticMarks, turningHeads: hasAcousticMarks, hollowHeads, filledHeads: !adapted.generic }));
 	const showBroadNote = $derived(hasAcousticMarks && isBroadAnalysis(adapted.completeness));
 
 	// ── Item 1.8, the withheld statement (2026-08-05) ─────────────────────

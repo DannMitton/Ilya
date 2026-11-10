@@ -399,15 +399,28 @@ describe('row 97: the three ratified Guide passages are seated', () => {
 	});
 });
 
-/* QUEUE row 166. Dann, 2026-11-09 16:13: the line above INSIGHTS' findings for a voice that has only placeholders. */
-describe('row 166: the placeholder lede', () => {
-	it('English and French, character for character, the apostrophe typographic (U+2019)', () => {
-		expect(t('insights.generic.lede', 'en')).toBe(
-			'These findings use placeholder values for a {voiceType}, not your specific voice. You can offer samples of your own vowels in vocal fry using Calibrate in the Voice section of the Drawer.',
-		);
-		expect(t('insights.generic.lede', 'fr')).toBe(
-			'Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier. Vous pouvez fournir des échantillons de vos propres voyelles en friture vocale à l’aide de Calibrer, dans la section Voix du Tiroir.',
-		);
-		expect(t('insights.generic.lede', 'fr')).toContain('l\u2019aide');
+/* QUEUE row 166. The strings Dann ratified 2026-11-10, 12:54 to 12:59 (the lede was cut to its first sentence at 12:56). Every French colon is
+   preceded by a no-break space (U+00A0), and the apostrophes are typographic where one occurs. */
+describe('row 166: the six ratified placeholder strings', () => {
+	it('the lede: its first sentence only, EN and FR', () => {
+		expect(t('insights.generic.lede', 'en')).toBe('These findings use placeholder values for a {voiceType}, not your specific voice.');
+		expect(t('insights.generic.lede', 'fr')).toBe('Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier.');
+	});
+	it('the MELODY subtitle for a placeholder voice', () => {
+		expect(t('profile.subtitlePlaceholder', 'en')).toBe('Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.');
+		expect(t('profile.subtitlePlaceholder', 'fr')).toBe('Profil de formants\u00a0: valeurs par défaut pour le type générique {voiceType}, pas encore vos propres résonances.');
+	});
+	it('the method lines: the two placeholder forms, and "including repeats" in the two calibrated forms (French unchanged)', () => {
+		expect(t('insights.method.generic.typed', 'en')).toBe('Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.');
+		expect(t('insights.method.generic.untyped', 'en')).toBe('Method: computed from placeholder values for your voice type and the score as sung, including repeats.');
+		expect(t('insights.method.generic.typed', 'fr')).toBe('Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.');
+		expect(t('insights.method.generic.untyped', 'fr')).toBe('Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.');
+		expect(t('insights.method.typed', 'en')).toBe('Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, including repeats.');
+		expect(t('insights.method.untyped', 'en')).toBe('Method: computed from your calibration of {date} and the score as sung, including repeats.');
+		expect(t('insights.method.typed', 'fr')).toContain('reprises comprises.');
+	});
+	it('the broad note for a placeholder voice', () => {
+		expect(t('analysis.broad.body.generic', 'en')).toBe('Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast uses placeholder values for your voice type.');
+		expect(t('analysis.broad.body.generic', 'fr')).toBe('Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision repose sur des valeurs par défaut pour votre type de voix.');
 	});
 });

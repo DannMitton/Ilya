@@ -452,8 +452,8 @@ describe('composeBroadNote (§B.5 print legend)', () => {
 
 	it('row 166: a placeholder voice gets the note without the sentence about measured resonances', () => {
 		const c = { formants: true, range: false, tessitura: true, passaggio: false };
-		expect(composeBroadNote(c, 'en', true)).toBe('Broad analysis: this score is shown without range guidance and positional passaggio flags, because the matching voice characteristics were left blank.');
-		expect(composeBroadNote(c, 'fr', true)).toBe('Analyse large\u00a0: cette partition est présentée sans les repères d’ambitus ni le signalement des notes de *passaggio*, car les caractéristiques vocales correspondantes ont été laissées vides.');
+		expect(composeBroadNote(c, 'en', true)).toBe('Broad analysis: this score is shown without range guidance and positional passaggio flags, because the matching voice characteristics were left blank. The forecast uses placeholder values for your voice type.');
+		expect(composeBroadNote(c, 'fr', true)).toBe('Analyse large\u00a0: cette partition est présentée sans les repères d’ambitus ni le signalement des notes de *passaggio*, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision repose sur des valeurs par défaut pour votre type de voix.');
 		for (const lang of ['en', 'fr'] as const) expect(composeBroadNote(c, lang, true)).not.toMatch(/measured|mesur/);
 		expect(composeBroadNote(full, 'en', true)).toBe('');
 	});

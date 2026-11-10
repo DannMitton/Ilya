@@ -4401,7 +4401,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				characteristics={voiceCharacteristics}
 				{language}
 				ingested={correctedScore}
-				scoreTitle={doc.metadata.title} composer={doc.metadata.composer} poet={doc.metadata.poet} voiceType={voiceTypeChoice?.voiceType}
+				scoreTitle={doc.metadata.title} composer={doc.metadata.composer} poet={doc.metadata.poet} voiceType={voiceTypeChoice?.voiceType} voiceTypeChoice={voiceTypeChoice}
 				{engraving}
 				{notationPrefs}
 				openSyllabification={doc.openSyllabification}

@@ -86,10 +86,10 @@ describe('row 166: the identity head of a placeholder voice', () => {
 		];
 		for (const [id, en, fr] of labels) {
 			expect(genericLede(true, { voiceType: id }, 'en')).toBe(
-				`These findings use placeholder values for a ${en}, not your specific voice. You can offer samples of your own vowels in vocal fry using Calibrate in the Voice section of the Drawer.`,
+				`These findings use placeholder values for a ${en}, not your specific voice.`,
 			);
 			expect(genericLede(true, { voiceType: id }, 'fr')).toBe(
-				`Ces constats reposent sur des valeurs par défaut pour le type ${fr}, et non sur votre voix en particulier. Vous pouvez fournir des échantillons de vos propres voyelles en friture vocale à l’aide de Calibrer, dans la section Voix du Tiroir.`,
+				`Ces constats reposent sur des valeurs par défaut pour le type ${fr}, et non sur votre voix en particulier.`,
 			);
 		}
 		expect(genericLede(false, { voiceType: 'baritone' }, 'en')).toBeNull();
