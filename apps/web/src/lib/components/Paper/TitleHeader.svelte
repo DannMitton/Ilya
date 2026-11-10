@@ -292,14 +292,14 @@
 		letter-spacing: 1.5px;
 		line-height: 1.6;
 		font-variant-caps: all-small-caps;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		/* STEP 7 (row 166): a ratified subtitle is never cut. Where it does not fit it wraps onto a second line, with no ellipsis, in every form. */
+		white-space: normal;
+		overflow-wrap: break-word;
 		max-width: 100%;
 	}
 
 	/* ── The Markup legend on the subtitle's line (walk finding 2026-10-09) ──
-	   The subtitle keeps its own box and ellipsis; the legend takes what it
+	   The subtitle keeps its own box and wraps where it must (step 7); the legend takes what it
 	   needs at the right, at the subtitle's 14px and in small caps. Stacked, the
 	   items are short lines at the right, and a long entry (the withheld-syllable
 	   sentence) wraps inside 58 % of the row rather than pushing the subtitle out. */
