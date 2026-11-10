@@ -881,7 +881,7 @@
 	// and, since row 142, starts below the last system when it fits (`notes-pages.ts` says how).
 	// N.173: the box says only what passes the gates (`gates.ts`).
 	const watchBox = $derived(watchList && analysisScore && analyzed && vowelResolver ? gateBand({ watchList, analysisScore, ...(readingScore ? { readingScore } : {}), analyzed, profile: adapted.snapshot, vowelForEvent: vowelResolver }) : null);
-	const bandLines = $derived(watchBox ? gatedLines(watchBox.shown, language, (id) => !!analyzed?.events[id]?.placeholder) : []);
+	const bandLines = $derived(watchBox ? gatedLines(watchBox.shown, language, (id) => !!analyzed?.events[id]?.placeholder, adapted.generic) : []);
 	const hasCommentaryPage = $derived(octaveLine !== null || bandLines.length > 0 || showWithheld);
 	let notesMeasure: NotesMeasure | null = $state(null);
 	const lastWindowTop = $derived(paginated?.lastPage?.index === 0 ? contentTop : subsequentTop);

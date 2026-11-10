@@ -194,6 +194,15 @@ describe('placeholders (QUEUE row 69)', () => {
 		expect(c.placeholder).toBe('Ce constat repose sur une valeur par défaut pour la voyelle [u]. Pour obtenir votre propre valeur, échantillonnez [u] en friture vocale.');
 	});
 
+	it('step 8: a voice with only placeholder values keeps the sentence less its remedy (EN and FR); a mixed voice keeps the whole', () => {
+		const generic = (language: 'en' | 'fr') => commentsOf(singerBlocks(inputs(sc, { language, comments: [comment('n1', true)], placeholders: ['u'], generic: true }), String))[0].placeholder;
+		expect(generic('en')).toBe('This finding rests on a placeholder value for [u].');
+		expect(generic('fr')).toBe('Ce constat repose sur une valeur par défaut pour la voyelle [u].');
+		for (const text of [generic('en'), generic('fr')]) expect(text).not.toMatch(/sample|échantillonn/);
+		const mixed = commentsOf(singerBlocks(inputs(sc, { comments: [comment('n1', true)], placeholders: ['u'], generic: false }), String))[0].placeholder;
+		expect(mixed).toMatch(/sample \[u\] in vocal fry\./);
+	});
+
 	it('says nothing when the vowel was sampled, or when the comment reads no resonance', () => {
 		expect(commentsOf(singerBlocks(inputs(sc, { comments: [comment('n1', true)], placeholders: ['a'] }), String))[0].placeholder).toBeUndefined();
 		expect(commentsOf(singerBlocks(inputs(sc, { comments: [comment('n1', false)], placeholders: ['u'] }), String))[0].placeholder).toBeUndefined();

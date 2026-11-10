@@ -345,7 +345,7 @@ export function buildVoiceProfileSnapshot(
  * QUEUE row 166: `placeholders` is `AdaptedProfile.generic`. The note's closing
  * sentence says the forecast reflects the singer's measured resonances, which a
  * placeholder voice has none of, so that voice gets the note without it
- * (`analysis.broad.body.generic`, DESK DEFAULT, unratified).
+ * (`analysis.broad.body.generic`, RATIFIED by Dann 2026-11-10).
  */
 export function composeBroadNote(c: AnalysisCompleteness, language: Language, placeholders = false): string {
 	const items: string[] = [];

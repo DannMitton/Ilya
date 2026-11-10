@@ -51,8 +51,8 @@ export function placeholderLine(vowels: readonly string[], language: Language, p
 }
 
 /** A comment's own sentences when its vowel is a placeholder: the finding, then the remedy (RATIFIED 19:49). */
-export function placeholderCommentSentence(vowel: string, language: Language): string {
-	return t('placeholder.comment', language).replaceAll('{vowel}', `[${vowel}]`);
+export function placeholderCommentSentence(vowel: string, language: Language, generic = false): string {
+	return t(generic ? 'placeholder.comment.generic' : 'placeholder.comment', language).replaceAll('{vowel}', `[${vowel}]`);
 }
 
 /** The vowel figure's sentence, or null when no row rests on a placeholder (RATIFIED). */

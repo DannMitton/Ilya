@@ -373,7 +373,7 @@
 						: null,
 				cycles: model.figure?.cycles ?? null,
 				turns: vowelResolver ? vowelTurns(analysisScore, adapted.snapshot, vowelResolver) : null,
-				placeholders,
+				placeholders, generic: adapted.generic,
 				method: methodLine,
 				footnote: model.tessitura.measured ? T('insights.footnote.tessitura') : null,
 			},
@@ -515,7 +515,7 @@
 		translator=""
 		opus=""
 		{language}
-		note={[keyRuler?.header(language), genericLede(adapted.generic, voiceType, language), placeholderLine(placeholders, language)]}
+		note={[keyRuler?.header(language), genericLede(adapted.generic && !!model, voiceType, language), placeholderLine(placeholders, language)]}
 		onheightchange={(h) => (headerHeight = h)}
 		versionAccent="var(--rose-ink)"
 		markAccent="var(--rose-ink)"

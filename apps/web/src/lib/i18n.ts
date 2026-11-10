@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,191 keys.
+   This file holds 1,192 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -56,7 +56,7 @@
    octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
    pacifier.      17  lib/voice/pacifier/Pacifier.svelte
    paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
-   placeholder.    7  lib/analysis/placeholder-line.ts
+   placeholder.    8  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
    profile.       35  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
    provenance.     5  no literal consumer found
@@ -2026,6 +2026,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    both languages (`OPEN.md`, "ROW 69's FRENCH AND THE WORD \"SUNG\""); the
 	//    comment's second sentence, the remedy, RATIFIED 19:49.
 	'placeholder.comment': { en: 'This finding rests on a placeholder value for {vowel}. To replace it with your own value, sample {vowel} in vocal fry.', fr: 'Ce constat repose sur une valeur par défaut pour la voyelle {vowel}. Pour obtenir votre propre valeur, échantillonnez {vowel} en friture vocale.' },
+	// Step 8 (Dann's rule of 2026-11-10 12:56, one gentle pointer to personalizing per page): for a voice with only placeholder values the page and the lede already point to sampling, so a finding keeps the line above less its remedy sentence. Text: `placeholder.comment`, character for character, less its last sentence.
+	'placeholder.comment.generic': { en: 'This finding rests on a placeholder value for {vowel}.', fr: 'Ce constat repose sur une valeur par défaut pour la voyelle {vowel}.' },
 	'placeholder.turns.one': { en: 'The turn of {vowels} rests on a placeholder value, so its bar is drawn dashed.', fr: 'Le changement de timbre de la voyelle {vowels} repose sur une valeur par défaut\u00a0: sa barre est tracée en pointillé.' },
 	'placeholder.turns.many': { en: 'The turns of {vowels} rest on placeholder values, so their bars are drawn dashed.', fr: 'Les changements de timbre des voyelles {vowels} reposent sur des valeurs par défaut\u00a0: leurs barres sont tracées en pointillé.' },
 	// Row 21, « plis vocaux » by the ruling of 04:12.

@@ -52,7 +52,7 @@ export function genericLede(generic: boolean, voiceType: VoiceTypeChoice | undef
 	return label ? t('insights.generic.lede', language).replace('{voiceType}', label) : null;
 }
 
-/** The Method endnote's string key: a placeholder voice names no calibration and no date (DESK DEFAULT, unratified). */
+/** The Method endnote's string key: a placeholder voice names no calibration and no date (RATIFIED by Dann 2026-11-10; the strings are pinned in `ratified-lines.test.ts`). */
 export function methodLineKey(o: { generic: boolean; typed: boolean }): string {
 	const kind = o.typed ? 'typed' : 'untyped';
 	return o.generic ? `insights.method.generic.${kind}` : `insights.method.${kind}`;

@@ -110,6 +110,8 @@ export interface BlockInputs {
 	turns: VowelTurns | null;
 	/** The vowels the page uses whose fR1 is a placeholder (QUEUE row 69). */
 	placeholders?: readonly string[];
+	/** Step 8: the voice has only placeholder values (`AdaptedProfile.generic`); a finding's placeholder sentence then leaves out its remedy. */
+	generic?: boolean;
 	/** QUEUE row 79: the method line, and the tessitura footnote where the page prints its marker. */
 	method?: string;
 	footnote?: string | null;
@@ -246,7 +248,7 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 		comment: c,
 		// Under a second paragraph of other approaches the line is plural (Dann 2026-11-04 09:34); the condition is the one that draws the paragraph.
 		...(suggestsApproach(c) ? { teacher: T(c.hidden.length > 0 ? 'insights.r2.teacherA.many' : 'insights.r2.teacherA') } : {}),
-		...(onPlaceholder(c) ? { placeholder: placeholderCommentSentence(c.comment.vowel, language) } : {}),
+		...(onPlaceholder(c) ? { placeholder: placeholderCommentSentence(c.comment.vowel, language, i.generic) } : {}),
 	});
 	const moments: Block[] = i.comments.map((c) => ({ kind: 'comment', ...moment(c) }));
 	if (i.hiddenBySettings > 0) {
