@@ -378,3 +378,16 @@ describe('row 97: the three ratified Guide passages are seated', () => {
 		}
 	});
 });
+
+/* QUEUE row 166. Dann, 2026-11-09 16:13: the line above INSIGHTS' findings for a voice that has only placeholders. */
+describe('row 166: the placeholder lede', () => {
+	it('English and French, character for character, the apostrophe typographic (U+2019)', () => {
+		expect(t('insights.generic.lede', 'en')).toBe(
+			'These findings use placeholder values for a {voiceType}, not your specific voice. You can offer samples of your own vowels in vocal fry using Calibrate in the Voice section of the Drawer.',
+		);
+		expect(t('insights.generic.lede', 'fr')).toBe(
+			'Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier. Vous pouvez fournir des échantillons de vos propres voyelles en friture vocale à l’aide de Calibrer, dans la section Voix du Tiroir.',
+		);
+		expect(t('insights.generic.lede', 'fr')).toContain('l\u2019aide');
+	});
+});

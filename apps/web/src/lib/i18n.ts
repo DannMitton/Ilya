@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,186 keys.
+   This file holds 1,189 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -43,7 +43,7 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     186  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     189  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     36  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte
    intake.        49  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
@@ -1855,6 +1855,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.method.typed':       { en: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date}, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Méthode\u00a0: aucune voix n\u2019a été mesurée, donc rien sur cette page n\u2019en est calculé.' },
+	// QUEUE row 166. RATIFIED: the lede, Dann 2026-11-09 16:13 (pinned in `ratified-lines.test.ts`). It is shown only for a
+	// voice declared as one of five types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the label the identity line prints.
+	'insights.generic.lede':       { en: 'These findings use placeholder values for a {voiceType}, not your specific voice. You can offer samples of your own vowels in vocal fry using Calibrate in the Voice section of the Drawer.', fr: 'Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier. Vous pouvez fournir des échantillons de vos propres voyelles en friture vocale à l’aide de Calibrer, dans la section Voix du Tiroir.' },
+	// DESK DEFAULT, UNRATIFIED (row 166 step 2): the method line for those findings, which must not name a calibration or its date. Dann's eye, the French above all.
+	'insights.method.generic.typed':   { en: 'Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
+	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values for your voice type and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.' },
 	'insights.silence.unmeasured': { en: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:', fr: 'Aucune voix n\u2019a été mesurée, donc cette page ne compare pas cette pièce avec votre voix. Retenu jusqu\u2019à ce qu\u2019une voix le soit\u00a0:' },
 	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Toute observation sur les endroits où cette pièce pourrait solliciter votre voix.' },
 	'insights.silence.noScore':    { en: 'No score has been added, so there is nothing of this piece to measure.', fr: 'Aucune partition n\u2019a été ajoutée, il n\u2019y a donc rien de cette pièce à mesurer.' },

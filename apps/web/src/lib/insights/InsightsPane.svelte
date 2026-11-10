@@ -82,7 +82,7 @@
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
-	import { composeIdentityLine } from '$lib/insights/identity';
+	import { composeIdentityLine, genericLede, methodLineKey, restsOnSamples } from '$lib/insights/identity';
 	import { isUsable } from '$lib/voice/engine/plausibility';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 
@@ -196,7 +196,7 @@
 	/* THE CONDITION IS THE MEASURED VOICE, as it is for the score page's
 	   withheld statement (`MarkupPane.svelte`, `showWithheld`). With no
 	   measured resonance nothing about this voice can be forecast, so the page
-	   prints no number at all (brief §7), even where a typed range exists. */
+	   prints no number at all (brief §7), even where a typed range exists, unless a declared type gives it placeholders (ROW 166, `generic`). */
 	const measured = $derived(adapted.completeness.formants);
 	const model = $derived(
 		measured && analysisScore
@@ -273,7 +273,7 @@
 
 	// ── The identity head (composed in `identity.ts`, voice type slice A) ──
 	const calibratedOn = $derived(/^\d{4}-\d{2}-\d{2}/.exec(voiceUpdatedAt ?? '')?.[0] ?? null);
-	const identityLine = $derived(composeIdentityLine({ voiceName, voiceUpdatedAt, measured, voiceType, language }));
+	const identityLine = $derived(composeIdentityLine({ voiceName, voiceUpdatedAt, measured: restsOnSamples(adapted), voiceType, language }));
 	const composerDisplay = $derived(formatNameForPaper(composer, COMPOSERS, language));
 
 	let headerHeight = $state(0);
@@ -288,7 +288,7 @@
 	const methodLine = $derived(
 		(!model
 			? T('insights.method.silent')
-			: fill(T(hasTypedCharacteristics ? 'insights.method.typed' : 'insights.method.untyped'), { date: calibratedOn ?? '' })) +
+			: fill(T(methodLineKey({ generic: adapted.generic, typed: hasTypedCharacteristics })), { date: calibratedOn ?? '' })) +
 			(model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : ''),
 	);
 
@@ -515,7 +515,7 @@
 		translator=""
 		opus=""
 		{language}
-		note={[keyRuler?.header(language), placeholderLine(placeholders, language)]}
+		note={[keyRuler?.header(language), genericLede(adapted.generic, voiceType, language), placeholderLine(placeholders, language)]}
 		onheightchange={(h) => (headerHeight = h)}
 		versionAccent="var(--rose-ink)"
 		markAccent="var(--rose-ink)"
