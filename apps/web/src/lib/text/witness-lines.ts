@@ -134,6 +134,9 @@ export function carryPoemEdit(
 	anchors: ReadonlyMap<string, string>,
 ): { glosses: Map<string, string>; anchors: Map<string, string> } | null {
 	const diff = before.trim() === '' ? emptyDiff() : diffWordGrid(wordGrid(before), wordGrid(after));
+	// Row 182: marks are saved now, so marks left over from a poem that was emptied (Clear, "Not this poem") must not land on
+	// the words of the next poem. There is no earlier text for them to follow, so they go.
+	if (before.trim() === '') marks.clear();
 	marks.carry(diff);
 	if (glosses.size === 0) return null;
 	const moved = diff.unchanged ? { glosses: new Map(glosses), anchors: new Map(anchors) } : { glosses: rekeyByWord(glosses, diff), anchors: rekeyByWord(anchors, diff) };

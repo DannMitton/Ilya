@@ -39,7 +39,7 @@
 	import { lyricsInPoemLines } from '$lib/text/relining';
 	import { poemOffer } from '$lib/text/poem-offer.svelte'; import { scanBanners } from '$lib/score/scan-banner-state.svelte'; import { LoupeSwipe } from '$lib/score/loupe-swipe.svelte'; import { poemJoin } from '$lib/text/poem-join.svelte'; import { loupePrint } from '$lib/score/loupe-print.svelte'; import { joinDeps, printDeps } from '$lib/score/loupe-print-wiring'; import ScanBanner from '$lib/components/Drawer/ScanBanner.svelte';
 	import { survivingGlosses } from '$lib/text/gloss-survival';
-	import { WordMarks } from '$lib/text/word-marks.svelte';
+	import { spotInversions } from '$lib/text/spot-choice';
 	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
 	// N.67 step 0: the song document owns the per-song state and is the only
 	// thing that talks to storage. `savePairings` / `loadPairings` are no
@@ -433,10 +433,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   an upload does, then applies the act. From then on it is an ordinary
 	   poem. A song that stores placements is never claimed; see there. */
 	const derivedPoem = $derived(doc.inputText.trim() === '' ? scoreText : '');
-	/* The word marks of each witness Text can transcribe (`word-marks.svelte.ts`),
-	   session state keyed by THAT text's words. Lyrics' are the ones every other surface reads. */
-	const lyricsMarks = new WordMarks();
-	const poemMarks = new WordMarks();
+	/* The word marks of each witness Text can transcribe (`word-marks.svelte.ts`), keyed by THAT text's words, owned and saved by the
+	   song document (row 182). Lyrics' are the ones every other surface reads. */
+	const lyricsMarks = $derived(doc.lyricsMarks);
+	const poemMarks = $derived(doc.poemMarks);
 	const derivedLines = $derived.by((): LineData[] => {
 		if (derivedPoem === '' || loaderState.isLoading || loaderState.entryCount === 0) return [];
 		try {
@@ -462,6 +462,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	const witnessDiffer = $derived(lyricsHas && poemHas && witnessesDiffer(shownPoem, doc.publishedPoem));
 	const shown = $derived(shownWitness(lyricsHas, poemHas, witnessDiffer, inputViews.witnessChoice[doc.id] ?? 'lyrics'));
 	const marks = $derived(shown === 'poem' ? poemMarks : lyricsMarks);
+	$effect(() => doc.syncLyricsMarks(derivedPoem)); // Lyrics that come from the score: their marks are applied once those words are known
 	const shownText = $derived(shown === 'poem' ? doc.publishedPoem : shownPoem);
 	const shownGlosses = $derived(shown === 'poem' ? doc.publishedGlosses : doc.glossOverrides);
 	/* ROW 172, STEP 1 (the quiet pause for Poem). While a Poem is typed key by key, Text keeps the poem as it stood when
@@ -1544,6 +1545,9 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		geminate: false,
 		reconstitution: false,
 	});
+	/* A saved spot mark is the singer's choice; every surface reads the words whose choice differs from the setting now (`spot-choice.ts`). */
+	const spotInverts = $derived(spotInversions(marks.spot, notationPrefs.reconstitution));
+	const lyricsSpotInverts = $derived(spotInversions(lyricsMarks.spot, notationPrefs.reconstitution));
 	// Display preferences
 	let showStressDiacritics = $state(false);
 	// The open-syllabification choice is `doc.openSyllabification`, N.67 step
@@ -1757,7 +1761,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		drawPairings(shownPairings, lines, {
 			openSyllabification: doc.openSyllabification,
 			reconstitution: notationPrefs.reconstitution,
-			spotReconstitution: lyricsMarks.spot,
+			spotReconstitution: lyricsSpotInverts,
 			syllableOverrides: lyricsMarks.syllables,
 		}),
 	);
@@ -1840,18 +1844,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		lastFocusedWord = null;
 	}
 	/**
-	 * The per-SESSION state, which is not the song and is never stored.
-	 *
-	 * Every one of these keys on word positions in the poem that is about to be
-	 * replaced. TWO CALLERS SINCE N.112, not three: Clear and N.67 step 4b's
-	 * song switch, which are the two moments where the poem those positions
-	 * described stops existing. Transcribe left this list when the diff gave it
-	 * a way to move a mark instead of dropping it.
-	 *
-	 * `transcribedGrid` GOES WITH THEM, and it must: an empty grid is how
-	 * `transcribeText` says "there is no previous text", and a grid left
-	 * standing across a song switch would diff the incoming poem against the
-	 * outgoing one and carry the wrong song's marks into it.
+	 * The per-SESSION state, which is not the song, and Lyrics' word marks, which are (a Clear drops them, saved as dropped;
+	 * a switch brings the new song's own, `doc.lyricsMarks`). TWO CALLERS SINCE N.112: Clear and the song switch.
+	 * `transcribedGrid` GOES WITH THEM: an empty grid is how `transcribeText` says "there is no previous text", and one left
+	 * standing across a song switch would diff the incoming poem against the outgoing one.
 	 */
 	function resetSessionState() {
 		resetTranscriptionView();
@@ -1911,6 +1907,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		const nextGrid = wordGrid(doc.inputText);
 		const diff = prevGrid.length === 0 ? emptyDiff() : diffWordGrid(prevGrid, nextGrid);
 		transcribedGrid = nextGrid;
+		/* ROW 182: THE MARKS FOLLOW THE GRID THEY KEY TO (`doc.lyricsMarksGrid`: the stored text's at load), so a first transcription after a load still moves them. */
+		lyricsMarks.carry(doc.lyricsMarksGrid.length ? diffWordGrid(doc.lyricsMarksGrid, nextGrid) : emptyDiff()); doc.lyricsMarksGrid = nextGrid;
 		carryOverridesAcross(diff);
 		runPipeline();
 		/* N.160 STEP 3. THE SEATS DIFF AGAINST THE SEATED TEXT, not against the
@@ -1992,19 +1990,11 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	/**
 	 * Carry every word-keyed override across a text edit. N.112, increment 1.
 	 *
-	 * FIVE MAPS, ONE RULE, and the rule lives in `text-diff.ts` where a test
-	 * can reach it. Four are session state and the fifth pair is the song's
-	 * own glosses; all of them key on `"lineIndex-wordIndex"` except the ё
-	 * toggles, which append the character ordinal and take the other helper.
-	 *
-	 * WHAT STILL RESETS is what is not keyed on a word at all: the error, the
-	 * selection, and the focus memory, which are `resetTranscriptionView`'s.
-	 * `resetSessionState` keeps the four `new Map()` lines for the two
-	 * Clear-shaped callers that genuinely want everything gone.
+	 * THE GLOSSES, here; Lyrics' word marks are carried by `transcribeText` from the grid they key to (row 182). The rule
+	 * lives in `text-diff.ts`. What is not keyed on a word is `resetTranscriptionView`'s.
 	 */
 	function carryOverridesAcross(diff: TextDiff): void {
 		if (diff.unchanged) return;
-		lyricsMarks.carry(diff);
 		doc.glossOverrides = rekeyByWord(doc.glossOverrides, diff);
 		doc.glossAnchors = rekeyByWord(doc.glossAnchors, diff);
 	}
@@ -2205,7 +2195,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	}
 	// Toggle spot reconstitution for the currently selected word
 	function handleSpotReconToggle() {
-		if (selectedWord) marks.toggleSpot(selectedKey());
+		if (selectedWord) marks.toggleSpot(selectedKey(), notationPrefs.reconstitution);
 	}
 	// ── Stress assignment handler ────────────────────────────────
 	function handleStressAssign(syllableIndex: number, source: string) {
@@ -3126,7 +3116,6 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			// document lands, so nothing of one song is ever drawn against the
 			// other's music.
 			resetSessionState();
-			poemMarks.clear();
 			ingestedScore = null;
 			lines = [];
 			transcribeMs = 0;
@@ -4088,7 +4077,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 									openSyllabification={doc.openSyllabification}
 									{showStressDiacritics}
 									syllableOverride={marks.syllables.get(wordKey) ?? null}
-									spotReconstituted={marks.spot.has(wordKey)}
+									spotReconstituted={spotInverts.has(wordKey)}
 									promotedFromClitic={marks.stress.get(wordKey)?.promotedFromClitic ?? false}
 									yoCharToggles={wordYoToggles}
 									onspotrecontoggle={handleSpotReconToggle}
@@ -4307,7 +4296,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			     document. -->
 			{#snippet transcriptionPaper()}
 				{#if witnessDiffer}<TextSourceLine {language} witness={shown} />{/if}
-				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={marks.spot} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownText, loaderState)} />
+				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={spotInverts} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownText, loaderState)} />
 			{/snippet}
 			{#if isMobile}
 				<!-- N.73 portrait C. The stage holds both views. The one that is
@@ -4341,7 +4330,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 								{notationPrefs}
 								{language}
 								{showStressDiacritics}
-								spotReconstitution={marks.spot}
+								spotReconstitution={spotInverts}
 								glossOverrides={shownGlosses}
 								onreturn={() => void showPortraitView('page')}
 							/>

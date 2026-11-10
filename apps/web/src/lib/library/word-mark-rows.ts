@@ -114,6 +114,7 @@ const gridsEqual = (a: readonly (readonly string[])[], b: readonly (readonly str
  * from `current`. A mark whose word is not in the grid it is anchored to has no anchor to write and is left out.
  */
 export function rowsFromMaps(maps: MarkMaps, keyedTo: readonly (readonly string[])[], current: readonly (readonly string[])[] | null): MarkRow[] {
+	if (markMapsEmpty(maps)) return [];
 	const moved = current !== null && keyedTo.length > 0 && !gridsEqual(keyedTo, current);
 	const diff = moved ? diffWordGrid(keyedTo, current) : null;
 	const grid = moved ? current : keyedTo;
