@@ -351,9 +351,9 @@ describe('a binder that cannot be read', () => {
 	});
 });
 
-/* ── Row 182: the Inspector's word marks ride the record ────────── */
+/* ── Row 184 (word marks): the Inspector's word marks ride the record ────────── */
 
-describe('the binder carries the Inspector\'s word marks (row 182, step 3)', () => {
+describe('the binder carries the Inspector\'s word marks (row 184 (word marks), step 3)', () => {
 	const lyrics: MarkRow[] = [
 		['0-0', 'stress', { stressIndex: 0, stressSource: 'user-override' }, 'я'],
 		['0-2-1', 'yo', { source: 'user-composer' }, 'любил'],

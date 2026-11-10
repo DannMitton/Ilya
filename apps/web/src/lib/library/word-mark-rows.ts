@@ -1,5 +1,5 @@
 /**
- * word-mark-rows.ts: THE INSPECTOR'S WORD MARKS, as rows on the song. ROW 182, RULED BY DANN 2026-11-09 20:44
+ * word-mark-rows.ts: THE INSPECTOR'S WORD MARKS, as rows on the song. ROW 184 (WORD MARKS), RULED BY DANN 2026-11-09 20:44
  * ("The data must be preserved over sessions"), brief `brief-code-word-marks-saved_r1_2026-11-09.md`.
  *
  * Plain TypeScript, no runes, so every decision in it is under the gates. `WordMarks` (`text/word-marks.svelte.ts`)

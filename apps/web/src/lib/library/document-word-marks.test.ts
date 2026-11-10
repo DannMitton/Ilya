@@ -1,5 +1,5 @@
 /**
- * document-word-marks.test.ts: row 182, step 2. The song document owns the Inspector's word marks of both witnesses,
+ * document-word-marks.test.ts: row 184 (word marks), step 2. The song document owns the Inspector's word marks of both witnesses,
  * writes them with the song, and loads them in place of a clear.
  *
  * Runes are inert under vitest, so the autosave effect does not run here (see `document-poem-source.test.ts`). What is

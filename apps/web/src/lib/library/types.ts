@@ -49,7 +49,7 @@ export type OctaveReading = 'as-written' | 'bass' | 'ottava';
 export type GlossRow = [key: string, gloss: string, anchorWord: string];
 
 /**
- * ROW 182, THE INSPECTOR'S WORD MARKS ON THE SONG, RULED BY DANN 2026-11-09 20:44. One mark on one word:
+ * ROW 184 (WORD MARKS), THE INSPECTOR'S WORD MARKS ON THE SONG, RULED BY DANN 2026-11-09 20:44. One mark on one word:
  * `[key, kind, value, anchor]`. `key` is the word's `"lineIndex-wordIndex"` in the witness's own text (a ё
  * toggle adds `-charIndex`); `value` is the map's value as the page holds it (`spot`'s is the singer's CHOICE,
  * `true` reconstituted and `false` reduced, ruled 22:20, never an inversion of the device-wide setting); `anchor`
@@ -216,7 +216,7 @@ export interface SongRecord {
 	 * transcription (`publishedPoem`), and a gloss on it must survive a reload
 	 * and a binder, as one on Lyrics does. Stored only while not empty; absent
 	 * means none. The poem's stress, ё, syllable, and spot marks are on the song
-	 * too (`wordMarks`, row 182). OPTIONAL AND
+	 * too (`wordMarks`, row 184 (word marks)). OPTIONAL AND
 	 * ADDITIVE, `publishedPoem`'s pattern: an older Ilya drops it.
 	 */
 	publishedGlosses?: GlossRow[];
@@ -245,7 +245,7 @@ export interface SongRecord {
 	 */
 	barAnswers?: BarAnswers;
 	/**
-	 * ROW 182, 2026-11-10. THE INSPECTOR'S PER-WORD MARKS (stress, ё, syllable boundaries, spot reconstitution)
+	 * ROW 184 (WORD MARKS), 2026-11-10. THE INSPECTOR'S PER-WORD MARKS (stress, ё, syllable boundaries, spot reconstitution)
 	 * for both witnesses, Lyrics and Poem: `MarkRow`s, each with the word it was made on. Stored only while a
 	 * witness has a row; absent means none. OPTIONAL AND ADDITIVE, `publishedGlosses`' pattern: an older Ilya
 	 * drops it and keeps the song. `RECORD_SCHEMA` stays 1. The poem join's scan-repair marks are not here: they

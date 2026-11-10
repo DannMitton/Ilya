@@ -1,5 +1,5 @@
 /**
- * ROW 182 (RULED BY DANN 2026-11-09 20:44), DESK WIDTH: the Inspector's word marks are saved with the song. A stress and a
+ * ROW 184 (WORD MARKS) (RULED BY DANN 2026-11-09 20:44), DESK WIDTH: the Inspector's word marks are saved with the song. A stress and a
  * spot reconstitution set on song 1 are still there after a reload, on Lyrics and on Poem.
  */
 import { test, expect, type Page } from '@playwright/test';

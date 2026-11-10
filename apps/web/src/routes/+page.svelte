@@ -434,7 +434,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   poem. A song that stores placements is never claimed; see there. */
 	const derivedPoem = $derived(doc.inputText.trim() === '' ? scoreText : '');
 	/* The word marks of each witness Text can transcribe (`word-marks.svelte.ts`), keyed by THAT text's words, owned and saved by the
-	   song document (row 182). Lyrics' are the ones every other surface reads. */
+	   song document (row 184 (word marks)). Lyrics' are the ones every other surface reads. */
 	const lyricsMarks = $derived(doc.lyricsMarks);
 	const poemMarks = $derived(doc.poemMarks);
 	const derivedLines = $derived.by((): LineData[] => {
@@ -1907,7 +1907,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		const nextGrid = wordGrid(doc.inputText);
 		const diff = prevGrid.length === 0 ? emptyDiff() : diffWordGrid(prevGrid, nextGrid);
 		transcribedGrid = nextGrid;
-		/* ROW 182: THE MARKS FOLLOW THE GRID THEY KEY TO (`doc.lyricsMarksGrid`: the stored text's at load), so a first transcription after a load still moves them. */
+		/* ROW 184 (WORD MARKS): THE MARKS FOLLOW THE GRID THEY KEY TO (`doc.lyricsMarksGrid`: the stored text's at load), so a first transcription after a load still moves them. */
 		lyricsMarks.carry(doc.lyricsMarksGrid.length ? diffWordGrid(doc.lyricsMarksGrid, nextGrid) : emptyDiff()); doc.lyricsMarksGrid = nextGrid;
 		carryOverridesAcross(diff);
 		runPipeline();
@@ -1990,7 +1990,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	/**
 	 * Carry every word-keyed override across a text edit. N.112, increment 1.
 	 *
-	 * THE GLOSSES, here; Lyrics' word marks are carried by `transcribeText` from the grid they key to (row 182). The rule
+	 * THE GLOSSES, here; Lyrics' word marks are carried by `transcribeText` from the grid they key to (row 184 (word marks)). The rule
 	 * lives in `text-diff.ts`. What is not keyed on a word is `resetTranscriptionView`'s.
 	 */
 	function carryOverridesAcross(diff: TextDiff): void {

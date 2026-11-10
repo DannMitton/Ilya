@@ -12,7 +12,7 @@
  * key never lands in Lyrics' maps. THE SONG DOCUMENT OWNS THE TWO INSTANCES
  * (`doc.lyricsMarks`, `doc.poemMarks`) and saves them as rows with the song
  * (`SongRecord.wordMarks`), so they survive a switch, a reload, and a binder
- * (row 182, ruled by Dann 2026-11-09 20:44, reversing the session-only form
+ * (row 184 (word marks), ruled by Dann 2026-11-09 20:44, reversing the session-only form
  * of review r2, amendment 5). The poem join's scan-repair marks are not here
  * and stay session-only. The bodies are the page's own, moved unchanged.
  */

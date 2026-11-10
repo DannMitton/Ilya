@@ -78,7 +78,7 @@ export interface SongFields {
 	poemSource: PoemSource | null;
 	/** Corrections slice 3: what the singer answered about the bars to confirm. Never absent on the page; empty means none (`SongRecord.barAnswers`). */
 	barAnswers: BarAnswers;
-	/** Row 182: the Inspector's word marks of both witnesses, as stored rows (`SongRecord.wordMarks`). Empty means none. */
+	/** Row 184 (word marks): the Inspector's word marks of both witnesses, as stored rows (`SongRecord.wordMarks`). Empty means none. */
 	wordMarks: WordMarkRows;
 }
 
@@ -173,7 +173,7 @@ export function recordFromFields(base: SongRecord, fields: SongFields): SongReco
 		...(fields.poemSource ? { poemSource: { ...fields.poemSource } } : {}),
 		// Corrections slice 3, the same shape: stored only while there is an answer, or the line is put away.
 		...(barAnswersEmpty(fields.barAnswers) ? {} : { barAnswers: copyBarAnswers(fields.barAnswers) }),
-		// Row 182, the same shape: stored only while a witness has a row. `base`'s copy was dropped above, so a song whose marks
+		// Row 184 (word marks), the same shape: stored only while a witness has a row. `base`'s copy was dropped above, so a song whose marks
 		// were all removed does not keep the old rows (Fable's amendment 7).
 		...(fields.wordMarks.lyrics?.length || fields.wordMarks.poem?.length
 			? {
@@ -345,7 +345,7 @@ export function validateRecord(value: unknown, id: string, now: string): LoadRes
 		if (stored.putAway === true) answers.putAway = true;
 		if (!barAnswersEmpty(answers)) record.barAnswers = answers;
 	} else if (value.barAnswers !== undefined) malformed();
-	// Row 182, additive, default ABSENCE (no marks). Row by row: a row that is not well formed for its kind is dropped alone
+	// Row 184 (word marks), additive, default ABSENCE (no marks). Row by row: a row that is not well formed for its kind is dropped alone
 	// (`word-mark-rows.ts`), never the song, so this field never calls `malformed()`.
 	const wordMarks = validateWordMarks(value.wordMarks);
 	if (wordMarks) record.wordMarks = wordMarks;

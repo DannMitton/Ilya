@@ -1,5 +1,5 @@
 /**
- * spot-choice.ts: WHAT A SAVED SPOT MARK MEANS ON SCREEN. ROW 182, RULED BY DANN 2026-11-09 22:20 (option 2).
+ * spot-choice.ts: WHAT A SAVED SPOT MARK MEANS ON SCREEN. ROW 184 (WORD MARKS), RULED BY DANN 2026-11-09 22:20 (option 2).
  *
  * A mark records the singer's choice for the word (`true` reconstituted, `false` reduced). Every surface that draws a
  * word (`WordStack`, `VerseLine`, `drawPairings`, the legend, the Inspector's checkbox) was written to read "this word

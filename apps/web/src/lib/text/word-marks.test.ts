@@ -23,7 +23,7 @@ describe('WordMarks', () => {
 		expect(m.yo.has('0-0-2')).toBe(true);
 		m.toggleYo('0-0-2', null);
 		expect(m.yo.size).toBe(0);
-		// Setting off: the box offers "reconstitute", and a saved mark is the CHOICE (row 182, Dann 22:20).
+		// Setting off: the box offers "reconstitute", and a saved mark is the CHOICE (row 184 (word marks), Dann 22:20).
 		m.toggleSpot('1-1', false);
 		expect(m.spot.get('1-1')).toBe(true);
 		m.toggleSpot('1-1', false);

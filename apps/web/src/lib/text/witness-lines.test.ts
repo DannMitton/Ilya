@@ -102,7 +102,7 @@ describe('a Poem edit carries the poem\'s marks and glosses (test l)', () => {
 		expect([...carried!.anchors]).toEqual([['1-1', 'шумного']]);
 	});
 
-	it('marks left from a poem that was emptied do not land on the next poem\'s words (row 182: they are saved now)', () => {
+	it('marks left from a poem that was emptied do not land on the next poem\'s words (row 184 (word marks): they are saved now)', () => {
 		const marks = new WordMarks();
 		marks.assignStress('0-1', {}, 0, 'user');
 		marks.toggleSpot('0-0', false);

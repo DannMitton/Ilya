@@ -1,5 +1,5 @@
 /**
- * spot-choice.test.ts: row 182, Dann 2026-11-09 22:20 option 2. A saved spot mark is the singer's choice for the word, so
+ * spot-choice.test.ts: row 184 (word marks), Dann 2026-11-09 22:20 option 2. A saved spot mark is the singer's choice for the word, so
  * it survives a change of the device-wide Reconstitution setting; surfaces read only the words whose choice differs from it.
  */
 import { describe, expect, it } from 'vitest';

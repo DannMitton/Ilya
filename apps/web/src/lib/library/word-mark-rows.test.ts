@@ -1,5 +1,5 @@
 /**
- * word-mark-rows.test.ts: row 182, step 1. The stored shape of the Inspector's word marks: a round trip of each kind for each
+ * word-mark-rows.test.ts: row 184 (word marks), step 1. The stored shape of the Inspector's word marks: a round trip of each kind for each
  * witness through the record, a record without the field, and a malformed row dropped alone. Also the pure halves
  * (`rowsFromMaps`, `mapsFromRows`) that step 2 wires to the document.
  */

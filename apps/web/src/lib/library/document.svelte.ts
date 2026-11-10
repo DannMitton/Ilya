@@ -145,7 +145,7 @@ export class SongDocument {
 	barAnswers = $state<BarAnswers>(emptyBarAnswers());
 
 	/**
-	 * Row 182, RULED BY DANN 2026-11-09 20:44: THE INSPECTOR'S WORD MARKS ARE ON THE SONG, one instance per witness. The
+	 * Row 184 (word marks), RULED BY DANN 2026-11-09 20:44: THE INSPECTOR'S WORD MARKS ARE ON THE SONG, one instance per witness. The
 	 * DOCUMENT owns them (not the page) so that its save effect can see them, and so that `close()` flushes the outgoing
 	 * song's marks before the next document exists: a switch cannot write one song's marks into another. Saved as
 	 * `SongRecord.wordMarks` rows; loaded in `#apply`, where the save effect stands down. The poem join's scan-repair
