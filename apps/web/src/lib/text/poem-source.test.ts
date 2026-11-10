@@ -313,8 +313,11 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 	});
 
 	it('every stanza start of every library entry: no joined line begins with a proper noun (the list the desk reviewed is pinned)', () => {
-		// The stanza starts of 14 entries (a dating block is not one: it is never a passage's start); some joined lines begin with a capital. Each is an ordinary word at the start of a verse
+		// The stanza starts of the library's entries (a dating block is not one: it is never a passage's start); some joined lines begin with a capital. Each is an ordinary word at the start of a verse
 		// line. If the library grows and a new one appears, this fails so that it is read, not lowered by habit.
+		// ROW 182 READ THE 20 NEW CAPITALS of the 89 arias (А, Безотрадный, Все, Где, Да, Души, И, Ко, Марта, Не, Нет, О, Песни, Прости, Рано, Солнце, Спи, Ты, Хочу, Чары).
+		// Nineteen are ordinary words opening a verse line. One is a proper noun, «Марта» (the nurse in Иоланта: «Марта и Бертран, проводите врача»).
+		// It is harmless here: that aria is one stanza, so no card cuts it to a passage and `passageLine` never joins its lines (the next test pins that).
 		const firsts = new Set<string>();
 		let starts = 0;
 		for (const e of library.entries) {
@@ -335,8 +338,12 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 				}
 			}
 		}
-		expect(starts).toBe(77);
-		expect([...firsts].sort()).toEqual(['Борону', 'В', 'Дайте', 'Из', 'Мать-земля', 'Много', 'На', 'Накормлю', 'Ночью', 'Ну', 'Останься', 'Пашней', 'С', 'Я']);
+		expect(starts).toBe(166); // 77 from the 14 poems, one for each of the 89 arias
+		expect([...firsts].sort()).toEqual(['А', 'Безотрадный', 'Борону', 'В', 'Все', 'Где', 'Да', 'Дайте', 'Души', 'И', 'Из', 'Ко', 'Марта', 'Мать-земля', 'Много', 'На', 'Накормлю', 'Не', 'Нет', 'Ночью', 'Ну', 'О', 'Останься', 'Пашней', 'Песни', 'Прости', 'Рано', 'С', 'Солнце', 'Спи', 'Ты', 'Хочу', 'Чары', 'Я']);
+	});
+
+	it('row 182: every aria is one stanza, so none is ever cut to a passage (a passage line joined across lines never reaches an aria)', () => {
+		for (const e of library.entries) if (e.kind === 'libretto') expect(bodyStanzas(e.textModern), e.id).toHaveLength(1);
 	});
 });
 

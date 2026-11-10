@@ -76,3 +76,50 @@ Tests that pin the library: `poem-library.test.ts:99` (`toHaveLength(14)`); `poe
 **Every entry whose composer matches no key: none.** The 89 arias name 12 composers (Arensky, Borodin, Dargomyzhsky, Glinka, Mussorgsky, Napravnik, Rachmaninoff, Rimsky-Korsakov, Rubinstein, Taneyev, Tchaikovsky, Verstovsky), all keys. The check is a test.
 
 **What I could not establish.** Whether "Nápravník" with its Czech accents is the form French Wikipedia carries as a title: it is Dann's ratified form, not looked up.
+
+## Step 3: merge, guard, build
+
+**Changed.**
+- `tools/poems/library.json`: the 89 entries of r3 added after the 14 poems (103 in all; `version` "r2", `built` "2026-11-10"), each with `kind: 'libretto'`. The data's top-level `harvest` key is not copied (it names a working pass). **`provenance` is kept whole** (Fable's amendment 3): r3 carries 19 keys, all of them facts about the text, the opera, or its rights; nothing in them names a working pass. The rights trail stays on the entries that have it (`contributorDates` on 69, `rightsTrail` and `rightsResolution` on 13).
+- `scripts/build-poem-library.mjs`: furniture checks for libretti (`LIBRETTO_FURNITURE`, `librettoFault`, `OPERA_ROLES`) and a provenance check (`PROVENANCE_KEYS`, `LIBRETTO_SITES`, `provenanceFault`). The furniture shapes are the checker's: a line that is only a role name (capitals, or a capitalised role of the entry's opera, from the 29-opera table, now in the build), a line wholly in parentheses, a parenthetical run inside a line, bracketed text, «- 38 -» page numbers, «[N. 13 - …]», «№ 7» and «Сцена V» headings, a stage-direction opener. They apply to libretti only (a poem may carry its author's parentheses: Fable's amendment 4). A Latin letter is refused for every entry (it already was). `shipEntry` throws on any of them.
+- **The trace test is not in the repository, on purpose.** Fable's amendment 3 says the checker's trace test (its part d) "becomes a build check". The checker's trace test is a list of the words that must not appear, and the words are the trace, so a copy of the list in a public build script would put them in the release (rulings, 22:19). The build checks the same property by structure: a key outside `PROVENANCE_KEYS` is refused, a parenthetical in `composer`, `text_kind`, or `literary_source` is refused, and a `source.site` outside the three listed is refused. The word list stays in the desk's checker.
+- Tests: `tests/build-poem-library.test.ts` +22 (one per furniture shape, plus the provenance and count tests; gate 7 is 150).
+- `data/`: `node scripts/build-poem-library.mjs` wrote `dictionary.poems.b3cc2f7e.json` and removed `dictionary.poems.2e56f692.json` (Fable's amendment 6). The manifest names the new file; its dictionary `hash` (86d83340) is unchanged. `.gitignore` lists `data/dictionary.*.json` with no exception for the poem file, and the old file was tracked by force, so the new one is added with `git add -f`. I did not touch `.gitignore`.
+- Pins moved by the data: `poem-library.test.ts:99` (14 to 103); `poem-source.test.ts` "every stanza start" (77 to 166, and the list of capitalised line openers). **I read the 20 new capitals** that test asks to be read. Nineteen are ordinary words opening a verse line; one, «Марта» (the nurse in Иоланта), is a proper noun, which `passageLine` would wrongly lower. It cannot be reached: each of the 89 arias is a single stanza (a new test pins that), so no card cuts an aria to a passage.
+
+**THE BYTE COUNT DANN HEARS BEFORE SHIP: 526,109 bytes** for `dictionary.poems.b3cc2f7e.json` (103 entries), from 129,444 bytes (14 entries). The desk's checker built 492,927 bytes before step 1; the `kind` and `opera` fields add about 33,000. It is 4.1 times the old file, and the letters the matcher holds grow from 19,547 to 71,041.
+
+**Gates after steps 3, 4, and 6's data pins:** 1 456; 2 248; 3 0 errors, 12 warnings; 4, see the end of step 7; 5 785 and 5 skipped; 6 168; 7 150; 8 OK.
+
+**What I could not establish.** Whether the ratchet script or CI treats a 526 KB tracked data file differently from a 129 KB one (nothing in `scripts/ratchets.json` names `data/`).
+
+## Step 6: the tests the library's growth moves
+
+**Changed** (landed in the same commit as step 3, because the data build moves them and a commit with the data and not these would be red).
+- `tools/poems/fixtures/expected_r2.txt`, regenerated with `tools/poems/reference_sw_match.py` over the r2 library and never edited by hand; `expected_r1.txt` is kept as the record. `poem-match.test.ts` reads `expected_r2.txt`.
+- `poem-library.test.ts:99` pins 103. `poem-match.test.ts:62` no longer names a letter count.
+- **The shortlist now engages** (42 works against `SHORTLIST` 20). The old test (`:383`, "20 works or fewer, the shortlist is everything (13)") is rewritten: 14 poems are still 13 works and the shortlist is everything; a library cut to 20 works is everything; and the shipped library gives a shortlist of exactly 20 on each of the twelve fixtures, with the poem each filled fixture sets inside it and equal to the reference's top work.
+- "The floor is measured" (a control that counts short windows that would fill if the floor were lifted): 213 of 963 now, from 440, and 40 of 313, from 94, because there is more to compete with. Its lower bounds move (300 to 100, 50 to 20); the assertions that matter (none fills at 80 letters or above) are unchanged and pass. Its timeout is 60 s (it takes about 10 s with the larger library).
+
+**Every row of `expected_r2.txt` against `expected_r1.txt`** (reference, all works):
+
+| row | top (r1 to r2) | second (r1 to r2) | margin (r1 to r2) | fills |
+|---|---|---|---|---|
+| P | same | f1a88510, same | 0.219, same | yes, unchanged |
+| S | same | Спящая... c1964bc3's neighbour 21568f1c to 4f94e1a3 (Queen of Spades) | 0.829 to 0.819 | yes |
+| T | same | c1964bc3 to 04cc9462 (Rusalka) | 0.658 to 0.651 | yes |
+| U1 | same | 0127a63f to a7b12193 (Boris Godunov) | 0.880 to 0.876 | yes |
+| U4 | 21568f1c 0.038 to b655d8eb (Onegin arias) 0.050 | c1964bc3 to bb52aaf5 (Snow Maiden) | 0.006 to 0.010 | no (below the floor, both) |
+| U5 | c1964bc3 0.017 to 7e59d67a (Iolanta arias) 0.019 | 2ba9040d to a78be89a (Ruslan and Ludmila) | 0.002 to 0.001 | no |
+| U6 | same | c1964bc3 to 00e3244d (A Life for the Tsar) | 0.676 to 0.673 | yes |
+| r114-song1 | c1964bc3 0.053 to eb5d3101 (The Tsar's Bride arias) 0.056 | f1a88510 to 3e714e57 (Prince Igor) 0.056 | 0.019 to 0.000 | no (0.056 is below 0.15) |
+| r114-song2 | same | c1964bc3 to a78be89a | 0.413 to 0.408 | yes |
+| r114-song3 | same | c1964bc3 to b655d8eb | 0.385 to 0.358 | yes |
+| r114-song4 | same | 7b9b662a to 04cc9462 | 0.408 to 0.396 | yes |
+| r114-song5 | same | c1964bc3 to b655d8eb | 0.234 to 0.227 | yes |
+
+(The "S" row's second reads: 21568f1c to 4f94e1a3.) Nine rows' second works changed to arias' works, and eleven margins moved, none below 0.10 on a row that fills. The three rows with no poem now have an aria's work on top, at 0.019 to 0.056: all far under the floor of 0.15.
+
+**One row where the matcher is not the reference, by design.** The reference scores every work; the matcher scores the 20 sharing the most trigrams, so a second work outside them is not seen. On U4 the matcher's second is a different work (7e59d67a) from the reference's (bb52aaf5); its score is not above the reference's. U4 does not fill either way, and the test pins that. On the nine rows that fill, the matcher's second is the reference's, to three decimals. This is the existing shortlist (no change to how a score is computed), now engaged.
+
+**What I could not establish.** Whether a Lyrics could ever have its true second work outside the shortlist on a row that fills, which would overstate its margin. No fixture does; the shortlist took the true top work on all twelve.

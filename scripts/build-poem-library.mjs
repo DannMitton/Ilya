@@ -121,6 +121,93 @@ export function textFault(text) {
 }
 
 /**
+ * THE FURNITURE A LIBRETTO'S TEXT MUST NOT CARRY (row 182, step 3). An aria's lines come from a page that also holds speaker labels,
+ * stage directions, page numbers, and number headings; the data is cleaned of them, and each check below refuses one shape, so none
+ * can return. Each is a test over ONE LINE of `textModern`. They apply to `kind: 'libretto'` only: a poem may carry an author's own
+ * parentheses («(как знать?)» is a poet's line), and a rule against a parenthetical run over every entry would refuse a future poem.
+ * Any Latin letter is refused for every entry (`TEXT_FAULTS`).
+ */
+const CAPS_ROLE = /^\s*[А-ЯЁ][А-ЯЁ\- ]*[.)]?\s*$/u;
+const CAPITALIZED_WORD = /^\s*([А-ЯЁ][а-яё\-]+)[.)]?\s*$/u;
+export const LIBRETTO_FURNITURE = [
+	['a line that is only a role name in capitals', (line) => CAPS_ROLE.test(line)],
+	['a line wholly in parentheses', (line) => /^\s*\([^()]*\)\s*[.!?…]*\s*$/u.test(line)],
+	['a parenthetical run inside a line', (line) => /\([^()]*\)/u.test(line)],
+	['bracketed text', (line) => /\[[^\]]*\]/u.test(line)],
+	['a page number («- 38 -»)', (line) => /^\s*[-–—]\s*\d+\s*[-–—]\s*$/u.test(line)],
+	['a number heading («[N. 13 - ...]», «№ 7», «Сцена V»)', (line) => /^\s*(?:\[\s*)?(?:№|N\.?|No\.?)\s*\d+/u.test(line) || /^\s*Сцена\s+(?:[IVXLC]+|\d+)\s*$/iu.test(line)],
+	['a stage-direction opener', (line) => /^\s*(?:Входит|Входят|Появляется|Появляются|Выходит|Выходят|Выбегает|Вбегает)(?!\p{L})[^,;]*\.\s*$/u.test(line)],
+];
+
+/** The roles each opera's numbers name, by the opera's Russian title: a line that is only one of them is a speaker label. */
+export const OPERA_ROLES = {
+	'Князь Игорь': ['Ярославна', 'Кончаковна', 'Владимир', 'Игорь', 'Галицкий', 'Кончак', 'Скула', 'Ерошка', 'Овлур', 'Девушки', 'Народ', 'Хор'],
+	'Золотой петушок': ['Шемаханская', 'Додон', 'Звездочёт', 'Амелфа', 'Полкан', 'Афрон'],
+	'Сказка о царе Салтане': ['Гвидон', 'Салтан', 'Лебедь', 'Лебедь-птица', 'Бабариха', 'Ткачиха', 'Повариха'],
+	'Евгений Онегин': ['Татьяна', 'Ольга', 'Ленский', 'Онегин', 'Гремин', 'Ларина', 'Филипьевна', 'Трике', 'Зарецкий', 'Хор'],
+	'Чародейка': ['Кума', 'Князь', 'Княгиня', 'Мамыров', 'Настасья', 'Кичига', 'Юрий', 'Хор'],
+	'Сон на Волге': ['Старуха', 'Воевода', 'Нечай', 'Дубровин', 'Олёна', 'Шалыгин'],
+	'Алеко': ['Алеко', 'Земфира', 'Цыган', 'Старик'],
+	'Снегурочка': ['Снегурочка', 'Лель', 'Царь', 'Берендей', 'Весна', 'Мороз', 'Купава', 'Мизгирь', 'Бобыль', 'Бобылиха', 'Леший', 'Хор'],
+	'Борис Годунов': ['Борис', 'Пимен', 'Шуйский', 'Щелкалов', 'Варлаам', 'Мисаил', 'Марина', 'Рангони', 'Самозванец', 'Григорий', 'Феодор', 'Ксения', 'Юродивый', 'Хор'],
+	'Жизнь за Царя': ['Антонида', 'Сусанин', 'Собинин', 'Ваня', 'Хор'],
+	'Руслан и Людмила': ['Руслан', 'Людмила', 'Горислава', 'Ратмир', 'Баян', 'Финн', 'Фарлаф', 'Наина', 'Светозар', 'Черномор', 'Хор'],
+	'Франческа да Римини': ['Франческа', 'Паоло', 'Ланчотто', 'Дант', 'Вергилий'],
+	'Ночь перед Рождеством': ['Оксана', 'Вакула', 'Солоха', 'Чуб'],
+	'Садко': ['Садко', 'Любава', 'Волхова', 'Нежата', 'Веденецкий', 'Индейский', 'Варяжский', 'Гость', 'Хор'],
+	'Царская невеста': ['Марфа', 'Любаша', 'Лыков', 'Грязной', 'Собакин', 'Бомелий', 'Малюта', 'Дуняша', 'Домна', 'Хор'],
+	'Иоланта': ['Иоланта', 'Водемон', 'Роберт', 'Король', 'Рене', 'Эбн-Хакиа', 'Марта', 'Бертран', 'Альмерик', 'Бригитта', 'Лаура', 'Хор'],
+	'Опричник': ['Наталья', 'Андрей', 'Басманов', 'Морозов', 'Жемчужный', 'Вяземский', 'Хор'],
+	'Пиковая дама': ['Герман', 'Лиза', 'Полина', 'Елецкий', 'Томский', 'Сурин', 'Чекалинский', 'Графиня', 'Хор'],
+	'Русалка': ['Княгиня', 'Князь', 'Мельник', 'Наташа', 'Русалка', 'Водяной', 'Ольга'],
+	'Каменный гость': ['Лаура', 'Дон-Гуан', 'Лепорелло', 'Монах'],
+	'Хованщина': ['Марфа', 'Шакловитый', 'Досифей', 'Голицин', 'Хованский', 'Андрей', 'Сусанна', 'Подьячий', 'Эмма', 'Хор'],
+	'Орестея': ['Клитемнестра', 'Агамемнон', 'Орест', 'Электра', 'Эгист', 'Кассандра', 'Хор'],
+	'Орлеанская дева': ['Иоанна', 'Дюнуа', 'Карл', 'Лионель', 'Тибо', 'Раймонд', 'Хор'],
+	'Дубровский': ['Дубровский', 'Дворовые', 'Троекуров', 'Маша', 'Верейский', 'Архип', 'Хор'],
+	'Майская ночь': ['Левко', 'Ганна', 'Голова', 'Винокур', 'Писарь', 'Каленик', 'Хор'],
+	'Мазепа': ['Мазепа', 'Андрей', 'Мария', 'Кочубей', 'Любовь', 'Орлик', 'Искра', 'Хор'],
+	'Черевички': ['Вакула', 'Оксана', 'Солоха', 'Чуб', 'Голова'],
+	'Аскольдова могила': ['Неизвестный', 'Рыбаки', 'Торопка', 'Аскольд', 'Вышата', 'Надежда', 'Стемида', 'Хор'],
+	'Демон': ['Демон', 'Тамара', 'Ангел', 'Синодал', 'Гудал'],
+};
+
+/**
+ * The first furniture fault in a libretto's text, as "line N is <shape>", or null. A line that is a capitalized single word naming a
+ * role of the entry's opera (from `OPERA_ROLES`) is a speaker label too.
+ */
+export function librettoFault(text, operaRu) {
+	const roles = (OPERA_ROLES[operaRu] || []).map((r) => r.toLowerCase());
+	const lines = text.split('\n');
+	for (let n = 0; n < lines.length; n += 1) {
+		for (const [name, test] of LIBRETTO_FURNITURE) if (test(lines[n])) return `line ${n + 1} is ${name}: ${JSON.stringify(lines[n].slice(0, 40))}`;
+		const word = CAPITALIZED_WORD.exec(lines[n]);
+		if (word && roles.includes(word[1].toLowerCase())) return `line ${n + 1} is only a role name: ${JSON.stringify(lines[n].slice(0, 40))}`;
+	}
+	return null;
+}
+
+/**
+ * THE PROVENANCE A LIBRETTO MAY CARRY (step 3). The repository is public, so no field may name a working pass: a key outside this
+ * list is refused, and so is a parenthetical in the three fields that are meant to be bare names. The two site names a libretto's
+ * text may come from are listed with the site strings in `poem-site.ts`. The rights trail (`contributorDates`, `url_people`,
+ * `pageNamesTextContributors`, `rightsTrail`, `rightsResolution`) stays: it is the record rule 5 asks for.
+ */
+export const PROVENANCE_KEYS = [
+	'composer', 'opera_ru', 'opera_en', 'character_ru', 'character_en', 'formerTitle', 'role', 'voice', 'literary_source', 'text_kind', 'notes',
+	'actScene', 'url_opera_en', 'url_opera_ru', 'url_people', 'pageNamesTextContributors', 'contributorDates', 'rightsTrail', 'rightsResolution',
+];
+export const LIBRETTO_SITES = ['Russian Wikisource', 'operalib.eu', 'FEB'];
+
+/** The first fault in a libretto's provenance and source, or null. */
+export function provenanceFault(e) {
+	for (const k of Object.keys(e.provenance ?? {})) if (!PROVENANCE_KEYS.includes(k)) return `"provenance.${k}" is not a field a libretto carries`;
+	for (const k of ['composer', 'text_kind', 'literary_source']) if (/[()]/.test(e.provenance?.[k] ?? '')) return `"provenance.${k}" carries a parenthetical`;
+	if (!LIBRETTO_SITES.includes(e.source?.site)) return `"source.site" is "${e.source?.site}"`;
+	return null;
+}
+
+/**
  * THE OPERA OBJECT of a libretto entry, mapped from its `provenance`: [shipped key, provenance key]. `composer` is a `COMPOSERS` key
  * (English "Surname, Given"); `character*` is the role whose lines the text holds; `number` is the number's English name as the
  * provenance records it in `role` ("Yaroslavna's lament"), named for what it holds; `voice` is the voice type; `literarySource` is
@@ -183,6 +270,12 @@ export function shipEntry(e) {
 	const libretto = e.kind === 'libretto';
 	const fault = textFault(e.textModern);
 	if (fault) throw new Error(`library entry ${e.id}: "textModern" holds ${fault}`);
+	if (libretto) {
+		const furniture = librettoFault(e.textModern, e.provenance?.opera_ru);
+		if (furniture) throw new Error(`library entry ${e.id}: "textModern" holds furniture: ${furniture}`);
+		const bad = provenanceFault(e);
+		if (bad) throw new Error(`library entry ${e.id}: ${bad}`);
+	}
 	const { letters, offsets } = letterStream(e.textModern);
 	return {
 		...(libretto ? { kind: 'libretto', opera: operaOf(e) } : {}),

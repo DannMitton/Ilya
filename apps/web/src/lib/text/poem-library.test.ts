@@ -96,7 +96,7 @@ describe('isPoemLibrary: the check a file passes before the app trusts it', () =
 		expect(m.poemFiles).toHaveLength(1);
 		const file = JSON.parse(readFileSync(join(DATA, m.poemFiles[0]), 'utf8'));
 		expect(isPoemLibrary(file)).toBe(true);
-		expect(file.entries).toHaveLength(14);
+		expect(file.entries).toHaveLength(103); // 14 poems and 89 arias (row 182)
 		for (const e of file.entries as PoemEntry[]) {
 			const offsets = decodeOffsets(e.at);
 			expect(offsets.every((o) => /[А-Яа-яЁёЙйѢѣІіѲѳѴѵ]/.test(e.textModern[o]))).toBe(true);

@@ -3,7 +3,7 @@
  *
  * The library is the committed `data/dictionary.poems.<hash8>.json`; the queries
  * are `tools/poems/fixtures/*.lyrics.txt` (twelve read Lyrics, public-domain
- * poems only); the reference scores are `expected_r1.txt`, written by
+ * poems only); the reference scores are `expected_r2.txt`, written by
  * `tools/poems/reference_sw_match.py`. A score here equals the reference's to
  * three decimals, or the matcher is not the reference.
  */
@@ -40,12 +40,12 @@ interface Expected {
 	secondScore: string;
 	margin: string;
 }
-const expected: Expected[] = readFileSync(join(ROOT, 'tools/poems/fixtures/expected_r1.txt'), 'utf8')
+const expected: Expected[] = readFileSync(join(ROOT, 'tools/poems/fixtures/expected_r2.txt'), 'utf8')
 	.split('\n')
 	.filter((l) => l.trim() !== '')
 	.map((l) => {
 		const m = /^(\S+)\s+(\d+)l \| (\S+)\s+([\d.]+) \| (\S+)\s+([\d.]+) \| m ([\d.]+)$/.exec(l);
-		if (!m) throw new Error(`expected_r1.txt: cannot read "${l}"`);
+		if (!m) throw new Error(`expected_r2.txt: cannot read "${l}"`);
 		return { name: m[1], letters: Number(m[2]), top: m[3], topScore: m[4], second: m[5], secondScore: m[6], margin: m[7] };
 	});
 
@@ -59,7 +59,7 @@ describe('the fold (reference_sw_match.py)', () => {
 		expect(foldLetters('')).toBe('');
 	});
 
-	it('agrees with the build on every poem in the shipped library (19,553 letters)', () => {
+	it('agrees with the build on every entry in the shipped library (poems and libretti)', () => {
 		for (const e of library.entries) expect(foldLetters(e.textModern)).toBe(e.letters);
 	});
 });
@@ -139,10 +139,18 @@ describe('align: local alignment, +2 / -1 / -2', () => {
 	});
 });
 
-describe('every fixture scores as the reference does (expected_r1.txt, three decimals)', () => {
+describe('every fixture scores as the reference does (expected_r2.txt, three decimals)', () => {
 	it('reads the twelve reference rows', () => {
 		expect(expected.map((e) => e.name)).toEqual(['P', 'S', 'T', 'U1', 'U4', 'U5', 'U6', 'r114-song1', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5']);
 	});
+
+	/**
+	 * The reference scores every work; the matcher scores the `SHORTLIST` sharing the most trigrams (the library has 42 works, so the
+	 * shortlist engages). The TOP work and its score are the reference's on all twelve rows. A second work outside the shortlist is
+	 * not seen, so the matcher's second is never above the reference's, and on one row (U4, a song with no library poem) it is a
+	 * different work. That row does not fill either way (its top is below the floor), and the test pins it.
+	 */
+	const SECOND_DIFFERS = ['U4'];
 
 	for (const e of expected) {
 		it(`${e.name}: ${e.letters} letters, top work ${e.top} ${e.topScore}, second ${e.second} ${e.secondScore}, margin ${e.margin}`, () => {
@@ -151,9 +159,15 @@ describe('every fixture scores as the reference does (expected_r1.txt, three dec
 			const ranked = rankWorks(letters, library);
 			expect(ranked[0].work).toBe(e.top);
 			expect(ranked[0].score.toFixed(3)).toBe(e.topScore);
-			expect(ranked[1].work).toBe(e.second);
-			expect(ranked[1].score.toFixed(3)).toBe(e.secondScore);
-			expect((ranked[0].score - ranked[1].score).toFixed(3)).toBe(e.margin);
+			if (SECOND_DIFFERS.includes(e.name)) {
+				expect(ranked[1].work).not.toBe(e.second);
+				expect(ranked[1].score).toBeLessThanOrEqual(Number(e.secondScore) + 0.0005);
+				expect(matchPoem(fixture(e.name), library)).toBeNull();
+			} else {
+				expect(ranked[1].work).toBe(e.second);
+				expect(ranked[1].score.toFixed(3)).toBe(e.secondScore);
+				expect((ranked[0].score - ranked[1].score).toFixed(3)).toBe(e.margin);
+			}
 		});
 	}
 });
@@ -250,13 +264,14 @@ describe('when it fills', () => {
 			return ranked[0].score >= MIN_SCORE && ranked[0].score - second >= MIN_MARGIN && w.length <= MAX_LENGTH_RATIO * ranked[0].entry.letters.length;
 		}
 		// The control: without the floor, short windows of songs that have no poem here do fill.
-		expect(fills(6)).toBeGreaterThan(300); // 440 of 963 when measured
-		expect(fills(15)).toBeGreaterThan(50); // 94 of 313
+		// (Row 182: with 42 works there is more to compete with, so fewer short windows fill: 213 of 963 and 40 of 313, from 440 and 94.)
+		expect(fills(6)).toBeGreaterThan(100); // 213 of 963 when measured on the library of 42 works
+		expect(fills(15)).toBeGreaterThan(20); // 40 of 313
 		// At the floor and above, none do, with or without it.
 		expect(fills(MIN_QUERY_LETTERS)).toBe(0);
 		expect(fills(100)).toBe(0);
 		for (const w of windows(MIN_QUERY_LETTERS)) expect(matchPoem(w, library)).toBeNull();
-	});
+	}, 60_000); // about 10 s with 42 works (3 s with 13): the same 2,300 matches over a library three times as long
 
 	it('keeps every song in the build set: the shortest true fixture has 113 letters', () => {
 		const lengths = ['P', 'S', 'T', 'U1', 'U6', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5'].map((n) => foldLetters(fixture(n)).length);
@@ -380,8 +395,26 @@ describe('the shortlist (a large library on a phone)', () => {
 	}
 	const big: PoemLibrary = { version: 1, entries: [...library.entries, ...invented(200)] };
 
-	it('with 20 works or fewer, the shortlist is everything (the shipped library has 13)', () => {
-		expect(shortlist(foldLetters(fixture('P')), library).size).toBe(13);
+	it('with 20 works or fewer, the shortlist is everything (the 14 poems are 13 works)', () => {
+		const poems: PoemLibrary = { version: 1, entries: library.entries.filter((e) => e.kind === undefined) };
+		expect(shortlist(foldLetters(fixture('P')), poems).size).toBe(13);
+		const firstTwenty = new Set(library.entries.map((e) => e.work)).values();
+		const keep = new Set(Array.from({ length: 20 }, () => firstTwenty.next().value));
+		const twenty: PoemLibrary = { version: 1, entries: library.entries.filter((e) => keep.has(e.work)) };
+		expect(shortlist(foldLetters(fixture('P')), twenty).size).toBe(20);
+	});
+
+	it('row 182: the shipped library has 42 works, so the shortlist engages, and each fixture\'s poem lands in it', () => {
+		expect(new Set(library.entries.map((e) => e.work)).size).toBe(42);
+		for (const name of ['P', 'S', 'T', 'U1', 'U4', 'U5', 'U6', 'r114-song1', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5']) {
+			expect(shortlist(foldLetters(fixture(name)), library).size, name).toBe(SHORTLIST);
+		}
+		for (const name of ['P', 'S', 'T', 'U1', 'U6', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5']) {
+			const match = matchPoem(fixture(name), library)!;
+			expect(shortlist(foldLetters(fixture(name)), library).has(match.work), name).toBe(true);
+			// and the shortlist took the true work, as the reference (all works) names it
+			expect(match.work, name).toBe(expected.find((e) => e.name === name)!.top);
+		}
 	});
 
 	it('aligns only the 20 works sharing the most trigrams, and finds the true one among them', () => {
