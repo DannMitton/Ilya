@@ -147,3 +147,17 @@ export function resolvedGlosses(
 	}
 	return out;
 }
+
+/**
+ * What the Inspector's field writes into the song for what she typed (`null` takes
+ * her edit in this language away). Typing the dictionary's own gloss, or blanking
+ * a field the dictionary fills, reverts to the dictionary. Blanking a field the
+ * glossary fills writes her "no gloss here", an explicit empty edit, so the
+ * glossary's text does not come back (walk item 5). An edit equal to the
+ * glossary's text is still hers: the song keeps it, so "Stop using" leaves the
+ * song alone.
+ */
+export function glossToWrite(typed: string, dictionaryGloss: string, glossaryText: string | undefined): string | null {
+	if (typed === '') return !dictionaryGloss && glossaryText ? '' : null;
+	return typed === dictionaryGloss ? null : typed;
+}

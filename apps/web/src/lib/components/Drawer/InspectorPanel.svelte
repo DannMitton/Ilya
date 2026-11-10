@@ -5,7 +5,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n'; import { savedFlag, settle } from '$lib/components/Field/settle-field'; import SavedNote from '$lib/components/Field/SavedNote.svelte';
-	import { resolveFullGloss } from '$lib/gloss-resolve'; import type { ResolvedGloss } from '$lib/text/gloss-edit';
+	import { resolveFullGloss } from '$lib/gloss-resolve'; import { glossToWrite, type ResolvedGloss } from '$lib/text/gloss-edit';
 
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
@@ -35,11 +35,13 @@
 		onreset?: () => void;
 		/** What the song's edit (or, later, the glossary) decides this word's gloss is, in the shown language; undefined where the dictionary decides (row 179). */
 		gloss?: ResolvedGloss;
+		/** The personal glossary's entry for this word in the shown language, if any (row 179). */
+		glossaryText?: string;
 		/** Callback when the user edits the gloss in the Dictionary panel. */
 		onglossoverride?: (gloss: string | null) => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, gloss, onglossoverride }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, gloss, glossaryText, onglossoverride }: Props = $props();
 
 	// Whether this word is a proclitic or enclitic (no independent stress).
 	// Declared here, ahead of displayCyrillic below, because it depends only
@@ -850,12 +852,7 @@
 		const input = e.target as HTMLInputElement;
 		const value = input.value.slice(0, 20);
 		dictGlossInput = value;
-		if (value === '' || value === word.gloss) {
-			// Revert to dictionary default
-			onglossoverride?.(null);
-		} else {
-			onglossoverride?.(value);
-		}
+		onglossoverride?.(glossToWrite(value, word.gloss ?? '', glossaryText)); // ROW 179: null reverts to the dictionary; '' is her "no gloss here"
 	}
 
 	// Click-outside dismissal for dictionary panel

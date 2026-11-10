@@ -38,7 +38,7 @@
 	import { sameWords } from '$lib/text/same-words';
 	import { lyricsInPoemLines } from '$lib/text/relining';
 	import { poemOffer } from '$lib/text/poem-offer.svelte'; import { scanBanners } from '$lib/score/scan-banner-state.svelte'; import { LoupeSwipe } from '$lib/score/loupe-swipe.svelte'; import { poemJoin } from '$lib/text/poem-join.svelte'; import { loupePrint } from '$lib/score/loupe-print.svelte'; import { joinDeps, printDeps } from '$lib/score/loupe-print-wiring'; import ScanBanner from '$lib/components/Drawer/ScanBanner.svelte';
-	import { survivingGlosses } from '$lib/text/gloss-survival'; import { resolvedGlosses, withGlossEdit } from '$lib/text/gloss-edit';
+	import { survivingGlosses } from '$lib/text/gloss-survival'; import { resolvedGlosses, withGlossEdit } from '$lib/text/gloss-edit'; import { GlossaryStore } from '$lib/text/glossary.svelte';
 	import { WordMarks } from '$lib/text/word-marks.svelte';
 	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
 	// N.67 step 0: the song document owns the per-song state and is the only
@@ -1742,7 +1742,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		}
 		return textLines;
 	});
-	/* ROW 179: what each word shows in the shown language, the song's edit deciding (`glossFor`, `text/gloss-edit.ts`); the readers below take it. */ const shownGlosses = $derived(resolvedGlosses(effectiveLines, shownEdits, language, null));
+	/* ROW 179: what each word shows in the shown language: the song's edit, else the dictionary, else the personal glossary (`glossFor`, `text/gloss-edit.ts`, `text/glossary.ts`); the readers below take it. */ const glossary = new GlossaryStore(); const shownGlosses = $derived(resolvedGlosses(effectiveLines, shownEdits, language, glossary));
 	/* N.159. WHAT EACH SEATED NOTE DRAWS on Score markup and in Insights,
 	   worked out fresh from the live poem under Reconstitution, Open
 	   syllables, a spot reconstitution, and a moved boundary, so the score
@@ -4090,7 +4090,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 									onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
 									onsyllableoverrideclear={() => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, null)}
 									onreset={handleReset}
-									gloss={shownGlosses.get(wordKey)}
+									gloss={shownGlosses.get(wordKey)} glossaryText={glossary.get(selectedWord.lemma, selectedWord.cleanWord, language)}
 									onglossoverride={handleGlossOverride}
 								/>
 							{/if}
