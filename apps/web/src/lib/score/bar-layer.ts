@@ -90,6 +90,14 @@ export class BarLayer {
 		return m && m.number.trim() ? m.number : String(songBar + 1);
 	}
 
+	/** The printed bar's number for a bar named by its number as the singer reads it (the Loupe's tag); the label itself where no mark moved a barline. */
+	readingLabelOfLabel(label: string): string {
+		if (this.bars.identity) return label;
+		const m = this.#get().score?.measures.find((x) => x.number.trim() === label.trim());
+		const i = m ? m.index : Number.parseInt(label, 10) - 1;
+		return Number.isFinite(i) && i >= 0 ? this.readingLabelOf(i) : label;
+	}
+
 	/** The number the PRINTED bar carries: the reading's, for the strip and the banner's list. */
 	readingLabelOf(songBar: number): string {
 		const r = this.bars.toReading(songBar);

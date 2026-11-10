@@ -32,6 +32,11 @@ export interface PrintDeps {
 	toCheck(): number[];
 	/** Open the Loupe on a bar, in the order that holds on a phone (the page's). */
 	openAt(bar: number): void;
+	/**
+	 * The number the PRINTED bar carries, for a bar named by the number the singer reads in the Loupe. After she divides or joins a
+	 * bar (`rebar.ts`) the two differ; the strip, the kept bands, and the banner's list are all keyed to the print's. Absent: the same.
+	 */
+	readingLabel?(songLabel: string): string;
 	render?: (file: File, kind: 'image' | 'pdf', page: number) => Promise<Blob>;
 	cut?: (page: Blob, band: BandFractions) => Promise<Strip | null>;
 	url?: (blob: Blob) => string;
@@ -98,10 +103,15 @@ export class LoupePrint {
 		return at < 0 ? null : (list[at + direction] ?? null);
 	}
 
-	/** The tag for a listed bar, «m. 14 · to check, 1 of 3»; null for any other bar, which keeps the Loupe's own tag. */
+	/** The printed bar's number for the number the Loupe shows; the same where nothing was divided or joined. */
+	readingLabelOf(label: string | null): string | null {
+		return label === null ? null : (this.#deps?.readingLabel?.(label) ?? label);
+	}
+
+	/** The tag for a listed bar, «m. 14 · to check, 1 of 3»; null for any other bar, which keeps the Loupe's own tag. The listing is the print's bars, the number shown is the singer's. */
 	tagFor(label: string | null, language: Language): string | null {
 		if (label === null) return null;
-		const at = this.position(Number.parseInt(label, 10));
+		const at = this.position(Number.parseInt(this.readingLabelOf(label) ?? label, 10));
 		return at ? t('loupe.measureTagCheck', language).replace('%m', label).replace('%s', String(at.index)).replace('%t', String(at.total)) : null;
 	}
 

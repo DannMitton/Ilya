@@ -63,6 +63,8 @@ export interface PrintLend {
 	stored(): { reading?: { bands?: readonly KeptSystem[] } | null; bytes: ArrayBuffer; fileName: string } | null;
 	/** The note ids of the corrected line, in order, for finding a bar's first note. */
 	line(): readonly { id: string; type: string; measureIndex: number }[];
+	/** The printed bar's number for the Loupe's own, once a bar was divided or joined (`BarLayer.readingLabelOfLabel`). */
+	readingLabel?(songLabel: string): string;
 	/** The Markup wall is open (`INCLUDE_MARKUP_INSIGHTS`). */
 	markupOn: boolean;
 	/** The page's three effects, in the order that holds on a phone: MELODY forward, the drawer lowered, the cursor on the note, the Loupe open. */
@@ -78,6 +80,7 @@ export function printDeps(l: PrintLend): PrintDeps {
 			return s?.reading?.bands ? { systems: s.reading.bands, file: new File([s.bytes], s.fileName), kind: /\.pdf$/i.test(s.fileName) ? 'pdf' : 'image' } : null;
 		},
 		toCheck: () => barsOf(unreadBarsOf(l.ingested())),
+		...(l.readingLabel ? { readingLabel: l.readingLabel } : {}),
 		openAt: (bar) => {
 			const id = firstNoteOfBar(l.ingested()?.result.score.measures ?? [], l.line(), bar);
 			if (!l.markupOn || !id) return;

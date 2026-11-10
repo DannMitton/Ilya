@@ -189,11 +189,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		measureFill,
 		positionsInMeasure,
 	} from '$lib/score/entry';
-	import {
-		applyCorrections,
-		currentPitch,
-		orphanIds,
-	} from '$lib/score/correction';
+	import { currentPitch, orphanIds } from '$lib/score/correction';
+	import { BarLayer } from '$lib/score/bar-layer';
 	import { stackLabel } from '$lib/score/undo-history.svelte';
 	import { createUndoHistory } from '$lib/score/undo-wiring.svelte';
 	import { breakControl } from '$lib/text/break-here';
@@ -801,7 +798,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   against the read would find nothing the moment they made one. Applying a
 	   correction to an already-corrected event is idempotent, so `currentPitch`
 	   and `currentDuration` read the same answer off either line. */
-	const correctedLine = $derived(applyCorrections(readLine, doc.corrections));
+	const layer = new BarLayer({ score: () => ingestedScore?.result.score ?? null, corrections: () => doc.corrections });
+	const correctedLine = $derived(layer.line);
 
 	const correctedCount = $derived(Object.keys(doc.corrections).length);
 
@@ -829,7 +827,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   correctly rather than measured against the opening bar. */
 	const heldMeasure = $derived.by(() => {
 		if (heldMeasureIndex === null) return undefined;
-		return ingestedScore?.result.score.measures.find((x) => x.index === heldMeasureIndex);
+		return layer.measureAt(heldMeasureIndex);
 	});
 	const heldFill = $derived.by(() => {
 		if (heldMeasureIndex === null) return null;
@@ -870,8 +868,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		selectedEventId: () => selectedEventId,
 		setCursor,
 		selectEntry: (id) => (stationCursor.selectedEventId = id),
-		keyOf: (measureIndex) =>
-			ingestedScore?.result.score.measures.find((m) => m.index === measureIndex)?.keySignature,
+		keyOf: (measureIndex) => layer.measureAt(measureIndex)?.keySignature,
 		clef: () => scoreClef,
 		label: pitchLabel,
 		word: (key) => t(key, language),
@@ -949,19 +946,9 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		const ing = ingestedScore;
 		if (!ing) return null;
 		if (correctedCount === 0) return ing;
-		return {
-			...ing,
-			result: {
-				...ing.result,
-				score: {
-					...ing.result.score,
-					// `correctedLine` above, not a second application: two calls could
-					// disagree only by drifting, and one line is what the loupe, the
-					// dock, and the page all have to be looking at.
-					vocalLine: correctedLine,
-				},
-			},
-		};
+		// `layer.score`, not a second application: the corrected line and the singer's barlines and time signatures
+		// (`score/rebar.ts`), so the loupe, the dock, and the page all look at one line and one list of bars.
+		return { ...ing, result: { ...ing.result, score: layer.score ?? ing.result.score } };
 	});
 	/* N.94, the Transposition ruler: the Piece band opens it and it floats over
 	   Markup. Its state and wiring are `transposition-ruler-state.svelte.ts`. */
@@ -1043,8 +1030,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	const heldMeasureLabel = $derived.by(() => {
 		const i = heldMeasureIndex;
 		if (i === null) return null;
-		const m = ingestedScore?.result.score.measures.find((x) => x.index === i);
-		return m && m.number.trim() ? m.number : String(i + 1);
+		return layer.labelOf(i);
 	});
 
 	const heldMeasureIds = $derived(
@@ -1127,8 +1113,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	const selectedSignature = $derived.by(() => {
 		const ev = selectedEvent;
 		if (!ev) return undefined;
-		return ingestedScore?.result.score.measures.find((m) => m.index === ev.measureIndex)
-			?.timeSignature;
+		return layer.measureAt(ev.measureIndex)?.timeSignature;
 	});
 
 	const selectedBeat = $derived.by(() => {
@@ -2337,7 +2322,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		joinText(how);
 	}
 	/* ROW 108 B (ruling default 4): Lyrics holding the score's words, in Ilya's own line breaks, takes the poem's (`text/relining.ts`). */
-	let lastLaid = ''; poemOffer.attach({ doc: () => doc, library: poemLibrary, put: (t) => handlePoemEdit(t, 'paste'), setLyrics: (t) => handleInput(t, 'paste'), laid: { get: () => lastLaid, set: (v) => (lastLaid = v) } }); poemJoin.attach(joinDeps({ doc: () => doc, setLyrics: (t) => handleInput(t, 'paste'), ingested: () => ingestedScore, scoreText: () => scoreText, lines: () => lines, pairings: () => doc.pairings, ready: () => !loaderState.isLoading && loaderState.entryCount > 0, hasScan: () => loupePrint.hasScan() })); loupePrint.attach(printDeps({ songId: () => doc.id, ingested: () => ingestedScore, stored: () => restoreSource, line: () => correctedLine, markupOn: INCLUDE_MARKUP_INSIGHTS, show: (id) => { handleTabChange('markup'); if (isPhone) drawerRaised = false; setCursor({ kind: 'entry', id }); loupeOpen = true; } })); // ROW 181 steps 5 and 6 (the print in the Loupe: `score/loupe-print.svelte.ts`): the join of Poem to a scan's Lyrics (`text/poem-join.svelte.ts`). The text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
+	let lastLaid = ''; poemOffer.attach({ doc: () => doc, library: poemLibrary, put: (t) => handlePoemEdit(t, 'paste'), setLyrics: (t) => handleInput(t, 'paste'), laid: { get: () => lastLaid, set: (v) => (lastLaid = v) } }); poemJoin.attach(joinDeps({ doc: () => doc, setLyrics: (t) => handleInput(t, 'paste'), ingested: () => ingestedScore, scoreText: () => scoreText, lines: () => lines, pairings: () => doc.pairings, ready: () => !loaderState.isLoading && loaderState.entryCount > 0, hasScan: () => loupePrint.hasScan() })); loupePrint.attach(printDeps({ songId: () => doc.id, ingested: () => ingestedScore, stored: () => restoreSource, line: () => layer.preLine, readingLabel: (l) => layer.readingLabelOfLabel(l), markupOn: INCLUDE_MARKUP_INSIGHTS, show: (id) => { handleTabChange('markup'); if (isPhone) drawerRaised = false; setCursor({ kind: 'entry', id }); loupeOpen = true; } })); // ROW 181 steps 5 and 6 (the print in the Loupe: `score/loupe-print.svelte.ts`): the join of Poem to a scan's Lyrics (`text/poem-join.svelte.ts`). The text Ilya last wrote into Lyrics: the witness that its line breaks are still Ilya's
 	function adoptPoemLines(how: TextArrival, previousPoem = ''): void {
 		const laid = lyricsInPoemLines(doc.inputText, doc.publishedPoem, previousPoem, scoreText, lastLaid);
 		if (laid !== null) { lastLaid = laid; handleInput(laid, how); }

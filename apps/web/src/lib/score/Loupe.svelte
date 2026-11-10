@@ -2295,7 +2295,7 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 	>
 		<div class="loupe-top" bind:offsetHeight={topH}>
 		<LoupeHeader {language} {isPhone} {undoLabel} {redoLabel} {onundo} {onredo} {onclose} {place} />
-		<LoupePrintStrip bar={measureLabel === null ? null : Number.parseInt(measureLabel, 10)} tag={loupePrint.tagFor(measureLabel, language) ?? tag} {language} {isPhone} />
+		<LoupePrintStrip bar={measureLabel === null ? null : Number.parseInt(loupePrint.readingLabelOf(measureLabel) ?? measureLabel, 10)} tag={loupePrint.tagFor(measureLabel, language) ?? tag} {language} {isPhone} />
 		<p class="loupe-tag">{loupePrint.tagFor(measureLabel, language) ?? tag}</p>
 		<p class="loupe-note">{noteLine || '\u00a0'}</p>
 		<div class="loupe-window" bind:this={windowEl} style="height: {frame.windowHeight}px;">

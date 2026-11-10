@@ -56,6 +56,17 @@ describe('the list the Loupe steps through', () => {
 		expect(p.tagFor(null, 'en')).toBeNull();
 	});
 
+	it('after a bar is divided the Loupe\'s number is the singer\'s and the strip and the list are keyed to the print\'s (QUEUE row 138)', () => {
+		// the singer's bar 11 is the print's bar 10; her bar 12 is the print's bar 11; her 13 is the print's 12
+		const { p } = rig({ readingLabel: (l: string) => ({ '11': '10', '12': '11', '13': '12' })[l] ?? l });
+		expect(p.readingLabelOf('11')).toBe('10');
+		expect(p.readingLabelOf('9')).toBe('9');
+		expect(p.readingLabelOf(null)).toBeNull();
+		expect(p.tagFor('11', 'en')).toBe('m.\u00a011 · to check, 1 of 2');
+		expect(p.tagFor('12', 'en')).toBeNull();
+		expect(p.tagFor('13', 'en')).toBe('m.\u00a013 · to check, 2 of 2');
+	});
+
 	it('opens the Loupe on a bar when asked (the banner\'s link, Previous, Next)', () => {
 		const { p, opened } = rig();
 		p.goto(12);

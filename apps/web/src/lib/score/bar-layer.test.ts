@@ -48,3 +48,25 @@ describe('BarLayer', () => {
 		expect(layer.score).toBeNull();
 	});
 });
+
+describe('BarLayer, the page\'s bar arithmetic on the fused fixture (QUEUE row 138, B2)', () => {
+	it('one barline gives the bar count the print has, the banner\'s list and MELODY\'s numbers agree, and both halves show one strip', async () => {
+		const score = await load('barline-fused');
+		const opener = score.vocalLine.filter((e) => e.measureIndex === 3)[4];
+		const layer = new BarLayer({ score: () => score, corrections: () => withCorrection({}, opener.id, { barline: 'before' }) });
+		// the print has 8 bars (the fused bar is two printed ones): the song now has 8 too, each a song bar
+		expect(layer.score?.measures.map((m) => m.number)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8']);
+		// the Loupe's label by number, for the strip
+		expect(layer.readingLabelOfLabel('4')).toBe('4');
+		expect(layer.readingLabelOfLabel('5')).toBe('4');
+		expect(layer.readingLabelOfLabel('6')).toBe('5');
+		expect(layer.readingLabelOfLabel('8')).toBe('7');
+		// the held bar's number is the layer's own
+		expect(layer.labelOf(4)).toBe('5');
+	});
+	it('with no mark every label is itself', async () => {
+		const score = await load('barline-fused');
+		const layer = new BarLayer({ score: () => score, corrections: () => ({}) });
+		expect(layer.readingLabelOfLabel('5')).toBe('5');
+	});
+});
