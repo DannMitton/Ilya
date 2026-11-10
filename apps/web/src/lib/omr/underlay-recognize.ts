@@ -55,7 +55,7 @@ interface TesseractBlock {
 
 /**
  * The words of a recognition's blocks, in the order tesseract gave them, each with its letter boxes where the reader gave
- * them (row 181 B0 step 1: `underlay-vowel-box.ts` reads them, for `splitTokens` and `cutUnits`; a word without `symbols` has
+ * them (row 181 B0 step 1: `letterBoxes` (`underlay-units.ts`) reads them, for `splitTokens` and `cutUnits`; a word without `symbols` has
  * no `symbols` key, so it is exactly the word of before).
  */
 export function wordsOf(blocks: TesseractBlock[] | null | undefined): WordBox[] {

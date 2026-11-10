@@ -39,7 +39,7 @@ import { rowWordSpans, splitTokens } from './underlay-tokens';
 import type { Look } from './underlay-looks';
 import { barExtents, bandFractions, type BandFractions, type BarExtent } from './kept-bands';
 import { markExtenderNotes, NO_EXTENDERS, type ExtenderArm, type ExtenderCounts } from './underlay-extender';
-import { cutUnits, type CutCounts } from './underlay-units';
+import { cutUnits, noVowelBoxes, type CutCounts, type VowelBoxCounts } from './underlay-units';
 import { sewWords, type Word } from './underlay-words';
 
 /** A word box the reader returned for a framed row, in the framed row's pixels. */
@@ -152,6 +152,8 @@ export interface UnderlayStats {
 	 * system of the page, seated or not; a note is counted once, under the first kind that applies.
 	 */
 	skippedNotes: { grace: number; chord: number; wouldSkip: { cue: number; voice2: number } };
+	/** Where the seated rows' split and cut boxes came from (row 181 B0): by the vowel's ink (`placed`), or the letter share, and why (`underlay-units.ts`). */
+	vowelBoxes: VowelBoxCounts;
 	counted: {
 		ownNote: (OwnNote & { system: number; row: number })[];
 		/** `merged`: tokens a note refused (a second token on a note is unseated, never joined: `underlay-words.ts`). */
@@ -212,7 +214,7 @@ export interface LookReport {
 export type ReadUnderlay = (image: Blob, musicXml: string, staves: readonly StaffBoxLike[]) => Promise<UnderlayPage | null>;
 
 /** A reader's answer for a row, back on the page: tokens in page pixels. */
-export function pageTokens(row: RowLayout, words: readonly WordBox[]): Token[] {
+export function pageTokens(row: RowLayout, words: readonly WordBox[], boxes?: VowelBoxCounts): Token[] {
 	const raw = words.map((w): Token => {
 		const b = unframeBox(row.transform, w);
 		// The letter boxes are taken back to the page as the word's box is: `unframeBox`, then the row's offset (row 181 B0 step 1).
@@ -223,7 +225,7 @@ export function pageTokens(row: RowLayout, words: readonly WordBox[]): Token[] {
 		return { text: w.text, x0: b.x0 + row.offsetX, x1: b.x1 + row.offsetX, ...(syms ? { syms } : {}) };
 	});
 	// The row's ink height on the page, for the dash that is a mark and not a joint.
-	return splitTokens(raw, { inkHeight: DEFAULT_INK_HEIGHT / row.transform.scale });
+	return splitTokens(raw, { inkHeight: DEFAULT_INK_HEIGHT / row.transform.scale, ...(boxes ? { boxes } : {}) });
 }
 
 /**
@@ -251,6 +253,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		extenders: { ...NO_EXTENDERS },
 		inkBands: [],
 		skippedNotes: { grace: 0, chord: 0, wouldSkip: { cue: 0, voice2: 0 } },
+		vowelBoxes: noVowelBoxes(),
 		counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, perSystem: [], breaches: [] },
 	};
 	const seats: Seat[] = [];
@@ -267,9 +270,10 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		// `free` are made, because `free` feeds the rescue decision and `foldClitics`, and a syllable's seat is known only
 		// at `seatTokens`. The flag comes from the token's own box (`underlay-extender.ts`); no seat is consulted.
 		const read = system.rows.map((row) => {
-			const tokens = pageTokens(row, reads[row.id] ?? []);
+			const boxes = noVowelBoxes();
+			const tokens = pageTokens(row, reads[row.id] ?? [], boxes);
 			const spans = rowWordSpans(tokens);
-			return { tokens, spans, words: spans.map((w) => w.text) };
+			return { tokens, spans, words: spans.map((w) => w.text), boxes };
 		});
 		// The extender marks are CANDIDATES (step 8b): `ext` holds them, `notes` does not. They are taken below, after the units exist,
 		// for a system where they bring the free notes and the syllable units to equal and nothing else does (the slur gate's rule,
@@ -316,6 +320,8 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 			seated = true;
 			const cutRow = cutUnits(tokens, seams.cut);
 			const { counts } = cutRow;
+			// Where this row's boxes came from, counted for the row that is seated only: the split (`pageTokens`) and the cut (`cutUnits`).
+			for (const k of ['placed', 'fallbackNoMatch', 'fallbackNoVowel'] as const) stats.vowelBoxes[k] += read[r].boxes[k] + cutRow.boxes[k];
 			let units = cutRow.units;
 			let origin = cutRow.origin;
 			// `foldClitics` runs before the gate (the gate counts its units), so it first reads the ties-only free notes. The free

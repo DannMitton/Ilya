@@ -101,3 +101,40 @@ describe('rowWords', () => {
 		expect(rowWords([])).toEqual([]);
 	});
 });
+
+/* Row 181 B0 step 3: the parts of a split token stand where their own vowels' ink is. */
+describe('splitTokens, each part placed by its own vowel\'s ink', () => {
+	const sy = (c: string, x0: number, x1: number) => ({ c, x0, x1 });
+	const withSyms = (text: string, x0: number, x1: number, syms: { c: string; x0: number; x1: number }[]): Token => ({ text, x0, x1, syms });
+
+	it('gives each part the box of its vowel, carries its own letter boxes on, and counts them placed', () => {
+		const boxes = { placed: 0, fallbackNoMatch: 0, fallbackNoVowel: 0 };
+		const syms = [sy('с', 0, 10), sy('у', 12, 30), sy('-', 32, 38), sy('е', 60, 80)];
+		const out = splitTokens([withSyms('су-е', 0, 90, syms)], { boxes });
+		expect(out.map((u) => [u.text, u.x0, u.x1])).toEqual([['су-', 12, 30], ['е', 60, 80]]);
+		expect(out.map((u) => u.syms)).toEqual([[sy('с', 0, 10), sy('у', 12, 30)], [sy('е', 60, 80)]]);
+		expect(boxes).toEqual({ placed: 2, fallbackNoMatch: 0, fallbackNoVowel: 0 });
+	});
+
+	it('gives a part of two vowels or none the span of its own letters\' boxes', () => {
+		const syms = [sy('м', 0, 10), sy('о', 12, 25), sy('я', 30, 42), sy('-', 44, 48), sy('н', 60, 70), sy('о', 72, 85)];
+		const out = splitTokens([withSyms('моя-но', 0, 90, syms)]);
+		expect(out.map((u) => [u.x0, u.x1])).toEqual([[0, 42], [72, 85]]); // «моя»: two vowels, the span; «но»: one vowel, its box
+		const none = splitTokens([withSyms('в-ты', 0, 60, [sy('в', 0, 12), sy('-', 14, 20), sy('т', 30, 40), sy('ы', 42, 58)])]);
+		expect(none.map((u) => [u.text, u.x0, u.x1])).toEqual([['в-', 0, 12], ['ты', 42, 58]]);
+	});
+
+	it('keeps the letter share where the boxes drop a letter, counts the token once, and carries no boxes on', () => {
+		const boxes = { placed: 0, fallbackNoMatch: 0, fallbackNoVowel: 0 };
+		const syms = [sy('с', 0, 10), sy('-', 32, 38), sy('е', 60, 80)];
+		const out = splitTokens([withSyms('су-е', 0, 90, syms)], { boxes });
+		expect(out.map((u) => [u.x0, u.x1])).toEqual([[0, 60], [60, 90]]);
+		expect(out.every((u) => !('syms' in u))).toBe(true);
+		expect(boxes).toEqual({ placed: 0, fallbackNoMatch: 1, fallbackNoVowel: 0 });
+	});
+
+	it('leaves a token with no mark inside it whole, its letter boxes with it', () => {
+		const syms = [sy('м', 0, 10), sy('и', 12, 30), sy('р', 32, 48)];
+		expect(splitTokens([withSyms('мир', 0, 50, syms)])).toEqual([withSyms('мир', 0, 50, syms)]);
+	});
+});

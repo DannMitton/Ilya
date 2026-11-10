@@ -150,6 +150,28 @@ describe('seatPage', () => {
 	});
 });
 
+describe('seatPage, a syllable placed by its vowel\'s ink (row 181 B0)', () => {
+	/* «бала» printed 0 to 100 with its second vowel at 70 to 90. By the letter share «ла» stands at 75 and takes the note at 70; by the
+	   vowel's ink it stands at 80 and takes the note at 86. If `cutUnits` fell back to the share, the second assertion would fail. */
+	const letters = [['б', 0, 10], ['а', 15, 35], ['л', 50, 65], ['а', 70, 90]] as const;
+	const sym = (c: string, x0: number, x1: number) => ({ text: c, x0: x0 + 16, x1: x1 + 16, y0: 16, y1: 48 });
+	const withInk: WordBox = { ...box('бала', 0, 100), symbols: letters.map(([c, a, b]) => sym(c, a, b)) };
+	const noInk = box('бала', 0, 100);
+	const where = (read: WordBox) => shape(seatPage(layout(system(notes(25, 70, 86), [row(0)])), [[read]], seams)).map((w) => w.map((s) => s[2]));
+
+	it('seats the second syllable on the note at its vowel, and on the share\'s note where the reader gave no letter boxes', () => {
+		expect(where(withInk)).toEqual([[0, 2]]);
+		expect(where(noInk)).toEqual([[0, 1]]);
+	});
+
+	it('counts the boxes by the seated row: placed with ink, a token fallback without', () => {
+		const withStats = seatPage(layout(system(notes(25, 70, 86), [row(0)])), [[withInk]], seams).stats.vowelBoxes;
+		expect(withStats).toEqual({ placed: 2, fallbackNoMatch: 0, fallbackNoVowel: 0 });
+		const withoutStats = seatPage(layout(system(notes(25, 70, 86), [row(0)])), [[noInk]], seams).stats.vowelBoxes;
+		expect(withoutStats).toEqual({ placed: 0, fallbackNoMatch: 1, fallbackNoVowel: 0 });
+	});
+});
+
 describe('seatPage, the row fallback (dictionary sewing)', () => {
 	const sewn = new Set(['тейской', 'мелочи', 'незаглушимый', 'шопот', 'мир', 'ты']);
 	const sewing: Seams = { isWord: (w) => sewn.has(w), cut: (w) => [w.toLowerCase()] };
