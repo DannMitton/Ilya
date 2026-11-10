@@ -888,6 +888,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// stored record keeps it; what is printed is looked up here by it (`text/poem-site.ts`), with the data's own string as the
 	// fallback for a site not listed.
 	'intake.poemLibrary.site.russianWikisource': { en: 'Russian Wikisource', fr: 'Wikisource en russe' },
+	// Row 182 (ratified by Dann 2026-11-09 22:14): the two other sites the aria texts come from. The French name of the second is coined.
+	'intake.poemLibrary.site.operalib':     { en: 'operalib.eu', fr: 'operalib.eu' },
+	'intake.poemLibrary.site.feb':          { en: 'the Fundamental Electronic Library (feb-web.ru)', fr: 'la Bibliothèque électronique fondamentale (feb-web.ru)' },
 	// The two lines that stand under POEM once the card is answered (`text/input-line.ts`).
 	'intake.view.libraryPoem':              { en: '{author}, “{title}”, from {site}.', fr: '{author}, «\u00a0{title}\u00a0», tiré de {site}.' },
 	'intake.view.libraryPoemEdited':        { en: 'Based on {author}, “{title}”, from {site}.', fr: 'D’après {author}, «\u00a0{title}\u00a0», tiré de {site}.' },

@@ -64,3 +64,15 @@ Tests that pin the library: `poem-library.test.ts:99` (`toHaveLength(14)`); `poe
 **Other readers of `work`, read and found sound per opera** (Fable's list, re-read on the tip): the shortlist and rank (`poem-match.ts:213-231`, `:243-255`), the decline key (`poem-offer.svelte.ts:76`, `:111`, `:187`), and the stored source (`library.ts:303-307`).
 
 **What I could not establish.** Whether the two ids that do not reproduce were hashed from the speaker-labelled or the pre-cleaning first line; nothing in the tree says.
+
+## Step 4: two new sites and two composers (landed before step 3's data, so every commit is green)
+
+**Changed.**
+- `i18n.ts`: `intake.poemLibrary.site.operalib` (EN "operalib.eu", FR "operalib.eu") and `intake.poemLibrary.site.feb` (EN "the Fundamental Electronic Library (feb-web.ru)", FR "la Bibliothèque électronique fondamentale (feb-web.ru)"). These are Dann's ratified lines of 2026-11-09 22:14 (rulings file), so they are seated as ratified, not as `TODO-EN`/`TODO-FR`, and no test fails on them. The brief's TODO seat, and Fable's amendment 10 on the conflict with step 8, are therefore moot. The source line stays "Tiré de {site}" with no elision.
+- `poem-site.ts`: `SITE_KEYS` gains `'operalib.eu'` and `FEB`.
+- `composers-poets.ts`: `COMPOSERS` gains `Napravnik, Eduard` (Направник, Эдуард; 1839–1916; French "Nápravník, Eduard") and `Verstovsky, Alexei` (Верстовский, Алексей; 1799–1862; French "Verstovski, Alexeï"), in alphabetical place. Serov left with the Judith entries, so the brief's "three composers" is two (Fable's amendment 11).
+- Tests: `poem-library-strings.test.ts` (table of 13 to 15 keys; the sites test now covers every site the library holds, three after step 3); `composers-poets.test.ts` (counts 62 to 64 and 49 to 51; the two new entries; alphabetical order; every aria's composer is a `COMPOSERS` key).
+
+**Every entry whose composer matches no key: none.** The 89 arias name 12 composers (Arensky, Borodin, Dargomyzhsky, Glinka, Mussorgsky, Napravnik, Rachmaninoff, Rimsky-Korsakov, Rubinstein, Taneyev, Tchaikovsky, Verstovsky), all keys. The check is a test.
+
+**What I could not establish.** Whether "Nápravník" with its Czech accents is the form French Wikipedia carries as a title: it is Dann's ratified form, not looked up.
