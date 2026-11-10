@@ -18,7 +18,7 @@ import {
 	type SongFields,
 } from './library';
 import { createMemoryDriver, type StorageDriver } from './driver';
-import { emptySongRecord, RECORD_SCHEMA, type SongRecord } from './types';
+import { emptySongRecord, RECORD_SCHEMA, type GlossRow, type SongRecord } from './types';
 
 const NOW = '2026-08-16T00:00:00.000Z';
 const LATER = '2026-08-16T01:00:00.000Z';
@@ -29,8 +29,8 @@ function seededRecord(): SongRecord {
 	record.metadata = { ...record.metadata, title: 'Сонет 90', composer: 'Kabalevsky' };
 	record.fromScore = ['title'];
 	record.glosses = [
-		['0-0', 'I', 'я'],
-		['0-1', 'loved', 'любил'],
+		['0-0', 'I', 'я', 'en'],
+		['0-1', 'loved', 'любил', 'en'],
 	];
 	record.openSyllabification = true;
 	return record;
@@ -41,8 +41,8 @@ describe('record and page state', () => {
 		const fields = fieldsFromRecord(seededRecord());
 
 		expect([...fields.glossOverrides]).toEqual([
-			['0-0', 'I'],
-			['0-1', 'loved'],
+			['0-0', { en: 'I' }],
+			['0-1', { en: 'loved' }],
 		]);
 		expect([...fields.glossAnchors]).toEqual([
 			['0-0', 'я'],
@@ -64,11 +64,11 @@ describe('record and page state', () => {
 		// is where an unanchored row is discarded, which is today's split too.
 		const fields: SongFields = {
 			...fieldsFromRecord(emptySongRecord('x', NOW)),
-			glossOverrides: new Map([['0-0', 'if']]),
+			glossOverrides: new Map([['0-0', { en: 'if' }]]),
 			glossAnchors: new Map(),
 		};
 
-		expect(recordFromFields(emptySongRecord('x', NOW), fields).glosses).toEqual([['0-0', 'if', '']]);
+		expect(recordFromFields(emptySongRecord('x', NOW), fields).glosses).toEqual([['0-0', 'if', '', 'en']]);
 	});
 
 	it('copies the metadata rather than aliasing the record’s object', () => {
@@ -386,7 +386,7 @@ describe('where the poem came from (poem library, build 1)', () => {
 });
 
 describe('the glosses on the poem\'s own words (row 109)', () => {
-	const rows: [string, string, string][] = [['0-1', 'noisy', 'шумного']];
+	const rows: GlossRow[] = [['0-1', 'noisy', 'шумного', 'en']];
 
 	it('are absent by default and a song without them writes none back', () => {
 		const record = emptySongRecord('x', NOW);
@@ -399,7 +399,7 @@ describe('the glosses on the poem\'s own words (row 109)', () => {
 		const base = emptySongRecord('x', NOW);
 		const fields = {
 			...fieldsFromRecord(base),
-			publishedGlosses: new Map([['0-1', 'noisy']]),
+			publishedGlosses: new Map([['0-1', { en: 'noisy' }]]),
 			publishedGlossAnchors: new Map([['0-1', 'шумного']]),
 		};
 		const stored = recordFromFields(base, fields);
@@ -408,15 +408,15 @@ describe('the glosses on the poem\'s own words (row 109)', () => {
 		expect(validated.reason).toBeUndefined();
 		expect(validated.record.publishedGlosses).toEqual(rows);
 		const back = fieldsFromRecord(validated.record);
-		expect([...back.publishedGlosses]).toEqual([['0-1', 'noisy']]);
+		expect([...back.publishedGlosses]).toEqual([['0-1', { en: 'noisy' }]]);
 		expect([...back.publishedGlossAnchors]).toEqual([['0-1', 'шумного']]);
 	});
 
 	it('keep the sung text\'s glosses apart from the poem\'s', () => {
-		const base = { ...emptySongRecord('x', NOW), glosses: [['0-0', 'sung', 'слово']] as [string, string, string][] };
-		const stored = recordFromFields(base, { ...fieldsFromRecord(base), publishedGlosses: new Map([['0-0', 'poet']]), publishedGlossAnchors: new Map([['0-0', 'слово']]) });
-		expect(stored.glosses).toEqual([['0-0', 'sung', 'слово']]);
-		expect(stored.publishedGlosses).toEqual([['0-0', 'poet', 'слово']]);
+		const base = { ...emptySongRecord('x', NOW), glosses: [['0-0', 'sung', 'слово', 'en']] as GlossRow[] };
+		const stored = recordFromFields(base, { ...fieldsFromRecord(base), publishedGlosses: new Map([['0-0', { en: 'poet' }]]), publishedGlossAnchors: new Map([['0-0', 'слово']]) });
+		expect(stored.glosses).toEqual([['0-0', 'sung', 'слово', 'en']]);
+		expect(stored.publishedGlosses).toEqual([['0-0', 'poet', 'слово', 'en']]);
 	});
 
 	it('drops a malformed row and marks a non-array malformed', () => {

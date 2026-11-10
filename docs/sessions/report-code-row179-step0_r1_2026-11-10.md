@@ -1,6 +1,6 @@
 # Report, row 179, step 0: measure, keep nothing (cloud-lane-44, 2026-11-10)
 
-Read on `cloud-lane-44` at `534d998` (`origin/cloud-lane-38`), working tree clean, `pnpm install --frozen-lockfile` from a fresh checkout. Brief: `brief-code-gloss-language-and-reuse_r3_2026-11-03.md`. No code changed in this step.
+Read on `cloud-lane-44` at `534d998` (three line ranges corrected in the step 1 commit after a re-count) (`origin/cloud-lane-38`), working tree clean, `pnpm install --frozen-lockfile` from a fresh checkout. Brief: `brief-code-gloss-language-and-reuse_r3_2026-11-03.md`. No code changed in this step.
 
 ## Baseline
 
@@ -30,7 +30,7 @@ All eight gates pass on the tip before any change (run together, 6 minutes 15 se
 | Paper | `:4361` | `:4310` |
 | ReadingAid | `:4390-4397` | `:4335-4346` |
 | `InspectorPanel` field, revert test, `hasOverrides` | `:841`, `:853`, `:378` | unchanged: `:841`, `:853`, `:378` |
-| Inspector outside-click, word change | `:862-867`, `:833-836` | `:861-867`, `:833-836` |
+| Inspector outside-click, word change | `:862-867`, `:833-836` | `:862-868`, `:833-836` |
 | edit cell | `:1037-1047` | `:1036-1046` |
 | `WordStack` gloss read | `:96` | `:104` (`glossOverride ?? word.gloss`); the pronoun strip is `:98-114` |
 | `Paper` prop | `Paper.svelte:21` | `Paper.svelte:27` |
@@ -59,8 +59,8 @@ All eight gates pass on the tip before any change (run together, 6 minutes 15 se
 2. **Do `ReadingAid.svelte` and `Paper.svelte` choose a gloss themselves?** No. `ReadingAid.svelte:29,40,73`, `Paper.svelte:27,46,96,157,178,201`, `TitlePage.svelte:29,58,119`, `SubsequentPage.svelte:25,52,88`, and `TextFitProbe.svelte:38,42,101` only pass the map down to `VerseLine.svelte:81` (`glossOverrides?.get(wordKey)`), which hands one entry to `WordStack`. The brief named three of these; there are five components between the page and `VerseLine`. One extra: `Paper.svelte:96` builds a redraw key with `JSON.stringify([…glossOverrides])`, so a map whose values are objects still stringifies, and a change of source or text changes the key.
 3. **Does a binder export carry `glosses` and `publishedGlosses`?** Yes, whole. A binder holds each `SongRecord` as it is (`exchange.test.ts:104-112` pins `publishedGlosses`; `binder.test.ts:30,118` pins `glosses`), so a fourth element on a row travels with it and an older Ilya's reader keeps the song. `binder.ts` contains no gloss logic of its own (the file reads as binary to `grep`; searched with `-a`). The legacy `localStorage` driver (`driver.ts:246-261,314`) writes `record.glosses` back as it stands.
 4. **What do `resetWord`, `carryPoemEdit`, and `settle` do with a gloss?**
-   - `resetWord` (`word-reset.ts:49-66`) deletes the word's key from the gloss map and from the anchor map, and returns `null` for either where the key was absent.
-   - `carryPoemEdit` (`witness-lines.ts:129-142`) re-keys both maps by the word diff, then drops any gloss whose anchor no longer stands there (`survivingGlosses` in the same file).
+   - `resetWord` (`word-reset.ts:43-61`) deletes the word's key from the gloss map and from the anchor map, and returns `null` for either where the key was absent.
+   - `carryPoemEdit` (`witness-lines.ts:129-143`) re-keys both maps by the word diff, then drops any gloss whose anchor no longer stands there (`survivingGlosses` in the same file).
    - `settle` (`settle-field.ts:44-48`) calls `onsettle` on blur when the value differs from the last settled one. It never touches a gloss; it only flips the "Saved" note.
 
 ## Strings

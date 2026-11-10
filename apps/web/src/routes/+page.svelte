@@ -38,7 +38,7 @@
 	import { sameWords } from '$lib/text/same-words';
 	import { lyricsInPoemLines } from '$lib/text/relining';
 	import { poemOffer } from '$lib/text/poem-offer.svelte'; import { scanBanners } from '$lib/score/scan-banner-state.svelte'; import { LoupeSwipe } from '$lib/score/loupe-swipe.svelte'; import { poemJoin } from '$lib/text/poem-join.svelte'; import { loupePrint } from '$lib/score/loupe-print.svelte'; import { joinDeps, printDeps } from '$lib/score/loupe-print-wiring'; import ScanBanner from '$lib/components/Drawer/ScanBanner.svelte';
-	import { survivingGlosses } from '$lib/text/gloss-survival';
+	import { survivingGlosses } from '$lib/text/gloss-survival'; import { resolvedGlosses, withGlossEdit } from '$lib/text/gloss-edit';
 	import { WordMarks } from '$lib/text/word-marks.svelte';
 	import { carryPoemEdit, lyricsTakesPoem, shownWitness, unsetPoemWords, witnessLines, witnessesDiffer } from '$lib/text/witness-lines';
 	// N.67 step 0: the song document owns the per-song state and is the only
@@ -463,7 +463,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	const shown = $derived(shownWitness(lyricsHas, poemHas, witnessDiffer, inputViews.witnessChoice[doc.id] ?? 'lyrics'));
 	const marks = $derived(shown === 'poem' ? poemMarks : lyricsMarks);
 	const shownText = $derived(shown === 'poem' ? doc.publishedPoem : shownPoem);
-	const shownGlosses = $derived(shown === 'poem' ? doc.publishedGlosses : doc.glossOverrides);
+	const shownEdits = $derived(shown === 'poem' ? doc.publishedGlosses : doc.glossOverrides);
 	/* ROW 172, STEP 1 (the quiet pause for Poem). While a Poem is typed key by key, Text keeps the poem as it stood when
 	   the keys began (`settledPoem`), and takes the typed one when the one quiet timer fires (`settlePoem`, below). `null`
 	   means "follow the live poem", so every path that writes `doc.publishedPoem` without a typed key needs no change here. */
@@ -1742,6 +1742,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		}
 		return textLines;
 	});
+	/* ROW 179: what each word shows in the shown language, the song's edit deciding (`glossFor`, `text/gloss-edit.ts`); the readers below take it. */ const shownGlosses = $derived(resolvedGlosses(effectiveLines, shownEdits, language, null));
 	/* N.159. WHAT EACH SEATED NOTE DRAWS on Score markup and in Insights,
 	   worked out fresh from the live poem under Reconstitution, Open
 	   syllables, a spot reconstitution, and a moved boundary, so the score
@@ -2240,19 +2241,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		if (!selectedWord) return;
 		claimDerivedPoem();
 		if (!selectedWord) return;
-		const key = selectedKey();
-		const poem = shown === 'poem';
-		const newMap = new Map(poem ? doc.publishedGlosses : doc.glossOverrides);
-		const newAnchors = new Map(poem ? doc.publishedGlossAnchors : doc.glossAnchors);
-		if (gloss === null) {
-			newMap.delete(key);
-			newAnchors.delete(key);
-		} else {
-			newMap.set(key, gloss);
-			newAnchors.set(key, selectedWord.cleanWord);
-		}
-		if (poem) [doc.publishedGlosses, doc.publishedGlossAnchors] = [newMap, newAnchors];
-		else [doc.glossOverrides, doc.glossAnchors] = [newMap, newAnchors];
+		const poem = shown === 'poem'; // ROW 179: the edit is in the language shown (`text/gloss-edit.ts`)
+		const next = withGlossEdit(shownEdits, poem ? doc.publishedGlossAnchors : doc.glossAnchors, selectedKey(), language, gloss, selectedWord.cleanWord);
+		if (poem) [doc.publishedGlosses, doc.publishedGlossAnchors] = next;
+		else [doc.glossOverrides, doc.glossAnchors] = next;
 	}
 	// ---- N.57: gloss persistence and the survival guard (`text/gloss-survival.ts`) ----
 	// The gloss rows are assembled and written by the library now (`library.ts`, `recordFromFields`): assigning the maps is the save.
@@ -2266,7 +2258,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		const poem = shown === 'poem';
 		const r = resetWord(selectedKey(), {
 			stress: marks.stress, yo: marks.yo, syllables: marks.syllables, spot: marks.spot,
-			glosses: shownGlosses, anchors: poem ? doc.publishedGlossAnchors : doc.glossAnchors,
+			glosses: shownEdits, anchors: poem ? doc.publishedGlossAnchors : doc.glossAnchors,
 		});
 		if (r.stress) marks.stress = r.stress;
 		if (r.yo) marks.yo = r.yo;
@@ -4098,7 +4090,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 									onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
 									onsyllableoverrideclear={() => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, null)}
 									onreset={handleReset}
-									glossOverride={shownGlosses.get(wordKey)}
+									gloss={shownGlosses.get(wordKey)}
 									onglossoverride={handleGlossOverride}
 								/>
 							{/if}

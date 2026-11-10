@@ -5,7 +5,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n'; import { savedFlag, settle } from '$lib/components/Field/settle-field'; import SavedNote from '$lib/components/Field/SavedNote.svelte';
-	import { resolveFullGloss } from '$lib/gloss-resolve';
+	import { resolveFullGloss } from '$lib/gloss-resolve'; import type { ResolvedGloss } from '$lib/text/gloss-edit';
 
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
@@ -33,13 +33,13 @@
 		onsyllableoverrideclear?: () => void;
 		/** Reset all per-word overrides (stress, ё, syllable, spot reconstitution). */
 		onreset?: () => void;
-		/** Current gloss override for this word, or undefined if none. */
-		glossOverride?: string;
+		/** What the song's edit (or, later, the glossary) decides this word's gloss is, in the shown language; undefined where the dictionary decides (row 179). */
+		gloss?: ResolvedGloss;
 		/** Callback when the user edits the gloss in the Dictionary panel. */
 		onglossoverride?: (gloss: string | null) => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, glossOverride, onglossoverride }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, gloss, onglossoverride }: Props = $props();
 
 	// Whether this word is a proclitic or enclitic (no independent stress).
 	// Declared here, ahead of displayCyrillic below, because it depends only
@@ -375,7 +375,7 @@
 
 	// Whether this word has any per-word overrides (controls reset button visibility)
 	const hasOverrides = $derived(
-		isUserStress || promotedFromClitic || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted || glossOverride !== undefined
+		isUserStress || promotedFromClitic || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted || gloss?.source === 'song'
 	);
 
 	const syllableCount = $derived(word.syllables?.length ?? 0);
@@ -838,7 +838,7 @@
 	// Sync input field with current gloss (override or dictionary)
 	$effect(() => {
 		if (dictPanelOpen) {
-			dictGlossInput = glossOverride ?? word.gloss ?? '';
+			dictGlossInput = gloss?.text ?? word.gloss ?? '';
 		}
 	});
 
