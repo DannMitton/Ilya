@@ -39,9 +39,7 @@ Final run, on the merged tree: **160 passed, 11 failed, 2 skipped** (40.2 minute
 | `[phone] relining.test.ts:70` y. a poem pasted into Poem | yes |
 | `[phone] relining.test.ts:95` bb. a poem typed key by key | yes |
 
-None is new. Two touch pages this build changes (`insights-page.test.ts:95`, `print-pages.test.ts:20`); both stored voices in `insights-page.test.ts` have sung vowels, so the new profile never reaches them, and both fail with the same values on the untouched lane. I did not diagnose them (the cause is not mine to chase here).
-
-**How the suite was run here.** The Playwright in this repository expects a Chromium build (1208) that is not installed in this sandbox, which has build 1243 under `/opt/pw-browsers/chromium`. My first run therefore failed every one of the 172 tests with `browserType.launch: Executable doesn't exist`; that run proves nothing and is not reported as a result. Every run reported here used the config's own hook, `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium`, `--trace off`. Whether the 1243 build reads the same as the build CI uses is NOT ESTABLISHED, and it could be the cause of the reds below.
+None is new. Two touch pages this build changes. `insights-page.test.ts` stores a voice with all ten vowels sung, so the new profile never reaches it. `print-pages.test.ts` stores no voice and declares no type, so it is also not an eligible case. Both fail with the same values on the untouched lane. I did not diagnose them.
 
 ## Screenshots
 
