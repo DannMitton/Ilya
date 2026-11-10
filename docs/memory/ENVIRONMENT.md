@@ -5167,6 +5167,8 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 |---|---|---|
 | Sonnet browser measure on row 114 f1 | 148k, 155k, 158k, 192k, 206k, 208k, 208k, 238k (J2, three arms, 2026-11-09), 257k | 150k to 260k |
 | Fable review of a brief or design | 156k to 315k, most near 200k | 160k to 320k |
+| Fable review of two built lanes (as built, merge-tree, one probe) | 367k (2026-11-09, 46 min, cap 320k) | 300k to 400k |
+| Fable review of three Code briefs (B0, row 166, row 182 with its data file) | 378k (cap 400k), 71 min, 141 tool uses, 2026-11-09 | 350k to 420k |
 | Opus review standing in for Fable | 130k, 170k, 171k, 183k, 215k | 130k to 220k |
 | Sonnet reading a dissertation, with a digest | Grayson 2012: 211k (two thirds), then 231k (the remainder, clipped; the reader estimated 185k) | a Sonnet reader stops near 200k to 230k whatever the cap: split a dissertation into pieces of about 250 pages or 60,000 words, one helper each, 180k to 240k per piece |
 
@@ -5174,6 +5176,7 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | Fable writing a long comparison from digests | 202k (2026-11-08; it estimated 95k) | 180k to 260k |
 | Sonnet checking every citation of a long draft against PDFs | 313k (135 rows, cap 200k not held; 2026-11-08) | 250k to 350k |
 
+| Sonnet consolidation review of every open task (memory files, grep checks) | 302k (2026-11-09, 6.7 min, cap 350k) | 250k to 350k |
 | Sonnet harvest of opera provenance and texts, 109 rows | 246k (first pass), 281k (second pass) (2026-11-08) | 230k to 290k per pass |
 
 Use the harness token count, never a helper's own estimate (2026-11-08: 231k counted against 185k estimated).
