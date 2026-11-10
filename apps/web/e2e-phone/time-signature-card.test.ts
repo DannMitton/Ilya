@@ -33,7 +33,7 @@ test.describe('the time signature card on a phone', () => {
 		expect(Math.round(box.x)).toBe(0);
 		expect(Math.round(box.width)).toBe(390);
 		expect(Math.round(box.y + box.height)).toBe(844);
-		for (const sel of ['[data-ts-common="3/4"]', '[data-ts-apply]', '[data-ts-cancel]', '[data-ts-beats]', '[data-ts-beat-type]', 'label.radio']) {
+		for (const sel of ['[data-ts-common="3/4"]', '[data-ts-apply]', '[data-ts-cancel]', '[data-ts-beats]', '[data-ts-beat-type]', 'label.radio', 'label.check']) {
 			const b = (await page.locator(sel).first().boundingBox())!;
 			expect(b.height, sel).toBeGreaterThanOrEqual(43.5);
 			expect(b.width, sel).toBeGreaterThanOrEqual(43.5);

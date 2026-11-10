@@ -145,4 +145,59 @@ test.describe('the time signature card', () => {
 		// the tap is still there on the new signature, and gives focus back to its own button
 		await expect(page.locator('[data-ts-hit]').first()).toBeAttached();
 	});
+
+	test('Rebar the notes: a 3/4 song laid out in bars of four comes right with ties, one Undo takes it all back, and Redo does it again', async ({ page }) => {
+		await page.goto('/');
+		await page.locator('input.hidden-input').setInputFiles('src/lib/omr/fixtures/time-signature-barlines-wrong.musicxml');
+		await page.getByRole('tab', { name: 'MELODY' }).click();
+		await page.locator('.score-page [data-hit]').first().waitFor({ state: 'attached', timeout: 30_000 });
+		await page.waitForTimeout(3_000);
+		const hit = page.locator('.score-page [data-hit="m0-0-1"]').first();
+		await hit.scrollIntoViewIfNeeded();
+		await hit.click();
+		await page.locator('.loupe .loupe-body').waitFor();
+		await page.locator('#loupe-mode-corrections').click();
+
+		await page.locator('.loupe [data-ts-open]').click();
+		const card = page.locator('[data-ts-card]');
+		const rebar = card.locator('[data-ts-rebar]');
+		await expect(rebar).not.toBeChecked();
+		await expect(card.getByText('Rebar the notes')).toBeVisible();
+		await expect(card.getByText('Moves notes across barlines to fill bars of the new time signature, tying any note that crosses one.')).toBeVisible();
+		await card.locator('[data-ts-common="3/4"]').click();
+		await page.locator('[data-ts-through="end"]').check();
+		await rebar.check();
+		await page.locator('[data-ts-apply]').click();
+		await expect(card).toHaveCount(0);
+
+		// 24 quarters in bars of three: eight bars. Walk to the last bar with the arrow keys (the read song has six).
+		await expect(meter(page, '3/4').first()).toBeAttached();
+		await expect(undo(page)).toHaveAccessibleName(/time signature changed/);
+		for (let i = 0; i < 80 && !/m\.\s?8\b/.test(await tag(page)); i++) {
+			await page.keyboard.press('ArrowRight');
+			await page.waitForTimeout(120);
+		}
+		expect(await tag(page)).toMatch(/m\.\s?8\b/);
+		expect(await tag(page)).not.toMatch(/of 3/);
+
+		await undo(page).click();
+		await expect(meter(page, '4/4').first()).toBeAttached();
+		expect(await tag(page)).not.toMatch(/m\.\s?8\b/);
+
+		await redo(page).click();
+		await expect(meter(page, '3/4').first()).toBeAttached();
+		expect(await tag(page)).toMatch(/m\.\s?8\b/);
+	});
+
+	test('Rebar the notes is off every time the card opens, and in French it reads as ratified', async ({ page }) => {
+		await raise(page, 'm0-0-1', 'fr');
+		await page.locator('.loupe [data-ts-open]').click();
+		const card = page.locator('[data-ts-card]');
+		await card.locator('[data-ts-rebar]').check();
+		await expect(card.getByText('Redistribuer les notes')).toBeVisible();
+		await expect(card.getByText('Déplace les notes d’une mesure à l’autre pour remplir les mesures du nouveau chiffrage, en liant toute note qui franchit une barre de mesure.')).toBeVisible();
+		await page.locator('[data-ts-cancel]').click();
+		await page.locator('.loupe [data-ts-open]').click();
+		await expect(card.locator('[data-ts-rebar]')).not.toBeChecked();
+	});
 });

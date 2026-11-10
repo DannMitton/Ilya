@@ -15,7 +15,7 @@ export interface TimeSignatureUiDeps {
 	/** The bar the held entry sits in, with the signatures in play; null where nothing is held. */
 	held(id?: string): HeldBar | null;
 	/** Write the change: one Undo step. `id` names an entry of the bar when the card was opened from the score, with no note held. */
-	commit(sig: { beats: number; beatType: number }, through: Through, id?: string): void;
+	commit(sig: { beats: number; beatType: number }, through: Through, id?: string, rebar?: boolean): void;
 }
 
 class TimeSignatureUi {
@@ -26,6 +26,8 @@ class TimeSignatureUi {
 	beats = $state<number | string | null>('4');
 	beatType = $state<number | string | null>('4');
 	through = $state<Through>('next');
+	/** "Rebar the notes": off by default, and off every time the card opens (Finale's Rebar Music is its own act). */
+	rebar = $state(false);
 	/** The element that opened the card, so Escape and Cancel give focus back to it. */
 	opener: HTMLElement | null = null;
 
@@ -50,6 +52,7 @@ class TimeSignatureUi {
 		this.beats = String(h.signature.beats);
 		this.beatType = String(h.signature.beatType);
 		this.through = h.mine?.through ?? 'next';
+		this.rebar = false;
 		this.open = true;
 	}
 
@@ -81,7 +84,7 @@ class TimeSignatureUi {
 	/** Press the card's one button. */
 	apply(): void {
 		if (!this.valid) return;
-		this.#deps?.commit(this.parsed, this.through, this.#id);
+		this.#deps?.commit(this.parsed, this.through, this.#id, this.rebar);
 		this.close();
 	}
 }

@@ -36,7 +36,7 @@ describe('the time signature card\'s state (QUEUE row 138, T1)', () => {
 		tsUi.choose(2, 2);
 		tsUi.through = 'end';
 		tsUi.apply();
-		expect(commit).toHaveBeenCalledWith({ beats: 2, beatType: 2 }, 'end', undefined);
+		expect(commit).toHaveBeenCalledWith({ beats: 2, beatType: 2 }, 'end', undefined, false);
 		expect(tsUi.open).toBe(false);
 	});
 	it('gives focus back to what opened it', () => {
@@ -58,6 +58,6 @@ describe('the time signature card\'s state (QUEUE row 138, T1)', () => {
 		expect(tsUi.open).toBe(true);
 		tsUi.choose(2, 4);
 		tsUi.apply();
-		expect(commit).toHaveBeenCalledWith({ beats: 2, beatType: 4 }, 'next', 'tapped');
+		expect(commit).toHaveBeenCalledWith({ beats: 2, beatType: 4 }, 'next', 'tapped', false);
 	});
 });

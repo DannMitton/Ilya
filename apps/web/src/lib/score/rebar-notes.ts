@@ -1,0 +1,227 @@
+/**
+ * rebar-notes.ts — "Rebar the notes", as pure data (QUEUE row 138, T2).
+ *
+ * THE FINALE MODEL (Rebar Music) with SIBELIUS'S AND DORICO'S TIES (Dann 2026-11-09 21:30): from the bar the singer chose, walk the notes
+ * forward and fill bars of the new time signature, tying any note that crosses a boundary. It stops where Finale's Rebar Options stop: at the
+ * end of the scope (the next change of signature, or the end of the song), at a key or clef change, at a repeat or any other barline the layer
+ * will not remove (`rebar.ts`, `mergeBlocked`), and, by Fable's amendment 3, at a tuplet group that cannot be counted whole into the bar it
+ * falls in. The last bar before a stop may be short: NOTHING IS INVENTED, no rest is added, and the bar stays flagged as not adding up.
+ *
+ * IT IS NOT A STORED MODE. At the moment the singer chooses it, this computes the barlines and splits the new signature implies and writes
+ * them as ORDINARY RECORDS in the one map: `barline` marks, shortened `base` and `dots`, `tied`, and hand-entered entries for the remainders
+ * (`entered.after` naming the part before). So every path ends in the same few stored fields, and one Undo takes the lot back
+ * (review of 2026-11-10, amendments 3 and 4). It REPLACES the barlines inside its scope, the singer's own included (Dorico's pitfall is
+ * overwriting manual barlines silently; here the scope is the one she chose, and Undo restores them).
+ *
+ * A TIE NEEDS FOUR THINGS, and a note split in a bar is a note split in the data (amendment 3): the read note takes the shorter length and
+ * `tied: 'start'`; the remainder is an entered entry after it with the same pitch; every remainder but the last is `tied: 'start'`; the last
+ * carries the tie the read note had. A REST that crosses is split with no tie. A length no single value holds (five sixteenths) is a chain.
+ * The seats survive: a note after a tie start takes no syllable (`pairings.ts`), so the syllable stays on the first part.
+ */
+import type { Fraction, NoteBase, ParsedScore, VocalLineEvent } from '@ilya/score-parser';
+import { currentPitch, durationFraction, type CorrectionMap, type NoteCorrection } from './correction';
+import { currentTie, currentType, nextEnteredId } from './entry';
+import { effectiveMarks, mergeBlocked } from './rebar';
+import { heldBar, setSignature, type Through } from './time-signature';
+
+const ZERO: Fraction = { numerator: 0, denominator: 1 };
+
+function gcd(a: number, b: number): number {
+	return b === 0 ? Math.abs(a) || 1 : gcd(b, a % b);
+}
+function frac(n: number, d: number): Fraction {
+	const g = gcd(n, d);
+	return { numerator: n / g, denominator: d / g };
+}
+const add = (a: Fraction, b: Fraction) => frac(a.numerator * b.denominator + b.numerator * a.denominator, a.denominator * b.denominator);
+const sub = (a: Fraction, b: Fraction) => frac(a.numerator * b.denominator - b.numerator * a.denominator, a.denominator * b.denominator);
+const cmp = (a: Fraction, b: Fraction) => a.numerator * b.denominator - b.numerator * a.denominator;
+const isZero = (a: Fraction) => a.numerator === 0;
+function summable(f: Fraction | undefined): f is Fraction {
+	return !!f && Number.isFinite(f.numerator) && Number.isFinite(f.denominator) && f.denominator > 0 && f.numerator > 0;
+}
+
+/** Every single note value, longest first, with its length: a whole down to a 64th, each undotted, dotted, and double-dotted. */
+const VALUES: ReadonlyArray<{ base: NoteBase; dots: number; length: Fraction }> = (['whole', 'half', 'quarter', 'eighth', '16th', '32nd', '64th'] as const).flatMap((base) =>
+	[0, 1, 2].map((dots) => ({ base, dots, length: durationFraction(base, dots) })),
+).sort((a, b) => cmp(b.length, a.length));
+
+/** `length` as a chain of single note values, longest first, or null where the 64th cannot reach it. */
+export function notatable(length: Fraction): Array<{ base: NoteBase; dots: number }> | null {
+	const out: Array<{ base: NoteBase; dots: number }> = [];
+	let left = length;
+	while (!isZero(left)) {
+		const v = VALUES.find((x) => cmp(x.length, left) <= 0);
+		if (!v || out.length > 16) return null;
+		out.push({ base: v.base, dots: v.dots });
+		left = sub(left, v.length);
+	}
+	return out;
+}
+
+interface Part {
+	base: NoteBase;
+	dots: number;
+	/** The part opens a bar of the new time signature. */
+	opens: boolean;
+}
+
+function sameTuplet(a: VocalLineEvent, b: VocalLineEvent): boolean {
+	const x = a.duration.tuplet;
+	const y = b.duration.tuplet;
+	return !!x && !!y && x.actualNotes === y.actualNotes && x.normalNotes === y.normalNotes && x.normalType === y.normalType;
+}
+
+/** The record with its `barline` set or removed; a record left saying nothing is dropped. */
+function withBarlineMark(map: CorrectionMap, id: string, value: 'before' | 'none' | undefined): CorrectionMap {
+	const { barline: _was, ...rest } = map[id] ?? {};
+	const next = value === undefined ? rest : { ...rest, barline: value };
+	if (!Object.values(next).some((v) => v !== undefined)) {
+		const { [id]: _gone, ...others } = map;
+		return others;
+	}
+	return { ...map, [id]: next };
+}
+
+/**
+ * The corrections after the singer changes the held bar's time signature AND re-bars the notes, or null where the signature is not one or
+ * nothing can be counted. `line` is the corrected line before the layer (`BarLayer.preLine`).
+ */
+export function rebarNotes(
+	read: ParsedScore,
+	line: VocalLineEvent[],
+	map: CorrectionMap,
+	heldId: string,
+	sig: { beats: number; beatType: number },
+	through: Through,
+): CorrectionMap | null {
+	const signed = setSignature(read, line, map, heldId, sig, through);
+	if (!signed) return null;
+	const held = heldBar(read, line, map, heldId);
+	if (!held) return null;
+	const start = line.findIndex((e) => e.id === held.openerId);
+	if (start < 0) return null;
+	const length = frac(sig.beats, sig.beatType);
+
+	/* ── Where the scope ends. A reading barline the layer would not remove, a gap of bars, or (to the next change) a later signature of hers. */
+	const readingMeasure = (i: number) => read.measures.find((m) => m.index === line[i].measureIndex);
+	const barlineBefore = (i: number): 'none' | 'removable' | 'blocked' => {
+		const prev = line[i - 1];
+		if (!prev || prev.measureIndex === line[i].measureIndex) return 'none';
+		const a = read.measures.find((m) => m.index === prev.measureIndex);
+		const b = readingMeasure(i);
+		if (prev.measureIndex !== line[i].measureIndex - 1 || !a || !b || mergeBlocked(a, b)) return 'blocked';
+		return 'removable';
+	};
+	const owners = effectiveMarks(read.vocalLine, line, signed);
+	let stop = line.length;
+	for (let i = start + 1; i < line.length; i++) {
+		if (barlineBefore(i) === 'blocked' || (through === 'next' && owners.get(line[i].id)?.timeSignature)) {
+			stop = i;
+			break;
+		}
+	}
+
+	/* ── Fill bars of the new signature from the held bar's opener. */
+	const plan = new Map<number, Part[]>();
+	let fill = ZERO;
+	let groupLeft = 0;
+	for (let i = start; i < stop; i++) {
+		const ev = line[i];
+		const d = ev.duration.fraction;
+		if (!summable(d)) {
+			stop = i;
+			break;
+		}
+		const remaining = sub(length, fill);
+		if (ev.duration.tuplet) {
+			if (groupLeft === 0 || !(i > start && sameTuplet(line[i - 1], ev))) {
+				// The head of a group: it must fit whole into the bar it falls in, or the rebar ends before it.
+				const members = ev.duration.tuplet.actualNotes;
+				let total = ZERO;
+				for (let k = i; k < Math.min(i + members, line.length) && sameTuplet(line[k], ev); k++) {
+					const f = line[k].duration.fraction;
+					if (!summable(f)) break;
+					total = add(total, f);
+				}
+				if (cmp(total, remaining) > 0) {
+					stop = i;
+					break;
+				}
+				groupLeft = members;
+			}
+			groupLeft--;
+		} else groupLeft = 0;
+		const chunks: Array<{ length: Fraction; opens: boolean }> = [];
+		if (cmp(d, remaining) <= 0) {
+			chunks.push({ length: d, opens: isZero(fill) });
+			fill = cmp(d, remaining) === 0 ? ZERO : add(fill, d);
+		} else {
+			chunks.push({ length: remaining, opens: isZero(fill) });
+			let left = sub(d, remaining);
+			fill = ZERO;
+			while (!isZero(left)) {
+				const c = cmp(left, length) < 0 ? left : length;
+				chunks.push({ length: c, opens: true });
+				left = sub(left, c);
+				fill = cmp(c, length) === 0 ? ZERO : c;
+			}
+		}
+		const parts: Part[] = [];
+		for (const chunk of chunks) {
+			const values = notatable(chunk.length);
+			if (!values) return null;
+			values.forEach((v, k) => parts.push({ ...v, opens: chunk.opens && k === 0 }));
+		}
+		plan.set(i, parts);
+	}
+	if (plan.size === 0) return signed;
+
+	/* ── Write it. The barlines in scope are replaced; the opener of the held bar keeps its own. */
+	let next = signed;
+	for (let i = start + 1; i < stop; i++) if (next[line[i].id]?.barline !== undefined) next = withBarlineMark(next, line[i].id, undefined);
+	for (let i = start + 1; i < stop; i++) {
+		const parts = plan.get(i);
+		if (!parts) continue;
+		const reading = barlineBefore(i) === 'removable';
+		if (parts[0].opens && !reading) next = withBarlineMark(next, line[i].id, 'before');
+		else if (!parts[0].opens && reading) next = withBarlineMark(next, line[i].id, 'none');
+	}
+	// The bar after the scope opens where the scope ended, so the short bar before it closes there.
+	if (stop < line.length && barlineBefore(stop) === 'none' && next[line[stop].id]?.barline !== 'before') next = withBarlineMark(next, line[stop].id, 'before');
+
+	for (const [i, parts] of plan) {
+		if (parts.length < 2) continue;
+		const ev = line[i];
+		const isNote = currentType(ev, next) === 'note';
+		const pitch = currentPitch(ev, next);
+		const tiedAfter = currentTie(ev, next);
+		const ids: string[] = [ev.id];
+		let working = next;
+		parts.slice(1).forEach((p, k) => {
+			const id = nextEnteredId(working);
+			const last = k === parts.length - 2;
+			const rec: NoteCorrection = {
+				entered: { after: ids[ids.length - 1] },
+				base: p.base,
+				dots: p.dots,
+				type: isNote ? 'note' : 'rest',
+				...(isNote && pitch ? { pitch } : {}),
+				...(isNote && (!last || tiedAfter) ? { tied: 'start' as const } : {}),
+			};
+			working = { ...working, [id]: rec };
+			ids.push(id);
+			if (p.opens) working = withBarlineMark(working, id, 'before');
+		});
+		working = { ...working, [ev.id]: { ...working[ev.id], base: parts[0].base, dots: parts[0].dots, ...(isNote ? { tied: 'start' as const } : {}) } };
+		next = working;
+	}
+	return next;
+}
+
+/** Re-bars with no change to the signature: the same fill from the held bar, to the next change. For the card's "Rebar the notes" with the signature already in force. */
+export function rebarNotesInForce(read: ParsedScore, line: VocalLineEvent[], map: CorrectionMap, heldId: string): CorrectionMap | null {
+	const held = heldBar(read, line, map, heldId);
+	if (!held) return null;
+	return rebarNotes(read, line, map, heldId, { beats: held.signature.beats, beatType: held.signature.beatType }, held.mine?.through ?? 'next');
+}

@@ -876,10 +876,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		word: (key) => t(key, language),
 		pushUndo,
 		barlineVerb: (id) => layer.barlineVerb(id),
-		timeSignature: { held: (id) => layer.heldBar(id), write: (id, sig, through) => layer.signatureWrite(id, sig, through) },
+		timeSignature: { held: (id) => layer.heldBar(id), write: (id, sig, through, rebar) => layer.signatureWrite(id, sig, through, rebar) },
 	});
 	barlineUi.attach({ mode: () => verbs.barline?.kind ?? null, act: () => verbs.handleBarline() });
-	tsUi.attach({ held: (id) => (id ? layer.heldBar(id) : verbs.heldBar), commit: (sig, through, id) => verbs.handleTimeSignature(sig, through, id) });
+	tsUi.attach({ held: (id) => (id ? layer.heldBar(id) : verbs.heldBar), commit: (sig, through, id, rebar) => verbs.handleTimeSignature(sig, through, id, rebar) });
 	const selectedEvent = $derived(verbs.selectedEvent);
 	const armedBase = $derived(verbs.armedBase);
 	const armedDots = $derived(verbs.armedDots);

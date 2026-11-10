@@ -4,7 +4,8 @@
 	 *
 	 * Change the time signature from the held bar: to the next change, or to the end of the song. Two fields and a list of the common signatures,
 	 * any signature typable; one button writes it as one Undo step ("time signature changed"). The bars keep the barlines the reading has; the
-	 * ones that now add up lose their flag, the others keep it (`rebar.ts`).
+	 * ones that now add up lose their flag, the others keep it (`rebar.ts`). "Rebar the notes" (T2, off by default) instead moves the notes across
+	 * barlines to fill bars of the new signature, tying any note that crosses one (`rebar-notes.ts`).
 	 *
 	 * A MENU-SIZED CARD ON A FINE POINTER, A SHEET FROM THE FOOT OF THE SCREEN ON A COARSE ONE, every target at least 44 px, on the
 	 * `ClefControls.svelte` pattern: a `position: fixed` overlay moved to `<body>` so its z-index means what it says. It stands over the Loupe
@@ -157,6 +158,9 @@
 				<label class="radio"><input type="radio" name="ts-through" value="next" data-ts-through="next" bind:group={tsUi.through} /><span>{T('correct.tsToNext')}</span></label>
 				<label class="radio"><input type="radio" name="ts-through" value="end" data-ts-through="end" bind:group={tsUi.through} /><span>{T('correct.tsToEnd')}</span></label>
 			</fieldset>
+
+			<label class="radio check"><input type="checkbox" data-ts-rebar bind:checked={tsUi.rebar} aria-describedby="ts-rebar-help" /><span>{T('correct.tsRebar')}</span></label>
+			<p class="help" id="ts-rebar-help">{T('correct.tsRebarHelp')}</p>
 
 			<div class="actions">
 				<button type="button" class="apply" data-ts-apply disabled={!tsUi.valid} onclick={() => tsUi.apply()}>{T('correct.tsChange')}</button>
@@ -315,6 +319,17 @@
 	.radio input {
 		width: 20px;
 		height: 20px;
+	}
+
+	.check {
+		margin-bottom: 0;
+	}
+
+	.help {
+		margin: 0 0 0.8rem 1.75rem;
+		font-size: 0.75rem;
+		line-height: 1.35;
+		color: var(--ink-secondary, #4a4540);
 	}
 
 	.actions {

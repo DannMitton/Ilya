@@ -70,3 +70,17 @@ describe('BarLayer, the page\'s bar arithmetic on the fused fixture (QUEUE row 1
 		expect(layer.readingLabelOfLabel('5')).toBe('5');
 	});
 });
+
+describe('BarLayer, Rebar the notes (QUEUE row 138, T2)', () => {
+	it('signatureWrite with rebar on writes ties and barlines, and with it off writes the mark alone', async () => {
+		const score = await load('time-signature-barlines-wrong');
+		const layer = new BarLayer({ score: () => score, corrections: () => ({}) });
+		const id = score.vocalLine[0].id;
+		const keep = layer.signatureWrite(id, { beats: 3, beatType: 4 }, 'end')!;
+		expect(Object.keys(keep)).toEqual([id]);
+		const rebarred = layer.signatureWrite(id, { beats: 3, beatType: 4 }, 'end', true)!;
+		expect(Object.keys(rebarred).length).toBeGreaterThan(Object.keys(keep).length);
+		const after = new BarLayer({ score: () => score, corrections: () => rebarred });
+		expect(after.score?.measures).toHaveLength(8);
+	});
+});

@@ -88,7 +88,7 @@ export interface CorrectionVerbsDeps {
 	/** The time signature card's reads and writes (`BarLayer.heldBar`, `.signatureWrite`); absent: none. */
 	timeSignature?: {
 		held(id: string): HeldBar | null;
-		write(id: string, sig: { beats: number; beatType: number }, through: Through): CorrectionMap | null;
+		write(id: string, sig: { beats: number; beatType: number }, through: Through, rebar?: boolean): CorrectionMap | null;
 	};
 }
 
@@ -420,10 +420,10 @@ export class CorrectionVerbs {
 		this.#d.setCorrections(v.map);
 	};
 
-	/** Change the held bar's time signature from this bar to the next change or to the end, keeping the barlines. One Undo step. */
-	handleTimeSignature = (sig: { beats: number; beatType: number }, through: Through, entryId?: string): void => {
+	/** Change the held bar's time signature from this bar to the next change or to the end, keeping the barlines, or re-barring the notes. One Undo step. */
+	handleTimeSignature = (sig: { beats: number; beatType: number }, through: Through, entryId?: string, rebar = false): void => {
 		const id = entryId ?? this.#d.selectedEventId();
-		const next = id ? this.#d.timeSignature?.write(id, sig, through) : null;
+		const next = id ? this.#d.timeSignature?.write(id, sig, through, rebar) : null;
 		if (!next || JSON.stringify(next) === JSON.stringify(this.#d.corrections())) return;
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.timeSignature' });
 		this.#d.setCorrections(next);

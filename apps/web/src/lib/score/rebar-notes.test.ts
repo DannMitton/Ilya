@@ -1,0 +1,132 @@
+import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { MusicXmlScoreParser, type Fraction, type ParsedScore, type VocalLineEvent } from '@ilya/score-parser';
+import { parseXml } from './ingestion/mini-dom';
+import { applyCorrections, withCorrection, type CorrectionMap } from './correction';
+import { canTie, isEnteredId, measureFill } from './entry';
+import { rebar } from './rebar';
+import { notatable, rebarNotes, rebarNotesInForce } from './rebar-notes';
+
+async function load(name: string, edit: (xml: string) => string = (x) => x): Promise<ParsedScore> {
+	const xml = edit(readFileSync(new URL(`../omr/fixtures/${name}.musicxml`, import.meta.url), 'utf8'));
+	return (await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(xml) as unknown as Document, sourcePath: `${name}.musicxml` })).score;
+}
+const inBar = (line: VocalLineEvent[], bar: number) => line.filter((e) => e.measureIndex === bar);
+const pre = (s: ParsedScore, m: CorrectionMap) => applyCorrections(s.vocalLine, m);
+const total = (line: VocalLineEvent[]) => line.reduce((n, e) => n + e.duration.fraction.numerator / e.duration.fraction.denominator, 0);
+const fills = (s: ParsedScore, m: CorrectionMap) => {
+	const r = rebar(s, pre(s, m), m);
+	return r.score.measures.map((x) => measureFill(r.line, x.index, x.timeSignature));
+};
+const f = (n: number, d: number): Fraction => ({ numerator: n, denominator: d });
+
+describe('notatable lengths', () => {
+	it('a length is one value where one holds it, a chain where not, and null below the 64th', () => {
+		expect(notatable(f(3, 4))).toEqual([{ base: 'half', dots: 1 }]);
+		expect(notatable(f(5, 16))).toEqual([{ base: 'quarter', dots: 0 }, { base: '16th', dots: 0 }]);
+		expect(notatable(f(7, 8))).toEqual([{ base: 'half', dots: 2 }]);
+		expect(notatable(f(3, 2))).toEqual([{ base: 'whole', dots: 1 }]);
+		expect(notatable(f(5, 4))).toEqual([{ base: 'whole', dots: 0 }, { base: 'quarter', dots: 0 }]);
+		expect(notatable(f(1, 128))).toBeNull();
+	});
+});
+
+describe('Rebar the notes (QUEUE row 138, T2)', () => {
+	it('a 3/4 song laid out in bars of four, rebarred to 3/4 to the end: eight bars that add up, with four notes tied across a new barline', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		expect(s.measures).toHaveLength(6);
+		const map = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		expect(map).not.toBeNull();
+		const r = rebar(s, pre(s, map), map);
+		expect(r.score.measures).toHaveLength(8);
+		expect(fills(s, map)).toEqual(Array(8).fill(null));
+		// the music is the same music: every read note is still there, no note was lost, and the total length did not change
+		for (const e of s.vocalLine) expect(r.line.some((x) => x.id === e.id)).toBe(true);
+		expect(total(r.line)).toBeCloseTo(total(s.vocalLine), 10);
+		// four notes crossed a boundary (2-4, 8-10, 14-16, 20-22 in quarters): four entered remainders, each tied from the part before and the same pitch
+		const entered = Object.keys(map).filter(isEnteredId);
+		expect(entered).toHaveLength(4);
+		const line = r.line;
+		for (const id of entered) {
+			const i = line.findIndex((e) => e.id === id);
+			expect(line[i - 1].tied?.type).toBe('start');
+			expect(canTie(line, map, line[i - 1].id)).toBe(true);
+			expect(line[i].pitch).toEqual(line[i - 1].pitch);
+			// the remainder opens the bar it falls in
+			expect(line[i].rhythmicPosition.fraction).toEqual(f(0, 1));
+		}
+	});
+
+	it('does not touch the input, and leaves the first bar\'s own opener alone', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		const input: CorrectionMap = {};
+		rebarNotes(s, s.vocalLine, input, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end');
+		expect(input).toEqual({});
+	});
+
+	it('replaces the barlines in its scope, hers included, and Undo (the snapshot) restores them', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		const hers = withCorrection({}, inBar(s.vocalLine, 1)[1].id, { barline: 'before' });
+		const map = rebarNotes(s, pre(s, hers), hers, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		expect(fills(s, map)).toEqual(Array(8).fill(null));
+		// the old snapshot is untouched: that is the whole of "Undo restores them"
+		expect(hers).toEqual({ [inBar(s.vocalLine, 1)[1].id]: { barline: 'before' } });
+	});
+
+	it('a rest that crosses is split with no tie', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		const rest = withCorrection({}, inBar(s.vocalLine, 0)[1].id, { type: 'rest' });
+		const map = rebarNotes(s, pre(s, rest), rest, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		const entered = Object.entries(map).filter(([id]) => isEnteredId(id));
+		const crossing = entered.find(([, c]) => c.entered?.after === inBar(s.vocalLine, 0)[1].id)!;
+		expect(crossing[1].type).toBe('rest');
+		expect(crossing[1].tied).toBeUndefined();
+		expect(map[inBar(s.vocalLine, 0)[1].id].tied).toBeUndefined();
+	});
+
+	it('a tuplet group that cannot be counted whole ends the rebar before it; the short bar stays flagged and nothing is invented', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		const t = { actualNotes: 3, normalNotes: 2, normalType: 'quarter' as const };
+		for (const e of inBar(s.vocalLine, 1)) e.duration.tuplet = t;
+		const map = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		const r = rebar(s, pre(s, map), map);
+		const fl = fills(s, map);
+		expect(fl[0]).toBeNull();
+		expect(fl[1]).toEqual({ actual: 1, expected: 3 });
+		// the group was left whole, in the bar it was read in
+		const group = inBar(s.vocalLine, 1).map((e) => e.id);
+		expect(r.line.filter((e) => group.includes(e.id)).map((e) => e.measureIndex)).toEqual([2, 2, 2]);
+		expect(Object.keys(map).filter((id) => group.includes(id))).toEqual([]);
+	});
+
+	it('"to the next change" ends at the reading\'s own next change of signature, and the bars after it keep theirs', async () => {
+		const s = await load('time-signature-barlines-wrong', (x) => x.replace('<measure number="4">', '<measure number="4"><attributes><time><beats>2</beats><beat-type>4</beat-type></time></attributes>'));
+		const map = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'next')!;
+		const r = rebar(s, pre(s, map), map);
+		expect(fills(s, map).slice(0, 4)).toEqual([null, null, null, null]);
+		expect(r.score.measures.slice(0, 4).every((m) => m.timeSignature.beats === 3 && m.timeSignature.beatType === 4)).toBe(true);
+		expect(r.score.measures[4].timeSignature).toMatchObject({ beats: 2, beatType: 4 });
+		// the bars after the change are the reading's own, untouched
+		expect(Object.keys(map).filter((id) => s.vocalLine.filter((e) => e.measureIndex >= 3).some((e) => e.id === id))).toEqual([]);
+	});
+
+	it('Rebar again with the signature already in force fills from the held bar to the next change, after a length was fixed inside the scope', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		const once = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		// she fixes a misread length inside the scope: the half note that opens read bar 4 becomes a quarter, so every later barline is off by one quarter
+		const target = inBar(s.vocalLine, 3)[0].id;
+		const fixed = withCorrection(once, target, { base: 'quarter', dots: 0 });
+		expect(fills(s, fixed).some((x) => x !== null)).toBe(true);
+		const again = rebarNotesInForce(s, pre(s, fixed), fixed, s.vocalLine[0].id)!;
+		expect(again).not.toBeNull();
+		const ok = fills(s, again);
+		// every bar but the last that holds the shortened remainder adds up; the music is one quarter shorter and nothing was invented
+		expect(ok.slice(0, ok.length - 1).every((x) => x === null)).toBe(true);
+	});
+
+	it('refuses a pair that is not a time signature, and an entry that is not there', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		expect(rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 5 }, 'end')).toBeNull();
+		expect(rebarNotes(s, s.vocalLine, {}, 'nope', { beats: 3, beatType: 4 }, 'end')).toBeNull();
+	});
+});

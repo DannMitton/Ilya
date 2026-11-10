@@ -384,3 +384,20 @@ describe('CorrectionVerbs, the time signature card (QUEUE row 138, T1)', () => {
 		expect(harness().verbs.heldBar).toBeNull();
 	});
 });
+
+describe('CorrectionVerbs, Rebar the notes passes its flag to the layer (QUEUE row 138, T2)', () => {
+	it('handleTimeSignature hands the rebar flag through, and defaults it off', () => {
+		const seen: Array<boolean | undefined> = [];
+		const line = [note('a', P('C', 4))];
+		let corrections: CorrectionMap = {};
+		const verbs = new CorrectionVerbs({
+			corrections: () => corrections, setCorrections: (n) => (corrections = n), line: () => line, readLine: () => line,
+			cursor: () => ({ kind: 'entry', id: 'a' }), inGap: () => false, selectedEventId: () => 'a',
+			setCursor: () => {}, selectEntry: () => {}, keyOf: () => undefined, clef: () => ({ sign: 'G' }), label: () => '', word: (k) => k, pushUndo: () => {},
+			timeSignature: { held: () => null, write: (_id, _s, _t, rebar) => (seen.push(rebar), { a: { dots: seen.length } }) },
+		});
+		verbs.handleTimeSignature({ beats: 3, beatType: 4 }, 'end');
+		verbs.handleTimeSignature({ beats: 3, beatType: 4 }, 'end', undefined, true);
+		expect(seen).toEqual([false, true]);
+	});
+});
