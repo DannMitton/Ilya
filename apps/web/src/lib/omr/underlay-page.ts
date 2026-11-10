@@ -146,6 +146,12 @@ export interface UnderlayStats {
 	extenders: ExtenderCounts;
 	/** Per system with a band: its ink share, its text-line candidates, and the rows cut; the desk sets `NO_INK_SHARE_MAX` from these on row 114. */
 	inkBands: { system: number; written: boolean; inkShare: number | null; textLines: number | null; rows: number }[];
+	/**
+	 * The notes the layout holds that take no syllable (row 181 B0g): `grace` and `chord`, left out of the notes each system seats; and
+	 * `wouldSkip`, the cue notes and the notes in voice 2 or later, counted and NOT skipped in this build (`note-kinds.ts`). Over every
+	 * system of the page, seated or not; a note is counted once, under the first kind that applies.
+	 */
+	skippedNotes: { grace: number; chord: number; wouldSkip: { cue: number; voice2: number } };
 	counted: {
 		ownNote: (OwnNote & { system: number; row: number })[];
 		/** `merged`: tokens a note refused (a second token on a note is unseated, never joined: `underlay-words.ts`). */
@@ -244,6 +250,7 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		dropped: { vowelless: 0, stray: 0 },
 		extenders: { ...NO_EXTENDERS },
 		inkBands: [],
+		skippedNotes: { grace: 0, chord: 0, wouldSkip: { cue: 0, voice2: 0 } },
 		counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, perSystem: [], breaches: [] },
 	};
 	const seats: Seat[] = [];
@@ -251,6 +258,10 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 	const systems: SystemWords[] = [];
 	layout.systems.forEach((system, s) => {
 		if (system.hasBand) stats.banded++;
+		for (const n of system.notes) {
+			if (n.skip) stats.skippedNotes[n.skip]++;
+			else if (n.wouldSkip) stats.skippedNotes.wouldSkip[n.wouldSkip]++;
+		}
 		let seated = false;
 		// The rows are read first (row 181 step 1, review amendment 4): the extender flag has to exist before `tiesOnly` and
 		// `free` are made, because `free` feeds the rescue decision and `foldClitics`, and a syllable's seat is known only
@@ -263,9 +274,20 @@ export function seatPage(layout: PageLayout, reads: readonly (readonly WordBox[]
 		// The extender marks are CANDIDATES (step 8b): `ext` holds them, `notes` does not. They are taken below, after the units exist,
 		// for a system where they bring the free notes and the syllable units to equal and nothing else does (the slur gate's rule,
 		// Dann 2026-10-20 03:37), and for no other. `notes` is the layout's, which the extender has not touched.
-		const ext = markExtenderNotes(system.notes, read.map((p) => p.tokens), arm);
+		// THE NOTES THIS SYSTEM SEATS AND MARKS are those that take a syllable: a grace note and a chord tone are left out (row 181
+		// B0g; Dann 2026-11-05 00:19, `OPEN.md`, "A GRACE NOTE TAKES NO SYLLABLE BY DEFAULT"; chord tones DESK DEFAULT in the same
+		// section). WHAT IT CHECKS: nothing; it only chooses the list. WHY: a grace note printed before a long note stands nearest the
+		// syllable meant for the long note, and `monotone` takes the nearest, so the syllable went one note early. WHAT FOLLOWS when it
+		// is wrong (a grace note that does sing): it gets no syllable, and the page's check shows no breach, because it also leaves `sung`
+		// below. A skipped note is outside the one-vowel-per-note count by that ruling, so `CONTRACT.md` §0.1's "none" clause is not
+		// breached when it leaves `sung` and the breach check. RELATION: skipped notes stay in `system.notes` (the system's
+		// grouping, its band, its bars, `barExtents`, and `silent` read all of them, as measured), so no ordinal moves; `writeLyrics`
+		// counts every `<note>`. Cue notes and voice 2 are counted (`stats.skippedNotes.wouldSkip`) and not skipped: N.191 and the poem
+		// join (`text/poem-join-wire.ts`, `buildRuns`) must read `skip` before they join it.
+		const live = system.notes.filter((n) => !n.skip);
+		const ext = markExtenderNotes(live, read.map((p) => p.tokens), arm);
 		for (const k of ['extender', 'joint', 'longDash'] as const) stats.extenders[k] += ext.counts[k];
-		const notes = system.notes;
+		const notes = live;
 		// The system's notes read by ties and extenders only, which is how every site read them before a slur was observed.
 		// The gate below decides after the units exist whether the system takes the slur reading; until it has, and for a
 		// system that does not take it, this is the reading (`inSlur` false on every note).

@@ -17,7 +17,7 @@ Branch `cloud-lane-40`, from `origin/cloud-lane-38` at `534d998` (fetched; worki
 
 Other corrections to the brief, found while reading:
 
-- **Fixtures do hold chord tones.** The brief says `tch-2` and `tch-3` hold none of the four kinds. They hold `<chord />` (counts of the element over the whole file, both parts: `tch-1` 55, `tch-2` 68, `tch-3` 75, `sun3-2` 123). None holds `<grace>` or `<cue>`. They also hold `<voice>` 2 to 7 (several belong to the second part). Step 2 reports the counts for the first part, which is what the seating reads.
+- **The fixtures hold chord elements, but not in the first part.** The brief says `tch-2` and `tch-3` hold none of the four kinds. Counted over the whole file, they hold `<chord />` (`tch-1` 55, `tch-2` 68, `tch-3` 75, `sun3-2` 123) and `<voice>` 2 to 7, and none holds `<grace>` or `<cue>`. Those chords and voices belong to the later parts: step 2's count over the first part, the part the seating reads, is 0 for every kind in all four (step 2 report, section 3). The brief's "hold none" is true for what the seating sees.
 - **The score parser already drops grace notes and chords.** `packages/score-parser/src/musicxml-parser.ts:701-702` skips a grace note with a warning; `:941` skips grace and chord when reading supplied ids. It reads no cue and no voice (grep: no match), which is the brief's reason for counting them rather than skipping them.
 
 ## 2. Every other site that places a token or unit by x, or decides which notes take syllables

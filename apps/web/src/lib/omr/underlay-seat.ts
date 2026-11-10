@@ -104,6 +104,13 @@ export interface NotePlace {
 	 * by nothing.
 	 */
 	inSlur?: boolean;
+	/**
+	 * The note takes no syllable of the voice's own: a grace note or a chord tone (`note-kinds.ts`, row 181 B0g). `seatPage` leaves it out
+	 * of the notes it seats and marks; the layout keeps it. Not a continuation: it is outside the one-vowel-per-note count by ruling.
+	 */
+	skip?: 'grace' | 'chord';
+	/** What a later build would skip and this one only counts: a cue note, or a note in voice 2 or later. Never read by a rule. */
+	wouldSkip?: 'cue' | 'voice2';
 }
 
 /**

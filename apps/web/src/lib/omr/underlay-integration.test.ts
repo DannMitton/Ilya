@@ -45,7 +45,7 @@ function deps(underlay?: ReadUnderlay, withStaves = true): ReaderDeps {
 }
 
 const stats = (unseated = 0) => ({
-	systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, fallback: 0, tokens: 3, units: 3, cuts: { cut: 0, whole: 3, mismatched: 0 }, seated: 3, unseated, words: 3, known: 3, clitics: { folded: 0, left: 0, ownNote: 0 }, dropped: { vowelless: 0, stray: 0 }, extenders: { extender: 0, joint: 0, longDash: 0, marked: 0 }, inkBands: [], counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, perSystem: [], breaches: [] },
+	systems: 1, banded: 1, rows: 1, russianRows: 1, systemsRussian: 1, fallback: 0, tokens: 3, units: 3, cuts: { cut: 0, whole: 3, mismatched: 0 }, seated: 3, unseated, words: 3, known: 3, clitics: { folded: 0, left: 0, ownNote: 0 }, dropped: { vowelless: 0, stray: 0 }, extenders: { extender: 0, joint: 0, longDash: 0, marked: 0 }, inkBands: [], skippedNotes: { grace: 0, chord: 0, wouldSkip: { cue: 0, voice2: 0 } }, counted: { ownNote: [], manyVowels: { cut: [], merged: [] }, perSystem: [], breaches: [] },
 });
 
 /**
