@@ -26,7 +26,7 @@ The Playwright projects are not run at step 0; the brief asks for them at the en
 | `standInBucket`, `stand-ins.ts:63-70` | `:63-70` exactly | Confirmed |
 | INSIGHTS gates on `measured`, `InsightsPane.svelte:200` on the lane | `:200` | Confirmed; the comment `:196-199` |
 | `model` and `commentNotes` read `measured` | `:201-210` and `:217-224` | Confirmed |
-| Withheld block `:353-366` | The `if (!model)` branch returning the withheld block is `:331-344` on the lane; `:353-366` on the lane is the `facts` and `keys` derivations | **Corrected**: the withheld block is `:331-344`. I cannot say why the brief's range differs; I did not read Shane. |
+| Withheld block `:353-366` | The `if (!model)` branch returning the withheld block is `:331-344` on the lane; `:353-366` on the lane is inside the `singerBlocks({...})` argument list | **Corrected**: the withheld block is `:331-344`. I cannot say why the brief's range differs; I did not read Shane. |
 | Identity line, `identity.ts:28`, `measured` passed at `InsightsPane.svelte:276` | `identity.ts:28` is the `t(measured && date ? ...)` choice; the call is `:276` on the lane | Confirmed (`:276`) |
 | `completenessOf` sets `formants: Object.keys(s.fR1).length > 0`, `:85` | `:85` | Confirmed; a generic profile therefore reads `formants: true` |
 | `overlay-engine.ts:231` sets `placeholder` where `fR1Source` is `'surrogate'` | `:231` | Confirmed |
