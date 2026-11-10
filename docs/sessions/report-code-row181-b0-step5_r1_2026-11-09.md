@@ -15,7 +15,7 @@ Branch `cloud-lane-40`, from `origin/cloud-lane-38` at `534d998`. Before this re
 
 Gate 4's +27 tests: `note-kinds.test.ts` (new file) 10; `underlay-units.test.ts` 7; `underlay-tokens.test.ts` 4; `underlay-recognize.test.ts` 1; `underlay-page.test.ts` 3 (one for the letter boxes reaching the token, two for the vowel's ink at the seating); `stamp.test.ts` 1; `underlay-switch.test.ts` 1 (the fifth stamp under which a stored scan is stale). No existing test was loosened. Two existing test fixtures (`underlay-integration.test.ts`, `underlay-song.test.ts`) gained the two new `UnderlayStats` fields, which the type requires.
 
-Ceilings: not raised. No file this build touched is listed in `scripts/ratchets.json`; each is held by `newFileMaxLines` 1000, and the longest is `underlay-page.ts`, which grew from 391 to 427 lines. `ratchets` still lists the five ceilings that could be lowered, none of them mine.
+Ceilings: not raised. No file this build touched is listed in `scripts/ratchets.json`; each is held by `newFileMaxLines` 1000, and the longest is `underlay-page.ts`, which grew from 391 to 426 lines. `ratchets` still lists the five ceilings that could be lowered, none of them mine.
 
 ## Files changed (source)
 
