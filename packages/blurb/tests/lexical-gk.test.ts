@@ -5,7 +5,7 @@
  * "⟨г⟩ stays [x]: the sound right after it is not soft." (p. 206) and «мягкие» read "⟨г⟩ softens to [x] before the soft [kʲ]…" (p. 209), both
  * of which misdescribe a plain [x] that the root carries. It checks that the flag selects its own rule and its own line, in English
  * and French, and that without the flag nothing changes. WHEN IT FAILS: the Inspector tells a singer the г "stays" or "softens" to [x].
- * The two sentences are PROPOSED (not yet ratified by Dann); the citation is Grayson 2012 p. 17.
+ * The two sentences are PROPOSED (not yet ratified by Dann); the citation of the rule is Grayson 2012 p. 17, printed beside the identity's page.
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -26,7 +26,7 @@ describe('lexical-gk', () => {
 		const b = composeBlurb(entry({ lexicalGk: true }))!;
 		expect(b.blurb.en).toContain('In the roots мягк- and лёгк-/легк-, ⟨г⟩ before ⟨к⟩ is [x], not the [k] that devoicing would give.');
 		expect(b.blurb.fr).toContain('Dans les racines мягк- et лёгк-/легк-, ⟨г⟩ devant ⟨к⟩ se prononce [x], et non le [k] que donnerait le dévoisement.');
-		expect(b.citation).toBe('(Grayson, p. 17)');
+		expect(b.citation).toContain('17'); // the page of the rule, beside the г identity's own page
 	});
 	it('does not say "stays" or "softens" of it (what the Inspector said before)', () => {
 		const b = composeBlurb(entry({ lexicalGk: true, soft: true, palReason: 'regressive-homorganic', trigger: 'kʲ' }))!;
