@@ -92,4 +92,23 @@ test.describe('the Barline verb', () => {
 		expect(after).not.toBe(before);
 		expect(after).toMatch(/m\.\s?5\b/);
 	});
+
+	test('a barline she added is saved with the song: after a reload the reading is read again and the barline is still there', async ({ page }) => {
+		await raise(page, FUSED, 'm3-3-4');
+		await cell(page).click();
+		await expect(cell(page)).toHaveAttribute('data-barline', 'remove');
+		// the autosave, so the reload reads IndexedDB and not a value that never left the tab
+		await page.waitForTimeout(3_000);
+		await page.reload();
+		await page.getByRole('tab', { name: 'MELODY' }).click();
+		await page.locator('.score-page [data-hit]').first().waitFor({ state: 'attached', timeout: 30_000 });
+		await page.waitForTimeout(3_000);
+		const hit = page.locator('.score-page [data-hit="m3-3-4"]').first();
+		await hit.scrollIntoViewIfNeeded();
+		await hit.click();
+		await page.locator('.loupe .loupe-body').waitFor();
+		await page.locator('#loupe-mode-corrections').click();
+		await expect(cell(page)).toHaveAttribute('data-barline', 'remove');
+		expect(await tag(page)).not.toMatch(/8 of 4/);
+	});
 });
