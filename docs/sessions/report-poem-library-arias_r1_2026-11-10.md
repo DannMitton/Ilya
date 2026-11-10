@@ -168,3 +168,27 @@ The twelve fixtures (113 to 567 letters) take 47 to 233 ms each in Node against 
 - Whether Dann wants Title to fill for the 14 poems too; I did not.
 
 **A correction to step 4's commit.** The step 4 commit left `i18n-index.test.ts` red: the two new site strings move the key index at the head of `i18n.ts` (1,186 to 1,188 keys; `intake.` 49 to 51), and I ran only the strings and composers tests before that commit. The index is corrected in the step 5 commit below; the full web suite found it.
+
+## Step 8: gates, and both Playwright projects
+
+Merge: `git fetch origin cloud-lane-38` gives `534d9981`, which is an ancestor of this branch, so `git merge origin/cloud-lane-38` is a no-op and the gates below stand.
+
+| gate | baseline | at the tip |
+|---|---|---|
+| 1 phonology | 456 | 456 |
+| 2 dictionary | 248 | 248 |
+| 3 web check | 0 errors, 12 warnings | 0 errors, 12 warnings |
+| 4 web test | 4707 passed, 1 skipped | 4744 passed, 1 skipped (258 files; +37 new tests) |
+| 5 score-parser | 785 passed, 5 skipped | 785 passed, 5 skipped |
+| 6 blurb | 168 | 168 |
+| 7 integration | 125 | 150 (+25 build tests) |
+| 8 ratchets | OK | OK (no ceiling raised; `+page.svelte` unchanged at 5,534) |
+
+**Playwright** (installed Chromium via `PW_CHROMIUM_PATH`, traces off). Desk project: 138 passed, 1 skipped, 7 failed. Phone project: 25 passed, 1 skipped, 4 failed. **None of the 11 is a poem test, and I ran 10 of them on an untouched worktree of `cloud-lane-38` (`534d9981`): the same 10 fail there, with the same assertions.** They are `glue-typed-marks` (2), `insights-page:95`, `loupe-header:47`, `print-pages:20`, `singer-paths:169`, and phone `input-views:134`, `phrase-ends:26`, `relining` y and bb. The eleventh, `heic-reader-path.test.ts:111` (a HEIC poem reaching tesseract), waited 3.4 minutes and failed; I did not run it on the baseline, so it is **not established** whether it fails there (it needs tesseract, which may not load in this sandbox). The two new aria tests in `poem-library.test.ts` and the timing test pass, as do the existing poem tests.
+
+## What I could not establish (whole lane)
+
+- The six of the 18 build songs not in the tree; the match time on a real phone; the id of two arias (step 0).
+- Whether the 10 baseline Playwright failures are this sandbox's Chromium (build 1243) or are real; and whether the HEIC test fails on the baseline.
+- **Traces in the repository outside this lane's reach.** `docs/memory/` (ENVIRONMENT, STATE, INBOX, OPEN), `docs/sessions/master-list-poem-sources_r1_2026-11-03.md`, `docs/sessions/inventory-n116-learn-grayson_r1_2026-09-07.md`, and `docs/sessions/brief-desk-harvest-pons-arias_r1_2026-11-08.md` (the file name itself) name the dissertation's author. `apps/`, `packages/`, `data/`, `tools/`, `scripts/`, and `tests/` carry none (grep, this lane's tip). I did not edit `docs/memory/`, and did not touch the older session files. Dann decides.
+- **The 195-poem harvest** attached after the brief is not merged (it would take the file to about 1.0 MB).
