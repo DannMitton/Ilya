@@ -341,13 +341,18 @@ export function buildVoiceProfileSnapshot(
  * one structure; the two-item join is language-specific (EN "and", FR "ni",
  * the idiomatic "sans X ni Y"). Returns '' when nothing is broad, so an empty
  * result reads as "no legend".
+ *
+ * QUEUE row 166: `placeholders` is `AdaptedProfile.generic`. The note's closing
+ * sentence says the forecast reflects the singer's measured resonances, which a
+ * placeholder voice has none of, so that voice gets the note without it
+ * (`analysis.broad.body.generic`, DESK DEFAULT, unratified).
  */
-export function composeBroadNote(c: AnalysisCompleteness, language: Language): string {
+export function composeBroadNote(c: AnalysisCompleteness, language: Language, placeholders = false): string {
 	const items: string[] = [];
 	if (!c.range || !c.tessitura) items.push(t('analysis.broad.itemRange', language));
 	if (!c.passaggio) items.push(t('analysis.broad.itemPassaggio', language));
 	if (items.length === 0) return '';
 	const list =
 		items.length === 2 ? `${items[0]} ${t('analysis.broad.join', language)} ${items[1]}` : items[0];
-	return t('analysis.broad.body', language).replace('{items}', list);
+	return t(placeholders ? 'analysis.broad.body.generic' : 'analysis.broad.body', language).replace('{items}', list);
 }

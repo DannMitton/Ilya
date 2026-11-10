@@ -450,6 +450,14 @@ describe('composeBroadNote (§B.5 print legend)', () => {
 		expect(composeBroadNote(c, 'fr')).toBe('Analyse large : cette partition est présentée sans les repères d’ambitus, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.');
 	});
 
+	it('row 166: a placeholder voice gets the note without the sentence about measured resonances', () => {
+		const c = { formants: true, range: false, tessitura: true, passaggio: false };
+		expect(composeBroadNote(c, 'en', true)).toBe('Broad analysis: this score is shown without range guidance and positional passaggio flags, because the matching voice characteristics were left blank.');
+		expect(composeBroadNote(c, 'fr', true)).toBe('Analyse large\u00a0: cette partition est présentée sans les repères d’ambitus ni le signalement des notes de *passaggio*, car les caractéristiques vocales correspondantes ont été laissées vides.');
+		for (const lang of ['en', 'fr'] as const) expect(composeBroadNote(c, lang, true)).not.toMatch(/measured|mesur/);
+		expect(composeBroadNote(full, 'en', true)).toBe('');
+	});
+
 	it('tessitura blank alone also reads as range guidance', () => {
 		const c = { formants: true, range: true, tessitura: false, passaggio: true };
 		expect(composeBroadNote(c, 'en')).toContain('without range guidance,');

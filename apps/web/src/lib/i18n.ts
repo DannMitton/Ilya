@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,189 keys.
+   This file holds 1,190 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -24,7 +24,7 @@
 
    a11y.           4  accessible names: lib/components/Drawer/Drawer.svelte, lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, lib/components/Paper/Paper.svelte
    aid.            2  lib/components/ReadingAid.svelte
-   analysis.       4  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
+   analysis.       5  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
@@ -1021,6 +1021,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// Composed from parts so EN and FR share one structure; the two-item
 	// join is language-specific (EN "a and b", FR "a ni b": "sans X ni Y").
 	'analysis.broad.body':         { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
+	// DESK DEFAULT, UNRATIFIED (row 166): the broad note for a voice that has only placeholders, which cannot say the forecast reflects measured resonances. The sentence is the one above, less its last clause. Dann's eye.
+	'analysis.broad.body.generic': { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides.' },
 	'analysis.broad.itemRange':    { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
 	'analysis.broad.itemPassaggio': { en: 'positional passaggio flags',   fr: 'le signalement des notes de *passaggio*' },
 	'analysis.broad.join':         { en: 'and',                          fr: 'ni' },

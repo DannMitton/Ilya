@@ -850,7 +850,7 @@
 	// The broad-analysis legend text (§B.5): composed from localized parts by
 	// the adapter (EN and FR), rendered print-native in the PageFooter legend
 	// zone rather than as a banner above the score. Empty when nothing is broad.
-	const broadNoteText = $derived(composeBroadNote(adapted.completeness, language));
+	const broadNoteText = $derived(composeBroadNote(adapted.completeness, language, adapted.generic));
 
 	const paginated = $derived(
 		readingScore && analyzed

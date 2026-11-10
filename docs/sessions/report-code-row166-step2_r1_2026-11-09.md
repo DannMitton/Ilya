@@ -26,7 +26,7 @@ Every site where `completeness.formants` reads true for a generic profile, with 
 | `InsightsPane.svelte:278` identity line | **Changed**: `restsOnSamples(adapted)`. |
 | `InsightsPane.svelte:289-295` method line | **Changed**: two new strings (Decision 2). |
 | `MarkupPane.svelte:838` `showWithheld` | Kept: the placeholders are the point of MELODY's change. |
-| `MarkupPane.svelte:811`, `:853` broad note | Unaffected: reads `range`, `tessitura`, `passaggio`, not `formants`. A generic voice with no typed edges still gets the broad note, which is right. |
+| `MarkupPane.svelte:811`, `:853` broad note | **Changed, and my first reading of this row was wrong.** The note's gate reads `range`, `tessitura`, `passaggio`, so a generic voice with no typed edges still gets it, which is right; but its text ends "The forecast still reflects your measured resonances." (`analysis.broad.body`), which is false for a placeholder voice. I saw it in the step 4 screenshot. `composeBroadNote` now takes the adapter's `generic` flag and uses `analysis.broad.body.generic`, the same sentence less its last clause. **Unratified, DESK DEFAULT, flagged in `i18n.ts`**; not pinned. Test in `analyze-score-adapter.test.ts`. |
 | `MarkupPane.svelte:568` → `:958` `statusLine` | Unaffected: reached only under `hasReadings` (the sampled map), so a generic voice never sees it. |
 | `key-suggest.ts:291` | Kept: counts sung and derived vowels only, so for a generic voice the key search has **no vowel evidence** and `pastTurn` stays null. Reported, not changed. |
 | the other `fR1` readers (`overlay-engine.ts:165`, `conditions.ts:368`, `comments.ts:164`, `singer-page.ts:186,199`, `modification-engine.ts:68-88`) | Kept: they read a number, and every drawn result carries the existing placeholder mark. |
@@ -72,10 +72,11 @@ Placement: the lede is one line in the page header's `note` stack (`TitleHeader`
    - FR typed: « Méthode : calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises. »
    - FR untyped: « Méthode : calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises. »
    (The no-break space before « : » is in the file as ` `.)
-3. **The ratchet.** The pane first came to 748 lines against a ceiling of 744, and a test of mine in `analysis/` imported `insights/`; both were caught by `pnpm ratchets`. The pane is back to 744, the test moved to `insights/`. No ceiling was raised.
+3. **The broad note's closing clause**, as in the table: one more unratified string, `analysis.broad.body.generic`, EN "Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank." and FR « Analyse large : cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. » (no-break space before the colon).
+4. **The ratchet.** The pane first came to 748 lines against a ceiling of 744, and a test of mine in `analysis/` imported `insights/`; both were caught by `pnpm ratchets`. The pane is back to 744, the test moved to `insights/`. No ceiling was raised.
 
 ## What Code could not establish
 
-- **How it looks.** The screenshots are step 4. I have not seen the header with a third note line; its height is measured by `TitleHeader` (`onheightchange`), so it should not overflow page one, but that is an inference until the screenshots.
+- **How it looks:** seen in the step 4 screenshots (`docs/sessions/row166-screens_2026-11-09/`); see the step 4 report.
 - **Whether a comment on a generic voice carries the placeholder sentence in the rendered page.** No comment fires on song 1 without a typed passaggio, and I did not find typed edges that fire one. Read, not exercised (Item 4).
 - **The English lede's article** ("for a {voiceType}") against a finer or Other label that begins with a vowel sound.
