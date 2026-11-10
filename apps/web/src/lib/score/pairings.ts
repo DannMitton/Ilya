@@ -87,9 +87,12 @@ export interface SlotOrigin {
 	 *
 	 * Both reslicers reslice the SAME concatenated letters: `openSyllabify`
 	 * maps over its input and cannot change length, and
-	 * `applySyllableOverride` takes its count from the override, whose
-	 * boundary list `InspectorPanel.svelte:781-818` only ever MOVES, never
-	 * pushes or splices. So a re-division leaves this string identical and
+	 * `applySyllableOverride` takes its count from the override. THE LIST NO
+	 * LONGER ONLY COMES FROM THE INSPECTOR'S DRAG, which only ever moves a
+	 * boundary (`InspectorPanel.svelte:781-818`): it is also read from storage
+	 * and from a binder (row 184), so `reslicedSyllables` uses an override only
+	 * where it moves no vowel (`keepsEveryVowel`) and otherwise keeps the
+	 * engine's division. So a re-division leaves this string identical and
 	 * only changes where it splits. A re-transcription changes it.
 	 *
 	 * The syllable text itself cannot serve: a slot growing a consonant is

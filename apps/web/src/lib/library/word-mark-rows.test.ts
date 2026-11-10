@@ -102,7 +102,7 @@ describe('rows and maps', () => {
 	const maps = (): MarkMaps => ({
 		stress: new Map([['0-1', { stressIndex: 1, stressSource: 'user-override' as const }]]),
 		yo: new Map([['1-0-3', { source: 'user-override' as const }]]),
-		syllables: new Map([['1-0', { boundaries: [2] }]]),
+		syllables: new Map([['1-0', { boundaries: [1] }]]),
 		spot: new Map([['0-2', true], ['0-0', false]]),
 	});
 
@@ -111,7 +111,7 @@ describe('rows and maps', () => {
 		expect(rows).toEqual([
 			['0-1', 'stress', { stressIndex: 1, stressSource: 'user-override' }, 'любил'],
 			['1-0-3', 'yo', { source: 'user-override' }, 'москва'],
-			['1-0', 'syllables', { boundaries: [2] }, 'москва'],
+			['1-0', 'syllables', { boundaries: [1] }, 'москва'],
 			['0-0', 'spot', false, 'я'],
 			['0-2', 'spot', true, 'тебя'],
 		]);
@@ -125,7 +125,7 @@ describe('rows and maps', () => {
 		expect(back.maps.spot.get('0-2')).toBe(true);
 		expect(back.maps.stress.get('0-1')).toEqual({ stressIndex: 1, stressSource: 'user-override' });
 		expect(back.maps.yo.get('1-0-3')).toEqual({ source: 'user-override' });
-		expect(back.maps.syllables.get('1-0')).toEqual({ boundaries: [2] });
+		expect(back.maps.syllables.get('1-0')).toEqual({ boundaries: [1] });
 	});
 
 	it('drops and counts a row whose anchor is not the word standing at its key', () => {
@@ -135,6 +135,17 @@ describe('rows and maps', () => {
 		expect(back.dropped).toBe(2);
 		expect(back.maps.stress.size).toBe(1);
 		expect(back.maps.spot.get('0-0')).toBe(false);
+	});
+
+	it('refuses a stored division that moves a vowel, and counts it as dropped, so it is not written back (CONTRACT 0.1)', () => {
+		const g = wordGrid('Москва');
+		const row = (boundaries: number[]): MarkRow => ['0-0', 'syllables', { boundaries }, 'москва'];
+		expect(mapsFromRows([row([1])], g).maps.syllables.size).toBe(1);
+		for (const bad of [[], [9], [0], [1, 3]]) {
+			const back = mapsFromRows([row(bad)], g);
+			expect(back.dropped).toBe(1);
+			expect(back.maps.syllables.size).toBe(0);
+		}
 	});
 
 	it('folds ё against е: a restored ё keeps its mark', () => {

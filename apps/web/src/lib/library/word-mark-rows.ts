@@ -20,6 +20,7 @@
  */
 import type { SyllableOverride, UserStressOverride, YoToggle } from '$lib/types';
 import { glossAnchorForm } from '$lib/text/gloss-survival';
+import { boundariesKeepOneVowel } from '$lib/syllable-utils';
 import { diffWordGrid, rekeyByWord, rekeyByWordChar } from '$lib/text-diff';
 import type { MarkKind, MarkRow, MarkValue } from './types';
 
@@ -151,6 +152,11 @@ export function mapsFromRows(rows: readonly MarkRow[], grid: readonly (readonly 
 		const [line, word] = num(key);
 		const standing = grid[line]?.[word];
 		if (standing === undefined || glossAnchorForm(standing) !== glossAnchorForm(anchor)) {
+			dropped++;
+			continue;
+		}
+		// One vowel per note (CONTRACT §0.1): a stored division that moves a vowel is refused, and counted as dropped so it is not written back.
+		if (kind === 'syllables' && !boundariesKeepOneVowel(standing, (value as SyllableOverride).boundaries)) {
 			dropped++;
 			continue;
 		}
