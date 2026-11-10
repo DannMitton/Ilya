@@ -28,6 +28,7 @@
  * Pure.
  */
 import { kindOf, type Seat, type Token } from './underlay-seat';
+import { letterBoxes, VOWEL, type VowelBoxCounts } from './underlay-units';
 import { sewWords } from './underlay-words';
 
 /** A run of non-letters (and no mark) between two letters. */
@@ -37,6 +38,8 @@ const LETTER = /\p{L}/gu;
 export interface SplitOptions {
 	/** The row's ink height in the pixels the boxes are in; absent, no dash is called a long dash. */
 	inkHeight?: number;
+	/** Where the parts of a split token's boxes came from is added here (`VowelBoxCounts`); absent, not counted. */
+	boxes?: VowelBoxCounts;
 }
 
 const letters = (s: string): number => (s.match(LETTER) ?? []).length;
@@ -67,10 +70,29 @@ export function splitTokens(tokens: readonly Token[], options: SplitOptions = {}
 			continue;
 		}
 		const total = parts.reduce((n, p) => n + letters(p), 0);
+		// EACH PART IS PLACED WHERE ITS OWN VOWEL'S INK IS (row 181 B0; Dann 2026-11-05 00:32 and 00:35, `OPEN.md`, "THE VOWEL IS THE
+		// NUCLEUS"; `CONTRACT.md` §0.2). WHAT IT CHECKS: that the token's letter boxes are its letters (`letterBoxes`); then a part
+		// of exactly one vowel letter takes that letter's box, and a part of two vowels or more, or none, takes the span of its own
+		// letters' boxes. WHY: the letter share put a part a share of the way along the word's box, not where its vowel is. WHAT FOLLOWS
+		// when it fails: the letter share stands and the token is counted (`fallbackNoMatch`). Each part carries its own letter boxes
+		// on (`syms`), so `cutUnits` can place the pieces of a part. RELATION: `seatTokens` is unchanged; `VOWEL` is `underlay-units.ts`'s.
+		const own = letterBoxes({ ...token, text });
+		if (!own && options.boxes) options.boxes.fallbackNoMatch++;
 		let x = token.x0;
+		let at = 0;
 		parts.forEach((p, i) => {
+			const label = i < parts.length - 1 ? `${p}-` : p;
+			const mine = own ? own.slice(at, at + letters(p)) : [];
+			at += letters(p);
+			if (own && mine.length > 0) {
+				const vowels = mine.filter((b) => VOWEL.test(b.c));
+				const [lo, hi] = vowels.length === 1 ? [vowels[0].x0, vowels[0].x1] : [Math.min(...mine.map((b) => b.x0)), Math.max(...mine.map((b) => b.x1))];
+				out.push({ text: label, x0: lo, x1: hi, syms: mine });
+				if (options.boxes) options.boxes.placed++;
+				return;
+			}
 			const width = ((token.x1 - token.x0) * letters(p)) / total;
-			out.push({ text: i < parts.length - 1 ? `${p}-` : p, x0: x, x1: x + width });
+			out.push({ text: label, x0: x, x1: x + width });
 			x += width;
 		});
 	}

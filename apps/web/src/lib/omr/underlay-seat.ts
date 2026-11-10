@@ -79,6 +79,11 @@ export interface Token {
 	x1: number;
 	/** The token was a hyphen-only box wider than half the row's ink height: the print's line, kept as an `extender` (`splitTokens`). Counted, never read by a rule. */
 	longDash?: boolean;
+	/**
+	 * The token's letter boxes, one for each letter the reader gave, in page pixels (row 181 B0 step 1). Present only where the reader gave
+	 * them; read through `letterBoxes` (`underlay-units.ts`) by `splitTokens` and `cutUnits` to put a piece where its vowel's ink is (step 3). Nothing else reads it.
+	 */
+	syms?: { c: string; x0: number; x1: number }[];
 }
 
 /** One note of the voice staff. */
@@ -99,6 +104,13 @@ export interface NotePlace {
 	 * by nothing.
 	 */
 	inSlur?: boolean;
+	/**
+	 * The note takes no syllable of the voice's own: a grace note or a chord tone (`note-kinds.ts`, row 181 B0g). `seatPage` leaves it out
+	 * of the notes it seats and marks; the layout keeps it. Not a continuation: it is outside the one-vowel-per-note count by ruling.
+	 */
+	skip?: 'grace' | 'chord';
+	/** What a later build would skip and this one only counts: a cue note, or a note in voice 2 or later. Never read by a rule. */
+	wouldSkip?: 'cue' | 'voice2';
 }
 
 /**

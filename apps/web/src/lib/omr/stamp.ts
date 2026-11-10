@@ -45,9 +45,11 @@ export const OMR_MODEL = '465';
  * row the dictionary sews into words (a reading kept as `underlay@2` is read
  * again once). `underlay@4` is row 181 steps 1 to 3: the print's extender line is read (a long dash is
  * no longer dropped, `<extend>` rides with the reading), the second look is made, and the reading keeps where each system's
- * lyric band stood (`bands`); a reading kept as `underlay@3` is read again once, on its next opening.
+ * lyric band stood (`bands`); a reading kept as `underlay@3` is read again once, on its next opening. `underlay@5` is row 181 B0
+ * and B0g: each syllable is placed where its own vowel's ink is, not a share of the way along the word's box, and a grace note or
+ * a chord tone takes no syllable, so the same page seats differently (a reading kept as `underlay@4` is read again once).
  */
-export const UNDERLAY_READER = 'underlay@4';
+export const UNDERLAY_READER = 'underlay@5';
 
 /** What a kept reading is stamped with: the homr reader and the underlay reader together (`homr-web@V/model+underlay@N`). */
 export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}+${UNDERLAY_READER}`;
