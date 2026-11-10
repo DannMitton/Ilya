@@ -18,7 +18,7 @@ Brief: `brief-code-gloss-language-and-reuse_r3_2026-11-03.md`, step 3. Base: `62
 
 ## Tests
 
-- `text/gloss-offer.test.ts` (15 tests): the offer's conditions, its return on reopening, the fill line, Not now's scope and that it is never stored, Stop using reviving the offer, a refused write leaving the offer open, and the six strings.
+- `text/gloss-offer.test.ts` (14 tests): the offer's conditions, its return on reopening, the fill line, Not now's scope and that it is never stored, Stop using reviving the offer, a refused write leaving the offer open, and the six strings.
 - New `e2e/gloss-reuse.test.ts` (desk, real browser, 3 tests): in French on `мрежа мрежу`, typing `filet` shows the offer under the field and it stays through blur; the tap shows **Utilisée dans vos autres chants** and fills the sibling form `мрежу` with `filet`; the sibling shows **De vos autres chants** and no Reset; **Ne plus utiliser** clears the sibling and leaves `filet` on the first word. An unanswered offer is there again after closing and reopening the panel, and **Pas maintenant** hides it. A French edit shows `net` (the dictionary's) in English, not `filet`.
 - New `e2e-phone/gloss-offer.test.ts`: below.
 
