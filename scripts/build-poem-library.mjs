@@ -12,6 +12,10 @@
  * `translator`, `source: { site, url }`, `spelling`, `verified`, `textModern`, and the
  * letter stream the matcher aligns against:
  *
+ * A LIBRETTO ENTRY (an aria's text, `kind: 'libretto'`) also carries `opera`, the opera's own metadata, and ships `kind`. An entry of
+ * the original kind (a poem) carries neither, and `kind` absent means poem. The opera object is MAPPED from the entry's `provenance`
+ * (`OPERA_FIELDS`), not authored in the build, and `librettists` is the entry's `author` string as it stands.
+ *
  *   letters   the folded letters of `textModern`, as one string.
  *   at        where each letter stands in `textModern`, DELTA-CODED to save
  *             bytes: `at[0]` is the first letter's offset, and `at[i]` is the
@@ -116,6 +120,36 @@ export function textFault(text) {
 	return null;
 }
 
+/**
+ * THE OPERA OBJECT of a libretto entry, mapped from its `provenance`: [shipped key, provenance key]. `composer` is a `COMPOSERS` key
+ * (English "Surname, Given"); `character*` is the role whose lines the text holds; `number` is the number's English name as the
+ * provenance records it in `role` ("Yaroslavna's lament"), named for what it holds; `voice` is the voice type; `literarySource` is
+ * the work behind the libretto, recorded and never substituted for the libretto itself (a libretto fills POEM; Pushkin does not).
+ */
+export const OPERA_FIELDS = [
+	['composer', 'composer'],
+	['operaRu', 'opera_ru'],
+	['operaEn', 'opera_en'],
+	['characterRu', 'character_ru'],
+	['characterEn', 'character_en'],
+	['number', 'role'],
+	['voice', 'voice'],
+	['literarySource', 'literary_source'],
+];
+
+/** The opera object for a libretto entry, or a thrown error naming what is missing. */
+export function operaOf(e) {
+	const p = e.provenance;
+	if (!p || typeof p !== 'object') throw new Error(`library entry ${e.id}: a libretto needs "provenance"`);
+	const opera = {};
+	for (const [key, from] of OPERA_FIELDS) {
+		if (typeof p[from] !== 'string' || p[from] === '') throw new Error(`library entry ${e.id}: a libretto needs "provenance.${from}"`);
+		opera[key] = p[from];
+	}
+	opera.librettists = e.author;
+	return opera;
+}
+
 /** One library entry as the app needs it. Throws on a missing field, so a bad library fails the build, not a singer. */
 export function shipEntry(e) {
 	for (const k of ['id', 'work', 'title', 'incipit', 'author', 'spelling', 'textModern']) {
@@ -128,10 +162,13 @@ export function shipEntry(e) {
 	// line, which names the site, is the attribution). The app does not read it in build 1; it ships so a later build can.
 	const state = e.verification?.state;
 	if (state !== 'verified' && state !== 'unverified') throw new Error(`library entry ${e.id}: "verification.state" must be "verified" or "unverified"`);
+	if (e.kind !== undefined && e.kind !== 'poem' && e.kind !== 'libretto') throw new Error(`library entry ${e.id}: "kind" is "${e.kind}"`);
+	const libretto = e.kind === 'libretto';
 	const fault = textFault(e.textModern);
 	if (fault) throw new Error(`library entry ${e.id}: "textModern" holds ${fault}`);
 	const { letters, offsets } = letterStream(e.textModern);
 	return {
+		...(libretto ? { kind: 'libretto', opera: operaOf(e) } : {}),
 		id: e.id,
 		work: e.work,
 		title: e.title,

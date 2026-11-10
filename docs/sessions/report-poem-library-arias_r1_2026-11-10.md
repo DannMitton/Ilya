@@ -39,3 +39,15 @@ Tests that pin the library: `poem-library.test.ts:99` (`toHaveLength(14)`); `poe
 
 - The six build songs beyond the twelve fixtures (finding 2).
 - How the two non-reproducing ids were made (finding 1).
+
+## Step 1: the entry kind and the opera fields
+
+**Changed.**
+- `scripts/build-poem-library.mjs`: `OPERA_FIELDS` and `operaOf` (exported); `shipEntry` ships `kind: 'libretto'` and `opera` for a libretto, and nothing new for a poem (the 14 poems build to the same bytes). A libretto with no `provenance`, or an empty opera field, throws, as does a `kind` that is neither `poem` nor `libretto`.
+- `apps/web/src/lib/text/poem-library.ts`: `PoemOpera` and `kind?` / `opera?` on `PoemEntry`; `isEntry` accepts an absent `kind`, requires every opera field on a libretto, and refuses an opera on a poem.
+- The opera object holds `composer` (a `COMPOSERS` key), `operaRu`, `operaEn`, `characterRu`, `characterEn`, `number` (the provenance's `role`, the number's English name, named for what it holds), `voice`, `librettists` (the entry's `author` as it stands), and `literarySource`. The literary source is recorded and never stands in for the text.
+- Tests: `tests/build-poem-library.test.ts` +3 (125 to 128 under gate 7); `poem-library.test.ts` +3 (12 to 15).
+
+**Gates after this step:** gate 7 128 passed. The other gates are unaffected by a build-script and type change and run in full at the end of step 3.
+
+**What I could not establish.** The app's `PoemEntry` has no entries with `kind` yet: the 89 arrive in step 3, so the opera path is tested on a synthetic libretto here and on the real data there.

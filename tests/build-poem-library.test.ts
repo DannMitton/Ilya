@@ -6,6 +6,8 @@ import {
 	decodeOffsets,
 	encodeOffsets,
 	letterStream,
+	OPERA_FIELDS,
+	operaOf,
 	shipEntry,
 	textFault,
 	withPoemKeys,
@@ -192,5 +194,61 @@ describe('poem library build: the text check (step 8, part 3)', () => {
 		expect(hymn.textEdition).toContain('покаянiіемъ'.replace('iі', 'і'));
 		expect(hymn.textEdition).not.toMatch(/[A-Za-z]/);
 		expect((hymn.textEdition.match(/і/g) ?? []).length).toBe(10);
+	});
+});
+
+describe('poem library build: a libretto entry (row 182, step 1)', () => {
+	const poem = library.entries[0];
+	const libretto = {
+		...poem,
+		id: 'aaaaaaaaaa',
+		work: 'bbbbbbbb',
+		kind: 'libretto',
+		author: 'Модест Ильич Чайковский',
+		provenance: {
+			composer: 'Tchaikovsky, Pyotr',
+			opera_ru: 'Пиковая дама',
+			opera_en: 'Pique Dame',
+			character_ru: 'Елецкий',
+			character_en: 'Yeletsky',
+			role: "Yeletsky's aria",
+			voice: 'baritone',
+			literary_source: 'Pushkin, Пиковая дама',
+			notes: 'x',
+		},
+	};
+
+	it('ships kind and the opera object, mapped from the provenance, with the entry\'s author as the librettists', () => {
+		const e = shipEntry(libretto);
+		expect(e.kind).toBe('libretto');
+		expect(e.opera).toEqual({
+			composer: 'Tchaikovsky, Pyotr',
+			operaRu: 'Пиковая дама',
+			operaEn: 'Pique Dame',
+			characterRu: 'Елецкий',
+			characterEn: 'Yeletsky',
+			number: "Yeletsky's aria",
+			voice: 'baritone',
+			literarySource: 'Pushkin, Пиковая дама',
+			librettists: 'Модест Ильич Чайковский',
+		});
+		expect(e.title).toBe(libretto.title); // the literary source is recorded in opera, never stood in for the text
+		expect(Object.keys(e)).not.toContain('provenance');
+	});
+
+	it('ships a poem exactly as before: no kind, no opera', () => {
+		const e = shipEntry(poem);
+		expect(e).not.toHaveProperty('kind');
+		expect(e).not.toHaveProperty('opera');
+		expect(shipEntry({ ...poem, kind: 'poem' })).not.toHaveProperty('kind');
+	});
+
+	it('refuses a libretto with no provenance or a missing opera field, and an unknown kind', () => {
+		expect(() => shipEntry({ ...libretto, provenance: undefined })).toThrow(/provenance/);
+		for (const [, from] of OPERA_FIELDS) {
+			expect(() => shipEntry({ ...libretto, provenance: { ...libretto.provenance, [from]: '' } }), from).toThrow(new RegExp(from));
+		}
+		expect(() => operaOf({ ...libretto, provenance: { ...libretto.provenance, voice: undefined } })).toThrow(/voice/);
+		expect(() => shipEntry({ ...poem, kind: 'aria' })).toThrow(/kind/);
 	});
 });
