@@ -1,6 +1,6 @@
 # Report: step B1, `rebar.ts` and the two stored fields (Code, cloud lane 43, r1, 2026-11-10)
 
-Commit: "B1: the barline and time signature layer". Files: `score/correction.ts` (+49), `score/rebar.ts` (new, 373 lines), `score/rebar.test.ts` (new, 15 tests), `analysis/rebar-downstream.test.ts` (new, 2 tests), `score/correction.test.ts` (+5 tests). Focused tests: 106 pass. Gate 3 (0 errors, 12 warnings) and gate 8 (OK) pass on this tree; the full set is run at the B2 close.
+Commit: "B1: the barline and time signature layer". Files: `score/correction.ts` (+55, −4), `score/rebar.ts` (new, 438 lines), `score/rebar.test.ts` (new, 15 tests), `analysis/rebar-downstream.test.ts` (new, 2 tests), `score/correction.test.ts` (+5 tests). Focused tests: 106 pass. Gate 3 (0 errors, 12 warnings) and gate 8 (OK) pass on this tree; the full set is run at the B2 close.
 
 ## What was built
 
@@ -36,6 +36,6 @@ Division gives 8 bars from the fused fixture, every bar adds up, ids unchanged, 
 
 ## What I could not establish
 
-- Accompaniment lines carry `measureIndex` (`types.ts:108-115`, `AccompanimentLine`): I did not read how, and `rebar` does not renumber them. If a score carries one and a bar is divided, its bars and the voice's disagree. The scan path ingests none; an imported file might.
+- `AccompanimentEvent` carries `measureIndex` (`packages/score-parser/src/types.ts:859-863`, read); `rebar` does not renumber accompaniment events. If a score carries one and a bar is divided, its bars and the voice's disagree. The scan path ingests none; an imported file might.
 - `Measure.jump` origin tokens (da capo, dal segno, fine, to coda) belong to a bar's END, and `rebar` keeps `jump` only on the first half of a divided bar. A divided bar carrying an origin token would lose it from the half that should hold it. No stored reading carries a jump inside a bar the singer would divide.
 - Whether `validateRecord` keeps the two new fields through save, load, and binder: B4 tests it.
