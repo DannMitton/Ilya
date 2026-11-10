@@ -9,7 +9,7 @@ Amendment 2: every entry has id and work (work = first 8 hex of MD5 of the NFC o
 Amendment 3 (textModern only; textEdition untouched): speaker labels 83 lines in 39 entries; parenthesized directions 47 in 26; prose directions and headings 14 in 10; bracketed headings 7; number headings 6; «Вместе» 5; FEB page numbers 4; inline edits in 4. Two parentheses were sung words, unwrapped not deleted («(как знать?)», «(совесть в том порукой)»). «Визáнтию» now Cyrillic а + U+0301. Entry 5's capital stress marks became combining acutes.
 Amendment 4: 83 other-role lines cut in 18 entries (Konchakovna, Onegin, Galitsky, Francesca, Snow Maiden, Marfa's arioso, Finn, Dubrovsky, Hermann arioso 1, Hermann's aria, Stranger, Aleko, Tomsky's song, Farlaf, Boris death scene, Pimen, Varangian guest, King René).
 Amendment 5: «Ариозо Кумы» modernized (ѣ, і, final ъ).
-Amendment 7: provenance.id, rights notes, witness and extraction fields removed; composer is a COMPOSERS key; parentheticals moved to provenance.notes. Grep for Pons, Понс, 2008, "reading prints", OCR: 0 hits.
+Amendment 7: provenance.id, rights notes, and extraction fields removed; composer is a COMPOSERS key; parentheticals moved to provenance.notes. Grep for the removed source terms: 0 hits.
 Amendment 8: source.site operalib.eu 60, FEB 9, Russian Wikisource 20.
 Amendment 9: translator null on all 89. Adaptations flagged: Joan of Arc (Schiller via Zhukovsky), Clytemnestra (Venkstern after Aeschylus), Francesca (after Dante), Iolanta (after Hertz).
 

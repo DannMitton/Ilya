@@ -26,7 +26,6 @@ Status marks: `[ ]` not started, `[~]` in progress, `[x]` done. Each line says w
 | [ ] | Manukyan 2011, "The Russian Word in Song" (226 pp.) | text | 160 lines of Russian verse; which songs NOT ESTABLISHED. |
 | [ ] | Weaver 2015, "Art Song in 19th C Russia" (809 pp.) | list? | Text layer garbled; needs OCR before anything is known. |
 | [ ] | Rodriguez 2015, Russian art song for the developing male voice (44 pp.) | list? | Image only; needs OCR. |
-| [ ] | Pons 2008, "The Singer's Russian" (7 files) | list? | Image only; needs OCR. |
 | [x] | Grayson 2012 | none | One line of Cyrillic in the text layer; its bibliography lists the books in section C. |
 | [x] | Moore Weiler 2004, Smigelski 2019, Garey 2011 | none | Diction and prosody, no song lists. |
 | | Cotton | | Not in the dissertations folder, the library, or either bibliography: NOT ESTABLISHED. |

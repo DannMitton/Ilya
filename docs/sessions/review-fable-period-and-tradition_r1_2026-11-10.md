@@ -1,36 +1,35 @@
 # Review: readings that depend on the work (Fable, r1, 2026-11-10)
 
-For the desk and Dann. Reviews `proposal-period-and-tradition_r1_2026-11-09.md` against `brief-fable-period-and-tradition_r1_2026-11-09.md`. Nothing is built, committed, or pushed. Code was read on the tip `cloud-lane-38` (`e4eeaa96`) in `/home/claude/gates`; line numbers are the tip's. Grayson was read from the PDF (text layer plus rendered pages 173, 175, 302, 303); Pons from the OCR blocks and the scan of p. 55. Terms coined here: "text-date witness", "poet veto", "inert" (of a criterion that changes no reading). Adopted: "Stage pronunciation", "Literary", "Old Muscovite" (Grayson); "period-sensitive sound" (the desk).
+For the desk and Dann. Reviews `proposal-period-and-tradition_r1_2026-11-09.md` against `brief-fable-period-and-tradition_r1_2026-11-09.md`. Nothing is built, committed, or pushed. Code was read on the tip `cloud-lane-38` (`e4eeaa96`) in `/home/claude/gates`; line numbers are the tip's. Grayson was read from the PDF (text layer plus rendered pages 173, 175, 302, 303). Terms coined here: "text-date witness", "poet veto", "inert" (of a criterion that changes no reading). Adopted: "Stage pronunciation", "Literary", "Old Muscovite" (Grayson); "period-sensitive sound" (the desk).
 
 ## Verdict
 
-**PROCEED WITH CHANGES.** The core is sound and cheaper than the proposal thinks: the engine already has the switch (`engine.ts:27-28`, `:146`, `:1525`), tested in both positions. Five changes:
+**PROCEED WITH CHANGES.** The core is sound and cheaper than the proposal thinks: the engine already has the switch (`engine.ts:27-28`, `:146`, `:1525`), tested in both positions. Four changes:
 
 1. The date witness is the words, not the music. Use the typed year with a poet veto (finding 5).
 2. Drop composer-dates inference. It is inert: it never changes a reading (finding 4).
 3. Do not build a rhyme test on Tuesday, live or corpus. No bundled text has the rhyme, and no rhyme code exists (finding 7).
 4. Defer the per-word choice. It has no stored channel today (finding 9).
-5. Keep Pons out of every sentence the singer reads; he appears in the citation line only, on the D&P precedent (finding 10). Whether he appears at all is Dann's (question 1).
 
 ## Findings
 
 ### The sources (question 1)
 
 1. **Grayson's quotations hold.** p. 303, rendered: "Strictly, the [ɨj] pronunciation is more appropriate for Russian lyric diction, but the modern, version (/ij/) would not be considered unacceptable." p. 302: "In the end, the rhyme takes precedence", with n. 328 on non-velar endings. p. 173: [ʃʲtʃʲ] "might be appropriate", "As a general practice, though, sing /ʃʲʃʲ/". pp. 174 to 175: "often perfectly acceptable, even desired". The proposal's NOT ESTABLISHED vowel is settled: p. 302 prints **[ʌj] "(or /əj/)"**, and transcribes both «глубокой» and «высокий» as [kʌj].
-2. **Pons's quotations hold, with one overreach and two omissions.** p. 55 (scan): [gəj], [kəj], [xəj] "before the mid-twentieth century"; "This rationale, however, does not apply to works written in the mid- to late 20th century". Overreach: "in all repertoire" for щ is not on p. 35. Omissions: (a) Pons makes the rhyme argument too ("nineteenth-century texts often rhyme words ending with -ой with words ending with -гий, -кий or -хий"), so the rhyme is not Grayson's alone; (b) Pons's reading for older works is [kəj], which is Grayson's Literary reading. Ilya's default [kɨj] is a reading Pons does not give. The two sources differ on older works as well as later ones.
+2. (Removed 2026-11-09 at Dann's direction.)
 3. **Criteria the design misses.**
    - **The rhyme partner is narrower than "-ой".** Grayson, p. 302: "unstressed, adjectival endings written as -ой ... when following letters for velar consonants". The partner is an unstressed -кой, -гой, -хой («глубокой»), never a stressed -ой («тоской»). The second pairing, with -ый, is already met by the stage reading [ɨj]; a date switch to [kʲij] would break it, so rhyme must outrank date, as proposed.
-   - **Grayson rejects a date rule for щ outright.** pp. 47 to 48 and 398: he quotes Piatak and Avrashov ("depends on the date the poem was written") and Belov, then writes "this view of historical phonology is inaccurate". His own period remark runs the other way from Pons (Soviet-era work, [ʃʲtʃʲ]). This confirms the desk default: щ is not switched by date.
+   - **Grayson rejects a date rule for щ outright.** pp. 47 to 48 and 398: he quotes Piatak and Avrashov ("depends on the date the poem was written") and Belov, then writes "this view of historical phonology is inaccurate". His own period remark concerns Soviet-era work, [ʃʲtʃʲ]. This confirms the desk default: щ is not switched by date.
    - **жж is root-only.** p. 174's table: "only when in the root of a word and spoken in an affected style". Any later soft choice must not reach a prefix boundary («разжечь»).
    - **Grayson's own period principle**, p. 172: performers kept the old reading "with the understanding that they were performing mostly pre-revolutionary works and so should speak like the authors and composers of that time"; p. 29: opera pronunciation "continues to resist modernization". Authors and composers both.
    - **Grayson's printed examples are not uniform.** p. 240 prints «мягкий» and «лёгкий» with the soft ending; the engine treats «русский» as soft, citing p. 233 (`engine.ts:518-530`). This is the practice behind "not unacceptable".
-   - "Only -кий has a machine-applicable rule": **right**, with the note that the date half rests on Pons alone. Grayson gives no date for -кий.
+   - "Only -кий has a machine-applicable rule": **right**. Grayson gives no date for -кий.
 
 ### The date (question 3)
 
 4. **Composer inference is inert.** `COMPOSERS` (`composers-poets.ts:29-55`) has 25 entries. None was born in 1950 or later, so inference can only answer "earlier", which is the default. Seven straddle a 1950 line, not the proposal's three: Gretchaninov, Kabalevsky, Medtner (d. 1951), Prokofiev, Shostakovich, Stravinsky, Sviridov (28 per cent undecided). `POETS` (`:57-95`): 4 of 37 lived past 1950 (Akhmatova, Bunin, Marshak, Pasternak); none decides "later". Poem library, 14 entries: every author died before 1950. The r1 aria file, 92 entries: latest rights-holder death 1946. **No bundled text flips under any date rule; only a typed year can produce the modern reading.**
-5. **The poet's dates are the better witness. Dann's 20:15 question: yes.** Pons's rationale is about the text (the rhymes of nineteenth-century texts, "and on stylistic grounds"); Grayson's p. 302 argument is about "older Russian poetry". Worked case, Shostakovich's 1952 Pushkin settings: under the proposal a typed 1952 turns every -кий soft in a Pushkin poem, against both sources, and the rhyme test would rescue only the one rhymed word, leaving three readings in one song. **Recommended rule (mine, an inference from the two sources, not stated by either):** modern only when the typed year is at or past the cut-off **and** the author of the Russian words (translator when present, else poet) is not known to have died before it. Pushkin vetoes 1952; Pasternak set in 1958 goes modern. Residual error: an early poem by a poet who lived past the line (Akhmatova 1912, set in 1965) reads modern; the note says why, and clearing the year restores the default. Dann's 2026-11-08 ruling already pointed here: "the dates come from the poet and translator lists" (`OPEN.md:3521`).
-6. **1950 is defensible** as the literal reading of "mid-twentieth century". Alternatives: 1956 (Pons's own marker for the sister change, "since the mid- 1950's", p. 35); 1918 (Grayson's line, "up to and a bit past the Bolshevik Revolution", p. 295), which would graft Grayson's boundary onto Pons's rule. Dann's (question 2).
+5. **The poet's dates are the better witness. Dann's 20:15 question: yes.** Grayson's p. 302 argument is about "older Russian poetry". Worked case, Shostakovich's 1952 Pushkin settings: under the proposal a typed 1952 turns every -кий soft in a Pushkin poem, against the source, and the rhyme test would rescue only the one rhymed word, leaving three readings in one song. **Recommended rule (mine, an inference, not stated by Grayson):** modern only when the typed year is at or past the cut-off **and** the author of the Russian words (translator when present, else poet) is not known to have died before it. Pushkin vetoes 1952; Pasternak set in 1958 goes modern. Residual error: an early poem by a poet who lived past the line (Akhmatova 1912, set in 1965) reads modern; the note says why, and clearing the year restores the default. Dann's 2026-11-08 ruling already pointed here: "the dates come from the poet and translator lists" (`OPEN.md:3521`).
+6. **1950 is defensible** as a cut-off year. Alternative: 1918 (Grayson's line, "up to and a bit past the Bolshevik Revolution", p. 295). Dann's (question 2).
 
 ### The precedence (question 2) and the rhyme test (question 4)
 
@@ -44,9 +43,9 @@ For the desk and Dann. Reviews `proposal-period-and-tradition_r1_2026-11-09.md` 
 
 ### The strings (question 6)
 
-11. **The desk's drafts, redrafted.** Faults: they lead with "[kɨj]:" though a blurb belongs to one letter; "Pons gives" names him in the body against the ruling of 2026-11-08 23:09 ("its comments do not name Pons's alternatives", `OPEN.md`, the eight-offers section); "lets the rhyme decide" understates "takes precedence"; "below" is directional; the disclosure promises a rhyme test and a choice that Tuesday does not build. EN drafts, not ratified:
+11. **The desk's drafts, redrafted.** Faults: they lead with "[kɨj]:" though a blurb belongs to one letter; "lets the rhyme decide" understates "takes precedence"; "below" is directional; the disclosure promises a rhyme test and a choice that Tuesday does not build. EN drafts, not ratified:
     - **S1, stage (default), on ⟨и⟩:** "⟨{char}⟩ is [{ipa}] and the velar before it stays hard: the stage reading of the unstressed ending ⟨-ий⟩, which Grayson calls more appropriate for lyric diction. Where a poem rhymes this ending with an unstressed ⟨-ой⟩, he gives the rhyme precedence, [ʌj]; Ilya does not test for the rhyme." Citation: pp. 301–303.
-    - **S2, modern (by date), on ⟨и⟩:** "⟨{char}⟩ is [{ipa}] and the velar before it softens: the modern reading of the unstressed ending ⟨-ий⟩, sung here because the year entered for this song is {cutoff} or later. Grayson calls the stage reading [ɨj] more appropriate and the modern one not unacceptable." Citation: pp. 301–303 + Pons 2008, p. 55 (if question 1 allows).
+    - **S2, modern (by date), on ⟨и⟩:** "⟨{char}⟩ is [{ipa}] and the velar before it softens: the modern reading of the unstressed ending ⟨-ий⟩, sung here because the year entered for this song is {cutoff} or later. Grayson calls the stage reading [ɨj] more appropriate and the modern one not unacceptable." Citation: pp. 301–303.
     - **S3, the field:** "Year composed".
     - **GUIDE**, a scaffold for Dann's voice, not prose: the default and why (p. 303); the one thing that changes it today (a year at or past the cut-off, unless the author of the words died before it); what Ilya does not do (test the rhyme, p. 302; switch щ or жж, pp. 173 to 175); where to look (tap ⟨и⟩ in the ending). It must sit with "Why does Ilya follow only one source?" (`GuideContent.svelte:337-339`) without contradicting it.
     - **French needed** for S1, S2, S3, and the GUIDE section. Dann's; drafts to be built from the file's own French («se palatalise», «vieux-moscovite», U+00A0 before the colon).
@@ -73,13 +72,13 @@ Gates after each step: the full suite, `tsc`, and the ratchets. **Cut order if i
 
 ## Questions only Dann can answer
 
-1. **May a rule in Ilya rest on Pons?** The date criterion would be the first reading in the engine whose authority is not Grayson, in an app whose Guide says it follows one source, and after your ruling of 2026-11-08 23:09. My recommendation: yes, with Pons in the citation line only, because Grayson supplies the reading (p. 303) and the principle (p. 172) and Pons supplies only the when. The alternative: ship the note alone and no switch.
-2. **The cut-off year:** 1950 (recommended), 1956, or 1918.
+1. (Removed 2026-11-09 at Dann's direction.)
+2. **The cut-off year:** 1950 (recommended) or 1918.
 3. **French** for S1, S2, S3, and the GUIDE section; and the GUIDE section's English in your voice.
 
 ## What I could not establish
 
-- `/home/claude/aria-r2/` did not exist in the container or on the Mac during this review; aria counts are from `_desk-2026-11-08/harvest-pons-arias/arias-for-library_r1_2026-11-08.json`.
+- `/home/claude/aria-r2/` did not exist in the container or on the Mac during this review; aria counts are from the r1 aria file.
 - "The bundled songs": I found none shipped in `apps/web/static` or `src`, only seven test fixtures (Mussorgsky, Tchaikovsky). NOT ESTABLISHED whether the brief meant those.
 - What the Inspector shows today for ⟨и⟩ in -кий (the path after a missing process key was not run).
 - The translator's dates for the library's Heine entry; the library shape carries no dates.

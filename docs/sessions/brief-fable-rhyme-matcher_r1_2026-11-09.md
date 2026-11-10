@@ -6,7 +6,7 @@ From the desk (Opus) 2026-11-09 20:5x, at Dann's request (20:47). A design revie
 
 Grayson 2012 p. 302 (read on the page by the desk and by Fable this session): where older verse rhymes an unstressed adjective ending ‑кий/‑гий/‑хий with an unstressed ‑кой/‑гой/‑хой, "the singer must read the -ий suffix as [ʌj] (or /əj/)", and "in the end, the rhyme takes precedence" (n. 328 extends the principle beyond velars; out of scope here). His worked example rhymes «глубокой» with «высокий», both [kʌj]. Ilya today gives «высокий» [vɨˈsokɨj] and «глубокой» [ɡɫuˈbokʌj] (Fable, `review-fable-period-and-tradition_r1_2026-11-10.md` finding 7d): it breaks Grayson's own example.
 
-Dann (2026-11-09 20:19 to 20:47) wants Ilya to detect the rhyme. His rulings in force: Ilya takes a defensible position, and a second pronunciation is not offered as an option (2026-11-01 23:16); Ilya does not rely on Pons in any way that needs citation (20:40); per-word Inspector marks are saved with the song (20:44); the era control ships with the share (20:22; freeze Wednesday 2026-11-11 noon).
+Dann (2026-11-09 20:19 to 20:47) wants Ilya to detect the rhyme. His rulings in force: Ilya takes a defensible position, and a second pronunciation is not offered as an option (2026-11-01 23:16); the date criterion needs a source of its own (20:40); per-word Inspector marks are saved with the song (20:44); the era control ships with the share (20:22; freeze Wednesday 2026-11-11 noon).
 
 ## 2. The proposed design (desk, from the research)
 
@@ -39,4 +39,4 @@ Research: `docs/sessions/research-rhyme-detection_r1_2026-11-09.md` (read it in 
 
 ## 5. Form
 
-Verdict first (PROCEED, PROCEED WITH CHANGES, or RETHINK), then numbered findings with the page or file:line read this session, then the build plan, then "Questions only Dann can answer" (taste, the irreversible, French), then "What I could not establish". House style: Canadian spelling, Oxford comma, no em dashes, none of "should", "simply", "just", "easy". NOT ESTABLISHED beats a complete invented answer. Every code claim carries a line read this session (`CONTRACT.md` §0). Pons is not a source for anything in this design.
+Verdict first (PROCEED, PROCEED WITH CHANGES, or RETHINK), then numbered findings with the page or file:line read this session, then the build plan, then "Questions only Dann can answer" (taste, the irreversible, French), then "What I could not establish". House style: Canadian spelling, Oxford comma, no em dashes, none of "should", "simply", "just", "easy". NOT ESTABLISHED beats a complete invented answer. Every code claim carries a line read this session (`CONTRACT.md` §0).
