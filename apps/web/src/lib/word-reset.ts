@@ -14,21 +14,22 @@
  */
 
 /** The five maps keyed by `"lineIndex-wordIndex"` (the ё toggles by `"…-charIndex"` after it). */
-export interface WordMaps<S, Y, B, P> {
+export interface WordMaps<S, Y, B, P, G = string> {
 	stress: ReadonlyMap<string, S>;
 	yo: ReadonlyMap<string, Y>;
 	syllables: ReadonlyMap<string, B>;
 	spot: ReadonlyMap<string, P>;
-	glosses: ReadonlyMap<string, string>;
+	/** Row 179: a word's gloss edit, whatever its shape: the whole value goes, every language with it. */
+	glosses: ReadonlyMap<string, G>;
 	anchors: ReadonlyMap<string, string>;
 }
 
-export interface WordReset<S, Y, B, P> {
+export interface WordReset<S, Y, B, P, G = string> {
 	stress: Map<string, S> | null;
 	yo: Map<string, Y> | null;
 	syllables: Map<string, B> | null;
 	spot: Map<string, P> | null;
-	glosses: Map<string, string> | null;
+	glosses: Map<string, G> | null;
 	anchors: Map<string, string> | null;
 	pipeline: boolean;
 }
@@ -40,7 +41,7 @@ function without<V>(map: ReadonlyMap<string, V>, key: string): Map<string, V> | 
 	return next;
 }
 
-export function resetWord<S, Y, B, P>(wordKey: string, maps: WordMaps<S, Y, B, P>): WordReset<S, Y, B, P> {
+export function resetWord<S, Y, B, P, G = string>(wordKey: string, maps: WordMaps<S, Y, B, P, G>): WordReset<S, Y, B, P, G> {
 	const yoPrefix = `${wordKey}-`;
 	let yo: Map<string, Y> | null = null;
 	if ([...maps.yo.keys()].some((k) => k.startsWith(yoPrefix))) {

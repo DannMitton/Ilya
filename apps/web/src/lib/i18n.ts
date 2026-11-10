@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,192 keys.
+   This file holds 1,198 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -44,7 +44,7 @@
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
    insights.     189  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
-   inspector.     36  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte
+   inspector.     42  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        49  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
@@ -2490,6 +2490,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.spot.reconstitution': { en: 'Spot reconstitution',        fr: 'Reconstitution ponctuelle' },
 	'inspector.resetWordAria':     { en: 'Reset word to engine defaults', fr: 'Réinitialiser le mot aux valeurs par défaut' },
 	'inspector.editGlossAria':     { en: 'Edit gloss',                   fr: 'Modifier la glose' },
+	// Row 179, RATIFIED by Dann 2026-11-03 20:21 (brief `brief-code-gloss-language-and-reuse_r3_2026-11-03.md`, "Strings"). Seated exactly.
+	'inspector.glossOffer':        { en: 'Use for this word in your other songs', fr: 'Utiliser pour ce mot dans vos autres chants' },
+	'inspector.glossOfferDismiss': { en: 'Not now',                      fr: 'Pas maintenant' },
+	'inspector.glossOfferDone':    { en: 'Used in your other songs',     fr: 'Utilisée dans vos autres chants' },
+	'inspector.glossOfferFailed':  { en: 'Could not be kept on this device', fr: 'Impossible de la conserver sur cet appareil' },
+	'inspector.glossFromGlossary': { en: 'From your other songs',        fr: 'De vos autres chants' },
+	'inspector.glossStopUsing':    { en: 'Stop using',                   fr: 'Ne plus utiliser' },
 	'select.noResults':            { en: 'No results',                   fr: 'Aucun résultat' },
 	'select.resultCount.one':      { en: '{n} result',                   fr: '{n} résultat' },
 	'select.resultCount.many':     { en: '{n} results',                  fr: '{n} résultats' },

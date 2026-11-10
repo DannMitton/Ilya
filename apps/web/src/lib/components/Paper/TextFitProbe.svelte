@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ResolvedGloss } from '$lib/text/gloss-edit';
 	import { tick } from 'svelte';
 	import type { LineData, WordStackData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
@@ -35,7 +36,7 @@
 		language: Language;
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
-		glossOverrides?: Map<string, string>;
+		glossOverrides?: Map<string, ResolvedGloss>;
 		/** The result: a measurement per piece key, and the two constants where a one-row line was among the pieces. */
 		onmeasured: (result: { pieces: Map<string, PieceMetrics>; rowBox?: number; overhang?: number }) => void;
 	}
