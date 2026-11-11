@@ -297,8 +297,9 @@ const FROM_FR1: ReadonlySet<WatchKind> = new Set(['crossing', 'cover', 'tracking
 /**
  * `placeholderAt`: whether a note's fR1 is a placeholder (QUEUE row 69). A line
  * whose kinds read that fR1 says so in a sentence of its own after it.
+ * `generic` (step 8): the voice has only placeholder values, so the sentence leaves out its remedy.
  */
-export function gatedLines(shown: readonly GatedEntry[], language: Language, placeholderAt?: (eventId: string) => boolean): string[] {
+export function gatedLines(shown: readonly GatedEntry[], language: Language, placeholderAt?: (eventId: string) => boolean, generic = false): string[] {
 	const list = new Intl.ListFormat(language, { type: 'conjunction' });
 	const render = (g: GatedEntry, opener: WatchOpener) => {
 		if (g.bars.length < 2) return watchEntryLine(g.entry, language, opener);
@@ -319,7 +320,7 @@ export function gatedLines(shown: readonly GatedEntry[], language: Language, pla
 	const flagged = (g: GatedEntry) => !!placeholderAt?.(g.entry.eventId) && g.entry.kinds.some((kind) => FROM_FR1.has(kind));
 	return unique.map((g) => {
 		const line = render(g, g.entry.advice ? WATCH_OPENERS[k++ % WATCH_OPENERS.length] : 2);
-		return flagged(g) ? `${line} ${placeholderCommentSentence(g.entry.vowel, language)}` : line;
+		return flagged(g) ? `${line} ${placeholderCommentSentence(g.entry.vowel, language, generic)}` : line;
 	});
 }
 

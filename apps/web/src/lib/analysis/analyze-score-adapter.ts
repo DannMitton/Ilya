@@ -36,7 +36,7 @@ import { t, type Language } from '$lib/i18n';
 import type { CalibratedFormant, VoiceCharacteristics, Vowel } from '$lib/voice/engine/types';
 import { DERIV_SOURCE, deriveFrom } from '$lib/voice/engine/derivations';
 import { checkPlausibility, isUsable } from '$lib/voice/engine/plausibility';
-import { fillStandIns, type StandInReport } from '$lib/voice/engine/stand-ins';
+import { fillStandIns, hasPlaceholderProfile, type StandInReport } from '$lib/voice/engine/stand-ins';
 
 /**
  * Which analysis dimensions rest on real singer input. Derived from the
@@ -63,6 +63,15 @@ export interface AdaptedProfile {
 	 * for the calibration summary to offer a retake; nothing draws it yet.
 	 */
 	standIns?: StandInReport;
+	/**
+	 * QUEUE row 166, internal word: no vowel is sung and every fR1 is a placeholder
+	 * from the declared type's template (`hasPlaceholderProfile`). A view of
+	 * `standIns`, computed per snapshot and never stored (`CONTRACT.md` §8, as
+	 * `standIns` itself): it is false for a voice with any sung vowel, and for a
+	 * voice whose type has no placeholder profile. The pages read it to say "not
+	 * calibrated"; `completeness.formants` is true for it, because numbers exist.
+	 */
+	generic: boolean;
 }
 
 /**
@@ -266,14 +275,20 @@ export function buildVoiceProfileSnapshot(
 
 	// QUEUE row 17: no vowel left blank (Dann 2026-09-16; the method ruled 2026-10-01 02:56).
 	// Every gap the loops above left takes a stand-in from Bozeman's staff fitted to the
-	// singer, flagged 'surrogate' (`stand-ins.ts`). Only once a vowel is sung: a voice with
-	// no reading keeps the page that says nothing was measured (DESK DEFAULT).
+	// singer, flagged 'surrogate' (`stand-ins.ts`).
+	//
+	// QUEUE row 166 (Dann ratified 2026-10-31 13:19 to 13:21): with NO vowel sung, a declared
+	// soprano, mezzo-soprano, tenor, baritone, or bass takes the template whole, every vowel
+	// flagged 'surrogate' and `generic` true. Contralto, countertenor, bass-baritone,
+	// "Not sure", and no type keep the page that says nothing was measured: DESK DEFAULT,
+	// which row 167 lifts. Range, tessitura, and passaggio stay as typed, below.
 	const implausible = (Object.entries(formants) as [Vowel, CalibratedFormant | undefined][])
 		.filter(([, f]) => f && !isUsable(f))
 		.map(([v]) => v);
-	const standIns: StandInReport | undefined = Object.values(fR1Source).includes('sung')
-		? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType, implausible)
-		: undefined;
+	const anySung = Object.values(fR1Source).includes('sung');
+	const generic = !anySung && hasPlaceholderProfile(voiceType);
+	const standIns: StandInReport | undefined =
+		anySung || generic ? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType, implausible) : undefined;
 
 	const c = characteristics;
 	const hasRange = c?.rangeLow !== undefined && c?.rangeHigh !== undefined;
@@ -315,6 +330,7 @@ export function buildVoiceProfileSnapshot(
 		snapshot,
 		...(standIns ? { standIns } : {}),
 		completeness: completenessOf(snapshot),
+		generic,
 	};
 }
 
@@ -325,13 +341,18 @@ export function buildVoiceProfileSnapshot(
  * one structure; the two-item join is language-specific (EN "and", FR "ni",
  * the idiomatic "sans X ni Y"). Returns '' when nothing is broad, so an empty
  * result reads as "no legend".
+ *
+ * QUEUE row 166: `placeholders` is `AdaptedProfile.generic`. The note's closing
+ * sentence says the forecast reflects the singer's measured resonances, which a
+ * placeholder voice has none of, so that voice gets the note without it
+ * (`analysis.broad.body.generic`, RATIFIED by Dann 2026-11-10).
  */
-export function composeBroadNote(c: AnalysisCompleteness, language: Language): string {
+export function composeBroadNote(c: AnalysisCompleteness, language: Language, placeholders = false): string {
 	const items: string[] = [];
 	if (!c.range || !c.tessitura) items.push(t('analysis.broad.itemRange', language));
 	if (!c.passaggio) items.push(t('analysis.broad.itemPassaggio', language));
 	if (items.length === 0) return '';
 	const list =
 		items.length === 2 ? `${items[0]} ${t('analysis.broad.join', language)} ${items[1]}` : items[0];
-	return t('analysis.broad.body', language).replace('{items}', list);
+	return t(placeholders ? 'analysis.broad.body.generic' : 'analysis.broad.body', language).replace('{items}', list);
 }

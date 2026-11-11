@@ -215,3 +215,36 @@ for (const [name, lyrics, taller] of [['36 short lines', SHORT_LINES, false], ['
 		});
 	}
 }
+
+/*
+ * A PLACEHOLDER VOICE (QUEUE row 166; Fable's review of steps 5 to 7, step 8 (d)). A stored voice with a declared type
+ * and no formants, French, song 1: MELODY and then INSIGHTS draw from the type's placeholder values (`generic`), with a
+ * subtitle that wraps and a lede above the findings. On each: nothing on any page reaches its footer, on screen and under
+ * print, and the pages Chromium prints equal the sheets on screen.
+ */
+const pdfPageCount = (pdf: Buffer): number => (pdf.toString('latin1').match(/\/Type\s*\/Page[^s]/g) ?? []).length;
+
+test('a placeholder baritone, French, song 1: MELODY then INSIGHTS reach no footer, and print as many pages as there are sheets', async ({ page }) => {
+	test.setTimeout(240_000);
+	const now = '2026-11-10T12:00:00.000Z';
+	const store = { version: 2, activeId: 'v', voices: [{ id: 'v', name: 'Voix 1', createdAt: now, updatedAt: now, formants: {}, voiceType: 'baritone' }] };
+	await page.addInitScript(([l, s]) => {
+		localStorage.setItem('ilya:language', l);
+		localStorage.setItem('shane.profiles.v2', s);
+	}, ['fr', JSON.stringify(store)]);
+	await page.goto('/');
+	await page.locator('input[type="file"].hidden-input').setInputFiles(SONGS['Without Sun, no. 1']);
+	await page.waitForTimeout(8000);
+	for (const doc of ['markup', 'insights'] as const) {
+		await page.evaluate((d) => (document.querySelector(`#tab-${d}`) as HTMLElement | null)?.click(), doc);
+		await page.waitForTimeout(doc === 'markup' ? 10_000 : 7000);
+		const sheets = await page.locator('.paper-page:visible').count();
+		expect(sheets, `${doc}: there is something to print`).toBeGreaterThan(0);
+		// It is the placeholder page, not the withheld one: the French lede or the placeholder subtitle is on it.
+		const text = await page.locator(doc === 'markup' ? '.markup-paper-container' : '.insights-container').innerText();
+		expect(text, `${doc}: drawn from placeholder values`).toMatch(/valeurs par défaut/i);
+		expect(await overlaps(page, `placeholder baritone, ${doc}, fr`), `${doc}: nothing reaches a footer`).toEqual([]);
+		const pdf = await page.pdf({ preferCSSPageSize: true, printBackground: true });
+		expect(pdfPageCount(pdf), `${doc}: pages printed against sheets on screen`).toBe(sheets);
+	}
+});

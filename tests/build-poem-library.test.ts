@@ -1,13 +1,22 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import {
 	buildPoemFile,
 	decodeOffsets,
 	encodeOffsets,
 	letterStream,
+	librettoFault,
+	LIBRETTO_SITES,
+	OPERA_FIELDS,
+	OPERA_ROLES,
+	PROVENANCE_KEYS,
+	provenanceFault,
+	operaOf,
 	shipEntry,
 	textFault,
+	workOfOpera,
 	withPoemKeys,
 } from '../scripts/build-poem-library.mjs';
 
@@ -99,10 +108,12 @@ describe('poem library build: an entry and the file', () => {
 		expect(a.name).toBe(`dictionary.poems.${a.hash}.json`);
 	});
 
-	it('ships 14 entries of 13 works (the brief says 12; the library holds 13 distinct `work` values)', () => {
+	it('ships the 14 poems of 13 works, and the 89 arias of 29 operas (the brief says 12 poems; the library holds 13 distinct `work` values)', () => {
 		const file = JSON.parse(buildPoemFile(library).text);
-		expect(file.entries).toHaveLength(14);
-		expect(new Set(file.entries.map((e: { work: string }) => e.work)).size).toBe(13);
+		const poems = file.entries.filter((e: { kind?: string }) => e.kind === undefined);
+		expect(poems).toHaveLength(14);
+		expect(new Set(poems.map((e: { work: string }) => e.work)).size).toBe(13);
+		expect(file.entries.filter((e: { kind?: string }) => e.kind === 'libretto')).toHaveLength(89);
 	});
 });
 
@@ -172,7 +183,7 @@ describe('poem library build: the text check (step 8, part 3)', () => {
 		expect(textFault('Строка\n\n8 декабря 1840\nМосква')).toBeNull();
 		expect(textFault('Строка\n\nФевраль 1837')).toBeNull();
 		expect(textFault('Строка\n\n1830')).toBeNull();
-		for (const e of library.entries) expect(textFault(e.textModern), e.id).toBeNull();
+		for (const e of library.entries) expect(textFault(e.textModern, e.kind === 'libretto'), e.id).toBeNull();
 		expect(() => buildPoemFile(library)).not.toThrow();
 	});
 
@@ -192,5 +203,184 @@ describe('poem library build: the text check (step 8, part 3)', () => {
 		expect(hymn.textEdition).toContain('покаянiіемъ'.replace('iі', 'і'));
 		expect(hymn.textEdition).not.toMatch(/[A-Za-z]/);
 		expect((hymn.textEdition.match(/і/g) ?? []).length).toBe(10);
+	});
+});
+
+describe('poem library build: a libretto entry (row 182, step 1)', () => {
+	const poem = library.entries[0];
+	const libretto = {
+		...poem,
+		id: 'aaaaaaaaaa',
+		work: crypto.createHash('md5').update('Пиковая дама'.normalize('NFC')).digest('hex').slice(0, 8),
+		kind: 'libretto',
+		author: 'Модест Ильич Чайковский',
+		provenance: {
+			composer: 'Tchaikovsky, Pyotr',
+			opera_ru: 'Пиковая дама',
+			opera_en: 'Pique Dame',
+			character_ru: 'Елецкий',
+			character_en: 'Yeletsky',
+			role: "Yeletsky's aria",
+			voice: 'baritone',
+			literary_source: 'Pushkin, Пиковая дама',
+			notes: 'x',
+		},
+	};
+
+	it('ships kind and the opera object, mapped from the provenance, with the entry\'s author as the librettists', () => {
+		const e = shipEntry(libretto);
+		expect(e.kind).toBe('libretto');
+		expect(e.opera).toEqual({
+			composer: 'Tchaikovsky, Pyotr',
+			operaRu: 'Пиковая дама',
+			operaEn: 'Pique Dame',
+			characterRu: 'Елецкий',
+			characterEn: 'Yeletsky',
+			number: "Yeletsky's aria",
+			voice: 'baritone',
+			literarySource: 'Pushkin, Пиковая дама',
+			librettists: 'Модест Ильич Чайковский',
+		});
+		expect(e.title).toBe(libretto.title); // the literary source is recorded in opera, never stood in for the text
+		expect(Object.keys(e)).not.toContain('provenance');
+	});
+
+	it('ships a poem exactly as before: no kind, no opera', () => {
+		const e = shipEntry(poem);
+		expect(e).not.toHaveProperty('kind');
+		expect(e).not.toHaveProperty('opera');
+		expect(shipEntry({ ...poem, kind: 'poem' })).not.toHaveProperty('kind');
+	});
+
+	it('refuses a libretto with no provenance or a missing opera field, and an unknown kind', () => {
+		expect(() => shipEntry({ ...libretto, provenance: undefined })).toThrow(/provenance/);
+		for (const [, from] of OPERA_FIELDS) {
+			expect(() => shipEntry({ ...libretto, provenance: { ...libretto.provenance, [from]: '' } }), from).toThrow(new RegExp(from));
+		}
+		expect(() => operaOf({ ...libretto, provenance: { ...libretto.provenance, voice: undefined } })).toThrow(/voice/);
+		expect(() => shipEntry({ ...poem, kind: 'aria' })).toThrow(/kind/);
+	});
+
+	it('row 182 step 2: the work is the opera\'s (first 8 hex of the MD5 of the NFC Russian title), and an id is ten hex digits', () => {
+		expect(libretto.work).toBe(workOfOpera('Пиковая дама'));
+		expect(workOfOpera('Пиковая дама')).toBe(workOfOpera('Пиковая дама'.normalize('NFD')));
+		expect(() => shipEntry({ ...libretto, work: 'bbbbbbbb' })).toThrow(/work/);
+		expect(() => shipEntry({ ...libretto, id: 'AAAAAAAAAA' })).toThrow(/id/);
+		expect(() => shipEntry({ ...libretto, id: 'aaaaaaaaa' })).toThrow(/id/);
+		// a poem's work is not an opera's: nothing checks it
+		expect(() => shipEntry(poem)).not.toThrow();
+	});
+});
+
+describe('poem library build: the furniture a libretto must not carry (row 182, step 3)', () => {
+	const arias = library.entries.filter((e: { kind?: string }) => e.kind === 'libretto');
+	const first = arias.find((e: { provenance: { opera_ru: string } }) => e.provenance.opera_ru === 'Евгений Онегин');
+	const body = 'Я вас люблю, люблю безмерно,\nЯ вас люблю, люблю без меры';
+	const shapes: [string, string][] = [
+		['a line that is only a role name in capitals', 'ГЕРМАН.\n' + body],
+		['a line that is only a role name in capitals (no stop)', body + '\nЕЛЕЦКИЙ'],
+		['a role name in the opera\'s own roles, capitalized', 'Татьяна\n' + body],
+		['a role name with a trailing period', 'Ленский.\n' + body],
+		['a line wholly in parentheses', body + '\n(уходит)'],
+		['a line wholly in parentheses with a stop after', body + '\n(смеётся).'],
+		['a parenthetical run inside a line', 'Я вас люблю (тихо), люблю безмерно'],
+		['bracketed text', body + '\n[Ария]'],
+		['a FEB page number', body + '\n- 38 -\n' + body],
+		['a bracketed number heading', '[N. 13 - Ария]\n' + body],
+		['a number sign heading', '№ 7 Ария\n' + body],
+		['a scene heading', 'Сцена V\n' + body],
+		['a stage-direction opener', 'Входит Герман.\n' + body],
+	];
+	for (const [name, text] of shapes) {
+		it(`refuses ${name}`, () => {
+			expect(librettoFault(text, 'Евгений Онегин'), name).not.toBeNull();
+			const aria = { ...first, textModern: text };
+			// «Герман» and «Елецкий» are Pique Dame's roles, so this case is judged against that opera
+			const operaRu = /ГЕРМАН|ЕЛЕЦКИЙ/.test(text) ? 'Пиковая дама' : 'Евгений Онегин';
+			expect(librettoFault(text, operaRu), name).not.toBeNull();
+			// the build refuses it either as furniture or, for a heading typed with the Latin N or V, already as a Latin letter
+			if (operaRu === 'Евгений Онегин') expect(() => shipEntry(aria), name).toThrow(/textModern/);
+		});
+	}
+
+	it('refuses a Latin letter in a libretto (the text fault every entry has)', () => {
+		expect(() => shipEntry({ ...first, textModern: body + '\nсловоa' })).toThrow(/Latin/);
+	});
+
+	it('lets a clean libretto through, and every one of the library\'s arias', () => {
+		expect(librettoFault(body, 'Евгений Онегин')).toBeNull();
+		expect(arias).toHaveLength(89);
+		for (const e of arias) expect(librettoFault(e.textModern, e.provenance.opera_ru), e.id).toBeNull();
+	});
+
+	it('applies to a libretto only: a poem may carry an author\'s own parentheses', () => {
+		const poem = library.entries[0];
+		expect(() => shipEntry({ ...poem, textModern: poem.textModern + '\n(как знать?)' })).not.toThrow();
+		expect(librettoFault('(как знать?)', 'Евгений Онегин')).not.toBeNull();
+	});
+
+	it('names the roles of all 29 operas the library holds', () => {
+		const operas = new Set(arias.map((e: { provenance: { opera_ru: string } }) => e.provenance.opera_ru));
+		expect(operas.size).toBe(29);
+		for (const o of operas) expect(OPERA_ROLES[o as string], o as string).toBeDefined();
+	});
+});
+
+describe('poem library build: the provenance a libretto carries (row 182, step 3)', () => {
+	const arias = library.entries.filter((e: { kind?: string }) => e.kind === 'libretto');
+
+	it('carries only the listed fields, none that names a working pass, and keeps the notes and the rights trail', () => {
+		for (const e of arias) {
+			expect(provenanceFault(e), e.id).toBeNull();
+			expect(Object.keys(e.provenance).every((k) => PROVENANCE_KEYS.includes(k)), e.id).toBe(true);
+			expect(typeof e.provenance.notes, e.id).toBe('string');
+		}
+		expect(arias.filter((e: { provenance: { rightsTrail?: unknown } }) => e.provenance.rightsTrail).length).toBe(13);
+		expect(arias.filter((e: { provenance: { contributorDates?: unknown } }) => e.provenance.contributorDates).length).toBe(69);
+		expect(library).not.toHaveProperty('harvest');
+	});
+
+	it('refuses a field outside the list, a parenthetical in a bare-name field, and a site that is not a listed one', () => {
+		const e = arias[0];
+		expect(provenanceFault({ ...e, provenance: { ...e.provenance, id: 'x' } })).toMatch(/provenance\.id/);
+		expect(provenanceFault({ ...e, provenance: { ...e.provenance, rights: 'x' } })).toMatch(/provenance\.rights/);
+		expect(provenanceFault({ ...e, provenance: { ...e.provenance, pass: 'x' } })).toMatch(/provenance\.pass/);
+		for (const k of ['composer', 'text_kind', 'literary_source']) expect(provenanceFault({ ...e, provenance: { ...e.provenance, [k]: 'x (y)' } }), k).toMatch(/parenthetical/);
+		expect(provenanceFault({ ...e, source: { ...e.source, site: 'elsewhere' } })).toMatch(/source\.site/);
+		expect(() => shipEntry({ ...e, provenance: { ...e.provenance, extra: 'x' } })).toThrow(/extra/);
+		expect(LIBRETTO_SITES).toEqual(['Russian Wikisource', 'operalib.eu', 'FEB']);
+	});
+
+	it('the arias use exactly the three sites, 20 of Russian Wikisource, 60 of operalib.eu, 9 of FEB', () => {
+		const count = (site: string) => arias.filter((e: { source: { site: string } }) => e.source.site === site).length;
+		expect([count('Russian Wikisource'), count('operalib.eu'), count('FEB')]).toEqual([20, 60, 9]);
+	});
+
+	it('the build holds 103 entries of 42 works, and ships every aria with its opera and no provenance', () => {
+		const file = JSON.parse(buildPoemFile(library).text);
+		expect(file.entries).toHaveLength(103);
+		expect(new Set(file.entries.map((e: { work: string }) => e.work)).size).toBe(42);
+		const shipped = file.entries.filter((e: { kind?: string }) => e.kind === 'libretto');
+		expect(shipped).toHaveLength(89);
+		for (const e of shipped) {
+			expect(e.opera.composer, e.id).toBeTruthy();
+			expect(e, e.id).not.toHaveProperty('provenance');
+			expect(e, e.id).not.toHaveProperty('textEdition');
+		}
+	});
+});
+
+describe('poem library build: a libretto may quote a Latin word (row 182, step 9)', () => {
+	const arias = library.entries.filter((e: { kind?: string }) => e.kind === 'libretto');
+	it('lets a whole Latin word through for a libretto, never one glued to a Russian word, and keeps the strict rule for a poem', () => {
+		const quoted = 'С своими "benedicite" и "amen,"';
+		expect(textFault(quoted, true)).toBeNull();
+		expect(textFault(quoted)).toBe('a Latin letter');
+		expect(textFault('покаянiем строка', true)).toMatch(/glued/);
+		expect(textFault('Ibо строка', true)).toMatch(/glued/);
+		// Robert's aria in Иоланта quotes «benedicite» and «amen» as printed
+		const robert = arias.find((e: { id: string }) => e.id === '67580c48a1');
+		expect(robert.textModern).toContain('benedicite');
+		expect(() => shipEntry(robert)).not.toThrow();
 	});
 });

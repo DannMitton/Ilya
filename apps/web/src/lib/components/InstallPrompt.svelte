@@ -25,7 +25,7 @@
     dismiss: string;
     ios_heading: string;
     ios_body: string;
-    /** Owed to Dann; drafted in docs/sessions/draft-strings-chrome-ios-install_r1_2026-10-15.md. The banner stays down for Chrome on iOS until this holds a ratified string. */
+    /** Ratified by Dann 2026-11-09 23:14. The banner stays down for Chrome on iOS wherever this is not a string. */
     ios_chrome_body: string | null;
     ios_dismiss: string;
   }
@@ -38,7 +38,7 @@
       dismiss: 'Not now',
       ios_heading: 'Add <em>Ilya</em> to your Home Screen',
       ios_body: 'Tap the <strong>Share</strong> button below, then choose <strong>Add to Home Screen</strong>.',
-      ios_chrome_body: null, // owed to Dann (see Strings)
+      ios_chrome_body: 'In Chrome, open the <strong>Share</strong> menu, then choose <strong>Add to Home Screen</strong>.',
       ios_dismiss: 'Got it'
     },
     fr: {
@@ -48,7 +48,7 @@
       dismiss: 'Plus tard',
       ios_heading: 'Ajoutez <em>Ilya</em> à votre écran d’accueil',
       ios_body: 'Appuyez sur le bouton <strong>Partager</strong> en bas, puis choisissez <strong>Sur l’écran d’accueil</strong>.',
-      ios_chrome_body: null, // owed to Dann (see Strings)
+      ios_chrome_body: 'Dans Chrome, ouvrez le menu <strong>Partager</strong>, puis choisissez <strong>Sur l’écran d’accueil</strong>.',
       ios_dismiss: 'Compris'
     }
   };

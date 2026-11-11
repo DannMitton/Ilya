@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { waitForDictionary } from './helpers';
+import { expandStation, waitForDictionary } from './helpers';
 
 /*
  * THE POEM LIBRARY, BUILD 1: THE SINGER'S WALK, in a real browser (step 6 of
@@ -405,5 +405,60 @@ test.describe('the same walk in French', () => {
 		await card(page).getByRole('button', { name: 'Conserver ce poème' }).click();
 		await page.locator('#intake-tab-poem').click();
 		await expect(lines(page).first()).toHaveText('Алексей Васильевич Кольцов, « Весёлый час », tiré de Wikisource en russe.');
+	});
+});
+
+/*
+ * ROW 182: AN ARIA. Pimen's monologue in «Борис Годунов» (Mussorgsky; Pushkin's text), the library's `a478c50e41`. A Lyrics made of
+ * it fills POEM as a poem does, and also the song's empty Title, Composer, and Poet; the card names the role and the opera beside the
+ * title (Dann 2026-11-09 22:13). "Not this poem" empties the fields the fill put, and Undo puts them back.
+ */
+const LIBRARY = JSON.parse(readFileSync(join(FIXTURES, '../library.json'), 'utf8'));
+const PIMEN = LIBRARY.entries.find((e: { id: string }) => e.id === 'a478c50e41') as { title: string; textModern: string };
+
+test.describe('row 182: she pastes an aria', () => {
+	test('POEM fills, the card names the role and the opera, and the empty Title, Composer, and Poet fill', async ({ page }) => {
+		await open(page);
+		await pasteIntoLyrics(page, PIMEN.textModern);
+		await expect(card(page)).toBeVisible({ timeout: 30_000 });
+		await expect(card(page)).toContainText(`“${PIMEN.title}”`);
+		await expect(page.getByTestId('poem-library-opera')).toHaveText('Pimen \u00b7 Boris Godunov (Борис Годунов)');
+		await expect(card(page)).toContainText('Александр Сергеевич Пушкин');
+		await expect(card(page)).toContainText('From Russian Wikisource.');
+
+		await page.locator('#intake-tab-poem').click();
+		await expect(field(page)).toHaveValue(PIMEN.textModern);
+
+		await expandStation(page, 'Piece');
+		await expect(page.locator('input.meta-input').first()).toHaveValue(PIMEN.title);
+		const triggers = page.locator('.select-trigger .trigger-text');
+		await expect(triggers.nth(0)).toHaveText('Modest Mussorgsky (1839\u20131881)');
+		await expect(triggers.nth(1)).toHaveText('Alexander Pushkin (1799\u20131837)');
+	});
+
+	test('"Not this poem" empties what the fill put, keeps a Title she edited since, and Undo puts the rest back', async ({ page }) => {
+		// (A Title she typed BEFORE the paste is kept: pinned in `poem-offer-metadata.test.ts`, where the song is a plain object.)
+		await open(page);
+		await pasteIntoLyrics(page, PIMEN.textModern);
+		await expect(card(page)).toBeVisible({ timeout: 30_000 });
+		await expandStation(page, 'Piece');
+		const title = page.locator('input.meta-input').first();
+		const triggers = page.locator('.select-trigger .trigger-text');
+		await expect(title).toHaveValue(PIMEN.title);
+		await title.fill('My Pimen'); // she edits the Title after the fill
+		await title.press('Tab');
+		await page.waitForTimeout(800); // the field's own "saved" note settles before she goes on
+
+		await page.getByRole('button', { name: 'Not this poem' }).click();
+		await expect(removed(page)).toBeVisible();
+		await expect(title).toHaveValue('My Pimen'); // hers
+		await expect(page.locator('.select-trigger .trigger-placeholder')).toHaveCount(3); // Composer, Poet, and Translator are empty
+		await expect(page.locator('.select-trigger .trigger-text')).toHaveCount(0);
+
+		await removed(page).getByRole('button', { name: 'Undo' }).click();
+		await expect(card(page)).toBeVisible();
+		await expect(title).toHaveValue('My Pimen');
+		await expect(triggers.nth(0)).toHaveText('Modest Mussorgsky (1839\u20131881)');
+		await expect(triggers.nth(1)).toHaveText('Alexander Pushkin (1799\u20131837)');
 	});
 });

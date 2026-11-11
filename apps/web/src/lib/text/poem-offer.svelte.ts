@@ -27,7 +27,9 @@
  * stays as stored (the fill only ever changes Lyrics' line breaks, `relining.ts`).
  */
 import type { PoemSource } from '$lib/library/types';
+import type { SongMetadata } from '$lib/types';
 import type { LoadedPoemLibrary } from './poem-library';
+import { emptyWhatWasPut, entryFields, fillEmpty, putBack, type FieldValues } from './poem-metadata';
 import { foldLetters, matchPoem } from './poem-match';
 import { poemJoin } from './poem-join.svelte';
 import { edited, heldForGuard, kept, replacesLibraryPoem, resolveSource, cutFor, type ResolvedSource } from './poem-source';
@@ -52,6 +54,11 @@ export interface OfferDeps {
 	setLyrics: (text: string) => void;
 	/** `lastLaid` in the page: the witness that Lyrics' line breaks are Ilya's. */
 	laid: { get: () => string; set: (value: string) => void };
+	/**
+	 * The song's metadata, read and written the way the singer's own edit is (the page's `handleMetadataChange`). Row 182: a fill from an
+	 * aria writes the empty Title, Composer, and Poet through it. Optional, so a page that lends nothing fills POEM alone.
+	 */
+	metadata?: { get: () => SongMetadata; set: (metadata: SongMetadata) => void };
 }
 
 /** Lyrics as they were before the fill. */
@@ -71,6 +78,8 @@ interface Removed {
 	/** Lyrics once the decline had restored them: the line stands only while they still are. */
 	restored: string;
 	laid: string;
+	/** The metadata fields the decline emptied (those still holding what the fill put there), for Undo to put back. */
+	fields: FieldValues;
 }
 
 const keyOf = (songId: string, work: string): string => `${songId}|${work}`;
@@ -82,6 +91,8 @@ export class PoemOffer {
 	#removed = $state<Removed | null>(null);
 	#declined = new Set<string>();
 	#memory = new Map<string, Memory>();
+	/** The metadata fields each song's fill put, until she answers the card: what "Not this poem" may empty. Session only, as `#memory` is. */
+	#put = new Map<string, FieldValues>();
 	#deps: OfferDeps | null = null;
 
 	attach(deps: OfferDeps): void {
@@ -119,6 +130,20 @@ export class PoemOffer {
 		deps.put(cut.text);
 		this.#memory.set(songId, memory);
 		doc.poemSource = { id: match.entry.id, work: match.work, poemHash: library.hash, start: cut.start, end: cut.end, answered: false, edited: false };
+		this.#fillMetadata(deps, songId, match.entry);
+	}
+
+	/**
+	 * Row 182, step 5: an aria's text also fills the song's EMPTY Title, Composer, and Poet (`poem-metadata.ts`). What she typed stays.
+	 * It is a write through the page's own metadata path (`handleMetadataChange`), as her edit is. A poem fills nothing here.
+	 */
+	#fillMetadata(deps: OfferDeps, songId: string, entry: Parameters<typeof entryFields>[0]): void {
+		const fields = entryFields(entry);
+		if (!deps.metadata || Object.keys(fields).length === 0) return;
+		const { metadata, put } = fillEmpty(deps.metadata.get(), fields);
+		if (Object.keys(put).length === 0) return;
+		deps.metadata.set(metadata);
+		this.#put.set(songId, put);
 	}
 
 	/** The song is this one, can be written, and holds no Poem and no source: nothing of hers stands in the way. */
@@ -140,6 +165,7 @@ export class PoemOffer {
 		else {
 			doc.poemSource = edited(doc.poemSource);
 			this.#memory.delete(doc.id);
+			this.#put.delete(doc.id);
 		}
 	}
 
@@ -162,6 +188,7 @@ export class PoemOffer {
 	#end(doc: OfferDoc): void {
 		doc.poemSource = null;
 		this.#memory.delete(doc.id);
+		this.#put.delete(doc.id);
 	}
 
 	/* ── What the singer answers on the card ───────────────────────── */
@@ -172,6 +199,7 @@ export class PoemOffer {
 		if (!doc?.poemSource || doc.poemSource.answered) return;
 		doc.poemSource = kept(doc.poemSource);
 		this.#memory.delete(doc.id);
+		this.#put.delete(doc.id);
 	}
 
 	/**
@@ -184,8 +212,16 @@ export class PoemOffer {
 		if (!deps || !doc?.poemSource || doc.poemSource.answered) return;
 		const source = doc.poemSource;
 		const memory = this.#memory.get(doc.id);
-		const removed: Removed = { songId: doc.id, key: keyOf(doc.id, source.work), source, poem: doc.publishedPoem, inputText: doc.inputText, restored: doc.inputText, laid: deps.laid.get() };
+		const removed: Removed = { songId: doc.id, key: keyOf(doc.id, source.work), source, poem: doc.publishedPoem, inputText: doc.inputText, restored: doc.inputText, laid: deps.laid.get(), fields: {} };
 		this.#declined.add(removed.key);
+		// Row 182: the fields the fill put, and only those still holding what it put, are emptied; a field she has edited is hers.
+		const put = this.#put.get(doc.id);
+		if (put && deps.metadata) {
+			const result = emptyWhatWasPut(deps.metadata.get(), put);
+			if (Object.keys(result.emptied).length > 0) deps.metadata.set(result.metadata);
+			removed.fields = result.emptied;
+		}
+		this.#put.delete(doc.id);
 		doc.poemSource = null;
 		doc.publishedPoem = '';
 		if (memory) {
@@ -207,6 +243,14 @@ export class PoemOffer {
 		doc.poemSource = removed.source;
 		if (doc.inputText !== removed.inputText) deps.setLyrics(removed.inputText);
 		deps.laid.set(removed.laid);
+		// Row 182: the fields the decline emptied are filled again, where they are still empty.
+		if (deps.metadata && Object.keys(removed.fields).length > 0) {
+			const result = putBack(deps.metadata.get(), removed.fields);
+			if (Object.keys(result.put).length > 0) {
+				deps.metadata.set(result.metadata);
+				this.#put.set(doc.id, result.put);
+			}
+		}
 		this.#removed = null;
 	}
 

@@ -27,6 +27,10 @@ import type { PairingMap } from '$lib/score/pairings';
 import type { CorrectionMap } from '$lib/score/correction';
 import { emptyBarAnswers, type BarAnswers } from '$lib/score/bar-answers';
 import type { KeyChoice } from '@ilya/score-parser';
+import { WordMarks } from '$lib/text/word-marks.svelte';
+import { wordGrid } from '$lib/pipeline';
+import { mapsFromRows, markMapsEmpty, rowsFromMaps, type WordMarkRows } from './word-mark-rows';
+import type { GlossEdit } from '$lib/text/gloss-edit';
 import {
 	createSaveScheduler,
 	fieldsFromRecord,
@@ -42,6 +46,7 @@ import {
 	emptyMetadata,
 	type FailureReason,
 	type LoadResult,
+	type MarkRow,
 	type OctaveReading,
 	type TempoChoice,
 	type Outcome,
@@ -68,7 +73,7 @@ export class SongDocument {
 	inputText = $state('');
 	metadata = $state<SongMetadata>(emptyMetadata());
 	fromScoreFields = $state<ReadonlySet<MetadataField>>(new Set<MetadataField>());
-	glossOverrides = $state<Map<string, string>>(new Map());
+	glossOverrides = $state<Map<string, GlossEdit>>(new Map());
 	glossAnchors = $state<Map<string, string>>(new Map());
 	openSyllabification = $state(false);
 	pairings = $state<PairingMap>({});
@@ -123,7 +128,7 @@ export class SongDocument {
 	 * kept beside `glossOverrides` and saved through the same path. Keyed by the
 	 * POEM's `"lineIndex-wordIndex"`.
 	 */
-	publishedGlosses = $state<Map<string, string>>(new Map());
+	publishedGlosses = $state<Map<string, GlossEdit>>(new Map());
 	publishedGlossAnchors = $state<Map<string, string>>(new Map());
 
 	/**
@@ -139,6 +144,26 @@ export class SongDocument {
 	 * it would be rebuilt away on the first autosave.
 	 */
 	barAnswers = $state<BarAnswers>(emptyBarAnswers());
+
+	/**
+	 * Row 184 (word marks), RULED BY DANN 2026-11-09 20:44: THE INSPECTOR'S WORD MARKS ARE ON THE SONG, one instance per witness. The
+	 * DOCUMENT owns them (not the page) so that its save effect can see them, and so that `close()` flushes the outgoing
+	 * song's marks before the next document exists: a switch cannot write one song's marks into another. Saved as
+	 * `SongRecord.wordMarks` rows; loaded in `#apply`, where the save effect stands down. The poem join's scan-repair
+	 * marks are not these and stay session-only (Dann, 20:32).
+	 */
+	readonly lyricsMarks = new WordMarks();
+	readonly poemMarks = new WordMarks();
+	/**
+	 * The words the Lyrics marks' keys describe: the grid of the stored text at load, then the grid of each
+	 * transcription (the page sets it), or the score's own words where Lyrics come from the score. NOT reactive, on
+	 * purpose: moving it is not a change to the song. The save reads it, so a mark made, a line typed above it, and a
+	 * reload inside the quiet pause still writes the mark on its own word (`rowsFromMaps`, Fable's amendment 4).
+	 */
+	lyricsMarksGrid: string[][] = [];
+	/** Lyrics rows loaded while Lyrics were empty: held, neither applied nor dropped, until the score's words are known (amendment 5). */
+	#heldLyricsRows: MarkRow[] = [];
+	#gridMemo: [text: string, grid: string[][]][] = [];
 
 	/** What the drawer's storage notice renders. Replaces `pairingsSaveError`. */
 	saveState = $state<SaveState>({ status: 'saved' });
@@ -314,7 +339,91 @@ export class SongDocument {
 			publishedGlossAnchors: this.publishedGlossAnchors,
 			poemSource: this.poemSource,
 			barAnswers: this.barAnswers,
+			wordMarks: this.#markRows(),
 		};
+	}
+
+	/** `wordGrid` of a text, remembered for the last two texts asked about, since the save effect asks on every keystroke. */
+	#gridOf(text: string): string[][] {
+		const hit = this.#gridMemo.find(([t]) => t === text);
+		if (hit) return hit[1];
+		const grid = wordGrid(text);
+		this.#gridMemo = [[text, grid] as [string, string[][]], ...this.#gridMemo].slice(0, 2);
+		return grid;
+	}
+
+	/**
+	 * The marks as rows, read through `$state` so the effect tracks every map. Lyrics' keys describe `lyricsMarksGrid`
+	 * (or the text itself where none is set), and are carried to the text as it stands now. The Poem's are carried at
+	 * once on every edit (`carryPoemEdit`), so they describe the poem as it stands.
+	 */
+	#markRows(): WordMarkRows {
+		const lyricsMaps = this.lyricsMarks.maps();
+		const poemMaps = this.poemMarks.maps();
+		const lyricsEmpty = markMapsEmpty(lyricsMaps);
+		const lyricsText = this.inputText.trim() === '' ? null : this.#gridOf(this.inputText);
+		const keyed = this.lyricsMarksGrid.length > 0 ? this.lyricsMarksGrid : (lyricsText ?? []);
+		const lyrics = [...(lyricsEmpty ? [] : rowsFromMaps(lyricsMaps, keyed, lyricsText)), ...this.#heldLyricsRows];
+		const poem = markMapsEmpty(poemMaps) ? [] : rowsFromMaps(poemMaps, this.#gridOf(this.publishedPoem), null);
+		return { ...(lyrics.length ? { lyrics } : {}), ...(poem.length ? { poem } : {}) };
+	}
+
+	/**
+	 * Load both witnesses' marks from a record, in `#apply` and so under its guard: a load is not a change. Each row's
+	 * anchor is checked against the stored text BEFORE the first transcription (the pipeline reads the stress and ё marks,
+	 * and a clitic a stress mark promotes changes the slots the seats were made against). A row whose word is no longer
+	 * there is dropped and counted. Lyrics that come from the score are not in the record, so those rows are held.
+	 */
+	#loadMarks(record: SongRecord): void {
+		const rows = record.wordMarks ?? {};
+		let dropped = 0;
+		this.#heldLyricsRows = [];
+		this.lyricsMarksGrid = wordGrid(record.poem);
+		if (rows.lyrics?.length && record.poem.trim() === '') {
+			this.#heldLyricsRows = rows.lyrics;
+			this.lyricsMarks.clear();
+		} else {
+			const lyrics = mapsFromRows(rows.lyrics ?? [], this.lyricsMarksGrid);
+			this.lyricsMarks.load(lyrics.maps);
+			dropped += lyrics.dropped;
+		}
+		const poem = mapsFromRows(rows.poem ?? [], wordGrid(record.publishedPoem ?? ''));
+		this.poemMarks.load(poem.maps);
+		dropped += poem.dropped;
+		this.#say(dropped, record);
+	}
+
+	#say(dropped: number, record: SongRecord): void {
+		if (dropped > 0) console.info(`[Ilya] "${record.name || record.id}": ${dropped} word mark(s) dropped, their word is no longer where it was set.`);
+	}
+
+	/**
+	 * Where Lyrics come from the score (`derivedPoem`, the page's), the words exist only once the stored scan is read, after
+	 * open. The page calls this with them: the marks keyed to those words follow their grid, and any rows held at load are
+	 * checked against it and applied. Where the singer has typed Lyrics meanwhile, the held rows are checked against those.
+	 * Cheap when there is nothing held and Lyrics hold text.
+	 */
+	syncLyricsMarks(derived: string): void {
+		const own = this.inputText.trim() !== '';
+		if (own && this.#heldLyricsRows.length === 0) return;
+		const text = own ? this.inputText : derived;
+		if (text.trim() === '') return;
+		const grid = wordGrid(text);
+		if (!own) this.lyricsMarksGrid = grid;
+		if (this.#heldLyricsRows.length === 0) return;
+		const held = this.#heldLyricsRows;
+		this.#heldLyricsRows = [];
+		const { maps, dropped } = mapsFromRows(held, grid);
+		this.lyricsMarksGrid = grid;
+		// A load is not a change: under the same guard `#apply` uses, unless a row was dropped, which is a change worth saving.
+		if (dropped === 0) {
+			this.#applying = true;
+			queueMicrotask(() => {
+				this.#applying = false;
+			});
+		}
+		this.lyricsMarks.load(maps);
+		this.#say(dropped, this.#base);
 	}
 
 	async #write(): Promise<void> {
@@ -356,7 +465,7 @@ export class SongDocument {
 		this.inputText = fields.inputText;
 		this.metadata = fields.metadata;
 		this.fromScoreFields = fields.fromScoreFields;
-		this.glossOverrides = fields.glossOverrides as Map<string, string>;
+		this.glossOverrides = fields.glossOverrides as Map<string, GlossEdit>;
 		this.glossAnchors = fields.glossAnchors as Map<string, string>;
 		this.openSyllabification = fields.openSyllabification;
 		this.pairings = fields.pairings;
@@ -367,10 +476,11 @@ export class SongDocument {
 		this.clefChipShown = fields.clefChipShown;
 		this.tempo = fields.tempo;
 		this.publishedPoem = fields.publishedPoem;
-		this.publishedGlosses = fields.publishedGlosses as Map<string, string>;
+		this.publishedGlosses = fields.publishedGlosses as Map<string, GlossEdit>;
 		this.publishedGlossAnchors = fields.publishedGlossAnchors as Map<string, string>;
 		this.poemSource = fields.poemSource;
 		this.barAnswers = fields.barAnswers;
+		this.#loadMarks(record);
 		// Cleared on the next microtask, after the effect this apply triggered
 		// has run and returned early.
 		queueMicrotask(() => {

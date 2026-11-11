@@ -23,9 +23,15 @@ describe('WordMarks', () => {
 		expect(m.yo.has('0-0-2')).toBe(true);
 		m.toggleYo('0-0-2', null);
 		expect(m.yo.size).toBe(0);
-		m.toggleSpot('1-1');
-		expect(m.spot.has('1-1')).toBe(true);
-		m.toggleSpot('1-1');
+		// Setting off: the box offers "reconstitute", and a saved mark is the CHOICE (row 184 (word marks), Dann 22:20).
+		m.toggleSpot('1-1', false);
+		expect(m.spot.get('1-1')).toBe(true);
+		m.toggleSpot('1-1', false);
+		expect(m.spot.size).toBe(0);
+		// Setting on: the box offers "reduce", and the saved choice is false.
+		m.toggleSpot('1-1', true);
+		expect(m.spot.get('1-1')).toBe(false);
+		m.toggleSpot('1-1', true);
 		expect(m.spot.size).toBe(0);
 		m.setSyllable('0-0', { boundaries: [1] } as never);
 		expect(m.syllables.size).toBe(1);
@@ -44,7 +50,7 @@ describe('WordMarks', () => {
 		const m = new WordMarks();
 		m.assignStress('0-1', {}, 0, 'user');
 		m.toggleYo('0-1-3', 'user');
-		m.toggleSpot('0-1');
+		m.toggleSpot('0-1', false);
 		m.carry(diffWordGrid([['а', 'б']], [['в'], ['а', 'б']]));
 		expect([...m.stress.keys()]).toEqual(['1-1']);
 		expect([...m.yo.keys()]).toEqual(['1-1-3']);

@@ -4,6 +4,7 @@
 	import { poemOffer } from '$lib/text/poem-offer.svelte';
 	import { cardLine, showsLine } from '$lib/text/poem-source';
 	import { siteName } from '$lib/text/poem-site';
+	import { operaLine } from '$lib/text/poem-metadata';
 	/*
 	 * PoemLibraryCard.svelte: THE CARD THAT SAYS ILYA FILLED POEM FROM ITS LIBRARY
 	 * (poem library, build 1, step 5; brief `docs/sessions/brief-code-poem-library-build1_r3_2026-11-03.md`,
@@ -20,6 +21,9 @@
 	 * empties Poem and returns Lyrics as they were, and "Poem removed." with Undo stands in its place until she leaves
 	 * the song (`poemOffer.removedFor`). The order of the buttons follows the page's rule that the last answer is the
 	 * safe one (`+page.svelte`, `askToReplace`). DESK DEFAULT, open for Dann.
+	 *
+	 * AN ARIA'S ROLE AND OPERA stand under its title (row 182; `operaLine`): the title is the aria's opening words in Russian, and the
+	 * role and the opera are their own fields (Dann 2026-11-09 22:13).
 	 *
 	 * THE POET IS PRINTED AS THE DATA'S `author` HAS IT, the full name, with no surname derived from it, and with
 	 * "translated by" where `translator` is set (review amendments 7 and 8). A first line the data quotes is not
@@ -45,6 +49,8 @@
 		const [open, close] = language === 'en' ? ['“', '”'] : ['«\u00a0', '\u00a0»']; // French: a no-break space inside each mark (OQLF, `CONTRACT.md` 7; as the French strings under POEM have it)
 		return {
 			title: `${open}${entry.title}${close}`,
+			// Row 182: an aria's role and opera stand beside its title, in the interface language (`operaLine`); a poem has none.
+			opera: entry.kind === 'libretto' && entry.opera ? operaLine(entry.opera, language) : null,
 			line: !showsLine(entry.title, card.resolved.firstLine, card.resolved.passage) ? null : card.resolved.passage ? t('intake.poemLibrary.passage', language).replace('{line}', () => quoted) : `${open}${quoted}${close}`,
 			poet: entry.translator ? t('intake.poemLibrary.by', language).replace('{author}', () => entry.author).replace('{translator}', () => entry.translator!) : entry.author,
 			// The ratified sentence, split around its `{site}`, so the site's name can be the link to the page (step 8, part 1, DESK DEFAULT):
@@ -82,6 +88,7 @@
 	<div class="card" role="group" aria-labelledby="poem-library-card-heading" data-testid="poem-library-card">
 		<p class="heading" id="poem-library-card-heading">{t('intake.poemLibrary.cardHeading', language)}</p>
 		<p class="name">{naming.title}</p>
+		{#if naming.opera}<p class="line" data-testid="poem-library-opera">{naming.opera}</p>{/if}
 		{#if naming.line}<p class="line">{naming.line}</p>{/if}
 		<p class="poet">{naming.poet}</p>
 		<p class="small">{naming.source.before}<a class="site-link" href={naming.source.url} target="_blank" rel="noopener noreferrer">{naming.source.site}</a>{naming.source.after}</p>

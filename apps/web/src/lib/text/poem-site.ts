@@ -11,6 +11,9 @@ import { hasString, t, type Language } from '$lib/i18n';
 /** The data's `source.site` to the key that names it. */
 const SITE_KEYS: Readonly<Record<string, string>> = {
 	'Russian Wikisource': 'intake.poemLibrary.site.russianWikisource',
+	// Row 182: the sites the aria texts come from (the build lists the same three, `LIBRETTO_SITES`).
+	'operalib.eu': 'intake.poemLibrary.site.operalib',
+	FEB: 'intake.poemLibrary.site.feb',
 };
 
 export function siteName(site: string, language: Language): string {

@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,205 keys.
+   This file holds 1,219 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -24,7 +24,7 @@
 
    a11y.           4  accessible names: lib/components/Drawer/Drawer.svelte, lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, lib/components/Paper/Paper.svelte
    aid.            2  lib/components/ReadingAid.svelte
-   analysis.       4  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
+   analysis.       5  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
@@ -43,9 +43,9 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     186  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
-   inspector.     36  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte
-   intake.        49  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
+   insights.     189  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   inspector.     42  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
+   intake.        51  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
    loupe.        122  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
@@ -56,9 +56,9 @@
    octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
    pacifier.      17  lib/voice/pacifier/Pacifier.svelte
    paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
-   placeholder.    7  lib/analysis/placeholder-line.ts
+   placeholder.    8  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
-   profile.       34  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
+   profile.       35  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
    provenance.     5  no literal consumer found
    recognize.      4  routes/+page.svelte
    replace.        4  routes/+page.svelte
@@ -908,6 +908,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// stored record keeps it; what is printed is looked up here by it (`text/poem-site.ts`), with the data's own string as the
 	// fallback for a site not listed.
 	'intake.poemLibrary.site.russianWikisource': { en: 'Russian Wikisource', fr: 'Wikisource en russe' },
+	// Row 182 (ratified by Dann 2026-11-09 22:14): the two other sites the aria texts come from. The French name of the second is coined.
+	'intake.poemLibrary.site.operalib':     { en: 'operalib.eu', fr: 'operalib.eu' },
+	'intake.poemLibrary.site.feb':          { en: 'the Fundamental Electronic Library (feb-web.ru)', fr: 'la Bibliothèque électronique fondamentale (feb-web.ru)' },
 	// The two lines that stand under POEM once the card is answered (`text/input-line.ts`).
 	'intake.view.libraryPoem':              { en: '{author}, “{title}”, from {site}.', fr: '{author}, «\u00a0{title}\u00a0», tiré de {site}.' },
 	'intake.view.libraryPoemEdited':        { en: 'Based on {author}, “{title}”, from {site}.', fr: 'D’après {author}, «\u00a0{title}\u00a0», tiré de {site}.' },
@@ -1041,6 +1044,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// Composed from parts so EN and FR share one structure; the two-item
 	// join is language-specific (EN "a and b", FR "a ni b": "sans X ni Y").
 	'analysis.broad.body':         { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées.' },
+	// RATIFIED by Dann 2026-11-10 (row 166): the broad note for a voice that has only placeholders; its last sentence says what the forecast uses.
+	'analysis.broad.body.generic': { en: 'Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast uses placeholder values for your voice type.', fr: 'Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision repose sur des valeurs par défaut pour votre type de voix.' },
 	'analysis.broad.itemRange':    { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
 	'analysis.broad.itemPassaggio': { en: 'positional passaggio flags',   fr: 'le signalement des notes de *passaggio*' },
 	'analysis.broad.join':         { en: 'and',                          fr: 'ni' },
@@ -1476,6 +1481,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    migrated verbatim from the old inline WITHHELD_COPY object) ──────
 	'profile.subtitleNamed': { en: 'Formant profile: a map of {voice}\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de la voix \u00ab\u00a0{voice}\u00a0\u00bb' },
 	'profile.subtitleYours': { en: 'Formant profile: a map of your voice\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de votre voix' },
+	// QUEUE row 166, RATIFIED by Dann 2026-11-10 (12:54 to 12:59): printed in place of the two above when the voice has only placeholder values (`markup/subtitle.ts`).
+	'profile.subtitlePlaceholder': { en: 'Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de formants\u00a0: valeurs par défaut pour le type générique {voiceType}, pas encore vos propres résonances.' },
 	'profile.count.1': { en: 'One', fr: 'Une' },
 	'profile.count.2': { en: 'Two', fr: 'Deux' },
 	'profile.count.3': { en: 'Three', fr: 'Trois' },
@@ -1872,9 +1879,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.footnote.tessitura': { en: 'Tessitura by Pacheco’s method: the span from the lowest to the highest pitch sung for at least half as long as the longest-sung pitch. Alberto José Vieira Pacheco, “Angelica Catalani’s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559.', fr: 'Tessiture selon la méthode de Pacheco\u00a0: l\u2019étendue de la hauteur la plus grave à la hauteur la plus aiguë chantée au moins la moitié du temps de la hauteur la plus longuement chantée. Alberto José Vieira Pacheco, “Angelica Catalani\u2019s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559. [\u00ab\u00a0La voix d\u2019Angelica Catalani selon une méthode d\u2019analyse statistique\u00a0\u00bb.]' },
 	// Printed by nothing since QUEUE row 50 (2026-10-08: Pacheco 2013 verified); kept for a future unverified source.
 	'insights.citationUnverified': { en: 'CITATION NOT YET VERIFIED',    fr: 'CITATION NON ENCORE VÉRIFIÉE' },
-	'insights.method.typed':       { en: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date}, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
-	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, repeats taken.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises.' },
+	'insights.method.typed':       { en: 'Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date}, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
+	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Méthode\u00a0: aucune voix n\u2019a été mesurée, donc rien sur cette page n\u2019en est calculé.' },
+	// QUEUE row 166. RATIFIED: the lede, Dann 2026-11-09 16:13, cut to its first sentence by Dann 2026-11-10 12:56 (pinned in `ratified-lines.test.ts`). It is shown only for a
+	// voice declared as one of five types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the label the identity line prints.
+	'insights.generic.lede':       { en: 'These findings use placeholder values for a {voiceType}, not your specific voice.', fr: 'Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier.' },
+	// RATIFIED by Dann 2026-11-10 (row 166): the method line for those findings, which names no calibration and no date.
+	'insights.method.generic.typed':   { en: 'Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
+	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values for your voice type and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.' },
 	'insights.silence.unmeasured': { en: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:', fr: 'Aucune voix n\u2019a été mesurée, donc cette page ne compare pas cette pièce avec votre voix. Retenu jusqu\u2019à ce qu\u2019une voix le soit\u00a0:' },
 	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Toute observation sur les endroits où cette pièce pourrait solliciter votre voix.' },
 	'insights.silence.noScore':    { en: 'No score has been added, so there is nothing of this piece to measure.', fr: 'Aucune partition n\u2019a été ajoutée, il n\u2019y a donc rien de cette pièce à mesurer.' },
@@ -2036,6 +2049,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    both languages (`OPEN.md`, "ROW 69's FRENCH AND THE WORD \"SUNG\""); the
 	//    comment's second sentence, the remedy, RATIFIED 19:49.
 	'placeholder.comment': { en: 'This finding rests on a placeholder value for {vowel}. To replace it with your own value, sample {vowel} in vocal fry.', fr: 'Ce constat repose sur une valeur par défaut pour la voyelle {vowel}. Pour obtenir votre propre valeur, échantillonnez {vowel} en friture vocale.' },
+	// Step 8 (Dann's rule of 2026-11-10 12:56, one gentle pointer to personalizing per page): for a voice with only placeholder values the page and the lede already point to sampling, so a finding keeps the line above less its remedy sentence. Text: `placeholder.comment`, character for character, less its last sentence.
+	'placeholder.comment.generic': { en: 'This finding rests on a placeholder value for {vowel}.', fr: 'Ce constat repose sur une valeur par défaut pour la voyelle {vowel}.' },
 	'placeholder.turns.one': { en: 'The turn of {vowels} rests on a placeholder value, so its bar is drawn dashed.', fr: 'Le changement de timbre de la voyelle {vowels} repose sur une valeur par défaut\u00a0: sa barre est tracée en pointillé.' },
 	'placeholder.turns.many': { en: 'The turns of {vowels} rest on placeholder values, so their bars are drawn dashed.', fr: 'Les changements de timbre des voyelles {vowels} reposent sur des valeurs par défaut\u00a0: leurs barres sont tracées en pointillé.' },
 	// Row 21, « plis vocaux » by the ruling of 04:12.
@@ -2498,6 +2513,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'inspector.spot.reconstitution': { en: 'Spot reconstitution',        fr: 'Reconstitution ponctuelle' },
 	'inspector.resetWordAria':     { en: 'Reset word to engine defaults', fr: 'Réinitialiser le mot aux valeurs par défaut' },
 	'inspector.editGlossAria':     { en: 'Edit gloss',                   fr: 'Modifier la glose' },
+	// Row 179, RATIFIED by Dann 2026-11-03 20:21 (brief `brief-code-gloss-language-and-reuse_r3_2026-11-03.md`, "Strings"). Seated exactly.
+	'inspector.glossOffer':        { en: 'Use for this word in your other songs', fr: 'Utiliser pour ce mot dans vos autres chants' },
+	'inspector.glossOfferDismiss': { en: 'Not now',                      fr: 'Pas maintenant' },
+	'inspector.glossOfferDone':    { en: 'Used in your other songs',     fr: 'Utilisée dans vos autres chants' },
+	'inspector.glossOfferFailed':  { en: 'Could not be kept on this device', fr: 'Impossible de la conserver sur cet appareil' },
+	'inspector.glossFromGlossary': { en: 'From your other songs',        fr: 'De vos autres chants' },
+	'inspector.glossStopUsing':    { en: 'Stop using',                   fr: 'Ne plus utiliser' },
 	'select.noResults':            { en: 'No results',                   fr: 'Aucun résultat' },
 	'select.resultCount.one':      { en: '{n} result',                   fr: '{n} résultat' },
 	'select.resultCount.many':     { en: '{n} results',                  fr: '{n} résultats' },

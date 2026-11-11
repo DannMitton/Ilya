@@ -1044,3 +1044,23 @@ Was (21:2x, superseded by the paragraph above): **THE ONE THING (2026-10-20 21:2
 
 ---
 
+
+
+## Moved from STATE.md at the close of 2026-11-10 (verbatim): the STATUS lines of 2026-11-09
+
+STATUS 2026-11-09 22:3x (desk). SIX CODE SESSIONS LIVE, every lane from cloud-lane-38 534d9981 (integration, gates measured, ship paste with Dann):
+- 2026-11-09 23:1x desk: ledger r1 (docs/sessions/ledger-open-work_r1_2026-11-09.md) settled: 56 tracker lines marked closed in the trackers (QUEUE rows 71, 82, 91, 103, 111, 113, 120 to 123, 125, 126, 129, 133, 134, 141 to 144, 147 to 149, 153, 154, 157, 159, 161, 162, 170 to 173, 175, 176, 180; QUEUE-archive rows 5, 13, 47, 48, 82 to 84, 86 to 88; STATE N.157, N.186, N.195, N.196; SCHEDULE H54, H65, H72, H74; SEQUENCE line 31). Not closed in a tracker line: L8, L10, L24 (INBOX and OPEN only, untouched), L56 (OWED only), L32 (INBOX I1, closed by Dann 23:04, untouched).
+- cloud-lane-39 row 166 INSIGHTS from a voice type: https://claude.ai/code/session_01Vk7wM55vdg3gcDddWTK5ME
+- cloud-lane-40 B0 syllables by vowel: https://claude.ai/code/session_01Vk7wM5RjVcvhVZXSoPaWVW
+- cloud-lane-41 row 182 the 89 arias (data r3 md5 76dd8f46): https://claude.ai/code/session_01Vk7wM5hbEmwAvPNXiWFJDq
+- cloud-lane-42 saved word marks: https://claude.ai/code/session_01Vk7wM89eSvnTPJra2HUhXs
+- cloud-lane-43 barline and time signature (Rebar never cut): https://claude.ai/code/session_01Vk7wM49LUqbeRtHkHP1h75
+Inputs for 41 to 43: briefs + docs/sessions/review-fable-tuesday-briefs_r1_2026-11-10.md + ~/Downloads/_desk-2026-11-09/rulings-2026-11-09-evening.md (OPEN.md from 20:44 on).
+Helper running: Sonnet poem harvest from the checklists (/home/claude/poem-harvest/). Docs scrub of the dissertation's author done (backup ~/Downloads/_desk-2026-11-09/backup-docs-before-scrub.tgz). Still to brief: the rhyme matcher and the -кий Inspector note (strings owed). Owed to Dann: the ledger of all open work (desk, tonight). The freeze follows the work (Dann 22:06).
+
+STATUS 2026-11-09 21:1x (desk): row 166 Code session STARTED on cloud-lane-39 from cloud-lane-38 (https://claude.ai/code/session_01Vk7wM55vdg3gcDddWTK5ME, Sonnet 5.5). Integration session at step 12 (Playwright). CI 22:38Z on e4eeaa9: e2e desktop failed (3 annotations), test/check/build passed; the 11 known reds are red on Shane too. Next lanes: B0 (40), arias brief r2 then lane 41, word-marks persistence brief then lane, rhyme+note lane after strings.
+
+STATUS 2026-11-09 20:2x (desk): Dann 20:22, the arias (row 182) and the era control ship with the share. Freeze moves to WEDNESDAY 2026-11-11 NOON. Running: Sonnet aria cleanup (/home/claude/aria-r2/, cap 400k); Fable review of the era design (docs/sessions/proposal-period-and-tradition_r1_2026-11-09.md, brief-fable-period-and-tradition_r1_2026-11-09.md; cap 350k). Tuesday: Code lanes for row 166 (39), B0 (40), row 182 (41), era (42). Dann 20:23: the desk scoped his 19:40 question to code and deferred row 182 itself; every deferral is now listed to him and is his call. Correction recorded.
+
+STATUS 2026-11-09 20:1x (desk): integration steps 1 to 9 on cloud-lane-38 (tip e4eeaa96), all eight gates green, 11 Playwright reds all red on Shane. Step 10 (show upload.banner.reader on every scan; blurb for the гк rule) sent 19:4x. Fable three-brief review filed (docs/sessions/review-fable-three-briefs_r1_2026-11-09.md, md5 c0452ad0). r2 briefs filed: row 166 (md5 a1f83b50, lane 39, strings ratified 16:13) and B0 (md5 25a2ef5c, lane 40, gate 389, cue and voice 2 counted not skipped). Row 182 (arias) waits past the share: data not ready (DESK DEFAULT). Next: step 10 report, desk measures eight gates on the merged tree, one ship paste to Dann.
+

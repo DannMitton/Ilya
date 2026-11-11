@@ -10,6 +10,7 @@
 import { t, type Language } from '$lib/i18n';
 import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 import { voiceTypePrint } from '$lib/voice/voiceTypes';
+import type { AdaptedProfile } from '$lib/analysis/analyze-score-adapter';
 
 export interface IdentityInput {
 	voiceName?: string;
@@ -30,4 +31,29 @@ export function composeIdentityLine({ voiceName, voiceUpdatedAt, measured, voice
 	// One pass, so a name or an Other label that contains "{date}" prints as typed.
 	const vars: Record<string, string> = { voice, voiceType: label ?? '', date: date ?? '' };
 	return withType.replace(/\{(voice|voiceType|date)\}/g, (_, k: string) => vars[k]);
+}
+
+/**
+ * QUEUE row 166: whether the findings rest on the singer's own samples. A voice
+ * with only placeholders (`generic`) has numbers, so `completeness.formants` is
+ * true, but it is not calibrated: the identity line says so, not "calibrated".
+ */
+export function restsOnSamples(adapted: Pick<AdaptedProfile, 'completeness' | 'generic'>): boolean {
+	return adapted.completeness.formants && !adapted.generic;
+}
+
+/**
+ * The line above the findings for a voice that has only placeholders (RATIFIED,
+ * Dann 2026-11-09 16:13), or null for any other voice. `{voiceType}` is the label
+ * the identity line prints, lower-cased as it prints it.
+ */
+export function genericLede(generic: boolean, voiceType: VoiceTypeChoice | undefined, language: Language): string | null {
+	const label = generic ? voiceTypePrint(voiceType, language) : undefined;
+	return label ? t('insights.generic.lede', language).replace('{voiceType}', label) : null;
+}
+
+/** The Method endnote's string key: a placeholder voice names no calibration and no date (RATIFIED by Dann 2026-11-10; the strings are pinned in `ratified-lines.test.ts`). */
+export function methodLineKey(o: { generic: boolean; typed: boolean }): string {
+	const kind = o.typed ? 'typed' : 'untyped';
+	return o.generic ? `insights.method.generic.${kind}` : `insights.method.${kind}`;
 }

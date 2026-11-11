@@ -35,9 +35,9 @@ const byLatin = (latin: string): PersonEntry => {
 };
 
 describe('the French column', () => {
-	it('carries a French form on 49 of the 62 entries', () => {
-		expect(ALL).toHaveLength(62);
-		expect(ALL.filter((e) => e.french !== undefined)).toHaveLength(49);
+	it('carries a French form on 51 of the 64 entries (row 182 added two composers, both with a French form)', () => {
+		expect(ALL).toHaveLength(64);
+		expect(ALL.filter((e) => e.french !== undefined)).toHaveLength(51);
 	});
 
 	it('spells every French form as "Surname, Given", like the English', () => {
@@ -226,5 +226,33 @@ describe('selecting from the dropdown writes English, whatever the language', ()
 		onchange(formatForPaper(mussorgsky));
 		expect(formatEntryForDisplay(mussorgsky, 'fr')).toBe('Modeste Moussorgski (1839–1881)');
 		expect(written).toEqual(['Modest Mussorgsky (1839–1881)']);
+	});
+});
+
+describe('row 182: the two composers the arias add, and every aria’s composer a key', () => {
+	it('stores the English key and displays the ratified French form (Dann 2026-11-09 22:14)', () => {
+		const verstovsky = byLatin('Verstovsky, Alexei');
+		expect(verstovsky.cyrillic).toBe('Верстовский, Алексей');
+		expect(verstovsky.dates).toBe('1799–1862');
+		expect(personNameForDisplay(verstovsky, 'fr')).toBe('Verstovski, Alexeï');
+		const napravnik = byLatin('Napravnik, Eduard');
+		expect(napravnik.cyrillic).toBe('Направник, Эдуард');
+		expect(napravnik.dates).toBe('1839–1916');
+		expect(personNameForDisplay(napravnik, 'fr')).toBe('Nápravník, Eduard');
+		expect(personNameForDisplay(napravnik, 'en')).toBe('Napravnik, Eduard');
+		expect(formatNameForPaper('Napravnik, Eduard', COMPOSERS, 'fr')).toBe('Eduard Nápravník (1839–1916)');
+	});
+
+	it('keeps the list alphabetized by surname', () => {
+		const surnames = COMPOSERS.map((c) => c.latin.split(',')[0]);
+		expect(surnames).toEqual([...surnames].sort((a, b) => a.localeCompare(b, 'en')));
+	});
+
+	it('every composer the library names for an aria is a COMPOSERS key', () => {
+		const lib = JSON.parse(readFileSync(fileURLToPath(new URL('../../../../tools/poems/library.json', import.meta.url)), 'utf8'));
+		const keys = new Set(COMPOSERS.map((c) => c.latin));
+		const unmatched = new Set<string>();
+		for (const e of lib.entries) if (e.kind === 'libretto' && !keys.has(e.provenance.composer)) unmatched.add(e.provenance.composer);
+		expect([...unmatched]).toEqual([]);
 	});
 });

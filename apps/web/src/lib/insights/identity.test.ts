@@ -4,7 +4,9 @@
  * line is exactly the line before the slice.
  */
 import { describe, expect, it } from 'vitest';
-import { composeIdentityLine } from './identity';
+import { composeIdentityLine, genericLede, methodLineKey, restsOnSamples } from './identity';
+import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
+import { t } from '$lib/i18n';
 import { OTHER } from '$lib/voice/voiceTypes';
 
 const base = { voiceName: 'Dann', voiceUpdatedAt: '2026-09-12T10:00:00.000Z', measured: true };
@@ -40,5 +42,56 @@ describe('voice type slice A: the identity line', () => {
 	it('prints a typed label containing a placeholder as typed', () => {
 		const voiceType = { voiceType: 'bass', voiceTypeSpecific: OTHER, voiceTypeOther: '{date}' };
 		expect(composeIdentityLine({ ...base, voiceType, language: 'en' })).toBe('INSIGHTS for Dann · {date} · calibrated 2026-09-12');
+	});
+});
+
+/* QUEUE row 166: a declared type with nothing sung computes as a measured voice, but is not calibrated. */
+describe('row 166: the identity head of a placeholder voice', () => {
+	const un = (type: string | undefined) => buildVoiceProfileSnapshot({}, undefined, undefined, undefined, type);
+
+	it('a generic baritone prints the uncalibrated form, with a date on hand, never "calibrated"', () => {
+		const adapted = un('baritone');
+		expect(adapted.generic).toBe(true);
+		expect(adapted.completeness.formants).toBe(true);
+		const input = { voiceName: 'Dann', voiceUpdatedAt: '2026-09-12T10:00:00.000Z', voiceType: { voiceType: 'baritone' }, measured: restsOnSamples(adapted) };
+		expect(composeIdentityLine({ ...input, language: 'en' })).toBe('INSIGHTS for Dann · baritone · not calibrated');
+		expect(composeIdentityLine({ ...input, language: 'fr' })).toBe('APERÇUS pour Dann · baryton · sans calibration');
+	});
+
+	it('a voice with a sung vowel is still calibrated, and a voice with nothing is still not', () => {
+		const sung = buildVoiceProfileSnapshot({ u: { f1: 330, f2: 800, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user' } as never }, undefined, undefined, undefined, 'baritone');
+		expect(restsOnSamples(sung)).toBe(true);
+		expect(restsOnSamples(un('contralto'))).toBe(false);
+		expect(restsOnSamples(un(undefined))).toBe(false);
+	});
+
+	it('the method line names no calibration for a placeholder voice, and keeps today\'s keys otherwise', () => {
+		expect(methodLineKey({ generic: false, typed: true })).toBe('insights.method.typed');
+		expect(methodLineKey({ generic: false, typed: false })).toBe('insights.method.untyped');
+		for (const lang of ['en', 'fr'] as const) {
+			for (const typed of [true, false]) {
+				const line = t(methodLineKey({ generic: true, typed }), lang);
+				expect(line).not.toMatch(/\{date\}|calibration/i);
+			}
+		}
+	});
+
+	it('the lede: shown only for a placeholder voice, with the identity line\'s own label (EN lower-cased, FR as printed)', () => {
+		const labels: Array<[string, string, string]> = [
+			['soprano', 'soprano', 'soprano'],
+			['mezzo-soprano', 'mezzo-soprano', 'mezzo-soprano'],
+			['tenor', 'tenor', 'ténor'],
+			['baritone', 'baritone', 'baryton'],
+			['bass', 'bass', 'basse'],
+		];
+		for (const [id, en, fr] of labels) {
+			expect(genericLede(true, { voiceType: id }, 'en')).toBe(
+				`These findings use placeholder values for a ${en}, not your specific voice.`,
+			);
+			expect(genericLede(true, { voiceType: id }, 'fr')).toBe(
+				`Ces constats reposent sur des valeurs par défaut pour le type ${fr}, et non sur votre voix en particulier.`,
+			);
+		}
+		expect(genericLede(false, { voiceType: 'baritone' }, 'en')).toBeNull();
 	});
 });
