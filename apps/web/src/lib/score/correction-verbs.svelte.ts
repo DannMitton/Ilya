@@ -58,6 +58,8 @@ import {
 } from './entry';
 import type { UndoNote } from './undo-history.svelte';
 import type { BarlineVerb } from './barline-marks';
+import type { BarMap } from './rebar';
+import { adoptBarMarks } from './entry-marks';
 import type { HeldBar, Through } from './time-signature';
 
 /** The clef in force, as `arrivalPitch` and `middleLine` read it. */
@@ -85,6 +87,8 @@ export interface CorrectionVerbsDeps {
 	pushUndo: (note: UndoNote) => void;
 	/** The Barline verb the held entry offers, with the corrections it would write (`BarLayer.barlineVerb`); absent: none. */
 	barlineVerb?: (id: string) => BarlineVerb | null;
+	/** Reading bars and song bars (`BarLayer.bars`): an entry's `entered.measureIndex` is written in reading bars (`entry-marks.ts`); absent: the same. */
+	bars?: () => BarMap;
 	/** The time signature card's reads and writes (`BarLayer.heldBar`, `.signatureWrite`); absent: none. */
 	timeSignature?: {
 		held(id: string): HeldBar | null;
@@ -338,6 +342,14 @@ export class CorrectionVerbs {
 	 * enters a rest. The brief is the later instruction and it is the one
 	 * built; the divergence is named in the memo rather than buried.
 	 */
+	/** Enter at the bar: the measure the entry names is in READING bars, and at the head of a bar the singer made it takes over the bar's marks (`entry-marks.ts`, B5). */
+	#enter(c: Cursor, spec: { base: NoteBase; dots: number; pitch?: Pitch }): { map: CorrectionMap; id: string } {
+		const bars = this.#d.bars?.();
+		const reading = c.kind === 'gap' && c.measureIndex !== undefined && bars ? { ...c, measureIndex: bars.toReading(c.measureIndex) } : c;
+		const out = enterEntry(this.#d.corrections(), reading, spec);
+		return c.kind === 'gap' ? { ...out, map: adoptBarMarks(out.map, this.#d.line(), c, out.id) } : out;
+	}
+
 	handleDurationCell = (base: NoteBase): void => {
 		this.armedBase = base;
 		const c = this.#d.cursor();
@@ -345,11 +357,7 @@ export class CorrectionVerbs {
 			this.handleBase(base);
 			return;
 		}
-		const { map, id } = enterEntry(this.#d.corrections(), c, {
-			base,
-			dots: this.armedDots,
-			pitch: this.arrival,
-		});
+		const { map, id } = this.#enter(c, { base, dots: this.armedDots, pitch: this.arrival });
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.entered' });
 		this.#d.setCorrections(map);
 		this.#d.setCursor({ kind: 'entry', id });
@@ -391,10 +399,7 @@ export class CorrectionVerbs {
 		const c = this.#d.cursor();
 		if (!c) return;
 		if (c.kind === 'gap') {
-			const { map, id } = enterEntry(this.#d.corrections(), c, {
-				base: this.armedBase,
-				dots: this.armedDots,
-			});
+			const { map, id } = this.#enter(c, { base: this.armedBase, dots: this.armedDots });
 			this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.rest' });
 			this.#d.setCorrections(map);
 			this.#d.setCursor({ kind: 'entry', id });

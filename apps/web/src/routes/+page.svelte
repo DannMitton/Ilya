@@ -876,6 +876,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		word: (key) => t(key, language),
 		pushUndo,
 		barlineVerb: (id) => layer.barlineVerb(id),
+		bars: () => layer.bars,
 		timeSignature: { held: (id) => layer.heldBar(id), write: (id, sig, through, rebar) => layer.signatureWrite(id, sig, through, rebar) },
 	});
 	barlineUi.attach({ mode: () => verbs.barline?.kind ?? null, act: () => verbs.handleBarline() });
