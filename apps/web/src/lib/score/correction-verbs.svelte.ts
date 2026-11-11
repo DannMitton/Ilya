@@ -345,7 +345,15 @@ export class CorrectionVerbs {
 	/** Enter at the bar: the measure the entry names is in READING bars, and at the head of a bar the singer made it takes over the bar's marks (`entry-marks.ts`, B5). */
 	#enter(c: Cursor, spec: { base: NoteBase; dots: number; pitch?: Pitch }): { map: CorrectionMap; id: string } {
 		const bars = this.#d.bars?.();
-		const reading = c.kind === 'gap' && c.measureIndex !== undefined && bars ? { ...c, measureIndex: bars.toReading(c.measureIndex) } : c;
+		let reading: Cursor = c;
+		if (c.kind === 'gap' && c.measureIndex !== undefined && bars) {
+			/* A song bar can span a reading barline, so `toReading` (the reading bar the song bar BEGINS in) is wrong for a note entered after an anchor
+			   that sits in the song bar's later part. Where the anchor stands in the held song bar, write no measure: absent means the anchor's bar
+			   (`correction.ts`, `entered.measureIndex`). Convert only at the head caret (lane 47, Fable's amendment 1). */
+			const anchor = c.after === null ? undefined : this.#d.line().find((e) => e.id === c.after);
+			if (anchor && anchor.measureIndex === c.measureIndex) reading = { kind: 'gap', after: c.after };
+			else reading = { ...c, measureIndex: bars.toReading(c.measureIndex) };
+		}
 		const out = enterEntry(this.#d.corrections(), reading, spec);
 		return c.kind === 'gap' ? { ...out, map: adoptBarMarks(out.map, this.#d.line(), c, out.id) } : out;
 	}
