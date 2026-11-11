@@ -100,3 +100,11 @@ Test, `rebar-notes.test.ts`: a deleted quarter in read bar 3 carrying `barline: 
 
 - A deleted record whose next standing entry is the held opener or the entry at the end of the scope: left alone by design (the opener keeps its own marks, and the scope's end is outside the clear), not tested.
 - A deleted hand-entered record: covered by the same walk, not tested.
+
+## Step 6: Amendment 8, `rebarNotesInForce` removed (DESK DEFAULT)
+
+Removed `rebarNotesInForce` from `apps/web/src/lib/score/rebar-notes.ts` (it was the last export, with its comment), its import from `rebar-notes.test.ts`, and its test ("Rebar again with the signature already in force…"). `git grep rebarNotesInForce -- apps packages` finds nothing. `src/lib/score`: 75 files, 1320 passed (one test fewer than step 5). `pnpm ratchets` OK.
+
+## What I could not establish (step 6)
+
+- `svelte-check` was not run for this step alone; it runs on the merged tip in step 8.

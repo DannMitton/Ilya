@@ -272,10 +272,3 @@ export function rebarNotes(
 	}
 	return next;
 }
-
-/** Re-bars with no change to the signature: the same fill from the held bar, to the next change. For the card's "Rebar the notes" with the signature already in force. */
-export function rebarNotesInForce(read: ParsedScore, line: VocalLineEvent[], map: CorrectionMap, heldId: string): CorrectionMap | null {
-	const held = heldBar(read, line, map, heldId);
-	if (!held) return null;
-	return rebarNotes(read, line, map, heldId, { beats: held.signature.beats, beatType: held.signature.beatType }, held.mine?.through ?? 'next');
-}

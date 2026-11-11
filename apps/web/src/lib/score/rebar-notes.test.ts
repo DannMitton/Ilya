@@ -6,7 +6,7 @@ import { applyCorrections, withCorrection, type CorrectionMap } from './correcti
 import { canTie, isEnteredId, measureFill } from './entry';
 import { rebar } from './rebar';
 import { syllableTargetIds } from './pairings';
-import { notatable, rebarNotes, rebarNotesInForce } from './rebar-notes';
+import { notatable, rebarNotes } from './rebar-notes';
 import { setSignature } from './time-signature';
 
 async function load(name: string, edit: (xml: string) => string = (x) => x): Promise<ParsedScore> {
@@ -234,20 +234,6 @@ describe('Rebar the notes (QUEUE row 138, T2)', () => {
 		// a deleted record OUTSIDE the scope keeps its barline
 		const outside = rebarNotes(s, pre(s, { [inBar(s.vocalLine, 1)[0].id]: { deleted: true, barline: 'before' } }), { [inBar(s.vocalLine, 1)[0].id]: { deleted: true, barline: 'before' } }, inBar(s.vocalLine, 3)[0].id, sig, 'end')!;
 		expect(outside[inBar(s.vocalLine, 1)[0].id]).toEqual({ deleted: true, barline: 'before' });
-	});
-
-	it('Rebar again with the signature already in force fills from the held bar to the next change, after a length was fixed inside the scope', async () => {
-		const s = await load('time-signature-barlines-wrong');
-		const once = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
-		// she fixes a misread length inside the scope: the half note that opens read bar 4 becomes a quarter, so every later barline is off by one quarter
-		const target = inBar(s.vocalLine, 3)[0].id;
-		const fixed = withCorrection(once, target, { base: 'quarter', dots: 0 });
-		expect(fills(s, fixed).some((x) => x !== null)).toBe(true);
-		const again = rebarNotesInForce(s, pre(s, fixed), fixed, s.vocalLine[0].id)!;
-		expect(again).not.toBeNull();
-		const ok = fills(s, again);
-		// every bar but the last that holds the shortened remainder adds up; the music is one quarter shorter and nothing was invented
-		expect(ok.slice(0, ok.length - 1).every((x) => x === null)).toBe(true);
 	});
 
 	it('refuses a pair that is not a time signature, and an entry that is not there', async () => {
