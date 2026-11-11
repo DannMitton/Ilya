@@ -33,7 +33,9 @@ function enterAfter(s: ParsedScore, map: CorrectionMap, after: string, songBar: 
 		pushUndo: () => {}, bars: () => r.bars,
 	});
 	verbs.handleDurationCell('quarter');
-	const entered = cursor && (cursor as Cursor).kind === 'entry' ? (cursor as { id: string }).id : '';
+	const now = (): Cursor | null => cursor;
+	const at = now();
+	const entered = at && at.kind === 'entry' ? at.id : '';
 	const after2 = rebar(s, applyCorrections(s.vocalLine, corrections), corrections);
 	return { entered, line: after2.line, map: corrections };
 }

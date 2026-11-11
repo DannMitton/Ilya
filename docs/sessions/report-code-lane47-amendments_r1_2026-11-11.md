@@ -108,3 +108,70 @@ Removed `rebarNotesInForce` from `apps/web/src/lib/score/rebar-notes.ts` (it was
 ## What I could not establish (step 6)
 
 - `svelte-check` was not run for this step alone; it runs on the merged tip in step 8.
+
+## Step 7: the merge
+
+`git merge origin/Shane` (`47284e24`, after `64d9f08f`), commit `a5513cba`. Exactly the two expected conflicts, each one hunk, and no others:
+- `apps/web/src/lib/i18n.ts:19-23`, the header total: set to **1,219** (HEAD said 1,205, Shane 1,200). `i18n-index.test.ts` passes, 5 of 5.
+- `apps/web/src/routes/+page.svelte:2318-2322`, the attach line: Shane's, which carries `metadata: { get: () => doc.metadata, set: (m) => handleMetadataChange(m) }` on `poemOffer.attach`, with `line: () => correctedLine` replaced by `line: () => layer.preLine, readingLabel: (l) => layer.readingLabelOfLabel(l)`. Both are present in the merged line.
+
+## Step 8: gates and Playwright on the merged tip
+
+Gates on `a5513cba` (run on the Mac), then one fix:
+
+| gate | command | baseline (`68cfb9c4`) | merged tip |
+|---|---|---|---|
+| 1 | `pnpm test:phonology` | 456 | 456 passed |
+| 2 | `pnpm test:dictionary` | 248 | 248 passed |
+| 3 | `pnpm --filter @ilya/web check` | 0 errors, 12 warnings | 1 error on first run (see below), then 0 errors, 12 warnings (5 files) |
+| 4 | `pnpm --filter @ilya/web test` | 4796 passed, 1 skipped (266 files) | 5189 passed, 1 skipped (280 files) |
+| 5 | `pnpm --filter @ilya/score-parser test` | 785 passed, 5 skipped | 785 passed, 5 skipped |
+| 6 | `pnpm test:blurb` | 168 | 168 passed |
+| 7 | `pnpm test:integration` | 125 | 151 passed |
+| 8 | `pnpm ratchets` | OK (719 files) | OK (743 files) |
+
+The gate 3 error was mine: a cast in `entry-after-rebar.test.ts` (step 1's test) that `svelte-check` rejected. Fixed in the commit that carries this report (a narrowing through a function instead of a cast); the file's three tests still pass and `svelte-check` is 0 errors, 12 warnings. Gates 4 and the others were run before that fix; only that test file changed after them.
+
+The merged gate 4 and 7 counts are higher than the baseline because Shane's own work arrived with the merge, not because of this lane.
+
+Playwright, run by `pnpm dev` on `localhost:5173`, `apps/web`:
+
+| project | specs | result |
+|---|---|---|
+| chromium | `barline-head-caret` 1, `barline-verb` 4, `time-signature-card` 7 | 12 of 12 passed |
+| chromium | `singer-paths` 7 | 6 passed, 1 failed |
+| chromium | `poem-library` 21 | 4 passed, 17 failed |
+| phone | `e2e-phone/time-signature-card` 1 | 1 passed |
+
+The 18 failures are not from this lane:
+- **`poem-library`, 17 of 21.** Every failure waits for `poem-library-card` after a paste, and the page snapshot shows the Lyrics box empty. The tests paste with `Control+V`; on this Mac's Chromium that does not paste and `Meta+V` does (a probe on a plain textarea: `Control+V` gave `""`, `Meta+V` gave `"hello"`). A temporary copy of the spec with `Control+V` replaced by `Meta+V` passed **21 of 21** against the merged tip, so the merged `poemOffer.attach` line works. The copy was deleted; no spec was changed.
+- **`singer-paths`, 1 of 7**, "Learn and Guide open…": the spec expects the French title "La diction lyrique russe pour chanteurs"; the page shows "…pour chanteuses et chanteurs". `origin/Shane`'s own i18n holds the longer title and its own spec the shorter, and neither file differs between `origin/Shane` and this branch (`git diff origin/Shane HEAD` on both specs is empty).
+- The phone project has no `poem-library` or `singer-paths` spec (its `testDir` is `e2e-phone`), so "both projects" for those two means chromium only. I ran the one phone time signature spec.
+
+## Step 9: the amendments, with where and how they were tested
+
+Line numbers are at the tip, `rebar-notes.ts` unless given; the earlier step sections cite lines as they stood then.
+
+| amendment | where | test |
+|---|---|---|
+| 1, an entry after a rebar or a join | `correction-verbs.svelte.ts:346-358` (`#enter`; `anchor` at `:353`) | `entry-after-rebar.test.ts`: mid-bar after a 3/4 rebar; after a Remove-barline join; head caret unchanged |
+| 2, triplets | `:178-200` (group head), `:220-224` (no `notatable` for an entry that stays one chunk of its own length) | `rebar-notes.test.ts:105` (fits whole), `:124` (crosses a barline) |
+| 4, a refused rebar | `:226` (`return signed`); comment `:86-93` | `rebar-notes.test.ts:146` |
+| 3, where it stops | `:152-166` (scope), `:180` (fill resets at a blocked barline), `:238-243` (no mark at a blocked barline) | `rebar-notes.test.ts:173` (2/4 at measure 4, "to the end"), `:183` (key change at measure 4, "to the next change"), `:192` (key change mid-bar), `:206` (her later signature); `:162` still passes |
+| 5, a deleted note's barline | `:93-117` (`withoutDeletedBarlines`), called at `:234` | `rebar-notes.test.ts:223` |
+| 8, `rebarNotesInForce` | removed | its test removed |
+
+Each new test was shown to fail with its code taken out: amendment 1 (2 of 3 fail), 2 (both fail), 3 (the three brief-or-added tests fail; `:206` passes either way), 5 (fails). Amendment 4's test failed before the change (null). Amendment 1's old code was restored from `git show HEAD:` and put back from a copy; nothing was stashed or checked out. One-vowel-per-note: `syllableTargetIds` unchanged is asserted in the triplet tests, the two scope tests, and the mid-bar key-change test; it was not added to the pre-existing eight-bar test.
+
+Branch `cloud-lane-47`, one commit per step plus this one, all pushed; no pull request; `Shane` and `main` not pushed. The working tree in `~/Desktop/ilya-rewrite` is now on `cloud-lane-47`, not `Shane`.
+
+## What I could not establish (steps 7 to 9)
+
+- **Playwright baselines.** I did not run the 18 failing tests on `68cfb9c4` or on `origin/Shane`. The causes above (a keyboard modifier on macOS, and a title mismatch present on Shane) rest on the failure text, a probe, a passing `Meta+V` rerun, and a diff of the specs, not on a baseline run. The lane's own handover counted eleven baseline failures on Linux (chromium 7, phone 4); I did not run the rest of either project, so I have no figure to compare.
+- **`singer-paths` was not run with `Meta+V`**; its one failure is a title mismatch, not a paste.
+- **The whole Playwright suite**, either project: not run, only the specs the brief names.
+- **Beams, ties, and how a rebarred triplet or a divided bar is drawn:** data only, no screenshot taken.
+- **A real reader's output:** every fixture is synthetic, as before.
+- **The `OPEN.md` rulings** (22:31, 22:32): not on this branch; I used the brief's quotation.
+- **`jump` tokens and accompaniment events in a divided bar:** not probed (outside these amendments).
+- **Whether the merge touches the Vercel preview or any deployed build:** nothing was deployed; everything ran on localhost.
