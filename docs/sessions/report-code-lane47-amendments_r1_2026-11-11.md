@@ -59,3 +59,14 @@ One reading of the brief to flag: in (a), a member that sits mid-bar loses the r
 
 - A group whose members are not contiguous in `line` (a rest or another voice between them) is outside what I tested.
 - How the rebarred triplet is drawn: data only.
+
+## Step 3: Amendment 4, a refused rebar (ruled 22:31)
+
+`apps/web/src/lib/score/rebar-notes.ts:182-184`: where a crossing piece has no note value (`notatable` returns null), `rebarNotes` returns `signed` (the `setSignature` result, `:98`) instead of null. The doc comment at `:86-93` is corrected: null only where `setSignature` refuses. The other nulls (`:99`, `:101`, `:103`, now shifted a few lines) are left as the brief says. Nothing changed in `correction-verbs.svelte.ts` or `bar-layer.ts`; one `pushUndo` and one `setCorrections` keep it one Undo step. No new string.
+
+Test, `rebar-notes.test.ts`: one lone triplet quarter in place of bar 2's two quarters in `time-signature-barlines-wrong` (the fill is then off by a sixth and a later note crosses a barline with an un-notatable remainder). `rebarNotes` equals `setSignature` for the same arguments (deep equality), the signature record is there with `through: 'end'`, and no entered remainder and no `barline` mark were written. Before the change this returned null (the first run of the test, with only the comment edited, failed with `expected null to deeply equal {...}`). `src/lib/score`: 1316 passed.
+
+## What I could not establish (step 3)
+
+- That "one Undo step" holds in the page: argued from the single `pushUndo` and `setCorrections` in `handleTimeSignature`, not exercised there.
+- Which real song would meet this branch: the fixture is synthetic.

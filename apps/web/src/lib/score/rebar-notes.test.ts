@@ -7,6 +7,7 @@ import { canTie, isEnteredId, measureFill } from './entry';
 import { rebar } from './rebar';
 import { syllableTargetIds } from './pairings';
 import { notatable, rebarNotes, rebarNotesInForce } from './rebar-notes';
+import { setSignature } from './time-signature';
 
 async function load(name: string, edit: (xml: string) => string = (x) => x): Promise<ParsedScore> {
 	const xml = edit(readFileSync(new URL(`../omr/fixtures/${name}.musicxml`, import.meta.url), 'utf8'));
@@ -140,6 +141,22 @@ describe('Rebar the notes (QUEUE row 138, T2)', () => {
 		expect(fl).toHaveLength(8);
 		expect(total(r.line)).toBeCloseTo(total(s.vocalLine), 10);
 		expect(syllableTargetIds(r.line)).toEqual(syllableTargetIds(s.vocalLine));
+	});
+
+	it('a rebar that cannot be done (a crossing piece shorter than a 64th) still applies the signature and keeps the barlines: it is what setSignature writes', async () => {
+		// one lone triplet quarter (1/6) in place of bar 2's two quarters: the fill is then off by a sixth, so a later note crosses a barline with a remainder no note value holds
+		const s = await load('time-signature-barlines-wrong', (x) => triplet(x, 2, 0, ['A']));
+		expect(s.vocalLine.filter((e) => e.duration.tuplet)).toHaveLength(1);
+		const sig = { beats: 3, beatType: 4 };
+		const held = s.vocalLine[0].id;
+		const only = setSignature(s, s.vocalLine, {}, held, sig, 'end')!;
+		expect(only).not.toBeNull();
+		const map = rebarNotes(s, s.vocalLine, {}, held, sig, 'end');
+		expect(map).toEqual(only);
+		// the signature is there, and no rebar was written: no entered remainder, no barline mark
+		expect(map![held].timeSignature).toMatchObject({ beats: 3, beatType: 4, through: 'end' });
+		expect(Object.keys(map!).filter(isEnteredId)).toEqual([]);
+		expect(Object.values(map!).some((c) => c.barline !== undefined)).toBe(false);
 	});
 
 	it('"to the next change" ends at the reading\'s own next change of signature, and the bars after it keep theirs', async () => {

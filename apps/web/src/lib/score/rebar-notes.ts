@@ -85,8 +85,10 @@ function withBarlineMark(map: CorrectionMap, id: string, value: 'before' | 'none
 }
 
 /**
- * The corrections after the singer changes the held bar's time signature AND re-bars the notes, or null where the signature is not one or
- * nothing can be counted. `line` is the corrected line before the layer (`BarLayer.preLine`).
+ * The corrections after the singer changes the held bar's time signature AND re-bars the notes, or null where `setSignature` refuses (the signature
+ * is not one, or the held bar is not there). Where the notes cannot be re-barred (a piece shorter than a 64th crosses a barline) it returns what
+ * `setSignature` returns: the signature applies and the barlines stay, in the same one Undo step (Dann 2026-11-10 22:31). `line` is the corrected
+ * line before the layer (`BarLayer.preLine`).
  */
 export function rebarNotes(
 	read: ParsedScore,
@@ -178,7 +180,8 @@ export function rebarNotes(
 				continue;
 			}
 			const values = notatable(chunk.length);
-			if (!values) return null;
+			// A crossing piece shorter than a 64th has no note value: the rebar cannot be done, but the signature still applies and the barlines stay (Dann 2026-11-10 22:31).
+			if (!values) return signed;
 			values.forEach((v, k) => parts.push({ ...v, opens: chunk.opens && k === 0 }));
 		}
 		plan.set(i, parts);
