@@ -131,3 +131,4 @@ r3, written by the desk (Opus) 2026-10-20 about 02:50, at Dann's request of 02:4
 - 2026-11-08 23:1x (evening desk): row 181 arm J measured (371 vs 389, refuted; report-desk-row181-armJ-row-floor_r1_2026-11-08.md); design r3 written; row 182 (poem library arias) briefed.
 
 - 2026-11-09 01:5x (night desk): row 181 arm J2 measured (388 at K=4 and K=6 vs 389, refuted; report-desk-row181-armJ2-scaled-floor_r1_2026-11-08.md); next, the B0 and B0g Code brief without rank 2.
+- 2026-11-10 21:2x (Opus desk): shipped row 181 B0 and B0g `31a3f55f` (report-code-row181-b0-step0 to step6_r1), row 179 `8fb0ffc6` (report-code-row179-step0 to step4_r1), row 166 `b7030de1` (report-code-row166-step0 to step9_r1), row 184 word marks `1f1bf1c6` (report-code-word-marks-step0 to step5_r1). Row 182 and row 138 (lane 43) next; row 183 (poem load) briefed.
