@@ -221,6 +221,26 @@ export function provenanceFault(e) {
 }
 
 /**
+ * THE TRAIL A POEM MUST CARRY (lane 45, step 1; Fable's amendment 16 of the harvest brief). A poem's rights trail was recorded and
+ * never read: the build refuses a poem whose `rightsHolderDates[1]` (the death year of the rights holder, the translator where there is
+ * one) is not a whole year of 1971 or earlier, and a poem whose `provenance` holds a key outside `POEM_PROVENANCE_KEYS`, as
+ * `PROVENANCE_KEYS` does for a libretto. The repository is public, so no field may name a working pass. The 14 poems that
+ * predate the harvest carry no `provenance` and pass.
+ */
+export const LAST_RIGHTS_HOLDER_DEATH_YEAR = 1971;
+export const POEM_PROVENANCE_KEYS = [
+	'retrieved', 'editionNamedOnPage', 'authorDates', 'translatorDates', 'rightsTrail', 'subpages', 'sourcePrintsYo', 'sourceNote', 'matchedBy', 'hygiene',
+];
+
+/** The first fault in a poem's rights dates and provenance, or null. */
+export function poemTrailFault(e) {
+	const died = Array.isArray(e.rightsHolderDates) ? e.rightsHolderDates[1] : undefined;
+	if (!Number.isInteger(died) || died > LAST_RIGHTS_HOLDER_DEATH_YEAR) return `"rightsHolderDates[1]" is ${JSON.stringify(died)}, not a year of ${LAST_RIGHTS_HOLDER_DEATH_YEAR} or earlier`;
+	for (const k of Object.keys(e.provenance ?? {})) if (!POEM_PROVENANCE_KEYS.includes(k)) return `"provenance.${k}" is not a field a poem carries`;
+	return null;
+}
+
+/**
  * THE OPERA OBJECT of a libretto entry, mapped from its `provenance`: [shipped key, provenance key]. `composer` is a `COMPOSERS` key
  * (English "Surname, Given"); `character*` is the role whose lines the text holds; `number` is the number's English name as the
  * provenance records it in `role` ("Yaroslavna's lament"), named for what it holds; `voice` is the voice type; `literarySource` is
@@ -288,6 +308,9 @@ export function shipEntry(e) {
 		if (furniture) throw new Error(`library entry ${e.id}: "textModern" holds furniture: ${furniture}`);
 		const bad = provenanceFault(e);
 		if (bad) throw new Error(`library entry ${e.id}: ${bad}`);
+	} else {
+		const trail = poemTrailFault(e);
+		if (trail) throw new Error(`library entry ${e.id}: ${trail}`);
 	}
 	const { letters, offsets } = letterStream(e.textModern);
 	return {

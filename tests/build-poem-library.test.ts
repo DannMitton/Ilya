@@ -5,6 +5,9 @@ import crypto from 'node:crypto';
 import {
 	buildPoemFile,
 	decodeOffsets,
+	LAST_RIGHTS_HOLDER_DEATH_YEAR,
+	POEM_PROVENANCE_KEYS,
+	poemTrailFault,
 	encodeOffsets,
 	letterStream,
 	librettoFault,
@@ -23,6 +26,8 @@ import {
 const root = path.resolve(__dirname, '..');
 const read = (p: string) => fs.readFileSync(path.join(root, p), 'utf-8');
 const library = JSON.parse(read('tools/poems/library.json'));
+/** The 14 poems the library held before the harvest (lane 45), by id. */
+const FIRST_FOURTEEN = ['0127a63ffe', '21568f1c1e', '298e556367', '2ba9040d8c', '307359f1d3', '36f13ef599', '419e40dd3c', '56eb0aac20', '6b51c54db7', '7b9b662ad7', '87376c1710', 'c1964bc3bd', 'c8f80d24ec', 'cb6998d772'];
 
 describe('poem library build: the letter fold (reference_sw_match.py)', () => {
 	it('lowercases, folds й ё ѣ і ѳ ѵ, drops ъ, and keeps only а-я', () => {
@@ -108,12 +113,14 @@ describe('poem library build: an entry and the file', () => {
 		expect(a.name).toBe(`dictionary.poems.${a.hash}.json`);
 	});
 
-	it('ships the 14 poems of 13 works, and the 89 arias of 29 operas (the brief says 12 poems; the library holds 13 distinct `work` values)', () => {
+	it('ships the 238 poems of 237 works (the 14 of the first library and the 224 harvested), and the 89 arias of 29 operas', () => {
 		const file = JSON.parse(buildPoemFile(library).text);
 		const poems = file.entries.filter((e: { kind?: string }) => e.kind === undefined);
-		expect(poems).toHaveLength(14);
-		expect(new Set(poems.map((e: { work: string }) => e.work)).size).toBe(13);
+		expect(poems).toHaveLength(238);
+		expect(new Set(poems.map((e: { work: string }) => e.work)).size).toBe(237);
 		expect(file.entries.filter((e: { kind?: string }) => e.kind === 'libretto')).toHaveLength(89);
+		// The 14 first poems are still there, by id, and the 224 harvested ones follow the 89 arias.
+		expect(poems.slice(0, 14).map((e: { id: string }) => e.id)).toEqual(FIRST_FOURTEEN);
 	});
 });
 
@@ -356,10 +363,10 @@ describe('poem library build: the provenance a libretto carries (row 182, step 3
 		expect([count('Russian Wikisource'), count('operalib.eu'), count('FEB')]).toEqual([20, 60, 9]);
 	});
 
-	it('the build holds 103 entries of 42 works, and ships every aria with its opera and no provenance', () => {
+	it('the build holds 327 entries of 266 works, and ships every aria with its opera and no provenance', () => {
 		const file = JSON.parse(buildPoemFile(library).text);
-		expect(file.entries).toHaveLength(103);
-		expect(new Set(file.entries.map((e: { work: string }) => e.work)).size).toBe(42);
+		expect(file.entries).toHaveLength(327);
+		expect(new Set(file.entries.map((e: { work: string }) => e.work)).size).toBe(266);
 		const shipped = file.entries.filter((e: { kind?: string }) => e.kind === 'libretto');
 		expect(shipped).toHaveLength(89);
 		for (const e of shipped) {
@@ -382,5 +389,45 @@ describe('poem library build: a libretto may quote a Latin word (row 182, step 9
 		const robert = arias.find((e: { id: string }) => e.id === '67580c48a1');
 		expect(robert.textModern).toContain('benedicite');
 		expect(() => shipEntry(robert)).not.toThrow();
+	});
+});
+
+describe('poem library build: the trail a poem carries (lane 45, step 1)', () => {
+	const poem = library.entries[0]; // one of the 14 first poems: no provenance
+	const harvested = library.entries.find((e: { provenance?: unknown; kind?: string }) => e.provenance && e.kind === undefined);
+
+	it('refuses a poem whose rights holder died after 1971, or whose death year is missing or not a year', () => {
+		expect(LAST_RIGHTS_HOLDER_DEATH_YEAR).toBe(1971);
+		expect(poemTrailFault({ ...poem, rightsHolderDates: [1900, 1971] })).toBeNull();
+		expect(poemTrailFault({ ...poem, rightsHolderDates: [1900, 1972] })).toMatch(/rightsHolderDates/);
+		for (const bad of [[1900, null], [1900, '1950'], [1900, 1950.5], [1900], [], null, undefined]) {
+			expect(poemTrailFault({ ...poem, rightsHolderDates: bad }), JSON.stringify(bad)).toMatch(/rightsHolderDates/);
+		}
+		expect(() => shipEntry({ ...poem, rightsHolderDates: [1900, 1972] })).toThrow(/rightsHolderDates/);
+	});
+
+	it('refuses a poem whose provenance holds a key outside the list, and names the key', () => {
+		expect(POEM_PROVENANCE_KEYS).toEqual(['retrieved', 'editionNamedOnPage', 'authorDates', 'translatorDates', 'rightsTrail', 'subpages', 'sourcePrintsYo', 'sourceNote', 'matchedBy', 'hygiene']);
+		expect(poemTrailFault({ ...poem, provenance: { retrieved: '2026-11-10', rightsTrail: 'x' } })).toBeNull();
+		expect(poemTrailFault({ ...poem, provenance: { harvest: 'r4' } })).toMatch(/provenance\.harvest/);
+		expect(poemTrailFault({ ...poem, provenance: { checklistSongs: [] } })).toMatch(/provenance\.checklistSongs/);
+		expect(() => shipEntry({ ...poem, provenance: { poetIdentifiedBy: 'r2' } })).toThrow(/poetIdentifiedBy/);
+	});
+
+	it('the 14 first poems carry no provenance and pass; every harvested poem passes both checks', () => {
+		expect(library.entries.slice(0, 14).filter((e: { kind?: string }) => e.kind === undefined).every((e: { provenance?: unknown }) => e.provenance === undefined)).toBe(true);
+		expect(harvested).toBeTruthy();
+		let poems = 0;
+		for (const e of library.entries) {
+			if (e.kind === 'libretto') continue;
+			poems += 1;
+			expect(poemTrailFault(e), e.id).toBeNull();
+		}
+		expect(poems).toBe(238);
+	});
+
+	it('does not apply to a libretto, whose trail is its own', () => {
+		const aria = library.entries.find((e: { kind?: string }) => e.kind === 'libretto');
+		expect(() => shipEntry(aria)).not.toThrow();
 	});
 });
