@@ -198,6 +198,16 @@ describe('resolveSource: a stored source found again in the library', () => {
 		expect(r.firstLine).toBe(r.entry.incipit); // the id is gone: the offsets belong to an entry that is not this one
 	});
 
+	it('row 182: never names another aria of the opera when the stored aria\'s id is gone, but still finds an aria by its id', () => {
+		const opera = { composer: 'Tchaikovsky, Pyotr', operaRu: 'Пиковая дама', operaEn: 'Pique Dame', characterRu: 'Герман', characterEn: 'Hermann', number: "Hermann's arioso", voice: 'tenor', librettists: 'Модест Ильич Чайковский', literarySource: 'Pushkin, Пиковая дама' };
+		const aria = (id: string, title: string): PoemEntry => ({ ...koltsov, id, work: 'opera001', title, incipit: title, kind: 'libretto', opera });
+		const lib = { ...library, entries: [...library.entries, aria('aria000001', 'Я имени её не знаю'), aria('aria000002', 'Прости, прелестное создание')] };
+		const gone = { id: 'aria00gone', work: 'opera001', poemHash: library.hash, start: 0, end: 20, answered: true, edited: false };
+		expect(resolveSource(gone, lib)).toBeNull(); // the caller falls back as it does for a work the library no longer has
+		expect(resolveSource({ ...gone, id: 'aria000002' }, lib)!.entry.title).toBe('Прости, прелестное создание');
+		// a poem's work still follows (the test above): only a libretto is exempt
+	});
+
 	it('is null when the library has no entry of the work (the caller falls back to the ordinary line)', () => {
 		expect(resolveSource(source({ work: 'gone', id: 'gone' }), library)).toBeNull();
 		expect(resolveSource(source(), { entries: [], hash: library.hash })).toBeNull();
@@ -303,8 +313,12 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 	});
 
 	it('every stanza start of every library entry: no joined line begins with a proper noun (the list the desk reviewed is pinned)', () => {
-		// The stanza starts of 14 entries (a dating block is not one: it is never a passage's start); some joined lines begin with a capital. Each is an ordinary word at the start of a verse
+		// The stanza starts of the library's entries (a dating block is not one: it is never a passage's start); some joined lines begin with a capital. Each is an ordinary word at the start of a verse
 		// line. If the library grows and a new one appears, this fails so that it is read, not lowered by habit.
+		// ROW 182 READ THE CAPITALS of the 89 arias, twice: at step 3 and again at step 9, after the arias were corrected to the character's unbroken run
+		// (Безотрадный, Все, Всегда, Да, Доля, Ко, Кто, Монахини, Не, Нет, О, Песни, Прости, Солнце, Спи, Ты, Хочу, Чары). Every one is an ordinary word opening a verse
+		// line. The proper noun the first reading found, «Марта» (the nurse in Иоланта), left with the correction. Each aria is one stanza, so no card cuts
+		// it to a passage and `passageLine` never joins its lines (the next test pins that).
 		const firsts = new Set<string>();
 		let starts = 0;
 		for (const e of library.entries) {
@@ -325,8 +339,12 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 				}
 			}
 		}
-		expect(starts).toBe(77);
-		expect([...firsts].sort()).toEqual(['Борону', 'В', 'Дайте', 'Из', 'Мать-земля', 'Много', 'На', 'Накормлю', 'Ночью', 'Ну', 'Останься', 'Пашней', 'С', 'Я']);
+		expect(starts).toBe(166); // 77 from the 14 poems, one for each of the 89 arias
+		expect([...firsts].sort()).toEqual(['Безотрадный', 'Борону', 'В', 'Все', 'Всегда', 'Да', 'Дайте', 'Доля', 'Из', 'Ко', 'Кто', 'Мать-земля', 'Много', 'Монахини', 'На', 'Накормлю', 'Не', 'Нет', 'Ночью', 'Ну', 'О', 'Останься', 'Пашней', 'Песни', 'Прости', 'С', 'Солнце', 'Спи', 'Ты', 'Хочу', 'Чары', 'Я']);
+	});
+
+	it('row 182: every aria is one stanza, so none is ever cut to a passage (a passage line joined across lines never reaches an aria)', () => {
+		for (const e of library.entries) if (e.kind === 'libretto') expect(bodyStanzas(e.textModern), e.id).toHaveLength(1);
 	});
 });
 

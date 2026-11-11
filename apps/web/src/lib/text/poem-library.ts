@@ -22,11 +22,44 @@
  * is the same offline and spares an online start a 131 KB fetch it already has.
  */
 
-/** One poem as the build ships it. `at` is delta-coded; `decodeOffsets` restores the offsets. */
+/**
+ * The opera a libretto entry's text comes from, as the build maps it (`scripts/build-poem-library.mjs`, `OPERA_FIELDS`).
+ * Display and fill only: nothing here reaches the matcher.
+ */
+export interface PoemOpera {
+	/** A `COMPOSERS` key: English "Surname, Given". */
+	composer: string;
+	operaRu: string;
+	operaEn: string;
+	/** The role whose lines the text holds. */
+	characterRu: string;
+	characterEn: string;
+	/** The number's English name as the data records it ("Yaroslavna's lament"). */
+	number: string;
+	/** The voice type: soprano, mezzo-soprano, tenor, baritone, or bass. */
+	voice: string;
+	/** The librettists, as the entry's `author` prints them (Russian, full names). */
+	librettists: string;
+	/** The work behind the libretto. Recorded, never substituted: the libretto is the text that fills POEM. */
+	literarySource: string;
+}
+
+/**
+ * One poem as the build ships it. `at` is delta-coded; `decodeOffsets` restores the offsets.
+ *
+ * `kind` is absent for a poem and 'libretto' for an aria's text, which also carries `opera`. A libretto is the opera's authored
+ * text, so it fills POEM like a poem does; the literary source behind it is recorded in `opera`, not stood in for it.
+ */
 export interface PoemEntry {
 	id: string;
-	/** Entries of one work share it (a pre-reform and a modern text of one poem). */
+	/**
+	 * Entries of one work share it (a pre-reform and a modern text of one poem). For a libretto the work is the OPERA (first 8 hex
+	 * of the MD5 of its NFC Russian title), so two arias of one opera never compete in the ranking, and "Not this poem" declines
+	 * by (song, work): declining one aria declines that opera for that song.
+	 */
 	work: string;
+	kind?: 'poem' | 'libretto';
+	opera?: PoemOpera;
 	title: string;
 	incipit: string;
 	/** The full name, as the data prints it. */
@@ -87,9 +120,20 @@ export function decodeOffsets(at: readonly number[]): number[] {
 
 const isText = (v: unknown): v is string => typeof v === 'string' && v !== '';
 
+const OPERA_TEXT_KEYS = ['composer', 'operaRu', 'operaEn', 'characterRu', 'characterEn', 'number', 'voice', 'librettists', 'literarySource'] as const;
+
+/** A libretto carries every opera field as text; a poem carries none. */
+function kindFits(e: PoemEntry): boolean {
+	if (e.kind === undefined || e.kind === 'poem') return e.opera === undefined;
+	if (e.kind !== 'libretto') return false;
+	const o = e.opera as Partial<Record<(typeof OPERA_TEXT_KEYS)[number], unknown>> | undefined;
+	return !!o && typeof o === 'object' && OPERA_TEXT_KEYS.every((k) => isText(o[k]));
+}
+
 function isEntry(v: unknown): v is PoemEntry {
 	const e = v as PoemEntry | null;
 	if (!e || typeof e !== 'object') return false;
+	if (!kindFits(e)) return false;
 	if (![e.id, e.work, e.title, e.incipit, e.author, e.textModern].every(isText)) return false;
 	if (e.translator !== null && !isText(e.translator)) return false;
 	if (!e.source || !isText(e.source.site) || !isText(e.source.url)) return false;

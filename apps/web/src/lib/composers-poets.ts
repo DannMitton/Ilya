@@ -18,7 +18,7 @@ export interface PersonEntry {
 	 * always holds the English form, whatever the interface language.
 	 *
 	 * Source: the French Wikipedia article title, patronymic dropped,
-	 * one authority for all 62 entries (ruled 2026-08-23). Absent on the
+	 * one authority for all 62 entries as first listed (row 182 added two composers by Dann's ruling of 2026-11-09 22:14) (ruled 2026-08-23). Absent on the
 	 * thirteen entries French spells the same as English, or that French
 	 * Wikipedia has no article for.
 	 */
@@ -39,6 +39,7 @@ export const COMPOSERS: PersonEntry[] = [
 	{ latin: 'Kabalevsky, Dmitri', cyrillic: 'Кабалевский, Дмитрий', dates: '1904–1987', french: 'Kabalevski, Dmitri' },
 	{ latin: 'Medtner, Nikolai', cyrillic: 'Метнер, Николай', dates: '1880–1951', french: 'Medtner, Nikolaï' },
 	{ latin: 'Mussorgsky, Modest', cyrillic: 'Мусоргский, Модест', dates: '1839–1881', french: 'Moussorgski, Modeste' },
+	{ latin: 'Napravnik, Eduard', cyrillic: 'Направник, Эдуард', dates: '1839–1916', french: 'Nápravník, Eduard' },
 	{ latin: 'Prokofiev, Sergei', cyrillic: 'Прокофьев, Сергей', dates: '1891–1953', french: 'Prokofiev, Sergueï' },
 	{ latin: 'Rachmaninoff, Sergei', cyrillic: 'Рахманинов, Сергей', dates: '1873–1943', french: 'Rachmaninov, Sergueï' },
 	{ latin: 'Rimsky-Korsakov, Nikolai', cyrillic: 'Римский-Корсаков, Николай', dates: '1844–1908', french: 'Rimski-Korsakov, Nikolaï' },
@@ -51,6 +52,7 @@ export const COMPOSERS: PersonEntry[] = [
 	{ latin: 'Tchaikovsky, Pyotr', cyrillic: 'Чайковский, Пётр', dates: '1840–1893', french: 'Tchaïkovski, Piotr' },
 	{ latin: 'Titov, Nikolai', cyrillic: 'Титов, Николай', dates: '1800–1875' },
 	{ latin: 'Varlamov, Alexander', cyrillic: 'Варламов, Александр', dates: '1801–1848', french: 'Varlamov, Alexandre' },
+	{ latin: 'Verstovsky, Alexei', cyrillic: 'Верстовский, Алексей', dates: '1799–1862', french: 'Verstovski, Alexeï' },
 ];
 
 export const POETS: PersonEntry[] = [

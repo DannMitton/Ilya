@@ -96,7 +96,7 @@ describe('isPoemLibrary: the check a file passes before the app trusts it', () =
 		expect(m.poemFiles).toHaveLength(1);
 		const file = JSON.parse(readFileSync(join(DATA, m.poemFiles[0]), 'utf8'));
 		expect(isPoemLibrary(file)).toBe(true);
-		expect(file.entries).toHaveLength(14);
+		expect(file.entries).toHaveLength(103); // 14 poems and 89 arias (row 182)
 		for (const e of file.entries as PoemEntry[]) {
 			const offsets = decodeOffsets(e.at);
 			expect(offsets.every((o) => /[А-Яа-яЁёЙйѢѣІіѲѳѴѵ]/.test(e.textModern[o]))).toBe(true);
@@ -162,5 +162,40 @@ describe('loadPoemLibrary', () => {
 		const deps = io({ setStored: vi.fn(() => new Promise<boolean>((r) => (release = () => r(true)))) });
 		expect(await loadPoemLibrary(manifest, deps)).toEqual({ ...library(), hash: 'deadbeef' });
 		release();
+	});
+});
+
+describe('isPoemLibrary: a libretto entry (row 182, step 1)', () => {
+	const opera = {
+		composer: 'Tchaikovsky, Pyotr',
+		operaRu: 'Пиковая дама',
+		operaEn: 'Pique Dame',
+		characterRu: 'Елецкий',
+		characterEn: 'Yeletsky',
+		number: "Yeletsky's aria",
+		voice: 'baritone',
+		librettists: 'Модест Ильич Чайковский',
+		literarySource: 'Pushkin, Пиковая дама',
+	};
+
+	it('accepts a libretto that carries every opera field, and an entry with no kind', () => {
+		expect(isPoemLibrary(library(entry({ kind: 'libretto', opera })))).toBe(true);
+		expect(isPoemLibrary(library(entry({ kind: 'poem' })))).toBe(true);
+		expect(isPoemLibrary(library(entry()))).toBe(true);
+	});
+
+	it('refuses a libretto with no opera, or an opera field missing or empty', () => {
+		expect(isPoemLibrary(library(entry({ kind: 'libretto' })))).toBe(false);
+		for (const k of Object.keys(opera)) {
+			expect(isPoemLibrary(library(entry({ kind: 'libretto', opera: { ...opera, [k]: '' } }))), k).toBe(false);
+			const { [k as keyof typeof opera]: _gone, ...rest } = opera;
+			expect(isPoemLibrary(library(entry({ kind: 'libretto', opera: rest as never }))), k).toBe(false);
+		}
+	});
+
+	it('refuses an opera on a poem, and a kind that is neither', () => {
+		expect(isPoemLibrary(library(entry({ opera })))).toBe(false);
+		expect(isPoemLibrary(library(entry({ kind: 'poem', opera })))).toBe(false);
+		expect(isPoemLibrary(library(entry({ kind: 'aria' as never, opera })))).toBe(false);
 	});
 });

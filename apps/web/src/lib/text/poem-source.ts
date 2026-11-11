@@ -161,10 +161,15 @@ export interface ResolvedSource {
  * never stored. The entry is the one with the stored `id`; where a later library has dropped that id, a modern entry of
  * the same `work`, else any entry of it; where it has no entry of the work, null (the caller falls back to `poemLine`).
  * The stored offsets are trusted only for the file they were cut from (`poemHash`).
+ *
+ * A LIBRETTO IS NEVER SUBSTITUTED (row 182, step 2). The work-level fallback was written for a pre-reform and a modern text of
+ * one poem. For an opera the work holds many arias, so where the stored aria's id is gone (a corrected first line changes the id)
+ * the card would name another aria of the opera. Where the work's entries are libretti, the fallback answers null.
  */
 export function resolveSource(source: PoemSource, library: { entries: readonly PoemEntry[]; hash?: string }): ResolvedSource | null {
 	const same = library.entries.find((e) => e.id === source.id);
 	const ofWork = library.entries.filter((e) => e.work === source.work);
+	if (!same && ofWork[0]?.kind === 'libretto') return null;
 	const entry = same ?? ofWork.find((e) => e.spelling === 'modern') ?? ofWork[0];
 	if (!entry) return null;
 	const fits = library.hash === source.poemHash && entry.id === source.id && source.end <= entry.textModern.length;

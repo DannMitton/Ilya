@@ -29,11 +29,14 @@ const RATIFIED_TABLE: Record<string, [string, string]> = {
 	'intake.poemLibrary.undo': ['Undo', 'Annuler'],
 	// D3: the site's name per language, looked up by the data's own string (`text/poem-site.ts`)
 	'intake.poemLibrary.site.russianWikisource': ['Russian Wikisource', 'Wikisource en russe'],
+	// Row 182, ratified by Dann 2026-11-09 22:14: the two other sites the aria texts come from (the French name of the second is coined)
+	'intake.poemLibrary.site.operalib': ['operalib.eu', 'operalib.eu'],
+	'intake.poemLibrary.site.feb': ['the Fundamental Electronic Library (feb-web.ru)', 'la Bibliothèque électronique fondamentale (feb-web.ru)'],
 };
 
 describe('the poem library strings', () => {
-	it('holds the twelve keys of the brief and the site name of D3, in both languages, exactly as ratified', () => {
-		expect(Object.keys(RATIFIED_TABLE)).toHaveLength(13);
+	it('holds the twelve keys of the brief, the site names of D3 and of row 182, in both languages, exactly as ratified', () => {
+		expect(Object.keys(RATIFIED_TABLE)).toHaveLength(15);
 		for (const [key, [en, fr]] of Object.entries(RATIFIED_TABLE)) {
 			expect(t(key, 'en'), key).toBe(en);
 			expect(t(key, 'fr'), key).toBe(fr);
@@ -67,12 +70,24 @@ describe('D3: the site is named in the interface language, by the data’s own s
 		expect(siteName('Gutenberg Russian', 'en')).toBe('Gutenberg Russian');
 		expect(siteName('Gutenberg Russian', 'fr')).toBe('Gutenberg Russian');
 	});
-	it('the library has one site, and the table lists it (so no entry prints the English name in French)', () => {
+	it('prints the two sites of the arias in both languages, each by its own ratified line (row 182)', () => {
+		expect(siteName('operalib.eu', 'en')).toBe('operalib.eu');
+		expect(siteName('operalib.eu', 'fr')).toBe('operalib.eu');
+		expect(siteName('FEB', 'en')).toBe('the Fundamental Electronic Library (feb-web.ru)');
+		expect(siteName('FEB', 'fr')).toBe('la Bibliothèque électronique fondamentale (feb-web.ru)');
+		// the sentence around it: "From {site}." and « Tiré de {site}. », with no elision
+		expect(t('intake.poemLibrary.cardSource', 'fr').replace('{site}', siteName('FEB', 'fr'))).toBe('Tiré de la Bibliothèque électronique fondamentale (feb-web.ru).');
+	});
+
+	it('every site the library holds is listed in the table (so no entry prints a data key as its name where a name is ratified)', () => {
 		const sites = new Set<string>();
 		const lib = JSON.parse(readFileSync(join(__dirname, '../../../../../tools/poems/library.json'), 'utf8'));
 		for (const e of lib.entries) sites.add(e.source.site);
-		expect([...sites]).toEqual(['Russian Wikisource']);
-		for (const s of sites) expect(siteName(s, 'fr')).not.toBe(s);
+		for (const s of sites) {
+			for (const lang of ['en', 'fr'] as const) expect(hasString(`intake.poemLibrary.site.${{ 'Russian Wikisource': 'russianWikisource', 'operalib.eu': 'operalib', FEB: 'feb' }[s as string]}`, lang), `${s} ${lang}`).toBe(true);
+		}
+		expect(siteName('Russian Wikisource', 'fr')).not.toBe('Russian Wikisource');
+		expect(siteName('FEB', 'fr')).not.toBe('FEB');
 	});
 });
 
