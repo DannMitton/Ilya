@@ -146,11 +146,11 @@ describe('every fixture scores as the reference does (expected_r2.txt, three dec
 
 	/**
 	 * The reference scores every work; the matcher scores the `SHORTLIST` sharing the most trigrams (the library has 42 works, so the
-	 * shortlist engages). The TOP work and its score are the reference's on all twelve rows. A second work outside the shortlist is
-	 * not seen, so the matcher's second is never above the reference's, and on one row (U4, a song with no library poem) it is a
-	 * different work. That row does not fill either way (its top is below the floor), and the test pins it.
+	 * shortlist engages). A second work outside the shortlist is not seen. At step 6 that made U4's second a different work from the
+	 * reference's; after the arias were corrected (step 9) the shortlist holds it, and all twelve rows agree with the reference on top,
+	 * second, and margin. If a row ever differs again, the matcher's second must not be above the reference's, and the row must not fill.
 	 */
-	const SECOND_DIFFERS = ['U4'];
+	const SECOND_DIFFERS: string[] = [];
 
 	for (const e of expected) {
 		it(`${e.name}: ${e.letters} letters, top work ${e.top} ${e.topScore}, second ${e.second} ${e.secondScore}, margin ${e.margin}`, () => {

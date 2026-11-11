@@ -183,7 +183,7 @@ describe('poem library build: the text check (step 8, part 3)', () => {
 		expect(textFault('Строка\n\n8 декабря 1840\nМосква')).toBeNull();
 		expect(textFault('Строка\n\nФевраль 1837')).toBeNull();
 		expect(textFault('Строка\n\n1830')).toBeNull();
-		for (const e of library.entries) expect(textFault(e.textModern), e.id).toBeNull();
+		for (const e of library.entries) expect(textFault(e.textModern, e.kind === 'libretto'), e.id).toBeNull();
 		expect(() => buildPoemFile(library)).not.toThrow();
 	});
 
@@ -367,5 +367,20 @@ describe('poem library build: the provenance a libretto carries (row 182, step 3
 			expect(e, e.id).not.toHaveProperty('provenance');
 			expect(e, e.id).not.toHaveProperty('textEdition');
 		}
+	});
+});
+
+describe('poem library build: a libretto may quote a Latin word (row 182, step 9)', () => {
+	const arias = library.entries.filter((e: { kind?: string }) => e.kind === 'libretto');
+	it('lets a whole Latin word through for a libretto, never one glued to a Russian word, and keeps the strict rule for a poem', () => {
+		const quoted = 'С своими "benedicite" и "amen,"';
+		expect(textFault(quoted, true)).toBeNull();
+		expect(textFault(quoted)).toBe('a Latin letter');
+		expect(textFault('покаянiем строка', true)).toMatch(/glued/);
+		expect(textFault('Ibо строка', true)).toMatch(/glued/);
+		// Robert's aria in Иоланта quotes «benedicite» and «amen» as printed
+		const robert = arias.find((e: { id: string }) => e.id === '67580c48a1');
+		expect(robert.textModern).toContain('benedicite');
+		expect(() => shipEntry(robert)).not.toThrow();
 	});
 });

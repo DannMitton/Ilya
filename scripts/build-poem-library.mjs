@@ -111,9 +111,22 @@ export const TEXT_FAULTS = [
 	['a digit glued to a letter', /\d\p{L}|\p{L}\d/u],
 ];
 
+/**
+ * A LIBRETTO MAY QUOTE A LATIN WORD (row 182, step 9). Robert's aria in «Иоланта» sings «benedicite» and «amen» as printed. The Latin-letter
+ * rule is there to catch a Latin homoglyph inside a Russian word, so for a libretto it is narrowed to a Latin letter touching a Cyrillic one.
+ * A poem keeps the strict rule.
+ */
+export const GLUED_LATIN = /\p{Script=Cyrillic}\p{Script=Latin}|\p{Script=Latin}\p{Script=Cyrillic}/u;
+
 /** The first fault in a text, or null. A line number is a line of one to three digits and a space or U+00A0 and a letter, with no four-digit year (a dating line such as «8 декабря 1840» has one and passes). */
-export function textFault(text) {
-	for (const [name, re] of TEXT_FAULTS) if (re.test(text)) return name;
+export function textFault(text, latinWordsAllowed = false) {
+	for (const [name, re] of TEXT_FAULTS) {
+		if (name === 'a Latin letter' && latinWordsAllowed) {
+			if (GLUED_LATIN.test(text)) return 'a Latin letter glued to a Russian word';
+			continue;
+		}
+		if (re.test(text)) return name;
+	}
 	for (const line of text.split('\n')) {
 		if (/^\d{1,3}[ \u00a0]\p{L}/u.test(line) && !/\d{4}/.test(line)) return `a line number (${JSON.stringify(line.slice(0, 20))})`;
 	}
@@ -194,7 +207,7 @@ export function librettoFault(text, operaRu) {
  * `pageNamesTextContributors`, `rightsTrail`, `rightsResolution`) stays: it is the record rule 5 asks for.
  */
 export const PROVENANCE_KEYS = [
-	'composer', 'opera_ru', 'opera_en', 'character_ru', 'character_en', 'formerTitle', 'role', 'voice', 'literary_source', 'text_kind', 'notes',
+	'composer', 'opera_ru', 'opera_en', 'character_ru', 'character_en', 'formerTitle', 'role', 'voice', 'literary_source', 'text_kind', 'notes', 'correction',
 	'actScene', 'url_opera_en', 'url_opera_ru', 'url_people', 'pageNamesTextContributors', 'contributorDates', 'rightsTrail', 'rightsResolution',
 ];
 export const LIBRETTO_SITES = ['Russian Wikisource', 'operalib.eu', 'FEB'];
@@ -268,7 +281,7 @@ export function shipEntry(e) {
 	if (state !== 'verified' && state !== 'unverified') throw new Error(`library entry ${e.id}: "verification.state" must be "verified" or "unverified"`);
 	if (e.kind !== undefined && e.kind !== 'poem' && e.kind !== 'libretto') throw new Error(`library entry ${e.id}: "kind" is "${e.kind}"`);
 	const libretto = e.kind === 'libretto';
-	const fault = textFault(e.textModern);
+	const fault = textFault(e.textModern, libretto);
 	if (fault) throw new Error(`library entry ${e.id}: "textModern" holds ${fault}`);
 	if (libretto) {
 		const furniture = librettoFault(e.textModern, e.provenance?.opera_ru);

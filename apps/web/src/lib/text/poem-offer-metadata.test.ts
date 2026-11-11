@@ -21,7 +21,7 @@ const fixture = (name: string): string => readFileSync(join(ROOT, 'tools/poems/f
 
 const PIMEN = entry('a478c50e41'); // Mussorgsky, Boris Godunov; the librettist is Pushkin, who is in POETS
 const TATYANA = entry('b43e7a4fc6'); // Tchaikovsky, Eugene Onegin; two librettists, so no Poet
-const SLIPPERS = entry('221d579b08'); // Tchaikovsky, Cherevichki; the librettist is Polonsky, who is in POETS
+const SLIPPERS = entry('221d579b08'); // Tchaikovsky, Cherevichki (the title is the first line exactly as printed, with its punctuation, row 182 step 9); the librettist is Polonsky, who is in POETS
 
 const blank = (): SongMetadata => ({ title: '', composer: '', poet: '', translator: '', opus: '', transcriber: '' });
 
@@ -83,12 +83,12 @@ describe('what a library entry offers to the empty fields (pure)', () => {
 	});
 
 	it('an aria offers its title (the opening words), its composer as the dropdown writes it, and its poet where the librettist is in POETS', () => {
-		expect(entryFields(PIMEN)).toEqual({ title: 'Еще одно, последнее сказанье', composer: 'Modest Mussorgsky (1839–1881)', poet: 'Alexander Pushkin (1799–1837)' });
-		expect(entryFields(SLIPPERS)).toEqual({ title: 'Лютое горюшко, горе моё?', composer: 'Pyotr Tchaikovsky (1840–1893)', poet: 'Yakov Polonsky (1819–1898)' });
+		expect(entryFields(PIMEN)).toEqual({ title: PIMEN.title, composer: 'Modest Mussorgsky (1839–1881)', poet: 'Alexander Pushkin (1799–1837)' });
+		expect(entryFields(SLIPPERS)).toEqual({ title: SLIPPERS.title, composer: 'Pyotr Tchaikovsky (1840–1893)', poet: 'Yakov Polonsky (1819–1898)' });
 	});
 
 	it('leaves Poet empty for two librettists, and for one who is not in POETS: never a Cyrillic string', () => {
-		expect(entryFields(TATYANA)).toEqual({ title: 'Ужель та самая Татьяна', composer: 'Pyotr Tchaikovsky (1840–1893)' });
+		expect(entryFields(TATYANA)).toEqual({ title: TATYANA.title, composer: 'Pyotr Tchaikovsky (1840–1893)' });
 		const arias = library.entries.filter((e) => e.kind === 'libretto');
 		for (const e of arias) expect(entryFields(e).poet ?? '', e.id).not.toMatch(/[А-Яа-яЁё]/);
 		expect(arias.filter((e) => entryFields(e).poet).length).toBe(5); // Pushkin four times, Polonsky once; measured on the 89
@@ -134,7 +134,7 @@ describe('the fill, the decline, and the undo (the controller)', () => {
 		await paste(r, PIMEN.textModern);
 		expect(r.song.poemSource!.id).toBe(PIMEN.id);
 		expect(r.song.publishedPoem).toBe(PIMEN.textModern);
-		expect(r.meta).toEqual({ ...blank(), title: 'Еще одно, последнее сказанье', composer: 'Modest Mussorgsky (1839–1881)', poet: 'Alexander Pushkin (1799–1837)' });
+		expect(r.meta).toEqual({ ...blank(), title: PIMEN.title, composer: 'Modest Mussorgsky (1839–1881)', poet: 'Alexander Pushkin (1799–1837)' });
 		expect(r.writes).toBe(1); // one write through the page's own metadata path
 	});
 
@@ -155,7 +155,7 @@ describe('the fill, the decline, and the undo (the controller)', () => {
 
 	it('leaves Poet empty for an aria with two librettists', async () => {
 		await paste(r, TATYANA.textModern);
-		expect(r.meta.title).toBe('Ужель та самая Татьяна');
+		expect(r.meta.title).toBe(TATYANA.title);
 		expect(r.meta.composer).toBe('Pyotr Tchaikovsky (1840–1893)');
 		expect(r.meta.poet).toBe('');
 	});
@@ -206,14 +206,14 @@ describe('the fill, the decline, and the undo (the controller)', () => {
 		// typing into a field ends nothing about the poem's Undo; the field she typed stays hers
 		r.offer.undo();
 		expect(r.meta.composer).toBe('Someone Else');
-		expect(r.meta.title).toBe('Еще одно, последнее сказанье');
+		expect(r.meta.title).toBe(PIMEN.title);
 	});
 
 	it('keeping the poem keeps the fields, and a later decline is not offered', async () => {
 		await paste(r, PIMEN.textModern);
 		r.offer.keep();
 		r.offer.decline(); // answered: nothing happens
-		expect(r.meta.title).toBe('Еще одно, последнее сказанье');
+		expect(r.meta.title).toBe(PIMEN.title);
 		expect(r.song.poemSource).not.toBeNull();
 	});
 
@@ -222,6 +222,6 @@ describe('the fill, the decline, and the undo (the controller)', () => {
 		r.offer.onPoemEdit(r.song.publishedPoem, r.song.publishedPoem + ' ', 'typing');
 		r.song.publishedPoem += ' ';
 		r.offer.decline(); // answered by the edit
-		expect(r.meta.title).toBe('Еще одно, последнее сказанье');
+		expect(r.meta.title).toBe(PIMEN.title);
 	});
 });
