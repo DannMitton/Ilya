@@ -51,3 +51,16 @@ NOT ESTABLISHED (step 2): how it looks (step 5); svelte-check's warning count af
 The four capital cells per language now read `<td class="gt-cell gt-cursive gt-null">—</td>`: `LearnContent.svelte:350, 554, 566, 578` (French) and `:2391, 2595, 2607, 2619` (English). No `>SVG<` remains in the file; each language has 12 null cursive cells (8 existing plus 4) and 62 drawings. The file is still 4097 lines. Nothing else changed.
 
 NOT ESTABLISHED (step 3): how the `—` looks beside the drawings (step 5).
+
+## Step 4: tests
+
+New `apps/web/src/lib/components/Reading/learn-cursive-glyphs.test.ts`, 197 tests, all passing (run alone). Counts come from the files on disk, nothing typed.
+
+- (a) Both languages, rendered with `svelte/server` and comments stripped as `learn-opening.test.ts` does: no `>SVG<`; `<svg` count equals the file count; the capital cursive cell of each capital with no file (found by listing the files: Й, Ъ, Ы, Ь) is `gt-null` and holds `—`, and its small cell is drawn; the `aria-label`s in the table equal the files' letters, one each.
+- (c) Per file: viewBox y = -3 and height 72; exactly one `<path>` with `fill="currentColor"`.
+- (d) Per file: `role="img"`, and `aria-label` is the capital for `upper`, the small letter for `lower`.
+- (e) Per file: one `<svg`, one `<path`, no `<script`, `on…=`, `href`, or `style`.
+- (f) Every app file is byte-identical to `tools/cursive/r4/svg/`, and the two directories list the same names.
+- Also: the list of letters with no capital file is non-empty and the file count equals lower plus upper.
+
+NOT ESTABLISHED (step 4): that the (a) assertions fail on the pre-change tree (a positive control). I did not run the test against `64d9f08f`; the rules forbid checkout and stash, so I read the assertions instead. The web gate total with the new tests is measured in step 5.
