@@ -89,3 +89,14 @@ A reading to flag: the brief says "'end': the last entry". I stop at her own lat
 
 - A repeat, ending, jump, or rehearsal mark at a blocked barline: they take the same code path as the key change (`mergeBlocked`), but only the key change is exercised.
 - Whether a note that crosses a blocked barline in the READING (a tie across a repeat) is rebarred sensibly: not probed.
+
+## Step 5: Amendment 5, a deleted note's barline
+
+`apps/web/src/lib/score/rebar-notes.ts:86-110` (new `withoutDeletedBarlines`) and its call in the write half (`let next = withoutDeletedBarlines(read, line, signed, start, stop)`). It walks the read line with the deletions undone, the way `effectiveMarks` (`rebar.ts:135-165`) does, and clears `barline` on each deleted record whose mark would carry to a standing entry strictly between the held opener and the end of the scope. The record keeps `deleted: true`. It returns the map untouched when no deleted record carries a barline.
+
+Test, `rebar-notes.test.ts`: a deleted quarter in read bar 3 carrying `barline: 'before'`, inside a 3/4 rebar "to the end": the record is exactly `{ deleted: true }` afterwards, and every bar but the last adds up (the last is not null, a quarter being gone). A deleted record with a barline OUTSIDE the scope (before the held bar) keeps it. With the code removed the test fails at the first assertion (`{ deleted: true, barline: 'before' }`); I did not separately confirm that the bar-sums assertion alone would fail on the old code. `src/lib/score`: 1321 passed.
+
+## What I could not establish (step 5)
+
+- A deleted record whose next standing entry is the held opener or the entry at the end of the scope: left alone by design (the opener keeps its own marks, and the scope's end is outside the clear), not tested.
+- A deleted hand-entered record: covered by the same walk, not tested.

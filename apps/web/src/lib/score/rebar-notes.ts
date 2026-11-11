@@ -21,7 +21,7 @@
  * The seats survive: a note after a tie start takes no syllable (`pairings.ts`), so the syllable stays on the first part.
  */
 import type { Fraction, NoteBase, ParsedScore, VocalLineEvent } from '@ilya/score-parser';
-import { currentPitch, durationFraction, type CorrectionMap, type NoteCorrection } from './correction';
+import { applyCorrections, currentPitch, durationFraction, type CorrectionMap, type NoteCorrection } from './correction';
 import { currentTie, currentType, nextEnteredId } from './entry';
 import { effectiveMarks, mergeBlocked, sameSignature } from './rebar';
 import { heldBar, setSignature, type Through } from './time-signature';
@@ -83,6 +83,35 @@ function withBarlineMark(map: CorrectionMap, id: string, value: 'before' | 'none
 		return others;
 	}
 	return { ...map, [id]: next };
+}
+
+/**
+ * `map` with the `barline` taken off every DELETED record whose mark would carry (`rebar.ts`, `effectiveMarks`) to a standing entry strictly between
+ * `from` and `to` in `line`. The rebar replaces the barlines in its scope, so a deleted note's barline, which the layer carries to the next entry
+ * standing, goes with them (lane 47, amendment 5).
+ */
+function withoutDeletedBarlines(read: ParsedScore, line: VocalLineEvent[], map: CorrectionMap, from: number, to: number): CorrectionMap {
+	if (!Object.values(map).some((c) => c.deleted && c.barline !== undefined)) return map;
+	const kept: CorrectionMap = {};
+	for (const [id, c] of Object.entries(map)) {
+		if (c.deleted) {
+			const { deleted: _d, ...rest } = c;
+			kept[id] = rest;
+		} else kept[id] = c;
+	}
+	const place = new Map(line.map((e, i) => [e.id, i] as const));
+	let next = map;
+	let pending: string[] = [];
+	for (const ev of applyCorrections(read.vocalLine, kept)) {
+		if (map[ev.id]?.deleted) {
+			if (map[ev.id].barline !== undefined) pending.push(ev.id);
+			continue;
+		}
+		const i = place.get(ev.id);
+		if (i !== undefined && i > from && i < to) for (const id of pending) next = withBarlineMark(next, id, undefined);
+		pending = [];
+	}
+	return next;
 }
 
 /**
@@ -202,7 +231,7 @@ export function rebarNotes(
 	if (plan.size === 0) return signed;
 
 	/* ── Write it. The barlines in scope are replaced; the opener of the held bar keeps its own. */
-	let next = signed;
+	let next = withoutDeletedBarlines(read, line, signed, start, stop);
 	for (let i = start + 1; i < stop; i++) if (next[line[i].id]?.barline !== undefined) next = withBarlineMark(next, line[i].id, undefined);
 	for (let i = start + 1; i < stop; i++) {
 		const parts = plan.get(i);

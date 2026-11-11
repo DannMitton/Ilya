@@ -220,6 +220,22 @@ describe('Rebar the notes (QUEUE row 138, T2)', () => {
 		expect(fills(s, end)).toEqual(Array(8).fill(null));
 	});
 
+	it('a deleted note carrying her barline, inside the scope, carries it no more: the record loses its barline and every bar but the last adds up', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		const gone = inBar(s.vocalLine, 2)[1].id; // the quarter after the half note that opens read bar 3
+		const hers: CorrectionMap = { [gone]: { deleted: true, barline: 'before' } };
+		const sig = { beats: 3, beatType: 4 };
+		// what it did before: the mark carried to the next entry standing and the bars read 2 of 3 and 1 of 3 (Fable's probe)
+		const map = rebarNotes(s, pre(s, hers), hers, s.vocalLine[0].id, sig, 'end')!;
+		expect(map[gone]).toEqual({ deleted: true });
+		const fl = fills(s, map);
+		expect(fl.slice(0, fl.length - 1).every((x) => x === null)).toBe(true);
+		expect(fl.at(-1)).not.toBeNull();
+		// a deleted record OUTSIDE the scope keeps its barline
+		const outside = rebarNotes(s, pre(s, { [inBar(s.vocalLine, 1)[0].id]: { deleted: true, barline: 'before' } }), { [inBar(s.vocalLine, 1)[0].id]: { deleted: true, barline: 'before' } }, inBar(s.vocalLine, 3)[0].id, sig, 'end')!;
+		expect(outside[inBar(s.vocalLine, 1)[0].id]).toEqual({ deleted: true, barline: 'before' });
+	});
+
 	it('Rebar again with the signature already in force fills from the held bar to the next change, after a length was fixed inside the scope', async () => {
 		const s = await load('time-signature-barlines-wrong');
 		const once = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
