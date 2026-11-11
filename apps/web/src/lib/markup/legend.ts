@@ -103,11 +103,13 @@ const MARKUP_WITHHELD_COPY: Record<Language, string> = {
  *
  * The filled turning-head entry shows whenever the page draws a turning head
  * (`turningHeads`, the stems entries' condition); the hollow one only when at
- * least one is hollow (`hollowHeads`, DESK DEFAULT).
+ * least one is hollow (`hollowHeads`, DESK DEFAULT). `filledHeads`, default true, is false where every head is a
+ * placeholder (`AdaptedProfile.generic`, row 166, Fable's amendment 39-5): no filled head is drawn, so its entry
+ * ("from your voice") is left out.
  */
 export function buildMarkupLegend(
 	language: Language,
-	options: { withheldSyllables?: boolean; stems?: boolean; turningHeads?: boolean; hollowHeads?: boolean } = {}
+	options: { withheldSyllables?: boolean; stems?: boolean; turningHeads?: boolean; hollowHeads?: boolean; filledHeads?: boolean } = {}
 ): LegendItem[] {
 	const items: LegendItem[] = [];
 	if (options.stems) {
@@ -123,7 +125,8 @@ export function buildMarkupLegend(
 		}
 	}
 	if (options.turningHeads) {
-		for (const head of options.hollowHeads ? (['filled', 'hollow'] as const) : (['filled'] as const)) {
+		const filled = options.filledHeads !== false;
+		for (const head of [...(filled ? ['filled' as const] : []), ...(options.hollowHeads ? ['hollow' as const] : [])]) {
 			items.push({
 				type: head === 'filled' ? MARKUP_TURN_FILLED_TYPE : MARKUP_TURN_HOLLOW_TYPE,
 				icon: 'head',

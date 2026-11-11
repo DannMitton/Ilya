@@ -102,6 +102,14 @@ describe('the turning-head entries (QUEUE row 78b)', () => {
 		expect(buildMarkupLegend('en', { stems: false, turningHeads: false, hollowHeads: true })).toEqual([]);
 	});
 
+	it('row 166, amendment 39-5: with no filled head on the page the "from your voice" entry is left out; the default keeps it', () => {
+		const generic = buildMarkupLegend('en', { stems: true, turningHeads: true, hollowHeads: true, filledHeads: false });
+		expect(generic.filter((i) => i.head).map((i) => i.head)).toEqual(['hollow']);
+		expect(generic.map((i) => i.type)).not.toContain(MARKUP_TURN_FILLED_TYPE);
+		expect(buildMarkupLegend('en', { turningHeads: true, hollowHeads: true, filledHeads: true }).filter((i) => i.head).map((i) => i.head)).toEqual(['filled', 'hollow']);
+		expect(buildMarkupLegend('en', { turningHeads: true, hollowHeads: true }).filter((i) => i.head).map((i) => i.head)).toEqual(['filled', 'hollow']);
+	});
+
 	it('says what Dann ratified at 20:01, in both languages, the apostrophes typographic', () => {
 		const label = (language: 'en' | 'fr') => buildMarkupLegend(language, { turningHeads: true, hollowHeads: true }).map((i) => i.label);
 		expect(label('en')).toEqual(['= the pitch where this vowel turns, from your voice', '= the same, from a placeholder value']);

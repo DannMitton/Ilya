@@ -96,6 +96,18 @@ function extenderLine(stats: UnderlayStats, arm: string): string {
 	return `; extenders (arm ${arm}): ${extender} underscore, ${joint} hyphen, ${longDash} long-dash token(s), ${marked} note(s) marked under one; ink bands (system, w written or u not: ink share/text-line candidates): ${bands || 'none'}`;
 }
 
+/** «; skipped notes: 2 grace, 1 chord (not skipped, counted: 0 cue, 3 voice 2)»: the notes that took no syllable, and those a later build would leave out (`note-kinds.ts`). */
+function skippedLine(stats: UnderlayStats): string {
+	const { grace, chord, wouldSkip } = stats.skippedNotes;
+	return `; skipped notes: ${grace} grace, ${chord} chord (not skipped, counted: ${wouldSkip.cue} cue, ${wouldSkip.voice2} voice 2)`;
+}
+
+/** «; vowel boxes: 41 placed by the vowel's ink, 0 by the letter share (0 letter boxes did not match, 0 pieces with no vowel)»: row 181 B0, for the desk's measure. */
+function vowelBoxesLine(stats: UnderlayStats): string {
+	const { placed, fallbackNoMatch, fallbackNoVowel } = stats.vowelBoxes;
+	return `; vowel boxes: ${placed} placed by the vowel's ink, fallbacks to the letter share: ${fallbackNoMatch} token(s) whose letter boxes did not match, ${fallbackNoVowel} piece(s) with no vowel`;
+}
+
 export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay {
 	const now = parts.now ?? (() => performance.now());
 	return async (image, musicXml, staves) => {
@@ -158,7 +170,7 @@ export function makeUnderlayReader<Row>(parts: UnderlayParts<Row>): ReadUnderlay
 			}
 			const ms = { prepare: Math.round(made.ms), read: Math.round(t2 - t1), seat: Math.round(now() - t2) - lookMs, ...(looks ? { look: lookMs } : {}) };
 			const page: UnderlayPage = { ...seated, ms, ...(looks ? { looks } : {}) };
-			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.stats.fallback ? `; the dictionary-sewing fallback seated ${seated.stats.fallback} system(s)` : ''}${counted(seated.stats)}${extenderLine(seated.stats, parts.arm?.() ?? 'off')}${looksLine(looks, lookMs)}${tookNone(seated.systems)}`);
+			console.info(`[omr] underlay: page read in ${((ms.prepare + ms.read + ms.seat) / 1000).toFixed(1)} s (worker ${ms.prepare} ms, reader ${ms.read} ms, seating ${ms.seat} ms): ${seated.stats.rows} rows in ${seated.stats.systems} systems, ${seated.stats.seated} syllables seated, ${seated.stats.unseated} unseated${seated.stats.fallback ? `; the dictionary-sewing fallback seated ${seated.stats.fallback} system(s)` : ''}${counted(seated.stats)}${extenderLine(seated.stats, parts.arm?.() ?? 'off')}${skippedLine(seated.stats)}${vowelBoxesLine(seated.stats)}${looksLine(looks, lookMs)}${tookNone(seated.systems)}`);
 			return page;
 		} catch (err) {
 			console.info(`[omr] underlay: the page was not read (${stage} failed: ${describeError(err)}${prepared ? `; the Worker had framed ${prepared.rows} rows in ${prepared.ms} ms` : ''})`);
