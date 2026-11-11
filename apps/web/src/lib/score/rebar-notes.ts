@@ -4,8 +4,9 @@
  * THE FINALE MODEL (Rebar Music) with SIBELIUS'S AND DORICO'S TIES (Dann 2026-11-09 21:30): from the bar the singer chose, walk the notes
  * forward and fill bars of the new time signature, tying any note that crosses a boundary. It stops where Finale's Rebar Options stop: at the
  * end of the scope (the next change of signature, or the end of the song), at a key or clef change, at a repeat or any other barline the layer
- * will not remove (`rebar.ts`, `mergeBlocked`), and, by Fable's amendment 3, at a tuplet group that cannot be counted whole into the bar it
- * falls in. The last bar before a stop may be short: NOTHING IS INVENTED, no rest is added, and the bar stays flagged as not adding up.
+ * will not remove (`rebar.ts`, `mergeBlocked`). A tuplet group that cannot be counted whole into the bar it falls in is NOT a stop: a tuplet is never
+ * split across a barline, so the group is left as read and the fill starts again after it (lane 47, amendment 2). A bar may be short or long: NOTHING IS
+ * INVENTED, no rest is added, and the bar stays flagged as not adding up.
  *
  * IT IS NOT A STORED MODE. At the moment the singer chooses it, this computes the barlines and splits the new signature implies and writes
  * them as ORDINARY RECORDS in the one map: `barline` marks, shortened `base` and `dots`, `tied`, and hand-entered entries for the remainders
@@ -125,7 +126,7 @@ export function rebarNotes(
 	/* ── Fill bars of the new signature from the held bar's opener. */
 	const plan = new Map<number, Part[]>();
 	let fill = ZERO;
-	let groupLeft = 0;
+	let groupEnd = 0;
 	for (let i = start; i < stop; i++) {
 		const ev = line[i];
 		const d = ev.duration.fraction;
@@ -134,24 +135,26 @@ export function rebarNotes(
 			break;
 		}
 		const remaining = sub(length, fill);
-		if (ev.duration.tuplet) {
-			if (groupLeft === 0 || !(i > start && sameTuplet(line[i - 1], ev))) {
-				// The head of a group: it must fit whole into the bar it falls in, or the rebar ends before it.
-				const members = ev.duration.tuplet.actualNotes;
-				let total = ZERO;
-				for (let k = i; k < Math.min(i + members, line.length) && sameTuplet(line[k], ev); k++) {
-					const f = line[k].duration.fraction;
-					if (!summable(f)) break;
-					total = add(total, f);
-				}
-				if (cmp(total, remaining) > 0) {
-					stop = i;
-					break;
-				}
-				groupLeft = members;
+		if (ev.duration.tuplet && i >= groupEnd) {
+			// The head of a group. A tuplet is never split across a barline: it fits whole into the bar it falls in, or it is left exactly as read
+			// (no plan, no record, no barline of ours), and the fill starts again after it, as at a blocked barline. The bar that holds it is short
+			// or long and flagged; nothing is invented (lane 47, amendment 2).
+			const members = ev.duration.tuplet.actualNotes;
+			let total = ZERO;
+			let end = i;
+			for (let k = i; k < Math.min(i + members, stop) && sameTuplet(line[k], ev); k++) {
+				const f = line[k].duration.fraction;
+				if (!summable(f)) break;
+				total = add(total, f);
+				end = k + 1;
 			}
-			groupLeft--;
-		} else groupLeft = 0;
+			groupEnd = end;
+			if (cmp(total, remaining) > 0) {
+				fill = ZERO;
+				i = end - 1;
+				continue;
+			}
+		}
 		const chunks: Array<{ length: Fraction; opens: boolean }> = [];
 		if (cmp(d, remaining) <= 0) {
 			chunks.push({ length: d, opens: isZero(fill) });
@@ -169,6 +172,11 @@ export function rebarNotes(
 		}
 		const parts: Part[] = [];
 		for (const chunk of chunks) {
+			// An entry that stays one chunk of its own length is not re-valued, so it needs no notatable chain: a triplet member (1/6) never has one.
+			if (chunks.length === 1 && cmp(chunk.length, d) === 0) {
+				parts.push({ base: ev.duration.base, dots: ev.duration.dots, opens: chunk.opens });
+				continue;
+			}
 			const values = notatable(chunk.length);
 			if (!values) return null;
 			values.forEach((v, k) => parts.push({ ...v, opens: chunk.opens && k === 0 }));

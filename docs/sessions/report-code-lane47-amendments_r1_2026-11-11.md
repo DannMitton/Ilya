@@ -41,3 +41,21 @@ With the old line restored, tests 1 and 2 fail (the note lands after `hand:1` an
 
 - Whether the live Loupe, in the browser, now draws the note in place: the unit tests go through the verbs, the layer, and `rebar`, not the page. Playwright is step 8.
 - The test's "1/2" is read from the fixture as parsed here; I did not compare it with the review's probe output beyond its quoted figure.
+
+## Step 2: Amendment 2, triplets
+
+`apps/web/src/lib/score/rebar-notes.ts:129-157` (the fill loop) and `:172-176` (the parts). Two changes:
+- The `notatable` check is skipped where an entry stays one chunk of its own length (`:173-176`). A triplet member (1/6) never has a note-value chain, so this is what unblocks the rebar.
+- A group that does not fit whole into the bar it falls in no longer ends the rebar. It is left as read (no plan, no record of ours, no barline mark), the fill goes to zero, and the loop resumes at the first entry after it (`:147-157`). The group's extent is now tracked as `groupEnd` rather than the old `groupLeft` count, so a group with fewer entries than `actualNotes` cannot carry its count into the next group. The header comment (`:1-20`) says so.
+
+Tests, `rebar-notes.test.ts` (replaces the old tuplet test; the `triplet()` helper builds a real `<time-modification>` triplet at 6 divisions to the quarter, each member 1/6):
+- (a) Bar 2's two quarters become a triplet of three: eight bars add up, total length unchanged, no member re-valued, split, or tied, no remainder entered after one, and `syllableTargetIds` of the rebarred line equals that of the read line.
+- (b) Bar 4's second half note becomes a triplet crossing the 3/4 barline at quarter 15: bars 0 to 3 add up, the bar holding the half note and the group reads `4 of 3`, the group is in one bar and carries no record, the two bars after it add up, eight bars in all, total length and syllable seats unchanged.
+Both fail on the old code and pass on the new. `src/lib/score`: 1315 passed.
+
+One reading of the brief to flag: in (a), a member that sits mid-bar loses the reading's barline before it (a `barline: 'none'` record on the group's first note). That is the ordinary rebar removing a reading barline, not a split or a re-valuing; the brief's "carry no record" is asserted in (b), the crossing case, where it holds.
+
+## What I could not establish (step 2)
+
+- A group whose members are not contiguous in `line` (a rest or another voice between them) is outside what I tested.
+- How the rebarred triplet is drawn: data only.

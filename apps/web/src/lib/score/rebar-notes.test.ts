@@ -5,6 +5,7 @@ import { parseXml } from './ingestion/mini-dom';
 import { applyCorrections, withCorrection, type CorrectionMap } from './correction';
 import { canTie, isEnteredId, measureFill } from './entry';
 import { rebar } from './rebar';
+import { syllableTargetIds } from './pairings';
 import { notatable, rebarNotes, rebarNotesInForce } from './rebar-notes';
 
 async function load(name: string, edit: (xml: string) => string = (x) => x): Promise<ParsedScore> {
@@ -19,6 +20,22 @@ const fills = (s: ParsedScore, m: CorrectionMap) => {
 	return r.score.measures.map((x) => measureFill(r.line, x.index, x.timeSignature));
 };
 const f = (n: number, d: number): Fraction => ({ numerator: n, denominator: d });
+
+/**
+ * The fixture at 6 divisions to the quarter (a triplet quarter is then a whole number of divisions), with notes `from` onward of measure `measure`
+ * replaced by quarter-note triplets of the given steps: `<time-modification>` 3 in the time of 2, each 1/6 of a whole note. The notes it replaces
+ * must add up to the same length (two quarters, or one half), so the song is as long as before.
+ */
+function triplet(xml: string, measure: number, from: number, steps: string[]): string {
+	const scaled = xml.replace('<divisions>2</divisions>', '<divisions>6</divisions>').replace(/<duration>(\d+)<\/duration>/g, (_, n) => `<duration>${Number(n) * 3}</duration>`);
+	const note = (step: string) =>
+		`<note><pitch><step>${step}</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification></note>`;
+	return scaled.replace(new RegExp(`(<measure number="${measure}">)([\\s\\S]*?)(</measure>)`), (_all, open: string, body: string, close: string) => {
+		const notes = body.match(/<note>[\s\S]*?<\/note>/g)!;
+		const replaced = from === 0 ? 2 : 1;
+		return open + [...notes.slice(0, from), ...steps.map(note), ...notes.slice(from + replaced)].join('\n') + close;
+	});
+}
 
 describe('notatable lengths', () => {
 	it('a length is one value where one holds it, a chain where not, and null below the 64th', () => {
@@ -84,19 +101,45 @@ describe('Rebar the notes (QUEUE row 138, T2)', () => {
 		expect(map[inBar(s.vocalLine, 0)[1].id].tied).toBeUndefined();
 	});
 
-	it('a tuplet group that cannot be counted whole ends the rebar before it; the short bar stays flagged and nothing is invented', async () => {
-		const s = await load('time-signature-barlines-wrong');
-		const t = { actualNotes: 3, normalNotes: 2, normalType: 'quarter' as const };
-		for (const e of inBar(s.vocalLine, 1)) e.duration.tuplet = t;
+	it('a real quarter-note triplet that fits whole into its new bar: eight bars add up, no member is re-valued or split, and the syllable seats are unchanged', async () => {
+		// bar 2's two quarters become a triplet of three (3 in the time of 2: 1/6 each, 1/2 in all), so the length of the song is unchanged
+		const s = await load('time-signature-barlines-wrong', (x) => triplet(x, 2, 0, ['A', 'G', 'A']));
+		const group = s.vocalLine.filter((e) => e.duration.tuplet);
+		expect(group).toHaveLength(3);
+		expect(group.map((e) => e.duration.fraction)).toEqual([f(1, 6), f(1, 6), f(1, 6)]);
 		const map = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		expect(map).not.toBeNull();
+		const r = rebar(s, pre(s, map), map);
+		expect(r.score.measures).toHaveLength(8);
+		expect(fills(s, map)).toEqual(Array(8).fill(null));
+		expect(total(r.line)).toBeCloseTo(total(s.vocalLine), 10);
+		// a member may lose the reading's barline before it (it sits mid-bar now), and nothing else: no length, no tie, no entered remainder
+		for (const g of group) expect(Object.keys(map[g.id] ?? {}).filter((k) => k !== 'barline')).toEqual([]);
+		expect(Object.keys(map).filter((id) => isEnteredId(id) && map[id].entered?.after && group.some((g) => g.id === map[id].entered!.after))).toEqual([]);
+		// one vowel per note (CONTRACT §0.1): the notes that take a syllable are the same notes, in the same order
+		expect(syllableTargetIds(r.line)).toEqual(syllableTargetIds(s.vocalLine));
+	});
+
+	it('a triplet that would cross a new barline is never split: its bar stays as it is, flagged, its entries carry no record, and the rebar goes on after it', async () => {
+		// bar 4's second half note becomes a triplet (quarters 14 to 16); a 3/4 barline falls at quarter 15, inside it
+		const s = await load('time-signature-barlines-wrong', (x) => triplet(x, 4, 1, ['E', 'F', 'E']));
+		const group = s.vocalLine.filter((e) => e.duration.tuplet).map((e) => e.id);
+		expect(group).toHaveLength(3);
+		const map = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		expect(map).not.toBeNull();
 		const r = rebar(s, pre(s, map), map);
 		const fl = fills(s, map);
-		expect(fl[0]).toBeNull();
-		expect(fl[1]).toEqual({ actual: 1, expected: 3 });
-		// the group was left whole, in the bar it was read in
-		const group = inBar(s.vocalLine, 1).map((e) => e.id);
-		expect(r.line.filter((e) => group.includes(e.id)).map((e) => e.measureIndex)).toEqual([2, 2, 2]);
+		// the four bars before the group add up; the bar that holds the group is the half note and the group, four quarters in a bar of three
+		expect(fl.slice(0, 4)).toEqual([null, null, null, null]);
+		expect(fl[4]).toEqual({ actual: 4, expected: 3 });
+		// the group is whole, in one bar, with no record of ours
+		expect(new Set(r.line.filter((e) => group.includes(e.id)).map((e) => e.measureIndex)).size).toBe(1);
 		expect(Object.keys(map).filter((id) => group.includes(id))).toEqual([]);
+		// after the group the fill starts again, so the rest of the song is rebarred: two bars add up, the last holds what is left
+		expect(fl.slice(5, 7)).toEqual([null, null]);
+		expect(fl).toHaveLength(8);
+		expect(total(r.line)).toBeCloseTo(total(s.vocalLine), 10);
+		expect(syllableTargetIds(r.line)).toEqual(syllableTargetIds(s.vocalLine));
 	});
 
 	it('"to the next change" ends at the reading\'s own next change of signature, and the bars after it keep theirs', async () => {
