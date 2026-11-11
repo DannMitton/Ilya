@@ -164,7 +164,7 @@ export function effectiveMarks(
 	return out;
 }
 
-function sameSignature(a: TimeSignature, b: TimeSignature): boolean {
+export function sameSignature(a: TimeSignature, b: TimeSignature): boolean {
 	return a.beats === b.beats && a.beatType === b.beatType && a.symbol === b.symbol;
 }
 

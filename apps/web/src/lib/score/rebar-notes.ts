@@ -2,9 +2,10 @@
  * rebar-notes.ts — "Rebar the notes", as pure data (QUEUE row 138, T2).
  *
  * THE FINALE MODEL (Rebar Music) with SIBELIUS'S AND DORICO'S TIES (Dann 2026-11-09 21:30): from the bar the singer chose, walk the notes
- * forward and fill bars of the new time signature, tying any note that crosses a boundary. It stops where Finale's Rebar Options stop: at the
- * end of the scope (the next change of signature, or the end of the song), at a key or clef change, at a repeat or any other barline the layer
- * will not remove (`rebar.ts`, `mergeBlocked`). A tuplet group that cannot be counted whole into the bar it falls in is NOT a stop: a tuplet is never
+ * forward and fill bars of the new time signature, tying any note that crosses a boundary. It stops where the signature's scope stops: at the
+ * end of the song, at a later signature of hers, or (to the next change) at the reading's own next change of signature. At a key or clef change, a
+ * repeat, an ending, a jump, a rehearsal mark, or any other barline the layer will not remove (`rebar.ts`, `mergeBlocked`) it does NOT stop: the
+ * reading's barline stays and the fill starts again after it (lane 47, amendment 3). A tuplet group that cannot be counted whole into the bar it falls in is NOT a stop: a tuplet is never
  * split across a barline, so the group is left as read and the fill starts again after it (lane 47, amendment 2). A bar may be short or long: NOTHING IS
  * INVENTED, no rest is added, and the bar stays flagged as not adding up.
  *
@@ -22,7 +23,7 @@
 import type { Fraction, NoteBase, ParsedScore, VocalLineEvent } from '@ilya/score-parser';
 import { currentPitch, durationFraction, type CorrectionMap, type NoteCorrection } from './correction';
 import { currentTie, currentType, nextEnteredId } from './entry';
-import { effectiveMarks, mergeBlocked } from './rebar';
+import { effectiveMarks, mergeBlocked, sameSignature } from './rebar';
 import { heldBar, setSignature, type Through } from './time-signature';
 
 const ZERO: Fraction = { numerator: 0, denominator: 1 };
@@ -106,7 +107,10 @@ export function rebarNotes(
 	if (start < 0) return null;
 	const length = frac(sig.beats, sig.beatType);
 
-	/* ── Where the scope ends. A reading barline the layer would not remove, a gap of bars, or (to the next change) a later signature of hers. */
+	/* ── Where the scope ends: where the SIGNATURE's scope ends, and nowhere else (lane 47, amendment 3). `rebar.ts` ends it at a later signature of hers
+	   (either scope) and, to the next change, at the reading's own next change of signature; to the end it runs to the last entry. A reading barline the
+	   layer will not remove for any other reason (a key or clef change, a repeat, an ending, a jump, a rehearsal mark, a gap of bars) does not end it:
+	   the fill starts again there and the reading's barline stays. */
 	const readingMeasure = (i: number) => read.measures.find((m) => m.index === line[i].measureIndex);
 	const barlineBefore = (i: number): 'none' | 'removable' | 'blocked' => {
 		const prev = line[i - 1];
@@ -116,10 +120,17 @@ export function rebarNotes(
 		if (prev.measureIndex !== line[i].measureIndex - 1 || !a || !b || mergeBlocked(a, b)) return 'blocked';
 		return 'removable';
 	};
+	const readingChangesSignatureAt = (i: number): boolean => {
+		const prev = line[i - 1];
+		if (!prev || prev.measureIndex === line[i].measureIndex) return false;
+		const a = read.measures.find((m) => m.index === prev.measureIndex);
+		const b = readingMeasure(i);
+		return !!a && !!b && !sameSignature(a.timeSignature, b.timeSignature);
+	};
 	const owners = effectiveMarks(read.vocalLine, line, signed);
 	let stop = line.length;
 	for (let i = start + 1; i < line.length; i++) {
-		if (barlineBefore(i) === 'blocked' || (through === 'next' && owners.get(line[i].id)?.timeSignature)) {
+		if (owners.get(line[i].id)?.timeSignature || (through === 'next' && readingChangesSignatureAt(i))) {
 			stop = i;
 			break;
 		}
@@ -136,6 +147,8 @@ export function rebarNotes(
 			stop = i;
 			break;
 		}
+		// A reading barline the layer keeps stays, whatever the fill: the bar before it may be short and flagged, and the next bar starts here.
+		if (i > start && barlineBefore(i) === 'blocked') fill = ZERO;
 		const remaining = sub(length, fill);
 		if (ev.duration.tuplet && i >= groupEnd) {
 			// The head of a group. A tuplet is never split across a barline: it fits whole into the bar it falls in, or it is left exactly as read
@@ -194,9 +207,10 @@ export function rebarNotes(
 	for (let i = start + 1; i < stop; i++) {
 		const parts = plan.get(i);
 		if (!parts) continue;
-		const reading = barlineBefore(i) === 'removable';
-		if (parts[0].opens && !reading) next = withBarlineMark(next, line[i].id, 'before');
-		else if (!parts[0].opens && reading) next = withBarlineMark(next, line[i].id, 'none');
+		// Only where the reading has no barline is one written; at a blocked barline the reading's own stays and no mark is written on the entry after it.
+		const before = barlineBefore(i);
+		if (parts[0].opens && before === 'none') next = withBarlineMark(next, line[i].id, 'before');
+		else if (!parts[0].opens && before === 'removable') next = withBarlineMark(next, line[i].id, 'none');
 	}
 	// The bar after the scope opens where the scope ended, so the short bar before it closes there.
 	if (stop < line.length && barlineBefore(stop) === 'none' && next[line[stop].id]?.barline !== 'before') next = withBarlineMark(next, line[stop].id, 'before');

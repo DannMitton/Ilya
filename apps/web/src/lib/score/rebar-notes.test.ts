@@ -170,6 +170,56 @@ describe('Rebar the notes (QUEUE row 138, T2)', () => {
 		expect(Object.keys(map).filter((id) => s.vocalLine.filter((e) => e.measureIndex >= 3).some((e) => e.id === id))).toEqual([]);
 	});
 
+	it('"to the end of the song" goes to the end across the reading\'s own change of signature: 2/4 stated at measure 4, eight bars that add up', async () => {
+		const s = await load('time-signature-barlines-wrong', (x) => x.replace('<measure number="4">', '<measure number="4"><attributes><time><beats>2</beats><beat-type>4</beat-type></time></attributes>'));
+		const map = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		const r = rebar(s, pre(s, map), map);
+		expect(r.score.measures).toHaveLength(8);
+		expect(r.score.measures.every((m) => m.timeSignature.beats === 3 && m.timeSignature.beatType === 4)).toBe(true);
+		expect(fills(s, map)).toEqual(Array(8).fill(null));
+		expect(syllableTargetIds(r.line)).toEqual(syllableTargetIds(s.vocalLine));
+	});
+
+	it('"to the next change" does not stop at a key change: the fill goes on, eight bars that add up', async () => {
+		const s = await load('time-signature-barlines-wrong', (x) => x.replace('<measure number="4">', '<measure number="4"><attributes><key><fifths>1</fifths></key></attributes>'));
+		const map = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'next')!;
+		const r = rebar(s, pre(s, map), map);
+		expect(r.score.measures).toHaveLength(8);
+		expect(fills(s, map)).toEqual(Array(8).fill(null));
+		expect(syllableTargetIds(r.line)).toEqual(syllableTargetIds(s.vocalLine));
+	});
+
+	it('a key change mid-bar of the new signature keeps its barline: the bar before it is short and flagged, no mark is written after it, and the bars after it add up', async () => {
+		// the key change opens read bar 3 at quarter 8, inside the new bar that runs from quarter 6 to 9
+		const s = await load('time-signature-barlines-wrong', (x) => x.replace('<measure number="3">', '<measure number="3"><attributes><key><fifths>1</fifths></key></attributes>'));
+		const map = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'next')!;
+		const fl = fills(s, map);
+		// bars: [0,3) [3,6) [6,8) [8,11) [11,14) [14,17) [17,20) [20,23) [23,24): the third and the last are short
+		expect(fl).toEqual([null, null, { actual: 2, expected: 3 }, null, null, null, null, null, { actual: 1, expected: 3 }]);
+		const opener = inBar(s.vocalLine, 2)[0].id;
+		expect(map[opener]?.barline).toBeUndefined();
+		const r = rebar(s, pre(s, map), map);
+		expect(r.line.find((e) => e.id === opener)!.rhythmicPosition.fraction).toEqual(f(0, 1));
+		expect(syllableTargetIds(r.line)).toEqual(syllableTargetIds(s.vocalLine));
+	});
+
+	it('a later signature of hers ends the fill "to the next change"; "to the end" takes her later signature away first (`setSignature`) and runs on', async () => {
+		const s = await load('time-signature-barlines-wrong');
+		const later = inBar(s.vocalLine, 3)[0].id;
+		const hers = setSignature(s, s.vocalLine, {}, later, { beats: 2, beatType: 4 }, 'end')!;
+		const laterIds = s.vocalLine.filter((e) => e.measureIndex >= 3).map((e) => e.id);
+		// to the next change: four bars of three before her 2/4 at quarter 12, and everything from her 2/4 on is left as it was
+		const next = rebarNotes(s, pre(s, hers), hers, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'next')!;
+		const rn = rebar(s, pre(s, next), next);
+		expect(fills(s, next).slice(0, 4)).toEqual([null, null, null, null]);
+		expect(rn.score.measures[4].timeSignature).toMatchObject({ beats: 2, beatType: 4 });
+		expect(Object.keys(next).filter((id) => laterIds.includes(id))).toEqual(Object.keys(hers).filter((id) => laterIds.includes(id)));
+		// to the end: her later signature is gone and all eight bars are of three
+		const end = rebarNotes(s, pre(s, hers), hers, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;
+		expect(end[later]?.timeSignature).toBeUndefined();
+		expect(fills(s, end)).toEqual(Array(8).fill(null));
+	});
+
 	it('Rebar again with the signature already in force fills from the held bar to the next change, after a length was fixed inside the scope', async () => {
 		const s = await load('time-signature-barlines-wrong');
 		const once = rebarNotes(s, s.vocalLine, {}, s.vocalLine[0].id, { beats: 3, beatType: 4 }, 'end')!;

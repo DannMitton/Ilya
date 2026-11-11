@@ -70,3 +70,22 @@ Test, `rebar-notes.test.ts`: one lone triplet quarter in place of bar 2's two qu
 
 - That "one Undo step" holds in the page: argued from the single `pushUndo` and `setCorrections` in `handleTimeSignature`, not exercised there.
 - Which real song would meet this branch: the fixture is synthetic.
+
+## Step 4: Amendment 3, where the rebar stops, under both scopes
+
+`apps/web/src/lib/score/rebar-notes.ts:106-132` (the scope), `:150-151` (the fill), `:207-212` (the write); `rebar.ts` exports `sameSignature` (one word). The fill now ends only where the signature's scope ends: at a later signature of hers (`owners`), or, "to the next change", where the reading's next measure has a different signature (`readingChangesSignatureAt`, the same comparison `rebar.ts:326` uses); "to the end" runs to the last entry. At any other blocked barline (key, clef, repeat, ending, jump, rehearsal mark, a gap of bars) the fill goes to zero and continues (`:151`). The reading's barline stays, the bar before may be short and flagged, and no `barline` mark is written on the entry after it: a `'before'` is written only where the reading has no barline (`before === 'none'`, `:209`), a `'none'` only where it has a removable one. The header comment is rewritten to say so.
+
+Tests, `rebar-notes.test.ts`:
+- `time-signature-barlines-wrong` with 2/4 stated at measure 4, "to the end": eight bars, all 3/4, all add up, `syllableTargetIds` unchanged.
+- The same file with a key change at measure 4, "to the next change": eight bars that add up, seats unchanged.
+- (added) A key change at measure 3, which falls at quarter 8, inside the new bar from 6 to 9: nine bars, the third reads `2 of 3` and the last `1 of 3`, the rest add up; the opener of measure 3 carries no `barline` mark and sits at onset 0; seats unchanged.
+- (added) A later signature of hers: "to the next change" stops at it (four bars of three, then her 2/4, and her records from there on untouched); "to the end" takes her later signature away first (`setSignature`, `time-signature.ts:145`) and runs to the end, eight bars.
+- `rebar-notes.test.ts` "to the next change ends at the reading's own next change of signature" still passes, unchanged.
+With the step-4 code removed, the first three fail and the others pass. `src/lib/score`: 1320 passed.
+
+A reading to flag: the brief says "'end': the last entry". I stop at her own later signature under both scopes, as `rebar.ts:333` does, but for "to the end" that case cannot arise: `setSignature` has already removed her later marks. So the two readings give the same result today.
+
+## What I could not establish (step 4)
+
+- A repeat, ending, jump, or rehearsal mark at a blocked barline: they take the same code path as the key change (`mergeBlocked`), but only the key change is exercised.
+- Whether a note that crosses a blocked barline in the READING (a tie across a repeat) is rebarred sensibly: not probed.
