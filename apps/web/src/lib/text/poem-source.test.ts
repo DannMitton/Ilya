@@ -109,16 +109,17 @@ describe('stanzaCut on the real fixtures', () => {
 	});
 
 	it('no poem in the library fills its dating line, and each still ends on its last verse (part 3)', () => {
+		// Keyed by id: lane 45 added a second «Русская песня» (`2f6be9d47e`, Кольцов too, no dating line) to the 14 poems' one, so a title no longer names an entry.
 		const ends: Record<string, string> = {
-			'Весёлый час': 'Видит заря!',
-			'Русская песня': 'Сам с собою грущу…',
+			'0127a63ffe': 'Видит заря!', // «Весёлый час»
+			'87376c1710': 'Сам с собою грущу…', // «Русская песня»
 		};
 		for (const e of library.entries) {
 			const cut = stanzaCut(e.textModern, 0, e.textModern.length);
 			expect(cut.whole, e.title).toBe(true);
 			expect(cut.text, e.title).not.toMatch(/(^|\n)\s*(\d{1,2}\s+[а-я]+\s+)?\d{4}[А-Яа-я]*\s*$/);
 			expect(cut.text, e.title).not.toMatch(/Февраль 1837/);
-			if (ends[e.title]) expect(cut.text.endsWith(ends[e.title]), e.title).toBe(true);
+			if (ends[e.id]) expect(cut.text.endsWith(ends[e.id]), e.title).toBe(true);
 			// an entry with no dating line fills exactly its text
 			if (!/\d{4}/.test(e.textModern.split('\n\n').pop()!)) expect(cut.text, e.title).toBe(e.textModern.trimEnd());
 		}
@@ -339,8 +340,10 @@ describe('passageLine: the wording of a passage (D4, ratified oracle «Дитя 
 				}
 			}
 		}
-		expect(starts).toBe(166); // 77 from the 14 poems, one for each of the 89 arias
-		expect([...firsts].sort()).toEqual(['Безотрадный', 'Борону', 'В', 'Все', 'Всегда', 'Да', 'Дайте', 'Доля', 'Из', 'Ко', 'Кто', 'Мать-земля', 'Много', 'Монахини', 'На', 'Накормлю', 'Не', 'Нет', 'Ночью', 'Ну', 'О', 'Останься', 'Пашней', 'Песни', 'Прости', 'С', 'Солнце', 'Спи', 'Ты', 'Хочу', 'Чары', 'Я']);
+		expect(starts).toBe(846); // 77 from the 14 first poems, one for each of the 89 arias, and 680 from the 224 harvested poems (lane 45)
+		// LANE 45 READ THE CAPITALS the harvested poems add (111 words in all, from 32): each is an ordinary word opening a verse line, a poet's capital at a line's start,
+		// except «Дона» (the river; 4da617ce24 «Грусть девушки»: «В широких степях / Дона тихова»), the one proper noun, which `passageLine` lowers to «дона». Reported, not fixed here.
+		expect([...firsts].sort()).toEqual(['А', 'Артистка', 'Бедной', 'Безотрадный', 'Богатые', 'Борону', 'Брось', 'В', 'Ветры', 'Во', 'Воска', 'Вот', 'Впереди', 'Все', 'Всегда', 'Всё', 'Выплыл', 'Голосистый', 'Горы', 'Грусть', 'Да', 'Давно', 'Дайте', 'Доля', 'Дона', 'Его', 'Ей', 'Ему', 'Ещё', 'Жарче', 'За', 'Забытый', 'Засыпан', 'Здравствуй', 'И', 'Из', 'Или', 'К', 'Как', 'Ко', 'Красавица', 'Кротко', 'Кто', 'Лето', 'Лучезарной', 'Люди', 'Мать-земля', 'Меж', 'Меня', 'Мир', 'Много', 'Мнёт', 'Мой', 'Монахини', 'На', 'Над', 'Накормлю', 'Не', 'Нежная', 'Непогожую', 'Нет', 'Ночью', 'Ну', 'О', 'Одет', 'Она', 'Орден', 'Оставь', 'Останется', 'Останься', 'Параличом', 'Пашней', 'Песни', 'Плач', 'Под', 'Поднявши', 'Послал', 'Поцелуи', 'Поэтесса', 'Приголубь', 'Прости', 'Пылью', 'Равнодушно', 'Разбивается', 'Раздаётся', 'Распахивает', 'Распласталась', 'Роковой', 'С', 'Солнце', 'Соловей', 'Спи', 'Спят', 'Струит', 'Сумрак', 'Твои', 'Теплей', 'Тихо', 'Точно', 'Трели', 'Трепетно', 'Тучи', 'Ты', 'У', 'Уймётся', 'Усни', 'Хочу', 'Цепи', 'Чары', 'Я', 'Ярче']);
 	});
 
 	it('row 182: every aria is one stanza, so none is ever cut to a passage (a passage line joined across lines never reaches an aria)', () => {

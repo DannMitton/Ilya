@@ -3,7 +3,7 @@
  *
  * The library is the committed `data/dictionary.poems.<hash8>.json`; the queries
  * are `tools/poems/fixtures/*.lyrics.txt` (twelve read Lyrics, public-domain
- * poems only); the reference scores are `expected_r2.txt`, written by
+ * poems only); the reference scores are `expected_r3.txt`, written by
  * `tools/poems/reference_sw_match.py`. A score here equals the reference's to
  * three decimals, or the matcher is not the reference.
  */
@@ -40,12 +40,12 @@ interface Expected {
 	secondScore: string;
 	margin: string;
 }
-const expected: Expected[] = readFileSync(join(ROOT, 'tools/poems/fixtures/expected_r2.txt'), 'utf8')
+const expected: Expected[] = readFileSync(join(ROOT, 'tools/poems/fixtures/expected_r3.txt'), 'utf8')
 	.split('\n')
 	.filter((l) => l.trim() !== '')
 	.map((l) => {
 		const m = /^(\S+)\s+(\d+)l \| (\S+)\s+([\d.]+) \| (\S+)\s+([\d.]+) \| m ([\d.]+)$/.exec(l);
-		if (!m) throw new Error(`expected_r2.txt: cannot read "${l}"`);
+		if (!m) throw new Error(`expected_r3.txt: cannot read "${l}"`);
 		return { name: m[1], letters: Number(m[2]), top: m[3], topScore: m[4], second: m[5], secondScore: m[6], margin: m[7] };
 	});
 
@@ -139,31 +139,40 @@ describe('align: local alignment, +2 / -1 / -2', () => {
 	});
 });
 
-describe('every fixture scores as the reference does (expected_r2.txt, three decimals)', () => {
+describe('every fixture scores as the reference does (expected_r3.txt, three decimals)', () => {
 	it('reads the twelve reference rows', () => {
 		expect(expected.map((e) => e.name)).toEqual(['P', 'S', 'T', 'U1', 'U4', 'U5', 'U6', 'r114-song1', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5']);
 	});
 
 	/**
-	 * The reference scores every work; the matcher scores the `SHORTLIST` sharing the most trigrams (the library has 42 works, so the
-	 * shortlist engages). A second work outside the shortlist is not seen. At step 6 that made U4's second a different work from the
-	 * reference's; after the arias were corrected (step 9) the shortlist holds it, and all twelve rows agree with the reference on top,
-	 * second, and margin. If a row ever differs again, the matcher's second must not be above the reference's, and the row must not fill.
+	 * The reference scores every work; the matcher scores the `SHORTLIST` sharing the most trigrams (the library has 266 works, so the
+	 * shortlist engages). A work outside the shortlist is not seen, so the matcher's second (and, on a Lyrics no poem sets, its top) can
+	 * be a different, lower work than the reference's. LANE 45 (224 harvested poems, 42 works to 266): seven rows differ so, listed here.
+	 * For a row that differs, the matcher must never score above the reference (it sees a subset of the works); a row the reference
+	 * fills must still fill the reference's top work at the reference's score; and a row the reference refuses must still be refused.
+	 * Every other row agrees with the reference on top, second, and margin to three decimals. A row not in this list that differs fails.
 	 */
-	const SECOND_DIFFERS: string[] = [];
+	const SHORTLIST_DIFFERS = ['S', 'U1', 'U4', 'U5', 'r114-song1', 'r114-song2', 'r114-song5'];
 
 	for (const e of expected) {
 		it(`${e.name}: ${e.letters} letters, top work ${e.top} ${e.topScore}, second ${e.second} ${e.secondScore}, margin ${e.margin}`, () => {
 			const letters = foldLetters(fixture(e.name));
 			expect(letters.length).toBe(e.letters);
 			const ranked = rankWorks(letters, library);
-			expect(ranked[0].work).toBe(e.top);
-			expect(ranked[0].score.toFixed(3)).toBe(e.topScore);
-			if (SECOND_DIFFERS.includes(e.name)) {
-				expect(ranked[1].work).not.toBe(e.second);
+			const refFills = Number(e.topScore) >= MIN_SCORE && Number(e.margin) >= MIN_MARGIN;
+			if (SHORTLIST_DIFFERS.includes(e.name)) {
+				expect(ranked[0].score).toBeLessThanOrEqual(Number(e.topScore) + 0.0005);
 				expect(ranked[1].score).toBeLessThanOrEqual(Number(e.secondScore) + 0.0005);
-				expect(matchPoem(fixture(e.name), library)).toBeNull();
+				if (refFills) {
+					expect(ranked[0].work).toBe(e.top);
+					expect(ranked[0].score.toFixed(3)).toBe(e.topScore);
+					expect(matchPoem(fixture(e.name), library)?.work).toBe(e.top);
+				} else {
+					expect(matchPoem(fixture(e.name), library)).toBeNull();
+				}
 			} else {
+				expect(ranked[0].work).toBe(e.top);
+				expect(ranked[0].score.toFixed(3)).toBe(e.topScore);
 				expect(ranked[1].work).toBe(e.second);
 				expect(ranked[1].score.toFixed(3)).toBe(e.secondScore);
 				expect((ranked[0].score - ranked[1].score).toFixed(3)).toBe(e.margin);
@@ -264,14 +273,14 @@ describe('when it fills', () => {
 			return ranked[0].score >= MIN_SCORE && ranked[0].score - second >= MIN_MARGIN && w.length <= MAX_LENGTH_RATIO * ranked[0].entry.letters.length;
 		}
 		// The control: without the floor, short windows of songs that have no poem here do fill.
-		// (Row 182: with 42 works there is more to compete with, so fewer short windows fill: 213 of 963 and 40 of 313, from 440 and 94.)
+		// (Lane 45: the library is 266 works now; the two lower bounds below hold and were not re-counted. Row 182: with 42 works there is more to compete with, so fewer short windows fill: 213 of 963 and 40 of 313, from 440 and 94.)
 		expect(fills(6)).toBeGreaterThan(100); // 213 of 963 when measured on the library of 42 works
 		expect(fills(15)).toBeGreaterThan(20); // 40 of 313
 		// At the floor and above, none do, with or without it.
 		expect(fills(MIN_QUERY_LETTERS)).toBe(0);
 		expect(fills(100)).toBe(0);
 		for (const w of windows(MIN_QUERY_LETTERS)) expect(matchPoem(w, library)).toBeNull();
-	}, 60_000); // about 10 s with 42 works (3 s with 13): the same 2,300 matches over a library three times as long
+	}, 60_000); // about 10 s with 42 works (3 s with 13): the same 2,300 matches over a library three times as long (lane 45, 266 works: about 3 s on the Mac)
 
 	it('keeps every song in the build set: the shortest true fixture has 113 letters', () => {
 		const lengths = ['P', 'S', 'T', 'U1', 'U6', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5'].map((n) => foldLetters(fixture(n)).length);
@@ -395,8 +404,11 @@ describe('the shortlist (a large library on a phone)', () => {
 	}
 	const big: PoemLibrary = { version: 1, entries: [...library.entries, ...invented(200)] };
 
-	it('with 20 works or fewer, the shortlist is everything (the 14 poems are 13 works)', () => {
-		const poems: PoemLibrary = { version: 1, entries: library.entries.filter((e) => e.kind === undefined) };
+	it('with 20 works or fewer, the shortlist is everything (the first 14 poems, by id, are 13 works)', () => {
+		// Lane 45: the 224 harvested poems carry no `kind` either, so "every entry with no kind" is no longer the 14. They are named by id.
+		const FIRST_FOURTEEN = new Set(['0127a63ffe', '21568f1c1e', '298e556367', '2ba9040d8c', '307359f1d3', '36f13ef599', '419e40dd3c', '56eb0aac20', '6b51c54db7', '7b9b662ad7', '87376c1710', 'c1964bc3bd', 'c8f80d24ec', 'cb6998d772']);
+		const poems: PoemLibrary = { version: 1, entries: library.entries.filter((e) => FIRST_FOURTEEN.has(e.id)) };
+		expect(poems.entries).toHaveLength(14);
 		expect(shortlist(foldLetters(fixture('P')), poems).size).toBe(13);
 		const firstTwenty = new Set(library.entries.map((e) => e.work)).values();
 		const keep = new Set(Array.from({ length: 20 }, () => firstTwenty.next().value));
@@ -404,8 +416,8 @@ describe('the shortlist (a large library on a phone)', () => {
 		expect(shortlist(foldLetters(fixture('P')), twenty).size).toBe(20);
 	});
 
-	it('row 182: the shipped library has 42 works, so the shortlist engages, and each fixture\'s poem lands in it', () => {
-		expect(new Set(library.entries.map((e) => e.work)).size).toBe(42);
+	it('row 182, lane 45: the shipped library has 266 works (42, then the 224 harvested poems), so the shortlist engages, and each fixture\'s poem lands in it', () => {
+		expect(new Set(library.entries.map((e) => e.work)).size).toBe(266);
 		for (const name of ['P', 'S', 'T', 'U1', 'U4', 'U5', 'U6', 'r114-song1', 'r114-song2', 'r114-song3', 'r114-song4', 'r114-song5']) {
 			expect(shortlist(foldLetters(fixture(name)), library).size, name).toBe(SHORTLIST);
 		}

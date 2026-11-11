@@ -1,12 +1,12 @@
 /**
  * The threshold, both ways, with the arias in the library (row 182, step 7; brief `brief-code-poem-library-arias_r2_2026-11-09.md`).
  *
- * THE LIBRARY IS THE COMMITTED FILE (`data/dictionary.poems.<hash8>.json`): 14 poems of 13 works and 89 arias of 29 operas (a libretto's
+ * THE LIBRARY IS THE COMMITTED FILE (`data/dictionary.poems.<hash8>.json`): 238 poems of 237 works (the 14 first and the 224 harvested, lane 45) and 89 arias of 29 operas (a libretto's
  * `work` is its opera). The matcher is unchanged. This file asks two things of it:
  *   - FORWARD, from the arias: a Lyrics made from an aria's own text fills that aria, and no other. Nothing is asked of the margin
  *     between two arias of one opera, because they share a `work` and `rankWorks` scores a work by its best entry (so siblings never
  *     compete); what that costs is measured below (how like a sibling an aria's text is).
- *   - BACK, from the songs: the twelve read Lyrics of `tools/poems/fixtures/` answer as `expected_r2.txt` says, and none fills from an
+ *   - BACK, from the songs: the twelve read Lyrics of `tools/poems/fixtures/` answer as `expected_r3.txt` says, and none fills from an
  *     aria by mistake.
  */
 import { readFileSync } from 'node:fs';
@@ -26,10 +26,11 @@ const FILLS = ['P', 'S', 'T', 'U1', 'U6', 'r114-song2', 'r114-song3', 'r114-song
 const REFUSES = ['U4', 'U5', 'r114-song1'];
 
 describe('the library holds the arias', () => {
-	it('has 103 entries of 42 works: 14 poems of 13 works and 89 arias of 29 operas', () => {
-		expect(library.entries).toHaveLength(103);
+	it('has 327 entries of 266 works: 238 poems of 237 works (the 14 first and the 224 harvested) and 89 arias of 29 operas', () => {
+		expect(library.entries).toHaveLength(327);
 		expect(arias).toHaveLength(89);
-		expect(new Set(library.entries.map((e) => e.work)).size).toBe(42);
+		expect(library.entries.filter((e) => e.kind === undefined)).toHaveLength(238);
+		expect(new Set(library.entries.map((e) => e.work)).size).toBe(266);
 		expect(new Set(arias.map((e) => e.work)).size).toBe(29);
 		// no work is shared between the poems and the arias
 		const poemWorks = new Set(library.entries.filter((e) => e.kind === undefined).map((e) => e.work));
@@ -107,7 +108,7 @@ describe('forward: a Lyrics made from an aria’s own text fills that aria', () 
 	}, 300_000);
 });
 
-describe('back: the twelve fixture songs answer as expected_r2.txt says, and none fills from an aria', () => {
+describe('back: the twelve fixture songs answer as expected_r3.txt says, and none fills from an aria', () => {
 	it('fills nine, refuses three, and names the poem each fills', () => {
 		for (const name of FILLS) expect(matchPoem(fixture(name), library), name).not.toBeNull();
 		for (const name of REFUSES) expect(matchPoem(fixture(name), library), name).toBeNull();
