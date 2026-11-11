@@ -347,7 +347,7 @@
 								<td class="gt-cell gt-sans">й</td>
 								<td class="gt-cell gt-sans-obl">Й</td>
 								<td class="gt-cell gt-sans-obl">й</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 								<td class="gt-cell gt-cursive"><CursiveGlyph letter="й" /></td>
 							</tr>
 							<tr>
@@ -551,7 +551,7 @@
 								<td class="gt-cell gt-sans">ъ</td>
 								<td class="gt-cell gt-sans-obl">Ъ</td>
 								<td class="gt-cell gt-sans-obl">ъ</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 								<td class="gt-cell gt-cursive"><CursiveGlyph letter="ъ" /></td>
 							</tr>
 							<tr>
@@ -563,7 +563,7 @@
 								<td class="gt-cell gt-sans">ы</td>
 								<td class="gt-cell gt-sans-obl">Ы</td>
 								<td class="gt-cell gt-sans-obl">ы</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 								<td class="gt-cell gt-cursive"><CursiveGlyph letter="ы" /></td>
 							</tr>
 							<tr>
@@ -575,7 +575,7 @@
 								<td class="gt-cell gt-sans">ь</td>
 								<td class="gt-cell gt-sans-obl">Ь</td>
 								<td class="gt-cell gt-sans-obl">ь</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 								<td class="gt-cell gt-cursive"><CursiveGlyph letter="ь" /></td>
 							</tr>
 							<tr>
@@ -2388,7 +2388,7 @@
 								<td class="gt-cell gt-sans">й</td>
 								<td class="gt-cell gt-sans-obl">Й</td>
 								<td class="gt-cell gt-sans-obl">й</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 								<td class="gt-cell gt-cursive"><CursiveGlyph letter="й" /></td>
 							</tr>
 							<tr>
@@ -2592,7 +2592,7 @@
 								<td class="gt-cell gt-sans">ъ</td>
 								<td class="gt-cell gt-sans-obl">Ъ</td>
 								<td class="gt-cell gt-sans-obl">ъ</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 								<td class="gt-cell gt-cursive"><CursiveGlyph letter="ъ" /></td>
 							</tr>
 							<tr>
@@ -2604,7 +2604,7 @@
 								<td class="gt-cell gt-sans">ы</td>
 								<td class="gt-cell gt-sans-obl">Ы</td>
 								<td class="gt-cell gt-sans-obl">ы</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 								<td class="gt-cell gt-cursive"><CursiveGlyph letter="ы" /></td>
 							</tr>
 							<tr>
@@ -2616,7 +2616,7 @@
 								<td class="gt-cell gt-sans">ь</td>
 								<td class="gt-cell gt-sans-obl">Ь</td>
 								<td class="gt-cell gt-sans-obl">ь</td>
-								<td class="gt-cell gt-cursive">SVG</td>
+								<td class="gt-cell gt-cursive gt-null">—</td>
 								<td class="gt-cell gt-cursive"><CursiveGlyph letter="ь" /></td>
 							</tr>
 							<tr>

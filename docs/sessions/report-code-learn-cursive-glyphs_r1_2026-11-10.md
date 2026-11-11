@@ -45,3 +45,9 @@ Gates run at the baseline (the ship script `ilya-ship.sh` is not in the reposito
 - Checked: `node scripts/ratchets.mjs` OK; a throwaway server-render of `LearnContent` in English held 62 `<svg` and 4 `>SVG<`. The throwaway test was deleted.
 
 NOT ESTABLISHED (step 2): how it looks (step 5); svelte-check's warning count after the change (step 5).
+
+## Step 3: capital Й, Ъ, Ы, Ь
+
+The four capital cells per language now read `<td class="gt-cell gt-cursive gt-null">—</td>`: `LearnContent.svelte:350, 554, 566, 578` (French) and `:2391, 2595, 2607, 2619` (English). No `>SVG<` remains in the file; each language has 12 null cursive cells (8 existing plus 4) and 62 drawings. The file is still 4097 lines. Nothing else changed.
+
+NOT ESTABLISHED (step 3): how the `—` looks beside the drawings (step 5).
