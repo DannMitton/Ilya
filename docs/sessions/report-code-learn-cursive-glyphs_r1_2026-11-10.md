@@ -32,3 +32,7 @@ Gates run at the baseline (the ship script `ilya-ship.sh` is not in the reposito
 - The ship script's own eight gates, its baselines, and their order: the script is outside the repository. My table is the CI set, not the ship script.
 - The desk's 2026-11-09 figures (web 4707 + 1, integration 125) differ from mine (4894 + 1, 151). This checkout is the maintainer's working tree and may count files a clean clone does not (`ENVIRONMENT.md` says gate 4 differs between a clean clone and the Mac). I did not reconcile this.
 - The Playwright suite's baseline.
+
+## Step 1: the 62 files copied
+
+`apps/web/src/lib/components/Reading/cursive/` now holds the 62 files, copied unchanged (`diff -r` against `tools/cursive/r4/svg/` is empty). `tools/cursive/r4/` stays as the source record. Loading is step 2.
