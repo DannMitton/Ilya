@@ -130,6 +130,11 @@ export interface LoaderState {
 	durationMs: number;
 	/** Fetch progress: 0 to 1 when determinable, -1 for indeterminate */
 	progress: number;
+	/**
+	 * True once the homograph tier has been installed (`scheduleHomographTier`). It lands after the app is interactive, so a
+	 * transcription made before it cannot match a homograph's gloss to the singer's stress; the page runs again when this turns true.
+	 */
+	homographsReady: boolean;
 }
 
 export interface LoaderCallbacks {
@@ -590,13 +595,14 @@ async function loadGlossTier(
  * has already transcribed changes. Failures are non-fatal: the app keeps the
  * single-entry behaviour it has today.
  */
-async function loadHomographTier(dictionary: Record<string, any>): Promise<void> {
+async function loadHomographTier(dictionary: Record<string, any>, onInstalled: () => void): Promise<void> {
 	const response = await fetch(HOMOGRAPH_URL);
 	if (!response.ok) {
 		throw new Error(`Homograph tier fetch failed: HTTP ${response.status}`);
 	}
 	const payload: Record<string, any[]> = await response.json();
 	installHomographEntries(dictionary, payload);
+	onInstalled();
 }
 
 /**
@@ -641,9 +647,9 @@ export function installHomographEntries(
  * Schedule the homograph tier after the app is interactive, on the same
  * idle machinery as the gloss tier. Non-fatal by design.
  */
-function scheduleHomographTier(dictionary: Record<string, any>): void {
+function scheduleHomographTier(dictionary: Record<string, any>, onInstalled: () => void): void {
 	const start = () => {
-		loadHomographTier(dictionary).catch((error: unknown) => {
+		loadHomographTier(dictionary, onInstalled).catch((error: unknown) => {
 			const message = error instanceof Error ? error.message : String(error);
 			console.warn('[Ilya] Homograph tier unavailable:', message);
 		});
@@ -726,7 +732,8 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		error: null,
 		entryCount: 0,
 		durationMs: 0,
-		progress: 0
+		progress: 0,
+		homographsReady: false
 	};
 	callbacks.onStateChange({ ...state });
 
@@ -826,7 +833,10 @@ export async function loadDictionary(callbacks: LoaderCallbacks): Promise<void> 
 		// Tier 2: schedule the lazy gloss tier (full E/F glosses) now that
 		// the app is interactive. Non-blocking; failures are non-fatal.
 		scheduleGlossTier(manifest, dictionary);
-		scheduleHomographTier(dictionary);
+		scheduleHomographTier(dictionary, () => {
+			state.homographsReady = true;
+			callbacks.onStateChange({ ...state });
+		});
 		schedulePoemTier(manifest);
 	} catch (error: unknown) {
 		const message = error instanceof Error ? error.message : String(error);

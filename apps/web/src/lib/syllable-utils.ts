@@ -11,6 +11,7 @@
  * not a phonological rule. No phonotactic validation is applied.
  */
 
+import { VOWEL } from './omr/underlay-units';
 import type { SyllableData } from '@ilya/phonology';
 import type { LineData, WordStackData, SyllableOverride } from './types';
 import { applyReconstitution } from './reconstitution';
@@ -257,6 +258,36 @@ export function applyOpenSyllabificationToLines(
  *
  * Does not mutate the word.
  */
+/**
+ * ONE VOWEL PER NOTE (`CONTRACT.md` §0.1), on a stored division. A recut is used only where it moves no vowel: the same
+ * number of syllables as the engine's, and in each place the same count of vowel letters (`VOWEL`, «й» a consonant).
+ * A boundary list can come from storage or a binder, not only from the Inspector's drag, so it is not trusted.
+ */
+export function keepsEveryVowel(engine: readonly SyllableData[], recut: readonly SyllableData[]): boolean {
+	if (recut.length !== engine.length) return false;
+	return engine.every((s, i) => vowelLetters(s.cyrillic ?? '') === vowelLetters(recut[i].cyrillic ?? ''));
+}
+
+const vowelLetters = (text: string): number => Array.from(text).filter((c) => VOWEL.test(c)).length;
+
+/**
+ * The same refusal on the letters alone, for a stored row read before any transcription: the boundaries must be whole,
+ * strictly rising, inside the word, and cut it into pieces of exactly one vowel letter each (what an engine syllable of a
+ * word of this many vowels holds).
+ */
+export function boundariesKeepOneVowel(word: string, boundaries: readonly number[]): boolean {
+	const letters = Array.from(word);
+	const vowels = letters.filter((c) => VOWEL.test(c)).length;
+	if (boundaries.length + 1 !== vowels) return false;
+	let start = 0;
+	for (const edge of [...boundaries, letters.length - 1]) {
+		if (!Number.isInteger(edge) || edge < start || edge > letters.length - 1) return false;
+		if (vowelLetters(letters.slice(start, edge + 1).join('')) !== 1) return false;
+		start = edge + 1;
+	}
+	return true;
+}
+
 export function reslicedSyllables(
 	word: WordStackData,
 	syllableOverrides?: ReadonlyMap<string, SyllableOverride>,
@@ -273,9 +304,12 @@ export function reslicedSyllables(
 	const override = syllableOverrides?.get(overrideKey);
 
 	if (override) {
-		// Per-word override: use custom boundaries with displayLog IPA
+		// Per-word override: use custom boundaries with displayLog IPA, but only where the recut moves no vowel
+		// (CONTRACT §0.1, one vowel per note). A division read from storage or a binder may be anything.
 		const charIpas = word.displayLog.map(e => e.ipa ?? '');
-		return applySyllableOverride(word.syllables, charIpas, override);
+		const recut = applySyllableOverride(word.syllables, charIpas, override);
+		if (keepsEveryVowel(word.syllables, recut)) return recut;
+		// Ignored: fall through to the global rule, as a word with no override would.
 	}
 	if (globalOpenSyllabification) {
 		// Global open syllabification for non-overridden words

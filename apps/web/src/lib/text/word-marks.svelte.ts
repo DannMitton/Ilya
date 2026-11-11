@@ -9,24 +9,43 @@
  * `"lineIndex-wordIndex"` (the ё toggles with `-charIndex`), which are the
  * words of ONE text. Held here, the page owns two instances (`lyricsMarks`,
  * `poemMarks`) and every tool works on the shown witness's, so a poem word's
- * key never lands in Lyrics' maps. These marks are session state and are never
- * stored, as Lyrics' have always been (review r2, amendment 5); only glosses
- * are on the song. The bodies are the page's own, moved unchanged.
+ * key never lands in Lyrics' maps. THE SONG DOCUMENT OWNS THE TWO INSTANCES
+ * (`doc.lyricsMarks`, `doc.poemMarks`) and saves them as rows with the song
+ * (`SongRecord.wordMarks`), so they survive a switch, a reload, and a binder
+ * (row 184 (word marks), ruled by Dann 2026-11-09 20:44, reversing the session-only form
+ * of review r2, amendment 5). The poem join's scan-repair marks are not here
+ * and stay session-only. The bodies are the page's own, moved unchanged.
  */
 import type { SyllableOverride, UserStressOverride, YoToggle } from '$lib/types';
 import { rekeyByWord, rekeyByWordChar, type TextDiff } from '$lib/text-diff';
+import type { MarkMaps } from '$lib/library/word-mark-rows';
 
 export class WordMarks {
-	/** Keyed by `"lineIndex-wordIndex"`. Cleared on a fresh transcription of an unrelated text. */
+	/** Keyed by `"lineIndex-wordIndex"`. Saved with the song. */
 	stress = $state<Map<string, UserStressOverride>>(new Map());
 	/** Keyed by `"lineIndex-wordIndex-charIndex"`. */
 	yo = $state<Map<string, YoToggle>>(new Map());
-	/** Per-word syllable boundaries; cleared when the global open-syllabification toggle changes. */
+	/** Per-word syllable boundaries; cleared (and saved as cleared) when the global open-syllabification toggle changes. */
 	syllables = $state<Map<string, SyllableOverride>>(new Map());
-	/** Ephemeral per-word reconstitutions. */
+	/**
+	 * The singer's CHOICE for a word, saved with the song: true reconstituted, false reduced (Dann, 2026-11-09 22:20,
+	 * option 2), not an inversion of the device-wide Reconstitution setting. A word with no entry follows the setting.
+	 * What a surface draws is `spotInversions` (`spot-choice.ts`), the words whose choice differs from the setting.
+	 */
 	spot = $state<Map<string, boolean>>(new Map());
 
-	/** Everything a Clear or a song switch drops. */
+	/** Replace all four from a loaded song, and the same four back out as plain maps for the save. */
+	load(maps: MarkMaps): void {
+		this.stress = new Map(maps.stress);
+		this.yo = new Map(maps.yo);
+		this.syllables = new Map(maps.syllables);
+		this.spot = new Map(maps.spot);
+	}
+	maps(): MarkMaps {
+		return { stress: this.stress, yo: this.yo, syllables: this.syllables, spot: this.spot };
+	}
+
+	/** Everything a Clear drops. */
 	clear(): void {
 		this.spot = new Map();
 		this.stress = new Map();
@@ -43,10 +62,15 @@ export class WordMarks {
 		this.yo = rekeyByWordChar(this.yo, diff);
 	}
 
-	toggleSpot(key: string): void {
+	/**
+	 * The checkbox beside the word offers the opposite of the setting. A word already read the opposite way is put back
+	 * to following the setting (its mark is removed); any other word is set to the opposite of the setting, as a saved choice.
+	 */
+	toggleSpot(key: string, reconstitution: boolean): void {
 		const next = new Map(this.spot);
-		if (next.has(key)) next.delete(key);
-		else next.set(key, true);
+		const choice = next.get(key);
+		if (choice !== undefined && choice !== reconstitution) next.delete(key);
+		else next.set(key, !reconstitution);
 		this.spot = next;
 	}
 

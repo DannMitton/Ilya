@@ -218,6 +218,16 @@ describe('loadDictionary without a connection (N.195)', () => {
 		expect(written.indexOf('dict-h1-part1-meta')).toBeGreaterThan(-1);
 	});
 
+	it('homographsReady is false when the dictionary is ready, and the state is announced again when the homograph tier lands', async () => {
+		serve({ manifest: manifestFor('h2') });
+		vi.stubGlobal('requestIdleCallback', (run: () => void) => setTimeout(run, 0)); // the suite's default never runs the idle tiers
+		const seen: boolean[] = [];
+		await loadDictionary({ onStateChange: (s) => seen.push(s.homographsReady) });
+		expect(seen[seen.length - 1]).toBe(false); // ready to transcribe, tier not yet in
+		await vi.waitFor(() => expect(seen[seen.length - 1]).toBe(true));
+		expect(seen.filter((v) => v).length).toBe(1);
+	});
+
 	it('(a) stores no manifest when a chunk write fails, so a stored manifest is never ahead of its dictionary', async () => {
 		const put = IDBObjectStore.prototype.put;
 		vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementation(function (this: IDBObjectStore, value: unknown, key?: IDBValidKey) {
