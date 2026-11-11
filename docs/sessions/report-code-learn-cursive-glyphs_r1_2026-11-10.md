@@ -36,3 +36,12 @@ Gates run at the baseline (the ship script `ilya-ship.sh` is not in the reposito
 ## Step 1: the 62 files copied
 
 `apps/web/src/lib/components/Reading/cursive/` now holds the 62 files, copied unchanged (`diff -r` against `tools/cursive/r4/svg/` is empty). `tools/cursive/r4/` stays as the source record. Loading is step 2.
+
+## Step 2: CursiveGlyph, the cells, the style
+
+- New `apps/web/src/lib/components/Reading/CursiveGlyph.svelte`: one `import.meta.glob('./cursive/*.svg', { query: '?raw', import: 'default', eager: true })`, keyed on capital plus case (`А` gives the `upper` file, `а` the `lower`), drawn with `{@html}`.
+- `LearnContent.svelte` gains one import line (`:4`), so it is 4097 lines against the ceiling of 4099. 124 cells changed in place, 62 per language (`<td class="gt-cell gt-cursive"><CursiveGlyph letter="а" /></td>`, for example `:230-231`); `gt-hi` stays on its `<td>` (`:279`, `:2320`). The letter in each call was read from its own row's sans-oblique cell, not typed. The four capitals Й, Ъ, Ы, Ь keep «SVG» until step 3.
+- `apps/web/src/routes/+page.svelte:4817-4819`: the one global rule beside `.gt-cursive`, as the brief gives it. `.gt-cursive` itself is unchanged, so the eight existing null cells look as before (I read the brief's "only `font-size` and `letter-spacing` may go" as permission, not an instruction, because the null cells use both).
+- Checked: `node scripts/ratchets.mjs` OK; a throwaway server-render of `LearnContent` in English held 62 `<svg` and 4 `>SVG<`. The throwaway test was deleted.
+
+NOT ESTABLISHED (step 2): how it looks (step 5); svelte-check's warning count after the change (step 5).

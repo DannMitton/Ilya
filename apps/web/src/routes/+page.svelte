@@ -4814,6 +4814,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		letter-spacing: 0.03em;
 	}
 
+	/* The drawn cursive letters (Reading/CursiveGlyph.svelte): one height for every letter, so the baseline is shared along the row.
+	   Global, because a scoped selector does not reach {@html} content and would count as unused. Widest at 40 px is capital Ж, 47.2 px, inside the 48 px cell. */
+	:global(.gt-cursive svg) { display: block; height: 40px; width: auto; margin: 0 auto; }
+
 	:global(.gt-null) {
 		font-size: 1.15rem !important;
 		font-weight: 700;
