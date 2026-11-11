@@ -14,6 +14,10 @@ const SITE_KEYS: Readonly<Record<string, string>> = {
 	// Row 182: the sites the aria texts come from (the build lists the same three, `LIBRETTO_SITES`).
 	'operalib.eu': 'intake.poemLibrary.site.operalib',
 	FEB: 'intake.poemLibrary.site.feb',
+	// Lane 45: the sites the harvested poems come from (the data's own strings).
+	RVB: 'intake.poemLibrary.site.rvb',
+	'az.lib.ru': 'intake.poemLibrary.site.azLib',
+	'ilibrary.ru': 'intake.poemLibrary.site.ilibrary',
 };
 
 export function siteName(site: string, language: Language): string {

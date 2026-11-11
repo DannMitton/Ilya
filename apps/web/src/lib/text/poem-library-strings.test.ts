@@ -32,11 +32,15 @@ const RATIFIED_TABLE: Record<string, [string, string]> = {
 	// Row 182, ratified by Dann 2026-11-09 22:14: the two other sites the aria texts come from (the French name of the second is coined)
 	'intake.poemLibrary.site.operalib': ['operalib.eu', 'operalib.eu'],
 	'intake.poemLibrary.site.feb': ['the Fundamental Electronic Library (feb-web.ru)', 'la Bibliothèque électronique fondamentale (feb-web.ru)'],
+	// Lane 45 (row 183), ratified by Dann: rvb.ru 2026-11-10 22:40, az.lib.ru 2026-11-10 22:41, ilibrary.ru 2026-11-11
+	'intake.poemLibrary.site.rvb': ['the Russian Virtual Library (rvb.ru)', 'la Bibliothèque virtuelle russe (rvb.ru)'],
+	'intake.poemLibrary.site.azLib': ['Maxim Moshkov’s Library (az.lib.ru)', 'la Bibliothèque de Maxime Mochkov (az.lib.ru)'],
+	'intake.poemLibrary.site.ilibrary': ['ilibrary.ru', 'ilibrary.ru'],
 };
 
 describe('the poem library strings', () => {
 	it('holds the twelve keys of the brief, the site names of D3 and of row 182, in both languages, exactly as ratified', () => {
-		expect(Object.keys(RATIFIED_TABLE)).toHaveLength(15);
+		expect(Object.keys(RATIFIED_TABLE)).toHaveLength(18);
 		for (const [key, [en, fr]] of Object.entries(RATIFIED_TABLE)) {
 			expect(t(key, 'en'), key).toBe(en);
 			expect(t(key, 'fr'), key).toBe(fr);
@@ -79,12 +83,23 @@ describe('D3: the site is named in the interface language, by the data’s own s
 		expect(t('intake.poemLibrary.cardSource', 'fr').replace('{site}', siteName('FEB', 'fr'))).toBe('Tiré de la Bibliothèque électronique fondamentale (feb-web.ru).');
 	});
 
+	it('prints the three sites of the harvested poems, each by its own ratified line, and the card sentence takes no elision (lane 45)', () => {
+		expect(siteName('RVB', 'en')).toBe('the Russian Virtual Library (rvb.ru)');
+		expect(siteName('RVB', 'fr')).toBe('la Bibliothèque virtuelle russe (rvb.ru)');
+		expect(siteName('az.lib.ru', 'en')).toBe('Maxim Moshkov\u2019s Library (az.lib.ru)');
+		expect(siteName('az.lib.ru', 'fr')).toBe('la Bibliothèque de Maxime Mochkov (az.lib.ru)');
+		expect(siteName('ilibrary.ru', 'en')).toBe('ilibrary.ru');
+		expect(siteName('ilibrary.ru', 'fr')).toBe('ilibrary.ru');
+		expect(t('intake.poemLibrary.cardSource', 'fr').replace('{site}', siteName('az.lib.ru', 'fr'))).toBe('Tiré de la Bibliothèque de Maxime Mochkov (az.lib.ru).');
+		expect(t('intake.poemLibrary.cardSource', 'fr').replace('{site}', siteName('ilibrary.ru', 'fr'))).toBe('Tiré de ilibrary.ru.');
+	});
+
 	it('every site the library holds is listed in the table (so no entry prints a data key as its name where a name is ratified)', () => {
 		const sites = new Set<string>();
 		const lib = JSON.parse(readFileSync(join(__dirname, '../../../../../tools/poems/library.json'), 'utf8'));
 		for (const e of lib.entries) sites.add(e.source.site);
 		for (const s of sites) {
-			for (const lang of ['en', 'fr'] as const) expect(hasString(`intake.poemLibrary.site.${{ 'Russian Wikisource': 'russianWikisource', 'operalib.eu': 'operalib', FEB: 'feb' }[s as string]}`, lang), `${s} ${lang}`).toBe(true);
+			for (const lang of ['en', 'fr'] as const) expect(hasString(`intake.poemLibrary.site.${{ 'Russian Wikisource': 'russianWikisource', 'operalib.eu': 'operalib', FEB: 'feb', RVB: 'rvb', 'az.lib.ru': 'azLib', 'ilibrary.ru': 'ilibrary' }[s as string]}`, lang), `${s} ${lang}`).toBe(true);
 		}
 		expect(siteName('Russian Wikisource', 'fr')).not.toBe('Russian Wikisource');
 		expect(siteName('FEB', 'fr')).not.toBe('FEB');

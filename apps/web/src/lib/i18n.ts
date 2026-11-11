@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,219 keys.
+   This file holds 1,222 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -45,7 +45,7 @@
    input.          8  lib/components/Drawer/IntakePanel.svelte
    insights.     189  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     42  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
-   intake.        51  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
+   intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
    loupe.        122  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
@@ -911,6 +911,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// Row 182 (ratified by Dann 2026-11-09 22:14): the two other sites the aria texts come from. The French name of the second is coined.
 	'intake.poemLibrary.site.operalib':     { en: 'operalib.eu', fr: 'operalib.eu' },
 	'intake.poemLibrary.site.feb':          { en: 'the Fundamental Electronic Library (feb-web.ru)', fr: 'la Bibliothèque électronique fondamentale (feb-web.ru)' },
+	// Lane 45 (row 183; ratified by Dann: rvb.ru 2026-11-10 22:40, az.lib.ru 2026-11-10 22:41, ilibrary.ru 2026-11-11): the three sites the harvested poems come from.
+	'intake.poemLibrary.site.rvb':          { en: 'the Russian Virtual Library (rvb.ru)', fr: 'la Bibliothèque virtuelle russe (rvb.ru)' },
+	'intake.poemLibrary.site.azLib':        { en: 'Maxim Moshkov’s Library (az.lib.ru)', fr: 'la Bibliothèque de Maxime Mochkov (az.lib.ru)' },
+	'intake.poemLibrary.site.ilibrary':     { en: 'ilibrary.ru', fr: 'ilibrary.ru' },
 	// The two lines that stand under POEM once the card is answered (`text/input-line.ts`).
 	'intake.view.libraryPoem':              { en: '{author}, “{title}”, from {site}.', fr: '{author}, «\u00a0{title}\u00a0», tiré de {site}.' },
 	'intake.view.libraryPoemEdited':        { en: 'Based on {author}, “{title}”, from {site}.', fr: 'D’après {author}, «\u00a0{title}\u00a0», tiré de {site}.' },
