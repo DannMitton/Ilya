@@ -64,3 +64,36 @@ New `apps/web/src/lib/components/Reading/learn-cursive-glyphs.test.ts`, 197 test
 - Also: the list of letters with no capital file is non-empty and the file count equals lower plus upper.
 
 NOT ESTABLISHED (step 4): that the (a) assertions fail on the pre-change tree (a positive control). I did not run the test against `64d9f08f`; the rules forbid checkout and stash, so I read the assertions instead. The web gate total with the new tests is measured in step 5.
+
+## Step 5: gates and the look
+
+Gates after the change (same set as step 0):
+
+| Gate | Baseline | After |
+|---|---|---|
+| ratchets | OK | OK |
+| svelte-check | 0 errors, 12 warnings | 0 errors, 12 warnings |
+| phonology | 456 | 456 |
+| dictionary | 248 | 248 |
+| blurb | 168 | 168 |
+| score-parser | 785 + 5 skipped | 785 + 5 skipped |
+| web | 4894 + 1 skipped | 5091 + 1 skipped (+197, the new file) |
+| integration | 151 | 151 |
+| build | done | done |
+
+Playwright look: `docs/sessions/learn-cursive_2026-11-10/look.mjs` (run from the repository root with the dev server on :5173; Chromium, 1440 x 900 desk and 390 x 844 phone at 2x, LEARN in English and in French). It asserts every `.gt-cursive svg` is 40 px high and at most 48 px wide, by `getBoundingClientRect`. Result in all four runs: 62 drawings, 0 outside the bounds, so no letter is named as failing. The eight pictures are in the same folder: `{en,fr}-{desk,phone}-{first8,last8}.png`. On the phone the script scrolls the table (`.gt-table` is itself the horizontal scroller) to its right edge so the cursive columns show. I read four of the pictures (en-desk-first8, en-desk-last8, en-phone-first8, fr-phone-last8): the letters are drawn in the column's green, the д cell keeps its `gt-hi` highlight, and the null cells show `—`.
+
+## Step 6: summary
+
+Changed: `Reading/cursive/` (62 files, new); `Reading/CursiveGlyph.svelte` (new); `LearnContent.svelte:4` (import) and 124 cells (`:230` onward, `:2320` onward); 8 cells to null (`:350, 554, 566, 578, 2391, 2595, 2607, 2619`); `+page.svelte:4817-4819` (one global rule); `Reading/learn-cursive-glyphs.test.ts` (new, 197 tests); this report; the look script and its eight pictures. Nothing was changed in the SVG files or any string. `LearnContent.svelte` is 4097 lines against a ceiling of 4099, so the citations the brief lists are off by one, as it says.
+
+## What I could not establish
+
+- The ship script's own eight gates and its baselines (outside the repository); I ran the CI set. My baseline counts (web 4894, integration 151) differ from the desk's 2026-11-09 figures (4707, 125); not reconciled.
+- The Playwright suite (`pnpm test:e2e`) was not run, before or after; only the look script.
+- That the new tests fail on the old tree (no positive control; no checkout allowed).
+- "The two cursive cells of every row on one baseline" was not measured. It follows from the shared viewBox frame (README: baseline at y = 48.2) and the one 40 px height; I looked at pictures, I did not measure baselines.
+- The tables have 38 `tbody tr`, not 37: the extra is the "Pre-1917 obsolete letters" divider row. I did not find it in the brief; it does not affect any count above.
+- Pictures: on the phone the first-eight shot shows about seven rows (the viewport clips it), and the last-eight shot ends at the first obsolete row. I read four of eight pictures, not all.
+- Gzipped weight of the built LEARN code was not measured; the 62 files gzip to 34,706 bytes together (`gzip -9`).
+- Dev server only; no production build was served. `docs/memory/OPEN.md` showed as modified in the working tree during the session. I did not touch it and did not stage it.
