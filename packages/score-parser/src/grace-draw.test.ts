@@ -42,7 +42,7 @@ describe('grace notes are drawn', () => {
 		const fonts = [...svg.matchAll(/<text [^>]*font-size="([\d.]+)px"[^>]*>()<\/text>/g)].map((m) => Number(m[1]));
 		expect(fonts.length).toBe(5); // the grace head first (it is drawn before its principal), then the four quarters
 		expect(fonts[0] / fonts[1]).toBeCloseTo(0.7, 2);
-		const g = svg.match(/<g data-grace="[^"]*">([\s\S]*?)<\/g>/)![1];
+		const g = svg.match(/<g data-grace="[^"]*"[^>]*>([\s\S]*?data-grace-slur[^>]*\/>)/)![1];
 		const stem = g.match(/<line x1="([\d.-]+)" y1="([\d.-]+)" x2="([\d.-]+)" y2="([\d.-]+)" stroke="#1a1612"/)!;
 		expect(stem[1]).toBe(stem[3]); // vertical
 		expect(Number(stem[2]) - Number(stem[4])).toBeCloseTo(12 * 2.25, 1); // up
@@ -97,6 +97,18 @@ describe('a grace note takes no time', () => {
 		const s = await fixture();
 		expect(widthOf(draw(s))).toBeGreaterThan(widthOf(draw(without(s))));
 		expect(widthOf(draw(without(s)))).toBeCloseTo(sliceWidth(without(s), 0, 9, OPTS, analyse(s)), 1);
+	});
+});
+
+describe('each grace note is selectable like a note', () => {
+	it('has its own event group and hit rectangle, and its principal\'s hit rectangle begins where the grace notes end', async () => {
+		const svg = draw(await fixture(), 0, 1);
+		expect(svg).toContain('<g data-event-id="m0-0-1~g1" pointer-events="none">');
+		expect(svg).toContain('<g data-event-id="m1-0-1~g2" pointer-events="none">');
+		const hit = (id: string) => { const m = svg.match(new RegExp(`<rect data-hit="${id}" x="([\\d.-]+)" y="[\\d.-]+" width="([\\d.-]+)"`))!; return { l: +m[1], r: +m[1] + +m[2] }; };
+		expect(hit('m0-0-1~g1').r).toBeLessThanOrEqual(hit('m0-0-1').l + 0.01);
+		expect(hit('m1-0-1~g1').r).toBeLessThanOrEqual(hit('m1-0-1~g2').l + 0.01);
+		expect(hit('m1-0-1~g2').r).toBeLessThanOrEqual(hit('m1-0-1').l + 0.5);
 	});
 });
 

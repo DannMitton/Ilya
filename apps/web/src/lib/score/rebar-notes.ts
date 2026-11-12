@@ -21,7 +21,7 @@
  * The seats survive: a note after a tie start takes no syllable (`pairings.ts`), so the syllable stays on the first part.
  */
 import type { Fraction, NoteBase, ParsedScore, VocalLineEvent } from '@ilya/score-parser';
-import { applyCorrections, currentPitch, durationFraction, type CorrectionMap, type NoteCorrection } from './correction';
+import { applyCorrections, madeGrace, currentPitch, durationFraction, type CorrectionMap, type NoteCorrection } from './correction';
 import { currentTie, currentType, nextEnteredId } from './entry';
 import { effectiveMarks, mergeBlocked, sameSignature } from './rebar';
 import { heldBar, setSignature, type Through } from './time-signature';
@@ -91,19 +91,20 @@ function withBarlineMark(map: CorrectionMap, id: string, value: 'before' | 'none
  * standing, goes with them (lane 47, amendment 5).
  */
 function withoutDeletedBarlines(read: ParsedScore, line: VocalLineEvent[], map: CorrectionMap, from: number, to: number): CorrectionMap {
-	if (!Object.values(map).some((c) => c.deleted && c.barline !== undefined)) return map;
+	if (!Object.values(map).some((c) => (c.deleted || madeGrace(c)) && c.barline !== undefined)) return map;
 	const kept: CorrectionMap = {};
 	for (const [id, c] of Object.entries(map)) {
-		if (c.deleted) {
-			const { deleted: _d, ...rest } = c;
+		if (c.deleted || madeGrace(c)) {
+			// N.187: a note made a grace note leaves the line as a deleted one does, so its marks pass on the same way.
+			const { deleted: _d, grace: _g, ...rest } = c;
 			kept[id] = rest;
 		} else kept[id] = c;
 	}
 	const place = new Map(line.map((e, i) => [e.id, i] as const));
 	let next = map;
 	let pending: string[] = [];
-	for (const ev of applyCorrections(read.vocalLine, kept)) {
-		if (map[ev.id]?.deleted) {
+	for (const ev of applyCorrections(read.vocalLine, kept, read.graceNotes)) {
+		if (map[ev.id]?.deleted || madeGrace(map[ev.id])) {
 			if (map[ev.id].barline !== undefined) pending.push(ev.id);
 			continue;
 		}
@@ -156,7 +157,7 @@ export function rebarNotes(
 		const b = readingMeasure(i);
 		return !!a && !!b && !sameSignature(a.timeSignature, b.timeSignature);
 	};
-	const owners = effectiveMarks(read.vocalLine, line, signed);
+	const owners = effectiveMarks(read.vocalLine, line, signed, read.graceNotes);
 	let stop = line.length;
 	for (let i = start + 1; i < line.length; i++) {
 		if (owners.get(line[i].id)?.timeSignature || (through === 'next' && readingChangesSignatureAt(i))) {

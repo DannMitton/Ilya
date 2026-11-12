@@ -41,6 +41,7 @@
 	import { LENGTH_CELLS } from '$lib/score/correction';
 	import { barlineUi } from '$lib/score/barline-ui';
 	import { tsUi } from '$lib/score/time-signature-ui.svelte';
+	import GraceCells, { type GraceCellsModel } from '$lib/score/GraceCells.svelte';
 	import {
 		stepCount,
 		stepValue,
@@ -105,6 +106,7 @@
 		/** Clear every correction on the taken entry, back by ruling 2026-08-27. */
 		onrestore: () => void;
 		restoreAvailable: boolean;
+		grace?: GraceCellsModel;
 		/** N.65's counter, on the LYRIC label. Drawn only where there are slots. */
 		placed?: number;
 		total?: number;
@@ -170,6 +172,7 @@
 		onrest,
 		ontie,
 		onrestore,
+		grace,
 		restoreAvailable,
 		placed = 0,
 		total = 0,
@@ -676,6 +679,7 @@
 			     (the last entry, inside a tuplet, a removal the layer would not honour). The face is one word beside Rest and Tie, the
 			     accessible name says which. -->
 			{#if barlineUi.mode || inGap}<button type="button" class="cell" class:engaged={barlineUi.mode === 'remove'} data-barline={barlineUi.mode ?? 'none'} disabled={inGap} aria-label={T(barlineUi.mode === 'remove' ? 'correct.barlineRemove' : 'correct.barlineAdd')} onclick={() => barlineUi.act()}>{T('loupe.barline')}</button>{/if}
+			{#if grace}<GraceCells cells={grace} {language} />{/if}
 			<!-- TIME SIGNATURE (QUEUE row 138, T1): opens the card, which changes it from the bar held to the next change or the end. -->
 			<button type="button" class="cell" data-ts-open disabled={inGap || !tsUi.held} aria-haspopup="dialog" aria-label={T('correct.tsChange')} onclick={(e) => tsUi.show(e.currentTarget)}>{T('loupe.timeSignature')}</button>
 			<!-- RESTORE clears every correction on ONE entry, which the Undo pill
@@ -1018,7 +1022,7 @@
 	   THE GRID FEELS THIS MOST. A cell is 44 px tall at its floor, so 999 px
 	   draws a 22 px end and the correction grid reads as a row of pills. That
 	   is the ruling applied where it shows, and it is Dann's to wave off. */
-	.cell {
+	.cell, :global(.cell-g) {
 		/* A flex box so a drawn glyph centres on both axes. The gap is what puts
 		   the space back between a pitch cell's triangle and its word: inside a
 		   flex container the whitespace between two children is not a text node
@@ -1041,7 +1045,7 @@
 		cursor: pointer;
 	}
 
-	.cell:disabled {
+	.cell:disabled, :global(.cell-g:disabled) {
 		color: var(--ink-tertiary, #6a655f);
 		opacity: 0.5;
 		cursor: default;
@@ -1052,7 +1056,7 @@
 	   VERBS — which duration a fresh entry will take, and which verb the
 	   keyboard is on — so they take the section's own hue rather than the
 	   score document's. */
-	.cell.engaged {
+	.cell.engaged, :global(.cell-g.engaged) {
 		border-color: var(--lavender);
 		color: var(--lavender-ink);
 		font-weight: 600;
@@ -1062,7 +1066,7 @@
 	   of it on the surface behind, so the contrast that decides whether it can
 	   be seen is against the surface rather than against the cell's own fill.
 	   MEASURED on both, before and after, in §21 of the memo. */
-	.cell:focus-visible,
+	.cell:focus-visible, :global(.cell-g:focus-visible),
 	.mark:focus-visible {
 		outline: 2px solid var(--lavender);
 		outline-offset: 2px;

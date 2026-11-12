@@ -18,6 +18,7 @@
  * bands are in READING bars. `readingLabelOf` is the conversion the Loupe's
  * strip needs.
  */
+import { correctedGraceNotes } from './grace-layer';
 import type { Measure, ParsedScore, VocalLineEvent } from '@ilya/score-parser';
 import { applyCorrections, type CorrectionMap } from './correction';
 import { barlineVerb, type BarlineVerb } from './barline-marks';
@@ -52,12 +53,15 @@ export class BarLayer {
 		const map = this.#d.corrections();
 		const memo = this.#memo;
 		if (memo && memo.score === score && memo.map === map) return memo.out;
-		const pre = applyCorrections(score?.vocalLine ?? [], map);
+		const pre = applyCorrections(score?.vocalLine ?? [], map, score?.graceNotes);
 		let out: Computed;
 		if (!score) out = { pre, line: pre, score: null, bars: IDENTITY_BARS };
 		else {
 			const r = rebar(score, pre, map);
-			out = { pre, line: r.line, score: r.score, bars: r.bars };
+			// N.187: the corrected grace list, from the read list, the map, and the corrected line (`grace-layer.ts`).
+			const graces = correctedGraceNotes(score.graceNotes, map, score.vocalLine, r.line);
+			const withGraces = graces === r.score.graceNotes ? r.score : { ...r.score, graceNotes: graces };
+			out = { pre, line: r.line, score: withGraces, bars: r.bars };
 		}
 		this.#memo = { score, map, out };
 		return out;

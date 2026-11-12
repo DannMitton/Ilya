@@ -23,7 +23,7 @@
  * removed (amendment 4); a barline is hers to take away.
  */
 import type { ParsedScore, TimeSignature, VocalLineEvent } from '@ilya/score-parser';
-import { applyCorrections, type CorrectionMap, type NoteCorrection } from './correction';
+import { applyCorrections, madeGrace, type CorrectionMap, type NoteCorrection } from './correction';
 import { rebar } from './rebar';
 
 export type Through = NonNullable<NoteCorrection['timeSignature']>['through'];
@@ -72,16 +72,17 @@ function ownersOf(read: ParsedScore, map: CorrectionMap): Map<string, string> {
 	const out = new Map<string, string>();
 	const kept: CorrectionMap = {};
 	for (const [id, c] of Object.entries(map)) {
-		if (c.deleted) {
-			const { deleted: _d, ...rest } = c;
+		if (c.deleted || madeGrace(c)) {
+			// N.187: a note made a grace note leaves the line as a deleted one does, so its marks pass on the same way.
+			const { deleted: _d, grace: _g, ...rest } = c;
 			kept[id] = rest;
 		} else kept[id] = c;
 	}
-	const full = applyCorrections(read.vocalLine, kept);
+	const full = applyCorrections(read.vocalLine, kept, read.graceNotes);
 	let pending: string[] = [];
 	for (const ev of full) {
 		const c = map[ev.id];
-		if (c?.deleted) {
+		if (c?.deleted || madeGrace(c)) {
 			if (c.timeSignature) pending.push(ev.id);
 			continue;
 		}

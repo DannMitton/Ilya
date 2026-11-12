@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,222 keys.
+   This file holds 1,231 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -32,7 +32,7 @@
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
    console.        2  lib/components/Drawer/AnalysisStation.svelte
-   correct.       32  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
+   correct.       36  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
    cosmetic.      15  lib/components/Drawer/NotationFields.svelte
    dict.           3  lib/components/Paper/TitlePage.svelte, lib/components/Drawer/AnalysisStation.svelte, lib/one-action.ts
    display.        5  no literal consumer found
@@ -48,7 +48,7 @@
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
-   loupe.        122  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   loupe.        127  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
@@ -560,6 +560,17 @@ const strings: Record<string, Record<Language, string>> = {
 	// three, and none of them carries behaviour here.
 	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },
 	'loupe.rest':                  { en: 'Rest',                         fr: 'Silence' },
+	/* ── N.187: grace notes in Corrections (cloud-lane-50). PENDING DANN: the English is the desk's draft, and the French slot
+	   holds the same English until Dann rules the French (the lane is told not to invent it; the French for a grace note is his to choose). One contiguous block. ── */
+	'loupe.grace':                 { en: 'Grace note',                   fr: 'Grace note' },
+	'correct.graceAdd':            { en: 'Add a grace note before the next note', fr: 'Add a grace note before the next note' },
+	'correct.graceMake':           { en: 'Make this a grace note',       fr: 'Make this a grace note' },
+	'correct.graceFull':           { en: 'Make this a full note again',  fr: 'Make this a full note again' },
+	'loupe.graceSlash':            { en: 'Slash',                        fr: 'Slash' },
+	'correct.graceSlash':          { en: 'Add or remove the slash on this grace note', fr: 'Add or remove the slash on this grace note' },
+	'loupe.undo.graceAdded':       { en: 'grace note added',             fr: 'grace note added' },
+	'loupe.undo.grace':            { en: 'grace note changed',           fr: 'grace note changed' },
+	'loupe.undo.graceSlash':       { en: 'slash changed',                fr: 'slash changed' },
 	// ROW 133, ratified by Dann 2026-10-19 23:41 (`docs/sessions/ratified-loupe-dot-words_2026-10-19.md`):
 	// the loupe and a tempo chip name a dotted value in words, and a French rest by its own name.
 	// Whole phrases, not words assembled by grammar, so the French agreement stays as ratified.

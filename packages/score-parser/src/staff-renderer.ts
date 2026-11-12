@@ -2908,7 +2908,8 @@ export function renderAnalyzedStaff(
     // one a singer never presses: N.71's second half, and the reason its first
     // half read as a broken app rather than as bad aim.
     {
-      const hitL = ((prevXById.get(ev.id) ?? nx - 40) + nx) / 2;
+      // N.187: with grace notes before it, its hit rectangle begins where they end, so the two never overlap.
+      const hitL = graceLeft !== undefined ? nx - graceLeft : ((prevXById.get(ev.id) ?? nx - 40) + nx) / 2;
       const hitR = (nx + (nextXById.get(ev.id) ?? nx + 40)) / 2;
       const hitTop = staffTop - 3.5 * o.lineGap;
       const hitBottom = staffBottom + 3.5 * o.lineGap;

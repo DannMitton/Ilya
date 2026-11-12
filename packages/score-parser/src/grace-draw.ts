@@ -119,7 +119,8 @@ export function drawGrace(
   const slots = group.map((g, i) => slotOf(g, marks[i], lone, m));
   const total = slots.reduce((t, s) => t + s.width, 0);
   let x = after ? anchorX : anchorX - m.lineGap * GRACE_CLEAR_SP - total;
-  const out: string[] = [`<g data-grace="${group.map((g) => g.id).join(' ')}"${after ? ' data-grace-after=""' : ''}>`];
+  // pointer-events none on the whole group: only each grace note's own hit rectangle takes a click, never a flag, stroke, beam or slur drawn over it.
+  const out: string[] = [`<g data-grace="${group.map((g) => g.id).join(' ')}"${after ? ' data-grace-after=""' : ''} pointer-events="none">`];
   const stemLen = m.lineGap * GRACE_STEM_SP;
   const stemHalf = (m.headW * GRACE_SCALE) / 2;
   const tips: { sx: number; tip: number; y: number; g: GraceNote }[] = [];
@@ -130,6 +131,9 @@ export function drawGrace(
     const s = slots[i];
     const y = d.yFor(g.pitch);
     const cx = x + s.acc + s.head / 2;
+    // Its own event group and hit rectangle, the width of its own slot and never overlapping its principal's (N.187, amendment 7).
+    out.push(`<g data-event-id="${g.id}" pointer-events="none">`);
+    out.push(`<rect data-hit="${g.id}" x="${round(x)}" y="${round(d.staffTop - 3.5 * m.lineGap)}" width="${round(s.width)}" height="${round(d.staffBottom - d.staffTop + 7 * m.lineGap)}" fill="transparent" pointer-events="all" cursor="pointer"/>`);
     // ledger lines, where the head stands off the stave
     const ledgerHalf = s.head / 2 + m.lineGap * 0.3;
     for (let ly = d.staffTop - m.lineGap; ly >= y - 0.01 && y < d.staffTop - 0.01; ly -= m.lineGap)
@@ -138,7 +142,7 @@ export function drawGrace(
       out.push(`<line x1="${round(cx - ledgerHalf)}" y1="${round(ly)}" x2="${round(cx + ledgerHalf)}" y2="${round(ly)}" stroke="#3a352f" stroke-width="1"/>`);
     if (marks[i]) {
       const acc = d.acc(g.pitch.alter, round(x), y);
-      if (acc) out.push(acc);
+      if (acc) out.push(acc.replace(/^<(\w+) /, `<$1 data-of-event="${g.id}" `));
     }
     if (d.font) out.push(d.glyph('noteheadBlack', round(cx - s.head / 2), y, true));
     else out.push(`<ellipse cx="${round(cx)}" cy="${round(y)}" rx="${round(6.2 * GRACE_SCALE)}" ry="${round(4.6 * GRACE_SCALE)}" fill="#1a1612" transform="rotate(-18 ${round(cx)} ${round(y)})"/>`);
@@ -147,6 +151,7 @@ export function drawGrace(
     centres.push({ cx, y });
     highest = Math.min(highest, y - stemLen);
     lowest = Math.max(lowest, y + m.lineGap / 2);
+    out.push('</g>');
     x += s.width;
   });
   // stems, flags, beam or stroke

@@ -219,3 +219,4 @@ export {
   type TempoLanguage,
 } from './tempo-lexicon';
 export * from './ring-geometry';
+export { isReadScan } from './printed-marks';

@@ -25,7 +25,8 @@
  * `pitchLabel` and the language switch come in as closures (`label`, `word`)
  * because `score/` may not import `voice/` or the page's language state.
  */
-import type { NoteBase, Pitch, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
+import type { GraceNote, NoteBase, Pitch, SpellingContext, VocalLineEvent } from '@ilya/score-parser';
+import { addGrace, isGraceId, toggleGrace, toggleSlash } from './grace-verbs';
 import {
 	amendsNote,
 	clearCorrection,
@@ -75,6 +76,10 @@ export interface CorrectionVerbsDeps {
 	cursor: () => Cursor | null;
 	inGap: () => boolean;
 	selectedEventId: () => string | null;
+	/** N.187: the corrected grace list, the read one, and whether a scan's unmarked lone grace note draws slashed. `line` then carries each grace note as a stop (`lineWithGraceStops`). */
+	graces?: () => GraceNote[] | undefined;
+	readGraces?: () => GraceNote[] | undefined;
+	slashDefault?: () => boolean;
 	setCursor: (next: Cursor | null) => void;
 	/** Moves the selection off a deleted note (`CorrectionCursor.selectedEventId`). */
 	selectEntry: (id: string | null) => void;
@@ -122,6 +127,34 @@ export class CorrectionVerbs {
 	}
 
 	/* ── THE READINGS ─────────────────────────────────────────────────── */
+
+	/** N.187: the taken entry is a grace note. */
+	get selectedIsGrace(): boolean {
+		return isGraceId(this.#d.graces?.(), this.#d.selectedEventId());
+	}
+
+	/** The corrected grace note the taken entry is, or undefined. */
+	get selectedGrace(): GraceNote | undefined {
+		const id = this.#d.selectedEventId();
+		return id ? this.#d.graces?.()?.find((g) => g.id === id) : undefined;
+	}
+
+	/**
+	 * N.187: what the Grace note and Slash cells need. `mode` is what the Grace note cell does now (add one in a gap, make the taken note a
+	 * grace note, make a taken grace note a full note again); the Slash cell shows only on a lone, flagged grace note.
+	 */
+	get graceCells(): { mode: 'gap' | 'note' | 'grace'; slashable: boolean; slashed: boolean; ongrace: () => void; onslash: () => void } {
+		const g = this.selectedGrace;
+		const group = g ? (this.#d.graces?.() ?? []).filter((x) => x.principalId === g.principalId && !!x.after === !!g.after) : [];
+		const flagged = !!g && g.base !== 'quarter' && g.base !== 'half' && g.base !== 'whole' && g.base !== 'breve';
+		return {
+			mode: this.#d.inGap() ? 'gap' : g ? 'grace' : 'note',
+			slashable: !!g && flagged && group.length === 1,
+			slashed: !!g && (g.slash ?? this.#d.slashDefault?.() ?? false),
+			ongrace: this.handleGrace,
+			onslash: this.handleGraceSlash,
+		};
+	}
 
 	get selectedEvent(): VocalLineEvent | undefined {
 		const id = this.#d.selectedEventId();
@@ -180,19 +213,19 @@ export class CorrectionVerbs {
 	/** The bar the held note sits in, for the time signature card (QUEUE row 138, T1); null in a gap or with nothing held. */
 	get heldBar(): HeldBar | null {
 		const id = this.#d.selectedEventId();
-		return !this.#d.inGap() && id ? (this.#d.timeSignature?.held(id) ?? null) : null;
+		return !this.#d.inGap() && id && !this.selectedIsGrace ? (this.#d.timeSignature?.held(id) ?? null) : null;
 	}
 
 	/** The Barline verb the held note offers (QUEUE row 138): Add where the next entry is in its bar, Remove where it opens the next; null where neither. */
 	get barline(): BarlineVerb | null {
 		const id = this.#d.selectedEventId();
-		return !this.#d.inGap() && id ? (this.#d.barlineVerb?.(id) ?? null) : null;
+		return !this.#d.inGap() && id && !this.selectedIsGrace ? (this.#d.barlineVerb?.(id) ?? null) : null;
 	}
 
 	/** Whether the taken entry may start a tie: Gould's conditions, in code. */
 	get tieAvailable(): boolean {
 		const id = this.#d.selectedEventId();
-		return !this.#d.inGap() && !!id && canTie(this.#d.line(), this.#d.corrections(), id);
+		return !this.#d.inGap() && !!id && !this.selectedIsGrace && canTie(this.#d.line(), this.#d.corrections(), id);
 	}
 
 	get selectedIsRest(): boolean {
@@ -295,7 +328,7 @@ export class CorrectionVerbs {
 
 	handleDot = (): void => {
 		const ev = this.selectedEvent;
-		if (!ev) return;
+		if (!ev || this.selectedIsGrace) return;
 		const on = currentDuration(ev, this.#d.corrections()).dots > 0;
 		this.#d.pushUndo({ kind: 'text', key: on ? 'loupe.undo.dotOff' : 'loupe.undo.dotOn' });
 		this.#correct({ dots: on ? 0 : 1 });
@@ -307,7 +340,8 @@ export class CorrectionVerbs {
 		// Move the selection off the note before removing it, so the singer is
 		// left somewhere rather than nowhere. Forward first, then back, because
 		// a run of false positives is usually deleted left to right.
-		const readLine = this.#d.readLine();
+		// A grace note is not in the read; its neighbour is found in the line with the grace notes in it.
+		const readLine = this.selectedIsGrace ? this.#d.line() : this.#d.readLine();
 		const next =
 			neighbourId(readLine, this.#d.corrections(), id, 1) ??
 			neighbourId(readLine, this.#d.corrections(), id, -1);
@@ -386,7 +420,7 @@ export class CorrectionVerbs {
 			return;
 		}
 		const ev = this.selectedEvent;
-		if (!ev) return;
+		if (!ev || this.selectedIsGrace) return;
 		const now = currentDuration(ev, this.#d.corrections()).dots;
 		const next = (now + 1) % 3;
 		this.#d.pushUndo({
@@ -413,6 +447,7 @@ export class CorrectionVerbs {
 			this.#d.setCursor({ kind: 'entry', id });
 			return;
 		}
+		if (this.selectedIsGrace) return;
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.rest' });
 		this.#d.setCorrections(toggleRest(this.#d.corrections(), this.#d.line(), c.id, this.arrival));
 	};
@@ -431,6 +466,51 @@ export class CorrectionVerbs {
 		if (!v) return;
 		this.#d.pushUndo({ kind: 'text', key: v.kind === 'add' ? 'loupe.undo.barlineAdded' : 'loupe.undo.barlineRemoved' });
 		this.#d.setCorrections(v.map);
+	};
+
+	/**
+	 * The Grace note cell and `;`. In a gap it adds one before the next note, at that note's pitch; on a full note it makes it a grace note; on
+	 * a grace note it makes it a full note again (the Rest cell's grammar, in both directions).
+	 */
+	handleGrace = (): void => {
+		const c = this.#d.cursor();
+		if (!c) return;
+		if (c.kind === 'gap') {
+			const line = this.#d.line();
+			const from = c.after === null ? 0 : line.findIndex((e) => e.id === c.after) + 1;
+			const next = line.slice(from).find((e) => e.type === 'note' && !this.#d.corrections()[e.id]?.deleted);
+			const pitch = (next && currentPitch(next, this.#d.corrections())) || this.arrival;
+			const { map, id } = addGrace(this.#d.corrections(), c.after, pitch);
+			this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.graceAdded' });
+			this.#d.setCorrections(map);
+			this.#d.setCursor({ kind: 'entry', id });
+			return;
+		}
+		const readIds = new Set((this.#d.readGraces?.() ?? []).map((g) => g.id));
+		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.grace' });
+		this.#d.setCorrections(toggleGrace(this.#d.corrections(), c.id, this.selectedIsGrace, readIds));
+	};
+
+	/** `/`: a grace note immediately before the taken note or grace note, after any grace notes already before a taken note, selected at once so the pitch keys move it. */
+	handleGraceAdd = (): void => {
+		const c = this.#d.cursor();
+		const ev = this.selectedEvent;
+		if (c?.kind !== 'entry' || !ev || this.selectedIsRest) return;
+		const order = this.#d.line().filter((e) => e.type !== 'rest' && !this.#d.corrections()[e.id]?.deleted);
+		const at = order.findIndex((e) => e.id === ev.id);
+		const anchor = at > 0 ? order[at - 1].id : null;
+		const { map, id } = addGrace(this.#d.corrections(), anchor, currentPitch(ev, this.#d.corrections()) ?? this.arrival);
+		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.graceAdded' });
+		this.#d.setCorrections(map);
+		this.#d.setCursor({ kind: 'entry', id });
+	};
+
+	/** The Slash cell: the stroke through a lone grace note's flag. */
+	handleGraceSlash = (): void => {
+		const g = this.selectedGrace;
+		if (!g || !this.graceCells.slashable) return;
+		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.graceSlash' });
+		this.#d.setCorrections(toggleSlash(this.#d.corrections(), g.id, this.graceCells.slashed));
 	};
 
 	/** Change the held bar's time signature from this bar to the next change or to the end, keeping the barlines, or re-barring the notes. One Undo step. */
