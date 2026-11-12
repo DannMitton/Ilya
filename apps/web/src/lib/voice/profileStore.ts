@@ -36,6 +36,7 @@
 import type { IntakeAnswers } from '@ilya/score-parser';
 import type { Vowel, CalibratedFormant, VoiceCharacteristics, VoiceType } from './engine/types';
 import type { FryRangeVerdict } from './engine/readiness';
+import { isUsable } from './engine/plausibility';
 import type { Outcome } from '$lib/library/types';
 import { profileSave } from './profile-save.svelte';
 
@@ -167,13 +168,26 @@ export interface ProfileStore {
  * Whether a working profile holds any reading at all.
  *
  * LIFTED here from CalibrationWizard.svelte by N.73 S3, unchanged. It decides
- * two things that must never disagree: which phase the wizard opens on, and
- * what the drawer's voice anchor says about the voice. Two copies of this
- * predicate would be two answers to "is this voice calibrated," so there is
- * one, and it lives beside the store whose shape it reads.
+ * which phase the wizard opens on. It no longer decides what the drawer's voice
+ * anchor says: the anchor follows `usableReadingCount`, because a voice whose
+ * readings were all refused has nothing the app can use and the button must say
+ * Calibrate. The wizard keeps this wider test on purpose, so that a singer whose
+ * readings were all refused still opens on the summary, where each reading can
+ * be retaken. The two differ by design (desk default, 2026-11-12).
  */
 export function hasAnyReadings(f: Partial<Record<Vowel, CalibratedFormant>>): boolean {
 	return Object.keys(f).length > 0;
+}
+
+/**
+ * How many of a working profile's readings the app may use: not refused by the
+ * plausibility guard, or refused and kept by the singer (`isUsable`,
+ * `voice/engine/plausibility.ts`). The Drawer's voice anchor says "calibrated"
+ * when this is above zero, and the Voice band's state line prints it as its
+ * count. The wizard does not use it (see `hasAnyReadings`).
+ */
+export function usableReadingCount(f: Partial<Record<Vowel, CalibratedFormant>>): number {
+	return Object.values(f).filter((r) => r !== undefined && isUsable(r)).length;
 }
 
 /** A collision-safe id; crypto.randomUUID with a time-random fallback. */

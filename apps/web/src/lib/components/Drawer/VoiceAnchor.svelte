@@ -15,16 +15,17 @@
 	 * line 17.
 	 *
 	 * This component decides nothing. It renders what it is given and calls
-	 * back. Whether the voice HAS readings is `hasAnyReadings` in
-	 * `profileStore.ts`, which the calibration wizard reads from the same
-	 * place, so the two can never disagree.
+	 * back. Whether the voice has a USABLE reading is `usableReadingCount` in
+	 * `profileStore.ts`; the wizard's opening phase reads the wider
+	 * `hasAnyReadings`, on purpose, so a voice whose readings were all refused
+	 * shows Calibrate here and the summary there.
 	 */
 	import { t, type Language } from '$lib/i18n';
 
 	interface Props {
 		/** The active voice's name, undefined before first-launch naming. */
 		voiceName?: string;
-		/** Whether the active voice holds any reading at all. */
+		/** Whether the active voice holds a reading the app may use (not refused by the plausibility guard, or kept by the singer). */
 		calibrated: boolean;
 		language: Language;
 		/** Opens the calibration takeover. */

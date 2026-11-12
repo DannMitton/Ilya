@@ -13,7 +13,7 @@
  */
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { saveStore, type ProfileStore } from './profileStore';
+import { hasAnyReadings, saveStore, usableReadingCount, type ProfileStore } from './profileStore';
 import { profileSave } from './profile-save.svelte';
 
 const STORE: ProfileStore = { version: 2, activeId: null, voices: [] };
@@ -89,5 +89,28 @@ describe('saveStore', () => {
 		});
 
 		expect(saveStore(STORE)).toEqual({ ok: false, reason: 'no-storage' });
+	});
+});
+
+/* Closing polish lane, step 1 (39-6): a reading the guard refused is not a usable reading, so the anchor does not call the voice calibrated. */
+describe('usableReadingCount', () => {
+	const ok = { f1: 600, confidence: 'high', reading: 'captured' } as const;
+	const refused = { f1: 90, confidence: 'high', reading: 'provisional', plausibility: 'implausible' } as const;
+
+	it('counts every reading the guard has not refused', () => {
+		expect(usableReadingCount({})).toBe(0);
+		expect(usableReadingCount({ a: ok, e: { ...ok, plausibility: 'plausible' }, i: { ...ok, plausibility: 'unchecked' } })).toBe(3);
+	});
+
+	it('does not count a refused reading, unless the singer kept it', () => {
+		expect(usableReadingCount({ a: refused, e: refused })).toBe(0);
+		expect(usableReadingCount({ a: refused, e: ok })).toBe(1);
+		expect(usableReadingCount({ a: { ...refused, plausibilityOverride: true } })).toBe(1);
+	});
+
+	it('differs from hasAnyReadings on a voice whose only readings are refused, on purpose', () => {
+		const f = { a: refused };
+		expect(hasAnyReadings(f)).toBe(true);
+		expect(usableReadingCount(f)).toBe(0);
 	});
 });
