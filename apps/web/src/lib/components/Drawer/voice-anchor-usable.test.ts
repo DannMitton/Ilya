@@ -7,7 +7,7 @@ import { usableReadingCount } from '../../voice/profileStore';
 
 /* Closing polish lane, step 1 (39-6). A voice whose only readings are `implausible`, with no override, has nothing the app can use: the Drawer's
    anchor reads "Voice: not yet calibrated" with a Calibrate button, and the Voice band names the voice with no count. */
-const refused = { f1: 90, confidence: 'high', reading: 'provisional', plausibility: 'implausible' } as const;
+const refused = { f1: 90, confidence: 'high', reading: 'provisional', source: 'measured-user', plausibility: 'implausible' } as const;
 const kept = { ...refused, plausibilityOverride: true } as const;
 const anchor = (readings: Parameters<typeof usableReadingCount>[0], language: 'en' | 'fr') =>
 	render(VoiceAnchor, { props: { voiceName: 'Dann', calibrated: usableReadingCount(readings) > 0, language, oncalibrate: () => {} } }).body;
@@ -22,7 +22,7 @@ describe('the voice anchor and the Voice band follow the usable readings', () =>
 	});
 
 	it('shows Re-calibrate and the voice’s name when a reading is usable, or kept by the singer', () => {
-		for (const readings of [{ a: refused, e: { f1: 600, confidence: 'high', reading: 'captured' } as const }, { a: kept }]) {
+		for (const readings of [{ a: refused, e: { f1: 600, confidence: 'high', reading: 'captured', source: 'measured-user' } as const }, { a: kept }]) {
 			const html = anchor(readings, 'en');
 			expect(html).toContain('Voice: Dann');
 			expect(html).toContain('Re-calibrate');

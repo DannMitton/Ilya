@@ -94,8 +94,8 @@ describe('saveStore', () => {
 
 /* Closing polish lane, step 1 (39-6): a reading the guard refused is not a usable reading, so the anchor does not call the voice calibrated. */
 describe('usableReadingCount', () => {
-	const ok = { f1: 600, confidence: 'high', reading: 'captured' } as const;
-	const refused = { f1: 90, confidence: 'high', reading: 'provisional', plausibility: 'implausible' } as const;
+	const ok = { f1: 600, confidence: 'high', reading: 'captured', source: 'measured-user' } as const;
+	const refused = { f1: 90, confidence: 'high', reading: 'provisional', source: 'measured-user', plausibility: 'implausible' } as const;
 
 	it('counts every reading the guard has not refused', () => {
 		expect(usableReadingCount({})).toBe(0);
