@@ -43,7 +43,7 @@ test.describe('a typed # takes the no-break form when the singer leaves Lyrics',
 		await field.blur();
 		await expect(field).toHaveValue(`я иду домой${NB}#`);
 		await field.focus();
-		await page.keyboard.press('Control+z');
+		await page.keyboard.press('ControlOrMeta+z');
 		const after = await field.inputValue();
 		expect(after).toBe('я иду домой #');
 	});

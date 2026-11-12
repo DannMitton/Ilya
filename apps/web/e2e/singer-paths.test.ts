@@ -177,7 +177,7 @@ test.describe('Learn and Guide', () => {
 		await expect(page.locator('main h1').first()).toHaveText('Guide');
 
 		await page.getByRole('button', { name: 'LEÇONS', exact: true }).click();
-		await expect(page.locator('#learn-title')).toHaveText('La diction lyrique russe pour chanteurs');
+		await expect(page.locator('#learn-title')).toHaveText('La diction lyrique russe pour chanteuses et chanteurs');
 	});
 });
 
