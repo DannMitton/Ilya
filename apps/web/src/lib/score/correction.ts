@@ -150,6 +150,22 @@ export interface NoteCorrection {
 	 * with its own `base` as its duration.
 	 */
 	grace?: { slash: boolean } | 'none';
+
+	/* ── KEY CHANGES (N.192, step 6b) ─────────────────────────────────────
+	   One ADDITIVE field, a layer over the reading as the barline and the time
+	   signature are: the kept MusicXML is never touched. It sits on the ENTRY THAT
+	   OPENS THE BAR, applied by `key-signature.ts` where `BarLayer` builds the
+	   corrected score. */
+
+	/**
+	 * The key signature the singer set from the bar this entry opens. `through`
+	 * `'next'` runs to the next change of key (the reading's own or another of the
+	 * singer's); `'end'` runs to the end of the song. `notes` `'follow'` re-spells the
+	 * notes that sat on the old key's altered letters to the new key's (the scan's
+	 * case: the reader applied a misread signature); `'keep'` changes no pitch.
+	 * `'remove'` takes the bar back to the key before it, the notes following.
+	 */
+	keySignature?: { fifths: number; through: 'next' | 'end'; notes: 'follow' | 'keep' } | 'remove';
 }
 
 /** N.187: a correction that makes this (read or entered) note a grace note: it stands out of the line. */
@@ -374,7 +390,8 @@ export function withCorrection(
 		entry.tuplet === undefined &&
 		entry.barline === undefined &&
 		entry.timeSignature === undefined &&
-		entry.grace === undefined
+		entry.grace === undefined &&
+		entry.keySignature === undefined
 	) {
 		const { [id]: _dropped, ...rest } = next;
 		return rest;
@@ -394,12 +411,13 @@ export function clearCorrection(map: CorrectionMap, id: string): CorrectionMap {
 	const c = map[id];
 	if (!c) return map;
 	const { [id]: _dropped, ...rest } = map;
-	if (c.barline === undefined && c.timeSignature === undefined) return rest;
+	if (c.barline === undefined && c.timeSignature === undefined && c.keySignature === undefined) return rest;
 	return {
 		...rest,
 		[id]: {
 			...(c.barline !== undefined ? { barline: c.barline } : {}),
 			...(c.timeSignature !== undefined ? { timeSignature: c.timeSignature } : {}),
+			...(c.keySignature !== undefined ? { keySignature: c.keySignature } : {}),
 		},
 	};
 }
@@ -407,7 +425,7 @@ export function clearCorrection(map: CorrectionMap, id: string): CorrectionMap {
 /** Whether a record says anything about the NOTE, beyond the bar's own marks. */
 export function amendsNote(c: NoteCorrection | undefined): boolean {
 	if (!c) return false;
-	const { barline: _b, timeSignature: _t, ...rest } = c;
+	const { barline: _b, timeSignature: _t, keySignature: _k, ...rest } = c;
 	return Object.values(rest).some((v) => v !== undefined);
 }
 

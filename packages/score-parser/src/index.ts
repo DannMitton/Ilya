@@ -220,3 +220,4 @@ export {
 } from './tempo-lexicon';
 export * from './ring-geometry';
 export { isReadScan } from './printed-marks';
+export { keySignatureAlter } from './accidental-carry';

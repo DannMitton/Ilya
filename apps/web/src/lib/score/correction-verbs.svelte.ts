@@ -62,6 +62,7 @@ import type { BarlineVerb } from './barline-marks';
 import type { BarMap } from './rebar';
 import { adoptBarMarks } from './entry-marks';
 import type { HeldBar, Through } from './time-signature';
+import type { HeldKey, KeySpec } from './key-signature';
 
 /** The clef in force, as `arrivalPitch` and `middleLine` read it. */
 type Clef = { sign: 'G' | 'F' | 'C'; octaveChange?: number };
@@ -94,6 +95,11 @@ export interface CorrectionVerbsDeps {
 	barlineVerb?: (id: string) => BarlineVerb | null;
 	/** Reading bars and song bars (`BarLayer.bars`): an entry's `entered.measureIndex` is written in reading bars (`entry-marks.ts`); absent: the same. */
 	bars?: () => BarMap;
+	/** The key signature card's reads and writes (`BarLayer.heldKey`, `.keyWrite`); absent: none. */
+	keySignature?: {
+		held(id: string): HeldKey | null;
+		write(id: string, spec: KeySpec | 'remove'): CorrectionMap | null;
+	};
 	/** The time signature card's reads and writes (`BarLayer.heldBar`, `.signatureWrite`); absent: none. */
 	timeSignature?: {
 		held(id: string): HeldBar | null;
@@ -214,6 +220,12 @@ export class CorrectionVerbs {
 	get heldBar(): HeldBar | null {
 		const id = this.#d.selectedEventId();
 		return !this.#d.inGap() && id && !this.selectedIsGrace ? (this.#d.timeSignature?.held(id) ?? null) : null;
+	}
+
+	/** The bar the held note sits in, for the key signature card (N.192); null in a gap, on a grace note, or with nothing held. */
+	get heldKey(): HeldKey | null {
+		const id = this.#d.selectedEventId();
+		return !this.#d.inGap() && id && !this.selectedIsGrace ? (this.#d.keySignature?.held(id) ?? null) : null;
 	}
 
 	/** The Barline verb the held note offers (QUEUE row 138): Add where the next entry is in its bar, Remove where it opens the next; null where neither. */
@@ -511,6 +523,15 @@ export class CorrectionVerbs {
 		if (!g || !this.graceCells.slashable) return;
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.graceSlash' });
 		this.#d.setCorrections(toggleSlash(this.#d.corrections(), g.id, this.graceCells.slashed));
+	};
+
+	/** Change the held bar's key from this bar to the next change or to the end, or remove the change the bar opens. One Undo step. */
+	handleKeySignature = (spec: KeySpec | 'remove', entryId?: string): void => {
+		const id = entryId ?? this.#d.selectedEventId();
+		const next = id ? this.#d.keySignature?.write(id, spec) : null;
+		if (!next || JSON.stringify(next) === JSON.stringify(this.#d.corrections())) return;
+		this.#d.pushUndo({ kind: 'text', key: spec === 'remove' ? 'loupe.undo.keyRemoved' : 'loupe.undo.keyChanged' });
+		this.#d.setCorrections(next);
 	};
 
 	/** Change the held bar's time signature from this bar to the next change or to the end, keeping the barlines, or re-barring the notes. One Undo step. */

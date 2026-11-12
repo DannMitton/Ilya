@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,231 keys.
+   This file holds 1,240 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -32,7 +32,7 @@
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
    console.        2  lib/components/Drawer/AnalysisStation.svelte
-   correct.       36  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
+   correct.       42  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
    cosmetic.      15  lib/components/Drawer/NotationFields.svelte
    dict.           3  lib/components/Paper/TitlePage.svelte, lib/components/Drawer/AnalysisStation.svelte, lib/one-action.ts
    display.        5  no literal consumer found
@@ -48,7 +48,7 @@
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
-   loupe.        127  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   loupe.        130  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
@@ -571,6 +571,16 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.undo.graceAdded':       { en: 'grace note added',             fr: 'grace note added' },
 	'loupe.undo.grace':            { en: 'grace note changed',           fr: 'grace note changed' },
 	'loupe.undo.graceSlash':       { en: 'slash changed',                fr: 'slash changed' },
+	/* ── N.192: the key signature card in Corrections. PENDING DANN, as the block above: English drafts, the French slot holds the same English. ── */
+	'loupe.keySignature':          { en: 'Key signature',                fr: 'Key signature' },
+	'correct.keyChange':           { en: 'Change the key from this bar', fr: 'Change the key from this bar' },
+	'correct.keyToNext':           { en: 'To the next key change',       fr: 'To the next key change' },
+	'correct.keyToEnd':            { en: 'To the end of the song',       fr: 'To the end of the song' },
+	'correct.keyFollow':           { en: 'The notes follow the new key', fr: 'The notes follow the new key' },
+	'correct.keyFollowHelp':       { en: 'A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.', fr: 'A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.' },
+	'correct.keyRemove':           { en: 'Remove this key change',       fr: 'Remove this key change' },
+	'loupe.undo.keyChanged':       { en: 'key changed',                  fr: 'key changed' },
+	'loupe.undo.keyRemoved':       { en: 'key change removed',           fr: 'key change removed' },
 	// ROW 133, ratified by Dann 2026-10-19 23:41 (`docs/sessions/ratified-loupe-dot-words_2026-10-19.md`):
 	// the loupe and a tempo chip name a dotted value in words, and a French rest by its own name.
 	// Whole phrases, not words assembled by grammar, so the French agreement stays as ratified.

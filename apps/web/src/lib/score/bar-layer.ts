@@ -19,6 +19,7 @@
  * strip needs.
  */
 import { correctedGraceNotes } from './grace-layer';
+import { applyKeyLayer, heldKey, removeKey, setKey, type HeldKey, type KeySpec } from './key-signature';
 import type { Measure, ParsedScore, VocalLineEvent } from '@ilya/score-parser';
 import { applyCorrections, type CorrectionMap } from './correction';
 import { barlineVerb, type BarlineVerb } from './barline-marks';
@@ -60,8 +61,10 @@ export class BarLayer {
 			const r = rebar(score, pre, map);
 			// N.187: the corrected grace list, from the read list, the map, and the corrected line (`grace-layer.ts`).
 			const graces = correctedGraceNotes(score.graceNotes, map, score.vocalLine, r.line);
-			const withGraces = graces === r.score.graceNotes ? r.score : { ...r.score, graceNotes: graces };
-			out = { pre, line: r.line, score: withGraces, bars: r.bars };
+			// N.192: the singer's key marks, after the bars are settled (`key-signature.ts`).
+			const k = applyKeyLayer(graces === r.score.graceNotes ? r.score : { ...r.score, graceNotes: graces }, r.line, map, graces);
+			const keyed = k.graces === k.score.graceNotes ? k.score : { ...k.score, graceNotes: k.graces };
+			out = { pre, line: k.line, score: keyed, bars: r.bars };
 		}
 		this.#memo = { score, map, out };
 		return out;
@@ -122,6 +125,19 @@ export class BarLayer {
 		const score = this.#d.score();
 		if (!score) return null;
 		return (rebar ? rebarNotes : setSignature)(score, this.#get().pre, this.#d.corrections(), id, sig, through);
+	}
+
+	/** The key the held entry's bar has, the reading's own, and the singer's mark (`key-signature.ts`); null where none. */
+	heldKey(id: string): HeldKey | null {
+		const score = this.#d.score();
+		return score ? heldKey(score, this.#get().pre, this.#d.corrections(), id) : null;
+	}
+
+	/** The corrections after the singer sets the held bar's key, or removes the change it opens; null where it cannot be. */
+	keyWrite(id: string, spec: KeySpec | 'remove'): CorrectionMap | null {
+		const score = this.#d.score();
+		if (!score) return null;
+		return spec === 'remove' ? removeKey(score, this.#get().pre, this.#d.corrections(), id) : setKey(score, this.#get().pre, this.#d.corrections(), id, spec);
 	}
 
 	/** The number the PRINTED bar carries: the reading's, for the strip and the banner's list. */
