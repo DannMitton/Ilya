@@ -22,8 +22,8 @@ describe('InstallPrompt: Chrome on iOS', () => {
 	it('holds the two ratified lines, English then French', () => {
 		const values = [...source.matchAll(/ios_chrome_body: '([^'\n]+)',/g)].map((m) => m[1]);
 		expect(values).toEqual([
-			'In Chrome, open the <strong>Share</strong> menu, then choose <strong>Add to Home Screen</strong>.',
-			'Dans Chrome, ouvrez le menu <strong>Partager</strong>, puis choisissez <strong>Sur l’écran d’accueil</strong>.',
+			'In Chrome, tap the <strong>Share</strong> button at the right inside the address bar, tap <strong>View More</strong>, then choose <strong>Add to Home Screen</strong>.',
+			'Dans Chrome, appuyez sur le bouton <strong>Partager</strong>, à droite dans la barre d’adresse, puis sur <strong>Afficher plus</strong>, et choisissez <strong>Sur l’écran d’accueil</strong>.',
 		]);
 	});
 
@@ -33,5 +33,16 @@ describe('InstallPrompt: Chrome on iOS', () => {
 
 	it('draws the Safari line for Safari and the Chrome line for Chrome', () => {
 		expect(source).toMatch(/isChrome \? \(t\.ios_chrome_body \?\? ''\) : t\.ios_body/);
+	});
+
+	/* Closing polish lane, step 3 (Amendment 6): the render expression is kept as written and wrapped, and the glyph is added by the component, not written into
+	   the strings (the regex above must still read them). */
+	it('wraps the render expression in withGlyph, and draws the glyph aria-hidden, after the first Share', () => {
+		expect(source).toMatch(/withGlyph\(isChrome \? \(t\.ios_chrome_body \?\? ''\) : t\.ios_body\)/);
+		expect(source).toMatch(/<svg viewBox="0 0 24 24" aria-hidden="true"/);
+		expect(source).toContain("html.replace('</strong>', `</strong>${SHARE_GLYPH}`)");
+		expect(source).toMatch(/stroke="currentColor"/);
+		expect(source).toMatch(/width:1em;height:1em/);
+		for (const m of source.matchAll(/ios_(?:chrome_)?body: '([^'\n]+)',/g)) expect(m[1]).not.toContain('<svg');
 	});
 });
