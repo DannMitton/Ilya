@@ -31,21 +31,23 @@ export interface MarkMaps {
 	syllables: ReadonlyMap<string, SyllableOverride>;
 	/** The singer's choice for the word: true reconstituted, false reduced. */
 	spot: ReadonlyMap<string, boolean>;
+	/** The words whose -кий rhyme reading the singer set aside (value `true`; the word then reads stage). */
+	rhyme: ReadonlyMap<string, boolean>;
 }
 
 export type WordMarkRows = { lyrics?: MarkRow[]; poem?: MarkRow[] };
 
-export const MARK_KINDS: readonly MarkKind[] = ['stress', 'yo', 'syllables', 'spot'];
+export const MARK_KINDS: readonly MarkKind[] = ['stress', 'yo', 'syllables', 'spot', 'rhyme'];
 const SOURCES: readonly string[] = ['user-dictionary', 'user-composer', 'user-override'];
 const WORD_KEY = /^\d+-\d+$/;
 const CHAR_KEY = /^\d+-\d+-\d+$/;
 
 export function emptyMarkMaps(): MarkMaps {
-	return { stress: new Map(), yo: new Map(), syllables: new Map(), spot: new Map() };
+	return { stress: new Map(), yo: new Map(), syllables: new Map(), spot: new Map(), rhyme: new Map() };
 }
 
 export function markMapsEmpty(maps: MarkMaps): boolean {
-	return maps.stress.size + maps.yo.size + maps.syllables.size + maps.spot.size === 0;
+	return maps.stress.size + maps.yo.size + maps.syllables.size + maps.spot.size + maps.rhyme.size === 0;
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -68,6 +70,8 @@ function validValue(kind: MarkKind, value: unknown): value is MarkValue {
 			return isObject(value) && Array.isArray(value.boundaries) && value.boundaries.every(isIndex);
 		case 'spot':
 			return typeof value === 'boolean';
+		case 'rhyme':
+			return value === true;
 	}
 }
 
@@ -123,6 +127,7 @@ export function rowsFromMaps(maps: MarkMaps, keyedTo: readonly (readonly string[
 	const yo = diff ? rekeyByWordChar(maps.yo, diff) : maps.yo;
 	const syllables = diff ? rekeyByWord(maps.syllables, diff) : maps.syllables;
 	const spot = diff ? rekeyByWord(maps.spot, diff) : maps.spot;
+	const rhyme = diff ? rekeyByWord(maps.rhyme, diff) : maps.rhyme;
 	const rows: MarkRow[] = [];
 	const add = (kind: MarkKind, key: string, value: MarkValue) => {
 		const [line, word] = num(key);
@@ -134,6 +139,7 @@ export function rowsFromMaps(maps: MarkMaps, keyedTo: readonly (readonly string[
 	for (const key of [...yo.keys()].sort(byKey)) add('yo', key, yo.get(key)!);
 	for (const key of [...syllables.keys()].sort(byKey)) add('syllables', key, syllables.get(key)!);
 	for (const key of [...spot.keys()].sort(byKey)) add('spot', key, spot.get(key)!);
+	for (const key of [...rhyme.keys()].sort(byKey)) add('rhyme', key, rhyme.get(key)!);
 	return rows;
 }
 
@@ -146,6 +152,7 @@ export function mapsFromRows(rows: readonly MarkRow[], grid: readonly (readonly 
 	const yo = new Map<string, YoToggle>();
 	const syllables = new Map<string, SyllableOverride>();
 	const spot = new Map<string, boolean>();
+	const rhyme = new Map<string, boolean>();
 	let dropped = 0;
 	for (const row of rows) {
 		const [key, kind, value, anchor] = row;
@@ -163,7 +170,8 @@ export function mapsFromRows(rows: readonly MarkRow[], grid: readonly (readonly 
 		if (kind === 'stress') stress.set(key, value as UserStressOverride);
 		else if (kind === 'yo') yo.set(key, value as YoToggle);
 		else if (kind === 'syllables') syllables.set(key, value as SyllableOverride);
-		else spot.set(key, value as boolean);
+		else if (kind === 'spot') spot.set(key, value as boolean);
+		else if (kind === 'rhyme') rhyme.set(key, true);
 	}
-	return { maps: { stress, yo, syllables, spot }, dropped };
+	return { maps: { stress, yo, syllables, spot, rhyme }, dropped };
 }

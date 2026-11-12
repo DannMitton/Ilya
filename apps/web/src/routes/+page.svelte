@@ -445,6 +445,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				language,
 				userStressOverrides: lyricsMarks.stress.size > 0 ? lyricsMarks.stress : undefined,
 				yoToggles: lyricsMarks.yo.size > 0 ? lyricsMarks.yo : undefined,
+				rhymeSetAside: lyricsMarks.rhyme,
 			});
 		} catch (e: unknown) {
 			console.error('[Ilya] Transcription error (derived poem):', e);
@@ -1807,6 +1808,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				language,
 				userStressOverrides: lyricsMarks.stress.size > 0 ? lyricsMarks.stress : undefined,
 				yoToggles: lyricsMarks.yo.size > 0 ? lyricsMarks.yo : undefined,
+				rhymeSetAside: lyricsMarks.rhyme,
 				phraseEnds,
 			});
 			transcribeMs = Math.round(performance.now() - start);
@@ -2194,6 +2196,14 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	function handleSpotReconToggle() {
 		if (selectedWord) marks.toggleSpot(selectedKey(), notationPrefs.reconstitution);
 	}
+	// The Stage reading box: set the shown word's -кий rhyme reading aside, or put it back
+	function handleRhymeToggle() {
+		if (!selectedWord) return;
+		claimDerivedPoem();
+		if (!selectedWord) return;
+		marks.toggleRhyme(selectedKey());
+		rerunShown();
+	}
 	// ── Stress assignment handler ────────────────────────────────
 	function handleStressAssign(syllableIndex: number, source: string) {
 		if (!selectedWord) return;
@@ -2243,13 +2253,14 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		if (!selectedWord) return;
 		const poem = shown === 'poem';
 		const r = resetWord(selectedKey(), {
-			stress: marks.stress, yo: marks.yo, syllables: marks.syllables, spot: marks.spot,
+			stress: marks.stress, yo: marks.yo, syllables: marks.syllables, spot: marks.spot, rhyme: marks.rhyme,
 			glosses: shownEdits, anchors: poem ? doc.publishedGlossAnchors : doc.glossAnchors,
 		});
 		if (r.stress) marks.stress = r.stress;
 		if (r.yo) marks.yo = r.yo;
 		if (r.syllables) marks.syllables = r.syllables;
 		if (r.spot) marks.spot = r.spot;
+		if (r.rhyme) marks.rhyme = r.rhyme;
 		if (r.glosses && r.anchors) {
 			if (poem) [doc.publishedGlosses, doc.publishedGlossAnchors] = [r.glosses, r.anchors];
 			else [doc.glossOverrides, doc.glossAnchors] = [r.glosses, r.anchors];
@@ -4066,6 +4077,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 									{showStressDiacritics}
 									syllableOverride={marks.syllables.get(wordKey) ?? null}
 									spotReconstituted={spotInverts.has(wordKey)}
+									rhymeSetAside={marks.rhyme.has(wordKey)}
+									onrhymetoggle={handleRhymeToggle}
 									promotedFromClitic={marks.stress.get(wordKey)?.promotedFromClitic ?? false}
 									yoCharToggles={wordYoToggles}
 									onspotrecontoggle={handleSpotReconToggle}

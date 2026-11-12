@@ -80,6 +80,11 @@ export interface WordStackData {
   /** A Latin word (`latin.ts`): kept on the page in italics, with no gloss or stress mark. */
   latin?: boolean;
   /**
+   * The -кой word this line-final -кий rhymes with (`rhyme-reading.ts`, Grayson p. 302), as typed without punctuation. Set whenever the
+   * matcher finds the rhyme, WHETHER OR NOT the singer set it aside, so the Inspector can still draw the box the singer unticks.
+   */
+  rhymePartner?: string;
+  /**
    * IPA with vowel reconstitution applied (Grayson Ch. 3, §8).
    * Pre-computed at pipeline time using the transcription log for
    * source-character disambiguation. Clitic merging applied in parallel
@@ -181,6 +186,8 @@ export interface ProcessTextOptions {
    * (`score/phrase-ends.ts`). Absent: a line end is a phrase end.
    */
   phraseEnds?: ReadonlyMap<string, boolean>;
+  /** Words (keyed "lineIndex-wordIndex") whose rhyme reading the singer set aside: they take the stage reading, and still link their rhyme group. */
+  rhymeSetAside?: { has(key: string): boolean };
 }
 
 // ── WYSIWYG Paper ────────────────────────────────────────────────

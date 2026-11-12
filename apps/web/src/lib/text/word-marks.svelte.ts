@@ -33,21 +33,28 @@ export class WordMarks {
 	 * What a surface draws is `spotInversions` (`spot-choice.ts`), the words whose choice differs from the setting.
 	 */
 	spot = $state<Map<string, boolean>>(new Map());
+	/**
+	 * The words whose -кий rhyme reading the singer set aside (`rhyme-reading.ts`; rhyme lane 49): a set, kept as a Map of `true`
+	 * like the other marks. It is an input to `processText` (`rhymeSetAside`), saved with the song as `rhyme` rows. Never forces a rhyme.
+	 */
+	rhyme = $state<Map<string, boolean>>(new Map());
 
-	/** Replace all four from a loaded song, and the same four back out as plain maps for the save. */
+	/** Replace all five from a loaded song, and the same five back out as plain maps for the save. */
 	load(maps: MarkMaps): void {
 		this.stress = new Map(maps.stress);
 		this.yo = new Map(maps.yo);
 		this.syllables = new Map(maps.syllables);
 		this.spot = new Map(maps.spot);
+		this.rhyme = new Map(maps.rhyme);
 	}
 	maps(): MarkMaps {
-		return { stress: this.stress, yo: this.yo, syllables: this.syllables, spot: this.spot };
+		return { stress: this.stress, yo: this.yo, syllables: this.syllables, spot: this.spot, rhyme: this.rhyme };
 	}
 
 	/** Everything a Clear drops. */
 	clear(): void {
 		this.spot = new Map();
+		this.rhyme = new Map();
 		this.stress = new Map();
 		this.yo = new Map();
 		this.syllables = new Map();
@@ -57,6 +64,7 @@ export class WordMarks {
 	carry(diff: TextDiff): void {
 		if (diff.unchanged) return;
 		this.spot = rekeyByWord(this.spot, diff);
+		this.rhyme = rekeyByWord(this.rhyme, diff);
 		this.stress = rekeyByWord(this.stress, diff);
 		this.syllables = rekeyByWord(this.syllables, diff);
 		this.yo = rekeyByWordChar(this.yo, diff);
@@ -72,6 +80,13 @@ export class WordMarks {
 		if (choice !== undefined && choice !== reconstitution) next.delete(key);
 		else next.set(key, !reconstitution);
 		this.spot = next;
+	}
+
+	/** The Stage reading box: ticked sets the word's rhyme aside, unticked puts it back. */
+	toggleRhyme(key: string): void {
+		const next = new Map(this.rhyme);
+		if (!next.delete(key)) next.set(key, true);
+		this.rhyme = next;
 	}
 
 	assignStress(key: string, word: { isProclitic?: boolean; isEnclitic?: boolean }, syllableIndex: number, source: string): void {

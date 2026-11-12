@@ -5,7 +5,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n'; import { savedFlag, settle } from '$lib/components/Field/settle-field'; import SavedNote from '$lib/components/Field/SavedNote.svelte';
-	import { resolveFullGloss } from '$lib/gloss-resolve'; import { glossToWrite, type ResolvedGloss } from '$lib/text/gloss-edit'; import type { GlossaryStore } from '$lib/text/glossary.svelte'; import GlossOffer from './GlossOffer.svelte';
+	import { resolveFullGloss } from '$lib/gloss-resolve'; import { glossToWrite, type ResolvedGloss } from '$lib/text/gloss-edit'; import type { GlossaryStore } from '$lib/text/glossary.svelte'; import GlossOffer from './GlossOffer.svelte'; import ReadingBoxes, { type ReadingBox } from './ReadingBoxes.svelte';
 
 	import { openSyllabify, buildCharToSyllableMap, rebuildIpaFromSyllables, applySyllableOverride, computeBoundaries } from '$lib/syllable-utils';
 
@@ -18,11 +18,14 @@
 		/** Per-word syllable boundary override for this word, or null if none. */
 		syllableOverride?: SyllableOverride | null;
 		spotReconstituted?: boolean;
+		/** The singer set this word's -кий rhyme reading aside (Stage reading ticked); the box is drawn whenever the word has a rhyme partner. */
+		rhymeSetAside?: boolean;
 		/** True when this word was promoted from clitic status via user stress assignment. */
 		promotedFromClitic?: boolean;
 		/** Character-level ё toggles for this word, keyed by charIndex. */
 		yoCharToggles?: Map<number, YoToggle>;
 		onspotrecontoggle?: () => void;
+		onrhymetoggle?: () => void;
 		onstressassign?: (syllableIndex: number, source: string) => void;
 		onstressrevert?: () => void;
 		/** Character-level ё toggle: source = provenance, or null to revert. */
@@ -41,7 +44,7 @@
 		onglossoverride?: (gloss: string | null) => void;
 	}
 
-	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, gloss, glossary, offerScope = '', onglossoverride }: Props = $props();
+	let { word, language, notationPrefs, openSyllabification = false, showStressDiacritics = false, syllableOverride = null, spotReconstituted = false, rhymeSetAside = false, promotedFromClitic = false, yoCharToggles = new Map(), onspotrecontoggle, onrhymetoggle, onstressassign, onstressrevert, onyochartoggle, onsyllableoverride, onsyllableoverrideclear, onreset, gloss, glossary, offerScope = '', onglossoverride }: Props = $props();
 
 	// Whether this word is a proclitic or enclitic (no independent stress).
 	// Declared here, ahead of displayCyrillic below, because it depends only
@@ -67,6 +70,13 @@
 	const canSpotToggle = $derived(
 		!!word.ipaOwnReconstituted && !!word.ipaContent && word.ipaOwnReconstituted !== word.ipaContent
 	);
+
+	// The boxes beside the word, spot first. The Stage reading box follows the MATCH (`word.rhymePartner`), not the reading in force, so a
+	// word the singer set aside still draws it, ticked (rhyme lane 49, Fable amendment 4).
+	const readingBoxes = $derived<ReadingBox[]>([
+		...(canSpotToggle ? [{ id: 'spot' as const, label: spotCheckboxLabel, checked: spotReconstituted, onchange: () => onspotrecontoggle?.() }] : []),
+		...(word.rhymePartner !== undefined ? [{ id: 'rhyme' as const, label: t('inspector.rhyme.stage', language), checked: rhymeSetAside, onchange: () => onrhymetoggle?.() }] : []),
+	]);
 
 	// Per-entry reconstituted IPA map (index → reconstituted IPA for entries that differ)
 	const reconstitutedIpaMap = $derived.by((): Map<number, string> => {
@@ -377,7 +387,7 @@
 
 	// Whether this word has any per-word overrides (controls reset button visibility)
 	const hasOverrides = $derived(
-		isUserStress || promotedFromClitic || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted || gloss?.source === 'song'
+		isUserStress || promotedFromClitic || yoCharToggles.size > 0 || syllableOverride !== null || spotReconstituted || rhymeSetAside || gloss?.source === 'song'
 	);
 
 	const syllableCount = $derived(word.syllables?.length ?? 0);
@@ -1005,20 +1015,7 @@
 				{/if}
 			</div>
 
-			<!-- Spot reconstitution/reduction checkbox (tethered to stack's right edge) -->
-			<div class="spot-checkbox-slot">
-				{#if canSpotToggle}
-					<label class="spot-checkbox-label">
-						<span class="spot-checkbox-text">{spotCheckboxLabel}</span>
-						<input
-							type="checkbox"
-							class="spot-checkbox"
-							checked={spotReconstituted}
-							onchange={() => onspotrecontoggle?.()}
-						/>
-					</label>
-				{/if}
-			</div>
+			<ReadingBoxes boxes={readingBoxes} />
 		</div>
 	</div>
 
@@ -2355,39 +2352,7 @@
 		color: var(--ink-primary);
 	}
 
-	/* ═══ 5. Spot reconstitution/reduction checkbox ═════════════════════ */
-
-	.spot-checkbox-slot {
-		min-height: 24px;
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		margin-top: 0.35rem;
-	}
-
-	.spot-checkbox-label {
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		cursor: pointer;
-	}
-
-	.spot-checkbox {
-		width: 14px;
-		height: 14px;
-		accent-color: var(--sage);
-		cursor: pointer;
-		margin: 0;
-		flex-shrink: 0;
-	}
-
-	.spot-checkbox-text {
-		font-family: var(--font-sans);
-		font-size: 0.75rem;
-		color: var(--ink-secondary);
-		line-height: 1;
-		user-select: none;
-	}
+	/* ═══ 5. The reading checkboxes: ReadingBoxes.svelte ═══════════════ */
 
 	/* ═══ 6. Notation indicator: REMOVED (Phase A) ══════════════════════ */
 

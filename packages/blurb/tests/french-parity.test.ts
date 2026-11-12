@@ -26,12 +26,13 @@ const PLACEHOLDER = /\{\w+\}/g;
 const all = pairs(data).filter(([path]) => path !== '/citation_style');
 
 describe('the word explanations in French', () => {
-	it('reads all 194 templates', () => {
+	it('reads all 196 templates', () => {
 		// Row 175: 209, less the 30 retired soft:* and hard:* processes, plus 18 ratified comments (the sixteen,
 		// look-alike-root, and lexical-exception) = 197 in step 3; step 4 deletes the 16 unreached implications
 		// (soft:* and hard:л) = 181. Row 157 adds 12: retained-voicing for б, в, г, д, ж, з, a process and an implication each.
 		// Step 10 adds 1: lexical-gk:г, a process (the г of мягк-, лёгк-, легк- is [x]).
-		expect(all.length).toBe(194);
+		// Rhyme lane 49, step 4 adds 2: velar-adjectival:и and velar-adjectival-rhyme:и, a process each.
+		expect(all.length).toBe(196);
 	});
 
 	it('gives every template a French version', () => {

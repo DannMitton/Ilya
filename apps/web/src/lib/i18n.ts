@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,222 keys.
+   This file holds 1,223 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -44,7 +44,7 @@
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
    insights.     189  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
-   inspector.     42  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
+   inspector.     43  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
@@ -2515,6 +2515,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'console.selectWord':          { en: 'Select a word on the page to analyse it here.', fr: 'Sélectionnez un mot sur la page pour l’analyser ici.' },
 	'inspector.spot.reduction':    { en: 'Spot reduction',               fr: 'Réduction ponctuelle' },
 	'inspector.spot.reconstitution': { en: 'Spot reconstitution',        fr: 'Reconstitution ponctuelle' },
+	// Rhyme lane 49, ruled 2026-11-11 23:05: the checkbox that sets an -кий rhyme reading aside; ticked, the word takes the stage reading.
+	'inspector.rhyme.stage':       { en: 'Stage reading',                fr: 'Prononciation scénique' },
 	'inspector.resetWordAria':     { en: 'Reset word to engine defaults', fr: 'Réinitialiser le mot aux valeurs par défaut' },
 	'inspector.editGlossAria':     { en: 'Edit gloss',                   fr: 'Modifier la glose' },
 	// Row 179, RATIFIED by Dann 2026-11-03 20:21 (brief `brief-code-gloss-language-and-reuse_r3_2026-11-03.md`, "Strings"). Seated exactly.

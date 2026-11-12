@@ -58,9 +58,10 @@ export type GlossRow = [key: string, gloss: string, anchorWord: string, language
  * `[key, kind, value, anchor]`. `key` is the word's `"lineIndex-wordIndex"` in the witness's own text (a ё
  * toggle adds `-charIndex`); `value` is the map's value as the page holds it (`spot`'s is the singer's CHOICE,
  * `true` reconstituted and `false` reduced, ruled 22:20, never an inversion of the device-wide setting); `anchor`
- * is the word's clean form, ё folded (`glossAnchorForm`), so a mark never lands on another word.
+ * is the word's clean form, ё folded (`glossAnchorForm`), so a mark never lands on another word. `rhyme`'s value is `true`:
+ * the singer set the word's -кий rhyme reading aside (rhyme lane 49); a word with no row keeps the reading the matcher finds.
  */
-export type MarkKind = 'stress' | 'yo' | 'syllables' | 'spot';
+export type MarkKind = 'stress' | 'yo' | 'syllables' | 'spot' | 'rhyme';
 export type MarkValue = UserStressOverride | YoToggle | SyllableOverride | boolean;
 export type MarkRow = [key: string, kind: MarkKind, value: MarkValue, anchorWord: string];
 

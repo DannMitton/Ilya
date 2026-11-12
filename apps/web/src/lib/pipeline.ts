@@ -46,6 +46,8 @@ import { adoptOldEnding, lookupOnlyTwinFor, stripForLookup } from './old-spellin
 
 import type { WordStackData, LineData, ProcessTextOptions, UserStressOverride, YoToggle } from './types';
 import { joinAfterNe } from './ne-join';
+import { swapYoAt } from './yo-swap';
+import { rhymeReading, stampRhymePartner } from './rhyme-reading';
 import { autoDetectBoundaries } from './boundaries';
 import { carryBreaks, cutAlongTypedBreaks, expandHyphenatedParticles, reinsertBreaks, resolveTypedHyphens, resolvesToWord, settleBreaks } from './typed-hyphens';
 import type { KnownForm, ToClean } from './typed-hyphens';
@@ -237,6 +239,7 @@ export function processText(
     userStressOverrides,
     yoToggles,
     phraseEnds,
+    rhymeSetAside,
   } = options;
 
   if (!text.trim()) return [];
@@ -282,24 +285,7 @@ export function processText(
             // Swap е ↔ ё at specified character positions in the cyrillic string,
             // then rebuild the PreTranscribeWord with yo-restoration suppressed
             // so the pipeline doesn't auto-restore ё on top of a user's toggle.
-            const cyrillic = line[wordIdx].cyrillic;
-            const chars = Array.from(cyrillic);
-            // Map from cleanWord index to cyrillic index (skipping punctuation/dashes)
-            let cleanIdx = 0;
-            for (let ci = 0; ci < chars.length; ci++) {
-              const isPunct = /[.,!?;:"""''–—\-\u2010\u2011«»]/.test(chars[ci]);
-              if (isPunct) continue;
-              if (wordToggles.includes(cleanIdx)) {
-                switch (chars[ci]) {
-                  case 'е': chars[ci] = 'ё'; break;
-                  case 'ё': chars[ci] = 'е'; break;
-                  case 'Е': chars[ci] = 'Ё'; break;
-                  case 'Ё': chars[ci] = 'Е'; break;
-                }
-              }
-              cleanIdx++;
-            }
-            const modified = chars.join('');
+            const modified = swapYoAt(line[wordIdx].cyrillic, wordToggles);
             line[wordIdx] = { ...buildPreTranscribeWord(modified, true), ...(line[wordIdx].syntacticBreak ? { syntacticBreak: true } : {}) };
           }
         }
@@ -322,11 +308,14 @@ export function processText(
   // «не» + a word the dictionary lacks borrows the joined word's stress (`ne-join.ts`), after every override.
   preLines.forEach((line, lineIdx) => { joinAfterNe(line, (w) => GraysonEngine.lookupStress(w)); autoDetectBoundaries(line, GraysonEngine, phraseEnds, lineIdx); });
 
+  // An unstressed -кий that rhymes with an unstressed -кой reads [ʌj] (`rhyme-reading.ts`, Grayson p. 302); the probe is one engine call.
+  const rhyme = rhymeReading(preLines.map((words, i) => ({ words, endsStanza: endsStanza[i] })), (w, adjectival) => GraysonEngine.transcribe(w.cleanWord, w.stress, false, null, { ...engineConfig, adjectival }).ipa);
+
   // ── Step 3: Transcribe each line with cross-word assimilation ─
 
   // Row 108 C: the engine runs over every line first, and cross-word assimilation once over all of them,
   // so it crosses a line end the music does not end (`boundaries.ts`). A `hard` boundary stops it, as before.
-  const transcribedLines = preLines.map((preLine, lineIdx) => transcribeWords(preLine, lineIdx, engineConfig));
+  const transcribedLines = preLines.map((preLine, lineIdx) => transcribeWords(preLine, lineIdx, engineConfig, rhyme, rhymeSetAside));
   GraysonEngine.applyCrossWordAssimilation(transcribedLines.flat());
   transcribedLines.forEach(finishLine);
 
@@ -445,6 +434,7 @@ export function processText(
           originalStressSource: tw.wordData.originalStressSource,
           yoAlternation: tw.wordData.yoAlternation,
           yoAlternateForm: tw.wordData.yoAlternateForm,
+          rhymePartner: rhyme.get(`${lineIdx}-${wordIdx}`),
           result: tw.engineResult,
           ipaDisplay: tw.ipaDisplay ?? tw.ipaContent ?? '',
           ipaReconstituted: tw.ipaReconstituted ?? tw.ipaDisplay ?? tw.ipaContent ?? '',
@@ -756,6 +746,8 @@ function transcribeWords(
   preLine: PreTranscribeWord[],
   lineIdx: number,
   engineConfig: EngineConfig,
+  rhyme: ReadonlyMap<string, string>,
+  setAside?: { has(key: string): boolean },
 ): TranscribedWord[] {
   // Build line text for context detection
   const lineText = preLine.map((w) => w.cyrillic).join(' ');
@@ -801,14 +793,17 @@ function transcribeWords(
       const effectiveStress =
         isProclitic || isEnclitic ? -1 : wordData.stress;
 
-      // Call the engine
+      // Call the engine; a matched line end reads under 'literary' and names its partner on the ⟨и⟩ entry, unless the singer set the rhyme aside
+      const partner = rhyme.get(`${lineIdx}-${wordIdx}`);
+      const literary = partner !== undefined && !setAside?.has(`${lineIdx}-${wordIdx}`);
       const engineResult = GraysonEngine.transcribe(
         cleanWord,
         effectiveStress,
         isProclitic || isEnclitic,
         procliticPosition,
-        engineConfig,
+        literary ? { ...engineConfig, adjectival: 'literary' } : engineConfig,
       );
+      if (literary) stampRhymePartner(engineResult.transcriptionLog, partner);
       // Row 106: the engine's own syllables are cut along the typed hyphens, before anything reads them.
       if (wordData.typedBreaks.length > 0) {
         cutAlongTypedBreaks(engineResult, wordData.typedBreaks, buildDisplayLog(engineResult.transcriptionLog).map((e) => e.ipa ?? ''), (part) => GraysonEngine.syllabify(part));
