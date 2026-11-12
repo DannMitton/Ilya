@@ -16,12 +16,12 @@ Amendments 8, 9, and 10 govern; where they differ from the step's text I followe
 
 ## Tests
 
-- `tests/build-poem-library.test.ts` (gate 7, 155 to 160 expected): «I» alone fails; «Он пришёл c ней» (Latin c) fails; «C тобой» (Latin C) fails; a Latin a at a line's end fails; «à ce soir» and a French line with «Ça va, mon cœur» pass; «мeня» (Latin e) fails; a line «IV.» fails; one word list runs through the builder's `isLatinWord` and the app's (the equality test, Amendment 8). Pins moved: the fault table's Latin row (`:176`, now named for the glued letter) and `:384-387` (`textFault(quoted)` for a poem is now null; the two glued cases still say "glued").
+- `tests/build-poem-library.test.ts` (gate 7: 155 to 159 passed, re-run after this step): «I» alone fails; «Он пришёл c ней» (Latin c) fails; «C тобой» (Latin C) fails; a Latin a at a line's end fails; «à ce soir» and a French line with «Ça va, mon cœur» pass; «мeня» (Latin e) fails; a line «IV.» fails; one word list runs through the builder's `isLatinWord` and the app's (the equality test, Amendment 8). Pins moved: the fault table's Latin row (`:176`, now named for the glued letter) and `:384-387` (`textFault(quoted)` for a poem is now null; the two glued cases still say "glued").
 - `src/lib/latin.test.ts`: the table's three rows; «à» and «cœur» marked Latin on a page; «et» alone in a French line gets no IPA and no credit; «panis et vinum» and «panis panis et» (one noun) show no credit; «Panis et piscis» keeps «et» as `ɛt` and shows the credit; «et atque panis» shows none. The thirty-row loop now runs each word beside two other nouns, so every row stays in «Семинарист»'s text.
 
 ## Gates after this step
 
-Web unit suite: 282 files, 5241 passed, 1 skipped. Ratchets OK. Integration suite not re-run in full after the last edit to `tests/build-poem-library.test.ts` except that file (61 passed).
+Web unit suite: 282 files, 5241 passed, 1 skipped. Ratchets OK. Integration suite (gate 7): 7 files, 159 passed.
 
 ## Reports the step asked for
 
