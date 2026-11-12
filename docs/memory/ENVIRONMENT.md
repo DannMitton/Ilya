@@ -5228,3 +5228,7 @@ Learned 2026-11-08: Grayson 2012 (PDF and both Word files) is set in legacy font
 - Only `Shane` and `main` build on Vercel now: no `cloud-lane-*` deployment is listed (connector, 2026-11-11 23:4x). A READY `Shane` build is about 0.42 GB (7.12 GB over 17 READY builds, desk arithmetic).
 - THE SCAN READER'S FILES WERE NEVER SERVED (found 2026-11-11 23:1x): `copy-underlay-model.mjs` was not in `dev` or `build`, so `/omr/models/underlay/*` answered 404 on the alias and every scan read no words. Before telling Dann a reader works on the alias, fetch its files there.
 - DESK ERROR 2026-11-12 00:3x, owned on Dann's question: the N.192 and N.187 brief r1 was designed from Ilya's code outward (what fits the existing verbs), not from what the singer does, and without surveying Finale, Sibelius, Dorico, and MuseScore as the desk did for the barline tools (2026-11-09). It had no way to correct a key change, and made adding a missing grace note two steps. Lesson: before any Corrections design, survey how the established notation programs do it, then design from the singer's task (CONTRACT tether 22).
+
+## LEARNED BY THE 2026-11-12 NIGHT DESK
+
+- Put a question to Dann from the singer's side, in plain words, never in engraver's jargon. Fable's strophic Q1 ("print only as far as its own words go, with the one-line bars printed once") reached him unparseable at 01:45. His rule: Ilya serves the user, and clever notation conventions fail that mission.
