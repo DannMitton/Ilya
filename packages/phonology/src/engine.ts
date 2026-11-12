@@ -24,8 +24,8 @@ import { finishBog, initialPastV, keepsVoicingAtBoundary4 } from './voicing-rule
 
 /** Multi-authority engine configuration (Grayson default, supports Belov, Richter, etc. later) */
 export interface EngineConfig {
-  /** Velar adjectival suffix treatment: 'stage' = Old Muscovite [ɨj], 'modern' = [ij] */
-  adjectival: 'stage' | 'modern';
+  /** Velar adjectival suffix treatment: 'stage' = Old Muscovite [ɨj], 'modern' = [ij], 'literary' = [ʌj], where the poem rhymes it with -ой (Grayson p. 302) */
+  adjectival: 'stage' | 'modern' | 'literary';
 }
 
 /** Notation display preferences — pure cosmetic transforms, never modify engine data */
@@ -1358,7 +1358,7 @@ export const GraysonEngine = {
     const lexicalSoft = new Set(lexicalSoftIndices(cleanWord, lookup)); // ц, ш softened by lemma (Grayson pp. 163, 168, 283-284)
     const reflexiveS = reflexiveParticleAt(cleanWord, lookup); // the с of a reflexive -ся reads hard, Grayson pp. 282, 284
     const velarAdjHard = new Set<number>(); // к, г, х kept hard in -кий/-гий/-хий by the stage profile (Grayson pp. 301-303)
-    if (config.adjectival === 'stage') {
+    if (config.adjectival !== 'modern') {
       for (let k = 0; k < cleanWord.length; k++) if (this.checkVelarAdjectival(cleanWord, k).charRole === 'velar') velarAdjHard.add(k);
     }
     const palMap = computePalatalization({
@@ -1520,11 +1520,11 @@ export const GraysonEngine = {
           }
 
           // Check for Old Muscovite velar adjectival suffix -кий/-гий/-хий (Grayson p. 301-303)
-          // When config adjectival='stage': и → [ɨ] after hard velar
+          // 'stage': и → [ɨ] after hard velar; 'literary' (rhymed with -ой, p. 302): [ʌ]
           const velarAdj = this.checkVelarAdjectival(cleanWord, globalIndex);
-          if (vowelIpa === null && velarAdj.isVelarAdjectival && velarAdj.charRole === 'i' && config.adjectival === 'stage') {
-            vowelIpa = 'ɨ';
-            vowelFeatures.exception = 'velar-adjectival';
+          if (vowelIpa === null && velarAdj.isVelarAdjectival && velarAdj.charRole === 'i' && config.adjectival !== 'modern') {
+            vowelIpa = config.adjectival === 'literary' ? 'ʌ' : 'ɨ';
+            vowelFeatures.exception = config.adjectival === 'literary' ? 'velar-adjectival-rhyme' : 'velar-adjectival';
           }
 
           // Normal vowel transcription (if no exception applied)

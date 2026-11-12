@@ -48,6 +48,8 @@ const TEST_DICTIONARY: Record<string, any> = {
   'долгий': { stress: 0, gloss: { en: 'long' }, pos: 'adj', lemma: 'долгий' },
   'тихий': { stress: 0, gloss: { en: 'quiet' }, pos: 'adj', lemma: 'тихий' },
   'глубокий': { stress: 1, gloss: { en: 'deep' }, pos: 'adj', lemma: 'глубокий' },
+  'высокий': { stress: 1, gloss: { en: 'high' }, pos: 'adj', lemma: 'высокий' },
+  'глубокой': { stress: 1, gloss: { en: 'deep (f, instr)' }, pos: 'adj', lemma: 'глубокий' },
   // русский exception: uses modern -кий (skipVelarAdjectival)
   'русский': { stress: 0, gloss: { en: 'Russian' }, pos: 'adj', lemma: 'русский' },
   // -ая/-яя suffix
@@ -320,6 +322,44 @@ describe('Task 7c: Notation and Edge Cases', () => {
       // великий (stress=1, modern): vʲiˈlʲikʲij
       const result = GraysonEngine.transcribe('великий', 1, false, null, { adjectival: 'modern' });
       expect(result.ipa).toContain('kʲij');
+    });
+
+  });
+
+  describe('velar adjectival: literary config (rhymed with -ой, Grayson p. 302)', () => {
+
+    const literary: EngineConfig = { adjectival: 'literary' };
+
+    it('reads высокий as [vɨˈsokʌj] with the velar hard', () => {
+      expect(transcribeWord('высокий', literary).ipa).toBe('vɨˈsokʌj');
+    });
+
+    it('logs the vowel as exception velar-adjectival-rhyme', () => {
+      const result = transcribeWord('высокий', literary);
+      const i = result.transcriptionLog.filter(e => e.char === 'и').pop();
+      expect(i?.ipa).toBe('ʌ');
+      expect(i?.features?.exception).toBe('velar-adjectival-rhyme');
+    });
+
+    it('keeps the velar hard in the same way stage does, for the other velars', () => {
+      expect(transcribeWord('долгий', literary).ipa).toBe('ˈdoɫɡʌj');
+      expect(transcribeWord('тихий', literary).ipa).toBe('ˈtʲixʌj');
+    });
+
+    it('differs from stage only in the vowel of the ending', () => {
+      const stage = transcribeWord('глубокий', { adjectival: 'stage' }).ipa;
+      expect(transcribeWord('глубокий', literary).ipa).toBe(stage.replace(/ɨj$/, 'ʌj'));
+    });
+
+    it('leaves stage and modern unchanged', () => {
+      expect(transcribeWord('высокий', { adjectival: 'stage' }).ipa).toBe('vɨˈsokɨj');
+      expect(transcribeWord('высокий', { adjectival: 'modern' }).ipa).toContain('kʲij');
+    });
+
+    it('leaves русский unchanged under all three values', () => {
+      for (const adjectival of ['stage', 'modern', 'literary'] as const) {
+        expect(transcribeWord('русский', { adjectival }).ipa).toBe('ˈruskʲij');
+      }
     });
 
   });
