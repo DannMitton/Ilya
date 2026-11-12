@@ -19,7 +19,7 @@ Counts: 2 pass here (3 and 8); 5 still fail; 1 (5) fails at a different line. Te
 
 ## 2. `pages-without-gaps.test.ts:227` in CI
 
-Here: fails at `:248` as in row 6 above. **CI: CI_RESULT_PLACEHOLDER**
+Here: fails at `:248` as in row 6 above. **CI: run 1066 never finished** (the workflow cancels a run when the branch is pushed again, and I pushed during it; every earlier run on this branch was cancelled the same way). The first run that completed is **run 1075, head `868e617`** (the lane through step 11 plus two fixes, before step 12's): job "Test, type-check, and build" **green** (type-check, ratchets, all tests, build); job "End-to-end (desktop)" **failed: 156 passed, 6 failed, 1 flaky, 1 skipped**. The six are the same six I got here: `glue-typed-marks.test.ts:29` and `:39`, `insights-page.test.ts:95`, `loupe-header.test.ts:47` (the failing assertion in CI is `:65`, 4.5 against < 2), `pages-without-gaps.test.ts:227` (CI too fails at `:248`, expected 2, received 1: the same message as here), and `print-pages.test.ts:20` (markup, expected 2, received 3). The flaky one is `loupe-header.test.ts:97` ("pressing a header button starts no drag": 624 against 615, passed on retry). `heic-reader-path` and `singer-paths:169` pass in CI. So `:227` fails in CI as it does here; step 12 explains and fixes it.
 
 ## 3. N.17, "viewport repair" (read-only measure; nothing built)
 
@@ -38,4 +38,4 @@ Measured at 390 × 844, 3x, touch, in Chromium (`e2e-phone` project's settings),
 
 ## What I could not establish
 
-CI's result for `:227`, until run 1066 completes (above); why CI read 0 words in test 3; which side is wrong in test 5 and what hides a sheet in print for test 6; every real-iPhone value of N.17; a figure screenshot for L17.
+Why CI read 0 words in test 3 (CI run 1075 passes `heic-reader-path`, which only says the old failure did not recur after step 6); which side is wrong in test 5 and what hides a sheet in print for test 6; every real-iPhone value of N.17; a figure screenshot for L17.
