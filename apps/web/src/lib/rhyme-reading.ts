@@ -139,3 +139,8 @@ function link(members: Member[], matches: Map<string, string>): void {
 		if (best !== null) matches.set(`${m.line}-${m.word}`, (best as Member).text);
 	});
 }
+
+/** The partner rides on the ⟨и⟩ entry's `features.word`, which the blurb composer substitutes (`composer.ts`, `word`). */
+export function stampRhymePartner(log: { features: { [key: string]: any } }[], partner: string): void {
+	for (const e of log) if (e.features.exception === 'velar-adjectival-rhyme') e.features.word = partner;
+}
