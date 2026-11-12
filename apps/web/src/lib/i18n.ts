@@ -560,27 +560,26 @@ const strings: Record<string, Record<Language, string>> = {
 	// three, and none of them carries behaviour here.
 	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },
 	'loupe.rest':                  { en: 'Rest',                         fr: 'Silence' },
-	/* ── N.187: grace notes in Corrections (cloud-lane-50). PENDING DANN: the English is the desk's draft, and the French slot
-	   holds the same English until Dann rules the French (the lane is told not to invent it; the French for a grace note is his to choose). One contiguous block. ── */
-	'loupe.grace':                 { en: 'Grace note',                   fr: 'Grace note' },
-	'correct.graceAdd':            { en: 'Add a grace note before the note that follows', fr: 'Add a grace note before the note that follows' },
-	'correct.graceMake':           { en: 'Make this a grace note',       fr: 'Make this a grace note' },
-	'correct.graceFull':           { en: 'Make this a full note again',  fr: 'Make this a full note again' },
-	'loupe.graceSlash':            { en: 'Slash',                        fr: 'Slash' },
-	'correct.graceSlash':          { en: 'Add or remove the slash on this grace note', fr: 'Add or remove the slash on this grace note' },
-	'loupe.undo.graceAdded':       { en: 'grace note added',             fr: 'grace note added' },
-	'loupe.undo.grace':            { en: 'grace note changed',           fr: 'grace note changed' },
-	'loupe.undo.graceSlash':       { en: 'slash changed',                fr: 'slash changed' },
-	/* ── N.192: the key signature card in Corrections. PENDING DANN, as the block above: English drafts, the French slot holds the same English. ── */
-	'loupe.keySignature':          { en: 'Key signature',                fr: 'Key signature' },
-	'correct.keyChange':           { en: 'Change the key from this bar', fr: 'Change the key from this bar' },
-	'correct.keyToNext':           { en: 'To the next key change',       fr: 'To the next key change' },
-	'correct.keyToEnd':            { en: 'To the end of the song',       fr: 'To the end of the song' },
-	'correct.keyFollow':           { en: 'The notes follow the new key', fr: 'The notes follow the new key' },
-	'correct.keyFollowHelp':       { en: 'A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.', fr: 'A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.' },
-	'correct.keyRemove':           { en: 'Remove this key change',       fr: 'Remove this key change' },
-	'loupe.undo.keyChanged':       { en: 'key changed',                  fr: 'key changed' },
-	'loupe.undo.keyRemoved':       { en: 'key change removed',           fr: 'key change removed' },
+	/* ── N.187: grace notes in Corrections (cloud-lane-50). RATIFIED by Dann 2026-11-12 12:54, English and French. One contiguous block. ── */
+	'loupe.grace':                 { en: 'Grace note',                   fr: 'Petite note' },
+	'correct.graceAdd':            { en: 'Add a grace note before the note that follows', fr: 'Ajouter une petite note avant la note qui suit' },
+	'correct.graceMake':           { en: 'Make this a grace note',       fr: 'Transformer cette note en petite note' },
+	'correct.graceFull':           { en: 'Make this a full note again',  fr: 'Redonner à cette note sa pleine valeur' },
+	'loupe.graceSlash':            { en: 'Slash',                        fr: 'Barre oblique' },
+	'correct.graceSlash':          { en: 'Add or remove the slash on this grace note', fr: 'Ajouter ou retirer la barre oblique de cette petite note' },
+	'loupe.undo.graceAdded':       { en: 'grace note added',             fr: 'petite note ajoutée' },
+	'loupe.undo.grace':            { en: 'grace note changed',           fr: 'petite note modifiée' },
+	'loupe.undo.graceSlash':       { en: 'slash changed',                fr: 'barre oblique modifiée' },
+	/* ── N.192: the key signature card in Corrections. RATIFIED by Dann 2026-11-12 12:54, as the block above. ── */
+	'loupe.keySignature':          { en: 'Key signature',                fr: 'Armure' },
+	'correct.keyChange':           { en: 'Change the key from this bar', fr: 'Changer l’armure à partir de cette mesure' },
+	'correct.keyToNext':           { en: 'To the next key change',       fr: 'Jusqu’au prochain changement d’armure' },
+	'correct.keyToEnd':            { en: 'To the end of the song',       fr: 'Jusqu’à la fin du chant' },
+	'correct.keyFollow':           { en: 'The notes follow the new key', fr: 'Les notes suivent la nouvelle armure' },
+	'correct.keyFollowHelp':       { en: 'A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.', fr: 'Une note sans altération propre prend le dièse ou le bémol de la nouvelle armure. Désactivez cette option pour garder chaque hauteur telle quelle.' },
+	'correct.keyRemove':           { en: 'Remove this key change',       fr: 'Supprimer ce changement d’armure' },
+	'loupe.undo.keyChanged':       { en: 'key changed',                  fr: 'armure modifiée' },
+	'loupe.undo.keyRemoved':       { en: 'key change removed',           fr: 'changement d’armure supprimé' },
 	// ROW 133, ratified by Dann 2026-10-19 23:41 (`docs/sessions/ratified-loupe-dot-words_2026-10-19.md`):
 	// the loupe and a tempo chip name a dotted value in words, and a French rest by its own name.
 	// Whole phrases, not words assembled by grammar, so the French agreement stays as ratified.

@@ -424,3 +424,37 @@ describe('row 166: the six ratified placeholder strings', () => {
 		expect(t('analysis.broad.body.generic', 'fr')).toBe('Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision repose sur des valeurs par défaut pour votre type de voix.');
 	});
 });
+
+
+describe('ratified grace note and key signature lines (N.187, N.192; Dann 2026-11-12 12:54)', () => {
+	it('pins all 18 pairs, English as built and the ratified French, character for character, the apostrophes typographic', () => {
+		const pairs: Record<string, { en: string; fr: string }> = {
+			'loupe.grace': { en: "Grace note", fr: "Petite note" },
+			'correct.graceAdd': { en: "Add a grace note before the note that follows", fr: "Ajouter une petite note avant la note qui suit" },
+			'correct.graceMake': { en: "Make this a grace note", fr: "Transformer cette note en petite note" },
+			'correct.graceFull': { en: "Make this a full note again", fr: "Redonner à cette note sa pleine valeur" },
+			'loupe.graceSlash': { en: "Slash", fr: "Barre oblique" },
+			'correct.graceSlash': { en: "Add or remove the slash on this grace note", fr: "Ajouter ou retirer la barre oblique de cette petite note" },
+			'loupe.undo.graceAdded': { en: "grace note added", fr: "petite note ajoutée" },
+			'loupe.undo.grace': { en: "grace note changed", fr: "petite note modifiée" },
+			'loupe.undo.graceSlash': { en: "slash changed", fr: "barre oblique modifiée" },
+			'loupe.keySignature': { en: "Key signature", fr: "Armure" },
+			'correct.keyChange': { en: "Change the key from this bar", fr: "Changer l’armure à partir de cette mesure" },
+			'correct.keyToNext': { en: "To the next key change", fr: "Jusqu’au prochain changement d’armure" },
+			'correct.keyToEnd': { en: "To the end of the song", fr: "Jusqu’à la fin du chant" },
+			'correct.keyFollow': { en: "The notes follow the new key", fr: "Les notes suivent la nouvelle armure" },
+			'correct.keyFollowHelp': { en: "A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.", fr: "Une note sans altération propre prend le dièse ou le bémol de la nouvelle armure. Désactivez cette option pour garder chaque hauteur telle quelle." },
+			'correct.keyRemove': { en: "Remove this key change", fr: "Supprimer ce changement d’armure" },
+			'loupe.undo.keyChanged': { en: "key changed", fr: "armure modifiée" },
+			'loupe.undo.keyRemoved': { en: "key change removed", fr: "changement d’armure supprimé" },
+		};
+		expect(Object.keys(pairs)).toHaveLength(18);
+		for (const [key, v] of Object.entries(pairs)) {
+			expect(t(key, 'en'), key).toBe(v.en);
+			expect(t(key, 'fr'), key).toBe(v.fr);
+		}
+	});
+	it('no French string of the block carries a straight apostrophe', () => {
+		for (const key of ['correct.keyChange', 'correct.keyToNext', 'correct.keyToEnd', 'correct.keyRemove', 'loupe.undo.keyRemoved']) expect(t(key, 'fr')).not.toContain("'");
+	});
+});
