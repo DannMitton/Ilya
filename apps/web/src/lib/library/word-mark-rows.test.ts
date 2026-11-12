@@ -104,6 +104,7 @@ describe('rows and maps', () => {
 		yo: new Map([['1-0-3', { source: 'user-override' as const }]]),
 		syllables: new Map([['1-0', { boundaries: [1] }]]),
 		spot: new Map([['0-2', true], ['0-0', false]]),
+		rhyme: new Map(),
 	});
 
 	it('writes each mark with the clean form of its word, ё folded, in a fixed order', () => {
@@ -169,5 +170,61 @@ describe('rows and maps', () => {
 		const rows = rowsFromMaps(maps(), keyedTo, now);
 		expect(rows.some((r) => r[1] === 'stress')).toBe(false);
 		expect(rows.some((r) => r[1] === 'syllables')).toBe(true);
+	});
+});
+
+describe('the set-aside rhyme mark (rhyme lane 49)', () => {
+	const grid = wordGrid('Глубокой\nвысокий');
+	const withRhyme = (): MarkMaps => ({ ...emptyMarkMaps(), rhyme: new Map([['1-0', true]]) });
+
+	it('is a row of its own kind, with the word it sits on, and reads back into its own map, never into spot', () => {
+		const rows = rowsFromMaps(withRhyme(), grid, null);
+		expect(rows).toEqual([['1-0', 'rhyme', true, 'высокий']]);
+		const back = mapsFromRows(rows, grid);
+		expect(back.dropped).toBe(0);
+		expect([...back.maps.rhyme]).toEqual([['1-0', true]]);
+		expect(back.maps.spot.size).toBe(0);
+	});
+
+	it('is written after the other kinds, and a spot mark on the same word stays a spot mark', () => {
+		const maps = { ...withRhyme(), spot: new Map([['1-0', false]]) };
+		const rows = rowsFromMaps(maps, grid, null);
+		expect(rows.map((r) => r[1])).toEqual(['spot', 'rhyme']);
+		const back = mapsFromRows(rows, grid);
+		expect(back.maps.spot.get('1-0')).toBe(false);
+		expect(back.maps.rhyme.get('1-0')).toBe(true);
+	});
+
+	it('is a mark whose value must be true', () => {
+		expect(validRow(['1-0', 'rhyme', true, 'высокий'])).toBe(true);
+		expect(validRow(['1-0', 'rhyme', false, 'высокий'])).toBe(false);
+		expect(validRow(['1-0', 'rhyme', 'yes', 'высокий'])).toBe(false);
+		expect(validRow(['1-0-2', 'rhyme', true, 'высокий'])).toBe(false);
+	});
+
+	it('counts as a mark: a witness with only this mark is not empty', () => {
+		expect(rowsFromMaps(withRhyme(), grid, null)).toHaveLength(1);
+	});
+
+	it('follows its word across an edit', () => {
+		const next = wordGrid('Дорогой\nГлубокой\nвысокий');
+		const rows = rowsFromMaps(withRhyme(), grid, next);
+		expect(rows).toEqual([['2-0', 'rhyme', true, 'высокий']]);
+	});
+
+	it('is dropped alone, by an older build that does not know the kind, and the rest of the song stays', () => {
+		// An older build's `MARK_KINDS` lacks 'rhyme': to it, the row's kind is unknown, as 'nonsense' is here.
+		const raw = JSON.parse(JSON.stringify(record()));
+		raw.wordMarks = { lyrics: [lyricsRows[0], ['1-0', 'nonsense', true, 'высокий'], lyricsRows[3]] };
+		const loaded = validateRecord(raw, 'song', NOW);
+		expect(loaded.reason).toBeUndefined();
+		expect(loaded.record.wordMarks).toEqual({ lyrics: [lyricsRows[0], lyricsRows[3]] });
+	});
+
+	it('round trips through the record with the other kinds', () => {
+		const rows: MarkRow[] = [...lyricsRows, ['1-0', 'rhyme', true, 'москва']];
+		const stored = recordFromFields(record(), { ...fieldsFromRecord(record()), wordMarks: { lyrics: rows } });
+		const loaded = validateRecord(JSON.parse(JSON.stringify(stored)), 'song', NOW);
+		expect(loaded.record.wordMarks).toEqual({ lyrics: rows });
 	});
 });

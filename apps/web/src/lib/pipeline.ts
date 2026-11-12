@@ -239,6 +239,7 @@ export function processText(
     userStressOverrides,
     yoToggles,
     phraseEnds,
+    rhymeSetAside,
   } = options;
 
   if (!text.trim()) return [];
@@ -314,7 +315,7 @@ export function processText(
 
   // Row 108 C: the engine runs over every line first, and cross-word assimilation once over all of them,
   // so it crosses a line end the music does not end (`boundaries.ts`). A `hard` boundary stops it, as before.
-  const transcribedLines = preLines.map((preLine, lineIdx) => transcribeWords(preLine, lineIdx, engineConfig, rhyme));
+  const transcribedLines = preLines.map((preLine, lineIdx) => transcribeWords(preLine, lineIdx, engineConfig, rhyme, rhymeSetAside));
   GraysonEngine.applyCrossWordAssimilation(transcribedLines.flat());
   transcribedLines.forEach(finishLine);
 
@@ -433,6 +434,7 @@ export function processText(
           originalStressSource: tw.wordData.originalStressSource,
           yoAlternation: tw.wordData.yoAlternation,
           yoAlternateForm: tw.wordData.yoAlternateForm,
+          rhymePartner: rhyme.get(`${lineIdx}-${wordIdx}`),
           result: tw.engineResult,
           ipaDisplay: tw.ipaDisplay ?? tw.ipaContent ?? '',
           ipaReconstituted: tw.ipaReconstituted ?? tw.ipaDisplay ?? tw.ipaContent ?? '',
@@ -745,6 +747,7 @@ function transcribeWords(
   lineIdx: number,
   engineConfig: EngineConfig,
   rhyme: ReadonlyMap<string, string>,
+  setAside?: { has(key: string): boolean },
 ): TranscribedWord[] {
   // Build line text for context detection
   const lineText = preLine.map((w) => w.cyrillic).join(' ');
@@ -790,16 +793,17 @@ function transcribeWords(
       const effectiveStress =
         isProclitic || isEnclitic ? -1 : wordData.stress;
 
-      // Call the engine; a matched line end reads under 'literary' and names its partner on the ⟨и⟩ entry
+      // Call the engine; a matched line end reads under 'literary' and names its partner on the ⟨и⟩ entry, unless the singer set the rhyme aside
       const partner = rhyme.get(`${lineIdx}-${wordIdx}`);
+      const literary = partner !== undefined && !setAside?.has(`${lineIdx}-${wordIdx}`);
       const engineResult = GraysonEngine.transcribe(
         cleanWord,
         effectiveStress,
         isProclitic || isEnclitic,
         procliticPosition,
-        partner === undefined ? engineConfig : { ...engineConfig, adjectival: 'literary' },
+        literary ? { ...engineConfig, adjectival: 'literary' } : engineConfig,
       );
-      if (partner !== undefined) stampRhymePartner(engineResult.transcriptionLog, partner);
+      if (literary) stampRhymePartner(engineResult.transcriptionLog, partner);
       // Row 106: the engine's own syllables are cut along the typed hyphens, before anything reads them.
       if (wordData.typedBreaks.length > 0) {
         cutAlongTypedBreaks(engineResult, wordData.typedBreaks, buildDisplayLog(engineResult.transcriptionLog).map((e) => e.ipa ?? ''), (part) => GraysonEngine.syllabify(part));

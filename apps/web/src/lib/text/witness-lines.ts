@@ -20,6 +20,8 @@ import type { InputView } from './input-views.svelte';
 export interface WitnessMarks {
 	stress: ReadonlyMap<string, UserStressOverride>;
 	yo: ReadonlyMap<string, YoToggle>;
+	/** The words whose -кий rhyme reading the singer set aside. */
+	rhyme: ReadonlyMap<string, boolean>;
 }
 
 /** The text transcribed, or no lines where it is empty or the pipeline throws (as `derivedLines` does). */
@@ -30,6 +32,7 @@ export function witnessLines(text: string, language: Language, marks: WitnessMar
 			language,
 			userStressOverrides: marks.stress.size > 0 ? (marks.stress as Map<string, UserStressOverride>) : undefined,
 			yoToggles: marks.yo.size > 0 ? (marks.yo as Map<string, YoToggle>) : undefined,
+			rhymeSetAside: marks.rhyme.size > 0 ? marks.rhyme : undefined,
 		});
 	} catch (e: unknown) {
 		console.error('[Ilya] Transcription error (poem):', e);

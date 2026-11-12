@@ -10,6 +10,8 @@ import { setStressDictionary, setSingerSupplement } from '@ilya/phonology';
 import { setGlossDictionary } from '@ilya/dictionary';
 import { processText } from '$lib/pipeline';
 import type { LineData, YoToggle } from '$lib/types';
+import { witnessLines } from './text/witness-lines';
+import { WordMarks } from './text/word-marks.svelte';
 
 const DATA_DIR = join(__dirname, '../../static/data');
 
@@ -93,5 +95,60 @@ describe('the rhyme reading through processText', () => {
 	it('русский keeps its lexical reading beside a partner', () => {
 		const lines = processText('узкой\nрусский');
 		expect(ipa(lines, 1, 0)).toContain('kʲij');
+	});
+});
+
+describe('the singer\'s set-aside (rhyme lane 49)', () => {
+	const aside = (...keys: string[]) => new Set(keys);
+
+	it('ticked: the word reads [kɨj], and still carries its partner so the box stays drawn', () => {
+		const lines = processText('глубокой\nвысокий', { rhymeSetAside: aside('1-0') });
+		expect(ipa(lines, 1, 0)).toBe('vɨ ˈso kɨj');
+		expect(lines[1].words[0].rhymePartner).toBe('глубокой');
+		expect(iEntry(lines, 1, 0)?.features.exception).toBe('velar-adjectival');
+	});
+
+	it('unticked: [kʌj] returns, and the partner is the same', () => {
+		const lines = processText('глубокой\nвысокий', { rhymeSetAside: aside() });
+		expect(ipa(lines, 1, 0)).toBe('vɨ ˈso kʌj');
+		expect(lines[1].words[0].rhymePartner).toBe('глубокой');
+	});
+
+	it('the partner is not changed by the set-aside of the trigger', () => {
+		const lines = processText('глубокой\nвысокий', { rhymeSetAside: aside('1-0') });
+		expect(ipa(lines, 0, 0)).toBe('ɡɫu ˈbo kʌj');
+	});
+
+	it('a set-aside trigger still links its rhyme group: the far trigger keeps the rhyme', () => {
+		const text = 'глубокой\nдней\nречей\nвысокий\nлюдей\nдалёкий';
+		const lines = processText(text, { rhymeSetAside: aside('3-0') });
+		expect(ipa(lines, 3, 0)).toBe('vɨ ˈso kɨj');
+		expect(ipa(lines, 5, 0)).toBe('dɑ ˈlʲo kʌj');
+	});
+
+	it('a word the matcher does not match carries no partner, so no box is drawn for it', () => {
+		const lines = processText('глубокой высокий');
+		expect(lines[0].words[1].rhymePartner).toBeUndefined();
+		expect(processText('высокий\nтонкий')[0].words[0].rhymePartner).toBeUndefined();
+	});
+
+	it('another word\'s set-aside leaves this one alone', () => {
+		const lines = processText('глубокой\nвысокий\n\nглубокой\nвысокий', { rhymeSetAside: aside('1-0') });
+		expect(ipa(lines, 1, 0)).toBe('vɨ ˈso kɨj');
+		expect(ipa(lines, 3, 0)).toBe('vɨ ˈso kʌj');
+	});
+});
+
+describe('the set-aside through the Poem witness (`witness-lines.ts`)', () => {
+	it('takes the reading from the marks of the witness, and the box\'s partner with it', () => {
+		const marks = new WordMarks();
+		const poem = 'глубокой\nвысокий';
+		expect(ipa(witnessLines(poem, 'en', marks), 1, 0)).toBe('vɨ ˈso kʌj');
+		marks.toggleRhyme('1-0');
+		const aside = witnessLines(poem, 'en', marks);
+		expect(ipa(aside, 1, 0)).toBe('vɨ ˈso kɨj');
+		expect(aside[1].words[0].rhymePartner).toBe('глубокой');
+		marks.toggleRhyme('1-0');
+		expect(ipa(witnessLines(poem, 'en', marks), 1, 0)).toBe('vɨ ˈso kʌj');
 	});
 });

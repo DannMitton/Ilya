@@ -17,7 +17,15 @@ describe('resetWord', () => {
 			glosses: new Map([['0-2', 'g']]),
 			anchors: new Map([['0-2', 'a']]),
 		});
-		expect(r).toEqual({ stress: null, yo: null, syllables: null, spot: null, glosses: null, anchors: null, pipeline: false });
+		expect(r).toEqual({ stress: null, yo: null, syllables: null, spot: null, rhyme: null, glosses: null, anchors: null, pipeline: false });
+	});
+
+	it('clears a set-aside rhyme of this word only, and asks for the transcription again', () => {
+		const rhyme = new Map([['1-0', true], ['2-0', true]]);
+		const r = resetWord('1-0', { stress: empty, yo: empty, syllables: empty, spot: empty, rhyme, glosses: empty as Map<string, string>, anchors: empty as Map<string, string> });
+		expect([...r.rhyme!.keys()]).toEqual(['2-0']);
+		expect(rhyme.size).toBe(2);
+		expect(r.pipeline).toBe(true);
 	});
 
 	it('clears a stress override and asks for the transcription again', () => {
