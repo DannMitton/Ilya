@@ -18,7 +18,7 @@ export interface HeldMeasure {
 	positions: Cursor[];
 }
 
-export function heldMeasure(line: readonly VocalLineEvent[], index: number | null): HeldMeasure {
+export function heldMeasureReads(line: readonly VocalLineEvent[], index: number | null): HeldMeasure {
 	if (index === null) return { ids: [], nextIds: [], positions: [] };
 	const later = line.filter((ev) => ev.type !== 'rest' && ev.measureIndex > index);
 	const first = later[0];

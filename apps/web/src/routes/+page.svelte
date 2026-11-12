@@ -212,7 +212,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { isReadScan, type IntakeAnswers } from '@ilya/score-parser';
 	import { lineWithGraceStops } from '$lib/score/grace-layer';
-	import { heldMeasure } from '$lib/score/held-measure';
+	import { heldMeasureReads } from '$lib/score/held-measure';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -1057,7 +1057,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		return layer.labelOf(i);
 	});
 
-	const held = $derived(heldMeasure(stopLine, heldMeasureIndex)); // `held-measure.ts`: the held bar's ids, the next bar's, and its carets
+	const held = $derived(heldMeasureReads(stopLine, heldMeasureIndex)); // `held-measure.ts`: the held bar's ids, the next bar's, and its carets
 
 	/* THE READOUT, `F3 · quarter · на`. Every part of it is a string the app
 	   already ships, and a part that has no value is absent rather than
