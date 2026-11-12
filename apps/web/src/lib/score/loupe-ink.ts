@@ -108,7 +108,7 @@ export function musicInk(sys: Element): { nodes: Element[]; gate: number; xs: nu
 		if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
 		/* N.139: the page's meter is stripped from the clone, so it is not the
 		   music the loupe's own meter panel stands clear of. */
-		if (el.closest('[data-meter]')) continue;
+		if (el.closest('[data-meter], [data-key-change]')) continue;
 		const tacet = el.closest('[data-tacet]');
 		if (tacet && tacet !== el) continue;
 		let b: DOMRect;
@@ -132,7 +132,7 @@ export function musicInk(sys: Element): { nodes: Element[]; gate: number; xs: nu
 export function restOrNoteInk(sys: Element): number[] {
 	const xs: number[] = [];
 	for (const el of sys.querySelectorAll('*')) {
-		if (el.closest('[data-analysis]') || el.closest('[data-held-measure]') || el.closest('[data-meter]')) continue;
+		if (el.closest('[data-analysis]') || el.closest('[data-held-measure]') || el.closest('[data-meter], [data-key-change]')) continue;
 		if (el.hasAttribute('data-hit') || el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
 		const tacet = el.closest('[data-tacet]');
 		const isNote = !!el.parentElement?.hasAttribute('data-event-id') || el.hasAttribute('data-of-event');

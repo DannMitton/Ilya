@@ -58,6 +58,9 @@ import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 import { breakText, splitBreak, underlayHalves } from './break-mark';
 import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
 import { CROSSING_RING_HEADROOM, CROSSING_RING_REACH } from './ring-geometry';
+import { keyChangeLayout, keyChangeMarkup, keyChangeRoom, doubleBarExtraPx, thinBarPx, KEY_CHANGE_CLEAR_SP, type KeyChangeGlyph, type KeyChangeLayout } from './key-change';
+import { outgoingKeyAfter, accidentalStateAtEndOf, advanceAccidentalState, carryIntoMeasure, FLAT_ORDER, keyDeclaredAt, keyInForce, keySignatureAlter, newAccidentalCarry, SHARP_ORDER, type AccidentalCarry } from './accidental-carry';
+export { accidentalKey, accidentalStateAtEndOf, advanceAccidentalState, carryIntoMeasure, newAccidentalCarry, type AccidentalCarry, type AccidentalMark } from './accidental-carry';
 
 /**
  * N.10b: the sigla for a syllable the resolver declined to transcribe.
@@ -401,6 +404,8 @@ export interface StaffRenderOptions {
    * signature, so this is not read there.
    */
   incomingTimeSignature?: TimeSignature;
+  /** N.192: the fifths of the key the NEXT system opens on, where it differs from this one's last bar; this system then closes with a double barline and a courtesy signature. */
+  outgoingKeySignature?: number;
   /**
    * N.188. Whether the whole vocal line carries a printed slur that found its
    * partner (`ParsedScore.carriesPrintedSlurs`). Computed once by the parser and
@@ -426,7 +431,7 @@ export interface StaffRenderOptions {
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'runOnTieSp' | 'printedSlurs' | 'slurAcross' | 'slurThrough'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'outgoingKeySignature' | 'runOnTieSp' | 'printedSlurs' | 'slurAcross' | 'slurThrough'>> = {
   staffMidY: 96,
   lineGap: 12,
   // N.139: the stave's own left edge, flush with the system's. DESK DEFAULT.
@@ -472,112 +477,7 @@ export function headNameOf(base: NoteBase): RequiredGlyphName {
       : 'noteheadBlack';
 }
 
-// Order in which sharps / flats are added by the key signature.
-const SHARP_ORDER: Pitch['step'][] = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
-const FLAT_ORDER: Pitch['step'][] = ['B', 'E', 'A', 'D', 'G', 'C', 'F'];
 
-/**
- * The key an accidental is carried under: step AND octave, so a B flat in one
- * octave says nothing about a B in another (r116, per
- * `brief-n102-courtesy-accidentals_r1_2026-09-02.md` §4).
- */
-export function accidentalKey(p: Pitch): string {
-  return `${p.step}${p.octave}`;
-}
-
-/** The alteration a key signature imposes on a given diatonic step. */
-function keySignatureAlter(step: Pitch['step'], fifths: number): number {
-  if (fifths > 0 && SHARP_ORDER.slice(0, fifths).includes(step)) return 1;
-  if (fifths < 0 && FLAT_ORDER.slice(0, -fifths).includes(step)) return -1;
-  return 0;
-}
-
-/** What a note's accidental draws, once the two carry maps have had their say. */
-export type AccidentalMark = 'none' | 'required' | 'courtesy';
-
-/**
- * Decide what one note's accidental draws, and ADVANCE the two carry maps.
- *
- * N.102 increment 1b. This is the whole accidental rule, in one place, and it
- * exists so that the draw loop and `accidentalStateAtEndOf` cannot drift.
- * Before this the rule lived only inside the draw loop, so the paginator had no
- * way to ask what state a slice inherits without restating the rule and
- * inviting the two copies to disagree.
- *
- * IT MUTATES BOTH MAPS, exactly as the draw loop did when it owned the rule:
- * a drawn accidental of either kind puts the note's alter into `measureAcc`, so
- * the rest of the bar is governed by it, and a drawn courtesy also drops its key
- * from `prevMeasureAcc`, so a second recurrence in this bar draws nothing.
- *
- * @param pitch           the sung note's pitch
- * @param fifths          the key signature in force
- * @param measureAcc      what has been stated so far in THIS bar (mutated)
- * @param prevMeasureAcc  what stood at the end of the bar before (mutated)
- */
-export function advanceAccidentalState(
-  pitch: Pitch,
-  fifths: number,
-  measureAcc: Record<string, number>,
-  prevMeasureAcc: Record<string, number>,
-): AccidentalMark {
-  const key = accidentalKey(pitch);
-  const inEffect = key in measureAcc ? measureAcc[key] : keySignatureAlter(pitch.step, fifths);
-  if (pitch.alter !== inEffect) {
-    measureAcc[key] = pitch.alter;
-    return 'required';
-  }
-  if (prevMeasureAcc[key] !== undefined && prevMeasureAcc[key] !== pitch.alter && !(key in measureAcc)) {
-    measureAcc[key] = pitch.alter;
-    delete prevMeasureAcc[key];
-    return 'courtesy';
-  }
-  return 'none';
-}
-
-/**
- * The sung line's accidental state as it stands at the END of `measureIndex`,
- * keyed the way `measureAcc` keys it.
- *
- * N.102 increment 1b, and the reason it exists: `paginateScore` renders every
- * system through its own `renderAnalyzedStaff` call on a rebased slice, so a
- * slice's first measure had no idea what the measure before it stated and no
- * courtesy was ever drawn on a measure that opens a system. The paginator now
- * computes this and hands it in as `incomingAccidentals`.
- *
- * IT WALKS FROM MEASURE 0, and it has to: a courtesy drawn in one bar writes to
- * that bar's `measureAcc`, so the state at the end of any bar depends on the
- * whole chain before it. It walks through `advanceAccidentalState`, the same
- * call the draw loop makes, so the two cannot answer differently.
- *
- * AN EMPTY RESULT IS A REAL ANSWER, not a failure. A bar in which the singer
- * altered nothing ends with nothing carried, and so does a bar the singer does
- * not sing at all. `measureIndex` below zero means there is no bar before the
- * slice, which is the first system's case.
- *
- * ONE KEY SIGNATURE governs the whole walk, which is what the renderer itself
- * assumes: it reads `keySignatures[0]` and renders every measure under it. A
- * score that changes key mid-piece is NOT handled here, and is not handled by
- * the renderer either.
- */
-export function accidentalStateAtEndOf(
-  parsed: ParsedScore,
-  measureIndex: number,
-  fifths: number,
-): Record<string, number> {
-  if (measureIndex < 0) return {};
-  // N.103: the barline step is `carryIntoMeasure`, the same call the draw loop
-  // and `layoutColumns` make. This function held the third copy of it.
-  const carry = newAccidentalCarry(fifths);
-  const turningAcc: Record<string, number> = {};
-  for (const ev of parsed.vocalLine) {
-    if (ev.measureIndex > measureIndex) break; // the vocal line is in measure order
-    carryIntoMeasure(carry, turningAcc, ev.measureIndex);
-    if (ev.type !== 'note' || !ev.pitch) continue;
-    advanceAccidentalState(ev.pitch, fifths, carry.measureAcc, carry.prevMeasureAcc);
-  }
-  // The bar asked about carried no sung event at all, so it states nothing.
-  return carry.curMeasure === measureIndex ? carry.measureAcc : {};
-}
 
 const ACCIDENTAL_GLYPH: Record<number, string> = { 1: '♯', [-1]: '♭', 0: '♮', 2: '𝄪', [-2]: '𝄫' };
 
@@ -857,8 +757,8 @@ export function tacetRuns(parsed: ParsedScore): TacetRun[] {
     if (sung.has(m.index)) continue;
     const open = runs[runs.length - 1];
     // N.139: a change of meter opens a new run, so the change draws at its own
-    // barline rather than vanishing inside a consolidated rest. DESK DEFAULT.
-    if (open && open.toMeasure === m.index - 1 && !meterDeclaredAt(parsed, m.index)) {
+    // barline rather than vanishing inside a consolidated rest. DESK DEFAULT. N.192: so does a change of key.
+    if (open && open.toMeasure === m.index - 1 && !meterDeclaredAt(parsed, m.index) && !keyDeclaredAt(parsed, m.index)) {
       open.toMeasure = m.index;
       open.count += 1;
     } else {
@@ -964,6 +864,20 @@ function partOfEvent(markup: string, id: string): string {
  * octave lower: `yFor` places SOUNDING pitches there (middle line B3), so the
  * glyphs land on the print's lines only if the octave drops by one (row 127).
  */
+/** N.192: one key-change glyph's step in px: its width plus the head's 1 px (9 where no font is loaded, as the head has it). */
+function keyStepFor(options: StaffRenderOptions): (kind: KeyChangeGlyph['kind']) => number {
+  const lineGap = options.lineGap ?? DEFAULTS.lineGap;
+  return (kind) => (options.font ? lineGap * options.font.glyph(ACCIDENTAL_SMUFL[kind === 'sharp' ? 1 : kind === 'flat' ? -1 : 0]).widthSp + 1 : 9);
+}
+
+/** N.192: the px a system ending at `toMeasure` adds for its courtesy key signature (0 where its next bar keeps the key). `sliceWidth` adds it. */
+export function keyCourtesyRoom(parsed: ParsedScore, toMeasure: number, options: StaffRenderOptions): number {
+  const to = Number.isFinite(toMeasure) ? outgoingKeyAfter(parsed, toMeasure) : undefined;
+  const lineGap = options.lineGap ?? DEFAULTS.lineGap;
+  const layout = to === undefined ? undefined : keyChangeLayout(keyInForce(parsed, toMeasure), to, keyStepFor(options));
+  return layout ? keyChangeRoom(layout, lineGap, thinBarPx(lineGap, options.font?.engravingDefaults.thinBarlineThickness), true) : 0;
+}
+
 const KS_OCTAVES: Record<'bass' | 'treble', { sharps: Record<Pitch['step'], number>; flats: Record<Pitch['step'], number> }> = {
   bass: {
     sharps: { F: 3, C: 3, G: 3, D: 3, A: 2, E: 3, B: 2 },
@@ -993,6 +907,8 @@ interface Placed {
   /** N.139: the meter this column's measure declares mid-system, and its room. */
   meter?: TimeSignature;
   meterRoom: number;
+  /** N.192: the key this measure declares mid-system; its room is inside `meterRoom`. */
+  key?: KeyChangeLayout;
 }
 
 /**
@@ -1408,51 +1324,7 @@ function turningUnitAt(
   return { left, tx, right: tx + M.turningHeadW / 2 };
 }
 
-/** The sung line's accidental state, plus the key signature that governs it. */
-export interface AccidentalCarry {
-  fifths: number;
-  /** What has been stated so far in THIS bar. Mutated by the walk. */
-  measureAcc: Record<string, number>;
-  /** What stood at the end of the bar before. Mutated by the walk. */
-  prevMeasureAcc: Record<string, number>;
-  /** The bar the carry currently stands in; -1 before the first. */
-  curMeasure: number;
-}
 
-/**
- * A fresh carry, seeded the way the draw loop seeds itself.
- *
- * `incoming` is NOT the first measure's own state: it is the closing state of
- * the measure before, standing in for a bar this walk never sees (N.102
- * increment 1b). The first `carryIntoMeasure` moves it into `prevMeasureAcc`
- * under the same guard every later measure gets.
- */
-export function newAccidentalCarry(fifths: number, incoming?: Record<string, number>): AccidentalCarry {
-  return { fifths, measureAcc: { ...(incoming ?? {}) }, prevMeasureAcc: {}, curMeasure: -1 };
-}
-
-/**
- * Step the carry to `measureIndex`, if it is not already there.
- *
- * The outgoing measure's state becomes the courtesy source, but only for the
- * measure that DIRECTLY follows it: a skipped index is a tacet run, and nothing
- * carries across one. The turning layer keeps its own per-measure state and
- * resets with no carry at all.
- *
- * ONE definition, called by the draw loop and by `layoutColumns`, so the
- * spacer's idea of what draws and the page's idea cannot diverge at a barline.
- */
-export function carryIntoMeasure(
-  carry: AccidentalCarry,
-  turningAcc: Record<string, number>,
-  measureIndex: number,
-): void {
-  if (measureIndex === carry.curMeasure) return;
-  carry.prevMeasureAcc = measureIndex === carry.curMeasure + 1 ? carry.measureAcc : {};
-  carry.curMeasure = measureIndex;
-  carry.measureAcc = {};
-  for (const k of Object.keys(turningAcc)) delete turningAcc[k];
-}
 
 /** One column's ink, as offsets from the notehead centre. */
 export interface ColumnInk {
@@ -1622,8 +1494,10 @@ export interface LayoutColumn {
    * N.139. The px the meter adds between the measure's barline and this column,
    * unstretched: the barline draws at `x - BARLINE_TO_COLUMN_PX - meterRoom`.
    * 0 where no meter draws, plus a crossing ring's reach where the column opening the measure crosses (row 78c).
+   * N.192: it holds a key change's room too, and `key` says which.
    */
   meterRoom: number;
+  key?: KeyChangeLayout;
 }
 
 /**
@@ -1671,12 +1545,15 @@ export function layoutColumns(
 
      NO ANALYSIS MEANS NO TURNING INK, which is correct rather than degraded: a
      score with no measured voice draws no turning layer at all. */
-  const fifths = parsed.keySignatures[0]?.signature.fifths ?? 0;
+  const firstBar = Number.isFinite(fromMeasure) ? Math.max(0, fromMeasure) : 0;
+  const fifths = keyInForce(parsed, firstBar);
   const inkOptions: StaffRenderOptions = { ...options, clef: options.clef ?? chooseClef(parsed) };
+  // N.192: nothing carries across a change of key, so a slice that opens on one inherits no accidentals.
   const carry = newAccidentalCarry(
     fifths,
     options.incomingAccidentals ??
-      (Number.isFinite(fromMeasure) ? accidentalStateAtEndOf(parsed, fromMeasure - 1, fifths) : undefined),
+      (Number.isFinite(fromMeasure) && !keyDeclaredAt(parsed, firstBar) ? accidentalStateAtEndOf(parsed, fromMeasure - 1, fifths) : undefined),
+    (m) => keyInForce(parsed, m),
   );
   const turningAcc: Record<string, number> = {};
   const inkOf = (ev: VocalLineEvent): ColumnInk =>
@@ -1694,17 +1571,24 @@ export function layoutColumns(
 
      A TACET COLUMN: barline, clearance, digits, and then the run-in less the
      H-bar's own inset, which the rest already stands off its left bound. */
-  const meterRoomFor = (measureIndex: number, inkLeft: number | undefined): { meter?: TimeSignature; meterRoom: number } => {
+  const thin = thinBarPx(lineGap, options.font?.engravingDefaults.thinBarlineThickness);
+  const keyStep = keyStepFor(options);
+  const meterRoomFor = (measureIndex: number, inkLeft: number | undefined): { meter?: TimeSignature; meterRoom: number; key?: KeyChangeLayout } => {
     const meter = meterDeclaredAt(parsed, measureIndex);
     const mi = meterInk(meter, options);
-    if (!meter || !mi) return { meterRoom: 0 };
-    const lead = METER_BARLINE_CLEAR_SP * lineGap + mi.width;
-    const runIn = options.meterRunInSp ?? METER_RUN_IN_SP;
+    /* N.192. A key declared here draws between the barline and the meter: barline, the light double's
+       second stroke, the signature, `METER_KEY_CLEAR_SP`, then the digits. */
+    const kd = keyDeclaredAt(parsed, measureIndex);
+    const key = kd ? keyChangeLayout(kd.from, kd.to, keyStep) : undefined;
+    if ((!meter || !mi) && !key) return { meterRoom: 0 };
+    const keyEnd = key ? keyChangeRoom(key, lineGap, thin) : 0;
+    const lead = (key ? keyEnd : METER_BARLINE_CLEAR_SP * lineGap) + (meter && mi ? (key ? METER_KEY_CLEAR_SP * lineGap : 0) + mi.width : 0);
+    const runIn = mi ? (options.meterRunInSp ?? METER_RUN_IN_SP) : HEAD_RUN_IN_SP;
     const meterRoom =
       inkLeft === undefined
         ? lead + Math.max(0, runIn - TACET_REST.barInsetSp) * lineGap
         : Math.max(0, lead + runIn * lineGap + inkLeft - BARLINE_TO_COLUMN_PX);
-    return { meter, meterRoom };
+    return { ...(meter && mi ? { meter } : {}), meterRoom, ...(key ? { key } : {}) };
   };
 
   const columns: LayoutColumn[] = [];
@@ -1744,7 +1628,7 @@ export function layoutColumns(
        next bar's courtesy is wrong. */
     const ink = inkOf(ev);
     let advance: number;
-    let room: { meter?: TimeSignature; meterRoom: number } = { meterRoom: 0 };
+    let room: { meter?: TimeSignature; meterRoom: number; key?: KeyChangeLayout } = { meterRoom: 0 };
     if (owedByTacet > 0) {
       room = meterRoomFor(ev.measureIndex, ink.left); room = { ...room, meterRoom: room.meterRoom + (ink.ringReach ?? 0) };
       advance = owedByTacet + BARLINE_ROOM + room.meterRoom;
@@ -1964,7 +1848,15 @@ export function renderAnalyzedStaff(
   // a compressed duration curve; stretching uniformly preserves whatever
   // curve is in force). Stretch only: `columnAdvance` already returned the
   // minimum each column needs, and compressing would undo r235's floor.
-  const targetSpan = (options.targetWidth ?? 0) - head.contentLeft;
+  const thin = thinBarPx(o.lineGap, smufl?.engravingDefaults.thinBarlineThickness);
+  const keyStep = keyStepFor(options);
+  /* N.192. A change of key that falls at a system break closes THIS system with a courtesy signature after
+     its barline (a double barline, drawn inside the width as the final pair is). The columns justify to the
+     target width less its room, so `sliceWidth` and the render agree. DEPARTS FROM THE 2026-08-06 RULING
+     ("the system ends at its barline") AT SUCH A SYSTEM ONLY: N.192's own spec. */
+  const courtesy = options.outgoingKeySignature === undefined ? undefined : keyChangeLayout(keyInForce(parsed, parsed.measures.length - 1), options.outgoingKeySignature, keyStep);
+  const courtesyRoom = courtesy ? keyChangeRoom(courtesy, o.lineGap, thin, true) : 0;
+  const targetSpan = (options.targetWidth ?? 0) - courtesyRoom - head.contentLeft;
   const stretch = naturalSpan > 0 && targetSpan > naturalSpan ? targetSpan / naturalSpan : 1;
 
   const placed: Placed[] = [];
@@ -1988,6 +1880,7 @@ export function renderAnalyzedStaff(
     newMeasure: boolean;
     meter?: TimeSignature;
     meterRoom: number;
+    key?: KeyChangeLayout;
   }> = [];
   {
     let x = head.contentLeft;
@@ -1997,7 +1890,7 @@ export function renderAnalyzedStaff(
       xs.push(round2(x));
     }
     steps.forEach((s, i) => {
-      if (s.ev) placed.push({ ev: s.ev, x: xs[i], newMeasure: s.newMeasure, meter: s.meter, meterRoom: s.meterRoom });
+      if (s.ev) placed.push({ ev: s.ev, x: xs[i], newMeasure: s.newMeasure, meter: s.meter, meterRoom: s.meterRoom, key: s.key });
       else if (s.tacet)
         tacetPlaced.push({
           run: s.tacet,
@@ -2007,6 +1900,7 @@ export function renderAnalyzedStaff(
           newMeasure: s.newMeasure,
           meter: s.meter,
           meterRoom: s.meterRoom,
+          key: s.key,
         });
     });
   }
@@ -2020,7 +1914,7 @@ export function renderAnalyzedStaff(
   // Kept identical for a final system: the r96 thin-plus-thick pair is drawn
   // INSIDE this width rather than added to it, so `sliceWidth`'s packing
   // estimate cannot diverge from the rendering by knowing which slice is last.
-  const width = contentRight;
+  const width = round2(contentRight + courtesyRoom);
 
   // ── Beam pass: group flagged notes by measure, beat, and timbre ──
   // A group needs at least two consecutive members; it breaks at rests,
@@ -2164,7 +2058,7 @@ export function renderAnalyzedStaff(
   const staffLineT = smufl ? round2(sp(ed!.staffLineThickness)) : 1;
   for (let i = -2; i <= 2; i++) {
     const y = o.staffMidY + i * o.lineGap;
-    parts.push(`<line x1="${staveLeft}" y1="${y}" x2="${round2(contentRight)}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
+    parts.push(`<line x1="${staveLeft}" y1="${y}" x2="${width}" y2="${y}" stroke="#3a352f" stroke-width="${staffLineT}"/>`);
   }
 
   // Clef at the head: SMuFL glyph on its reference line (treble winds
@@ -2225,6 +2119,28 @@ export function renderAnalyzedStaff(
     ksX += ksStep;
   }
   if (headMeterSig && headMeter) parts.push(meterMarkup(headMeterSig, headMeter, meterLeft));
+
+  /* N.192. A key signature mid-piece: positions from the clef's own table, one glyph at a time. The group is
+     stamped `data-key-change`, never `data-key-signature` (the Loupe's head bound reads that one). */
+  const keyChangeMarks = (key: KeyChangeLayout, left: number): string =>
+    keyChangeMarkup(key, left, keyStep, (g) => yFor({ step: g.step, octave: ksClef[g.table][g.step] - (clef === 'treble-8vb' ? 1 : 0), alter: 0 }), (kind, x, y) =>
+      smufl ? glyphAt(ACCIDENTAL_SMUFL[kind === 'sharp' ? 1 : kind === 'flat' ? -1 : 0], round2(x), y, '#3a352f', true) : `<text x="${round2(x)}" y="${y + 4}" font-size="15" fill="#3a352f">${ACCIDENTAL_GLYPH[kind === 'sharp' ? 1 : kind === 'flat' ? -1 : 0]}</text>`);
+  /** The barline at `barX` and what a bar that declares a key or a meter draws after it: for a key, a light double barline, the signature, then `METER_KEY_CLEAR_SP` and the digits. */
+  const barAndChange = (barX: number, meter: TimeSignature | undefined, key: KeyChangeLayout | undefined): void => {
+    const barT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
+    const stroke = (x: number): string => `<line x1="${round2(x)}" y1="${staffTop}" x2="${round2(x)}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`;
+    parts.push(stroke(barX));
+    let at = barX + sp(METER_BARLINE_CLEAR_SP);
+    if (key) {
+      const second = barX + doubleBarExtraPx(o.lineGap, thin);
+      parts.push(stroke(second));
+      at = second + sp(KEY_CHANGE_CLEAR_SP);
+      parts.push(keyChangeMarks(key, at));
+      at += key.width + sp(METER_KEY_CLEAR_SP);
+    }
+    const mi = meterInk(meter, { lineGap: o.lineGap, font: smufl });
+    if (meter && mi) parts.push(meterMarkup(meter, mi, at));
+  };
 
   // ── N.126: the system's measure number, above the clef ──
   // Gould p484-c and Dann's rulings; `BAR_NUMBER` holds every value and says
@@ -2329,7 +2245,7 @@ export function renderAnalyzedStaff(
    * before that event is the slice's own silent first bar, not the previous
    * system's last.
    */
-  const carry = newAccidentalCarry(fifths, options.incomingAccidentals);
+  const carry = newAccidentalCarry(fifths, options.incomingAccidentals, (m) => keyInForce(parsed, m));
   const turningAcc: Record<string, number> = {};
   /**
    * N.102. The sung line's accidental state as it stood at the END of the
@@ -2477,7 +2393,7 @@ export function renderAnalyzedStaff(
 
      `TACET_REST` holds the four numbers and says which of them are convention
      and which come from the face. */
-  for (const { run, x: tx, nextX, nextMeterRoom, newMeasure, meter, meterRoom } of tacetPlaced) {
+  for (const { run, x: tx, nextX, nextMeterRoom, newMeasure, meter, meterRoom, key } of tacetPlaced) {
     /* N.139: where the run opens on a meter, its barline stands `meterRoom` further
        left and the digits stand after it, and the rest's left bound is the
        column's usual one, which `layoutColumns` placed the run-in past the
@@ -2485,13 +2401,7 @@ export function renderAnalyzedStaff(
     const left = newMeasure ? tx - BARLINE_TO_COLUMN_PX : headMeter ? meterRight + sp(Math.max(0, o.meterRunInSp - TACET_REST.barInsetSp)) : ksEnd;
     const right = nextX === undefined ? closingBarlineStrokeX(contentRight, !!options.finalBarline, { thin: smufl ? round2(sp(ed!.thinBarlineThickness)) : 1, thick: smufl ? round2(sp(ed!.thickBarlineThickness)) : 1.6, halfSpace: sp(0.5) }) : nextX - BARLINE_TO_COLUMN_PX - nextMeterRoom; // QUEUE row 36: the nearest stroke's centre, as a mid-system barline gives
     const centre = (left + right) / 2;
-    if (newMeasure) {
-      const barX = left - meterRoom;
-      const barT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
-      parts.push(`<line x1="${round2(barX)}" y1="${staffTop}" x2="${round2(barX)}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
-      const mi = meterInk(meter, { lineGap: o.lineGap, font: smufl });
-      if (meter && mi) parts.push(meterMarkup(meter, mi, barX + sp(METER_BARLINE_CLEAR_SP)));
-    }
+    if (newMeasure) barAndChange(left - meterRoom, meter, key);
     const runFrom = run.fromMeasure + o.measureOffset;
     parts.push(`<g data-tacet="${runFrom}-${runFrom + run.count - 1}" data-tacet-count="${run.count}">`);
 
@@ -2612,20 +2522,14 @@ export function renderAnalyzedStaff(
     }
   }
 
-  for (const { ev, x: nx, newMeasure, meter, meterRoom } of placed) {
+  for (const { ev, x: nx, newMeasure, meter, meterRoom, key } of placed) {
     // N.102: the outgoing measure's state becomes the courtesy source, but only
     // for the measure that DIRECTLY follows it. A skipped index is a tacet run,
     // and nothing carries across one. The turning layer resets outright.
     carryIntoMeasure(carry, turningAcc, ev.measureIndex);
-    if (newMeasure) {
-      // N.139: a measure that declares a meter pushes its barline left by the
-      // room `layoutColumns` reserved, and the digits stand after the barline.
-      const barX = round2(nx - BARLINE_TO_COLUMN_PX - meterRoom);
-      const barT = smufl ? round2(sp(ed!.thinBarlineThickness)) : 1;
-      parts.push(`<line x1="${barX}" y1="${staffTop}" x2="${barX}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${barT}"/>`);
-      const mi = meterInk(meter, { lineGap: o.lineGap, font: smufl });
-      if (meter && mi) parts.push(meterMarkup(meter, mi, barX + sp(METER_BARLINE_CLEAR_SP)));
-    }
+    // N.139: a measure that declares a meter pushes its barline left by the room `layoutColumns` reserved,
+    // and the digits stand after the barline; N.192: so does a key signature, which stands before them.
+    if (newMeasure) barAndChange(round2(nx - BARLINE_TO_COLUMN_PX - meterRoom), meter, key);
 
     if (ev.type === 'rest') {
       // N.92, THE CARETS clause 5: A REST IS A DURATION GLYPH LIKE THE OTHERS,
@@ -2730,7 +2634,7 @@ export function renderAnalyzedStaff(
     // 1b, so `accidentalStateAtEndOf` can answer what a slice inherits by
     // making the same call this loop makes. Everything below decides only what
     // the mark LOOKS like; what it is was decided there.
-    const mark = advanceAccidentalState(pitch, fifths, carry.measureAcc, carry.prevMeasureAcc);
+    const mark = advanceAccidentalState(pitch, carry.fifths, carry.measureAcc, carry.prevMeasureAcc);
     if (mark === 'required') {
       /* The width is `inkMetrics`'s in both modes since N.103, so the spacer's
          left extent and this placement are the same number. Primitive mode's
@@ -2948,7 +2852,7 @@ export function renderAnalyzedStaff(
       const tp = a.turningPitch;
       const ty = yFor(tp);
       const tKey = `${tp.step}${tp.octave}`;
-      const tInEffect = tKey in turningAcc ? turningAcc[tKey] : keySignatureAlter(tp.step, fifths);
+      const tInEffect = tKey in turningAcc ? turningAcc[tKey] : keySignatureAlter(tp.step, carry.fifths);
 
       /* ── THE TURNING UNIT KEEPS TO THE RIGHT OF THE SUNG UNIT ────────────
          N.106, ruled by Dann at the page on 2026-09-02, and the principle is
@@ -3399,6 +3303,12 @@ export function renderAnalyzedStaff(
     parts.push(`<line x1="${thickX}" y1="${staffTop}" x2="${thickX}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${thickT}"/>`);
   } else {
     parts.push(`<line x1="${endBarX}" y1="${staffTop}" x2="${endBarX}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${endBarT}"/>`);
+    // N.192: before a change of key at the next system, the closing barline is a light double, inside the width, and the courtesy follows it.
+    if (courtesy) {
+      const x1 = round2(endBarX - doubleBarExtraPx(o.lineGap, thin));
+      parts.push(`<line x1="${x1}" y1="${staffTop}" x2="${x1}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${endBarT}"/>`);
+      parts.push(keyChangeMarks(courtesy, contentRight + sp(KEY_CHANGE_CLEAR_SP)));
+    }
   }
   parts.push('</svg>');
 

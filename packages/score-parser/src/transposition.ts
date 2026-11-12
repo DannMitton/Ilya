@@ -31,6 +31,7 @@ import { analyzeScore, pitchToMidi, STEP_SEMITONE, type VowelResolver } from './
 import type { KeySignature, ParsedScore, Pitch, VocalLineEvent } from './types';
 import type { VoiceProfileSnapshot } from './analysis-types';
 import { advanceAccidentalState, carryIntoMeasure, newAccidentalCarry } from './staff-renderer';
+import { keyInForce } from './accidental-carry';
 
 /** Default search window, in semitones either side (a tritone). JUDGEMENT. */
 const DEFAULT_MAX_SEMITONES = 6;
@@ -413,18 +414,19 @@ export interface DoubleAccidentalCount {
  * where its accidental prints, so a second B double flat in the same bar does
  * not count twice. The walk is the renderer's own: `advanceAccidentalState`
  * under `carryIntoMeasure`, the calls `accidentalStateAtEndOf` makes, against
- * the first signature, as the renderer reads it. A courtesy that restates a
+ * the key in force at each bar (N.192), as the renderer reads it. A courtesy that restates a
  * double accidental counts, because it draws one. Pure.
  */
 export function doubleAccidentalsDrawn(parsed: ParsedScore): DoubleAccidentalCount {
   const fifths = parsed.keySignatures[0]?.signature.fifths ?? parsed.measures[0]?.keySignature.fifths ?? 0;
-  const carry = newAccidentalCarry(fifths);
+  // N.192: each bar is judged against its own key, as the renderer judges it.
+  const carry = newAccidentalCarry(fifths, undefined, (m) => keyInForce(parsed, m, fifths));
   const turningAcc: Record<string, number> = {};
   const count: DoubleAccidentalCount = { flats: 0, sharps: 0 };
   for (const ev of parsed.vocalLine) {
     carryIntoMeasure(carry, turningAcc, ev.measureIndex);
     if (ev.type !== 'note' || !ev.pitch) continue;
-    const mark = advanceAccidentalState(ev.pitch, fifths, carry.measureAcc, carry.prevMeasureAcc);
+    const mark = advanceAccidentalState(ev.pitch, carry.fifths, carry.measureAcc, carry.prevMeasureAcc);
     if (mark === 'none') continue;
     if (ev.pitch.alter === -2) count.flats++;
     else if (ev.pitch.alter === 2) count.sharps++;

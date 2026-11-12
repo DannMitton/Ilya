@@ -24,6 +24,7 @@ import type { AnalyzedScore } from './analysis-types';
 import {
 	accidentalStateAtEndOf,
 	headMeterSignature,
+	keyCourtesyRoom,
 	systemHead,
 	renderAnalyzedStaff,
 	layoutColumns,
@@ -32,6 +33,7 @@ import {
 } from './staff-renderer';
 import { unitEnd } from './tacet-run';
 import { keepGraceNotes } from './grace';
+import { keyDeclaredAt, outgoingKeyAfter } from './accidental-carry';
 import { chooseClef } from './clef-select';
 import { slurEndsAcross, slursThrough } from './printed-marks';
 
@@ -173,7 +175,8 @@ export function sliceWidth(
     first?.keySignature.fifths ?? parsed.keySignatures[0]?.signature.fifths ?? 0,
     headMeterSignature(first?.timeSignature, parsed.measures[from - 1]?.timeSignature, from === 0),
   );
-  return head.contentLeft + columns.reduce((total, c) => total + c.advance, 0) + trailing + RIGHT_PAD;
+  // N.192: a change of key at the break closes this system with a courtesy signature, which is part of its width.
+  return head.contentLeft + columns.reduce((total, c) => total + c.advance, 0) + trailing + RIGHT_PAD + keyCourtesyRoom(parsed, toMeasure, options);
 }
 
 function viewBoxOf(svg: string): { minY: number; width: number; height: number } {
@@ -214,7 +217,7 @@ export function renderSystemSlice(
   options: StaffRenderOptions,
   fromMeasure: number,
   toMeasure: number,
-  extra: { finalBarline: boolean; targetWidth?: number },
+  extra: { finalBarline: boolean; targetWidth?: number; courtesy?: boolean },
 ): string {
   /* N.102 increment 1b. Every system is rendered from a slice whose measure
      indices start at 0, so the renderer cannot see what the measure before the
@@ -228,9 +231,10 @@ export function renderSystemSlice(
      system, which the walk answers with an empty state, and that is the truth:
      nothing precedes the first bar.
 
-     ONE KEY SIGNATURE for the whole walk, the score's own, which is the
-     assumption the renderer already makes when it reads `keySignatures[0]`. */
+     THE KEY IN FORCE, bar by bar (N.192): the walk reads each measure's own
+     key, so `fifths` here is only the fallback for a score with no snapshot. */
   const fifths = parsed.keySignatures[0]?.signature.fifths ?? 0;
+  const outgoing = outgoingKeyAfter(parsed, toMeasure);
   return renderAnalyzedStaff(sliceScore(parsed, fromMeasure, toMeasure), analyzed, {
     ...options,
     clef: options.clef ?? chooseClef(parsed),
@@ -240,7 +244,10 @@ export function renderSystemSlice(
     // the one `data-system` and every event id already print (N.104).
     measureOffset: fromMeasure,
     // N.102 increment 1b: what the bar before this slice left in force.
-    incomingAccidentals: accidentalStateAtEndOf(parsed, fromMeasure - 1, fifths),
+    // Nothing carries across a change of key (N.192), so a system that opens on one inherits none.
+    incomingAccidentals: keyDeclaredAt(parsed, fromMeasure) ? {} : accidentalStateAtEndOf(parsed, fromMeasure - 1, fifths),
+    // N.192: a change that falls at this system's end closes it with a courtesy signature.
+    ...(outgoing !== undefined && extra.courtesy !== false ? { outgoingKeySignature: outgoing } : {}),
     // N.139: the meter that bar counted in, so a change on this system's
     // first measure draws at its head.
     incomingTimeSignature: parsed.measures[fromMeasure - 1]?.timeSignature,

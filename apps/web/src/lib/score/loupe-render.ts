@@ -88,8 +88,10 @@ export function renderLoupeMeasure(bundle: LoupeRenderBundle, m: number, minGap:
 	/* The loupe's meter run-in is 1 sp, the page's stays 2 (`LOUPE_METER_RUN_IN_SP`). */
 	const options: StaffRenderOptions = { ...bundleRenderOptions(bundle), minGap, meterRunInSp: LOUPE_METER_RUN_IN_SP, runOnTieSp: m === measures - 1 ? 0 : RUN_ON_SP };
 	delete options.targetWidth;
+	/* N.192: the loupe's one bar is not at the end of a system, so it closes with no courtesy key signature. */
 	const svg = renderSystemSlice(bundle.readingScore, bundle.analyzed, options, m, m, {
 		finalBarline: m === measures - 1,
+		courtesy: false,
 	});
 	const box = svg.match(/viewBox="0 ([\d.-]+) ([\d.]+) ([\d.]+)"/);
 	return box ? { svg, minY: Number(box[1]), width: Number(box[2]), height: Number(box[3]) } : null;
