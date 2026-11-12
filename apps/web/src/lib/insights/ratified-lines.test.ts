@@ -426,7 +426,7 @@ describe('row 166: the six ratified placeholder strings', () => {
 });
 
 
-describe('ratified grace note and key signature lines (N.187, N.192; Dann 2026-11-12 12:54)', () => {
+describe('ratified grace note and key signature lines (N.187, N.192; ratified by Dann on 2026-11-12 at 12:54)', () => {
 	it('pins all 18 pairs, English as built and the ratified French, character for character, the apostrophes typographic', () => {
 		const pairs: Record<string, { en: string; fr: string }> = {
 			'loupe.grace': { en: "Grace note", fr: "Petite note" },

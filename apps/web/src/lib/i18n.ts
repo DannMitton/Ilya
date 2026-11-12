@@ -560,7 +560,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// three, and none of them carries behaviour here.
 	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },
 	'loupe.rest':                  { en: 'Rest',                         fr: 'Silence' },
-	/* ── N.187: grace notes in Corrections (cloud-lane-50). RATIFIED by Dann 2026-11-12 12:54, English and French. One contiguous block. ── */
+	/* ── N.187: grace notes in Corrections (cloud-lane-50). ratified on 2026-11-12 at 12:54 by Dann, English and French. One contiguous block. ── */
 	'loupe.grace':                 { en: 'Grace note',                   fr: 'Petite note' },
 	'correct.graceAdd':            { en: 'Add a grace note before the note that follows', fr: 'Ajouter une petite note avant la note qui suit' },
 	'correct.graceMake':           { en: 'Make this a grace note',       fr: 'Transformer cette note en petite note' },
@@ -570,7 +570,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.undo.graceAdded':       { en: 'grace note added',             fr: 'petite note ajoutée' },
 	'loupe.undo.grace':            { en: 'grace note changed',           fr: 'petite note modifiée' },
 	'loupe.undo.graceSlash':       { en: 'slash changed',                fr: 'barre oblique modifiée' },
-	/* ── N.192: the key signature card in Corrections. RATIFIED by Dann 2026-11-12 12:54, as the block above. ── */
+	/* ── N.192: the key signature card in Corrections. ratified on 2026-11-12 at 12:54 by Dann, as the block above. ── */
 	'loupe.keySignature':          { en: 'Key signature',                fr: 'Armure' },
 	'correct.keyChange':           { en: 'Change the key from this bar', fr: 'Changer l’armure à partir de cette mesure' },
 	'correct.keyToNext':           { en: 'To the next key change',       fr: 'Jusqu’au prochain changement d’armure' },
