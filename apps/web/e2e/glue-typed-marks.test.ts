@@ -26,17 +26,21 @@ test.describe('a typed # takes the no-break form when the singer leaves Lyrics',
 		await expect(field).toHaveValue(`я иду домой${NB}#`);
 	});
 
-	test('leaves «я #на» as typed, so two words are not fused', async ({ page }) => {
+	// QUEUE row 163 step 3 (Dann 2026-10-30 14:27): leaving the field tidies every typed `#` to «<unit> #» at the end of its unit, so «я #на» becomes
+	// «я #» with a no-break space, and the next word follows after an ordinary space. (This pinned «я #на» left as typed, the rule of 2026-10-29,
+	// until the 2026-10-30 ruling widened it.)
+	test('tidies «я #на дом» to «я #» (no-break space) and the next word on leaving the field', async ({ page }) => {
 		const field = page.locator('textarea.text-input');
 		await field.click();
 		await page.keyboard.type('я #на дом');
 		await field.blur();
-		await expect(field).toHaveValue('я #на дом');
+		await expect(field).toHaveValue(`я${NB}# на дом`);
 	});
 
-	// Seen in Chromium 153 (headless, Linux), 2026-10-29: Control+Z after the blur puts the field back to «я иду домой #» with the
-	// ordinary space. Not seen in Firefox or Safari, nor with Cmd-Z on a Mac. Pinned as seen, for Chromium only.
-	test('Control+Z after the blur returns the field to the ordinary space (Chromium, as seen)', async ({ page }) => {
+	// The tidy goes up as a whole arrival (`oninput(tidy, 'paste')`, `IntakeViews.svelte`'s `onBlur`), a value set from code, which is not in the
+	// textarea's own undo history (its comment says so). So the undo key does not restore the plain space: the tidy value stays. (This pinned
+	// the opposite, "as seen" in Chromium 153 on 2026-10-29, before row 163 step 3 changed how the value is set.)
+	test('the tidy value stays after the blur, and the undo key does not restore the plain space', async ({ page }) => {
 		const field = page.locator('textarea.text-input');
 		await field.click();
 		await page.keyboard.type('я иду домой #');
@@ -45,6 +49,6 @@ test.describe('a typed # takes the no-break form when the singer leaves Lyrics',
 		await field.focus();
 		await page.keyboard.press('ControlOrMeta+z');
 		const after = await field.inputValue();
-		expect(after).toBe('я иду домой #');
+		expect(after).toBe(`я иду домой${NB}#`);
 	});
 });

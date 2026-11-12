@@ -43,6 +43,53 @@
 	const BAR_W = $derived(Math.max(50, Math.min(210, width - X0 - 98 - 120)));
 	const BRACKET_X = $derived(X0 + BAR_W + 98);
 
+	/* THE BRACKET'S LABEL WRAPS (L17, closing polish lane). SVG text does not wrap, and the French « votre zone de travail confortable, telle que vous
+	   l'avez indiquée » runs past the figure on a phone, where the bars give way to 50 px. So the label is cut into lines at word spaces, each no wider
+	   than the room right of the bracket, from widths measured in the page's real font (after `document.fonts.ready`, and again when the width or the
+	   language changes), never from a character count. Two lines where two will do, cut at the space that makes them most even; more only where a
+	   word would still overrun. The typed range stays one line under it. A hidden copy of the label, whole, is what the widths are read from. */
+	const LEAD = 12;
+	const label = $derived(T('insights.r2.yourTessitura'));
+	const room = $derived(width - BRACKET_X - 6);
+	let whole = $state<SVGTextElement | null>(null);
+	let fontsTick = $state(0);
+	let wrapped = $state<{ text: string; room: number; lines: string[] } | null>(null);
+	$effect(() => {
+		document.fonts?.ready.then(() => (fontsTick += 1));
+	});
+	$effect(() => {
+		void fontsTick;
+		if (!whole || !(room > 0)) return;
+		const text = label;
+		wrapped = { text, room, lines: wrapLabel(whole, text, room) };
+	});
+	/** The label's lines: the measured cut, or the whole label until it is measured (and for any other text or room than the one measured). */
+	const lines = $derived(wrapped && wrapped.text === label && wrapped.room === room ? wrapped.lines : [label]);
+
+	function wrapLabel(el: SVGTextElement, text: string, avail: number): string[] {
+		const total = el.getComputedTextLength();
+		if (!(total > avail)) return [text];
+		const spaces = [...text.matchAll(/ /g)].map((m) => m.index!);
+		let best: { at: number; w: number } | null = null;
+		for (const at of spaces) {
+			const w = Math.max(el.getSubStringLength(0, at), total - el.getSubStringLength(0, at + 1));
+			if (!best || w < best.w) best = { at, w };
+		}
+		if (best && best.w <= avail) return [text.slice(0, best.at), text.slice(best.at + 1)];
+		const out: string[] = [];
+		let start = 0;
+		while (start < text.length) {
+			let end = text.length;
+			if (el.getSubStringLength(start, end - start) > avail) {
+				const fits = spaces.filter((at) => at > start && el.getSubStringLength(start, at - start) <= avail);
+				end = fits.length ? fits[fits.length - 1] : (spaces.find((at) => at > start) ?? text.length);
+			}
+			out.push(text.slice(start, end));
+			start = end + 1;
+		}
+		return out;
+	}
+
 	const rows = $derived([...figure.rows].sort((a, b) => b.midi - a.midi));
 	const maxQ = $derived(Math.max(1, ...rows.map((r) => r.quavers)));
 
@@ -99,7 +146,7 @@
 	const extent = $derived.by(() => {
 		const ys = [0, rows.length * ROW];
 		for (const p of passaggioLabels) ys.push(p.y - 4, p.ly - 8);
-		if (bracket) ys.push(bracket.top, bracket.bottom, bracket.mid - 8, bracket.mid + 16);
+		if (bracket) ys.push(bracket.top, bracket.bottom, bracket.mid - 8 - (LEAD / 2) * (lines.length - 1), bracket.mid + 16 + (LEAD / 2) * (lines.length - 1));
 		return { min: Math.min(...ys), max: Math.max(...ys) };
 	});
 	const top = $derived(4 - extent.min);
@@ -122,8 +169,9 @@
 			{/each}
 			{#if bracket && typedTessitura}
 				<path class="bracket" d="M{BRACKET_X - 4} {bracket.top} H{BRACKET_X} V{bracket.bottom} H{BRACKET_X - 4}"></path>
-				<text class="bracket-name" x={BRACKET_X + 6} y={bracket.mid - 2}>{T('insights.r2.yourTessitura')}</text>
-				<text class="bracket-name" x={BRACKET_X + 6} y={bracket.mid + 10}>{t('insights.fit.span', language).replace('{low}', N(typedTessitura.low)).replace('{high}', N(typedTessitura.high))}</text>
+				<text class="bracket-name bracket-label" x={BRACKET_X + 6} y={bracket.mid - 2 - (LEAD / 2) * (lines.length - 1)}>{#each lines as ln, k (k)}<tspan x={BRACKET_X + 6} dy={k === 0 ? 0 : LEAD}>{ln}</tspan>{/each}</text>
+				<text class="bracket-name" x={BRACKET_X + 6} y={bracket.mid + 10 + (LEAD / 2) * (lines.length - 1)}>{t('insights.fit.span', language).replace('{low}', N(typedTessitura.low)).replace('{high}', N(typedTessitura.high))}</text>
+				<text class="bracket-name" x="0" y="0" visibility="hidden" aria-hidden="true" bind:this={whole}>{label}</text>
 			{/if}
 		</g>
 	</svg>

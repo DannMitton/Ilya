@@ -318,7 +318,11 @@ body {
 		line-height: 1.5;
 	}
 
-	.paper-page:last-child {
+	/* THE LAST SHEET BREAKS NOWHERE. `:last-child` alone missed MELODY's last sheet: MarkupPane draws a zero-height wrapper after the sheets
+	   (`MarkupPane.svelte:1047`, the notes measurer), so the sheet was not its parent's last child, kept `break-after: page`, and Chromium printed a blank
+	   page after it (print-pages.test.ts; closing polish lane, step 12). `:last-of-type` is the last `article`, whatever follows it. */
+	.paper-page:last-child,
+	.paper-page:last-of-type {
 		page-break-after: auto;
 		break-after: auto;
 	}
