@@ -4,14 +4,14 @@
  *
  * WIRED: `dev` and `build` in package.json run it after `copy-metre-model.mjs`
  * (a unit test, `src/lib/omr/underlay-wired.test.ts`, fails if either lacks it), so
- * the three files below are served, and the page's fetch of them succeeds. Before
+ * the files below are served, and the page's fetch of them succeeds. Before
  * this, none was built into the site, and every scan was read with no words and no
  * error. The model itself is committed (`omr-underlay/`); the other two files and
  * the licences are copied from the installed packages.
  *
  * `/omr/` is git-ignored and never intercepted by the service worker
  * (`static/sw.js`), so the browser's own HTTP cache keeps these bytes, as it
- * keeps homr's and the metre network's. Five files go to `static/omr/models/underlay/`:
+ * keeps homr's and the metre network's. Six files go to `static/omr/models/underlay/`:
  *
  * - `rus_prereform_r2_29000.traineddata` (7,827,478 bytes, md5 2ff2af3e33461cd64e7d2015ef21d10d),
  *   from `omr-underlay/`, the source folder; it is the project's own model
@@ -21,6 +21,8 @@
  *   from the installed `tesseract.js-core`;
  * - `worker.min.js` (111,307 bytes), from the installed `tesseract.js`, so that the
  *   worker script is the app's own and not a CDN's;
+ * - `rus.traineddata.gz` (2,679,598 bytes, md5 9c66849e0afcfd659d613e71695d6f1c), the Russian model the photo path read from the CDN, from the
+ *   installed `@tesseract.js-data/rus` 1.0.0 (`4.0.0_best_int/`), copied as it is (the photo reader's own, `photoWorkerArgs`);
  * - `LICENSE-tesseract.js.txt` and `LICENSE-tesseract.js-core.txt`, each package's own
  *   licence file, copied as it is, because Ilya serves those two packages' code
  *   from its own origin (both state Apache-2.0).
@@ -39,10 +41,13 @@ const require = createRequire(import.meta.url);
 const tesseract = dirname(require.resolve('tesseract.js/package.json'));
 const core = dirname(createRequire(join(tesseract, 'package.json')).resolve('tesseract.js-core/package.json'));
 
+const photoModel = join(dirname(require.resolve('@tesseract.js-data/rus/package.json')), '4.0.0_best_int', 'rus.traineddata.gz');
+
 const FILES = [
 	[MODEL, 'rus_prereform_r2_29000.traineddata'],
 	[join(core, 'tesseract-core-simd-lstm.wasm.js'), 'tesseract-core-simd-lstm.wasm.js'],
 	[join(tesseract, 'dist', 'worker.min.js'), 'worker.min.js'],
+	[photoModel, 'rus.traineddata.gz'],
 	[join(tesseract, 'LICENSE.md'), 'LICENSE-tesseract.js.txt'],
 	[join(core, 'LICENSE'), 'LICENSE-tesseract.js-core.txt'],
 ];

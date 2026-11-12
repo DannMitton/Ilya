@@ -8,8 +8,7 @@
  * HEIC_OBSERVE_MS keeps watching the score drops after the wait is shown, without asserting.
  */
 import { test, expect, type Page } from '@playwright/test';
-import { existsSync, mkdirSync, readFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
+import { mkdirSync } from 'node:fs';
 
 const FIXTURES = 'src/lib/reader/fixtures';
 const SHOTS = process.env.HEIC_SHOTS ? '../../docs/sessions/row113-heic-shots' : null;
@@ -36,33 +35,6 @@ async function open(page: Page) {
 	await page.goto('/');
 	await page.locator('input.hidden-input').waitFor({ state: 'attached', timeout: 60_000 });
 	return { consoleLines, requests };
-}
-
-/**
- * tesseract.js loads its worker, its WebAssembly core, and the Russian language data from
- * cdn.jsdelivr.net (its defaults; ScoreUploader.svelte calls `createWorker('rus')` with no
- * paths). A sandbox may have no route there, so with `OCR_LOCAL` set to a directory that holds
- * `@tesseract.js-data/rus` (npm pack, unpacked as `package/`), the three are served from disk.
- * The requests are logged either way, so the run records what the app asks the CDN for.
- */
-async function serveOcrLocally(page: Page, langDir: string | undefined) {
-	const require = createRequire(import.meta.url);
-	const worker = require.resolve('tesseract.js/dist/worker.min.js');
-	const coreDir = require.resolve('tesseract.js-core/package.json').replace(/package\.json$/, '');
-	await page.route('https://cdn.jsdelivr.net/**', async (route) => {
-		const url = new URL(route.request().url());
-		console.log(`CDN request: ${url.pathname}`);
-		const name = url.pathname.split('/').pop()!;
-		let path: string | null = null;
-		if (url.pathname.includes('/tesseract.js@') && name === 'worker.min.js') path = worker;
-		else if (url.pathname.includes('/tesseract.js-core@') && existsSync(coreDir + name)) path = coreDir + name;
-		else if (langDir && url.pathname.includes('/@tesseract.js-data/rus/')) {
-			const dir = url.pathname.includes('4.0.0_best_int') ? '4.0.0_best_int' : '4.0.0';
-			path = `${langDir}/package/${dir}/${name}`;
-		}
-		if (!path || !existsSync(path)) return route.abort();
-		await route.fulfill({ body: readFileSync(path), headers: { 'access-control-allow-origin': '*', 'content-type': name.endsWith('.wasm') ? 'application/wasm' : name.endsWith('.gz') ? 'application/gzip' : 'text/javascript' } });
-	});
 }
 
 async function shot(page: Page, name: string) {
@@ -110,8 +82,8 @@ for (const [label, file] of [['(a) the lossless staff page', 'staff-page.heic'],
 
 test('a HEIC poem with no staves reaches tesseract as a PNG', async ({ page }) => {
 	test.setTimeout(OBSERVE_MS + 240_000);
-	await serveOcrLocally(page, process.env.OCR_LOCAL);
-	const { consoleLines } = await open(page);
+	// the photo reader fetches its worker, core, and model from Ilya's own site (`photoWorkerArgs`), so nothing is routed or mocked here
+	const { consoleLines, requests } = await open(page);
 	await page.locator('input.hidden-input').setInputFiles(`${FIXTURES}/poem-page.heic`);
 	await expect.poll(() => page.evaluate(() => (window as unknown as { __ocrInputs: string[] }).__ocrInputs.length), { timeout: 200_000 }).toBeGreaterThan(0);
 	const inputs = await page.evaluate(() => (window as unknown as { __ocrInputs: string[] }).__ocrInputs);
@@ -125,4 +97,7 @@ test('a HEIC poem with no staves reaches tesseract as a PNG', async ({ page }) =
 	await expect(poem).not.toHaveValue('', { timeout: 120_000 });
 	console.log(`the poem landed: ${JSON.stringify((await poem.inputValue()).slice(0, 200))}`);
 	await shot(page, 'poem-landed');
+	// Done when the read has landed a poem with no request to any outside host (closing polish lane, step 6)
+	const origin = new URL(page.url()).origin;
+	expect(requests.filter((u) => !u.startsWith(origin) && !u.startsWith('data:') && !u.startsWith('blob:')), 'requests to other origins').toEqual([]);
 });

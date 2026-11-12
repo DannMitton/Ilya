@@ -94,3 +94,9 @@ is not part of this repository.
   field and its `LICENSE`, the same standard text). Ilya serves its
   `tesseract-core-simd-lstm.wasm.js` unchanged from its own site, and the licence
   text is served beside it as `LICENSE-tesseract.js-core.txt`.
+- **@tesseract.js-data/rus** 1.0.0, <https://github.com/naptha/tessdata>, the
+  Russian language data tesseract.js reads (`4.0.0_best_int/rus.traineddata.gz`),
+  used by the photograph reader. The package's `license` field says MIT; it
+  ships no licence file and names no copyright holder, so none is served beside
+  the model. The licence of the Tesseract language data behind it is not stated
+  by the package. Ilya serves the file unchanged from its own site.

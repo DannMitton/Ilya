@@ -66,7 +66,7 @@
 	import { inkPng, toGreyscalePng } from '$lib/reader/page-image';
 	import { hasStaves } from '$lib/reader/staff-detect';
 	import { routePdf, type PdfRoute } from '$lib/score/ingestion/first-staved-page';
-	import { readScanAsScore, readingWait } from '$lib/omr/scan';
+	import { photoWorkerArgs, readScanAsScore, readingWait } from '$lib/omr/scan';
 	import { restoreStoredScan, type KeptReading } from '$lib/omr/restore';
 	import { formatLabelKey } from './format-label';
 	import {
@@ -370,7 +370,7 @@
 		let ocrText = '';
 		try {
 			const { createWorker } = await import('tesseract.js');
-			const worker = await createWorker('rus');
+			const worker = await createWorker(...photoWorkerArgs(location.origin));
 			const { data: { text } } = await worker.recognize(file);
 			await worker.terminate();
 			ocrText = text;

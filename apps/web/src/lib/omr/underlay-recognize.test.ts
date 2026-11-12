@@ -4,7 +4,7 @@
  * tesseract.js worker is a fake; the real one is the desk's measure.
  */
 import { describe, expect, it } from 'vitest';
-import { makeRecognizer, recognizerPaths, startTesseract, wordsOf, UNDERLAY_BASE, UNDERLAY_CORE, UNDERLAY_LANG, type TesseractLike } from './underlay-recognize';
+import { makeRecognizer, photoWorkerArgs, recognizerPaths, startTesseract, wordsOf, UNDERLAY_BASE, UNDERLAY_CORE, UNDERLAY_LANG, type TesseractLike } from './underlay-recognize';
 
 const block = (...texts: string[]) => ({ paragraphs: [{ lines: [{ words: texts.map((text, i) => ({ text, bbox: { x0: i * 10, y0: 1, x1: i * 10 + 8, y1: 9 } })) }] }] });
 
@@ -131,5 +131,22 @@ describe('startTesseract', () => {
 
 	it('keeps the reason where tesseract.js gives one', async () => {
 		await expect(startTesseract(async () => Promise.reject('Network error while fetching the model'), '')).rejects.toThrow('(Network error while fetching the model)');
+	});
+});
+
+/* Closing polish lane, step 6: the photo path's arguments are Ilya's own, and name the model the photo path read from the CDN before. */
+describe('photoWorkerArgs', () => {
+	it('is the rus model at Ilya\u2019s own paths, LSTM only, with no gzip or cacheMethod set', () => {
+		const [lang, oem, options] = photoWorkerArgs('https://ilya.example');
+		expect(lang).toBe('rus');
+		expect(oem).toBe(1);
+		expect(options).toEqual({
+			workerPath: `https://ilya.example${UNDERLAY_BASE}/worker.min.js`,
+			corePath: `https://ilya.example${UNDERLAY_BASE}/${UNDERLAY_CORE}`,
+			langPath: `https://ilya.example${UNDERLAY_BASE}`,
+		});
+		expect(Object.keys(options)).not.toContain('gzip');
+		expect(Object.keys(options)).not.toContain('cacheMethod');
+		expect(Object.values(options).join(' ')).not.toMatch(/jsdelivr|unpkg|cdn/);
 	});
 });

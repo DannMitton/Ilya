@@ -32,6 +32,18 @@ export const UNDERLAY_LANG = 'rus_prereform_r2_29000';
 export const UNDERLAY_CORE = 'tesseract-core-simd-lstm.wasm.js';
 export const UNDERLAY_WORKER = 'worker.min.js';
 
+/**
+ * THE PHOTO READER'S ARGUMENTS (closing polish lane, step 6). A photograph of a poem is read by `createWorker('rus')`, which, given no
+ * paths, fetched its worker, its core, and the Russian model from cdn.jsdelivr.net. These are Ilya's own: the worker and the SIMD core
+ * the scan reader is served (`recognizerPaths`), and the model the photo path read before, `4.0.0_best_int/rus.traineddata.gz` of
+ * `@tesseract.js-data/rus` 1.0.0, served as `/omr/models/underlay/rus.traineddata.gz`. `gzip` and `cacheMethod` keep tesseract's defaults,
+ * so the model is unpacked and kept on the device as it was.
+ */
+export const PHOTO_LANG = 'rus';
+export function photoWorkerArgs(origin: string): [string, number, { workerPath: string; corePath: string; langPath: string }] {
+	return [PHOTO_LANG, 1, recognizerPaths(origin)];
+}
+
 /** The paths `createWorker` is given, from an origin. */
 export function recognizerPaths(origin: string): { workerPath: string; corePath: string; langPath: string } {
 	return {

@@ -3668,11 +3668,6 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	on:pointercancel={(e) => swipe.cancel(e)}
 />
 
-<svelte:head>
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;1,400&family=Noto+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
-</svelte:head>
 <!-- N.73 portrait C, ruling 4: THE INTERSTITIAL IS RETIRED. The gate that
      stood here ("Ilya is designed for desktop / Continue anyway") met every
      phone visit and is Fable's audit finding F5. A portrait visit now arrives
