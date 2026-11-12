@@ -97,6 +97,12 @@ export function decodeOffsets(deltas) {
 }
 
 /**
+ * A LATIN LETTER TOUCHING A CYRILLIC ONE is garble: a look-alike typed inside a Russian word («мeня» with a Latin e). One that stands
+ * in a whole word of its own is not (`latinTextFault`, below).
+ */
+export const GLUED_LATIN = /\p{Script=Cyrillic}\p{Script=Latin}|\p{Script=Latin}\p{Script=Cyrillic}/u;
+
+/**
  * THE FAULTS A TEXT MUST NOT CARRY (step 8, part 3). A Wikisource page read into the library once brought a stylesheet, invisible
  * direction marks, a line number, a heading, and a Latin letter inside a Russian word; this check refuses each, so the data
  * stays clean after the desk fixes it. Each is a regular expression over `textModern`, named for the message.
@@ -107,30 +113,40 @@ export const TEXT_FAULTS = [
 	['a direction mark (U+200E or U+200F)', /[\u200e\u200f]/],
 	['a run of three or more underscores', /_{3,}/],
 	['a run of three or more line breaks', /\n{3,}/],
-	['a Latin letter', /\p{Script=Latin}/u],
+	['a Latin letter glued to a Russian word', GLUED_LATIN],
 	['a digit glued to a letter', /\d\p{L}|\p{L}\d/u],
 ];
 
 /**
- * A LIBRETTO MAY QUOTE A LATIN WORD (row 182, step 9). Robert's aria in «Иоланта» sings «benedicite» and «amen» as printed. The Latin-letter
- * rule is there to catch a Latin homoglyph inside a Russian word, so for a libretto it is narrowed to a Latin letter touching a Cyrillic one.
- * A poem keeps the strict rule.
+ * ONE DEFINITION OF A LATIN WORD, for the builder and the app (Dann 2026-11-09 23:32; closing polish lane, step 5): a word with at least one
+ * letter, every letter of which is `\p{Script=Latin}`. The builder applies it to each run of `[\p{L}\p{M}]`, so a hyphen or an apostrophe
+ * divides words; the app (`apps/web/src/lib/latin.ts`, `isLatinWord`) applies the same test to the whole `cleanWord` it is given. A plain
+ * `.mjs` cannot import the app's TypeScript, so the two are copies, held equal by `src/lib/latin.test.ts`.
  */
-export const GLUED_LATIN = /\p{Script=Cyrillic}\p{Script=Latin}|\p{Script=Latin}\p{Script=Cyrillic}/u;
+export const isLatinWord = (word) => /\p{L}/u.test(word) && !/\p{L}/u.test(word.replace(/\p{Script=Latin}/gu, ''));
+export const WORDS = /[\p{L}\p{M}]+/gu;
+
+/**
+ * A WHOLE LATIN WORD IS DELIBERATE FOREIGN TEXT (Robert's «benedicite» and «amen», a French line a poem quotes); two guards remain.
+ * A line that is only a Roman numeral is a number heading, not a sung line. A one-letter Latin word in a line that also holds a Cyrillic
+ * word is a look-alike typed for a Russian word («Он пришёл c ней», «C тобой»). Returns the first fault in the text, or null.
+ */
+export function latinTextFault(text) {
+	for (const line of text.split('\n')) {
+		if (/^\s*[IVXLCDM]+[.)]?\s*$/.test(line)) return `a line that is only a Roman numeral (${JSON.stringify(line.trim())})`;
+		const words = line.match(WORDS) ?? [];
+		if (words.some((w) => /\p{Script=Cyrillic}/u.test(w)) && words.some((w) => w.length === 1 && isLatinWord(w))) return `a one-letter Latin word in a Russian line (${JSON.stringify(line.slice(0, 40))})`;
+	}
+	return null;
+}
 
 /** The first fault in a text, or null. A line number is a line of one to three digits and a space or U+00A0 and a letter, with no four-digit year (a dating line such as «8 декабря 1840» has one and passes). */
-export function textFault(text, latinWordsAllowed = false) {
-	for (const [name, re] of TEXT_FAULTS) {
-		if (name === 'a Latin letter' && latinWordsAllowed) {
-			if (GLUED_LATIN.test(text)) return 'a Latin letter glued to a Russian word';
-			continue;
-		}
-		if (re.test(text)) return name;
-	}
+export function textFault(text) {
+	for (const [name, re] of TEXT_FAULTS) if (re.test(text)) return name;
 	for (const line of text.split('\n')) {
 		if (/^\d{1,3}[ \u00a0]\p{L}/u.test(line) && !/\d{4}/.test(line)) return `a line number (${JSON.stringify(line.slice(0, 20))})`;
 	}
-	return null;
+	return latinTextFault(text);
 }
 
 /**
@@ -138,7 +154,7 @@ export function textFault(text, latinWordsAllowed = false) {
  * stage directions, page numbers, and number headings; the data is cleaned of them, and each check below refuses one shape, so none
  * can return. Each is a test over ONE LINE of `textModern`. They apply to `kind: 'libretto'` only: a poem may carry an author's own
  * parentheses («(как знать?)» is a poet's line), and a rule against a parenthetical run over every entry would refuse a future poem.
- * Any Latin letter is refused for every entry (`TEXT_FAULTS`).
+ * A Latin letter glued to a Cyrillic one is refused for every entry (`TEXT_FAULTS`); a whole Latin word passes (`latinTextFault`).
  */
 const CAPS_ROLE = /^\s*[А-ЯЁ][А-ЯЁ\- ]*[.)]?\s*$/u;
 const CAPITALIZED_WORD = /^\s*([А-ЯЁ][а-яё\-]+)[.)]?\s*$/u;
@@ -303,7 +319,7 @@ export function shipEntry(e) {
 	if (state !== 'verified' && state !== 'unverified') throw new Error(`library entry ${e.id}: "verification.state" must be "verified" or "unverified"`);
 	if (e.kind !== undefined && e.kind !== 'poem' && e.kind !== 'libretto') throw new Error(`library entry ${e.id}: "kind" is "${e.kind}"`);
 	const libretto = e.kind === 'libretto';
-	const fault = textFault(e.textModern, libretto);
+	const fault = textFault(e.textModern);
 	if (fault) throw new Error(`library entry ${e.id}: "textModern" holds ${fault}`);
 	if (libretto) {
 		const furniture = librettoFault(e.textModern, e.provenance?.opera_ru);

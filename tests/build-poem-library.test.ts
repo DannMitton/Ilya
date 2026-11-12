@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { isLatinWord as appIsLatinWord } from '../apps/web/src/lib/latin';
 import {
 	buildPoemFile,
 	decodeOffsets,
@@ -19,6 +20,7 @@ import {
 	operaOf,
 	shipEntry,
 	textFault,
+	isLatinWord,
 	workOfOpera,
 	withPoemKeys,
 } from '../scripts/build-poem-library.mjs';
@@ -173,7 +175,7 @@ describe('poem library build: the text check (step 8, part 3)', () => {
 		['U+200F', 'Строка‏ строка'],
 		['underscores', 'Строка\n\n________\nстрока'],
 		['three line breaks', 'Строка\n\n\nстрока'],
-		['a Latin letter', 'покаянiем строка'],
+		['a Latin letter glued to a Russian word', 'покаянiем строка'],
 		['a digit glued to a letter', 'Строка 1840Москва'],
 		['a line number', '5 Про юную пальму все снится ему'],
 		['a line number with a plain space', '12 Про юную пальму'],
@@ -190,7 +192,7 @@ describe('poem library build: the text check (step 8, part 3)', () => {
 		expect(textFault('Строка\n\n8 декабря 1840\nМосква')).toBeNull();
 		expect(textFault('Строка\n\nФевраль 1837')).toBeNull();
 		expect(textFault('Строка\n\n1830')).toBeNull();
-		for (const e of library.entries) expect(textFault(e.textModern, e.kind === 'libretto'), e.id).toBeNull();
+		for (const e of library.entries) expect(textFault(e.textModern), e.id).toBeNull();
 		expect(() => buildPoemFile(library)).not.toThrow();
 	});
 
@@ -383,12 +385,11 @@ describe('poem library build: the provenance a libretto carries (row 182, step 3
 
 describe('poem library build: a libretto may quote a Latin word (row 182, step 9)', () => {
 	const arias = library.entries.filter((e: { kind?: string }) => e.kind === 'libretto');
-	it('lets a whole Latin word through for a libretto, never one glued to a Russian word, and keeps the strict rule for a poem', () => {
+	it('lets a whole Latin word through, for a libretto and for a poem, and never one glued to a Russian word (closing polish lane, step 5)', () => {
 		const quoted = 'С своими "benedicite" и "amen,"';
-		expect(textFault(quoted, true)).toBeNull();
-		expect(textFault(quoted)).toBe('a Latin letter');
-		expect(textFault('покаянiем строка', true)).toMatch(/glued/);
-		expect(textFault('Ibо строка', true)).toMatch(/glued/);
+		expect(textFault(quoted)).toBeNull();
+		expect(textFault('покаянiем строка')).toMatch(/glued/);
+		expect(textFault('Ibо строка')).toMatch(/glued/);
 		// Robert's aria in Иоланта quotes «benedicite» and «amen» as printed
 		const robert = arias.find((e: { id: string }) => e.id === '67580c48a1');
 		expect(robert.textModern).toContain('benedicite');
@@ -433,5 +434,31 @@ describe('poem library build: the trail a poem carries (lane 45, step 1)', () =>
 	it('does not apply to a libretto, whose trail is its own', () => {
 		const aria = library.entries.find((e: { kind?: string }) => e.kind === 'libretto');
 		expect(() => shipEntry(aria)).not.toThrow();
+	});
+});
+
+describe('poem library build: Latin words, as ruled 2026-11-09 23:32 (closing polish lane, step 5)', () => {
+	it('accepts a whole Latin word in a poem, and keeps refusing a Latin letter inside a Cyrillic word', () => {
+		expect(textFault('à ce soir')).toBeNull();
+		expect(textFault('Строка\nÇa va, mon cœur\nстрока')).toBeNull();
+		expect(textFault('мeня строка')).toMatch(/glued/); // a Latin e inside «меня»
+	});
+	it('refuses a line that is only a Roman numeral', () => {
+		expect(textFault('I')).toMatch(/Roman numeral/);
+		expect(textFault('Строка\nIV.\nстрока')).toMatch(/Roman numeral/);
+	});
+	it('refuses a one-letter Latin word in a line that also holds a Cyrillic word, at the start, the middle, or the end', () => {
+		expect(textFault('Он пришёл c ней')).toMatch(/one-letter Latin/); // a Latin c
+		expect(textFault('C тобой')).toMatch(/one-letter Latin/); // a Latin C
+		expect(textFault('Дай мне a')).toMatch(/one-letter Latin/); // a Latin a at the end
+		expect(textFault('Il a dit à moi')).toBeNull(); // a line of Latin words only
+	});
+	/* Amendment 8: the builder's test and the app's (`latin.ts`) are two copies of one definition; one word list runs through both. */
+	it('one test of a word, held equal in the builder and the app: a Latin word has a letter and every letter is Latin', () => {
+		const LATIN_A_WORD_LIST = [['à', true], ['cœur', true], ['et', true], ['amen', true], ['c', true], ['мeня', false], ['меня', false], ['', false], ['123', false], ['panis,', true]] as const;
+		for (const [w, is] of LATIN_A_WORD_LIST) {
+			expect(isLatinWord(w), `builder: ${w}`).toBe(is);
+			expect(appIsLatinWord(w), `app: ${w}`).toBe(is);
+		}
 	});
 });

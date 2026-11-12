@@ -37,17 +37,17 @@ export const SEMINARIAN_LATIN_IPA: Readonly<Record<string, string>> = {
 	finis: 'ˈfʲi ɲis',
 	ignis: 'ˈiɡ ɲis',
 	lapis: 'ˈɫɑ pʲis',
-	pulvis: 'ˈpulʲ vʲis',
+	pulvis: 'ˈpul vʲis',
 	cinis: 'ˈkʲi ɲis',
 	orbis: 'ˈor bʲis',
-	amnis: 'ˈɑmʲ ɲis',
+	amnis: 'ˈɑm ɲis',
 	et: 'ɛt',
 	canalis: 'kɑ ˈnɑ lʲis',
 	annalis: 'ɑ ˈnɑ lʲis',
 	sanguis: 'ˈsɑn ɡwis',
 	unguis: 'ˈun ɡwis',
 	fascis: 'ˈfɑsʲ kʲis',
-	axis: 'ˈɑkʲ sʲis',
+	axis: 'ˈɑk sʲis',
 	funis: 'ˈfu ɲis',
 	ensis: 'ˈɛɲ sʲis',
 	fustis: 'ˈfusʲ tʲis',
@@ -63,12 +63,17 @@ export const SEMINARIAN_LATIN_IPA: Readonly<Record<string, string>> = {
 	caulis: 'ˈkɑw lʲis',
 };
 
-const HAS_CYRILLIC = /[А-Яа-яЁё]/;
-const HAS_LATIN = /[A-Za-z]/;
+const ANY_LETTER = /\p{L}/u;
+const LATIN_LETTERS = /\p{Script=Latin}/gu;
 
-/** A word with a Latin letter and no Cyrillic letter. */
+/**
+ * A Latin word (Dann 2026-11-09 23:32, closing polish lane step 5): a word with at least one letter, every letter of which is Latin
+ * script. «à» and «cœur» are Latin; «et» is; a Russian word with a Latin look-alike inside it (a garble) is not. It is applied to the
+ * `cleanWord` as the pipeline made it, which is not split again. The poem library's builder holds the same test
+ * (`scripts/build-poem-library.mjs`, `isLatinWord`); `latin.test.ts` runs one word list through both.
+ */
 export function isLatinWord(word: string): boolean {
-	return HAS_LATIN.test(word) && !HAS_CYRILLIC.test(word);
+	return ANY_LETTER.test(word) && !ANY_LETTER.test(word.replace(LATIN_LETTERS, ''));
 }
 
 /** Richter's IPA for a Latin word of «Семинарист», or null for any other word. */
@@ -77,16 +82,38 @@ export function seminarianIpa(word: string): string | null {
 	return Object.hasOwn(SEMINARIAN_LATIN_IPA, key) ? SEMINARIAN_LATIN_IPA[key] : null;
 }
 
+/** The two table words that are also ordinary Latin («et», «atque»): they do not say the text is «Семинарист». */
+const COMMON_LATIN = new Set(['et', 'atque']);
+
 /**
- * The pipeline's last pass (`processText`). Marks every Latin word and gives
- * it the table's IPA or none, and no gloss: the engine wrote neither, and no
- * other source may (CONTRACT §6). Russian words are not touched.
+ * Whether the text is «Семинарист»'s: it holds at least two DIFFERENT nouns of the table (every key but `et` and `atque`). One «et»
+ * in a French line is a French word and gets no IPA and no credit. "The text" is the lines of the one `processText` call, so a call
+ * made on less than the song (a seam, a clitic match) does not see the song's other nouns (desk default, 2026-11-12).
  */
-export function markLatinWords(lines: LineData[]): LineData[] {
+function isSeminarianText(lines: readonly LineData[]): boolean {
+	const nouns = new Set<string>();
 	for (const line of lines) {
 		for (const word of line.words) {
 			if (!isLatinWord(word.cleanWord)) continue;
-			const ipa = seminarianIpa(word.cleanWord) ?? '';
+			const key = word.cleanWord.toLowerCase().replace(/[^a-z]/g, '');
+			if (Object.hasOwn(SEMINARIAN_LATIN_IPA, key) && !COMMON_LATIN.has(key)) nouns.add(key);
+		}
+	}
+	return nouns.size >= 2;
+}
+
+/**
+ * The pipeline's last pass (`processText`). Marks every Latin word and gives
+ * it the table's IPA (only in a text that is «Семинарист»'s, `isSeminarianText`)
+ * or none, and no gloss: the engine wrote neither, and no
+ * other source may (CONTRACT §6). Russian words are not touched.
+ */
+export function markLatinWords(lines: LineData[]): LineData[] {
+	const seminarian = isSeminarianText(lines);
+	for (const line of lines) {
+		for (const word of line.words) {
+			if (!isLatinWord(word.cleanWord)) continue;
+			const ipa = (seminarian ? seminarianIpa(word.cleanWord) : null) ?? '';
 			word.latin = true;
 			word.gloss = '';
 			word.ipaDisplay = word.ipaContent = word.ipaReconstituted = word.ipaOwnReconstituted = ipa;
