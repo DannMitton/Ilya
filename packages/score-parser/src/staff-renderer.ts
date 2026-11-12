@@ -58,6 +58,7 @@ import { estimateCyrillicWidthPx, estimateIpaWidthPx } from './underlay-widths';
 import { breakText, splitBreak, underlayHalves } from './break-mark';
 import { placeholderMark, rotatedEllipseHeight } from './placeholder-mark';
 import { CROSSING_RING_HEADROOM, CROSSING_RING_REACH } from './ring-geometry';
+import { drawGrace, graceGroupsOf, graceRoom, GRACE_SCALE, type GraceMetrics } from './grace-draw';
 import { keyChangeLayout, keyChangeMarkup, keyChangeRoom, doubleBarExtraPx, thinBarPx, KEY_CHANGE_CLEAR_SP, type KeyChangeGlyph, type KeyChangeLayout } from './key-change';
 import { outgoingKeyAfter, accidentalStateAtEndOf, advanceAccidentalState, carryIntoMeasure, FLAT_ORDER, keyDeclaredAt, keyInForce, keySignatureAlter, newAccidentalCarry, SHARP_ORDER, type AccidentalCarry } from './accidental-carry';
 export { accidentalKey, accidentalStateAtEndOf, advanceAccidentalState, carryIntoMeasure, newAccidentalCarry, type AccidentalCarry, type AccidentalMark } from './accidental-carry';
@@ -870,6 +871,12 @@ function keyStepFor(options: StaffRenderOptions): (kind: KeyChangeGlyph['kind'])
   return (kind) => (options.font ? lineGap * options.font.glyph(ACCIDENTAL_SMUFL[kind === 'sharp' ? 1 : kind === 'flat' ? -1 : 0]).widthSp + 1 : 9);
 }
 
+/** N.187: the widths grace notes need, from the same metrics the sung notes use. */
+function graceMetricsFor(options: StaffRenderOptions): GraceMetrics {
+  const M = inkMetrics(options);
+  return { lineGap: M.lineGap, headW: 2 * M.headHalfW('quarter'), accW: M.accidentalW, accGap: ACC_GAP_PX };
+}
+
 /** N.192: the px a system ending at `toMeasure` adds for its courtesy key signature (0 where its next bar keeps the key). `sliceWidth` adds it. */
 export function keyCourtesyRoom(parsed: ParsedScore, toMeasure: number, options: StaffRenderOptions): number {
   const to = Number.isFinite(toMeasure) ? outgoingKeyAfter(parsed, toMeasure) : undefined;
@@ -909,6 +916,9 @@ interface Placed {
   meterRoom: number;
   /** N.192: the key this measure declares mid-system; its room is inside `meterRoom`. */
   key?: KeyChangeLayout;
+  /** N.187: see `LayoutColumn`. */
+  graceLeft?: number;
+  graceRight?: number;
 }
 
 /**
@@ -1498,6 +1508,9 @@ export interface LayoutColumn {
    */
   meterRoom: number;
   key?: KeyChangeLayout;
+  /** N.187: the grace notes before this column's note take `graceRoom` px of its advance (and of `meterRoom`, where it opens a bar); `graceLeft` is its ink's reach left of `x`, where they end. After-graces: `graceRight`. */
+  graceLeft?: number;
+  graceRight?: number;
 }
 
 /**
@@ -1599,6 +1612,10 @@ export function layoutColumns(
   // Set by a tacet column, spent by the column after it.
   let owedByTacet = 0;
   let runCursor = 0;
+  /** N.187: the room an after-grace took, spent by the column after it (or the trailing advance). */
+  let pendingAfter = 0;
+  const graces = graceGroupsOf(parsed.graceNotes);
+  const gm = graceMetricsFor(options);
 
   const openRun = (run: TacetRun): void => {
     const room = columns.length === 0 ? { meterRoom: 0 } : meterRoomFor(run.fromMeasure, undefined);
@@ -1623,6 +1640,14 @@ export function layoutColumns(
       runCursor += 1;
     }
     const newMeasure = ev.measureIndex !== prevMeasure;
+    /* N.187. The grace notes before this note judge their accidentals first, as they are sung first, and take
+       room before it; after-graces judge after it and take room after it (the next column's advance). */
+    const gg = graces.get(ev.id);
+    let beforeRoom = 0;
+    if (gg?.before.length) {
+      carryIntoMeasure(carry, turningAcc, ev.measureIndex);
+      beforeRoom = graceRoom(gg.before, gg.before.map((g) => advanceAccidentalState(g.pitch, carry.fifths, carry.measureAcc, carry.prevMeasureAcc) !== 'none'), gm);
+    }
     /* MEASURED BEFORE THE ADVANCE IS SPENT, and every column is measured even
        where its advance is not: the carry has to see every note in order or the
        next bar's courtesy is wrong. */
@@ -1640,7 +1665,17 @@ export function layoutColumns(
     } else {
       advance = 0;
     }
-    columns.push({ ev, advance, newMeasure: newMeasure && columns.length > 0, ...room });
+    let afterRoom = 0;
+    if (gg?.after.length) afterRoom = graceRoom(gg.after, gg.after.map((g) => advanceAccidentalState(g.pitch, carry.fifths, carry.measureAcc, carry.prevMeasureAcc) !== 'none'), gm);
+    // The first column has the head's run-in to spend (at least a space, the loupe's own); a later one takes the room whole, and a bar's barline stands that much further left.
+    const first = columns.length === 0 && owedByTacet === 0 && !prevEv;
+    if (beforeRoom) {
+      advance += first ? Math.max(0, beforeRoom - lineGap * 0.9) : beforeRoom;
+      if (!first && newMeasure) room = { ...room, meterRoom: room.meterRoom + beforeRoom };
+    }
+    advance += pendingAfter;
+    pendingAfter = afterRoom;
+    columns.push({ ev, advance, newMeasure: newMeasure && columns.length > 0, ...room, ...(gg?.before.length ? { graceLeft: ink.left } : {}), ...(gg?.after.length ? { graceRight: ink.right } : {}) });
     prevMeasure = ev.measureIndex;
     prevDurWhole = ev.duration.fraction.numerator / ev.duration.fraction.denominator;
     prevEv = ev;
@@ -1653,11 +1688,11 @@ export function layoutColumns(
   }
 
   const trailing =
-    owedByTacet > 0
+    (owedByTacet > 0
       ? owedByTacet
       : prevEv
         ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk)
-        : 0;
+        : 0) + pendingAfter;
   return { columns, trailing };
 }
 
@@ -1890,7 +1925,7 @@ export function renderAnalyzedStaff(
       xs.push(round2(x));
     }
     steps.forEach((s, i) => {
-      if (s.ev) placed.push({ ev: s.ev, x: xs[i], newMeasure: s.newMeasure, meter: s.meter, meterRoom: s.meterRoom, key: s.key });
+      if (s.ev) placed.push({ ev: s.ev, x: xs[i], newMeasure: s.newMeasure, meter: s.meter, meterRoom: s.meterRoom, key: s.key, graceLeft: s.graceLeft, graceRight: s.graceRight });
       else if (s.tacet)
         tacetPlaced.push({
           run: s.tacet,
@@ -2522,7 +2557,40 @@ export function renderAnalyzedStaff(
     }
   }
 
-  for (const { ev, x: nx, newMeasure, meter, meterRoom, key } of placed) {
+  /* N.187. The grace notes: drawn before their principal (after it, for an after-grace), judged by the same carry
+     in the order they are sung, and held to the next iteration (or the loop's end) for an after-grace, so the
+     principal's own accidental has been judged first. */
+  const graceMap = graceGroupsOf(parsed.graceNotes);
+  const gm = graceMetricsFor(options);
+  const graceDraw = {
+    m: gm,
+    yFor,
+    staffTop,
+    staffBottom,
+    glyph: (name: 'noteheadBlack' | 'flag8thUp' | 'flag16thUp', x: number, y: number, anchorLeft: boolean) => glyphAt(name, x, y, '#1a1612', anchorLeft, GRACE_SCALE),
+    acc: (alter: number, x: number, y: number) =>
+      smufl
+        ? ACCIDENTAL_SMUFL[alter] && glyphAt(ACCIDENTAL_SMUFL[alter], x, y, '#1a1612', true, GRACE_SCALE)
+        : ACCIDENTAL_GLYPH[alter] && `<text x="${x}" y="${round2(y + 4 * GRACE_SCALE)}" font-size="${round2(15 * GRACE_SCALE)}" fill="#1a1612">${ACCIDENTAL_GLYPH[alter]}</text>`,
+    stemT: smufl ? round2(sp(ed!.stemThickness)) : 1.5,
+    beamT: smufl ? round2(sp(ed!.beamThickness) * GRACE_SCALE) : 2.8,
+    slurT: smufl ? round2(sp(ed!.slurMidpointThickness) * 0.5) : 1.2,
+    font: !!smufl,
+    slashDefault: isReadScan(parsed),
+    round: round2,
+    headHalfH: smufl ? sp((smufl.glyph('noteheadBlack').bBoxNE[1] - smufl.glyph('noteheadBlack').bBoxSW[1]) / 2) * GRACE_SCALE : 4.6 * GRACE_SCALE,
+  };
+  const drawGraces = (list: typeof parsed.graceNotes & object, after: boolean, anchor: number, nx: number, ny: number): void => {
+    const marks = list.map((g) => advanceAccidentalState(g.pitch, carry.fifths, carry.measureAcc, carry.prevMeasureAcc) !== 'none');
+    const drawn = drawGrace(list, marks, after, anchor, { x: nx, y: ny }, graceDraw);
+    parts.push(...drawn.markup);
+    highestInk = Math.min(highestInk, drawn.highest);
+    lowestInk = Math.max(lowestInk, drawn.lowest);
+  };
+  let afterGrace: (() => void) | null = null;
+  for (const { ev, x: nx, newMeasure, meter, meterRoom, key, graceLeft, graceRight } of placed) {
+    afterGrace?.();
+    afterGrace = null;
     // N.102: the outgoing measure's state becomes the courtesy source, but only
     // for the measure that DIRECTLY follows it. A skipped index is a tacet run,
     // and nothing carries across one. The turning layer resets outright.
@@ -2530,6 +2598,9 @@ export function renderAnalyzedStaff(
     // N.139: a measure that declares a meter pushes its barline left by the room `layoutColumns` reserved,
     // and the digits stand after the barline; N.192: so does a key signature, which stands before them.
     if (newMeasure) barAndChange(round2(nx - BARLINE_TO_COLUMN_PX - meterRoom), meter, key);
+    const gg = ev.pitch ? graceMap.get(ev.id) : undefined;
+    if (gg?.before.length) drawGraces(gg.before, false, nx - (graceLeft ?? 0), nx, yFor(ev.pitch!));
+    if (gg?.after.length) afterGrace = () => drawGraces(gg.after, true, nx + (graceRight ?? 0), nx, yFor(ev.pitch!));
 
     if (ev.type === 'rest') {
       // N.92, THE CARETS clause 5: A REST IS A DURATION GLYPH LIKE THE OTHERS,
@@ -3288,6 +3359,7 @@ export function renderAnalyzedStaff(
     highestInk = Math.min(highestInk, b.yBr);
   }
 
+  (afterGrace as (() => void) | null)?.(); // N.187: the last note's after-grace
   // Final barline.
   // The right-hand barline, at the stave's end. Ordinary weight on every
   // system; the thin-plus-thick pair of Gould r96 only where the piece ends,

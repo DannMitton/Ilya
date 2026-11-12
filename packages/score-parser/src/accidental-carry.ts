@@ -12,6 +12,7 @@
  * system's first key.
  */
 import type { ParsedScore, Pitch } from './types';
+import { graceGroupsOf } from './grace-draw';
 
 /**
  * The key signature's fifths at a bar, from the measure's own snapshot, else
@@ -141,11 +142,16 @@ export function accidentalStateAtEndOf(
   // and `layoutColumns` make. This function held the third copy of it.
   const carry = newAccidentalCarry(keyInForce(parsed, 0, fifths), undefined, (m) => keyInForce(parsed, m, fifths));
   const turningAcc: Record<string, number> = {};
+  const graces = graceGroupsOf(parsed.graceNotes);
   for (const ev of parsed.vocalLine) {
     if (ev.measureIndex > measureIndex) break; // the vocal line is in measure order
     carryIntoMeasure(carry, turningAcc, ev.measureIndex);
     if (ev.type !== 'note' || !ev.pitch) continue;
+    // N.187: a grace note is judged by the same carry, in the order it is sung, and governs the rest of the bar.
+    const gg = graces.get(ev.id);
+    for (const g of gg?.before ?? []) advanceAccidentalState(g.pitch, carry.fifths, carry.measureAcc, carry.prevMeasureAcc);
     advanceAccidentalState(ev.pitch, carry.fifths, carry.measureAcc, carry.prevMeasureAcc);
+    for (const g of gg?.after ?? []) advanceAccidentalState(g.pitch, carry.fifths, carry.measureAcc, carry.prevMeasureAcc);
   }
   // The bar asked about carried no sung event at all, so it states nothing.
   return carry.curMeasure === measureIndex ? carry.measureAcc : {};
