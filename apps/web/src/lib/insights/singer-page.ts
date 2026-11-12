@@ -126,17 +126,27 @@ export function firstOutsideRange(
 	if (!profile.range) return null;
 	const low = pitchToMidi(profile.range.lowest);
 	const high = pitchToMidi(profile.range.highest);
+	// In the order sung: a grace note before its principal, an after-grace after it. A grace note is sung on its
+	// principal's syllable, so it is named by the note it hangs on (N.187).
+	const graces = new Map<string, { before: Pitch[]; after: Pitch[] }>();
+	for (const g of score.graceNotes ?? []) {
+		const e = graces.get(g.principalId) ?? { before: [], after: [] };
+		(g.after ? e.after : e.before).push(g.pitch);
+		graces.set(g.principalId, e);
+	}
 	for (const ev of score.vocalLine) {
-		if (!ev.pitch) continue;
-		const m = pitchToMidi(ev.pitch);
-		if (m >= low && m <= high) continue;
-		return {
-			eventId: ev.id,
-			measure: measureNumber(score, ev.measureIndex),
-			pitch: ev.pitch,
-			vowel: vowelOf?.(ev.id) ?? '',
-			direction: m > high ? 'above' : 'below',
-		};
+		const around = graces.get(ev.id);
+		for (const pitch of [...(around?.before ?? []), ...(ev.pitch ? [ev.pitch] : []), ...(around?.after ?? [])]) {
+			const m = pitchToMidi(pitch);
+			if (m >= low && m <= high) continue;
+			return {
+				eventId: ev.id,
+				measure: measureNumber(score, ev.measureIndex),
+				pitch,
+				vowel: vowelOf?.(ev.id) ?? '',
+				direction: m > high ? 'above' : 'below',
+			};
+		}
 	}
 	return null;
 }

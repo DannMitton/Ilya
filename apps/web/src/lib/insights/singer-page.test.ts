@@ -8,6 +8,7 @@
 import { describe, expect, it } from 'vitest';
 import { pitchToMidi, type Measure, type ParsedScore, type Pitch, type VocalLineEvent, type VoiceProfileSnapshot } from '@ilya/score-parser';
 import { buildInsights, type InsightsModel } from './insights';
+import { firstOutsideRange } from './singer-page';
 import { cycleDose, cycleDoseSplit } from './singing-measures';
 import {
 	BETTER_KEY_MIN_DROP,
@@ -196,5 +197,15 @@ describe('words the sentences need', () => {
 		}
 		// No solfège and no French index survive in the French path.
 		expect(pitchName(P('A', 4), 'fr')).not.toMatch(/la|3/);
+	});
+});
+
+describe('N.187 the first note outside the typed range counts a grace note', () => {
+	it('names the note the grace note hangs on, in the order sung', () => {
+		const base = score([note('a', 0, 0, P('C', 3)), note('b', 0, 1, P('D', 3))]);
+		const profile = { fR1: {}, range: { lowest: P('A', 2), highest: P('F', 4) } } as unknown as Parameters<typeof firstOutsideRange>[1];
+		expect(firstOutsideRange(base, profile)).toBeNull();
+		const graced = { ...base, graceNotes: [{ id: 'b~g1', principalId: 'b', pitch: P('A', 4), base: 'eighth' as const }] } as ParsedScore;
+		expect(firstOutsideRange(graced, profile)).toMatchObject({ eventId: 'b', direction: 'above', pitch: P('A', 4) });
 	});
 });
