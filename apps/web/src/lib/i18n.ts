@@ -563,7 +563,7 @@ const strings: Record<string, Record<Language, string>> = {
 	/* ── N.187: grace notes in Corrections (cloud-lane-50). PENDING DANN: the English is the desk's draft, and the French slot
 	   holds the same English until Dann rules the French (the lane is told not to invent it; the French for a grace note is his to choose). One contiguous block. ── */
 	'loupe.grace':                 { en: 'Grace note',                   fr: 'Grace note' },
-	'correct.graceAdd':            { en: 'Add a grace note before the next note', fr: 'Add a grace note before the next note' },
+	'correct.graceAdd':            { en: 'Add a grace note before the note that follows', fr: 'Add a grace note before the note that follows' },
 	'correct.graceMake':           { en: 'Make this a grace note',       fr: 'Make this a grace note' },
 	'correct.graceFull':           { en: 'Make this a full note again',  fr: 'Make this a full note again' },
 	'loupe.graceSlash':            { en: 'Slash',                        fr: 'Slash' },
