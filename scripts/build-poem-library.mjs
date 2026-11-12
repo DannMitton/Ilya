@@ -207,7 +207,7 @@ export function librettoFault(text, operaRu) {
  * `pageNamesTextContributors`, `rightsTrail`, `rightsResolution`) stays: it is the record rule 5 asks for.
  */
 export const PROVENANCE_KEYS = [
-	'composer', 'opera_ru', 'opera_en', 'character_ru', 'character_en', 'formerTitle', 'role', 'voice', 'literary_source', 'text_kind', 'notes', 'correction',
+	'composer', 'opera_ru', 'opera_en', 'opera_fr', 'character_ru', 'character_en', 'character_fr', 'formerTitle', 'role', 'voice', 'literary_source', 'text_kind', 'notes', 'correction',
 	'actScene', 'url_opera_en', 'url_opera_ru', 'url_people', 'pageNamesTextContributors', 'contributorDates', 'rightsTrail', 'rightsResolution',
 ];
 export const LIBRETTO_SITES = ['Russian Wikisource', 'operalib.eu', 'FEB'];
@@ -250,8 +250,10 @@ export const OPERA_FIELDS = [
 	['composer', 'composer'],
 	['operaRu', 'opera_ru'],
 	['operaEn', 'opera_en'],
+	['operaFr', 'opera_fr'],
 	['characterRu', 'character_ru'],
 	['characterEn', 'character_en'],
+	['characterFr', 'character_fr'],
 	['number', 'role'],
 	['voice', 'voice'],
 	['literarySource', 'literary_source'],
