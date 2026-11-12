@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,223 keys.
+   This file holds 1,193 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -48,7 +48,7 @@
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
-   loupe.        122  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   loupe.        121  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
@@ -69,7 +69,7 @@
    song.           2  lib/omr/scan.ts, lib/library/notices.ts, routes/+page.svelte
    songs.         13  routes/+page.svelte, lib/components/Drawer/SongList.svelte
    source.         1  lib/components/Drawer/IntakePanel.svelte, lib/score/ingestion/ingest.ts
-   station.        2  routes/+page.svelte
+   station.        1  routes/+page.svelte
    storage.        8  lib/library/notices.ts, lib/library/library.ts
    stress.         9  `stressSourceLabel`, at the foot of this file
    tab.            5  lib/components/DeskHead.svelte, lib/components/Paper/RunningHeader.svelte, lib/insights/InsightsPane.svelte (LEGACY KEY: `tab.markedScore`)
@@ -78,7 +78,7 @@
    toc.           83  the tables of contents: lib/components/Drawer/Drawer.svelte
    underlay.       1  read only by lib/names.ts, the record of names; no component reads it
    update.         4  routes/+page.svelte
-   upload.        78  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
+   upload.        50  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
    verify.         1  lib/components/Paper/WordStack.svelte
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
    voiceIntake.   60  lib/voice/InsightsIntake.svelte, lib/voice/VoiceTypeIntake.svelte
@@ -100,8 +100,8 @@
    - `insights.fit.*` is the INSIGHTS page's measurement table, from when the
      document was shown as Fit. It is read by `lib/insights/FitTable.svelte`,
      which nothing imports; consistency batch 4 decides whether the table and
-     its keys stay. No comment says why these keys kept the name; the heading's
-     comment, above `insights.fit.heading`, records the wording rulings.
+     its keys stay. A comment above `insights.fit.heading` says why they kept the
+     name; the one below it records the wording rulings.
    ═══════════════════════════════════════════════════════════ */
 
 export type Language = 'en' | 'fr';
@@ -189,8 +189,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    UNUSED SINCE N.114 (Dann's ruling of 2026-09-07: the Underlay station
 	//    leaves Score markup and the syllable line goes under the poem field,
 	//    where the ruling of 2026-09-09 gives it no label at all). Kept and
-	//    marked in place rather than deleted, the way `upload.scanTooltip` is,
-	//    on Dann's ruling of 2026-09-03.
+	//    marked in place rather than deleted, on Dann's ruling of 2026-09-03
+	//    (`upload.scanTooltip`, which was kept the same way, was removed in the closing polish lane).
 	'underlay.heading':            { en: 'UNDERLAY',                     fr: 'PLACEMENT DES PAROLES' },
 	//    VOICE, the station name from E.27 §3.3. The anchor line inside it
 	//    keeps its ratified `calib.anchor.*` strings.
@@ -429,7 +429,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'notation.orphans':            { en: '%s corrections no longer find their note', fr: '%s corrections ne retrouvent plus leur note' },
 	// N.92 second slice, the accidental palette. Approved by Dann 2026-08-24.
 	// `bémol` and `dièse` are ADOPTED from the intake prompt's own French
-	// (`upload.ask.keySharp` and `upload.ask.keyFlat` above); `bécarre` is
+	// (`upload.ask.keySharp` and `upload.ask.keyFlat`, removed 2026-11-12); `bécarre` is
 	// ADOPTED from standard musical usage and is new to the app. Nothing here
 	// is coined.
 	'notation.tool.flat':          { en: 'Flat',                        fr: 'Bémol' },
@@ -443,10 +443,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// ruling of 2026-08-26 asks for.
 	//
 	// ADOPTED, each from a string already shipped in this file: `tiroir`
-	// (drawer.collapse), `mesures` (upload.report.events), `système`
-	// (upload.report.systems), `sur` for "of" (footer.of), `Durée`
-	// (correct.length), `Hauteur` (upload.report.pitchSubs), `Altération`
-	// (notePicker.accidentalAria), `Silence` (upload.report.events), `Texte`
+	// (drawer.collapse), `mesures` (upload.report.events, removed 2026-11-12), `système`
+	// (upload.report.systems, removed), `sur` for "of" (footer.of), `Durée`
+	// (correct.length), `Hauteur` (upload.report.pitchSubs, removed), `Altération`
+	// (notePicker.accidentalAria), `Silence` (upload.report.events, removed), `Texte`
 	// (station.textChanged), `degré` (correct.stepUp), `Supprimer`
 	// (correct.delete), `Annuler` (correct.restore), `Point` (correct.dot),
 	// and the two shift-scope clauses (shiftLyrics.*), reused verbatim.
@@ -505,9 +505,6 @@ const strings: Record<string, Record<Language, string>> = {
 	// ratified across `upload.*`, `binder.*` and `replace.*`.
 	'loupe.redo':                  { en: 'Redo: %s',                     fr: 'Refaire : %s' },
 	'loupe.undo.placed':           { en: 'syllable placed',              fr: 'syllabe placée' },
-	// RULED by Dann 2026-09-16: `station.startOver`'s own English/French pair,
-	// verbatim, for the undo pill after Start placement over.
-	'loupe.undo.startOver':        { en: 'placement started over',       fr: 'placement recommencé' },
 	// N.179 (QUEUE row 14), RULED by Dann 2026-10-01 02:42 and 02:43, French
 	// RATIFIED 02:44 ("ratified"), adopted from the `loupe.lyric.*` and
 	// `loupe.undo.*` families. The brief types the apostrophe straight; the tree
@@ -642,7 +639,6 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.lyric.toEnd':           { en: 'Syllables, to the end of the lyric', fr: 'Les syllabes, jusqu\u2019à la fin du texte' },
 	'loupe.lyric.toNextOpen':      { en: 'Syllables, to the next open note',   fr: 'Les syllabes, jusqu\u2019à la prochaine note libre' },
 
-
 	// ── N.92 mobile slice 3: the entry grammar ───────────────
 	// EVERY FRENCH WORD HERE AWAITS DANN'S EYE. The table in
 	// `docs/sessions/memo-mobile-slice3_r1_2026-08-26.md` sets each one beside
@@ -650,9 +646,9 @@ const strings: Record<string, Record<Language, string>> = {
 	//
 	// ADOPTED, from strings already in this file: `mesure` and `entrée` follow
 	// `mes.` and the entry station's « Saisie » from slice 2; `Silence`
-	// (upload.report.events); `Liaison` and `Nolet` (both ratified by Dann
+	// (upload.report.events, removed 2026-11-12); `Liaison` and `Nolet` (both ratified by Dann
 	// 2026-08-26 with the slice 2 table); `Annuler` (correct.restore);
-	// `Hauteur` (upload.report.pitchSubs); `note` and `syllabe` throughout.
+	// `Hauteur` (upload.report.pitchSubs, removed); `note` and `syllabe` throughout.
 	//
 	// COINED, two: « dans l'espace de » for the tuplet definition's ratio
 	// clause, and « prend la hauteur de » for the arrival label.
@@ -824,12 +820,10 @@ const strings: Record<string, Record<Language, string>> = {
 	//    and the French is OWED. That is not a translation and must not be read
 	//    as one. Every key here is listed in the increment 2 memo.
 	//
-	//    WHAT THEY REPLACE, and none of the replaced strings is deleted: the
-	//    French table is not ruled, and a ratified French string is not a
-	//    build's to throw away. `input.placeholder`, `input.clear`,
-	//    `upload.drop.title`, `upload.drop.browse`, `upload.drop.release`,
-	//    `upload.drop.acceptedNow` and `upload.drop.placeholder` are UNUSED as
-	//    of this ship and stay where they are, marked below.
+	//    WHAT THEY REPLACE: `input.placeholder`, `input.clear`, and the five
+	//    `upload.drop.*` strings were unused at this ship and were kept; the
+	//    five `upload.drop.*` keys were removed in the closing polish lane
+	//    (2026-11-12).
 	//
 	//    `intake.placeholder` IS DESIGN'S OWN SENTENCE, from the r2 prototype
 	//    at `:359`, where it is marked a placeholder string. It says the two
@@ -983,7 +977,6 @@ const strings: Record<string, Record<Language, string>> = {
 	'intake.picture.title':   { en: 'Is this picture the poem, or the score?', fr: 'Cette image est-elle le poème ou la partition?' },
 	'intake.picture.reading': { en: 'Reading the words out of the picture…', fr: 'Lecture des mots de l\u2019image…' },
 
-
 	// ── Word Console placeholder ─────────────────────────────
 	'console.placeholder':         { en: 'ANALYSIS',                     fr: 'ANALYSE' },
 
@@ -1106,80 +1099,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'engraving.systemSpacing':     { en: 'Between systems',              fr: 'Entre les systèmes' },
 	'engraving.reset':             { en: 'Reset',                        fr: 'Réinitialiser' },
 
-	// ── Score uploader (the ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
-	// THE DROP ZONE'S ONE PLACEHOLDER. RULED by Dann 2026-08-20 on his walk
-	// of `3c498aa`: the drop zone showed three stacked lines in three
-	// treatments while the textarea beside it showed one quiet line, and the
-	// two are the pair that must match. The three strings below are what it
-	// recombines, and they are KEPT rather than deleted: they are the
-	// provenance of this one, and reversing the ruling is one edit if he
-	// wants the three lines back.
-	//
-	// THE ENGLISH IS DANN'S, VERBATIM, including "or photograph". That used
-	// to be a difference from 'upload.drop.acceptedNow', which said "a
-	// photograph"; N.65 brought the conjunction back to that key on
-	// 2026-08-21, so the two now agree and there is no difference to name.
-	//
-	// THE FRENCH IS RECOMBINED, NOT TRANSLATED. Every word comes from the two
-	// French strings below, in their order, with three characters added and
-	// nothing else: the space joining the two sentences and the two full
-	// stops. Every format name stands exactly as it did, and the non-breaking
-	// space before the colon is French typography the tree already had.
-	// « ou » CONFIRMED BY DANN 2026-08-20, on his walk of `39d60e0`. The
-	// English gained "or" before the last item and the French now mirrors
-	// it. That is the one word in this string he added rather than the tree,
-	// and it is the only word here that did not come from the three keys
-	// below.
-	'upload.drop.placeholder': { en: 'Drop a score here or click to browse. Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph.', fr: 'Déposez une partition ici ou cliquez pour parcourir. Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie.' },
-
-	// N.65 ship B. NO LONGER RENDERED, AND IT SWAPPED PLACES WITH THE THREE
-	// KEYS BELOW. Dann ruled on 2026-08-21 that the score box says only the
-	// first sentence and the format list moves outside it, so
-	// `ScoreUploader` now assembles the placeholder from `.title` and
-	// `.browse` and renders `.acceptedNow` as its own line. This string is
-	// RETAINED rather than deleted, on the treatment those three already
-	// carry: it is the provenance of the collapsed one-sentence version and
-	// it holds the « ou » Dann confirmed by hand on 2026-08-20. Deleting the
-	// one string he added a word to is not a thing this ship was asked to
-	// do.
-	// 'upload.drop.placeholder' is above; the three keys here are LIVE again.
-	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
-	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
-	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
-	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
-	// THE LEAD-IN IS GONE AND THE « ou » IS BACK, N.65, Dann's ruling of
-	// 2026-08-21: "If we remove 'Acceptés maintenant :/ Accepted now:' we let
-	// the remaining French shrink to a single line and it stops the downward
-	// displacement of elements in French. I think it's understood that the
-	// file names are the acceptable formats."
-	//
-	// NO NEW FRENCH IS WRITTEN. Every word here comes from
-	// `upload.drop.placeholder` above, which Dann confirmed by hand on
-	// 2026-08-20, and the tail is that string's own tail: `PDF, or
-	// photograph` and `PDF, ou une photographie`.
-	//
-	// THE « ou » CORRECTS THE DESK, NOT DANN. Ship B wrote `PDF, a
-	// photograph` and `PDF, une photographie` and the desk then told him the
-	// missing conjunction could stay missing. The comment four lines above
-	// `upload.drop.placeholder` says why that was wrong: the conjunction is
-	// the one word in that string he added rather than the tree, and nothing
-	// has reversed it. A word Dann added by hand is a ruling.
-	//
-	// NO TERMINAL FULL STOP. Without a lead-in the line is a bare list, not a
-	// sentence. If Dann wants the stop back it is one character in each
-	// language.
-	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
-	'upload.drop.acceptedNow': { en: 'MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph', fr: 'MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie' },
-	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
-	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
 	// The score intake's watermark. « partition » is DANN'S OWN WORD, not a
 	// translation this desk chose, and no other French ships for it.
 	'upload.watermark':            { en: 'score',                        fr: 'partition' },
-	// UNUSED SINCE N.108 increment 4 (the photograph button is gone; the one
-	// picker takes a photograph like every other kind, and a picture asks in
-	// place which it is). Kept: ratified French. RULED BY DANN 2026-09-03:
-	// the strings are "marked unused in place, not deleted".
-	'upload.scanTooltip':          { en: 'Read a score from a photograph', fr: 'Lire une partition à partir d’une photographie' },
 
 	'upload.status.reading':       { en: 'Reading file…',           fr: 'Lecture du fichier…' },
 	'upload.status.converting':    { en: 'Converting Finale file…',  fr: 'Conversion du fichier Finale…' },
@@ -1194,9 +1116,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.banner.denigma':       { en: 'Converted from Finale format by denigma. Lyric alignment and measure structure are preserved. Verify custom expressions or complex layouts if the score appears unusual.', fr: 'Converti depuis le format Finale par denigma. L’alignement des paroles et la structure des mesures sont préservés. Vérifiez les expressions personnalisées ou les mises en page complexes si la partition semble inhabituelle.' },
 	'upload.banner.dismiss':       { en: 'Dismiss',                      fr: 'Ignorer' },
 
-	'upload.continue':             { en: 'Continue to analysis',         fr: 'Continuer vers l’analyse' },
 	'upload.tryAnother':           { en: 'Try another file',             fr: 'Essayer un autre fichier' },
-
 
 	'upload.soon.mscz':            { en: 'MuseScore (.mscz) import is coming soon.', fr: 'L’import MuseScore (.mscz) arrive bientôt.' },
 	// ── N.59: the page reader ────────────────────────────────────────
@@ -1213,47 +1133,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
 	'upload.banner.reader':        { en: 'This score is Ilya’s synthesis from an image (scan or photograph). The optical recognition of musical notes and printed text is imperfect, so you should check Ilya’s reading against your original source. You may rectify any errors through the Loupe’s CORRECTIONS pane.', fr: 'Cette partition est la synthèse qu’Ilya a faite à partir d’une image (numérisation ou photographie). La reconnaissance optique des notes de musique et du texte imprimé est imparfaite; vérifiez donc la lecture d’Ilya sur votre source originale. Vous pouvez corriger toute erreur dans le volet CORRECTIONS de la loupe.' },
 
-	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
-	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
 	'upload.ask.clef':             { en: 'Clef', fr: 'Clé' },
 	'upload.ask.clefTreble':       { en: 'Treble', fr: 'Clé de sol' },
 	'upload.ask.clefTrebleOttava': { en: 'Treble, sounding an octave lower', fr: 'Clé de sol, à l’octave inférieure' },
 	'upload.ask.clefBass':         { en: 'Bass', fr: 'Clé de fa' },
-	'upload.ask.key':              { en: 'Key signature', fr: 'Armure' },
-	'upload.ask.keyNone':          { en: 'No sharps or flats', fr: 'Aucune altération' },
-	'upload.ask.keySharp':         { en: '1 sharp', fr: '1 dièse' },
-	'upload.ask.keySharps':        { en: '%s sharps', fr: '%s dièses' },
-	'upload.ask.keyFlat':          { en: '1 flat', fr: '1 bémol' },
-	'upload.ask.keyFlats':         { en: '%s flats', fr: '%s bémols' },
-	'upload.ask.read':             { en: 'Read this page', fr: 'Lire cette page' },
 	'upload.ask.cancel':           { en: 'Cancel', fr: 'Annuler' },
 
-	// N.97. The prompt CONFIRMS what the reader found instead of asking blind.
-	// Only these two frame strings are new; the field labels, the option
-	// labels, and both buttons are `upload.ask.*` above, unchanged, and the
-	// abstention path shows `upload.ask.title` and `upload.ask.why` word for
-	// word. Both rows are Dann's own wording, approved 2026-08-24 and
-	// transcribed verbatim, straight apostrophes included.
-	'upload.confirm.title':        { en: 'Two things Ilya read from the page', fr: "Deux choses qu'Ilya a lues sur la page" },
-	'upload.confirm.why':          { en: 'Ilya read the clef and the key signature off the picture. Check them against your own paper, and change them if it read wrong.', fr: "Ilya a lu la clé et l'armure sur l'image. Vérifiez-les sur votre propre partition, et corrigez-les s'il a mal lu." },
-
-	'upload.report.title':         { en: 'What Ilya read', fr: 'Ce qu’Ilya a lu' },
-	'upload.report.systems':       { en: '%s systems, %s staves', fr: '%s systèmes, %s portées' },
-	'upload.report.spacing':       { en: 'Staff spacing: %s px', fr: 'Interligne\u00a0: %s px' },
-	'upload.report.events':        { en: '%s notes, %s rests, %s measures', fr: '%s notes, %s silences, %s mesures' },
-	'upload.report.seconds':       { en: 'Read in %s s', fr: 'Lu en %s s' },
-	'upload.report.pitchSubs':     { en: 'Pitch assumed on %s notes (measures %s).', fr: 'Hauteur supposée sur %s notes (mesures %s).' },
-	'upload.report.durationSubs':  { en: 'Length assumed on %s notes (measures %s).', fr: 'Durée supposée sur %s notes (mesures %s).' },
-	// N.96 ship 1b. One page raising no longer aborts the whole read, so the
-	// read report names the pages that failed. Both strings are Dann's own
-	// wording, ruled 2026-08-24 and transcribed verbatim with the page number
-	// substituted; the French keeps its straight apostrophe. Rendered ONCE PER
-	// FAILED PAGE rather than pluralized, so no second string is coined.
-	'upload.report.pageFailed':    { en: 'Ilya could not read page %s.', fr: "Ilya n'a pas pu lire la page %s." },
-	'upload.report.staffFallback': { en: 'Ilya could not tell which staff carries the voice in %s systems, and read the top one.', fr: 'Ilya n’a pas pu déterminer quelle portée porte la voix dans %s systèmes, et a lu celle du haut.' },
-
 	'upload.err.readerLoadFailed': { en: 'The page reader could not be loaded. Check your connection and try again.', fr: 'Le lecteur de page n’a pas pu être chargé. Vérifiez votre connexion et réessayez.' },
-	'upload.err.pageReadFailed':   { en: 'Ilya could not read this page. Reading photographs is new and does not yet work on every page. If you have the score as a MusicXML, MNX, or Finale file, Ilya reads those directly.', fr: 'Ilya n’a pas pu lire cette page. La lecture de photographies est nouvelle et ne fonctionne pas encore sur toutes les pages. Si vous avez la partition sous forme de fichier MusicXML, MNX ou Finale, Ilya lit ces formats directement.' },
 	'upload.err.imageUndecodable': { en: 'This browser cannot open that picture. A JPEG or a PNG will work.', fr: 'Ce navigateur ne peut pas ouvrir cette image. Un JPEG ou un PNG fonctionnera.' },
 	// Both RATIFIED by Dann 2026-09-24 20:37 to 20:38 (brief-code-photo-messages_r1).
 	// `imageHeic` replaces `imageUndecodable` only where the picture sniffs as
@@ -1312,7 +1198,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// general Canadian French usage (Dann's reason: it is on the Tim Horton's
 	// Roll Up the Rim cup every year), not from any other slot in this file.
 	// The desk's « Recommencer » was proposed and withdrawn: `station.startOver`
-	// already reads « Recommencer le placement », and collapsing "Re-take" and
+	// (since removed, with no reader) read « Recommencer le placement », and collapsing "Re-take" and
 	// "Start over" into one French word would have lost the distinction between
 	// another attempt and a restart. Written as the infinitive, matching this
 	// file's other buttons (« Rétablir », « Recommencer le placement »), not
@@ -1325,7 +1211,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// UNUSED SINCE N.114b item 8 (Dann's ruling of 2026-09-10: the wizard's
 	// compact collapse row is gone, and this was its spoken label's tail).
 	// Kept and marked in place rather than deleted, with its ratified French,
-	// the way `upload.scanTooltip` and `underlay.heading` are.
+	// the way `underlay.heading` is.
 	'calib.compact.vowelsSampled': { en: 'vowels sampled', fr: 'voyelles échantillonnées' },
 	'calib.log.addedPrefix': { en: 'Added to progress:', fr: 'Ajouté à la progression\u00a0:' },
 	'calib.log.hertz': { en: 'hertz', fr: 'hertz' },
@@ -1726,7 +1612,6 @@ const strings: Record<string, Record<Language, string>> = {
 	// a binder with no songs is refused as `no-songs` before it gets here.
 	'binder.importedOne': { en: 'One song was added.', fr: 'Un chant a été ajouté.' },
 	'binder.importedMany': { en: '%s songs were added.', fr: '%s chants ont été ajoutés.' },
-	'station.startOver': { en: 'Start placement over', fr: 'Recommencer le placement' },
 	// The count of placements whose note the new score does not contain. They
 	// are KEPT; this only says how many no longer have a note to sit on. %s is
 	// the number. Twins 'station.textChanged' in restraint: a count, not alarm.
@@ -1819,6 +1704,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.identityUncalibrated': { en: 'INSIGHTS for {voice} · {voiceType} · not calibrated', fr: 'APERÇUS pour {voice} · {voiceType} · sans calibration' },
 	'insights.yourVoice':          { en: 'your voice',                   fr: 'votre voix' },
 	'insights.pageAria':           { en: 'Insights, page {n} of {total}', fr: 'Aperçus, page {n} sur {total}' },
+	// WHY `insights.fit.*` KEEPS ITS NAME. INSIGHTS was shown as Fit until 2026-09. N.174 (2026-09-27) renamed the code to Text, Markup, and
+	// Insights and the screen to TEXT, MELODY, and INSIGHTS, but renamed no string key: these keys are cited by name in
+	// `lib/insights/singer-blocks.ts` and in tests, and a key's name is not shown to a singer. A rename is mechanical and changes no word on the screen.
 	// The heading: English ruled by Dann 2026-09-22 (OWED.md "Rulings Dann owes"
 	// item 2), French drafted by the desk and RATIFIED by Dann 2026-09-30 21:30.
 	// « relevés », not « mesures », which also means a bar. It replaces "The

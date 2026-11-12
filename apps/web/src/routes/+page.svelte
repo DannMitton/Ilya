@@ -3114,7 +3114,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			cancelQuietTimer();
 			orphanedCount = 0;
 			noLyricsFile = null; scanBanners.reset();
-			restoreSource = restoreFrom(bytes, next.source?.page);
+			restoreSource = restoreFrom(bytes);
 			doc = next;
 			await refreshSongs();
 			/* A SWITCH IS NOT A BOOT. The singer just chose this song, so Ilya
@@ -3233,10 +3233,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	 * What the uploader needs to bring a stored score back.
 	 *
 	 * The stored page's clef and key answers are no longer handed on: they were
-	 * the old page reader's (retired 2026-10-27), and `page` is kept in the
-	 * signature because `SongSource.page` still holds them for older songs.
+	 * the old page reader's (retired 2026-10-27), so the function takes no
+	 * `page`; `SongSource.page` still holds them for older songs.
 	 */
-	function restoreFrom(source: SourceBytes | null, page: PageProvenance | null | undefined) {
+	function restoreFrom(source: SourceBytes | null) {
 		if (!source) return null;
 		return {
 			fileName: source.fileName,
@@ -3248,7 +3248,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	// N.67 step 4b: STATE, because a switch hands the uploader a different
 	// song's bytes. The uploader is keyed on `doc.id`, so it remounts and its
 	// own restore runs, which is the same path a reload takes and no other.
-	let restoreSource = $state(restoreFrom(opened?.source ?? null, opened?.loaded?.record?.source?.page));
+	let restoreSource = $state(restoreFrom(opened?.source ?? null));
 
 	/**
 	 * N.108 increment 2. THE UPLOADER INSTANCE, so the one intake can hand it a
