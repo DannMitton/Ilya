@@ -140,7 +140,7 @@ function link(members: Member[], matches: Map<string, string>): void {
 	});
 }
 
-/** The partner rides on the ⟨и⟩ entry's `features.word`, which the blurb composer substitutes (`composer.ts`, `word`). */
+/** The partner rides on the ⟨и⟩ entry's `features.word`, which the blurb composer substitutes (`composer.ts`, `word`) into text the Inspector prints as HTML, so `<`, `>`, and `&` are dropped from it. */
 export function stampRhymePartner(log: { features: { [key: string]: any } }[], partner: string): void {
-	for (const e of log) if (e.features.exception === 'velar-adjectival-rhyme') e.features.word = partner;
+	for (const e of log) if (e.features.exception === 'velar-adjectival-rhyme') e.features.word = partner.replace(/[<>&]/g, '');
 }

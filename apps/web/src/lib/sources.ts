@@ -349,6 +349,8 @@ export const OWED: Record<string, string> = {
 	'Titze 2007': 'Insights `insights.r2.sourcesLine`: "Titze 2007, p. 200", no title',
 	'Titze 2012': 'Insights `insights.r2.sourcesLine`: "Titze 2012, p. 544", no title',
 	'Titze 2008': 'Insights `insights.r2.sourcesLine`: "after Titze 2008", no title',
+	// The stage note on ⟨и⟩ of -кий (`data/blurb-composer.json`, `velar-adjectival:и`, ratified 2026-11-11 22:53; rhyme lane 49, step 4): "Avanesov 1989, p. 660". No title, place, or publisher is on file in this tree; none is supplied here.
+	'Avanesov 1989': 'The Inspector\'s stage note on ⟨и⟩ of -кий (`velar-adjectival:и`, `data/blurb-composer.json`): "Avanesov 1989, p. 660", no title',
 	'Popolo 2003': 'Insights `insights.r2.sourcesLine`: "Titze, Švec, and Popolo 2003", the vocal loading index (*JSLHR* 46(4), pp. 919-932, as `singing-measures.ts` cites it); not registered',
 };
 

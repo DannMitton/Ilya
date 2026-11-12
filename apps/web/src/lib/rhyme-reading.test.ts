@@ -7,7 +7,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { GraysonEngine } from '@ilya/phonology';
 import { loadRealDictionary } from './score/row108.support';
-import { rhymeReading, rhymeTail, type RhymeLine, type RhymeProbe, type RhymeWord } from './rhyme-reading';
+import { rhymeReading, rhymeTail, stampRhymePartner, type RhymeLine, type RhymeProbe, type RhymeWord } from './rhyme-reading';
 
 beforeAll(() => loadRealDictionary());
 
@@ -170,5 +170,17 @@ describe('rhyme-reading: the rule', () => {
 	it('a refrain: each copy finds its own partner', () => {
 		const m = read('глубокой\nвысокий\n\nглубокой\nвысокий');
 		expect([...m.keys()].sort()).toEqual(['1-0', '3-0']);
+	});
+});
+
+describe('rhyme-reading: the partner on the entry', () => {
+	it('is stamped on the ⟨и⟩ entry only, and drops <, >, and & (the Inspector prints the note as HTML)', () => {
+		const log = [
+			{ features: { type: 'vowel', exception: 'velar-adjectival-rhyme' } },
+			{ features: { type: 'vowel', exception: 'velar-adjectival' } },
+		];
+		stampRhymePartner(log, 'глу<b>бокой&');
+		expect(log[0].features).toMatchObject({ word: 'глуbбокой' });
+		expect(log[1].features).not.toHaveProperty('word');
 	});
 });
