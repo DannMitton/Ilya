@@ -403,12 +403,16 @@ describe('row 97: the three ratified Guide passages are seated', () => {
    preceded by a no-break space (U+00A0), and the apostrophes are typographic where one occurs. */
 describe('row 166: the six ratified placeholder strings', () => {
 	it('the lede: its first sentence only, EN and FR', () => {
-		expect(t('insights.generic.lede', 'en')).toBe('These findings use placeholder values for a {voiceType}, not your specific voice.');
-		expect(t('insights.generic.lede', 'fr')).toBe('Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier.');
+		expect(t('insights.generic.lede', 'en')).toBe('These findings use placeholder values for a generic {voiceType}, not your specific voice.');
+		expect(t('insights.generic.lede', 'fr')).toBe('Ces constats reposent sur des valeurs par défaut pour une voix type de {voiceType}, et non sur votre voix en particulier.');
 	});
 	it('the MELODY subtitle for a placeholder voice', () => {
 		expect(t('profile.subtitlePlaceholder', 'en')).toBe('Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.');
-		expect(t('profile.subtitlePlaceholder', 'fr')).toBe('Profil de formants\u00a0: valeurs par défaut pour le type générique {voiceType}, pas encore vos propres résonances.');
+		expect(t('profile.subtitlePlaceholder', 'fr')).toBe('Profil de formants\u00a0: valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances.');
+	});
+	it('the vowel chart\u2019s caption for a placeholder page, EN and FR (closing polish lane, step 2; Dann 2026-11-11 13:23)', () => {
+		expect(t('insights.r2.vowels.against.generic', 'en')).toBe('against where each vowel turns in a generic {voiceType}');
+		expect(t('insights.r2.vowels.against.generic', 'fr')).toBe('selon la hauteur où chaque voyelle change de timbre pour une voix type de {voiceType}');
 	});
 	it('the method lines: the two placeholder forms, and "including repeats" in the two calibrated forms (French unchanged)', () => {
 		expect(t('insights.method.generic.typed', 'en')).toBe('Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.');

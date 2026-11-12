@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,222 keys.
+   This file holds 1,223 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -43,7 +43,7 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     189  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     190  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     42  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
@@ -1486,7 +1486,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.subtitleNamed': { en: 'Formant profile: a map of {voice}\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de la voix \u00ab\u00a0{voice}\u00a0\u00bb' },
 	'profile.subtitleYours': { en: 'Formant profile: a map of your voice\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de votre voix' },
 	// QUEUE row 166, RATIFIED by Dann 2026-11-10 (12:54 to 12:59): printed in place of the two above when the voice has only placeholder values (`markup/subtitle.ts`).
-	'profile.subtitlePlaceholder': { en: 'Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de formants\u00a0: valeurs par défaut pour le type générique {voiceType}, pas encore vos propres résonances.' },
+	'profile.subtitlePlaceholder': { en: 'Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de formants\u00a0: valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances.' },
 	'profile.count.1': { en: 'One', fr: 'Une' },
 	'profile.count.2': { en: 'Two', fr: 'Deux' },
 	'profile.count.3': { en: 'Three', fr: 'Trois' },
@@ -1888,7 +1888,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Méthode\u00a0: aucune voix n\u2019a été mesurée, donc rien sur cette page n\u2019en est calculé.' },
 	// QUEUE row 166. RATIFIED: the lede, Dann 2026-11-09 16:13, cut to its first sentence by Dann 2026-11-10 12:56 (pinned in `ratified-lines.test.ts`). It is shown only for a
 	// voice declared as one of five types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the label the identity line prints.
-	'insights.generic.lede':       { en: 'These findings use placeholder values for a {voiceType}, not your specific voice.', fr: 'Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier.' },
+	'insights.generic.lede':       { en: 'These findings use placeholder values for a generic {voiceType}, not your specific voice.', fr: 'Ces constats reposent sur des valeurs par défaut pour une voix type de {voiceType}, et non sur votre voix en particulier.' },
 	// RATIFIED by Dann 2026-11-10 (row 166): the method line for those findings, which names no calibration and no date.
 	'insights.method.generic.typed':   { en: 'Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values for your voice type and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.' },
@@ -2028,6 +2028,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.r2.cycles.above':    { en: '{n} above your comfortable working zone',      fr: '{n} au-dessus de votre zone de travail confortable' },
 	// Rows 15 to 20, and a vowel with no fR1.
 	'insights.r2.vowels.against':  { en: 'against where each vowel turns in your voice', fr: 'selon la hauteur où chaque voyelle change de timbre dans votre voix' },
+	'insights.r2.vowels.against.generic': { en: 'against where each vowel turns in a generic {voiceType}', fr: 'selon la hauteur où chaque voyelle change de timbre pour une voix type de {voiceType}' },
 	'insights.r2.vowels.ring':     { en: '{n}% of your singing lies past the turn.', fr: '{n} % de votre chant se situe après le changement de timbre.' },
 	'insights.r2.vowels.before':   { en: 'before the turn',               fr: 'avant le changement de timbre' },
 	'insights.r2.vowels.past':     { en: 'past the turn',                 fr: 'après le changement de timbre' },

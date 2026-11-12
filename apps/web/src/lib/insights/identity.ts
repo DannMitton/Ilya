@@ -9,7 +9,7 @@
  */
 import { t, type Language } from '$lib/i18n';
 import type { VoiceTypeChoice } from '$lib/voice/profileStore';
-import { voiceTypePrint } from '$lib/voice/voiceTypes';
+import { fillVoiceType, voiceTypePrint } from '$lib/voice/voiceTypes';
 import type { AdaptedProfile } from '$lib/analysis/analyze-score-adapter';
 
 export interface IdentityInput {
@@ -48,8 +48,13 @@ export function restsOnSamples(adapted: Pick<AdaptedProfile, 'completeness' | 'g
  * the identity line prints, lower-cased as it prints it.
  */
 export function genericLede(generic: boolean, voiceType: VoiceTypeChoice | undefined, language: Language): string | null {
-	const label = generic ? voiceTypePrint(voiceType, language) : undefined;
-	return label ? t('insights.generic.lede', language).replace('{voiceType}', label) : null;
+	const label = placeholderLabel(generic, voiceType, language);
+	return label ? fillVoiceType(t('insights.generic.lede', language), label, language) : null;
+}
+
+/** The voice type's label for a placeholder voice, or undefined for any other voice and for "Not sure" with no typed text (`voiceTypePrint`). */
+export function placeholderLabel(generic: boolean, voiceType: VoiceTypeChoice | undefined, language: Language): string | undefined {
+	return generic ? voiceTypePrint(voiceType, language) : undefined;
 }
 
 /** The Method endnote's string key: a placeholder voice names no calibration and no date (RATIFIED by Dann 2026-11-10; the strings are pinned in `ratified-lines.test.ts`). */

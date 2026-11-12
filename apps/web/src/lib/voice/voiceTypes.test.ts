@@ -7,7 +7,7 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { bucketFor } from './engine/plausibility';
-import { OTHER, TIER1, TIER2, voiceTypePrint, withTier1 } from './voiceTypes';
+import { OTHER, TIER1, TIER2, fillVoiceType, voiceTypePrint, withTier1 } from './voiceTypes';
 import { assignToVoice, loadStore, type StoredVoice } from './profileStore';
 import { t } from '$lib/i18n';
 
@@ -154,5 +154,20 @@ describe('voice type slice A: storage', () => {
 		expect(v.updatedAt).not.toBe('2026-09-12T10:00:00.000Z');
 		assignToVoice(v, { voiceTypeSpecific: 'octavist' });
 		expect(v.calibratedAt).toBe('2026-09-12T10:00:00.000Z');
+	});
+});
+
+/* Closing polish lane, step 2: « de » elides before a vowel letter in French (desk default, 2026-11-11), never before h. */
+describe('fillVoiceType', () => {
+	const T = 'pour une voix type de {voiceType}';
+	it('elides « de » before a vowel letter and keeps it before a consonant and before h', () => {
+		expect(fillVoiceType(T, 'octaviste', 'fr')).toBe('pour une voix type d\u2019octaviste');
+		expect(fillVoiceType(T, 'basse', 'fr')).toBe('pour une voix type de basse');
+		expect(fillVoiceType(T, 'heldentenor', 'fr')).toBe('pour une voix type de heldentenor');
+		expect(fillVoiceType(T, '\u00e9crivain', 'fr')).toBe('pour une voix type d\u2019\u00e9crivain');
+		expect(fillVoiceType(T, 'Yodleur', 'fr')).toBe('pour une voix type d\u2019Yodleur');
+	});
+	it('fills English as it is', () => {
+		expect(fillVoiceType('for a generic {voiceType}', 'octavist', 'en')).toBe('for a generic octavist');
 	});
 });
