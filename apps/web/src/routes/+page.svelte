@@ -187,7 +187,6 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import {
 		beatOfEntry,
 		measureFill,
-		positionsInMeasure,
 	} from '$lib/score/entry';
 	import { currentPitch, orphanIds } from '$lib/score/correction';
 	import { BarLayer } from '$lib/score/bar-layer';
@@ -213,6 +212,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { isReadScan, type IntakeAnswers } from '@ilya/score-parser';
 	import { lineWithGraceStops } from '$lib/score/grace-layer';
+	import { heldMeasure } from '$lib/score/held-measure';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -447,6 +447,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				language,
 				userStressOverrides: lyricsMarks.stress.size > 0 ? lyricsMarks.stress : undefined,
 				yoToggles: lyricsMarks.yo.size > 0 ? lyricsMarks.yo : undefined,
+				rhymeSetAside: lyricsMarks.rhyme,
 			});
 		} catch (e: unknown) {
 			console.error('[Ilya] Transcription error (derived poem):', e);
@@ -1056,34 +1057,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		return layer.labelOf(i);
 	});
 
-	const heldMeasureIds = $derived(
-		heldMeasureIndex === null
-			? []
-			: stopLine
-					.filter((ev) => ev.type !== 'rest' && ev.measureIndex === heldMeasureIndex)
-					.map((ev) => ev.id),
-	);
-
-	/** The next measure that carries an entry, which bounds the loupe's window. */
-	const nextMeasureIds = $derived.by(() => {
-		if (heldMeasureIndex === null) return [];
-		const later = stopLine.filter(
-			(ev) => ev.type !== 'rest' && ev.measureIndex > heldMeasureIndex,
-		);
-		const first = later[0];
-		if (!first) return [];
-		return later.filter((ev) => ev.measureIndex === first.measureIndex).map((ev) => ev.id);
-	});
-
-	/* N.92, THE CARETS. The held measure's own run of places, head gap to tail
-	   gap, off `correctedLine` rather than the read: a hand-entered note is a
-	   place the bar can stand exactly as a read one is. `positionsInMeasure`
-	   is `positions` itself, sliced; the loupe draws one caret per `gap` this
-	   carries and reads every `entry` it carries as already spoken for by its
-	   own hit rectangle. */
-	const heldMeasurePositions = $derived(
-		heldMeasureIndex === null ? [] : positionsInMeasure(stopLine, heldMeasureIndex),
-	);
+	const held = $derived(heldMeasure(stopLine, heldMeasureIndex)); // `held-measure.ts`: the held bar's ids, the next bar's, and its carets
 
 	/* THE READOUT, `F3 · quarter · на`. Every part of it is a string the app
 	   already ships, and a part that has no value is absent rather than
@@ -1818,6 +1792,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				language,
 				userStressOverrides: lyricsMarks.stress.size > 0 ? lyricsMarks.stress : undefined,
 				yoToggles: lyricsMarks.yo.size > 0 ? lyricsMarks.yo : undefined,
+				rhymeSetAside: lyricsMarks.rhyme,
 				phraseEnds,
 			});
 			transcribeMs = Math.round(performance.now() - start);
@@ -2205,6 +2180,14 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	function handleSpotReconToggle() {
 		if (selectedWord) marks.toggleSpot(selectedKey(), notationPrefs.reconstitution);
 	}
+	// The Stage reading box: set the shown word's -кий rhyme reading aside, or put it back
+	function handleRhymeToggle() {
+		if (!selectedWord) return;
+		claimDerivedPoem();
+		if (!selectedWord) return;
+		marks.toggleRhyme(selectedKey());
+		rerunShown();
+	}
 	// ── Stress assignment handler ────────────────────────────────
 	function handleStressAssign(syllableIndex: number, source: string) {
 		if (!selectedWord) return;
@@ -2254,13 +2237,14 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		if (!selectedWord) return;
 		const poem = shown === 'poem';
 		const r = resetWord(selectedKey(), {
-			stress: marks.stress, yo: marks.yo, syllables: marks.syllables, spot: marks.spot,
+			stress: marks.stress, yo: marks.yo, syllables: marks.syllables, spot: marks.spot, rhyme: marks.rhyme,
 			glosses: shownEdits, anchors: poem ? doc.publishedGlossAnchors : doc.glossAnchors,
 		});
 		if (r.stress) marks.stress = r.stress;
 		if (r.yo) marks.yo = r.yo;
 		if (r.syllables) marks.syllables = r.syllables;
 		if (r.spot) marks.spot = r.spot;
+		if (r.rhyme) marks.rhyme = r.rhyme;
 		if (r.glosses && r.anchors) {
 			if (poem) [doc.publishedGlosses, doc.publishedGlossAnchors] = [r.glosses, r.anchors];
 			else [doc.glossOverrides, doc.glossAnchors] = [r.glosses, r.anchors];
@@ -4077,6 +4061,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 									{showStressDiacritics}
 									syllableOverride={marks.syllables.get(wordKey) ?? null}
 									spotReconstituted={spotInverts.has(wordKey)}
+									rhymeSetAside={marks.rhyme.has(wordKey)}
+									onrhymetoggle={handleRhymeToggle}
 									promotedFromClitic={marks.stress.get(wordKey)?.promotedFromClitic ?? false}
 									yoCharToggles={wordYoToggles}
 									onspotrecontoggle={handleSpotReconToggle}
@@ -4510,8 +4496,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		measureLabel={heldMeasureLabel}
 		noteLine={loupeNoteLine}
 		measureIndex={heldMeasureIndex}
-		ownIds={heldMeasureIds}
-		nextIds={nextMeasureIds}
+		ownIds={held.ids}
+		nextIds={held.nextIds}
 		{selectedEventId} {gapAfter}
 		revision={pageRevision}
 		bundle={loupeBundle}
@@ -4519,7 +4505,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		fill={heldFill}
 		meter={heldMeter}
 		onpick={handleLoupePick}
-		positions={heldMeasurePositions}
+		positions={held.positions}
 		onpickgap={handleLoupePickGap}
 		dockInset={loupeInset}
 		{isPhone}

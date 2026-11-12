@@ -755,6 +755,28 @@
       },
       "standalone": true
     },
+    "velar-adjectival:и": {
+      "en": {
+        "template": "⟨{char}⟩ is [{ipa}] and the velar before it stays hard: the stage reading of the unstressed ending ⟨-ий⟩, which Grayson calls more appropriate for lyric diction. Avanesov records this reading and the soft one as both literary, the hard one following the older Moscow norm. Where the poem rhymes this ending with an unstressed ⟨-ой⟩, Ilya reads it [ʌj] instead, so that the rhyme holds (Grayson, p. 302).",
+        "citation": "pp. 301–303 + Avanesov 1989, p. 660"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se prononce [{ipa}] et la vélaire qui le précède reste dure\u00a0: c’est la prononciation scénique de la terminaison inaccentuée ⟨-ий⟩, que Grayson juge plus appropriée à la diction lyrique. Avanesov consigne cette prononciation et la prononciation molle comme toutes deux littéraires, la dure suivant l’ancienne norme moscovite. Lorsque le poème fait rimer cette terminaison avec un ⟨-ой⟩ inaccentué, Ilya la prononce plutôt [ʌj], afin que la rime soit respectée (Grayson, p. 302).",
+        "citation": "pp. 301–303 + Avanesov 1989, p. 660"
+      },
+      "standalone": true
+    },
+    "velar-adjectival-rhyme:и": {
+      "en": {
+        "template": "⟨{char}⟩ is [{ipa}] here, and the velar before it stays hard, so that the ending rhymes with «{word}». In older Russian verse an unstressed ⟨-ий⟩ after a velar rhymes with an unstressed ⟨-ой⟩, and Grayson gives the rhyme precedence.",
+        "citation": "p. 302"
+      },
+      "fr": {
+        "template": "⟨{char}⟩ se prononce ici [{ipa}], et la vélaire qui le précède reste dure, afin que la terminaison rime avec «{word}». Dans la poésie russe ancienne, un ⟨-ий⟩ inaccentué après une vélaire rime avec un ⟨-ой⟩ inaccentué, et Grayson donne la priorité à la rime.",
+        "citation": "p. 302"
+      },
+      "standalone": true
+    },
     "unstressed:ё": {
       "en": {
         "template": "Stressed or unstressed, ⟨{char}⟩ never reduces in sung Russian.",

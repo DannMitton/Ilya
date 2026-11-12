@@ -6,6 +6,35 @@ import { describe, it, expect } from 'vitest';
 import { WordMarks } from './word-marks.svelte';
 import { diffWordGrid } from '$lib/text-diff';
 
+describe('WordMarks, the set-aside rhyme', () => {
+	it('toggles on and off, and a word with no entry keeps the matcher\'s reading', () => {
+		const m = new WordMarks();
+		m.toggleRhyme('1-0');
+		expect(m.rhyme.get('1-0')).toBe(true);
+		m.toggleRhyme('1-0');
+		expect(m.rhyme.size).toBe(0);
+	});
+
+	it('loads, saves, and clears with the other maps', () => {
+		const m = new WordMarks();
+		m.toggleRhyme('1-0');
+		const out = m.maps();
+		expect([...out.rhyme]).toEqual([['1-0', true]]);
+		const n = new WordMarks();
+		n.load(out);
+		expect(n.rhyme.get('1-0')).toBe(true);
+		n.clear();
+		expect(n.rhyme.size).toBe(0);
+	});
+
+	it('follows its word across an edit', () => {
+		const m = new WordMarks();
+		m.toggleRhyme('1-0');
+		m.carry(diffWordGrid([['глубокой'], ['высокий']], [['дорогой'], ['глубокой'], ['высокий']]));
+		expect([...m.rhyme.keys()]).toEqual(['2-0']);
+	});
+});
+
 describe('WordMarks', () => {
 	it('assigns, promotes a clitic, and reverts a stress mark', () => {
 		const m = new WordMarks();

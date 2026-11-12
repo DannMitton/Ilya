@@ -7,10 +7,10 @@
  *
  * Clears every override the singer has put on ONE word: a stress mark, the
  * ё toggles (keyed `line-word-char`, so by prefix), a syllable boundary, a spot
- * reconstitution, and a gloss with its anchor. A map the word was not in comes
+ * reconstitution, a set-aside rhyme, and a gloss with its anchor. A map the word was not in comes
  * back `null`, so the page assigns only what changed, as it did when this was
  * inline. `pipeline` says whether the transcription must run again: a stress
- * mark or a ё toggle changes the sounds, and the others do not.
+ * mark, a ё toggle, or a set-aside rhyme changes the sounds, and the others do not.
  */
 
 /** The five maps keyed by `"lineIndex-wordIndex"` (the ё toggles by `"…-charIndex"` after it). */
@@ -19,6 +19,8 @@ export interface WordMaps<S, Y, B, P, G = string> {
 	yo: ReadonlyMap<string, Y>;
 	syllables: ReadonlyMap<string, B>;
 	spot: ReadonlyMap<string, P>;
+	/** Rhyme lane 49: the words whose -кий rhyme reading the singer set aside (`text/word-marks.svelte.ts`, `rhyme`). */
+	rhyme?: ReadonlyMap<string, boolean>;
 	/** Row 179: a word's gloss edit, whatever its shape: the whole value goes, every language with it. */
 	glosses: ReadonlyMap<string, G>;
 	anchors: ReadonlyMap<string, string>;
@@ -29,6 +31,7 @@ export interface WordReset<S, Y, B, P, G = string> {
 	yo: Map<string, Y> | null;
 	syllables: Map<string, B> | null;
 	spot: Map<string, P> | null;
+	rhyme: Map<string, boolean> | null;
 	glosses: Map<string, G> | null;
 	anchors: Map<string, string> | null;
 	pipeline: boolean;
@@ -50,13 +53,15 @@ export function resetWord<S, Y, B, P, G = string>(wordKey: string, maps: WordMap
 	}
 	const stress = without(maps.stress, wordKey);
 	const hasGloss = maps.glosses.has(wordKey);
+	const rhyme = maps.rhyme ? without(maps.rhyme, wordKey) : null;
 	return {
 		stress,
 		yo,
 		syllables: without(maps.syllables, wordKey),
 		spot: without(maps.spot, wordKey),
+		rhyme,
 		glosses: hasGloss ? without(maps.glosses, wordKey) : null,
 		anchors: hasGloss ? without(maps.anchors, wordKey) ?? new Map(maps.anchors) : null,
-		pipeline: stress !== null || yo !== null,
+		pipeline: stress !== null || yo !== null || rhyme !== null,
 	};
 }
