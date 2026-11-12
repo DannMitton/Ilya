@@ -5178,6 +5178,9 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 
 | Sonnet consolidation review of every open task (memory files, grep checks) | 302k (2026-11-09, 6.7 min, cap 350k) | 250k to 350k |
 | Sonnet harvest of opera provenance and texts, 109 rows | 246k (first pass), 281k (second pass) (2026-11-08) | 230k to 290k per pass |
+| Sonnet French-name search, 6 operas and 8 roles, French sources beyond fr.wikipedia | 175k harness count (helper estimated 150k), 82 tool uses, 6.7 min, cap 290k (2026-11-11) | 150k to 230k (one actual) |
+| Sonnet survey of comparable products' guide and learning pages (8 products read, Diátaxis) | 138k harness count, 42 tool uses, 3.4 min, cap 350k (2026-11-11); a subagent's Write of its report was refused by the harness, so the desk saved the returned text | 130k to 250k (one actual) |
+| Sonnet scout packet for three Code briefs (every cited line checked, other sites grepped) | 244k harness count, 79 tool uses, 7.1 min, cap 320k (2026-11-11) | 230k to 320k |
 
 Use the harness token count, never a helper's own estimate (2026-11-08: 231k counted against 185k estimated).
 
@@ -5210,3 +5213,12 @@ Learned 2026-11-08: Grayson 2012 (PDF and both Word files) is set in legacy font
 - DEVICE_COMMIT_FILES DID NOT REPLACE A FILE OF THE SAME NAME, 2026-11-10 22:0x. Re-sending `cursive-r4-repo.tgz` to the same Downloads path (with `force: true`) reported "written" but left the old bytes (md5 575f… on the Mac against d002… in the workspace). Send each new version under a new file name and check its md5 on the bridge before using it.
 - THE BRIDGE CANNOT OVERWRITE BY TAR. `tar xzf` into the repository refused every existing file ("Cannot open: File exists"), because the bridge refuses unlink. Extract to the session home, then write each changed file in place with Python `open(p, 'wb')`.
 - Cursive letters for LEARN (Dann's hand, redrawn): pipeline and settings in `tools/cursive/r4/README.md`; the desk's working copy was `/root/cursive/` in the cloud workspace. A redraw from an outline cannot know stroke order: ask Dann for the order of any letter whose weight looks wrong, and encode it (`THIN`, `LOOPS` in `style.py`), rather than removing strokes (the desk's error on д, 22:02 to 22:05).
+
+## LEARNED BY THE 2026-11-11 LATE DESK (Opus, 21:38 to 23:1x)
+- DESK ERROR 22:5x: an i18n key is not a control. The desk described Spot Reconstitution as a two-sided switch from `inspector.spotRecon.*` (`i18n.ts:783-786`), keys no code reads; Dann ruled on it (22:56) and had to rule again (23:05). Before describing a control to Dann, read the component that draws it (here `InspectorPanel.svelte:1009-1019`), never the string table alone.
+- DESK ERROR 22:28: Dann asked whether the desk's own list was done; it was mostly not started. Report the state of each item when asked, plainly, before more work.
+- A subagent's Write of a report file is refused by the harness ("Subagents should return findings as text"): brief helpers to RETURN their report as text; the desk saves it.
+- operalib.eu and az.lib.ru refuse WebFetch (robots); Dann asked the desk to open them in his Chrome (23:00). operalib.eu's root and www root show an error page in Chrome; its libretto pages load (e.g. `http://www.operalib.eu/ruslan/rid.html`), headed as the short version of librettidopera.it.
+- A Python edit through `device_bash` must not be chained after a `cd` into the cloud workspace: the device has no `/home/claude/`, the `cd` fails, and the edit silently does not run. Run workspace edits with the Bash tool.
+- Shipped tonight: `ad90f5a6` row 183 (lane 45), gate 4 5190/1/5191, gate 7 155.
+

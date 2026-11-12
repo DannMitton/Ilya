@@ -6,6 +6,8 @@ r1 draft, 2026-10-12. Created 2026-09-30 by the desk after Dann: *"are there any
 
 ## Open rows, in run order
 
+**UPDATE 2026-11-11 23:1x (Opus late desk close).** Row 183 SHIPPED `ad90f5a6` (lane 45; not walked). Row 131 CLOSED with no build (Dann 22:47; `OPEN.md`, ROW 131 CLOSED). New briefs, not yet Fable-reviewed, in `~/Downloads/_desk-2026-11-11/`: the closing polish lane r1b, the rhyme matcher r1d (row of the 2026-11-09 21:09 ruling), L17 r1; the scout packet's corrections go in first (`STATE.md`, top). Lanes `cloud-lane-48` (polish) and `cloud-lane-49` (rhyme) are named in the briefs, not started.
+
 **UPDATE 2026-11-10 21:2x (Opus desk close).** SHIPPED: row 181 B0 and B0g `31a3f55f` (lane 40); row 179 `8fb0ffc6` (lane 44); row 166 `b7030de1` (lane 39); row 184, the word marks, `1f1bf1c6` (lane 42). None walked by Dann. Row 182 (lane 41) step 9 RUNNING (the corrected arias r5). Row 138, the barline and time signature tools (lane 43, tip `68cfb9c4`): built except the one-tap divide offer (A1, A2); Fable as built owed. Row 183 NEW (the poem load): brief r1 reviewed, r2 owed. `STATE.md` holds the order.
 
 **UPDATE 2026-11-09 01:5x (Opus night desk close).** Row 181: arm J2 (a row floor scaled to free notes) 388 at K=4 and K=6 against control 389, refuted (`../sessions/report-desk-row181-armJ2-scaled-floor_r1_2026-11-08.md` (md5 `17d0b41b5e85`)); the junk on song 2 p5 s1 is chosen by `scoreLook`, not missed by the floor. `STATE.md` holds the order.
