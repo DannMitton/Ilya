@@ -222,6 +222,7 @@ export function transposeScore(parsed: ParsedScore, semitones: number): ParsedSc
     vocalLine: parsed.vocalLine.map((e: VocalLineEvent) =>
       e.pitch ? { ...e, pitch: transposePitch(e.pitch, semitones) } : e,
     ),
+    ...(parsed.graceNotes ? { graceNotes: parsed.graceNotes.map((g) => ({ ...g, pitch: transposePitch(g.pitch, semitones) })) } : {}),
   };
 }
 
@@ -349,6 +350,10 @@ export function engraveInKey(parsed: ParsedScore, choice: KeyChoice): ParsedScor
       const midi = pitchToMidi(e.pitch) + choice.semitones;
       return { ...e, pitch: fewerAccidentals(carrySpelling(e.pitch, letters, midi)) };
     }),
+    // N.187: a grace note is a sung pitch and moves with the rest.
+    ...(parsed.graceNotes
+      ? { graceNotes: parsed.graceNotes.map((g) => ({ ...g, pitch: fewerAccidentals(carrySpelling(g.pitch, letters, pitchToMidi(g.pitch) + choice.semitones)) })) }
+      : {}),
   };
 }
 

@@ -31,6 +31,7 @@ import {
 	type StaffRenderOptions,
 } from './staff-renderer';
 import { unitEnd } from './tacet-run';
+import { keepGraceNotes } from './grace';
 import { chooseClef } from './clef-select';
 import { slurEndsAcross, slursThrough } from './printed-marks';
 
@@ -136,6 +137,8 @@ export function sliceScore(parsed: ParsedScore, fromMeasure: number, toMeasure: 
     vocalLine: parsed.vocalLine
       .filter((e) => e.measureIndex >= fromMeasure && e.measureIndex <= toMeasure)
       .map((e) => ({ ...e, measureIndex: e.measureIndex - fromMeasure })),
+    // N.187: a grace note rides with its principal. It stores no bar of its own.
+    ...(parsed.graceNotes ? { graceNotes: keepGraceNotes(parsed, fromMeasure, toMeasure) } : {}),
   };
 }
 

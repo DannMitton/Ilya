@@ -125,6 +125,7 @@ export interface ParsedScore {
 
   /** N.188. True when a printed slur found its partner; the parser sets it once, so page, print, and loupe agree on the melisma slur. */
   carriesPrintedSlurs?: boolean;
+  graceNotes?: import('./grace').GraceNote[]; // N.187: sung pitches that take no time; never in `vocalLine`
 }
 
 /** N.171. The part of a `DictionMarkFold` that must survive on the score. */

@@ -19,6 +19,7 @@
  */
 
 export * from './types';
+export * from './grace';
 export * from './analysis-types';
 
 export { MnxScoreParser } from './mnx-parser';

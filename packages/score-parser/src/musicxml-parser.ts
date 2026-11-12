@@ -77,7 +77,8 @@ import type {
 	WorkMetadata,
 } from './types';
 import { adoptPickupMeter } from './pickup';
-import { pairSlurs, readNoteNotations, readSlurEnds } from './notations';
+import { pairSlurs, readNoteNotations } from './notations';
+import { graceField, keepGrace, type RawGrace } from './grace';
 
 // ── Minimal DOM surface the parser reads ───────────────────────────
 
@@ -388,6 +389,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 		const vocalLine: VocalLineEvent[] = [];
 		const tieFlags = new Map<string, { start: boolean; stop: boolean }>();
 		const slurCarry: SlurEnd[] = [];
+		const graces: RawGrace[] = [];
 
 		let divisions = readInitialDivisions(vocalPart) ?? readInitialDivisions(parts[0]);
 		if (!divisions || divisions <= 0) {
@@ -521,6 +523,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 							verseToCanonical,
 							honourSuppliedIds: supplied.honour,
 							slurCarry,
+							graces,
 						});
 						break;
 					}
@@ -673,6 +676,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 			metricModulations,
 			vocalLine,
 			...(carriesPrintedSlurs ? { carriesPrintedSlurs: true } : {}),
+			...graceField(graces, vocalLine, warnings),
 		};
 
 		return { score, warnings, errors };
@@ -695,20 +699,12 @@ export class MusicXmlScoreParser implements ScoreParser {
 			honourSuppliedIds: boolean;
 			/** N.188 A.2a: slur starts read off dropped grace notes, waiting for the next kept note. */
 			slurCarry: SlurEnd[];
+			graces: RawGrace[];
 		},
 	): Fraction {
-		// Grace notes carry no rhythmic duration; skip (v1 attends to sustained events).
+		// N.187: a grace note takes no time, so it is kept in its own list (`grace.ts`) and the cursor stays.
 		if (firstChild(note, 'grace')) {
-			ctx.warnings.push({ code: 'unrecognised-element', message: 'grace note skipped (no rhythmic duration).', location: { measureIndex } });
-			// N.188 A.2a: its slur ends move onto the kept notes either side. A start goes to
-			// the next kept note; a stop goes to the last kept note before it.
-			for (const end of readSlurEnds(note)) {
-				if (end.type === 'start') ctx.slurCarry.push(end);
-				else {
-					const prev = [...ctx.vocalLine].reverse().find((e) => e.type === 'note');
-					if (prev) (prev.slurs ??= []).push(end);
-				}
-			}
+			keepGrace(note, measureIndex, ctx);
 			return cursor;
 		}
 		// A chord tone shares the previous note's position; keep the first,
@@ -927,9 +923,10 @@ const CURSOR_ID_SHAPE = /^m\d+-\d+-\d+$/;
  *   case completely: honoured ids and generated ids then live in disjoint
  *   namespaces.
  *
- * Grace notes and chord tones are skipped, because `readNote` skips them: they
- * never become events, so their ids are not on the vocal line and cannot
- * collide with anything.
+ * Grace notes and chord tones are skipped. A grace note's id is never honoured:
+ * N.187 keeps it in `ParsedScore.graceNotes` under an id made from its
+ * principal's (`<id>~g1`), which cannot collide with a supplied one that
+ * has no `~`; a chord tone never becomes an event.
  *
  * A file with no `id` attributes at all returns `{ honour: true }` and every
  * event falls back, note by note, to the cursor id. That is the path every

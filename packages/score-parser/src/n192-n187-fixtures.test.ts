@@ -29,13 +29,12 @@ describe('key-changes.musicxml', () => {
 });
 
 describe('grace-notes.musicxml', () => {
-	it('parses with the grace notes still left out of the vocal line, as before step 2', async () => {
+	it('parses with every bar summing as before: a grace note takes no time', async () => {
 		const { score, errors, warnings } = await parseFixture('grace-notes.musicxml');
 		expect(errors.filter((e) => e.fatal)).toEqual([]);
 		expect(score.measures).toHaveLength(10);
 		expect(score.vocalLine).toHaveLength(27);
-		expect(warnings.filter((w) => w.message.startsWith('grace note skipped'))).toHaveLength(11);
-		// no bar is reported short or over: a grace note takes no time.
+		expect(score.graceNotes).toHaveLength(11);
 		expect(warnings.filter((w) => w.code === 'measure-duration-mismatch')).toEqual([]);
 	});
 });
