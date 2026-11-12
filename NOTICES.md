@@ -84,3 +84,13 @@ is not part of this repository.
   <https://github.com/TechStark/opencv-js>. Apache License 2.0.
 - **delaunator** 5.1.0, Mapbox, <https://github.com/mapbox/delaunator>. ISC
   License.
+- **tesseract.js** 7.0.0, <https://github.com/naptha/tesseract.js>. Apache
+  License 2.0 (the package's `license` field and its `LICENSE.md`, which is the
+  licence's standard text with the appendix's copyright line left blank). Ilya
+  serves its `worker.min.js` unchanged from its own site, for the scan reader, and
+  the licence text is served beside it as `LICENSE-tesseract.js.txt`.
+- **tesseract.js-core** 7.0.0, <https://github.com/naptha/tesseract.js-core>,
+  an Emscripten build of Tesseract. Apache License 2.0 (the package's `license`
+  field and its `LICENSE`, the same standard text). Ilya serves its
+  `tesseract-core-simd-lstm.wasm.js` unchanged from its own site, and the licence
+  text is served beside it as `LICENSE-tesseract.js-core.txt`.

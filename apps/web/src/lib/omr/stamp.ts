@@ -47,9 +47,11 @@ export const OMR_MODEL = '465';
  * no longer dropped, `<extend>` rides with the reading), the second look is made, and the reading keeps where each system's
  * lyric band stood (`bands`); a reading kept as `underlay@3` is read again once, on its next opening. `underlay@5` is row 181 B0
  * and B0g: each syllable is placed where its own vowel's ink is, not a share of the way along the word's box, and a grace note or
- * a chord tone takes no syllable, so the same page seats differently (a reading kept as `underlay@4` is read again once).
+ * a chord tone takes no syllable, so the same page seats differently (a reading kept as `underlay@4` is read again once). `underlay@6`
+ * reads nothing differently; it marks that the reader's files are served, so a scan kept while they were not (kept with no words, and
+ * current under `underlay@5`) is read again once. RULED by Dann 2026-11-11 23:37.
  */
-export const UNDERLAY_READER = 'underlay@5';
+export const UNDERLAY_READER = 'underlay@6';
 
 /** What a kept reading is stamped with: the homr reader and the underlay reader together (`homr-web@V/model+underlay@N`). */
 export const READER_STAMP = `homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}+${UNDERLAY_READER}`;

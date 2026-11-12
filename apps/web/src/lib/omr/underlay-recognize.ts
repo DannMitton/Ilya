@@ -19,8 +19,8 @@
  * the nested form has been measured to load in headless Chromium, and it has
  * not been.
  *
- * Where the files are not served (they are not, until Dann has said yes to the
- * bytes), `createWorker` rejects, the page answers null, and the song is joined
+ * The files are served: `scripts/copy-underlay-model.mjs` runs in `dev` and
+ * `build`. Where they are not (a site built without that script), `createWorker` rejects, the page answers null, and the song is joined
  * as it was. One reader is kept for the session and made again after a failure.
  */
 import type { WordBox } from './underlay-page';
