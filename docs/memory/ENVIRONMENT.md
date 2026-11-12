@@ -5222,3 +5222,13 @@ Learned 2026-11-08: Grayson 2012 (PDF and both Word files) is set in legacy font
 - A Python edit through `device_bash` must not be chained after a `cd` into the cloud workspace: the device has no `/home/claude/`, the `cd` fails, and the edit silently does not run. Run workspace edits with the Bash tool.
 - Shipped tonight: `ad90f5a6` row 183 (lane 45), gate 4 5190/1/5191, gate 7 155.
 
+
+## LEARNED BY THE 2026-11-11 NIGHT DESK (Opus, 23:1x on)
+- VERCEL, deleting a deployment through Chrome (seen 2026-11-11 23:5x): the deployment's own page (`https://vercel.com/dannmittons-projects/ilya/<id without dpl_>`), the "Deployment Actions" button (three dots, top right of Deployment Details), then Delete (last item, red), then a modal "Delete Deployment" with Cancel and Delete. Wait about 6 s after loading before opening the menu, or the page shows "Something went wrong". The usage page opens with a 2FA reminder modal; Escape closes it. Deployment Storage details: Usage, then "View details for Deployment Storage" (URL `/~/usage/deployments-storage`).
+- Only `Shane` and `main` build on Vercel now: no `cloud-lane-*` deployment is listed (connector, 2026-11-11 23:4x). A READY `Shane` build is about 0.42 GB (7.12 GB over 17 READY builds, desk arithmetic).
+- THE SCAN READER'S FILES WERE NEVER SERVED (found 2026-11-11 23:1x): `copy-underlay-model.mjs` was not in `dev` or `build`, so `/omr/models/underlay/*` answered 404 on the alias and every scan read no words. Before telling Dann a reader works on the alias, fetch its files there.
+- DESK ERROR 2026-11-12 00:3x, owned on Dann's question: the N.192 and N.187 brief r1 was designed from Ilya's code outward (what fits the existing verbs), not from what the singer does, and without surveying Finale, Sibelius, Dorico, and MuseScore as the desk did for the barline tools (2026-11-09). It had no way to correct a key change, and made adding a missing grace note two steps. Lesson: before any Corrections design, survey how the established notation programs do it, then design from the singer's task (CONTRACT tether 22).
+
+## LEARNED BY THE 2026-11-12 NIGHT DESK
+
+- Put a question to Dann from the singer's side, in plain words, never in engraver's jargon. Fable's strophic Q1 ("print only as far as its own words go, with the one-line bars printed once") reached him unparseable at 01:45. His rule: Ilya serves the user, and clever notation conventions fail that mission.
