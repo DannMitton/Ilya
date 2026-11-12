@@ -171,10 +171,13 @@
 				<path class="bracket" d="M{BRACKET_X - 4} {bracket.top} H{BRACKET_X} V{bracket.bottom} H{BRACKET_X - 4}"></path>
 				<text class="bracket-name bracket-label" x={BRACKET_X + 6} y={bracket.mid - 2 - (LEAD / 2) * (lines.length - 1)}>{#each lines as ln, k (k)}<tspan x={BRACKET_X + 6} dy={k === 0 ? 0 : LEAD}>{ln}</tspan>{/each}</text>
 				<text class="bracket-name" x={BRACKET_X + 6} y={bracket.mid + 10 + (LEAD / 2) * (lines.length - 1)}>{t('insights.fit.span', language).replace('{low}', N(typedTessitura.low)).replace('{high}', N(typedTessitura.high))}</text>
-				<text class="bracket-name" x="0" y="0" visibility="hidden" aria-hidden="true" bind:this={whole}>{label}</text>
 			{/if}
 		</g>
 	</svg>
+	{#if bracket && typedTessitura}
+		<!-- The measurer: the label whole, in an svg of its own (so no test or reader of the figure meets it), hidden and out of the flow. -->
+		<svg class="measurer" width="0" height="0" aria-hidden="true"><text class="bracket-name" x="0" y="0" bind:this={whole}>{label}</text></svg>
+	{/if}
 	<ul class="legend">
 		{#if band}<li><span class="swatch band-swatch"></span>{T('insights.r2.pieceTessitura')}<sup>1</sup></li>{/if}
 		{#if passaggi.length}<li><span class="swatch dash-swatch"></span>{#each italicRuns(T('insights.figure.key.passaggi')) as run, j (j)}{#if run.title}<em>{run.text}</em>{:else}{run.text}{/if}{/each}</li>{/if}
@@ -213,6 +216,12 @@
 		stroke: var(--rose-ink);
 		stroke-width: 1;
 		stroke-dasharray: 4 3;
+	}
+
+	.pitch-seconds svg.measurer {
+		position: absolute;
+		visibility: hidden;
+		pointer-events: none;
 	}
 
 	.bracket {
