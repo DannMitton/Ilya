@@ -15,7 +15,7 @@ The French «{word}» carries no inner no-break spaces, as the ratified literal 
 
 ## Tests
 
-- `packages/blurb/tests/velar-adjectival.test.ts` (new, 11 tests): each of the four strings pinned character for character; both printed citations; the ` ` and the absence of a plain space; **neither composed note contains the identity sentence** (EN "usually sounds like /i/", FR "se prononce généralement /i/"); both processes `standalone`; no em dash; same placeholders and citations in both languages; `deriveRule` yields the two keys from the engine's two exceptions.
+- `packages/blurb/tests/velar-adjectival.test.ts` (new, 10 tests): each of the four strings pinned character for character; both printed citations; the ` ` and the absence of a plain space; **neither composed note contains the identity sentence** (EN "usually sounds like /i/", FR "se prononce généralement /i/"); both processes `standalone`; no em dash; same placeholders and citations in both languages; `deriveRule` yields the two keys from the engine's two exceptions.
 - `packages/blurb/tests/french-parity.test.ts`: template count 194 to 196, with the comment line.
 - `rhyme-reading.test.ts`: `stampRhymePartner` stamps only the `velar-adjectival-rhyme` entry and drops `<`, `>`, `&` (the Inspector prints the note through `{@html}`; a partner must be a dictionary word, so this is defence in depth).
 
@@ -25,7 +25,7 @@ The French «{word}» carries no inner no-break spaces, as the ratified literal 
 
 ## Gates after step 4
 
-phonology 462, blurb 178 (168 + 11 new, less the template count test unchanged), integration 155, web-test 5231 passed and 1 skipped (5230 + the new stamp test), web-check 0 errors and 12 warnings, ratchets OK.
+phonology 462, blurb 178 (168 + 10 new), integration 155, web-test 5231 passed and 1 skipped (5230 + the new stamp test), web-check 0 errors and 12 warnings, ratchets OK.
 
 ## What I could not establish
 
