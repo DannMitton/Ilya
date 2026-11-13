@@ -57,8 +57,9 @@ export const DRAFT = {
 	'capture.bar': 'Progress of this take',
 	'capture.chartAlt': 'Chart of the vowel zones. It moves in on the vowel being measured, and a dot shows the reading.',
 	'capture.drawingAlt': 'Side view of the mouth and throat for {name}',
-	// The sheet's own words that the brief's table does not list (Step 2): the print control and the chart's accessible name.
-	// PROPOSED BY THE BUILD, flagged in the Step 2 report for Dann.
+	// Words the brief's tables do not list, PROPOSED BY THE BUILD and flagged in the step reports for Dann: the sheet's print control
+	// and the chart's accessible name (Step 2); the ten buttons' group name, and the sentence the first-time explanation joins (Step 4b).
+	'capture.vowels': 'The ten vowels',
 	'sheet.print': 'Print this sheet',
 	'sheet.chartAlt': 'Chart of your vowel space. Each vowel is a coloured zone, a filled dot where you sang it, or a hollow dot where Ilya has placed it for now.'
 } as const;

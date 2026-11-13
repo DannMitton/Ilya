@@ -45,10 +45,11 @@
 	import Pacifier from '$lib/voice/pacifier/Pacifier.svelte';
 	import { spokenName } from '$lib/voice/vowel-names';
 	import FrSym from '$lib/voice/FrSym.svelte';
-	// N.199 (?calibrate=new): the vowel-space sheet on the summary. Seen only with the switch on.
+	// N.199 (?calibrate=new only): the new capture screen and the sheet on the summary.
 	import { calibrateNewOn } from '$lib/voice/chart/calibrate-switch';
-	import VowelSpaceSheet from '$lib/voice/chart/VowelSpaceSheet.svelte';
-	import { printVowelSheet } from '$lib/voice/chart/print-sheet';
+	import SummarySheet from '$lib/voice/chart/SummarySheet.svelte';
+	import VowelCapture from '$lib/voice/VowelCapture.svelte';
+	import { openChallenging, openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
@@ -254,6 +255,7 @@
 	let activeVoice = $derived(store.voices.find((v) => v.id === store.activeId));
 	// N.199: the development switch for the new Calibrate screen, `?calibrate=new`. Read once; off by default.
 	const calibrateNew = calibrateNewOn();
+	let opening = $state<Opening>({ start: 'i' }); // where the new capture screen opens, and any list it walks
 	let voiceType = $derived(activeVoice?.voiceType); // Voice type slice A: the guard routes from the stored Tier 1 id.
 	// The smallest unused sequential default, so deletions never cause
 	// name collisions ("Voice 2" existing skips to "Voice 3").
@@ -758,6 +760,7 @@
 	// ── Phase 1 → 2 ────────────────────────────────────────────────────────
 	async function beginCapture() {
 		phase = 'capture';
+		if (calibrateNew) opening = openTour(profile);
 		queue = [...DEFAULT_VOWELS];
 		queueIndex = 0;
 		await tick(); // let the Pacifier mount before driving it
@@ -788,6 +791,18 @@
 	// the tour is waiting on holds and advances; an out-of-turn capture
 	// hands focus straight back to the current vowel.
 	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
+		const effective = commitReading(vowel, formant);
+		if (phase !== 'capture' || paused) return;
+		if (vowel === currentVowel) {
+			beginHold(vowel, holdKindFor(effective)); // `hold.ts`: an implausible take advances like any other.
+		} else if (currentVowel) {
+			// Out of turn: the roster took the value; the tour stays put.
+			pacifierRef?.activateVowel(currentVowel);
+		}
+	}
+
+	// A reading into the profile (guard, [ɨ] pass, save, announcement), moved out whole from the function above (N.199 Step 4b) so the new screen commits the same way.
+	function commitReading(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
 		const checked = withPlausibility(vowel, formant);
 		profile = withIghPass({ ...profile, [vowel]: checked });
 		persist();
@@ -801,13 +816,7 @@
 		// users. Speakable name, never the raw glyph (§4.6 discipline).
 		logAnnounce = `${T('calib.log.addedPrefix')} ${spokenName(vowel, language)}, ${Math.round(effective.f1)} ${T('calib.log.hertz')}, ${readingLabel(effective.reading)}.`;
 		onVowelCaptured?.(vowel, effective);
-		if (phase !== 'capture' || paused) return;
-		if (vowel === currentVowel) {
-			beginHold(vowel, holdKindFor(effective)); // `hold.ts`: an implausible take advances like any other.
-		} else if (currentVowel) {
-			// Out of turn: the roster took the value; the tour stays put.
-			pacifierRef?.activateVowel(currentVowel);
-		}
+		return effective;
 	}
 
 	/**
@@ -966,6 +975,7 @@
 
 	async function addChallengingVowels() {
 		challengingOffered = true;
+		if (calibrateNew) opening = openChallenging(profile);
 		queue = [...DEFAULT_VOWELS, ...CHALLENGING_VOWELS];
 		queueIndex = DEFAULT_VOWELS.length; // resume right where the default set ended
 		phase = 'capture';
@@ -978,6 +988,7 @@
 		// single-item pass, so the ritual (and the post-capture hold) still
 		// applies, and finishing it returns to the summary via the normal
 		// advance path.
+		if (calibrateNew) opening = openRetake([vowel, ...more]);
 		queue = [vowel, ...more]; // `more`: the summary note's Re-take sings every vowel it names.
 		queueIndex = 0;
 		phase = 'capture';
@@ -1235,20 +1246,6 @@
 	</table>
 {/snippet}
 
-<!-- N.199 Step 2 (?calibrate=new only): the vowel-space sheet, under the roster on the summary. It reads the stored profile and
-     touches no capture code. Its words are the draft English in `voice/chart/draft-strings.ts` until Step 7. -->
-{#snippet vowelSpaceSheet()}
-	{#if calibrateNew}
-		<VowelSpaceSheet
-			{profile}
-			{voiceType}
-			{language}
-			voiceName={activeVoice?.name}
-			onprint={() => printVowelSheet({ profile, voiceType, language, voiceName: activeVoice?.name })}
-		/>
-	{/if}
-{/snippet}
-
 <section class="calibration-wizard" aria-label={T('calib.section.ariaLabel')}>
 	<!-- The dedicated polite live region for roster announcements (Kimi
 	     consensus, 2026-07-10). A single-purpose hidden region rather than
@@ -1371,6 +1368,10 @@
 					<button type="button" class="wizard-primary" onclick={beginCapture}>{T('calib.common.continue')}</button>
 				{/if}
 			</div>
+		{:else if phase === 'capture' && calibrateNew}
+			<!-- N.199 Step 4b: the new capture screen; the wheel below stays the default. -->
+			<div class="wizard-phase"><VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
+				onCaptured={commitReading} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} /></div>
 		{:else if phase === 'capture'}
 			<div class="wizard-phase">
 				<div class="wizard-progress" role="status" aria-live="polite">
@@ -1475,7 +1476,7 @@
 						{T('calib.summary.savedLede')}
 					</p>
 					{@render rosterTable(true)}
-					{@render vowelSpaceSheet()}
+					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} />
 					{@render challengingInvite()}
 					{@render characteristicsButton()}
 				{:else}
@@ -1483,7 +1484,7 @@
 						{capturedCount} {T('calib.common.of')} {ALL_VOWELS.length} {T('calib.summary.progressLedeSuffix')}
 					</p>
 					{@render rosterTable(true)}
-					{@render vowelSpaceSheet()}
+					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} />
 					{@render challengingInvite()}
 					<!-- FILLED FINISH LEADS, N.114b item 9, RULED BY DANN 2026-09-10:
 					     "Filled Finish, ghost Add voice characteristics, ghost Start
