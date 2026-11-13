@@ -34,6 +34,7 @@
  * bump already queued).
  */
 import type { IntakeAnswers } from '@ilya/score-parser';
+import type { TakeRecord } from './takes';
 import type { Vowel, CalibratedFormant, VoiceCharacteristics, VoiceType } from './engine/types';
 import type { FryRangeVerdict } from './engine/readiness';
 import type { Outcome } from '$lib/library/types';
@@ -129,6 +130,12 @@ export interface StoredVoice {
 	 * which reads as every question skipped.
 	 */
 	intake?: IntakeAnswers;
+	/**
+	 * N.199 Step 5 (`?calibrate=new` only): a record of the takes on the new capture screen, 50 a vowel, oldest dropped
+	 * (`takes.ts`). Optional and additive, the same discipline as the fields above. Start over clears it; a full store drops it
+	 * before it refuses the profile (`saveStore`).
+	 */
+	takes?: TakeRecord[];
 }
 
 /** Voice type slice A: the three fields the voice-type intake writes together. */
@@ -291,7 +298,12 @@ export function loadStore(migratedName: string): ProfileStore {
  * session store stands.
  */
 export function saveStore(store: ProfileStore): Outcome {
-	const outcome = write(store);
+	let outcome = write(store);
+	// N.199 Step 5: the take record is the first thing a full store gives up, before it refuses the singer's profile.
+	if (!outcome.ok && outcome.reason === 'quota-exceeded' && store.voices.some((v) => v.takes?.length)) {
+		for (const v of store.voices) delete v.takes;
+		outcome = write(store);
+	}
 	profileSave.failure = outcome.ok ? null : outcome.reason;
 	return outcome;
 }

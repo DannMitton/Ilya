@@ -49,6 +49,7 @@
 	import { calibrateNewOn } from '$lib/voice/chart/calibrate-switch';
 	import SummarySheet from '$lib/voice/chart/SummarySheet.svelte';
 	import VowelCapture from '$lib/voice/VowelCapture.svelte';
+	import { addTake, type TakeRecord } from '$lib/voice/takes';
 	import { openChallenging, openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
@@ -686,6 +687,12 @@
 		persistStore();
 	}
 
+	// N.199 Step 5: a take's record, written as `recordReadiness` writes (not `persist()`, which moves the calibration date).
+	function recordTake(rec: TakeRecord) {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (v) { addTake(v, rec); persistStore(); }
+	}
+
 	// ── Phase 0 → 1 ────────────────────────────────────────────────────────
 	function beginReadiness() {
 		phase = 'readiness';
@@ -1028,6 +1035,8 @@
 
 	// ── Start over: clears the active voice's readings, keeps its name ──────
 	function confirmReset() {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (v) delete v.takes; // Start over clears the take record with the readings
 		profile = {};
 		persist();
 		resetFlow('welcome');
@@ -1371,7 +1380,7 @@
 		{:else if phase === 'capture' && calibrateNew}
 			<!-- N.199 Step 4b: the new capture screen; the wheel below stays the default. -->
 			<div class="wizard-phase"><VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
-				onCaptured={commitReading} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} /></div>
+				onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} /></div>
 		{:else if phase === 'capture'}
 			<div class="wizard-phase">
 				<div class="wizard-progress" role="status" aria-live="polite">

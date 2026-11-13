@@ -86,6 +86,12 @@ export interface CalibratedFormant {
 	 * estimated values, which were never measured in a room at all.
 	 */
 	noiseFloor?: 'measured' | 'unmeasured';
+	/**
+	 * N.199 Step 5: what the singer could see while singing this reading: `hidden` (the chart and numbers were hidden) or `zone` (the
+	 * chart and its zones were shown; Phase 2 adds `live`). Optional and additive: absent on every reading taken before it, and on
+	 * every reading taken by the wheel. A record of how the reading was taken, never a judgement of it.
+	 */
+	visibility?: 'hidden' | 'zone';
 	source:
 		| 'measured-user'
 		| 'derived-retracted-i'

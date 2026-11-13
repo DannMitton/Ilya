@@ -30,6 +30,7 @@
 	import { createViewMotion, ZOOM_IN_MS, ZOOM_OUT_QUICK_MS } from './chart/view-motion';
 	import { ds } from './chart/draft-strings';
 	import { DRAWINGS, creditLine } from './chart/drawings';
+	import { failedTake, readingTake, type TakeRecord, type TakeVisibility } from './takes';
 	import {
 		GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel
 	} from './chart/screen-logic';
@@ -44,6 +45,7 @@
 		onCaptured,
 		onRolledBack,
 		onFailed,
+		onTake,
 		onReturn,
 		onClearAll
 	}: {
@@ -59,6 +61,8 @@
 		onCaptured: (vowel: Vowel, formant: CalibratedFormant) => void;
 		onRolledBack?: (vowel: Vowel, rejected: CalibratedFormant) => void;
 		onFailed?: (vowel: Vowel, error: CaptureError) => void;
+		/** Every take's record, for the voice's take record (Step 5; development switch only). */
+		onTake?: (record: TakeRecord) => void;
 		/** Leave for the summary. */
 		onReturn: () => void;
 		/** The second tap of Start over: the wizard clears this voice's readings. */
@@ -88,16 +92,19 @@
 		previous: (v) => profile[v],
 		reducedMotion: () => reducedMotion,
 		onCaptured: (v, f) => {
-			onCaptured(v, f);
+			onTake?.(readingTake(takeContext(v), f));
+			onCaptured(v, { ...f, visibility: takeVisible }); // the reading carries how it was taken
 			keepNotice();
 			advanceFrom(v);
 		},
 		onRolledBack: (v, f) => {
+			onTake?.(readingTake(takeContext(v), f, true));
 			onRolledBack?.(v, f);
 			keepNotice();
 			advanceFrom(v);
 		},
 		onFailed: (v, e) => {
+			onTake?.(failedTake(takeContext(v), e));
 			onFailed?.(v, e);
 			keepNotice();
 		}
@@ -196,7 +203,11 @@
 	const hz = $derived(t('calib.common.hz', language));
 
 	// ── Gestures ───────────────────────────────────────────────────────────
+	/** What the singer could see from the tap to the reading: the toggle as it stood at the tap. */
+	let takeVisible: TakeVisibility = 'zone';
+	const takeContext = (vowel: Vowel) => ({ vowel, voiceType, visible: takeVisible });
 	function startTake(v: Vowel) {
+		takeVisible = hideWhileSinging ? 'hidden' : 'zone';
 		notice = null;
 		confirmingClear = false;
 		tookAny = true;
