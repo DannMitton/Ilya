@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { computeZones } from './zones';
 import {
 	BOZEMAN_FR2_HZ, EXTRACTOR_FR1_HZ, EXTRACTOR_FR2_HZ, ZOOM_MAX, ZOOM_MIN,
-	ease, fullView, hull, mixView, project, zoomFactor, zoomTarget, type View
+	ease, fullView, gridTicks, hull, mixView, project, zoomFactor, zoomTarget, type View
 } from './geometry';
 
 const L = Math.log;
@@ -151,5 +151,28 @@ describe('the hull', () => {
 	});
 	it('of a triangle is the triangle', () => {
 		expect(hull([[0, 0], [3, 0], [0, 3]])).toHaveLength(3);
+	});
+});
+
+describe('the grid', () => {
+	const full: View = { u0: L(2000), u1: L(600), v0: L(220), v1: L(850) };
+	it('puts lines at round numbers of Hz inside the view', () => {
+		const g = gridTicks(full, 484, 280);
+		for (const f of g.f2) {
+			expect(f % 10).toBe(0);
+			expect(f).toBeGreaterThanOrEqual(600);
+			expect(f).toBeLessThanOrEqual(2000);
+		}
+		for (const f of g.f1) expect(f % 10).toBe(0);
+		expect(g.f2.length).toBeGreaterThan(2);
+		expect(g.f1.length).toBeGreaterThan(2);
+	});
+	it('keeps lines at least minPx apart at the middle, and gains lines when zoomed in', () => {
+		const a = gridTicks(full, 484, 280, 38);
+		const zoomed: View = { u0: L(1300), u1: L(900), v0: L(400), v1: L(650) };
+		const b = gridTicks(zoomed, 484, 280, 38);
+		const gap = (xs: number[], lo: number, hi: number, px: number) => (px * Math.log(xs[1] / xs[0])) / (Math.log(hi) - Math.log(lo));
+		expect(gap(a.f2, 600, 2000, 484)).toBeGreaterThanOrEqual(30);
+		expect(b.f2[1] - b.f2[0]).toBeLessThan(a.f2[1] - a.f2[0]);
 	});
 });

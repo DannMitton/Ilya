@@ -64,6 +64,13 @@ export interface PlaceholderDot {
 	source: 'derived' | 'surrogate';
 }
 
+/** A reading the singer has sung, as the chart plots it. `f2` is absent when the reading has none. */
+export interface SungDot {
+	vowel: Vowel;
+	f1: number;
+	f2?: number;
+}
+
 export interface ZoneSet {
 	/** All ten, in Grayson's inventory order (`VOWELS`). */
 	zones: Zone[];
@@ -118,4 +125,15 @@ export function computeZones(profile: Partial<Record<Vowel, CalibratedFormant>>,
 		}
 	}
 	return { zones, placeholders };
+}
+
+/** The stored readings as dots, in Grayson's order: every sung vowel, with its fR2 only when it has a usable one. */
+export function sungDots(profile: Partial<Record<Vowel, CalibratedFormant>>): SungDot[] {
+	const out: SungDot[] = [];
+	for (const vowel of VOWELS) {
+		const f = profile[vowel];
+		if (!isSung(f)) continue;
+		out.push({ vowel, f1: f.f1, ...(typeof f.f2 === 'number' && f.f2 > 0 ? { f2: f.f2 } : {}) });
+	}
+	return out;
 }

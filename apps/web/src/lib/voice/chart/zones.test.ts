@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { VOWELS, type CalibratedFormant, type Vowel } from '../engine/types';
 import { anchorF1sFor, checkPlausibility, windowFor } from '../engine/plausibility';
 import { resolveVowelValues } from '../engine/resolve-values';
-import { FR2_HALF_SPAN_SEMITONES, computeZones, type Zone } from './zones';
+import { FR2_HALF_SPAN_SEMITONES, computeZones, sungDots, type Zone } from './zones';
 
 const f = (f1: number, f2: number): CalibratedFormant => ({ f1, f2, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user' }) as CalibratedFormant;
 const BASS: Record<Vowel, CalibratedFormant> = {
@@ -177,5 +177,17 @@ describe('the chart shows a placeholder for every voice (the one computation thi
 				expect(p.f2).toBeGreaterThan(0);
 			}
 		}
+	});
+});
+
+describe('the sung dots', () => {
+	it('are the stored readings in Grayson’s order, an estimate left out, and a missing fR2 left off the dot', () => {
+		const noF2 = { f1: 381, confidence: 'high', reading: 'captured', source: 'measured-user' } as CalibratedFormant;
+		const dots = sungDots({ u: BASS.u, i: BASS.i, e: noF2, ɨ: { ...BASS['ɨ'], reading: 'estimated' } });
+		expect(dots).toEqual([
+			{ vowel: 'i', f1: 296, f2: 1705 },
+			{ vowel: 'e', f1: 381 },
+			{ vowel: 'u', f1: 346, f2: 804 }
+		]);
 	});
 });

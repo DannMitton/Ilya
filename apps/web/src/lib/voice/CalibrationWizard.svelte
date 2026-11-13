@@ -45,6 +45,10 @@
 	import Pacifier from '$lib/voice/pacifier/Pacifier.svelte';
 	import { spokenName } from '$lib/voice/vowel-names';
 	import FrSym from '$lib/voice/FrSym.svelte';
+	// N.199 (?calibrate=new): the vowel-space sheet on the summary. Seen only with the switch on.
+	import { calibrateNewOn } from '$lib/voice/chart/calibrate-switch';
+	import VowelSpaceSheet from '$lib/voice/chart/VowelSpaceSheet.svelte';
+	import { printVowelSheet } from '$lib/voice/chart/print-sheet';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
@@ -248,6 +252,8 @@
 	// functions below and save the whole store, failure-silent.
 	let store = $state<ProfileStore>(loadStore(`${INITIAL_NAME_BASE} 1`));
 	let activeVoice = $derived(store.voices.find((v) => v.id === store.activeId));
+	// N.199: the development switch for the new Calibrate screen, `?calibrate=new`. Read once; off by default.
+	const calibrateNew = calibrateNewOn();
 	let voiceType = $derived(activeVoice?.voiceType); // Voice type slice A: the guard routes from the stored Tier 1 id.
 	// The smallest unused sequential default, so deletions never cause
 	// name collisions ("Voice 2" existing skips to "Voice 3").
@@ -1229,6 +1235,20 @@
 	</table>
 {/snippet}
 
+<!-- N.199 Step 2 (?calibrate=new only): the vowel-space sheet, under the roster on the summary. It reads the stored profile and
+     touches no capture code. Its words are the draft English in `voice/chart/draft-strings.ts` until Step 7. -->
+{#snippet vowelSpaceSheet()}
+	{#if calibrateNew}
+		<VowelSpaceSheet
+			{profile}
+			{voiceType}
+			{language}
+			voiceName={activeVoice?.name}
+			onprint={() => printVowelSheet({ profile, voiceType, language, voiceName: activeVoice?.name })}
+		/>
+	{/if}
+{/snippet}
+
 <section class="calibration-wizard" aria-label={T('calib.section.ariaLabel')}>
 	<!-- The dedicated polite live region for roster announcements (Kimi
 	     consensus, 2026-07-10). A single-purpose hidden region rather than
@@ -1455,6 +1475,7 @@
 						{T('calib.summary.savedLede')}
 					</p>
 					{@render rosterTable(true)}
+					{@render vowelSpaceSheet()}
 					{@render challengingInvite()}
 					{@render characteristicsButton()}
 				{:else}
@@ -1462,6 +1483,7 @@
 						{capturedCount} {T('calib.common.of')} {ALL_VOWELS.length} {T('calib.summary.progressLedeSuffix')}
 					</p>
 					{@render rosterTable(true)}
+					{@render vowelSpaceSheet()}
 					{@render challengingInvite()}
 					<!-- FILLED FINISH LEADS, N.114b item 9, RULED BY DANN 2026-09-10:
 					     "Filled Finish, ghost Add voice characteristics, ghost Start

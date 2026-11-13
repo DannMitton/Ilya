@@ -157,3 +157,27 @@ export function hull(points: ReadonlyArray<readonly [number, number]>): Array<[n
 	const h = lo.slice(0, -1).concat(up.slice(0, -1));
 	return h.length >= 3 ? h : [];
 }
+
+/** The nice steps the grid picks from, Hz. */
+const GRID_STEPS = [10, 20, 25, 50, 100, 200, 250, 500, 1000];
+
+/** The smallest of `GRID_STEPS` that keeps lines at least `minPx` apart (at the middle of the span), and every multiple of it inside `[lo, hi]`. */
+function gridAxis(loHz: number, hiHz: number, px: number, minPx: number): number[] {
+	const midHz = Math.sqrt(loHz * hiHz);
+	const pxPerLn = px / (Math.log(hiHz) - Math.log(loHz));
+	const step = GRID_STEPS.find((s) => pxPerLn * Math.log((midHz + s) / midHz) >= minPx) ?? GRID_STEPS[GRID_STEPS.length - 1];
+	const out: number[] = [];
+	for (let f = Math.ceil(loHz / step) * step; f <= hiHz; f += step) out.push(f);
+	return out;
+}
+
+/**
+ * The grid's lines for a view: fR2 columns and fR1 rows at round numbers of Hz, spaced at least `minPx` apart so a
+ * zoomed view gains lines and the full view keeps few. Board D's `vlines` and `hlines`, which hard-coded two fixed steps.
+ */
+export function gridTicks(view: View, w: number, h: number, minPx = 38): { f2: number[]; f1: number[] } {
+	return {
+		f2: gridAxis(Math.exp(view.u1), Math.exp(view.u0), w, minPx),
+		f1: gridAxis(Math.exp(view.v0), Math.exp(view.v1), h, minPx)
+	};
+}
