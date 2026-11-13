@@ -53,12 +53,14 @@ function groupInner(svg: string, id: string, until: string): string {
 	const a = svg.indexOf(open);
 	if (a < 0) throw new Error(`no <g id="${id}"> in a sagittal drawing`);
 	const b = svg.indexOf(until, a);
+	if (b < 0) throw new Error(`no ${until} after <g id="${id}"> in a sagittal drawing`);
 	return svg.slice(a + open.length, b);
 }
 
 /**
- * Builds the one drawing from the ten files' text. The `fixed` group is taken from [i]'s and `drawings.test.ts` proves it is the same in all ten; the
- * `<metadata>` (a provenance manifest the files carry) and every id are left out of what is drawn, so no id repeats in the page.
+ * Builds the one drawing from the ten files' text. The `fixed` group is taken from [i]'s and `drawings.test.ts` proves it is the same in all ten; every id
+ * is left out of what is drawn, so no id repeats in the page. A group is read to the next marker and a missing marker throws, so a file that does not end as
+ * the others do cannot be sliced at -1 and drawn wrong.
  */
 export function buildSagittal(files: Record<string, string>): Sagittal {
 	const get = (v: Vowel) => {
@@ -68,9 +70,9 @@ export function buildSagittal(files: Record<string, string>): Sagittal {
 	};
 	const first = get('i');
 	const viewBox = /viewBox="([^"]+)"/.exec(first)?.[1] ?? '-24 -12 544 544';
-	// `fixed` ends at the `moving` group's opening; `moving` ends at the metadata.
+	// `fixed` ends at the `moving` group's opening; `moving` ends at the closing `</svg>`.
 	const fixed = stripIds(groupInner(first, 'fixed', '<g id="moving">')).replace(/<\/g>\s*$/, '');
 	const moving = {} as Record<Vowel, string>;
-	for (const v of Object.keys(DRAWING_FILE) as Vowel[]) moving[v] = stripIds(groupInner(get(v), 'moving', '<metadata>')).replace(/<\/g>\s*$/, '').trim();
+	for (const v of Object.keys(DRAWING_FILE) as Vowel[]) moving[v] = stripIds(groupInner(get(v), 'moving', '</svg>')).replace(/<\/g>\s*$/, '').trim();
 	return { viewBox, fixed: fixed.trim(), moving };
 }

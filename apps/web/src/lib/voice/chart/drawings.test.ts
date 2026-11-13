@@ -77,6 +77,12 @@ describe('the one drawing built from them', () => {
 			expect((s.match(/<g[ >]/g) ?? []).length).toBe((s.match(/<\/g>/g) ?? []).length);
 		}
 	});
+	it('a file that lacks the marker it is read to throws, never a slice at -1', () => {
+		const broken = { ...files, [DRAWING_FILE.i]: files[DRAWING_FILE.i].replace('</svg>', '') };
+		expect(() => buildSagittal(broken)).toThrow(/no <\/svg> after <g id="moving">/);
+		const noMoving = { ...files, [DRAWING_FILE.e]: files[DRAWING_FILE.e].replace('<g id="moving">', '<g id="mov">') };
+		expect(() => buildSagittal(noMoving)).toThrow(/no <g id="moving">/);
+	});
 	it('carries no fill and no colour of its own: the line is currentColor (set to --lavender-ink by the component)', () => {
 		for (const s of [d.fixed, ...Object.values(d.moving)]) {
 			expect(s).not.toMatch(/fill="(?!none)/);
