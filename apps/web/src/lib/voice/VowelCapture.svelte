@@ -151,6 +151,10 @@
 				motion.to(model.full, ms(LANDING_MS));
 			} else if (phase === 'idle' && (was === 'sing' || was === 'pause' || was === 'listening' || was === 'sweep')) {
 				motion.to(model.full, ms(ZOOM_OUT_QUICK_MS)); // a cancel or an error: out again
+			} else if (phase === 'idle' && was === 'landing') {
+				// The landing is over: rest on the full view as it now stands. The rest effect below acts only when the full view changes, and
+				// does not run for a landing that left it unchanged, so this is what guarantees the view ends where the voice is (Step 6a amendment).
+				motion.to(model.full, 0);
 			}
 		});
 	});
