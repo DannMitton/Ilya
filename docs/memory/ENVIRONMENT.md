@@ -5263,3 +5263,14 @@ The desk told Dann his walk, the words, and the microphone test would not happen
 ## `git fetch --dry-run` IS NOT READ-ONLY ENOUGH (2026-11-13 01:0x, night Fable desk)
 
 At the close the desk ran `git --no-optional-locks --no-pager fetch --dry-run` through the bridge to read a lane's log. `fetch` is not in `CONTRACT.md` §4's allowed list. It moved no ref, but it downloaded objects, and because the bridge cannot delete, it left three `tmp_obj_*` files under `.git/objects/{55,62,ca}/`. No lock file was left. To read a lane's tip use `ls-remote`; to read its commits, read GitHub in Dann's Chrome or have Dann fetch.
+
+## LEARNED BY THE 2026-11-13 DAY DESK (Opus 5.5, 10:26 to 16:0x)
+
+- **`device_commit_files` adds a C2PA provenance manifest to SVG files** (an `xmlns:c2pa` attribute and a base64 `<metadata>` block, about 7.8 kB per file; PNGs get a chunk). Ten 5.6 kB drawings became 13.4 kB and reached the bundle through lane 51. Write text files to the Mac with `device_bash` (a heredoc, or base64 through `tar`), and check md5s against the originals. The strip that restores the originals byte for byte is in lane 51's amendment.
+- **Code that parses a file can depend on the very metadata you strip.** `drawings.ts:74` ended each drawing at `<metadata>`; stripping it would have broken the drawings silently. Read the parser before changing the file it reads. Fable caught this.
+- **A label in a code comment is not Dann's ruling.** "Dann's locked anchor rule" (`CalibrationWizard.svelte:275-277`) and the brief's `all-small-caps` both turned Dann's words into rules he did not make. Check `OPEN.md` for his words before attributing.
+- **When Dann rejects a clause twice, drop it.** The desk re-inserted "Your own [ɨ] is kept" three times without saying why.
+- **Read the extractor before describing it.** fR1 is a closed-phase all-pole fit when it agrees within 30% of the cepstral envelope; fR2 is always the envelope peak of the recorded sound (`extract.ts:133-179`). The desk described both as resonance estimates first.
+- **`device_request_folder_access` can be refused by the classifier on a first ask.** When Dann says he will grant it, ask again; it went through at 15:53.
+- **Typing into a lane session:** `javascript_tool` with `document.execCommand('insertText', …)` on the `[contenteditable="true"]` box, then Return. Sending while the lane works queues the message.
+- **Estimates, actuals:** Fable as-built lane review 195k (estimated 300k); Sonnet reader-visible notation audit 144k (estimated 150k).
