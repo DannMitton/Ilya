@@ -343,9 +343,8 @@ export const OWED: Record<string, string> = {
 	'Thomas 2010': 'Learn `:2081`: "in Karna, 2010", no title',
 	'Lindblom 1983': 'Learn `:3571-3572`: "economy of speech gestures", no title',
 	'Derwing 1980': 'Learn `:3639`: "Derwing and Priestly (1980, 76–87)", no title',
-	'Bolla 1980': 'Learn `:3384`: "Bolla 1980, 8", no title',
-	// N.199 Step 6b: the drawing credit (`i18n.ts`, `capture.credit.plate`), RATIFIED by Dann 2026-11-13 11:35: "after Bolla (1981), plate {n}", no title. `PRODUCT.md` gives Bolla's *A Conspectus of Russian Speech Sounds* as 1981; Learn cites "Bolla 1980" (above). One of the two years is wrong, or they are two printings: NOT ESTABLISHED, Dann's.
-	'Bolla 1981': 'The drawing credit, `capture.credit.plate`: "after Bolla (1981), plate {n}", no title; Learn cites the same book as "Bolla 1980"',
+	// Bolla's *A Conspectus of Russian Speech Sounds* is 1981 (the publisher's catalogue; `PRODUCT.md`). Learn read "1980" until the desk's amendment of 2026-11-13, which corrected it here and in Learn.
+	'Bolla 1981': 'Learn `:3382` (French `:1352`): "Bolla 1981, 8", no title; and the drawing credit, `capture.credit.plate` (RATIFIED by Dann 2026-11-13 11:35): "after Bolla (1981), plate {n}"',
 	// Insights round 2's sources line (`i18n.ts`, `insights.r2.sourcesLine`, QUEUE row 66), as the accepted drawing cites them; no full reference is on file yet.
 	'Bozeman 2010': 'Insights `insights.r2.sourcesLine`: "Bozeman 2010 and 2014", no title',
 	'Titze 2007': 'Insights `insights.r2.sourcesLine`: "Titze 2007, p. 200", no title',
