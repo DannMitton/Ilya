@@ -27,9 +27,14 @@
 		/** The vowel being measured: its zone takes a deeper saturation. */
 		active?: Vowel | null;
 	} = $props();
+
+	// The chart scales to the width it is given, so a symbol sized in its own units shrinks on a phone. The grid's numbers and the axis words are sized
+	// to hold 11 CSS px at any width (Step 6b amendment): the unit size is 11 times the ratio of the frame to the rendered width.
+	let width = $state(0);
+	const labelSize = $derived(Math.round((11 * CHART_W) / (width || CHART_W)));
 </script>
 
-<svg class="vowel-chart" viewBox="0 0 {CHART_W} {CHART_H}" role="img" aria-label={tv('capture.chartAlt', language)} preserveAspectRatio="xMidYMid meet">
+<svg class="vowel-chart" bind:clientWidth={width} viewBox="0 0 {CHART_W} {CHART_H}" role="img" aria-label={tv('capture.chartAlt', language)} preserveAspectRatio="xMidYMid meet">
 	<rect x="0" y="0" width={CHART_W} height={CHART_H} class="ground" />
 	<ChartLayers
 		{view}
@@ -42,7 +47,7 @@
 		hullDashed={!model.allTen}
 		axisWords={{ front: tv('sheet.axis.front', language), back: tv('sheet.axis.back', language), open: tv('sheet.axis.open', language) }}
 		symbolSize={18}
-		labelSize={11}
+		{labelSize}
 	/>
 	<rect x="0.6" y="0.6" width={CHART_W - 1.2} height={CHART_H - 1.2} class="frame" />
 </svg>

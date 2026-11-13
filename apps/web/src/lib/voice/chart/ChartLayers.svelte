@@ -138,11 +138,11 @@
 	</g>
 	{#if axisWords}
 		<!-- The axis words, small, in the grid's grey, inside the frame so the chart's height does not change (Step 6b). fR2 runs across, fR1 down. -->
-		<g class="axis-words" aria-hidden="true" font-size={labelSize + 1}>
+		<g class="axis-words" aria-hidden="true" font-size={labelSize}>
 			<text x="5" y={height - 5} text-anchor="start">{axisWords.front}</text>
 			<text x={width - 5} y={height - 5} text-anchor="end">{axisWords.back}</text>
 			<text x={width / 2} y={height - 5} text-anchor="middle"><tspan font-style="italic">f</tspan><tspan class="sub" dy="2">R2</tspan></text>
-			<text transform="translate({width - 5} {height / 2}) rotate(90)" text-anchor="middle"><tspan font-style="italic">f</tspan><tspan class="sub" dy="2">R1</tspan><tspan dy="-2"> {axisWords.open}</tspan></text>
+			<text transform="translate({width - 5 - labelSize} {height / 2}) rotate(90)" text-anchor="middle"><tspan font-style="italic">f</tspan><tspan class="sub" dy="2">R1</tspan><tspan dy="-2"> {axisWords.open}</tspan></text>
 		</g>
 	{/if}
 	<g class="numbers" aria-hidden="true" font-size={labelSize}>

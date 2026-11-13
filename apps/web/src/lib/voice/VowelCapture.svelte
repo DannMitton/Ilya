@@ -503,7 +503,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		height: 4.75rem;
+		min-height: 4.75rem;
 	}
 	.cue {
 		margin: 0;
@@ -581,6 +581,7 @@
 	}
 	.actions {
 		display: flex;
+		flex-wrap: wrap;
 		gap: 0.6rem;
 	}
 	.main,
@@ -604,7 +605,9 @@
 		cursor: default;
 	}
 	.stop {
-		flex: 1;
+		flex: 1 0 auto;
+		padding: 0 1rem;
+		white-space: nowrap;
 		border: 1.5px solid var(--lavender-jewel);
 		background: transparent;
 		color: var(--lavender-ink);
