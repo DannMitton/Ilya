@@ -42,7 +42,8 @@
 
 	/** The chart's own frame, in its viewBox units (the SVG scales to the width it is given). */
 	const W = 720;
-	const H = 420;
+	/** Shorter on paper: the ratified legend and provenance lines are longer than the drafts were, and one letter sheet holds the sheet (measured, Step 6b). */
+	const H = $derived(forPrint ? 360 : 420);
 
 	const model = $derived(buildChartModel(profile, voiceType));
 	const rows = $derived(readingRows(profile, language));
@@ -341,8 +342,8 @@
 	   its own half-inch margin, prints white, and keeps its colours on paper. Nothing interactive is drawn (`forPrint`). */
 	.vowel-sheet.for-print {
 		width: 8.5in;
-		padding: 0.4in 0.5in;
-		gap: 0.4rem;
+		padding: 0.35in 0.5in;
+		gap: 0.35rem;
 		background: #ffffff;
 		print-color-adjust: exact;
 		-webkit-print-color-adjust: exact;
@@ -365,7 +366,7 @@
 		gap: 0.2rem 1rem;
 	}
 	.vowel-sheet.for-print .provenance {
-		font-size: 0.6875rem;
+		font-size: 0.65rem;
 	}
 	@media print {
 		:global(body.printing-vowel-sheet > *:not(.vowel-sheet-print-root)) {

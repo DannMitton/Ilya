@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,269 keys.
+   This file holds 1,271 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -28,7 +28,7 @@
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
-   capture.       30  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
+   capture.       32  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
@@ -2581,6 +2581,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'capture.vowels': { en: 'The ten vowels', fr: 'Les dix voyelles' },
 	'sheet.print': { en: 'Print this sheet', fr: 'Imprimer cette feuille' },
 	'sheet.chartAlt': { en: 'Chart of your vowel space. Each vowel is a coloured zone, a filled dot where you sang it, or a hollow dot where Ilya has placed it for now.', fr: 'Graphique de votre espace vocalique. Chaque voyelle est une zone colorée, un point plein là où vous l’avez chantée, ou un point creux là où Ilya l’a placée pour l’instant.' },
+	// N.199 Step 6b: the drawing credit lines, RATIFIED by Dann 2026-11-13 11:35 ("I ratify these lines."); U+00A0 before the colon in French.
+	'capture.credit.plate': { en: 'Drawing: Dann Mitton, after Bolla (1981), plate {n}.', fr: 'Dessin : Dann Mitton, d’après Bolla (1981), planche {n}.' },
+	'capture.credit.noPlate': { en: 'Drawing: Dann Mitton. Bolla has no plate for this vowel.', fr: 'Dessin : Dann Mitton. Bolla ne donne pas de planche pour cette voyelle.' },
 };
 
 /**

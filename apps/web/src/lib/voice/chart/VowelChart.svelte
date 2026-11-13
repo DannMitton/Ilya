@@ -40,6 +40,7 @@
 		sung={model.sung}
 		{active}
 		hullDashed={!model.allTen}
+		axisWords={{ front: tv('sheet.axis.front', language), back: tv('sheet.axis.back', language), open: tv('sheet.axis.open', language) }}
 		symbolSize={18}
 		labelSize={11}
 	/>

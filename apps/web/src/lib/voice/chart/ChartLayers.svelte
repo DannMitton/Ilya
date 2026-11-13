@@ -12,6 +12,7 @@
 	import { project, hull, gridTicks, type View } from './geometry';
 	import type { PlaceholderDot, SungDot, Zone } from './zones';
 	import { zoneColour } from './colours';
+	import { placeLabels, type LabelAnchor } from './labels';
 
 	let {
 		view,
@@ -23,7 +24,8 @@
 		active = null,
 		hullDashed,
 		symbolSize = 18,
-		labelSize = 11
+		labelSize = 11,
+		axisWords = null
 	}: {
 		view: View;
 		width: number;
@@ -39,6 +41,8 @@
 		symbolSize?: number;
 		/** Pixel size of the grid's numbers. */
 		labelSize?: number;
+		/** The words for the axes, drawn small inside the frame's edges (the capture chart; the sheet draws its own outside). Absent: none. */
+		axisWords?: { front: string; back: string; open: string } | null;
 	} = $props();
 
 	const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -73,6 +77,16 @@
 			return { vowel: p.vowel, x: r1(q.x), y: r1(q.y) };
 		})
 	);
+	// Where each symbol goes: four places round its dot, the first clear of every dot and every symbol already set (`labels.ts`).
+	const labelAt = $derived.by(() => {
+		const anchors: LabelAnchor[] = [];
+		for (const d of dots) {
+			const e = ellipses.find((q) => q.vowel === d.vowel);
+			anchors.push(d.hasF2 ? { id: d.vowel, x: d.x, y: d.y, r: 6 } : { id: d.vowel, x: e ? e.cx : d.x, y: d.y, r: 0 });
+		}
+		for (const g of ghosts) anchors.push({ id: g.vowel, x: g.x, y: g.y, r: 5.5 });
+		return new Map(placeLabels(anchors, symbolSize, { w: width, h: height }).map((l) => [l.id, l]));
+	});
 	const outline = $derived(
 		hull(dots.filter((d) => d.hasF2).map((d) => [d.x, d.y] as [number, number])).map((p) => `${r1(p[0])},${r1(p[1])}`).join(' ')
 	);
@@ -111,7 +125,7 @@
 	<g class="placeholders">
 		{#each ghosts as g (g.vowel)}
 			<circle class="ghost" cx={g.x} cy={g.y} r="5.5" data-placeholder={g.vowel} />
-			<text class="sym ghost-sym" x={g.x + symbolSize * 0.8} y={g.y - symbolSize * 0.55} font-size={symbolSize} text-anchor="middle" dominant-baseline="central">{g.vowel}</text>
+			<text class="sym ghost-sym" x={labelAt.get(g.vowel)?.x ?? g.x} y={labelAt.get(g.vowel)?.y ?? g.y} font-size={symbolSize} text-anchor="middle" dominant-baseline="central">{g.vowel}</text>
 		{/each}
 	</g>
 	<g class="dots">
@@ -119,9 +133,18 @@
 			{#if d.hasF2}
 				<circle class="dot" cx={d.x} cy={d.y} r="6" data-sung={d.vowel} />
 			{/if}
-			<text class="sym dot-sym" x={d.x + symbolSize * 0.8} y={d.y - symbolSize * 0.55} font-size={symbolSize} text-anchor="middle" dominant-baseline="central">{d.vowel}</text>
+			<text class="sym dot-sym" x={labelAt.get(d.vowel)?.x ?? d.x} y={labelAt.get(d.vowel)?.y ?? d.y} font-size={symbolSize} text-anchor="middle" dominant-baseline="central">{d.vowel}</text>
 		{/each}
 	</g>
+	{#if axisWords}
+		<!-- The axis words, small, in the grid's grey, inside the frame so the chart's height does not change (Step 6b). fR2 runs across, fR1 down. -->
+		<g class="axis-words" aria-hidden="true" font-size={labelSize + 1}>
+			<text x="5" y={height - 5} text-anchor="start">{axisWords.front}</text>
+			<text x={width - 5} y={height - 5} text-anchor="end">{axisWords.back}</text>
+			<text x={width / 2} y={height - 5} text-anchor="middle"><tspan font-style="italic">f</tspan><tspan class="sub" dy="2">R2</tspan></text>
+			<text transform="translate({width - 5} {height / 2}) rotate(90)" text-anchor="middle"><tspan font-style="italic">f</tspan><tspan class="sub" dy="2">R1</tspan><tspan dy="-2"> {axisWords.open}</tspan></text>
+		</g>
+	{/if}
 	<g class="numbers" aria-hidden="true" font-size={labelSize}>
 		{#each cols as c (c.f)}
 			<text x={c.x} y={labelSize + 1} text-anchor="middle">{c.f}</text>
@@ -171,6 +194,18 @@
 	}
 	.dot-sym {
 		fill: var(--ink-primary);
+	}
+	.axis-words text {
+		fill: var(--ink-tertiary);
+		font-family: var(--font-sans);
+		paint-order: stroke;
+		stroke: color-mix(in srgb, var(--paper-light, #f5f1e8) 85%, transparent);
+		stroke-width: 3px;
+	}
+	.axis-words .sub {
+		font-size: 0.78em;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.02em;
 	}
 	.numbers text {
 		fill: var(--ink-tertiary);

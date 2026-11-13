@@ -28,7 +28,8 @@
 	import { nextVowel } from './chart/tour';
 	import { zoomTarget, type View } from './chart/geometry';
 	import { createViewMotion, ZOOM_IN_MS, ZOOM_OUT_QUICK_MS } from './chart/view-motion';
-	import { DRAWINGS, creditLine } from './chart/drawings';
+	import { creditLine } from './chart/drawings';
+	import SagittalDrawing from './chart/SagittalDrawing.svelte';
 	import { failedTake, readingTake, type TakeRecord, type TakeVisibility } from './takes';
 	import {
 		GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel
@@ -271,15 +272,11 @@
 		</div>
 		<div class="glyph-words">
 			<p class="vowel-name">{spokenName(selected, language)}</p>
-			<p class="credit">{creditLine(selected)}</p>
+			<p class="credit">{creditLine(selected, language)}</p>
 		</div>
 		<!-- The side view, in a squircle with a fixed frame: the ten drawings share one box, so the picture changes in place (Dann 2026-11-12, entry 41). -->
 		<div class="squircle" role="img" aria-label={tv('capture.drawingAlt', language, { name: spokenName(selected, language) })}>
-			<div class="squircle-frame">
-				{#each VOWELS as v (v)}
-					<img src={DRAWINGS[v].src} alt="" style="opacity: {v === selected ? 1 : 0}" />
-				{/each}
-			</div>
+			<div class="squircle-frame"><SagittalDrawing {selected} /></div>
 		</div>
 	</div>
 
@@ -449,14 +446,6 @@
 	.squircle-frame {
 		position: absolute;
 		inset: 6%;
-	}
-	.squircle-frame img {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-		transition: opacity 0.35s;
 	}
 
 	/* The group that stays in view together during a take when the takeover scrolls: chart, bar, cue, buttons, Start and Stop. */
@@ -661,7 +650,6 @@
 		font-weight: 400;
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.squircle-frame img,
 		.bar-fill {
 			transition: none;
 		}

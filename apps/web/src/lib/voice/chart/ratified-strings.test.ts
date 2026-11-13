@@ -1,6 +1,6 @@
 /**
  * ratified-strings.test.ts: the calibration screen's and the sheet's strings, ratified by Dann 2026-11-13 (`OPEN.md` section N.199: 01:05, 10:30 to
- * 10:50, 11:52, 12:01), pinned character for character in both languages, as `insights/ratified-lines.test.ts` pins its own. The French has U+2019
+ * 10:50, 11:35, 11:52, 12:01), pinned character for character in both languages, as `insights/ratified-lines.test.ts` pins its own. The French has U+2019
  * apostrophes and U+00A0 before « : ». These are literals, not read from `i18n.ts`, so a change to a ratified line fails here and is a decision, not
  * an accident; ratification is approval at that moment, never fossilization (`CONTRACT.md` section 1, 11a), and the desk changes the text and its pin
  * together. The English changed after brief r5 in `OPEN.md` only: `capture.hide` and `capture.hidden` say "the readout"; `sheet.legend.hull` says
@@ -59,11 +59,13 @@ const RATIFIED: Array<[string, string, string]> = [
 	['capture.vowels', 'The ten vowels', 'Les dix voyelles'],
 	['sheet.print', 'Print this sheet', 'Imprimer cette feuille'],
 	['sheet.chartAlt', 'Chart of your vowel space. Each vowel is a coloured zone, a filled dot where you sang it, or a hollow dot where Ilya has placed it for now.', 'Graphique de votre espace vocalique. Chaque voyelle est une zone colorée, un point plein là où vous l’avez chantée, ou un point creux là où Ilya l’a placée pour l’instant.'],
+	['capture.credit.plate', 'Drawing: Dann Mitton, after Bolla (1981), plate {n}.', 'Dessin\u00a0: Dann Mitton, d’après Bolla (1981), planche {n}.'],
+	['capture.credit.noPlate', 'Drawing: Dann Mitton. Bolla has no plate for this vowel.', 'Dessin\u00a0: Dann Mitton. Bolla ne donne pas de planche pour cette voyelle.'],
 ];
 
 describe('the ratified calibration and sheet strings', () => {
-	it('pins all forty-six, in both languages', () => {
-		expect(RATIFIED).toHaveLength(46);
+	it('pins all forty-eight, in both languages', () => {
+		expect(RATIFIED).toHaveLength(48);
 		for (const [key, en, fr] of RATIFIED) {
 			expect(t(key, 'en'), `${key} en`).toBe(en);
 			expect(t(key, 'fr'), `${key} fr`).toBe(fr);
