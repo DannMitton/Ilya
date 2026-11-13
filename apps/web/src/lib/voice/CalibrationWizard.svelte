@@ -631,9 +631,9 @@
 	//
 	// Typography (Dann, 2026-07-10, per international mathematical-notation
 	// convention): the resonance symbol is an italic f (a variable) with an
-	// upright roman subscript (a label, not a product of variables), set as
-	// a true subscript slightly smaller than the base — see
-	// `FrSym.svelte` (lifted from the wizard's snippet, N.199 Step 1). One source in the code; the convention extends across the
+	// upright roman subscript R1 or R2 (a label, not a product of variables), set as
+	// a true subscript slightly smaller than the base, the R a full capital: Titze et al. (2015), Table I (Dann 2026-11-13 15:44).
+	// See `FrSym.svelte` (lifted from the wizard's snippet, N.199 Step 1). One source in the code; the convention extends across the
 	// whole app as other surfaces are touched.
 	let logAnnounce = $state('');
 	// The hold banner's announcement text; delivered through a persistent

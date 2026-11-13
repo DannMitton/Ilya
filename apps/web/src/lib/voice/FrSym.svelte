@@ -8,10 +8,9 @@
 	N.199 Step 1: LIFTED from `CalibrationWizard.svelte`'s `frSym` snippet with the same markup.
 
 	THE SYMBOL FOLLOWS TITZE ET AL. (2015), "Toward a consensus on symbolic notation of harmonics, resonances, and formants in vocalization", JASA 137(5):
-	3005-3007, doi 10.1121/1.4919349, Table I: a resonance frequency is f with the two-character subscript R1 (R2, ... Rm), the R a full capital. Dann's
-	ruling of 2026-11-13 15:44 seats it, and supersedes the small-capital R of ruling 14 (2026-11-12) and the 0.78 em plain capital of the amendment's
-	earlier step: the R and the numeral are one subscript, one size, one weight. The 2026-07-10 rules stand: an italic f, an upright subscript set slightly
-	smaller than the base. `FrSym` is on the live roster, so this reaches every singer.
+	3005-3007, doi 10.1121/1.4919349, Table I: a resonance frequency is f with the two-character subscript R1 (R2, ... Rm), the R a full capital, seated
+	by Dann's ruling of 2026-11-13 15:44. The R and the numeral are one subscript, one size, one weight. The 2026-07-10 rules stand: an italic f, an
+	upright subscript set slightly smaller than the base. `FrSym` is on the live roster, so this reaches every singer.
 -->
 <script lang="ts">
 	let { n }: { n: 1 | 2 } = $props();

@@ -137,7 +137,7 @@
 		{/each}
 	</g>
 	{#if axisWords}
-		<!-- The axis words, small, in the grid's grey, inside the frame so the chart's height does not change (Step 6b). fR2 runs across, fR1 down. -->
+		<!-- The axis words, small, in the grid's grey, inside the frame so the chart's height does not change (Step 6b). fR2 runs across, fR1 down; the symbol is Titze et al. (2015), Table I: an italic f, a subscript R1 or R2 with the R a full capital (Dann 2026-11-13 15:44). -->
 		<g class="axis-words" aria-hidden="true" font-size={labelSize}>
 			<text x="5" y={height - 5} text-anchor="start">{axisWords.front}</text>
 			<text x={width - 5} y={height - 5} text-anchor="end">{axisWords.back}</text>
