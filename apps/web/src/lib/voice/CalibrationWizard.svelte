@@ -42,7 +42,9 @@
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
 	import { onMount, tick, untrack } from 'svelte';
-	import Pacifier, { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
+	import Pacifier from '$lib/voice/pacifier/Pacifier.svelte';
+	import { spokenName } from '$lib/voice/vowel-names';
+	import FrSym from '$lib/voice/FrSym.svelte';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
@@ -64,7 +66,7 @@
 	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
 	import { deriveFrom } from '$lib/voice/engine/derivations';
 	import { applyIghDivergence } from '$lib/voice/engine/divergence';
-	import { checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
+	import { anchorF1sFor, checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
 	import { holdKindFor, holdAnnouncement, type HoldKind } from '$lib/voice/hold';
 	import {
 		loadStore,
@@ -308,11 +310,7 @@
 	 */
 	function withPlausibility(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
 		if (formant.source !== 'measured-user') return formant;
-		const anchorF1s: Partial<Record<Vowel, number>> = {};
-		for (const [g, f] of Object.entries(profile) as [Vowel, CalibratedFormant][]) {
-			if (f && f.reading !== 'estimated') anchorF1s[g] = f.f1;
-		}
-		const res = checkPlausibility(formant.f1, vowel, voiceType, anchorF1s);
+		const res = checkPlausibility(formant.f1, vowel, voiceType, anchorF1sFor(profile));
 		const out: CalibratedFormant = { ...formant, plausibility: res.plausibility };
 		if (res.plausibility === 'implausible' && out.reading === 'captured')
 			out.reading = 'provisional';
@@ -625,8 +623,8 @@
 	// Typography (Dann, 2026-07-10, per international mathematical-notation
 	// convention): the resonance symbol is an italic f (a variable) with an
 	// upright roman subscript (a label, not a product of variables), set as
-	// a true subscript slightly smaller than the base — see the frSym
-	// snippet. One source in the code; the convention extends across the
+	// a true subscript slightly smaller than the base — see
+	// `FrSym.svelte` (lifted from the wizard's snippet, N.199 Step 1). One source in the code; the convention extends across the
 	// whole app as other surfaces are touched.
 	let logAnnounce = $state('');
 	// The hold banner's announcement text; delivered through a persistent
@@ -1099,18 +1097,6 @@
 	>{spokenName(g, language)}{/snippet}
 
 <!--
-	The resonance symbol (Dann, 2026-07-10): italic f (variable), upright
-	roman subscript (label, so it cannot be misread as f × R × 1), subscript
-	set slightly smaller than the base. The single source of this convention
-	in the code. Screen readers announce the aria-label; the styled glyphs
-	are hidden from them because "f" plus a subscript reads as noise.
--->
-{#snippet frSym(n: number)}<span class="fr-sym" aria-label={`f R ${n}`}><em aria-hidden="true"
-			>f</em
-		><sub aria-hidden="true">R{n}</sub></span
-	>{/snippet}
-
-<!--
 	The resonance roster (Dann's direction, 2026-07-10; see the script-side
 	comment for full provenance). One table on both surfaces: the guided
 	flow renders it read-only under the quadrilateral; the summary renders
@@ -1159,8 +1145,8 @@
 		<thead>
 			<tr>
 				<th scope="col">{T('calib.common.vowelWord')}</th>
-				<th scope="col">{@render frSym(1)}</th>
-				<th scope="col">{@render frSym(2)}</th>
+				<th scope="col"><FrSym n={1} /></th>
+				<th scope="col"><FrSym n={2} /></th>
 				{#if showActions}
 					<th scope="col"><span class="visually-hidden">{T('calib.roster.actionsHeader')}</span></th>
 				{/if}
@@ -1657,18 +1643,6 @@
 		clip: rect(0 0 0 0);
 		white-space: nowrap;
 		border: 0;
-	}
-
-	/* The resonance symbol: italic variable, upright subscript, subscript
-	   slightly smaller than the base (Dann, 2026-07-10). */
-	.fr-sym em {
-		font-style: italic;
-		font-weight: inherit;
-	}
-	.fr-sym sub {
-		font-style: normal;
-		font-size: 0.72em;
-		line-height: 1;
 	}
 
 	/* Drawer kinship (Dann, 2026-07-12): the wizard adopts Ilya's drawer
