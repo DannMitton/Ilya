@@ -1,10 +1,10 @@
 /**
  * ratified-strings.test.ts: the calibration screen's and the sheet's strings, ratified by Dann 2026-11-13 (`OPEN.md` section N.199: 01:05, 10:30 to
- * 10:50, 11:35, 11:52, 12:01), pinned character for character in both languages, as `insights/ratified-lines.test.ts` pins its own. The French has U+2019
+ * 10:50, 11:35, 11:52, 12:01; `sheet.legend.zones` superseded at 15:41), pinned character for character in both languages, as `insights/ratified-lines.test.ts` pins its own. The French has U+2019
  * apostrophes and U+00A0 before « : ». These are literals, not read from `i18n.ts`, so a change to a ratified line fails here and is a decision, not
  * an accident; ratification is approval at that moment, never fossilization (`CONTRACT.md` section 1, 11a), and the desk changes the text and its pin
  * together. The English changed after brief r5 in `OPEN.md` only: `capture.hide` and `capture.hidden` say "the readout"; `sheet.legend.hull` says
- * "surrounds"; `sheet.legend.zones` is the 12:01 text; `sheet.provenance` is corrected. The English here has house typography (U+2019 apostrophes, curly
+ * "surrounds"; `sheet.legend.zones` is the 15:41 text; `sheet.provenance` is corrected. The English here has house typography (U+2019 apostrophes, curly
  * double quotes), where `OPEN.md` writes them straight.
  *
  * `capture.hint.toGo` takes a digit in both languages (Dann 11:52): "7 to go, in any order." « Il en reste 7, dans l’ordre de votre choix. »
@@ -21,7 +21,7 @@ const RATIFIED: Array<[string, string, string]> = [
 	['sheet.col.fr2', 'Hz and note', 'Hz et note'],
 	['sheet.legend.sung', 'A vowel you sang, measured in vocal fry.', 'Une voyelle que vous avez chantée, mesurée en friture vocale.'],
 	['sheet.legend.placeholder', 'A placeholder: where Ilya expects a vowel you have not sung yet.', 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore chantée.'],
-	['sheet.legend.zones', 'Each colour is the neighbourhood Ilya draws on for one of the outer vowels, for a voice of your type. Lavender marks the inner vowels, which Ilya can work out from the outer ones if you choose not to offer samples yourself. Where zones cross, the colours blend.', 'Chaque couleur est le voisinage sur lequel Ilya s’appuie pour l’une des voyelles extérieures, pour une voix de votre type. Le lavande marque les voyelles intérieures, qu’Ilya peut déduire des voyelles extérieures si vous choisissez de ne pas fournir vous-même d’échantillons. Là où les zones se croisent, les couleurs se fondent.'],
+	['sheet.legend.zones', 'Each coloured area reflects the neighbourhood where Ilya expects a vowel to resonate in a voice like yours. The lavender areas mark [ɪ], [ɨ], [a], and [ʌ]: Ilya can work out these four from your samples of the other six, or you can choose to sample them directly. Overlap between areas (where the colours blend) is normal.', 'Chaque zone colorée reflète le voisinage où Ilya s’attend à ce qu’une voyelle résonne dans une voix comme la vôtre. Les zones lavande marquent [ɪ], [ɨ], [a] et [ʌ]\u00a0: Ilya peut déduire ces quatre-là de vos échantillons des six autres, ou vous pouvez choisir de les chanter directement. Le chevauchement entre les zones (là où les couleurs se fondent) est normal.'],
 	['sheet.legend.hull', 'The outline surrounds your sung vowels. It is dashed until all ten are sung.', 'Le contour entoure vos voyelles chantées. Il reste en pointillé jusqu’à ce que les dix soient chantées.'],
 	['sheet.axis.front', 'tongue forward', 'langue avancée'],
 	['sheet.axis.back', 'tongue back', 'langue reculée'],

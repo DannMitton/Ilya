@@ -38,3 +38,14 @@ Gate 4: 5621 before this amendment, 5623 after: **+2**, both mine (the missing-m
 - **Whether the served Source Sans 3 has no `smcp`**: your statement; I could not load the face here. The change does not depend on it any more.
 - **A production build**, so the bundle figures are of the source text.
 - **The ten interim PNGs still carry the manifest** (above).
+
+## Addendum 1: `sheet.legend.zones`, ratified by Dann at 15:41 (supersedes the 12:00 text)
+
+Seated in `apps/web/src/lib/i18n.ts:2546` character for character, in its own commit after the amendment's. The English and the French are exactly the desk's: U+2019 in « s’attend » and « qu’une » (two), and one U+00A0 before the colon in « [ʌ] : » (checked by script on the file). `voice/chart/ratified-strings.test.ts` pins the new text and its header names the 15:41 supersession (the pin changes with the text, as the file's own rule says). I did not shorten a word.
+
+- EN: "Each coloured area reflects the neighbourhood where Ilya expects a vowel to resonate in a voice like yours. The lavender areas mark [ɪ], [ɨ], [a], and [ʌ]: Ilya can work out these four from your samples of the other six, or you can choose to sample them directly. Overlap between areas (where the colours blend) is normal."
+- FR: « Chaque zone colorée reflète le voisinage où Ilya s’attend à ce qu’une voyelle résonne dans une voix comme la vôtre. Les zones lavande marquent [ɪ], [ɨ], [a] et [ʌ] : Ilya peut déduire ces quatre-là de vos échantillons des six autres, ou vous pouvez choisir de les chanter directement. Le chevauchement entre les zones (là où les couleurs se fondent) est normal. »
+
+**The printed sheet still fits one letter page in both languages** (PDFs in print media: `pdfinfo` Pages 1 for each; `docs/sessions/report-code-n199-addendum-pictures/printed-sheet-en.pdf` and `-fr.pdf`; the French has room to spare). The text is not shorter than the 12:00 text by much; nothing was cut.
+
+Gates after this commit: phonology 462, dictionary 248, web-check 0 errors and 12 warnings, **web-test 5623 passed and 1 skipped (unchanged)**, score-parser 785 and 5 skipped, blurb 178, integration 155, ratchets OK.
