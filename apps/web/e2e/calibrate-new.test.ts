@@ -68,6 +68,28 @@ test.describe('the new capture screen on the stub', () => {
 		await expect(page.getByText('Your vowel space').first()).toBeVisible();
 	});
 
+	test('after a cancel the chart moves out, it does not snap, and the hide box is not live during a take (Step 6a)', async ({ page }) => {
+		test.setTimeout(60_000);
+		await open(page);
+		await toCapture(page);
+		const rx = async () => +(await page.locator('[data-zone="i"]').getAttribute('rx'));
+		const rest = await rx();
+		await expect(page.getByLabel('Hide the chart and numbers while I sing')).toBeEnabled();
+		await btn(page, /^cardinal-i/).click();
+		await expect(page.getByLabel('Hide the chart and numbers while I sing')).toBeDisabled();
+		await page.waitForTimeout(2500);
+		const zoomed = await rx();
+		expect(zoomed).toBeGreaterThan(rest * 1.3);
+		await btn(page, /^cardinal-i/).click(); // cancel
+		await page.waitForTimeout(100);
+		const mid = await rx();
+		expect(mid, 'a snap would read the rest radius at once').toBeGreaterThan(rest * 1.05);
+		expect(mid).toBeLessThan(zoomed);
+		await page.waitForTimeout(700);
+		expect(await rx()).toBeCloseTo(rest, 0);
+		await expect(page.getByLabel('Hide the chart and numbers while I sing')).toBeEnabled();
+	});
+
 	test('a manual pick starts at once and takes precedence; Ilya carries on from the singer’s lead; Return to summary shows after one vowel', async ({ page }) => {
 		test.setTimeout(120_000);
 		await open(page);

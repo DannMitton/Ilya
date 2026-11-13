@@ -10,14 +10,14 @@
  *   - The six Bozeman vowels [i e ɛ ɑ o u]: the band fixed by the declared voice type, margins applied; with no type,
  *     the union bands. It does not move when vowels are sung (Dann 2026-11-12 23:49, "1"; 2026-11-13 00:04).
  *   - The four personal vowels [ɪ ɨ a ʌ]: the guard centres their window on the singer's own anchors
- *     (`expectedF1`). With an anchor sung, the zone IS that window (`basis: 'guard'`) and so moves once, when the
- *     anchor arrives. With none, the guard has no window ("unchecked"); the zone is then drawn around the type's
+ *     (`expectedF1`). With an anchor sung, the zone's fR1 extent IS that window (`basis: 'guard'`) and so moves once,
+ *     when the anchor arrives; its fR2 centre stays on the template (Step 6a: it followed the singer's own reading before). With none, the guard has no window ("unchecked"); the zone is then drawn around the type's
  *     placeholder value with the same margins and carries `basis: 'placeholder'`, so the legend never calls it the
  *     guard's.
  *
  * ONE SET OF VALUES. The fR2 centre and every placeholder dot come from `resolveVowelValues` with
- * `placeholders: 'always'`, the function the forecast reads. A Bozeman zone's fR2 centre is the type's template with
- * nothing sung, so the zone does not slide under the dot; a placeholder dot is the value the fit gives for that
+ * `placeholders: 'always'`, the function the forecast reads. Every zone's fR2 centre is the type's template with
+ * nothing sung, so no zone slides under the dot; a placeholder dot is the value the fit gives for that
  * vowel now, so it moves as Ilya learns the voice. THE ONE COMPUTATION THIS CHANGES: the chart shows a placeholder for
  * every voice, including the types the adapter withholds them from (contralto, countertenor, bass-baritone, "Not
  * sure", and no type); the forecast's own behaviour is unchanged (`resolve-values.ts`, the flag).
@@ -101,8 +101,9 @@ export function computeZones(profile: Partial<Record<Vowel, CalibratedFormant>>,
 				vowel,
 				f1Low: w.low,
 				f1High: w.high,
-				// A Bozeman zone stays on the type's template; a personal one follows its anchors, as its guard window does.
-				f2Centre: w.anchorSource === 'bozeman' ? ground.fR2[vowel] : now.fR2[vowel],
+				// Zones stay (ruling 5): every zone's fR2 centre is the type's template with nothing sung, so no zone slides under a dot,
+				// and a personal zone does not move on a re-take of its own vowel. Only a personal zone's fR1 window follows its anchors.
+				f2Centre: ground.fR2[vowel],
 				f2HalfSpanSemitones: FR2_HALF_SPAN_SEMITONES,
 				basis: 'guard',
 				voiceTypeBucket: w.voiceTypeBucket

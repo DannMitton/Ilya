@@ -166,6 +166,21 @@ describe('the personal vowels', () => {
 	});
 });
 
+describe('a personal zone stays put when its own vowel is sung (Step 6a)', () => {
+	it('the fR2 centre is the same before and after [ɨ], [ɪ], [a], or [ʌ] is sung four semitones off, in every voice type', () => {
+		const off = (v: Vowel) => ({ ...BASS[v], f1: BASS[v].f1 * Math.pow(2, 4 / 12), f2: BASS[v].f2! * Math.pow(2, 4 / 12) });
+		const anchors = sung('i', 'e', 'ɑ', 'ɛ', 'u');
+		for (const type of [undefined, 'soprano', 'tenor', 'baritone', 'bass', 'contralto']) {
+			const before = byVowel(computeZones(anchors, type).zones);
+			for (const v of ['ɨ', 'ɪ', 'a', 'ʌ'] as Vowel[]) {
+				const after = byVowel(computeZones({ ...anchors, [v]: off(v) }, type).zones);
+				expect(after[v].f2Centre, `${type} ${v}`).toBe(before[v].f2Centre);
+				expect(after[v].f2Centre).toBe(byVowel(computeZones({}, type).zones)[v].f2Centre);
+			}
+		}
+	});
+});
+
 describe('the chart shows a placeholder for every voice (the one computation this changes)', () => {
 	it('for contralto, countertenor, bass-baritone, not sure, and no type, with nothing sung', () => {
 		for (const type of ['contralto', 'countertenor', 'bass-baritone', 'not-sure', undefined]) {

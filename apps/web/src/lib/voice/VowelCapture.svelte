@@ -154,10 +154,13 @@
 			}
 		});
 	});
-	// At rest the view follows the voice (a dot added, a voice cleared).
+	// At rest the view follows the voice (a dot added, a voice cleared). It acts only when the full view CHANGES: the phase is read
+	// untracked, so the move out after a cancel or an error (400 ms) is not ended by this effect in the same flush (Step 6a).
 	$effect(() => {
 		const full = model.full;
-		if (ritual.phase === 'idle') untrack(() => motion.set(full));
+		untrack(() => {
+			if (ritual.phase === 'idle') motion.set(full);
+		});
 	});
 
 	onMount(() => {
@@ -342,7 +345,8 @@
 	<p class="explain">{ds('capture.explain')}</p>
 
 	<label class="hide-toggle">
-		<input type="checkbox" bind:checked={hideWhileSinging} />
+		<!-- Fixed at the tap for the take's record (`takeVisible`), so the box is not live while a take runs (Step 6a). -->
+		<input type="checkbox" bind:checked={hideWhileSinging} disabled={running} />
 		<span>{ds('capture.hide')}</span>
 	</label>
 
