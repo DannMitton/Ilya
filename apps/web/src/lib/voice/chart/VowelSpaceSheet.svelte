@@ -15,12 +15,10 @@
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
 	import type { CalibratedFormant, Vowel } from '../engine/types';
-	import { VOWELS } from '../engine/types';
 	import { spokenName } from '../vowel-names';
 	import FrSym from '../FrSym.svelte';
 	import ChartLayers from './ChartLayers.svelte';
-	import { computeZones, sungDots } from './zones';
-	import { fullView } from './geometry';
+	import { buildChartModel } from './model';
 	import { readingRows } from './readings';
 	import { zoneColour } from './colours';
 	import { ds } from './draft-strings';
@@ -46,13 +44,10 @@
 	const W = 720;
 	const H = 420;
 
-	const set = $derived(computeZones(profile, voiceType));
-	const dots = $derived(sungDots(profile));
-	const view = $derived(fullView(set.zones, [...set.placeholders, ...dots]));
+	const model = $derived(buildChartModel(profile, voiceType));
 	const rows = $derived(readingRows(profile, language));
-	const allTen = $derived(dots.length === VOWELS.length);
+	const allTen = $derived(model.allTen);
 	const hz = $derived(t('calib.common.hz', language));
-	const personal: readonly Vowel[] = ['ɪ', 'ɨ', 'a', 'ʌ'];
 </script>
 
 <section class="vowel-sheet" class:for-print={forPrint} aria-labelledby="vowel-sheet-title{forPrint ? '-print' : ''}">
@@ -75,12 +70,12 @@
 		<svg class="sheet-chart" viewBox="0 0 {W} {H}" role="img" aria-label={ds('sheet.chartAlt')} preserveAspectRatio="xMidYMid meet">
 			<rect x="0" y="0" width={W} height={H} class="chart-ground" />
 			<ChartLayers
-				{view}
+				view={model.full}
 				width={W}
 				height={H}
-				zones={set.zones}
-				placeholders={set.placeholders}
-				sung={dots}
+				zones={model.zones}
+				placeholders={model.placeholders}
+				sung={model.sung}
 				hullDashed={!allTen}
 				symbolSize={22}
 				labelSize={12}
