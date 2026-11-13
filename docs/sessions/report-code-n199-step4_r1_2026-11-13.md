@@ -110,3 +110,36 @@
 - **That 1 s is "under the first sung beat" to the eye**, and that the 60 to 84 zoom is enough. The minimum zoom is board D's 1.4.
 - **No unit test mounts the component's effects**, so the phase-to-motion rules in `VowelCapture.svelte` are covered by the browser check above only, until Step 6's test.
 - **Hidden mode records nothing yet.** Step 5 records which way each reading was taken.
+
+## 4d. The drawings
+
+**What changed, with path:line**
+
+- `apps/web/static/sagittal/` (new): the ten interim PNGs, copied unchanged from `docs/sessions/n199-calibrate/interim-sagittal/`, 520 by 520, greyscale. **Bytes as shipped: 555,071** (the ten files summed, `du -cb`; a test pins the total). The brief and the desk's note say 497,371. The files on disk sum to 555,071; I do not know why the figures differ and did not change the files. Per `CONTRACT.md` section 8, this is the byte count for `static/`.
+- `voice/chart/drawings.ts` (new): the vowel-to-file map and the plate numbers; `creditLine(v)`. The credit is board D's draft: "Interim drawing: Mitton (2020), Fig. 4.3, after Bolla (1981), plate N.", or "Bolla has no plate for this vowel." where the board has none ([ɪ]). **The plate numbers are board D's and are NOT CHECKED**: Bolla is not in this repository. The credit line's wording is Dann's (brief section 11, item 2).
+- `voice/VowelCapture.svelte`: the squircle in the glyph row's right-hand end: a rounded square (corner 24 percent, 2 px lavender), `min(8.25rem, 34cqw)` wide so it narrows on a phone, a fixed inner frame, the ten images stacked in it with opacity 0.35 s, so the picture changes in place (Dann, entry 41); no transition under reduced motion. Its accessible name is `capture.drawingAlt` with the vowel's spoken name; the images are `alt=""`. The credit sits under the vowel's name.
+- `voice/chart/drawings.test.ts` (3): one existing PNG per vowel, none shared; the byte total; the credit lines.
+
+**Looked at in a real browser** (Drawer on desktop, 520 px): the squircle, the circle with [ɑ], "dark-a", and the credit line sit in one row; the drawing changed on selecting [ɑ]. Not looked at at 390 px.
+
+**Gates after 4d**
+
+| Gate | Baseline | After 4d |
+|---|---|---|
+| phonology | 462 | 462 passed |
+| dictionary | 248 | 248 passed |
+| web-check | 0 errors, 12 warnings | 0 errors, 12 warnings (5 files) |
+| web-test | 5252 passed, 1 skipped | **5574 passed, 1 skipped** |
+| score-parser | 785 passed, 5 skipped | 785 passed, 5 skipped |
+| blurb | 178 | 178 passed |
+| integration | 155 | 155 passed |
+| ratchets | OK | OK |
+
+5571 after 4c plus 3.
+
+**Could not establish in 4d**
+
+- **Whether the squircle's rounding is a true squircle.** It is a plain rounded square; a superellipse would need an SVG clip. The brief says "squircle" and board D uses a 32 px radius on 132 px; I took the same proportion (24 percent).
+- **Whether [i] and [ɨ] are centred in the circle** (brief section 11, item 3, Dann's). I used board D's nudges unchanged.
+- **The 497,371 against 555,071 discrepancy**, above.
+- **Where the drawings should live** (`static/` or bundled): I chose `static/`, which the service worker may precache; I did not check `scripts/stamp-sw.mjs` for what it precaches.

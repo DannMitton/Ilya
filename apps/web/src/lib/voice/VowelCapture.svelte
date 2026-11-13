@@ -29,6 +29,7 @@
 	import { zoomTarget, type View } from './chart/geometry';
 	import { createViewMotion, ZOOM_IN_MS, ZOOM_OUT_QUICK_MS } from './chart/view-motion';
 	import { ds } from './chart/draft-strings';
+	import { DRAWINGS, creditLine } from './chart/drawings';
 	import {
 		GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel
 	} from './chart/screen-logic';
@@ -256,6 +257,15 @@
 		</div>
 		<div class="glyph-words">
 			<p class="vowel-name">{spokenName(selected, language)}</p>
+			<p class="credit">{creditLine(selected)}</p>
+		</div>
+		<!-- The side view, in a squircle with a fixed frame: the ten drawings share one box, so the picture changes in place (Dann 2026-11-12, entry 41). -->
+		<div class="squircle" role="img" aria-label={ds('capture.drawingAlt', { name: spokenName(selected, language) })}>
+			<div class="squircle-frame">
+				{#each VOWELS as v (v)}
+					<img src={DRAWINGS[v].src} alt="" style="opacity: {v === selected ? 1 : 0}" />
+				{/each}
+			</div>
 		</div>
 	</div>
 
@@ -371,6 +381,7 @@
 		color: var(--ink-secondary);
 	}
 	.glyph-row {
+		container-type: inline-size;
 		display: flex;
 		gap: 0.9rem;
 		align-items: center;
@@ -399,9 +410,38 @@
 		min-width: 0;
 	}
 	.vowel-name {
-		margin: 0;
+		margin: 0 0 0.3rem;
 		font-size: 0.9375rem;
 		line-height: 1.35;
+	}
+	.credit {
+		margin: 0;
+		font-size: 0.75rem;
+		line-height: 1.4;
+		color: var(--ink-secondary);
+	}
+	.squircle {
+		flex: none;
+		position: relative;
+		width: min(8.25rem, 34cqw);
+		aspect-ratio: 1;
+		box-sizing: border-box;
+		border-radius: 24%;
+		background: #ffffff;
+		border: 2px solid var(--lavender-jewel);
+		overflow: hidden;
+	}
+	.squircle-frame {
+		position: absolute;
+		inset: 6%;
+	}
+	.squircle-frame img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		transition: opacity 0.35s;
 	}
 
 	/* The group that stays in view together during a take when the takeover scrolls: chart, bar, cue, buttons, Start and Stop. */
@@ -604,6 +644,7 @@
 		font-weight: 400;
 	}
 	@media (prefers-reduced-motion: reduce) {
+		.squircle-frame img,
 		.bar-fill {
 			transition: none;
 		}
