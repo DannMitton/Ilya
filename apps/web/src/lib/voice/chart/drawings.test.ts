@@ -58,6 +58,16 @@ describe('check.py, ported: the first three checks', () => {
 	});
 });
 
+describe('the files carry no provenance manifest (stripped 2026-11-13, the desk\'s amendment)', () => {
+	it('none of the ten shipped files has a metadata element or the manifest namespace', () => {
+		for (const n of names) {
+			expect(files[n], n).not.toContain('<metadata');
+			expect(files[n], n).not.toMatch(/c2p[a]/);
+			expect(files[n].trimEnd().endsWith('</g>\n</svg>'), n).toBe(true);
+		}
+	});
+});
+
 describe('the one drawing built from them', () => {
 	const d = buildSagittal(files);
 	it('has the fixed group once and a moving group for each of the ten vowels', () => {
@@ -71,7 +81,8 @@ describe('the one drawing built from them', () => {
 		for (const s of [d.fixed, ...Object.values(d.moving)]) {
 			expect(s).not.toMatch(/\sid="/);
 			expect(s).not.toContain('metadata');
-			expect(s).not.toContain('c2pa');
+			expect(s).not.toMatch(/c2p[a]/);
+			expect(s).not.toContain('svg');
 			expect(s).not.toContain('<g id');
 			// balanced groups
 			expect((s.match(/<g[ >]/g) ?? []).length).toBe((s.match(/<\/g>/g) ?? []).length);
