@@ -20,12 +20,14 @@
 	import type { CaptureError } from './engine/errors';
 	import type { CalibratedFormant, Vowel } from './engine/types';
 	import { VOWELS } from './engine/types';
-	import { createCaptureRitual, type RitualCue } from './capture-ritual.svelte';
+	import { createCaptureRitual, LANDING_MS, type RitualCue } from './capture-ritual.svelte';
 	import { spokenName } from './vowel-names';
 	import FrSym from './FrSym.svelte';
 	import VowelChart from './chart/VowelChart.svelte';
 	import { buildChartModel } from './chart/model';
 	import { nextVowel } from './chart/tour';
+	import { zoomTarget, type View } from './chart/geometry';
+	import { createViewMotion, ZOOM_IN_MS, ZOOM_OUT_QUICK_MS } from './chart/view-motion';
 	import { ds } from './chart/draft-strings';
 	import {
 		GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel
@@ -114,6 +116,42 @@
 		// all ten sung, no pass: the screen rests where it is
 	}
 
+	// ── The chart's view: in under the first sung beat, back out on the landing (Step 4c) ────────
+	let view = $state<View>(untrack(() => model.full));
+	const motion = createViewMotion(untrack(() => model.full), (v) => (view = v));
+	/** The view that moves in on a vowel's zone, widened to hold the reading it has (a re-take) or is about to have. */
+	const targetFor = (v: Vowel, extra?: CalibratedFormant) => {
+		const zone = model.zones.find((z) => z.vowel === v)!;
+		const have = extra ?? profile[v];
+		return zoomTarget(model.full, zone, have ? [{ f1: have.f1, f2: have.f2 }] : []);
+	};
+	let lastPhase: string = 'idle';
+	$effect(() => {
+		const phase = ritual.phase;
+		const v = ritual.vowel;
+		untrack(() => {
+			const was = lastPhase;
+			lastPhase = phase;
+			if (phase === was) return;
+			const ms = (n: number) => (reducedMotion ? 0 : n);
+			if (phase === 'sing' && v) {
+				// Hidden mode: the chart is not drawn, so the view takes its place with no motion.
+				motion.to(targetFor(v), hideWhileSinging ? 0 : ms(ZOOM_IN_MS));
+			} else if (phase === 'landing' && v) {
+				// The reading has landed (the profile has it): start close on it, and move back out.
+				motion.set(targetFor(v, profile[v]));
+				motion.to(model.full, ms(LANDING_MS));
+			} else if (phase === 'idle' && (was === 'sing' || was === 'pause' || was === 'listening' || was === 'sweep')) {
+				motion.to(model.full, ms(ZOOM_OUT_QUICK_MS)); // a cancel or an error: out again
+			}
+		});
+	});
+	// At rest the view follows the voice (a dot added, a voice cleared).
+	$effect(() => {
+		const full = model.full;
+		if (ritual.phase === 'idle') untrack(() => motion.set(full));
+	});
+
 	onMount(() => {
 		const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
 		reducedMotion = mq.matches;
@@ -121,6 +159,7 @@
 		mq.addEventListener('change', change);
 		return () => {
 			mq.removeEventListener('change', change);
+			motion.stop();
 			ritual.destroy();
 		};
 	});
@@ -225,7 +264,7 @@
 			{#if hiding}
 				<p class="hidden-note">{ds('capture.hidden')}</p>
 			{:else}
-				<VowelChart {model} view={model.full} active={running ? subject : null} />
+				<VowelChart {model} {view} active={running ? subject : null} />
 			{/if}
 		</div>
 		<div

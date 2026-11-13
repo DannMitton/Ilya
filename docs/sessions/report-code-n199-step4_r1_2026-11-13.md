@@ -73,3 +73,40 @@
 - **Whether the toggle should persist.** I did not persist it (the brief asks the question and does not rule).
 - **Whether the first-time explanation reads well** as "Tap the [i] cardinal-i vowel to begin. First sing it as you usually do...". It is the tree's ratified text joined to the bracketed symbol and the name; the join is mine.
 - **Hint wording for a selected unsung vowel** is two sentences (placed, then to go); the brief's table gives the sentences and not the rule for which to show. The rule is in `screen-logic.ts` `hintsFor`.
+
+## 4c. Zoom and hidden mode
+
+**What changed, with path:line**
+
+- `apps/web/src/lib/voice/chart/view-motion.ts` (new): `createViewMotion` moves the chart's view from where it is to a target over a time, eased (`mixView`), or at once for 0 ms; a new move starts from wherever the last had got to. The clock and frame scheduler are injected. `ZOOM_IN_MS` 1000 (under the first sung beat), `ZOOM_OUT_QUICK_MS` 400. 4 tests.
+- `voice/VowelCapture.svelte`: the screen holds a `view` and drives it from the ritual's phase.
+  - `sing`: the view moves in on the vowel's zone (`zoomTarget`, widened to hold a re-take's existing reading) over 1 s.
+  - `landing`: the view is set close on the new reading (widened if it lands outside its zone), then moves back out to the full view over the landing's 900 ms. The dot appears from the stored profile, which `onCaptured` has already updated.
+  - A cancel or an error: the view moves out in 400 ms.
+  - At rest the view follows the voice, so a cleared voice or a new dot reframes.
+  - **Reduced motion:** every move is set at once, no animation.
+  - **Hidden mode:** from the tap, the chart and the readout are replaced by the one sentence (`capture.hidden`); the view takes its zoomed place with no motion, so when the chart returns at the landing it is already close on the dot and moves out.
+
+**Looked at in a real browser** (Playwright, fake microphone): the [ɛ] zone's radius along fR2 read 60 at rest, 64 at 0.3 s, 84 at 1.8 s (the 1.4 times minimum zoom), and 60 again 0.8 s after a cancel. With the toggle on, a tap replaced the chart with "The chart and the numbers are hidden while you sing...", and Escape brought the chart back. The zoom-out on a landing was not observed, because no take completed (see below).
+
+**Gates after 4c**
+
+| Gate | Baseline | After 4c |
+|---|---|---|
+| phonology | 462 | 462 passed |
+| dictionary | 248 | 248 passed |
+| web-check | 0 errors, 12 warnings | 0 errors, 12 warnings (5 files) |
+| web-test | 5252 passed, 1 skipped | **5571 passed, 1 skipped** |
+| score-parser | 785 passed, 5 skipped | 785 passed, 5 skipped |
+| blurb | 178 | 178 passed |
+| integration | 155 | 155 passed |
+| ratchets | OK | OK |
+
+5567 after 4b plus 4.
+
+**Could not establish in 4c**
+
+- **The landing's move back out.** It runs on a delivered reading, which needs the stub session (Step 6). The code path is written and its motion helper is tested; the sequence on screen is not observed.
+- **That 1 s is "under the first sung beat" to the eye**, and that the 60 to 84 zoom is enough. The minimum zoom is board D's 1.4.
+- **No unit test mounts the component's effects**, so the phase-to-motion rules in `VowelCapture.svelte` are covered by the browser check above only, until Step 6's test.
+- **Hidden mode records nothing yet.** Step 5 records which way each reading was taken.
