@@ -11,7 +11,7 @@
  * 1. A TEMPLATE, the Bozeman staff for the singer's voice type ("Approximate
  *    First Formant Locations", *Practical Vocal Acoustics*, 2013), held in
  *    `plausibility.ts` as `CORE_BANDS`: each Bozeman vowel's value is the
- *    geometric centre of its band. Bozeman charts fR1 only, so the fR2
+ *    geometric centre of its band. That chart is fR1 only (Bozeman gives fR2 elsewhere: PVA 2nd ed. p. 35 and Fig. 5.3), so the fR2
  *    template is Mitton (2020) Table 5.3's fR2 for the six vowels (p. 81),
  *    scaled into the bucket by the geometric mean of the bucket's fR1 template
  *    over the bass bucket's (DESK DEFAULT in the brief, flagged).

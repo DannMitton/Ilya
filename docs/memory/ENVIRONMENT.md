@@ -15,6 +15,13 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Desk error recorded 2026-11-12 (night Fable desk)
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| a sentence saying no source gives fR2, or "Bozeman charts fR1 only" | `BOZEMAN GIVES fR2` |
+| a helper's report lands while you still have the full text only in the thread | `A HELPER'S REPORT WAS FILED CONDENSED` |
+
 ### Desk errors recorded 2026-10-21 (afternoon desk)
 
 | you are about to, or you are seeing | search for |
@@ -5239,3 +5246,11 @@ Learned 2026-11-08: Grayson 2012 (PDF and both Word files) is set in legacy font
 - Files the handover says are "in ~/Downloads" may not be: IMG_4547 and 4550 to 4552 (Gould) were in Gmail ("Gould Index and section I TOC", 2026-07-13), and were the table of contents. Search Gmail by `filename:` before asking Dann.
 - Lanes 49 and 50 each passed the `+page.svelte` ratchet alone (5528, 5527 of 5534) and failed it together (5540). Measure the merge, not the lanes.
 - ESTIMATES: Fable brief review (strophic lane A r2) 220k against a 250k cap; desk gate measures in its own workspace cost few tokens (no helper).
+
+## BOZEMAN GIVES fR2 (2026-11-12 23:5x, night Fable desk; Dann's fourth correction of the night)
+
+The false belief had four homes, each now corrected: the comment at `apps/web/src/lib/voice/engine/stand-ins.ts:14` ("Bozeman charts fR1 only"); `gaps_pass01.md` line 70 in the library ("fR2 has no generic value"); the Calibrate handoff, section 7 ("No single source gives fR2 by vowel by voice type"), which later desks shortened to "no source"; and this desk's own reply of 23:5x ("drawn from nothing citable"). Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025): p. 35, the second resonances "lie between ca. F5 and D7, and mostly between G5 and C7. Within a given voice the second resonance spans the interval of about a 10th."; p. 31, Fig. 5.3, a model of F1 and F2 for nine vowels ([i ɪ e ɛ ɑ ɔ o ʊ u]) on one scale (250 to 2000 Hz). Photographs: `~/Documents/Voice Pedagogy Library/Insights Research/_scans/Bozeman PVA 2nd ed/` (Ch05 p031, p035); extraction rows PVA2-A-016 and PVA2-A-026 in `_extraction/claims_bozeman-PVA2_batch-A.csv`. What Bozeman does not chart is an fR2 band for each vowel by voice type, as his boxed charts do for fR1 (PVA2 App. 2 Fig. 19.1; KVP2 Figs. 8 to 10). The rule is in `CONTRACT.md` section 8. Lesson: a narrow true statement (no per-vowel band by voice type) was repeated in a broad false form (no fR2 at all); quote the narrow form with its pages, or open the pages.
+
+## A HELPER'S REPORT WAS FILED CONDENSED (2026-11-12, night Fable desk)
+
+A subagent's hand-back arrives as text in the thread, not as a file. The scout packet for brief N.199 r4 (226k tokens) was not filed at all; its twelve contradictions are listed in the brief's section 12. The Fable review (328k against a 300k cap) was filed condensed by the desk as `~/Downloads/_desk-2026-11-12/review-fable-brief-n199_r1_2026-11-12.md`. Next time: have the helper write its report to `/mnt/user-data/outputs/` itself and commit it with `device_commit_files` before it hands back. Actuals for ESTIMATES BY KIND OF JOB: Sonnet scout packet for one Code brief 226k, 41 tool uses, 4.6 min (cap 320k); Fable review of one brief with the code read in full 328k, 28 tool uses, 10 min.

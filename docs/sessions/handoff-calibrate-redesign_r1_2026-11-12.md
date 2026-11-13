@@ -59,7 +59,7 @@ For the next desk thread. Nothing in the repository was changed by this thread. 
 
 ## 7. Known gaps and risks
 
-- No single source gives fR2 by vowel by voice type. Best spread source: Titze et al. (2016), fry, 77 subjects, by sex. Bozeman PVA2 Fig. 5.3 (p. 31) gives F1 and F2 by vowel for one generic voice; Appendix 2 Fig. 19.1 gives fR1 by five voice types.
+- **[CORRECTED 2026-11-12 23:5x by the next desk, on Dann's word: Bozeman gives fR2. PVA 2nd ed. p. 35: second resonances lie between about F5 and D7, mostly G5 to C7, spanning about a tenth within a voice; Fig. 5.3, p. 31. Do not shorten the next sentence to "no source gives fR2"; `CONTRACT.md` section 8.]** No single source gives fR2 by vowel by voice type. Best spread source: Titze et al. (2016), fry, 77 subjects, by sex. Bozeman PVA2 Fig. 5.3 (p. 31) gives F1 and F2 by vowel for one generic voice; Appendix 2 Fig. 19.1 gives fR1 by five voice types.
 - The extractor's prior table is one bass's values for every voice type. Untested.
 - The wrong-vowel test (fry [u] when asked for [i]) and the shown-versus-hidden comparison have not been run.
 - The drawings in the prototype are interim crops of Dann's 2020 Fig. 4.3 panels. The Bolla adaptation is not done. Plate mapping: i 17, e 13, ɪ none, ɨ 15, ɛ 10, a 3, ɑ 2, ʌ 23, o 6, u 19. In the Bolla PDF, plate n's tracing is PDF page 161 + 2n. The meaning of Bolla's dashed contour is NOT ESTABLISHED.
