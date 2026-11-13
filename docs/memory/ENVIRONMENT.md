@@ -5232,3 +5232,10 @@ Learned 2026-11-08: Grayson 2012 (PDF and both Word files) is set in legacy font
 ## LEARNED BY THE 2026-11-12 NIGHT DESK
 
 - Put a question to Dann from the singer's side, in plain words, never in engraver's jargon. Fable's strophic Q1 ("print only as far as its own words go, with the one-line bars printed once") reached him unparseable at 01:45. His rule: Ilya serves the user, and clever notation conventions fail that mission.
+
+## LEARNED BY THE 2026-11-12 DAY DESK (Opus, 01:52 open to 13:4x)
+- A desk reading of a ruling is not the ruling. The night desk wrote 01:45 as "every later verse reprints the whole song"; two briefs (r2, r3) and one Fable review (220k) were built on that reading before Dann saw it (13:40: not what he meant; ruled 13:41 in `OPEN.md`). Before briefing from a ruling the desk worded, read Dann's own words back to him in a picture of what the singer sees.
+- The desk twice turned Dann's principle (13:16 to 13:21) into limits ("never improves it"). He: "I am consistently fighting your drive to nail down barriers that will limit us." Record his words; word no boundary around them.
+- Files the handover says are "in ~/Downloads" may not be: IMG_4547 and 4550 to 4552 (Gould) were in Gmail ("Gould Index and section I TOC", 2026-07-13), and were the table of contents. Search Gmail by `filename:` before asking Dann.
+- Lanes 49 and 50 each passed the `+page.svelte` ratchet alone (5528, 5527 of 5534) and failed it together (5540). Measure the merge, not the lanes.
+- ESTIMATES: Fable brief review (strophic lane A r2) 220k against a 250k cap; desk gate measures in its own workspace cost few tokens (no helper).
