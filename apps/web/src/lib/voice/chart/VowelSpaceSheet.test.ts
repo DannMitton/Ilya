@@ -7,7 +7,7 @@ import { render } from 'svelte/server';
 import type { CalibratedFormant, Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
 import VowelSpaceSheet from './VowelSpaceSheet.svelte';
-import { DRAFT } from './draft-strings';
+import { t } from '$lib/i18n';
 
 const f = (f1: number, f2?: number): CalibratedFormant =>
 	({ f1, ...(f2 === undefined ? {} : { f2 }), f2Quality: f2 === undefined ? 'absent' : 'clear', confidence: 'high', reading: 'captured', source: 'measured-user' }) as CalibratedFormant;
@@ -59,7 +59,7 @@ describe('the sheet', () => {
 
 	it('carries the legend’s four entries, the provenance line, and the symbol for fR1 and fR2', () => {
 		const h = html({ profile: pick('i') }).replace(/&#39;|&#x27;/g, "'");
-		for (const k of ['sheet.legend.sung', 'sheet.legend.placeholder', 'sheet.legend.hull'] as const) expect(h).toContain(DRAFT[k]);
+		for (const k of ['sheet.legend.sung', 'sheet.legend.placeholder', 'sheet.legend.hull'] as const) expect(h).toContain(t(k, 'en'));
 		expect(h).toContain('Bozeman');
 		expect(h).toContain('p. 35');
 		expect(h).toContain('Mitton (2020)');

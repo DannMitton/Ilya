@@ -1,7 +1,7 @@
 /**
  * N.199 Step 6: the new capture screen, in a browser, on `StubCaptureSession` (`?calibrate=new&capture=stub`, development server only).
  * A full tour (ten captures), a manual pick, a cancel in each phase, a rolled-back re-take and an error, Return to summary after one
- * vowel, Start over's two taps, hidden mode, and a soprano's view. Real time: the count-in is 5 s and the stub's sweep 3.5 to 4 s,
+ * vowel, Start over's two taps, hidden mode, and a soprano's view. Real time: the count-in is 6 s and the stub's sweep 3.5 to 4 s,
  * so these tests are long by design. The stub gives clean readings, so what is asserted is the screen's behaviour and what it keeps,
  * not the extractor's.
  */
@@ -74,9 +74,9 @@ test.describe('the new capture screen on the stub', () => {
 		await toCapture(page);
 		const rx = async () => +(await page.locator('[data-zone="i"]').getAttribute('rx'));
 		const rest = await rx();
-		await expect(page.getByLabel('Hide the chart and numbers while I sing')).toBeEnabled();
+		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeEnabled();
 		await btn(page, /^cardinal-i/).click();
-		await expect(page.getByLabel('Hide the chart and numbers while I sing')).toBeDisabled();
+		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeDisabled();
 		await page.waitForTimeout(2500);
 		const zoomed = await rx();
 		expect(zoomed).toBeGreaterThan(rest * 1.3);
@@ -87,7 +87,7 @@ test.describe('the new capture screen on the stub', () => {
 		expect(mid).toBeLessThan(zoomed);
 		await page.waitForTimeout(700);
 		expect(await rx()).toBeCloseTo(rest, 0);
-		await expect(page.getByLabel('Hide the chart and numbers while I sing')).toBeEnabled();
+		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeEnabled();
 	});
 
 	test('a manual pick starts at once and takes precedence; Ilya carries on from the singer’s lead; Return to summary shows after one vowel', async ({ page }) => {
@@ -111,8 +111,8 @@ test.describe('the new capture screen on the stub', () => {
 		test.setTimeout(120_000);
 		await open(page);
 		await toCapture(page);
-		// The count-in is 5 s; the stub's stable fry comes 0.5 to 1 s after it, its sweep 3 s after that.
-		for (const ms of [500, 3500, 5150, 7200]) {
+		// The count-in is 6 s (three beats, a 3 s pause); the stub's stable fry comes 0.5 to 1 s after it, its sweep 3 s after that.
+		for (const ms of [500, 4500, 6150, 8200]) {
 			await btn(page, /^cardinal-i/).click();
 			await expect(page.locator('.main')).toBeDisabled();
 			await page.waitForTimeout(ms);
@@ -187,9 +187,9 @@ test.describe('the new capture screen on the stub', () => {
 		test.setTimeout(120_000);
 		await open(page);
 		await toCapture(page);
-		await page.getByLabel('Hide the chart and numbers while I sing').check();
+		await page.getByLabel('Hide the chart and the readout while I sing').check();
 		await btn(page, /^cardinal-i/).click();
-		await expect(page.locator('.chart-box')).toContainText('The chart and the numbers are hidden while you sing.');
+		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden while you sing.');
 		expect(await page.locator('.vowel-chart').count()).toBe(0);
 		await expect(count(page)).toHaveText('1 of 10', { timeout: 40_000 });
 		await expect(page.locator('.vowel-chart')).toBeVisible();

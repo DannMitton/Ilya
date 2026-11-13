@@ -1,14 +1,13 @@
 /**
  * The capture screen's decisions, as pure functions (N.199 Step 4b): what each vowel's button says, which hint to show, what the main
  * button reads, what the cue says. The component (`VowelCapture.svelte`) calls them; they are tested here without mounting anything.
- * Words are the draft English in `draft-strings.ts` and, where the brief adopts them, the tree's keys through `t()`.
+ * Words are `i18n.ts`'s, English and French, through `t()` and `tv()` (N.199 Step 7).
  */
-import { t, type Language } from '$lib/i18n';
+import { t, tv, type Language } from '$lib/i18n';
 import type { Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
 import { spoken, spokenName } from '../vowel-names';
 import type { RitualCue } from '../capture-ritual.svelte';
-import { DRAFT, ds, type DraftKey } from './draft-strings';
 
 /** The bracketed symbol the eye reads in a sentence. */
 export const bracket = (v: Vowel): string => `[${v}]`;
@@ -22,14 +21,10 @@ export function buttonStates(sung: ReadonlySet<Vowel>): Record<Vowel, ButtonStat
 
 /** The button's accessible name: the vowel's spoken name, then its state, then "selected" when it is. */
 export function buttonLabel(v: Vowel, state: ButtonState, selected: boolean, language: Language): string {
-	const parts = [spokenName(v, language), ds(state === 'sung' ? 'capture.button.sung' : 'capture.button.placed')];
-	if (selected) parts.push(ds('capture.button.selected'));
+	const parts = [spokenName(v, language), tv(state === 'sung' ? 'capture.button.sung' : 'capture.button.placed', language)];
+	if (selected) parts.push(tv('capture.button.selected', language));
 	return parts.join(', ');
 }
-
-const COUNT_WORDS = ['None', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
-/** "Seven" for 7, as the hint's `{count}`; a number past ten falls back to the digits. */
-export const countWord = (n: number): string => COUNT_WORDS[n] ?? String(n);
 
 /** Whether a declared voice type is a real one (the placeholder says "your voice type"); "Not sure" and none are not. */
 export const hasDeclaredType = (voiceType?: string): boolean => !!voiceType && voiceType !== 'not-sure';
@@ -46,7 +41,7 @@ export interface HintInput {
 }
 
 export interface Hint {
-	key: DraftKey;
+	key: string;
 	vars: Record<string, string | number>;
 }
 
@@ -67,34 +62,34 @@ export function hintsFor(h: HintInput): Hint[] {
 			? { key: 'capture.hint.retake', vars: v }
 			: { key: hasDeclaredType(h.voiceType) ? 'capture.hint.placed.typed' : 'capture.hint.placed.untyped', vars: v }
 	);
-	out.push({ key: 'capture.hint.toGo', vars: { count: countWord(VOWELS.length - h.sung.size) } });
+	out.push({ key: 'capture.hint.toGo', vars: { count: VOWELS.length - h.sung.size } });
 	return out;
 }
 
-export const hintText = (hints: Hint[]): string => hints.map((x) => ds(x.key, x.vars)).join(' ');
+export const hintText = (hints: Hint[], language: Language): string => hints.map((x) => tv(x.key, language, x.vars)).join(' ');
 
 export type MainButton = { kind: 'start' | 'retake' | 'inProgress' | 'done'; label: string; disabled: boolean };
 
 /** The main button: Start, Re-take, "in progress" (disabled), or Done when all ten are sung and nothing is running. */
-export function mainButton(active: boolean, sung: ReadonlySet<Vowel>, selected: Vowel): MainButton {
+export function mainButton(active: boolean, sung: ReadonlySet<Vowel>, selected: Vowel, language: Language): MainButton {
 	const v = { v: bracket(selected) };
-	if (active) return { kind: 'inProgress', label: ds('capture.inProgress', v), disabled: true };
-	if (sung.size === VOWELS.length) return { kind: 'done', label: ds('capture.done'), disabled: false };
+	if (active) return { kind: 'inProgress', label: tv('capture.inProgress', language, v), disabled: true };
+	if (sung.size === VOWELS.length) return { kind: 'done', label: tv('capture.done', language), disabled: false };
 	return sung.has(selected)
-		? { kind: 'retake', label: ds('capture.retake', v), disabled: false }
-		: { kind: 'start', label: ds('capture.start', v), disabled: false };
+		? { kind: 'retake', label: tv('capture.retake', language, v), disabled: false }
+		: { kind: 'start', label: tv('capture.start', language, v), disabled: false };
 }
 
 /** What the secondary button reads: Stop while a take runs, "Clear all" once Start over is tapped, "Start over" otherwise. */
 export function stopLabel(active: boolean, confirmingClear: boolean, language: Language): string {
-	if (active) return ds('capture.stop');
-	return confirmingClear ? ds('capture.clearAll') : t('calib.summary.startOverButton', language);
+	if (active) return tv('capture.stop', language);
+	return confirmingClear ? tv('capture.clearAll', language) : t('calib.summary.startOverButton', language);
 }
 
 /** The cue as the eye reads it (bracketed symbol) and as the ear hears it (the spoken name), from the ritual's key and vowel. */
 export function cueText(cue: RitualCue, language: Language): { eye: string; ear: string } {
 	if (!cue.key) return { eye: '', ear: '' };
-	const raw = cue.key in DRAFT ? DRAFT[cue.key as DraftKey] : t(cue.key, language);
+	const raw = t(cue.key, language);
 	const eye = cue.vowel ? raw.split('{v}').join(bracket(cue.vowel)) : raw;
 	const ear = cue.vowel ? raw.split('{v}').join(spoken(cue.vowel, language)) : raw;
 	return { eye, ear };

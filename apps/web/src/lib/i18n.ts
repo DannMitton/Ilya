@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,223 keys.
+   This file holds 1,269 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -28,6 +28,7 @@
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
+   capture.       30  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
@@ -65,6 +66,7 @@
    result.         1  no literal consumer found
    ribbon.         6  lib/components/Drawer/InspectorPanel.svelte
    select.         5  lib/components/Drawer/SearchableSelect.svelte
+   sheet.         16  the vowel-space sheet: lib/voice/chart/VowelSpaceSheet.svelte
    shiftLyrics.    5  lib/score/CorrectionSurface.svelte
    song.           2  lib/omr/scan.ts, lib/library/notices.ts, routes/+page.svelte
    songs.         13  routes/+page.svelte, lib/components/Drawer/SongList.svelte
@@ -1436,7 +1438,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'pacifier.tapToCapture': { en: 'Tap a vowel to capture it.', fr: 'Touchez une voyelle pour la capter.' },
 	// singFirst, pause, and beginPhonating: RATIFIED by Dann 2026-09-30 21:00 (row 2d part 3).
 	'pacifier.singFirst': { en: 'Sing {v} as you usually do. Three.', fr: 'Chantez {v} comme d\u2019habitude. Trois.' },
-	'pacifier.pause': { en: 'Stop, and keep the shape.', fr: 'Arrêtez, et gardez la forme.' },
+	// N.199 Step 7: the pause line, new English (Dann 2026-11-13 01:05) and French (10:30); it replaces "Stop, and keep the shape." (ratified 2026-09-30 21:00).
+	'pacifier.pause': { en: 'Stop singing, but maintain the shape of your vocal tract for that vowel.', fr: 'Arrêtez de chanter, mais gardez la forme de votre conduit vocal pour cette voyelle.' },
 	'pacifier.beginPhonating': { en: 'Now {v} in vocal fry.', fr: 'Maintenant, {v} en friture vocale.' },
 	'pacifier.nowSustain': { en: 'Now sustain. Sample recording.', fr: 'Soutenez maintenant. Échantillon en cours d\u2019enregistrement.' },
 	'pacifier.captured': { en: '{v} captured.', fr: 'Capture de {v} effectuée.' },
@@ -2529,6 +2532,55 @@ const strings: Record<string, Record<Language, string>> = {
 	'select.noResults':            { en: 'No results',                   fr: 'Aucun résultat' },
 	'select.resultCount.one':      { en: '{n} result',                   fr: '{n} résultat' },
 	'select.resultCount.many':     { en: '{n} results',                  fr: '{n} résultats' },
+	// ── N.199: the calibration screen's capture strings and the vowel-space sheet's (RATIFIED by Dann 2026-11-13 10:30 to 12:01; `OPEN.md` section N.199) ──
+	//    Moved here from `voice/chart/draft-strings.ts` in Step 7. `{v}` is the bracketed symbol, `{n}` and `{count}` digits (Dann 11:52), `{name}` a vowel's
+	//    spoken name; fill them with `tv`. French apostrophes are U+2019 and a French colon takes U+00A0 before it.
+	'sheet.title': { en: 'Your vowel space', fr: 'Votre espace vocalique' },
+	'sheet.subtitle': { en: 'The ten vowels of sung Russian, as your voice shapes them', fr: 'Les dix voyelles du russe chanté, telles que votre voix les façonne' },
+	'sheet.readings': { en: 'Your readings', fr: 'Vos lectures' },
+	'sheet.col.vowel': { en: 'Vowel', fr: 'Voyelle' },
+	'sheet.col.fr1': { en: 'Hz and note', fr: 'Hz et note' },
+	'sheet.col.fr2': { en: 'Hz and note', fr: 'Hz et note' },
+	'sheet.legend.sung': { en: 'A vowel you sang, measured in vocal fry.', fr: 'Une voyelle que vous avez chantée, mesurée en friture vocale.' },
+	'sheet.legend.placeholder': { en: 'A placeholder: where Ilya expects a vowel you have not sung yet.', fr: 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore chantée.' },
+	'sheet.legend.zones': { en: 'Each colour is the neighbourhood Ilya draws on for one of the outer vowels, for a voice of your type. Lavender marks the inner vowels, which Ilya can work out from the outer ones if you choose not to offer samples yourself. Where zones cross, the colours blend.', fr: 'Chaque couleur est le voisinage sur lequel Ilya s’appuie pour l’une des voyelles extérieures, pour une voix de votre type. Le lavande marque les voyelles intérieures, qu’Ilya peut déduire des voyelles extérieures si vous choisissez de ne pas fournir vous-même d’échantillons. Là où les zones se croisent, les couleurs se fondent.' },
+	'sheet.legend.hull': { en: 'The outline surrounds your sung vowels. It is dashed until all ten are sung.', fr: 'Le contour entoure vos voyelles chantées. Il reste en pointillé jusqu’à ce que les dix soient chantées.' },
+	'sheet.axis.front': { en: 'tongue forward', fr: 'langue avancée' },
+	'sheet.axis.back': { en: 'tongue back', fr: 'langue reculée' },
+	'sheet.axis.open': { en: 'mouth more open', fr: 'bouche plus ouverte' },
+	'sheet.provenance': { en: 'Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to your voice type, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.', fr: 'Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté à votre type de voix, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya.' },
+	'capture.title': { en: 'Your resonances', fr: 'Vos résonances' },
+	'capture.count': { en: '{n} of 10', fr: '{n} sur 10' },
+	'capture.explain': { en: 'Each dot is one of your vowels: the higher your tongue, the higher the dot; the further forward, the nearer the front edge.', fr: 'Chaque point est l’une de vos voyelles : plus votre langue est haute, plus le point est haut; plus elle est avancée, plus il s’approche du bord avant.' },
+	'capture.cue.ready': { en: 'Ready for {v}.', fr: 'Au tour de {v}.' },
+	'capture.cue.isCaptured': { en: '{v} is captured.', fr: 'Capture de {v} effectuée.' },
+	'capture.cue.allTen': { en: 'All ten captured. This is your vowel space.', fr: 'Les dix voyelles sont captées. Voici votre espace vocalique.' },
+	'capture.start': { en: 'Start {v}', fr: 'Commencer {v}' },
+	'capture.retake': { en: 'Re-take {v}', fr: 'Reprendre {v}' },
+	'capture.inProgress': { en: '{v} in progress', fr: '{v} en cours' },
+	'capture.done': { en: 'Done', fr: 'Terminé' },
+	'capture.stop': { en: 'Stop', fr: 'Arrêter' },
+	'capture.clearAll': { en: 'Clear all', fr: 'Tout effacer' },
+	'capture.hide': { en: 'Hide the chart and the readout while I sing', fr: 'Masquer le graphique et l’affichage pendant que je chante' },
+	'capture.hidden': { en: 'The chart and the readout are hidden while you sing. They return when this vowel is captured.', fr: 'Le graphique et l’affichage sont masqués pendant que vous chantez. Ils réapparaissent quand cette voyelle est captée.' },
+	'capture.hint.first': { en: 'Start follows Ilya’s order. Or tap any vowel to sing that one now.', fr: 'Commencer suit l’ordre d’Ilya. Ou touchez une voyelle pour la chanter tout de suite.' },
+	'capture.hint.active': { en: 'Stop, or a second tap on {v}, ends this take. Nothing is saved from it.', fr: 'Touchez {v} de nouveau, ou Arrêter, pour mettre fin à cette prise. Rien n’en est conservé.' },
+	'capture.hint.retake': { en: 'A re-take replaces {v} only if the new reading is as clear.', fr: 'Une reprise ne remplace {v} que si la nouvelle lecture est aussi nette.' },
+	'capture.hint.placed.typed': { en: 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you sing.', fr: 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.' },
+	'capture.hint.placed.untyped': { en: 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you sing.', fr: 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.' },
+	'capture.hint.toGo': { en: '{count} to go, in any order. Ilya keeps a placeholder for each until you sing it.', fr: 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la chantiez.' },
+	'capture.hint.finished': { en: 'Tap any vowel to sing it again.', fr: 'Touchez une voyelle pour la chanter de nouveau.' },
+	'capture.hint.confirmClear': { en: 'Tap Clear all to clear every reading for this voice.', fr: 'Touchez Tout effacer pour effacer toutes les lectures de cette voix.' },
+	'capture.uncertain': { en: '{v} is noted, though this take was less clear. A re-take can replace it.', fr: '{v} est noté, même si cette prise était moins nette. Une reprise peut le remplacer.' },
+	'capture.button.sung': { en: 'sung', fr: 'chantée' },
+	'capture.button.placed': { en: 'placeholder', fr: 'valeur par défaut' },
+	'capture.button.selected': { en: 'selected', fr: 'sélectionnée' },
+	'capture.bar': { en: 'Progress of this take', fr: 'Progression de cette prise' },
+	'capture.chartAlt': { en: 'Chart of the vowel zones. It moves in on the vowel being measured, and a dot shows the reading.', fr: 'Graphique des zones des voyelles. Il se rapproche de la voyelle mesurée, et un point en montre la lecture.' },
+	'capture.drawingAlt': { en: 'Side view of the mouth and throat for {name}', fr: 'Vue de profil de la bouche et de la gorge pour {name}' },
+	'capture.vowels': { en: 'The ten vowels', fr: 'Les dix voyelles' },
+	'sheet.print': { en: 'Print this sheet', fr: 'Imprimer cette feuille' },
+	'sheet.chartAlt': { en: 'Chart of your vowel space. Each vowel is a coloured zone, a filled dot where you sang it, or a hollow dot where Ilya has placed it for now.', fr: 'Graphique de votre espace vocalique. Chaque voyelle est une zone colorée, un point plein là où vous l’avez chantée, ou un point creux là où Ilya l’a placée pour l’instant.' },
 };
 
 /**
@@ -2540,6 +2592,16 @@ export function t(key: string, lang: Language): string {
 	const entry = strings[key];
 	if (!entry || !entry[lang]) return `[MISSING: ${key}]`;
 	return entry[lang];
+}
+
+/**
+ * `t`, with the `{name}` placeholders filled (N.199 Step 7): `{v}` a bracketed vowel symbol, `{n}` and `{count}` digits, `{name}` a vowel's spoken
+ * name. `t` itself takes no variables. A placeholder with no value is left as written, so a missing variable shows, never vanishes.
+ */
+export function tv(key: string, lang: Language, vars: Record<string, string | number> = {}): string {
+	let s = t(key, lang);
+	for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(String(v));
+	return s;
 }
 
 /** Every key in the table, for tests that sweep every string (`i18n.test.ts`). */

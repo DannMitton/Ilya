@@ -9,7 +9,7 @@
  * never calls `t`: the cue is a key and a vowel, and the screen words it.
  *
  * WHAT IS RULED HERE, because "same as the wheel" cannot be said of a thing nothing tests (brief r5, Step 3):
- *   - TIMING is the tree's: three sung beats of 1 s, a 2 s pause (`count-in.ts`), a wait for stable fry (the session's: up to
+ *   - TIMING is the tree's: three sung beats of 1 s, a 3 s pause (`count-in.ts`, 2 s until N.199 Step 7), a wait for stable fry (the session's: up to
  *     10 s, `engine/live.ts`), then the 3.0 s sweep. The progress bar starts at stable fry. Under reduced motion the bar still
  *     advances, in coarser steps, as the readiness bar does.
  *   - THE RE-TAKE RULE: a Provisional re-take never replaces a Captured reading. It compares against `previous(vowel)`, the

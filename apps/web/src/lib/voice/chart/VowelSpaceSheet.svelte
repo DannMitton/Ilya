@@ -6,14 +6,15 @@
 
 	It is built to board B3 (the sheet; `project/PhoneticColourFlat.dc.html` on the design canvas), which is not in the
 	repository: the layout follows the brief's description and board D's chart, and where they differ the brief governs. Words are
-	the draft English in `draft-strings.ts` until Step 7. Nothing here says "goal" or "target", and nothing tells a singer the voice
+	the ratified words in `i18n.ts` (`sheet.*`), English and French. Nothing here says "goal" or "target", and nothing tells a singer the voice
 	looks wrong: a zone is a neighbourhood (brief section 1).
 
 	`forPrint` draws the same sheet without its screen control, on white, at the letter page's measure (`print-sheet.ts` mounts
 	it on the page for the print dialogue).
 -->
 <script lang="ts">
-	import { t, type Language } from '$lib/i18n';
+	import { t, tv, type Language } from '$lib/i18n';
+	import Italics from '$lib/components/Italics.svelte';
 	import type { CalibratedFormant, Vowel } from '../engine/types';
 	import { spokenName } from '../vowel-names';
 	import FrSym from '../FrSym.svelte';
@@ -21,7 +22,6 @@
 	import { buildChartModel } from './model';
 	import { readingRows } from './readings';
 	import { zoneColour } from './colours';
-	import { ds } from './draft-strings';
 
 	let {
 		profile,
@@ -52,22 +52,22 @@
 
 <section class="vowel-sheet" class:for-print={forPrint} aria-labelledby="vowel-sheet-title{forPrint ? '-print' : ''}">
 	<header class="sheet-head">
-		<h2 id="vowel-sheet-title{forPrint ? '-print' : ''}">{ds('sheet.title')}</h2>
-		<p class="sheet-sub">{ds('sheet.subtitle')}</p>
+		<h2 id="vowel-sheet-title{forPrint ? '-print' : ''}">{tv('sheet.title', language)}</h2>
+		<p class="sheet-sub">{tv('sheet.subtitle', language)}</p>
 		{#if voiceName}<p class="sheet-voice">{voiceName}</p>{/if}
 	</header>
 
 	<div class="sheet-frame">
 		<div class="axis-top" aria-hidden="true">
-			<span>{ds('sheet.axis.front')}</span>
+			<span>{tv('sheet.axis.front', language)}</span>
 			<span class="axis-sym"><FrSym n={2} /></span>
-			<span>{ds('sheet.axis.back')}</span>
+			<span>{tv('sheet.axis.back', language)}</span>
 		</div>
 		<div class="axis-side" aria-hidden="true">
 			<span class="axis-sym"><FrSym n={1} /></span>
-			<span>{ds('sheet.axis.open')}</span>
+			<span>{tv('sheet.axis.open', language)}</span>
 		</div>
-		<svg class="sheet-chart" viewBox="0 0 {W} {H}" role="img" aria-label={ds('sheet.chartAlt')} preserveAspectRatio="xMidYMid meet">
+		<svg class="sheet-chart" viewBox="0 0 {W} {H}" role="img" aria-label={tv('sheet.chartAlt', language)} preserveAspectRatio="xMidYMid meet">
 			<rect x="0" y="0" width={W} height={H} class="chart-ground" />
 			<ChartLayers
 				view={model.full}
@@ -87,11 +87,11 @@
 	<ul class="legend">
 		<li>
 			<svg viewBox="0 0 24 16" width="24" height="16" aria-hidden="true"><circle cx="12" cy="8" r="6" class="swatch-dot" /></svg>
-			<span>{ds('sheet.legend.sung')}</span>
+			<span>{tv('sheet.legend.sung', language)}</span>
 		</li>
 		<li>
 			<svg viewBox="0 0 24 16" width="24" height="16" aria-hidden="true"><circle cx="12" cy="8" r="5.5" class="swatch-ghost" /></svg>
-			<span>{ds('sheet.legend.placeholder')}</span>
+			<span>{tv('sheet.legend.placeholder', language)}</span>
 		</li>
 		<li>
 			<svg viewBox="0 0 24 16" width="24" height="16" aria-hidden="true">
@@ -99,22 +99,22 @@
 				<ellipse cx="14" cy="8" rx="7" ry="5" style="fill: {zoneColour('e')}; fill-opacity: 0.4; mix-blend-mode: multiply" />
 				<ellipse cx="17" cy="8" rx="6" ry="4.5" style="fill: {zoneColour('ɨ')}; fill-opacity: 0.4; mix-blend-mode: multiply" />
 			</svg>
-			<span>{ds('sheet.legend.zones')}</span>
+			<span>{tv('sheet.legend.zones', language)}</span>
 		</li>
 		<li>
 			<svg viewBox="0 0 24 16" width="24" height="16" aria-hidden="true"><path d="M2 12 L8 3 L20 6 L14 14 Z" class="swatch-hull" class:dashed={!allTen} /></svg>
-			<span>{ds('sheet.legend.hull')}</span>
+			<span>{tv('sheet.legend.hull', language)}</span>
 		</li>
 	</ul>
 
 	{#if rows.length}
 		<table class="readings">
-			<caption>{ds('sheet.readings')}</caption>
+			<caption>{tv('sheet.readings', language)}</caption>
 			<thead>
 				<tr>
-					<th scope="col" class="col-vowel">{ds('sheet.col.vowel')}</th>
-					<th scope="col"><FrSym n={1} /> <span class="col-unit">{ds('sheet.col.fr1')}</span></th>
-					<th scope="col"><FrSym n={2} /> <span class="col-unit">{ds('sheet.col.fr2')}</span></th>
+					<th scope="col" class="col-vowel">{tv('sheet.col.vowel', language)}</th>
+					<th scope="col"><FrSym n={1} /> <span class="col-unit">{tv('sheet.col.fr1', language)}</span></th>
+					<th scope="col"><FrSym n={2} /> <span class="col-unit">{tv('sheet.col.fr2', language)}</span></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -138,10 +138,10 @@
 		</table>
 	{/if}
 
-	<p class="provenance">{ds('sheet.provenance')}</p>
+	<p class="provenance"><Italics text={tv('sheet.provenance', language)} /></p>
 
 	{#if onprint && !forPrint}
-		<button type="button" class="sheet-print-btn" onclick={onprint}>{ds('sheet.print')}</button>
+		<button type="button" class="sheet-print-btn" onclick={onprint}>{tv('sheet.print', language)}</button>
 	{/if}
 </section>
 

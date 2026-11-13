@@ -11,11 +11,11 @@
 
 	Width: 484 px in the Drawer on desktop, the phone's width on a phone. One component; the chart takes the width it is given. The
 	chart, the cue line, and the buttons sit in one sticky group, so they stay in view together during a take when the takeover scrolls.
-	Words: the draft English in `chart/draft-strings.ts` and the tree's own keys (`t()`); never invented here.
+	Words: `i18n.ts`, English and French, ratified by Dann (`OPEN.md` section N.199); never invented here.
 -->
 <script lang="ts">
 	import { onMount, untrack } from 'svelte';
-	import { t, type Language } from '$lib/i18n';
+	import { t, tv, type Language } from '$lib/i18n';
 	import type { CaptureSession } from './engine/session';
 	import type { CaptureError } from './engine/errors';
 	import type { CalibratedFormant, Vowel } from './engine/types';
@@ -28,7 +28,6 @@
 	import { nextVowel } from './chart/tour';
 	import { zoomTarget, type View } from './chart/geometry';
 	import { createViewMotion, ZOOM_IN_MS, ZOOM_OUT_QUICK_MS } from './chart/view-motion';
-	import { ds } from './chart/draft-strings';
 	import { DRAWINGS, creditLine } from './chart/drawings';
 	import { failedTake, readingTake, type TakeRecord, type TakeVisibility } from './takes';
 	import {
@@ -196,13 +195,14 @@
 	const hiding = $derived(hideWhileSinging && active);
 	const states = $derived(buttonStates(sungSet));
 	const cue = $derived(running ? cueText(ritual.cue, language) : cueText(notice ?? idleCue(selected, sungSet), language));
-	const hint = $derived(hintText(hintsFor({ active, confirmingClear, selected, sung: sungSet, voiceType })));
-	const main = $derived(mainButton(running, sungSet, selected));
+	const hint = $derived(hintText(hintsFor({ active, confirmingClear, selected, sung: sungSet, voiceType }), language));
+	const main = $derived(mainButton(running, sungSet, selected, language));
 	const showExplain = $derived(!tookAny && sungSet.size === 0);
 	/** The vowel the chart and the readout are about: the take's, while one is running or landing; else the selection. */
 	const subject = $derived(ritual.vowel ?? selected);
 	const reading = $derived(profile[subject]);
-	const showReading = $derived((ritual.phase === 'idle' || ritual.phase === 'landing') && !!reading);
+	/** The readout shows at rest and in the landing, and not while a notice is being read: the cue then has the whole row (Step 7, the pause line on a phone). */
+	const showReading = $derived((ritual.phase === 'idle' || ritual.phase === 'landing') && !!reading && !(ritual.phase === 'idle' && notice));
 	const hz = $derived(t('calib.common.hz', language));
 
 	// ── Gestures ───────────────────────────────────────────────────────────
@@ -261,8 +261,8 @@
 	<p class="visually-hidden" role="status" aria-live="polite">{cue.ear}</p>
 
 	<header class="head">
-		<h2>{ds('capture.title')}</h2>
-		<p class="count">{ds('capture.count', { n: sungSet.size })}</p>
+		<h2>{tv('capture.title', language)}</h2>
+		<p class="count">{tv('capture.count', language, { n: sungSet.size })}</p>
 	</header>
 
 	<div class="glyph-row">
@@ -274,7 +274,7 @@
 			<p class="credit">{creditLine(selected)}</p>
 		</div>
 		<!-- The side view, in a squircle with a fixed frame: the ten drawings share one box, so the picture changes in place (Dann 2026-11-12, entry 41). -->
-		<div class="squircle" role="img" aria-label={ds('capture.drawingAlt', { name: spokenName(selected, language) })}>
+		<div class="squircle" role="img" aria-label={tv('capture.drawingAlt', language, { name: spokenName(selected, language) })}>
 			<div class="squircle-frame">
 				{#each VOWELS as v (v)}
 					<img src={DRAWINGS[v].src} alt="" style="opacity: {v === selected ? 1 : 0}" />
@@ -286,15 +286,15 @@
 	<div class="stage">
 		<div class="chart-box">
 			{#if hiding}
-				<p class="hidden-note">{ds('capture.hidden')}</p>
+				<p class="hidden-note">{tv('capture.hidden', language)}</p>
 			{:else}
-				<VowelChart {model} {view} active={running ? subject : null} />
+				<VowelChart {model} {view} {language} active={running ? subject : null} />
 			{/if}
 		</div>
 		<div
 			class="bar"
 			role="progressbar"
-			aria-label={ds('capture.bar')}
+			aria-label={tv('capture.bar', language)}
 			aria-valuemin="0"
 			aria-valuemax="100"
 			aria-valuenow={Math.round(ritual.progress * 100)}
@@ -303,21 +303,21 @@
 		</div>
 		<div class="cue-row">
 			<p class="cue" aria-hidden="true">{cue.eye}</p>
-			<div class="readout" aria-hidden="true">
-				{#if showReading && reading && !hiding}
+			{#if showReading && reading && !hiding}
+				<div class="readout" aria-hidden="true">
 					<div class="readout-line"><FrSym n={1} /><span>{Math.round(reading.f1)} {hz}</span></div>
 					<div class="readout-line">
 						<FrSym n={2} />
 						{#if typeof reading.f2 === 'number'}<span>{Math.round(reading.f2)} {hz}</span>{:else}<span class="try">{t('calib.roster.tryAgain', language)}</span>{/if}
 					</div>
-				{/if}
-			</div>
+				</div>
+			{/if}
 		</div>
 		{#if showExplain}
 			<p class="explain-first">{firstTimeExplanation(selected, language)}</p>
 		{/if}
 
-		<div class="buttons" role="group" aria-label={ds('capture.vowels')}>
+		<div class="buttons" role="group" aria-label={tv('capture.vowels', language)}>
 			{#each VOWELS as v (v)}
 				{@const isSelected = v === selected}
 				<button
@@ -342,12 +342,12 @@
 	</div>
 
 	<p class="hint">{hint}</p>
-	<p class="explain">{ds('capture.explain')}</p>
+	<p class="explain">{tv('capture.explain', language)}</p>
 
 	<label class="hide-toggle">
 		<!-- Fixed at the tap for the take's record (`takeVisible`), so the box is not live while a take runs (Step 6a). -->
 		<input type="checkbox" bind:checked={hideWhileSinging} disabled={running} />
-		<span>{ds('capture.hide')}</span>
+		<span>{tv('capture.hide', language)}</span>
 	</label>
 
 	{#if returnShown}
@@ -508,11 +508,13 @@
 		background: var(--lavender-jewel);
 		transition: width 0.06s linear;
 	}
+	/* One height for the row, whatever the cue: the longest cue (the pause line, 13 words in English, longer in French) takes three lines
+	   across the whole row on a phone, so the buttons below never move under the singer's thumb (Step 7). */
 	.cue-row {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		min-height: 2.9rem;
+		height: 4.75rem;
 	}
 	.cue {
 		margin: 0;

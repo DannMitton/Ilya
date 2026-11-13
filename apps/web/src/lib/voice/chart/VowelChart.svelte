@@ -13,21 +13,23 @@
 	import type { View } from './geometry';
 	import { CHART_W, CHART_H, type ChartModel } from './model';
 	import ChartLayers from './ChartLayers.svelte';
-	import { ds } from './draft-strings';
+	import { tv, type Language } from '$lib/i18n';
 
 	let {
 		model,
 		view,
+		language,
 		active = null
 	}: {
 		model: ChartModel;
 		view: View;
+		language: Language;
 		/** The vowel being measured: its zone takes a deeper saturation. */
 		active?: Vowel | null;
 	} = $props();
 </script>
 
-<svg class="vowel-chart" viewBox="0 0 {CHART_W} {CHART_H}" role="img" aria-label={ds('capture.chartAlt')} preserveAspectRatio="xMidYMid meet">
+<svg class="vowel-chart" viewBox="0 0 {CHART_W} {CHART_H}" role="img" aria-label={tv('capture.chartAlt', language)} preserveAspectRatio="xMidYMid meet">
 	<rect x="0" y="0" width={CHART_W} height={CHART_H} class="ground" />
 	<ChartLayers
 		{view}

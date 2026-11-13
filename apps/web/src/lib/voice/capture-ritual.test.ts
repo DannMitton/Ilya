@@ -1,6 +1,6 @@
 /**
  * N.199 Step 3: the capture ritual's transition table. A fake session, fake timers; nothing mounts. The intervals are quoted
- * here, not imported (1000 ms a beat, 2000 ms pause, 3000 ms sweep, 900 ms landing), so a silent change to the module or to
+ * here, not imported (1000 ms a beat, 3000 ms pause, 3000 ms sweep, 900 ms landing), so a silent change to the module or to
  * `count-in.ts` fails a test.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -9,8 +9,8 @@ import type { CaptureSession, CaptureHandlers, ReadinessHandlers } from './engin
 import type { CaptureError } from './engine/errors';
 import type { CalibratedFormant, Vowel } from './engine/types';
 
-const BEAT = 1000, PAUSE = 2000, SWEEP = 3000, LANDING = 900;
-const FRY_AT = 3 * BEAT + PAUSE; // 5000: the session starts here
+const BEAT = 1000, PAUSE = 3000, SWEEP = 3000, LANDING = 900;
+const FRY_AT = 3 * BEAT + PAUSE; // 6000: the session starts here
 
 const formant = (reading: CalibratedFormant['reading'] = 'captured', f1 = 296): CalibratedFormant =>
 	({ f1, f2: 1705, confidence: reading === 'provisional' ? 'low' : 'high', f2Quality: 'clear', reading, source: 'measured-user' }) as CalibratedFormant;

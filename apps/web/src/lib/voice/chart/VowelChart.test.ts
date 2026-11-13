@@ -18,7 +18,7 @@ const BASS: Record<Vowel, CalibratedFormant> = {
 const pick = (...vs: Vowel[]) => Object.fromEntries(vs.map((v) => [v, BASS[v]])) as Partial<Record<Vowel, CalibratedFormant>>;
 const html = (profile: Partial<Record<Vowel, CalibratedFormant>>, extra: Record<string, unknown> = {}) => {
 	const model = buildChartModel(profile, 'bass');
-	return render(VowelChart, { props: { model, view: model.full, ...extra } as never }).body;
+	return render(VowelChart, { props: { model, view: model.full, language: 'en', ...extra } as never }).body;
 };
 const count = (h: string, re: RegExp) => (h.match(re) ?? []).length;
 const zoneTag = (h: string, v: string) => h.match(new RegExp(`<ellipse[^>]*data-zone="${v}"[^>]*>`))![0];
@@ -68,8 +68,8 @@ describe('the chart', () => {
 	it('moves with the view it is handed: a zoomed view draws the same zone larger', () => {
 		const model = buildChartModel({}, 'bass');
 		const zone = model.zones.find((z) => z.vowel === 'ɑ')!;
-		const wide = render(VowelChart, { props: { model, view: model.full } as never }).body;
-		const near = render(VowelChart, { props: { model, view: zoomTarget(model.full, zone) } as never }).body;
+		const wide = render(VowelChart, { props: { model, view: model.full, language: 'en' } as never }).body;
+		const near = render(VowelChart, { props: { model, view: zoomTarget(model.full, zone), language: 'en' } as never }).body;
 		const rx = (h: string) => +zoneTag(h, 'ɑ').match(/rx="([\d.]+)"/)![1];
 		expect(rx(near)).toBeGreaterThan(rx(wide) * 1.3);
 	});

@@ -92,7 +92,7 @@ describe('the screen at rest', () => {
 	it('has the toggle, the progress bar, Start over, and the one plain sentence about the dot and the axes', () => {
 		const h = html({ profile: pick('i') });
 		expect(h).toContain('type="checkbox"');
-		expect(text(h)).toContain('Hide the chart and numbers while I sing');
+		expect(text(h)).toContain('Hide the chart and the readout while I sing');
 		expect(h).toContain('role="progressbar"');
 		expect(text(h)).toContain('Start over');
 		expect(text(h)).toContain('Each dot is one of your vowels: the higher your tongue, the higher the dot; the further forward, the nearer the front edge.');
@@ -113,11 +113,22 @@ describe('the screen at rest', () => {
 		for (const profile of [{}, pick('i', 'e', 'u'), BASS]) expect(text(html({ profile })).toLowerCase()).not.toMatch(/\bgoals?\b|\btargets?\b|\bwrong\b|\bfault|\bimplausible\b/);
 	});
 
-	it('renders for every voice type and none, and in French (the draft English shows for draft keys, the tree’s French for its own)', () => {
+	it('renders for every voice type and none, and in French, every string French and none missing', () => {
 		for (const voiceType of [undefined, 'soprano', 'contralto', 'countertenor', 'bass-baritone', 'not-sure']) expect(buttons(html({ voiceType }))).toHaveLength(10);
 		const fr = html({ language: 'fr', profile: pick('i') });
 		expect(text(fr)).toContain('Retour au sommaire');
 		expect(text(fr)).toContain('Tout recommencer');
-		expect(text(fr)).not.toMatch(/MISSING/);
+		expect(text(fr)).toContain('Vos résonances');
+		expect(text(fr)).toContain('1 sur 10');
+		expect(text(fr)).toContain('Reprendre [i]');
+		expect(text(fr)).toContain('Masquer le graphique et l’affichage pendant que je chante');
+		expect(buttons(fr)[0]).toBe('i cardinal, chantée, sélectionnée');
+		expect(text(fr)).toContain('Il en reste 9, dans l’ordre de votre choix.');
+		expect(fr).toContain('aria-label="Graphique des zones des voyelles.');
+		expect(text(fr)).not.toMatch(/MISSING|\{[a-z]+\}/);
+		// And with nothing sung, the first-time explanation and the first-move hint in French.
+		const none = html({ language: 'fr' });
+		expect(text(none)).toContain('Commencer suit l’ordre d’Ilya.');
+		expect(text(none)).not.toMatch(/MISSING|\{[a-z]+\}/);
 	});
 });

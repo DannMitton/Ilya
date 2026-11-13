@@ -14,8 +14,12 @@
 
 /** DESK DEFAULT 2026-09-30: one beat of the sung count. Was 700 ms. */
 export const SING_BEAT_MS = 1000;
-/** DESK DEFAULT 2026-09-30: the silent moment between the sung vowel and the fry. */
-export const PAUSE_MS = 2000;
+/**
+ * DESK DEFAULT 2026-09-30: the silent moment between the sung vowel and the fry. Was 2000 ms; 3000 ms from N.199 Step 7 (DESK DEFAULT 2026-11-13,
+ * Dann's to strike) so the 13-word pause line, "Stop singing, but maintain the shape of your vocal tract for that vowel.", can be read. It reaches the
+ * wheel too (`pacifier/count-in.ts` re-exports this), so every singer's count-in is six seconds at the ship.
+ */
+export const PAUSE_MS = 3000;
 
 export type CountInStep = 'sing' | 'two' | 'one' | 'pause' | 'fry';
 
