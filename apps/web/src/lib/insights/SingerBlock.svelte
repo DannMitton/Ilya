@@ -53,7 +53,7 @@
 	const TRACK = $derived(Math.max(80, Math.min(300, width - 250)));
 </script>
 
-{#snippet rich(text: string)}{#each richParts(text) as p, j (j)}{#if p.sub}<sub class:em={p.em}>{p.text}</sub>{:else if p.ipa}<span class="ipa">{p.text}</span>{:else if p.acc}<span class="acc">{p.text}</span>{:else if p.mus}<span class="mus">{p.text}</span>{:else if p.em}<em>{p.text}</em>{:else}{p.text}{/if}{/each}{/snippet}
+{#snippet rich(text: string)}{#each richParts(text) as p, j (j)}{#if p.sub}<sub>{p.text}</sub>{:else if p.ipa}<span class="ipa">{p.text}</span>{:else if p.acc}<span class="acc">{p.text}</span>{:else if p.mus}<span class="mus">{p.text}</span>{:else if p.em}<em>{p.text}</em>{:else}{p.text}{/if}{/each}{/snippet}
 
 {#snippet prose(text: string)}{#each textParts(text) as part, j (j)}{#if part.ipa}<span class="ipa">{part.text}</span>{:else if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
 

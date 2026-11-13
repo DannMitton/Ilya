@@ -1,13 +1,13 @@
 /**
  * Row 2d part 3: sing the vowel first, pause, then fry. The intervals asserted
  * are the brief's numbers, quoted here rather than imported, so a silent change
- * to `count-in.ts` fails a test: 1000 ms a beat and a 2000 ms pause (both DESK
+ * to `count-in.ts` fails a test: 1000 ms a beat and a 3000 ms pause (the pause DESK
  * DEFAULT, 2026-09-30).
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { runCountIn, tapAction, type CountInStep } from './count-in';
 
-const BEAT = 1000, PAUSE = 2000;
+const BEAT = 1000, PAUSE = 3000;
 
 /** The Pacifier's own timer shape: every timer in one list, cleared together. */
 function harness() {
@@ -40,7 +40,7 @@ describe('one tap begins the count-in', () => {
 });
 
 describe('the beats and the pause fire in order at the stated intervals', () => {
-	it('sings on three beats a second apart, pauses two seconds, then begins the fry', () => {
+	it('sings on three beats a second apart, pauses three seconds, then begins the fry', () => {
 		vi.useFakeTimers();
 		const h = harness();
 		h.begin();

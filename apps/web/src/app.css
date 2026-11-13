@@ -167,6 +167,21 @@
 	--signal-red: #A32D2D;        /* retake flash and badge */
 	--prep-amber: #BC7E08;        /* prep-countdown flash (policy-pending) */
 
+	/* ── The vowel-space chart's zones (N.199, ?calibrate=new) ───────────────
+	   One colour for each of the six vowels Bozeman charts; the four personal
+	   vowels ([ɪ ɨ a ʌ]) take the Voice family's lavender, as the chart is coded
+	   to Voice (Dann 2026-11-12 22:1x). Zones are flat, translucent, and never
+	   outlined, so these are fills, not strokes. DESK DEFAULT values, taken from
+	   board D (docs/sessions/n199-calibrate/); Dann's to retune. Each carries a
+	   symbol on the chart, so no zone is told apart by colour alone. */
+	--zone-i: #4F6FA8;
+	--zone-e: #3F8C8C;
+	--zone-open-e: #B07A12;
+	--zone-dark-a: #A8606F;
+	--zone-o: #5E8A55;
+	--zone-u: #4E6478;
+	--zone-personal: var(--lavender-jewel);
+
 	/* ── Backward-compatible aliases ──────────────────────── */
 	/* Components from Phase 2 reference these names.         */
 	/* New code should prefer the semantic names above.       */

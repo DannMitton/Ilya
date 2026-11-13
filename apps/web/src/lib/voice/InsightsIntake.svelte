@@ -17,6 +17,7 @@
 	 */
 	import type { IntakeAnswers, IntakePoint, IntakeTopic } from '@ilya/score-parser';
 	import { t, type Language } from '$lib/i18n';
+	import { SYMBOL_PARTS, stemParts } from './intake-symbols';
 
 	interface Props {
 		value: IntakeAnswers | undefined;
@@ -63,7 +64,7 @@
 
 {#snippet scale(q: Scaled)}
 	<fieldset class="intake-question">
-		<legend>{@html T(`voiceIntake.${q}.stem`)}</legend>
+		<legend>{#each stemParts(T(`voiceIntake.${q}.stem`)) as part, k (k)}{#if part.kind === 'symbol'}{@const sym = SYMBOL_PARTS[part.symbol]}<span class="stem-symbol">{sym.before}<i>{sym.italic}</i><sub>{sym.sub}</sub></span>{:else}{@html part.text}{/if}{/each}</legend>
 		{#each POINTS as p (p)}
 			<label class="intake-option">
 				<input
@@ -129,6 +130,15 @@
 </div>
 
 <style>
+	/* The acoustics question's symbols (Titze et al. 2015, Table I): an italic letter and an upright subscript set slightly smaller (Dann 2026-07-10). */
+	.stem-symbol i {
+		font-style: italic;
+	}
+	.stem-symbol sub {
+		font-style: normal;
+		font-size: 0.78em;
+		line-height: 1;
+	}
 	/* The characteristics phase's own recipes (`CalibrationWizard.svelte`,
 	   `.charx-*`), so the panel reads as part of the phase it sits in. */
 	.intake {

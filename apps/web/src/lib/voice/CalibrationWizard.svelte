@@ -42,7 +42,16 @@
 	 * rendered the Pacifier with a static coaching line and nothing else.
 	 */
 	import { onMount, tick, untrack } from 'svelte';
-	import Pacifier, { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
+	import Pacifier from '$lib/voice/pacifier/Pacifier.svelte';
+	import { spokenName } from '$lib/voice/vowel-names';
+	import FrSym from '$lib/voice/FrSym.svelte';
+	// N.199 (?calibrate=new only): the new capture screen and the sheet on the summary.
+	import { calibrateNewOn } from '$lib/voice/chart/calibrate-switch';
+	import { captureSessionFor } from '$lib/voice/chart/stub-switch';
+	import SummarySheet from '$lib/voice/chart/SummarySheet.svelte';
+	import VowelCapture from '$lib/voice/VowelCapture.svelte';
+	import { addTake, type TakeRecord } from '$lib/voice/takes';
+	import { openChallenging, openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
@@ -52,7 +61,6 @@
 	import OutsideNote from '$lib/voice/OutsideNote.svelte';
 	import { outsideVowels } from '$lib/voice/outside';
 	import NotePicker from '$lib/voice/NotePicker.svelte';
-	import { LiveCaptureSession } from '$lib/voice/engine/live';
 	import type { CaptureSession } from '$lib/voice/engine/session';
 	import {
 		READINESS_CAPTURE_MS,
@@ -64,7 +72,7 @@
 	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
 	import { deriveFrom } from '$lib/voice/engine/derivations';
 	import { applyIghDivergence } from '$lib/voice/engine/divergence';
-	import { checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
+	import { anchorF1sFor, checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
 	import { holdKindFor, holdAnnouncement, type HoldKind } from '$lib/voice/hold';
 	import {
 		loadStore,
@@ -215,7 +223,7 @@
 		// run opens and releases the microphone itself, so the mic indicator
 		// rests dark between them. Construction touches no browser API;
 		// getUserMedia is requested only inside start() and startReadiness().
-		session: captureSession = new LiveCaptureSession(),
+		session: captureSession = captureSessionFor(),
 		onVowelCaptured,
 		onProfileChange,
 		onComplete,
@@ -246,6 +254,9 @@
 	// functions below and save the whole store, failure-silent.
 	let store = $state<ProfileStore>(loadStore(`${INITIAL_NAME_BASE} 1`));
 	let activeVoice = $derived(store.voices.find((v) => v.id === store.activeId));
+	// N.199: the development switch for the new Calibrate screen, `?calibrate=new`. Read once; off by default.
+	const calibrateNew = calibrateNewOn();
+	let opening = $state<Opening>({ start: 'i' }); // where the new capture screen opens, and any list it walks
 	let voiceType = $derived(activeVoice?.voiceType); // Voice type slice A: the guard routes from the stored Tier 1 id.
 	// The smallest unused sequential default, so deletions never cause
 	// name collisions ("Voice 2" existing skips to "Voice 3").
@@ -308,11 +319,7 @@
 	 */
 	function withPlausibility(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
 		if (formant.source !== 'measured-user') return formant;
-		const anchorF1s: Partial<Record<Vowel, number>> = {};
-		for (const [g, f] of Object.entries(profile) as [Vowel, CalibratedFormant][]) {
-			if (f && f.reading !== 'estimated') anchorF1s[g] = f.f1;
-		}
-		const res = checkPlausibility(formant.f1, vowel, voiceType, anchorF1s);
+		const res = checkPlausibility(formant.f1, vowel, voiceType, anchorF1sFor(profile));
 		const out: CalibratedFormant = { ...formant, plausibility: res.plausibility };
 		if (res.plausibility === 'implausible' && out.reading === 'captured')
 			out.reading = 'provisional';
@@ -624,9 +631,9 @@
 	//
 	// Typography (Dann, 2026-07-10, per international mathematical-notation
 	// convention): the resonance symbol is an italic f (a variable) with an
-	// upright roman subscript (a label, not a product of variables), set as
-	// a true subscript slightly smaller than the base — see the frSym
-	// snippet. One source in the code; the convention extends across the
+	// upright roman subscript R1 or R2 (a label, not a product of variables), set as
+	// a true subscript slightly smaller than the base, the R a full capital: Titze et al. (2015), Table I (Dann 2026-11-13 15:44).
+	// See `FrSym.svelte` (lifted from the wizard's snippet, N.199 Step 1). One source in the code; the convention extends across the
 	// whole app as other surfaces are touched.
 	let logAnnounce = $state('');
 	// The hold banner's announcement text; delivered through a persistent
@@ -678,6 +685,12 @@
 		v.readiness = record;
 		touchVoice(v);
 		persistStore();
+	}
+
+	// N.199 Step 5: a take's record, written as `recordReadiness` writes (not `persist()`, which moves the calibration date).
+	function recordTake(rec: TakeRecord) {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (v) { addTake(v, rec); persistStore(); }
 	}
 
 	// ── Phase 0 → 1 ────────────────────────────────────────────────────────
@@ -754,6 +767,7 @@
 	// ── Phase 1 → 2 ────────────────────────────────────────────────────────
 	async function beginCapture() {
 		phase = 'capture';
+		if (calibrateNew) opening = openTour(profile);
 		queue = [...DEFAULT_VOWELS];
 		queueIndex = 0;
 		await tick(); // let the Pacifier mount before driving it
@@ -784,6 +798,18 @@
 	// the tour is waiting on holds and advances; an out-of-turn capture
 	// hands focus straight back to the current vowel.
 	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
+		const effective = commitReading(vowel, formant);
+		if (phase !== 'capture' || paused) return;
+		if (vowel === currentVowel) {
+			beginHold(vowel, holdKindFor(effective)); // `hold.ts`: an implausible take advances like any other.
+		} else if (currentVowel) {
+			// Out of turn: the roster took the value; the tour stays put.
+			pacifierRef?.activateVowel(currentVowel);
+		}
+	}
+
+	// A reading into the profile (guard, [ɨ] pass, save, announcement), moved out whole from the function above (N.199 Step 4b) so the new screen commits the same way.
+	function commitReading(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
 		const checked = withPlausibility(vowel, formant);
 		profile = withIghPass({ ...profile, [vowel]: checked });
 		persist();
@@ -797,13 +823,7 @@
 		// users. Speakable name, never the raw glyph (§4.6 discipline).
 		logAnnounce = `${T('calib.log.addedPrefix')} ${spokenName(vowel, language)}, ${Math.round(effective.f1)} ${T('calib.log.hertz')}, ${readingLabel(effective.reading)}.`;
 		onVowelCaptured?.(vowel, effective);
-		if (phase !== 'capture' || paused) return;
-		if (vowel === currentVowel) {
-			beginHold(vowel, holdKindFor(effective)); // `hold.ts`: an implausible take advances like any other.
-		} else if (currentVowel) {
-			// Out of turn: the roster took the value; the tour stays put.
-			pacifierRef?.activateVowel(currentVowel);
-		}
+		return effective;
 	}
 
 	/**
@@ -962,6 +982,7 @@
 
 	async function addChallengingVowels() {
 		challengingOffered = true;
+		if (calibrateNew) opening = openChallenging(profile);
 		queue = [...DEFAULT_VOWELS, ...CHALLENGING_VOWELS];
 		queueIndex = DEFAULT_VOWELS.length; // resume right where the default set ended
 		phase = 'capture';
@@ -974,6 +995,7 @@
 		// single-item pass, so the ritual (and the post-capture hold) still
 		// applies, and finishing it returns to the summary via the normal
 		// advance path.
+		if (calibrateNew) opening = openRetake([vowel, ...more]);
 		queue = [vowel, ...more]; // `more`: the summary note's Re-take sings every vowel it names.
 		queueIndex = 0;
 		phase = 'capture';
@@ -1013,6 +1035,8 @@
 
 	// ── Start over: clears the active voice's readings, keeps its name ──────
 	function confirmReset() {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (v) delete v.takes; // Start over clears the take record with the readings
 		profile = {};
 		persist();
 		resetFlow('welcome');
@@ -1099,18 +1123,6 @@
 	>{spokenName(g, language)}{/snippet}
 
 <!--
-	The resonance symbol (Dann, 2026-07-10): italic f (variable), upright
-	roman subscript (label, so it cannot be misread as f × R × 1), subscript
-	set slightly smaller than the base. The single source of this convention
-	in the code. Screen readers announce the aria-label; the styled glyphs
-	are hidden from them because "f" plus a subscript reads as noise.
--->
-{#snippet frSym(n: number)}<span class="fr-sym" aria-label={`f R ${n}`}><em aria-hidden="true"
-			>f</em
-		><sub aria-hidden="true">R{n}</sub></span
-	>{/snippet}
-
-<!--
 	The resonance roster (Dann's direction, 2026-07-10; see the script-side
 	comment for full provenance). One table on both surfaces: the guided
 	flow renders it read-only under the quadrilateral; the summary renders
@@ -1159,8 +1171,8 @@
 		<thead>
 			<tr>
 				<th scope="col">{T('calib.common.vowelWord')}</th>
-				<th scope="col">{@render frSym(1)}</th>
-				<th scope="col">{@render frSym(2)}</th>
+				<th scope="col"><FrSym n={1} /></th>
+				<th scope="col"><FrSym n={2} /></th>
 				{#if showActions}
 					<th scope="col"><span class="visually-hidden">{T('calib.roster.actionsHeader')}</span></th>
 				{/if}
@@ -1365,6 +1377,10 @@
 					<button type="button" class="wizard-primary" onclick={beginCapture}>{T('calib.common.continue')}</button>
 				{/if}
 			</div>
+		{:else if phase === 'capture' && calibrateNew}
+			<!-- N.199 Step 4b: the new capture screen; the wheel below stays the default. -->
+			<div class="wizard-phase"><VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
+				onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} /></div>
 		{:else if phase === 'capture'}
 			<div class="wizard-phase">
 				<div class="wizard-progress" role="status" aria-live="polite">
@@ -1469,6 +1485,7 @@
 						{T('calib.summary.savedLede')}
 					</p>
 					{@render rosterTable(true)}
+					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} />
 					{@render challengingInvite()}
 					{@render characteristicsButton()}
 				{:else}
@@ -1476,6 +1493,7 @@
 						{capturedCount} {T('calib.common.of')} {ALL_VOWELS.length} {T('calib.summary.progressLedeSuffix')}
 					</p>
 					{@render rosterTable(true)}
+					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} />
 					{@render challengingInvite()}
 					<!-- FILLED FINISH LEADS, N.114b item 9, RULED BY DANN 2026-09-10:
 					     "Filled Finish, ghost Add voice characteristics, ghost Start
@@ -1657,18 +1675,6 @@
 		clip: rect(0 0 0 0);
 		white-space: nowrap;
 		border: 0;
-	}
-
-	/* The resonance symbol: italic variable, upright subscript, subscript
-	   slightly smaller than the base (Dann, 2026-07-10). */
-	.fr-sym em {
-		font-style: italic;
-		font-weight: inherit;
-	}
-	.fr-sym sub {
-		font-style: normal;
-		font-size: 0.72em;
-		line-height: 1;
 	}
 
 	/* Drawer kinship (Dann, 2026-07-12): the wizard adopts Ilya's drawer

@@ -45,12 +45,12 @@ const STUB_FORMANTS: Record<Vowel, { f1: number; f2: number }> = {
 };
 
 /** Force a specific outcome regardless of vowel, for testing the UI paths. */
-export type StubOutcome = 'captured' | 'provisional-low' | 'provisional-divergent';
+export type StubOutcome = 'captured' | 'provisional-low' | 'provisional-divergent' | 'error-no-audio';
 
 /** Force a specific readiness outcome, for exercising the wizard's three paths. */
 export type StubReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr' | 'no-microphone';
 
-function stubFormant(vowel: Vowel, outcome: StubOutcome): CalibratedFormant {
+function stubFormant(vowel: Vowel, outcome: Exclude<StubOutcome, 'error-no-audio'>): CalibratedFormant {
 	const { f1, f2 } = STUB_FORMANTS[vowel];
 	const base: CalibratedFormant = {
 		f1,
@@ -119,7 +119,15 @@ export class StubCaptureSession implements CaptureSession {
 	 * Pass a StubOutcome to force every capture down one path, and a
 	 * StubReadinessOutcome to force the readiness gate's verdict.
 	 */
-	constructor(forced?: StubOutcome, readiness: StubReadinessOutcome = 'clear') {
+	constructor(
+		forced?: StubOutcome,
+		readiness: StubReadinessOutcome = 'clear',
+		/**
+		 * N.199 Step 6: a per-take script. Asked at each `start`; an outcome it returns wins over `forced` and the default, so a browser test
+		 * can make one take a Provisional re-take or an error without a second session. Absent: nothing changes.
+		 */
+		private readonly outcomeFor?: (vowel: Vowel) => StubOutcome | undefined
+	) {
 		this.forced = forced;
 		this.readiness = readiness;
 	}
@@ -130,7 +138,7 @@ export class StubCaptureSession implements CaptureSession {
 
 		const stableDelay = 500 + Math.random() * 500; // 500 to 1000 ms to stable fry
 		const completeDelay = stableDelay + 3000; // plus the fixed 3.0 s sweep
-		const outcome = this.forced ?? defaultOutcome(vowel);
+		const outcome = this.outcomeFor?.(vowel) ?? this.forced ?? defaultOutcome(vowel);
 
 		this.timers.push(
 			setTimeout(() => {
@@ -141,6 +149,10 @@ export class StubCaptureSession implements CaptureSession {
 			setTimeout(() => {
 				if (!this.active) return;
 				this.active = false;
+				if (outcome === 'error-no-audio') {
+					handlers.onError({ code: 'NO_AUDIO_INPUT', message: 'No sound came through.' });
+					return;
+				}
 				handlers.onComplete(stubFormant(vowel, outcome));
 			}, completeDelay)
 		);
