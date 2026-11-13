@@ -49,3 +49,24 @@ Gates before this step (after 6a): phonology 462, dictionary 248, web-check 0 er
 - **The English pause line and its `PAUSE_MS` in the wheel.** The wheel now says the longer line with a 3 s pause; I did not run the wheel.
 - **Whether the French summary's own strings still say "Réessayer" for what the capture screen calls « Reprendre ».** The summary's button is the tree's `calib.common.retake` (« Réessayer »); the capture screen's button is the ratified `capture.retake` (« Reprendre {v} »). Two words for one act, in French. Not mine to change; noted for Dann.
 - **The credit line** still reads the English interim text in both languages until 6b.
+
+## Item 8: `FrSym` takes small capitals (its own commit)
+
+`apps/web/src/lib/voice/FrSym.svelte` (the `.fr-sym sub` rule): `font-variant-caps: all-small-caps`, `font-size: 0.78em`, `letter-spacing: 0.02em`, upright (board D's values). The symbol is now italic f, small-capital R, and the subscript numeral (Dann 2026-11-12, entry 17, ruling 14). **`FrSym` is on the live roster, so this reaches every singer at the ship**, not only `?calibrate=new`: the roster's two column heads and the capture screen's readout and the sheet's table.
+
+**Pictures, the roster before and after** (Drawer on desktop, 1440 by 900, scale 2): `docs/sessions/report-code-n199-step7-pictures/roster-header-before.png` and `roster-header-after.png` (the column heads), and `roster-before.png` and `roster-after.png` (the whole table). Before, the subscript reads "R1" in full capitals at 0.72 em; after, a small-capital R beside the numeral at 0.78 em.
+
+**Is it true small capitals, or synthesized by the browser? NOT ESTABLISHED for the face that ships.** The app takes Source Sans 3 from Google Fonts (`src/app.html:49`), which this sandbox cannot reach, so the face was "unloaded" and the page rendered in the fallback. In the fallback, with synthesis switched off the width equalled plain capitals (106.61 against 106.61) and with synthesis allowed it was 74.63, a 0.7 scaling: the fallback has no small-capital glyphs and the browser synthesizes them. Whether Source Sans 3 as Google serves it carries true small capitals I could not test; if it does not, singers see the browser's scaled capitals, which are lighter and a little smaller than designed ones. Dann's walk, with the face loaded, settles it. If he wants to be sure, the face can be self-hosted (as Lato IPA is); that is not done.
+
+Gates after this commit: see the table above's twin below.
+
+| Gate | Baseline | After `FrSym` |
+|---|---|---|
+| phonology | 462 | 462 passed |
+| dictionary | 248 | 248 passed |
+| web-check | 0 errors, 12 warnings | 0 errors, 12 warnings (5 files) |
+| web-test | 5252 passed, 1 skipped | 5589 passed, 1 skipped (no change from the words commit) |
+| score-parser | 785 passed, 5 skipped | 785 passed, 5 skipped |
+| blurb | 178 | 178 passed |
+| integration | 155 | 155 passed |
+| ratchets | OK | OK |
