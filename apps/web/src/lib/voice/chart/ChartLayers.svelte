@@ -204,7 +204,6 @@
 	}
 	.axis-words .sub {
 		font-size: 0.78em;
-		font-variant-caps: all-small-caps;
 		letter-spacing: 0.02em;
 	}
 	.numbers text {
