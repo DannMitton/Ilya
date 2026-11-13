@@ -49,3 +49,16 @@ Seated in `apps/web/src/lib/i18n.ts:2546` character for character, in its own co
 **The printed sheet still fits one letter page in both languages** (PDFs in print media: `pdfinfo` Pages 1 for each; `docs/sessions/report-code-n199-addendum-pictures/printed-sheet-en.pdf` and `-fr.pdf`; the French has room to spare). The text is not shorter than the 12:00 text by much; nothing was cut.
 
 Gates after this commit: phonology 462, dictionary 248, web-check 0 errors and 12 warnings, **web-test 5623 passed and 1 skipped (unchanged)**, score-parser 785 and 5 skipped, blurb 178, integration 155, ratchets OK.
+
+## Addendum 2: the resonance symbol follows Titze et al. (2015), Table I (Dann 2026-11-13 15:44)
+
+Titze et al. (2015), as the desk cites it: *Toward a consensus on symbolic notation of harmonics, resonances, and formants in vocalization*, JASA 137(5): 3005-3007, doi 10.1121/1.4919349, Table I: a resonance frequency is f with the subscript R1 (R2, ... Rm), the R a full capital. This supersedes the small-capital R (ruling 14) and the 0.78 em plain capital of amendment 4.
+
+- `apps/web/src/lib/voice/FrSym.svelte`: the subscript is `R{n}`, one run of text, so the R and the numeral share one size and one weight. Removed: the separate weight, `font-synthesis`, and letter-spacing. Kept: the 2026-07-10 rules (italic f, upright subscript at 0.78 em on the `sub`), `role="img"` and the `aria-label` unchanged. The header comment cites Titze et al. 2015, Table I, and Dann's 15:44 ruling; the CSS comment no longer carries the small-capital history.
+- `voice/chart/ChartLayers.svelte`: the axis words' subscript is one tspan `R1` or `R2` at 0.78 em, the letter-spacing removed. **A defect the pictures showed, from Step 6b, fixed here:** the rotated label read "fR1mouth more open" with no space (Svelte trimmed the leading space of the tspan); the words now take `dx="0.4em"`.
+- Not touched: `voiceIntake.acoustics.stem` (`i18n.ts`).
+- Measured (computed style, French and English roster header): the subscript is "R1", 10.14 px, weight 600, `font-variant-caps` normal, letter-spacing normal, no child element.
+- Pictures (`docs/sessions/report-code-n199-titze-pictures/`, phone 390 by 844, scale 3): `phone-en-roster-header.png`, `phone-fr-roster-header.png`, `phone-en-chart-axis.png`, `phone-fr-chart-axis.png`.
+- I did not open the paper; the citation and Table I are the desk's words, not read by me.
+
+Gates after this commit: phonology 462, dictionary 248, web-check 0 errors and 12 warnings, **web-test 5623 passed and 1 skipped (unchanged)**, score-parser 785 and 5 skipped, blurb 178, integration 155, ratchets OK.

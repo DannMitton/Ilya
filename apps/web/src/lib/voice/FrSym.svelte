@@ -5,10 +5,13 @@
 	in the code. Screen readers announce the aria-label; the styled glyphs
 	are hidden from them because "f" plus a subscript reads as noise.
 
-	N.199 Step 1: LIFTED from `CalibrationWizard.svelte`'s `frSym` snippet with the same markup and the same two
-	rules (Step 1). Ruling 14 (Dann 2026-11-12) asks for a small-capital R; Step 7 set it with `all-small-caps`, and the desk's amendment of
-	2026-11-13 replaced that: the served Source Sans 3 has no `smcp` feature, so the browser synthesized a thin R. The subscript is now a plain capital R
-	at 0.78 em beside the numeral, in the same weight, with no synthesis, so the two read as one mark. `FrSym` is on the live roster, so this reaches every singer.
+	N.199 Step 1: LIFTED from `CalibrationWizard.svelte`'s `frSym` snippet with the same markup.
+
+	THE SYMBOL FOLLOWS TITZE ET AL. (2015), "Toward a consensus on symbolic notation of harmonics, resonances, and formants in vocalization", JASA 137(5):
+	3005-3007, doi 10.1121/1.4919349, Table I: a resonance frequency is f with the two-character subscript R1 (R2, ... Rm), the R a full capital. Dann's
+	ruling of 2026-11-13 15:44 seats it, and supersedes the small-capital R of ruling 14 (2026-11-12) and the 0.78 em plain capital of the amendment's
+	earlier step: the R and the numeral are one subscript, one size, one weight. The 2026-07-10 rules stand: an italic f, an upright subscript set slightly
+	smaller than the base. `FrSym` is on the live roster, so this reaches every singer.
 -->
 <script lang="ts">
 	let { n }: { n: 1 | 2 } = $props();
@@ -17,19 +20,15 @@
 <span class="fr-sym" role="img" aria-label={`f R ${n}`}><em aria-hidden="true">f</em><sub aria-hidden="true">R{n}</sub></span>
 
 <style>
-	/* The resonance symbol: italic f, a subscript capital R and numeral (Dann 2026-11-12, entry 17 and ruling 14: "f(italics)R2(smallcaps
-	   subscript)"). The subscript is upright and set slightly smaller than the base (Dann, 2026-07-10). It is a plain capital at 0.78 em, not a synthesized
-	   small capital: the served face has no `smcp`, and a synthesized R is thinner than its numeral. */
+	/* The resonance symbol: italic f and an upright subscript R1 or R2 (Titze et al. 2015, Table I; Dann 2026-11-13 15:44), the subscript set slightly
+	   smaller than the base (Dann, 2026-07-10). The R and the numeral are one run of text, so they share one size and one weight. */
 	.fr-sym em {
 		font-style: italic;
 		font-weight: inherit;
 	}
 	.fr-sym sub {
 		font-style: normal;
-		font-weight: inherit;
-		font-synthesis: none;
 		font-size: 0.78em;
-		letter-spacing: 0.02em;
 		line-height: 1;
 	}
 </style>

@@ -142,7 +142,7 @@
 			<text x="5" y={height - 5} text-anchor="start">{axisWords.front}</text>
 			<text x={width - 5} y={height - 5} text-anchor="end">{axisWords.back}</text>
 			<text x={width / 2} y={height - 5} text-anchor="middle"><tspan font-style="italic">f</tspan><tspan class="sub" dy="2">R2</tspan></text>
-			<text transform="translate({width - 5 - labelSize} {height / 2}) rotate(90)" text-anchor="middle"><tspan font-style="italic">f</tspan><tspan class="sub" dy="2">R1</tspan><tspan dy="-2"> {axisWords.open}</tspan></text>
+			<text transform="translate({width - 5 - labelSize} {height / 2}) rotate(90)" text-anchor="middle"><tspan font-style="italic">f</tspan><tspan class="sub" dy="2">R1</tspan><tspan dy="-2" dx="0.4em">{axisWords.open}</tspan></text>
 		</g>
 	{/if}
 	<g class="numbers" aria-hidden="true" font-size={labelSize}>
@@ -202,9 +202,9 @@
 		stroke: color-mix(in srgb, var(--paper-light, #f5f1e8) 85%, transparent);
 		stroke-width: 3px;
 	}
+	/* The subscript R1 or R2 is one tspan, so the R and the numeral share one size (Titze et al. 2015, Table I; Dann 2026-11-13 15:44). */
 	.axis-words .sub {
 		font-size: 0.78em;
-		letter-spacing: 0.02em;
 	}
 	.numbers text {
 		fill: var(--ink-tertiary);
