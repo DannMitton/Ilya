@@ -2,6 +2,8 @@
 
 r3, written by the desk (Opus) 2026-10-20 about 02:50, at Dann's request of 02:47: *"Can you generate such a list and use it as a running cheklist to keep us oriented? ... Can you heop m,e by devising a sequential checklist grouped by meta tasks?"* (transcribed as written). It replaces r2 of 2026-10-12, which is in `SCHEDULE-archive.md` verbatim. Floor: `4e56cea8`.
 
+**RULED 2026-11-13 00:47 (Dann): THE RELEASE IS FRIDAY 2026-11-20, and N.199 (the Calibrate redesign, QUEUE row 185) is in it.** *"Let's move the release to next Friday. Let's be aggressive in our development and integration of this aspect of the build."* The checklist below is NOT re-planned to that date; the desk owes it.
+
 **RULED 2026-10-27 02:49 (Dann, option 3): the share moves until meta 2 is measured at 9 of 10; 2026-10-30 is no longer the share date and the new date is NOT SET. The paragraph below is history.** **What 2026-10-30 is.** The day Dann shares Ilya with colleagues for testing and feedback, at `ilya.dannmitton.com` (ruled 2026-10-18 18:26 and 2026-10-19 19:59; `OPEN.md` §N.170). Not a release; a release date is NOT SET. The date never sizes the work (`CONTRACT.md` §1 item 7): what does not fit moves, and the move is written in "Changes" below.
 
 **What colleagues are meant to meet: THE TARGET** (`PRODUCT.md`, "The target, in Dann's words", ruled 2026-10-18 18:44): a colleague drops a scan, PDF, or photograph of a Russian song; Ilya gives back the correct Text, Markup with the sung syllables seated in IPA and syllabified modern Cyrillic, reading at least 9 of 10 syllables without anyone typing the poem, and Insights that are reasonable, relevant, and human-sounding.
