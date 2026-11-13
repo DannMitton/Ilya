@@ -120,7 +120,7 @@
 		const after = new Set<Vowel>([...sungSet, v]);
 		const next = nextVowel(after, v, pass);
 		if (next !== null) pendingSelected = next;
-		else if (pass) returnWhenIdle = true;
+		else if (pass && !notice) returnWhenIdle = true; // a take that leaves a notice to read (a rollback, an uncertain reading) stays until the singer returns
 		// all ten sung, no pass: the screen rests where it is
 	}
 

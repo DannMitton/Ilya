@@ -341,8 +341,8 @@
 	   its own half-inch margin, prints white, and keeps its colours on paper. Nothing interactive is drawn (`forPrint`). */
 	.vowel-sheet.for-print {
 		width: 8.5in;
-		padding: 0.5in;
-		gap: 0.6rem;
+		padding: 0.4in 0.5in;
+		gap: 0.4rem;
 		background: #ffffff;
 		print-color-adjust: exact;
 		-webkit-print-color-adjust: exact;
@@ -350,6 +350,22 @@
 	}
 	.vowel-sheet.for-print .chart-ground {
 		fill: #ffffff;
+	}
+	/* One letter sheet, measured (Step 6): the rows, the legend, and the provenance take less room on paper than on the screen. */
+	.vowel-sheet.for-print .readings {
+		font-size: 0.8125rem;
+	}
+	.vowel-sheet.for-print .readings th,
+	.vowel-sheet.for-print .readings td {
+		padding-top: 0.08rem;
+		padding-bottom: 0.08rem;
+	}
+	.vowel-sheet.for-print .legend {
+		font-size: 0.75rem;
+		gap: 0.2rem 1rem;
+	}
+	.vowel-sheet.for-print .provenance {
+		font-size: 0.6875rem;
 	}
 	@media print {
 		:global(body.printing-vowel-sheet > *:not(.vowel-sheet-print-root)) {

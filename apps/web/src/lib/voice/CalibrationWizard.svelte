@@ -47,6 +47,7 @@
 	import FrSym from '$lib/voice/FrSym.svelte';
 	// N.199 (?calibrate=new only): the new capture screen and the sheet on the summary.
 	import { calibrateNewOn } from '$lib/voice/chart/calibrate-switch';
+	import { captureSessionFor } from '$lib/voice/chart/stub-switch';
 	import SummarySheet from '$lib/voice/chart/SummarySheet.svelte';
 	import VowelCapture from '$lib/voice/VowelCapture.svelte';
 	import { addTake, type TakeRecord } from '$lib/voice/takes';
@@ -60,7 +61,6 @@
 	import OutsideNote from '$lib/voice/OutsideNote.svelte';
 	import { outsideVowels } from '$lib/voice/outside';
 	import NotePicker from '$lib/voice/NotePicker.svelte';
-	import { LiveCaptureSession } from '$lib/voice/engine/live';
 	import type { CaptureSession } from '$lib/voice/engine/session';
 	import {
 		READINESS_CAPTURE_MS,
@@ -223,7 +223,7 @@
 		// run opens and releases the microphone itself, so the mic indicator
 		// rests dark between them. Construction touches no browser API;
 		// getUserMedia is requested only inside start() and startReadiness().
-		session: captureSession = new LiveCaptureSession(),
+		session: captureSession = captureSessionFor(),
 		onVowelCaptured,
 		onProfileChange,
 		onComplete,
