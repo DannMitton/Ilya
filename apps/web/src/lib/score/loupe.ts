@@ -344,7 +344,7 @@ function round(n: number): number {
  * time signature. **Ilya draws no time signature anywhere today**: `:1102`
  * reads `timeSignature` for spacing and nothing emits it.
  */
-export const MUSIC_MARK = '[data-event-id] > :not([data-hit]), [data-of-event], [data-tacet]';
+export const MUSIC_MARK = '[data-event-id] > :not([data-hit]), [data-verse-event-id] > :not([data-verse-hit]), [data-of-event], [data-verse-of-event], [data-tacet]';
 
 /**
  * Where the loupe's head ends: the leftmost ink drawn from `MUSIC_MARK` on.

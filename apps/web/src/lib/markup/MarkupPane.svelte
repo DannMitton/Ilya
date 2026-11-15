@@ -803,9 +803,6 @@
 	const hasAcousticMarks = $derived(!!analyzed && Object.keys(analyzed.events).length > 0);
 	// The Markup legend (N.10b, N.176): the withheld sigla needs `withheldIpa`, and the stems key
 	// needs a note with a timbre analysis, so it sits here, after both.
-	// Row 78b: the turning-head entries; the hollow one only when a placeholder head is drawn.
-	const hollowHeads = $derived(!!analyzed && Object.values(analyzed.events).some((e) => e.placeholder));
-	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!withheldIpa, stems: hasAcousticMarks, turningHeads: hasAcousticMarks, hollowHeads, filledHeads: !adapted.generic }));
 	const showBroadNote = $derived(hasAcousticMarks && isBroadAnalysis(adapted.completeness));
 
 	// ── Item 1.8, the withheld statement (2026-08-05) ─────────────────────
@@ -862,9 +859,13 @@
 					engraving,
 					channels: { ipaPreview, withheldIpa, cyrPreview, sylTypePreview, melismaPreview },
 					font: notationFont ? { prepared: notationFont.prepared, family: notationFont.family } : undefined,
+					verses: { profile: adapted.snapshot, notationPrefs, openSyllabification },
 				})
 			: null,
 	);
+	// Row 78b: the turning-head entries; the hollow one only when a placeholder head is drawn.
+	const hollowHeads = $derived(!!analyzed && Object.values((paginated?.analyzed ?? analyzed).events).some((e) => e.placeholder));
+	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!(paginated ? paginated.withheld : withheldIpa), stems: hasAcousticMarks, turningHeads: hasAcousticMarks, hollowHeads, filledHeads: !adapted.generic }));
 	const scorePages = $derived(paginated?.pages ?? null);
 
 	// The commentary (octave notice, watch list, withheld statement) follows the score (Dann 2026-07-18)

@@ -158,34 +158,34 @@ describe('verseView on strophic-repeat.musicxml (strophic lane A, D2)', () => {
 		expect(sungVerseNumbers(await fixture('strophic-repeat.musicxml'))).toEqual([1, 2, 3]);
 	});
 
-	it('in verses 2 and 3, the refrain bars (7 and 8) carry verse 1\'s syllables', async () => {
+	it('in verses 2 and 3, the refrain bars carry verse 1\'s syllables', async () => {
 		const s = await fixture('strophic-repeat.musicxml');
 		for (const v of [2, 3]) {
 			const view = verseView(s, v);
-			for (const bar of [6, 7]) expect(wordsIn(view, bar)).toEqual(wordsIn(s, bar));
-			expect(wordsIn(view, 6).every((w) => w !== null)).toBe(true);
+			for (const bar of [7, 8]) expect(wordsIn(view, bar)).toEqual(wordsIn(s, bar));
+			expect(wordsIn(view, 7).every((w) => w !== null)).toBe(true);
 		}
 	});
 
-	it('in verse 2, bar 4\'s second note has no syllable and bar 5\'s two notes each have one', async () => {
+	it('in verse 2, the second passage bar\'s second note has no syllable and the third bar\'s two notes each have one', async () => {
 		const view = verseView(await fixture('strophic-repeat.musicxml'), 2);
-		expect(wordsIn(view, 3).slice(0, 2)).toEqual(['Лес', null]);
-		expect(wordsIn(view, 4).slice(0, 2)).toEqual(['зо', 'лот']);
+		expect(wordsIn(view, 4).slice(0, 2)).toEqual(['Лес', null]);
+		expect(wordsIn(view, 5).slice(0, 2)).toEqual(['зо', 'лот']);
 		const v1 = verseView(await fixture('strophic-repeat.musicxml'), 1);
-		expect(wordsIn(v1, 3).slice(0, 2)).toEqual(['ре', 'кой']);
-		expect(wordsIn(v1, 4).slice(0, 2)).toEqual(['Свет', null]);
+		expect(wordsIn(v1, 4).slice(0, 2)).toEqual(['ре', 'кой']);
+		expect(wordsIn(v1, 5).slice(0, 2)).toEqual(['Свет', null]);
 	});
 
 	it('no sung note in any view lacks a syllable except the continuations the file has', async () => {
 		const s = await fixture('strophic-repeat.musicxml');
-		// printed bar 4 (index 3) note 2 in verses 2 and 3, bar 5 (index 4) note 2 in verse 1, bar 6 (index 5) note 2 in every verse (the slur).
-		const allowed: Record<number, Array<[number, number]>> = { 1: [[4, 1], [5, 1]], 2: [[3, 1], [5, 1]], 3: [[3, 1], [5, 1]] };
+		// the second passage bar (index 4), note 2, in verses 2 and 3; the third (index 5), note 2, in verse 1; the fourth (index 6), note 2, in every verse (the slur).
+		const allowed: Record<number, Array<[number, number]>> = { 1: [[5, 1], [6, 1]], 2: [[4, 1], [6, 1]], 3: [[4, 1], [6, 1]] };
 		for (const v of [1, 2, 3]) {
 			const view = verseView(s, v);
 			const bare: Array<[number, number]> = [];
 			for (const bar of new Set(view.vocalLine.map((e) => e.measureIndex))) {
 				view.vocalLine.filter((e) => e.measureIndex === bar && e.type === 'note').forEach((e, i) => {
-					if (!e.syllable && bar >= 2 && bar <= 9) bare.push([bar, i]);
+					if (!e.syllable && bar >= 3 && bar <= 10) bare.push([bar, i]);
 				});
 			}
 			expect(bare, `verse ${v}`).toEqual(allowed[v]);

@@ -36,27 +36,27 @@ describe('strophic-repeat.musicxml', () => {
 		expect(sungVerseNumbers(s)).toEqual([1, 2, 3]);
 		const fwd = s.measures.filter((m) => m.repeatStart);
 		const back = s.measures.filter((m) => m.repeatEnd);
-		expect(fwd.map((m) => m.number)).toEqual(['3']);
-		expect(back.map((m) => m.number)).toEqual(['8']);
+		expect(fwd.map((m) => m.number)).toEqual(['4']);
+		expect(back.map((m) => m.number)).toEqual(['9']);
 		expect(back[0].repeatTimes).toBeUndefined();
 		expect(s.measures.some((m) => m.ending)).toBe(false);
-		expect(s.measures).toHaveLength(10);
+		expect(s.measures).toHaveLength(11);
 		expect(s.vocalLine.flatMap((e) => e.slurs ?? [])).toHaveLength(2); // one slur: a start and a stop
 		expect(s.tempoMarkings).toHaveLength(1);
-		expect(s.tempoMarkings[0].measureIndex).toBe(8);
+		expect(s.tempoMarkings[0].measureIndex).toBe(9);
 	});
 	it('puts the words where the brief says: introduction bare, bar 4 and bar 5 differing, refrain in verse 1 only', async () => {
 		const s = await load('strophic-repeat.musicxml');
-		const intro = s.vocalLine.filter((e) => e.measureIndex < 2);
+		const intro = s.vocalLine.filter((e) => e.measureIndex < 3);
 		expect(intro.every((e) => e.type === 'rest')).toBe(true);
-		// passage bar 4 of the brief (index 3): verse 1 two syllables on two notes, verse 2 one syllable and a continuation
-		expect(wordsOf(s, 3, 1).slice(0, 2).every((w) => w !== null)).toBe(true);
-		expect(wordsOf(s, 3, 2).slice(0, 2)).toEqual(['Лес', null]);
-		// passage bar 5 (index 4): the reverse
-		expect(wordsOf(s, 4, 1).slice(0, 2)).toEqual(['Свет', null]);
-		expect(wordsOf(s, 4, 2).slice(0, 2).every((w) => w !== null)).toBe(true);
-		// refrain bars 7 and 8 (indices 6 and 7): verse 1 only
-		for (const bar of [6, 7]) {
+		// passage bar 2 (printed 5, index 4): verse 1 two syllables on two notes, verse 2 one syllable and a continuation
+		expect(wordsOf(s, 4, 1).slice(0, 2).every((w) => w !== null)).toBe(true);
+		expect(wordsOf(s, 4, 2).slice(0, 2)).toEqual(['Лес', null]);
+		// passage bar 3 (printed 6, index 5): the reverse
+		expect(wordsOf(s, 5, 1).slice(0, 2)).toEqual(['Свет', null]);
+		expect(wordsOf(s, 5, 2).slice(0, 2).every((w) => w !== null)).toBe(true);
+		// refrain bars (printed 8 and 9, indices 7 and 8): verse 1 only
+		for (const bar of [7, 8]) {
 			expect(wordsOf(s, bar, 1).every((w) => w !== null)).toBe(true);
 			expect(wordsOf(s, bar, 2).every((w) => w === null)).toBe(true);
 			expect(wordsOf(s, bar, 3).every((w) => w === null)).toBe(true);
