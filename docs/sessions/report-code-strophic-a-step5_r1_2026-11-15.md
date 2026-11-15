@@ -15,11 +15,27 @@ Brief r5, Step 5. Branch `cloud-lane-56`, cut from `origin/Shane` at `fb9d829e`,
 | root integration | 159 passed (159) |
 | ratchets | OK |
 | `pnpm build` | exit 0 |
-| Playwright, `chromium` and `phone` together | PW_RESULT |
+| Playwright, `chromium` and `phone` together | 245 passed, 8 failed, 1 skipped (254 tests, 56.9 min); the failures are listed below |
 
 Against the baseline you gave, phonology, dictionary, blurb, root integration, `svelte-check`, and ratchets are unchanged. Web went from 5817 to 6051 and score-parser from 842 to 890; the additions are this lane's own tests (the 208-case byte baseline is most of the web rise, and the six fixtures also run through `fixture-rule.test.ts`).
 
 **The two web failures are both in `voice/engine/open-extract.test.ts`**, and both are 5000 ms timeouts (5.0 and 5.1 s). The file is CPU-bound, I was taking screenshots while the run went, and rerun alone with the dev server up it still measured 5.7 s on one case. It passed on the first untouched run, in the Step 2 and 4b runs, and alone twice; it has failed or passed with and without this lane's files in the tree, so it is not this lane's. I did not touch it. It will pass or fail on CI by machine.
+
+## The Playwright failures, each checked against the untouched tip
+
+I built a clean worktree at `fb9d829e` (and `pnpm build` in it) and ran the failing tests there.
+
+| Test | On this branch | On `fb9d829e` |
+| --- | --- | --- |
+| `calibrate-new` "fr at 375 px: Re-take [i] on one line" | fails, also alone | fails |
+| `heic-offline` "a singer offline who never opened a HEIC can open one" | fails, also alone (it runs only with a `build/`) | fails once built |
+| `loupe-header` "a drag on the desk moves the card, holds while open, and resets on close" | fails, also alone | fails |
+| `loupe-header` "pressing a header button starts no drag" | failed in the full run, **passes alone** | not run |
+| phone `input-views` "a poem typed into Poem moves no seat of «Within Four Walls»" | fails | fails |
+| phone `phrase-ends` "Tchaikovsky onto an empty song: 172 seats…" | fails | fails |
+| phone `relining` "y." and "bb." | fail | fail |
+
+So seven of the eight are failures of this sandbox, not of the lane (none opens MELODY's strophic path; five are in Text and Poem), and the eighth is a load flake. **I did not run the whole suite on the untouched tip, so a failure this lane causes that is not in the list above would show only as a pass that became a fail, and none did.** The four new strophic Playwright tests passed, and so did `key-change-melody`, `markup-pages-lose-no-bars`, and `print-pages`.
 
 ## What the lane does (the brief's own words, checked)
 
