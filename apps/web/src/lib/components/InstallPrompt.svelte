@@ -38,7 +38,7 @@
       dismiss: 'Not now',
       ios_heading: 'Add <em>Ilya</em> to your Home Screen',
       ios_body: 'Tap the <strong>Share</strong> button below, then choose <strong>Add to Home Screen</strong>.',
-      ios_chrome_body: 'In Chrome, open the <strong>Share</strong> menu, then choose <strong>Add to Home Screen</strong>.',
+      ios_chrome_body: 'In Chrome, tap the <strong>Share</strong> button at the right inside the address bar, tap <strong>View More</strong>, then choose <strong>Add to Home Screen</strong>.',
       ios_dismiss: 'Got it'
     },
     fr: {
@@ -48,7 +48,7 @@
       dismiss: 'Plus tard',
       ios_heading: 'Ajoutez <em>Ilya</em> à votre écran d’accueil',
       ios_body: 'Appuyez sur le bouton <strong>Partager</strong> en bas, puis choisissez <strong>Sur l’écran d’accueil</strong>.',
-      ios_chrome_body: 'Dans Chrome, ouvrez le menu <strong>Partager</strong>, puis choisissez <strong>Sur l’écran d’accueil</strong>.',
+      ios_chrome_body: 'Dans Chrome, appuyez sur le bouton <strong>Partager</strong>, à droite dans la barre d’adresse, puis sur <strong>Afficher plus</strong>, et choisissez <strong>Sur l’écran d’accueil</strong>.',
       ios_dismiss: 'Compris'
     }
   };
@@ -138,13 +138,19 @@
   }
 
   let t = $derived(strings[language] ?? strings.en);
+
+  /* THE SHARE GLYPH (closing polish lane, step 3, desk default): an open-topped rounded square with an arrow rising from its middle, drawn from
+     plain shapes, not Apple's symbol. Inserted after the first `</strong>` (the word Share or Partager) so the strings stay as ratified. */
+  const SHARE_GLYPH =
+    '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" style="display:inline-block;width:1em;height:1em;margin-left:0.2em;vertical-align:-0.15em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2"/><path d="M12 15V3M8 7l4-4 4 4"/></svg>';
+  const withGlyph = (html: string) => html.replace('</strong>', `</strong>${SHARE_GLYPH}`);
 </script>
 
 {#if visible}
   <div class="install-prompt" role="region" aria-label={isIos ? t.ios_heading : t.heading}>
     <div class="install-prompt-inner">
       <p class="install-heading">{@html isIos ? t.ios_heading : t.heading}</p>
-      <p class="install-body">{@html isIos ? (isChrome ? (t.ios_chrome_body ?? '') : t.ios_body) : t.body}</p>
+      <p class="install-body">{@html isIos ? withGlyph(isChrome ? (t.ios_chrome_body ?? '') : t.ios_body) : t.body}</p>
       <div class="install-actions">
         {#if !isIos}
           <button class="install-btn-primary" onclick={install}>{t.install}</button>

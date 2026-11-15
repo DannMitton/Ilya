@@ -12,6 +12,7 @@
 import { pitchToMidi, type Pitch, type VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import { pitchName } from '$lib/voice/note-picker';
+import { fillVoiceType } from '$lib/voice/voiceTypes';
 import { placeholderCommentSentence, placeholderTurnsSentence } from '$lib/analysis/placeholder-line';
 import type { Run } from './comment-sources';
 import type { RenderedComment } from './comment-text';
@@ -112,6 +113,8 @@ export interface BlockInputs {
 	placeholders?: readonly string[];
 	/** Step 8: the voice has only placeholder values (`AdaptedProfile.generic`); a finding's placeholder sentence then leaves out its remedy. */
 	generic?: boolean;
+	/** The voice type's label for a placeholder page (`placeholderLabel`, `identity.ts`); undefined where there is none, and the chart's caption then keeps `insights.r2.vowels.against`. */
+	voiceTypeLabel?: string;
 	/** QUEUE row 79: the method line, and the tessitura footnote where the page prints its marker. */
 	method?: string;
 	footnote?: string | null;
@@ -331,7 +334,7 @@ export function singerBlocks(i: BlockInputs, formatFine: (seconds: number) => st
 			totals.push({
 				kind: 'vowels',
 				caption: T(model.phonation.timing === 'none' ? 'insights.phonation.byVowelShare' : 'insights.phonation.byVowel'),
-				sub: T('insights.r2.vowels.against'),
+				sub: i.generic && i.voiceTypeLabel ? fillVoiceType(T('insights.r2.vowels.against.generic'), i.voiceTypeLabel, language) : T('insights.r2.vowels.against'),
 				turns: i.turns,
 				ring: i.turns.pastShare !== null ? fill(T('insights.r2.vowels.ring'), { n: percent(i.turns.pastShare) }) : null,
 				// Step 5 (Fable's as-built review): the ring's share sums every row, so it is dashed where any row with a turn rests on a placeholder.

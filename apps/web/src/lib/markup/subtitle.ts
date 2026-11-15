@@ -5,10 +5,10 @@
  */
 import { t, type Language } from '$lib/i18n';
 import type { VoiceTypeChoice } from '$lib/voice/profileStore';
-import { voiceTypePrint } from '$lib/voice/voiceTypes';
+import { fillVoiceType, voiceTypePrint } from '$lib/voice/voiceTypes';
 
 export function profileSubtitle(o: { generic: boolean; voiceName?: string; voiceType?: VoiceTypeChoice; language: Language }): string {
 	const label = o.generic ? voiceTypePrint(o.voiceType, o.language) : undefined;
-	if (label) return t('profile.subtitlePlaceholder', o.language).replace('{voiceType}', label);
+	if (label) return fillVoiceType(t('profile.subtitlePlaceholder', o.language), label, o.language);
 	return o.voiceName ? t('profile.subtitleNamed', o.language).replace('{voice}', o.voiceName) : t('profile.subtitleYours', o.language);
 }

@@ -34,10 +34,13 @@ describe('N.196: security headers on every response', () => {
 		expect(keys).not.toContain('content-security-policy');
 	});
 
-	it('names every origin the app is known to reach, and no other', () => {
+	/* Closing polish lane, step 6: the app serves its own fonts (`static/fonts/`) and its own tesseract worker, core, and models
+	   (`/omr/models/underlay/`), so the policy names no outside host. The header is report-only: a host left out is reported, not blocked,
+	   so this pin is the check. */
+	it('names no origin but its own', () => {
 		const policy = valueOf(all, 'Content-Security-Policy-Report-Only')!;
 		const origins = [...policy.matchAll(/https:\/\/[^\s;]+/g)].map((m) => m[0]).sort();
-		expect(origins).toEqual(['https://cdn.jsdelivr.net', 'https://cdn.jsdelivr.net', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com']);
+		expect(origins).toEqual([]);
 	});
 
 	it('leaves isolation to a later row: no Cross-Origin-Opener-Policy or Cross-Origin-Embedder-Policy', () => {

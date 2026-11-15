@@ -21,6 +21,7 @@ import { readingWait, type WaitHooks } from '$lib/score/reading-wait.svelte';
 export type { OmrProgress, OmrReadResult };
 /** The app's one wait, re-exported for the component that echoes it in the drawer. */
 export { readingWait };
+export { photoWorkerArgs } from './underlay-recognize';
 
 /** Reads every page of the scan with homr. Never rejects. */
 export async function readScan(

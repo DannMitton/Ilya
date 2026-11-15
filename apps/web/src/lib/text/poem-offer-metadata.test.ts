@@ -123,9 +123,54 @@ describe('what a library entry offers to the empty fields (pure)', () => {
 		expect(putBack(blank(), { composer: 'C' }).put).toEqual({ composer: 'C' });
 	});
 
-	it('the card’s line: English «role · opera (Russian)», French the Russian names (no French name is in the data, and none is made up)', () => {
+	it('the card’s line: English «role · opera (Russian)», French the same shape with the French names (Dann 2026-11-11 22:18)', () => {
 		expect(operaLine(PIMEN.opera!, 'en')).toBe('Pimen · Boris Godunov (Борис Годунов)');
-		expect(operaLine(PIMEN.opera!, 'fr')).toBe('Пимен · Борис Годунов');
+		expect(operaLine(PIMEN.opera!, 'fr')).toBe('Pimène · Boris Godounov (Борис Годунов)');
+	});
+
+	/* Closing polish lane, step 4: one French line for each of the 29 operas, with one of its roles, pinned as ratified. */
+	const FRENCH_LINES: [string, string, string][] = [
+		['Алеко', 'Алеко', 'Aleko \u00b7 Aleko (Алеко)'],
+		['Аскольдова могила', 'Неизвестный', 'L’Homme inconnu \u00b7 La Tombe d’Askold (Аскольдова могила)'],
+		['Борис Годунов', 'Борис', 'Boris \u00b7 Boris Godounov (Борис Годунов)'],
+		['Демон', 'Демон', 'Le Démon \u00b7 Le Démon (Демон)'],
+		['Дубровский', 'Дубровский', 'Vladimir Doubrovski \u00b7 Doubrovski (Дубровский)'],
+		['Евгений Онегин', 'Гремин', 'Grémine \u00b7 Eugène Onéguine (Евгений Онегин)'],
+		['Жизнь за Царя', 'Антонида', 'Antonida \u00b7 Une vie pour le tsar (Жизнь за Царя)'],
+		['Золотой петушок', 'Шемаханская царица', 'La Reine de Chemakha \u00b7 Le Coq d’or (Золотой петушок)'],
+		['Иоланта', 'Водемон', 'Vaudémont \u00b7 Iolanta (Иоланта)'],
+		['Каменный гость', 'Лаура', 'Laura \u00b7 Le Convive de pierre (Каменный гость)'],
+		['Князь Игорь', 'Владимир Игоревич', 'Vladimir Igorevitch \u00b7 Le Prince Igor (Князь Игорь)'],
+		['Мазепа', 'Андрей', 'Andreï \u00b7 Mazeppa (Мазепа)'],
+		['Майская ночь', 'Левко', 'Levko \u00b7 Nuit de mai (Майская ночь)'],
+		['Ночь перед Рождеством', 'Оксана', 'Oxana \u00b7 La Nuit de Noël (Ночь перед Рождеством)'],
+		['Опричник', 'Наталья', 'Natalia \u00b7 L’Opritchnik (Опричник)'],
+		['Орестея', 'Клитемнестра', 'Clytemnestre \u00b7 Oresteïa (Орестея)'],
+		['Орлеанская дева', 'Иоанна', 'Jeanne d’Arc \u00b7 La Pucelle d’Orléans (Орлеанская дева)'],
+		['Пиковая дама', 'Герман', 'Hermann \u00b7 La Dame de pique (Пиковая дама)'],
+		['Русалка', 'Княгиня', 'La Princesse \u00b7 La Roussalka (Русалка)'],
+		['Руслан и Людмила', 'Баян', 'Bayan \u00b7 Rouslan et Ludmila (Руслан и Людмила)'],
+		['Садко', 'Варяжский гость', 'Le Marchand varègue \u00b7 Sadko (Садко)'],
+		['Сказка о царе Салтане', 'Царевич Гвидон', 'Tsarévitch Guidon \u00b7 Le Conte du tsar Saltan (Сказка о царе Салтане)'],
+		['Снегурочка', 'Лель', 'Lel \u00b7 Snégourotchka (Снегурочка)'],
+		['Франческа да Римини', 'Франческа', 'Francesca \u00b7 Francesca da Rimini (Франческа да Римини)'],
+		['Хованщина', 'Марфа', 'Marfa \u00b7 La Khovanchtchina (Хованщина)'],
+		['Царская невеста', 'Грязной', 'Griaznoï \u00b7 La Fiancée du tsar (Царская невеста)'],
+		['Чародейка', 'Князь', 'Le Prince \u00b7 L’Enchanteresse (Чародейка)'],
+		['Черевички', 'Вакула', 'Vakoula \u00b7 Les Souliers de la reine (Черевички)'],
+		['Сон на Волге', 'Старуха', 'La Vieille \u00b7 Un rêve sur la Volga (Сон на Волге)'],
+	];
+	it.each(FRENCH_LINES)('French line, %s, %s', (operaRu, characterRu, line) => {
+		const e = library.entries.find((x) => x.opera?.operaRu === operaRu && x.opera?.characterRu === characterRu)!;
+		expect(e, `${operaRu} / ${characterRu}`).toBeDefined();
+		expect(operaLine(e.opera!, 'fr')).toBe(line);
+	});
+	it('the table holds all 29 operas, and every libretto entry carries a French opera title and role', () => {
+		expect(FRENCH_LINES).toHaveLength(29);
+		expect(new Set(FRENCH_LINES.map((l) => l[0])).size).toBe(29);
+		const libretti = library.entries.filter((e) => e.kind === 'libretto');
+		expect(new Set(libretti.map((e) => e.opera!.operaRu)).size).toBe(29);
+		for (const e of libretti) expect(`${e.opera!.operaFr}${e.opera!.characterFr}`).not.toMatch(/'|[А-Яа-яЁё]/);
 	});
 });
 

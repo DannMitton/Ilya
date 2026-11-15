@@ -127,7 +127,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	} from '$lib/components/Drawer/sections.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
-	import { hasAnyReadings, type VoiceTypeChoice } from '$lib/voice/profileStore';
+	import { usableReadingCount, type VoiceTypeChoice } from '$lib/voice/profileStore';
 	import { profileSave } from '$lib/voice/profile-save.svelte';
 	// N.115: the ten sung vowels as a value, so Score markup's state line can
 	// count the denominator of "10 of 10" without reading the wizard's queue.
@@ -1636,13 +1636,12 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	 * is invented, and neither behaviour is lost.
 	 */
 	/**
-	 * N.73 S3 ship one. Whether the active voice holds any reading at all.
-	 * ONE predicate, `hasAnyReadings` in `profileStore.ts`, lifted out of
-	 * `CalibrationWizard` so the wizard's opening phase, the voice anchor's
-	 * sentence, and this Print guard cannot give three answers. The guard's
-	 * expression is unchanged in meaning: it read
-	 * `Object.keys(voiceFormants).length === 0` inline, which is the same test
-	 * written a second time.
+	 * Whether the active voice holds a reading the app may use (closing polish
+	 * lane, 2026-11-12). `usableReadingCount` in `profileStore.ts` counts the
+	 * readings the plausibility guard has not refused, so the voice anchor's
+	 * button and the Voice band's count give one answer. The wizard's opening
+	 * phase keeps `hasAnyReadings`, the wider test, on purpose. The Print guard
+	 * this once served is gone (the note below).
 	 */
 	/* `printDisabled` IS GONE, N.65, Dann's ruling of 2026-08-21. It read
 	   `studioDocument === 'markup' ? !ingestedScore && !voiceCalibrated
@@ -1650,7 +1649,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   sits under the sheet now and IT IS ALWAYS LIVE ON TRANSCRIPTION AND
 	   MARKED SCORE: no disabled state, no greying. `voiceCalibrated` stays,
 	   because the voice anchor reads it. */
-	const voiceCalibrated = $derived(hasAnyReadings(voiceFormants));
+	const voiceCalibrated = $derived(usableReadingCount(voiceFormants) > 0);
 	/**
 	 * N.114b item 8 emptied this of everything but the flag. It used to expand
 	 * the wizard first, because the Q3 collapse could leave a takeover opening
@@ -1735,7 +1734,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		INCLUDE_MARKUP_INSIGHTS
 			? scoreStateLine(
 					voiceName,
-					Object.keys(voiceFormants).length,
+					usableReadingCount(voiceFormants),
 					VOWELS.length,
 					language,
 				)
@@ -3155,7 +3154,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			cancelQuietTimer();
 			orphanedCount = 0;
 			noLyricsFile = null; scanBanners.reset();
-			restoreSource = restoreFrom(bytes, next.source?.page);
+			restoreSource = restoreFrom(bytes);
 			doc = next;
 			await refreshSongs();
 			/* A SWITCH IS NOT A BOOT. The singer just chose this song, so Ilya
@@ -3284,10 +3283,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	 * What the uploader needs to bring a stored score back.
 	 *
 	 * The stored page's clef and key answers are no longer handed on: they were
-	 * the old page reader's (retired 2026-10-27), and `page` is kept in the
-	 * signature because `SongSource.page` still holds them for older songs.
+	 * the old page reader's (retired 2026-10-27), so the function takes no
+	 * `page`; `SongSource.page` still holds them for older songs.
 	 */
-	function restoreFrom(source: SourceBytes | null, page: PageProvenance | null | undefined) {
+	function restoreFrom(source: SourceBytes | null) {
 		if (!source) return null;
 		return {
 			fileName: source.fileName,
@@ -3299,7 +3298,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	// N.67 step 4b: STATE, because a switch hands the uploader a different
 	// song's bytes. The uploader is keyed on `doc.id`, so it remounts and its
 	// own restore runs, which is the same path a reload takes and no other.
-	let restoreSource = $state(restoreFrom(opened?.source ?? null, opened?.loaded?.record?.source?.page));
+	let restoreSource = $state(restoreFrom(opened?.source ?? null));
 
 	/**
 	 * N.108 increment 2. THE UPLOADER INSTANCE, so the one intake can hand it a
@@ -3725,11 +3724,6 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	on:pointercancel={(e) => swipe.cancel(e)}
 />
 
-<svelte:head>
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;1,400&family=Noto+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
-</svelte:head>
 <!-- N.73 portrait C, ruling 4: THE INTERSTITIAL IS RETIRED. The gate that
      stood here ("Ilya is designed for desktop / Continue anyway") met every
      phone visit and is Fable's audit finding F5. A portrait visit now arrives
@@ -4167,9 +4161,9 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     Instrument panel
 					     (`fable-gui-audit-and-spec_r1_2026-08-18.md:41-44`).
 
-					     `voiceCalibrated` is the wizard's own predicate, read from
-					     `profileStore.ts`, so this line and the wizard cannot
-					     disagree. -->
+					     `voiceCalibrated` is true when a reading is usable
+					     (`usableReadingCount`, `profileStore.ts`). The wizard's
+					     opening phase uses a wider test, on purpose. -->
 					<div class="station">
 						<!-- N.150: no StationHeader. The band is named Voice, so the
 						     name is drawn once, there. N.114a (2026-09-09) kept this
