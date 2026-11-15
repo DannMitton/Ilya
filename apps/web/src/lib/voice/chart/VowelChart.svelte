@@ -10,7 +10,7 @@
 -->
 <script lang="ts">
 	import type { Vowel } from '../engine/types';
-	import type { View } from './geometry';
+	import { labelSizeFor, type View } from './geometry';
 	import { CHART_W, CHART_H, type ChartModel } from './model';
 	import ChartLayers from './ChartLayers.svelte';
 	import { tv, type Language } from '$lib/i18n';
@@ -31,7 +31,7 @@
 	// The chart scales to the width it is given, so a symbol sized in its own units shrinks on a phone. The grid's numbers and the axis words are sized
 	// to hold 11 CSS px at any width (Step 6b amendment): the unit size is 11 times the ratio of the frame to the rendered width.
 	let width = $state(0);
-	const labelSize = $derived(Math.round((11 * CHART_W) / (width || CHART_W)));
+	const labelSize = $derived(labelSizeFor(CHART_W, width));
 </script>
 
 <svg class="vowel-chart" bind:clientWidth={width} viewBox="0 0 {CHART_W} {CHART_H}" role="img" aria-label={tv('capture.chartAlt', language)} preserveAspectRatio="xMidYMid meet">

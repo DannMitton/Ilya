@@ -172,12 +172,109 @@ function gridAxis(loHz: number, hiHz: number, px: number, minPx: number): number
 }
 
 /**
- * The grid's lines for a view: fR2 columns and fR1 rows at round numbers of Hz, spaced at least `minPx` apart so a
- * zoomed view gains lines and the full view keeps few. Board D's `vlines` and `hlines`, which hard-coded two fixed steps.
+ * The size of the grid's numbers in the chart's own units, so they hold `cssPx` CSS px at any rendered width: the SVG scales to
+ * the width it is given, so a size in its units shrinks with it. Before the first measure (`renderedW` 0) the frame's own width.
  */
-export function gridTicks(view: View, w: number, h: number, minPx = 38): { f2: number[]; f1: number[] } {
+export const labelSizeFor = (frameW: number, renderedW: number, cssPx = 11): number => Math.round((cssPx * frameW) / (renderedW || frameW));
+
+/** A rectangle in the chart's own units. */
+export interface Box {
+	x0: number;
+	y0: number;
+	x1: number;
+	y1: number;
+}
+
+/**
+ * WHERE THE GRID'S NUMBERS SIT, shared by the drawing (`ChartLayers.svelte`) and the rule below, so the two cannot disagree.
+ * A column's number is centred on its line, its baseline `NUMBER_COL_BASELINE` em-and-a-bit below the top; a row's number
+ * starts `NUMBER_ROW_X` from the left edge, its baseline `NUMBER_ROW_LIFT` above its line.
+ */
+export const NUMBER_ROW_X = 3;
+export const NUMBER_ROW_LIFT = 3;
+export const numberColBaseline = (labelSize: number): number => labelSize + 1;
+/** The halo (`stroke-width: 3px`, `ChartLayers.svelte`) is part of a number's box: it paints over what it meets. */
+export const NUMBER_HALO = 3;
+/** An estimate, not the served face's measure: a digit is half an em wide (Source Sans 3's figures are narrower, so this errs towards dropping a number). */
+const DIGIT_EM = 0.5;
+/** A letter of an axis word, in em. Estimated; wider than a digit, so errs towards dropping a number. */
+const WORD_EM = 0.55;
+/** JUDGEMENT: the clearance kept between two numbers, or a number and an axis word, as a fraction of the number's size. */
+const CLEARANCE_EM = 0.4;
+/** JUDGEMENT: the room kept from the frame's edge, in chart units. */
+const EDGE_INSET = 1;
+
+/** A number's box, halo included: `cx` is its centre (a column) or its left (a row). */
+const numberBox = (text: string, anchor: 'middle' | 'start', x: number, baseline: number, ls: number): Box => {
+	const w = text.length * DIGIT_EM * ls + NUMBER_HALO;
+	const x0 = anchor === 'middle' ? x - w / 2 : x - NUMBER_HALO / 2;
+	return { x0, y0: baseline - 0.75 * ls - NUMBER_HALO / 2, x1: x0 + w, y1: baseline + NUMBER_HALO / 2 };
+};
+
+/**
+ * The boxes of the axis words the capture chart draws inside its frame (`ChartLayers.svelte`, `axisWords`): "tongue forward"
+ * bottom left, "tongue back" bottom right, the resonance symbol bottom centre, and the turned fR1 word down the right edge.
+ * Widths are estimated from the letters; the symbol `fR2` is taken as 1.2 em.
+ */
+export function axisWordBoxes(w: number, h: number, ls: number, words: { front: string; back: string; open: string }): Box[] {
+	const base = h - 5;
+	const top = base - 0.75 * ls - NUMBER_HALO / 2;
+	const bottom = base + 0.25 * ls + NUMBER_HALO / 2;
+	const width = (s: string) => s.length * WORD_EM * ls + NUMBER_HALO;
+	const sym = 1.2 * ls + NUMBER_HALO;
+	const open = (1.2 + 0.4) * ls + width(words.open);
+	return [
+		{ x0: 5 - NUMBER_HALO / 2, y0: top, x1: 5 + width(words.front), y1: bottom },
+		{ x0: w - 5 - width(words.back), y0: top, x1: w - 5 + NUMBER_HALO / 2, y1: bottom },
+		{ x0: w / 2 - sym / 2, y0: top, x1: w / 2 + sym / 2, y1: bottom },
+		// Turned a quarter turn: the glyphs rise towards the right edge from a baseline `ls` in from it.
+		{ x0: w - 5 - ls - 0.25 * ls - NUMBER_HALO / 2, y0: h / 2 - open / 2, x1: w - 5 - ls + 0.8 * ls + NUMBER_HALO / 2, y1: h / 2 + open / 2 }
+	];
+}
+
+const meets = (a: Box, b: Box, gap: number): boolean => a.x0 < b.x1 + gap && b.x0 < a.x1 + gap && a.y0 < b.y1 + gap && b.y0 < a.y1 + gap;
+
+/** How round a number is: the rounder is kept first when two numbers meet (1000 before 500 before 100 before 50 ...). */
+const roundness = (f: number): number => {
+	const k = [1000, 500, 250, 100, 50, 25, 20, 10].findIndex((s) => f % s === 0);
+	return k < 0 ? 8 : k;
+};
+
+/**
+ * THE GRID'S NUMBERS NEVER RUN TOGETHER (N.199 readings brief, Step 2). Of the lines, the ones whose numbers are drawn: a
+ * number whose box (halo included) would meet another number's box, an axis word, or the frame's edge is not drawn, and its
+ * line stays. The rounder number wins a meeting; at a tie, a column wins over a row, then the lower in Hz. Widths are estimated (`DIGIT_EM`), so the thinning errs towards dropping a number.
+ */
+function numbersFor(cols: Array<{ f: number; x: number }>, rows: Array<{ f: number; y: number }>, w: number, h: number, ls: number, words: Box[]): { f2: number[]; f1: number[] } {
+	const gap = CLEARANCE_EM * ls;
+	const frame = { x0: EDGE_INSET, y0: EDGE_INSET, x1: w - EDGE_INSET, y1: h - EDGE_INSET };
+	const inside = (b: Box) => b.x0 >= frame.x0 && b.y0 >= frame.y0 && b.x1 <= frame.x1 && b.y1 <= frame.y1;
+	type C = { kind: 'f2' | 'f1'; f: number; box: Box; rank: number };
+	const cands: C[] = [
+		...cols.map((c) => ({ kind: 'f2' as const, f: c.f, box: numberBox(String(c.f), 'middle', c.x, numberColBaseline(ls), ls), rank: roundness(c.f) })),
+		...rows.map((r) => ({ kind: 'f1' as const, f: r.f, box: numberBox(String(r.f), 'start', NUMBER_ROW_X, r.y - NUMBER_ROW_LIFT, ls), rank: roundness(r.f) }))
+	]
+		.filter((c) => inside(c.box) && !words.some((b) => meets(c.box, b, gap)))
+		.sort((a, b) => a.rank - b.rank || (a.kind === b.kind ? 0 : a.kind === 'f2' ? -1 : 1));
+	const kept: C[] = [];
+	for (const c of cands) if (!kept.some((k) => meets(c.box, k.box, gap))) kept.push(c);
 	return {
-		f2: gridAxis(Math.exp(view.u1), Math.exp(view.u0), w, minPx),
-		f1: gridAxis(Math.exp(view.v0), Math.exp(view.v1), h, minPx)
+		f2: kept.filter((c) => c.kind === 'f2').map((c) => c.f).sort((a, b) => a - b),
+		f1: kept.filter((c) => c.kind === 'f1').map((c) => c.f).sort((a, b) => a - b)
 	};
+}
+
+/**
+ * The grid for a view: fR2 columns and fR1 rows at round numbers of Hz, spaced at least `minPx` apart so a zoomed view gains
+ * lines and the full view keeps few (`f2`, `f1`: the lines, as dense as `minPx` allows), and `f2Numbers`, `f1Numbers`: the
+ * lines whose numbers are drawn, at `labelSize`, clear of each other, of `words` (the axis words' boxes, `axisWordBoxes`), and
+ * of the frame's edge. A line with no number is still drawn.
+ */
+export function gridTicks(view: View, w: number, h: number, labelSize: number, words: readonly Box[] = [], minPx = 38): { f2: number[]; f1: number[]; f2Numbers: number[]; f1Numbers: number[] } {
+	const f2 = gridAxis(Math.exp(view.u1), Math.exp(view.u0), w, minPx);
+	const f1 = gridAxis(Math.exp(view.v0), Math.exp(view.v1), h, minPx);
+	const xs = f2.map((f) => ({ f, x: project(view, w, h, 1, f).x })).filter((c) => c.x > 0 && c.x < w);
+	const ys = f1.map((f) => ({ f, y: project(view, w, h, f, 1).y })).filter((r) => r.y > 0 && r.y < h);
+	const n = numbersFor(xs, ys, w, h, labelSize, [...words]);
+	return { f2, f1, f2Numbers: n.f2, f1Numbers: n.f1 };
 }

@@ -9,7 +9,7 @@
 -->
 <script lang="ts">
 	import type { Vowel } from '../engine/types';
-	import { project, hull, gridTicks, type View } from './geometry';
+	import { project, hull, gridTicks, axisWordBoxes, numberColBaseline, NUMBER_ROW_X, NUMBER_ROW_LIFT, type View } from './geometry';
 	import type { PlaceholderDot, SungDot, Zone } from './zones';
 	import { zoneColour } from './colours';
 	import { placeLabels, type LabelAnchor } from './labels';
@@ -61,9 +61,12 @@
 			return { vowel: z.vowel, cx: r1(c.x), cy: r1(c.y), rx: r1(rx), ry: r1(ry), fill: zoneColour(z.vowel), op };
 		})
 	);
-	const grid = $derived(gridTicks(view, width, height));
+	// The lines stay as dense as `gridTicks` makes them; a number that would run into another, an axis word, or the frame is not drawn (Step 2).
+	const grid = $derived(gridTicks(view, width, height, labelSize, axisWords ? axisWordBoxes(width, height, labelSize, axisWords) : []));
 	const cols = $derived(grid.f2.map((f) => ({ f, x: r1(project(view, width, height, 1, f).x) })).filter((c) => c.x > 0 && c.x < width));
+	const colNumbers = $derived(cols.filter((c) => grid.f2Numbers.includes(c.f)));
 	const rows = $derived(grid.f1.map((f) => ({ f, y: r1(project(view, width, height, f, 1).y) })).filter((r) => r.y > 0 && r.y < height));
+	const rowNumbers = $derived(rows.filter((r) => grid.f1Numbers.includes(r.f)));
 	const dots = $derived(
 		sung.map((s) => {
 			const hasF2 = typeof s.f2 === 'number' && s.f2 > 0;
@@ -146,11 +149,11 @@
 		</g>
 	{/if}
 	<g class="numbers" aria-hidden="true" font-size={labelSize}>
-		{#each cols as c (c.f)}
-			<text x={c.x} y={labelSize + 1} text-anchor="middle">{c.f}</text>
+		{#each colNumbers as c (c.f)}
+			<text x={c.x} y={numberColBaseline(labelSize)} text-anchor="middle">{c.f}</text>
 		{/each}
-		{#each rows as r (r.f)}
-			<text x="3" y={r.y - 3} text-anchor="start">{r.f}</text>
+		{#each rowNumbers as r (r.f)}
+			<text x={NUMBER_ROW_X} y={r.y - NUMBER_ROW_LIFT} text-anchor="start">{r.f}</text>
 		{/each}
 	</g>
 </g>
