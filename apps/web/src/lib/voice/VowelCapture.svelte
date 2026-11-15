@@ -362,6 +362,11 @@
 		flex-direction: column;
 		gap: 0.6rem;
 		width: 100%;
+		/* A largest width: the chart's own frame, 484 px (`chart/model.ts` `CHART_W`). In the desk Drawer the content is 484 px already (520 less 32 less
+		   36), so the phone and the desk are unchanged; in the Drawer as a sheet (`max-width: 1399px`) the chart no longer fills the sheet and pushes the
+		   ten buttons below the fold. Its parent centres it (`CalibrationWizard.svelte` `.wizard-phase`); the auto margins keep it centred where it does not. */
+		max-width: 484px;
+		margin-inline: auto;
 		box-sizing: border-box;
 		text-align: left;
 		color: var(--ink-primary);

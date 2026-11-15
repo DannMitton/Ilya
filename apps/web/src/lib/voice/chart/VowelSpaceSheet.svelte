@@ -163,6 +163,11 @@
 		color: var(--ink-primary);
 		font-family: var(--font-sans);
 	}
+	/* A largest width on screen: the chart's own frame, 720 px (`W`), so in the Drawer as a sheet it does not stretch past it. Print is not capped. */
+	.vowel-sheet:not(.for-print) {
+		max-width: 720px;
+		margin-inline: auto;
+	}
 	.sheet-head h2 {
 		margin: 0;
 		font-family: var(--font-serif);

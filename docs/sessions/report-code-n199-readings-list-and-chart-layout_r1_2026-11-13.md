@@ -50,3 +50,26 @@ Gates after Step 2: 1 462, 2 248, 3 0 errors and 12 warnings, **4 5640 passed, 1
 - `step4-sheet-mid-en.png`, `step4-sheet-mid-fr.png`: 430 by 900 at 2x, four vowels sung, the other six placeholders. Clear.
 
 **Not established for Step 4.** That 11 CSS px is the size on the user's own screen: the pictures are in headless Chromium at the scale named. Whether `bind:clientWidth` on an `<svg>` reports a width in every browser Ilya supports (the brief's list); it did in this Chromium, and in Safari and Firefox I did not look.
+
+Gates after Step 4: all eight pass; gate 4 **5641 passed, 1 skipped (5642)**.
+
+## Step 3: the capture screen has a largest width
+
+**Built.** `VowelCapture.svelte` `.capture`: `max-width: 484px; margin-inline: auto` (the chart's own frame, `model.ts` `CHART_W`). Its parent already centres it (`CalibrationWizard.svelte` `.wizard-phase`, `align-items: center`); the auto margins are a second guarantee. The desk Drawer's content is 484 px already (520 less 32 less 36), so the phone and the 1400 px desk are unchanged. `VowelSpaceSheet.svelte`: `.vowel-sheet:not(.for-print) { max-width: 720px; margin-inline: auto }`; print is not capped.
+
+**Measured** (dev server, Chromium, 800 px high, non-touch, getBoundingClientRect; the Drawer is `top 0` to `bottom 756`; the takeover scrolls to its end, 374 px of scroll, and the stage sticks at 60). At 768, 1024, and 1244 px, in English and French, all six the same figures:
+
+| | at rest | scrolled until the stage sticks |
+|---|---|---|
+| `.capture` | 484 px wide, centred (left 142, 270, 380) | same |
+| chart | 345 to 625 | 66 to 346 |
+| ten buttons | 799 to 895 (below the Drawer's end, 756) | 519 to 615 |
+| both actions | 904 to 948 | 624 to 668 |
+
+So the chart, the ten buttons, and both action buttons are in view, scrolled, at all three widths, as the brief's acceptance (review blocker 1) states. At rest the buttons are below the fold at all three widths: a width cap alone does not bring them in, as the brief said. Without the cap the screen is 1176 px wide at 1244 (the same test, run with the CSS reverted, failed on that).
+
+**Test** (e2e, `calibrate-new.test.ts`, 3 new, one a width; run here with `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium`: 3 passed). Asserts 484 px, centred, and the chart, buttons, and both actions inside the Drawer after the scroll. The file's `open` now presses the Drawer's pull below 1400 px. The rest of the e2e file was not run in this step.
+
+**Pictures** (looked at: `step3-capture-1244-fr-scrolled.png`, `step3-capture-768-en-rest.png`, and `step3-sheet-1244-en.png`; the other nine of the set are the same figures at the other widths and in the other language, not each opened). `report-code-n199-readings-pictures/step3-capture-{768,1024,1244}-{en,fr}-{rest,scrolled}.png` (the six the brief asks for, in two languages) and `step3-sheet-1244-en.png` (the summary's sheet at 720 px, centred, in the Drawer at 1244).
+
+Gates after Step 3: all eight pass; gate 4 **5641 passed, 1 skipped (5642)**.

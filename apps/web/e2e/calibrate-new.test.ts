@@ -20,6 +20,8 @@ async function open(page: Page, opts: { formants?: Record<string, unknown>; voic
 	}, [JSON.stringify(store), opts.next ?? []] as const);
 	await page.goto('/?calibrate=new&capture=stub');
 	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
+	// Below the desk layout (1400) the Drawer is a bottom sheet, closed until its pull is pressed.
+	if ((page.viewportSize()?.width ?? 1440) < 1400) await page.getByRole('button', { name: /drawer/i }).first().click();
 	await page.getByRole('button', { name: /^voice$/i }).click();
 }
 /** From nothing sung: Calibrate, Begin, the readiness wait, Continue. Lands on the capture screen. */
@@ -205,4 +207,28 @@ test.describe('the new capture screen on the stub', () => {
 		expect(await page.locator('[data-placeholder]').count()).toBe(10);
 		await expect(page.locator('.hint')).toHaveText('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
 	});
+});
+
+/** N.199 readings brief, Step 3: the capture screen has a largest width (the chart's 484 px), so the Drawer as a sheet does not push the buttons off. */
+test.describe('the capture screen in the Drawer as a sheet', () => {
+	for (const width of [768, 1024, 1244]) {
+		test(`at ${width} px wide and 800 high: 484 px wide, centred, and scrolled until the stage sticks the chart, the ten buttons, and both actions are in view`, async ({ page }) => {
+			await page.setViewportSize({ width, height: 800 });
+			await open(page);
+			await toCapture(page);
+			const box = async (sel: string) => (await page.locator(sel).first().boundingBox())!;
+			const capture = await box('.capture');
+			expect(Math.round(capture.width)).toBe(484);
+			expect(Math.abs(capture.x + capture.width / 2 - width / 2)).toBeLessThan(2);
+			// Scroll the Drawer's takeover to its end: the stage sticks at the top.
+			await page.locator('.takeover-body').evaluate((e) => { e.scrollTop = e.scrollHeight; });
+			const drawer = await box('.drawer');
+			for (const sel of ['.chart-box', '.buttons', '.main', '.stop']) {
+				const b = await box(sel);
+				expect(b.y, `${sel} above the Drawer`).toBeGreaterThanOrEqual(drawer.y);
+				expect(b.y + b.height, `${sel} below the Drawer's end`).toBeLessThanOrEqual(drawer.y + drawer.height);
+			}
+			expect(await page.locator('.vowel-btn').count()).toBe(10);
+		});
+	}
 });
