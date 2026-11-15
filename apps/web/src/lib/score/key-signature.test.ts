@@ -8,7 +8,7 @@ import { engraveInKey, MusicXmlScoreParser, type ParsedScore } from '@ilya/score
 import { parseXml } from './ingestion/mini-dom';
 import { BarLayer } from './bar-layer';
 import { withCorrection, type CorrectionMap } from './correction';
-import { applyKeyLayer, heldKey, removeKey, setKey } from './key-signature';
+import { applyKeyLayer, heldKey, KEY_CHOICES, keyLabelKey, removeKey, setKey } from './key-signature';
 
 async function fixture(): Promise<ParsedScore> {
 	const xml = readFileSync(new URL('../../../../../packages/score-parser/src/fixtures/key-changes.musicxml', import.meta.url), 'utf8');
@@ -160,5 +160,17 @@ describe('transposition moves a corrected key as it moves a read one', () => {
 		expect(corrected.keySignatures[0].signature.fifths).toBe(3);
 		const moved = engraveInKey(corrected, { semitones: 2, fifths: 5 }); // E major's neighbour: delta from the corrected 3 is 2
 		expect(moved.measures[0].keySignature.fifths).toBe(5);
+	});
+});
+
+describe('the fifteen labels exist in both languages', () => {
+	it('every signature has a label in English and in French, and none is a missing string', async () => {
+		const { t } = await import('$lib/i18n');
+		for (const f of KEY_CHOICES) {
+			const { key, n } = keyLabelKey(f);
+			for (const lang of ['en', 'fr'] as const) expect(t(key, lang).replace('%s', String(n)), `${f} ${lang}`).not.toContain('MISSING');
+		}
+		expect(t('correct.keyFlats', 'fr').replace('%s', '3')).toBe('3 bémols');
+		expect(t('correct.keySharp', 'en')).toBe('1 sharp');
 	});
 });

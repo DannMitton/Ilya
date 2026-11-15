@@ -34,7 +34,7 @@ export const KEY_CHOICES: readonly number[] = [-7, -6, -5, -4, -3, -2, -1, 0, 1,
 
 /** The i18n key and the count for a signature's label (the upload question's own strings: count the sharps or flats on your paper). */
 export function keyLabelKey(fifths: number): { key: string; n: number } {
-	return { key: fifths === 0 ? 'upload.ask.keyNone' : fifths === 1 ? 'upload.ask.keySharp' : fifths > 1 ? 'upload.ask.keySharps' : fifths === -1 ? 'upload.ask.keyFlat' : 'upload.ask.keyFlats', n: Math.abs(fifths) };
+	return { key: fifths === 0 ? 'correct.keyNone' : fifths === 1 ? 'correct.keySharp' : fifths > 1 ? 'correct.keySharps' : fifths === -1 ? 'correct.keyFlat' : 'correct.keyFlats', n: Math.abs(fifths) };
 }
 
 interface Placed {

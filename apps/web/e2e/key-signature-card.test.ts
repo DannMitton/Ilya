@@ -36,6 +36,7 @@ test.describe('the key signature card', () => {
 		const card = page.locator('[data-ks-card]');
 		await expect(card).toBeVisible();
 		await expect(card.locator('select[data-ks-key] option')).toHaveCount(15);
+		expect(await card.locator('select[data-ks-key] option').allTextContents()).toEqual(['7 flats', '6 flats', '5 flats', '4 flats', '3 flats', '2 flats', '1 flat', 'No sharps or flats', '1 sharp', '2 sharps', '3 sharps', '4 sharps', '5 sharps', '6 sharps', '7 sharps']);
 		await expect(page.locator('[data-ks-key]')).toHaveValue('-1');
 		await expect(page.locator('[data-ks-through="next"]')).toBeChecked();
 		await expect(page.locator('[data-ks-follow]')).toBeChecked();

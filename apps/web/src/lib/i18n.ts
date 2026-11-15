@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,264 keys.
+   This file holds 1,269 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -33,7 +33,7 @@
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
    console.        2  lib/components/Drawer/AnalysisStation.svelte
-   correct.       42  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
+   correct.       47  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
    cosmetic.      15  lib/components/Drawer/NotationFields.svelte
    dict.           3  lib/components/Paper/TitlePage.svelte, lib/components/Drawer/AnalysisStation.svelte, lib/one-action.ts
    display.        5  no literal consumer found
@@ -576,6 +576,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'correct.keyToEnd':            { en: 'To the end of the song',       fr: 'Jusqu’à la fin du chant' },
 	'correct.keyFollow':           { en: 'The notes follow the new key', fr: 'Les notes suivent la nouvelle armure' },
 	'correct.keyFollowHelp':       { en: 'A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.', fr: 'Une note sans altération propre prend le dièse ou le bémol de la nouvelle armure. Désactivez cette option pour garder chaque hauteur telle quelle.' },
+	// The fifteen signatures' labels, the wording the upload question used (ratified before; its keys were removed 2026-11-12 as dead, so the card has its own).
+	'correct.keyNone':             { en: 'No sharps or flats',           fr: 'Aucune altération' },
+	'correct.keySharp':            { en: '1 sharp',                      fr: '1 dièse' },
+	'correct.keySharps':           { en: '%s sharps',                    fr: '%s dièses' },
+	'correct.keyFlat':             { en: '1 flat',                       fr: '1 bémol' },
+	'correct.keyFlats':            { en: '%s flats',                     fr: '%s bémols' },
 	'correct.keyRemove':           { en: 'Remove this key change',       fr: 'Supprimer ce changement d’armure' },
 	'loupe.undo.keyChanged':       { en: 'key changed',                  fr: 'armure modifiée' },
 	'loupe.undo.keyRemoved':       { en: 'key change removed',           fr: 'changement d’armure supprimé' },
