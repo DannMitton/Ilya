@@ -1,0 +1,145 @@
+/**
+ * The recorder (`capture-file.ts`), N.200 Step 1. What is pinned: one ZIP holds every held take; each file name and
+ * each JSON carries the asked and the sung vowel and the build; the file calls no network; and nothing of it reaches
+ * a build that does not set the flag (every use is behind `__ILYA_RECORDER__`, and `vercel.json` sets the flag for
+ * one branch only).
+ */
+import { describe, it, expect, beforeEach } from 'vitest';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { crc32, zipBytes, takeBase, holdCapture, heldCount, heldZip, clearHeld, setSungVowel, sungVowel, captureFileEnabled } from './capture-file';
+import { SYNTH_SR, synthFry } from './fry-synth';
+
+const here = (f: string) => join(__dirname, f);
+const read = (f: string) => readFileSync(here(f), 'utf8');
+const stripComments = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+
+interface Parsed { name: string; bytes: Uint8Array; crc: number }
+/** A reader of the store-method ZIP, written from the format's own layout, not from `zipBytes`. */
+function parseZip(z: Uint8Array): Parsed[] {
+	const v = new DataView(z.buffer, z.byteOffset, z.byteLength);
+	let e = z.length - 22;
+	while (e >= 0 && v.getUint32(e, true) !== 0x06054b50) e--;
+	expect(e).toBeGreaterThanOrEqual(0);
+	const n = v.getUint16(e + 10, true);
+	let c = v.getUint32(e + 16, true);
+	const out: Parsed[] = [];
+	for (let i = 0; i < n; i++) {
+		expect(v.getUint32(c, true)).toBe(0x02014b50);
+		const crc = v.getUint32(c + 16, true), size = v.getUint32(c + 24, true), nl = v.getUint16(c + 28, true), off = v.getUint32(c + 42, true);
+		const name = new TextDecoder().decode(z.subarray(c + 46, c + 46 + nl));
+		expect(v.getUint32(off, true)).toBe(0x04034b50);
+		const fl = v.getUint16(off + 26, true), xl = v.getUint16(off + 28, true), start = off + 30 + fl + xl;
+		out.push({ name, bytes: z.slice(start, start + size), crc });
+		c += 46 + nl;
+	}
+	return out;
+}
+
+describe('crc32 and zipBytes', () => {
+	it('crc32 of "123456789" is the standard check value', () => {
+		expect(crc32(new TextEncoder().encode('123456789'))).toBe(0xcbf43926);
+	});
+	it('a ZIP of three entries reads back byte for byte, with names in UTF-8 and each CRC right', () => {
+		const a = new Uint8Array([1, 2, 3, 250]), b = new TextEncoder().encode('{"x":1}'), c = new Uint8Array(0);
+		const got = parseZip(zipBytes([{ name: 'a-ɑ.wav', bytes: a }, { name: 'b.json', bytes: b }, { name: 'empty', bytes: c }]));
+		expect(got.map((g) => g.name)).toEqual(['a-ɑ.wav', 'b.json', 'empty']);
+		expect([...got[0].bytes]).toEqual([...a]);
+		expect(new TextDecoder().decode(got[1].bytes)).toBe('{"x":1}');
+		expect(got[2].bytes.length).toBe(0);
+		expect(got.map((g) => g.crc)).toEqual([crc32(a), crc32(b), crc32(c)]);
+	});
+});
+
+describe('the held takes', () => {
+	beforeEach(() => { clearHeld(); setSungVowel(null); });
+
+	it('names a take by the asked and the sung vowel', () => {
+		expect(takeBase('i', 'u', '2026-11-15T10-00-00-000Z')).toBe('ilya-capture-asked-i-sung-u-2026-11-15T10-00-00-000Z');
+		expect(takeBase('i', null, 'T')).toBe('ilya-capture-asked-i-sung-unstated-T');
+	});
+
+	it('holds takes, and one ZIP carries a WAV and a JSON per take, each JSON stamped asked, sung, and build', () => {
+		const y = synthFry({ formants: [300, 2000], bandwidths: [80, 150], rate: 70, durationS: 1 });
+		setSungVowel('u');
+		holdCapture(y, { vowel: 'i', sampleRate: SYNTH_SR, trimS: 0.25, outcome: { outcome: 'threw', message: 'x' }, trace: null });
+		setSungVowel('ɑ');
+		holdCapture(y, { vowel: 'i', sampleRate: SYNTH_SR, trimS: 0.25, outcome: { outcome: 'threw', message: 'y' }, trace: null });
+		expect(heldCount()).toBe(2);
+		const files = parseZip(heldZip());
+		expect(files).toHaveLength(4);
+		const names = files.map((f) => f.name);
+		expect(names.filter((n) => n.endsWith('.wav'))).toHaveLength(2);
+		expect(names.some((n) => n.includes('-asked-i-sung-u-'))).toBe(true);
+		expect(names.some((n) => n.includes('-asked-i-sung-ɑ-'))).toBe(true);
+		const json = files.filter((f) => f.name.endsWith('.json')).map((f) => JSON.parse(new TextDecoder().decode(f.bytes)));
+		expect(json.map((j) => [j.asked, j.vowel, j.sung]).sort()).toEqual([['i', 'i', 'u'], ['i', 'i', 'ɑ']].sort());
+		for (const j of json) {
+			expect(typeof j.build).toBe('string');
+			expect(j.build.length).toBeGreaterThan(0);
+			expect(j.samples).toBe(y.length);
+		}
+		const wav = files.find((f) => f.name.endsWith('.wav'))!;
+		expect(new TextDecoder().decode(wav.bytes.subarray(0, 4))).toBe('RIFF');
+		expect(wav.bytes.length).toBe(44 + 2 * y.length);
+	});
+
+	it('the sung vowel is null until stated', () => {
+		expect(sungVowel()).toBeNull();
+	});
+
+	it('is off in a test run with no address', () => {
+		expect(captureFileEnabled()).toBe(false);
+	});
+});
+
+describe('privacy: nothing leaves the browser', () => {
+	it('capture-file.ts holds no fetch, XMLHttpRequest, sendBeacon, WebSocket, EventSource, or form post', () => {
+		const code = stripComments(read('capture-file.ts'));
+		for (const word of ['fetch', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'EventSource', 'importScripts', 'postMessage', 'FormData']) {
+			expect(code, word).not.toMatch(new RegExp(`\\b${word}\\b`));
+		}
+		expect(code).not.toMatch(/https?:\/\//);
+		expect(code).not.toMatch(/\bimport\s+[^;]*from\s+['"](?!\.\/(analyze|extract)['"])/);
+	});
+});
+
+describe('the recorder is out of every build that does not set the flag', () => {
+	it('each use in live.ts and stub-switch.ts sits behind `__ILYA_RECORDER__ &&` on its own line', () => {
+		for (const f of ['live.ts', '../chart/stub-switch.ts']) {
+			const lines = read(f).split('\n');
+			lines.forEach((l, i) => {
+				if (/^\s*(\/\/|\*|\/\*)/.test(l) || /^import\b/.test(l)) return;
+				if (/\b(holdCapture|mountRecorderPanel|captureFileEnabled)\(/.test(l)) {
+					expect(l, `${f}:${i + 1}`).toMatch(/__ILYA_RECORDER__\s*&&/);
+				}
+			});
+		}
+	});
+
+	it('no other file in the app imports the recorder', () => {
+		const importers: string[] = [];
+		const walk = (dir: string) => {
+			for (const e of readdirSync(dir, { withFileTypes: true })) {
+				const p = join(dir, e.name);
+				if (e.isDirectory()) { if (e.name !== 'node_modules') walk(p); continue; }
+				if (!/\.(ts|svelte)$/.test(e.name) || /\.test\.ts$/.test(e.name)) continue;
+				if (/from\s+['"][^'"]*capture-file['"]/.test(readFileSync(p, 'utf8'))) importers.push(p.replace(/^.*\/src\//, 'src/'));
+			}
+		};
+		walk(join(__dirname, '../../..'));
+		expect(importers.sort()).toEqual(['src/lib/voice/chart/stub-switch.ts', 'src/lib/voice/engine/live.ts']);
+	});
+
+	it('vercel.json sets PUBLIC_RECORDER only inside a branch test, and no other build setting does', () => {
+		const v = JSON.parse(readFileSync(join(__dirname, '../../../../../../vercel.json'), 'utf8')) as { buildCommand: string };
+		const cmd = v.buildCommand;
+		expect(cmd.match(/PUBLIC_RECORDER/g)).toHaveLength(1);
+		expect(cmd).toMatch(/^if \[ "\$VERCEL_GIT_COMMIT_REF" = "cloud-lane-\d+" \]; then export PUBLIC_RECORDER=1; fi; pnpm --filter @ilya\/web build$/);
+	});
+
+	it('vite.config.ts turns the flag off in a Vercel production build', () => {
+		const cfg = readFileSync(join(__dirname, '../../../../vite.config.ts'), 'utf8');
+		expect(cfg).toMatch(/PUBLIC_RECORDER === '1' && process\.env\.VERCEL_ENV !== 'production'/);
+	});
+});
