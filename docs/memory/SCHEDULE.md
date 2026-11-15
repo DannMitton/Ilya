@@ -47,7 +47,7 @@ r4, written by the desk (Opus 5.5) 2026-11-14 21:4x, at the day desk's close deb
 - [ ] **Freeze the interface.** After lanes 54 and 55 and the Meta A lanes ship, and Dann has walked them. Proposed: Tuesday 2026-11-17 evening. After it, only what would tell a singer something false or lose a singer's work joins (the freeze rule of r3).
 - [ ] **Review packet and known-issues line** (share table item 10). Desk drafts; Dann ratifies.
 - [ ] **Format walk, print walk, N.83 end to end, both languages** (item 11). Desk, Thursday 2026-11-19.
-- [ ] **Release.** Frozen build; `main` moved to `Shane`; invitations. Dann, Friday 2026-11-20.
+- [ ] **Release.** Frozen build; `main` moved to `Shane`; invitations. Dann, Friday 2026-11-20. With the move (N.202, Dann 2026-11-15 13:31): the version reads 2026b on the commit `main` moves to; a git tag and a GitHub release named 2026b on that commit (Dann's command); `CITATION.cff` takes `date-released`; the 2026b announcement, drafted by the desk and ratified by Dann, goes out the same day and says once that Ilya is now under the AGPL.
 
 ---
 

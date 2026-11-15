@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-15 (afternoon Fable desk: lanes 56 and 57 started, N.200 Step 4 prepared)
+- `LEARNED BY THE 2026-11-15 AFTERNOON FABLE DESK` (last section of this file): reading a Code session's page as text, a cloud session's stale clone, the New session screen, the recorder's Sung field and the ten vowel symbols, what the opening read costs.
+
 ### Learned 2026-11-15 (Fable desk: lanes 50 and 52)
 - `LEARNED BY THE 2026-11-15 FABLE DESK` (last section of this file): how long the desk's own gate runs take, the `i18n.ts` key-count conflict between two lanes and its resolver, a blocked `javascript_tool` result, checking a build flag in the page, re-citing a brief by script, the Vercel usage figure as page text, JavaScript refused on `claude.ai` pages, a conflicted lane merge shipped as one paste, why a merge's tree can differ from the desk's trial merge.
 
@@ -5180,7 +5183,7 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | kind of job | actuals (tokens) | range to quote |
 |---|---|---|
 | Sonnet browser measure on row 114 f1 | 148k, 155k, 158k, 192k, 206k, 208k, 208k, 238k (J2, three arms, 2026-11-09), 257k | 150k to 260k |
-| Fable review of a brief or design | 156k to 315k, most near 200k; 2026-11-13: 212k (N.200 r1), 222k in 6.6 min with 26 tool uses (N.199 readings r2, cap 330k; the brief pasted whole into the prompt, the desk's clone already installed) | 160k to 330k |
+| Fable review of a brief or design | 156k to 315k, most near 200k; 2026-11-13: 212k (N.200 r1), 222k in 6.6 min with 26 tool uses (N.199 readings r2, cap 330k; the brief pasted whole into the prompt, the desk's clone already installed); 2026-11-15: 360k in 15.2 min with 81 tool uses (N.202 r1, cap 250k, over by 110k: the helper read some sixty files, both lanes' diffs, and 100,000 characters of a web page) | 160k to 370k |
 | Fable review of two built lanes (as built, merge-tree, one probe) | 367k (2026-11-09, 46 min, cap 320k) | 300k to 400k |
 | Fable review of three Code briefs (B0, row 166, row 182 with its data file) | 378k (cap 400k), 71 min, 141 tool uses, 2026-11-09; 303k harness count (cap 420k), 13 min, 64 tool uses, 2026-11-12 (polish lane r2, rhyme r2, L17 r2, with a scout packet) | 300k to 420k |
 | Opus review standing in for Fable | 130k, 170k, 171k, 183k, 215k | 130k to 220k |
@@ -5313,3 +5316,15 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 - **A ship paste can wait for hours.** The lane 50 paste was given 03:03 and run 11:52. The desk's workspace (`/root/desk`, the clones and gate logs) was still there at 11:59. The tracked memory files the desk edited in between were committed by the script's `git add -u`. Before the second paste the desk read `git log`, `ls-remote`, and the ship script's md5 again.
 - **Desk error, 12:1x, caught at the close.** The desk wrote a placeholder token into `STATE.md` to fill later, and it sat in the uncommitted file for about 20 minutes. A memory file gets the true state at the moment of writing, never a marker.
 - **Estimates, actuals (second half):** starting two lanes was estimated at 10 to 20 minutes of silence and was stopped at 2 by Dann's question about closing; the close was estimated at 10 minutes and took about 10.
+
+## LEARNED BY THE 2026-11-15 AFTERNOON FABLE DESK (12:37 on; lanes 56 and 57 started, N.200 Step 4 prepared)
+
+- **`get_page_text` reads a Code session's page** (the prompt, each step's summary line, the branch field, the context figure) with no JavaScript, so a lane is read as text and not only by screenshot. `read_page` with the interactive filter reads the New session screen's controls by name ("Branch: Shane", "Model: Sonnet 5.5 Medium", "Permissions: Auto", and the usage chip).
+- **Both new sessions started on a stale clone** (each wrote that its local `Shane` was behind `fb9d829e`). Each caught it because the prompt named the sha and the first words of its message, fetched, and cut its lane from the named commit. Keep both in every lane prompt.
+- **The New session screen draws a list (Auto, Default, "Choose environment") in the middle of the page** that Escape did not close. It did not take the send: the arrow at the right of the box sent the prompt both times. Backticks typed into the box become inline code, and the read-back shows the words whole. The branch picker stayed on `Shane`, as for lanes 51 to 55; the prompt names the lane.
+- **The recorder's Sung field wants the vowel's own symbol.** `score-core.ts:211` calls a take right only when `sung === asked`; the ten are `['i','e','ɪ','ɨ','ɛ','a','ɑ','ʌ','o','u']` (`engine/types.ts:26`); the field takes typed text (`capture-file.ts:205-208`). Five of the ten cannot be typed. For right-vowel takes leave the field empty and stamp `sung` = `asked` into the sidecars afterwards; for wrong pairings the desk sets the field in the tab.
+- **The opening read is heavy.** The usage chip under the Code box read 37% of the 5-hour limit at 12:45, against 28% on Dann's usage page at 12:39. `QUEUE.md` is 195 kB (the Read tool counted 40,258 tokens for lines 61 to 106 alone), and most of its open table is rows closed on 2026-11-09 with their whole history. Moving closed rows to `QUEUE-archive.md` is a close-time job (`README.md`, Closing a session, step 3) that had not been done for them.
+- **A helper's own token figure is not the count.** The N.202 review ended "Roughly 190,000 tokens used"; the harness counted 360,356. Record the harness figure. The cap told to Dann (250k) was passed by 110k: a brief that cites some sixty lines and touches three running lanes costs more than a brief pasted whole. Say 370k for the next one of that shape.
+- **A helper asked to run in the foreground ran in the background anyway** (`run_in_background: false` was passed). Its report arrives later as a message in the thread; nothing is known of it until then, and the desk keeps working.
+- **An escape typed in a tool call arrives as the character.** `\u00a0` typed into a python heredoc reached the file as a real no-break space. Check with `cat -A` before asserting on it (`M-BM-` followed by a space is that character).
+- **A Code lane's Playwright run can outlive its 30-minute background limit.** Lane 57's first run was killed at about 143 desktop tests; it restarted the rest under a longer limit. Its page showed "Go ahead with the amendment." in the message box: that is the page's own suggestion, not a message sent.

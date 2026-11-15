@@ -1275,3 +1275,18 @@ Related, same session: a sample the singer gives is real data and outranks Ilya'
 ## THE PAGE IS THE FOCUS SURFACE; THE DRAWER HOLDS THE NECESSARY CONTROLS. Stated by Dann 2026-11-14 08:21
 
 His words, transcribed as written: *"The WYSIWYG is the focus surface, the Drawer are necessary controls."* Occasion (`INBOX.md`, 2026-11-14 08:21): the desk had offered a previous and next pair on the word stack, so that a singer could step through words without returning to the page; Dann: *"Each new word costs a trip back tot he page seems ok to me?"* The desk withdrew the offer. What it means for a design: a control that lets the singer work without looking at the page is weighed against this before it is offered. Not walked: whether the trip costs more on a phone. Homed here by the desk 2026-11-14 19:5x from the phone thread's record.
+
+## ILYA'S NAME AND ITS VERSION. Ruled by Dann 2026-11-15 13:31 and 13:35; the design was offered by the desk
+
+His ask, 13:22, transcribed as written: *"We call it Ilya 2026A in the footer and in the Ilya sigil. I'm re4thinking that and I need your help. Currently a version of Ilya exists in the wild as a transcription-only app. This release dignificantly expands Ilya's functionality. Should we just call it Ilya or should we append a years marker and/or a version letter within that year? Help me integrate version control and coherent branding for the usership"*. Occasion: the public app at ilya.dannmitton.com showed "2026A" in its sigil (seen by the desk 13:2x), and the release's code carried the same label in the same three places, so two different Ilyas would have shared one label.
+
+His ruling, 13:31, transcribed as written: *"I like your suggestions and We adopt all of them."*; *"I like that the qualifying concatenated letter advances each time `main` moves! Excellent"*; *"I like structured planned announcements to coincide with a new alphabetic marker"*; *"Yes to footer, about, exports, and citations. Very good."*; *"Yes let's call the formatted branding identifier the sigil (not badge or mark), that will make sure we're always talking about that aspect of the brand's visual identify."*; *"pelase implement you ideas within our Calmn Authority aestehtic and application: Ilya alone in the sigil and the page logo, with 2026b in the footer and the About line"*.
+
+1. **The name is *Ilya*, alone.** The sigil carries the name and nothing else.
+2. **"The sigil"** is the word for the formatted branding identifier, the bracketed [*Ilya*] (his word); never "the badge" or "the mark". The desk reads it as naming the device wherever it stands, in the app bar and at the head of a page; his to correct.
+3. **The version is a year and a letter.** It shows where someone asks which *Ilya* made a thing: the footer of every page, the About entry in the GUIDE, the files *Ilya* exports, and the citation.
+4. **The letter advances each time `main` moves, and at no other time.** The release of 2026-11-20 is 2026b.
+5. **Each new letter comes with a planned announcement.**
+6. **Every standing surface states the current licence only.** Dann 13:32, transcribed as written: *"Do we have to be this specific: "2026a and earlier under MIT, 2026b onward under AGPL."? Cant we just say the current license? Who does the histortical information benefit?"*; 13:35: *"Proceed"*, on the desk's answer that the history serves only the holder of an older copy, whose rights rest on that copy's own licence file. The by-version boundary was the desk's idea and is withdrawn. The change of licence is said once, in the 2026b announcement.
+
+Spec, drafts, and build: `OPEN.md`, N.202.
