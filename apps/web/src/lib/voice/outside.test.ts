@@ -8,7 +8,6 @@ import { describe, expect, it } from 'vitest';
 import { t } from '$lib/i18n';
 import type { CalibratedFormant, Vowel } from './engine/types';
 import { checkPlausibility, keepReading } from './engine/plausibility';
-import { holdKindFor, holdAnnouncement } from './hold';
 import { outsideNote, outsideVowels } from './outside';
 
 const ORDER: Vowel[] = ['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u', 'ɨ', 'ɪ', 'ʌ'];
@@ -22,21 +21,6 @@ const reading = (f1: number, extra: Partial<CalibratedFormant> = {}): Calibrated
 });
 const implausible = (f1: number, extra: Partial<CalibratedFormant> = {}) =>
 	reading(f1, { reading: 'provisional', plausibility: 'implausible', ...extra });
-
-describe('no question during capture', () => {
-	it('a take judged implausible holds as a good take does, and a low one as provisional', () => {
-		expect(holdKindFor(implausible(1063))).toBe('good');
-		expect(holdKindFor(implausible(1063, { confidence: 'low' }))).toBe('provisional');
-		expect(holdKindFor(reading(300, { plausibility: 'plausible' }))).toBe('good');
-	});
-
-	it('announces an implausible take as captured, with no question in it', () => {
-		const T = (k: string) => t(k, 'en');
-		const said = holdAnnouncement(holdKindFor(implausible(1063)), 'cardinal-i', T);
-		expect(said).toBe('cardinal-i, captured.');
-		expect(said).not.toMatch(/\?/);
-	});
-});
 
 describe('the summary note', () => {
 	it('lists exactly the out-of-band readings not yet kept, in roster order', () => {

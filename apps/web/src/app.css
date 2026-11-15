@@ -141,10 +141,6 @@
 	   A future change moves this one number. */
 	--portrait-gutter: 24px;
 
-	/* --lavender-desk is the melody desk and it is NOT --surround-voice: that token is
-	   the calibration pacifier band, it sits on white rather than on a desk, and
-	   contrast.test.ts asserts its literal. Different surfaces, different names. */
-
 	/* ── A floating card's corner and lift ─────────────────── */
 	/* Named 2026-10-07 so the Loupe and the wait for the reader (ReadingWait)
 	   are visibly one family. The values are the Loupe's own, ruled by Dann
@@ -156,18 +152,11 @@
 		0 8px 16px rgba(46, 42, 38, 0.13),
 		0 20px 44px rgba(46, 42, 38, 0.07);
 
-	/* ── Calibration pacifier ──────────────────────────────── */
-	/* Calibration-pacifier tokens, per the pacifier spec v11 §13.     */
-	/* --paper-cream and the ink hierarchy above are reused as-is.     */
-	/* --arc-green and --prep-amber carry contrast caveats tracked in  */
-	/* the pacifier contrast checker (contrast.ts), not here.          */
-	--surround-voice: #D8D0E0;    /* the pacifier band, on white */
-	/* --lavender, the captured outline, is declared with the family bands. */
-	--arc-green: #1DB954;         /* progress arc (owned exception) */
-	--signal-red: #A32D2D;        /* retake flash and badge */
+	/* ── Calibration ───────────────────────────────────────── */
+	/* The vowel wheel's tokens (--surround-voice, --arc-green, --signal-red) went with the wheel, N.199 Step 8. */
 	--prep-amber: #BC7E08;        /* prep-countdown flash (policy-pending) */
 
-	/* ── The vowel-space chart's zones (N.199, ?calibrate=new) ───────────────
+	/* ── The vowel-space chart's zones (N.199) ────────────────────
 	   One colour for each of the six vowels Bozeman charts; the four personal
 	   vowels ([ɪ ɨ a ʌ]) take the Voice family's lavender, as the chart is coded
 	   to Voice (Dann 2026-11-12 22:1x). Zones are flat, translucent, and never

@@ -121,7 +121,7 @@ export const FRY_PRESENCE_MIN_SNR_DB = 6;
  * measurement claim: a singer given a countdown and a bar that completes knows
  * their voice was heard and knows when to stop, and neither of those is worth
  * trading for 1.7 saved seconds. **The precedent is the house's own**, at
- * `pacifier/Pacifier.svelte`'s `SWEEP_MS` comment: *"The arc is a fixed 3.0 s
+ * the deleted wheel's `SWEEP_MS` comment (N.199 Step 8): *"The arc is a fixed 3.0 s
  * clock that never stalls, independent of the engine's delivery time."* The
  * vowel steps already ask a singer to sustain longer than the extractor
  * strictly requires.
