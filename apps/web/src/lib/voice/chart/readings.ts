@@ -9,6 +9,7 @@ import { centsBetween, hzToPitch, pitchToHz } from '@ilya/score-parser';
 import type { CalibratedFormant, Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
 import { pitchName } from '../note-picker';
+import type { PlaceholderDot } from './zones';
 
 export interface NoteReading {
 	hz: number;
@@ -60,6 +61,41 @@ export function readingRows(profile: Partial<Record<Vowel, CalibratedFormant>>, 
 			fR1: noteReading(f.f1, language),
 			...(typeof f.f2 === 'number' && f.f2 > 0 ? { fR2: noteReading(f.f2, language) } : {})
 		});
+	}
+	return rows;
+}
+
+/** One line of the capture screen's readings list: a sung vowel's stored reading, or the placeholder the chart draws for one not yet sung. */
+export interface ListRow {
+	vowel: Vowel;
+	/** `sung`: the stored reading; `placed`: the chart's placeholder (`ZoneSet.placeholders`), the same number as its hollow dot. */
+	kind: 'sung' | 'placed';
+	fR1: NoteReading;
+	/** Absent when a sung reading has no usable fR2 (the chart's test, `f2 > 0`, not the readout's `typeof`). */
+	fR2?: NoteReading;
+}
+
+/**
+ * The capture screen's readings list (N.199 readings brief, Step 1), as data: all ten vowels in Grayson's order, the ten buttons'.
+ * A sung vowel ("sung" is the chart's own test, `zones.ts` `isSung`) takes its stored values; one not yet sung takes the values of the
+ * placeholder handed in, which is what the chart draws its hollow dot from, so a dot and its row are one number. No second call to
+ * `resolveVowelValues`: a vowel with neither a sung reading nor a placeholder has no row.
+ */
+export function readingListRows(
+	profile: Partial<Record<Vowel, CalibratedFormant>>,
+	placeholders: readonly PlaceholderDot[],
+	language: 'en' | 'fr' = 'en'
+): ListRow[] {
+	const rows: ListRow[] = [];
+	for (const vowel of VOWELS) {
+		const f = profile[vowel];
+		if (isSung(f)) {
+			rows.push({ vowel, kind: 'sung', fR1: noteReading(f.f1, language), ...(typeof f.f2 === 'number' && f.f2 > 0 ? { fR2: noteReading(f.f2, language) } : {}) });
+			continue;
+		}
+		const p = placeholders.find((q) => q.vowel === vowel);
+		if (!p || !(p.f1 > 0)) continue;
+		rows.push({ vowel, kind: 'placed', fR1: noteReading(p.f1, language), ...(typeof p.f2 === 'number' && p.f2 > 0 ? { fR2: noteReading(p.f2, language) } : {}) });
 	}
 	return rows;
 }

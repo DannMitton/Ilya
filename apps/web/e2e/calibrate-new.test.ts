@@ -232,3 +232,59 @@ test.describe('the capture screen in the Drawer as a sheet', () => {
 		});
 	}
 });
+
+/** N.199 readings brief, Step 1: the readings list on the capture screen. */
+test.describe('the readings list', () => {
+	test('is closed by default with a summary at least 44 px tall, opens to ten rows, and never opens by itself', async ({ page }) => {
+		await open(page, { next: ['captured'] });
+		await toCapture(page);
+		const list = page.locator('details.readings');
+		await expect(list).toBeVisible();
+		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false);
+		const summary = list.locator('summary');
+		await expect(summary).toHaveText('Your readings');
+		expect((await summary.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+		await expect(list.locator('tbody tr')).toHaveCount(10); // in the DOM, folded
+		await expect(list.locator('table')).not.toBeVisible();
+		await summary.click();
+		await expect(list.locator('table')).toBeVisible();
+		await expect(list.locator('tbody tr')).toHaveCount(10);
+		// A take that ends does not fold it or open anything else; a closed list stays closed through a take.
+		await summary.click();
+		await btn(page, /^cardinal-i/).click();
+		await expect(count(page)).toHaveText('1 of 10', { timeout: 40_000 });
+		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false);
+	});
+
+	test('with the chart hidden, a take closes it and keeps its closed line in place, invisible and inert, so the toggle does not move; it returns at the landing, still closed', async ({ page }) => {
+		test.setTimeout(120_000);
+		await open(page, { next: ['captured'] });
+		await toCapture(page);
+		const list = page.locator('details.readings');
+		const toggle = page.locator('.hide-toggle');
+		await page.getByLabel('Hide the chart and the readout while I sing').check();
+		// The list's closed line and the toggle below it: its height and the gap between them. (Text above the list changes during a take, so the toggle's
+		// distance from the top of the screen is not the measure.)
+		const closedLine = async () => {
+			const l = (await list.boundingBox())!;
+			const t = (await toggle.boundingBox())!;
+			return { height: Math.round(l.height), gap: Math.round(t.y - (l.y + l.height)) };
+		};
+		const closedAtRest = await closedLine();
+		expect(closedAtRest.height).toBeGreaterThanOrEqual(44);
+		await list.locator('summary').click();
+		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(true);
+		expect((await closedLine()).height).toBeGreaterThan(closedAtRest.height + 100); // open, the table fills it
+		await btn(page, /^cardinal-i/).click();
+		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden while you sing.');
+		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false);
+		expect(await list.evaluate((e) => getComputedStyle(e).visibility)).toBe('hidden');
+		expect(await list.evaluate((e) => (e as HTMLElement).inert)).toBe(true);
+		expect(await closedLine()).toEqual(closedAtRest); // the closed line kept its place and size, and the toggle sits as close below it
+		await expect(count(page)).toHaveText('1 of 10', { timeout: 40_000 });
+		await expect(page.locator('.vowel-chart')).toBeVisible();
+		expect(await list.evaluate((e) => getComputedStyle(e).visibility)).toBe('visible');
+		expect(await list.evaluate((e) => (e as HTMLElement).inert)).toBe(false);
+		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false);
+	});
+});

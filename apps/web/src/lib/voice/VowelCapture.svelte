@@ -25,6 +25,7 @@
 	import FrSym from './FrSym.svelte';
 	import VowelChart from './chart/VowelChart.svelte';
 	import { buildChartModel } from './chart/model';
+	import { readingListRows } from './chart/readings';
 	import { nextVowel } from './chart/tour';
 	import { zoomTarget, type View } from './chart/geometry';
 	import { createViewMotion, ZOOM_IN_MS, ZOOM_OUT_QUICK_MS } from './chart/view-motion';
@@ -76,6 +77,8 @@
 	let notice = $state<RitualCue | null>(null);
 	let confirmingClear = $state(false);
 	let hideWhileSinging = $state(false);
+	/** The readings list, closed until the singer opens it. Not stored; it never opens by itself, and a take closes it while the chart is hidden. */
+	let listOpen = $state(false);
 	/** Whether a take has begun on this screen: the first-time explanation shows until one has. */
 	let tookAny = $state(false);
 	/** A pass ended with the last capture: return to the summary when the landing is over. */
@@ -84,6 +87,7 @@
 
 	const sungSet = $derived(new Set(VOWELS.filter((v) => profile[v] && profile[v]!.reading !== 'estimated' && profile[v]!.f1 > 0)));
 	const model = $derived(buildChartModel(profile, voiceType));
+	const listRows = $derived(readingListRows(profile, model.placeholders, language));
 
 	const ritual = createCaptureRitual({
 		// The session is the wizard's for the life of this screen; it is read once.
@@ -216,6 +220,7 @@
 	const takeContext = (vowel: Vowel) => ({ vowel, voiceType, visible: takeVisible });
 	function startTake(v: Vowel) {
 		takeVisible = hideWhileSinging ? 'hidden' : 'zone';
+		if (hideWhileSinging) listOpen = false; // the list follows the chart and the readout: out of sight from the tap to the landing
 		notice = null;
 		confirmingClear = false;
 		tookAny = true;
@@ -344,6 +349,42 @@
 
 	<p class="hint">{hint}</p>
 	<p class="explain">{tv('capture.explain', language)}</p>
+
+	<!-- The readings list (N.199 readings brief, Step 1): fR1 and fR2 for each of the ten vowels, folded. Closed by default so the chart stays the feature.
+	     While the chart is hidden its closed line stays in place, invisible and inert, so the toggle below does not move. -->
+	<details class="readings" class:away={hiding} inert={hiding} bind:open={listOpen}>
+		<summary id="capture-readings-summary">{tv('sheet.readings', language)}</summary>
+		<table aria-labelledby="capture-readings-summary">
+			<thead>
+				<tr>
+					<th scope="col" class="c-vowel">{tv('sheet.col.vowel', language)}</th>
+					<th scope="col"><FrSym n={1} /> <span class="col-unit">{tv('sheet.col.fr1', language)}</span></th>
+					<th scope="col"><FrSym n={2} /> <span class="col-unit">{tv('sheet.col.fr2', language)}</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each listRows as r (r.vowel)}
+					<tr class:placed-row={r.kind === 'placed'} data-row={r.vowel} data-kind={r.kind}>
+						<th scope="row" class="c-vowel">
+							<svg class="mark" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+								<circle cx="6" cy="6" r={r.kind === 'sung' ? 4.5 : 4} class={r.kind === 'sung' ? 'mark-sung' : 'mark-placed'} />
+							</svg>
+							<span class="row-sym" aria-hidden="true">{r.vowel}</span>
+							<span class="visually-hidden">{buttonLabel(r.vowel, r.kind, false, language)}</span>
+						</th>
+						<td><span class="num">{r.fR1.hzText} {hz}</span> <span class="note">{r.fR1.text}</span></td>
+						<td>
+							{#if r.fR2}
+								<span class="num">{r.fR2.hzText} {hz}</span> <span class="note">{r.fR2.text}</span>
+							{:else if r.kind === 'sung'}
+								<span class="try">{t('calib.roster.tryAgain', language)}</span>
+							{/if}
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</details>
 
 	<label class="hide-toggle">
 		<!-- Fixed at the tap for the take's record (`takeVisible`), so the box is not live while a take runs (Step 6a). -->
@@ -637,6 +678,103 @@
 		font-size: 0.75rem;
 		line-height: 1.35;
 		color: var(--ink-tertiary);
+	}
+	.readings summary {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		min-height: 44px;
+		font-size: 0.9375rem;
+		cursor: pointer;
+		list-style: none;
+	}
+	.readings summary::-webkit-details-marker {
+		display: none;
+	}
+	/* The marker is drawn here, not by the browser: a chevron that turns when the list is open. */
+	.readings summary::before {
+		content: '';
+		flex: none;
+		width: 0.5rem;
+		height: 0.5rem;
+		margin: 0 0.25rem 0 0.4rem;
+		border-right: 2px solid var(--lavender-ink);
+		border-bottom: 2px solid var(--lavender-ink);
+		transform: rotate(-45deg);
+		transition: transform 0.12s ease;
+	}
+	.readings[open] summary::before {
+		transform: rotate(45deg);
+	}
+	.readings summary:focus-visible {
+		outline: 2px solid var(--ink-primary);
+		outline-offset: 2px;
+	}
+	/* Hidden mode: the closed line keeps its place and is not seen or reached; the toggle below it does not move. */
+	.readings.away {
+		visibility: hidden;
+	}
+	.readings table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.8125rem;
+		font-variant-numeric: tabular-nums;
+		margin-bottom: 0.4rem;
+	}
+	.readings th,
+	.readings td {
+		text-align: left;
+		padding: 0.18rem 0.4rem 0.18rem 0;
+		border-bottom: 1px solid var(--stone-300, #d6d3d1);
+		font-weight: 400;
+		white-space: nowrap;
+	}
+	.readings thead th {
+		font-weight: 600;
+		border-bottom: 1.5px solid var(--lavender-jewel);
+	}
+	.col-unit {
+		font-weight: 400;
+		font-size: 0.6875rem;
+		color: var(--ink-tertiary);
+	}
+	.c-vowel {
+		width: 1%;
+	}
+	.mark {
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 0.3rem;
+	}
+	.mark-sung {
+		fill: var(--lavender-jewel);
+	}
+	.mark-placed {
+		fill: var(--paper-light, #f5f1e8);
+		stroke: var(--lavender-jewel);
+		stroke-width: 1.5;
+		stroke-dasharray: 2.5 2;
+	}
+	.row-sym {
+		display: inline-block;
+		min-width: 1.1em;
+		font-family: 'Lato IPA', 'Source Sans 3', sans-serif;
+		font-size: 1.05rem;
+	}
+	.num {
+		font-weight: 600;
+		color: var(--ink-primary);
+	}
+	.note {
+		color: var(--ink-secondary);
+		margin-left: 0.2em;
+	}
+	/* A vowel not yet sung is a placeholder: the tertiary grey, with the legend's hollow dot. */
+	.placed-row .num,
+	.placed-row .note,
+	.placed-row .row-sym {
+		color: var(--ink-tertiary);
+		font-weight: 400;
 	}
 	.hide-toggle {
 		display: flex;

@@ -132,3 +132,67 @@ describe('the screen at rest', () => {
 		expect(text(none)).not.toMatch(/MISSING|\{[a-z]+\}/);
 	});
 });
+
+describe('the readings list (readings brief, Step 1)', () => {
+	const count = (h: string, re: RegExp) => (h.match(re) ?? []).length;
+	const details = (h: string) => h.match(/<details[^>]*class="readings[^"]*"[^>]*>/)![0];
+	const rowsOf = (h: string) => [...h.matchAll(/<tr[^>]*data-row="([^"]+)"[^>]*data-kind="([^"]+)"/g)].map((m) => [m[1], m[2]]);
+
+	it('is one folded disclosure titled “Your readings”, closed by default, below the hint and the explanation and above the toggle', () => {
+		const h = html({ profile: pick('i') });
+		expect(details(h)).not.toMatch(/\sopen[\s=>]/);
+		expect(text(h)).toContain('Your readings');
+		expect(h.indexOf('class="explain')).toBeLessThan(h.indexOf('<details'));
+		expect(h.indexOf('<details')).toBeLessThan(h.indexOf('class="hide-toggle'));
+		expect(count(h, /<details/g)).toBe(1);
+		expect(details(h)).not.toContain('inert');
+	});
+
+	it('lists all ten vowels in the buttons’ order, in a table named by the summary, with no caption, headed by the resonance symbols', () => {
+		const h = html({ profile: pick('i', 'e') });
+		expect(rowsOf(h).map((r) => r[0])).toEqual([...VOWELS]);
+		expect(h).toContain('aria-labelledby="capture-readings-summary"');
+		expect(h).toContain('id="capture-readings-summary"');
+		expect(h).not.toContain('<caption');
+		const head = h.match(/<thead[^>]*>[\s\S]*?<\/thead>/)![0];
+		expect(head).toContain('aria-label="f R 1"');
+		expect(head).toContain('aria-label="f R 2"');
+		expect(text(head)).toContain('Vowel');
+		expect(text(head)).toContain('Hz and note');
+	});
+
+	it('marks a sung row and a placeholder row differently, in words for assistive technology and by the legend’s two dots', () => {
+		const h = html({ profile: pick('i', 'e') });
+		expect(rowsOf(h).slice(0, 3)).toEqual([['i', 'sung'], ['e', 'sung'], ['ɪ', 'placed']]);
+		expect(h).toContain('cardinal-i, sung');
+		expect(h).toContain('smallcaps-i, placeholder');
+		expect(count(h, /class="mark-sung[ "]/g)).toBe(2);
+		expect(count(h, /class="mark-placed[ "]/g)).toBe(8);
+		expect(h).toMatch(/<tr[^>]*data-row="ɪ"[^>]*class="[^"]*placed-row/);
+	});
+
+	it('prints Hz with the nearest note and signed cents, for both resonances', () => {
+		const t = text(html({ profile: pick('i') }));
+		expect(t).toContain('296 Hz D4 +14');
+		expect(t).toContain('1705 Hz G♯6 +45');
+	});
+
+	it('says “Try again” for a sung reading with no usable fR2, and never for a placeholder; a stored 0 never prints “0 Hz”', () => {
+		const h = html({ profile: { e: f(381), u: f(346, 0) } });
+		const row = (v: string) => h.match(new RegExp(`<tr[^>]*data-row="${v}"[\\s\\S]*?</tr>`))![0];
+		expect(row('e')).toContain('Try again');
+		expect(row('u')).toContain('Try again');
+		expect(text(row('u'))).not.toContain('0 Hz Try');
+		expect(row('i')).not.toContain('Try again');
+		expect(text(h)).not.toMatch(/(^|\s)0 Hz/);
+	});
+
+	it('does the same with no declared type, and in French', () => {
+		const none = html({ voiceType: undefined, profile: pick('i') });
+		expect(rowsOf(none)).toHaveLength(10);
+		const fr = html({ language: 'fr', profile: pick('i') });
+		expect(text(fr)).toContain('Vos lectures');
+		expect(text(fr)).toContain('Voyelle');
+		expect(fr).toContain('i cardinal, chantée');
+	});
+});

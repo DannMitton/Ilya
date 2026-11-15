@@ -66,7 +66,7 @@
    result.         1  no literal consumer found
    ribbon.         6  lib/components/Drawer/InspectorPanel.svelte
    select.         5  lib/components/Drawer/SearchableSelect.svelte
-   sheet.         16  the vowel-space sheet: lib/voice/chart/VowelSpaceSheet.svelte
+   sheet.         16  the vowel-space sheet and the capture screen's readings list: lib/voice/chart/VowelSpaceSheet.svelte, lib/voice/VowelCapture.svelte
    shiftLyrics.    5  lib/score/CorrectionSurface.svelte
    song.           2  lib/omr/scan.ts, lib/library/notices.ts, routes/+page.svelte
    songs.         13  routes/+page.svelte, lib/components/Drawer/SongList.svelte
