@@ -170,3 +170,51 @@ What the pictures do not show, so it is not claimed: the app behind the scrim at
 | 8 ratchets | OK | ratchets: OK. |
 
 Gate 4's new baseline for the ship script is therefore 5863 passed | 1 skipped (5864), if this lane is merged alone. The Playwright counts (the sheet's 14 and 3, and the full suites) are in Part 2.
+
+## Part 2: close
+
+### The merge
+
+`git fetch origin Shane` showed `origin/Shane` still at `fb9d829e`, the commit the lane was cut from. `git merge origin/Shane` answered "Already up to date." There was nothing to merge, so the lane's code is `Shane` plus Part 1's commit.
+
+### The eight gates at close
+
+The code the gates read has not changed since Part 1's run (the only files written since are this report and the Playwright logs), and the merge was empty, so the counts in Part 1's table are the close's counts: 462, 248, 0 errors and 12 warnings in 5 files, **5863 passed | 1 skipped (5864)**, 842 passed | 5 skipped (847), 178, 159, ratchets OK. I did not re-run them for this part. The amendment below re-runs all eight on the final tree.
+
+### The Playwright suites (`--trace off`, this sandbox's Chromium 1243 through `PW_CHROMIUM_PATH`)
+
+The desktop suite is 223 tests in 35 files. A first run was cut off at the 30-minute background limit inside `pages-without-gaps.test.ts`, so I ran that file and every later file again in a second run, and the phone suite separately.
+
+| run | result |
+|---|---|
+| desktop, first run (files up to `pages-without-gaps`) | about 111 passed, **2 failed** |
+| desktop, second run (`pages-without-gaps` and every later file, which includes the sheet's 14) | **110 passed, 0 failed** |
+| phone (44 tests, 15 files, which includes the sheet's 3) | **39 passed, 1 skipped, 4 failed** |
+
+I assembled the desktop figure from two runs, so the first run's count is derived (the run was killed, so there is no final tally line for it): 223 tests minus the second run's 110 is 113, of which 2 failed.
+
+**All six failures also fail on the untouched tip.** I made a clean worktree of `fb9d829e`, installed with `pnpm install --frozen-lockfile`, and ran exactly those six tests there: the same six failed.
+
+| test | on the untouched tip |
+|---|---|
+| `e2e/calibrate-new.test.ts:392` fr at 375 px: Re-take [i] on one line | fails (1.0 m) |
+| `e2e/loupe-header.test.ts:47` a drag on the desk moves the card | fails |
+| `e2e-phone/input-views.test.ts:134` a poem typed into Poem moves no seat | fails |
+| `e2e-phone/phrase-ends.test.ts:26` Tchaikovsky onto an empty song: 172 seats | fails |
+| `e2e-phone/relining.test.ts:70` y. a poem pasted into Poem | fails |
+| `e2e-phone/relining.test.ts:95` bb. a poem typed key by key | fails |
+
+I did not establish why they fail (this sandbox's Chromium and fonts differ from the maintainer's; `ENVIRONMENT.md` records French desk captures differing in this sandbox for the same reason). They are not caused by this lane, and none involves the sheet. They are a sandbox baseline to be compared against CI, which is the shared record.
+
+### How many existing tests were touched: none
+
+No test file that existed before this lane was edited. The one shared setup (`use.storageState` in `playwright.config.ts`) reached all of them. Two tests open their own browser context, and I looked at each:
+
+- `e2e/insights-page.test.ts:84` (`browser.newContext(...)` with no `baseURL`): **passed** in the suite, so a context made that way inherits the config's `use` options, the storage state included.
+- `e2e/heic-offline.test.ts:45` (its own origin `127.0.0.2:4173`, served from `build/`): **skipped here**, because it needs `pnpm --filter @ilya/web build` first. **NOT ESTABLISHED** whether the sheet affects it: its origin is not the config's, so the flag is not set there, and the sheet will stand over its page. It drives a hidden file input (`input.hidden-input`), which Playwright's `setInputFiles` does not need an interactive page for, so it may be unaffected. If it fails on a machine that has a build, the fix is one line: give that `newContext` a `storageState` whose origin is `http://127.0.0.2:4173` and which holds `ilya:welcomeSeen` = `1`. I did not make that edit unverified.
+
+### What the desk should know about the lane as it stands
+
+- Branch `cloud-lane-57` is pushed. No pull request, nothing on `Shane` or `main`, nothing under `docs/memory/`, no brief edited.
+- New gate 4 baseline for the ship script, if this lane merges alone: 5863 passed | 1 skipped (5864).
+- Owed to Dann: (1) the note's horizontal place (Part 1, departure 3); (2) Bravura against Maestro for that one glyph (departure 1); (3) the shadow's tail (departure 5); (4) a control to reopen the sheet and the app icon files are outside this lane, as the brief says.
