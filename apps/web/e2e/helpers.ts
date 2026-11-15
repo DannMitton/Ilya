@@ -50,6 +50,8 @@ export async function transcribe(page: Page, text: string): Promise<void> {
  * first.
  */
 export async function expandStation(page: Page, label: string): Promise<void> {
+	// N.201: NOTATION is ANALYSIS's first row, so its band opens first.
+	if (/^notation$/i.test(label)) await expandStation(page, 'Analysis');
 	// The station names are capitals by value since consistency batch 1 ("Voice"
 	// reads VOICE), and `exact: true` is case-sensitive, so match the whole name
 	// without regard to case.
